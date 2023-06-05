@@ -1,6 +1,6 @@
 import { useForm, zodResolver } from "@mantine/form";
 import { createPagesBrowserClient } from "@supabase/auth-helpers-nextjs";
-import { Database } from "@/lib/database.types";
+import { Database } from "../../../lib/database.types";
 import { notifications } from "@mantine/notifications";
 import {
   Anchor,
@@ -13,11 +13,11 @@ import {
 import {
   ResetPasswordModal,
   resetPasswordModalVisible,
-} from "@/components/organisms/ResetPasswordModal/ResetPasswordModal";
+} from "../ResetPasswordModal/ResetPasswordModal";
 import { useAtom } from "jotai";
 import { useRouter } from "next/router";
 import { useState } from "react";
-import { loginFormSchema } from "@/schemas/LoginFormSchema";
+import { loginFormSchema } from "../../../schemas/LoginFormSchema";
 
 export function LoginForm() {
   const [_, setResetPasswordModalOpen] = useAtom(resetPasswordModalVisible);
