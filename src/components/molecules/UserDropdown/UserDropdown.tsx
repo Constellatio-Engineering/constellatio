@@ -3,7 +3,6 @@ import { IconBrandStripe, IconLogout } from "@tabler/icons-react";
 import { createPagesBrowserClient } from "@supabase/auth-helpers-nextjs";
 import { notifications } from "@mantine/notifications";
 import { useRouter } from "next/router";
-import Link from "next/link";
 
 export function UserDropdown() {
   const supabase = createPagesBrowserClient();
