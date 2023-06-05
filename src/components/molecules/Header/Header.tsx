@@ -1,7 +1,7 @@
 import { Group, Header as MantineHeader } from "@mantine/core";
 import ConstellatioLogo from "../../../../public/constellatio.svg";
 import Image from "next/image";
-import { UserDropdown } from "@/components/molecules/UserDropdown/UserDropdown";
+import { UserDropdown } from "../UserDropdown/UserDropdown";
 import Link from "next/link";
 
 export function Header() {
