@@ -7,7 +7,9 @@
     "build": "next build",
     "start": "next start",
     "lint": "next lint",
-    "supabase:typegen": "npx supabase gen types typescript --project-id kzrdtppwdumjscxldnwo --schema public > src/lib/database.types.ts"
+    "supabase:typegen": "npx supabase gen types typescript --project-id kzrdtppwdumjscxldnwo --schema public > src/lib/database.types.ts",
+    "storybook": "storybook dev -p 6006",
+    "build-storybook": "storybook build"
   },
   "dependencies": {
     "@caisy/rich-text-react-renderer": "^0.7.3",
@@ -52,7 +54,16 @@
     "zod": "^3.21.4"
   },
   "devDependencies": {
+    "@storybook/addon-essentials": "^7.0.18",
+    "@storybook/addon-interactions": "^7.0.18",
+    "@storybook/addon-links": "^7.0.18",
+    "@storybook/blocks": "^7.0.18",
+    "@storybook/nextjs": "^7.0.18",
+    "@storybook/react": "^7.0.18",
+    "@storybook/testing-library": "^0.0.14-next.2",
+    "eslint-plugin-storybook": "^0.6.12",
     "prettier": "^2.8.8",
+    "storybook": "^7.0.18",
     "supabase": "^1.64.8"
   }
 }
