@@ -1,6 +1,7 @@
 import { Tabs } from "@mantine/core";
 import { useRouter } from "next/router";
 import { LoginForm } from "@/components/organisms/LoginForm/LoginForm";
+import { RegistrationForm } from "@/components/organisms/RegistrationForm/RegistrationForm";
 
 type AuthPageProps = {
   tab: "login" | "register";
@@ -21,7 +22,9 @@ export function AuthPage({ tab }: AuthPageProps) {
       <Tabs.Panel value="login">
         <LoginForm />
       </Tabs.Panel>
-      <Tabs.Panel value="register">{null}</Tabs.Panel>
+      <Tabs.Panel value="register">
+        <RegistrationForm />
+      </Tabs.Panel>
     </Tabs>
   );
 }
