@@ -16,8 +16,12 @@ export function AuthPage({ tab }: AuthPageProps) {
   return (
     <Tabs value={tab} onTabChange={handleTabChange}>
       <Tabs.List grow>
-        <Tabs.Tab value="login">Login</Tabs.Tab>
-        <Tabs.Tab value="register">Register</Tabs.Tab>
+        <Tabs.Tab color="dark" value="login">
+          Anmelden
+        </Tabs.Tab>
+        <Tabs.Tab color="dark" value="register">
+          Konto erstellen
+        </Tabs.Tab>
       </Tabs.List>
       <Tabs.Panel value="login">
         <LoginForm />

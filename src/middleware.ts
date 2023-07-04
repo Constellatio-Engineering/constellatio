@@ -12,6 +12,17 @@ export async function middleware(req: NextRequest) {
   } = await supabase.auth.getSession();
 
   if (session?.user) {
+    const { error, data } = await supabase.auth.getUser();
+
+    if (!data.user?.confirmed_at) {
+      const redirectUrl = req.nextUrl.clone();
+
+      redirectUrl.pathname = "/confirm";
+      redirectUrl.searchParams.set("redirectedFrom", req.nextUrl.pathname);
+
+      return NextResponse.redirect(redirectUrl);
+    }
+
     return res;
   }
 
@@ -30,10 +41,11 @@ export const config = {
      * - api (API routes)
      * - login (login route)
      * - register (registration route)
+     * - confirm (email confirmation route)
      * - _next/static (static files)
      * - _next/image (image optimization files)
      * - favicon.ico (favicon file)
      */
-    "/((?!api|login|register|_next/static|_next/image|favicon.ico).*)",
+    "/((?!api|login|register|confirm|_next/static|_next/image|favicon.ico).*)",
   ],
 };

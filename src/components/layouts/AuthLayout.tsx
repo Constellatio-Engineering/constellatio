@@ -1,6 +1,6 @@
 import type { ReactNode } from "react";
-import { AppShell, Container } from "@mantine/core";
-import { Footer } from "@/components/molecules/Footer/Footer";
+import { Container } from "@mantine/core";
+import { AuthHeader } from "@/components/molecules/AuthHeader/AuthHeader";
 
 type AuthLayoutProps = {
   children: ReactNode;
@@ -8,10 +8,11 @@ type AuthLayoutProps = {
 
 export function AuthLayout({ children }: AuthLayoutProps) {
   return (
-    <AppShell footer={<Footer />}>
+    <>
+      <AuthHeader />
       <Container size={420} my={40}>
         {children}
       </Container>
-    </AppShell>
+    </>
   );
 }

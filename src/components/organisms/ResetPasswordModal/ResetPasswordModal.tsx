@@ -23,7 +23,9 @@ export function ResetPasswordModal() {
         title: "Password reset handler",
         message: "The password reset handler was called",
       });
-      // await supabase.auth.resetPasswordForEmail(formValues.email);
+      await supabase.auth.resetPasswordForEmail(formValues.email, {
+        redirectTo: "http://localhost:3000/recover",
+      });
     } catch (error) {}
   });
 

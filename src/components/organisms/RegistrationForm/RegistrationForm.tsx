@@ -1,24 +1,21 @@
-regiimport { useForm, zodResolver } from "@mantine/form";
+import { useForm, zodResolver } from "@mantine/form";
 import { createPagesBrowserClient } from "@supabase/auth-helpers-nextjs";
 import { Database } from "../../../lib/database.types";
 import { notifications } from "@mantine/notifications";
 import {
-  Anchor,
   Button,
+  Checkbox,
   Group,
+  NumberInput,
   PasswordInput,
   Progress,
   Stack,
   TextInput,
 } from "@mantine/core";
-import {
-  ResetPasswordModal,
-  resetPasswordModalVisible,
-} from "../ResetPasswordModal/ResetPasswordModal";
-import { useAtom } from "jotai";
 import { useRouter } from "next/router";
 import { useState } from "react";
-import { loginFormSchema } from "../../../schemas/LoginFormSchema";
+import { registrationFormSchema } from "@/schemas/RegistrationFormSchema";
+import { useSupabaseClient } from "@supabase/auth-helpers-react";
 
 const requirements = [
   { re: /[0-9]/, label: "Includes number" },
@@ -40,12 +37,11 @@ function getStrength(password: string) {
 }
 
 export function RegistrationForm() {
-  const [_, setResetPasswordModalOpen] = useAtom(resetPasswordModalVisible);
-  const supabase = createPagesBrowserClient<Database>();
+  const supabase = createPagesBrowserClient();
   const router = useRouter();
   const [submitting, setSubmitting] = useState(false);
   const form = useForm({
-    validate: zodResolver(loginFormSchema),
+    validate: zodResolver(registrationFormSchema),
     validateInputOnBlur: true,
     initialValues: {
       firstName: "",
@@ -55,30 +51,30 @@ export function RegistrationForm() {
       password: "",
       passwordConfirmation: "",
       university: "",
-      semester: "",
+      semester: undefined,
       gender: "",
       acceptTOS: false,
     },
   });
 
-  const openResetPasswordModal = () => setResetPasswordModalOpen(true);
-
   const handleSubmit = form.onSubmit(async (formValues) => {
     try {
       setSubmitting(true);
 
-      notifications.show({
-        title: "Login handler",
-        message: "The login handler was called",
+      const response = await fetch("/api/auth/register", {
+        method: "POST",
+        body: JSON.stringify(formValues),
       });
 
-      await supabase.auth.signInWithPassword({
-        email: formValues.email,
-        password: formValues.password,
-      });
+      const data = await response.json();
 
+      await supabase.auth.setSession(data);
       await router.replace("/");
     } catch (error) {
+      notifications.show({
+        title: "Oops!",
+        message: "We couldn't sign you up. Please try again.",
+      });
     } finally {
       setSubmitting(false);
     }
@@ -105,46 +101,33 @@ export function RegistrationForm() {
     ));
 
   return (
-    <>
-      <form onSubmit={handleSubmit}>
-        <Stack mt={32}>
-          <TextInput label="Vorname" {...form.getInputProps("firstName")} />
-          <TextInput label="Nachname" {...form.getInputProps("lastName")} />
-          <TextInput
-            label="Anzeigename"
-            {...form.getInputProps("displayName")}
-          />
-          <TextInput label="E-Mail Adresse" {...form.getInputProps("email")} />
-          <div>
-            <PasswordInput
-              label="Passwort"
-              {...form.getInputProps("password")}
-            />
-            <Group spacing={5} grow mt="xs" mb="md">
-              {bars}
-            </Group>
-          </div>
-          <PasswordInput
-            label="Passwort bestätigen"
-            {...form.getInputProps("passwordConfirmation")}
-          />
-          <Group position="apart" mt="xl">
-            <Anchor
-              component="button"
-              type="button"
-              onClick={openResetPasswordModal}
-              color="dimmed"
-              size="xs"
-            >
-              Probleme beim Anmelden?
-            </Anchor>
-            <Button type="submit" radius="xl" loading={submitting}>
-              Login
-            </Button>
+    <form onSubmit={handleSubmit}>
+      <Stack mt={32}>
+        <TextInput label="Vorname" {...form.getInputProps("firstName")} />
+        <TextInput label="Nachname" {...form.getInputProps("lastName")} />
+        <TextInput label="Anzeigename" {...form.getInputProps("displayName")} />
+        <TextInput label="E-Mail Adresse" {...form.getInputProps("email")} />
+        <div>
+          <PasswordInput label="Passwort" {...form.getInputProps("password")} />
+          <Group spacing={5} grow mt="xs" mb="md">
+            {bars}
           </Group>
-        </Stack>
-      </form>
-      <ResetPasswordModal />
-    </>
+        </div>
+        <PasswordInput
+          label="Passwort bestätigen"
+          {...form.getInputProps("passwordConfirmation")}
+        />
+        <TextInput label="Universität" {...form.getInputProps("university")} />
+        <NumberInput label="Semester" {...form.getInputProps("semester")} />
+        <TextInput label="Geschlecht" {...form.getInputProps("gender")} />
+        <Checkbox
+          label="I agree to the data protection regulations"
+          {...form.getInputProps("acceptTOS")}
+        />
+        <Button color="dark" type="submit" radius="sm" loading={submitting}>
+          Konto erstellen
+        </Button>
+      </Stack>
+    </form>
   );
 }
