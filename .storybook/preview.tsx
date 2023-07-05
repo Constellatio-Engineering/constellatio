@@ -1,6 +1,6 @@
 import type { Preview } from '@storybook/react';
 import React from 'react';
-import { MantineProvider } from '@mantine/core';
+import CustomThemingProvider from '../src/provider/CustomThemingProvider';
 
 const customViewports = {
 	Bronze: {
@@ -71,7 +71,10 @@ const customViewports = {
 const preview: Preview = {
 	parameters: {
 		actions: { argTypesRegex: '^on[A-Z].*' },
-		viewport: { viewports: customViewports, defaultViewport: 'Gold' },
+		viewport: {
+			viewports: customViewports,
+			defaultViewport: 'Gold',
+		},
 		controls: {
 			matchers: {
 				color: /(background|color)$/i,
@@ -82,13 +85,9 @@ const preview: Preview = {
 	decorators: [
 		(Story) => {
 			return (
-				<MantineProvider
-					withGlobalStyles
-					withNormalizeCSS
-					theme={{ colorScheme: 'light' }}
-				>
+				<CustomThemingProvider>
 					<Story />
-				</MantineProvider>
+				</CustomThemingProvider>
 			);
 		},
 	],
