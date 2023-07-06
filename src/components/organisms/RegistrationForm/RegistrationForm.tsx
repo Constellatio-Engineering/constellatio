@@ -14,8 +14,8 @@ import {
 } from "@mantine/core";
 import { useRouter } from "next/router";
 import { useState } from "react";
-import { registrationFormSchema } from "@/schemas/RegistrationFormSchema";
 import { useSupabaseClient } from "@supabase/auth-helpers-react";
+import { registrationFormSchema } from "@/schemas/RegistrationFormSchema";
 
 const requirements = [
   { re: /[0-9]/, label: "Includes number" },

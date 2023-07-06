@@ -73,7 +73,7 @@ export function LoginForm() {
               Probleme beim Anmelden?
             </Anchor>
           </Group>
-          <Button type="submit" color="dark" radius="sm" loading={submitting}>
+          <Button type="submit" color="neutrals-02.1" loading={submitting}>
             Login
           </Button>
         </Stack>
