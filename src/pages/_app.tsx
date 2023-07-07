@@ -4,7 +4,7 @@ import { createPagesBrowserClient } from '@supabase/auth-helpers-nextjs';
 import { useState } from 'react';
 import { Session, SessionContextProvider } from '@supabase/auth-helpers-react';
 import { Notifications } from '@mantine/notifications';
-import { RouterTransition } from '@/components/atoms/RouterTransition';
+import { RouterTransition } from '@/components/atoms/RouterTransition/RouterTransition';
 import CustomThemingProvider from '@/provider/CustomThemingProvider';
 
 type ExtendedAppProps = AppProps<{ initialSession: Session }>;
