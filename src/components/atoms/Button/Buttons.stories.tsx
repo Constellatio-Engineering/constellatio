@@ -1,5 +1,5 @@
 import { Meta, StoryObj } from "@storybook/react";
-import { Button as MantineButton } from "./Button";
+import { Button } from "./Button";
 import { withDesign } from "storybook-addon-designs";
 import { DownloadIcon } from "@/components/Icons/DownloadIcon";
 import { ArrowDown } from "@/components/Icons/ArrowDown";
@@ -8,7 +8,7 @@ import { Box, Flex } from "@mantine/core";
 const Template = (args: any) => (
   <Flex>
     <Box w={300}>
-      <MantineButton {...args} />
+      <Button {...args} />
     </Box>
   </Flex>
 );
@@ -17,6 +17,7 @@ const meta: Meta = {
   title: "Atoms/Button",
   component: Template,
   decorators: [withDesign],
+  tags: ["autodocs"],
   parameters: {
     design: {
       type: "figma",
@@ -45,9 +46,9 @@ const meta: Meta = {
 
 export default meta;
 
-type Story = StoryObj<typeof MantineButton>;
+type Story = StoryObj<typeof Button>;
 
-export const Primary: Story = {
+export const Default: Story = {
   args: {
     title: "Button title",
     onClick: () => alert("Clicked"),

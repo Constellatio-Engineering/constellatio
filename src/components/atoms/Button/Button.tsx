@@ -6,26 +6,31 @@ import {
   Styles,
   ButtonStylesParams,
   ButtonStylesNames,
+  CSSObject,
 } from "@mantine/core";
 
 type TButton = (ButtonProps | ButtonHTMLAttributes<HTMLButtonElement>) & {
   title: string;
   styleType?: "primary" | "secondarySimple" | "secondarySubtle" | "tertiary";
   size?: "large" | "medium";
+  styleOverwrite?: CSSObject | undefined;
 };
-
-export const Button: FC<TButton> = ({ title, styleType = "primary", size = "large", ...props }) => {
+export const Button: FC<TButton> = ({
+  title,
+  styleType = "primary",
+  size = "large",
+  styleOverwrite,
+  ...props
+}) => {
   const styles: Styles<ButtonStylesNames, ButtonStylesParams> = (theme: MantineTheme) => ({
     root: {
       height: size === "large" ? theme.spacing["spacing-40"] : theme.spacing["spacing-32"],
-      paddingTop: size === "large" ? theme.spacing["spacing-8"] : theme.spacing["spacing-4"],
-      paddingBottom: size === "large" ? theme.spacing["spacing-8"] : theme.spacing["spacing-4"],
-      paddingLeft: size === "large" ? theme.spacing["spacing-16"] : theme.spacing["spacing-12"],
-      paddingRight: size === "large" ? theme.spacing["spacing-16"] : theme.spacing["spacing-12"],
+      padding: `${theme.spacing["spacing-8"]} ${theme.spacing["spacing-16"]}`,
       fontSize: theme.fontSizes["spacing-16"],
       fontWeight: 500,
       lineHeight: theme.spacing["spacing-24"],
       fontStyle: "normal",
+      fontFamily: "inherit",
       color:
         styleType === "primary"
           ? theme.colors["neutrals-01"][0]
@@ -75,6 +80,7 @@ export const Button: FC<TButton> = ({ title, styleType = "primary", size = "larg
             : theme.colors["neutrals-01"][3],
         border: styleType !== "primary" ? `1px solid ${theme.colors["neutrals-01"][3]}` : "",
       },
+      ...styleOverwrite,
     },
   });
 

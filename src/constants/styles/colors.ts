@@ -16,15 +16,78 @@ export const colors = {
     "#000000", // 1
     "#303030", // 2
   ],
-  "brand-01": ["#FBDFDD", "#EBAEA9", "#D26D65", "#BA3333", "#A90000", "#760000"],
-  "brand-02": ["#FCEEDD", "#FFD3B9", "#FFBD96", "#FFA773", "#FF9150", "#D86420"],
-  "cc-cases": ["#F4F6FE", "#E9EDFD", "#C7D3FB", "#96A8E4", "#5B74C7", "#3A4C88"],
-  "cc-dictionary": ["#F3F9F5", "#E3F1EA", "#C3DFCF", "#A5CBB5", "#8EBDA2", "#68937A"],
-  "cc-forum": ["#FEFDF1", "#FDFADC", "#FBF4B9", "#EBE361", "#D3C750", "#999146"],
-  "support-success": ["#EEF8F2", "#DAF2E4", "#6CCB92", "#0AA949", "#008D39", "#005A06"],
-  "support-error": ["#FFDFDF", "#F0B3B2", "#E58180", "#CC0300", "#8A1F17", "#4C0000"],
-  "support-warning": ["#FEFDF1", "#FDFADC", "#FBF4B9", "#EBE361", "#D3C750", "#999146"],
-  "support-notice": ["#F4F6FE", "#E9EDFD", "#C7D3FB", "#96A8E4", "#5B74C7", "#3A4C88"],
+  "brand-01": [
+    "#FBDFDD", // 0
+    "#EBAEA9", // 1
+    "#D26D65", // 2
+    "#BA3333", // 3
+    "#A90000", // 4
+    "#760000", // 5
+  ],
+  "brand-02": [
+    "#FCEEDD", // 0
+    "#FFD3B9", // 1
+    "#FFBD96", // 2
+    "#FFA773", // 3
+    "#FF9150", // 4
+    "#D86420", // 5
+  ],
+  "cc-cases": [
+    "#F4F6FE", // 0
+    "#E9EDFD", // 1
+    "#C7D3FB", // 2
+    "#96A8E4", // 3
+    "#5B74C7", // 4
+    "#3A4C88", // 5
+  ],
+  "cc-dictionary": [
+    "#F3F9F5", // 0
+    "#E3F1EA", // 1
+    "#C3DFCF", // 2
+    "#A5CBB5", // 3
+    "#8EBDA2", // 4
+    "#68937A", // 5
+  ],
+  "cc-forum": [
+    "#FEFDF1", // 0
+    "#FDFADC", // 1
+    "#FBF4B9", // 2
+    "#EBE361", // 3
+    "#D3C750", // 4
+    "#999146", // 5
+  ],
+  "support-success": [
+    "#EEF8F2", // 0
+    "#DAF2E4", // 1
+    "#6CCB92", // 2
+    "#0AA949", // 3
+    "#008D39", // 4
+    "#005A06", // 5
+  ],
+  "support-error": [
+    "#FFDFDF", // 0
+    "#F0B3B2", // 1
+    "#E58180", // 2
+    "#CC0300", // 3
+    "#8A1F17", // 4
+    "#4C0000", // 5
+  ],
+  "support-warning": [
+    "#FEFDF1", // 0
+    "#FDFADC", // 1
+    "#FBF4B9", // 2
+    "#EBE361", // 3
+    "#D3C750", // 4
+    "#999146", // 5
+  ],
+  "support-notice": [
+    "#F4F6FE", // 0
+    "#E9EDFD", // 1
+    "#C7D3FB", // 2
+    "#96A8E4", // 3
+    "#5B74C7", // 4
+    "#3A4C88", // 5
+  ],
   "transparency-01": [
     "rgba(0, 0, 0, 0.1)", // 0
     "rgba(0, 0, 0, 0.2)", // 1
