@@ -45,7 +45,7 @@ export const colors = {
     "#E3F1EA", // 1
     "#C3DFCF", // 2
     "#A5CBB5", // 3
-    "#8EBDA2", // 4
+    "#83B899", // 4
     "#68937A", // 5
   ],
   "cc-forum": [
