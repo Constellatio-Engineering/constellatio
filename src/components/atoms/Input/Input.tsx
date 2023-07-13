@@ -1,6 +1,6 @@
 import React, { FC } from "react";
 import { PasswordInputProps, TextInput, TextInputProps, PasswordInput, CSSObject } from "@mantine/core";
-import { Alert } from "@/components/Icons/Alert";
+import { AlertFilled } from "@/components/Icons/AlertFilled";
 import { passwordStyles, textStyles } from "./input.styles";
 import { Show } from "@/components/Icons/Show";
 import { Hide } from "@/components/Icons/Hide";
@@ -32,7 +32,7 @@ export const Input: FC<TInput> = ({
       styles={textStyles({ error, disabled, labelStyleOverwrite, inputStyleOverwrite })}
       error={error}
       disabled={disabled}
-      rightSection={error && <Alert />}
+      rightSection={error && <AlertFilled />}
       {...props}
     />
   ) : null;

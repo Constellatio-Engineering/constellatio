@@ -1,22 +1,34 @@
-import { Group, Header as MantineHeader } from "@mantine/core";
-import ConstellatioLogo from "../../../../public/constellatio.svg";
+import { Group } from "@mantine/core";
+import ConstellatioLogo from "../../../../public/constellatio-full-logo.svg";
 import Image from "next/image";
 import { UserDropdown } from "../UserDropdown/UserDropdown";
 import Link from "next/link";
+import { FC } from "react";
+import { SHeader } from "./Header.style";
 
-export function Header() {
-  return (
-    <MantineHeader height={72} px="xl">
-      <Group position="apart" sx={{ height: "100%" }}>
-        <div>
-          <Link href="/">
-            <Image src={ConstellatioLogo} alt="Constellatio" />
-          </Link>
-        </div>
-        <div>
-          <UserDropdown />
-        </div>
-      </Group>
-    </MantineHeader>
+type THeader = {
+  variant: "default" | "simple";
+};
+
+export const Header: FC<THeader> = ({ variant = "default" }) => {
+  return variant === "simple" ? (
+    <SHeader variant={variant}>
+      <div>
+        <Link href="/">
+          <Image src={ConstellatioLogo} alt="Constellatio" />
+        </Link>
+      </div>
+    </SHeader>
+  ) : (
+    <SHeader variant={variant}>
+      <div>
+        <Link href="/">
+          <Image src={ConstellatioLogo} alt="Constellatio" />
+        </Link>
+      </div>
+      <div>
+        <UserDropdown />
+      </div>
+    </SHeader>
   );
-}
+};
