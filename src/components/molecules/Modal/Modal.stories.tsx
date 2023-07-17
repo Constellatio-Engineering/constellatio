@@ -1,6 +1,6 @@
 import { Meta, StoryObj } from "@storybook/react";
 import { withDesign } from "storybook-addon-designs";
-import { Box } from "@mantine/core";
+import { Box, Group, Stack, Text, Title } from "@mantine/core";
 import { Modal } from "./Modal";
 import { useDisclosure } from "@mantine/hooks";
 import { Button } from "@/components/atoms/Button/Button";
@@ -19,7 +19,18 @@ const Template = (args: any) => {
         }}
         {...args}
       >
-        test
+        <Text>
+          Amet minim mollit non deserunt ullamco est sit aliqua dolor do amet sint. Velit officia consequat duis enim
+          velit mollit.
+        </Text>
+        <Group noWrap grow w="100%">
+          <Button onClick={close} fullWidth styleType="secondarySimple">
+            Close Modal
+          </Button>
+          <Button styleType="primary" fullWidth>
+            Primary Button
+          </Button>
+        </Group>
       </Modal>
       <Button onClick={open} title="Open Modal" type="button" styleType="primary">
         Open Modal
@@ -46,5 +57,8 @@ export default meta;
 type Story = StoryObj<typeof Modal>;
 
 export const Default: Story = {
-  args: {},
+  args: {
+    opened: true,
+    title: <Title order={1}>Title</Title>,
+  },
 };

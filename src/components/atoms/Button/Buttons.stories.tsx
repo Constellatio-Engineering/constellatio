@@ -50,21 +50,21 @@ type Story = StoryObj<typeof Button>;
 
 export const Default: Story = {
   args: {
-    title: "Button title",
+    children: "Button title",
     onClick: () => alert("Clicked"),
   },
 };
 
 export const WithLeftIcon: Story = {
   args: {
-    title: "Primary Button",
+    children: "Primary Button",
     leftIcon: <DownloadIcon />,
   },
 };
 
 export const WithRightIcon: Story = {
   args: {
-    title: "Primary Button",
+    children: "Primary Button",
     rightIcon: <ArrowDown />,
   },
 };

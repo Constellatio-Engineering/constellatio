@@ -10,18 +10,11 @@ import {
 } from "@mantine/core";
 
 type TButton = (ButtonProps | ButtonHTMLAttributes<HTMLButtonElement>) & {
-  title: string;
-  styleType?: "primary" | "secondarySimple" | "secondarySubtle" | "tertiary";
+  styleType: "primary" | "secondarySimple" | "secondarySubtle" | "tertiary";
   size?: "large" | "medium";
   styleOverwrite?: CSSObject | undefined;
 };
-export const Button: FC<TButton> = ({
-  title,
-  styleType = "primary",
-  size = "large",
-  styleOverwrite,
-  ...props
-}) => {
+export const Button: FC<TButton> = ({ styleType = "primary", size = "large", styleOverwrite, children, ...props }) => {
   const styles: Styles<ButtonStylesNames, ButtonStylesParams> = (theme: MantineTheme) => ({
     root: {
       height: size === "large" ? theme.spacing["spacing-40"] : theme.spacing["spacing-32"],
@@ -85,8 +78,8 @@ export const Button: FC<TButton> = ({
   });
 
   return (
-    <MantineButton radius="full" title={title} styles={styles} {...props}>
-      {title}
+    <MantineButton radius="full" styles={styles} {...props}>
+      {children}
     </MantineButton>
   );
 };

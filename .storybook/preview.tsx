@@ -73,7 +73,6 @@ const preview: Preview = {
 		actions: { argTypesRegex: '^on[A-Z].*' },
 		viewport: {
 			viewports: customViewports,
-			defaultViewport: 'Gold',
 		},
 		controls: {
 			matchers: {
