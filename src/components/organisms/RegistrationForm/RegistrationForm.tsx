@@ -1,11 +1,9 @@
 import { useForm, zodResolver } from "@mantine/form";
 import { createPagesBrowserClient } from "@supabase/auth-helpers-nextjs";
-import { Database } from "../../../lib/database.types";
 import { notifications } from "@mantine/notifications";
-import { Box, Progress, Stack } from "@mantine/core";
+import { Box,  Stack } from "@mantine/core";
 import { useRouter } from "next/router";
 import { useState } from "react";
-import { useSupabaseClient } from "@supabase/auth-helpers-react";
 import { registrationFormSchema } from "@/schemas/RegistrationFormSchema";
 import { Input } from "@/components/atoms/Input/Input";
 import { Button } from "@/components/atoms/Button/Button";
@@ -111,32 +109,6 @@ export function RegistrationForm() {
 
   return (
     <form onSubmit={handleSubmit}>
-      {/* <Stack mt={32}>
-        <TextInput label="Vorname" {...form.getInputProps("firstName")} />
-        <TextInput label="Nachname" {...form.getInputProps("lastName")} />
-        <TextInput label="Anzeigename" {...form.getInputProps("displayName")} />
-        <TextInput label="E-Mail Adresse" {...form.getInputProps("email")} />
-        <div>
-          <PasswordInput label="Passwort" {...form.getInputProps("password")} />
-          <Group spacing={5} grow mt="xs" mb="md">
-            {bars}
-          </Group>
-        </div>
-        <PasswordInput
-          label="Passwort bestätigen"
-          {...form.getInputProps("passwordConfirmation")}
-        />
-        <TextInput label="Universität" {...form.getInputProps("university")} />
-        <NumberInput label="Semester" {...form.getInputProps("semester")} />
-        <TextInput label="Geschlecht" {...form.getInputProps("gender")} />
-        <Checkbox
-          label="I agree to the data protection regulations"
-          {...form.getInputProps("acceptTOS")}
-        />
-        <Button color="dark" type="submit" radius="sm" loading={submitting}>
-          Konto erstellen
-        </Button>
-      </Stack> */}
       <Stack spacing={"spacing-24"}>
         <Stack spacing={"spacing-12"}>
           <Input inputType="text" label="Vorname" title="Vorname" {...form.getInputProps("firstName")} />
@@ -177,11 +149,6 @@ export function RegistrationForm() {
                   styleType="primary-01"
                   href="#"
                   c={"neutrals-02.1"}
-                  stylesOverwrite={{
-                    ":hover": {
-                      color: `${colors["neutrals-01"][9]}`,
-                    },
-                  }}
                 >
                   Data Protection Regulations
                 </CustomLink>
