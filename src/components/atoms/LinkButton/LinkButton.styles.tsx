@@ -20,5 +20,10 @@ export const SButton = styled.button<{ size?: "big" | "medium" }>`
     :disabled {
       color: ${theme.colors["neutrals-01"][7]};
     }
+
+    svg {
+      width: ${size === "big" ? theme.spacing["spacing-20"] : theme.spacing["spacing-16"]};
+      height: ${size === "big" ? theme.spacing["spacing-20"] : theme.spacing["spacing-16"]};
+    }
   `}
 `;
