@@ -1,16 +1,40 @@
-import type { Meta, StoryObj } from "@storybook/react";
+import { Meta, StoryObj } from "@storybook/react";
+import { withDesign } from "storybook-addon-designs";
+import { Box } from "@mantine/core";
+import { ResetPasswordModal, resetPasswordModalVisible } from "./ResetPasswordModal";
+import { Button } from "@/components/atoms/Button/Button";
+import { useAtom } from "jotai";
 
-import { ResetPasswordModal } from "./ResetPasswordModal";
-
-const meta: Meta<typeof ResetPasswordModal> = {
-  title: "Organisms/ResetPasswordModal",
-  component: ResetPasswordModal,
+const Template = (args: any) => {
+  const [_, setResetPasswordModalOpen] = useAtom(resetPasswordModalVisible);
+  const openResetPasswordModal = () => setResetPasswordModalOpen(true);
+  return (
+    <>
+      <ResetPasswordModal {...args} />
+      <Button onClick={openResetPasswordModal} styleType="primary">
+        Open Modal
+      </Button>
+    </>
+  );
 };
+
+const meta: Meta = {
+  title: "Organisms/ResetPasswordModal",
+  component: Template,
+  decorators: [withDesign],
+  parameters: {
+    design: {
+      type: "figma",
+      url: "https://www.figma.com/file/Lq58wHThYMiImXmLJcYbGZ/Constellatio-UI-Design?type=design&node-id=273-68492&mode=dev",
+    },
+  },
+  argTypes: {},
+};
+
+export default meta;
 
 type Story = StoryObj<typeof ResetPasswordModal>;
 
 export const Default: Story = {
-  render: () => <ResetPasswordModal />,
+  args: {},
 };
-
-export default meta;

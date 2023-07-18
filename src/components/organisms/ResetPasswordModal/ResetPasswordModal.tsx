@@ -1,8 +1,13 @@
 import { atom, useAtom } from "jotai";
-import { Button, Modal, Stack, TextInput } from "@mantine/core";
+
 import { createPagesBrowserClient } from "@supabase/auth-helpers-nextjs";
 import { useForm } from "@mantine/form";
 import { notifications } from "@mantine/notifications";
+import { Modal } from "@/components/molecules/Modal/Modal";
+import { Stack, Text, Title } from "@mantine/core";
+import { Input } from "@/components/atoms/Input/Input";
+import { Button } from "@/components/atoms/Button/Button";
+import { BodyText } from "@/components/atoms/BodyText/BodyText";
 
 type ResetPasswordFormValues = {
   email: string;
@@ -30,11 +35,15 @@ export function ResetPasswordModal() {
   });
 
   return (
-    <Modal opened={isOpen} onClose={handleClose} title="Passwort zurücksetzen">
-      <form onSubmit={handleSubmit}>
-        <Stack>
-          <TextInput label="E-Mail Adresse" {...form.getInputProps("email")} />
-          <Button type="submit" radius="xl">
+    <Modal opened={isOpen} onClose={handleClose} title={"Passwort zurücksetzen"}>
+      <form onSubmit={handleSubmit} style={{ width: "100%" }}>
+        <Stack spacing={"spacing-24"}>
+          <BodyText styleType="body-01-regular">
+            You will receive an email from us with a link. Clicking this link will take you to a page where you can
+            enter your new password.
+          </BodyText>
+          <Input inputType="text" label="E-Mail Adresse" {...form.getInputProps("email")} />
+          <Button styleType="primary" type="submit">
             Zurücksetzen
           </Button>
         </Stack>

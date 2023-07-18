@@ -1,7 +1,7 @@
 import { AppShell } from "@mantine/core";
 import { ReactNode } from "react";
-import { Header } from "@/components/molecules/Header/Header";
-import { Footer } from "@/components/molecules/Footer/Footer";
+import { Header } from "@/components/organisms/Header/Header";
+import { Footer } from "@/components/organisms/Footer/Footer";
 
 type LayoutProps = {
   children?: ReactNode;
@@ -9,7 +9,7 @@ type LayoutProps = {
 
 export function Layout({ children }: LayoutProps) {
   return (
-    <AppShell header={<Header />} footer={<Footer />}>
+    <AppShell header={<Header />} footer={<Footer />} maw={1440}>
       {children}
     </AppShell>
   );
