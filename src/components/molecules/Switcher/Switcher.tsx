@@ -66,7 +66,7 @@ export const Switcher: FC<TSwitcher> = ({
     tabsList: {
       display: "flex",
       alignItems: "center",
-      justifyContent: "center",
+      justifyContent: "space-between",
       padding: theme.spacing["spacing-4"],
       borderRadius: theme.radius.full,
       backgroundColor: theme.colors["neutrals-01"][4],

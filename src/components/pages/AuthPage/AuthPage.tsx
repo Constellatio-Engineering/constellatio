@@ -35,7 +35,7 @@ export function AuthPage({ tab }: AuthPageProps) {
             size="big"
             value={tab}
             onTabChange={handleTabChange}
-            tabStyleOverwrite={{ width: "49%", margin: "0 auto" }}
+            tabStyleOverwrite={{ width: "49%" }}
             panelStyleOverwrite={{ padding: "40px 0" }}
           >
             <Tabs.List grow>
