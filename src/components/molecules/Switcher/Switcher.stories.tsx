@@ -63,7 +63,8 @@ export const Login: Story = {
     ),
     w: 500,
     tabStyleOverwrite: {
-      width: "100%",
+      width: "49%",
+      margin: "0 auto",
     }
   },
 };
