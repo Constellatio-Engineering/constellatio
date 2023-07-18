@@ -10,7 +10,7 @@ const Template = (args: any) => (
 );
 
 const meta: Meta = {
-  title: "Atoms/Link",
+  title: "Atoms/CustomLink",
   component: Template,
   decorators: [withDesign],
   parameters: {

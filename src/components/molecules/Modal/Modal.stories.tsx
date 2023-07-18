@@ -59,6 +59,6 @@ type Story = StoryObj<typeof Modal>;
 export const Default: Story = {
   args: {
     opened: true,
-    title: <Title order={1}>Title</Title>,
+    title: "Title",
   },
 };

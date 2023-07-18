@@ -24,15 +24,26 @@ const CustomThemingProvider = ({ children }: { children: ReactNode }) => {
         fontFamily: "Karla, sans-serif",
         headings: {
           fontFamily: "Libre Baskerville, serif",
-          fontWeight: 700,
           sizes: {
             h1: {
               fontSize: "44px",
               lineHeight: "68px",
+              fontWeight: 700,
             },
             h2: {
               fontSize: "28px",
               lineHeight: "40px",
+              fontWeight: 700,
+            },
+            h3: {
+              fontSize: "24px",
+              lineHeight: "36px",
+              fontWeight: 400,
+            },
+            h4: {
+              fontSize: "18px",
+              lineHeight: "24px",
+              fontWeight: 400,
             },
           },
         },

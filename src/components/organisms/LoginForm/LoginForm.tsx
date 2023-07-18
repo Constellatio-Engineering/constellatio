@@ -65,7 +65,7 @@ export function LoginForm() {
           >
             Forgot Password?
           </CustomLink>
-          <Button styleType="primary" title={"Log in"} loading={submitting}>
+          <Button styleType="primary" type="submit" title={"Log in"} loading={submitting}>
             Log in
           </Button>
         </Stack>

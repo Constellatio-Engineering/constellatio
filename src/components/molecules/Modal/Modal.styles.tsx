@@ -2,6 +2,10 @@ import { MantineTheme, ModalStylesNames, Styles } from "@mantine/core";
 
 export const modalStyles = () => {
   const styles: Styles<ModalStylesNames, Record<string, any>> = (theme: MantineTheme) => ({
+    header: {
+      alignItems: "self-start",
+      padding: `0 0 ${theme.spacing["spacing-16"]} 0`,
+    },
     close: {
       width: "32px",
       height: "32px",
@@ -11,9 +15,11 @@ export const modalStyles = () => {
         color: theme.colors["neutrals-02"][1],
       },
     },
-    header: {
-      alignItems: "self-start",
-      padding: 0,
+    title: {
+      fontSize: theme.fontSizes["spacing-24"],
+      fontWeight: 400,
+      lineHeight: theme.spacing["spacing-36"],
+      fontFamily: "Libre Baskerville, serif",
     },
     body: {
       padding: 0,
