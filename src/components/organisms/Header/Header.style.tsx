@@ -15,6 +15,6 @@ export const SHeader = styled.header<{ variant: "default" | "simple" }>`
   display: flex;
   align-items: center;
   padding: 0 ${({ theme }) => theme.spacing["spacing-24"]};
-  background-color: ${({ theme }) => theme.colors["neutrals-01"][0]};
+  background-color: transparent;
   ${({variant}) => variant === "simple" ? SimpleHeader : DefaultHeader}
 `;

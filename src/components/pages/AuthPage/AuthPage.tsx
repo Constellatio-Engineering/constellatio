@@ -19,12 +19,12 @@ export function AuthPage({ tab }: AuthPageProps) {
   const handleTabChange = (value: AuthPageProps["tab"]) => router.push(`/${value}`);
 
   return (
-    <Flex justify={"space-between"}>
+    <Flex justify={"space-between"} bg={"brand-01.5"}>
       <RegistrationVisualHeader />
       <Container
         w={"100%"}
         sx={(theme) => ({
-          borderRadius: `${theme.radius["spacing-16"]} 0 0 ${theme.radius["spacing-16"]}`,
+          borderRadius: `${theme.radius["radius-16"]} 0 0 ${theme.radius["radius-16"]}`,
           backgroundColor: theme.colors["neutrals-01"][0],
           padding: 0,
         })}
