@@ -8,7 +8,7 @@ type TPasswordStrengthMeter = {
   meets: boolean;
   label: string;
   isPasswordRevealed: boolean;
-  error: ReactNode;
+  error?: ReactNode;
   disabled?: boolean;
 };
 
