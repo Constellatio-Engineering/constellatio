@@ -15,7 +15,7 @@ export const styles =
   }) =>
   (theme: MantineTheme): CSSObject => ({
     display: disabled ? "none" : "flex",
-    alignItems: "center",
+    alignItems: "start",
     color: meets
       ? theme.colors["neutrals-01"][9]
       : !meets && error

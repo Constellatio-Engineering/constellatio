@@ -2,38 +2,29 @@ import { useForm, zodResolver } from "@mantine/form";
 import { createPagesBrowserClient } from "@supabase/auth-helpers-nextjs";
 import { Database } from "../../../lib/database.types";
 import { notifications } from "@mantine/notifications";
-import {
-  Anchor,
-  Button,
-  Group,
-  PasswordInput,
-  Stack,
-  TextInput,
-} from "@mantine/core";
-import {
-  ResetPasswordModal,
-  resetPasswordModalVisible,
-} from "../ResetPasswordModal/ResetPasswordModal";
-import { useAtom } from "jotai";
+import { Box, Stack, Title } from "@mantine/core";
 import { useRouter } from "next/router";
 import { useState } from "react";
 import { loginFormSchema } from "../../../schemas/LoginFormSchema";
+import { Input } from "@/components/atoms/Input/Input";
+import { Button } from "@/components/atoms/Button/Button";
+import { PasswordValidationSchema } from "@/components/Helpers/PasswordValidationSchema";
+import { useDisclosure } from "@mantine/hooks";
 
 export function UpdatePasswordForm() {
-  const [_, setResetPasswordModalOpen] = useAtom(resetPasswordModalVisible);
   const supabase = createPagesBrowserClient<Database>();
+  const [isPasswordRevealed, { toggle }] = useDisclosure(false);
+
   const router = useRouter();
   const [submitting, setSubmitting] = useState(false);
   const form = useForm({
     validate: zodResolver(loginFormSchema),
     validateInputOnBlur: true,
     initialValues: {
-      email: "",
       password: "",
+      confirmPassword: "",
     },
   });
-
-  const openResetPasswordModal = () => setResetPasswordModalOpen(true);
 
   const handleSubmit = form.onSubmit(async (formValues) => {
     try {
@@ -45,7 +36,7 @@ export function UpdatePasswordForm() {
       });
 
       await supabase.auth.signInWithPassword({
-        email: formValues.email,
+        email: formValues.confirmPassword,
         password: formValues.password,
       });
 
@@ -59,26 +50,33 @@ export function UpdatePasswordForm() {
   return (
     <>
       <form onSubmit={handleSubmit}>
-        <Stack mt={32}>
-          <TextInput label="E-Mail Adresse" {...form.getInputProps("email")} />
-          <PasswordInput label="Passwort" {...form.getInputProps("password")} />
-          <Group position="apart" mt="xl">
-            <Anchor
-              component="button"
-              type="button"
-              onClick={openResetPasswordModal}
-              color="dimmed"
-              size="xs"
-            >
-              Probleme beim Anmelden?
-            </Anchor>
-          </Group>
-          <Button type="submit" color="dark" radius="sm" loading={submitting}>
-            Login
+        <Stack spacing={"spacing-32"}>
+          <Title order={3} align="center" c={"neutrals-02.1"}>
+            Set new password
+          </Title>
+          <Stack spacing={"spacing-12"}>
+            <Box>
+              <Input
+                inputType="password"
+                label="Password"
+                title="Password"
+                {...form.getInputProps("password")}
+                onVisibilityChange={toggle}
+              />
+              <PasswordValidationSchema passwordValue={form.values.password} isPasswordRevealed={isPasswordRevealed} />
+            </Box>
+            <Input
+              inputType="password"
+              label="Confirm Password"
+              title="Confirm Password"
+              {...form.getInputProps("confirmPassword")}
+            />
+          </Stack>
+          <Button styleType="primary" type="submit" title={"Reset Password"} loading={submitting}>
+            Reset Password
           </Button>
         </Stack>
       </form>
-      <ResetPasswordModal />
     </>
   );
 }

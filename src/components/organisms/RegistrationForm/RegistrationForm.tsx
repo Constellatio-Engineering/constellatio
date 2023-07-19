@@ -7,21 +7,13 @@ import { useState } from "react";
 import { registrationFormSchema } from "@/schemas/RegistrationFormSchema";
 import { Input } from "@/components/atoms/Input/Input";
 import { Button } from "@/components/atoms/Button/Button";
-import { PasswordStrengthMeter } from "@/components/atoms/PasswordStrengthMeter/PasswordStrengthMeter";
 import { useDisclosure } from "@mantine/hooks";
 import { Dropdown } from "@/components/atoms/Dropdown/Dropdown";
 import { Puzzle } from "@/components/Icons/Puzzle";
 import { Checkbox } from "@/components/atoms/Checkbox/Checkbox";
 import { BodyText } from "@/components/atoms/BodyText/BodyText";
 import { CustomLink } from "@/components/atoms/Link/CustomLink";
-
-const requirements = [
-  { re: /.{8,}/, label: "At least 8 characters" },
-  { re: /[0-9]/, label: "Includes a number" },
-  { re: /[A-Z]/, label: "Includes an uppercase letter" },
-  { re: /[a-z]/, label: "Includes a lowercase letter" },
-  { re: /[!#$&()*+,-.=\/?@{}\[\]^_~]/, label: "Includes special character" },
-];
+import { PasswordValidationSchema } from "@/components/Helpers/PasswordValidationSchema";
 
 const universityData = [
   { label: "Menu list item", icon: <Puzzle />, value: "1" },
@@ -94,19 +86,6 @@ export function RegistrationForm() {
     }
   });
 
-  const passwordValidationSchema = (
-    <Stack spacing={"spacing-8"} mt={"spacing-12"} pb={"spacing-16"}>
-      {requirements.map((requirement, index) => (
-        <PasswordStrengthMeter
-          key={index}
-          label={requirement.label}
-          meets={requirement.re.test(form.values.password)}
-          isPasswordRevealed={isPasswordRevealed}
-        />
-      ))}
-    </Stack>
-  );
-
   return (
     <form onSubmit={handleSubmit}>
       <Stack spacing={"spacing-24"}>
@@ -122,7 +101,7 @@ export function RegistrationForm() {
               onVisibilityChange={toggle}
               {...form.getInputProps("password")}
             />
-            {passwordValidationSchema}
+            <PasswordValidationSchema passwordValue={form.values.password} isPasswordRevealed={isPasswordRevealed} />
           </Box>
           <Input
             inputType="password"
