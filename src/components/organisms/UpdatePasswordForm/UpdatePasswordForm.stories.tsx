@@ -3,7 +3,9 @@ import { Box } from "@mantine/core";
 import { UpdatePasswordForm } from "./UpdatePasswordForm";
 
 const Template = (args: any) => (
-  <UpdatePasswordForm {...args} />
+  <Box w={440}>
+    <UpdatePasswordForm {...args} />
+  </Box>
 );
 
 const meta: Meta = {
@@ -15,9 +17,7 @@ const meta: Meta = {
       url: "https://www.figma.com/file/Lq58wHThYMiImXmLJcYbGZ/Constellatio-UI-Design?type=design&node-id=145-30737&mode=dev",
     },
   },
-  argTypes: {
-    
-  },
+  argTypes: {},
 };
 
 export default meta;
@@ -25,9 +25,5 @@ export default meta;
 type Story = StoryObj<typeof UpdatePasswordForm>;
 
 export const Default: Story = {
-  args: {
-   
-  },
+  args: {},
 };
-
-

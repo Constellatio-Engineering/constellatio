@@ -14,7 +14,7 @@ const meta: Meta = {
   parameters: {
     design: {
       type: "figma",
-      url: "https://www.figma.com/file/KZhlH1AesOBZZf1V4F9d2r/Constellatio-%E2%80%93-UI-Kit?type=design&node-id=48-4837&mode=design&t=fUYGnKtkoyjTfrLF-4",
+      url: "https://www.figma.com/file/Lq58wHThYMiImXmLJcYbGZ/Constellatio-UI-Design?type=design&node-id=145-30733&mode=dev",
     },
   },
   argTypes: {},
