@@ -1,5 +1,4 @@
 import { Meta, StoryObj } from "@storybook/react";
-import { withDesign } from "storybook-addon-designs";
 import { Box, Group, Stack, Text, Title } from "@mantine/core";
 import { Modal } from "./Modal";
 import { useDisclosure } from "@mantine/hooks";
@@ -42,7 +41,6 @@ const Template = (args: any) => {
 const meta: Meta = {
   title: "Molecules/Modal",
   component: Template,
-  decorators: [withDesign],
   parameters: {
     design: {
       type: "figma",

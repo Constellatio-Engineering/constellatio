@@ -49,14 +49,15 @@
 		"zod": "^3.21.4"
 	},
 	"devDependencies": {
-		"@storybook/addon-docs": "^7.0.26",
-		"@storybook/addon-essentials": "^7.0.18",
-		"@storybook/addon-interactions": "^7.0.18",
-		"@storybook/addon-links": "^7.0.18",
-		"@storybook/blocks": "^7.0.18",
-		"@storybook/nextjs": "^7.0.18",
-		"@storybook/react": "^7.0.18",
-		"@storybook/testing-library": "^0.0.14-next.2",
+		"@storybook/addon-designs": "^7.0.0",
+		"@storybook/addon-docs": "^7.1.0",
+		"@storybook/addon-essentials": "^7.1.0",
+		"@storybook/addon-interactions": "^7.1.0",
+		"@storybook/addon-links": "^7.1.0",
+		"@storybook/blocks": "^7.1.0",
+		"@storybook/nextjs": "^7.1.0",
+		"@storybook/react": "^7.1.0",
+		"@storybook/testing-library": "^0.2.0",
 		"@types/node": "20.2.5",
 		"@types/react": "18.2.8",
 		"@types/react-dom": "18.2.4",
@@ -64,8 +65,7 @@
 		"eslint-config-next": "13.4.4",
 		"eslint-plugin-storybook": "^0.6.12",
 		"prettier": "^2.8.8",
-		"storybook": "^7.0.18",
-		"storybook-addon-designs": "^7.0.0-beta.2",
+		"storybook": "^7.1.0",
 		"supabase": "^1.64.8",
 		"typescript": "5.1.3"
 	}

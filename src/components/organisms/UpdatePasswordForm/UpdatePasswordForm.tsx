@@ -19,7 +19,7 @@ import { useRouter } from "next/router";
 import { useState } from "react";
 import { loginFormSchema } from "../../../schemas/LoginFormSchema";
 
-export function LoginForm() {
+export function UpdatePasswordForm() {
   const [_, setResetPasswordModalOpen] = useAtom(resetPasswordModalVisible);
   const supabase = createPagesBrowserClient<Database>();
   const router = useRouter();

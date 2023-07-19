@@ -1,5 +1,4 @@
 import { Meta, StoryObj } from "@storybook/react";
-import { withDesign } from "storybook-addon-designs";
 import { AuthPage } from "./AuthPage";
 import { Header } from "@/components/organisms/Header/Header";
 import { Container } from "@mantine/core";
@@ -13,7 +12,6 @@ const Template = (args: any) => (
 const meta: Meta = {
   title: "Pages/AuthPage",
   component: Template,
-  decorators: [withDesign],
   parameters: {
     design: {
       type: "figma",

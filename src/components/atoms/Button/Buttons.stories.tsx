@@ -1,6 +1,5 @@
 import { Meta, StoryObj } from "@storybook/react";
 import { Button } from "./Button";
-import { withDesign } from "storybook-addon-designs";
 import { DownloadIcon } from "@/components/Icons/DownloadIcon";
 import { ArrowDown } from "@/components/Icons/ArrowDown";
 import { Box, Flex } from "@mantine/core";
@@ -16,7 +15,6 @@ const Template = (args: any) => (
 const meta: Meta = {
   title: "Atoms/Button",
   component: Template,
-  decorators: [withDesign],
   tags: ["autodocs"],
   parameters: {
     design: {

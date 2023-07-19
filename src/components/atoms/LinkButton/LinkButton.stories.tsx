@@ -1,5 +1,4 @@
 import { Meta, StoryObj } from "@storybook/react";
-import { withDesign } from "storybook-addon-designs";
 import { LinkButton } from "./LinkButton";
 import { DownloadIcon } from "@/components/Icons/DownloadIcon";
 
@@ -8,7 +7,6 @@ const Template = (args: any) => <LinkButton {...args} />;
 const meta: Meta = {
   title: "Atoms/LinkButton",
   component: Template,
-  decorators: [withDesign],
   parameters: {
     design: {
       type: "figma",

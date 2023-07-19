@@ -1,5 +1,4 @@
 import { Meta, StoryObj } from "@storybook/react";
-import { withDesign } from "storybook-addon-designs";
 import { Input } from "./Input";
 import { Box } from "@mantine/core";
 
@@ -12,7 +11,6 @@ const Template = (args: any) => (
 const meta: Meta = {
   title: "Atoms/SimpleInput",
   component: Template,
-  decorators: [withDesign],
   parameters: {
     design: {
       type: "figma",
