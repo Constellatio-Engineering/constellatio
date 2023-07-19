@@ -1,5 +1,4 @@
 import { Meta, StoryObj } from "@storybook/react";
-import { withDesign } from "storybook-addon-designs";
 import { Box } from "@mantine/core";
 import { ResetPasswordModal, resetPasswordModalVisible } from "./ResetPasswordModal";
 import { Button } from "@/components/atoms/Button/Button";
@@ -21,7 +20,6 @@ const Template = (args: any) => {
 const meta: Meta = {
   title: "Organisms/ResetPasswordModal",
   component: Template,
-  decorators: [withDesign],
   parameters: {
     design: {
       type: "figma",

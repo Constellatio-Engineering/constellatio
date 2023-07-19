@@ -1,5 +1,4 @@
 import { Meta, StoryObj } from "@storybook/react";
-import { withDesign } from "storybook-addon-designs";
 import { Box } from "@mantine/core";
 import { RegistrationVisualHeader } from "./RegistrationVisualHeader";
 
@@ -12,7 +11,6 @@ const Template = (args: any) => (
 const meta: Meta = {
   title: "Organisms/RegistrationVisualHeader",
   component: Template,
-  decorators: [withDesign],
   parameters: {
     design: {
       type: "figma",

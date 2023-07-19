@@ -1,5 +1,4 @@
 import { Meta, StoryObj } from "@storybook/react";
-import { withDesign } from "storybook-addon-designs";
 import { Box, Stack } from "@mantine/core";
 import { PasswordStrengthMeter } from "./PasswordStrengthMeter";
 import { useState } from "react";
@@ -48,7 +47,6 @@ const Template = (args: any) => {
 const meta: Meta = {
   title: "Atoms/PasswordStrengthMeter",
   component: Template,
-  decorators: [withDesign],
   parameters: {
     design: {
       type: "figma",

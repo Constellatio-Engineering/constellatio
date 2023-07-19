@@ -1,5 +1,4 @@
 import { Meta, StoryObj } from "@storybook/react";
-import { withDesign } from "storybook-addon-designs";
 import { Tabs } from "@mantine/core";
 import { SwitcherTab } from "./SwitcherTab";
 import { Puzzle } from "@/components/Icons/Puzzle";
@@ -53,7 +52,6 @@ const Template = (args: any) => (
 const meta: Meta = {
   title: "Atoms/SwitcherTab",
   component: Template,
-  decorators: [withDesign],
   parameters: {
     design: {
       type: "figma",

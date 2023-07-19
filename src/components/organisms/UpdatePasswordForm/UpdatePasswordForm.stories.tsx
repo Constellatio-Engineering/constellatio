@@ -1,20 +1,20 @@
 import { Meta, StoryObj } from "@storybook/react";
 import { Box } from "@mantine/core";
-import { RegistrationForm } from "./RegistrationForm";
+import { UpdatePasswordForm } from "./UpdatePasswordForm";
 
 const Template = (args: any) => (
-  <Box w={400}>
-    <RegistrationForm {...args} />
+  <Box w={440}>
+    <UpdatePasswordForm {...args} />
   </Box>
 );
 
 const meta: Meta = {
-  title: "Organisms/RegistrationForm",
+  title: "Organisms/UpdatePasswordForm",
   component: Template,
   parameters: {
     design: {
       type: "figma",
-      url: "https://www.figma.com/file/Lq58wHThYMiImXmLJcYbGZ/Constellatio-UI-Design?type=design&node-id=143-26667&mode=dev",
+      url: "https://www.figma.com/file/Lq58wHThYMiImXmLJcYbGZ/Constellatio-UI-Design?type=design&node-id=145-30737&mode=dev",
     },
   },
   argTypes: {},
@@ -22,7 +22,7 @@ const meta: Meta = {
 
 export default meta;
 
-type Story = StoryObj<typeof RegistrationForm>;
+type Story = StoryObj<typeof UpdatePasswordForm>;
 
 export const Default: Story = {
   args: {},
