@@ -14,7 +14,6 @@ import { Puzzle } from "@/components/Icons/Puzzle";
 import { Checkbox } from "@/components/atoms/Checkbox/Checkbox";
 import { BodyText } from "@/components/atoms/BodyText/BodyText";
 import { CustomLink } from "@/components/atoms/Link/CustomLink";
-import { colors } from "@/constants/styles/colors";
 
 const requirements = [
   { re: /.{8,}/, label: "At least 8 characters" },
@@ -96,7 +95,7 @@ export function RegistrationForm() {
   });
 
   const passwordValidationSchema = (
-    <Stack spacing={"spacing-8"} mt={"spacing-12"}>
+    <Stack spacing={"spacing-8"} mt={"spacing-12"} pb={"spacing-16"}>
       {requirements.map((requirement, index) => (
         <PasswordStrengthMeter
           key={index}
@@ -120,8 +119,8 @@ export function RegistrationForm() {
               inputType="password"
               label="Passwort"
               title="Passwort"
-              {...form.getInputProps("password")}
               onVisibilityChange={toggle}
+              {...form.getInputProps("password")}
             />
             {passwordValidationSchema}
           </Box>

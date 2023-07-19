@@ -35,7 +35,7 @@ export function ResetPasswordModal() {
   });
 
   return (
-    <Modal opened={isOpen} onClose={handleClose} title={"Passwort zurücksetzen"}>
+    <Modal opened={isOpen} onClose={handleClose} title={"Passwort zurücksetzen"} centered>
       <form onSubmit={handleSubmit} style={{ width: "100%" }}>
         <Stack spacing={"spacing-24"}>
           <BodyText styleType="body-01-regular">
