@@ -1,7 +1,7 @@
 import { useForm, zodResolver } from "@mantine/form";
 import { createPagesBrowserClient } from "@supabase/auth-helpers-nextjs";
 import { notifications } from "@mantine/notifications";
-import { Box,  Stack } from "@mantine/core";
+import { Box, Stack } from "@mantine/core";
 import { useRouter } from "next/router";
 import { useState } from "react";
 import { registrationFormSchema } from "@/schemas/RegistrationFormSchema";
@@ -41,6 +41,7 @@ const semesterData = [
   { label: "6", value: "6" },
   { label: "7", value: "7" },
   { label: "8", value: "8" },
+  { label: "Graduate", value: "9" },
 ];
 
 const genderData = [
@@ -145,11 +146,7 @@ export function RegistrationForm() {
             label={
               <BodyText styleType="body-01-medium">
                 I agree to the&nbsp;
-                <CustomLink
-                  styleType="primary-01"
-                  href="#"
-                  c={"neutrals-02.1"}
-                >
+                <CustomLink styleType="primary-01" href="#" c={"neutrals-02.1"}>
                   Data Protection Regulations
                 </CustomLink>
               </BodyText>
