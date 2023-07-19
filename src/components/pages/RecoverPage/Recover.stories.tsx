@@ -1,22 +1,22 @@
 import { Meta, StoryObj } from "@storybook/react";
 import { withDesign } from "storybook-addon-designs";
 import { Box } from "@mantine/core";
-import { RegistrationForm } from "./RegistrationForm";
+import { RecoverPage } from "./RecoverPage";
 
 const Template = (args: any) => (
-  <Box w={400}>
-    <RegistrationForm {...args} />
+  <Box w={350}>
+    <RecoverPage {...args} />
   </Box>
 );
 
 const meta: Meta = {
-  title: "Organisms/RegistrationForm",
+  title: "Pages/RecoverPage",
   component: Template,
   decorators: [withDesign],
   parameters: {
     design: {
       type: "figma",
-      url: "https://www.figma.com/file/Lq58wHThYMiImXmLJcYbGZ/Constellatio-UI-Design?type=design&node-id=143-26667&mode=dev",
+      url: "https://www.figma.com/file/KZhlH1AesOBZZf1V4F9d2r/Constellatio-%E2%80%93-UI-Kit?type=design&node-id=48-4837&mode=design&t=fUYGnKtkoyjTfrLF-4",
     },
   },
   argTypes: {},
@@ -24,7 +24,7 @@ const meta: Meta = {
 
 export default meta;
 
-type Story = StoryObj<typeof RegistrationForm>;
+type Story = StoryObj<typeof RecoverPage>;
 
 export const Default: Story = {
   args: {},

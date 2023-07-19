@@ -1,45 +1,59 @@
 import { useForm, zodResolver } from "@mantine/form";
 import { createPagesBrowserClient } from "@supabase/auth-helpers-nextjs";
-import { Database } from "../../../lib/database.types";
 import { notifications } from "@mantine/notifications";
-import {
-  Button,
-  Checkbox,
-  Group,
-  NumberInput,
-  PasswordInput,
-  Progress,
-  Stack,
-  TextInput,
-} from "@mantine/core";
+import { Box, Stack } from "@mantine/core";
 import { useRouter } from "next/router";
 import { useState } from "react";
-import { useSupabaseClient } from "@supabase/auth-helpers-react";
 import { registrationFormSchema } from "@/schemas/RegistrationFormSchema";
+import { Input } from "@/components/atoms/Input/Input";
+import { Button } from "@/components/atoms/Button/Button";
+import { PasswordStrengthMeter } from "@/components/atoms/PasswordStrengthMeter/PasswordStrengthMeter";
+import { useDisclosure } from "@mantine/hooks";
+import { Dropdown } from "@/components/atoms/Dropdown/Dropdown";
+import { Puzzle } from "@/components/Icons/Puzzle";
+import { Checkbox } from "@/components/atoms/Checkbox/Checkbox";
+import { BodyText } from "@/components/atoms/BodyText/BodyText";
+import { CustomLink } from "@/components/atoms/Link/CustomLink";
 
 const requirements = [
-  { re: /[0-9]/, label: "Includes number" },
-  { re: /[a-z]/, label: "Includes lowercase letter" },
-  { re: /[A-Z]/, label: "Includes uppercase letter" },
-  { re: /[$&+,:;=?@#|'<>.^*()%!-]/, label: "Includes special symbol" },
+  { re: /.{8,}/, label: "At least 8 characters" },
+  { re: /[0-9]/, label: "Includes a number" },
+  { re: /[A-Z]/, label: "Includes an uppercase letter" },
+  { re: /[a-z]/, label: "Includes a lowercase letter" },
+  { re: /[!#$&()*+,-.=\/?@{}\[\]^_~]/, label: "Includes special character" },
 ];
 
-function getStrength(password: string) {
-  let multiplier = password.length > 5 ? 0 : 1;
+const universityData = [
+  { label: "Menu list item", icon: <Puzzle />, value: "1" },
+  { label: "Menu list item", icon: <Puzzle />, value: "2" },
+  { label: "Menu list item", icon: <Puzzle />, value: "3" },
+  { label: "Menu list item", icon: <Puzzle />, value: "4" },
+  { label: "Menu list item", icon: <Puzzle />, value: "5" },
+];
 
-  requirements.forEach((requirement) => {
-    if (!requirement.re.test(password)) {
-      multiplier += 1;
-    }
-  });
+const semesterData = [
+  { label: "1", value: "1" },
+  { label: "2", value: "2" },
+  { label: "3", value: "3" },
+  { label: "4", value: "4" },
+  { label: "5", value: "5" },
+  { label: "6", value: "6" },
+  { label: "7", value: "7" },
+  { label: "8", value: "8" },
+  { label: "Graduate", value: "9" },
+];
 
-  return Math.max(100 - (100 / (requirements.length + 1)) * multiplier, 0);
-}
+const genderData = [
+  { label: "male", value: "1" },
+  { label: "female", value: "2" },
+  { label: "other", value: "3" },
+];
 
 export function RegistrationForm() {
   const supabase = createPagesBrowserClient();
   const router = useRouter();
   const [submitting, setSubmitting] = useState(false);
+  const [isPasswordRevealed, { toggle }] = useDisclosure(false);
   const form = useForm({
     validate: zodResolver(registrationFormSchema),
     validateInputOnBlur: true,
@@ -80,51 +94,68 @@ export function RegistrationForm() {
     }
   });
 
-  const strength = getStrength(form.values.password);
-
-  const bars = Array(4)
-    .fill(0)
-    .map((_, index) => (
-      <Progress
-        styles={{ bar: { transitionDuration: "0ms" } }}
-        value={
-          form.values.password.length > 0 && index === 0
-            ? 100
-            : strength >= ((index + 1) / 4) * 100
-            ? 100
-            : 0
-        }
-        color={strength > 80 ? "teal" : strength > 50 ? "yellow" : "red"}
-        key={index}
-        size={4}
-      />
-    ));
+  const passwordValidationSchema = (
+    <Stack spacing={"spacing-8"} mt={"spacing-12"} pb={"spacing-16"}>
+      {requirements.map((requirement, index) => (
+        <PasswordStrengthMeter
+          key={index}
+          label={requirement.label}
+          meets={requirement.re.test(form.values.password)}
+          isPasswordRevealed={isPasswordRevealed}
+        />
+      ))}
+    </Stack>
+  );
 
   return (
     <form onSubmit={handleSubmit}>
-      <Stack mt={32}>
-        <TextInput label="Vorname" {...form.getInputProps("firstName")} />
-        <TextInput label="Nachname" {...form.getInputProps("lastName")} />
-        <TextInput label="Anzeigename" {...form.getInputProps("displayName")} />
-        <TextInput label="E-Mail Adresse" {...form.getInputProps("email")} />
-        <div>
-          <PasswordInput label="Passwort" {...form.getInputProps("password")} />
-          <Group spacing={5} grow mt="xs" mb="md">
-            {bars}
-          </Group>
-        </div>
-        <PasswordInput
-          label="Passwort bestätigen"
-          {...form.getInputProps("passwordConfirmation")}
-        />
-        <TextInput label="Universität" {...form.getInputProps("university")} />
-        <NumberInput label="Semester" {...form.getInputProps("semester")} />
-        <TextInput label="Geschlecht" {...form.getInputProps("gender")} />
-        <Checkbox
-          label="I agree to the data protection regulations"
-          {...form.getInputProps("acceptTOS")}
-        />
-        <Button color="dark" type="submit" radius="sm" loading={submitting}>
+      <Stack spacing={"spacing-24"}>
+        <Stack spacing={"spacing-12"}>
+          <Input inputType="text" label="Vorname" title="Vorname" {...form.getInputProps("firstName")} />
+          <Input inputType="text" label="Nachname" title="Nachname" {...form.getInputProps("lastName")} />
+          <Input inputType="text" label="Anzeigename" title="Anzeigename" {...form.getInputProps("displayName")} />
+          <Box>
+            <Input
+              inputType="password"
+              label="Passwort"
+              title="Passwort"
+              onVisibilityChange={toggle}
+              {...form.getInputProps("password")}
+            />
+            {passwordValidationSchema}
+          </Box>
+          <Input
+            inputType="password"
+            label="Passwort bestätigen"
+            title="Passwort bestätigen"
+            {...form.getInputProps("passwordConfirmation")}
+            onVisibilityChange={toggle}
+          />
+          <Dropdown
+            label="Universität"
+            title="Universität"
+            {...form.getInputProps("university")}
+            data={universityData}
+          />
+          <Box maw={240}>
+            <Dropdown label="Semester" title="Semester" {...form.getInputProps("semester")} data={semesterData} />
+          </Box>
+          <Dropdown label="Geschlecht" title="Geschlecht" {...form.getInputProps("Geschlecht")} data={genderData} />
+          <Checkbox
+            label={
+              <BodyText styleType="body-01-medium">
+                I agree to the&nbsp;
+                <CustomLink styleType="primary-01" href="#" c={"neutrals-02.1"}>
+                  Data Protection Regulations
+                </CustomLink>
+              </BodyText>
+            }
+            title="acceptTOS"
+            {...form.getInputProps("acceptTOS")}
+          />
+        </Stack>
+
+        <Button styleType="primary" fullWidth type="submit" title={"Konto erstellen"} loading={submitting}>
           Konto erstellen
         </Button>
       </Stack>

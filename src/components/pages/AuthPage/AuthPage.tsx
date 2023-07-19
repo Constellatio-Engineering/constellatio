@@ -17,7 +17,6 @@ export function AuthPage({ tab }: AuthPageProps) {
   const router = useRouter();
 
   const handleTabChange = (value: AuthPageProps["tab"]) => router.push(`/${value}`);
-
   return (
     <Flex justify={"space-between"} bg={"brand-01.5"}>
       <RegistrationVisualHeader />
@@ -30,12 +29,12 @@ export function AuthPage({ tab }: AuthPageProps) {
         })}
       >
         <Header variant="simple" />
-        <Container w={440} pt={180}>
+        <Container w={440} pt={180} pb={tab === "register" ? "spacing-100" : 0}>
           <Switcher
             size="big"
             value={tab}
             onTabChange={handleTabChange}
-            tabStyleOverwrite={{ width: "49%" }}
+            tabStyleOverwrite={{ width: "49.5%" }}
             panelStyleOverwrite={{ padding: "40px 0" }}
           >
             <Tabs.List grow>

@@ -6,7 +6,7 @@ import { Show } from "@/components/Icons/Show";
 import { Hide } from "@/components/Icons/Hide";
 
 type TInput = (TextInputProps | PasswordInputProps) & {
-  inputType: "text" | "password";
+  inputType: "text" | "password" | "number";
   labelStyleOverwrite?: CSSObject | undefined;
   inputStyleOverwrite?: CSSObject | undefined;
 };
@@ -35,5 +35,6 @@ export const Input: FC<TInput> = ({
       rightSection={error && <AlertFilled />}
       {...props}
     />
+    
   ) : null;
 };
