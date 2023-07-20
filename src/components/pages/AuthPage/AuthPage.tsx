@@ -5,7 +5,7 @@ import { RegistrationForm } from "@/components/organisms/RegistrationForm/Regist
 import { Switcher } from "@/components/molecules/Switcher/Switcher";
 import { SwitcherTab } from "@/components/atoms/Switcher-tab/SwitcherTab";
 import { BodyText } from "@/components/atoms/BodyText/BodyText";
-import { CustomLink } from "@/components/atoms/Link/CustomLink";
+import { CustomLink } from "@/components/atoms/CustomLink/CustomLink";
 import { RegistrationVisualHeader } from "@/components/organisms/RegistrationVisualHeader/RegistrationVisualHeader";
 import { Header } from "@/components/organisms/Header/Header";
 
@@ -51,7 +51,7 @@ export function AuthPage({ tab }: AuthPageProps) {
           <BodyText styleType="body-02-medium" c={"neutrals-01.7"}>
             Note: This version of Constellatio is optimized for computer use only. If you have any technical questions,
             please contact our support at&nbsp;
-            <CustomLink href="mailto:webmaster@constellatio.de" styleType="secondary-02" c={"neutrals-01.7"}>
+            <CustomLink href="mailto:webmaster@constellatio.de" styleType="link-secondary" c={"neutrals-01.7"}>
               webmaster@constellatio.de
             </CustomLink>
           </BodyText>

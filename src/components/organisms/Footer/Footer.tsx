@@ -6,6 +6,8 @@ import { LinkButton } from "@/components/atoms/LinkButton/LinkButton";
 import { Help } from "@/components/Icons/Help";
 import { Heart } from "@/components/Icons/Heart";
 import { CaptionText } from "@/components/atoms/CaptionText/CaptionText";
+import ConstellatioLogoIcon from "../../../../public/images/icons/constellatio-icon.svg";
+import ConstellatioLogoWhiteIcon from "../../../../public/images/icons/logo-symbol-white.svg";
 
 type TFooter = {
   variant?: "default" | "simpleColoredBg" | "simpleWhiteBg";
@@ -22,7 +24,7 @@ export const Footer: FC<TFooter> = ({ variant = "default" }) => {
               <LinkButton icon={<Heart />} title={"Support us"} size="big" />
             </Group>
             <Group spacing={"spacing-8"}>
-              <Image src={"/images/icons/constellatio-icon.svg"} alt="Constellatio" width={20} height={20} />{" "}
+              <Image src={ConstellatioLogoIcon} alt="Constellatio" />{" "}
               <CaptionText styleType="caption-01-medium" tt={"uppercase"} c={"neutrals-01.9"}>
                 &copy; Constellatio 2023. All Rights Reserved.
               </CaptionText>
@@ -33,7 +35,7 @@ export const Footer: FC<TFooter> = ({ variant = "default" }) => {
         <SFooter variant={variant}>
           <Flex justify={"center"}>
             <Group spacing={"spacing-8"}>
-              <Image src={"/images/icons/logo-symbol-white.svg"} alt="Constellatio" width={20} height={20} />{" "}
+            <Image src={ConstellatioLogoWhiteIcon} alt="Constellatio" />{" "}
               <CaptionText styleType="caption-01-medium" tt={"uppercase"} c={"neutrals-01.0"}>
                 &copy; Constellatio 2023. All Rights Reserved.
               </CaptionText>
@@ -44,7 +46,7 @@ export const Footer: FC<TFooter> = ({ variant = "default" }) => {
         <SFooter variant={variant}>
           <Flex justify={"center"}>
             <Group spacing={"spacing-8"}>
-              <Image src={"/images/icons/constellatio-icon.svg"} alt="Constellatio" width={20} height={20} />{" "}
+            <Image src={ConstellatioLogoIcon} alt="Constellatio" />{" "}
               <CaptionText styleType="caption-01-medium" tt={"uppercase"} c={"neutrals-01.9"}>
                 &copy; Constellatio 2023. All Rights Reserved.
               </CaptionText>

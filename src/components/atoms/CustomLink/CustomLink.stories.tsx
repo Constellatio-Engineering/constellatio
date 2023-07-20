@@ -20,7 +20,7 @@ const meta: Meta = {
   argTypes: {
     styleType: {
       control: "select",
-      options: ["primary-01", "secondary-02"],
+      options: ["link-primary", "link-secondary", "link-primary-ts", "link-content" , "link-content-title"],
     },
     disabled: {
       control: "boolean",
