@@ -1,0 +1,582 @@
+""""""
+type Asset {
+  """"""
+  _meta: CaisyDocument_Meta
+
+  """"""
+  author: String
+
+  """"""
+  blurHash: String
+
+  """"""
+  copyright: String
+
+  """"""
+  description: String
+
+  """"""
+  dominantColor: String
+
+  """"""
+  height: Int
+
+  """"""
+  id: ID
+
+  """"""
+  keywords: String
+
+  """"""
+  originType: String
+
+  """"""
+  originalName: String
+
+  """"""
+  src: String
+
+  """"""
+  title: String
+
+  """"""
+  width: Int
+}
+
+""""""
+type Asset_Connection {
+  """"""
+  edges: [Asset_ConnectionEdge]
+
+  """"""
+  pageInfo: PageInfo
+
+  """"""
+  totalCount: Int
+}
+
+""""""
+type Asset_ConnectionEdge {
+  """"""
+  cursor: String
+
+  """"""
+  node: Asset
+}
+
+""""""
+input Asset_Sort {
+  """"""
+  author: Order
+
+  """"""
+  blurHash: Order
+
+  """"""
+  copyright: Order
+
+  """"""
+  description: Order
+
+  """"""
+  dominantColor: Order
+
+  """"""
+  height: Order
+
+  """"""
+  keywords: Order
+
+  """"""
+  originType: Order
+
+  """"""
+  originalName: Order
+
+  """"""
+  title: Order
+
+  """"""
+  width: Order
+}
+
+""""""
+input Asset_Where {
+  """"""
+  AND: [Asset_Where]
+
+  """"""
+  OR: [Asset_Where]
+
+  """"""
+  author: CaisyField_String_Where
+
+  """"""
+  blurHash: CaisyField_String_Where
+
+  """"""
+  copyright: CaisyField_String_Where
+
+  """"""
+  description: CaisyField_String_Where
+
+  """"""
+  dominantColor: CaisyField_Color_Where
+
+  """"""
+  height: CaisyField_Number_WhereInt
+
+  """"""
+  keywords: CaisyField_String_Where
+
+  """"""
+  originType: CaisyField_String_Where
+
+  """"""
+  originalName: CaisyField_String_Where
+
+  """"""
+  title: CaisyField_String_Where
+
+  """"""
+  width: CaisyField_Number_WhereInt
+}
+
+""""""
+type CaisyDocument_Meta {
+  """"""
+  createdAt: DateTime
+
+  """"""
+  id: ID
+
+  """"""
+  locale: String
+
+  """"""
+  locales: [String]
+
+  """"""
+  publishedAt: DateTime
+
+  """"""
+  updatedAt: DateTime
+}
+
+""""""
+input CaisyField_Color_Where {
+  """"""
+  contains: String
+
+  """"""
+  eq: String
+
+  """"""
+  neq: String
+}
+
+""""""
+input CaisyField_Number_WhereInt {
+  """"""
+  eq: Int
+
+  """"""
+  gt: Int
+
+  """"""
+  gte: Int
+
+  """"""
+  lt: Int
+
+  """"""
+  lte: Int
+
+  """"""
+  neq: Int
+}
+
+""""""
+input CaisyField_Richtext_Where {
+  """"""
+  contains: String
+
+  """"""
+  eq: String
+
+  """"""
+  neq: String
+}
+
+""""""
+input CaisyField_String_Where {
+  """"""
+  contains: String
+
+  """"""
+  eq: String
+
+  """"""
+  neq: String
+}
+
+""""""
+type Caisy_Field_Document_NotFound {
+  """"""
+  id: ID
+
+  """"""
+  message: String
+}
+
+""""""
+type Case {
+  """"""
+  _meta: CaisyDocument_Meta
+
+  """"""
+  facts(locale: String): Case_facts
+
+  """"""
+  id: ID
+
+  """"""
+  legalArea(
+    """
+    The cursor to start the pagination from. In this case the curser equals the id for the (last) element. If not set, we wil start from the beginning.
+    """
+    after: String
+
+    """The number of items to return. Default and max value is 100."""
+    first: Int = 100
+
+    """"""
+    locale: String
+  ): LegalArea
+
+  """"""
+  quiz(
+    """
+    The cursor to start the pagination from. In this case the curser equals the id for the (last) element. If not set, we wil start from the beginning.
+    """
+    after: String
+
+    """The number of items to return. Default and max value is 100."""
+    first: Int = 100
+
+    """"""
+    locale: String
+  ): [Case_quiz]
+
+  """"""
+  slug: String
+
+  """"""
+  tags: [String]
+
+  """"""
+  title: String
+
+  """"""
+  topic: String
+}
+
+""""""
+type Case_Connection {
+  """"""
+  edges: [Case_ConnectionEdge]
+
+  """"""
+  pageInfo: PageInfo
+
+  """"""
+  totalCount: Int
+}
+
+""""""
+type Case_ConnectionEdge {
+  """"""
+  cursor: String
+
+  """"""
+  node: Case
+}
+
+""""""
+input Case_Sort {
+  """"""
+  legalArea: Order
+
+  """"""
+  quiz: Order
+
+  """"""
+  slug: Order
+
+  """"""
+  tags: Order
+
+  """"""
+  title: Order
+
+  """"""
+  topic: Order
+}
+
+""""""
+input Case_Where {
+  """"""
+  AND: [Case_Where]
+
+  """"""
+  OR: [Case_Where]
+
+  """"""
+  facts: CaisyField_Richtext_Where
+
+  """"""
+  slug: CaisyField_String_Where
+
+  """"""
+  tags: CaisyField_String_Where
+
+  """"""
+  title: CaisyField_String_Where
+
+  """"""
+  topic: CaisyField_String_Where
+}
+
+""""""
+type Case_facts {
+  """"""
+  connections(
+    """
+    The cursor to start the pagination from. In this case the curser equals the id for the (last) element. If not set, we wil start from the beginning.
+    """
+    after: String
+
+    """The number of items to return. Default and max value is 100."""
+    first: Int = 100
+
+    """"""
+    locale: String
+  ): [Case_facts_Connections]
+
+  """"""
+  json: JSON
+}
+
+""""""
+union Case_facts_Connections = Caisy_Field_Document_NotFound
+
+""""""
+union Case_quiz = Quiz
+
+"""
+The `DateTime` scalar type represents a DateTime. The DateTime is serialized as an RFC 3339 quoted string
+"""
+scalar DateTime
+
+"""Any JSON value"""
+scalar JSON
+
+""""""
+type LegalArea {
+  """"""
+  _meta: CaisyDocument_Meta
+
+  """"""
+  id: ID
+
+  """"""
+  title: String
+}
+
+""""""
+type LegalArea_Connection {
+  """"""
+  edges: [LegalArea_ConnectionEdge]
+
+  """"""
+  pageInfo: PageInfo
+
+  """"""
+  totalCount: Int
+}
+
+""""""
+type LegalArea_ConnectionEdge {
+  """"""
+  cursor: String
+
+  """"""
+  node: LegalArea
+}
+
+""""""
+input LegalArea_Sort {
+  """"""
+  title: Order
+}
+
+""""""
+input LegalArea_Where {
+  """"""
+  AND: [LegalArea_Where]
+
+  """"""
+  OR: [LegalArea_Where]
+
+  """"""
+  title: CaisyField_String_Where
+}
+
+""""""
+enum Order {
+  """"""
+  ASC
+
+  """"""
+  DESC
+}
+
+""""""
+type PageInfo {
+  """"""
+  endCursor: String
+
+  """"""
+  hasNextPage: Boolean
+
+  """"""
+  hasPreviousPage: Boolean
+
+  """"""
+  startCursor: String
+}
+
+""""""
+type Query {
+  """"""
+  Asset(id: ID!, locale: String): Asset
+
+  """"""
+  Case(id: ID!, locale: String): Case
+
+  """"""
+  LegalArea(id: ID!, locale: String): LegalArea
+
+  """"""
+  Quiz(id: ID!, locale: String): Quiz
+
+  """"""
+  allAsset(after: String, before: String, first: Int, last: Int, locale: String, sort: [Asset_Sort], where: [Asset_Where]): Asset_Connection
+
+  """"""
+  allCase(after: String, before: String, first: Int, last: Int, locale: String, sort: [Case_Sort], where: [Case_Where]): Case_Connection
+
+  """"""
+  allLegalArea(after: String, before: String, first: Int, last: Int, locale: String, sort: [LegalArea_Sort], where: [LegalArea_Where]): LegalArea_Connection
+
+  """"""
+  allQuiz(after: String, before: String, first: Int, last: Int, locale: String, sort: [Quiz_Sort], where: [Quiz_Where]): Quiz_Connection
+}
+
+""""""
+type Quiz {
+  """"""
+  _meta: CaisyDocument_Meta
+
+  """"""
+  correctOptions: [String]
+
+  """"""
+  description(locale: String): Quiz_description
+
+  """"""
+  id: ID
+
+  """"""
+  options: [String]
+
+  """"""
+  title: String
+}
+
+""""""
+type Quiz_Connection {
+  """"""
+  edges: [Quiz_ConnectionEdge]
+
+  """"""
+  pageInfo: PageInfo
+
+  """"""
+  totalCount: Int
+}
+
+""""""
+type Quiz_ConnectionEdge {
+  """"""
+  cursor: String
+
+  """"""
+  node: Quiz
+}
+
+""""""
+input Quiz_Sort {
+  """"""
+  correctOptions: Order
+
+  """"""
+  options: Order
+
+  """"""
+  title: Order
+}
+
+""""""
+input Quiz_Where {
+  """"""
+  AND: [Quiz_Where]
+
+  """"""
+  OR: [Quiz_Where]
+
+  """"""
+  correctOptions: CaisyField_String_Where
+
+  """"""
+  description: CaisyField_Richtext_Where
+
+  """"""
+  options: CaisyField_String_Where
+
+  """"""
+  title: CaisyField_String_Where
+}
+
+""""""
+type Quiz_description {
+  """"""
+  connections(
+    """
+    The cursor to start the pagination from. In this case the curser equals the id for the (last) element. If not set, we wil start from the beginning.
+    """
+    after: String
+
+    """The number of items to return. Default and max value is 100."""
+    first: Int = 100
+
+    """"""
+    locale: String
+  ): [Quiz_description_Connections]
+
+  """"""
+  json: JSON
+}
+
+""""""
+union Quiz_description_Connections = Caisy_Field_Document_NotFound
