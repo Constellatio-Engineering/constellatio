@@ -17,7 +17,8 @@ export const SRichtext = styled.div`
         color: ${theme.colors["neutrals-02"][2]};
         text-decoration: underline;
         font-size: ${theme.fontSizes["spacing-16"]};
-        font-weight: 400;
+        font-weight: inherit;
+        font-family: inherit;
         line-height: ${theme.spacing["spacing-24"]};
         transition: color 0.3 ease;
 
