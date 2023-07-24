@@ -2,6 +2,7 @@ import Image from "next/image";
 import { UserDropdown } from "../../molecules/UserDropdown/UserDropdown";
 import Link from "next/link";
 import { FC } from "react";
+import logo from "../../../../public/images/icons/constellatio-full-logo.svg";
 import { SHeader } from "./Header.style";
 
 type THeader = {
@@ -13,7 +14,7 @@ export const Header: FC<THeader> = ({ variant = "default" }) => {
     <SHeader variant={variant}>
       <div>
         <Link href="/">
-          <Image src={"/images/icons/constellatio-full-logo.svg"} alt="Constellatio" width={141} height={20} />
+          <Image src={logo} alt="Constellatio" style={{ width: "auto", height: 20 }} />
         </Link>
       </div>
     </SHeader>
@@ -21,7 +22,7 @@ export const Header: FC<THeader> = ({ variant = "default" }) => {
     <SHeader variant={variant}>
       <div>
         <Link href="/">
-          <Image src={"/images/icons/constellatio-full-logo.svg"} alt="Constellatio" width={141} height={20} />
+          <Image src={logo} alt="Constellatio" style={{ width: "auto", height: 20 }} />
         </Link>
       </div>
       <div>

@@ -19,7 +19,7 @@ const handler: NextApiHandler = async (req, res) => {
   const profileUpdate = await supabaseAdmin
     .from("profiles")
     .upsert({
-      id: data.user?.id,
+      id: data.user?.id as string,
       firstName: body.firstName,
       lastName: body.lastName,
       displayName: body.displayName,
