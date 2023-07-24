@@ -1,15 +1,14 @@
 import { useForm, zodResolver } from "@mantine/form";
 import { createPagesBrowserClient } from "@supabase/auth-helpers-nextjs";
-import { Database } from "../../../lib/database.types";
-import { notifications } from "@mantine/notifications";
+import { Database } from "@/lib/database.types";
 import { Box, Stack, Title } from "@mantine/core";
 import { useRouter } from "next/router";
 import { useState } from "react";
-import { loginFormSchema } from "../../../schemas/LoginFormSchema";
 import { Input } from "@/components/atoms/Input/Input";
 import { Button } from "@/components/atoms/Button/Button";
 import { PasswordValidationSchema } from "@/components/Helpers/PasswordValidationSchema";
 import { useDisclosure } from "@mantine/hooks";
+import { updatePasswordFormSchema } from "@/schemas/UpdatePasswordFormSchema";
 
 export function UpdatePasswordForm() {
   const supabase = createPagesBrowserClient<Database>();
@@ -18,28 +17,18 @@ export function UpdatePasswordForm() {
   const router = useRouter();
   const [submitting, setSubmitting] = useState(false);
   const form = useForm({
-    validate: zodResolver(loginFormSchema),
+    validate: zodResolver(updatePasswordFormSchema),
     validateInputOnBlur: true,
     initialValues: {
       password: "",
-      confirmPassword: "",
+      passwordConfirm: "",
     },
   });
 
   const handleSubmit = form.onSubmit(async (formValues) => {
     try {
       setSubmitting(true);
-
-      notifications.show({
-        title: "Login handler",
-        message: "The login handler was called",
-      });
-
-      await supabase.auth.signInWithPassword({
-        email: formValues.confirmPassword,
-        password: formValues.password,
-      });
-
+      await supabase.auth.updateUser({ password: formValues.password });
       await router.replace("/");
     } catch (error) {
     } finally {
@@ -69,7 +58,7 @@ export function UpdatePasswordForm() {
               inputType="password"
               label="Confirm Password"
               title="Confirm Password"
-              {...form.getInputProps("confirmPassword")}
+              {...form.getInputProps("passwordConfirm")}
             />
           </Stack>
           <Button styleType="primary" type="submit" title={"Reset Password"} loading={submitting}>
