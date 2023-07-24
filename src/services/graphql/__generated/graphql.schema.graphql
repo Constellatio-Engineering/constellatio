@@ -230,6 +230,94 @@ type Caisy_Field_Document_NotFound {
 }
 
 """"""
+type Callout {
+  """"""
+  _meta: CaisyDocument_Meta
+
+  """"""
+  icon(
+    """
+    The cursor to start the pagination from. In this case the curser equals the id for the (last) element. If not set, we wil start from the beginning.
+    """
+    after: String
+
+    """The number of items to return. Default and max value is 100."""
+    first: Int = 100
+
+    """"""
+    locale: String
+  ): Asset
+
+  """"""
+  id: ID
+
+  """"""
+  text(
+    """
+    The cursor to start the pagination from. In this case the curser equals the id for the (last) element. If not set, we wil start from the beginning.
+    """
+    after: String
+
+    """The number of items to return. Default and max value is 100."""
+    first: Int = 100
+
+    """"""
+    locale: String
+  ): [Callout_text]
+
+  """"""
+  title: String
+}
+
+""""""
+type Callout_Connection {
+  """"""
+  edges: [Callout_ConnectionEdge]
+
+  """"""
+  pageInfo: PageInfo
+
+  """"""
+  totalCount: Int
+}
+
+""""""
+type Callout_ConnectionEdge {
+  """"""
+  cursor: String
+
+  """"""
+  node: Callout
+}
+
+""""""
+input Callout_Sort {
+  """"""
+  icon: Order
+
+  """"""
+  text: Order
+
+  """"""
+  title: Order
+}
+
+""""""
+input Callout_Where {
+  """"""
+  AND: [Callout_Where]
+
+  """"""
+  OR: [Callout_Where]
+
+  """"""
+  title: CaisyField_String_Where
+}
+
+""""""
+union Callout_text = TextElement
+
+""""""
 type Case {
   """"""
   _meta: CaisyDocument_Meta
@@ -378,6 +466,134 @@ The `DateTime` scalar type represents a DateTime. The DateTime is serialized as 
 """
 scalar DateTime
 
+""""""
+type Headline {
+  """"""
+  _meta: CaisyDocument_Meta
+
+  """"""
+  id: ID
+
+  """"""
+  title: String
+}
+
+""""""
+type Headline_Connection {
+  """"""
+  edges: [Headline_ConnectionEdge]
+
+  """"""
+  pageInfo: PageInfo
+
+  """"""
+  totalCount: Int
+}
+
+""""""
+type Headline_ConnectionEdge {
+  """"""
+  cursor: String
+
+  """"""
+  node: Headline
+}
+
+""""""
+input Headline_Sort {
+  """"""
+  title: Order
+}
+
+""""""
+input Headline_Where {
+  """"""
+  AND: [Headline_Where]
+
+  """"""
+  OR: [Headline_Where]
+
+  """"""
+  title: CaisyField_String_Where
+}
+
+""""""
+type ImageCard {
+  """"""
+  _meta: CaisyDocument_Meta
+
+  """"""
+  id: ID
+
+  """"""
+  image(
+    """
+    The cursor to start the pagination from. In this case the curser equals the id for the (last) element. If not set, we wil start from the beginning.
+    """
+    after: String
+
+    """The number of items to return. Default and max value is 100."""
+    first: Int = 100
+
+    """"""
+    locale: String
+  ): Asset
+
+  """"""
+  internalTitle: String
+
+  """"""
+  text: String
+}
+
+""""""
+type ImageCard_Connection {
+  """"""
+  edges: [ImageCard_ConnectionEdge]
+
+  """"""
+  pageInfo: PageInfo
+
+  """"""
+  totalCount: Int
+}
+
+""""""
+type ImageCard_ConnectionEdge {
+  """"""
+  cursor: String
+
+  """"""
+  node: ImageCard
+}
+
+""""""
+input ImageCard_Sort {
+  """"""
+  image: Order
+
+  """"""
+  internalTitle: Order
+
+  """"""
+  text: Order
+}
+
+""""""
+input ImageCard_Where {
+  """"""
+  AND: [ImageCard_Where]
+
+  """"""
+  OR: [ImageCard_Where]
+
+  """"""
+  internalTitle: CaisyField_String_Where
+
+  """"""
+  text: CaisyField_String_Where
+}
+
 """Any JSON value"""
 scalar JSON
 
@@ -442,6 +658,38 @@ enum Order {
 }
 
 """"""
+type Page {
+  """"""
+  _meta: CaisyDocument_Meta
+
+  """"""
+  components(
+    """
+    The cursor to start the pagination from. In this case the curser equals the id for the (last) element. If not set, we wil start from the beginning.
+    """
+    after: String
+
+    """The number of items to return. Default and max value is 100."""
+    first: Int = 100
+
+    """"""
+    locale: String
+  ): [Page_components]
+
+  """"""
+  id: ID
+
+  """"""
+  internalTitle: String
+
+  """"""
+  nameInNavigation: String
+
+  """"""
+  slug: String
+}
+
+""""""
 type PageInfo {
   """"""
   endCursor: String
@@ -457,30 +705,114 @@ type PageInfo {
 }
 
 """"""
+type Page_Connection {
+  """"""
+  edges: [Page_ConnectionEdge]
+
+  """"""
+  pageInfo: PageInfo
+
+  """"""
+  totalCount: Int
+}
+
+""""""
+type Page_ConnectionEdge {
+  """"""
+  cursor: String
+
+  """"""
+  node: Page
+}
+
+""""""
+input Page_Sort {
+  """"""
+  components: Order
+
+  """"""
+  internalTitle: Order
+
+  """"""
+  nameInNavigation: Order
+
+  """"""
+  slug: Order
+}
+
+""""""
+input Page_Where {
+  """"""
+  AND: [Page_Where]
+
+  """"""
+  OR: [Page_Where]
+
+  """"""
+  internalTitle: CaisyField_String_Where
+
+  """"""
+  nameInNavigation: CaisyField_String_Where
+
+  """"""
+  slug: CaisyField_String_Where
+}
+
+""""""
+union Page_components = Callout | Headline | ImageCard | TextElement
+
+""""""
 type Query {
   """"""
   Asset(id: ID!, locale: String): Asset
 
   """"""
+  Callout(id: ID!, locale: String): Callout
+
+  """"""
   Case(id: ID!, locale: String): Case
+
+  """"""
+  Headline(id: ID!, locale: String): Headline
+
+  """"""
+  ImageCard(id: ID!, locale: String): ImageCard
 
   """"""
   LegalArea(id: ID!, locale: String): LegalArea
 
   """"""
-  Quiz(id: ID!, locale: String): Quiz
+  Page(id: ID!, locale: String): Page
+
+  """"""
+  Quiz(locale: String): Quiz
+
+  """"""
+  TextElement(id: ID!, locale: String): TextElement
 
   """"""
   allAsset(after: String, before: String, first: Int, last: Int, locale: String, sort: [Asset_Sort], where: [Asset_Where]): Asset_Connection
 
   """"""
+  allCallout(after: String, before: String, first: Int, last: Int, locale: String, sort: [Callout_Sort], where: [Callout_Where]): Callout_Connection
+
+  """"""
   allCase(after: String, before: String, first: Int, last: Int, locale: String, sort: [Case_Sort], where: [Case_Where]): Case_Connection
+
+  """"""
+  allHeadline(after: String, before: String, first: Int, last: Int, locale: String, sort: [Headline_Sort], where: [Headline_Where]): Headline_Connection
+
+  """"""
+  allImageCard(after: String, before: String, first: Int, last: Int, locale: String, sort: [ImageCard_Sort], where: [ImageCard_Where]): ImageCard_Connection
 
   """"""
   allLegalArea(after: String, before: String, first: Int, last: Int, locale: String, sort: [LegalArea_Sort], where: [LegalArea_Where]): LegalArea_Connection
 
   """"""
-  allQuiz(after: String, before: String, first: Int, last: Int, locale: String, sort: [Quiz_Sort], where: [Quiz_Where]): Quiz_Connection
+  allPage(after: String, before: String, first: Int, last: Int, locale: String, sort: [Page_Sort], where: [Page_Where]): Page_Connection
+
+  """"""
+  allTextElement(after: String, before: String, first: Int, last: Int, locale: String, sort: [TextElement_Sort], where: [TextElement_Where]): TextElement_Connection
 }
 
 """"""
@@ -505,60 +837,6 @@ type Quiz {
 }
 
 """"""
-type Quiz_Connection {
-  """"""
-  edges: [Quiz_ConnectionEdge]
-
-  """"""
-  pageInfo: PageInfo
-
-  """"""
-  totalCount: Int
-}
-
-""""""
-type Quiz_ConnectionEdge {
-  """"""
-  cursor: String
-
-  """"""
-  node: Quiz
-}
-
-""""""
-input Quiz_Sort {
-  """"""
-  correctOptions: Order
-
-  """"""
-  options: Order
-
-  """"""
-  title: Order
-}
-
-""""""
-input Quiz_Where {
-  """"""
-  AND: [Quiz_Where]
-
-  """"""
-  OR: [Quiz_Where]
-
-  """"""
-  correctOptions: CaisyField_String_Where
-
-  """"""
-  description: CaisyField_Richtext_Where
-
-  """"""
-  options: CaisyField_String_Where
-
-  """"""
-  title: CaisyField_String_Where
-}
-
-""""""
 type Quiz_description {
   """"""
   connections(
@@ -580,3 +858,83 @@ type Quiz_description {
 
 """"""
 union Quiz_description_Connections = Caisy_Field_Document_NotFound
+
+""""""
+type TextElement {
+  """"""
+  _meta: CaisyDocument_Meta
+
+  """"""
+  id: ID
+
+  """"""
+  internalTitle: String
+
+  """"""
+  richTextContent(locale: String): TextElement_richTextContent
+}
+
+""""""
+type TextElement_Connection {
+  """"""
+  edges: [TextElement_ConnectionEdge]
+
+  """"""
+  pageInfo: PageInfo
+
+  """"""
+  totalCount: Int
+}
+
+""""""
+type TextElement_ConnectionEdge {
+  """"""
+  cursor: String
+
+  """"""
+  node: TextElement
+}
+
+""""""
+input TextElement_Sort {
+  """"""
+  internalTitle: Order
+}
+
+""""""
+input TextElement_Where {
+  """"""
+  AND: [TextElement_Where]
+
+  """"""
+  OR: [TextElement_Where]
+
+  """"""
+  internalTitle: CaisyField_String_Where
+
+  """"""
+  richTextContent: CaisyField_Richtext_Where
+}
+
+""""""
+type TextElement_richTextContent {
+  """"""
+  connections(
+    """
+    The cursor to start the pagination from. In this case the curser equals the id for the (last) element. If not set, we wil start from the beginning.
+    """
+    after: String
+
+    """The number of items to return. Default and max value is 100."""
+    first: Int = 100
+
+    """"""
+    locale: String
+  ): [TextElement_richTextContent_Connections]
+
+  """"""
+  json: JSON
+}
+
+""""""
+union TextElement_richTextContent_Connections = Caisy_Field_Document_NotFound
