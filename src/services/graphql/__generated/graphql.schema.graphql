@@ -235,6 +235,9 @@ type Callout {
   _meta: CaisyDocument_Meta
 
   """"""
+  expandable: Boolean
+
+  """"""
   icon(
     """
     The cursor to start the pagination from. In this case the curser equals the id for the (last) element. If not set, we wil start from the beginning.
@@ -252,6 +255,9 @@ type Callout {
   id: ID
 
   """"""
+  internalTitle: String
+
+  """"""
   text(
     """
     The cursor to start the pagination from. In this case the curser equals the id for the (last) element. If not set, we wil start from the beginning.
@@ -263,7 +269,7 @@ type Callout {
 
     """"""
     locale: String
-  ): [Callout_text]
+  ): TextElement
 
   """"""
   title: String
@@ -293,7 +299,13 @@ type Callout_ConnectionEdge {
 """"""
 input Callout_Sort {
   """"""
+  expandable: Order
+
+  """"""
   icon: Order
+
+  """"""
+  internalTitle: Order
 
   """"""
   text: Order
@@ -311,11 +323,14 @@ input Callout_Where {
   OR: [Callout_Where]
 
   """"""
+  expandable: Boolean
+
+  """"""
+  internalTitle: CaisyField_String_Where
+
+  """"""
   title: CaisyField_String_Where
 }
-
-""""""
-union Callout_text = TextElement
 
 """"""
 type Case {

@@ -32,7 +32,10 @@ export const modalStyles = () => {
     content: {
       padding: theme.spacing["spacing-36"],
       borderRadius: theme.radius["radius-8"],
-      boxShadow: theme.shadows.default,
+      boxShadow: theme.shadows["elevation-big"],
+    },
+    overlay: {
+      backgroundColor: theme.colors["transparency-01"][5],
     },
   });
   return styles;

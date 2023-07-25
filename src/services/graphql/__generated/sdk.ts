@@ -125,9 +125,11 @@ export type IGenCaisy_Field_Document_NotFound = {
 export type IGenCallout = {
   __typename?: 'Callout';
   _meta?: Maybe<IGenCaisyDocument_Meta>;
+  expandable?: Maybe<Scalars['Boolean']['output']>;
   icon?: Maybe<IGenAsset>;
   id?: Maybe<Scalars['ID']['output']>;
-  text?: Maybe<Array<Maybe<IGenCallout_Text>>>;
+  internalTitle?: Maybe<Scalars['String']['output']>;
+  text?: Maybe<IGenTextElement>;
   title?: Maybe<Scalars['String']['output']>;
 };
 
@@ -159,7 +161,9 @@ export type IGenCallout_ConnectionEdge = {
 };
 
 export type IGenCallout_Sort = {
+  expandable?: InputMaybe<IGenOrder>;
   icon?: InputMaybe<IGenOrder>;
+  internalTitle?: InputMaybe<IGenOrder>;
   text?: InputMaybe<IGenOrder>;
   title?: InputMaybe<IGenOrder>;
 };
@@ -167,10 +171,10 @@ export type IGenCallout_Sort = {
 export type IGenCallout_Where = {
   AND?: InputMaybe<Array<InputMaybe<IGenCallout_Where>>>;
   OR?: InputMaybe<Array<InputMaybe<IGenCallout_Where>>>;
+  expandable?: InputMaybe<Scalars['Boolean']['input']>;
+  internalTitle?: InputMaybe<IGenCaisyField_String_Where>;
   title?: InputMaybe<IGenCaisyField_String_Where>;
 };
-
-export type IGenCallout_Text = IGenTextElement;
 
 export type IGenCase = {
   __typename?: 'Case';
@@ -659,14 +663,78 @@ export type IGenTextElement_RichTextContentConnectionsArgs = {
 
 export type IGenTextElement_RichTextContent_Connections = IGenCaisy_Field_Document_NotFound;
 
+export type IGenAssetFragment = { __typename?: 'Asset', title?: string | null, src?: string | null, originType?: string | null, keywords?: string | null, id?: string | null, dominantColor?: string | null, description?: string | null, copyright?: string | null, author?: string | null };
+
+export type IGenCalloutFragment = { __typename?: 'Callout', id?: string | null, title?: string | null, icon?: (
+    { __typename?: 'Asset' }
+    & IGenAssetFragment
+  ) | null, text?: (
+    { __typename?: 'TextElement' }
+    & IGenTextElementFragment
+  ) | null };
+
+export type IGenHeadlineFragment = { __typename?: 'Headline', id?: string | null, title?: string | null };
+
+export type IGenTextElementFragment = { __typename?: 'TextElement', id?: string | null, richTextContent?: { __typename?: 'TextElement_richTextContent', json?: any | null, connections?: Array<{ __typename: 'Caisy_Field_Document_NotFound' } | null> | null } | null };
+
 export type IGenPageQueryVariables = Exact<{
   slug: Scalars['String']['input'];
 }>;
 
 
-export type IGenPageQuery = { __typename?: 'Query', allPage?: { __typename?: 'Page_Connection', edges?: Array<{ __typename?: 'Page_ConnectionEdge', node?: { __typename?: 'Page', id?: string | null, nameInNavigation?: string | null, slug?: string | null, components?: Array<{ __typename?: 'Callout' } | { __typename?: 'Headline', title?: string | null } | { __typename?: 'ImageCard' } | { __typename?: 'TextElement', id?: string | null, richTextContent?: { __typename?: 'TextElement_richTextContent', json?: any | null, connections?: Array<{ __typename: 'Caisy_Field_Document_NotFound' } | null> | null } | null } | null> | null } | null } | null> | null } | null };
+export type IGenPageQuery = { __typename?: 'Query', allPage?: { __typename?: 'Page_Connection', edges?: Array<{ __typename?: 'Page_ConnectionEdge', node?: { __typename?: 'Page', id?: string | null, nameInNavigation?: string | null, slug?: string | null, components?: Array<(
+          { __typename?: 'Callout' }
+          & IGenCalloutFragment
+        ) | (
+          { __typename?: 'Headline' }
+          & IGenHeadlineFragment
+        ) | { __typename?: 'ImageCard' } | (
+          { __typename?: 'TextElement' }
+          & IGenTextElementFragment
+        ) | null> | null } | null } | null> | null } | null };
 
-
+export const AssetFragmentDoc = gql`
+    fragment Asset on Asset {
+  title
+  src
+  originType
+  keywords
+  id
+  dominantColor
+  description
+  copyright
+  author
+}
+    `;
+export const TextElementFragmentDoc = gql`
+    fragment TextElement on TextElement {
+  id
+  richTextContent {
+    connections {
+      __typename
+    }
+    json
+  }
+}
+    `;
+export const CalloutFragmentDoc = gql`
+    fragment Callout on Callout {
+  id
+  title
+  icon {
+    ...Asset
+  }
+  text {
+    ...TextElement
+  }
+}
+    `;
+export const HeadlineFragmentDoc = gql`
+    fragment Headline on Headline {
+  id
+  title
+}
+    `;
 export const PageDocument = gql`
     query Page($slug: String!) {
   allPage(where: {slug: {eq: $slug}}) {
@@ -676,24 +744,18 @@ export const PageDocument = gql`
         nameInNavigation
         slug
         components {
-          ... on Headline {
-            title
-          }
-          ... on TextElement {
-            id
-            richTextContent {
-              connections {
-                __typename
-              }
-              json
-            }
-          }
+          ...Headline
+          ...TextElement
+          ...Callout
         }
       }
     }
   }
 }
-    `;
+    ${HeadlineFragmentDoc}
+${TextElementFragmentDoc}
+${CalloutFragmentDoc}
+${AssetFragmentDoc}`;
 export type Requester<C = {}, E = unknown> = <R, V>(doc: DocumentNode, vars?: V, options?: C) => Promise<R> | AsyncIterable<R>
 export function getSdk<C, E>(requester: Requester<C, E>) {
   return {

@@ -1,7 +1,7 @@
 import { AppProps } from "next/app";
 import Head from "next/head";
 import { createPagesBrowserClient } from "@supabase/auth-helpers-nextjs";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { Session, SessionContextProvider } from "@supabase/auth-helpers-react";
 import { Notifications } from "@mantine/notifications";
 import { RouterTransition } from "@/components/atoms/RouterTransition/RouterTransition";
