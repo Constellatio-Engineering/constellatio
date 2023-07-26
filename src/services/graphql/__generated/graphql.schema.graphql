@@ -332,150 +332,6 @@ input Callout_Where {
   title: CaisyField_String_Where
 }
 
-""""""
-type Case {
-  """"""
-  _meta: CaisyDocument_Meta
-
-  """"""
-  facts(locale: String): Case_facts
-
-  """"""
-  id: ID
-
-  """"""
-  legalArea(
-    """
-    The cursor to start the pagination from. In this case the curser equals the id for the (last) element. If not set, we wil start from the beginning.
-    """
-    after: String
-
-    """The number of items to return. Default and max value is 100."""
-    first: Int = 100
-
-    """"""
-    locale: String
-  ): LegalArea
-
-  """"""
-  quiz(
-    """
-    The cursor to start the pagination from. In this case the curser equals the id for the (last) element. If not set, we wil start from the beginning.
-    """
-    after: String
-
-    """The number of items to return. Default and max value is 100."""
-    first: Int = 100
-
-    """"""
-    locale: String
-  ): [Case_quiz]
-
-  """"""
-  slug: String
-
-  """"""
-  tags: [String]
-
-  """"""
-  title: String
-
-  """"""
-  topic: String
-}
-
-""""""
-type Case_Connection {
-  """"""
-  edges: [Case_ConnectionEdge]
-
-  """"""
-  pageInfo: PageInfo
-
-  """"""
-  totalCount: Int
-}
-
-""""""
-type Case_ConnectionEdge {
-  """"""
-  cursor: String
-
-  """"""
-  node: Case
-}
-
-""""""
-input Case_Sort {
-  """"""
-  legalArea: Order
-
-  """"""
-  quiz: Order
-
-  """"""
-  slug: Order
-
-  """"""
-  tags: Order
-
-  """"""
-  title: Order
-
-  """"""
-  topic: Order
-}
-
-""""""
-input Case_Where {
-  """"""
-  AND: [Case_Where]
-
-  """"""
-  OR: [Case_Where]
-
-  """"""
-  facts: CaisyField_Richtext_Where
-
-  """"""
-  slug: CaisyField_String_Where
-
-  """"""
-  tags: CaisyField_String_Where
-
-  """"""
-  title: CaisyField_String_Where
-
-  """"""
-  topic: CaisyField_String_Where
-}
-
-""""""
-type Case_facts {
-  """"""
-  connections(
-    """
-    The cursor to start the pagination from. In this case the curser equals the id for the (last) element. If not set, we wil start from the beginning.
-    """
-    after: String
-
-    """The number of items to return. Default and max value is 100."""
-    first: Int = 100
-
-    """"""
-    locale: String
-  ): [Case_facts_Connections]
-
-  """"""
-  json: JSON
-}
-
-""""""
-union Case_facts_Connections = Caisy_Field_Document_NotFound
-
-""""""
-union Case_quiz = Quiz
-
 """
 The `DateTime` scalar type represents a DateTime. The DateTime is serialized as an RFC 3339 quoted string
 """
@@ -533,9 +389,12 @@ input Headline_Where {
 }
 
 """"""
-type ImageCard {
+type ImageWrapperCard {
   """"""
   _meta: CaisyDocument_Meta
+
+  """"""
+  downloadable: Boolean
 
   """"""
   id: ID
@@ -558,13 +417,13 @@ type ImageCard {
   internalTitle: String
 
   """"""
-  text: String
+  title: String
 }
 
 """"""
-type ImageCard_Connection {
+type ImageWrapperCard_Connection {
   """"""
-  edges: [ImageCard_ConnectionEdge]
+  edges: [ImageWrapperCard_ConnectionEdge]
 
   """"""
   pageInfo: PageInfo
@@ -574,16 +433,19 @@ type ImageCard_Connection {
 }
 
 """"""
-type ImageCard_ConnectionEdge {
+type ImageWrapperCard_ConnectionEdge {
   """"""
   cursor: String
 
   """"""
-  node: ImageCard
+  node: ImageWrapperCard
 }
 
 """"""
-input ImageCard_Sort {
+input ImageWrapperCard_Sort {
+  """"""
+  downloadable: Order
+
   """"""
   image: Order
 
@@ -591,77 +453,29 @@ input ImageCard_Sort {
   internalTitle: Order
 
   """"""
-  text: Order
+  title: Order
 }
 
 """"""
-input ImageCard_Where {
+input ImageWrapperCard_Where {
   """"""
-  AND: [ImageCard_Where]
+  AND: [ImageWrapperCard_Where]
 
   """"""
-  OR: [ImageCard_Where]
+  OR: [ImageWrapperCard_Where]
+
+  """"""
+  downloadable: Boolean
 
   """"""
   internalTitle: CaisyField_String_Where
 
   """"""
-  text: CaisyField_String_Where
+  title: CaisyField_String_Where
 }
 
 """Any JSON value"""
 scalar JSON
-
-""""""
-type LegalArea {
-  """"""
-  _meta: CaisyDocument_Meta
-
-  """"""
-  id: ID
-
-  """"""
-  title: String
-}
-
-""""""
-type LegalArea_Connection {
-  """"""
-  edges: [LegalArea_ConnectionEdge]
-
-  """"""
-  pageInfo: PageInfo
-
-  """"""
-  totalCount: Int
-}
-
-""""""
-type LegalArea_ConnectionEdge {
-  """"""
-  cursor: String
-
-  """"""
-  node: LegalArea
-}
-
-""""""
-input LegalArea_Sort {
-  """"""
-  title: Order
-}
-
-""""""
-input LegalArea_Where {
-  """"""
-  AND: [LegalArea_Where]
-
-  """"""
-  OR: [LegalArea_Where]
-
-  """"""
-  title: CaisyField_String_Where
-}
 
 """"""
 enum Order {
@@ -774,7 +588,7 @@ input Page_Where {
 }
 
 """"""
-union Page_components = Callout | Headline | ImageCard | TextElement
+union Page_components = Callout | Headline | ImageWrapperCard | TextElement
 
 """"""
 type Query {
@@ -785,22 +599,13 @@ type Query {
   Callout(id: ID!, locale: String): Callout
 
   """"""
-  Case(id: ID!, locale: String): Case
-
-  """"""
   Headline(id: ID!, locale: String): Headline
 
   """"""
-  ImageCard(id: ID!, locale: String): ImageCard
-
-  """"""
-  LegalArea(id: ID!, locale: String): LegalArea
+  ImageWrapperCard(id: ID!, locale: String): ImageWrapperCard
 
   """"""
   Page(id: ID!, locale: String): Page
-
-  """"""
-  Quiz(locale: String): Quiz
 
   """"""
   TextElement(id: ID!, locale: String): TextElement
@@ -812,16 +617,10 @@ type Query {
   allCallout(after: String, before: String, first: Int, last: Int, locale: String, sort: [Callout_Sort], where: [Callout_Where]): Callout_Connection
 
   """"""
-  allCase(after: String, before: String, first: Int, last: Int, locale: String, sort: [Case_Sort], where: [Case_Where]): Case_Connection
-
-  """"""
   allHeadline(after: String, before: String, first: Int, last: Int, locale: String, sort: [Headline_Sort], where: [Headline_Where]): Headline_Connection
 
   """"""
-  allImageCard(after: String, before: String, first: Int, last: Int, locale: String, sort: [ImageCard_Sort], where: [ImageCard_Where]): ImageCard_Connection
-
-  """"""
-  allLegalArea(after: String, before: String, first: Int, last: Int, locale: String, sort: [LegalArea_Sort], where: [LegalArea_Where]): LegalArea_Connection
+  allImageWrapperCard(after: String, before: String, first: Int, last: Int, locale: String, sort: [ImageWrapperCard_Sort], where: [ImageWrapperCard_Where]): ImageWrapperCard_Connection
 
   """"""
   allPage(after: String, before: String, first: Int, last: Int, locale: String, sort: [Page_Sort], where: [Page_Where]): Page_Connection
@@ -829,50 +628,6 @@ type Query {
   """"""
   allTextElement(after: String, before: String, first: Int, last: Int, locale: String, sort: [TextElement_Sort], where: [TextElement_Where]): TextElement_Connection
 }
-
-""""""
-type Quiz {
-  """"""
-  _meta: CaisyDocument_Meta
-
-  """"""
-  correctOptions: [String]
-
-  """"""
-  description(locale: String): Quiz_description
-
-  """"""
-  id: ID
-
-  """"""
-  options: [String]
-
-  """"""
-  title: String
-}
-
-""""""
-type Quiz_description {
-  """"""
-  connections(
-    """
-    The cursor to start the pagination from. In this case the curser equals the id for the (last) element. If not set, we wil start from the beginning.
-    """
-    after: String
-
-    """The number of items to return. Default and max value is 100."""
-    first: Int = 100
-
-    """"""
-    locale: String
-  ): [Quiz_description_Connections]
-
-  """"""
-  json: JSON
-}
-
-""""""
-union Quiz_description_Connections = Caisy_Field_Document_NotFound
 
 """"""
 type TextElement {

@@ -8,6 +8,7 @@ export const spacing = {
 	'spacing-16': '16px',
 	'spacing-18': '18px',
 	'spacing-20': '20px',
+	'spacing-22': '22px',
 	'spacing-24': '24px',
 	'spacing-28': '28px',
 	'spacing-32': '32px',

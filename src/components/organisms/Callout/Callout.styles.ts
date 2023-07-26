@@ -34,6 +34,9 @@ export const spoilerStyles = ({ isContentHide }: { isContentHide: boolean }) => 
           : "transparent",
       },
     },
+    control: {
+      marginTop: isContentHide ? -4 : theme.spacing["spacing-22"],
+    }
   });
 
   return styles;
