@@ -15,7 +15,7 @@ export const imageWrapperStyles = () => {
     alignItems: "flex-start",
     gap: theme.spacing["spacing-8"],
     padding: theme.spacing["spacing-8"],
-    borderRadius: theme.radius["radius-8"],
+    borderRadius: theme.radius["radius-12"],
     border: `1px solid ${theme.colors["neutrals-01"][3]}`,
     backgroundColor: theme.colors["neutrals-01"][0],
 

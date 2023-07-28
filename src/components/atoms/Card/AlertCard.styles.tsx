@@ -11,7 +11,7 @@ export const cardStyles = ({
     root: {
       padding: `${theme.spacing["spacing-16"]} ${theme.spacing["spacing-20"]}`,
       maxWidth: "440px",
-      borderRadius: theme.radius["radius-8"],
+      borderRadius: theme.radius["radius-12"],
       backgroundColor: variant === "success" ? theme.colors["support-success"][1] : theme.colors["support-error"][0],
       ...stylesOverwrite,
     },

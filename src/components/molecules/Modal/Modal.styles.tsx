@@ -31,7 +31,7 @@ export const modalStyles = () => {
     },
     content: {
       padding: theme.spacing["spacing-36"],
-      borderRadius: theme.radius["radius-8"],
+      borderRadius: theme.radius["radius-12"],
       boxShadow: theme.shadows["elevation-big"],
     },
     overlay: {

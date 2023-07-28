@@ -26,11 +26,12 @@ export const spoilerStyles = ({ isContentHide }: { isContentHide: boolean }) => 
       ":before": {
         content: "''",
         width: "100%",
-        height: "100%",
+        height: "100px",
         display: isContentHide ? "block" : "none",
         position: "absolute",
+        bottom: 0,
         background: isContentHide
-          ? "linear-gradient(360deg, #fff  31.60%, rgba(255, 255, 255, 0) 100%)"
+          ? "linear-gradient(360deg, #fff  64%, rgba(255, 255, 255, 0) 100%)"
           : "transparent",
       },
     },
@@ -45,7 +46,7 @@ export const spoilerStyles = ({ isContentHide }: { isContentHide: boolean }) => 
 export const calloutStyles = () => {
   const styles = (theme: MantineTheme): CSSObject => ({
     backgroundColor: theme.colors["neutrals-01"][0],
-    borderRadius: theme.radius["radius-8"],
+    borderRadius: theme.radius["radius-12"],
     padding: theme.spacing["spacing-24"],
     borderTop: `8px solid ${theme.colors["support-warning"][2]}`,
   });
