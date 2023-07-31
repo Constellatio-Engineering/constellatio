@@ -31,7 +31,7 @@ export const DragDropGame = () => {
       <TitleWrapper>
         <Gamification /> <Title order={4}>Drag all correct answers into the box on the right</Title>
       </TitleWrapper>
-      <GameWrapper>
+      <GameWrapper> 
         <BodyText styleType="body-01-regular">
           Based on the above definition of the term and its prerequisites: Which of the following {'"organizations"'}
           constitute companies in the sense of company law. Skim the respective norms!
