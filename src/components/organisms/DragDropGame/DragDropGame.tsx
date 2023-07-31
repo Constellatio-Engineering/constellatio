@@ -11,7 +11,7 @@ import { Flag } from "@/components/Icons/Flag";
 import { GhostDropCard } from "@/components/atoms/GhostDropCard/GhostDropCard";
 
 export const DragDropGame = () => {
-  const [droppedItems, setDroppedItems] = useState([]);
+  const [droppedItems, setDroppedItems] = useState<any[]>([]);
   const [activeId, setActiveId] = useState(null);
 
   const handleDragEnd = (event) => {
@@ -40,11 +40,11 @@ export const DragDropGame = () => {
           <Game>
             <Options>
               <DraggableCard label={"Drag Card"} id={"1"} status="default" />
-              <DraggableCard label={"Drag Card"} id={"2"} />
-              <DraggableCard label={"Drag Card"} id={"3"} />
-              <DraggableCard label={"Drag Card"} id={"4"} />
-              <DraggableCard label={"Drag Card"} id={"5"} />
-              <DraggableCard label={"Drag Card"} id={"6"} />
+              <DraggableCard label={"Drag Card"} id={"2"} status="default"/>
+              <DraggableCard label={"Drag Card"} id={"3"} status="default"/>
+              <DraggableCard label={"Drag Card"} id={"4"} status="default"/>
+              <DraggableCard label={"Drag Card"} id={"5"} status="default"/>
+              <DraggableCard label={"Drag Card"} id={"6"} status="default"/>
               <DragOverlay
                 className="drag-overlay"
                 style={{
