@@ -1,11 +1,12 @@
-import { css } from "@emotion/react";
 import styled from "@emotion/styled";
 
-export const ButtonCard = styled.button<{ status: "success" | "error" | "default"; isGrabbed: boolean }>`
-  cursor: ${({ isGrabbed }) => (isGrabbed ? "grabbing" : "grab")};
+export const ButtonCard = styled.button<{ status: "success" | "error" | "default"; isDragging: boolean }>`
+  cursor: ${({ isDragging }) => (isDragging ? "grabbing" : "grab")};
   display: flex;
   align-items: center;
   justify-content: space-between;
+  position: relative;
+  z-index: 99;
   padding: ${({ theme }) => theme.spacing["spacing-12"]};
   gap: ${({ theme }) => theme.spacing["spacing-4"]};
   border-radius: ${({ theme }) => theme.radius["radius-8"]};
@@ -21,7 +22,7 @@ export const ButtonCard = styled.button<{ status: "success" | "error" | "default
   appearance: none;
   outline: none;
   transition: background-color 0.3s ease, border-color 0.3s ease, color 0.3s ease;
-  
+  box-shadow: ${({ theme, isDragging }) => isDragging && theme.shadows["elevation-big"]};
 
   > div svg {
     color: ${({ theme, status }) =>
@@ -47,8 +48,8 @@ export const ButtonCard = styled.button<{ status: "success" | "error" | "default
   }
 `;
 
-export const StatusButton = styled.button<{ status: "success" | "error" | "default" }>`
-  display: ${({ status }) => (status === "default" ? "none" : "flex")};
+export const StatusWrapper = styled.div<{ dropped?: boolean; status: "default" | "success" | "error" }>`
+  display: ${({ dropped, status }) => (dropped && status === "default" ? "flex" : "none")};
   appearance: none;
   outline: none;
   border: none;

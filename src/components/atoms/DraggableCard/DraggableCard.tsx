@@ -1,6 +1,6 @@
 import React, { ButtonHTMLAttributes, CSSProperties, FC, ReactNode } from "react";
 import { useDraggable } from "@dnd-kit/core";
-import { ButtonCard, StatusButton } from "./DraggableCard.styles";
+import { ButtonCard, StatusWrapper } from "./DraggableCard.styles";
 import { BodyText } from "../BodyText/BodyText";
 import { Handle } from "@/components/Icons/Handle";
 import { CSS } from "@dnd-kit/utilities";
@@ -13,9 +13,11 @@ type TDraggableCard = ButtonHTMLAttributes<HTMLButtonElement> & {
   label: ReactNode;
   id: string;
   status: "default" | "success" | "error";
+  dropped?: boolean;
+  onDeleteClickHandler?: React.MouseEventHandler<HTMLDivElement>;
 };
 
-export const DraggableCard: FC<TDraggableCard> = ({ label, id, status, ...props }) => {
+export const DraggableCard: FC<TDraggableCard> = ({ onDeleteClickHandler, dropped, label, id, status, ...props }) => {
   const { attributes, listeners, setNodeRef, transform, isDragging } = useDraggable({
     id,
   });
@@ -29,7 +31,7 @@ export const DraggableCard: FC<TDraggableCard> = ({ label, id, status, ...props 
       style={style}
       ref={setNodeRef}
       status={status}
-      isGrabbed={isDragging}
+      isDragging={isDragging}
       {...attributes}
       {...listeners}
       {...props}
@@ -40,9 +42,9 @@ export const DraggableCard: FC<TDraggableCard> = ({ label, id, status, ...props 
           {label}
         </BodyText>
       </Flex>
-      <StatusButton status={status}>
+      <StatusWrapper dropped={dropped} status={status} onClick={onDeleteClickHandler}>
         <Cross />
-      </StatusButton>
+      </StatusWrapper>
     </ButtonCard>
   );
 };

@@ -83,6 +83,9 @@ const meta: Meta = {
       control: "radio",
       options: ["default", "success", "error"],
     },
+    dropped: {
+      control: "boolean",
+    }
   },
 };
 
