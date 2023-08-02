@@ -43,15 +43,18 @@
     "@tiptap/extension-link": "^2.0.3",
     "@tiptap/react": "^2.0.3",
     "@tiptap/starter-kit": "^2.0.3",
+    "autoprefixer": "^10.4.14",
     "dayjs": "^1.11.7",
     "embla-carousel-react": "^7.1.0",
     "graphql": "^16.6.0",
     "graphql-request": "^6.1.0",
     "jotai": "^2.1.0",
     "next": "13.4.4",
+    "postcss": "^8.4.27",
     "react": "18.2.0",
     "react-dom": "18.2.0",
     "stripe": "^12.8.0",
+    "tailwindcss": "^3.3.3",
     "zod": "^3.21.4"
   },
   "devDependencies": {
