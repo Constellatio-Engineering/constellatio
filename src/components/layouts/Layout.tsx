@@ -9,8 +9,9 @@ type LayoutProps = {
 
 export function Layout({ children }: LayoutProps) {
   return (
-    <AppShell header={<Header />} footer={<Footer />} maw={1440}>
+    <div>
+      <Header />
       {children}
-    </AppShell>
+    </div>
   );
 }

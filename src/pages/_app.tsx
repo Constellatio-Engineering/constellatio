@@ -1,12 +1,13 @@
 import { AppProps } from "next/app";
 import Head from "next/head";
 import { createPagesBrowserClient } from "@supabase/auth-helpers-nextjs";
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import { Session, SessionContextProvider } from "@supabase/auth-helpers-react";
 import { Notifications } from "@mantine/notifications";
 import { RouterTransition } from "@/components/atoms/RouterTransition/RouterTransition";
 import CustomThemingProvider from "@/provider/CustomThemingProvider";
 import "../constants/styles/resets.css";
+import "../styles.css";
 
 type ExtendedAppProps = AppProps<{ initialSession: Session }>;
 

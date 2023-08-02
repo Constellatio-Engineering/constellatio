@@ -541,6 +541,57 @@ input ImageWrapperCard_Where {
 scalar JSON
 
 """"""
+type LegalArea {
+  """"""
+  _meta: CaisyDocument_Meta
+
+  """"""
+  id: ID
+
+  """"""
+  title: String
+}
+
+""""""
+type LegalArea_Connection {
+  """"""
+  edges: [LegalArea_ConnectionEdge]
+
+  """"""
+  pageInfo: PageInfo
+
+  """"""
+  totalCount: Int
+}
+
+""""""
+type LegalArea_ConnectionEdge {
+  """"""
+  cursor: String
+
+  """"""
+  node: LegalArea
+}
+
+""""""
+input LegalArea_Sort {
+  """"""
+  title: Order
+}
+
+""""""
+input LegalArea_Where {
+  """"""
+  AND: [LegalArea_Where]
+
+  """"""
+  OR: [LegalArea_Where]
+
+  """"""
+  title: CaisyField_String_Where
+}
+
+""""""
 enum Order {
   """"""
   ASC
@@ -651,7 +702,11 @@ input Page_Where {
 }
 
 """"""
+<<<<<<< HEAD
 union Page_components = Callout | DragNDrop | Headline | ImageWrapperCard | TextElement
+=======
+union Page_components = Callout | CaseSection | DragNDrop | Headline | ImageWrapperCard | LegalArea | TextElement | Topic
+>>>>>>> fe4816b0cb61acf46d46d6e0352061be5cfbbc3a
 
 """"""
 type Query {
@@ -662,6 +717,15 @@ type Query {
   Callout(id: ID!, locale: String): Callout
 
   """"""
+<<<<<<< HEAD
+=======
+  Case(id: ID!, locale: String): Case
+
+  """"""
+  CaseSection(id: ID!, locale: String): CaseSection
+
+  """"""
+>>>>>>> fe4816b0cb61acf46d46d6e0352061be5cfbbc3a
   DragNDrop(id: ID!, locale: String): DragNDrop
 
   """"""
@@ -671,10 +735,16 @@ type Query {
   ImageWrapperCard(id: ID!, locale: String): ImageWrapperCard
 
   """"""
+  LegalArea(id: ID!, locale: String): LegalArea
+
+  """"""
   Page(id: ID!, locale: String): Page
 
   """"""
   TextElement(id: ID!, locale: String): TextElement
+
+  """"""
+  Topic(id: ID!, locale: String): Topic
 
   """"""
   allAsset(after: String, before: String, first: Int, last: Int, locale: String, sort: [Asset_Sort], where: [Asset_Where]): Asset_Connection
@@ -683,6 +753,15 @@ type Query {
   allCallout(after: String, before: String, first: Int, last: Int, locale: String, sort: [Callout_Sort], where: [Callout_Where]): Callout_Connection
 
   """"""
+<<<<<<< HEAD
+=======
+  allCase(after: String, before: String, first: Int, last: Int, locale: String, sort: [Case_Sort], where: [Case_Where]): Case_Connection
+
+  """"""
+  allCaseSection(after: String, before: String, first: Int, last: Int, locale: String, sort: [CaseSection_Sort], where: [CaseSection_Where]): CaseSection_Connection
+
+  """"""
+>>>>>>> fe4816b0cb61acf46d46d6e0352061be5cfbbc3a
   allDragNDrop(after: String, before: String, first: Int, last: Int, locale: String, sort: [DragNDrop_Sort], where: [DragNDrop_Where]): DragNDrop_Connection
 
   """"""
@@ -692,10 +771,16 @@ type Query {
   allImageWrapperCard(after: String, before: String, first: Int, last: Int, locale: String, sort: [ImageWrapperCard_Sort], where: [ImageWrapperCard_Where]): ImageWrapperCard_Connection
 
   """"""
+  allLegalArea(after: String, before: String, first: Int, last: Int, locale: String, sort: [LegalArea_Sort], where: [LegalArea_Where]): LegalArea_Connection
+
+  """"""
   allPage(after: String, before: String, first: Int, last: Int, locale: String, sort: [Page_Sort], where: [Page_Where]): Page_Connection
 
   """"""
   allTextElement(after: String, before: String, first: Int, last: Int, locale: String, sort: [TextElement_Sort], where: [TextElement_Where]): TextElement_Connection
+
+  """"""
+  allTopic(after: String, before: String, first: Int, last: Int, locale: String, sort: [Topic_Sort], where: [Topic_Where]): Topic_Connection
 }
 
 """"""
@@ -777,3 +862,54 @@ type TextElement_richTextContent {
 
 """"""
 union TextElement_richTextContent_Connections = Caisy_Field_Document_NotFound
+
+""""""
+type Topic {
+  """"""
+  _meta: CaisyDocument_Meta
+
+  """"""
+  id: ID
+
+  """"""
+  title: String
+}
+
+""""""
+type Topic_Connection {
+  """"""
+  edges: [Topic_ConnectionEdge]
+
+  """"""
+  pageInfo: PageInfo
+
+  """"""
+  totalCount: Int
+}
+
+""""""
+type Topic_ConnectionEdge {
+  """"""
+  cursor: String
+
+  """"""
+  node: Topic
+}
+
+""""""
+input Topic_Sort {
+  """"""
+  title: Order
+}
+
+""""""
+input Topic_Where {
+  """"""
+  AND: [Topic_Where]
+
+  """"""
+  OR: [Topic_Where]
+
+  """"""
+  title: CaisyField_String_Where
+}
