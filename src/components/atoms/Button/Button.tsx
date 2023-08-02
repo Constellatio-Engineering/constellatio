@@ -75,6 +75,12 @@ export const Button: FC<TButton> = ({ styleType = "primary", size = "large", sty
       },
       ...styleOverwrite,
     },
+    leftIcon: {
+      marginRight: theme.spacing["spacing-4"],
+    },
+    rightIcon: {
+      marginLeft: theme.spacing["spacing-4"],
+    },
   });
 
   return (

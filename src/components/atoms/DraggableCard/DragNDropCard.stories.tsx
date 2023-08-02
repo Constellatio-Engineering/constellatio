@@ -1,10 +1,11 @@
 import { Meta, StoryObj } from "@storybook/react";
 import { Box, Flex } from "@mantine/core";
 import { DndContext, useDroppable, DragOverlay } from "@dnd-kit/core";
-import { DraggableCard } from "./DraggableCard";
+import { DragNDropCard } from "./DragNDropCard";
 import { ReactNode, useState } from "react";
 import { set, z } from "zod";
 import { RadioUnselected } from "@/components/Icons/RadioUnselected";
+import { Draggable } from "@/components/Helpers/Draggable";
 
 const Droppable = ({ children }: { children: ReactNode }) => {
   const { isOver, setNodeRef } = useDroppable({
@@ -26,7 +27,11 @@ const Template = (args: any) => {
   const [isDropped, setIsDropped] = useState(false);
   const [activeId, setActiveId] = useState<string | null>(null);
 
-  const draggableMarkup = <DraggableCard {...args} />;
+  const draggableMarkup = (
+    <Draggable id="draggable">
+      <DragNDropCard {...args} />
+    </Draggable>
+  );
 
   const handleDragEnd = (event) => {
     setActiveId(null);
@@ -62,7 +67,7 @@ const Template = (args: any) => {
             zIndex: 1,
           }}
         >
-          {activeId ? <DraggableCard {...args} icon={<RadioUnselected />} label="OVERLAY" /> : null}
+          {activeId ? <DragNDropCard {...args} icon={<RadioUnselected />} label="OVERLAY" /> : null}
         </DragOverlay>
       </Flex>
     </DndContext>
@@ -70,7 +75,7 @@ const Template = (args: any) => {
 };
 
 const meta: Meta = {
-  title: "Atoms/Gamification/DraggableCard",
+  title: "Atoms/Gamification/DragNDropCard",
   component: Template,
   parameters: {
     design: {
@@ -85,18 +90,17 @@ const meta: Meta = {
     },
     dropped: {
       control: "boolean",
-    }
+    },
   },
 };
 
 export default meta;
 
-type Story = StoryObj<typeof DraggableCard>;
+type Story = StoryObj<typeof DragNDropCard>;
 
 export const Default: Story = {
   args: {
     label: "Draggable Card",
-    id: "draggable",
     status: "default",
   },
 };

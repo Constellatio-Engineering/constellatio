@@ -338,6 +338,69 @@ The `DateTime` scalar type represents a DateTime. The DateTime is serialized as 
 scalar DateTime
 
 """"""
+type DragNDrop {
+  """"""
+  _meta: CaisyDocument_Meta
+
+  """"""
+  game: JSON
+
+  """"""
+  helpNote: String
+
+  """"""
+  id: ID
+
+  """"""
+  internalTitle: String
+}
+
+""""""
+type DragNDrop_Connection {
+  """"""
+  edges: [DragNDrop_ConnectionEdge]
+
+  """"""
+  pageInfo: PageInfo
+
+  """"""
+  totalCount: Int
+}
+
+""""""
+type DragNDrop_ConnectionEdge {
+  """"""
+  cursor: String
+
+  """"""
+  node: DragNDrop
+}
+
+""""""
+input DragNDrop_Sort {
+  """"""
+  helpNote: Order
+
+  """"""
+  internalTitle: Order
+}
+
+""""""
+input DragNDrop_Where {
+  """"""
+  AND: [DragNDrop_Where]
+
+  """"""
+  OR: [DragNDrop_Where]
+
+  """"""
+  helpNote: CaisyField_String_Where
+
+  """"""
+  internalTitle: CaisyField_String_Where
+}
+
+""""""
 type Headline {
   """"""
   _meta: CaisyDocument_Meta
@@ -588,7 +651,7 @@ input Page_Where {
 }
 
 """"""
-union Page_components = Callout | Headline | ImageWrapperCard | TextElement
+union Page_components = Callout | DragNDrop | Headline | ImageWrapperCard | TextElement
 
 """"""
 type Query {
@@ -597,6 +660,9 @@ type Query {
 
   """"""
   Callout(id: ID!, locale: String): Callout
+
+  """"""
+  DragNDrop(id: ID!, locale: String): DragNDrop
 
   """"""
   Headline(id: ID!, locale: String): Headline
@@ -615,6 +681,9 @@ type Query {
 
   """"""
   allCallout(after: String, before: String, first: Int, last: Int, locale: String, sort: [Callout_Sort], where: [Callout_Where]): Callout_Connection
+
+  """"""
+  allDragNDrop(after: String, before: String, first: Int, last: Int, locale: String, sort: [DragNDrop_Sort], where: [DragNDrop_Where]): DragNDrop_Connection
 
   """"""
   allHeadline(after: String, before: String, first: Int, last: Int, locale: String, sort: [Headline_Sort], where: [Headline_Where]): Headline_Connection

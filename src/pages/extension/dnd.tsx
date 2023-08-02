@@ -1,9 +1,12 @@
-import React from 'react'
+import { DndWrapper } from "@/components/Wrappers/DndWrapper";
+import React from "react";
 
-const dnd = () => {
+const NextPage = () => {
   return (
-    <div>Hello World</div>
-  )
-}
+    <>
+      <DndWrapper />
+    </>
+  );
+};
 
-export default dnd
+export default NextPage;

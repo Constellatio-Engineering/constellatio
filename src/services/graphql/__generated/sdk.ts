@@ -176,6 +176,40 @@ export type IGenCallout_Where = {
   title?: InputMaybe<IGenCaisyField_String_Where>;
 };
 
+export type IGenDragNDrop = {
+  __typename?: 'DragNDrop';
+  _meta?: Maybe<IGenCaisyDocument_Meta>;
+  game?: Maybe<Scalars['JSON']['output']>;
+  helpNote?: Maybe<Scalars['String']['output']>;
+  id?: Maybe<Scalars['ID']['output']>;
+  internalTitle?: Maybe<Scalars['String']['output']>;
+};
+
+export type IGenDragNDrop_Connection = {
+  __typename?: 'DragNDrop_Connection';
+  edges?: Maybe<Array<Maybe<IGenDragNDrop_ConnectionEdge>>>;
+  pageInfo?: Maybe<IGenPageInfo>;
+  totalCount?: Maybe<Scalars['Int']['output']>;
+};
+
+export type IGenDragNDrop_ConnectionEdge = {
+  __typename?: 'DragNDrop_ConnectionEdge';
+  cursor?: Maybe<Scalars['String']['output']>;
+  node?: Maybe<IGenDragNDrop>;
+};
+
+export type IGenDragNDrop_Sort = {
+  helpNote?: InputMaybe<IGenOrder>;
+  internalTitle?: InputMaybe<IGenOrder>;
+};
+
+export type IGenDragNDrop_Where = {
+  AND?: InputMaybe<Array<InputMaybe<IGenDragNDrop_Where>>>;
+  OR?: InputMaybe<Array<InputMaybe<IGenDragNDrop_Where>>>;
+  helpNote?: InputMaybe<IGenCaisyField_String_Where>;
+  internalTitle?: InputMaybe<IGenCaisyField_String_Where>;
+};
+
 export type IGenHeadline = {
   __typename?: 'Headline';
   _meta?: Maybe<IGenCaisyDocument_Meta>;
@@ -309,18 +343,20 @@ export type IGenPage_Where = {
   slug?: InputMaybe<IGenCaisyField_String_Where>;
 };
 
-export type IGenPage_Components = IGenCallout | IGenHeadline | IGenImageWrapperCard | IGenTextElement;
+export type IGenPage_Components = IGenCallout | IGenDragNDrop | IGenHeadline | IGenImageWrapperCard | IGenTextElement;
 
 export type IGenQuery = {
   __typename?: 'Query';
   Asset?: Maybe<IGenAsset>;
   Callout?: Maybe<IGenCallout>;
+  DragNDrop?: Maybe<IGenDragNDrop>;
   Headline?: Maybe<IGenHeadline>;
   ImageWrapperCard?: Maybe<IGenImageWrapperCard>;
   Page?: Maybe<IGenPage>;
   TextElement?: Maybe<IGenTextElement>;
   allAsset?: Maybe<IGenAsset_Connection>;
   allCallout?: Maybe<IGenCallout_Connection>;
+  allDragNDrop?: Maybe<IGenDragNDrop_Connection>;
   allHeadline?: Maybe<IGenHeadline_Connection>;
   allImageWrapperCard?: Maybe<IGenImageWrapperCard_Connection>;
   allPage?: Maybe<IGenPage_Connection>;
@@ -335,6 +371,12 @@ export type IGenQueryAssetArgs = {
 
 
 export type IGenQueryCalloutArgs = {
+  id: Scalars['ID']['input'];
+  locale?: InputMaybe<Scalars['String']['input']>;
+};
+
+
+export type IGenQueryDragNDropArgs = {
   id: Scalars['ID']['input'];
   locale?: InputMaybe<Scalars['String']['input']>;
 };
@@ -383,6 +425,17 @@ export type IGenQueryAllCalloutArgs = {
   locale?: InputMaybe<Scalars['String']['input']>;
   sort?: InputMaybe<Array<InputMaybe<IGenCallout_Sort>>>;
   where?: InputMaybe<Array<InputMaybe<IGenCallout_Where>>>;
+};
+
+
+export type IGenQueryAllDragNDropArgs = {
+  after?: InputMaybe<Scalars['String']['input']>;
+  before?: InputMaybe<Scalars['String']['input']>;
+  first?: InputMaybe<Scalars['Int']['input']>;
+  last?: InputMaybe<Scalars['Int']['input']>;
+  locale?: InputMaybe<Scalars['String']['input']>;
+  sort?: InputMaybe<Array<InputMaybe<IGenDragNDrop_Sort>>>;
+  where?: InputMaybe<Array<InputMaybe<IGenDragNDrop_Where>>>;
 };
 
 
@@ -491,6 +544,8 @@ export type IGenCalloutFragment = { __typename?: 'Callout', id?: string | null, 
     & IGenTextElementFragment
   ) | null };
 
+export type IGenDragNDropFragment = { __typename?: 'DragNDrop', id?: string | null, game?: any | null, helpNote?: string | null };
+
 export type IGenHeadlineFragment = { __typename?: 'Headline', id?: string | null, title?: string | null };
 
 export type IGenImageWrapperCardFragment = { __typename?: 'ImageWrapperCard', id?: string | null, title?: string | null, downloadable?: boolean | null, image?: (
@@ -508,6 +563,9 @@ export type IGenPageQueryVariables = Exact<{
 export type IGenPageQuery = { __typename?: 'Query', allPage?: { __typename?: 'Page_Connection', edges?: Array<{ __typename?: 'Page_ConnectionEdge', node?: { __typename?: 'Page', id?: string | null, nameInNavigation?: string | null, slug?: string | null, components?: Array<(
           { __typename?: 'Callout' }
           & IGenCalloutFragment
+        ) | (
+          { __typename?: 'DragNDrop' }
+          & IGenDragNDropFragment
         ) | (
           { __typename?: 'Headline' }
           & IGenHeadlineFragment
@@ -555,6 +613,13 @@ export const CalloutFragmentDoc = gql`
   }
 }
     `;
+export const DragNDropFragmentDoc = gql`
+    fragment DragNDrop on DragNDrop {
+  id
+  game
+  helpNote
+}
+    `;
 export const HeadlineFragmentDoc = gql`
     fragment Headline on Headline {
   id
@@ -584,6 +649,7 @@ export const PageDocument = gql`
           ...TextElement
           ...Callout
           ...ImageWrapperCard
+          ...DragNDrop
         }
       }
     }
@@ -593,7 +659,8 @@ export const PageDocument = gql`
 ${TextElementFragmentDoc}
 ${CalloutFragmentDoc}
 ${AssetFragmentDoc}
-${ImageWrapperCardFragmentDoc}`;
+${ImageWrapperCardFragmentDoc}
+${DragNDropFragmentDoc}`;
 export type Requester<C = {}, E = unknown> = <R, V>(doc: DocumentNode, vars?: V, options?: C) => Promise<R> | AsyncIterable<R>
 export function getSdk<C, E>(requester: Requester<C, E>) {
   return {
