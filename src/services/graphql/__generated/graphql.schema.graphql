@@ -332,6 +332,237 @@ input Callout_Where {
   title: CaisyField_String_Where
 }
 
+""""""
+type Case {
+  """"""
+  _meta: CaisyDocument_Meta
+
+  """"""
+  facts(locale: String): Case_facts
+
+  """"""
+  id: ID
+
+  """"""
+  legalArea(
+    """
+    The cursor to start the pagination from. In this case the curser equals the id for the (last) element. If not set, we wil start from the beginning.
+    """
+    after: String
+
+    """The number of items to return. Default and max value is 100."""
+    first: Int = 100
+
+    """"""
+    locale: String
+  ): LegalArea
+
+  """"""
+  sections(
+    """
+    The cursor to start the pagination from. In this case the curser equals the id for the (last) element. If not set, we wil start from the beginning.
+    """
+    after: String
+
+    """The number of items to return. Default and max value is 100."""
+    first: Int = 100
+
+    """"""
+    locale: String
+  ): [Case_sections]
+
+  """"""
+  title: String
+
+  """"""
+  topic(
+    """
+    The cursor to start the pagination from. In this case the curser equals the id for the (last) element. If not set, we wil start from the beginning.
+    """
+    after: String
+
+    """The number of items to return. Default and max value is 100."""
+    first: Int = 100
+
+    """"""
+    locale: String
+  ): Topic
+}
+
+""""""
+type CaseSection {
+  """"""
+  _meta: CaisyDocument_Meta
+
+  """"""
+  content(locale: String): CaseSection_content
+
+  """"""
+  game(
+    """
+    The cursor to start the pagination from. In this case the curser equals the id for the (last) element. If not set, we wil start from the beginning.
+    """
+    after: String
+
+    """The number of items to return. Default and max value is 100."""
+    first: Int = 100
+
+    """"""
+    locale: String
+  ): DragNDrop
+
+  """"""
+  id: ID
+
+  """"""
+  title: String
+}
+
+""""""
+type CaseSection_Connection {
+  """"""
+  edges: [CaseSection_ConnectionEdge]
+
+  """"""
+  pageInfo: PageInfo
+
+  """"""
+  totalCount: Int
+}
+
+""""""
+type CaseSection_ConnectionEdge {
+  """"""
+  cursor: String
+
+  """"""
+  node: CaseSection
+}
+
+""""""
+input CaseSection_Sort {
+  """"""
+  game: Order
+
+  """"""
+  title: Order
+}
+
+""""""
+input CaseSection_Where {
+  """"""
+  AND: [CaseSection_Where]
+
+  """"""
+  OR: [CaseSection_Where]
+
+  """"""
+  content: CaisyField_Richtext_Where
+
+  """"""
+  title: CaisyField_String_Where
+}
+
+""""""
+type CaseSection_content {
+  """"""
+  connections(
+    """
+    The cursor to start the pagination from. In this case the curser equals the id for the (last) element. If not set, we wil start from the beginning.
+    """
+    after: String
+
+    """The number of items to return. Default and max value is 100."""
+    first: Int = 100
+
+    """"""
+    locale: String
+  ): [CaseSection_content_Connections]
+
+  """"""
+  json: JSON
+}
+
+""""""
+union CaseSection_content_Connections = Caisy_Field_Document_NotFound
+
+""""""
+type Case_Connection {
+  """"""
+  edges: [Case_ConnectionEdge]
+
+  """"""
+  pageInfo: PageInfo
+
+  """"""
+  totalCount: Int
+}
+
+""""""
+type Case_ConnectionEdge {
+  """"""
+  cursor: String
+
+  """"""
+  node: Case
+}
+
+""""""
+input Case_Sort {
+  """"""
+  legalArea: Order
+
+  """"""
+  sections: Order
+
+  """"""
+  title: Order
+
+  """"""
+  topic: Order
+}
+
+""""""
+input Case_Where {
+  """"""
+  AND: [Case_Where]
+
+  """"""
+  OR: [Case_Where]
+
+  """"""
+  facts: CaisyField_Richtext_Where
+
+  """"""
+  title: CaisyField_String_Where
+}
+
+""""""
+type Case_facts {
+  """"""
+  connections(
+    """
+    The cursor to start the pagination from. In this case the curser equals the id for the (last) element. If not set, we wil start from the beginning.
+    """
+    after: String
+
+    """The number of items to return. Default and max value is 100."""
+    first: Int = 100
+
+    """"""
+    locale: String
+  ): [Case_facts_Connections]
+
+  """"""
+  json: JSON
+}
+
+""""""
+union Case_facts_Connections = Caisy_Field_Document_NotFound
+
+""""""
+union Case_sections = CaseSection
+
 """
 The `DateTime` scalar type represents a DateTime. The DateTime is serialized as an RFC 3339 quoted string
 """
@@ -702,11 +933,7 @@ input Page_Where {
 }
 
 """"""
-<<<<<<< HEAD
-union Page_components = Callout | DragNDrop | Headline | ImageWrapperCard | TextElement
-=======
 union Page_components = Callout | CaseSection | DragNDrop | Headline | ImageWrapperCard | LegalArea | TextElement | Topic
->>>>>>> fe4816b0cb61acf46d46d6e0352061be5cfbbc3a
 
 """"""
 type Query {
@@ -717,15 +944,12 @@ type Query {
   Callout(id: ID!, locale: String): Callout
 
   """"""
-<<<<<<< HEAD
-=======
   Case(id: ID!, locale: String): Case
 
   """"""
   CaseSection(id: ID!, locale: String): CaseSection
 
   """"""
->>>>>>> fe4816b0cb61acf46d46d6e0352061be5cfbbc3a
   DragNDrop(id: ID!, locale: String): DragNDrop
 
   """"""
@@ -753,15 +977,12 @@ type Query {
   allCallout(after: String, before: String, first: Int, last: Int, locale: String, sort: [Callout_Sort], where: [Callout_Where]): Callout_Connection
 
   """"""
-<<<<<<< HEAD
-=======
   allCase(after: String, before: String, first: Int, last: Int, locale: String, sort: [Case_Sort], where: [Case_Where]): Case_Connection
 
   """"""
   allCaseSection(after: String, before: String, first: Int, last: Int, locale: String, sort: [CaseSection_Sort], where: [CaseSection_Where]): CaseSection_Connection
 
   """"""
->>>>>>> fe4816b0cb61acf46d46d6e0352061be5cfbbc3a
   allDragNDrop(after: String, before: String, first: Int, last: Int, locale: String, sort: [DragNDrop_Sort], where: [DragNDrop_Where]): DragNDrop_Connection
 
   """"""

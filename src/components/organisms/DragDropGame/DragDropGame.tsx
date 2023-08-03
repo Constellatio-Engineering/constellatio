@@ -35,7 +35,8 @@ export const DragDropGame: FC<TDragDropGame> = ({ game }: { game?: TValue }) => 
 
   useEffect(() => {
     setOptionsItems(shuffleOptions(originalOptions));
-  }, [game?.options]);
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
 
   const handleDragEnd = (event) => {
     const { active, over } = event;

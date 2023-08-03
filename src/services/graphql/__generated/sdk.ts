@@ -829,6 +829,8 @@ export type IGenCaseFragment = { __typename?: 'Case', id?: string | null, title?
     & IGenCaseSectionFragment
   ) | null> | null };
 
+export type IGenDragNDropFragment = { __typename?: 'DragNDrop', id?: string | null, game?: any | null, helpNote?: string | null };
+
 export type IGenHeadlineFragment = { __typename?: 'Headline', id?: string | null, title?: string | null };
 
 export type IGenImageWrapperCardFragment = { __typename?: 'ImageWrapperCard', id?: string | null, title?: string | null, downloadable?: boolean | null, image?: (
@@ -864,7 +866,10 @@ export type IGenPageQueryVariables = Exact<{
 export type IGenPageQuery = { __typename?: 'Query', allPage?: { __typename?: 'Page_Connection', edges?: Array<{ __typename?: 'Page_ConnectionEdge', node?: { __typename?: 'Page', id?: string | null, nameInNavigation?: string | null, slug?: string | null, components?: Array<(
           { __typename?: 'Callout' }
           & IGenCalloutFragment
-        ) | { __typename?: 'CaseSection' } | { __typename?: 'DragNDrop' } | (
+        ) | { __typename?: 'CaseSection' } | (
+          { __typename?: 'DragNDrop' }
+          & IGenDragNDropFragment
+        ) | (
           { __typename?: 'Headline' }
           & IGenHeadlineFragment
         ) | (
@@ -943,6 +948,13 @@ export const CaseFragmentDoc = gql`
       ...CaseSection
     }
   }
+}
+    `;
+export const DragNDropFragmentDoc = gql`
+    fragment DragNDrop on DragNDrop {
+  id
+  game
+  helpNote
 }
     `;
 export const HeadlineFragmentDoc = gql`
