@@ -25,7 +25,7 @@ export const Footer: FC<TFooter> = ({ variant = "default" }) => {
             </Group>
             <Group spacing={"spacing-8"}>
               <Image src={ConstellatioLogoIcon} alt="Constellatio" />{" "}
-              <CaptionText styleType="caption-01-medium" tt={"uppercase"} c={"neutrals-01.9"}>
+              <CaptionText component="p" styleType="caption-01-medium" tt={"uppercase"} c={"neutrals-01.9"}>
                 &copy; Constellatio 2023. All Rights Reserved.
               </CaptionText>
             </Group>
@@ -36,7 +36,7 @@ export const Footer: FC<TFooter> = ({ variant = "default" }) => {
           <Flex justify={"center"}>
             <Group spacing={"spacing-8"}>
             <Image src={ConstellatioLogoWhiteIcon} alt="Constellatio" />{" "}
-              <CaptionText styleType="caption-01-medium" tt={"uppercase"} c={"neutrals-01.0"}>
+              <CaptionText component="p" styleType="caption-01-medium" tt={"uppercase"} c={"neutrals-01.0"}>
                 &copy; Constellatio 2023. All Rights Reserved.
               </CaptionText>
             </Group>
@@ -47,7 +47,7 @@ export const Footer: FC<TFooter> = ({ variant = "default" }) => {
           <Flex justify={"center"}>
             <Group spacing={"spacing-8"}>
             <Image src={ConstellatioLogoIcon} alt="Constellatio" />{" "}
-              <CaptionText styleType="caption-01-medium" tt={"uppercase"} c={"neutrals-01.9"}>
+              <CaptionText component="p" styleType="caption-01-medium" tt={"uppercase"} c={"neutrals-01.9"}>
                 &copy; Constellatio 2023. All Rights Reserved.
               </CaptionText>
             </Group>

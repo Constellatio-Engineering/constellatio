@@ -35,7 +35,7 @@ export const DragDropGame: FC<TDragDropGame> = ({ game }: { game?: TValue }) => 
 
   useEffect(() => {
     setOptionsItems(shuffleOptions(originalOptions));
-  // eslint-disable-next-line react-hooks/exhaustive-deps
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   const handleDragEnd = (event) => {
@@ -106,7 +106,7 @@ export const DragDropGame: FC<TDragDropGame> = ({ game }: { game?: TValue }) => 
         <Gamification /> <Title order={4}>Drag all correct answers into the box on the right</Title>
       </TitleWrapper>
       <GameWrapper>
-        <BodyText styleType="body-01-regular">
+        <BodyText component="p" styleType="body-01-regular">
           Based on the above definition of the term and its prerequisites: Which of the following {'"organizations"'}
           constitute companies in the sense of company law. Skim the respective norms!
         </BodyText>
@@ -151,7 +151,7 @@ export const DragDropGame: FC<TDragDropGame> = ({ game }: { game?: TValue }) => 
                 ) : (
                   <EmptyPlaceholder>
                     <Flag />
-                    <BodyText align="center" styleType="body-02-medium">
+                    <BodyText component="p" align="center" styleType="body-02-medium">
                       Drag and drop correct answers from the left column
                     </BodyText>
                   </EmptyPlaceholder>

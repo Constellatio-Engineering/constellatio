@@ -122,7 +122,7 @@ export function RegistrationForm() {
           <Dropdown label="Geschlecht" title="Geschlecht" {...form.getInputProps("Geschlecht")} data={genderData} />
           <Checkbox
             label={
-              <BodyText styleType="body-01-medium">
+              <BodyText  component="p" styleType="body-01-medium">
                 I agree to the&nbsp;
                 <CustomLink styleType="link-primary" href="#">
                   Data Protection Regulations

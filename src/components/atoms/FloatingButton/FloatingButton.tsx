@@ -40,7 +40,7 @@ export const _FloatingButton: FC<TFloatingButton> = ({ pinsNotificationsAmount, 
       rightIcon={ButtonIcons}
       {...props}
     >
-      {buttonText && <BodyText styleType="body-01-medium">{buttonText}</BodyText>}
+      {buttonText && <BodyText  component="p" styleType="body-01-medium">{buttonText}</BodyText>}
     </Button>
   );
 };

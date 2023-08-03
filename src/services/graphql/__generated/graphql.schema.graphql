@@ -344,18 +344,7 @@ type Case {
   id: ID
 
   """"""
-  legalArea(
-    """
-    The cursor to start the pagination from. In this case the curser equals the id for the (last) element. If not set, we wil start from the beginning.
-    """
-    after: String
-
-    """The number of items to return. Default and max value is 100."""
-    first: Int = 100
-
-    """"""
-    locale: String
-  ): LegalArea
+  legalArea: String
 
   """"""
   sections(
@@ -508,6 +497,21 @@ type Case_ConnectionEdge {
 }
 
 """"""
+enum Case_LegalArea {
+  """"""
+  civil_law
+
+  """"""
+  public_law
+}
+
+""""""
+input Case_LegalArea_Where {
+  """"""
+  eq: Case_LegalArea
+}
+
+""""""
 input Case_Sort {
   """"""
   legalArea: Order
@@ -532,6 +536,9 @@ input Case_Where {
 
   """"""
   facts: CaisyField_Richtext_Where
+
+  """"""
+  legalArea: Case_LegalArea_Where
 
   """"""
   title: CaisyField_String_Where
@@ -1093,6 +1100,20 @@ type Topic {
   id: ID
 
   """"""
+  legalArea(
+    """
+    The cursor to start the pagination from. In this case the curser equals the id for the (last) element. If not set, we wil start from the beginning.
+    """
+    after: String
+
+    """The number of items to return. Default and max value is 100."""
+    first: Int = 100
+
+    """"""
+    locale: String
+  ): LegalArea
+
+  """"""
   title: String
 }
 
@@ -1119,6 +1140,9 @@ type Topic_ConnectionEdge {
 
 """"""
 input Topic_Sort {
+  """"""
+  legalArea: Order
+
   """"""
   title: Order
 }

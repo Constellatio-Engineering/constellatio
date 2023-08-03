@@ -181,7 +181,7 @@ export type IGenCase = {
   _meta?: Maybe<IGenCaisyDocument_Meta>;
   facts?: Maybe<IGenCase_Facts>;
   id?: Maybe<Scalars['ID']['output']>;
-  legalArea?: Maybe<IGenLegalArea>;
+  legalArea?: Maybe<Scalars['String']['output']>;
   sections?: Maybe<Array<Maybe<IGenCase_Sections>>>;
   title?: Maybe<Scalars['String']['output']>;
   topic?: Maybe<IGenTopic>;
@@ -189,13 +189,6 @@ export type IGenCase = {
 
 
 export type IGenCaseFactsArgs = {
-  locale?: InputMaybe<Scalars['String']['input']>;
-};
-
-
-export type IGenCaseLegalAreaArgs = {
-  after?: InputMaybe<Scalars['String']['input']>;
-  first?: InputMaybe<Scalars['Int']['input']>;
   locale?: InputMaybe<Scalars['String']['input']>;
 };
 
@@ -287,6 +280,15 @@ export type IGenCase_ConnectionEdge = {
   node?: Maybe<IGenCase>;
 };
 
+export enum IGenCase_LegalArea {
+  CivilLaw = 'civil_law',
+  PublicLaw = 'public_law'
+}
+
+export type IGenCase_LegalArea_Where = {
+  eq?: InputMaybe<IGenCase_LegalArea>;
+};
+
 export type IGenCase_Sort = {
   legalArea?: InputMaybe<IGenOrder>;
   sections?: InputMaybe<IGenOrder>;
@@ -298,6 +300,7 @@ export type IGenCase_Where = {
   AND?: InputMaybe<Array<InputMaybe<IGenCase_Where>>>;
   OR?: InputMaybe<Array<InputMaybe<IGenCase_Where>>>;
   facts?: InputMaybe<IGenCaisyField_Richtext_Where>;
+  legalArea?: InputMaybe<IGenCase_LegalArea_Where>;
   title?: InputMaybe<IGenCaisyField_String_Where>;
 };
 
@@ -786,7 +789,15 @@ export type IGenTopic = {
   __typename?: 'Topic';
   _meta?: Maybe<IGenCaisyDocument_Meta>;
   id?: Maybe<Scalars['ID']['output']>;
+  legalArea?: Maybe<IGenLegalArea>;
   title?: Maybe<Scalars['String']['output']>;
+};
+
+
+export type IGenTopicLegalAreaArgs = {
+  after?: InputMaybe<Scalars['String']['input']>;
+  first?: InputMaybe<Scalars['Int']['input']>;
+  locale?: InputMaybe<Scalars['String']['input']>;
 };
 
 export type IGenTopic_Connection = {
@@ -803,6 +814,7 @@ export type IGenTopic_ConnectionEdge = {
 };
 
 export type IGenTopic_Sort = {
+  legalArea?: InputMaybe<IGenOrder>;
   title?: InputMaybe<IGenOrder>;
 };
 
@@ -824,7 +836,7 @@ export type IGenCalloutFragment = { __typename?: 'Callout', id?: string | null, 
 
 export type IGenCaseSectionFragment = { __typename?: 'CaseSection', id?: string | null, title?: string | null, game?: { __typename?: 'DragNDrop', id?: string | null, helpNote?: string | null, game?: any | null } | null, content?: { __typename?: 'CaseSection_content', json?: any | null } | null };
 
-export type IGenCaseFragment = { __typename?: 'Case', id?: string | null, title?: string | null, legalArea?: { __typename?: 'LegalArea', title?: string | null } | null, topic?: { __typename?: 'Topic', title?: string | null } | null, facts?: { __typename?: 'Case_facts', json?: any | null } | null, sections?: Array<(
+export type IGenCaseFragment = { __typename?: 'Case', id?: string | null, title?: string | null, legalArea?: string | null, topic?: { __typename?: 'Topic', title?: string | null } | null, facts?: { __typename?: 'Case_facts', json?: any | null } | null, sections?: Array<(
     { __typename?: 'CaseSection' }
     & IGenCaseSectionFragment
   ) | null> | null };
@@ -934,9 +946,7 @@ export const CaseFragmentDoc = gql`
     fragment Case on Case {
   id
   title
-  legalArea {
-    title
-  }
+  legalArea
   topic {
     title
   }

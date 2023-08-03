@@ -34,7 +34,7 @@ export const Callout: FC<TCallout> = ({ icon, title, text, expandable }) => {
     <Stack spacing={"spacing-4"} sx={calloutStyles()}>
       <Group spacing={"spacing-8"}>
         {icon?.src && <CaisyIcon src={icon.src} description={icon?.description ?? ""} />}
-        {title && <BodyText styleType="body-01-bold">{title}</BodyText>}
+        {title && <BodyText component="p" styleType="body-01-bold">{title}</BodyText>}
       </Group>
       {text?.richTextContent?.json &&
         (expandable ? (

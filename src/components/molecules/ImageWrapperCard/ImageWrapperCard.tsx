@@ -14,7 +14,7 @@ export const ImageWrapperCard: FC<TImageWrapperCard> = ({ downloadable, image, t
     <>
       {image?.src && (
         <ContainerWrapper>
-          {title && <BodyText styleType="body-01-regular">{title}</BodyText>}
+          {title && <BodyText component="p" styleType="body-01-regular">{title}</BodyText>}
           <Box sx={imageWrapperStyles()}>
             <CaisyImg src={image.src} description={image.description ?? ""} />
             {downloadable && (

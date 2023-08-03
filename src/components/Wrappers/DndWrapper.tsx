@@ -98,7 +98,9 @@ export const DndWrapper = () => {
   }
 
   return !loaded ? (
-    <BodyText styleType="body-01-bold">Loading...</BodyText>
+    <BodyText component="p" styleType="body-01-bold">
+      Loading...
+    </BodyText>
   ) : !value ? (
     <Button styleType="tertiary" onClick={() => setValue({ options: [], orderRequired: false })} w={"25%"}>
       Reload
@@ -129,7 +131,11 @@ export const DndWrapper = () => {
             >
               <Switch
                 label={
-                  <BodyText styleType="body-01-medium" c={checked ? "support-success.3" : "support-error.3"}>
+                  <BodyText
+                    component="p"
+                    styleType="body-01-medium"
+                    c={checked ? "support-success.3" : "support-error.3"}
+                  >
                     Add as {checked ? "a correct" : "an correct"} option
                   </BodyText>
                 }
@@ -154,7 +160,9 @@ export const DndWrapper = () => {
               </Button>
             </Box>
           </Box>
-          <BodyText styleType="body-01-bold">You can drag and drop items to sort them</BodyText>
+          <BodyText component="p" styleType="body-01-bold">
+            You can drag and drop items to sort them
+          </BodyText>
 
           <OutputWrapper>
             <DndContext sensors={sensors} collisionDetection={closestCenter} onDragEnd={handleDragEnd}>
@@ -165,6 +173,7 @@ export const DndWrapper = () => {
                       <SortableItem id={option.id}>
                         <CardItem>
                           <BodyText
+                            component="p"
                             styleType="body-01-bold"
                             c={option?.correctAnswer ? "support-success.3" : "support-error.3"}
                           >
@@ -194,7 +203,11 @@ export const DndWrapper = () => {
       </GameWrapper>
       <Checkbox
         checked={value.orderRequired}
-        label={<BodyText styleType="body-01-bold">Make answers order relevant</BodyText>}
+        label={
+          <BodyText component="p" styleType="body-01-bold">
+            Make answers order relevant
+          </BodyText>
+        }
         onChange={(e) => setValue({ ...value, orderRequired: e.target.checked })}
       />
     </Container>

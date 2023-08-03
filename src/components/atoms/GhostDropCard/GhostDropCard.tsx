@@ -7,7 +7,7 @@ export const GhostDropCard = () => {
   return (
     <Card>
       <DownloadIcon />
-      <BodyText styleType="body-01-regular">Drop here</BodyText>
+      <BodyText component="p" styleType="body-01-regular">Drop here</BodyText>
     </Card>
   );
 };

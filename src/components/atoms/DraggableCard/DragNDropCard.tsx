@@ -21,7 +21,7 @@ export const DragNDropCard: FC<TDraggableCard> = ({ onDeleteHandler, dropped, la
     <ButtonCard status={status} {...props}>
       <Flex gap={"spacing-8"} align="center">
         {status === "success" ? <CheckFilled /> : status === "error" ? <CrossFilled /> : <Handle />}
-        <BodyText styleType="body-01-regular" c={"neutrals-02.1"}>
+        <BodyText styleType="body-01-regular" c={"neutrals-02.1"} component="p">
           {label}
         </BodyText>
       </Flex>
