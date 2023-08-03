@@ -1,12 +1,16 @@
 import { gql } from "graphql-request";
+import { f_TextElement } from "./TextElement";
 
 export const f_CaseSection = gql`
+${f_TextElement}
   fragment CaseSection on CaseSection {
     id
     title
     game {
       id
-      helpNote
+      helpNote{
+        ...TextElement
+      }
       game
     }
     content {

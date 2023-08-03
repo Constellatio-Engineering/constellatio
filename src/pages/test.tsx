@@ -7,7 +7,7 @@ import React from "react";
 const NextPage = (props) => {
   console.log(props);
   return <div>NextPage
-    <Box w={700}><DragDropGame game={props?.Page.components[4].game}/></Box>
+    {/* <Box w={700}><DragDropGame game={props?.Page.components[3].game}/></Box> */}
   </div>;
 };
 

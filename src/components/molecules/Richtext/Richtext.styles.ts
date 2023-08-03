@@ -1,7 +1,7 @@
 import { css } from "@emotion/react";
 import styled from "@emotion/styled";
 
-export const SRichtext = styled.div<{ stylesOverwrite: any  }>`
+export const SRichtext = styled.div<{ stylesOverwrite: any }>`
   ${({ theme }) => css`
     p {
       font-size: ${theme.fontSizes["spacing-16"]};
@@ -44,6 +44,24 @@ export const SRichtext = styled.div<{ stylesOverwrite: any  }>`
       }
     }
 
+    ol {
+      counter-reset: li;
+
+      li {
+        display: flex;
+        align-items: center;
+        gap: 3px;
+        
+
+        &::before {
+          content: counters(li, "") ".";
+          counter-increment: li;
+          font-family: "Karla, sans-serif";
+          font-weight: inherit;
+        }
+      }
+    }
+
     ul,
     ol {
       li {
@@ -74,8 +92,6 @@ export const SRichtext = styled.div<{ stylesOverwrite: any  }>`
         font-weight: 700;
       }
     }
-    
-
   `}
 
   h1, h2, h3, h4 {

@@ -584,7 +584,18 @@ type DragNDrop {
   game: JSON
 
   """"""
-  helpNote: String
+  helpNote(
+    """
+    The cursor to start the pagination from. In this case the curser equals the id for the (last) element. If not set, we wil start from the beginning.
+    """
+    after: String
+
+    """The number of items to return. Default and max value is 100."""
+    first: Int = 100
+
+    """"""
+    locale: String
+  ): TextElement
 
   """"""
   id: ID
@@ -632,61 +643,7 @@ input DragNDrop_Where {
   OR: [DragNDrop_Where]
 
   """"""
-  helpNote: CaisyField_String_Where
-
-  """"""
   internalTitle: CaisyField_String_Where
-}
-
-""""""
-type Headline {
-  """"""
-  _meta: CaisyDocument_Meta
-
-  """"""
-  id: ID
-
-  """"""
-  title: String
-}
-
-""""""
-type Headline_Connection {
-  """"""
-  edges: [Headline_ConnectionEdge]
-
-  """"""
-  pageInfo: PageInfo
-
-  """"""
-  totalCount: Int
-}
-
-""""""
-type Headline_ConnectionEdge {
-  """"""
-  cursor: String
-
-  """"""
-  node: Headline
-}
-
-""""""
-input Headline_Sort {
-  """"""
-  title: Order
-}
-
-""""""
-input Headline_Where {
-  """"""
-  AND: [Headline_Where]
-
-  """"""
-  OR: [Headline_Where]
-
-  """"""
-  title: CaisyField_String_Where
 }
 
 """"""
@@ -940,7 +897,7 @@ input Page_Where {
 }
 
 """"""
-union Page_components = Callout | CaseSection | DragNDrop | Headline | ImageWrapperCard | LegalArea | TextElement | Topic
+union Page_components = Callout | CaseSection | DragNDrop | ImageWrapperCard | LegalArea | TextElement | Topic
 
 """"""
 type Query {
@@ -958,9 +915,6 @@ type Query {
 
   """"""
   DragNDrop(id: ID!, locale: String): DragNDrop
-
-  """"""
-  Headline(id: ID!, locale: String): Headline
 
   """"""
   ImageWrapperCard(id: ID!, locale: String): ImageWrapperCard
@@ -991,9 +945,6 @@ type Query {
 
   """"""
   allDragNDrop(after: String, before: String, first: Int, last: Int, locale: String, sort: [DragNDrop_Sort], where: [DragNDrop_Where]): DragNDrop_Connection
-
-  """"""
-  allHeadline(after: String, before: String, first: Int, last: Int, locale: String, sort: [Headline_Sort], where: [Headline_Where]): Headline_Connection
 
   """"""
   allImageWrapperCard(after: String, before: String, first: Int, last: Int, locale: String, sort: [ImageWrapperCard_Sort], where: [ImageWrapperCard_Where]): ImageWrapperCard_Connection

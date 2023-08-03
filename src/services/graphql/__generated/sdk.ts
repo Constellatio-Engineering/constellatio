@@ -325,9 +325,16 @@ export type IGenDragNDrop = {
   __typename?: 'DragNDrop';
   _meta?: Maybe<IGenCaisyDocument_Meta>;
   game?: Maybe<Scalars['JSON']['output']>;
-  helpNote?: Maybe<Scalars['String']['output']>;
+  helpNote?: Maybe<IGenTextElement>;
   id?: Maybe<Scalars['ID']['output']>;
   internalTitle?: Maybe<Scalars['String']['output']>;
+};
+
+
+export type IGenDragNDropHelpNoteArgs = {
+  after?: InputMaybe<Scalars['String']['input']>;
+  first?: InputMaybe<Scalars['Int']['input']>;
+  locale?: InputMaybe<Scalars['String']['input']>;
 };
 
 export type IGenDragNDrop_Connection = {
@@ -351,38 +358,7 @@ export type IGenDragNDrop_Sort = {
 export type IGenDragNDrop_Where = {
   AND?: InputMaybe<Array<InputMaybe<IGenDragNDrop_Where>>>;
   OR?: InputMaybe<Array<InputMaybe<IGenDragNDrop_Where>>>;
-  helpNote?: InputMaybe<IGenCaisyField_String_Where>;
   internalTitle?: InputMaybe<IGenCaisyField_String_Where>;
-};
-
-export type IGenHeadline = {
-  __typename?: 'Headline';
-  _meta?: Maybe<IGenCaisyDocument_Meta>;
-  id?: Maybe<Scalars['ID']['output']>;
-  title?: Maybe<Scalars['String']['output']>;
-};
-
-export type IGenHeadline_Connection = {
-  __typename?: 'Headline_Connection';
-  edges?: Maybe<Array<Maybe<IGenHeadline_ConnectionEdge>>>;
-  pageInfo?: Maybe<IGenPageInfo>;
-  totalCount?: Maybe<Scalars['Int']['output']>;
-};
-
-export type IGenHeadline_ConnectionEdge = {
-  __typename?: 'Headline_ConnectionEdge';
-  cursor?: Maybe<Scalars['String']['output']>;
-  node?: Maybe<IGenHeadline>;
-};
-
-export type IGenHeadline_Sort = {
-  title?: InputMaybe<IGenOrder>;
-};
-
-export type IGenHeadline_Where = {
-  AND?: InputMaybe<Array<InputMaybe<IGenHeadline_Where>>>;
-  OR?: InputMaybe<Array<InputMaybe<IGenHeadline_Where>>>;
-  title?: InputMaybe<IGenCaisyField_String_Where>;
 };
 
 export type IGenImageWrapperCard = {
@@ -518,7 +494,7 @@ export type IGenPage_Where = {
   slug?: InputMaybe<IGenCaisyField_String_Where>;
 };
 
-export type IGenPage_Components = IGenCallout | IGenCaseSection | IGenDragNDrop | IGenHeadline | IGenImageWrapperCard | IGenLegalArea | IGenTextElement | IGenTopic;
+export type IGenPage_Components = IGenCallout | IGenCaseSection | IGenDragNDrop | IGenImageWrapperCard | IGenLegalArea | IGenTextElement | IGenTopic;
 
 export type IGenQuery = {
   __typename?: 'Query';
@@ -527,7 +503,6 @@ export type IGenQuery = {
   Case?: Maybe<IGenCase>;
   CaseSection?: Maybe<IGenCaseSection>;
   DragNDrop?: Maybe<IGenDragNDrop>;
-  Headline?: Maybe<IGenHeadline>;
   ImageWrapperCard?: Maybe<IGenImageWrapperCard>;
   LegalArea?: Maybe<IGenLegalArea>;
   Page?: Maybe<IGenPage>;
@@ -538,7 +513,6 @@ export type IGenQuery = {
   allCase?: Maybe<IGenCase_Connection>;
   allCaseSection?: Maybe<IGenCaseSection_Connection>;
   allDragNDrop?: Maybe<IGenDragNDrop_Connection>;
-  allHeadline?: Maybe<IGenHeadline_Connection>;
   allImageWrapperCard?: Maybe<IGenImageWrapperCard_Connection>;
   allLegalArea?: Maybe<IGenLegalArea_Connection>;
   allPage?: Maybe<IGenPage_Connection>;
@@ -572,12 +546,6 @@ export type IGenQueryCaseSectionArgs = {
 
 
 export type IGenQueryDragNDropArgs = {
-  id: Scalars['ID']['input'];
-  locale?: InputMaybe<Scalars['String']['input']>;
-};
-
-
-export type IGenQueryHeadlineArgs = {
   id: Scalars['ID']['input'];
   locale?: InputMaybe<Scalars['String']['input']>;
 };
@@ -665,17 +633,6 @@ export type IGenQueryAllDragNDropArgs = {
   locale?: InputMaybe<Scalars['String']['input']>;
   sort?: InputMaybe<Array<InputMaybe<IGenDragNDrop_Sort>>>;
   where?: InputMaybe<Array<InputMaybe<IGenDragNDrop_Where>>>;
-};
-
-
-export type IGenQueryAllHeadlineArgs = {
-  after?: InputMaybe<Scalars['String']['input']>;
-  before?: InputMaybe<Scalars['String']['input']>;
-  first?: InputMaybe<Scalars['Int']['input']>;
-  last?: InputMaybe<Scalars['Int']['input']>;
-  locale?: InputMaybe<Scalars['String']['input']>;
-  sort?: InputMaybe<Array<InputMaybe<IGenHeadline_Sort>>>;
-  where?: InputMaybe<Array<InputMaybe<IGenHeadline_Where>>>;
 };
 
 
@@ -834,16 +791,20 @@ export type IGenCalloutFragment = { __typename?: 'Callout', id?: string | null, 
     & IGenTextElementFragment
   ) | null };
 
-export type IGenCaseSectionFragment = { __typename?: 'CaseSection', id?: string | null, title?: string | null, game?: { __typename?: 'DragNDrop', id?: string | null, helpNote?: string | null, game?: any | null } | null, content?: { __typename?: 'CaseSection_content', json?: any | null } | null };
+export type IGenCaseSectionFragment = { __typename?: 'CaseSection', id?: string | null, title?: string | null, game?: { __typename?: 'DragNDrop', id?: string | null, game?: any | null, helpNote?: (
+      { __typename?: 'TextElement' }
+      & IGenTextElementFragment
+    ) | null } | null, content?: { __typename?: 'CaseSection_content', json?: any | null } | null };
 
 export type IGenCaseFragment = { __typename?: 'Case', id?: string | null, title?: string | null, legalArea?: string | null, topic?: { __typename?: 'Topic', title?: string | null } | null, facts?: { __typename?: 'Case_facts', json?: any | null } | null, sections?: Array<(
     { __typename?: 'CaseSection' }
     & IGenCaseSectionFragment
   ) | null> | null };
 
-export type IGenDragNDropFragment = { __typename?: 'DragNDrop', id?: string | null, game?: any | null, helpNote?: string | null };
-
-export type IGenHeadlineFragment = { __typename?: 'Headline', id?: string | null, title?: string | null };
+export type IGenDragNDropFragment = { __typename?: 'DragNDrop', id?: string | null, game?: any | null, helpNote?: (
+    { __typename?: 'TextElement' }
+    & IGenTextElementFragment
+  ) | null };
 
 export type IGenImageWrapperCardFragment = { __typename?: 'ImageWrapperCard', id?: string | null, title?: string | null, downloadable?: boolean | null, image?: (
     { __typename?: 'Asset' }
@@ -881,9 +842,6 @@ export type IGenPageQuery = { __typename?: 'Query', allPage?: { __typename?: 'Pa
         ) | { __typename?: 'CaseSection' } | (
           { __typename?: 'DragNDrop' }
           & IGenDragNDropFragment
-        ) | (
-          { __typename?: 'Headline' }
-          & IGenHeadlineFragment
         ) | (
           { __typename?: 'ImageWrapperCard' }
           & IGenImageWrapperCardFragment
@@ -934,7 +892,9 @@ export const CaseSectionFragmentDoc = gql`
   title
   game {
     id
-    helpNote
+    helpNote {
+      ...TextElement
+    }
     game
   }
   content {
@@ -964,13 +924,9 @@ export const DragNDropFragmentDoc = gql`
     fragment DragNDrop on DragNDrop {
   id
   game
-  helpNote
-}
-    `;
-export const HeadlineFragmentDoc = gql`
-    fragment Headline on Headline {
-  id
-  title
+  helpNote {
+    ...TextElement
+  }
 }
     `;
 export const ImageWrapperCardFragmentDoc = gql`
@@ -994,7 +950,8 @@ export const CasesDocument = gql`
   }
 }
     ${CaseFragmentDoc}
-${CaseSectionFragmentDoc}`;
+${CaseSectionFragmentDoc}
+${TextElementFragmentDoc}`;
 export const CaseByIdDocument = gql`
     query CaseById($id: ID!) {
   Case(id: $id) {
@@ -1002,7 +959,8 @@ export const CaseByIdDocument = gql`
   }
 }
     ${CaseFragmentDoc}
-${CaseSectionFragmentDoc}`;
+${CaseSectionFragmentDoc}
+${TextElementFragmentDoc}`;
 export const PageDocument = gql`
     query Page($slug: String!) {
   allPage(where: {slug: {eq: $slug}}) {
@@ -1012,7 +970,6 @@ export const PageDocument = gql`
         nameInNavigation
         slug
         components {
-          ...Headline
           ...TextElement
           ...Callout
           ...ImageWrapperCard
@@ -1022,8 +979,7 @@ export const PageDocument = gql`
     }
   }
 }
-    ${HeadlineFragmentDoc}
-${TextElementFragmentDoc}
+    ${TextElementFragmentDoc}
 ${CalloutFragmentDoc}
 ${AssetFragmentDoc}
 ${ImageWrapperCardFragmentDoc}
