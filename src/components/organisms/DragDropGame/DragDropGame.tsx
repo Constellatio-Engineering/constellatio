@@ -15,8 +15,10 @@ import { Check } from "@/components/Icons/Check";
 import { Draggable } from "@/components/Helpers/Draggable";
 import { Reload } from "@/components/Icons/Reload";
 import { LoadingOverlay } from "@mantine/core";
+import { ResultCard } from "@/components/molecules/ResultCard/ResultCard";
+import { HelpNote } from "@/components/molecules/HelpNote/HelpNote";
 
-type TDragDropGame = Pick<IGenDragNDrop, "game">;
+type TDragDropGame = Pick<IGenDragNDrop, "game" | "helpNote">;
 
 const shuffleOptions = (arr) => {
   for (let i = arr.length - 1; i > 0; i--) {
@@ -26,12 +28,13 @@ const shuffleOptions = (arr) => {
   return arr;
 };
 
-export const DragDropGame: FC<TDragDropGame> = ({ game }: { game?: TValue }) => {
+export const DragDropGame: FC<TDragDropGame> = ({ game, helpNote }) => {
   const originalOptions = JSON.parse(JSON.stringify(game?.options));
   const [optionsItems, setOptionsItems] = useState<any[]>([]);
   const [droppedItems, setDroppedItems] = useState<any[]>([]);
   const [activeId, setActiveId] = useState(null);
   const [gameStatus, setGameStatus] = useState<"win" | "lose" | "inprogress">("inprogress");
+  const [resultMessage, setResultMessage] = useState<string>("");
 
   useEffect(() => {
     setOptionsItems(shuffleOptions(originalOptions));
@@ -75,21 +78,21 @@ export const DragDropGame: FC<TDragDropGame> = ({ game }: { game?: TValue }) => 
       const orderCorrect = checkOrder();
       if (winCondition && orderCorrect) {
         setGameStatus("win");
-        console.log("win with order relevant");
+        setResultMessage("Congrats! all answers are correct!");
       } else if (winCondition && !orderCorrect) {
         setGameStatus("lose");
-        console.log("Correct answers but wrong order");
+        setResultMessage("You have all correct answers but in wrong order!");
       } else {
         setGameStatus("lose");
-        console.log("lose wrong answers");
+        setResultMessage("Answers are incorrect!");
       }
     } else {
       if (winCondition) {
         setGameStatus("win");
-        console.log("win without order relevant");
+        setResultMessage("Congrats! all answers are correct!");
       } else {
         setGameStatus("lose");
-        console.log("lose wrong answers");
+        setResultMessage("Answers are incorrect!");
       }
     }
   };
@@ -183,6 +186,17 @@ export const DragDropGame: FC<TDragDropGame> = ({ game }: { game?: TValue }) => 
             </Droppable>
           </Game>
         </DndContext>
+        {gameStatus !== "inprogress" && (
+          <>
+            <ResultCard
+              droppedCorrectCards={droppedItems.filter((item) => item.correctAnswer).length ?? null}
+              totalCorrectCards={originalOptions.filter((item) => item.correctAnswer).length ?? null}
+              variant={gameStatus}
+              message={resultMessage}
+            />
+            {helpNote?.richTextContent?.json && <HelpNote richTextContent={helpNote?.richTextContent} />}
+          </>
+        )}
         <div>
           <Button
             styleType="primary"

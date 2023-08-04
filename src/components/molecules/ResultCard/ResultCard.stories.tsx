@@ -43,7 +43,7 @@ export const Lose: Story = {
 
 export const IncorrectOrder: Story = {
   args: {
-    variant: "incorrectOrder",
+    variant: "lose",
     message: "some of your answers are in incorrect order",
     totalCorrectCards: 3,
     droppedCorrectCards: 3,

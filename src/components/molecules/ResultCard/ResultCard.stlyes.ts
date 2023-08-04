@@ -1,6 +1,6 @@
 import styled from "@emotion/styled";
 
-export const Card = styled.div<{ variant: "win" | "lose" | "incorrectOrder" }>`
+export const Card = styled.div<{ variant: "win" | "lose" }>`
   display: flex;
   padding: ${({ theme }) => theme.spacing["spacing-16"]};
   align-items: center;
@@ -12,7 +12,7 @@ export const Card = styled.div<{ variant: "win" | "lose" | "incorrectOrder" }>`
     variant === "win" ? theme.colors["support-success"][4] : theme.colors["support-error"][0]};
 `;
 
-export const TextWrapper = styled.div<{ variant: "win" | "lose" | "incorrectOrder" }>`
+export const TextWrapper = styled.div<{ variant: "win" | "lose" }>`
   display: flex;
   gap: ${({ theme }) => theme.spacing["spacing-12"]};
   align-items: center;
@@ -21,7 +21,7 @@ export const TextWrapper = styled.div<{ variant: "win" | "lose" | "incorrectOrde
     variant === "win" ? theme.colors["neutrals-01"][0] : theme.colors["support-error"][3]};
 `;
 
-export const IconWrapper = styled.div<{ variant: "win" | "lose" | "incorrectOrder" }>`
+export const IconWrapper = styled.div<{ variant: "win" | "lose" }>`
   display: flex;
   align-items: center;
   justify-content: center;
@@ -38,7 +38,7 @@ export const IconWrapper = styled.div<{ variant: "win" | "lose" | "incorrectOrde
   }
 `;
 
-export const LabelWrapper = styled.div<{ variant: "win" | "lose" | "incorrectOrder" }>`
+export const LabelWrapper = styled.div<{ variant: "win" | "lose" }>`
   border-radius: ${({ theme }) => theme.radius["radius-8"]};
 
   > p {

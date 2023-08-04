@@ -61,6 +61,34 @@ export const OrderRelevant: Story = {
       ],
       orderRequired: true,
     },
+    helpNote: {
+      id: "7ff9b046-4c5e-4b2c-a081-88f99c98f3ea",
+      richTextContent: {
+        connections: [],
+        json: {
+          content: [
+            {
+              attrs: {
+                textAlign: "left",
+              },
+              content: [
+                {
+                  marks: [
+                    {
+                      type: "bold",
+                    },
+                  ],
+                  text: "Keine Gesellschaften sind also: (1) Stiftungen, (2) Eheliche Lebensgemeinschaften, (3) Erbengemeinschaften und (4) die Bruchteilsgemeinschaft. Keine Sorge, wenn du hier Probleme hattest. Es geht darum, dich zunächst einmal dafür zu sensibilisieren, welche Gesellschaftsformen es überhaupt gibt und welche Rechtsinstitutionen es noch gibt, die aber aus verschiedenen Gründen nicht als Gesellschaften angesehen werden und daher nicht dem Gesellschaftsrecht unterliegen. In den nachfolgenden Fällen werden wir noch nach und nach verschiedene Abgrenzungen - auch zwischen den Gesellschaftsformen - vornehmen.",
+                  type: "text",
+                },
+              ],
+              type: "paragraph",
+            },
+          ],
+          type: "doc",
+        },
+      },
+    },
   },
 };
 

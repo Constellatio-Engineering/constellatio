@@ -5,7 +5,7 @@ import { Check } from "@/components/Icons/Check";
 import { Cross } from "@/components/Icons/Cross";
 
 type TResultCard = {
-  variant: "win" | "lose" | "incorrectOrder";
+  variant: "win" | "lose";
   totalCorrectCards: number;
   droppedCorrectCards: number;
   message: string;
