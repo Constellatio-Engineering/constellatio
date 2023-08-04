@@ -4,11 +4,11 @@ import { Container, EmptyPlaceholder, Game, GameWrapper, Options, TitleWrapper }
 import { Button } from "@/components/atoms/Button/Button";
 import { Gamification } from "@/components/Icons/Gamification";
 import { Loader, Title } from "@mantine/core";
-import { DragNDropCard } from "@/components/atoms/DraggableCard/DragNDropCard";
+import { DragNDropCard } from "@/components/molecules/DraggableCard/DragNDropCard";
 import { DndContext, DragOverlay } from "@dnd-kit/core";
 import { Droppable } from "../../Helpers/Droppable";
 import { Flag } from "@/components/Icons/Flag";
-import { GhostDropCard } from "@/components/atoms/GhostDropCard/GhostDropCard";
+import { GhostDropCard } from "@/components/molecules/GhostDropCard/GhostDropCard";
 import { IGenDragNDrop } from "@/services/graphql/__generated/sdk";
 import { TValue } from "@/components/Wrappers/DndWrapper";
 import { Check } from "@/components/Icons/Check";

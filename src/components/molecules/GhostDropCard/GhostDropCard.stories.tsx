@@ -10,7 +10,7 @@ const Template = (args: any) => (
 );
 
 const meta: Meta = {
-  title: "Atoms/Gamification/GhostDropCard",
+  title: "Molecules/Gamification/GhostDropCard",
   component: Template,
   parameters: {
     design: {

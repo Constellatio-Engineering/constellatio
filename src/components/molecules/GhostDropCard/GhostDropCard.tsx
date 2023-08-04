@@ -1,6 +1,6 @@
 import { DownloadIcon } from "@/components/Icons/DownloadIcon";
 import React from "react";
-import { BodyText } from "../BodyText/BodyText";
+import { BodyText } from "../../atoms/BodyText/BodyText";
 import { Card } from "./GhostDropCard.styles";
 
 export const GhostDropCard = () => {

@@ -1,7 +1,7 @@
 import React, { ButtonHTMLAttributes, CSSProperties, FC, ReactNode } from "react";
 import { useDraggable } from "@dnd-kit/core";
 import { ButtonCard, StatusWrapper } from "./DragNDropCard.styles";
-import { BodyText } from "../BodyText/BodyText";
+import { BodyText } from "../../atoms/BodyText/BodyText";
 import { Handle } from "@/components/Icons/Handle";
 import { CSS } from "@dnd-kit/utilities";
 import { CheckFilled } from "@/components/Icons/CheckFilled";
