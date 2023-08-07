@@ -1,20 +1,20 @@
 import { Meta, StoryObj } from "@storybook/react";
 import { Box } from "@mantine/core";
-import { DragDropGame } from "./DragDropGame";
+import { SelectionCardGame } from "./SelectionCardGame";
 
 const Template = (args: any) => (
   <Box w={670}>
-    <DragDropGame {...args} />
+    <SelectionCardGame {...args} />
   </Box>
 );
 
 const meta: Meta = {
-  title: "Organisms/Gamification/DragDropGame",
+  title: "Organisms/Gamification/SelectionCardGame",
   component: Template,
   parameters: {
     design: {
       type: "figma",
-      url: "https://www.figma.com/file/KZhlH1AesOBZZf1V4F9d2r/Constellatio-%E2%80%93-UI-Kit?type=design&node-id=51-4848&mode=dev",
+      url: "https://www.figma.com/file/KZhlH1AesOBZZf1V4F9d2r/Constellatio-%E2%80%93-UI-Kit?type=design&node-id=51-9026&mode=dev",
     },
   },
   argTypes: {},
@@ -22,44 +22,43 @@ const meta: Meta = {
 
 export default meta;
 
-type Story = StoryObj<typeof DragDropGame>;
+type Story = StoryObj<typeof SelectionCardGame>;
 
-export const OrderRelevant: Story = {
+export const Default: Story = {
   args: {
     game: {
       options: [
         {
           correctAnswer: false,
-          id: "mantine-z8s83yqq4",
-          label: "incorrect 2",
-        },
-        {
-          correctAnswer: true,
-          id: "mantine-cm0emte8g",
-          label: "correct 2",
+          id: "mantine-jv39t5jcd",
+          label: "Incorrect 1",
         },
         {
           correctAnswer: false,
-          id: "mantine-al6nvyf3p",
-          label: "incorrect 1",
-        },
-        {
-          correctAnswer: true,
-          id: "mantine-yypgy82zw",
-          label: "correct 1",
-        },
-        {
-          correctAnswer: true,
-          id: "mantine-16im481b1",
-          label: "correct 3",
+          id: "mantine-kq6liayyc",
+          label: "Incorrect 2",
         },
         {
           correctAnswer: false,
-          id: "mantine-z36xuo6x0",
-          label: "incorrect 3 ",
+          id: "mantine-j5w8k2a9v",
+          label: "Incorrect 3",
+        },
+        {
+          correctAnswer: true,
+          id: "mantine-pygn9ailp",
+          label: "Correct 1",
+        },
+        {
+          correctAnswer: true,
+          id: "mantine-4x0lkbhlu",
+          label: "Correct 2",
+        },
+        {
+          correctAnswer: true,
+          id: "mantine-7qis9b9wa",
+          label: "Correct 3",
         },
       ],
-      orderRequired: true,
     },
     helpNote: {
       id: "7ff9b046-4c5e-4b2c-a081-88f99c98f3ea",
@@ -90,16 +89,6 @@ export const OrderRelevant: Story = {
       },
     },
     question:
-      'Based on the above definition of the term and its prerequisites: Which of the following "organizations" constitute companies in the sense of company law. Skim the respective norms!',
-  },
-};
-
-export const OrderIrrelevant: Story = {
-  args: {
-    ...OrderRelevant?.args,
-    game: {
-      ...OrderRelevant?.args?.game,
-      orderRequired: false,
-    },
+      'So far so easy. But what exactly does the wording "liabilities established up until then" in § 160 HGB mean?',
   },
 };

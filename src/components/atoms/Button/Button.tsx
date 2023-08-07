@@ -7,6 +7,7 @@ import {
   ButtonStylesParams,
   ButtonStylesNames,
   CSSObject,
+  createPolymorphicComponent,
 } from "@mantine/core";
 
 type TButton = (ButtonProps | ButtonHTMLAttributes<HTMLButtonElement>) & {
@@ -14,7 +15,7 @@ type TButton = (ButtonProps | ButtonHTMLAttributes<HTMLButtonElement>) & {
   size?: "large" | "medium";
   styleOverwrite?: CSSObject | undefined;
 };
-export const Button: FC<TButton> = ({ styleType = "primary", size = "large", styleOverwrite, children, ...props }) => {
+const _Button: FC<TButton> = ({ styleType = "primary", size = "large", styleOverwrite, children, ...props }) => {
   const styles: Styles<ButtonStylesNames, ButtonStylesParams> = (theme: MantineTheme) => ({
     root: {
       height: size === "large" ? theme.spacing["spacing-40"] : theme.spacing["spacing-32"],
@@ -89,3 +90,5 @@ export const Button: FC<TButton> = ({ styleType = "primary", size = "large", sty
     </MantineButton>
   );
 };
+
+export const Button = createPolymorphicComponent<"button", TButton>(_Button);

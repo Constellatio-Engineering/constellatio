@@ -3,7 +3,7 @@ import React, { FC, ReactNode, useState } from "react";
 import { BodyText } from "@/components/atoms/BodyText/BodyText";
 import { CheckFilled } from "@/components/Icons/CheckFilled";
 import { CrossFilled } from "@/components/Icons/CrossFilled";
-import { Box, useMantineTheme } from "@mantine/core";
+import { useMantineTheme } from "@mantine/core";
 import { IconWrapper } from "./SelectionCard.styles";
 
 type TSelectionCard = {
@@ -37,10 +37,9 @@ export const SelectionCard: FC<TSelectionCard> = ({ onCheckHandler, status, labe
       }
       checkboxBodyOverride={{
         alignItems: "center",
-        width: 320,
-        padding: theme.spacing["spacing-12"],
-        gap: theme.spacing["spacing-4"],
+        gap: theme.spacing["spacing-8"],
         borderRadius: theme.radius["radius-8"],
+        padding: `0 ${theme.spacing["spacing-12"]}`,
         border: `1px solid ${
           checked && status === "default"
             ? theme.colors["neutrals-02"][1]
@@ -74,6 +73,7 @@ export const SelectionCard: FC<TSelectionCard> = ({ onCheckHandler, status, labe
         justifyContent: "space-between",
         cursor: status === "default" ? "pointer" : "default",
         color: `${theme.colors["neutrals-02"][1]} !important`,
+        padding: `${theme.spacing["spacing-12"]} 0`,
       }}
     />
   );

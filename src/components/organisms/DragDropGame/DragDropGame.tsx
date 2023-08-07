@@ -3,14 +3,13 @@ import React, { FC, useEffect, useState } from "react";
 import { Container, EmptyPlaceholder, Game, GameWrapper, Options, TitleWrapper } from "./DragDropGame.styles";
 import { Button } from "@/components/atoms/Button/Button";
 import { Gamification } from "@/components/Icons/Gamification";
-import { Loader, Title } from "@mantine/core";
+import { Title } from "@mantine/core";
 import { DragNDropCard } from "@/components/molecules/DraggableCard/DragNDropCard";
 import { DndContext, DragOverlay } from "@dnd-kit/core";
 import { Droppable } from "../../Helpers/Droppable";
 import { Flag } from "@/components/Icons/Flag";
 import { GhostDropCard } from "@/components/molecules/GhostDropCard/GhostDropCard";
 import { IGenDragNDrop } from "@/services/graphql/__generated/sdk";
-import { TValue } from "@/components/Wrappers/DndWrapper";
 import { Check } from "@/components/Icons/Check";
 import { Draggable } from "@/components/Helpers/Draggable";
 import { Reload } from "@/components/Icons/Reload";
@@ -18,7 +17,7 @@ import { LoadingOverlay } from "@mantine/core";
 import { ResultCard } from "@/components/molecules/ResultCard/ResultCard";
 import { HelpNote } from "@/components/molecules/HelpNote/HelpNote";
 
-type TDragDropGame = Pick<IGenDragNDrop, "game" | "helpNote">;
+type TDragDropGame = Pick<IGenDragNDrop, "game" | "helpNote" | "question">;
 
 const shuffleOptions = (arr) => {
   for (let i = arr.length - 1; i > 0; i--) {
@@ -28,7 +27,7 @@ const shuffleOptions = (arr) => {
   return arr;
 };
 
-export const DragDropGame: FC<TDragDropGame> = ({ game, helpNote }) => {
+export const DragDropGame: FC<TDragDropGame> = ({ game, helpNote, question }) => {
   const originalOptions = JSON.parse(JSON.stringify(game?.options));
   const [optionsItems, setOptionsItems] = useState<any[]>([]);
   const [droppedItems, setDroppedItems] = useState<any[]>([]);
@@ -109,10 +108,11 @@ export const DragDropGame: FC<TDragDropGame> = ({ game, helpNote }) => {
         <Gamification /> <Title order={4}>Drag all correct answers into the box on the right</Title>
       </TitleWrapper>
       <GameWrapper>
-        <BodyText component="p" styleType="body-01-regular">
-          Based on the above definition of the term and its prerequisites: Which of the following {'"organizations"'}
-          constitute companies in the sense of company law. Skim the respective norms!
-        </BodyText>
+        {question && (
+          <BodyText component="p" styleType="body-01-regular">
+            {question}
+          </BodyText>
+        )}
         <DndContext onDragEnd={handleDragEnd} onDragStart={handleDragStart}>
           <Game>
             <Options>

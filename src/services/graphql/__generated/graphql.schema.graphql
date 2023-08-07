@@ -602,6 +602,9 @@ type DragNDrop {
 
   """"""
   internalTitle: String
+
+  """"""
+  question: String
 }
 
 """"""
@@ -632,6 +635,9 @@ input DragNDrop_Sort {
 
   """"""
   internalTitle: Order
+
+  """"""
+  question: Order
 }
 
 """"""
@@ -644,6 +650,9 @@ input DragNDrop_Where {
 
   """"""
   internalTitle: CaisyField_String_Where
+
+  """"""
+  question: CaisyField_String_Where
 }
 
 """"""
@@ -897,7 +906,7 @@ input Page_Where {
 }
 
 """"""
-union Page_components = Callout | CaseSection | DragNDrop | ImageWrapperCard | LegalArea | TextElement | Topic
+union Page_components = Callout | CaseSection | DragNDrop | ImageWrapperCard | LegalArea | SelectionCard | TextElement | Topic
 
 """"""
 type Query {
@@ -924,6 +933,9 @@ type Query {
 
   """"""
   Page(id: ID!, locale: String): Page
+
+  """"""
+  SelectionCard(id: ID!, locale: String): SelectionCard
 
   """"""
   TextElement(id: ID!, locale: String): TextElement
@@ -956,10 +968,93 @@ type Query {
   allPage(after: String, before: String, first: Int, last: Int, locale: String, sort: [Page_Sort], where: [Page_Where]): Page_Connection
 
   """"""
+  allSelectionCard(after: String, before: String, first: Int, last: Int, locale: String, sort: [SelectionCard_Sort], where: [SelectionCard_Where]): SelectionCard_Connection
+
+  """"""
   allTextElement(after: String, before: String, first: Int, last: Int, locale: String, sort: [TextElement_Sort], where: [TextElement_Where]): TextElement_Connection
 
   """"""
   allTopic(after: String, before: String, first: Int, last: Int, locale: String, sort: [Topic_Sort], where: [Topic_Where]): Topic_Connection
+}
+
+""""""
+type SelectionCard {
+  """"""
+  _meta: CaisyDocument_Meta
+
+  """"""
+  game: JSON
+
+  """"""
+  helpNote(
+    """
+    The cursor to start the pagination from. In this case the curser equals the id for the (last) element. If not set, we wil start from the beginning.
+    """
+    after: String
+
+    """The number of items to return. Default and max value is 100."""
+    first: Int = 100
+
+    """"""
+    locale: String
+  ): TextElement
+
+  """"""
+  id: ID
+
+  """"""
+  internalTitle: String
+
+  """"""
+  question: String
+}
+
+""""""
+type SelectionCard_Connection {
+  """"""
+  edges: [SelectionCard_ConnectionEdge]
+
+  """"""
+  pageInfo: PageInfo
+
+  """"""
+  totalCount: Int
+}
+
+""""""
+type SelectionCard_ConnectionEdge {
+  """"""
+  cursor: String
+
+  """"""
+  node: SelectionCard
+}
+
+""""""
+input SelectionCard_Sort {
+  """"""
+  helpNote: Order
+
+  """"""
+  internalTitle: Order
+
+  """"""
+  question: Order
+}
+
+""""""
+input SelectionCard_Where {
+  """"""
+  AND: [SelectionCard_Where]
+
+  """"""
+  OR: [SelectionCard_Where]
+
+  """"""
+  internalTitle: CaisyField_String_Where
+
+  """"""
+  question: CaisyField_String_Where
 }
 
 """"""

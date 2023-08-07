@@ -328,6 +328,7 @@ export type IGenDragNDrop = {
   helpNote?: Maybe<IGenTextElement>;
   id?: Maybe<Scalars['ID']['output']>;
   internalTitle?: Maybe<Scalars['String']['output']>;
+  question?: Maybe<Scalars['String']['output']>;
 };
 
 
@@ -353,12 +354,14 @@ export type IGenDragNDrop_ConnectionEdge = {
 export type IGenDragNDrop_Sort = {
   helpNote?: InputMaybe<IGenOrder>;
   internalTitle?: InputMaybe<IGenOrder>;
+  question?: InputMaybe<IGenOrder>;
 };
 
 export type IGenDragNDrop_Where = {
   AND?: InputMaybe<Array<InputMaybe<IGenDragNDrop_Where>>>;
   OR?: InputMaybe<Array<InputMaybe<IGenDragNDrop_Where>>>;
   internalTitle?: InputMaybe<IGenCaisyField_String_Where>;
+  question?: InputMaybe<IGenCaisyField_String_Where>;
 };
 
 export type IGenImageWrapperCard = {
@@ -494,7 +497,7 @@ export type IGenPage_Where = {
   slug?: InputMaybe<IGenCaisyField_String_Where>;
 };
 
-export type IGenPage_Components = IGenCallout | IGenCaseSection | IGenDragNDrop | IGenImageWrapperCard | IGenLegalArea | IGenTextElement | IGenTopic;
+export type IGenPage_Components = IGenCallout | IGenCaseSection | IGenDragNDrop | IGenImageWrapperCard | IGenLegalArea | IGenSelectionCard | IGenTextElement | IGenTopic;
 
 export type IGenQuery = {
   __typename?: 'Query';
@@ -506,6 +509,7 @@ export type IGenQuery = {
   ImageWrapperCard?: Maybe<IGenImageWrapperCard>;
   LegalArea?: Maybe<IGenLegalArea>;
   Page?: Maybe<IGenPage>;
+  SelectionCard?: Maybe<IGenSelectionCard>;
   TextElement?: Maybe<IGenTextElement>;
   Topic?: Maybe<IGenTopic>;
   allAsset?: Maybe<IGenAsset_Connection>;
@@ -516,6 +520,7 @@ export type IGenQuery = {
   allImageWrapperCard?: Maybe<IGenImageWrapperCard_Connection>;
   allLegalArea?: Maybe<IGenLegalArea_Connection>;
   allPage?: Maybe<IGenPage_Connection>;
+  allSelectionCard?: Maybe<IGenSelectionCard_Connection>;
   allTextElement?: Maybe<IGenTextElement_Connection>;
   allTopic?: Maybe<IGenTopic_Connection>;
 };
@@ -564,6 +569,12 @@ export type IGenQueryLegalAreaArgs = {
 
 
 export type IGenQueryPageArgs = {
+  id: Scalars['ID']['input'];
+  locale?: InputMaybe<Scalars['String']['input']>;
+};
+
+
+export type IGenQuerySelectionCardArgs = {
   id: Scalars['ID']['input'];
   locale?: InputMaybe<Scalars['String']['input']>;
 };
@@ -669,6 +680,17 @@ export type IGenQueryAllPageArgs = {
 };
 
 
+export type IGenQueryAllSelectionCardArgs = {
+  after?: InputMaybe<Scalars['String']['input']>;
+  before?: InputMaybe<Scalars['String']['input']>;
+  first?: InputMaybe<Scalars['Int']['input']>;
+  last?: InputMaybe<Scalars['Int']['input']>;
+  locale?: InputMaybe<Scalars['String']['input']>;
+  sort?: InputMaybe<Array<InputMaybe<IGenSelectionCard_Sort>>>;
+  where?: InputMaybe<Array<InputMaybe<IGenSelectionCard_Where>>>;
+};
+
+
 export type IGenQueryAllTextElementArgs = {
   after?: InputMaybe<Scalars['String']['input']>;
   before?: InputMaybe<Scalars['String']['input']>;
@@ -688,6 +710,49 @@ export type IGenQueryAllTopicArgs = {
   locale?: InputMaybe<Scalars['String']['input']>;
   sort?: InputMaybe<Array<InputMaybe<IGenTopic_Sort>>>;
   where?: InputMaybe<Array<InputMaybe<IGenTopic_Where>>>;
+};
+
+export type IGenSelectionCard = {
+  __typename?: 'SelectionCard';
+  _meta?: Maybe<IGenCaisyDocument_Meta>;
+  game?: Maybe<Scalars['JSON']['output']>;
+  helpNote?: Maybe<IGenTextElement>;
+  id?: Maybe<Scalars['ID']['output']>;
+  internalTitle?: Maybe<Scalars['String']['output']>;
+  question?: Maybe<Scalars['String']['output']>;
+};
+
+
+export type IGenSelectionCardHelpNoteArgs = {
+  after?: InputMaybe<Scalars['String']['input']>;
+  first?: InputMaybe<Scalars['Int']['input']>;
+  locale?: InputMaybe<Scalars['String']['input']>;
+};
+
+export type IGenSelectionCard_Connection = {
+  __typename?: 'SelectionCard_Connection';
+  edges?: Maybe<Array<Maybe<IGenSelectionCard_ConnectionEdge>>>;
+  pageInfo?: Maybe<IGenPageInfo>;
+  totalCount?: Maybe<Scalars['Int']['output']>;
+};
+
+export type IGenSelectionCard_ConnectionEdge = {
+  __typename?: 'SelectionCard_ConnectionEdge';
+  cursor?: Maybe<Scalars['String']['output']>;
+  node?: Maybe<IGenSelectionCard>;
+};
+
+export type IGenSelectionCard_Sort = {
+  helpNote?: InputMaybe<IGenOrder>;
+  internalTitle?: InputMaybe<IGenOrder>;
+  question?: InputMaybe<IGenOrder>;
+};
+
+export type IGenSelectionCard_Where = {
+  AND?: InputMaybe<Array<InputMaybe<IGenSelectionCard_Where>>>;
+  OR?: InputMaybe<Array<InputMaybe<IGenSelectionCard_Where>>>;
+  internalTitle?: InputMaybe<IGenCaisyField_String_Where>;
+  question?: InputMaybe<IGenCaisyField_String_Where>;
 };
 
 export type IGenTextElement = {
@@ -801,7 +866,7 @@ export type IGenCaseFragment = { __typename?: 'Case', id?: string | null, title?
     & IGenCaseSectionFragment
   ) | null> | null };
 
-export type IGenDragNDropFragment = { __typename?: 'DragNDrop', id?: string | null, game?: any | null, helpNote?: (
+export type IGenDragNDropFragment = { __typename?: 'DragNDrop', id?: string | null, game?: any | null, question?: string | null, helpNote?: (
     { __typename?: 'TextElement' }
     & IGenTextElementFragment
   ) | null };
@@ -809,6 +874,11 @@ export type IGenDragNDropFragment = { __typename?: 'DragNDrop', id?: string | nu
 export type IGenImageWrapperCardFragment = { __typename?: 'ImageWrapperCard', id?: string | null, title?: string | null, downloadable?: boolean | null, image?: (
     { __typename?: 'Asset' }
     & IGenAssetFragment
+  ) | null };
+
+export type IGenSelectionCardFragment = { __typename?: 'SelectionCard', id?: string | null, game?: any | null, question?: string | null, helpNote?: (
+    { __typename?: 'TextElement' }
+    & IGenTextElementFragment
   ) | null };
 
 export type IGenTextElementFragment = { __typename?: 'TextElement', id?: string | null, richTextContent?: { __typename?: 'TextElement_richTextContent', json?: any | null, connections?: Array<{ __typename: 'Caisy_Field_Document_NotFound' } | null> | null } | null };
@@ -846,6 +916,9 @@ export type IGenPageQuery = { __typename?: 'Query', allPage?: { __typename?: 'Pa
           { __typename?: 'ImageWrapperCard' }
           & IGenImageWrapperCardFragment
         ) | { __typename?: 'LegalArea' } | (
+          { __typename?: 'SelectionCard' }
+          & IGenSelectionCardFragment
+        ) | (
           { __typename?: 'TextElement' }
           & IGenTextElementFragment
         ) | { __typename?: 'Topic' } | null> | null } | null } | null> | null } | null };
@@ -924,6 +997,7 @@ export const DragNDropFragmentDoc = gql`
     fragment DragNDrop on DragNDrop {
   id
   game
+  question
   helpNote {
     ...TextElement
   }
@@ -936,6 +1010,16 @@ export const ImageWrapperCardFragmentDoc = gql`
   downloadable
   image {
     ...Asset
+  }
+}
+    `;
+export const SelectionCardFragmentDoc = gql`
+    fragment SelectionCard on SelectionCard {
+  id
+  game
+  question
+  helpNote {
+    ...TextElement
   }
 }
     `;
@@ -974,6 +1058,7 @@ export const PageDocument = gql`
           ...Callout
           ...ImageWrapperCard
           ...DragNDrop
+          ...SelectionCard
         }
       }
     }
@@ -983,7 +1068,8 @@ export const PageDocument = gql`
 ${CalloutFragmentDoc}
 ${AssetFragmentDoc}
 ${ImageWrapperCardFragmentDoc}
-${DragNDropFragmentDoc}`;
+${DragNDropFragmentDoc}
+${SelectionCardFragmentDoc}`;
 export type Requester<C = {}, E = unknown> = <R, V>(doc: DocumentNode, vars?: V, options?: C) => Promise<R> | AsyncIterable<R>
 export function getSdk<C, E>(requester: Requester<C, E>) {
   return {

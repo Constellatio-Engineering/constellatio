@@ -1,9 +1,9 @@
 import { gql } from "graphql-request";
 import { f_TextElement } from "./TextElement";
 
-export const f_DragNDrop = gql`
-${f_TextElement}
-  fragment DragNDrop on DragNDrop {
+export const f_SelectionCard = gql`
+  ${f_TextElement}
+  fragment SelectionCard on SelectionCard {
     id
     game
     question
@@ -11,4 +11,4 @@ ${f_TextElement}
       ...TextElement
     }
   }
-`
+`;

@@ -13,10 +13,10 @@ import {
   OptionWrapper,
   OutputWrapper,
   switchStyle,
-} from "./DndWrapper.styles";
+} from "./DndGame.styles";
 import { BodyText } from "@/components/atoms/BodyText/BodyText";
 import { Cross } from "@/components/Icons/Cross";
-import { Check } from "../Icons/Check";
+import { Check } from "../../Icons/Check";
 import { DndContext, KeyboardSensor, PointerSensor, closestCenter, useSensor, useSensors } from "@dnd-kit/core";
 import {
   SortableContext,
@@ -24,9 +24,9 @@ import {
   sortableKeyboardCoordinates,
   verticalListSortingStrategy,
 } from "@dnd-kit/sortable";
-import { SortableItem } from "../Helpers/SortableItem";
-import { Checkbox } from "../atoms/Checkbox/Checkbox";
-import { Handle } from "../Icons/Handle";
+import { SortableItem } from "../../Helpers/SortableItem";
+import { Checkbox } from "../../atoms/Checkbox/Checkbox";
+import { Handle } from "../../Icons/Handle";
 
 export type TValue = {
   options: { id: string; label: string; correctAnswer: boolean }[];
@@ -188,7 +188,6 @@ export const DndWrapper = () => {
                             ...value,
                             options: value.options.filter((item) => item.id !== option.id),
                           });
-                          console.log("clicked");
                         }}
                       >
                         <Cross />

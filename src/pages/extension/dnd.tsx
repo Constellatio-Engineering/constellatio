@@ -1,4 +1,4 @@
-import { DndWrapper } from "@/components/Wrappers/DndWrapper";
+import { DndWrapper } from "@/components/Wrappers/DndGame/DndGame";
 import React from "react";
 
 const NextPage = () => {
