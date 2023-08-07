@@ -1,6 +1,6 @@
 import { BodyText } from "@/components/atoms/BodyText/BodyText";
 import React, { FC, useEffect, useState } from "react";
-import { Container, EmptyPlaceholder, Game, GameWrapper, Options, TitleWrapper } from "./SelectionCardGame.styles";
+import { Container, Game, GameWrapper, Options, TitleWrapper } from "./SelectionCardGame.styles";
 import { Button } from "@/components/atoms/Button/Button";
 import { Gamification } from "@/components/Icons/Gamification";
 import { Title } from "@mantine/core";

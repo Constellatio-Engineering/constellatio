@@ -47,16 +47,5 @@ export const Game = styled.div`
 `;
 
 export const Options = styled.div`
-position: relative;
-`;
-
-export const EmptyPlaceholder = styled.div`
-  height: 100%;
-  align-self: center;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  gap: ${({ theme }) => theme.spacing["spacing-8"]};
-  color: ${({ theme }) => theme.colors["neutrals-01"][7]};
+  position: relative;
 `;
