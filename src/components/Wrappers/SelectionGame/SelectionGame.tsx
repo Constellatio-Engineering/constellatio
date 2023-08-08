@@ -64,13 +64,11 @@ export const SelectionGameWrapper = () => {
     form.values.option = "";
   };
 
-  // !loaded ? (
-  //   <BodyText component="p" styleType="body-01-bold">
-  //     Loading...
-  //   </BodyText>
-  // ) :
-
-  return !value ? (
+  return !loaded ? (
+    <BodyText component="p" styleType="body-01-bold">
+      Loading...
+    </BodyText>
+  ) : !value ? (
     <Button styleType="tertiary" onClick={() => setValue({ options: [] })} w={"25%"}>
       Reload
     </Button>

@@ -1,4 +1,3 @@
-import { PasswordInputStylesParams } from "@mantine/core";
 import { CSSObject, MantineTheme, PasswordInputStylesNames, Styles, TextInputStylesNames } from "@mantine/core";
 import { ReactNode } from "react";
 
@@ -113,9 +112,7 @@ export const passwordStyles = ({ error, disabled, labelStyleOverwrite, inputStyl
         },
       },
       ":hover .mantine-PasswordInput-input": {
-        border: error
-          ? `1px solid ${theme.colors["support-error"][3]}`
-          : `1px solid ${theme.colors["neutrals-01"][6]}`,
+        border: error ? `1px solid ${theme.colors["support-error"][3]}` : `1px solid ${theme.colors["neutrals-01"][6]}`,
       },
     },
     label: {
