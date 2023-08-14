@@ -1,5 +1,5 @@
 import { BodyText } from "@/components/atoms/BodyText/BodyText";
-import React, { FC, useCallback, useEffect, useRef, useState } from "react";
+import React, { FC, useRef, useState } from "react";
 import { Container, Game, GameWrapper, Options, TitleWrapper, stylesOverwrite } from "./FillGapsGame.styles";
 import { Button } from "@/components/atoms/Button/Button";
 import { Gamification } from "@/components/Icons/Gamification";
@@ -7,16 +7,11 @@ import { Title } from "@mantine/core";
 import { IGenFillInGapsGame } from "@/services/graphql/__generated/sdk";
 import { Check } from "@/components/Icons/Check";
 import { Reload } from "@/components/Icons/Reload";
-import { LoadingOverlay } from "@mantine/core";
 import { ResultCard } from "@/components/molecules/ResultCard/ResultCard";
 import { HelpNote } from "@/components/molecules/HelpNote/HelpNote";
-import { SelectionCard } from "@/components/molecules/SelectionCard/SelectionCard";
 import { Richtext } from "@/components/molecules/Richtext/Richtext";
-import { css } from "@emotion/react";
-import { RichTextRenderer } from "@caisy/rich-text-react-renderer";
 import { RichtextOverwrite } from "./RichtextOverwrite";
 import { distance } from "fastest-levenshtein";
-import { set } from "zod";
 
 type TFillGapsGame = Pick<IGenFillInGapsGame, "fillGameParagraph" | "helpNote" | "question">;
 
@@ -41,7 +36,8 @@ export const FillGapsGame: FC<TFillGapsGame> = ({ fillGameParagraph, helpNote, q
   const [gameStatus, setGameStatus] = useState<"win" | "lose" | "inprogress">("inprogress");
   const [resultMessage, setResultMessage] = useState<string>("");
   const totalPlaceholders = countPlaceholders(fillGameParagraph?.richTextContent?.json?.content || {});
-  const [userAnswers, setUserAnswers] = useState(new Array(totalPlaceholders).fill(""));
+  const [userAnswers, setUserAnswers] = useState<string[]>(new Array(totalPlaceholders).fill(""));
+  const [answerResult, setAnswerResult] = useState<string[]>(new Array(totalPlaceholders).fill(""));
   const inputCounter = useRef(0);
   const correctAnswers = useRef<string[]>([]);
   const focusedIndex = useRef<number | null>(null);
@@ -57,36 +53,46 @@ export const FillGapsGame: FC<TFillGapsGame> = ({ fillGameParagraph, helpNote, q
   // console.log("userAnswers", userAnswers);
   // console.log("correctAnswers", correctAnswers.current);
   // console.log(gameStatus);
-  // console.log(resetCounter);
+  // console.log(answerResult);
 
   const checkAnswers = (): boolean => {
     if (userAnswers.length !== correctAnswers.current.length) return false;
 
+    let allCorrect = true;
+
+    const newAnswerResult: string[] = [];
+
     for (let i = 0; i < userAnswers.length; i++) {
       const possibleCorrectAnswers = correctAnswers.current[i].split(";");
+
       let isAnswerCorrect = false;
 
       for (const possibleAnswer of possibleCorrectAnswers) {
-        const dist = distance(userAnswers[i], possibleAnswer);
+        const dist = distance(userAnswers[i].toLowerCase(), possibleAnswer.toLowerCase());
+
         if (dist <= 2) {
           isAnswerCorrect = true;
           break;
         }
       }
 
-      if (!isAnswerCorrect) {
-        return false;
+      if (isAnswerCorrect) {
+        newAnswerResult.push("correct");
+      } else {
+        newAnswerResult.push("incorrect");
+        allCorrect = false;
       }
     }
 
-    return true;
+    setAnswerResult(newAnswerResult);
+    return allCorrect;
   };
 
   const handleCheckAnswers = () => {
     if (checkAnswers()) {
       // all answers are correct
       setGameStatus("win");
-      setResultMessage("All answers are correct!");
+      setResultMessage("Congrats! all answers are correct!");
     } else {
       // at least one answer is incorrect
       setGameStatus("lose");
@@ -96,16 +102,16 @@ export const FillGapsGame: FC<TFillGapsGame> = ({ fillGameParagraph, helpNote, q
 
   const handleResetGame = () => {
     setGameStatus("inprogress");
-    setResultMessage("");
     inputCounter.current = 0;
     correctAnswers.current = [];
     setUserAnswers(new Array(totalPlaceholders).fill(""));
+    setAnswerResult(new Array(totalPlaceholders).fill(""));
   };
 
   return (
     <Container>
       <TitleWrapper>
-        <Gamification /> <Title order={4}>Choose the right answers</Title>
+        <Gamification /> <Title order={4}>Fill in the gaps</Title>
       </TitleWrapper>
       <GameWrapper>
         {question && (
@@ -129,6 +135,8 @@ export const FillGapsGame: FC<TFillGapsGame> = ({ fillGameParagraph, helpNote, q
                         inputCounter={inputCounter}
                         userAnswers={userAnswers}
                         focusedIndex={focusedIndex}
+                        gameStatus={gameStatus}
+                        answerResult={answerResult}
                       />
                     );
                   },
@@ -138,24 +146,24 @@ export const FillGapsGame: FC<TFillGapsGame> = ({ fillGameParagraph, helpNote, q
             )}
           </Options>
         </Game>
-        {/* {gameStatus !== "inprogress" && (
+        {gameStatus !== "inprogress" && (
           <>
             <ResultCard
-              droppedCorrectCards={filteredCorrectAnswers.filter((item) => item.checked).length ?? null}
-              totalCorrectCards={filteredCorrectAnswers.length ?? null}
+              droppedCorrectCards={answerResult.filter((item) => item === "correct").length ?? null}
+              totalCorrectCards={correctAnswers.current.length ?? null}
               variant={gameStatus}
               message={resultMessage}
             />
             {helpNote?.richTextContent?.json && <HelpNote richTextContent={helpNote?.richTextContent} />}
           </>
-        )} */}
+        )}
         <div>
           <Button
             styleType="primary"
             size="large"
             leftIcon={gameStatus === "inprogress" ? <Check /> : <Reload />}
             onClick={gameStatus === "inprogress" ? handleCheckAnswers : handleResetGame}
-            disabled={gameStatus === "inprogress" && null}
+            disabled={gameStatus === "inprogress" && userAnswers.some((answer) => answer.trim() === "")}
           >
             {gameStatus === "inprogress" ? "Check my answers" : "Solve again"}
           </Button>

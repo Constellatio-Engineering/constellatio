@@ -178,6 +178,7 @@ export const DragDropGame: FC<TDragDropGame> = ({ game, helpNote, question }) =>
                       key={item.id}
                       label={item.label}
                       id={item.id}
+                      showIcon
                       status={item.correctAnswer ? "success" : "error"}
                     />
                   );

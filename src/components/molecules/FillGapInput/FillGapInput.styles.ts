@@ -15,6 +15,7 @@ export const fillGapInputStyles = ({ status }: { status: "default" | "success" |
       position: "absolute",
       bottom: "-17px",
       left: "0",
+      width: "max-content",
 
       "> p": {
         color: theme.colors["neutrals-01"][7],

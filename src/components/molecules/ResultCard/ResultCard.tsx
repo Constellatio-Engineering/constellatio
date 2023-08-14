@@ -22,7 +22,7 @@ export const ResultCard: FC<TResultCard> = ({ message, droppedCorrectCards, tota
           </CaptionText>
         </TextWrapper>
       )}
-      {droppedCorrectCards && totalCorrectCards && (
+      {totalCorrectCards && (
         <LabelWrapper variant={variant}>
           <CaptionText styleType="caption-01-bold" component="p">
             {droppedCorrectCards} / {totalCorrectCards}

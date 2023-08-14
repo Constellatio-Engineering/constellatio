@@ -1,3 +1,4 @@
+/* eslint-disable react-hooks/exhaustive-deps */
 import { FillGapInput } from "@/components/molecules/FillGapInput/FillGapInput";
 import { FC, MutableRefObject, RefObject, createRef, memo, useEffect, useRef } from "react";
 
@@ -8,17 +9,19 @@ type TRichtextOverwrite = {
   correctAnswers: MutableRefObject<string[]>;
   userAnswers: string[];
   focusedIndex: MutableRefObject<number | null>;
+  gameStatus: "win" | "lose" | "inprogress";
+  answerResult: string[];
 };
 
 const _RichtextOverwrite: FC<TRichtextOverwrite> = memo(
-  ({ text, correctAnswers, handleInputChange, inputCounter, userAnswers, focusedIndex }) => {
+  ({ text, correctAnswers, handleInputChange, inputCounter, userAnswers, focusedIndex, gameStatus, answerResult }) => {
     const inputRefs = useRef<Array<RefObject<HTMLInputElement>>>([]);
 
     // Splitting the text based on {{...}} pattern using regex
     const parts = text.split(/({{.*?}})/g);
 
     const createChangeHandler = (index) => (e) => {
-      handleInputChange(index, e.target.value.toLocaleLowerCase());
+      handleInputChange(index, e.target.value);
       focusedIndex.current = index;
     };
 
@@ -36,10 +39,12 @@ const _RichtextOverwrite: FC<TRichtextOverwrite> = memo(
       <div className="richtextOverwrite">
         {parts.map((part, index) => {
           if (part.startsWith("{{") && part.endsWith("}}")) {
-            const innerContent = part.slice(2, -2).toLocaleLowerCase();
+            const innerContent = part.slice(2, -2);
             if (correctAnswers.current.length <= userAnswers.length - 1) {
               correctAnswers.current.push(innerContent);
             }
+
+            const possibleCorrectAnswer = correctAnswers.current[inputCounter.current].split(";");
 
             const currentInputIndex = inputCounter.current;
             inputCounter.current += 1;
@@ -48,14 +53,23 @@ const _RichtextOverwrite: FC<TRichtextOverwrite> = memo(
               inputRefs.current[currentInputIndex] = createRef();
             }
 
-            return (
+            return gameStatus === "inprogress" ? (
               <FillGapInput
                 ref={inputRefs.current[currentInputIndex]}
                 value={userAnswers[currentInputIndex]}
                 key={`${index}${currentInputIndex}}`}
                 onChange={createChangeHandler(currentInputIndex)}
-                hint="Enter Answer"
-                status="default"
+                status={"default"}
+                placeholder="fill the gap"
+              />
+            ) : (
+              <FillGapInput
+                ref={inputRefs.current[currentInputIndex]}
+                value={userAnswers[currentInputIndex]}
+                key={`${index}${currentInputIndex}}`}
+                onChange={createChangeHandler(currentInputIndex)}
+                hint={possibleCorrectAnswer.map((answer) => answer.trim()).join(" or ")}
+                status={answerResult[currentInputIndex] === "correct" ? "success" : "error"}
                 placeholder="fill the gap"
               />
             );
