@@ -364,6 +364,57 @@ export type IGenDragNDrop_Where = {
   question?: InputMaybe<IGenCaisyField_String_Where>;
 };
 
+export type IGenFillInGapsGame = {
+  __typename?: 'FillInGapsGame';
+  _meta?: Maybe<IGenCaisyDocument_Meta>;
+  fillGameParagraph?: Maybe<IGenTextElement>;
+  helpNote?: Maybe<IGenTextElement>;
+  id?: Maybe<Scalars['ID']['output']>;
+  internalTitle?: Maybe<Scalars['String']['output']>;
+  question?: Maybe<Scalars['String']['output']>;
+};
+
+
+export type IGenFillInGapsGameFillGameParagraphArgs = {
+  after?: InputMaybe<Scalars['String']['input']>;
+  first?: InputMaybe<Scalars['Int']['input']>;
+  locale?: InputMaybe<Scalars['String']['input']>;
+};
+
+
+export type IGenFillInGapsGameHelpNoteArgs = {
+  after?: InputMaybe<Scalars['String']['input']>;
+  first?: InputMaybe<Scalars['Int']['input']>;
+  locale?: InputMaybe<Scalars['String']['input']>;
+};
+
+export type IGenFillInGapsGame_Connection = {
+  __typename?: 'FillInGapsGame_Connection';
+  edges?: Maybe<Array<Maybe<IGenFillInGapsGame_ConnectionEdge>>>;
+  pageInfo?: Maybe<IGenPageInfo>;
+  totalCount?: Maybe<Scalars['Int']['output']>;
+};
+
+export type IGenFillInGapsGame_ConnectionEdge = {
+  __typename?: 'FillInGapsGame_ConnectionEdge';
+  cursor?: Maybe<Scalars['String']['output']>;
+  node?: Maybe<IGenFillInGapsGame>;
+};
+
+export type IGenFillInGapsGame_Sort = {
+  fillGameParagraph?: InputMaybe<IGenOrder>;
+  helpNote?: InputMaybe<IGenOrder>;
+  internalTitle?: InputMaybe<IGenOrder>;
+  question?: InputMaybe<IGenOrder>;
+};
+
+export type IGenFillInGapsGame_Where = {
+  AND?: InputMaybe<Array<InputMaybe<IGenFillInGapsGame_Where>>>;
+  OR?: InputMaybe<Array<InputMaybe<IGenFillInGapsGame_Where>>>;
+  internalTitle?: InputMaybe<IGenCaisyField_String_Where>;
+  question?: InputMaybe<IGenCaisyField_String_Where>;
+};
+
 export type IGenImageWrapperCard = {
   __typename?: 'ImageWrapperCard';
   _meta?: Maybe<IGenCaisyDocument_Meta>;
@@ -497,7 +548,7 @@ export type IGenPage_Where = {
   slug?: InputMaybe<IGenCaisyField_String_Where>;
 };
 
-export type IGenPage_Components = IGenCallout | IGenCaseSection | IGenDragNDrop | IGenImageWrapperCard | IGenLegalArea | IGenSelectionCard | IGenTextElement | IGenTopic;
+export type IGenPage_Components = IGenCallout | IGenCaseSection | IGenDragNDrop | IGenFillInGapsGame | IGenImageWrapperCard | IGenLegalArea | IGenSelectionCard | IGenTextElement | IGenTopic;
 
 export type IGenQuery = {
   __typename?: 'Query';
@@ -506,6 +557,7 @@ export type IGenQuery = {
   Case?: Maybe<IGenCase>;
   CaseSection?: Maybe<IGenCaseSection>;
   DragNDrop?: Maybe<IGenDragNDrop>;
+  FillInGapsGame?: Maybe<IGenFillInGapsGame>;
   ImageWrapperCard?: Maybe<IGenImageWrapperCard>;
   LegalArea?: Maybe<IGenLegalArea>;
   Page?: Maybe<IGenPage>;
@@ -517,6 +569,7 @@ export type IGenQuery = {
   allCase?: Maybe<IGenCase_Connection>;
   allCaseSection?: Maybe<IGenCaseSection_Connection>;
   allDragNDrop?: Maybe<IGenDragNDrop_Connection>;
+  allFillInGapsGame?: Maybe<IGenFillInGapsGame_Connection>;
   allImageWrapperCard?: Maybe<IGenImageWrapperCard_Connection>;
   allLegalArea?: Maybe<IGenLegalArea_Connection>;
   allPage?: Maybe<IGenPage_Connection>;
@@ -551,6 +604,12 @@ export type IGenQueryCaseSectionArgs = {
 
 
 export type IGenQueryDragNDropArgs = {
+  id: Scalars['ID']['input'];
+  locale?: InputMaybe<Scalars['String']['input']>;
+};
+
+
+export type IGenQueryFillInGapsGameArgs = {
   id: Scalars['ID']['input'];
   locale?: InputMaybe<Scalars['String']['input']>;
 };
@@ -644,6 +703,17 @@ export type IGenQueryAllDragNDropArgs = {
   locale?: InputMaybe<Scalars['String']['input']>;
   sort?: InputMaybe<Array<InputMaybe<IGenDragNDrop_Sort>>>;
   where?: InputMaybe<Array<InputMaybe<IGenDragNDrop_Where>>>;
+};
+
+
+export type IGenQueryAllFillInGapsGameArgs = {
+  after?: InputMaybe<Scalars['String']['input']>;
+  before?: InputMaybe<Scalars['String']['input']>;
+  first?: InputMaybe<Scalars['Int']['input']>;
+  last?: InputMaybe<Scalars['Int']['input']>;
+  locale?: InputMaybe<Scalars['String']['input']>;
+  sort?: InputMaybe<Array<InputMaybe<IGenFillInGapsGame_Sort>>>;
+  where?: InputMaybe<Array<InputMaybe<IGenFillInGapsGame_Where>>>;
 };
 
 
@@ -871,6 +941,14 @@ export type IGenDragNDropFragment = { __typename?: 'DragNDrop', id?: string | nu
     & IGenTextElementFragment
   ) | null };
 
+export type IGenFillInGapsGameFragment = { __typename?: 'FillInGapsGame', id?: string | null, question?: string | null, fillGameParagraph?: (
+    { __typename?: 'TextElement' }
+    & IGenTextElementFragment
+  ) | null, helpNote?: (
+    { __typename?: 'TextElement' }
+    & IGenTextElementFragment
+  ) | null };
+
 export type IGenImageWrapperCardFragment = { __typename?: 'ImageWrapperCard', id?: string | null, title?: string | null, downloadable?: boolean | null, image?: (
     { __typename?: 'Asset' }
     & IGenAssetFragment
@@ -912,6 +990,9 @@ export type IGenPageQuery = { __typename?: 'Query', allPage?: { __typename?: 'Pa
         ) | { __typename?: 'CaseSection' } | (
           { __typename?: 'DragNDrop' }
           & IGenDragNDropFragment
+        ) | (
+          { __typename?: 'FillInGapsGame' }
+          & IGenFillInGapsGameFragment
         ) | (
           { __typename?: 'ImageWrapperCard' }
           & IGenImageWrapperCardFragment
@@ -1003,6 +1084,18 @@ export const DragNDropFragmentDoc = gql`
   }
 }
     `;
+export const FillInGapsGameFragmentDoc = gql`
+    fragment FillInGapsGame on FillInGapsGame {
+  id
+  question
+  fillGameParagraph {
+    ...TextElement
+  }
+  helpNote {
+    ...TextElement
+  }
+}
+    `;
 export const ImageWrapperCardFragmentDoc = gql`
     fragment ImageWrapperCard on ImageWrapperCard {
   id
@@ -1059,6 +1152,7 @@ export const PageDocument = gql`
           ...ImageWrapperCard
           ...DragNDrop
           ...SelectionCard
+          ...FillInGapsGame
         }
       }
     }
@@ -1069,7 +1163,8 @@ ${CalloutFragmentDoc}
 ${AssetFragmentDoc}
 ${ImageWrapperCardFragmentDoc}
 ${DragNDropFragmentDoc}
-${SelectionCardFragmentDoc}`;
+${SelectionCardFragmentDoc}
+${FillInGapsGameFragmentDoc}`;
 export type Requester<C = {}, E = unknown> = <R, V>(doc: DocumentNode, vars?: V, options?: C) => Promise<R> | AsyncIterable<R>
 export function getSdk<C, E>(requester: Requester<C, E>) {
   return {

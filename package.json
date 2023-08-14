@@ -46,6 +46,7 @@
     "autoprefixer": "^10.4.14",
     "dayjs": "^1.11.7",
     "embla-carousel-react": "^7.1.0",
+    "fastest-levenshtein": "^1.0.16",
     "graphql": "^16.6.0",
     "graphql-request": "^6.1.0",
     "jotai": "^2.1.0",

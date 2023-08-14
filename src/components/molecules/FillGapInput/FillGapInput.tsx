@@ -1,5 +1,5 @@
-import { TextInput, TextInputProps } from "@mantine/core";
-import React, { FC, ReactNode } from "react";
+import { TextInput, TextInputProps, createPolymorphicComponent } from "@mantine/core";
+import React, { FC, ForwardRefRenderFunction, ReactNode, forwardRef } from "react";
 import { fillGapInputStyles } from "./FillGapInput.styles";
 import { CheckFilled } from "@/components/Icons/CheckFilled";
 import { CrossFilled } from "@/components/Icons/CrossFilled";
@@ -10,9 +10,13 @@ type TFillGapInput = TextInputProps & {
   hint: ReactNode;
 };
 
-export const FillGapInput: FC<TFillGapInput> = ({ hint, status, ...props }) => {
+const _FillGapInput: ForwardRefRenderFunction<HTMLInputElement, TFillGapInput> = (
+  { hint, status, ...props },
+  ref,
+) => {
   return (
     <TextInput
+    ref={ref}
       styles={fillGapInputStyles({ status })}
       rightSection={
         status === "success" ? <CheckFilled size={16} /> : status === "error" ? <CrossFilled size={16} /> : null
@@ -29,3 +33,5 @@ export const FillGapInput: FC<TFillGapInput> = ({ hint, status, ...props }) => {
     />
   );
 };
+
+export const FillGapInput = forwardRef(_FillGapInput);

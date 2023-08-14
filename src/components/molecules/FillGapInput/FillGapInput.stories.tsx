@@ -32,7 +32,7 @@ type Story = StoryObj<typeof FillGapInput>;
 export const Default: Story = {
   args: {
     placeholder: "fill in the gap",
-    value: "",
     hint: "HINT",
+    onChangeHandler: () => {},
   },
 };

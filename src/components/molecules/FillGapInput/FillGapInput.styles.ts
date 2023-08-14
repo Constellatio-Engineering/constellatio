@@ -3,14 +3,18 @@ import { MantineTheme, Styles, TextInputStylesNames } from "@mantine/core";
 export const fillGapInputStyles = ({ status }: { status: "default" | "success" | "error" }) => {
   const styles: Styles<TextInputStylesNames, Record<string, any>> = (theme: MantineTheme) => ({
     root: {
-      display: "flex",
-      gap: theme.spacing["spacing-4"],
-      flexDirection: "column",
-      alignItems: "flex-start",
-      paddingBottom: status === "error" ? theme.spacing["spacing-4"] : 0,
+      display: "inline-block",
+      paddingBottom: status === "error" ? theme.spacing["spacing-4"] : "0",
+      paddingLeft: theme.spacing["spacing-2"],
+      paddingRight: theme.spacing["spacing-2"],
+      position: "relative",
+      maxWidth: "140px",
+      marginTop: theme.spacing["spacing-2"],
     },
     description: {
-      order: 2,
+      position: "absolute",
+      bottom: "-17px",
+      left: "0",
 
       "> p": {
         color: theme.colors["neutrals-01"][7],
@@ -47,6 +51,7 @@ export const fillGapInputStyles = ({ status }: { status: "default" | "success" |
       fontWeight: 500,
       height: "auto",
       minHeight: "auto",
+      backgroundColor: "transparent",
 
       "&:focus, &:focus-within": {
         borderColor: "initial",

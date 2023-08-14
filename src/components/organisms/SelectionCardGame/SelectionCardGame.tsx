@@ -24,7 +24,7 @@ const shuffleOptions = (arr) => {
 
 export const SelectionCardGame: FC<TSelectionCardGame> = ({ game, helpNote, question }) => {
   const optionsWithCheckProp = game?.options?.map((option) => ({ ...option, checked: false }));
-  const originalOptions = JSON.parse(JSON.stringify(optionsWithCheckProp));
+  const originalOptions = JSON.parse(JSON.stringify(optionsWithCheckProp ?? []));
   const [optionsItems, setOptionsItems] = useState<any[]>([]);
   const [gameStatus, setGameStatus] = useState<"win" | "lose" | "inprogress">("inprogress");
   const [resultMessage, setResultMessage] = useState<string>("");

@@ -656,6 +656,100 @@ input DragNDrop_Where {
 }
 
 """"""
+type FillInGapsGame {
+  """"""
+  _meta: CaisyDocument_Meta
+
+  """"""
+  fillGameParagraph(
+    """
+    The cursor to start the pagination from. In this case the curser equals the id for the (last) element. If not set, we wil start from the beginning.
+    """
+    after: String
+
+    """The number of items to return. Default and max value is 100."""
+    first: Int = 100
+
+    """"""
+    locale: String
+  ): TextElement
+
+  """"""
+  helpNote(
+    """
+    The cursor to start the pagination from. In this case the curser equals the id for the (last) element. If not set, we wil start from the beginning.
+    """
+    after: String
+
+    """The number of items to return. Default and max value is 100."""
+    first: Int = 100
+
+    """"""
+    locale: String
+  ): TextElement
+
+  """"""
+  id: ID
+
+  """"""
+  internalTitle: String
+
+  """"""
+  question: String
+}
+
+""""""
+type FillInGapsGame_Connection {
+  """"""
+  edges: [FillInGapsGame_ConnectionEdge]
+
+  """"""
+  pageInfo: PageInfo
+
+  """"""
+  totalCount: Int
+}
+
+""""""
+type FillInGapsGame_ConnectionEdge {
+  """"""
+  cursor: String
+
+  """"""
+  node: FillInGapsGame
+}
+
+""""""
+input FillInGapsGame_Sort {
+  """"""
+  fillGameParagraph: Order
+
+  """"""
+  helpNote: Order
+
+  """"""
+  internalTitle: Order
+
+  """"""
+  question: Order
+}
+
+""""""
+input FillInGapsGame_Where {
+  """"""
+  AND: [FillInGapsGame_Where]
+
+  """"""
+  OR: [FillInGapsGame_Where]
+
+  """"""
+  internalTitle: CaisyField_String_Where
+
+  """"""
+  question: CaisyField_String_Where
+}
+
+""""""
 type ImageWrapperCard {
   """"""
   _meta: CaisyDocument_Meta
@@ -906,7 +1000,7 @@ input Page_Where {
 }
 
 """"""
-union Page_components = Callout | CaseSection | DragNDrop | ImageWrapperCard | LegalArea | SelectionCard | TextElement | Topic
+union Page_components = Callout | CaseSection | DragNDrop | FillInGapsGame | ImageWrapperCard | LegalArea | SelectionCard | TextElement | Topic
 
 """"""
 type Query {
@@ -924,6 +1018,9 @@ type Query {
 
   """"""
   DragNDrop(id: ID!, locale: String): DragNDrop
+
+  """"""
+  FillInGapsGame(id: ID!, locale: String): FillInGapsGame
 
   """"""
   ImageWrapperCard(id: ID!, locale: String): ImageWrapperCard
@@ -957,6 +1054,9 @@ type Query {
 
   """"""
   allDragNDrop(after: String, before: String, first: Int, last: Int, locale: String, sort: [DragNDrop_Sort], where: [DragNDrop_Where]): DragNDrop_Connection
+
+  """"""
+  allFillInGapsGame(after: String, before: String, first: Int, last: Int, locale: String, sort: [FillInGapsGame_Sort], where: [FillInGapsGame_Where]): FillInGapsGame_Connection
 
   """"""
   allImageWrapperCard(after: String, before: String, first: Int, last: Int, locale: String, sort: [ImageWrapperCard_Sort], where: [ImageWrapperCard_Where]): ImageWrapperCard_Connection

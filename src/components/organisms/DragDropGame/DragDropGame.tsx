@@ -28,7 +28,7 @@ const shuffleOptions = (arr) => {
 };
 
 export const DragDropGame: FC<TDragDropGame> = ({ game, helpNote, question }) => {
-  const originalOptions = JSON.parse(JSON.stringify(game?.options));
+  const originalOptions = JSON.parse(JSON.stringify(game?.options ?? []));
   const [optionsItems, setOptionsItems] = useState<any[]>([]);
   const [droppedItems, setDroppedItems] = useState<any[]>([]);
   const [activeId, setActiveId] = useState(null);
