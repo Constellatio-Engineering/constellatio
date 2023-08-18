@@ -1,6 +1,6 @@
 import { BodyText } from "@/components/atoms/BodyText/BodyText";
 import React, { FC, useEffect, useState } from "react";
-import { Container, Game, GameWrapper, Options, TitleWrapper } from "./SelectionCardGame.styles";
+import { Container, Game, GameWrapper, LegendWrapper, Options, TitleWrapper } from "./SelectionCardGame.styles";
 import { Button } from "@/components/atoms/Button/Button";
 import { Gamification } from "@/components/Icons/Gamification";
 import { Title } from "@mantine/core";
@@ -74,6 +74,14 @@ export const SelectionCardGame: FC<TSelectionCardGame> = ({ game, helpNote, ques
             {question}
           </BodyText>
         )}
+        <LegendWrapper>
+          <BodyText component="p" styleType="body-01-regular">
+            Correct answer
+          </BodyText>
+          <BodyText component="p" styleType="body-01-regular">
+            Incorrect answer
+          </BodyText>
+        </LegendWrapper>
         <Game>
           <Options>
             <LoadingOverlay visible={optionsItems.length < 1} radius={"radius-12"} />
@@ -85,12 +93,14 @@ export const SelectionCardGame: FC<TSelectionCardGame> = ({ game, helpNote, ques
                 }}
                 key={`${option.id} - ${resetCount}`}
                 label={option.label}
+                disabled={gameStatus !== "inprogress"}
+                result={option.correctAnswer ? "Correct" : "Incorrect"}
                 status={
                   gameStatus === "inprogress"
                     ? "default"
                     : option.correctAnswer
                     ? "success"
-                    : !option.correctAnswer && option.checked
+                    : !option.correctAnswer
                     ? "error"
                     : "default"
                 }

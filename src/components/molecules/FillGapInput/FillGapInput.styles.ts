@@ -1,6 +1,6 @@
 import { MantineTheme, Styles, TextInputStylesNames } from "@mantine/core";
 
-export const fillGapInputStyles = ({ status }: { status: "default" | "success" | "error" }) => {
+export const fillGapInputStyles = ({ status, index }: { status: "default" | "success" | "error"; index?: number }) => {
   const styles: Styles<TextInputStylesNames, Record<string, any>> = (theme: MantineTheme) => ({
     root: {
       display: "inline-block",
@@ -8,22 +8,35 @@ export const fillGapInputStyles = ({ status }: { status: "default" | "success" |
       paddingLeft: theme.spacing["spacing-2"],
       paddingRight: theme.spacing["spacing-2"],
       position: "relative",
-      maxWidth: "140px",
+      maxWidth: "145px",
       marginTop: theme.spacing["spacing-2"],
     },
-    description: {
-      position: "absolute",
-      bottom: "-17px",
-      left: "0",
-      width: "max-content",
-
-      "> p": {
-        color: theme.colors["neutrals-01"][7],
-      },
-    },
     wrapper: {
+      display: "flex",
+      alignItems: "center",
+      gap: "8px",
+
       "&:has(input:disabled) .mantine-Input-rightSection": {
         display: "flex",
+      },
+
+      "&::before": {
+        content: index ? `"${index}"` : "''",
+        width: "18px",
+        height: "18px",
+        minWidth: "18px",
+        borderRadius: "50%",
+        border: `1px solid ${theme.colors["neutrals-02"][1]}`,
+        display: status === "default" ? "none" : "flex",
+
+        flexDirection: "column",
+        alignItems: "center",
+        justifyContent: "center",
+        fontSize: "14px",
+        fontWeight: 700,
+        lineHeight: "20px",
+        textTransform: "uppercase",
+        textAlign: "center",
       },
     },
     input: {

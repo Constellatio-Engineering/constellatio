@@ -1,6 +1,14 @@
 import { BodyText } from "@/components/atoms/BodyText/BodyText";
 import React, { FC, useRef, useState } from "react";
-import { Container, Game, GameWrapper, Options, TitleWrapper, stylesOverwrite } from "./FillGapsGame.styles";
+import {
+  Container,
+  Game,
+  GameWrapper,
+  LegendWrapper,
+  Options,
+  TitleWrapper,
+  stylesOverwrite,
+} from "./FillGapsGame.styles";
 import { Button } from "@/components/atoms/Button/Button";
 import { Gamification } from "@/components/Icons/Gamification";
 import { Title } from "@mantine/core";
@@ -12,6 +20,7 @@ import { HelpNote } from "@/components/molecules/HelpNote/HelpNote";
 import { Richtext } from "@/components/molecules/Richtext/Richtext";
 import { RichtextOverwrite } from "./RichtextOverwrite";
 import { distance } from "fastest-levenshtein";
+import { HintsAccordion } from "@/components/molecules/HintsAccordion/HintsAccordion";
 
 type TFillGapsGame = Pick<IGenFillInGapsGame, "fillGameParagraph" | "helpNote" | "question">;
 
@@ -59,20 +68,29 @@ export const FillGapsGame: FC<TFillGapsGame> = ({ fillGameParagraph, helpNote, q
     if (userAnswers.length !== correctAnswers.current.length) return false;
 
     let allCorrect = true;
-
     const newAnswerResult: string[] = [];
 
     for (let i = 0; i < userAnswers.length; i++) {
       const possibleCorrectAnswers = correctAnswers.current[i].split(";");
-
       let isAnswerCorrect = false;
 
       for (const possibleAnswer of possibleCorrectAnswers) {
-        const dist = distance(userAnswers[i].toLowerCase(), possibleAnswer.toLowerCase());
+        const userAnswer = userAnswers[i].toLowerCase();
+        const correctAnswer = possibleAnswer.toLowerCase();
 
-        if (dist <= 2) {
-          isAnswerCorrect = true;
-          break;
+        if (!isNaN(Number(correctAnswer)) || correctAnswer.length <= 4) {
+          // If correct answer is number or a short word, require an exact match
+          if (userAnswer === correctAnswer) {
+            isAnswerCorrect = true;
+            break;
+          }
+        } else {
+          //check for distance
+          const dist = distance(userAnswer, correctAnswer);
+          if (dist <= 2) {
+            isAnswerCorrect = true;
+            break;
+          }
         }
       }
 
@@ -119,8 +137,16 @@ export const FillGapsGame: FC<TFillGapsGame> = ({ fillGameParagraph, helpNote, q
             {question}
           </BodyText>
         )}
+        <LegendWrapper>
+          <BodyText component="p" styleType="body-01-regular">
+            Correct answer
+          </BodyText>
+          <BodyText component="p" styleType="body-01-regular">
+            Incorrect answer
+          </BodyText>
+        </LegendWrapper>
         <Game>
-          <Options status={gameStatus}>
+          <Options>
             {fillGameParagraph?.richTextContent?.json && (
               <Richtext
                 richTextContent={fillGameParagraph.richTextContent}
@@ -148,6 +174,7 @@ export const FillGapsGame: FC<TFillGapsGame> = ({ fillGameParagraph, helpNote, q
         </Game>
         {gameStatus !== "inprogress" && (
           <>
+            <HintsAccordion items={correctAnswers.current} />
             <ResultCard
               droppedCorrectCards={answerResult.filter((item) => item === "correct").length ?? null}
               totalCorrectCards={correctAnswers.current.length ?? null}

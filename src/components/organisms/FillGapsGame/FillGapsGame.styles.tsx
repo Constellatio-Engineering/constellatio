@@ -41,11 +41,11 @@ export const Game = styled.div`
   }
 `;
 
-export const Options = styled.div<{ status: "win" | "lose" | "inprogress" }>`
+export const Options = styled.div`
   position: relative;
   > div > .richtextOverwrite {
     > * {
-      padding-bottom: ${({ status }) => (status === "lose" ? "16px" : "8px")};
+      padding-bottom: 8px;
     }
   }
 `;
@@ -67,5 +67,33 @@ export const stylesOverwrite = css`
     line-height: 24px;
     font-weight: 400;
     font-style: normal;
+  }
+`;
+
+export const LegendWrapper = styled.div`
+  display: flex;
+  align-items: center;
+  gap: 12px;
+
+  > p {
+    display: flex;
+    align-items: center;
+    gap: ${({ theme }) => theme.spacing["spacing-4"]};
+
+    &::before {
+      content: "";
+      display: inline-block;
+      width: 11px;
+      height: 11px;
+      border: 1px solid transparent;
+    }
+
+    &:first-of-type::before {
+      border-color: ${({ theme }) => theme.colors["support-success"][4]};
+    }
+
+    &:last-of-type::before {
+      border-color: ${({ theme }) => theme.colors["support-error"][3]};
+    }
   }
 `;

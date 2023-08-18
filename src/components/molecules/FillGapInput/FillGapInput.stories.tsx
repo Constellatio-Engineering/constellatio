@@ -3,7 +3,7 @@ import { Box } from "@mantine/core";
 import { FillGapInput } from "./FillGapInput";
 
 const Template = (args: any) => (
-  <Box w={140}>
+  <Box w={300}>
     <FillGapInput {...args} />
   </Box>
 );
@@ -32,7 +32,6 @@ type Story = StoryObj<typeof FillGapInput>;
 export const Default: Story = {
   args: {
     placeholder: "fill in the gap",
-    hint: "HINT",
-    onChangeHandler: () => {},
+    index: 1,
   },
 };

@@ -1,5 +1,5 @@
 import React, { ButtonHTMLAttributes, FC, ReactNode } from "react";
-import { ButtonCard, StatusWrapper } from "./DragNDropCard.styles";
+import { ButtonCard, ResultWrapper, StatusWrapper } from "./DragNDropCard.styles";
 import { BodyText } from "../../atoms/BodyText/BodyText";
 import { Handle } from "@/components/Icons/Handle";
 import { CheckFilled } from "@/components/Icons/CheckFilled";
@@ -13,27 +13,37 @@ type TDraggableCard = ButtonHTMLAttributes<HTMLButtonElement> & {
   dropped?: boolean;
   onDeleteHandler?: React.MouseEventHandler<HTMLDivElement>;
   showIcon?: boolean;
+  result?: ReactNode;
 };
 
-export const DragNDropCard: FC<TDraggableCard> = ({ onDeleteHandler, dropped, label, status, showIcon, ...props }) => {
+export const DragNDropCard: FC<TDraggableCard> = ({
+  onDeleteHandler,
+  dropped,
+  label,
+  status,
+  showIcon,
+  result,
+  ...props
+}) => {
   return (
-    <ButtonCard status={status} {...props}>
+    <ButtonCard status={status} dropped={dropped} {...props}>
       <Flex gap={"spacing-8"} align="center">
-        {status === "success" && showIcon ? (
-          <CheckFilled />
-        ) : status === "error" && showIcon ? (
-          <CrossFilled />
-        ) : (
-          <Handle />
+        {status === "default" && (
+          <div>
+            <Handle />
+          </div>
         )}
-
-        <BodyText styleType="body-01-regular" c={"neutrals-02.1"} component="p">
+        <BodyText styleType="body-01-regular" c={"neutrals-02.1"} component="p" ta={"left"}>
           {label}
         </BodyText>
       </Flex>
       <StatusWrapper dropped={dropped} status={status} onClick={onDeleteHandler}>
         <Cross />
       </StatusWrapper>
+      <ResultWrapper status={status}>
+        {result && <BodyText styleType="body-01-regular" component="p">{result}</BodyText>}
+        {status === "success" ? <CheckFilled /> : status === "error" ? <CrossFilled /> : null}
+      </ResultWrapper>
     </ButtonCard>
   );
 };

@@ -1,6 +1,14 @@
 import { BodyText } from "@/components/atoms/BodyText/BodyText";
 import React, { FC, useEffect, useState } from "react";
-import { Container, EmptyPlaceholder, Game, GameWrapper, Options, TitleWrapper } from "./DragDropGame.styles";
+import {
+  Container,
+  EmptyPlaceholder,
+  Game,
+  GameWrapper,
+  LegendWrapper,
+  Options,
+  TitleWrapper,
+} from "./DragDropGame.styles";
 import { Button } from "@/components/atoms/Button/Button";
 import { Gamification } from "@/components/Icons/Gamification";
 import { Title } from "@mantine/core";
@@ -113,6 +121,14 @@ export const DragDropGame: FC<TDragDropGame> = ({ game, helpNote, question }) =>
             {question}
           </BodyText>
         )}
+        <LegendWrapper>
+          <BodyText component="p" styleType="body-01-regular">
+            Correct answer
+          </BodyText>
+          <BodyText component="p" styleType="body-01-regular">
+            Incorrect answer
+          </BodyText>
+        </LegendWrapper>
         <DndContext onDragEnd={handleDragEnd} onDragStart={handleDragStart}>
           <Game>
             <Options>
@@ -126,7 +142,8 @@ export const DragDropGame: FC<TDragDropGame> = ({ game, helpNote, question }) =>
                   <DragNDropCard
                     key={option.id}
                     label={option.label}
-                    status={option.correctAnswer ? "success" : "default"}
+                    status={option.correctAnswer ? "success" : "error"}
+                    result={option.correctAnswer ? "Correct" : "Incorrect"}
                   />
                 ),
               )}
@@ -179,7 +196,9 @@ export const DragDropGame: FC<TDragDropGame> = ({ game, helpNote, question }) =>
                       label={item.label}
                       id={item.id}
                       showIcon
+                      dropped
                       status={item.correctAnswer ? "success" : "error"}
+                      result={item.correctAnswer ? "Correct" : "Incorrect"}
                     />
                   );
                 })

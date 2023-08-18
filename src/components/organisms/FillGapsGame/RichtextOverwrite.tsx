@@ -44,8 +44,6 @@ const _RichtextOverwrite: FC<TRichtextOverwrite> = memo(
               correctAnswers.current.push(innerContent);
             }
 
-            const possibleCorrectAnswer = correctAnswers.current[inputCounter.current].split(";");
-
             const currentInputIndex = inputCounter.current;
             inputCounter.current += 1;
 
@@ -68,7 +66,7 @@ const _RichtextOverwrite: FC<TRichtextOverwrite> = memo(
                 value={userAnswers[currentInputIndex]}
                 key={`${index}${currentInputIndex}}`}
                 onChange={createChangeHandler(currentInputIndex)}
-                hint={possibleCorrectAnswer.map((answer) => answer.trim()).join(" or ")}
+                index={currentInputIndex + 1}
                 status={answerResult[currentInputIndex] === "correct" ? "success" : "error"}
                 placeholder="fill the gap"
               />

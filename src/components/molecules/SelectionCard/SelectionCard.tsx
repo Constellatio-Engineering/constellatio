@@ -4,15 +4,17 @@ import { BodyText } from "@/components/atoms/BodyText/BodyText";
 import { CheckFilled } from "@/components/Icons/CheckFilled";
 import { CrossFilled } from "@/components/Icons/CrossFilled";
 import { useMantineTheme } from "@mantine/core";
-import { IconWrapper } from "./SelectionCard.styles";
+import { ResultWrapper } from "./SelectionCard.styles";
 
 type TSelectionCard = {
   label: ReactNode | null;
   status: "default" | "success" | "error";
   onCheckHandler: React.ChangeEventHandler<HTMLInputElement>;
+  disabled?: boolean;
+  result?: ReactNode;
 };
 
-export const SelectionCard: FC<TSelectionCard> = ({ onCheckHandler, status, label }) => {
+export const SelectionCard: FC<TSelectionCard> = ({ onCheckHandler, status, label, disabled, result }) => {
   const [checked, setChecked] = useState(false);
   const theme = useMantineTheme();
 
@@ -24,15 +26,20 @@ export const SelectionCard: FC<TSelectionCard> = ({ onCheckHandler, status, labe
         setChecked(e.target.checked);
         onCheckHandler(e);
       }}
-      disabled={status !== "default"}
+      disabled={disabled}
       label={
         <>
           <BodyText styleType="body-01-regular" component="p">
             {label}
           </BodyText>
-          {status !== "default" && checked && (
-            <IconWrapper status={status}>{status === "success" ? <CheckFilled /> : <CrossFilled />}</IconWrapper>
-          )}
+          <ResultWrapper status={status}>
+            {result && (
+              <BodyText styleType="body-01-regular" component="p">
+                {result}
+              </BodyText>
+            )}
+            {status === "success" ? <CheckFilled /> : status === "error" ? <CrossFilled /> : null}
+          </ResultWrapper>
         </>
       }
       checkboxBodyOverride={{
@@ -41,11 +48,15 @@ export const SelectionCard: FC<TSelectionCard> = ({ onCheckHandler, status, labe
         borderRadius: theme.radius["radius-8"],
         padding: `0 ${theme.spacing["spacing-12"]}`,
         border: `1px solid ${
-          checked && status === "default"
-            ? theme.colors["neutrals-02"][1]
+          checked
+            ? status === "default"
+              ? theme.colors["neutrals-02"][1]
+              : status === "success"
+              ? theme.colors["support-success"][4]
+              : status === "error"
+              ? theme.colors["support-error"][3]
+              : ""
             : status === "success"
-            ? theme.colors["support-success"][4]
-            : status === "error"
             ? theme.colors["support-error"][3]
             : theme.colors["neutrals-01"][3]
         }`,
@@ -54,11 +65,34 @@ export const SelectionCard: FC<TSelectionCard> = ({ onCheckHandler, status, labe
 
         ".mantine-Checkbox-inner": {
           input: {
-            borderColor:
-              checked && status === "default" ? theme.colors["neutrals-02"][1] : theme.colors["neutrals-01"][5],
+            borderColor: checked
+              ? status === "default"
+                ? theme.colors["neutrals-02"][1]
+                : status === "success"
+                ? theme.colors["support-success"][4]
+                : status === "error"
+                ? theme.colors["support-error"][3]
+                : ""
+              : status === "success"
+              ? theme.colors["support-error"][3]
+              : theme.colors["neutrals-01"][5],
+
+            backgroundColor: `${theme.colors["neutrals-01"][0]} !important`,
+
             "&:hover": {
-              borderColor: theme.colors["neutrals-01"][5],
+              borderColor: !checked && status === "default" ? theme.colors["neutrals-01"][5] : "",
             },
+          },
+          svg: {
+            color: checked
+              ? status === "default"
+                ? `${theme.colors["neutrals-02"][1]} !important`
+                : status === "success"
+                ? `${theme.colors["support-success"][4]} !important`
+                : status === "error"
+                ? `${theme.colors["support-error"][3]} !important`
+                : ""
+              : "",
           },
         },
 

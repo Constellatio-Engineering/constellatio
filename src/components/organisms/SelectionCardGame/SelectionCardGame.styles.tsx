@@ -38,14 +38,36 @@ export const Game = styled.div`
     border: 1px solid ${({ theme }) => theme.colors["neutrals-01"][3]};
     background-color: ${({ theme }) => theme.colors["neutrals-01"][2]};
   }
-
-  .droppable-area {
-    background-image: url("/images/icons/linedBackground.svg");
-    background-size: cover;
-    background-position: center center;
-  }
 `;
 
 export const Options = styled.div`
   position: relative;
+`;
+
+export const LegendWrapper = styled.div`
+  display: flex;
+  align-items: center;
+  gap: 12px;
+
+  > p {
+    display: flex;
+    align-items: center;
+    gap: ${({ theme }) => theme.spacing["spacing-4"]};
+
+    &::before {
+      content: "";
+      display: inline-block;
+      width: 11px;
+      height: 11px;
+      border: 1px solid transparent;
+    }
+
+    &:first-of-type::before {
+      border-color: ${({ theme }) => theme.colors["support-success"][4]};
+    }
+
+    &:last-of-type::before {
+      border-color: ${({ theme }) => theme.colors["support-error"][3]};
+    }
+  }
 `;

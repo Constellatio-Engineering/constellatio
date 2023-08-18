@@ -1,14 +1,8 @@
 import styled from "@emotion/styled";
 
-export const IconWrapper = styled.div<{ status: "success" | "error" | "default" }>`
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  padding: ${({ theme }) => theme.spacing["spacing-2"]} 0;
-  gap: ${({ theme }) => theme.spacing["spacing-4"]};
-
-  svg {
-    color: ${({ theme, status }) =>
-      status === "success" ? theme.colors["support-success"][4] : theme.colors["support-error"][3]};
-  }
+export const ResultWrapper = styled.div<{ status: "default" | "success" | "error" }>`
+display: ${({ status }) => (status === "default" ? "none" : "flex")};
+color: ${({ theme }) => theme.colors["neutrals-01"][7]};
+align-items: center;
+gap: ${({ theme }) => theme.spacing["spacing-8"]};
 `;
