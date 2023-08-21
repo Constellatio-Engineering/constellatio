@@ -1,4 +1,4 @@
-import { Flex, Group, Text, FooterProps } from "@mantine/core";
+import { Flex, Group } from "@mantine/core";
 import Image from "next/image";
 import { FC } from "react";
 import { SFooter } from "./Footer.style";
@@ -6,6 +6,7 @@ import { LinkButton } from "@/components/atoms/LinkButton/LinkButton";
 import { Help } from "@/components/Icons/Help";
 import { Heart } from "@/components/Icons/Heart";
 import { CaptionText } from "@/components/atoms/CaptionText/CaptionText";
+import logo from "../../../../public/images/icons/constellatio-icon.svg";
 import ConstellatioLogoIcon from "../../../../public/images/icons/constellatio-icon.svg";
 import ConstellatioLogoWhiteIcon from "../../../../public/images/icons/logo-symbol-white.svg";
 
@@ -14,6 +15,8 @@ type TFooter = {
 };
 
 export const Footer: FC<TFooter> = ({ variant = "default" }) => {
+  console.log(logo);
+
   return (
     <>
       {variant === "default" ? (

@@ -6,8 +6,8 @@ const SimpleHeader = css`
 `;
 
 const DefaultHeader = css`
-justify-content: space-between;
-`
+  justify-content: space-between;
+`;
 
 export const SHeader = styled.header<{ variant: "default" | "simple" }>`
   height: 72px;
@@ -16,5 +16,9 @@ export const SHeader = styled.header<{ variant: "default" | "simple" }>`
   align-items: center;
   padding: 0 ${({ theme }) => theme.spacing["spacing-24"]};
   background-color: transparent;
-  ${({variant}) => variant === "simple" ? SimpleHeader : DefaultHeader}
+  position: sticky;
+  top: 0;
+  z-index: 40;
+  background: white;
+  ${({ variant }) => (variant === "simple" ? SimpleHeader : DefaultHeader)}
 `;
