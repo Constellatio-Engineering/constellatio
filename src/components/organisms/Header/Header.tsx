@@ -4,6 +4,7 @@ import Link from "next/link";
 import { FC } from "react";
 import logo from "../../../../public/images/icons/constellatio-full-logo.svg";
 import { SHeader } from "./Header.style";
+import ConstellatioFullLogo from "../../../../public/images/icons/constellatio-full-logo.svg";
 
 type THeader = {
   variant?: "default" | "simple";
@@ -14,7 +15,7 @@ export const Header: FC<THeader> = ({ variant = "default" }) => {
     <SHeader variant={variant}>
       <div>
         <Link href="/">
-          <Image src={logo} alt="Constellatio" style={{ width: "auto", height: 20 }} />
+          <Image src={ConstellatioFullLogo} alt="Constellatio" />
         </Link>
       </div>
     </SHeader>
@@ -22,7 +23,7 @@ export const Header: FC<THeader> = ({ variant = "default" }) => {
     <SHeader variant={variant}>
       <div>
         <Link href="/">
-          <Image src={logo} alt="Constellatio" style={{ width: "auto", height: 20 }} />
+          <Image src={ConstellatioFullLogo} alt="Constellatio" />
         </Link>
       </div>
       <div>

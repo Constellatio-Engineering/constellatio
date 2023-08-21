@@ -4,7 +4,10 @@ import { createPagesBrowserClient } from "@supabase/auth-helpers-nextjs";
 import { useState } from "react";
 import { Session, SessionContextProvider } from "@supabase/auth-helpers-react";
 import { Notifications } from "@mantine/notifications";
+import { RouterTransition } from "@/components/atoms/RouterTransition/RouterTransition";
 import CustomThemingProvider from "@/provider/CustomThemingProvider";
+import "../constants/styles/resets.css";
+import "../styles.css";
 
 type ExtendedAppProps = AppProps<{ initialSession: Session }>;
 
@@ -20,6 +23,7 @@ export default function App(props: ExtendedAppProps) {
       </Head>
       <SessionContextProvider supabaseClient={supabaseClient} initialSession={pageProps.initialSession}>
         <CustomThemingProvider>
+          <RouterTransition />
           <Notifications />
           <Component {...pageProps} />
         </CustomThemingProvider>

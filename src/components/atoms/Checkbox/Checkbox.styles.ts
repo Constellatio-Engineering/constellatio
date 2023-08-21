@@ -1,9 +1,24 @@
-import { CheckboxStylesNames, CheckboxStylesParams, MantineTheme, Styles } from "@mantine/core";
+import { CSSObject, CheckboxStylesNames, CheckboxStylesParams, MantineTheme, Styles } from "@mantine/core";
 import { ReactNode } from "react";
 
-export const checkboxStyles = ({ error, disabled }: { error: ReactNode; disabled?: boolean }) => {
+export const checkboxStyles = ({
+  error,
+  disabled,
+  checkboxLabelOverride,
+  checkboxBodyOverride,
+  fullWidth,
+}: {
+  error: ReactNode;
+  disabled?: boolean;
+  checkboxLabelOverride?: CSSObject;
+  checkboxBodyOverride?: CSSObject;
+  fullWidth?: boolean;
+}) => {
   const styles: Styles<CheckboxStylesNames, CheckboxStylesParams> = (theme: MantineTheme) => ({
     root: {},
+    body: {
+      ...checkboxBodyOverride,
+    },
     input: {
       width: "20px",
       height: "20px",
@@ -29,12 +44,16 @@ export const checkboxStyles = ({ error, disabled }: { error: ReactNode; disabled
       marginTop: 0,
       paddingLeft: theme.spacing["spacing-8"],
     },
+    labelWrapper: {
+      width: fullWidth ? "100%" : "initial",
+    },
     label: {
       fontSize: theme.fontSizes["spacing-16"],
       lineHeight: theme.spacing["spacing-24"],
       fontWeight: 500,
       paddingLeft: theme.spacing["spacing-8"],
       color: disabled ? theme.colors["neutrals-01"][7] : theme.colors["neutrals-02"][1],
+      ...checkboxLabelOverride,
     },
     inner: {
       display: "flex",

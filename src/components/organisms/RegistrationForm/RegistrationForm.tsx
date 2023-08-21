@@ -12,7 +12,7 @@ import { Dropdown } from "@/components/atoms/Dropdown/Dropdown";
 import { Puzzle } from "@/components/Icons/Puzzle";
 import { Checkbox } from "@/components/atoms/Checkbox/Checkbox";
 import { BodyText } from "@/components/atoms/BodyText/BodyText";
-import { CustomLink } from "@/components/atoms/Link/CustomLink";
+import { CustomLink } from "@/components/atoms/CustomLink/CustomLink";
 import { PasswordValidationSchema } from "@/components/Helpers/PasswordValidationSchema";
 
 const universityData = [
@@ -122,9 +122,9 @@ export function RegistrationForm() {
           <Dropdown label="Geschlecht" title="Geschlecht" {...form.getInputProps("Geschlecht")} data={genderData} />
           <Checkbox
             label={
-              <BodyText styleType="body-01-medium">
+              <BodyText  component="p" styleType="body-01-medium">
                 I agree to the&nbsp;
-                <CustomLink styleType="primary-01" href="#" c={"neutrals-02.1"}>
+                <CustomLink styleType="link-primary" href="#">
                   Data Protection Regulations
                 </CustomLink>
               </BodyText>

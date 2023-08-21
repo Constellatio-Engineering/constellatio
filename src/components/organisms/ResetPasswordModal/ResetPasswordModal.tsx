@@ -38,7 +38,7 @@ export function ResetPasswordModal() {
     <Modal opened={isOpen} onClose={handleClose} title={"Passwort zurücksetzen"} centered>
       <form onSubmit={handleSubmit} style={{ width: "100%" }}>
         <Stack spacing={"spacing-24"}>
-          <BodyText styleType="body-01-regular">
+          <BodyText component="p" styleType="body-01-regular">
             You will receive an email from us with a link. Clicking this link will take you to a page where you can
             enter your new password.
           </BodyText>

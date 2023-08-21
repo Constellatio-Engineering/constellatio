@@ -49,7 +49,9 @@ const CustomThemingProvider = ({ children }: { children: ReactNode }) => {
         },
         colors: colors as any,
         shadows: {
-          default: "0px 8px 32px 0px rgba(0, 0, 0, 0.08)",
+          "elevation-big": "0px 8px 44px 0px rgba(0, 0, 0, 0.04)",
+          "elevation-medium": "0px 8px 24px 0px rgba(0, 0, 0, 0.06)",
+          "shadow-dark": "0px 4px 8px 0px rgba(0, 0, 0, 0.25)",
         },
         radius,
         spacing,

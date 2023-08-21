@@ -9,8 +9,9 @@ import { useRouter } from "next/router";
 import { useState } from "react";
 import { loginFormSchema } from "../../../schemas/LoginFormSchema";
 import { Input } from "@/components/atoms/Input/Input";
-import { CustomLink } from "@/components/atoms/Link/CustomLink";
+import { CustomLink } from "@/components/atoms/CustomLink/CustomLink";
 import { Button } from "@/components/atoms/Button/Button";
+import { colors } from "@/constants/styles/colors";
 
 export function LoginForm() {
   const [_, setResetPasswordModalOpen] = useAtom(resetPasswordModalVisible);
@@ -58,10 +59,10 @@ export function LoginForm() {
             <Input inputType="password" label="Password" title="password" {...form.getInputProps("password")} />
           </Stack>
           <CustomLink
-            styleType="primary-01"
+            styleType="link-secondary"
             component="button"
             onClick={openResetPasswordModal}
-            stylesOverwrite={{ textAlign: "left" }}
+            stylesOverwrite={{ textAlign: "left", color: colors['neutrals-02'][2] }}
           >
             Forgot Password?
           </CustomLink>
