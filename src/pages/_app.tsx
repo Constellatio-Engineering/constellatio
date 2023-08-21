@@ -1,22 +1,21 @@
 import { RouterTransition } from "@/components/atoms/RouterTransition/RouterTransition";
 import CustomThemingProvider from "@/provider/CustomThemingProvider";
+import { api } from "@/utils/api";
 
 import { Notifications } from "@mantine/notifications";
 import { createPagesBrowserClient } from "@supabase/auth-helpers-nextjs";
 import { type Session, SessionContextProvider } from "@supabase/auth-helpers-react";
 import { type AppProps } from "next/app";
 import Head from "next/head";
-import { useState } from "react";
+import { type FunctionComponent, useState } from "react";
 
 import "../constants/styles/resets.css";
 import "../styles.css";
 
-type ExtendedAppProps = AppProps<{ initialSession: Session }>;
+type MyAppProps = AppProps<{ initialSession: Session }>;
 
-export default function App(props: ExtendedAppProps)
+const MyApp: FunctionComponent<MyAppProps> = ({ Component, pageProps }) =>
 {
-  const { Component, pageProps } = props;
-
   // this is taken from the docs
   // eslint-disable-next-line react/hook-use-state
   const [supabaseClient] = useState(() => createPagesBrowserClient());
@@ -36,4 +35,6 @@ export default function App(props: ExtendedAppProps)
       </SessionContextProvider>
     </>
   );
-}
+};
+
+export default api.withTRPC(MyApp);
