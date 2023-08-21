@@ -1,0 +1,13 @@
+(constellatio_ssl_certs) {
+	tls "/data/certs/constellatio.localhost.cert.pem" "/data/certs/constellatio.localhost.key.pem"
+}
+
+app.constellatio.localhost {
+	import survey_tool_ssl_certs
+	reverse_proxy constellatio-app:3010
+}
+
+supabase.constellatio.localhost {
+	import survey_tool_ssl_certs
+	reverse_proxy constellatio-app:3010
+}
