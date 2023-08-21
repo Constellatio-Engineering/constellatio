@@ -4,7 +4,7 @@ import { Checkbox } from "@/components/atoms/Checkbox/Checkbox";
 import { CustomLink } from "@/components/atoms/CustomLink/CustomLink";
 import { Dropdown } from "@/components/atoms/Dropdown/Dropdown";
 import { Input } from "@/components/atoms/Input/Input";
-import { PasswordValidationSchema } from "@/components/Helpers/PasswordValidationSchema";
+import { PasswordValidationSchema } from "@/components/helpers/PasswordValidationSchema";
 import { Puzzle } from "@/components/Icons/Puzzle";
 import { registrationFormSchema } from "@/schemas/RegistrationFormSchema";
 

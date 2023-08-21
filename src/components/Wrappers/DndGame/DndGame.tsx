@@ -1,6 +1,7 @@
 import { BodyText } from "@/components/atoms/BodyText/BodyText";
 import { Button } from "@/components/atoms/Button/Button";
 import { Input } from "@/components/atoms/Input/Input";
+import { SortableItem } from "@/components/helpers/SortableItem";
 import { Cross } from "@/components/Icons/Cross";
 
 import { useCaisyField } from "@caisy/ui-extension-react";
@@ -28,7 +29,6 @@ import {
   switchStyle,
 } from "./DndGame.styles";
 import { Checkbox } from "../../atoms/Checkbox/Checkbox";
-import { SortableItem } from "../../Helpers/SortableItem";
 import { Check } from "../../Icons/Check";
 import { Handle } from "../../Icons/Handle";
 

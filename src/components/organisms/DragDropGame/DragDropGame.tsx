@@ -1,6 +1,7 @@
 import { BodyText } from "@/components/atoms/BodyText/BodyText";
 import { Button } from "@/components/atoms/Button/Button";
-import { Draggable } from "@/components/Helpers/Draggable";
+import { Draggable } from "@/components/helpers/Draggable";
+import { Droppable } from "@/components/helpers/Droppable";
 import { Check } from "@/components/Icons/Check";
 import { Flag } from "@/components/Icons/Flag";
 import { Gamification } from "@/components/Icons/Gamification";
@@ -24,7 +25,6 @@ import {
   Options,
   TitleWrapper,
 } from "./DragDropGame.styles";
-import { Droppable } from "../../Helpers/Droppable";
 
 type TDragDropGame = Pick<IGenDragNDrop, "game" | "helpNote" | "question">;
 

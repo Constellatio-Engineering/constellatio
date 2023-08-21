@@ -1,4 +1,4 @@
-import { Draggable } from "@/components/Helpers/Draggable";
+import { Draggable } from "@/components/helpers/Draggable";
 import { RadioUnselected } from "@/components/Icons/RadioUnselected";
 
 import { DndContext, useDroppable, DragOverlay } from "@dnd-kit/core";
