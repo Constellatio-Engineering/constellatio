@@ -1,19 +1,22 @@
-import { IGenTextElement } from "@/services/graphql/__generated/sdk";
-import React, { FC } from "react";
-import { ElementType, RichTextRenderer } from "@caisy/rich-text-react-renderer";
+import { type IGenTextElement } from "@/services/graphql/__generated/sdk";
+
+import { type ElementType, RichTextRenderer } from "@caisy/rich-text-react-renderer";
+import React, { type FC } from "react";
+
 import { SRichtext } from "./Richtext.styles";
 
 type TRichtext = Pick<IGenTextElement, "richTextContent"> & {
-  stylesOverwrite?: any;
-  richTextOverwrite?: Partial<Record<ElementType, FC<{ node: any }>> | null> | undefined;
+  readonly richTextOverwrite?: Partial<Record<ElementType, FC<{ node: any }>> | null> | undefined;
+  readonly stylesOverwrite?: any;
 };
 
-export const Richtext: FC<TRichtext> = ({ richTextOverwrite, stylesOverwrite, richTextContent }) => {
+export const Richtext: FC<TRichtext> = ({ richTextContent, richTextOverwrite, stylesOverwrite }) => 
+{
   return (
     <>
       {richTextContent?.json && (
         <SRichtext stylesOverwrite={stylesOverwrite}>
-          <RichTextRenderer node={richTextContent.json} overwrites={richTextOverwrite} />
+          <RichTextRenderer node={richTextContent.json} overwrites={richTextOverwrite}/>
         </SRichtext>
       )}
     </>

@@ -34,7 +34,7 @@ export const IconWrapper = styled.div<{ variant: "win" | "lose" }>`
 
   svg {
     color: ${({ theme, variant }) =>
-      variant === "win" ? theme.colors["support-success"][4] : theme.colors["neutrals-01"][0]};
+    variant === "win" ? theme.colors["support-success"][4] : theme.colors["neutrals-01"][0]};
   }
 `;
 
@@ -45,9 +45,9 @@ export const LabelWrapper = styled.div<{ variant: "win" | "lose" }>`
     display: flex;
     padding: ${({ theme }) => theme.spacing["spacing-4"]} ${({ theme }) => theme.spacing["spacing-8"]};
     gap: ${({ theme }) => theme.spacing["spacing-10"]};
-    border-radius: ${({ theme }) => theme.radius["full"]};
+    border-radius: ${({ theme }) => theme.radius.full};
     background-color: ${({ theme, variant }) =>
-      variant === "win" ? theme.colors["support-success"][3] : theme.colors["support-error"][3]};
+    variant === "win" ? theme.colors["support-success"][3] : theme.colors["support-error"][3]};
 
     color: ${({ theme }) => theme.colors["neutrals-01"][0]};
   }

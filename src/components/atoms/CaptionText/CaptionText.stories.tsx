@@ -1,15 +1,21 @@
-import { Meta, StoryObj } from "@storybook/react";
 import { Box } from "@mantine/core";
+import { type Meta, type StoryObj } from "@storybook/react";
+
 import { CaptionText } from "./CaptionText";
 
 const Template = (args: any) => (
   <Box w={350}>
-    <CaptionText {...args} />
+    <CaptionText {...args}/>
   </Box>
 );
 
 const meta: Meta = {
-  title: "Atoms/CaptionText",
+  argTypes: {
+    styleType: {
+      control: "radio",
+      options: ["caption-01-bold", "caption-01-medium"],
+    },
+  },
   component: Template,
   parameters: {
     design: {
@@ -17,12 +23,7 @@ const meta: Meta = {
       url: "https://www.figma.com/file/28lZi8gmK47C0DMkXwyUcy/Constellatio-%E2%80%93-Style-Guide?type=design&node-id=12-2128&mode=dev",
     },
   },
-  argTypes: {
-    styleType: {
-      control: "radio",
-      options: ["caption-01-bold", "caption-01-medium"],
-    },
-  },
+  title: "Atoms/CaptionText",
 };
 
 export default meta;

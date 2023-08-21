@@ -1,19 +1,26 @@
-import { Meta, StoryObj } from "@storybook/react";
-import { Box, Flex, Tabs } from "@mantine/core";
-import { Switcher } from "./Switcher";
 import { SwitcherTab } from "@/components/atoms/Switcher-tab/SwitcherTab";
 import { Puzzle } from "@/components/Icons/Puzzle";
+
+import { Box, Flex, Tabs } from "@mantine/core";
+import { type Meta, type StoryObj } from "@storybook/react";
+
+import { Switcher } from "./Switcher";
 
 const Template = (args: any) => (
   <Box w={args.w ?? "fit-content"}>
     <Flex>
-      <Switcher defaultValue="value2" {...args} />
+      <Switcher defaultValue="value2" {...args}/>
     </Flex>
   </Box>
 );
 
 const meta: Meta = {
-  title: "Molecules/Switcher",
+  argTypes: {
+    size: {
+      control: "select",
+      options: ["big", "medium"],
+    },
+  },
   component: Template,
   parameters: {
     design: {
@@ -21,12 +28,7 @@ const meta: Meta = {
       url: "https://www.figma.com/file/KZhlH1AesOBZZf1V4F9d2r/Constellatio-%E2%80%93-UI-Kit?type=design&node-id=23-438&mode=dev",
     },
   },
-  argTypes: {
-    size: {
-      control: "select",
-      options: ["big", "medium"],
-    },
-  },
+  title: "Molecules/Switcher",
 };
 
 export default meta;
@@ -59,10 +61,10 @@ export const Login: Story = {
         </Tabs.List>
       </>
     ),
-    w: 500,
     tabStyleOverwrite: {
       width: "49.5%",
-    }
+    },
+    w: 500
   },
 };
 
@@ -71,16 +73,16 @@ export const WithIcons: Story = {
     children: (
       <>
         <Tabs.List>
-          <SwitcherTab value="login" icon={<Puzzle />}>
+          <SwitcherTab value="login" icon={<Puzzle/>}>
             Switcher tab 1
           </SwitcherTab>
-          <SwitcherTab value="value2" icon={<Puzzle />}>
+          <SwitcherTab value="value2" icon={<Puzzle/>}>
             Switcher tab 2
           </SwitcherTab>
-          <SwitcherTab value="value3" icon={<Puzzle />}>
+          <SwitcherTab value="value3" icon={<Puzzle/>}>
             Switcher tab 3
           </SwitcherTab>
-          <SwitcherTab value="value4" icon={<Puzzle />}>
+          <SwitcherTab value="value4" icon={<Puzzle/>}>
             Switcher tab 4
           </SwitcherTab>
         </Tabs.List>

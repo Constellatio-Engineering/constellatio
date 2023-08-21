@@ -1,13 +1,17 @@
-import { Accordion } from "@mantine/core";
-import React, { FC, useState } from "react";
-import { ItemWrapper, hintsAccordionStyles } from "./HintsAccordion.styles";
 import { BodyText } from "@/components/atoms/BodyText/BodyText";
 
-type THintsAccordion = {
-  items: string[];
-};
+import { Accordion } from "@mantine/core";
+import React, { type FC, useState } from "react";
 
-export const HintsAccordion: FC<THintsAccordion> = ({ items }) => {
+import { ItemWrapper, hintsAccordionStyles } from "./HintsAccordion.styles";
+
+interface THintsAccordion 
+{
+  readonly items: string[];
+}
+
+export const HintsAccordion: FC<THintsAccordion> = ({ items }) => 
+{
   const [value, setValue] = useState<string | null>(null);
   return (
     <Accordion onChange={setValue} value={value} styles={hintsAccordionStyles({})}>
@@ -20,7 +24,8 @@ export const HintsAccordion: FC<THintsAccordion> = ({ items }) => {
         <Accordion.Panel>
           {items?.[0] && (
             <ul>
-              {items.map((item, index) => {
+              {items.map((item, index) => 
+              {
                 const splittedItem = item.split(";");
 
                 return (

@@ -1,16 +1,19 @@
-import { Meta, StoryObj } from "@storybook/react";
 import { Box } from "@mantine/core";
-import { GhostDropCard } from "./GhostDropCard";
+import { type Meta, type StoryObj } from "@storybook/react";
 import React from "react";
+
+import { GhostDropCard } from "./GhostDropCard";
 
 const Template = (args: any) => (
   <Box w={350}>
-    <GhostDropCard {...args} />
+    <GhostDropCard {...args}/>
   </Box>
 );
 
 const meta: Meta = {
-  title: "Molecules/Gamification/GhostDropCard",
+  argTypes: {
+    
+  },
   component: Template,
   parameters: {
     design: {
@@ -18,9 +21,7 @@ const meta: Meta = {
       url: "https://www.figma.com/file/KZhlH1AesOBZZf1V4F9d2r/Constellatio-%E2%80%93-UI-Kit?type=design&node-id=50-3732&mode=dev",
     },
   },
-  argTypes: {
-    
-  },
+  title: "Molecules/Gamification/GhostDropCard",
 };
 
 export default meta;
@@ -32,5 +33,4 @@ export const Default: Story = {
    
   },
 };
-
 

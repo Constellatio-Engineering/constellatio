@@ -1,15 +1,21 @@
-import { Meta, StoryObj } from "@storybook/react";
 import { Box } from "@mantine/core";
+import { type Meta, type StoryObj } from "@storybook/react";
+
 import { FillGapInput } from "./FillGapInput";
 
 const Template = (args: any) => (
   <Box w={300}>
-    <FillGapInput {...args} />
+    <FillGapInput {...args}/>
   </Box>
 );
 
 const meta: Meta = {
-  title: "Molecules/Gamification/FillGapInput",
+  argTypes: {
+    status: {
+      control: "radio",
+      options: ["default", "success", "error"],
+    },
+  },
   component: Template,
   parameters: {
     design: {
@@ -17,12 +23,7 @@ const meta: Meta = {
       url: "https://www.figma.com/file/KZhlH1AesOBZZf1V4F9d2r/Constellatio-%E2%80%93-UI-Kit?type=design&node-id=52-5823&mode=dev",
     },
   },
-  argTypes: {
-    status: {
-      control: "radio",
-      options: ["default", "success", "error"],
-    },
-  },
+  title: "Molecules/Gamification/FillGapInput",
 };
 
 export default meta;
@@ -31,7 +32,7 @@ type Story = StoryObj<typeof FillGapInput>;
 
 export const Default: Story = {
   args: {
-    placeholder: "fill in the gap",
     index: 1,
+    placeholder: "fill in the gap",
   },
 };

@@ -1,7 +1,8 @@
 import { useDroppable } from "@dnd-kit/core";
-import React, { ReactNode } from "react";
+import React, { type ReactNode } from "react";
 
-export const Droppable = ({ children }: { children: ReactNode }) => {
+export const Droppable = ({ children }: { readonly children: ReactNode }) => 
+{
   const { setNodeRef } = useDroppable({
     id: "droppable",
   });

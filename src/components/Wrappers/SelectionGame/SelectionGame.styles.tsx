@@ -1,5 +1,5 @@
 import styled from "@emotion/styled";
-import { MantineTheme, Styles, SwitchStylesNames, SwitchStylesParams } from "@mantine/core";
+import { type MantineTheme, type Styles, type SwitchStylesNames, type SwitchStylesParams } from "@mantine/core";
 
 export const Container = styled.div`
   max-width: 1440px;
@@ -84,17 +84,9 @@ export const CardItem = styled.div`
   transition: background-color 0.3s ease;
 `;
 
-export const switchStyle = ({ checked }: { checked: boolean }) => {
+export const switchStyle = ({ checked }: { checked: boolean }) => 
+{
   const style: Styles<SwitchStylesNames, SwitchStylesParams> = (theme: MantineTheme) => ({
-    track: {
-      backgroundColor: checked
-        ? `${theme.colors["support-success"][3]} !important`
-        : `${theme.colors["support-error"][3]} !important`,
-      borderColor: checked
-        ? ` ${theme.colors["support-success"][1]} !important`
-        : ` ${theme.colors["support-error"][1]} !important`,
-      cursor: "pointer",
-    },
     thumb: {
       alignItems: "center",
       justifyContent: "center",
@@ -104,6 +96,15 @@ export const switchStyle = ({ checked }: { checked: boolean }) => {
           ? `${theme.colors["support-success"][2]} !important`
           : `${theme.colors["support-error"][2]} !important`,
       },
+    },
+    track: {
+      backgroundColor: checked
+        ? `${theme.colors["support-success"][3]} !important`
+        : `${theme.colors["support-error"][3]} !important`,
+      borderColor: checked
+        ? ` ${theme.colors["support-success"][1]} !important`
+        : ` ${theme.colors["support-error"][1]} !important`,
+      cursor: "pointer",
     },
   });
   return style;

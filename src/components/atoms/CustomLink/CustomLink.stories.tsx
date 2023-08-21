@@ -1,15 +1,24 @@
-import { Meta, StoryObj } from "@storybook/react";
 import { Box } from "@mantine/core";
+import { type Meta, type StoryObj } from "@storybook/react";
+
 import { CustomLink } from "./CustomLink";
 
 const Template = (args: any) => (
   <Box w={350}>
-    <CustomLink {...args} />
+    <CustomLink {...args}/>
   </Box>
 );
 
 const meta: Meta = {
-  title: "Atoms/CustomLink",
+  argTypes: {
+    disabled: {
+      control: "boolean",
+    },
+    styleType: {
+      control: "select",
+      options: ["link-primary", "link-secondary", "link-primary-ts", "link-content", "link-content-title"],
+    },
+  },
   component: Template,
   parameters: {
     design: {
@@ -17,15 +26,7 @@ const meta: Meta = {
       url: "https://www.figma.com/file/28lZi8gmK47C0DMkXwyUcy/Constellatio-%E2%80%93-Style-Guide?type=design&node-id=113-1640&mode=dev",
     },
   },
-  argTypes: {
-    styleType: {
-      control: "select",
-      options: ["link-primary", "link-secondary", "link-primary-ts", "link-content" , "link-content-title"],
-    },
-    disabled: {
-      control: "boolean",
-    },
-  },
+  title: "Atoms/CustomLink",
 };
 
 export default meta;

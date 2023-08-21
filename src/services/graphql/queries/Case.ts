@@ -1,4 +1,5 @@
 import { gql } from "graphql-request";
+
 import { f_Case } from "../fragments/Case";
 
 export const q_Cases = gql`

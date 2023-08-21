@@ -1,5 +1,6 @@
-import { Database } from "@/lib/database.types";
+import { type Database } from "@/lib/database.types";
 import { stripe } from "@/lib/stripe";
+
 import { createClient } from "@supabase/supabase-js";
 
 export const supabaseAdmin = createClient<Database>(
@@ -7,28 +8,28 @@ export const supabaseAdmin = createClient<Database>(
   process.env.SUPABASE_SERVICE_ROLE_KEY ?? ""
 );
 
-export const createOrRetrieveCustomer = async ({
-  email,
-  uuid,
-}: {
+export const createOrRetrieveCustomer = async ({ email, uuid }: {
   email?: string;
   uuid: string;
-}) => {
+}) => 
+{
   const { data, error } = await supabaseAdmin
     .from("profiles")
     .select("stripe_customer_id")
     .eq("id", uuid)
     .single();
 
-  if (error || !data?.stripe_customer_id) {
-    const customerData: { metadata: { supabaseUUID: string }; email?: string } =
+  if(error || !data?.stripe_customer_id) 
+  {
+    const customerData: { email?: string; metadata: { supabaseUUID: string } } =
       {
         metadata: {
           supabaseUUID: uuid,
         },
       };
 
-    if (email) {
+    if(email) 
+    {
       customerData.email = email;
     }
 
@@ -39,7 +40,8 @@ export const createOrRetrieveCustomer = async ({
       .update({ stripe_customer_id: customer.id })
       .eq("id", uuid);
 
-    if (error) {
+    if(error) 
+    {
       throw error;
     }
 

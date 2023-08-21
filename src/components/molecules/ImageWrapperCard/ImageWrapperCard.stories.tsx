@@ -1,15 +1,16 @@
-import { Meta, StoryObj } from "@storybook/react";
 import { Box } from "@mantine/core";
+import { type Meta, type StoryObj } from "@storybook/react";
+
 import { ImageWrapperCard } from "./ImageWrapperCard";
 
 const Template = (args: any) => (
   <Box w={670}>
-    <ImageWrapperCard {...args} />
+    <ImageWrapperCard {...args}/>
   </Box>
 );
 
 const meta: Meta = {
-  title: "Molecules/ImageWrapperCard",
+  argTypes: {},
   component: Template,
   parameters: {
     design: {
@@ -17,7 +18,7 @@ const meta: Meta = {
       url: "https://www.figma.com/file/KZhlH1AesOBZZf1V4F9d2r/Constellatio-%E2%80%93-UI-Kit?type=design&node-id=53-5355&mode=dev",
     },
   },
-  argTypes: {},
+  title: "Molecules/ImageWrapperCard",
 };
 
 export default meta;

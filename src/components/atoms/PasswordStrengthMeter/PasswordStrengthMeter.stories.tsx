@@ -1,18 +1,20 @@
-import { Meta, StoryObj } from "@storybook/react";
 import { Box, Stack } from "@mantine/core";
-import { PasswordStrengthMeter } from "./PasswordStrengthMeter";
-import { useState } from "react";
-import { Input } from "../Input/Input";
 import { useDisclosure } from "@mantine/hooks";
+import { type Meta, type StoryObj } from "@storybook/react";
+import { useState } from "react";
+
+import { PasswordStrengthMeter } from "./PasswordStrengthMeter";
+import { Input } from "../Input/Input";
 
 const requirements = [
-  { re: /[0-9]/, label: "Includes number" },
-  { re: /[a-z]/, label: "Includes lowercase letter" },
-  { re: /[A-Z]/, label: "Includes uppercase letter" },
-  { re: /[$&+,:;=?@#|'<>.^*()%!-]/, label: "Includes special symbol" },
+  { label: "Includes number", re: /[0-9]/ },
+  { label: "Includes lowercase letter", re: /[a-z]/ },
+  { label: "Includes uppercase letter", re: /[A-Z]/ },
+  { label: "Includes special symbol", re: /[$&+,:;=?@#|'<>.^*()%!-]/ },
 ];
 
-const Template = (args: any) => {
+const Template = (args: any) => 
+{
   const [value, setValue] = useState("");
   const [isPasswordRevealed, { toggle }] = useDisclosure(false);
 
@@ -28,7 +30,7 @@ const Template = (args: any) => {
         error={args.error}
         disabled={args.disabled}
       />
-      <Stack spacing={"spacing-8"} mt={"spacing-12"}>
+      <Stack spacing="spacing-8" mt="spacing-12">
         {requirements.map((requirement, index) => (
           <PasswordStrengthMeter
             key={index}
@@ -45,7 +47,15 @@ const Template = (args: any) => {
 };
 
 const meta: Meta = {
-  title: "Atoms/PasswordStrengthMeter",
+  argTypes: {
+    disabled: {
+      control: "boolean",
+    },
+    error: {
+      control: "text",
+      description: "Error message",
+    },
+  },
   component: Template,
   parameters: {
     design: {
@@ -53,15 +63,7 @@ const meta: Meta = {
       url: "https://www.figma.com/file/KZhlH1AesOBZZf1V4F9d2r/Constellatio-%E2%80%93-UI-Kit?type=design&node-id=48-4837&mode=design&t=fUYGnKtkoyjTfrLF-4",
     },
   },
-  argTypes: {
-    error: {
-      control: "text",
-      description: "Error message",
-    },
-    disabled: {
-      control: "boolean",
-    },
-  },
+  title: "Atoms/PasswordStrengthMeter",
 };
 
 export default meta;

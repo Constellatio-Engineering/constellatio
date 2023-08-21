@@ -1,15 +1,16 @@
-import { Meta, StoryObj } from "@storybook/react";
 import { Box } from "@mantine/core";
+import { type Meta, type StoryObj } from "@storybook/react";
+
 import { Callout } from "./Callout";
 
 const Template = (args: any) => (
   <Box w={670}>
-    <Callout {...args} />
+    <Callout {...args}/>
   </Box>
 );
 
 const meta: Meta = {
-  title: "Organisms/Callout",
+  argTypes: {},
   component: Template,
   parameters: {
     design: {
@@ -17,7 +18,7 @@ const meta: Meta = {
       url: "https://www.figma.com/file/KZhlH1AesOBZZf1V4F9d2r/Constellatio-%E2%80%93-UI-Kit?type=design&node-id=107-3775&mode=dev",
     },
   },
-  argTypes: {},
+  title: "Organisms/Callout",
 };
 
 export default meta;
@@ -26,6 +27,7 @@ type Story = StoryObj<typeof Callout>;
 
 export const Expandable: Story = {
   args: {
+    expandable: true,
     icon: {
       author: "",
       copyright: "",
@@ -38,6 +40,7 @@ export const Expandable: Story = {
       title: "book-bookmark",
     },
     id: "33028fe1-b1b1-465d-b936-4be217c44652",
+
     text: {
       id: "e1cabad6-1b5a-43b8-9117-92509f724a98",
       richTextContent: {
@@ -369,9 +372,7 @@ export const Expandable: Story = {
         },
       },
     },
-
     title: "Law reference",
-    expandable: true,
   },
 };
 

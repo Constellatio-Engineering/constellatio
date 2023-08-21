@@ -1,17 +1,24 @@
 import { Group } from "@mantine/core";
-import React, { ButtonHTMLAttributes, FC, ReactNode } from "react";
+import React, { type ButtonHTMLAttributes, type FC, type ReactNode } from "react";
+
 import { SButton } from "./LinkButton.styles";
 
 type TLinkButton = ButtonHTMLAttributes<HTMLButtonElement> & {
-  size?: "big" | "medium";
-  icon: ReactNode;
-  title: ReactNode;
+  readonly icon: ReactNode;
+  readonly size?: "big" | "medium";
+  readonly title: ReactNode;
 };
 
-export const LinkButton: FC<TLinkButton> = ({ icon, title, size = "big", ...props }) => {
+export const LinkButton: FC<TLinkButton> = ({
+  icon,
+  size = "big",
+  title,
+  ...props
+}) => 
+{
   return (
     <SButton {...props} size={size}>
-      <Group spacing={"spacing-8"}>
+      <Group spacing="spacing-8">
         {icon}
         {title}
       </Group>

@@ -1,38 +1,47 @@
-import React, { FC } from "react";
-import { PasswordInputProps, TextInput, TextInputProps, PasswordInput, CSSObject } from "@mantine/core";
 import { AlertFilled } from "@/components/Icons/AlertFilled";
-import { passwordStyles, textStyles } from "./input.styles";
-import { Show } from "@/components/Icons/Show";
 import { Hide } from "@/components/Icons/Hide";
+import { Show } from "@/components/Icons/Show";
+
+import {
+  type PasswordInputProps, TextInput, type TextInputProps, PasswordInput, type CSSObject 
+} from "@mantine/core";
+import React, { type FC } from "react";
+
+import { passwordStyles, textStyles } from "./input.styles";
 
 type TInput = (TextInputProps | PasswordInputProps) & {
-  inputType: "text" | "password" | "number";
-  labelStyleOverwrite?: CSSObject | undefined;
-  inputStyleOverwrite?: CSSObject | undefined;
+  readonly inputStyleOverwrite?: CSSObject | undefined;
+  readonly inputType: "text" | "password" | "number";
+  readonly labelStyleOverwrite?: CSSObject | undefined;
 };
 
 export const Input: FC<TInput> = ({
+  disabled,
+  error,
+  inputStyleOverwrite,
   inputType,
   labelStyleOverwrite,
-  inputStyleOverwrite,
-  error,
-  disabled,
   ...props
-}) => {
+}) => 
+{
   return inputType === "password" ? (
     <PasswordInput
-      styles={passwordStyles({ error, disabled, labelStyleOverwrite, inputStyleOverwrite })}
+      styles={passwordStyles({
+        disabled, error, inputStyleOverwrite, labelStyleOverwrite 
+      })}
       error={error}
       disabled={disabled}
-      visibilityToggleIcon={({ reveal }) => (reveal ? <Show /> : <Hide />)}
+      visibilityToggleIcon={({ reveal }) => (reveal ? <Show/> : <Hide/>)}
       {...props}
     />
   ) : inputType === "text" ? (
     <TextInput
-      styles={textStyles({ error, disabled, labelStyleOverwrite, inputStyleOverwrite })}
+      styles={textStyles({
+        disabled, error, inputStyleOverwrite, labelStyleOverwrite 
+      })}
       error={error}
       disabled={disabled}
-      rightSection={error && <AlertFilled />}
+      rightSection={error && <AlertFilled/>}
       {...props}
     />
     

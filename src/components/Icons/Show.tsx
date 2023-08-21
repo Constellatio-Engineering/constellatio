@@ -1,5 +1,10 @@
-export const Show = ({ size = 20 }: { size?: number | undefined }) => (
-  <svg width={size} height={size} viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg">
+export const Show = ({ size = 20 }: { readonly size?: number | undefined }) => (
+  <svg
+    width={size}
+    height={size}
+    viewBox="0 0 20 20"
+    fill="none"
+    xmlns="http://www.w3.org/2000/svg">
     <g id="show">
       <path
         id="vector"

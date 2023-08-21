@@ -1,16 +1,19 @@
-import { AppShell } from "@mantine/core";
-import { ReactNode } from "react";
-import { Header } from "@/components/organisms/Header/Header";
 import { Footer } from "@/components/organisms/Footer/Footer";
+import { Header } from "@/components/organisms/Header/Header";
 
-type LayoutProps = {
-  children?: ReactNode;
-};
+import { AppShell } from "@mantine/core";
+import { type ReactNode } from "react";
 
-export function Layout({ children }: LayoutProps) {
+interface LayoutProps 
+{
+  readonly children?: ReactNode;
+}
+
+export function Layout({ children }: LayoutProps) 
+{
   return (
     <div>
-      <Header />
+      <Header/>
       {children}
     </div>
   );

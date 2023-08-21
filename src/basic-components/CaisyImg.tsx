@@ -1,12 +1,14 @@
 /* eslint-disable @next/next/no-img-element */
-import React, { FC } from "react";
+import React, { type FC } from "react";
 
-type TCaisyImg = {
-  src: string;
-  description?: string;
-};
+interface TCaisyImg 
+{
+  readonly description?: string;
+  readonly src: string;
+}
 
-const CaisyImg: FC<TCaisyImg> = ({ src, description }) => {
+const CaisyImg: FC<TCaisyImg> = ({ description, src }) => 
+{
   return (
     <>
       {src && (

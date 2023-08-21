@@ -1,15 +1,16 @@
-import { Meta, StoryObj } from "@storybook/react";
 import { Box } from "@mantine/core";
+import { type Meta, type StoryObj } from "@storybook/react";
+
 import { FillGapsGame } from "./FillGapsGame";
 
 const Template = (args: any) => (
   <Box w={670}>
-    <FillGapsGame {...args} />
+    <FillGapsGame {...args}/>
   </Box>
 );
 
 const meta: Meta = {
-  title: "Organisms/Gamification/FillGapsGame",
+  argTypes: {},
   component: Template,
   parameters: {
     design: {
@@ -17,7 +18,7 @@ const meta: Meta = {
       url: "https://www.figma.com/file/KZhlH1AesOBZZf1V4F9d2r/Constellatio-%E2%80%93-UI-Kit?type=design&node-id=52-6106&mode=dev",
     },
   },
-  argTypes: {},
+  title: "Organisms/Gamification/FillGapsGame",
 };
 
 export default meta;

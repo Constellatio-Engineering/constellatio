@@ -1,12 +1,18 @@
-import { CSSObject, Text, TextProps, createPolymorphicComponent } from "@mantine/core";
-import React, { FC } from "react";
+import { type CSSObject, Text, type TextProps, createPolymorphicComponent } from "@mantine/core";
+import React, { type FC } from "react";
 
 type TBodyText = TextProps & {
-  styleType: "body-01-bold" | "body-01-medium" | "body-01-regular" | "body-02-medium";
-  styleOverwrite?: CSSObject;
+  readonly styleOverwrite?: CSSObject;
+  readonly styleType: "body-01-bold" | "body-01-medium" | "body-01-regular" | "body-02-medium";
 };
 
-const _BodyText: FC<TBodyText> = ({ styleOverwrite, children, styleType, ...props }) => {
+const _BodyText: FC<TBodyText> = ({
+  children,
+  styleOverwrite,
+  styleType,
+  ...props
+}) => 
+{
   return (
     <Text
       sx={(theme) => ({
@@ -15,8 +21,7 @@ const _BodyText: FC<TBodyText> = ({ styleOverwrite, children, styleType, ...prop
         lineHeight: styleType === "body-02-medium" ? theme.spacing["spacing-20"] : theme.spacing["spacing-24"],
         ...styleOverwrite,
       })}
-      {...props}
-    >
+      {...props}>
       {children}
     </Text>
   );

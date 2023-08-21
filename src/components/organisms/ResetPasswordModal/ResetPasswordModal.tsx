@@ -1,48 +1,57 @@
-import { atom, useAtom } from "jotai";
+import { BodyText } from "@/components/atoms/BodyText/BodyText";
+import { Button } from "@/components/atoms/Button/Button";
+import { Input } from "@/components/atoms/Input/Input";
+import { Modal } from "@/components/molecules/Modal/Modal";
 
-import { createPagesBrowserClient } from "@supabase/auth-helpers-nextjs";
+import { Stack, Text, Title } from "@mantine/core";
 import { useForm } from "@mantine/form";
 import { notifications } from "@mantine/notifications";
-import { Modal } from "@/components/molecules/Modal/Modal";
-import { Stack, Text, Title } from "@mantine/core";
-import { Input } from "@/components/atoms/Input/Input";
-import { Button } from "@/components/atoms/Button/Button";
-import { BodyText } from "@/components/atoms/BodyText/BodyText";
+import { createPagesBrowserClient } from "@supabase/auth-helpers-nextjs";
+import { atom, useAtom } from "jotai";
 
-type ResetPasswordFormValues = {
+interface ResetPasswordFormValues 
+{
   email: string;
-};
+}
 
 export const resetPasswordModalVisible = atom(false);
 
-export function ResetPasswordModal() {
+export function ResetPasswordModal() 
+{
   const supabase = createPagesBrowserClient();
   const [isOpen, setOpen] = useAtom(resetPasswordModalVisible);
   const form = useForm<ResetPasswordFormValues>();
 
   const handleClose = () => setOpen(false);
 
-  const handleSubmit = form.onSubmit(async (formValues) => {
-    try {
+  const handleSubmit = form.onSubmit(async (formValues) => 
+  {
+    try 
+    {
       notifications.show({
-        title: "Password reset handler",
         message: "The password reset handler was called",
+        title: "Password reset handler",
       });
       await supabase.auth.resetPasswordForEmail(formValues.email, {
         redirectTo: "http://localhost:3000/recover",
       });
-    } catch (error) {}
+    }
+    catch (error) {}
   });
 
   return (
-    <Modal opened={isOpen} onClose={handleClose} title={"Passwort zurücksetzen"} centered>
+    <Modal
+      opened={isOpen}
+      onClose={handleClose}
+      title="Passwort zurücksetzen"
+      centered>
       <form onSubmit={handleSubmit} style={{ width: "100%" }}>
-        <Stack spacing={"spacing-24"}>
+        <Stack spacing="spacing-24">
           <BodyText component="p" styleType="body-01-regular">
             You will receive an email from us with a link. Clicking this link will take you to a page where you can
             enter your new password.
           </BodyText>
-          <Input inputType="text" label="E-Mail Adresse" {...form.getInputProps("email")} />
+          <Input inputType="text" label="E-Mail Adresse" {...form.getInputProps("email")}/>
           <Button styleType="primary" type="submit">
             Zurücksetzen
           </Button>

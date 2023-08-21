@@ -1,23 +1,22 @@
-import Stripe from "stripe";
+import type Stripe from "stripe";
 
-export const postData = async ({
-  url,
-  data,
-}: {
-  url: string;
+export const postData = async ({ data, url }: {
   data?: { price: Stripe.Price };
-}) => {
+  url: string;
+}) => 
+{
   console.log("posting,", url, data);
 
   const res = await fetch(url, {
-    method: "POST",
-    headers: new Headers({ "Content-Type": "application/json" }),
-    credentials: "same-origin",
     body: JSON.stringify(data),
+    credentials: "same-origin",
+    headers: new Headers({ "Content-Type": "application/json" }),
+    method: "POST",
   });
 
-  if (!res.ok) {
-    console.log("Error in postData", { url, data, res });
+  if(!res.ok) 
+  {
+    console.log("Error in postData", { data, res, url });
 
     throw Error(res.statusText);
   }

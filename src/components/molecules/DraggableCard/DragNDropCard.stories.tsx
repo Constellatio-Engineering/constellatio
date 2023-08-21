@@ -1,13 +1,16 @@
-import { Meta, StoryObj } from "@storybook/react";
-import { Box, Flex } from "@mantine/core";
-import { DndContext, useDroppable, DragOverlay } from "@dnd-kit/core";
-import { DragNDropCard } from "./DragNDropCard";
-import { ReactNode, useState } from "react";
-import { set, z } from "zod";
-import { RadioUnselected } from "@/components/Icons/RadioUnselected";
 import { Draggable } from "@/components/Helpers/Draggable";
+import { RadioUnselected } from "@/components/Icons/RadioUnselected";
 
-const Droppable = ({ children }: { children: ReactNode }) => {
+import { DndContext, useDroppable, DragOverlay } from "@dnd-kit/core";
+import { Box, Flex } from "@mantine/core";
+import { type Meta, type StoryObj } from "@storybook/react";
+import { type ReactNode, useState } from "react";
+import { set, z } from "zod";
+
+import { DragNDropCard } from "./DragNDropCard";
+
+const Droppable = ({ children }: { readonly children: ReactNode }) => 
+{
   const { isOver, setNodeRef } = useDroppable({
     id: "droppable",
   });
@@ -17,47 +20,59 @@ const Droppable = ({ children }: { children: ReactNode }) => {
   };
 
   return (
-    <Box w={350} h={150} sx={{ border: "1px solid red" }} p={20} m="0 auto" ref={setNodeRef} style={style}>
+    <Box
+      w={350}
+      h={150}
+      sx={{ border: "1px solid red" }}
+      p={20}
+      m="0 auto"
+      ref={setNodeRef}
+      style={style}>
       {children}
     </Box>
   );
 };
 
-const Template = (args: any) => {
+const Template = (args: any) => 
+{
   const [isDropped, setIsDropped] = useState(false);
   const [activeId, setActiveId] = useState<string | null>(null);
 
   const draggableMarkup = (
     <Draggable id="draggable">
-      <DragNDropCard {...args} />
+      <DragNDropCard {...args}/>
     </Draggable>
   );
 
-  const handleDragEnd = (event) => {
+  const handleDragEnd = (event) => 
+  {
     setActiveId(null);
-    if (event.over && event.over.id === "droppable") {
+    if(event.over && event.over.id === "droppable") 
+    {
       setIsDropped(true);
-    } else {
+    }
+    else 
+    {
       setIsDropped(false);
     }
   };
 
-  const handleDragStart = (event) => {
+  const handleDragStart = (event) => 
+  {
     setActiveId(event.active.id);
   };
 
   return (
     <DndContext onDragEnd={handleDragEnd} onDragStart={handleDragStart}>
       <Flex
-        direction={"column"}
-        gap={"20px"}
+        direction="column"
+        gap="20px"
         sx={{
           ".drag-overlay": {
             // display: "none",
             opacity: 0.5,
           },
-        }}
-      >
+        }}>
         <Droppable>{isDropped ? "Drop Here" : draggableMarkup}</Droppable>
         <Droppable>{isDropped ? draggableMarkup : "Drop Here Too"}</Droppable>
         <DragOverlay
@@ -65,9 +80,8 @@ const Template = (args: any) => {
           style={{
             transform: "translate3d(0, 0, 0)",
             zIndex: 1,
-          }}
-        >
-          {activeId ? <DragNDropCard {...args} icon={<RadioUnselected />} label="OVERLAY" /> : null}
+          }}>
+          {activeId ? <DragNDropCard {...args} icon={<RadioUnselected/>} label="OVERLAY"/> : null}
         </DragOverlay>
       </Flex>
     </DndContext>
@@ -75,7 +89,15 @@ const Template = (args: any) => {
 };
 
 const meta: Meta = {
-  title: "Molecules/Gamification/DragNDropCard",
+  argTypes: {
+    dropped: {
+      control: "boolean",
+    },
+    status: {
+      control: "radio",
+      options: ["default", "success", "error"],
+    },
+  },
   component: Template,
   parameters: {
     design: {
@@ -83,15 +105,7 @@ const meta: Meta = {
       url: "https://www.figma.com/file/KZhlH1AesOBZZf1V4F9d2r/Constellatio-%E2%80%93-UI-Kit?type=design&node-id=50-3627&mode=dev",
     },
   },
-  argTypes: {
-    status: {
-      control: "radio",
-      options: ["default", "success", "error"],
-    },
-    dropped: {
-      control: "boolean",
-    },
-  },
+  title: "Molecules/Gamification/DragNDropCard",
 };
 
 export default meta;

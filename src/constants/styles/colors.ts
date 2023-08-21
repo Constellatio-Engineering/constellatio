@@ -1,21 +1,4 @@
 export const colors = {
-  "neutrals-01": [
-    "#FFFFFF", // 0
-    "#F9F9F9", // 1
-    "#F6F6F5", // 2
-    "#F0F0F0", // 3
-    "#ECECEC", // 4
-    "#D6D6D6", // 5
-    "#B5B5B5", // 6
-    "#949494", // 7
-    "#767676", // 8
-    "#4C4C4C", // 9
-  ],
-  "neutrals-02": [
-    "#3D3D3D", // 0
-    "#000000", // 1
-    "#303030", // 2
-  ],
   "brand-01": [
     "#FBDFDD", // 0
     "#EBAEA9", // 1
@@ -56,13 +39,22 @@ export const colors = {
     "#D3C750", // 4
     "#999146", // 5
   ],
-  "support-success": [
-    "#EEF8F2", // 0
-    "#DAF2E4", // 1
-    "#6CCB92", // 2
-    "#0AA949", // 3
-    "#008D39", // 4
-    "#005A06", // 5
+  "neutrals-01": [
+    "#FFFFFF", // 0
+    "#F9F9F9", // 1
+    "#F6F6F5", // 2
+    "#F0F0F0", // 3
+    "#ECECEC", // 4
+    "#D6D6D6", // 5
+    "#B5B5B5", // 6
+    "#949494", // 7
+    "#767676", // 8
+    "#4C4C4C", // 9
+  ],
+  "neutrals-02": [
+    "#3D3D3D", // 0
+    "#000000", // 1
+    "#303030", // 2
   ],
   "support-error": [
     "#FFDFDF", // 0
@@ -72,14 +64,6 @@ export const colors = {
     "#8A1F17", // 4
     "#4C0000", // 5
   ],
-  "support-warning": [
-    "#FEFDF1", // 0
-    "#FDFADC", // 1
-    "#FBF4B9", // 2
-    "#EBE361", // 3
-    "#D3C750", // 4
-    "#999146", // 5
-  ],
   "support-notice": [
     "#F4F6FE", // 0
     "#E9EDFD", // 1
@@ -87,6 +71,22 @@ export const colors = {
     "#96A8E4", // 3
     "#5B74C7", // 4
     "#3A4C88", // 5
+  ],
+  "support-success": [
+    "#EEF8F2", // 0
+    "#DAF2E4", // 1
+    "#6CCB92", // 2
+    "#0AA949", // 3
+    "#008D39", // 4
+    "#005A06", // 5
+  ],
+  "support-warning": [
+    "#FEFDF1", // 0
+    "#FDFADC", // 1
+    "#FBF4B9", // 2
+    "#EBE361", // 3
+    "#D3C750", // 4
+    "#999146", // 5
   ],
   "transparency-01": [
     "rgba(0, 0, 0, 0.1)", // 0

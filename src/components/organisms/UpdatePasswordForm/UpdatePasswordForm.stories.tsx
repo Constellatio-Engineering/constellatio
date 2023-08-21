@@ -1,15 +1,16 @@
-import { Meta, StoryObj } from "@storybook/react";
 import { Box } from "@mantine/core";
+import { type Meta, type StoryObj } from "@storybook/react";
+
 import { UpdatePasswordForm } from "./UpdatePasswordForm";
 
 const Template = (args: any) => (
   <Box w={440}>
-    <UpdatePasswordForm {...args} />
+    <UpdatePasswordForm {...args}/>
   </Box>
 );
 
 const meta: Meta = {
-  title: "Organisms/UpdatePasswordForm",
+  argTypes: {},
   component: Template,
   parameters: {
     design: {
@@ -17,7 +18,7 @@ const meta: Meta = {
       url: "https://www.figma.com/file/Lq58wHThYMiImXmLJcYbGZ/Constellatio-UI-Design?type=design&node-id=145-30737&mode=dev",
     },
   },
-  argTypes: {},
+  title: "Organisms/UpdatePasswordForm",
 };
 
 export default meta;

@@ -1,24 +1,28 @@
-import React, { FC } from "react";
-import { CSSObject, CheckboxProps, Checkbox as MantineCheckBox } from "@mantine/core";
+import { type CSSObject, type CheckboxProps, Checkbox as MantineCheckBox } from "@mantine/core";
+import React, { type FC } from "react";
+
 import { checkboxStyles } from "./Checkbox.styles";
 
 type TCheckbox = CheckboxProps & {
-  checkboxLabelOverride?: CSSObject;
-  checkboxBodyOverride?: CSSObject;
-  fullWidth?: boolean;
+  readonly checkboxBodyOverride?: CSSObject;
+  readonly checkboxLabelOverride?: CSSObject;
+  readonly fullWidth?: boolean;
 };
 
 export const Checkbox: FC<TCheckbox> = ({
-  fullWidth,
-  error,
-  disabled,
-  checkboxLabelOverride,
   checkboxBodyOverride,
+  checkboxLabelOverride,
+  disabled,
+  error,
+  fullWidth,
   ...props
-}) => {
+}) => 
+{
   return (
     <MantineCheckBox
-      styles={checkboxStyles({ error, disabled, checkboxLabelOverride, checkboxBodyOverride, fullWidth })}
+      styles={checkboxStyles({
+        checkboxBodyOverride, checkboxLabelOverride, disabled, error, fullWidth 
+      })}
       error={error}
       disabled={disabled}
       {...props}

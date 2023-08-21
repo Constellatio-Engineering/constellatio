@@ -1,4 +1,5 @@
 import { gql } from "graphql-request";
+
 import { f_TextElement } from "./TextElement";
 
 export const f_CaseSection = gql`

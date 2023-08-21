@@ -1,5 +1,10 @@
-export const AlertStoke = ({ size = 20 }: { size?: number }) => (
-  <svg width={size} height={size} viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+export const AlertStoke = ({ size = 20 }: { readonly size?: number }) => (
+  <svg
+    width={size}
+    height={size}
+    viewBox="0 0 24 24"
+    fill="none"
+    xmlns="http://www.w3.org/2000/svg">
     <g id="alert">
       <path
         id="vector"

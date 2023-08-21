@@ -1,26 +1,27 @@
-import { useForm, zodResolver } from "@mantine/form";
-import { createPagesBrowserClient } from "@supabase/auth-helpers-nextjs";
-import { notifications } from "@mantine/notifications";
+import { BodyText } from "@/components/atoms/BodyText/BodyText";
+import { Button } from "@/components/atoms/Button/Button";
+import { Checkbox } from "@/components/atoms/Checkbox/Checkbox";
+import { CustomLink } from "@/components/atoms/CustomLink/CustomLink";
+import { Dropdown } from "@/components/atoms/Dropdown/Dropdown";
+import { Input } from "@/components/atoms/Input/Input";
+import { PasswordValidationSchema } from "@/components/Helpers/PasswordValidationSchema";
+import { Puzzle } from "@/components/Icons/Puzzle";
+import { registrationFormSchema } from "@/schemas/RegistrationFormSchema";
+
 import { Box, Stack } from "@mantine/core";
+import { useForm, zodResolver } from "@mantine/form";
+import { useDisclosure } from "@mantine/hooks";
+import { notifications } from "@mantine/notifications";
+import { createPagesBrowserClient } from "@supabase/auth-helpers-nextjs";
 import { useRouter } from "next/router";
 import { useState } from "react";
-import { registrationFormSchema } from "@/schemas/RegistrationFormSchema";
-import { Input } from "@/components/atoms/Input/Input";
-import { Button } from "@/components/atoms/Button/Button";
-import { useDisclosure } from "@mantine/hooks";
-import { Dropdown } from "@/components/atoms/Dropdown/Dropdown";
-import { Puzzle } from "@/components/Icons/Puzzle";
-import { Checkbox } from "@/components/atoms/Checkbox/Checkbox";
-import { BodyText } from "@/components/atoms/BodyText/BodyText";
-import { CustomLink } from "@/components/atoms/CustomLink/CustomLink";
-import { PasswordValidationSchema } from "@/components/Helpers/PasswordValidationSchema";
 
 const universityData = [
-  { label: "Menu list item", icon: <Puzzle />, value: "1" },
-  { label: "Menu list item", icon: <Puzzle />, value: "2" },
-  { label: "Menu list item", icon: <Puzzle />, value: "3" },
-  { label: "Menu list item", icon: <Puzzle />, value: "4" },
-  { label: "Menu list item", icon: <Puzzle />, value: "5" },
+  { icon: <Puzzle/>, label: "Menu list item", value: "1" },
+  { icon: <Puzzle/>, label: "Menu list item", value: "2" },
+  { icon: <Puzzle/>, label: "Menu list item", value: "3" },
+  { icon: <Puzzle/>, label: "Menu list item", value: "4" },
+  { icon: <Puzzle/>, label: "Menu list item", value: "5" },
 ];
 
 const semesterData = [
@@ -41,58 +42,80 @@ const genderData = [
   { label: "other", value: "3" },
 ];
 
-export function RegistrationForm() {
+export function RegistrationForm() 
+{
   const supabase = createPagesBrowserClient();
   const router = useRouter();
   const [submitting, setSubmitting] = useState(false);
   const [isPasswordRevealed, { toggle }] = useDisclosure(false);
   const form = useForm({
-    validate: zodResolver(registrationFormSchema),
-    validateInputOnBlur: true,
     initialValues: {
-      firstName: "",
-      lastName: "",
+      acceptTOS: false,
       displayName: "",
       email: "",
+      firstName: "",
+      gender: "",
+      lastName: "",
       password: "",
       passwordConfirmation: "",
-      university: "",
       semester: undefined,
-      gender: "",
-      acceptTOS: false,
+      university: "",
     },
+    validate: zodResolver(registrationFormSchema),
+    validateInputOnBlur: true,
   });
 
-  const handleSubmit = form.onSubmit(async (formValues) => {
-    try {
+  const handleSubmit = form.onSubmit(async (formValues) => 
+  {
+    try 
+    {
       setSubmitting(true);
 
       const response = await fetch("/api/auth/register", {
-        method: "POST",
         body: JSON.stringify(formValues),
+        method: "POST",
       });
 
       const data = await response.json();
 
       await supabase.auth.setSession(data);
       await router.replace("/");
-    } catch (error) {
+    }
+    catch (error) 
+    {
       notifications.show({
-        title: "Oops!",
         message: "We couldn't sign you up. Please try again.",
+        title: "Oops!",
       });
-    } finally {
+    }
+    finally 
+    {
       setSubmitting(false);
     }
   });
 
   return (
     <form onSubmit={handleSubmit}>
-      <Stack spacing={"spacing-24"}>
-        <Stack spacing={"spacing-12"}>
-          <Input inputType="text" label="Vorname" title="Vorname" {...form.getInputProps("firstName")} />
-          <Input inputType="text" label="Nachname" title="Nachname" {...form.getInputProps("lastName")} />
-          <Input inputType="text" label="Anzeigename" title="Anzeigename" {...form.getInputProps("displayName")} />
+      <Stack spacing="spacing-24">
+        <Stack spacing="spacing-12">
+          <Input
+            inputType="text"
+            label="Vorname"
+            title="Vorname"
+            {...form.getInputProps("firstName")}
+          />
+          <Input
+            inputType="text"
+            label="Nachname"
+            title="Nachname"
+            {...form.getInputProps("lastName")}
+          />
+          <Input
+            inputType="text"
+            label="Anzeigename"
+            title="Anzeigename"
+            {...form.getInputProps("displayName")}
+          />
           <Box>
             <Input
               inputType="password"
@@ -101,7 +124,7 @@ export function RegistrationForm() {
               onVisibilityChange={toggle}
               {...form.getInputProps("password")}
             />
-            <PasswordValidationSchema passwordValue={form.values.password} isPasswordRevealed={isPasswordRevealed} />
+            <PasswordValidationSchema passwordValue={form.values.password} isPasswordRevealed={isPasswordRevealed}/>
           </Box>
           <Input
             inputType="password"
@@ -117,24 +140,38 @@ export function RegistrationForm() {
             data={universityData}
           />
           <Box maw={240}>
-            <Dropdown label="Semester" title="Semester" {...form.getInputProps("semester")} data={semesterData} />
+            <Dropdown
+              label="Semester"
+              title="Semester"
+              {...form.getInputProps("semester")}
+              data={semesterData}
+            />
           </Box>
-          <Dropdown label="Geschlecht" title="Geschlecht" {...form.getInputProps("Geschlecht")} data={genderData} />
+          <Dropdown
+            label="Geschlecht"
+            title="Geschlecht"
+            {...form.getInputProps("Geschlecht")}
+            data={genderData}
+          />
           <Checkbox
-            label={
-              <BodyText  component="p" styleType="body-01-medium">
+            label={(
+              <BodyText component="p" styleType="body-01-medium">
                 I agree to the&nbsp;
                 <CustomLink styleType="link-primary" href="#">
                   Data Protection Regulations
                 </CustomLink>
               </BodyText>
-            }
+            )}
             title="acceptTOS"
             {...form.getInputProps("acceptTOS")}
           />
         </Stack>
-
-        <Button styleType="primary" fullWidth type="submit" title={"Konto erstellen"} loading={submitting}>
+        <Button
+          styleType="primary"
+          fullWidth
+          type="submit"
+          title="Konto erstellen"
+          loading={submitting}>
           Konto erstellen
         </Button>
       </Stack>

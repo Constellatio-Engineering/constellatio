@@ -1,23 +1,28 @@
-import { Meta, StoryObj } from "@storybook/react";
-import { Box, Group, Stack, Text, Title } from "@mantine/core";
-import { Modal } from "./Modal";
-import { useDisclosure } from "@mantine/hooks";
 import { Button } from "@/components/atoms/Button/Button";
 
-const Template = (args: any) => {
-  const [isOpened, { open, close }] = useDisclosure(false);
+import {
+  Box, Group, Stack, Text, Title 
+} from "@mantine/core";
+import { useDisclosure } from "@mantine/hooks";
+import { type Meta, type StoryObj } from "@storybook/react";
+
+import { Modal } from "./Modal";
+
+const Template = (args: any) => 
+{
+  const [isOpened, { close, open }] = useDisclosure(false);
 
   return (
     <>
       <Modal
         opened={isOpened}
         centered
-        onClose={() => {
+        onClose={() => 
+        {
           console.log("Closed");
           close();
         }}
-        {...args}
-      >
+        {...args}>
         <Text>
           Amet minim mollit non deserunt ullamco est sit aliqua dolor do amet sint. Velit officia consequat duis enim
           velit mollit.
@@ -31,7 +36,11 @@ const Template = (args: any) => {
           </Button>
         </Group>
       </Modal>
-      <Button onClick={open} title="Open Modal" type="button" styleType="primary">
+      <Button
+        onClick={open}
+        title="Open Modal"
+        type="button"
+        styleType="primary">
         Open Modal
       </Button>
     </>
@@ -39,7 +48,7 @@ const Template = (args: any) => {
 };
 
 const meta: Meta = {
-  title: "Molecules/Modal",
+  argTypes: {},
   component: Template,
   parameters: {
     design: {
@@ -47,7 +56,7 @@ const meta: Meta = {
       url: "https://www.figma.com/file/KZhlH1AesOBZZf1V4F9d2r/Constellatio-%E2%80%93-UI-Kit?type=design&node-id=168-4891&mode=dev",
     },
   },
-  argTypes: {},
+  title: "Molecules/Modal",
 };
 
 export default meta;

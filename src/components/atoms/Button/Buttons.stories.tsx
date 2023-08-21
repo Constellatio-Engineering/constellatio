@@ -1,28 +1,24 @@
-import { Meta, StoryObj } from "@storybook/react";
-import { Button } from "./Button";
-import { DownloadIcon } from "@/components/Icons/DownloadIcon";
 import { ArrowDown } from "@/components/Icons/ArrowDown";
+import { DownloadIcon } from "@/components/Icons/DownloadIcon";
+
 import { Box, Flex } from "@mantine/core";
+import { type Meta, type StoryObj } from "@storybook/react";
+
+import { Button } from "./Button";
 
 const Template = (args: any) => (
   <Flex>
     <Box w={300}>
-      <Button {...args} />
+      <Button {...args}/>
     </Box>
   </Flex>
 );
 
 const meta: Meta = {
-  title: "Atoms/Button",
-  component: Template,
-  tags: ["autodocs"],
-  parameters: {
-    design: {
-      type: "figma",
-      url: "https://www.figma.com/file/KZhlH1AesOBZZf1V4F9d2r/Constellatio-%E2%80%93-UI-Kit?node-id=3%3A2&mode=dev",
-    },
-  },
   argTypes: {
+    disabled: {
+      type: "boolean",
+    },
     fullWidth: {
       control: {
         type: "boolean",
@@ -36,10 +32,16 @@ const meta: Meta = {
       control: "select",
       options: ["primary", "secondarySimple", "secondarySubtle", "tertiary"],
     },
-    disabled: {
-      type: "boolean",
+  },
+  component: Template,
+  parameters: {
+    design: {
+      type: "figma",
+      url: "https://www.figma.com/file/KZhlH1AesOBZZf1V4F9d2r/Constellatio-%E2%80%93-UI-Kit?node-id=3%3A2&mode=dev",
     },
   },
+  tags: ["autodocs"],
+  title: "Atoms/Button",
 };
 
 export default meta;
@@ -56,13 +58,13 @@ export const Default: Story = {
 export const WithLeftIcon: Story = {
   args: {
     children: "Primary Button",
-    leftIcon: <DownloadIcon />,
+    leftIcon: <DownloadIcon/>,
   },
 };
 
 export const WithRightIcon: Story = {
   args: {
     children: "Primary Button",
-    rightIcon: <ArrowDown />,
+    rightIcon: <ArrowDown/>,
   },
 };

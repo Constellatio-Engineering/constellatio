@@ -1,11 +1,13 @@
-import { useEffect } from "react";
-import { useRouter } from "next/router";
 import { NavigationProgress, nprogress } from "@mantine/nprogress";
+import { useRouter } from "next/router";
+import { useEffect } from "react";
 
-export function RouterTransition() {
+export function RouterTransition() 
+{
   const router = useRouter();
 
-  useEffect(() => {
+  useEffect(() => 
+  {
     const handleStart = (url: string) =>
       url !== router.asPath && nprogress.start();
     const handleComplete = () => nprogress.complete();
@@ -14,12 +16,13 @@ export function RouterTransition() {
     router.events.on("routeChangeComplete", handleComplete);
     router.events.on("routeChangeError", handleComplete);
 
-    return () => {
+    return () => 
+    {
       router.events.off("routeChangeStart", handleStart);
       router.events.off("routeChangeComplete", handleComplete);
       router.events.off("routeChangeError", handleComplete);
     };
   }, [router.asPath]);
 
-  return <NavigationProgress progressLabel="Loading Page" autoReset={true} />;
+  return <NavigationProgress progressLabel="Loading Page" autoReset/>;
 }

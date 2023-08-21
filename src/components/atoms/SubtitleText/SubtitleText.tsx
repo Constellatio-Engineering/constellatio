@@ -1,12 +1,18 @@
-import { CSSObject, Text, TextProps, createPolymorphicComponent } from "@mantine/core";
-import React, { FC } from "react";
+import { type CSSObject, Text, type TextProps, createPolymorphicComponent } from "@mantine/core";
+import React, { type FC } from "react";
 
 type TSubtitleText = TextProps & {
-  styleType: "subtitle-01-bold" | "subtitle-01-medium";
-  styleOverwrite?: CSSObject;
+  readonly styleOverwrite?: CSSObject;
+  readonly styleType: "subtitle-01-bold" | "subtitle-01-medium";
 };
 
-const _SubtitleText: FC<TSubtitleText> = ({ styleOverwrite, children, styleType, ...props }) => {
+const _SubtitleText: FC<TSubtitleText> = ({
+  children,
+  styleOverwrite,
+  styleType,
+  ...props
+}) => 
+{
   return (
     <Text
       sx={(theme) => ({
@@ -15,8 +21,7 @@ const _SubtitleText: FC<TSubtitleText> = ({ styleOverwrite, children, styleType,
         lineHeight: theme.spacing["spacing-24"],
         ...styleOverwrite,
       })}
-      {...props}
-    >
+      {...props}>
       {children}
     </Text>
   );

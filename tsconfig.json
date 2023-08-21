@@ -1,6 +1,6 @@
 {
 	"compilerOptions": {
-		"target": "es5",
+		"target": "es2017",
 		"lib": ["dom", "dom.iterable", "esnext"],
 		"allowJs": true,
 		"skipLibCheck": true,
@@ -8,24 +8,54 @@
 		"forceConsistentCasingInFileNames": true,
 		"noEmit": true,
 		"esModuleInterop": true,
-		"module": "esnext",
 		"moduleResolution": "node",
 		"typeRoots": ["./node_modules/@types", "./types"],
 		"resolveJsonModule": true,
 		"isolatedModules": true,
 		"jsx": "preserve",
-		"noImplicitAny": false,
 		"incremental": true,
+		"checkJs": true,
+		"noUncheckedIndexedAccess": true,
+		"allowSyntheticDefaultImports": true,
+		"alwaysStrict": true,
+		"experimentalDecorators": true,
+		"emitDecoratorMetadata": true,
+		"noImplicitAny": true,
+		"noImplicitThis": true,
+		"noImplicitReturns": true,
+		"noFallthroughCasesInSwitch": true,
+		"pretty": true,
+		"removeComments": true,
+		"downlevelIteration": true,
+		"strictNullChecks": true,
+		"strictFunctionTypes": true,
+		"strictPropertyInitialization": false,
+		"outDir": "dist",
+		"declaration": false,
+		"sourceMap": true,
+		"module": "esnext",
+		"importHelpers": true,
+		"baseUrl": ".",
 		"plugins": [
 			{
 				"name": "next"
 			}
 		],
-		"baseUrl": ".",
 		"paths": {
 			"@/*": ["./src/*"]
 		}
 	},
-	"include": ["next-env.d.ts", "**/*.ts", "**/*.tsx", ".next/types/**/*.ts", "./types/**/*.ts"],
-	"exclude": ["node_modules"]
+	"ts-node": {
+		"swc": true
+	},
+	"include": [
+		".eslintrc.cjs",
+		"next-env.d.ts",
+		".next/types/**/*.ts",
+		"**/*.ts",
+		"**/*.tsx",
+		"**/*.cjs",
+		"**/*.mjs"
+	],
+	"exclude": ["node_modules"],
 }

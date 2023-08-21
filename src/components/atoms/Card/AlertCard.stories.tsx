@@ -1,23 +1,24 @@
-import { Meta, StoryObj } from "@storybook/react";
 import { Box } from "@mantine/core";
+import { type Meta, type StoryObj } from "@storybook/react";
+
 import { AlertCard } from "./AlertCard";
 
 const Template = (args: any) => (
   <Box w={500}>
-    <AlertCard {...args} />
+    <AlertCard {...args}/>
   </Box>
 );
 
 const meta: Meta = {
-  title: "Atoms/AlertCard",
+  argTypes: {},
   component: Template,
-   parameters: {
+  parameters: {
     design: {
       type: "figma",
       url: "https://www.figma.com/file/KZhlH1AesOBZZf1V4F9d2r/Constellatio-%E2%80%93-UI-Kit?type=design&node-id=55-6533&mode=dev",
     },
   },
-  argTypes: {},
+  title: "Atoms/AlertCard",
 };
 
 export default meta;

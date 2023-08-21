@@ -7,12 +7,20 @@ export const Flag = () => (
     viewBox="0 0 90 88"
     fill="none"
     xmlns="http://www.w3.org/2000/svg"
-    xmlnsXlink="http://www.w3.org/1999/xlink"
-  >
-    <rect y="0.258057" width="90" height="87.0968" fill="url(#pattern0)" />
+    xmlnsXlink="http://www.w3.org/1999/xlink">
+    <rect
+      y="0.258057"
+      width="90"
+      height="87.0968"
+      fill="url(#pattern0)"
+    />
     <defs>
-      <pattern id="pattern0" patternContentUnits="objectBoundingBox" width="1" height="1">
-        <use xlinkHref="#image0_1041_465" transform="matrix(0.00251256 0 0 0.00239234 -0.130653 -0.062201)" />
+      <pattern
+        id="pattern0"
+        patternContentUnits="objectBoundingBox"
+        width="1"
+        height="1">
+        <use xlinkHref="#image0_1041_465" transform="matrix(0.00251256 0 0 0.00239234 -0.130653 -0.062201)"/>
       </pattern>
       <image
         id="image0_1041_465"

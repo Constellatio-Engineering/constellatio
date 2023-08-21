@@ -1,12 +1,14 @@
 import { Layout } from "@/components/layouts/Layout";
 import { Richtext } from "@/components/molecules/Richtext/Richtext";
 import { DragDropGame } from "@/components/organisms/DragDropGame/DragDropGame";
-import { IGenCaseByIdQuery, IGenCasesQuery } from "@/services/graphql/__generated/sdk";
+import { type IGenCaseByIdQuery, IGenCasesQuery } from "@/services/graphql/__generated/sdk";
 import { caisySDK } from "@/services/graphql/getSdk";
-import { Flex, Title } from "@mantine/core";
-import { GetStaticPaths, GetStaticProps } from "next";
 
-export default function Cases({ caseById }: { caseById: IGenCaseByIdQuery }) {
+import { Flex, Title } from "@mantine/core";
+import { type GetStaticPaths, type GetStaticProps } from "next";
+
+export default function Cases({ caseById }: { readonly caseById: IGenCaseByIdQuery }) 
+{
   console.log(caseById);
   return (
     <Layout>
@@ -26,7 +28,7 @@ export default function Cases({ caseById }: { caseById: IGenCaseByIdQuery }) {
                   <p className="text-lg font-semibold">{caseById.Case?.topic?.title}</p>
                 </div>
               </div>
-              <hr className="m-0 w-full border-0 h-px bg-neutral-200" />
+              <hr className="m-0 w-full border-0 h-px bg-neutral-200"/>
               <div className="flex space-x-8 px-4 py-3">
                 <div className="flex flex-col">
                   <p className="text-sm">LEGAL AREA</p>
@@ -37,7 +39,7 @@ export default function Cases({ caseById }: { caseById: IGenCaseByIdQuery }) {
                   <p className="text-lg font-semibold">{caseById.Case?.topic?.title}</p>
                 </div>
               </div>
-              <hr className="m-0 w-full border-0 h-px bg-neutral-200" />
+              <hr className="m-0 w-full border-0 h-px bg-neutral-200"/>
               <div className="flex space-x-8 px-4 py-3">
                 <div className="flex flex-col">
                   <p className="text-sm">LEGAL AREA</p>
@@ -58,15 +60,16 @@ export default function Cases({ caseById }: { caseById: IGenCaseByIdQuery }) {
             <Title size={32} mb={24}>
               Facts
             </Title>
-            <Richtext richTextContent={caseById.Case?.facts} />
-            {caseById.Case?.sections?.map((edge, index) => {
-              if (index > 0) return null;
+            <Richtext richTextContent={caseById.Case?.facts}/>
+            {caseById.Case?.sections?.map((edge, index) => 
+            {
+              if(index > 0) { return null; }
 
               return (
                 <div key={edge?.id}>
                   <Title size={24}>{edge?.title}</Title>
-                  <Richtext richTextContent={edge?.content} />
-                  <DragDropGame />
+                  <Richtext richTextContent={edge?.content}/>
+                  <DragDropGame/>
                 </div>
               );
             })}
@@ -77,18 +80,20 @@ export default function Cases({ caseById }: { caseById: IGenCaseByIdQuery }) {
   );
 }
 
-export const getStaticPaths: GetStaticPaths = async () => {
+export const getStaticPaths: GetStaticPaths = async () => 
+{
   const cases = await caisySDK.Cases();
 
   return {
+    fallback: "blocking",
     paths: cases.allCase?.edges!.map((edge) => ({
       params: { id: edge?.node?.id },
     })),
-    fallback: "blocking",
   };
 };
 
-export const getStaticProps: GetStaticProps = async ({ params }) => {
+export const getStaticProps: GetStaticProps = async ({ params }) => 
+{
   const caseById = await caisySDK.CaseById({ id: params!.id as string });
 
   return {

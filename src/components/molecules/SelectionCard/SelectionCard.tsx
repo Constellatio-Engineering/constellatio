@@ -1,20 +1,30 @@
-import { Checkbox } from "@/components/atoms/Checkbox/Checkbox";
-import React, { FC, ReactNode, useState } from "react";
 import { BodyText } from "@/components/atoms/BodyText/BodyText";
+import { Checkbox } from "@/components/atoms/Checkbox/Checkbox";
 import { CheckFilled } from "@/components/Icons/CheckFilled";
 import { CrossFilled } from "@/components/Icons/CrossFilled";
+
 import { useMantineTheme } from "@mantine/core";
+import React, { type FC, type ReactNode, useState } from "react";
+
 import { ResultWrapper } from "./SelectionCard.styles";
 
-type TSelectionCard = {
-  label: ReactNode | null;
-  status: "default" | "success" | "error";
-  onCheckHandler: React.ChangeEventHandler<HTMLInputElement>;
-  disabled?: boolean;
-  result?: ReactNode;
-};
+interface TSelectionCard 
+{
+  readonly disabled?: boolean;
+  readonly label: ReactNode | null;
+  readonly onCheckHandler: React.ChangeEventHandler<HTMLInputElement>;
+  readonly result?: ReactNode;
+  readonly status: "default" | "success" | "error";
+}
 
-export const SelectionCard: FC<TSelectionCard> = ({ onCheckHandler, status, label, disabled, result }) => {
+export const SelectionCard: FC<TSelectionCard> = ({
+  disabled,
+  label,
+  onCheckHandler,
+  result,
+  status
+}) => 
+{
   const [checked, setChecked] = useState(false);
   const theme = useMantineTheme();
 
@@ -22,12 +32,13 @@ export const SelectionCard: FC<TSelectionCard> = ({ onCheckHandler, status, labe
     <Checkbox
       fullWidth
       checked={checked}
-      onChange={(e) => {
+      onChange={(e) => 
+      {
         setChecked(e.target.checked);
         onCheckHandler(e);
       }}
       disabled={disabled}
-      label={
+      label={(
         <>
           <BodyText styleType="body-01-regular" component="p">
             {label}
@@ -38,75 +49,75 @@ export const SelectionCard: FC<TSelectionCard> = ({ onCheckHandler, status, labe
                 {result}
               </BodyText>
             )}
-            {status === "success" ? <CheckFilled /> : status === "error" ? <CrossFilled /> : null}
+            {status === "success" ? <CheckFilled/> : status === "error" ? <CrossFilled/> : null}
           </ResultWrapper>
         </>
-      }
+      )}
       checkboxBodyOverride={{
-        alignItems: "center",
-        gap: theme.spacing["spacing-8"],
-        borderRadius: theme.radius["radius-8"],
-        padding: `0 ${theme.spacing["spacing-12"]}`,
-        border: `1px solid ${
-          checked
-            ? status === "default"
-              ? theme.colors["neutrals-02"][1]
-              : status === "success"
-              ? theme.colors["support-success"][4]
-              : status === "error"
-              ? theme.colors["support-error"][3]
-              : ""
-            : status === "success"
-            ? theme.colors["support-error"][3]
-            : theme.colors["neutrals-01"][3]
-        }`,
-        backgroundColor: theme.colors["neutrals-01"][0],
-        transition: "all 0.3s ease",
-
+        "&:hover": {
+          backgroundColor: status === "default" ? theme.colors["neutrals-01"][1] : "",
+          borderColor: status === "default" ? theme.colors["neutrals-01"][4] : "",
+        },
         ".mantine-Checkbox-inner": {
           input: {
+            "&:hover": {
+              borderColor: !checked && status === "default" ? theme.colors["neutrals-01"][5] : "",
+            },
+
+            backgroundColor: `${theme.colors["neutrals-01"][0]} !important`,
+
             borderColor: checked
               ? status === "default"
                 ? theme.colors["neutrals-02"][1]
                 : status === "success"
-                ? theme.colors["support-success"][4]
-                : status === "error"
-                ? theme.colors["support-error"][3]
-                : ""
+                  ? theme.colors["support-success"][4]
+                  : status === "error"
+                    ? theme.colors["support-error"][3]
+                    : ""
               : status === "success"
-              ? theme.colors["support-error"][3]
-              : theme.colors["neutrals-01"][5],
-
-            backgroundColor: `${theme.colors["neutrals-01"][0]} !important`,
-
-            "&:hover": {
-              borderColor: !checked && status === "default" ? theme.colors["neutrals-01"][5] : "",
-            },
+                ? theme.colors["support-error"][3]
+                : theme.colors["neutrals-01"][5],
           },
           svg: {
             color: checked
               ? status === "default"
                 ? `${theme.colors["neutrals-02"][1]} !important`
                 : status === "success"
-                ? `${theme.colors["support-success"][4]} !important`
-                : status === "error"
-                ? `${theme.colors["support-error"][3]} !important`
-                : ""
+                  ? `${theme.colors["support-success"][4]} !important`
+                  : status === "error"
+                    ? `${theme.colors["support-error"][3]} !important`
+                    : ""
               : "",
           },
         },
+        alignItems: "center",
+        backgroundColor: theme.colors["neutrals-01"][0],
+        border: `1px solid ${
+          checked
+            ? status === "default"
+              ? theme.colors["neutrals-02"][1]
+              : status === "success"
+                ? theme.colors["support-success"][4]
+                : status === "error"
+                  ? theme.colors["support-error"][3]
+                  : ""
+            : status === "success"
+              ? theme.colors["support-error"][3]
+              : theme.colors["neutrals-01"][3]
+        }`,
+        borderRadius: theme.radius["radius-8"],
+        gap: theme.spacing["spacing-8"],
 
-        "&:hover": {
-          borderColor: status === "default" ? theme.colors["neutrals-01"][4] : "",
-          backgroundColor: status === "default" ? theme.colors["neutrals-01"][1] : "",
-        },
+        padding: `0 ${theme.spacing["spacing-12"]}`,
+
+        transition: "all 0.3s ease",
       }}
       checkboxLabelOverride={{
-        display: "flex",
         alignItems: "center",
-        justifyContent: "space-between",
-        cursor: status === "default" ? "pointer" : "default",
         color: `${theme.colors["neutrals-02"][1]} !important`,
+        cursor: status === "default" ? "pointer" : "default",
+        display: "flex",
+        justifyContent: "space-between",
         padding: `${theme.spacing["spacing-12"]} 0`,
       }}
     />

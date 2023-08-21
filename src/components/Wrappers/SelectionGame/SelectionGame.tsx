@@ -1,10 +1,14 @@
+import { BodyText } from "@/components/atoms/BodyText/BodyText";
 import { Button } from "@/components/atoms/Button/Button";
 import { Input } from "@/components/atoms/Input/Input";
+import { Cross } from "@/components/Icons/Cross";
+
 import { useCaisyField } from "@caisy/ui-extension-react";
 import { Box, Title, Switch } from "@mantine/core";
 import { useForm } from "@mantine/form";
-import React, { useState } from "react";
 import { randomId } from "@mantine/hooks";
+import React, { useState } from "react";
+
 import {
   CardItem,
   CardItemWrapper,
@@ -14,50 +18,52 @@ import {
   OutputWrapper,
   switchStyle,
 } from "./SelectionGame.styles";
-import { BodyText } from "@/components/atoms/BodyText/BodyText";
-import { Cross } from "@/components/Icons/Cross";
 import { Check } from "../../Icons/Check";
 
-export type TValue = {
-  options: { id: string; label: string; correctAnswer: boolean }[];
-};
-
-interface ICaisy {
-  value: TValue;
-  setValue: (value: TValue) => void;
-  loaded: boolean;
-  context: {
-    projectId?: string;
-    documentId?: string;
-    schemaId?: string;
-    token?: string;
-    schemaFieldId?: string;
-  };
+export interface TValue 
+{
+  options: { correctAnswer: boolean; id: string; label: string }[];
 }
 
-export const SelectionGameWrapper = () => {
+interface ICaisy 
+{
+  context: {
+    documentId?: string;
+    projectId?: string;
+    schemaFieldId?: string;
+    schemaId?: string;
+    token?: string;
+  };
+  loaded: boolean;
+  setValue: (value: TValue) => void;
+  value: TValue;
+}
+
+export const SelectionGameWrapper = () => 
+{
   const [checked, setChecked] = useState(false);
 
   const { loaded, setValue, value }: ICaisy = useCaisyField();
 
   const form = useForm({
     initialValues: {
-      option: "",
       correct: checked,
+      option: "",
     },
   });
 
   console.log(value);
 
-  const onSubmitHandler = () => {
+  const onSubmitHandler = () => 
+  {
     setValue({
       ...value,
       options: [
         ...value.options,
         {
+          correctAnswer: form.values.correct,
           id: randomId(),
           label: form.values.option,
-          correctAnswer: form.values.correct,
         },
       ],
     });
@@ -69,60 +75,59 @@ export const SelectionGameWrapper = () => {
       Loading...
     </BodyText>
   ) : !value ? (
-    <Button styleType="tertiary" onClick={() => setValue({ options: [] })} w={"25%"}>
+    <Button styleType="tertiary" onClick={() => setValue({ options: [] })} w="25%">
       Reload
     </Button>
   ) : (
     <Container>
       <Title order={3}>Add Options for Card Selection Game</Title>
-      <Button styleType="primary" onClick={() => setValue({ options: [] })} w={"20%"} bg={"support-error.3"}>
+      <Button
+        styleType="primary"
+        onClick={() => setValue({ options: [] })}
+        w="20%"
+        bg="support-error.3">
         Rest All
       </Button>
       <GameWrapper>
         <OptionWrapper>
           <Box component="form" onSubmit={form.onSubmit(() => onSubmitHandler())}>
-            <Input inputType="text" label={"Add an option"} {...form.getInputProps("option")} />
-
+            <Input inputType="text" label="Add an option" {...form.getInputProps("option")}/>
             <Box
               sx={(theme) => ({
+                alignItems: "center",
                 display: "flex",
                 justifyContent: "space-between",
-                alignItems: "center",
                 width: "100%",
-              })}
-            >
+              })}>
               <Switch
-                label={
+                label={(
                   <BodyText
                     component="p"
                     styleType="body-01-medium"
-                    c={checked ? "support-success.3" : "support-error.3"}
-                  >
+                    c={checked ? "support-success.3" : "support-error.3"}>
                     Add as {checked ? "a correct" : "an correct"} option
                   </BodyText>
-                }
-                thumbIcon={checked ? <Check size={18} /> : <Cross size={18} />}
+                )}
+                thumbIcon={checked ? <Check size={18}/> : <Cross size={18}/>}
                 size="md"
                 checked={checked}
-                onChange={() => {
+                onChange={() => 
+                {
                   setChecked((prev) => !prev);
                   form.setFieldValue("correct", !checked);
                 }}
                 styles={switchStyle({ checked })}
               />
-
               <Button
                 styleType="primary"
                 type="submit"
                 disabled={form.getInputProps("option")?.value?.length <= 1}
                 fullWidth
-                w={"50%"}
-              >
+                w="50%">
                 Add
               </Button>
             </Box>
           </Box>
-
           <OutputWrapper>
             {value &&
               value.options &&
@@ -133,20 +138,19 @@ export const SelectionGameWrapper = () => {
                     <BodyText
                       component="p"
                       styleType="body-01-bold"
-                      c={option?.correctAnswer ? "support-success.3" : "support-error.3"}
-                    >
+                      c={option?.correctAnswer ? "support-success.3" : "support-error.3"}>
                       {option.label}
                     </BodyText>
                   </CardItem>
                   <span
-                    onClick={() => {
+                    onClick={() => 
+                    {
                       setValue({
                         ...value,
                         options: value.options.filter((item) => item.id !== option.id),
                       });
-                    }}
-                  >
-                    <Cross />
+                    }}>
+                    <Cross/>
                   </span>
                 </CardItemWrapper>
               ))}

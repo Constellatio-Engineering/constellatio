@@ -24,4 +24,3 @@ export const GameWrapper = styled.div`
   background-color: ${({ theme }) => theme.colors["neutrals-01"][0]};
 `;
 
-

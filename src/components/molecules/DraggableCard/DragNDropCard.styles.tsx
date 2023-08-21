@@ -1,6 +1,6 @@
 import styled from "@emotion/styled";
 
-export const ButtonCard = styled.button<{ status: "success" | "error" | "default"; dropped?: boolean }>`
+export const ButtonCard = styled.button<{ dropped?: boolean; status: "success" | "error" | "default" }>`
   display: flex;
   align-items: center;
   justify-content: space-between;
@@ -8,14 +8,14 @@ export const ButtonCard = styled.button<{ status: "success" | "error" | "default
   gap: ${({ theme }) => theme.spacing["spacing-4"]};
   border-radius: ${({ theme }) => theme.radius["radius-8"]};
   border: 1px solid
-    ${({ theme, status, dropped }) =>
-      dropped
-        ? status === "success"
-          ? theme.colors["support-success"][4]
-          : status === "error"
+    ${({ dropped, status, theme }) =>
+    dropped
+      ? status === "success"
+        ? theme.colors["support-success"][4]
+        : status === "error"
           ? theme.colors["support-error"][3]
           : theme.colors["neutrals-01"][3]
-        : status === "success"
+      : status === "success"
         ? theme.colors["support-error"][3]
         : theme.colors["neutrals-01"][3]};
 
@@ -30,11 +30,11 @@ export const ButtonCard = styled.button<{ status: "success" | "error" | "default
   }
 
   &:hover {
-    border-color: ${({ theme, status }) => status === "default" && theme.colors["neutrals-01"][4]};
-    background-color: ${({ theme, status }) => status === "default" && theme.colors["neutrals-01"][1]};
+    border-color: ${({ status, theme }) => status === "default" && theme.colors["neutrals-01"][4]};
+    background-color: ${({ status, theme }) => status === "default" && theme.colors["neutrals-01"][1]};
 
     svg {
-      color: ${({ theme, status }) => status === "default" && theme.colors["neutrals-02"][1]};
+      color: ${({ status, theme }) => status === "default" && theme.colors["neutrals-02"][1]};
     }
   }
 

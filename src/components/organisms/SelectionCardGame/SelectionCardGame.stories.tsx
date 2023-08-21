@@ -1,15 +1,16 @@
-import { Meta, StoryObj } from "@storybook/react";
 import { Box } from "@mantine/core";
+import { type Meta, type StoryObj } from "@storybook/react";
+
 import { SelectionCardGame } from "./SelectionCardGame";
 
 const Template = (args: any) => (
   <Box w={670}>
-    <SelectionCardGame {...args} />
+    <SelectionCardGame {...args}/>
   </Box>
 );
 
 const meta: Meta = {
-  title: "Organisms/Gamification/SelectionCardGame",
+  argTypes: {},
   component: Template,
   parameters: {
     design: {
@@ -17,7 +18,7 @@ const meta: Meta = {
       url: "https://www.figma.com/file/KZhlH1AesOBZZf1V4F9d2r/Constellatio-%E2%80%93-UI-Kit?type=design&node-id=51-9026&mode=dev",
     },
   },
-  argTypes: {},
+  title: "Organisms/Gamification/SelectionCardGame",
 };
 
 export default meta;
@@ -89,6 +90,6 @@ export const Default: Story = {
       },
     },
     question:
-      'So far so easy. But what exactly does the wording "liabilities established up until then" in § 160 HGB mean?',
+      "So far so easy. But what exactly does the wording \"liabilities established up until then\" in § 160 HGB mean?",
   },
 };

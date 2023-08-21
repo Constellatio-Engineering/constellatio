@@ -1,21 +1,23 @@
 import Image from "next/image";
-import { UserDropdown } from "../../molecules/UserDropdown/UserDropdown";
 import Link from "next/link";
-import { FC } from "react";
-import logo from "../../../../public/images/icons/constellatio-full-logo.svg";
+import { type FC } from "react";
+
 import { SHeader } from "./Header.style";
 import ConstellatioFullLogo from "../../../../public/images/icons/constellatio-full-logo.svg";
+import { UserDropdown } from "../../molecules/UserDropdown/UserDropdown";
 
-type THeader = {
-  variant?: "default" | "simple";
-};
+interface THeader 
+{
+  readonly variant?: "default" | "simple";
+}
 
-export const Header: FC<THeader> = ({ variant = "default" }) => {
+export const Header: FC<THeader> = ({ variant = "default" }) => 
+{
   return variant === "simple" ? (
     <SHeader variant={variant}>
       <div>
         <Link href="/">
-          <Image src={ConstellatioFullLogo} alt="Constellatio" />
+          <Image src={ConstellatioFullLogo} alt="Constellatio"/>
         </Link>
       </div>
     </SHeader>
@@ -23,11 +25,11 @@ export const Header: FC<THeader> = ({ variant = "default" }) => {
     <SHeader variant={variant}>
       <div>
         <Link href="/">
-          <Image src={ConstellatioFullLogo} alt="Constellatio" />
+          <Image src={ConstellatioFullLogo} alt="Constellatio"/>
         </Link>
       </div>
       <div>
-        <UserDropdown />
+        <UserDropdown/>
       </div>
     </SHeader>
   );

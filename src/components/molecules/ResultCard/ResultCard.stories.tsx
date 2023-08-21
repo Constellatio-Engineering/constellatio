@@ -1,15 +1,15 @@
-import { Meta, StoryObj } from "@storybook/react";
 import { Box } from "@mantine/core";
+import { type Meta, type StoryObj } from "@storybook/react";
+
 import { ResultCard } from "./ResultCard";
 
 const Template = (args: any) => (
   <Box w={640}>
-    <ResultCard {...args} />
+    <ResultCard {...args}/>
   </Box>
 );
 
 const meta: Meta = {
-  title: "Molecules/Gamification/ResultCard",
   component: Template,
   parameters: {
     design: {
@@ -17,6 +17,7 @@ const meta: Meta = {
       url: "https://www.figma.com/file/KZhlH1AesOBZZf1V4F9d2r/Constellatio-%E2%80%93-UI-Kit?type=design&node-id=51-4110&mode=dev",
     },
   },
+  title: "Molecules/Gamification/ResultCard",
 };
 
 export default meta;
@@ -25,27 +26,27 @@ type Story = StoryObj<typeof ResultCard>;
 
 export const Win: Story = {
   args: {
-    variant: "win",
+    droppedCorrectCards: 3,
     message: "Congrats! all answers are correct!",
     totalCorrectCards: 3,
-    droppedCorrectCards: 3,
+    variant: "win",
   },
 };
 
 export const Lose: Story = {
   args: {
-    variant: "lose",
+    droppedCorrectCards: 2,
     message: "some of your answers are incorrect",
     totalCorrectCards: 3,
-    droppedCorrectCards: 2,
+    variant: "lose",
   },
 };
 
 export const IncorrectOrder: Story = {
   args: {
-    variant: "lose",
+    droppedCorrectCards: 3,
     message: "some of your answers are in incorrect order",
     totalCorrectCards: 3,
-    droppedCorrectCards: 3,
+    variant: "lose",
   },
 };

@@ -1,92 +1,93 @@
-import { MantineTheme, Styles, TextInputStylesNames } from "@mantine/core";
+import { type MantineTheme, type Styles, type TextInputStylesNames } from "@mantine/core";
 
-export const fillGapInputStyles = ({ status, index }: { status: "default" | "success" | "error"; index?: number }) => {
+export const fillGapInputStyles = ({ index, status }: { index?: number; status: "default" | "success" | "error" }) => 
+{
   const styles: Styles<TextInputStylesNames, Record<string, any>> = (theme: MantineTheme) => ({
-    root: {
-      display: "inline-block",
-      paddingBottom: status === "error" ? theme.spacing["spacing-4"] : "0",
-      paddingLeft: theme.spacing["spacing-2"],
-      paddingRight: theme.spacing["spacing-2"],
-      position: "relative",
-      maxWidth: "145px",
-      marginTop: theme.spacing["spacing-2"],
-    },
-    wrapper: {
-      display: "flex",
-      alignItems: "center",
-      gap: "8px",
-
-      "&:has(input:disabled) .mantine-Input-rightSection": {
-        display: "flex",
-      },
-
-      "&::before": {
-        content: index ? `"${index}"` : "''",
-        width: "18px",
-        height: "18px",
-        minWidth: "18px",
-        borderRadius: "50%",
-        border: `1px solid ${theme.colors["neutrals-02"][1]}`,
-        display: status === "default" ? "none" : "flex",
-
-        flexDirection: "column",
-        alignItems: "center",
-        justifyContent: "center",
-        fontSize: "14px",
-        fontWeight: 700,
-        lineHeight: "20px",
-        textTransform: "uppercase",
-        textAlign: "center",
-      },
-    },
     input: {
-      border: "none",
-      borderRadius: 0,
-      display: "flex",
-      alignItems: "flex-start",
-      gap: theme.spacing["spacing-4"],
-      padding: 0,
-      paddingBottom: theme.spacing["spacing-4"],
-      borderBottom: `1px solid ${
-        status === "default"
-          ? theme.colors["neutrals-01"][8]
-          : status === "success"
-          ? theme.colors["support-success"][4]
-          : theme.colors["support-error"][3]
-      }`,
-      color:
-        status === "default"
-          ? theme.colors["neutrals-02"][1]
-          : status === "success"
-          ? theme.colors["support-success"][4]
-          : theme.colors["support-error"][3],
-      fontSize: theme.fontSizes["spacing-16"],
-      lineHeight: "24px",
-      fontWeight: 500,
-      height: "auto",
-      minHeight: "auto",
-      backgroundColor: "transparent",
-
       "&:focus, &:focus-within": {
         borderColor: "initial",
       },
-
       "&[data-disabled], :disabled": {
+        backgroundColor: "transparent",
         color:
           status === "default"
             ? theme.colors["neutrals-02"][1]
             : status === "success"
-            ? theme.colors["support-success"][4]
-            : theme.colors["support-error"][3],
-        backgroundColor: "transparent",
+              ? theme.colors["support-success"][4]
+              : theme.colors["support-error"][3],
         opacity: 1,
       },
+      alignItems: "flex-start",
+      backgroundColor: "transparent",
+      border: "none",
+      borderBottom: `1px solid ${
+        status === "default"
+          ? theme.colors["neutrals-01"][8]
+          : status === "success"
+            ? theme.colors["support-success"][4]
+            : theme.colors["support-error"][3]
+      }`,
+      borderRadius: 0,
+      color:
+        status === "default"
+          ? theme.colors["neutrals-02"][1]
+          : status === "success"
+            ? theme.colors["support-success"][4]
+            : theme.colors["support-error"][3],
+      display: "flex",
+      fontSize: theme.fontSizes["spacing-16"],
+      fontWeight: 500,
+      gap: theme.spacing["spacing-4"],
+      height: "auto",
+      lineHeight: "24px",
+      minHeight: "auto",
+
+      padding: 0,
+
+      paddingBottom: theme.spacing["spacing-4"],
     },
     rightSection: {
-      width: 16,
+      color: status === "success" ? theme.colors["support-success"][4] : theme.colors["support-error"][3],
       height: 16,
       top: "5px",
-      color: status === "success" ? theme.colors["support-success"][4] : theme.colors["support-error"][3],
+      width: 16,
+    },
+    root: {
+      display: "inline-block",
+      marginTop: theme.spacing["spacing-2"],
+      maxWidth: "145px",
+      paddingBottom: status === "error" ? theme.spacing["spacing-4"] : "0",
+      paddingLeft: theme.spacing["spacing-2"],
+      paddingRight: theme.spacing["spacing-2"],
+      position: "relative",
+    },
+    wrapper: {
+      "&::before": {
+        alignItems: "center",
+        border: `1px solid ${theme.colors["neutrals-02"][1]}`,
+        borderRadius: "50%",
+        content: index ? `"${index}"` : "''",
+        display: status === "default" ? "none" : "flex",
+        flexDirection: "column",
+        fontSize: "14px",
+
+        fontWeight: 700,
+        height: "18px",
+        justifyContent: "center",
+        lineHeight: "20px",
+        minWidth: "18px",
+        textAlign: "center",
+        textTransform: "uppercase",
+        width: "18px",
+      },
+      "&:has(input:disabled) .mantine-Input-rightSection": {
+        display: "flex",
+      },
+      alignItems: "center",
+
+      display: "flex",
+
+      gap: "8px",
     },
   });
   return styles;

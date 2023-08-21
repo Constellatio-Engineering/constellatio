@@ -2,10 +2,17 @@ import { useDraggable } from "@dnd-kit/core";
 import { CSS } from "@dnd-kit/utilities";
 import { useTheme } from "@emotion/react";
 import { Box } from "@mantine/core";
-import React, { ReactNode } from "react";
+import React, { type ReactNode } from "react";
 
-export const Draggable = ({ id, children }: { id: string; children: ReactNode }) => {
-  const { attributes, listeners, setNodeRef, transform, isDragging } = useDraggable({
+export const Draggable = ({ children, id }: { readonly children: ReactNode; readonly id: string }) => 
+{
+  const {
+    attributes,
+    isDragging,
+    listeners,
+    setNodeRef,
+    transform
+  } = useDraggable({
     id,
   });
 
@@ -21,13 +28,12 @@ export const Draggable = ({ id, children }: { id: string; children: ReactNode })
       {...listeners}
       sx={{
         ...style,
-        boxShadow: isDragging ? theme.shadows["elevation-big"] : "",
         "> button": {
           cursor: isDragging ? "grabbing" : "grab",
         },
+        boxShadow: isDragging ? theme.shadows["elevation-big"] : "",
       }}
-      ref={setNodeRef}
-    >
+      ref={setNodeRef}>
       {children}
     </Box>
   );

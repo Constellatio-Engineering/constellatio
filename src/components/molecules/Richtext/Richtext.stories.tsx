@@ -1,15 +1,16 @@
-import { Meta, StoryObj } from "@storybook/react";
 import { Box } from "@mantine/core";
+import { type Meta, type StoryObj } from "@storybook/react";
+
 import { Richtext } from "./Richtext";
 
 const Template = (args: any) => (
   <Box w={500}>
-    <Richtext {...args} />
+    <Richtext {...args}/>
   </Box>
 );
 
 const meta: Meta = {
-  title: "Molecules/Richtext",
+  argTypes: {},
   component: Template,
   parameters: {
     design: {
@@ -17,7 +18,7 @@ const meta: Meta = {
       url: "https://www.figma.com/file/Lq58wHThYMiImXmLJcYbGZ/Constellatio-UI-Design?type=design&node-id=45-13163&mode=dev",
     },
   },
-  argTypes: {},
+  title: "Molecules/Richtext",
 };
 
 export default meta;

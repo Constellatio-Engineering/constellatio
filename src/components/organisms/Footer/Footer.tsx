@@ -1,34 +1,39 @@
+import { CaptionText } from "@/components/atoms/CaptionText/CaptionText";
+import { LinkButton } from "@/components/atoms/LinkButton/LinkButton";
+import { Heart } from "@/components/Icons/Heart";
+import { Help } from "@/components/Icons/Help";
+
 import { Flex, Group } from "@mantine/core";
 import Image from "next/image";
-import { FC } from "react";
+import { type FC } from "react";
+
 import { SFooter } from "./Footer.style";
-import { LinkButton } from "@/components/atoms/LinkButton/LinkButton";
-import { Help } from "@/components/Icons/Help";
-import { Heart } from "@/components/Icons/Heart";
-import { CaptionText } from "@/components/atoms/CaptionText/CaptionText";
-import logo from "../../../../public/images/icons/constellatio-icon.svg";
 import ConstellatioLogoIcon from "../../../../public/images/icons/constellatio-icon.svg";
 import ConstellatioLogoWhiteIcon from "../../../../public/images/icons/logo-symbol-white.svg";
 
-type TFooter = {
-  variant?: "default" | "simpleColoredBg" | "simpleWhiteBg";
-};
+interface TFooter 
+{
+  readonly variant?: "default" | "simpleColoredBg" | "simpleWhiteBg";
+}
 
-export const Footer: FC<TFooter> = ({ variant = "default" }) => {
-  console.log(logo);
-
+export const Footer: FC<TFooter> = ({ variant = "default" }) => 
+{
   return (
     <>
       {variant === "default" ? (
         <SFooter variant={variant}>
           <Group position="apart">
-            <Group spacing={"spacing-16"}>
-              <LinkButton icon={<Help />} title={"Need help?"} size="big" />
-              <LinkButton icon={<Heart />} title={"Support us"} size="big" />
+            <Group spacing="spacing-16">
+              <LinkButton icon={<Help/>} title="Need help?" size="big"/>
+              <LinkButton icon={<Heart/>} title="Support us" size="big"/>
             </Group>
-            <Group spacing={"spacing-8"}>
-              <Image src={ConstellatioLogoIcon} alt="Constellatio" />{" "}
-              <CaptionText component="p" styleType="caption-01-medium" tt={"uppercase"} c={"neutrals-01.9"}>
+            <Group spacing="spacing-8">
+              <Image src={ConstellatioLogoIcon} alt="Constellatio"/>{" "}
+              <CaptionText
+                component="p"
+                styleType="caption-01-medium"
+                tt="uppercase"
+                c="neutrals-01.9">
                 &copy; Constellatio 2023. All Rights Reserved.
               </CaptionText>
             </Group>
@@ -36,10 +41,14 @@ export const Footer: FC<TFooter> = ({ variant = "default" }) => {
         </SFooter>
       ) : variant === "simpleColoredBg" ? (
         <SFooter variant={variant}>
-          <Flex justify={"center"}>
-            <Group spacing={"spacing-8"}>
-            <Image src={ConstellatioLogoWhiteIcon} alt="Constellatio" />{" "}
-              <CaptionText component="p" styleType="caption-01-medium" tt={"uppercase"} c={"neutrals-01.0"}>
+          <Flex justify="center">
+            <Group spacing="spacing-8">
+              <Image src={ConstellatioLogoWhiteIcon} alt="Constellatio"/>{" "}
+              <CaptionText
+                component="p"
+                styleType="caption-01-medium"
+                tt="uppercase"
+                c="neutrals-01.0">
                 &copy; Constellatio 2023. All Rights Reserved.
               </CaptionText>
             </Group>
@@ -47,10 +56,14 @@ export const Footer: FC<TFooter> = ({ variant = "default" }) => {
         </SFooter>
       ) : (
         <SFooter variant={variant}>
-          <Flex justify={"center"}>
-            <Group spacing={"spacing-8"}>
-            <Image src={ConstellatioLogoIcon} alt="Constellatio" />{" "}
-              <CaptionText component="p" styleType="caption-01-medium" tt={"uppercase"} c={"neutrals-01.9"}>
+          <Flex justify="center">
+            <Group spacing="spacing-8">
+              <Image src={ConstellatioLogoIcon} alt="Constellatio"/>{" "}
+              <CaptionText
+                component="p"
+                styleType="caption-01-medium"
+                tt="uppercase"
+                c="neutrals-01.9">
                 &copy; Constellatio 2023. All Rights Reserved.
               </CaptionText>
             </Group>

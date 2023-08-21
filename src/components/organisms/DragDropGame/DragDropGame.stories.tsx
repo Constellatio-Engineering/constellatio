@@ -1,15 +1,16 @@
-import { Meta, StoryObj } from "@storybook/react";
 import { Box } from "@mantine/core";
+import { type Meta, type StoryObj } from "@storybook/react";
+
 import { DragDropGame } from "./DragDropGame";
 
 const Template = (args: any) => (
   <Box w={670}>
-    <DragDropGame {...args} />
+    <DragDropGame {...args}/>
   </Box>
 );
 
 const meta: Meta = {
-  title: "Organisms/Gamification/DragDropGame",
+  argTypes: {},
   component: Template,
   parameters: {
     design: {
@@ -17,7 +18,7 @@ const meta: Meta = {
       url: "https://www.figma.com/file/KZhlH1AesOBZZf1V4F9d2r/Constellatio-%E2%80%93-UI-Kit?type=design&node-id=51-4848&mode=dev",
     },
   },
-  argTypes: {},
+  title: "Organisms/Gamification/DragDropGame",
 };
 
 export default meta;
@@ -90,7 +91,7 @@ export const OrderRelevant: Story = {
       },
     },
     question:
-      'Based on the above definition of the term and its prerequisites: Which of the following "organizations" constitute companies in the sense of company law. Skim the respective norms!',
+      "Based on the above definition of the term and its prerequisites: Which of the following \"organizations\" constitute companies in the sense of company law. Skim the respective norms!",
   },
 };
 

@@ -1,15 +1,16 @@
-import { Meta, StoryObj } from "@storybook/react";
 import { Box } from "@mantine/core";
+import { type Meta, type StoryObj } from "@storybook/react";
+
 import { RecoverPage } from "./RecoverPage";
 
 const Template = (args: any) => (
   <Box w={350}>
-    <RecoverPage {...args} />
+    <RecoverPage {...args}/>
   </Box>
 );
 
 const meta: Meta = {
-  title: "Pages/RecoverPage",
+  argTypes: {},
   component: Template,
   parameters: {
     design: {
@@ -17,7 +18,7 @@ const meta: Meta = {
       url: "https://www.figma.com/file/Lq58wHThYMiImXmLJcYbGZ/Constellatio-UI-Design?type=design&node-id=145-30733&mode=dev",
     },
   },
-  argTypes: {},
+  title: "Pages/RecoverPage",
 };
 
 export default meta;

@@ -37,4 +37,7 @@ next-env.d.ts
 # webstorm
 .idea
 
+# yarn 2
+.yarn/cache
+
 .storybook-static/

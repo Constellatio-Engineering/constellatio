@@ -1,17 +1,19 @@
-import { Box, Stack } from "@mantine/core";
 
-import { Header } from "@/components/organisms/Header/Header";
 import { Footer } from "@/components/organisms/Footer/Footer";
+import { Header } from "@/components/organisms/Header/Header";
 import { UpdatePasswordForm } from "@/components/organisms/UpdatePasswordForm/UpdatePasswordForm";
 
-export function RecoverPage() {
+import { Box, Stack } from "@mantine/core";
+
+export function RecoverPage() 
+{
   return (
-    <Stack align="center" h={"100vh"} justify="space-between">
-      <Header variant="simple" />
+    <Stack align="center" h="100vh" justify="space-between">
+      <Header variant="simple"/>
       <Box w={440}>
-        <UpdatePasswordForm />
+        <UpdatePasswordForm/>
       </Box>
-      <Footer variant="simpleWhiteBg" />
+      <Footer variant="simpleWhiteBg"/>
     </Stack>
   );
 }

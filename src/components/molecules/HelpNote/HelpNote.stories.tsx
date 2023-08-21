@@ -1,16 +1,18 @@
-import { Meta, StoryObj } from "@storybook/react";
-import { Box } from "@mantine/core";
 import { Help } from "@/components/Icons/Help";
+
+import { Box } from "@mantine/core";
+import { type Meta, type StoryObj } from "@storybook/react";
+
 import { HelpNote } from "./HelpNote";
 
 const Template = (args: any) => (
   <Box w={650}>
-    <HelpNote {...args} />
+    <HelpNote {...args}/>
   </Box>
 );
 
 const meta: Meta = {
-  title: "Molecules/Gamification/HelpNote",
+  argTypes: {},
   component: Template,
   parameters: {
     design: {
@@ -18,7 +20,7 @@ const meta: Meta = {
       url: "https://www.figma.com/file/KZhlH1AesOBZZf1V4F9d2r/Constellatio-%E2%80%93-UI-Kit?type=design&node-id=51-4182&mode=dev",
     },
   },
-  argTypes: {},
+  title: "Molecules/Gamification/HelpNote",
 };
 
 export default meta;

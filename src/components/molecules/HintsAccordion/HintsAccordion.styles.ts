@@ -1,5 +1,5 @@
 import styled from "@emotion/styled";
-import { AccordionStylesNames, AccordionStylesParams, MantineTheme, Styles } from "@mantine/core";
+import { type AccordionStylesNames, type AccordionStylesParams, type MantineTheme, type Styles } from "@mantine/core";
 
 export const ItemWrapper = styled.li<{ index: number }>`
   > p {
@@ -26,37 +26,18 @@ export const ItemWrapper = styled.li<{ index: number }>`
   }
 `;
 
-export const hintsAccordionStyles = ({}) => {
+export const hintsAccordionStyles = ({}) => 
+{
   const styles: Styles<AccordionStylesNames, AccordionStylesParams> = (theme: MantineTheme) => ({
-    item: {
-      border: `1px solid ${theme.colors["neutrals-01"][3]}`,
-      borderRadius: "12px",
-      backgroundColor: theme.colors["neutrals-01"][2],
-
-      "&[data-active] .mantine-Accordion-control": {
-        borderBottom: `1px solid ${theme.colors["neutrals-01"][3]}`,
-        borderRadius: "12px 12px 0 0",
-      },
-    },
-    control: {
-      padding: "12px 16px",
-      borderRadius: "12px",
-    },
-    label: {
-      padding: 0,
-    },
     chevron: {
-      width: "24px",
       height: "24px",
       margin: 0,
-
       svg: {
-        width: "20px !important",
         height: "20px !important",
+        width: "20px !important",
       },
-    },
-    panel: {
-      padding: "16px",
+
+      width: "24px",
     },
     content: {
       padding: 0,
@@ -66,6 +47,26 @@ export const hintsAccordionStyles = ({}) => {
         flexDirection: "column",
         gap: "16px",
       },
+    },
+    control: {
+      borderRadius: "12px",
+      padding: "12px 16px",
+    },
+    item: {
+      "&[data-active] .mantine-Accordion-control": {
+        borderBottom: `1px solid ${theme.colors["neutrals-01"][3]}`,
+        borderRadius: "12px 12px 0 0",
+      },
+      backgroundColor: theme.colors["neutrals-01"][2],
+      border: `1px solid ${theme.colors["neutrals-01"][3]}`,
+
+      borderRadius: "12px",
+    },
+    label: {
+      padding: 0,
+    },
+    panel: {
+      padding: "16px",
     },
   });
 

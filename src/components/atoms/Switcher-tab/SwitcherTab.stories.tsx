@@ -1,7 +1,9 @@
-import { Meta, StoryObj } from "@storybook/react";
-import { Tabs } from "@mantine/core";
-import { SwitcherTab } from "./SwitcherTab";
 import { Puzzle } from "@/components/Icons/Puzzle";
+
+import { Tabs } from "@mantine/core";
+import { type Meta, type StoryObj } from "@storybook/react";
+
+import { SwitcherTab } from "./SwitcherTab";
 
 const Template = (args: any) => (
   <Tabs
@@ -9,48 +11,47 @@ const Template = (args: any) => (
     styles={(theme) => ({
       root: {},
       tab: {
-        padding: `${theme.spacing["spacing-8"]} ${theme.spacing["spacing-16"]}`,
-        borderRadius: theme.radius["radius-20"],
-        border: "none",
-        outline: "none",
-        cursor: "pointer",
-        display: "flex",
-        alignItems: "center",
-        gap: theme.spacing["spacing-4"],
-        backgroundColor: "transparent",
-        fontSize: "16px",
-        fontWeight: 500,
-        lineHeight: "24px",
-        fontFamily: "inherit",
-        color: theme.colors["neutrals-02"][1],
-        transition: "all 0.3s ease",
-
-        ":hover": {
-          backgroundColor: theme.colors["neutrals-01"][1],
-        },
-
         ":active": {
           backgroundColor: theme.colors["neutrals-01"][2],
         },
-
         ":focus": {
           backgroundColor: theme.colors["neutrals-01"][1],
         },
+        ":hover": {
+          backgroundColor: theme.colors["neutrals-01"][1],
+        },
+        alignItems: "center",
+        backgroundColor: "transparent",
+        border: "none",
+        borderRadius: theme.radius["radius-20"],
+        color: theme.colors["neutrals-02"][1],
+        cursor: "pointer",
+        display: "flex",
+        fontFamily: "inherit",
+        fontSize: "16px",
+        fontWeight: 500,
+        gap: theme.spacing["spacing-4"],
+        lineHeight: "24px",
+
+        outline: "none",
+
+        padding: `${theme.spacing["spacing-8"]} ${theme.spacing["spacing-16"]}`,
+
+        transition: "all 0.3s ease",
       },
       tabIcon: {
-        display: "flex",
         alignItems: "center",
+        display: "flex",
       },
-    })}
-  >
+    })}>
     <Tabs.List>
-      <SwitcherTab {...args} />
+      <SwitcherTab {...args}/>
     </Tabs.List>
   </Tabs>
 );
 
 const meta: Meta = {
-  title: "Atoms/SwitcherTab",
+  argTypes: {},
   component: Template,
   parameters: {
     design: {
@@ -58,7 +59,7 @@ const meta: Meta = {
       url: "https://www.figma.com/file/KZhlH1AesOBZZf1V4F9d2r/Constellatio-%E2%80%93-UI-Kit?type=design&node-id=23-438&mode=dev",
     },
   },
-  argTypes: {},
+  title: "Atoms/SwitcherTab",
 };
 
 export default meta;
@@ -66,9 +67,9 @@ export default meta;
 type Story = StoryObj<typeof SwitcherTab>;
 
 export const Default: Story = {
-  args: { value: "login", children: "Anmelden" },
+  args: { children: "Anmelden", value: "login" },
 };
 
 export const WithIcon: Story = {
-  args: { value: "login", children: "Anmelden", icon: <Puzzle /> },
+  args: { children: "Anmelden", icon: <Puzzle/>, value: "login" },
 };

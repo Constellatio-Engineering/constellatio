@@ -1,16 +1,23 @@
-import { Group, Avatar, Text, MantineTheme, CSSObject } from "@mantine/core";
-import React, { ComponentPropsWithoutRef, ReactNode, forwardRef } from "react";
+import {
+  Group, Avatar, Text, type MantineTheme, type CSSObject 
+} from "@mantine/core";
+import React, { type ComponentPropsWithoutRef, type ReactNode, forwardRef } from "react";
 
 type TDropdownItem = ComponentPropsWithoutRef<"div"> & {
-  icon: ReactNode;
-  label: string;
+  readonly icon: ReactNode;
+  readonly label: string;
 };
 
-const DropdownItemComponent = forwardRef<HTMLDivElement, TDropdownItem>(({ icon, label, ...props }, ref) => {
+const DropdownItemComponent = forwardRef<HTMLDivElement, TDropdownItem>(({
+  icon,
+  label,
+  ...props
+}, ref) => 
+{
   const textStyles = (theme: MantineTheme): CSSObject => ({
-    fontSize: theme.fontSizes['spacing-16'],
-    lineHeight: theme.fontSizes['spacing-24'],
+    fontSize: theme.fontSizes["spacing-16"],
     fontWeight: 500,
+    lineHeight: theme.fontSizes["spacing-24"],
   });
 
   return (

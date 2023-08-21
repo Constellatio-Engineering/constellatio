@@ -1,48 +1,55 @@
-import React, { ButtonHTMLAttributes, FC, ReactNode } from "react";
+import { CheckFilled } from "@/components/Icons/CheckFilled";
+import { Cross } from "@/components/Icons/Cross";
+import { CrossFilled } from "@/components/Icons/CrossFilled";
+import { Handle } from "@/components/Icons/Handle";
+
+import { Flex } from "@mantine/core";
+import React, { type ButtonHTMLAttributes, type FC, type ReactNode } from "react";
+
 import { ButtonCard, ResultWrapper, StatusWrapper } from "./DragNDropCard.styles";
 import { BodyText } from "../../atoms/BodyText/BodyText";
-import { Handle } from "@/components/Icons/Handle";
-import { CheckFilled } from "@/components/Icons/CheckFilled";
-import { CrossFilled } from "@/components/Icons/CrossFilled";
-import { Flex } from "@mantine/core";
-import { Cross } from "@/components/Icons/Cross";
 
 type TDraggableCard = ButtonHTMLAttributes<HTMLButtonElement> & {
-  label: ReactNode;
-  status: "default" | "success" | "error";
-  dropped?: boolean;
-  onDeleteHandler?: React.MouseEventHandler<HTMLDivElement>;
-  showIcon?: boolean;
-  result?: ReactNode;
+  readonly dropped?: boolean;
+  readonly label: ReactNode;
+  readonly onDeleteHandler?: React.MouseEventHandler<HTMLDivElement>;
+  readonly result?: ReactNode;
+  readonly showIcon?: boolean;
+  readonly status: "default" | "success" | "error";
 };
 
 export const DragNDropCard: FC<TDraggableCard> = ({
-  onDeleteHandler,
   dropped,
   label,
-  status,
-  showIcon,
+  onDeleteHandler,
   result,
+  showIcon,
+  status,
   ...props
-}) => {
+}) => 
+{
   return (
     <ButtonCard status={status} dropped={dropped} {...props}>
-      <Flex gap={"spacing-8"} align="center">
+      <Flex gap="spacing-8" align="center">
         {status === "default" && (
           <div>
-            <Handle />
+            <Handle/>
           </div>
         )}
-        <BodyText styleType="body-01-regular" c={"neutrals-02.1"} component="p" ta={"left"}>
+        <BodyText
+          styleType="body-01-regular"
+          c="neutrals-02.1"
+          component="p"
+          ta="left">
           {label}
         </BodyText>
       </Flex>
       <StatusWrapper dropped={dropped} status={status} onClick={onDeleteHandler}>
-        <Cross />
+        <Cross/>
       </StatusWrapper>
       <ResultWrapper status={status}>
         {result && <BodyText styleType="body-01-regular" component="p">{result}</BodyText>}
-        {status === "success" ? <CheckFilled /> : status === "error" ? <CrossFilled /> : null}
+        {status === "success" ? <CheckFilled/> : status === "error" ? <CrossFilled/> : null}
       </ResultWrapper>
     </ButtonCard>
   );

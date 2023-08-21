@@ -1,10 +1,12 @@
 import { Layout } from "@/components/layouts/Layout";
-import { IGenCasesQuery } from "@/services/graphql/__generated/sdk";
+import { type IGenCasesQuery } from "@/services/graphql/__generated/sdk";
 import { caisySDK } from "@/services/graphql/getSdk";
-import { GetStaticProps } from "next";
+
+import { type GetStaticProps } from "next";
 import Link from "next/link";
 
-export default function Cases({ cases }: { cases: IGenCasesQuery }) {
+export default function Cases({ cases }: { readonly cases: IGenCasesQuery }) 
+{
   return (
     <Layout>
       <ul>
@@ -18,7 +20,8 @@ export default function Cases({ cases }: { cases: IGenCasesQuery }) {
   );
 }
 
-export const getStaticProps: GetStaticProps = async () => {
+export const getStaticProps: GetStaticProps = async () => 
+{
   const cases = await caisySDK.Cases();
 
   return {

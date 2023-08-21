@@ -6,7 +6,7 @@ export const SButton = styled.button<{ size?: "big" | "medium" }>`
   background-color: transparent;
   cursor: pointer;
 
-  ${({ theme, size }) => css`
+  ${({ size, theme }) => css`
     color: ${theme.colors["neutrals-01"][9]};
     font-size: ${size === "big" ? theme.fontSizes["spacing-16"] : theme.fontSizes["spacing-14"]};
     font-weight: 500;

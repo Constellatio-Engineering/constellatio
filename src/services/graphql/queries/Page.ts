@@ -1,10 +1,11 @@
 import { gql } from "graphql-request";
-import { f_TextElement } from "../fragments/TextElement";
+
 import { f_Callout } from "../fragments/Callout";
-import { f_ImageWrapperCard } from "../fragments/ImageWrapperCard";
 import { f_DragNDrop } from "../fragments/DragNDrop";
-import { f_SelectionCard } from "../fragments/SelectionCard";
 import { f_FillInGapsGame } from "../fragments/FillInGapsGame";
+import { f_ImageWrapperCard } from "../fragments/ImageWrapperCard";
+import { f_SelectionCard } from "../fragments/SelectionCard";
+import { f_TextElement } from "../fragments/TextElement";
 
 export const q_Page = gql`
   ${f_TextElement}

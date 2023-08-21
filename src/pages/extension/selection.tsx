@@ -1,10 +1,12 @@
 import { SelectionGameWrapper } from "@/components/Wrappers/SelectionGame/SelectionGame";
+
 import React from "react";
 
-const NextPage = () => {
+const NextPage = () => 
+{
   return (
     <>
-      <SelectionGameWrapper />
+      <SelectionGameWrapper/>
     </>
   );
 };
