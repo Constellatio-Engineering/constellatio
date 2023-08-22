@@ -9,7 +9,6 @@ import { type AppProps } from "next/app";
 import Head from "next/head";
 import { type FunctionComponent, useState } from "react";
 
-import "../constants/styles/resets.css";
 import "../styles.css";
 
 type MyAppProps = AppProps<{ initialSession: Session }>;
@@ -24,6 +23,7 @@ const MyApp: FunctionComponent<MyAppProps> = ({ Component, pageProps }) =>
     <>
       <Head>
         <title>Constellatio</title>
+        <link rel="shortcut icon" href="/favicon.png"/>
         <meta name="viewport" content="minimum-scale=1, initial-scale=1, width=device-width"/>
       </Head>
       <SessionContextProvider supabaseClient={supabaseClient} initialSession={pageProps.initialSession}>
