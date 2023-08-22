@@ -1,0 +1,24 @@
+{
+  "name": "constellatio",
+  "version": "1.0.0",
+  "license": "UNLICENSED",
+  "private": true,
+  "scripts": {
+    "start:dev": "docker compose up",
+    "install-ssl-certificates": "cd caddy && sh ./install-ssl-certificates.sh",
+    "reset:node_modules": "rm app/pnpm-lock.yaml && find . -name node_modules -type d -prune -exec rm -rf '{}' + && pnpm install",
+    "separator1": "--------------------------",
+    "docker:stop-containers": "docker stop $(docker ps -a -q)",
+    "docker:delete-containers": "docker rm -vf $(docker ps -aq)",
+    "docker:delete-images": "docker rmi -f $(docker images -aq)",
+    "docker:prune": "yarn docker:stop-containers && yarn docker:delete-containers && yarn docker:delete-images && docker system prune -a -f --volumes"
+  },
+  "workspaces": {
+    "packages": [
+      "app"
+    ]
+  },
+  "devDependencies": {
+    "supabase": "^1.86.2"
+  }
+}

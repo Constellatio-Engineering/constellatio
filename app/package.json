@@ -1,5 +1,5 @@
 {
-  "name": "constellatio",
+  "name": "@constellatio/app",
   "version": "0.1.0",
   "private": true,
   "scripts": {
