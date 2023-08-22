@@ -22,6 +22,8 @@ services:
 
   caddy:
     image: caddy:2.4.3-alpine
+    extra_hosts:
+      - "host.docker.internal:host-gateway"
     container_name: caddy
     restart: always
     ports:

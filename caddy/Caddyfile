@@ -13,5 +13,15 @@ https://app.constellatio.localhost {
 
 supabase.constellatio.localhost {
 	import constellatio_ssl_certs
-	reverse_proxy constellatio-app:3010
+	reverse_proxy host.docker.internal:54323
+}
+
+supabase-api.constellatio.localhost {
+	import constellatio_ssl_certs
+	reverse_proxy host.docker.internal:54321
+}
+
+supabase-inbucket.constellatio.localhost {
+	import constellatio_ssl_certs
+	reverse_proxy host.docker.internal:54324
 }
