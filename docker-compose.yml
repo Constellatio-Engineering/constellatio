@@ -29,7 +29,6 @@ services:
     volumes:
       - './app:/usr/src/app'
       - '/usr/src/app/node_modules'
-      - '/usr/src/app/.yarn/cache'
     ports:
       - '3010:3000'
 

@@ -3,7 +3,7 @@
   "version": "0.1.0",
   "private": true,
   "scripts": {
-    "build": "yarn lint && next build",
+    "build": "pnpm lint && next build",
     "build-storybook": "storybook build",
     "check-types": "tsc --noEmit",
     "dev": "next dev",
@@ -11,14 +11,14 @@
     "drizzle:studio": "drizzle-kit studio",
     "gen": "graphql-codegen -r dotenv/config --config codegen.ts",
     "gen:watch": "graphql-codegen --watch --config codegen.ts",
-    "lint": "yarn check-types && yarn eslint",
+    "lint": "pnpm check-types && pnpm eslint",
     "eslint": "eslint --ext .js,.jsx,.ts,.tsx src",
     "eslint:fix": "eslint --fix --ext .js,.jsx,.ts,.tsx src",
     "migrations:generate": "drizzle-kit generate:pg --config=drizzle.config.ts",
     "migrations:push": "drizzle-kit push:pg --config=drizzle.config.ts",
     "migrations:drop": "drizzle-kit drop --config=drizzle.config.ts",
     "start": "next start",
-    "start:prod": "yarn build && yarn start",
+    "start:prod": "pnpm build && pnpm start",
     "supabase:typegen": "npx supabase gen types typescript --project-id kzrdtppwdumjscxldnwo --schema public > src/lib/database.types.ts",
     "storybook": "storybook dev -p 6006"
   },
@@ -125,6 +125,5 @@
   },
   "ct3aMetadata": {
     "initVersion": "7.18.0"
-  },
-  "packageManager": "yarn@3.6.2"
+  }
 }

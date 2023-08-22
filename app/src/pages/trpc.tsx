@@ -11,6 +11,7 @@ const Trpc: FunctionComponent = () =>
   return (
     <div>
       {helloData ? <h1>{helloData.greeting}</h1> : <h1>Loading...</h1>}
+      <p>Does this work?</p>
     </div>
   );
 };
