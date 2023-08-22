@@ -2,9 +2,13 @@
 	tls "/data/certs/constellatio.localhost.cert.pem" "/data/certs/constellatio.localhost.key.pem"
 }
 
-app.constellatio.localhost {
-	import constellatio_ssl_certs
-	reverse_proxy constellatio-app:3000
+http://app.constellatio.localhost {
+  reverse_proxy constellatio-app:3000
+}
+
+https://app.constellatio.localhost {
+  import constellatio_ssl_certs
+  reverse_proxy constellatio-app:3000
 }
 
 supabase.constellatio.localhost {
