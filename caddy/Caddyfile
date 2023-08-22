@@ -1,0 +1,27 @@
+(constellatio_ssl_certs) {
+	tls "/data/certs/constellatio.localhost.cert.pem" "/data/certs/constellatio.localhost.key.pem"
+}
+
+http://app.constellatio.localhost {
+  reverse_proxy constellatio-app:3000
+}
+
+https://app.constellatio.localhost {
+  import constellatio_ssl_certs
+  reverse_proxy constellatio-app:3000
+}
+
+supabase.constellatio.localhost {
+	import constellatio_ssl_certs
+	reverse_proxy host.docker.internal:54323
+}
+
+supabase-api.constellatio.localhost {
+	import constellatio_ssl_certs
+	reverse_proxy host.docker.internal:54321
+}
+
+supabase-inbucket.constellatio.localhost {
+	import constellatio_ssl_certs
+	reverse_proxy host.docker.internal:54324
+}

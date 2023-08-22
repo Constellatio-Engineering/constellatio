@@ -1,0 +1,96 @@
+{
+  "parserOptions": {
+    "project": "./tsconfig.json"
+  },
+  "extends": ["@dualmeta/eslint-config-next", "plugin:storybook/recommended"],
+  "ignorePatterns": [
+    "src/services/graphql/__generated/*",
+    "src/lib/database.types.ts"
+  ],
+  "rules": {
+    "no-console": "off",
+    "prefer-arrow/prefer-arrow-functions": "off",
+    "no-nested-ternary": "off",
+    "import/no-unresolved": [
+      "error",
+      {
+        "ignore": ["drizzle-orm/postgres", "drizzle-orm/pg-core"]
+      }
+    ],
+    "react/no-unknown-property": [
+      "error",
+      {
+        "ignore": ["css", "global", "jsx"]
+      }
+    ],
+    "@typescript-eslint/naming-convention": [
+      "error",
+      {
+        "format": ["camelCase", "PascalCase"],
+        "leadingUnderscore": "allow",
+        "filter": {
+          "regex": "^f_|^q_",
+          "match": false
+        },
+        "selector": [
+          "variable",
+          "parameter",
+          "classProperty",
+          "typeProperty"
+        ]
+      },
+      {
+        "format": ["PascalCase"],
+        "leadingUnderscore": "allow",
+        "prefix": [
+          "is",
+          "should",
+          "has",
+          "can",
+          "was",
+          "were",
+          "have",
+          "do",
+          "must",
+          "does",
+          "would",
+          "did",
+          "will",
+          "may",
+          "could",
+          "might",
+          "cant",
+          "wont",
+          "are"
+        ],
+        "selector": [
+          "variable",
+          "parameter",
+          "classProperty",
+          "typeProperty"
+        ],
+        "types": ["boolean"]
+      },
+      {
+        "custom": {
+          "match": true,
+          "regex": "^e[A-Z]"
+        },
+        "format": ["strictCamelCase"],
+        "selector": "enum"
+      },
+      {
+        "format": ["strictCamelCase"],
+        "selector": "enumMember"
+      }
+    ]
+  },
+  "overrides": [
+    {
+      "files": ["**/pages/**/*", "src/services/graphql/**/*", "*.stories.tsx"],
+      "rules": {
+        "import/no-unused-modules": "off"
+      }
+    }
+  ]
+}
