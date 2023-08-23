@@ -1,24 +1,18 @@
 import { createGetInitialProps } from "@mantine/next";
 import Document, { Html, Head, Main, NextScript } from "next/document";
+import { type ReactElement } from "react";
 
 const getInitialProps = createGetInitialProps();
 
 export default class CustomDocument extends Document 
 {
-  static getInitialProps = getInitialProps;
+  public static getInitialProps = getInitialProps;
 
-  render() 
+  public render(): ReactElement
   {
     return (
       <Html lang="de">
-        <Head>
-          <link rel="preconnect" href="https://fonts.googleapis.com"/>
-          <link rel="preconnect" href="https://fonts.gstatic.com" crossOrigin="anonymous"/>
-          <link
-            href="https://fonts.googleapis.com/css2?family=Karla:ital,wght@0,400;0,500;0,700;1,400;1,700&family=Libre+Baskerville:wght@400;700&display=swap"
-            rel="stylesheet"
-          />
-        </Head>
+        <Head/>
         <body>
           <Main/>
           <NextScript/>

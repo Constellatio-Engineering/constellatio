@@ -3,17 +3,22 @@
 }
 
 http://app.constellatio.localhost {
-  reverse_proxy constellatio-app:3000
+  reverse_proxy host.docker.internal:3010
 }
 
 https://app.constellatio.localhost {
   import constellatio_ssl_certs
-  reverse_proxy constellatio-app:3000
+  reverse_proxy host.docker.internal:3010
 }
 
 supabase.constellatio.localhost {
 	import constellatio_ssl_certs
 	reverse_proxy host.docker.internal:54323
+}
+
+supabase-postgres.constellatio.localhost {
+	import constellatio_ssl_certs
+	reverse_proxy host.docker.internal:54322
 }
 
 supabase-api.constellatio.localhost {

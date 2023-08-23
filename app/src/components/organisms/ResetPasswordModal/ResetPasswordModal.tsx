@@ -3,11 +3,12 @@ import { Button } from "@/components/atoms/Button/Button";
 import { Input } from "@/components/atoms/Input/Input";
 import { Modal } from "@/components/molecules/Modal/Modal";
 
-import { Stack, Text, Title } from "@mantine/core";
+import { Stack } from "@mantine/core";
 import { useForm } from "@mantine/form";
 import { notifications } from "@mantine/notifications";
 import { createPagesBrowserClient } from "@supabase/auth-helpers-nextjs";
 import { atom, useAtom } from "jotai";
+import { type FunctionComponent } from "react";
 
 interface ResetPasswordFormValues 
 {
@@ -16,17 +17,17 @@ interface ResetPasswordFormValues
 
 export const resetPasswordModalVisible = atom(false);
 
-export function ResetPasswordModal() 
+export const ResetPasswordModal: FunctionComponent = () =>
 {
   const supabase = createPagesBrowserClient();
   const [isOpen, setOpen] = useAtom(resetPasswordModalVisible);
   const form = useForm<ResetPasswordFormValues>();
 
-  const handleClose = () => setOpen(false);
+  const handleClose = (): void => setOpen(false);
 
-  const handleSubmit = form.onSubmit(async (formValues) => 
+  const handleSubmit = form.onSubmit(async (formValues) =>
   {
-    try 
+    try
     {
       notifications.show({
         message: "The password reset handler was called",
@@ -36,7 +37,10 @@ export function ResetPasswordModal()
         redirectTo: "http://localhost:3000/recover",
       });
     }
-    catch (error) {}
+    catch (error)
+    {
+      console.log(error);
+    }
   });
 
   return (
@@ -59,4 +63,4 @@ export function ResetPasswordModal()
       </form>
     </Modal>
   );
-}
+};

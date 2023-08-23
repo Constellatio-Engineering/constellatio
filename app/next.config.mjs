@@ -10,6 +10,9 @@ const config = {
   experimental: {
     appDir: false,
   },
+  compiler: {
+    emotion: true,
+  },
   productionBrowserSourceMaps: true,
   eslint: {
     ignoreDuringBuilds: true,
@@ -29,7 +32,7 @@ const config = {
           }
         ],
         locale: false,
-        source: "/:all*(svg|jpg|png|woff|ttf)"
+        source: "/:all*(svg|jpg|png)"
       }
     ];
   },
