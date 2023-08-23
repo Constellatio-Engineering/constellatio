@@ -26,7 +26,12 @@ export const RegistrationVisualHeader = () =>
           direction="column"
           justify="space-between"
           align="center">
-          <Image src={visual} style={{ height: "auto", maxWidth: 550 }} alt="Registration-visual"/>
+          <Image
+            priority
+            src={visual}
+            style={{ height: "auto", maxWidth: 550 }}
+            alt="Registration-visual"
+          />
           <Title
             mt={32}
             align="center"

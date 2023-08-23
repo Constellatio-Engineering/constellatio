@@ -32,36 +32,8 @@ export const LoginForm: FunctionComponent = () =>
 
   const openResetPasswordModal = (): void => setResetPasswordModalOpen(true);
 
-  const test = async (e: any): Promise<void> =>
-  {
-    e.preventDefault();
-
-    console.log("test");
-
-    // const result = await fetch("https://app.constellatio.localhost/supabase/test", {
-    const result = await fetch("https://supabase.constellatio.localhost/login", {
-      body: JSON.stringify({
-        email: "christian@dualmeta.io",
-        password: "super-secure-password"
-      }),
-      headers: {
-        Accept: "application/json",
-        "Content-Type": "application/json",
-      },
-      method: "POST",
-    });
-
-    console.log("result", result);
-
-    const json = await result.json();
-
-    console.log("json", json);
-  };
-
   const handleSubmit = form.onSubmit(async (formValues) =>
   {
-    console.log("handleSubmit", formValues);
-
     try
     {
       setSubmitting(true);
@@ -71,8 +43,6 @@ export const LoginForm: FunctionComponent = () =>
         title: "Login handler",
       });
 
-      console.log("signing in with email and password");
-
       const result = await supabase.auth.signInWithPassword({
         email: formValues.email,
         password: formValues.password,
@@ -80,7 +50,6 @@ export const LoginForm: FunctionComponent = () =>
 
       if(result.error)
       {
-        console.log(result.error);
         throw result.error;
       }
 
@@ -94,7 +63,6 @@ export const LoginForm: FunctionComponent = () =>
     }
     finally
     {
-      console.log("finally");
       setSubmitting(false);
     }
   });

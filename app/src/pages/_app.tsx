@@ -7,7 +7,7 @@ import { createPagesBrowserClient } from "@supabase/auth-helpers-nextjs";
 import { type Session, SessionContextProvider } from "@supabase/auth-helpers-react";
 import { type AppProps } from "next/app";
 import Head from "next/head";
-import { type FunctionComponent, useState } from "react";
+import { type FunctionComponent, useMemo } from "react";
 
 import "../styles.css";
 
@@ -15,12 +15,7 @@ type MyAppProps = AppProps<{ initialSession: Session }>;
 
 const MyApp: FunctionComponent<MyAppProps> = ({ Component, pageProps }) =>
 {
-  // this is taken from the docs
-  // eslint-disable-next-line react/hook-use-state
-  // const [supabaseClient] = useState(() => createPagesBrowserClient());
-  const [supabaseClient] = useState(() => createPagesBrowserClient({
-    supabaseUrl: "https://app.constellatio.localhost/kottis-supabase",
-  }));
+  const supabaseClient = useMemo(() => createPagesBrowserClient(), []);
 
   return (
     <>

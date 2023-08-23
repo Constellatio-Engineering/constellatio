@@ -29,7 +29,7 @@ const config = {
           }
         ],
         locale: false,
-        source: "/:all*(svg|jpg|png|woff|ttf)"
+        source: "/:all*(svg|jpg|png)"
       }
     ];
   },
@@ -37,14 +37,6 @@ const config = {
     locales: ["de"],
     defaultLocale: "de",
   },
-  async rewrites() {
-    return [
-      {
-        source: '/kottis-supabase/:path*',
-        destination: 'http://host.docker.internal:54321/:path*'
-      }
-    ]
-  }
 };
 
 export default config;
