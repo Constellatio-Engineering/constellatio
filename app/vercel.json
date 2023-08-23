@@ -1,0 +1,9 @@
+{
+  "buildCommand": "pnpm build",
+  "installCommand": "pnpm install",
+  "cleanUrls": true,
+  "devCommand": "pnpm dev",
+  "framework": "nextjs",
+  "regions": ["fra1"],
+  "public": false
+}

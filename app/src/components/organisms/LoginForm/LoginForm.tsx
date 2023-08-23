@@ -2,20 +2,20 @@ import { Button } from "@/components/atoms/Button/Button";
 import { CustomLink } from "@/components/atoms/CustomLink/CustomLink";
 import { Input } from "@/components/atoms/Input/Input";
 import { colors } from "@/constants/styles/colors";
+import { type Database } from "@/lib/database.types";
+import { loginFormSchema } from "@/schemas/LoginFormSchema";
 
 import { Stack } from "@mantine/core";
 import { useForm, zodResolver } from "@mantine/form";
 import { notifications } from "@mantine/notifications";
 import { createPagesBrowserClient } from "@supabase/auth-helpers-nextjs";
 import { useAtom } from "jotai";
-import { useRouter } from "next/router";
-import { useState } from "react";
+import { useRouter } from "next/router"; 
+import { type FunctionComponent, useState } from "react";
 
-import { type Database } from "../../../lib/database.types";
-import { loginFormSchema } from "../../../schemas/LoginFormSchema";
 import { ResetPasswordModal, resetPasswordModalVisible } from "../ResetPasswordModal/ResetPasswordModal";
 
-export function LoginForm() 
+export const LoginForm: FunctionComponent = () =>
 {
   const [_, setResetPasswordModalOpen] = useAtom(resetPasswordModalVisible);
   const supabase = createPagesBrowserClient<Database>();
@@ -30,11 +30,11 @@ export function LoginForm()
     validateInputOnBlur: true,
   });
 
-  const openResetPasswordModal = () => setResetPasswordModalOpen(true);
+  const openResetPasswordModal = (): void => setResetPasswordModalOpen(true);
 
-  const handleSubmit = form.onSubmit(async (formValues) => 
+  const handleSubmit = form.onSubmit(async (formValues) =>
   {
-    try 
+    try
     {
       setSubmitting(true);
 
@@ -43,17 +43,25 @@ export function LoginForm()
         title: "Login handler",
       });
 
-      await supabase.auth.signInWithPassword({
+      const result = await supabase.auth.signInWithPassword({
         email: formValues.email,
         password: formValues.password,
       });
 
+      if(result.error)
+      {
+        throw result.error;
+      }
+
+      console.log("successfully logged in, redirecting to home page");
+
       await router.replace("/");
     }
-    catch (error) 
+    catch (error)
     {
+      console.log("error while logging in", error);
     }
-    finally 
+    finally
     {
       setSubmitting(false);
     }
@@ -85,6 +93,8 @@ export function LoginForm()
             Forgot Password?
           </CustomLink>
           <Button
+            /* eslint-disable-next-line @typescript-eslint/ban-ts-comment */
+            /* @ts-ignore */ // there is a bug with typescript, so we need to ignore this
             styleType="primary"
             type="submit"
             title="Log in"
@@ -96,4 +106,4 @@ export function LoginForm()
       <ResetPasswordModal/>
     </>
   );
-}
+};
