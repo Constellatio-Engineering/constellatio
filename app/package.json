@@ -4,8 +4,7 @@
   "private": true,
   "scripts": {
     "separatorDev": "---------------------- DEVELOPMENT ----------------------",
-    "dev": "next dev",
-    "dev:docker": "next dev -p 3000",
+    "dev": "next dev -p 3010",
     "sepatatorLint": "---------------------- LINT ----------------------",
     "check-types": "tsc --noEmit",
     "eslint": "eslint --ext .js,.jsx,.ts,.tsx src",

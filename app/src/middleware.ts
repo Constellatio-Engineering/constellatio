@@ -13,9 +13,7 @@ export const middleware: NextMiddleware = async (req: NextRequest) =>
 
   console.log("createMiddlewareClient");
 
-  const supabase = createMiddlewareClient<Database>({ req, res }, {
-    supabaseUrl: "http://host.docker.internal:54321"
-  });
+  const supabase = createMiddlewareClient<Database>({ req, res });
 
   console.log("supabase client created");
 
