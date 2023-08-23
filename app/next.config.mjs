@@ -37,6 +37,14 @@ const config = {
     locales: ["de"],
     defaultLocale: "de",
   },
+  async rewrites() {
+    return [
+      {
+        source: '/kottis-supabase/:path*',
+        destination: 'http://host.docker.internal:54321/:path*'
+      }
+    ]
+  }
 };
 
 export default config;

@@ -17,7 +17,10 @@ const MyApp: FunctionComponent<MyAppProps> = ({ Component, pageProps }) =>
 {
   // this is taken from the docs
   // eslint-disable-next-line react/hook-use-state
-  const [supabaseClient] = useState(() => createPagesBrowserClient());
+  // const [supabaseClient] = useState(() => createPagesBrowserClient());
+  const [supabaseClient] = useState(() => createPagesBrowserClient({
+    supabaseUrl: "https://app.constellatio.localhost/kottis-supabase",
+  }));
 
   return (
     <>

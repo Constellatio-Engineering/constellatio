@@ -10,9 +10,6 @@ export const globalStyles = css`
   html {
     -webkit-text-size-adjust: 100%;
     scroll-behavior: smooth;
-  }
-  
-  html, body {
     overflow-x: hidden;
   }
   

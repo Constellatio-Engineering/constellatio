@@ -2,20 +2,20 @@ import { Button } from "@/components/atoms/Button/Button";
 import { CustomLink } from "@/components/atoms/CustomLink/CustomLink";
 import { Input } from "@/components/atoms/Input/Input";
 import { colors } from "@/constants/styles/colors";
+import { type Database } from "@/lib/database.types";
+import { loginFormSchema } from "@/schemas/LoginFormSchema";
 
 import { Stack } from "@mantine/core";
 import { useForm, zodResolver } from "@mantine/form";
 import { notifications } from "@mantine/notifications";
 import { createPagesBrowserClient } from "@supabase/auth-helpers-nextjs";
 import { useAtom } from "jotai";
-import { useRouter } from "next/router";
-import { useState } from "react";
+import { useRouter } from "next/router"; 
+import { type FunctionComponent, useState } from "react";
 
-import { type Database } from "../../../lib/database.types";
-import { loginFormSchema } from "../../../schemas/LoginFormSchema";
 import { ResetPasswordModal, resetPasswordModalVisible } from "../ResetPasswordModal/ResetPasswordModal";
 
-export function LoginForm() 
+export const LoginForm: FunctionComponent = () =>
 {
   const [_, setResetPasswordModalOpen] = useAtom(resetPasswordModalVisible);
   const supabase = createPagesBrowserClient<Database>();
@@ -30,11 +30,39 @@ export function LoginForm()
     validateInputOnBlur: true,
   });
 
-  const openResetPasswordModal = () => setResetPasswordModalOpen(true);
+  const openResetPasswordModal = (): void => setResetPasswordModalOpen(true);
 
-  const handleSubmit = form.onSubmit(async (formValues) => 
+  const test = async (e: any): Promise<void> =>
   {
-    try 
+    e.preventDefault();
+
+    console.log("test");
+
+    // const result = await fetch("https://app.constellatio.localhost/supabase/test", {
+    const result = await fetch("https://supabase.constellatio.localhost/login", {
+      body: JSON.stringify({
+        email: "christian@dualmeta.io",
+        password: "super-secure-password"
+      }),
+      headers: {
+        Accept: "application/json",
+        "Content-Type": "application/json",
+      },
+      method: "POST",
+    });
+
+    console.log("result", result);
+
+    const json = await result.json();
+
+    console.log("json", json);
+  };
+
+  const handleSubmit = form.onSubmit(async (formValues) =>
+  {
+    console.log("handleSubmit", formValues);
+
+    try
     {
       setSubmitting(true);
 
@@ -43,18 +71,30 @@ export function LoginForm()
         title: "Login handler",
       });
 
-      await supabase.auth.signInWithPassword({
+      console.log("signing in with email and password");
+
+      const result = await supabase.auth.signInWithPassword({
         email: formValues.email,
         password: formValues.password,
       });
 
+      if(result.error)
+      {
+        console.log(result.error);
+        throw result.error;
+      }
+
+      console.log("successfully logged in, redirecting to home page");
+
       await router.replace("/");
     }
-    catch (error) 
+    catch (error)
     {
+      console.log("error while logging in", error);
     }
-    finally 
+    finally
     {
+      console.log("finally");
       setSubmitting(false);
     }
   });
@@ -96,4 +136,4 @@ export function LoginForm()
       <ResetPasswordModal/>
     </>
   );
-}
+};

@@ -6,6 +6,10 @@ import type { NextRequest } from "next/server";
 
 export async function middleware(req: NextRequest) 
 {
+  console.log("middleware", req.nextUrl.pathname);
+
+  const test = "https://supabase.constellatio.localhost/:path*";
+
   const res = NextResponse.next();
   const supabase = createMiddlewareClient<Database>({ req, res });
   const {
@@ -50,6 +54,6 @@ export const config = {
      * - favicon.ico (favicon file)
      * - extension (Caisy UI extension)
      */
-    "/((?!api|login|register|confirm|_next/static|_next/image|favicon.ico|extension).*)",
+    "/((?!api|login|register|kottis-supabase|confirm|_next/static|_next/image|favicon.*|extension).*)",
   ],
 };
