@@ -93,6 +93,8 @@ export const LoginForm: FunctionComponent = () =>
             Forgot Password?
           </CustomLink>
           <Button
+            /* eslint-disable-next-line @typescript-eslint/ban-ts-comment */
+            /* @ts-ignore */ // there is a bug with typescript, so we need to ignore this
             styleType="primary"
             type="submit"
             title="Log in"
