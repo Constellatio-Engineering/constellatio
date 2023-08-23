@@ -7,17 +7,64 @@ import type { NextRequest, NextMiddleware } from "next/server";
 
 export const middleware: NextMiddleware = async (req: NextRequest) =>
 {
-  const res = NextResponse.next();
-  const supabase = createMiddlewareClient<Database>({ req, res });
-  const {
-    data: { session },
-  } = await supabase.auth.getSession();
+  console.log("--- middleware ---");
 
-  if(session?.user)
+  const res = NextResponse.next();
+
+  console.log("createMiddlewareClient");
+
+  const supabase = createMiddlewareClient<Database>({ req, res }, {
+    supabaseUrl: "http://host.docker.internal:54321"
+  });
+
+  console.log("supabase client created");
+
+  try
+  {
+    console.log("try to get session");
+
+    const sessionData = await supabase.auth.getSession();
+
+    if(sessionData.error)
+    {
+      throw sessionData.error;
+    }
+
+    console.log("got sessionData", JSON.stringify(sessionData, null, 2));
+
+  }
+  catch (e: any)
+  {
+    console.log("eeror while getting session", e);
+  }
+
+  try
+  {
+    console.log("try to get userData");
+
+    const userData = await supabase.auth.getUser();
+
+    if(userData.error)
+    {
+      throw userData.error;
+    }
+
+    console.log("got userData", JSON.stringify(userData, null, 2));
+  }
+  catch (e: any)
+  {
+    console.log("eeror while getting userData", e);
+  }
+
+  return res;
+
+  /* if(session?.user)
   {
     const { data, error } = await supabase.auth.getUser();
 
-    if(!data.user?.confirmed_at)
+    console.log(data);
+
+    /!* if(!data.user?.confirmed_at)
     {
       const redirectUrl = req.nextUrl.clone();
 
@@ -25,10 +72,10 @@ export const middleware: NextMiddleware = async (req: NextRequest) =>
       redirectUrl.searchParams.set("redirectedFrom", req.nextUrl.pathname);
 
       return NextResponse.redirect(redirectUrl);
-    }
+    }*!/
 
     return res;
-  }
+  }*/
 
   const redirectUrl = req.nextUrl.clone();
 
