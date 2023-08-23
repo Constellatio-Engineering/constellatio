@@ -29,7 +29,7 @@ const config = {
           }
         ],
         locale: false,
-        source: "/:all*(svg|jpg|png|woff|ttf)"
+        source: "/:all*(svg|jpg|png)"
       }
     ];
   },

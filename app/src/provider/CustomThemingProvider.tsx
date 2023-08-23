@@ -1,11 +1,27 @@
 import { colors } from "@/constants/styles/colors";
 import { radius } from "@/constants/styles/radius";
 import { spacing } from "@/constants/styles/spacing";
+import { globalStyles } from "@/styles/globals.style";
+import { resetStyles } from "@/styles/resets.style";
 
+import { Global } from "@emotion/react";
 import {
   MantineProvider, type MantineTheme, type ScrollAreaStylesNames, type ScrollAreaStylesParams, type Styles 
 } from "@mantine/core";
+import { Karla, Libre_Baskerville } from "next/font/google";
 import React, { type FunctionComponent, type ReactNode } from "react";
+
+const karlaFont = Karla({
+  style: ["normal", "italic"],
+  subsets: ["latin"],
+  weight: ["300", "400", "500", "600", "700"],
+});
+
+const libreBaskervilleFont = Libre_Baskerville({
+  style: ["normal", "italic"],
+  subsets: ["latin"],
+  weight: ["400", "700"],
+});
 
 interface Props
 {
@@ -30,16 +46,16 @@ const CustomThemingProvider: FunctionComponent<Props> = ({ children }) =>
       withNormalizeCSS
       theme={{
         colorScheme: "light",
-        colors: colors as any,
+        colors,
         components: {
           ScrollArea: {
             styles: scrollAreaStyles,
           },
         },
-        fontFamily: "Karla, sans-serif",
+        fontFamily: karlaFont.style.fontFamily + ", sans-serif",
         fontSizes: spacing,
         headings: {
-          fontFamily: "Libre Baskerville, serif",
+          fontFamily: libreBaskervilleFont.style.fontFamily + ", serif",
           sizes: {
             h1: {
               fontSize: "44px",
@@ -71,6 +87,7 @@ const CustomThemingProvider: FunctionComponent<Props> = ({ children }) =>
         },
         spacing,
       }}>
+      <Global styles={[resetStyles, globalStyles]}/>
       {children}
     </MantineProvider>
   );

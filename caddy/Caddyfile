@@ -16,6 +16,11 @@ supabase.constellatio.localhost {
 	reverse_proxy host.docker.internal:54323
 }
 
+supabase-postgres.constellatio.localhost {
+	import constellatio_ssl_certs
+	reverse_proxy host.docker.internal:54322
+}
+
 supabase-api.constellatio.localhost {
 	import constellatio_ssl_certs
 	reverse_proxy host.docker.internal:54321
