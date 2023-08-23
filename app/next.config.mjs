@@ -10,6 +10,9 @@ const config = {
   experimental: {
     appDir: false,
   },
+  compiler: {
+    emotion: true,
+  },
   productionBrowserSourceMaps: true,
   eslint: {
     ignoreDuringBuilds: true,
