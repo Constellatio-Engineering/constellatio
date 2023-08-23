@@ -1,0 +1,21 @@
+# ========= Use this file for development only! =========
+
+version: '3.9'
+
+services:
+
+  caddy:
+    image: caddy:2.4.3-alpine
+    extra_hosts:
+      - "host.docker.internal:host-gateway"
+    container_name: caddy
+    restart: always
+    ports:
+      - '80:80'
+      - '443:443'
+    volumes:
+      - ./caddy/Caddyfile:/etc/caddy/Caddyfile
+      - ./caddy/certs:/data/certs
+      - ./caddy/data:/data
+      - ./caddy/config:/config
+
