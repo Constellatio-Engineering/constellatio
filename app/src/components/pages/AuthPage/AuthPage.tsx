@@ -19,9 +19,13 @@ export function AuthPage({ tab }: AuthPageProps)
 {
   const router = useRouter();
 
-  const handleTabChange = async (value: AuthPageProps["tab"]) => router.push(`/${value}`);
+  const handleTabChange = async (value: AuthPageProps["tab"]) =>
+    router.push(`/${value}`);
   return (
-    <Flex justify="space-between" bg="brand-01.5" sx={{ height: "100vh", minHeight: 600, overflow: "hidden" }}>
+    <Flex
+      justify="space-between"
+      bg="brand-01.5"
+      sx={{ height: "100vh", minHeight: 600, overflow: "hidden" }}>
       <RegistrationVisualHeader/>
       <Container
         w="100%"
@@ -51,9 +55,13 @@ export function AuthPage({ tab }: AuthPageProps)
             </Tabs.Panel>
           </Switcher>
           <BodyText component="p" styleType="body-02-medium" c="neutrals-01.7">
-            Note: This version of Constellatio is optimized for computer use only. If you have any technical questions,
-            please contact our support at&nbsp;
-            <CustomLink href="mailto:webmaster@constellatio.de" styleType="link-secondary" c="neutrals-01.7">
+            Note: This version of Constellatio is optimized for computer use
+            only. If you have any technical questions, please contact our
+            support at&nbsp;
+            <CustomLink
+              href="mailto:webmaster@constellatio.de"
+              styleType="link-secondary"
+              c="neutrals-01.7">
               webmaster@constellatio.de
             </CustomLink>
           </BodyText>
