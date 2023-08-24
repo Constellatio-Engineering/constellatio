@@ -63,6 +63,6 @@ export const config = {
      * - favicon.ico (favicon file)
      * - extension (Caisy UI extension)
      */
-    "/((?!api|login|register|confirm|_next/static|_next/image|favicon.*|extension).*)",
+    "/((?!api|login|register|confirm|_next/static|_next/image|favicon.*|extension|test).*)",
   ],
 };
