@@ -7,19 +7,20 @@ import { LoginForm } from "@/components/organisms/LoginForm/LoginForm";
 import { RegistrationForm } from "@/components/organisms/RegistrationForm/RegistrationForm";
 import { RegistrationVisualHeader } from "@/components/organisms/RegistrationVisualHeader/RegistrationVisualHeader";
 
-import { Box, Container, Flex, Tabs } from "@mantine/core";
+import { Container, Flex, Tabs } from "@mantine/core";
 import { useRouter } from "next/router";
+import { type FC } from "react";
 
 interface AuthPageProps 
 {
   readonly tab: "login" | "register";
 }
 
-export function AuthPage({ tab }: AuthPageProps) 
+export const AuthPage: FC<AuthPageProps> = ({ tab }) =>
 {
   const router = useRouter();
 
-  const handleTabChange = async (value: AuthPageProps["tab"]) =>
+  const handleTabChange: (value: AuthPageProps["tab"]) => Promise<boolean> = async (value) =>
     router.push(`/${value}`);
   return (
     <Flex
@@ -69,4 +70,4 @@ export function AuthPage({ tab }: AuthPageProps)
       </Container>
     </Flex>
   );
-}
+};
