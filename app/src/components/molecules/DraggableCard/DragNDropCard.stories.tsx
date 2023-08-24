@@ -1,4 +1,3 @@
-/* eslint-disable react/no-multi-comp */
 import { Draggable } from "@/components/helpers/Draggable";
 
 import {

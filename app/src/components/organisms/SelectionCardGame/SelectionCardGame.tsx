@@ -6,10 +6,11 @@ import { Reload } from "@/components/Icons/Reload";
 import { HelpNote } from "@/components/molecules/HelpNote/HelpNote";
 import { ResultCard } from "@/components/molecules/ResultCard/ResultCard";
 import { SelectionCard } from "@/components/molecules/SelectionCard/SelectionCard";
+import { type TValue } from "@/components/Wrappers/SelectionGame/SelectionGame";
 import { type IGenSelectionCard } from "@/services/graphql/__generated/sdk";
 
 import { Title, LoadingOverlay } from "@mantine/core";
-import React, { type FC, useEffect, useState } from "react";
+import { type FC, useEffect, useState } from "react";
 
 import {
   Container, Game, GameWrapper, LegendWrapper, Options, TitleWrapper 
@@ -17,19 +18,23 @@ import {
 
 type TSelectionCardGame = Pick<IGenSelectionCard, "game" | "helpNote" | "question">;
 
-const shuffleOptions = (arr) => 
+type TOptionType = TValue["options"][number];
+
+const shuffleOptions = (arr: TOptionType[]): TOptionType[] => 
 {
   for(let i = arr.length - 1; i > 0; i--) 
   {
     const j = Math.floor(Math.random() * (i + 1));
-    [arr[i], arr[j]] = [arr[j], arr[i]];
+    const temp = arr[i] as TOptionType;
+    arr[i] = arr[j] as TOptionType;
+    arr[j] = temp; 
   }
   return arr;
 };
 
 export const SelectionCardGame: FC<TSelectionCardGame> = ({ game, helpNote, question }) => 
 {
-  const optionsWithCheckProp = game?.options?.map((option) => ({ ...option, checked: false }));
+  const optionsWithCheckProp = game?.options?.map((option: TOptionType) => ({ ...option, checked: false }));
   const originalOptions = JSON.parse(JSON.stringify(optionsWithCheckProp ?? []));
   const [optionsItems, setOptionsItems] = useState<any[]>([]);
   const [gameStatus, setGameStatus] = useState<"win" | "lose" | "inprogress">("inprogress");
@@ -44,7 +49,7 @@ export const SelectionCardGame: FC<TSelectionCardGame> = ({ game, helpNote, ques
 
   const filteredCorrectAnswers = optionsItems.filter((item) => item.correctAnswer);
 
-  const checkWinCondition = () => 
+  const checkWinCondition = (): boolean => 
   {
     const checkedAnswers = optionsItems.filter((item) => item.checked);
 
@@ -53,7 +58,7 @@ export const SelectionCardGame: FC<TSelectionCardGame> = ({ game, helpNote, ques
     );
   };
 
-  const onGameFinishHandler = () => 
+  const onGameFinishHandler = (): void => 
   {
     const winCondition = checkWinCondition();
 
@@ -69,7 +74,7 @@ export const SelectionCardGame: FC<TSelectionCardGame> = ({ game, helpNote, ques
     }
   };
 
-  const onGameResetHandler = () => 
+  const onGameResetHandler = (): void => 
   {
     setGameStatus("inprogress");
     setOptionsItems(shuffleOptions(originalOptions));
@@ -135,6 +140,9 @@ export const SelectionCardGame: FC<TSelectionCardGame> = ({ game, helpNote, ques
         )}
         <div>
           <Button
+            // Disabled this rule because ESLint doesn't recognize the type of the Button component
+            // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+            // @ts-ignore
             styleType="primary"
             size="large"
             leftIcon={gameStatus === "inprogress" ? <Check/> : <Reload/>}

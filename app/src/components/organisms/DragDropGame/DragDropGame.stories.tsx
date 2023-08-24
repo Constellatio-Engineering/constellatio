@@ -1,9 +1,10 @@
 import { Box } from "@mantine/core";
 import { type Meta, type StoryObj } from "@storybook/react";
+import { type FC } from "react";
 
-import { DragDropGame } from "./DragDropGame";
+import { DragDropGame, type TDragDropGame } from "./DragDropGame";
 
-const Template = (args: any) => (
+const Template: FC<TDragDropGame> = (args) => (
   <Box w={670}>
     <DragDropGame {...args}/>
   </Box>
