@@ -1,7 +1,6 @@
 import { DragDropGame } from "@/components/organisms/DragDropGame/DragDropGame";
 import { getProps } from "@/services/content/getProps";
 
-import { Box } from "@mantine/core";
 import { GetStaticPaths, type GetStaticProps } from "next";
 import React from "react";
 
