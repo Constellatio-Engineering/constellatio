@@ -3,6 +3,7 @@ import type { Meta, StoryObj } from "@storybook/react";
 import React from "react";
 
 import CategoryTab from "./CategoryTab";
+// import { CivilLawIcon } from "../Icons/CivilLawIcon";
 
 const Template = (args: any): any => (
   <Box w={350}>
@@ -30,6 +31,11 @@ type Story = StoryObj<typeof CategoryTab>;
 
 export const Default: Story = {
   args: {
+    icon: {
+      src: "https://assets.caisy.io/assets/21691a6c-f949-491d-99a3-079a4bd23818/66502932-ff6e-48a0-a64f-d74c7fd8ecda/4beef6a9-ca67-4b1c-a862-812ef87d7bf1civillawcategoryicon.svg"
+    }
+    ,
+    itemsNumber: 23,
     title: "CategoryTab StoryProp",
   },
 };

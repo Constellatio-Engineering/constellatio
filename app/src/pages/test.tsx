@@ -6,15 +6,24 @@ import { type GetStaticProps } from "next";
 import React from "react";
 
 import CategoryTab from "../components/categoryTab/CategoryTab";
-import { CivilLawIcon } from "../components/Icons/CivilLawIcon";
+// import { CivilLawIcon } from "../components/Icons/CivilLawIcon";
 
 const NextPage = (props: any): any => 
 {
-  console.log(props);
+  console.log({ ...props?.Page });
   return (
-    <div>NextPage
+    <div>
       {/* <Box w={700}><DragDropGame game={props?.Page.components[3].game}/></Box> */}
-      <CategoryTab title="Category Tab" icon={<CivilLawIcon/>} itemsNumber={3}/>
+      {props?.Page.components.map((component: any, index: number) => (
+        <div key={index}>
+          {component.categories?.map((category: any, index: number) => ( 
+            <React.Fragment key={index}>
+              <CategoryTab {...category} itemsNumber={20} selected={index === 0}/>
+            </React.Fragment>
+          ))}
+          
+        </div>
+      ))}
     </div>
   );
 };

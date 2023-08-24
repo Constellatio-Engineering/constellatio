@@ -1,6 +1,5 @@
 import type { StorybookConfig } from "@storybook/nextjs";
 // const prettierConfig = require("../.prettierrc");
-// require.resolve('@emotion/babel-preset-css-prop')
 
 const config: StorybookConfig = {
   stories: ["../src/**/*.mdx", "../src/**/*.stories.@(js|jsx|ts|tsx)"],
@@ -11,6 +10,7 @@ const config: StorybookConfig = {
     "@storybook/addon-interactions",
     "@storybook/addon-designs",
     "@storybook/addon-styling",
+    '@emotion/babel-preset-css-prop',
     {
       name: "@storybook/addon-docs",
       options: {
