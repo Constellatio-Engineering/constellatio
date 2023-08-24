@@ -62,7 +62,8 @@ export const config = {
      * - _next/image (image optimization files)
      * - favicon.ico (favicon file)
      * - extension (Caisy UI extension)
+     * - test (test route)
      */
-    "/((?!api|login|register|confirm|_next/static|_next/image|favicon.*|extension).*)",
+    "/((?!api|login|register|confirm|_next/static|_next/image|favicon.*|extension|test).*)",
   ],
 };

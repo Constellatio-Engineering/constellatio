@@ -9,12 +9,11 @@ import React, { type ButtonHTMLAttributes, type FC, type ReactNode } from "react
 import { ButtonCard, ResultWrapper, StatusWrapper } from "./DragNDropCard.styles";
 import { BodyText } from "../../atoms/BodyText/BodyText";
 
-type TDraggableCard = ButtonHTMLAttributes<HTMLButtonElement> & {
+export type TDraggableCard = ButtonHTMLAttributes<HTMLButtonElement> & {
   readonly dropped?: boolean;
   readonly label: ReactNode;
   readonly onDeleteHandler?: React.MouseEventHandler<HTMLDivElement>;
   readonly result?: ReactNode;
-  readonly showIcon?: boolean;
   readonly status: "default" | "success" | "error";
 };
 
@@ -23,7 +22,6 @@ export const DragNDropCard: FC<TDraggableCard> = ({
   label,
   onDeleteHandler,
   result,
-  showIcon,
   status,
   ...props
 }) => 

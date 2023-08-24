@@ -1,7 +1,6 @@
 import type { Preview } from "@storybook/react";
 import React from "react";
 import CustomThemingProvider from "../src/provider/CustomThemingProvider";
-import "../src/constants/styles/resets.css"
 
 const customViewports = {
   Bronze: {

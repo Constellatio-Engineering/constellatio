@@ -20,7 +20,6 @@ export const globalStyles = css`
   strong, span, i, b {
     color: inherit;
     font-size: inherit;
-    font-family: inherit;
   }
 
   span {
