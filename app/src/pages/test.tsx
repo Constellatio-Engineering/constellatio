@@ -5,7 +5,7 @@ import { getProps } from "@/services/content/getProps";
 import { type GetStaticProps } from "next";
 import React from "react";
 
-import CategoryTab from "../components/categoryTab/CategoryTab";
+import CategoryTab from "../components/molecules/categoryTab/CategoryTab";
 // import { CivilLawIcon } from "../components/Icons/CivilLawIcon";
 
 const NextPage = (props: any): any => 

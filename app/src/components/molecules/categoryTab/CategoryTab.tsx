@@ -3,7 +3,7 @@ import type { IGenCategory } from "@/services/graphql/__generated/sdk";
 import React, { type FunctionComponent } from "react";
 
 import * as styles from "./CategoryTab.style";
-import { Svg } from "../atoms/SVG/Svg";
+import { Svg } from "../../atoms/SVG/Svg";
 interface IProps extends IGenCategory
 {
   readonly itemsNumber: number;
