@@ -22,6 +22,19 @@ export const q_Page = gql`
           nameInNavigation
           slug
           components {
+             ...on PageHeader{
+            categories{
+              ...on Category{
+                title
+                id
+                icon{
+                  src
+                  title
+                }
+
+              }
+            }
+          }
             ...TextElement
             ...Callout
             ...ImageWrapperCard
