@@ -140,6 +140,9 @@ dependencies:
   graphql-request:
     specifier: ^6.1.0
     version: 6.1.0(graphql@16.8.0)
+  graphql-tag:
+    specifier: ^2.12.6
+    version: 2.12.6(graphql@16.8.0)
   jotai:
     specifier: ^2.3.1
     version: 2.3.1(@types/react@18.2.20)(react@18.2.0)
@@ -226,6 +229,9 @@ devDependencies:
   '@storybook/testing-library':
     specifier: ^0.2.0
     version: 0.2.0
+  '@total-typescript/ts-reset':
+    specifier: ^0.5.1
+    version: 0.5.1
   '@types/eslint':
     specifier: ^8.44.2
     version: 8.44.2
@@ -6357,6 +6363,10 @@ packages:
       - '@tiptap/pm'
     dev: false
 
+  /@total-typescript/ts-reset@0.5.1:
+    resolution: {integrity: sha512-AqlrT8YA1o7Ff5wPfMOL0pvL+1X+sw60NN6CcOCqs658emD6RfiXhF7Gu9QcfKBH7ELY2nInLhKSCWVoNL70MQ==}
+    dev: true
+
   /@trpc/client@10.37.1(@trpc/server@10.37.1):
     resolution: {integrity: sha512-OSblNfeI0Z9ERn3usgLV2x63CwwPoNOHf1FQK85cOT7F8MNaWyEHoEv7tHUwNGJwyzKXmpU+ockZ0movzX3D0g==}
     peerDependencies:
@@ -10572,7 +10582,6 @@ packages:
     dependencies:
       graphql: 16.8.0
       tslib: 2.6.2
-    dev: true
 
   /graphql-ws@5.14.0(graphql@16.8.0):
     resolution: {integrity: sha512-itrUTQZP/TgswR4GSSYuwWUzrE/w5GhbwM2GX3ic2U7aw33jgEsayfIlvaj7/GcIvZgNMzsPTrE5hqPuFUiE5g==}
