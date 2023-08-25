@@ -13,10 +13,11 @@ import { HelpNote } from "@/components/molecules/HelpNote/HelpNote";
 import { ResultCard } from "@/components/molecules/ResultCard/ResultCard";
 import { type TValue } from "@/components/Wrappers/DndGame/DndGame";
 import { type IGenDragNDrop } from "@/services/graphql/__generated/sdk";
+import { shuffleArray } from "@/utils/array";
 
 import { DndContext, type DragEndEvent, DragOverlay, type DragStartEvent } from "@dnd-kit/core";
 import { Title, LoadingOverlay } from "@mantine/core";
-import React, { type FC, useEffect, useState } from "react";
+import React, { type FC, useEffect, useMemo, useState } from "react";
 
 import {
   Container,
@@ -32,32 +33,20 @@ export type TDragDropGame = Pick<IGenDragNDrop, "game" | "helpNote" | "question"
 
 type TOptionType = TValue["options"][number];
 
-const shuffleOptions = (arr: TOptionType[]): TOptionType[] => 
+export const DragDropGame: FC<TDragDropGame> = ({ game: { options, orderRequired }, helpNote, question }) =>
 {
-  for(let i = arr.length - 1; i > 0; i--) 
-  {
-    const j = Math.floor(Math.random() * (i + 1));
-    const temp = arr[i] as TOptionType;
-    arr[i] = arr[j] as TOptionType;
-    arr[j] = temp; 
-  }
-  return arr;
-};
-
-export const DragDropGame: FC<TDragDropGame> = ({ game, helpNote, question }) => 
-{
-  const originalOptions: TOptionType[] = JSON.parse(JSON.stringify(game?.options ?? []));
+  const originalOptions: TOptionType[] = useMemo(() => options ?? [], [options]);
   const [optionsItems, setOptionsItems] = useState<TOptionType[]>([]);
   const [droppedItems, setDroppedItems] = useState<TOptionType[]>([]);
   const [activeId, setActiveId] = useState<string | null>(null);
   const [gameStatus, setGameStatus] = useState<"win" | "lose" | "inprogress">("inprogress");
   const [resultMessage, setResultMessage] = useState<string>("");
 
-  useEffect(() => 
+  useEffect(() =>
   {
-    setOptionsItems(shuffleOptions(originalOptions));
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
+    const optionsShuffled = shuffleArray<TOptionType>(originalOptions);
+    setOptionsItems(optionsShuffled);
+  }, [originalOptions]);
 
   const handleDragEnd = (event: DragEndEvent): void => 
   {
@@ -100,7 +89,7 @@ export const DragDropGame: FC<TDragDropGame> = ({ game, helpNote, question }) =>
   {
     const winCondition = checkWinCondition();
 
-    if(game.orderRequired) 
+    if(orderRequired)
     {
       const orderCorrect = checkOrder();
       if(winCondition && orderCorrect) 
@@ -136,8 +125,9 @@ export const DragDropGame: FC<TDragDropGame> = ({ game, helpNote, question }) =>
 
   const onGameResetHandler = (): void => 
   {
+    const originalOptionsShuffled = shuffleArray<TOptionType>(originalOptions);
+    setOptionsItems(originalOptionsShuffled);
     setGameStatus("inprogress");
-    setOptionsItems(shuffleOptions(originalOptions));
     setDroppedItems([]);
   };
 

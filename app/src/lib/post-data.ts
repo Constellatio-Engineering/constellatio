@@ -1,9 +1,12 @@
 import type Stripe from "stripe";
 
-export const postData = async ({ data, url }: {
+interface PostDataProps 
+{
   data?: { price: Stripe.Price };
   url: string;
-}) => 
+}
+
+export const postData = async ({ data, url }: PostDataProps): Promise<any> =>
 {
   console.log("posting,", url, data);
 
