@@ -1,3 +1,4 @@
+/* eslint-disable max-lines */
 import { BodyText } from "@/components/atoms/BodyText/BodyText";
 import { Button } from "@/components/atoms/Button/Button";
 import { Draggable } from "@/components/helpers/Draggable";
@@ -10,9 +11,10 @@ import { DragNDropCard } from "@/components/molecules/DraggableCard/DragNDropCar
 import { GhostDropCard } from "@/components/molecules/GhostDropCard/GhostDropCard";
 import { HelpNote } from "@/components/molecules/HelpNote/HelpNote";
 import { ResultCard } from "@/components/molecules/ResultCard/ResultCard";
+import { type TValue } from "@/components/Wrappers/DndGame/DndGame";
 import { type IGenDragNDrop } from "@/services/graphql/__generated/sdk";
 
-import { DndContext, DragOverlay } from "@dnd-kit/core";
+import { DndContext, type DragEndEvent, DragOverlay, type DragStartEvent } from "@dnd-kit/core";
 import { Title, LoadingOverlay } from "@mantine/core";
 import React, { type FC, useEffect, useState } from "react";
 
@@ -26,24 +28,28 @@ import {
   TitleWrapper,
 } from "./DragDropGame.styles";
 
-type TDragDropGame = Pick<IGenDragNDrop, "game" | "helpNote" | "question">;
+export type TDragDropGame = Pick<IGenDragNDrop, "game" | "helpNote" | "question">;
 
-const shuffleOptions = (arr) => 
+type TOptionType = TValue["options"][number];
+
+const shuffleOptions = (arr: TOptionType[]): TOptionType[] => 
 {
   for(let i = arr.length - 1; i > 0; i--) 
   {
     const j = Math.floor(Math.random() * (i + 1));
-    [arr[i], arr[j]] = [arr[j], arr[i]];
+    const temp = arr[i] as TOptionType;
+    arr[i] = arr[j] as TOptionType;
+    arr[j] = temp; 
   }
   return arr;
 };
 
 export const DragDropGame: FC<TDragDropGame> = ({ game, helpNote, question }) => 
 {
-  const originalOptions = JSON.parse(JSON.stringify(game?.options ?? []));
-  const [optionsItems, setOptionsItems] = useState<any[]>([]);
-  const [droppedItems, setDroppedItems] = useState<any[]>([]);
-  const [activeId, setActiveId] = useState(null);
+  const originalOptions: TOptionType[] = JSON.parse(JSON.stringify(game?.options ?? []));
+  const [optionsItems, setOptionsItems] = useState<TOptionType[]>([]);
+  const [droppedItems, setDroppedItems] = useState<TOptionType[]>([]);
+  const [activeId, setActiveId] = useState<string | null>(null);
   const [gameStatus, setGameStatus] = useState<"win" | "lose" | "inprogress">("inprogress");
   const [resultMessage, setResultMessage] = useState<string>("");
 
@@ -53,7 +59,7 @@ export const DragDropGame: FC<TDragDropGame> = ({ game, helpNote, question }) =>
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
-  const handleDragEnd = (event) => 
+  const handleDragEnd = (event: DragEndEvent): void => 
   {
     const { active, over } = event;
     setActiveId(null);
@@ -68,21 +74,21 @@ export const DragDropGame: FC<TDragDropGame> = ({ game, helpNote, question }) =>
     }
   };
 
-  const handleDragStart = (event) => 
+  const handleDragStart = (event: DragStartEvent): void => 
   {
-    setActiveId(event.active.id);
+    setActiveId(event.active.id.toString());
   };
 
-  const checkWinCondition = () =>
+  const checkWinCondition = (): boolean =>
     droppedItems.every((item) => item.correctAnswer) && optionsItems.every((item) => !item.correctAnswer);
 
-  const checkOrder = () => 
+  const checkOrder = (): boolean => 
   {
-    const correctAnswersOrder = originalOptions?.filter((item) => item.correctAnswer)!;
+    const correctAnswersOrder = originalOptions.filter((item) => item.correctAnswer);
 
     for(let i = 0; i < droppedItems.length; i++) 
     {
-      if(droppedItems[i].id !== correctAnswersOrder[i].id) 
+      if(droppedItems[i]?.id !== correctAnswersOrder[i]?.id) 
       {
         return false;
       }
@@ -90,11 +96,11 @@ export const DragDropGame: FC<TDragDropGame> = ({ game, helpNote, question }) =>
     return true;
   };
 
-  const onGameFinishHandler = () => 
+  const onGameFinishHandler = (): void => 
   {
     const winCondition = checkWinCondition();
 
-    if(game?.orderRequired) 
+    if(game.orderRequired) 
     {
       const orderCorrect = checkOrder();
       if(winCondition && orderCorrect) 
@@ -128,7 +134,7 @@ export const DragDropGame: FC<TDragDropGame> = ({ game, helpNote, question }) =>
     }
   };
 
-  const onGameResetHandler = () => 
+  const onGameResetHandler = (): void => 
   {
     setGameStatus("inprogress");
     setOptionsItems(shuffleOptions(originalOptions));
@@ -191,7 +197,7 @@ export const DragDropGame: FC<TDragDropGame> = ({ game, helpNote, question }) =>
             <Droppable>
               {droppedItems.length < 1 ? (
                 activeId ? (
-                  <GhostDropCard/>
+                  <GhostDropCard/>                                
                 ) : (
                   <EmptyPlaceholder>
                     <Flag/>
@@ -221,7 +227,6 @@ export const DragDropGame: FC<TDragDropGame> = ({ game, helpNote, question }) =>
                       key={item.id}
                       label={item.label}
                       id={item.id}
-                      showIcon
                       dropped
                       status={item.correctAnswer ? "success" : "error"}
                       result={item.correctAnswer ? "Correct" : "Incorrect"}
@@ -244,7 +249,11 @@ export const DragDropGame: FC<TDragDropGame> = ({ game, helpNote, question }) =>
           </>
         )}
         <div>
+          
           <Button
+          // Disabled this rule because ESLint doesn't recognize the type of the Button component
+          // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+          // @ts-ignore
             styleType="primary"
             size="large"
             leftIcon={gameStatus === "inprogress" ? <Check/> : <Reload/>}

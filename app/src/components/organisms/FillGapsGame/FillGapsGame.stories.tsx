@@ -1,9 +1,10 @@
 import { Box } from "@mantine/core";
 import { type Meta, type StoryObj } from "@storybook/react";
+import { type FC } from "react";
 
-import { FillGapsGame } from "./FillGapsGame";
+import { FillGapsGame, type TFillGapsGame } from "./FillGapsGame";
 
-const Template = (args: any) => (
+const Template: FC<TFillGapsGame> = (args) => (
   <Box w={670}>
     <FillGapsGame {...args}/>
   </Box>

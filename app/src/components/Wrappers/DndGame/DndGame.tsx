@@ -6,7 +6,7 @@ import { Cross } from "@/components/Icons/Cross";
 
 import { useCaisyField } from "@caisy/ui-extension-react";
 import {
-  DndContext, KeyboardSensor, PointerSensor, closestCenter, useSensor, useSensors 
+  DndContext, type DragEndEvent, KeyboardSensor, PointerSensor, closestCenter, useSensor, useSensors 
 } from "@dnd-kit/core";
 import {
   SortableContext,
@@ -17,7 +17,7 @@ import {
 import { Box, Title, Switch } from "@mantine/core";
 import { useForm } from "@mantine/form";
 import { randomId } from "@mantine/hooks";
-import React, { useState } from "react";
+import React, { type FC, useState } from "react";
 
 import {
   CardItem,
@@ -52,7 +52,7 @@ interface ICaisy
   value: TValue;
 }
 
-export const DndWrapper = () => 
+export const DndWrapper: FC = () => 
 {
   const [checked, setChecked] = useState(false);
 
@@ -72,7 +72,7 @@ export const DndWrapper = () =>
     },
   });
 
-  const onSubmitHandler = () => 
+  const onSubmitHandler = (): void => 
   {
     setValue({
       ...value,
@@ -88,22 +88,18 @@ export const DndWrapper = () =>
     form.values.option = "";
   };
 
-  function handleDragEnd(event) 
+  function handleDragEnd(event: DragEndEvent): void 
   {
     const { active, over } = event;
 
-    if(active.id !== over.id) 
+    if(active.id !== over?.id) 
     {
-      // @ts-ignore
-      setValue(() => 
-      {
-        const oldIndex = value.options.findIndex((option) => option.id === active.id);
-        const newIndex = value.options.findIndex((option) => option.id === over.id);
-
-        return {
-          ...value,
-          options: arrayMove(value.options, oldIndex, newIndex),
-        };
+      const oldIndex = value.options.findIndex((option) => option.id === active.id);
+      const newIndex = value.options.findIndex((option) => option.id === over?.id);
+      const newOptions = arrayMove(value.options, oldIndex, newIndex);
+      setValue({
+        ...value,
+        options: newOptions,
       });
     }
   }
@@ -113,7 +109,13 @@ export const DndWrapper = () =>
       Loading...
     </BodyText>
   ) : !value ? (
-    <Button styleType="tertiary" onClick={() => setValue({ options: [], orderRequired: false })} w="25%">
+    <Button 
+    // Disabled this rule because ESLint doesn't recognize the type of the Button component
+      // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+      // @ts-ignore
+      styleType="tertiary"
+      onClick={() => setValue({ options: [], orderRequired: false })}
+      w="25%">
       Reload
     </Button>
   ) : (
@@ -131,7 +133,7 @@ export const DndWrapper = () =>
           <Box component="form" onSubmit={form.onSubmit(() => onSubmitHandler())}>
             <Input inputType="text" label="Add an option" {...form.getInputProps("option")}/>
             <Box
-              sx={(theme) => ({
+              sx={() => ({
                 alignItems: "center",
                 display: "flex",
                 justifyContent: "space-between",
@@ -157,6 +159,9 @@ export const DndWrapper = () =>
                 styles={switchStyle({ checked })}
               />
               <Button
+              // Disabled this rule because ESLint doesn't recognize the type of the Button component
+                // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+                // @ts-ignore
                 styleType="primary"
                 type="submit"
                 disabled={form.getInputProps("option")?.value?.length <= 1}

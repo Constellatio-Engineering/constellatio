@@ -7,7 +7,7 @@ import { useCaisyField } from "@caisy/ui-extension-react";
 import { Box, Title, Switch } from "@mantine/core";
 import { useForm } from "@mantine/form";
 import { randomId } from "@mantine/hooks";
-import React, { useState } from "react";
+import { useState } from "react";
 
 import {
   CardItem,
@@ -39,7 +39,7 @@ interface ICaisy
   value: TValue;
 }
 
-export const SelectionGameWrapper = () => 
+export const SelectionGameWrapper = (): JSX.Element => 
 {
   const [checked, setChecked] = useState(false);
 
@@ -54,7 +54,7 @@ export const SelectionGameWrapper = () =>
 
   console.log(value);
 
-  const onSubmitHandler = () => 
+  const onSubmitHandler = (): void => 
   {
     setValue({
       ...value,
@@ -75,7 +75,13 @@ export const SelectionGameWrapper = () =>
       Loading...
     </BodyText>
   ) : !value ? (
-    <Button styleType="tertiary" onClick={() => setValue({ options: [] })} w="25%">
+    <Button
+    // Disabled this rule because ESLint doesn't recognize the type of the Button component
+      // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+      // @ts-ignore
+      styleType="tertiary"
+      onClick={() => setValue({ options: [] })}
+      w="25%">
       Reload
     </Button>
   ) : (
@@ -93,7 +99,7 @@ export const SelectionGameWrapper = () =>
           <Box component="form" onSubmit={form.onSubmit(() => onSubmitHandler())}>
             <Input inputType="text" label="Add an option" {...form.getInputProps("option")}/>
             <Box
-              sx={(theme) => ({
+              sx={() => ({
                 alignItems: "center",
                 display: "flex",
                 justifyContent: "space-between",
@@ -119,6 +125,9 @@ export const SelectionGameWrapper = () =>
                 styles={switchStyle({ checked })}
               />
               <Button
+                // Disabled this rule because ESLint doesn't recognize the type of the Button component
+                // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+                // @ts-ignore
                 styleType="primary"
                 type="submit"
                 disabled={form.getInputProps("option")?.value?.length <= 1}
