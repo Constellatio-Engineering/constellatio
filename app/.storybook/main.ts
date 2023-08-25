@@ -16,9 +16,6 @@ const config: StorybookConfig = {
         rule: {
           include: ["../src/components/"], // You can specify directories
         },
-        // loaderOptions: {
-        //   prettierConfig,
-        // },
       },
     },
   ],
@@ -26,6 +23,11 @@ const config: StorybookConfig = {
     name: "@storybook/nextjs",
     options: {},
   },
+  babel: async (options) => ({
+    ...options,
+    // @ts-ignore
+    presets: [...options.presets, '@emotion/babel-preset-css-prop'],
+  }),
   docs: {
     autodocs: true,
   },
