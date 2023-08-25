@@ -1,4 +1,76 @@
 """"""
+type Article {
+  """"""
+  _meta: CaisyDocument_Meta
+
+  """"""
+  id: ID
+
+  """"""
+  internalTitle: String
+
+  """"""
+  title: String
+}
+
+""""""
+type Article_Connection {
+  """"""
+  edges: [Article_ConnectionEdge]
+
+  """"""
+  pageInfo: PageInfo
+
+  """"""
+  totalCount: Int
+}
+
+""""""
+type Article_ConnectionEdge {
+  """"""
+  cursor: String
+
+  """"""
+  node: Article
+}
+
+""""""
+input Article_Sort {
+  """"""
+  createdAt: Order
+
+  """"""
+  id: Order
+
+  """"""
+  internalTitle: Order
+
+  """"""
+  publishedAt: Order
+
+  """"""
+  title: Order
+
+  """"""
+  updatedAt: Order
+}
+
+""""""
+input Article_Where {
+  """"""
+  AND: [Article_Where]
+
+  """"""
+  OR: [Article_Where]
+
+  """"""
+  internalTitle: CaisyField_String_Where
+
+  """"""
+  title: CaisyField_String_Where
+}
+
+""""""
 type Asset {
   """"""
   _meta: CaisyDocument_Meta
@@ -362,16 +434,7 @@ type Case {
   _meta: CaisyDocument_Meta
 
   """"""
-  facts(locale: String): Case_facts
-
-  """"""
-  id: ID
-
-  """"""
-  legalArea: String
-
-  """"""
-  sections(
+  components(
     """
     The cursor to start the pagination from. In this case the curser equals the id for the (last) element. If not set, we wil start from the beginning.
     """
@@ -382,13 +445,16 @@ type Case {
 
     """"""
     locale: String
-  ): [Case_sections]
+  ): [Case_components]
+
+  """"""
+  id: ID
+
+  """"""
+  internalTitle: String
 
   """"""
   title: String
-
-  """"""
-  topic(locale: String): Case_topic
 }
 
 """"""
@@ -413,22 +479,10 @@ type Case_ConnectionEdge {
 }
 
 """"""
-enum Case_LegalArea {
-  """"""
-  civil_law
-
-  """"""
-  public_law
-}
-
-""""""
-input Case_LegalArea_Where {
-  """"""
-  eq: Case_LegalArea
-}
-
-""""""
 input Case_Sort {
+  """"""
+  components: Order
+
   """"""
   createdAt: Order
 
@@ -436,19 +490,13 @@ input Case_Sort {
   id: Order
 
   """"""
-  legalArea: Order
+  internalTitle: Order
 
   """"""
   publishedAt: Order
 
   """"""
-  sections: Order
-
-  """"""
   title: Order
-
-  """"""
-  topic: Order
 
   """"""
   updatedAt: Order
@@ -463,73 +511,14 @@ input Case_Where {
   OR: [Case_Where]
 
   """"""
-  facts: CaisyField_Richtext_Where
-
-  """"""
-  legalArea: Case_LegalArea_Where
+  internalTitle: CaisyField_String_Where
 
   """"""
   title: CaisyField_String_Where
 }
 
 """"""
-type Case_facts {
-  """"""
-  connections(
-    """
-    The cursor to start the pagination from. In this case the curser equals the id for the (last) element. If not set, we wil start from the beginning.
-    """
-    after: String
-
-    """The number of items to return. Default and max value is 100."""
-    first: Int = 100
-
-    """"""
-    locale: String
-  ): [Case_facts_Connections]
-
-  """"""
-  json: JSON
-}
-
-""""""
-union Case_facts_Connections = Caisy_Field_Document_NotFound
-
-""""""
-union Case_sections = Callout | Category | DragNDrop | FillInGapsGame | ImageWrapperCard | PageHeader | SelectionCard | Subcategory | TextElement
-
-""""""
-union Case_topic = Callout | Category | DragNDrop | FillInGapsGame | ImageWrapperCard | PageHeader | SelectionCard | Subcategory | TextElement
-
-""""""
-type Cases {
-  """"""
-  _meta: CaisyDocument_Meta
-
-  """"""
-  id: ID
-}
-
-""""""
-type Cases_Connection {
-  """"""
-  edges: [Cases_ConnectionEdge]
-
-  """"""
-  pageInfo: PageInfo
-
-  """"""
-  totalCount: Int
-}
-
-""""""
-type Cases_ConnectionEdge {
-  """"""
-  cursor: String
-
-  """"""
-  node: Cases
-}
+union Case_components = Callout | DragNDrop | FillInGapsGame | ImageWrapperCard | SelectionCard | TextElement
 
 """"""
 type Category {
@@ -552,6 +541,9 @@ type Category {
 
   """"""
   id: ID
+
+  """"""
+  internalTitle: String
 
   """"""
   subcategories(
@@ -604,6 +596,9 @@ input Category_Sort {
   id: Order
 
   """"""
+  internalTitle: Order
+
+  """"""
   publishedAt: Order
 
   """"""
@@ -623,6 +618,9 @@ input Category_Where {
 
   """"""
   OR: [Category_Where]
+
+  """"""
+  internalTitle: CaisyField_String_Where
 
   """"""
   title: CaisyField_String_Where
@@ -977,7 +975,7 @@ type Page {
 }
 
 """"""
-type PageHeader {
+type PageContent {
   """"""
   _meta: CaisyDocument_Meta
 
@@ -993,7 +991,7 @@ type PageHeader {
 
     """"""
     locale: String
-  ): [PageHeader_categories]
+  ): [PageContent_categories]
 
   """"""
   id: ID
@@ -1006,9 +1004,9 @@ type PageHeader {
 }
 
 """"""
-type PageHeader_Connection {
+type PageContent_Connection {
   """"""
-  edges: [PageHeader_ConnectionEdge]
+  edges: [PageContent_ConnectionEdge]
 
   """"""
   pageInfo: PageInfo
@@ -1018,16 +1016,16 @@ type PageHeader_Connection {
 }
 
 """"""
-type PageHeader_ConnectionEdge {
+type PageContent_ConnectionEdge {
   """"""
   cursor: String
 
   """"""
-  node: PageHeader
+  node: PageContent
 }
 
 """"""
-input PageHeader_Sort {
+input PageContent_Sort {
   """"""
   categories: Order
 
@@ -1051,12 +1049,12 @@ input PageHeader_Sort {
 }
 
 """"""
-input PageHeader_Where {
+input PageContent_Where {
   """"""
-  AND: [PageHeader_Where]
+  AND: [PageContent_Where]
 
   """"""
-  OR: [PageHeader_Where]
+  OR: [PageContent_Where]
 
   """"""
   internalTitle: CaisyField_String_Where
@@ -1066,7 +1064,7 @@ input PageHeader_Where {
 }
 
 """"""
-union PageHeader_categories = Category
+union PageContent_categories = Category
 
 """"""
 type PageInfo {
@@ -1150,10 +1148,13 @@ input Page_Where {
 }
 
 """"""
-union Page_components = Callout | Category | DragNDrop | FillInGapsGame | ImageWrapperCard | PageHeader | SelectionCard | Subcategory | TextElement
+union Page_components = PageContent
 
 """"""
 type Query {
+  """"""
+  Article(id: ID!, locale: String): Article
+
   """"""
   Asset(id: ID!, locale: String): Asset
 
@@ -1162,9 +1163,6 @@ type Query {
 
   """"""
   Case(id: ID!, locale: String): Case
-
-  """"""
-  Cases(id: ID!, locale: String): Cases
 
   """"""
   Category(id: ID!, locale: String): Category
@@ -1182,7 +1180,7 @@ type Query {
   Page(id: ID!, locale: String): Page
 
   """"""
-  PageHeader(id: ID!, locale: String): PageHeader
+  PageContent(id: ID!, locale: String): PageContent
 
   """"""
   SelectionCard(id: ID!, locale: String): SelectionCard
@@ -1194,6 +1192,9 @@ type Query {
   TextElement(id: ID!, locale: String): TextElement
 
   """"""
+  allArticle(after: String, before: String, first: Int, last: Int, locale: String, sort: [Article_Sort], where: [Article_Where]): Article_Connection
+
+  """"""
   allAsset(after: String, before: String, first: Int, last: Int, locale: String, sort: [Asset_Sort], where: [Asset_Where]): Asset_Connection
 
   """"""
@@ -1201,9 +1202,6 @@ type Query {
 
   """"""
   allCase(after: String, before: String, first: Int, last: Int, locale: String, sort: [Case_Sort], where: [Case_Where]): Case_Connection
-
-  """"""
-  allCases: Cases_Connection
 
   """"""
   allCategory(after: String, before: String, first: Int, last: Int, locale: String, sort: [Category_Sort], where: [Category_Where]): Category_Connection
@@ -1221,7 +1219,7 @@ type Query {
   allPage(after: String, before: String, first: Int, last: Int, locale: String, sort: [Page_Sort], where: [Page_Where]): Page_Connection
 
   """"""
-  allPageHeader(after: String, before: String, first: Int, last: Int, locale: String, sort: [PageHeader_Sort], where: [PageHeader_Where]): PageHeader_Connection
+  allPageContent(after: String, before: String, first: Int, last: Int, locale: String, sort: [PageContent_Sort], where: [PageContent_Where]): PageContent_Connection
 
   """"""
   allSelectionCard(after: String, before: String, first: Int, last: Int, locale: String, sort: [SelectionCard_Sort], where: [SelectionCard_Where]): SelectionCard_Connection
@@ -1331,7 +1329,13 @@ type Subcategory {
   _meta: CaisyDocument_Meta
 
   """"""
-  cases(
+  id: ID
+
+  """"""
+  internalTitle: String
+
+  """"""
+  item(
     """
     The cursor to start the pagination from. In this case the curser equals the id for the (last) element. If not set, we wil start from the beginning.
     """
@@ -1342,13 +1346,7 @@ type Subcategory {
 
     """"""
     locale: String
-  ): [Subcategory_cases]
-
-  """"""
-  id: ID
-
-  """"""
-  internalTitle: String
+  ): [Subcategory_item]
 
   """"""
   title: String
@@ -1378,9 +1376,6 @@ type Subcategory_ConnectionEdge {
 """"""
 input Subcategory_Sort {
   """"""
-  cases: Order
-
-  """"""
   createdAt: Order
 
   """"""
@@ -1388,6 +1383,9 @@ input Subcategory_Sort {
 
   """"""
   internalTitle: Order
+
+  """"""
+  item: Order
 
   """"""
   publishedAt: Order
@@ -1415,7 +1413,7 @@ input Subcategory_Where {
 }
 
 """"""
-union Subcategory_cases = Callout | Category | DragNDrop | FillInGapsGame | ImageWrapperCard | PageHeader | SelectionCard | Subcategory | TextElement
+union Subcategory_item = Case
 
 """"""
 type TextElement {

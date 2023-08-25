@@ -22,7 +22,11 @@ export const q_Page = gql`
           nameInNavigation
           slug
           components {
-             ...on PageHeader{
+
+             ...on PageContent{
+              __typename
+              title
+              internalTitle
             categories{
               ...on Category{
                 title
@@ -35,12 +39,6 @@ export const q_Page = gql`
               }
             }
           }
-            ...TextElement
-            ...Callout
-            ...ImageWrapperCard
-            ...DragNDrop
-            ...SelectionCard
-            ...FillInGapsGame
           }
         }
       }

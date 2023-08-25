@@ -54,6 +54,7 @@ const CustomThemingProvider: FunctionComponent<Props> = ({ children }) =>
         },
         fontFamily: karlaFont.style.fontFamily + ", sans-serif",
         fontSizes: spacing,
+        // <Title order={1}>{title}</Title>
         headings: {
           fontFamily: libreBaskervilleFont.style.fontFamily + ", serif",
           sizes: {

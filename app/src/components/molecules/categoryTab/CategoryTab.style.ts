@@ -29,7 +29,7 @@ export const wrapper = (theme: MantineTheme) =>
 };
 
 export const icon = ({ isSelected, theme }: {
-  isSelected: boolean;
+  isSelected: boolean | undefined;
   theme: MantineTheme;
 }) => css`
     margin-right: 16px;

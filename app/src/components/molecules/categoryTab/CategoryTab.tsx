@@ -19,16 +19,14 @@ const CategoryTab: FunctionComponent<IProps> = ({
   title
 }) => 
 {
-  const [isSelected, setIsSelected] = React.useState<boolean>(selected || false);
   const theme = useMantineTheme(); // or however you retrieve your theme
 
   return (
     <button
       type="button"
       css={styles.wrapper}
-      className={isSelected ? "selected" : ""}
-      onClick={() => setIsSelected(!isSelected)}>
-      <Svg css={styles.icon({ isSelected, theme })} src={icon?.src} className="icon"/>
+      className={selected ? "selected" : ""}>
+      <Svg css={styles.icon({ isSelected: selected, theme })} src={icon?.src} className="icon"/>
       {title && <BodyText styleType="body-01-medium" component="p">{title} <span css={styles.counter}>({itemsNumber})</span></BodyText>}
     </button>
   );

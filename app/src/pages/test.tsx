@@ -1,29 +1,32 @@
 // import { DragDropGame } from "@/components/organisms/DragDropGame/DragDropGame";
+import { Footer } from "@/components/organisms/Footer/Footer";
+import { Header } from "@/components/organisms/Header/Header";
+import PageContent from "@/components/organisms/pageContent/PageContent";
 import { getProps } from "@/services/content/getProps";
+import { type IGenPageContent, type IGenPage_Components, type Maybe } from "@/services/graphql/__generated/sdk";
 
-// import { Box } from "@mantine/core";
 import { type GetStaticProps } from "next";
 import React from "react";
 
-import CategoryTab from "../components/molecules/categoryTab/CategoryTab";
-// import { CivilLawIcon } from "../components/Icons/CivilLawIcon";
-
 const NextPage = (props: any): any => 
 {
-  console.log({ ...props?.Page });
+  const pageComponents: Maybe<Maybe<IGenPage_Components>[]> = props?.Page?.components;
+  
   return (
     <div>
-      {/* <Box w={700}><DragDropGame game={props?.Page.components[3].game}/></Box> */}
-      {props?.Page.components.map((component: any, index: number) => (
-        <div key={index}>
-          {component.categories?.map((category: any, index: number) => ( 
-            <React.Fragment key={index}>
-              <CategoryTab {...category} itemsNumber={20} selected={index === 0}/>
-            </React.Fragment>
-          ))}
-          
-        </div>
-      ))}
+      <Header/>
+      {pageComponents?.map((component: Maybe<Maybe<IGenPageContent>>, index: number) => 
+      {
+        switch (component?.__typename) 
+        {
+          case "PageContent":
+            return <PageContent key={index} {...component}/>;
+          default:
+            return null;
+
+        }
+      })}
+      <Footer/>
     </div>
   );
 };
@@ -48,3 +51,7 @@ export const getStaticProps: GetStaticProps = async () =>
 // };
 
 export default NextPage;
+
+// component?.__typename === "PageHeader" ? (
+//   <PageHeader key={index} {...component}/>
+// ) : null)

@@ -18,6 +18,43 @@ export type Scalars = {
   JSON: { input: any; output: any; }
 };
 
+export type IGenArticle = {
+  __typename?: 'Article';
+  _meta?: Maybe<IGenCaisyDocument_Meta>;
+  id?: Maybe<Scalars['ID']['output']>;
+  internalTitle?: Maybe<Scalars['String']['output']>;
+  title?: Maybe<Scalars['String']['output']>;
+};
+
+export type IGenArticle_Connection = {
+  __typename?: 'Article_Connection';
+  edges?: Maybe<Array<Maybe<IGenArticle_ConnectionEdge>>>;
+  pageInfo?: Maybe<IGenPageInfo>;
+  totalCount?: Maybe<Scalars['Int']['output']>;
+};
+
+export type IGenArticle_ConnectionEdge = {
+  __typename?: 'Article_ConnectionEdge';
+  cursor?: Maybe<Scalars['String']['output']>;
+  node?: Maybe<IGenArticle>;
+};
+
+export type IGenArticle_Sort = {
+  createdAt?: InputMaybe<IGenOrder>;
+  id?: InputMaybe<IGenOrder>;
+  internalTitle?: InputMaybe<IGenOrder>;
+  publishedAt?: InputMaybe<IGenOrder>;
+  title?: InputMaybe<IGenOrder>;
+  updatedAt?: InputMaybe<IGenOrder>;
+};
+
+export type IGenArticle_Where = {
+  AND?: InputMaybe<Array<InputMaybe<IGenArticle_Where>>>;
+  OR?: InputMaybe<Array<InputMaybe<IGenArticle_Where>>>;
+  internalTitle?: InputMaybe<IGenCaisyField_String_Where>;
+  title?: InputMaybe<IGenCaisyField_String_Where>;
+};
+
 export type IGenAsset = {
   __typename?: 'Asset';
   _meta?: Maybe<IGenCaisyDocument_Meta>;
@@ -187,28 +224,16 @@ export type IGenCallout_Where = {
 export type IGenCase = {
   __typename?: 'Case';
   _meta?: Maybe<IGenCaisyDocument_Meta>;
-  facts?: Maybe<IGenCase_Facts>;
+  components?: Maybe<Array<Maybe<IGenCase_Components>>>;
   id?: Maybe<Scalars['ID']['output']>;
-  legalArea?: Maybe<Scalars['String']['output']>;
-  sections?: Maybe<Array<Maybe<IGenCase_Sections>>>;
+  internalTitle?: Maybe<Scalars['String']['output']>;
   title?: Maybe<Scalars['String']['output']>;
-  topic?: Maybe<IGenCase_Topic>;
 };
 
 
-export type IGenCaseFactsArgs = {
-  locale?: InputMaybe<Scalars['String']['input']>;
-};
-
-
-export type IGenCaseSectionsArgs = {
+export type IGenCaseComponentsArgs = {
   after?: InputMaybe<Scalars['String']['input']>;
   first?: InputMaybe<Scalars['Int']['input']>;
-  locale?: InputMaybe<Scalars['String']['input']>;
-};
-
-
-export type IGenCaseTopicArgs = {
   locale?: InputMaybe<Scalars['String']['input']>;
 };
 
@@ -225,77 +250,31 @@ export type IGenCase_ConnectionEdge = {
   node?: Maybe<IGenCase>;
 };
 
-export enum IGenCase_LegalArea {
-  CivilLaw = 'civil_law',
-  PublicLaw = 'public_law'
-}
-
-export type IGenCase_LegalArea_Where = {
-  eq?: InputMaybe<IGenCase_LegalArea>;
-};
-
 export type IGenCase_Sort = {
+  components?: InputMaybe<IGenOrder>;
   createdAt?: InputMaybe<IGenOrder>;
   id?: InputMaybe<IGenOrder>;
-  legalArea?: InputMaybe<IGenOrder>;
+  internalTitle?: InputMaybe<IGenOrder>;
   publishedAt?: InputMaybe<IGenOrder>;
-  sections?: InputMaybe<IGenOrder>;
   title?: InputMaybe<IGenOrder>;
-  topic?: InputMaybe<IGenOrder>;
   updatedAt?: InputMaybe<IGenOrder>;
 };
 
 export type IGenCase_Where = {
   AND?: InputMaybe<Array<InputMaybe<IGenCase_Where>>>;
   OR?: InputMaybe<Array<InputMaybe<IGenCase_Where>>>;
-  facts?: InputMaybe<IGenCaisyField_Richtext_Where>;
-  legalArea?: InputMaybe<IGenCase_LegalArea_Where>;
+  internalTitle?: InputMaybe<IGenCaisyField_String_Where>;
   title?: InputMaybe<IGenCaisyField_String_Where>;
 };
 
-export type IGenCase_Facts = {
-  __typename?: 'Case_facts';
-  connections?: Maybe<Array<Maybe<IGenCase_Facts_Connections>>>;
-  json?: Maybe<Scalars['JSON']['output']>;
-};
-
-
-export type IGenCase_FactsConnectionsArgs = {
-  after?: InputMaybe<Scalars['String']['input']>;
-  first?: InputMaybe<Scalars['Int']['input']>;
-  locale?: InputMaybe<Scalars['String']['input']>;
-};
-
-export type IGenCase_Facts_Connections = IGenCaisy_Field_Document_NotFound;
-
-export type IGenCase_Sections = IGenCallout | IGenCategory | IGenDragNDrop | IGenFillInGapsGame | IGenImageWrapperCard | IGenPageHeader | IGenSelectionCard | IGenSubcategory | IGenTextElement;
-
-export type IGenCase_Topic = IGenCallout | IGenCategory | IGenDragNDrop | IGenFillInGapsGame | IGenImageWrapperCard | IGenPageHeader | IGenSelectionCard | IGenSubcategory | IGenTextElement;
-
-export type IGenCases = {
-  __typename?: 'Cases';
-  _meta?: Maybe<IGenCaisyDocument_Meta>;
-  id?: Maybe<Scalars['ID']['output']>;
-};
-
-export type IGenCases_Connection = {
-  __typename?: 'Cases_Connection';
-  edges?: Maybe<Array<Maybe<IGenCases_ConnectionEdge>>>;
-  pageInfo?: Maybe<IGenPageInfo>;
-  totalCount?: Maybe<Scalars['Int']['output']>;
-};
-
-export type IGenCases_ConnectionEdge = {
-  __typename?: 'Cases_ConnectionEdge';
-  cursor?: Maybe<Scalars['String']['output']>;
-  node?: Maybe<IGenCases>;
-};
+export type IGenCase_Components = IGenCallout | IGenDragNDrop | IGenFillInGapsGame | IGenImageWrapperCard | IGenSelectionCard | IGenTextElement;
 
 export type IGenCategory = {
   __typename?: 'Category';
   _meta?: Maybe<IGenCaisyDocument_Meta>;
   icon?: Maybe<IGenAsset>;
   id?: Maybe<Scalars['ID']['output']>;
+  internalTitle?: Maybe<Scalars['String']['output']>;
   subcategories?: Maybe<Array<Maybe<IGenCategory_Subcategories>>>;
   title?: Maybe<Scalars['String']['output']>;
 };
@@ -331,6 +310,7 @@ export type IGenCategory_Sort = {
   createdAt?: InputMaybe<IGenOrder>;
   icon?: InputMaybe<IGenOrder>;
   id?: InputMaybe<IGenOrder>;
+  internalTitle?: InputMaybe<IGenOrder>;
   publishedAt?: InputMaybe<IGenOrder>;
   subcategories?: InputMaybe<IGenOrder>;
   title?: InputMaybe<IGenOrder>;
@@ -340,6 +320,7 @@ export type IGenCategory_Sort = {
 export type IGenCategory_Where = {
   AND?: InputMaybe<Array<InputMaybe<IGenCategory_Where>>>;
   OR?: InputMaybe<Array<InputMaybe<IGenCategory_Where>>>;
+  internalTitle?: InputMaybe<IGenCaisyField_String_Where>;
   title?: InputMaybe<IGenCaisyField_String_Where>;
 };
 
@@ -518,36 +499,36 @@ export type IGenPageComponentsArgs = {
   locale?: InputMaybe<Scalars['String']['input']>;
 };
 
-export type IGenPageHeader = {
-  __typename?: 'PageHeader';
+export type IGenPageContent = {
+  __typename?: 'PageContent';
   _meta?: Maybe<IGenCaisyDocument_Meta>;
-  categories?: Maybe<Array<Maybe<IGenPageHeader_Categories>>>;
+  categories?: Maybe<Array<Maybe<IGenPageContent_Categories>>>;
   id?: Maybe<Scalars['ID']['output']>;
   internalTitle?: Maybe<Scalars['String']['output']>;
   title?: Maybe<Scalars['String']['output']>;
 };
 
 
-export type IGenPageHeaderCategoriesArgs = {
+export type IGenPageContentCategoriesArgs = {
   after?: InputMaybe<Scalars['String']['input']>;
   first?: InputMaybe<Scalars['Int']['input']>;
   locale?: InputMaybe<Scalars['String']['input']>;
 };
 
-export type IGenPageHeader_Connection = {
-  __typename?: 'PageHeader_Connection';
-  edges?: Maybe<Array<Maybe<IGenPageHeader_ConnectionEdge>>>;
+export type IGenPageContent_Connection = {
+  __typename?: 'PageContent_Connection';
+  edges?: Maybe<Array<Maybe<IGenPageContent_ConnectionEdge>>>;
   pageInfo?: Maybe<IGenPageInfo>;
   totalCount?: Maybe<Scalars['Int']['output']>;
 };
 
-export type IGenPageHeader_ConnectionEdge = {
-  __typename?: 'PageHeader_ConnectionEdge';
+export type IGenPageContent_ConnectionEdge = {
+  __typename?: 'PageContent_ConnectionEdge';
   cursor?: Maybe<Scalars['String']['output']>;
-  node?: Maybe<IGenPageHeader>;
+  node?: Maybe<IGenPageContent>;
 };
 
-export type IGenPageHeader_Sort = {
+export type IGenPageContent_Sort = {
   categories?: InputMaybe<IGenOrder>;
   createdAt?: InputMaybe<IGenOrder>;
   id?: InputMaybe<IGenOrder>;
@@ -557,14 +538,14 @@ export type IGenPageHeader_Sort = {
   updatedAt?: InputMaybe<IGenOrder>;
 };
 
-export type IGenPageHeader_Where = {
-  AND?: InputMaybe<Array<InputMaybe<IGenPageHeader_Where>>>;
-  OR?: InputMaybe<Array<InputMaybe<IGenPageHeader_Where>>>;
+export type IGenPageContent_Where = {
+  AND?: InputMaybe<Array<InputMaybe<IGenPageContent_Where>>>;
+  OR?: InputMaybe<Array<InputMaybe<IGenPageContent_Where>>>;
   internalTitle?: InputMaybe<IGenCaisyField_String_Where>;
   title?: InputMaybe<IGenCaisyField_String_Where>;
 };
 
-export type IGenPageHeader_Categories = IGenCategory;
+export type IGenPageContent_Categories = IGenCategory;
 
 export type IGenPageInfo = {
   __typename?: 'PageInfo';
@@ -606,36 +587,42 @@ export type IGenPage_Where = {
   slug?: InputMaybe<IGenCaisyField_String_Where>;
 };
 
-export type IGenPage_Components = IGenCallout | IGenCategory | IGenDragNDrop | IGenFillInGapsGame | IGenImageWrapperCard | IGenPageHeader | IGenSelectionCard | IGenSubcategory | IGenTextElement;
+export type IGenPage_Components = IGenPageContent;
 
 export type IGenQuery = {
   __typename?: 'Query';
+  Article?: Maybe<IGenArticle>;
   Asset?: Maybe<IGenAsset>;
   Callout?: Maybe<IGenCallout>;
   Case?: Maybe<IGenCase>;
-  Cases?: Maybe<IGenCases>;
   Category?: Maybe<IGenCategory>;
   DragNDrop?: Maybe<IGenDragNDrop>;
   FillInGapsGame?: Maybe<IGenFillInGapsGame>;
   ImageWrapperCard?: Maybe<IGenImageWrapperCard>;
   Page?: Maybe<IGenPage>;
-  PageHeader?: Maybe<IGenPageHeader>;
+  PageContent?: Maybe<IGenPageContent>;
   SelectionCard?: Maybe<IGenSelectionCard>;
   Subcategory?: Maybe<IGenSubcategory>;
   TextElement?: Maybe<IGenTextElement>;
+  allArticle?: Maybe<IGenArticle_Connection>;
   allAsset?: Maybe<IGenAsset_Connection>;
   allCallout?: Maybe<IGenCallout_Connection>;
   allCase?: Maybe<IGenCase_Connection>;
-  allCases?: Maybe<IGenCases_Connection>;
   allCategory?: Maybe<IGenCategory_Connection>;
   allDragNDrop?: Maybe<IGenDragNDrop_Connection>;
   allFillInGapsGame?: Maybe<IGenFillInGapsGame_Connection>;
   allImageWrapperCard?: Maybe<IGenImageWrapperCard_Connection>;
   allPage?: Maybe<IGenPage_Connection>;
-  allPageHeader?: Maybe<IGenPageHeader_Connection>;
+  allPageContent?: Maybe<IGenPageContent_Connection>;
   allSelectionCard?: Maybe<IGenSelectionCard_Connection>;
   allSubcategory?: Maybe<IGenSubcategory_Connection>;
   allTextElement?: Maybe<IGenTextElement_Connection>;
+};
+
+
+export type IGenQueryArticleArgs = {
+  id: Scalars['ID']['input'];
+  locale?: InputMaybe<Scalars['String']['input']>;
 };
 
 
@@ -652,12 +639,6 @@ export type IGenQueryCalloutArgs = {
 
 
 export type IGenQueryCaseArgs = {
-  id: Scalars['ID']['input'];
-  locale?: InputMaybe<Scalars['String']['input']>;
-};
-
-
-export type IGenQueryCasesArgs = {
   id: Scalars['ID']['input'];
   locale?: InputMaybe<Scalars['String']['input']>;
 };
@@ -693,7 +674,7 @@ export type IGenQueryPageArgs = {
 };
 
 
-export type IGenQueryPageHeaderArgs = {
+export type IGenQueryPageContentArgs = {
   id: Scalars['ID']['input'];
   locale?: InputMaybe<Scalars['String']['input']>;
 };
@@ -714,6 +695,17 @@ export type IGenQuerySubcategoryArgs = {
 export type IGenQueryTextElementArgs = {
   id: Scalars['ID']['input'];
   locale?: InputMaybe<Scalars['String']['input']>;
+};
+
+
+export type IGenQueryAllArticleArgs = {
+  after?: InputMaybe<Scalars['String']['input']>;
+  before?: InputMaybe<Scalars['String']['input']>;
+  first?: InputMaybe<Scalars['Int']['input']>;
+  last?: InputMaybe<Scalars['Int']['input']>;
+  locale?: InputMaybe<Scalars['String']['input']>;
+  sort?: InputMaybe<Array<InputMaybe<IGenArticle_Sort>>>;
+  where?: InputMaybe<Array<InputMaybe<IGenArticle_Where>>>;
 };
 
 
@@ -805,14 +797,14 @@ export type IGenQueryAllPageArgs = {
 };
 
 
-export type IGenQueryAllPageHeaderArgs = {
+export type IGenQueryAllPageContentArgs = {
   after?: InputMaybe<Scalars['String']['input']>;
   before?: InputMaybe<Scalars['String']['input']>;
   first?: InputMaybe<Scalars['Int']['input']>;
   last?: InputMaybe<Scalars['Int']['input']>;
   locale?: InputMaybe<Scalars['String']['input']>;
-  sort?: InputMaybe<Array<InputMaybe<IGenPageHeader_Sort>>>;
-  where?: InputMaybe<Array<InputMaybe<IGenPageHeader_Where>>>;
+  sort?: InputMaybe<Array<InputMaybe<IGenPageContent_Sort>>>;
+  where?: InputMaybe<Array<InputMaybe<IGenPageContent_Where>>>;
 };
 
 
@@ -898,14 +890,14 @@ export type IGenSelectionCard_Where = {
 export type IGenSubcategory = {
   __typename?: 'Subcategory';
   _meta?: Maybe<IGenCaisyDocument_Meta>;
-  cases?: Maybe<Array<Maybe<IGenSubcategory_Cases>>>;
   id?: Maybe<Scalars['ID']['output']>;
   internalTitle?: Maybe<Scalars['String']['output']>;
+  item?: Maybe<Array<Maybe<IGenSubcategory_Item>>>;
   title?: Maybe<Scalars['String']['output']>;
 };
 
 
-export type IGenSubcategoryCasesArgs = {
+export type IGenSubcategoryItemArgs = {
   after?: InputMaybe<Scalars['String']['input']>;
   first?: InputMaybe<Scalars['Int']['input']>;
   locale?: InputMaybe<Scalars['String']['input']>;
@@ -925,10 +917,10 @@ export type IGenSubcategory_ConnectionEdge = {
 };
 
 export type IGenSubcategory_Sort = {
-  cases?: InputMaybe<IGenOrder>;
   createdAt?: InputMaybe<IGenOrder>;
   id?: InputMaybe<IGenOrder>;
   internalTitle?: InputMaybe<IGenOrder>;
+  item?: InputMaybe<IGenOrder>;
   publishedAt?: InputMaybe<IGenOrder>;
   title?: InputMaybe<IGenOrder>;
   updatedAt?: InputMaybe<IGenOrder>;
@@ -941,7 +933,7 @@ export type IGenSubcategory_Where = {
   title?: InputMaybe<IGenCaisyField_String_Where>;
 };
 
-export type IGenSubcategory_Cases = IGenCallout | IGenCategory | IGenDragNDrop | IGenFillInGapsGame | IGenImageWrapperCard | IGenPageHeader | IGenSelectionCard | IGenSubcategory | IGenTextElement;
+export type IGenSubcategory_Item = IGenCase;
 
 export type IGenTextElement = {
   __typename?: 'TextElement';
@@ -1009,7 +1001,7 @@ export type IGenCalloutFragment = { __typename?: 'Callout', id?: string | null, 
     & IGenTextElementFragment
   ) | null };
 
-export type IGenCaseFragment = { __typename?: 'Case', id?: string | null, title?: string | null, legalArea?: string | null, facts?: { __typename?: 'Case_facts', json?: any | null } | null };
+export type IGenCaseFragment = { __typename?: 'Case', id?: string | null, title?: string | null };
 
 export type IGenDragNDropFragment = { __typename?: 'DragNDrop', id?: string | null, game?: any | null, question?: string | null, helpNote?: (
     { __typename?: 'TextElement' }
@@ -1059,25 +1051,7 @@ export type IGenPageQueryVariables = Exact<{
 }>;
 
 
-export type IGenPageQuery = { __typename?: 'Query', allPage?: { __typename?: 'Page_Connection', edges?: Array<{ __typename?: 'Page_ConnectionEdge', node?: { __typename?: 'Page', id?: string | null, nameInNavigation?: string | null, slug?: string | null, components?: Array<(
-          { __typename?: 'Callout' }
-          & IGenCalloutFragment
-        ) | { __typename?: 'Category' } | (
-          { __typename?: 'DragNDrop' }
-          & IGenDragNDropFragment
-        ) | (
-          { __typename?: 'FillInGapsGame' }
-          & IGenFillInGapsGameFragment
-        ) | (
-          { __typename?: 'ImageWrapperCard' }
-          & IGenImageWrapperCardFragment
-        ) | { __typename?: 'PageHeader', categories?: Array<{ __typename?: 'Category', title?: string | null, id?: string | null, icon?: { __typename?: 'Asset', src?: string | null, title?: string | null } | null } | null> | null } | (
-          { __typename?: 'SelectionCard' }
-          & IGenSelectionCardFragment
-        ) | { __typename?: 'Subcategory' } | (
-          { __typename?: 'TextElement' }
-          & IGenTextElementFragment
-        ) | null> | null } | null } | null> | null } | null };
+export type IGenPageQuery = { __typename?: 'Query', allPage?: { __typename?: 'Page_Connection', edges?: Array<{ __typename?: 'Page_ConnectionEdge', node?: { __typename?: 'Page', id?: string | null, nameInNavigation?: string | null, slug?: string | null, components?: Array<{ __typename: 'PageContent', title?: string | null, internalTitle?: string | null, categories?: Array<{ __typename?: 'Category', title?: string | null, id?: string | null, icon?: { __typename?: 'Asset', src?: string | null, title?: string | null } | null } | null> | null } | null> | null } | null } | null> | null } | null };
 
 export const AssetFragmentDoc = gql`
     fragment Asset on Asset {
@@ -1119,10 +1093,6 @@ export const CaseFragmentDoc = gql`
     fragment Case on Case {
   id
   title
-  legalArea
-  facts {
-    json
-  }
 }
     `;
 export const DragNDropFragmentDoc = gql`
@@ -1194,7 +1164,10 @@ export const PageDocument = gql`
         nameInNavigation
         slug
         components {
-          ... on PageHeader {
+          ... on PageContent {
+            __typename
+            title
+            internalTitle
             categories {
               ... on Category {
                 title
@@ -1206,24 +1179,12 @@ export const PageDocument = gql`
               }
             }
           }
-          ...TextElement
-          ...Callout
-          ...ImageWrapperCard
-          ...DragNDrop
-          ...SelectionCard
-          ...FillInGapsGame
         }
       }
     }
   }
 }
-    ${TextElementFragmentDoc}
-${CalloutFragmentDoc}
-${AssetFragmentDoc}
-${ImageWrapperCardFragmentDoc}
-${DragNDropFragmentDoc}
-${SelectionCardFragmentDoc}
-${FillInGapsGameFragmentDoc}`;
+    `;
 export type Requester<C = {}, E = unknown> = <R, V>(doc: DocumentNode, vars?: V, options?: C) => Promise<R> | AsyncIterable<R>
 export function getSdk<C, E>(requester: Requester<C, E>) {
   return {
