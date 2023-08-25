@@ -1,70 +1,47 @@
 import { css } from "@emotion/react";
 import { type MantineTheme } from "@mantine/styles";
 
-export const wrapper = (theme: MantineTheme) => css`
-outline: 0;
-border: 0;
+export const wrapper = (theme: MantineTheme) => 
+{
+  return (css`
+  outline: 0;
+  border: 0;
+  background: transparent;
+  color: ${theme?.colors["neutrals-02"][1]};
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 12px 16px;
+  border-radius: 12px;
 
-background-color: transparent;
-color: #000;
-/* progressive/body/body-01@medium */
-display: flex;
-justify-content: space-between;
-align-items: center;
-padding:12px 16px;
-border-radius: 12px;
+  &:hover {
+    background-color: ${theme?.colors["neutrals-01"][2]};
+  } 
+   &:active {
+    background-color: ${theme?.colors["neutrals-01"][3]};
+  }
 
-.icon{
+  &.selected{
+    background-color: ${theme?.colors["neutrals-02"][1]};
+    color: ${theme?.colors["neutrals-01"][0]};
+  }
+`);
+};
+
+export const icon = ({ isSelected, theme }: {
+  isSelected: boolean;
+  theme: MantineTheme;
+}) => css`
     margin-right: 16px;
     width: 40px;
     height: 40px;
-    background-color: #000;
+    background-color: ${isSelected ? theme?.colors["neutrals-02"][2] : theme.colors["neutrals-02"][1]};
     color: white;
     display: grid;
     place-items:   center;
     border-radius: 50%;
-}
-.counter{
-    color: #949494;
-    /* progressive/body/body-01@medium */
-    font-family: Karla;
-    font-size: 16px;
-    font-style: normal;
-    font-weight: 500;
-    line-height: 24px; /* 150% */
-}
-&:hover{
-    background-color: #F6F6F5;
-}
-&:active{
-    background-color: #F0F0F0;
-}
-&.selected{
-    background-color: ${theme.colors["neutrals-02"][1]};
-    color:#fff;
-
-    .icon{
-        background-color: #303030;
-    }
-}
 `;
 
-export const icon = css`
- margin-right: 16px;
-        width: 40px;
-        height: 40px;
-        background-color: #000;
-        color: white;
-        display: grid;
-        place-items:   center;
-        border-radius: 50%;
+export const counter = (theme: MantineTheme) => css`
+  color: ${theme?.colors["neutrals-01"][7]};
 `;
-export const counter = css`
-  color: #949494;
-        /* progressive/body/body-01@medium */
-        font-family: Karla;
-        font-size: 16px;
-        font-style: normal;
-        font-weight: 500;
-        line-height: 24px; /* 150% */`;
-        
