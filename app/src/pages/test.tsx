@@ -1,9 +1,11 @@
+// import { DragDropGame } from "@/components/organisms/DragDropGame/DragDropGame";
 import { getProps } from "@/services/content/getProps";
 
-import { GetStaticPaths, type GetStaticProps } from "next";
+// import { Box } from "@mantine/core";
+import { type GetStaticProps } from "next";
 import React from "react";
 
-import CategoryTab from "../components/categoryTab/CategoryTab";
+import CategoryTab from "../components/molecules/categoryTab/CategoryTab";
 // import { CivilLawIcon } from "../components/Icons/CivilLawIcon";
 
 const NextPage = (props: any): any => 
