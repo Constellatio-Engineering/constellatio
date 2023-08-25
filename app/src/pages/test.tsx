@@ -1,14 +1,29 @@
+// import { DragDropGame } from "@/components/organisms/DragDropGame/DragDropGame";
 import { getProps } from "@/services/content/getProps";
 
-import { GetStaticPaths, type GetStaticProps } from "next";
+// import { Box } from "@mantine/core";
+import { type GetStaticProps } from "next";
 import React from "react";
 
-const NextPage = (props) => 
+import CategoryTab from "../components/molecules/categoryTab/CategoryTab";
+// import { CivilLawIcon } from "../components/Icons/CivilLawIcon";
+
+const NextPage = (props: any): any => 
 {
-  console.log(props);
+  console.log({ ...props?.Page });
   return (
-    <div>NextPage
+    <div>
       {/* <Box w={700}><DragDropGame game={props?.Page.components[3].game}/></Box> */}
+      {props?.Page.components.map((component: any, index: number) => (
+        <div key={index}>
+          {component.categories?.map((category: any, index: number) => ( 
+            <React.Fragment key={index}>
+              <CategoryTab {...category} itemsNumber={20} selected={index === 0}/>
+            </React.Fragment>
+          ))}
+          
+        </div>
+      ))}
     </div>
   );
 };
