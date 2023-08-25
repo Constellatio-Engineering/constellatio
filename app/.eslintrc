@@ -97,6 +97,12 @@
       "rules": {
         "react/no-multi-comp": "off"
       }
+    },
+    {
+      "files": ["src/db/schema.ts"],
+      "rules": {
+        "import/no-unused-modules": "off"
+      }
     }
   ]
 }

@@ -126,8 +126,8 @@ dependencies:
     specifier: ^16.3.1
     version: 16.3.1
   drizzle-orm:
-    specifier: ^0.28.3
-    version: 0.28.3(pg@8.11.3)(postgres@3.3.5)
+    specifier: 0.28.5
+    version: 0.28.5(postgres@3.3.5)
   embla-carousel-react:
     specifier: ^7.1.0
     version: 7.1.0(react@18.2.0)
@@ -140,17 +140,17 @@ dependencies:
   graphql-request:
     specifier: ^6.1.0
     version: 6.1.0(graphql@16.8.0)
+  graphql-tag:
+    specifier: ^2.12.6
+    version: 2.12.6(graphql@16.8.0)
   jotai:
     specifier: ^2.3.1
     version: 2.3.1(@types/react@18.2.20)(react@18.2.0)
   next:
     specifier: 13.4.19
     version: 13.4.19(@babel/core@7.22.10)(react-dom@18.2.0)(react@18.2.0)
-  pg:
-    specifier: ^8.11.3
-    version: 8.11.3
   postgres:
-    specifier: ^3.3.5
+    specifier: 3.3.5
     version: 3.3.5
   react:
     specifier: 18.2.0
@@ -170,11 +170,11 @@ dependencies:
 
 devDependencies:
   '@dualmeta/eslint-config-base':
-    specifier: ^1.0.15
-    version: 1.0.15(@typescript-eslint/eslint-plugin@6.4.1)(@typescript-eslint/parser@6.4.1)(eslint-import-resolver-typescript@3.6.0)(eslint-plugin-import@2.28.1)(eslint-plugin-newline-destructuring@1.2.1)(eslint-plugin-prefer-arrow@1.2.3)(eslint-plugin-sort-destructure-keys@1.5.0)(eslint-plugin-sort-keys-fix@1.1.2)(eslint-plugin-typescript-sort-keys@2.3.0)(eslint@8.47.0)(typescript@5.1.6)
+    specifier: ^1.0.17
+    version: 1.0.17(@typescript-eslint/eslint-plugin@6.4.1)(@typescript-eslint/parser@6.4.1)(eslint-import-resolver-typescript@3.6.0)(eslint-plugin-import@2.28.1)(eslint-plugin-newline-destructuring@1.2.1)(eslint-plugin-prefer-arrow@1.2.3)(eslint-plugin-sort-destructure-keys@1.5.0)(eslint-plugin-sort-keys-fix@1.1.2)(eslint-plugin-typescript-sort-keys@2.3.0)(eslint@8.47.0)(typescript@5.1.6)
   '@dualmeta/eslint-config-next':
     specifier: ^1.0.13
-    version: 1.0.13(@dualmeta/eslint-config-base@1.0.15)(@dualmeta/eslint-config-shared-react-rules@1.0.2)(eslint-config-next@13.4.19)(eslint@8.47.0)(next@13.4.19)
+    version: 1.0.13(@dualmeta/eslint-config-base@1.0.17)(@dualmeta/eslint-config-shared-react-rules@1.0.2)(eslint-config-next@13.4.19)(eslint@8.47.0)(next@13.4.19)
   '@dualmeta/eslint-config-shared-react-rules':
     specifier: ^1.0.2
     version: 1.0.2
@@ -229,6 +229,9 @@ devDependencies:
   '@storybook/testing-library':
     specifier: ^0.2.0
     version: 0.2.0
+  '@total-typescript/ts-reset':
+    specifier: ^0.5.1
+    version: 0.5.1
   '@types/eslint':
     specifier: ^8.44.2
     version: 8.44.2
@@ -248,7 +251,7 @@ devDependencies:
     specifier: ^6.4.1
     version: 6.4.1(eslint@8.47.0)(typescript@5.1.6)
   drizzle-kit:
-    specifier: ^0.19.13
+    specifier: 0.19.13
     version: 0.19.13
   eslint:
     specifier: ^8.47.0
@@ -1826,8 +1829,8 @@ packages:
     resolution: {integrity: sha512-ps5qF0tMxWRVu+V5gvCRrQNqlY92aTnIKdq27gm9LZMSdaKYZt6AVvSK1dlUMzs6Rt0Jm80b+eWct6xShBKhIw==}
     dev: true
 
-  /@dualmeta/eslint-config-base@1.0.15(@typescript-eslint/eslint-plugin@6.4.1)(@typescript-eslint/parser@6.4.1)(eslint-import-resolver-typescript@3.6.0)(eslint-plugin-import@2.28.1)(eslint-plugin-newline-destructuring@1.2.1)(eslint-plugin-prefer-arrow@1.2.3)(eslint-plugin-sort-destructure-keys@1.5.0)(eslint-plugin-sort-keys-fix@1.1.2)(eslint-plugin-typescript-sort-keys@2.3.0)(eslint@8.47.0)(typescript@5.1.6):
-    resolution: {integrity: sha512-vFZwAMs9JnWVWPlYIbe9WcBLtV2BiNumEAyVLwHGWXHWf1PzG3Y++CQegYce6aGCBik0DrBsWaGL3Vj7qUl+hQ==}
+  /@dualmeta/eslint-config-base@1.0.17(@typescript-eslint/eslint-plugin@6.4.1)(@typescript-eslint/parser@6.4.1)(eslint-import-resolver-typescript@3.6.0)(eslint-plugin-import@2.28.1)(eslint-plugin-newline-destructuring@1.2.1)(eslint-plugin-prefer-arrow@1.2.3)(eslint-plugin-sort-destructure-keys@1.5.0)(eslint-plugin-sort-keys-fix@1.1.2)(eslint-plugin-typescript-sort-keys@2.3.0)(eslint@8.47.0)(typescript@5.1.6):
+    resolution: {integrity: sha512-czcOj4i8ejr3wD1IM0LXjMR0+I7JCsC5BPsFiyPCUV9R3ZM/KwSYnrfdlwv3ln0cTCyX7iWkgmZh6hmoHiCLOg==}
     peerDependencies:
       '@typescript-eslint/eslint-plugin': ^6.4.0
       '@typescript-eslint/parser': ^6.4.0
@@ -1857,7 +1860,7 @@ packages:
       typescript: 5.1.6
     dev: true
 
-  /@dualmeta/eslint-config-next@1.0.13(@dualmeta/eslint-config-base@1.0.15)(@dualmeta/eslint-config-shared-react-rules@1.0.2)(eslint-config-next@13.4.19)(eslint@8.47.0)(next@13.4.19):
+  /@dualmeta/eslint-config-next@1.0.13(@dualmeta/eslint-config-base@1.0.17)(@dualmeta/eslint-config-shared-react-rules@1.0.2)(eslint-config-next@13.4.19)(eslint@8.47.0)(next@13.4.19):
     resolution: {integrity: sha512-qC3btd+95MegCnN82XD5FoZkTccyHYQF+vttXHjA/iKiiuVCH2tpKZC2fPldIhUs2qNdekBx+nx8utq7t1qxWA==}
     peerDependencies:
       '@dualmeta/eslint-config-base': ^1.0.14
@@ -1866,7 +1869,7 @@ packages:
       eslint-config-next: ^13.4.19
       next: ^13.4.19
     dependencies:
-      '@dualmeta/eslint-config-base': 1.0.15(@typescript-eslint/eslint-plugin@6.4.1)(@typescript-eslint/parser@6.4.1)(eslint-import-resolver-typescript@3.6.0)(eslint-plugin-import@2.28.1)(eslint-plugin-newline-destructuring@1.2.1)(eslint-plugin-prefer-arrow@1.2.3)(eslint-plugin-sort-destructure-keys@1.5.0)(eslint-plugin-sort-keys-fix@1.1.2)(eslint-plugin-typescript-sort-keys@2.3.0)(eslint@8.47.0)(typescript@5.1.6)
+      '@dualmeta/eslint-config-base': 1.0.17(@typescript-eslint/eslint-plugin@6.4.1)(@typescript-eslint/parser@6.4.1)(eslint-import-resolver-typescript@3.6.0)(eslint-plugin-import@2.28.1)(eslint-plugin-newline-destructuring@1.2.1)(eslint-plugin-prefer-arrow@1.2.3)(eslint-plugin-sort-destructure-keys@1.5.0)(eslint-plugin-sort-keys-fix@1.1.2)(eslint-plugin-typescript-sort-keys@2.3.0)(eslint@8.47.0)(typescript@5.1.6)
       '@dualmeta/eslint-config-shared-react-rules': 1.0.2
       eslint: 8.47.0
       eslint-config-next: 13.4.19(eslint@8.47.0)(typescript@5.1.6)
@@ -6361,6 +6364,10 @@ packages:
       - '@tiptap/pm'
     dev: false
 
+  /@total-typescript/ts-reset@0.5.1:
+    resolution: {integrity: sha512-AqlrT8YA1o7Ff5wPfMOL0pvL+1X+sw60NN6CcOCqs658emD6RfiXhF7Gu9QcfKBH7ELY2nInLhKSCWVoNL70MQ==}
+    dev: true
+
   /@trpc/client@10.37.1(@trpc/server@10.37.1):
     resolution: {integrity: sha512-OSblNfeI0Z9ERn3usgLV2x63CwwPoNOHf1FQK85cOT7F8MNaWyEHoEv7tHUwNGJwyzKXmpU+ockZ0movzX3D0g==}
     peerDependencies:
@@ -7905,11 +7912,6 @@ packages:
     resolution: {integrity: sha512-E+XQCRwSbaaiChtv6k6Dwgc+bx+Bs6vuKJHHl5kox/BaKbhiXzqQOwK4cO22yElGp2OCmjwVhT3HmxgyPGnJfQ==}
     dev: true
 
-  /buffer-writer@2.0.0:
-    resolution: {integrity: sha512-a7ZpuTZU1TRtnwyCNW3I5dc0wWNC3VR9S++Ewyk2HHZdrO3CQJqSpd+95Us590V6AL7JqUAH2IwZ/398PmNFgw==}
-    engines: {node: '>=4'}
-    dev: false
-
   /buffer-xor@1.0.3:
     resolution: {integrity: sha512-571s0T7nZWK6vB67HI5dyUF7wXiNcfaPPPTl6zYCNApANjIvYJTg7hlud/+cJpdAhS7dVzqMLmfhfHR3rAcOjQ==}
     dev: true
@@ -8894,8 +8896,8 @@ packages:
       - supports-color
     dev: true
 
-  /drizzle-orm@0.28.3(pg@8.11.3)(postgres@3.3.5):
-    resolution: {integrity: sha512-7LwNEBJH5EFvkD0vm7RdKWDZsFP9CYR4AWN2fMwns/ezexoX3+UNoVOWGRPJf1qsj357SESldrNEueFvUDfZxA==}
+  /drizzle-orm@0.28.5(postgres@3.3.5):
+    resolution: {integrity: sha512-6r6Iw4c38NAmW6TiKH3TUpGUQ1YdlEoLJOQptn8XPx3Z63+vFNKfAiANqrIiYZiMjKR9+NYAL219nFrmo1duXA==}
     peerDependencies:
       '@aws-sdk/client-rds-data': '>=3'
       '@cloudflare/workers-types': '>=3'
@@ -8956,7 +8958,6 @@ packages:
       sqlite3:
         optional: true
     dependencies:
-      pg: 8.11.3
       postgres: 3.3.5
     dev: false
 
@@ -10517,7 +10518,6 @@ packages:
     dependencies:
       graphql: 16.8.0
       tslib: 2.6.2
-    dev: true
 
   /graphql-ws@5.14.0(graphql@16.8.0):
     resolution: {integrity: sha512-itrUTQZP/TgswR4GSSYuwWUzrE/w5GhbwM2GX3ic2U7aw33jgEsayfIlvaj7/GcIvZgNMzsPTrE5hqPuFUiE5g==}
@@ -12689,10 +12689,6 @@ packages:
     engines: {node: '>=6'}
     dev: true
 
-  /packet-reader@1.0.0:
-    resolution: {integrity: sha512-HAKu/fG3HpHFO0AA8WE8q2g+gBJaZ9MG7fcKk+IJPLTGAD6Psw4443l+9DGRbOIh3/aXr7Phy0TjilYivJo5XQ==}
-    dev: false
-
   /pako@0.2.9:
     resolution: {integrity: sha512-NUcwaKxUxWrZLpDG+z/xZaCgQITkA/Dv4V/T6bw7VON6l1Xz/VnrBqrYjZQ12TamKHzITTfOEIYUj48y2KXImA==}
     dev: true
@@ -12858,70 +12854,6 @@ packages:
     resolution: {integrity: sha512-F3asv42UuXchdzt+xXqfW1OGlVBe+mxa2mqI0pg5yAHZPvFmY3Y6drSf/GQ1A86WgWEN9Kzh/WrgKa6iGcHXLg==}
     dev: true
 
-  /pg-cloudflare@1.1.1:
-    resolution: {integrity: sha512-xWPagP/4B6BgFO+EKz3JONXv3YDgvkbVrGw2mTo3D6tVDQRh1e7cqVGvyR3BE+eQgAvx1XhW/iEASj4/jCWl3Q==}
-    requiresBuild: true
-    dev: false
-    optional: true
-
-  /pg-connection-string@2.6.2:
-    resolution: {integrity: sha512-ch6OwaeaPYcova4kKZ15sbJ2hKb/VP48ZD2gE7i1J+L4MspCtBMAx8nMgz7bksc7IojCIIWuEhHibSMFH8m8oA==}
-    dev: false
-
-  /pg-int8@1.0.1:
-    resolution: {integrity: sha512-WCtabS6t3c8SkpDBUlb1kjOs7l66xsGdKpIPZsg4wR+B3+u9UAum2odSsF9tnvxg80h4ZxLWMy4pRjOsFIqQpw==}
-    engines: {node: '>=4.0.0'}
-    dev: false
-
-  /pg-pool@3.6.1(pg@8.11.3):
-    resolution: {integrity: sha512-jizsIzhkIitxCGfPRzJn1ZdcosIt3pz9Sh3V01fm1vZnbnCMgmGl5wvGGdNN2EL9Rmb0EcFoCkixH4Pu+sP9Og==}
-    peerDependencies:
-      pg: '>=8.0'
-    dependencies:
-      pg: 8.11.3
-    dev: false
-
-  /pg-protocol@1.6.0:
-    resolution: {integrity: sha512-M+PDm637OY5WM307051+bsDia5Xej6d9IR4GwJse1qA1DIhiKlksvrneZOYQq42OM+spubpcNYEo2FcKQrDk+Q==}
-    dev: false
-
-  /pg-types@2.2.0:
-    resolution: {integrity: sha512-qTAAlrEsl8s4OiEQY69wDvcMIdQN6wdz5ojQiOy6YRMuynxenON0O5oCpJI6lshc6scgAY8qvJ2On/p+CXY0GA==}
-    engines: {node: '>=4'}
-    dependencies:
-      pg-int8: 1.0.1
-      postgres-array: 2.0.0
-      postgres-bytea: 1.0.0
-      postgres-date: 1.0.7
-      postgres-interval: 1.2.0
-    dev: false
-
-  /pg@8.11.3:
-    resolution: {integrity: sha512-+9iuvG8QfaaUrrph+kpF24cXkH1YOOUeArRNYIxq1viYHZagBxrTno7cecY1Fa44tJeZvaoG+Djpkc3JwehN5g==}
-    engines: {node: '>= 8.0.0'}
-    peerDependencies:
-      pg-native: '>=3.0.1'
-    peerDependenciesMeta:
-      pg-native:
-        optional: true
-    dependencies:
-      buffer-writer: 2.0.0
-      packet-reader: 1.0.0
-      pg-connection-string: 2.6.2
-      pg-pool: 3.6.1(pg@8.11.3)
-      pg-protocol: 1.6.0
-      pg-types: 2.2.0
-      pgpass: 1.0.5
-    optionalDependencies:
-      pg-cloudflare: 1.1.1
-    dev: false
-
-  /pgpass@1.0.5:
-    resolution: {integrity: sha512-FdW9r/jQZhSeohs1Z3sI1yxFQNFvMcnmfuj4WBMUTxOrAyLMaTcE1aAMBiTlbMNaXvBCQuVi0R7hd8udDSP7ug==}
-    dependencies:
-      split2: 4.2.0
-    dev: false
-
   /picocolors@1.0.0:
     resolution: {integrity: sha512-1fygroTLlHu66zi26VoTDv8yRgm0Fccecssto+MhsZ0D/DGW2sm8E8AjW7NU5VVTRt5GxbeZ5qBuJr+HyLYkjQ==}
 
@@ -13082,28 +13014,6 @@ packages:
       picocolors: 1.0.0
       source-map-js: 1.0.2
     dev: true
-
-  /postgres-array@2.0.0:
-    resolution: {integrity: sha512-VpZrUqU5A69eQyW2c5CA1jtLecCsN2U/bD6VilrFDWq5+5UIEVO7nazS3TEcHf1zuPYO/sqGvUvW62g86RXZuA==}
-    engines: {node: '>=4'}
-    dev: false
-
-  /postgres-bytea@1.0.0:
-    resolution: {integrity: sha512-xy3pmLuQqRBZBXDULy7KbaitYqLcmxigw14Q5sj8QBVLqEwXfeybIKVWiqAXTlcvdvb0+xkOtDbfQMOf4lST1w==}
-    engines: {node: '>=0.10.0'}
-    dev: false
-
-  /postgres-date@1.0.7:
-    resolution: {integrity: sha512-suDmjLVQg78nMK2UZ454hAG+OAW+HQPZ6n++TNDUX+L0+uUlLywnoxJKDou51Zm+zTCjrCl0Nq6J9C5hP9vK/Q==}
-    engines: {node: '>=0.10.0'}
-    dev: false
-
-  /postgres-interval@1.2.0:
-    resolution: {integrity: sha512-9ZhXKM/rw350N1ovuWHbGxnGh/SNJ4cnxHiM0rxE4VN41wsg8P8zWn9hv/buK00RP4WvlOyr/RBDiptyxVbkZQ==}
-    engines: {node: '>=0.10.0'}
-    dependencies:
-      xtend: 4.0.2
-    dev: false
 
   /postgres@3.3.5:
     resolution: {integrity: sha512-+JD93VELV9gHkqpV5gdL5/70HdGtEw4/XE1S4BC8f1mcPmdib3K5XsKVbnR1XcAyC41zOnifJ+9YRKxdIsXiUw==}
@@ -14400,11 +14310,6 @@ packages:
     resolution: {integrity: sha512-XkD+zwiqXHikFZm4AX/7JSCXA98U5Db4AFd5XUg/+9UNtnH75+Z9KxtpYiJZx36mUDVOwH83pl7yvCer6ewM3w==}
     dev: true
 
-  /split2@4.2.0:
-    resolution: {integrity: sha512-UcjcJOWknrNkF6PLX83qcHM6KHgVKNkV62Y8a5uYDVv9ydGQVwAHMKqHdJje1VTWpljG0WYpCDhrCdAOYH4TWg==}
-    engines: {node: '>= 10.x'}
-    dev: false
-
   /sponge-case@1.0.1:
     resolution: {integrity: sha512-dblb9Et4DAtiZ5YSUZHLl4XhH4uK80GhAZrVXdN4O2P4gQ40Wa5UIOPUHlA/nFd2PLblBZWUioLMMAVrgpoYcA==}
     dependencies:
@@ -15699,6 +15604,7 @@ packages:
   /xtend@4.0.2:
     resolution: {integrity: sha512-LKYU1iAXJXUgAXn9URjiu+MWhyUXHsvfp7mcuYm9dSUKK0/CjtrUwFAxD82/mCWbtLsGjFIad0wIsod4zrTAEQ==}
     engines: {node: '>=0.4'}
+    dev: true
 
   /y18n@4.0.3:
     resolution: {integrity: sha512-JKhqTOwSrqNA1NY5lSztJ1GrBiUodLMmIZuLiDaMRJ+itFd+ABVE8XBjOvIWL+rSqNDC74LCSFmlb/U4UZ4hJQ==}

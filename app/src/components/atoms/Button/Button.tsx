@@ -15,6 +15,7 @@ type TButton = (ButtonProps | ButtonHTMLAttributes<HTMLButtonElement>) & {
   readonly styleOverwrite?: CSSObject | undefined;
   readonly styleType: "primary" | "secondarySimple" | "secondarySubtle" | "tertiary";
 };
+
 const _Button: FC<TButton> = ({
   children,
   size = "large",
