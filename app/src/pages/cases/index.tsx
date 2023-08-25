@@ -26,7 +26,7 @@ export const getStaticProps: GetStaticProps = async () =>
 
   return {
     props: {
-      cases,
+      cases: cases ?? [],
     },
   };
 };
