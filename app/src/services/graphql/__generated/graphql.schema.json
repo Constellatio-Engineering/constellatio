@@ -2132,11 +2132,6 @@
           },
           {
             "kind": "OBJECT",
-            "name": "SelectionCard",
-            "ofType": null
-          },
-          {
-            "kind": "OBJECT",
             "name": "TextElement",
             "ofType": null
           }
@@ -3945,7 +3940,7 @@
       },
       {
         "kind": "OBJECT",
-        "name": "PageContent",
+        "name": "PageHeader",
         "description": "",
         "fields": [
           {
@@ -4006,7 +4001,7 @@
               "name": null,
               "ofType": {
                 "kind": "UNION",
-                "name": "PageContent_categories",
+                "name": "PageHeader_categories",
                 "ofType": null
               }
             },
@@ -4057,7 +4052,7 @@
       },
       {
         "kind": "OBJECT",
-        "name": "PageContent_Connection",
+        "name": "PageHeader_Connection",
         "description": "",
         "fields": [
           {
@@ -4069,7 +4064,7 @@
               "name": null,
               "ofType": {
                 "kind": "OBJECT",
-                "name": "PageContent_ConnectionEdge",
+                "name": "PageHeader_ConnectionEdge",
                 "ofType": null
               }
             },
@@ -4108,7 +4103,7 @@
       },
       {
         "kind": "OBJECT",
-        "name": "PageContent_ConnectionEdge",
+        "name": "PageHeader_ConnectionEdge",
         "description": "",
         "fields": [
           {
@@ -4129,7 +4124,7 @@
             "args": [],
             "type": {
               "kind": "OBJECT",
-              "name": "PageContent",
+              "name": "PageHeader",
               "ofType": null
             },
             "isDeprecated": false,
@@ -4143,7 +4138,7 @@
       },
       {
         "kind": "INPUT_OBJECT",
-        "name": "PageContent_Sort",
+        "name": "PageHeader_Sort",
         "description": "",
         "fields": null,
         "inputFields": [
@@ -4238,7 +4233,7 @@
       },
       {
         "kind": "INPUT_OBJECT",
-        "name": "PageContent_Where",
+        "name": "PageHeader_Where",
         "description": "",
         "fields": null,
         "inputFields": [
@@ -4250,7 +4245,7 @@
               "name": null,
               "ofType": {
                 "kind": "INPUT_OBJECT",
-                "name": "PageContent_Where",
+                "name": "PageHeader_Where",
                 "ofType": null
               }
             },
@@ -4266,7 +4261,7 @@
               "name": null,
               "ofType": {
                 "kind": "INPUT_OBJECT",
-                "name": "PageContent_Where",
+                "name": "PageHeader_Where",
                 "ofType": null
               }
             },
@@ -4305,7 +4300,7 @@
       },
       {
         "kind": "UNION",
-        "name": "PageContent_categories",
+        "name": "PageHeader_categories",
         "description": "",
         "fields": null,
         "inputFields": null,
@@ -4661,7 +4656,7 @@
         "possibleTypes": [
           {
             "kind": "OBJECT",
-            "name": "PageContent",
+            "name": "PageHeader",
             "ofType": null
           }
         ]
@@ -5041,7 +5036,7 @@
             "deprecationReason": null
           },
           {
-            "name": "PageContent",
+            "name": "PageHeader",
             "description": "",
             "args": [
               {
@@ -5075,7 +5070,7 @@
             ],
             "type": {
               "kind": "OBJECT",
-              "name": "PageContent",
+              "name": "PageHeader",
               "ofType": null
             },
             "isDeprecated": false,
@@ -6150,7 +6145,7 @@
             "deprecationReason": null
           },
           {
-            "name": "allPageContent",
+            "name": "allPageHeader",
             "description": "",
             "args": [
               {
@@ -6221,7 +6216,7 @@
                   "name": null,
                   "ofType": {
                     "kind": "INPUT_OBJECT",
-                    "name": "PageContent_Sort",
+                    "name": "PageHeader_Sort",
                     "ofType": null
                   }
                 },
@@ -6237,7 +6232,7 @@
                   "name": null,
                   "ofType": {
                     "kind": "INPUT_OBJECT",
-                    "name": "PageContent_Where",
+                    "name": "PageHeader_Where",
                     "ofType": null
                   }
                 },
@@ -6248,7 +6243,7 @@
             ],
             "type": {
               "kind": "OBJECT",
-              "name": "PageContent_Connection",
+              "name": "PageHeader_Connection",
               "ofType": null
             },
             "isDeprecated": false,
@@ -6971,31 +6966,7 @@
             "deprecationReason": null
           },
           {
-            "name": "id",
-            "description": "",
-            "args": [],
-            "type": {
-              "kind": "SCALAR",
-              "name": "ID",
-              "ofType": null
-            },
-            "isDeprecated": false,
-            "deprecationReason": null
-          },
-          {
-            "name": "internalTitle",
-            "description": "",
-            "args": [],
-            "type": {
-              "kind": "SCALAR",
-              "name": "String",
-              "ofType": null
-            },
-            "isDeprecated": false,
-            "deprecationReason": null
-          },
-          {
-            "name": "item",
+            "name": "articles",
             "description": "",
             "args": [
               {
@@ -7040,9 +7011,86 @@
               "name": null,
               "ofType": {
                 "kind": "UNION",
-                "name": "Subcategory_item",
+                "name": "Subcategory_articles",
                 "ofType": null
               }
+            },
+            "isDeprecated": false,
+            "deprecationReason": null
+          },
+          {
+            "name": "cases",
+            "description": "",
+            "args": [
+              {
+                "name": "after",
+                "description": "The cursor to start the pagination from. In this case the curser equals the id for the (last) element. If not set, we wil start from the beginning.",
+                "type": {
+                  "kind": "SCALAR",
+                  "name": "String",
+                  "ofType": null
+                },
+                "defaultValue": null,
+                "isDeprecated": false,
+                "deprecationReason": null
+              },
+              {
+                "name": "first",
+                "description": "The number of items to return. Default and max value is 100.",
+                "type": {
+                  "kind": "SCALAR",
+                  "name": "Int",
+                  "ofType": null
+                },
+                "defaultValue": "100",
+                "isDeprecated": false,
+                "deprecationReason": null
+              },
+              {
+                "name": "locale",
+                "description": "",
+                "type": {
+                  "kind": "SCALAR",
+                  "name": "String",
+                  "ofType": null
+                },
+                "defaultValue": null,
+                "isDeprecated": false,
+                "deprecationReason": null
+              }
+            ],
+            "type": {
+              "kind": "LIST",
+              "name": null,
+              "ofType": {
+                "kind": "UNION",
+                "name": "Subcategory_cases",
+                "ofType": null
+              }
+            },
+            "isDeprecated": false,
+            "deprecationReason": null
+          },
+          {
+            "name": "id",
+            "description": "",
+            "args": [],
+            "type": {
+              "kind": "SCALAR",
+              "name": "ID",
+              "ofType": null
+            },
+            "isDeprecated": false,
+            "deprecationReason": null
+          },
+          {
+            "name": "internalTitle",
+            "description": "",
+            "args": [],
+            "type": {
+              "kind": "SCALAR",
+              "name": "String",
+              "ofType": null
             },
             "isDeprecated": false,
             "deprecationReason": null
@@ -7158,6 +7206,30 @@
         "fields": null,
         "inputFields": [
           {
+            "name": "articles",
+            "description": "",
+            "type": {
+              "kind": "ENUM",
+              "name": "Order",
+              "ofType": null
+            },
+            "defaultValue": null,
+            "isDeprecated": false,
+            "deprecationReason": null
+          },
+          {
+            "name": "cases",
+            "description": "",
+            "type": {
+              "kind": "ENUM",
+              "name": "Order",
+              "ofType": null
+            },
+            "defaultValue": null,
+            "isDeprecated": false,
+            "deprecationReason": null
+          },
+          {
             "name": "createdAt",
             "description": "",
             "type": {
@@ -7183,18 +7255,6 @@
           },
           {
             "name": "internalTitle",
-            "description": "",
-            "type": {
-              "kind": "ENUM",
-              "name": "Order",
-              "ofType": null
-            },
-            "defaultValue": null,
-            "isDeprecated": false,
-            "deprecationReason": null
-          },
-          {
-            "name": "item",
             "description": "",
             "type": {
               "kind": "ENUM",
@@ -7315,7 +7375,23 @@
       },
       {
         "kind": "UNION",
-        "name": "Subcategory_item",
+        "name": "Subcategory_articles",
+        "description": "",
+        "fields": null,
+        "inputFields": null,
+        "interfaces": null,
+        "enumValues": null,
+        "possibleTypes": [
+          {
+            "kind": "OBJECT",
+            "name": "Article",
+            "ofType": null
+          }
+        ]
+      },
+      {
+        "kind": "UNION",
+        "name": "Subcategory_cases",
         "description": "",
         "fields": null,
         "inputFields": null,

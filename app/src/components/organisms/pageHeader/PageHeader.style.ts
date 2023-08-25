@@ -4,7 +4,7 @@ import { MantineTheme } from "@mantine/styles";
 export const wrapper = css``;
 export const contentHeader = (theme: MantineTheme) => css`
   height: 80vh;
-  position:relative;
+  position: relative;
   width: 100%;
   display: flex;
   flex-direction: column;
@@ -41,15 +41,38 @@ export const itemsList = () => css`
   }
 `;
 
-export const filtersButton = (theme: MantineTheme) => css`
-  background-color: ${theme.colors[`neutrals-01`][0]};
-  padding: 8px 16px;
+export const filtersArea = () => {
+  return css`
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    width: 90%;
+  `;
+}
+
+export const filterButtons = (theme: MantineTheme) => css`
+  background-color: transparent;
   border-radius: 100px;
   display: flex;
   gap: 4px;
   place-items: center;
-  position:absolute;
-  bottom: 150px;
-  left:5%;
   cursor: pointer;
+  outline: 0;
+  border: 0;
+  &.reset {
+    right: 2.5%;
+  }
+  &.dropdown {
+   
+    left: 2.5%;
+  }
+`;
+
+export const selectedFiltersArea = css`
+flex: .7;
+display: flex;
+justify-content:center;
+align-items: center;
+gap: 8px;
+flex-wrap: wrap;
 `;

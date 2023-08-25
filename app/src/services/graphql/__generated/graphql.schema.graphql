@@ -518,7 +518,7 @@ input Case_Where {
 }
 
 """"""
-union Case_components = Callout | DragNDrop | FillInGapsGame | ImageWrapperCard | SelectionCard | TextElement
+union Case_components = Callout | DragNDrop | FillInGapsGame | ImageWrapperCard | TextElement
 
 """"""
 type Category {
@@ -975,7 +975,7 @@ type Page {
 }
 
 """"""
-type PageContent {
+type PageHeader {
   """"""
   _meta: CaisyDocument_Meta
 
@@ -991,7 +991,7 @@ type PageContent {
 
     """"""
     locale: String
-  ): [PageContent_categories]
+  ): [PageHeader_categories]
 
   """"""
   id: ID
@@ -1004,9 +1004,9 @@ type PageContent {
 }
 
 """"""
-type PageContent_Connection {
+type PageHeader_Connection {
   """"""
-  edges: [PageContent_ConnectionEdge]
+  edges: [PageHeader_ConnectionEdge]
 
   """"""
   pageInfo: PageInfo
@@ -1016,16 +1016,16 @@ type PageContent_Connection {
 }
 
 """"""
-type PageContent_ConnectionEdge {
+type PageHeader_ConnectionEdge {
   """"""
   cursor: String
 
   """"""
-  node: PageContent
+  node: PageHeader
 }
 
 """"""
-input PageContent_Sort {
+input PageHeader_Sort {
   """"""
   categories: Order
 
@@ -1049,12 +1049,12 @@ input PageContent_Sort {
 }
 
 """"""
-input PageContent_Where {
+input PageHeader_Where {
   """"""
-  AND: [PageContent_Where]
+  AND: [PageHeader_Where]
 
   """"""
-  OR: [PageContent_Where]
+  OR: [PageHeader_Where]
 
   """"""
   internalTitle: CaisyField_String_Where
@@ -1064,7 +1064,7 @@ input PageContent_Where {
 }
 
 """"""
-union PageContent_categories = Category
+union PageHeader_categories = Category
 
 """"""
 type PageInfo {
@@ -1148,7 +1148,7 @@ input Page_Where {
 }
 
 """"""
-union Page_components = PageContent
+union Page_components = PageHeader
 
 """"""
 type Query {
@@ -1180,7 +1180,7 @@ type Query {
   Page(id: ID!, locale: String): Page
 
   """"""
-  PageContent(id: ID!, locale: String): PageContent
+  PageHeader(id: ID!, locale: String): PageHeader
 
   """"""
   SelectionCard(id: ID!, locale: String): SelectionCard
@@ -1219,7 +1219,7 @@ type Query {
   allPage(after: String, before: String, first: Int, last: Int, locale: String, sort: [Page_Sort], where: [Page_Where]): Page_Connection
 
   """"""
-  allPageContent(after: String, before: String, first: Int, last: Int, locale: String, sort: [PageContent_Sort], where: [PageContent_Where]): PageContent_Connection
+  allPageHeader(after: String, before: String, first: Int, last: Int, locale: String, sort: [PageHeader_Sort], where: [PageHeader_Where]): PageHeader_Connection
 
   """"""
   allSelectionCard(after: String, before: String, first: Int, last: Int, locale: String, sort: [SelectionCard_Sort], where: [SelectionCard_Where]): SelectionCard_Connection
@@ -1329,13 +1329,7 @@ type Subcategory {
   _meta: CaisyDocument_Meta
 
   """"""
-  id: ID
-
-  """"""
-  internalTitle: String
-
-  """"""
-  item(
+  articles(
     """
     The cursor to start the pagination from. In this case the curser equals the id for the (last) element. If not set, we wil start from the beginning.
     """
@@ -1346,7 +1340,27 @@ type Subcategory {
 
     """"""
     locale: String
-  ): [Subcategory_item]
+  ): [Subcategory_articles]
+
+  """"""
+  cases(
+    """
+    The cursor to start the pagination from. In this case the curser equals the id for the (last) element. If not set, we wil start from the beginning.
+    """
+    after: String
+
+    """The number of items to return. Default and max value is 100."""
+    first: Int = 100
+
+    """"""
+    locale: String
+  ): [Subcategory_cases]
+
+  """"""
+  id: ID
+
+  """"""
+  internalTitle: String
 
   """"""
   title: String
@@ -1376,6 +1390,12 @@ type Subcategory_ConnectionEdge {
 """"""
 input Subcategory_Sort {
   """"""
+  articles: Order
+
+  """"""
+  cases: Order
+
+  """"""
   createdAt: Order
 
   """"""
@@ -1383,9 +1403,6 @@ input Subcategory_Sort {
 
   """"""
   internalTitle: Order
-
-  """"""
-  item: Order
 
   """"""
   publishedAt: Order
@@ -1413,7 +1430,10 @@ input Subcategory_Where {
 }
 
 """"""
-union Subcategory_item = Case
+union Subcategory_articles = Article
+
+""""""
+union Subcategory_cases = Case
 
 """"""
 type TextElement {

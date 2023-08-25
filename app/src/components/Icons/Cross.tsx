@@ -1,4 +1,4 @@
-export const Cross = ({ size = 20 }: { readonly size?: number }) => (
+export const Cross = ({ size = 20 }: { readonly size?: number }): JSX.Element => (
   <svg
     width={size}
     height={size}

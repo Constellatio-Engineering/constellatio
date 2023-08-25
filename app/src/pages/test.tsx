@@ -1,25 +1,25 @@
 // import { DragDropGame } from "@/components/organisms/DragDropGame/DragDropGame";
 import { Footer } from "@/components/organisms/Footer/Footer";
 import { Header } from "@/components/organisms/Header/Header";
-import PageContent from "@/components/organisms/pageContent/PageContent";
+import PageContent from "@/components/organisms/pageHeader/PageHeader";
 import { getProps } from "@/services/content/getProps";
-import { type IGenPageContent, type IGenPage_Components, type Maybe } from "@/services/graphql/__generated/sdk";
+// import { type IGenPageContent, type IGenPage_Components, type Maybe } from "@/services/graphql/__generated/sdk";
 
 import { type GetStaticProps } from "next";
 import React from "react";
 
 const NextPage = (props: any): any => 
 {
-  const pageComponents: Maybe<Maybe<IGenPage_Components>[]> = props?.Page?.components;
+  const pageComponents = props?.Page?.components;
   
   return (
     <div>
       <Header/>
-      {pageComponents?.map((component: Maybe<Maybe<IGenPageContent>>, index: number) => 
+      {pageComponents?.map((component: any, index: number) => 
       {
         switch (component?.__typename) 
         {
-          case "PageContent":
+          case "PageHeader":
             return <PageContent key={index} {...component}/>;
           default:
             return null;

@@ -23,7 +23,7 @@ export const q_Page = gql`
           slug
           components {
 
-             ...on PageContent{
+             ...on PageHeader{
               __typename
               title
               internalTitle
