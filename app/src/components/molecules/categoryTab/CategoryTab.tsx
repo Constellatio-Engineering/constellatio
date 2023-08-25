@@ -1,3 +1,4 @@
+import { BodyText } from "@/components/atoms/BodyText/BodyText";
 import type { IGenCategory } from "@/services/graphql/__generated/sdk";
 
 import React, { type FunctionComponent } from "react";
@@ -26,7 +27,7 @@ const CategoryTab: FunctionComponent<IProps> = ({
       className={isSelected ? "selected" : ""}
       onClick={() => setIsSelected(!isSelected)}>
       <Svg className="icon" src={icon?.src}/>
-      {title && <p>{title} <span className="counter">({itemsNumber})</span></p>}
+      {title && <BodyText styleType="body-01-medium" component="p">{title} <span className="counter">({itemsNumber})</span></BodyText>}
     </button>
   );
 };
