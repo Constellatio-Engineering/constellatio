@@ -10,7 +10,6 @@ const config: StorybookConfig = {
     "@storybook/addon-interactions",
     "@storybook/addon-designs",
     "@storybook/addon-styling",
-    '@emotion/babel-preset-css-prop',
     {
       name: "@storybook/addon-docs",
       options: {
