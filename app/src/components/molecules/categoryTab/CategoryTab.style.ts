@@ -1,6 +1,6 @@
 import { css } from "@emotion/react";
 
-export const wrapper = css`
+export const wrapper = (theme) => css`
     outline: 0;
     border: 0;
 
@@ -18,25 +18,6 @@ export const wrapper = css`
     padding:12px 16px;
     border-radius: 12px;
 
-    .icon{
-        margin-right: 16px;
-        width: 40px;
-        height: 40px;
-        background-color: #000;
-        color: white;
-        display: grid;
-        place-items:   center;
-        border-radius: 50%;
-    }
-    .counter{
-        color: #949494;
-        /* progressive/body/body-01@medium */
-        font-family: Karla;
-        font-size: 16px;
-        font-style: normal;
-        font-weight: 500;
-        line-height: 24px; /* 150% */
-    }
     &:hover{
         background-color: #F6F6F5;
     }
@@ -52,3 +33,23 @@ export const wrapper = css`
         }
     }
 `;
+
+export const icon = css`
+ margin-right: 16px;
+        width: 40px;
+        height: 40px;
+        background-color: #000;
+        color: white;
+        display: grid;
+        place-items:   center;
+        border-radius: 50%;
+`;
+export const counter = css`
+  color: #949494;
+        /* progressive/body/body-01@medium */
+        font-family: Karla;
+        font-size: 16px;
+        font-style: normal;
+        font-weight: 500;
+        line-height: 24px; /* 150% */`;
+        
