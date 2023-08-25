@@ -14,7 +14,7 @@ import { useDisclosure } from "@mantine/hooks";
 import { notifications } from "@mantine/notifications";
 import { createPagesBrowserClient } from "@supabase/auth-helpers-nextjs";
 import { useRouter } from "next/router";
-import { useState } from "react";
+import { type FunctionComponent, useState } from "react";
 
 const universityData = [
   { icon: <Puzzle/>, label: "Menu list item", value: "1" },
@@ -42,7 +42,7 @@ const genderData = [
   { label: "other", value: "3" },
 ];
 
-export function RegistrationForm() 
+export const RegistrationForm: FunctionComponent = () =>
 {
   const supabase = createPagesBrowserClient();
   const router = useRouter();
@@ -65,9 +65,9 @@ export function RegistrationForm()
     validateInputOnBlur: true,
   });
 
-  const handleSubmit = form.onSubmit(async (formValues) => 
+  const handleSubmit = form.onSubmit(async (formValues) =>
   {
-    try 
+    try
     {
       setSubmitting(true);
 
@@ -76,19 +76,19 @@ export function RegistrationForm()
         method: "POST",
       });
 
-      const data = await response.json();
-
+      // TODO: Add type safety
+      const data = await response.json() as any;
       await supabase.auth.setSession(data);
       await router.replace("/");
     }
-    catch (error) 
+    catch (error)
     {
       notifications.show({
         message: "We couldn't sign you up. Please try again.",
         title: "Oops!",
       });
     }
-    finally 
+    finally
     {
       setSubmitting(false);
     }
@@ -177,4 +177,4 @@ export function RegistrationForm()
       </Stack>
     </form>
   );
-}
+};
