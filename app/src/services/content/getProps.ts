@@ -2,11 +2,15 @@ import { type IGenPage } from "@/services/graphql/__generated/sdk";
 
 import { caisySDK } from "../graphql/getSdk";
 
-type GetProps = (props: {
+type GetPropsParams = {
   slug: string;
-}) => Promise<{
+};
+
+export type GetPropsResult = {
   Page: IGenPage | null;
-}>;
+};
+
+type GetProps = (props: GetPropsParams) => Promise<GetPropsResult>;
 
 export const getProps: GetProps = async ({ slug }) =>
 {

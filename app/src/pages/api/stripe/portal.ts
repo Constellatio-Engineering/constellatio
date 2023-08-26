@@ -8,51 +8,44 @@ import { type NextApiRequest, type NextApiResponse } from "next";
 export default async function handler(
   req: NextApiRequest,
   res: NextApiResponse
-) 
+): Promise<void | NextApiResponse>
 {
-  if(req.method === "POST") 
+  if(req.method !== "POST")
   {
-    try 
-    {
-      const supabase = createPagesServerClient({ req, res });
-      const {
-        data: { user },
-      } = await supabase.auth.getUser();
-
-      if(!user) 
-      {
-        throw new Error("User not found");
-      }
-
-      const stripeCustomerId = await createOrRetrieveCustomer({
-        email: user.email,
-        uuid: user.id,
-      });
-
-      const { url } = await stripe.billingPortal.sessions.create({
-        customer: stripeCustomerId,
-        return_url: `${getURL()}/settings/billing`,
-      });
-
-      return res.status(200).json({
-        url,
-      });
-    }
-    catch (error) 
-    {
-      console.log(error);
-      return res.status(500).json({
-        error: {
-          // @ts-ignore
-          message: error.message,
-          
-          statusCode: 500,
-        },
-      });
-    }
+    return res.status(405).setHeader("Allow", "POST").send("Wrong request method");
   }
-  else 
+
+  // TODO: Refactor this to add proper error handling
+
+  try
   {
-    return res.status(405).setHeader("Allow", "POST");
+    const supabase = createPagesServerClient({ req, res });
+    const {
+      data: { user }
+    } = await supabase.auth.getUser();
+
+    if(!user)
+    {
+      throw new Error("User not found");
+    }
+
+    const stripeCustomerId = await createOrRetrieveCustomer({
+      email: user.email,
+      uuid: user.id,
+    });
+
+    const { url } = await stripe.billingPortal.sessions.create({
+      customer: stripeCustomerId,
+      return_url: `${getURL()}/settings/billing`,
+    });
+
+    return res.status(200).json({
+      url,
+    });
+  }
+  catch (error: unknown)
+  {
+    console.log(error);
+    return res.status(500).send("Something went wrong");
   }
 }

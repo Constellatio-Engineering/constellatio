@@ -1,11 +1,11 @@
-import { Modal as MantineModal, type ModalProps } from "@mantine/core";
+import { Modal as MantineModal, type ModalProps as MantineModalProps } from "@mantine/core";
 import React, { type FC } from "react";
 
 import { modalStyles } from "./Modal.styles";
 
-type TModal = ModalProps;
+export type ModalProps = MantineModalProps;
 
-export const Modal: FC<TModal> = ({
+export const Modal: FC<ModalProps> = ({
   children,
   onClose,
   opened,

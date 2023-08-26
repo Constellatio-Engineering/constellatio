@@ -1,6 +1,6 @@
 /* eslint-disable max-lines */
 import {
-  type CSSObject, type MantineTheme, type PasswordInputStylesNames, type Styles, type TextInputStylesNames 
+  type CSSObject, type MantineTheme, type PasswordInputStylesNames, type PasswordInputStylesParams, type Styles, type TextInputStylesNames
 } from "@mantine/core";
 import { type ReactNode } from "react";
 
@@ -12,14 +12,16 @@ interface TProps
   labelStyleOverwrite: CSSObject | undefined;
 }
 
+type TextStyles = Styles<TextInputStylesNames>;
+
 export const textStyles = ({
   disabled,
   error,
   inputStyleOverwrite,
   labelStyleOverwrite
-}: TProps) => 
+}: TProps): TextStyles =>
 {
-  const styles: Styles<TextInputStylesNames, Record<string, any>> = (theme: MantineTheme) => ({
+  const styles: TextStyles = (theme: MantineTheme) => ({
     description: {
       color: theme.colors["neutrals-01"][7],
       fontSize: "14px",
@@ -110,14 +112,16 @@ export const textStyles = ({
   return styles;
 };
 
+type PasswordStyles = Styles<PasswordInputStylesNames, PasswordInputStylesParams>;
+
 export const passwordStyles = ({
   disabled,
   error,
   inputStyleOverwrite,
   labelStyleOverwrite
-}: TProps) => 
+}: TProps): PasswordStyles =>
 {
-  const styles: Styles<PasswordInputStylesNames, Record<string, any>> = (theme: MantineTheme) => ({
+  const styles: PasswordStyles = (theme: MantineTheme) => ({
     description: {
       color: theme.colors["neutrals-01"][7],
       fontSize: "14px",

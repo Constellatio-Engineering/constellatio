@@ -1,7 +1,7 @@
 import { spacing } from "@/constants/styles/spacing";
+import { type MantineCssObjectStyles } from "@/utils/types";
 
 import styled from "@emotion/styled";
-import { type CSSObject, type MantineTheme } from "@mantine/core";
 
 export const ContainerWrapper = styled.div`
   display: flex;
@@ -9,9 +9,11 @@ export const ContainerWrapper = styled.div`
   gap: ${spacing["spacing-24"]};
 `;
 
-export const imageWrapperStyles = () => 
+type ImageWrapperStyles = MantineCssObjectStyles;
+
+export const imageWrapperStyles = (): ImageWrapperStyles =>
 {
-  const styles = (theme: MantineTheme): CSSObject => ({
+  const styles: ImageWrapperStyles = theme => ({
     alignItems: "flex-start",
     backgroundColor: theme.colors["neutrals-01"][0],
     border: `1px solid ${theme.colors["neutrals-01"][3]}`,
@@ -29,9 +31,11 @@ export const imageWrapperStyles = () =>
   return styles;
 };
 
-export const iconWrapperStyles = () => 
+type IconWrapperStyles = MantineCssObjectStyles;
+
+export const iconWrapperStyles = (): IconWrapperStyles =>
 {
-  const styles = (theme: MantineTheme): CSSObject => ({
+  const styles: IconWrapperStyles = () => ({
     bottom: "20px",
     position: "absolute",
     right: "20px",

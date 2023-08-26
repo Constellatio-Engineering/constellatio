@@ -1,4 +1,4 @@
-import { RecoverPage } from "@/components/pages/RecoverPage/RecoverPage";
+import RecoverPage from "@/components/pages/RecoverPage/RecoverPage";
 
 import React, { type FunctionComponent } from "react";
 

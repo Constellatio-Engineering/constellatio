@@ -3,9 +3,8 @@ import { type MantineTheme, type Styles, type SwitchStylesNames, type SwitchStyl
 
 export const Container = styled.div`
   max-width: 1440px;
-  margin: 0 auto;
+  margin: 16px auto 0;
   display: flex;
-  margin-top: 16px;
   flex-direction: column;
   gap: 24px;
   align-items: center;
@@ -87,9 +86,11 @@ export const CardItem = styled.div`
   }
 `;
 
-export const switchStyle = ({ checked }: { checked: boolean }) => 
+type SwitchStyles = Styles<SwitchStylesNames, SwitchStylesParams>;
+
+export const switchStyle = ({ checked }: { checked: boolean }): SwitchStyles =>
 {
-  const style: Styles<SwitchStylesNames, SwitchStylesParams> = (theme: MantineTheme) => ({
+  const style: SwitchStyles = (theme: MantineTheme) => ({
     thumb: {
       alignItems: "center",
       justifyContent: "center",

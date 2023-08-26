@@ -14,7 +14,7 @@ export const HintsAccordion: FC<HintsAccordionProps> = ({ items }) =>
 {
   const [value, setValue] = useState<string | null>(null);
   return (
-    <Accordion onChange={setValue} value={value} styles={hintsAccordionStyles({})}>
+    <Accordion onChange={setValue} value={value} styles={hintsAccordionStyles()}>
       <Accordion.Item value="hints">
         <Accordion.Control>
           <BodyText styleType="body-01-regular" component="p">

@@ -2,7 +2,7 @@ import styled from "@emotion/styled";
 import { type MantineTheme, type Styles } from "@mantine/core";
 import { type RichTextEditorStylesNames } from "@mantine/tiptap";
 
-type RichtextEditorFieldStyles = Styles<RichTextEditorStylesNames, Record<string, any>>;
+type RichtextEditorFieldStyles = Styles<RichTextEditorStylesNames>;
 
 export const richtextEditorFieldStyles = (): RichtextEditorFieldStyles =>
 {

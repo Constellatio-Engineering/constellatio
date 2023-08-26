@@ -11,7 +11,7 @@ export const supabaseAdmin = createClient<Database>(
 export const createOrRetrieveCustomer = async ({ email, uuid }: {
   email?: string;
   uuid: string;
-}): Promise<string | number> =>
+}): Promise<string> =>
 {
   const { data, error: error1 } = await supabaseAdmin
     .from("profiles")

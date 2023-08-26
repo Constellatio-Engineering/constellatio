@@ -1,8 +1,16 @@
-import { type MantineTheme, type Styles, type TextInputStylesNames } from "@mantine/core";
+import { type Styles, type TextInputStylesNames } from "@mantine/core";
 
-export const fillGapInputStyles = ({ index, status }: { index?: number; status: "default" | "success" | "error" }) => 
+type FillGapInputStylesProps =
 {
-  const styles: Styles<TextInputStylesNames, Record<string, any>> = (theme: MantineTheme) => ({
+  index?: number;
+  status: "default" | "success" | "error";
+};
+
+type FillGapInputStyles = Styles<TextInputStylesNames>;
+
+export const fillGapInputStyles = ({ index, status }: FillGapInputStylesProps): FillGapInputStyles =>
+{
+  const styles: FillGapInputStyles = theme => ({
     input: {
       "&:focus, &:focus-within": {
         borderColor: "initial",

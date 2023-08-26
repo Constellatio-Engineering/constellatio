@@ -1,3 +1,4 @@
+/* eslint-disable max-lines */
 import { Box } from "@mantine/core";
 import { type Meta, type StoryObj } from "@storybook/react";
 import { type FunctionComponent } from "react";

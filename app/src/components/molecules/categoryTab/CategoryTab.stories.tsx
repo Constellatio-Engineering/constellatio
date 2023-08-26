@@ -1,11 +1,11 @@
 import { Box } from "@mantine/core";
 import type { Meta, StoryObj } from "@storybook/react";
-import React from "react";
+import React, { type FunctionComponent } from "react";
 
 import CategoryTab from "./CategoryTab";
 // import { CivilLawIcon } from "../Icons/CivilLawIcon";
 
-const Template = (args: any): any => (
+const Template: FunctionComponent = (args: any): any => (
   <Box w={350}>
     <CategoryTab {...args}/>
   </Box>

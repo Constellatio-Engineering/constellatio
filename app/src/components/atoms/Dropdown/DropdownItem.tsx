@@ -1,3 +1,5 @@
+import { type MantineCssObjectStyles } from "@/utils/types";
+
 import {
   Group, Avatar, Text, type MantineTheme, type CSSObject 
 } from "@mantine/core";
@@ -14,7 +16,7 @@ const DropdownItemComponent = forwardRef<HTMLDivElement, TDropdownItem>(({
   ...props
 }, ref) => 
 {
-  const textStyles = (theme: MantineTheme): CSSObject => ({
+  const textStyles: MantineCssObjectStyles = theme => ({
     fontSize: theme.fontSizes["spacing-16"],
     fontWeight: 500,
     lineHeight: theme.fontSizes["spacing-24"],
