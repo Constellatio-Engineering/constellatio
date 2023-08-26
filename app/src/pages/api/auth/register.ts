@@ -14,31 +14,38 @@ const handler: NextApiHandler = async (req, res) =>
   const body = registrationFormSchema.parse(JSON.parse(req.body));
   const supabase = createPagesServerClient({ req, res });
 
-  const { data, error } = await supabase.auth.signUp({
+  const { data: signUpData, error: signUpError } = await supabase.auth.signUp({
     email: body.email,
     password: body.password,
   });
 
-  if(error)
+  if(signUpError)
   {
-    console.log("error while signing up", error);
-    return res.status(400).json({ message: error.message });
+    console.log("error while signing up", signUpError);
+    return res.status(400).json({ message: signUpError.message });
   }
 
-  const profileUpdate = await supabaseAdmin
+  const { data: upsertData, error: upsertError } = await supabaseAdmin
     .from("profiles")
     .upsert({
       displayName: body.displayName,
       firstName: body.firstName,
       gender: body.gender,
-      id: data.user?.id ?? "",
+      id: signUpData.user?.id ?? "",
       lastName: body.lastName,
       semester: body.semester,
       university: body.university,
     })
     .select();
 
-  return res.status(200).json(data.session);
+  if(upsertError)
+  {
+    console.log("error while upserting", upsertError);
+  }
+
+  console.log("upsertData", upsertData);
+
+  return res.status(200).json(signUpData.session);
 };
 
 export default handler;
