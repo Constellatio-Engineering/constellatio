@@ -49,7 +49,7 @@ export const RichtextEditorField: FC<TRichtextEditorField> = ({ content = "", va
       <ContentWrapper>
         <RichTextEditor.Content/>
         <div>
-          <Button
+          <Button<"button">
             styleType="primary"
             size="large"
             type="button"

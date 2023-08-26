@@ -110,7 +110,7 @@ export const DndWrapper: FC = () =>
       Loading...
     </BodyText>
   ) : !value ? (
-    <Button 
+    <Button<"button">
     // Disabled this rule because ESLint doesn't recognize the type of the Button component
       // eslint-disable-next-line @typescript-eslint/ban-ts-comment
       // @ts-ignore
@@ -122,7 +122,7 @@ export const DndWrapper: FC = () =>
   ) : (
     <Container>
       <Title order={3}>Add Options for Drag N Drop Game</Title>
-      <Button
+      <Button<"button">
         styleType="primary"
         onClick={() => setValue({ options: [], orderRequired: false })}
         w="20%"
@@ -159,10 +159,7 @@ export const DndWrapper: FC = () =>
                 }}
                 styles={switchStyle({ checked })}
               />
-              <Button
-              // Disabled this rule because ESLint doesn't recognize the type of the Button component
-                // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-                // @ts-ignore
+              <Button<"button">
                 styleType="primary"
                 type="submit"
                 disabled={form.getInputProps("option")?.value?.length <= 1}

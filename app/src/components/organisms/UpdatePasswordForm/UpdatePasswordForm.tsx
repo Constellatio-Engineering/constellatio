@@ -70,7 +70,7 @@ export const UpdatePasswordForm: FunctionComponent = () =>
               {...form.getInputProps("passwordConfirm")}
             />
           </Stack>
-          <Button
+          <Button<"button">
             styleType="primary"
             type="submit"
             title="Reset Password"

@@ -29,15 +29,15 @@ const Template: FunctionComponent<ModalProps> = (args) =>
           velit mollit.
         </Text>
         <Group noWrap grow w="100%">
-          <Button onClick={close} fullWidth styleType="secondarySimple">
+          <Button<"button"> onClick={close} fullWidth styleType="secondarySimple">
             Close Modal
           </Button>
-          <Button styleType="primary" fullWidth>
+          <Button<"button"> styleType="primary" fullWidth>
             Primary Button
           </Button>
         </Group>
       </Modal>
-      <Button
+      <Button<"button">
         onClick={open}
         title="Open Modal"
         type="button"

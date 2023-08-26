@@ -14,7 +14,7 @@ const Template: FunctionComponent = () =>
   return (
     <>
       <ResetPasswordModal/>
-      <Button onClick={openResetPasswordModal} styleType="primary">
+      <Button<"button"> onClick={openResetPasswordModal} styleType="primary">
         Open Modal
       </Button>
     </>

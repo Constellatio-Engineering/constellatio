@@ -128,10 +128,7 @@ export const SelectionCardGame: FC<SelectionCardGameProps> = ({ game, helpNote, 
           </>
         )}
         <div>
-          <Button
-            // Disabled this rule because ESLint doesn't recognize the type of the Button component
-            // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-            // @ts-ignore
+          <Button<"button">
             styleType="primary"
             size="large"
             leftIcon={gameStatus === "inprogress" ? <Check/> : <Reload/>}

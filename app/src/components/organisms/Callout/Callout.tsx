@@ -23,7 +23,7 @@ export const Callout: FC<CalloutProps> = ({
   const [isContentHide, setIsContentHide] = React.useState<boolean>(true);
 
   const ShowAllBtn = (
-    <Button
+    <Button<"a">
       component="a"
       styleType="tertiary"
       rightIcon={<ArrowDown size={20}/>}
@@ -34,7 +34,7 @@ export const Callout: FC<CalloutProps> = ({
   );
 
   const ShowLessBtn = (
-    <Button
+    <Button<"a">
       component="a"
       styleType="tertiary"
       rightIcon={<ArrowUp size={20}/>}
