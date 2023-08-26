@@ -23,6 +23,7 @@ export const env = createEnv({
   client: {
     NEXT_PUBLIC_SUPABASE_ANON_KEY: z.string(),
     NEXT_PUBLIC_SUPABASE_URL: z.string().url(),
+    NEXT_PUBLIC_WEBSITE_URL: z.string().url(),
   },
 
   /**
@@ -38,6 +39,7 @@ export const env = createEnv({
     STRIPE_SECRET_KEY: process.env.STRIPE_SECRET_KEY,
     CAISY_API_KEY: process.env.CAISY_API_KEY,
     CAISY_PROJECT_ID: process.env.CAISY_PROJECT_ID,
+    NEXT_PUBLIC_WEBSITE_URL: process.env.NEXT_PUBLIC_WEBSITE_URL,
   },
   /**
    * Run `build` or `dev` with `SKIP_ENV_VALIDATION` to skip env validation.

@@ -3,10 +3,11 @@ import { DownloadIcon } from "@/components/Icons/DownloadIcon";
 
 import { Box, Flex } from "@mantine/core";
 import { type Meta, type StoryObj } from "@storybook/react";
+import { type FunctionComponent } from "react";
 
 import { Button } from "./Button";
 
-const Template = (args: any) => (
+const Template: FunctionComponent = (args: any) => (
   <Flex>
     <Box w={300}>
       <Button {...args}/>

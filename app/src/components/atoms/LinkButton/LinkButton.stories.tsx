@@ -1,10 +1,11 @@
 import { DownloadIcon } from "@/components/Icons/DownloadIcon";
 
 import { type Meta, type StoryObj } from "@storybook/react";
+import { type FunctionComponent } from "react";
 
 import { LinkButton } from "./LinkButton";
 
-const Template = (args: any) => <LinkButton {...args}/>;
+const Template: FunctionComponent = (args: any) => <LinkButton {...args}/>;
 
 const meta: Meta = {
   argTypes: {

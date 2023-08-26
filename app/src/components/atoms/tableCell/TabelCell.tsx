@@ -7,7 +7,7 @@ interface IProps
 
 }
 
-const TableCell: FunctionComponent<IProps> = ({ }) => (
+const TableCell: FunctionComponent<IProps> = () => (
   <div css={styles.wrapper}>
     Hello World
   </div>

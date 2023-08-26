@@ -1,9 +1,10 @@
 import { Box } from "@mantine/core";
 import { type Meta, type StoryObj } from "@storybook/react";
+import { type FunctionComponent } from "react";
 
 import { RichtextEditorField } from "./RichtextEditorField";
 
-const Template = (args: any) => (
+const Template: FunctionComponent = (args: any) => (
   <Box w={670}>
     <RichtextEditorField {...args}/>
   </Box>

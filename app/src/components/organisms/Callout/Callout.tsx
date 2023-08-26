@@ -6,14 +6,14 @@ import { ArrowUp } from "@/components/Icons/ArrowUp";
 import { Richtext } from "@/components/molecules/Richtext/Richtext";
 import { type IGenCallout } from "@/services/graphql/__generated/sdk";
 
-import { Box, Group, Spoiler, Stack } from "@mantine/core";
+import { Group, Spoiler, Stack } from "@mantine/core";
 import React, { type FC } from "react";
 
 import { RichTextStyles, calloutStyles, spoilerStyles } from "./Callout.styles";
 
-type TCallout = IGenCallout;
+export type CalloutProps = IGenCallout;
 
-export const Callout: FC<TCallout> = ({
+export const Callout: FC<CalloutProps> = ({
   expandable,
   icon,
   text,

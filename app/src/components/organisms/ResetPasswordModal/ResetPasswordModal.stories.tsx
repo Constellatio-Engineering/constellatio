@@ -1,19 +1,19 @@
 import { Button } from "@/components/atoms/Button/Button";
 
-import { Box } from "@mantine/core";
 import { type Meta, type StoryObj } from "@storybook/react";
 import { useAtom } from "jotai";
 import { type FunctionComponent } from "react";
 
 import { ResetPasswordModal, resetPasswordModalVisible } from "./ResetPasswordModal";
 
-const Template: FunctionComponent = (args: any) =>
+const Template: FunctionComponent = () =>
 {
-  const [_passwordModalOpen, setResetPasswordModalOpen] = useAtom(resetPasswordModalVisible);
-  const openResetPasswordModal = () => setResetPasswordModalOpen(true);
+  const [, setResetPasswordModalOpen] = useAtom(resetPasswordModalVisible);
+  const openResetPasswordModal = (): void => setResetPasswordModalOpen(true);
+
   return (
     <>
-      <ResetPasswordModal {...args}/>
+      <ResetPasswordModal/>
       <Button onClick={openResetPasswordModal} styleType="primary">
         Open Modal
       </Button>

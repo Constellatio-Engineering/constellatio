@@ -3,9 +3,9 @@ import { type Meta, type StoryObj } from "@storybook/react";
 
 import TableCell from "./TabelCell";
 
-const Template = (args: any): JSX.Element => (
+const Template = (): JSX.Element => (
   <Box w={350}>
-    <TableCell {...args}/>
+    <TableCell/>
   </Box>
 );
 

@@ -1,7 +1,7 @@
 import { Box, Stack } from "@mantine/core";
 import { useDisclosure } from "@mantine/hooks";
 import { type Meta, type StoryObj } from "@storybook/react";
-import { useState } from "react";
+import { type FunctionComponent, useState } from "react";
 
 import { PasswordStrengthMeter } from "./PasswordStrengthMeter";
 import { Input } from "../Input/Input";
@@ -13,7 +13,12 @@ const requirements = [
   { label: "Includes special symbol", re: /[$&+,:;=?@#|'<>.^*()%!-]/ },
 ];
 
-const Template = (args: any) => 
+type TemplateProps = {
+  readonly disabled: boolean;
+  readonly error: string;
+};
+
+const Template: FunctionComponent<TemplateProps> = ({ disabled, error }) =>
 {
   const [value, setValue] = useState("");
   const [isPasswordRevealed, { toggle }] = useDisclosure(false);
@@ -27,8 +32,8 @@ const Template = (args: any) =>
         value={value}
         onChange={(event) => setValue(event.currentTarget.value)}
         onVisibilityChange={toggle}
-        error={args.error}
-        disabled={args.disabled}
+        error={error}
+        disabled={disabled}
       />
       <Stack spacing="spacing-8" mt="spacing-12">
         {requirements.map((requirement, index) => (
@@ -37,8 +42,8 @@ const Template = (args: any) =>
             label={requirement.label}
             meets={requirement.re.test(value)}
             isPasswordRevealed={isPasswordRevealed}
-            error={args.error}
-            disabled={args.disabled}
+            error={error}
+            disabled={disabled}
           />
         ))}
       </Stack>

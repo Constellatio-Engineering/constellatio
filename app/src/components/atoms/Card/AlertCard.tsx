@@ -6,12 +6,12 @@ import React, { type FC } from "react";
 
 import { cardStyles } from "./AlertCard.styles";
 
-type TCard = AlertProps & {
+export type AlertCardProps = AlertProps & {
   readonly stylesOverwrite?: CSSObject;
   readonly variant: "error" | "success";
 };
 
-export const AlertCard: FC<TCard> = ({
+export const AlertCard: FC<AlertCardProps> = ({
   children,
   stylesOverwrite,
   variant,

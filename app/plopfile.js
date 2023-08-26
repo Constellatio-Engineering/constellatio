@@ -21,7 +21,7 @@ module.exports = function (plop) {
       return [
         {
           type: 'add',
-          path: 'src/components/{{camelCase name}}/{{pascalCase name}}.style.ts',
+          path: 'src/components/{{camelCase name}}/{{pascalCase name}}.styles.ts',
           templateFile: 'src/utils/plop-templates/component.style.plop.hbs',
         },
         {

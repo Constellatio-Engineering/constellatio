@@ -17,11 +17,10 @@ import {
   Container, Game, GameWrapper, LegendWrapper, Options, TitleWrapper 
 } from "./SelectionCardGame.styles";
 
-type TSelectionCardGame = Pick<IGenSelectionCard, "game" | "helpNote" | "question">;
-
 type TOptionType = TValue["options"][number];
+export type SelectionCardGameProps = Pick<IGenSelectionCard, "game" | "helpNote" | "question">;
 
-export const SelectionCardGame: FC<TSelectionCardGame> = ({ game, helpNote, question }) =>
+export const SelectionCardGame: FC<SelectionCardGameProps> = ({ game, helpNote, question }) =>
 {
   const optionsWithCheckProp = useMemo(() => game?.options?.map((option: TOptionType) => ({ ...option, checked: false })), [game?.options]);
   const originalOptions: TOptionType[] = useMemo(() => optionsWithCheckProp ?? [], [optionsWithCheckProp]);

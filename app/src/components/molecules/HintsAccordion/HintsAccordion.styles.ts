@@ -26,9 +26,11 @@ export const ItemWrapper = styled.li<{ index: number }>`
   }
 `;
 
-export const hintsAccordionStyles = ({}) => 
+type HintsAccordionStyles = Styles<AccordionStylesNames, AccordionStylesParams>;
+
+export const hintsAccordionStyles = (): HintsAccordionStyles =>
 {
-  const styles: Styles<AccordionStylesNames, AccordionStylesParams> = (theme: MantineTheme) => ({
+  const styles: HintsAccordionStyles = (theme: MantineTheme) => ({
     chevron: {
       height: "24px",
       margin: 0,

@@ -30,7 +30,7 @@ interface Props
 
 const CustomThemingProvider: FunctionComponent<Props> = ({ children }) =>
 {
-  const scrollAreaStyles: Styles<ScrollAreaStylesNames, ScrollAreaStylesParams> = (theme: MantineTheme) => ({
+  const scrollAreaStyles: Styles<ScrollAreaStylesNames, ScrollAreaStylesParams> = theme => ({
     scrollbar: {
       backgroundColor: theme.colors["neutrals-01"][0],
     },
