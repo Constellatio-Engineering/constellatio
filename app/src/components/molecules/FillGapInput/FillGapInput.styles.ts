@@ -1,3 +1,5 @@
+import { type UnknownMantineStylesParams } from "@/utils/types";
+
 import { type Styles, type TextInputStylesNames } from "@mantine/core";
 
 type FillGapInputStylesProps =
@@ -6,7 +8,7 @@ type FillGapInputStylesProps =
   status: "default" | "success" | "error";
 };
 
-type FillGapInputStyles = Styles<TextInputStylesNames>;
+type FillGapInputStyles = Styles<TextInputStylesNames, UnknownMantineStylesParams>;
 
 export const fillGapInputStyles = ({ index, status }: FillGapInputStylesProps): FillGapInputStyles =>
 {

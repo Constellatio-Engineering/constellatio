@@ -17,7 +17,7 @@ import { ResetPasswordModal, resetPasswordModalVisible } from "../ResetPasswordM
 
 export const LoginForm: FunctionComponent = () =>
 {
-  const [_, setResetPasswordModalOpen] = useAtom(resetPasswordModalVisible);
+  const [, setResetPasswordModalOpen] = useAtom(resetPasswordModalVisible);
   const supabase = createPagesBrowserClient<Database>();
   const router = useRouter();
   const [submitting, setSubmitting] = useState(false);

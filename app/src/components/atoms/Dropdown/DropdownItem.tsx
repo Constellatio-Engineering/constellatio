@@ -1,7 +1,7 @@
 import { type MantineCssObjectStyles } from "@/utils/types";
 
 import {
-  Group, Avatar, Text, type MantineTheme, type CSSObject 
+  Group, Text
 } from "@mantine/core";
 import React, { type ComponentPropsWithoutRef, type ReactNode, forwardRef } from "react";
 

@@ -1,6 +1,8 @@
 /* eslint-disable max-lines */
+import { type UnknownMantineStylesParams } from "@/utils/types";
+
 import {
-  type CSSObject, type MantineTheme, type PasswordInputStylesNames, type PasswordInputStylesParams, type Styles, type TextInputStylesNames
+  type CSSObject, type MantineTheme, type PasswordInputStylesNames, type Styles, type TextInputStylesNames
 } from "@mantine/core";
 import { type ReactNode } from "react";
 
@@ -12,7 +14,7 @@ interface TProps
   labelStyleOverwrite: CSSObject | undefined;
 }
 
-type TextStyles = Styles<TextInputStylesNames>;
+type TextStyles = Styles<TextInputStylesNames, UnknownMantineStylesParams>;
 
 export const textStyles = ({
   disabled,
@@ -112,7 +114,7 @@ export const textStyles = ({
   return styles;
 };
 
-type PasswordStyles = Styles<PasswordInputStylesNames, PasswordInputStylesParams>;
+type PasswordStyles = Styles<PasswordInputStylesNames, UnknownMantineStylesParams>;
 
 export const passwordStyles = ({
   disabled,

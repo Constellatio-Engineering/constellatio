@@ -14,10 +14,16 @@ const handler: NextApiHandler = async (req, res) =>
   const body = registrationFormSchema.parse(JSON.parse(req.body));
   const supabase = createPagesServerClient({ req, res });
 
-  const { data, error: _error } = await supabase.auth.signUp({
+  const { data, error } = await supabase.auth.signUp({
     email: body.email,
     password: body.password,
   });
+
+  if(error)
+  {
+    console.log("error while signing up", error);
+    return res.status(400).json({ message: error.message });
+  }
 
   const profileUpdate = await supabaseAdmin
     .from("profiles")
