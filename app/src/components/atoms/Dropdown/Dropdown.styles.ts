@@ -1,7 +1,9 @@
+import { type UnknownMantineStylesParams } from "@/utils/types";
+
 import { type SelectStylesNames, type Styles } from "@mantine/core";
 import { type ReactNode } from "react";
 
-type DropdownStyles = Styles<SelectStylesNames>;
+type DropdownStyles = Styles<SelectStylesNames, UnknownMantineStylesParams>;
 
 export const dropdownStyles = ({ disabled, error }: { disabled?: boolean; error: ReactNode }): DropdownStyles =>
 {

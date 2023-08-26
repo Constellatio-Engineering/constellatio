@@ -2,9 +2,9 @@ import { Button } from "@/components/atoms/Button/Button";
 import { Check } from "@/components/Icons/Check";
 
 import { RichTextEditor, Link } from "@mantine/tiptap";
-import Placeholder from "@tiptap/extension-placeholder";
+import { Placeholder } from "@tiptap/extension-placeholder";
 import { type Content, useEditor } from "@tiptap/react";
-import StarterKit from "@tiptap/starter-kit";
+import { StarterKit } from "@tiptap/starter-kit";
 import { type FC } from "react";
 
 import { ContentWrapper, richtextEditorFieldStyles } from "./RichtextEditorField.styles";

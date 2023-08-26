@@ -1,6 +1,8 @@
+import { type UnknownMantineStylesParams } from "@/utils/types";
+
 import { type MantineTheme, type ModalStylesNames, type Styles } from "@mantine/core";
 
-type ModalStyles = Styles<ModalStylesNames>;
+type ModalStyles = Styles<ModalStylesNames, UnknownMantineStylesParams>;
 
 export const modalStyles = (): ModalStyles =>
 {
