@@ -1,6 +1,6 @@
-import React from "react";
+import React, { type FunctionComponent } from "react";
 
-export const Gamification = ({ size = 24 }: { readonly size?: number }) => (
+export const Gamification: FunctionComponent = ({ size = 24 }: { readonly size?: number }) => (
   <svg
     xmlns="http://www.w3.org/2000/svg"
     width={size}

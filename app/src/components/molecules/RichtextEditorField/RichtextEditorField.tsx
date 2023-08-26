@@ -29,7 +29,7 @@ export const RichtextEditorField: FC<TRichtextEditorField> = ({ content = "", va
   });
 
   return (
-    <RichTextEditor editor={editor} styles={richtextEditorFieldStyles({})}>
+    <RichTextEditor editor={editor} styles={richtextEditorFieldStyles()}>
       <RichTextEditor.Toolbar>
         <RichTextEditor.ControlsGroup>
           <RichTextEditor.Bold/>

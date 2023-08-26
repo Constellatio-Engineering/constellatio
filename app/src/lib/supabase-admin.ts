@@ -11,44 +11,43 @@ export const supabaseAdmin = createClient<Database>(
 export const createOrRetrieveCustomer = async ({ email, uuid }: {
   email?: string;
   uuid: string;
-}) => 
+}): Promise<string | number> =>
 {
-  const { data, error } = await supabaseAdmin
+  const { data, error: error1 } = await supabaseAdmin
     .from("profiles")
     .select("stripe_customer_id")
     .eq("id", uuid)
     .single();
 
-  if(error || !data?.stripe_customer_id) 
+  if(!(error1 || !data?.stripe_customer_id))
   {
-    const customerData: { email?: string; metadata: { supabaseUUID: string } } =
+    return data.stripe_customer_id;
+  }
+  const customerData: { email?: string; metadata: { supabaseUUID: string } } =
       {
         metadata: {
           supabaseUUID: uuid,
         },
       };
 
-    if(email) 
-    {
-      customerData.email = email;
-    }
-
-    const customer = await stripe.customers.create(customerData);
-
-    const { error } = await supabaseAdmin
-      .from("profiles")
-      .update({ stripe_customer_id: customer.id })
-      .eq("id", uuid);
-
-    if(error) 
-    {
-      throw error;
-    }
-
-    console.log(`New customer created and inserted for ${uuid}`);
-
-    return customer.id;
+  if(email)
+  {
+    customerData.email = email;
   }
 
-  return data.stripe_customer_id;
+  const customer = await stripe.customers.create(customerData);
+
+  const { error: error2 } = await supabaseAdmin
+    .from("profiles")
+    .update({ stripe_customer_id: customer.id })
+    .eq("id", uuid);
+
+  if(error2)
+  {
+    throw error2;
+  }
+
+  console.log(`New customer created and inserted for ${uuid}`);
+
+  return customer.id;
 };

@@ -1,3 +1,4 @@
+/* eslint-disable max-lines */
 import {
   type CSSObject, type MantineTheme, type PasswordInputStylesNames, type Styles, type TextInputStylesNames 
 } from "@mantine/core";

@@ -1,11 +1,12 @@
 import { Box } from "@mantine/core";
 import { type Meta, type StoryObj } from "@storybook/react";
+import { type FunctionComponent } from "react";
 
 import { RegistrationForm } from "./RegistrationForm";
 
-const Template = (args: any) => (
+const Template: FunctionComponent = () => (
   <Box w={400}>
-    <RegistrationForm {...args}/>
+    <RegistrationForm/>
   </Box>
 );
 

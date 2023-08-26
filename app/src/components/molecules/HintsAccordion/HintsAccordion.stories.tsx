@@ -1,9 +1,10 @@
 import { Box } from "@mantine/core";
 import { type Meta, type StoryObj } from "@storybook/react";
+import { type FunctionComponent } from "react";
 
-import { HintsAccordion } from "./HintsAccordion";
+import { HintsAccordion, type HintsAccordionProps } from "./HintsAccordion";
 
-const Template = (args: any) => (
+const Template: FunctionComponent<HintsAccordionProps> = (args) => (
   <Box w={630}>
     <HintsAccordion {...args}/>
   </Box>
