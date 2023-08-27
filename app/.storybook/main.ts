@@ -1,5 +1,4 @@
 import type { StorybookConfig } from "@storybook/nextjs";
-// const prettierConfig = require("../.prettierrc");
 
 const config: StorybookConfig = {
   stories: ["../src/**/*.mdx", "../src/**/*.stories.@(js|jsx|ts|tsx)"],
