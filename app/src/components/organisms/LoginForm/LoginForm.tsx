@@ -17,7 +17,7 @@ import { ResetPasswordModal, resetPasswordModalVisible } from "../ResetPasswordM
 
 export const LoginForm: FunctionComponent = () =>
 {
-  const [_, setResetPasswordModalOpen] = useAtom(resetPasswordModalVisible);
+  const [, setResetPasswordModalOpen] = useAtom(resetPasswordModalVisible);
   const supabase = createPagesBrowserClient<Database>();
   const router = useRouter();
   const [submitting, setSubmitting] = useState(false);
@@ -92,9 +92,7 @@ export const LoginForm: FunctionComponent = () =>
             stylesOverwrite={{ color: colors["neutrals-02"][2], textAlign: "left" }}>
             Forgot Password?
           </CustomLink>
-          <Button
-            /* eslint-disable-next-line @typescript-eslint/ban-ts-comment */
-            /* @ts-ignore */ // there is a bug with typescript, so we need to ignore this
+          <Button<"button">
             styleType="primary"
             type="submit"
             title="Log in"

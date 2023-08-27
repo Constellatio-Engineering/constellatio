@@ -1,4 +1,6 @@
-export const ArrowDown = ({ size = 20 }: { readonly size?: number }) => (
+import { type FunctionComponent } from "react";
+
+export const ArrowDown: FunctionComponent< { readonly size?: number }> = ({ size = 20 }) => (
   <svg
     width={size}
     height={size}

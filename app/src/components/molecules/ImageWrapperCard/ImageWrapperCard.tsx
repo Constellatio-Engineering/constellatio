@@ -1,7 +1,6 @@
 import CaisyImg from "@/basic-components/CaisyImg";
 import { BodyText } from "@/components/atoms/BodyText/BodyText";
 import { FloatingButton } from "@/components/atoms/FloatingButton/FloatingButton";
-import { DownloadIcon } from "@/components/Icons/DownloadIcon";
 import { type IGenImageWrapperCard } from "@/services/graphql/__generated/sdk";
 
 import { Box } from "@mantine/core";
@@ -9,9 +8,9 @@ import React, { type FC } from "react";
 
 import { ContainerWrapper, iconWrapperStyles, imageWrapperStyles } from "./ImageWrapperCard.styles";
 
-type TImageWrapperCard = IGenImageWrapperCard;
+export type ImageWrapperCardProps = IGenImageWrapperCard;
 
-export const ImageWrapperCard: FC<TImageWrapperCard> = ({ downloadable, image, title }) => 
+export const ImageWrapperCard: FC<ImageWrapperCardProps> = ({ downloadable, image, title }) =>
 {
   return (
     <>

@@ -3,13 +3,13 @@ import {
 } from "@mantine/core";
 import React, { type FC } from "react";
 
-type TSwitcher = TabsProps & {
+export type SwitcherProps = TabsProps & {
   readonly panelStyleOverwrite?: CSSObject | undefined;
   readonly size: "big" | "medium";
   readonly tabStyleOverwrite?: CSSObject | undefined;
 };
 
-export const Switcher: FC<TSwitcher> = ({
+export const Switcher: FC<SwitcherProps> = ({
   children,
   panelStyleOverwrite,
   size = "big",

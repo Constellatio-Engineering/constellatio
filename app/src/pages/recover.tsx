@@ -1,8 +1,8 @@
-import { RecoverPage } from "@/components/pages/RecoverPage/RecoverPage";
+import RecoverPage from "@/components/pages/RecoverPage/RecoverPage";
 
-import React from "react";
+import React, { type FunctionComponent } from "react";
 
-const recover = () => 
+const Recover: FunctionComponent = () =>
 {
   return (
     <>
@@ -11,4 +11,4 @@ const recover = () =>
   );
 };
 
-export default recover;
+export default Recover;

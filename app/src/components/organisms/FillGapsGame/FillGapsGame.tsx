@@ -13,7 +13,7 @@ import { type IGenFillInGapsGame } from "@/services/graphql/__generated/sdk";
 
 import { Title } from "@mantine/core";
 import { distance } from "fastest-levenshtein";
-import { type FC, useRef, useState } from "react";
+import { type FC, type ReactElement, useRef, useState } from "react";
 
 import {
   Container,
@@ -147,7 +147,7 @@ export const FillGapsGame: FC<TFillGapsGame> = ({ fillGameParagraph, helpNote, q
     setAnswerResult(new Array(totalPlaceholders).fill(""));
   };
 
-  const richtextOverwrite = (props: any): JSX.Element => 
+  const richtextOverwrite = (props: any): ReactElement =>
   {
     return (
       <RichtextOverwrite
@@ -208,10 +208,7 @@ export const FillGapsGame: FC<TFillGapsGame> = ({ fillGameParagraph, helpNote, q
           </>
         )}
         <div>
-          <Button
-            // Disabled this rule because ESLint doesn't recognize the type of the Button component
-            // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-            // @ts-ignore
+          <Button<"button">
             styleType="primary"
             size="large"
             leftIcon={gameStatus === "inprogress" ? <Check/> : <Reload/>}

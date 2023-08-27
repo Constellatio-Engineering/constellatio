@@ -1,11 +1,11 @@
-import { Help } from "@/components/Icons/Help";
-
+/* eslint-disable max-lines */
 import { Box } from "@mantine/core";
 import { type Meta, type StoryObj } from "@storybook/react";
+import { type FunctionComponent } from "react";
 
-import { HelpNote } from "./HelpNote";
+import { HelpNote, type HelpNoteProps } from "./HelpNote";
 
-const Template = (args: any) => (
+const Template: FunctionComponent = (args: HelpNoteProps) => (
   <Box w={650}>
     <HelpNote {...args}/>
   </Box>

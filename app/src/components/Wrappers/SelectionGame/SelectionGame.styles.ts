@@ -1,11 +1,10 @@
 import styled from "@emotion/styled";
-import { type MantineTheme, type Styles, type SwitchStylesNames, type SwitchStylesParams } from "@mantine/core";
+import { type Styles, type SwitchStylesNames, type SwitchStylesParams } from "@mantine/core";
 
 export const Container = styled.div`
   max-width: 1440px;
-  margin: 0 auto;
+  margin: 16px auto 0;
   display: flex;
-  margin-top: 16px;
   flex-direction: column;
   gap: 24px;
   align-items: center;
@@ -84,9 +83,11 @@ export const CardItem = styled.div`
   transition: background-color 0.3s ease;
 `;
 
-export const switchStyle = ({ checked }: { checked: boolean }) => 
+type SwitchStyles = Styles<SwitchStylesNames, SwitchStylesParams>;
+
+export const switchStyle = ({ checked }: { checked: boolean }): SwitchStyles =>
 {
-  const style: Styles<SwitchStylesNames, SwitchStylesParams> = (theme: MantineTheme) => ({
+  const style: SwitchStyles = theme => ({
     thumb: {
       alignItems: "center",
       justifyContent: "center",
@@ -107,5 +108,6 @@ export const switchStyle = ({ checked }: { checked: boolean }) =>
       cursor: "pointer",
     },
   });
+
   return style;
 };

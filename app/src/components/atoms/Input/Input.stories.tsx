@@ -1,9 +1,10 @@
 import { Box } from "@mantine/core";
 import { type Meta, type StoryObj } from "@storybook/react";
+import { type FunctionComponent } from "react";
 
-import { Input } from "./Input";
+import { Input, type InputProps } from "./Input";
 
-const Template = (args: any) => (
+const Template: FunctionComponent<InputProps> = (args) => (
   <Box w={350}>
     <Input {...args}/>
   </Box>

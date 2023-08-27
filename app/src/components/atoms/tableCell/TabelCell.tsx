@@ -1,4 +1,5 @@
-import React, { FunctionComponent } from "react";
+import React, { type FunctionComponent } from "react";
+
 import * as styles from "./TableCell.style";
 
 interface IProps
@@ -6,7 +7,7 @@ interface IProps
 
 }
 
-const TableCell: FunctionComponent<IProps> = ({  }) => (
+const TableCell: FunctionComponent<IProps> = () => (
   <div css={styles.wrapper}>
     Hello World
   </div>

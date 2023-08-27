@@ -1,11 +1,9 @@
-import { Header } from "@/components/organisms/Header/Header";
 import { AuthPage } from "@/components/pages/AuthPage/AuthPage";
 
-export default function Login() 
-{
-  return (
-    <>
-      <AuthPage tab="register"/>
-    </>
-  );
-}
+import { type FunctionComponent } from "react";
+
+const Login: FunctionComponent = () => (
+  <AuthPage tab="register"/>
+);
+
+export default Login;

@@ -56,7 +56,7 @@ export const ResetPasswordModal: FunctionComponent = () =>
             enter your new password.
           </BodyText>
           <Input inputType="text" label="E-Mail Adresse" {...form.getInputProps("email")}/>
-          <Button styleType="primary" type="submit">
+          <Button<"button"> styleType="primary" type="submit">
             Zurücksetzen
           </Button>
         </Stack>

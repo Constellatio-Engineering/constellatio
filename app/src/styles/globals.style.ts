@@ -37,6 +37,7 @@ export const globalStyles = css`
   }
 `;
 
+// eslint-disable-next-line import/no-unused-modules
 export const centerHorizontally = css`
   position: relative;
   left: 50%;

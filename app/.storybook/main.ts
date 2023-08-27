@@ -1,8 +1,6 @@
 import type { StorybookConfig } from "@storybook/nextjs";
 
 const config: StorybookConfig = {
-  stories: ["../src/**/*.mdx", "../src/**/*.stories.@(js|jsx|ts|tsx)"],
-  staticDirs: ["../public"],
   addons: [
     "@storybook/addon-links",
     "@storybook/addon-essentials",
@@ -12,23 +10,26 @@ const config: StorybookConfig = {
     {
       name: "@storybook/addon-docs",
       options: {
-        rule: {
-          include: ["../src/components/"], // You can specify directories
+        rule: { 
+          include: ["../src/components/"],
         },
       },
     },
   ],
-  framework: {
-    name: "@storybook/nextjs",
-    options: {},
-  },
+  // eslint-disable-next-line @typescript-eslint/require-await
   babel: async (options) => ({
     ...options,
-    // @ts-ignore
-    presets: [...options.presets, '@emotion/babel-preset-css-prop'],
+    presets: [...options.presets || [], "@emotion/babel-preset-css-prop"],
   }),
   docs: {
     autodocs: true,
   },
+  framework: {
+    name: "@storybook/nextjs",
+    options: {},
+  },
+  staticDirs: ["../public"],
+  stories: ["../src/**/*.mdx", "../src/**/*.stories.@(js|jsx|ts|tsx)"],
 };
+
 export default config;

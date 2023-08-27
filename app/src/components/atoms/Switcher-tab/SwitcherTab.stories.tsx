@@ -2,10 +2,11 @@ import { Puzzle } from "@/components/Icons/Puzzle";
 
 import { Tabs } from "@mantine/core";
 import { type Meta, type StoryObj } from "@storybook/react";
+import { type FunctionComponent } from "react";
 
 import { SwitcherTab } from "./SwitcherTab";
 
-const Template = (args: any) => (
+const Template: FunctionComponent = (args: any) => (
   <Tabs
     unstyled
     styles={(theme) => ({

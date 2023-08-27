@@ -1,9 +1,10 @@
 import { Box } from "@mantine/core";
 import { type Meta, type StoryObj } from "@storybook/react";
+import { type FunctionComponent } from "react";
 
-import { AlertCard } from "./AlertCard";
+import { AlertCard, type AlertCardProps } from "./AlertCard";
 
-const Template = (args: any) => (
+const Template: FunctionComponent<AlertCardProps> = (args) => (
   <Box w={500}>
     <AlertCard {...args}/>
   </Box>

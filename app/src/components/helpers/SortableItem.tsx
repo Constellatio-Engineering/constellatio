@@ -1,8 +1,13 @@
 import { useSortable } from "@dnd-kit/sortable";
 import { CSS } from "@dnd-kit/utilities";
-import React, { type ReactNode } from "react";
+import React, { type FunctionComponent, type ReactNode } from "react";
 
-export const SortableItem = ({ children, id }: { readonly children: ReactNode; readonly id: string }) => 
+type SortableItemProps = {
+  readonly children: ReactNode;
+  readonly id: string;
+};
+
+export const SortableItem: FunctionComponent<SortableItemProps> = ({ children, id }) =>
 {
   const {
     attributes,

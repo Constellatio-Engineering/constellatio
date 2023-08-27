@@ -1,6 +1,6 @@
-import React from "react";
+import React, { type FunctionComponent } from "react";
 
-export const Flag = () => (
+export const Flag: FunctionComponent = () => (
   <svg
     width="90"
     height="88"

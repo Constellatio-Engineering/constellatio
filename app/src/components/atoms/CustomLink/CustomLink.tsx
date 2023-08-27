@@ -1,5 +1,5 @@
 import { Anchor, type AnchorProps, type CSSObject, createPolymorphicComponent } from "@mantine/core";
-import React, { type FC, forwardRef } from "react";
+import React, { type FC } from "react";
 
 type TLink = AnchorProps & {
   readonly styleType: "link-primary" | "link-secondary" | "link-primary-ts" | "link-content" | "link-content-title";

@@ -1,14 +1,16 @@
 import { type ButtonStylesNames, type ButtonStylesParams, type MantineTheme, type Styles } from "@mantine/core";
 
+type FloatingButtonStyles = Styles<ButtonStylesNames, ButtonStylesParams>;
+
 export const floatingButtonStyles = ({
   pinsNotificationsAmount,
   variation,
 }: {
   pinsNotificationsAmount?: number;
   variation: "icon-big" | "icon-medium" | "pins" | "notes-notes" | "notes-no-notes";
-}) => 
+}): FloatingButtonStyles =>
 {
-  const styles: Styles<ButtonStylesNames, ButtonStylesParams> = (theme: MantineTheme) => ({
+  const styles: FloatingButtonStyles = (theme: MantineTheme) => ({
     icon: {
       "::after": {
         alignItems: "center",

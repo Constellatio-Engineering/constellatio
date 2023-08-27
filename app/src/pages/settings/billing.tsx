@@ -42,7 +42,7 @@ const Billing: FunctionComponent = () =>
     <Layout>
       <Container>
         <Title>Abonnement</Title>
-        <Button mt="lg" loading={opening} onClick={redirectToCustomerPortal}>
+        <Button<"button"> mt="lg" loading={opening} onClick={redirectToCustomerPortal}>
           Stripe öffnen
         </Button>
       </Container>

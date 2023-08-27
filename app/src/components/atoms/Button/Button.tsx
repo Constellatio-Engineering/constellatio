@@ -1,12 +1,10 @@
 import {
   Button as MantineButton,
   type ButtonProps,
-  type MantineTheme,
   type Styles,
-  type ButtonStylesParams,
   type ButtonStylesNames,
   type CSSObject,
-  createPolymorphicComponent,
+  createPolymorphicComponent, type ButtonStylesParams,
 } from "@mantine/core";
 import React, { type ButtonHTMLAttributes, type FC } from "react";
 
@@ -24,7 +22,7 @@ const _Button: FC<TButton> = ({
   ...props
 }) => 
 {
-  const styles: Styles<ButtonStylesNames, ButtonStylesParams> = (theme: MantineTheme) => ({
+  const styles: Styles<ButtonStylesNames, ButtonStylesParams> = theme => ({
     leftIcon: {
       marginRight: theme.spacing["spacing-4"],
     },

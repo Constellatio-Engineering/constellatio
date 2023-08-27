@@ -166,7 +166,7 @@ export const RegistrationForm: FunctionComponent = () =>
             {...form.getInputProps("acceptTOS")}
           />
         </Stack>
-        <Button
+        <Button<"button">
           styleType="primary"
           fullWidth
           type="submit"
