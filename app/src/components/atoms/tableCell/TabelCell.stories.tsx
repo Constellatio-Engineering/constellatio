@@ -26,7 +26,7 @@ const meta: Meta = {
       url: "https://www.figma.com/file/KZhlH1AesOBZZf1V4F9d2r/Constellatio-%E2%80%93-UI-Kit?type=design&node-id=32-951&mode=dev",
     },
   },
-  title: "Atoms/TableCell",
+  title: "Atoms/Table/TableCell",
 };
 
 export default meta;
