@@ -1,0 +1,30 @@
+import { type Meta, type StoryObj } from "@storybook/react";
+
+import {{pascalCase name}}, { type I{{pascalCase name}}Props } from "./{{pascalCase name}}";
+
+const Template = (args: I{{pascalCase name}}Props): JSX.Element => (<{{pascalCase name}} {...args}/>);
+
+const meta: Meta = {
+  argTypes: {
+    
+  },
+  component: Template,
+  parameters: {
+    design: {
+      type: "figma",
+      url: "https://www.figma.com/file/...",
+    },
+  },
+  title: "Atoms/{{pascalCase name}}",
+};
+
+export default meta;
+
+type Story = StoryObj<typeof {{pascalCase name}}>;
+
+export const Default: Story = {
+  args: {
+   
+  },
+};
+
