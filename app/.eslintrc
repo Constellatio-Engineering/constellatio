@@ -10,6 +10,8 @@
   "rules": {
     "no-console": "off",
     "prefer-arrow/prefer-arrow-functions": "off",
+    "@typescript-eslint/consistent-type-definitions": "off",
+    "@typescript-eslint/no-explicit-any": "error",
     "no-nested-ternary": "off",
     "import/no-unresolved": [
       "error",

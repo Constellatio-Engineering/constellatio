@@ -1,5 +1,6 @@
 import { colors } from "@/constants/styles/colors";
 import { spacing } from "@/constants/styles/spacing";
+import { type MantineCssObjectStyles } from "@/utils/types";
 
 import { css } from "@emotion/react";
 import {
@@ -23,9 +24,11 @@ export const RichTextStyles = css`
   }
 `;
 
-export const spoilerStyles = ({ isContentHide }: { isContentHide: boolean }) => 
+type SpoilerStyles = Styles<SpoilerStylesNames, SpoilerStylesParams>;
+
+export const spoilerStyles = ({ isContentHide }: { isContentHide: boolean }): SpoilerStyles =>
 {
-  const styles: Styles<SpoilerStylesNames, SpoilerStylesParams> = (theme: MantineTheme) => ({
+  const styles: SpoilerStyles = (theme: MantineTheme) => ({
     control: {
       marginTop: isContentHide ? -4 : theme.spacing["spacing-22"],
     },
@@ -47,7 +50,9 @@ export const spoilerStyles = ({ isContentHide }: { isContentHide: boolean }) =>
   return styles;
 };
 
-export const calloutStyles = () => 
+type CalloutStyles = MantineCssObjectStyles;
+
+export const calloutStyles = (): CalloutStyles =>
 {
   const styles = (theme: MantineTheme): CSSObject => ({
     backgroundColor: theme.colors["neutrals-01"][0],

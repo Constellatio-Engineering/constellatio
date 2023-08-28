@@ -1,9 +1,10 @@
 import { Box } from "@mantine/core";
 import { type Meta, type StoryObj } from "@storybook/react";
+import { type FunctionComponent } from "react";
 
-import { FillGapInput } from "./FillGapInput";
+import { FillGapInput, type FillGapInputProps } from "./FillGapInput";
 
-const Template = (args: any) => (
+const Template: FunctionComponent<FillGapInputProps> = (args) => (
   <Box w={300}>
     <FillGapInput {...args}/>
   </Box>

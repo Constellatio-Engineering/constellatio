@@ -24,7 +24,7 @@ export const SolveCaseGame: FC<TSolveCaseGame> = ({ onGameStartHandler }) =>
           Awesome job! Now, you’re ready to solve the case.
         </BodyText>
         <div>
-          <Button styleType="primary" size="large" onClick={onGameStartHandler}>
+          <Button<"button"> styleType="primary" size="large" onClick={onGameStartHandler}>
             Start solving this case
           </Button>
         </div>

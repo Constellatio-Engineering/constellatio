@@ -1,17 +1,11 @@
+import { updateHTML } from "@/utils/update-html";
+
 import { type Maybe } from "graphql/jsutils/Maybe";
 import React, { useEffect, useRef } from "react";
 
-const updateHTML = (ref: React.MutableRefObject<any>, html: string): void => 
-{
-  if(ref.current) 
-  {
-    ref.current.innerHTML = html;
-  }
-};
-
 export const Svg: React.FC<{ readonly className?: string;readonly src: Maybe<string> | undefined }> = ({ className, src }) => 
 {
-  const svgRef = useRef(null);
+  const svgRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => 
   {

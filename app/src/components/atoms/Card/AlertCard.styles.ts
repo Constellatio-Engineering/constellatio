@@ -2,12 +2,14 @@ import {
   type AlertStylesNames, type AlertStylesParams, type CSSObject, type MantineTheme, type Styles 
 } from "@mantine/core";
 
+type CardStyle = Styles<AlertStylesNames, AlertStylesParams>;
+
 export const cardStyles = ({ stylesOverwrite, variant }: {
   stylesOverwrite?: CSSObject;
   variant: "error" | "success";
-}) => 
+}): CardStyle =>
 {
-  const styles: Styles<AlertStylesNames, AlertStylesParams> = (theme: MantineTheme) => ({
+  const styles: CardStyle = (theme: MantineTheme) => ({
     body: {
       flex: "initial",
     },

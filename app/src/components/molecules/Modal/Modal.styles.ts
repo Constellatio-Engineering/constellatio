@@ -1,8 +1,12 @@
+import { type UnknownMantineStylesParams } from "@/utils/types";
+
 import { type MantineTheme, type ModalStylesNames, type Styles } from "@mantine/core";
 
-export const modalStyles = () => 
+type ModalStyles = Styles<ModalStylesNames, UnknownMantineStylesParams>;
+
+export const modalStyles = (): ModalStyles =>
 {
-  const styles: Styles<ModalStylesNames, Record<string, any>> = (theme: MantineTheme) => ({
+  const styles: ModalStyles = (theme: MantineTheme) => ({
     body: {
       alignItems: "center",
       display: "flex",

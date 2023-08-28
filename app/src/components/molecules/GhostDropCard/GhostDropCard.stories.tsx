@@ -1,12 +1,12 @@
 import { Box } from "@mantine/core";
 import { type Meta, type StoryObj } from "@storybook/react";
-import React from "react";
+import React, { type FunctionComponent } from "react";
 
 import { GhostDropCard } from "./GhostDropCard";
 
-const Template = (args: any) => (
+const Template: FunctionComponent = () => (
   <Box w={350}>
-    <GhostDropCard {...args}/>
+    <GhostDropCard/>
   </Box>
 );
 

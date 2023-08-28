@@ -1,37 +1,11 @@
-// import { DragDropGame } from "@/components/organisms/DragDropGame/DragDropGame";
-import { Footer } from "@/components/organisms/Footer/Footer";
-import { Header } from "@/components/organisms/Header/Header";
-import PageContent from "@/components/organisms/pageHeader/PageHeader";
-import { getProps } from "@/services/content/getProps";
-// import { type IGenPageContent, type IGenPage_Components, type Maybe } from "@/services/graphql/__generated/sdk";
+import { getProps, type GetPropsResult } from "@/services/content/getProps";
 
 import { type GetStaticProps } from "next";
-import React from "react";
+import React, { type FunctionComponent } from "react";
 
-const NextPage = (props: any): any => 
-{
-  const pageComponents = props?.Page?.components;
-  
-  return (
-    <div>
-      <Header/>
-      {pageComponents?.map((component: any, index: number) => 
-      {
-        switch (component?.__typename) 
-        {
-          case "PageHeader":
-            return <PageContent key={index} {...component}/>;
-          default:
-            return null;
+import CategoryTab from "../components/molecules/categoryTab/CategoryTab";
 
-        }
-      })}
-      <Footer/>
-    </div>
-  );
-};
-
-export const getStaticProps: GetStaticProps = async () => 
+export const getStaticProps: GetStaticProps<GetPropsResult, Record<string, never>> = async () =>
 {
   const resPage = await getProps({ slug: "cases" });
 
@@ -43,12 +17,32 @@ export const getStaticProps: GetStaticProps = async () =>
   };
 };
 
-// export const getStaticPaths: GetStaticPaths = async () => {
-//   return {
-//     paths: [],
-//     fallback: true,
-//   };
-// };
+const NextPage: FunctionComponent<GetPropsResult> = ({ Page }) =>
+{
+  console.log(Page);
+
+  if(!Page)
+  {
+    return <div>Page Props not found</div>;
+  }
+
+  return (
+    <div>
+      {Page.components?.map((component, index) => (
+        <div key={index}>
+          {/* TODO: Delete this */}
+          {/* eslint-disable-next-line @typescript-eslint/ban-ts-comment */}
+          {/* @ts-ignore */}
+          {component?.categories?.map((category, index) => (
+            <React.Fragment key={index}>
+              <CategoryTab {...category} itemsNumber={20} selected={index === 0}/>
+            </React.Fragment>
+          ))}
+        </div>
+      ))}
+    </div>
+  );
+};
 
 export default NextPage;
 

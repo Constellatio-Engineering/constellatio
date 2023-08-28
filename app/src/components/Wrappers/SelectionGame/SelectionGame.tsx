@@ -75,10 +75,7 @@ export const SelectionGameWrapper = (): JSX.Element =>
       Loading...
     </BodyText>
   ) : !value ? (
-    <Button
-    // Disabled this rule because ESLint doesn't recognize the type of the Button component
-      // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-      // @ts-ignore
+    <Button<"button">
       styleType="tertiary"
       onClick={() => setValue({ options: [] })}
       w="25%">
@@ -87,7 +84,7 @@ export const SelectionGameWrapper = (): JSX.Element =>
   ) : (
     <Container>
       <Title order={3}>Add Options for Card Selection Game</Title>
-      <Button
+      <Button<"button">
         styleType="primary"
         onClick={() => setValue({ options: [] })}
         w="20%"
@@ -124,10 +121,7 @@ export const SelectionGameWrapper = (): JSX.Element =>
                 }}
                 styles={switchStyle({ checked })}
               />
-              <Button
-                // Disabled this rule because ESLint doesn't recognize the type of the Button component
-                // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-                // @ts-ignore
+              <Button<"button">
                 styleType="primary"
                 type="submit"
                 disabled={form.getInputProps("option")?.value?.length <= 1}

@@ -1,4 +1,6 @@
-export const Help = ({ size = 20 }: { readonly size?: number | undefined }) => (
+import { type FunctionComponent } from "react";
+
+export const Help: FunctionComponent = ({ size = 20 }: { readonly size?: number | undefined }) => (
   <svg
     width={size}
     height={size}

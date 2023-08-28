@@ -1,6 +1,6 @@
-import React from "react";
+import React, { type FunctionComponent } from "react";
 
-export const Pin = ({ size = 20 }: { readonly size?: number }) => (
+export const Pin: FunctionComponent = ({ size = 20 }: { readonly size?: number }) => (
   <svg
     width={size}
     height={size}

@@ -1,10 +1,14 @@
+import { type UnknownMantineStylesParams } from "@/utils/types";
+
 import styled from "@emotion/styled";
 import { type MantineTheme, type Styles } from "@mantine/core";
 import { type RichTextEditorStylesNames } from "@mantine/tiptap";
 
-export const richtextEditorFieldStyles = ({}) => 
+type RichtextEditorFieldStyles = Styles<RichTextEditorStylesNames, UnknownMantineStylesParams>;
+
+export const richtextEditorFieldStyles = (): RichtextEditorFieldStyles =>
 {
-  const styles: Styles<RichTextEditorStylesNames, Record<string, any>> = (theme: MantineTheme) => ({
+  const styles: RichtextEditorFieldStyles = (theme: MantineTheme) => ({
     content: {
       "& .ProseMirror": {
         "& blockquote": {

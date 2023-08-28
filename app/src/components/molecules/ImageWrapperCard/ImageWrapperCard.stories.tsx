@@ -1,9 +1,10 @@
 import { Box } from "@mantine/core";
 import { type Meta, type StoryObj } from "@storybook/react";
+import { type FunctionComponent } from "react";
 
-import { ImageWrapperCard } from "./ImageWrapperCard";
+import { ImageWrapperCard, type ImageWrapperCardProps } from "./ImageWrapperCard";
 
-const Template = (args: any) => (
+const Template: FunctionComponent = (args: ImageWrapperCardProps) => (
   <Box w={670}>
     <ImageWrapperCard {...args}/>
   </Box>

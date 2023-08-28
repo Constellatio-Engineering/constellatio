@@ -2,16 +2,16 @@ import { CheckFilled } from "@/components/Icons/CheckFilled";
 import { CrossFilled } from "@/components/Icons/CrossFilled";
 
 import { TextInput, type TextInputProps } from "@mantine/core";
-import React, { type ForwardRefRenderFunction, ReactNode, forwardRef } from "react";
+import React, { type ForwardRefRenderFunction, forwardRef } from "react";
 
 import { fillGapInputStyles } from "./FillGapInput.styles";
 
-type TFillGapInput = TextInputProps & {
+export type FillGapInputProps = TextInputProps & {
   readonly index?: number;
   readonly status: "default" | "success" | "error";
 };
 
-const _FillGapInput: ForwardRefRenderFunction<HTMLInputElement, TFillGapInput> = ({
+const _FillGapInput: ForwardRefRenderFunction<HTMLInputElement, FillGapInputProps> = ({
   index,
   status,
   ...props

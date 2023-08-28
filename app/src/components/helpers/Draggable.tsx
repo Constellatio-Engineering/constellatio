@@ -2,9 +2,14 @@ import { useDraggable } from "@dnd-kit/core";
 import { CSS } from "@dnd-kit/utilities";
 import { useTheme } from "@emotion/react";
 import { Box } from "@mantine/core";
-import React, { type ReactNode } from "react";
+import React, { type FunctionComponent, type ReactNode } from "react";
 
-export const Draggable = ({ children, id }: { readonly children: ReactNode; readonly id: string }) => 
+type DraggableProps = {
+  readonly children: ReactNode;
+  readonly id: string;
+};
+
+export const Draggable: FunctionComponent<DraggableProps> = ({ children, id }) =>
 {
   const {
     attributes,

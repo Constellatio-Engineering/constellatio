@@ -41,7 +41,7 @@ export const _FloatingButton: FC<TFloatingButton> = ({
           : null;
 
   return (
-    <Button
+    <Button<"button">
       unstyled
       styles={floatingButtonStyles({ pinsNotificationsAmount, variation })}
       rightIcon={ButtonIcons}

@@ -6,9 +6,9 @@ import React, { type FC } from "react";
 import { IconWrapper, RichTextWrapper, Wrapper } from "./HelpNote.styles";
 import { Richtext } from "../Richtext/Richtext";
 
-type THelpNote = IGenTextElement;
+export type HelpNoteProps = IGenTextElement;
 
-export const HelpNote: FC<THelpNote> = ({ richTextContent }) => 
+export const HelpNote: FC<HelpNoteProps> = ({ richTextContent }) =>
 {
   return (
     <Wrapper>
