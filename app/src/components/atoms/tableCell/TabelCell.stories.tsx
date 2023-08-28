@@ -1,17 +1,23 @@
+import { Puzzle } from "@/components/Icons/Puzzle";
+
 import { Box } from "@mantine/core";
 import { type Meta, type StoryObj } from "@storybook/react";
+import { type FC } from "react";
 
-import TableCell from "./TabelCell";
+import TableCell, { type ITableCellProps } from "./TableCell";
 
-const Template = (): JSX.Element => (
-  <Box w={350}>
-    <TableCell/>
+const Template: FC<ITableCellProps> = (args) => (
+  <Box w={220}>
+    <TableCell {...args}/>
   </Box>
 );
 
 const meta: Meta = {
   argTypes: {
-    
+    variant: {
+      control: "radio",
+      options: ["titleTableCell", "simpleTableCell"],
+    },
   },
   component: Template,
   parameters: {
@@ -27,9 +33,15 @@ export default meta;
 
 type Story = StoryObj<typeof TableCell>;
 
-export const Default: Story = {
+export const WithoutIcon: Story = {
   args: {
-   
+    children: "Title table cell",
   },
 };
 
+export const WithIcon: Story = {
+  args: {
+    ...WithoutIcon.args,
+    icon: <Puzzle/>,
+  },
+};

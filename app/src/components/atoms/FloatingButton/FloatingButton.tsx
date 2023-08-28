@@ -14,7 +14,7 @@ type TFloatingButton = ButtonProps & {
   readonly variation: "icon-big" | "icon-medium" | "pins" | "notes-notes" | "notes-no-notes";
 };
 
-export const _FloatingButton: FC<TFloatingButton> = ({
+const _FloatingButton: FC<TFloatingButton> = ({
   pinsNotificationsAmount,
   variation,
   ...props
