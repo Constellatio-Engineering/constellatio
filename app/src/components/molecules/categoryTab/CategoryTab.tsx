@@ -6,13 +6,13 @@ import React, { type FunctionComponent } from "react";
 
 import * as styles from "./CategoryTab.style";
 import { Svg } from "../../../basic-components/SVG/Svg";
-interface IProps extends IGenCategory
+export interface ICategoryTab extends IGenCategory
 {
   readonly itemsNumber: number;
   readonly selected?: boolean;
 }
 
-const CategoryTab: FunctionComponent<IProps> = ({
+const CategoryTab: FunctionComponent<ICategoryTab> = ({
   icon,
   itemsNumber,
   selected,

@@ -3,9 +3,9 @@ import type { Meta, StoryObj } from "@storybook/react";
 import React, { type FunctionComponent } from "react";
 
 import CategoryTab from "./CategoryTab";
-// import { CivilLawIcon } from "../Icons/CivilLawIcon";
+import type { ICategoryTab } from "./CategoryTab";
 
-const Template: FunctionComponent = (args: any): any => (
+const Template: FunctionComponent<ICategoryTab> = (args: ICategoryTab): JSX.Element => (
   <Box w={350}>
     <CategoryTab {...args}/>
   </Box>
