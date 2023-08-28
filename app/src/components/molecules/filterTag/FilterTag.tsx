@@ -4,19 +4,17 @@ import * as styles from "./FilterTag.style";
 import { BodyText } from "../../atoms/BodyText/BodyText";
 import { Cross } from "../../Icons/Cross";
 
-interface IProps extends PropsWithChildren
+export interface IFilterTag extends PropsWithChildren
 {
-  readonly active?: boolean;
-  // applied?: boolean;
   readonly simple?: boolean;
-  readonly title: string;
+  readonly title?: string;
 }
 
-const FilterTag: FunctionComponent<IProps> = ({
+const FilterTag: FunctionComponent<IFilterTag> = ({
   children,
   ...props
 }) => (
-  <div css={styles.tag}>
+  <div css={styles.filterTag}>
     <BodyText styleType="body-01-medium">{props?.title ?? children} {props?.simple ? "" : <Cross/>}</BodyText>
   </div>
 );

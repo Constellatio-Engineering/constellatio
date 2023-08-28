@@ -1,7 +1,7 @@
 import { css } from "@emotion/react";
-import { MantineTheme } from "@mantine/styles";
+import { type MantineTheme } from "@mantine/styles";
 
-export const tag = (theme: MantineTheme) => css`
+export const filterTag = (theme: MantineTheme) => css`
   div{
     background-color:${theme.colors["neutrals-01"][0]};
     display: flex;
@@ -12,6 +12,7 @@ export const tag = (theme: MantineTheme) => css`
     color: ${theme.colors["neutrals-02"][1]};
     border:1px solid ${theme.colors["neutrals-01"][3]};
     cursor: pointer;
+    width: max-content;
     svg{
         color: ${theme.colors["neutrals-01"][7]};
     }
