@@ -1,4 +1,3 @@
-import { BodyText } from "@/components/atoms/BodyText/BodyText";
 import { ArrowDown } from "@/components/Icons/ArrowDown";
 import { DownloadIcon } from "@/components/Icons/DownloadIcon";
 import { type ExtractProps } from "@/utils/types";
