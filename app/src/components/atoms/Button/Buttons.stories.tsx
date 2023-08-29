@@ -1,5 +1,7 @@
+import { BodyText } from "@/components/atoms/BodyText/BodyText";
 import { ArrowDown } from "@/components/Icons/ArrowDown";
 import { DownloadIcon } from "@/components/Icons/DownloadIcon";
+import { type ExtractProps } from "@/utils/types";
 
 import { Box, Flex } from "@mantine/core";
 import { type Meta, type StoryObj } from "@storybook/react";
@@ -7,9 +9,11 @@ import { type FunctionComponent } from "react";
 
 import { Button } from "./Button";
 
-const Template: FunctionComponent = (args: any) => (
+const Template: FunctionComponent<ExtractProps<typeof Button>> = args => (
   <Flex>
     <Box w={300}>
+      {/* eslint-disable-next-line @typescript-eslint/ban-ts-comment */}
+      {/* @ts-ignore - This is needed because the Type produced by the Button component is too complex for Typescript*/}
       <Button {...args}/>
     </Box>
   </Flex>
