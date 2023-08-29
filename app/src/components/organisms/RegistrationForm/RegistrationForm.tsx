@@ -6,7 +6,9 @@ import { Dropdown } from "@/components/atoms/Dropdown/Dropdown";
 import { Input } from "@/components/atoms/Input/Input";
 import { PasswordValidationSchema } from "@/components/helpers/PasswordValidationSchema";
 import { Puzzle } from "@/components/Icons/Puzzle";
-import { registrationFormSchema } from "@/schemas/RegistrationFormSchema";
+import { env } from "@/env.mjs";
+import { type RegistrationFormSchema, registrationFormSchema } from "@/schemas/RegistrationFormSchema";
+import { api } from "@/utils/api";
 
 import { Box, Stack } from "@mantine/core";
 import { useForm, zodResolver } from "@mantine/form";
@@ -14,14 +16,11 @@ import { useDisclosure } from "@mantine/hooks";
 import { notifications } from "@mantine/notifications";
 import { createPagesBrowserClient } from "@supabase/auth-helpers-nextjs";
 import { useRouter } from "next/router";
-import { type FunctionComponent, useState } from "react";
+import { type FunctionComponent } from "react";
 
 const universityData = [
-  { icon: <Puzzle/>, label: "Menu list item", value: "1" },
-  { icon: <Puzzle/>, label: "Menu list item", value: "2" },
-  { icon: <Puzzle/>, label: "Menu list item", value: "3" },
-  { icon: <Puzzle/>, label: "Menu list item", value: "4" },
-  { icon: <Puzzle/>, label: "Menu list item", value: "5" },
+  { icon: <Puzzle/>, label: "HdM Stuttgart", value: "hdm-stuttgart" },
+  { icon: <Puzzle/>, label: "TU München", value: "tu-muenchen" },
 ];
 
 const semesterData = [
@@ -46,10 +45,48 @@ export const RegistrationForm: FunctionComponent = () =>
 {
   const supabase = createPagesBrowserClient();
   const router = useRouter();
-  const [submitting, setSubmitting] = useState(false);
   const [isPasswordRevealed, { toggle }] = useDisclosure(false);
-  const form = useForm({
-    initialValues: {
+
+  const { isLoading: isRegisterLoading, mutate: register } = api.authentication.register.useMutation({
+    onError: e =>
+    {
+      console.log("error while register:", e);
+      notifications.show({
+        message: "We couldn't sign you up. Please try again.",
+        title: "Oops!",
+      });
+    },
+    onSuccess: async data =>
+    {
+      console.log("registered successfully", data);
+      await supabase.auth.setSession(data);
+      await router.replace("/");
+    },
+  });
+
+  let initialValues: RegistrationFormSchema;
+
+  console.log(env.NEXT_PUBLIC_NODE_ENV);
+
+  if(env.NEXT_PUBLIC_NODE_ENV === "development")
+  {
+    initialValues = {
+      acceptTOS: false,
+      displayName: "Constellatio Dev User",
+      email: "devUser@constellatio-dummy-mail.de",
+      firstName: "Dev",
+      gender: "male",
+      lastName: "User",
+      password: "super-secure-password-123",
+      passwordConfirmation: "super-secure-password-123",
+      semester: undefined,
+      university: "HdM Stuttgart",
+    };
+
+  }
+  else
+  {
+    initialValues = {
       acceptTOS: false,
       displayName: "",
       email: "",
@@ -60,39 +97,16 @@ export const RegistrationForm: FunctionComponent = () =>
       passwordConfirmation: "",
       semester: undefined,
       university: "",
-    },
+    };
+  }
+
+  const form = useForm<RegistrationFormSchema>({
+    initialValues,
     validate: zodResolver(registrationFormSchema),
     validateInputOnBlur: true,
   });
 
-  const handleSubmit = form.onSubmit(async (formValues) =>
-  {
-    try
-    {
-      setSubmitting(true);
-
-      const response = await fetch("/api/auth/register", {
-        body: JSON.stringify(formValues),
-        method: "POST",
-      });
-
-      // TODO: Add type safety
-      const data = await response.json() as any;
-      await supabase.auth.setSession(data);
-      await router.replace("/");
-    }
-    catch (error)
-    {
-      notifications.show({
-        message: "We couldn't sign you up. Please try again.",
-        title: "Oops!",
-      });
-    }
-    finally
-    {
-      setSubmitting(false);
-    }
-  });
+  const handleSubmit = form.onSubmit(formValues => register(formValues));
 
   return (
     <form onSubmit={handleSubmit}>
@@ -171,7 +185,7 @@ export const RegistrationForm: FunctionComponent = () =>
           fullWidth
           type="submit"
           title="Konto erstellen"
-          loading={submitting}>
+          loading={isRegisterLoading}>
           Konto erstellen
         </Button>
       </Stack>
