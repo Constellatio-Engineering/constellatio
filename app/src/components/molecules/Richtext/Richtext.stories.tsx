@@ -3,9 +3,9 @@ import { Box } from "@mantine/core";
 import { type Meta, type StoryObj } from "@storybook/react";
 import { type FunctionComponent } from "react";
 
-import { Richtext } from "./Richtext";
+import { Richtext, type RichtextProps } from "./Richtext";
 
-const Template: FunctionComponent = (args: any) => (
+const Template: FunctionComponent<RichtextProps> = args => (
   <Box w={500}>
     <Richtext {...args}/>
   </Box>

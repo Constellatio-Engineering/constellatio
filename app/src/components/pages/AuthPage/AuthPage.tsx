@@ -11,7 +11,7 @@ import { Container, Flex, Tabs } from "@mantine/core";
 import { useRouter } from "next/router";
 import { type FC } from "react";
 
-interface AuthPageProps 
+export interface AuthPageProps
 {
   readonly tab: "login" | "register";
 }

@@ -1,10 +1,12 @@
+import { type ExtractProps } from "@/utils/types";
+
 import { Box } from "@mantine/core";
 import { type Meta, type StoryObj } from "@storybook/react";
 import { type FunctionComponent } from "react";
 
 import { FloatingButton } from "./FloatingButton";
 
-const Template: FunctionComponent = (args: any) => (
+const Template: FunctionComponent<ExtractProps<typeof FloatingButton>> = args => (
   <Box w={350}>
     <FloatingButton {...args}/>
   </Box>

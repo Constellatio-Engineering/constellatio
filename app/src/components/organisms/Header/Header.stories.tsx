@@ -2,9 +2,9 @@ import { Box } from "@mantine/core";
 import { type Meta, type StoryObj } from "@storybook/react";
 import { type FunctionComponent } from "react";
 
-import { Header } from "./Header";
+import { Header, type HeaderProps } from "./Header";
 
-const Template: FunctionComponent = (args: any) => (
+const Template: FunctionComponent<HeaderProps> = args => (
   <Box maw={1440}>
     <Header {...args}/>
   </Box>

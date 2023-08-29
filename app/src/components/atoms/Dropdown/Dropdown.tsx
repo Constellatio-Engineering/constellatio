@@ -4,9 +4,9 @@ import React, { type FC } from "react";
 import { dropdownStyles } from "./Dropdown.styles";
 import { DropdownItem } from "./DropdownItem";
 
-type TDropdown = SelectProps;
+export type DropdownProps = SelectProps;
 
-export const Dropdown: FC<TDropdown> = ({
+export const Dropdown: FC<DropdownProps> = ({
   disabled,
   error,
   ...props
