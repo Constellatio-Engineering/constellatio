@@ -10,6 +10,7 @@ import { ResultCard } from "@/components/molecules/ResultCard/ResultCard";
 import { Richtext } from "@/components/molecules/Richtext/Richtext";
 import RichtextOverwrite from "@/components/organisms/FillGapsGame/RichtextOverwrite";
 import { type IGenFillInGapsGame } from "@/services/graphql/__generated/sdk";
+import { type TextElement } from "types/richtext";
 
 import { Title } from "@mantine/core";
 import { distance } from "fastest-levenshtein";
@@ -27,18 +28,24 @@ import {
 
 export type TFillGapsGame = Pick<IGenFillInGapsGame, "fillGameParagraph" | "helpNote" | "question">;
 
-const countPlaceholders = (content: any): number => 
+const countPlaceholders = (content: TextElement[]): number => 
 {
   let count = 0;
   const regex = /{{.*?}}/g;
 
-  content.forEach((item: any) => 
+  content.forEach((item: TextElement) => 
   {
-    if(item.type === "text" && item.text) 
+    switch (item.type) 
     {
-      const matches = item.text.match(regex) || [];
-      count += matches.length;
+      case "text":
+        if(item.text) 
+        {
+          const matches = item.text.match(regex) || [];
+          count += matches.length;
+        }
+        break;
     }
+
     if(item.content) 
     {
       count += countPlaceholders(item.content);
@@ -71,7 +78,7 @@ export const FillGapsGame: FC<TFillGapsGame> = ({ fillGameParagraph, helpNote, q
 
   const checkAnswers = (): boolean => 
   {
-    if(userAnswers.length !== correctAnswers.current.length) { return false; }
+    if(userAnswers.length !== correctAnswers.current.length) { return false; }                                         
 
     let allCorrect = true;
     const newAnswerResult: string[] = [];
@@ -147,7 +154,9 @@ export const FillGapsGame: FC<TFillGapsGame> = ({ fillGameParagraph, helpNote, q
     setAnswerResult(new Array(totalPlaceholders).fill(""));
   };
 
-  const richtextOverwrite = (props: any): ReactElement =>
+  // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+  // @ts-ignore
+  const richtextOverwrite = (props): ReactElement =>
   {
     return (
       <RichtextOverwrite

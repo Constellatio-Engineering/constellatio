@@ -20,18 +20,20 @@ import {
 type TOptionType = TValue["options"][number];
 export type SelectionCardGameProps = Pick<IGenSelectionCard, "game" | "helpNote" | "question">;
 
+type TOptionWithCheck = TOptionType & { checked: boolean };
+
 export const SelectionCardGame: FC<SelectionCardGameProps> = ({ game, helpNote, question }) =>
 {
   const optionsWithCheckProp = useMemo(() => game?.options?.map((option: TOptionType) => ({ ...option, checked: false })), [game?.options]);
-  const originalOptions: TOptionType[] = useMemo(() => optionsWithCheckProp ?? [], [optionsWithCheckProp]);
-  const [optionsItems, setOptionsItems] = useState<any[]>([]);
+  const originalOptions: TOptionWithCheck[] = useMemo(() => optionsWithCheckProp ?? [], [optionsWithCheckProp]);
+  const [optionsItems, setOptionsItems] = useState<TOptionWithCheck[]>([]);
   const [gameStatus, setGameStatus] = useState<"win" | "lose" | "inprogress">("inprogress");
   const [resultMessage, setResultMessage] = useState<string>("");
   const [resetCount, setResetCount] = useState(0);
 
   useEffect(() => 
   {
-    const optionsShuffled = shuffleArray<TOptionType>(originalOptions);
+    const optionsShuffled = shuffleArray<TOptionWithCheck>(originalOptions);
     setOptionsItems(optionsShuffled);
   }, [originalOptions]);
 
@@ -64,7 +66,7 @@ export const SelectionCardGame: FC<SelectionCardGameProps> = ({ game, helpNote, 
 
   const onGameResetHandler = (): void => 
   {
-    const optionsShuffled = shuffleArray<TOptionType>(originalOptions);
+    const optionsShuffled = shuffleArray<TOptionWithCheck>(originalOptions);
     setOptionsItems(optionsShuffled);
     setGameStatus("inprogress");
     setResetCount((prevCount) => prevCount + 1);
