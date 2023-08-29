@@ -1,8 +1,9 @@
 import { type Meta, type StoryObj } from "@storybook/react";
+import { type FunctionComponent } from "react";
 
 import OverviewCard, { type IOverviewCard } from "./OverviewCard";
 
-const Template = (args: IOverviewCard): JSX.Element => (<OverviewCard {...args}/>);
+const Template: FunctionComponent<IOverviewCard> = (args) => (<OverviewCard {...args}/>);
 
 const meta: Meta = {
   argTypes: {

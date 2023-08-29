@@ -5,11 +5,13 @@ import { IOverviewCard } from "./OverviewCard";
 interface IOverviewCardStyles {
     variant: IOverviewCard["variant"];
     theme: MantineTheme;
+    tableTheme?:boolean
 }
 
-export const wrapper = ({ variant, theme }: IOverviewCardStyles) => css`
+export const wrapper = () => css`
   border-radius: 12px;
   height: 450px;
+  /* max-width: 486px; */
 `;
 export const topDetails = ({ variant, theme }: IOverviewCardStyles) => css`
   background-color: ${variant === "case"
@@ -21,6 +23,7 @@ export const topDetails = ({ variant, theme }: IOverviewCardStyles) => css`
   display: flex;
   justify-content: space-between;
   align-items: center;
+  flex-wrap: wrap;
   .left-side {
     display: flex;
     justify-content: flex-start;
@@ -39,19 +42,20 @@ export const topDetails = ({ variant, theme }: IOverviewCardStyles) => css`
     justify-content: center;
     align-items: center;
     gap:8px;
+    flex-wrap: wrap;
     span {
       color: ${theme.colors["transparency-02"][8]};
     }
   }
 `;
 
-export const cardBody = ({ variant, theme }: IOverviewCardStyles) => css`
+export const cardBody = ({ theme }: IOverviewCardStyles) => css`
 border-radius: 12px;
-background-color: white;
+background-color: ${theme.colors["neutrals-01"][0]};
 transform: translateY(-16px);
 `;
 
-export const row = ({ variant, theme }: IOverviewCardStyles) => css`
+export const row = ({ theme , tableTheme }: IOverviewCardStyles) => css`
     padding:16px;
     color:green;
     border-bottom: 1px solid ${theme.colors["neutrals-01"][3]};
@@ -66,9 +70,14 @@ export const row = ({ variant, theme }: IOverviewCardStyles) => css`
     .row-value{
         display: flex;
         /* gap difference in font size */
-        gap: 24px;
+        gap: ${tableTheme ? "24px" : "8px"};
+        flex-wrap: wrap;
         align-items: center;
         justify-content: flex-start;
         color: ${theme.colors["neutrals-02"][1]};
+        .reset-button{
+            flex: 1;
+            text-align: right;
+        }
     }
 `

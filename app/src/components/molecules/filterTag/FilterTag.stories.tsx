@@ -5,7 +5,7 @@ import React, { type FunctionComponent } from "react";
 import FilterTag from "./FilterTag";
 import type { IFilterTag } from "./FilterTag";
 
-const Template: FunctionComponent<IFilterTag> = (args): JSX.Element => (
+const Template: FunctionComponent<IFilterTag> = (args) => (
   <Box w={350}>
     <FilterTag {...args}/>
   </Box>

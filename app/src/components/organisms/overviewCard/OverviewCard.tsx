@@ -10,6 +10,7 @@ import Tag from "@/components/atoms/tag/Tag";
 import StatusLabel, { IStatusLabel } from "@/components/atoms/statusLabel/StatusLabel";
 import { LinkButton } from "@/components/atoms/LinkButton/LinkButton";
 import { IconTrash } from "@tabler/icons-react";
+import { Trash } from "@/components/Icons/Trash";
 
 export interface IOverviewCard {
   variant: "case" | "dictionary";
@@ -68,7 +69,7 @@ const OverviewCard: FunctionComponent<IOverviewCard> = ({
 }) => {
   const theme = useMantineTheme();
   return (
-    <div css={styles.wrapper({ variant, theme })}>
+    <div css={styles.wrapper()}>
       <div css={styles.topDetails({ variant, theme })}>
         <div className="left-side">
           {views && (
@@ -96,7 +97,7 @@ const OverviewCard: FunctionComponent<IOverviewCard> = ({
         )}
       </div>
       <div css={styles.cardBody({ theme, variant })}>
-        <div css={styles.row({ theme, variant })}>
+        <div css={styles.row({ theme, variant, tableTheme:true })}>
           <div className="row-title">
             <CaptionText styleType={"caption-01-medium"}>
               LEGAL AREA
@@ -146,7 +147,9 @@ const OverviewCard: FunctionComponent<IOverviewCard> = ({
                     <StatusLabel variant={status}/>
                   )
                 }
-              <LinkButton title={`${<BodyText styleType={"body-02-medium"}>Reset case progress</BodyText>}`} icon={<IconTrash/>} />
+              <div className="reset-button">
+                <LinkButton size="medium" title={"Reset case progress"} icon={<Trash/>} />
+              </div>
               </div>
             </div>
             )

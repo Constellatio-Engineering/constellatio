@@ -1,4 +1,6 @@
-export const CivilLawIcon = (): JSX.Element => (
+import { type FunctionComponent } from "react";
+
+export const CivilLawIcon: FunctionComponent = () => (
   <svg
     width="21"
     height="20"
