@@ -9,8 +9,6 @@ interface IOverviewCardStyles {
 }
 
 export const wrapper = () => css`
-  border-radius: 12px;
-  height: 450px;
   /* max-width: 486px; */
 `;
 export const topDetails = ({ variant, theme }: IOverviewCardStyles) => css`
