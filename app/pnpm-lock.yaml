@@ -173,8 +173,8 @@ devDependencies:
     specifier: ^1.0.18
     version: 1.0.18(@typescript-eslint/eslint-plugin@6.4.1)(@typescript-eslint/parser@6.4.1)(eslint-import-resolver-typescript@3.6.0)(eslint-plugin-import@2.28.1)(eslint-plugin-newline-destructuring@1.2.1)(eslint-plugin-prefer-arrow@1.2.3)(eslint-plugin-sort-destructure-keys@1.5.0)(eslint-plugin-sort-keys-fix@1.1.2)(eslint-plugin-typescript-sort-keys@2.3.0)(eslint@8.47.0)(typescript@5.1.6)
   '@dualmeta/eslint-config-next':
-    specifier: ^1.0.13
-    version: 1.0.13(@dualmeta/eslint-config-base@1.0.18)(@dualmeta/eslint-config-shared-react-rules@1.0.2)(eslint-config-next@13.4.19)(eslint@8.47.0)(next@13.4.19)
+    specifier: ^1.0.14
+    version: 1.0.14(@dualmeta/eslint-config-base@1.0.18)(@dualmeta/eslint-config-shared-react-rules@1.0.2)(eslint-config-next@13.4.19)(eslint@8.47.0)(next@13.4.19)
   '@dualmeta/eslint-config-shared-react-rules':
     specifier: ^1.0.2
     version: 1.0.2
@@ -1874,8 +1874,8 @@ packages:
       typescript: 5.1.6
     dev: true
 
-  /@dualmeta/eslint-config-next@1.0.13(@dualmeta/eslint-config-base@1.0.18)(@dualmeta/eslint-config-shared-react-rules@1.0.2)(eslint-config-next@13.4.19)(eslint@8.47.0)(next@13.4.19):
-    resolution: {integrity: sha512-qC3btd+95MegCnN82XD5FoZkTccyHYQF+vttXHjA/iKiiuVCH2tpKZC2fPldIhUs2qNdekBx+nx8utq7t1qxWA==}
+  /@dualmeta/eslint-config-next@1.0.14(@dualmeta/eslint-config-base@1.0.18)(@dualmeta/eslint-config-shared-react-rules@1.0.2)(eslint-config-next@13.4.19)(eslint@8.47.0)(next@13.4.19):
+    resolution: {integrity: sha512-AMznXmtc89RPHSa7V9XNAm9lS5Na1DeZPf/qpv6MVfY6H6OSs2VR7jM0J8GgSY+HVAOF+IlyQU45fLFN44kvtw==}
     peerDependencies:
       '@dualmeta/eslint-config-base': ^1.0.14
       '@dualmeta/eslint-config-shared-react-rules': ^1.0.2

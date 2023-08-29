@@ -9,7 +9,7 @@ type TLinkButton = Omit<ButtonHTMLAttributes<HTMLButtonElement>, "title"> & {
   readonly title: ReactNode;
 };
 
-export const LinkButton: FC<TLinkButton> = ({
+export const LinkButton: FC<LinkButtonProps> = ({
   icon,
   size = "big",
   title,

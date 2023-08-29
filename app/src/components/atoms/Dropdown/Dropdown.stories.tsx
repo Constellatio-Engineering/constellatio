@@ -4,7 +4,7 @@ import { Box } from "@mantine/core";
 import { type Meta, type StoryObj } from "@storybook/react";
 import { type FunctionComponent } from "react";
 
-import { Dropdown } from "./Dropdown";
+import { Dropdown, type DropdownProps } from "./Dropdown";
 
 const data = [
   { icon: <Puzzle/>, label: "Menu list item", value: "1" },
@@ -22,7 +22,7 @@ const data = [
   { icon: <Puzzle/>, label: "Menu list item", value: "13" },
 ];
 
-const Template: FunctionComponent = (args: any) => (
+const Template: FunctionComponent<DropdownProps> = args => (
   <Box w={350}>
     <Dropdown {...args} data={data}/>
   </Box>

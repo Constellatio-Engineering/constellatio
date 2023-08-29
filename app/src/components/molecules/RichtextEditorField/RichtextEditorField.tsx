@@ -9,13 +9,13 @@ import { type FC } from "react";
 
 import { ContentWrapper, richtextEditorFieldStyles } from "./RichtextEditorField.styles";
 
-interface TRichtextEditorField 
+export interface RichtextEditorFieldProps
 {
   readonly content?: Content;
   readonly variant: "simple" | "with-legal-quote";
 }
 
-export const RichtextEditorField: FC<TRichtextEditorField> = ({ content = "", variant }) => 
+export const RichtextEditorField: FC<RichtextEditorFieldProps> = ({ content = "", variant }) =>
 {
   const editor = useEditor({
     content,
