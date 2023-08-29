@@ -1,20 +1,22 @@
-import { css } from "@emotion/react";
-import { MantineTheme } from "@mantine/styles";
-import { IOverviewCard } from "./OverviewCard";
+import { type SerializedStyles, css } from "@emotion/react";
+import { type MantineTheme } from "@mantine/styles";
 
-interface IOverviewCardStyles {
-    variant: IOverviewCard["variant"];
-    theme: MantineTheme;
-    tableTheme?:boolean
+import { type IOverviewCard } from "./OverviewCard";
+
+interface IOverviewCardStyles 
+{
+  tableTheme?: boolean;
+  theme: MantineTheme;
+  variant: IOverviewCard["variant"];
 }
 
-export const wrapper = () => css`
+export const wrapper = (): SerializedStyles => css`
   /* max-width: 486px; */
 `;
-export const topDetails = ({ variant, theme }: IOverviewCardStyles) => css`
+export const topDetails = ({ theme, variant }: IOverviewCardStyles): SerializedStyles => css`
   background-color: ${variant === "case"
-        ? theme.colors["support-notice"][4]
-        : theme.colors["cc-dictionary"][4]};
+    ? theme.colors["support-notice"][4]
+    : theme.colors["cc-dictionary"][4]};
   padding: 16px 16px 32px 16px;
   border-radius: 12px 12px 0 0;
   color: ${theme.colors["neutrals-01"][0]};
@@ -47,13 +49,13 @@ export const topDetails = ({ variant, theme }: IOverviewCardStyles) => css`
   }
 `;
 
-export const cardBody = ({ theme }: IOverviewCardStyles) => css`
+export const cardBody = ({ theme }: IOverviewCardStyles): SerializedStyles => css`
 border-radius: 12px;
 background-color: ${theme.colors["neutrals-01"][0]};
 transform: translateY(-16px);
 `;
 
-export const row = ({ theme , tableTheme }: IOverviewCardStyles) => css`
+export const row = ({ tableTheme, theme }: IOverviewCardStyles): SerializedStyles => css`
     padding:16px;
     color:green;
     border-bottom: 1px solid ${theme.colors["neutrals-01"][3]};
@@ -78,4 +80,4 @@ export const row = ({ theme , tableTheme }: IOverviewCardStyles) => css`
             text-align: right;
         }
     }
-`
+`;
