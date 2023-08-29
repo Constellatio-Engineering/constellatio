@@ -2,10 +2,11 @@ import { DownloadIcon } from "@/components/Icons/DownloadIcon";
 
 import { Box } from "@mantine/core";
 import { type Meta, type StoryObj } from "@storybook/react";
+import { type FunctionComponent } from "react";
 
 import TableIconButton, { type ITableIconButtonProps } from "./TableIconButton";
 
-const Template = (args: ITableIconButtonProps): JSX.Element => (
+const Template: FunctionComponent<ITableIconButtonProps> = (args) => (
   <Box w={152}>
     <TableIconButton {...args}/>
   </Box>
