@@ -4,9 +4,9 @@ import { type FunctionComponent } from "react";
 
 import RecoverPage from "./RecoverPage";
 
-const Template: FunctionComponent = (args: any) => (
+const Template: FunctionComponent = () => (
   <Box w={350}>
-    <RecoverPage {...args}/>
+    <RecoverPage/>
   </Box>
 );
 
