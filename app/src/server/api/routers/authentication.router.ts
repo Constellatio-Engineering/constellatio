@@ -1,16 +1,13 @@
+import { db } from "@/db/connection";
 import { registrationFormSchema } from "@/schemas/RegistrationFormSchema";
 import { createTRPCRouter, publicProcedure } from "@/server/api/trpc";
-
-import { TRPCError } from "@trpc/server";
+import { EmailAlreadyTakenError, InternalServerError, RegisterError } from "@/utils/serverError";
 
 export const authenticationRouter = createTRPCRouter({
   register: publicProcedure
     .input(registrationFormSchema)
     .mutation(async ({ ctx: { supabaseServerClient }, input }) =>
     {
-      console.log("--- register ---");
-      console.log(input);
-
       const { data: signUpData, error: signUpError } = await supabaseServerClient.auth.signUp({
         email: input.email,
         password: input.password,
@@ -18,20 +15,17 @@ export const authenticationRouter = createTRPCRouter({
 
       if(signUpError)
       {
-        console.log("Error while signing up", signUpError);
-        throw new TRPCError({ cause: signUpError, code: "BAD_REQUEST" });
+        if(signUpError.message === "User already registered")
+        {
+          throw new EmailAlreadyTakenError();
+        }
+
+        throw new RegisterError(signUpError);
       }
 
       if(!signUpData.session)
       {
-        throw new TRPCError({
-          cause: {
-            message: "Session was null after signUp. This should probably not happen and should be investigated.",
-            signUpData,
-            signUpError
-          },
-          code: "BAD_REQUEST"
-        });
+        throw new InternalServerError(new Error("Session was null after signUp. This should probably not happen and should be investigated."));
       }
 
       /* const { data: upsertData, error: upsertError } = await supabaseAdmin

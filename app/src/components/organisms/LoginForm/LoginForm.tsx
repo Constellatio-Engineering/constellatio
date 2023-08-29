@@ -4,11 +4,11 @@ import { Input } from "@/components/atoms/Input/Input";
 import { colors } from "@/constants/styles/colors";
 import { type Database } from "@/lib/database.types";
 import { loginFormSchema } from "@/schemas/LoginFormSchema";
+import { supabase } from "@/supabase/client";
 
 import { Stack } from "@mantine/core";
 import { useForm, zodResolver } from "@mantine/form";
 import { notifications } from "@mantine/notifications";
-import { createPagesBrowserClient } from "@supabase/auth-helpers-nextjs";
 import { useAtom } from "jotai";
 import { useRouter } from "next/router"; 
 import { type FunctionComponent, useState } from "react";
@@ -18,7 +18,6 @@ import { ResetPasswordModal, resetPasswordModalVisible } from "../ResetPasswordM
 export const LoginForm: FunctionComponent = () =>
 {
   const [, setResetPasswordModalOpen] = useAtom(resetPasswordModalVisible);
-  const supabase = createPagesBrowserClient<Database>();
   const router = useRouter();
   const [submitting, setSubmitting] = useState(false);
   const form = useForm({

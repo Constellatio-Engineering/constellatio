@@ -7,12 +7,12 @@ export const registrationFormSchema = z.object({
   displayName: z.string().min(2, { message: "Ein Anzeigename ist erforderlich" }),
   email: z.string().email({ message: "Ungültige E-Mail Adresse" }),
   firstName: z.string().min(2, { message: "Ein Vorname ist erforderlich" }),
-  gender: z.string().min(2, { message: "Ein Geschlecht ist erforderlich" }),
+  gender: z.string().min(1, { message: "Ein Geschlecht ist erforderlich" }),
   lastName: z.string().min(2, { message: "Ein Anzeigename ist erforderlich" }),
   password: z.string().min(6, { message: "Passwörter haben mindestens 6 Zeichen" }),
   passwordConfirmation: z.string().min(6, { message: "Passwörter haben mindestens 6 Zeichen" }),
-  semester: z.coerce.number().min(1).max(32).optional(),
+  semester: z.any().pipe(z.coerce.number().min(1).max(32)).optional(),
   university: z.string().min(2, { message: "Eine Uni ist erforderlich" }),
 });
 
-export type RegistrationFormSchema = z.infer<typeof registrationFormSchema>;
+export type RegistrationFormSchema = z.input<typeof registrationFormSchema>;

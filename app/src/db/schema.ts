@@ -23,3 +23,13 @@ export const posts = pgTable("posts", {
   createdAt: timestamp("created_at").defaultNow(),
   updatedAt: timestamp("updated_at"),
 });
+
+export const profiles = pgTable("profiles", {
+  displayName: text("displayName"),
+  firstName: text("firstName"),
+  gender: text("gender"),
+  id: signUpData.user?.id ?? "",
+  lastName: body.lastName,
+  semester: body.semester,
+  university: body.university,
+});

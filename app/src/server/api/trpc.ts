@@ -7,7 +7,11 @@
  * need to use are documented accordingly near the end.
  */
 
-import { createPagesServerClient, type SupabaseClient, type User } from "@supabase/auth-helpers-nextjs";
+import { env } from "@/env.mjs";
+import { type ClientError, clientErrors } from "@/utils/clientError";
+import { EmailAlreadyTakenError } from "@/utils/serverError";
+
+import { createServerSupabaseClient, type SupabaseClient, type User } from "@supabase/auth-helpers-nextjs";
 import { type Session } from "@supabase/auth-helpers-react";
 import { initTRPC } from "@trpc/server";
 import { type CreateNextContextOptions } from "@trpc/server/adapters/next";
@@ -53,7 +57,7 @@ type TrpcContext = {
 
 export const createTRPCContext = async ({ req, res }: CreateNextContextOptions): Promise<TrpcContext> =>
 {
-  const supabaseServerClient = createPagesServerClient({ req, res });
+  const supabaseServerClient = createServerSupabaseClient({ req, res });
   const { data: { user } } = await supabaseServerClient.auth.getUser();
   const { data: { session } } = await supabaseServerClient.auth.getSession();
 
@@ -75,11 +79,34 @@ export const createTRPCContext = async ({ req, res }: CreateNextContextOptions):
  * ZodErrors so that you get typesafety on the frontend if your procedure fails due to validation
  * errors on the backend.
  */
-
 const t = initTRPC
   .context<typeof createTRPCContext>()
   .create({
     errorFormatter: ({ error, shape }) =>
+    {
+      console.log("error formatter");
+
+      let errorData: ClientError;
+
+      if(error instanceof EmailAlreadyTakenError)
+      {
+        errorData = clientErrors["email-already-taken"];
+      }
+      else
+      {
+        console.warn("Unhandled Server Error. Please check tRPC error formatter. Error was:", error);
+        errorData = clientErrors["internal-server-error"];
+      }
+
+      return {
+        ...shape,
+        data: {
+          ...errorData
+        },
+      };
+    },
+    isDev: env.NODE_ENV === "development",
+    /* errorFormatter: ({ error, shape }) =>
     {
       return {
         ...shape,
@@ -89,7 +116,7 @@ const t = initTRPC
           error.cause instanceof ZodError ? error.cause.flatten() : null,
         },
       };
-    },
+    },*/
     transformer: superjson,
   });
 

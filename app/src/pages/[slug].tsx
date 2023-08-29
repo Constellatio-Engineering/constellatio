@@ -1,6 +1,6 @@
 import { getProps, type GetPropsResult } from "@/services/content/getProps";
 
-import { type GetStaticPaths, type GetStaticProps, NextPage } from "next";
+import { type GetStaticPaths, type GetStaticProps } from "next";
 import React, { type FunctionComponent } from "react";
 
 export const getStaticProps: GetStaticProps<Awaited<ReturnType<typeof getProps>>> = async ({ params }) => 
