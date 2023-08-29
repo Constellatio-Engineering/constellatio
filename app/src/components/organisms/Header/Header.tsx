@@ -6,12 +6,12 @@ import { SHeader } from "./Header.style";
 import ConstellatioFullLogo from "../../../../public/images/icons/constellatio-full-logo.svg";
 import { UserDropdown } from "../../molecules/UserDropdown/UserDropdown";
 
-interface THeader 
+export interface HeaderProps
 {
   readonly variant?: "default" | "simple";
 }
 
-export const Header: FC<THeader> = ({ variant = "default" }) => 
+export const Header: FC<HeaderProps> = ({ variant = "default" }) =>
 {
   return variant === "simple" ? (
     <SHeader variant={variant}>

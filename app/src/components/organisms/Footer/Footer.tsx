@@ -11,12 +11,12 @@ import { SFooter } from "./Footer.style";
 import ConstellatioLogoIcon from "../../../../public/images/icons/constellatio-icon.svg";
 import ConstellatioLogoWhiteIcon from "../../../../public/images/icons/logo-symbol-white.svg";
 
-interface TFooter 
+export interface FooterProps
 {
   readonly variant?: "default" | "simpleColoredBg" | "simpleWhiteBg";
 }
 
-export const Footer: FC<TFooter> = ({ variant = "default" }) => 
+export const Footer: FC<FooterProps> = ({ variant = "default" }) =>
 {
   return (
     <>

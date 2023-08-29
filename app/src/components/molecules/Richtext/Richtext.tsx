@@ -7,12 +7,12 @@ import React, { type FC, type ReactElement } from "react";
 
 import { SRichtext } from "./Richtext.styles";
 
-type TRichtext = Pick<IGenTextElement, "richTextContent"> & {
+export type RichtextProps = Pick<IGenTextElement, "richTextContent"> & {
   readonly richTextOverwrite?: Nullable<Partial<Record<ElementType, FC<{ node: ReactElement }>>>>;
   readonly stylesOverwrite?: SerializedStyles;
 };
 
-export const Richtext: FC<TRichtext> = ({ richTextContent, richTextOverwrite, stylesOverwrite }) =>
+export const Richtext: FC<RichtextProps> = ({ richTextContent, richTextOverwrite, stylesOverwrite }) =>
 {
   if(!richTextContent?.json)
   {
