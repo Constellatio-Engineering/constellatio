@@ -15,7 +15,7 @@ interface Params extends ParsedUrlQuery
   id: string | undefined;
 }
 
-export const getStaticPaths: GetStaticPaths<Params> = async () =>
+export const getStaticPaths: GetStaticPaths<Params> = () =>
 {
   // TODO: Remove this once we have real data from caisy
   return {
@@ -23,7 +23,7 @@ export const getStaticPaths: GetStaticPaths<Params> = async () =>
     paths: [],
   };
 
-  const cases = await caisySDK.Cases();
+  /* const cases = await caisySDK.Cases();
   const allEdges = cases.allCase?.edges;
 
   if(!allEdges || allEdges.length === 0)
@@ -46,7 +46,7 @@ export const getStaticPaths: GetStaticPaths<Params> = async () =>
   return {
     fallback: true,
     paths
-  };
+  };*/
 };
 
 // this is the type of the props that getStaticProps will return
@@ -55,7 +55,7 @@ export interface GetCaseDetailPagePropsResult
   readonly caseById: IGenCaseByIdQuery; 
 }
 
-export const getStaticProps: GetStaticProps<GetCaseDetailPagePropsResult, Params> = async ({ params }) =>
+export const getStaticProps: GetStaticProps<GetCaseDetailPagePropsResult, Params> = ({ params }) =>
 {
   // TODO: Remove this once we have real data from caisy
   return {
@@ -73,7 +73,7 @@ export const getStaticProps: GetStaticProps<GetCaseDetailPagePropsResult, Params
     revalidate: 1,
   };
 
-  const caseId = params?.id;
+  /* const caseId = params?.id;
 
   if(caseId == null)
   {
@@ -87,7 +87,7 @@ export const getStaticProps: GetStaticProps<GetCaseDetailPagePropsResult, Params
       caseById,
     },
     revalidate: 1,
-  };
+  };*/
 };
 
 const CaseDetailPage: FunctionComponent<GetCaseDetailPagePropsResult> = ({ caseById }) =>

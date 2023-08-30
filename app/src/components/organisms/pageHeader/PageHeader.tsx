@@ -1,21 +1,21 @@
+import { Title } from "@mantine/core";
+import React, { type FunctionComponent, useState } from "react";
+
+import * as styles from "./PageHeader.style";
 import { LinkButton } from "../../../components/atoms/LinkButton/LinkButton";
 import CategoryTab from "../../../components/molecules/categoryTab/CategoryTab";
 import FiltersButton from "../../../components/molecules/filtersButton/FiltersButton";
 import FilterTag from "../../../components/molecules/filterTag/FilterTag";
 import type { IGenCaisyDocument_Meta, IGenPageHeader_Categories, Maybe, Scalars } from "../../../services/graphql/__generated/sdk";
 
-import { Title } from "@mantine/core";
-import React, { type FunctionComponent, useState } from "react";
-
-import * as styles from "./PageHeader.style";
-
-interface IProp {
-  __typename?: 'PageHeader';
-  _meta?: Maybe<IGenCaisyDocument_Meta>;
-  categories?: Maybe<Array<Maybe<IGenPageHeader_Categories>>>;
-  id?: Maybe<Scalars['ID']['output']>;
-  internalTitle?: Maybe<Scalars['String']['output']>;
-  title?: Maybe<Scalars['String']['output']>;
+interface IProp 
+{
+  readonly __typename?: "PageHeader";
+  readonly _meta?: Maybe<IGenCaisyDocument_Meta>;
+  readonly categories?: Maybe<Maybe<IGenPageHeader_Categories>[]>;
+  readonly id?: Maybe<Scalars["ID"]["output"]>;
+  readonly internalTitle?: Maybe<Scalars["String"]["output"]>;
+  readonly title?: Maybe<Scalars["String"]["output"]>;
 }
 
 const PageHeader: FunctionComponent<IProp> = ({ categories, title }) => 
@@ -46,7 +46,7 @@ const PageHeader: FunctionComponent<IProp> = ({ categories, title }) =>
                   </div>
                 ))}
               </div>
-              <LinkButton title={"Clear all filters"} icon={""}/>
+              <LinkButton title="Clear all filters" icon=""/>
             </>
           )}
         </div>
