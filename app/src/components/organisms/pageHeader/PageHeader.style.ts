@@ -1,8 +1,8 @@
 import { css } from "@emotion/react";
 import { MantineTheme } from "@mantine/styles";
 
-export const wrapper = css``;
-export const contentHeader = (theme: MantineTheme) => css`
+// export const wrapper = css``;
+export const contentHeader = css`
   height: 80vh;
   position: relative;
   width: 100%;
@@ -11,15 +11,9 @@ export const contentHeader = (theme: MantineTheme) => css`
   align-items: center;
   justify-content: center;
   gap: 32px;
-  background: var(
-    --gradients-fader-cases-radial,
-    radial-gradient(
-      50% 50% at 50% 50%,
-      rgba(199, 211, 251, 0) 0%,
-      ${theme.colors["cc-cases"][2]} 100%
-    )
-  );
+  background: var(--gradients-fader-cases-radial, radial-gradient(50.00% 50.00% at 50.00% 50.00%, rgba(199, 211, 251, 0.00) 0%, #C7D3FB 100%));
 `;
+
 export const categoriesButtons = () => {
   return css`
     display: flex;

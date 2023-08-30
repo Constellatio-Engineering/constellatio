@@ -1,19 +1,28 @@
-
-import { BodyText } from "@/components/atoms/BodyText/BodyText";
-import { LinkButton } from "@/components/atoms/LinkButton/LinkButton";
-import { TrashIcon } from "@/components/Icons/trash";
-import CategoryTab from "@/components/molecules/categoryTab/CategoryTab";
-import FiltersButton from "@/components/molecules/filtersButton/FiltersButton";
-import FilterTag from "@/components/molecules/filterTag/FilterTag";
+/** @jsxImportSource @emotion/react */
+import { jsx, css } from '@emotion/react';
+// import {BodyText} from "../../atoms/BodyText/BodyText"
+import { LinkButton } from "../../../components/atoms/LinkButton/LinkButton";
+import CategoryTab from "../../../components/molecules/categoryTab/CategoryTab";
+import FiltersButton from "../../../components/molecules/filtersButton/FiltersButton";
+import FilterTag from "../../../components/molecules/filterTag/FilterTag";
 // import { FiltersIcon } from "@/components/Icons/filters";
-import { type IGenPageHeader } from "@/services/graphql/__generated/sdk";
+import type { IGenCaisyDocument_Meta, IGenPageHeader_Categories, Maybe, Scalars } from "../../../services/graphql/__generated/sdk";
 
 import { Title } from "@mantine/core";
 import React, { type FunctionComponent, useState } from "react";
 
 import * as styles from "./PageHeader.style";
 
-const PageHeader: FunctionComponent<IGenPageHeader> = ({ categories, title }) => 
+interface IProp {
+  __typename?: 'PageHeader';
+  _meta?: Maybe<IGenCaisyDocument_Meta>;
+  categories?: Maybe<Array<Maybe<IGenPageHeader_Categories>>>;
+  id?: Maybe<Scalars['ID']['output']>;
+  internalTitle?: Maybe<Scalars['String']['output']>;
+  title?: Maybe<Scalars['String']['output']>;
+}
+
+const PageHeader: FunctionComponent<IProp> = ({ categories, title }) => 
 {
   const [selectedCategoryIndex, setSelectedCategoryIndex] = useState<number>(0);
   const [filters, setFilters] = useState<string[]>(["Filter One", "Filter Two", "Filter Three", "Filter Four", "Filter Five", "Filter Six", "Filter Seven", "Filter Eight", "Filter Nine", "Filter Ten", "Filter Eleven", "Filter Twelve", "Filter Thirteen", "Filter Fourteen", "Filter Fifteen", "Filter Sixteen", "Filter Seventeen", "Filter Eighteen", "Filter Nineteen", "Filter Twenty"]);
@@ -41,7 +50,7 @@ const PageHeader: FunctionComponent<IGenPageHeader> = ({ categories, title }) =>
                   </div>
                 ))}
               </div>
-              <LinkButton title={<BodyText styleType="body-01-medium">Clear all filters</BodyText>} icon={<TrashIcon/>}/>
+              <LinkButton title={"Clear all filters"} icon={""}/>
             </>
           )}
         </div>
