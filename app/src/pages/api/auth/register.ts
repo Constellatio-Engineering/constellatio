@@ -1,7 +1,7 @@
 import { supabaseAdmin } from "@/lib/supabase-admin";
 import { registrationFormSchema } from "@/schemas/RegistrationFormSchema";
 
-import { createPagesServerClient } from "@supabase/auth-helpers-nextjs";
+import { createServerSupabaseClient } from "@supabase/auth-helpers-nextjs";
 import { type NextApiHandler } from "next";
 
 const handler: NextApiHandler = async (req, res) => 
@@ -12,7 +12,7 @@ const handler: NextApiHandler = async (req, res) =>
   }
 
   const body = registrationFormSchema.parse(JSON.parse(req.body));
-  const supabase = createPagesServerClient({ req, res });
+  const supabase = createServerSupabaseClient({ req, res });
 
   const { data: signUpData, error: signUpError } = await supabase.auth.signUp({
     email: body.email,

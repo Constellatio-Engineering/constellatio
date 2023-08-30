@@ -1,5 +1,5 @@
 import { css } from "@emotion/react";
-import { MantineTheme } from "@mantine/styles";
+import { type MantineTheme } from "@mantine/styles";
 
 // export const wrapper = css``;
 export const contentHeader = css`
@@ -14,7 +14,8 @@ export const contentHeader = css`
   background: var(--gradients-fader-cases-radial, radial-gradient(50.00% 50.00% at 50.00% 50.00%, rgba(199, 211, 251, 0.00) 0%, #C7D3FB 100%));
 `;
 
-export const categoriesButtons = () => {
+export const categoriesButtons = () => 
+{
   return css`
     display: flex;
     justify-content: center;
@@ -35,14 +36,15 @@ export const itemsList = () => css`
   }
 `;
 
-export const filtersArea = () => {
+export const filtersArea = () => 
+{
   return css`
     display: flex;
     justify-content: space-between;
     align-items: center;
     width: 90%;
   `;
-}
+};
 
 export const filterButtons = (theme: MantineTheme) => css`
   background-color: transparent;

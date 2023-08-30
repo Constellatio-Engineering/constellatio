@@ -15,9 +15,15 @@ interface Params extends ParsedUrlQuery
   id: string | undefined;
 }
 
-export const getStaticPaths: GetStaticPaths<Params> = async () =>
+export const getStaticPaths: GetStaticPaths<Params> = () =>
 {
-  const cases = await caisySDK.Cases();
+  // TODO: Remove this once we have real data from caisy
+  return {
+    fallback: true,
+    paths: [],
+  };
+
+  /* const cases = await caisySDK.Cases();
   const allEdges = cases.allCase?.edges;
 
   if(!allEdges || allEdges.length === 0)
@@ -40,7 +46,7 @@ export const getStaticPaths: GetStaticPaths<Params> = async () =>
   return {
     fallback: true,
     paths
-  };
+  };*/
 };
 
 // this is the type of the props that getStaticProps will return
@@ -49,9 +55,25 @@ export interface GetCaseDetailPagePropsResult
   readonly caseById: IGenCaseByIdQuery; 
 }
 
-export const getStaticProps: GetStaticProps<GetCaseDetailPagePropsResult, Params> = async ({ params }) =>
+export const getStaticProps: GetStaticProps<GetCaseDetailPagePropsResult, Params> = ({ params }) =>
 {
-  const caseId = params?.id;
+  // TODO: Remove this once we have real data from caisy
+  return {
+    props: {
+      caseById: {
+        Case: {
+          __typename: "Case",
+          facts: undefined,
+          id: "dummy-id",
+          legalArea: undefined,
+          title: "Dummy title",
+        }
+      },
+    },
+    revalidate: 1,
+  };
+
+  /* const caseId = params?.id;
 
   if(caseId == null)
   {
@@ -65,7 +87,7 @@ export const getStaticProps: GetStaticProps<GetCaseDetailPagePropsResult, Params
       caseById,
     },
     revalidate: 1,
-  };
+  };*/
 };
 
 const CaseDetailPage: FunctionComponent<GetCaseDetailPagePropsResult> = ({ caseById }) =>
@@ -75,40 +97,47 @@ const CaseDetailPage: FunctionComponent<GetCaseDetailPagePropsResult> = ({ caseB
     <Layout>
       <header className="py-16 bg-[#C7D3FB] bg-[url('/images/grid-pattern.svg')] bg-cover bg-center">
         <div className="container mx-auto grid grid-cols-2 items-center justify-end">
-          <Title>{caseById.Case?.title}</Title>
+          {/* <Title>{caseById.Case?.title}</Title>*/}
+          <Title>TODO: Render Case Title</Title>
           <div className="min-w-[400px] justify-self-end rounded-lg bg-[#5B74C7]">
             <div className="p-4 text-white">32 VIEWS</div>
             <div className="bg-white rounded-lg flex flex-col">
               <div className="flex space-x-8 px-4 py-3">
                 <div className="flex flex-col">
                   <p className="text-sm">LEGAL AREA</p>
-                  <p className="text-lg font-semibold">{caseById.Case?.legalArea?.title}</p>
+                  {/* <p className="text-lg font-semibold">{caseById.Case?.legalArea?.title}</p>*/}
+                  <p className="text-lg font-semibold">TODO: Display legalArea title</p>
                 </div>
                 <div className="flex flex-col">
                   <p className="text-sm">TOPIC</p>
-                  <p className="text-lg font-semibold">{caseById.Case?.topic?.title}</p>
+                  {/* <p className="text-lg font-semibold">{caseById.Case?.topic?.title}</p>*/}
+                  <p className="text-lg font-semibold">TODO: Display topic title</p>
                 </div>
               </div>
               <hr className="m-0 w-full border-0 h-px bg-neutral-200"/>
               <div className="flex space-x-8 px-4 py-3">
                 <div className="flex flex-col">
                   <p className="text-sm">LEGAL AREA</p>
-                  <p className="text-lg font-semibold">{caseById.Case?.legalArea?.title}</p>
+                  {/* <p className="text-lg font-semibold">{caseById.Case?.legalArea?.title}</p>*/}
+                  <p className="text-lg font-semibold">TODO: Display legalArea title</p>
                 </div>
                 <div className="flex flex-col">
                   <p className="text-sm">TOPIC</p>
-                  <p className="text-lg font-semibold">{caseById.Case?.topic?.title}</p>
+                  {/* <p className="text-lg font-semibold">{caseById.Case?.topic?.title}</p>*/}
+                  <p className="text-lg font-semibold">TODO: Display topic title</p>
                 </div>
               </div>
               <hr className="m-0 w-full border-0 h-px bg-neutral-200"/>
               <div className="flex space-x-8 px-4 py-3">
                 <div className="flex flex-col">
                   <p className="text-sm">LEGAL AREA</p>
-                  <p className="text-lg font-semibold">{caseById.Case?.legalArea?.title}</p>
+                  {/* <p className="text-lg font-semibold">{caseById.Case?.legalArea?.title}</p>*/}
+                  <p className="text-lg font-semibold">TODO: Display legalArea title</p>
                 </div>
                 <div className="flex flex-col">
                   <p className="text-sm">TOPIC</p>
-                  <p className="text-lg font-semibold">{caseById.Case?.topic?.title}</p>
+                  {/* <p className="text-lg font-semibold">{caseById.Case?.topic?.title}</p>*/}
+                  <p className="text-lg font-semibold">TODO: Display topic title</p>
                 </div>
               </div>
             </div>
@@ -121,7 +150,8 @@ const CaseDetailPage: FunctionComponent<GetCaseDetailPagePropsResult> = ({ caseB
             <Title size={32} mb={24}>
               Facts
             </Title>
-            <Richtext richTextContent={caseById.Case?.facts}/>
+            <p>TODO: Render Case facts and sections</p>
+            {/* <Richtext richTextContent={caseById.Case?.facts}/>
             {caseById.Case?.sections?.map((edge, index) =>
             {
               if(index > 0) { return null; }
@@ -133,7 +163,7 @@ const CaseDetailPage: FunctionComponent<GetCaseDetailPagePropsResult> = ({ caseB
                   <DragDropGame/>
                 </div>
               );
-            })}
+            })}*/}
           </div>
         </div>
       </main>

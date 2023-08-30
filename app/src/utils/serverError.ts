@@ -1,3 +1,4 @@
+// eslint-disable-next-line max-classes-per-file
 import { type AuthError } from "@supabase/gotrue-js";
 import { TRPCError } from "@trpc/server";
 

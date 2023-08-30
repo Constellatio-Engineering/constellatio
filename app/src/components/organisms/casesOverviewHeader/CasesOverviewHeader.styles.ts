@@ -1,13 +1,11 @@
 import { css } from "@emotion/react";
-import { MantineTheme } from "@mantine/styles";
+import { type MantineTheme } from "@mantine/styles";
+
 import BgLines from "../../Icons/bg-lines.png";
 
-export const contentHeader = ({
-    theme,
-    variant,
-}: {
-    theme: MantineTheme;
-    variant: "case" | "dictionary";
+export const contentHeader = ({ theme, variant }: {
+  theme: MantineTheme;
+  variant: "case" | "dictionary";
 }) => css`
   position: relative;
   max-width: 100%;
@@ -19,8 +17,9 @@ export const contentHeader = ({
   background: url(${BgLines.src}),radial-gradient(50.00% 50.00% at 50.00% 50.00%, rgba(199, 211, 251, 0.00) 0%, ${variant === "case" ? theme.colors["cc-cases"][2] : theme.colors["support-notice"][2]} 100%);
   `;
 
-export const categoriesButtons = () => {
-    return css`
+export const categoriesButtons = () => 
+{
+  return css`
     display: flex;
     justify-content: center;
     gap: 20px;
@@ -40,8 +39,9 @@ export const itemsList = () => css`
   }
 `;
 
-export const filtersArea = () => {
-    return css`
+export const filtersArea = () => 
+{
+  return css`
     display: flex;
     justify-content: space-between;
     align-items: center;
