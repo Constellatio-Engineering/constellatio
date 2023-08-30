@@ -92,7 +92,7 @@ jobs:
       - name: Build Project Artifacts
         run: vercel build ${{ env.VERCEL_ENVIRONMENT_FLAG }} --token=${{ secrets.VERCEL_ACCESS_TOKEN }}
       - name: Zip Build Folder
-        run: zip bundle.zip .next .vercel -r
+        run: zip bundle.zip .vercel/output
       - name: Upload Build Folder as Artifact
         uses: actions/upload-artifact@v3
         with:
