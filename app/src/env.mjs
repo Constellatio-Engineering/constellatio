@@ -7,7 +7,7 @@ export const env = createEnv({
   /**
    * Specify your server-side environment variables schema here. This way you can ensure the app
    * isn't built with invalid env vars.
-   */
+   */ 
   server: {
     NODE_ENV: nodeEnvEnum,
     SUPABASE_SERVICE_ROLE_KEY: z.string(),
