@@ -1,7 +1,7 @@
 /* eslint-disable import/no-unused-modules */
 import type { Database } from "@/lib/database.types";
 
-import { createMiddlewareClient } from "@supabase/auth-helpers-nextjs";
+import { createMiddlewareSupabaseClient } from "@supabase/auth-helpers-nextjs";
 import { NextResponse } from "next/server";
 import type { NextRequest, NextMiddleware } from "next/server";
 
@@ -10,7 +10,7 @@ export const middleware: NextMiddleware = async (req: NextRequest) =>
   console.log("--- middleware ---");
 
   const res = NextResponse.next();
-  const supabase = createMiddlewareClient<Database>({ req, res });
+  const supabase = createMiddlewareSupabaseClient<Database>({ req, res });
   const { data: { session }, error: authError } = await supabase.auth.getSession();
 
   if(authError != null)

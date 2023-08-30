@@ -2,7 +2,7 @@ import { getURL } from "@/lib/get-url";
 import { stripe } from "@/lib/stripe";
 import { createOrRetrieveCustomer } from "@/lib/supabase-admin";
 
-import { createPagesServerClient } from "@supabase/auth-helpers-nextjs";
+import { createServerSupabaseClient } from "@supabase/auth-helpers-nextjs";
 import { type NextApiRequest, type NextApiResponse } from "next";
 
 export default async function handler(
@@ -19,7 +19,7 @@ export default async function handler(
 
   try
   {
-    const supabase = createPagesServerClient({ req, res });
+    const supabase = createServerSupabaseClient({ req, res });
     const {
       data: { user }
     } = await supabase.auth.getUser();

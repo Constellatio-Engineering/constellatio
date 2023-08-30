@@ -82,33 +82,39 @@ const CaseDetailPage: FunctionComponent<GetCaseDetailPagePropsResult> = ({ caseB
               <div className="flex space-x-8 px-4 py-3">
                 <div className="flex flex-col">
                   <p className="text-sm">LEGAL AREA</p>
-                  <p className="text-lg font-semibold">{caseById.Case?.legalArea?.title}</p>
+                  {/* <p className="text-lg font-semibold">{caseById.Case?.legalArea?.title}</p>*/}
+                  <p className="text-lg font-semibold">TODO: Display legalArea title</p>
                 </div>
                 <div className="flex flex-col">
                   <p className="text-sm">TOPIC</p>
-                  <p className="text-lg font-semibold">{caseById.Case?.topic?.title}</p>
+                  {/* <p className="text-lg font-semibold">{caseById.Case?.topic?.title}</p>*/}
+                  <p className="text-lg font-semibold">TODO: Display topic title</p>
                 </div>
               </div>
               <hr className="m-0 w-full border-0 h-px bg-neutral-200"/>
               <div className="flex space-x-8 px-4 py-3">
                 <div className="flex flex-col">
                   <p className="text-sm">LEGAL AREA</p>
-                  <p className="text-lg font-semibold">{caseById.Case?.legalArea?.title}</p>
+                  {/* <p className="text-lg font-semibold">{caseById.Case?.legalArea?.title}</p>*/}
+                  <p className="text-lg font-semibold">TODO: Display legalArea title</p>
                 </div>
                 <div className="flex flex-col">
                   <p className="text-sm">TOPIC</p>
-                  <p className="text-lg font-semibold">{caseById.Case?.topic?.title}</p>
+                  {/* <p className="text-lg font-semibold">{caseById.Case?.topic?.title}</p>*/}
+                  <p className="text-lg font-semibold">TODO: Display topic title</p>
                 </div>
               </div>
               <hr className="m-0 w-full border-0 h-px bg-neutral-200"/>
               <div className="flex space-x-8 px-4 py-3">
                 <div className="flex flex-col">
                   <p className="text-sm">LEGAL AREA</p>
-                  <p className="text-lg font-semibold">{caseById.Case?.legalArea?.title}</p>
+                  {/* <p className="text-lg font-semibold">{caseById.Case?.legalArea?.title}</p>*/}
+                  <p className="text-lg font-semibold">TODO: Display legalArea title</p>
                 </div>
                 <div className="flex flex-col">
                   <p className="text-sm">TOPIC</p>
-                  <p className="text-lg font-semibold">{caseById.Case?.topic?.title}</p>
+                  {/* <p className="text-lg font-semibold">{caseById.Case?.topic?.title}</p>*/}
+                  <p className="text-lg font-semibold">TODO: Display topic title</p>
                 </div>
               </div>
             </div>
@@ -121,7 +127,8 @@ const CaseDetailPage: FunctionComponent<GetCaseDetailPagePropsResult> = ({ caseB
             <Title size={32} mb={24}>
               Facts
             </Title>
-            <Richtext richTextContent={caseById.Case?.facts}/>
+            <p>TODO: Render Case facts and sections</p>
+            {/* <Richtext richTextContent={caseById.Case?.facts}/>
             {caseById.Case?.sections?.map((edge, index) =>
             {
               if(index > 0) { return null; }
@@ -133,7 +140,7 @@ const CaseDetailPage: FunctionComponent<GetCaseDetailPagePropsResult> = ({ caseB
                   <DragDropGame/>
                 </div>
               );
-            })}
+            })}*/}
           </div>
         </div>
       </main>
