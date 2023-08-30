@@ -28,6 +28,8 @@ export const authenticationRouter = createTRPCRouter({
         throw new InternalServerError(new Error("Session was null after signUp. This should probably not happen and should be investigated."));
       }
 
+      console.log(signUpData.user?.id);
+
       /* const { data: upsertData, error: upsertError } = await supabaseAdmin
         .from("profiles")
         .upsert({
