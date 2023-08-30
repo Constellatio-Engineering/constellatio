@@ -5,7 +5,7 @@ import React, { type FunctionComponent } from "react";
 import FiltersButton from "./FiltersButton";
 import type { IFiltersButton } from "./FiltersButton";
 
-const Template: FunctionComponent<IFiltersButton> = (args): JSX.Element => (
+const Template: FunctionComponent<IFiltersButton> = (args) => (
   <Box w={350}>
     <FiltersButton {...args}/>
   </Box>

@@ -1,0 +1,87 @@
+import { type SerializedStyles, css } from "@emotion/react";
+import { type MantineTheme } from "@mantine/styles";
+
+import { type IOverviewCard } from "./OverviewCard";
+
+interface IOverviewCardStyles 
+{
+  tableTheme?: boolean;
+  theme: MantineTheme;
+  variant: IOverviewCard["variant"];
+}
+
+export const wrapper = (): SerializedStyles => css`
+  /* max-width: 486px; */
+`;
+
+export const topDetails = ({ theme, variant }: IOverviewCardStyles): SerializedStyles => css`
+  background-color: ${variant === "case"
+    ? theme.colors["support-notice"][4]
+    : theme.colors["cc-dictionary"][4]};
+  padding: 16px 16px 32px 16px;
+  border-radius: 12px 12px 0 0;
+  color: ${theme.colors["neutrals-01"][0]};
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  flex-wrap: wrap;
+  .left-side {
+    display: flex;
+    justify-content: flex-start;
+    align-items: center;
+    gap: 16px;
+    & .views div,
+    & .time div {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 8px;
+    }
+  }
+  .right-side {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap:8px;
+    flex-wrap: wrap;
+    span {
+      color: ${theme.colors["transparency-02"][8]};
+    }
+  }
+`;
+
+export const cardBody = ({ theme }: IOverviewCardStyles): SerializedStyles => css`
+  border-radius: 12px;
+  background-color: ${theme.colors["neutrals-01"][0]};
+  transform: translateY(-16px);
+`;
+
+export const row = ({ tableTheme, theme }: IOverviewCardStyles): SerializedStyles => css`
+    padding:16px;
+    color:green;
+    border-bottom: 1px solid ${theme.colors["neutrals-01"][3]};
+    .row-title{
+        color: ${theme.colors["neutrals-01"][7]};
+        display: flex;
+        gap: 29px;
+        align-items: center;
+        justify-content: flex-start;
+        margin-bottom: 8px;
+    }
+    .row-value{
+        display: flex;
+        /* gap difference in font size */
+        gap: ${tableTheme ? "24px" : "8px"};
+        flex-wrap: wrap;
+        align-items: center;
+        justify-content: flex-start;
+        color: ${theme.colors["neutrals-02"][1]};
+        .reset-button{
+            flex: 1;
+            text-align: right;
+        }
+    }
+    &:last-child{
+        border-bottom: none;
+    }
+`;

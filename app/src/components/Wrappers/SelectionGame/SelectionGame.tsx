@@ -7,7 +7,7 @@ import { useCaisyField } from "@caisy/ui-extension-react";
 import { Box, Title, Switch } from "@mantine/core";
 import { useForm } from "@mantine/form";
 import { randomId } from "@mantine/hooks";
-import { useState } from "react";
+import { type FunctionComponent, useState } from "react";
 
 import {
   CardItem,
@@ -39,7 +39,7 @@ interface ICaisy
   value: TValue;
 }
 
-export const SelectionGameWrapper = (): JSX.Element => 
+export const SelectionGameWrapper: FunctionComponent = () => 
 {
   const [checked, setChecked] = useState(false);
 

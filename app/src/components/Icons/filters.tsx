@@ -1,6 +1,6 @@
 import React
-  from "react";
-export const FiltersIcon = (): JSX.Element => (
+, { type FunctionComponent } from "react";
+export const FiltersIcon: FunctionComponent = () => (
   <svg
     width="20"
     height="20"
