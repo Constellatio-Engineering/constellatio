@@ -126,6 +126,8 @@ jobs:
           path: app
       - name: Unzip build folder
         run: unzip bundle.zip
+      - name: Print files in vercel/output
+        run: ls -la .vercel/output
       - name: Deploy to Vercel
         run: vercel deploy --prebuilt --token=${{ secrets.VERCEL_ACCESS_TOKEN }}
       - name: Apply Database Migrations
