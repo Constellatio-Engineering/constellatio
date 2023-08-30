@@ -1,23 +1,17 @@
-import { SerializedStyles, css } from "@emotion/react";
+import { type SerializedStyles, css } from "@emotion/react";
 import type { MantineTheme } from "@mantine/styles";
 
-export const wrapper = (theme: MantineTheme): SerializedStyles => css`
-  /* temnporary height !!!! */
-  /* height: 488px; */
-  /* background: var(
-    --gradients-fader-cases-radial,
-    radial-gradient(
-      50% 50% at 50% 50%,
-      rgba(199, 211, 251, 0) 0%,
-      ${theme.colors["cc-cases"][2]} 100%
-    )
-  ); */
+import BgLines from "../../Icons/bg-lines.png";
+
+export const wrapper = ({ theme, variant }: {theme: MantineTheme; 
+  variant: "case" | "dictionary";}): SerializedStyles => css`
   position: relative;
   #bg-overlay {
     position: absolute;
     inset: 0;
     width: 100%;
     height: 100%;
+    background: url(${BgLines.src}),radial-gradient(50.00% 50.00% at 50.00% 50.00%, rgba(199, 211, 251, 0.00) 0%, ${variant === "case" ? theme.colors["cc-cases"][2] : theme.colors["support-notice"][2]} 100%);
     img {
       width: 100%;
       height: 100%;
@@ -33,42 +27,77 @@ export const body = (theme: MantineTheme): SerializedStyles => css`
   justify-content: space-between;
   align-items: center;
   flex-wrap: wrap;
-  padding:100px 60px;
+  padding: 100px 60px;
   @media (max-width: 800px) {
-    justify-content: center;  
+    justify-content: center;
     gap: 32px;
   }
-
 `;
 
 export const bodyText = (theme: MantineTheme): SerializedStyles => css`
-width:45% ;
-.icons-bar{
-  display: flex;
-  justify-content: flex-start;
-  align-items: center;
-  flex-wrap: wrap;
-  gap:8px;
-}
-.bread-crumb{
-  margin:32px 0px 8px 0 ;
-  a{
-    color: ${theme.colors["transparency-01"][5]};
-    text-transform: uppercase;
+  width: 45%;
+  .icons-bar {
+    display: flex;
+    justify-content: flex-start;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 8px;
   }
-}
-.title{
-  color: ${theme.colors["transparency-02"][1]};
-}
-@media (max-width: 800px) {
-  width:100% ;
+  .bread-crumb {
+    margin: 32px 0px 8px 0;
+    a {
+      color: ${theme.colors["transparency-01"][5]};
+      text-transform: uppercase;
+    }
+  }
+  .title {
+    color: ${theme.colors["transparency-02"][1]};
+  }
+  @media (max-width: 800px) {
+    width: 100%;
   }
 `;
 
 export const bodyCard = (theme: MantineTheme): SerializedStyles => css`
-width:45% ;
-min-width: 350px;
-@media (max-width: 800px) {
-  width:100% ;
+  width: 45%;
+  min-width: 350px;
+  max-width: 536px;
+  @media (max-width: 800px) {
+    width: 100%;
   }
-`
+`;
+export const stepsBar = (theme: MantineTheme): SerializedStyles => css`
+  position: relative;
+  z-index: 2;
+  background-color: ${theme.colors["neutrals-01"][0]};
+  padding: 16px 32px; 
+  width: 100%;
+  justify-content: space-between;
+  align-items: center;
+  display: flex;
+  .steps {
+    display: flex;
+    gap: 8px;
+    justify-content: flex-start;
+    align-items: center;
+    .step { 
+      outline:1px solid red;
+      display: flex;
+      gap: 8px;
+      justify-content: flex-start;
+      align-items: center;
+      
+      
+      span {
+        display:inline-block;
+        background-color: ${theme.colors["support-notice"][5]};
+        color: ${theme.colors["neutrals-01"][0]};
+        width:24px;
+        height: 24px;
+        display:grid;
+        place-items: center;
+        border-radius: 50%;
+      }
+    }
+  }
+`;

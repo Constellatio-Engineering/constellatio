@@ -87,7 +87,7 @@ const OverviewCard: FunctionComponent<IOverviewCard> = ({
               </CaptionText>
             </div>
           )}
-          {variant === "case" && timeInMinutes && (
+          {variant === "case" && (timeInMinutes !== null && timeInMinutes !== undefined) && (
             <div className="time">
               <CaptionText styleType="caption-01-bold">
                 <Timer/> {timeFormatter(timeInMinutes)}

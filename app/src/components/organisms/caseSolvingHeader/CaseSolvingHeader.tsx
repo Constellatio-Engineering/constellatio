@@ -1,46 +1,51 @@
-import React, { FunctionComponent, ReactNode } from "react";
-
-import * as styles from "./CaseSolvingHeader.styles";
-import bgOverlayCase from "../../Icons/bg-layer-case.png";
-import bgOverlayDictionary from "../../Icons/bg-layer-dictionary.png";
-import OverviewCard from "../overviewCard/OverviewCard";
 import IconButton from "@/components/atoms/iconButton/IconButton";
 import { Bookmark } from "@/components/Icons/bookmark";
-import { Print } from "@/components/Icons/print";
 import { Pin } from "@/components/Icons/Pin";
+import { Print } from "@/components/Icons/print";
+
+import { Title, useMantineTheme } from "@mantine/core";
 import Link from "next/link";
-import { Title } from "@mantine/core";
+import React, { type FunctionComponent, type ReactNode } from "react";
 
-export interface ICaseSolvingHeaderProps {
-  title: string;
-  variant: "case" | "dictionary";
-  pathSlugs?: string[];
+import * as styles from "./CaseSolvingHeader.styles";
+import OverviewCard from "../overviewCard/OverviewCard";
+export interface ICaseSolvingHeaderProps 
+{
+  readonly pathSlugs?: string[];
+  // readonly steps?: string[];
+  readonly title: string;
+  readonly variant: "case" | "dictionary";
 }
-interface IIcons {
-  src: ReactNode;
+interface IIcons 
+{
   size: "big" | "medium";
+  src: ReactNode;
   title: string;
 }
 
-const CaseSolvingHeader: FunctionComponent<ICaseSolvingHeaderProps> = ({
-  title, variant, pathSlugs
-}) => {
+const CaseSolvingHeader: FunctionComponent<ICaseSolvingHeaderProps> = ({ pathSlugs, title, variant }) => 
+{
   // add title to each icon object in the array with keeping size:"big" and src
   const icons: IIcons[] = [
-    { src: <Bookmark />, size: "big", title: "Bookmark" },
-    { src: <Print />, size: "big", title: "Print" },
-    { src: <Pin />, size: "big", title: "Pin" },
+    { size: "big", src: <Bookmark/>, title: "Bookmark" },
+    { size: "big", src: <Print/>, title: "Print" },
+    { size: "big", src: <Pin/>, title: "Pin" },
   ];
+  const theme = useMantineTheme();
+  // const [selectedStepIndex, setSelectedStepIndex] = React.useState<number>(0);
   return (
-    <div css={styles.wrapper}>
-      <div id="bg-overlay">
-        <img src={variant === "case" ? bgOverlayCase.src : bgOverlayDictionary.src} alt="bg with lines" width={100} height={100} />
-      </div>
+    <div css={styles.wrapper({ theme, variant })}>
+      <div id="bg-overlay"/>
       <div css={styles.body}>
         <div css={styles.bodyText}>
           <div className="icons-bar">
-            {icons?.map(({ src, size, title }, index) => (
-              <IconButton key={index} icon={src} size={size} title={title} />
+            {icons?.map(({ size, src, title }, index) => (
+              <IconButton
+                key={index}
+                icon={src}
+                size={size}
+                title={title}
+              />
             ))}
           </div>
           <div className="bread-crumb">
@@ -55,15 +60,31 @@ const CaseSolvingHeader: FunctionComponent<ICaseSolvingHeaderProps> = ({
         <div css={styles.bodyCard}>
           <OverviewCard
             lastUpdated={new Date()}
-            legalArea={""}
+            legalArea=""
             tags={[]}
-            topic={""}
+            topic=""
             variant={variant}
             views={0}
             timeInMinutes={0}
           />
         </div>
+
       </div>
+      {/* {variant === "case" && steps && <div css={styles.stepsBar}>
+        <div className="steps">
+          {steps?.map((step, stepIndex) => (
+            <div className="step" key={stepIndex}>
+              <CaptionText styleType={"caption-01-bold"} component="p"><span>{stepIndex + 1}</span>{step}</CaptionText>
+            </div>
+          ))}
+        </div>.
+
+        <div className="call-to-action">
+          <Button<"button"> styleType="primary" type="button" disabled={selectedStepIndex < steps.length}>
+            Solve this case
+          </Button>
+        </div>
+      </div>} */}
     </div>
   );
 };
