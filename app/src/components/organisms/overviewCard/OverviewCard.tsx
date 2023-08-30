@@ -80,7 +80,7 @@ const OverviewCard: FunctionComponent<IOverviewCard> = ({
     <div css={styles.wrapper()}>
       <div css={styles.topDetails({ theme, variant })}>
         <div className="left-side">
-          {views && (
+          {views !== undefined && views !== null && (
             <div className="views">
               <CaptionText styleType="caption-01-bold">
                 <Show/> {views} VIEWS
