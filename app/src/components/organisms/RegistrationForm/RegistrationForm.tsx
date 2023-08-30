@@ -1,3 +1,4 @@
+/* eslint-disable max-lines */
 import { BodyText } from "@/components/atoms/BodyText/BodyText";
 import { Button } from "@/components/atoms/Button/Button";
 import { Checkbox } from "@/components/atoms/Checkbox/Checkbox";
@@ -6,6 +7,7 @@ import { Dropdown } from "@/components/atoms/Dropdown/Dropdown";
 import { Input } from "@/components/atoms/Input/Input";
 import { PasswordValidationSchema } from "@/components/helpers/PasswordValidationSchema";
 import { Puzzle } from "@/components/Icons/Puzzle";
+import { type GenderIdentifier } from "@/db/schema";
 import { env } from "@/env.mjs";
 import { type RegistrationFormSchema, registrationFormSchema } from "@/schemas/RegistrationFormSchema";
 import { supabase } from "@/supabase/client";
@@ -35,10 +37,24 @@ const semesterData = [
   { label: "Graduate", value: "9" },
 ];
 
-const genderData = [
-  { label: "male", value: "1" },
-  { label: "female", value: "2" },
-  { label: "other", value: "3" },
+type Gender = {
+  identifier: GenderIdentifier;
+  label: string;
+};
+
+const allGenders: Gender[] = [
+  {
+    identifier: "male",
+    label: "männliche"
+  },
+  {
+    identifier: "female",
+    label: "weiblich"
+  },
+  {
+    identifier: "diverse",
+    label: "divers"
+  }
 ];
 
 let initialValues: RegistrationFormSchema;
@@ -50,7 +66,7 @@ if(env.NEXT_PUBLIC_NODE_ENV === "development")
     displayName: "Constellatio Dev User",
     email: "devUser@constellatio-dummy-mail.de",
     firstName: "Dev",
-    gender: "1",
+    gender: allGenders[0]!.identifier,
     lastName: "User",
     password: "super-secure-password-123",
     passwordConfirmation: "super-secure-password-123",
@@ -175,7 +191,7 @@ export const RegistrationForm: FunctionComponent = () =>
             {...form.getInputProps("gender")}
             label="Geschlecht"
             title="Geschlecht"
-            data={genderData}
+            data={allGenders.map(gender => ({ label: gender.label, value: gender.identifier }))}
           />
           <Checkbox
             {...form.getInputProps("acceptTOS", { type: "checkbox" })}
