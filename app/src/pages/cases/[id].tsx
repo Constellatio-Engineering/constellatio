@@ -17,6 +17,12 @@ interface Params extends ParsedUrlQuery
 
 export const getStaticPaths: GetStaticPaths<Params> = async () =>
 {
+  // TODO: Remove this once we have real data from caisy
+  return {
+    fallback: true,
+    paths: [],
+  };
+
   const cases = await caisySDK.Cases();
   const allEdges = cases.allCase?.edges;
 
@@ -51,6 +57,22 @@ export interface GetCaseDetailPagePropsResult
 
 export const getStaticProps: GetStaticProps<GetCaseDetailPagePropsResult, Params> = async ({ params }) =>
 {
+  // TODO: Remove this once we have real data from caisy
+  return {
+    props: {
+      caseById: {
+        Case: {
+          __typename: "Case",
+          facts: undefined,
+          id: "dummy-id",
+          legalArea: undefined,
+          title: "Dummy title",
+        }
+      },
+    },
+    revalidate: 1,
+  };
+
   const caseId = params?.id;
 
   if(caseId == null)
@@ -75,7 +97,8 @@ const CaseDetailPage: FunctionComponent<GetCaseDetailPagePropsResult> = ({ caseB
     <Layout>
       <header className="py-16 bg-[#C7D3FB] bg-[url('/images/grid-pattern.svg')] bg-cover bg-center">
         <div className="container mx-auto grid grid-cols-2 items-center justify-end">
-          <Title>{caseById.Case?.title}</Title>
+          {/* <Title>{caseById.Case?.title}</Title>*/}
+          <Title>TODO: Render Case Title</Title>
           <div className="min-w-[400px] justify-self-end rounded-lg bg-[#5B74C7]">
             <div className="p-4 text-white">32 VIEWS</div>
             <div className="bg-white rounded-lg flex flex-col">
