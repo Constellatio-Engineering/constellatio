@@ -17,20 +17,14 @@ const CategoryTab: FunctionComponent<CategoryTabProps> = ({
   itemsNumber,
   selected,
   title
-}) => 
-{
-  const [isSelected, setIsSelected] = React.useState<boolean>(selected || false);
-
-  return (
-    <button
-      css={styles.wrapper}
-      type="button"
-      className={isSelected ? "selected" : ""}
-      onClick={() => setIsSelected(!isSelected)}>
-      <Svg className="icon" src={icon?.src}/>
-      {title && <BodyText styleType="body-01-medium" component="p">{title} <span className="counter">({itemsNumber})</span></BodyText>}
-    </button>
-  );
-};
+}) => (
+  <button
+    css={styles.wrapper}
+    type="button"
+    className={selected ? "selected" : ""}>
+    {icon && icon?.src && <Svg className="icon" src={icon?.src}/>}
+    {title && <BodyText styleType="body-01-medium" component="p">{title}{itemsNumber !== null && itemsNumber !== undefined && <span className="counter"> ({itemsNumber})</span>}</BodyText>}
+  </button>
+);
 
 export default CategoryTab;
