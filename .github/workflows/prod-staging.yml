@@ -92,7 +92,7 @@ jobs:
       - name: Build Project Artifacts
         run: vercel build ${{ env.VERCEL_ENVIRONMENT_FLAG }} --token=${{ secrets.VERCEL_ACCESS_TOKEN }}
       - name: Zip Build Folder
-        run: zip bundle.zip .vercel/output
+        run: zip bundle.zip .vercel/output -r
       - name: Upload Build Folder as Artifact
         uses: actions/upload-artifact@v3
         with:
@@ -126,8 +126,6 @@ jobs:
           path: app
       - name: Unzip build folder
         run: unzip bundle.zip
-      - name: Print files in vercel/output
-        run: ls -la .vercel/output
       - name: Deploy to Vercel
         run: vercel deploy --prebuilt --token=${{ secrets.VERCEL_ACCESS_TOKEN }}
       - name: Apply Database Migrations
