@@ -11,6 +11,7 @@
     "start:supabase": "supabase start",
     "stop:supabase": "supabase stop",
     "reset:supabase": "supabase stop --no-backup",
+    "supabase:status": "supabase status",
     "separatorDocker": "---------------------- DOCKER ----------------------",
     "docker:stop-containers": "docker stop $(docker ps -a -q)",
     "docker:delete-containers": "docker rm -vf $(docker ps -aq)",

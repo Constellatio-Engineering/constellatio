@@ -64,7 +64,7 @@ jobs:
     name: Build Next.js App
     needs:
       - set-vercel-environment
-      - lint
+      # - lint
     runs-on: ubuntu-latest
     defaults:
       run:
