@@ -1,24 +1,27 @@
 import { type IGenTextElement } from "@/services/graphql/__generated/sdk";
+import { type Nullable } from "@/utils/types";
 
 import { type ElementType, RichTextRenderer } from "@caisy/rich-text-react-renderer";
-import React, { type FC } from "react";
+import { type SerializedStyles } from "@emotion/react";
+import React, { type FC, type ReactElement } from "react";
 
 import { SRichtext } from "./Richtext.styles";
 
-type TRichtext = Pick<IGenTextElement, "richTextContent"> & {
-  readonly richTextOverwrite?: Partial<Record<ElementType, FC<{ node: any }>> | null> | undefined;
-  readonly stylesOverwrite?: any;
+export type RichtextProps = Pick<IGenTextElement, "richTextContent"> & {
+  readonly richTextOverwrite?: Nullable<Partial<Record<ElementType, FC<{ node: ReactElement }>>>>;
+  readonly stylesOverwrite?: SerializedStyles;
 };
 
-export const Richtext: FC<TRichtext> = ({ richTextContent, richTextOverwrite, stylesOverwrite }) => 
+export const Richtext: FC<RichtextProps> = ({ richTextContent, richTextOverwrite, stylesOverwrite }) =>
 {
+  if(!richTextContent?.json)
+  {
+    return null;
+  }
+
   return (
-    <>
-      {richTextContent?.json && (
-        <SRichtext stylesOverwrite={stylesOverwrite}>
-          <RichTextRenderer node={richTextContent.json} overwrites={richTextOverwrite}/>
-        </SRichtext>
-      )}
-    </>
+    <SRichtext stylesOverwrite={stylesOverwrite}>
+      <RichTextRenderer node={richTextContent.json} overwrites={richTextOverwrite}/>
+    </SRichtext>
   );
 };

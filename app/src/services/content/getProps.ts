@@ -1,6 +1,18 @@
+import { type IGenPage } from "@/services/graphql/__generated/sdk";
+
 import { caisySDK } from "../graphql/getSdk";
 
-export const getProps = async ({ slug }: { slug: string }) => 
+type GetPropsParams = {
+  slug: string;
+};
+
+export type GetPropsResult = {
+  Page: IGenPage | null;
+};
+
+type GetProps = (props: GetPropsParams) => Promise<GetPropsResult>;
+
+export const getProps: GetProps = async ({ slug }) =>
 {
   // if partner slug is undefined, return vanilla page
   if(slug === undefined) 

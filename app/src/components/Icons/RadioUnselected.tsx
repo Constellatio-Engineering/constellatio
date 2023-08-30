@@ -1,6 +1,6 @@
-import React from "react";
+import React, { type FunctionComponent } from "react";
 
-export const RadioUnselected = ({ size = 20 }: { readonly size?: number }) => (
+export const RadioUnselected: FunctionComponent = ({ size = 20 }: { readonly size?: number }) => (
   <svg
     xmlns="http://www.w3.org/2000/svg"
     width={size}

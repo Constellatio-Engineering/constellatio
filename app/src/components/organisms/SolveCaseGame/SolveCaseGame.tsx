@@ -7,12 +7,12 @@ import React, { type FC } from "react";
 
 import { Container, GameWrapper, TitleWrapper } from "./SolveCaseGame.styles";
 
-interface TSolveCaseGame 
+export interface SolveCaseGameProps
 {
   readonly onGameStartHandler: () => void;
 }
 
-export const SolveCaseGame: FC<TSolveCaseGame> = ({ onGameStartHandler }) => 
+export const SolveCaseGame: FC<SolveCaseGameProps> = ({ onGameStartHandler }) =>
 {
   return (
     <Container>
@@ -24,7 +24,7 @@ export const SolveCaseGame: FC<TSolveCaseGame> = ({ onGameStartHandler }) =>
           Awesome job! Now, you’re ready to solve the case.
         </BodyText>
         <div>
-          <Button styleType="primary" size="large" onClick={onGameStartHandler}>
+          <Button<"button"> styleType="primary" size="large" onClick={onGameStartHandler}>
             Start solving this case
           </Button>
         </div>

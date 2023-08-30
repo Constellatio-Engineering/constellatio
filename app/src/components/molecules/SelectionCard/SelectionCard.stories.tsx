@@ -1,9 +1,10 @@
 import { Box } from "@mantine/core";
 import { type Meta, type StoryObj } from "@storybook/react";
+import { type FunctionComponent } from "react";
 
-import { SelectionCard } from "./SelectionCard";
+import { SelectionCard, type SelectionCardProps } from "./SelectionCard";
 
-const Template = (args: any) => (
+const Template: FunctionComponent<SelectionCardProps> = args => (
   <Box w={320}>
     <SelectionCard {...args}/>
   </Box>

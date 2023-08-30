@@ -100,7 +100,7 @@ export const colors: MantineThemeColors = {
   "support-notice": [
     "#F4F6FE", // 0
     "#E9EDFD", // 1
-    "#C7D3FB", // 2
+    "#C3DFCF ", // 2
     "#96A8E4", // 3
     "#5B74C7", // 4
     "#3A4C88", // 5

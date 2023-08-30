@@ -1,6 +1,6 @@
-import React from "react";
+import React, { type FunctionComponent } from "react";
 
-export const ArrowUp = ({ size = 20 }: { readonly size?: number }) => (
+export const ArrowUp: FunctionComponent<{ readonly size?: number }> = ({ size = 20 }) => (
   <svg
     width={size}
     height={size}

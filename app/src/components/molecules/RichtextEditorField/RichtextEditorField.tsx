@@ -2,20 +2,20 @@ import { Button } from "@/components/atoms/Button/Button";
 import { Check } from "@/components/Icons/Check";
 
 import { RichTextEditor, Link } from "@mantine/tiptap";
-import Placeholder from "@tiptap/extension-placeholder";
+import { Placeholder } from "@tiptap/extension-placeholder";
 import { type Content, useEditor } from "@tiptap/react";
-import StarterKit from "@tiptap/starter-kit";
+import { StarterKit } from "@tiptap/starter-kit";
 import { type FC } from "react";
 
 import { ContentWrapper, richtextEditorFieldStyles } from "./RichtextEditorField.styles";
 
-interface TRichtextEditorField 
+export interface RichtextEditorFieldProps
 {
   readonly content?: Content;
   readonly variant: "simple" | "with-legal-quote";
 }
 
-export const RichtextEditorField: FC<TRichtextEditorField> = ({ content = "", variant }) => 
+export const RichtextEditorField: FC<RichtextEditorFieldProps> = ({ content = "", variant }) =>
 {
   const editor = useEditor({
     content,
@@ -29,7 +29,7 @@ export const RichtextEditorField: FC<TRichtextEditorField> = ({ content = "", va
   });
 
   return (
-    <RichTextEditor editor={editor} styles={richtextEditorFieldStyles({})}>
+    <RichTextEditor editor={editor} styles={richtextEditorFieldStyles()}>
       <RichTextEditor.Toolbar>
         <RichTextEditor.ControlsGroup>
           <RichTextEditor.Bold/>
@@ -49,7 +49,7 @@ export const RichtextEditorField: FC<TRichtextEditorField> = ({ content = "", va
       <ContentWrapper>
         <RichTextEditor.Content/>
         <div>
-          <Button
+          <Button<"button">
             styleType="primary"
             size="large"
             type="button"

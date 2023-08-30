@@ -1,9 +1,11 @@
+/* eslint-disable max-lines */
 import { Box } from "@mantine/core";
 import { type Meta, type StoryObj } from "@storybook/react";
+import { type FunctionComponent } from "react";
 
-import { Callout } from "./Callout";
+import { Callout, type CalloutProps } from "./Callout";
 
-const Template = (args: any) => (
+const Template: FunctionComponent<CalloutProps> = (args) => (
   <Box w={670}>
     <Callout {...args}/>
   </Box>

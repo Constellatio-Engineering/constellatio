@@ -1,11 +1,13 @@
 import { Puzzle } from "@/components/Icons/Puzzle";
+import { type ExtractProps } from "@/utils/types";
 
 import { Tabs } from "@mantine/core";
 import { type Meta, type StoryObj } from "@storybook/react";
+import { type FunctionComponent } from "react";
 
 import { SwitcherTab } from "./SwitcherTab";
 
-const Template = (args: any) => (
+const Template: FunctionComponent<ExtractProps<typeof SwitcherTab>> = args => (
   <Tabs
     unstyled
     styles={(theme) => ({
@@ -32,11 +34,8 @@ const Template = (args: any) => (
         fontWeight: 500,
         gap: theme.spacing["spacing-4"],
         lineHeight: "24px",
-
         outline: "none",
-
         padding: `${theme.spacing["spacing-8"]} ${theme.spacing["spacing-16"]}`,
-
         transition: "all 0.3s ease",
       },
       tabIcon: {

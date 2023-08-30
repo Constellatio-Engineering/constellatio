@@ -1,9 +1,10 @@
 import { Box } from "@mantine/core";
 import { type Meta, type StoryObj } from "@storybook/react";
+import { type FunctionComponent } from "react";
 
-import { SolveCaseGame } from "./SolveCaseGame";
+import { SolveCaseGame, type SolveCaseGameProps } from "./SolveCaseGame";
 
-const Template = (args: any) => (
+const Template: FunctionComponent<SolveCaseGameProps> = args => (
   <Box w={670}>
     <SolveCaseGame {...args}/>
   </Box>

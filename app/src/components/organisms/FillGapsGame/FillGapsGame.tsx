@@ -1,3 +1,4 @@
+/* eslint-disable max-lines */
 import { BodyText } from "@/components/atoms/BodyText/BodyText";
 import { Button } from "@/components/atoms/Button/Button";
 import { Check } from "@/components/Icons/Check";
@@ -12,7 +13,7 @@ import { type IGenFillInGapsGame } from "@/services/graphql/__generated/sdk";
 
 import { Title } from "@mantine/core";
 import { distance } from "fastest-levenshtein";
-import React, { type FC, useRef, useState } from "react";
+import { type FC, type ReactElement, useRef, useState } from "react";
 
 import {
   Container,
@@ -24,14 +25,14 @@ import {
   stylesOverwrite,
 } from "./FillGapsGame.styles";
 
-type TFillGapsGame = Pick<IGenFillInGapsGame, "fillGameParagraph" | "helpNote" | "question">;
+export type TFillGapsGame = Pick<IGenFillInGapsGame, "fillGameParagraph" | "helpNote" | "question">;
 
-const countPlaceholders = (content) => 
+const countPlaceholders = (content: any): number => 
 {
   let count = 0;
   const regex = /{{.*?}}/g;
 
-  content.forEach((item) => 
+  content.forEach((item: any) => 
   {
     if(item.type === "text" && item.text) 
     {
@@ -58,7 +59,7 @@ export const FillGapsGame: FC<TFillGapsGame> = ({ fillGameParagraph, helpNote, q
   const correctAnswers = useRef<string[]>([]);
   const focusedIndex = useRef<number | null>(null);
 
-  const handleInputChange = (index: number, value: string) => 
+  const handleInputChange = (index: number, value: string): void => 
   {
     setUserAnswers((prevAnswers) => 
     {
@@ -67,11 +68,6 @@ export const FillGapsGame: FC<TFillGapsGame> = ({ fillGameParagraph, helpNote, q
       return newAnswers;
     });
   };
-
-  // console.log("userAnswers", userAnswers);
-  // console.log("correctAnswers", correctAnswers.current);
-  // console.log(gameStatus);
-  // console.log(answerResult);
 
   const checkAnswers = (): boolean => 
   {
@@ -82,12 +78,12 @@ export const FillGapsGame: FC<TFillGapsGame> = ({ fillGameParagraph, helpNote, q
 
     for(let i = 0; i < userAnswers.length; i++) 
     {
-      const possibleCorrectAnswers = correctAnswers.current[i].split(";");
+      const possibleCorrectAnswers = correctAnswers.current?.[i]?.split(";") ?? [];
       let isAnswerCorrect = false;
 
       for(const possibleAnswer of possibleCorrectAnswers) 
       {
-        const userAnswer = userAnswers[i].toLowerCase();
+        const userAnswer = userAnswers?.[i]?.toLowerCase() ?? "";
         const correctAnswer = possibleAnswer.toLowerCase();
 
         if(!isNaN(Number(correctAnswer)) || correctAnswer.length <= 4) 
@@ -126,7 +122,7 @@ export const FillGapsGame: FC<TFillGapsGame> = ({ fillGameParagraph, helpNote, q
     return allCorrect;
   };
 
-  const handleCheckAnswers = () => 
+  const handleCheckAnswers = (): void => 
   {
     if(checkAnswers()) 
     {
@@ -142,13 +138,29 @@ export const FillGapsGame: FC<TFillGapsGame> = ({ fillGameParagraph, helpNote, q
     }
   };
 
-  const handleResetGame = () => 
+  const handleResetGame = (): void => 
   {
     setGameStatus("inprogress");
     inputCounter.current = 0;
     correctAnswers.current = [];
     setUserAnswers(new Array(totalPlaceholders).fill(""));
     setAnswerResult(new Array(totalPlaceholders).fill(""));
+  };
+
+  const richtextOverwrite = (props: any): ReactElement =>
+  {
+    return (
+      <RichtextOverwrite
+        text={props?.children?.[0]?.props?.node.text}
+        correctAnswers={correctAnswers}
+        handleInputChange={handleInputChange}
+        inputCounter={inputCounter}
+        userAnswers={userAnswers}
+        focusedIndex={focusedIndex}
+        gameStatus={gameStatus}
+        answerResult={answerResult}
+      />
+    );
   };
 
   return (
@@ -176,22 +188,7 @@ export const FillGapsGame: FC<TFillGapsGame> = ({ fillGameParagraph, helpNote, q
               <Richtext
                 richTextContent={fillGameParagraph.richTextContent}
                 richTextOverwrite={{
-                  paragraph: (props) => 
-                  {
-                    return (
-                      <RichtextOverwrite
-                        // @ts-ignore
-                        text={props?.children?.[0]?.props?.node.text}
-                        correctAnswers={correctAnswers}
-                        handleInputChange={handleInputChange}
-                        inputCounter={inputCounter}
-                        userAnswers={userAnswers}
-                        focusedIndex={focusedIndex}
-                        gameStatus={gameStatus}
-                        answerResult={answerResult}
-                      />
-                    );
-                  },
+                  paragraph: richtextOverwrite,
                 }}
                 stylesOverwrite={stylesOverwrite}
               />
@@ -211,7 +208,7 @@ export const FillGapsGame: FC<TFillGapsGame> = ({ fillGameParagraph, helpNote, q
           </>
         )}
         <div>
-          <Button
+          <Button<"button">
             styleType="primary"
             size="large"
             leftIcon={gameStatus === "inprogress" ? <Check/> : <Reload/>}

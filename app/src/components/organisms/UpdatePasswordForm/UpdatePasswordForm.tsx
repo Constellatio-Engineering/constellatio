@@ -3,17 +3,16 @@ import { Input } from "@/components/atoms/Input/Input";
 import { PasswordValidationSchema } from "@/components/helpers/PasswordValidationSchema";
 import { type Database } from "@/lib/database.types";
 import { updatePasswordFormSchema } from "@/schemas/UpdatePasswordFormSchema";
+import { supabase } from "@/supabase/client";
 
 import { Box, Stack, Title } from "@mantine/core";
 import { useForm, zodResolver } from "@mantine/form";
 import { useDisclosure } from "@mantine/hooks";
-import { createPagesBrowserClient } from "@supabase/auth-helpers-nextjs";
 import { useRouter } from "next/router";
-import { useState } from "react";
+import { type FunctionComponent, useState } from "react";
 
-export function UpdatePasswordForm() 
+export const UpdatePasswordForm: FunctionComponent = () =>
 {
-  const supabase = createPagesBrowserClient<Database>();
   const [isPasswordRevealed, { toggle }] = useDisclosure(false);
 
   const router = useRouter();
@@ -27,18 +26,19 @@ export function UpdatePasswordForm()
     validateInputOnBlur: true,
   });
 
-  const handleSubmit = form.onSubmit(async (formValues) => 
+  const handleSubmit = form.onSubmit(async (formValues) =>
   {
-    try 
+    try
     {
       setSubmitting(true);
       await supabase.auth.updateUser({ password: formValues.password });
       await router.replace("/");
     }
-    catch (error) 
+    catch (error)
     {
+      console.log("error updating password:", error);
     }
-    finally 
+    finally
     {
       setSubmitting(false);
     }
@@ -69,7 +69,7 @@ export function UpdatePasswordForm()
               {...form.getInputProps("passwordConfirm")}
             />
           </Stack>
-          <Button
+          <Button<"button">
             styleType="primary"
             type="submit"
             title="Reset Password"
@@ -80,4 +80,4 @@ export function UpdatePasswordForm()
       </form>
     </>
   );
-}
+};

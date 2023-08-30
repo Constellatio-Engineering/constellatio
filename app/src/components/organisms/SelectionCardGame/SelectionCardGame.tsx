@@ -6,31 +6,24 @@ import { Reload } from "@/components/Icons/Reload";
 import { HelpNote } from "@/components/molecules/HelpNote/HelpNote";
 import { ResultCard } from "@/components/molecules/ResultCard/ResultCard";
 import { SelectionCard } from "@/components/molecules/SelectionCard/SelectionCard";
+import { type TValue } from "@/components/Wrappers/SelectionGame/SelectionGame";
 import { type IGenSelectionCard } from "@/services/graphql/__generated/sdk";
+import { shuffleArray } from "@/utils/array";
 
 import { Title, LoadingOverlay } from "@mantine/core";
-import React, { type FC, useEffect, useState } from "react";
+import { type FC, useEffect, useMemo, useState } from "react";
 
 import {
   Container, Game, GameWrapper, LegendWrapper, Options, TitleWrapper 
 } from "./SelectionCardGame.styles";
 
-type TSelectionCardGame = Pick<IGenSelectionCard, "game" | "helpNote" | "question">;
+type TOptionType = TValue["options"][number];
+export type SelectionCardGameProps = Pick<IGenSelectionCard, "game" | "helpNote" | "question">;
 
-const shuffleOptions = (arr) => 
+export const SelectionCardGame: FC<SelectionCardGameProps> = ({ game, helpNote, question }) =>
 {
-  for(let i = arr.length - 1; i > 0; i--) 
-  {
-    const j = Math.floor(Math.random() * (i + 1));
-    [arr[i], arr[j]] = [arr[j], arr[i]];
-  }
-  return arr;
-};
-
-export const SelectionCardGame: FC<TSelectionCardGame> = ({ game, helpNote, question }) => 
-{
-  const optionsWithCheckProp = game?.options?.map((option) => ({ ...option, checked: false }));
-  const originalOptions = JSON.parse(JSON.stringify(optionsWithCheckProp ?? []));
+  const optionsWithCheckProp = useMemo(() => game?.options?.map((option: TOptionType) => ({ ...option, checked: false })), [game?.options]);
+  const originalOptions: TOptionType[] = useMemo(() => optionsWithCheckProp ?? [], [optionsWithCheckProp]);
   const [optionsItems, setOptionsItems] = useState<any[]>([]);
   const [gameStatus, setGameStatus] = useState<"win" | "lose" | "inprogress">("inprogress");
   const [resultMessage, setResultMessage] = useState<string>("");
@@ -38,13 +31,13 @@ export const SelectionCardGame: FC<TSelectionCardGame> = ({ game, helpNote, ques
 
   useEffect(() => 
   {
-    setOptionsItems(shuffleOptions(originalOptions));
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
+    const optionsShuffled = shuffleArray<TOptionType>(originalOptions);
+    setOptionsItems(optionsShuffled);
+  }, [originalOptions]);
 
   const filteredCorrectAnswers = optionsItems.filter((item) => item.correctAnswer);
 
-  const checkWinCondition = () => 
+  const checkWinCondition = (): boolean => 
   {
     const checkedAnswers = optionsItems.filter((item) => item.checked);
 
@@ -53,7 +46,7 @@ export const SelectionCardGame: FC<TSelectionCardGame> = ({ game, helpNote, ques
     );
   };
 
-  const onGameFinishHandler = () => 
+  const onGameFinishHandler = (): void => 
   {
     const winCondition = checkWinCondition();
 
@@ -69,10 +62,11 @@ export const SelectionCardGame: FC<TSelectionCardGame> = ({ game, helpNote, ques
     }
   };
 
-  const onGameResetHandler = () => 
+  const onGameResetHandler = (): void => 
   {
+    const optionsShuffled = shuffleArray<TOptionType>(originalOptions);
+    setOptionsItems(optionsShuffled);
     setGameStatus("inprogress");
-    setOptionsItems(shuffleOptions(originalOptions));
     setResetCount((prevCount) => prevCount + 1);
   };
 
@@ -134,7 +128,7 @@ export const SelectionCardGame: FC<TSelectionCardGame> = ({ game, helpNote, ques
           </>
         )}
         <div>
-          <Button
+          <Button<"button">
             styleType="primary"
             size="large"
             leftIcon={gameStatus === "inprogress" ? <Check/> : <Reload/>}

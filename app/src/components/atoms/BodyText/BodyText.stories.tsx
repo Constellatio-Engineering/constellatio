@@ -1,9 +1,12 @@
+import { type ExtractProps } from "@/utils/types";
+
 import { Box } from "@mantine/core";
 import { type Meta, type StoryObj } from "@storybook/react";
+import { type FunctionComponent } from "react";
 
 import { BodyText } from "./BodyText";
 
-const Template = (args: any) => (
+const Template: FunctionComponent<ExtractProps<typeof BodyText>> = args => (
   <Box w={350}>
     <BodyText {...args}/>
   </Box>

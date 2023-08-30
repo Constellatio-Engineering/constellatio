@@ -1,11 +1,11 @@
 import { Container, Flex, Title } from "@mantine/core";
 import Image from "next/image";
-import React from "react";
+import React, { type FunctionComponent } from "react";
 
 import visual from "../../../../public/images/Registration-visual.png";
 import { Footer } from "../Footer/Footer";
 
-export const RegistrationVisualHeader = () => 
+export const RegistrationVisualHeader: FunctionComponent = () =>
 {
   return (
     <Container

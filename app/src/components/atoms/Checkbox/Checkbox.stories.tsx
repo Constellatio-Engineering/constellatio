@@ -1,9 +1,10 @@
 import { Box } from "@mantine/core";
 import { type Meta, type StoryObj } from "@storybook/react";
+import { type FunctionComponent } from "react";
 
-import { Checkbox } from "./Checkbox";
+import { Checkbox, type CheckboxProps } from "./Checkbox";
 
-const Template = (args: any) => (
+const Template: FunctionComponent<CheckboxProps> = (args) => (
   <Box w={350}>
     <Checkbox {...args}/>
   </Box>

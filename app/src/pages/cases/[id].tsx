@@ -1,13 +1,74 @@
 import { Layout } from "@/components/layouts/Layout";
 import { Richtext } from "@/components/molecules/Richtext/Richtext";
 import { DragDropGame } from "@/components/organisms/DragDropGame/DragDropGame";
-import { type IGenCaseByIdQuery, IGenCasesQuery } from "@/services/graphql/__generated/sdk";
+import { type IGenCaseByIdQuery } from "@/services/graphql/__generated/sdk";
 import { caisySDK } from "@/services/graphql/getSdk";
 
-import { Flex, Title } from "@mantine/core";
-import { type GetStaticPaths, type GetStaticProps } from "next";
+import { Title } from "@mantine/core";
+import { type GetStaticPaths, type GetStaticProps, type GetStaticPathsResult } from "next";
+import { type FunctionComponent } from "react";
 
-export default function Cases({ caseById }: { readonly caseById: IGenCaseByIdQuery }) 
+import { type ParsedUrlQuery } from "querystring";
+
+interface Params extends ParsedUrlQuery
+{
+  id: string | undefined;
+}
+
+export const getStaticPaths: GetStaticPaths<Params> = async () =>
+{
+  const cases = await caisySDK.Cases();
+  const allEdges = cases.allCase?.edges;
+
+  if(!allEdges || allEdges.length === 0)
+  {
+    return {
+      fallback: false,
+      paths: []
+    };
+  }
+
+  const paths: GetStaticPathsResult<Params>["paths"] = allEdges
+    .map(edge => edge?.node?.id)
+    .filter(Boolean)
+    .map(edgeIid => ({
+      params: {
+        id: edgeIid
+      },
+    }));
+
+  return {
+    fallback: true,
+    paths
+  };
+};
+
+// this is the type of the props that getStaticProps will return
+export interface GetCaseDetailPagePropsResult 
+{
+  readonly caseById: IGenCaseByIdQuery; 
+}
+
+export const getStaticProps: GetStaticProps<GetCaseDetailPagePropsResult, Params> = async ({ params }) =>
+{
+  const caseId = params?.id;
+
+  if(caseId == null)
+  {
+    throw new Error("caseId is null. How did this happen?");
+  }
+
+  const caseById = await caisySDK.CaseById({ id: caseId });
+
+  return {
+    props: {
+      caseById,
+    },
+    revalidate: 1,
+  };
+};
+
+const CaseDetailPage: FunctionComponent<GetCaseDetailPagePropsResult> = ({ caseById }) =>
 {
   console.log(caseById);
   return (
@@ -61,7 +122,7 @@ export default function Cases({ caseById }: { readonly caseById: IGenCaseByIdQue
               Facts
             </Title>
             <Richtext richTextContent={caseById.Case?.facts}/>
-            {caseById.Case?.sections?.map((edge, index) => 
+            {caseById.Case?.sections?.map((edge, index) =>
             {
               if(index > 0) { return null; }
 
@@ -78,27 +139,7 @@ export default function Cases({ caseById }: { readonly caseById: IGenCaseByIdQue
       </main>
     </Layout>
   );
-}
-
-export const getStaticPaths: GetStaticPaths = async () => 
-{
-  const cases = await caisySDK.Cases();
-
-  return {
-    fallback: "blocking",
-    paths: cases.allCase?.edges!.map((edge) => ({
-      params: { id: edge?.node?.id },
-    })),
-  };
 };
 
-export const getStaticProps: GetStaticProps = async ({ params }) => 
-{
-  const caseById = await caisySDK.CaseById({ id: params!.id as string });
+export default CaseDetailPage;
 
-  return {
-    props: {
-      caseById,
-    },
-  };
-};

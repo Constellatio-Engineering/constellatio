@@ -1,7 +1,18 @@
 import {
-  type CSSObject, type CheckboxStylesNames, type CheckboxStylesParams, type MantineTheme, type Styles 
+  type CSSObject, type CheckboxStylesNames, type Styles, type CheckboxStylesParams
 } from "@mantine/core";
 import { type ReactNode } from "react";
+
+type CheckboxStylesProps = {
+
+  checkboxBodyOverride?: CSSObject;
+  checkboxLabelOverride?: CSSObject;
+  disabled?: boolean;
+  error: ReactNode;
+  fullWidth?: boolean;
+};
+
+type CheckboxStyles = Styles<CheckboxStylesNames, CheckboxStylesParams>;
 
 export const checkboxStyles = ({
   checkboxBodyOverride,
@@ -9,15 +20,9 @@ export const checkboxStyles = ({
   disabled,
   error,
   fullWidth,
-}: {
-  checkboxBodyOverride?: CSSObject;
-  checkboxLabelOverride?: CSSObject;
-  disabled?: boolean;
-  error: ReactNode;
-  fullWidth?: boolean;
-}) => 
+}: CheckboxStylesProps): CheckboxStyles =>
 {
-  const styles: Styles<CheckboxStylesNames, CheckboxStylesParams> = (theme: MantineTheme) => ({
+  const styles: CheckboxStyles = theme => ({
     body: {
       ...checkboxBodyOverride,
     },

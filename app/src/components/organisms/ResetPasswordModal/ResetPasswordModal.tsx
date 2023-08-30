@@ -2,11 +2,11 @@ import { BodyText } from "@/components/atoms/BodyText/BodyText";
 import { Button } from "@/components/atoms/Button/Button";
 import { Input } from "@/components/atoms/Input/Input";
 import { Modal } from "@/components/molecules/Modal/Modal";
+import { supabase } from "@/supabase/client";
 
 import { Stack } from "@mantine/core";
 import { useForm } from "@mantine/form";
 import { notifications } from "@mantine/notifications";
-import { createPagesBrowserClient } from "@supabase/auth-helpers-nextjs";
 import { atom, useAtom } from "jotai";
 import { type FunctionComponent } from "react";
 
@@ -19,7 +19,6 @@ export const resetPasswordModalVisible = atom(false);
 
 export const ResetPasswordModal: FunctionComponent = () =>
 {
-  const supabase = createPagesBrowserClient();
   const [isOpen, setOpen] = useAtom(resetPasswordModalVisible);
   const form = useForm<ResetPasswordFormValues>();
 
@@ -56,7 +55,7 @@ export const ResetPasswordModal: FunctionComponent = () =>
             enter your new password.
           </BodyText>
           <Input inputType="text" label="E-Mail Adresse" {...form.getInputProps("email")}/>
-          <Button styleType="primary" type="submit">
+          <Button<"button"> styleType="primary" type="submit">
             Zurücksetzen
           </Button>
         </Stack>

@@ -1,7 +1,7 @@
-import { css } from "@emotion/react";
+import { css, type SerializedStyles } from "@emotion/react";
 import styled from "@emotion/styled";
 
-export const SRichtext = styled.div<{ stylesOverwrite: any }>`
+export const SRichtext = styled.div<{ stylesOverwrite?: SerializedStyles }>`
   ${({ theme }) => css`
     p {
       font-size: ${theme.fontSizes["spacing-16"]};

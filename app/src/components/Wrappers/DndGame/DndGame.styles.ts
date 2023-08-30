@@ -3,9 +3,8 @@ import { type MantineTheme, type Styles, type SwitchStylesNames, type SwitchStyl
 
 export const Container = styled.div`
   max-width: 1440px;
-  margin: 0 auto;
+  margin: 16px auto 0;
   display: flex;
-  margin-top: 16px;
   flex-direction: column;
   gap: 24px;
   align-items: center;
@@ -73,7 +72,6 @@ export const CardItemWrapper = styled.div`
 
 export const CardItem = styled.div`
   display: flex;
-  width: 100%;
   align-items: center;
   gap: ${({ theme }) => theme.spacing["spacing-8"]};
   padding: ${({ theme }) => theme.spacing["spacing-12"]};
@@ -82,11 +80,17 @@ export const CardItem = styled.div`
   border: 1px solid ${({ theme }) => theme.colors["neutrals-01"][4]};
   background-color: ${({ theme }) => theme.colors["neutrals-01"][0]};
   transition: background-color 0.3s ease;
+
+  &:active{
+    background-color: ${({ theme }) => theme.colors["neutrals-01"][1]};
+  }
 `;
 
-export const switchStyle = ({ checked }: { checked: boolean }) => 
+type SwitchStyles = Styles<SwitchStylesNames, SwitchStylesParams>;
+
+export const switchStyle = ({ checked }: { checked: boolean }): SwitchStyles =>
 {
-  const style: Styles<SwitchStylesNames, SwitchStylesParams> = (theme: MantineTheme) => ({
+  const style: SwitchStyles = (theme: MantineTheme) => ({
     thumb: {
       alignItems: "center",
       justifyContent: "center",

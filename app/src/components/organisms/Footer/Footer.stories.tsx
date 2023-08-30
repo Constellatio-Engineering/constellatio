@@ -1,9 +1,10 @@
 import { Box } from "@mantine/core";
 import { type Meta, type StoryObj } from "@storybook/react";
+import { type FunctionComponent } from "react";
 
-import { Footer } from "./Footer";
+import { Footer, type FooterProps } from "./Footer";
 
-const Template = (args: any) => (
+const Template: FunctionComponent<FooterProps> = args => (
   <Box maw={1440}>
     <Footer {...args}/>
   </Box>

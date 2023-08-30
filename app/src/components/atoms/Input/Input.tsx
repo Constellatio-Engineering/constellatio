@@ -1,3 +1,4 @@
+/* eslint-disable react/no-unstable-nested-components */
 import { AlertFilled } from "@/components/Icons/AlertFilled";
 import { Hide } from "@/components/Icons/Hide";
 import { Show } from "@/components/Icons/Show";
@@ -9,13 +10,13 @@ import React, { type FC } from "react";
 
 import { passwordStyles, textStyles } from "./input.styles";
 
-type TInput = (TextInputProps | PasswordInputProps) & {
+export type InputProps = (TextInputProps | PasswordInputProps) & {
   readonly inputStyleOverwrite?: CSSObject | undefined;
   readonly inputType: "text" | "password" | "number";
   readonly labelStyleOverwrite?: CSSObject | undefined;
 };
 
-export const Input: FC<TInput> = ({
+export const Input: FC<InputProps> = ({
   disabled,
   error,
   inputStyleOverwrite,

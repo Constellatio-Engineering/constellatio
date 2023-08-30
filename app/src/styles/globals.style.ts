@@ -20,7 +20,6 @@ export const globalStyles = css`
   strong, span, i, b {
     color: inherit;
     font-size: inherit;
-    font-family: inherit;
   }
 
   span {
@@ -38,6 +37,7 @@ export const globalStyles = css`
   }
 `;
 
+// eslint-disable-next-line import/no-unused-modules
 export const centerHorizontally = css`
   position: relative;
   left: 50%;

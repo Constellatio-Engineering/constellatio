@@ -3,38 +3,51 @@ import { postData } from "@/lib/post-data";
 
 import { Button, Container, Title } from "@mantine/core";
 import { useRouter } from "next/router";
-import { useState } from "react";
+import { type FunctionComponent, useState } from "react";
 
-export default function Billing() 
+const Billing: FunctionComponent = () =>
 {
   const router = useRouter();
   const [opening, setOpening] = useState(false);
 
-  const redirectToCustomerPortal = async () => 
+  const redirectToCustomerPortal = async (): Promise<void> =>
   {
-    try 
-    {
-      setOpening(true);
+    setOpening(true);
 
-      const { url } = await postData({
+    let url: string;
+
+    try
+    {
+      const postDataResult = await postData({
         url: "/api/stripe/portal",
       });
-      router.push(url);
+
+      if(!postDataResult.url)
+      {
+        throw new Error("No url returned from api/stripe/portal");
+      }
+
+      url = postDataResult.url;
     }
-    catch (error) 
+    catch (error)
     {
-      if(error) { return alert((error as Error).message); }
+      console.error(error);
+      return alert("An error occurred. Please look at the console for more details.");
     }
+
+    void router.push(url);
   };
 
   return (
     <Layout>
       <Container>
         <Title>Abonnement</Title>
-        <Button mt="lg" loading={opening} onClick={redirectToCustomerPortal}>
+        <Button<"button"> mt="lg" loading={opening} onClick={redirectToCustomerPortal}>
           Stripe öffnen
         </Button>
       </Container>
     </Layout>
   );
-}
+};
+
+export default Billing;

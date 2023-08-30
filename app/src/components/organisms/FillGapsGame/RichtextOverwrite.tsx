@@ -2,7 +2,7 @@
 import { FillGapInput } from "@/components/molecules/FillGapInput/FillGapInput";
 
 import {
-  type FC, type MutableRefObject, type RefObject, createRef, memo, useEffect, useRef 
+  type FC, type MutableRefObject, type RefObject, createRef, memo, useEffect, useRef, type ChangeEvent 
 } from "react";
 
 interface TRichtextOverwrite 
@@ -33,7 +33,7 @@ let RichtextOverwrite: FC<TRichtextOverwrite> = ({
   // Splitting the text based on {{...}} pattern using regex
   const parts = text.split(/({{.*?}})/g);
 
-  const createChangeHandler = (index) => (e) => 
+  const createChangeHandler = (index: number) => (e: ChangeEvent<HTMLInputElement>) => 
   {
     handleInputChange(index, e.target.value);
     focusedIndex.current = index;
@@ -48,7 +48,7 @@ let RichtextOverwrite: FC<TRichtextOverwrite> = ({
   {
     if(focusedIndex.current !== null && inputRefs.current[focusedIndex.current]) 
     {
-      inputRefs.current[focusedIndex.current].current?.focus();
+      inputRefs.current?.[focusedIndex.current]?.current?.focus();
     }
   }, [focusedIndex]);
 

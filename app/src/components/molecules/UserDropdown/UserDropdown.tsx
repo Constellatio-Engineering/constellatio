@@ -1,21 +1,23 @@
+import { supabase } from "@/supabase/client";
+
 import { Avatar, Menu } from "@mantine/core";
 import { notifications } from "@mantine/notifications";
-import { createPagesBrowserClient } from "@supabase/auth-helpers-nextjs";
 import { IconBrandStripe, IconLogout } from "@tabler/icons-react";
 import { useRouter } from "next/router";
+import { type FunctionComponent } from "react";
 
-export function UserDropdown() 
+export const UserDropdown: FunctionComponent = () =>
 {
-  const supabase = createPagesBrowserClient();
   const router = useRouter();
 
-  const handleSubscription = async () => 
+  const handleSubscription = async (): Promise<void> =>
   {
     await router.push("/settings/billing");
   };
-  const handleSignOut = async () => 
+
+  const handleSignOut = async (): Promise<void> =>
   {
-    try 
+    try
     {
       await supabase.auth.signOut();
       await router.replace("/login");
@@ -24,7 +26,10 @@ export function UserDropdown()
         title: "Sign out handler",
       });
     }
-    catch (error) {}
+    catch (error) 
+    {
+      console.log("error while signing out", error);
+    }
   };
 
   return (
@@ -49,4 +54,4 @@ export function UserDropdown()
       </Menu.Dropdown>
     </Menu>
   );
-}
+};
