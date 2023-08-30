@@ -13,6 +13,7 @@ interface IOverviewCardStyles
 export const wrapper = (): SerializedStyles => css`
   /* max-width: 486px; */
 `;
+
 export const topDetails = ({ theme, variant }: IOverviewCardStyles): SerializedStyles => css`
   background-color: ${variant === "case"
     ? theme.colors["support-notice"][4]
@@ -50,9 +51,9 @@ export const topDetails = ({ theme, variant }: IOverviewCardStyles): SerializedS
 `;
 
 export const cardBody = ({ theme }: IOverviewCardStyles): SerializedStyles => css`
-border-radius: 12px;
-background-color: ${theme.colors["neutrals-01"][0]};
-transform: translateY(-16px);
+  border-radius: 12px;
+  background-color: ${theme.colors["neutrals-01"][0]};
+  transform: translateY(-16px);
 `;
 
 export const row = ({ tableTheme, theme }: IOverviewCardStyles): SerializedStyles => css`
@@ -79,5 +80,8 @@ export const row = ({ tableTheme, theme }: IOverviewCardStyles): SerializedStyle
             flex: 1;
             text-align: right;
         }
+    }
+    &:last-child{
+        border-bottom: none;
     }
 `;
