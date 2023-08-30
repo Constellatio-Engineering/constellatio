@@ -7,11 +7,11 @@ import { BodyText } from "../BodyText/BodyText";
 
 export interface IStatusLabel extends PropsWithChildren 
 {
-  readonly title?: string;
+  // readonly title?: string;
   readonly variant: "notStarted" | "inProgress" | "completed";
 }
 
-const StatusLabel: FunctionComponent<IStatusLabel> = ({ children, title, variant }) => 
+const StatusLabel: FunctionComponent<IStatusLabel> = ({ variant }) => 
 {
   switch (variant) 
   {
@@ -19,21 +19,21 @@ const StatusLabel: FunctionComponent<IStatusLabel> = ({ children, title, variant
       return (
         <div css={styles.inProgress}>
           <InProgressStatusLabelIcon/>
-          <BodyText styleType="body-02-medium">{title ?? children}</BodyText>
+          <BodyText styleType="body-02-medium">In Progress</BodyText>
         </div>
       );
     case "completed":
       return (
         <div css={styles.completed}>
           <CompletedStatusLabelIcon/>
-          <BodyText styleType="body-02-medium">{title ?? children}</BodyText>
+          <BodyText styleType="body-02-medium">Completed</BodyText>
         </div>
       );
     default:
       return (
         <div css={styles.notStarted}>
           <NotStartedStatusLabelIcon/>
-          <BodyText styleType="body-02-medium">{title ?? children}</BodyText>
+          <BodyText styleType="body-02-medium">Not Selected</BodyText>
         </div>
       );
   }
