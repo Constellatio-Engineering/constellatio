@@ -91,13 +91,13 @@ jobs:
         run: vercel pull --yes --environment=${{ env.VERCEL_ENVIRONMENT }} --token=${{ secrets.VERCEL_ACCESS_TOKEN }}
       - name: Build Project Artifacts
         run: vercel build ${{ env.VERCEL_ENVIRONMENT_FLAG }} --token=${{ secrets.VERCEL_ACCESS_TOKEN }}
+      - name: Zip Build Folder
+        run: zip bundle.zip .next .vercel -r
       - name: Upload Build Folder as Artifact
         uses: actions/upload-artifact@v3
         with:
           name: next-build
-          path: |
-            app/.next
-            app/.vercel
+          path: app/bundle.zip
 
   deploy-staging:
     name: Deploy Staging to Vercel
@@ -124,6 +124,8 @@ jobs:
         with:
           name: next-build
           path: app
+      - name: Unzip build folder
+        run: unzip bundle.zip
       - name: Deploy to Vercel
         run: vercel deploy --prebuilt --token=${{ secrets.VERCEL_ACCESS_TOKEN }}
       - name: Apply Database Migrations
