@@ -1,1 +1,20 @@
-{"version":"5","dialect":"pg","entries":[]}
+{
+  "version": "5",
+  "dialect": "pg",
+  "entries": [
+    {
+      "idx": 0,
+      "version": "5",
+      "when": 1693425547246,
+      "tag": "0000_dazzling_hellion",
+      "breakpoints": true
+    },
+    {
+      "idx": 1,
+      "version": "5",
+      "when": 1693425547743,
+      "tag": "0001_wooden_mesmero",
+      "breakpoints": true
+    }
+  ]
+}
