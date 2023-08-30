@@ -4,7 +4,7 @@ import { type FunctionComponent } from "react";
 
 import StatusLabel, { type IStatusLabel } from "./StatusLabel";
 
-const Template: FunctionComponent<IStatusLabel> = (args): JSX.Element => (
+const Template: FunctionComponent<IStatusLabel> = (args) => (
   <Box w={350}>
     <StatusLabel {...args}/>
   </Box>

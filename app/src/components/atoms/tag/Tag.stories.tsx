@@ -4,7 +4,7 @@ import React, { type FunctionComponent } from "react";
 
 import Tag from "./Tag";
 import type { ITag } from "./Tag";
-const Template: FunctionComponent<ITag> = (args): JSX.Element => (
+const Template: FunctionComponent<ITag> = (args) => (
   <Box w={350}>
     <Tag {...args}/>
   </Box>

@@ -1,3 +1,4 @@
+import { Svg } from "@/basic-components/SVG/Svg";
 import { BodyText } from "@/components/atoms/BodyText/BodyText";
 import type { IGenCategory } from "@/services/graphql/__generated/sdk";
 
@@ -5,14 +6,14 @@ import { useMantineTheme } from "@mantine/core";
 import React, { type FunctionComponent } from "react";
 
 import * as styles from "./CategoryTab.style";
-import { Svg } from "../../../basic-components/SVG/Svg";
-export interface ICategoryTab extends IGenCategory
+
+export interface CategoryTabProps extends IGenCategory
 {
   readonly itemsNumber: number;
   readonly selected?: boolean;
 }
 
-const CategoryTab: FunctionComponent<ICategoryTab> = ({
+const CategoryTab: FunctionComponent<CategoryTabProps> = ({
   icon,
   itemsNumber,
   selected,

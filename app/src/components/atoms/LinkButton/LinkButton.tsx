@@ -3,13 +3,13 @@ import React, { type ButtonHTMLAttributes, type FC, type ReactNode } from "react
 
 import { SButton } from "./LinkButton.styles";
 
-type TLinkButton = Omit<ButtonHTMLAttributes<HTMLButtonElement>, "title"> & {
+export type LinkButtonProps = ButtonHTMLAttributes<HTMLButtonElement> & {
   readonly icon: ReactNode;
   readonly size?: "big" | "medium";
   readonly title: ReactNode | string ;
 };
 
-export const LinkButton: FC<TLinkButton> = ({
+export const LinkButton: FC<LinkButtonProps> = ({
   icon,
   size = "big",
   title,

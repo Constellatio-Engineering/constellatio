@@ -4,9 +4,9 @@ import { type FunctionComponent } from "react";
 
 import { UpdatePasswordForm } from "./UpdatePasswordForm";
 
-const Template: FunctionComponent = (args: any) => (
+const Template: FunctionComponent = () => (
   <Box w={440}>
-    <UpdatePasswordForm {...args}/>
+    <UpdatePasswordForm/>
   </Box>
 );
 

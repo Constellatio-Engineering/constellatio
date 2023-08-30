@@ -6,7 +6,7 @@ import React, { type FC } from "react";
 import { Card, IconWrapper, LabelWrapper, TextWrapper } from "./ResultCard.stlyes";
 import { CaptionText } from "../../atoms/CaptionText/CaptionText";
 
-interface TResultCard 
+export interface ResultCardProps
 {
   readonly droppedCorrectCards: number;
   readonly message: string;
@@ -14,7 +14,7 @@ interface TResultCard
   readonly variant: "win" | "lose";
 }
 
-export const ResultCard: FC<TResultCard> = ({
+export const ResultCard: FC<ResultCardProps> = ({
   droppedCorrectCards,
   message,
   totalCorrectCards,

@@ -1,12 +1,13 @@
-import TableCell from "@/components/atoms/tableCell/TabelCell";
+import TableCell from "@/components/atoms/tableCell/TableCell";
 import { getProps } from "@/services/content/getProps";
 
 import { type GetStaticProps } from "next";
-import React from "react";
+import React, { type FunctionComponent } from "react";
 
-const NextPage = (props: any): any => 
+const NextPage: FunctionComponent = (props: any) =>
 {
   console.log({ ...props?.Page });
+  
   return (
     <div>
       <TableCell/>

@@ -2,10 +2,9 @@ import { Box } from "@mantine/core";
 import type { Meta, StoryObj } from "@storybook/react";
 import React, { type FunctionComponent } from "react";
 
-import CategoryTab from "./CategoryTab";
-import type { ICategoryTab } from "./CategoryTab";
+import CategoryTab, { type CategoryTabProps } from "./CategoryTab";
 
-const Template: FunctionComponent<ICategoryTab> = (args: ICategoryTab): JSX.Element => (
+const Template: FunctionComponent<CategoryTabProps> = args => (
   <Box w={350}>
     <CategoryTab {...args}/>
   </Box>
