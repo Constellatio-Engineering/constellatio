@@ -20,8 +20,8 @@ export const AuthPage: FC<AuthPageProps> = ({ tab }) =>
 {
   const router = useRouter();
 
-  const handleTabChange: (value: AuthPageProps["tab"]) => Promise<boolean> = async (value) =>
-    router.push(`/${value}`);
+  const handleTabChange: (value: AuthPageProps["tab"]) => Promise<boolean> = async (value) => router.push(`/${value}`);
+
   return (
     <Flex
       justify="space-between"

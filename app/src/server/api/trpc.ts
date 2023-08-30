@@ -7,7 +7,12 @@
  * need to use are documented accordingly near the end.
  */
 
-import { createPagesServerClient } from "@supabase/auth-helpers-nextjs";
+import { env } from "@/env.mjs";
+import { type ClientError, clientErrors } from "@/utils/clientError";
+import { EmailAlreadyTakenError } from "@/utils/serverError";
+
+import { createServerSupabaseClient, type SupabaseClient, type User } from "@supabase/auth-helpers-nextjs";
+import { type Session } from "@supabase/auth-helpers-react";
 import { initTRPC } from "@trpc/server";
 import { type CreateNextContextOptions } from "@trpc/server/adapters/next";
 import superjson from "superjson";
@@ -44,9 +49,15 @@ const createInnerTRPCContext = (_opts: CreateContextOptions): Record<string, nev
  *
  * @see https://trpc.io/docs/context
  */
-export const createTRPCContext = async ({ req, res }: CreateNextContextOptions): Promise<null> =>
+type TrpcContext = {
+  session: Session | null;
+  supabaseServerClient: SupabaseClient;
+  user: User | null;
+};
+
+export const createTRPCContext = async ({ req, res }: CreateNextContextOptions): Promise<TrpcContext> =>
 {
-  const supabaseServerClient = createPagesServerClient({ req, res });
+  const supabaseServerClient = createServerSupabaseClient({ req, res });
   const { data: { user } } = await supabaseServerClient.auth.getUser();
   const { data: { session } } = await supabaseServerClient.auth.getSession();
 
@@ -54,7 +65,11 @@ export const createTRPCContext = async ({ req, res }: CreateNextContextOptions):
   console.log("user", user);
   console.log("session", session);
 
-  return null;
+  return {
+    session,
+    supabaseServerClient,
+    user
+  };
 };
 
 /**
@@ -64,11 +79,34 @@ export const createTRPCContext = async ({ req, res }: CreateNextContextOptions):
  * ZodErrors so that you get typesafety on the frontend if your procedure fails due to validation
  * errors on the backend.
  */
-
 const t = initTRPC
   .context<typeof createTRPCContext>()
   .create({
     errorFormatter: ({ error, shape }) =>
+    {
+      console.log("error formatter");
+
+      let errorData: ClientError;
+
+      if(error instanceof EmailAlreadyTakenError)
+      {
+        errorData = clientErrors["email-already-taken"];
+      }
+      else
+      {
+        console.warn("Unhandled Server Error. Please check tRPC error formatter. Error was:", error);
+        errorData = clientErrors["internal-server-error"];
+      }
+
+      return {
+        ...shape,
+        data: {
+          ...errorData
+        },
+      };
+    },
+    isDev: env.NODE_ENV === "development",
+    /* errorFormatter: ({ error, shape }) =>
     {
       return {
         ...shape,
@@ -78,7 +116,7 @@ const t = initTRPC
           error.cause instanceof ZodError ? error.cause.flatten() : null,
         },
       };
-    },
+    },*/
     transformer: superjson,
   });
 

@@ -6,22 +6,21 @@ import { Dropdown } from "@/components/atoms/Dropdown/Dropdown";
 import { Input } from "@/components/atoms/Input/Input";
 import { PasswordValidationSchema } from "@/components/helpers/PasswordValidationSchema";
 import { Puzzle } from "@/components/Icons/Puzzle";
-import { registrationFormSchema } from "@/schemas/RegistrationFormSchema";
+import { env } from "@/env.mjs";
+import { type RegistrationFormSchema, registrationFormSchema } from "@/schemas/RegistrationFormSchema";
+import { supabase } from "@/supabase/client";
+import { api } from "@/utils/api";
 
 import { Box, Stack } from "@mantine/core";
 import { useForm, zodResolver } from "@mantine/form";
 import { useDisclosure } from "@mantine/hooks";
 import { notifications } from "@mantine/notifications";
-import { createPagesBrowserClient } from "@supabase/auth-helpers-nextjs";
 import { useRouter } from "next/router";
-import { type FunctionComponent, useState } from "react";
+import { type FunctionComponent } from "react";
 
 const universityData = [
-  { icon: <Puzzle/>, label: "Menu list item", value: "1" },
-  { icon: <Puzzle/>, label: "Menu list item", value: "2" },
-  { icon: <Puzzle/>, label: "Menu list item", value: "3" },
-  { icon: <Puzzle/>, label: "Menu list item", value: "4" },
-  { icon: <Puzzle/>, label: "Menu list item", value: "5" },
+  { icon: <Puzzle/>, label: "HdM Stuttgart", value: "hdm-stuttgart" },
+  { icon: <Puzzle/>, label: "TU München", value: "tu-muenchen" },
 ];
 
 const semesterData = [
@@ -42,118 +41,144 @@ const genderData = [
   { label: "other", value: "3" },
 ];
 
+let initialValues: RegistrationFormSchema;
+
+if(env.NEXT_PUBLIC_NODE_ENV === "development")
+{
+  initialValues = {
+    acceptTOS: true,
+    displayName: "Constellatio Dev User",
+    email: "devUser@constellatio-dummy-mail.de",
+    firstName: "Dev",
+    gender: "1",
+    lastName: "User",
+    password: "super-secure-password-123",
+    passwordConfirmation: "super-secure-password-123",
+    semester: semesterData[3]?.value ?? "",
+    university: universityData[0]?.value ?? "",
+  };
+}
+else
+{
+  initialValues = {
+    acceptTOS: false,
+    displayName: "",
+    email: "",
+    firstName: "",
+    gender: "",
+    lastName: "",
+    password: "",
+    passwordConfirmation: "",
+    semester: undefined,
+    university: "",
+  };
+}
+
 export const RegistrationForm: FunctionComponent = () =>
 {
-  const supabase = createPagesBrowserClient();
   const router = useRouter();
-  const [submitting, setSubmitting] = useState(false);
   const [isPasswordRevealed, { toggle }] = useDisclosure(false);
-  const form = useForm({
-    initialValues: {
-      acceptTOS: false,
-      displayName: "",
-      email: "",
-      firstName: "",
-      gender: "",
-      lastName: "",
-      password: "",
-      passwordConfirmation: "",
-      semester: undefined,
-      university: "",
-    },
+  const form = useForm<RegistrationFormSchema>({
+    initialValues,
     validate: zodResolver(registrationFormSchema),
     validateInputOnBlur: true,
   });
 
-  const handleSubmit = form.onSubmit(async (formValues) =>
-  {
-    try
+  const { isLoading: isRegisterLoading, mutate: register } = api.authentication.register.useMutation({
+    onError: e =>
     {
-      setSubmitting(true);
+      if(e.data?.identifier === "email-already-taken")
+      {
+        form.setFieldError("email", "Diese E-Mail Adresse wird bereits verwendet");
+        return;
+      }
 
-      const response = await fetch("/api/auth/register", {
-        body: JSON.stringify(formValues),
-        method: "POST",
-      });
-
-      // TODO: Add type safety
-      const data = await response.json() as any;
-      await supabase.auth.setSession(data);
-      await router.replace("/");
-    }
-    catch (error)
-    {
+      console.log("error while register:", e);
       notifications.show({
         message: "We couldn't sign you up. Please try again.",
         title: "Oops!",
       });
-    }
-    finally
+    },
+    onSuccess: async data =>
     {
-      setSubmitting(false);
-    }
+      console.log("registered successfully", data);
+      await supabase.auth.setSession(data);
+      await router.replace("/");
+    },
   });
+
+  const handleSubmit = form.onSubmit(formValues => register(formValues));
 
   return (
     <form onSubmit={handleSubmit}>
       <Stack spacing="spacing-24">
         <Stack spacing="spacing-12">
           <Input
+            {...form.getInputProps("firstName")}
             inputType="text"
             label="Vorname"
             title="Vorname"
-            {...form.getInputProps("firstName")}
           />
           <Input
+            {...form.getInputProps("lastName")}
             inputType="text"
             label="Nachname"
             title="Nachname"
-            {...form.getInputProps("lastName")}
           />
           <Input
+            {...form.getInputProps("displayName")}
             inputType="text"
             label="Anzeigename"
             title="Anzeigename"
-            {...form.getInputProps("displayName")}
+          />
+          <Input
+            {...form.getInputProps("email")}
+            inputType="text"
+            label="E-Mail"
+            title="E-Mail"
           />
           <Box>
             <Input
+              {...form.getInputProps("password")}
               inputType="password"
               label="Passwort"
               title="Passwort"
               onVisibilityChange={toggle}
-              {...form.getInputProps("password")}
             />
-            <PasswordValidationSchema passwordValue={form.values.password} isPasswordRevealed={isPasswordRevealed}/>
+            <PasswordValidationSchema
+              passwordValue={form.values.password}
+              isPasswordRevealed={isPasswordRevealed}
+            />
           </Box>
           <Input
+            {...form.getInputProps("passwordConfirmation")}
             inputType="password"
             label="Passwort bestätigen"
             title="Passwort bestätigen"
-            {...form.getInputProps("passwordConfirmation")}
             onVisibilityChange={toggle}
           />
           <Dropdown
+            {...form.getInputProps("university")}
             label="Universität"
             title="Universität"
-            {...form.getInputProps("university")}
             data={universityData}
           />
           <Box maw={240}>
             <Dropdown
+              {...form.getInputProps("semester")}
               label="Semester"
               title="Semester"
-              {...form.getInputProps("semester")}
               data={semesterData}
             />
           </Box>
           <Dropdown
+            {...form.getInputProps("gender")}
             label="Geschlecht"
             title="Geschlecht"
-            {...form.getInputProps("Geschlecht")}
             data={genderData}
           />
           <Checkbox
+            {...form.getInputProps("acceptTOS", { type: "checkbox" })}
             label={(
               <BodyText component="p" styleType="body-01-medium">
                 I agree to the&nbsp;
@@ -163,7 +188,6 @@ export const RegistrationForm: FunctionComponent = () =>
               </BodyText>
             )}
             title="acceptTOS"
-            {...form.getInputProps("acceptTOS")}
           />
         </Stack>
         <Button<"button">
@@ -171,7 +195,7 @@ export const RegistrationForm: FunctionComponent = () =>
           fullWidth
           type="submit"
           title="Konto erstellen"
-          loading={submitting}>
+          loading={isRegisterLoading}>
           Konto erstellen
         </Button>
       </Stack>
