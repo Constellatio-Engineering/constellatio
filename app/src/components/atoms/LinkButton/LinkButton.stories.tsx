@@ -3,9 +3,9 @@ import { DownloadIcon } from "@/components/Icons/DownloadIcon";
 import { type Meta, type StoryObj } from "@storybook/react";
 import { type FunctionComponent } from "react";
 
-import { LinkButton, type LinkButtonProps } from "./LinkButton";
+import { LinkButton, type TLinkButton } from "./LinkButton";
 
-const Template: FunctionComponent<LinkButtonProps> = args => <LinkButton {...args}/>;
+const Template: FunctionComponent<TLinkButton> = args => <LinkButton {...args}/>;
 
 const meta: Meta = {
   argTypes: {

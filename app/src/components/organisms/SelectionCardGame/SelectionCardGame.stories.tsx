@@ -4,7 +4,7 @@ import { type FunctionComponent } from "react";
 
 import { SelectionCardGame, type SelectionCardGameProps } from "./SelectionCardGame";
 
-const Template: FunctionComponent = (args: SelectionCardGameProps) => (
+const Template: FunctionComponent<SelectionCardGameProps> = (args) => (
   <Box w={670}>
     <SelectionCardGame {...args}/>
   </Box>

@@ -12,7 +12,7 @@ import { GhostDropCard } from "@/components/molecules/GhostDropCard/GhostDropCar
 import { HelpNote } from "@/components/molecules/HelpNote/HelpNote";
 import { ResultCard } from "@/components/molecules/ResultCard/ResultCard";
 import { type TValue } from "@/components/Wrappers/DndGame/DndGame";
-import { type IGenDragNDrop } from "@/services/graphql/__generated/sdk";
+import { type IGenDragNDropGame } from "@/services/graphql/__generated/sdk";
 import { shuffleArray } from "@/utils/array";
 
 import { DndContext, type DragEndEvent, DragOverlay, type DragStartEvent } from "@dnd-kit/core";
@@ -29,7 +29,7 @@ import {
   TitleWrapper,
 } from "./DragDropGame.styles";
 
-export type TDragDropGame = Pick<IGenDragNDrop, "game" | "helpNote" | "question">;
+export type TDragDropGame = Pick<IGenDragNDropGame, "game" | "helpNote" | "question">;
 
 type TOptionType = TValue["options"][number];
 

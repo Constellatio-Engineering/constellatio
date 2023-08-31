@@ -7,7 +7,7 @@ import { HelpNote } from "@/components/molecules/HelpNote/HelpNote";
 import { ResultCard } from "@/components/molecules/ResultCard/ResultCard";
 import { SelectionCard } from "@/components/molecules/SelectionCard/SelectionCard";
 import { type TValue } from "@/components/Wrappers/SelectionGame/SelectionGame";
-import { type IGenSelectionCard } from "@/services/graphql/__generated/sdk";
+import { type IGenCardSelectionGame } from "@/services/graphql/__generated/sdk";
 import { shuffleArray } from "@/utils/array";
 
 import { Title, LoadingOverlay } from "@mantine/core";
@@ -18,7 +18,7 @@ import {
 } from "./SelectionCardGame.styles";
 
 type TOptionType = TValue["options"][number];
-export type SelectionCardGameProps = Pick<IGenSelectionCard, "game" | "helpNote" | "question">;
+export type SelectionCardGameProps = Pick<IGenCardSelectionGame, "game" | "helpNote" | "question">;
 
 type TOptionWithCheck = TOptionType & { checked: boolean };
 
