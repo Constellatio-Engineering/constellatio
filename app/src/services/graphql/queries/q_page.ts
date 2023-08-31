@@ -7,41 +7,18 @@ import { f_ImageWrapperCard } from "../fragments/ImageWrapperCard";
 import { f_SelectionCard } from "../fragments/SelectionCard";
 import { f_TextElement } from "../fragments/TextElement";
 
-export const q_Page = gql`
+export const q_page = gql`
   ${f_TextElement}
   ${f_Callout}
   ${f_ImageWrapperCard}
   ${f_DragNDrop}
   ${f_SelectionCard}
   ${f_FillInGapsGame}
-  query Page($slug: String!) {
+  query q_page($slug: String!) {
     allPage(where: { slug: { eq: $slug } }) {
       edges {
         node {
-          id
-          nameInNavigation
-          slug
-          components {
-             ...on PageHeader{
-            categories{
-              ...on Category{
-                title
-                id
-                icon{
-                  src
-                  title
-                }
-
-              }
-            }
-          }
-            ...TextElement
-            ...Callout
-            ...ImageWrapperCard
-            ...DragNDrop
-            ...SelectionCard
-            ...FillInGapsGame
-          }
+        
         }
       }
     }
