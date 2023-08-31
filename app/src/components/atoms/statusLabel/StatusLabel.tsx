@@ -19,21 +19,21 @@ const StatusLabel: FunctionComponent<IStatusLabel> = ({ variant }) =>
       return (
         <div css={styles.inProgress}>
           <InProgressStatusLabelIcon/>
-          <BodyText styleType="body-02-medium">In Progress</BodyText>
+          <BodyText styleType="body-02-medium" component="p">In Progress</BodyText>
         </div>
       );
     case "completed":
       return (
         <div css={styles.completed}>
           <CompletedStatusLabelIcon/>
-          <BodyText styleType="body-02-medium">Completed</BodyText>
+          <BodyText styleType="body-02-medium" component="p">Completed</BodyText>
         </div>
       );
     default:
       return (
         <div css={styles.notStarted}>
           <NotStartedStatusLabelIcon/>
-          <BodyText styleType="body-02-medium">Not Selected</BodyText>
+          <BodyText styleType="body-02-medium" component="p">Not Selected</BodyText>
         </div>
       );
   }

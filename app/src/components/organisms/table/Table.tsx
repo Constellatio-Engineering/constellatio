@@ -1,6 +1,6 @@
 import ColumnHeader from "@/components/atoms/columnHeader/ColumnHeader";
 
-import React, { type FunctionComponent } from "react";
+import { type FunctionComponent, type PropsWithChildren } from "react";
 
 import * as styles from "./Table.styles";
 import { tableHeaders } from "./tableHeadersHelper";
@@ -21,24 +21,28 @@ interface DictionaryTableProps extends TTable
   variant: "dictionary" | "favorites" | "search";
 }
 
-export interface ITableProps 
+export interface ITableProps extends PropsWithChildren 
 {
+  /**
+   * refer to Storybook for use cases
+   */
   readonly tableType: CasesTableProps | DictionaryTableProps;
 }
 
-const Table: FunctionComponent<ITableProps> = ({ tableType }) => 
+const Table: FunctionComponent<ITableProps> = ({ children, tableType }) => 
 {
   return (
-    <table css={styles.wrapper}>
-      <thead>
+    <table css={styles.table}>
+      <thead css={styles.tableHeader}>
         <tr>
           {tableHeaders({ tableType }).map((header, i) => (
-            <thead key={`${header}-${i}`}>
+            <th key={`${header}-${i}`}>
               <ColumnHeader title={header.title}/>
-            </thead>
+            </th>
           ))}
         </tr>
       </thead>
+      <tbody css={styles.tableBody}>{children}</tbody>
     </table>
   );
 };
