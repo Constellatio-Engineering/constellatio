@@ -4,15 +4,10 @@ import postgres from "postgres";
 
 const connectionString = process.env.DATABASE_URL;
 
-console.log(process.env);
-console.log(process.env.DATABASE_URL);
-
 if(!connectionString)
 {
   throw new Error("DATABASE_URL environment variable is not set");
 }
-
-console.log("Applying migrations to database", connectionString);
 
 const sql = postgres(connectionString, { max: 1 })
 const db = drizzle(sql);
