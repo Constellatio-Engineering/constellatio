@@ -10,6 +10,7 @@ import { ResultCard } from "@/components/molecules/ResultCard/ResultCard";
 import { Richtext } from "@/components/molecules/Richtext/Richtext";
 import RichtextOverwrite from "@/components/organisms/FillGapsGame/RichtextOverwrite";
 import { type IGenFillInGapsGame } from "@/services/graphql/__generated/sdk";
+import useFillGapsGameStore from "@/stores/fillGapsGame.store";
 import { type TextElement } from "types/richtext";
 
 import { Title } from "@mantine/core";
@@ -57,9 +58,14 @@ const countPlaceholders = (content: TextElement[]): number =>
 
 export const FillGapsGame: FC<TFillGapsGame> = ({ fillGameParagraph, helpNote, question }) => 
 {
-  const [gameStatus, setGameStatus] = useState<"win" | "lose" | "inprogress">("inprogress");
-  const [resultMessage, setResultMessage] = useState<string>("");
   const totalPlaceholders = countPlaceholders(fillGameParagraph?.richTextContent?.json?.content || {});
+
+  const {
+    gameStatus,
+    resultMessage,
+    setGameStatus,
+    setResultMessage
+  } = useFillGapsGameStore();
   const [userAnswers, setUserAnswers] = useState<string[]>(new Array(totalPlaceholders).fill(""));
   const [answerResult, setAnswerResult] = useState<string[]>(new Array(totalPlaceholders).fill(""));
   const inputCounter = useRef(0);
@@ -166,7 +172,6 @@ export const FillGapsGame: FC<TFillGapsGame> = ({ fillGameParagraph, helpNote, q
         inputCounter={inputCounter}
         userAnswers={userAnswers}
         focusedIndex={focusedIndex}
-        gameStatus={gameStatus}
         answerResult={answerResult}
       />
     );
