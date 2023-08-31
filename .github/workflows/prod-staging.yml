@@ -69,8 +69,8 @@ jobs:
       - name: Install Dependencies
         run: pnpm install
       # ======== End duplicate steps ========
-      - name: Deploy to Vercel
-        run: vercel deploy --token=${{ secrets.VERCEL_ACCESS_TOKEN }}
+      #- name: Deploy to Vercel
+        #run: vercel deploy --token=${{ secrets.VERCEL_ACCESS_TOKEN }}
       - name: Apply Database Migrations
         env:
           DATABASE_URL: ${{ secrets.DATABASE_URL }}
