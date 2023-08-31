@@ -1,5 +1,6 @@
 /* eslint-disable react-hooks/exhaustive-deps */
 import { FillGapInput } from "@/components/molecules/FillGapInput/FillGapInput";
+import useFillGapsGameStore from "@/stores/fillGapsGame.store";
 
 import {
   type FC, type MutableRefObject, type RefObject, createRef, memo, useEffect, useRef, type ChangeEvent 
@@ -10,7 +11,6 @@ interface TRichtextOverwrite
   readonly answerResult: string[];
   readonly correctAnswers: MutableRefObject<string[]>;
   readonly focusedIndex: MutableRefObject<number | null>;
-  readonly gameStatus: "win" | "lose" | "inprogress";
   readonly handleInputChange: (index: number, value: string) => void;
   readonly inputCounter: MutableRefObject<number>;
   readonly text: string;
@@ -21,13 +21,15 @@ let RichtextOverwrite: FC<TRichtextOverwrite> = ({
   answerResult,
   correctAnswers,
   focusedIndex,
-  gameStatus,
   handleInputChange,
   inputCounter,
   text,
   userAnswers
 }) =>  
 {
+
+  const { gameStatus } = useFillGapsGameStore();
+
   const inputRefs = useRef<RefObject<HTMLInputElement>[]>([]);
 
   // Splitting the text based on {{...}} pattern using regex
