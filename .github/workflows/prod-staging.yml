@@ -47,8 +47,6 @@ jobs:
       # needs:
     # - lint
     runs-on: ubuntu-latest
-    env:
-      DATABASE_URL: ${{ secrets.DATABASE_URL }}
     defaults:
       run:
         working-directory: app
@@ -72,8 +70,6 @@ jobs:
       #- name: Deploy to Vercel
         #run: vercel deploy --token=${{ secrets.VERCEL_ACCESS_TOKEN }}
       - name: Apply Database Migrations
-        env:
-          DATABASE_URL: ${{ secrets.DATABASE_URL }}
         id: apply-db-migrations
         run: node ci/apply-db-migrations.mjs
       - name: Get Latest Vercel Preview Deployment ID
