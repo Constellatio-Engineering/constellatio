@@ -9,8 +9,6 @@ import { type AppProps } from "next/app";
 import Head from "next/head";
 import { type FunctionComponent } from "react";
 
-import "../styles.css";
-
 type MyAppProps = AppProps<{ initialSession: Session }>;
 
 const MyApp: FunctionComponent<MyAppProps> = ({ Component, pageProps }) =>

@@ -64,6 +64,6 @@ export const config = {
      * - extension (Caisy UI extension)
      * - test (test route)
      */
-    "/((?!api|login|register|confirm|_next/static|_next/image|favicon.*|extension|test|testahmed|overview).*)",
+    "/((?!api|login|register|confirm|_next/static|_next/image|favicon.*|extension|test|testahmed|cases).*)",
   ],
 };
