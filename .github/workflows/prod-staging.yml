@@ -14,31 +14,31 @@ on:
 
 jobs:
 
-#  lint:
-#    name: Run Linting
-#    runs-on: ubuntu-latest
-#    defaults:
-#      run:
-#        working-directory: app
-#    steps:
-#      - name: Checkout code
-#        uses: actions/checkout@v3
-#      - name: Setup pnpm
-#        uses: pnpm/action-setup@v2
-#        with:
-#          version: 8
-#      - name: Setup Node
-#        uses: actions/setup-node@v3
-#        with:
-#          node-version: 18
-#          cache-dependency-path: ./app/pnpm-lock.yaml
-#          cache: 'pnpm'
-#      - name: Install Dependencies
-#        run: pnpm install
-#      - name: Run type checking
-#        run: pnpm check-types
-#      - name: Run ESLint
-#        run: pnpm eslint
+  lint:
+    name: Run Linting
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: app
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v3
+      - name: Setup pnpm
+        uses: pnpm/action-setup@v2
+        with:
+          version: 8
+      - name: Setup Node
+        uses: actions/setup-node@v3
+        with:
+          node-version: 18
+          cache-dependency-path: ./app/pnpm-lock.yaml
+          cache: 'pnpm'
+      - name: Install Dependencies
+        run: pnpm install
+      - name: Run type checking
+        run: pnpm check-types
+      - name: Run ESLint
+        run: pnpm eslint
 
   deploy-staging:
     name: Deploy Staging to Vercel
@@ -67,8 +67,8 @@ jobs:
       - name: Install Dependencies
         run: pnpm install
       # ======== End duplicate steps ========
-      #- name: Deploy to Vercel
-        #run: vercel deploy --token=${{ secrets.VERCEL_ACCESS_TOKEN }}
+      - name: Deploy to Vercel
+        run: vercel deploy --token=${{ secrets.VERCEL_ACCESS_TOKEN }}
       - name: Apply Database Migrations
         id: apply-db-migrations
         run: node ci/apply-db-migrations.mjs
