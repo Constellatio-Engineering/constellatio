@@ -14,26 +14,6 @@ on:
 
 jobs:
 
-  set-vercel-environment:
-    name: Set Vercel Production Environment if Main Branch
-    runs-on: ubuntu-latest
-    outputs:
-      VERCEL_ENVIRONMENT_FLAG: ${{ steps.set-flag.outputs.VERCEL_ENVIRONMENT_FLAG }}
-      VERCEL_ENVIRONMENT: ${{ steps.set-flag.outputs.VERCEL_ENVIRONMENT }}
-    steps:
-      - name: Set Production Flag
-        id: set-flag
-        run: |
-          if [[ "${{ github.ref }}" == "refs/heads/main" ]]; then
-            echo "Vercel environment is production"
-            echo "VERCEL_ENVIRONMENT_FLAG=--prod" >> "$GITHUB_OUTPUT"
-            echo "VERCEL_ENVIRONMENT=production" >> "$GITHUB_OUTPUT"
-          else
-            echo "Vercel environment is staging"
-            echo "VERCEL_ENVIRONMENT_FLAG=" >> "$GITHUB_OUTPUT"
-            echo "VERCEL_ENVIRONMENT=preview" >> "$GITHUB_OUTPUT"
-          fi
-
   lint:
     name: Run Linting
     runs-on: ubuntu-latest
@@ -60,19 +40,18 @@ jobs:
       - name: Run ESLint
         run: pnpm eslint
 
-  build:
-    name: Build Next.js App
-    needs:
-      - set-vercel-environment
-      # - lint
+  deploy-staging:
+    name: Deploy Staging to Vercel
+    if: github.ref == 'refs/heads/staging'
+    environment: staging
+      # needs:
+    # - lint
     runs-on: ubuntu-latest
     defaults:
       run:
         working-directory: app
-    env:
-      VERCEL_ENVIRONMENT: ${{ needs.set-vercel-environment.outputs.VERCEL_ENVIRONMENT }}
-      VERCEL_ENVIRONMENT_FLAG: ${{ needs.set-vercel-environment.outputs.VERCEL_ENVIRONMENT_FLAG }}
     steps:
+      # ======== Begin duplicate steps from deploy-production ========
       - name: Checkout code
         uses: actions/checkout@v3
       - name: Setup pnpm
@@ -87,45 +66,9 @@ jobs:
           cache: 'pnpm'
       - name: Install Dependencies
         run: pnpm install
-      - name: Pull Vercel Environment Information
-        run: vercel pull --yes --environment=${{ env.VERCEL_ENVIRONMENT }} --token=${{ secrets.VERCEL_ACCESS_TOKEN }}
-      - name: Build Project Artifacts
-        run: vercel build ${{ env.VERCEL_ENVIRONMENT_FLAG }} --token=${{ secrets.VERCEL_ACCESS_TOKEN }}
-      - name: Upload Build Folder as Artifact
-        uses: actions/upload-artifact@v3
-        with:
-          name: next-build
-          path: |
-            app/.next
-            app/.vercel
-
-  deploy-staging:
-    name: Deploy Staging to Vercel
-    needs: build
-    if: github.ref == 'refs/heads/staging'
-    runs-on: ubuntu-latest
-    defaults:
-      run:
-        working-directory: app
-    environment: staging
-    steps:
-      - uses: actions/checkout@v3
-      - name: Setup pnpm
-        uses: pnpm/action-setup@v2
-        with:
-          version: 8
-      - name: Set up Node.js
-        uses: actions/setup-node@v3
-        with:
-          node-version: 18
-      - name: Install Dependencies
-        run: pnpm install
-      - uses: actions/download-artifact@v3
-        with:
-          name: next-build
-          path: app
+      # ======== End duplicate steps ========
       - name: Deploy to Vercel
-        run: vercel deploy --prebuilt --token=${{ secrets.VERCEL_ACCESS_TOKEN }}
+        run: vercel deploy --token=${{ secrets.VERCEL_ACCESS_TOKEN }}
       - name: Apply Database Migrations
         id: apply-db-migrations
         run: node ci/apply-db-migrations.mjs
@@ -142,36 +85,38 @@ jobs:
 
   deploy-production:
     name: Deploy Production to Vercel
-    needs: build
+    if: github.ref == 'refs/heads/main'
+    environment: production
+      # needs:
+    # - lint
     runs-on: ubuntu-latest
     defaults:
       run:
         working-directory: app
-    if: github.ref == 'refs/heads/main'
-    environment: production
     steps:
-      - uses: actions/checkout@v3
+      # ======== Begin duplicate steps from deploy-staging ========
+      - name: Checkout code
+        uses: actions/checkout@v3
       - name: Setup pnpm
         uses: pnpm/action-setup@v2
         with:
           version: 8
-      - name: Set up Node.js
+      - name: Setup Node
         uses: actions/setup-node@v3
         with:
           node-version: 18
+          cache-dependency-path: ./app/pnpm-lock.yaml
+          cache: 'pnpm'
       - name: Install Dependencies
         run: pnpm install
-      - uses: actions/download-artifact@v3
-        with:
-          name: next-build
-          path: app
+      # ======== End duplicate steps ========
       - name: Get Latest Vercel Production Deployment ID
         id: get-latest-deployment-id
         run: |
           result=$(node ./ci/get-latest-vercel-deployment.js "prefers-deployment-id" "production")
           echo "LATEST_DEPLOYMENT_ID=$result" >> $GITHUB_OUTPUT
       - name: Deploy to Vercel
-        run: vercel deploy --prebuilt --prod --token=${{ secrets.VERCEL_ACCESS_TOKEN }}
+        run: vercel deploy --prod --token=${{ secrets.VERCEL_ACCESS_TOKEN }}
       - name: Apply Database Migrations
         id: apply-db-migrations
         run: node ci/apply-db-migrations.mjs
@@ -194,3 +139,4 @@ jobs:
           captured_rolledBackDeploymentUrl="${{ steps.get-rolled-back-deployment-url.outputs.ROLLED_BACK_DEPLOYMENT_URL }}"
           echo "Deleting rolled back deployment with URL: $captured_rolledBackDeploymentUrl"
           vercel remove $captured_rolledBackDeploymentUrl --yes --token=${{ secrets.VERCEL_ACCESS_TOKEN }}
+      
