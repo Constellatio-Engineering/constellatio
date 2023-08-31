@@ -6,12 +6,12 @@ import { CustomLink } from "@/components/atoms/CustomLink/CustomLink";
 import { Dropdown } from "@/components/atoms/Dropdown/Dropdown";
 import { Input } from "@/components/atoms/Input/Input";
 import { PasswordValidationSchema } from "@/components/helpers/PasswordValidationSchema";
-import { Puzzle } from "@/components/Icons/Puzzle";
-import { type GenderIdentifier } from "@/db/schema";
+import { allGenders, allUniversities } from "@/components/organisms/RegistrationForm/RegistrationForm.data";
 import { env } from "@/env.mjs";
 import { type RegistrationFormSchema, registrationFormSchema } from "@/schemas/RegistrationFormSchema";
 import { supabase } from "@/supabase/client";
 import { api } from "@/utils/api";
+import { type PartialUndefined } from "@/utils/types";
 
 import { Box, Stack } from "@mantine/core";
 import { useForm, zodResolver } from "@mantine/form";
@@ -19,11 +19,6 @@ import { useDisclosure } from "@mantine/hooks";
 import { notifications } from "@mantine/notifications";
 import { useRouter } from "next/router";
 import { type FunctionComponent } from "react";
-
-const universityData = [
-  { icon: <Puzzle/>, label: "HdM Stuttgart", value: "hdm-stuttgart" },
-  { icon: <Puzzle/>, label: "TU München", value: "tu-muenchen" },
-];
 
 const semesterData = [
   { label: "1", value: "1" },
@@ -37,27 +32,10 @@ const semesterData = [
   { label: "Graduate", value: "9" },
 ];
 
-type Gender = {
-  identifier: GenderIdentifier;
-  label: string;
-};
+// this means for the initial values of the form, these keys can be null since these are dropdowns
+type InitialValues = PartialUndefined<RegistrationFormSchema, "gender">;
 
-const allGenders: Gender[] = [
-  {
-    identifier: "male",
-    label: "männliche"
-  },
-  {
-    identifier: "female",
-    label: "weiblich"
-  },
-  {
-    identifier: "diverse",
-    label: "divers"
-  }
-];
-
-let initialValues: RegistrationFormSchema;
+let initialValues: InitialValues;
 
 if(env.NEXT_PUBLIC_NODE_ENV === "development")
 {
@@ -66,12 +44,15 @@ if(env.NEXT_PUBLIC_NODE_ENV === "development")
     displayName: "Constellatio Dev User",
     email: "devUser@constellatio-dummy-mail.de",
     firstName: "Dev",
-    gender: allGenders[0]!.identifier,
+    // gender: allGenders[0]!.identifier,
+    gender: undefined,
     lastName: "User",
     password: "super-secure-password-123",
     passwordConfirmation: "super-secure-password-123",
-    semester: semesterData[3]?.value ?? "",
-    university: universityData[0]?.value ?? "",
+    // semester: semesterData[3]?.value ?? "",
+    semester: "",
+    // university: universityData[0]?.value ?? "",
+    university: "",
   };
 }
 else
@@ -81,7 +62,7 @@ else
     displayName: "",
     email: "",
     firstName: "",
-    gender: "",
+    gender: undefined,
     lastName: "",
     password: "",
     passwordConfirmation: "",
@@ -94,7 +75,7 @@ export const RegistrationForm: FunctionComponent = () =>
 {
   const router = useRouter();
   const [isPasswordRevealed, { toggle }] = useDisclosure(false);
-  const form = useForm<RegistrationFormSchema>({
+  const form = useForm<InitialValues>({
     initialValues,
     validate: zodResolver(registrationFormSchema),
     validateInputOnBlur: true,
@@ -123,7 +104,7 @@ export const RegistrationForm: FunctionComponent = () =>
     },
   });
 
-  const handleSubmit = form.onSubmit(formValues => register(formValues));
+  const handleSubmit = form.onSubmit(formValues => register(formValues as RegistrationFormSchema));
 
   return (
     <form onSubmit={handleSubmit}>
@@ -177,7 +158,8 @@ export const RegistrationForm: FunctionComponent = () =>
             {...form.getInputProps("university")}
             label="Universität"
             title="Universität"
-            data={universityData}
+            data={allUniversities}
+            searchable
           />
           <Box maw={240}>
             <Dropdown
