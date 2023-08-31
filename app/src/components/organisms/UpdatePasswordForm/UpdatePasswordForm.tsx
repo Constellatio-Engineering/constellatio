@@ -3,17 +3,16 @@ import { Input } from "@/components/atoms/Input/Input";
 import { PasswordValidationSchema } from "@/components/helpers/PasswordValidationSchema";
 import { type Database } from "@/lib/database.types";
 import { updatePasswordFormSchema } from "@/schemas/UpdatePasswordFormSchema";
+import { supabase } from "@/supabase/client";
 
 import { Box, Stack, Title } from "@mantine/core";
 import { useForm, zodResolver } from "@mantine/form";
 import { useDisclosure } from "@mantine/hooks";
-import { createPagesBrowserClient } from "@supabase/auth-helpers-nextjs";
 import { useRouter } from "next/router";
 import { type FunctionComponent, useState } from "react";
 
 export const UpdatePasswordForm: FunctionComponent = () =>
 {
-  const supabase = createPagesBrowserClient<Database>();
   const [isPasswordRevealed, { toggle }] = useDisclosure(false);
 
   const router = useRouter();

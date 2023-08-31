@@ -1,13 +1,13 @@
+import { supabase } from "@/supabase/client";
+
 import { Avatar, Menu } from "@mantine/core";
 import { notifications } from "@mantine/notifications";
-import { createPagesBrowserClient } from "@supabase/auth-helpers-nextjs";
 import { IconBrandStripe, IconLogout } from "@tabler/icons-react";
 import { useRouter } from "next/router";
 import { type FunctionComponent } from "react";
 
 export const UserDropdown: FunctionComponent = () =>
 {
-  const supabase = createPagesBrowserClient();
   const router = useRouter();
 
   const handleSubscription = async (): Promise<void> =>
