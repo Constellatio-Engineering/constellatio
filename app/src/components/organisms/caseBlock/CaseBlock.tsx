@@ -23,35 +23,38 @@ const CaseBlock: FunctionComponent<ICaseBlockProps> = ({ blockHead }) =>
   return (
     <div css={styles.wrapper}>
       <CaseBlockHead {...blockHead}/> 
-      <Table tableType={{ type: "cases", variant: "all-cases" }}><tr>
-        <td>
-          <Link passHref href="/">
-            <TableCell variant="titleTableCell">
-              ArbR 1 | Working with young unicorns
-            </TableCell>
-          </Link>
-        </td>
-        <td>
-          <StatusTableCell variant="notStarted"/>
-        </td>
-        <td>
-          <TableCell variant="simpleTableCell" icon={<ClockIcon/>}>
-            1.5h
-          </TableCell>
-        </td>
-        <td>
-          <TableCell variant="simpleTableCell">Civil law</TableCell>
-        </td>
-        <td>
-          <TableCell variant="simpleTableCell">Labor law</TableCell>
-        </td>
-        <td>
-          <TableIconButton
-            icon={<Bookmark/>}
-            onClickHandler={() => console.log("clicked")}
-          />
-        </td>
-                                                                 </tr>
+      <Table tableType={{ type: "cases", variant: "all-cases" }}>
+        {Array(5).fill(0).map((_, index) => (
+          <tr key={index}>
+            <td>
+              <Link passHref href="/">
+                <TableCell variant="titleTableCell">
+                  ArbR 1 | Working with young unicorns
+                </TableCell>
+              </Link>
+            </td>
+            <td>
+              <StatusTableCell variant="notStarted"/>
+            </td>
+            <td>
+              <TableCell variant="simpleTableCell" icon={<ClockIcon/>}>
+                1.5h
+              </TableCell>
+            </td>
+            <td>
+              <TableCell variant="simpleTableCell">Civil law</TableCell>
+            </td>
+            <td>
+              <TableCell variant="simpleTableCell">Labor law</TableCell>
+            </td>
+            <td>
+              <TableIconButton
+                icon={<Bookmark/>}
+                onClickHandler={() => console.log("clicked")}
+              />
+            </td>
+          </tr>
+        ))}
       </Table>
     </div>
   );
