@@ -4,7 +4,6 @@ import IconButton from "@/components/atoms/iconButton/IconButton";
 import Label from "@/components/atoms/label/Label";
 
 import { Title } from "@mantine/core";
-import Image from "next/image";
 import React, { type FunctionComponent } from "react";
 
 import * as styles from "./CaseBlockHead.styles";
@@ -85,9 +84,15 @@ const CaseBlockHead: FunctionComponent<ICaseBlockHeadProps> = ({
 
   return (
     <div css={styles.wrapper}>
-      {icon && icon.src && <IconButton icon={icon.src} size="medium"/>}
-      {categoryName && (blockType === "itemsBlock" || blockType === "facouritItemsBlock" || blockType === "seaechBlock") && <Title order={1}>{categoryName}</Title>}
-      {blockType === "searchPapersBlock" ? <Title order={1}>Papers</Title> : blockType === "searchUploadedMaterials" && <Title order={1}>Uploaded materials</Title>}
+      {icon && icon.src && (
+        <div css={styles.iconWrapper}>
+          <IconButton icon={icon.src} size="medium"/>
+        </div>
+      )}
+      <div css={styles.title}>
+        {categoryName && (blockType === "itemsBlock" || blockType === "facouritItemsBlock" || blockType === "seaechBlock") && <Title order={3}>{categoryName}</Title>}
+        {blockType === "searchPapersBlock" ? <Title order={3}>Papers</Title> : blockType === "searchUploadedMaterials" && <Title order={3}>Uploaded materials</Title>}
+      </div>
       <div className="details">
         {detailRenderer({ blockType, variant })}
       </div>

@@ -25,7 +25,13 @@ type Story = StoryObj<typeof CaseBlock>;
 
 export const Default: Story = {
   args: {
-    title: "storyArg"
+    blockHead: {
+      blockType: "itemsBlock",
+      categoryName: "Category Name",
+      completedCases: 1,
+      items: 1,
+      variant: "case",
+    },
   },
 };
 
