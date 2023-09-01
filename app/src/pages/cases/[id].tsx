@@ -12,7 +12,6 @@ import * as styles from "../styles/styles";
 interface ICasePageProps 
 {
   readonly case: IGenCase;
-//   readonly id: string | string[] | undefined;
 }
 
 export const getStaticProps: GetStaticProps = async ({ params }) => 
@@ -32,8 +31,6 @@ export const getStaticProps: GetStaticProps = async ({ params }) =>
 
 const NextPage: FunctionComponent<ICasePageProps> = (props) => 
 {
-
-  console.log("resCase", props?.case?.title);
   return (
     <div css={styles.Page}>
       <Header/>
