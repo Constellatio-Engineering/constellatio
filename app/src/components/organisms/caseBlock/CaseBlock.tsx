@@ -27,13 +27,13 @@ const CaseBlock: FunctionComponent<ICaseBlockProps> = ({ blockHead, cases }) =>
   return (
     <div css={styles.wrapper}>
       <CaseBlockHead {...blockHead}/> 
-      <Table tableType={{ type: "cases", variant: "all-cases" }}>
-        {cases?.map((_, caseIndex) => (
+      <Table tableType={{ type: "cases", variant: "cases" }}>
+        {cases?.map((item, caseIndex) => (
           <tr key={caseIndex}>
             <td>
-              <Link passHref href="/">
+              <Link passHref href={`/cases/${item?.id}`}>
                 <TableCell variant="titleTableCell">
-                  {_?.title}
+                  {item?.title}
                 </TableCell>
               </Link>
             </td>
@@ -42,14 +42,11 @@ const CaseBlock: FunctionComponent<ICaseBlockProps> = ({ blockHead, cases }) =>
             </td>
             <td>
               <TableCell variant="simpleTableCell" icon={<ClockIcon/>}>
-                {timeFormatter(_?.durationToCompleteInMinutes ?? 0)}
+                {timeFormatter(item?.durationToCompleteInMinutes ?? 0)}
               </TableCell>
             </td>
             <td>
-              <TableCell variant="simpleTableCell">{_?.mainCategoryField?.[0]?.mainCategory}</TableCell>
-            </td>
-            <td>
-              <TableCell variant="simpleTableCell">{_?.subCategoryField?.map((item) => item?.subCategory).join(", ")}</TableCell>
+              <TableCell variant="simpleTableCell">{item?.subCategoryField?.map((item) => item?.subCategory).join(", ")}</TableCell>
             </td>
             <td>
               <TableIconButton
