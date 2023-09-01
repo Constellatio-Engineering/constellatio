@@ -9,9 +9,9 @@ import { getAllSubcategories } from "@/services/content/getAllSubcategories";
 // import { type IGenMainCategoryFragment } from "@/services/graphql/__generated/sdk";
 
 import { type GetStaticProps } from "next";
-import React, { type FunctionComponent, useState, useEffect, ReactNode } from "react";
+import React, { type FunctionComponent, useState, useEffect } from "react";
 
-import * as styles from "./styles/styles";
+import * as styles from "../styles/styles";
 
 type ICasesOverviewProps = getAllCasesResult & getAllCategoriesResult & getAllSubcategories;
 
