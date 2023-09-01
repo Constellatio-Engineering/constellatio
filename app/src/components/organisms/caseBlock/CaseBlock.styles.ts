@@ -10,4 +10,5 @@ display: flex;
 justify-content: flex-start;
 align-items: flex-start;    
 gap: 32px;
+margin:48px 0;
 `;
