@@ -1112,7 +1112,7 @@ export type IGenSelectionCardFragment = { __typename?: 'CardSelectionGame', id?:
 
 export type IGenTextElementFragment = { __typename?: 'TextElement', id?: string | null, richTextContent?: { __typename?: 'TextElement_richTextContent', json?: any | null, connections?: Array<{ __typename: 'Caisy_Field_Document_NotFound' } | null> | null } | null };
 
-export type IGenCaseFragment = { __typename: 'Case', title?: string | null, durationToCompleteInMinutes?: number | null, topic?: Array<{ __typename?: 'Topic', id?: string | null, topicName?: string | null } | null> | null, tags?: Array<{ __typename?: 'Tags', id?: string | null, tagName?: string | null } | null> | null, mainCategoryField?: Array<(
+export type IGenCaseFragment = { __typename: 'Case', title?: string | null, id?: string | null, durationToCompleteInMinutes?: number | null, topic?: Array<{ __typename?: 'Topic', id?: string | null, topicName?: string | null } | null> | null, tags?: Array<{ __typename?: 'Tags', id?: string | null, tagName?: string | null } | null> | null, mainCategoryField?: Array<(
     { __typename?: 'MainCategory' }
     & IGenMainCategoryFragment
   ) | null> | null, subCategoryField?: Array<{ __typename?: 'SubCategory', id?: string | null, subCategory?: string | null, mainCategory?: Array<(
@@ -1237,6 +1237,7 @@ export const CaseFragmentDoc = gql`
     fragment Case on Case {
   __typename
   title
+  id
   topic {
     ... on Topic {
       id

@@ -8,6 +8,7 @@ ${f_Category}
   fragment Case on Case {
     __typename
     title
+    id
     topic {
       ... on Topic {
         id
