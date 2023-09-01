@@ -8,33 +8,39 @@ import { LinkButton } from "../../../components/atoms/LinkButton/LinkButton";
 import CategoryTab from "../../../components/molecules/categoryTab/CategoryTab";
 import FiltersButton from "../../../components/molecules/filtersButton/FiltersButton";
 import FilterTag from "../../../components/molecules/filterTag/FilterTag";
-import type { IGenCaisyDocument_Meta, IGenPageHeader_Categories, Maybe, Scalars } from "../../../services/graphql/__generated/sdk";
+import type {
+  IGenMainCategoryFragment, Maybe, Scalars 
+} from "../../../services/graphql/__generated/sdk";
 
 export interface ICasesOverviewHeaderProps 
 {
-  readonly __typename?: "PageHeader";
-  readonly _meta?: Maybe<IGenCaisyDocument_Meta>;
-  readonly categories?: Maybe<Maybe<IGenPageHeader_Categories>[]>;
-  readonly id?: Maybe<Scalars["ID"]["output"]>;
-  readonly internalTitle?: Maybe<Scalars["String"]["output"]>;
+  readonly categories?: (({ _typename?: "MainCategory" | undefined } & IGenMainCategoryFragment) | null | undefined)[] | undefined;
+  readonly selectedCategoryId?: string;
+  readonly setSelectedCategoryId: (id: string) => void;
   readonly title?: Maybe<Scalars["String"]["output"]>;
   readonly variant: "case" | "dictionary";
 }
 
-const OverviewHeader: FunctionComponent<ICasesOverviewHeaderProps> = ({ categories, title, variant }) => 
+const OverviewHeader: FunctionComponent<ICasesOverviewHeaderProps> = ({
+  categories,
+  selectedCategoryId,
+  setSelectedCategoryId,
+  title,
+  variant
+}) => 
 {
   const theme = useMantineTheme();
-  const [selectedCategoryIndex, setSelectedCategoryIndex] = useState<number>(0);
-  const [filters, setFilters] = useState<string[]>(["Filter One", "Filter Two", "Filter Three", "Filter Four", "Filter Five", "Filter Six"]);
-  // const [filters, setFilters] = useState<string[]>([]);
+  // const [filters, setFilters] = useState<string[]>(["Filter One", "Filter Two", "Filter Three", "Filter Four", "Filter Five", "Filter Six"]);
+  const [filters, setFilters] = useState<string[]>([]);
+  
   return (
     <div css={styles.contentHeader({ theme, variant })} className="header">
       <div id="overlay"/>
       <Title order={1}>{title}</Title>
       <div css={styles.categoriesButtons}>
-        {categories?.map((category, index: number) => (
-          <div key={index} onClick={() => setSelectedCategoryIndex(index)}>
-            <CategoryTab {...category} itemsNumber={0} selected={index === selectedCategoryIndex}/>
+        {categories?.map((category, index: number) => category?.id && (
+          <div key={index} onClick={() => setSelectedCategoryId(`${category?.id}`)}>
+            <CategoryTab {...category} itemsNumber={0} selected={category?.id === selectedCategoryId}/>
           </div>
         ))}
       </div>

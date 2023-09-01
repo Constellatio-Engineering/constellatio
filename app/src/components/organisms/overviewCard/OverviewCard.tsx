@@ -25,7 +25,7 @@ export interface IOverviewCard
   readonly views: number;
 }
 
-function timeFormatter(minutes: number): string 
+export function timeFormatter(minutes: number): string 
 {
   if(minutes >= 60) 
   {

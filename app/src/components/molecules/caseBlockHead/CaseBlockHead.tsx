@@ -41,9 +41,9 @@ const CaseBlockHead: FunctionComponent<ICaseBlockHeadProps> = ({
       case "itemsBlock":
         return (
           <>
-            {completedCases && items && variant === "case" ? (
+            {(completedCases !== null || completedCases !== undefined) && items && variant === "case" ? (
               <div css={styles.detailText}>
-                <CountLabel count={completedCases} total={items} variant="cases"/>
+                <CountLabel count={completedCases ?? 0} total={items} variant="cases"/>
                 <CaptionText component="p" styleType="caption-01-medium">CASES COMPLETED</CaptionText>
               </div>
             )

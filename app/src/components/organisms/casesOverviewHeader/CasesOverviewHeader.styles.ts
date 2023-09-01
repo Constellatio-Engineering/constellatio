@@ -15,13 +15,15 @@ export const contentHeader = ({ theme, variant }: {
   justify-content: center;
   gap: 32px;
   background: url(${BgLines.src}),radial-gradient(50.00% 50.00% at 50.00% 50.00%, rgba(199, 211, 251, 0.00) 0%, ${variant === "case" ? theme.colors["cc-cases"][2] : theme.colors["support-notice"][2]} 100%);
-  `;
+  height: 70vh;
+`;
 
 export const categoriesButtons = () => 
 {
   return css`
     display: flex;
     justify-content: center;
+    align-items: center;
     gap: 20px;
     margin-bottom: 20px;
   `;

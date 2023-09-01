@@ -1,7 +1,10 @@
 
 import { gql } from "graphql-request";
 
+import { f_Category } from "./f_Main_Category";
+
 export const f_Case = gql`
+${f_Category}
   fragment Case on Case {
     __typename
     title
@@ -18,17 +21,16 @@ export const f_Case = gql`
       }
     }
     mainCategoryField {
-      ... on MainCategory {
-        mainCategory
-      }
+      ...MainCategory
+        
+      
     }
     subCategoryField {
       ... on SubCategory {
+        id
         subCategory
         mainCategory {
-          ... on MainCategory {
-            mainCategory
-          }
+        ...MainCategory 
         }
       }
     }
@@ -44,6 +46,6 @@ export const f_Case = gql`
     fact {
       json
     }
-    durationToComplete
+    durationToCompleteInMinutes
   }
 `;
