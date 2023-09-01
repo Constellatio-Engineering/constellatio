@@ -7,8 +7,10 @@ import Tag from "@/components/atoms/tag/Tag";
 import { Show } from "@/components/Icons/Show";
 import { Timer } from "@/components/Icons/timer";
 import { Trash } from "@/components/Icons/Trash";
+import { type IGenLegalArea, type IGenTags } from "@/services/graphql/__generated/sdk";
 
 import { useMantineTheme } from "@mantine/core";
+import { type Maybe } from "@trpc/server";
 import React, { type FunctionComponent } from "react";
 
 import * as styles from "./OverviewCard.styles";
@@ -16,9 +18,9 @@ import * as styles from "./OverviewCard.styles";
 export interface IOverviewCard 
 {
   readonly lastUpdated: Date;
-  readonly legalArea: string;
+  readonly legalArea: Maybe<IGenLegalArea> | undefined;
   readonly status?: IStatusLabel["variant"];
-  readonly tags: string[];
+  readonly tags: Maybe<Maybe<IGenTags>[]> | undefined;
   readonly timeInMinutes?: number;
   readonly topic: string;
   readonly variant: "case" | "dictionary";
@@ -105,22 +107,20 @@ const OverviewCard: FunctionComponent<IOverviewCard> = ({
         )}
       </div>
       <div css={styles.cardBody({ theme, variant })}>
-        <div css={styles.row({ tableTheme: true, theme, variant })}>
-          <div className="row-title">
-            <CaptionText styleType="caption-01-medium">
-              LEGAL AREA
-            </CaptionText>
-            {variant === "case" && (
-              <CaptionText styleType="caption-01-medium" component="p">TOPIC</CaptionText>
-            )}
-          </div>
-          <div className="row-value">
-            <BodyText styleType="body-01-medium">{legalArea}</BodyText>
-            {variant === "case" && (
-              <BodyText styleType="body-01-medium">{topic}</BodyText>
-            )}
-          </div>
-        </div>
+        <table style={{ textAlign: "left", }}>
+          <thead>
+            <tr>
+              {legalArea && <th style={{ color: "#949494", padding: "16px 32px 8px 16px" }}><CaptionText styleType="caption-01-medium">LEGAL AREA</CaptionText></th>}
+              {variant === "case" && topic && (<th style={{ color: "#949494", padding: "16px 32px 8px 16px" }}><CaptionText styleType="caption-01-medium" component="p">TOPIC</CaptionText> </th>)}
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              {legalArea?.legalAreaName && <td style={{ color: "black", padding: "4px 32px 16px 16px" }}><BodyText styleType="body-01-medium">{legalArea?.legalAreaName}</BodyText></td>}
+              {variant === "case" && topic && <td style={{ color: "black", padding: "4px 32px 16px 16px" }}><BodyText styleType="body-01-medium">{topic}</BodyText></td>}
+            </tr>
+          </tbody>
+        </table>
         {variant === "dictionary" && (
           <div css={styles.row({ theme, variant })}>
             <div className="row-title">
@@ -138,7 +138,7 @@ const OverviewCard: FunctionComponent<IOverviewCard> = ({
           <div className="row-value">
             {
               tags?.map((tag, tagIndex) => (
-                <Tag key={tagIndex}>{tag}</Tag>
+                <Tag key={tagIndex}>{tag?.tagName}</Tag>
               ))
             }
           </div>
