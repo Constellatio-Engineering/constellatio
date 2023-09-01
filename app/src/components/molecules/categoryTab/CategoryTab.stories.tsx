@@ -35,6 +35,6 @@ export const Default: Story = {
     }
     ,
     itemsNumber: 23,
-    title: "CategoryTab StoryProp",
+    mainCategory: "CategoryTab StoryProp",
   },
 };

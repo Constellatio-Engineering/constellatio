@@ -6,7 +6,9 @@ import React, { type FunctionComponent } from "react";
 
 import * as styles from "./CategoryTab.style";
 
-const CategoryTab: FunctionComponent<IGenMainCategory & {readonly itemsNumber?: number;readonly selected?: boolean}> = ({
+export type CategoryTabProps = IGenMainCategory & {readonly itemsNumber?: number;readonly selected?: boolean};
+
+const CategoryTab: FunctionComponent<CategoryTabProps> = ({
   icon,
   itemsNumber,
   mainCategory,
