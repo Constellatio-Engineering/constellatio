@@ -18,7 +18,7 @@ export const wrapper = ({ theme, variant }: {
       : variant === "error"
         ? theme?.colors["support-error"][3]
         : variant === "cases"
-          ? theme?.colors["support-notice"][2]
+          ? theme?.colors["cc-cases"][2]
           : variant === "dictionary"
             ? theme?.colors["cc-dictionary"][2]
             : variant === "neutral" && theme?.colors["neutrals-01"][2];

@@ -5,7 +5,7 @@ import { type FunctionComponent } from "react";
 import StatusLabel, { type IStatusLabel } from "./StatusLabel";
 
 const Template: FunctionComponent<IStatusLabel> = (args) => (
-  <Box w={350}>
+  <Box w={112}>
     <StatusLabel {...args}/>
   </Box>
 );
@@ -28,19 +28,16 @@ type Story = StoryObj<typeof StatusLabel>;
 
 export const NotStarted: Story = {
   args: {
-    // title: "Not started",
     variant: "notStarted",
   },
 };
 export const InProgress: Story = {
   args: {
-    // title: "In Progress",
     variant: "inProgress",
   },
 };
 export const Completed: Story = {
   args: {
-    // title: "Completed",
     variant: "completed",
   },
 };

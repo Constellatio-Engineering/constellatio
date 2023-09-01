@@ -1,14 +1,17 @@
-import { css } from "@emotion/react";
+import { type SerializedStyles, css } from "@emotion/react";
 import { type MantineTheme } from "@mantine/styles";
 
-export const wrapper = ({ theme, variant }: {
+export const wrapper = ({
+  theme,
+  variant,
+}: {
   theme: MantineTheme;
   variant: "titleTableCell" | "simpleTableCell";
-}) => css`
-  cursor: pointer;
-  outline: none;
-  border: none;
-  width: 100%;
+}): SerializedStyles => css`
+	cursor: ${variant === "titleTableCell" ? "pointer" : "default"};
+	outline: none;
+	border: none;
+	width: 100%;
 	display: flex;
 	height: 60px;
 	padding: 0 16px;
@@ -22,22 +25,24 @@ export const wrapper = ({ theme, variant }: {
 	transition: border-color 0.3s ease-in, background-color 0.3s ease-in;
 
 	&:hover {
-    border-color: ${theme.colors["neutrals-01"][4]};
-    background-color: ${theme.colors["neutrals-01"][1]};
+		border-color: ${theme.colors["neutrals-01"][4]};
+		background-color: ${theme.colors["neutrals-01"][1]};
 	}
 
-  &:active{
-    border-color: ${theme.colors["neutrals-01"][3]};
-    background-color: ${theme.colors["neutrals-01"][2]};
-  }
+	&:active {
+		border-color: ${theme.colors["neutrals-01"][3]};
+		background-color: ${theme.colors["neutrals-01"][2]};
+	}
 
-  &:focus{
-    border-color: ${theme.colors["neutrals-01"][4]};
-    background-color: ${theme.colors["neutrals-01"][1]};
-  }
+	&:focus {
+		border-color: ${theme.colors["neutrals-01"][4]};
+		background-color: ${theme.colors["neutrals-01"][1]};
+	}
 `;
 
-export const iconWrapper = ({ variant }: {
+export const iconWrapper = ({
+  variant,
+}: {
   variant: "titleTableCell" | "simpleTableCell";
 }) => css`
 	display: flex;
