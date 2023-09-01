@@ -11,13 +11,20 @@ import { DragNDropCard } from "@/components/molecules/DraggableCard/DragNDropCar
 import { GhostDropCard } from "@/components/molecules/GhostDropCard/GhostDropCard";
 import { HelpNote } from "@/components/molecules/HelpNote/HelpNote";
 import { ResultCard } from "@/components/molecules/ResultCard/ResultCard";
-import { type TValue } from "@/components/Wrappers/DndGame/DndGame";
 import { type IGenDragNDropGame } from "@/services/graphql/__generated/sdk";
+import useDragDropGameStore, {
+  type TDragAndDropGameOptionType,
+} from "@/stores/dragDropGame.store";
 import { shuffleArray } from "@/utils/array";
 
-import { DndContext, type DragEndEvent, DragOverlay, type DragStartEvent } from "@dnd-kit/core";
+import {
+  DndContext,
+  type DragEndEvent,
+  DragOverlay,
+  type DragStartEvent,
+} from "@dnd-kit/core";
 import { Title, LoadingOverlay } from "@mantine/core";
-import React, { type FC, useEffect, useMemo, useState } from "react";
+import { type FC, useEffect, useMemo } from "react";
 
 import {
   Container,
@@ -29,23 +36,41 @@ import {
   TitleWrapper,
 } from "./DragDropGame.styles";
 
-export type TDragDropGame = Pick<IGenDragNDropGame, "game" | "helpNote" | "question">;
+export type TDragDropGame = Pick<
+IGenDragNDropGame,
+"game" | "helpNote" | "question"
+>;
 
-type TOptionType = TValue["options"][number];
-
-export const DragDropGame: FC<TDragDropGame> = ({ game: { options, orderRequired }, helpNote, question }) =>
+export const DragDropGame: FC<TDragDropGame> = ({ game: { options, orderRequired }, helpNote, question }) => 
 {
-  const originalOptions: TOptionType[] = useMemo(() => options ?? [], [options]);
-  const [optionsItems, setOptionsItems] = useState<TOptionType[]>([]);
-  const [droppedItems, setDroppedItems] = useState<TOptionType[]>([]);
-  const [activeId, setActiveId] = useState<string | null>(null);
-  const [gameStatus, setGameStatus] = useState<"win" | "lose" | "inprogress">("inprogress");
-  const [resultMessage, setResultMessage] = useState<string>("");
+  const {
+    activeId,
+    addDroppedItem,
+    addOptionItem,
+    deleteDroppedItem,
+    deleteOptionItem,
+    droppedItems,
+    gameStatus,
+    optionsItems,
+    resultMessage,
+    setActiveId,
+    setDroppedItems,
+    setGameStatus,
+    setOptionsItems,
+    setResultMessage,
+  } = useDragDropGameStore();
 
-  useEffect(() =>
+  const originalOptions: TDragAndDropGameOptionType[] = useMemo(
+    () => options ?? [],
+    [options]
+  );
+
+  useEffect(() => 
   {
-    const optionsShuffled = shuffleArray<TOptionType>(originalOptions);
+    const optionsShuffled =
+			shuffleArray<TDragAndDropGameOptionType>(originalOptions);
     setOptionsItems(optionsShuffled);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [originalOptions]);
 
   const handleDragEnd = (event: DragEndEvent): void => 
@@ -57,8 +82,8 @@ export const DragDropGame: FC<TDragDropGame> = ({ game: { options, orderRequired
       const activeItem = optionsItems.find((item) => item.id === active.id);
       if(activeItem) 
       {
-        setDroppedItems((items) => [...items, activeItem]);
-        setOptionsItems((items) => items.filter((item) => item.id !== active.id));
+        addDroppedItem(activeItem);
+        deleteOptionItem(activeItem.id);
       }
     }
   };
@@ -69,11 +94,14 @@ export const DragDropGame: FC<TDragDropGame> = ({ game: { options, orderRequired
   };
 
   const checkWinCondition = (): boolean =>
-    droppedItems.every((item) => item.correctAnswer) && optionsItems.every((item) => !item.correctAnswer);
+    droppedItems.every((item) => item.correctAnswer) &&
+		optionsItems.every((item) => !item.correctAnswer);
 
   const checkOrder = (): boolean => 
   {
-    const correctAnswersOrder = originalOptions.filter((item) => item.correctAnswer);
+    const correctAnswersOrder = originalOptions.filter(
+      (item) => item.correctAnswer
+    );
 
     for(let i = 0; i < droppedItems.length; i++) 
     {
@@ -89,7 +117,7 @@ export const DragDropGame: FC<TDragDropGame> = ({ game: { options, orderRequired
   {
     const winCondition = checkWinCondition();
 
-    if(orderRequired)
+    if(orderRequired) 
     {
       const orderCorrect = checkOrder();
       if(winCondition && orderCorrect) 
@@ -125,7 +153,8 @@ export const DragDropGame: FC<TDragDropGame> = ({ game: { options, orderRequired
 
   const onGameResetHandler = (): void => 
   {
-    const originalOptionsShuffled = shuffleArray<TOptionType>(originalOptions);
+    const originalOptionsShuffled =
+			shuffleArray<TDragAndDropGameOptionType>(originalOptions);
     setOptionsItems(originalOptionsShuffled);
     setGameStatus("inprogress");
     setDroppedItems([]);
@@ -134,7 +163,10 @@ export const DragDropGame: FC<TDragDropGame> = ({ game: { options, orderRequired
   return (
     <Container>
       <TitleWrapper>
-        <Gamification/> <Title order={4}>Drag all correct answers into the box on the right</Title>
+        <Gamification/>{" "}
+        <Title order={4}>
+          Drag all correct answers into the box on the right
+        </Title>
       </TitleWrapper>
       <GameWrapper>
         {question && (
@@ -153,7 +185,10 @@ export const DragDropGame: FC<TDragDropGame> = ({ game: { options, orderRequired
         <DndContext onDragEnd={handleDragEnd} onDragStart={handleDragStart}>
           <Game>
             <Options>
-              <LoadingOverlay visible={optionsItems.length < 1} radius="radius-12"/>
+              <LoadingOverlay
+                visible={optionsItems.length < 1}
+                radius="radius-12"
+              />
               {optionsItems.map((option) =>
                 gameStatus === "inprogress" ? (
                   <Draggable key={option.id} id={option.id}>
@@ -166,7 +201,7 @@ export const DragDropGame: FC<TDragDropGame> = ({ game: { options, orderRequired
                     status={option.correctAnswer ? "success" : "error"}
                     result={option.correctAnswer ? "Correct" : "Incorrect"}
                   />
-                ),
+                )
               )}
               <DragOverlay
                 className="drag-overlay"
@@ -187,11 +222,14 @@ export const DragDropGame: FC<TDragDropGame> = ({ game: { options, orderRequired
             <Droppable>
               {droppedItems.length < 1 ? (
                 activeId ? (
-                  <GhostDropCard/>                                
+                  <GhostDropCard/>
                 ) : (
                   <EmptyPlaceholder>
                     <Flag/>
-                    <BodyText component="p" align="center" styleType="body-02-medium">
+                    <BodyText
+                      component="p"
+                      align="center"
+                      styleType="body-02-medium">
                       Drag and drop correct answers from the left column
                     </BodyText>
                   </EmptyPlaceholder>
@@ -208,8 +246,8 @@ export const DragDropGame: FC<TDragDropGame> = ({ game: { options, orderRequired
                       dropped
                       onDeleteHandler={() => 
                       {
-                        setDroppedItems((items) => items.filter((i) => i.id !== item.id));
-                        setOptionsItems((items) => [...items, item]);
+                        deleteDroppedItem(item.id);
+                        addOptionItem(item);
                       }}
                     />
                   ) : (
@@ -231,20 +269,28 @@ export const DragDropGame: FC<TDragDropGame> = ({ game: { options, orderRequired
           <>
             <ResultCard
               droppedCorrectCards={droppedItems.filter((item) => item.correctAnswer).length ?? null}
-              totalCorrectCards={originalOptions.filter((item) => item.correctAnswer).length ?? null}
+              totalCorrectCards={
+                originalOptions.filter((item) => item.correctAnswer).length ??
+								null
+              }
               variant={gameStatus}
               message={resultMessage}
             />
-            {helpNote?.richTextContent?.json && <HelpNote richTextContent={helpNote?.richTextContent}/>}
+            {helpNote?.richTextContent?.json && (
+              <HelpNote richTextContent={helpNote?.richTextContent}/>
+            )}
           </>
         )}
         <div>
-          
           <Button<"button">
             styleType="primary"
             size="large"
             leftIcon={gameStatus === "inprogress" ? <Check/> : <Reload/>}
-            onClick={gameStatus === "inprogress" ? onGameFinishHandler : onGameResetHandler}
+            onClick={
+              gameStatus === "inprogress"
+                ? onGameFinishHandler
+                : onGameResetHandler
+            }
             disabled={gameStatus === "inprogress" && droppedItems.length < 1}>
             {gameStatus === "inprogress" ? "Check my answers" : "Solve again"}
           </Button>
