@@ -1,9 +1,9 @@
 import { gql } from "graphql-request";
 
-import { f_Case } from "../fragments/f_Case";
+import { f_FullCase } from "../fragments/FullCase";
 
 export const q_all_case = gql`
-  ${f_Case}
+  ${f_FullCase}
   query q_all_case {
     allCase {
       edges {
