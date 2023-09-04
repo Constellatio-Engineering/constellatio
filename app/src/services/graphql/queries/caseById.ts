@@ -2,11 +2,11 @@ import { gql } from "graphql-request";
 
 import { f_FullCase } from "../fragments/FullCase";
 
-export const q_case_by_id = gql`
+export const q_caseById = gql`
   ${f_FullCase}
-  query q_case_by_id($id: ID!) {
+  query caseById($id: ID!) {
     Case(id: $id) {
-      ...Case
+      ...FullCase
     }
   }
 `;

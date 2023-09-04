@@ -2,9 +2,9 @@ import { gql } from "graphql-request";
 
 import { f_MainCategory } from "../fragments/MainCategory";
 
-export const q_all_category = gql`
+export const q_allMainCategory = gql`
 	${f_MainCategory}
-	query q_all_category {
+	query allMainCategory {
 		allMainCategory {
 			totalCount
 			edges {

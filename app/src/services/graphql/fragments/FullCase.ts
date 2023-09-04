@@ -16,10 +16,11 @@ export const f_FullCase = gql`
 	${f_Topic}
 	${f_FullTextTasks}
 	${f_Fact}
-	fragment Case on Case {
+	fragment FullCase on Case {
 		__typename
 		id
 		title
+		durationToCompleteInMinutes
 		fact {
 			...Fact
 		}

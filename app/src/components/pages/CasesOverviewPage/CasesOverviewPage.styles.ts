@@ -13,7 +13,3 @@ export const Page = (theme: MantineTheme): SerializedStyles => css`
     min-height: 100vh;
     position: relative;
 `;
-
-export const CasePage = (theme: MantineTheme): SerializedStyles => css`
-
-`;

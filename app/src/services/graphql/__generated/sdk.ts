@@ -1085,6 +1085,14 @@ export type IGenCardSelectionGameFragment = { __typename?: 'CardSelectionGame', 
     & IGenTextElementFragment
   ) | null };
 
+export type IGenCaseOverviewFragment = { __typename: 'Case', id?: string | null, title?: string | null, durationToCompleteInMinutes?: number | null, subCategoryField?: Array<(
+    { __typename?: 'SubCategory' }
+    & IGenSubCategoryFragment
+  ) | null> | null, topic?: Array<(
+    { __typename?: 'Topic' }
+    & IGenTopicFragment
+  ) | null> | null };
+
 export type IGenDragNDropGameFragment = { __typename: 'DragNDropGame', id?: string | null, game?: any | null, question?: string | null, helpNote?: (
     { __typename?: 'TextElement' }
     & IGenTextElementFragment
@@ -1100,7 +1108,7 @@ export type IGenFillInGapsGameFragment = { __typename: 'FillInGapsGame', id?: st
     & IGenTextElementFragment
   ) | null };
 
-export type IGenCaseFragment = { __typename: 'Case', id?: string | null, title?: string | null, fact?: (
+export type IGenFullCaseFragment = { __typename: 'Case', id?: string | null, title?: string | null, durationToCompleteInMinutes?: number | null, fact?: (
     { __typename?: 'Case_fact' }
     & IGenFactFragment
   ) | null, fullTextTasks?: (
@@ -1163,40 +1171,96 @@ export type IGenTextElementFragment = { __typename?: 'TextElement', id?: string 
 
 export type IGenTopicFragment = { __typename: 'Topic', id?: string | null, topicName?: string | null };
 
-export type IGenQ_All_CaseQueryVariables = Exact<{ [key: string]: never; }>;
+export type IGenAllCaseOverviewQueryVariables = Exact<{
+  after?: InputMaybe<Scalars['String']['input']>;
+}>;
 
 
-export type IGenQ_All_CaseQuery = { __typename?: 'Query', allCase?: { __typename?: 'Case_Connection', edges?: Array<{ __typename?: 'Case_ConnectionEdge', node?: (
+export type IGenAllCaseOverviewQuery = { __typename?: 'Query', allCase?: { __typename?: 'Case_Connection', totalCount?: number | null, pageInfo?: { __typename?: 'PageInfo', endCursor?: string | null, hasNextPage?: boolean | null } | null, edges?: Array<{ __typename?: 'Case_ConnectionEdge', node?: (
         { __typename?: 'Case' }
-        & IGenCaseFragment
+        & IGenCaseOverviewFragment
       ) | null } | null> | null } | null };
 
-export type IGenQ_All_CategoryQueryVariables = Exact<{ [key: string]: never; }>;
+export type IGenAllMainCategoryQueryVariables = Exact<{ [key: string]: never; }>;
 
 
-export type IGenQ_All_CategoryQuery = { __typename?: 'Query', allMainCategory?: { __typename?: 'MainCategory_Connection', totalCount?: number | null, edges?: Array<{ __typename?: 'MainCategory_ConnectionEdge', node?: (
+export type IGenAllMainCategoryQuery = { __typename?: 'Query', allMainCategory?: { __typename?: 'MainCategory_Connection', totalCount?: number | null, edges?: Array<{ __typename?: 'MainCategory_ConnectionEdge', node?: (
         { __typename?: 'MainCategory' }
         & IGenMainCategoryFragment
       ) | null } | null> | null } | null };
 
-export type IGenQ_All_SubcategoryQueryVariables = Exact<{ [key: string]: never; }>;
+export type IGenAllSubCategoryQueryVariables = Exact<{ [key: string]: never; }>;
 
 
-export type IGenQ_All_SubcategoryQuery = { __typename?: 'Query', allSubCategory?: { __typename?: 'SubCategory_Connection', totalCount?: number | null, edges?: Array<{ __typename?: 'SubCategory_ConnectionEdge', node?: { __typename?: 'SubCategory', id?: string | null, subCategory?: string | null, mainCategory?: Array<(
-          { __typename?: 'MainCategory' }
-          & IGenMainCategoryFragment
-        ) | null> | null } | null } | null> | null } | null };
+export type IGenAllSubCategoryQuery = { __typename?: 'Query', allSubCategory?: { __typename?: 'SubCategory_Connection', totalCount?: number | null, edges?: Array<{ __typename?: 'SubCategory_ConnectionEdge', node?: (
+        { __typename?: 'SubCategory' }
+        & IGenSubCategoryFragment
+      ) | null } | null> | null } | null };
 
-export type IGenQ_Case_By_IdQueryVariables = Exact<{
+export type IGenCaseByIdQueryVariables = Exact<{
   id: Scalars['ID']['input'];
 }>;
 
 
-export type IGenQ_Case_By_IdQuery = { __typename?: 'Query', Case?: (
+export type IGenCaseByIdQuery = { __typename?: 'Query', Case?: (
     { __typename?: 'Case' }
-    & IGenCaseFragment
+    & IGenFullCaseFragment
   ) | null };
 
+export const AssetFragmentDoc = gql`
+    fragment Asset on Asset {
+  title
+  src
+  originType
+  keywords
+  id
+  dominantColor
+  description
+  copyright
+  author
+}
+    `;
+export const MainCategoryFragmentDoc = gql`
+    fragment MainCategory on MainCategory {
+  __typename
+  id
+  icon {
+    ...Asset
+  }
+  mainCategory
+}
+    `;
+export const SubCategoryFragmentDoc = gql`
+    fragment SubCategory on SubCategory {
+  __typename
+  id
+  subCategory
+  mainCategory {
+    ...MainCategory
+  }
+}
+    `;
+export const TopicFragmentDoc = gql`
+    fragment Topic on Topic {
+  __typename
+  id
+  topicName
+}
+    `;
+export const CaseOverviewFragmentDoc = gql`
+    fragment CaseOverview on Case {
+  __typename
+  id
+  title
+  durationToCompleteInMinutes
+  subCategoryField {
+    ...SubCategory
+  }
+  topic {
+    ...Topic
+  }
+}
+    `;
 export const FactFragmentDoc = gql`
     fragment Fact on Case_fact {
   __typename
@@ -1248,19 +1312,6 @@ export const DragNDropGameFragmentDoc = gql`
   }
 }
     `;
-export const AssetFragmentDoc = gql`
-    fragment Asset on Asset {
-  title
-  src
-  originType
-  keywords
-  id
-  dominantColor
-  description
-  copyright
-  author
-}
-    `;
 export const ImageWrapperCardFragmentDoc = gql`
     fragment ImageWrapperCard on ImageWrapperCard {
   __typename
@@ -1303,26 +1354,6 @@ export const LegalAreaFragmentDoc = gql`
   legalAreaName
 }
     `;
-export const MainCategoryFragmentDoc = gql`
-    fragment MainCategory on MainCategory {
-  __typename
-  id
-  icon {
-    ...Asset
-  }
-  mainCategory
-}
-    `;
-export const SubCategoryFragmentDoc = gql`
-    fragment SubCategory on SubCategory {
-  __typename
-  id
-  subCategory
-  mainCategory {
-    ...MainCategory
-  }
-}
-    `;
 export const TagsFragmentDoc = gql`
     fragment Tags on Tags {
   __typename
@@ -1330,18 +1361,12 @@ export const TagsFragmentDoc = gql`
   tagName
 }
     `;
-export const TopicFragmentDoc = gql`
-    fragment Topic on Topic {
-  __typename
-  id
-  topicName
-}
-    `;
-export const CaseFragmentDoc = gql`
-    fragment Case on Case {
+export const FullCaseFragmentDoc = gql`
+    fragment FullCase on Case {
   __typename
   id
   title
+  durationToCompleteInMinutes
   fact {
     ...Fact
   }
@@ -1365,33 +1390,28 @@ export const CaseFragmentDoc = gql`
   }
 }
     `;
-export const Q_All_CaseDocument = gql`
-    query q_all_case {
-  allCase {
+export const AllCaseOverviewDocument = gql`
+    query allCaseOverview($after: String) {
+  allCase(first: 100, after: $after) {
+    totalCount
+    pageInfo {
+      endCursor
+      hasNextPage
+    }
     edges {
       node {
-        ...Case
+        ...CaseOverview
       }
     }
   }
 }
-    ${CaseFragmentDoc}
-${FactFragmentDoc}
-${FullTextTasksFragmentDoc}
-${FillInGapsGameFragmentDoc}
-${TextElementFragmentDoc}
-${CardSelectionGameFragmentDoc}
-${DragNDropGameFragmentDoc}
-${ImageWrapperCardFragmentDoc}
-${AssetFragmentDoc}
-${CalloutFragmentDoc}
-${LegalAreaFragmentDoc}
-${MainCategoryFragmentDoc}
+    ${CaseOverviewFragmentDoc}
 ${SubCategoryFragmentDoc}
-${TagsFragmentDoc}
+${MainCategoryFragmentDoc}
+${AssetFragmentDoc}
 ${TopicFragmentDoc}`;
-export const Q_All_CategoryDocument = gql`
-    query q_all_category {
+export const AllMainCategoryDocument = gql`
+    query allMainCategory {
   allMainCategory {
     totalCount
     edges {
@@ -1403,30 +1423,27 @@ export const Q_All_CategoryDocument = gql`
 }
     ${MainCategoryFragmentDoc}
 ${AssetFragmentDoc}`;
-export const Q_All_SubcategoryDocument = gql`
-    query q_all_subcategory {
+export const AllSubCategoryDocument = gql`
+    query allSubCategory {
   allSubCategory {
     totalCount
     edges {
       node {
-        id
-        subCategory
-        mainCategory {
-          ...MainCategory
-        }
+        ...SubCategory
       }
     }
   }
 }
-    ${MainCategoryFragmentDoc}
+    ${SubCategoryFragmentDoc}
+${MainCategoryFragmentDoc}
 ${AssetFragmentDoc}`;
-export const Q_Case_By_IdDocument = gql`
-    query q_case_by_id($id: ID!) {
+export const CaseByIdDocument = gql`
+    query caseById($id: ID!) {
   Case(id: $id) {
-    ...Case
+    ...FullCase
   }
 }
-    ${CaseFragmentDoc}
+    ${FullCaseFragmentDoc}
 ${FactFragmentDoc}
 ${FullTextTasksFragmentDoc}
 ${FillInGapsGameFragmentDoc}
@@ -1444,17 +1461,17 @@ ${TopicFragmentDoc}`;
 export type Requester<C = {}, E = unknown> = <R, V>(doc: DocumentNode, vars?: V, options?: C) => Promise<R> | AsyncIterable<R>
 export function getSdk<C, E>(requester: Requester<C, E>) {
   return {
-    q_all_case(variables?: IGenQ_All_CaseQueryVariables, options?: C): Promise<IGenQ_All_CaseQuery> {
-      return requester<IGenQ_All_CaseQuery, IGenQ_All_CaseQueryVariables>(Q_All_CaseDocument, variables, options) as Promise<IGenQ_All_CaseQuery>;
+    allCaseOverview(variables?: IGenAllCaseOverviewQueryVariables, options?: C): Promise<IGenAllCaseOverviewQuery> {
+      return requester<IGenAllCaseOverviewQuery, IGenAllCaseOverviewQueryVariables>(AllCaseOverviewDocument, variables, options) as Promise<IGenAllCaseOverviewQuery>;
     },
-    q_all_category(variables?: IGenQ_All_CategoryQueryVariables, options?: C): Promise<IGenQ_All_CategoryQuery> {
-      return requester<IGenQ_All_CategoryQuery, IGenQ_All_CategoryQueryVariables>(Q_All_CategoryDocument, variables, options) as Promise<IGenQ_All_CategoryQuery>;
+    allMainCategory(variables?: IGenAllMainCategoryQueryVariables, options?: C): Promise<IGenAllMainCategoryQuery> {
+      return requester<IGenAllMainCategoryQuery, IGenAllMainCategoryQueryVariables>(AllMainCategoryDocument, variables, options) as Promise<IGenAllMainCategoryQuery>;
     },
-    q_all_subcategory(variables?: IGenQ_All_SubcategoryQueryVariables, options?: C): Promise<IGenQ_All_SubcategoryQuery> {
-      return requester<IGenQ_All_SubcategoryQuery, IGenQ_All_SubcategoryQueryVariables>(Q_All_SubcategoryDocument, variables, options) as Promise<IGenQ_All_SubcategoryQuery>;
+    allSubCategory(variables?: IGenAllSubCategoryQueryVariables, options?: C): Promise<IGenAllSubCategoryQuery> {
+      return requester<IGenAllSubCategoryQuery, IGenAllSubCategoryQueryVariables>(AllSubCategoryDocument, variables, options) as Promise<IGenAllSubCategoryQuery>;
     },
-    q_case_by_id(variables: IGenQ_Case_By_IdQueryVariables, options?: C): Promise<IGenQ_Case_By_IdQuery> {
-      return requester<IGenQ_Case_By_IdQuery, IGenQ_Case_By_IdQueryVariables>(Q_Case_By_IdDocument, variables, options) as Promise<IGenQ_Case_By_IdQuery>;
+    caseById(variables: IGenCaseByIdQueryVariables, options?: C): Promise<IGenCaseByIdQuery> {
+      return requester<IGenCaseByIdQuery, IGenCaseByIdQueryVariables>(CaseByIdDocument, variables, options) as Promise<IGenCaseByIdQuery>;
     }
   };
 }

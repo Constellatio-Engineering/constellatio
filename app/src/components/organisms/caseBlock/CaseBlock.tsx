@@ -5,7 +5,7 @@ import TableIconButton from "@/components/atoms/tableIconButton/TableIconButton"
 import { Bookmark } from "@/components/Icons/bookmark";
 import { ClockIcon } from "@/components/Icons/ClockIcon";
 import CaseBlockHead, { type ICaseBlockHeadProps } from "@/components/molecules/caseBlockHead/CaseBlockHead";
-import { type IGenCaseFragment } from "@/services/graphql/__generated/sdk";
+import { type IGenFullCaseFragment } from "@/services/graphql/__generated/sdk";
 
 import Link from "next/link";
 import React, { type FunctionComponent } from "react";
@@ -19,7 +19,7 @@ export interface ICaseBlockProps
   readonly blockHead: ICaseBlockHeadProps;
   readonly cases?: (({
     _typename?: "Case" | undefined;
-  } & IGenCaseFragment) | null | undefined)[] | undefined;
+  } & IGenFullCaseFragment) | null | undefined)[] | undefined;
 }
 
 const CaseBlock: FunctionComponent<ICaseBlockProps> = ({ blockHead, cases }) => 
