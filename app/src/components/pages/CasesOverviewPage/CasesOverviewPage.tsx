@@ -29,6 +29,7 @@ const CasesOverviewPage: FunctionComponent<ICasesOverviewProps> = ({ allCases, a
     );
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [selectedCategoryId]);
+  console.log({ allCases });
 
   return (
     <div css={styles.Page}>

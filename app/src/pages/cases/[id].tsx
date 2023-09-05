@@ -1,3 +1,5 @@
+import FloatingPanel from "@/components/floatingPanel/FloatingPanel";
+import { Trash } from "@/components/Icons/Trash";
 import CaseSolvingHeader from "@/components/organisms/caseSolvingHeader/CaseSolvingHeader";
 import { Footer } from "@/components/organisms/Footer/Footer";
 import { Header } from "@/components/organisms/Header/Header";
@@ -6,8 +8,6 @@ import { type IGenCase } from "@/services/graphql/__generated/sdk";
 
 import type { GetStaticProps, GetStaticPaths } from "next";
 import { type FunctionComponent } from "react";
-
-import * as styles from "../styles/styles";
 
 interface ICasePageProps 
 {
@@ -31,10 +31,11 @@ export const getStaticProps: GetStaticProps = async ({ params }) =>
 
 const NextPage: FunctionComponent<ICasePageProps> = (props) => 
 {
+  const content = props?.case?.fullTextTasks?.json?.content?.filter((contentItem: { content: { text: string }[]; type: string }) => contentItem?.type === "heading");
+  console.log({ content });
   return (
-    <div css={styles.Page}>
+    <div style={{ background: "#F6F6F5" }}>
       <Header/>
-      {/* <h5>{props?.id}</h5> */}
       {props && props?.case && (
         <CaseSolvingHeader
           title={props?.case?.title ?? ""}
@@ -52,6 +53,7 @@ const NextPage: FunctionComponent<ICasePageProps> = (props) =>
           }}
         />
       )}
+      <FloatingPanel content={content} tabs={[{ icon: { src: <Trash/> }, title: "Content" }, { icon: { src: <Trash/> }, title: "Facts" }]}/>
       <Footer/>
     </div>
   );
@@ -59,7 +61,6 @@ const NextPage: FunctionComponent<ICasePageProps> = (props) =>
 
 export const getStaticPaths: GetStaticPaths = () => 
 {
-
   return {
     fallback: true,
     paths: []

@@ -1,6 +1,6 @@
 import { gql } from "graphql-request";
 
-import { f_Fact } from "./Fact";
+// import { f_Fact } from "./Fact";
 import { f_FullTextTasks } from "./FullTextTasks";
 import { f_LegalArea } from "./LegalArea";
 import { f_MainCategory } from "./MainCategory";
@@ -15,14 +15,18 @@ export const f_FullCase = gql`
 	${f_Tags}
 	${f_Topic}
 	${f_FullTextTasks}
-	${f_Fact}
 	fragment FullCase on Case {
 		__typename
 		id
 		title
 		durationToCompleteInMinutes
-		fact {
-			...Fact
+		facts {
+			richTextContent{
+				connections{
+					              __typename
+				}
+				json
+			}
 		}
 		fullTextTasks {
 			...FullTextTasks

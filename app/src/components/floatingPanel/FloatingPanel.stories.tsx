@@ -26,7 +26,7 @@ type Story = StoryObj<typeof FloatingPanel>;
 
 export const Default: Story = {
   args: {
-    content: "Data",
+    content: [{ attrs: { level: 1, textAlign: "left", }, content: [{ text: "txt", type: "heading" }], type: "heading" }],
     tabs: [{ icon: { src: <Trash/> }, title: "Content" }, { icon: { src: <Trash/> }, title: "Facts" }]
   },
 };

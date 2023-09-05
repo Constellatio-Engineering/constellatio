@@ -526,7 +526,18 @@ type Case {
   durationToCompleteInMinutes: Int
 
   """"""
-  fact(locale: String): Case_fact
+  facts(
+    """
+    The cursor to start the pagination from. In this case the curser equals the id for the (last) element. If not set, we wil start from the beginning.
+    """
+    after: String
+
+    """The number of items to return. Default and max value is 100."""
+    first: Int = 100
+
+    """"""
+    locale: String
+  ): TextElement
 
   """"""
   fullTextTasks(locale: String): Case_fullTextTasks
@@ -638,6 +649,9 @@ input Case_Sort {
   durationToCompleteInMinutes: Order
 
   """"""
+  facts: Order
+
+  """"""
   id: Order
 
   """"""
@@ -677,37 +691,11 @@ input Case_Where {
   durationToCompleteInMinutes: CaisyField_Number_WhereInt
 
   """"""
-  fact: CaisyField_Richtext_Where
-
-  """"""
   fullTextTasks: CaisyField_Richtext_Where
 
   """"""
   title: CaisyField_String_Where
 }
-
-""""""
-type Case_fact {
-  """"""
-  connections(
-    """
-    The cursor to start the pagination from. In this case the curser equals the id for the (last) element. If not set, we wil start from the beginning.
-    """
-    after: String
-
-    """The number of items to return. Default and max value is 100."""
-    first: Int = 100
-
-    """"""
-    locale: String
-  ): [Case_fact_Connections]
-
-  """"""
-  json: JSON
-}
-
-""""""
-union Case_fact_Connections = Caisy_Field_Document_NotFound
 
 """"""
 type Case_fullTextTasks {

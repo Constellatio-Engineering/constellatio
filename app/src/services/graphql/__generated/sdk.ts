@@ -276,7 +276,7 @@ export type IGenCase = {
   __typename?: 'Case';
   _meta?: Maybe<IGenCaisyDocument_Meta>;
   durationToCompleteInMinutes?: Maybe<Scalars['Int']['output']>;
-  fact?: Maybe<IGenCase_Fact>;
+  facts?: Maybe<IGenTextElement>;
   fullTextTasks?: Maybe<IGenCase_FullTextTasks>;
   id?: Maybe<Scalars['ID']['output']>;
   legalArea?: Maybe<Array<Maybe<IGenCase_LegalArea>>>;
@@ -288,7 +288,9 @@ export type IGenCase = {
 };
 
 
-export type IGenCaseFactArgs = {
+export type IGenCaseFactsArgs = {
+  after?: InputMaybe<Scalars['String']['input']>;
+  first?: InputMaybe<Scalars['Int']['input']>;
   locale?: InputMaybe<Scalars['String']['input']>;
 };
 
@@ -348,6 +350,7 @@ export type IGenCase_ConnectionEdge = {
 export type IGenCase_Sort = {
   createdAt?: InputMaybe<IGenOrder>;
   durationToCompleteInMinutes?: InputMaybe<IGenOrder>;
+  facts?: InputMaybe<IGenOrder>;
   id?: InputMaybe<IGenOrder>;
   legalArea?: InputMaybe<IGenOrder>;
   mainCategoryField?: InputMaybe<IGenOrder>;
@@ -363,25 +366,9 @@ export type IGenCase_Where = {
   AND?: InputMaybe<Array<InputMaybe<IGenCase_Where>>>;
   OR?: InputMaybe<Array<InputMaybe<IGenCase_Where>>>;
   durationToCompleteInMinutes?: InputMaybe<IGenCaisyField_Number_WhereInt>;
-  fact?: InputMaybe<IGenCaisyField_Richtext_Where>;
   fullTextTasks?: InputMaybe<IGenCaisyField_Richtext_Where>;
   title?: InputMaybe<IGenCaisyField_String_Where>;
 };
-
-export type IGenCase_Fact = {
-  __typename?: 'Case_fact';
-  connections?: Maybe<Array<Maybe<IGenCase_Fact_Connections>>>;
-  json?: Maybe<Scalars['JSON']['output']>;
-};
-
-
-export type IGenCase_FactConnectionsArgs = {
-  after?: InputMaybe<Scalars['String']['input']>;
-  first?: InputMaybe<Scalars['Int']['input']>;
-  locale?: InputMaybe<Scalars['String']['input']>;
-};
-
-export type IGenCase_Fact_Connections = IGenCaisy_Field_Document_NotFound;
 
 export type IGenCase_FullTextTasks = {
   __typename?: 'Case_fullTextTasks';
@@ -1098,8 +1085,6 @@ export type IGenDragNDropGameFragment = { __typename: 'DragNDropGame', id?: stri
     & IGenTextElementFragment
   ) | null };
 
-export type IGenFactFragment = { __typename: 'Case_fact', json?: any | null };
-
 export type IGenFillInGapsGameFragment = { __typename: 'FillInGapsGame', id?: string | null, question?: string | null, fillGameParagraph?: (
     { __typename?: 'TextElement' }
     & IGenTextElementFragment
@@ -1108,10 +1093,7 @@ export type IGenFillInGapsGameFragment = { __typename: 'FillInGapsGame', id?: st
     & IGenTextElementFragment
   ) | null };
 
-export type IGenFullCaseFragment = { __typename: 'Case', id?: string | null, title?: string | null, durationToCompleteInMinutes?: number | null, fact?: (
-    { __typename?: 'Case_fact' }
-    & IGenFactFragment
-  ) | null, fullTextTasks?: (
+export type IGenFullCaseFragment = { __typename: 'Case', id?: string | null, title?: string | null, durationToCompleteInMinutes?: number | null, facts?: { __typename?: 'TextElement', richTextContent?: { __typename?: 'TextElement_richTextContent', json?: any | null, connections?: Array<{ __typename: 'Caisy_Field_Document_NotFound' } | null> | null } | null } | null, fullTextTasks?: (
     { __typename?: 'Case_fullTextTasks' }
     & IGenFullTextTasksFragment
   ) | null, legalArea?: Array<(
@@ -1261,12 +1243,6 @@ export const CaseOverviewFragmentDoc = gql`
   }
 }
     `;
-export const FactFragmentDoc = gql`
-    fragment Fact on Case_fact {
-  __typename
-  json
-}
-    `;
 export const TextElementFragmentDoc = gql`
     fragment TextElement on TextElement {
   id
@@ -1367,8 +1343,13 @@ export const FullCaseFragmentDoc = gql`
   id
   title
   durationToCompleteInMinutes
-  fact {
-    ...Fact
+  facts {
+    richTextContent {
+      connections {
+        __typename
+      }
+      json
+    }
   }
   fullTextTasks {
     ...FullTextTasks
@@ -1444,7 +1425,6 @@ export const CaseByIdDocument = gql`
   }
 }
     ${FullCaseFragmentDoc}
-${FactFragmentDoc}
 ${FullTextTasksFragmentDoc}
 ${FillInGapsGameFragmentDoc}
 ${TextElementFragmentDoc}
