@@ -8,9 +8,10 @@ import Link from "next/link";
 import React, { type FunctionComponent, type ReactNode } from "react";
 
 import * as styles from "./CaseSolvingHeader.styles";
-import OverviewCard from "../overviewCard/OverviewCard";
+import OverviewCard, { type IOverviewCard } from "../overviewCard/OverviewCard";
 export interface ICaseSolvingHeaderProps 
 {
+  readonly overviewCard: IOverviewCard;
   readonly pathSlugs?: string[];
   // readonly steps?: string[];
   readonly title: string;
@@ -23,7 +24,12 @@ interface IIcons
   title: string;
 }
 
-const CaseSolvingHeader: FunctionComponent<ICaseSolvingHeaderProps> = ({ pathSlugs, title, variant }) => 
+const CaseSolvingHeader: FunctionComponent<ICaseSolvingHeaderProps> = ({
+  overviewCard,
+  pathSlugs,
+  title,
+  variant
+}) => 
 {
   // add title to each icon object in the array with keeping size:"big" and src
   const icons: IIcons[] = [
@@ -59,13 +65,7 @@ const CaseSolvingHeader: FunctionComponent<ICaseSolvingHeaderProps> = ({ pathSlu
         </div>
         <div css={styles.bodyCard}>
           <OverviewCard
-            lastUpdated={new Date()}
-            legalArea=""
-            tags={[]}
-            topic=""
-            variant={variant}
-            views={0}
-            timeInMinutes={0}
+            {...overviewCard}
           />
         </div>
 
