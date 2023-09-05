@@ -32,8 +32,8 @@ const getCasesOverviewProps = async (): Promise<ICasesOverviewProps> =>
   try 
   {
     const [allMainCategoriesRes, allSubCategoriesRes, allCasesRes] = await Promise.all([
-      caisySDK.allMainCategory(),
-      caisySDK.allSubCategory(), getAllCases({})
+      caisySDK.getAllMainCategory(),
+      caisySDK.getAllSubCategory(), getAllCases({})
     ]);
 
     const allMainCategories = (

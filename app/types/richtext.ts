@@ -19,3 +19,11 @@ export interface OverwriteProps
     };
   }[];
 }
+
+export interface IDocumentLink extends TRichTextElements 
+{
+  attrs: {
+    documentId: string;
+  };
+  type: "documentLink";
+}

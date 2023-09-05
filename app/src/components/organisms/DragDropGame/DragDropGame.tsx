@@ -41,7 +41,7 @@ IGenDragNDropGame,
 "game" | "helpNote" | "question"
 >;
 
-export const DragDropGame: FC<TDragDropGame> = ({ game: { options, orderRequired }, helpNote, question }) => 
+export const DragDropGame: FC<TDragDropGame> = ({ game, helpNote, question }) => 
 {
   const {
     activeId,
@@ -61,8 +61,8 @@ export const DragDropGame: FC<TDragDropGame> = ({ game: { options, orderRequired
   } = useDragDropGameStore();
 
   const originalOptions: TDragAndDropGameOptionType[] = useMemo(
-    () => options ?? [],
-    [options]
+    () => game?.options ?? [],
+    [game?.options]
   );
 
   useEffect(() => 
@@ -117,7 +117,7 @@ export const DragDropGame: FC<TDragDropGame> = ({ game: { options, orderRequired
   {
     const winCondition = checkWinCondition();
 
-    if(orderRequired) 
+    if(game?.orderRequired) 
     {
       const orderCorrect = checkOrder();
       if(winCondition && orderCorrect) 

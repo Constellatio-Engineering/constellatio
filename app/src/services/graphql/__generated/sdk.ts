@@ -276,7 +276,7 @@ export type IGenCase = {
   __typename?: 'Case';
   _meta?: Maybe<IGenCaisyDocument_Meta>;
   durationToCompleteInMinutes?: Maybe<Scalars['Int']['output']>;
-  fact?: Maybe<IGenCase_Fact>;
+  facts?: Maybe<IGenTextElement>;
   fullTextTasks?: Maybe<IGenCase_FullTextTasks>;
   id?: Maybe<Scalars['ID']['output']>;
   legalArea?: Maybe<Array<Maybe<IGenCase_LegalArea>>>;
@@ -288,7 +288,9 @@ export type IGenCase = {
 };
 
 
-export type IGenCaseFactArgs = {
+export type IGenCaseFactsArgs = {
+  after?: InputMaybe<Scalars['String']['input']>;
+  first?: InputMaybe<Scalars['Int']['input']>;
   locale?: InputMaybe<Scalars['String']['input']>;
 };
 
@@ -348,6 +350,7 @@ export type IGenCase_ConnectionEdge = {
 export type IGenCase_Sort = {
   createdAt?: InputMaybe<IGenOrder>;
   durationToCompleteInMinutes?: InputMaybe<IGenOrder>;
+  facts?: InputMaybe<IGenOrder>;
   id?: InputMaybe<IGenOrder>;
   legalArea?: InputMaybe<IGenOrder>;
   mainCategoryField?: InputMaybe<IGenOrder>;
@@ -363,25 +366,9 @@ export type IGenCase_Where = {
   AND?: InputMaybe<Array<InputMaybe<IGenCase_Where>>>;
   OR?: InputMaybe<Array<InputMaybe<IGenCase_Where>>>;
   durationToCompleteInMinutes?: InputMaybe<IGenCaisyField_Number_WhereInt>;
-  fact?: InputMaybe<IGenCaisyField_Richtext_Where>;
   fullTextTasks?: InputMaybe<IGenCaisyField_Richtext_Where>;
   title?: InputMaybe<IGenCaisyField_String_Where>;
 };
-
-export type IGenCase_Fact = {
-  __typename?: 'Case_fact';
-  connections?: Maybe<Array<Maybe<IGenCase_Fact_Connections>>>;
-  json?: Maybe<Scalars['JSON']['output']>;
-};
-
-
-export type IGenCase_FactConnectionsArgs = {
-  after?: InputMaybe<Scalars['String']['input']>;
-  first?: InputMaybe<Scalars['Int']['input']>;
-  locale?: InputMaybe<Scalars['String']['input']>;
-};
-
-export type IGenCase_Fact_Connections = IGenCaisy_Field_Document_NotFound;
 
 export type IGenCase_FullTextTasks = {
   __typename?: 'Case_fullTextTasks';
@@ -1098,8 +1085,6 @@ export type IGenDragNDropGameFragment = { __typename: 'DragNDropGame', id?: stri
     & IGenTextElementFragment
   ) | null };
 
-export type IGenFactFragment = { __typename: 'Case_fact', json?: any | null };
-
 export type IGenFillInGapsGameFragment = { __typename: 'FillInGapsGame', id?: string | null, question?: string | null, fillGameParagraph?: (
     { __typename?: 'TextElement' }
     & IGenTextElementFragment
@@ -1108,9 +1093,9 @@ export type IGenFillInGapsGameFragment = { __typename: 'FillInGapsGame', id?: st
     & IGenTextElementFragment
   ) | null };
 
-export type IGenFullCaseFragment = { __typename: 'Case', id?: string | null, title?: string | null, durationToCompleteInMinutes?: number | null, fact?: (
-    { __typename?: 'Case_fact' }
-    & IGenFactFragment
+export type IGenFullCaseFragment = { __typename: 'Case', id?: string | null, title?: string | null, durationToCompleteInMinutes?: number | null, facts?: (
+    { __typename?: 'TextElement' }
+    & IGenTextElementFragment
   ) | null, fullTextTasks?: (
     { __typename?: 'Case_fullTextTasks' }
     & IGenFullTextTasksFragment
@@ -1171,38 +1156,38 @@ export type IGenTextElementFragment = { __typename?: 'TextElement', id?: string 
 
 export type IGenTopicFragment = { __typename: 'Topic', id?: string | null, topicName?: string | null };
 
-export type IGenAllCaseOverviewQueryVariables = Exact<{
+export type IGenGetAllCaseOverviewQueryVariables = Exact<{
   after?: InputMaybe<Scalars['String']['input']>;
 }>;
 
 
-export type IGenAllCaseOverviewQuery = { __typename?: 'Query', allCase?: { __typename?: 'Case_Connection', totalCount?: number | null, pageInfo?: { __typename?: 'PageInfo', endCursor?: string | null, hasNextPage?: boolean | null } | null, edges?: Array<{ __typename?: 'Case_ConnectionEdge', node?: (
+export type IGenGetAllCaseOverviewQuery = { __typename?: 'Query', allCase?: { __typename?: 'Case_Connection', totalCount?: number | null, pageInfo?: { __typename?: 'PageInfo', endCursor?: string | null, hasNextPage?: boolean | null } | null, edges?: Array<{ __typename?: 'Case_ConnectionEdge', node?: (
         { __typename?: 'Case' }
         & IGenCaseOverviewFragment
       ) | null } | null> | null } | null };
 
-export type IGenAllMainCategoryQueryVariables = Exact<{ [key: string]: never; }>;
+export type IGenGetAllMainCategoryQueryVariables = Exact<{ [key: string]: never; }>;
 
 
-export type IGenAllMainCategoryQuery = { __typename?: 'Query', allMainCategory?: { __typename?: 'MainCategory_Connection', totalCount?: number | null, edges?: Array<{ __typename?: 'MainCategory_ConnectionEdge', node?: (
+export type IGenGetAllMainCategoryQuery = { __typename?: 'Query', allMainCategory?: { __typename?: 'MainCategory_Connection', totalCount?: number | null, edges?: Array<{ __typename?: 'MainCategory_ConnectionEdge', node?: (
         { __typename?: 'MainCategory' }
         & IGenMainCategoryFragment
       ) | null } | null> | null } | null };
 
-export type IGenAllSubCategoryQueryVariables = Exact<{ [key: string]: never; }>;
+export type IGenGetAllSubCategoryQueryVariables = Exact<{ [key: string]: never; }>;
 
 
-export type IGenAllSubCategoryQuery = { __typename?: 'Query', allSubCategory?: { __typename?: 'SubCategory_Connection', totalCount?: number | null, edges?: Array<{ __typename?: 'SubCategory_ConnectionEdge', node?: (
+export type IGenGetAllSubCategoryQuery = { __typename?: 'Query', allSubCategory?: { __typename?: 'SubCategory_Connection', totalCount?: number | null, edges?: Array<{ __typename?: 'SubCategory_ConnectionEdge', node?: (
         { __typename?: 'SubCategory' }
         & IGenSubCategoryFragment
       ) | null } | null> | null } | null };
 
-export type IGenCaseByIdQueryVariables = Exact<{
+export type IGenGetCaseByIdQueryVariables = Exact<{
   id: Scalars['ID']['input'];
 }>;
 
 
-export type IGenCaseByIdQuery = { __typename?: 'Query', Case?: (
+export type IGenGetCaseByIdQuery = { __typename?: 'Query', Case?: (
     { __typename?: 'Case' }
     & IGenFullCaseFragment
   ) | null };
@@ -1259,12 +1244,6 @@ export const CaseOverviewFragmentDoc = gql`
   topic {
     ...Topic
   }
-}
-    `;
-export const FactFragmentDoc = gql`
-    fragment Fact on Case_fact {
-  __typename
-  json
 }
     `;
 export const TextElementFragmentDoc = gql`
@@ -1367,8 +1346,8 @@ export const FullCaseFragmentDoc = gql`
   id
   title
   durationToCompleteInMinutes
-  fact {
-    ...Fact
+  facts {
+    ...TextElement
   }
   fullTextTasks {
     ...FullTextTasks
@@ -1390,8 +1369,8 @@ export const FullCaseFragmentDoc = gql`
   }
 }
     `;
-export const AllCaseOverviewDocument = gql`
-    query allCaseOverview($after: String) {
+export const GetAllCaseOverviewDocument = gql`
+    query getAllCaseOverview($after: String) {
   allCase(first: 100, after: $after) {
     totalCount
     pageInfo {
@@ -1410,8 +1389,8 @@ ${SubCategoryFragmentDoc}
 ${MainCategoryFragmentDoc}
 ${AssetFragmentDoc}
 ${TopicFragmentDoc}`;
-export const AllMainCategoryDocument = gql`
-    query allMainCategory {
+export const GetAllMainCategoryDocument = gql`
+    query getAllMainCategory {
   allMainCategory {
     totalCount
     edges {
@@ -1423,8 +1402,8 @@ export const AllMainCategoryDocument = gql`
 }
     ${MainCategoryFragmentDoc}
 ${AssetFragmentDoc}`;
-export const AllSubCategoryDocument = gql`
-    query allSubCategory {
+export const GetAllSubCategoryDocument = gql`
+    query getAllSubCategory {
   allSubCategory {
     totalCount
     edges {
@@ -1437,17 +1416,16 @@ export const AllSubCategoryDocument = gql`
     ${SubCategoryFragmentDoc}
 ${MainCategoryFragmentDoc}
 ${AssetFragmentDoc}`;
-export const CaseByIdDocument = gql`
-    query caseById($id: ID!) {
+export const GetCaseByIdDocument = gql`
+    query getCaseById($id: ID!) {
   Case(id: $id) {
     ...FullCase
   }
 }
     ${FullCaseFragmentDoc}
-${FactFragmentDoc}
+${TextElementFragmentDoc}
 ${FullTextTasksFragmentDoc}
 ${FillInGapsGameFragmentDoc}
-${TextElementFragmentDoc}
 ${CardSelectionGameFragmentDoc}
 ${DragNDropGameFragmentDoc}
 ${ImageWrapperCardFragmentDoc}
@@ -1461,17 +1439,17 @@ ${TopicFragmentDoc}`;
 export type Requester<C = {}, E = unknown> = <R, V>(doc: DocumentNode, vars?: V, options?: C) => Promise<R> | AsyncIterable<R>
 export function getSdk<C, E>(requester: Requester<C, E>) {
   return {
-    allCaseOverview(variables?: IGenAllCaseOverviewQueryVariables, options?: C): Promise<IGenAllCaseOverviewQuery> {
-      return requester<IGenAllCaseOverviewQuery, IGenAllCaseOverviewQueryVariables>(AllCaseOverviewDocument, variables, options) as Promise<IGenAllCaseOverviewQuery>;
+    getAllCaseOverview(variables?: IGenGetAllCaseOverviewQueryVariables, options?: C): Promise<IGenGetAllCaseOverviewQuery> {
+      return requester<IGenGetAllCaseOverviewQuery, IGenGetAllCaseOverviewQueryVariables>(GetAllCaseOverviewDocument, variables, options) as Promise<IGenGetAllCaseOverviewQuery>;
     },
-    allMainCategory(variables?: IGenAllMainCategoryQueryVariables, options?: C): Promise<IGenAllMainCategoryQuery> {
-      return requester<IGenAllMainCategoryQuery, IGenAllMainCategoryQueryVariables>(AllMainCategoryDocument, variables, options) as Promise<IGenAllMainCategoryQuery>;
+    getAllMainCategory(variables?: IGenGetAllMainCategoryQueryVariables, options?: C): Promise<IGenGetAllMainCategoryQuery> {
+      return requester<IGenGetAllMainCategoryQuery, IGenGetAllMainCategoryQueryVariables>(GetAllMainCategoryDocument, variables, options) as Promise<IGenGetAllMainCategoryQuery>;
     },
-    allSubCategory(variables?: IGenAllSubCategoryQueryVariables, options?: C): Promise<IGenAllSubCategoryQuery> {
-      return requester<IGenAllSubCategoryQuery, IGenAllSubCategoryQueryVariables>(AllSubCategoryDocument, variables, options) as Promise<IGenAllSubCategoryQuery>;
+    getAllSubCategory(variables?: IGenGetAllSubCategoryQueryVariables, options?: C): Promise<IGenGetAllSubCategoryQuery> {
+      return requester<IGenGetAllSubCategoryQuery, IGenGetAllSubCategoryQueryVariables>(GetAllSubCategoryDocument, variables, options) as Promise<IGenGetAllSubCategoryQuery>;
     },
-    caseById(variables: IGenCaseByIdQueryVariables, options?: C): Promise<IGenCaseByIdQuery> {
-      return requester<IGenCaseByIdQuery, IGenCaseByIdQueryVariables>(CaseByIdDocument, variables, options) as Promise<IGenCaseByIdQuery>;
+    getCaseById(variables: IGenGetCaseByIdQueryVariables, options?: C): Promise<IGenGetCaseByIdQuery> {
+      return requester<IGenGetCaseByIdQuery, IGenGetCaseByIdQueryVariables>(GetCaseByIdDocument, variables, options) as Promise<IGenGetCaseByIdQuery>;
     }
   };
 }

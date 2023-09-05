@@ -1,4 +1,4 @@
-import { type IGenQ_Case_By_IdQuery, type IGenQ_All_SubcategoryQuery, type IGenQ_Case_By_IdQueryVariables, type IGenCase } from "../graphql/__generated/sdk";
+import { type IGenCase } from "../graphql/__generated/sdk";
 import { caisySDK } from "../graphql/getSdk";
 
 export interface getAllSubcategories 
@@ -6,16 +6,11 @@ export interface getAllSubcategories
   Case: IGenCase | null;
 }
 
-interface IQueryVar 
+export const getCaseById = async ({ id }: {id: string}): Promise<getAllSubcategories> =>
 {
-  id: string;
-}
-
-export const getCaseById = async ({ id }: IQueryVar): Promise<getAllSubcategories> =>
-{
-  const Case = await caisySDK.q_case_by_id({ id });
+  const { Case } = await caisySDK.getCaseById({ id });
     
   return {
-    Case: Case?.Case || null,
+    Case: Case || null,
   };
 };

@@ -13,12 +13,7 @@ import { RichTextStyles, calloutStyles, spoilerStyles } from "./Callout.styles";
 
 export type CalloutProps = IGenCallout;
 
-export const Callout: FC<CalloutProps> = ({
-  expandable,
-  icon,
-  text,
-  title
-}) => 
+export const Callout: FC<CalloutProps> = ({ calloutType, expandable, text }) => 
 {
   const [isContentHide, setIsContentHide] = React.useState<boolean>(true);
 
