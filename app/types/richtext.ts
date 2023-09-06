@@ -27,3 +27,9 @@ export interface IDocumentLink extends TRichTextElements
   };
   type: "documentLink";
 }
+
+export interface IParagraph extends TRichTextElements
+{
+  content: TextElement[];
+  type: "paragraph";
+}

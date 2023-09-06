@@ -5,10 +5,13 @@ import CaseSolvingHeader from "@/components/organisms/caseSolvingHeader/CaseSolv
 import { DragDropGame } from "@/components/organisms/DragDropGame/DragDropGame";
 import { FillGapsGame } from "@/components/organisms/FillGapsGame/FillGapsGame";
 import { SelectionCardGame } from "@/components/organisms/SelectionCardGame/SelectionCardGame";
-import { type IGenCase } from "@/services/graphql/__generated/sdk";
-import { type IDocumentLink } from "types/richtext";
+import { type IGenCase_FullTextTasks, type IGenCase } from "@/services/graphql/__generated/sdk";
+import { type TextElement, type IDocumentLink, type IParagraph } from "types/richtext";
 
-import React, { Fragment, type FunctionComponent } from "react";
+import { RichTextRenderer } from "@caisy/rich-text-react-renderer";
+import React, { type ReactElement, type FunctionComponent } from "react";
+
+import * as styles from "./CasesPage.styles";
 
 const CasePage: FunctionComponent<IGenCase> = ({
   durationToCompleteInMinutes,
@@ -20,6 +23,14 @@ const CasePage: FunctionComponent<IGenCase> = ({
   topic
 }) => 
 {
+  // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+  // @ts-ignore
+  const richTextOverwrite = (props): ReactElement => 
+  {
+    const node = props.node as unknown as IParagraph;
+    return node?.content && <RichTextRenderer {...props}/>;
+  };
+
   return (
     <>
       <CaseSolvingHeader
@@ -36,83 +47,96 @@ const CasePage: FunctionComponent<IGenCase> = ({
           views: 0,
         }}
       />
-      <Richtext richTextContent={facts?.richTextContent}/>
-      <Richtext
-        // eslint-disable-next-line @typescript-eslint/no-explicit-any
-        richTextContent={fullTextTasks as any}
-        richTextOverwrite={{
-          documentLink: (props) => 
-          {
-            const node = props.node as unknown as IDocumentLink;
-            return node && fullTextTasks?.connections ? fullTextTasks.connections?.map((component, index) => 
-            {
-              switch (component?.__typename) 
-              {
-                case "ImageWrapperCard":
-                  if(node?.attrs?.documentId === component?.id) 
+      <div css={styles.mainContainer}>
+        <div css={styles.contentWrapper}>
+          <div css={styles.content}>
+            <Richtext
+              richTextContent={facts?.richTextContent} 
+              richTextOverwrite={{
+                paragraph: richTextOverwrite
+              }}
+            />
+            <Richtext
+              // eslint-disable-next-line @typescript-eslint/no-explicit-any
+              richTextContent={fullTextTasks as any}
+              richTextOverwrite={{
+                documentLink: (props) => 
+                {
+                  const node = props.node as unknown as IDocumentLink;
+                  return node && fullTextTasks?.connections ? fullTextTasks.connections?.map((component, index) => 
                   {
-                    return (
-                      <Fragment key={`${component?.__typename}-${index}`}>
-                        <ImageWrapperCard {...component}/>
-                      </Fragment>
-                    );
-                  }
-                  break;
+                    switch (component?.__typename) 
+                    {
+                      case "ImageWrapperCard":
+                        if(node?.attrs?.documentId === component?.id) 
+                        {
+                          return (
+                            <div css={styles.componentWrapper} key={`${component?.__typename}-${index}`}>
+                              <ImageWrapperCard {...component}/>
+                            </div>
+                          );
+                        }
+                        break;
   
-                case "Callout": 
-                  if(node?.attrs?.documentId === component?.id) 
-                  {
-                    return (
-                      <Fragment key={`${component?.__typename}-${index}`}>
-                        <Callout {...component}/>
-                      </Fragment>
-                    );
-                  }
-                  break;
+                      case "Callout": 
+                        if(node?.attrs?.documentId === component?.id) 
+                        {
+                          return (
+                            <div css={styles.componentWrapper} key={`${component?.__typename}-${index}`}>
+                              <Callout {...component}/>
+                            </div>
+                          );
+                        }
+                        break;
   
-                case "CardSelectionGame":
-                  if(node?.attrs?.documentId === component?.id) 
-                  {
-                    return (
-                      <Fragment key={`${component?.__typename}-${index}`}>
-                        <SelectionCardGame {...component}/>
-                      </Fragment>
-                    );
-                  }
-                  break;
+                      case "CardSelectionGame":
+                        if(node?.attrs?.documentId === component?.id) 
+                        {
+                          return (
+                            <div css={styles.gameComponentWrapper} key={`${component?.__typename}-${index}`}>
+                              <SelectionCardGame {...component}/>
+                            </div>
+                          );
+                        }
+                        break;
   
-                case "DragNDropGame":
-                  if(node?.attrs?.documentId === component?.id) 
-                  {
-                    return (
-                      <Fragment key={`${component?.__typename}-${index}`}>
-                        <DragDropGame {...component}/>
-                      </Fragment>
-                    );
-                  }
-                  break;
+                      case "DragNDropGame":
+                        if(node?.attrs?.documentId === component?.id) 
+                        {
+                          return (
+                            <div css={styles.gameComponentWrapper} key={`${component?.__typename}-${index}`}>
+                              <DragDropGame {...component}/>
+                            </div>
+                          );
+                        }
+                        break;
   
-                case "FillInGapsGame":
-                  if(node?.attrs?.documentId === component?.id) 
-                  {
-                    return (
-                      <Fragment key={`${component?.__typename}-${index}`}>
-                        <FillGapsGame {...component}/>
-                      </Fragment>
-                    );
-                  }
-                  break;
+                      case "FillInGapsGame":
+                        if(node?.attrs?.documentId === component?.id) 
+                        {
+                          return (
+                            <div css={styles.gameComponentWrapper} key={`${component?.__typename}-${index}`}>
+                              <FillGapsGame {...component}/>
+                            </div>
+                          );
+                        }
+                        break;
   
-                default:
-                  console.warn(`Unknown component type: ${component?.__typename}`);
-                  return null;
-              }
+                      default:
+                        console.warn(`Unknown component type: ${component?.__typename}`);
+                        return null;
+                    }
   
-              return null;
-            }) : null; 
-          }
-        }}
-      />
+                    return null;
+                  }) : null; 
+                },
+                paragraph: richTextOverwrite
+                
+              }}
+            />
+          </div>
+        </div>
+      </div>
       
     </>
   );
