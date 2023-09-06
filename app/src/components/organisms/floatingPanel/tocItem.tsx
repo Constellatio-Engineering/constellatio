@@ -4,9 +4,9 @@ import React, { useState } from "react";
 
 import * as styles from "./FloatingPanel.styles";
 import { getNumericalLabel, renderTOC, type TOCItem } from "./generateTocHelper";
-import { BodyText } from "../atoms/BodyText/BodyText";
-import { ArrowSolidDown } from "../Icons/arrow-solid-down";
-import { ArrowSolidRight } from "../Icons/arrow-solid-right";
+import { BodyText } from "../../atoms/BodyText/BodyText";
+import { ArrowSolidDown } from "../../Icons/arrow-solid-down";
+import { ArrowSolidRight } from "../../Icons/arrow-solid-right";
 export const TOCItemComponent: React.FC<{ readonly depth: number; readonly item: TOCItem; readonly itemNumber: number; readonly total: number }> = ({
   depth,
   item,

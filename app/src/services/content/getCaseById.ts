@@ -6,16 +6,11 @@ export interface getAllSubcategories
   Case: IGenCase | null;
 }
 
-interface IQueryVar 
+export const getCaseById = async ({ id }: {id: string}): Promise<getAllSubcategories> =>
 {
-  id: string;
-}
-
-export const getCaseById = async ({ id }: IQueryVar): Promise<getAllSubcategories> =>
-{
-  const Case = await caisySDK.caseById({ id });
+  const { Case } = await caisySDK.getCaseById({ id });
     
   return {
-    Case: Case?.Case || null,
+    Case: Case || null,
   };
 };

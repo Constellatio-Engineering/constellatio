@@ -4,7 +4,7 @@ import { f_SubCategory } from "../fragments/SubCategory";
 
 export const q_allSubCategory = gql`
 	${f_SubCategory}
-	query allSubCategory {
+	query getAllSubCategory {
 		allSubCategory {
 			totalCount
 			edges {

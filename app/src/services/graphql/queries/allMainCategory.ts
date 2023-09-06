@@ -4,7 +4,7 @@ import { f_MainCategory } from "../fragments/MainCategory";
 
 export const q_allMainCategory = gql`
 	${f_MainCategory}
-	query allMainCategory {
+	query getAllMainCategory {
 		allMainCategory {
 			totalCount
 			edges {

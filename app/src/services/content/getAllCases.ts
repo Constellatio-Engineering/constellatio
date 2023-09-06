@@ -13,7 +13,7 @@ const getAllCases = async ({ after, allCases = [] }: {
 {
   try 
   {
-    const { allCase } = await caisySDK.allCaseOverview({ after });
+    const { allCase } = await caisySDK.getAllCaseOverview({ after });
 
     allCase?.edges?.forEach((edge) => 
     {
