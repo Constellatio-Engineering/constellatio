@@ -1,9 +1,11 @@
 import IconButton from "@/components/atoms/iconButton/IconButton";
+import { OverlayLines } from "@/components/Icons/bg-layer";
 import { Bookmark } from "@/components/Icons/bookmark";
 import { Pin } from "@/components/Icons/Pin";
 import { Print } from "@/components/Icons/print";
 
 import { Title, useMantineTheme } from "@mantine/core";
+import Image from "next/image";
 import Link from "next/link";
 import React, { type FunctionComponent, type ReactNode } from "react";
 
@@ -41,7 +43,9 @@ const CaseSolvingHeader: FunctionComponent<ICaseSolvingHeaderProps> = ({
   // const [selectedStepIndex, setSelectedStepIndex] = React.useState<number>(0);
   return (
     <div css={styles.wrapper({ theme, variant })}>
-      <div id="bg-overlay"/>
+      <div id="overlay-lines">
+        <OverlayLines/>
+      </div>
       <div css={styles.body}>
         <div css={styles.bodyText}>
           <div className="icons-bar">

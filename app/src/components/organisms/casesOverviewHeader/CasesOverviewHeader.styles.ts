@@ -1,8 +1,6 @@
 import { css } from "@emotion/react";
 import { type MantineTheme } from "@mantine/styles";
 
-import BgLines from "../../Icons/bg-lines.png";
-
 export const contentHeader = ({ theme, variant }: {
   theme: MantineTheme;
   variant: "case" | "dictionary";
@@ -14,8 +12,18 @@ export const contentHeader = ({ theme, variant }: {
   align-items: center;
   justify-content: center;
   gap: 32px;
-  background: url(${BgLines.src}),radial-gradient(50.00% 50.00% at 50.00% 50.00%, rgba(199, 211, 251, 0.00) 0%, ${variant === "case" ? theme.colors["cc-cases"][2] : theme.colors["support-notice"][2]} 100%);
-  height: 70vh;
+  min-height: 70vh;
+  background: ${variant === "case" ? theme.colors["cc-cases"][2] : theme.colors["cc-dictionary"][2]};
+#overlay-lines{
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  display: grid;
+  place-items: center;
+  z-index: 2;
+  color: ${variant === "case" ? theme.colors["cc-cases"][2] : theme.colors["cc-dictionary"][2]};
+}
 `;
 
 export const categoriesButtons = () => 
@@ -26,11 +34,14 @@ export const categoriesButtons = () =>
     align-items: center;
     gap: 20px;
     margin-bottom: 20px;
+    position: relative;
+    z-index: 3;
   `;
 };
 
 export const itemsList = () => css`
-  transform: translateY(-150px);
+  transform: translateY(-150px);    position: relative;
+    z-index: 3;
   .item {
     outline: 1px solid;
     padding: 16px;
@@ -47,11 +58,12 @@ export const filtersArea = () =>
     display: flex;
     justify-content: space-between;
     align-items: center;
-    width: 90%;
+    width: 90%;    position: relative;
+    z-index: 3;
   `;
 };
 
-export const filterButtons = (theme: MantineTheme) => css`
+export const filterButtons = css`
   background-color: transparent;
   border-radius: 100px;
   display: flex;
@@ -65,7 +77,8 @@ export const filterButtons = (theme: MantineTheme) => css`
   }
   &.dropdown {
     left: 2.5%;
-  }
+  }    position: relative;
+    z-index: 3;
 `;
 
 export const selectedFiltersArea = css`
@@ -74,5 +87,10 @@ export const selectedFiltersArea = css`
   justify-content: center;
   align-items: center;
   gap: 8px;
-  flex-wrap: wrap;
+  flex-wrap: wrap;    position: relative;
+    z-index: 3;
+`;
+export const title = css`
+    position: relative;
+    z-index: 3;
 `;
