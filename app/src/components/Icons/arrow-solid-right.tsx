@@ -1,4 +1,6 @@
-export const ArrowSolidRight = ({ size = 24 }: {readonly size?: number}) => (
+import { type FunctionComponent } from "react";
+
+export const ArrowSolidRight: FunctionComponent = ({ size = 24 }: {readonly size?: number}) => (
   <svg
     width={size}
     height={size}

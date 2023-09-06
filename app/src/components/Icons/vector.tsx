@@ -1,5 +1,6 @@
+import { type FunctionComponent } from "react";
 
-export const ExclamationMark = ({ size = 20 }: {readonly size?: number}) => (
+export const ExclamationMark: FunctionComponent = ({ size = 20 }: {readonly size?: number}) => (
   <svg
     width={size}
     height={size}

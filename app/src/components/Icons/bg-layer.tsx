@@ -1,4 +1,7 @@
-export const OverlayLines = (): JSX.Element => (
+import { type FunctionComponent } from "react";
+
+/* eslint-disable max-lines */
+export const OverlayLines: FunctionComponent = () => (
   <svg
     width="1440"
     height="488"
