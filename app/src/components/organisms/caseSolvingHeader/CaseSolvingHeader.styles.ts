@@ -1,26 +1,32 @@
 import { type SerializedStyles, css } from "@emotion/react";
 import type { MantineTheme } from "@mantine/styles";
 
-import BgLines from "../../Icons/bg-lines.png";
+// import BgLines from "../../Icons/bg-lines.png";
 
-export const wrapper = ({ theme, variant }: {theme: MantineTheme; 
-  variant: "case" | "dictionary";}): SerializedStyles => css`
+export const wrapper = ({ theme, variant }: {
+  theme: MantineTheme;
+  variant: "case" | "dictionary";
+}): SerializedStyles => css`
   position: relative;
-  #bg-overlay {
+  background: ${variant === "case"
+    ? theme.colors["cc-cases"][2]
+    : theme.colors["cc-dictionary"][2]};
+  min-height: 60vh;
+  #overlay-lines {
     position: absolute;
     inset: 0;
     width: 100%;
     height: 100%;
-    background: url(${BgLines.src}),radial-gradient(50.00% 50.00% at 50.00% 50.00%, rgba(199, 211, 251, 0.00) 0%, ${variant === "case" ? theme.colors["cc-cases"][2] : theme.colors["support-notice"][2]} 100%);
-    img {
-      width: 100%;
-      height: 100%;
-      z-index: 1;
-    }
+    display: grid;
+    place-items: center;
+    z-index: 2;
+    color: ${variant === "case"
+    ? theme.colors["cc-cases"][2]
+    : theme.colors["cc-dictionary"][2]};
   }
 `;
 
-export const body = (theme: MantineTheme): SerializedStyles => css`
+export const body = css`
   position: relative;
   z-index: 2;
   display: flex;
@@ -58,7 +64,7 @@ export const bodyText = (theme: MantineTheme): SerializedStyles => css`
   }
 `;
 
-export const bodyCard = (theme: MantineTheme): SerializedStyles => css`
+export const bodyCard = css`
   width: 45%;
   min-width: 350px;
   max-width: 536px;
@@ -70,7 +76,7 @@ export const stepsBar = (theme: MantineTheme): SerializedStyles => css`
   position: relative;
   z-index: 2;
   background-color: ${theme.colors["neutrals-01"][0]};
-  padding: 16px 32px; 
+  padding: 16px 32px;
   width: 100%;
   justify-content: space-between;
   align-items: center;
@@ -80,21 +86,20 @@ export const stepsBar = (theme: MantineTheme): SerializedStyles => css`
     gap: 8px;
     justify-content: flex-start;
     align-items: center;
-    .step { 
-      outline:1px solid red;
+    .step {
+      outline: 1px solid red;
       display: flex;
       gap: 8px;
       justify-content: flex-start;
       align-items: center;
-      
-      
+
       span {
-        display:inline-block;
+        display: inline-block;
         background-color: ${theme.colors["support-notice"][5]};
         color: ${theme.colors["neutrals-01"][0]};
-        width:24px;
+        width: 24px;
         height: 24px;
-        display:grid;
+        display: grid;
         place-items: center;
         border-radius: 50%;
       }

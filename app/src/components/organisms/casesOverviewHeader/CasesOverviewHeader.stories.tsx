@@ -1,8 +1,9 @@
 import { type Meta, type StoryObj } from "@storybook/react";
+import { type FunctionComponent } from "react";
 
 import OverviewHeader, { type ICasesOverviewHeaderProps } from "./CasesOverviewHeader";
 
-const Template = (args: ICasesOverviewHeaderProps): JSX.Element => (<OverviewHeader {...args}/>);
+const Template: FunctionComponent<ICasesOverviewHeaderProps> = (args) => (<OverviewHeader {...args}/>);
 
 const meta: Meta = {
   argTypes: {
@@ -25,7 +26,7 @@ type Story = StoryObj<typeof OverviewHeader>;
 export const Case: Story = {
   args: {
     // __typename: "PageHeader",
-    categories: [{ title: "Civil Law" }, { title: "Public Law" }, { title: "Criminal Law" }],
+    categories: [],
     title: "Cases",
     variant: "case"
   },
@@ -34,7 +35,7 @@ export const Case: Story = {
 export const Dictionary: Story = {
   args: {
     // __typename: "PageHeader",
-    categories: [{ title: "Civil Law" }, { title: "Public Law" }, { title: "Criminal Law" }],
+    categories: [],
     title: "Dictionary",
     variant: "dictionary"
   },
