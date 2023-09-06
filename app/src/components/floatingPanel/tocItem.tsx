@@ -23,7 +23,7 @@ export const TOCItemComponent: React.FC<{ readonly depth: number; readonly item:
   const theme = useMantineTheme();
   return (
     <div style={{
-      paddingLeft: (depth === 0 ? 0 : depth + 20) + "px" 
+      paddingLeft: ((depth === 0 || depth >= 5) ? 0 : depth + 20) + "px" 
     }}>
       <span
         onClick={handleToggle}
