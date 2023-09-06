@@ -1100,16 +1100,19 @@ export type IGenFillInGapsGameFragment = { __typename: 'FillInGapsGame', id?: st
     & IGenTextElementFragment
   ) | null };
 
-export type IGenFullCaseFragment = { __typename: 'Case', id?: string | null, title?: string | null, durationToCompleteInMinutes?: number | null, fact?: (
-    { __typename?: 'Case_fact' }
-    & IGenFactFragment
+export type IGenFullCaseFragment = { __typename: 'Case', id?: string | null, title?: string | null, durationToCompleteInMinutes?: number | null, facts?: (
+    { __typename?: 'TextElement' }
+    & IGenTextElementFragment
   ) | null, fullTextTasks?: (
     { __typename?: 'Case_fullTextTasks' }
     & IGenFullTextTasksFragment
-  ) | null, legalArea?: Array<(
+  ) | null, legalArea?: (
     { __typename?: 'LegalArea' }
     & IGenLegalAreaFragment
-  ) | null> | null, mainCategoryField?: Array<(
+  ) | (
+    { __typename?: 'SubCategory' }
+    & IGenSubCategoryFragment
+  ) | null, mainCategoryField?: Array<(
     { __typename?: 'MainCategory' }
     & IGenMainCategoryFragment
   ) | null> | null, subCategoryField?: Array<(
@@ -1333,6 +1336,13 @@ export const FullTextTasksFragmentDoc = gql`
   }
 }
     `;
+export const LegalAreaFragmentDoc = gql`
+    fragment LegalArea on LegalArea {
+  __typename
+  id
+  legalAreaName
+}
+    `;
 export const TagsFragmentDoc = gql`
     fragment Tags on Tags {
   __typename
@@ -1346,14 +1356,15 @@ export const FullCaseFragmentDoc = gql`
   id
   title
   durationToCompleteInMinutes
-  fact {
-    ...Fact
+  facts {
+    ...TextElement
   }
   fullTextTasks {
     ...FullTextTasks
   }
   legalArea {
     ...LegalArea
+    ...SubCategory
   }
   mainCategoryField {
     ...MainCategory
@@ -1367,13 +1378,6 @@ export const FullCaseFragmentDoc = gql`
   topic {
     ...Topic
   }
-}
-    `;
-export const LegalAreaFragmentDoc = gql`
-    fragment LegalArea on LegalArea {
-  __typename
-  id
-  legalAreaName
 }
     `;
 export const GetAllCaseOverviewDocument = gql`
@@ -1430,7 +1434,7 @@ export const GetCaseByIdDocument = gql`
   }
 }
     ${FullCaseFragmentDoc}
-${FactFragmentDoc}
+${TextElementFragmentDoc}
 ${FullTextTasksFragmentDoc}
 ${FillInGapsGameFragmentDoc}
 ${CardSelectionGameFragmentDoc}
@@ -1439,7 +1443,6 @@ ${ImageWrapperCardFragmentDoc}
 ${AssetFragmentDoc}
 ${CalloutFragmentDoc}
 ${LegalAreaFragmentDoc}
-${MainCategoryFragmentDoc}
 ${SubCategoryFragmentDoc}
 ${MainCategoryFragmentDoc}
 ${TagsFragmentDoc}

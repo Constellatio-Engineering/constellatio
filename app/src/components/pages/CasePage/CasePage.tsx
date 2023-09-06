@@ -1,15 +1,17 @@
+import { richTextParagraphOverwrite } from "@/components/helpers/richTextParagraphOverwrite";
+import { Trash } from "@/components/Icons/Trash";
 import { ImageWrapperCard } from "@/components/molecules/ImageWrapperCard/ImageWrapperCard";
 import { Richtext } from "@/components/molecules/Richtext/Richtext";
 import { Callout } from "@/components/organisms/Callout/Callout";
 import CaseSolvingHeader from "@/components/organisms/caseSolvingHeader/CaseSolvingHeader";
 import { DragDropGame } from "@/components/organisms/DragDropGame/DragDropGame";
 import { FillGapsGame } from "@/components/organisms/FillGapsGame/FillGapsGame";
+import FloatingPanel from "@/components/organisms/floatingPanel/FloatingPanel";
 import { SelectionCardGame } from "@/components/organisms/SelectionCardGame/SelectionCardGame";
-import { type IGenCase_FullTextTasks, type IGenCase } from "@/services/graphql/__generated/sdk";
-import { type TextElement, type IDocumentLink, type IParagraph } from "types/richtext";
+import { type IGenCase } from "@/services/graphql/__generated/sdk";
+import { type IDocumentLink } from "types/richtext";
 
-import { RichTextRenderer } from "@caisy/rich-text-react-renderer";
-import React, { type ReactElement, type FunctionComponent } from "react";
+import React, { type FunctionComponent } from "react";
 
 import * as styles from "./CasesPage.styles";
 
@@ -23,13 +25,7 @@ const CasePage: FunctionComponent<IGenCase> = ({
   topic
 }) => 
 {
-  // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-  // @ts-ignore
-  const richTextOverwrite = (props): ReactElement => 
-  {
-    const node = props.node as unknown as IParagraph;
-    return node?.content && <RichTextRenderer {...props}/>;
-  };
+  const content = fullTextTasks?.json?.content?.filter((contentItem: { content: { text: string }[]; type: string }) => contentItem?.type === "heading");
 
   return (
     <>
@@ -38,7 +34,7 @@ const CasePage: FunctionComponent<IGenCase> = ({
         variant="case"
         overviewCard={{
           lastUpdated: new Date(),
-          legalArea: legalArea?.[0],
+          legalArea,
           status: "notStarted",
           tags,
           timeInMinutes: durationToCompleteInMinutes || 0,
@@ -49,11 +45,17 @@ const CasePage: FunctionComponent<IGenCase> = ({
       />
       <div css={styles.mainContainer}>
         <div css={styles.contentWrapper}>
+          <FloatingPanel
+            hidden={false}
+            facts={facts?.richTextContent}
+            content={content}
+            tabs={[{ icon: { src: <Trash/> }, title: "Content" }, { icon: { src: <Trash/> }, title: "Facts" }]}
+          />
           <div css={styles.content}>
             <Richtext
               richTextContent={facts?.richTextContent} 
               richTextOverwrite={{
-                paragraph: richTextOverwrite
+                paragraph: richTextParagraphOverwrite
               }}
             />
             <Richtext
@@ -130,7 +132,7 @@ const CasePage: FunctionComponent<IGenCase> = ({
                     return null;
                   }) : null; 
                 },
-                paragraph: richTextOverwrite
+                paragraph: richTextParagraphOverwrite
                 
               }}
             />

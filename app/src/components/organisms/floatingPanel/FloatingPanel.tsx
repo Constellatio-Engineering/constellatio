@@ -1,3 +1,4 @@
+import { richTextParagraphOverwrite } from "@/components/helpers/richTextParagraphOverwrite";
 import { type IGenTextElement_RichTextContent } from "@/services/graphql/__generated/sdk";
 
 // import { RichTextRenderer } from "@caisy/rich-text-react-renderer";
@@ -7,13 +8,13 @@ import React, { useState, type FunctionComponent } from "react";
 
 import * as styles from "./FloatingPanel.styles";
 import { type DataType, generateTOC, renderTOC } from "./generateTocHelper";
-import { CaptionText } from "../atoms/CaptionText/CaptionText";
-import IconButton from "../atoms/iconButton/IconButton";
-import { SwitcherTab } from "../atoms/Switcher-tab/SwitcherTab";
-import { Trash } from "../Icons/Trash";
-import { ExclamationMark } from "../Icons/vector";
-import { Richtext } from "../molecules/Richtext/Richtext";
-import { Switcher } from "../molecules/Switcher/Switcher";
+import { CaptionText } from "../../atoms/CaptionText/CaptionText";
+import IconButton from "../../atoms/iconButton/IconButton";
+import { SwitcherTab } from "../../atoms/Switcher-tab/SwitcherTab";
+import { Trash } from "../../Icons/Trash";
+import { ExclamationMark } from "../../Icons/vector";
+import { Richtext } from "../../molecules/Richtext/Richtext";
+import { Switcher } from "../../molecules/Switcher/Switcher";
 
 type ITableTab = { icon: {src: React.ReactNode}; title: "Content" | "Facts" };   
 export interface IFloatingPanelProps
@@ -68,7 +69,7 @@ const FloatingPanel: FunctionComponent<IFloatingPanelProps> = ({
       {selectedTab === "Content" && content && renderTOC(toc)}
       {facts && facts.json && selectedTab === "Facts" && facts && (
         <div css={styles.facts}>
-          <Richtext richTextContent={facts}/>
+          <Richtext richTextContent={facts} richTextOverwrite={{ paragraph: richTextParagraphOverwrite }}/>
         </div>
       )}
     </div>
