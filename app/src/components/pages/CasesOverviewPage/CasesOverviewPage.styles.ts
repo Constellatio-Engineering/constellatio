@@ -6,6 +6,8 @@ transform: translateY(-120px);
 width: 90%;
 margin: 0 auto;
 display: grid;
+position: relative;
+z-index: 3;
 `;
 
 export const Page = (theme: MantineTheme): SerializedStyles => css`

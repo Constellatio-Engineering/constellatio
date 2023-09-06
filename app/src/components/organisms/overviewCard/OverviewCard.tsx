@@ -7,7 +7,7 @@ import Tag from "@/components/atoms/tag/Tag";
 import { Show } from "@/components/Icons/Show";
 import { Timer } from "@/components/Icons/timer";
 import { Trash } from "@/components/Icons/Trash";
-import { type IGenLegalArea, type IGenTags } from "@/services/graphql/__generated/sdk";
+import { type IGenSubCategory, type IGenLegalArea, type IGenTags } from "@/services/graphql/__generated/sdk";
 
 import { useMantineTheme } from "@mantine/core";
 import { type Maybe } from "@trpc/server";
@@ -18,7 +18,7 @@ import * as styles from "./OverviewCard.styles";
 export interface IOverviewCard 
 {
   readonly lastUpdated: Date;
-  readonly legalArea: Maybe<IGenLegalArea> | undefined;
+  readonly legalArea: Maybe<IGenLegalArea> | Maybe<IGenSubCategory> | undefined;
   readonly status?: IStatusLabel["variant"];
   readonly tags: Maybe<Maybe<IGenTags>[]> | undefined;
   readonly timeInMinutes?: number;
@@ -77,6 +77,7 @@ const OverviewCard: FunctionComponent<IOverviewCard> = ({
   views,
 }) => 
 {
+
   const theme = useMantineTheme();
   return (
     <div css={styles.wrapper()}>
@@ -110,13 +111,14 @@ const OverviewCard: FunctionComponent<IOverviewCard> = ({
         <table style={{ textAlign: "left", }}>
           <thead>
             <tr>
-              {legalArea && <th style={{ color: "#949494", padding: "16px 32px 8px 16px" }}><CaptionText styleType="caption-01-medium">LEGAL AREA</CaptionText></th>}
+              {((legalArea?.__typename === "LegalArea" && legalArea?.legalAreaName) || (legalArea?.__typename === "SubCategory" && legalArea?.subCategory)) && <th style={{ color: "#949494", padding: "16px 32px 8px 16px" }}><CaptionText styleType="caption-01-medium">LEGAL AREA</CaptionText></th>}
               {variant === "case" && topic && (<th style={{ color: "#949494", padding: "16px 32px 8px 16px" }}><CaptionText styleType="caption-01-medium" component="p">TOPIC</CaptionText> </th>)}
             </tr>
           </thead>
           <tbody>
             <tr>
-              {legalArea?.legalAreaName && <td style={{ color: "black", padding: "4px 32px 16px 16px" }}><BodyText styleType="body-01-medium">{legalArea?.legalAreaName}</BodyText></td>}
+              {(legalArea?.__typename === "SubCategory" && legalArea?.subCategory) && <td style={{ color: "black", padding: "4px 32px 16px 16px" }}><BodyText styleType="body-01-medium">{legalArea?.subCategory}</BodyText></td>}
+              {(legalArea?.__typename === "LegalArea" && legalArea?.legalAreaName) && <td style={{ color: "black", padding: "4px 32px 16px 16px" }}><BodyText styleType="body-01-medium">{legalArea?.legalAreaName}</BodyText></td>}
               {variant === "case" && topic && <td style={{ color: "black", padding: "4px 32px 16px 16px" }}><BodyText styleType="body-01-medium">{topic}</BodyText></td>}
             </tr>
           </tbody>

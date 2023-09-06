@@ -26,6 +26,8 @@ export const getStaticProps: GetStaticProps = async ({ params }) =>
 
 const NextPage: FunctionComponent<ICasePageProps> = ({ legalCase }) => 
 {
+  const content = props?.case?.fullTextTasks?.json?.content?.filter((contentItem: { content: { text: string }[]; type: string }) => contentItem?.type === "heading");
+  const facts = props?.case?.facts?.richTextContent;
   return (
     <Layout>
       <CasePage {...legalCase}/>
@@ -35,7 +37,6 @@ const NextPage: FunctionComponent<ICasePageProps> = ({ legalCase }) =>
 
 export const getStaticPaths: GetStaticPaths = () => 
 {
-
   return {
     fallback: true,
     paths: []

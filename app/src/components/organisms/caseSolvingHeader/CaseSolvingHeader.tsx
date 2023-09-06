@@ -1,5 +1,6 @@
 import IconButton from "@/components/atoms/iconButton/IconButton";
-import { Bookmark } from "@/components/Icons/Bookmark";
+import { OverlayLines } from "@/components/Icons/bg-layer";
+import { Bookmark } from "@/components/Icons/bookmark";
 import { Pin } from "@/components/Icons/Pin";
 import { Print } from "@/components/Icons/print";
 
@@ -31,17 +32,17 @@ const CaseSolvingHeader: FunctionComponent<ICaseSolvingHeaderProps> = ({
   variant
 }) => 
 {
-  // add title to each icon object in the array with keeping size:"big" and src
   const icons: IIcons[] = [
     { size: "big", src: <Bookmark/>, title: "Bookmark" },
     { size: "big", src: <Print/>, title: "Print" },
     { size: "big", src: <Pin/>, title: "Pin" },
   ];
   const theme = useMantineTheme();
-  // const [selectedStepIndex, setSelectedStepIndex] = React.useState<number>(0);
   return (
     <div css={styles.wrapper({ theme, variant })}>
-      <div id="bg-overlay"/>
+      <div id="overlay-lines">
+        <OverlayLines/>
+      </div>
       <div css={styles.body}>
         <div css={styles.bodyText}>
           <div className="icons-bar">
@@ -70,21 +71,6 @@ const CaseSolvingHeader: FunctionComponent<ICaseSolvingHeaderProps> = ({
         </div>
 
       </div>
-      {/* {variant === "case" && steps && <div css={styles.stepsBar}>
-        <div className="steps">
-          {steps?.map((step, stepIndex) => (
-            <div className="step" key={stepIndex}>
-              <CaptionText styleType={"caption-01-bold"} component="p"><span>{stepIndex + 1}</span>{step}</CaptionText>
-            </div>
-          ))}
-        </div>.
-
-        <div className="call-to-action">
-          <Button<"button"> styleType="primary" type="button" disabled={selectedStepIndex < steps.length}>
-            Solve this case
-          </Button>
-        </div>
-      </div>} */}
     </div>
   );
 };

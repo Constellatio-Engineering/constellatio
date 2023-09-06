@@ -10,5 +10,7 @@ display: flex;
 justify-content: flex-start;
 align-items: flex-start;    
 gap: 32px;
-margin:48px 0;
+margin:24px 0;
+position:relative;
+z-index: 3;
 `;
