@@ -12,7 +12,7 @@ export const wrapper = ({ hidden, theme }: {hidden?: boolean; theme: MantineThem
   /* padding:20px 16px 0 16px; */
   background-color: ${theme.colors["neutrals-01"][0]};
   border-radius: 12px;
-  margin: 50px 50px 50px auto;
+  /* margin: 50px 50px 50px auto; */
   padding-top: 20px;
   .switcher {
     margin: 0px 24px 8px 24px;
