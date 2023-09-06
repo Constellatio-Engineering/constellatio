@@ -20,6 +20,8 @@ export type TOCItem = {
   text: string;
 };
 
+const numericalStyles = ["upper-alpha", "lower-roman", "decimal", "lower-alpha",];
+
 export const generateTOC = (data: DataType[]): TOCItem[] => 
 {
   const stack: TOCItem[] = [];
@@ -59,7 +61,7 @@ export const renderTOC = (toc: TOCItem[], depth: number = 0): JSX.Element =>
   return (
     <ul>
       {toc.map((item, index) => (
-        <li key={index}>
+        <li key={index} style={{ listStyleType: "none" }}>
           <TOCItemComponent
             depth={depth}
             item={item}

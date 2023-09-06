@@ -24,7 +24,12 @@ export const TOCItemComponent: React.FC<{ readonly depth: number; readonly item:
     <div style={{
       paddingLeft: (depth === 0 ? 0 : depth + 10) + "px" 
     }}>
-      <span onClick={handleToggle} style={{ cursor: "pointer" }} css={styles.item({ isExpandable: item.children.length > 0, isExpanded, theme })}>
+      <span
+        onClick={handleToggle}
+        style={{ cursor: "pointer" }}
+        css={styles.item({
+          isExpandable: item.children.length > 0, isExpanded, isTopLevel: depth === 0, theme 
+        })}>
         <div style={{ display: "flex", justifyContent: "flex-start", padding: "0 16px" }}>
           <BodyText component="p" styleType="body-01-medium">{item.children.length > 0 && (isExpanded ? <ArrowSolidDown/> : <ArrowSolidRight/>)}</BodyText>
           <BodyText component="p" styleType="body-01-medium">{item.text}</BodyText>

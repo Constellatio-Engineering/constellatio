@@ -32,6 +32,7 @@ export const getStaticProps: GetStaticProps = async ({ params }) =>
 const NextPage: FunctionComponent<ICasePageProps> = (props) => 
 {
   const content = props?.case?.fullTextTasks?.json?.content?.filter((contentItem: { content: { text: string }[]; type: string }) => contentItem?.type === "heading");
+  const facts = props?.case?.facts?.richTextContent;
   console.log({ content });
   return (
     <div style={{ background: "#F6F6F5" }}>
@@ -42,7 +43,7 @@ const NextPage: FunctionComponent<ICasePageProps> = (props) =>
           variant="case"
           overviewCard={{
             lastUpdated: new Date(),
-            legalArea: props?.case?.legalArea?.[0],
+            legalArea: props?.case?.legalArea,
             status: "notStarted",
             tags: props?.case?.tags,
             timeInMinutes: props?.case?.durationToCompleteInMinutes || 0,
@@ -53,7 +54,7 @@ const NextPage: FunctionComponent<ICasePageProps> = (props) =>
           }}
         />
       )}
-      <FloatingPanel content={content} tabs={[{ icon: { src: <Trash/> }, title: "Content" }, { icon: { src: <Trash/> }, title: "Facts" }]}/>
+      <FloatingPanel facts={facts} content={content} tabs={[{ icon: { src: <Trash/> }, title: "Content" }, { icon: { src: <Trash/> }, title: "Facts" }]}/>
       <Footer/>
     </div>
   );

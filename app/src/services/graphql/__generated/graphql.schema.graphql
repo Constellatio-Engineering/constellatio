@@ -546,18 +546,7 @@ type Case {
   id: ID
 
   """"""
-  legalArea(
-    """
-    The cursor to start the pagination from. In this case the curser equals the id for the (last) element. If not set, we wil start from the beginning.
-    """
-    after: String
-
-    """The number of items to return. Default and max value is 100."""
-    first: Int = 100
-
-    """"""
-    locale: String
-  ): [Case_legalArea]
+  legalArea(locale: String): Case_legalArea
 
   """"""
   mainCategoryField(
@@ -572,6 +561,20 @@ type Case {
     """"""
     locale: String
   ): [Case_mainCategoryField]
+
+  """"""
+  resolution(
+    """
+    The cursor to start the pagination from. In this case the curser equals the id for the (last) element. If not set, we wil start from the beginning.
+    """
+    after: String
+
+    """The number of items to return. Default and max value is 100."""
+    first: Int = 100
+
+    """"""
+    locale: String
+  ): TextElement
 
   """"""
   subCategoryField(
@@ -664,6 +667,9 @@ input Case_Sort {
   publishedAt: Order
 
   """"""
+  resolution: Order
+
+  """"""
   subCategoryField: Order
 
   """"""
@@ -721,7 +727,7 @@ type Case_fullTextTasks {
 union Case_fullTextTasks_Connections = Callout | CardSelectionGame | DragNDropGame | FillInGapsGame | ImageWrapperCard
 
 """"""
-union Case_legalArea = LegalArea
+union Case_legalArea = LegalArea | SubCategory
 
 """"""
 union Case_mainCategoryField = MainCategory

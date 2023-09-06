@@ -9,42 +9,51 @@ import { f_Tags } from "./Tags";
 import { f_Topic } from "./Topic";
 
 export const f_FullCase = gql`
-	${f_MainCategory}
-	${f_LegalArea}
-	${f_SubCategory}
-	${f_Tags}
-	${f_Topic}
-	${f_FullTextTasks}
-	fragment FullCase on Case {
-		__typename
-		id
-		title
-		durationToCompleteInMinutes
-		facts {
-			richTextContent{
-				connections{
-					              __typename
-				}
-				json
-			}
-		}
-		fullTextTasks {
-			...FullTextTasks
-		}
-		legalArea {
-			...LegalArea
-		}
-		mainCategoryField {
-			...MainCategory
-		}
-		subCategoryField {
-			...SubCategory
-		}
-		tags {
-			...Tags
-		}
-		topic {
-			...Topic
-		}
-	}
+  ${f_MainCategory}
+  ${f_LegalArea}
+  ${f_SubCategory}
+  ${f_Tags}
+  ${f_Topic}
+  ${f_FullTextTasks}
+  fragment FullCase on Case {
+    __typename
+    id
+    title
+    durationToCompleteInMinutes
+    facts {
+      richTextContent {
+        connections {
+          __typename
+        }
+        json
+      }
+    }
+    fullTextTasks {
+      ...FullTextTasks
+    }
+    legalArea {
+      ... on LegalArea {
+        id
+        legalAreaName
+        __typename
+      }
+      ... on SubCategory {
+        id
+        subCategory
+        __typename
+      }
+    }
+    mainCategoryField {
+      ...MainCategory
+    }
+    subCategoryField {
+      ...SubCategory
+    }
+    tags {
+      ...Tags
+    }
+    topic {
+      ...Topic
+    }
+  }
 `;

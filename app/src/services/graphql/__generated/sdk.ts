@@ -279,8 +279,9 @@ export type IGenCase = {
   facts?: Maybe<IGenTextElement>;
   fullTextTasks?: Maybe<IGenCase_FullTextTasks>;
   id?: Maybe<Scalars['ID']['output']>;
-  legalArea?: Maybe<Array<Maybe<IGenCase_LegalArea>>>;
+  legalArea?: Maybe<IGenCase_LegalArea>;
   mainCategoryField?: Maybe<Array<Maybe<IGenCase_MainCategoryField>>>;
+  resolution?: Maybe<IGenTextElement>;
   subCategoryField?: Maybe<Array<Maybe<IGenCase_SubCategoryField>>>;
   tags?: Maybe<Array<Maybe<IGenCase_Tags>>>;
   title?: Maybe<Scalars['String']['output']>;
@@ -301,13 +302,18 @@ export type IGenCaseFullTextTasksArgs = {
 
 
 export type IGenCaseLegalAreaArgs = {
+  locale?: InputMaybe<Scalars['String']['input']>;
+};
+
+
+export type IGenCaseMainCategoryFieldArgs = {
   after?: InputMaybe<Scalars['String']['input']>;
   first?: InputMaybe<Scalars['Int']['input']>;
   locale?: InputMaybe<Scalars['String']['input']>;
 };
 
 
-export type IGenCaseMainCategoryFieldArgs = {
+export type IGenCaseResolutionArgs = {
   after?: InputMaybe<Scalars['String']['input']>;
   first?: InputMaybe<Scalars['Int']['input']>;
   locale?: InputMaybe<Scalars['String']['input']>;
@@ -355,6 +361,7 @@ export type IGenCase_Sort = {
   legalArea?: InputMaybe<IGenOrder>;
   mainCategoryField?: InputMaybe<IGenOrder>;
   publishedAt?: InputMaybe<IGenOrder>;
+  resolution?: InputMaybe<IGenOrder>;
   subCategoryField?: InputMaybe<IGenOrder>;
   tags?: InputMaybe<IGenOrder>;
   title?: InputMaybe<IGenOrder>;
@@ -385,7 +392,7 @@ export type IGenCase_FullTextTasksConnectionsArgs = {
 
 export type IGenCase_FullTextTasks_Connections = IGenCallout | IGenCardSelectionGame | IGenDragNDropGame | IGenFillInGapsGame | IGenImageWrapperCard;
 
-export type IGenCase_LegalArea = IGenLegalArea;
+export type IGenCase_LegalArea = IGenLegalArea | IGenSubCategory;
 
 export type IGenCase_MainCategoryField = IGenMainCategory;
 
@@ -1096,10 +1103,7 @@ export type IGenFillInGapsGameFragment = { __typename: 'FillInGapsGame', id?: st
 export type IGenFullCaseFragment = { __typename: 'Case', id?: string | null, title?: string | null, durationToCompleteInMinutes?: number | null, facts?: { __typename?: 'TextElement', richTextContent?: { __typename?: 'TextElement_richTextContent', json?: any | null, connections?: Array<{ __typename: 'Caisy_Field_Document_NotFound' } | null> | null } | null } | null, fullTextTasks?: (
     { __typename?: 'Case_fullTextTasks' }
     & IGenFullTextTasksFragment
-  ) | null, legalArea?: Array<(
-    { __typename?: 'LegalArea' }
-    & IGenLegalAreaFragment
-  ) | null> | null, mainCategoryField?: Array<(
+  ) | null, legalArea?: { __typename: 'LegalArea', id?: string | null, legalAreaName?: string | null } | { __typename: 'SubCategory', id?: string | null, subCategory?: string | null } | null, mainCategoryField?: Array<(
     { __typename?: 'MainCategory' }
     & IGenMainCategoryFragment
   ) | null> | null, subCategoryField?: Array<(
@@ -1323,13 +1327,6 @@ export const FullTextTasksFragmentDoc = gql`
   }
 }
     `;
-export const LegalAreaFragmentDoc = gql`
-    fragment LegalArea on LegalArea {
-  __typename
-  id
-  legalAreaName
-}
-    `;
 export const TagsFragmentDoc = gql`
     fragment Tags on Tags {
   __typename
@@ -1355,7 +1352,16 @@ export const FullCaseFragmentDoc = gql`
     ...FullTextTasks
   }
   legalArea {
-    ...LegalArea
+    ... on LegalArea {
+      id
+      legalAreaName
+      __typename
+    }
+    ... on SubCategory {
+      id
+      subCategory
+      __typename
+    }
   }
   mainCategoryField {
     ...MainCategory
@@ -1369,6 +1375,13 @@ export const FullCaseFragmentDoc = gql`
   topic {
     ...Topic
   }
+}
+    `;
+export const LegalAreaFragmentDoc = gql`
+    fragment LegalArea on LegalArea {
+  __typename
+  id
+  legalAreaName
 }
     `;
 export const AllCaseOverviewDocument = gql`
@@ -1433,7 +1446,6 @@ ${DragNDropGameFragmentDoc}
 ${ImageWrapperCardFragmentDoc}
 ${AssetFragmentDoc}
 ${CalloutFragmentDoc}
-${LegalAreaFragmentDoc}
 ${MainCategoryFragmentDoc}
 ${SubCategoryFragmentDoc}
 ${TagsFragmentDoc}
