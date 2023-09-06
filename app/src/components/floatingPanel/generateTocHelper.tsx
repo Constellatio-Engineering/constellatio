@@ -20,7 +20,7 @@ export type TOCItem = {
   text: string;
 };
 
-const numericalStyles = ["upper-alpha", "lower-roman", "decimal", "lower-alpha"];
+// const numericalStyles = ["upper-alpha", "lower-roman", "decimal", "lower-alpha"];
 
 export const generateTOC = (data: DataType[]): TOCItem[] => 
 {

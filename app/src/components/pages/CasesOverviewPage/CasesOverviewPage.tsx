@@ -1,6 +1,7 @@
 import CaseBlock from "@/components/organisms/caseBlock/CaseBlock";
 import OverviewHeader from "@/components/organisms/casesOverviewHeader/CasesOverviewHeader";
 import { type ICasesOverviewProps } from "@/services/content/getCasesOverviewProps";
+import { type IGenFullCaseFragment, type IGenSubCategoryFragment } from "@/services/graphql/__generated/sdk";
 
 import {
   type FunctionComponent,
@@ -19,7 +20,6 @@ const CasesOverviewPage: FunctionComponent<ICasesOverviewProps> = ({ allCases, a
   const [filteredSubcategories, setFilteredSubcategories] = useState<
     typeof allSubCategories | undefined
   >(undefined);
-
   useEffect(() => 
   {
     setFilteredSubcategories(
@@ -29,7 +29,9 @@ const CasesOverviewPage: FunctionComponent<ICasesOverviewProps> = ({ allCases, a
     );
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [selectedCategoryId]);
-  console.log({ allCases });
+  const allCasesOfSubcategory = (item: IGenSubCategoryFragment): (({
+    _typename?: "Case" | undefined;
+  } & IGenFullCaseFragment) | null | undefined)[] | undefined => allCases?.filter((caseItem) => caseItem?.subCategoryField?.some((e) => e?.id === item?.id));
 
   return (
     <div css={styles.Page}>
@@ -49,9 +51,9 @@ const CasesOverviewPage: FunctionComponent<ICasesOverviewProps> = ({ allCases, a
             <Fragment key={itemIndex}>
               <CaseBlock
                 blockHead={{
-                  blockType: "itemsBlock", categoryName: item?.subCategory, items: 4, variant: "case",
+                  blockType: "itemsBlock", categoryName: item?.subCategory, completedCases: 0, items: allCasesOfSubcategory(item)?.length ?? 0, variant: "case"  
                 }}
-                cases={allCases?.filter((caseItem) => caseItem?.subCategoryField?.some((e) => e?.id === item?.id))}
+                cases={allCasesOfSubcategory(item)}
               />
             </Fragment>
           )

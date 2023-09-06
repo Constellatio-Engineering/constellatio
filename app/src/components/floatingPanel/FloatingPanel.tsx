@@ -36,7 +36,7 @@ const FloatingPanel: FunctionComponent<IFloatingPanelProps> = ({
   const toc = generateTOC(content);
   const theme = useMantineTheme();
 
-  return content ? (
+  return content?.length > 0 ? (
     <div css={styles.wrapper({ hidden, theme })}>
       {hidden && (
         <div className="hidden-overlay">
