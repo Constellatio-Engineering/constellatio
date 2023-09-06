@@ -1,8 +1,9 @@
 import { useMantineTheme } from "@mantine/core";
+import Link from "next/link";
 import React, { useState } from "react";
 
 import * as styles from "./FloatingPanel.styles";
-import { renderTOC, type TOCItem } from "./generateTocHelper";
+import { getNumericalLabel, renderTOC, type TOCItem } from "./generateTocHelper";
 import { BodyText } from "../atoms/BodyText/BodyText";
 import { ArrowSolidDown } from "../Icons/arrow-solid-down";
 import { ArrowSolidRight } from "../Icons/arrow-solid-right";
@@ -22,7 +23,7 @@ export const TOCItemComponent: React.FC<{ readonly depth: number; readonly item:
   const theme = useMantineTheme();
   return (
     <div style={{
-      paddingLeft: (depth === 0 ? 0 : depth + 10) + "px" 
+      paddingLeft: (depth === 0 ? 0 : depth + 20) + "px" 
     }}>
       <span
         onClick={handleToggle}
@@ -32,7 +33,7 @@ export const TOCItemComponent: React.FC<{ readonly depth: number; readonly item:
         })}>
         <div style={{ display: "flex", justifyContent: "flex-start", padding: "0 16px" }}>
           <BodyText component="p" styleType="body-01-medium">{item.children.length > 0 && (isExpanded ? <ArrowSolidDown/> : <ArrowSolidRight/>)}</BodyText>
-          <BodyText component="p" styleType="body-01-medium">{item.text}</BodyText>
+          <BodyText component="p" styleType="body-01-medium">{getNumericalLabel(depth, itemNumber - 1)}<Link href={`#${item.text}`}>&nbsp;{item.text}</Link> </BodyText>
         </div>
         {depth === 0 && <div style={{ paddingRight: "24px" }}>{itemNumber}/{total}</div>}
       </span>

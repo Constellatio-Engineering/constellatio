@@ -1,7 +1,13 @@
 import { css } from "@emotion/react";
 import { type MantineTheme } from "@mantine/styles";
 
-export const wrapper = (theme: MantineTheme) => css`
+const CSSHiddenCard = css`
+height: 317px;
+overflow: hidden;
+`;
+
+export const wrapper = ({ hidden, theme }: {hidden?: boolean; theme: MantineTheme}) => css`
+  position:relative;
   width: 422px;
   /* padding:20px 16px 0 16px; */
   background-color: ${theme.colors["neutrals-01"][0]};
@@ -11,9 +17,9 @@ export const wrapper = (theme: MantineTheme) => css`
   .switcher {
     margin: 0px 24px 8px 24px;
   }
-  max-height: 600px;
   overflow:auto;
-
+  
+  ${hidden && CSSHiddenCard}
   &::-webkit-scrollbar{
     width: 8px;
     background-color: white;
@@ -22,6 +28,44 @@ export const wrapper = (theme: MantineTheme) => css`
       border-radius:4px;
       margin:0 5px;
     }
+  }
+  .hidden-overlay{
+    position: absolute;
+    bottom: 0;
+    height:auto;
+    /* background-color: ${theme.colors["neutrals-01"][0]}; */
+    width: 100%;
+    /* background: linear-gradient(180deg, rgba(255,255,255,0) 63%, red 97%); */
+    background: white;
+    /* background: linear-gradient(180deg, rgba(255,255,255,0) 0%, ${theme.colors["neutrals-01"][0]} 40%); */
+   
+    /* outline: 1px solid grey; */
+    color: ${theme.colors["neutrals-01"][7]};
+    svg{
+      display: inline-block;
+    }
+   
+      div{    display:flex;
+    align-items: flex-end;
+    justify-content: center;
+gap:12px;
+    padding:  20px;
+        background-color: transparent;
+        border-top: 2px solid ${theme.colors["neutrals-01"][4]};
+        position: relative;
+        &::before{
+          content: "";
+          position: absolute;
+          top: -111%;
+          left: 0;
+          width: 100%;
+          height: 110%;
+          background: linear-gradient(180deg, rgba(255,255,255,0) 43%, white 97%);
+          /* background: linear-gradient(180deg, rgba(255,255,255,0) 63%, ${theme.colors["neutrals-01"][0]} 97%); */
+
+        }
+      }
+    
   }
 `;
 
@@ -42,6 +86,11 @@ export const item = ({
   color: ${isTopLevel && isExpanded
     ? theme?.colors["neutrals-02"][1]
     : theme?.colors?.["neutrals-01"]?.[9]};
+    a{
+      color: ${isTopLevel && isExpanded
+    ? theme?.colors["neutrals-02"][1]
+    : theme?.colors?.["neutrals-01"]?.[9]};
+    }
   background: ${isTopLevel && isExpandable && isExpanded
     ? theme?.colors["neutrals-01"][2]
     : theme?.colors?.["neutrals-01"]?.[0]};
@@ -55,6 +104,12 @@ p{
     display: flex;
   align-items: center;
     justify-content: center;
+    padding-left: 5px;
+}
+position: relative;
+svg{
+  position: absolute;
+  left: 3px;
 }
 `;
 

@@ -54,7 +54,12 @@ const NextPage: FunctionComponent<ICasePageProps> = (props) =>
           }}
         />
       )}
-      <FloatingPanel facts={facts} content={content} tabs={[{ icon: { src: <Trash/> }, title: "Content" }, { icon: { src: <Trash/> }, title: "Facts" }]}/>
+      <FloatingPanel
+        hidden={false}
+        facts={facts}
+        content={content}
+        tabs={[{ icon: { src: <Trash/> }, title: "Content" }, { icon: { src: <Trash/> }, title: "Facts" }]}
+      />
       <Footer/>
     </div>
   );
