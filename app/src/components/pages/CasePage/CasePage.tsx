@@ -64,8 +64,7 @@ const CasePage: FunctionComponent<IGenCase> = ({
                   {
                     return (
                       <Fragment key={`${component?.__typename}-${index}`}>
-                        {/* <Callout {...component}/> */}
-                        hi this is a callout
+                        <Callout {...component}/>
                       </Fragment>
                     );
                   }

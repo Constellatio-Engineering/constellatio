@@ -17,3 +17,6 @@ next-env.d.ts
 
 .storybook-static/
 .vercel
+
+# storybook
+storybook-static/

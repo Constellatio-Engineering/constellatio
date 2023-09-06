@@ -29,6 +29,7 @@ export const f_FullCase = gql`
 		}
 		legalArea {
 			...LegalArea
+			...SubCategory
 		}
 		mainCategoryField {
 			...MainCategory

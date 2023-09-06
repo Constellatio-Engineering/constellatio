@@ -279,8 +279,9 @@ export type IGenCase = {
   facts?: Maybe<IGenTextElement>;
   fullTextTasks?: Maybe<IGenCase_FullTextTasks>;
   id?: Maybe<Scalars['ID']['output']>;
-  legalArea?: Maybe<Array<Maybe<IGenCase_LegalArea>>>;
+  legalArea?: Maybe<IGenCase_LegalArea>;
   mainCategoryField?: Maybe<Array<Maybe<IGenCase_MainCategoryField>>>;
+  resolution?: Maybe<IGenTextElement>;
   subCategoryField?: Maybe<Array<Maybe<IGenCase_SubCategoryField>>>;
   tags?: Maybe<Array<Maybe<IGenCase_Tags>>>;
   title?: Maybe<Scalars['String']['output']>;
@@ -301,13 +302,18 @@ export type IGenCaseFullTextTasksArgs = {
 
 
 export type IGenCaseLegalAreaArgs = {
+  locale?: InputMaybe<Scalars['String']['input']>;
+};
+
+
+export type IGenCaseMainCategoryFieldArgs = {
   after?: InputMaybe<Scalars['String']['input']>;
   first?: InputMaybe<Scalars['Int']['input']>;
   locale?: InputMaybe<Scalars['String']['input']>;
 };
 
 
-export type IGenCaseMainCategoryFieldArgs = {
+export type IGenCaseResolutionArgs = {
   after?: InputMaybe<Scalars['String']['input']>;
   first?: InputMaybe<Scalars['Int']['input']>;
   locale?: InputMaybe<Scalars['String']['input']>;
@@ -355,6 +361,7 @@ export type IGenCase_Sort = {
   legalArea?: InputMaybe<IGenOrder>;
   mainCategoryField?: InputMaybe<IGenOrder>;
   publishedAt?: InputMaybe<IGenOrder>;
+  resolution?: InputMaybe<IGenOrder>;
   subCategoryField?: InputMaybe<IGenOrder>;
   tags?: InputMaybe<IGenOrder>;
   title?: InputMaybe<IGenOrder>;
@@ -385,7 +392,7 @@ export type IGenCase_FullTextTasksConnectionsArgs = {
 
 export type IGenCase_FullTextTasks_Connections = IGenCallout | IGenCardSelectionGame | IGenDragNDropGame | IGenFillInGapsGame | IGenImageWrapperCard;
 
-export type IGenCase_LegalArea = IGenLegalArea;
+export type IGenCase_LegalArea = IGenLegalArea | IGenSubCategory;
 
 export type IGenCase_MainCategoryField = IGenMainCategory;
 
@@ -1099,10 +1106,13 @@ export type IGenFullCaseFragment = { __typename: 'Case', id?: string | null, tit
   ) | null, fullTextTasks?: (
     { __typename?: 'Case_fullTextTasks' }
     & IGenFullTextTasksFragment
-  ) | null, legalArea?: Array<(
+  ) | null, legalArea?: (
     { __typename?: 'LegalArea' }
     & IGenLegalAreaFragment
-  ) | null> | null, mainCategoryField?: Array<(
+  ) | (
+    { __typename?: 'SubCategory' }
+    & IGenSubCategoryFragment
+  ) | null, mainCategoryField?: Array<(
     { __typename?: 'MainCategory' }
     & IGenMainCategoryFragment
   ) | null> | null, subCategoryField?: Array<(
@@ -1354,6 +1364,7 @@ export const FullCaseFragmentDoc = gql`
   }
   legalArea {
     ...LegalArea
+    ...SubCategory
   }
   mainCategoryField {
     ...MainCategory
@@ -1432,8 +1443,8 @@ ${ImageWrapperCardFragmentDoc}
 ${AssetFragmentDoc}
 ${CalloutFragmentDoc}
 ${LegalAreaFragmentDoc}
-${MainCategoryFragmentDoc}
 ${SubCategoryFragmentDoc}
+${MainCategoryFragmentDoc}
 ${TagsFragmentDoc}
 ${TopicFragmentDoc}`;
 export type Requester<C = {}, E = unknown> = <R, V>(doc: DocumentNode, vars?: V, options?: C) => Promise<R> | AsyncIterable<R>
