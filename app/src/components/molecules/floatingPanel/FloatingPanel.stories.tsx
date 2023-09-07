@@ -2,7 +2,7 @@ import { type Meta, type StoryObj } from "@storybook/react";
 import { type FunctionComponent } from "react";
 
 import FloatingPanel, { type IFloatingPanelProps } from "./FloatingPanel";
-import { Trash } from "../Icons/Trash";
+import { Trash } from "../../Icons/Trash";
 
 const Template: FunctionComponent<IFloatingPanelProps> = (args) => (<FloatingPanel {...args}/>);
 

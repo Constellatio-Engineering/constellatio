@@ -1,5 +1,6 @@
-import FloatingPanel from "@/components/floatingPanel/FloatingPanel";
 import { Trash } from "@/components/Icons/Trash";
+import CaseNavBar from "@/components/molecules/caseNavBar/CaseNavBar";
+import FloatingPanel from "@/components/molecules/floatingPanel/FloatingPanel";
 import CaseSolvingHeader from "@/components/organisms/caseSolvingHeader/CaseSolvingHeader";
 import { Footer } from "@/components/organisms/Footer/Footer";
 import { Header } from "@/components/organisms/Header/Header";
@@ -53,6 +54,7 @@ const NextPage: FunctionComponent<ICasePageProps> = (props) =>
           }}
         />
       )}
+      <CaseNavBar title="arg"/>
       <FloatingPanel
         hidden={false}
         facts={facts}
