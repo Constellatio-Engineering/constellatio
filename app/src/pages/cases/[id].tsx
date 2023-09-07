@@ -54,7 +54,7 @@ const NextPage: FunctionComponent<ICasePageProps> = (props) =>
           }}
         />
       )}
-      <CaseNavBar title="arg"/>
+      <CaseNavBar variant="case"/>
       <FloatingPanel
         hidden={false}
         facts={facts}
