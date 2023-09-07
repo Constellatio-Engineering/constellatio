@@ -4,7 +4,7 @@ import { f_CaseOverview } from "../fragments/CaseOverview";
 
 export const q_allCaseOverview = gql`
 	${f_CaseOverview}
-	query allCaseOverview($after: String) {
+	query getAllCaseOverview($after: String) {
 		allCase(first: 100, after: $after) {
 			totalCount
 			pageInfo {

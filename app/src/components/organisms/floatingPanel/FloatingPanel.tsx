@@ -1,3 +1,4 @@
+import { richTextParagraphOverwrite } from "@/components/helpers/richTextParagraphOverwrite";
 import { type IGenTextElement_RichTextContent } from "@/services/graphql/__generated/sdk";
 
 // import { RichTextRenderer } from "@caisy/rich-text-react-renderer";
@@ -68,7 +69,7 @@ const FloatingPanel: FunctionComponent<IFloatingPanelProps> = ({
       {selectedTab === "Content" && content && renderTOC(toc)}
       {facts && facts.json && selectedTab === "Facts" && facts && (
         <div css={styles.facts}>
-          <Richtext richTextContent={facts}/>
+          <Richtext richTextContent={facts} richTextOverwrite={{ paragraph: richTextParagraphOverwrite }}/>
         </div>
       )}
     </div>

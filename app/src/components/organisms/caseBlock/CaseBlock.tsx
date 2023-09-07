@@ -2,7 +2,7 @@
 import StatusTableCell from "@/components/atoms/statusTableCell/StatusTableCell";
 import TableCell from "@/components/atoms/tableCell/TableCell";
 import TableIconButton from "@/components/atoms/tableIconButton/TableIconButton";
-import { Bookmark } from "@/components/Icons/bookmark";
+import { Bookmark } from "@/components/Icons/Bookmark";
 import { ClockIcon } from "@/components/Icons/ClockIcon";
 import CaseBlockHead, { type ICaseBlockHeadProps } from "@/components/molecules/caseBlockHead/CaseBlockHead";
 import { type IGenFullCaseFragment } from "@/services/graphql/__generated/sdk";

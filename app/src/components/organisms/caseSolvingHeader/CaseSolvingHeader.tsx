@@ -1,6 +1,6 @@
 import IconButton from "@/components/atoms/iconButton/IconButton";
 import { OverlayLines } from "@/components/Icons/bg-layer";
-import { Bookmark } from "@/components/Icons/bookmark";
+import { Bookmark } from "@/components/Icons/Bookmark";
 import { Pin } from "@/components/Icons/Pin";
 import { Print } from "@/components/Icons/print";
 
