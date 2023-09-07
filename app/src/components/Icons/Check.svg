@@ -1,0 +1,5 @@
+export const Check = () => <svg width="16" height="16" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg">
+<g id="check">
+<path id="vector" d="M6.66681 10.3907L4.47148 8.19539L3.52881 9.13806L6.66681 12.2761L13.1381 5.80473L12.1955 4.86206L6.66681 10.3907Z" fill="white"/>
+</g>
+</svg>
