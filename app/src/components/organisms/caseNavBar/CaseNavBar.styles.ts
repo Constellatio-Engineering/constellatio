@@ -81,6 +81,6 @@ export const progressBar = ({
     ? theme.colors["cc-cases"][4]
     : theme.colors["cc-dictionary"][4]};
   position: absolute;
-  bottom: 0;
+  bottom: -7px;
   transition: width 0.3s ease-in-out;
 `;
