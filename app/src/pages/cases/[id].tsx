@@ -1,6 +1,6 @@
 import { Trash } from "@/components/Icons/Trash";
-import CaseNavBar from "@/components/molecules/caseNavBar/CaseNavBar";
-import FloatingPanel from "@/components/molecules/floatingPanel/FloatingPanel";
+import CaseNavBar from "@/components/organisms/caseNavBar/CaseNavBar";
+import FloatingPanel from "@/components/organisms/floatingPanel/FloatingPanel";
 import CaseSolvingHeader from "@/components/organisms/caseSolvingHeader/CaseSolvingHeader";
 import { Footer } from "@/components/organisms/Footer/Footer";
 import { Header } from "@/components/organisms/Header/Header";

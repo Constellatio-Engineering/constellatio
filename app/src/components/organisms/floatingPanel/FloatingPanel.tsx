@@ -12,8 +12,8 @@ import IconButton from "../../atoms/iconButton/IconButton";
 import { SwitcherTab } from "../../atoms/Switcher-tab/SwitcherTab";
 import { Trash } from "../../Icons/Trash";
 import { ExclamationMark } from "../../Icons/vector";
-import { Richtext } from "../Richtext/Richtext";
-import { Switcher } from "../Switcher/Switcher";
+import { Richtext } from "../../molecules/Richtext/Richtext";
+import { Switcher } from "../../molecules/Switcher/Switcher";
 
 type ITableTab = { icon: {src: React.ReactNode}; title: "Content" | "Facts" };   
 export interface IFloatingPanelProps
