@@ -3,6 +3,7 @@ import { Trash } from "@/components/Icons/Trash";
 import { ImageWrapperCard } from "@/components/molecules/ImageWrapperCard/ImageWrapperCard";
 import { Richtext } from "@/components/molecules/Richtext/Richtext";
 import { Callout } from "@/components/organisms/Callout/Callout";
+import CaseNavBar from "@/components/organisms/caseNavBar/CaseNavBar";
 import CaseSolvingHeader from "@/components/organisms/caseSolvingHeader/CaseSolvingHeader";
 import { DragDropGame } from "@/components/organisms/DragDropGame/DragDropGame";
 import { FillGapsGame } from "@/components/organisms/FillGapsGame/FillGapsGame";
@@ -44,6 +45,7 @@ const CasePage: FunctionComponent<IGenCase> = ({
         }}
       />
       <div css={styles.mainContainer}>
+        <CaseNavBar variant="case"/>
         <div css={styles.contentWrapper}>
           <div css={styles.content}>
             <div css={styles.facts}>
