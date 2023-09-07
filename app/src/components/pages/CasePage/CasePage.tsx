@@ -38,7 +38,6 @@ const CasePage: FunctionComponent<IGenCase> = ({
       <div css={styles.mainContainer}>
         <CaseNavBar
           variant="case"
-          progressPercentage={20}
           activeStep={caseStepIndex}
           setCaseStepIndex={setCaseStepIndex}
         />

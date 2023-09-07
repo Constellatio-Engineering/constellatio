@@ -17,7 +17,7 @@ export const wrapper = ({ theme, variant }: {
   background-color: ${theme.colors["neutrals-01"][0]};
   /* position: relative; */
   ${variant === "dictionary" && DictionaryCSS}
-
+border-bottom: 8px solid ${theme.colors["neutrals-01"][4]};
   position: -webkit-sticky;
   position: sticky;
   top: 0;

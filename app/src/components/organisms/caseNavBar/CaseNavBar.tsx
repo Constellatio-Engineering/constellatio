@@ -6,6 +6,7 @@ import { useMantineTheme } from "@mantine/core";
 import React, { type FunctionComponent, useState, useEffect } from "react";
 
 import * as styles from "./CaseNavBar.styles";
+import { calculateScrollProgress } from "./caseNavbarHelper";
 
 export interface ICaseNavBarProps
 {
@@ -30,6 +31,14 @@ const CaseNavBar: FunctionComponent<ICaseNavBarProps> = ({ activeStep, progressP
   }
   , [progressPercentage]);
   
+
+  useEffect(() => {
+    window.addEventListener('scroll', ()=> setProgress(calculateScrollProgress()));
+    return () => {
+      window.removeEventListener('scroll', ()=> setProgress(calculateScrollProgress()));
+    };
+  }, []);
+
   return variant === "case" ? (
     <div css={styles.wrapper({ theme, variant })}>
       <div css={styles.tabs}>
