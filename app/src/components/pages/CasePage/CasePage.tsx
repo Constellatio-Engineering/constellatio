@@ -11,6 +11,7 @@ import { SelectionCardGame } from "@/components/organisms/SelectionCardGame/Sele
 import { type IGenCase } from "@/services/graphql/__generated/sdk";
 import { type IDocumentLink } from "types/richtext";
 
+import { Title } from "@mantine/core";
 import React, { type FunctionComponent } from "react";
 
 import * as styles from "./CasesPage.styles";
@@ -26,6 +27,8 @@ const CasePage: FunctionComponent<IGenCase> = ({
 }) => 
 {
   const content = fullTextTasks?.json?.content?.filter((contentItem: { content: { text: string }[]; type: string }) => contentItem?.type === "heading");
+
+  console.log("fullTextTasks", fullTextTasks);
 
   return (
     <>
@@ -45,24 +48,25 @@ const CasePage: FunctionComponent<IGenCase> = ({
       />
       <div css={styles.mainContainer}>
         <div css={styles.contentWrapper}>
+          <div css={styles.facts}>
+            <Title order={2}>Facts</Title>
+            <Richtext
+              richTextContent={facts?.richTextContent} 
+              richTextOverwrite={{
+                paragraph: richTextParagraphOverwrite
+              }}
+            />
+          </div>
           <div css={styles.content}>
-            <div css={styles.facts}>
-              <Richtext
-                richTextContent={facts?.richTextContent} 
-                richTextOverwrite={{
-                  paragraph: richTextParagraphOverwrite
-                }}
+            <div css={styles.toc}>
+              <FloatingPanel
+                hidden={false}
+                facts={facts?.richTextContent}
+                content={content}
+                tabs={[{ icon: { src: <Trash/> }, title: "Content" }, { icon: { src: <Trash/> }, title: "Facts" }]}
               />
             </div>
             <div css={styles.fullTextAndTasksWrapper}>
-              <div css={styles.toc}>
-                <FloatingPanel
-                  hidden={false}
-                  facts={facts?.richTextContent}
-                  content={content}
-                  tabs={[{ icon: { src: <Trash/> }, title: "Content" }, { icon: { src: <Trash/> }, title: "Facts" }]}
-                />
-              </div>
               <Richtext
               // eslint-disable-next-line @typescript-eslint/no-explicit-any
                 richTextContent={fullTextTasks as any}

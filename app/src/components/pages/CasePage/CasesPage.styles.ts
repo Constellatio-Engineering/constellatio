@@ -1,26 +1,36 @@
 import { css } from "@emotion/react";
 
-export const mainContainer = css``;
-
-export const contentWrapper = css`
+export const mainContainer = css`
 	padding: 60px;
 `;
 
-export const content = css`
+export const contentWrapper = css``;
+
+export const facts = css`
 	max-width: 52.5%;
 	padding: 0 44px;
+
+	> h2 {
+		padding-bottom: 24px;
+	}
 `;
 
-export const facts = css``;
-
-export const fullTextAndTasksWrapper = css`
+export const content = css`
 	position: relative;
+	display: flex;
+	justify-content: space-between;
 `;
 
 export const toc = css`
-	position: absolute;
-	right: -670px;
-	top: 0;
+	position: sticky;
+	top: 104px;
+	order: 1;
+	height: max-content;
+`;
+
+export const fullTextAndTasksWrapper = css`
+	max-width: 52.5%;
+	padding: 0 44px;
 `;
 
 export const componentWrapper = css`

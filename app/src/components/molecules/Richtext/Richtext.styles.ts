@@ -54,7 +54,7 @@ export const SRichtext = styled.div<{ stylesOverwrite?: SerializedStyles }>`
 
 			li {
 				display: flex;
-				align-items: center;
+				align-items: baseline;
 				gap: 3px;
 				padding-bottom: 24px;
 
