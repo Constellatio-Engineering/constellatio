@@ -1,4 +1,4 @@
-import { getProps, type GetPropsResult } from "@/services/content/getProps";
+import { getProps } from "@/services/content/getProps";
 
 import { type GetStaticPaths, type GetStaticProps } from "next";
 import React, { type FunctionComponent } from "react";
@@ -27,7 +27,7 @@ export const getStaticPaths: GetStaticPaths = () =>
   return { fallback: true, paths: [] };
 };
 
-const NextPage: FunctionComponent<GetPropsResult> = ({ Page }) =>
+const NextPage: FunctionComponent<{readonly Page: null}> = ({ Page }) =>
 {
   console.log(Page);
   return <div><p>Hello World</p></div>;

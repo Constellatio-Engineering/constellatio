@@ -31,9 +31,12 @@ type Story = StoryObj<typeof OverviewCard>;
 export const Case: Story = {
   args: {
     lastUpdated: new Date(),
-    legalArea: "Labor law",
+    legalArea: {
+      __typename: "LegalArea",
+      legalAreaName: "Labor law"
+    },
     status: "inProgress",
-    tags: ["Labor law", "Civil law", "Internal relationship of partnerships"],
+    tags: [{ tagName: "tag" }],
     timeInMinutes: 120,
     topic: "Basic of labor law",
     variant: "case",
@@ -43,8 +46,11 @@ export const Case: Story = {
 export const Dictionary: Story = {
   args: {
     lastUpdated: new Date(),
-    legalArea: "Labor law",
-    tags: ["Labor law", "Civil law", "Internal relationship of partnerships"],
+    legalArea: {
+      __typename: "LegalArea",
+      legalAreaName: "Labor law"
+    },
+    tags: [{ tagName: "tag" }],
     timeInMinutes: 120,
     topic: "Basic of labor law",
     variant: "dictionary",
