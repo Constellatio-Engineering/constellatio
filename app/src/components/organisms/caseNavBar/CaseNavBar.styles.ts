@@ -15,8 +15,14 @@ export const wrapper = ({ theme, variant }: {
   flex-wrap: wrap;
   height: 72px;
   background-color: ${theme.colors["neutrals-01"][0]};
-  position: relative;
+  /* position: relative; */
   ${variant === "dictionary" && DictionaryCSS}
+
+  position: -webkit-sticky;
+  position: sticky;
+  top: 0;
+  z-index: 41;
+  width: 100%;
 `;
 
 export const tabs = css`
