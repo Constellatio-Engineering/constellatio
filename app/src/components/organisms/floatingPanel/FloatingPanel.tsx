@@ -2,7 +2,7 @@ import { richTextParagraphOverwrite } from "@/components/helpers/richTextParagra
 import { type IGenTextElement_RichTextContent } from "@/services/graphql/__generated/sdk";
 
 // import { RichTextRenderer } from "@caisy/rich-text-react-renderer";
-import { Tabs, useMantineTheme } from "@mantine/core";
+import { ScrollArea, Tabs, useMantineTheme } from "@mantine/core";
 import { type Maybe } from "@trpc/server";
 import React, { useState, type FunctionComponent } from "react";
 
@@ -38,41 +38,44 @@ const FloatingPanel: FunctionComponent<IFloatingPanelProps> = ({
   const theme = useMantineTheme();
 
   return content?.length > 0 ? (
-    <div css={styles.wrapper({ hidden, theme })}>
-      {hidden && (
-        <div className="hidden-overlay">
-          <div>
-            <IconButton icon={<ExclamationMark/>} size="medium"/>
-            <CaptionText styleType="caption-01-medium" component="p">To open the next chapter, please complete the tests
-              in the previous chapter.
-            </CaptionText>
+    <ScrollArea h={hidden ? 300 : 600} sx={{ borderRadius: "12px" }}>
+      <div css={styles.wrapper({ hidden, theme })}>
+        {hidden && (
+          <div className="hidden-overlay">
+            <div>
+              <IconButton icon={<ExclamationMark/>} size="medium"/>
+              <CaptionText styleType="caption-01-medium" component="p">To open the next chapter, please complete the tests
+                in the previous chapter.
+              </CaptionText>
+            </div>
           </div>
-        </div>
-      )}
-      <Switcher
-        className="switcher"
-        size="medium"
-        defaultValue={selectedTab}
-        tabStyleOverwrite={{ flex: "1" }}>
-        <Tabs.List>
-          {tabs && tabs?.map((tab, tabIndex) => (
-            <React.Fragment key={tabIndex}>
-              <SwitcherTab
-                icon={tab?.icon?.src ?? <Trash/>}
-                value={tab.title}
-                onClick={() => setSelectedTab(tab?.title)}>{tab.title}
-              </SwitcherTab>
-            </React.Fragment>
-          ))}
-        </Tabs.List>
-      </Switcher>
-      {selectedTab === "Content" && content && renderTOC(toc)}
-      {facts && facts.json && selectedTab === "Facts" && facts && (
-        <div css={styles.facts}>
-          <Richtext richTextContent={facts} richTextOverwrite={{ paragraph: richTextParagraphOverwrite }}/>
-        </div>
-      )}
-    </div>
+        )}
+        <Switcher
+          className="switcher"
+          size="medium"
+          defaultValue={selectedTab}
+          tabStyleOverwrite={{ flex: "1" }}>
+          <Tabs.List>
+            {tabs && tabs?.map((tab, tabIndex) => (
+              <React.Fragment key={tabIndex}>
+                <SwitcherTab
+                  icon={tab?.icon?.src ?? <Trash/>}
+                  value={tab.title}
+                  onClick={() => setSelectedTab(tab?.title)}>{tab.title}
+                </SwitcherTab>
+              </React.Fragment>
+            ))}
+          </Tabs.List>
+        </Switcher>
+        {selectedTab === "Content" && content && renderTOC(toc)}
+        {facts && facts.json && selectedTab === "Facts" && facts && (
+          <div css={styles.facts}>
+            <Richtext richTextContent={facts} richTextOverwrite={{ paragraph: richTextParagraphOverwrite }}/>
+          </div>
+        )}
+      </div>
+  
+    </ScrollArea>
   ) : "";
 };
 
