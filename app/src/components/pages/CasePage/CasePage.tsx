@@ -1,9 +1,8 @@
-import CaseCompleteTestsStep from "@/components/caseCompleteTestsStep/CaseCompleteTestsStep";
+import CaseCompleteTestsStep from "@/components/organisms/caseCompleteTestsStep/CaseCompleteTestsStep";
 import CaseNavBar from "@/components/organisms/caseNavBar/CaseNavBar";
 import CaseSolvingHeader from "@/components/organisms/caseSolvingHeader/CaseSolvingHeader";
 import { type IGenCase } from "@/services/graphql/__generated/sdk";
 
-import { Title } from "@mantine/core";
 import React, { type FunctionComponent } from "react";
 
 import * as styles from "./CasesPage.styles";
@@ -36,12 +35,12 @@ const CasePage: FunctionComponent<IGenCase> = ({
           views: 0,
         }}
       />
+      <CaseNavBar
+        variant="case"
+        activeStep={caseStepIndex}
+        setCaseStepIndex={setCaseStepIndex}
+      />
       <div css={styles.mainContainer}>
-        <CaseNavBar
-          variant="case"
-          activeStep={caseStepIndex}
-          setCaseStepIndex={setCaseStepIndex}
-        />
         {caseStepIndex === 0 && <CaseCompleteTestsStep content={content} facts={facts} fullTextTasks={fullTextTasks}/>}
         {/* upon creating the other two steps other index uses will be added here */}
         {/* caseStepIndex === 1  */}
