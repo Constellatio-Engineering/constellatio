@@ -2,7 +2,6 @@ import CaseCompleteTestsStep from "@/components/caseCompleteTestsStep/CaseComple
 import CaseNavBar from "@/components/organisms/caseNavBar/CaseNavBar";
 import CaseSolvingHeader from "@/components/organisms/caseSolvingHeader/CaseSolvingHeader";
 import { type IGenCase } from "@/services/graphql/__generated/sdk";
-import { type IDocumentLink } from "types/richtext";
 
 import React, { type FunctionComponent } from "react";
 
