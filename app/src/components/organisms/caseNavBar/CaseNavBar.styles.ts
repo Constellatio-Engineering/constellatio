@@ -13,7 +13,8 @@ export const wrapper = ({ theme, variant }: {
   justify-content: space-between;
   align-items: center;
   flex-wrap: wrap;
-  height: 72px;
+  /* height: 72px; */
+  padding:12px 0;
   background-color: ${theme.colors["neutrals-01"][0]};
   /* position: relative; */
   ${variant === "dictionary" && DictionaryCSS}
@@ -64,7 +65,10 @@ export const tab = ({ active, completed, theme }: {
   cursor: pointer;
 `;
 export const callToAction = css`
-  margin-right: 60px;
+  margin-inline: 60px;
+  @media screen and (max-width: 1000px) {
+    margin:12px 60px;
+  }
 `;
 export const progressBar = ({
   progress,

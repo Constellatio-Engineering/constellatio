@@ -11,47 +11,40 @@ import { calculateScrollProgress } from "./caseNavbarHelper";
 
 export interface ICaseNavBarProps 
 {
-  readonly activeStep?: number;
-  readonly progressPercentage?: number;
+  readonly activeStep?: 0 | 1 | 2;
   readonly setCaseStepIndex?: React.Dispatch<React.SetStateAction<0 | 1 | 2>>;
   readonly variant: "case" | "dictionary";
 }
 
-const CaseNavBar: FunctionComponent<ICaseNavBarProps> = ({
-  activeStep,
-  progressPercentage,
-  setCaseStepIndex,
-  variant,
-}) => 
+const CaseNavBar: FunctionComponent<ICaseNavBarProps> = ({ activeStep, setCaseStepIndex, variant }) => 
 {
   const theme = useMantineTheme();
   const steps = ["COMPLETE TESTS", "SOLVE CASE", "REVIEW REUSLTS"];
-  const [progress, setProgress] = useState<number>(progressPercentage ?? 0);
-  const { hasCaseSolvingStarted } = useCaseSolvingStore();
-
-  useEffect(() => 
-  {
-    if(progressPercentage) 
-    {
-      setProgress(progressPercentage);
-    }
-  }, [progressPercentage]);
+  const [progress, setProgress] = useState<number>(0);
+  const { hasCaseSolvingStarted, isStepCompleted, setShowStepTwoModal } = useCaseSolvingStore();
 
   useEffect(() => 
   {
     const handleScroll = (): void => 
     {
-      const progress = calculateScrollProgress();
-      setProgress(progress);
+      if(activeStep === 0) { setProgress(calculateScrollProgress("completeTestsStepContent")); }
+      if(activeStep === 1) { setProgress(calculateScrollProgress("solveCaseStepContent")); }
     };
-
-    if(hasCaseSolvingStarted) 
+    if(hasCaseSolvingStarted)
     {
-      window.addEventListener("scroll", handleScroll);
+      window.addEventListener("scroll", () => setTimeout(() => handleScroll(), 500)); 
     }
+    return () => window.removeEventListener("scroll", () => setTimeout(() => handleScroll(), 0));
+  }, [activeStep, hasCaseSolvingStarted]);
 
-    return () => window.removeEventListener("scroll", handleScroll);
-  }, [hasCaseSolvingStarted]);
+  const handleCallToAction = (): void => 
+  {
+    if(setCaseStepIndex)
+    {
+      if(activeStep === 0) { setCaseStepIndex(1); }
+      if(activeStep === 1) { setShowStepTwoModal(true); }  
+    }
+  };
 
   return variant === "case" ? (
     <div css={styles.wrapper({ theme, variant })}>
@@ -64,7 +57,10 @@ const CaseNavBar: FunctionComponent<ICaseNavBarProps> = ({
                 <CaptionText
                   component="p"
                   key={index}
-                  // onClick={() => setCaseStepIndex(index)}
+                  onClick={() => 
+                  {
+                    if(activeStep > 0 && activeStep > index) { setCaseStepIndex(index); }
+                  }}
                   css={styles.tab({
                     active: index === activeStep,
                     completed: index < activeStep,
@@ -80,16 +76,16 @@ const CaseNavBar: FunctionComponent<ICaseNavBarProps> = ({
       </div>
       {activeStep !== undefined && activeStep < 2 && steps && (
         <div css={styles.callToAction}>
-          <Button<"button"> disabled={progress === 0} styleType="primary">
+          <Button<"button"> onClick={handleCallToAction} disabled={!isStepCompleted} styleType="primary">
             {activeStep === 0 ? "Solve this case" : "Submit and view results"}
           </Button>
         </div>
       )}
-      <div css={styles.progressBar({ progress, theme, variant })}/>
+      {hasCaseSolvingStarted && <div css={styles.progressBar({ progress, theme, variant })}/>}
     </div>
   ) : (
     <div css={styles.wrapper({ theme, variant })}>
-      <div css={styles.progressBar({ progress, theme, variant })}/>
+      {hasCaseSolvingStarted && <div css={styles.progressBar({ progress, theme, variant })}/>}
     </div>
   );
 };

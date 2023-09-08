@@ -11,7 +11,6 @@ import { type IDocumentLink } from "types/richtext";
 import { Title } from "@mantine/core";
 import { type Maybe } from "@trpc/server";
 import { useState, type FunctionComponent, useEffect } from "react";
-import { set } from "zod";
 
 import * as styles from "./CaseCompleteTestsStep.styles";
 import { richTextParagraphOverwrite } from "../../helpers/richTextParagraphOverwrite";
@@ -26,14 +25,14 @@ import { SelectionCardGame } from "../SelectionCardGame/SelectionCardGame";
 interface ICaseCompleteTestsStepProps 
 {
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  readonly content: any;
   readonly facts: Maybe<IGenTextElement> | undefined;
   readonly fullTextTasks: Maybe<IGenCase_FullTextTasks> | undefined;
 }
 
-const CaseCompleteTestsStep: FunctionComponent<ICaseCompleteTestsStepProps> = ({ content, facts, fullTextTasks }) => 
+const CaseCompleteTestsStep: FunctionComponent<ICaseCompleteTestsStepProps> = ({ facts, fullTextTasks }) => 
 {
   const { hasCaseSolvingStarted, setHasCaseSolvingStarted } = useCaseSolvingStore();
+  const content = fullTextTasks?.json?.content?.filter((contentItem: { content: { text: string }[]; type: string }) => contentItem?.type === "heading");
 
   const gameComponents = fullTextTasks?.connections?.filter((component) => component?.__typename === "CardSelectionGame" || component?.__typename === "DragNDropGame" || component?.__typename === "FillInGapsGame").map(game => ({ __typename: game?.__typename, id: game?.id })) ?? [];
 
@@ -55,13 +54,15 @@ const CaseCompleteTestsStep: FunctionComponent<ICaseCompleteTestsStepProps> = ({
   {
     const indexes = gamesIndexes();
     // setRenderedCaseContent((prevContent => ({ ...prevContent, json: { ...prevContent?.json, content: prevContent?.json?.content } })));
-    setRenderedCaseContent({ ...fullTextTasks, json: { ...fullTextTasks?.json, content: fullTextTasks?.json?.content.slice(0, indexes[1] + 1) } });
+    if(indexes && indexes?.[1]) 
+    {
+      setRenderedCaseContent({ ...fullTextTasks, json: { ...fullTextTasks?.json, content: fullTextTasks?.json?.content?.slice(0, indexes?.[1] + 1) } });
+    }
+  // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [fullTextTasks]);
 
-  console.log(renderedCaseContent);
-
   return (
-    <div css={styles.contentWrapper}>
+    <div css={styles.contentWrapper} id="completeTestsStepContent">
       <div css={styles.facts}>
         <Title order={2}>Facts</Title>
         <Richtext
