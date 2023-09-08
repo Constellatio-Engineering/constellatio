@@ -1,17 +1,15 @@
 import { Button } from "@/components/atoms/Button/Button";
 import { BoxIcon } from "@/components/Icons/BoxIcon";
 import { FileIcon } from "@/components/Icons/FileIcon";
-import {
-  type IGenTextElement,
-  type IGenCase_FullTextTasks,
-} from "@/services/graphql/__generated/sdk";
+import { type IGenTextElement, type IGenCase_FullTextTasks } from "@/services/graphql/__generated/sdk";
 import useCaseSolvingStore from "@/stores/caseSolving.store";
 import { type IDocumentLink } from "types/richtext";
 
 import { Title } from "@mantine/core";
 import { type Maybe } from "@trpc/server";
-import { useState, type FunctionComponent, useEffect } from "react";
+import { type FunctionComponent, useEffect, useMemo } from "react";
 
+import { getGamesIndexes } from "./caseCompleteTestsStep.helper";
 import * as styles from "./CaseCompleteTestsStep.styles";
 import { richTextParagraphOverwrite } from "../../helpers/richTextParagraphOverwrite";
 import { ImageWrapperCard } from "../../molecules/ImageWrapperCard/ImageWrapperCard";
@@ -25,40 +23,54 @@ import { SelectionCardGame } from "../SelectionCardGame/SelectionCardGame";
 interface ICaseCompleteTestsStepProps 
 {
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  readonly facts: Maybe<IGenTextElement> | undefined;
-  readonly fullTextTasks: Maybe<IGenCase_FullTextTasks> | undefined;
+  readonly facts: Maybe<IGenTextElement>;
+  readonly fullTextTasks: Maybe<IGenCase_FullTextTasks>;
 }
 
 const CaseCompleteTestsStep: FunctionComponent<ICaseCompleteTestsStepProps> = ({ facts, fullTextTasks }) => 
 {
-  const { hasCaseSolvingStarted, setHasCaseSolvingStarted } = useCaseSolvingStore();
-  const content = fullTextTasks?.json?.content?.filter((contentItem: { content: { text: string }[]; type: string }) => contentItem?.type === "heading");
+  const {
+    getNextGameIndex,
+    hasCaseSolvingStarted,
+    isLastGame,
+    latestGameIndex,
+    setGamesIndexes,
+    setHasCaseSolvingStarted
+  } =
+		useCaseSolvingStore();
 
-  const gameComponents = fullTextTasks?.connections?.filter((component) => component?.__typename === "CardSelectionGame" || component?.__typename === "DragNDropGame" || component?.__typename === "FillInGapsGame").map(game => ({ __typename: game?.__typename, id: game?.id })) ?? [];
-
-  const gamesIndexes = (): number[] => 
+  const renderedCaseContent = useMemo(() => 
   {
-    const indexes = [];
-    for(const game of gameComponents) 
+    if(fullTextTasks?.json?.content.length >= 1) 
     {
-      // eslint-disable-next-line @typescript-eslint/no-explicit-any
-      const gameIndex = fullTextTasks?.json?.content?.findIndex((item: any) => item?.type === "documentLink" && item?.attrs?.documentId === game?.id);
-      if(gameIndex !== -1) { indexes.push(gameIndex); }
+      return {
+        ...fullTextTasks,
+        json: {
+          ...fullTextTasks?.json,
+          content: isLastGame ? fullTextTasks?.json?.content : fullTextTasks?.json?.content?.slice(0, latestGameIndex + 1),
+        },
+      };
     }
-    return indexes;
-  };
+    else 
+    {
+      return fullTextTasks;
+    }
+  }, [fullTextTasks, latestGameIndex, isLastGame]);
 
-  const [renderedCaseContent, setRenderedCaseContent] = useState(fullTextTasks);
+  const content = useMemo(
+    () =>
+      renderedCaseContent?.json?.content?.filter(
+        (contentItem: { content: { text: string }[]; type: string }) =>
+          contentItem?.type === "heading"
+      ),
+    [renderedCaseContent]
+  );
 
   useEffect(() => 
   {
-    const indexes = gamesIndexes();
-    // setRenderedCaseContent((prevContent => ({ ...prevContent, json: { ...prevContent?.json, content: prevContent?.json?.content } })));
-    if(indexes && indexes?.[1]) 
-    {
-      setRenderedCaseContent({ ...fullTextTasks, json: { ...fullTextTasks?.json, content: fullTextTasks?.json?.content?.slice(0, indexes?.[1] + 1) } });
-    }
-  // eslint-disable-next-line react-hooks/exhaustive-deps
+    setGamesIndexes(getGamesIndexes({ fullTextTasks }));
+    getNextGameIndex();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [fullTextTasks]);
 
   return (
@@ -76,7 +88,8 @@ const CaseCompleteTestsStep: FunctionComponent<ICaseCompleteTestsStepProps> = ({
             styleType="primary"
             size="large"
             type="button"
-            onClick={() => setHasCaseSolvingStarted(true)}>Start solving case
+            onClick={() => setHasCaseSolvingStarted(true)}>
+            Start solving case
           </Button>
         )}
       </div>
@@ -95,7 +108,7 @@ const CaseCompleteTestsStep: FunctionComponent<ICaseCompleteTestsStepProps> = ({
           </div>
           <div css={styles.fullTextAndTasksWrapper}>
             <Richtext
-            // eslint-disable-next-line @typescript-eslint/no-explicit-any
+              // eslint-disable-next-line @typescript-eslint/no-explicit-any
               richTextContent={renderedCaseContent as any}
               richTextOverwrite={{
                 documentLink: (props) => 
@@ -178,14 +191,15 @@ const CaseCompleteTestsStep: FunctionComponent<ICaseCompleteTestsStepProps> = ({
                           return null;
                       }
                       return null;
-                    }
-                    )
-
+                    })
                     : null;
                 },
                 paragraph: richTextParagraphOverwrite,
               }}
             />
+            <button type="button" onClick={() => getNextGameIndex()}>
+              Next{" "}
+            </button>
           </div>
         </div>
       )}
