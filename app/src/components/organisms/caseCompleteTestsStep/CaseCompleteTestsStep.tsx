@@ -7,7 +7,7 @@ import { type IDocumentLink } from "types/richtext";
 
 import { Title } from "@mantine/core";
 import { type Maybe } from "@trpc/server";
-import { useState, type FunctionComponent, useEffect, useMemo } from "react";
+import { type FunctionComponent, useEffect, useMemo } from "react";
 
 import { getGamesIndexes } from "./caseCompleteTestsStep.helper";
 import * as styles from "./CaseCompleteTestsStep.styles";
@@ -191,7 +191,7 @@ const CaseCompleteTestsStep: FunctionComponent<ICaseCompleteTestsStepProps> = ({
                           return null;
                       }
                       return null;
-										  })
+                    })
                     : null;
                 },
                 paragraph: richTextParagraphOverwrite,
