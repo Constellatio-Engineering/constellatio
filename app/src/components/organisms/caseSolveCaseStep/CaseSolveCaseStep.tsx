@@ -8,7 +8,7 @@ import useCaseSolvingStore from "@/stores/caseSolving.store";
 
 import { Title } from "@mantine/core";
 import Image from "next/image";
-import React, { useEffect, type FunctionComponent, useState } from "react";
+import React, { useEffect, type FunctionComponent } from "react";
 
 import * as styles from "./CaseSolveCaseStep.styles";
 import modalImg from "../../Icons/CaseResultModalIcon.png";
@@ -48,8 +48,7 @@ const CaseSolveCaseStep: FunctionComponent<IGenCase & {readonly setCaseStepIndex
             centered
             onClose={function(): void 
             {
-              // next step
-              console.log("close modal");
+              setShowStepTwoModal(false);
             }}>
             <Image
               src={modalImg?.src}
@@ -66,9 +65,9 @@ const CaseSolveCaseStep: FunctionComponent<IGenCase & {readonly setCaseStepIndex
               onClick={() => 
               {
               // next casePage step
-              // close modal
-                setShowStepTwoModal(false);
                 setCaseStepIndex(2);
+                // close modal
+                setShowStepTwoModal(false);
               }}
               fullWidth>
               Review results

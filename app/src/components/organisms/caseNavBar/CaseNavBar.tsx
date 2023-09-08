@@ -4,7 +4,6 @@ import { Check } from "@/components/Icons/Check";
 import useCaseSolvingStore from "@/stores/caseSolving.store";
 
 import { useMantineTheme } from "@mantine/core";
-import { useDisclosure } from "@mantine/hooks";
 import React, { type FunctionComponent, useState, useEffect } from "react";
 
 import * as styles from "./CaseNavBar.styles";
