@@ -13,12 +13,18 @@ import React, { useEffect, type FunctionComponent, useState } from "react";
 import * as styles from "./CaseSolveCaseStep.styles";
 import modalImg from "../../Icons/CaseResultModalIcon.png";
 
-const CaseSolveCaseStep: FunctionComponent<IGenCase> = ({ facts, title }) => 
+const CaseSolveCaseStep: FunctionComponent<IGenCase & {readonly setCaseStepIndex: React.Dispatch<React.SetStateAction<0 | 2 | 1>> }> = ({
+  facts,
+  setCaseStepIndex,
+  title
+}) => 
 {
-  const { setHasCaseSolvingStarted, setIsStepCompleted } = useCaseSolvingStore(); 
-  // const [isOpened, { close, open }] = useDisclosure(false);
-
-  const [showModal, setShowModal] = useState(true);
+  const {
+    setHasCaseSolvingStarted,
+    setIsStepCompleted,
+    setShowStepTwoModal,
+    showStepTwoModal
+  } = useCaseSolvingStore(); 
   useEffect(() => 
   {
     setIsStepCompleted(false);
@@ -34,16 +40,16 @@ const CaseSolveCaseStep: FunctionComponent<IGenCase> = ({ facts, title }) =>
             Of course, the question of whether and how a shareholder can be excluded can also arise in the oHG. Read the related article after handling this case.
           </BodyText>
           <RichtextEditorField
-            action={() => open()}
+            action={() => setShowStepTwoModal(true)}
             variant="simple"
           />
           <Modal
-            opened={showModal}
+            opened={showStepTwoModal}
             centered
-            onClose={() => 
+            onClose={function(): void 
             {
-              console.log("Closed");
-              setShowModal(false);
+              // next step
+              console.log("close modal");
             }}>
             <Image
               src={modalImg?.src}
@@ -60,7 +66,9 @@ const CaseSolveCaseStep: FunctionComponent<IGenCase> = ({ facts, title }) =>
               onClick={() => 
               {
               // next casePage step
-                close();
+              // close modal
+                setShowStepTwoModal(false);
+                setCaseStepIndex(2);
               }}
               fullWidth>
               Review results

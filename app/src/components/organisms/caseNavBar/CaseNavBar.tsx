@@ -22,7 +22,7 @@ const CaseNavBar: FunctionComponent<ICaseNavBarProps> = ({ activeStep, setCaseSt
   const theme = useMantineTheme();
   const steps = ["COMPLETE TESTS", "SOLVE CASE", "REVIEW REUSLTS"];
   const [progress, setProgress] = useState<number>(0);
-  const { hasCaseSolvingStarted, isStepCompleted } = useCaseSolvingStore();
+  const { hasCaseSolvingStarted, isStepCompleted, setShowStepTwoModal } = useCaseSolvingStore();
 
   useEffect(() => 
   {
@@ -48,8 +48,8 @@ const CaseNavBar: FunctionComponent<ICaseNavBarProps> = ({ activeStep, setCaseSt
     
     if(setCaseStepIndex)
     {
-      // if(activeStep === 0) { setCaseStepIndex(1); }
-      // if(activeStep === 1)   
+      if(activeStep === 0) { setCaseStepIndex(1); }
+      if(activeStep === 1) { setShowStepTwoModal(true); }  
     }
   };
 
