@@ -21,6 +21,7 @@ export const wrapper = ({ hidden, theme }: {
     position: sticky;
     top: 0;
     background-color: ${theme.colors["neutrals-01"][0]};
+		z-index: 1;
 	}
 	overflow: visible;
 

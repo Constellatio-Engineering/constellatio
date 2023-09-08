@@ -17,7 +17,6 @@ const CasePage: FunctionComponent<IGenCase> = ({
   topic
 }) => 
 {
-  const content = fullTextTasks?.json?.content?.filter((contentItem: { content: { text: string }[]; type: string }) => contentItem?.type === "heading");
   const [caseStepIndex, setCaseStepIndex] = React.useState<0 | 1 | 2>(0);
   return (
     <>
@@ -41,7 +40,7 @@ const CasePage: FunctionComponent<IGenCase> = ({
         setCaseStepIndex={setCaseStepIndex}
       />
       <div css={styles.mainContainer}>
-        {caseStepIndex === 0 && <CaseCompleteTestsStep content={content} facts={facts} fullTextTasks={fullTextTasks}/>}
+        {caseStepIndex === 0 && <CaseCompleteTestsStep facts={facts} fullTextTasks={fullTextTasks}/>}
         {/* upon creating the other two steps other index uses will be added here */}
         {/* caseStepIndex === 1  */}
         {/* caseStepIndex === 2  */}
