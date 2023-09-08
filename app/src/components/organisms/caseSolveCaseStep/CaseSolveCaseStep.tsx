@@ -6,26 +6,25 @@ import { RichtextEditorField } from "@/components/molecules/RichtextEditorField/
 import { type IGenCase } from "@/services/graphql/__generated/sdk";
 import useCaseSolvingStore from "@/stores/caseSolving.store";
 
-import { Group, Title } from "@mantine/core";
-import { useDisclosure } from "@mantine/hooks";
+import { Title } from "@mantine/core";
 import Image from "next/image";
-import React, { useEffect, type FunctionComponent } from "react";
+import React, { useEffect, type FunctionComponent, useState } from "react";
 
 import * as styles from "./CaseSolveCaseStep.styles";
 import modalImg from "../../Icons/CaseResultModalIcon.png";
-import { content } from "../caseCompleteTestsStep/CaseCompleteTestsStep.styles";
 
 const CaseSolveCaseStep: FunctionComponent<IGenCase> = ({ facts, title }) => 
 {
   const { setHasCaseSolvingStarted, setIsStepCompleted } = useCaseSolvingStore(); 
+  // const [isOpened, { close, open }] = useDisclosure(false);
 
+  const [showModal, setShowModal] = useState(true);
   useEffect(() => 
   {
     setIsStepCompleted(false);
     setHasCaseSolvingStarted(true);
   // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
-  const [isOpened, { close, open }] = useDisclosure(false);
   return (
     <div css={styles.wrapper} id="solveCaseStepContent">
       {title && (
@@ -39,12 +38,12 @@ const CaseSolveCaseStep: FunctionComponent<IGenCase> = ({ facts, title }) =>
             variant="simple"
           />
           <Modal
-            opened={isOpened}
+            opened={showModal}
             centered
             onClose={() => 
             {
               console.log("Closed");
-              close();
+              setShowModal(false);
             }}>
             <Image
               src={modalImg?.src}

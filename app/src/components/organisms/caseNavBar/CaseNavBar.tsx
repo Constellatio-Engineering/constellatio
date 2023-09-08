@@ -13,36 +13,23 @@ import { calculateScrollProgress } from "./caseNavbarHelper";
 export interface ICaseNavBarProps 
 {
   readonly activeStep?: 0 | 1 | 2;
-  readonly progressPercentage?: number;
   readonly setCaseStepIndex?: React.Dispatch<React.SetStateAction<0 | 1 | 2>>;
   readonly variant: "case" | "dictionary";
 }
 
-const CaseNavBar: FunctionComponent<ICaseNavBarProps> = ({
-  activeStep,
-  progressPercentage,
-  setCaseStepIndex,
-  variant,
-}) => 
+const CaseNavBar: FunctionComponent<ICaseNavBarProps> = ({ activeStep, setCaseStepIndex, variant }) => 
 {
   const theme = useMantineTheme();
   const steps = ["COMPLETE TESTS", "SOLVE CASE", "REVIEW REUSLTS"];
-  const [progress, setProgress] = useState<number>(progressPercentage ?? 0);
+  const [progress, setProgress] = useState<number>(0);
   const { hasCaseSolvingStarted, isStepCompleted } = useCaseSolvingStore();
-
-  useEffect(() => 
-  {
-    if(progressPercentage) 
-    {
-      setProgress(progressPercentage);
-    }
-  }, [progressPercentage]);
 
   useEffect(() => 
   {
     const handleScroll = (): void => 
     {
-      setProgress(calculateScrollProgress(activeStep === 0 ? "completeTestsStepContent" : activeStep === 1 ? "solveCaseStepContent" : ""));
+      if(activeStep === 0) { setProgress(calculateScrollProgress("completeTestsStepContent")); }
+      if(activeStep === 1) { setProgress(calculateScrollProgress("solveCaseStepContent")); }
     };
     if(hasCaseSolvingStarted)
     {
@@ -53,6 +40,12 @@ const CaseNavBar: FunctionComponent<ICaseNavBarProps> = ({
 
   const handleCallToAction = (): void => 
   {
+    console.log({
+      currentStep: activeStep,
+      hasCaseSolvingStarted,
+      isStepCompleted
+    });
+    
     if(setCaseStepIndex)
     {
       // if(activeStep === 0) { setCaseStepIndex(1); }
@@ -75,7 +68,7 @@ const CaseNavBar: FunctionComponent<ICaseNavBarProps> = ({
                   {
                     console.log({ activeStep, index });
                     
-                    if(activeStep > 0) { setCaseStepIndex(index); }
+                    if(activeStep > 0 && activeStep > index) { setCaseStepIndex(index); }
                   }}
                   css={styles.tab({
                     active: index === activeStep,

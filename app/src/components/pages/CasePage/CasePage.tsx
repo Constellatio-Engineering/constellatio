@@ -4,6 +4,7 @@ import CaseSolveCaseStep from "@/components/organisms/caseSolveCaseStep/CaseSolv
 import CaseSolvingHeader from "@/components/organisms/caseSolvingHeader/CaseSolvingHeader";
 import { type IGenCase } from "@/services/graphql/__generated/sdk";
 
+import { useDisclosure } from "@mantine/hooks";
 import React, { type FunctionComponent } from "react";
 
 import * as styles from "./CasesPage.styles";
@@ -19,6 +20,7 @@ const CasePage: FunctionComponent<IGenCase> = ({
 }) => 
 {
   const [caseStepIndex, setCaseStepIndex] = React.useState<0 | 1 | 2>(1);
+
   return (
     <>
       <CaseSolvingHeader
@@ -51,7 +53,7 @@ const CasePage: FunctionComponent<IGenCase> = ({
         {caseStepIndex === 1 && (
           <CaseSolveCaseStep {...{
             facts,
-            title,
+            title
           }}
           />
         )}

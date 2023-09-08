@@ -54,7 +54,7 @@ export const StepTwoWithProgress: Story = {
 
 export const StepThree: Story = {
   args: {
-    activeStep: 3,
+    activeStep: 2,
     progressPercentage: 10,
     variant: "case",
   },
