@@ -64,8 +64,9 @@ export const richtextEditorFieldStyles = (): RichtextEditorFieldStyles =>
       },
     },
     root: {
+      background: `${theme.colors["neutrals-01"][0]}`,
       border: `1px solid ${theme.colors["neutrals-01"][5]}`,
-      borderRadius: "12px",
+      borderRadius: "12px"
     },
     toolbar: {
       "& .blockquote-control": {

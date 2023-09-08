@@ -7,9 +7,13 @@ interface ICaseSolvingStore
   getNextGameIndex: () => void;
   hasCaseSolvingStarted: boolean;
   isLastGame: boolean;
+  isStepCompleted: boolean;
   latestGameIndex: number ;
   setGamesIndexes: (gamesIndexes: number[]) => void;
   setHasCaseSolvingStarted: (hasCaseSolvingStarted: boolean) => void;
+  setIsStepCompleted: (isCompleted: boolean) => void;
+  setShowStepTwoModal: (showStepTwoModal: boolean) => void;
+  showStepTwoModal: boolean;
 }
 
 const useCaseSolvingStore = create(
@@ -37,6 +41,7 @@ const useCaseSolvingStore = create(
     },
     hasCaseSolvingStarted: false,
     isLastGame: false,
+    isStepCompleted: false,
     latestGameIndex: 0,
     setGamesIndexes: (gamesIndexes) => 
     {
@@ -52,6 +57,21 @@ const useCaseSolvingStore = create(
         state.hasCaseSolvingStarted = hasCaseSolvingStarted;
       });
     },
+    setIsStepCompleted(isCompleted) 
+    {
+      set((state) => 
+      {
+        state.isStepCompleted = isCompleted;
+      });
+    },
+    setShowStepTwoModal: (showStepTwoModal) =>
+    {
+      set((state) => 
+      {
+        state.showStepTwoModal = showStepTwoModal;
+      });
+    },
+    showStepTwoModal: false
   }))
 );
 

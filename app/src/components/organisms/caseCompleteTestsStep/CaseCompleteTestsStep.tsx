@@ -74,7 +74,7 @@ const CaseCompleteTestsStep: FunctionComponent<ICaseCompleteTestsStepProps> = ({
   }, [fullTextTasks]);
 
   return (
-    <div css={styles.contentWrapper}>
+    <div css={styles.contentWrapper} id="completeTestsStepContent">
       <div css={styles.facts}>
         <Title order={2}>Facts</Title>
         <Richtext
