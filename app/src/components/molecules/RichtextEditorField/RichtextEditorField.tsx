@@ -32,7 +32,6 @@ export const RichtextEditorField: FC<RichtextEditorFieldProps> = ({ action, cont
   const { setIsStepCompleted } = useCaseSolvingStore();
   useEffect(() =>
   {
-    console.log({ empt: editor?.isEmpty });
     if(editor?.isEmpty)
     {
       setIsStepCompleted(false);

@@ -40,12 +40,6 @@ const CaseNavBar: FunctionComponent<ICaseNavBarProps> = ({ activeStep, setCaseSt
 
   const handleCallToAction = (): void => 
   {
-    console.log({
-      currentStep: activeStep,
-      hasCaseSolvingStarted,
-      isStepCompleted
-    });
-    
     if(setCaseStepIndex)
     {
       if(activeStep === 0) { setCaseStepIndex(1); }
@@ -66,8 +60,6 @@ const CaseNavBar: FunctionComponent<ICaseNavBarProps> = ({ activeStep, setCaseSt
                   key={index}
                   onClick={() => 
                   {
-                    console.log({ activeStep, index });
-                    
                     if(activeStep > 0 && activeStep > index) { setCaseStepIndex(index); }
                   }}
                   css={styles.tab({
