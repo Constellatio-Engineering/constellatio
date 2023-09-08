@@ -1,5 +1,6 @@
 import CaseCompleteTestsStep from "@/components/organisms/caseCompleteTestsStep/CaseCompleteTestsStep";
 import CaseNavBar from "@/components/organisms/caseNavBar/CaseNavBar";
+import CaseResultsReviewStep from "@/components/organisms/caseResultsReviewStep/CaseResultsReviewStep";
 import CaseSolveCaseStep from "@/components/organisms/caseSolveCaseStep/CaseSolveCaseStep";
 import CaseSolvingHeader from "@/components/organisms/caseSolvingHeader/CaseSolvingHeader";
 import { type IGenCase } from "@/services/graphql/__generated/sdk";
@@ -12,19 +13,23 @@ const CasePage: FunctionComponent<IGenCase> = ({
   durationToCompleteInMinutes,
   facts,
   fullTextTasks,
+  id,
   legalArea,
+  resolution,
   tags,
   title,
   topic
 }) => 
 {
-  const [caseStepIndex, setCaseStepIndex] = React.useState<0 | 1 | 2>(1);
-
+  const [caseStepIndex, setCaseStepIndex] = React.useState<0 | 1 | 2>(2);
+  console.log({ resolution });
+   
   return (
     <>
       <CaseSolvingHeader
         title={title ?? ""}
         variant="case"
+        pathSlugs={[{ path: "/cases", slug: "Cases" }, { path: `/cases/${id}`, slug: title ?? "" }]}
         overviewCard={{
           lastUpdated: new Date(),
           legalArea,
@@ -34,6 +39,7 @@ const CasePage: FunctionComponent<IGenCase> = ({
           topic: topic?.[0]?.topicName ?? "",
           variant: "case",
           views: 0,
+
         }}
       />
       <CaseNavBar
@@ -58,6 +64,7 @@ const CasePage: FunctionComponent<IGenCase> = ({
           />
         )}
         {/* caseStepIndex === 2  */}
+        {caseStepIndex === 2 && <CaseResultsReviewStep/>}
       </div>
       
     </>

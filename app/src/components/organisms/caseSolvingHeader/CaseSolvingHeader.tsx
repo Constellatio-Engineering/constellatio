@@ -10,10 +10,16 @@ import React, { type FunctionComponent, type ReactNode } from "react";
 
 import * as styles from "./CaseSolvingHeader.styles";
 import OverviewCard, { type IOverviewCard } from "../overviewCard/OverviewCard";
+
+interface IBreadcrumbItem 
+{
+  path: string;
+  slug: string;
+}
 export interface ICaseSolvingHeaderProps 
 {
   readonly overviewCard: IOverviewCard;
-  readonly pathSlugs?: string[];
+  readonly pathSlugs?: IBreadcrumbItem[];
   // readonly steps?: string[];
   readonly title: string;
   readonly variant: "case" | "dictionary";
@@ -56,8 +62,8 @@ const CaseSolvingHeader: FunctionComponent<ICaseSolvingHeaderProps> = ({
             ))}
           </div>
           <div className="bread-crumb">
-            {pathSlugs?.map((slug, index) => (
-              <Link key={index} href={`/${slug}`}>{slug}{index + 1 < pathSlugs.length ? " / " : ""}</Link>
+            {pathSlugs?.map(({ path, slug }, index) => (
+              <Link key={index} href={path}>{slug}{index + 1 < pathSlugs.length ? " / " : ""}</Link>
             ))}
           </div>
           <div className="headline">

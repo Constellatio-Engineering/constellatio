@@ -1124,7 +1124,10 @@ export type IGenFullCaseFragment = { __typename: 'Case', id?: string | null, tit
   ) | null> | null, topic?: Array<(
     { __typename?: 'Topic' }
     & IGenTopicFragment
-  ) | null> | null };
+  ) | null> | null, resolution?: (
+    { __typename?: 'TextElement' }
+    & IGenTextElementFragment
+  ) | null };
 
 export type IGenFullTextTasksFragment = { __typename: 'Case_fullTextTasks', json?: any | null, connections?: Array<(
     { __typename: 'Callout' }
@@ -1377,6 +1380,9 @@ export const FullCaseFragmentDoc = gql`
   }
   topic {
     ...Topic
+  }
+  resolution {
+    ...TextElement
   }
 }
     `;

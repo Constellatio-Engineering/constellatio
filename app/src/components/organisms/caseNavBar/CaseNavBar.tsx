@@ -29,6 +29,7 @@ const CaseNavBar: FunctionComponent<ICaseNavBarProps> = ({ activeStep, setCaseSt
     {
       if(activeStep === 0) { setProgress(calculateScrollProgress("completeTestsStepContent")); }
       if(activeStep === 1) { setProgress(calculateScrollProgress("solveCaseStepContent")); }
+      if(activeStep === 2) { setProgress(calculateScrollProgress("ResultsReviewStepContent")); }
     };
     if(hasCaseSolvingStarted)
     {

@@ -9,7 +9,7 @@ export interface ICaseResultsReviewStepProps
 
 const CaseResultsReviewStep: FunctionComponent<ICaseResultsReviewStepProps> = ({  }) => {
   return (
-    <div css={styles.wrapper}>
+    <div css={styles.wrapper} id="ResultsReviewStepContent">
       CaseResultsReviewStep
     </div>
   );
