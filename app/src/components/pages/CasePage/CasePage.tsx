@@ -1,5 +1,6 @@
 import CaseCompleteTestsStep from "@/components/organisms/caseCompleteTestsStep/CaseCompleteTestsStep";
 import CaseNavBar from "@/components/organisms/caseNavBar/CaseNavBar";
+import CaseSolveCaseStep from "@/components/organisms/caseSolveCaseStep/CaseSolveCaseStep";
 import CaseSolvingHeader from "@/components/organisms/caseSolvingHeader/CaseSolvingHeader";
 import { type IGenCase } from "@/services/graphql/__generated/sdk";
 
@@ -17,8 +18,7 @@ const CasePage: FunctionComponent<IGenCase> = ({
   topic
 }) => 
 {
-  const content = fullTextTasks?.json?.content?.filter((contentItem: { content: { text: string }[]; type: string }) => contentItem?.type === "heading");
-  const [caseStepIndex, setCaseStepIndex] = React.useState<0 | 1 | 2>(0);
+  const [caseStepIndex, setCaseStepIndex] = React.useState<0 | 1 | 2>(1);
   return (
     <>
       <CaseSolvingHeader
@@ -41,9 +41,20 @@ const CasePage: FunctionComponent<IGenCase> = ({
         setCaseStepIndex={setCaseStepIndex}
       />
       <div css={styles.mainContainer}>
-        {caseStepIndex === 0 && <CaseCompleteTestsStep content={content} facts={facts} fullTextTasks={fullTextTasks}/>}
-        {/* upon creating the other two steps other index uses will be added here */}
-        {/* caseStepIndex === 1  */}
+        {caseStepIndex === 0 && (
+          <CaseCompleteTestsStep {...{
+            facts,
+            fullTextTasks,
+          }}
+          />
+        )}
+        {caseStepIndex === 1 && (
+          <CaseSolveCaseStep {...{
+            facts,
+            title,
+          }}
+          />
+        )}
         {/* caseStepIndex === 2  */}
       </div>
       
