@@ -5,25 +5,28 @@ const DictionaryCSS = css`
   height: 5px;
 `;
 
-export const wrapper = ({ theme, variant }: {
-  theme: MantineTheme;
+export const componentArea = (theme: MantineTheme): SerializedStyles => css`
+ background-color: ${theme.colors["neutrals-01"][0]};
+ border-bottom: 8px solid ${theme.colors["neutrals-01"][4]};
+ position: sticky;
+  top: 0;
+  z-index: 41;
+  width: 100%;
+  padding: 12px 0px;
+ `;
+
+export const wrapper = ({ variant }: {
   variant: "case" | "dictionary";
 }) => css`
   display: flex;
   justify-content: space-between;
   align-items: center;
   flex-wrap: wrap;
-  /* height: 72px; */
   padding:12px 0;
-  background-color: ${theme.colors["neutrals-01"][0]};
-  /* position: relative; */
-  ${variant === "dictionary" && DictionaryCSS}
-border-bottom: 8px solid ${theme.colors["neutrals-01"][4]};
   position: -webkit-sticky;
-  position: sticky;
-  top: 0;
-  z-index: 41;
-  width: 100%;
+  max-width: 1440px;
+  margin: 0 auto;  
+  ${variant === "dictionary" && DictionaryCSS}
 `;
 
 export const tabs = css`
@@ -31,7 +34,6 @@ export const tabs = css`
   align-items: center;
   flex-wrap: wrap;
   gap: 16px;
-  margin-left: 60px;
 `;
 export const tab = ({ active, completed, theme }: {
   active: boolean;

@@ -4,7 +4,8 @@ export const contentWrapper = css``;
 
 export const facts = css`
 	max-width: 52.5%;
-	padding: 0 44px;
+	/* padding: 0 44px; */
+	padding: 0;
 
 	display: flex;
 	flex-direction: column;
@@ -30,7 +31,8 @@ export const toc = css`
 
 export const fullTextAndTasksWrapper = css`
 	max-width: 52.5%;
-	padding: 0 44px;
+	/* padding: 0 44px; */
+	padding: 0 ;
 `;
 
 export const componentWrapper = css`
