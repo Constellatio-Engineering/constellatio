@@ -12,7 +12,7 @@ export const componentArea = (theme: MantineTheme): SerializedStyles => css`
   top: 0;
   z-index: 41;
   width: 100%;
-  padding: 12px ;
+  padding: 0px ;
  `;
 
 export const wrapper = ({ variant }: {
@@ -34,6 +34,7 @@ export const tabs = css`
   align-items: center;
   flex-wrap: wrap;
   gap: 16px;
+  margin-left: 12px;
 `;
 export const tab = ({ active, completed, theme }: {
   active: boolean;
@@ -67,10 +68,8 @@ export const tab = ({ active, completed, theme }: {
   cursor: pointer;
 `;
 export const callToAction = css`
-  margin-inline: 0px;
-  @media screen and (max-width: 1000px) {
-    margin:12px 0px;
-  }
+margin-right: 12px;
+
 `;
 export const progressBar = ({
   progress,
