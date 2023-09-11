@@ -63,7 +63,7 @@ const CasePage: FunctionComponent<IGenCase> = ({
           }}
           />
         )}
-        {facts && resolution && caseStepIndex === 2 && <CaseResultsReviewStep {...{ setCaseStepIndex,facts, resolution }}/>}
+        {facts && resolution && title && caseStepIndex === 2 && <CaseResultsReviewStep {...{ title,setCaseStepIndex,facts, resolution }}/>}
       </div>
     </>
   );
