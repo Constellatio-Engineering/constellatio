@@ -12,17 +12,15 @@ interface TRichtextOverwrite
   readonly correctAnswers: MutableRefObject<string[]>;
   readonly focusedIndex: MutableRefObject<number | null>;
   readonly handleInputChange: (index: number, value: string) => void;
-  readonly inputCounter: MutableRefObject<number>;
   readonly text: string;
   readonly userAnswers: string[];
 }
 
-let RichtextOverwrite: FC<TRichtextOverwrite> = ({
+const _RichtextOverwrite: FC<TRichtextOverwrite> = ({
   answerResult,
   correctAnswers,
   focusedIndex,
   handleInputChange,
-  inputCounter,
   text,
   userAnswers
 }) =>  
@@ -31,6 +29,7 @@ let RichtextOverwrite: FC<TRichtextOverwrite> = ({
   const { gameStatus } = useFillGapsGameStore();
 
   const inputRefs = useRef<RefObject<HTMLInputElement>[]>([]);
+  let currentInputIndex = -1;
 
   // Splitting the text based on {{...}} pattern using regex
   const parts = text.split(/({{.*?}})/g);
@@ -40,11 +39,6 @@ let RichtextOverwrite: FC<TRichtextOverwrite> = ({
     handleInputChange(index, e.target.value);
     focusedIndex.current = index;
   };
-
-  useEffect(() => 
-  {
-    inputCounter.current = 0;
-  }, []);
 
   useEffect(() => 
   {
@@ -66,8 +60,10 @@ let RichtextOverwrite: FC<TRichtextOverwrite> = ({
             correctAnswers.current.push(innerContent);
           }
 
-          const currentInputIndex = inputCounter.current;
-          inputCounter.current += 1;
+          // const currentInputIndex = inputCounter.current;
+          // inputCounter.current++;
+          currentInputIndex++;
+          console.log("child", currentInputIndex);
 
           if(!inputRefs.current[currentInputIndex]) 
           {
@@ -104,7 +100,7 @@ let RichtextOverwrite: FC<TRichtextOverwrite> = ({
   );
 };
 
-RichtextOverwrite.displayName = "RichtextOverwrite";
-RichtextOverwrite = memo(RichtextOverwrite);
+_RichtextOverwrite.displayName = "RichtextOverwrite";
+const RichtextOverwrite = memo(_RichtextOverwrite);
 
 export default RichtextOverwrite;

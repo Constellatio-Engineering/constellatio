@@ -10,6 +10,7 @@ import { ResultCard } from "@/components/molecules/ResultCard/ResultCard";
 import { Richtext } from "@/components/molecules/Richtext/Richtext";
 import RichtextOverwrite from "@/components/organisms/FillGapsGame/RichtextOverwrite";
 import { type IGenFillInGapsGame } from "@/services/graphql/__generated/sdk";
+import useCaseSolvingStore from "@/stores/caseSolving.store";
 import useFillGapsGameStore from "@/stores/fillGapsGame.store";
 import { type TextElement } from "types/richtext";
 
@@ -62,13 +63,17 @@ export const FillGapsGame: FC<TFillGapsGame> = ({ fillGameParagraph, helpNote, q
 
   const {
     gameStatus,
+    gameSubmitted,
     resultMessage,
     setGameStatus,
+    setGameSubmitted,
     setResultMessage
   } = useFillGapsGameStore();
+
+  const { getNextGameIndex } = useCaseSolvingStore();
+
   const [userAnswers, setUserAnswers] = useState<string[]>(new Array(totalPlaceholders).fill(""));
   const [answerResult, setAnswerResult] = useState<string[]>(new Array(totalPlaceholders).fill(""));
-  const inputCounter = useRef(0);
   const correctAnswers = useRef<string[]>([]);
   const focusedIndex = useRef<number | null>(null);
 
@@ -149,12 +154,17 @@ export const FillGapsGame: FC<TFillGapsGame> = ({ fillGameParagraph, helpNote, q
       setGameStatus("lose");
       setResultMessage("Some answers are incorrect. Please try again.");
     }
+
+    if(!gameSubmitted) 
+    {
+      setGameSubmitted(true);
+      getNextGameIndex();
+    }
   };
 
   const handleResetGame = (): void => 
   {
     setGameStatus("inprogress");
-    inputCounter.current = 0;
     correctAnswers.current = [];
     setUserAnswers(new Array(totalPlaceholders).fill(""));
     setAnswerResult(new Array(totalPlaceholders).fill(""));
@@ -169,7 +179,6 @@ export const FillGapsGame: FC<TFillGapsGame> = ({ fillGameParagraph, helpNote, q
         text={props?.children?.[0]?.props?.node.text}
         correctAnswers={correctAnswers}
         handleInputChange={handleInputChange}
-        inputCounter={inputCounter}
         userAnswers={userAnswers}
         focusedIndex={focusedIndex}
         answerResult={answerResult}
