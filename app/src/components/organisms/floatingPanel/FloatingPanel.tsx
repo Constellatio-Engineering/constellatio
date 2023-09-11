@@ -38,7 +38,7 @@ const FloatingPanel: FunctionComponent<IFloatingPanelProps> = ({
   const theme = useMantineTheme();
 
   return content?.length > 0 ? (
-    <ScrollArea h={hidden ? 300 : 600} sx={{ borderRadius: "12px" }}>
+    <ScrollArea h={hidden ? 300 : 600} styles={() => ({ scrollbar: { zIndex: 1 } })} sx={{ borderRadius: "12px" }}>
       <div css={styles.wrapper({ hidden, theme })}>
         {hidden && (
           <div className="hidden-overlay">

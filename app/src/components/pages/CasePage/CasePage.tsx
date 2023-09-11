@@ -21,9 +21,9 @@ const CasePage: FunctionComponent<IGenCase> = ({
   topic
 }) => 
 {
-  const [caseStepIndex, setCaseStepIndex] = React.useState<0 | 1 | 2>(2);
-  console.log({ resolution });
    
+  const [caseStepIndex, setCaseStepIndex] = React.useState<0 | 1 | 2>(0);
+
   return (
     <>
       <CaseSolvingHeader
