@@ -29,7 +29,7 @@ export const RichtextEditorField: FC<RichtextEditorFieldProps> = ({ action, cont
       }),
     ],
   });
-  const { setIsStepCompleted } = useCaseSolvingStore();
+  const { setIsStepCompleted,setSolution } = useCaseSolvingStore();
   useEffect(() =>
   {
     if(editor?.isEmpty)
@@ -48,11 +48,14 @@ export const RichtextEditorField: FC<RichtextEditorFieldProps> = ({ action, cont
 
   const handleSubmit = (): void => 
   {
+    const richTextContent: string = editor?.getHTML() ?? "";
     // add content to globalState ana send to supabase?
-    // const richTextContent = editor?.getHTML();
-    // Open Modal with results button
+    // store content locally with caseSolving.store.ts
+    setSolution(richTextContent);
+    console.log({ richTextContent });
+    
+    // closes modal and apply next step function
     if(action) { action(); }
-
   };
 
   return (

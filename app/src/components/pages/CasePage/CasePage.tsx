@@ -22,7 +22,7 @@ const CasePage: FunctionComponent<IGenCase> = ({
 }) => 
 {
    
-  const [caseStepIndex, setCaseStepIndex] = React.useState<0 | 1 | 2>(2);
+  const [caseStepIndex, setCaseStepIndex] = React.useState<0 | 1 | 2>(1);
 
   return (
     <>
@@ -63,7 +63,7 @@ const CasePage: FunctionComponent<IGenCase> = ({
           }}
           />
         )}
-        {facts && resolution && caseStepIndex === 2 && <CaseResultsReviewStep {...{ facts, resolution }}/>}
+        {facts && resolution && caseStepIndex === 2 && <CaseResultsReviewStep {...{ setCaseStepIndex,facts, resolution }}/>}
       </div>
     </>
   );

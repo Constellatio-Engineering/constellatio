@@ -29,8 +29,9 @@ export const factsWrapper = (theme: MantineTheme) => css`
 `;
 
 const CSSshowSolutionCard = css`
-  height: auto;
-  overflow: auto;
+  height:100%;
+  max-height: 100%;
+  overflow: visible;
 `;
 
 export const solutionWrapper = ({ isExpandSolution, theme }: {
@@ -39,11 +40,12 @@ export const solutionWrapper = ({ isExpandSolution, theme }: {
 }) => css`
   background-color: ${theme.colors["neutrals-01"][0]};
   border-radius: 12px;
-  height: 350px;
-  overflow: auto;
+  width: 100%;
+  height:100%;
+  max-height: 350px; 
   overflow: hidden;
-  transition: height 0.5s ease-in-out;
   ${isExpandSolution && CSSshowSolutionCard};
+  transition: height 0.5s ease-in-out;
   position: relative;
   .solution-header {
     display: flex;
@@ -55,6 +57,12 @@ export const solutionWrapper = ({ isExpandSolution, theme }: {
     padding: 20px;
     position: relative;
     z-index: 2;
+
+    font-family: Karla;
+font-size: 16px;
+font-style: normal;
+font-weight: 400;
+line-height: 24px; /* 150% */
   }
   .show-all {
     z-index: 3;
