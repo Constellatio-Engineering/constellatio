@@ -13,9 +13,9 @@ interface ICaseSolvingStore
   setHasCaseSolvingStarted: (hasCaseSolvingStarted: boolean) => void;
   setIsStepCompleted: (isCompleted: boolean) => void;
   setShowStepTwoModal: (showStepTwoModal: boolean) => void;
+  setSolution: (solution: string) => void;
   showStepTwoModal: boolean;
   solution: string;
-  setSolution: (solution: string) => void;
 }
 
 const useCaseSolvingStore = create(
@@ -73,15 +73,15 @@ const useCaseSolvingStore = create(
         state.showStepTwoModal = showStepTwoModal;
       });
     },
-    showStepTwoModal: false,
-    solution: "",
     setSolution: (solution) =>
     {
       set((state) => 
       {
         state.solution = solution;
       });
-    }
+    },
+    showStepTwoModal: false,
+    solution: ""
 
   }))
 );

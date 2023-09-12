@@ -9,63 +9,77 @@ import { Edit } from "@/components/Icons/Edit";
 import { Notepad } from "@/components/Icons/Notepad";
 import { Pen } from "@/components/Icons/Pen";
 import { Print } from "@/components/Icons/print";
+import { Modal } from "@/components/molecules/Modal/Modal";
 import { Richtext } from "@/components/molecules/Richtext/Richtext";
 import { type Maybe, type IGenTextElement } from "@/services/graphql/__generated/sdk";
+import caseSolvingStore from "@/stores/caseSolving.store";
 
-import { Accordion, Container, Group, Text, Title, useMantineTheme } from "@mantine/core";
+import {
+  Accordion, Container, Group, Text, Title, useMantineTheme 
+} from "@mantine/core";
+import { useDisclosure } from "@mantine/hooks";
 import React, { useRef, type FunctionComponent, useEffect } from "react";
 
 import * as styles from "./CaseResultsReviewStep.styles";
-import caseSolvingStore from "@/stores/caseSolving.store";
-import { Modal } from "@/components/molecules/Modal/Modal";
-import { useDisclosure } from "@mantine/hooks";
 
-export interface ICaseResultsReviewStepProps {
+export interface ICaseResultsReviewStepProps 
+{
   readonly facts: Maybe<IGenTextElement>;
   readonly resolution: Maybe<IGenTextElement>;
-  setCaseStepIndex: React.Dispatch<React.SetStateAction<0 | 1 | 2>>;
-  title: string;
+  readonly setCaseStepIndex: React.Dispatch<React.SetStateAction<0 | 1 | 2>>;
+  readonly title: string;
 }
 
-const CaseResultsReviewStep: FunctionComponent<ICaseResultsReviewStepProps> = ({ title, facts, resolution, setCaseStepIndex }) => {
+const CaseResultsReviewStep: FunctionComponent<ICaseResultsReviewStepProps> = ({
+  facts,
+  resolution,
+  setCaseStepIndex,
+  title
+}) => 
+{
   console.log({ facts, resolution });
   const theme = useMantineTheme();
   const [isExpandSolution, setIsExpandSolution] = React.useState<boolean>(false);
   const icons = [
-    { src: <Bookmark />, title: "Bookmark" },
-    { src: <Print />, title: "Print" },
+    { src: <Bookmark/>, title: "Bookmark" },
+    { src: <Print/>, title: "Print" },
   ];
   const { solution } = caseSolvingStore();
-  const solutionContent = useRef<HTMLDivElement>(null)
+  const solutionContent = useRef<HTMLDivElement>(null);
   const [solutionElementHight, setSolutionElementHight] = React.useState<number>(0);
 
-  useEffect(() => {
+  useEffect(() => 
+  {
     console.log({ solution });
-    if (solution && solutionContent.current !== undefined) {
+    if(solution && solutionContent.current !== undefined) 
+    {
       solutionContent.current!.innerHTML = solution;
       setSolutionElementHight(solutionContent.current!.offsetHeight);
     }
-  }, [solution])
+  }, [solution]);
 
   const [isOpened, { close, open }] = useDisclosure(false);
-  const editButtonClick = (): void => {
+  const editButtonClick = (): void => 
+  {
     // go back a step
     // setCaseStepIndex(1)
 
     // show modal
-    open()
+    open();
 
-  }
+  };
 
-  const resetProgressButton = (): void => {
+  const resetProgressButton = (): void => 
+  {
     close();
     setCaseStepIndex(0);
-  }
+  };
 
-  const keepProgressButton = (): void => {
+  const keepProgressButton = (): void => 
+  {
     close();
     setCaseStepIndex(1);
-  }
+  };
 
   return (
     <div css={styles.wrapper} id="ResultsReviewStepContent">
@@ -80,7 +94,7 @@ const CaseResultsReviewStep: FunctionComponent<ICaseResultsReviewStepProps> = ({
                       <Title order={3}>Facts</Title>
                     </Accordion.Control>
                     <Accordion.Panel>
-                      <Richtext richTextContent={facts.richTextContent} />
+                      <Richtext richTextContent={facts.richTextContent}/>
                     </Accordion.Panel>
                   </Accordion.Item>
                 </Accordion>
@@ -88,30 +102,31 @@ const CaseResultsReviewStep: FunctionComponent<ICaseResultsReviewStepProps> = ({
             )}
             <div css={styles.solutionWrapper({ isExpandSolution, theme })}>
               <div className="solution-header">
-                <Title order={3}><Pen /> Your solution</Title>
+                <Title order={3}><Pen/> Your solution</Title>
                 <div className="edit-but">
-                  <Button<"button"> onClick={() => editButtonClick()
-
-                  } styleType="secondarySimple"><Edit /> Edit</Button>
+                  <Button<"button"> onClick={() => editButtonClick()} styleType="secondarySimple"><Edit/> Edit
+                  </Button>
                 </div>
               </div>
               <div className="solution-content">
-                <div ref={solutionContent} />
+                <div ref={solutionContent}/>
 
               </div>
-              {solutionElementHight > 240 && <div className="show-all">
-                <Button<"button"> styleType="tertiary" onClick={() => setIsExpandSolution(prev => !prev)}>Show {!isExpandSolution ? "all" : "less"}<ArrowDown /></Button>
-              </div>}
+              {solutionElementHight > 240 && (
+                <div className="show-all">
+                  <Button<"button"> styleType="tertiary" onClick={() => setIsExpandSolution(prev => !prev)}>Show {!isExpandSolution ? "all" : "less"}<ArrowDown/></Button>
+                </div>
+              )}
             </div>
           </div>
           <div css={styles.resolutionWrapper}>
             <div className="resolution-header">
-              <Title order={2}><Notepad size={24} /> Resolution</Title>
+              <Title order={2}><Notepad size={24}/> Resolution</Title>
               <div className="icons-bar">
-                <IconButtonBar icons={icons} />
+                <IconButtonBar icons={icons}/>
               </div>
             </div>
-            <Richtext richTextContent={resolution?.richTextContent} />
+            <Richtext richTextContent={resolution?.richTextContent}/>
           </div>
         </div>
       </Container>
@@ -119,7 +134,8 @@ const CaseResultsReviewStep: FunctionComponent<ICaseResultsReviewStepProps> = ({
         opened={isOpened}
         centered
         title="Reset case progress?"
-        onClose={() => {
+        onClose={() => 
+        {
           console.log("Closed");
           close();
         }}>

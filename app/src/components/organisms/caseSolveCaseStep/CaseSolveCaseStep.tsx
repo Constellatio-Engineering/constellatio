@@ -23,7 +23,8 @@ const CaseSolveCaseStep: FunctionComponent<IGenCase & {readonly setCaseStepIndex
     setHasCaseSolvingStarted,
     setIsStepCompleted,
     setShowStepTwoModal,
-    showStepTwoModal,solution
+    showStepTwoModal,
+    solution
   } = useCaseSolvingStore(); 
   useEffect(() => 
   {
@@ -40,10 +41,12 @@ const CaseSolveCaseStep: FunctionComponent<IGenCase & {readonly setCaseStepIndex
             Of course, the question of whether and how a shareholder can be excluded can also arise in the oHG. Read the related article after handling this case.
           </BodyText>
           <RichtextEditorField
-          content={solution ?? ""}
-            action={() => {
+            content={solution ?? ""}
+            action={() => 
+            {
               
-              setShowStepTwoModal(true)}}
+              setShowStepTwoModal(true);
+            }}
             variant="simple"
           />
           <Modal
