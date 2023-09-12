@@ -13,7 +13,7 @@ interface ICasePageProps
 
 export const getStaticProps: GetStaticProps = async ({ params }) => 
 {
-  const id = Array.isArray(params?.id) ? (params?.id[0] ?? "") : (params?.id ?? "");
+  const id = Array.isArray(params?.slug) ? (params?.slug[0] ?? "") : (params?.slug ?? "");
   const resCase = await getCaseById({ id });
   return {
     props: {
@@ -28,7 +28,7 @@ const NextPage: FunctionComponent<ICasePageProps> = ({ legalCase }) =>
 {
   return (
     <Layout>
-      <DetailsPage variant="case" {...legalCase}/>
+      <DetailsPage {...legalCase} variant="dictionary"/>
     </Layout>
   );
 };

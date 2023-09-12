@@ -9,7 +9,7 @@ import React, { type FunctionComponent } from "react";
 
 import * as styles from "./CasesPage.styles";
 
-const CasePage: FunctionComponent<IGenCase> = ({
+const DetailsPage: FunctionComponent<IGenCase& {readonly variant: "case" | "dictionary"}> = ({
   durationToCompleteInMinutes,
   facts,
   fullTextTasks,
@@ -18,17 +18,18 @@ const CasePage: FunctionComponent<IGenCase> = ({
   resolution,
   tags,
   title,
-  topic
+  topic,
+  variant = "case"
 }) => 
 {
    
-  const [caseStepIndex, setCaseStepIndex] = React.useState<0 | 1 | 2>(1);
+  const [caseStepIndex, setCaseStepIndex] = React.useState<0 | 1 | 2>(0);
 
   return (
     <>
       <CaseSolvingHeader
         title={title ?? ""}
-        variant="case"
+        variant={variant}
         pathSlugs={[{ path: "/cases", slug: "Cases" }, { path: `/cases/${id}`, slug: title ?? "" }]}
         overviewCard={{
           lastUpdated: new Date(),
@@ -37,13 +38,13 @@ const CasePage: FunctionComponent<IGenCase> = ({
           tags,
           timeInMinutes: durationToCompleteInMinutes || 0,
           topic: topic?.[0]?.topicName ?? "",
-          variant: "case",
+          variant,
           views: 0,
 
         }}
       />
       <CaseNavBar
-        variant="case"
+        variant={variant}
         activeStep={caseStepIndex}
         setCaseStepIndex={setCaseStepIndex}
       />
@@ -74,4 +75,4 @@ const CasePage: FunctionComponent<IGenCase> = ({
   );
 };
 
-export default CasePage;
+export default DetailsPage;
