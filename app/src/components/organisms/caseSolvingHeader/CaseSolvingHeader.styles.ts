@@ -11,7 +11,7 @@ export const wrapper = ({ theme, variant }: {
   background: ${variant === "case"
     ? theme.colors["cc-cases"][2]
     : theme.colors["cc-dictionary"][2]};
-  min-height: 60vh;
+  /* min-height: 60vh; */
   #overlay-lines {
     position: absolute;
     inset: 0;
@@ -33,7 +33,7 @@ export const body = css`
   justify-content: space-between;
   align-items: center;
   flex-wrap: wrap;
-  padding: 100px 60px;
+  padding: 100px 0px;
   @media (max-width: 800px) {
     justify-content: center;
     gap: 32px;

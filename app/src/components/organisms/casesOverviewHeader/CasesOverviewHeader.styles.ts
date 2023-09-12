@@ -58,7 +58,8 @@ export const filtersArea = () =>
     display: flex;
     justify-content: space-between;
     align-items: center;
-    width: 90%;    
+    width: 90%;
+    max-width:1440px ;
     position: relative;
     z-index: 3;
   `;

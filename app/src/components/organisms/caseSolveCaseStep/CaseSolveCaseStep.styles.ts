@@ -8,6 +8,9 @@ export const wrapper = css`
     @media screen and (max-width: 1000px) {
         flex-direction: column-reverse;
         }
+
+        max-width: 1440px;
+        margin:0 auto;
 `;
 export const textAreaWrapper = css`
     padding:0 44px;

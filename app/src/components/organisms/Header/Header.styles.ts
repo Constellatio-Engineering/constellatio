@@ -16,15 +16,16 @@ export const wrapper = ({ theme, variant }: {
 }) => css`
 	height: 72px;
 	width: 100%;
+	max-width: 1440px;
+	margin:0 auto;
 	display: flex;
 	align-items: center;
 	padding: 0 ${theme.spacing["spacing-24"]};
-	background: ${theme.colors["neutrals-01"][0]};
 	${variant === "simple" ? SimpleHeader : DefaultHeader}
-`;
+	`;
 
 export const SHeader = styled.header`
-	background-color: transparent;
+background: #fff;
 	position: sticky;
 	top: 0;
 	z-index: 40;

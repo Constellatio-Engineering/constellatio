@@ -6,7 +6,7 @@ interface PostDataProps
   url: string;
 }
 
-export const postData = async ({ data, url }: PostDataProps): Promise<any> =>
+export const postData = async ({ data, url }: PostDataProps): Promise<unknown> =>
 {
   console.log("posting,", url, data);
 
