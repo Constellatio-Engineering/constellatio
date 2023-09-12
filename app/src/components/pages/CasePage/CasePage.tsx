@@ -19,18 +19,18 @@ const DetailsPage: FunctionComponent<IGenCase& {readonly variant: "case" | "dict
   tags,
   title,
   topic,
-  variant = "case"
+  variant
 }) => 
 {
    
-  const [caseStepIndex, setCaseStepIndex] = React.useState<0 | 1 | 2>(0);
+  const [caseStepIndex, setCaseStepIndex] = React.useState<0 | 1 | 2>(1);
 
   return (
     <>
       <CaseSolvingHeader
         title={title ?? ""}
         variant={variant}
-        pathSlugs={[{ path: "/cases", slug: "Cases" }, { path: `/cases/${id}`, slug: title ?? "" }]}
+        pathSlugs={[{ path: variant === "case" ? "/cases" : "/dictionaries", slug: variant === "case" ? "Cases" : "Dictionaries" }, { path: `/dictionaries/${id}`, slug: title ?? "" }]}
         overviewCard={{
           lastUpdated: new Date(),
           legalArea,

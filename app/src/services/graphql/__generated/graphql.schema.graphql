@@ -70,7 +70,7 @@ input Article_Where {
 }
 
 """"""
-union Article_asdf = Article | Case | LegalArea | MainCategory | SubCategory | Tags | Topic
+union Article_asdf = Article | Case | Dictionary | LegalArea | MainCategory | SubCategory | Tags | Topic
 
 """"""
 type Asset {
@@ -747,6 +747,221 @@ The `DateTime` scalar type represents a DateTime. The DateTime is serialized as 
 scalar DateTime
 
 """"""
+type Dictionary {
+  """"""
+  _meta: CaisyDocument_Meta
+
+  """"""
+  facts(
+    """
+    The cursor to start the pagination from. In this case the curser equals the id for the (last) element. If not set, we wil start from the beginning.
+    """
+    after: String
+
+    """The number of items to return. Default and max value is 100."""
+    first: Int = 100
+
+    """"""
+    locale: String
+  ): TextElement
+
+  """"""
+  fullTextTasks(locale: String): Dictionary_fullTextTasks
+
+  """"""
+  id: ID
+
+  """"""
+  legalArea(locale: String): Dictionary_legalArea
+
+  """"""
+  mainCategoryField(
+    """
+    The cursor to start the pagination from. In this case the curser equals the id for the (last) element. If not set, we wil start from the beginning.
+    """
+    after: String
+
+    """The number of items to return. Default and max value is 100."""
+    first: Int = 100
+
+    """"""
+    locale: String
+  ): [Dictionary_mainCategoryField]
+
+  """"""
+  resolution(
+    """
+    The cursor to start the pagination from. In this case the curser equals the id for the (last) element. If not set, we wil start from the beginning.
+    """
+    after: String
+
+    """The number of items to return. Default and max value is 100."""
+    first: Int = 100
+
+    """"""
+    locale: String
+  ): TextElement
+
+  """"""
+  subCategoryField(
+    """
+    The cursor to start the pagination from. In this case the curser equals the id for the (last) element. If not set, we wil start from the beginning.
+    """
+    after: String
+
+    """The number of items to return. Default and max value is 100."""
+    first: Int = 100
+
+    """"""
+    locale: String
+  ): [Dictionary_subCategoryField]
+
+  """"""
+  tags(
+    """
+    The cursor to start the pagination from. In this case the curser equals the id for the (last) element. If not set, we wil start from the beginning.
+    """
+    after: String
+
+    """The number of items to return. Default and max value is 100."""
+    first: Int = 100
+
+    """"""
+    locale: String
+  ): [Dictionary_tags]
+
+  """"""
+  title: String
+
+  """"""
+  topic(
+    """
+    The cursor to start the pagination from. In this case the curser equals the id for the (last) element. If not set, we wil start from the beginning.
+    """
+    after: String
+
+    """The number of items to return. Default and max value is 100."""
+    first: Int = 100
+
+    """"""
+    locale: String
+  ): [Dictionary_topic]
+}
+
+""""""
+type Dictionary_Connection {
+  """"""
+  edges: [Dictionary_ConnectionEdge]
+
+  """"""
+  pageInfo: PageInfo
+
+  """"""
+  totalCount: Int
+}
+
+""""""
+type Dictionary_ConnectionEdge {
+  """"""
+  cursor: String
+
+  """"""
+  node: Dictionary
+}
+
+""""""
+input Dictionary_Sort {
+  """"""
+  createdAt: Order
+
+  """"""
+  facts: Order
+
+  """"""
+  id: Order
+
+  """"""
+  legalArea: Order
+
+  """"""
+  mainCategoryField: Order
+
+  """"""
+  publishedAt: Order
+
+  """"""
+  resolution: Order
+
+  """"""
+  subCategoryField: Order
+
+  """"""
+  tags: Order
+
+  """"""
+  title: Order
+
+  """"""
+  topic: Order
+
+  """"""
+  updatedAt: Order
+}
+
+""""""
+input Dictionary_Where {
+  """"""
+  AND: [Dictionary_Where]
+
+  """"""
+  OR: [Dictionary_Where]
+
+  """"""
+  fullTextTasks: CaisyField_Richtext_Where
+
+  """"""
+  title: CaisyField_String_Where
+}
+
+""""""
+type Dictionary_fullTextTasks {
+  """"""
+  connections(
+    """
+    The cursor to start the pagination from. In this case the curser equals the id for the (last) element. If not set, we wil start from the beginning.
+    """
+    after: String
+
+    """The number of items to return. Default and max value is 100."""
+    first: Int = 100
+
+    """"""
+    locale: String
+  ): [Dictionary_fullTextTasks_Connections]
+
+  """"""
+  json: JSON
+}
+
+""""""
+union Dictionary_fullTextTasks_Connections = Callout | CardSelectionGame | DragNDropGame | FillInGapsGame | ImageWrapperCard
+
+""""""
+union Dictionary_legalArea = LegalArea | SubCategory
+
+""""""
+union Dictionary_mainCategoryField = MainCategory
+
+""""""
+union Dictionary_subCategoryField = SubCategory
+
+""""""
+union Dictionary_tags = Tags
+
+""""""
+union Dictionary_topic = Topic
+
+""""""
 type DragNDropGame {
   """"""
   _meta: CaisyDocument_Meta
@@ -1194,6 +1409,9 @@ type Query {
   Case(id: ID!, locale: String): Case
 
   """"""
+  Dictionary(id: ID!, locale: String): Dictionary
+
+  """"""
   DragNDropGame(id: ID!, locale: String): DragNDropGame
 
   """"""
@@ -1234,6 +1452,9 @@ type Query {
 
   """"""
   allCase(after: String, before: String, first: Int, last: Int, locale: String, sort: [Case_Sort], where: [Case_Where]): Case_Connection
+
+  """"""
+  allDictionary(after: String, before: String, first: Int, last: Int, locale: String, sort: [Dictionary_Sort], where: [Dictionary_Where]): Dictionary_Connection
 
   """"""
   allDragNDropGame(after: String, before: String, first: Int, last: Int, locale: String, sort: [DragNDropGame_Sort], where: [DragNDropGame_Where]): DragNDropGame_Connection

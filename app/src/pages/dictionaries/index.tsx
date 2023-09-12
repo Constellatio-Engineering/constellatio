@@ -5,7 +5,6 @@ import getCasesOverviewProps, { type ICasesOverviewProps } from "@/services/cont
 
 import { type GetStaticProps } from "next";
 import { type FunctionComponent, } from "react";
-import React from "react";
 
 export const getStaticProps: GetStaticProps<
 Awaited<ReturnType<typeof getCasesOverviewProps>>
@@ -25,10 +24,9 @@ Awaited<ReturnType<typeof getCasesOverviewProps>>
 
 const NextPage: FunctionComponent<ICasesOverviewProps> = (props) => 
 {
-  
   return (
     <Layout>
-      <CasesOverviewPage {...props}/>      
+      <CasesOverviewPage {...props} variant="dictionary"/>      
     </Layout>
   );
 };

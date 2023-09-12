@@ -6,7 +6,7 @@ import {
 } from "../graphql/__generated/sdk";
 import { caisySDK } from "../graphql/getSdk";
 
-type allMainCategories = {
+export type allMainCategories = {
   __typename?: "MainCategory" | undefined;
   casesPerCategory: number;
   icon?: ({
@@ -16,7 +16,7 @@ type allMainCategories = {
   mainCategory?: string | null | undefined;
 }[] | null;
 
-type allSubCategories = (IGenSubCategoryFragment | null | undefined)[] & {
+export type allSubCategories = (IGenSubCategoryFragment | null | undefined)[] & {
   __typename?: "SubCategory" | undefined;
 };
 

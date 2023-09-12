@@ -58,7 +58,7 @@ export type IGenArticle_Where = {
   OR?: InputMaybe<Array<InputMaybe<IGenArticle_Where>>>;
 };
 
-export type IGenArticle_Asdf = IGenArticle | IGenCase | IGenLegalArea | IGenMainCategory | IGenSubCategory | IGenTags | IGenTopic;
+export type IGenArticle_Asdf = IGenArticle | IGenCase | IGenDictionary | IGenLegalArea | IGenMainCategory | IGenSubCategory | IGenTags | IGenTopic;
 
 export type IGenAsset = {
   __typename?: 'Asset';
@@ -402,6 +402,133 @@ export type IGenCase_Tags = IGenTags;
 
 export type IGenCase_Topic = IGenTopic;
 
+export type IGenDictionary = {
+  __typename?: 'Dictionary';
+  _meta?: Maybe<IGenCaisyDocument_Meta>;
+  facts?: Maybe<IGenTextElement>;
+  fullTextTasks?: Maybe<IGenDictionary_FullTextTasks>;
+  id?: Maybe<Scalars['ID']['output']>;
+  legalArea?: Maybe<IGenDictionary_LegalArea>;
+  mainCategoryField?: Maybe<Array<Maybe<IGenDictionary_MainCategoryField>>>;
+  resolution?: Maybe<IGenTextElement>;
+  subCategoryField?: Maybe<Array<Maybe<IGenDictionary_SubCategoryField>>>;
+  tags?: Maybe<Array<Maybe<IGenDictionary_Tags>>>;
+  title?: Maybe<Scalars['String']['output']>;
+  topic?: Maybe<Array<Maybe<IGenDictionary_Topic>>>;
+};
+
+
+export type IGenDictionaryFactsArgs = {
+  after?: InputMaybe<Scalars['String']['input']>;
+  first?: InputMaybe<Scalars['Int']['input']>;
+  locale?: InputMaybe<Scalars['String']['input']>;
+};
+
+
+export type IGenDictionaryFullTextTasksArgs = {
+  locale?: InputMaybe<Scalars['String']['input']>;
+};
+
+
+export type IGenDictionaryLegalAreaArgs = {
+  locale?: InputMaybe<Scalars['String']['input']>;
+};
+
+
+export type IGenDictionaryMainCategoryFieldArgs = {
+  after?: InputMaybe<Scalars['String']['input']>;
+  first?: InputMaybe<Scalars['Int']['input']>;
+  locale?: InputMaybe<Scalars['String']['input']>;
+};
+
+
+export type IGenDictionaryResolutionArgs = {
+  after?: InputMaybe<Scalars['String']['input']>;
+  first?: InputMaybe<Scalars['Int']['input']>;
+  locale?: InputMaybe<Scalars['String']['input']>;
+};
+
+
+export type IGenDictionarySubCategoryFieldArgs = {
+  after?: InputMaybe<Scalars['String']['input']>;
+  first?: InputMaybe<Scalars['Int']['input']>;
+  locale?: InputMaybe<Scalars['String']['input']>;
+};
+
+
+export type IGenDictionaryTagsArgs = {
+  after?: InputMaybe<Scalars['String']['input']>;
+  first?: InputMaybe<Scalars['Int']['input']>;
+  locale?: InputMaybe<Scalars['String']['input']>;
+};
+
+
+export type IGenDictionaryTopicArgs = {
+  after?: InputMaybe<Scalars['String']['input']>;
+  first?: InputMaybe<Scalars['Int']['input']>;
+  locale?: InputMaybe<Scalars['String']['input']>;
+};
+
+export type IGenDictionary_Connection = {
+  __typename?: 'Dictionary_Connection';
+  edges?: Maybe<Array<Maybe<IGenDictionary_ConnectionEdge>>>;
+  pageInfo?: Maybe<IGenPageInfo>;
+  totalCount?: Maybe<Scalars['Int']['output']>;
+};
+
+export type IGenDictionary_ConnectionEdge = {
+  __typename?: 'Dictionary_ConnectionEdge';
+  cursor?: Maybe<Scalars['String']['output']>;
+  node?: Maybe<IGenDictionary>;
+};
+
+export type IGenDictionary_Sort = {
+  createdAt?: InputMaybe<IGenOrder>;
+  facts?: InputMaybe<IGenOrder>;
+  id?: InputMaybe<IGenOrder>;
+  legalArea?: InputMaybe<IGenOrder>;
+  mainCategoryField?: InputMaybe<IGenOrder>;
+  publishedAt?: InputMaybe<IGenOrder>;
+  resolution?: InputMaybe<IGenOrder>;
+  subCategoryField?: InputMaybe<IGenOrder>;
+  tags?: InputMaybe<IGenOrder>;
+  title?: InputMaybe<IGenOrder>;
+  topic?: InputMaybe<IGenOrder>;
+  updatedAt?: InputMaybe<IGenOrder>;
+};
+
+export type IGenDictionary_Where = {
+  AND?: InputMaybe<Array<InputMaybe<IGenDictionary_Where>>>;
+  OR?: InputMaybe<Array<InputMaybe<IGenDictionary_Where>>>;
+  fullTextTasks?: InputMaybe<IGenCaisyField_Richtext_Where>;
+  title?: InputMaybe<IGenCaisyField_String_Where>;
+};
+
+export type IGenDictionary_FullTextTasks = {
+  __typename?: 'Dictionary_fullTextTasks';
+  connections?: Maybe<Array<Maybe<IGenDictionary_FullTextTasks_Connections>>>;
+  json?: Maybe<Scalars['JSON']['output']>;
+};
+
+
+export type IGenDictionary_FullTextTasksConnectionsArgs = {
+  after?: InputMaybe<Scalars['String']['input']>;
+  first?: InputMaybe<Scalars['Int']['input']>;
+  locale?: InputMaybe<Scalars['String']['input']>;
+};
+
+export type IGenDictionary_FullTextTasks_Connections = IGenCallout | IGenCardSelectionGame | IGenDragNDropGame | IGenFillInGapsGame | IGenImageWrapperCard;
+
+export type IGenDictionary_LegalArea = IGenLegalArea | IGenSubCategory;
+
+export type IGenDictionary_MainCategoryField = IGenMainCategory;
+
+export type IGenDictionary_SubCategoryField = IGenSubCategory;
+
+export type IGenDictionary_Tags = IGenTags;
+
+export type IGenDictionary_Topic = IGenTopic;
+
 export type IGenDragNDropGame = {
   __typename?: 'DragNDropGame';
   _meta?: Maybe<IGenCaisyDocument_Meta>;
@@ -638,6 +765,7 @@ export type IGenQuery = {
   Callout?: Maybe<IGenCallout>;
   CardSelectionGame?: Maybe<IGenCardSelectionGame>;
   Case?: Maybe<IGenCase>;
+  Dictionary?: Maybe<IGenDictionary>;
   DragNDropGame?: Maybe<IGenDragNDropGame>;
   FillInGapsGame?: Maybe<IGenFillInGapsGame>;
   ImageWrapperCard?: Maybe<IGenImageWrapperCard>;
@@ -652,6 +780,7 @@ export type IGenQuery = {
   allCallout?: Maybe<IGenCallout_Connection>;
   allCardSelectionGame?: Maybe<IGenCardSelectionGame_Connection>;
   allCase?: Maybe<IGenCase_Connection>;
+  allDictionary?: Maybe<IGenDictionary_Connection>;
   allDragNDropGame?: Maybe<IGenDragNDropGame_Connection>;
   allFillInGapsGame?: Maybe<IGenFillInGapsGame_Connection>;
   allImageWrapperCard?: Maybe<IGenImageWrapperCard_Connection>;
@@ -689,6 +818,12 @@ export type IGenQueryCardSelectionGameArgs = {
 
 
 export type IGenQueryCaseArgs = {
+  id: Scalars['ID']['input'];
+  locale?: InputMaybe<Scalars['String']['input']>;
+};
+
+
+export type IGenQueryDictionaryArgs = {
   id: Scalars['ID']['input'];
   locale?: InputMaybe<Scalars['String']['input']>;
 };
@@ -800,6 +935,17 @@ export type IGenQueryAllCaseArgs = {
   locale?: InputMaybe<Scalars['String']['input']>;
   sort?: InputMaybe<Array<InputMaybe<IGenCase_Sort>>>;
   where?: InputMaybe<Array<InputMaybe<IGenCase_Where>>>;
+};
+
+
+export type IGenQueryAllDictionaryArgs = {
+  after?: InputMaybe<Scalars['String']['input']>;
+  before?: InputMaybe<Scalars['String']['input']>;
+  first?: InputMaybe<Scalars['Int']['input']>;
+  last?: InputMaybe<Scalars['Int']['input']>;
+  locale?: InputMaybe<Scalars['String']['input']>;
+  sort?: InputMaybe<Array<InputMaybe<IGenDictionary_Sort>>>;
+  where?: InputMaybe<Array<InputMaybe<IGenDictionary_Where>>>;
 };
 
 
@@ -1087,6 +1233,8 @@ export type IGenCaseOverviewFragment = { __typename: 'Case', id?: string | null,
     & IGenTopicFragment
   ) | null> | null };
 
+export type IGenDictionaryFragment = { __typename: 'Dictionary', id?: string | null, title?: string | null, facts?: { __typename?: 'TextElement', id?: string | null, richTextContent?: { __typename?: 'TextElement_richTextContent', json?: any | null } | null } | null, fullTextTasks?: { __typename?: 'Dictionary_fullTextTasks', json?: any | null, connections?: Array<{ __typename: 'Callout' } | { __typename: 'CardSelectionGame' } | { __typename: 'DragNDropGame' } | { __typename: 'FillInGapsGame' } | { __typename: 'ImageWrapperCard' } | null> | null } | null, legalArea?: { __typename?: 'LegalArea', id?: string | null, legalAreaName?: string | null } | { __typename?: 'SubCategory', id?: string | null, subCategory?: string | null, mainCategory?: Array<{ __typename?: 'MainCategory', id?: string | null, mainCategory?: string | null } | null> | null } | null, mainCategoryField?: Array<{ __typename?: 'MainCategory', id?: string | null, mainCategory?: string | null } | null> | null, resolution?: { __typename?: 'TextElement', id?: string | null, richTextContent?: { __typename?: 'TextElement_richTextContent', json?: any | null, connections?: Array<{ __typename: 'Caisy_Field_Document_NotFound' } | null> | null } | null } | null, subCategoryField?: Array<{ __typename?: 'SubCategory', id?: string | null, subCategory?: string | null, mainCategory?: Array<{ __typename?: 'MainCategory', id?: string | null, mainCategory?: string | null } | null> | null } | null> | null, tags?: Array<{ __typename?: 'Tags', id?: string | null, tagName?: string | null } | null> | null, topic?: Array<{ __typename?: 'Topic', id?: string | null, topicName?: string | null } | null> | null };
+
 export type IGenDragNDropGameFragment = { __typename: 'DragNDropGame', id?: string | null, game?: any | null, question?: string | null, helpNote?: (
     { __typename?: 'TextElement' }
     & IGenTextElementFragment
@@ -1179,6 +1327,13 @@ export type IGenGetAllCaseOverviewQuery = { __typename?: 'Query', allCase?: { __
         & IGenCaseOverviewFragment
       ) | null } | null> | null } | null };
 
+export type IGenGetAllDictionaryQueryVariables = Exact<{
+  after?: InputMaybe<Scalars['String']['input']>;
+}>;
+
+
+export type IGenGetAllDictionaryQuery = { __typename?: 'Query', allDictionary?: { __typename?: 'Dictionary_Connection', totalCount?: number | null, pageInfo?: { __typename?: 'PageInfo', endCursor?: string | null, hasNextPage?: boolean | null } | null, edges?: Array<{ __typename?: 'Dictionary_ConnectionEdge', node?: { __typename: 'Dictionary', id?: string | null, title?: string | null, facts?: { __typename?: 'TextElement', id?: string | null, richTextContent?: { __typename?: 'TextElement_richTextContent', json?: any | null } | null } | null, fullTextTasks?: { __typename?: 'Dictionary_fullTextTasks', json?: any | null, connections?: Array<{ __typename: 'Callout' } | { __typename: 'CardSelectionGame' } | { __typename: 'DragNDropGame' } | { __typename: 'FillInGapsGame' } | { __typename: 'ImageWrapperCard' } | null> | null } | null, legalArea?: { __typename?: 'LegalArea', id?: string | null, legalAreaName?: string | null } | { __typename?: 'SubCategory', id?: string | null, subCategory?: string | null, mainCategory?: Array<{ __typename?: 'MainCategory', id?: string | null, mainCategory?: string | null } | null> | null } | null, mainCategoryField?: Array<{ __typename?: 'MainCategory', id?: string | null, mainCategory?: string | null } | null> | null, resolution?: { __typename?: 'TextElement', id?: string | null, richTextContent?: { __typename?: 'TextElement_richTextContent', json?: any | null, connections?: Array<{ __typename: 'Caisy_Field_Document_NotFound' } | null> | null } | null } | null, subCategoryField?: Array<{ __typename?: 'SubCategory', id?: string | null, subCategory?: string | null, mainCategory?: Array<{ __typename?: 'MainCategory', id?: string | null, mainCategory?: string | null } | null> | null } | null> | null, tags?: Array<{ __typename?: 'Tags', id?: string | null, tagName?: string | null } | null> | null, topic?: Array<{ __typename?: 'Topic', id?: string | null, topicName?: string | null } | null> | null } | null } | null> | null } | null };
+
 export type IGenGetAllMainCategoryQueryVariables = Exact<{ [key: string]: never; }>;
 
 
@@ -1257,6 +1412,80 @@ export const CaseOverviewFragmentDoc = gql`
   topic {
     ...Topic
   }
+}
+    `;
+export const DictionaryFragmentDoc = gql`
+    fragment Dictionary on Dictionary {
+  facts {
+    id
+    richTextContent {
+      json
+    }
+  }
+  fullTextTasks {
+    json
+    connections {
+      __typename
+    }
+  }
+  id
+  legalArea {
+    ... on LegalArea {
+      id
+      legalAreaName
+    }
+    ... on SubCategory {
+      id
+      subCategory
+      mainCategory {
+        ... on MainCategory {
+          id
+          mainCategory
+        }
+      }
+    }
+  }
+  mainCategoryField {
+    ... on MainCategory {
+      id
+      mainCategory
+    }
+  }
+  resolution {
+    id
+    richTextContent {
+      json
+      connections {
+        __typename
+      }
+    }
+  }
+  subCategoryField {
+    ... on SubCategory {
+      id
+      subCategory
+      mainCategory {
+        ... on MainCategory {
+          id
+          mainCategory
+        }
+      }
+    }
+  }
+  tags {
+    ... on Tags {
+      id
+      tagName
+    }
+  }
+  title
+  topic {
+    ... on Topic {
+      id
+      topicName
+    }
+  }
+  __typename
 }
     `;
 export const TextElementFragmentDoc = gql`
@@ -1406,6 +1635,91 @@ ${SubCategoryFragmentDoc}
 ${MainCategoryFragmentDoc}
 ${AssetFragmentDoc}
 ${TopicFragmentDoc}`;
+export const GetAllDictionaryDocument = gql`
+    query getAllDictionary($after: String) {
+  allDictionary(first: 100, after: $after) {
+    totalCount
+    pageInfo {
+      endCursor
+      hasNextPage
+    }
+    edges {
+      node {
+        facts {
+          id
+          richTextContent {
+            json
+          }
+        }
+        fullTextTasks {
+          json
+          connections {
+            __typename
+          }
+        }
+        id
+        legalArea {
+          ... on LegalArea {
+            id
+            legalAreaName
+          }
+          ... on SubCategory {
+            id
+            subCategory
+            mainCategory {
+              ... on MainCategory {
+                id
+                mainCategory
+              }
+            }
+          }
+        }
+        mainCategoryField {
+          ... on MainCategory {
+            id
+            mainCategory
+          }
+        }
+        resolution {
+          id
+          richTextContent {
+            json
+            connections {
+              __typename
+            }
+          }
+        }
+        subCategoryField {
+          ... on SubCategory {
+            id
+            subCategory
+            mainCategory {
+              ... on MainCategory {
+                id
+                mainCategory
+              }
+            }
+          }
+        }
+        tags {
+          ... on Tags {
+            id
+            tagName
+          }
+        }
+        title
+        topic {
+          ... on Topic {
+            id
+            topicName
+          }
+        }
+        __typename
+      }
+    }
+  }
+}
+    `;
 export const GetAllMainCategoryDocument = gql`
     query getAllMainCategory {
   allMainCategory {
@@ -1458,6 +1772,9 @@ export function getSdk<C, E>(requester: Requester<C, E>) {
   return {
     getAllCaseOverview(variables?: IGenGetAllCaseOverviewQueryVariables, options?: C): Promise<IGenGetAllCaseOverviewQuery> {
       return requester<IGenGetAllCaseOverviewQuery, IGenGetAllCaseOverviewQueryVariables>(GetAllCaseOverviewDocument, variables, options) as Promise<IGenGetAllCaseOverviewQuery>;
+    },
+    getAllDictionary(variables?: IGenGetAllDictionaryQueryVariables, options?: C): Promise<IGenGetAllDictionaryQuery> {
+      return requester<IGenGetAllDictionaryQuery, IGenGetAllDictionaryQueryVariables>(GetAllDictionaryDocument, variables, options) as Promise<IGenGetAllDictionaryQuery>;
     },
     getAllMainCategory(variables?: IGenGetAllMainCategoryQueryVariables, options?: C): Promise<IGenGetAllMainCategoryQuery> {
       return requester<IGenGetAllMainCategoryQuery, IGenGetAllMainCategoryQueryVariables>(GetAllMainCategoryDocument, variables, options) as Promise<IGenGetAllMainCategoryQuery>;

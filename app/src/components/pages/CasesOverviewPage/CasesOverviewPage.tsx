@@ -12,7 +12,13 @@ import {
 
 import * as styles from "./CasesOverviewPage.styles";
 
-const CasesOverviewPage: FunctionComponent<ICasesOverviewProps> = ({ allCases, allMainCategories, allSubCategories }) => 
+const OverviewPage: FunctionComponent<ICasesOverviewProps & {readonly variant: "case" | "dictionary"}> = ({
+  allCases,
+  allMainCategories,
+  allSubCategories,
+  variant,
+
+}) => 
 {
   const [selectedCategoryId, setSelectedCategoryId] = useState<string>(
     allMainCategories?.[0]?.id ?? ""
@@ -37,11 +43,11 @@ const CasesOverviewPage: FunctionComponent<ICasesOverviewProps> = ({ allCases, a
     <div css={styles.Page}>
       {allMainCategories && (
         <OverviewHeader
-          variant="case"
+          variant={variant}
           selectedCategoryId={selectedCategoryId}
           setSelectedCategoryId={setSelectedCategoryId}
           categories={allMainCategories}
-          title="Cases"
+          title={variant === "case" ? "Cases" : "Dictionaries"}
         />
       )}
       <div css={styles.ListWrapper}>
@@ -51,7 +57,7 @@ const CasesOverviewPage: FunctionComponent<ICasesOverviewProps> = ({ allCases, a
             <Fragment key={itemIndex}>
               <CaseBlock
                 blockHead={{
-                  blockType: "itemsBlock", categoryName: item?.subCategory, completedCases: 0, items: allCasesOfSubcategory(item)?.length ?? 0, variant: "case"  
+                  blockType: "itemsBlock", categoryName: item?.subCategory, completedCases: 0, items: allCasesOfSubcategory(item)?.length ?? 0, variant  
                 }}
                 cases={allCasesOfSubcategory(item)}
               />
@@ -59,8 +65,9 @@ const CasesOverviewPage: FunctionComponent<ICasesOverviewProps> = ({ allCases, a
           )
           )}
       </div>
+      
     </div>
   );
 };
 
-export default CasesOverviewPage;
+export default OverviewPage;
