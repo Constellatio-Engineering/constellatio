@@ -8,37 +8,45 @@ import {
 
 interface TRichtextOverwrite 
 {
-  readonly answerResult: string[];
   readonly correctAnswers: MutableRefObject<string[]>;
   readonly focusedIndex: MutableRefObject<number | null>;
-  readonly handleInputChange: (index: number, value: string) => void;
+  readonly inputCounter: MutableRefObject<number>;
   readonly text: string;
-  readonly userAnswers: string[];
 }
 
 const _RichtextOverwrite: FC<TRichtextOverwrite> = ({
-  answerResult,
   correctAnswers,
   focusedIndex,
-  handleInputChange,
-  text,
-  userAnswers
+  inputCounter,
+  text
 }) =>  
 {
-
-  const { gameStatus } = useFillGapsGameStore();
-
+  const {
+    answerResult,
+    gameStatus,
+    updateUserAnswers,
+    userAnswers
+  } = useFillGapsGameStore();
   const inputRefs = useRef<RefObject<HTMLInputElement>[]>([]);
-  let currentInputIndex = -1;
 
   // Splitting the text based on {{...}} pattern using regex
   const parts = text.split(/({{.*?}})/g);
 
   const createChangeHandler = (index: number) => (e: ChangeEvent<HTMLInputElement>) => 
   {
-    handleInputChange(index, e.target.value);
+    updateUserAnswers(index, e.target.value);
     focusedIndex.current = index;
   };
+
+  useEffect(() => 
+  {
+    inputCounter.current = 0;
+    // Reset the counter when the component is unmounted
+    return () => 
+    {
+      inputCounter.current = 0;
+    };
+  }, []);
 
   useEffect(() => 
   {
@@ -60,10 +68,9 @@ const _RichtextOverwrite: FC<TRichtextOverwrite> = ({
             correctAnswers.current.push(innerContent);
           }
 
-          // const currentInputIndex = inputCounter.current;
-          // inputCounter.current++;
-          currentInputIndex++;
-          console.log("child", currentInputIndex);
+          const currentInputIndex = inputCounter.current;
+          inputCounter.current++;
+          console.log("currentInputIndex", currentInputIndex);
 
           if(!inputRefs.current[currentInputIndex]) 
           {

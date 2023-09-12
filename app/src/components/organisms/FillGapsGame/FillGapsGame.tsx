@@ -16,7 +16,9 @@ import { type TextElement } from "types/richtext";
 
 import { Title } from "@mantine/core";
 import { distance } from "fastest-levenshtein";
-import { type FC, type ReactElement, useRef, useState } from "react";
+import {
+  type FC, type ReactElement, useRef, memo, useEffect, useMemo 
+} from "react";
 
 import {
   Container,
@@ -57,39 +59,41 @@ const countPlaceholders = (content: TextElement[]): number =>
   return count;
 };
 
-export const FillGapsGame: FC<TFillGapsGame> = ({ fillGameParagraph, helpNote, question }) => 
+const _FillGapsGame: FC<TFillGapsGame> = ({ fillGameParagraph, helpNote, question }) => 
 {
-  const totalPlaceholders = countPlaceholders(fillGameParagraph?.richTextContent?.json?.content || {});
+  const totalPlaceholders = useMemo(() => countPlaceholders(fillGameParagraph?.richTextContent?.json?.content), [fillGameParagraph]);
 
   const {
+    answerResult,
     gameStatus,
     gameSubmitted,
     resultMessage,
+    setAnswerResult,
     setGameStatus,
     setGameSubmitted,
-    setResultMessage
+    setResultMessage,
+    setUserAnswers,
+    userAnswers
   } = useFillGapsGameStore();
 
   const { getNextGameIndex } = useCaseSolvingStore();
 
-  const [userAnswers, setUserAnswers] = useState<string[]>(new Array(totalPlaceholders).fill(""));
-  const [answerResult, setAnswerResult] = useState<string[]>(new Array(totalPlaceholders).fill(""));
   const correctAnswers = useRef<string[]>([]);
+  const inputCounter = useRef(0);
   const focusedIndex = useRef<number | null>(null);
 
-  const handleInputChange = (index: number, value: string): void => 
+  useEffect(() => 
   {
-    setUserAnswers((prevAnswers) => 
-    {
-      const newAnswers = [...prevAnswers];
-      newAnswers[index] = value;
-      return newAnswers;
-    });
-  };
+    setUserAnswers(new Array(totalPlaceholders).fill(""));
+    setAnswerResult(new Array(totalPlaceholders).fill(""));
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [totalPlaceholders]);
+
+  // console.log("userAnswers", userAnswers);
 
   const checkAnswers = (): boolean => 
   {
-    if(userAnswers.length !== correctAnswers.current.length) { return false; }                                         
+    if(userAnswers.length !== correctAnswers.current.length) { return false; }
 
     let allCorrect = true;
     const newAnswerResult: string[] = [];
@@ -141,7 +145,13 @@ export const FillGapsGame: FC<TFillGapsGame> = ({ fillGameParagraph, helpNote, q
   };
 
   const handleCheckAnswers = (): void => 
-  {
+  { 
+    if(!gameSubmitted) 
+    {
+      setGameSubmitted(true);
+      getNextGameIndex();
+    }
+
     if(checkAnswers()) 
     {
       // all answers are correct
@@ -154,18 +164,13 @@ export const FillGapsGame: FC<TFillGapsGame> = ({ fillGameParagraph, helpNote, q
       setGameStatus("lose");
       setResultMessage("Some answers are incorrect. Please try again.");
     }
-
-    if(!gameSubmitted) 
-    {
-      setGameSubmitted(true);
-      getNextGameIndex();
-    }
   };
 
   const handleResetGame = (): void => 
   {
     setGameStatus("inprogress");
     correctAnswers.current = [];
+    inputCounter.current = 0;
     setUserAnswers(new Array(totalPlaceholders).fill(""));
     setAnswerResult(new Array(totalPlaceholders).fill(""));
   };
@@ -178,10 +183,8 @@ export const FillGapsGame: FC<TFillGapsGame> = ({ fillGameParagraph, helpNote, q
       <RichtextOverwrite
         text={props?.children?.[0]?.props?.node.text}
         correctAnswers={correctAnswers}
-        handleInputChange={handleInputChange}
-        userAnswers={userAnswers}
         focusedIndex={focusedIndex}
-        answerResult={answerResult}
+        inputCounter={inputCounter}
       />
     );
   };
@@ -244,3 +247,5 @@ export const FillGapsGame: FC<TFillGapsGame> = ({ fillGameParagraph, helpNote, q
     </Container>
   );
 };
+
+export const FillGapsGame = memo(_FillGapsGame);

@@ -177,8 +177,8 @@ const CaseCompleteTestsStep: FunctionComponent<ICaseCompleteTestsStepProps> = ({
                             return (
                               <div
                                 css={styles.gameComponentWrapper}
-                                key={`${component?.__typename}-${index}`}>
-                                <FillGapsGame {...component}/>
+                                key={`${component?.__typename}-${component?.id}`}>
+                                <FillGapsGame key={component?.id} {...component}/>
                               </div>
                             );
                           }
@@ -194,6 +194,7 @@ const CaseCompleteTestsStep: FunctionComponent<ICaseCompleteTestsStepProps> = ({
                     })
                     : null;
                 },
+                // eslint-disable-next-line max-lines
                 paragraph: richTextParagraphOverwrite,
               }}
             />
