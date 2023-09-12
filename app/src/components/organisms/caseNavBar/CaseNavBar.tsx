@@ -29,6 +29,7 @@ const CaseNavBar: FunctionComponent<ICaseNavBarProps> = ({ activeStep, setCaseSt
     {
       if(activeStep === 0) { setProgress(calculateScrollProgress("completeTestsStepContent")); }
       if(activeStep === 1) { setProgress(calculateScrollProgress("solveCaseStepContent")); }
+      if(activeStep === 2) { setProgress(calculateScrollProgress("ResultsReviewStepContent")); }
     };
     if(hasCaseSolvingStarted)
     {
@@ -47,44 +48,46 @@ const CaseNavBar: FunctionComponent<ICaseNavBarProps> = ({ activeStep, setCaseSt
   };
 
   return variant === "case" ? (
-    <div css={styles.wrapper({ theme, variant })}>
-      <div css={styles.tabs}>
-        {setCaseStepIndex &&
-          steps.map(
-            (stepText, index) =>
-              (index === 0 || index === 1 || index === 2) &&
-              activeStep !== undefined && (
-                <CaptionText
-                  component="p"
-                  key={index}
-                  onClick={() => 
-                  {
-                    if(activeStep > 0 && activeStep > index) { setCaseStepIndex(index); }
-                  }}
-                  css={styles.tab({
-                    active: index === activeStep,
-                    completed: index < activeStep,
-                    theme,
-                  })}
-                  variant="caseNavBar"
-                  styleType="caption-01-bold">
-                  <span>{index < activeStep ? <Check/> : index + 1}</span>
-                  {stepText}
-                </CaptionText>
-              )
-          )}
-      </div>
-      {activeStep !== undefined && activeStep < 2 && steps && (
-        <div css={styles.callToAction}>
-          <Button<"button"> onClick={handleCallToAction} disabled={!isStepCompleted} styleType="primary">
-            {activeStep === 0 ? "Solve this case" : "Submit and view results"}
-          </Button>
+    <div css={styles.componentArea}>
+      <div css={styles.wrapper({ variant })}>
+        <div css={styles.tabs}>
+          {setCaseStepIndex &&
+            steps.map(
+              (stepText, index) =>
+                (index === 0 || index === 1 || index === 2) &&
+                activeStep !== undefined && (
+                  <CaptionText
+                    component="p"
+                    key={index}
+                    onClick={() =>
+                    {
+                      if(activeStep > 0 && activeStep > index) { setCaseStepIndex(index); }
+                    }}
+                    css={styles.tab({
+                      active: index === activeStep,
+                      completed: index < activeStep,
+                      theme,
+                    })}
+                    variant="caseNavBar"
+                    styleType="caption-01-bold">
+                    <span>{index < activeStep ? <Check/> : index + 1}</span>
+                    {stepText}
+                  </CaptionText>
+                )
+            )}
         </div>
-      )}
+        {activeStep !== undefined && activeStep < 2 && steps && (
+          <div css={styles.callToAction}>
+            <Button<"button"> onClick={handleCallToAction} disabled={!isStepCompleted} styleType="primary">
+              {activeStep === 0 ? "Solve this case" : "Submit and view results"}
+            </Button>
+          </div>
+        )}
+      </div>
       {hasCaseSolvingStarted && <div css={styles.progressBar({ progress, theme, variant })}/>}
     </div>
   ) : (
-    <div css={styles.wrapper({ theme, variant })}>
+    <div css={styles.wrapper({ variant })}>
       {hasCaseSolvingStarted && <div css={styles.progressBar({ progress, theme, variant })}/>}
     </div>
   );

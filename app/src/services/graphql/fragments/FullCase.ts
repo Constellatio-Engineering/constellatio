@@ -43,5 +43,8 @@ export const f_FullCase = gql`
 		topic {
 			...Topic
 		}
+		resolution{
+        	...TextElement
+        }
 	}
 `;
