@@ -8,28 +8,25 @@ import {
 
 interface TRichtextOverwrite 
 {
-  readonly answerResult: string[];
   readonly correctAnswers: MutableRefObject<string[]>;
   readonly focusedIndex: MutableRefObject<number | null>;
-  readonly handleInputChange: (index: number, value: string) => void;
   readonly inputCounter: MutableRefObject<number>;
   readonly text: string;
-  readonly userAnswers: string[];
 }
 
-let RichtextOverwrite: FC<TRichtextOverwrite> = ({
-  answerResult,
+const _RichtextOverwrite: FC<TRichtextOverwrite> = ({
   correctAnswers,
   focusedIndex,
-  handleInputChange,
   inputCounter,
-  text,
-  userAnswers
+  text
 }) =>  
 {
-
-  const { gameStatus } = useFillGapsGameStore();
-
+  const {
+    answerResult,
+    gameStatus,
+    updateUserAnswers,
+    userAnswers
+  } = useFillGapsGameStore();
   const inputRefs = useRef<RefObject<HTMLInputElement>[]>([]);
 
   // Splitting the text based on {{...}} pattern using regex
@@ -37,13 +34,18 @@ let RichtextOverwrite: FC<TRichtextOverwrite> = ({
 
   const createChangeHandler = (index: number) => (e: ChangeEvent<HTMLInputElement>) => 
   {
-    handleInputChange(index, e.target.value);
+    updateUserAnswers(index, e.target.value);
     focusedIndex.current = index;
   };
 
   useEffect(() => 
   {
     inputCounter.current = 0;
+    // Reset the counter when the component is unmounted
+    return () => 
+    {
+      inputCounter.current = 0;
+    };
   }, []);
 
   useEffect(() => 
@@ -67,7 +69,8 @@ let RichtextOverwrite: FC<TRichtextOverwrite> = ({
           }
 
           const currentInputIndex = inputCounter.current;
-          inputCounter.current += 1;
+          inputCounter.current++;
+          console.log("currentInputIndex", currentInputIndex);
 
           if(!inputRefs.current[currentInputIndex]) 
           {
@@ -104,7 +107,7 @@ let RichtextOverwrite: FC<TRichtextOverwrite> = ({
   );
 };
 
-RichtextOverwrite.displayName = "RichtextOverwrite";
-RichtextOverwrite = memo(RichtextOverwrite);
+_RichtextOverwrite.displayName = "RichtextOverwrite";
+const RichtextOverwrite = memo(_RichtextOverwrite);
 
 export default RichtextOverwrite;

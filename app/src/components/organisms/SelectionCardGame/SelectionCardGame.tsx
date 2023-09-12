@@ -1,3 +1,4 @@
+/* eslint-disable max-lines */
 import { BodyText } from "@/components/atoms/BodyText/BodyText";
 import { Button } from "@/components/atoms/Button/Button";
 import { Check } from "@/components/Icons/Check";
@@ -7,6 +8,7 @@ import { HelpNote } from "@/components/molecules/HelpNote/HelpNote";
 import { ResultCard } from "@/components/molecules/ResultCard/ResultCard";
 import { SelectionCard } from "@/components/molecules/SelectionCard/SelectionCard";
 import { type IGenCardSelectionGame } from "@/services/graphql/__generated/sdk";
+import useCaseSolvingStore from "@/stores/caseSolving.store";
 import useSelectionCardGameStore, {
   type TCardGameOption,
   type TCardGameOptionWithCheck,
@@ -34,13 +36,17 @@ export const SelectionCardGame: FC<SelectionCardGameProps> = ({ game, helpNote, 
 {
   const {
     gameStatus,
+    gameSubmitted,
     onOptionCheck,
     optionsItems,
     resultMessage,
     setGameStatus,
+    setGameSubmitted,
     setOptionsItems,
     setResultMessage,
   } = useSelectionCardGameStore();
+
+  const { getNextGameIndex } = useCaseSolvingStore();
 
   const optionsWithCheckProp = useMemo(
     () =>
@@ -91,6 +97,12 @@ export const SelectionCardGame: FC<SelectionCardGameProps> = ({ game, helpNote, 
     {
       setGameStatus("lose");
       setResultMessage("Answers are incorrect!");
+    }
+
+    if(!gameSubmitted)
+    {
+      setGameSubmitted(true);
+      getNextGameIndex();
     }
   };
 
