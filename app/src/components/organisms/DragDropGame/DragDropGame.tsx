@@ -12,6 +12,7 @@ import { GhostDropCard } from "@/components/molecules/GhostDropCard/GhostDropCar
 import { HelpNote } from "@/components/molecules/HelpNote/HelpNote";
 import { ResultCard } from "@/components/molecules/ResultCard/ResultCard";
 import { type IGenDragNDropGame } from "@/services/graphql/__generated/sdk";
+import useCaseSolvingStore from "@/stores/caseSolving.store";
 import useDragDropGameStore, {
   type TDragAndDropGameOptionType,
 } from "@/stores/dragDropGame.store";
@@ -51,14 +52,18 @@ export const DragDropGame: FC<TDragDropGame> = ({ game, helpNote, question }) =>
     deleteOptionItem,
     droppedItems,
     gameStatus,
+    gameSubmitted,
     optionsItems,
     resultMessage,
     setActiveId,
     setDroppedItems,
     setGameStatus,
+    setGameSubmitted,
     setOptionsItems,
-    setResultMessage,
+    setResultMessage
   } = useDragDropGameStore();
+
+  const { getNextGameIndex } = useCaseSolvingStore();
 
   const originalOptions: TDragAndDropGameOptionType[] = useMemo(
     () => game?.options ?? [],
@@ -148,6 +153,12 @@ export const DragDropGame: FC<TDragDropGame> = ({ game, helpNote, question }) =>
         setGameStatus("lose");
         setResultMessage("Answers are incorrect!");
       }
+    }
+
+    if(!gameSubmitted) 
+    {
+      setGameSubmitted(true);
+      getNextGameIndex();
     }
   };
 
