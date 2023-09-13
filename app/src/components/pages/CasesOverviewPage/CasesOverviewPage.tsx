@@ -46,9 +46,9 @@ const CasesOverviewPage: FunctionComponent<ICasesOverviewProps> = ({ allCases, a
           title="Cases"
         />
       )}
-      <div css={styles.ListWrapper({ empty: filteredSubcategories?.length && filteredSubcategories?.length < 15 ? true : false })}>
+      <div css={styles.ListWrapper({ empty: filteredSubcategories?.length && filteredSubcategories?.length > 0 ? false : true })}>
         {filteredSubcategories &&
-          filteredSubcategories.length > 15 ?
+          filteredSubcategories.length > 0 ?
           filteredSubcategories.map((item, itemIndex) => item?.subCategory && (
             <Fragment key={itemIndex}>
               <CaseBlock
