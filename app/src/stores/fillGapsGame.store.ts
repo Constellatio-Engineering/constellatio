@@ -24,6 +24,7 @@ type FillGapsGameStateUpdate = Partial<Pick<FillGapsGameState, "gameStatus" | "g
 type FillGapsGameStore = {
   games: FillGapsGameState[];
   getGameState: (id: Nullable<string>) => FillGapsGameState | undefined;
+  initializeNewGameState: (id: string) => void;
   updateGameState: (id: string, update: FillGapsGameStateUpdate) => void;
   updateUserAnswer: (params: { gameId: string; index: number; path: string; value: string}) => void;
 };
@@ -52,24 +53,34 @@ const useFillGapsGameStore = create(
 
       const game = games.find(game => game.id === id);
 
-      if(game)
+      if(!game)
       {
-        return game;
+        console.log("game not found");
       }
 
-      console.log(`game with id '${id}' not found. now creating it`);
+      return game;
+    },
+    initializeNewGameState: (id) =>
+    {
+      console.log("initializeNewGameState", id);
 
-      const newGame: FillGapsGameState = {
-        ...defaultFillGapsGameState,
-        id,
-      };
+      const existingGame = get().games.find(game => game.id === id);
+
+      if(existingGame)
+      {
+        console.info("game already exists. cannot initialize new game state");
+        return;
+      }
 
       set((state) =>
       {
-        state.games = state.games.concat(newGame);
+        state.games = state.games.concat({
+          ...defaultFillGapsGameState,
+          id,
+        });
       });
 
-      return games.find(game => game.id === id);
+      console.log("new game state initialized successfully");
     },
     updateGameState: (id, update) =>
     {
@@ -122,7 +133,20 @@ const useFillGapsGameStore = create(
 
       if(answersByPathIndex === -1)
       {
-        console.warn(`answers not found for path '${path}'. cannot update user answer`);
+        console.warn(`answers not found for path '${path}'. creating new answers`);
+
+        set((state) =>
+        {
+          const newAnswers: UserAnswersPerParagraph = {
+            answers: [],
+            path,
+          };
+
+          newAnswers.answers[index] = value;
+
+          state.games[gameIndex]!.userAnswers = state.games[gameIndex]!.userAnswers.concat(newAnswers);
+        });
+
         return;
       }
 

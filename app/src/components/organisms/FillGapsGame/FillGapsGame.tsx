@@ -32,7 +32,7 @@ import {
 
 export type TFillGapsGame = Pick<IGenFillInGapsGame, "fillGameParagraph" | "helpNote" | "question" | "id">;
 
-const countPlaceholders = (content: TextElement[]): number => 
+/* const countPlaceholders = (content: TextElement[]): number =>
 {
   let count = 0;
   const regex = /{{.*?}}/g;
@@ -57,7 +57,7 @@ const countPlaceholders = (content: TextElement[]): number =>
   });
 
   return count;
-};
+};*/
 
 let FillGapsGame: FC<TFillGapsGame> = ({
   fillGameParagraph,
@@ -66,14 +66,24 @@ let FillGapsGame: FC<TFillGapsGame> = ({
   question
 }) =>
 {
-  const totalPlaceholders = useMemo(() => countPlaceholders(fillGameParagraph?.richTextContent?.json?.content), [fillGameParagraph]);
+  // const totalPlaceholders = useMemo(() => countPlaceholders(fillGameParagraph?.richTextContent?.json?.content), [fillGameParagraph]);
   const { getNextGameIndex } = useCaseSolvingStore();
   const gameState = useFillGapsGameStore(s => s.getGameState(id));
+  const allGames = useFillGapsGameStore(s => s.games);
   const updateGameState = useFillGapsGameStore(s => s.updateGameState);
+  const initializeNewGameState = useFillGapsGameStore(s => s.initializeNewGameState);
   const correctAnswers = useRef<string[]>([]);
   const focusedIndex = useRef<number | null>(null);
 
   console.log(`gameState for game with ID '${id}'`, gameState);
+
+  useEffect(() =>
+  {
+    if(gameState == null && id != null)
+    {
+      initializeNewGameState(id);
+    }
+  }, [allGames, gameState, id, initializeNewGameState]);
 
   if(!gameState || !id)
   {
@@ -217,7 +227,7 @@ let FillGapsGame: FC<TFillGapsGame> = ({
           </BodyText>
         </LegendWrapper>
         <Game>
-          {/* <Options>
+          <Options>
             {fillGameParagraph?.richTextContent?.json && (
               <Richtext
                 richTextContent={fillGameParagraph.richTextContent}
@@ -227,7 +237,7 @@ let FillGapsGame: FC<TFillGapsGame> = ({
                 stylesOverwrite={stylesOverwrite}
               />
             )}
-          </Options>*/}
+          </Options>
         </Game>
         {gameStatus !== "inprogress" && (
           <>
