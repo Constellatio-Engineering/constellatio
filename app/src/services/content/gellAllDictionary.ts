@@ -2,24 +2,14 @@
 import { type IGenGetAllDictionaryQuery } from "../graphql/__generated/sdk";
 import { caisySDK } from "../graphql/getSdk";
 
-// export type allCases = IGenCaseOverviewFragment[] & {
-//   __typename?: "Dictionary" | undefined;
-// };
-
-const getAllDictionary = async (): Promise<IGenGetAllDictionaryQuery> => 
-{
-  try 
-  {
-    const allDectionaryRes = await caisySDK.getAllDictionary();
-    return allDectionaryRes;
-    
-  } 
-  catch (error)
-  {
-    console.error("error at getting all Dictionary", error);
-    throw error;
-  }
-   
+const getAllDictionary = async (): Promise<IGenGetAllDictionaryQuery> => {
+	try {
+		const allDictionaryRes = await caisySDK.getAllDictionary();
+		return allDictionaryRes;
+	} catch (error) {
+		console.error("error at getting all Dictionary", error);
+		throw error;
+	}
 };
 
 export default getAllDictionary;
