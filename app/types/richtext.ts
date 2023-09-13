@@ -33,3 +33,9 @@ export interface IParagraph extends TRichTextElements
   content: TextElement[];
   type: "paragraph";
 }
+
+export interface IHeading extends TRichTextElements
+{
+  content: TextElement[];
+  type: "heading";
+}

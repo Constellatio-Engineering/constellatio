@@ -5,11 +5,15 @@ import { BoxIcon } from "@/components/Icons/BoxIcon";
 import { FileIcon } from "@/components/Icons/FileIcon";
 import { type IGenTextElement, type IGenCase_FullTextTasks } from "@/services/graphql/__generated/sdk";
 import useCaseSolvingStore from "@/stores/caseSolving.store";
-import { type IDocumentLink } from "types/richtext";
+import { IHeading, type IDocumentLink } from "types/richtext";
 
 import { Container, Title } from "@mantine/core";
 import { type Maybe } from "@trpc/server";
-import { type FunctionComponent, useEffect, useMemo } from "react";
+import {
+  type FunctionComponent, useEffect, useMemo, type JSXElementConstructor, type ReactElement 
+} from "react";
+
+import { title } from "process";
 
 import { getGamesIndexes } from "./caseCompleteTestsStep.helper";
 import * as styles from "./CaseCompleteTestsStep.styles";
@@ -39,7 +43,7 @@ const CaseCompleteTestsStep: FunctionComponent<ICaseCompleteTestsStepProps> = ({
     setGamesIndexes,
     setHasCaseSolvingStarted
   } =
-		useCaseSolvingStore();
+    useCaseSolvingStore();
 
   const renderedCaseContent = useMemo(() => 
   {
@@ -74,6 +78,23 @@ const CaseCompleteTestsStep: FunctionComponent<ICaseCompleteTestsStepProps> = ({
     getNextGameIndex();
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [fullTextTasks]);
+
+  const getHeadingIndex = (passedHead: {
+    attrs: {
+      level: number;
+    };
+    type: "heading";
+  } & ReactElement<unknown, string | JSXElementConstructor<unknown>>): number | void => 
+  {
+    const allHeadings = fullTextTasks?.json?.content?.filter((x: { attrs: { level: number }; type: "heading" }) => (x.type === "heading" && x.attrs.level === passedHead.attrs.level));
+    for(let headIndex = 0; headIndex < allHeadings.length; headIndex++) 
+    {
+      if(JSON?.stringify(allHeadings?.[headIndex]) === JSON?.stringify(passedHead)) 
+      {
+        return headIndex;
+      }
+    }
+  };
 
   return (
     <Container maw={1440}>
@@ -114,16 +135,16 @@ const CaseCompleteTestsStep: FunctionComponent<ICaseCompleteTestsStepProps> = ({
                 // eslint-disable-next-line @typescript-eslint/no-explicit-any
                 richTextContent={renderedCaseContent as any}
                 richTextOverwrite={{
-                  documentLink: (props) =>
+                  documentLink: (props) => 
                   {
                     const node = props!.node as unknown as IDocumentLink;
                     return node && fullTextTasks?.connections
-                      ? fullTextTasks.connections?.map((component, index) =>
+                      ? fullTextTasks.connections?.map((component, index) => 
                       {
-                        switch (component?.__typename)
+                        switch (component?.__typename) 
                         {
                           case "ImageWrapperCard":
-                            if(node?.attrs?.documentId === component?.id)
+                            if(node?.attrs?.documentId === component?.id) 
                             {
                               return (
                                 <div
@@ -135,7 +156,7 @@ const CaseCompleteTestsStep: FunctionComponent<ICaseCompleteTestsStepProps> = ({
                             }
                             break;
                           case "Callout":
-                            if(node?.attrs?.documentId === component?.id)
+                            if(node?.attrs?.documentId === component?.id) 
                             {
                               return (
                                 <div
@@ -147,7 +168,7 @@ const CaseCompleteTestsStep: FunctionComponent<ICaseCompleteTestsStepProps> = ({
                             }
                             break;
                           case "CardSelectionGame":
-                            if(node?.attrs?.documentId === component?.id)
+                            if(node?.attrs?.documentId === component?.id) 
                             {
                               return (
                                 <div
@@ -159,7 +180,7 @@ const CaseCompleteTestsStep: FunctionComponent<ICaseCompleteTestsStepProps> = ({
                             }
                             break;
                           case "DragNDropGame":
-                            if(node?.attrs?.documentId === component?.id)
+                            if(node?.attrs?.documentId === component?.id) 
                             {
                               return (
                                 <div
@@ -171,7 +192,7 @@ const CaseCompleteTestsStep: FunctionComponent<ICaseCompleteTestsStepProps> = ({
                             }
                             break;
                           case "FillInGapsGame":
-                            if(node?.attrs?.documentId === component?.id)
+                            if(node?.attrs?.documentId === component?.id) 
                             {
                               return (
                                 <div
@@ -192,7 +213,18 @@ const CaseCompleteTestsStep: FunctionComponent<ICaseCompleteTestsStepProps> = ({
                       })
                       : null;
                   },
-                  heading: richTextHeadingOverwrite,
+                  // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+                  // @ts-ignore
+                  heading: (props: {
+                    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+                    node: ReactElement<any, string | JSXElementConstructor<any>>;
+                  }&{
+                    attrs: {
+                      level: number;
+                    };
+                    type: "heading";
+                  // eslint-disable-next-line react/prop-types
+                  }) => richTextHeadingOverwrite({ index: getHeadingIndex(props.node), ...props }),
                   paragraph: richTextParagraphOverwrite
                 }}
               />

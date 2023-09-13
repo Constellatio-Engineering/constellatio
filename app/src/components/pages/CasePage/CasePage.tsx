@@ -22,7 +22,7 @@ const CasePage: FunctionComponent<IGenCase> = ({
 }) => 
 {
    
-  const [caseStepIndex, setCaseStepIndex] = React.useState<0 | 1 | 2>(1);
+  const [caseStepIndex, setCaseStepIndex] = React.useState<0 | 1 | 2>(0);
 
   return (
     <>
