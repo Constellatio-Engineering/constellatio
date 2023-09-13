@@ -213,10 +213,7 @@ const CaseCompleteTestsStep: FunctionComponent<ICaseCompleteTestsStepProps> = ({
                       })
                       : null;
                   },
-                  // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-                  // @ts-ignore
                   heading: (props: {
-                    // eslint-disable-next-line @typescript-eslint/no-explicit-any
                     node: ReactElement<any, string | JSXElementConstructor<any>>;
                   }&{
                     attrs: {
