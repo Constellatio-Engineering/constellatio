@@ -1,7 +1,6 @@
 import CaisyImg from "@/basic-components/CaisyImg";
 import { BodyText } from "@/components/atoms/BodyText/BodyText";
 import { Button } from "@/components/atoms/Button/Button";
-import { CivilLawIcon } from "@/components/Icons/CivilLawIcon";
 
 import { Title, useMantineTheme } from "@mantine/core";
 import React, { type ReactNode, type FunctionComponent } from "react";
