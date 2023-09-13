@@ -1,5 +1,7 @@
+import { CivilLawIcon } from "@/components/Icons/CivilLawIcon";
 import CaseBlock from "@/components/organisms/caseBlock/CaseBlock";
 import OverviewHeader from "@/components/organisms/casesOverviewHeader/CasesOverviewHeader";
+import EmptyStateCard from "@/components/organisms/emptyStateCard/EmptyStateCard";
 import { type ICasesOverviewProps } from "@/services/content/getCasesOverviewProps";
 import { type IGenFullCaseFragment, type IGenSubCategoryFragment } from "@/services/graphql/__generated/sdk";
 
@@ -44,9 +46,9 @@ const CasesOverviewPage: FunctionComponent<ICasesOverviewProps> = ({ allCases, a
           title="Cases"
         />
       )}
-      <div css={styles.ListWrapper}>
+      <div css={styles.ListWrapper({ empty: filteredSubcategories?.length && filteredSubcategories?.length < 15 ? true : false })}>
         {filteredSubcategories &&
-          filteredSubcategories.length > 0 &&
+          filteredSubcategories.length > 15 ?
           filteredSubcategories.map((item, itemIndex) => item?.subCategory && (
             <Fragment key={itemIndex}>
               <CaseBlock
@@ -57,7 +59,17 @@ const CasesOverviewPage: FunctionComponent<ICasesOverviewProps> = ({ allCases, a
               />
             </Fragment>
           )
+          ) : (
+            // the state of the data entered in this component is based on if there's filter items
+            // this will change later when we create global filter state
+            <EmptyStateCard
+              button={<><CivilLawIcon/>Explore Civil law cases</>}
+              title="Title"
+              text="Amet minim mollit non deserunt ullamco est sit aliqua dolor do amet sint. Velit officia consequat duis enim velit mollit"
+              variant="For-large-areas"
+            />
           )}
+          
       </div>
     </div>
   );
