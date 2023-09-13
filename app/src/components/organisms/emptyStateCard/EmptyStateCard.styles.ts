@@ -1,6 +1,7 @@
 import { css } from "@emotion/react";
 import { type MantineTheme } from "@mantine/styles";
 
+import { colors } from "./../../../constants/styles/colors";
 import { type IEmptyStateCardProps } from "./EmptyStateCard";
 
 interface IEmptyCardProps 

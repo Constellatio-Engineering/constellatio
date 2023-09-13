@@ -11,7 +11,7 @@ import placeHolderFlagImg from "../../../../public/images/placeholder-flag.png";
 
 export interface IEmptyStateCardProps 
 {
-  readonly button: ReactNode;
+  readonly button?: ReactNode;
   readonly hideIcon?: boolean;
   readonly text: string;
   readonly title: string;
@@ -44,7 +44,7 @@ const EmptyStateCard: FunctionComponent<IEmptyStateCardProps> = ({
           {text}
         </BodyText>
       </div>
-      {variant === "For-large-areas" && (
+      {button && variant === "For-large-areas" && (
         <div css={styles.callToAction}>
           <Button<"button"> styleType="primary" onClick={() => {}}>
             {button}

@@ -60,6 +60,8 @@ const CasesOverviewPage: FunctionComponent<ICasesOverviewProps> = ({ allCases, a
             </Fragment>
           )
           ) : (
+            // the state of the data entered in this component is based on if there's filter items
+            // this will change later when we create global filter state
             <EmptyStateCard
               button={<><CivilLawIcon/>Explore Civil law cases</>}
               title="Title"

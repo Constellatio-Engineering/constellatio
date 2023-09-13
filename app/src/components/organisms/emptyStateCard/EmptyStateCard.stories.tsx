@@ -1,3 +1,5 @@
+import { Trash } from "@/components/Icons/Trash";
+
 import { type Meta, type StoryObj } from "@storybook/react";
 import { type FunctionComponent } from "react";
 
@@ -25,25 +27,24 @@ type Story = StoryObj<typeof EmptyStateCard>;
 
 export const InLargeArea: Story = {
   args: {
-    isFiltered: false,
-    variant: "For-large-areas"
-  },
-};
-export const InLargeAreaFiltered: Story = {
-  args: {
-    isFiltered: true,
+    button: <><Trash/>Explore Civil law cases</>,
+    text: "Amet minim mollit non deserunt ullamco est sit aliqua dolor do amet sint. Velit officia consequat duis enim velit mollit",
+    title: "Title",
     variant: "For-large-areas"
   },
 };
 export const InSmallArea: Story = {
   args: {
-    isFiltered: false,
+    text: "Amet minim mollit non deserunt ullamco est sit aliqua dolor do amet sint. Velit officia consequat duis enim velit mollit",
+    title: "Title",
     variant: "For-small-areas"
   },
 };
-export const InSmallAreaFiltered: Story = {
+export const SmallAreaHiddenIcon: Story = {
   args: {
-    isFiltered: true,
+    hideIcon: true,
+    text: "Amet minim mollit non deserunt ullamco est sit aliqua dolor do amet sint. Velit officia consequat duis enim velit mollit",
+    title: "Title",
     variant: "For-small-areas"
   },
 };
