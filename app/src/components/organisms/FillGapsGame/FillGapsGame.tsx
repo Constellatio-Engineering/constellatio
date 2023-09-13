@@ -37,7 +37,7 @@ const countPlaceholders = (content: TextElement[]): number =>
   let count = 0;
   const regex = /{{.*?}}/g;
 
-  content.forEach((item: TextElement) => 
+  content.forEach((item: TextElement) =>
   {
     switch (item.type) 
     {
@@ -79,7 +79,6 @@ const _FillGapsGame: FC<TFillGapsGame> = ({ fillGameParagraph, helpNote, questio
   const { getNextGameIndex } = useCaseSolvingStore();
 
   const correctAnswers = useRef<string[]>([]);
-  const inputCounter = useRef(0);
   const focusedIndex = useRef<number | null>(null);
 
   useEffect(() => 
@@ -170,7 +169,6 @@ const _FillGapsGame: FC<TFillGapsGame> = ({ fillGameParagraph, helpNote, questio
   {
     setGameStatus("inprogress");
     correctAnswers.current = [];
-    inputCounter.current = 0;
     setUserAnswers(new Array(totalPlaceholders).fill(""));
     setAnswerResult(new Array(totalPlaceholders).fill(""));
   };
@@ -184,7 +182,6 @@ const _FillGapsGame: FC<TFillGapsGame> = ({ fillGameParagraph, helpNote, questio
         text={props?.children?.[0]?.props?.node.text}
         correctAnswers={correctAnswers}
         focusedIndex={focusedIndex}
-        inputCounter={inputCounter}
       />
     );
   };
