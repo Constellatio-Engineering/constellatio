@@ -1,72 +1,139 @@
+import { type Nullable } from "@/utils/types";
+
 import { create } from "zustand";
 import { immer } from "zustand/middleware/immer";
 
-type TFillGapsGameStore = {
+type GameStatus = "win" | "lose" | "inprogress";
+
+type UserAnswersPerParagraph = {
+  answers: string[];
+  path: string;
+};
+
+type FillGapsGameState = {
   answerResult: string[];
-  gameStatus: "win" | "lose" | "inprogress";
+  gameStatus: GameStatus;
   gameSubmitted: boolean;
+  id: string;
   resultMessage: string;
-  setAnswerResult: (answersResult: string[]) => void;
-  setGameStatus: (status: "win" | "lose" | "inprogress") => void;
-  setGameSubmitted: (gameSubmitted: boolean) => void;
-  setResultMessage: (message: string) => void;
-  setUserAnswers: (userAnswers: string[]) => void;
-  updateUserAnswers: (index: number, value: string) => void;
-  userAnswers: string[];
+  userAnswers: UserAnswersPerParagraph[];
+};
+
+type FillGapsGameStateUpdate = Partial<Pick<FillGapsGameState, "gameStatus" | "gameSubmitted" | "resultMessage" | "answerResult">>;
+
+type FillGapsGameStore = {
+  games: FillGapsGameState[];
+  getGameState: (id: Nullable<string>) => FillGapsGameState | undefined;
+  updateGameState: (id: string, update: FillGapsGameStateUpdate) => void;
+  updateUserAnswer: (params: { gameId: string; index: number; path: string; value: string}) => void;
+};
+
+const defaultFillGapsGameState: FillGapsGameState = {
+  answerResult: [],
+  gameStatus: "inprogress",
+  gameSubmitted: false,
+  id: "",
+  resultMessage: "",
+  userAnswers: [],
 };
 
 const useFillGapsGameStore = create(
-  immer<TFillGapsGameStore>((set, get) => ({
-    answerResult: [],
-    gameStatus: "inprogress",
-    gameSubmitted: false,
-    resultMessage: "",
-    setAnswerResult(answersResult)
+  immer<FillGapsGameStore>((set, get) => ({
+    games: [],
+    getGameState: (id) =>
     {
-      set((state) => 
+      const { games } = get();
+
+      if(id == null)
       {
-        state.answerResult = answersResult;
-      });
-    },
-    setGameStatus(status) 
-    {
-      set((state) => 
+        console.warn("id is null. cannot get game state");
+        return;
+      }
+
+      const game = games.find(game => game.id === id);
+
+      if(game)
       {
-        state.gameStatus = status;
-      });
-    },
-    setGameSubmitted(gameSubmitted) 
-    {
-      set((state) => 
+        return game;
+      }
+
+      console.log(`game with id '${id}' not found. now creating it`);
+
+      const newGame: FillGapsGameState = {
+        ...defaultFillGapsGameState,
+        id,
+      };
+
+      set((state) =>
       {
-        state.gameSubmitted = gameSubmitted;
-      });
-    },
-    setResultMessage(message) 
-    {
-      set((state) => 
-      {
-        state.resultMessage = message;
-      });
-    },
-    setUserAnswers(userAnswers)
-    {
-      set((state) => 
-      {
-        state.userAnswers = userAnswers;
-      });
-    },
-    updateUserAnswers(index, value)
-    {
-      set((state) => 
-      {
-        const newAnswers = [...state.userAnswers];
-        newAnswers[index] = value;
-        state.userAnswers = newAnswers;
+        state.games = state.games.concat(newGame);
       });
 
+      return games.find(game => game.id === id);
     },
-    userAnswers: [],
+    updateGameState: (id, update) =>
+    {
+      console.log("updateGameState", id, update);
+
+      set((state) =>
+      {
+        const gameIndex = state.games.findIndex(game => game.id === id);
+
+        if(gameIndex === -1)
+        {
+          const newGame: FillGapsGameState = {
+            ...defaultFillGapsGameState,
+            id,
+            ...update,
+          };
+
+          state.games = state.games.concat(newGame);
+          return;
+        }
+
+        const newGame: FillGapsGameState = {
+          ...state.games[gameIndex]!,
+          ...update
+        };
+
+        state.games[gameIndex] = newGame;
+      });
+    },
+    updateUserAnswer: ({
+      gameId,
+      index,
+      path,
+      value
+    }) =>
+    {
+      console.log("updateUserAnswer", gameId, path, index, value);
+
+      const { games } = get();
+      const gameIndex = games.findIndex(game => game.id === gameId);
+
+      if(gameIndex === -1)
+      {
+        console.warn("game not found. cannot update user answer");
+        return;
+      }
+
+      const game = games[gameIndex]!;
+      const answersByPathIndex = game.userAnswers.findIndex(answers => answers.path === path);
+
+      if(answersByPathIndex === -1)
+      {
+        console.warn(`answers not found for path '${path}'. cannot update user answer`);
+        return;
+      }
+
+      set((state) =>
+      {
+        const answers = game.userAnswers[answersByPathIndex]!.answers!;
+        const newAnswers = [...answers];
+        newAnswers[index] = value;
+        state.games[gameIndex]!.userAnswers[answersByPathIndex]!.answers = newAnswers;
+      });
+    }
   }))
 );
 

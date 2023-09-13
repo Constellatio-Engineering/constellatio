@@ -105,7 +105,7 @@ const t = initTRPC
         },
       };
     },
-    isDev: env.NODE_ENV === "development",
+    isDev: env.NEXT_PUBLIC_NODE_ENV === "development",
     /* errorFormatter: ({ error, shape }) =>
     {
       return {

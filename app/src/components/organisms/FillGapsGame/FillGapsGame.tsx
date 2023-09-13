@@ -30,7 +30,7 @@ import {
   stylesOverwrite,
 } from "./FillGapsGame.styles";
 
-export type TFillGapsGame = Pick<IGenFillInGapsGame, "fillGameParagraph" | "helpNote" | "question">;
+export type TFillGapsGame = Pick<IGenFillInGapsGame, "fillGameParagraph" | "helpNote" | "question" | "id">;
 
 const countPlaceholders = (content: TextElement[]): number => 
 {
@@ -59,40 +59,42 @@ const countPlaceholders = (content: TextElement[]): number =>
   return count;
 };
 
-const _FillGapsGame: FC<TFillGapsGame> = ({ fillGameParagraph, helpNote, question }) => 
+let FillGapsGame: FC<TFillGapsGame> = ({
+  fillGameParagraph,
+  helpNote,
+  id,
+  question
+}) =>
 {
   const totalPlaceholders = useMemo(() => countPlaceholders(fillGameParagraph?.richTextContent?.json?.content), [fillGameParagraph]);
+  const { getNextGameIndex } = useCaseSolvingStore();
+  const gameState = useFillGapsGameStore(s => s.getGameState(id));
+  const updateGameState = useFillGapsGameStore(s => s.updateGameState);
+  const correctAnswers = useRef<string[]>([]);
+  const focusedIndex = useRef<number | null>(null);
+
+  console.log(`gameState for game with ID '${id}'`, gameState);
+
+  if(!gameState || !id)
+  {
+    return null;
+  }
 
   const {
     answerResult,
     gameStatus,
     gameSubmitted,
     resultMessage,
-    setAnswerResult,
-    setGameStatus,
-    setGameSubmitted,
-    setResultMessage,
-    setUserAnswers,
     userAnswers
-  } = useFillGapsGameStore();
+  } = gameState;
 
-  const { getNextGameIndex } = useCaseSolvingStore();
-
-  const correctAnswers = useRef<string[]>([]);
-  const focusedIndex = useRef<number | null>(null);
-
-  useEffect(() => 
+  const checkAnswers = (): boolean =>
   {
-    setUserAnswers(new Array(totalPlaceholders).fill(""));
-    setAnswerResult(new Array(totalPlaceholders).fill(""));
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [totalPlaceholders]);
+    console.log("checkAnswers");
 
-  // console.log("userAnswers", userAnswers);
+    return false;
 
-  const checkAnswers = (): boolean => 
-  {
-    if(userAnswers.length !== correctAnswers.current.length) { return false; }
+    /* if(userAnswers.length !== correctAnswers.current.length) { return false; }
 
     let allCorrect = true;
     const newAnswerResult: string[] = [];
@@ -140,45 +142,53 @@ const _FillGapsGame: FC<TFillGapsGame> = ({ fillGameParagraph, helpNote, questio
     }
 
     setAnswerResult(newAnswerResult);
-    return allCorrect;
+    return allCorrect;*/
   };
 
-  const handleCheckAnswers = (): void => 
-  { 
-    if(!gameSubmitted) 
+  const handleCheckAnswers = (): void =>
+  {
+    console.log("handleCheckAnswers");
+
+    /* if(!gameSubmitted)
     {
       setGameSubmitted(true);
       getNextGameIndex();
     }
 
-    if(checkAnswers()) 
+    if(checkAnswers())
     {
       // all answers are correct
       setGameStatus("win");
       setResultMessage("Congrats! all answers are correct!");
     }
-    else 
+    else
     {
       // at least one answer is incorrect
       setGameStatus("lose");
       setResultMessage("Some answers are incorrect. Please try again.");
-    }
+    }*/
   };
 
-  const handleResetGame = (): void => 
+  const handleResetGame = (): void =>
   {
-    setGameStatus("inprogress");
+    console.log("handleResetGame");
+
+    /* setGameStatus("inprogress");
     correctAnswers.current = [];
     setUserAnswers(new Array(totalPlaceholders).fill(""));
-    setAnswerResult(new Array(totalPlaceholders).fill(""));
+    setAnswerResult(new Array(totalPlaceholders).fill(""));*/
   };
 
   // eslint-disable-next-line @typescript-eslint/ban-ts-comment
   // @ts-ignore
   const richtextOverwrite = (props): ReactElement =>
   {
+    console.log(props.path, props?.children?.[0]?.props?.node.text);
+
     return (
       <RichtextOverwrite
+        id={id}
+        path={props.path}
         text={props?.children?.[0]?.props?.node.text}
         correctAnswers={correctAnswers}
         focusedIndex={focusedIndex}
@@ -189,7 +199,8 @@ const _FillGapsGame: FC<TFillGapsGame> = ({ fillGameParagraph, helpNote, questio
   return (
     <Container>
       <TitleWrapper>
-        <Gamification/> <Title order={4}>Fill in the gaps</Title>
+        <Gamification/>
+        <Title order={4}>Fill in the gaps</Title>
       </TitleWrapper>
       <GameWrapper>
         {question && (
@@ -206,7 +217,7 @@ const _FillGapsGame: FC<TFillGapsGame> = ({ fillGameParagraph, helpNote, questio
           </BodyText>
         </LegendWrapper>
         <Game>
-          <Options>
+          {/* <Options>
             {fillGameParagraph?.richTextContent?.json && (
               <Richtext
                 richTextContent={fillGameParagraph.richTextContent}
@@ -216,7 +227,7 @@ const _FillGapsGame: FC<TFillGapsGame> = ({ fillGameParagraph, helpNote, questio
                 stylesOverwrite={stylesOverwrite}
               />
             )}
-          </Options>
+          </Options>*/}
         </Game>
         {gameStatus !== "inprogress" && (
           <>
@@ -236,7 +247,8 @@ const _FillGapsGame: FC<TFillGapsGame> = ({ fillGameParagraph, helpNote, questio
             size="large"
             leftIcon={gameStatus === "inprogress" ? <Check/> : <Reload/>}
             onClick={gameStatus === "inprogress" ? handleCheckAnswers : handleResetGame}
-            disabled={gameStatus === "inprogress" && userAnswers.some((answer) => answer.trim() === "")}>
+            /* disabled={gameStatus === "inprogress" && userAnswers.some((answer) => answer.trim() === "")}*/
+            disabled={false}>
             {gameStatus === "inprogress" ? "Check my answers" : "Solve again"}
           </Button>
         </div>
@@ -245,4 +257,6 @@ const _FillGapsGame: FC<TFillGapsGame> = ({ fillGameParagraph, helpNote, questio
   );
 };
 
-export const FillGapsGame = memo(_FillGapsGame);
+FillGapsGame = memo(FillGapsGame);
+
+export default FillGapsGame;

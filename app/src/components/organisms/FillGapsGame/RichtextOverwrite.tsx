@@ -10,25 +10,37 @@ interface TRichtextOverwrite
 {
   readonly correctAnswers: MutableRefObject<string[]>;
   readonly focusedIndex: MutableRefObject<number | null>;
+  readonly id: string;
+  readonly path: string;
   readonly text: string;
 }
 
-const _RichtextOverwrite: FC<TRichtextOverwrite> = ({ correctAnswers, focusedIndex, text }) =>  
+let RichtextOverwrite: FC<TRichtextOverwrite> = ({
+  correctAnswers,
+  focusedIndex,
+  id,
+  path,
+  text
+}) =>
 {
-  const {
-    answerResult,
-    gameStatus,
-    updateUserAnswers,
-    userAnswers
-  } = useFillGapsGameStore();
+  const gameState = useFillGapsGameStore(s => s.getGameState(id))!;
+  const updateUserAnswer = useFillGapsGameStore(s => s.updateUserAnswer);
   const inputRefs = useRef<RefObject<HTMLInputElement>[]>([]);
+
+  const { answerResult, gameStatus, userAnswers } = gameState;
 
   // Splitting the text based on {{...}} pattern using regex
   const parts = text.split(/({{.*?}})/g);
 
   const createChangeHandler = (index: number) => (e: ChangeEvent<HTMLInputElement>) => 
   {
-    updateUserAnswers(index, e.target.value);
+    updateUserAnswer({
+      gameId: id,
+      index,
+      path,
+      value: e.target.value
+    });
+
     focusedIndex.current = index;
   };
 
@@ -62,10 +74,12 @@ const _RichtextOverwrite: FC<TRichtextOverwrite> = ({ correctAnswers, focusedInd
             inputRefs.current[currentInputIndex] = createRef();
           }
 
+          const answerValue = userAnswers.find(answer => answer.path === path)?.answers[currentInputIndex] || "";
+
           return gameStatus === "inprogress" ? (
             <FillGapInput
               ref={inputRefs.current[currentInputIndex]}
-              value={userAnswers[currentInputIndex]}
+              value={answerValue}
               key={`${index}${currentInputIndex}}`}
               onChange={createChangeHandler(currentInputIndex)}
               status="default"
@@ -74,7 +88,7 @@ const _RichtextOverwrite: FC<TRichtextOverwrite> = ({ correctAnswers, focusedInd
           ) : (
             <FillGapInput
               ref={inputRefs.current[currentInputIndex]}
-              value={userAnswers[currentInputIndex]}
+              value={answerValue}
               key={`${index}${currentInputIndex}}`}
               onChange={createChangeHandler(currentInputIndex)}
               index={currentInputIndex + 1}
@@ -92,7 +106,7 @@ const _RichtextOverwrite: FC<TRichtextOverwrite> = ({ correctAnswers, focusedInd
   );
 };
 
-_RichtextOverwrite.displayName = "RichtextOverwrite";
-const RichtextOverwrite = memo(_RichtextOverwrite);
+RichtextOverwrite.displayName = "RichtextOverwrite";
+RichtextOverwrite = memo(RichtextOverwrite);
 
 export default RichtextOverwrite;

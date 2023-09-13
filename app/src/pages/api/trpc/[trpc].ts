@@ -7,7 +7,7 @@ import { createNextApiHandler } from "@trpc/server/adapters/next";
 // export API handler
 export default createNextApiHandler({
   createContext: createTRPCContext,
-  onError: env.NODE_ENV === "development"
+  onError: env.NEXT_PUBLIC_NODE_ENV === "development"
     ? ({ error, path }) =>
     {
       console.error(`❌ tRPC failed on ${path ?? "<no-path>"}: ${error.message}`);

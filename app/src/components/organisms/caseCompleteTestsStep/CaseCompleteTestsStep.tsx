@@ -17,7 +17,7 @@ import { ImageWrapperCard } from "../../molecules/ImageWrapperCard/ImageWrapperC
 import { Richtext } from "../../molecules/Richtext/Richtext";
 import { Callout } from "../Callout/Callout";
 import { DragDropGame } from "../DragDropGame/DragDropGame";
-import { FillGapsGame } from "../FillGapsGame/FillGapsGame";
+import FillGapsGame from "../FillGapsGame/FillGapsGame";
 import FloatingPanel from "../floatingPanel/FloatingPanel";
 import { SelectionCardGame } from "../SelectionCardGame/SelectionCardGame";
 
