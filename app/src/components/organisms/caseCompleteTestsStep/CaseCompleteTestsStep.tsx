@@ -1,5 +1,6 @@
 /* eslint-disable max-lines */
 import { Button } from "@/components/atoms/Button/Button";
+import { richTextHeadingOverwrite } from "@/components/helpers/richTextHeadingOverwrite";
 import { BoxIcon } from "@/components/Icons/BoxIcon";
 import { FileIcon } from "@/components/Icons/FileIcon";
 import { type IGenTextElement, type IGenCase_FullTextTasks } from "@/services/graphql/__generated/sdk";
@@ -191,7 +192,8 @@ const CaseCompleteTestsStep: FunctionComponent<ICaseCompleteTestsStepProps> = ({
                       })
                       : null;
                   },
-                  paragraph: richTextParagraphOverwrite,
+                  heading: richTextHeadingOverwrite,
+                  paragraph: richTextParagraphOverwrite
                 }}
               />
               <button type="button" onClick={() => getNextGameIndex()}>
