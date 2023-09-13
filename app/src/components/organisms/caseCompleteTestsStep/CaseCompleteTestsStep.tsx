@@ -5,7 +5,7 @@ import { BoxIcon } from "@/components/Icons/BoxIcon";
 import { FileIcon } from "@/components/Icons/FileIcon";
 import { type IGenTextElement, type IGenCase_FullTextTasks } from "@/services/graphql/__generated/sdk";
 import useCaseSolvingStore from "@/stores/caseSolving.store";
-import { IHeading, type IDocumentLink } from "types/richtext";
+import { type IHeading, type IDocumentLink, IHeadingNode } from "types/richtext";
 
 import { Container, Title } from "@mantine/core";
 import { type Maybe } from "@trpc/server";
@@ -213,15 +213,11 @@ const CaseCompleteTestsStep: FunctionComponent<ICaseCompleteTestsStepProps> = ({
                       })
                       : null;
                   },
-                  heading: (props: {
-                    node: ReactElement<any, string | JSXElementConstructor<any>>;
-                  }&{
-                    attrs: {
-                      level: number;
-                    };
-                    type: "heading";
-                  // eslint-disable-next-line react/prop-types
-                  }) => richTextHeadingOverwrite({ index: getHeadingIndex(props.node), ...props }),
+                  heading: (props) => 
+                  {
+                    const node = props!.node as unknown as IHeadingNode;
+                    return richTextHeadingOverwrite({ index: getHeadingIndex(node), ...props });
+                  },
                   paragraph: richTextParagraphOverwrite
                 }}
               />
