@@ -48,7 +48,7 @@ const CaseNavBar: FunctionComponent<ICaseNavBarProps> = ({ activeStep, setCaseSt
   };
 
   return variant === "case" ? (
-    <div css={styles.componentArea}>
+    <div css={styles.componentArea({ theme, variant })}>
       <div css={styles.wrapper({ variant })}>
         <div css={styles.tabs}>
           {setCaseStepIndex &&
@@ -87,8 +87,10 @@ const CaseNavBar: FunctionComponent<ICaseNavBarProps> = ({ activeStep, setCaseSt
       {hasCaseSolvingStarted && <div css={styles.progressBar({ progress, theme, variant })}/>}
     </div>
   ) : (
-    <div css={styles.wrapper({ variant })}>
-      {hasCaseSolvingStarted && <div css={styles.progressBar({ progress, theme, variant })}/>}
+    <div css={styles.componentArea({ theme, variant })}>
+      <div css={styles.wrapper({ variant })}>
+        {hasCaseSolvingStarted && <div css={styles.progressBar({ progress, theme, variant })}/>}
+      </div>
     </div>
   );
 };

@@ -9,7 +9,7 @@ import React, { type FunctionComponent } from "react";
 
 import * as styles from "./CasesPage.styles";
 
-const CasePage: FunctionComponent<IGenCase> = ({
+const DetailsPage: FunctionComponent<IGenCase& {readonly variant: "case" | "dictionary"}> = ({
   durationToCompleteInMinutes,
   facts,
   fullTextTasks,
@@ -18,7 +18,8 @@ const CasePage: FunctionComponent<IGenCase> = ({
   resolution,
   tags,
   title,
-  topic
+  topic,
+  variant
 }) => 
 {
    
@@ -28,8 +29,8 @@ const CasePage: FunctionComponent<IGenCase> = ({
     <>
       <CaseSolvingHeader
         title={title ?? ""}
-        variant="case"
-        pathSlugs={[{ path: "/cases", slug: "Cases" }, { path: `/cases/${id}`, slug: title ?? "" }]}
+        variant={variant}
+        pathSlugs={[{ path: variant === "case" ? "/cases" : "/dictionaries", slug: variant === "case" ? "Cases" : "Dictionaries" }, { path: `/dictionaries/${id}`, slug: title ?? "" }]}
         overviewCard={{
           lastUpdated: new Date(),
           legalArea,
@@ -37,13 +38,13 @@ const CasePage: FunctionComponent<IGenCase> = ({
           tags,
           timeInMinutes: durationToCompleteInMinutes || 0,
           topic: topic?.[0]?.topicName ?? "",
-          variant: "case",
+          variant,
           views: 0,
 
         }}
       />
       <CaseNavBar
-        variant="case"
+        variant={variant}
         activeStep={caseStepIndex}
         setCaseStepIndex={setCaseStepIndex}
       />
@@ -74,4 +75,4 @@ const CasePage: FunctionComponent<IGenCase> = ({
   );
 };
 
-export default CasePage;
+export default DetailsPage;

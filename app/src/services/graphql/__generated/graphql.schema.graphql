@@ -4,7 +4,16 @@ type Article {
   _meta: CaisyDocument_Meta
 
   """"""
-  asdf(
+  fullTextTasks(locale: String): Article_fullTextTasks
+
+  """"""
+  id: ID
+
+  """"""
+  legalArea(locale: String): Article_legalArea
+
+  """"""
+  mainCategoryField(
     """
     The cursor to start the pagination from. In this case the curser equals the id for the (last) element. If not set, we wil start from the beginning.
     """
@@ -15,10 +24,52 @@ type Article {
 
     """"""
     locale: String
-  ): [Article_asdf]
+  ): [Article_mainCategoryField]
 
   """"""
-  id: ID
+  subCategoryField(
+    """
+    The cursor to start the pagination from. In this case the curser equals the id for the (last) element. If not set, we wil start from the beginning.
+    """
+    after: String
+
+    """The number of items to return. Default and max value is 100."""
+    first: Int = 100
+
+    """"""
+    locale: String
+  ): [Article_subCategoryField]
+
+  """"""
+  tags(
+    """
+    The cursor to start the pagination from. In this case the curser equals the id for the (last) element. If not set, we wil start from the beginning.
+    """
+    after: String
+
+    """The number of items to return. Default and max value is 100."""
+    first: Int = 100
+
+    """"""
+    locale: String
+  ): [Article_tags]
+
+  """"""
+  title: String
+
+  """"""
+  topic(
+    """
+    The cursor to start the pagination from. In this case the curser equals the id for the (last) element. If not set, we wil start from the beginning.
+    """
+    after: String
+
+    """The number of items to return. Default and max value is 100."""
+    first: Int = 100
+
+    """"""
+    locale: String
+  ): [Article_topic]
 }
 
 """"""
@@ -45,16 +96,31 @@ type Article_ConnectionEdge {
 """"""
 input Article_Sort {
   """"""
-  asdf: Order
-
-  """"""
   createdAt: Order
 
   """"""
   id: Order
 
   """"""
+  legalArea: Order
+
+  """"""
+  mainCategoryField: Order
+
+  """"""
   publishedAt: Order
+
+  """"""
+  subCategoryField: Order
+
+  """"""
+  tags: Order
+
+  """"""
+  title: Order
+
+  """"""
+  topic: Order
 
   """"""
   updatedAt: Order
@@ -67,10 +133,51 @@ input Article_Where {
 
   """"""
   OR: [Article_Where]
+
+  """"""
+  fullTextTasks: CaisyField_Richtext_Where
+
+  """"""
+  title: CaisyField_String_Where
 }
 
 """"""
-union Article_asdf = Article | Case | LegalArea | MainCategory | SubCategory | Tags | Topic
+type Article_fullTextTasks {
+  """"""
+  connections(
+    """
+    The cursor to start the pagination from. In this case the curser equals the id for the (last) element. If not set, we wil start from the beginning.
+    """
+    after: String
+
+    """The number of items to return. Default and max value is 100."""
+    first: Int = 100
+
+    """"""
+    locale: String
+  ): [Article_fullTextTasks_Connections]
+
+  """"""
+  json: JSON
+}
+
+""""""
+union Article_fullTextTasks_Connections = Callout | CardSelectionGame | DragNDropGame | FillInGapsGame | ImageWrapperCard
+
+""""""
+union Article_legalArea = LegalArea | SubCategory
+
+""""""
+union Article_mainCategoryField = MainCategory
+
+""""""
+union Article_subCategoryField = SubCategory
+
+""""""
+union Article_tags = Tags
+
+""""""
+union Article_topic = Topic
 
 """"""
 type Asset {

@@ -6,13 +6,13 @@ import { f_DragNDropGame } from "./DragNDropGame";
 import { f_FillInGapsGame } from "./FillInGapsGame";
 import { f_ImageWrapperCard } from "./ImageWrapperCard";
 
-export const f_FullTextTasks = gql`
+export const f_CaseFullTextTasks = gql`
 	${f_FillInGapsGame}
 	${f_CardSelectionGame}
 	${f_DragNDropGame}
 	${f_ImageWrapperCard}
 	${f_Callout}
-	fragment FullTextTasks on Case_fullTextTasks {
+	fragment CaseFullTextTasks on Case_fullTextTasks {
 		__typename
 		json
 		connections {

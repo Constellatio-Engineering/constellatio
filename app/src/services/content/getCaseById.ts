@@ -1,12 +1,12 @@
 import { type IGenCase } from "../graphql/__generated/sdk";
 import { caisySDK } from "../graphql/getSdk";
 
-export interface getAllSubcategories 
+interface getCaseByIdProps
 {
   Case: IGenCase | null;
 }
 
-export const getCaseById = async ({ id }: {id: string}): Promise<getAllSubcategories> =>
+export const getCaseById = async ({ id }: {id: string}): Promise<getCaseByIdProps> =>
 {
   const { Case } = await caisySDK.getCaseById({ id });
     

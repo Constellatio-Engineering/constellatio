@@ -1,5 +1,5 @@
 /* eslint-disable @typescript-eslint/naming-convention */
-import getAllCases, { type allCases } from "./getAllCases";
+import getAllArticles, { type allArticles } from "./getAllArticles";
 import {
   type IGenAssetFragment,
   type IGenSubCategoryFragment,
@@ -20,28 +20,28 @@ export type allSubCategories = (IGenSubCategoryFragment | null | undefined)[] & 
   __typename?: "SubCategory" | undefined;
 };
 
-export interface ICasesOverviewProps 
+export interface IArticlesOverviewProps 
 {
-  allCases: allCases;
+  allArticles: allArticles;
   allMainCategories: allMainCategories;
   allSubCategories: allSubCategories;
 }
 
-const getCasesOverviewProps = async (): Promise<ICasesOverviewProps> => 
+const getArticlesOverviewProps = async (): Promise<IArticlesOverviewProps> => 
 {
   try 
   {
-    const [allMainCategoriesRes, allSubCategoriesRes, allCasesRes] = await Promise.all([
+    const [allMainCategoriesRes, allSubCategoriesRes, allArticlesRes] = await Promise.all([
       caisySDK.getAllMainCategory(),
-      caisySDK.getAllSubCategory(), getAllCases({})
+      caisySDK.getAllSubCategory(), getAllArticles({})
     ]);
 
     const allMainCategories = (
       allMainCategoriesRes?.allMainCategory?.edges?.map((category) => ({
-        casesPerCategory: allCasesRes?.filter((caseItem) =>
+        casesPerCategory: allArticlesRes?.filter((caseItem) =>
           caseItem?.subCategoryField?.some(
-            (subCategoryForEachCase) =>
-              subCategoryForEachCase?.mainCategory?.[0]?.id ===
+            (subCategoryForEachArticle) =>
+              subCategoryForEachArticle?.mainCategory?.[0]?.id ===
 							category?.node?.id
           )
         ).length,
@@ -53,7 +53,7 @@ const getCasesOverviewProps = async (): Promise<ICasesOverviewProps> =>
     ) || [];
 
     return {
-      allCases: allCasesRes,
+      allArticles: allArticlesRes,
       allMainCategories,
       allSubCategories,
     };
@@ -65,4 +65,4 @@ const getCasesOverviewProps = async (): Promise<ICasesOverviewProps> =>
   }
 };
 
-export default getCasesOverviewProps;
+export default getArticlesOverviewProps;

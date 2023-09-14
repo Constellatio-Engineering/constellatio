@@ -1,34 +1,34 @@
 import { Layout } from "@/components/layouts/Layout";
 import DetailsPage from "@/components/pages/CasePage/CasePage";
-import { getCaseById } from "@/services/content/getCaseById";
-import { type IGenCase } from "@/services/graphql/__generated/sdk";
+import { getArticleById } from "@/services/content/getArticleById";
+import { type IGenArticle } from "@/services/graphql/__generated/sdk";
 
 import type { GetStaticProps, GetStaticPaths } from "next";
 import { type FunctionComponent } from "react";
 
 interface ICasePageProps 
 {
-  readonly legalCase: IGenCase;
+  readonly legalArticle: IGenArticle;
 }
 
 export const getStaticProps: GetStaticProps = async ({ params }) => 
 {
   const id = Array.isArray(params?.id) ? (params?.id[0] ?? "") : (params?.id ?? "");
-  const resCase = await getCaseById({ id });
+  const resArticle = await getArticleById({ id });
   return {
     props: {
       id,
-      legalCase: resCase?.Case ?? null
+      legalArticle: resArticle?.Article ?? null
     }
   };
 
 };
 
-const NextPage: FunctionComponent<ICasePageProps> = ({ legalCase }) => 
+const NextPage: FunctionComponent<ICasePageProps> = ({ legalArticle }) => 
 {
   return (
     <Layout>
-      <DetailsPage variant="case" {...legalCase}/>
+      <DetailsPage {...legalArticle} variant="dictionary"/>
     </Layout>
   );
 };

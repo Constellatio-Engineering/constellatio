@@ -1,17 +1,17 @@
 
 import { Layout } from "@/components/layouts/Layout";
 import CasesOverviewPage from "@/components/pages/CasesOverviewPage/CasesOverviewPage";
-import getCasesOverviewProps, { type ICasesOverviewProps } from "@/services/content/getCasesOverviewProps";
+import getArticlesOverviewProps, { type IArticlesOverviewProps } from "@/services/content/getArticlesOverviewProps";
 
 import { type GetStaticProps } from "next";
 import { type FunctionComponent, } from "react";
 
 export const getStaticProps: GetStaticProps<
-Awaited<ReturnType<typeof getCasesOverviewProps>>
+Awaited<ReturnType<typeof getArticlesOverviewProps>>
 > = async () => 
 {
 
-  const resAllCases = await getCasesOverviewProps();
+  const resAllCases = await getArticlesOverviewProps();
 
   return {
     props: {
@@ -22,12 +22,11 @@ Awaited<ReturnType<typeof getCasesOverviewProps>>
 
 };
 
-const NextPage: FunctionComponent<ICasesOverviewProps> = (props) => 
+const NextPage: FunctionComponent<IArticlesOverviewProps> = (props) => 
 {
-  
   return (
     <Layout>
-      <CasesOverviewPage variant="case" {...props}/>      
+      <CasesOverviewPage {...props} allCases={props?.allArticles} variant="dictionary"/>      
     </Layout>
   );
 };
