@@ -5,15 +5,13 @@ import { BoxIcon } from "@/components/Icons/BoxIcon";
 import { FileIcon } from "@/components/Icons/FileIcon";
 import { type IGenTextElement, type IGenCase_FullTextTasks } from "@/services/graphql/__generated/sdk";
 import useCaseSolvingStore from "@/stores/caseSolving.store";
-import { type IHeading, type IDocumentLink, IHeadingNode } from "types/richtext";
+import type { IDocumentLink, IHeadingNode } from "types/richtext";
 
 import { Container, Title } from "@mantine/core";
 import { type Maybe } from "@trpc/server";
 import {
   type FunctionComponent, useEffect, useMemo, type JSXElementConstructor, type ReactElement 
 } from "react";
-
-import { title } from "process";
 
 import { getGamesIndexes } from "./caseCompleteTestsStep.helper";
 import * as styles from "./CaseCompleteTestsStep.styles";
@@ -42,8 +40,7 @@ const CaseCompleteTestsStep: FunctionComponent<ICaseCompleteTestsStepProps> = ({
     latestGameIndex,
     setGamesIndexes,
     setHasCaseSolvingStarted
-  } =
-    useCaseSolvingStore();
+  } = useCaseSolvingStore();
 
   const renderedCaseContent = useMemo(() => 
   {

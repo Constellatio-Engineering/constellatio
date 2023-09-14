@@ -10,16 +10,10 @@ interface TRichtextOverwrite
 {
   readonly correctAnswers: MutableRefObject<string[]>;
   readonly focusedIndex: MutableRefObject<number | null>;
-  readonly inputCounter: MutableRefObject<number>;
   readonly text: string;
 }
 
-const _RichtextOverwrite: FC<TRichtextOverwrite> = ({
-  correctAnswers,
-  focusedIndex,
-  inputCounter,
-  text
-}) =>  
+const _RichtextOverwrite: FC<TRichtextOverwrite> = ({ correctAnswers, focusedIndex, text }) =>  
 {
   const {
     answerResult,
@@ -38,23 +32,15 @@ const _RichtextOverwrite: FC<TRichtextOverwrite> = ({
     focusedIndex.current = index;
   };
 
-  useEffect(() => 
-  {
-    inputCounter.current = 0;
-    // Reset the counter when the component is unmounted
-    return () => 
-    {
-      inputCounter.current = 0;
-    };
-  }, []);
-
-  useEffect(() => 
+  useEffect(() =>
   {
     if(focusedIndex.current !== null && inputRefs.current[focusedIndex.current]) 
     {
       inputRefs.current?.[focusedIndex.current]?.current?.focus();
     }
   }, [focusedIndex]);
+
+  let inputCounter = 0;
 
   return (
     <div className="richtextOverwrite">
@@ -68,11 +54,10 @@ const _RichtextOverwrite: FC<TRichtextOverwrite> = ({
             correctAnswers.current.push(innerContent);
           }
 
-          const currentInputIndex = inputCounter.current;
-          inputCounter.current++;
-          console.log("currentInputIndex", currentInputIndex);
+          const currentInputIndex = inputCounter;
+          inputCounter++;
 
-          if(!inputRefs.current[currentInputIndex]) 
+          if(!inputRefs.current[currentInputIndex])
           {
             inputRefs.current[currentInputIndex] = createRef();
           }
