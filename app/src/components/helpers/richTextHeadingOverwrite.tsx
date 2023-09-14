@@ -8,7 +8,7 @@ import { type ReactElement } from "react";
 import { getNumericalLabel } from "../organisms/floatingPanel/generateTocHelper";
 
 /**
- * this function Remove empty paragraphs
+ * this function is used to overwrite the heading renderer in the rich text renderer and add the numerical label to the text
  */
 export const richTextHeadingOverwrite = ({
   index,
@@ -39,12 +39,3 @@ export const richTextHeadingOverwrite = ({
     )
   );
 };
-
-// console.log({ props });
-//   const obj = {
-//     node: {
-//       arrts: { level: 1, textAlign: "left" },
-//       content: [{ text: "text content", type: "text" }],
-//       type: "heading"
-//     }
-//   };
