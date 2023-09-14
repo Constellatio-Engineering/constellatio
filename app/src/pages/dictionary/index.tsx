@@ -26,7 +26,7 @@ const NextPage: FunctionComponent<IArticlesOverviewProps> = (props) =>
 {
   return (
     <Layout>
-      <CasesOverviewPage {...props} variant="dictionary"/>      
+      <CasesOverviewPage {...props} allCases={props?.allArticles} variant="dictionary"/>      
     </Layout>
   );
 };
