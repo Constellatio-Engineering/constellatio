@@ -1,4 +1,6 @@
+import { OverlayLines } from "@/components/Icons/bg-layer";
 import { Trash } from "@/components/Icons/Trash";
+import { type ICasesOverviewProps } from "@/services/content/getCasesOverviewProps";
 
 import { Title, useMantineTheme } from "@mantine/core";
 import React, { type FunctionComponent, useState } from "react";
@@ -9,12 +11,12 @@ import CategoryTab from "../../../components/molecules/categoryTab/CategoryTab";
 import FiltersButton from "../../../components/molecules/filtersButton/FiltersButton";
 import FilterTag from "../../../components/molecules/filterTag/FilterTag";
 import type {
-  IGenMainCategoryFragment, Maybe, Scalars 
+  Maybe, Scalars 
 } from "../../../services/graphql/__generated/sdk";
 
 export interface ICasesOverviewHeaderProps 
 {
-  readonly categories?: (({ _typename?: "MainCategory" | undefined } & IGenMainCategoryFragment) | null | undefined)[] | undefined;
+  readonly categories?: ICasesOverviewProps["allMainCategories"] ;
   readonly selectedCategoryId?: string;
   readonly setSelectedCategoryId: (id: string) => void;
   readonly title?: Maybe<Scalars["String"]["output"]>;
@@ -35,12 +37,14 @@ const OverviewHeader: FunctionComponent<ICasesOverviewHeaderProps> = ({
   
   return (
     <div css={styles.contentHeader({ theme, variant })} className="header">
-      <div id="overlay"/>
-      <Title order={1}>{title}</Title>
+      <div id="overlay-lines">
+        <OverlayLines/>
+      </div>
+      <Title order={1} css={styles.title}>{title}</Title>
       <div css={styles.categoriesButtons}>
         {categories?.map((category, index: number) => category?.id && (
           <div key={index} onClick={() => setSelectedCategoryId(`${category?.id}`)}>
-            <CategoryTab {...category} itemsNumber={0} selected={category?.id === selectedCategoryId}/>
+            <CategoryTab {...category} itemsNumber={category?.casesPerCategory} selected={category?.id === selectedCategoryId}/>
           </div>
         ))}
       </div>

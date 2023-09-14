@@ -10,13 +10,12 @@ import { ContainerWrapper, iconWrapperStyles, imageWrapperStyles } from "./Image
 
 export type ImageWrapperCardProps = IGenImageWrapperCard;
 
-export const ImageWrapperCard: FC<ImageWrapperCardProps> = ({ downloadable, image, title }) =>
+export const ImageWrapperCard: FC<ImageWrapperCardProps> = ({ downloadable, image }) =>
 {
   return (
     <>
       {image?.src && (
         <ContainerWrapper>
-          {title && <BodyText component="p" styleType="body-01-regular">{title}</BodyText>}
           <Box sx={imageWrapperStyles()}>
             <CaisyImg src={image.src} description={image.description ?? ""}/>
             {downloadable && (

@@ -1,13 +1,13 @@
-import { getProps, type GetPropsResult } from "@/services/content/getProps";
+import getCasesOverviewProps, { type ICasesOverviewProps } from "@/services/content/getCasesOverviewProps";
 
 import { type GetStaticProps } from "next";
 import React, { type FunctionComponent } from "react";
 
-import CategoryTab from "../components/molecules/categoryTab/CategoryTab";
-
-export const getStaticProps: GetStaticProps<GetPropsResult, Record<string, never>> = async () =>
+export const getStaticProps: GetStaticProps<
+Awaited<ReturnType<typeof getCasesOverviewProps>>
+> = async () =>
 {
-  const resPage = await getProps({ slug: "cases" });
+  const resPage = await getCasesOverviewProps();
 
   return {
     props: {
@@ -17,29 +17,18 @@ export const getStaticProps: GetStaticProps<GetPropsResult, Record<string, never
   };
 };
 
-const NextPage: FunctionComponent<GetPropsResult> = ({ Page }) =>
+const NextPage: FunctionComponent<ICasesOverviewProps> = (props) =>
 {
-  console.log(Page);
+  console.log(props);
 
-  if(!Page)
+  if(!props)
   {
     return <div>Page Props not found</div>;
   }
 
   return (
     <div>
-      {Page.components?.map((component, index) => (
-        <div key={index}>
-          {/* TODO: Delete this */}
-          {/* eslint-disable-next-line @typescript-eslint/ban-ts-comment */}
-          {/* @ts-ignore */}
-          {component?.categories?.map((category, index) => (
-            <React.Fragment key={index}>
-              <CategoryTab {...category} itemsNumber={20} selected={index === 0}/>
-            </React.Fragment>
-          ))}
-        </div>
-      ))}
+      Hello World Test Page
     </div>
   );
 };

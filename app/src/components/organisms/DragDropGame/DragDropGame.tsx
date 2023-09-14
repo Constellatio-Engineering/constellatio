@@ -12,6 +12,7 @@ import { GhostDropCard } from "@/components/molecules/GhostDropCard/GhostDropCar
 import { HelpNote } from "@/components/molecules/HelpNote/HelpNote";
 import { ResultCard } from "@/components/molecules/ResultCard/ResultCard";
 import { type IGenDragNDropGame } from "@/services/graphql/__generated/sdk";
+import useCaseSolvingStore from "@/stores/caseSolving.store";
 import useDragDropGameStore, {
   type TDragAndDropGameOptionType,
 } from "@/stores/dragDropGame.store";
@@ -41,7 +42,7 @@ IGenDragNDropGame,
 "game" | "helpNote" | "question"
 >;
 
-export const DragDropGame: FC<TDragDropGame> = ({ game: { options, orderRequired }, helpNote, question }) => 
+export const DragDropGame: FC<TDragDropGame> = ({ game, helpNote, question }) => 
 {
   const {
     activeId,
@@ -51,18 +52,22 @@ export const DragDropGame: FC<TDragDropGame> = ({ game: { options, orderRequired
     deleteOptionItem,
     droppedItems,
     gameStatus,
+    gameSubmitted,
     optionsItems,
     resultMessage,
     setActiveId,
     setDroppedItems,
     setGameStatus,
+    setGameSubmitted,
     setOptionsItems,
-    setResultMessage,
+    setResultMessage
   } = useDragDropGameStore();
 
+  const { getNextGameIndex } = useCaseSolvingStore();
+
   const originalOptions: TDragAndDropGameOptionType[] = useMemo(
-    () => options ?? [],
-    [options]
+    () => game?.options ?? [],
+    [game?.options]
   );
 
   useEffect(() => 
@@ -117,7 +122,7 @@ export const DragDropGame: FC<TDragDropGame> = ({ game: { options, orderRequired
   {
     const winCondition = checkWinCondition();
 
-    if(orderRequired) 
+    if(game?.orderRequired) 
     {
       const orderCorrect = checkOrder();
       if(winCondition && orderCorrect) 
@@ -148,6 +153,12 @@ export const DragDropGame: FC<TDragDropGame> = ({ game: { options, orderRequired
         setGameStatus("lose");
         setResultMessage("Answers are incorrect!");
       }
+    }
+
+    if(!gameSubmitted) 
+    {
+      setGameSubmitted(true);
+      getNextGameIndex();
     }
   };
 

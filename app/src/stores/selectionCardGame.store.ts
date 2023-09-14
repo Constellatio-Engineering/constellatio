@@ -8,16 +8,19 @@ export type TCardGameOption = TValue["options"][number];
 
 type TSelectionCardGameStore = {
   gameStatus: "win" | "lose" | "inprogress";
+  gameSubmitted: boolean;
   onOptionCheck: (id: TCardGameOption["id"], checked: TCardGameOptionWithCheck["checked"]) => void;
   optionsItems: TCardGameOptionWithCheck[];
   resultMessage: string;
   setGameStatus: (status: "win" | "lose" | "inprogress") => void;
+  setGameSubmitted: (gameSubmitted: boolean) => void;
   setOptionsItems: (optionsItems: TCardGameOptionWithCheck[]) => void;
   setResultMessage: (message: string) => void;
 };
 
 const useSelectionCardGameStore = create(immer<TSelectionCardGameStore> ((set) => ({
   gameStatus: "inprogress",
+  gameSubmitted: false,
   onOptionCheck(id, checked) 
   {
     set((state) => 
@@ -39,6 +42,13 @@ const useSelectionCardGameStore = create(immer<TSelectionCardGameStore> ((set) =
     set((state) => 
     {
       state.gameStatus = status;
+    });
+  },
+  setGameSubmitted(gameSubmitted) 
+  {
+    set((state) => 
+    {
+      state.gameSubmitted = gameSubmitted;
     });
   },
   setOptionsItems(optionsItems) 

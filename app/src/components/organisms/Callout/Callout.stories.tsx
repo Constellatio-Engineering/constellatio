@@ -12,7 +12,12 @@ const Template: FunctionComponent<CalloutProps> = (args) => (
 );
 
 const meta: Meta = {
-  argTypes: {},
+  argTypes: {
+    calloutType: {
+      control: "select",
+      options: ["remember", "bestPractice", "definition", "quote", "lawReference", "specialProblem", "example"],
+    }
+  },
   component: Template,
   parameters: {
     design: {
@@ -29,20 +34,9 @@ type Story = StoryObj<typeof Callout>;
 
 export const Expandable: Story = {
   args: {
+    calloutType: "remember",
     expandable: true,
-    icon: {
-      author: "",
-      copyright: "",
-      description: "",
-      dominantColor: "#000000",
-      id: "73368b0a-3ea1-4774-9b0e-d126cbfaeee1",
-      keywords: "",
-      originType: "image/svg+xml",
-      src: "https://assets.caisy.io/assets/21691a6c-f949-491d-99a3-079a4bd23818/73368b0a-3ea1-4774-9b0e-d126cbfaeee1/6308ce14-eec9-4794-b8af-98b29a2acadbbookbookmark.svg",
-      title: "book-bookmark",
-    },
     id: "33028fe1-b1b1-465d-b936-4be217c44652",
-
     text: {
       id: "e1cabad6-1b5a-43b8-9117-92509f724a98",
       richTextContent: {
@@ -374,7 +368,6 @@ export const Expandable: Story = {
         },
       },
     },
-    title: "Law reference",
   },
 };
 

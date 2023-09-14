@@ -13,11 +13,13 @@ type IDragDropGameStore = {
   deleteOptionItem: (id: TDragAndDropGameOptionType["id"]) => void;
   droppedItems: TDragAndDropGameOptionType[];
   gameStatus: "win" | "lose" | "inprogress";
+  gameSubmitted: boolean;
   optionsItems: TDragAndDropGameOptionType[];
   resultMessage: string;
   setActiveId: (id: string | null) => void;
   setDroppedItems: (droppedItems: TDragAndDropGameOptionType[]) => void;
   setGameStatus: (status: "win" | "lose" | "inprogress") => void;
+  setGameSubmitted: (gameSubmitted: boolean) => void;
   setOptionsItems: (optionsItems: TDragAndDropGameOptionType[]) => void;
   setResultMessage: (message: string) => void;
 };
@@ -55,6 +57,7 @@ const useDragDropGameStore = create(
     },
     droppedItems: [],
     gameStatus: "inprogress",
+    gameSubmitted: false,
     optionsItems: [],
     resultMessage: "",
     setActiveId(id) 
@@ -76,6 +79,13 @@ const useDragDropGameStore = create(
       set((state) => 
       {
         state.gameStatus = status;
+      });
+    },
+    setGameSubmitted(gameSubmitted) 
+    {
+      set((state) => 
+      {
+        state.gameSubmitted = gameSubmitted;
       });
     },
     setOptionsItems: (optionsItems) => 

@@ -1,5 +1,3 @@
-import CaisyIcon from "@/basic-components/CaisyIcon";
-import { BodyText } from "@/components/atoms/BodyText/BodyText";
 import { Button } from "@/components/atoms/Button/Button";
 import { ArrowDown } from "@/components/Icons/ArrowDown";
 import { ArrowUp } from "@/components/Icons/ArrowUp";
@@ -10,15 +8,11 @@ import { Group, Spoiler, Stack } from "@mantine/core";
 import React, { type FC } from "react";
 
 import { RichTextStyles, calloutStyles, spoilerStyles } from "./Callout.styles";
+import { HeadingType } from "./HeadingType";
 
 export type CalloutProps = IGenCallout;
 
-export const Callout: FC<CalloutProps> = ({
-  expandable,
-  icon,
-  text,
-  title
-}) => 
+export const Callout: FC<CalloutProps> = ({ calloutType, expandable, text }) => 
 {
   const [isContentHide, setIsContentHide] = React.useState<boolean>(true);
 
@@ -45,14 +39,11 @@ export const Callout: FC<CalloutProps> = ({
   );
   return (
     <Stack spacing="spacing-4" sx={calloutStyles()}>
-      <Group spacing="spacing-8">
-        {icon?.src && <CaisyIcon src={icon.src} description={icon?.description ?? ""}/>}
-        {title && (
-          <BodyText component="p" styleType="body-01-bold">
-            {title}
-          </BodyText>
-        )}
-      </Group>
+      {calloutType && (
+        <Group spacing="spacing-8">
+          <HeadingType calloutType={calloutType}/>
+        </Group>
+      )}
       {text?.richTextContent?.json &&
         (expandable ? (
           <Spoiler

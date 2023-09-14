@@ -8,28 +8,19 @@ import {
 
 interface TRichtextOverwrite 
 {
-  readonly answerResult: string[];
   readonly correctAnswers: MutableRefObject<string[]>;
   readonly focusedIndex: MutableRefObject<number | null>;
-  readonly handleInputChange: (index: number, value: string) => void;
-  readonly inputCounter: MutableRefObject<number>;
   readonly text: string;
-  readonly userAnswers: string[];
 }
 
-let RichtextOverwrite: FC<TRichtextOverwrite> = ({
-  answerResult,
-  correctAnswers,
-  focusedIndex,
-  handleInputChange,
-  inputCounter,
-  text,
-  userAnswers
-}) =>  
+const _RichtextOverwrite: FC<TRichtextOverwrite> = ({ correctAnswers, focusedIndex, text }) =>  
 {
-
-  const { gameStatus } = useFillGapsGameStore();
-
+  const {
+    answerResult,
+    gameStatus,
+    updateUserAnswers,
+    userAnswers
+  } = useFillGapsGameStore();
   const inputRefs = useRef<RefObject<HTMLInputElement>[]>([]);
 
   // Splitting the text based on {{...}} pattern using regex
@@ -37,22 +28,19 @@ let RichtextOverwrite: FC<TRichtextOverwrite> = ({
 
   const createChangeHandler = (index: number) => (e: ChangeEvent<HTMLInputElement>) => 
   {
-    handleInputChange(index, e.target.value);
+    updateUserAnswers(index, e.target.value);
     focusedIndex.current = index;
   };
 
-  useEffect(() => 
-  {
-    inputCounter.current = 0;
-  }, []);
-
-  useEffect(() => 
+  useEffect(() =>
   {
     if(focusedIndex.current !== null && inputRefs.current[focusedIndex.current]) 
     {
       inputRefs.current?.[focusedIndex.current]?.current?.focus();
     }
   }, [focusedIndex]);
+
+  let inputCounter = 0;
 
   return (
     <div className="richtextOverwrite">
@@ -66,10 +54,10 @@ let RichtextOverwrite: FC<TRichtextOverwrite> = ({
             correctAnswers.current.push(innerContent);
           }
 
-          const currentInputIndex = inputCounter.current;
-          inputCounter.current += 1;
+          const currentInputIndex = inputCounter;
+          inputCounter++;
 
-          if(!inputRefs.current[currentInputIndex]) 
+          if(!inputRefs.current[currentInputIndex])
           {
             inputRefs.current[currentInputIndex] = createRef();
           }
@@ -104,7 +92,7 @@ let RichtextOverwrite: FC<TRichtextOverwrite> = ({
   );
 };
 
-RichtextOverwrite.displayName = "RichtextOverwrite";
-RichtextOverwrite = memo(RichtextOverwrite);
+_RichtextOverwrite.displayName = "RichtextOverwrite";
+const RichtextOverwrite = memo(_RichtextOverwrite);
 
 export default RichtextOverwrite;
