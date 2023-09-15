@@ -1,7 +1,7 @@
 /* eslint-disable sort-keys-fix/sort-keys-fix */
 import { type InferInsertModel } from "drizzle-orm";
 import {
-  text, pgTable, integer, pgEnum, uuid, serial, smallint
+  text, pgTable, integer, pgEnum, uuid, serial, smallint, unique
 } from "drizzle-orm/pg-core";
 
 export const allGenderIdentifiers = ["male", "female", "diverse",] as const;
@@ -32,6 +32,8 @@ export const bookmarksTable = pgTable("bookmarks", {
   userId: uuid("userId").references(() => usersTable.id, { onDelete: "cascade" }).notNull(),
   resourceType: resourceTypeEnum("resourceType").notNull(),
   resourceId: uuid("resourceId").notNull()
-});
+}, table => ({
+  unq: unique().on(table.resourceType, table.resourceId, table.userId),
+}));
 
 export type BookmarkInsert = InferInsertModel<typeof bookmarksTable>;
