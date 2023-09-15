@@ -7,6 +7,7 @@ import { Notifications } from "@mantine/notifications";
 import { type Session, SessionContextProvider } from "@supabase/auth-helpers-react";
 import { type AppProps } from "next/app";
 import Head from "next/head";
+import { appWithTranslation } from "next-i18next";
 import { type FunctionComponent } from "react";
 
 type MyAppProps = AppProps<{ initialSession: Session }>;
@@ -31,4 +32,4 @@ const MyApp: FunctionComponent<MyAppProps> = ({ Component, pageProps }) =>
   );
 };
 
-export default api.withTRPC(MyApp);
+export default api.withTRPC(appWithTranslation(MyApp));

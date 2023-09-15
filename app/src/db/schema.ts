@@ -3,7 +3,7 @@ import {
   text, pgTable, integer, pgEnum, uuid
 } from "drizzle-orm/pg-core";
 
-const allGenderIdentifiers = [
+export const allGenderIdentifiers = [
   "male",
   "female",
   "diverse",
@@ -19,6 +19,5 @@ export const profiles = pgTable("profiles", {
   gender: genderEnum("gender"),
   lastName: text("lastName"),
   semester: integer("semester"),
-  university: text("displayName"),
-  test: text("test"),
+  university: text("university")
 });
