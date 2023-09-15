@@ -3,12 +3,11 @@ import { Button } from "@/components/atoms/Button/Button";
 import { richTextHeadingOverwrite } from "@/components/helpers/richTextHeadingOverwrite";
 import { BoxIcon } from "@/components/Icons/BoxIcon";
 import { FileIcon } from "@/components/Icons/FileIcon";
-import { type IGenTextElement, type IGenCase_FullTextTasks } from "@/services/graphql/__generated/sdk";
+import { type IGenTextElement, type IGenCase_FullTextTasks, type Maybe, type IGenArticle_FullTextTasks } from "@/services/graphql/__generated/sdk";
 import useCaseSolvingStore from "@/stores/caseSolving.store";
 import type { IDocumentLink, IHeadingNode } from "types/richtext";
 
 import { Container, Title } from "@mantine/core";
-import { type Maybe } from "@trpc/server";
 import {
   type FunctionComponent, useEffect, useMemo, type JSXElementConstructor, type ReactElement 
 } from "react";
@@ -27,12 +26,15 @@ import { SelectionCardGame } from "../SelectionCardGame/SelectionCardGame";
 interface ICaseCompleteTestsStepProps 
 {
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  readonly facts: Maybe<IGenTextElement>;
-  readonly fullTextTasks: Maybe<IGenCase_FullTextTasks>;
+  readonly facts?: Maybe<IGenTextElement> | undefined; 
+  readonly fullTextTasks: IGenCase_FullTextTasks | IGenArticle_FullTextTasks;
 }
 
 const CaseCompleteTestsStep: FunctionComponent<ICaseCompleteTestsStepProps> = ({ facts, fullTextTasks }) => 
 {
+
+  console.log({ fullTextTasks });
+
   const {
     getNextGameIndex,
     hasCaseSolvingStarted,
@@ -83,10 +85,14 @@ const CaseCompleteTestsStep: FunctionComponent<ICaseCompleteTestsStepProps> = ({
     type: "heading";
   } & ReactElement<unknown, string | JSXElementConstructor<unknown>>): number | void => 
   {
-    const allHeadings = fullTextTasks?.json?.content?.filter((x: { attrs: { level: number }; type: "heading" }) => (x.type === "heading" && x.attrs.level === passedHead.attrs.level));
-    for(let headIndex = 0; headIndex < allHeadings.length; headIndex++) 
+    const allHeadingsSameLevel = fullTextTasks?.json?.content?.filter((x: { attrs: { level: number }; type: "heading" }) => (x.type === "heading" && x.attrs.level === passedHead.attrs.level));
+    const allHeadings = fullTextTasks?.json?.content?.filter((x: { attrs: { level: number }; type: "heading" }) => (x.type === "heading"));
+    const depth = 0;
+    console.log({ allHeadings });
+
+    for(let headIndex = 0; headIndex < allHeadingsSameLevel.length; headIndex++) 
     {
-      if(JSON?.stringify(allHeadings?.[headIndex]) === JSON?.stringify(passedHead)) 
+      if(JSON?.stringify(allHeadingsSameLevel?.[headIndex]) === JSON?.stringify(passedHead)) 
       {
         return headIndex;
       }
@@ -96,24 +102,26 @@ const CaseCompleteTestsStep: FunctionComponent<ICaseCompleteTestsStepProps> = ({
   return (
     <Container maw={1440}>
       <div css={styles.contentWrapper} id="completeTestsStepContent">
-        <div css={styles.facts}>
-          <Title order={2}>Facts</Title>
-          <Richtext
-            richTextContent={facts?.richTextContent}
-            richTextOverwrite={{
-              paragraph: richTextParagraphOverwrite,
-            }}
-          />
-          {!hasCaseSolvingStarted && (
-            <Button<"button">
-              styleType="primary"
-              size="large"
-              type="button"
-              onClick={() => setHasCaseSolvingStarted(true)}>
-              Start solving case
-            </Button>
-          )}
-        </div>
+        {facts && (
+          <div css={styles.facts}>
+            <Title order={2}>Facts</Title>
+            <Richtext
+              richTextContent={facts?.richTextContent}
+              richTextOverwrite={{
+                paragraph: richTextParagraphOverwrite,
+              }}
+            />
+            {!hasCaseSolvingStarted && (
+              <Button<"button">
+                styleType="primary"
+                size="large"
+                type="button"
+                onClick={() => setHasCaseSolvingStarted(true)}>
+                Start solving case
+              </Button>
+            )}
+          </div>
+        )}
         {hasCaseSolvingStarted && (
           <div css={styles.content}>
             <div css={styles.toc}>
@@ -210,11 +218,7 @@ const CaseCompleteTestsStep: FunctionComponent<ICaseCompleteTestsStepProps> = ({
                       })
                       : null;
                   },
-                  heading: (props) => 
-                  {
-                    const node = props!.node as unknown as IHeadingNode;
-                    return richTextHeadingOverwrite({ index: getHeadingIndex(node), ...props });
-                  },
+                 
                   paragraph: richTextParagraphOverwrite
                 }}
               />

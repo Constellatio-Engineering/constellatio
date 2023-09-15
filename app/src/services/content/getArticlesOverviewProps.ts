@@ -25,6 +25,7 @@ export interface IArticlesOverviewProps
   allArticles: allArticles;
   allMainCategories: allMainCategories;
   allSubCategories: allSubCategories;
+  variant: "dictionary";
 }
 
 const getArticlesOverviewProps = async (): Promise<IArticlesOverviewProps> => 
@@ -56,6 +57,7 @@ const getArticlesOverviewProps = async (): Promise<IArticlesOverviewProps> =>
       allArticles: allArticlesRes,
       allMainCategories,
       allSubCategories,
+      variant: "dictionary",
     };
   }
   catch (error) 

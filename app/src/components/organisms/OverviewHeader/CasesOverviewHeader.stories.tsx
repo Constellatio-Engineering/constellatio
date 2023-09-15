@@ -1,7 +1,7 @@
 import { type Meta, type StoryObj } from "@storybook/react";
 import { type FunctionComponent } from "react";
 
-import OverviewHeader, { type ICasesOverviewHeaderProps } from "./CasesOverviewHeader";
+import OverviewHeader, { type ICasesOverviewHeaderProps } from "./OverviewHeader";
 
 const Template: FunctionComponent<ICasesOverviewHeaderProps> = (args) => (<OverviewHeader {...args}/>);
 

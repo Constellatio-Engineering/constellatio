@@ -25,6 +25,7 @@ export interface ICasesOverviewProps
   allCases: allCases;
   allMainCategories: allMainCategories;
   allSubCategories: allSubCategories;
+  variant: "case";
 }
 
 const getCasesOverviewProps = async (): Promise<ICasesOverviewProps> => 
@@ -56,6 +57,7 @@ const getCasesOverviewProps = async (): Promise<ICasesOverviewProps> =>
       allCases: allCasesRes,
       allMainCategories,
       allSubCategories,
+      variant: "case",
     };
   }
   catch (error) 
