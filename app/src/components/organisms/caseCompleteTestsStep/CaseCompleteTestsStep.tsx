@@ -133,10 +133,7 @@ const CaseCompleteTestsStep: FunctionComponent<ICaseCompleteTestsStepProps> = ({
                 hidden={false}
                 facts={facts?.richTextContent}
                 content={content}
-                tabs={[
-                  { icon: { src: <FileIcon size={16}/> }, title: "Content" },
-                  { icon: { src: <BoxIcon size={16}/> }, title: "Facts" },
-                ]}
+                variant={variant}
               />
             </div>
             <div css={styles.fullTextAndTasksWrapper}>
