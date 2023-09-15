@@ -16,7 +16,6 @@ import { type Session } from "@supabase/auth-helpers-react";
 import { initTRPC } from "@trpc/server";
 import { type CreateNextContextOptions } from "@trpc/server/adapters/next";
 import superjson from "superjson";
-import { ZodError } from "zod";
 
 /**
  * 1. CONTEXT
@@ -57,7 +56,10 @@ type TrpcContext = {
 
 export const createTRPCContext = async ({ req, res }: CreateNextContextOptions): Promise<TrpcContext> =>
 {
-  const supabaseServerClient = createServerSupabaseClient({ req, res });
+  const supabaseServerClient = createServerSupabaseClient({ req, res }, {
+    supabaseKey: env.SUPABASE_SERVICE_ROLE_KEY,
+    supabaseUrl: env.NEXT_PUBLIC_SUPABASE_URL
+  });
   const { data: { user } } = await supabaseServerClient.auth.getUser();
   const { data: { session } } = await supabaseServerClient.auth.getSession();
 
@@ -105,7 +107,7 @@ const t = initTRPC
         },
       };
     },
-    isDev: env.NODE_ENV === "development",
+    isDev: env.NEXT_PUBLIC_NODE_ENV === "development",
     /* errorFormatter: ({ error, shape }) =>
     {
       return {
