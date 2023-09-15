@@ -1,8 +1,8 @@
 import StatusTableCell from "@/components/atoms/statusTableCell/StatusTableCell";
 import TableCell from "@/components/atoms/tableCell/TableCell";
-import TableIconButton from "@/components/atoms/tableIconButton/TableIconButton";
 import { Bookmark } from "@/components/Icons/Bookmark";
 import { ClockIcon } from "@/components/Icons/ClockIcon";
+import TableIconButton from "@/components/molecules/tableIconButton/TableIconButton";
 
 import { Box } from "@mantine/core";
 import { type Meta, type StoryObj } from "@storybook/react";
