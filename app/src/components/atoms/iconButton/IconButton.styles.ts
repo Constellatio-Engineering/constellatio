@@ -35,7 +35,7 @@ export const wrapper = ({ size, theme }: {
   &:disabled{
     cursor: default;
     border-color: ${theme.colors["neutrals-01"][4]};
-    background-color: ${theme.colors["neutrals-01"][4]};
+    background-color: ${theme.colors["neutrals-01"][2]};
   }
 `;
 

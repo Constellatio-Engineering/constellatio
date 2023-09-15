@@ -13,7 +13,7 @@ export type BookmarkResourceType = typeof allBookmarkResourceTypes[number];
 export const genderEnum = pgEnum("gender", allGenderIdentifiers);
 export const resourceTypeEnum = pgEnum("resourceType", allBookmarkResourceTypes);
 
-export const users = pgTable("users", {
+export const usersTable = pgTable("users", {
   id: uuid("id").unique().notNull(),
   email: text("email").unique().notNull(),
   displayName: text("displayName").notNull(),
@@ -24,14 +24,14 @@ export const users = pgTable("users", {
   university: text("university").notNull()
 });
 
-export type UserInsert = InferInsertModel<typeof users>;
+export type UserInsert = InferInsertModel<typeof usersTable>;
 
-export const bookmarks = pgTable("bookmarks", {
+export const bookmarksTable = pgTable("bookmarks", {
   id: serial("id").primaryKey(),
   uuid: uuid("uuid").defaultRandom().unique().notNull(),
-  userId: uuid("userId").references(() => users.id, { onDelete: "cascade" }).notNull(),
+  userId: uuid("userId").references(() => usersTable.id, { onDelete: "cascade" }).notNull(),
   resourceType: resourceTypeEnum("resourceType").notNull(),
   resourceId: uuid("resourceId").notNull()
 });
 
-export type BookmarkInsert = InferInsertModel<typeof bookmarks>;
+export type BookmarkInsert = InferInsertModel<typeof bookmarksTable>;

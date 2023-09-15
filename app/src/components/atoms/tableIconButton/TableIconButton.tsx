@@ -9,13 +9,21 @@ import IconButton from "../iconButton/IconButton";
 
 export interface ITableIconButtonProps 
 {
+  readonly disabled?: boolean;
   readonly icon: ReactNode;
   readonly onClickHandler: MouseEventHandler<HTMLButtonElement>;
 }
 
-const TableIconButton: FunctionComponent<ITableIconButtonProps> = ({ icon, onClickHandler }) => (
+const TableIconButton: FunctionComponent<ITableIconButtonProps> = ({ disabled, icon, onClickHandler }) => (
   <div css={styles.wrapper}>
-    {icon && <IconButton icon={icon} size="medium" onClick={onClickHandler}/>}
+    {icon && (
+      <IconButton
+        disabled={disabled}
+        icon={icon}
+        size="medium"
+        onClick={onClickHandler}
+      />
+    )}
   </div>
 );
 

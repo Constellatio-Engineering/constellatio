@@ -9,9 +9,10 @@ import { type IGenFullCaseFragment } from "@/services/graphql/__generated/sdk";
 import { supabase } from "@/supabase/client";
 import { api } from "@/utils/api";
 
+import { Loader } from "@mantine/core";
 import { notifications } from "@mantine/notifications";
 import Link from "next/link";
-import React, { type FunctionComponent } from "react";
+import React, { type FunctionComponent, useEffect } from "react";
 
 import * as styles from "./CaseBlock.styles";
 import { timeFormatter } from "../overviewCard/OverviewCard";
@@ -27,6 +28,8 @@ export interface ICaseBlockProps
 
 const CaseBlock: FunctionComponent<ICaseBlockProps> = ({ blockHead, cases }) => 
 {
+  const { data: bookmarks, isLoading } = api.bookmarks.getAllBookmarks.useQuery();
+
   const { mutate: addBookmark } = api.bookmarks.addBookmark.useMutation({
     onError: e =>
     {
@@ -69,7 +72,12 @@ const CaseBlock: FunctionComponent<ICaseBlockProps> = ({ blockHead, cases }) =>
             </td>
             <td>
               <TableIconButton
-                icon={<Bookmark/>}
+                icon={isLoading ? (
+                  <Loader size={30}/>
+                ) : (
+                  <Bookmark/>
+                )}
+                disabled={isLoading}
                 onClickHandler={() => addBookmark({ resourceId: item!.id!, resourceType: "case" })}
               />
             </td>
