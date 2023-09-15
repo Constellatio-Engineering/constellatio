@@ -81,6 +81,7 @@ const CaseCompleteTestsStep: FunctionComponent<ICaseCompleteTestsStepProps> = ({
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [fullTextTasks]);
 
+  // THIS LOGIC IS WRONG WE NEED INDEX AMONGST THE SAME NESTING LEVEL NOT AMONGST ALL THE OTHER HEADINGS
   const getHeadingIndex = (passedHead: {
     attrs: {
       level: number;
@@ -88,10 +89,8 @@ const CaseCompleteTestsStep: FunctionComponent<ICaseCompleteTestsStepProps> = ({
     type: "heading";
   } & ReactElement<unknown, string | JSXElementConstructor<unknown>>): number | void => 
   {
+    
     const allHeadingsSameLevel = fullTextTasks?.json?.content?.filter((x: { attrs: { level: number }; type: "heading" }) => (x.type === "heading" && x.attrs.level === passedHead.attrs.level));
-    const allHeadings = fullTextTasks?.json?.content?.filter((x: { attrs: { level: number }; type: "heading" }) => (x.type === "heading"));
-    const depth = 0;
-    console.log({ allHeadings });
 
     for(let headIndex = 0; headIndex < allHeadingsSameLevel.length; headIndex++) 
     {
@@ -101,6 +100,37 @@ const CaseCompleteTestsStep: FunctionComponent<ICaseCompleteTestsStepProps> = ({
       }
     }
   };
+
+  // THIS FUNCTION RETURNS THE INDEX OF THE ITEM AMONGST THE SAME HEADING LEVEL INSIDE A SPECIFIC NESTING LEVEL 
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  const allHeadings = fullTextTasks?.json?.content?.filter((x: { attrs: { level: number }; type: "heading" }) => x.type === "heading");
+  
+  function getNestedHeadingIndex(item: IHeadingNode): number | null 
+  {
+    const level = item.attrs?.level;
+    if(level === undefined) 
+    {
+      return null;
+    }
+
+    let currentIndex = -1;
+    for(const currentItem of allHeadings) 
+    {
+      if(currentItem.attrs?.level === level) 
+      {
+        currentIndex++;
+        if(JSON.stringify(item) === JSON.stringify(currentItem)) 
+        {
+          return currentIndex;
+        }
+      }
+      else if(currentItem.attrs?.level < level) 
+      {
+        currentIndex = -1;
+      }
+    }
+    return null;
+  }
 
   return (
     <Container maw={1440}>
@@ -221,7 +251,7 @@ const CaseCompleteTestsStep: FunctionComponent<ICaseCompleteTestsStepProps> = ({
                   heading: (props) => 
                   {
                     const node = props!.node as unknown as IHeadingNode;
-                    return richTextHeadingOverwrite({ depth: 0, index: getHeadingIndex(node), ...props });
+                    return richTextHeadingOverwrite({ depth: node?.attrs?.level, index: getNestedHeadingIndex(node), ...props });
                   },
                   paragraph: richTextParagraphOverwrite
                 }}
