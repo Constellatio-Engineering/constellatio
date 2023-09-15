@@ -1,9 +1,11 @@
-// import { Container } from "@mantine/core";
-import { CaptionText } from "@/components/atoms/CaptionText/CaptionText";
+import MenuTab from "@/components/atoms/menuTab/MenuTab";
+import SearchFieldSmall from "@/components/molecules/searchFieldSmall/SearchFieldSmall";
 
 import { useMantineTheme } from "@mantine/styles";
+import { IconFolder } from "@tabler/icons-react";
 import Image from "next/image";
 import Link from "next/link";
+import { useRouter } from "next/router";
 import { type FC } from "react";
 
 import { SHeader } from "./Header.styles";
@@ -19,6 +21,8 @@ export interface HeaderProps
 export const Header: FC<HeaderProps> = ({ variant = "default" }) => 
 {
   const theme = useMantineTheme();
+  const links = ["DASHBOARD", "CASES", "DICTIONARY", "FORUM"];
+  const { pathname } = useRouter();
 
   return variant === "simple" ? (
     <SHeader>
@@ -38,15 +42,19 @@ export const Header: FC<HeaderProps> = ({ variant = "default" }) =>
           <Link href="/">
             <Image src={ConstellatioFullLogo} alt="Constellatio"/>
           </Link>
-          <Link href="/"><CaptionText styleType="caption-01-bold" component="span">DASHBOARD</CaptionText></Link>
-          <Link href="/cases"><CaptionText styleType="caption-01-bold" component="span">CASES</CaptionText></Link>
-          <Link href="/dictionary"><CaptionText styleType="caption-01-bold" component="span">DICTIONARY</CaptionText></Link>
-          <Link href="/"><CaptionText styleType="caption-01-bold" component="span">FORUM</CaptionText></Link>
+          {
+            links.map((link, linkIndex) => 
+            {
+              return <Link href={`/${link.toLowerCase()}`} key={linkIndex}><MenuTab active={pathname?.toLowerCase().includes(link.toLowerCase())} title={link}/></Link>;
+            })
+          }
         </div>
-        <div>
+        <div css={styles.profileArea}>
+          <div className="search-input"><SearchFieldSmall/></div>
+          <MenuTab title="Persoanl Space" icon={<IconFolder/>}/>
+          <span className="vertical-line">s</span>
           <UserDropdown/>
         </div>
-        {/* </Container> */}
       </div>
     </SHeader>
   );

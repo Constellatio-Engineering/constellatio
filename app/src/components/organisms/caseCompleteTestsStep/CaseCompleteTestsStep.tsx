@@ -1,8 +1,6 @@
 /* eslint-disable max-lines */
 import { Button } from "@/components/atoms/Button/Button";
 import { richTextHeadingOverwrite } from "@/components/helpers/richTextHeadingOverwrite";
-import { BoxIcon } from "@/components/Icons/BoxIcon";
-import { FileIcon } from "@/components/Icons/FileIcon";
 import { type IGenTextElement, type IGenCase_FullTextTasks, type Maybe, type IGenArticle_FullTextTasks } from "@/services/graphql/__generated/sdk";
 import useCaseSolvingStore from "@/stores/caseSolving.store";
 import type { IDocumentLink, IHeadingNode } from "types/richtext";
@@ -72,6 +70,7 @@ const CaseCompleteTestsStep: FunctionComponent<ICaseCompleteTestsStepProps> = ({
           contentItem?.type === "heading"
       );
     },
+    // eslint-disable-next-line react-hooks/exhaustive-deps
     [renderedCaseContent]
   );
 
