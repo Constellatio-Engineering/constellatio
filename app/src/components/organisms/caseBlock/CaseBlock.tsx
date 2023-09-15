@@ -6,7 +6,10 @@ import { Bookmark } from "@/components/Icons/Bookmark";
 import { ClockIcon } from "@/components/Icons/ClockIcon";
 import CaseBlockHead, { type ICaseBlockHeadProps } from "@/components/molecules/caseBlockHead/CaseBlockHead";
 import { type IGenFullCaseFragment } from "@/services/graphql/__generated/sdk";
+import { supabase } from "@/supabase/client";
+import { api } from "@/utils/api";
 
+import { notifications } from "@mantine/notifications";
 import Link from "next/link";
 import React, { type FunctionComponent } from "react";
 
@@ -24,6 +27,22 @@ export interface ICaseBlockProps
 
 const CaseBlock: FunctionComponent<ICaseBlockProps> = ({ blockHead, cases }) => 
 {
+  const { mutate: addBookmark } = api.bookmarks.addBookmark.useMutation({
+    onError: e =>
+    {
+      console.log("error while adding bookmark:", e);
+
+      notifications.show({
+        message: "We couldn't sign you up. Please try again.",
+        title: "Oops!",
+      });
+    },
+    onSuccess: data =>
+    {
+      console.log("bookmark added successfully", data);
+    },
+  });
+
   return (
     <div css={styles.wrapper}>
       <CaseBlockHead {...blockHead}/> 
@@ -51,7 +70,7 @@ const CaseBlock: FunctionComponent<ICaseBlockProps> = ({ blockHead, cases }) =>
             <td>
               <TableIconButton
                 icon={<Bookmark/>}
-                onClickHandler={() => console.log("clicked")}
+                onClickHandler={() => addBookmark({ resourceId: item!.id!, resourceType: "case" })}
               />
             </td>
           </tr>

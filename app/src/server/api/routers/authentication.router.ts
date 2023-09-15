@@ -1,5 +1,5 @@
 import { db } from "@/db/connection";
-import { users } from "@/db/schema";
+import { type UserInsert, users } from "@/db/schema";
 import { registrationFormSchema } from "@/schemas/RegistrationFormSchema";
 import { createTRPCRouter, publicProcedure } from "@/server/api/trpc";
 import { EmailAlreadyTakenError, InternalServerError, RegisterError } from "@/utils/serverError";
@@ -38,7 +38,7 @@ export const authenticationRouter = createTRPCRouter({
 
       try
       {
-        await db.insert(users).values({
+        const userToInsert: UserInsert = {
           displayName: input.displayName,
           email: input.email,
           firstName: input.firstName,
@@ -47,7 +47,9 @@ export const authenticationRouter = createTRPCRouter({
           lastName: input.lastName,
           semester: input.semester,
           university: input.university
-        });
+        };
+
+        await db.insert(users).values(userToInsert);
       }
       catch (e: unknown)
       {

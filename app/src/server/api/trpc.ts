@@ -9,7 +9,7 @@
 
 import { env } from "@/env.mjs";
 import { type ClientError, clientErrors } from "@/utils/clientError";
-import { EmailAlreadyTakenError } from "@/utils/serverError";
+import { EmailAlreadyTakenError, UnauthorizedError } from "@/utils/serverError";
 
 import { createServerSupabaseClient, type SupabaseClient, type User } from "@supabase/auth-helpers-nextjs";
 import { type Session } from "@supabase/auth-helpers-react";
@@ -64,8 +64,8 @@ export const createTRPCContext = async ({ req, res }: CreateNextContextOptions):
   const { data: { session } } = await supabaseServerClient.auth.getSession();
 
   console.log("--- createTRPCContext ---");
-  console.log("user", user);
-  console.log("session", session);
+  console.log("user", user?.id);
+  console.log("user in session", session?.user.id);
 
   return {
     session,
@@ -144,3 +144,21 @@ export const createTRPCRouter = t.router;
  * are logged in.
  */
 export const publicProcedure = t.procedure;
+
+const enforceUserIsAuthenticated = t.middleware(async ({ ctx, next }) =>
+{
+  const { session } = ctx;
+
+  if(!session)
+  {
+    throw new UnauthorizedError();
+  }
+
+  return next({
+    ctx: {
+      session
+    },
+  });
+});
+
+export const protectedProcedure = t.procedure.use(enforceUserIsAuthenticated);
