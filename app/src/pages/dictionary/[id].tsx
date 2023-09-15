@@ -26,7 +26,7 @@ export const getStaticProps: GetStaticProps = async ({ params }) =>
 
 const NextPage: FunctionComponent<ICasePageProps> = ({ legalArticle }) => 
 {
-  console.log({ legalArticle });
+  // console.log({ legalArticle });
   
   return (
     <Layout>

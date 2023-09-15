@@ -6,13 +6,13 @@ import { Title, useMantineTheme } from "@mantine/core";
 import React, { type FunctionComponent, useState } from "react";
 
 import * as styles from "./OverviewHeader.styles";
+import type {
+  Maybe, Scalars 
+} from "../../../services/graphql/__generated/sdk";
 import { LinkButton } from "../../atoms/LinkButton/LinkButton";
 import CategoryTab from "../../molecules/categoryTab/CategoryTab";
 import FiltersButton from "../../molecules/filtersButton/FiltersButton";
 import FilterTag from "../../molecules/filterTag/FilterTag";
-import type {
-  Maybe, Scalars 
-} from "../../../services/graphql/__generated/sdk";
 
 export interface ICasesOverviewHeaderProps 
 {

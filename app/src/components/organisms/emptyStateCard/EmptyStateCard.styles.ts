@@ -20,7 +20,11 @@ const CSSForLargeAreas = css`
   margin: 0 auto;
 `;
 
-export const emptyStateCard = ({ variant }: IEmptyCardProps) => css`
+export const wrapper = (theme: MantineTheme) => css`
+  background-color: ${theme?.colors["neutrals-01"][2]};
+`;
+
+export const emptyStateCard = ({ theme, variant }: IEmptyCardProps) => css`
   height: 500px;
   display: flex;
   flex-direction: column;

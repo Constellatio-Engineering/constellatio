@@ -61,7 +61,7 @@ const OverviewPage: FunctionComponent<IOverviewPageProps> = ({ content, variant 
       )}
       <div css={styles.ListWrapper({ empty: filteredSubcategories?.length && filteredSubcategories?.length > 0 ? false : true })}>
         {filteredSubcategories &&
-          filteredSubcategories.length > 0 ?
+          filteredSubcategories.length > 0 &&
           filteredSubcategories.map((item, itemIndex) => item?.subCategory && (
             <Fragment key={itemIndex}>
               <CaseBlock
@@ -73,19 +73,18 @@ const OverviewPage: FunctionComponent<IOverviewPageProps> = ({ content, variant 
               />
             </Fragment>
           )
-          ) : (
-            // the state of the data entered in this component is based on if there's filter items
-            // this will change later when we create global filter state
-            <EmptyStateCard
-              button={<><CivilLawIcon/>Explore Civil law cases</>}
-              title="Title"
-              text="Amet minim mollit non deserunt ullamco est sit aliqua dolor do amet sint. Velit officia consequat duis enim velit mollit"
-              variant="For-large-areas"
-            />
           )}
           
       </div>
-      
+      <div css={{}}/>
+      {filteredSubcategories && filteredSubcategories.length <= 0 && (
+        <EmptyStateCard
+          button={<><CivilLawIcon/>Explore Civil law cases</>}
+          title="We're currently working hard to bring you engaging cases to solve"
+          text="Please check back soon for the latest updates"
+          variant="For-large-areas"
+        />
+      )}
     </div>
   );
 };
