@@ -139,6 +139,7 @@ export const Default: Story = {
         },
       },
     },
-    question: "Um welche Norm geht es?",
+    id: "1",
+    question: "Um welche Norm geht es?"
   },
 };

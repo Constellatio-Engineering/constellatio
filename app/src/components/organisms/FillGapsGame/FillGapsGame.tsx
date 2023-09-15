@@ -17,7 +17,13 @@ import { type TextElement } from "types/richtext";
 import { Title } from "@mantine/core";
 import { distance } from "fastest-levenshtein";
 import {
-  type FC, type ReactElement, useRef, memo, useEffect, useMemo 
+  type FC,
+  type ReactElement,
+  useRef,
+  memo,
+  useEffect,
+  useMemo,
+  useCallback,
 } from "react";
 
 import {
@@ -30,7 +36,10 @@ import {
   stylesOverwrite,
 } from "./FillGapsGame.styles";
 
-export type TFillGapsGame = Pick<IGenFillInGapsGame, "fillGameParagraph" | "helpNote" | "question" | "id">;
+export type TFillGapsGame = Pick<
+IGenFillInGapsGame,
+"fillGameParagraph" | "helpNote" | "question" | "id"
+>;
 
 /* const countPlaceholders = (content: TextElement[]): number =>
 {
@@ -63,102 +72,126 @@ let FillGapsGame: FC<TFillGapsGame> = ({
   fillGameParagraph,
   helpNote,
   id,
-  question
-}) =>
+  question,
+}) => 
 {
   // const totalPlaceholders = useMemo(() => countPlaceholders(fillGameParagraph?.richTextContent?.json?.content), [fillGameParagraph]);
   const { getNextGameIndex } = useCaseSolvingStore();
-  const gameState = useFillGapsGameStore(s => s.getGameState(id));
-  const allGames = useFillGapsGameStore(s => s.games);
-  const updateGameState = useFillGapsGameStore(s => s.updateGameState);
-  const initializeNewGameState = useFillGapsGameStore(s => s.initializeNewGameState);
-  const correctAnswers = useRef<string[]>([]);
-  const focusedIndex = useRef<number | null>(null);
 
-  console.log(`gameState for game with ID '${id}'`, gameState);
+  const gameState = useFillGapsGameStore((s) => s.getGameState(id));
 
-  useEffect(() =>
+  const allGames = useFillGapsGameStore((s) => s.games);
+
+  const updateGameState = useFillGapsGameStore((s) => s.updateGameState);
+
+  const initializeNewGameState = useFillGapsGameStore(
+    (s) => s.initializeNewGameState
+  );
+
+  const updateAnswersResult = useFillGapsGameStore((s) => s.updateAnswersResult);
+  // console.log(`gameState for game with ID '${id}'`, gameState);
+
+  useEffect(() => 
   {
-    if(gameState == null && id != null)
+    if(gameState == null && id != null) 
     {
       initializeNewGameState(id);
     }
   }, [allGames, gameState, id, initializeNewGameState]);
 
-  if(!gameState || !id)
+  const richtextOverwrite = useCallback(
+    // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+    // @ts-ignore
+    (props): ReactElement => 
+    {
+      return (
+        <RichtextOverwrite
+          id={id!}
+          path={props.path}
+          text={props?.children?.[0]?.props?.node.text}
+        />
+      );
+    },
+    [id]
+  );
+
+  if(!gameState || !id) 
   {
     return null;
   }
 
   const {
     answerResult,
+    correctAnswers,
     gameStatus,
     gameSubmitted,
     resultMessage,
     userAnswers
-  } = gameState;
+  } = gameState ?? {};
 
-  const checkAnswers = (): boolean =>
-  {
-    console.log("checkAnswers");
+  // const checkAnswers = (): boolean => 
+  // {
+  //   console.log("checkAnswers");
 
-    return false;
+  //    if(userAnswers.length !== correctAnswers.current.length) { return false; }
 
-    /* if(userAnswers.length !== correctAnswers.current.length) { return false; }
+  //   let allCorrect = true;
+  //   const newAnswerResult: string[] = [];
 
-    let allCorrect = true;
-    const newAnswerResult: string[] = [];
+  //   for(let i = 0; i < userAnswers.length; i++) 
+  //   {
+  //     const possibleCorrectAnswers = correctAnswers.current?.[i]?.split(";") ?? [];
+  //     let isAnswerCorrect = false;
 
-    for(let i = 0; i < userAnswers.length; i++) 
-    {
-      const possibleCorrectAnswers = correctAnswers.current?.[i]?.split(";") ?? [];
-      let isAnswerCorrect = false;
+  //     for(const possibleAnswer of possibleCorrectAnswers) 
+  //     {
+  //       const userAnswer = userAnswers?.[i]?.toLowerCase() ?? "";
+  //       const correctAnswer = possibleAnswer.toLowerCase();
 
-      for(const possibleAnswer of possibleCorrectAnswers) 
-      {
-        const userAnswer = userAnswers?.[i]?.toLowerCase() ?? "";
-        const correctAnswer = possibleAnswer.toLowerCase();
+  //       if(!isNaN(Number(correctAnswer)) || correctAnswer.length <= 4) 
+  //       {
+  //         // If correct answer is number or a short word, require an exact match
+  //         if(userAnswer === correctAnswer) 
+  //         {
+  //           isAnswerCorrect = true;
+  //           break;
+  //         }
+  //       }
+  //       else 
+  //       {
+  //         // check for distance
+  //         const dist = distance(userAnswer, correctAnswer);
+  //         if(dist <= 2) 
+  //         {
+  //           isAnswerCorrect = true;
+  //           break;
+  //         }
+  //       }
+  //     }
 
-        if(!isNaN(Number(correctAnswer)) || correctAnswer.length <= 4) 
-        {
-          // If correct answer is number or a short word, require an exact match
-          if(userAnswer === correctAnswer) 
-          {
-            isAnswerCorrect = true;
-            break;
-          }
-        }
-        else 
-        {
-          // check for distance
-          const dist = distance(userAnswer, correctAnswer);
-          if(dist <= 2) 
-          {
-            isAnswerCorrect = true;
-            break;
-          }
-        }
-      }
+  //     if(isAnswerCorrect) 
+  //     {
+  //       newAnswerResult.push("correct");
+  //     }
+  //     else 
+  //     {
+  //       newAnswerResult.push("incorrect");
+  //       allCorrect = false;
+  //     }
+  //   }
 
-      if(isAnswerCorrect) 
-      {
-        newAnswerResult.push("correct");
-      }
-      else 
-      {
-        newAnswerResult.push("incorrect");
-        allCorrect = false;
-      }
-    }
+  //   setAnswerResult(newAnswerResult);
+  //   return allCorrect;
+  // };
 
-    setAnswerResult(newAnswerResult);
-    return allCorrect;*/
-  };
-
-  const handleCheckAnswers = (): void =>
+  const handleCheckAnswers = (): void => 
   {
     console.log("handleCheckAnswers");
 
+    updateAnswersResult({ gameId: id });
+
+    console.log("answersResult", answerResult);
+    console.log("correctAnswers", correctAnswers);
     /* if(!gameSubmitted)
     {
       setGameSubmitted(true);
@@ -179,7 +212,7 @@ let FillGapsGame: FC<TFillGapsGame> = ({
     }*/
   };
 
-  const handleResetGame = (): void =>
+  const handleResetGame = (): void => 
   {
     console.log("handleResetGame");
 
@@ -187,23 +220,6 @@ let FillGapsGame: FC<TFillGapsGame> = ({
     correctAnswers.current = [];
     setUserAnswers(new Array(totalPlaceholders).fill(""));
     setAnswerResult(new Array(totalPlaceholders).fill(""));*/
-  };
-
-  // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-  // @ts-ignore
-  const richtextOverwrite = (props): ReactElement =>
-  {
-    console.log(props.path, props?.children?.[0]?.props?.node.text);
-
-    return (
-      <RichtextOverwrite
-        id={id}
-        path={props.path}
-        text={props?.children?.[0]?.props?.node.text}
-        correctAnswers={correctAnswers}
-        focusedIndex={focusedIndex}
-      />
-    );
   };
 
   return (
@@ -248,7 +264,9 @@ let FillGapsGame: FC<TFillGapsGame> = ({
               variant={gameStatus}
               message={resultMessage}
             />
-            {helpNote?.richTextContent?.json && <HelpNote richTextContent={helpNote?.richTextContent}/>}
+            {helpNote?.richTextContent?.json && (
+              <HelpNote richTextContent={helpNote?.richTextContent}/>
+            )}
           </>
         )}
         <div>

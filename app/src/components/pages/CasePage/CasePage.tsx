@@ -18,18 +18,20 @@ const CasePage: FunctionComponent<IGenCase> = ({
   resolution,
   tags,
   title,
-  topic
+  topic,
 }) => 
 {
-   
-  const [caseStepIndex, setCaseStepIndex] = React.useState<0 | 1 | 2>(1);
+  const [caseStepIndex, setCaseStepIndex] = React.useState<0 | 1 | 2>(0);
 
   return (
     <>
       <CaseSolvingHeader
         title={title ?? ""}
         variant="case"
-        pathSlugs={[{ path: "/cases", slug: "Cases" }, { path: `/cases/${id}`, slug: title ?? "" }]}
+        pathSlugs={[
+          { path: "/cases", slug: "Cases" },
+          { path: `/cases/${id}`, slug: title ?? "" },
+        ]}
         overviewCard={{
           lastUpdated: new Date(),
           legalArea,
@@ -39,7 +41,6 @@ const CasePage: FunctionComponent<IGenCase> = ({
           topic: topic?.[0]?.topicName ?? "",
           variant: "case",
           views: 0,
-
         }}
       />
       <CaseNavBar
@@ -49,24 +50,30 @@ const CasePage: FunctionComponent<IGenCase> = ({
       />
       <div css={styles.mainContainer}>
         {caseStepIndex === 0 && (
-          <CaseCompleteTestsStep {...{
-            facts,
-            fullTextTasks,
-          }}
+          <CaseCompleteTestsStep
+            {...{
+              facts,
+              fullTextTasks,
+            }}
           />
         )}
         {caseStepIndex === 1 && (
-          <CaseSolveCaseStep {...{
-            facts,
-            setCaseStepIndex,
-            title
-          }}
+          <CaseSolveCaseStep
+            {...{
+              facts,
+              setCaseStepIndex,
+              title,
+            }}
           />
         )}
         {facts && resolution && title && caseStepIndex === 2 && (
-          <CaseResultsReviewStep {...{
-            facts, resolution, setCaseStepIndex, title 
-          }}
+          <CaseResultsReviewStep
+            {...{
+              facts,
+              resolution,
+              setCaseStepIndex,
+              title,
+            }}
           />
         )}
       </div>

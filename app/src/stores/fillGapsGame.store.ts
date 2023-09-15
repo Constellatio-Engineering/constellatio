@@ -10,8 +10,19 @@ type UserAnswersPerParagraph = {
   path: string;
 };
 
+type CorrectAnswersPerParagraph = {
+  correctAnswers: string[];
+  path: string;
+};
+
+type AnswersResultPerParagraph = {
+  answersResult: string[];
+  path: string;
+};
+
 type FillGapsGameState = {
-  answerResult: string[];
+  answerResult: AnswersResultPerParagraph[];
+  correctAnswers: CorrectAnswersPerParagraph[];
   gameStatus: GameStatus;
   gameSubmitted: boolean;
   id: string;
@@ -19,18 +30,21 @@ type FillGapsGameState = {
   userAnswers: UserAnswersPerParagraph[];
 };
 
-type FillGapsGameStateUpdate = Partial<Pick<FillGapsGameState, "gameStatus" | "gameSubmitted" | "resultMessage" | "answerResult">>;
+type FillGapsGameStateUpdate = Partial<Pick<FillGapsGameState, "gameStatus" | "gameSubmitted" | "resultMessage" | "answerResult" >>;
 
 type FillGapsGameStore = {
   games: FillGapsGameState[];
   getGameState: (id: Nullable<string>) => FillGapsGameState | undefined;
   initializeNewGameState: (id: string) => void;
+  updateAnswersResult: (params: { gameId: string }) => void;
+  updateCorrectAnswer: (params: { gameId: string; innerContent: string[]; path: string}) => void;
   updateGameState: (id: string, update: FillGapsGameStateUpdate) => void;
   updateUserAnswer: (params: { gameId: string; index: number; path: string; value: string}) => void;
 };
 
 const defaultFillGapsGameState: FillGapsGameState = {
   answerResult: [],
+  correctAnswers: [],
   gameStatus: "inprogress",
   gameSubmitted: false,
   id: "",
@@ -82,6 +96,97 @@ const useFillGapsGameStore = create(
 
       console.log("new game state initialized successfully");
     },
+
+    updateAnswersResult: ({ gameId }) => 
+    {
+        
+      const { games } = get();
+      const gameIndex = games.findIndex(game => game.id === gameId);
+
+      if(gameIndex === -1)
+      {
+        console.warn("game not found. cannot update answers result");
+        return;
+      }
+
+      const game = games[gameIndex]!;
+      
+      const answersResult = game.userAnswers.map((userAnswer) =>
+      {
+        const correctAnswers = game.correctAnswers.find(correctAnswer => correctAnswer.path === userAnswer.path);
+
+        if(!correctAnswers)
+        {
+          console.warn(`correct answers not found for path '${userAnswer.path}'. cannot update answers result`);
+          return null;
+        }
+
+        const answersResult: AnswersResultPerParagraph = {
+          answersResult: new Array(userAnswer.answers.length).fill(null),
+          path: userAnswer.path,
+        };
+
+        userAnswer.answers.forEach((answer, index) =>
+        {
+          if(answer === correctAnswers.correctAnswers[index])
+          {
+            answersResult.answersResult[index] = "correct";
+            return;
+          }
+
+          answersResult.answersResult[index] = "wrong";
+        });
+
+        return answersResult;
+      }).filter(Boolean) as AnswersResultPerParagraph[];
+
+      set((state) =>
+      {
+        console.log("answersResult at store", answersResult);
+        state.games[gameIndex]!.answerResult = answersResult;
+      });
+    },
+
+    updateCorrectAnswer: ({ gameId, innerContent, path }) => 
+    {
+
+      const { games } = get();
+      const gameIndex = games.findIndex(game => game.id === gameId);
+
+      if(gameIndex === -1)
+      {
+        console.warn("game not found. cannot update correct answer");
+        return;
+      }
+
+      const game = games[gameIndex]!;
+      const correctAnswersByPathIndex = game.correctAnswers.findIndex(answers => answers.path === path);
+
+      if(correctAnswersByPathIndex === -1)
+      {
+        console.warn(`correct answers not found for path '${path}'. creating new correct answers`);
+
+        set((state) =>
+        {
+          const newCorrectAnswers: CorrectAnswersPerParagraph = {
+            correctAnswers: innerContent,
+            path,
+          };
+
+          newCorrectAnswers.correctAnswers = innerContent;
+
+          state.games[gameIndex]!.correctAnswers = state.games[gameIndex]!.correctAnswers.concat(newCorrectAnswers);
+        });
+
+        return;
+      }
+
+      set((state) =>
+      {
+        state.games[gameIndex]!.correctAnswers[correctAnswersByPathIndex]!.correctAnswers = innerContent;
+      });
+    },
+
     updateGameState: (id, update) =>
     {
       console.log("updateGameState", id, update);
@@ -110,6 +215,7 @@ const useFillGapsGameStore = create(
         state.games[gameIndex] = newGame;
       });
     },
+
     updateUserAnswer: ({
       gameId,
       index,
@@ -117,7 +223,7 @@ const useFillGapsGameStore = create(
       value
     }) =>
     {
-      console.log("updateUserAnswer", gameId, path, index, value);
+      // console.log("updateUserAnswer", gameId, path, index, value);
 
       const { games } = get();
       const gameIndex = games.findIndex(game => game.id === gameId);
