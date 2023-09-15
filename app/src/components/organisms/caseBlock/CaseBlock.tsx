@@ -25,8 +25,6 @@ export interface ICaseBlockProps
 
 const CaseBlock: FunctionComponent<ICaseBlockProps> = ({ blockHead, items, variant }) => 
 {
-  console.log({ items });
-  
   return items?.length && items?.length > 0 ? (
     <div css={styles.wrapper}>
       <CaseBlockHead {...blockHead}/> 

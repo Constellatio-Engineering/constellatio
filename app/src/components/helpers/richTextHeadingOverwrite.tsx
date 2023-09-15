@@ -19,7 +19,7 @@ export const richTextHeadingOverwrite = ({
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
 }: any): ReactElement => 
 {
-  const node = props!.node as IHeadingNode;
+  const node = props!.node as unknown as IHeadingNode;
 
   // const { level } = node.attrs;
   // if(counters.length < level) 

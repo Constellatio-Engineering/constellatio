@@ -61,6 +61,7 @@ const DetailsPage: FunctionComponent<IDetailsPageProps> = ({ content, variant })
           <CaseCompleteTestsStep {...{
             facts: content?.__typename === "Case" ? content?.facts : undefined,
             fullTextTasks: content?.fullTextTasks,
+            variant
           }}
           />
         )}

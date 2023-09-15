@@ -1,4 +1,6 @@
-import { Container } from "@mantine/core";
+// import { Container } from "@mantine/core";
+import { CaptionText } from "@/components/atoms/CaptionText/CaptionText";
+
 import { useMantineTheme } from "@mantine/styles";
 import Image from "next/image";
 import Link from "next/link";
@@ -32,10 +34,14 @@ export const Header: FC<HeaderProps> = ({ variant = "default" }) =>
     <SHeader>
       <div css={styles.wrapper({ theme, variant })}>
         {/* <Container maw={1440}> */}
-        <div>
+        <div css={styles.links}>
           <Link href="/">
             <Image src={ConstellatioFullLogo} alt="Constellatio"/>
           </Link>
+          <Link href="/"><CaptionText styleType="caption-01-bold" component="span">DASHBOARD</CaptionText></Link>
+          <Link href="/cases"><CaptionText styleType="caption-01-bold" component="span">CASES</CaptionText></Link>
+          <Link href="/dictionary"><CaptionText styleType="caption-01-bold" component="span">DICTIONARY</CaptionText></Link>
+          <Link href="/"><CaptionText styleType="caption-01-bold" component="span">FORUM</CaptionText></Link>
         </div>
         <div>
           <UserDropdown/>

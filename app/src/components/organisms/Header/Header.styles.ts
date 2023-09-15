@@ -1,3 +1,5 @@
+import { colors } from "@/constants/styles/colors";
+
 import { css } from "@emotion/react";
 import styled from "@emotion/styled";
 import { type MantineTheme } from "@mantine/styles";
@@ -29,4 +31,15 @@ background: #fff;
 	position: sticky;
 	top: 0;
 	z-index: 40;
+`;
+export const links = css`
+display: flex;
+	align-items: center;
+	img{
+		margin-right: 40px;
+	}
+a{
+	margin-right: 16px;;
+	color:black;
+}
 `;

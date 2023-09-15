@@ -28,12 +28,13 @@ interface ICaseCompleteTestsStepProps
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   readonly facts?: Maybe<IGenTextElement> | undefined; 
   readonly fullTextTasks: IGenCase_FullTextTasks | IGenArticle_FullTextTasks;
+  readonly variant?: "case" | "dictionary";
 }
 
-const CaseCompleteTestsStep: FunctionComponent<ICaseCompleteTestsStepProps> = ({ facts, fullTextTasks }) => 
+const CaseCompleteTestsStep: FunctionComponent<ICaseCompleteTestsStepProps> = ({ facts, fullTextTasks, variant }) => 
 {
 
-  console.log({ fullTextTasks });
+  // console.log({ fullTextTasks });
 
   const {
     getNextGameIndex,
@@ -64,10 +65,13 @@ const CaseCompleteTestsStep: FunctionComponent<ICaseCompleteTestsStepProps> = ({
 
   const content = useMemo(
     () =>
-      renderedCaseContent?.json?.content?.filter(
+    {
+      const items = variant === "case" ? renderedCaseContent?.json?.content : fullTextTasks?.json?.content;
+      return items?.filter(
         (contentItem: { content: { text: string }[]; type: string }) =>
           contentItem?.type === "heading"
-      ),
+      );
+    },
     [renderedCaseContent]
   );
 
@@ -138,7 +142,7 @@ const CaseCompleteTestsStep: FunctionComponent<ICaseCompleteTestsStepProps> = ({
             <div css={styles.fullTextAndTasksWrapper}>
               <Richtext
                 // eslint-disable-next-line @typescript-eslint/no-explicit-any
-                richTextContent={renderedCaseContent as any}
+                richTextContent={variant === "case" ? renderedCaseContent as any : fullTextTasks}
                 richTextOverwrite={{
                   documentLink: (props) => 
                   {
@@ -218,7 +222,11 @@ const CaseCompleteTestsStep: FunctionComponent<ICaseCompleteTestsStepProps> = ({
                       })
                       : null;
                   },
-                 
+                  heading: (props) => 
+                  {
+                    const node = props!.node as unknown as IHeadingNode;
+                    return richTextHeadingOverwrite({ depth: 0, index: getHeadingIndex(node), ...props });
+                  },
                   paragraph: richTextParagraphOverwrite
                 }}
               />
