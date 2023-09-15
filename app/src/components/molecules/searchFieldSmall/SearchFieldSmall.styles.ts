@@ -1,6 +1,7 @@
-import { icon } from "./../filtersButton/FiltersButton.style";
 import { css } from "@emotion/react";
-import { MantineTheme } from "@mantine/styles";
+import { type MantineTheme } from "@mantine/styles";
+
+import { icon } from "./../filtersButton/FiltersButton.style";
 
 export const wrapper = (theme: MantineTheme) => css`
   position: relative;
