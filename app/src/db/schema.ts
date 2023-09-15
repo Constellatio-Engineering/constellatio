@@ -12,8 +12,9 @@ export type GenderIdentifier = typeof allGenderIdentifiers[number];
 
 export const genderEnum = pgEnum("gender", allGenderIdentifiers);
 
-export const profiles = pgTable("profiles", {
+export const users = pgTable("users", {
   id: uuid("id").primaryKey(),
+  email: text("email").unique(),
   displayName: text("displayName"),
   firstName: text("firstName"),
   gender: genderEnum("gender"),
