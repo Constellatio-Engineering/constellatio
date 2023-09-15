@@ -1,10 +1,11 @@
 
 import StatusTableCell from "@/components/atoms/statusTableCell/StatusTableCell";
 import TableCell from "@/components/atoms/tableCell/TableCell";
-import TableIconButton from "@/components/atoms/tableIconButton/TableIconButton";
 import { Bookmark } from "@/components/Icons/Bookmark";
+import { BookmarkFilledIcon } from "@/components/Icons/BookmarkFilledIcon";
 import { ClockIcon } from "@/components/Icons/ClockIcon";
 import CaseBlockHead, { type ICaseBlockHeadProps } from "@/components/molecules/caseBlockHead/CaseBlockHead";
+import TableIconButton from "@/components/molecules/tableIconButton/TableIconButton";
 import { type IGenFullCaseFragment } from "@/services/graphql/__generated/sdk";
 import { supabase } from "@/supabase/client";
 import { api } from "@/utils/api";
@@ -30,7 +31,7 @@ const CaseBlock: FunctionComponent<ICaseBlockProps> = ({ blockHead, cases }) =>
 {
   const { data: bookmarks, isLoading } = api.bookmarks.getAllBookmarks.useQuery();
 
-  const { mutate: addBookmark } = api.bookmarks.addBookmark.useMutation({
+  const { isSuccess, mutate: addBookmark } = api.bookmarks.addBookmark.useMutation({
     onError: e =>
     {
       console.log("error while adding bookmark:", e);
@@ -72,11 +73,12 @@ const CaseBlock: FunctionComponent<ICaseBlockProps> = ({ blockHead, cases }) =>
             </td>
             <td>
               <TableIconButton
-                icon={isLoading ? (
-                  <Loader size={30}/>
+                icon={isSuccess ? (
+                  <BookmarkFilledIcon/>
                 ) : (
                   <Bookmark/>
                 )}
+                isLoading={isLoading}
                 disabled={isLoading}
                 onClickHandler={() => addBookmark({ resourceId: item!.id!, resourceType: "case" })}
               />
