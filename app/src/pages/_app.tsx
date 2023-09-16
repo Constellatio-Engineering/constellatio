@@ -3,6 +3,7 @@ import CustomThemingProvider from "@/provider/CustomThemingProvider";
 import { supabase } from "@/supabase/client";
 import { api } from "@/utils/api";
 
+import { ModalsProvider } from "@mantine/modals";
 import { Notifications } from "@mantine/notifications";
 import { type Session, SessionContextProvider } from "@supabase/auth-helpers-react";
 import { type AppProps } from "next/app";
@@ -23,9 +24,11 @@ const MyApp: FunctionComponent<MyAppProps> = ({ Component, pageProps }) =>
       </Head>
       <SessionContextProvider supabaseClient={supabase} initialSession={pageProps.initialSession}>
         <CustomThemingProvider>
-          <RouterTransition/>
-          <Notifications/>
-          <Component {...pageProps}/>
+          <ModalsProvider>
+            <RouterTransition/>
+            <Notifications/>
+            <Component {...pageProps}/>
+          </ModalsProvider>
         </CustomThemingProvider>
       </SessionContextProvider>
     </>
