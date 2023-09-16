@@ -1,6 +1,7 @@
 import { authenticationRouter } from "@/server/api/routers/authentication.router";
 import { bookmarksRouter } from "@/server/api/routers/bookmarks.router";
 import { caisyRouter } from "@/server/api/routers/caisy.router";
+import { uploadsRouter } from "@/server/api/routers/uploads.router";
 import { createTRPCRouter } from "@/server/api/trpc";
 
 /**
@@ -12,6 +13,7 @@ export const appRouter = createTRPCRouter({
   authentication: authenticationRouter,
   bookmarks: bookmarksRouter,
   caisy: caisyRouter,
+  uploads: uploadsRouter,
 });
 
 // export type definition of API
