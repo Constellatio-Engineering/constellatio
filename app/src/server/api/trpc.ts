@@ -9,7 +9,8 @@
 
 import { env } from "@/env.mjs";
 import { type ClientError, clientErrors } from "@/utils/clientError";
-import { EmailAlreadyTakenError } from "@/utils/serverError";
+import { EmailAlreadyTakenError, UnauthorizedError } from "@/utils/serverError";
+import { sleep } from "@/utils/utils";
 
 import { createServerSupabaseClient, type SupabaseClient, type User } from "@supabase/auth-helpers-nextjs";
 import { type Session } from "@supabase/auth-helpers-react";
@@ -60,12 +61,16 @@ export const createTRPCContext = async ({ req, res }: CreateNextContextOptions):
     supabaseKey: env.SUPABASE_SERVICE_ROLE_KEY,
     supabaseUrl: env.NEXT_PUBLIC_SUPABASE_URL
   });
+
   const { data: { user } } = await supabaseServerClient.auth.getUser();
   const { data: { session } } = await supabaseServerClient.auth.getSession();
 
-  console.log("--- createTRPCContext ---");
-  console.log("user", user);
-  console.log("session", session);
+  if(env.THROTTLE_REQUESTS_IN_MS && env.NEXT_PUBLIC_NODE_ENV === "development")
+  {
+    // Caution: This is only for testing purposes in development. It will slow down the API response time.
+    console.info(`Caution: Requests are throttled for ${env.THROTTLE_REQUESTS_IN_MS}ms due to 'env.THROTTLE_REQUESTS_IN_MS' being set.`);
+    await sleep(env.THROTTLE_REQUESTS_IN_MS);
+  }
 
   return {
     session,
@@ -144,3 +149,22 @@ export const createTRPCRouter = t.router;
  * are logged in.
  */
 export const publicProcedure = t.procedure;
+
+const enforceUserIsAuthenticated = t.middleware(async ({ ctx, next }) =>
+{
+  const { session } = ctx;
+
+  if(!session)
+  {
+    throw new UnauthorizedError();
+  }
+
+  return next({
+    ctx: {
+      session,
+      userId: session.user.id
+    },
+  });
+});
+
+export const protectedProcedure = t.procedure.use(enforceUserIsAuthenticated);

@@ -14,6 +14,7 @@ export const env = createEnv({
     CAISY_API_KEY: z.string(),
     CAISY_PROJECT_ID: z.string(),
     STRIPE_SECRET_KEY: z.string(),
+    THROTTLE_REQUESTS_IN_MS: z.string().pipe(z.coerce.number().int().min(1)).optional(),
   },
 
   /**
@@ -42,6 +43,7 @@ export const env = createEnv({
     CAISY_API_KEY: process.env.CAISY_API_KEY,
     CAISY_PROJECT_ID: process.env.CAISY_PROJECT_ID,
     NEXT_PUBLIC_WEBSITE_URL: process.env.NEXT_PUBLIC_WEBSITE_URL,
+    THROTTLE_REQUESTS_IN_MS: process.env.THROTTLE_REQUESTS_IN_MS,
   },
   /**
    * Run `build` or `dev` with `SKIP_ENV_VALIDATION` to skip env validation.
