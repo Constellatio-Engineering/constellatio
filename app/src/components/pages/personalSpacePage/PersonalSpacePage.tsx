@@ -1,4 +1,6 @@
+/* eslint-disable max-lines */
 import { Button } from "@/components/atoms/Button/Button";
+import uploadsProgressStore from "@/stores/uploadsProgress.store";
 import { api } from "@/utils/api";
 
 import { Loader, Text } from "@mantine/core";
@@ -16,8 +18,8 @@ const PersonalSpacePage: FunctionComponent = () =>
   const { data: uploadedFiles = [], isLoading: isGetUploadedFilesLoading } = api.uploads.getUploadedFiles.useQuery();
   const allCasesBookmarks = bookmarks.filter(bookmark => bookmark?.resourceType === "case") ?? [];
   const bookmarkedCases = allCases.filter(caisyCase => allCasesBookmarks.some(bookmark => bookmark.resourceId === caisyCase.id));
-  const [isUploading, setIsUploading] = useState<boolean>(false);
   const fileInputRef = React.useRef<HTMLInputElement>(null);
+  const { setUploadState, uploads } = uploadsProgressStore();
 
   const { mutate: removeBookmark } = api.bookmarks.removeBookmark.useMutation({
     onError: e => console.log("error while removing bookmark:", e),
@@ -45,32 +47,48 @@ const PersonalSpacePage: FunctionComponent = () =>
 
   const [file, setFile] = useState<File>();
 
-  const uploadFile = async (e: FormEvent<HTMLFormElement>): Promise<void> =>
+  const uploadFile = async (): Promise<void> =>
   {
-    e.preventDefault();
-
     if(!file)
     {
       console.log("no file selected");
       return;
     }
 
+    const originalFileName = file.name;
+
     console.log("uploading file '", `${file.name}'...`);
+
+    setUploadState(originalFileName, {
+      progressInPercent: 0,
+      type: "uploading"
+    });
 
     const { filename, uploadUrl } = await createSignedUploadUrl({
       contentType: file.type,
       fileSizeInBytes: file.size,
-      filename: file.name
+      filename: originalFileName,
     });
 
     await axios.put(uploadUrl, file, {
-      headers: { "Content-Type": file.type }
+      headers: { "Content-Type": file.type },
+      onUploadProgress: ({ progress = 0 }) =>
+      {
+        console.log("progress:", progress);
+
+        setUploadState(originalFileName, progress === 1 ? {
+          type: "completed"
+        } : {
+          progressInPercent: progress * 100,
+          type: "uploading"
+        });
+      }
     });
 
     await saveFileToDatabase({
       fileSizeInBytes: file.size,
       filename,
-      originalFilename: file.name,
+      originalFilename: originalFileName,
     });
 
     console.log("file uploaded successfully");
@@ -108,17 +126,19 @@ const PersonalSpacePage: FunctionComponent = () =>
       )}
       <div style={{ alignItems: "center", display: "flex", marginTop: 100 }}>
         <h2 style={{ fontSize: 22, marginRight: 10 }}>Test signed upload url</h2>
-        {isUploading && (
-          <Loader size={26}/>
-        )}
       </div>
       <form onSubmit={async e =>
       {
-        setIsUploading(true);
+        e.preventDefault();
+
+        if(!file)
+        {
+          return;
+        }
 
         try
         {
-          await uploadFile(e);
+          await uploadFile();
           setFile(undefined);
 
           if(fileInputRef.current)
@@ -129,10 +149,7 @@ const PersonalSpacePage: FunctionComponent = () =>
         catch (e: unknown)
         {
           console.log("error while uploading file", e);
-        }
-        finally
-        {
-          setIsUploading(false);
+          setUploadState(file.name, { type: "failed" });
         }
       }}>
         Select File:{" "}
@@ -143,7 +160,7 @@ const PersonalSpacePage: FunctionComponent = () =>
         />
         <Button<"button">
           styleType="primary"
-          disabled={isUploading}
+          disabled={!file}
           type="submit">
           Upload
         </Button>
@@ -160,6 +177,27 @@ const PersonalSpacePage: FunctionComponent = () =>
           <div key={file.id} style={{ margin: "10px 0" }}>
             <strong>{file.originalFilename}.{file.fileExtension}</strong>
             <p>Uploaded: {uploadedDate} {uploadedTime}</p>
+          </div>
+        );
+      })}
+      <h2 style={{ fontSize: 22, marginRight: 10, marginTop: 100 }}>Current Uploads</h2>
+      {uploads.filter(u => u.state.type !== "completed").map((upload, index) =>
+      {
+        return (
+          <div key={index} style={{ margin: "10px 0" }}>
+            <strong>{upload.fileName}</strong>
+            {upload.state.type === "uploading" ? (
+              <div
+                style={{
+                  border: "1px solid black",
+                  height: 30,
+                  width: 200,
+                }}>
+                <div style={{ backgroundColor: "red", height: "100%", width: `${upload.state.progressInPercent}%` }}/>
+              </div>
+            ) : (
+              <p>{upload.state.type}</p>
+            )}
           </div>
         );
       })}
