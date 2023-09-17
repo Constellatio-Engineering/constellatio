@@ -2,6 +2,7 @@
 import { Button } from "@/components/atoms/Button/Button";
 import uploadsProgressStore from "@/stores/uploadsProgress.store";
 import { api } from "@/utils/api";
+import { removeItemsByIndices } from "@/utils/utils";
 
 import { Loader, Text } from "@mantine/core";
 import { modals } from "@mantine/modals";
@@ -20,6 +21,7 @@ const PersonalSpacePage: FunctionComponent = () =>
   const bookmarkedCases = allCases.filter(caisyCase => allCasesBookmarks.some(bookmark => bookmark.resourceId === caisyCase.id));
   const fileInputRef = React.useRef<HTMLInputElement>(null);
   const { setUploadState, uploads } = uploadsProgressStore();
+  const [selectedFiles, setSelectedFiles] = useState<File[]>([]);
 
   const { mutate: removeBookmark } = api.bookmarks.removeBookmark.useMutation({
     onError: e => console.log("error while removing bookmark:", e),
@@ -45,13 +47,11 @@ const PersonalSpacePage: FunctionComponent = () =>
     });
   };
 
-  const [file, setFile] = useState<File>();
-
-  const uploadFile = async (): Promise<void> =>
+  const uploadFile = async (file: File): Promise<void> =>
   {
-    if(!file)
+    if(selectedFiles.length === 0)
     {
-      console.log("no file selected");
+      console.log("no files selected");
       return;
     }
 
@@ -92,8 +92,44 @@ const PersonalSpacePage: FunctionComponent = () =>
     });
 
     console.log("file uploaded successfully");
+  };
 
-    await ctx.uploads.getUploadedFiles.invalidate();
+  const onSubmit = async (e: FormEvent<HTMLFormElement>): Promise<void> =>
+  {
+    e.preventDefault();
+
+    const uploads: Array<Promise<void>> = selectedFiles.map(async file =>
+    {
+      try
+      {
+        await uploadFile(file);
+        await ctx.uploads.getUploadedFiles.invalidate();
+      }
+      catch (e: unknown)
+      {
+        console.log("error while uploading file", e);
+        setUploadState(file.name, { type: "failed" });
+        return Promise.reject(e);
+      }
+    });
+
+    const uploadResults = await Promise.allSettled(uploads);
+
+    const indicesOfSuccessfulUploads: number[] = [];
+
+    uploadResults.forEach((result, index) =>
+    {
+      if(result.status === "fulfilled")
+      {
+        indicesOfSuccessfulUploads.push(index);
+      }
+    });
+
+    console.log("indices of successful uploads:", indicesOfSuccessfulUploads);
+
+    const newSelectedFiles = removeItemsByIndices<File>(selectedFiles, indicesOfSuccessfulUploads);
+    console.log("new selected files:", newSelectedFiles);
+    setSelectedFiles(newSelectedFiles);
   };
 
   const uploadedFileSortedByCreatedAt = uploadedFiles.sort((a, b) =>
@@ -127,45 +163,25 @@ const PersonalSpacePage: FunctionComponent = () =>
       <div style={{ alignItems: "center", display: "flex", marginTop: 100 }}>
         <h2 style={{ fontSize: 22, marginRight: 10 }}>Test signed upload url</h2>
       </div>
-      <form onSubmit={async e =>
-      {
-        e.preventDefault();
-
-        if(!file)
-        {
-          return;
-        }
-
-        try
-        {
-          await uploadFile();
-          setFile(undefined);
-
-          if(fileInputRef.current)
-          {
-            fileInputRef.current.value = "";
-          }
-        }
-        catch (e: unknown)
-        {
-          console.log("error while uploading file", e);
-          setUploadState(file.name, { type: "failed" });
-        }
-      }}>
+      <form onSubmit={onSubmit}>
         Select File:{" "}
         <input
           ref={fileInputRef}
           type="file"
-          onChange={e => setFile(e.target.files![0])}
+          multiple
+          onChange={e => setSelectedFiles(Array.from(e.target.files ?? []))}
         />
         <Button<"button">
           styleType="primary"
-          disabled={!file}
+          disabled={selectedFiles.length === 0}
           type="submit">
           Upload
         </Button>
       </form>
-      {file && <p>{file.name}</p>}
+      Selected Files:
+      {selectedFiles.map(file => (
+        <p key={file.name}>{file.name}</p>
+      ))}
       <h2 style={{ fontSize: 22, marginRight: 10, marginTop: 100 }}>Uploaded Files</h2>
       {isGetUploadedFilesLoading && <p>Loading...</p>}
       {uploadedFileSortedByCreatedAt.map(file =>
