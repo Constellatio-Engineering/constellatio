@@ -13,6 +13,7 @@ const PersonalSpacePage: FunctionComponent = () =>
   const ctx = api.useContext();
   const { data: allCases = [], isLoading: areCasesLoading } = api.caisy.getAllCases.useQuery();
   const { data: bookmarks = [], isLoading: areBookmarksLoading } = api.bookmarks.getAllBookmarks.useQuery();
+  const { data: uploadedFiles = [], isLoading: isGetUploadedFilesLoading } = api.uploads.getUploadedFiles.useQuery();
   const allCasesBookmarks = bookmarks.filter(bookmark => bookmark?.resourceType === "case") ?? [];
   const bookmarkedCases = allCases.filter(caisyCase => allCasesBookmarks.some(bookmark => bookmark.resourceId === caisyCase.id));
   const [isUploading, setIsUploading] = useState<boolean>(false);
@@ -24,6 +25,7 @@ const PersonalSpacePage: FunctionComponent = () =>
   });
 
   const { mutateAsync: createSignedUploadUrl } = api.uploads.createSignedUploadUrl.useMutation();
+  const { mutateAsync: saveFileToDatabase } = api.uploads.saveFileToDatabase.useMutation();
 
   const openDeleteBookmark = (caseId: string): void =>
   {
@@ -55,7 +57,7 @@ const PersonalSpacePage: FunctionComponent = () =>
 
     console.log("uploading file '", `${file.name}'...`);
 
-    const uploadUrl = await createSignedUploadUrl({
+    const { filename, uploadUrl } = await createSignedUploadUrl({
       contentType: file.type,
       fileSizeInBytes: file.size,
       filename: file.name
@@ -65,8 +67,26 @@ const PersonalSpacePage: FunctionComponent = () =>
       headers: { "Content-Type": file.type }
     });
 
+    await saveFileToDatabase({
+      fileSizeInBytes: file.size,
+      filename,
+      originalFilename: file.name,
+    });
+
     console.log("file uploaded successfully");
+
+    await ctx.uploads.getUploadedFiles.invalidate();
   };
+
+  const uploadedFileSortedByCreatedAt = uploadedFiles.sort((a, b) =>
+  {
+    if(!a.createdAt || !b.createdAt)
+    {
+      return 0;
+    }
+
+    return b.createdAt.getTime() - a.createdAt.getTime();
+  });
 
   return (
     <div css={styles.wrapper}>
@@ -100,7 +120,7 @@ const PersonalSpacePage: FunctionComponent = () =>
         {
           await uploadFile(e);
           setFile(undefined);
-          
+
           if(fileInputRef.current)
           {
             fileInputRef.current.value = "";
@@ -129,6 +149,20 @@ const PersonalSpacePage: FunctionComponent = () =>
         </Button>
       </form>
       {file && <p>{file.name}</p>}
+      <h2 style={{ fontSize: 22, marginRight: 10, marginTop: 100 }}>Uploaded Files</h2>
+      {isGetUploadedFilesLoading && <p>Loading...</p>}
+      {uploadedFileSortedByCreatedAt.map(file =>
+      {
+        const uploadedDate = file.createdAt?.toLocaleDateString();
+        const uploadedTime = file.createdAt?.toLocaleTimeString();
+
+        return (
+          <div key={file.id} style={{ margin: "10px 0" }}>
+            <strong>{file.originalFilename}.{file.fileExtension}</strong>
+            <p>Uploaded: {uploadedDate} {uploadedTime}</p>
+          </div>
+        );
+      })}
     </div>
   );
 };

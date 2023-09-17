@@ -1,8 +1,12 @@
+import { db } from "@/db/connection";
+import { uploadsTable } from "@/db/schema";
 import { env } from "@/env.mjs";
 import { createTRPCRouter, protectedProcedure } from "@/server/api/trpc";
-import { FileTooLargeError, InternalServerError } from "@/utils/serverError";
+import { BadFileError, FileTooLargeError, InternalServerError, NotFoundError } from "@/utils/serverError";
+import { getFileNameWithoutExtension } from "@/utils/utils";
 
 import { Storage } from "@google-cloud/storage";
+import { and, eq } from "drizzle-orm";
 import { z } from "zod";
 
 const storage = new Storage({
@@ -15,6 +19,35 @@ const storage = new Storage({
 });
 
 export const uploadsRouter = createTRPCRouter({
+  createSignedGetUrl: protectedProcedure
+    .input(z.object({
+      fileId: z.string(),
+    }))
+    .mutation(async ({ ctx: { userId }, input: { fileId } }) =>
+    {
+      const file = await db.query.uploadsTable.findFirst({
+        where: and(
+          eq(uploadsTable.userId, userId),
+          eq(uploadsTable.uuid, fileId)
+        )
+      });
+
+      if(!file)
+      {
+        throw new NotFoundError();
+      }
+
+      const [url] = await storage
+        .bucket(env.GOOGLE_CLOUD_STORAGE_BUCKET_NAME)
+        .file(`${userId}/${file.filename}`)
+        .getSignedUrl({
+          action: "read",
+          expires: Date.now() + 15 * 60 * 1000,
+          version: "v4",
+        });
+
+      return url;
+    }),
   createSignedUploadUrl: protectedProcedure
     .input(z.object({
       contentType: z.string(),
@@ -31,10 +64,11 @@ export const uploadsRouter = createTRPCRouter({
       }
 
       const filenameWithoutSpaces = filename.replace(/\s/g, "-");
+      const filenameWithTimestamp = `${Date.now()}-${filenameWithoutSpaces}`;
 
       const [url] = await storage
         .bucket(env.GOOGLE_CLOUD_STORAGE_BUCKET_NAME)
-        .file(`${userId}/${Date.now()}-${filenameWithoutSpaces}`)
+        .file(`${userId}/${filenameWithTimestamp}`)
         .getSignedUrl({
           action: "write",
           contentType,
@@ -42,10 +76,47 @@ export const uploadsRouter = createTRPCRouter({
           extensionHeaders: {
             "content-length": fileSizeInBytes
           },
-          // 5 minutes
           version: "v4"
         });
 
-      return url;
+      return ({
+        filename: filenameWithTimestamp,
+        uploadUrl: url
+      });
     }),
+  getUploadedFiles: protectedProcedure
+    .query(async ({ ctx: { userId } }) =>
+    {
+      return db.query.uploadsTable.findMany({
+        where: eq(uploadsTable.userId, userId)
+      });
+    }),
+  saveFileToDatabase: protectedProcedure
+    .input(z.object({
+      fileSizeInBytes: z.number().int().min(1),
+      filename: z.string(),
+      originalFilename: z.string(),
+    }))
+    .mutation(async ({ ctx: { userId }, input: { filename, fileSizeInBytes, originalFilename } }) =>
+    {
+      const fileNameWithoutExtension = getFileNameWithoutExtension(filename);
+      const originalFilenameWithoutExtension = getFileNameWithoutExtension(originalFilename);
+      const fileExtension = filename.split(".").pop();
+
+      if(!fileExtension)
+      {
+        throw new BadFileError(new Error("File has no extension"));
+      }
+
+      console.log("fileNameWithoutExtension", fileNameWithoutExtension);
+      console.log("fileExtension", fileExtension);
+
+      await db.insert(uploadsTable).values({
+        fileExtension,
+        filename: fileNameWithoutExtension,
+        originalFilename: originalFilenameWithoutExtension,
+        sizeInBytes: fileSizeInBytes,
+        userId
+      });
+    })
 });

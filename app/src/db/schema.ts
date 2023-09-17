@@ -1,7 +1,7 @@
 /* eslint-disable sort-keys-fix/sort-keys-fix */
 import { type InferInsertModel } from "drizzle-orm";
 import {
-  text, pgTable, integer, pgEnum, uuid, serial, smallint, unique
+  text, pgTable, integer, pgEnum, uuid, serial, smallint, unique, timestamp
 } from "drizzle-orm/pg-core";
 
 export const allGenderIdentifiers = ["male", "female", "diverse",] as const;
@@ -31,9 +31,23 @@ export const bookmarksTable = pgTable("bookmarks", {
   uuid: uuid("uuid").defaultRandom().unique().notNull(),
   userId: uuid("userId").references(() => usersTable.id, { onDelete: "cascade" }).notNull(),
   resourceType: resourceTypeEnum("resourceType").notNull(),
+  createdAt: timestamp("created_at").defaultNow(),
   resourceId: uuid("resourceId").notNull()
 }, table => ({
   unq: unique().on(table.resourceType, table.resourceId, table.userId),
 }));
 
 export type BookmarkInsert = InferInsertModel<typeof bookmarksTable>;
+
+export const uploadsTable = pgTable("uploads", {
+  id: serial("id").primaryKey(),
+  uuid: uuid("uuid").defaultRandom().unique().notNull(),
+  userId: uuid("userId").references(() => usersTable.id, { onDelete: "cascade" }).notNull(),
+  createdAt: timestamp("created_at").defaultNow(),
+  filename: text("filename").notNull(),
+  originalFilename: text("originalFilename").notNull(),
+  sizeInBytes: integer("sizeInBytes").notNull(),
+  fileExtension: text("fileExtension").notNull()
+});
+
+export type UploadInsert = InferInsertModel<typeof uploadsTable>;
