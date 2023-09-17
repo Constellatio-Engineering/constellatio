@@ -3,7 +3,7 @@ import { uploadsTable } from "@/db/schema";
 import { env } from "@/env.mjs";
 import { createTRPCRouter, protectedProcedure } from "@/server/api/trpc";
 import { BadFileError, FileTooLargeError, InternalServerError, NotFoundError } from "@/utils/serverError";
-import { getFileNameWithoutExtension } from "@/utils/utils";
+import { getFileNameWithoutExtension, sleep } from "@/utils/utils";
 
 import { Storage } from "@google-cloud/storage";
 import { and, eq } from "drizzle-orm";

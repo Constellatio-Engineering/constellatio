@@ -74,8 +74,6 @@ const PersonalSpacePage: FunctionComponent = () =>
       headers: { "Content-Type": file.type },
       onUploadProgress: ({ progress = 0 }) =>
       {
-        console.log("progress:", progress);
-
         setUploadState(originalFileName, progress === 1 ? {
           type: "completed"
         } : {
@@ -97,6 +95,11 @@ const PersonalSpacePage: FunctionComponent = () =>
   const onSubmit = async (e: FormEvent<HTMLFormElement>): Promise<void> =>
   {
     e.preventDefault();
+
+    if(fileInputRef.current)
+    {
+      fileInputRef.current.value = "";
+    }
 
     const uploads: Array<Promise<void>> = selectedFiles.map(async file =>
     {
@@ -125,10 +128,7 @@ const PersonalSpacePage: FunctionComponent = () =>
       }
     });
 
-    console.log("indices of successful uploads:", indicesOfSuccessfulUploads);
-
     const newSelectedFiles = removeItemsByIndices<File>(selectedFiles, indicesOfSuccessfulUploads);
-    console.log("new selected files:", newSelectedFiles);
     setSelectedFiles(newSelectedFiles);
   };
 
@@ -141,6 +141,8 @@ const PersonalSpacePage: FunctionComponent = () =>
 
     return b.createdAt.getTime() - a.createdAt.getTime();
   });
+
+  const areUploadsInProgress = uploads.some(u => u.state.type === "uploading");
 
   return (
     <div css={styles.wrapper}>
@@ -168,12 +170,13 @@ const PersonalSpacePage: FunctionComponent = () =>
         <input
           ref={fileInputRef}
           type="file"
+          disabled={areUploadsInProgress}
           multiple
           onChange={e => setSelectedFiles(Array.from(e.target.files ?? []))}
         />
         <Button<"button">
           styleType="primary"
-          disabled={selectedFiles.length === 0}
+          disabled={selectedFiles.length === 0 || areUploadsInProgress}
           type="submit">
           Upload
         </Button>
@@ -182,20 +185,6 @@ const PersonalSpacePage: FunctionComponent = () =>
       {selectedFiles.map(file => (
         <p key={file.name}>{file.name}</p>
       ))}
-      <h2 style={{ fontSize: 22, marginRight: 10, marginTop: 100 }}>Uploaded Files</h2>
-      {isGetUploadedFilesLoading && <p>Loading...</p>}
-      {uploadedFileSortedByCreatedAt.map(file =>
-      {
-        const uploadedDate = file.createdAt?.toLocaleDateString();
-        const uploadedTime = file.createdAt?.toLocaleTimeString();
-
-        return (
-          <div key={file.id} style={{ margin: "10px 0" }}>
-            <strong>{file.originalFilename}.{file.fileExtension}</strong>
-            <p>Uploaded: {uploadedDate} {uploadedTime}</p>
-          </div>
-        );
-      })}
       <h2 style={{ fontSize: 22, marginRight: 10, marginTop: 100 }}>Current Uploads</h2>
       {uploads.filter(u => u.state.type !== "completed").map((upload, index) =>
       {
@@ -214,6 +203,20 @@ const PersonalSpacePage: FunctionComponent = () =>
             ) : (
               <p>{upload.state.type}</p>
             )}
+          </div>
+        );
+      })}
+      <h2 style={{ fontSize: 22, marginRight: 10, marginTop: 100 }}>Uploaded Files</h2>
+      {isGetUploadedFilesLoading && <p>Loading...</p>}
+      {uploadedFileSortedByCreatedAt.map(file =>
+      {
+        const uploadedDate = file.createdAt?.toLocaleDateString();
+        const uploadedTime = file.createdAt?.toLocaleTimeString();
+
+        return (
+          <div key={file.id} style={{ margin: "10px 0" }}>
+            <strong>{file.originalFilename}.{file.fileExtension}</strong>
+            <p>Uploaded: {uploadedDate} {uploadedTime}</p>
           </div>
         );
       })}
