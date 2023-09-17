@@ -13,6 +13,12 @@
     "@typescript-eslint/consistent-type-definitions": "off",
     "@typescript-eslint/no-explicit-any": "error",
     "no-nested-ternary": "off",
+    "@typescript-eslint/array-type": [
+      "error",
+      {
+        "default": "array-simple"
+      }
+    ],
     "import/no-unresolved": [
       "error",
       {

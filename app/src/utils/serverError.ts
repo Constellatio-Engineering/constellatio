@@ -37,3 +37,27 @@ export class RegisterError extends TRPCError
     super({ cause, code: "BAD_REQUEST" });
   }
 }
+
+export class FileTooLargeError extends TRPCError
+{
+  public constructor()
+  {
+    super({ code: "BAD_REQUEST" });
+  }
+}
+
+export class BadFileError extends TRPCError
+{
+  public constructor(cause: Error)
+  {
+    super({ cause, code: "BAD_REQUEST" });
+  }
+}
+
+export class NotFoundError extends TRPCError
+{
+  public constructor()
+  {
+    super({ code: "NOT_FOUND" });
+  }
+}
