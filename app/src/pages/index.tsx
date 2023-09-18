@@ -24,8 +24,8 @@ export const getServerSideProps: GetServerSideProps<ServerSidePropsResult> = asy
 };
 
 const meiliSearch = new MeiliSearch({
-  apiKey: env.NEXT_PUBLIC_MEILISEARCH_SEARCH_API_KEY,
-  host: env.NEXT_PUBLIC_MEILISEARCH_HOST
+  apiKey: "super-secret-meili-master-key",
+  host: env.NEXT_PUBLIC_MEILISEARCH_HOST_URL
 });
 
 type Movie = {
