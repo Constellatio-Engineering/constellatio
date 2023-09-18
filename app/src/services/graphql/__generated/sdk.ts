@@ -242,12 +242,18 @@ export type IGenCallout = {
   expandable?: Maybe<Scalars['Boolean']['output']>;
   id?: Maybe<Scalars['ID']['output']>;
   text?: Maybe<IGenTextElement>;
+  text1?: Maybe<IGenCallout_Text1>;
 };
 
 
 export type IGenCalloutTextArgs = {
   after?: InputMaybe<Scalars['String']['input']>;
   first?: InputMaybe<Scalars['Int']['input']>;
+  locale?: InputMaybe<Scalars['String']['input']>;
+};
+
+
+export type IGenCalloutText1Args = {
   locale?: InputMaybe<Scalars['String']['input']>;
 };
 
@@ -293,13 +299,30 @@ export type IGenCallout_Where = {
   OR?: InputMaybe<Array<InputMaybe<IGenCallout_Where>>>;
   calloutType?: InputMaybe<IGenCallout_CalloutType_Where>;
   expandable?: InputMaybe<Scalars['Boolean']['input']>;
+  text1?: InputMaybe<IGenCaisyField_Richtext_Where>;
 };
+
+export type IGenCallout_Text1 = {
+  __typename?: 'Callout_text1';
+  connections?: Maybe<Array<Maybe<IGenCallout_Text1_Connections>>>;
+  json?: Maybe<Scalars['JSON']['output']>;
+};
+
+
+export type IGenCallout_Text1ConnectionsArgs = {
+  after?: InputMaybe<Scalars['String']['input']>;
+  first?: InputMaybe<Scalars['Int']['input']>;
+  locale?: InputMaybe<Scalars['String']['input']>;
+};
+
+export type IGenCallout_Text1_Connections = IGenCaisy_Field_Document_NotFound;
 
 export type IGenCardSelectionGame = {
   __typename?: 'CardSelectionGame';
   _meta?: Maybe<IGenCaisyDocument_Meta>;
   game?: Maybe<Scalars['JSON']['output']>;
   helpNote?: Maybe<IGenTextElement>;
+  helpNote1?: Maybe<IGenCardSelectionGame_HelpNote1>;
   id?: Maybe<Scalars['ID']['output']>;
   question?: Maybe<Scalars['String']['output']>;
 };
@@ -308,6 +331,11 @@ export type IGenCardSelectionGame = {
 export type IGenCardSelectionGameHelpNoteArgs = {
   after?: InputMaybe<Scalars['String']['input']>;
   first?: InputMaybe<Scalars['Int']['input']>;
+  locale?: InputMaybe<Scalars['String']['input']>;
+};
+
+
+export type IGenCardSelectionGameHelpNote1Args = {
   locale?: InputMaybe<Scalars['String']['input']>;
 };
 
@@ -336,19 +364,37 @@ export type IGenCardSelectionGame_Sort = {
 export type IGenCardSelectionGame_Where = {
   AND?: InputMaybe<Array<InputMaybe<IGenCardSelectionGame_Where>>>;
   OR?: InputMaybe<Array<InputMaybe<IGenCardSelectionGame_Where>>>;
+  helpNote1?: InputMaybe<IGenCaisyField_Richtext_Where>;
   question?: InputMaybe<IGenCaisyField_String_Where>;
 };
+
+export type IGenCardSelectionGame_HelpNote1 = {
+  __typename?: 'CardSelectionGame_helpNote1';
+  connections?: Maybe<Array<Maybe<IGenCardSelectionGame_HelpNote1_Connections>>>;
+  json?: Maybe<Scalars['JSON']['output']>;
+};
+
+
+export type IGenCardSelectionGame_HelpNote1ConnectionsArgs = {
+  after?: InputMaybe<Scalars['String']['input']>;
+  first?: InputMaybe<Scalars['Int']['input']>;
+  locale?: InputMaybe<Scalars['String']['input']>;
+};
+
+export type IGenCardSelectionGame_HelpNote1_Connections = IGenCaisy_Field_Document_NotFound;
 
 export type IGenCase = {
   __typename?: 'Case';
   _meta?: Maybe<IGenCaisyDocument_Meta>;
   durationToCompleteInMinutes?: Maybe<Scalars['Int']['output']>;
   facts?: Maybe<IGenTextElement>;
+  facts1?: Maybe<IGenCase_Facts1>;
   fullTextTasks?: Maybe<IGenCase_FullTextTasks>;
   id?: Maybe<Scalars['ID']['output']>;
   legalArea?: Maybe<IGenCase_LegalArea>;
   mainCategoryField?: Maybe<Array<Maybe<IGenCase_MainCategoryField>>>;
   resolution?: Maybe<IGenTextElement>;
+  resolution1?: Maybe<IGenCase_Resolution1>;
   subCategoryField?: Maybe<Array<Maybe<IGenCase_SubCategoryField>>>;
   tags?: Maybe<Array<Maybe<IGenCase_Tags>>>;
   title?: Maybe<Scalars['String']['output']>;
@@ -359,6 +405,11 @@ export type IGenCase = {
 export type IGenCaseFactsArgs = {
   after?: InputMaybe<Scalars['String']['input']>;
   first?: InputMaybe<Scalars['Int']['input']>;
+  locale?: InputMaybe<Scalars['String']['input']>;
+};
+
+
+export type IGenCaseFacts1Args = {
   locale?: InputMaybe<Scalars['String']['input']>;
 };
 
@@ -383,6 +434,11 @@ export type IGenCaseMainCategoryFieldArgs = {
 export type IGenCaseResolutionArgs = {
   after?: InputMaybe<Scalars['String']['input']>;
   first?: InputMaybe<Scalars['Int']['input']>;
+  locale?: InputMaybe<Scalars['String']['input']>;
+};
+
+
+export type IGenCaseResolution1Args = {
   locale?: InputMaybe<Scalars['String']['input']>;
 };
 
@@ -440,9 +496,26 @@ export type IGenCase_Where = {
   AND?: InputMaybe<Array<InputMaybe<IGenCase_Where>>>;
   OR?: InputMaybe<Array<InputMaybe<IGenCase_Where>>>;
   durationToCompleteInMinutes?: InputMaybe<IGenCaisyField_Number_WhereInt>;
+  facts1?: InputMaybe<IGenCaisyField_Richtext_Where>;
   fullTextTasks?: InputMaybe<IGenCaisyField_Richtext_Where>;
+  resolution1?: InputMaybe<IGenCaisyField_Richtext_Where>;
   title?: InputMaybe<IGenCaisyField_String_Where>;
 };
+
+export type IGenCase_Facts1 = {
+  __typename?: 'Case_facts1';
+  connections?: Maybe<Array<Maybe<IGenCase_Facts1_Connections>>>;
+  json?: Maybe<Scalars['JSON']['output']>;
+};
+
+
+export type IGenCase_Facts1ConnectionsArgs = {
+  after?: InputMaybe<Scalars['String']['input']>;
+  first?: InputMaybe<Scalars['Int']['input']>;
+  locale?: InputMaybe<Scalars['String']['input']>;
+};
+
+export type IGenCase_Facts1_Connections = IGenCaisy_Field_Document_NotFound;
 
 export type IGenCase_FullTextTasks = {
   __typename?: 'Case_fullTextTasks';
@@ -463,6 +536,21 @@ export type IGenCase_LegalArea = IGenLegalArea | IGenSubCategory;
 
 export type IGenCase_MainCategoryField = IGenMainCategory;
 
+export type IGenCase_Resolution1 = {
+  __typename?: 'Case_resolution1';
+  connections?: Maybe<Array<Maybe<IGenCase_Resolution1_Connections>>>;
+  json?: Maybe<Scalars['JSON']['output']>;
+};
+
+
+export type IGenCase_Resolution1ConnectionsArgs = {
+  after?: InputMaybe<Scalars['String']['input']>;
+  first?: InputMaybe<Scalars['Int']['input']>;
+  locale?: InputMaybe<Scalars['String']['input']>;
+};
+
+export type IGenCase_Resolution1_Connections = IGenCaisy_Field_Document_NotFound;
+
 export type IGenCase_SubCategoryField = IGenSubCategory;
 
 export type IGenCase_Tags = IGenTags;
@@ -474,6 +562,7 @@ export type IGenDragNDropGame = {
   _meta?: Maybe<IGenCaisyDocument_Meta>;
   game?: Maybe<Scalars['JSON']['output']>;
   helpNote?: Maybe<IGenTextElement>;
+  helpNote1?: Maybe<IGenDragNDropGame_HelpNote1>;
   id?: Maybe<Scalars['ID']['output']>;
   question?: Maybe<Scalars['String']['output']>;
 };
@@ -482,6 +571,11 @@ export type IGenDragNDropGame = {
 export type IGenDragNDropGameHelpNoteArgs = {
   after?: InputMaybe<Scalars['String']['input']>;
   first?: InputMaybe<Scalars['Int']['input']>;
+  locale?: InputMaybe<Scalars['String']['input']>;
+};
+
+
+export type IGenDragNDropGameHelpNote1Args = {
   locale?: InputMaybe<Scalars['String']['input']>;
 };
 
@@ -510,14 +604,32 @@ export type IGenDragNDropGame_Sort = {
 export type IGenDragNDropGame_Where = {
   AND?: InputMaybe<Array<InputMaybe<IGenDragNDropGame_Where>>>;
   OR?: InputMaybe<Array<InputMaybe<IGenDragNDropGame_Where>>>;
+  helpNote1?: InputMaybe<IGenCaisyField_Richtext_Where>;
   question?: InputMaybe<IGenCaisyField_String_Where>;
 };
+
+export type IGenDragNDropGame_HelpNote1 = {
+  __typename?: 'DragNDropGame_helpNote1';
+  connections?: Maybe<Array<Maybe<IGenDragNDropGame_HelpNote1_Connections>>>;
+  json?: Maybe<Scalars['JSON']['output']>;
+};
+
+
+export type IGenDragNDropGame_HelpNote1ConnectionsArgs = {
+  after?: InputMaybe<Scalars['String']['input']>;
+  first?: InputMaybe<Scalars['Int']['input']>;
+  locale?: InputMaybe<Scalars['String']['input']>;
+};
+
+export type IGenDragNDropGame_HelpNote1_Connections = IGenCaisy_Field_Document_NotFound;
 
 export type IGenFillInGapsGame = {
   __typename?: 'FillInGapsGame';
   _meta?: Maybe<IGenCaisyDocument_Meta>;
   fillGameParagraph?: Maybe<IGenTextElement>;
+  fillGameParagraph1?: Maybe<IGenFillInGapsGame_FillGameParagraph1>;
   helpNote?: Maybe<IGenTextElement>;
+  helpNote1?: Maybe<IGenFillInGapsGame_HelpNote1>;
   id?: Maybe<Scalars['ID']['output']>;
   question?: Maybe<Scalars['String']['output']>;
 };
@@ -530,9 +642,19 @@ export type IGenFillInGapsGameFillGameParagraphArgs = {
 };
 
 
+export type IGenFillInGapsGameFillGameParagraph1Args = {
+  locale?: InputMaybe<Scalars['String']['input']>;
+};
+
+
 export type IGenFillInGapsGameHelpNoteArgs = {
   after?: InputMaybe<Scalars['String']['input']>;
   first?: InputMaybe<Scalars['Int']['input']>;
+  locale?: InputMaybe<Scalars['String']['input']>;
+};
+
+
+export type IGenFillInGapsGameHelpNote1Args = {
   locale?: InputMaybe<Scalars['String']['input']>;
 };
 
@@ -562,8 +684,40 @@ export type IGenFillInGapsGame_Sort = {
 export type IGenFillInGapsGame_Where = {
   AND?: InputMaybe<Array<InputMaybe<IGenFillInGapsGame_Where>>>;
   OR?: InputMaybe<Array<InputMaybe<IGenFillInGapsGame_Where>>>;
+  fillGameParagraph1?: InputMaybe<IGenCaisyField_Richtext_Where>;
+  helpNote1?: InputMaybe<IGenCaisyField_Richtext_Where>;
   question?: InputMaybe<IGenCaisyField_String_Where>;
 };
+
+export type IGenFillInGapsGame_FillGameParagraph1 = {
+  __typename?: 'FillInGapsGame_fillGameParagraph1';
+  connections?: Maybe<Array<Maybe<IGenFillInGapsGame_FillGameParagraph1_Connections>>>;
+  json?: Maybe<Scalars['JSON']['output']>;
+};
+
+
+export type IGenFillInGapsGame_FillGameParagraph1ConnectionsArgs = {
+  after?: InputMaybe<Scalars['String']['input']>;
+  first?: InputMaybe<Scalars['Int']['input']>;
+  locale?: InputMaybe<Scalars['String']['input']>;
+};
+
+export type IGenFillInGapsGame_FillGameParagraph1_Connections = IGenCaisy_Field_Document_NotFound;
+
+export type IGenFillInGapsGame_HelpNote1 = {
+  __typename?: 'FillInGapsGame_helpNote1';
+  connections?: Maybe<Array<Maybe<IGenFillInGapsGame_HelpNote1_Connections>>>;
+  json?: Maybe<Scalars['JSON']['output']>;
+};
+
+
+export type IGenFillInGapsGame_HelpNote1ConnectionsArgs = {
+  after?: InputMaybe<Scalars['String']['input']>;
+  first?: InputMaybe<Scalars['Int']['input']>;
+  locale?: InputMaybe<Scalars['String']['input']>;
+};
+
+export type IGenFillInGapsGame_HelpNote1_Connections = IGenCaisy_Field_Document_NotFound;
 
 export type IGenImageWrapperCard = {
   __typename?: 'ImageWrapperCard';

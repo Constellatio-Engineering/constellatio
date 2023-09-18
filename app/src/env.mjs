@@ -14,6 +14,12 @@ export const env = createEnv({
     CAISY_API_KEY: z.string(),
     CAISY_PROJECT_ID: z.string(),
     STRIPE_SECRET_KEY: z.string(),
+    THROTTLE_REQUESTS_IN_MS: z.string().pipe(z.coerce.number().int().min(1)).optional(),
+    GOOGLE_CLOUD_STORAGE_PROJECT_ID: z.string(),
+    GOOGLE_CLOUD_STORAGE_BUCKET_NAME: z.string(),
+    GOOGLE_SERVICE_ACCOUNT_CLIENT_EMAIL: z.string().email(),
+    GOOGLE_SERVICE_ACCOUNT_CLIENT_ID: z.string(),
+    GOOGLE_SERVICE_ACCOUNT_PRIVATE_KEY: z.string(),
   },
 
   /**
@@ -25,6 +31,7 @@ export const env = createEnv({
     NEXT_PUBLIC_SUPABASE_ANON_KEY: z.string(),
     NEXT_PUBLIC_SUPABASE_URL: z.string().url(),
     NEXT_PUBLIC_WEBSITE_URL: z.string().url(),
+    NEXT_PUBLIC_MAXIMUM_FILE_UPLOAD_SIZE_IN_MB: z.string().pipe(z.coerce.number().int().min(1).max(999)),
     NEXT_PUBLIC_NODE_ENV: nodeEnvEnum
   },
 
@@ -42,6 +49,13 @@ export const env = createEnv({
     CAISY_API_KEY: process.env.CAISY_API_KEY,
     CAISY_PROJECT_ID: process.env.CAISY_PROJECT_ID,
     NEXT_PUBLIC_WEBSITE_URL: process.env.NEXT_PUBLIC_WEBSITE_URL,
+    NEXT_PUBLIC_MAXIMUM_FILE_UPLOAD_SIZE_IN_MB: process.env.NEXT_PUBLIC_MAXIMUM_FILE_UPLOAD_SIZE_IN_MB,
+    THROTTLE_REQUESTS_IN_MS: process.env.THROTTLE_REQUESTS_IN_MS,
+    GOOGLE_CLOUD_STORAGE_PROJECT_ID: process.env.GOOGLE_CLOUD_STORAGE_PROJECT_ID,
+    GOOGLE_CLOUD_STORAGE_BUCKET_NAME: process.env.GOOGLE_CLOUD_STORAGE_BUCKET_NAME,
+    GOOGLE_SERVICE_ACCOUNT_CLIENT_EMAIL: process.env.GOOGLE_SERVICE_ACCOUNT_CLIENT_EMAIL,
+    GOOGLE_SERVICE_ACCOUNT_CLIENT_ID: process.env.GOOGLE_SERVICE_ACCOUNT_CLIENT_ID,
+    GOOGLE_SERVICE_ACCOUNT_PRIVATE_KEY: process.env.GOOGLE_SERVICE_ACCOUNT_PRIVATE_KEY,
   },
   /**
    * Run `build` or `dev` with `SKIP_ENV_VALIDATION` to skip env validation.

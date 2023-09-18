@@ -6,58 +6,38 @@ import { CustomLink } from "@/components/atoms/CustomLink/CustomLink";
 import { Dropdown } from "@/components/atoms/Dropdown/Dropdown";
 import { Input } from "@/components/atoms/Input/Input";
 import { PasswordValidationSchema } from "@/components/helpers/PasswordValidationSchema";
-import { Puzzle } from "@/components/Icons/Puzzle";
-import { type GenderIdentifier } from "@/db/schema";
+import { allGenders, allUniversities } from "@/components/organisms/RegistrationForm/RegistrationForm.data";
 import { env } from "@/env.mjs";
-import { type RegistrationFormSchema, registrationFormSchema } from "@/schemas/RegistrationFormSchema";
+import { maximumAmountOfSemesters, type RegistrationFormSchema, registrationFormSchema } from "@/schemas/RegistrationFormSchema";
 import { supabase } from "@/supabase/client";
 import { api } from "@/utils/api";
+import { type PartialUndefined } from "@/utils/types";
 
 import { Box, Stack } from "@mantine/core";
 import { useForm, zodResolver } from "@mantine/form";
 import { useDisclosure } from "@mantine/hooks";
 import { notifications } from "@mantine/notifications";
 import { useRouter } from "next/router";
+import { useTranslation } from "next-i18next";
 import { type FunctionComponent } from "react";
+import z from "zod";
+import { makeZodI18nMap } from "zod-i18n-map";
 
-const universityData = [
-  { icon: <Puzzle/>, label: "HdM Stuttgart", value: "hdm-stuttgart" },
-  { icon: <Puzzle/>, label: "TU München", value: "tu-muenchen" },
-];
+// this means for the initial values of the form, these keys can be null since these are dropdowns
+type InitialValues = PartialUndefined<RegistrationFormSchema, "gender">;
 
-const semesterData = [
-  { label: "1", value: "1" },
-  { label: "2", value: "2" },
-  { label: "3", value: "3" },
-  { label: "4", value: "4" },
-  { label: "5", value: "5" },
-  { label: "6", value: "6" },
-  { label: "7", value: "7" },
-  { label: "8", value: "8" },
-  { label: "Graduate", value: "9" },
-];
-
-type Gender = {
-  identifier: GenderIdentifier;
-  label: string;
+let initialValues: InitialValues = {
+  acceptTOS: false,
+  displayName: "",
+  email: "",
+  firstName: "",
+  gender: undefined,
+  lastName: "",
+  password: "",
+  passwordConfirmation: "",
+  semester: undefined,
+  university: "",
 };
-
-const allGenders: Gender[] = [
-  {
-    identifier: "male",
-    label: "männliche"
-  },
-  {
-    identifier: "female",
-    label: "weiblich"
-  },
-  {
-    identifier: "diverse",
-    label: "divers"
-  }
-];
-
-let initialValues: RegistrationFormSchema;
 
 if(env.NEXT_PUBLIC_NODE_ENV === "development")
 {
@@ -68,33 +48,20 @@ if(env.NEXT_PUBLIC_NODE_ENV === "development")
     firstName: "Dev",
     gender: allGenders[0]!.identifier,
     lastName: "User",
-    password: "super-secure-password-123",
-    passwordConfirmation: "super-secure-password-123",
-    semester: semesterData[3]?.value ?? "",
-    university: universityData[0]?.value ?? "",
-  };
-}
-else
-{
-  initialValues = {
-    acceptTOS: false,
-    displayName: "",
-    email: "",
-    firstName: "",
-    gender: "",
-    lastName: "",
-    password: "",
-    passwordConfirmation: "",
-    semester: undefined,
-    university: "",
+    password: "Super-secure-password-123",
+    passwordConfirmation: "Super-secure-password-123",
+    semester: "7",
+    university: allUniversities[0] ?? "",
   };
 }
 
 export const RegistrationForm: FunctionComponent = () =>
 {
+  const { t } = useTranslation();
+  z.setErrorMap(makeZodI18nMap({ t }));
   const router = useRouter();
   const [isPasswordRevealed, { toggle }] = useDisclosure(false);
-  const form = useForm<RegistrationFormSchema>({
+  const form = useForm<InitialValues>({
     initialValues,
     validate: zodResolver(registrationFormSchema),
     validateInputOnBlur: true,
@@ -123,7 +90,7 @@ export const RegistrationForm: FunctionComponent = () =>
     },
   });
 
-  const handleSubmit = form.onSubmit(formValues => register(formValues));
+  const handleSubmit = form.onSubmit(formValues => register(formValues as RegistrationFormSchema));
 
   return (
     <form onSubmit={handleSubmit}>
@@ -134,24 +101,28 @@ export const RegistrationForm: FunctionComponent = () =>
             inputType="text"
             label="Vorname"
             title="Vorname"
+            placeholder="Maximilian"
           />
           <Input
             {...form.getInputProps("lastName")}
             inputType="text"
             label="Nachname"
             title="Nachname"
+            placeholder="Mustermann"
           />
           <Input
             {...form.getInputProps("displayName")}
             inputType="text"
             label="Anzeigename"
             title="Anzeigename"
+            placeholder="Max"
           />
           <Input
             {...form.getInputProps("email")}
             inputType="text"
             label="E-Mail"
             title="E-Mail"
+            placeholder="max.mustermann@mail.com"
           />
           <Box>
             <Input
@@ -159,6 +130,7 @@ export const RegistrationForm: FunctionComponent = () =>
               inputType="password"
               label="Passwort"
               title="Passwort"
+              placeholder={"*".repeat(16)}
               onVisibilityChange={toggle}
             />
             <PasswordValidationSchema
@@ -170,6 +142,7 @@ export const RegistrationForm: FunctionComponent = () =>
             {...form.getInputProps("passwordConfirmation")}
             inputType="password"
             label="Passwort bestätigen"
+            placeholder={"*".repeat(16)}
             title="Passwort bestätigen"
             onVisibilityChange={toggle}
           />
@@ -177,29 +150,33 @@ export const RegistrationForm: FunctionComponent = () =>
             {...form.getInputProps("university")}
             label="Universität"
             title="Universität"
-            data={universityData}
+            placeholder="Universität auswählen"
+            data={allUniversities}
+            searchable
           />
           <Box maw={240}>
             <Dropdown
               {...form.getInputProps("semester")}
               label="Semester"
               title="Semester"
-              data={semesterData}
+              placeholder="Semester auswählen"
+              data={Array(maximumAmountOfSemesters).fill(null).map((_, i) => String(i + 1))}
             />
           </Box>
           <Dropdown
             {...form.getInputProps("gender")}
             label="Geschlecht"
             title="Geschlecht"
+            placeholder="Geschlecht auswählen"
             data={allGenders.map(gender => ({ label: gender.label, value: gender.identifier }))}
           />
           <Checkbox
             {...form.getInputProps("acceptTOS", { type: "checkbox" })}
             label={(
               <BodyText component="p" styleType="body-01-medium">
-                I agree to the&nbsp;
+                Ich akzeptiere die&nbsp;
                 <CustomLink styleType="link-primary" href="#">
-                  Data Protection Regulations
+                  Datenschutzerklärung
                 </CustomLink>
               </BodyText>
             )}

@@ -34,7 +34,7 @@ const requester: Requester<any> = async (doc: any, vars: any) =>
   }
   catch (err: unknown)
   {
-    if(err instanceof GraphQLError && env.NODE_ENV === "development")
+    if(err instanceof GraphQLError && env.NEXT_PUBLIC_NODE_ENV === "development")
     {
       console.error(
         "Error in GraphQL request:",

@@ -1,4 +1,5 @@
 import { db } from "@/db/connection";
+import { type UserInsert, usersTable } from "@/db/schema";
 import { registrationFormSchema } from "@/schemas/RegistrationFormSchema";
 import { createTRPCRouter, publicProcedure } from "@/server/api/trpc";
 import { EmailAlreadyTakenError, InternalServerError, RegisterError } from "@/utils/serverError";
@@ -28,27 +29,41 @@ export const authenticationRouter = createTRPCRouter({
         throw new InternalServerError(new Error("Session was null after signUp. This should probably not happen and should be investigated."));
       }
 
-      console.log(signUpData.user?.id);
+      const userId = signUpData.user?.id;
 
-      /* const { data: upsertData, error: upsertError } = await supabaseAdmin
-        .from("profiles")
-        .upsert({
-          displayName: body.displayName,
-          firstName: body.firstName,
-          gender: body.gender,
-          id: signUpData.user?.id ?? "",
-          lastName: body.lastName,
-          semester: body.semester,
-          university: body.university,
-        })
-        .select();
-
-      if(upsertError)
+      if(!userId)
       {
-        console.log("error while upserting", upsertError);
+        throw new InternalServerError(new Error("User ID was null after signUp. This should probably not happen and should be investigated."));
       }
 
-      console.log("upsertData", upsertData);*/
+      try
+      {
+        const userToInsert: UserInsert = {
+          displayName: input.displayName,
+          email: input.email,
+          firstName: input.firstName,
+          gender: input.gender,
+          id: userId,
+          lastName: input.lastName,
+          semester: input.semester,
+          university: input.university
+        };
+
+        await db.insert(usersTable).values(userToInsert);
+      }
+      catch (e: unknown)
+      {
+        console.log("Deleting user because insertion into public schema failed");
+
+        const deleteUserResult = await supabaseServerClient.auth.admin.deleteUser(userId);
+
+        if(deleteUserResult.error)
+        {
+          console.log("Error while deleting user", deleteUserResult.error);
+        }
+
+        throw new InternalServerError(new Error("Error while inserting user: " + e));
+      }
 
       return signUpData.session;
     }),
