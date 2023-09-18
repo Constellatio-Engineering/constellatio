@@ -1,6 +1,7 @@
 import { CivilLawIcon } from "@/components/Icons/CivilLawIcon";
 import CaseBlock from "@/components/organisms/caseBlock/CaseBlock";
 import EmptyStateCard from "@/components/organisms/emptyStateCard/EmptyStateCard";
+import OverviewHeader from "@/components/organisms/OverviewHeader/OverviewHeader";
 import { type ICasesOverviewProps } from "@/services/content/getCasesOverviewProps";
 import { type IGenFullCaseFragment, type IGenSubCategoryFragment } from "@/services/graphql/__generated/sdk";
 import { api } from "@/utils/api";
@@ -14,9 +15,7 @@ import {
   Fragment,
 } from "react";
 
-import * as styles from "./CasesOverviewPage.styles";
-
-import OverviewHeader from "@/components/organisms/casesOverviewHeader/CasesOverviewHeader";
+import * as styles from "./OverviewPage.styles";
 
 const OverviewPage: FunctionComponent<ICasesOverviewProps & {readonly variant: "case" | "dictionary"}> = ({
   allCases,

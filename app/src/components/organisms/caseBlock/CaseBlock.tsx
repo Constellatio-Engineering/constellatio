@@ -11,7 +11,7 @@ import React, { type FunctionComponent } from "react";
 
 import * as styles from "./CaseBlock.styles";
 import { timeFormatter } from "../overviewCard/OverviewCard";
-import Table, { DictionaryTableProps, type CasesTableProps } from "../table/Table";
+import Table, { type DictionaryTableProps, type CasesTableProps } from "../table/Table";
 
 export interface ICaseBlockProps 
 {
