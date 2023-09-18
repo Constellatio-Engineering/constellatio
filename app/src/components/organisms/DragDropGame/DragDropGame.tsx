@@ -287,8 +287,8 @@ export const DragDropGame: FC<TDragDropGame> = ({ game, helpNote, question }) =>
               variant={gameStatus}
               message={resultMessage}
             />
-            {helpNote?.richTextContent?.json && (
-              <HelpNote richTextContent={helpNote?.richTextContent}/>
+            {helpNote?.json && (
+              <HelpNote data={helpNote}/>
             )}
           </>
         )}

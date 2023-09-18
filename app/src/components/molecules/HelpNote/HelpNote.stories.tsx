@@ -5,7 +5,7 @@ import { type FunctionComponent } from "react";
 
 import { HelpNote, type HelpNoteProps } from "./HelpNote";
 
-const Template: FunctionComponent = (args: HelpNoteProps) => (
+const Template: FunctionComponent<HelpNoteProps> = (args) => (
   <Box w={650}>
     <HelpNote {...args}/>
   </Box>
@@ -29,8 +29,7 @@ type Story = StoryObj<typeof HelpNote>;
 
 export const Default: Story = {
   args: {
-    id: "e1cabad6-1b5a-43b8-9117-92509f724a98",
-    richTextContent: {
+    data: {
       connections: [],
       json: {
         content: [

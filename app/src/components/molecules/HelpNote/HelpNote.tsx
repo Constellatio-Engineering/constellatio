@@ -1,23 +1,25 @@
 import { InfoFilled } from "@/components/Icons/InfoFilled";
-import { type IGenTextElement } from "@/services/graphql/__generated/sdk";
 
 import React, { type FC } from "react";
 
 import { IconWrapper, RichTextWrapper, Wrapper } from "./HelpNote.styles";
 import { Richtext } from "../Richtext/Richtext";
 
-export type HelpNoteProps = IGenTextElement;
+export type HelpNoteProps = {
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  readonly data: any;
+};
 
-export const HelpNote: FC<HelpNoteProps> = ({ richTextContent }) =>
+export const HelpNote: FC<HelpNoteProps> = ({ data }) =>
 {
   return (
     <Wrapper>
       <IconWrapper>
         <InfoFilled/>
       </IconWrapper>
-      {richTextContent?.json && (
+      {data?.json && (
         <RichTextWrapper>
-          <Richtext richTextContent={richTextContent}/>
+          <Richtext data={data}/>
         </RichTextWrapper>
       )}
     </Wrapper>

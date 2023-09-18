@@ -61,7 +61,7 @@ const countPlaceholders = (content: TextElement[]): number =>
 
 const _FillGapsGame: FC<TFillGapsGame> = ({ fillGameParagraph, helpNote, question }) => 
 {
-  const totalPlaceholders = useMemo(() => countPlaceholders(fillGameParagraph?.richTextContent?.json?.content), [fillGameParagraph]);
+  const totalPlaceholders = useMemo(() => countPlaceholders(fillGameParagraph?.json?.content), [fillGameParagraph]);
 
   const {
     answerResult,
@@ -207,9 +207,9 @@ const _FillGapsGame: FC<TFillGapsGame> = ({ fillGameParagraph, helpNote, questio
         </LegendWrapper>
         <Game>
           <Options>
-            {fillGameParagraph?.richTextContent?.json && (
+            {fillGameParagraph?.json && (
               <Richtext
-                richTextContent={fillGameParagraph.richTextContent}
+                data={fillGameParagraph}
                 richTextOverwrite={{
                   paragraph: richtextOverwrite,
                 }}
@@ -227,7 +227,7 @@ const _FillGapsGame: FC<TFillGapsGame> = ({ fillGameParagraph, helpNote, questio
               variant={gameStatus}
               message={resultMessage}
             />
-            {helpNote?.richTextContent?.json && <HelpNote richTextContent={helpNote?.richTextContent}/>}
+            {helpNote?.json && <HelpNote data={helpNote}/>}
           </>
         )}
         <div>

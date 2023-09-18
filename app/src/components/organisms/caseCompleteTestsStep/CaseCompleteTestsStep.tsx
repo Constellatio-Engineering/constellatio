@@ -1,7 +1,9 @@
 /* eslint-disable max-lines */
 import { Button } from "@/components/atoms/Button/Button";
 import { richTextHeadingOverwrite } from "@/components/helpers/richTextHeadingOverwrite";
-import { type IGenTextElement, type IGenCase_FullTextTasks, type Maybe, type IGenArticle_FullTextTasks } from "@/services/graphql/__generated/sdk";
+import { BoxIcon } from "@/components/Icons/BoxIcon";
+import { FileIcon } from "@/components/Icons/FileIcon";
+import { type Maybe, type IGenCase_Facts, type IGenCase_FullTextTasks } from "@/services/graphql/__generated/sdk";
 import useCaseSolvingStore from "@/stores/caseSolving.store";
 import type { IDocumentLink, IHeadingNode } from "types/richtext";
 
@@ -24,9 +26,9 @@ import { SelectionCardGame } from "../SelectionCardGame/SelectionCardGame";
 
 interface ICaseCompleteTestsStepProps 
 {
+  readonly facts: Maybe<IGenCase_Facts>;
+  readonly fullTextTasks: Maybe<IGenCase_FullTextTasks>;
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  readonly facts?: Maybe<IGenTextElement> | undefined; 
-  readonly fullTextTasks: IGenCase_FullTextTasks | IGenArticle_FullTextTasks;
   readonly variant?: "case" | "dictionary";
 }
 
@@ -75,6 +77,7 @@ const CaseCompleteTestsStep: FunctionComponent<ICaseCompleteTestsStepProps> = ({
 
   useEffect(() => 
   {
+    
     setGamesIndexes(getGamesIndexes({ fullTextTasks }));
     getNextGameIndex();
     // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -108,32 +111,30 @@ const CaseCompleteTestsStep: FunctionComponent<ICaseCompleteTestsStepProps> = ({
   return (
     <Container maw={1440}>
       <div css={styles.contentWrapper} id="completeTestsStepContent">
-        {facts && (
-          <div css={styles.facts}>
-            <Title order={2}>Facts</Title>
-            <Richtext
-              richTextContent={facts?.richTextContent}
-              richTextOverwrite={{
-                paragraph: richTextParagraphOverwrite,
-              }}
-            />
-            {!hasCaseSolvingStarted && (
-              <Button<"button">
-                styleType="primary"
-                size="large"
-                type="button"
-                onClick={() => setHasCaseSolvingStarted(true)}>
-                Start solving case
-              </Button>
-            )}
-          </div>
-        )}
+        <div css={styles.facts}>
+          <Title order={2}>Facts</Title>
+          <Richtext
+            data={facts}
+            richTextOverwrite={{
+              paragraph: richTextParagraphOverwrite,
+            }}
+          />
+          {!hasCaseSolvingStarted && (
+            <Button<"button">
+              styleType="primary"
+              size="large"
+              type="button"
+              onClick={() => setHasCaseSolvingStarted(true)}>
+              Start solving case
+            </Button>
+          )}
+        </div>
         {hasCaseSolvingStarted && (
           <div css={styles.content}>
             <div css={styles.toc}>
               <FloatingPanel
                 hidden={false}
-                facts={facts?.richTextContent}
+                facts={facts}
                 content={content}
                 variant={variant}
               />
@@ -141,7 +142,7 @@ const CaseCompleteTestsStep: FunctionComponent<ICaseCompleteTestsStepProps> = ({
             <div css={styles.fullTextAndTasksWrapper}>
               <Richtext
                 // eslint-disable-next-line @typescript-eslint/no-explicit-any
-                richTextContent={variant === "case" ? renderedCaseContent as any : fullTextTasks}
+                data={variant === "case" ? renderedCaseContent as any : fullTextTasks}
                 richTextOverwrite={{
                   documentLink: (props) => 
                   {

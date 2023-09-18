@@ -403,6 +403,110 @@
       },
       {
         "kind": "INPUT_OBJECT",
+        "name": "Article_LegalArea_Where",
+        "description": "",
+        "fields": null,
+        "inputFields": [
+          {
+            "name": "findOne",
+            "description": "",
+            "type": {
+              "kind": "INPUT_OBJECT",
+              "name": "Article_LegalArea_WhereConnection",
+              "ofType": null
+            },
+            "defaultValue": null,
+            "isDeprecated": false,
+            "deprecationReason": null
+          }
+        ],
+        "interfaces": null,
+        "enumValues": null,
+        "possibleTypes": null
+      },
+      {
+        "kind": "INPUT_OBJECT",
+        "name": "Article_LegalArea_WhereConnection",
+        "description": "",
+        "fields": null,
+        "inputFields": [
+          {
+            "name": "LegalArea",
+            "description": "",
+            "type": {
+              "kind": "INPUT_OBJECT",
+              "name": "LegalArea_Nested_Where",
+              "ofType": null
+            },
+            "defaultValue": null,
+            "isDeprecated": false,
+            "deprecationReason": null
+          },
+          {
+            "name": "SubCategory",
+            "description": "",
+            "type": {
+              "kind": "INPUT_OBJECT",
+              "name": "SubCategory_Nested_Where",
+              "ofType": null
+            },
+            "defaultValue": null,
+            "isDeprecated": false,
+            "deprecationReason": null
+          }
+        ],
+        "interfaces": null,
+        "enumValues": null,
+        "possibleTypes": null
+      },
+      {
+        "kind": "INPUT_OBJECT",
+        "name": "Article_MainCategoryField_Where",
+        "description": "",
+        "fields": null,
+        "inputFields": [
+          {
+            "name": "findOne",
+            "description": "",
+            "type": {
+              "kind": "INPUT_OBJECT",
+              "name": "Article_MainCategoryField_WhereConnection",
+              "ofType": null
+            },
+            "defaultValue": null,
+            "isDeprecated": false,
+            "deprecationReason": null
+          }
+        ],
+        "interfaces": null,
+        "enumValues": null,
+        "possibleTypes": null
+      },
+      {
+        "kind": "INPUT_OBJECT",
+        "name": "Article_MainCategoryField_WhereConnection",
+        "description": "",
+        "fields": null,
+        "inputFields": [
+          {
+            "name": "MainCategory",
+            "description": "",
+            "type": {
+              "kind": "INPUT_OBJECT",
+              "name": "MainCategory_Nested_Where",
+              "ofType": null
+            },
+            "defaultValue": null,
+            "isDeprecated": false,
+            "deprecationReason": null
+          }
+        ],
+        "interfaces": null,
+        "enumValues": null,
+        "possibleTypes": null
+      },
+      {
+        "kind": "INPUT_OBJECT",
         "name": "Article_Sort",
         "description": "",
         "fields": null,
@@ -534,6 +638,144 @@
       },
       {
         "kind": "INPUT_OBJECT",
+        "name": "Article_SubCategoryField_Where",
+        "description": "",
+        "fields": null,
+        "inputFields": [
+          {
+            "name": "findOne",
+            "description": "",
+            "type": {
+              "kind": "INPUT_OBJECT",
+              "name": "Article_SubCategoryField_WhereConnection",
+              "ofType": null
+            },
+            "defaultValue": null,
+            "isDeprecated": false,
+            "deprecationReason": null
+          }
+        ],
+        "interfaces": null,
+        "enumValues": null,
+        "possibleTypes": null
+      },
+      {
+        "kind": "INPUT_OBJECT",
+        "name": "Article_SubCategoryField_WhereConnection",
+        "description": "",
+        "fields": null,
+        "inputFields": [
+          {
+            "name": "SubCategory",
+            "description": "",
+            "type": {
+              "kind": "INPUT_OBJECT",
+              "name": "SubCategory_Nested_Where",
+              "ofType": null
+            },
+            "defaultValue": null,
+            "isDeprecated": false,
+            "deprecationReason": null
+          }
+        ],
+        "interfaces": null,
+        "enumValues": null,
+        "possibleTypes": null
+      },
+      {
+        "kind": "INPUT_OBJECT",
+        "name": "Article_Tags_Where",
+        "description": "",
+        "fields": null,
+        "inputFields": [
+          {
+            "name": "findOne",
+            "description": "",
+            "type": {
+              "kind": "INPUT_OBJECT",
+              "name": "Article_Tags_WhereConnection",
+              "ofType": null
+            },
+            "defaultValue": null,
+            "isDeprecated": false,
+            "deprecationReason": null
+          }
+        ],
+        "interfaces": null,
+        "enumValues": null,
+        "possibleTypes": null
+      },
+      {
+        "kind": "INPUT_OBJECT",
+        "name": "Article_Tags_WhereConnection",
+        "description": "",
+        "fields": null,
+        "inputFields": [
+          {
+            "name": "Tags",
+            "description": "",
+            "type": {
+              "kind": "INPUT_OBJECT",
+              "name": "Tags_Nested_Where",
+              "ofType": null
+            },
+            "defaultValue": null,
+            "isDeprecated": false,
+            "deprecationReason": null
+          }
+        ],
+        "interfaces": null,
+        "enumValues": null,
+        "possibleTypes": null
+      },
+      {
+        "kind": "INPUT_OBJECT",
+        "name": "Article_Topic_Where",
+        "description": "",
+        "fields": null,
+        "inputFields": [
+          {
+            "name": "findOne",
+            "description": "",
+            "type": {
+              "kind": "INPUT_OBJECT",
+              "name": "Article_Topic_WhereConnection",
+              "ofType": null
+            },
+            "defaultValue": null,
+            "isDeprecated": false,
+            "deprecationReason": null
+          }
+        ],
+        "interfaces": null,
+        "enumValues": null,
+        "possibleTypes": null
+      },
+      {
+        "kind": "INPUT_OBJECT",
+        "name": "Article_Topic_WhereConnection",
+        "description": "",
+        "fields": null,
+        "inputFields": [
+          {
+            "name": "Topic",
+            "description": "",
+            "type": {
+              "kind": "INPUT_OBJECT",
+              "name": "Topic_Nested_Where",
+              "ofType": null
+            },
+            "defaultValue": null,
+            "isDeprecated": false,
+            "deprecationReason": null
+          }
+        ],
+        "interfaces": null,
+        "enumValues": null,
+        "possibleTypes": null
+      },
+      {
+        "kind": "INPUT_OBJECT",
         "name": "Article_Where",
         "description": "",
         "fields": null,
@@ -583,11 +825,71 @@
             "deprecationReason": null
           },
           {
+            "name": "legalArea",
+            "description": "",
+            "type": {
+              "kind": "INPUT_OBJECT",
+              "name": "Article_LegalArea_Where",
+              "ofType": null
+            },
+            "defaultValue": null,
+            "isDeprecated": false,
+            "deprecationReason": null
+          },
+          {
+            "name": "mainCategoryField",
+            "description": "",
+            "type": {
+              "kind": "INPUT_OBJECT",
+              "name": "Article_MainCategoryField_Where",
+              "ofType": null
+            },
+            "defaultValue": null,
+            "isDeprecated": false,
+            "deprecationReason": null
+          },
+          {
+            "name": "subCategoryField",
+            "description": "",
+            "type": {
+              "kind": "INPUT_OBJECT",
+              "name": "Article_SubCategoryField_Where",
+              "ofType": null
+            },
+            "defaultValue": null,
+            "isDeprecated": false,
+            "deprecationReason": null
+          },
+          {
+            "name": "tags",
+            "description": "",
+            "type": {
+              "kind": "INPUT_OBJECT",
+              "name": "Article_Tags_Where",
+              "ofType": null
+            },
+            "defaultValue": null,
+            "isDeprecated": false,
+            "deprecationReason": null
+          },
+          {
             "name": "title",
             "description": "",
             "type": {
               "kind": "INPUT_OBJECT",
               "name": "CaisyField_String_Where",
+              "ofType": null
+            },
+            "defaultValue": null,
+            "isDeprecated": false,
+            "deprecationReason": null
+          },
+          {
+            "name": "topic",
+            "description": "",
+            "type": {
+              "kind": "INPUT_OBJECT",
+              "name": "Article_Topic_Where",
               "ofType": null
             },
             "defaultValue": null,
@@ -1841,30 +2143,6 @@
             "description": "",
             "args": [
               {
-                "name": "after",
-                "description": "The cursor to start the pagination from. In this case the curser equals the id for the (last) element. If not set, we wil start from the beginning.",
-                "type": {
-                  "kind": "SCALAR",
-                  "name": "String",
-                  "ofType": null
-                },
-                "defaultValue": null,
-                "isDeprecated": false,
-                "deprecationReason": null
-              },
-              {
-                "name": "first",
-                "description": "The number of items to return. Default and max value is 100.",
-                "type": {
-                  "kind": "SCALAR",
-                  "name": "Int",
-                  "ofType": null
-                },
-                "defaultValue": "100",
-                "isDeprecated": false,
-                "deprecationReason": null
-              },
-              {
                 "name": "locale",
                 "description": "",
                 "type": {
@@ -1879,32 +2157,19 @@
             ],
             "type": {
               "kind": "OBJECT",
-              "name": "TextElement",
+              "name": "Callout_text",
               "ofType": null
             },
             "isDeprecated": false,
             "deprecationReason": null
           },
           {
-            "name": "text1",
+            "name": "title",
             "description": "",
-            "args": [
-              {
-                "name": "locale",
-                "description": "",
-                "type": {
-                  "kind": "SCALAR",
-                  "name": "String",
-                  "ofType": null
-                },
-                "defaultValue": null,
-                "isDeprecated": false,
-                "deprecationReason": null
-              }
-            ],
+            "args": [],
             "type": {
-              "kind": "OBJECT",
-              "name": "Callout_text1",
+              "kind": "SCALAR",
+              "name": "String",
               "ofType": null
             },
             "isDeprecated": false,
@@ -2145,7 +2410,7 @@
             "deprecationReason": null
           },
           {
-            "name": "text",
+            "name": "title",
             "description": "",
             "type": {
               "kind": "ENUM",
@@ -2236,11 +2501,23 @@
             "deprecationReason": null
           },
           {
-            "name": "text1",
+            "name": "text",
             "description": "",
             "type": {
               "kind": "INPUT_OBJECT",
               "name": "CaisyField_Richtext_Where",
+              "ofType": null
+            },
+            "defaultValue": null,
+            "isDeprecated": false,
+            "deprecationReason": null
+          },
+          {
+            "name": "title",
+            "description": "",
+            "type": {
+              "kind": "INPUT_OBJECT",
+              "name": "CaisyField_String_Where",
               "ofType": null
             },
             "defaultValue": null,
@@ -2254,7 +2531,7 @@
       },
       {
         "kind": "OBJECT",
-        "name": "Callout_text1",
+        "name": "Callout_text",
         "description": "",
         "fields": [
           {
@@ -2303,7 +2580,7 @@
               "name": null,
               "ofType": {
                 "kind": "UNION",
-                "name": "Callout_text1_Connections",
+                "name": "Callout_text_Connections",
                 "ofType": null
               }
             },
@@ -2330,7 +2607,7 @@
       },
       {
         "kind": "UNION",
-        "name": "Callout_text1_Connections",
+        "name": "Callout_text_Connections",
         "description": "",
         "fields": null,
         "inputFields": null,
@@ -2378,30 +2655,6 @@
             "description": "",
             "args": [
               {
-                "name": "after",
-                "description": "The cursor to start the pagination from. In this case the curser equals the id for the (last) element. If not set, we wil start from the beginning.",
-                "type": {
-                  "kind": "SCALAR",
-                  "name": "String",
-                  "ofType": null
-                },
-                "defaultValue": null,
-                "isDeprecated": false,
-                "deprecationReason": null
-              },
-              {
-                "name": "first",
-                "description": "The number of items to return. Default and max value is 100.",
-                "type": {
-                  "kind": "SCALAR",
-                  "name": "Int",
-                  "ofType": null
-                },
-                "defaultValue": "100",
-                "isDeprecated": false,
-                "deprecationReason": null
-              },
-              {
                 "name": "locale",
                 "description": "",
                 "type": {
@@ -2416,32 +2669,7 @@
             ],
             "type": {
               "kind": "OBJECT",
-              "name": "TextElement",
-              "ofType": null
-            },
-            "isDeprecated": false,
-            "deprecationReason": null
-          },
-          {
-            "name": "helpNote1",
-            "description": "",
-            "args": [
-              {
-                "name": "locale",
-                "description": "",
-                "type": {
-                  "kind": "SCALAR",
-                  "name": "String",
-                  "ofType": null
-                },
-                "defaultValue": null,
-                "isDeprecated": false,
-                "deprecationReason": null
-              }
-            ],
-            "type": {
-              "kind": "OBJECT",
-              "name": "CardSelectionGame_helpNote1",
+              "name": "CardSelectionGame_helpNote",
               "ofType": null
             },
             "isDeprecated": false,
@@ -2582,18 +2810,6 @@
             "deprecationReason": null
           },
           {
-            "name": "helpNote",
-            "description": "",
-            "type": {
-              "kind": "ENUM",
-              "name": "Order",
-              "ofType": null
-            },
-            "defaultValue": null,
-            "isDeprecated": false,
-            "deprecationReason": null
-          },
-          {
             "name": "id",
             "description": "",
             "type": {
@@ -2685,7 +2901,7 @@
             "deprecationReason": null
           },
           {
-            "name": "helpNote1",
+            "name": "helpNote",
             "description": "",
             "type": {
               "kind": "INPUT_OBJECT",
@@ -2715,7 +2931,7 @@
       },
       {
         "kind": "OBJECT",
-        "name": "CardSelectionGame_helpNote1",
+        "name": "CardSelectionGame_helpNote",
         "description": "",
         "fields": [
           {
@@ -2764,7 +2980,7 @@
               "name": null,
               "ofType": {
                 "kind": "UNION",
-                "name": "CardSelectionGame_helpNote1_Connections",
+                "name": "CardSelectionGame_helpNote_Connections",
                 "ofType": null
               }
             },
@@ -2791,7 +3007,7 @@
       },
       {
         "kind": "UNION",
-        "name": "CardSelectionGame_helpNote1_Connections",
+        "name": "CardSelectionGame_helpNote_Connections",
         "description": "",
         "fields": null,
         "inputFields": null,
@@ -2839,30 +3055,6 @@
             "description": "",
             "args": [
               {
-                "name": "after",
-                "description": "The cursor to start the pagination from. In this case the curser equals the id for the (last) element. If not set, we wil start from the beginning.",
-                "type": {
-                  "kind": "SCALAR",
-                  "name": "String",
-                  "ofType": null
-                },
-                "defaultValue": null,
-                "isDeprecated": false,
-                "deprecationReason": null
-              },
-              {
-                "name": "first",
-                "description": "The number of items to return. Default and max value is 100.",
-                "type": {
-                  "kind": "SCALAR",
-                  "name": "Int",
-                  "ofType": null
-                },
-                "defaultValue": "100",
-                "isDeprecated": false,
-                "deprecationReason": null
-              },
-              {
                 "name": "locale",
                 "description": "",
                 "type": {
@@ -2877,32 +3069,7 @@
             ],
             "type": {
               "kind": "OBJECT",
-              "name": "TextElement",
-              "ofType": null
-            },
-            "isDeprecated": false,
-            "deprecationReason": null
-          },
-          {
-            "name": "facts1",
-            "description": "",
-            "args": [
-              {
-                "name": "locale",
-                "description": "",
-                "type": {
-                  "kind": "SCALAR",
-                  "name": "String",
-                  "ofType": null
-                },
-                "defaultValue": null,
-                "isDeprecated": false,
-                "deprecationReason": null
-              }
-            ],
-            "type": {
-              "kind": "OBJECT",
-              "name": "Case_facts1",
+              "name": "Case_facts",
               "ofType": null
             },
             "isDeprecated": false,
@@ -3028,30 +3195,6 @@
             "description": "",
             "args": [
               {
-                "name": "after",
-                "description": "The cursor to start the pagination from. In this case the curser equals the id for the (last) element. If not set, we wil start from the beginning.",
-                "type": {
-                  "kind": "SCALAR",
-                  "name": "String",
-                  "ofType": null
-                },
-                "defaultValue": null,
-                "isDeprecated": false,
-                "deprecationReason": null
-              },
-              {
-                "name": "first",
-                "description": "The number of items to return. Default and max value is 100.",
-                "type": {
-                  "kind": "SCALAR",
-                  "name": "Int",
-                  "ofType": null
-                },
-                "defaultValue": "100",
-                "isDeprecated": false,
-                "deprecationReason": null
-              },
-              {
                 "name": "locale",
                 "description": "",
                 "type": {
@@ -3066,32 +3209,7 @@
             ],
             "type": {
               "kind": "OBJECT",
-              "name": "TextElement",
-              "ofType": null
-            },
-            "isDeprecated": false,
-            "deprecationReason": null
-          },
-          {
-            "name": "resolution1",
-            "description": "",
-            "args": [
-              {
-                "name": "locale",
-                "description": "",
-                "type": {
-                  "kind": "SCALAR",
-                  "name": "String",
-                  "ofType": null
-                },
-                "defaultValue": null,
-                "isDeprecated": false,
-                "deprecationReason": null
-              }
-            ],
-            "type": {
-              "kind": "OBJECT",
-              "name": "Case_resolution1",
+              "name": "Case_resolution",
               "ofType": null
             },
             "isDeprecated": false,
@@ -3362,6 +3480,110 @@
       },
       {
         "kind": "INPUT_OBJECT",
+        "name": "Case_LegalArea_Where",
+        "description": "",
+        "fields": null,
+        "inputFields": [
+          {
+            "name": "findOne",
+            "description": "",
+            "type": {
+              "kind": "INPUT_OBJECT",
+              "name": "Case_LegalArea_WhereConnection",
+              "ofType": null
+            },
+            "defaultValue": null,
+            "isDeprecated": false,
+            "deprecationReason": null
+          }
+        ],
+        "interfaces": null,
+        "enumValues": null,
+        "possibleTypes": null
+      },
+      {
+        "kind": "INPUT_OBJECT",
+        "name": "Case_LegalArea_WhereConnection",
+        "description": "",
+        "fields": null,
+        "inputFields": [
+          {
+            "name": "LegalArea",
+            "description": "",
+            "type": {
+              "kind": "INPUT_OBJECT",
+              "name": "LegalArea_Nested_Where",
+              "ofType": null
+            },
+            "defaultValue": null,
+            "isDeprecated": false,
+            "deprecationReason": null
+          },
+          {
+            "name": "SubCategory",
+            "description": "",
+            "type": {
+              "kind": "INPUT_OBJECT",
+              "name": "SubCategory_Nested_Where",
+              "ofType": null
+            },
+            "defaultValue": null,
+            "isDeprecated": false,
+            "deprecationReason": null
+          }
+        ],
+        "interfaces": null,
+        "enumValues": null,
+        "possibleTypes": null
+      },
+      {
+        "kind": "INPUT_OBJECT",
+        "name": "Case_MainCategoryField_Where",
+        "description": "",
+        "fields": null,
+        "inputFields": [
+          {
+            "name": "findOne",
+            "description": "",
+            "type": {
+              "kind": "INPUT_OBJECT",
+              "name": "Case_MainCategoryField_WhereConnection",
+              "ofType": null
+            },
+            "defaultValue": null,
+            "isDeprecated": false,
+            "deprecationReason": null
+          }
+        ],
+        "interfaces": null,
+        "enumValues": null,
+        "possibleTypes": null
+      },
+      {
+        "kind": "INPUT_OBJECT",
+        "name": "Case_MainCategoryField_WhereConnection",
+        "description": "",
+        "fields": null,
+        "inputFields": [
+          {
+            "name": "MainCategory",
+            "description": "",
+            "type": {
+              "kind": "INPUT_OBJECT",
+              "name": "MainCategory_Nested_Where",
+              "ofType": null
+            },
+            "defaultValue": null,
+            "isDeprecated": false,
+            "deprecationReason": null
+          }
+        ],
+        "interfaces": null,
+        "enumValues": null,
+        "possibleTypes": null
+      },
+      {
+        "kind": "INPUT_OBJECT",
         "name": "Case_Sort",
         "description": "",
         "fields": null,
@@ -3380,18 +3602,6 @@
           },
           {
             "name": "durationToCompleteInMinutes",
-            "description": "",
-            "type": {
-              "kind": "ENUM",
-              "name": "Order",
-              "ofType": null
-            },
-            "defaultValue": null,
-            "isDeprecated": false,
-            "deprecationReason": null
-          },
-          {
-            "name": "facts",
             "description": "",
             "type": {
               "kind": "ENUM",
@@ -3440,18 +3650,6 @@
           },
           {
             "name": "publishedAt",
-            "description": "",
-            "type": {
-              "kind": "ENUM",
-              "name": "Order",
-              "ofType": null
-            },
-            "defaultValue": null,
-            "isDeprecated": false,
-            "deprecationReason": null
-          },
-          {
-            "name": "resolution",
             "description": "",
             "type": {
               "kind": "ENUM",
@@ -3529,6 +3727,144 @@
       },
       {
         "kind": "INPUT_OBJECT",
+        "name": "Case_SubCategoryField_Where",
+        "description": "",
+        "fields": null,
+        "inputFields": [
+          {
+            "name": "findOne",
+            "description": "",
+            "type": {
+              "kind": "INPUT_OBJECT",
+              "name": "Case_SubCategoryField_WhereConnection",
+              "ofType": null
+            },
+            "defaultValue": null,
+            "isDeprecated": false,
+            "deprecationReason": null
+          }
+        ],
+        "interfaces": null,
+        "enumValues": null,
+        "possibleTypes": null
+      },
+      {
+        "kind": "INPUT_OBJECT",
+        "name": "Case_SubCategoryField_WhereConnection",
+        "description": "",
+        "fields": null,
+        "inputFields": [
+          {
+            "name": "SubCategory",
+            "description": "",
+            "type": {
+              "kind": "INPUT_OBJECT",
+              "name": "SubCategory_Nested_Where",
+              "ofType": null
+            },
+            "defaultValue": null,
+            "isDeprecated": false,
+            "deprecationReason": null
+          }
+        ],
+        "interfaces": null,
+        "enumValues": null,
+        "possibleTypes": null
+      },
+      {
+        "kind": "INPUT_OBJECT",
+        "name": "Case_Tags_Where",
+        "description": "",
+        "fields": null,
+        "inputFields": [
+          {
+            "name": "findOne",
+            "description": "",
+            "type": {
+              "kind": "INPUT_OBJECT",
+              "name": "Case_Tags_WhereConnection",
+              "ofType": null
+            },
+            "defaultValue": null,
+            "isDeprecated": false,
+            "deprecationReason": null
+          }
+        ],
+        "interfaces": null,
+        "enumValues": null,
+        "possibleTypes": null
+      },
+      {
+        "kind": "INPUT_OBJECT",
+        "name": "Case_Tags_WhereConnection",
+        "description": "",
+        "fields": null,
+        "inputFields": [
+          {
+            "name": "Tags",
+            "description": "",
+            "type": {
+              "kind": "INPUT_OBJECT",
+              "name": "Tags_Nested_Where",
+              "ofType": null
+            },
+            "defaultValue": null,
+            "isDeprecated": false,
+            "deprecationReason": null
+          }
+        ],
+        "interfaces": null,
+        "enumValues": null,
+        "possibleTypes": null
+      },
+      {
+        "kind": "INPUT_OBJECT",
+        "name": "Case_Topic_Where",
+        "description": "",
+        "fields": null,
+        "inputFields": [
+          {
+            "name": "findOne",
+            "description": "",
+            "type": {
+              "kind": "INPUT_OBJECT",
+              "name": "Case_Topic_WhereConnection",
+              "ofType": null
+            },
+            "defaultValue": null,
+            "isDeprecated": false,
+            "deprecationReason": null
+          }
+        ],
+        "interfaces": null,
+        "enumValues": null,
+        "possibleTypes": null
+      },
+      {
+        "kind": "INPUT_OBJECT",
+        "name": "Case_Topic_WhereConnection",
+        "description": "",
+        "fields": null,
+        "inputFields": [
+          {
+            "name": "Topic",
+            "description": "",
+            "type": {
+              "kind": "INPUT_OBJECT",
+              "name": "Topic_Nested_Where",
+              "ofType": null
+            },
+            "defaultValue": null,
+            "isDeprecated": false,
+            "deprecationReason": null
+          }
+        ],
+        "interfaces": null,
+        "enumValues": null,
+        "possibleTypes": null
+      },
+      {
+        "kind": "INPUT_OBJECT",
         "name": "Case_Where",
         "description": "",
         "fields": null,
@@ -3578,7 +3914,7 @@
             "deprecationReason": null
           },
           {
-            "name": "facts1",
+            "name": "facts",
             "description": "",
             "type": {
               "kind": "INPUT_OBJECT",
@@ -3602,11 +3938,59 @@
             "deprecationReason": null
           },
           {
-            "name": "resolution1",
+            "name": "legalArea",
+            "description": "",
+            "type": {
+              "kind": "INPUT_OBJECT",
+              "name": "Case_LegalArea_Where",
+              "ofType": null
+            },
+            "defaultValue": null,
+            "isDeprecated": false,
+            "deprecationReason": null
+          },
+          {
+            "name": "mainCategoryField",
+            "description": "",
+            "type": {
+              "kind": "INPUT_OBJECT",
+              "name": "Case_MainCategoryField_Where",
+              "ofType": null
+            },
+            "defaultValue": null,
+            "isDeprecated": false,
+            "deprecationReason": null
+          },
+          {
+            "name": "resolution",
             "description": "",
             "type": {
               "kind": "INPUT_OBJECT",
               "name": "CaisyField_Richtext_Where",
+              "ofType": null
+            },
+            "defaultValue": null,
+            "isDeprecated": false,
+            "deprecationReason": null
+          },
+          {
+            "name": "subCategoryField",
+            "description": "",
+            "type": {
+              "kind": "INPUT_OBJECT",
+              "name": "Case_SubCategoryField_Where",
+              "ofType": null
+            },
+            "defaultValue": null,
+            "isDeprecated": false,
+            "deprecationReason": null
+          },
+          {
+            "name": "tags",
+            "description": "",
+            "type": {
+              "kind": "INPUT_OBJECT",
+              "name": "Case_Tags_Where",
               "ofType": null
             },
             "defaultValue": null,
@@ -3624,6 +4008,18 @@
             "defaultValue": null,
             "isDeprecated": false,
             "deprecationReason": null
+          },
+          {
+            "name": "topic",
+            "description": "",
+            "type": {
+              "kind": "INPUT_OBJECT",
+              "name": "Case_Topic_Where",
+              "ofType": null
+            },
+            "defaultValue": null,
+            "isDeprecated": false,
+            "deprecationReason": null
           }
         ],
         "interfaces": null,
@@ -3632,7 +4028,7 @@
       },
       {
         "kind": "OBJECT",
-        "name": "Case_facts1",
+        "name": "Case_facts",
         "description": "",
         "fields": [
           {
@@ -3681,7 +4077,7 @@
               "name": null,
               "ofType": {
                 "kind": "UNION",
-                "name": "Case_facts1_Connections",
+                "name": "Case_facts_Connections",
                 "ofType": null
               }
             },
@@ -3708,7 +4104,7 @@
       },
       {
         "kind": "UNION",
-        "name": "Case_facts1_Connections",
+        "name": "Case_facts_Connections",
         "description": "",
         "fields": null,
         "inputFields": null,
@@ -3873,7 +4269,7 @@
       },
       {
         "kind": "OBJECT",
-        "name": "Case_resolution1",
+        "name": "Case_resolution",
         "description": "",
         "fields": [
           {
@@ -3922,7 +4318,7 @@
               "name": null,
               "ofType": {
                 "kind": "UNION",
-                "name": "Case_resolution1_Connections",
+                "name": "Case_resolution_Connections",
                 "ofType": null
               }
             },
@@ -3949,7 +4345,7 @@
       },
       {
         "kind": "UNION",
-        "name": "Case_resolution1_Connections",
+        "name": "Case_resolution_Connections",
         "description": "",
         "fields": null,
         "inputFields": null,
@@ -4055,30 +4451,6 @@
             "description": "",
             "args": [
               {
-                "name": "after",
-                "description": "The cursor to start the pagination from. In this case the curser equals the id for the (last) element. If not set, we wil start from the beginning.",
-                "type": {
-                  "kind": "SCALAR",
-                  "name": "String",
-                  "ofType": null
-                },
-                "defaultValue": null,
-                "isDeprecated": false,
-                "deprecationReason": null
-              },
-              {
-                "name": "first",
-                "description": "The number of items to return. Default and max value is 100.",
-                "type": {
-                  "kind": "SCALAR",
-                  "name": "Int",
-                  "ofType": null
-                },
-                "defaultValue": "100",
-                "isDeprecated": false,
-                "deprecationReason": null
-              },
-              {
                 "name": "locale",
                 "description": "",
                 "type": {
@@ -4093,32 +4465,7 @@
             ],
             "type": {
               "kind": "OBJECT",
-              "name": "TextElement",
-              "ofType": null
-            },
-            "isDeprecated": false,
-            "deprecationReason": null
-          },
-          {
-            "name": "helpNote1",
-            "description": "",
-            "args": [
-              {
-                "name": "locale",
-                "description": "",
-                "type": {
-                  "kind": "SCALAR",
-                  "name": "String",
-                  "ofType": null
-                },
-                "defaultValue": null,
-                "isDeprecated": false,
-                "deprecationReason": null
-              }
-            ],
-            "type": {
-              "kind": "OBJECT",
-              "name": "DragNDropGame_helpNote1",
+              "name": "DragNDropGame_helpNote",
               "ofType": null
             },
             "isDeprecated": false,
@@ -4259,18 +4606,6 @@
             "deprecationReason": null
           },
           {
-            "name": "helpNote",
-            "description": "",
-            "type": {
-              "kind": "ENUM",
-              "name": "Order",
-              "ofType": null
-            },
-            "defaultValue": null,
-            "isDeprecated": false,
-            "deprecationReason": null
-          },
-          {
             "name": "id",
             "description": "",
             "type": {
@@ -4362,7 +4697,7 @@
             "deprecationReason": null
           },
           {
-            "name": "helpNote1",
+            "name": "helpNote",
             "description": "",
             "type": {
               "kind": "INPUT_OBJECT",
@@ -4392,7 +4727,7 @@
       },
       {
         "kind": "OBJECT",
-        "name": "DragNDropGame_helpNote1",
+        "name": "DragNDropGame_helpNote",
         "description": "",
         "fields": [
           {
@@ -4441,7 +4776,7 @@
               "name": null,
               "ofType": {
                 "kind": "UNION",
-                "name": "DragNDropGame_helpNote1_Connections",
+                "name": "DragNDropGame_helpNote_Connections",
                 "ofType": null
               }
             },
@@ -4468,7 +4803,7 @@
       },
       {
         "kind": "UNION",
-        "name": "DragNDropGame_helpNote1_Connections",
+        "name": "DragNDropGame_helpNote_Connections",
         "description": "",
         "fields": null,
         "inputFields": null,
@@ -4504,30 +4839,6 @@
             "description": "",
             "args": [
               {
-                "name": "after",
-                "description": "The cursor to start the pagination from. In this case the curser equals the id for the (last) element. If not set, we wil start from the beginning.",
-                "type": {
-                  "kind": "SCALAR",
-                  "name": "String",
-                  "ofType": null
-                },
-                "defaultValue": null,
-                "isDeprecated": false,
-                "deprecationReason": null
-              },
-              {
-                "name": "first",
-                "description": "The number of items to return. Default and max value is 100.",
-                "type": {
-                  "kind": "SCALAR",
-                  "name": "Int",
-                  "ofType": null
-                },
-                "defaultValue": "100",
-                "isDeprecated": false,
-                "deprecationReason": null
-              },
-              {
                 "name": "locale",
                 "description": "",
                 "type": {
@@ -4542,32 +4853,7 @@
             ],
             "type": {
               "kind": "OBJECT",
-              "name": "TextElement",
-              "ofType": null
-            },
-            "isDeprecated": false,
-            "deprecationReason": null
-          },
-          {
-            "name": "fillGameParagraph1",
-            "description": "",
-            "args": [
-              {
-                "name": "locale",
-                "description": "",
-                "type": {
-                  "kind": "SCALAR",
-                  "name": "String",
-                  "ofType": null
-                },
-                "defaultValue": null,
-                "isDeprecated": false,
-                "deprecationReason": null
-              }
-            ],
-            "type": {
-              "kind": "OBJECT",
-              "name": "FillInGapsGame_fillGameParagraph1",
+              "name": "FillInGapsGame_fillGameParagraph",
               "ofType": null
             },
             "isDeprecated": false,
@@ -4578,30 +4864,6 @@
             "description": "",
             "args": [
               {
-                "name": "after",
-                "description": "The cursor to start the pagination from. In this case the curser equals the id for the (last) element. If not set, we wil start from the beginning.",
-                "type": {
-                  "kind": "SCALAR",
-                  "name": "String",
-                  "ofType": null
-                },
-                "defaultValue": null,
-                "isDeprecated": false,
-                "deprecationReason": null
-              },
-              {
-                "name": "first",
-                "description": "The number of items to return. Default and max value is 100.",
-                "type": {
-                  "kind": "SCALAR",
-                  "name": "Int",
-                  "ofType": null
-                },
-                "defaultValue": "100",
-                "isDeprecated": false,
-                "deprecationReason": null
-              },
-              {
                 "name": "locale",
                 "description": "",
                 "type": {
@@ -4616,32 +4878,7 @@
             ],
             "type": {
               "kind": "OBJECT",
-              "name": "TextElement",
-              "ofType": null
-            },
-            "isDeprecated": false,
-            "deprecationReason": null
-          },
-          {
-            "name": "helpNote1",
-            "description": "",
-            "args": [
-              {
-                "name": "locale",
-                "description": "",
-                "type": {
-                  "kind": "SCALAR",
-                  "name": "String",
-                  "ofType": null
-                },
-                "defaultValue": null,
-                "isDeprecated": false,
-                "deprecationReason": null
-              }
-            ],
-            "type": {
-              "kind": "OBJECT",
-              "name": "FillInGapsGame_helpNote1",
+              "name": "FillInGapsGame_helpNote",
               "ofType": null
             },
             "isDeprecated": false,
@@ -4782,30 +5019,6 @@
             "deprecationReason": null
           },
           {
-            "name": "fillGameParagraph",
-            "description": "",
-            "type": {
-              "kind": "ENUM",
-              "name": "Order",
-              "ofType": null
-            },
-            "defaultValue": null,
-            "isDeprecated": false,
-            "deprecationReason": null
-          },
-          {
-            "name": "helpNote",
-            "description": "",
-            "type": {
-              "kind": "ENUM",
-              "name": "Order",
-              "ofType": null
-            },
-            "defaultValue": null,
-            "isDeprecated": false,
-            "deprecationReason": null
-          },
-          {
             "name": "id",
             "description": "",
             "type": {
@@ -4897,7 +5110,7 @@
             "deprecationReason": null
           },
           {
-            "name": "fillGameParagraph1",
+            "name": "fillGameParagraph",
             "description": "",
             "type": {
               "kind": "INPUT_OBJECT",
@@ -4909,7 +5122,7 @@
             "deprecationReason": null
           },
           {
-            "name": "helpNote1",
+            "name": "helpNote",
             "description": "",
             "type": {
               "kind": "INPUT_OBJECT",
@@ -4939,7 +5152,7 @@
       },
       {
         "kind": "OBJECT",
-        "name": "FillInGapsGame_fillGameParagraph1",
+        "name": "FillInGapsGame_fillGameParagraph",
         "description": "",
         "fields": [
           {
@@ -4988,7 +5201,7 @@
               "name": null,
               "ofType": {
                 "kind": "UNION",
-                "name": "FillInGapsGame_fillGameParagraph1_Connections",
+                "name": "FillInGapsGame_fillGameParagraph_Connections",
                 "ofType": null
               }
             },
@@ -5015,7 +5228,7 @@
       },
       {
         "kind": "UNION",
-        "name": "FillInGapsGame_fillGameParagraph1_Connections",
+        "name": "FillInGapsGame_fillGameParagraph_Connections",
         "description": "",
         "fields": null,
         "inputFields": null,
@@ -5031,7 +5244,7 @@
       },
       {
         "kind": "OBJECT",
-        "name": "FillInGapsGame_helpNote1",
+        "name": "FillInGapsGame_helpNote",
         "description": "",
         "fields": [
           {
@@ -5080,7 +5293,7 @@
               "name": null,
               "ofType": {
                 "kind": "UNION",
-                "name": "FillInGapsGame_helpNote1_Connections",
+                "name": "FillInGapsGame_helpNote_Connections",
                 "ofType": null
               }
             },
@@ -5107,7 +5320,7 @@
       },
       {
         "kind": "UNION",
-        "name": "FillInGapsGame_helpNote1_Connections",
+        "name": "FillInGapsGame_helpNote_Connections",
         "description": "",
         "fields": null,
         "inputFields": null,
@@ -5606,6 +5819,61 @@
       },
       {
         "kind": "INPUT_OBJECT",
+        "name": "LegalArea_Nested_Where",
+        "description": "",
+        "fields": null,
+        "inputFields": [
+          {
+            "name": "AND",
+            "description": "",
+            "type": {
+              "kind": "LIST",
+              "name": null,
+              "ofType": {
+                "kind": "INPUT_OBJECT",
+                "name": "LegalArea_Nested_Where",
+                "ofType": null
+              }
+            },
+            "defaultValue": null,
+            "isDeprecated": false,
+            "deprecationReason": null
+          },
+          {
+            "name": "OR",
+            "description": "",
+            "type": {
+              "kind": "LIST",
+              "name": null,
+              "ofType": {
+                "kind": "INPUT_OBJECT",
+                "name": "LegalArea_Nested_Where",
+                "ofType": null
+              }
+            },
+            "defaultValue": null,
+            "isDeprecated": false,
+            "deprecationReason": null
+          },
+          {
+            "name": "legalAreaName",
+            "description": "",
+            "type": {
+              "kind": "INPUT_OBJECT",
+              "name": "CaisyField_String_Where",
+              "ofType": null
+            },
+            "defaultValue": null,
+            "isDeprecated": false,
+            "deprecationReason": null
+          }
+        ],
+        "interfaces": null,
+        "enumValues": null,
+        "possibleTypes": null
+      },
+      {
+        "kind": "INPUT_OBJECT",
         "name": "LegalArea_Sort",
         "description": "",
         "fields": null,
@@ -5909,6 +6177,61 @@
         ],
         "inputFields": null,
         "interfaces": [],
+        "enumValues": null,
+        "possibleTypes": null
+      },
+      {
+        "kind": "INPUT_OBJECT",
+        "name": "MainCategory_Nested_Where",
+        "description": "",
+        "fields": null,
+        "inputFields": [
+          {
+            "name": "AND",
+            "description": "",
+            "type": {
+              "kind": "LIST",
+              "name": null,
+              "ofType": {
+                "kind": "INPUT_OBJECT",
+                "name": "MainCategory_Nested_Where",
+                "ofType": null
+              }
+            },
+            "defaultValue": null,
+            "isDeprecated": false,
+            "deprecationReason": null
+          },
+          {
+            "name": "OR",
+            "description": "",
+            "type": {
+              "kind": "LIST",
+              "name": null,
+              "ofType": {
+                "kind": "INPUT_OBJECT",
+                "name": "MainCategory_Nested_Where",
+                "ofType": null
+              }
+            },
+            "defaultValue": null,
+            "isDeprecated": false,
+            "deprecationReason": null
+          },
+          {
+            "name": "mainCategory",
+            "description": "",
+            "type": {
+              "kind": "INPUT_OBJECT",
+              "name": "CaisyField_String_Where",
+              "ofType": null
+            },
+            "defaultValue": null,
+            "isDeprecated": false,
+            "deprecationReason": null
+          }
+        ],
+        "interfaces": null,
         "enumValues": null,
         "possibleTypes": null
       },
@@ -6624,47 +6947,6 @@
             "type": {
               "kind": "OBJECT",
               "name": "Tags",
-              "ofType": null
-            },
-            "isDeprecated": false,
-            "deprecationReason": null
-          },
-          {
-            "name": "TextElement",
-            "description": "",
-            "args": [
-              {
-                "name": "id",
-                "description": "",
-                "type": {
-                  "kind": "NON_NULL",
-                  "name": null,
-                  "ofType": {
-                    "kind": "SCALAR",
-                    "name": "ID",
-                    "ofType": null
-                  }
-                },
-                "defaultValue": null,
-                "isDeprecated": false,
-                "deprecationReason": null
-              },
-              {
-                "name": "locale",
-                "description": "",
-                "type": {
-                  "kind": "SCALAR",
-                  "name": "String",
-                  "ofType": null
-                },
-                "defaultValue": null,
-                "isDeprecated": false,
-                "deprecationReason": null
-              }
-            ],
-            "type": {
-              "kind": "OBJECT",
-              "name": "TextElement",
               "ofType": null
             },
             "isDeprecated": false,
@@ -7972,111 +8254,6 @@
             "deprecationReason": null
           },
           {
-            "name": "allTextElement",
-            "description": "",
-            "args": [
-              {
-                "name": "after",
-                "description": "",
-                "type": {
-                  "kind": "SCALAR",
-                  "name": "String",
-                  "ofType": null
-                },
-                "defaultValue": null,
-                "isDeprecated": false,
-                "deprecationReason": null
-              },
-              {
-                "name": "before",
-                "description": "",
-                "type": {
-                  "kind": "SCALAR",
-                  "name": "String",
-                  "ofType": null
-                },
-                "defaultValue": null,
-                "isDeprecated": false,
-                "deprecationReason": null
-              },
-              {
-                "name": "first",
-                "description": "",
-                "type": {
-                  "kind": "SCALAR",
-                  "name": "Int",
-                  "ofType": null
-                },
-                "defaultValue": null,
-                "isDeprecated": false,
-                "deprecationReason": null
-              },
-              {
-                "name": "last",
-                "description": "",
-                "type": {
-                  "kind": "SCALAR",
-                  "name": "Int",
-                  "ofType": null
-                },
-                "defaultValue": null,
-                "isDeprecated": false,
-                "deprecationReason": null
-              },
-              {
-                "name": "locale",
-                "description": "",
-                "type": {
-                  "kind": "SCALAR",
-                  "name": "String",
-                  "ofType": null
-                },
-                "defaultValue": null,
-                "isDeprecated": false,
-                "deprecationReason": null
-              },
-              {
-                "name": "sort",
-                "description": "",
-                "type": {
-                  "kind": "LIST",
-                  "name": null,
-                  "ofType": {
-                    "kind": "INPUT_OBJECT",
-                    "name": "TextElement_Sort",
-                    "ofType": null
-                  }
-                },
-                "defaultValue": null,
-                "isDeprecated": false,
-                "deprecationReason": null
-              },
-              {
-                "name": "where",
-                "description": "",
-                "type": {
-                  "kind": "LIST",
-                  "name": null,
-                  "ofType": {
-                    "kind": "INPUT_OBJECT",
-                    "name": "TextElement_Where",
-                    "ofType": null
-                  }
-                },
-                "defaultValue": null,
-                "isDeprecated": false,
-                "deprecationReason": null
-              }
-            ],
-            "type": {
-              "kind": "OBJECT",
-              "name": "TextElement_Connection",
-              "ofType": null
-            },
-            "isDeprecated": false,
-            "deprecationReason": null
-          },
-          {
             "name": "allTopic",
             "description": "",
             "args": [
@@ -8385,6 +8562,107 @@
       },
       {
         "kind": "INPUT_OBJECT",
+        "name": "SubCategory_MainCategory_Where",
+        "description": "",
+        "fields": null,
+        "inputFields": [
+          {
+            "name": "findOne",
+            "description": "",
+            "type": {
+              "kind": "INPUT_OBJECT",
+              "name": "SubCategory_MainCategory_WhereConnection",
+              "ofType": null
+            },
+            "defaultValue": null,
+            "isDeprecated": false,
+            "deprecationReason": null
+          }
+        ],
+        "interfaces": null,
+        "enumValues": null,
+        "possibleTypes": null
+      },
+      {
+        "kind": "INPUT_OBJECT",
+        "name": "SubCategory_MainCategory_WhereConnection",
+        "description": "",
+        "fields": null,
+        "inputFields": [
+          {
+            "name": "MainCategory",
+            "description": "",
+            "type": {
+              "kind": "INPUT_OBJECT",
+              "name": "MainCategory_Nested_Where",
+              "ofType": null
+            },
+            "defaultValue": null,
+            "isDeprecated": false,
+            "deprecationReason": null
+          }
+        ],
+        "interfaces": null,
+        "enumValues": null,
+        "possibleTypes": null
+      },
+      {
+        "kind": "INPUT_OBJECT",
+        "name": "SubCategory_Nested_Where",
+        "description": "",
+        "fields": null,
+        "inputFields": [
+          {
+            "name": "AND",
+            "description": "",
+            "type": {
+              "kind": "LIST",
+              "name": null,
+              "ofType": {
+                "kind": "INPUT_OBJECT",
+                "name": "SubCategory_Nested_Where",
+                "ofType": null
+              }
+            },
+            "defaultValue": null,
+            "isDeprecated": false,
+            "deprecationReason": null
+          },
+          {
+            "name": "OR",
+            "description": "",
+            "type": {
+              "kind": "LIST",
+              "name": null,
+              "ofType": {
+                "kind": "INPUT_OBJECT",
+                "name": "SubCategory_Nested_Where",
+                "ofType": null
+              }
+            },
+            "defaultValue": null,
+            "isDeprecated": false,
+            "deprecationReason": null
+          },
+          {
+            "name": "subCategory",
+            "description": "",
+            "type": {
+              "kind": "INPUT_OBJECT",
+              "name": "CaisyField_String_Where",
+              "ofType": null
+            },
+            "defaultValue": null,
+            "isDeprecated": false,
+            "deprecationReason": null
+          }
+        ],
+        "interfaces": null,
+        "enumValues": null,
+        "possibleTypes": null
+      },
+      {
+        "kind": "INPUT_OBJECT",
         "name": "SubCategory_Sort",
         "description": "",
         "fields": null,
@@ -8499,6 +8777,18 @@
                 "name": "SubCategory_Where",
                 "ofType": null
               }
+            },
+            "defaultValue": null,
+            "isDeprecated": false,
+            "deprecationReason": null
+          },
+          {
+            "name": "mainCategory",
+            "description": "",
+            "type": {
+              "kind": "INPUT_OBJECT",
+              "name": "SubCategory_MainCategory_Where",
+              "ofType": null
             },
             "defaultValue": null,
             "isDeprecated": false,
@@ -8672,6 +8962,61 @@
       },
       {
         "kind": "INPUT_OBJECT",
+        "name": "Tags_Nested_Where",
+        "description": "",
+        "fields": null,
+        "inputFields": [
+          {
+            "name": "AND",
+            "description": "",
+            "type": {
+              "kind": "LIST",
+              "name": null,
+              "ofType": {
+                "kind": "INPUT_OBJECT",
+                "name": "Tags_Nested_Where",
+                "ofType": null
+              }
+            },
+            "defaultValue": null,
+            "isDeprecated": false,
+            "deprecationReason": null
+          },
+          {
+            "name": "OR",
+            "description": "",
+            "type": {
+              "kind": "LIST",
+              "name": null,
+              "ofType": {
+                "kind": "INPUT_OBJECT",
+                "name": "Tags_Nested_Where",
+                "ofType": null
+              }
+            },
+            "defaultValue": null,
+            "isDeprecated": false,
+            "deprecationReason": null
+          },
+          {
+            "name": "tagName",
+            "description": "",
+            "type": {
+              "kind": "INPUT_OBJECT",
+              "name": "CaisyField_String_Where",
+              "ofType": null
+            },
+            "defaultValue": null,
+            "isDeprecated": false,
+            "deprecationReason": null
+          }
+        ],
+        "interfaces": null,
+        "enumValues": null,
+        "possibleTypes": null
+      },
+      {
+        "kind": "INPUT_OBJECT",
         "name": "Tags_Sort",
         "description": "",
         "fields": null,
@@ -8795,358 +9140,6 @@
         "interfaces": null,
         "enumValues": null,
         "possibleTypes": null
-      },
-      {
-        "kind": "OBJECT",
-        "name": "TextElement",
-        "description": "",
-        "fields": [
-          {
-            "name": "_meta",
-            "description": "",
-            "args": [],
-            "type": {
-              "kind": "OBJECT",
-              "name": "CaisyDocument_Meta",
-              "ofType": null
-            },
-            "isDeprecated": false,
-            "deprecationReason": null
-          },
-          {
-            "name": "id",
-            "description": "",
-            "args": [],
-            "type": {
-              "kind": "SCALAR",
-              "name": "ID",
-              "ofType": null
-            },
-            "isDeprecated": false,
-            "deprecationReason": null
-          },
-          {
-            "name": "richTextContent",
-            "description": "",
-            "args": [
-              {
-                "name": "locale",
-                "description": "",
-                "type": {
-                  "kind": "SCALAR",
-                  "name": "String",
-                  "ofType": null
-                },
-                "defaultValue": null,
-                "isDeprecated": false,
-                "deprecationReason": null
-              }
-            ],
-            "type": {
-              "kind": "OBJECT",
-              "name": "TextElement_richTextContent",
-              "ofType": null
-            },
-            "isDeprecated": false,
-            "deprecationReason": null
-          }
-        ],
-        "inputFields": null,
-        "interfaces": [],
-        "enumValues": null,
-        "possibleTypes": null
-      },
-      {
-        "kind": "OBJECT",
-        "name": "TextElement_Connection",
-        "description": "",
-        "fields": [
-          {
-            "name": "edges",
-            "description": "",
-            "args": [],
-            "type": {
-              "kind": "LIST",
-              "name": null,
-              "ofType": {
-                "kind": "OBJECT",
-                "name": "TextElement_ConnectionEdge",
-                "ofType": null
-              }
-            },
-            "isDeprecated": false,
-            "deprecationReason": null
-          },
-          {
-            "name": "pageInfo",
-            "description": "",
-            "args": [],
-            "type": {
-              "kind": "OBJECT",
-              "name": "PageInfo",
-              "ofType": null
-            },
-            "isDeprecated": false,
-            "deprecationReason": null
-          },
-          {
-            "name": "totalCount",
-            "description": "",
-            "args": [],
-            "type": {
-              "kind": "SCALAR",
-              "name": "Int",
-              "ofType": null
-            },
-            "isDeprecated": false,
-            "deprecationReason": null
-          }
-        ],
-        "inputFields": null,
-        "interfaces": [],
-        "enumValues": null,
-        "possibleTypes": null
-      },
-      {
-        "kind": "OBJECT",
-        "name": "TextElement_ConnectionEdge",
-        "description": "",
-        "fields": [
-          {
-            "name": "cursor",
-            "description": "",
-            "args": [],
-            "type": {
-              "kind": "SCALAR",
-              "name": "String",
-              "ofType": null
-            },
-            "isDeprecated": false,
-            "deprecationReason": null
-          },
-          {
-            "name": "node",
-            "description": "",
-            "args": [],
-            "type": {
-              "kind": "OBJECT",
-              "name": "TextElement",
-              "ofType": null
-            },
-            "isDeprecated": false,
-            "deprecationReason": null
-          }
-        ],
-        "inputFields": null,
-        "interfaces": [],
-        "enumValues": null,
-        "possibleTypes": null
-      },
-      {
-        "kind": "INPUT_OBJECT",
-        "name": "TextElement_Sort",
-        "description": "",
-        "fields": null,
-        "inputFields": [
-          {
-            "name": "createdAt",
-            "description": "",
-            "type": {
-              "kind": "ENUM",
-              "name": "Order",
-              "ofType": null
-            },
-            "defaultValue": null,
-            "isDeprecated": false,
-            "deprecationReason": null
-          },
-          {
-            "name": "id",
-            "description": "",
-            "type": {
-              "kind": "ENUM",
-              "name": "Order",
-              "ofType": null
-            },
-            "defaultValue": null,
-            "isDeprecated": false,
-            "deprecationReason": null
-          },
-          {
-            "name": "publishedAt",
-            "description": "",
-            "type": {
-              "kind": "ENUM",
-              "name": "Order",
-              "ofType": null
-            },
-            "defaultValue": null,
-            "isDeprecated": false,
-            "deprecationReason": null
-          },
-          {
-            "name": "updatedAt",
-            "description": "",
-            "type": {
-              "kind": "ENUM",
-              "name": "Order",
-              "ofType": null
-            },
-            "defaultValue": null,
-            "isDeprecated": false,
-            "deprecationReason": null
-          }
-        ],
-        "interfaces": null,
-        "enumValues": null,
-        "possibleTypes": null
-      },
-      {
-        "kind": "INPUT_OBJECT",
-        "name": "TextElement_Where",
-        "description": "",
-        "fields": null,
-        "inputFields": [
-          {
-            "name": "AND",
-            "description": "",
-            "type": {
-              "kind": "LIST",
-              "name": null,
-              "ofType": {
-                "kind": "INPUT_OBJECT",
-                "name": "TextElement_Where",
-                "ofType": null
-              }
-            },
-            "defaultValue": null,
-            "isDeprecated": false,
-            "deprecationReason": null
-          },
-          {
-            "name": "OR",
-            "description": "",
-            "type": {
-              "kind": "LIST",
-              "name": null,
-              "ofType": {
-                "kind": "INPUT_OBJECT",
-                "name": "TextElement_Where",
-                "ofType": null
-              }
-            },
-            "defaultValue": null,
-            "isDeprecated": false,
-            "deprecationReason": null
-          },
-          {
-            "name": "richTextContent",
-            "description": "",
-            "type": {
-              "kind": "INPUT_OBJECT",
-              "name": "CaisyField_Richtext_Where",
-              "ofType": null
-            },
-            "defaultValue": null,
-            "isDeprecated": false,
-            "deprecationReason": null
-          }
-        ],
-        "interfaces": null,
-        "enumValues": null,
-        "possibleTypes": null
-      },
-      {
-        "kind": "OBJECT",
-        "name": "TextElement_richTextContent",
-        "description": "",
-        "fields": [
-          {
-            "name": "connections",
-            "description": "",
-            "args": [
-              {
-                "name": "after",
-                "description": "The cursor to start the pagination from. In this case the curser equals the id for the (last) element. If not set, we wil start from the beginning.",
-                "type": {
-                  "kind": "SCALAR",
-                  "name": "String",
-                  "ofType": null
-                },
-                "defaultValue": null,
-                "isDeprecated": false,
-                "deprecationReason": null
-              },
-              {
-                "name": "first",
-                "description": "The number of items to return. Default and max value is 100.",
-                "type": {
-                  "kind": "SCALAR",
-                  "name": "Int",
-                  "ofType": null
-                },
-                "defaultValue": "100",
-                "isDeprecated": false,
-                "deprecationReason": null
-              },
-              {
-                "name": "locale",
-                "description": "",
-                "type": {
-                  "kind": "SCALAR",
-                  "name": "String",
-                  "ofType": null
-                },
-                "defaultValue": null,
-                "isDeprecated": false,
-                "deprecationReason": null
-              }
-            ],
-            "type": {
-              "kind": "LIST",
-              "name": null,
-              "ofType": {
-                "kind": "UNION",
-                "name": "TextElement_richTextContent_Connections",
-                "ofType": null
-              }
-            },
-            "isDeprecated": false,
-            "deprecationReason": null
-          },
-          {
-            "name": "json",
-            "description": "",
-            "args": [],
-            "type": {
-              "kind": "SCALAR",
-              "name": "JSON",
-              "ofType": null
-            },
-            "isDeprecated": false,
-            "deprecationReason": null
-          }
-        ],
-        "inputFields": null,
-        "interfaces": [],
-        "enumValues": null,
-        "possibleTypes": null
-      },
-      {
-        "kind": "UNION",
-        "name": "TextElement_richTextContent_Connections",
-        "description": "",
-        "fields": null,
-        "inputFields": null,
-        "interfaces": null,
-        "enumValues": null,
-        "possibleTypes": [
-          {
-            "kind": "OBJECT",
-            "name": "Caisy_Field_Document_NotFound",
-            "ofType": null
-          }
-        ]
       },
       {
         "kind": "OBJECT",
@@ -9278,6 +9271,61 @@
         ],
         "inputFields": null,
         "interfaces": [],
+        "enumValues": null,
+        "possibleTypes": null
+      },
+      {
+        "kind": "INPUT_OBJECT",
+        "name": "Topic_Nested_Where",
+        "description": "",
+        "fields": null,
+        "inputFields": [
+          {
+            "name": "AND",
+            "description": "",
+            "type": {
+              "kind": "LIST",
+              "name": null,
+              "ofType": {
+                "kind": "INPUT_OBJECT",
+                "name": "Topic_Nested_Where",
+                "ofType": null
+              }
+            },
+            "defaultValue": null,
+            "isDeprecated": false,
+            "deprecationReason": null
+          },
+          {
+            "name": "OR",
+            "description": "",
+            "type": {
+              "kind": "LIST",
+              "name": null,
+              "ofType": {
+                "kind": "INPUT_OBJECT",
+                "name": "Topic_Nested_Where",
+                "ofType": null
+              }
+            },
+            "defaultValue": null,
+            "isDeprecated": false,
+            "deprecationReason": null
+          },
+          {
+            "name": "topicName",
+            "description": "",
+            "type": {
+              "kind": "INPUT_OBJECT",
+              "name": "CaisyField_String_Where",
+              "ofType": null
+            },
+            "defaultValue": null,
+            "isDeprecated": false,
+            "deprecationReason": null
+          }
+        ],
+        "interfaces": null,
         "enumValues": null,
         "possibleTypes": null
       },
