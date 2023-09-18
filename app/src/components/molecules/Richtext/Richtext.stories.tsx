@@ -29,7 +29,7 @@ type Story = StoryObj<typeof Richtext>;
 
 export const Default: Story = {
   args: {
-    richTextContent: {
+    data: {
       connections: [],
       json: {
         content: [
@@ -357,5 +357,5 @@ export const Default: Story = {
         type: "doc",
       },
     },
-  },
+  }
 };

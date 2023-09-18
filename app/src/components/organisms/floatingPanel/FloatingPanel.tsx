@@ -1,7 +1,6 @@
 import { richTextParagraphOverwrite } from "@/components/helpers/richTextParagraphOverwrite";
-import { type IGenTextElement_RichTextContent } from "@/services/graphql/__generated/sdk";
+import { type IGenCase_Facts } from "@/services/graphql/__generated/sdk";
 
-// import { RichTextRenderer } from "@caisy/rich-text-react-renderer";
 import { ScrollArea, Tabs, useMantineTheme } from "@mantine/core";
 import { type Maybe } from "@trpc/server";
 import React, { useState, type FunctionComponent } from "react";
@@ -20,7 +19,7 @@ type ITableTab = { icon: {src: React.ReactNode}; title: "Content" | "Facts" };
 export interface IFloatingPanelProps
 {
   readonly content: DataType[];
-  readonly facts: Maybe<IGenTextElement_RichTextContent> | undefined;
+  readonly facts: Maybe<IGenCase_Facts> | undefined;
   readonly hidden?: boolean;
   readonly tabs: ITableTab[];
 }
@@ -70,7 +69,7 @@ const FloatingPanel: FunctionComponent<IFloatingPanelProps> = ({
         {selectedTab === "Content" && content && renderTOC(toc)}
         {facts && facts.json && selectedTab === "Facts" && facts && (
           <div css={styles.facts}>
-            <Richtext richTextContent={facts} richTextOverwrite={{ paragraph: richTextParagraphOverwrite }}/>
+            <Richtext data={facts} richTextOverwrite={{ paragraph: richTextParagraphOverwrite }}/>
           </div>
         )}
       </div>

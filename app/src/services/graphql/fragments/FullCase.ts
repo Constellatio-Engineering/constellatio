@@ -5,7 +5,6 @@ import { f_LegalArea } from "./LegalArea";
 import { f_MainCategory } from "./MainCategory";
 import { f_SubCategory } from "./SubCategory";
 import { f_Tags } from "./Tags";
-import { f_TextElement } from "./TextElement";
 import { f_Topic } from "./Topic";
 
 export const f_FullCase = gql`
@@ -15,14 +14,16 @@ export const f_FullCase = gql`
 	${f_Tags}
 	${f_Topic}
 	${f_CaseFullTextTasks}
-	${f_TextElement}
 	fragment FullCase on Case {
 		__typename
 		id
 		title
 		durationToCompleteInMinutes
 		facts {
-			...TextElement
+			connections {
+				__typename
+			}
+			json
 		}
 		fullTextTasks {
 			...CaseFullTextTasks
@@ -44,7 +45,10 @@ export const f_FullCase = gql`
 			...Topic
 		}
 		resolution {
-			...TextElement
+			connections {
+				__typename
+			}
+			json
 		}
 	}
 `;

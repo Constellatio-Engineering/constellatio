@@ -244,9 +244,9 @@ let FillGapsGame: FC<TFillGapsGame> = ({
         </LegendWrapper>
         <Game>
           <Options>
-            {fillGameParagraph?.richTextContent?.json && (
+            {fillGameParagraph?.json && (
               <Richtext
-                richTextContent={fillGameParagraph.richTextContent}
+                data={fillGameParagraph}
                 richTextOverwrite={{
                   paragraph: richtextOverwrite,
                 }}
@@ -264,9 +264,7 @@ let FillGapsGame: FC<TFillGapsGame> = ({
               variant={gameStatus}
               message={resultMessage}
             />
-            {helpNote?.richTextContent?.json && (
-              <HelpNote richTextContent={helpNote?.richTextContent}/>
-            )}
+            {helpNote?.json && <HelpNote data={helpNote}/>}
           </>
         )}
         <div>

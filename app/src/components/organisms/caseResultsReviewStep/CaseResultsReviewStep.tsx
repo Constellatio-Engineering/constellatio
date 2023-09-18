@@ -1,8 +1,5 @@
-import { BodyText } from "@/components/atoms/BodyText/BodyText";
 import { Button } from "@/components/atoms/Button/Button";
-import IconButton from "@/components/atoms/iconButton/IconButton";
 import IconButtonBar from "@/components/iconButtonBar/IconButtonBar";
-import { ArrowSolidDown } from "@/components/Icons/arrow-solid-down";
 import { ArrowDown } from "@/components/Icons/ArrowDown";
 import { Bookmark } from "@/components/Icons/Bookmark";
 import { Edit } from "@/components/Icons/Edit";
@@ -11,7 +8,7 @@ import { Pen } from "@/components/Icons/Pen";
 import { Print } from "@/components/Icons/print";
 import { Modal } from "@/components/molecules/Modal/Modal";
 import { Richtext } from "@/components/molecules/Richtext/Richtext";
-import { type Maybe, type IGenTextElement } from "@/services/graphql/__generated/sdk";
+import { type IGenCase_Resolution, type IGenCase_Facts, type Maybe } from "@/services/graphql/__generated/sdk";
 import caseSolvingStore from "@/stores/caseSolving.store";
 
 import {
@@ -24,8 +21,8 @@ import * as styles from "./CaseResultsReviewStep.styles";
 
 export interface ICaseResultsReviewStepProps 
 {
-  readonly facts: Maybe<IGenTextElement>;
-  readonly resolution: Maybe<IGenTextElement>;
+  readonly facts: Maybe<IGenCase_Facts>;
+  readonly resolution: Maybe<IGenCase_Resolution>;
   readonly setCaseStepIndex: React.Dispatch<React.SetStateAction<0 | 1 | 2>>;
   readonly title: string;
 }
@@ -86,7 +83,7 @@ const CaseResultsReviewStep: FunctionComponent<ICaseResultsReviewStepProps> = ({
       <Container maw={1440}>
         <div css={styles.content}>
           <div>
-            {facts && (
+            {facts?.json && (
               <div css={styles.factsWrapper}>
                 <Accordion variant="separated">
                   <Accordion.Item value="facts">
@@ -94,7 +91,7 @@ const CaseResultsReviewStep: FunctionComponent<ICaseResultsReviewStepProps> = ({
                       <Title order={3}>Facts</Title>
                     </Accordion.Control>
                     <Accordion.Panel>
-                      <Richtext richTextContent={facts.richTextContent}/>
+                      <Richtext data={facts}/>
                     </Accordion.Panel>
                   </Accordion.Item>
                 </Accordion>
@@ -119,15 +116,17 @@ const CaseResultsReviewStep: FunctionComponent<ICaseResultsReviewStepProps> = ({
               )}
             </div>
           </div>
-          <div css={styles.resolutionWrapper}>
-            <div className="resolution-header">
-              <Title order={2}><Notepad size={24}/> Resolution</Title>
-              <div className="icons-bar">
-                <IconButtonBar icons={icons}/>
+          {resolution?.json && (
+            <div css={styles.resolutionWrapper}>
+              <div className="resolution-header">
+                <Title order={2}><Notepad size={24}/> Resolution</Title>
+                <div className="icons-bar">
+                  <IconButtonBar icons={icons}/>
+                </div>
               </div>
+              <Richtext data={resolution}/>
             </div>
-            <Richtext richTextContent={resolution?.richTextContent}/>
-          </div>
+          )}
         </div>
       </Container>
       <Modal

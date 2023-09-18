@@ -437,18 +437,10 @@ type Callout {
   id: ID
 
   """"""
-  text(
-    """
-    The cursor to start the pagination from. In this case the curser equals the id for the (last) element. If not set, we wil start from the beginning.
-    """
-    after: String
+  text(locale: String): Callout_text
 
-    """The number of items to return. Default and max value is 100."""
-    first: Int = 100
-
-    """"""
-    locale: String
-  ): TextElement
+  """"""
+  title: String
 }
 
 """"""
@@ -520,7 +512,7 @@ input Callout_Sort {
   publishedAt: Order
 
   """"""
-  text: Order
+  title: Order
 
   """"""
   updatedAt: Order
@@ -539,18 +531,18 @@ input Callout_Where {
 
   """"""
   expandable: Boolean
+
+  """"""
+  text: CaisyField_Richtext_Where
+
+  """"""
+  title: CaisyField_String_Where
 }
 
 """"""
-type CardSelectionGame {
+type Callout_text {
   """"""
-  _meta: CaisyDocument_Meta
-
-  """"""
-  game: JSON
-
-  """"""
-  helpNote(
+  connections(
     """
     The cursor to start the pagination from. In this case the curser equals the id for the (last) element. If not set, we wil start from the beginning.
     """
@@ -561,7 +553,25 @@ type CardSelectionGame {
 
     """"""
     locale: String
-  ): TextElement
+  ): [Callout_text_Connections]
+
+  """"""
+  json: JSON
+}
+
+""""""
+union Callout_text_Connections = Caisy_Field_Document_NotFound
+
+""""""
+type CardSelectionGame {
+  """"""
+  _meta: CaisyDocument_Meta
+
+  """"""
+  game: JSON
+
+  """"""
+  helpNote(locale: String): CardSelectionGame_helpNote
 
   """"""
   id: ID
@@ -597,9 +607,6 @@ input CardSelectionGame_Sort {
   createdAt: Order
 
   """"""
-  helpNote: Order
-
-  """"""
   id: Order
 
   """"""
@@ -621,19 +628,16 @@ input CardSelectionGame_Where {
   OR: [CardSelectionGame_Where]
 
   """"""
+  helpNote: CaisyField_Richtext_Where
+
+  """"""
   question: CaisyField_String_Where
 }
 
 """"""
-type Case {
+type CardSelectionGame_helpNote {
   """"""
-  _meta: CaisyDocument_Meta
-
-  """"""
-  durationToCompleteInMinutes: Int
-
-  """"""
-  facts(
+  connections(
     """
     The cursor to start the pagination from. In this case the curser equals the id for the (last) element. If not set, we wil start from the beginning.
     """
@@ -644,7 +648,25 @@ type Case {
 
     """"""
     locale: String
-  ): TextElement
+  ): [CardSelectionGame_helpNote_Connections]
+
+  """"""
+  json: JSON
+}
+
+""""""
+union CardSelectionGame_helpNote_Connections = Caisy_Field_Document_NotFound
+
+""""""
+type Case {
+  """"""
+  _meta: CaisyDocument_Meta
+
+  """"""
+  durationToCompleteInMinutes: Int
+
+  """"""
+  facts(locale: String): Case_facts
 
   """"""
   fullTextTasks(locale: String): Case_fullTextTasks
@@ -670,18 +692,7 @@ type Case {
   ): [Case_mainCategoryField]
 
   """"""
-  resolution(
-    """
-    The cursor to start the pagination from. In this case the curser equals the id for the (last) element. If not set, we wil start from the beginning.
-    """
-    after: String
-
-    """The number of items to return. Default and max value is 100."""
-    first: Int = 100
-
-    """"""
-    locale: String
-  ): TextElement
+  resolution(locale: String): Case_resolution
 
   """"""
   subCategoryField(
@@ -759,9 +770,6 @@ input Case_Sort {
   durationToCompleteInMinutes: Order
 
   """"""
-  facts: Order
-
-  """"""
   id: Order
 
   """"""
@@ -772,9 +780,6 @@ input Case_Sort {
 
   """"""
   publishedAt: Order
-
-  """"""
-  resolution: Order
 
   """"""
   subCategoryField: Order
@@ -804,11 +809,40 @@ input Case_Where {
   durationToCompleteInMinutes: CaisyField_Number_WhereInt
 
   """"""
+  facts: CaisyField_Richtext_Where
+
+  """"""
   fullTextTasks: CaisyField_Richtext_Where
+
+  """"""
+  resolution: CaisyField_Richtext_Where
 
   """"""
   title: CaisyField_String_Where
 }
+
+""""""
+type Case_facts {
+  """"""
+  connections(
+    """
+    The cursor to start the pagination from. In this case the curser equals the id for the (last) element. If not set, we wil start from the beginning.
+    """
+    after: String
+
+    """The number of items to return. Default and max value is 100."""
+    first: Int = 100
+
+    """"""
+    locale: String
+  ): [Case_facts_Connections]
+
+  """"""
+  json: JSON
+}
+
+""""""
+union Case_facts_Connections = Caisy_Field_Document_NotFound
 
 """"""
 type Case_fullTextTasks {
@@ -840,6 +874,29 @@ union Case_legalArea = LegalArea | SubCategory
 union Case_mainCategoryField = MainCategory
 
 """"""
+type Case_resolution {
+  """"""
+  connections(
+    """
+    The cursor to start the pagination from. In this case the curser equals the id for the (last) element. If not set, we wil start from the beginning.
+    """
+    after: String
+
+    """The number of items to return. Default and max value is 100."""
+    first: Int = 100
+
+    """"""
+    locale: String
+  ): [Case_resolution_Connections]
+
+  """"""
+  json: JSON
+}
+
+""""""
+union Case_resolution_Connections = Caisy_Field_Document_NotFound
+
+""""""
 union Case_subCategoryField = SubCategory
 
 """"""
@@ -862,18 +919,7 @@ type DragNDropGame {
   game: JSON
 
   """"""
-  helpNote(
-    """
-    The cursor to start the pagination from. In this case the curser equals the id for the (last) element. If not set, we wil start from the beginning.
-    """
-    after: String
-
-    """The number of items to return. Default and max value is 100."""
-    first: Int = 100
-
-    """"""
-    locale: String
-  ): TextElement
+  helpNote(locale: String): DragNDropGame_helpNote
 
   """"""
   id: ID
@@ -909,9 +955,6 @@ input DragNDropGame_Sort {
   createdAt: Order
 
   """"""
-  helpNote: Order
-
-  """"""
   id: Order
 
   """"""
@@ -933,8 +976,34 @@ input DragNDropGame_Where {
   OR: [DragNDropGame_Where]
 
   """"""
+  helpNote: CaisyField_Richtext_Where
+
+  """"""
   question: CaisyField_String_Where
 }
+
+""""""
+type DragNDropGame_helpNote {
+  """"""
+  connections(
+    """
+    The cursor to start the pagination from. In this case the curser equals the id for the (last) element. If not set, we wil start from the beginning.
+    """
+    after: String
+
+    """The number of items to return. Default and max value is 100."""
+    first: Int = 100
+
+    """"""
+    locale: String
+  ): [DragNDropGame_helpNote_Connections]
+
+  """"""
+  json: JSON
+}
+
+""""""
+union DragNDropGame_helpNote_Connections = Caisy_Field_Document_NotFound
 
 """"""
 type FillInGapsGame {
@@ -942,32 +1011,10 @@ type FillInGapsGame {
   _meta: CaisyDocument_Meta
 
   """"""
-  fillGameParagraph(
-    """
-    The cursor to start the pagination from. In this case the curser equals the id for the (last) element. If not set, we wil start from the beginning.
-    """
-    after: String
-
-    """The number of items to return. Default and max value is 100."""
-    first: Int = 100
-
-    """"""
-    locale: String
-  ): TextElement
+  fillGameParagraph(locale: String): FillInGapsGame_fillGameParagraph
 
   """"""
-  helpNote(
-    """
-    The cursor to start the pagination from. In this case the curser equals the id for the (last) element. If not set, we wil start from the beginning.
-    """
-    after: String
-
-    """The number of items to return. Default and max value is 100."""
-    first: Int = 100
-
-    """"""
-    locale: String
-  ): TextElement
+  helpNote(locale: String): FillInGapsGame_helpNote
 
   """"""
   id: ID
@@ -1003,12 +1050,6 @@ input FillInGapsGame_Sort {
   createdAt: Order
 
   """"""
-  fillGameParagraph: Order
-
-  """"""
-  helpNote: Order
-
-  """"""
   id: Order
 
   """"""
@@ -1030,8 +1071,60 @@ input FillInGapsGame_Where {
   OR: [FillInGapsGame_Where]
 
   """"""
+  fillGameParagraph: CaisyField_Richtext_Where
+
+  """"""
+  helpNote: CaisyField_Richtext_Where
+
+  """"""
   question: CaisyField_String_Where
 }
+
+""""""
+type FillInGapsGame_fillGameParagraph {
+  """"""
+  connections(
+    """
+    The cursor to start the pagination from. In this case the curser equals the id for the (last) element. If not set, we wil start from the beginning.
+    """
+    after: String
+
+    """The number of items to return. Default and max value is 100."""
+    first: Int = 100
+
+    """"""
+    locale: String
+  ): [FillInGapsGame_fillGameParagraph_Connections]
+
+  """"""
+  json: JSON
+}
+
+""""""
+union FillInGapsGame_fillGameParagraph_Connections = Caisy_Field_Document_NotFound
+
+""""""
+type FillInGapsGame_helpNote {
+  """"""
+  connections(
+    """
+    The cursor to start the pagination from. In this case the curser equals the id for the (last) element. If not set, we wil start from the beginning.
+    """
+    after: String
+
+    """The number of items to return. Default and max value is 100."""
+    first: Int = 100
+
+    """"""
+    locale: String
+  ): [FillInGapsGame_helpNote_Connections]
+
+  """"""
+  json: JSON
+}
+
+""""""
+union FillInGapsGame_helpNote_Connections = Caisy_Field_Document_NotFound
 
 """"""
 type ImageWrapperCard {
@@ -1322,9 +1415,6 @@ type Query {
   Tags(id: ID!, locale: String): Tags
 
   """"""
-  TextElement(id: ID!, locale: String): TextElement
-
-  """"""
   Topic(id: ID!, locale: String): Topic
 
   """"""
@@ -1362,9 +1452,6 @@ type Query {
 
   """"""
   allTags(after: String, before: String, first: Int, last: Int, locale: String, sort: [Tags_Sort], where: [Tags_Where]): Tags_Connection
-
-  """"""
-  allTextElement(after: String, before: String, first: Int, last: Int, locale: String, sort: [TextElement_Sort], where: [TextElement_Where]): TextElement_Connection
 
   """"""
   allTopic(after: String, before: String, first: Int, last: Int, locale: String, sort: [Topic_Sort], where: [Topic_Where]): Topic_Connection
@@ -1515,89 +1602,6 @@ input Tags_Where {
   """"""
   tagName: CaisyField_String_Where
 }
-
-""""""
-type TextElement {
-  """"""
-  _meta: CaisyDocument_Meta
-
-  """"""
-  id: ID
-
-  """"""
-  richTextContent(locale: String): TextElement_richTextContent
-}
-
-""""""
-type TextElement_Connection {
-  """"""
-  edges: [TextElement_ConnectionEdge]
-
-  """"""
-  pageInfo: PageInfo
-
-  """"""
-  totalCount: Int
-}
-
-""""""
-type TextElement_ConnectionEdge {
-  """"""
-  cursor: String
-
-  """"""
-  node: TextElement
-}
-
-""""""
-input TextElement_Sort {
-  """"""
-  createdAt: Order
-
-  """"""
-  id: Order
-
-  """"""
-  publishedAt: Order
-
-  """"""
-  updatedAt: Order
-}
-
-""""""
-input TextElement_Where {
-  """"""
-  AND: [TextElement_Where]
-
-  """"""
-  OR: [TextElement_Where]
-
-  """"""
-  richTextContent: CaisyField_Richtext_Where
-}
-
-""""""
-type TextElement_richTextContent {
-  """"""
-  connections(
-    """
-    The cursor to start the pagination from. In this case the curser equals the id for the (last) element. If not set, we wil start from the beginning.
-    """
-    after: String
-
-    """The number of items to return. Default and max value is 100."""
-    first: Int = 100
-
-    """"""
-    locale: String
-  ): [TextElement_richTextContent_Connections]
-
-  """"""
-  json: JSON
-}
-
-""""""
-union TextElement_richTextContent_Connections = Caisy_Field_Document_NotFound
 
 """"""
 type Topic {
