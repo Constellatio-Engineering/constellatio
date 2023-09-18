@@ -20,6 +20,8 @@ export const env = createEnv({
     GOOGLE_SERVICE_ACCOUNT_CLIENT_EMAIL: z.string().email(),
     GOOGLE_SERVICE_ACCOUNT_CLIENT_ID: z.string(),
     GOOGLE_SERVICE_ACCOUNT_PRIVATE_KEY: z.string(),
+    MEILISEARCH_HOST: z.string().url(),
+    MEILISEARCH_MASTER_API_KEY: z.string(),
   },
 
   /**
@@ -56,6 +58,8 @@ export const env = createEnv({
     GOOGLE_SERVICE_ACCOUNT_CLIENT_EMAIL: process.env.GOOGLE_SERVICE_ACCOUNT_CLIENT_EMAIL,
     GOOGLE_SERVICE_ACCOUNT_CLIENT_ID: process.env.GOOGLE_SERVICE_ACCOUNT_CLIENT_ID,
     GOOGLE_SERVICE_ACCOUNT_PRIVATE_KEY: process.env.GOOGLE_SERVICE_ACCOUNT_PRIVATE_KEY,
+    MEILISEARCH_HOST: process.env.MEILISEARCH_HOST,
+    MEILISEARCH_MASTER_API_KEY: process.env.MEILISEARCH_MASTER_API_KEY,
   },
   /**
    * Run `build` or `dev` with `SKIP_ENV_VALIDATION` to skip env validation.

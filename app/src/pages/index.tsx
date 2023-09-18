@@ -3,7 +3,7 @@ import { getCommonProps } from "@/utils/commonProps";
 
 import { type GetServerSideProps } from "next";
 import { type SSRConfig } from "next-i18next";
-import { type FunctionComponent } from "react";
+import { type FunctionComponent, useState } from "react";
 
 import { defaultLocale } from "../../next.config.mjs";
 
@@ -23,7 +23,16 @@ export const getServerSideProps: GetServerSideProps<ServerSidePropsResult> = asy
 
 const Home: FunctionComponent<ServerSidePropsResult> = () =>
 {
-  return <Layout/>;
+  const [input, setInput] = useState<string>("");
+
+  return (
+    <Layout>
+      <div style={{ padding: 100 }}>
+        <h1>Search</h1>
+        <input type="text" value={input} onChange={e => setInput(e.target.value)}/>
+      </div>
+    </Layout>
+  );
 };
 
 export default Home;
