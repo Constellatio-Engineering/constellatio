@@ -7,19 +7,18 @@ import type { NextRequest, NextMiddleware } from "next/server";
 
 export const middleware: NextMiddleware = async (req: NextRequest) =>
 {
-  console.log("--- middleware ---");
-
   const res = NextResponse.next();
   const supabase = createMiddlewareSupabaseClient<Database>({ req, res });
   const { data: { session }, error: authError } = await supabase.auth.getSession();
+  const { data: userData, error: getUserError } = await supabase.auth.getUser();
+  const didErrorOccur = authError != null || getUserError != null;
 
-  if(authError != null)
+  if(didErrorOccur)
   {
-    console.error("Error getting session", authError);
-    return res;
+    console.error("Error getting session or user", { authError, getUserError });
   }
 
-  if(!session?.user)
+  if(didErrorOccur || !session?.user)
   {
     const redirectUrl = req.nextUrl.clone();
 
@@ -29,25 +28,17 @@ export const middleware: NextMiddleware = async (req: NextRequest) =>
     return NextResponse.redirect(redirectUrl);
   }
 
-  const { data: userData, error: getUserError } = await supabase.auth.getUser();
-
-  if(getUserError != null)
+  if(!userData.user?.confirmed_at)
   {
-    console.error("Error getting user", getUserError);
-    return res;
+    const redirectUrl = req.nextUrl.clone();
+
+    redirectUrl.pathname = "/confirm";
+    redirectUrl.searchParams.set("redirectedFrom", req.nextUrl.pathname);
+
+    return NextResponse.redirect(redirectUrl);
   }
 
-  if(userData.user?.confirmed_at)
-  {
-    return res;
-  }
-
-  const redirectUrl = req.nextUrl.clone();
-
-  redirectUrl.pathname = "/confirm";
-  redirectUrl.searchParams.set("redirectedFrom", req.nextUrl.pathname);
-
-  return NextResponse.redirect(redirectUrl);
+  return res;
 };
 
 export const config = {

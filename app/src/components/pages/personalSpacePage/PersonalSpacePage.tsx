@@ -1,5 +1,6 @@
 /* eslint-disable max-lines */
 import { Button } from "@/components/atoms/Button/Button";
+import DummyFileViewer from "@/components/pages/personalSpacePage/dummyFileViewer/DummyFileViewer";
 import uploadsProgressStore from "@/stores/uploadsProgress.store";
 import { api } from "@/utils/api";
 import { removeItemsByIndices } from "@/utils/utils";
@@ -22,6 +23,7 @@ const PersonalSpacePage: FunctionComponent = () =>
   const fileInputRef = React.useRef<HTMLInputElement>(null);
   const { setUploadState, uploads } = uploadsProgressStore();
   const [selectedFiles, setSelectedFiles] = useState<File[]>([]);
+  const [selectedFileIdForPreview, setSelectedFileIdForPreview] = useState<string>();
 
   const { mutate: removeBookmark } = api.bookmarks.removeBookmark.useMutation({
     onError: e => console.log("error while removing bookmark:", e),
@@ -132,16 +134,6 @@ const PersonalSpacePage: FunctionComponent = () =>
     setSelectedFiles(newSelectedFiles);
   };
 
-  const uploadedFileSortedByCreatedAt = uploadedFiles.sort((a, b) =>
-  {
-    if(!a.createdAt || !b.createdAt)
-    {
-      return 0;
-    }
-
-    return b.createdAt.getTime() - a.createdAt.getTime();
-  });
-
   const areUploadsInProgress = uploads.some(u => u.state.type === "uploading");
 
   return (
@@ -208,18 +200,24 @@ const PersonalSpacePage: FunctionComponent = () =>
       })}
       <h2 style={{ fontSize: 22, marginRight: 10, marginTop: 100 }}>Uploaded Files</h2>
       {isGetUploadedFilesLoading && <p>Loading...</p>}
-      {uploadedFileSortedByCreatedAt.map(file =>
+      {uploadedFiles.slice(0, 5).map(file =>
       {
         const uploadedDate = file.createdAt?.toLocaleDateString();
         const uploadedTime = file.createdAt?.toLocaleTimeString();
 
         return (
-          <div key={file.id} style={{ margin: "10px 0" }}>
+          <div key={file.id} style={{ cursor: "pointer", margin: "10px 0" }} onClick={() => setSelectedFileIdForPreview(file.uuid)}>
             <strong>{file.originalFilename}.{file.fileExtension}</strong>
             <p>Uploaded: {uploadedDate} {uploadedTime}</p>
           </div>
         );
       })}
+      {uploadedFiles.length > 5 && (
+        <p>{uploadedFiles.length - 5} more files...</p>
+      )}
+      {selectedFileIdForPreview && (
+        <DummyFileViewer fileId={selectedFileIdForPreview}/>
+      )}
     </div>
   );
 };
