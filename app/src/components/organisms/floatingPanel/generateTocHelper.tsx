@@ -1,3 +1,5 @@
+import { type IHeadingNode } from "types/richtext";
+
 import { TOCItemComponent } from "./tocItem";
 
 type ContentType = {
@@ -126,6 +128,34 @@ export function getNumericalLabel(depth: number, index: number): string
 //   ];
 //   return numberingTypes[level - 1] ? numberingTypes[level - 1](count) : count.toString();
 // }
+
+// eslint-disable-next-line import/no-unused-modules, @typescript-eslint/no-explicit-any
+export function getNestedHeadingIndex(item: IHeadingNode, allHeadings: any): number | null 
+{
+  const level = item.attrs?.level;
+  if(level === undefined) 
+  {
+    return null;
+  }
+
+  let currentIndex = -1;
+  for(const currentItem of allHeadings) 
+  {
+    if(currentItem.attrs?.level === level) 
+    {
+      currentIndex++;
+      if(JSON.stringify(item) === JSON.stringify(currentItem)) 
+      {
+        return currentIndex;
+      }
+    }
+    else if(currentItem.attrs?.level < level) 
+    {
+      currentIndex = -1;
+    }
+  }
+  return null;
+}
 
 export const renderTOC = (toc: TOCItem[], depth: number = 0): JSX.Element => 
 {

@@ -7,7 +7,7 @@ import type { IDocumentLink, IHeadingNode } from "types/richtext";
 
 import { Container, Title } from "@mantine/core";
 import {
-  type FunctionComponent, useEffect, useMemo, type JSXElementConstructor, type ReactElement 
+  type FunctionComponent, useEffect, useMemo
 } from "react";
 
 import { getGamesIndexes } from "./caseCompleteTestsStep.helper";
@@ -19,6 +19,7 @@ import { Callout } from "../Callout/Callout";
 import { DragDropGame } from "../DragDropGame/DragDropGame";
 import { FillGapsGame } from "../FillGapsGame/FillGapsGame";
 import FloatingPanel from "../floatingPanel/FloatingPanel";
+import { getNestedHeadingIndex } from "../floatingPanel/generateTocHelper";
 import { SelectionCardGame } from "../SelectionCardGame/SelectionCardGame";
 
 interface ICaseCompleteTestsStepProps 
@@ -31,8 +32,6 @@ interface ICaseCompleteTestsStepProps
 
 const CaseCompleteTestsStep: FunctionComponent<ICaseCompleteTestsStepProps> = ({ facts, fullTextTasks, variant }) => 
 {
-
-  // console.log({ fullTextTasks });
 
   const {
     getNextGameIndex,
@@ -82,55 +81,29 @@ const CaseCompleteTestsStep: FunctionComponent<ICaseCompleteTestsStepProps> = ({
   }, [fullTextTasks]);
 
   // THIS LOGIC IS WRONG WE NEED INDEX AMONGST THE SAME NESTING LEVEL NOT AMONGST ALL THE OTHER HEADINGS
-  const getHeadingIndex = (passedHead: {
-    attrs: {
-      level: number;
-    };
-    type: "heading";
-  } & ReactElement<unknown, string | JSXElementConstructor<unknown>>): number | void => 
-  {
+  // const getHeadingIndex = (passedHead: {
+  //   attrs: {
+  //     level: number;
+  //   };
+  //   type: "heading";
+  // } & ReactElement<unknown, string | JSXElementConstructor<unknown>>): number | void => 
+  // {
     
-    const allHeadingsSameLevel = fullTextTasks?.json?.content?.filter((x: { attrs: { level: number }; type: "heading" }) => (x.type === "heading" && x.attrs.level === passedHead.attrs.level));
+  //   const allHeadingsSameLevel = fullTextTasks?.json?.content?.filter((x: { attrs: { level: number }; type: "heading" }) => (x.type === "heading" && x.attrs.level === passedHead.attrs.level));
 
-    for(let headIndex = 0; headIndex < allHeadingsSameLevel.length; headIndex++) 
-    {
-      if(JSON?.stringify(allHeadingsSameLevel?.[headIndex]) === JSON?.stringify(passedHead)) 
-      {
-        return headIndex;
-      }
-    }
-  };
+  //   for(let headIndex = 0; headIndex < allHeadingsSameLevel.length; headIndex++) 
+  //   {
+  //     if(JSON?.stringify(allHeadingsSameLevel?.[headIndex]) === JSON?.stringify(passedHead)) 
+  //     {
+  //       return headIndex;
+  //     }
+  //   }
+  // };
 
   // THIS FUNCTION RETURNS THE INDEX OF THE ITEM AMONGST THE SAME HEADING LEVEL INSIDE A SPECIFIC NESTING LEVEL 
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const allHeadings = fullTextTasks?.json?.content?.filter((x: { attrs: { level: number }; type: "heading" }) => x.type === "heading");
   
-  function getNestedHeadingIndex(item: IHeadingNode): number | null 
-  {
-    const level = item.attrs?.level;
-    if(level === undefined) 
-    {
-      return null;
-    }
-
-    let currentIndex = -1;
-    for(const currentItem of allHeadings) 
-    {
-      if(currentItem.attrs?.level === level) 
-      {
-        currentIndex++;
-        if(JSON.stringify(item) === JSON.stringify(currentItem)) 
-        {
-          return currentIndex;
-        }
-      }
-      else if(currentItem.attrs?.level < level) 
-      {
-        currentIndex = -1;
-      }
-    }
-    return null;
-  }
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
 
   return (
     <Container maw={1440}>
@@ -251,7 +224,7 @@ const CaseCompleteTestsStep: FunctionComponent<ICaseCompleteTestsStepProps> = ({
                   heading: (props) => 
                   {
                     const node = props!.node as unknown as IHeadingNode;
-                    return richTextHeadingOverwrite({ depth: node?.attrs?.level, index: getNestedHeadingIndex(node), ...props });
+                    return richTextHeadingOverwrite({ depth: node?.attrs?.level, index: getNestedHeadingIndex(node, allHeadings), ...props });
                   },
                   paragraph: richTextParagraphOverwrite
                 }}
