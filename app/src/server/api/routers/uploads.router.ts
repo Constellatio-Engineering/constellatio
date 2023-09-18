@@ -2,11 +2,11 @@ import { db } from "@/db/connection";
 import { uploadsTable } from "@/db/schema";
 import { env } from "@/env.mjs";
 import { createTRPCRouter, protectedProcedure } from "@/server/api/trpc";
-import { BadFileError, FileTooLargeError, InternalServerError, NotFoundError } from "@/utils/serverError";
+import { BadFileError, FileTooLargeError, NotFoundError } from "@/utils/serverError";
 import { getFileNameWithoutExtension } from "@/utils/utils";
 
 import { Storage } from "@google-cloud/storage";
-import { and, eq } from "drizzle-orm";
+import { and, desc, eq } from "drizzle-orm";
 import { z } from "zod";
 
 const storage = new Storage({
@@ -23,7 +23,7 @@ export const uploadsRouter = createTRPCRouter({
     .input(z.object({
       fileId: z.string(),
     }))
-    .mutation(async ({ ctx: { userId }, input: { fileId } }) =>
+    .query(async ({ ctx: { userId }, input: { fileId } }) =>
     {
       const file = await db.query.uploadsTable.findFirst({
         where: and(
@@ -39,7 +39,7 @@ export const uploadsRouter = createTRPCRouter({
 
       const [url] = await storage
         .bucket(env.GOOGLE_CLOUD_STORAGE_BUCKET_NAME)
-        .file(`${userId}/${file.filename}`)
+        .file(`${userId}/${file.filename + "." + file.fileExtension}`)
         .getSignedUrl({
           action: "read",
           expires: Date.now() + 15 * 60 * 1000,
@@ -88,6 +88,7 @@ export const uploadsRouter = createTRPCRouter({
     .query(async ({ ctx: { userId } }) =>
     {
       return db.query.uploadsTable.findMany({
+        orderBy: [desc(uploadsTable.createdAt)],
         where: eq(uploadsTable.userId, userId)
       });
     }),
@@ -107,9 +108,6 @@ export const uploadsRouter = createTRPCRouter({
       {
         throw new BadFileError(new Error("File has no extension"));
       }
-
-      console.log("fileNameWithoutExtension", fileNameWithoutExtension);
-      console.log("fileExtension", fileExtension);
 
       await db.insert(uploadsTable).values({
         fileExtension,
