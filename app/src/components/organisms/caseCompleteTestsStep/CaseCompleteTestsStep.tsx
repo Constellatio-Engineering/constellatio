@@ -28,7 +28,6 @@ interface ICaseCompleteTestsStepProps
 {
   readonly facts: Maybe<IGenCase_Facts>;
   readonly fullTextTasks: Maybe<IGenCase_FullTextTasks>;
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   readonly variant?: "case" | "dictionary";
 }
 
@@ -78,7 +77,7 @@ const CaseCompleteTestsStep: FunctionComponent<ICaseCompleteTestsStepProps> = ({
   useEffect(() => 
   {
     
-    setGamesIndexes(getGamesIndexes({ fullTextTasks }));
+    if(variant === "case" && fullTextTasks?.__typename === "Case_fullTextTasks") { setGamesIndexes(getGamesIndexes({ fullTextTasks })); }
     getNextGameIndex();
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [fullTextTasks]);

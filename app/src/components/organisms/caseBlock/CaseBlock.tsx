@@ -11,7 +11,7 @@ import React, { type FunctionComponent } from "react";
 
 import * as styles from "./CaseBlock.styles";
 import { timeFormatter } from "../overviewCard/OverviewCard";
-import Table from "../table/Table";
+import Table, { type CasesTableProps } from "../table/Table";
 
 export interface ICaseBlockProps 
 {
@@ -24,20 +24,32 @@ export interface ICaseBlockProps
 
 const CaseBlock: FunctionComponent<ICaseBlockProps> = ({ blockHead, items, variant }) => 
 {
+
+  const CasesTable: CasesTableProps = 
+  { 
+    type: "cases",
+    variant: "cases"  
+  };
+  const DictionaryTable: DictionaryTableProps = 
+  {
+    type: "dictionary", 
+    variant: "dictionary"  
+  };
+
   const { data: casesBookmarks, isLoading } = api.bookmarks.getAllBookmarks.useQuery({ resourceType: "case" });
 
   return items && items.length > 0 ? (
     <div css={styles.wrapper}>
-      <CaseBlockHead {...blockHead}/> 
-      <Table tableType={{ type: variant === "case" ? "cases" : "dictionary", variant: variant === "case" ? "cases" : "dictionary" }}>
-        {items?.map((item, caseIndex) =>
+      <CaseBlockHead {...blockHead}/>
+      <Table tableType={variant === "case" ? CasesTable : DictionaryTable}>
+        {items?.map((item, caseIndex) => 
         {
           const isBookmarked = casesBookmarks?.some(bookmark => bookmark?.resourceId === item?.id) || false;
 
           return (
             <tr key={caseIndex}>
               <td>
-                <Link passHref href={`/cases/${item?.id}`}>
+                <Link passHref href={`/${variant === "case" ? "cases" : "dictionary"}/${item?.id}`}>
                   <TableCell variant="titleTableCell">
                     {item?.title}
                   </TableCell>

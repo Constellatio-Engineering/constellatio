@@ -1287,11 +1287,559 @@ export type IGenTopic_Where = {
   topicName?: InputMaybe<IGenCaisyField_String_Where>;
 };
 
+export type IGenArticleFullTextTasksFragment = { __typename: 'Article_fullTextTasks', json?: any | null, connections?: Array<(
+    { __typename: 'Callout' }
+    & IGenCalloutFragment
+  ) | (
+    { __typename: 'CardSelectionGame' }
+    & IGenCardSelectionGameFragment
+  ) | (
+    { __typename: 'DragNDropGame' }
+    & IGenDragNDropGameFragment
+  ) | (
+    { __typename: 'FillInGapsGame' }
+    & IGenFillInGapsGameFragment
+  ) | (
+    { __typename: 'ImageWrapperCard' }
+    & IGenImageWrapperCardFragment
+  ) | null> | null };
 
+export type IGenArticleOverviewFragment = { __typename: 'Article', id?: string | null, title?: string | null, subCategoryField?: Array<(
+    { __typename?: 'SubCategory' }
+    & IGenSubCategoryFragment
+  ) | null> | null, topic?: Array<(
+    { __typename?: 'Topic' }
+    & IGenTopicFragment
+  ) | null> | null };
+
+export type IGenAssetFragment = { __typename?: 'Asset', title?: string | null, src?: string | null, originType?: string | null, keywords?: string | null, id?: string | null, dominantColor?: string | null, description?: string | null, copyright?: string | null, author?: string | null };
+
+export type IGenCalloutFragment = { __typename: 'Callout', id?: string | null, calloutType?: string | null, expandable?: boolean | null, text?: { __typename?: 'Callout_text', json?: any | null, connections?: Array<{ __typename: 'Caisy_Field_Document_NotFound' } | null> | null } | null };
+
+export type IGenCardSelectionGameFragment = { __typename?: 'CardSelectionGame', id?: string | null, game?: any | null, question?: string | null, helpNote?: { __typename?: 'CardSelectionGame_helpNote', json?: any | null, connections?: Array<{ __typename: 'Caisy_Field_Document_NotFound' } | null> | null } | null };
+
+export type IGenCaseFullTextTasksFragment = { __typename: 'Case_fullTextTasks', json?: any | null, connections?: Array<(
+    { __typename: 'Callout' }
+    & IGenCalloutFragment
+  ) | (
+    { __typename: 'CardSelectionGame' }
+    & IGenCardSelectionGameFragment
+  ) | (
+    { __typename: 'DragNDropGame' }
+    & IGenDragNDropGameFragment
+  ) | (
+    { __typename: 'FillInGapsGame' }
+    & IGenFillInGapsGameFragment
+  ) | (
+    { __typename: 'ImageWrapperCard' }
+    & IGenImageWrapperCardFragment
+  ) | null> | null };
+
+export type IGenCaseOverviewFragment = { __typename: 'Case', id?: string | null, title?: string | null, durationToCompleteInMinutes?: number | null, subCategoryField?: Array<(
+    { __typename?: 'SubCategory' }
+    & IGenSubCategoryFragment
+  ) | null> | null, topic?: Array<(
+    { __typename?: 'Topic' }
+    & IGenTopicFragment
+  ) | null> | null };
+
+export type IGenDragNDropGameFragment = { __typename: 'DragNDropGame', id?: string | null, game?: any | null, question?: string | null, helpNote?: { __typename?: 'DragNDropGame_helpNote', json?: any | null, connections?: Array<{ __typename: 'Caisy_Field_Document_NotFound' } | null> | null } | null };
+
+export type IGenFillInGapsGameFragment = { __typename: 'FillInGapsGame', id?: string | null, question?: string | null, fillGameParagraph?: { __typename?: 'FillInGapsGame_fillGameParagraph', json?: any | null, connections?: Array<{ __typename: 'Caisy_Field_Document_NotFound' } | null> | null } | null, helpNote?: { __typename?: 'FillInGapsGame_helpNote', json?: any | null, connections?: Array<{ __typename: 'Caisy_Field_Document_NotFound' } | null> | null } | null };
+
+export type IGenFullArticleFragment = { __typename: 'Article', id?: string | null, title?: string | null, fullTextTasks?: (
+    { __typename?: 'Article_fullTextTasks' }
+    & IGenArticleFullTextTasksFragment
+  ) | null, legalArea?: (
+    { __typename?: 'LegalArea' }
+    & IGenLegalAreaFragment
+  ) | (
+    { __typename?: 'SubCategory' }
+    & IGenSubCategoryFragment
+  ) | null, mainCategoryField?: Array<(
+    { __typename?: 'MainCategory' }
+    & IGenMainCategoryFragment
+  ) | null> | null, subCategoryField?: Array<(
+    { __typename?: 'SubCategory' }
+    & IGenSubCategoryFragment
+  ) | null> | null, tags?: Array<(
+    { __typename?: 'Tags' }
+    & IGenTagsFragment
+  ) | null> | null, topic?: Array<(
+    { __typename?: 'Topic' }
+    & IGenTopicFragment
+  ) | null> | null };
+
+export type IGenFullCaseFragment = { __typename: 'Case', id?: string | null, title?: string | null, durationToCompleteInMinutes?: number | null, facts?: { __typename?: 'Case_facts', json?: any | null, connections?: Array<{ __typename: 'Caisy_Field_Document_NotFound' } | null> | null } | null, fullTextTasks?: (
+    { __typename?: 'Case_fullTextTasks' }
+    & IGenCaseFullTextTasksFragment
+  ) | null, legalArea?: (
+    { __typename?: 'LegalArea' }
+    & IGenLegalAreaFragment
+  ) | (
+    { __typename?: 'SubCategory' }
+    & IGenSubCategoryFragment
+  ) | null, mainCategoryField?: Array<(
+    { __typename?: 'MainCategory' }
+    & IGenMainCategoryFragment
+  ) | null> | null, subCategoryField?: Array<(
+    { __typename?: 'SubCategory' }
+    & IGenSubCategoryFragment
+  ) | null> | null, tags?: Array<(
+    { __typename?: 'Tags' }
+    & IGenTagsFragment
+  ) | null> | null, topic?: Array<(
+    { __typename?: 'Topic' }
+    & IGenTopicFragment
+  ) | null> | null, resolution?: { __typename?: 'Case_resolution', json?: any | null, connections?: Array<{ __typename: 'Caisy_Field_Document_NotFound' } | null> | null } | null };
+
+export type IGenImageWrapperCardFragment = { __typename: 'ImageWrapperCard', id?: string | null, downloadable?: boolean | null, image?: (
+    { __typename?: 'Asset' }
+    & IGenAssetFragment
+  ) | null };
+
+export type IGenLegalAreaFragment = { __typename: 'LegalArea', id?: string | null, legalAreaName?: string | null };
+
+export type IGenMainCategoryFragment = { __typename: 'MainCategory', id?: string | null, mainCategory?: string | null, icon?: (
+    { __typename?: 'Asset' }
+    & IGenAssetFragment
+  ) | null };
+
+export type IGenSubCategoryFragment = { __typename: 'SubCategory', id?: string | null, subCategory?: string | null, mainCategory?: Array<(
+    { __typename?: 'MainCategory' }
+    & IGenMainCategoryFragment
+  ) | null> | null };
+
+export type IGenTagsFragment = { __typename: 'Tags', id?: string | null, tagName?: string | null };
+
+export type IGenTopicFragment = { __typename: 'Topic', id?: string | null, topicName?: string | null };
+
+export type IGenGetAllCaseOverviewQueryVariables = Exact<{
+  after?: InputMaybe<Scalars['String']['input']>;
+}>;
+
+
+export type IGenGetAllCaseOverviewQuery = { __typename?: 'Query', allCase?: { __typename?: 'Case_Connection', totalCount?: number | null, pageInfo?: { __typename?: 'PageInfo', endCursor?: string | null, hasNextPage?: boolean | null } | null, edges?: Array<{ __typename?: 'Case_ConnectionEdge', node?: (
+        { __typename?: 'Case' }
+        & IGenCaseOverviewFragment
+      ) | null } | null> | null } | null };
+
+export type IGenGetAllArticleOverviewQueryVariables = Exact<{
+  after?: InputMaybe<Scalars['String']['input']>;
+}>;
+
+
+export type IGenGetAllArticleOverviewQuery = { __typename?: 'Query', allArticle?: { __typename?: 'Article_Connection', totalCount?: number | null, pageInfo?: { __typename?: 'PageInfo', endCursor?: string | null, hasNextPage?: boolean | null } | null, edges?: Array<{ __typename?: 'Article_ConnectionEdge', node?: (
+        { __typename?: 'Article' }
+        & IGenArticleOverviewFragment
+      ) | null } | null> | null } | null };
+
+export type IGenGetAllMainCategoryQueryVariables = Exact<{ [key: string]: never; }>;
+
+
+export type IGenGetAllMainCategoryQuery = { __typename?: 'Query', allMainCategory?: { __typename?: 'MainCategory_Connection', totalCount?: number | null, edges?: Array<{ __typename?: 'MainCategory_ConnectionEdge', node?: (
+        { __typename?: 'MainCategory' }
+        & IGenMainCategoryFragment
+      ) | null } | null> | null } | null };
+
+export type IGenGetAllSubCategoryQueryVariables = Exact<{ [key: string]: never; }>;
+
+
+export type IGenGetAllSubCategoryQuery = { __typename?: 'Query', allSubCategory?: { __typename?: 'SubCategory_Connection', totalCount?: number | null, edges?: Array<{ __typename?: 'SubCategory_ConnectionEdge', node?: (
+        { __typename?: 'SubCategory' }
+        & IGenSubCategoryFragment
+      ) | null } | null> | null } | null };
+
+export type IGenGetArticleByIdQueryVariables = Exact<{
+  id: Scalars['ID']['input'];
+}>;
+
+
+export type IGenGetArticleByIdQuery = { __typename?: 'Query', Article?: (
+    { __typename?: 'Article' }
+    & IGenFullArticleFragment
+  ) | null };
+
+export type IGenGetCaseByIdQueryVariables = Exact<{
+  id: Scalars['ID']['input'];
+}>;
+
+
+export type IGenGetCaseByIdQuery = { __typename?: 'Query', Case?: (
+    { __typename?: 'Case' }
+    & IGenFullCaseFragment
+  ) | null };
+
+export const AssetFragmentDoc = gql`
+    fragment Asset on Asset {
+  title
+  src
+  originType
+  keywords
+  id
+  dominantColor
+  description
+  copyright
+  author
+}
+    `;
+export const MainCategoryFragmentDoc = gql`
+    fragment MainCategory on MainCategory {
+  __typename
+  id
+  icon {
+    ...Asset
+  }
+  mainCategory
+}
+    `;
+export const SubCategoryFragmentDoc = gql`
+    fragment SubCategory on SubCategory {
+  __typename
+  id
+  subCategory
+  mainCategory {
+    ...MainCategory
+  }
+}
+    `;
+export const TopicFragmentDoc = gql`
+    fragment Topic on Topic {
+  __typename
+  id
+  topicName
+}
+    `;
+export const ArticleOverviewFragmentDoc = gql`
+    fragment ArticleOverview on Article {
+  __typename
+  id
+  title
+  subCategoryField {
+    ...SubCategory
+  }
+  topic {
+    ...Topic
+  }
+}
+    `;
+export const CaseOverviewFragmentDoc = gql`
+    fragment CaseOverview on Case {
+  __typename
+  id
+  title
+  durationToCompleteInMinutes
+  subCategoryField {
+    ...SubCategory
+  }
+  topic {
+    ...Topic
+  }
+}
+    `;
+export const FillInGapsGameFragmentDoc = gql`
+    fragment FillInGapsGame on FillInGapsGame {
+  __typename
+  id
+  question
+  fillGameParagraph {
+    connections {
+      __typename
+    }
+    json
+  }
+  helpNote {
+    connections {
+      __typename
+    }
+    json
+  }
+}
+    `;
+export const CardSelectionGameFragmentDoc = gql`
+    fragment CardSelectionGame on CardSelectionGame {
+  id
+  game
+  question
+  helpNote {
+    connections {
+      __typename
+    }
+    json
+  }
+}
+    `;
+export const DragNDropGameFragmentDoc = gql`
+    fragment DragNDropGame on DragNDropGame {
+  __typename
+  id
+  game
+  question
+  helpNote {
+    connections {
+      __typename
+    }
+    json
+  }
+}
+    `;
+export const ImageWrapperCardFragmentDoc = gql`
+    fragment ImageWrapperCard on ImageWrapperCard {
+  __typename
+  id
+  downloadable
+  image {
+    ...Asset
+  }
+}
+    `;
+export const CalloutFragmentDoc = gql`
+    fragment Callout on Callout {
+  __typename
+  id
+  calloutType
+  expandable
+  text {
+    connections {
+      __typename
+    }
+    json
+  }
+}
+    `;
+export const ArticleFullTextTasksFragmentDoc = gql`
+    fragment ArticleFullTextTasks on Article_fullTextTasks {
+  __typename
+  json
+  connections {
+    __typename
+    ...FillInGapsGame
+    ...CardSelectionGame
+    ...DragNDropGame
+    ...ImageWrapperCard
+    ...Callout
+  }
+}
+    `;
+export const LegalAreaFragmentDoc = gql`
+    fragment LegalArea on LegalArea {
+  __typename
+  id
+  legalAreaName
+}
+    `;
+export const TagsFragmentDoc = gql`
+    fragment Tags on Tags {
+  __typename
+  id
+  tagName
+}
+    `;
+export const FullArticleFragmentDoc = gql`
+    fragment FullArticle on Article {
+  __typename
+  id
+  title
+  fullTextTasks {
+    ...ArticleFullTextTasks
+  }
+  legalArea {
+    ...LegalArea
+    ...SubCategory
+  }
+  mainCategoryField {
+    ...MainCategory
+  }
+  subCategoryField {
+    ...SubCategory
+  }
+  tags {
+    ...Tags
+  }
+  topic {
+    ...Topic
+  }
+}
+    `;
+export const CaseFullTextTasksFragmentDoc = gql`
+    fragment CaseFullTextTasks on Case_fullTextTasks {
+  __typename
+  json
+  connections {
+    __typename
+    ...FillInGapsGame
+    ...CardSelectionGame
+    ...DragNDropGame
+    ...ImageWrapperCard
+    ...Callout
+  }
+}
+    `;
+export const FullCaseFragmentDoc = gql`
+    fragment FullCase on Case {
+  __typename
+  id
+  title
+  durationToCompleteInMinutes
+  facts {
+    connections {
+      __typename
+    }
+    json
+  }
+  fullTextTasks {
+    ...CaseFullTextTasks
+  }
+  legalArea {
+    ...LegalArea
+    ...SubCategory
+  }
+  mainCategoryField {
+    ...MainCategory
+  }
+  subCategoryField {
+    ...SubCategory
+  }
+  tags {
+    ...Tags
+  }
+  topic {
+    ...Topic
+  }
+  resolution {
+    connections {
+      __typename
+    }
+    json
+  }
+}
+    `;
+export const GetAllCaseOverviewDocument = gql`
+    query getAllCaseOverview($after: String) {
+  allCase(first: 100, after: $after) {
+    totalCount
+    pageInfo {
+      endCursor
+      hasNextPage
+    }
+    edges {
+      node {
+        ...CaseOverview
+      }
+    }
+  }
+}
+    ${CaseOverviewFragmentDoc}
+${SubCategoryFragmentDoc}
+${MainCategoryFragmentDoc}
+${AssetFragmentDoc}
+${TopicFragmentDoc}`;
+export const GetAllArticleOverviewDocument = gql`
+    query getAllArticleOverview($after: String) {
+  allArticle(first: 100, after: $after) {
+    totalCount
+    pageInfo {
+      endCursor
+      hasNextPage
+    }
+    edges {
+      node {
+        ...ArticleOverview
+      }
+    }
+  }
+}
+    ${ArticleOverviewFragmentDoc}
+${SubCategoryFragmentDoc}
+${MainCategoryFragmentDoc}
+${AssetFragmentDoc}
+${TopicFragmentDoc}`;
+export const GetAllMainCategoryDocument = gql`
+    query getAllMainCategory {
+  allMainCategory {
+    totalCount
+    edges {
+      node {
+        ...MainCategory
+      }
+    }
+  }
+}
+    ${MainCategoryFragmentDoc}
+${AssetFragmentDoc}`;
+export const GetAllSubCategoryDocument = gql`
+    query getAllSubCategory {
+  allSubCategory {
+    totalCount
+    edges {
+      node {
+        ...SubCategory
+      }
+    }
+  }
+}
+    ${SubCategoryFragmentDoc}
+${MainCategoryFragmentDoc}
+${AssetFragmentDoc}`;
+export const GetArticleByIdDocument = gql`
+    query getArticleById($id: ID!) {
+  Article(id: $id) {
+    ...FullArticle
+  }
+}
+    ${FullArticleFragmentDoc}
+${ArticleFullTextTasksFragmentDoc}
+${FillInGapsGameFragmentDoc}
+${CardSelectionGameFragmentDoc}
+${DragNDropGameFragmentDoc}
+${ImageWrapperCardFragmentDoc}
+${AssetFragmentDoc}
+${CalloutFragmentDoc}
+${LegalAreaFragmentDoc}
+${SubCategoryFragmentDoc}
+${MainCategoryFragmentDoc}
+${TagsFragmentDoc}
+${TopicFragmentDoc}`;
+export const GetCaseByIdDocument = gql`
+    query getCaseById($id: ID!) {
+  Case(id: $id) {
+    ...FullCase
+  }
+}
+    ${FullCaseFragmentDoc}
+${CaseFullTextTasksFragmentDoc}
+${FillInGapsGameFragmentDoc}
+${CardSelectionGameFragmentDoc}
+${DragNDropGameFragmentDoc}
+${ImageWrapperCardFragmentDoc}
+${AssetFragmentDoc}
+${CalloutFragmentDoc}
+${LegalAreaFragmentDoc}
+${SubCategoryFragmentDoc}
+${MainCategoryFragmentDoc}
+${TagsFragmentDoc}
+${TopicFragmentDoc}`;
 export type Requester<C = {}, E = unknown> = <R, V>(doc: DocumentNode, vars?: V, options?: C) => Promise<R> | AsyncIterable<R>
 export function getSdk<C, E>(requester: Requester<C, E>) {
   return {
-
+    getAllCaseOverview(variables?: IGenGetAllCaseOverviewQueryVariables, options?: C): Promise<IGenGetAllCaseOverviewQuery> {
+      return requester<IGenGetAllCaseOverviewQuery, IGenGetAllCaseOverviewQueryVariables>(GetAllCaseOverviewDocument, variables, options) as Promise<IGenGetAllCaseOverviewQuery>;
+    },
+    getAllArticleOverview(variables?: IGenGetAllArticleOverviewQueryVariables, options?: C): Promise<IGenGetAllArticleOverviewQuery> {
+      return requester<IGenGetAllArticleOverviewQuery, IGenGetAllArticleOverviewQueryVariables>(GetAllArticleOverviewDocument, variables, options) as Promise<IGenGetAllArticleOverviewQuery>;
+    },
+    getAllMainCategory(variables?: IGenGetAllMainCategoryQueryVariables, options?: C): Promise<IGenGetAllMainCategoryQuery> {
+      return requester<IGenGetAllMainCategoryQuery, IGenGetAllMainCategoryQueryVariables>(GetAllMainCategoryDocument, variables, options) as Promise<IGenGetAllMainCategoryQuery>;
+    },
+    getAllSubCategory(variables?: IGenGetAllSubCategoryQueryVariables, options?: C): Promise<IGenGetAllSubCategoryQuery> {
+      return requester<IGenGetAllSubCategoryQuery, IGenGetAllSubCategoryQueryVariables>(GetAllSubCategoryDocument, variables, options) as Promise<IGenGetAllSubCategoryQuery>;
+    },
+    getArticleById(variables: IGenGetArticleByIdQueryVariables, options?: C): Promise<IGenGetArticleByIdQuery> {
+      return requester<IGenGetArticleByIdQuery, IGenGetArticleByIdQueryVariables>(GetArticleByIdDocument, variables, options) as Promise<IGenGetArticleByIdQuery>;
+    },
+    getCaseById(variables: IGenGetCaseByIdQueryVariables, options?: C): Promise<IGenGetCaseByIdQuery> {
+      return requester<IGenGetCaseByIdQuery, IGenGetCaseByIdQueryVariables>(GetCaseByIdDocument, variables, options) as Promise<IGenGetCaseByIdQuery>;
+    }
   };
 }
 export type Sdk = ReturnType<typeof getSdk>;
