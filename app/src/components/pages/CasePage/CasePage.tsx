@@ -22,7 +22,6 @@ const DetailsPage: FunctionComponent<IGenCase& {readonly variant: "case" | "dict
   variant
 }) => 
 {
-   
   const [caseStepIndex, setCaseStepIndex] = React.useState<0 | 1 | 2>(0);
 
   return (
