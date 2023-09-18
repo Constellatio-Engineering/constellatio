@@ -50,7 +50,6 @@ const CaseResultsReviewStep: FunctionComponent<ICaseResultsReviewStepProps> = ({
 
   useEffect(() => 
   {
-    console.log({ solution });
     if(solution && solutionContent.current !== undefined) 
     {
       solutionContent.current!.innerHTML = solution;
@@ -61,12 +60,7 @@ const CaseResultsReviewStep: FunctionComponent<ICaseResultsReviewStepProps> = ({
   const [isOpened, { close, open }] = useDisclosure(false);
   const editButtonClick = (): void => 
   {
-    // go back a step
-    // setCaseStepIndex(1)
-
-    // show modal
     open();
-
   };
 
   const resetProgressButton = (): void => 

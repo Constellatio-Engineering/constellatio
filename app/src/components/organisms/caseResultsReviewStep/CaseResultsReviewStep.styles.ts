@@ -2,13 +2,14 @@ import { css } from "@emotion/react";
 import { type MantineTheme } from "@mantine/styles";
 
 export const wrapper = css``;
+
 export const content = css`
   display: flex;
   justify-content: flex-start;
   align-items: flex-start;
   /* outline: 1px solid red; */
   width: 100%;
-  gap:24px;
+  gap: 24px;
   > div {
     width: 50%;
     display: flex;
@@ -17,6 +18,7 @@ export const content = css`
     flex-direction: column;
   }
 `;
+
 export const factsWrapper = (theme: MantineTheme) => css`
   min-width: 100%;
   margin-bottom: 24px;
@@ -26,10 +28,11 @@ export const factsWrapper = (theme: MantineTheme) => css`
     outline: 0;
     border: 0;
   }
+  outline: 1px solid red;
 `;
 
 const CSSshowSolutionCard = css`
-  height:100%;
+  height: 100%;
   max-height: 100%;
   overflow: visible;
 `;
@@ -38,11 +41,12 @@ export const solutionWrapper = ({ isExpandSolution, theme }: {
   isExpandSolution?: boolean;
   theme: MantineTheme;
 }) => css`
+  outline: 1px solid red;
   background-color: ${theme.colors["neutrals-01"][0]};
   border-radius: 12px;
   width: 100%;
-  height:100%;
-  max-height: 350px; 
+  height: 100%;
+  max-height: 350px;
   overflow: hidden;
   ${isExpandSolution && CSSshowSolutionCard};
   transition: height 0.5s ease-in-out;
@@ -59,10 +63,10 @@ export const solutionWrapper = ({ isExpandSolution, theme }: {
     z-index: 2;
 
     font-family: Karla;
-font-size: 16px;
-font-style: normal;
-font-weight: 400;
-line-height: 24px; /* 150% */
+    font-size: 16px;
+    font-style: normal;
+    font-weight: 400;
+    line-height: 24px; /* 150% */
   }
   .show-all {
     z-index: 3;
@@ -90,18 +94,18 @@ line-height: 24px; /* 150% */
 
 export const resolutionWrapper = css`
   width: 50%;
-  padding:0 20px;
-  .resolution-header{
+  padding: 0 20px;
+  .resolution-header {
     display: flex;
     justify-content: space-between;
     align-items: center;
     width: 100%;
     margin-bottom: 30px;
-    .icons-bar{
-        display: flex;
-        justify-content: space-between;
-        align-items: center;
-        gap:8px;
+    .icons-bar {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 8px;
     }
-}
+  }
 `;

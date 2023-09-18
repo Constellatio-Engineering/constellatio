@@ -66,7 +66,7 @@ const CaseCompleteTestsStep: FunctionComponent<ICaseCompleteTestsStepProps> = ({
     {
       const items = variant === "case" ? renderedCaseContent?.json?.content : fullTextTasks?.json?.content;
       return items?.filter(
-        (contentItem: { content: { text: string }[]; type: string }) =>
+        (contentItem: { content: Array<{ text: string }>; type: string }) =>
           contentItem?.type === "heading"
       );
     },

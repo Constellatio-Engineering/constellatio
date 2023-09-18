@@ -11,32 +11,12 @@ import { getNumericalLabel } from "../organisms/floatingPanel/generateTocHelper"
 export const richTextHeadingOverwrite = ({
   index,
   ...props
-// eslint-disable-next-line @typescript-eslint/no-explicit-any
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
 }: any): ReactElement => 
 {
   const node = props!.node as unknown as IHeadingNode;
-
   const { level } = node.attrs;
-  // if(counters.length < level) 
-  // {
-  //   counters.push(1);
-  // }
-  // else 
-  // {
-  //   counters[level - 1] += 1;
-  // }
-  // counters.length = level;
 
-  // const number = counters.map((count: number, index: number): string => getNumbering(count, index + 1)).join(".");
-
-  // console.log({ props });
-  const propObj = {
-    ...props,
-    node: {
-      ...props.node,
-      content: [...props.node.content, { ...props.node.content[0], text: "test" }]
-    }
-  };
   return (
     <>
       {node?.content && (
@@ -50,7 +30,7 @@ export const richTextHeadingOverwrite = ({
         />
       )}
     </>
-    
+
   );
 };
 
