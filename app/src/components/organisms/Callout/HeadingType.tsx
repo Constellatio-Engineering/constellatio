@@ -62,6 +62,11 @@ export const HeadingType: FunctionComponent<Pick<IGenCallout, "calloutType">> = 
       ); 
 
     default:
-      return null;
+      return (
+        <>
+          <StarIcon/>
+          <BodyText component="p" styleType="body-01-bold" tt="capitalize">Merke</BodyText>
+        </>
+      );
   }
 };

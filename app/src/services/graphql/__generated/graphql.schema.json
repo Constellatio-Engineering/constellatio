@@ -1841,30 +1841,6 @@
             "description": "",
             "args": [
               {
-                "name": "after",
-                "description": "The cursor to start the pagination from. In this case the curser equals the id for the (last) element. If not set, we wil start from the beginning.",
-                "type": {
-                  "kind": "SCALAR",
-                  "name": "String",
-                  "ofType": null
-                },
-                "defaultValue": null,
-                "isDeprecated": false,
-                "deprecationReason": null
-              },
-              {
-                "name": "first",
-                "description": "The number of items to return. Default and max value is 100.",
-                "type": {
-                  "kind": "SCALAR",
-                  "name": "Int",
-                  "ofType": null
-                },
-                "defaultValue": "100",
-                "isDeprecated": false,
-                "deprecationReason": null
-              },
-              {
                 "name": "locale",
                 "description": "",
                 "type": {
@@ -1879,7 +1855,19 @@
             ],
             "type": {
               "kind": "OBJECT",
-              "name": "TextElement",
+              "name": "Callout_text",
+              "ofType": null
+            },
+            "isDeprecated": false,
+            "deprecationReason": null
+          },
+          {
+            "name": "title",
+            "description": "",
+            "args": [],
+            "type": {
+              "kind": "SCALAR",
+              "name": "String",
               "ofType": null
             },
             "isDeprecated": false,
@@ -2120,7 +2108,7 @@
             "deprecationReason": null
           },
           {
-            "name": "text",
+            "name": "title",
             "description": "",
             "type": {
               "kind": "ENUM",
@@ -2209,6 +2197,30 @@
             "defaultValue": null,
             "isDeprecated": false,
             "deprecationReason": null
+          },
+          {
+            "name": "text",
+            "description": "",
+            "type": {
+              "kind": "INPUT_OBJECT",
+              "name": "CaisyField_Richtext_Where",
+              "ofType": null
+            },
+            "defaultValue": null,
+            "isDeprecated": false,
+            "deprecationReason": null
+          },
+          {
+            "name": "title",
+            "description": "",
+            "type": {
+              "kind": "INPUT_OBJECT",
+              "name": "CaisyField_String_Where",
+              "ofType": null
+            },
+            "defaultValue": null,
+            "isDeprecated": false,
+            "deprecationReason": null
           }
         ],
         "interfaces": null,
@@ -2217,35 +2229,11 @@
       },
       {
         "kind": "OBJECT",
-        "name": "CardSelectionGame",
+        "name": "Callout_text",
         "description": "",
         "fields": [
           {
-            "name": "_meta",
-            "description": "",
-            "args": [],
-            "type": {
-              "kind": "OBJECT",
-              "name": "CaisyDocument_Meta",
-              "ofType": null
-            },
-            "isDeprecated": false,
-            "deprecationReason": null
-          },
-          {
-            "name": "game",
-            "description": "",
-            "args": [],
-            "type": {
-              "kind": "SCALAR",
-              "name": "JSON",
-              "ofType": null
-            },
-            "isDeprecated": false,
-            "deprecationReason": null
-          },
-          {
-            "name": "helpNote",
+            "name": "connections",
             "description": "",
             "args": [
               {
@@ -2286,8 +2274,100 @@
               }
             ],
             "type": {
+              "kind": "LIST",
+              "name": null,
+              "ofType": {
+                "kind": "UNION",
+                "name": "Callout_text_Connections",
+                "ofType": null
+              }
+            },
+            "isDeprecated": false,
+            "deprecationReason": null
+          },
+          {
+            "name": "json",
+            "description": "",
+            "args": [],
+            "type": {
+              "kind": "SCALAR",
+              "name": "JSON",
+              "ofType": null
+            },
+            "isDeprecated": false,
+            "deprecationReason": null
+          }
+        ],
+        "inputFields": null,
+        "interfaces": [],
+        "enumValues": null,
+        "possibleTypes": null
+      },
+      {
+        "kind": "UNION",
+        "name": "Callout_text_Connections",
+        "description": "",
+        "fields": null,
+        "inputFields": null,
+        "interfaces": null,
+        "enumValues": null,
+        "possibleTypes": [
+          {
+            "kind": "OBJECT",
+            "name": "Caisy_Field_Document_NotFound",
+            "ofType": null
+          }
+        ]
+      },
+      {
+        "kind": "OBJECT",
+        "name": "CardSelectionGame",
+        "description": "",
+        "fields": [
+          {
+            "name": "_meta",
+            "description": "",
+            "args": [],
+            "type": {
               "kind": "OBJECT",
-              "name": "TextElement",
+              "name": "CaisyDocument_Meta",
+              "ofType": null
+            },
+            "isDeprecated": false,
+            "deprecationReason": null
+          },
+          {
+            "name": "game",
+            "description": "",
+            "args": [],
+            "type": {
+              "kind": "SCALAR",
+              "name": "JSON",
+              "ofType": null
+            },
+            "isDeprecated": false,
+            "deprecationReason": null
+          },
+          {
+            "name": "helpNote",
+            "description": "",
+            "args": [
+              {
+                "name": "locale",
+                "description": "",
+                "type": {
+                  "kind": "SCALAR",
+                  "name": "String",
+                  "ofType": null
+                },
+                "defaultValue": null,
+                "isDeprecated": false,
+                "deprecationReason": null
+              }
+            ],
+            "type": {
+              "kind": "OBJECT",
+              "name": "CardSelectionGame_helpNote",
               "ofType": null
             },
             "isDeprecated": false,
@@ -2428,18 +2508,6 @@
             "deprecationReason": null
           },
           {
-            "name": "helpNote",
-            "description": "",
-            "type": {
-              "kind": "ENUM",
-              "name": "Order",
-              "ofType": null
-            },
-            "defaultValue": null,
-            "isDeprecated": false,
-            "deprecationReason": null
-          },
-          {
             "name": "id",
             "description": "",
             "type": {
@@ -2531,6 +2599,18 @@
             "deprecationReason": null
           },
           {
+            "name": "helpNote",
+            "description": "",
+            "type": {
+              "kind": "INPUT_OBJECT",
+              "name": "CaisyField_Richtext_Where",
+              "ofType": null
+            },
+            "defaultValue": null,
+            "isDeprecated": false,
+            "deprecationReason": null
+          },
+          {
             "name": "question",
             "description": "",
             "type": {
@@ -2549,35 +2629,11 @@
       },
       {
         "kind": "OBJECT",
-        "name": "Case",
+        "name": "CardSelectionGame_helpNote",
         "description": "",
         "fields": [
           {
-            "name": "_meta",
-            "description": "",
-            "args": [],
-            "type": {
-              "kind": "OBJECT",
-              "name": "CaisyDocument_Meta",
-              "ofType": null
-            },
-            "isDeprecated": false,
-            "deprecationReason": null
-          },
-          {
-            "name": "durationToCompleteInMinutes",
-            "description": "",
-            "args": [],
-            "type": {
-              "kind": "SCALAR",
-              "name": "Int",
-              "ofType": null
-            },
-            "isDeprecated": false,
-            "deprecationReason": null
-          },
-          {
-            "name": "facts",
+            "name": "connections",
             "description": "",
             "args": [
               {
@@ -2618,8 +2674,100 @@
               }
             ],
             "type": {
+              "kind": "LIST",
+              "name": null,
+              "ofType": {
+                "kind": "UNION",
+                "name": "CardSelectionGame_helpNote_Connections",
+                "ofType": null
+              }
+            },
+            "isDeprecated": false,
+            "deprecationReason": null
+          },
+          {
+            "name": "json",
+            "description": "",
+            "args": [],
+            "type": {
+              "kind": "SCALAR",
+              "name": "JSON",
+              "ofType": null
+            },
+            "isDeprecated": false,
+            "deprecationReason": null
+          }
+        ],
+        "inputFields": null,
+        "interfaces": [],
+        "enumValues": null,
+        "possibleTypes": null
+      },
+      {
+        "kind": "UNION",
+        "name": "CardSelectionGame_helpNote_Connections",
+        "description": "",
+        "fields": null,
+        "inputFields": null,
+        "interfaces": null,
+        "enumValues": null,
+        "possibleTypes": [
+          {
+            "kind": "OBJECT",
+            "name": "Caisy_Field_Document_NotFound",
+            "ofType": null
+          }
+        ]
+      },
+      {
+        "kind": "OBJECT",
+        "name": "Case",
+        "description": "",
+        "fields": [
+          {
+            "name": "_meta",
+            "description": "",
+            "args": [],
+            "type": {
               "kind": "OBJECT",
-              "name": "TextElement",
+              "name": "CaisyDocument_Meta",
+              "ofType": null
+            },
+            "isDeprecated": false,
+            "deprecationReason": null
+          },
+          {
+            "name": "durationToCompleteInMinutes",
+            "description": "",
+            "args": [],
+            "type": {
+              "kind": "SCALAR",
+              "name": "Int",
+              "ofType": null
+            },
+            "isDeprecated": false,
+            "deprecationReason": null
+          },
+          {
+            "name": "facts",
+            "description": "",
+            "args": [
+              {
+                "name": "locale",
+                "description": "",
+                "type": {
+                  "kind": "SCALAR",
+                  "name": "String",
+                  "ofType": null
+                },
+                "defaultValue": null,
+                "isDeprecated": false,
+                "deprecationReason": null
+              }
+            ],
+            "type": {
+              "kind": "OBJECT",
+              "name": "Case_facts",
               "ofType": null
             },
             "isDeprecated": false,
@@ -2745,30 +2893,6 @@
             "description": "",
             "args": [
               {
-                "name": "after",
-                "description": "The cursor to start the pagination from. In this case the curser equals the id for the (last) element. If not set, we wil start from the beginning.",
-                "type": {
-                  "kind": "SCALAR",
-                  "name": "String",
-                  "ofType": null
-                },
-                "defaultValue": null,
-                "isDeprecated": false,
-                "deprecationReason": null
-              },
-              {
-                "name": "first",
-                "description": "The number of items to return. Default and max value is 100.",
-                "type": {
-                  "kind": "SCALAR",
-                  "name": "Int",
-                  "ofType": null
-                },
-                "defaultValue": "100",
-                "isDeprecated": false,
-                "deprecationReason": null
-              },
-              {
                 "name": "locale",
                 "description": "",
                 "type": {
@@ -2783,7 +2907,7 @@
             ],
             "type": {
               "kind": "OBJECT",
-              "name": "TextElement",
+              "name": "Case_resolution",
               "ofType": null
             },
             "isDeprecated": false,
@@ -3083,18 +3207,6 @@
             "deprecationReason": null
           },
           {
-            "name": "facts",
-            "description": "",
-            "type": {
-              "kind": "ENUM",
-              "name": "Order",
-              "ofType": null
-            },
-            "defaultValue": null,
-            "isDeprecated": false,
-            "deprecationReason": null
-          },
-          {
             "name": "id",
             "description": "",
             "type": {
@@ -3132,18 +3244,6 @@
           },
           {
             "name": "publishedAt",
-            "description": "",
-            "type": {
-              "kind": "ENUM",
-              "name": "Order",
-              "ofType": null
-            },
-            "defaultValue": null,
-            "isDeprecated": false,
-            "deprecationReason": null
-          },
-          {
-            "name": "resolution",
             "description": "",
             "type": {
               "kind": "ENUM",
@@ -3270,7 +3370,31 @@
             "deprecationReason": null
           },
           {
+            "name": "facts",
+            "description": "",
+            "type": {
+              "kind": "INPUT_OBJECT",
+              "name": "CaisyField_Richtext_Where",
+              "ofType": null
+            },
+            "defaultValue": null,
+            "isDeprecated": false,
+            "deprecationReason": null
+          },
+          {
             "name": "fullTextTasks",
+            "description": "",
+            "type": {
+              "kind": "INPUT_OBJECT",
+              "name": "CaisyField_Richtext_Where",
+              "ofType": null
+            },
+            "defaultValue": null,
+            "isDeprecated": false,
+            "deprecationReason": null
+          },
+          {
+            "name": "resolution",
             "description": "",
             "type": {
               "kind": "INPUT_OBJECT",
@@ -3297,6 +3421,98 @@
         "interfaces": null,
         "enumValues": null,
         "possibleTypes": null
+      },
+      {
+        "kind": "OBJECT",
+        "name": "Case_facts",
+        "description": "",
+        "fields": [
+          {
+            "name": "connections",
+            "description": "",
+            "args": [
+              {
+                "name": "after",
+                "description": "The cursor to start the pagination from. In this case the curser equals the id for the (last) element. If not set, we wil start from the beginning.",
+                "type": {
+                  "kind": "SCALAR",
+                  "name": "String",
+                  "ofType": null
+                },
+                "defaultValue": null,
+                "isDeprecated": false,
+                "deprecationReason": null
+              },
+              {
+                "name": "first",
+                "description": "The number of items to return. Default and max value is 100.",
+                "type": {
+                  "kind": "SCALAR",
+                  "name": "Int",
+                  "ofType": null
+                },
+                "defaultValue": "100",
+                "isDeprecated": false,
+                "deprecationReason": null
+              },
+              {
+                "name": "locale",
+                "description": "",
+                "type": {
+                  "kind": "SCALAR",
+                  "name": "String",
+                  "ofType": null
+                },
+                "defaultValue": null,
+                "isDeprecated": false,
+                "deprecationReason": null
+              }
+            ],
+            "type": {
+              "kind": "LIST",
+              "name": null,
+              "ofType": {
+                "kind": "UNION",
+                "name": "Case_facts_Connections",
+                "ofType": null
+              }
+            },
+            "isDeprecated": false,
+            "deprecationReason": null
+          },
+          {
+            "name": "json",
+            "description": "",
+            "args": [],
+            "type": {
+              "kind": "SCALAR",
+              "name": "JSON",
+              "ofType": null
+            },
+            "isDeprecated": false,
+            "deprecationReason": null
+          }
+        ],
+        "inputFields": null,
+        "interfaces": [],
+        "enumValues": null,
+        "possibleTypes": null
+      },
+      {
+        "kind": "UNION",
+        "name": "Case_facts_Connections",
+        "description": "",
+        "fields": null,
+        "inputFields": null,
+        "interfaces": null,
+        "enumValues": null,
+        "possibleTypes": [
+          {
+            "kind": "OBJECT",
+            "name": "Caisy_Field_Document_NotFound",
+            "ofType": null
+          }
+        ]
       },
       {
         "kind": "OBJECT",
@@ -3448,6 +3664,98 @@
         ]
       },
       {
+        "kind": "OBJECT",
+        "name": "Case_resolution",
+        "description": "",
+        "fields": [
+          {
+            "name": "connections",
+            "description": "",
+            "args": [
+              {
+                "name": "after",
+                "description": "The cursor to start the pagination from. In this case the curser equals the id for the (last) element. If not set, we wil start from the beginning.",
+                "type": {
+                  "kind": "SCALAR",
+                  "name": "String",
+                  "ofType": null
+                },
+                "defaultValue": null,
+                "isDeprecated": false,
+                "deprecationReason": null
+              },
+              {
+                "name": "first",
+                "description": "The number of items to return. Default and max value is 100.",
+                "type": {
+                  "kind": "SCALAR",
+                  "name": "Int",
+                  "ofType": null
+                },
+                "defaultValue": "100",
+                "isDeprecated": false,
+                "deprecationReason": null
+              },
+              {
+                "name": "locale",
+                "description": "",
+                "type": {
+                  "kind": "SCALAR",
+                  "name": "String",
+                  "ofType": null
+                },
+                "defaultValue": null,
+                "isDeprecated": false,
+                "deprecationReason": null
+              }
+            ],
+            "type": {
+              "kind": "LIST",
+              "name": null,
+              "ofType": {
+                "kind": "UNION",
+                "name": "Case_resolution_Connections",
+                "ofType": null
+              }
+            },
+            "isDeprecated": false,
+            "deprecationReason": null
+          },
+          {
+            "name": "json",
+            "description": "",
+            "args": [],
+            "type": {
+              "kind": "SCALAR",
+              "name": "JSON",
+              "ofType": null
+            },
+            "isDeprecated": false,
+            "deprecationReason": null
+          }
+        ],
+        "inputFields": null,
+        "interfaces": [],
+        "enumValues": null,
+        "possibleTypes": null
+      },
+      {
+        "kind": "UNION",
+        "name": "Case_resolution_Connections",
+        "description": "",
+        "fields": null,
+        "inputFields": null,
+        "interfaces": null,
+        "enumValues": null,
+        "possibleTypes": [
+          {
+            "kind": "OBJECT",
+            "name": "Caisy_Field_Document_NotFound",
+            "ofType": null
+          }
+        ]
+      },
+      {
         "kind": "UNION",
         "name": "Case_subCategoryField",
         "description": "",
@@ -3539,30 +3847,6 @@
             "description": "",
             "args": [
               {
-                "name": "after",
-                "description": "The cursor to start the pagination from. In this case the curser equals the id for the (last) element. If not set, we wil start from the beginning.",
-                "type": {
-                  "kind": "SCALAR",
-                  "name": "String",
-                  "ofType": null
-                },
-                "defaultValue": null,
-                "isDeprecated": false,
-                "deprecationReason": null
-              },
-              {
-                "name": "first",
-                "description": "The number of items to return. Default and max value is 100.",
-                "type": {
-                  "kind": "SCALAR",
-                  "name": "Int",
-                  "ofType": null
-                },
-                "defaultValue": "100",
-                "isDeprecated": false,
-                "deprecationReason": null
-              },
-              {
                 "name": "locale",
                 "description": "",
                 "type": {
@@ -3577,7 +3861,7 @@
             ],
             "type": {
               "kind": "OBJECT",
-              "name": "TextElement",
+              "name": "DragNDropGame_helpNote",
               "ofType": null
             },
             "isDeprecated": false,
@@ -3718,18 +4002,6 @@
             "deprecationReason": null
           },
           {
-            "name": "helpNote",
-            "description": "",
-            "type": {
-              "kind": "ENUM",
-              "name": "Order",
-              "ofType": null
-            },
-            "defaultValue": null,
-            "isDeprecated": false,
-            "deprecationReason": null
-          },
-          {
             "name": "id",
             "description": "",
             "type": {
@@ -3821,6 +4093,18 @@
             "deprecationReason": null
           },
           {
+            "name": "helpNote",
+            "description": "",
+            "type": {
+              "kind": "INPUT_OBJECT",
+              "name": "CaisyField_Richtext_Where",
+              "ofType": null
+            },
+            "defaultValue": null,
+            "isDeprecated": false,
+            "deprecationReason": null
+          },
+          {
             "name": "question",
             "description": "",
             "type": {
@@ -3836,6 +4120,98 @@
         "interfaces": null,
         "enumValues": null,
         "possibleTypes": null
+      },
+      {
+        "kind": "OBJECT",
+        "name": "DragNDropGame_helpNote",
+        "description": "",
+        "fields": [
+          {
+            "name": "connections",
+            "description": "",
+            "args": [
+              {
+                "name": "after",
+                "description": "The cursor to start the pagination from. In this case the curser equals the id for the (last) element. If not set, we wil start from the beginning.",
+                "type": {
+                  "kind": "SCALAR",
+                  "name": "String",
+                  "ofType": null
+                },
+                "defaultValue": null,
+                "isDeprecated": false,
+                "deprecationReason": null
+              },
+              {
+                "name": "first",
+                "description": "The number of items to return. Default and max value is 100.",
+                "type": {
+                  "kind": "SCALAR",
+                  "name": "Int",
+                  "ofType": null
+                },
+                "defaultValue": "100",
+                "isDeprecated": false,
+                "deprecationReason": null
+              },
+              {
+                "name": "locale",
+                "description": "",
+                "type": {
+                  "kind": "SCALAR",
+                  "name": "String",
+                  "ofType": null
+                },
+                "defaultValue": null,
+                "isDeprecated": false,
+                "deprecationReason": null
+              }
+            ],
+            "type": {
+              "kind": "LIST",
+              "name": null,
+              "ofType": {
+                "kind": "UNION",
+                "name": "DragNDropGame_helpNote_Connections",
+                "ofType": null
+              }
+            },
+            "isDeprecated": false,
+            "deprecationReason": null
+          },
+          {
+            "name": "json",
+            "description": "",
+            "args": [],
+            "type": {
+              "kind": "SCALAR",
+              "name": "JSON",
+              "ofType": null
+            },
+            "isDeprecated": false,
+            "deprecationReason": null
+          }
+        ],
+        "inputFields": null,
+        "interfaces": [],
+        "enumValues": null,
+        "possibleTypes": null
+      },
+      {
+        "kind": "UNION",
+        "name": "DragNDropGame_helpNote_Connections",
+        "description": "",
+        "fields": null,
+        "inputFields": null,
+        "interfaces": null,
+        "enumValues": null,
+        "possibleTypes": [
+          {
+            "kind": "OBJECT",
+            "name": "Caisy_Field_Document_NotFound",
+            "ofType": null
+          }
+        ]
       },
       {
         "kind": "OBJECT",
@@ -3859,30 +4235,6 @@
             "description": "",
             "args": [
               {
-                "name": "after",
-                "description": "The cursor to start the pagination from. In this case the curser equals the id for the (last) element. If not set, we wil start from the beginning.",
-                "type": {
-                  "kind": "SCALAR",
-                  "name": "String",
-                  "ofType": null
-                },
-                "defaultValue": null,
-                "isDeprecated": false,
-                "deprecationReason": null
-              },
-              {
-                "name": "first",
-                "description": "The number of items to return. Default and max value is 100.",
-                "type": {
-                  "kind": "SCALAR",
-                  "name": "Int",
-                  "ofType": null
-                },
-                "defaultValue": "100",
-                "isDeprecated": false,
-                "deprecationReason": null
-              },
-              {
                 "name": "locale",
                 "description": "",
                 "type": {
@@ -3897,7 +4249,7 @@
             ],
             "type": {
               "kind": "OBJECT",
-              "name": "TextElement",
+              "name": "FillInGapsGame_fillGameParagraph",
               "ofType": null
             },
             "isDeprecated": false,
@@ -3908,30 +4260,6 @@
             "description": "",
             "args": [
               {
-                "name": "after",
-                "description": "The cursor to start the pagination from. In this case the curser equals the id for the (last) element. If not set, we wil start from the beginning.",
-                "type": {
-                  "kind": "SCALAR",
-                  "name": "String",
-                  "ofType": null
-                },
-                "defaultValue": null,
-                "isDeprecated": false,
-                "deprecationReason": null
-              },
-              {
-                "name": "first",
-                "description": "The number of items to return. Default and max value is 100.",
-                "type": {
-                  "kind": "SCALAR",
-                  "name": "Int",
-                  "ofType": null
-                },
-                "defaultValue": "100",
-                "isDeprecated": false,
-                "deprecationReason": null
-              },
-              {
                 "name": "locale",
                 "description": "",
                 "type": {
@@ -3946,7 +4274,7 @@
             ],
             "type": {
               "kind": "OBJECT",
-              "name": "TextElement",
+              "name": "FillInGapsGame_helpNote",
               "ofType": null
             },
             "isDeprecated": false,
@@ -4087,30 +4415,6 @@
             "deprecationReason": null
           },
           {
-            "name": "fillGameParagraph",
-            "description": "",
-            "type": {
-              "kind": "ENUM",
-              "name": "Order",
-              "ofType": null
-            },
-            "defaultValue": null,
-            "isDeprecated": false,
-            "deprecationReason": null
-          },
-          {
-            "name": "helpNote",
-            "description": "",
-            "type": {
-              "kind": "ENUM",
-              "name": "Order",
-              "ofType": null
-            },
-            "defaultValue": null,
-            "isDeprecated": false,
-            "deprecationReason": null
-          },
-          {
             "name": "id",
             "description": "",
             "type": {
@@ -4202,6 +4506,30 @@
             "deprecationReason": null
           },
           {
+            "name": "fillGameParagraph",
+            "description": "",
+            "type": {
+              "kind": "INPUT_OBJECT",
+              "name": "CaisyField_Richtext_Where",
+              "ofType": null
+            },
+            "defaultValue": null,
+            "isDeprecated": false,
+            "deprecationReason": null
+          },
+          {
+            "name": "helpNote",
+            "description": "",
+            "type": {
+              "kind": "INPUT_OBJECT",
+              "name": "CaisyField_Richtext_Where",
+              "ofType": null
+            },
+            "defaultValue": null,
+            "isDeprecated": false,
+            "deprecationReason": null
+          },
+          {
             "name": "question",
             "description": "",
             "type": {
@@ -4217,6 +4545,190 @@
         "interfaces": null,
         "enumValues": null,
         "possibleTypes": null
+      },
+      {
+        "kind": "OBJECT",
+        "name": "FillInGapsGame_fillGameParagraph",
+        "description": "",
+        "fields": [
+          {
+            "name": "connections",
+            "description": "",
+            "args": [
+              {
+                "name": "after",
+                "description": "The cursor to start the pagination from. In this case the curser equals the id for the (last) element. If not set, we wil start from the beginning.",
+                "type": {
+                  "kind": "SCALAR",
+                  "name": "String",
+                  "ofType": null
+                },
+                "defaultValue": null,
+                "isDeprecated": false,
+                "deprecationReason": null
+              },
+              {
+                "name": "first",
+                "description": "The number of items to return. Default and max value is 100.",
+                "type": {
+                  "kind": "SCALAR",
+                  "name": "Int",
+                  "ofType": null
+                },
+                "defaultValue": "100",
+                "isDeprecated": false,
+                "deprecationReason": null
+              },
+              {
+                "name": "locale",
+                "description": "",
+                "type": {
+                  "kind": "SCALAR",
+                  "name": "String",
+                  "ofType": null
+                },
+                "defaultValue": null,
+                "isDeprecated": false,
+                "deprecationReason": null
+              }
+            ],
+            "type": {
+              "kind": "LIST",
+              "name": null,
+              "ofType": {
+                "kind": "UNION",
+                "name": "FillInGapsGame_fillGameParagraph_Connections",
+                "ofType": null
+              }
+            },
+            "isDeprecated": false,
+            "deprecationReason": null
+          },
+          {
+            "name": "json",
+            "description": "",
+            "args": [],
+            "type": {
+              "kind": "SCALAR",
+              "name": "JSON",
+              "ofType": null
+            },
+            "isDeprecated": false,
+            "deprecationReason": null
+          }
+        ],
+        "inputFields": null,
+        "interfaces": [],
+        "enumValues": null,
+        "possibleTypes": null
+      },
+      {
+        "kind": "UNION",
+        "name": "FillInGapsGame_fillGameParagraph_Connections",
+        "description": "",
+        "fields": null,
+        "inputFields": null,
+        "interfaces": null,
+        "enumValues": null,
+        "possibleTypes": [
+          {
+            "kind": "OBJECT",
+            "name": "Caisy_Field_Document_NotFound",
+            "ofType": null
+          }
+        ]
+      },
+      {
+        "kind": "OBJECT",
+        "name": "FillInGapsGame_helpNote",
+        "description": "",
+        "fields": [
+          {
+            "name": "connections",
+            "description": "",
+            "args": [
+              {
+                "name": "after",
+                "description": "The cursor to start the pagination from. In this case the curser equals the id for the (last) element. If not set, we wil start from the beginning.",
+                "type": {
+                  "kind": "SCALAR",
+                  "name": "String",
+                  "ofType": null
+                },
+                "defaultValue": null,
+                "isDeprecated": false,
+                "deprecationReason": null
+              },
+              {
+                "name": "first",
+                "description": "The number of items to return. Default and max value is 100.",
+                "type": {
+                  "kind": "SCALAR",
+                  "name": "Int",
+                  "ofType": null
+                },
+                "defaultValue": "100",
+                "isDeprecated": false,
+                "deprecationReason": null
+              },
+              {
+                "name": "locale",
+                "description": "",
+                "type": {
+                  "kind": "SCALAR",
+                  "name": "String",
+                  "ofType": null
+                },
+                "defaultValue": null,
+                "isDeprecated": false,
+                "deprecationReason": null
+              }
+            ],
+            "type": {
+              "kind": "LIST",
+              "name": null,
+              "ofType": {
+                "kind": "UNION",
+                "name": "FillInGapsGame_helpNote_Connections",
+                "ofType": null
+              }
+            },
+            "isDeprecated": false,
+            "deprecationReason": null
+          },
+          {
+            "name": "json",
+            "description": "",
+            "args": [],
+            "type": {
+              "kind": "SCALAR",
+              "name": "JSON",
+              "ofType": null
+            },
+            "isDeprecated": false,
+            "deprecationReason": null
+          }
+        ],
+        "inputFields": null,
+        "interfaces": [],
+        "enumValues": null,
+        "possibleTypes": null
+      },
+      {
+        "kind": "UNION",
+        "name": "FillInGapsGame_helpNote_Connections",
+        "description": "",
+        "fields": null,
+        "inputFields": null,
+        "interfaces": null,
+        "enumValues": null,
+        "possibleTypes": [
+          {
+            "kind": "OBJECT",
+            "name": "Caisy_Field_Document_NotFound",
+            "ofType": null
+          }
+        ]
       },
       {
         "kind": "SCALAR",
@@ -5727,47 +6239,6 @@
             "deprecationReason": null
           },
           {
-            "name": "TextElement",
-            "description": "",
-            "args": [
-              {
-                "name": "id",
-                "description": "",
-                "type": {
-                  "kind": "NON_NULL",
-                  "name": null,
-                  "ofType": {
-                    "kind": "SCALAR",
-                    "name": "ID",
-                    "ofType": null
-                  }
-                },
-                "defaultValue": null,
-                "isDeprecated": false,
-                "deprecationReason": null
-              },
-              {
-                "name": "locale",
-                "description": "",
-                "type": {
-                  "kind": "SCALAR",
-                  "name": "String",
-                  "ofType": null
-                },
-                "defaultValue": null,
-                "isDeprecated": false,
-                "deprecationReason": null
-              }
-            ],
-            "type": {
-              "kind": "OBJECT",
-              "name": "TextElement",
-              "ofType": null
-            },
-            "isDeprecated": false,
-            "deprecationReason": null
-          },
-          {
             "name": "Topic",
             "description": "",
             "args": [
@@ -7069,111 +7540,6 @@
             "deprecationReason": null
           },
           {
-            "name": "allTextElement",
-            "description": "",
-            "args": [
-              {
-                "name": "after",
-                "description": "",
-                "type": {
-                  "kind": "SCALAR",
-                  "name": "String",
-                  "ofType": null
-                },
-                "defaultValue": null,
-                "isDeprecated": false,
-                "deprecationReason": null
-              },
-              {
-                "name": "before",
-                "description": "",
-                "type": {
-                  "kind": "SCALAR",
-                  "name": "String",
-                  "ofType": null
-                },
-                "defaultValue": null,
-                "isDeprecated": false,
-                "deprecationReason": null
-              },
-              {
-                "name": "first",
-                "description": "",
-                "type": {
-                  "kind": "SCALAR",
-                  "name": "Int",
-                  "ofType": null
-                },
-                "defaultValue": null,
-                "isDeprecated": false,
-                "deprecationReason": null
-              },
-              {
-                "name": "last",
-                "description": "",
-                "type": {
-                  "kind": "SCALAR",
-                  "name": "Int",
-                  "ofType": null
-                },
-                "defaultValue": null,
-                "isDeprecated": false,
-                "deprecationReason": null
-              },
-              {
-                "name": "locale",
-                "description": "",
-                "type": {
-                  "kind": "SCALAR",
-                  "name": "String",
-                  "ofType": null
-                },
-                "defaultValue": null,
-                "isDeprecated": false,
-                "deprecationReason": null
-              },
-              {
-                "name": "sort",
-                "description": "",
-                "type": {
-                  "kind": "LIST",
-                  "name": null,
-                  "ofType": {
-                    "kind": "INPUT_OBJECT",
-                    "name": "TextElement_Sort",
-                    "ofType": null
-                  }
-                },
-                "defaultValue": null,
-                "isDeprecated": false,
-                "deprecationReason": null
-              },
-              {
-                "name": "where",
-                "description": "",
-                "type": {
-                  "kind": "LIST",
-                  "name": null,
-                  "ofType": {
-                    "kind": "INPUT_OBJECT",
-                    "name": "TextElement_Where",
-                    "ofType": null
-                  }
-                },
-                "defaultValue": null,
-                "isDeprecated": false,
-                "deprecationReason": null
-              }
-            ],
-            "type": {
-              "kind": "OBJECT",
-              "name": "TextElement_Connection",
-              "ofType": null
-            },
-            "isDeprecated": false,
-            "deprecationReason": null
-          },
-          {
             "name": "allTopic",
             "description": "",
             "args": [
@@ -7892,358 +8258,6 @@
         "interfaces": null,
         "enumValues": null,
         "possibleTypes": null
-      },
-      {
-        "kind": "OBJECT",
-        "name": "TextElement",
-        "description": "",
-        "fields": [
-          {
-            "name": "_meta",
-            "description": "",
-            "args": [],
-            "type": {
-              "kind": "OBJECT",
-              "name": "CaisyDocument_Meta",
-              "ofType": null
-            },
-            "isDeprecated": false,
-            "deprecationReason": null
-          },
-          {
-            "name": "id",
-            "description": "",
-            "args": [],
-            "type": {
-              "kind": "SCALAR",
-              "name": "ID",
-              "ofType": null
-            },
-            "isDeprecated": false,
-            "deprecationReason": null
-          },
-          {
-            "name": "richTextContent",
-            "description": "",
-            "args": [
-              {
-                "name": "locale",
-                "description": "",
-                "type": {
-                  "kind": "SCALAR",
-                  "name": "String",
-                  "ofType": null
-                },
-                "defaultValue": null,
-                "isDeprecated": false,
-                "deprecationReason": null
-              }
-            ],
-            "type": {
-              "kind": "OBJECT",
-              "name": "TextElement_richTextContent",
-              "ofType": null
-            },
-            "isDeprecated": false,
-            "deprecationReason": null
-          }
-        ],
-        "inputFields": null,
-        "interfaces": [],
-        "enumValues": null,
-        "possibleTypes": null
-      },
-      {
-        "kind": "OBJECT",
-        "name": "TextElement_Connection",
-        "description": "",
-        "fields": [
-          {
-            "name": "edges",
-            "description": "",
-            "args": [],
-            "type": {
-              "kind": "LIST",
-              "name": null,
-              "ofType": {
-                "kind": "OBJECT",
-                "name": "TextElement_ConnectionEdge",
-                "ofType": null
-              }
-            },
-            "isDeprecated": false,
-            "deprecationReason": null
-          },
-          {
-            "name": "pageInfo",
-            "description": "",
-            "args": [],
-            "type": {
-              "kind": "OBJECT",
-              "name": "PageInfo",
-              "ofType": null
-            },
-            "isDeprecated": false,
-            "deprecationReason": null
-          },
-          {
-            "name": "totalCount",
-            "description": "",
-            "args": [],
-            "type": {
-              "kind": "SCALAR",
-              "name": "Int",
-              "ofType": null
-            },
-            "isDeprecated": false,
-            "deprecationReason": null
-          }
-        ],
-        "inputFields": null,
-        "interfaces": [],
-        "enumValues": null,
-        "possibleTypes": null
-      },
-      {
-        "kind": "OBJECT",
-        "name": "TextElement_ConnectionEdge",
-        "description": "",
-        "fields": [
-          {
-            "name": "cursor",
-            "description": "",
-            "args": [],
-            "type": {
-              "kind": "SCALAR",
-              "name": "String",
-              "ofType": null
-            },
-            "isDeprecated": false,
-            "deprecationReason": null
-          },
-          {
-            "name": "node",
-            "description": "",
-            "args": [],
-            "type": {
-              "kind": "OBJECT",
-              "name": "TextElement",
-              "ofType": null
-            },
-            "isDeprecated": false,
-            "deprecationReason": null
-          }
-        ],
-        "inputFields": null,
-        "interfaces": [],
-        "enumValues": null,
-        "possibleTypes": null
-      },
-      {
-        "kind": "INPUT_OBJECT",
-        "name": "TextElement_Sort",
-        "description": "",
-        "fields": null,
-        "inputFields": [
-          {
-            "name": "createdAt",
-            "description": "",
-            "type": {
-              "kind": "ENUM",
-              "name": "Order",
-              "ofType": null
-            },
-            "defaultValue": null,
-            "isDeprecated": false,
-            "deprecationReason": null
-          },
-          {
-            "name": "id",
-            "description": "",
-            "type": {
-              "kind": "ENUM",
-              "name": "Order",
-              "ofType": null
-            },
-            "defaultValue": null,
-            "isDeprecated": false,
-            "deprecationReason": null
-          },
-          {
-            "name": "publishedAt",
-            "description": "",
-            "type": {
-              "kind": "ENUM",
-              "name": "Order",
-              "ofType": null
-            },
-            "defaultValue": null,
-            "isDeprecated": false,
-            "deprecationReason": null
-          },
-          {
-            "name": "updatedAt",
-            "description": "",
-            "type": {
-              "kind": "ENUM",
-              "name": "Order",
-              "ofType": null
-            },
-            "defaultValue": null,
-            "isDeprecated": false,
-            "deprecationReason": null
-          }
-        ],
-        "interfaces": null,
-        "enumValues": null,
-        "possibleTypes": null
-      },
-      {
-        "kind": "INPUT_OBJECT",
-        "name": "TextElement_Where",
-        "description": "",
-        "fields": null,
-        "inputFields": [
-          {
-            "name": "AND",
-            "description": "",
-            "type": {
-              "kind": "LIST",
-              "name": null,
-              "ofType": {
-                "kind": "INPUT_OBJECT",
-                "name": "TextElement_Where",
-                "ofType": null
-              }
-            },
-            "defaultValue": null,
-            "isDeprecated": false,
-            "deprecationReason": null
-          },
-          {
-            "name": "OR",
-            "description": "",
-            "type": {
-              "kind": "LIST",
-              "name": null,
-              "ofType": {
-                "kind": "INPUT_OBJECT",
-                "name": "TextElement_Where",
-                "ofType": null
-              }
-            },
-            "defaultValue": null,
-            "isDeprecated": false,
-            "deprecationReason": null
-          },
-          {
-            "name": "richTextContent",
-            "description": "",
-            "type": {
-              "kind": "INPUT_OBJECT",
-              "name": "CaisyField_Richtext_Where",
-              "ofType": null
-            },
-            "defaultValue": null,
-            "isDeprecated": false,
-            "deprecationReason": null
-          }
-        ],
-        "interfaces": null,
-        "enumValues": null,
-        "possibleTypes": null
-      },
-      {
-        "kind": "OBJECT",
-        "name": "TextElement_richTextContent",
-        "description": "",
-        "fields": [
-          {
-            "name": "connections",
-            "description": "",
-            "args": [
-              {
-                "name": "after",
-                "description": "The cursor to start the pagination from. In this case the curser equals the id for the (last) element. If not set, we wil start from the beginning.",
-                "type": {
-                  "kind": "SCALAR",
-                  "name": "String",
-                  "ofType": null
-                },
-                "defaultValue": null,
-                "isDeprecated": false,
-                "deprecationReason": null
-              },
-              {
-                "name": "first",
-                "description": "The number of items to return. Default and max value is 100.",
-                "type": {
-                  "kind": "SCALAR",
-                  "name": "Int",
-                  "ofType": null
-                },
-                "defaultValue": "100",
-                "isDeprecated": false,
-                "deprecationReason": null
-              },
-              {
-                "name": "locale",
-                "description": "",
-                "type": {
-                  "kind": "SCALAR",
-                  "name": "String",
-                  "ofType": null
-                },
-                "defaultValue": null,
-                "isDeprecated": false,
-                "deprecationReason": null
-              }
-            ],
-            "type": {
-              "kind": "LIST",
-              "name": null,
-              "ofType": {
-                "kind": "UNION",
-                "name": "TextElement_richTextContent_Connections",
-                "ofType": null
-              }
-            },
-            "isDeprecated": false,
-            "deprecationReason": null
-          },
-          {
-            "name": "json",
-            "description": "",
-            "args": [],
-            "type": {
-              "kind": "SCALAR",
-              "name": "JSON",
-              "ofType": null
-            },
-            "isDeprecated": false,
-            "deprecationReason": null
-          }
-        ],
-        "inputFields": null,
-        "interfaces": [],
-        "enumValues": null,
-        "possibleTypes": null
-      },
-      {
-        "kind": "UNION",
-        "name": "TextElement_richTextContent_Connections",
-        "description": "",
-        "fields": null,
-        "inputFields": null,
-        "interfaces": null,
-        "enumValues": null,
-        "possibleTypes": [
-          {
-            "kind": "OBJECT",
-            "name": "Caisy_Field_Document_NotFound",
-            "ofType": null
-          }
-        ]
       },
       {
         "kind": "OBJECT",

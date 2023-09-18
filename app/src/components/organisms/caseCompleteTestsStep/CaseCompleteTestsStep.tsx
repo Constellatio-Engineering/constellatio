@@ -3,7 +3,7 @@ import { Button } from "@/components/atoms/Button/Button";
 import { richTextHeadingOverwrite } from "@/components/helpers/richTextHeadingOverwrite";
 import { BoxIcon } from "@/components/Icons/BoxIcon";
 import { FileIcon } from "@/components/Icons/FileIcon";
-import { type IGenTextElement, type IGenCase_FullTextTasks } from "@/services/graphql/__generated/sdk";
+import { type IGenCase_Facts, type IGenCase_FullTextTasks } from "@/services/graphql/__generated/sdk";
 import useCaseSolvingStore from "@/stores/caseSolving.store";
 import type { IDocumentLink, IHeadingNode } from "types/richtext";
 
@@ -27,7 +27,7 @@ import { SelectionCardGame } from "../SelectionCardGame/SelectionCardGame";
 interface ICaseCompleteTestsStepProps 
 {
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  readonly facts: Maybe<IGenTextElement>;
+  readonly facts: Maybe<IGenCase_Facts>;
   readonly fullTextTasks: Maybe<IGenCase_FullTextTasks>;
 }
 
@@ -63,7 +63,7 @@ const CaseCompleteTestsStep: FunctionComponent<ICaseCompleteTestsStepProps> = ({
   const content = useMemo(
     () =>
       renderedCaseContent?.json?.content?.filter(
-        (contentItem: { content: { text: string }[]; type: string }) =>
+        (contentItem: { content: Array<{ text: string }>; type: string }) =>
           contentItem?.type === "heading"
       ),
     [renderedCaseContent]
@@ -99,7 +99,7 @@ const CaseCompleteTestsStep: FunctionComponent<ICaseCompleteTestsStepProps> = ({
         <div css={styles.facts}>
           <Title order={2}>Facts</Title>
           <Richtext
-            richTextContent={facts?.richTextContent}
+            data={facts}
             richTextOverwrite={{
               paragraph: richTextParagraphOverwrite,
             }}
@@ -119,7 +119,7 @@ const CaseCompleteTestsStep: FunctionComponent<ICaseCompleteTestsStepProps> = ({
             <div css={styles.toc}>
               <FloatingPanel
                 hidden={false}
-                facts={facts?.richTextContent}
+                facts={facts}
                 content={content}
                 tabs={[
                   { icon: { src: <FileIcon size={16}/> }, title: "Content" },
@@ -129,8 +129,7 @@ const CaseCompleteTestsStep: FunctionComponent<ICaseCompleteTestsStepProps> = ({
             </div>
             <div css={styles.fullTextAndTasksWrapper}>
               <Richtext
-                // eslint-disable-next-line @typescript-eslint/no-explicit-any
-                richTextContent={renderedCaseContent as any}
+                data={renderedCaseContent}
                 richTextOverwrite={{
                   documentLink: (props) => 
                   {

@@ -82,10 +82,10 @@ const CaseSolveCaseStep: FunctionComponent<IGenCase & {readonly setCaseStepIndex
           </Modal>
         </div>
       )}
-      {facts && facts.richTextContent && (
+      {facts && facts.json && (
         <div css={styles.factsWrapper}>
           <Title order={3}>Facts</Title>
-          <Richtext richTextContent={facts.richTextContent}/>
+          <Richtext data={facts}/>
         </div>
       )}
     </div>

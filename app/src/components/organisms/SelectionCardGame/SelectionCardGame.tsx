@@ -175,8 +175,8 @@ export const SelectionCardGame: FC<SelectionCardGameProps> = ({ game, helpNote, 
               variant={gameStatus}
               message={resultMessage}
             />
-            {helpNote?.richTextContent?.json && (
-              <HelpNote richTextContent={helpNote?.richTextContent}/>
+            {helpNote?.json && (
+              <HelpNote data={helpNote}/>
             )}
           </>
         )}
