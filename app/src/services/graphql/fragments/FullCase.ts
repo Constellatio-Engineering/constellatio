@@ -1,6 +1,6 @@
 import { gql } from "graphql-request";
 
-import { f_FullTextTasks } from "./FullTextTasks";
+import { f_CaseFullTextTasks } from "./CaseFullTextTasks";
 import { f_LegalArea } from "./LegalArea";
 import { f_MainCategory } from "./MainCategory";
 import { f_SubCategory } from "./SubCategory";
@@ -14,7 +14,7 @@ export const f_FullCase = gql`
 	${f_SubCategory}
 	${f_Tags}
 	${f_Topic}
-	${f_FullTextTasks}
+	${f_CaseFullTextTasks}
 	${f_TextElement}
 	fragment FullCase on Case {
 		__typename
@@ -25,7 +25,7 @@ export const f_FullCase = gql`
 			...TextElement
 		}
 		fullTextTasks {
-			...FullTextTasks
+			...CaseFullTextTasks
 		}
 		legalArea {
 			...LegalArea
@@ -43,8 +43,8 @@ export const f_FullCase = gql`
 		topic {
 			...Topic
 		}
-		resolution{
-        	...TextElement
-        }
+		resolution {
+			...TextElement
+		}
 	}
 `;

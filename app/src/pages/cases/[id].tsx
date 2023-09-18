@@ -1,5 +1,5 @@
 import { Layout } from "@/components/layouts/Layout";
-import CasePage from "@/components/pages/CasePage/CasePage";
+import DetailsPage from "@/components/pages/CasePage/CasePage";
 import { getCaseById } from "@/services/content/getCaseById";
 import { type IGenCase } from "@/services/graphql/__generated/sdk";
 
@@ -28,7 +28,7 @@ const NextPage: FunctionComponent<ICasePageProps> = ({ legalCase }) =>
 {
   return (
     <Layout>
-      <CasePage {...legalCase}/>
+      <DetailsPage variant="case" {...legalCase}/>
     </Layout>
   );
 };

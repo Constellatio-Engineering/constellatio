@@ -30,6 +30,7 @@ export const AuthPage: FC<AuthPageProps> = ({ tab }) =>
       <RegistrationVisualHeader/>
       <Container
         w="100%"
+        pt={20}
         sx={(theme) => ({
           backgroundColor: theme.colors["neutrals-01"][0],
           borderRadius: `${theme.radius["radius-16"]} 0 0 ${theme.radius["radius-16"]}`,
@@ -37,7 +38,7 @@ export const AuthPage: FC<AuthPageProps> = ({ tab }) =>
           padding: 0,
         })}>
         <Header variant="simple"/>
-        <Container w={440} pt={120} pb={tab === "register" ? "spacing-100" : 0}>
+        <Container w={500} pt={50} pb={tab === "register" ? "spacing-100" : 0}>
           <Switcher
             size="big"
             value={tab}
@@ -56,9 +57,9 @@ export const AuthPage: FC<AuthPageProps> = ({ tab }) =>
             </Tabs.Panel>
           </Switcher>
           <BodyText component="p" styleType="body-02-medium" c="neutrals-01.7">
-            Note: This version of Constellatio is optimized for computer use
-            only. If you have any technical questions, please contact our
-            support at&nbsp;
+            Hinweis: Diese Version von Constellatio ist nur für die Verwendung am Computer optimiert.
+            Wenn du technische Fragen hast, wende dich bitte an unseren
+            Support unter&nbsp;
             <CustomLink
               href="mailto:webmaster@constellatio.de"
               styleType="link-secondary"

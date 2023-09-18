@@ -1,24 +1,53 @@
 /* eslint-disable sort-keys-fix/sort-keys-fix */
+import { type InferInsertModel } from "drizzle-orm";
 import {
-  text, pgTable, integer, pgEnum, uuid
+  text, pgTable, integer, pgEnum, uuid, serial, smallint, unique, timestamp
 } from "drizzle-orm/pg-core";
 
-const allGenderIdentifiers = [
-  "male",
-  "female",
-  "diverse",
-] as const;
+export const allGenderIdentifiers = ["male", "female", "diverse",] as const;
 export type GenderIdentifier = typeof allGenderIdentifiers[number];
 
-export const genderEnum = pgEnum("gender", allGenderIdentifiers);
+export const allBookmarkResourceTypes = ["article", "case"] as const;
+export type BookmarkResourceType = typeof allBookmarkResourceTypes[number];
 
-export const profiles = pgTable("profiles", {
-  id: uuid("id").primaryKey(),
-  displayName: text("displayName"),
-  firstName: text("firstName"),
-  gender: genderEnum("gender"),
-  lastName: text("lastName"),
-  semester: integer("semester"),
-  university: text("displayName"),
-  test: text("test"),
+export const genderEnum = pgEnum("gender", allGenderIdentifiers);
+export const resourceTypeEnum = pgEnum("resourceType", allBookmarkResourceTypes);
+
+export const usersTable = pgTable("users", {
+  id: uuid("id").unique().notNull(),
+  email: text("email").unique().notNull(),
+  displayName: text("displayName").notNull(),
+  firstName: text("firstName").notNull(),
+  gender: genderEnum("gender").notNull(),
+  lastName: text("lastName").notNull(),
+  semester: smallint("semester"),
+  university: text("university").notNull()
 });
+
+export type UserInsert = InferInsertModel<typeof usersTable>;
+
+export const bookmarksTable = pgTable("bookmarks", {
+  id: serial("id").primaryKey(),
+  uuid: uuid("uuid").defaultRandom().unique().notNull(),
+  userId: uuid("userId").references(() => usersTable.id, { onDelete: "cascade" }).notNull(),
+  resourceType: resourceTypeEnum("resourceType").notNull(),
+  createdAt: timestamp("created_at").defaultNow(),
+  resourceId: uuid("resourceId").notNull()
+}, table => ({
+  unq: unique().on(table.resourceType, table.resourceId, table.userId),
+}));
+
+export type BookmarkInsert = InferInsertModel<typeof bookmarksTable>;
+
+export const uploadsTable = pgTable("uploads", {
+  id: serial("id").primaryKey(),
+  uuid: uuid("uuid").defaultRandom().unique().notNull(),
+  userId: uuid("userId").references(() => usersTable.id, { onDelete: "cascade" }).notNull(),
+  createdAt: timestamp("created_at").defaultNow(),
+  filename: text("filename").notNull(),
+  originalFilename: text("originalFilename").notNull(),
+  sizeInBytes: integer("sizeInBytes").notNull(),
+  fileExtension: text("fileExtension").notNull()
+});
+
+export type UploadInsert = InferInsertModel<typeof uploadsTable>;

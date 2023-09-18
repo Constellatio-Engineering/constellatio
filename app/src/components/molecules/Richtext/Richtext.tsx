@@ -1,4 +1,4 @@
-import { type IGenTextElement_RichTextContent, type IGenTextElement } from "@/services/graphql/__generated/sdk";
+import { type IGenTextElement } from "@/services/graphql/__generated/sdk";
 import { type Nullable } from "@/utils/types";
 
 import { type ElementType, RichTextRenderer } from "@caisy/rich-text-react-renderer";

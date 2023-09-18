@@ -2,14 +2,16 @@ import { type SerializedStyles, css } from "@emotion/react";
 import { type MantineTheme } from "@mantine/styles";
 
 const DictionaryCSS = css`
-  height: 5px;
+  height: 0px;
+  padding:0;
+  max-width: 100%;
 `;
 
-export const componentArea = (theme: MantineTheme): SerializedStyles => css`
+export const componentArea = ({ theme, variant }: {theme: MantineTheme;variant: "case"|"dictionary"}): SerializedStyles => css`
  background-color: ${theme.colors["neutrals-01"][0]};
  border-bottom: 8px solid ${theme.colors["neutrals-01"][4]};
  position: sticky;
-  top: 0;
+  top: ${variant === "case" ? "0px" : "72px"};
   z-index: 41;
   width: 100%;
   padding: 0px ;
@@ -23,7 +25,7 @@ export const wrapper = ({ variant }: {
   align-items: center;
   flex-wrap: wrap;
   padding:12px 0;
-  position: -webkit-sticky;
+  /* position: -webkit-sticky; */
   max-width: 1440px;
   margin: 0 auto;  
   ${variant === "dictionary" && DictionaryCSS}
