@@ -3,14 +3,19 @@ import { Button } from "@/components/atoms/Button/Button";
 import DummyFileViewer from "@/components/pages/personalSpacePage/dummyFileViewer/DummyFileViewer";
 import uploadsProgressStore from "@/stores/uploadsProgress.store";
 import { api } from "@/utils/api";
-import { removeItemsByIndices } from "@/utils/utils";
+import { getRandomUuid, removeItemsByIndices } from "@/utils/utils";
 
-import { Loader, Text } from "@mantine/core";
+import { Text } from "@mantine/core";
 import { modals } from "@mantine/modals";
 import axios from "axios";
 import React, { type FormEvent, type FunctionComponent, useState } from "react";
 
 import * as styles from "./PersonalSpacePage.styles";
+
+type FileWithClientSideUuid = {
+  clientSideUuid: string;
+  file: File;
+};
 
 const PersonalSpacePage: FunctionComponent = () =>
 {
@@ -22,7 +27,7 @@ const PersonalSpacePage: FunctionComponent = () =>
   const bookmarkedCases = allCases.filter(caisyCase => allCasesBookmarks.some(bookmark => bookmark.resourceId === caisyCase.id));
   const fileInputRef = React.useRef<HTMLInputElement>(null);
   const { setUploadState, uploads } = uploadsProgressStore();
-  const [selectedFiles, setSelectedFiles] = useState<File[]>([]);
+  const [selectedFiles, setSelectedFiles] = useState<FileWithClientSideUuid[]>([]);
   const [selectedFileIdForPreview, setSelectedFileIdForPreview] = useState<string>();
 
   const { mutate: removeBookmark } = api.bookmarks.removeBookmark.useMutation({
@@ -49,7 +54,7 @@ const PersonalSpacePage: FunctionComponent = () =>
     });
   };
 
-  const uploadFile = async (file: File): Promise<void> =>
+  const uploadFile = async (file: File, clientSideUuid: string): Promise<void> =>
   {
     if(selectedFiles.length === 0)
     {
@@ -59,9 +64,9 @@ const PersonalSpacePage: FunctionComponent = () =>
 
     const originalFileName = file.name;
 
-    console.log("uploading file '", `${file.name}'...`);
+    console.log("uploading file '", `${originalFileName}'...`);
 
-    setUploadState(originalFileName, {
+    setUploadState(clientSideUuid, {
       progressInPercent: 0,
       type: "uploading"
     });
@@ -76,7 +81,7 @@ const PersonalSpacePage: FunctionComponent = () =>
       headers: { "Content-Type": file.type },
       onUploadProgress: ({ progress = 0 }) =>
       {
-        setUploadState(originalFileName, progress === 1 ? {
+        setUploadState(clientSideUuid, progress === 1 ? {
           type: "completed"
         } : {
           progressInPercent: progress * 100,
@@ -86,9 +91,10 @@ const PersonalSpacePage: FunctionComponent = () =>
     });
 
     await saveFileToDatabase({
+      clientSideUuid,
       fileSizeInBytes: file.size,
       filename,
-      originalFilename: originalFileName,
+      originalFilename: originalFileName
     });
 
     console.log("file uploaded successfully");
@@ -103,17 +109,17 @@ const PersonalSpacePage: FunctionComponent = () =>
       fileInputRef.current.value = "";
     }
 
-    const uploads: Array<Promise<void>> = selectedFiles.map(async file =>
+    const uploads: Array<Promise<void>> = selectedFiles.map(async ({ clientSideUuid, file }) =>
     {
       try
       {
-        await uploadFile(file);
+        await uploadFile(file, clientSideUuid);
         await ctx.uploads.getUploadedFiles.invalidate();
       }
       catch (e: unknown)
       {
         console.log("error while uploading file", e);
-        setUploadState(file.name, { type: "failed" });
+        setUploadState(clientSideUuid, { type: "failed" });
         return Promise.reject(e);
       }
     });
@@ -130,7 +136,7 @@ const PersonalSpacePage: FunctionComponent = () =>
       }
     });
 
-    const newSelectedFiles = removeItemsByIndices<File>(selectedFiles, indicesOfSuccessfulUploads);
+    const newSelectedFiles = removeItemsByIndices<FileWithClientSideUuid>(selectedFiles, indicesOfSuccessfulUploads);
     setSelectedFiles(newSelectedFiles);
   };
 
@@ -164,7 +170,12 @@ const PersonalSpacePage: FunctionComponent = () =>
           type="file"
           disabled={areUploadsInProgress}
           multiple
-          onChange={e => setSelectedFiles(Array.from(e.target.files ?? []))}
+          onChange={e =>
+          {
+            const files = Array.from(e.target.files ?? []);
+            const filesWithUuid: FileWithClientSideUuid[] = files.map(file => ({ clientSideUuid: getRandomUuid(), file }));
+            setSelectedFiles(filesWithUuid);
+          }}
         />
         <Button<"button">
           styleType="primary"
@@ -174,15 +185,15 @@ const PersonalSpacePage: FunctionComponent = () =>
         </Button>
       </form>
       Selected Files:
-      {selectedFiles.map(file => (
-        <p key={file.name}>{file.name}</p>
+      {selectedFiles.map(({ clientSideUuid, file }) => (
+        <p key={clientSideUuid}>{file.name}</p>
       ))}
       <h2 style={{ fontSize: 22, marginRight: 10, marginTop: 100 }}>Current Uploads</h2>
       {uploads.filter(u => u.state.type !== "completed").map((upload, index) =>
       {
         return (
           <div key={index} style={{ margin: "10px 0" }}>
-            <strong>{upload.fileName}</strong>
+            <strong>File Client Side UUID: {upload.fileClientSideUuid}</strong>
             {upload.state.type === "uploading" ? (
               <div
                 style={{
@@ -209,6 +220,9 @@ const PersonalSpacePage: FunctionComponent = () =>
           <div key={file.id} style={{ cursor: "pointer", margin: "10px 0" }} onClick={() => setSelectedFileIdForPreview(file.uuid)}>
             <strong>{file.originalFilename}.{file.fileExtension}</strong>
             <p>Uploaded: {uploadedDate} {uploadedTime}</p>
+            <p>FileId: {file.id}</p>
+            <p>File UUID: {file.uuid}</p>
+            <p>File client side UUID: {file.clientSideUuid}</p>
           </div>
         );
       })}
