@@ -89,6 +89,8 @@ let FillGapsGame: FC<TFillGapsGame> = ({
   );
 
   const updateAnswersResult = useFillGapsGameStore((s) => s.updateAnswersResult);
+
+  // const setGameSubmitted = useFillGapsGameStore((s) => s.setGameSubmitted);
   // console.log(`gameState for game with ID '${id}'`, gameState);
 
   useEffect(() => 
@@ -121,6 +123,7 @@ let FillGapsGame: FC<TFillGapsGame> = ({
   }
 
   const {
+    allCorrect,
     answerResult,
     correctAnswers,
     gameStatus,
@@ -129,87 +132,33 @@ let FillGapsGame: FC<TFillGapsGame> = ({
     userAnswers
   } = gameState ?? {};
 
-  // const checkAnswers = (): boolean => 
-  // {
-  //   console.log("checkAnswers");
-
-  //    if(userAnswers.length !== correctAnswers.current.length) { return false; }
-
-  //   let allCorrect = true;
-  //   const newAnswerResult: string[] = [];
-
-  //   for(let i = 0; i < userAnswers.length; i++) 
-  //   {
-  //     const possibleCorrectAnswers = correctAnswers.current?.[i]?.split(";") ?? [];
-  //     let isAnswerCorrect = false;
-
-  //     for(const possibleAnswer of possibleCorrectAnswers) 
-  //     {
-  //       const userAnswer = userAnswers?.[i]?.toLowerCase() ?? "";
-  //       const correctAnswer = possibleAnswer.toLowerCase();
-
-  //       if(!isNaN(Number(correctAnswer)) || correctAnswer.length <= 4) 
-  //       {
-  //         // If correct answer is number or a short word, require an exact match
-  //         if(userAnswer === correctAnswer) 
-  //         {
-  //           isAnswerCorrect = true;
-  //           break;
-  //         }
-  //       }
-  //       else 
-  //       {
-  //         // check for distance
-  //         const dist = distance(userAnswer, correctAnswer);
-  //         if(dist <= 2) 
-  //         {
-  //           isAnswerCorrect = true;
-  //           break;
-  //         }
-  //       }
-  //     }
-
-  //     if(isAnswerCorrect) 
-  //     {
-  //       newAnswerResult.push("correct");
-  //     }
-  //     else 
-  //     {
-  //       newAnswerResult.push("incorrect");
-  //       allCorrect = false;
-  //     }
-  //   }
-
-  //   setAnswerResult(newAnswerResult);
-  //   return allCorrect;
-  // };
+  console.log("answerResult", answerResult, "correctAnswers", correctAnswers, "gameStatus", gameStatus, "resultMessage", resultMessage, "userAnswers", userAnswers, "allCorrect", allCorrect);
 
   const handleCheckAnswers = (): void => 
   {
     console.log("handleCheckAnswers");
 
     updateAnswersResult({ gameId: id });
-
-    console.log("answersResult", answerResult);
-    console.log("correctAnswers", correctAnswers);
-    /* if(!gameSubmitted)
+    if(!gameSubmitted)
     {
-      setGameSubmitted(true);
+      updateGameState(id, { gameSubmitted: true });
       getNextGameIndex();
     }
 
-    if(checkAnswers())
+    updateGameState(id, { gameStatus: allCorrect ? "win" : "lose", resultMessage: allCorrect ? "Congrats! all answers are correct!" : "Some answers are incorrect. Please try again." });
+
+    if(allCorrect)
     {
       // all answers are correct
-      setGameStatus("win");
-      setResultMessage("Congrats! all answers are correct!");
+      // setGameStatus("win");
+      // setResultMessage("Congrats! all answers are correct!");
     }
     else
     {
       // at least one answer is incorrect
-      setGameStatus("lose");
-      setResultMessage("Some answers are incorrect. Please try again.");
-    }*/
+      // setGameStatus("lose");
+      // setResultMessage("Some answers are incorrect. Please try again.");
+    }
   };
 
   const handleResetGame = (): void => 

@@ -1,5 +1,8 @@
+/* eslint-disable max-lines */
 import { type Nullable } from "@/utils/types";
 
+import { is } from "drizzle-orm";
+import { distance } from "fastest-levenshtein";
 import { create } from "zustand";
 import { immer } from "zustand/middleware/immer";
 
@@ -21,6 +24,7 @@ type AnswersResultPerParagraph = {
 };
 
 type FillGapsGameState = {
+  allCorrect: boolean;
   answerResult: AnswersResultPerParagraph[];
   correctAnswers: CorrectAnswersPerParagraph[];
   gameStatus: GameStatus;
@@ -30,7 +34,7 @@ type FillGapsGameState = {
   userAnswers: UserAnswersPerParagraph[];
 };
 
-type FillGapsGameStateUpdate = Partial<Pick<FillGapsGameState, "gameStatus" | "gameSubmitted" | "resultMessage" | "answerResult" >>;
+type FillGapsGameStateUpdate = Partial<Pick<FillGapsGameState, "gameStatus" | "gameSubmitted" | "resultMessage" >>;
 
 type FillGapsGameStore = {
   games: FillGapsGameState[];
@@ -43,6 +47,7 @@ type FillGapsGameStore = {
 };
 
 const defaultFillGapsGameState: FillGapsGameState = {
+  allCorrect: true,
   answerResult: [],
   correctAnswers: [],
   gameStatus: "inprogress",
@@ -99,7 +104,6 @@ const useFillGapsGameStore = create(
 
     updateAnswersResult: ({ gameId }) => 
     {
-        
       const { games } = get();
       const gameIndex = games.findIndex(game => game.id === gameId);
 
@@ -128,15 +132,47 @@ const useFillGapsGameStore = create(
 
         userAnswer.answers.forEach((answer, index) =>
         {
-          if(answer === correctAnswers.correctAnswers[index])
+          let isAnswerCorrect = false;
+          const possibleCorrectAnswer = correctAnswers?.correctAnswers?.[index]?.split(";");
+          for(const possibleAnswer of possibleCorrectAnswer!)
           {
-            answersResult.answersResult[index] = "correct";
-            return;
+            const userAnswer = answer.trim().toLowerCase();
+            const correctAnswer = possibleAnswer.trim().toLowerCase();
+            
+            if(!isNaN(Number(userAnswer)) || correctAnswer!.length <= 4)
+            {
+              // If correct answer is number or a short word, require an exact match
+              if(userAnswer === correctAnswer)
+              {
+                isAnswerCorrect = true;
+                break;
+              }
+              else 
+              {
+                // check for distance
+                const dist = distance(userAnswer, correctAnswer!);
+                if(dist <= 2)
+                {
+                  isAnswerCorrect = true;
+                  break;
+                }
+              }
+            }
+            if(isAnswerCorrect)
+            {
+              answersResult.answersResult[index] = "correct";
+            }
+            else 
+            {
+              answersResult.answersResult[index] = "incorrect";
+              set(state => 
+              {
+                state.games[gameIndex]!.allCorrect = false;
+              }
+              );
+            }
           }
-
-          answersResult.answersResult[index] = "wrong";
         });
-
         return answersResult;
       }).filter(Boolean) as AnswersResultPerParagraph[];
 
