@@ -35,6 +35,7 @@ const OverviewHeader: FunctionComponent<ICasesOverviewHeaderProps> = ({
   // const [filters, setFilters] = useState<string[]>(["Filter One", "Filter Two", "Filter Three", "Filter Four", "Filter Five", "Filter Six"]);
   const [filters, setFilters] = useState<string[]>([]);
   
+  console.log({ categories });
   return (
     <div css={styles.contentHeader({ theme, variant })} className="header">
       <div id="overlay-lines">

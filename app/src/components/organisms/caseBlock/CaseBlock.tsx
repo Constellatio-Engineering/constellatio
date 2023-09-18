@@ -11,7 +11,7 @@ import React, { type FunctionComponent } from "react";
 
 import * as styles from "./CaseBlock.styles";
 import { timeFormatter } from "../overviewCard/OverviewCard";
-import Table, { type CasesTableProps } from "../table/Table";
+import Table from "../table/Table";
 
 export interface ICaseBlockProps 
 {
@@ -26,10 +26,10 @@ const CaseBlock: FunctionComponent<ICaseBlockProps> = ({ blockHead, items, varia
 {
   const { data: casesBookmarks, isLoading } = api.bookmarks.getAllBookmarks.useQuery({ resourceType: "case" });
 
-  return (
+  return items && items.length > 0 ? (
     <div css={styles.wrapper}>
       <CaseBlockHead {...blockHead}/> 
-      <Table tableType={{ type: "cases", variant: "cases" }}>
+      <Table tableType={{ type: variant === "case" ? "cases" : "dictionary", variant: variant === "case" ? "cases" : "dictionary" }}>
         {items?.map((item, caseIndex) =>
         {
           const isBookmarked = casesBookmarks?.some(bookmark => bookmark?.resourceId === item?.id) || false;
@@ -68,7 +68,7 @@ const CaseBlock: FunctionComponent<ICaseBlockProps> = ({ blockHead, items, varia
         })}
       </Table>
     </div>
-  );
+  ) : null;
 };
 
 export default CaseBlock;
