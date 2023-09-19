@@ -4,13 +4,10 @@ export const contentWrapper = css``;
 
 export const facts = css`
 	max-width: 52.5%;
-	/* padding: 0 44px; */
 	padding: 0;
-
 	display: flex;
 	flex-direction: column;
 	gap: 24px;
-
 	> button {
 		align-self: flex-start;
 	}

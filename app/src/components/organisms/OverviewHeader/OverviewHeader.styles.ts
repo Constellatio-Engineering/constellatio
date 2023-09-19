@@ -12,7 +12,8 @@ export const contentHeader = ({ theme, variant }: {
   align-items: center;
   justify-content: center;
   gap: 32px;
-  min-height: 70vh;
+  /* min-height: 50vh; */
+  height: 680px;
   background: ${variant === "case" ? theme.colors["cc-cases"][2] : theme.colors["cc-dictionary"][2]};
 #overlay-lines{
   position: absolute;
@@ -23,6 +24,9 @@ export const contentHeader = ({ theme, variant }: {
   place-items: center;
   z-index: 2;
   color: ${variant === "case" ? theme.colors["cc-cases"][2] : theme.colors["cc-dictionary"][2]};
+  svg{
+    height: 100%;
+  }
 }
 `;
 
@@ -40,7 +44,8 @@ export const categoriesButtons = () =>
 };
 
 export const itemsList = () => css`
-  transform: translateY(-150px);    position: relative;
+  transform: translateY(-150px);    
+  position: relative;
     z-index: 3;
   .item {
     outline: 1px solid;

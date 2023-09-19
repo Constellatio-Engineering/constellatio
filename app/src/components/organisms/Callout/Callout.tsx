@@ -44,17 +44,17 @@ export const Callout: FC<CalloutProps> = ({ calloutType, expandable, text }) =>
           <HeadingType calloutType={calloutType}/>
         </Group>
       )}
-      {text?.richTextContent?.json &&
+      {text?.json &&
         (expandable ? (
           <Spoiler
             hideLabel={ShowLessBtn}
             maxHeight={190}
             showLabel={ShowAllBtn}
             styles={spoilerStyles({ isContentHide })}>
-            <Richtext richTextContent={text.richTextContent} stylesOverwrite={RichTextStyles}/>
+            <Richtext data={text} stylesOverwrite={RichTextStyles}/>
           </Spoiler>
         ) : (
-          <Richtext richTextContent={text.richTextContent} stylesOverwrite={RichTextStyles}/>
+          <Richtext data={text} stylesOverwrite={RichTextStyles}/>
         ))}
     </Stack>
   );

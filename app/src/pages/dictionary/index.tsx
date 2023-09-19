@@ -1,6 +1,6 @@
 
 import { Layout } from "@/components/layouts/Layout";
-import CasesOverviewPage from "@/components/pages/CasesOverviewPage/CasesOverviewPage";
+import OverviewPage from "@/components/pages/OverviewPage/OverviewPage";
 import getArticlesOverviewProps, { type IArticlesOverviewProps } from "@/services/content/getArticlesOverviewProps";
 
 import { type GetStaticProps } from "next";
@@ -11,11 +11,11 @@ Awaited<ReturnType<typeof getArticlesOverviewProps>>
 > = async () => 
 {
 
-  const resAllCases = await getArticlesOverviewProps();
+  const allArticles = await getArticlesOverviewProps();
 
   return {
     props: {
-      ...(resAllCases || null)
+      ...(allArticles || null)
     },
     revalidate: 1,
   };
@@ -26,7 +26,7 @@ const NextPage: FunctionComponent<IArticlesOverviewProps> = (props) =>
 {
   return (
     <Layout>
-      <CasesOverviewPage {...props} allCases={props?.allArticles} variant="dictionary"/>      
+      <OverviewPage content={props} variant="dictionary"/>      
     </Layout>
   );
 };

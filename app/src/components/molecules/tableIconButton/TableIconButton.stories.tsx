@@ -13,7 +13,11 @@ const Template: FunctionComponent<ITableIconButtonProps> = (args) => (
 );
 
 const meta: Meta = {
-  argTypes: {},
+  argTypes: {
+    isLoading: {
+      control: "boolean"
+    }
+  },
   component: Template,
   parameters: {
     design: {
@@ -21,7 +25,7 @@ const meta: Meta = {
       url: "https://www.figma.com/file/KZhlH1AesOBZZf1V4F9d2r/Constellatio-%E2%80%93-UI-Kit?type=design&node-id=32-4495&mode=dev",
     },
   },
-  title: "Atoms/Table/TableIconButton",
+  title: "Molecules/Table/TableIconButton",
 };
 
 export default meta;

@@ -3,14 +3,13 @@ import { Button } from "@/components/atoms/Button/Button";
 import { richTextHeadingOverwrite } from "@/components/helpers/richTextHeadingOverwrite";
 import { BoxIcon } from "@/components/Icons/BoxIcon";
 import { FileIcon } from "@/components/Icons/FileIcon";
-import { type IGenTextElement, type IGenCase_FullTextTasks } from "@/services/graphql/__generated/sdk";
+import { type Maybe, type IGenCase_Facts, type IGenCase_FullTextTasks, type IGenArticle_FullTextTasks } from "@/services/graphql/__generated/sdk";
 import useCaseSolvingStore from "@/stores/caseSolving.store";
 import type { IDocumentLink, IHeadingNode } from "types/richtext";
 
 import { Container, Title } from "@mantine/core";
-import { type Maybe } from "@trpc/server";
 import {
-  type FunctionComponent, useEffect, useMemo, type JSXElementConstructor, type ReactElement 
+  type FunctionComponent, useEffect, useMemo
 } from "react";
 
 import { getGamesIndexes } from "./caseCompleteTestsStep.helper";
@@ -20,19 +19,21 @@ import { ImageWrapperCard } from "../../molecules/ImageWrapperCard/ImageWrapperC
 import { Richtext } from "../../molecules/Richtext/Richtext";
 import { Callout } from "../Callout/Callout";
 import { DragDropGame } from "../DragDropGame/DragDropGame";
-import { FillGapsGame } from "../FillGapsGame/FillGapsGame";
+import FillGapsGame from "../FillGapsGame/FillGapsGame";
 import FloatingPanel from "../floatingPanel/FloatingPanel";
+import { getNestedHeadingIndex } from "../floatingPanel/generateTocHelper";
 import { SelectionCardGame } from "../SelectionCardGame/SelectionCardGame";
 
 interface ICaseCompleteTestsStepProps 
 {
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  readonly facts: Maybe<IGenTextElement>;
-  readonly fullTextTasks: Maybe<IGenCase_FullTextTasks>;
+  readonly facts: Maybe<IGenCase_Facts> | undefined;
+  readonly fullTextTasks: Maybe<IGenCase_FullTextTasks> | Maybe<IGenArticle_FullTextTasks>;
+  readonly variant?: "case" | "dictionary";
 }
 
-const CaseCompleteTestsStep: FunctionComponent<ICaseCompleteTestsStepProps> = ({ facts, fullTextTasks }) => 
+const CaseCompleteTestsStep: FunctionComponent<ICaseCompleteTestsStepProps> = ({ facts, fullTextTasks, variant }) => 
 {
+
   const {
     getNextGameIndex,
     hasCaseSolvingStarted,
@@ -62,36 +63,49 @@ const CaseCompleteTestsStep: FunctionComponent<ICaseCompleteTestsStepProps> = ({
 
   const content = useMemo(
     () =>
-      renderedCaseContent?.json?.content?.filter(
-        (contentItem: { content: { text: string }[]; type: string }) =>
+    {
+      const items = variant === "case" ? renderedCaseContent?.json?.content : fullTextTasks?.json?.content;
+      return items?.filter(
+        (contentItem: { content: Array<{ text: string }>; type: string }) =>
           contentItem?.type === "heading"
-      ),
+      );
+    },
+    // eslint-disable-next-line react-hooks/exhaustive-deps
     [renderedCaseContent]
   );
 
   useEffect(() => 
   {
-    setGamesIndexes(getGamesIndexes({ fullTextTasks }));
+    
+    if(variant === "case" && fullTextTasks?.__typename === "Case_fullTextTasks") { setGamesIndexes(getGamesIndexes({ fullTextTasks })); }
     getNextGameIndex();
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [fullTextTasks]);
 
-  const getHeadingIndex = (passedHead: {
-    attrs: {
-      level: number;
-    };
-    type: "heading";
-  } & ReactElement<unknown, string | JSXElementConstructor<unknown>>): number | void => 
-  {
-    const allHeadings = fullTextTasks?.json?.content?.filter((x: { attrs: { level: number }; type: "heading" }) => (x.type === "heading" && x.attrs.level === passedHead.attrs.level));
-    for(let headIndex = 0; headIndex < allHeadings.length; headIndex++) 
-    {
-      if(JSON?.stringify(allHeadings?.[headIndex]) === JSON?.stringify(passedHead)) 
-      {
-        return headIndex;
-      }
-    }
-  };
+  // THIS LOGIC IS WRONG WE NEED INDEX AMONGST THE SAME NESTING LEVEL NOT AMONGST ALL THE OTHER HEADINGS
+  // const getHeadingIndex = (passedHead: {
+  //   attrs: {
+  //     level: number;
+  //   };
+  //   type: "heading";
+  // } & ReactElement<unknown, string | JSXElementConstructor<unknown>>): number | void => 
+  // {
+    
+  //   const allHeadingsSameLevel = fullTextTasks?.json?.content?.filter((x: { attrs: { level: number }; type: "heading" }) => (x.type === "heading" && x.attrs.level === passedHead.attrs.level));
+
+  //   for(let headIndex = 0; headIndex < allHeadingsSameLevel.length; headIndex++) 
+  //   {
+  //     if(JSON?.stringify(allHeadingsSameLevel?.[headIndex]) === JSON?.stringify(passedHead)) 
+  //     {
+  //       return headIndex;
+  //     }
+  //   }
+  // };
+
+  // THIS FUNCTION RETURNS THE INDEX OF THE ITEM AMONGST THE SAME HEADING LEVEL INSIDE A SPECIFIC NESTING LEVEL 
+  const allHeadings = fullTextTasks?.json?.content?.filter((x: { attrs: { level: number }; type: "heading" }) => x.type === "heading");
+  
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
 
   return (
     <Container maw={1440}>
@@ -99,7 +113,7 @@ const CaseCompleteTestsStep: FunctionComponent<ICaseCompleteTestsStepProps> = ({
         <div css={styles.facts}>
           <Title order={2}>Facts</Title>
           <Richtext
-            richTextContent={facts?.richTextContent}
+            data={facts}
             richTextOverwrite={{
               paragraph: richTextParagraphOverwrite,
             }}
@@ -119,18 +133,15 @@ const CaseCompleteTestsStep: FunctionComponent<ICaseCompleteTestsStepProps> = ({
             <div css={styles.toc}>
               <FloatingPanel
                 hidden={false}
-                facts={facts?.richTextContent}
+                facts={facts}
                 content={content}
-                tabs={[
-                  { icon: { src: <FileIcon size={16}/> }, title: "Content" },
-                  { icon: { src: <BoxIcon size={16}/> }, title: "Facts" },
-                ]}
+                variant={variant}
               />
             </div>
             <div css={styles.fullTextAndTasksWrapper}>
               <Richtext
                 // eslint-disable-next-line @typescript-eslint/no-explicit-any
-                richTextContent={renderedCaseContent as any}
+                data={variant === "case" ? renderedCaseContent as any : fullTextTasks}
                 richTextOverwrite={{
                   documentLink: (props) => 
                   {
@@ -213,7 +224,7 @@ const CaseCompleteTestsStep: FunctionComponent<ICaseCompleteTestsStepProps> = ({
                   heading: (props) => 
                   {
                     const node = props!.node as unknown as IHeadingNode;
-                    return richTextHeadingOverwrite({ index: getHeadingIndex(node), ...props });
+                    return richTextHeadingOverwrite({ depth: node?.attrs?.level, index: getNestedHeadingIndex(node, allHeadings), ...props });
                   },
                   paragraph: richTextParagraphOverwrite
                 }}

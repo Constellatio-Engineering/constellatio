@@ -27,29 +27,31 @@ const EmptyStateCard: FunctionComponent<IEmptyStateCardProps> = ({
 {
   const theme = useMantineTheme();
   return (
-    <div css={styles.emptyStateCard({ theme, variant })}>
-      {!hideIcon && (
-        <div css={styles.emptyStateCardImage({ variant })}>
-          <CaisyImg src={placeHolderFlagImg.src} description="empty card img"/>
+    <div css={styles.wrapper}>
+      <div css={styles.emptyStateCard({ theme, variant })}>
+        {!hideIcon && (
+          <div css={styles.emptyStateCardImage({ variant })}>
+            <CaisyImg src={placeHolderFlagImg.src} description="empty card img"/>
+          </div>
+        )}
+        <div css={styles.emptyStateCardTitle}>
+          <Title order={3}>
+            {title}
+          </Title>
         </div>
-      )}
-      <div css={styles.emptyStateCardTitle}>
-        <Title order={3}>
-          {title}
-        </Title>
-      </div>
-      <div css={styles.emptyStateCardText({ theme })}>
-        <BodyText styleType="body-01-medium">
-          {text}
-        </BodyText>
-      </div>
-      {button && variant === "For-large-areas" && (
-        <div css={styles.callToAction}>
-          <Button<"button"> styleType="primary" onClick={() => {}}>
-            {button}
-          </Button>
+        <div css={styles.emptyStateCardText({ theme })}>
+          <BodyText styleType="body-01-medium">
+            {text}
+          </BodyText>
         </div>
-      )}
+        {button && variant === "For-large-areas" && (
+          <div css={styles.callToAction}>
+            <Button<"button"> styleType="primary" onClick={() => {}}>
+              {button}
+            </Button>
+          </div>
+        )}
+      </div>
     </div>
   );
 };

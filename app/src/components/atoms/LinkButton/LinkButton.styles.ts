@@ -5,6 +5,8 @@ export const SButton = styled.button<{ size?: "big" | "medium" }>`
   border: none;
   background-color: transparent;
   cursor: pointer;
+  font-family: inherit;
+
 
   ${({ size, theme }) => css`
     color: ${theme.colors["neutrals-01"][9]};

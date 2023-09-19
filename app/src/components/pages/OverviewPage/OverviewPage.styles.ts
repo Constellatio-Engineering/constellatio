@@ -2,7 +2,7 @@ import { type SerializedStyles, css } from "@emotion/react";
 import { type MantineTheme } from "@mantine/styles";
 
 export const ListWrapper = ({ empty }: {empty?: boolean}) => css`
-transform: translateY(${empty ? 0 : -120}px);
+transform: translateY(-120px);
 width: 90%;
 margin: 0 auto;
 display: grid;
@@ -16,3 +16,4 @@ export const Page = (theme: MantineTheme): SerializedStyles => css`
     min-height: 100vh;
     position: relative;
 `;
+

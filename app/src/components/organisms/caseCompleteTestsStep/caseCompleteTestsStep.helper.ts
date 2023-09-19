@@ -1,8 +1,6 @@
-import { type IGenCase_FullTextTasks } from "@/services/graphql/__generated/sdk";
+import { type IGenArticle_FullTextTasks, type IGenCase_FullTextTasks } from "@/services/graphql/__generated/sdk";
 
-import { type Maybe } from "@trpc/server";
-
-export const getGamesIndexes = ({ fullTextTasks }: {fullTextTasks: Maybe<IGenCase_FullTextTasks> | undefined}): number[] => 
+export const getGamesIndexes = ({ fullTextTasks }: {fullTextTasks: IGenCase_FullTextTasks | IGenArticle_FullTextTasks | undefined}): number[] => 
 {
   const gameComponents = fullTextTasks?.connections?.filter((component) => component?.__typename === "CardSelectionGame" || component?.__typename === "DragNDropGame" || component?.__typename === "FillInGapsGame").map(game => ({ __typename: game?.__typename, id: game?.id })) ?? [];
   

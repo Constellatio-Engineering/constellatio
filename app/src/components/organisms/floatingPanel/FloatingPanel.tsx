@@ -1,7 +1,9 @@
+import { BodyText } from "@/components/atoms/BodyText/BodyText";
 import { richTextParagraphOverwrite } from "@/components/helpers/richTextParagraphOverwrite";
-import { type IGenTextElement_RichTextContent } from "@/services/graphql/__generated/sdk";
+import { BoxIcon } from "@/components/Icons/BoxIcon";
+import { FileIcon } from "@/components/Icons/FileIcon";
+import { type IGenCase_Facts } from "@/services/graphql/__generated/sdk";
 
-// import { RichTextRenderer } from "@caisy/rich-text-react-renderer";
 import { ScrollArea, Tabs, useMantineTheme } from "@mantine/core";
 import { type Maybe } from "@trpc/server";
 import React, { useState, type FunctionComponent } from "react";
@@ -20,19 +22,22 @@ type ITableTab = { icon: {src: React.ReactNode}; title: "Content" | "Facts" };
 export interface IFloatingPanelProps
 {
   readonly content: DataType[];
-  readonly facts: Maybe<IGenTextElement_RichTextContent> | undefined;
+  readonly facts: Maybe<IGenCase_Facts> | undefined;
   readonly hidden?: boolean;
-  readonly tabs: ITableTab[];
+  readonly variant?: "dictionary" | "case";
 }
 
 const FloatingPanel: FunctionComponent<IFloatingPanelProps> = ({
   content,
   facts,
   hidden,
-  tabs
+  variant
 }) => 
 {
-  
+  const tabs: ITableTab[] = [
+    { icon: { src: <FileIcon size={16}/> }, title: "Content" },
+    { icon: { src: <BoxIcon size={16}/> }, title: "Facts" },
+  ];
   const [selectedTab, setSelectedTab] = useState<"Content" | "Facts">(tabs?.[0]?.title ?? "Content");
   const toc = generateTOC(content);
   const theme = useMantineTheme();
@@ -55,22 +60,29 @@ const FloatingPanel: FunctionComponent<IFloatingPanelProps> = ({
           size="medium"
           defaultValue={selectedTab}
           tabStyleOverwrite={{ flex: "1" }}>
-          <Tabs.List>
-            {tabs && tabs?.map((tab, tabIndex) => (
-              <React.Fragment key={tabIndex}>
-                <SwitcherTab
-                  icon={tab?.icon?.src ?? <Trash/>}
-                  value={tab.title}
-                  onClick={() => setSelectedTab(tab?.title)}>{tab.title}
-                </SwitcherTab>
-              </React.Fragment>
-            ))}
-          </Tabs.List>
+          {variant === "case" && facts && (
+            <Tabs.List>
+              {tabs && tabs?.map((tab, tabIndex) => (
+                <React.Fragment key={tabIndex}>
+                  <SwitcherTab
+                    icon={tab?.icon?.src ?? <Trash/>}
+                    value={tab.title}
+                    onClick={() => setSelectedTab(tab?.title)}>{tab.title}
+                  </SwitcherTab>
+                </React.Fragment>
+              ))}
+            </Tabs.List>
+          )}
+          {variant === "dictionary" && (
+            <div className="card-header">
+              <BodyText styleType="body-01-medium" component="p"><FileIcon/>Content</BodyText>
+            </div>
+          )}
         </Switcher>
         {selectedTab === "Content" && content && renderTOC(toc)}
         {facts && facts.json && selectedTab === "Facts" && facts && (
           <div css={styles.facts}>
-            <Richtext richTextContent={facts} richTextOverwrite={{ paragraph: richTextParagraphOverwrite }}/>
+            <Richtext data={facts} richTextOverwrite={{ paragraph: richTextParagraphOverwrite }}/>
           </div>
         )}
       </div>
