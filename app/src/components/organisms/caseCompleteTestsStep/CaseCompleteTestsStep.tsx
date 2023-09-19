@@ -3,7 +3,7 @@ import { Button } from "@/components/atoms/Button/Button";
 import { richTextHeadingOverwrite } from "@/components/helpers/richTextHeadingOverwrite";
 import { BoxIcon } from "@/components/Icons/BoxIcon";
 import { FileIcon } from "@/components/Icons/FileIcon";
-import { type Maybe, type IGenCase_Facts, type IGenCase_FullTextTasks } from "@/services/graphql/__generated/sdk";
+import { type Maybe, type IGenCase_Facts, type IGenCase_FullTextTasks, type IGenArticle_FullTextTasks } from "@/services/graphql/__generated/sdk";
 import useCaseSolvingStore from "@/stores/caseSolving.store";
 import type { IDocumentLink, IHeadingNode } from "types/richtext";
 
@@ -26,8 +26,8 @@ import { SelectionCardGame } from "../SelectionCardGame/SelectionCardGame";
 
 interface ICaseCompleteTestsStepProps 
 {
-  readonly facts: Maybe<IGenCase_Facts>;
-  readonly fullTextTasks: Maybe<IGenCase_FullTextTasks>;
+  readonly facts: Maybe<IGenCase_Facts> | undefined;
+  readonly fullTextTasks: Maybe<IGenCase_FullTextTasks> | Maybe<IGenArticle_FullTextTasks>;
   readonly variant?: "case" | "dictionary";
 }
 
