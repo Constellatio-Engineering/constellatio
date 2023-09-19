@@ -19,7 +19,7 @@ type IDetailsPageProps = {
 
 const DetailsPage: FunctionComponent<IDetailsPageProps> = ({ content, variant }) => 
 {
-  const [caseStepIndex, setCaseStepIndex] = React.useState<0 | 1 | 2>(2);
+  const [caseStepIndex, setCaseStepIndex] = React.useState<0 | 1 | 2>(0);
   const { setHasCaseSolvingStarted } = useCaseSolvingStore();
 
   useEffect(() => 
@@ -47,7 +47,6 @@ const DetailsPage: FunctionComponent<IDetailsPageProps> = ({ content, variant })
           topic: content?.topic?.[0]?.topicName ?? "",
           variant,
           views: 0,
-
         }}
       />
       <CaseNavBar
