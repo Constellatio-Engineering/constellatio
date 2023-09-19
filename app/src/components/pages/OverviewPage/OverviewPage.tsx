@@ -44,10 +44,22 @@ const OverviewPage: FunctionComponent<IOverviewPageProps> = ({ content, variant 
 
   const allCasesOfSubcategory = (item: IGenSubCategoryFragment): Array<({
     _typename?: "Case" | undefined;
-  } & IGenFullCaseFragment) | null | undefined> | undefined => content?.variant === "case" ? content?.allCases?.filter((caseItem) => caseItem?.subCategoryField?.some((e) => e?.id === item?.id)) : undefined;
-  const allArticlesOfSubcategory = (item: IGenSubCategoryFragment):
-  IGenArticleOverviewFragment[] | undefined => content?.variant === "dictionary" ? content?.allArticles?.filter((caseItem) => caseItem?.subCategoryField?.some((e) => e?.id === item?.id)) : undefined;
+  } & IGenFullCaseFragment) | null | undefined> | undefined => content?.__typename === "case" ?
+    content?.allCases?.filter((caseItem) => caseItem?.subCategoryField?.some((e) => e?.id === item?.id)) : undefined;
 
+  const allArticlesOfSubcategory = (item: IGenSubCategoryFragment):
+  IGenArticleOverviewFragment[] | undefined => content?.__typename === "dictionary" ? 
+    content?.allArticles?.filter((caseItem) => caseItem?.subCategoryField?.some((e) => e?.id === item?.id)) : undefined;
+    
+  const isCategoryEmpty = (selectedMainCategory: string): boolean => 
+  {
+    const allMainCategories = content?.allMainCategories;
+    const selectedMainCategoryObject = allMainCategories?.filter(x => x?.id === selectedMainCategory)?.[0];
+    const casesPerCategory = selectedMainCategoryObject?.casesPerCategory;
+    const isCategoryEmpty = casesPerCategory !== undefined && casesPerCategory !== null && casesPerCategory <= 0 ? true : false;
+    return isCategoryEmpty;
+  };
+  
   return (
     <div css={styles.Page}>
       {content?.allMainCategories && (
@@ -55,7 +67,7 @@ const OverviewPage: FunctionComponent<IOverviewPageProps> = ({ content, variant 
           variant={variant}
           selectedCategoryId={selectedCategoryId}
           setSelectedCategoryId={setSelectedCategoryId}
-          categories={content?.variant === variant ? content?.allMainCategories : undefined}
+          categories={content?.allMainCategories}
           title={variant === "case" ? "Cases" : "Dictionary"}
         />
       )}
@@ -76,8 +88,7 @@ const OverviewPage: FunctionComponent<IOverviewPageProps> = ({ content, variant 
           )}
 
       </div>
-      <div css={{}}/>
-      {content?.allMainCategories?.find(x => x.id === selectedCategoryId)?.casesPerCategory === 0 && (
+      {isCategoryEmpty(selectedCategoryId) && (
         <EmptyStateCard
           button={<><CivilLawIcon/>Explore Civil law cases</>}
           title="We're currently working hard to bring you engaging cases to solve"
