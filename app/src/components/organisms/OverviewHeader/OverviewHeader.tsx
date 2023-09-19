@@ -5,14 +5,14 @@ import { type ICasesOverviewProps } from "@/services/content/getCasesOverviewPro
 import { Title, useMantineTheme } from "@mantine/core";
 import React, { type FunctionComponent, useState } from "react";
 
-import * as styles from "./CasesOverviewHeader.styles";
-import { LinkButton } from "../../../components/atoms/LinkButton/LinkButton";
-import CategoryTab from "../../../components/molecules/categoryTab/CategoryTab";
-import FiltersButton from "../../../components/molecules/filtersButton/FiltersButton";
-import FilterTag from "../../../components/molecules/filterTag/FilterTag";
+import * as styles from "./OverviewHeader.styles";
 import type {
   Maybe, Scalars 
 } from "../../../services/graphql/__generated/sdk";
+import { LinkButton } from "../../atoms/LinkButton/LinkButton";
+import CategoryTab from "../../molecules/categoryTab/CategoryTab";
+import FiltersButton from "../../molecules/filtersButton/FiltersButton";
+import FilterTag from "../../molecules/filterTag/FilterTag";
 
 export interface ICasesOverviewHeaderProps 
 {

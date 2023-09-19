@@ -94,6 +94,33 @@ type Article_ConnectionEdge {
 }
 
 """"""
+input Article_LegalArea_Where {
+  """"""
+  findOne: Article_LegalArea_WhereConnection
+}
+
+""""""
+input Article_LegalArea_WhereConnection {
+  """"""
+  LegalArea: LegalArea_Nested_Where
+
+  """"""
+  SubCategory: SubCategory_Nested_Where
+}
+
+""""""
+input Article_MainCategoryField_Where {
+  """"""
+  findOne: Article_MainCategoryField_WhereConnection
+}
+
+""""""
+input Article_MainCategoryField_WhereConnection {
+  """"""
+  MainCategory: MainCategory_Nested_Where
+}
+
+""""""
 input Article_Sort {
   """"""
   createdAt: Order
@@ -127,6 +154,42 @@ input Article_Sort {
 }
 
 """"""
+input Article_SubCategoryField_Where {
+  """"""
+  findOne: Article_SubCategoryField_WhereConnection
+}
+
+""""""
+input Article_SubCategoryField_WhereConnection {
+  """"""
+  SubCategory: SubCategory_Nested_Where
+}
+
+""""""
+input Article_Tags_Where {
+  """"""
+  findOne: Article_Tags_WhereConnection
+}
+
+""""""
+input Article_Tags_WhereConnection {
+  """"""
+  Tags: Tags_Nested_Where
+}
+
+""""""
+input Article_Topic_Where {
+  """"""
+  findOne: Article_Topic_WhereConnection
+}
+
+""""""
+input Article_Topic_WhereConnection {
+  """"""
+  Topic: Topic_Nested_Where
+}
+
+""""""
 input Article_Where {
   """"""
   AND: [Article_Where]
@@ -138,7 +201,22 @@ input Article_Where {
   fullTextTasks: CaisyField_Richtext_Where
 
   """"""
+  legalArea: Article_LegalArea_Where
+
+  """"""
+  mainCategoryField: Article_MainCategoryField_Where
+
+  """"""
+  subCategoryField: Article_SubCategoryField_Where
+
+  """"""
+  tags: Article_Tags_Where
+
+  """"""
   title: CaisyField_String_Where
+
+  """"""
+  topic: Article_Topic_Where
 }
 
 """"""
@@ -762,6 +840,33 @@ type Case_ConnectionEdge {
 }
 
 """"""
+input Case_LegalArea_Where {
+  """"""
+  findOne: Case_LegalArea_WhereConnection
+}
+
+""""""
+input Case_LegalArea_WhereConnection {
+  """"""
+  LegalArea: LegalArea_Nested_Where
+
+  """"""
+  SubCategory: SubCategory_Nested_Where
+}
+
+""""""
+input Case_MainCategoryField_Where {
+  """"""
+  findOne: Case_MainCategoryField_WhereConnection
+}
+
+""""""
+input Case_MainCategoryField_WhereConnection {
+  """"""
+  MainCategory: MainCategory_Nested_Where
+}
+
+""""""
 input Case_Sort {
   """"""
   createdAt: Order
@@ -798,6 +903,42 @@ input Case_Sort {
 }
 
 """"""
+input Case_SubCategoryField_Where {
+  """"""
+  findOne: Case_SubCategoryField_WhereConnection
+}
+
+""""""
+input Case_SubCategoryField_WhereConnection {
+  """"""
+  SubCategory: SubCategory_Nested_Where
+}
+
+""""""
+input Case_Tags_Where {
+  """"""
+  findOne: Case_Tags_WhereConnection
+}
+
+""""""
+input Case_Tags_WhereConnection {
+  """"""
+  Tags: Tags_Nested_Where
+}
+
+""""""
+input Case_Topic_Where {
+  """"""
+  findOne: Case_Topic_WhereConnection
+}
+
+""""""
+input Case_Topic_WhereConnection {
+  """"""
+  Topic: Topic_Nested_Where
+}
+
+""""""
 input Case_Where {
   """"""
   AND: [Case_Where]
@@ -815,10 +956,25 @@ input Case_Where {
   fullTextTasks: CaisyField_Richtext_Where
 
   """"""
+  legalArea: Case_LegalArea_Where
+
+  """"""
+  mainCategoryField: Case_MainCategoryField_Where
+
+  """"""
   resolution: CaisyField_Richtext_Where
 
   """"""
+  subCategoryField: Case_SubCategoryField_Where
+
+  """"""
+  tags: Case_Tags_Where
+
+  """"""
   title: CaisyField_String_Where
+
+  """"""
+  topic: Case_Topic_Where
 }
 
 """"""
@@ -1243,6 +1399,18 @@ type LegalArea_ConnectionEdge {
 }
 
 """"""
+input LegalArea_Nested_Where {
+  """"""
+  AND: [LegalArea_Nested_Where]
+
+  """"""
+  OR: [LegalArea_Nested_Where]
+
+  """"""
+  legalAreaName: CaisyField_String_Where
+}
+
+""""""
 input LegalArea_Sort {
   """"""
   createdAt: Order
@@ -1317,6 +1485,18 @@ type MainCategory_ConnectionEdge {
 
   """"""
   node: MainCategory
+}
+
+""""""
+input MainCategory_Nested_Where {
+  """"""
+  AND: [MainCategory_Nested_Where]
+
+  """"""
+  OR: [MainCategory_Nested_Where]
+
+  """"""
+  mainCategory: CaisyField_String_Where
 }
 
 """"""
@@ -1505,6 +1685,30 @@ type SubCategory_ConnectionEdge {
 }
 
 """"""
+input SubCategory_MainCategory_Where {
+  """"""
+  findOne: SubCategory_MainCategory_WhereConnection
+}
+
+""""""
+input SubCategory_MainCategory_WhereConnection {
+  """"""
+  MainCategory: MainCategory_Nested_Where
+}
+
+""""""
+input SubCategory_Nested_Where {
+  """"""
+  AND: [SubCategory_Nested_Where]
+
+  """"""
+  OR: [SubCategory_Nested_Where]
+
+  """"""
+  subCategory: CaisyField_String_Where
+}
+
+""""""
 input SubCategory_Sort {
   """"""
   createdAt: Order
@@ -1532,6 +1736,9 @@ input SubCategory_Where {
 
   """"""
   OR: [SubCategory_Where]
+
+  """"""
+  mainCategory: SubCategory_MainCategory_Where
 
   """"""
   subCategory: CaisyField_String_Where
@@ -1571,6 +1778,18 @@ type Tags_ConnectionEdge {
 
   """"""
   node: Tags
+}
+
+""""""
+input Tags_Nested_Where {
+  """"""
+  AND: [Tags_Nested_Where]
+
+  """"""
+  OR: [Tags_Nested_Where]
+
+  """"""
+  tagName: CaisyField_String_Where
 }
 
 """"""
@@ -1634,6 +1853,18 @@ type Topic_ConnectionEdge {
 
   """"""
   node: Topic
+}
+
+""""""
+input Topic_Nested_Where {
+  """"""
+  AND: [Topic_Nested_Where]
+
+  """"""
+  OR: [Topic_Nested_Where]
+
+  """"""
+  topicName: CaisyField_String_Where
 }
 
 """"""

@@ -21,7 +21,7 @@ const _RichtextOverwrite: FC<TRichtextOverwrite> = ({ correctAnswers, focusedInd
     updateUserAnswers,
     userAnswers
   } = useFillGapsGameStore();
-  const inputRefs = useRef<RefObject<HTMLInputElement>[]>([]);
+  const inputRefs = useRef<Array<RefObject<HTMLInputElement>>>([]);
 
   // Splitting the text based on {{...}} pattern using regex
   const parts = text.split(/({{.*?}})/g);

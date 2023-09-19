@@ -28,7 +28,7 @@ const NextPage: FunctionComponent<ICasePageProps> = ({ legalCase }) =>
 {
   return (
     <Layout>
-      <DetailsPage variant="case" {...legalCase}/>
+      <DetailsPage variant="case" content={legalCase}/>
     </Layout>
   );
 };

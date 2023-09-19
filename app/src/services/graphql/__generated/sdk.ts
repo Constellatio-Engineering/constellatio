@@ -82,6 +82,23 @@ export type IGenArticle_ConnectionEdge = {
   node?: Maybe<IGenArticle>;
 };
 
+export type IGenArticle_LegalArea_Where = {
+  findOne?: InputMaybe<IGenArticle_LegalArea_WhereConnection>;
+};
+
+export type IGenArticle_LegalArea_WhereConnection = {
+  LegalArea?: InputMaybe<IGenLegalArea_Nested_Where>;
+  SubCategory?: InputMaybe<IGenSubCategory_Nested_Where>;
+};
+
+export type IGenArticle_MainCategoryField_Where = {
+  findOne?: InputMaybe<IGenArticle_MainCategoryField_WhereConnection>;
+};
+
+export type IGenArticle_MainCategoryField_WhereConnection = {
+  MainCategory?: InputMaybe<IGenMainCategory_Nested_Where>;
+};
+
 export type IGenArticle_Sort = {
   createdAt?: InputMaybe<IGenOrder>;
   id?: InputMaybe<IGenOrder>;
@@ -95,11 +112,40 @@ export type IGenArticle_Sort = {
   updatedAt?: InputMaybe<IGenOrder>;
 };
 
+export type IGenArticle_SubCategoryField_Where = {
+  findOne?: InputMaybe<IGenArticle_SubCategoryField_WhereConnection>;
+};
+
+export type IGenArticle_SubCategoryField_WhereConnection = {
+  SubCategory?: InputMaybe<IGenSubCategory_Nested_Where>;
+};
+
+export type IGenArticle_Tags_Where = {
+  findOne?: InputMaybe<IGenArticle_Tags_WhereConnection>;
+};
+
+export type IGenArticle_Tags_WhereConnection = {
+  Tags?: InputMaybe<IGenTags_Nested_Where>;
+};
+
+export type IGenArticle_Topic_Where = {
+  findOne?: InputMaybe<IGenArticle_Topic_WhereConnection>;
+};
+
+export type IGenArticle_Topic_WhereConnection = {
+  Topic?: InputMaybe<IGenTopic_Nested_Where>;
+};
+
 export type IGenArticle_Where = {
   AND?: InputMaybe<Array<InputMaybe<IGenArticle_Where>>>;
   OR?: InputMaybe<Array<InputMaybe<IGenArticle_Where>>>;
   fullTextTasks?: InputMaybe<IGenCaisyField_Richtext_Where>;
+  legalArea?: InputMaybe<IGenArticle_LegalArea_Where>;
+  mainCategoryField?: InputMaybe<IGenArticle_MainCategoryField_Where>;
+  subCategoryField?: InputMaybe<IGenArticle_SubCategoryField_Where>;
+  tags?: InputMaybe<IGenArticle_Tags_Where>;
   title?: InputMaybe<IGenCaisyField_String_Where>;
+  topic?: InputMaybe<IGenArticle_Topic_Where>;
 };
 
 export type IGenArticle_FullTextTasks = {
@@ -445,6 +491,23 @@ export type IGenCase_ConnectionEdge = {
   node?: Maybe<IGenCase>;
 };
 
+export type IGenCase_LegalArea_Where = {
+  findOne?: InputMaybe<IGenCase_LegalArea_WhereConnection>;
+};
+
+export type IGenCase_LegalArea_WhereConnection = {
+  LegalArea?: InputMaybe<IGenLegalArea_Nested_Where>;
+  SubCategory?: InputMaybe<IGenSubCategory_Nested_Where>;
+};
+
+export type IGenCase_MainCategoryField_Where = {
+  findOne?: InputMaybe<IGenCase_MainCategoryField_WhereConnection>;
+};
+
+export type IGenCase_MainCategoryField_WhereConnection = {
+  MainCategory?: InputMaybe<IGenMainCategory_Nested_Where>;
+};
+
 export type IGenCase_Sort = {
   createdAt?: InputMaybe<IGenOrder>;
   durationToCompleteInMinutes?: InputMaybe<IGenOrder>;
@@ -459,14 +522,43 @@ export type IGenCase_Sort = {
   updatedAt?: InputMaybe<IGenOrder>;
 };
 
+export type IGenCase_SubCategoryField_Where = {
+  findOne?: InputMaybe<IGenCase_SubCategoryField_WhereConnection>;
+};
+
+export type IGenCase_SubCategoryField_WhereConnection = {
+  SubCategory?: InputMaybe<IGenSubCategory_Nested_Where>;
+};
+
+export type IGenCase_Tags_Where = {
+  findOne?: InputMaybe<IGenCase_Tags_WhereConnection>;
+};
+
+export type IGenCase_Tags_WhereConnection = {
+  Tags?: InputMaybe<IGenTags_Nested_Where>;
+};
+
+export type IGenCase_Topic_Where = {
+  findOne?: InputMaybe<IGenCase_Topic_WhereConnection>;
+};
+
+export type IGenCase_Topic_WhereConnection = {
+  Topic?: InputMaybe<IGenTopic_Nested_Where>;
+};
+
 export type IGenCase_Where = {
   AND?: InputMaybe<Array<InputMaybe<IGenCase_Where>>>;
   OR?: InputMaybe<Array<InputMaybe<IGenCase_Where>>>;
   durationToCompleteInMinutes?: InputMaybe<IGenCaisyField_Number_WhereInt>;
   facts?: InputMaybe<IGenCaisyField_Richtext_Where>;
   fullTextTasks?: InputMaybe<IGenCaisyField_Richtext_Where>;
+  legalArea?: InputMaybe<IGenCase_LegalArea_Where>;
+  mainCategoryField?: InputMaybe<IGenCase_MainCategoryField_Where>;
   resolution?: InputMaybe<IGenCaisyField_Richtext_Where>;
+  subCategoryField?: InputMaybe<IGenCase_SubCategoryField_Where>;
+  tags?: InputMaybe<IGenCase_Tags_Where>;
   title?: InputMaybe<IGenCaisyField_String_Where>;
+  topic?: InputMaybe<IGenCase_Topic_Where>;
 };
 
 export type IGenCase_Facts = {
@@ -722,6 +814,12 @@ export type IGenLegalArea_ConnectionEdge = {
   node?: Maybe<IGenLegalArea>;
 };
 
+export type IGenLegalArea_Nested_Where = {
+  AND?: InputMaybe<Array<InputMaybe<IGenLegalArea_Nested_Where>>>;
+  OR?: InputMaybe<Array<InputMaybe<IGenLegalArea_Nested_Where>>>;
+  legalAreaName?: InputMaybe<IGenCaisyField_String_Where>;
+};
+
 export type IGenLegalArea_Sort = {
   createdAt?: InputMaybe<IGenOrder>;
   id?: InputMaybe<IGenOrder>;
@@ -762,6 +860,12 @@ export type IGenMainCategory_ConnectionEdge = {
   __typename?: 'MainCategory_ConnectionEdge';
   cursor?: Maybe<Scalars['String']['output']>;
   node?: Maybe<IGenMainCategory>;
+};
+
+export type IGenMainCategory_Nested_Where = {
+  AND?: InputMaybe<Array<InputMaybe<IGenMainCategory_Nested_Where>>>;
+  OR?: InputMaybe<Array<InputMaybe<IGenMainCategory_Nested_Where>>>;
+  mainCategory?: InputMaybe<IGenCaisyField_String_Where>;
 };
 
 export type IGenMainCategory_Sort = {
@@ -1071,6 +1175,20 @@ export type IGenSubCategory_ConnectionEdge = {
   node?: Maybe<IGenSubCategory>;
 };
 
+export type IGenSubCategory_MainCategory_Where = {
+  findOne?: InputMaybe<IGenSubCategory_MainCategory_WhereConnection>;
+};
+
+export type IGenSubCategory_MainCategory_WhereConnection = {
+  MainCategory?: InputMaybe<IGenMainCategory_Nested_Where>;
+};
+
+export type IGenSubCategory_Nested_Where = {
+  AND?: InputMaybe<Array<InputMaybe<IGenSubCategory_Nested_Where>>>;
+  OR?: InputMaybe<Array<InputMaybe<IGenSubCategory_Nested_Where>>>;
+  subCategory?: InputMaybe<IGenCaisyField_String_Where>;
+};
+
 export type IGenSubCategory_Sort = {
   createdAt?: InputMaybe<IGenOrder>;
   id?: InputMaybe<IGenOrder>;
@@ -1083,6 +1201,7 @@ export type IGenSubCategory_Sort = {
 export type IGenSubCategory_Where = {
   AND?: InputMaybe<Array<InputMaybe<IGenSubCategory_Where>>>;
   OR?: InputMaybe<Array<InputMaybe<IGenSubCategory_Where>>>;
+  mainCategory?: InputMaybe<IGenSubCategory_MainCategory_Where>;
   subCategory?: InputMaybe<IGenCaisyField_String_Where>;
 };
 
@@ -1106,6 +1225,12 @@ export type IGenTags_ConnectionEdge = {
   __typename?: 'Tags_ConnectionEdge';
   cursor?: Maybe<Scalars['String']['output']>;
   node?: Maybe<IGenTags>;
+};
+
+export type IGenTags_Nested_Where = {
+  AND?: InputMaybe<Array<InputMaybe<IGenTags_Nested_Where>>>;
+  OR?: InputMaybe<Array<InputMaybe<IGenTags_Nested_Where>>>;
+  tagName?: InputMaybe<IGenCaisyField_String_Where>;
 };
 
 export type IGenTags_Sort = {
@@ -1140,6 +1265,12 @@ export type IGenTopic_ConnectionEdge = {
   __typename?: 'Topic_ConnectionEdge';
   cursor?: Maybe<Scalars['String']['output']>;
   node?: Maybe<IGenTopic>;
+};
+
+export type IGenTopic_Nested_Where = {
+  AND?: InputMaybe<Array<InputMaybe<IGenTopic_Nested_Where>>>;
+  OR?: InputMaybe<Array<InputMaybe<IGenTopic_Nested_Where>>>;
+  topicName?: InputMaybe<IGenCaisyField_String_Where>;
 };
 
 export type IGenTopic_Sort = {

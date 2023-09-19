@@ -6,7 +6,7 @@ import {
 } from "../graphql/__generated/sdk";
 import { caisySDK } from "../graphql/getSdk";
 
-export type allMainCategories = {
+export type allMainCategories = Array<{
   __typename?: "MainCategory" | undefined;
   casesPerCategory: number;
   icon?: ({
@@ -14,9 +14,9 @@ export type allMainCategories = {
   } & IGenAssetFragment) | null | undefined;
   id?: string | null | undefined;
   mainCategory?: string | null | undefined;
-}[] | null;
+}> | null;
 
-export type allSubCategories = (IGenSubCategoryFragment | null | undefined)[] & {
+export type allSubCategories = Array<IGenSubCategoryFragment | null | undefined> & {
   __typename?: "SubCategory" | undefined;
 };
 
@@ -25,6 +25,7 @@ export interface ICasesOverviewProps
   allCases: allCases;
   allMainCategories: allMainCategories;
   allSubCategories: allSubCategories;
+  variant: "case";
 }
 
 const getCasesOverviewProps = async (): Promise<ICasesOverviewProps> => 
@@ -56,6 +57,7 @@ const getCasesOverviewProps = async (): Promise<ICasesOverviewProps> =>
       allCases: allCasesRes,
       allMainCategories,
       allSubCategories,
+      variant: "case",
     };
   }
   catch (error) 

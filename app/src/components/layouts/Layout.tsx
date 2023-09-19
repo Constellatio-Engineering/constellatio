@@ -12,7 +12,7 @@ interface LayoutProps
 
 export const Layout: FunctionComponent<LayoutProps> = ({ children }) => (
   <main css={styles.wrapper}>
-    <Header/>
+    <Header variant="default"/>
     {children}
     <Footer/>
   </main>

@@ -20,7 +20,7 @@ export interface IOverviewCard
   readonly lastUpdated: Date;
   readonly legalArea: Maybe<IGenLegalArea> | Maybe<IGenSubCategory> | undefined;
   readonly status?: IStatusLabel["variant"];
-  readonly tags: Maybe<Maybe<IGenTags>[]> | undefined;
+  readonly tags: Maybe<Array<Maybe<IGenTags>>> | undefined;
   readonly timeInMinutes?: number;
   readonly topic: string;
   readonly variant: "case" | "dictionary";
