@@ -8,7 +8,7 @@ import useCaseSolvingStore from "@/stores/caseSolving.store";
 
 import React, { useEffect, type FunctionComponent } from "react";
 
-import * as styles from "./CasesPage.styles";
+import * as styles from "./DetailsPage.styles";
 
 // Omit<Omit<Partial<IGenCase & IGenArticle>, "__typename">, "variant"> & {readonly variant: "case" | "dictionary"};
 

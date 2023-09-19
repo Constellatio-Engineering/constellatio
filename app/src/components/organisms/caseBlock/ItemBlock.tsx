@@ -9,7 +9,7 @@ import { api } from "@/utils/api";
 import Link from "next/link";
 import React, { type FunctionComponent } from "react";
 
-import * as styles from "./CaseBlock.styles";
+import * as styles from "./ItemBlock.styles";
 import { timeFormatter } from "../overviewCard/OverviewCard";
 import Table, { type DictionaryTableProps, type CasesTableProps } from "../table/Table";
 
@@ -22,7 +22,7 @@ export interface ICaseBlockProps
   readonly variant: "case" | "dictionary";
 }
 
-const CaseBlock: FunctionComponent<ICaseBlockProps> = ({ blockHead, items, variant }) => 
+const ItemBlock: FunctionComponent<ICaseBlockProps> = ({ blockHead, items, variant }) => 
 {
 
   const CasesTable: CasesTableProps = 
@@ -83,5 +83,5 @@ const CaseBlock: FunctionComponent<ICaseBlockProps> = ({ blockHead, items, varia
   ) : null;
 };
 
-export default CaseBlock;
+export default ItemBlock;
 

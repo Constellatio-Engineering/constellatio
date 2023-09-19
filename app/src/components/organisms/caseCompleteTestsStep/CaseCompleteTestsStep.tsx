@@ -1,9 +1,7 @@
 /* eslint-disable max-lines */
 import { Button } from "@/components/atoms/Button/Button";
 import { richTextHeadingOverwrite } from "@/components/helpers/richTextHeadingOverwrite";
-import { BoxIcon } from "@/components/Icons/BoxIcon";
-import { FileIcon } from "@/components/Icons/FileIcon";
-import { type Maybe, type IGenCase_Facts, type IGenCase_FullTextTasks } from "@/services/graphql/__generated/sdk";
+import { type Maybe, type IGenCase_Facts, type IGenCase_FullTextTasks, type IGenArticle_FullTextTasks } from "@/services/graphql/__generated/sdk";
 import useCaseSolvingStore from "@/stores/caseSolving.store";
 import type { IDocumentLink, IHeadingNode } from "types/richtext";
 
@@ -26,8 +24,8 @@ import { SelectionCardGame } from "../SelectionCardGame/SelectionCardGame";
 
 interface ICaseCompleteTestsStepProps 
 {
-  readonly facts: Maybe<IGenCase_Facts>;
-  readonly fullTextTasks: Maybe<IGenCase_FullTextTasks>;
+  readonly facts: Maybe<IGenCase_Facts> | undefined;
+  readonly fullTextTasks: IGenCase_FullTextTasks | IGenArticle_FullTextTasks;
   readonly variant?: "case" | "dictionary";
 }
 
@@ -82,30 +80,7 @@ const CaseCompleteTestsStep: FunctionComponent<ICaseCompleteTestsStepProps> = ({
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [fullTextTasks]);
 
-  // THIS LOGIC IS WRONG WE NEED INDEX AMONGST THE SAME NESTING LEVEL NOT AMONGST ALL THE OTHER HEADINGS
-  // const getHeadingIndex = (passedHead: {
-  //   attrs: {
-  //     level: number;
-  //   };
-  //   type: "heading";
-  // } & ReactElement<unknown, string | JSXElementConstructor<unknown>>): number | void => 
-  // {
-    
-  //   const allHeadingsSameLevel = fullTextTasks?.json?.content?.filter((x: { attrs: { level: number }; type: "heading" }) => (x.type === "heading" && x.attrs.level === passedHead.attrs.level));
-
-  //   for(let headIndex = 0; headIndex < allHeadingsSameLevel.length; headIndex++) 
-  //   {
-  //     if(JSON?.stringify(allHeadingsSameLevel?.[headIndex]) === JSON?.stringify(passedHead)) 
-  //     {
-  //       return headIndex;
-  //     }
-  //   }
-  // };
-
-  // THIS FUNCTION RETURNS THE INDEX OF THE ITEM AMONGST THE SAME HEADING LEVEL INSIDE A SPECIFIC NESTING LEVEL 
   const allHeadings = fullTextTasks?.json?.content?.filter((x: { attrs: { level: number }; type: "heading" }) => x.type === "heading");
-  
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
 
   return (
     <Container maw={1440}>

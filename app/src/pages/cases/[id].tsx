@@ -1,5 +1,5 @@
 import { Layout } from "@/components/layouts/Layout";
-import DetailsPage from "@/components/pages/CasePage/CasePage";
+import DetailsPage from "@/components/pages/DetailsPage/DetailsPage";
 import { getCaseById } from "@/services/content/getCaseById";
 import { type IGenCase } from "@/services/graphql/__generated/sdk";
 
