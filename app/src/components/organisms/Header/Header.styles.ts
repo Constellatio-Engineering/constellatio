@@ -24,7 +24,7 @@ export const wrapper = ({ theme, variant }: {
 	align-items: center;
 	padding: 0 ${theme.spacing["spacing-24"]};
 	${variant === "simple" ? SimpleHeader : DefaultHeader}
-	`;
+`;
 
 export const SHeader = styled.header`
 background: #fff;

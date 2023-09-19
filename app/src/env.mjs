@@ -21,6 +21,7 @@ export const env = createEnv({
     GOOGLE_SERVICE_ACCOUNT_CLIENT_ID: z.string(),
     GOOGLE_SERVICE_ACCOUNT_PRIVATE_KEY: z.string(),
     MEILISEARCH_MASTER_API_KEY: z.string(),
+    MEILISEARCH_HOST_URL: z.string().url(),
   },
 
   /**
@@ -34,7 +35,7 @@ export const env = createEnv({
     NEXT_PUBLIC_WEBSITE_URL: z.string().url(),
     NEXT_PUBLIC_MAXIMUM_FILE_UPLOAD_SIZE_IN_MB: z.string().pipe(z.coerce.number().int().min(1).max(999)),
     NEXT_PUBLIC_NODE_ENV: nodeEnvEnum,
-    NEXT_PUBLIC_MEILISEARCH_HOST_URL: z.string().url(),
+    NEXT_PUBLIC_MEILISEARCH_PUBLIC_URL: z.string().url(),
   },
 
   /**
@@ -58,7 +59,8 @@ export const env = createEnv({
     GOOGLE_SERVICE_ACCOUNT_CLIENT_EMAIL: process.env.GOOGLE_SERVICE_ACCOUNT_CLIENT_EMAIL,
     GOOGLE_SERVICE_ACCOUNT_CLIENT_ID: process.env.GOOGLE_SERVICE_ACCOUNT_CLIENT_ID,
     GOOGLE_SERVICE_ACCOUNT_PRIVATE_KEY: process.env.GOOGLE_SERVICE_ACCOUNT_PRIVATE_KEY,
-    NEXT_PUBLIC_MEILISEARCH_HOST_URL: process.env.NEXT_PUBLIC_MEILISEARCH_HOST_URL,
+    NEXT_PUBLIC_MEILISEARCH_PUBLIC_URL: process.env.NEXT_PUBLIC_MEILISEARCH_PUBLIC_URL,
+    MEILISEARCH_HOST_URL: process.env.MEILISEARCH_HOST_URL,
     MEILISEARCH_MASTER_API_KEY: process.env.MEILISEARCH_MASTER_API_KEY,
   },
   /**

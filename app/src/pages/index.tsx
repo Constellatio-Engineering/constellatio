@@ -2,10 +2,11 @@ import { Layout } from "@/components/layouts/Layout";
 import { env } from "@/env.mjs";
 import { getCommonProps } from "@/utils/commonProps";
 
+import { useQuery } from "@tanstack/react-query";
 import { MeiliSearch } from "meilisearch";
 import { type GetServerSideProps } from "next";
 import { type SSRConfig } from "next-i18next";
-import { type FunctionComponent, useEffect, useState } from "react";
+import { type FunctionComponent, useState } from "react";
 
 import { defaultLocale } from "../../next.config.mjs";
 
@@ -25,7 +26,7 @@ export const getServerSideProps: GetServerSideProps<ServerSidePropsResult> = asy
 
 const meiliSearch = new MeiliSearch({
   apiKey: "super-secret-meili-master-key",
-  host: env.NEXT_PUBLIC_MEILISEARCH_HOST_URL
+  host: env.NEXT_PUBLIC_MEILISEARCH_PUBLIC_URL
 });
 
 type Movie = {
@@ -36,21 +37,31 @@ type Movie = {
 const Home: FunctionComponent<ServerSidePropsResult> = () =>
 {
   const [input, setInput] = useState<string>("");
-  const [results, setResults] = useState<Movie[]>([]);
+  const hasInput = input.length > 0;
 
-  useEffect(() =>
-  {
-    meiliSearch.index("movies").search<Movie>(input)
-      .then((res) => setResults(res.hits))
-      .catch((err) => console.log(err));
-  }, [input]);
+  const { data: moviesSearchResult, isLoading } = useQuery({
+    enabled: hasInput,
+    initialData: [],
+    keepPreviousData: true,
+    queryFn: async () =>
+    {
+      const searchResult = await meiliSearch.index("movies").search<Movie>(input);
+      return searchResult.hits;
+    },
+    queryKey: ["movies", input],
+    refetchOnMount: false,
+    refetchOnReconnect: false,
+    refetchOnWindowFocus: false,
+    staleTime: 1000,
+  });
   
   return (
     <Layout>
       <div style={{ padding: 100 }}>
         <h1>Search</h1>
         <input type="text" value={input} onChange={e => setInput(e.target.value)}/>
-        {results.map(result => (
+        {(hasInput && isLoading) && <p>Loading...</p>}
+        {moviesSearchResult.map(result => (
           <div key={result.id}>
             <p>{result.title}</p>
           </div>
