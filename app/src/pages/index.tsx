@@ -1,6 +1,7 @@
 import { Layout } from "@/components/layouts/Layout";
 import { env } from "@/env.mjs";
 import { getCommonProps } from "@/utils/commonProps";
+import { type CaseSearchIndexItem, searchIndices } from "@/utils/search";
 
 import { useQuery } from "@tanstack/react-query";
 import { MeiliSearch } from "meilisearch";
@@ -29,38 +30,25 @@ const meiliSearch = new MeiliSearch({
   host: env.NEXT_PUBLIC_MEILISEARCH_PUBLIC_URL
 });
 
-type Movie = {
-  id: number;
-  title: string;
-};
-
 const Home: FunctionComponent<ServerSidePropsResult> = () =>
 {
   const [input, setInput] = useState<string>("");
   const hasInput = input.length > 0;
 
-  const { data: moviesSearchResult = [], isLoading, isRefetching } = useQuery({
+  const { data: casesSearchResult = [], isLoading } = useQuery({
     enabled: hasInput,
     keepPreviousData: true,
     queryFn: async () =>
     {
-      const searchResult = await meiliSearch.index("movies").search<Movie>(input);
+      const searchResult = await meiliSearch.index(searchIndices.cases).search<CaseSearchIndexItem>(input);
       return searchResult.hits;
     },
-    queryKey: ["movies", input],
+    queryKey: ["cases", input],
     refetchOnMount: false,
     refetchOnReconnect: false,
     refetchOnWindowFocus: false,
     staleTime: 3000,
   });
-
-  useEffect(() =>
-  {
-    if(isRefetching)
-    {
-      console.log("refetching");
-    }
-  }, [isRefetching]);
 
   return (
     <Layout>
@@ -68,7 +56,7 @@ const Home: FunctionComponent<ServerSidePropsResult> = () =>
         <h1>Search</h1>
         <input type="text" value={input} onChange={e => setInput(e.target.value)}/>
         {(hasInput && isLoading) && <p>Loading...</p>}
-        {moviesSearchResult.map(result => (
+        {hasInput && casesSearchResult.map(result => (
           <div key={result.id}>
             <p>{result.title}</p>
           </div>

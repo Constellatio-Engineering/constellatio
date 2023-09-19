@@ -1,9 +1,10 @@
 import { env } from "@/env.mjs";
+import getAllCases from "@/services/content/getAllCases";
+import { getCaseById } from "@/services/content/getCaseById";
+import { createCaseSearchIndexItem, searchIndices } from "@/utils/search";
 
 import { MeiliSearch } from "meilisearch";
 import { type NextApiHandler } from "next";
-
-const movies = require("./movies.json");
 
 const meiliSearch = new MeiliSearch({
   apiKey: env.MEILISEARCH_MASTER_API_KEY,
@@ -22,23 +23,33 @@ const handler: NextApiHandler = async (req, res) =>
     return res.status(400).json({ message: "Invalid request method" });
   }
 
-  console.log("Creating meilisearch index for movies. This may take a while...");
+  console.log("Creating meilisearch index for cases. This may take a while...");
 
-  await meiliSearch.deleteIndexIfExists("movies");
-  const createMoviesIndexTask = await meiliSearch.index("movies").addDocuments(movies);
+  await meiliSearch.deleteIndexIfExists(searchIndices.cases);
 
-  const createMoviesIndexResult = await meiliSearch.waitForTask(createMoviesIndexTask.taskUid, {
+  const allCases = await getAllCases();
+
+  const fetchAllCasesDetailsPromises = allCases.map(async (c) =>
+  {
+    const { Case } = await getCaseById({ id: c.id! });
+    return Case;
+  });
+
+  const allCasesWithDetails = await Promise.all(fetchAllCasesDetailsPromises);
+  const allCasesSearchIndexItems = allCasesWithDetails.filter(Boolean).map(createCaseSearchIndexItem);
+  const createCasesIndexTask = await meiliSearch.index(searchIndices.cases).addDocuments(allCasesSearchIndexItems);
+  const createCasesIndexResult = await meiliSearch.waitForTask(createCasesIndexTask.taskUid, {
     intervalMs: 1000,
     timeOutMs: 1000 * 60 * 5,
   });
 
-  if(createMoviesIndexResult.status !== "succeeded")
+  if(createCasesIndexResult.status !== "succeeded")
   {
-    console.log("Failed to create movies index:", createMoviesIndexResult);
-    return res.status(500).json({ message: "Failed to create movies index" });
+    console.log("Failed to create cases index:", createCasesIndexResult);
+    return res.status(500).json({ message: "Failed to create cases index" });
   }
 
-  console.log("Successfully created movies index");
+  console.log("Successfully created cases index");
   return res.status(200).json({ message: "Success" });
 };
 

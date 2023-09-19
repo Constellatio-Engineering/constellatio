@@ -2,15 +2,22 @@
 import { type IGenCaseOverviewFragment } from "../graphql/__generated/sdk";
 import { caisySDK } from "../graphql/getSdk";
 
-export type allCases = IGenCaseOverviewFragment[] & {
+export type allCases = Array<IGenCaseOverviewFragment & {
   __typename?: "Case" | undefined;
-};
+}>;
 
-const getAllCases = async ({ after, allCases = [] }: {
+type GetAllCasesProps = {
   after?: string;
   allCases?: allCases;
-}): Promise<allCases> => 
+};
+
+const getAllCases = async (props?: GetAllCasesProps): Promise<allCases> =>
 {
+  // console.log("getAllCases", props?.after);
+
+  const after = props?.after;
+  let allCases = props?.allCases || [];
+
   try 
   {
     const { allCase } = await caisySDK.getAllCaseOverview({ after });
@@ -22,6 +29,9 @@ const getAllCases = async ({ after, allCases = [] }: {
         allCases = [...allCases, edge?.node];
       }
     });
+
+    // console.log("fetched cases", allCase?.edges?.map(e => e?.node?.title));
+    // console.log("has next page", allCase?.pageInfo?.hasNextPage);
 
     if(allCase?.pageInfo?.hasNextPage) 
     {

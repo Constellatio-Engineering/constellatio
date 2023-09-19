@@ -4,6 +4,10 @@ import { type ComponentType } from "react";
 
 export type Nullable<T> = T | null | undefined;
 
+export type NullableProperties<T> = {
+  [K in keyof T]: T[K] | null | undefined;
+};
+
 export type MantineCssObjectStyles = (theme: MantineTheme) => CSSObject;
 
 export type UnknownMantineStylesParams = Record<string, unknown>;
