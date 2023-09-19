@@ -1,7 +1,7 @@
 import { env } from "@/env.mjs";
 import getAllCases from "@/services/content/getAllCases";
 import { getCaseById } from "@/services/content/getCaseById";
-import { createCaseSearchIndexItem, searchIndices } from "@/utils/search";
+import { type CaseSearchItemNodes, createCaseSearchIndexItem, searchIndices } from "@/utils/search";
 
 import { MeiliSearch } from "meilisearch";
 import { type NextApiHandler } from "next";
@@ -48,6 +48,14 @@ const handler: NextApiHandler = async (req, res) =>
     console.log("Failed to create cases index:", createCasesIndexResult);
     return res.status(500).json({ message: "Failed to create cases index" });
   }
+
+  const caseSearchableAttributes: CaseSearchItemNodes[] = ["title", "legalArea.legalAreaName", "mainCategory.mainCategory", "subCategory.subCategory", "tags.tagName"];
+  const updateRankingRulesTask = await meiliSearch.index(searchIndices.cases).updateSearchableAttributes(caseSearchableAttributes);
+
+  await meiliSearch.waitForTask(updateRankingRulesTask.taskUid, {
+    intervalMs: 1000,
+    timeOutMs: 1000 * 60 * 5,
+  });
 
   console.log("Successfully created cases index");
   return res.status(200).json({ message: "Success" });

@@ -1,20 +1,26 @@
 import {
   type IGenCase, type IGenLegalArea, type IGenMainCategory, type IGenSubCategory, type IGenTags 
 } from "@/services/graphql/__generated/sdk";
-import { type Nullable, type NullableProperties } from "@/utils/types";
+import {
+  type DotSeparatedKeys,
+  type Nullable, type NullableProperties, type RemoveUndefined
+} from "@/utils/types";
 
 export const searchIndices = {
   cases: "cases",
 };
 
-export type CaseSearchIndexItem = NullableProperties<{
+type CaseSearchIndexItemContent = {
   id: string;
   legalArea: Pick<IGenLegalArea, "legalAreaName" | "id">;
   mainCategory: Pick<IGenMainCategory, "mainCategory" | "id">;
   subCategory: Pick<IGenSubCategory, "subCategory" | "id">;
   tags: Array<Pick<IGenTags, "id" | "tagName">>;
   title: string;
-}>;
+};
+
+export type CaseSearchIndexItem = NullableProperties<CaseSearchIndexItemContent>;
+export type CaseSearchItemNodes = RemoveUndefined<DotSeparatedKeys<CaseSearchIndexItemContent>>;
 
 export const createCaseSearchIndexItem = (fullCase: IGenCase): CaseSearchIndexItem =>
 {
