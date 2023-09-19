@@ -34,7 +34,6 @@ const CaseResultsReviewStep: FunctionComponent<ICaseResultsReviewStepProps> = ({
   title
 }) => 
 {
-  console.log({ facts, resolution });
   const theme = useMantineTheme();
   const [isExpandSolution, setIsExpandSolution] = React.useState<boolean>(false);
   const icons = [
@@ -76,7 +75,7 @@ const CaseResultsReviewStep: FunctionComponent<ICaseResultsReviewStepProps> = ({
     <div css={styles.wrapper} id="ResultsReviewStepContent">
       <Container maw={1440}>
         <div css={styles.content}>
-          <div>
+          <div css={styles.leftSideWrapper}>
             {facts?.json && (
               <div css={styles.factsWrapper}>
                 <Accordion variant="separated">

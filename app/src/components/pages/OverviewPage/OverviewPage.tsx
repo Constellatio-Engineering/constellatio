@@ -48,8 +48,6 @@ const OverviewPage: FunctionComponent<IOverviewPageProps> = ({ content, variant 
   const allArticlesOfSubcategory = (item: IGenSubCategoryFragment):
   IGenArticleOverviewFragment[] | undefined => content?.variant === "dictionary" ? content?.allArticles?.filter((caseItem) => caseItem?.subCategoryField?.some((e) => e?.id === item?.id)) : undefined;
 
-  // console.log({ filteredSubcategories });
-
   return (
     <div css={styles.Page}>
       {content?.allMainCategories && (

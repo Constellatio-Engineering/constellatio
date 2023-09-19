@@ -7,7 +7,6 @@ export const content = css`
   display: flex;
   justify-content: flex-start;
   align-items: flex-start;
-  /* outline: 1px solid red; */
   width: 100%;
   gap: 24px;
   > div {
@@ -28,20 +27,22 @@ export const factsWrapper = (theme: MantineTheme) => css`
     outline: 0;
     border: 0;
   }
-  outline: 1px solid red;
+  max-height: 300px;
+  overflow: auto;
+
+
 `;
 
 const CSSshowSolutionCard = css`
-  height: 100%;
-  max-height: 100%;
-  overflow: visible;
+  height: 500px;
+  max-height: 500px;
+  overflow: auto;
 `;
 
 export const solutionWrapper = ({ isExpandSolution, theme }: {
   isExpandSolution?: boolean;
   theme: MantineTheme;
 }) => css`
-  outline: 1px solid red;
   background-color: ${theme.colors["neutrals-01"][0]};
   border-radius: 12px;
   width: 100%;
@@ -50,7 +51,7 @@ export const solutionWrapper = ({ isExpandSolution, theme }: {
   overflow: hidden;
   ${isExpandSolution && CSSshowSolutionCard};
   transition: height 0.5s ease-in-out;
-  position: relative;
+  /* position: relative; */
   .solution-header {
     display: flex;
     justify-content: space-between;
@@ -90,6 +91,7 @@ export const solutionWrapper = ({ isExpandSolution, theme }: {
     }
   }
   padding-bottom: 80px;
+
 `;
 
 export const resolutionWrapper = css`
@@ -108,4 +110,10 @@ export const resolutionWrapper = css`
       gap: 8px;
     }
   }
+  
+`;
+
+export const leftSideWrapper = css`
+position: sticky;
+top: 80px;
 `;

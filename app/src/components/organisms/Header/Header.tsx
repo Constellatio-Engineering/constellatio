@@ -21,7 +21,7 @@ export interface HeaderProps
 export const Header: FC<HeaderProps> = ({ variant = "default" }) => 
 {
   const theme = useMantineTheme();
-  const links = ["DASHBOARD", "CASES", "DICTIONARY", "FORUM"];
+  const links = ["CASES", "DICTIONARY"];
   const { pathname } = useRouter();
 
   return variant === "simple" ? (
@@ -51,7 +51,7 @@ export const Header: FC<HeaderProps> = ({ variant = "default" }) =>
         </div>
         <div css={styles.profileArea}>
           <div className="search-input"><SearchFieldSmall/></div>
-          <MenuTab title="Persoanl Space" icon={<IconFolder/>}/>
+          <Link href="personal-space"><MenuTab title="Persoanl Space" icon={<IconFolder/>}/></Link>
           <span className="vertical-line">s</span>
           <UserDropdown/>
         </div>

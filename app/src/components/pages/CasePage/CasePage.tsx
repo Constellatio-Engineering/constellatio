@@ -19,7 +19,7 @@ type IDetailsPageProps = {
 
 const DetailsPage: FunctionComponent<IDetailsPageProps> = ({ content, variant }) => 
 {
-  const [caseStepIndex, setCaseStepIndex] = React.useState<0 | 1 | 2>(0);
+  const [caseStepIndex, setCaseStepIndex] = React.useState<0 | 1 | 2>(2);
   const { setHasCaseSolvingStarted } = useCaseSolvingStore();
 
   useEffect(() => 
