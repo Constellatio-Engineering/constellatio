@@ -6,7 +6,7 @@ import { useQuery } from "@tanstack/react-query";
 import { MeiliSearch } from "meilisearch";
 import { type GetServerSideProps } from "next";
 import { type SSRConfig } from "next-i18next";
-import { type FunctionComponent, useState } from "react";
+import { type FunctionComponent, useEffect, useState } from "react";
 
 import { defaultLocale } from "../../next.config.mjs";
 
@@ -39,9 +39,8 @@ const Home: FunctionComponent<ServerSidePropsResult> = () =>
   const [input, setInput] = useState<string>("");
   const hasInput = input.length > 0;
 
-  const { data: moviesSearchResult, isLoading } = useQuery({
+  const { data: moviesSearchResult = [], isLoading, isRefetching } = useQuery({
     enabled: hasInput,
-    initialData: [],
     keepPreviousData: true,
     queryFn: async () =>
     {
@@ -52,9 +51,17 @@ const Home: FunctionComponent<ServerSidePropsResult> = () =>
     refetchOnMount: false,
     refetchOnReconnect: false,
     refetchOnWindowFocus: false,
-    staleTime: 1000,
+    staleTime: 3000,
   });
-  
+
+  useEffect(() =>
+  {
+    if(isRefetching)
+    {
+      console.log("refetching");
+    }
+  }, [isRefetching]);
+
   return (
     <Layout>
       <div style={{ padding: 100 }}>
