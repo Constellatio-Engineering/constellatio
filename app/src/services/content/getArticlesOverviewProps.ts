@@ -13,10 +13,10 @@ export type allSubCategories = Array<IGenSubCategoryFragment | null | undefined>
 
 export interface IArticlesOverviewProps 
 {
+  __typename: "dictionary";
   allArticles: allArticles;
   allMainCategories: allMainCategories;
   allSubCategories: allSubCategories;
-  variant: "dictionary";
 }
 
 const getArticlesOverviewProps = async (): Promise<IArticlesOverviewProps> => 
@@ -45,10 +45,10 @@ const getArticlesOverviewProps = async (): Promise<IArticlesOverviewProps> =>
     ) || [];
 
     return {
+      __typename: "dictionary",
       allArticles: allArticlesRes,
       allMainCategories,
       allSubCategories,
-      variant: "dictionary",
     };
   }
   catch (error) 

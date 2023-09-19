@@ -22,10 +22,10 @@ export type allSubCategories = Array<IGenSubCategoryFragment | null | undefined>
 
 export interface ICasesOverviewProps 
 {
+  __typename: "case";
   allCases: allCases;
   allMainCategories: allMainCategories;
   allSubCategories: allSubCategories;
-  variant: "case";
 }
 
 const getCasesOverviewProps = async (): Promise<ICasesOverviewProps> => 
@@ -54,10 +54,10 @@ const getCasesOverviewProps = async (): Promise<ICasesOverviewProps> =>
     ) || [];
 
     return {
+      __typename: "case",
       allCases: allCasesRes,
       allMainCategories,
       allSubCategories,
-      variant: "case",
     };
   }
   catch (error) 

@@ -7,7 +7,7 @@ import React, { type FunctionComponent, useState } from "react";
 
 import * as styles from "./OverviewHeader.styles";
 import type {
-  Maybe, Scalars 
+  Maybe, Scalars
 } from "../../../services/graphql/__generated/sdk";
 import { LinkButton } from "../../atoms/LinkButton/LinkButton";
 import CategoryTab from "../../molecules/categoryTab/CategoryTab";
@@ -16,7 +16,7 @@ import FilterTag from "../../molecules/filterTag/FilterTag";
 
 export interface ICasesOverviewHeaderProps 
 {
-  readonly categories?: ICasesOverviewProps["allMainCategories"] ;
+  readonly categories?: ICasesOverviewProps["allMainCategories"];
   readonly selectedCategoryId?: string;
   readonly setSelectedCategoryId: (id: string) => void;
   readonly title?: Maybe<Scalars["String"]["output"]>;
@@ -34,7 +34,7 @@ const OverviewHeader: FunctionComponent<ICasesOverviewHeaderProps> = ({
   const theme = useMantineTheme();
   // const [filters, setFilters] = useState<string[]>(["Filter One", "Filter Two", "Filter Three", "Filter Four", "Filter Five", "Filter Six"]);
   const [filters, setFilters] = useState<string[]>([]);
-  
+
   return (
     <div css={styles.contentHeader({ theme, variant })} className="header">
       <div id="overlay-lines">
