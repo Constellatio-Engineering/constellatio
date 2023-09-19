@@ -403,6 +403,110 @@
       },
       {
         "kind": "INPUT_OBJECT",
+        "name": "Article_LegalArea_Where",
+        "description": "",
+        "fields": null,
+        "inputFields": [
+          {
+            "name": "findOne",
+            "description": "",
+            "type": {
+              "kind": "INPUT_OBJECT",
+              "name": "Article_LegalArea_WhereConnection",
+              "ofType": null
+            },
+            "defaultValue": null,
+            "isDeprecated": false,
+            "deprecationReason": null
+          }
+        ],
+        "interfaces": null,
+        "enumValues": null,
+        "possibleTypes": null
+      },
+      {
+        "kind": "INPUT_OBJECT",
+        "name": "Article_LegalArea_WhereConnection",
+        "description": "",
+        "fields": null,
+        "inputFields": [
+          {
+            "name": "LegalArea",
+            "description": "",
+            "type": {
+              "kind": "INPUT_OBJECT",
+              "name": "LegalArea_Nested_Where",
+              "ofType": null
+            },
+            "defaultValue": null,
+            "isDeprecated": false,
+            "deprecationReason": null
+          },
+          {
+            "name": "SubCategory",
+            "description": "",
+            "type": {
+              "kind": "INPUT_OBJECT",
+              "name": "SubCategory_Nested_Where",
+              "ofType": null
+            },
+            "defaultValue": null,
+            "isDeprecated": false,
+            "deprecationReason": null
+          }
+        ],
+        "interfaces": null,
+        "enumValues": null,
+        "possibleTypes": null
+      },
+      {
+        "kind": "INPUT_OBJECT",
+        "name": "Article_MainCategoryField_Where",
+        "description": "",
+        "fields": null,
+        "inputFields": [
+          {
+            "name": "findOne",
+            "description": "",
+            "type": {
+              "kind": "INPUT_OBJECT",
+              "name": "Article_MainCategoryField_WhereConnection",
+              "ofType": null
+            },
+            "defaultValue": null,
+            "isDeprecated": false,
+            "deprecationReason": null
+          }
+        ],
+        "interfaces": null,
+        "enumValues": null,
+        "possibleTypes": null
+      },
+      {
+        "kind": "INPUT_OBJECT",
+        "name": "Article_MainCategoryField_WhereConnection",
+        "description": "",
+        "fields": null,
+        "inputFields": [
+          {
+            "name": "MainCategory",
+            "description": "",
+            "type": {
+              "kind": "INPUT_OBJECT",
+              "name": "MainCategory_Nested_Where",
+              "ofType": null
+            },
+            "defaultValue": null,
+            "isDeprecated": false,
+            "deprecationReason": null
+          }
+        ],
+        "interfaces": null,
+        "enumValues": null,
+        "possibleTypes": null
+      },
+      {
+        "kind": "INPUT_OBJECT",
         "name": "Article_Sort",
         "description": "",
         "fields": null,
@@ -534,6 +638,144 @@
       },
       {
         "kind": "INPUT_OBJECT",
+        "name": "Article_SubCategoryField_Where",
+        "description": "",
+        "fields": null,
+        "inputFields": [
+          {
+            "name": "findOne",
+            "description": "",
+            "type": {
+              "kind": "INPUT_OBJECT",
+              "name": "Article_SubCategoryField_WhereConnection",
+              "ofType": null
+            },
+            "defaultValue": null,
+            "isDeprecated": false,
+            "deprecationReason": null
+          }
+        ],
+        "interfaces": null,
+        "enumValues": null,
+        "possibleTypes": null
+      },
+      {
+        "kind": "INPUT_OBJECT",
+        "name": "Article_SubCategoryField_WhereConnection",
+        "description": "",
+        "fields": null,
+        "inputFields": [
+          {
+            "name": "SubCategory",
+            "description": "",
+            "type": {
+              "kind": "INPUT_OBJECT",
+              "name": "SubCategory_Nested_Where",
+              "ofType": null
+            },
+            "defaultValue": null,
+            "isDeprecated": false,
+            "deprecationReason": null
+          }
+        ],
+        "interfaces": null,
+        "enumValues": null,
+        "possibleTypes": null
+      },
+      {
+        "kind": "INPUT_OBJECT",
+        "name": "Article_Tags_Where",
+        "description": "",
+        "fields": null,
+        "inputFields": [
+          {
+            "name": "findOne",
+            "description": "",
+            "type": {
+              "kind": "INPUT_OBJECT",
+              "name": "Article_Tags_WhereConnection",
+              "ofType": null
+            },
+            "defaultValue": null,
+            "isDeprecated": false,
+            "deprecationReason": null
+          }
+        ],
+        "interfaces": null,
+        "enumValues": null,
+        "possibleTypes": null
+      },
+      {
+        "kind": "INPUT_OBJECT",
+        "name": "Article_Tags_WhereConnection",
+        "description": "",
+        "fields": null,
+        "inputFields": [
+          {
+            "name": "Tags",
+            "description": "",
+            "type": {
+              "kind": "INPUT_OBJECT",
+              "name": "Tags_Nested_Where",
+              "ofType": null
+            },
+            "defaultValue": null,
+            "isDeprecated": false,
+            "deprecationReason": null
+          }
+        ],
+        "interfaces": null,
+        "enumValues": null,
+        "possibleTypes": null
+      },
+      {
+        "kind": "INPUT_OBJECT",
+        "name": "Article_Topic_Where",
+        "description": "",
+        "fields": null,
+        "inputFields": [
+          {
+            "name": "findOne",
+            "description": "",
+            "type": {
+              "kind": "INPUT_OBJECT",
+              "name": "Article_Topic_WhereConnection",
+              "ofType": null
+            },
+            "defaultValue": null,
+            "isDeprecated": false,
+            "deprecationReason": null
+          }
+        ],
+        "interfaces": null,
+        "enumValues": null,
+        "possibleTypes": null
+      },
+      {
+        "kind": "INPUT_OBJECT",
+        "name": "Article_Topic_WhereConnection",
+        "description": "",
+        "fields": null,
+        "inputFields": [
+          {
+            "name": "Topic",
+            "description": "",
+            "type": {
+              "kind": "INPUT_OBJECT",
+              "name": "Topic_Nested_Where",
+              "ofType": null
+            },
+            "defaultValue": null,
+            "isDeprecated": false,
+            "deprecationReason": null
+          }
+        ],
+        "interfaces": null,
+        "enumValues": null,
+        "possibleTypes": null
+      },
+      {
+        "kind": "INPUT_OBJECT",
         "name": "Article_Where",
         "description": "",
         "fields": null,
@@ -583,11 +825,71 @@
             "deprecationReason": null
           },
           {
+            "name": "legalArea",
+            "description": "",
+            "type": {
+              "kind": "INPUT_OBJECT",
+              "name": "Article_LegalArea_Where",
+              "ofType": null
+            },
+            "defaultValue": null,
+            "isDeprecated": false,
+            "deprecationReason": null
+          },
+          {
+            "name": "mainCategoryField",
+            "description": "",
+            "type": {
+              "kind": "INPUT_OBJECT",
+              "name": "Article_MainCategoryField_Where",
+              "ofType": null
+            },
+            "defaultValue": null,
+            "isDeprecated": false,
+            "deprecationReason": null
+          },
+          {
+            "name": "subCategoryField",
+            "description": "",
+            "type": {
+              "kind": "INPUT_OBJECT",
+              "name": "Article_SubCategoryField_Where",
+              "ofType": null
+            },
+            "defaultValue": null,
+            "isDeprecated": false,
+            "deprecationReason": null
+          },
+          {
+            "name": "tags",
+            "description": "",
+            "type": {
+              "kind": "INPUT_OBJECT",
+              "name": "Article_Tags_Where",
+              "ofType": null
+            },
+            "defaultValue": null,
+            "isDeprecated": false,
+            "deprecationReason": null
+          },
+          {
             "name": "title",
             "description": "",
             "type": {
               "kind": "INPUT_OBJECT",
               "name": "CaisyField_String_Where",
+              "ofType": null
+            },
+            "defaultValue": null,
+            "isDeprecated": false,
+            "deprecationReason": null
+          },
+          {
+            "name": "topic",
+            "description": "",
+            "type": {
+              "kind": "INPUT_OBJECT",
+              "name": "Article_Topic_Where",
               "ofType": null
             },
             "defaultValue": null,
@@ -3178,6 +3480,110 @@
       },
       {
         "kind": "INPUT_OBJECT",
+        "name": "Case_LegalArea_Where",
+        "description": "",
+        "fields": null,
+        "inputFields": [
+          {
+            "name": "findOne",
+            "description": "",
+            "type": {
+              "kind": "INPUT_OBJECT",
+              "name": "Case_LegalArea_WhereConnection",
+              "ofType": null
+            },
+            "defaultValue": null,
+            "isDeprecated": false,
+            "deprecationReason": null
+          }
+        ],
+        "interfaces": null,
+        "enumValues": null,
+        "possibleTypes": null
+      },
+      {
+        "kind": "INPUT_OBJECT",
+        "name": "Case_LegalArea_WhereConnection",
+        "description": "",
+        "fields": null,
+        "inputFields": [
+          {
+            "name": "LegalArea",
+            "description": "",
+            "type": {
+              "kind": "INPUT_OBJECT",
+              "name": "LegalArea_Nested_Where",
+              "ofType": null
+            },
+            "defaultValue": null,
+            "isDeprecated": false,
+            "deprecationReason": null
+          },
+          {
+            "name": "SubCategory",
+            "description": "",
+            "type": {
+              "kind": "INPUT_OBJECT",
+              "name": "SubCategory_Nested_Where",
+              "ofType": null
+            },
+            "defaultValue": null,
+            "isDeprecated": false,
+            "deprecationReason": null
+          }
+        ],
+        "interfaces": null,
+        "enumValues": null,
+        "possibleTypes": null
+      },
+      {
+        "kind": "INPUT_OBJECT",
+        "name": "Case_MainCategoryField_Where",
+        "description": "",
+        "fields": null,
+        "inputFields": [
+          {
+            "name": "findOne",
+            "description": "",
+            "type": {
+              "kind": "INPUT_OBJECT",
+              "name": "Case_MainCategoryField_WhereConnection",
+              "ofType": null
+            },
+            "defaultValue": null,
+            "isDeprecated": false,
+            "deprecationReason": null
+          }
+        ],
+        "interfaces": null,
+        "enumValues": null,
+        "possibleTypes": null
+      },
+      {
+        "kind": "INPUT_OBJECT",
+        "name": "Case_MainCategoryField_WhereConnection",
+        "description": "",
+        "fields": null,
+        "inputFields": [
+          {
+            "name": "MainCategory",
+            "description": "",
+            "type": {
+              "kind": "INPUT_OBJECT",
+              "name": "MainCategory_Nested_Where",
+              "ofType": null
+            },
+            "defaultValue": null,
+            "isDeprecated": false,
+            "deprecationReason": null
+          }
+        ],
+        "interfaces": null,
+        "enumValues": null,
+        "possibleTypes": null
+      },
+      {
+        "kind": "INPUT_OBJECT",
         "name": "Case_Sort",
         "description": "",
         "fields": null,
@@ -3321,6 +3727,144 @@
       },
       {
         "kind": "INPUT_OBJECT",
+        "name": "Case_SubCategoryField_Where",
+        "description": "",
+        "fields": null,
+        "inputFields": [
+          {
+            "name": "findOne",
+            "description": "",
+            "type": {
+              "kind": "INPUT_OBJECT",
+              "name": "Case_SubCategoryField_WhereConnection",
+              "ofType": null
+            },
+            "defaultValue": null,
+            "isDeprecated": false,
+            "deprecationReason": null
+          }
+        ],
+        "interfaces": null,
+        "enumValues": null,
+        "possibleTypes": null
+      },
+      {
+        "kind": "INPUT_OBJECT",
+        "name": "Case_SubCategoryField_WhereConnection",
+        "description": "",
+        "fields": null,
+        "inputFields": [
+          {
+            "name": "SubCategory",
+            "description": "",
+            "type": {
+              "kind": "INPUT_OBJECT",
+              "name": "SubCategory_Nested_Where",
+              "ofType": null
+            },
+            "defaultValue": null,
+            "isDeprecated": false,
+            "deprecationReason": null
+          }
+        ],
+        "interfaces": null,
+        "enumValues": null,
+        "possibleTypes": null
+      },
+      {
+        "kind": "INPUT_OBJECT",
+        "name": "Case_Tags_Where",
+        "description": "",
+        "fields": null,
+        "inputFields": [
+          {
+            "name": "findOne",
+            "description": "",
+            "type": {
+              "kind": "INPUT_OBJECT",
+              "name": "Case_Tags_WhereConnection",
+              "ofType": null
+            },
+            "defaultValue": null,
+            "isDeprecated": false,
+            "deprecationReason": null
+          }
+        ],
+        "interfaces": null,
+        "enumValues": null,
+        "possibleTypes": null
+      },
+      {
+        "kind": "INPUT_OBJECT",
+        "name": "Case_Tags_WhereConnection",
+        "description": "",
+        "fields": null,
+        "inputFields": [
+          {
+            "name": "Tags",
+            "description": "",
+            "type": {
+              "kind": "INPUT_OBJECT",
+              "name": "Tags_Nested_Where",
+              "ofType": null
+            },
+            "defaultValue": null,
+            "isDeprecated": false,
+            "deprecationReason": null
+          }
+        ],
+        "interfaces": null,
+        "enumValues": null,
+        "possibleTypes": null
+      },
+      {
+        "kind": "INPUT_OBJECT",
+        "name": "Case_Topic_Where",
+        "description": "",
+        "fields": null,
+        "inputFields": [
+          {
+            "name": "findOne",
+            "description": "",
+            "type": {
+              "kind": "INPUT_OBJECT",
+              "name": "Case_Topic_WhereConnection",
+              "ofType": null
+            },
+            "defaultValue": null,
+            "isDeprecated": false,
+            "deprecationReason": null
+          }
+        ],
+        "interfaces": null,
+        "enumValues": null,
+        "possibleTypes": null
+      },
+      {
+        "kind": "INPUT_OBJECT",
+        "name": "Case_Topic_WhereConnection",
+        "description": "",
+        "fields": null,
+        "inputFields": [
+          {
+            "name": "Topic",
+            "description": "",
+            "type": {
+              "kind": "INPUT_OBJECT",
+              "name": "Topic_Nested_Where",
+              "ofType": null
+            },
+            "defaultValue": null,
+            "isDeprecated": false,
+            "deprecationReason": null
+          }
+        ],
+        "interfaces": null,
+        "enumValues": null,
+        "possibleTypes": null
+      },
+      {
+        "kind": "INPUT_OBJECT",
         "name": "Case_Where",
         "description": "",
         "fields": null,
@@ -3394,6 +3938,30 @@
             "deprecationReason": null
           },
           {
+            "name": "legalArea",
+            "description": "",
+            "type": {
+              "kind": "INPUT_OBJECT",
+              "name": "Case_LegalArea_Where",
+              "ofType": null
+            },
+            "defaultValue": null,
+            "isDeprecated": false,
+            "deprecationReason": null
+          },
+          {
+            "name": "mainCategoryField",
+            "description": "",
+            "type": {
+              "kind": "INPUT_OBJECT",
+              "name": "Case_MainCategoryField_Where",
+              "ofType": null
+            },
+            "defaultValue": null,
+            "isDeprecated": false,
+            "deprecationReason": null
+          },
+          {
             "name": "resolution",
             "description": "",
             "type": {
@@ -3406,11 +3974,47 @@
             "deprecationReason": null
           },
           {
+            "name": "subCategoryField",
+            "description": "",
+            "type": {
+              "kind": "INPUT_OBJECT",
+              "name": "Case_SubCategoryField_Where",
+              "ofType": null
+            },
+            "defaultValue": null,
+            "isDeprecated": false,
+            "deprecationReason": null
+          },
+          {
+            "name": "tags",
+            "description": "",
+            "type": {
+              "kind": "INPUT_OBJECT",
+              "name": "Case_Tags_Where",
+              "ofType": null
+            },
+            "defaultValue": null,
+            "isDeprecated": false,
+            "deprecationReason": null
+          },
+          {
             "name": "title",
             "description": "",
             "type": {
               "kind": "INPUT_OBJECT",
               "name": "CaisyField_String_Where",
+              "ofType": null
+            },
+            "defaultValue": null,
+            "isDeprecated": false,
+            "deprecationReason": null
+          },
+          {
+            "name": "topic",
+            "description": "",
+            "type": {
+              "kind": "INPUT_OBJECT",
+              "name": "Case_Topic_Where",
               "ofType": null
             },
             "defaultValue": null,
@@ -5215,6 +5819,61 @@
       },
       {
         "kind": "INPUT_OBJECT",
+        "name": "LegalArea_Nested_Where",
+        "description": "",
+        "fields": null,
+        "inputFields": [
+          {
+            "name": "AND",
+            "description": "",
+            "type": {
+              "kind": "LIST",
+              "name": null,
+              "ofType": {
+                "kind": "INPUT_OBJECT",
+                "name": "LegalArea_Nested_Where",
+                "ofType": null
+              }
+            },
+            "defaultValue": null,
+            "isDeprecated": false,
+            "deprecationReason": null
+          },
+          {
+            "name": "OR",
+            "description": "",
+            "type": {
+              "kind": "LIST",
+              "name": null,
+              "ofType": {
+                "kind": "INPUT_OBJECT",
+                "name": "LegalArea_Nested_Where",
+                "ofType": null
+              }
+            },
+            "defaultValue": null,
+            "isDeprecated": false,
+            "deprecationReason": null
+          },
+          {
+            "name": "legalAreaName",
+            "description": "",
+            "type": {
+              "kind": "INPUT_OBJECT",
+              "name": "CaisyField_String_Where",
+              "ofType": null
+            },
+            "defaultValue": null,
+            "isDeprecated": false,
+            "deprecationReason": null
+          }
+        ],
+        "interfaces": null,
+        "enumValues": null,
+        "possibleTypes": null
+      },
+      {
+        "kind": "INPUT_OBJECT",
         "name": "LegalArea_Sort",
         "description": "",
         "fields": null,
@@ -5518,6 +6177,61 @@
         ],
         "inputFields": null,
         "interfaces": [],
+        "enumValues": null,
+        "possibleTypes": null
+      },
+      {
+        "kind": "INPUT_OBJECT",
+        "name": "MainCategory_Nested_Where",
+        "description": "",
+        "fields": null,
+        "inputFields": [
+          {
+            "name": "AND",
+            "description": "",
+            "type": {
+              "kind": "LIST",
+              "name": null,
+              "ofType": {
+                "kind": "INPUT_OBJECT",
+                "name": "MainCategory_Nested_Where",
+                "ofType": null
+              }
+            },
+            "defaultValue": null,
+            "isDeprecated": false,
+            "deprecationReason": null
+          },
+          {
+            "name": "OR",
+            "description": "",
+            "type": {
+              "kind": "LIST",
+              "name": null,
+              "ofType": {
+                "kind": "INPUT_OBJECT",
+                "name": "MainCategory_Nested_Where",
+                "ofType": null
+              }
+            },
+            "defaultValue": null,
+            "isDeprecated": false,
+            "deprecationReason": null
+          },
+          {
+            "name": "mainCategory",
+            "description": "",
+            "type": {
+              "kind": "INPUT_OBJECT",
+              "name": "CaisyField_String_Where",
+              "ofType": null
+            },
+            "defaultValue": null,
+            "isDeprecated": false,
+            "deprecationReason": null
+          }
+        ],
+        "interfaces": null,
         "enumValues": null,
         "possibleTypes": null
       },
@@ -7848,6 +8562,107 @@
       },
       {
         "kind": "INPUT_OBJECT",
+        "name": "SubCategory_MainCategory_Where",
+        "description": "",
+        "fields": null,
+        "inputFields": [
+          {
+            "name": "findOne",
+            "description": "",
+            "type": {
+              "kind": "INPUT_OBJECT",
+              "name": "SubCategory_MainCategory_WhereConnection",
+              "ofType": null
+            },
+            "defaultValue": null,
+            "isDeprecated": false,
+            "deprecationReason": null
+          }
+        ],
+        "interfaces": null,
+        "enumValues": null,
+        "possibleTypes": null
+      },
+      {
+        "kind": "INPUT_OBJECT",
+        "name": "SubCategory_MainCategory_WhereConnection",
+        "description": "",
+        "fields": null,
+        "inputFields": [
+          {
+            "name": "MainCategory",
+            "description": "",
+            "type": {
+              "kind": "INPUT_OBJECT",
+              "name": "MainCategory_Nested_Where",
+              "ofType": null
+            },
+            "defaultValue": null,
+            "isDeprecated": false,
+            "deprecationReason": null
+          }
+        ],
+        "interfaces": null,
+        "enumValues": null,
+        "possibleTypes": null
+      },
+      {
+        "kind": "INPUT_OBJECT",
+        "name": "SubCategory_Nested_Where",
+        "description": "",
+        "fields": null,
+        "inputFields": [
+          {
+            "name": "AND",
+            "description": "",
+            "type": {
+              "kind": "LIST",
+              "name": null,
+              "ofType": {
+                "kind": "INPUT_OBJECT",
+                "name": "SubCategory_Nested_Where",
+                "ofType": null
+              }
+            },
+            "defaultValue": null,
+            "isDeprecated": false,
+            "deprecationReason": null
+          },
+          {
+            "name": "OR",
+            "description": "",
+            "type": {
+              "kind": "LIST",
+              "name": null,
+              "ofType": {
+                "kind": "INPUT_OBJECT",
+                "name": "SubCategory_Nested_Where",
+                "ofType": null
+              }
+            },
+            "defaultValue": null,
+            "isDeprecated": false,
+            "deprecationReason": null
+          },
+          {
+            "name": "subCategory",
+            "description": "",
+            "type": {
+              "kind": "INPUT_OBJECT",
+              "name": "CaisyField_String_Where",
+              "ofType": null
+            },
+            "defaultValue": null,
+            "isDeprecated": false,
+            "deprecationReason": null
+          }
+        ],
+        "interfaces": null,
+        "enumValues": null,
+        "possibleTypes": null
+      },
+      {
+        "kind": "INPUT_OBJECT",
         "name": "SubCategory_Sort",
         "description": "",
         "fields": null,
@@ -7962,6 +8777,18 @@
                 "name": "SubCategory_Where",
                 "ofType": null
               }
+            },
+            "defaultValue": null,
+            "isDeprecated": false,
+            "deprecationReason": null
+          },
+          {
+            "name": "mainCategory",
+            "description": "",
+            "type": {
+              "kind": "INPUT_OBJECT",
+              "name": "SubCategory_MainCategory_Where",
+              "ofType": null
             },
             "defaultValue": null,
             "isDeprecated": false,
@@ -8130,6 +8957,61 @@
         ],
         "inputFields": null,
         "interfaces": [],
+        "enumValues": null,
+        "possibleTypes": null
+      },
+      {
+        "kind": "INPUT_OBJECT",
+        "name": "Tags_Nested_Where",
+        "description": "",
+        "fields": null,
+        "inputFields": [
+          {
+            "name": "AND",
+            "description": "",
+            "type": {
+              "kind": "LIST",
+              "name": null,
+              "ofType": {
+                "kind": "INPUT_OBJECT",
+                "name": "Tags_Nested_Where",
+                "ofType": null
+              }
+            },
+            "defaultValue": null,
+            "isDeprecated": false,
+            "deprecationReason": null
+          },
+          {
+            "name": "OR",
+            "description": "",
+            "type": {
+              "kind": "LIST",
+              "name": null,
+              "ofType": {
+                "kind": "INPUT_OBJECT",
+                "name": "Tags_Nested_Where",
+                "ofType": null
+              }
+            },
+            "defaultValue": null,
+            "isDeprecated": false,
+            "deprecationReason": null
+          },
+          {
+            "name": "tagName",
+            "description": "",
+            "type": {
+              "kind": "INPUT_OBJECT",
+              "name": "CaisyField_String_Where",
+              "ofType": null
+            },
+            "defaultValue": null,
+            "isDeprecated": false,
+            "deprecationReason": null
+          }
+        ],
+        "interfaces": null,
         "enumValues": null,
         "possibleTypes": null
       },
@@ -8389,6 +9271,61 @@
         ],
         "inputFields": null,
         "interfaces": [],
+        "enumValues": null,
+        "possibleTypes": null
+      },
+      {
+        "kind": "INPUT_OBJECT",
+        "name": "Topic_Nested_Where",
+        "description": "",
+        "fields": null,
+        "inputFields": [
+          {
+            "name": "AND",
+            "description": "",
+            "type": {
+              "kind": "LIST",
+              "name": null,
+              "ofType": {
+                "kind": "INPUT_OBJECT",
+                "name": "Topic_Nested_Where",
+                "ofType": null
+              }
+            },
+            "defaultValue": null,
+            "isDeprecated": false,
+            "deprecationReason": null
+          },
+          {
+            "name": "OR",
+            "description": "",
+            "type": {
+              "kind": "LIST",
+              "name": null,
+              "ofType": {
+                "kind": "INPUT_OBJECT",
+                "name": "Topic_Nested_Where",
+                "ofType": null
+              }
+            },
+            "defaultValue": null,
+            "isDeprecated": false,
+            "deprecationReason": null
+          },
+          {
+            "name": "topicName",
+            "description": "",
+            "type": {
+              "kind": "INPUT_OBJECT",
+              "name": "CaisyField_String_Where",
+              "ofType": null
+            },
+            "defaultValue": null,
+            "isDeprecated": false,
+            "deprecationReason": null
+          }
+        ],
+        "interfaces": null,
         "enumValues": null,
         "possibleTypes": null
       },

@@ -1,8 +1,6 @@
 import { css } from "@emotion/react";
 
 export const wrapper = css`
-/* outline:1px solid red; */
-/* min-height: 500px; */
 padding:32px;
 border-radius: 8px;
 background-color: #fff;
@@ -13,4 +11,6 @@ gap: 32px;
 margin:24px 0;
 position:relative;
 z-index: 3;
+/* color doesn't exist in Mantine Theme Colors array */
+box-shadow: 0px 8px 44px 0px #0000000a;
 `;

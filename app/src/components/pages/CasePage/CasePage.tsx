@@ -3,40 +3,48 @@ import CaseNavBar from "@/components/organisms/caseNavBar/CaseNavBar";
 import CaseResultsReviewStep from "@/components/organisms/caseResultsReviewStep/CaseResultsReviewStep";
 import CaseSolveCaseStep from "@/components/organisms/caseSolveCaseStep/CaseSolveCaseStep";
 import CaseSolvingHeader from "@/components/organisms/caseSolvingHeader/CaseSolvingHeader";
-import { type IGenCase } from "@/services/graphql/__generated/sdk";
+import { type IGenArticle, type IGenCase } from "@/services/graphql/__generated/sdk";
+import useCaseSolvingStore from "@/stores/caseSolving.store";
 
-import React, { type FunctionComponent } from "react";
+import React, { useEffect, type FunctionComponent } from "react";
 
 import * as styles from "./CasesPage.styles";
 
-const DetailsPage: FunctionComponent<IGenCase& {readonly variant: "case" | "dictionary"}> = ({
-  durationToCompleteInMinutes,
-  facts,
-  fullTextTasks,
-  id,
-  legalArea,
-  resolution,
-  tags,
-  title,
-  topic,
-  variant
-}) => 
+// Omit<Omit<Partial<IGenCase & IGenArticle>, "__typename">, "variant"> & {readonly variant: "case" | "dictionary"};
+
+type IDetailsPageProps = {
+  readonly content: IGenCase | IGenArticle | undefined;
+  readonly variant: "case" | "dictionary";
+};
+
+const DetailsPage: FunctionComponent<IDetailsPageProps> = ({ content, variant }) => 
 {
-  const [caseStepIndex, setCaseStepIndex] = React.useState<0 | 1 | 2>(0);
+  const [caseStepIndex, setCaseStepIndex] = React.useState<0 | 1 | 2>(2);
+  const { setHasCaseSolvingStarted } = useCaseSolvingStore();
+
+  useEffect(() => 
+  {
+    if(content?.__typename === "Article")
+    {
+      setCaseStepIndex(0);
+      setHasCaseSolvingStarted(true);
+    }
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [content?.__typename]);
 
   return (
     <>
       <CaseSolvingHeader
-        title={title ?? ""}
+        title={content?.title ?? ""}
         variant={variant}
-        pathSlugs={[{ path: variant === "case" ? "/cases" : "/dictionaries", slug: variant === "case" ? "Cases" : "Dictionaries" }, { path: `/dictionaries/${id}`, slug: title ?? "" }]}
+        pathSlugs={[{ path: variant === "case" ? "/cases" : "/dictionary", slug: variant === "case" ? "Cases" : "Dictionary" }, { path: `/dictionaries/${content?.id}`, slug: content?.title ?? "" }]}
         overviewCard={{
           lastUpdated: new Date(),
-          legalArea,
+          legalArea: content?.legalArea,
           status: "notStarted",
-          tags,
-          timeInMinutes: durationToCompleteInMinutes || 0,
-          topic: topic?.[0]?.topicName ?? "",
+          tags: content?.tags,
+          timeInMinutes: content?.__typename === "Case" && content.durationToCompleteInMinutes ? content.durationToCompleteInMinutes : undefined,
+          topic: content?.topic?.[0]?.topicName ?? "",
           variant,
           views: 0,
         }}
@@ -47,31 +55,26 @@ const DetailsPage: FunctionComponent<IGenCase& {readonly variant: "case" | "dict
         setCaseStepIndex={setCaseStepIndex}
       />
       <div css={styles.mainContainer}>
-        {caseStepIndex === 0 && (
-          <CaseCompleteTestsStep
-            {...{
-              facts,
-              fullTextTasks,
-            }}
+        {content?.fullTextTasks && caseStepIndex === 0 && (
+          <CaseCompleteTestsStep {...{
+            facts: content?.__typename === "Case" ? content?.facts : undefined,
+            fullTextTasks: content?.fullTextTasks,
+            variant
+          }}
           />
         )}
-        {caseStepIndex === 1 && (
-          <CaseSolveCaseStep
-            {...{
-              facts,
-              setCaseStepIndex,
-              title,
-            }}
+        {content?.__typename === "Case" && caseStepIndex === 1 && (
+          <CaseSolveCaseStep {...{
+            facts: content?.facts,
+            setCaseStepIndex,
+            title: content?.title
+          }}
           />
         )}
-        {facts && resolution && title && caseStepIndex === 2 && (
-          <CaseResultsReviewStep
-            {...{
-              facts,
-              resolution,
-              setCaseStepIndex,
-              title,
-            }}
+        {content?.__typename === "Case" && content?.facts && content?.resolution && content?.title && caseStepIndex === 2 && (
+          <CaseResultsReviewStep {...{
+            facts: content?.facts, resolution: content?.resolution, setCaseStepIndex, title: content?.title 
+          }}
           />
         )}
       </div>

@@ -35,7 +35,7 @@ import { Handle } from "../../Icons/Handle";
 
 export interface TValue 
 {
-  options: { correctAnswer: boolean; id: string; label: string }[];
+  options: Array<{ correctAnswer: boolean; id: string; label: string }>;
   orderRequired: boolean;
 }
 

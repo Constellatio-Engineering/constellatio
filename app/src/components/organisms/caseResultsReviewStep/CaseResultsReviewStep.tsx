@@ -34,7 +34,6 @@ const CaseResultsReviewStep: FunctionComponent<ICaseResultsReviewStepProps> = ({
   title
 }) => 
 {
-  console.log({ facts, resolution });
   const theme = useMantineTheme();
   const [isExpandSolution, setIsExpandSolution] = React.useState<boolean>(false);
   const icons = [
@@ -47,7 +46,6 @@ const CaseResultsReviewStep: FunctionComponent<ICaseResultsReviewStepProps> = ({
 
   useEffect(() => 
   {
-    console.log({ solution });
     if(solution && solutionContent.current !== undefined) 
     {
       solutionContent.current!.innerHTML = solution;
@@ -58,12 +56,7 @@ const CaseResultsReviewStep: FunctionComponent<ICaseResultsReviewStepProps> = ({
   const [isOpened, { close, open }] = useDisclosure(false);
   const editButtonClick = (): void => 
   {
-    // go back a step
-    // setCaseStepIndex(1)
-
-    // show modal
     open();
-
   };
 
   const resetProgressButton = (): void => 
@@ -82,7 +75,7 @@ const CaseResultsReviewStep: FunctionComponent<ICaseResultsReviewStepProps> = ({
     <div css={styles.wrapper} id="ResultsReviewStepContent">
       <Container maw={1440}>
         <div css={styles.content}>
-          <div>
+          <div css={styles.leftSideWrapper}>
             {facts?.json && (
               <div css={styles.factsWrapper}>
                 <Accordion variant="separated">

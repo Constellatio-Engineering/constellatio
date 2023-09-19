@@ -1,6 +1,6 @@
 
 import { Layout } from "@/components/layouts/Layout";
-import CasesOverviewPage from "@/components/pages/CasesOverviewPage/CasesOverviewPage";
+import OverviewPage from "@/components/pages/OverviewPage/OverviewPage";
 import getCasesOverviewProps, { type ICasesOverviewProps } from "@/services/content/getCasesOverviewProps";
 
 import { type GetStaticProps } from "next";
@@ -15,7 +15,7 @@ Awaited<ReturnType<typeof getCasesOverviewProps>>
 
   return {
     props: {
-      ...(resAllCases || null)
+      ...(resAllCases || null),
     },
     revalidate: 1,
   };
@@ -27,7 +27,7 @@ const NextPage: FunctionComponent<ICasesOverviewProps> = (props) =>
   
   return (
     <Layout>
-      <CasesOverviewPage variant="case" {...props}/>      
+      <OverviewPage variant="case" content={props}/>      
     </Layout>
   );
 };

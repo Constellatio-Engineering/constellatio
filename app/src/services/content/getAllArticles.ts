@@ -1,5 +1,5 @@
 /* eslint-disable @typescript-eslint/naming-convention */
-import { IGenArticleOverviewFragment, type IGenCaseOverviewFragment } from "../graphql/__generated/sdk";
+import { type IGenArticleOverviewFragment, type IGenCaseOverviewFragment } from "../graphql/__generated/sdk";
 import { caisySDK } from "../graphql/getSdk";
 
 export type allArticles = IGenArticleOverviewFragment[] & {

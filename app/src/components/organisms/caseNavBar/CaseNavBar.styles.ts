@@ -9,9 +9,9 @@ const DictionaryCSS = css`
 
 export const componentArea = ({ theme, variant }: {theme: MantineTheme;variant: "case"|"dictionary"}): SerializedStyles => css`
  background-color: ${theme.colors["neutrals-01"][0]};
- border-bottom: 8px solid ${theme.colors["neutrals-01"][4]};
+ border-bottom: 6px solid ${theme.colors["neutrals-01"][4]};
  position: sticky;
-  top: ${variant === "case" ? "0px" : "72px"};
+  top: ${variant === "case" ? "0px" : "60px"};
   z-index: 41;
   width: 100%;
   padding: 0px ;
@@ -24,7 +24,7 @@ export const wrapper = ({ variant }: {
   justify-content: space-between;
   align-items: center;
   flex-wrap: wrap;
-  padding:12px 0;
+  padding:16px 0;
   /* position: -webkit-sticky; */
   max-width: 1440px;
   margin: 0 auto;  
@@ -88,6 +88,6 @@ export const progressBar = ({
     ? theme.colors["cc-cases"][4]
     : theme.colors["cc-dictionary"][4]};
   position: absolute;
-  bottom: -7px;
+  bottom: -6px;
   transition: width 0.3s ease-in-out;
 `;

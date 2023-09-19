@@ -1,27 +1,19 @@
 /* eslint-disable @typescript-eslint/naming-convention */
 import getAllArticles, { type allArticles } from "./getAllArticles";
+import { type allMainCategories } from "./getCasesOverviewProps";
 import {
   type IGenAssetFragment,
   type IGenSubCategoryFragment,
 } from "../graphql/__generated/sdk";
 import { caisySDK } from "../graphql/getSdk";
 
-export type allMainCategories = {
-  __typename?: "MainCategory" | undefined;
-  casesPerCategory: number;
-  icon?: ({
-    __typename?: "Asset" | undefined;
-  } & IGenAssetFragment) | null | undefined;
-  id?: string | null | undefined;
-  mainCategory?: string | null | undefined;
-}[] | null;
-
-export type allSubCategories = (IGenSubCategoryFragment | null | undefined)[] & {
+export type allSubCategories = Array<IGenSubCategoryFragment | null | undefined> & {
   __typename?: "SubCategory" | undefined;
 };
 
 export interface IArticlesOverviewProps 
 {
+  __typename: "dictionary";
   allArticles: allArticles;
   allMainCategories: allMainCategories;
   allSubCategories: allSubCategories;
@@ -53,6 +45,7 @@ const getArticlesOverviewProps = async (): Promise<IArticlesOverviewProps> =>
     ) || [];
 
     return {
+      __typename: "dictionary",
       allArticles: allArticlesRes,
       allMainCategories,
       allSubCategories,

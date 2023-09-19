@@ -9,13 +9,13 @@ type TTable = {
   type: "cases" | "dictionary";
 };
 
-interface CasesTableProps extends TTable 
+export interface CasesTableProps extends TTable 
 {
   type: "cases";
   variant: "all-cases" | "cases" | "favorites" | "search";
 }
 
-interface DictionaryTableProps extends TTable 
+export interface DictionaryTableProps extends TTable 
 {
   type: "dictionary";
   variant: "dictionary" | "favorites" | "search";
