@@ -19,28 +19,28 @@ type CompletedState = {
 };
 
 type UploadState = {
-  fileName: string;
+  fileClientSideUuid: string;
   state: CanceledState | UploadingState | CompletedState | FailedState;
 };
 
 interface UploadsProgressStore
 {
-  setUploadState: (fileName: string, state: UploadState["state"]) => void;
+  setUploadState: (fileClientSideUuid: string, state: UploadState["state"]) => void;
   uploads: UploadState[];
 }
 
 const uploadsProgressStore = create(
   immer<UploadsProgressStore>((set, get) => ({
-    setUploadState: (fileName, stateUpdate) =>
+    setUploadState: (clientSideUuid, stateUpdate) =>
     {
-      const fileIndex = get().uploads.findIndex(upload => upload.fileName === fileName);
+      const fileIndex = get().uploads.findIndex(upload => upload.fileClientSideUuid === clientSideUuid);
 
       set(state =>
       {
         if(fileIndex === -1)
         {
           state.uploads = state.uploads.concat({
-            fileName,
+            fileClientSideUuid: clientSideUuid,
             state: stateUpdate
           });
         }

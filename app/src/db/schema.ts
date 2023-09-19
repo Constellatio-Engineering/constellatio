@@ -42,6 +42,7 @@ export type BookmarkInsert = InferInsertModel<typeof bookmarksTable>;
 export const uploadsTable = pgTable("uploads", {
   id: serial("id").primaryKey(),
   uuid: uuid("uuid").defaultRandom().unique().notNull(),
+  clientSideUuid: uuid("clientSideUuid").notNull(),
   userId: uuid("userId").references(() => usersTable.id, { onDelete: "cascade" }).notNull(),
   createdAt: timestamp("created_at").defaultNow(),
   filename: text("filename").notNull(),

@@ -94,11 +94,22 @@ export const uploadsRouter = createTRPCRouter({
     }),
   saveFileToDatabase: protectedProcedure
     .input(z.object({
+      clientSideUuid: z.string(),
       fileSizeInBytes: z.number().int().min(1),
       filename: z.string(),
       originalFilename: z.string(),
     }))
-    .mutation(async ({ ctx: { userId }, input: { filename, fileSizeInBytes, originalFilename } }) =>
+    .mutation(async ({
+      ctx: {
+        userId
+      },
+      input: {
+        clientSideUuid,
+        filename,
+        fileSizeInBytes,
+        originalFilename
+      } 
+    }) =>
     {
       const fileNameWithoutExtension = getFileNameWithoutExtension(filename);
       const originalFilenameWithoutExtension = getFileNameWithoutExtension(originalFilename);
@@ -110,6 +121,7 @@ export const uploadsRouter = createTRPCRouter({
       }
 
       await db.insert(uploadsTable).values({
+        clientSideUuid,
         fileExtension,
         filename: fileNameWithoutExtension,
         originalFilename: originalFilenameWithoutExtension,
