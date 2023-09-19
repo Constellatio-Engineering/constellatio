@@ -12,18 +12,15 @@ import RichtextOverwrite from "@/components/organisms/FillGapsGame/RichtextOverw
 import { type IGenFillInGapsGame } from "@/services/graphql/__generated/sdk";
 import useCaseSolvingStore from "@/stores/caseSolving.store";
 import useFillGapsGameStore from "@/stores/fillGapsGame.store";
-import { type TextElement } from "types/richtext";
 
 import { Title } from "@mantine/core";
-import { distance } from "fastest-levenshtein";
 import {
   type FC,
   type ReactElement,
-  useRef,
   memo,
   useEffect,
-  useMemo,
   useCallback,
+  useMemo,
 } from "react";
 
 import {
@@ -41,33 +38,6 @@ IGenFillInGapsGame,
 "fillGameParagraph" | "helpNote" | "question" | "id"
 >;
 
-/* const countPlaceholders = (content: TextElement[]): number =>
-{
-  let count = 0;
-  const regex = /{{.*?}}/g;
-
-  content.forEach((item: TextElement) =>
-  {
-    switch (item.type) 
-    {
-      case "text":
-        if(item.text) 
-        {
-          const matches = item.text.match(regex) || [];
-          count += matches.length;
-        }
-        break;
-    }
-
-    if(item.content) 
-    {
-      count += countPlaceholders(item.content);
-    }
-  });
-
-  return count;
-};*/
-
 let FillGapsGame: FC<TFillGapsGame> = ({
   fillGameParagraph,
   helpNote,
@@ -75,7 +45,6 @@ let FillGapsGame: FC<TFillGapsGame> = ({
   question,
 }) => 
 {
-  // const totalPlaceholders = useMemo(() => countPlaceholders(fillGameParagraph?.richTextContent?.json?.content), [fillGameParagraph]);
   const { getNextGameIndex } = useCaseSolvingStore();
 
   const gameState = useFillGapsGameStore((s) => s.getGameState(id));
@@ -88,10 +57,7 @@ let FillGapsGame: FC<TFillGapsGame> = ({
     (s) => s.initializeNewGameState
   );
 
-  const updateAnswersResult = useFillGapsGameStore((s) => s.updateAnswersResult);
-
-  // const setGameSubmitted = useFillGapsGameStore((s) => s.setGameSubmitted);
-  // console.log(`gameState for game with ID '${id}'`, gameState);
+  const checkAnswers = useFillGapsGameStore((s) => s.checkAnswers);
 
   useEffect(() => 
   {
@@ -101,19 +67,45 @@ let FillGapsGame: FC<TFillGapsGame> = ({
     }
   }, [allGames, gameState, id, initializeNewGameState]);
 
+  const correctAnswersArr = useMemo(() => 
+  {
+    if(!gameState?.correctAnswers) 
+    {
+      return [];
+    }
+    return gameState.correctAnswers?.reduce<string[]>(
+      (acc, curr) => acc.concat(curr.correctAnswers),
+      []
+    );
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [gameState?.correctAnswers]);
+
+  const userEntriesArr = useMemo(() => 
+  {
+    if(!gameState?.userAnswers) 
+    {
+      return [];
+    }
+    return gameState.userAnswers.reduce<string[]>(
+      (acc, curr) => acc.concat(curr.answers),
+      []
+    );
+  }, [gameState?.userAnswers]);
+
   const richtextOverwrite = useCallback(
-    // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-    // @ts-ignore
-    (props): ReactElement => 
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    (props: any): ReactElement => 
     {
       return (
         <RichtextOverwrite
           id={id!}
           path={props.path}
           text={props?.children?.[0]?.props?.node.text}
+          correctAnswersArr={correctAnswersArr}
         />
       );
     },
+    // eslint-disable-next-line react-hooks/exhaustive-deps
     [id]
   );
 
@@ -123,52 +115,38 @@ let FillGapsGame: FC<TFillGapsGame> = ({
   }
 
   const {
-    allCorrect,
     answerResult,
-    correctAnswers,
     gameStatus,
     gameSubmitted,
     resultMessage,
-    userAnswers
   } = gameState ?? {};
-
-  console.log("answerResult", answerResult, "correctAnswers", correctAnswers, "gameStatus", gameStatus, "resultMessage", resultMessage, "userAnswers", userAnswers, "allCorrect", allCorrect);
 
   const handleCheckAnswers = (): void => 
   {
-    console.log("handleCheckAnswers");
-
-    updateAnswersResult({ gameId: id });
-    if(!gameSubmitted)
+    if(!gameSubmitted) 
     {
       updateGameState(id, { gameSubmitted: true });
       getNextGameIndex();
     }
 
-    updateGameState(id, { gameStatus: allCorrect ? "win" : "lose", resultMessage: allCorrect ? "Congrats! all answers are correct!" : "Some answers are incorrect. Please try again." });
+    const allCorrect = checkAnswers({ gameId: id });
 
-    if(allCorrect)
-    {
-      // all answers are correct
-      // setGameStatus("win");
-      // setResultMessage("Congrats! all answers are correct!");
-    }
-    else
-    {
-      // at least one answer is incorrect
-      // setGameStatus("lose");
-      // setResultMessage("Some answers are incorrect. Please try again.");
-    }
+    updateGameState(id, {
+      gameStatus: allCorrect ? "win" : "lose",
+      resultMessage: allCorrect
+        ? "Congrats! all answers are correct!"
+        : "Some answers are incorrect. Please try again.",
+    });
   };
 
   const handleResetGame = (): void => 
   {
-    console.log("handleResetGame");
-
-    /* setGameStatus("inprogress");
-    correctAnswers.current = [];
-    setUserAnswers(new Array(totalPlaceholders).fill(""));
-    setAnswerResult(new Array(totalPlaceholders).fill(""));*/
+    updateGameState(id, {
+      answerResult: [],
+      gameStatus: "inprogress",
+      resultMessage: "",
+      userAnswers: [],
+    });
   };
 
   return (
@@ -206,10 +184,17 @@ let FillGapsGame: FC<TFillGapsGame> = ({
         </Game>
         {gameStatus !== "inprogress" && (
           <>
-            <HintsAccordion items={correctAnswers.current}/>
+            <HintsAccordion items={correctAnswersArr}/>
             <ResultCard
-              droppedCorrectCards={answerResult.filter((item) => item === "correct").length ?? null}
-              totalCorrectCards={correctAnswers.current.length ?? null}
+              droppedCorrectCards={
+                answerResult
+                  .reduce<string[]>(
+                  (acc, curr) => acc.concat(curr.answersResult),
+                  []
+                )
+                  .filter((item) => item === "correct").length ?? null
+              }
+              totalCorrectCards={correctAnswersArr.length}
               variant={gameStatus}
               message={resultMessage}
             />
@@ -222,8 +207,10 @@ let FillGapsGame: FC<TFillGapsGame> = ({
             size="large"
             leftIcon={gameStatus === "inprogress" ? <Check/> : <Reload/>}
             onClick={gameStatus === "inprogress" ? handleCheckAnswers : handleResetGame}
-            /* disabled={gameStatus === "inprogress" && userAnswers.some((answer) => answer.trim() === "")}*/
-            disabled={false}>
+            disabled={
+              gameStatus === "inprogress" &&
+							userEntriesArr.length !== correctAnswersArr.length
+            }>
             {gameStatus === "inprogress" ? "Check my answers" : "Solve again"}
           </Button>
         </div>

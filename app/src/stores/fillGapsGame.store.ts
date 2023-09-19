@@ -1,7 +1,6 @@
 /* eslint-disable max-lines */
 import { type Nullable } from "@/utils/types";
 
-import { is } from "drizzle-orm";
 import { distance } from "fastest-levenshtein";
 import { create } from "zustand";
 import { immer } from "zustand/middleware/immer";
@@ -24,7 +23,6 @@ type AnswersResultPerParagraph = {
 };
 
 type FillGapsGameState = {
-  allCorrect: boolean;
   answerResult: AnswersResultPerParagraph[];
   correctAnswers: CorrectAnswersPerParagraph[];
   gameStatus: GameStatus;
@@ -34,20 +32,19 @@ type FillGapsGameState = {
   userAnswers: UserAnswersPerParagraph[];
 };
 
-type FillGapsGameStateUpdate = Partial<Pick<FillGapsGameState, "gameStatus" | "gameSubmitted" | "resultMessage" >>;
+type FillGapsGameStateUpdate = Partial<Pick<FillGapsGameState, "gameStatus" | "gameSubmitted" | "resultMessage" | "answerResult" | "userAnswers" >>;
 
 type FillGapsGameStore = {
+  checkAnswers: (params: { gameId: string }) => boolean;
   games: FillGapsGameState[];
   getGameState: (id: Nullable<string>) => FillGapsGameState | undefined;
   initializeNewGameState: (id: string) => void;
-  updateAnswersResult: (params: { gameId: string }) => void;
   updateCorrectAnswer: (params: { gameId: string; innerContent: string[]; path: string}) => void;
   updateGameState: (id: string, update: FillGapsGameStateUpdate) => void;
   updateUserAnswer: (params: { gameId: string; index: number; path: string; value: string}) => void;
 };
 
 const defaultFillGapsGameState: FillGapsGameState = {
-  allCorrect: true,
   answerResult: [],
   correctAnswers: [],
   gameStatus: "inprogress",
@@ -59,50 +56,7 @@ const defaultFillGapsGameState: FillGapsGameState = {
 
 const useFillGapsGameStore = create(
   immer<FillGapsGameStore>((set, get) => ({
-    games: [],
-    getGameState: (id) =>
-    {
-      const { games } = get();
-
-      if(id == null)
-      {
-        console.warn("id is null. cannot get game state");
-        return;
-      }
-
-      const game = games.find(game => game.id === id);
-
-      if(!game)
-      {
-        console.log("game not found");
-      }
-
-      return game;
-    },
-    initializeNewGameState: (id) =>
-    {
-      console.log("initializeNewGameState", id);
-
-      const existingGame = get().games.find(game => game.id === id);
-
-      if(existingGame)
-      {
-        console.info("game already exists. cannot initialize new game state");
-        return;
-      }
-
-      set((state) =>
-      {
-        state.games = state.games.concat({
-          ...defaultFillGapsGameState,
-          id,
-        });
-      });
-
-      console.log("new game state initialized successfully");
-    },
-
-    updateAnswersResult: ({ gameId }) => 
+    checkAnswers: ({ gameId }) => 
     {
       const { games } = get();
       const gameIndex = games.findIndex(game => game.id === gameId);
@@ -110,10 +64,11 @@ const useFillGapsGameStore = create(
       if(gameIndex === -1)
       {
         console.warn("game not found. cannot update answers result");
-        return;
+        return false;
       }
 
       const game = games[gameIndex]!;
+      let allCorrect = true;
       
       const answersResult = game.userAnswers.map((userAnswer) =>
       {
@@ -147,39 +102,72 @@ const useFillGapsGameStore = create(
                 isAnswerCorrect = true;
                 break;
               }
-              else 
-              {
-                // check for distance
-                const dist = distance(userAnswer, correctAnswer!);
-                if(dist <= 2)
-                {
-                  isAnswerCorrect = true;
-                  break;
-                }
-              }
-            }
-            if(isAnswerCorrect)
-            {
-              answersResult.answersResult[index] = "correct";
+              
             }
             else 
             {
-              answersResult.answersResult[index] = "incorrect";
-              set(state => 
+              // check for distance
+              const dist = distance(userAnswer, correctAnswer!);
+              if(dist <= 2)
               {
-                state.games[gameIndex]!.allCorrect = false;
+                isAnswerCorrect = true;
+                break;
               }
-              );
             }
           }
+          if(isAnswerCorrect)
+          {
+            answersResult.answersResult[index] = "correct";
+          }
+          else 
+          {
+            answersResult.answersResult[index] = "incorrect";
+            allCorrect = false;
+          }
+          
         });
         return answersResult;
       }).filter(Boolean) as AnswersResultPerParagraph[];
 
       set((state) =>
       {
-        console.log("answersResult at store", answersResult);
         state.games[gameIndex]!.answerResult = answersResult;
+      });
+
+      return allCorrect;
+    },
+    games: [],
+    getGameState: (id) =>
+    {
+      const { games } = get();
+
+      if(id == null)
+      {
+        console.warn("id is null. cannot get game state");
+        return;
+      }
+
+      const game = games.find(game => game.id === id);
+
+      return game;
+    },
+
+    initializeNewGameState: (id) =>
+    {
+
+      const existingGame = get().games.find(game => game.id === id);
+
+      if(existingGame)
+      {
+        return;
+      }
+
+      set((state) =>
+      {
+        state.games = state.games.concat({
+          ...defaultFillGapsGameState,
+          id,
+        });
       });
     },
 
@@ -191,7 +179,6 @@ const useFillGapsGameStore = create(
 
       if(gameIndex === -1)
       {
-        console.warn("game not found. cannot update correct answer");
         return;
       }
 
@@ -200,7 +187,6 @@ const useFillGapsGameStore = create(
 
       if(correctAnswersByPathIndex === -1)
       {
-        console.warn(`correct answers not found for path '${path}'. creating new correct answers`);
 
         set((state) =>
         {
@@ -225,8 +211,6 @@ const useFillGapsGameStore = create(
 
     updateGameState: (id, update) =>
     {
-      console.log("updateGameState", id, update);
-
       set((state) =>
       {
         const gameIndex = state.games.findIndex(game => game.id === id);
@@ -247,7 +231,6 @@ const useFillGapsGameStore = create(
           ...state.games[gameIndex]!,
           ...update
         };
-
         state.games[gameIndex] = newGame;
       });
     },
@@ -259,14 +242,11 @@ const useFillGapsGameStore = create(
       value
     }) =>
     {
-      // console.log("updateUserAnswer", gameId, path, index, value);
-
       const { games } = get();
       const gameIndex = games.findIndex(game => game.id === gameId);
 
       if(gameIndex === -1)
       {
-        console.warn("game not found. cannot update user answer");
         return;
       }
 
@@ -275,8 +255,6 @@ const useFillGapsGameStore = create(
 
       if(answersByPathIndex === -1)
       {
-        console.warn(`answers not found for path '${path}'. creating new answers`);
-
         set((state) =>
         {
           const newAnswers: UserAnswersPerParagraph = {
