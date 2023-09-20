@@ -147,9 +147,7 @@ const PersonalSpacePage: FunctionComponent = () =>
 
   return (
     <div css={styles.wrapper}>
-      {/* <h1 style={{ fontSize: 40, marginBottom: 30 }}>Personal Space</h1> */}
       <div css={styles.header}>
-        {/* <Title order={2}>Personal Space</Title> */}
         <OverviewHeader
           title="Personal Space"
           variant="red"
