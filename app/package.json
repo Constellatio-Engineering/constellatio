@@ -6,7 +6,6 @@
     "separatorDev": "---------------------- DEVELOPMENT ----------------------",
     "dev": "next dev -p 3010",
     "dev-with-migrations": "node -r dotenv-flow/config ci/apply-db-migrations.mjs && pnpm dev",
-    "seed-meilisearch": "node -r dotenv-flow/config seed-meilisearch.js",
     "sepatatorLint": "---------------------- LINT ----------------------",
     "check-types": "tsc --noEmit",
     "eslint": "eslint --ext .js,.jsx,.ts,.tsx src",
