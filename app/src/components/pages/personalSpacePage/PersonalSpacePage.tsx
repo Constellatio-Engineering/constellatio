@@ -19,7 +19,7 @@ type FileWithClientSideUuid = {
 
 const PersonalSpacePage: FunctionComponent = () =>
 {
-  const ctx = api.useContext();
+  const apiContext = api.useContext();
   const { data: allCases = [], isLoading: areCasesLoading } = api.caisy.getAllCases.useQuery();
   const { data: bookmarks = [], isLoading: areBookmarksLoading } = api.bookmarks.getAllBookmarks.useQuery();
   const { data: uploadedFiles = [], isLoading: isGetUploadedFilesLoading } = api.uploads.getUploadedFiles.useQuery();
@@ -32,7 +32,7 @@ const PersonalSpacePage: FunctionComponent = () =>
 
   const { mutate: removeBookmark } = api.bookmarks.removeBookmark.useMutation({
     onError: e => console.log("error while removing bookmark:", e),
-    onSuccess: async () => ctx.bookmarks.getAllBookmarks.invalidate(),
+    onSuccess: async () => apiContext.bookmarks.getAllBookmarks.invalidate(),
   });
 
   const { mutateAsync: createSignedUploadUrl } = api.uploads.createSignedUploadUrl.useMutation();
@@ -114,7 +114,7 @@ const PersonalSpacePage: FunctionComponent = () =>
       try
       {
         await uploadFile(file, clientSideUuid);
-        await ctx.uploads.getUploadedFiles.invalidate();
+        await apiContext.uploads.getUploadedFiles.invalidate();
       }
       catch (e: unknown)
       {

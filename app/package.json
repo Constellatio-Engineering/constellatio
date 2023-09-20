@@ -89,6 +89,7 @@
     "i18next": "^23.4.6",
     "immer": "^10.0.2",
     "jotai": "^2.3.1",
+    "meilisearch": "^0.34.2",
     "next": "13.4.19",
     "next-i18next": "^14.0.0",
     "postgres": "3.3.5",

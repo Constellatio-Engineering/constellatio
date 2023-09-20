@@ -1,8 +1,12 @@
 import MenuTab from "@/components/atoms/menuTab/MenuTab";
 import SearchFieldSmall from "@/components/molecules/searchFieldSmall/SearchFieldSmall";
+import { env } from "@/env.mjs";
 
+import { Loader } from "@mantine/core";
 import { useMantineTheme } from "@mantine/styles";
 import { IconFolder } from "@tabler/icons-react";
+import { useMutation } from "@tanstack/react-query";
+import axios, { AxiosError } from "axios";
 import Image from "next/image";
 import Link from "next/link";
 import { useRouter } from "next/router";
@@ -23,6 +27,11 @@ export const Header: FC<HeaderProps> = ({ variant = "default" }) =>
   const theme = useMantineTheme();
   const links = ["CASES", "DICTIONARY"];
   const { pathname } = useRouter();
+  const { isLoading: isRecreatingSearchIndices, mutate: recreateSearchIndices } = useMutation({
+    mutationFn: async () => axios.post("/api/search/recreate-search-indices"),
+    onError: (e: unknown) => console.log("error while recreating search indices", e instanceof AxiosError ? e.response?.data : e),
+    onSuccess: () => console.log("successfully recreated search indices"),
+  });
 
   return variant === "simple" ? (
     <SHeader>
@@ -50,10 +59,24 @@ export const Header: FC<HeaderProps> = ({ variant = "default" }) =>
           }
         </div>
         <div css={styles.profileArea}>
+          {env.NEXT_PUBLIC_NODE_ENV === "development" && (
+            <div style={{ alignItems: "center", display: "flex" }}>
+              <button
+                disabled={isRecreatingSearchIndices}
+                type="button"
+                onClick={() => recreateSearchIndices()}
+                style={{ marginRight: 10 }}>
+                Recreate Search Indices
+              </button>
+              {isRecreatingSearchIndices && <Loader size={22}/>}
+            </div>
+          )}
           <div className="search-input"><SearchFieldSmall/></div>
           <Link href="personal-space"><MenuTab title="Persoanl Space" icon={<IconFolder/>}/></Link>
           <span className="vertical-line">s</span>
-          <UserDropdown/>
+          <div>
+            <UserDropdown/>
+          </div>
         </div>
       </div>
     </SHeader>

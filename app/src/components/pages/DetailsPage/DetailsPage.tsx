@@ -47,7 +47,6 @@ const DetailsPage: FunctionComponent<IDetailsPageProps> = ({ content, variant })
           topic: content?.topic?.[0]?.topicName ?? "",
           variant,
           views: 0,
-
         }}
       />
       <CaseNavBar

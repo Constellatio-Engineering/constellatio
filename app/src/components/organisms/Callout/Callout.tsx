@@ -15,7 +15,7 @@ export type CalloutProps = IGenCallout;
 export const Callout: FC<CalloutProps> = ({ calloutType, expandable, text }) => 
 {
   const [isContentHide, setIsContentHide] = React.useState<boolean>(true);
-  console.log(text);
+
   const ShowAllBtn = (
     <Button<"a">
       component="a"

@@ -16,7 +16,7 @@ interface ICaseBlockBookmarkButtonProps
 
 const CaseBlockBookmarkButton: FunctionComponent<ICaseBlockBookmarkButtonProps> = ({ areAllBookmarksLoading, caseId, isBookmarked }) =>
 {
-  const ctx = api.useContext();
+  const apiContext = api.useContext();
 
   /**
    * Could add optimistic updates here later
@@ -24,7 +24,7 @@ const CaseBlockBookmarkButton: FunctionComponent<ICaseBlockBookmarkButtonProps> 
 
   const onBookmarkAddedOrRemoved = async (): Promise<void> =>
   {
-    await ctx.bookmarks.getAllBookmarks.invalidate();
+    await apiContext.bookmarks.getAllBookmarks.invalidate();
   };
 
   const onError = (e: unknown, type: "add" | "remove"): void =>
