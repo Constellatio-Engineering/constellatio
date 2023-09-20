@@ -26,7 +26,7 @@ border-radius: 12px;
     margin-right: 16px;
     width: 40px;
     height: 40px;
-    background-color: ${variant === "case" ? theme.colors["neutrals-02"][1] : variant === "dictionary" ? theme.colors["brand-02"][1] : variant === "red" ? theme.colors["neutrals-02"][0] : "blue"};
+    background-color: ${variant === "case" ? theme.colors["neutrals-02"][1] : variant === "dictionary" ? theme.colors["neutrals-02"][1] : variant === "red" ? theme.colors["neutrals-02"][0] : "blue"};
     color: white;
     display: grid;
     place-items:   center;
