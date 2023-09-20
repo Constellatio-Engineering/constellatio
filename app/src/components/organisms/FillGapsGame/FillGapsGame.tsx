@@ -96,11 +96,22 @@ let FillGapsGame: FC<TFillGapsGame> = ({
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
     (props: any): ReactElement => 
     {
+      const textArr: string[] = [];
+
+      if(props.node?.content?.length < 0) { return <div/>; }
+
+      for(const el of props.node.content) 
+      {
+        textArr.push(el.text);
+      }
+      
+      const text = textArr?.join(" ");
+
       return (
         <RichtextOverwrite
           id={id!}
           path={props.path}
-          text={props?.children?.[0]?.props?.node.text}
+          text={text}
           correctAnswersArr={correctAnswersArr}
         />
       );

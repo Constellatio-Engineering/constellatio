@@ -39,12 +39,12 @@ let RichtextOverwrite: FC<TRichtextOverwrite> = ({
   } = gameState;
 
   // Splitting the text based on {{...}} pattern using regex
-  const parts = useMemo(() => text.split(/({{.*?}})/), [text]);
+  const parts = useMemo(() => text?.split(/({{.*?}})/), [text]);
   const innerContent = useMemo(
     () =>
       parts
-        .filter((part) => part.startsWith("{{") && part.endsWith("}}"))
-        .map((part) => part.slice(2, -2)),
+        ?.filter((part) => part.startsWith("{{") && part.endsWith("}}"))
+        .map((part) => part?.slice(2, -2)),
     [parts]
   );
 
@@ -61,7 +61,7 @@ let RichtextOverwrite: FC<TRichtextOverwrite> = ({
 
   useEffect(() => 
   {
-    if(innerContent.length > 0) 
+    if(innerContent?.length > 0) 
     {
       updateCorrectAnswers({
         gameId: id,
@@ -73,7 +73,7 @@ let RichtextOverwrite: FC<TRichtextOverwrite> = ({
 
   return (
     <div className="richtextOverwrite">
-      {parts.map((part, index) => 
+      {parts?.map((part, index) => 
       {
         if(part.startsWith("{{") && part.endsWith("}}")) 
         {
