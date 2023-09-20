@@ -1,5 +1,6 @@
 /* eslint-disable max-lines */
 import { Button } from "@/components/atoms/Button/Button";
+import OverviewHeader from "@/components/organisms/OverviewHeader/OverviewHeader";
 import DummyFileViewer from "@/components/pages/personalSpacePage/dummyFileViewer/DummyFileViewer";
 import uploadsProgressStore from "@/stores/uploadsProgress.store";
 import { api } from "@/utils/api";
@@ -11,6 +12,8 @@ import axios from "axios";
 import React, { type FormEvent, type FunctionComponent, useState } from "react";
 
 import * as styles from "./PersonalSpacePage.styles";
+import BookmarkIconSvg from "../../../../public/images/icons/bookmark.svg";
+import FileIconSvg from "../../../../public/images/icons/file.svg";
 
 type FileWithClientSideUuid = {
   clientSideUuid: string;
@@ -144,7 +147,32 @@ const PersonalSpacePage: FunctionComponent = () =>
 
   return (
     <div css={styles.wrapper}>
-      <h1 style={{ fontSize: 40, marginBottom: 30 }}>Personal Space</h1>
+      {/* <h1 style={{ fontSize: 40, marginBottom: 30 }}>Personal Space</h1> */}
+      <div css={styles.header}>
+        {/* <Title order={2}>Personal Space</Title> */}
+        <OverviewHeader
+          title="Personal Space"
+          variant="red"
+          categories={[{
+            casesPerCategory: bookmarkedCases?.length ?? 0,
+            icon: {
+              src: BookmarkIconSvg.src,
+              title: "civil-law-category-icon"
+            },
+            id: "60d46218-087c-4170-9edc-246cc1bffcdf",
+            mainCategory: "Favourites"
+          }, {
+            casesPerCategory: 999,
+            icon: {
+              src: FileIconSvg.src,
+              title: "civil-law-category-icon"
+            },
+            id: "60d46218-087c-4170-9edc-246cc1bffcdf",
+            mainCategory: "Materials"
+          }]}
+          setSelectedCategoryId={() => {}}
+        />
+      </div>
       <p style={{ fontSize: 26, marginBottom: 10 }}><strong>Your bookmarked cases:</strong></p>
       {(areBookmarksLoading || areCasesLoading) ? (
         <p>Loading...</p>
