@@ -1,12 +1,20 @@
 import { css } from "@emotion/react";
 import { type MantineTheme } from "@mantine/styles";
 
-export const wrapper = (theme: MantineTheme) => css`
+import { type } from "os";
+
+type ICategoryTabStyleProps =
+    {
+      theme: MantineTheme;
+      variant?: "case" | "dictionary" | "red";
+    };
+
+export const wrapper = ({ theme, variant }: ICategoryTabStyleProps) => css`
 outline: 0;
 border: 0;
 
-background-color: transparent;
-color: #000;
+background-color: ${variant === "case" ? "transparent" : variant === "dictionary" ? "transparent" : variant === "red" ? theme.colors["neutrals-02"][1] : "transparent"};
+color: ${variant === "case" ? theme.colors["neutrals-02"][1] : variant === "dictionary" ? theme.colors["neutrals-02"][1] : variant === "red" ? theme.colors["neutrals-01"][0] : theme.colors["neutrals-02"][1]};
 /* progressive/body/body-01@medium */
 display: flex;
 justify-content: space-between;
@@ -18,7 +26,7 @@ border-radius: 12px;
     margin-right: 16px;
     width: 40px;
     height: 40px;
-    background-color: #000;
+    background-color: ${variant === "case" ? theme.colors["neutrals-02"][1] : variant === "dictionary" ? theme.colors["brand-02"][1] : variant === "red" ? theme.colors["neutrals-02"][0] : "blue"};
     color: white;
     display: grid;
     place-items:   center;
@@ -34,7 +42,12 @@ border-radius: 12px;
     line-height: 24px; /* 150% */
 }
 &:hover{
-    background-color: #F6F6F5;
+    background-color: ${theme.colors["neutrals-01"][1]};
+border-radius: 12px;
+    color: ${theme.colors["neutrals-02"][1]};
+    .icon{
+        background-color: ${theme.colors["neutrals-02"][1]};
+    }
 }
 &:active{
     background-color: #F0F0F0;

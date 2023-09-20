@@ -3,7 +3,7 @@ import { type MantineTheme } from "@mantine/styles";
 
 export const contentHeader = ({ theme, variant }: {
   theme: MantineTheme;
-  variant: "case" | "dictionary";
+  variant: "case" | "dictionary" | "red";
 }) => css`
   position: relative;
   max-width: 100%;
@@ -14,7 +14,7 @@ export const contentHeader = ({ theme, variant }: {
   gap: 32px;
   /* min-height: 50vh; */
   height: 680px;
-  background: ${variant === "case" ? theme.colors["cc-cases"][2] : theme.colors["cc-dictionary"][2]};
+  background: ${variant === "case" ? theme.colors["cc-cases"][2] : variant === "dictionary" ? theme.colors["cc-dictionary"][2] : variant === "red" && theme.colors["brand-01"][4]} url("/images/overview-header-bg.svg") no-repeat center center;
 #overlay-lines{
   position: absolute;
   inset: 0;
@@ -23,7 +23,7 @@ export const contentHeader = ({ theme, variant }: {
   display: grid;
   place-items: center;
   z-index: 2;
-  color: ${variant === "case" ? theme.colors["cc-cases"][2] : theme.colors["cc-dictionary"][2]};
+  color: ${variant === "case" ? theme.colors["cc-cases"][2] : variant === "dictionary" ? theme.colors["cc-dictionary"][2] : variant === "red" && theme.colors["brand-01"][4]};
   svg{
     height: 100%;
   }
@@ -97,7 +97,11 @@ export const selectedFiltersArea = css`
   flex-wrap: wrap;    position: relative;
     z-index: 3;
 `;
-export const title = css`
+export const title = ({ theme, variant }: {
+  theme: MantineTheme;
+  variant: "case" | "dictionary" | "red";
+}) => css`
     position: relative;
     z-index: 3;
+    color:${variant === "red" ? theme.colors["neutrals-01"][0] : theme.colors["neutrals-02"][1]};
 `;

@@ -20,7 +20,7 @@ export interface ICasesOverviewHeaderProps
   readonly selectedCategoryId?: string;
   readonly setSelectedCategoryId: (id: string) => void;
   readonly title?: Maybe<Scalars["String"]["output"]>;
-  readonly variant: "case" | "dictionary";
+  readonly variant: "case" | "dictionary" | "red";
 }
 
 const OverviewHeader: FunctionComponent<ICasesOverviewHeaderProps> = ({
@@ -40,16 +40,21 @@ const OverviewHeader: FunctionComponent<ICasesOverviewHeaderProps> = ({
       <div id="overlay-lines">
         <OverlayLines/>
       </div>
-      <Title order={1} css={styles.title}>{title}</Title>
+      <Title order={1} css={styles.title({ theme, variant })}>{title}</Title>
       <div css={styles.categoriesButtons}>
         {categories?.map((category, index: number) => category?.id && (
           <div key={index} onClick={() => setSelectedCategoryId(`${category?.id}`)}>
-            <CategoryTab {...category} itemsNumber={category?.casesPerCategory} selected={category?.id === selectedCategoryId}/>
+            <CategoryTab
+              {...category}
+              itemsNumber={category?.casesPerCategory}
+              selected={category?.id === selectedCategoryId}
+              variant={variant}
+            />
           </div>
         ))}
       </div>
       <div css={styles.filtersArea}>
-        <FiltersButton title="Filters"/>
+        {filters.length > 0 && <FiltersButton title="Filters"/>}
         {/* this can be a helper or a provider with global state passed to the cases list for filters */}
         {filters.length > 0 && (
           <>

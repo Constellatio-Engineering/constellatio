@@ -25,6 +25,7 @@ interface IOverviewPageProps
 
 const OverviewPage: FunctionComponent<IOverviewPageProps> = ({ content, variant }) => 
 {
+  console.log("categories[0]", content?.allMainCategories);
 
   const [selectedCategoryId, setSelectedCategoryId] = useState<string>(
     content?.allMainCategories?.[0]?.id ?? ""
