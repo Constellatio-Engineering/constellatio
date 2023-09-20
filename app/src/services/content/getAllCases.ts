@@ -13,8 +13,6 @@ type GetAllCasesProps = {
 
 const getAllCases = async (props?: GetAllCasesProps): Promise<allCases> =>
 {
-  // console.log("getAllCases", props?.after);
-
   const after = props?.after;
   let allCases = props?.allCases || [];
 
@@ -30,17 +28,16 @@ const getAllCases = async (props?: GetAllCasesProps): Promise<allCases> =>
       }
     });
 
-    // console.log("fetched cases", allCase?.edges?.map(e => e?.node?.title));
-    // console.log("has next page", allCase?.pageInfo?.hasNextPage);
-
     if(allCase?.pageInfo?.hasNextPage) 
     {
       return await getAllCases({
         after: allCase.pageInfo.endCursor!,
+        allCases
       });
     }
     return allCases;
   }
+
   catch (error) 
   {
     console.error("error at getting all Cases", error);

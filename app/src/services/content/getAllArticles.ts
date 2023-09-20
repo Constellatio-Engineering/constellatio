@@ -1,16 +1,21 @@
 /* eslint-disable @typescript-eslint/naming-convention */
-import { type IGenArticleOverviewFragment, type IGenCaseOverviewFragment } from "../graphql/__generated/sdk";
+import { type IGenArticleOverviewFragment } from "../graphql/__generated/sdk";
 import { caisySDK } from "../graphql/getSdk";
 
-export type allArticles = IGenArticleOverviewFragment[] & {
+export type allArticles = Array<IGenArticleOverviewFragment & {
   __typename?: "Article" | undefined;
-};
+}>;
 
-const getAllArticles = async ({ after, allArticles = [] }: {
+type GetAllArticlesProps = {
   after?: string;
   allArticles?: allArticles;
-}): Promise<allArticles> => 
+};
+
+const getAllArticles = async (props?: GetAllArticlesProps): Promise<allArticles> => 
 {
+  const after = props?.after;
+  let allArticles = props?.allArticles || [];
+
   try 
   {
     const { allArticle } = await caisySDK.getAllArticleOverview({ after });
@@ -27,13 +32,15 @@ const getAllArticles = async ({ after, allArticles = [] }: {
     {
       return await getAllArticles({
         after: allArticle.pageInfo.endCursor!,
+        allArticles
       });
     }
     return allArticles;
   }
+
   catch (error) 
   {
-    console.error("error at getting all Cases", error);
+    console.error("error at getting all Articles", error);
     throw error;
   }
 };
