@@ -1,14 +1,18 @@
+import { type Upload } from "@/db/schema";
 import {
   type IGenCase, type IGenLegalArea, type IGenMainCategory, type IGenSubCategory, type IGenTags 
 } from "@/services/graphql/__generated/sdk";
 import {
   type DotSeparatedKeys,
-  type Nullable, type NullableProperties, type RemoveUndefined
+  type Nullable, type NullableProperties, type RemoveUndefined, type Values
 } from "@/utils/types";
 
 export const searchIndices = {
   cases: "cases",
-};
+  userUploads: "user-uploads",
+} as const;
+
+export type SearchIndex = Values<typeof searchIndices>;
 
 type CaseSearchIndexItemContent = {
   id: string;
@@ -61,4 +65,12 @@ export const createCaseSearchIndexItem = (fullCase: IGenCase): CaseSearchIndexIt
   };
 
   return caseSearchIndexItem;
+};
+
+export type UploadSearchIndexItem = Pick<Upload, "uuid" | "originalFilename" | "userId">;
+export type UploadSearchItemNodes = RemoveUndefined<DotSeparatedKeys<UploadSearchIndexItem>>;
+
+export const createUploadsSearchIndexItem = ({ originalFilename, userId, uuid }: Upload): UploadSearchIndexItem =>
+{
+  return ({ originalFilename, userId, uuid });
 };

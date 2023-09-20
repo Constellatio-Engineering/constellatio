@@ -36,6 +36,7 @@ export const env = createEnv({
     NEXT_PUBLIC_MAXIMUM_FILE_UPLOAD_SIZE_IN_MB: z.string().pipe(z.coerce.number().int().min(1).max(999)),
     NEXT_PUBLIC_NODE_ENV: nodeEnvEnum,
     NEXT_PUBLIC_MEILISEARCH_PUBLIC_URL: z.string().url(),
+    NEXT_PUBLIC_MEILISEARCH_TENANT_TOKEN_EXPIRATION_TIME_MS: z.string().pipe(z.coerce.number().int().min(10_000)),
   },
 
   /**
@@ -62,6 +63,7 @@ export const env = createEnv({
     NEXT_PUBLIC_MEILISEARCH_PUBLIC_URL: process.env.NEXT_PUBLIC_MEILISEARCH_PUBLIC_URL,
     MEILISEARCH_HOST_URL: process.env.MEILISEARCH_HOST_URL,
     MEILISEARCH_MASTER_API_KEY: process.env.MEILISEARCH_MASTER_API_KEY,
+    NEXT_PUBLIC_MEILISEARCH_TENANT_TOKEN_EXPIRATION_TIME_MS: process.env.NEXT_PUBLIC_MEILISEARCH_TENANT_TOKEN_EXPIRATION_TIME_MS,
   },
   /**
    * Run `build` or `dev` with `SKIP_ENV_VALIDATION` to skip env validation.

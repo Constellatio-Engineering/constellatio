@@ -3,6 +3,8 @@
 import { type CSSObject, type MantineTheme } from "@mantine/core";
 import { type ComponentType } from "react";
 
+export type Values<T> = T[keyof T];
+
 export type Nullable<T> = T | null | undefined;
 
 export type NullableProperties<T> = {

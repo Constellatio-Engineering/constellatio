@@ -1,5 +1,5 @@
 /* eslint-disable sort-keys-fix/sort-keys-fix */
-import { type InferInsertModel } from "drizzle-orm";
+import { type InferInsertModel, type InferSelectModel } from "drizzle-orm";
 import {
   text, pgTable, integer, pgEnum, uuid, serial, smallint, unique, timestamp
 } from "drizzle-orm/pg-core";
@@ -52,3 +52,4 @@ export const uploadsTable = pgTable("uploads", {
 });
 
 export type UploadInsert = InferInsertModel<typeof uploadsTable>;
+export type Upload = InferSelectModel<typeof uploadsTable>;
