@@ -39,10 +39,15 @@ import {
 
 export type TDragDropGame = Pick<
 IGenDragNDropGame,
-"game" | "helpNote" | "question"
+"game" | "helpNote" | "question" | "id"
 >;
 
-export const DragDropGame: FC<TDragDropGame> = ({ game, helpNote, question }) => 
+export const DragDropGame: FC<TDragDropGame> = ({
+  game,
+  helpNote,
+  id,
+  question
+}) => 
 {
   const {
     activeId,
@@ -197,10 +202,10 @@ export const DragDropGame: FC<TDragDropGame> = ({ game, helpNote, question }) =>
           <Game>
             <Options>
               <LoadingOverlay
-                visible={optionsItems.length < 1}
+                visible={optionsItems?.length < 1}
                 radius="radius-12"
               />
-              {optionsItems.map((option) =>
+              {optionsItems?.map((option) =>
                 gameStatus === "inprogress" ? (
                   <Draggable key={option.id} id={option.id}>
                     <DragNDropCard label={option.label} status="default"/>
@@ -223,7 +228,7 @@ export const DragDropGame: FC<TDragDropGame> = ({ game, helpNote, question }) =>
                 }}>
                 {activeId && (
                   <DragNDropCard
-                    label={optionsItems.find((item) => item.id === activeId)?.label}
+                    label={optionsItems?.find((item) => item.id === activeId)?.label}
                     id={activeId}
                     status="default"
                   />
@@ -231,7 +236,7 @@ export const DragDropGame: FC<TDragDropGame> = ({ game, helpNote, question }) =>
               </DragOverlay>
             </Options>
             <Droppable>
-              {droppedItems.length < 1 ? (
+              {droppedItems?.length < 1 ? (
                 activeId ? (
                   <GhostDropCard/>
                 ) : (
@@ -246,7 +251,7 @@ export const DragDropGame: FC<TDragDropGame> = ({ game, helpNote, question }) =>
                   </EmptyPlaceholder>
                 )
               ) : (
-                droppedItems.map((item) => 
+                droppedItems?.map((item) => 
                 {
                   return gameStatus === "inprogress" ? (
                     <DragNDropCard
@@ -279,7 +284,7 @@ export const DragDropGame: FC<TDragDropGame> = ({ game, helpNote, question }) =>
         {gameStatus !== "inprogress" && (
           <>
             <ResultCard
-              droppedCorrectCards={droppedItems.filter((item) => item.correctAnswer).length ?? null}
+              droppedCorrectCards={droppedItems?.filter((item) => item.correctAnswer).length ?? null}
               totalCorrectCards={
                 originalOptions.filter((item) => item.correctAnswer).length ??
 								null
