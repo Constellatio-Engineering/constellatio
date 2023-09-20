@@ -29,7 +29,7 @@
     "drop-migration": "drizzle-kit drop",
     "separatorGenerate": "---------------------- GENERATE ----------------------",
     "gen": "graphql-codegen -r dotenv/config --config codegen.ts",
-    "gen:watch": "graphql-codegen --watch --config codegen.ts",
+    "gen:watch": "graphql-codegen --watch -r dotenv/config --config codegen.ts",
     "supabase:typegen": "npx supabase gen types typescript --project-id kzrdtppwdumjscxldnwo --schema public > src/lib/database.types.ts",
     "separatorStorybook": "---------------------- Storybook ----------------------",
     "storybook": "storybook dev -p 6006",
