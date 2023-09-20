@@ -27,18 +27,21 @@ export const AuthPage: FC<AuthPageProps> = ({ tab }) =>
       justify="space-between"
       bg="brand-01.5"
       sx={{ height: "100vh", minHeight: 600, overflow: "hidden" }}>
-      <RegistrationVisualHeader/>
+      {/* <RegistrationVisualHeader/> */}
       <Container
         w="100%"
         pt={20}
         sx={(theme) => ({
           backgroundColor: theme.colors["neutrals-01"][0],
           borderRadius: `${theme.radius["radius-16"]} 0 0 ${theme.radius["radius-16"]}`,
-          overflowY: "scroll",
+          overflowY: "auto",
           padding: 0,
         })}>
         <Header variant="simple"/>
-        <Container w={500} pt={50} pb={tab === "register" ? "spacing-100" : 0}>
+        <Container
+          w={500}
+          pt={50}
+          pb={tab === "register" ? "spacing-100" : 0}>
           <Switcher
             size="big"
             value={tab}

@@ -12,7 +12,7 @@ export const RegistrationVisualHeader: FunctionComponent = () =>
       bg="brand-01.5"
       sx={() => ({
         height: "100%",
-        overflow: "scroll",
+        overflow: "hidden",
         padding: 0,
       })}>
       <Flex
