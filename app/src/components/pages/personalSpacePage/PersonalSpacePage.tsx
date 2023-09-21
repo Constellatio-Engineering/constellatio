@@ -177,7 +177,7 @@ const PersonalSpacePage: FunctionComponent = () =>
 
   const areUploadsInProgress = uploads.some(u => u.state.type === "uploading");
   
-  const favoriteCategoryNavTabs = [{ id: "0", itemsPerTab: 999, title: "gg" }, { id: "1", itemsPerTab: 999, title: "ez" }, { id: "2", itemsPerTab: 999, title: "tutorial" }];
+  const favoriteCategoryNavTabs = [{ id: "0", itemsPerTab: bookmarkedCases?.length ?? 0, title: "CASES" }, { id: "1", itemsPerTab: 999, title: "DICTIONARY" }, { id: "2", itemsPerTab: 999, title: "FORUM" }, { id: "3", itemsPerTab: 999, title: "HIGHLIGHTS" }];
   const [selectedTabId, setSelectedTabId] = useState<string>(favoriteCategoryNavTabs?.[0]?.id as string);
 
   return (
@@ -192,9 +192,6 @@ const PersonalSpacePage: FunctionComponent = () =>
         />
       </div>
       {isFlavoriteTab(selectedCategoryId ?? "") && <PersonalSpaceNavBar setSelectedTabId={setSelectedTabId} selectedTabId={selectedTabId} tabs={favoriteCategoryNavTabs}/>}
-      <br/><br/>
-      <hr/>
-      <br/><br/>
       <p style={{ fontSize: 26, marginBottom: 10 }}><strong>Your bookmarked cases:</strong></p>
       {(areBookmarksLoading || areCasesLoading) ? (
         <p>Loading...</p>
