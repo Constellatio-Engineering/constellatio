@@ -5,6 +5,8 @@
  * We also create a few inference helpers for input and output types.
  */
 import { type AppRouter } from "@/server/api/root";
+import { supabase } from "@/supabase/client";
+import { type ClientError } from "@/utils/clientError";
 
 import { QueryCache } from "@tanstack/react-query";
 import { httpBatchLink, TRPCClientError } from "@trpc/client";
@@ -53,13 +55,21 @@ export const api = createTRPCNext<AppRouter>({
               return;
             }
 
-            if(err.message === "UNAUTHORIZED")
+            const clientError = err.data.clientError as ClientError;
+
+            if(!clientError)
             {
-              console.log("Server responded with 'UNAUTHORIZED'. Redirecting to login");
-              return window.location.replace("/login");
+              console.warn("'clientError' not found in server response. Error was TRPCClientError: ", err);
+              return;
             }
 
-            console.error("TRPCClientError: ", err);
+            if(clientError.identifier === "unauthorized")
+            {
+              console.log("Server responded with 'UNAUTHORIZED'. Redirecting to login");
+              window.location.replace("/login");
+              void supabase.auth.signOut();
+              return;
+            }
           },
         }),
       },

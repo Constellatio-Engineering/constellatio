@@ -1,4 +1,4 @@
-type ClientErrorIdentifiers = "email-already-taken" | "internal-server-error";
+type ClientErrorIdentifiers = "email-already-taken" | "internal-server-error" | "unauthorized";
 
 interface ClientErrorShape
 {
@@ -12,16 +12,16 @@ type ClientErrors = {
 
 export const clientErrors: ClientErrors = {
   "email-already-taken": {
-    details: {
-      message: "Diese E-Mail Adresse wird bereits verwendet",
-    },
+    details: { message: "Diese E-Mail Adresse wird bereits verwendet" },
     identifier: "email-already-taken"
   },
   "internal-server-error": {
-    details: {
-      message: "Diese E-Mail Adresse wird bereits verwendet",
-    },
+    details: { message: "Diese E-Mail Adresse wird bereits verwendet" },
     identifier: "internal-server-error"
+  },
+  unauthorized: {
+    details: { message: "Du bist nicht angemeldet" },
+    identifier: "unauthorized"
   }
 } as const;
 
