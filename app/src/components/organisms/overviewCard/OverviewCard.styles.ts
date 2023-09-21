@@ -81,6 +81,18 @@ export const row = ({ tableTheme, theme }: IOverviewCardStyles): SerializedStyle
             text-align: right;
         }
     }
+    .tags-values{
+      display: flex;
+      flex-wrap: nowrap;
+      flex-direction: row;
+      justify-content: flex-start;
+      align-items: center;
+      overflow-x: auto;
+      &::-webkit-scrollbar{
+        display: none;
+      }
+      padding-bottom: 16px;
+    }
     &:last-child{
         border-bottom: none;
     }

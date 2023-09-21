@@ -6,4 +6,5 @@ export const tag = (theme: MantineTheme) => css`
     background: ${theme.colors["neutrals-01"][2]};
     border-radius:40px;
     display: inline-block;
+    white-space: nowrap;
 `;

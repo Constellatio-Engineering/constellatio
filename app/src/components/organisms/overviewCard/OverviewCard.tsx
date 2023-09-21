@@ -9,7 +9,7 @@ import { Timer } from "@/components/Icons/timer";
 import { Trash } from "@/components/Icons/Trash";
 import { type IGenSubCategory, type IGenLegalArea, type IGenTags } from "@/services/graphql/__generated/sdk";
 
-import { useMantineTheme } from "@mantine/core";
+import { ScrollArea, useMantineTheme } from "@mantine/core";
 import { type Maybe } from "@trpc/server";
 import React, { type FunctionComponent } from "react";
 
@@ -137,13 +137,14 @@ const OverviewCard: FunctionComponent<IOverviewCard> = ({
           <div className="row-title">
             <CaptionText styleType="caption-01-medium" component="p">TAGS</CaptionText>
           </div>
-          <div className="row-value">
-            {
-              tags?.map((tag, tagIndex) => (
-                <Tag key={tagIndex}>{tag?.tagName}</Tag>
-              ))
-            }
-          </div>
+          <ScrollArea>
+            <div className="row-value tags-values">
+              {tags &&
+                [...tags, ...tags, ...tags]?.map((tag, tagIndex) => (
+                  <Tag key={tagIndex}>{tag?.tagName}</Tag>
+                ))}
+            </div>
+          </ScrollArea>
         </div>
         {
           variant === "case" && (
