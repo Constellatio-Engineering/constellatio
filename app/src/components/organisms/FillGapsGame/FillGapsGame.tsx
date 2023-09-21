@@ -45,7 +45,7 @@ let FillGapsGame: FC<TFillGapsGame> = ({
   question,
 }) => 
 {
-  const { getNextGameIndex } = useCaseSolvingStore();
+  const getNextGameIndex = useCaseSolvingStore((s) => s.getNextGameIndex);
 
   const gameState = useFillGapsGameStore((s) => s.getGameState(id));
 

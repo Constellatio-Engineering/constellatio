@@ -34,17 +34,17 @@ IGenCardSelectionGame,
 
 export const SelectionCardGame: FC<SelectionCardGameProps> = ({ game, helpNote, question }) => 
 {
-  const {
-    gameStatus,
-    gameSubmitted,
-    onOptionCheck,
-    optionsItems,
-    resultMessage,
-    setGameStatus,
-    setGameSubmitted,
-    setOptionsItems,
-    setResultMessage,
-  } = useSelectionCardGameStore();
+  // const {
+  //   gameStatus,
+  //   gameSubmitted,
+  //   onOptionCheck,
+  //   optionsItems,
+  //   resultMessage,
+  //   setGameStatus,
+  //   setGameSubmitted,
+  //   setOptionsItems,
+  //   setResultMessage,
+  // } = useSelectionCardGameStore();
 
   const { getNextGameIndex } = useCaseSolvingStore();
 
@@ -70,7 +70,7 @@ export const SelectionCardGame: FC<SelectionCardGameProps> = ({ game, helpNote, 
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [originalOptions]);
 
-  const filteredCorrectAnswers = optionsItems.filter(
+  const filteredCorrectAnswers = optionsItems?.filter(
     (item) => item.correctAnswer
   );
 
