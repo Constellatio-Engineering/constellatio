@@ -3,7 +3,7 @@ import { CustomLink } from "@/components/atoms/CustomLink/CustomLink";
 import { Input } from "@/components/atoms/Input/Input";
 import { colors } from "@/constants/styles/colors";
 import { type Database } from "@/lib/database.types";
-import { loginFormSchema } from "@/schemas/LoginFormSchema";
+import { loginFormSchema } from "@/schemas/auth/loginForm.schema";
 import { supabase } from "@/supabase/client";
 
 import { Stack } from "@mantine/core";

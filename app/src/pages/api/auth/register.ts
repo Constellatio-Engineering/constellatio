@@ -1,5 +1,5 @@
 import { supabaseAdmin } from "@/lib/supabase-admin";
-import { registrationFormSchema } from "@/schemas/RegistrationFormSchema";
+import { registrationFormSchema } from "@/schemas/auth/registrationForm.schema";
 
 import { createServerSupabaseClient } from "@supabase/auth-helpers-nextjs";
 import { type NextApiHandler } from "next";

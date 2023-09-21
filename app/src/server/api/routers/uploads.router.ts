@@ -1,7 +1,11 @@
 import { db } from "@/db/connection";
-import { uploadsTable } from "@/db/schema";
+import { type UploadInsert, uploadsTable } from "@/db/schema";
 import { env } from "@/env.mjs";
+import { meiliSearchAdmin } from "@/meilisearch/client";
+import { addUploadSchema } from "@/schemas/uploads/addUpload.schema";
+import { deleteUploadSchema } from "@/schemas/uploads/deleteUpload.schema";
 import { createTRPCRouter, protectedProcedure } from "@/server/api/trpc";
+import { createUploadsSearchIndexItem, searchIndices } from "@/utils/search";
 import { BadFileError, FileTooLargeError, NotFoundError } from "@/utils/serverError";
 import { getFileNameWithoutExtension } from "@/utils/utils";
 
@@ -84,6 +88,17 @@ export const uploadsRouter = createTRPCRouter({
         uploadUrl: url
       });
     }),
+  deleteUploadedFile: protectedProcedure
+    .input(deleteUploadSchema)
+    .mutation(async ({ ctx: { userId }, input: { fileUuid } }) =>
+    {
+      const deleteResult = await db.delete(uploadsTable).where(and(
+        eq(uploadsTable.userId, userId),
+        eq(uploadsTable.uuid, fileUuid)
+      ));
+
+      console.log("deleteResult", deleteResult);
+    }),
   getUploadedFiles: protectedProcedure
     .query(async ({ ctx: { userId } }) =>
     {
@@ -93,24 +108,16 @@ export const uploadsRouter = createTRPCRouter({
       });
     }),
   saveFileToDatabase: protectedProcedure
-    .input(z.object({
-      clientSideUuid: z.string(),
-      fileSizeInBytes: z.number().int().min(1),
-      filename: z.string(),
-      originalFilename: z.string(),
-    }))
-    .mutation(async ({
-      ctx: {
-        userId
-      },
-      input: {
+    .input(addUploadSchema)
+    .mutation(async ({ ctx, input }) =>
+    {
+      const {
         clientSideUuid,
         filename,
         fileSizeInBytes,
         originalFilename
-      } 
-    }) =>
-    {
+      } = input;
+
       const fileNameWithoutExtension = getFileNameWithoutExtension(filename);
       const originalFilenameWithoutExtension = getFileNameWithoutExtension(originalFilename);
       const fileExtension = filename.split(".").pop();
@@ -120,13 +127,28 @@ export const uploadsRouter = createTRPCRouter({
         throw new BadFileError(new Error("File has no extension"));
       }
 
-      await db.insert(uploadsTable).values({
+      const uploadInsert: UploadInsert = {
         clientSideUuid,
         fileExtension,
         filename: fileNameWithoutExtension,
         originalFilename: originalFilenameWithoutExtension,
         sizeInBytes: fileSizeInBytes,
-        userId
+        userId: ctx.userId
+      };
+
+      const insertResult = await db.insert(uploadsTable).values(uploadInsert).returning({ uid: uploadsTable.uuid });
+
+      const searchIndexItem = createUploadsSearchIndexItem({
+        ...uploadInsert,
+        uuid: insertResult[0]!.uid
       });
+
+      const addUploadToIndexTask = await meiliSearchAdmin
+        .index(searchIndices.userUploads)
+        .addDocuments([searchIndexItem], { primaryKey: "uuid" });
+
+      const addUploadToIndexResult = await meiliSearchAdmin.waitForTask(addUploadToIndexTask.taskUid);
+
+      console.log("addUploadToIndexResult", addUploadToIndexResult);
     })
 });
