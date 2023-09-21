@@ -33,13 +33,7 @@ border-radius: 12px;
     border-radius: 50%;
 }
 .counter{
-    color: #949494;
-    /* progressive/body/body-01@medium */
-    font-family: Karla;
-    font-size: 16px;
-    font-style: normal;
-    font-weight: 500;
-    line-height: 24px; /* 150% */
+    color: ${theme.colors["neutrals-01"][7]};
 }
 &:hover{
     background-color: ${theme.colors["neutrals-01"][2]};
