@@ -46,29 +46,28 @@ export const DragDropGame: FC<TDragDropGame> = ({
   game,
   helpNote,
   id,
-  question
+  question,
 }) => 
 {
-  const {
-    activeId,
-    addDroppedItem,
-    addOptionItem,
-    deleteDroppedItem,
-    deleteOptionItem,
-    droppedItems,
-    gameStatus,
-    gameSubmitted,
-    optionsItems,
-    resultMessage,
-    setActiveId,
-    setDroppedItems,
-    setGameStatus,
-    setGameSubmitted,
-    setOptionsItems,
-    setResultMessage
-  } = useDragDropGameStore();
+  const getNextGameIndex = useCaseSolvingStore((s) => s.getNextGameIndex);
 
-  const { getNextGameIndex } = useCaseSolvingStore();
+  const gameState = useDragDropGameStore((s) => s.getGameState(id));
+
+  const allGames = useDragDropGameStore((s) => s.games);
+
+  const updateGameState = useDragDropGameStore((s) => s.updateGameState);
+
+  const initializeNewGameState = useDragDropGameStore(
+    (s) => s.initializeNewGameState
+  );
+
+  useEffect(() => 
+  {
+    if(gameState == null && id != null) 
+    {
+      initializeNewGameState(id);
+    }
+  }, [allGames, gameState, id, initializeNewGameState]);
 
   const originalOptions: TDragAndDropGameOptionType[] = useMemo(
     () => game?.options ?? [],
@@ -79,28 +78,46 @@ export const DragDropGame: FC<TDragDropGame> = ({
   {
     const optionsShuffled =
 			shuffleArray<TDragAndDropGameOptionType>(originalOptions);
-    setOptionsItems(optionsShuffled);
+    updateGameState(id!, { optionsItems: optionsShuffled });
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [originalOptions]);
+
+  if(!gameState || !id) 
+  {
+    return null;
+  }
+
+  const {
+    activeId,
+    droppedItems,
+    gameStatus,
+    gameSubmitted,
+    optionsItems,
+    resultMessage,
+  } = gameState ?? {};
 
   const handleDragEnd = (event: DragEndEvent): void => 
   {
     const { active, over } = event;
-    setActiveId(null);
+    updateGameState(id, { activeId: null });
     if(over && over.id === "droppable") 
     {
       const activeItem = optionsItems.find((item) => item.id === active.id);
       if(activeItem) 
       {
-        addDroppedItem(activeItem);
-        deleteOptionItem(activeItem.id);
+        updateGameState(id, { droppedItems: [...droppedItems, activeItem] });
+        updateGameState(id, {
+          optionsItems: optionsItems.filter(
+            (item) => item.id !== activeItem.id
+          ),
+        });
       }
     }
   };
 
   const handleDragStart = (event: DragStartEvent): void => 
   {
-    setActiveId(event.active.id.toString());
+    updateGameState(id, { activeId: event.active.id.toString() });
   };
 
   const checkWinCondition = (): boolean =>
@@ -132,38 +149,48 @@ export const DragDropGame: FC<TDragDropGame> = ({
       const orderCorrect = checkOrder();
       if(winCondition && orderCorrect) 
       {
-        setGameStatus("win");
-        setResultMessage("Congrats! all answers are correct!");
+        updateGameState(id, {
+          gameStatus: "win",
+          resultMessage: "Congrats! all answers are correct!",
+        });
       }
       else if(winCondition && !orderCorrect) 
       {
-        setGameStatus("lose");
-        setResultMessage("You have all correct answers but in wrong order!");
+        updateGameState(id, {
+          gameStatus: "lose",
+          resultMessage: "You have all correct answers but in wrong order!",
+        });
       }
       else 
       {
-        setGameStatus("lose");
-        setResultMessage("Answers are incorrect!");
+        updateGameState(id, {
+          gameStatus: "lose",
+          resultMessage: "Answers are incorrect!",
+        });
       }
     }
     else 
     {
       if(winCondition) 
       {
-        setGameStatus("win");
-        setResultMessage("Congrats! all answers are correct!");
+        updateGameState(id, {
+          gameStatus: "win",
+          resultMessage: "Congrats! all answers are correct!",
+        });
       }
       else 
       {
-        setGameStatus("lose");
-        setResultMessage("Answers are incorrect!");
+        updateGameState(id, {
+          gameStatus: "lose",
+          resultMessage: "Answers are incorrect!",
+        });
       }
     }
 
     if(!gameSubmitted) 
     {
-      setGameSubmitted(true);
       getNextGameIndex();
+      updateGameState(id, { gameSubmitted: true });
     }
   };
 
@@ -171,9 +198,12 @@ export const DragDropGame: FC<TDragDropGame> = ({
   {
     const originalOptionsShuffled =
 			shuffleArray<TDragAndDropGameOptionType>(originalOptions);
-    setOptionsItems(originalOptionsShuffled);
-    setGameStatus("inprogress");
-    setDroppedItems([]);
+    updateGameState(id, {
+      droppedItems: [],
+      gameStatus: "inprogress",
+      optionsItems: originalOptionsShuffled,
+      resultMessage: "",
+    });
   };
 
   return (
@@ -262,8 +292,12 @@ export const DragDropGame: FC<TDragDropGame> = ({
                       dropped
                       onDeleteHandler={() => 
                       {
-                        deleteDroppedItem(item.id);
-                        addOptionItem(item);
+                        updateGameState(id, {
+                          droppedItems: droppedItems.filter(
+                            (card) => card.id !== item.id
+                          ),
+                          optionsItems: [...optionsItems, item],
+                        });
                       }}
                     />
                   ) : (
@@ -284,7 +318,10 @@ export const DragDropGame: FC<TDragDropGame> = ({
         {gameStatus !== "inprogress" && (
           <>
             <ResultCard
-              droppedCorrectCards={droppedItems?.filter((item) => item.correctAnswer).length ?? null}
+              droppedCorrectCards={
+                droppedItems?.filter((item) => item.correctAnswer).length ??
+								null
+              }
               totalCorrectCards={
                 originalOptions.filter((item) => item.correctAnswer).length ??
 								null
@@ -292,9 +329,7 @@ export const DragDropGame: FC<TDragDropGame> = ({
               variant={gameStatus}
               message={resultMessage}
             />
-            {helpNote?.json && (
-              <HelpNote data={helpNote}/>
-            )}
+            {helpNote?.json && <HelpNote data={helpNote}/>}
           </>
         )}
         <div>

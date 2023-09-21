@@ -18,22 +18,12 @@ type DragDropGameState = {
   resultMessage: string;
 };
 
-type DragDropGameStateUpdate = Partial<Pick<DragDropGameState, "gameStatus" | "gameSubmitted" | "resultMessage" | "droppedItems">>;
+type DragDropGameStateUpdate = Partial<Pick<DragDropGameState, "gameStatus" | "gameSubmitted" | "resultMessage" | "droppedItems" | "optionsItems" | "activeId">>;
 
 type IDragDropGameStore = {
-  addDroppedItem: (droppedItem: TDragAndDropGameOptionType) => void;
-  addOptionItem: (optionItem: TDragAndDropGameOptionType) => void;
-  deleteDroppedItem: (id: TDragAndDropGameOptionType["id"]) => void;
-  deleteOptionItem: (id: TDragAndDropGameOptionType["id"]) => void;
   games: DragDropGameState[];
   getGameState: (gameId: Nullable<string>) => DragDropGameState | undefined;
   initializeNewGameState: (gameId: string) => void;
-  setActiveId: (id: string | null) => void;
-  setDroppedItems: (droppedItems: TDragAndDropGameOptionType[]) => void;
-  setGameStatus: (status: "win" | "lose" | "inprogress") => void;
-  setGameSubmitted: (gameSubmitted: boolean) => void;
-  setOptionsItems: (optionsItems: TDragAndDropGameOptionType[]) => void;
-  setResultMessage: (message: string) => void;
   updateGameState: (gameId: string, update: DragDropGameStateUpdate) => void;
 };
 
@@ -49,36 +39,8 @@ const defaultDragDropGameState: DragDropGameState = {
 
 const useDragDropGameStore = create(
   immer<IDragDropGameStore>((set, get) => ({
-    addDroppedItem(droppedItem) 
-    {
-      set((state) => 
-      {
-        state.droppedItems = [...state.droppedItems, droppedItem];
-      });
-    },
-    addOptionItem(optionItem) 
-    {
-      set((state) => 
-      {
-        state.optionsItems = [...state.optionsItems, optionItem];
-      });
-    },
-    deleteDroppedItem(id) 
-    {
-      set((state) => 
-      {
-        state.droppedItems = state.droppedItems.filter((droppedItem) => droppedItem.id !== id);
-      });
-    },
-
-    deleteOptionItem(id) 
-    {
-      set((state) => 
-      {
-        state.optionsItems = state.optionsItems.filter((option) => option.id !== id);
-      });
-    },
     games: [],
+
     getGameState: (gameId) =>
     {
       const { games } = get();
@@ -93,9 +55,9 @@ const useDragDropGameStore = create(
 
       return game;
     },
+
     initializeNewGameState: (gameId) =>
     {
-
       const existingGame = get().games.find(game => game.gameId === gameId);
 
       if(existingGame)
@@ -111,41 +73,7 @@ const useDragDropGameStore = create(
         });
       });
     },
-    setActiveId(id) 
-    {
-      set((state) => 
-      {
-        state.activeId = id;
-      });
-    },
-    setDroppedItems(droppedItems) 
-    {
-      set((state) => 
-      {
-        state.droppedItems = droppedItems;
-      });
-    },
-    setGameStatus: (status) => 
-    {
-      set((state) => 
-      {
-        state.gameStatus = status;
-      });
-    },
-    setGameSubmitted(gameSubmitted) 
-    {
-      set((state) => 
-      {
-        state.gameSubmitted = gameSubmitted;
-      });
-    },
-    setOptionsItems: (optionsItems) => 
-    {
-      set((state) => 
-      {
-        state.optionsItems = optionsItems;
-      });
-    },
+
     updateGameState: (gameId, update) =>
     {
       set((state) =>
@@ -169,13 +97,6 @@ const useDragDropGameStore = create(
           ...update
         };
         state.games[gameIndex] = newGame;
-      });
-    },
-    setResultMessage(message) 
-    {
-      set((state) => 
-      {
-        state.resultMessage = message;
       });
     },
   }))

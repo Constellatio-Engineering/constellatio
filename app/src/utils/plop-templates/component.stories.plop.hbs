@@ -1,9 +1,10 @@
+import { type PropsOf } from "@emotion/react";
 import { type Meta, type StoryObj } from "@storybook/react";
 import { type FunctionComponent } from "react";
 
-import {{pascalCase name}}, { type I{{pascalCase name}}Props } from "./{{pascalCase name}}";
+import {{pascalCase name}} from "./{{pascalCase name}}";
 
-const Template: FunctionComponent<I{{pascalCase name}}Props> = (args) => (<{{pascalCase name}} {...args}/>);
+const Template: FunctionComponent<PropsOf<typeof {{pascalCase name}}>> = (args) => (<{{pascalCase name}} {...args}/>);
 
 const meta: Meta = {
   argTypes: {
