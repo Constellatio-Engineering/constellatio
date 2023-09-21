@@ -46,17 +46,10 @@ let FillGapsGame: FC<TFillGapsGame> = ({
 }) => 
 {
   const getNextGameIndex = useCaseSolvingStore((s) => s.getNextGameIndex);
-
   const gameState = useFillGapsGameStore((s) => s.getGameState(id));
-
   const allGames = useFillGapsGameStore((s) => s.games);
-
   const updateGameState = useFillGapsGameStore((s) => s.updateGameState);
-
-  const initializeNewGameState = useFillGapsGameStore(
-    (s) => s.initializeNewGameState
-  );
-
+  const initializeNewGameState = useFillGapsGameStore((s) => s.initializeNewGameState);
   const checkAnswers = useFillGapsGameStore((s) => s.checkAnswers);
 
   useEffect(() => 

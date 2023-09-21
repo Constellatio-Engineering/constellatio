@@ -21,6 +21,7 @@ import FillGapsGame from "../FillGapsGame/FillGapsGame";
 import FloatingPanel from "../floatingPanel/FloatingPanel";
 import { getNestedHeadingIndex } from "../floatingPanel/generateTocHelper";
 import { SelectionCardGame } from "../SelectionCardGame/SelectionCardGame";
+import { SolveCaseGame } from "../SolveCaseGame/SolveCaseGame";
 
 interface ICaseCompleteTestsStepProps 
 {
@@ -31,15 +32,13 @@ interface ICaseCompleteTestsStepProps
 
 const CaseCompleteTestsStep: FunctionComponent<ICaseCompleteTestsStepProps> = ({ facts, fullTextTasks, variant }) => 
 {
-
-  const {
-    getNextGameIndex,
-    hasCaseSolvingStarted,
-    isLastGame,
-    latestGameIndex,
-    setGamesIndexes,
-    setHasCaseSolvingStarted
-  } = useCaseSolvingStore();
+  const getNextGameIndex = useCaseSolvingStore((state) => state.getNextGameIndex);
+  const hasCaseSolvingStarted = useCaseSolvingStore((state) => state.hasCaseSolvingStarted);
+  const isLastGame = useCaseSolvingStore((state) => state.isLastGame);
+  const latestGameIndex = useCaseSolvingStore((state) => state.latestGameIndex);
+  const setGamesIndexes = useCaseSolvingStore((state) => state.setGamesIndexes);
+  const setHasCaseSolvingStarted = useCaseSolvingStore((state) => state.setHasCaseSolvingStarted);
+  const setCaseStepIndex = useCaseSolvingStore((state) => state.setCaseStepIndex);
 
   const renderedCaseContent = useMemo(() => 
   {
@@ -71,8 +70,6 @@ const CaseCompleteTestsStep: FunctionComponent<ICaseCompleteTestsStepProps> = ({
     // eslint-disable-next-line react-hooks/exhaustive-deps
     [renderedCaseContent]
   );
-
-  console.log("render");
 
   useEffect(() => 
   {
@@ -209,9 +206,7 @@ const CaseCompleteTestsStep: FunctionComponent<ICaseCompleteTestsStepProps> = ({
                   paragraph: richTextParagraphOverwrite
                 }}
               />
-              <button type="button" onClick={() => getNextGameIndex()}>
-                Next{" "}
-              </button>
+              {isLastGame && <SolveCaseGame onGameStartHandler={() => setCaseStepIndex(1)}/>}
             </div>
           </div>
         )}

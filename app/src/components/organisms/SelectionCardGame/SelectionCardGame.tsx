@@ -40,16 +40,10 @@ export const SelectionCardGame: FC<SelectionCardGameProps> = ({
 }) => 
 {
   const getNextGameIndex = useCaseSolvingStore((s) => s.getNextGameIndex);
-
   const gameState = useSelectionCardGameStore((s) => s.getGameState(id));
-
   const allGames = useSelectionCardGameStore((s) => s.games);
-
   const updateGameState = useSelectionCardGameStore((s) => s.updateGameState);
-
-  const initializeNewGameState = useSelectionCardGameStore(
-    (s) => s.initializeNewGameState
-  );
+  const initializeNewGameState = useSelectionCardGameStore((s) => s.initializeNewGameState);
 
   useEffect(() => 
   {

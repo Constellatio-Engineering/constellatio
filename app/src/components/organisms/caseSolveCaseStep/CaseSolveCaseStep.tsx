@@ -13,25 +13,22 @@ import React, { useEffect, type FunctionComponent } from "react";
 import * as styles from "./CaseSolveCaseStep.styles";
 import modalImg from "../../Icons/CaseResultModalIcon.png";
 
-const CaseSolveCaseStep: FunctionComponent<IGenCase & {readonly setCaseStepIndex: React.Dispatch<React.SetStateAction<0 | 2 | 1>> }> = ({
-  facts,
-  setCaseStepIndex,
-  title
-}) => 
+const CaseSolveCaseStep: FunctionComponent<IGenCase> = ({ facts, title }) => 
 {
-  const {
-    setHasCaseSolvingStarted,
-    setIsStepCompleted,
-    setShowStepTwoModal,
-    showStepTwoModal,
-    solution
-  } = useCaseSolvingStore(); 
+  const setCaseStepIndex = useCaseSolvingStore((state) => state.setCaseStepIndex);
+  const setHasCaseSolvingStarted = useCaseSolvingStore((state) => state.setHasCaseSolvingStarted);
+  const setIsStepCompleted = useCaseSolvingStore((state) => state.setIsStepCompleted);
+  const setShowStepTwoModal = useCaseSolvingStore((state) => state.setShowStepTwoModal);
+  const showStepTwoModal = useCaseSolvingStore((state) => state.showStepTwoModal);
+  const solution = useCaseSolvingStore((state) => state.solution);
+
   useEffect(() => 
   {
     setIsStepCompleted(false);
     setHasCaseSolvingStarted(true);
   // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
+
   return (
     <div css={styles.wrapper} id="solveCaseStepContent">
       {title && (
@@ -78,7 +75,6 @@ const CaseSolveCaseStep: FunctionComponent<IGenCase & {readonly setCaseStepIndex
               fullWidth>
               Review results
             </Button>
-         
           </Modal>
         </div>
       )}

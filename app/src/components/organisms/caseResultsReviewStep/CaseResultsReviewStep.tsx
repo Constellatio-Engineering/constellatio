@@ -23,26 +23,22 @@ export interface ICaseResultsReviewStepProps
 {
   readonly facts: Maybe<IGenCase_Facts>;
   readonly resolution: Maybe<IGenCase_Resolution>;
-  readonly setCaseStepIndex: React.Dispatch<React.SetStateAction<0 | 1 | 2>>;
   readonly title: string;
 }
 
-const CaseResultsReviewStep: FunctionComponent<ICaseResultsReviewStepProps> = ({
-  facts,
-  resolution,
-  setCaseStepIndex,
-  title
-}) => 
+const CaseResultsReviewStep: FunctionComponent<ICaseResultsReviewStepProps> = ({ facts, resolution, title }) => 
 {
   const theme = useMantineTheme();
   const [isExpandSolution, setIsExpandSolution] = React.useState<boolean>(false);
+  const { solution } = caseSolvingStore();
+  const solutionContent = useRef<HTMLDivElement>(null);
+  const [solutionElementHight, setSolutionElementHight] = React.useState<number>(0);
+  const setCaseStepIndex = caseSolvingStore((state) => state.setCaseStepIndex);
+
   const icons = [
     { src: <Bookmark/>, title: "Bookmark" },
     { src: <Print/>, title: "Print" },
   ];
-  const { solution } = caseSolvingStore();
-  const solutionContent = useRef<HTMLDivElement>(null);
-  const [solutionElementHight, setSolutionElementHight] = React.useState<number>(0);
 
   useEffect(() => 
   {
