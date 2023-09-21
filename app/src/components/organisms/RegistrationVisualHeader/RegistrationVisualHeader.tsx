@@ -13,14 +13,15 @@ export const RegistrationVisualHeader: FunctionComponent = () =>
       sx={() => ({
         height: "100%",
         overflow: "auto",
-        padding: 0
+        padding: 0,
       })}>
       <Flex
         direction="column"
         justify="space-between"
         align="center"
-        h="100%"
-        maw="100%"
+        mah="100%"
+        maw="90%"
+        sx={{ margin: "0 auto", overflow: "hidden" }}
         pt={64}>
         <Flex
           px={20}
