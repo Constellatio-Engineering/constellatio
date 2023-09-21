@@ -8,7 +8,7 @@
     "start:dev": "docker compose up",
     "start:dev-force-rebuild": "docker compose up --build --force-recreate",
     "separatorSupabase": "---------------------- SUPABASE ----------------------",
-    "start:supabase": "supabase start",
+    "start:supabase": "supabase start --ignore-health-check",
     "stop:supabase": "supabase stop",
     "restart:supabase": "supabase stop && pnpm start:supabase",
     "reset:supabase": "supabase stop --no-backup && pnpm start:supabase",
