@@ -2,12 +2,13 @@
 import { Svg } from "@/basic-components/SVG/Svg";
 import { Button } from "@/components/atoms/Button/Button";
 import ItemBlock from "@/components/organisms/caseBlock/ItemBlock";
+import EmptyStateCard from "@/components/organisms/emptyStateCard/EmptyStateCard";
 import FavoriteCasesList from "@/components/organisms/favoriteCasesList/FavoriteCasesList";
 import OverviewHeader from "@/components/organisms/OverviewHeader/OverviewHeader";
 import PersonalSpaceNavBar from "@/components/organisms/personalSpaceNavBar/PersonalSpaceNavBar";
 import DummyFileViewer from "@/components/pages/personalSpacePage/dummyFileViewer/DummyFileViewer";
 import { type ICasesOverviewProps } from "@/services/content/getCasesOverviewProps";
-import { type IGenMainCategory } from "@/services/graphql/__generated/sdk";
+import { type IGenArticleOverviewFragment, IGenCase, type IGenFullCaseFragment, type IGenMainCategory } from "@/services/graphql/__generated/sdk";
 import uploadsProgressStore from "@/stores/uploadsProgress.store";
 import { api } from "@/utils/api";
 import { getRandomUuid, removeItemsByIndices } from "@/utils/utils";
@@ -15,6 +16,7 @@ import { getRandomUuid, removeItemsByIndices } from "@/utils/utils";
 import { Container, Loader, Text } from "@mantine/core";
 import { modals } from "@mantine/modals";
 import axios from "axios";
+import Link from "next/link";
 import React, { type FormEvent, type FunctionComponent, useState } from "react";
 
 // import { isFloat32Array } from "util/types";
@@ -50,7 +52,6 @@ const PersonalSpacePage: FunctionComponent = () =>
     }
     return acc;
   }, []);
-  //  console.log({ mainCategoriesInBookmarkedCases });
 
   const fileInputRef = React.useRef<HTMLInputElement>(null);
   const { setUploadState, uploads } = uploadsProgressStore();
@@ -199,15 +200,14 @@ const PersonalSpacePage: FunctionComponent = () =>
   
   const favoriteCategoryNavTabs = [{ id: "0", itemsPerTab: bookmarkedCases?.length ?? 0, title: "CASES" }, { id: "1", itemsPerTab: 999, title: "DICTIONARY" }, { id: "2", itemsPerTab: 999, title: "FORUM" }, { id: "3", itemsPerTab: 999, title: "HIGHLIGHTS" }];
   const [selectedTabId, setSelectedTabId] = useState<string>(favoriteCategoryNavTabs?.[0]?.id as string);
-  console.log({ bookmarkedCases });
-  
+
+  // FUNCTION RETURNING ALL CASES USING THEIR SUBCATEGORY WITH THE SUBCATEGORY ID
   // const casesBySubcategoryId = (id: string) => 
   // {
   //   return bookmarkedCases.filter(bookmarkedCase => bookmarkedCase.subCategoryField?.[0]?.id === id);
   // };
 
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  const casesByMainCategory = (id: string): any =>
+  const casesByMainCategory = (id: string): Array<({ _typename?: "Case" | undefined } & IGenFullCaseFragment) | null | undefined> | IGenArticleOverviewFragment[] | undefined =>
   {
     const cases = bookmarkedCases?.filter(bookmarkedCase => bookmarkedCase.subCategoryField?.[0]?.mainCategory?.[0]?.id === id);
     return cases;
@@ -225,12 +225,24 @@ const PersonalSpacePage: FunctionComponent = () =>
         />
       </div>
       {isFlavoriteTab(selectedCategoryId ?? "") && <PersonalSpaceNavBar setSelectedTabId={setSelectedTabId} selectedTabId={selectedTabId} tabs={favoriteCategoryNavTabs}/>}
-      {selectedCategoryId === "0" && selectedTabId === "0" ? (
+      {isFlavoriteTab(selectedCategoryId ?? "") ? (selectedTabId === "0" ? (
         <> 
           {(areBookmarksLoading || areCasesLoading) ? (
             <Loader sx={{ margin: "50px" }}/>
           ) : (
-            <FavoriteCasesList bookmarkedCasesMainCategoriesUnique={bookmarkedCasesMainCategoriesUnique} casesByMainCategory={casesByMainCategory}/>
+            bookmarkedCases?.length > 0 ? (
+              <FavoriteCasesList 
+                bookmarkedCasesMainCategoriesUnique={bookmarkedCasesMainCategoriesUnique} 
+                casesByMainCategory={casesByMainCategory}
+              />
+            ) : (
+              <EmptyStateCard
+                button={<Link href="/cases">Explore Cases</Link>}
+                title="You haven’t saved any cases yet"
+                text="You can save cases, dictionary articles, forum questions and highlighted text to Favourites"
+                variant="For-large-areas"
+              />
+            )
           )}
         
         </>
@@ -309,6 +321,8 @@ const PersonalSpacePage: FunctionComponent = () =>
             <DummyFileViewer fileId={selectedFileIdForPreview}/>
           )}
         </>
+      )) : (
+        <div>Category Id: {selectedCategoryId} - MATERIALS</div>
       )}
       
     </div>
