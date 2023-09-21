@@ -7,26 +7,28 @@ import type { NextRequest, NextMiddleware } from "next/server";
 
 export const middleware: NextMiddleware = async (req: NextRequest) =>
 {
-  console.log("--- middleware ---");
-
   const res = NextResponse.next();
   const supabase = createMiddlewareSupabaseClient<Database>({ req, res });
   const { data: { session }, error: getSessionError } = await supabase.auth.getSession();
   const { data: { user }, error: getUserError } = await supabase.auth.getUser();
-  const didErrorOccur = getSessionError != null || getUserError != null;
+  let didErrorOccur = false;
 
   if(getSessionError)
   {
     console.warn("Error getting session", getSessionError);
+    didErrorOccur = true;
   }
 
   if(getUserError)
   {
     console.warn("Error getting user", getUserError);
+    didErrorOccur = true;
   }
 
   if(didErrorOccur || !session?.user)
   {
+    console.log("User is not logged in, redirecting to login");
+
     const redirectUrl = req.nextUrl.clone();
 
     redirectUrl.pathname = "/login";
@@ -37,6 +39,8 @@ export const middleware: NextMiddleware = async (req: NextRequest) =>
 
   if(!user?.confirmed_at)
   {
+    console.log("User is not confirmed, redirecting to confirm");
+
     const redirectUrl = req.nextUrl.clone();
 
     redirectUrl.pathname = "/confirm";

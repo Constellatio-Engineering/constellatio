@@ -6,6 +6,10 @@ const defaultLocale = "de";
  */
 module.exports = {
   i18n: {
+    /**
+     * Caution: If you change this, you need apply the same changes in `next.config.mjs` as well, as this is duplicated there for now.
+     * There is currently no workaround for this since `next-i18next` does not support esm.
+     */
     defaultLocale: defaultLocale,
     locales: [defaultLocale],
   },
