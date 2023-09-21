@@ -70,7 +70,11 @@ export const createCaseSearchIndexItem = (fullCase: IGenCase): CaseSearchIndexIt
 export type UploadSearchIndexItem = Pick<Upload, "uuid" | "originalFilename" | "userId">;
 export type UploadSearchItemNodes = RemoveUndefined<DotSeparatedKeys<UploadSearchIndexItem>>;
 
-export const createUploadsSearchIndexItem = ({ originalFilename, userId, uuid }: Upload): UploadSearchIndexItem =>
+export const createUploadsSearchIndexItem = ({
+  originalFilename,
+  userId,
+  uuid
+}: Pick<Upload, "originalFilename" | "userId" | "uuid">): UploadSearchIndexItem =>
 {
   return ({ originalFilename, userId, uuid });
 };

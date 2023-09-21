@@ -1,7 +1,7 @@
 import { Bookmark } from "@/components/Icons/Bookmark";
 import { BookmarkFilledIcon } from "@/components/Icons/BookmarkFilledIcon";
 import TableIconButton from "@/components/molecules/tableIconButton/TableIconButton";
-import { type AddOrRemoveBookmarkSchema } from "@/schemas/addOrRemoveBookmarkSchema";
+import { type AddOrRemoveBookmarkSchema } from "@/schemas/bookmarks/addOrRemoveBookmark.schema";
 import { api } from "@/utils/api";
 
 import { notifications } from "@mantine/notifications";
