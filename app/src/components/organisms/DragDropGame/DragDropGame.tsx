@@ -50,16 +50,10 @@ export const DragDropGame: FC<TDragDropGame> = ({
 }) => 
 {
   const getNextGameIndex = useCaseSolvingStore((s) => s.getNextGameIndex);
-
   const gameState = useDragDropGameStore((s) => s.getGameState(id));
-
   const allGames = useDragDropGameStore((s) => s.games);
-
   const updateGameState = useDragDropGameStore((s) => s.updateGameState);
-
-  const initializeNewGameState = useDragDropGameStore(
-    (s) => s.initializeNewGameState
-  );
+  const initializeNewGameState = useDragDropGameStore((s) => s.initializeNewGameState);
 
   useEffect(() => 
   {

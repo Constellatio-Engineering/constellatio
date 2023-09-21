@@ -1,70 +1,102 @@
 import { type TValue } from "@/components/Wrappers/SelectionGame/SelectionGame";
+import { type Nullable } from "@/utils/types";
 
 import { create } from "zustand";
 import { immer } from "zustand/middleware/immer";
 
-export type TCardGameOptionWithCheck = TCardGameOption & { checked: boolean };
 export type TCardGameOption = TValue["options"][number];
+export type TCardGameOptionWithCheck = TCardGameOption & { checked: boolean };
 
-type TSelectionCardGameStore = {
-  gameStatus: "win" | "lose" | "inprogress";
+type GameStatus = "win" | "lose" | "inprogress";
+
+type SelectionCardGameState = {
+  gameId: string;
+  gameStatus: GameStatus;
   gameSubmitted: boolean;
-  onOptionCheck: (id: TCardGameOption["id"], checked: TCardGameOptionWithCheck["checked"]) => void;
   optionsItems: TCardGameOptionWithCheck[];
+  resetCounter: number;
   resultMessage: string;
-  setGameStatus: (status: "win" | "lose" | "inprogress") => void;
-  setGameSubmitted: (gameSubmitted: boolean) => void;
-  setOptionsItems: (optionsItems: TCardGameOptionWithCheck[]) => void;
-  setResultMessage: (message: string) => void;
 };
 
-const useSelectionCardGameStore = create(immer<TSelectionCardGameStore> ((set) => ({
+type SelectionCardGameStateUpdate = Partial<Pick<SelectionCardGameState, "gameStatus" | "gameSubmitted" | "resultMessage" | "optionsItems" | "resetCounter">>;
+
+type TSelectionCardGameStore = {
+  games: SelectionCardGameState[];
+  getGameState: (gameId: Nullable<string>) => SelectionCardGameState | undefined;
+  initializeNewGameState: (gameId: string) => void;
+  updateGameState: (gameId: string, update: SelectionCardGameStateUpdate) => void;
+};
+
+const defaultSelectionCardGameState: SelectionCardGameState = {
+  gameId: "",
   gameStatus: "inprogress",
   gameSubmitted: false,
-  onOptionCheck(id, checked) 
+  optionsItems: [],
+  resetCounter: 0,
+  resultMessage: "",
+};
+
+const useSelectionCardGameStore = create(immer<TSelectionCardGameStore> ((set, get) => ({
+  games: [],
+
+  getGameState: (gameId) =>
   {
-    set((state) => 
+    const { games } = get();
+
+    if(gameId == null)
     {
-      state.optionsItems = state.optionsItems.map((item) => 
-      {
-        if(item.id === id) 
-        {
-          item.checked = checked;
-        }
-        return item;
+      console.warn("game Id is null. cannot get game state");
+      return;
+    }
+
+    const game = games.find(game => game.gameId === gameId);
+
+    return game;
+  },
+
+  initializeNewGameState: (gameId) =>
+  {
+    const existingGame = get().games.find(game => game.gameId === gameId);
+
+    if(existingGame)
+    {
+      return;
+    }
+
+    set((state) =>
+    {
+      state.games = state.games.concat({
+        ...defaultSelectionCardGameState,
+        gameId,
       });
     });
   },
-  optionsItems: [],
-  resultMessage: "",
-  setGameStatus(status) 
+
+  updateGameState: (gameId, update) =>
   {
-    set((state) => 
+    set((state) =>
     {
-      state.gameStatus = status;
+      const gameIndex = state.games.findIndex(game => game.gameId === gameId);
+
+      if(gameIndex === -1)
+      {
+        const newGame: SelectionCardGameState = {
+          ...defaultSelectionCardGameState,
+          gameId,
+          ...update,
+        };
+
+        state.games = state.games.concat(newGame);
+        return;
+      }
+
+      const newGame: SelectionCardGameState = {
+        ...state.games[gameIndex]!,
+        ...update
+      };
+      state.games[gameIndex] = newGame;
     });
   },
-  setGameSubmitted(gameSubmitted) 
-  {
-    set((state) => 
-    {
-      state.gameSubmitted = gameSubmitted;
-    });
-  },
-  setOptionsItems(optionsItems) 
-  {
-    set((state) => 
-    {
-      state.optionsItems = optionsItems;
-    });
-  },
-  setResultMessage(message) 
-  {
-    set((state) => 
-    {
-      state.resultMessage = message;
-    });
-  }
 })));
 
 export default useSelectionCardGameStore;

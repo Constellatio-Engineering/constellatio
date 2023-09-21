@@ -19,7 +19,8 @@ export const getStaticProps: GetStaticProps = async ({ params }) =>
     props: {
       id,
       legalCase: resCase?.Case ?? null
-    }
+    }, 
+    revalidate: 10
   };
 
 };
