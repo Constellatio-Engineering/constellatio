@@ -1,9 +1,9 @@
 import { type Meta, type StoryObj } from "@storybook/react";
 import { type FunctionComponent } from "react";
 
-import DummyFileViewer, { type IDummyFileViewerProps } from "./DummyFileViewer";
+import PersonalSpaceNavBar, { type IPersonalSpaceNavBarProps } from "./PersonalSpaceNavBar";
 
-const Template: FunctionComponent<IDummyFileViewerProps> = (args) => (<DummyFileViewer {...args}/>);
+const Template: FunctionComponent<IPersonalSpaceNavBarProps> = (args) => (<PersonalSpaceNavBar {...args}/>);
 
 const meta: Meta = {
   argTypes: {
@@ -16,12 +16,12 @@ const meta: Meta = {
       url: "https://www.figma.com/file/...",
     },
   },
-  title: "Atoms/DummyFileViewer",
+  title: "Atoms/PersonalSpaceNavBar",
 };
 
 export default meta;
 
-type Story = StoryObj<typeof DummyFileViewer>;
+type Story = StoryObj<typeof PersonalSpaceNavBar>;
 
 export const Default: Story = {
   args: {

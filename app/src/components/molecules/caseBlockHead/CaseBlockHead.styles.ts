@@ -18,5 +18,6 @@ cursor: default;
 
 export const title = css`
 width: 60%;
+white-space: nowrap;
 margin: 12px 0 24px 0;
 `;

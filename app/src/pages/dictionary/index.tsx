@@ -17,7 +17,7 @@ Awaited<ReturnType<typeof getArticlesOverviewProps>>
     props: {
       ...(allArticles || null)
     },
-    revalidate: 1,
+    revalidate: 10,
   };
 
 };

@@ -8,7 +8,7 @@ import { Input } from "@/components/atoms/Input/Input";
 import { PasswordValidationSchema } from "@/components/helpers/PasswordValidationSchema";
 import { allGenders, allUniversities } from "@/components/organisms/RegistrationForm/RegistrationForm.data";
 import { env } from "@/env.mjs";
-import { maximumAmountOfSemesters, type RegistrationFormSchema, registrationFormSchema } from "@/schemas/RegistrationFormSchema";
+import { maximumAmountOfSemesters, type RegistrationFormSchema, registrationFormSchema } from "@/schemas/auth/registrationForm.schema";
 import { supabase } from "@/supabase/client";
 import { api } from "@/utils/api";
 import { type PartialUndefined } from "@/utils/types";

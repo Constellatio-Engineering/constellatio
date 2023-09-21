@@ -11,6 +11,11 @@ https://app.constellatio.localhost {
   reverse_proxy host.docker.internal:3010
 }
 
+meilisearch.constellatio.localhost {
+  import constellatio_ssl_certs
+  reverse_proxy host.docker.internal:7700
+}
+
 supabase.constellatio.localhost {
 	import constellatio_ssl_certs
 	reverse_proxy host.docker.internal:54323

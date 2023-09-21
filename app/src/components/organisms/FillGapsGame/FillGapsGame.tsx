@@ -45,18 +45,11 @@ let FillGapsGame: FC<TFillGapsGame> = ({
   question,
 }) => 
 {
-  const { getNextGameIndex } = useCaseSolvingStore();
-
+  const getNextGameIndex = useCaseSolvingStore((s) => s.getNextGameIndex);
   const gameState = useFillGapsGameStore((s) => s.getGameState(id));
-
   const allGames = useFillGapsGameStore((s) => s.games);
-
   const updateGameState = useFillGapsGameStore((s) => s.updateGameState);
-
-  const initializeNewGameState = useFillGapsGameStore(
-    (s) => s.initializeNewGameState
-  );
-
+  const initializeNewGameState = useFillGapsGameStore((s) => s.initializeNewGameState);
   const checkAnswers = useFillGapsGameStore((s) => s.checkAnswers);
 
   useEffect(() => 
@@ -96,11 +89,22 @@ let FillGapsGame: FC<TFillGapsGame> = ({
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
     (props: any): ReactElement => 
     {
+      const textArr: string[] = [];
+
+      if(!props.node.content || props.node?.content?.length <= 0) { return <></>; }
+
+      for(const el of props.node.content) 
+      {
+        textArr.push(el.text);
+      }
+      
+      const text = textArr?.join(" ");
+
       return (
         <RichtextOverwrite
           id={id!}
           path={props.path}
-          text={props?.children?.[0]?.props?.node.text}
+          text={text}
           correctAnswersArr={correctAnswersArr}
         />
       );

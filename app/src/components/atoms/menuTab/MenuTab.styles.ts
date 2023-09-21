@@ -20,6 +20,7 @@ export const menuTabStyles = ({ active, disabled, theme }: {
   display: inline-block;
   text-transform: uppercase;
   color: ${theme.colors["neutrals-02"][1]};
+  white-space: nowrap;
   cursor: pointer;
   span {
     display: flex;
@@ -31,14 +32,18 @@ export const menuTabStyles = ({ active, disabled, theme }: {
   &::after {
     position: absolute;
     width: 100%;
-    height: 2px;
+    height: 3px;
     background-color: ${!active ? "transparent" : theme.colors["neutrals-02"][1]};
     content: "";
-    bottom: 0;
+    bottom: 0px;
     left: 0;
   }
   &:hover::after {
     background-color:${theme.colors["neutrals-01"][3]};
   }
   ${disabled && CSSDisabledStyles(theme)};
+`;
+
+export const number = (theme: MantineTheme) => css`
+color:${theme.colors["neutrals-01"][7]};
 `;

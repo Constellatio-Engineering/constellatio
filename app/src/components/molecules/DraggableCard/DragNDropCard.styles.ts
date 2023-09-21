@@ -20,7 +20,7 @@ export const ButtonCard = styled.button<{ dropped?: boolean; status: "success" |
         : theme.colors["neutrals-01"][3]};
 
   background-color: ${({ theme }) => theme.colors["neutrals-01"][0]};
-  width: 286px;
+  width: 100%;
   appearance: none;
   outline: none;
   transition: background-color 0.3s ease, border-color 0.3s ease, color 0.3s ease;

@@ -11,39 +11,42 @@ import { calculateScrollProgress } from "./caseNavbarHelper";
 
 export interface ICaseNavBarProps 
 {
-  readonly activeStep?: 0 | 1 | 2;
-  readonly setCaseStepIndex?: React.Dispatch<React.SetStateAction<0 | 1 | 2>>;
   readonly variant: "case" | "dictionary";
 }
 
-const CaseNavBar: FunctionComponent<ICaseNavBarProps> = ({ activeStep, setCaseStepIndex, variant }) => 
+const CaseNavBar: FunctionComponent<ICaseNavBarProps> = ({ variant }) => 
 {
   const theme = useMantineTheme();
   const steps = ["COMPLETE TESTS", "SOLVE CASE", "REVIEW REUSLTS"];
+  const setCaseStepIndex = useCaseSolvingStore((state) => state.setCaseStepIndex);
   const [progress, setProgress] = useState<number>(0);
-  const { hasCaseSolvingStarted, isStepCompleted, setShowStepTwoModal } = useCaseSolvingStore();
+  const isLastGame = useCaseSolvingStore((state) => state.isLastGame);
+  const hasCaseSolvingStarted = useCaseSolvingStore((state) => state.hasCaseSolvingStarted);
+  const isStepCompleted = useCaseSolvingStore((state) => state.isStepCompleted);
+  const setShowStepTwoModal = useCaseSolvingStore((state) => state.setShowStepTwoModal);
+  const caseStepIndex = useCaseSolvingStore((state) => state.caseStepIndex);
 
   useEffect(() => 
   {
     const handleScroll = (): void => 
     {
-      if(activeStep === 0) { setProgress(calculateScrollProgress("completeTestsStepContent")); }
-      if(activeStep === 1) { setProgress(calculateScrollProgress("solveCaseStepContent")); }
-      if(activeStep === 2) { setProgress(calculateScrollProgress("ResultsReviewStepContent")); }
+      if(caseStepIndex === 0) { setProgress(calculateScrollProgress("completeTestsStepContent")); }
+      if(caseStepIndex === 1) { setProgress(calculateScrollProgress("solveCaseStepContent")); }
+      if(caseStepIndex === 2) { setProgress(calculateScrollProgress("ResultsReviewStepContent")); }
     };
     if(hasCaseSolvingStarted)
     {
       window.addEventListener("scroll", () => setTimeout(() => handleScroll(), 500)); 
     }
     return () => window.removeEventListener("scroll", () => setTimeout(() => handleScroll(), 0));
-  }, [activeStep, hasCaseSolvingStarted]);
+  }, [caseStepIndex, hasCaseSolvingStarted]);
 
   const handleCallToAction = (): void => 
   {
     if(setCaseStepIndex)
     {
-      if(activeStep === 0) { setCaseStepIndex(1); }
-      if(activeStep === 1) { setShowStepTwoModal(true); }  
+      if(caseStepIndex === 0) { setCaseStepIndex(1); }
+      if(caseStepIndex === 1) { setShowStepTwoModal(true); }  
     }
   };
 
@@ -55,31 +58,31 @@ const CaseNavBar: FunctionComponent<ICaseNavBarProps> = ({ activeStep, setCaseSt
             steps.map(
               (stepText, index) =>
                 (index === 0 || index === 1 || index === 2) &&
-                activeStep !== undefined && (
+                caseStepIndex !== undefined && (
                   <CaptionText
                     component="p"
                     key={index}
                     onClick={() =>
                     {
-                      if(activeStep > 0 && activeStep > index) { setCaseStepIndex(index); }
+                      if(caseStepIndex > 0 && caseStepIndex > index) { setCaseStepIndex(index); }
                     }}
                     css={styles.tab({
-                      active: index === activeStep,
-                      completed: index < activeStep,
+                      active: index === caseStepIndex,
+                      completed: index < caseStepIndex,
                       theme,
                     })}
                     variant="caseNavBar"
                     styleType="caption-01-bold">
-                    <span>{index < activeStep ? <Check/> : index + 1}</span>
+                    <span>{index < caseStepIndex ? <Check/> : index + 1}</span>
                     {stepText}
                   </CaptionText>
                 )
             )}
         </div>
-        {activeStep !== undefined && activeStep < 2 && steps && (
+        {caseStepIndex !== undefined && caseStepIndex < 2 && steps && (
           <div css={styles.callToAction}>
-            <Button<"button"> onClick={handleCallToAction} disabled={!isStepCompleted} styleType="primary">
-              {activeStep === 0 ? "Solve this case" : "Submit and view results"}
+            <Button<"button"> onClick={handleCallToAction} disabled={caseStepIndex === 0 ? !isLastGame : !isStepCompleted} styleType="primary">
+              {caseStepIndex === 0 ? "Solve this case" : "Submit and view results"}
             </Button>
           </div>
         )}

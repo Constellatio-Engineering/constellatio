@@ -1,6 +1,7 @@
 import { Button } from "@/components/atoms/Button/Button";
 import IconButtonBar from "@/components/iconButtonBar/IconButtonBar";
 import { ArrowDown } from "@/components/Icons/ArrowDown";
+import { ArrowUp } from "@/components/Icons/ArrowUp";
 import { Bookmark } from "@/components/Icons/Bookmark";
 import { Edit } from "@/components/Icons/Edit";
 import { Notepad } from "@/components/Icons/Notepad";
@@ -12,37 +13,32 @@ import { type IGenCase_Resolution, type IGenCase_Facts, type Maybe } from "@/ser
 import caseSolvingStore from "@/stores/caseSolving.store";
 
 import {
-  Accordion, Container, Group, Text, Title, useMantineTheme 
+  Accordion, Container, Group, ScrollArea, Spoiler, Text, Title
 } from "@mantine/core";
 import { useDisclosure } from "@mantine/hooks";
-import React, { useRef, type FunctionComponent, useEffect } from "react";
+import React, { useRef, type FunctionComponent, useEffect, useState } from "react";
 
 import * as styles from "./CaseResultsReviewStep.styles";
 
-export interface ICaseResultsReviewStepProps 
+interface ICaseResultsReviewStepProps 
 {
   readonly facts: Maybe<IGenCase_Facts>;
   readonly resolution: Maybe<IGenCase_Resolution>;
-  readonly setCaseStepIndex: React.Dispatch<React.SetStateAction<0 | 1 | 2>>;
   readonly title: string;
 }
 
-const CaseResultsReviewStep: FunctionComponent<ICaseResultsReviewStepProps> = ({
-  facts,
-  resolution,
-  setCaseStepIndex,
-  title
-}) => 
+const CaseResultsReviewStep: FunctionComponent<ICaseResultsReviewStepProps> = ({ facts, resolution, title }) => 
 {
-  const theme = useMantineTheme();
-  const [isExpandSolution, setIsExpandSolution] = React.useState<boolean>(false);
+  const [isExpandSolution, setIsExpandSolution] = useState<boolean>(false);
+  const solution = caseSolvingStore((s) => s.solution);
+  const solutionContent = useRef<HTMLDivElement>(null);
+  const [solutionElementHight, setSolutionElementHight] = React.useState<number>(0);
+  const setCaseStepIndex = caseSolvingStore((state) => state.setCaseStepIndex);
+
   const icons = [
     { src: <Bookmark/>, title: "Bookmark" },
     { src: <Print/>, title: "Print" },
   ];
-  const { solution } = caseSolvingStore();
-  const solutionContent = useRef<HTMLDivElement>(null);
-  const [solutionElementHight, setSolutionElementHight] = React.useState<number>(0);
 
   useEffect(() => 
   {
@@ -71,6 +67,26 @@ const CaseResultsReviewStep: FunctionComponent<ICaseResultsReviewStepProps> = ({
     setCaseStepIndex(1);
   };
 
+  const ShowAllBtn = (
+    <Button<"button">
+      styleType="tertiary"
+      rightIcon={<ArrowDown size={20}/>}
+      size="medium"
+      onClick={() => setIsExpandSolution(true)}>
+      Show all
+    </Button>
+  );
+
+  const ShowLessBtn = (
+    <Button<"button">
+      styleType="tertiary"
+      rightIcon={<ArrowUp size={20}/>}
+      size="medium"
+      onClick={() => setIsExpandSolution(false)}>
+      Show less
+    </Button>
+  );
+
   return (
     <div css={styles.wrapper} id="ResultsReviewStepContent">
       <Container maw={1440}>
@@ -78,19 +94,21 @@ const CaseResultsReviewStep: FunctionComponent<ICaseResultsReviewStepProps> = ({
           <div css={styles.leftSideWrapper}>
             {facts?.json && (
               <div css={styles.factsWrapper}>
-                <Accordion variant="separated">
+                <Accordion variant="separated" defaultValue="facts">
                   <Accordion.Item value="facts">
                     <Accordion.Control>
                       <Title order={3}>Facts</Title>
                     </Accordion.Control>
                     <Accordion.Panel>
-                      <Richtext data={facts}/>
+                      <ScrollArea h={500} offsetScrollbars>
+                        <Richtext data={facts}/>
+                      </ScrollArea>
                     </Accordion.Panel>
                   </Accordion.Item>
                 </Accordion>
               </div>
             )}
-            <div css={styles.solutionWrapper({ isExpandSolution, theme })}>
+            <div css={styles.solutionWrapper}>
               <div className="solution-header">
                 <Title order={3}><Pen/> Your solution</Title>
                 <div className="edit-but">
@@ -98,15 +116,25 @@ const CaseResultsReviewStep: FunctionComponent<ICaseResultsReviewStepProps> = ({
                   </Button>
                 </div>
               </div>
-              <div className="solution-content">
-                <div ref={solutionContent}/>
-
-              </div>
-              {solutionElementHight > 240 && (
-                <div className="show-all">
-                  <Button<"button"> styleType="tertiary" onClick={() => setIsExpandSolution(prev => !prev)}>Show {!isExpandSolution ? "all" : "less"}<ArrowDown/></Button>
-                </div>
-              )}
+              {
+                solutionElementHight > 240 ? (
+                  <Spoiler
+                    hideLabel={ShowLessBtn}
+                    maxHeight={220}
+                    showLabel={ShowAllBtn}
+                    styles={styles.spoilerStyles({ isExpandSolution })}>
+                    <div className="solution-content">
+                      <ScrollArea h={isExpandSolution && solutionElementHight > 240 ? 500 : undefined} offsetScrollbars>
+                        <div ref={solutionContent}/>
+                      </ScrollArea>
+                    </div>
+                  </Spoiler>
+                ) : (
+                  <div className="solution-content">
+                    <div ref={solutionContent}/>
+                  </div>
+                )
+              }
             </div>
           </div>
           {resolution?.json && (
@@ -128,7 +156,6 @@ const CaseResultsReviewStep: FunctionComponent<ICaseResultsReviewStepProps> = ({
         title="Reset case progress?"
         onClose={() => 
         {
-          console.log("Closed");
           close();
         }}>
         <Text>

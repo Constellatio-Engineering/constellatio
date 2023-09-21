@@ -1,6 +1,6 @@
 import { db } from "@/db/connection";
 import { allBookmarkResourceTypes, type BookmarkInsert, bookmarksTable } from "@/db/schema";
-import { addOrRemoveBookmarkSchema } from "@/schemas/addOrRemoveBookmarkSchema";
+import { addOrRemoveBookmarkSchema } from "@/schemas/bookmarks/addOrRemoveBookmark.schema";
 import { createTRPCRouter, protectedProcedure } from "@/server/api/trpc";
 import { InternalServerError } from "@/utils/serverError";
 

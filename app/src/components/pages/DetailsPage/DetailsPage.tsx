@@ -8,7 +8,7 @@ import useCaseSolvingStore from "@/stores/caseSolving.store";
 
 import React, { useEffect, type FunctionComponent } from "react";
 
-import * as styles from "./CasesPage.styles";
+import * as styles from "./DetailsPage.styles";
 
 // Omit<Omit<Partial<IGenCase & IGenArticle>, "__typename">, "variant"> & {readonly variant: "case" | "dictionary"};
 
@@ -19,8 +19,9 @@ type IDetailsPageProps = {
 
 const DetailsPage: FunctionComponent<IDetailsPageProps> = ({ content, variant }) => 
 {
-  const [caseStepIndex, setCaseStepIndex] = React.useState<0 | 1 | 2>(0);
-  const { setHasCaseSolvingStarted } = useCaseSolvingStore();
+  const setHasCaseSolvingStarted = useCaseSolvingStore((state) => state.setHasCaseSolvingStarted);
+  const caseStepIndex = useCaseSolvingStore((state) => state.caseStepIndex);
+  const setCaseStepIndex = useCaseSolvingStore((state) => state.setCaseStepIndex);
 
   useEffect(() => 
   {
@@ -51,8 +52,6 @@ const DetailsPage: FunctionComponent<IDetailsPageProps> = ({ content, variant })
       />
       <CaseNavBar
         variant={variant}
-        activeStep={caseStepIndex}
-        setCaseStepIndex={setCaseStepIndex}
       />
       <div css={styles.mainContainer}>
         {content?.fullTextTasks && caseStepIndex === 0 && (
@@ -66,14 +65,13 @@ const DetailsPage: FunctionComponent<IDetailsPageProps> = ({ content, variant })
         {content?.__typename === "Case" && caseStepIndex === 1 && (
           <CaseSolveCaseStep {...{
             facts: content?.facts,
-            setCaseStepIndex,
             title: content?.title
           }}
           />
         )}
         {content?.__typename === "Case" && content?.facts && content?.resolution && content?.title && caseStepIndex === 2 && (
           <CaseResultsReviewStep {...{
-            facts: content?.facts, resolution: content?.resolution, setCaseStepIndex, title: content?.title 
+            facts: content?.facts, resolution: content?.resolution, title: content?.title 
           }}
           />
         )}

@@ -2,15 +2,20 @@
 import { type IGenCaseOverviewFragment } from "../graphql/__generated/sdk";
 import { caisySDK } from "../graphql/getSdk";
 
-export type allCases = IGenCaseOverviewFragment[] & {
+export type allCases = Array<IGenCaseOverviewFragment & {
   __typename?: "Case" | undefined;
-};
+}>;
 
-const getAllCases = async ({ after, allCases = [] }: {
+type GetAllCasesProps = {
   after?: string;
   allCases?: allCases;
-}): Promise<allCases> => 
+};
+
+const getAllCases = async (props?: GetAllCasesProps): Promise<allCases> =>
 {
+  const after = props?.after;
+  let allCases = props?.allCases || [];
+
   try 
   {
     const { allCase } = await caisySDK.getAllCaseOverview({ after });
@@ -27,10 +32,12 @@ const getAllCases = async ({ after, allCases = [] }: {
     {
       return await getAllCases({
         after: allCase.pageInfo.endCursor!,
+        allCases
       });
     }
     return allCases;
   }
+
   catch (error) 
   {
     console.error("error at getting all Cases", error);

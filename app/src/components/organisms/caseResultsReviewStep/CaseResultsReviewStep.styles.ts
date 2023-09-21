@@ -1,5 +1,6 @@
 import { css } from "@emotion/react";
-import { type MantineTheme } from "@mantine/styles";
+import { type SpoilerStylesNames, type SpoilerStylesParams } from "@mantine/core";
+import { type Styles, type MantineTheme } from "@mantine/styles";
 
 export const wrapper = css``;
 
@@ -27,71 +28,35 @@ export const factsWrapper = (theme: MantineTheme) => css`
     outline: 0;
     border: 0;
   }
-  max-height: 300px;
-  overflow: auto;
-
-
-`;
-
-const CSSshowSolutionCard = css`
-  height: 500px;
-  max-height: 500px;
   overflow: auto;
 `;
 
-export const solutionWrapper = ({ isExpandSolution, theme }: {
-  isExpandSolution?: boolean;
-  theme: MantineTheme;
-}) => css`
+export const solutionWrapper = (theme: MantineTheme) => css`
   background-color: ${theme.colors["neutrals-01"][0]};
   border-radius: 12px;
   width: 100%;
-  height: 100%;
-  max-height: 350px;
-  overflow: hidden;
-  ${isExpandSolution && CSSshowSolutionCard};
   transition: height 0.5s ease-in-out;
-  /* position: relative; */
+
   .solution-header {
     display: flex;
     justify-content: space-between;
     align-items: center;
     padding: 16px 20px;
   }
+
   .solution-content {
     padding: 20px;
     position: relative;
     z-index: 2;
 
-    font-family: Karla;
     font-size: 16px;
     font-style: normal;
     font-weight: 400;
     line-height: 24px; /* 150% */
+    margin-bottom: 32px;
   }
-  .show-all {
-    z-index: 3;
-    position: absolute;
-    bottom: 0;
-    left: 0;
-    width: 100%;
-    height: 100px;
-    display: flex;
-    justify-content: flex-start;
-    padding-left: 20px;
-    align-items: center;
-    background: linear-gradient(
-      to bottom,
-      ${theme.colors["transparency-03"][0]} 0%,
-      ${theme.colors["neutrals-01"][0]} 25%
-    );
-    button {
-      transform: translateY(10px);
-      border: 1px solid ${theme.colors["neutrals-01"][3]};
-    }
-  }
-  padding-bottom: 80px;
 
+  padding-bottom: 20px;
 `;
 
 export const resolutionWrapper = css`
@@ -117,3 +82,33 @@ export const leftSideWrapper = css`
 position: sticky;
 top: 80px;
 `;
+
+type SpoilerStyles = Styles<SpoilerStylesNames, SpoilerStylesParams>;
+
+export const spoilerStyles = ({ isExpandSolution }: { isExpandSolution: boolean }): SpoilerStyles =>
+{
+  const styles: SpoilerStyles = () => ({
+    control: {
+      bottom: 0,
+      left: "20px",
+      position: "absolute",
+      zIndex: 3
+    },
+    root: {
+      ":before": {
+        background: !isExpandSolution
+          ? "linear-gradient(360deg, #fff  64%, rgba(255, 255, 255, 0) 97%)"
+          : "transparent",
+        bottom: 0,
+        content: "''",
+        display: !isExpandSolution ? "block" : "none",
+        height: "90px",
+        position: "absolute",
+        width: "100%",
+        zIndex: 3,
+      },
+    }
+  });
+
+  return styles;
+};

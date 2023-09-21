@@ -29,7 +29,9 @@ export const RichtextEditorField: FC<RichtextEditorFieldProps> = ({ action, cont
       }),
     ],
   });
-  const { setIsStepCompleted, setSolution } = useCaseSolvingStore();
+  const setSolution = useCaseSolvingStore((state) => state.setSolution);
+  const setIsStepCompleted = useCaseSolvingStore((state) => state.setIsStepCompleted);
+
   useEffect(() =>
   {
     if(editor?.isEmpty)

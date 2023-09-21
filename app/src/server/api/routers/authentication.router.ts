@@ -1,6 +1,6 @@
 import { db } from "@/db/connection";
 import { type UserInsert, usersTable } from "@/db/schema";
-import { registrationFormSchema } from "@/schemas/RegistrationFormSchema";
+import { registrationFormSchema } from "@/schemas/auth/registrationForm.schema";
 import { createTRPCRouter, publicProcedure } from "@/server/api/trpc";
 import { EmailAlreadyTakenError, InternalServerError, RegisterError } from "@/utils/serverError";
 

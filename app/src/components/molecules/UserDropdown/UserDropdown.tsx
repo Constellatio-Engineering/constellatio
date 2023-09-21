@@ -1,4 +1,5 @@
 import { supabase } from "@/supabase/client";
+import { api } from "@/utils/api";
 
 import { Avatar, Menu } from "@mantine/core";
 import { notifications } from "@mantine/notifications";
@@ -8,6 +9,7 @@ import { type FunctionComponent } from "react";
 
 export const UserDropdown: FunctionComponent = () =>
 {
+  const apiContext = api.useContext();
   const router = useRouter();
 
   const handleSubscription = async (): Promise<void> =>
@@ -21,6 +23,7 @@ export const UserDropdown: FunctionComponent = () =>
     {
       await supabase.auth.signOut();
       await router.replace("/login");
+      await apiContext.search.getTenantToken.invalidate();
       notifications.show({
         message: "Come back soon!",
         title: "Sign out handler",

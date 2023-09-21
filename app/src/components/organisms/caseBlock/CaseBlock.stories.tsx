@@ -1,7 +1,7 @@
 import { type Meta, type StoryObj } from "@storybook/react";
 import { type FunctionComponent } from "react";
 
-import CaseBlock, { type ICaseBlockProps } from "./CaseBlock";
+import CaseBlock, { type ICaseBlockProps } from "./ItemBlock";
 
 const Template: FunctionComponent<ICaseBlockProps> = (args) => (<CaseBlock {...args}/>);
 
