@@ -51,12 +51,7 @@ export const Header: FC<HeaderProps> = ({ variant = "default" }) =>
           <Link href="/">
             <Image src={ConstellatioFullLogo} alt="Constellatio"/>
           </Link>
-          {
-            links.map((link, linkIndex) => 
-            {
-              return <Link href={`/${link.toLowerCase()}`} key={linkIndex}><MenuTab active={pathname?.toLowerCase().includes(link.toLowerCase())} title={link}/></Link>;
-            })
-          }
+          {links.map((link, linkIndex) => <Link href={`/${link.toLowerCase()}`} key={linkIndex}><MenuTab active={pathname?.toLowerCase().includes(link.toLowerCase())} title={link}/></Link>)}
         </div>
         <div css={styles.profileArea}>
           {env.NEXT_PUBLIC_NODE_ENV === "development" && (
@@ -72,7 +67,7 @@ export const Header: FC<HeaderProps> = ({ variant = "default" }) =>
             </div>
           )}
           <div className="search-input"><SearchFieldSmall/></div>
-          <Link href="personal-space"><MenuTab title="Persoanl Space" icon={<IconFolder/>}/></Link>
+          <Link href="personal-space"><MenuTab title="Persoanl Space" icon={<IconFolder/>} active={pathname?.toLowerCase().includes("personal-space")}/></Link>
           <span className="vertical-line">s</span>
           <div>
             <UserDropdown/>

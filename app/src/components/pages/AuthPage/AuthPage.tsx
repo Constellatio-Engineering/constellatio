@@ -34,11 +34,14 @@ export const AuthPage: FC<AuthPageProps> = ({ tab }) =>
         sx={(theme) => ({
           backgroundColor: theme.colors["neutrals-01"][0],
           borderRadius: `${theme.radius["radius-16"]} 0 0 ${theme.radius["radius-16"]}`,
-          overflowY: "scroll",
+          overflowY: "auto",
           padding: 0,
         })}>
         <Header variant="simple"/>
-        <Container w={500} pt={50} pb={tab === "register" ? "spacing-100" : 0}>
+        <Container
+          w={500}
+          pt={50}
+          pb={tab === "register" ? "spacing-100" : 0}>
           <Switcher
             size="big"
             value={tab}

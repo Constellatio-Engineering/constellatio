@@ -13,7 +13,7 @@ export const wrapper = ({ theme, variant }: ICategoryTabStyleProps) => css`
 outline: 0;
 border: 0;
 
-background-color: ${variant === "case" ? "transparent" : variant === "dictionary" ? "transparent" : variant === "red" ? theme.colors["neutrals-02"][1] : "transparent"};
+background-color: ${variant === "case" ? theme.colors["neutrals-01"][0] : variant === "dictionary" ? theme.colors["neutrals-01"][0] : variant === "red" ? theme.colors["neutrals-02"][1] : theme.colors["neutrals-01"][0]};
 color: ${variant === "case" ? theme.colors["neutrals-02"][1] : variant === "dictionary" ? theme.colors["neutrals-02"][1] : variant === "red" ? theme.colors["neutrals-01"][0] : theme.colors["neutrals-02"][1]};
 /* progressive/body/body-01@medium */
 display: flex;
