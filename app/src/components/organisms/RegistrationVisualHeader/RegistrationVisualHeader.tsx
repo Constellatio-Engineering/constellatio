@@ -12,24 +12,26 @@ export const RegistrationVisualHeader: FunctionComponent = () =>
       bg="brand-01.5"
       sx={() => ({
         height: "100%",
-        overflow: "hidden",
-        padding: 0,
+        overflow: "auto",
+        padding: 0
       })}>
       <Flex
         direction="column"
         justify="space-between"
         align="center"
         h="100%"
+        maw="100%"
         pt={64}>
         <Flex
           px={20}
           direction="column"
+          maw="100%"
           justify="space-between"
           align="center">
           <Image
             priority
             src={visual}
-            style={{ height: "auto", maxWidth: 550 }}
+            style={{ height: "auto", maxWidth: "100%", objectFit: "contain" }}
             alt="Registration-visual"
           />
           <Title

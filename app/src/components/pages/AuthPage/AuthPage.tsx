@@ -27,7 +27,7 @@ export const AuthPage: FC<AuthPageProps> = ({ tab }) =>
       justify="space-between"
       bg="brand-01.5"
       sx={{ height: "100vh", minHeight: 600, overflow: "hidden" }}>
-      {/* <RegistrationVisualHeader/> */}
+      <RegistrationVisualHeader/>
       <Container
         w="100%"
         pt={20}
