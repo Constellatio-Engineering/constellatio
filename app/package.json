@@ -14,7 +14,7 @@
     "separatorBuild": "---------------------- BUILD ----------------------",
     "build": "next build",
     "separatorStart": "---------------------- START ----------------------",
-    "start": "next start",
+    "start": "next start -p 3010",
     "start:prod": "pnpm build && pnpm start",
     "separatoDeploy": "---------------------- DEPLOY ----------------------",
     "vercel:link-project": "VERCEL_PROJECT_ID=prj_OPv3FlK3PfhRLLf1U6Mw0QI77heh VERCEL_ORG_ID=qoskyGLRMimmASRmEg9i5oEa",

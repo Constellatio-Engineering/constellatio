@@ -7,15 +7,22 @@ import type { NextRequest, NextMiddleware } from "next/server";
 
 export const middleware: NextMiddleware = async (req: NextRequest) =>
 {
+  console.log("--- middleware ---");
+
   const res = NextResponse.next();
   const supabase = createMiddlewareSupabaseClient<Database>({ req, res });
-  const { data: { session }, error: authError } = await supabase.auth.getSession();
-  const { data: userData, error: getUserError } = await supabase.auth.getUser();
-  const didErrorOccur = authError != null || getUserError != null;
+  const { data: { session }, error: getSessionError } = await supabase.auth.getSession();
+  const { data: { user }, error: getUserError } = await supabase.auth.getUser();
+  const didErrorOccur = getSessionError != null || getUserError != null;
 
-  if(didErrorOccur)
+  if(getSessionError)
   {
-    console.error("Error getting session or user", { authError, getUserError });
+    console.warn("Error getting session", getSessionError);
+  }
+
+  if(getUserError)
+  {
+    console.warn("Error getting user", getUserError);
   }
 
   if(didErrorOccur || !session?.user)
@@ -28,7 +35,7 @@ export const middleware: NextMiddleware = async (req: NextRequest) =>
     return NextResponse.redirect(redirectUrl);
   }
 
-  if(!userData.user?.confirmed_at)
+  if(!user?.confirmed_at)
   {
     const redirectUrl = req.nextUrl.clone();
 
@@ -55,6 +62,6 @@ export const config = {
      * - extension (Caisy UI extension)
      * - test (test route)
      */
-    "/((?!api|login|register|confirm|_next/static|_next/image|favicon.*|extension|test|cases|dictionary).*)",
+    "/((?!api|login|register|confirm|_next/static|_next/image|favicon.*|extension|test).*)",
   ],
 };
