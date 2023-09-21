@@ -25,7 +25,7 @@ const getArticlesOverviewProps = async (): Promise<IArticlesOverviewProps> =>
   {
     const [allMainCategoriesRes, allSubCategoriesRes, allArticlesRes] = await Promise.all([
       caisySDK.getAllMainCategory(),
-      caisySDK.getAllSubCategory(), getAllArticles({})
+      caisySDK.getAllSubCategory(), getAllArticles()
     ]);
 
     const allMainCategories = (
