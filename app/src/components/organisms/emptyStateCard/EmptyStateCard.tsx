@@ -45,7 +45,7 @@ const EmptyStateCard: FunctionComponent<IEmptyStateCardProps> = ({
           </BodyText>
         </div>
         {button && variant === "For-large-areas" && (
-          <div css={styles.callToAction}>
+          <div css={styles.callToAction({ theme })}>
             <Button<"button"> styleType="primary" onClick={() => {}}>
               {button}
             </Button>

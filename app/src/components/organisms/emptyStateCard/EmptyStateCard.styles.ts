@@ -47,7 +47,11 @@ export const emptyStateCardText = ({ theme, variant }: IEmptyCardProps) => css`
     ? theme?.colors["neutrals-01"][7]
     : theme?.colors["neutrals-01"][9]};
 `;
-export const callToAction = css`
+export const callToAction = ({ theme }: IEmptyCardProps) => css`
+    color: ${theme?.colors["neutrals-01"][0]};
+  & * {
+    color: ${theme?.colors["neutrals-01"][0]};
+  }
   svg {
     margin-right: 4px;
   }
