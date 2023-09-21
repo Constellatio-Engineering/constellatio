@@ -16,7 +16,7 @@ import useSelectionCardGameStore, {
 import { shuffleArray } from "@/utils/array";
 
 import { Title, LoadingOverlay } from "@mantine/core";
-import { type FC, useEffect, useMemo, useState } from "react";
+import { type FC, useEffect, useMemo } from "react";
 
 import {
   Container,
@@ -29,26 +29,37 @@ import {
 
 export type SelectionCardGameProps = Pick<
 IGenCardSelectionGame,
-"game" | "helpNote" | "question"
+"game" | "helpNote" | "question" | "id"
 >;
 
-export const SelectionCardGame: FC<SelectionCardGameProps> = ({ game, helpNote, question }) => 
+export const SelectionCardGame: FC<SelectionCardGameProps> = ({
+  game,
+  helpNote,
+  id,
+  question
+}) => 
 {
-  // const {
-  //   gameStatus,
-  //   gameSubmitted,
-  //   onOptionCheck,
-  //   optionsItems,
-  //   resultMessage,
-  //   setGameStatus,
-  //   setGameSubmitted,
-  //   setOptionsItems,
-  //   setResultMessage,
-  // } = useSelectionCardGameStore();
+  const getNextGameIndex = useCaseSolvingStore((s) => s.getNextGameIndex);
 
-  const { getNextGameIndex } = useCaseSolvingStore();
+  const gameState = useSelectionCardGameStore((s) => s.getGameState(id));
 
-  const optionsWithCheckProp = useMemo(
+  const allGames = useSelectionCardGameStore((s) => s.games);
+
+  const updateGameState = useSelectionCardGameStore((s) => s.updateGameState);
+
+  const initializeNewGameState = useSelectionCardGameStore(
+    (s) => s.initializeNewGameState
+  );
+
+  useEffect(() => 
+  {
+    if(gameState == null && id != null) 
+    {
+      initializeNewGameState(id);
+    }
+  }, [allGames, gameState, id, initializeNewGameState]);
+
+  const optionsWithCheckProp: TCardGameOptionWithCheck[] = useMemo(
     () =>
       game?.options?.map((option: TCardGameOption) => ({
         ...option,
@@ -56,19 +67,27 @@ export const SelectionCardGame: FC<SelectionCardGameProps> = ({ game, helpNote, 
       })),
     [game?.options]
   );
-  const originalOptions: TCardGameOptionWithCheck[] = useMemo(
-    () => optionsWithCheckProp ?? [],
-    [optionsWithCheckProp]
-  );
-  const [resetCount, setResetCount] = useState(0);
+
+  const optionsShuffled = useMemo(() => shuffleArray<TCardGameOptionWithCheck>(optionsWithCheckProp), [optionsWithCheckProp]);
 
   useEffect(() => 
   {
-    const optionsShuffled =
-			shuffleArray<TCardGameOptionWithCheck>(originalOptions);
-    setOptionsItems(optionsShuffled);
+    updateGameState(id!, { optionsItems: optionsShuffled });
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [originalOptions]);
+  }, [optionsWithCheckProp]);
+
+  if(!gameState || !id) 
+  {
+    return null;
+  }
+
+  const {
+    gameStatus,
+    gameSubmitted,
+    optionsItems,
+    resetCounter,
+    resultMessage
+  } = gameState ?? {};
 
   const filteredCorrectAnswers = optionsItems?.filter(
     (item) => item.correctAnswer
@@ -90,29 +109,25 @@ export const SelectionCardGame: FC<SelectionCardGameProps> = ({ game, helpNote, 
 
     if(winCondition) 
     {
-      setGameStatus("win");
-      setResultMessage("Congrats! all answers are correct!");
+      updateGameState(id, { gameStatus: "win", resultMessage: "Congrats! all answers are correct!" });
     }
     else 
     {
-      setGameStatus("lose");
-      setResultMessage("Answers are incorrect!");
+      updateGameState(id, { gameStatus: "lose", resultMessage: "Answers are incorrect!" });
     }
 
     if(!gameSubmitted)
     {
-      setGameSubmitted(true);
       getNextGameIndex();
+      updateGameState(id, { gameSubmitted: true });
     }
   };
 
   const onGameResetHandler = (): void => 
   {
-    const optionsShuffled =
-			shuffleArray<TCardGameOptionWithCheck>(originalOptions);
-    setOptionsItems(optionsShuffled);
-    setGameStatus("inprogress");
-    setResetCount((prevCount) => prevCount + 1);
+    updateGameState(id, {
+      gameStatus: "inprogress", optionsItems: optionsShuffled, resetCounter: resetCounter + 1, resultMessage: "" 
+    });
   };
 
   return (
@@ -145,9 +160,9 @@ export const SelectionCardGame: FC<SelectionCardGameProps> = ({ game, helpNote, 
                 onCheckHandler={(e) => 
                 {
                   const { checked } = e.target;
-                  onOptionCheck(option.id, checked);
+                  updateGameState(id, { optionsItems: optionsItems.map((item) => item.id === option.id ? { ...item, checked } : item) });
                 }}
-                key={`${option.id} - ${resetCount}`}
+                key={`${option.id} - ${resetCounter}`}
                 label={option.label}
                 disabled={gameStatus !== "inprogress"}
                 result={option.correctAnswer ? "Correct" : "Incorrect"}

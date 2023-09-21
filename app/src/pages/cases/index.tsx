@@ -17,7 +17,7 @@ Awaited<ReturnType<typeof getCasesOverviewProps>>
     props: {
       ...(resAllCases || null),
     },
-    revalidate: 1,
+    revalidate: 10,
   };
 
 };
