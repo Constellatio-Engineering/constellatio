@@ -13,8 +13,8 @@ export const wrapper = ({ theme, variant }: ICategoryTabStyleProps) => css`
 outline: 0;
 border: 0;
 
-background-color: ${variant === "case" ? theme.colors["neutrals-01"][0] : variant === "dictionary" ? theme.colors["neutrals-01"][0] : variant === "red" ? theme.colors["neutrals-02"][1] : theme.colors["neutrals-01"][0]};
-color: ${variant === "case" ? theme.colors["neutrals-02"][1] : variant === "dictionary" ? theme.colors["neutrals-02"][1] : variant === "red" ? theme.colors["neutrals-01"][0] : theme.colors["neutrals-02"][1]};
+background-color: ${theme.colors["neutrals-01"][0]};
+color: ${theme.colors["neutrals-02"][1]};
 /* progressive/body/body-01@medium */
 display: flex;
 justify-content: space-between;
@@ -26,7 +26,7 @@ border-radius: 12px;
     margin-right: 16px;
     width: 40px;
     height: 40px;
-    background-color: ${variant === "case" ? theme.colors["neutrals-02"][1] : variant === "dictionary" ? theme.colors["neutrals-02"][1] : variant === "red" ? theme.colors["neutrals-02"][0] : "blue"};
+    background-color: ${theme.colors["neutrals-02"][1]};
     color: white;
     display: grid;
     place-items:   center;
@@ -42,7 +42,7 @@ border-radius: 12px;
     line-height: 24px; /* 150% */
 }
 &:hover{
-    background-color: ${theme.colors["neutrals-01"][1]};
+    background-color: ${theme.colors["neutrals-01"][2]};
 border-radius: 12px;
     color: ${theme.colors["neutrals-02"][1]};
     .icon{
@@ -50,14 +50,14 @@ border-radius: 12px;
     }
 }
 &:active{
-    background-color: #F0F0F0;
+    background-color: ${theme.colors["neutrals-01"][3]};
 }
 &.selected{
     background-color: ${theme.colors["neutrals-02"][1]};
-    color:#fff;
+    color: ${theme.colors["neutrals-01"][0]};
 
     .icon{
-        background-color: #303030;
+        background-color: ${theme.colors["neutrals-02"][2]};
     }
 }
 `;

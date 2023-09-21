@@ -1,7 +1,10 @@
 /* eslint-disable max-lines */
 import { Button } from "@/components/atoms/Button/Button";
 import OverviewHeader from "@/components/organisms/OverviewHeader/OverviewHeader";
+import PersonalSpaceNavBar from "@/components/organisms/personalSpaceNavBar/PersonalSpaceNavBar";
 import DummyFileViewer from "@/components/pages/personalSpacePage/dummyFileViewer/DummyFileViewer";
+import { type ICasesOverviewProps } from "@/services/content/getCasesOverviewProps";
+import { type IGenMainCategory } from "@/services/graphql/__generated/sdk";
 import uploadsProgressStore from "@/stores/uploadsProgress.store";
 import { api } from "@/utils/api";
 import { getRandomUuid, removeItemsByIndices } from "@/utils/utils";
@@ -38,6 +41,27 @@ const PersonalSpacePage: FunctionComponent = () =>
     onSuccess: async () => apiContext.bookmarks.getAllBookmarks.invalidate(),
   });
 
+  const categories: ICasesOverviewProps["allMainCategories"] = [{
+    __typename: "MainCategory",
+    casesPerCategory: bookmarkedCases?.length ?? 0,
+    icon: {
+      src: BookmarkIconSvg.src,
+      title: "bookmark-icon"
+    },
+    id: "1",
+    mainCategory: "Favourites"
+  }, {
+    __typename: "MainCategory",
+    casesPerCategory: 999,
+    icon: {
+      src: FileIconSvg.src,
+      title: "file-category-icon"
+    },
+    id: "2",
+    mainCategory: "Materials"
+  }];
+
+  const [selectedCategoryId, setSelectedCategoryId] = useState<IGenMainCategory["id"]>(categories[0].id as IGenMainCategory["id"]);
   const { mutateAsync: createSignedUploadUrl } = api.uploads.createSignedUploadUrl.useMutation();
   const { mutateAsync: saveFileToDatabase } = api.uploads.saveFileToDatabase.useMutation();
 
@@ -144,6 +168,7 @@ const PersonalSpacePage: FunctionComponent = () =>
   };
 
   const areUploadsInProgress = uploads.some(u => u.state.type === "uploading");
+  const [selectedTab, setSelectedTab] = useState<number>(0);
 
   return (
     <div css={styles.wrapper}>
@@ -151,26 +176,12 @@ const PersonalSpacePage: FunctionComponent = () =>
         <OverviewHeader
           title="Personal Space"
           variant="red"
-          categories={[{
-            casesPerCategory: bookmarkedCases?.length ?? 0,
-            icon: {
-              src: BookmarkIconSvg.src,
-              title: "civil-law-category-icon"
-            },
-            id: "60d46218-087c-4170-9edc-246cc1bffcdf",
-            mainCategory: "Favourites"
-          }, {
-            casesPerCategory: 999,
-            icon: {
-              src: FileIconSvg.src,
-              title: "civil-law-category-icon"
-            },
-            id: "60d46218-087c-4170-9edc-246cc1bffcdf",
-            mainCategory: "Materials"
-          }]}
-          setSelectedCategoryId={() => {}}
+          categories={categories}
+          selectedCategoryId={selectedCategoryId ?? ""}
+          setSelectedCategoryId={setSelectedCategoryId}
         />
       </div>
+      {selectedCategoryId === "1" && <PersonalSpaceNavBar tabs={[{ itemsPerTab: 999, title: "gg" }]}/>}
       <p style={{ fontSize: 26, marginBottom: 10 }}><strong>Your bookmarked cases:</strong></p>
       {(areBookmarksLoading || areCasesLoading) ? (
         <p>Loading...</p>
