@@ -98,7 +98,7 @@ let FillGapsGame: FC<TFillGapsGame> = ({
     {
       const textArr: string[] = [];
 
-      if(props.node?.content?.length < 0) { return <div/>; }
+      if(!props.node.content || props.node?.content?.length <= 0) { return <></>; }
 
       for(const el of props.node.content) 
       {

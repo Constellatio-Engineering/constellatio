@@ -72,11 +72,12 @@ const CaseCompleteTestsStep: FunctionComponent<ICaseCompleteTestsStepProps> = ({
     [renderedCaseContent]
   );
 
+  console.log("render");
+
   useEffect(() => 
   {
-    
     if(variant === "case" && fullTextTasks?.__typename === "Case_fullTextTasks") { setGamesIndexes(getGamesIndexes({ fullTextTasks })); }
-    getNextGameIndex();
+
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [fullTextTasks]);
 
@@ -98,7 +99,11 @@ const CaseCompleteTestsStep: FunctionComponent<ICaseCompleteTestsStepProps> = ({
               styleType="primary"
               size="large"
               type="button"
-              onClick={() => setHasCaseSolvingStarted(true)}>
+              onClick={() => 
+              {
+                setHasCaseSolvingStarted(true); 
+                getNextGameIndex(); 
+              }}>
               Start solving case
             </Button>
           )}
