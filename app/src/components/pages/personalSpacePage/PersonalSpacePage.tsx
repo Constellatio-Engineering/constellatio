@@ -14,6 +14,8 @@ import { modals } from "@mantine/modals";
 import axios from "axios";
 import React, { type FormEvent, type FunctionComponent, useState } from "react";
 
+import { isFloat32Array } from "util/types";
+
 import * as styles from "./PersonalSpacePage.styles";
 import BookmarkIconSvg from "../../../../public/images/icons/bookmark.svg";
 import FileIconSvg from "../../../../public/images/icons/file.svg";
@@ -48,7 +50,7 @@ const PersonalSpacePage: FunctionComponent = () =>
       src: BookmarkIconSvg.src,
       title: "bookmark-icon"
     },
-    id: "1",
+    id: "0",
     mainCategory: "Favourites"
   }, {
     __typename: "MainCategory",
@@ -57,11 +59,11 @@ const PersonalSpacePage: FunctionComponent = () =>
       src: FileIconSvg.src,
       title: "file-category-icon"
     },
-    id: "2",
+    id: "1",
     mainCategory: "Materials"
   }];
 
-  const [selectedCategoryId, setSelectedCategoryId] = useState<IGenMainCategory["id"]>(categories[0].id as IGenMainCategory["id"]);
+  const [selectedCategoryId, setSelectedCategoryId] = useState<IGenMainCategory["id"]>(categories?.[0]?.id as IGenMainCategory["id"]);
   const { mutateAsync: createSignedUploadUrl } = api.uploads.createSignedUploadUrl.useMutation();
   const { mutateAsync: saveFileToDatabase } = api.uploads.saveFileToDatabase.useMutation();
 
@@ -167,8 +169,16 @@ const PersonalSpacePage: FunctionComponent = () =>
     setSelectedFiles(newSelectedFiles);
   };
 
+  const isFlavoriteTab = (id: string): boolean => 
+  {
+    if(id === categories?.[0]?.id) { return true; }
+    return false;
+  };
+
   const areUploadsInProgress = uploads.some(u => u.state.type === "uploading");
-  const [selectedTab, setSelectedTab] = useState<number>(0);
+  
+  const favoriteCategoryNavTabs = [{ id: "0", itemsPerTab: 999, title: "gg" }, { id: "1", itemsPerTab: 999, title: "ez" }, { id: "2", itemsPerTab: 999, title: "tutorial" }];
+  const [selectedTabId, setSelectedTabId] = useState<string>(favoriteCategoryNavTabs?.[0]?.id as string);
 
   return (
     <div css={styles.wrapper}>
@@ -181,7 +191,10 @@ const PersonalSpacePage: FunctionComponent = () =>
           setSelectedCategoryId={setSelectedCategoryId}
         />
       </div>
-      {selectedCategoryId === "1" && <PersonalSpaceNavBar tabs={[{ itemsPerTab: 999, title: "gg" }]}/>}
+      {isFlavoriteTab(selectedCategoryId ?? "") && <PersonalSpaceNavBar setSelectedTabId={setSelectedTabId} selectedTabId={selectedTabId} tabs={favoriteCategoryNavTabs}/>}
+      <br/><br/>
+      <hr/>
+      <br/><br/>
       <p style={{ fontSize: 26, marginBottom: 10 }}><strong>Your bookmarked cases:</strong></p>
       {(areBookmarksLoading || areCasesLoading) ? (
         <p>Loading...</p>

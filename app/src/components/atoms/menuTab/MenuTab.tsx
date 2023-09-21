@@ -4,11 +4,12 @@ import React, { type FunctionComponent } from "react";
 import * as styles from "./MenuTab.styles";
 import { CaptionText } from "../CaptionText/CaptionText";
 
-export interface IMenuTabProps
+export interface IMenuTabProps extends React.HTMLProps<HTMLDivElement>
 {
   readonly active?: boolean;
   readonly disabled?: boolean;
   readonly icon?: React.ReactNode;
+  readonly number: number;
   readonly title: string;
 }
 
@@ -16,13 +17,15 @@ const MenuTab: FunctionComponent<IMenuTabProps> = ({
   active,
   disabled,
   icon,
-  title
+  number,
+  title,
+  ...props
 }) => 
 {
   const theme = useMantineTheme();
   return (title || icon) ? (
-    <div css={styles.menuTabStyles({ active, disabled, theme })}>
-      <CaptionText styleType="caption-01-bold" component="span">{icon && icon}{title}</CaptionText>
+    <div {...props} css={styles.menuTabStyles({ active, disabled, theme })}>
+      <CaptionText styleType="caption-01-bold" component="span">{icon && icon}{title} <span css={styles.number}>({number})</span></CaptionText>
     </div>
   ) : null;
 };

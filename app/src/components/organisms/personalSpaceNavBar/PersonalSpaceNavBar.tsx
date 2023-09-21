@@ -1,22 +1,37 @@
+
+import MenuTab from "@/components/atoms/menuTab/MenuTab";
+
 import React, { type FunctionComponent } from "react";
 
 import * as styles from "./PersonalSpaceNavBar.styles";
 
-
-interface INavTab {
-  title: string;
+interface INavTab 
+{
+  id: string;
   itemsPerTab: number;
+  title: string;
 }
 
 interface PersonalSpaceNavBarProps
 {
-  tabs: Array<INavTab>;
+  readonly selectedTabId: string;
+  readonly setSelectedTabId: React.Dispatch<React.SetStateAction<string>>;
+  readonly tabs: INavTab[];
 }
 
-const PersonalSpaceNavBar: FunctionComponent<PersonalSpaceNavBarProps> = ({  }) => {
+const PersonalSpaceNavBar: FunctionComponent<PersonalSpaceNavBarProps> = ({ selectedTabId, setSelectedTabId, tabs }) => 
+{
   return (
     <div css={styles.wrapper}>
-      PersonalSpaceNavBar
+      {tabs && tabs.map((tab, index) => (
+        <MenuTab
+          key={index}
+          number={tab.itemsPerTab}
+          onClick={() => setSelectedTabId(tab.id)}
+          title={`${tab.title}`}
+          active={selectedTabId === tab.id}
+        />
+      ))}
     </div>
   );
 };
