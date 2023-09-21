@@ -43,3 +43,7 @@ export const menuTabStyles = ({ active, disabled, theme }: {
   }
   ${disabled && CSSDisabledStyles(theme)};
 `;
+
+export const number = (theme: MantineTheme) => css`
+color:${theme.colors["neutrals-01"][7]};
+`;

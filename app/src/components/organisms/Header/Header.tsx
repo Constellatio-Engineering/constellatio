@@ -67,7 +67,7 @@ export const Header: FC<HeaderProps> = ({ variant = "default" }) =>
             </div>
           )}
           <div className="search-input"><SearchFieldSmall/></div>
-          <Link href="personal-space"><MenuTab title="Persoanl Space" icon={<IconFolder/>} active={pathname?.toLowerCase().includes("personal-space")}/></Link>
+          <Link href="/personal-space"><MenuTab title="Persoanl Space" icon={<IconFolder/>} active={pathname?.toLowerCase().includes("personal-space")}/></Link>
           <span className="vertical-line">s</span>
           <div>
             <UserDropdown/>
