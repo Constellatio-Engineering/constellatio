@@ -9,7 +9,7 @@ export interface IMenuTabProps extends React.HTMLProps<HTMLDivElement>
   readonly active?: boolean;
   readonly disabled?: boolean;
   readonly icon?: React.ReactNode;
-  readonly number: number;
+  readonly number?: number;
   readonly title: string;
 }
 

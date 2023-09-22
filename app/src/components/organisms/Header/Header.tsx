@@ -1,3 +1,4 @@
+import { Button } from "@/components/atoms/Button/Button";
 import MenuTab from "@/components/atoms/menuTab/MenuTab";
 import SearchFieldSmall from "@/components/molecules/searchFieldSmall/SearchFieldSmall";
 import { env } from "@/env.mjs";
@@ -56,13 +57,14 @@ export const Header: FC<HeaderProps> = ({ variant = "default" }) =>
         <div css={styles.profileArea}>
           {env.NEXT_PUBLIC_NODE_ENV === "development" && (
             <div style={{ alignItems: "center", display: "flex" }}>
-              <button
+              <Button<"button">
+                styleType="secondarySubtle"
                 disabled={isRecreatingSearchIndices}
                 type="button"
                 onClick={() => recreateSearchIndices()}
                 style={{ marginRight: 10 }}>
                 Recreate Search Indices
-              </button>
+              </Button>
               {isRecreatingSearchIndices && <Loader size={22}/>}
             </div>
           )}
