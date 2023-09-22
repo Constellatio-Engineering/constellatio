@@ -2,10 +2,6 @@
  * Run `build` or `dev` with `SKIP_ENV_VALIDATION` to skip env validation. This is especially useful
  * for Docker builds.
  */
-import { createRequire } from 'module'
-const nodeRequire = createRequire(import.meta.url)
-const i18nextConfig = nodeRequire('./next-i18next.config.js')
-
 export const defaultLocale = "de";
 
 await import("./src/env.mjs");
@@ -26,7 +22,14 @@ const config = {
   typescript: {
     ignoreBuildErrors: true
   },
-  i18n: i18nextConfig.i18n,
+  i18n: {
+    /**
+     * Caution: If you change this, you need apply the same changes in `next-i18next.config.js` as well, as this is duplicated there for now.
+     * There is currently no workaround for this since `next-i18next` does not support esm.
+     */
+    defaultLocale: defaultLocale,
+    locales: [defaultLocale],
+  },
   swcMinify: true,
   async headers()
   {

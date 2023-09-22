@@ -9,17 +9,26 @@ export const middleware: NextMiddleware = async (req: NextRequest) =>
 {
   const res = NextResponse.next();
   const supabase = createMiddlewareSupabaseClient<Database>({ req, res });
-  const { data: { session }, error: authError } = await supabase.auth.getSession();
-  const { data: userData, error: getUserError } = await supabase.auth.getUser();
-  const didErrorOccur = authError != null || getUserError != null;
+  const { data: { session }, error: getSessionError } = await supabase.auth.getSession();
+  const { data: { user }, error: getUserError } = await supabase.auth.getUser();
+  let didErrorOccur = false;
 
-  if(didErrorOccur)
+  if(getSessionError)
   {
-    console.error("Error getting session or user", { authError, getUserError });
+    console.warn("Error getting session", getSessionError);
+    didErrorOccur = true;
+  }
+
+  if(getUserError)
+  {
+    console.warn("Error getting user", getUserError);
+    didErrorOccur = true;
   }
 
   if(didErrorOccur || !session?.user)
   {
+    console.log("User is not logged in, redirecting to login");
+
     const redirectUrl = req.nextUrl.clone();
 
     redirectUrl.pathname = "/login";
@@ -28,8 +37,10 @@ export const middleware: NextMiddleware = async (req: NextRequest) =>
     return NextResponse.redirect(redirectUrl);
   }
 
-  if(!userData.user?.confirmed_at)
+  if(!user?.confirmed_at)
   {
+    console.log("User is not confirmed, redirecting to confirm");
+
     const redirectUrl = req.nextUrl.clone();
 
     redirectUrl.pathname = "/confirm";
@@ -43,6 +54,7 @@ export const middleware: NextMiddleware = async (req: NextRequest) =>
 
 export const config = {
   matcher: [
+    "/", // Match the index route
     /*
      * Match all request paths except for the ones starting with:
      * - api (API routes)
@@ -53,8 +65,7 @@ export const config = {
      * - _next/image (image optimization files)
      * - favicon.ico (favicon file)
      * - extension (Caisy UI extension)
-     * - test (test route)
      */
-    "/((?!api|login|register|confirm|_next/static|_next/image|favicon.*|extension|test|cases|dictionary).*)",
+    "/((?!api|login|register|confirm|_next/static|_next/image|favicon.*|extension).*)",
   ],
 };

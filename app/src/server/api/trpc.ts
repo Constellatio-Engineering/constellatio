@@ -91,24 +91,26 @@ const t = initTRPC
   .create({
     errorFormatter: ({ error, shape }) =>
     {
-      console.log("error formatter");
-
       let errorData: ClientError;
 
       if(error instanceof EmailAlreadyTakenError)
       {
         errorData = clientErrors["email-already-taken"];
       }
+      else if(error instanceof UnauthorizedError)
+      {
+        errorData = clientErrors.unauthorized;
+      }
       else
       {
-        console.warn("Unhandled Server Error. Please check tRPC error formatter. Error was:", error);
+        console.warn("Unhandled Server Error. Please check tRPC error formatter in your 'trpc.ts' file. Error was:", error);
         errorData = clientErrors["internal-server-error"];
       }
 
       return {
         ...shape,
         data: {
-          ...errorData
+          clientError: errorData,
         },
       };
     },
