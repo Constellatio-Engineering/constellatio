@@ -1,5 +1,5 @@
 import MenuTab from "@/components/atoms/menuTab/MenuTab";
-import SearchFieldSmall from "@/components/molecules/searchFieldSmall/SearchFieldSmall";
+import SearchField from "@/components/molecules/searchField/SearchField";
 import { env } from "@/env.mjs";
 
 import { Loader } from "@mantine/core";
@@ -29,7 +29,11 @@ export const Header: FC<HeaderProps> = ({ variant = "default" }) =>
   const { pathname } = useRouter();
   const { isLoading: isRecreatingSearchIndices, mutate: recreateSearchIndices } = useMutation({
     mutationFn: async () => axios.post("/api/search/recreate-search-indices"),
-    onError: (e: unknown) => console.log("error while recreating search indices", e instanceof AxiosError ? e.response?.data : e),
+    onError: (e: unknown) =>
+      console.log(
+        "error while recreating search indices",
+        e instanceof AxiosError ? e.response?.data : e
+      ),
     onSuccess: () => console.log("successfully recreated search indices"),
   });
 
@@ -51,7 +55,15 @@ export const Header: FC<HeaderProps> = ({ variant = "default" }) =>
           <Link href="/">
             <Image src={ConstellatioFullLogo} alt="Constellatio"/>
           </Link>
-          {links.map((link, linkIndex) => <Link href={`/${link.toLowerCase()}`} key={linkIndex}><MenuTab active={pathname?.toLowerCase().includes(link.toLowerCase())} title={link}/></Link>)}
+          {links.map((link, linkIndex) => (
+            <Link href={`/${link.toLowerCase()}`} key={linkIndex}>
+              <MenuTab
+                number={1}
+                active={pathname?.toLowerCase().includes(link.toLowerCase())}
+                title={link}
+              />
+            </Link>
+          ))}
         </div>
         <div css={styles.profileArea}>
           {env.NEXT_PUBLIC_NODE_ENV === "development" && (
@@ -66,8 +78,17 @@ export const Header: FC<HeaderProps> = ({ variant = "default" }) =>
               {isRecreatingSearchIndices && <Loader size={22}/>}
             </div>
           )}
-          <div className="search-input"><SearchFieldSmall/></div>
-          <Link href="/personal-space"><MenuTab title="Persoanl Space" icon={<IconFolder/>} active={pathname?.toLowerCase().includes("personal-space")}/></Link>
+          <div className="search-input">
+            <SearchField size="small"/>
+          </div>
+          <Link href="/personal-space">
+            <MenuTab
+              title="Persoanl Space"
+              number={1}
+              icon={<IconFolder/>}
+              active={pathname?.toLowerCase().includes("personal-space")}
+            />
+          </Link>
           <span className="vertical-line">s</span>
           <div>
             <UserDropdown/>
