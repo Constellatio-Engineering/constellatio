@@ -23,10 +23,11 @@ export const UserDropdown: FunctionComponent = () =>
     {
       await supabase.auth.signOut();
       await router.replace("/login");
-      await apiContext.search.getTenantToken.invalidate();
+      await apiContext.invalidate();
+
       notifications.show({
         message: "Come back soon!",
-        title: "Sign out handler",
+        title: "Signed out",
       });
     }
     catch (error) 
