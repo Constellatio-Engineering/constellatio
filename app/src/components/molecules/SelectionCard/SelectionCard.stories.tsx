@@ -12,10 +12,13 @@ const Template: FunctionComponent<SelectionCardProps> = args => (
 
 const meta: Meta = {
   argTypes: {
+    disabled: {
+      control: "boolean",
+    },
     status: {
       control: "radio",
       options: ["default", "success", "error"],
-    },
+    }
   },
   component: Template,
   parameters: {
