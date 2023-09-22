@@ -24,16 +24,18 @@ export const authenticationRouter = createTRPCRouter({
         throw new RegisterError(signUpError);
       }
 
-      if(!signUpData.session)
-      {
-        throw new InternalServerError(new Error("Session was null after signUp. This should probably not happen and should be investigated."));
-      }
-
       const userId = signUpData.user?.id;
+
+      console.log("User signed up successfully", signUpData.user);
 
       if(!userId)
       {
         throw new InternalServerError(new Error("User ID was null after signUp. This should probably not happen and should be investigated."));
+      }
+
+      if(!signUpData.session)
+      {
+        throw new InternalServerError(new Error("Session was null after signUp. This should probably not happen and should be investigated."));
       }
 
       try
