@@ -28,7 +28,7 @@ export const wrapper = ({ searchValue, size, theme }: SearchFieldSmallStylesProp
 				height: 16px;
 			`}
 
-      top: ${size === "small" ? "10px" : "15px"};
+      top: ${size === "small" ? "10px" : "16px"};
 			left: ${size === "small" ? "10px" : "16px"};
       cursor: pointer;
 		}
@@ -48,8 +48,8 @@ export const wrapper = ({ searchValue, size, theme }: SearchFieldSmallStylesProp
 			`}
 
 			visibility: ${searchValue ? "visible" : "hidden"};
+			top: ${size === "small" ? "10px" : "16px"};
 			right: ${size === "small" ? "10px" : "16px"};
-			top: ${size === "small" ? "9px" : "15px"};
 			background-color: ${theme.colors["neutrals-01"][0]};
       cursor: pointer;
 		}
