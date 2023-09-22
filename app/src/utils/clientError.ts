@@ -16,7 +16,7 @@ export const clientErrors: ClientErrors = {
     identifier: "email-already-taken"
   },
   "internal-server-error": {
-    details: { message: "Diese E-Mail Adresse wird bereits verwendet" },
+    details: { message: "Es ist etwas schief gelaufen" },
     identifier: "internal-server-error"
   },
   unauthorized: {
