@@ -9,16 +9,16 @@ export interface TextElement extends TRichTextElements
 {
   content: [];
   text: string;
-  type: "text";
+  type: "text"; 
 }
 
 export interface OverwriteProps 
 {
-  children: {
+  children: Array<{
     props: {
       node: TextElement;
     };
-  }[];
+  }>;
 }
 
 export interface IDocumentLink extends TRichTextElements 

@@ -11,14 +11,15 @@ import { getFileNameWithoutExtension } from "@/utils/utils";
 
 import { Storage } from "@google-cloud/storage";
 import { and, desc, eq } from "drizzle-orm";
+import { type CredentialBody } from "google-auth-library";
 import { z } from "zod";
 
+const base64ServiceAccount = env.GOOGLE_SERVICE_ACCOUNT_BASE64;
+const serviceAccountBuffer = Buffer.from(base64ServiceAccount, "base64");
+const cloudStorageCredentials = JSON.parse(serviceAccountBuffer.toString()) as CredentialBody;
+
 const storage = new Storage({
-  credentials: {
-    client_email: env.GOOGLE_SERVICE_ACCOUNT_CLIENT_EMAIL,
-    client_id: env.GOOGLE_SERVICE_ACCOUNT_CLIENT_ID,
-    private_key: env.GOOGLE_SERVICE_ACCOUNT_PRIVATE_KEY,
-  },
+  credentials: cloudStorageCredentials,
   projectId: env.GOOGLE_CLOUD_STORAGE_PROJECT_ID,
 });
 
