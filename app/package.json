@@ -35,12 +35,14 @@
     "storybook": "storybook dev -p 6006",
     "build-storybook": "storybook build",
     "separatorServiceAccounts": "---------------------- GOOGLE SERVICE ACCOUNTS ----------------------",
-    "copyDevelopmentServiceAccountBase64ToClipboard": "cat google/service-accounts/development.serviceAccount.json | base64 | pbcopy",
-    "copyStagingServiceAccountBase64ToClipboard": "cat google/service-accounts/staging.serviceAccount.json | base64 | pbcopy",
-    "copyProductionServiceAccountBase64ToClipboard": "cat google/service-accounts/production.serviceAccount.json | base64 | pbcopy",
+    "copyDevelopmentServiceAccountBase64ToClipboard": "cat google/service-accounts/development.serviceAccount.json | base64 | pbcopy && pnpm printCopiedToClipboard",
+    "copyStagingServiceAccountBase64ToClipboard": "cat google/service-accounts/staging.serviceAccount.json | base64 | pbcopy && pnpm printCopiedToClipboard",
+    "copyProductionServiceAccountBase64ToClipboard": "cat google/service-accounts/production.serviceAccount.json | base64 | pbcopy && pnpm printCopiedToClipboard",
     "separatorCloudStorageCors": "---------------------- GOOGLE CLOUD STORAGE CORS ----------------------",
     "setCloudStorageDevelopmentCors": "gsutil cors set google/cloud-storage-cors/development.cors-config.json gs://user-uploads-constellatio-test-kotti",
-    "setCloudStorageStagingCors": "gsutil cors set google/cloud-storage-cors/staging.cors-config.json gs://user-uploads-constellatio-test-staging"
+    "setCloudStorageStagingCors": "gsutil cors set google/cloud-storage-cors/staging.cors-config.json gs://user-uploads-constellatio-test-staging",
+    "separatorOther": "---------------------- OTHER ----------------------",
+    "printCopiedToClipboard": "echo 'Copied to clipboard'"
   },
   "dependencies": {
     "@caisy/rich-text-react-renderer": "^0.7.3",

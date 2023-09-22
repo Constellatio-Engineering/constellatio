@@ -65,7 +65,7 @@ export const createTRPCContext = async ({ req, res }: CreateNextContextOptions):
   const { data: { user } } = await supabaseServerClient.auth.getUser();
   const { data: { session } } = await supabaseServerClient.auth.getSession();
 
-  if(env.THROTTLE_REQUESTS_IN_MS && env.NEXT_PUBLIC_NODE_ENV === "development")
+  if(env.THROTTLE_REQUESTS_IN_MS && env.NEXT_PUBLIC_DEPLOYMENT_ENVIRONMENT === "development")
   {
     // Caution: This is only for testing purposes in development. It will slow down the API response time.
     console.info(`Caution: Requests are throttled for ${env.THROTTLE_REQUESTS_IN_MS}ms due to 'env.THROTTLE_REQUESTS_IN_MS' being set.`);
@@ -114,7 +114,7 @@ const t = initTRPC
         },
       };
     },
-    isDev: env.NEXT_PUBLIC_NODE_ENV === "development",
+    isDev: process.env.NODE_ENV === "development",
     /* errorFormatter: ({ error, shape }) =>
     {
       return {

@@ -33,7 +33,7 @@ export const env = createEnv({
     NEXT_PUBLIC_MEILISEARCH_PUBLIC_URL: z.string().url(),
     NEXT_PUBLIC_MEILISEARCH_TENANT_TOKEN_EXPIRATION_TIME_MS: z.string().pipe(z.coerce.number().int().min(10_000)),
     NEXT_PUBLIC_SIGN_UP_DEFAULT_EMAIL: z.string().email().optional(),
-    NEXT_PUBLIC_NODE_ENV: z.enum(["development", "staging", "production"]),
+    NEXT_PUBLIC_DEPLOYMENT_ENVIRONMENT: z.enum(["development", "staging", "production"]),
     NEXT_PUBLIC_FRONTEND_URL: z.string().url(),
   },
 
@@ -42,7 +42,7 @@ export const env = createEnv({
    * middlewares) or client-side, so we need to destruct manually.
    */
   runtimeEnv: {
-    NEXT_PUBLIC_NODE_ENV: process.env.NODE_ENV,
+    NEXT_PUBLIC_DEPLOYMENT_ENVIRONMENT: process.env.NEXT_PUBLIC_DEPLOYMENT_ENVIRONMENT,
     SUPABASE_SERVICE_ROLE_KEY: process.env.SUPABASE_SERVICE_ROLE_KEY,
     NEXT_PUBLIC_SUPABASE_ANON_KEY: process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY,
     NEXT_PUBLIC_SUPABASE_URL: process.env.NEXT_PUBLIC_SUPABASE_URL,

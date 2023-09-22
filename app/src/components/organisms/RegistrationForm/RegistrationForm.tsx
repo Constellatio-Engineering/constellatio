@@ -22,7 +22,7 @@ import { notifications } from "@mantine/notifications";
 import Link from "next/link";
 import { useRouter } from "next/router";
 import { useTranslation } from "next-i18next";
-import { type FunctionComponent, useRef, useState } from "react";
+import { type FunctionComponent, useEffect, useRef, useState } from "react";
 import z from "zod";
 import { makeZodI18nMap } from "zod-i18n-map";
 
@@ -56,7 +56,6 @@ const initialValues: InitialValues = isDevelopmentOrStaging ? {
 export const RegistrationForm: FunctionComponent = () =>
 {
   const { t } = useTranslation();
-  z.setErrorMap(makeZodI18nMap({ t }));
   const router = useRouter();
   const [isPasswordRevealed, { toggle }] = useDisclosure(false);
   const form = useForm<InitialValues>({
@@ -66,6 +65,11 @@ export const RegistrationForm: FunctionComponent = () =>
   });
   const [shouldShowEmailConfirmationDialog, setShouldShowEmailConfirmationDialog] = useState<boolean>(false);
   const lastConfirmationEmailTimestamp = useRef<number>();
+
+  useEffect(() =>
+  {
+    z.setErrorMap(makeZodI18nMap({ t }));
+  }, [t]);
 
   const { isLoading: isRegisterLoading, mutate: register } = api.authentication.register.useMutation({
     onError: e =>
