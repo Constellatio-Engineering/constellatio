@@ -1,25 +1,22 @@
 /* eslint-disable max-lines */
-import { Svg } from "@/basic-components/SVG/Svg";
 import { Button } from "@/components/atoms/Button/Button";
-import ItemBlock from "@/components/organisms/caseBlock/ItemBlock";
 import EmptyStateCard from "@/components/organisms/emptyStateCard/EmptyStateCard";
 import FavoriteCasesList from "@/components/organisms/favoriteCasesList/FavoriteCasesList";
+import MaterialMenu from "@/components/organisms/materialMenu/MaterialMenu";
 import OverviewHeader from "@/components/organisms/OverviewHeader/OverviewHeader";
 import PersonalSpaceNavBar from "@/components/organisms/personalSpaceNavBar/PersonalSpaceNavBar";
 import DummyFileViewer from "@/components/pages/personalSpacePage/dummyFileViewer/DummyFileViewer";
 import { type ICasesOverviewProps } from "@/services/content/getCasesOverviewProps";
-import { type IGenArticleOverviewFragment, IGenCase, type IGenFullCaseFragment, type IGenMainCategory } from "@/services/graphql/__generated/sdk";
+import { type IGenArticleOverviewFragment, type IGenFullCaseFragment, type IGenMainCategory } from "@/services/graphql/__generated/sdk";
 import uploadsProgressStore from "@/stores/uploadsProgress.store";
 import { api } from "@/utils/api";
 import { getRandomUuid, removeItemsByIndices } from "@/utils/utils";
 
-import { Container, Loader, Text } from "@mantine/core";
+import { Loader, Text } from "@mantine/core";
 import { modals } from "@mantine/modals";
 import axios from "axios";
 import Link from "next/link";
-import React, { type FormEvent, type FunctionComponent, useState } from "react";
-
-// import { isFloat32Array } from "util/types";
+import React, { type FormEvent, type FunctionComponent, useState, useId } from "react";
 
 import * as styles from "./PersonalSpacePage.styles";
 import BookmarkIconSvg from "../../../../public/images/icons/bookmark.svg";
@@ -38,7 +35,6 @@ const PersonalSpacePage: FunctionComponent = () =>
   const { data: uploadedFiles = [], isLoading: isGetUploadedFilesLoading } = api.uploads.getUploadedFiles.useQuery();
   const allCasesBookmarks = bookmarks.filter(bookmark => bookmark?.resourceType === "case") ?? [];
   const bookmarkedCases = allCases.filter(caisyCase => allCasesBookmarks.some(bookmark => bookmark.resourceId === caisyCase.id));
-  // const bookmarkedCasesSubcategories = bookmarkedCases.map(bookmarkedCase => bookmarkedCase.subCategoryField);
   const mainCategoriesInBookmarkedCases = bookmarkedCases.map(bookmarkedCase => bookmarkedCase?.subCategoryField?.[0]?.mainCategory?.[0]);
   const bookmarkedCasesMainCategoriesUnique = mainCategoriesInBookmarkedCases.reduce<IGenMainCategory[]>((acc, current) => 
   {
@@ -63,6 +59,8 @@ const PersonalSpacePage: FunctionComponent = () =>
     onSuccess: async () => apiContext.bookmarks.getAllBookmarks.invalidate(),
   });
 
+  const FavCategoryId = useId();
+  const MaterialsCategoryId = useId();
   const categories: ICasesOverviewProps["allMainCategories"] = [{
     __typename: "MainCategory",
     casesPerCategory: bookmarkedCases?.length ?? 0,
@@ -70,24 +68,28 @@ const PersonalSpacePage: FunctionComponent = () =>
       src: BookmarkIconSvg.src,
       title: "bookmark-icon"
     },
-    id: "0",
+    id: FavCategoryId,
     mainCategory: "Favourites"
   }, {
     __typename: "MainCategory",
-    casesPerCategory: 999,
+    casesPerCategory: uploadedFiles?.length ?? 0,
     icon: {
       src: FileIconSvg.src,
       title: "file-category-icon"
     },
-    id: "1",
+    id: MaterialsCategoryId,
     mainCategory: "Materials"
   }];
 
   const [selectedCategoryId, setSelectedCategoryId] = useState<IGenMainCategory["id"]>(categories?.[0]?.id as IGenMainCategory["id"]);
   const { mutateAsync: createSignedUploadUrl } = api.uploads.createSignedUploadUrl.useMutation();
   const { mutateAsync: saveFileToDatabase } = api.uploads.saveFileToDatabase.useMutation();
+  const FavCasesTabId = useId();
+  const FavDictionaryTabId = useId();
+  const FavForumsTabId = useId();
+  const FavHighlightsTabId = useId();
 
-  // Function To Delete a Bookmarked Case with the Case Id
+  // Function To Delete a Bookmarked Case with the Case Id - copied and used inside the tabel inside ItemBlock
   const openDeleteBookmark = (caseId: string): void =>
   {
     modals.openConfirmModal({
@@ -198,7 +200,7 @@ const PersonalSpacePage: FunctionComponent = () =>
 
   const areUploadsInProgress = uploads.some(u => u.state.type === "uploading");
   
-  const favoriteCategoryNavTabs = [{ id: "0", itemsPerTab: bookmarkedCases?.length ?? 0, title: "CASES" }, { id: "1", itemsPerTab: 999, title: "DICTIONARY" }, { id: "2", itemsPerTab: 999, title: "FORUM" }, { id: "3", itemsPerTab: 999, title: "HIGHLIGHTS" }];
+  const favoriteCategoryNavTabs = [{ id: FavCasesTabId, itemsPerTab: bookmarkedCases?.length ?? 0, title: "CASES" }, { id: FavDictionaryTabId, itemsPerTab: 999, title: "DICTIONARY" }, { id: FavForumsTabId, itemsPerTab: 999, title: "FORUM" }, { id: FavHighlightsTabId, itemsPerTab: 999, title: "HIGHLIGHTS" }];
   const [selectedTabId, setSelectedTabId] = useState<string>(favoriteCategoryNavTabs?.[0]?.id as string);
 
   // FUNCTION RETURNING ALL CASES USING THEIR SUBCATEGORY WITH THE SUBCATEGORY ID
@@ -225,16 +227,18 @@ const PersonalSpacePage: FunctionComponent = () =>
         />
       </div>
       {isFlavoriteTab(selectedCategoryId ?? "") && <PersonalSpaceNavBar setSelectedTabId={setSelectedTabId} selectedTabId={selectedTabId} tabs={favoriteCategoryNavTabs}/>}
-      {isFlavoriteTab(selectedCategoryId ?? "") ? (selectedTabId === "0" ? (
+      {isFlavoriteTab(selectedCategoryId ?? "") ? (selectedTabId === FavCasesTabId ? (
         <> 
           {(areBookmarksLoading || areCasesLoading) ? (
             <Loader sx={{ margin: "50px" }}/>
           ) : (
             bookmarkedCases?.length > 0 ? (
-              <FavoriteCasesList 
-                bookmarkedCasesMainCategoriesUnique={bookmarkedCasesMainCategoriesUnique} 
-                casesByMainCategory={casesByMainCategory}
-              />
+              <>  
+                <FavoriteCasesList 
+                  bookmarkedCasesMainCategoriesUnique={bookmarkedCasesMainCategoriesUnique} 
+                  casesByMainCategory={casesByMainCategory}
+                />
+              </>
             ) : (
               <EmptyStateCard
                 button={<Link href="/cases">Explore Cases</Link>}
@@ -246,83 +250,120 @@ const PersonalSpacePage: FunctionComponent = () =>
           )}
         
         </>
-      ) : (
+      ) : selectedTabId === FavDictionaryTabId ? (
         <>
-          <div style={{ alignItems: "center", display: "flex", marginTop: 100 }}>
-            <h2 style={{ fontSize: 22, marginRight: 10 }}>Test signed upload url</h2>
-          </div>
-          <form onSubmit={onSubmit}>
-            Select File:{" "}
-            <input
-              ref={fileInputRef}
-              type="file"
-              disabled={areUploadsInProgress}
-              multiple
-              onChange={e =>
-              {
-                const files = Array.from(e.target.files ?? []);
-                const filesWithUuid: FileWithClientSideUuid[] = files.map(file => ({ clientSideUuid: getRandomUuid(), file }));
-                setSelectedFiles(filesWithUuid);
-              }}
-            />
-            <Button<"button">
-              styleType="primary"
-              disabled={selectedFiles.length === 0 || areUploadsInProgress}
-              type="submit">
-              Upload
-            </Button>
-          </form>
-          Selected Files:
-          {selectedFiles.map(({ clientSideUuid, file }) => (
-            <p key={clientSideUuid}>{file.name}</p>
-          ))}
-          <h2 style={{ fontSize: 22, marginRight: 10, marginTop: 100 }}>Current Uploads</h2>
-          {uploads.filter(u => u.state.type !== "completed").map((upload, index) =>
-          {
-            return (
-              <div key={index} style={{ margin: "10px 0" }}>
-                <strong>File Client Side UUID: {upload.fileClientSideUuid}</strong>
-                {upload.state.type === "uploading" ? (
-                  <div
-                    style={{
-                      border: "1px solid black",
-                      height: 30,
-                      width: 200,
-                    }}>
-                    <div style={{ backgroundColor: "red", height: "100%", width: `${upload.state.progressInPercent}%` }}/>
-                  </div>
-                ) : (
-                  <p>{upload.state.type}</p>
-                )}
-              </div>
-            );
-          })}
-          <h2 style={{ fontSize: 22, marginRight: 10, marginTop: 100 }}>Uploaded Files</h2>
-          {isGetUploadedFilesLoading && <p>Loading...</p>}
-          {uploadedFiles.slice(0, 5).map(file =>
-          {
-            const uploadedDate = file.createdAt?.toLocaleDateString();
-            const uploadedTime = file.createdAt?.toLocaleTimeString();
-
-            return (
-              <div key={file.id} style={{ cursor: "pointer", margin: "10px 0" }} onClick={() => setSelectedFileIdForPreview(file.uuid)}>
-                <strong>{file.originalFilename}.{file.fileExtension}</strong>
-                <p>Uploaded: {uploadedDate} {uploadedTime}</p>
-                <p>FileId: {file.id}</p>
-                <p>File UUID: {file.uuid}</p>
-                <p>File client side UUID: {file.clientSideUuid}</p>
-              </div>
-            );
-          })}
-          {uploadedFiles.length > 5 && (
-            <p>{uploadedFiles.length - 5} more files...</p>
-          )}
-          {selectedFileIdForPreview && (
-            <DummyFileViewer fileId={selectedFileIdForPreview}/>
-          )}
+          <EmptyStateCard
+            button={<Link href="/dictionary">Explore Articles</Link>}
+            title="You haven’t saved any Articles yet"
+            text="You can save cases, dictionary articles, forum questions and highlighted text to Favourites"
+            variant="For-large-areas"
+          />
+        </>
+      ) : selectedTabId === FavForumsTabId ? (
+        <>
+          <EmptyStateCard
+            title="You haven’t saved any Forums yet"
+            text="You can save cases, dictionary articles, forum questions and highlighted text to Favourites"
+            variant="For-large-areas"
+          />
+        </>
+      ) : selectedTabId === FavHighlightsTabId && (
+        <>
+          <EmptyStateCard
+            title="You haven’t saved any Highlights yet"
+            text="You can save cases, dictionary articles, forum questions and highlighted text to Favourites"
+            variant="For-large-areas"
+          />
         </>
       )) : (
-        <div>Category Id: {selectedCategoryId} - MATERIALS</div>
+        <>
+          <div style={{
+            alignItems: "flex-start", display: "flex", justifyContent: "space-around", marginTop: "40px" 
+          }}>
+            <MaterialMenu folders={[
+              { title: "Default folder" }, 
+              { title: "Folder name" }, 
+              { title: "Folder name long for folder name thats written in the card" }, 
+              { title: "Folder name" }]}
+            />
+            <div>
+              Category Id  &#123;{selectedCategoryId}&#125; - MATERIALS
+              <div>
+                <h2 style={{ fontSize: 22, marginRight: 10 }}>Test signed upload url</h2>
+              </div>
+              <form onSubmit={onSubmit}>
+                Select File:{" "}
+                <input
+                  ref={fileInputRef}
+                  type="file"
+                  disabled={areUploadsInProgress}
+                  multiple
+                  onChange={e =>
+                  {
+                    const files = Array.from(e.target.files ?? []);
+                    const filesWithUuid: FileWithClientSideUuid[] = files.map(file => ({ clientSideUuid: getRandomUuid(), file }));
+                    setSelectedFiles(filesWithUuid);
+                  }}
+                />
+                <Button<"button">
+                  styleType="primary"
+                  disabled={selectedFiles.length === 0 || areUploadsInProgress}
+                  type="submit">
+                  Upload
+                </Button>
+              </form>
+              Selected Files:
+              {selectedFiles.map(({ clientSideUuid, file }) => (
+                <p key={clientSideUuid}>{file.name}</p>
+              ))}
+              <h2 style={{ fontSize: 22, marginRight: 10, marginTop: 100 }}>Current Uploads</h2>
+              {uploads.filter(u => u.state.type !== "completed").map((upload, index) =>
+              {
+                return (
+                  <div key={index} style={{ margin: "10px 0" }}>
+                    <strong>File Client Side UUID: {upload.fileClientSideUuid}</strong>
+                    {upload.state.type === "uploading" ? (
+                      <div
+                        style={{
+                          border: "1px solid black",
+                          height: 30,
+                          width: 200,
+                        }}>
+                        <div style={{ backgroundColor: "red", height: "100%", width: `${upload.state.progressInPercent}%` }}/>
+                      </div>
+                    ) : (
+                      <p>{upload.state.type}</p>
+                    )}
+                  </div>
+                );
+              })}
+              <h2 style={{ fontSize: 22, marginRight: 10, marginTop: 100 }}>Uploaded Files</h2>
+              {isGetUploadedFilesLoading && <p>Loading...</p>}
+              {uploadedFiles.slice(0, 5).map(file =>
+              {
+                const uploadedDate = file.createdAt?.toLocaleDateString();
+                const uploadedTime = file.createdAt?.toLocaleTimeString();
+
+                return (
+                  <div key={file.id} style={{ cursor: "pointer", margin: "10px 0" }} onClick={() => setSelectedFileIdForPreview(file.uuid)}>
+               
+                    <strong>{file.originalFilename}.{file.fileExtension}</strong>
+                    <p>Uploaded: {uploadedDate} {uploadedTime}</p>
+                    <p>FileId: {file.id}</p>
+                    <p>File UUID: {file.uuid}</p>
+                    <p>File client side UUID: {file.clientSideUuid}</p>
+                  </div>
+                );
+              })}
+              {uploadedFiles.length > 5 && (
+                <p>{uploadedFiles.length - 5} more files...</p>
+              )}
+              {selectedFileIdForPreview && (
+                <DummyFileViewer fileId={selectedFileIdForPreview}/>
+              )}
+            </div>
+          </div>
+        </>
       )}
       
     </div>

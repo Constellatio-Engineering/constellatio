@@ -7,7 +7,7 @@ import type { IDocumentLink, IHeadingNode } from "types/richtext";
 
 import { Container, Title } from "@mantine/core";
 import {
-  type FunctionComponent, useEffect, useMemo
+  type FunctionComponent, useEffect, useMemo, useCallback
 } from "react";
 
 import { getGamesIndexes } from "./caseCompleteTestsStep.helper";
@@ -20,7 +20,7 @@ import { DragDropGame } from "../DragDropGame/DragDropGame";
 import FillGapsGame from "../FillGapsGame/FillGapsGame";
 import FloatingPanel from "../floatingPanel/FloatingPanel";
 import { getNestedHeadingIndex } from "../floatingPanel/generateTocHelper";
-import { SelectionCardGame } from "../SelectionCardGame/SelectionCardGame";
+import SelectionCardGame from "../SelectionCardGame/SelectionCardGame";
 import { SolveCaseGame } from "../SolveCaseGame/SolveCaseGame";
 
 interface ICaseCompleteTestsStepProps 
@@ -80,6 +80,86 @@ const CaseCompleteTestsStep: FunctionComponent<ICaseCompleteTestsStepProps> = ({
 
   const allHeadings = fullTextTasks?.json?.content?.filter((x: { attrs: { level: number }; type: "heading" }) => x.type === "heading");
 
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  const documentLinkOverwrite = useCallback((props: any) => 
+  {
+    const node = props!.node as unknown as IDocumentLink;
+    return node && fullTextTasks?.connections
+      ? fullTextTasks.connections?.map((component, index) => 
+      {
+        switch (component?.__typename) 
+        {
+          case "ImageWrapperCard":
+            if(node?.attrs?.documentId === component?.id) 
+            {
+              return (
+                <div
+                  css={styles.componentWrapper}
+                  key={`${component?.__typename}-${index}`}>
+                  <ImageWrapperCard {...component}/>
+                </div>
+              );
+            }
+            break;
+          case "Callout":
+            if(node?.attrs?.documentId === component?.id) 
+            {
+              return (
+                <div
+                  css={styles.componentWrapper}
+                  key={`${component?.__typename}-${index}`}>
+                  <Callout {...component}/>
+                </div>
+              );
+            }
+            break;
+          case "CardSelectionGame":
+            if(node?.attrs?.documentId === component?.id) 
+            {
+              return (
+                <div
+                  css={styles.gameComponentWrapper}
+                  key={`${component?.__typename}-${index}`}>
+                  <SelectionCardGame {...component}/>
+                </div>
+              );
+            }
+            break;
+          case "DragNDropGame":
+            if(node?.attrs?.documentId === component?.id) 
+            {
+              return (
+                <div
+                  css={styles.gameComponentWrapper}
+                  key={`${component?.__typename}-${index}`}>
+                  <DragDropGame {...component}/>
+                </div>
+              );
+            }
+            break;
+          case "FillInGapsGame":
+            if(node?.attrs?.documentId === component?.id) 
+            {
+              return (
+                <div
+                  css={styles.gameComponentWrapper}
+                  key={`${component?.__typename}-${index}`}>
+                  <FillGapsGame {...component}/>
+                </div>
+              );
+            }
+            break;
+          default:
+            console.warn(
+              `Unknown component type: ${component?.__typename}`
+            );
+            return null;
+        }
+        return null;
+      })
+      : null;
+  }, [fullTextTasks]);
+
   return (
     <Container maw={1440}>
       <div css={styles.contentWrapper} id="completeTestsStepContent">
@@ -120,84 +200,7 @@ const CaseCompleteTestsStep: FunctionComponent<ICaseCompleteTestsStepProps> = ({
                 // eslint-disable-next-line @typescript-eslint/no-explicit-any
                 data={variant === "case" ? renderedCaseContent as any : fullTextTasks}
                 richTextOverwrite={{
-                  documentLink: (props) => 
-                  {
-                    const node = props!.node as unknown as IDocumentLink;
-                    return node && fullTextTasks?.connections
-                      ? fullTextTasks.connections?.map((component, index) => 
-                      {
-                        switch (component?.__typename) 
-                        {
-                          case "ImageWrapperCard":
-                            if(node?.attrs?.documentId === component?.id) 
-                            {
-                              return (
-                                <div
-                                  css={styles.componentWrapper}
-                                  key={`${component?.__typename}-${index}`}>
-                                  <ImageWrapperCard {...component}/>
-                                </div>
-                              );
-                            }
-                            break;
-                          case "Callout":
-                            if(node?.attrs?.documentId === component?.id) 
-                            {
-                              return (
-                                <div
-                                  css={styles.componentWrapper}
-                                  key={`${component?.__typename}-${index}`}>
-                                  <Callout {...component}/>
-                                </div>
-                              );
-                            }
-                            break;
-                          case "CardSelectionGame":
-                            if(node?.attrs?.documentId === component?.id) 
-                            {
-                              return (
-                                <div
-                                  css={styles.gameComponentWrapper}
-                                  key={`${component?.__typename}-${index}`}>
-                                  <SelectionCardGame {...component}/>
-                                </div>
-                              );
-                            }
-                            break;
-                          case "DragNDropGame":
-                            if(node?.attrs?.documentId === component?.id) 
-                            {
-                              return (
-                                <div
-                                  css={styles.gameComponentWrapper}
-                                  key={`${component?.__typename}-${index}`}>
-                                  <DragDropGame {...component}/>
-                                </div>
-                              );
-                            }
-                            break;
-                          case "FillInGapsGame":
-                            if(node?.attrs?.documentId === component?.id) 
-                            {
-                              return (
-                                <div
-                                  css={styles.gameComponentWrapper}
-                                  key={`${component?.__typename}-${index}`}>
-                                  <FillGapsGame {...component}/>
-                                </div>
-                              );
-                            }
-                            break;
-                          default:
-                            console.warn(
-                              `Unknown component type: ${component?.__typename}`
-                            );
-                            return null;
-                        }
-                        return null;
-                      })
-                      : null;
-                  },
+                  documentLink: documentLinkOverwrite,
                   heading: (props) => 
                   {
                     const node = props!.node as unknown as IHeadingNode;

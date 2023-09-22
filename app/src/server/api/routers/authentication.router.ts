@@ -2,6 +2,7 @@ import { db } from "@/db/connection";
 import { type UserInsert, usersTable } from "@/db/schema";
 import { registrationFormSchema } from "@/schemas/auth/registrationForm.schema";
 import { createTRPCRouter, publicProcedure } from "@/server/api/trpc";
+import { getConfirmEmailUrl } from "@/utils/paths";
 import { EmailAlreadyTakenError, InternalServerError, RegisterError } from "@/utils/serverError";
 
 export const authenticationRouter = createTRPCRouter({
@@ -11,7 +12,8 @@ export const authenticationRouter = createTRPCRouter({
     {
       const { data: signUpData, error: signUpError } = await supabaseServerClient.auth.signUp({
         email: input.email,
-        password: input.password,
+        options: { emailRedirectTo: getConfirmEmailUrl() },
+        password: input.password
       });
 
       if(signUpError)
@@ -22,11 +24,6 @@ export const authenticationRouter = createTRPCRouter({
         }
 
         throw new RegisterError(signUpError);
-      }
-
-      if(!signUpData.session)
-      {
-        throw new InternalServerError(new Error("Session was null after signUp. This should probably not happen and should be investigated."));
       }
 
       const userId = signUpData.user?.id;
@@ -65,6 +62,16 @@ export const authenticationRouter = createTRPCRouter({
         throw new InternalServerError(new Error("Error while inserting user: " + e));
       }
 
-      return signUpData.session;
+      if(!signUpData.session)
+      {
+        // Sign up was successful, but email confirmation is enabled. The user needs to confirm their email address.
+        return ({ resultType: "emailConfirmationRequired" }) as const;
+      }
+
+      // If the session is available right after sign up, it means that email confirmation is disabled.
+      return ({
+        resultType: "signupComplete",
+        session: signUpData.session
+      }) as const;
     }),
 });

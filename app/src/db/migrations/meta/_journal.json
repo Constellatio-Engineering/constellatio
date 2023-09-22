@@ -15,6 +15,20 @@
       "when": 1695327955499,
       "tag": "0001_nebulous_vector",
       "breakpoints": true
+    },
+    {
+      "idx": 2,
+      "version": "5",
+      "when": 1695410766108,
+      "tag": "0002_glamorous_energizer",
+      "breakpoints": true
+    },
+    {
+      "idx": 3,
+      "version": "5",
+      "when": 1695410766623,
+      "tag": "0003_curved_old_lace",
+      "breakpoints": true
     }
   ]
 }

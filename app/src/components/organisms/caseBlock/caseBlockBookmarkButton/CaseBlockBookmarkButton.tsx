@@ -4,6 +4,8 @@ import TableIconButton from "@/components/molecules/tableIconButton/TableIconBut
 import { type AddOrRemoveBookmarkSchema } from "@/schemas/bookmarks/addOrRemoveBookmark.schema";
 import { api } from "@/utils/api";
 
+import { Text } from "@mantine/core";
+import { modals } from "@mantine/modals";
 import { notifications } from "@mantine/notifications";
 import React, { type FunctionComponent } from "react";
 
@@ -58,10 +60,20 @@ const CaseBlockBookmarkButton: FunctionComponent<ICaseBlockBookmarkButtonProps> 
           resourceId: caseId,
           resourceType: "case"
         };
-
         if(isBookmarked)
         {
-          removeBookmark(bookmarkData);
+          modals.openConfirmModal({
+            centered: true,
+            children: (
+              <Text size="sm">
+                Are you sure you want to delete this case from your favorites?
+              </Text>
+            ),
+            confirmProps: { color: "red" },
+            labels: { cancel: "No don't delete it", confirm: "Delete bookmark" },
+            onConfirm: () => removeBookmark(bookmarkData),
+            title: "Remove from favorites",
+          });
         }
         else
         {

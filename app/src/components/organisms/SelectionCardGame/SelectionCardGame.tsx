@@ -16,7 +16,7 @@ import useSelectionCardGameStore, {
 import { shuffleArray } from "@/utils/array";
 
 import { Title, LoadingOverlay } from "@mantine/core";
-import { type FC, useEffect, useMemo } from "react";
+import { type FC, useEffect, useMemo, memo } from "react";
 
 import {
   Container,
@@ -32,7 +32,7 @@ IGenCardSelectionGame,
 "game" | "helpNote" | "question" | "id"
 >;
 
-export const SelectionCardGame: FC<SelectionCardGameProps> = ({
+let SelectionCardGame: FC<SelectionCardGameProps> = ({
   game,
   helpNote,
   id,
@@ -62,10 +62,10 @@ export const SelectionCardGame: FC<SelectionCardGameProps> = ({
     [game?.options]
   );
 
-  const optionsShuffled = useMemo(() => shuffleArray<TCardGameOptionWithCheck>(optionsWithCheckProp), [optionsWithCheckProp]);
-
   useEffect(() => 
   {
+    const optionsShuffled = shuffleArray<TCardGameOptionWithCheck>(optionsWithCheckProp);
+
     updateGameState(id!, { optionsItems: optionsShuffled });
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [optionsWithCheckProp]);
@@ -119,6 +119,8 @@ export const SelectionCardGame: FC<SelectionCardGameProps> = ({
 
   const onGameResetHandler = (): void => 
   {
+    const optionsShuffled = shuffleArray<TCardGameOptionWithCheck>(optionsWithCheckProp);
+
     updateGameState(id, {
       gameStatus: "inprogress", optionsItems: optionsShuffled, resetCounter: resetCounter + 1, resultMessage: "" 
     });
@@ -210,3 +212,7 @@ export const SelectionCardGame: FC<SelectionCardGameProps> = ({
     </Container>
   );
 };
+
+SelectionCardGame = memo(SelectionCardGame);
+
+export default SelectionCardGame;

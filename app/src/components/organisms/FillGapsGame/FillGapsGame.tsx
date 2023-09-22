@@ -105,11 +105,9 @@ let FillGapsGame: FC<TFillGapsGame> = ({
           id={id!}
           path={props.path}
           text={text}
-          correctAnswersArr={correctAnswersArr}
         />
       );
     },
-    // eslint-disable-next-line react-hooks/exhaustive-deps
     [id]
   );
 
