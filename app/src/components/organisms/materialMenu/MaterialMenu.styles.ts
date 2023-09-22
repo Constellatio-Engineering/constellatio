@@ -1,8 +1,8 @@
 import { css } from "@emotion/react";
-import { MantineTheme } from "@mantine/styles";
+import { type MantineTheme } from "@mantine/styles";
 
-export const wrapper = (theme:MantineTheme) => css`
-    background-color: ${theme.colors['neutrals-01'][0]};
+export const wrapper = (theme: MantineTheme) => css`
+    background-color: ${theme.colors["neutrals-01"][0]};
     border-radius: 12px;
     /* box-shadow color doesn't exist on Mantine Theme */
     box-shadow: 0px 8px 44px 0px rgba(0, 0, 0, 0.04);
@@ -11,11 +11,11 @@ export const wrapper = (theme:MantineTheme) => css`
     max-height: 400px;
     /* overflow: hidden; */
 `;
-export const header = (theme:MantineTheme) => css`
-    color:${theme.colors['neutrals-02'][1]};
+export const header = (theme: MantineTheme) => css`
+    color:${theme.colors["neutrals-02"][1]};
     padding:24px  24px 24px 16px;
-`
-export const content = (theme:MantineTheme) => css``;
-export const callToAction = (theme:MantineTheme) => css`
+`;
+export const content = (theme: MantineTheme) => css``;
+export const callToAction = (theme: MantineTheme) => css`
     padding:16px 24px;
 `;
