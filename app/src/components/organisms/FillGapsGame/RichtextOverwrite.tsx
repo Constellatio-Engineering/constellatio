@@ -8,18 +8,12 @@ import {
 
 interface TRichtextOverwrite 
 {
-  readonly correctAnswersArr: string[];
   readonly id: string;
   readonly path: string;
   readonly text: string;
 }
 
-let RichtextOverwrite: FC<TRichtextOverwrite> = ({
-  correctAnswersArr,
-  id,
-  path,
-  text,
-}) => 
+let RichtextOverwrite: FC<TRichtextOverwrite> = ({ id, path, text }) => 
 {
   const gameState = useFillGapsGameStore((s) => s.getGameState(id))!;
 
@@ -37,6 +31,18 @@ let RichtextOverwrite: FC<TRichtextOverwrite> = ({
     gameStatus,
     userAnswers
   } = gameState;
+
+  const correctAnswersArr = useMemo(() => 
+  {
+    if(!correctAnswers) 
+    {
+      return [];
+    }
+    return correctAnswers?.reduce<string[]>(
+      (acc, curr) => acc.concat(curr.correctAnswers),
+      []
+    );
+  }, [correctAnswers]);
 
   // Splitting the text based on {{...}} pattern using regex
   const parts = useMemo(() => text?.split(/({{.*?}})/), [text]);
