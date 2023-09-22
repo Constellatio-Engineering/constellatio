@@ -1,8 +1,8 @@
 import { db } from "@/db/connection";
 import { type UserInsert, usersTable } from "@/db/schema";
-import { env } from "@/env.mjs";
 import { registrationFormSchema } from "@/schemas/auth/registrationForm.schema";
 import { createTRPCRouter, publicProcedure } from "@/server/api/trpc";
+import { getConfirmEmailUrl } from "@/utils/paths";
 import { EmailAlreadyTakenError, InternalServerError, RegisterError } from "@/utils/serverError";
 
 export const authenticationRouter = createTRPCRouter({
@@ -12,9 +12,7 @@ export const authenticationRouter = createTRPCRouter({
     {
       const { data: signUpData, error: signUpError } = await supabaseServerClient.auth.signUp({
         email: input.email,
-        options: {
-          emailRedirectTo: env.FRONTEND_URL + "/confirm",
-        },
+        options: { emailRedirectTo: getConfirmEmailUrl() },
         password: input.password
       });
 
@@ -30,16 +28,9 @@ export const authenticationRouter = createTRPCRouter({
 
       const userId = signUpData.user?.id;
 
-      console.log("User signed up successfully", signUpData.user);
-
       if(!userId)
       {
         throw new InternalServerError(new Error("User ID was null after signUp. This should probably not happen and should be investigated."));
-      }
-
-      if(!signUpData.session)
-      {
-        throw new InternalServerError(new Error("Session was null after signUp. This should probably not happen and should be investigated."));
       }
 
       try
@@ -71,6 +62,16 @@ export const authenticationRouter = createTRPCRouter({
         throw new InternalServerError(new Error("Error while inserting user: " + e));
       }
 
-      return signUpData.session;
+      if(!signUpData.session)
+      {
+        // Sign up was successful, but email confirmation is enabled. The user needs to confirm their email address.
+        return ({ resultType: "emailConfirmationRequired" }) as const;
+      }
+
+      // If the session is available right after sign up, it means that email confirmation is disabled.
+      return ({
+        resultType: "signupComplete",
+        session: signUpData.session
+      }) as const;
     }),
 });

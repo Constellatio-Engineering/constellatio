@@ -1,6 +1,7 @@
 import MenuTab from "@/components/atoms/menuTab/MenuTab";
 import SearchFieldSmall from "@/components/molecules/searchFieldSmall/SearchFieldSmall";
 import { env } from "@/env.mjs";
+import { isDevelopmentOrStaging } from "@/utils/env";
 
 import { Loader } from "@mantine/core";
 import { useMantineTheme } from "@mantine/styles";
@@ -54,7 +55,7 @@ export const Header: FC<HeaderProps> = ({ variant = "default" }) =>
           {links.map((link, linkIndex) => <Link href={`/${link.toLowerCase()}`} key={linkIndex}><MenuTab active={pathname?.toLowerCase().includes(link.toLowerCase())} title={link}/></Link>)}
         </div>
         <div css={styles.profileArea}>
-          {env.NEXT_PUBLIC_NODE_ENV === "development" && (
+          {isDevelopmentOrStaging && (
             <div style={{ alignItems: "center", display: "flex" }}>
               <button
                 disabled={isRecreatingSearchIndices}
