@@ -1,4 +1,5 @@
 import { db } from "@/db/connection";
+import { env } from "@/env.mjs";
 import { meiliSearchAdmin } from "@/meilisearch/client";
 import getAllCases from "@/services/content/getAllCases";
 import { getCaseById } from "@/services/content/getCaseById";
@@ -17,7 +18,10 @@ const handler: NextApiHandler = async (req, res) =>
 
   if(isDevelopmentOrStaging)
   {
-    return res.status(403).json({ details: "This endpoint is only available in development or staging mode", message: "Forbidden" });
+    return res.status(403).json({
+      details: `This endpoint is only available in development or staging mode. Current mode is '${env.NEXT_PUBLIC_DEPLOYMENT_ENVIRONMENT}'`,
+      message: "Forbidden" 
+    });
   }
 
   if(req.method !== "POST")
