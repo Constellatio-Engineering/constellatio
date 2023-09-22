@@ -1,0 +1,8 @@
+[
+  {
+    "origin": ["https://app.constellatio.de"],
+    "method": ["GET", "PUT", "POST", "DELETE"],
+    "responseHeader": ["Content-Type"],
+    "maxAgeSeconds": 3600
+  }
+]

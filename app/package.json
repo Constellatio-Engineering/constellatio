@@ -33,7 +33,14 @@
     "supabase:typegen": "npx supabase gen types typescript --project-id kzrdtppwdumjscxldnwo --schema public > src/lib/database.types.ts",
     "separatorStorybook": "---------------------- Storybook ----------------------",
     "storybook": "storybook dev -p 6006",
-    "build-storybook": "storybook build"
+    "build-storybook": "storybook build",
+    "separatorServiceAccounts": "---------------------- GOOGLE SERVICE ACCOUNTS ----------------------",
+    "copyDevelopmentServiceAccountBase64ToClipboard": "cat google/service-accounts/development.serviceAccount.json | base64 | pbcopy",
+    "copyStagingServiceAccountBase64ToClipboard": "cat google/service-accounts/staging.serviceAccount.json | base64 | pbcopy",
+    "copyProductionServiceAccountBase64ToClipboard": "cat google/service-accounts/production.serviceAccount.json | base64 | pbcopy",
+    "separatorCloudStorageCors": "---------------------- GOOGLE CLOUD STORAGE CORS ----------------------",
+    "setCloudStorageDevelopmentCors": "gsutil cors set google/cloud-storage-cors/development.cors-config.json gs://user-uploads-constellatio-test-kotti",
+    "setCloudStorageStagingCors": "gsutil cors set google/cloud-storage-cors/staging.cors-config.json gs://user-uploads-constellatio-test-staging"
   },
   "dependencies": {
     "@caisy/rich-text-react-renderer": "^0.7.3",
@@ -83,6 +90,7 @@
     "drizzle-orm": "0.28.5",
     "embla-carousel-react": "^7.1.0",
     "fastest-levenshtein": "^1.0.16",
+    "google-auth-library": "^9.0.0",
     "graphql": "^16.8.0",
     "graphql-request": "^6.1.0",
     "graphql-tag": "^2.12.6",
