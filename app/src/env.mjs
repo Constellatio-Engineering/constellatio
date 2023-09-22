@@ -22,6 +22,7 @@ export const env = createEnv({
     GOOGLE_SERVICE_ACCOUNT_PRIVATE_KEY: z.string(),
     MEILISEARCH_MASTER_API_KEY: z.string(),
     MEILISEARCH_HOST_URL: z.string().url(),
+    FRONTEND_URL: z.string().url(),
   },
 
   /**
@@ -50,6 +51,7 @@ export const env = createEnv({
     NEXT_PUBLIC_SUPABASE_URL: process.env.NEXT_PUBLIC_SUPABASE_URL,
     DATABASE_URL: process.env.DATABASE_URL,
     STRIPE_SECRET_KEY: process.env.STRIPE_SECRET_KEY,
+    FRONTEND_URL: process.env.FRONTEND_URL,
     CAISY_API_KEY: process.env.CAISY_API_KEY,
     CAISY_PROJECT_ID: process.env.CAISY_PROJECT_ID,
     NEXT_PUBLIC_WEBSITE_URL: process.env.NEXT_PUBLIC_WEBSITE_URL,

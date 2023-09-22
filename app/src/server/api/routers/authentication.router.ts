@@ -1,5 +1,6 @@
 import { db } from "@/db/connection";
 import { type UserInsert, usersTable } from "@/db/schema";
+import { env } from "@/env.mjs";
 import { registrationFormSchema } from "@/schemas/auth/registrationForm.schema";
 import { createTRPCRouter, publicProcedure } from "@/server/api/trpc";
 import { EmailAlreadyTakenError, InternalServerError, RegisterError } from "@/utils/serverError";
@@ -11,7 +12,10 @@ export const authenticationRouter = createTRPCRouter({
     {
       const { data: signUpData, error: signUpError } = await supabaseServerClient.auth.signUp({
         email: input.email,
-        password: input.password,
+        options: {
+          emailRedirectTo: env.FRONTEND_URL + "/confirm",
+        },
+        password: input.password
       });
 
       if(signUpError)
