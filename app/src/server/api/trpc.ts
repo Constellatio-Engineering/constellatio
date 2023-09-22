@@ -108,7 +108,7 @@ const t = initTRPC
       }
 
       return {
-        ...shape,
+        ...shape, // TODO: Dont return shape, at least nor for internal server errors
         data: {
           clientError: errorData,
         },

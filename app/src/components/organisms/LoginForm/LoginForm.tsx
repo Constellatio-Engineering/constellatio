@@ -2,24 +2,26 @@ import { Button } from "@/components/atoms/Button/Button";
 import { CustomLink } from "@/components/atoms/CustomLink/CustomLink";
 import { Input } from "@/components/atoms/Input/Input";
 import { colors } from "@/constants/styles/colors";
-import { type Database } from "@/lib/database.types";
 import { loginFormSchema } from "@/schemas/auth/loginForm.schema";
 import { supabase } from "@/supabase/client";
 
 import { Stack } from "@mantine/core";
 import { useForm, zodResolver } from "@mantine/form";
-import { notifications } from "@mantine/notifications";
+import { AuthError } from "@supabase/gotrue-js";
 import { useAtom } from "jotai";
 import { useRouter } from "next/router"; 
 import { type FunctionComponent, useState } from "react";
 
 import { ResetPasswordModal, resetPasswordModalVisible } from "../ResetPasswordModal/ResetPasswordModal";
 
+type SignInError = "emailNotConfirmed" | "invalidCredentials" | "unknownError";
+
 export const LoginForm: FunctionComponent = () =>
 {
   const [, setResetPasswordModalOpen] = useAtom(resetPasswordModalVisible);
   const router = useRouter();
-  const [submitting, setSubmitting] = useState(false);
+  const [isLoginInProgress, setIsLoginInProgress] = useState(false);
+  const [signInError, setSignInError] = useState<SignInError>();
   const form = useForm({
     initialValues: {
       email: "",
@@ -33,41 +35,68 @@ export const LoginForm: FunctionComponent = () =>
 
   const handleSubmit = form.onSubmit(async (formValues) =>
   {
+    setIsLoginInProgress(true);
+
     try
     {
-      setSubmitting(true);
-
-      notifications.show({
-        message: "The login handler was called",
-        title: "Login handler",
-      });
-
-      const result = await supabase.auth.signInWithPassword({
+      const loginResult = await supabase.auth.signInWithPassword({
         email: formValues.email,
         password: formValues.password,
       });
 
-      if(result.error)
+      if(loginResult.error)
       {
-        throw result.error;
+        throw loginResult.error;
       }
-
-      console.log("successfully logged in, redirecting to home page");
 
       await router.replace("/");
     }
     catch (error)
     {
-      console.log("error while logging in", error);
+      if(!(error instanceof AuthError))
+      {
+        console.log("Something went wrong while logging in", error);
+        setSignInError("unknownError");
+        return;
+      }
+
+      switch (error.message)
+      {
+        case "Email not confirmed":
+        {
+          setSignInError("emailNotConfirmed");
+          break;
+        }
+        case "Invalid login credentials":
+        {
+          setSignInError("invalidCredentials");
+          break;
+        }
+        default:
+        {
+          console.log("error while logging in", error);
+          setSignInError("unknownError");
+          break;
+        }
+      }
     }
     finally
     {
-      setSubmitting(false);
+      setIsLoginInProgress(false);
     }
   });
 
   return (
     <>
+      {signInError && (
+        <div style={{ backgroundColor: "rgba(255,0,77,0.24)", marginBottom: 40, padding: 30 }}>
+          <p>
+            {signInError === "emailNotConfirmed" && "Du musst zuerst deine E-Mail Adresse bestätigen. Eine Bestätigungsmail wurde dir zugesendet."}
+            {signInError === "invalidCredentials" && "Wir konnten keinen Account mit diesen Anmeldedaten finden. Bitte überprüfe deine Eingaben."}
+            {signInError === "unknownError" && "Es ist ein unbekannter Fehler aufgetreten. Bitte versuche es erneut."}
+          </p>
+        </div>
+      )}
       <form onSubmit={handleSubmit}>
         <Stack spacing="spacing-24">
           <Stack spacing="spacing-12">
@@ -95,7 +124,7 @@ export const LoginForm: FunctionComponent = () =>
             styleType="primary"
             type="submit"
             title="Log in"
-            loading={submitting}>
+            loading={isLoginInProgress}>
             Log in
           </Button>
         </Stack>
