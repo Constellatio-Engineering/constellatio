@@ -16,12 +16,10 @@ const handler: NextApiHandler = async (req, res) =>
    * TODO: Setting up the indices should be done in CI/CD
    */
 
-  if(isDevelopmentOrStaging)
+  if(!isDevelopmentOrStaging)
   {
-    return res.status(403).json({
-      details: `This endpoint is only available in development or staging mode. Current mode is '${env.NEXT_PUBLIC_DEPLOYMENT_ENVIRONMENT}'`,
-      message: "Forbidden" 
-    });
+    console.warn("This endpoint is only available in development or staging mode. Current mode is '" + env.NEXT_PUBLIC_DEPLOYMENT_ENVIRONMENT + "'");
+    return res.status(403).json({ message: "Forbidden" });
   }
 
   if(req.method !== "POST")

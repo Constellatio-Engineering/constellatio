@@ -1,7 +1,6 @@
 import { Button } from "@/components/atoms/Button/Button";
 import MenuTab from "@/components/atoms/menuTab/MenuTab";
 import SearchFieldSmall from "@/components/molecules/searchFieldSmall/SearchFieldSmall";
-import { env } from "@/env.mjs";
 import { isDevelopmentOrStaging } from "@/utils/env";
 
 import { Loader } from "@mantine/core";

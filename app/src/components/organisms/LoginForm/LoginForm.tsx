@@ -39,15 +39,21 @@ export const LoginForm: FunctionComponent = () =>
 
     try
     {
+      console.log("logging in...");
+
       const loginResult = await supabase.auth.signInWithPassword({
         email: formValues.email,
         password: formValues.password,
       });
 
+      console.log("login result", loginResult);
+
       if(loginResult.error)
       {
         throw loginResult.error;
       }
+
+      console.log("successfully logged in. Redirecting to home page...");
 
       await router.replace("/");
     }
