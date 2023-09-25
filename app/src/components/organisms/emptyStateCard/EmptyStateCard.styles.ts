@@ -21,11 +21,11 @@ const CSSForLargeAreas = css`
 `;
 
 export const wrapper = (theme: MantineTheme) => css`
-  background-color: ${theme?.colors["neutrals-01"][2]};
+  /* background-color: ${theme?.colors["neutrals-01"][2]}; */
 `;
 
 export const emptyStateCard = ({ theme, variant }: IEmptyCardProps) => css`
-  height: 500px;
+  padding: ${variant === "For-small-areas" ? "32px 20px 40px 20px" : "32px 0"};
   display: flex;
   flex-direction: column;
   justify-content: center;
@@ -38,9 +38,11 @@ export const emptyStateCardImage = ({ variant }: IEmptyCardProps) => css`
   margin-bottom: ${variant === "For-small-areas" ? "32px" : "40px"};
 `;
 
-export const emptyStateCardTitle = css`
+export const emptyStateCardTitle = ({ theme, variant }: IEmptyCardProps) => css`
   margin-bottom: 16px;
+  color: ${variant === "For-large-areas" ? theme?.colors?.["neutrals-02"][1] : theme?.colors?.["neutrals-01"][9]};
 `;
+
 export const emptyStateCardText = ({ theme, variant }: IEmptyCardProps) => css`
   margin-bottom: 40px;
   color: ${variant === "For-small-areas"

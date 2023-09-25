@@ -34,7 +34,7 @@ const EmptyStateCard: FunctionComponent<IEmptyStateCardProps> = ({
             <CaisyImg src={placeHolderFlagImg.src} description="empty card img"/>
           </div>
         )}
-        <div css={styles.emptyStateCardTitle}>
+        <div css={styles.emptyStateCardTitle({ theme, variant })}>
           <Title order={3}>
             {title}
           </Title>
