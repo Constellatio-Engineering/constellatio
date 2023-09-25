@@ -34,8 +34,8 @@ const _Link: FC<TLink> = ({
                 : theme.colors["neutrals-02"][1],
         fontFamily:
           styleType === "link-content" || styleType === "link-content-title"
-            ? "Libre Baskerville, serif"
-            : "Karla, sans-serif",
+            ? `${theme.headings.fontFamily}, serif}`
+            : `${theme.fontFamily}, sans-serif`,
         fontSize:
           styleType === "link-content-title"
             ? theme.fontSizes["spacing-18"]
