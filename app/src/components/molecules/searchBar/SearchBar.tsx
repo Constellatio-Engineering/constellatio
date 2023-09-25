@@ -29,6 +29,7 @@ const SearchBar: FunctionComponent<SearchBarProps> = () =>
 
   return (
     <Input
+      data-autofocus
       type="search"
       placeholder="Type Here"
       styles={styles.inputStyles()}

@@ -88,11 +88,7 @@ export const Header: FC<HeaderProps> = ({ variant = "default" }) =>
             <div className="search-input">
               <SearchField
                 size="small"
-                onClick={(e) => 
-                {
-                  (e.target as HTMLInputElement).blur();
-                  toggleDrawer(true);
-                }}
+                onClick={() => toggleDrawer(true)}
               />
             </div>
             <Link href="/personal-space">

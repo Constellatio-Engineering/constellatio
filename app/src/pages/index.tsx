@@ -88,6 +88,7 @@ const Home: FunctionComponent<ServerSidePropsResult> = () =>
     staleTime: 3000,
   });
 
+  console.log(searchResults.cases);
   return (
     <Layout>
       <div style={{ padding: 100 }}>

@@ -34,8 +34,8 @@ export const wrapper = ({ searchValue, size, theme }: SearchFieldSmallStylesProp
 		}
 
 		&-input {
-			padding-left: ${size === "small" ? "26px" : "43px"};
-      padding-right: ${size === "small" ? "26px" : "43px"};
+			padding-left: ${size === "small" ? "30px" : "43px"};
+      padding-right: ${size === "small" ? "30px" : "43px"};
 			height: ${size === "small" ? "32px" : "48px"};
 			border-radius: ${size === "small" ? "500px" : "8px"};
 		}
