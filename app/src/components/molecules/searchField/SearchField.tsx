@@ -3,16 +3,20 @@ import { CrossFilled } from "@/components/Icons/CrossFilled";
 import { Search } from "@/components/Icons/Search";
 import useSearchStore from "@/stores/search.store";
 
+import { type TextInputProps } from "@mantine/core";
 import { useMantineTheme } from "@mantine/styles";
 import React, { type FunctionComponent } from "react";
 
 import * as styles from "./SearchField.styles";
 
-type SearchFieldProps = {
+type SearchFieldProps = TextInputProps & {
   readonly size?: "small" | "normal";
 };
 
-const SearchField: FunctionComponent<SearchFieldProps> = ({ size = "normal" }) => 
+const SearchField: FunctionComponent<SearchFieldProps> = ({
+  size = "normal",
+  ...props
+}) => 
 {
   const theme = useMantineTheme();
   const searchValue = useSearchStore(s => s.searchValue);
@@ -32,7 +36,7 @@ const SearchField: FunctionComponent<SearchFieldProps> = ({ size = "normal" }) =
         icon={SearchIcon}
         rightSection={ResetIcon}
         value={searchValue}
-        onChange={(e) => setSearchValue(e.target.value)}
+        {...props}
       />
     </div>
   );
