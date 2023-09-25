@@ -14,7 +14,7 @@ export const genderEnum = pgEnum("gender", allGenderIdentifiers);
 export const resourceTypeEnum = pgEnum("resourceType", allBookmarkResourceTypes);
 
 export const usersTable = pgTable("users", {
-  id: uuid("id").unique().notNull(),
+  id: uuid("id").unique().notNull().primaryKey(),
   email: text("email").unique().notNull(),
   displayName: text("displayName").notNull(),
   firstName: text("firstName").notNull(),

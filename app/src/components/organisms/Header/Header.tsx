@@ -1,6 +1,7 @@
+import { Button } from "@/components/atoms/Button/Button";
 import MenuTab from "@/components/atoms/menuTab/MenuTab";
 import SearchField from "@/components/molecules/searchField/SearchField";
-import { env } from "@/env.mjs";
+import { isDevelopmentOrStaging } from "@/utils/env";
 
 import { Loader } from "@mantine/core";
 import { useMantineTheme } from "@mantine/styles";
@@ -66,15 +67,16 @@ export const Header: FC<HeaderProps> = ({ variant = "default" }) =>
           ))}
         </div>
         <div css={styles.profileArea}>
-          {env.NEXT_PUBLIC_NODE_ENV === "development" && (
+          {isDevelopmentOrStaging && (
             <div style={{ alignItems: "center", display: "flex" }}>
-              <button
+              <Button<"button">
+                styleType="secondarySubtle"
                 disabled={isRecreatingSearchIndices}
                 type="button"
                 onClick={() => recreateSearchIndices()}
                 style={{ marginRight: 10 }}>
                 Recreate Search Indices
-              </button>
+              </Button>
               {isRecreatingSearchIndices && <Loader size={22}/>}
             </div>
           )}

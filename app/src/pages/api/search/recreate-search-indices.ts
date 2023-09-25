@@ -3,6 +3,7 @@ import { env } from "@/env.mjs";
 import { meiliSearchAdmin } from "@/meilisearch/client";
 import getAllCases from "@/services/content/getAllCases";
 import { getCaseById } from "@/services/content/getCaseById";
+import { isDevelopmentOrStaging } from "@/utils/env";
 import {
   type CaseSearchItemNodes, createCaseSearchIndexItem, createUploadsSearchIndexItem, searchIndices, type UploadSearchItemNodes
 } from "@/utils/search";
@@ -15,9 +16,10 @@ const handler: NextApiHandler = async (req, res) =>
    * TODO: Setting up the indices should be done in CI/CD
    */
 
-  if(env.NEXT_PUBLIC_NODE_ENV !== "development")
+  if(!isDevelopmentOrStaging)
   {
-    return res.status(403).json({ details: "This endpoint is only available in development mode", message: "Forbidden" });
+    console.warn("This endpoint is only available in development or staging mode. Current mode is '" + env.NEXT_PUBLIC_DEPLOYMENT_ENVIRONMENT + "'");
+    return res.status(403).json({ message: "Forbidden" });
   }
 
   if(req.method !== "POST")

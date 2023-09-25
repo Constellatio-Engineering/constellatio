@@ -1,8 +1,6 @@
 import { createEnv } from "@t3-oss/env-nextjs";
 import { z } from "zod";
 
-const nodeEnvEnum = z.enum(["development", "test", "production"]);
-
 export const env = createEnv({
   /**
    * Specify your server-side environment variables schema here. This way you can ensure the app
@@ -17,9 +15,7 @@ export const env = createEnv({
     THROTTLE_REQUESTS_IN_MS: z.string().pipe(z.coerce.number().int().min(1)).optional(),
     GOOGLE_CLOUD_STORAGE_PROJECT_ID: z.string(),
     GOOGLE_CLOUD_STORAGE_BUCKET_NAME: z.string(),
-    GOOGLE_SERVICE_ACCOUNT_CLIENT_EMAIL: z.string().email(),
-    GOOGLE_SERVICE_ACCOUNT_CLIENT_ID: z.string(),
-    GOOGLE_SERVICE_ACCOUNT_PRIVATE_KEY: z.string(),
+    GOOGLE_SERVICE_ACCOUNT_BASE64: z.string(),
     MEILISEARCH_MASTER_API_KEY: z.string(),
     MEILISEARCH_HOST_URL: z.string().url(),
   },
@@ -34,9 +30,11 @@ export const env = createEnv({
     NEXT_PUBLIC_SUPABASE_URL: z.string().url(),
     NEXT_PUBLIC_WEBSITE_URL: z.string().url(),
     NEXT_PUBLIC_MAXIMUM_FILE_UPLOAD_SIZE_IN_MB: z.string().pipe(z.coerce.number().int().min(1).max(999)),
-    NEXT_PUBLIC_NODE_ENV: nodeEnvEnum,
     NEXT_PUBLIC_MEILISEARCH_PUBLIC_URL: z.string().url(),
     NEXT_PUBLIC_MEILISEARCH_TENANT_TOKEN_EXPIRATION_TIME_MS: z.string().pipe(z.coerce.number().int().min(10_000)),
+    NEXT_PUBLIC_SIGN_UP_DEFAULT_EMAIL: z.string().email().optional(),
+    NEXT_PUBLIC_DEPLOYMENT_ENVIRONMENT: z.enum(["development", "staging", "production"]),
+    NEXT_PUBLIC_FRONTEND_URL: z.string().url(),
   },
 
   /**
@@ -44,12 +42,14 @@ export const env = createEnv({
    * middlewares) or client-side, so we need to destruct manually.
    */
   runtimeEnv: {
-    NEXT_PUBLIC_NODE_ENV: process.env.NODE_ENV,
+    NEXT_PUBLIC_DEPLOYMENT_ENVIRONMENT: process.env.NEXT_PUBLIC_DEPLOYMENT_ENVIRONMENT,
     SUPABASE_SERVICE_ROLE_KEY: process.env.SUPABASE_SERVICE_ROLE_KEY,
     NEXT_PUBLIC_SUPABASE_ANON_KEY: process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY,
     NEXT_PUBLIC_SUPABASE_URL: process.env.NEXT_PUBLIC_SUPABASE_URL,
     DATABASE_URL: process.env.DATABASE_URL,
     STRIPE_SECRET_KEY: process.env.STRIPE_SECRET_KEY,
+    NEXT_PUBLIC_SIGN_UP_DEFAULT_EMAIL: process.env.NEXT_PUBLIC_SIGN_UP_DEFAULT_EMAIL,
+    NEXT_PUBLIC_FRONTEND_URL: process.env.NEXT_PUBLIC_FRONTEND_URL,
     CAISY_API_KEY: process.env.CAISY_API_KEY,
     CAISY_PROJECT_ID: process.env.CAISY_PROJECT_ID,
     NEXT_PUBLIC_WEBSITE_URL: process.env.NEXT_PUBLIC_WEBSITE_URL,
@@ -57,9 +57,7 @@ export const env = createEnv({
     THROTTLE_REQUESTS_IN_MS: process.env.THROTTLE_REQUESTS_IN_MS,
     GOOGLE_CLOUD_STORAGE_PROJECT_ID: process.env.GOOGLE_CLOUD_STORAGE_PROJECT_ID,
     GOOGLE_CLOUD_STORAGE_BUCKET_NAME: process.env.GOOGLE_CLOUD_STORAGE_BUCKET_NAME,
-    GOOGLE_SERVICE_ACCOUNT_CLIENT_EMAIL: process.env.GOOGLE_SERVICE_ACCOUNT_CLIENT_EMAIL,
-    GOOGLE_SERVICE_ACCOUNT_CLIENT_ID: process.env.GOOGLE_SERVICE_ACCOUNT_CLIENT_ID,
-    GOOGLE_SERVICE_ACCOUNT_PRIVATE_KEY: process.env.GOOGLE_SERVICE_ACCOUNT_PRIVATE_KEY,
+    GOOGLE_SERVICE_ACCOUNT_BASE64: process.env.GOOGLE_SERVICE_ACCOUNT_BASE64,
     NEXT_PUBLIC_MEILISEARCH_PUBLIC_URL: process.env.NEXT_PUBLIC_MEILISEARCH_PUBLIC_URL,
     MEILISEARCH_HOST_URL: process.env.MEILISEARCH_HOST_URL,
     MEILISEARCH_MASTER_API_KEY: process.env.MEILISEARCH_MASTER_API_KEY,

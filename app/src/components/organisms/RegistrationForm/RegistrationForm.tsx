@@ -11,22 +11,36 @@ import { env } from "@/env.mjs";
 import { maximumAmountOfSemesters, type RegistrationFormSchema, registrationFormSchema } from "@/schemas/auth/registrationForm.schema";
 import { supabase } from "@/supabase/client";
 import { api } from "@/utils/api";
+import { isDevelopmentOrStaging } from "@/utils/env";
+import { getConfirmEmailUrl } from "@/utils/paths";
 import { type PartialUndefined } from "@/utils/types";
 
 import { Box, Stack } from "@mantine/core";
 import { useForm, zodResolver } from "@mantine/form";
 import { useDisclosure } from "@mantine/hooks";
 import { notifications } from "@mantine/notifications";
+import Link from "next/link";
 import { useRouter } from "next/router";
 import { useTranslation } from "next-i18next";
-import { type FunctionComponent } from "react";
+import { type FunctionComponent, useEffect, useRef, useState } from "react";
 import z from "zod";
 import { makeZodI18nMap } from "zod-i18n-map";
 
 // this means for the initial values of the form, these keys can be null since these are dropdowns
 type InitialValues = PartialUndefined<RegistrationFormSchema, "gender">;
 
-let initialValues: InitialValues = {
+const initialValues: InitialValues = isDevelopmentOrStaging ? {
+  acceptTOS: true,
+  displayName: "Constellatio Dev User",
+  email: env.NEXT_PUBLIC_SIGN_UP_DEFAULT_EMAIL || "devUser@constellatio-dummy-mail.de",
+  firstName: "Dev",
+  gender: allGenders[0]!.identifier,
+  lastName: "User",
+  password: "Super-secure-password-123",
+  passwordConfirmation: "Super-secure-password-123",
+  semester: "7",
+  university: allUniversities[0] ?? "",
+} : {
   acceptTOS: false,
   displayName: "",
   email: "",
@@ -39,26 +53,9 @@ let initialValues: InitialValues = {
   university: "",
 };
 
-if(env.NEXT_PUBLIC_NODE_ENV === "development")
-{
-  initialValues = {
-    acceptTOS: true,
-    displayName: "Constellatio Dev User",
-    email: "devUser@constellatio-dummy-mail.de",
-    firstName: "Dev",
-    gender: allGenders[0]!.identifier,
-    lastName: "User",
-    password: "Super-secure-password-123",
-    passwordConfirmation: "Super-secure-password-123",
-    semester: "7",
-    university: allUniversities[0] ?? "",
-  };
-}
-
 export const RegistrationForm: FunctionComponent = () =>
 {
   const { t } = useTranslation();
-  z.setErrorMap(makeZodI18nMap({ t }));
   const router = useRouter();
   const [isPasswordRevealed, { toggle }] = useDisclosure(false);
   const form = useForm<InitialValues>({
@@ -66,11 +63,18 @@ export const RegistrationForm: FunctionComponent = () =>
     validate: zodResolver(registrationFormSchema),
     validateInputOnBlur: true,
   });
+  const [shouldShowEmailConfirmationDialog, setShouldShowEmailConfirmationDialog] = useState<boolean>(false);
+  const lastConfirmationEmailTimestamp = useRef<number>();
+
+  useEffect(() =>
+  {
+    z.setErrorMap(makeZodI18nMap({ t }));
+  }, [t]);
 
   const { isLoading: isRegisterLoading, mutate: register } = api.authentication.register.useMutation({
     onError: e =>
     {
-      if(e.data?.identifier === "email-already-taken")
+      if(e.data?.clientError.identifier === "email-already-taken")
       {
         form.setFieldError("email", "Diese E-Mail Adresse wird bereits verwendet");
         return;
@@ -82,15 +86,82 @@ export const RegistrationForm: FunctionComponent = () =>
         title: "Oops!",
       });
     },
-    onSuccess: async data =>
+    onSuccess: async result =>
     {
-      console.log("registered successfully", data);
-      await supabase.auth.setSession(data);
-      await router.replace("/");
+      switch (result.resultType)
+      {
+        case "emailConfirmationRequired":
+        {
+          setShouldShowEmailConfirmationDialog(true);
+          break;
+        }
+        case "signupComplete":
+        {
+          await supabase.auth.setSession(result.session);
+          await router.replace("/");
+          break;
+        }
+      }
     },
   });
 
   const handleSubmit = form.onSubmit(formValues => register(formValues as RegistrationFormSchema));
+
+  const resendConfirmationEmail = async (): Promise<void> =>
+  {
+    if(lastConfirmationEmailTimestamp.current && (Date.now() - lastConfirmationEmailTimestamp.current < 10000))
+    {
+      notifications.show({
+        message: "Bitte warte noch einen Moment, bevor du eine weitere E-Mail anforderst",
+        title: "Ups!",
+      });
+      return;
+    }
+
+    lastConfirmationEmailTimestamp.current = Date.now();
+
+    const { error } = await supabase.auth.resend({
+      email: form.values.email,
+      options: { emailRedirectTo: getConfirmEmailUrl() },
+      type: "signup"
+    });
+
+    if(error)
+    {
+      notifications.show({
+        message: "Deine Bestätigungs-E-Mail konnte nicht erneut gesendet werden. Bitte versuche es später erneut.",
+        title: "Ups!",
+      });
+      return;
+    }
+
+    notifications.show({
+      message: "Deine Bestätigungs-E-Mail wurde erneut gesendet.",
+      title: "E-Mail gesendet!",
+    });
+  };
+
+  if(shouldShowEmailConfirmationDialog)
+  {
+    return (
+      <div style={{ display: "flex", flexDirection: "column", gap: 10 }}>
+        <h1>Bestätige deine E-Mail Adresse</h1>
+        <p>Deine Registrierung war erfolgreich. Du musst jetzt noch deine E-Mail Adresse bestätigen. Bitte schaue in deinem Postfach nach einer E-Mail von uns.</p>
+        <p>Nach erfolgreicher Bestätigung kannst du dich mit deinem neuen Account einloggen.</p>
+        <p>Keine E-Mail erhalten? Drücke auf den Button, um eine neue E-Mail zu erhalten.</p>
+        <div style={{ alignItems: "center", display: "flex", gap: 12 }}>
+          <Button<"button"> styleType="tertiary" onClick={resendConfirmationEmail}>
+            E-Mail erneut senden
+          </Button>
+          <Link href="/login" passHref>
+            <Button<"button"> styleType="primary">
+              Weiter zum Login
+            </Button>
+          </Link>
+        </div>
+      </div>
+    );
+  }
 
   return (
     <form onSubmit={handleSubmit}>
