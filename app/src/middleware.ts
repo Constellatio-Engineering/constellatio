@@ -1,5 +1,5 @@
 /* eslint-disable import/no-unused-modules */
-import type { Database } from "@/lib/database.types";
+import { getIsUserLoggedIn } from "@/utils/auth";
 
 import { createMiddlewareSupabaseClient } from "@supabase/auth-helpers-nextjs";
 import { type NextMiddleware, NextResponse } from "next/server";
@@ -12,26 +12,16 @@ export const middleware: NextMiddleware = async (req) =>
   console.log("req.nextUrl", req.nextUrl.pathname);
 
   const res = NextResponse.next();
-  const supabase = createMiddlewareSupabaseClient<Database>({ req, res });
-  const { data: { session }, error: getSessionError } = await supabase.auth.getSession();
+  const supabase = createMiddlewareSupabaseClient({ req, res });
 
-  if(getSessionError || !session?.user)
+  const isUserLoggedIn = await getIsUserLoggedIn(supabase);
+
+  if(!isUserLoggedIn)
   {
-    if(getSessionError)
-    {
-      console.warn("Error getting session, redirecting to login", getSessionError);
-    }
-    else
-    {
-      console.log("User is not logged in, redirecting to login. Session: ", session);
-    }
-
     const redirectUrl = req.nextUrl.clone();
-
     redirectUrl.pathname = "/login";
-    // redirectUrl.searchParams.set("redirectedFrom", req.nextUrl.pathname);
-
-    console.log("Redirecting to: ", redirectUrl.toString());
+    redirectUrl.searchParams.set("redirectedFrom", req.nextUrl.pathname);
+    console.log("User is not logged in. Redirecting to: ", redirectUrl.toString());
     return NextResponse.redirect(redirectUrl);
   }
 
@@ -72,6 +62,8 @@ export const config = {
      * - _next/image (image optimization files)
      * - favicon.* (favicon files)
      * - extension (Caisy UI extension)
+     *
+     * CAUTION: This does not work for the root path ("/")!
      */
     "/((?!api|login|register|confirm|recover|_next/static|_next/image|favicon.*|extension).*)",
   ],

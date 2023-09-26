@@ -36,7 +36,7 @@ const initialSearchResults: SearchResults = {
   userUploads: [],
 };
 
-const Home: FunctionComponent<ServerSidePropsResult> = () =>
+const Dashboard: FunctionComponent<ServerSidePropsResult> = () =>
 {
   const [input, setInput] = useState<string>("");
   const hasInput = input.length > 0;
@@ -117,4 +117,4 @@ const Home: FunctionComponent<ServerSidePropsResult> = () =>
   );
 };
 
-export default Home;
+export default Dashboard;
