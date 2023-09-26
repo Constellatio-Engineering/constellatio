@@ -54,11 +54,16 @@ export const LoginForm: FunctionComponent = () =>
         throw loginResult.error;
       }
 
-      console.log("successfully logged in. Redirecting to home page...", loginResult.data);
+      console.log("successfully logged in. Redirecting to cases page...", loginResult.data);
 
+      console.log("setting session", loginResult.data.session);
       await supabase.auth.setSession(loginResult.data.session);
+
+      console.log("invalidating api context");
       await apiContext.invalidate();
-      await router.replace("/");
+
+      console.log("redirecting to home page...");
+      await router.replace("/cases");
     }
     catch (error)
     {

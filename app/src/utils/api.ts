@@ -66,8 +66,8 @@ export const api = createTRPCNext<AppRouter>({
             if(clientError.identifier === "unauthorized")
             {
               console.log("Server responded with 'UNAUTHORIZED'. Redirecting to login");
-              window.location.replace("/login");
-              void supabase.auth.signOut();
+              // window.location.replace("/login");
+              // void supabase.auth.signOut();
               return;
             }
           },

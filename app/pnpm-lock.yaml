@@ -176,6 +176,9 @@ dependencies:
   next-i18next:
     specifier: ^14.0.0
     version: 14.0.0(i18next@23.4.6)(next@13.4.19)(react-i18next@13.2.1)(react@18.2.0)
+  path-to-regexp:
+    specifier: ^6.2.1
+    version: 6.2.1
   postgres:
     specifier: 3.3.5
     version: 3.3.5
@@ -13204,6 +13207,10 @@ packages:
   /path-to-regexp@0.1.7:
     resolution: {integrity: sha512-5DFkuoqlv1uYQKxy8omFBeJPQcdoE07Kv2sferDCrAq1ohOU+MSDswDIbnx3YAM60qIOnYa53wBhXW0EbMonrQ==}
     dev: true
+
+  /path-to-regexp@6.2.1:
+    resolution: {integrity: sha512-JLyh7xT1kizaEvcaXOQwOc2/Yhw6KZOvPf1S8401UyLk86CU79LN3vl7ztXGm/pZ+YjoyAJ4rxmHwbkBXJX+yw==}
+    dev: false
 
   /path-type@4.0.0:
     resolution: {integrity: sha512-gDKb8aZMDeD/tZWs9P6+q0J9Mwkdl6xMV8TjnGP3qJVJ06bdMgkbBlLU8IdfOsIsFz2BW1rNVT3XuNEl8zPAvw==}
