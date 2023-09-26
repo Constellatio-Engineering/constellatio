@@ -38,6 +38,12 @@ export const textStyles = ({
       lineHeight: theme.spacing["spacing-20"],
       order: 3,
     },
+    icon: {
+      height: "20px",
+      left: "12px",
+      top: "9px",
+      width: "20px",
+    },
     input: {
       "&[data-disabled]": {
         backgroundColor: theme.colors["neutrals-01"][3],
