@@ -7,6 +7,8 @@ import type { NextRequest, NextMiddleware } from "next/server";
 
 export const middleware: NextMiddleware = async (req: NextRequest) =>
 {
+  console.log("--- Middleware ---");
+
   const res = NextResponse.next();
   const supabase = createMiddlewareSupabaseClient<Database>({ req, res });
   const { data: { session }, error: getSessionError } = await supabase.auth.getSession();
@@ -46,6 +48,8 @@ export const middleware: NextMiddleware = async (req: NextRequest) =>
 
     console.warn("User is not confirmed. This should not happen. User: ", user, data.user);
   }
+
+  console.log("User is logged in. Do nothing.");
 
   return res;
 };

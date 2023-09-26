@@ -92,11 +92,13 @@ export const RegistrationForm: FunctionComponent = () =>
       {
         case "emailConfirmationRequired":
         {
+          console.log("email confirmation required");
           setShouldShowEmailConfirmationDialog(true);
           break;
         }
         case "signupComplete":
         {
+          console.log("signup complete. redirecting to home page...");
           await supabase.auth.setSession(result.session);
           await router.replace("/");
           break;
