@@ -1,5 +1,6 @@
 import { Layout } from "@/components/layouts/Layout";
 import { env } from "@/env.mjs";
+import useSearchStore from "@/stores/search.store";
 import { api } from "@/utils/api";
 import { getCommonProps } from "@/utils/commonProps";
 import { type CaseSearchIndexItem, searchIndices, type UploadSearchIndexItem } from "@/utils/search";
@@ -8,7 +9,7 @@ import { useQuery } from "@tanstack/react-query";
 import { MeiliSearch } from "meilisearch";
 import { type GetServerSideProps } from "next";
 import { type SSRConfig } from "next-i18next";
-import { type FunctionComponent, useMemo, useState } from "react";
+import { type FunctionComponent, useMemo, useState, useEffect } from "react";
 
 import { defaultLocale } from "../../next.config.mjs";
 
@@ -26,20 +27,24 @@ export const getServerSideProps: GetServerSideProps<ServerSidePropsResult> = asy
   };
 };
 
-type SearchResults = {
-  cases: CaseSearchIndexItem[];
-  userUploads: UploadSearchIndexItem[];
-};
+// type SearchResults = {
+//   cases: CaseSearchIndexItem[];
+//   userUploads: UploadSearchIndexItem[];
+// };
 
-const initialSearchResults: SearchResults = {
-  cases: [],
-  userUploads: [],
-};
+// const initialSearchResults: SearchResults = {
+//   cases: [],
+//   userUploads: [],
+// };
 
 const Dashboard: FunctionComponent<ServerSidePropsResult> = () =>
 {
-  const [input, setInput] = useState<string>("");
+  const input = useSearchStore(s => s.searchValue);
   const hasInput = input.length > 0;
+  const setInput = useSearchStore(s => s.setSearchValue);
+  const setSearchResults = useSearchStore(s => s.setSearchResults);
+  const setIsLoading = useSearchStore(s => s.setIsLoading);
+  const globalSearchResults = useSearchStore(s => s.searchResults);
 
   const { data: searchToken } = api.search.getTenantToken.useQuery(undefined, {
     refetchOnMount: "always",
@@ -52,14 +57,14 @@ const Dashboard: FunctionComponent<ServerSidePropsResult> = () =>
     host: env.NEXT_PUBLIC_MEILISEARCH_PUBLIC_URL
   }), [searchToken]);
 
-  const { data: searchResults = initialSearchResults, isLoading } = useQuery({
+  const { data: searchResults = globalSearchResults, isLoading } = useQuery({
     enabled: hasInput && meiliSearch != null,
     keepPreviousData: true,
     queryFn: async () =>
     {
       if(!meiliSearch)
       {
-        return initialSearchResults;
+        return globalSearchResults;
       }
 
       const { results } = await meiliSearch.multiSearch({
@@ -79,6 +84,7 @@ const Dashboard: FunctionComponent<ServerSidePropsResult> = () =>
         cases: results?.[0]?.hits ?? [],
         userUploads: results?.[1]?.hits ?? [],
       });
+
     },
     queryKey: ["search", input],
     refetchOnMount: false,
@@ -88,7 +94,13 @@ const Dashboard: FunctionComponent<ServerSidePropsResult> = () =>
     staleTime: 3000,
   });
 
-  console.log(searchResults.cases);
+  useEffect(() => 
+  {
+    setSearchResults(searchResults);
+    setIsLoading(isLoading);
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [searchResults, isLoading]);
+
   return (
     <Layout>
       <div style={{ padding: 100 }}>
@@ -98,15 +110,15 @@ const Dashboard: FunctionComponent<ServerSidePropsResult> = () =>
         {hasInput && (
           <div style={{ marginTop: 10 }}>
             <h2>Cases</h2>
-            {searchResults.cases.length === 0 && <p style={{ color: "#acacac", fontStyle: "italic" }}>No results</p>}
-            {searchResults.cases.map(result => (
+            {globalSearchResults.cases.length === 0 && <p style={{ color: "#acacac", fontStyle: "italic" }}>No results</p>}
+            {globalSearchResults.cases.map(result => (
               <div key={result.id}>
                 <p>{result.title}</p>
               </div>
             ))}
             <h2 style={{ marginTop: 10 }}>Uploads</h2>
-            {searchResults.userUploads.length === 0 && <p style={{ color: "#acacac", fontStyle: "italic" }}>No results</p>}
-            {searchResults.userUploads.map(result => (
+            {globalSearchResults.userUploads.length === 0 && <p style={{ color: "#acacac", fontStyle: "italic" }}>No results</p>}
+            {globalSearchResults.userUploads.map(result => (
               <div key={result.uuid}>
                 <p>{result.originalFilename}</p>
               </div>
