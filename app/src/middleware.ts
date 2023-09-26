@@ -6,11 +6,6 @@ import { type NextMiddleware, NextResponse } from "next/server";
 
 export const middleware: NextMiddleware = async (req) =>
 {
-  console.log("--- Middleware ---");
-
-  console.log("req.url", req.url);
-  console.log("req.nextUrl", req.nextUrl.pathname);
-
   const res = NextResponse.next();
   const supabase = createMiddlewareSupabaseClient({ req, res });
 
@@ -29,13 +24,13 @@ export const middleware: NextMiddleware = async (req) =>
 
   if(getUserError)
   {
-    console.log("Error getting user. Do nothing for now", getUserError);
+    console.log("User is logged in but there was an error getting the user. Do nothing for now. This should be investigated", getUserError);
     return res;
   }
 
   if(!user)
   {
-    console.log("User was null. This should not happen. Do nothing for now");
+    console.log("User is logged in but was null. This should not happen. Do nothing for now");
     return res;
   }
 
@@ -45,7 +40,6 @@ export const middleware: NextMiddleware = async (req) =>
     console.warn("User is not confirmed. This should not happen. User: ", user);
   }
 
-  console.log("User is logged in. Do nothing.");
   return NextResponse.next();
 };
 
