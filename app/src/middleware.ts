@@ -10,24 +10,18 @@ export const middleware: NextMiddleware = async (req: NextRequest) =>
   const res = NextResponse.next();
   const supabase = createMiddlewareSupabaseClient<Database>({ req, res });
   const { data: { session }, error: getSessionError } = await supabase.auth.getSession();
-  const { data: { user }, error: getUserError } = await supabase.auth.getUser();
-  let didErrorOccur = false;
+  const user = session?.user;
 
-  if(getSessionError)
+  if(getSessionError || !user)
   {
-    console.warn("Error getting session", getSessionError);
-    didErrorOccur = true;
-  }
-
-  if(getUserError)
-  {
-    console.warn("Error getting user", getUserError);
-    didErrorOccur = true;
-  }
-
-  if(didErrorOccur || !session?.user)
-  {
-    console.log("User is not logged in, redirecting to login");
+    if(getSessionError)
+    {
+      console.warn("Error getting session, redirecting to login", getSessionError);
+    }
+    else
+    {
+      console.log("User is not logged in, redirecting to login");
+    }
 
     const redirectUrl = req.nextUrl.clone();
 
@@ -37,16 +31,10 @@ export const middleware: NextMiddleware = async (req: NextRequest) =>
     return NextResponse.redirect(redirectUrl);
   }
 
-  if(!user?.confirmed_at)
+  if(!user.confirmed_at)
   {
-    console.log("User is not confirmed, redirecting to confirm");
-
-    const redirectUrl = req.nextUrl.clone();
-
-    redirectUrl.pathname = "/confirm";
-    redirectUrl.searchParams.set("redirectedFrom", req.nextUrl.pathname);
-
-    return NextResponse.redirect(redirectUrl);
+    // In this case this happens, we should send an additional confirmation email and redirect to an explanation page
+    console.warn("User is not confirmed. This should not happen. User: ", user);
   }
 
   return res;
