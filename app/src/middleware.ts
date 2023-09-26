@@ -4,34 +4,12 @@ import type { Database } from "@/lib/database.types";
 import { createMiddlewareSupabaseClient } from "@supabase/auth-helpers-nextjs";
 import { type NextMiddleware, NextResponse } from "next/server";
 
-// we cant use the matcher in the middleware config because negative lookahead has a bug where it does not match the index route
-const excludedPaths = [
-  "/api",
-  "/login",
-  "/register",
-  "/confirm",
-  "/extension",
-  "/_next/static",
-  "/_next/image",
-  "/favicon.",
-];
-
 export const middleware: NextMiddleware = async (req) =>
 {
   console.log("--- Middleware ---");
 
   console.log("req.url", req.url);
   console.log("req.nextUrl", req.nextUrl.pathname);
-
-  const isExcluded = excludedPaths.some(path => req.nextUrl.pathname.startsWith(path));
-
-  console.log("isExcluded", String(isExcluded));
-
-  if(isExcluded)
-  {
-    console.log("Path is excluded. Do nothing.");
-    return NextResponse.next();
-  }
 
   const res = NextResponse.next();
   const supabase = createMiddlewareSupabaseClient<Database>({ req, res });
@@ -79,4 +57,22 @@ export const middleware: NextMiddleware = async (req) =>
 
   console.log("User is logged in. Do nothing.");
   return NextResponse.next();
+};
+
+export const config = {
+  matcher: [
+    /*
+     * Match all request paths except for the ones starting with:
+     * - api (API routes)
+     * - login (login route)
+     * - register (registration route)
+     * - recover (recover password route)
+     * - confirm (email confirmation route)
+     * - _next/static (static files)
+     * - _next/image (image optimization files)
+     * - favicon.* (favicon files)
+     * - extension (Caisy UI extension)
+     */
+    "/((?!api|login|register|confirm|recover|_next/static|_next/image|favicon.*|extension).*)",
+  ],
 };

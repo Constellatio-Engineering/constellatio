@@ -14,8 +14,9 @@ export const getServerSideProps: GetServerSideProps<ServerSidePropsResult> = asy
   const commonProps = await getCommonProps({ locale });
 
   return {
+    re
     props: {
-      ...(await getCommonProps({ locale })),
+      ...commonProps,
       test: "test",
     },
   };
