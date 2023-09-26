@@ -35,7 +35,7 @@ const DocsTable: FunctionComponent<DocsTableProps> = ({ docs }) =>
             </th>
             <th><CaptionText styleType="caption-01-medium" component="p">LAST MODIFIED</CaptionText></th>
             <th><CaptionText styleType="caption-01-medium" component="p">TAGS</CaptionText></th>
-            <tr/>
+            <th/>
           </tr>
         </thead>
         <tbody css={styles.tableBody}>

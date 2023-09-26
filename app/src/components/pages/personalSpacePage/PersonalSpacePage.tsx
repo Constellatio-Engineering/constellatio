@@ -1,5 +1,6 @@
 /* eslint-disable max-lines */
 import { Button } from "@/components/atoms/Button/Button";
+import BadgeCard from "@/components/badgeCard/BadgeCard";
 import DocsTable from "@/components/docsTable/DocsTable";
 import EmptyStateCard from "@/components/organisms/emptyStateCard/EmptyStateCard";
 import FavoriteCasesList from "@/components/organisms/favoriteCasesList/FavoriteCasesList";
@@ -25,7 +26,7 @@ import * as styles from "./PersonalSpacePage.styles";
 import BookmarkIconSvg from "../../../../public/images/icons/bookmark.svg";
 import FileIconSvg from "../../../../public/images/icons/file.svg";
 
-type FileWithClientSideUuid = {
+export type FileWithClientSideUuid = {
   clientSideUuid: string;
   file: File;
 };
@@ -205,6 +206,9 @@ const PersonalSpacePage: FunctionComponent = () =>
   
   const favoriteCategoryNavTabs = [{ id: FavCasesTabId, itemsPerTab: bookmarkedCases?.length ?? 0, title: "CASES" }, { id: FavDictionaryTabId, itemsPerTab: 999, title: "DICTIONARY" }, { id: FavForumsTabId, itemsPerTab: 999, title: "FORUM" }, { id: FavHighlightsTabId, itemsPerTab: 999, title: "HIGHLIGHTS" }];
   const [selectedTabId, setSelectedTabId] = useState<string>(favoriteCategoryNavTabs?.[0]?.id as string);
+  const UploadedMaterialProps = {
+    areUploadsInProgress, fileInputRef, onSubmit, selectedFiles, setSelectedFiles
+  };
 
   // FUNCTION RETURNING ALL CASES USING THEIR SUBCATEGORY WITH THE SUBCATEGORY ID
   // const casesBySubcategoryId = (id: string) => 
@@ -297,13 +301,14 @@ const PersonalSpacePage: FunctionComponent = () =>
                   // { lastModified: new Date(), name: "Cosntellatio doc name", tagsNumber: 0 },
                 ]}
                 />
-
-                <UploadedMaterialBlock/>
+                <UploadedMaterialBlock {...UploadedMaterialProps}/>
                 <div>
                   <h2 style={{ fontSize: 22, marginRight: 10 }}>Test signed upload url</h2>
                 </div>
-                <form onSubmit={onSubmit}>
-                  Select File:{" "}
+                {/* <form
+                  onSubmit={onSubmit}
+                  css={styles.badge}>
+                  <BadgeCard/>
                   <input
                     ref={fileInputRef}
                     type="file"
@@ -322,7 +327,7 @@ const PersonalSpacePage: FunctionComponent = () =>
                     type="submit">
                     Upload
                   </Button>
-                </form>
+                </form> */}
                 Selected Files:
                 {selectedFiles.map(({ clientSideUuid, file }) => (
                   <p key={clientSideUuid}>{file.name}</p>
