@@ -36,6 +36,7 @@ const SearchField: FunctionComponent<SearchFieldProps> = ({
         icon={SearchIcon}
         rightSection={ResetIcon}
         value={searchValue}
+        onChange={e => setSearchValue(e.currentTarget.value)}
         {...props}
       />
     </div>
