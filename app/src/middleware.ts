@@ -20,7 +20,7 @@ export const middleware: NextMiddleware = async (req: NextRequest) =>
     }
     else
     {
-      console.log("User is not logged in, redirecting to login");
+      console.log("User is not logged in, redirecting to login. Session: ", session);
     }
 
     const redirectUrl = req.nextUrl.clone();
@@ -34,7 +34,17 @@ export const middleware: NextMiddleware = async (req: NextRequest) =>
   if(!user.confirmed_at)
   {
     // In this case this happens, we should send an additional confirmation email and redirect to an explanation page
-    console.warn("User is not confirmed. This should not happen. User: ", user);
+
+    console.log("User is not confirmed, this should not happen");
+
+    const { data, error } = await supabase.auth.getUser();
+
+    if(error)
+    {
+      console.log("Error getting user", error);
+    }
+
+    console.warn("User is not confirmed. This should not happen. User: ", user, data.user);
   }
 
   return res;

@@ -48,15 +48,15 @@ export const LoginForm: FunctionComponent = () =>
         password: formValues.password,
       });
 
-      console.log("login result", loginResult);
-
       if(loginResult.error)
       {
+        console.log("login failed", loginResult.error);
         throw loginResult.error;
       }
 
-      console.log("successfully logged in. Redirecting to home page...");
+      console.log("successfully logged in. Redirecting to home page...", loginResult.data);
 
+      await supabase.auth.setSession(loginResult.data.session);
       await apiContext.invalidate();
       await router.replace("/");
     }

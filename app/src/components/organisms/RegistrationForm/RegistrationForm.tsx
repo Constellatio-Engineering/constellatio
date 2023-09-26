@@ -31,15 +31,15 @@ type InitialValues = PartialUndefined<RegistrationFormSchema, "gender">;
 
 const initialValues: InitialValues = isDevelopmentOrStaging ? {
   acceptTOS: true,
-  displayName: "Constellatio Dev User",
-  email: env.NEXT_PUBLIC_SIGN_UP_DEFAULT_EMAIL || "devUser@constellatio-dummy-mail.de",
-  firstName: "Dev",
+  displayName: "Constellatio Test User",
+  email: env.NEXT_PUBLIC_SIGN_UP_DEFAULT_EMAIL || (env.NEXT_PUBLIC_DEPLOYMENT_ENVIRONMENT === "development" ? "devUser@constellatio-dummy-mail.de" : ""),
+  firstName: "Test",
   gender: allGenders[0]!.identifier,
   lastName: "User",
   password: "Super-secure-password-123",
   passwordConfirmation: "Super-secure-password-123",
   semester: "7",
-  university: allUniversities[0] ?? "",
+  university: allUniversities[20] ?? "",
 } : {
   acceptTOS: false,
   displayName: "",
@@ -165,6 +165,9 @@ export const RegistrationForm: FunctionComponent = () =>
 
   return (
     <form onSubmit={handleSubmit}>
+      {isDevelopmentOrStaging && (
+        <p style={{ fontStyle: "italic", marginBottom: 30 }}>Note from developers: Form is only pre filled in development and staging, not in production.</p>
+      )}
       <Stack spacing="spacing-24">
         <Stack spacing="spacing-12">
           <Input
