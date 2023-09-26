@@ -4,6 +4,7 @@ import { Input } from "@/components/atoms/Input/Input";
 import { colors } from "@/constants/styles/colors";
 import { loginFormSchema } from "@/schemas/auth/loginForm.schema";
 import { supabase } from "@/supabase/client";
+import { api } from "@/utils/api";
 
 import { Stack } from "@mantine/core";
 import { useForm, zodResolver } from "@mantine/form";
@@ -18,6 +19,7 @@ type SignInError = "emailNotConfirmed" | "invalidCredentials" | "unknownError";
 
 export const LoginForm: FunctionComponent = () =>
 {
+  const apiContext = api.useContext();
   const [, setResetPasswordModalOpen] = useAtom(resetPasswordModalVisible);
   const router = useRouter();
   const [isLoginInProgress, setIsLoginInProgress] = useState(false);
@@ -55,6 +57,7 @@ export const LoginForm: FunctionComponent = () =>
 
       console.log("successfully logged in. Redirecting to home page...");
 
+      await apiContext.invalidate();
       await router.replace("/");
     }
     catch (error)
