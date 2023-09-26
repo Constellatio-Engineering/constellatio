@@ -1,17 +1,10 @@
 import { css } from "@emotion/react";
 import { type MantineTheme } from "@mantine/styles";
 
-export const wrapper = css`
-  display: flex;
-  flex-direction: column;
-  position: relative;
-`;
-
 export const tableWrapper = (theme: MantineTheme) => css`
   text-align: left;
   border-radius: 12px;
   overflow: hidden;
-  width: 100%;
   outline: 1px solid ${theme.colors["neutrals-01"][1]};
   td {
     padding: 16px;
@@ -25,12 +18,21 @@ export const tableWrapper = (theme: MantineTheme) => css`
     vertical-align: middle;
     white-space: nowrap;
   }
-
   tr {
     border: 1px solid ${theme.colors["neutrals-01"][2]};
   }
   .primaryCell {
     width: 100%;
+    
+    p {
+      max-width: 550px;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      display: flex;
+      justify-content: flex-start;
+      align-items: center;
+      gap: 8px;
+    }
   }
 `;
 
@@ -55,17 +57,17 @@ export const docTags = (theme: MantineTheme) => css`
 `;
 
 export const showMoreButton = (theme: MantineTheme) => css`
-  position: absolute;
+  position: relative;
   background: red;
   display: grid;
   place-items: center;
-  bottom: 0;
+  bottom: 45px;
   left: 0;
   width: 100%;
   padding: 10px;
   background: linear-gradient(
-    to bottom,
-    transparent,
-    ${theme.colors["neutrals-01"][0]}
+    to top,
+    ${theme.colors["neutrals-01"][0]} 40%,
+    transparent 100%
   );
 `;

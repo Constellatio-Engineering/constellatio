@@ -45,9 +45,7 @@ export const emptyStateCardTitle = ({ theme, variant }: IEmptyCardProps) => css`
 
 export const emptyStateCardText = ({ theme, variant }: IEmptyCardProps) => css`
   margin-bottom: 40px;
-  color: ${variant === "For-small-areas"
-    ? theme?.colors["neutrals-01"][7]
-    : theme?.colors["neutrals-01"][9]};
+  color: ${theme?.colors["neutrals-01"][7]};
 `;
 export const callToAction = ({ theme }: IEmptyCardProps) => css`
     color: ${theme?.colors["neutrals-01"][0]};

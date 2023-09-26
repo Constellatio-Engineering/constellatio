@@ -31,6 +31,11 @@ export type FileWithClientSideUuid = {
   file: File;
 };
 
+export interface IUploadedMaterialProps 
+{
+
+}
+
 const PersonalSpacePage: FunctionComponent = () =>
 {
   const apiContext = api.useContext();
@@ -206,8 +211,15 @@ const PersonalSpacePage: FunctionComponent = () =>
   
   const favoriteCategoryNavTabs = [{ id: FavCasesTabId, itemsPerTab: bookmarkedCases?.length ?? 0, title: "CASES" }, { id: FavDictionaryTabId, itemsPerTab: 999, title: "DICTIONARY" }, { id: FavForumsTabId, itemsPerTab: 999, title: "FORUM" }, { id: FavHighlightsTabId, itemsPerTab: 999, title: "HIGHLIGHTS" }];
   const [selectedTabId, setSelectedTabId] = useState<string>(favoriteCategoryNavTabs?.[0]?.id as string);
+  
   const UploadedMaterialProps = {
-    areUploadsInProgress, fileInputRef, onSubmit, selectedFiles, setSelectedFiles
+    areUploadsInProgress, 
+    fileInputRef, 
+    isGetUploadedFilesLoading, 
+    onSubmit, 
+    selectedFiles,
+    setSelectedFiles,
+    uploadedFiles
   };
 
   // FUNCTION RETURNING ALL CASES USING THEIR SUBCATEGORY WITH THE SUBCATEGORY ID
@@ -233,8 +245,8 @@ const PersonalSpacePage: FunctionComponent = () =>
           setSelectedCategoryId={setSelectedCategoryId}
         />
       </div>
+      {isFlavoriteTab(selectedCategoryId ?? "") && <PersonalSpaceNavBar setSelectedTabId={setSelectedTabId} selectedTabId={selectedTabId} tabs={favoriteCategoryNavTabs}/>}
       <Container maw={1440}>
-        {isFlavoriteTab(selectedCategoryId ?? "") && <PersonalSpaceNavBar setSelectedTabId={setSelectedTabId} selectedTabId={selectedTabId} tabs={favoriteCategoryNavTabs}/>}
         {isFlavoriteTab(selectedCategoryId ?? "") ? (selectedTabId === FavCasesTabId ? (
           <> 
             {(areBookmarksLoading || areCasesLoading) ? (
@@ -286,7 +298,7 @@ const PersonalSpacePage: FunctionComponent = () =>
         )) : (
           <>
             <div style={{
-              alignItems: "flex-start", display: "flex", gap: "62px", justifyContent: "space-between", marginTop: "40px" 
+              alignItems: "flex-start", display: "flex", gap: "0px", justifyContent: "space-between", marginTop: "40px",
             }}>
               <MaterialMenu folders={[
                 { title: "Default folder" }, 
@@ -295,44 +307,14 @@ const PersonalSpacePage: FunctionComponent = () =>
                 // { title: "Folder name" }
               ]}
               /> 
-              <div style={{ flex: 1 }}>
+              <div style={{ flex: 1, maxWidth: "75%" }}>
                 <PapersBlock docs={[
                   // { lastModified: new Date(), name: "Cosntellatio doc name", tagsNumber: 0 },
                   // { lastModified: new Date(), name: "Cosntellatio doc name", tagsNumber: 0 },
                 ]}
                 />
                 <UploadedMaterialBlock {...UploadedMaterialProps}/>
-                <div>
-                  <h2 style={{ fontSize: 22, marginRight: 10 }}>Test signed upload url</h2>
-                </div>
-                {/* <form
-                  onSubmit={onSubmit}
-                  css={styles.badge}>
-                  <BadgeCard/>
-                  <input
-                    ref={fileInputRef}
-                    type="file"
-                    disabled={areUploadsInProgress}
-                    multiple
-                    onChange={e =>
-                    {
-                      const files = Array.from(e.target.files ?? []);
-                      const filesWithUuid: FileWithClientSideUuid[] = files.map(file => ({ clientSideUuid: getRandomUuid(), file }));
-                      setSelectedFiles(filesWithUuid);
-                    }}
-                  />
-                  <Button<"button">
-                    styleType="primary"
-                    disabled={selectedFiles.length === 0 || areUploadsInProgress}
-                    type="submit">
-                    Upload
-                  </Button>
-                </form> */}
-                Selected Files:
-                {selectedFiles.map(({ clientSideUuid, file }) => (
-                  <p key={clientSideUuid}>{file.name}</p>
-                ))}
-                <h2 style={{ fontSize: 22, marginRight: 10, marginTop: 100 }}>Current Uploads</h2>
+                <h2 style={{ fontSize: 22, marginRight: 10 }}>Current Uploads</h2>
                 {uploads.filter(u => u.state.type !== "completed").map((upload, index) =>
                 {
                   return (
@@ -341,7 +323,6 @@ const PersonalSpacePage: FunctionComponent = () =>
                       {upload.state.type === "uploading" ? (
                         <div
                           style={{
-                            border: "1px solid black",
                             height: 30,
                             width: 200,
                           }}>
@@ -353,27 +334,6 @@ const PersonalSpacePage: FunctionComponent = () =>
                     </div>
                   );
                 })}
-                <h2 style={{ fontSize: 22, marginRight: 10, marginTop: 100 }}>Uploaded Files</h2>
-                {isGetUploadedFilesLoading && <p>Loading...</p>}
-                {uploadedFiles.slice(0, 5).map(file =>
-                {
-                  const uploadedDate = file.createdAt?.toLocaleDateString();
-                  const uploadedTime = file.createdAt?.toLocaleTimeString();
-
-                  return (
-                    <div key={file.id} style={{ cursor: "pointer", margin: "10px 0" }} onClick={() => setSelectedFileIdForPreview(file.uuid)}>
-               
-                      <strong>{file.originalFilename}.{file.fileExtension}</strong>
-                      <p>Uploaded: {uploadedDate} {uploadedTime}</p>
-                      <p>FileId: {file.id}</p>
-                      <p>File UUID: {file.uuid}</p>
-                      <p>File client side UUID: {file.clientSideUuid}</p>
-                    </div>
-                  );
-                })}
-                {uploadedFiles.length > 5 && (
-                  <p>{uploadedFiles.length - 5} more files...</p>
-                )}
                 {selectedFileIdForPreview && (
                   <DummyFileViewer fileId={selectedFileIdForPreview}/>
                 )}

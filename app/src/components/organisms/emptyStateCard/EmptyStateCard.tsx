@@ -1,6 +1,7 @@
 import CaisyImg from "@/basic-components/CaisyImg";
 import { BodyText } from "@/components/atoms/BodyText/BodyText";
 import { Button } from "@/components/atoms/Button/Button";
+import { SubtitleText } from "@/components/atoms/SubtitleText/SubtitleText";
 
 import { Title, useMantineTheme } from "@mantine/core";
 import React, { type ReactNode, type FunctionComponent } from "react";
@@ -35,14 +36,18 @@ const EmptyStateCard: FunctionComponent<IEmptyStateCardProps> = ({
           </div>
         )}
         <div css={styles.emptyStateCardTitle({ theme, variant })}>
-          <Title order={3}>
-            {title}
-          </Title>
+          {variant === "For-large-areas" ? (
+            <Title order={3}>
+              {title}
+            </Title>
+          ) : <SubtitleText styleType="subtitle-01-medium">{title}</SubtitleText>}
         </div>
         <div css={styles.emptyStateCardText({ theme })}>
-          <BodyText styleType="body-01-medium">
-            {text}
-          </BodyText>
+          {variant === "For-large-areas" ? (
+            <BodyText styleType="body-01-medium">
+              {text}
+            </BodyText>
+          ) : <SubtitleText styleType="subtitle-01-medium">{text}</SubtitleText>}
         </div>
         {button && variant === "For-large-areas" && (
           <div css={styles.callToAction({ theme })}>
