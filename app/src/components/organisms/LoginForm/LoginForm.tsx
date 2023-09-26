@@ -54,11 +54,11 @@ export const LoginForm: FunctionComponent = () =>
         throw loginResult.error;
       }
 
-      console.log("successfully logged in. Redirecting to home page...", loginResult.data);
+      console.log("successfully logged in. Redirecting to dashboard page...", loginResult.data);
 
-      await supabase.auth.setSession(loginResult.data.session);
+      // await supabase.auth.setSession(loginResult.data.session);
       await apiContext.invalidate();
-      await router.replace("/");
+      await router.replace("/dashboard");
     }
     catch (error)
     {
