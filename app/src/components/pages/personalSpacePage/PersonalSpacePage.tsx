@@ -216,6 +216,7 @@ const PersonalSpacePage: FunctionComponent = () =>
     isGetUploadedFilesLoading, 
     onSubmit, 
     selectedFiles,
+    setSelectedFileIdForPreview,
     setSelectedFiles,
     uploadedFiles
   };
@@ -313,25 +314,6 @@ const PersonalSpacePage: FunctionComponent = () =>
                 />
                 <UploadedMaterialBlock {...UploadedMaterialProps}/>
                 <FileUploadMenu uploads={uploads}/>
-                {/* <h2 style={{ fontSize: 22, marginRight: 10 }}>Current Uploads</h2>
-                {uploads.filter(u => u.state.type !== "completed").map((upload, index) => 
-                  (
-                    <div key={index} style={{ margin: "10px 0" }}>
-                      <strong>File Client Side UUID: {upload.fileClientSideUuid}</strong>
-                      {upload.state.type === "uploading" ? (
-                        <div
-                          style={{
-                            height: 30,
-                            width: 200,
-                          }}>
-                          <div style={{ backgroundColor: "red", height: "100%", width: `${upload.state.progressInPercent}%` }}/>
-                        </div>
-                      ) : (
-                        <p>{upload.state.type}</p>
-                      )}
-                    </div>
-                  
-                  ))} */}
                 {selectedFileIdForPreview && (
                   <DummyFileViewer fileId={selectedFileIdForPreview}/>
                 )}

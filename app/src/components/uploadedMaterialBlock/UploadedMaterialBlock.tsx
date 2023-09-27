@@ -39,6 +39,7 @@ export interface IFile
     readonly isGetUploadedFilesLoading: boolean;
     readonly onSubmit: (e: FormEvent<HTMLFormElement>) => Promise<void>;
     readonly selectedFiles: FileWithClientSideUuid[];
+    readonly setSelectedFileIdForPreview: React.Dispatch<React.SetStateAction<string | undefined>>;
     readonly setSelectedFiles: React.Dispatch<React.SetStateAction<FileWithClientSideUuid[]>>;
     readonly uploadedFiles: IFile[];
   };

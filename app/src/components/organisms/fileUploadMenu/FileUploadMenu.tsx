@@ -34,7 +34,8 @@ const FileUploadMenu: FunctionComponent<FileUploadMenuProps> = ({ uploads }) =>
     <div css={styles.wrapper({ isShowMenu })}>
       <div css={styles.menuHeader}>
         <SubtitleText styleType="subtitle-01-medium">Upload {uploads?.length} files</SubtitleText>
-        {areUploadsInProgress ? "Cancel" : <span onClick={() => setIsShowMenu(false)}><Cross/></span>}
+        {/* {areUploadsInProgress ? "Cancel" : <span onClick={() => setIsShowMenu(false)}><Cross/></span>} */}
+        <span onClick={() => setIsShowMenu(false)}><Cross/></span>
       </div>
       <div css={styles.menuList}>
         <ScrollArea

@@ -3,8 +3,7 @@ import { AlertStoke } from "@/components/Icons/AlertStroke";
 import { CheckCircleGreenIcon } from "@/components/Icons/CheckCircleGreen";
 import { type UploadState } from "@/stores/uploadsProgress.store";
 
-import { ActionIcon, Center, RingProgress, rem } from "@mantine/core";
-import { IconCheck } from "@tabler/icons-react";
+import { RingProgress } from "@mantine/core";
 import React, { useState, type FunctionComponent } from "react";
 
 import * as styles from "./FileUploadListItem.styles";
@@ -25,29 +24,26 @@ const FileUploadListItem: FunctionComponent<FileUploadListItemProps> = ({
 }) => 
 {
 
-  const [uploadInProgressHovered, setUploadInProgressHovered] = useState<boolean>(false);
- 
+  // const [uploadInProgressHovered, setUploadInProgressHovered] = useState<boolean>(false);
  
   return (
     <div
-      css={styles.wrapper}
-      onMouseEnter={() => setUploadInProgressHovered(true)}
-      onMouseLeave={() => setUploadInProgressHovered(false)}>
-     
+      css={styles.wrapper}>
       <BodyText styleType="body-01-medium" component="p" title={title}>{fileIcon}{title}</BodyText>
       <div className="progress">
         {(file?.state?.type !== "failed") ? (progress < 100 ? (
           <div>
-            {!uploadInProgressHovered ? (
-              <RingProgress
-                size={24}
-                thickness={4}
-                roundCaps
-                sections={[
-                  { color: "red", value: progress ?? 0 },
-                ]}
-              />
-            ) : "Cancel "}
+            {/* {!uploadInProgressHovered ? ( */}
+            
+            <RingProgress
+              size={24}
+              thickness={4}
+              roundCaps
+              sections={[
+                { color: "red", value: progress ?? 0 },
+              ]}
+            />
+            
           </div>
         ) : <CheckCircleGreenIcon/>) :
           ""}
