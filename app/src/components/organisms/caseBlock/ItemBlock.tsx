@@ -24,8 +24,7 @@ export interface ICaseBlockProps
 
 const ItemBlock: FunctionComponent<ICaseBlockProps> = ({ blockHead, items, variant }) => 
 {
-
-  const CasesTable: CasesTableProps = 
+  const CasesTable: CasesTableProps =
   { 
     type: "cases",
     variant: "cases"  
@@ -36,7 +35,9 @@ const ItemBlock: FunctionComponent<ICaseBlockProps> = ({ blockHead, items, varia
     variant: "dictionary"  
   };
 
-  const { data: casesBookmarks, isLoading } = api.bookmarks.getAllBookmarks.useQuery({ resourceType: "case" });
+  const { data: casesBookmarks, isLoading } = api.bookmarks.getAllBookmarks.useQuery({ resourceType: "case" }, {
+    staleTime: Infinity,
+  });
 
   return items && items.length > 0 ? (
     <div css={styles.wrapper}>
