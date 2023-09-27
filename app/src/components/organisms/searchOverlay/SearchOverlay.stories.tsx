@@ -1,9 +1,11 @@
 import { Button } from "@/components/atoms/Button/Button";
 import useSearchStore from "@/stores/search.store";
+import { api } from "@/utils/api";
 
 import { type PropsOf } from "@emotion/react";
 import { type Meta, type StoryObj } from "@storybook/react";
-import { useEffect, type FunctionComponent } from "react";
+import { appWithTranslation } from "next-i18next";
+import { type FunctionComponent } from "react";
 
 import SearchOverlay from "./SearchOverlay";
 
@@ -23,7 +25,7 @@ const meta: Meta = {
   argTypes: {
     
   },
-  component: Template,
+  component: api.withTRPC(appWithTranslation(Template)),
   parameters: {
     design: {
       type: "figma",
