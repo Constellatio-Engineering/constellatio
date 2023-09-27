@@ -28,6 +28,7 @@ type SearchStoreProps = {
   setSearchResults: (searchResults: MeiliSearchResults) => void;
   setSearchValue: (searchValue: string) => void;
   toggleDrawer: (isDrawerOpened: boolean) => void;
+  updateSearchHistory: (searchValue: string) => void;
 };
 
 const initialSearchResults: SearchResults = {
@@ -39,7 +40,7 @@ const useSearchStore = create(
   immer<SearchStoreProps>((set) => ({
     isDrawerOpened: false,
     isLoading: true,
-    searchHistory: [],
+    searchHistory: ["d", "s", "3"],
     searchResults: initialSearchResults,
     searchValue: "",
     setIsLoading: (isLoading) => 
@@ -61,7 +62,6 @@ const useSearchStore = create(
       set((state) => 
       {
         state.searchValue = searchValue;
-        state.searchHistory = [...state.searchHistory, searchValue];
       });
     },
     toggleDrawer: (isDrawerOpened) => 
@@ -69,6 +69,16 @@ const useSearchStore = create(
       set((state) => 
       {
         state.isDrawerOpened = isDrawerOpened;
+      });
+    },
+    updateSearchHistory: (searchValue) =>
+    {
+      set((state) =>
+      {
+        if(!state.searchHistory.includes(searchValue))
+        {
+          state.searchHistory.push(searchValue);
+        }
       });
     },
   }))
