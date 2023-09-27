@@ -3,8 +3,8 @@ import TableCell from "@/components/atoms/tableCell/TableCell";
 import { ClockIcon } from "@/components/Icons/ClockIcon";
 import CaseBlockHead, { type ICaseBlockHeadProps } from "@/components/molecules/caseBlockHead/CaseBlockHead";
 import CaseBlockBookmarkButton from "@/components/organisms/caseBlock/caseBlockBookmarkButton/CaseBlockBookmarkButton";
+import useBookmarks from "@/hooks/useBookmarks";
 import { type IGenArticleOverviewFragment, type IGenFullCaseFragment } from "@/services/graphql/__generated/sdk";
-import { api } from "@/utils/api";
 
 import Link from "next/link";
 import React, { type FunctionComponent } from "react";
@@ -24,19 +24,19 @@ export interface ICaseBlockProps
 
 const ItemBlock: FunctionComponent<ICaseBlockProps> = ({ blockHead, items, variant }) => 
 {
-
-  const CasesTable: CasesTableProps = 
+  const CasesTable: CasesTableProps =
   { 
     type: "cases",
     variant: "cases"  
   };
+
   const DictionaryTable: DictionaryTableProps = 
   {
     type: "dictionary", 
     variant: "dictionary"  
   };
 
-  const { data: casesBookmarks, isLoading } = api.bookmarks.getAllBookmarks.useQuery({ resourceType: "case" });
+  const { bookmarks: casesBookmarks, isLoading } = useBookmarks("case");
 
   return items && items.length > 0 ? (
     <div css={styles.wrapper}>

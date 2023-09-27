@@ -1,4 +1,4 @@
-import { api } from "@/utils/api";
+import useSignedGetUrl from "@/hooks/useSignedGetUrl";
 
 import { Loader } from "@mantine/core";
 import React, { type FunctionComponent } from "react";
@@ -12,9 +12,7 @@ interface DummyFileViewerProps
 
 const DummyFileViewer: FunctionComponent<DummyFileViewerProps> = ({ fileId }) => 
 {
-  const { data: url, isLoading: isGetUrlLoading } = api.uploads.createSignedGetUrl.useQuery({ fileId }, {
-    staleTime: 1000 * 60 * 10,
-  });
+  const { isLoading: isGetUrlLoading, url } = useSignedGetUrl(fileId);
 
   if(isGetUrlLoading)
   {

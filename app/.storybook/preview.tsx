@@ -1,6 +1,5 @@
 import type { Preview } from "@storybook/react";
-import React from "react";
- 
+
 import CustomThemingProvider from "../src/provider/CustomThemingProvider";
 
 const customViewports = {
@@ -71,14 +70,11 @@ const customViewports = {
 
 const preview: Preview = {
   decorators: [
-    (Story) => 
-    {
-      return (
-        <CustomThemingProvider>
-          <Story/>
-        </CustomThemingProvider>
-      );
-    },
+    (Story) => (
+      <CustomThemingProvider>
+        <Story/>
+      </CustomThemingProvider>
+    ),
   ],
   parameters: {
     actions: { argTypesRegex: "^on[A-Z].*" },
