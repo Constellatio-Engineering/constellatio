@@ -37,7 +37,7 @@ export const modalStyles = (): ModalStyles =>
       backgroundColor: theme.colors["transparency-01"][5],
     },
     title: {
-      fontFamily: "Libre Baskerville, serif",
+      fontFamily: `${theme.fontFamily}`,
       fontSize: theme.fontSizes["spacing-24"],
       fontWeight: 400,
       lineHeight: theme.spacing["spacing-36"],

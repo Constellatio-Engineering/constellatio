@@ -10,7 +10,7 @@ export interface ITag
 
 const Tag: FunctionComponent<ITag & PropsWithChildren> = ({ children, title }) => (
   <span css={styles.tag}>
-    <BodyText styleType="body-02-medium">{title ?? children}</BodyText>
+    <BodyText styleType="body-02-medium" component="p">{title ?? children}</BodyText>
   </span>
 );
 

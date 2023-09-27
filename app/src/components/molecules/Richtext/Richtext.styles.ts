@@ -61,7 +61,7 @@ export const SRichtext = styled.div<{ stylesOverwrite?: SerializedStyles }>`
 				&::before {
 					content: counters(li, "") ".";
 					counter-increment: li;
-					font-family: "Karla, sans-serif";
+					font-family: ${theme.fontFamily};
 					font-weight: inherit;
 				}
 			}

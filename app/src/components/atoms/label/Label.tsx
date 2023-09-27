@@ -15,7 +15,7 @@ const Label: FunctionComponent<ILabelProps> = ({ children, title, variant }) =>
   const theme = useMantineTheme();
   return (
     <div css={styles.wrapper({ theme, variant })}>
-      <CaptionText styleType="caption-01-medium">{title ?? children}</CaptionText>
+      <CaptionText styleType="caption-01-medium" component="p">{title ?? children}</CaptionText>
     </div>
   );
 };
