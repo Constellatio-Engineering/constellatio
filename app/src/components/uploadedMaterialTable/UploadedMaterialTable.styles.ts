@@ -28,9 +28,11 @@ export const tableWrapper = (theme: MantineTheme) => css`
       max-width: 550px;
       overflow: hidden;
       text-overflow: ellipsis;
-      display: flex;
-      justify-content: flex-start;
-      align-items: center;
+      white-space: nowrap;
+      svg{
+        vertical-align: text-bottom;
+        margin-right: 8px;
+      }
       gap: 8px;
     }
   }
@@ -43,6 +45,7 @@ export const tableHead = (theme: MantineTheme) => css`
 
 export const tableBody = (theme: MantineTheme) => css`
   background: ${theme.colors["neutrals-01"][0]};
+
 `;
 
 export const callToActionCell = css``;

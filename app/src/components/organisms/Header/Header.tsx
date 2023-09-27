@@ -64,7 +64,7 @@ export const Header: FC<HeaderProps> = ({ variant = "default" }) =>
             {links.map((link, linkIndex) => (
               <Link href={`/${link.toLowerCase()}`} key={linkIndex}>
                 <MenuTab
-                  number={1}
+                  // number={1}
                   active={pathname?.toLowerCase().includes(link.toLowerCase())}
                   title={link}
                 />
@@ -94,7 +94,7 @@ export const Header: FC<HeaderProps> = ({ variant = "default" }) =>
             <Link href="/personal-space">
               <MenuTab
                 title="Persoanl Space"
-                number={1}
+                // number={1}
                 icon={<IconFolder/>}
                 active={pathname?.toLowerCase().includes("personal-space")}
               />

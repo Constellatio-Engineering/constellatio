@@ -2,9 +2,9 @@
 import { type FunctionComponent } from "react";
 
 import * as styles from "./DocsTable.styles";
-import { BodyText } from "../atoms/BodyText/BodyText";
-import { Checkbox } from "../atoms/Checkbox/Checkbox";
-import { DotsIcon } from "../Icons/dots";
+import { BodyText } from "../../atoms/BodyText/BodyText";
+import { Checkbox } from "../../atoms/Checkbox/Checkbox";
+import { DotsIcon } from "../../Icons/dots";
 
 const formatDate = (date: Date): string => `${String(date.getDate()).padStart(2, "0")}.${String(date.getMonth() + 1).padStart(2, "0")}.${date.getFullYear()}`;
 export interface IDoc 

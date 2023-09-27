@@ -18,7 +18,7 @@ type CompletedState = {
   type: "completed";
 };
 
-type UploadState = {
+export type UploadState = {
   fileClientSideUuid: string;
   state: CanceledState | UploadingState | CompletedState | FailedState;
 };

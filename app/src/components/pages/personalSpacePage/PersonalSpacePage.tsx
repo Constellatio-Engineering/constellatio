@@ -1,9 +1,7 @@
 /* eslint-disable max-lines */
-import { Button } from "@/components/atoms/Button/Button";
-import BadgeCard from "@/components/badgeCard/BadgeCard";
-import DocsTable from "@/components/docsTable/DocsTable";
 import EmptyStateCard from "@/components/organisms/emptyStateCard/EmptyStateCard";
 import FavoriteCasesList from "@/components/organisms/favoriteCasesList/FavoriteCasesList";
+import FileUploadMenu from "@/components/organisms/fileUploadMenu/FileUploadMenu";
 import MaterialMenu from "@/components/organisms/materialMenu/MaterialMenu";
 import OverviewHeader from "@/components/organisms/OverviewHeader/OverviewHeader";
 import PersonalSpaceNavBar from "@/components/organisms/personalSpaceNavBar/PersonalSpaceNavBar";
@@ -14,9 +12,9 @@ import { type ICasesOverviewProps } from "@/services/content/getCasesOverviewPro
 import { type IGenArticleOverviewFragment, type IGenFullCaseFragment, type IGenMainCategory } from "@/services/graphql/__generated/sdk";
 import uploadsProgressStore from "@/stores/uploadsProgress.store";
 import { api } from "@/utils/api";
-import { getRandomUuid, removeItemsByIndices } from "@/utils/utils";
+import { removeItemsByIndices } from "@/utils/utils";
 
-import { Container, Loader, Text } from "@mantine/core";
+import { Container, Loader, ScrollArea, Text } from "@mantine/core";
 import { modals } from "@mantine/modals";
 import axios from "axios";
 import Link from "next/link";
@@ -298,7 +296,7 @@ const PersonalSpacePage: FunctionComponent = () =>
         )) : (
           <>
             <div style={{
-              alignItems: "flex-start", display: "flex", gap: "0px", justifyContent: "space-between", marginTop: "40px",
+              alignItems: "flex-start", display: "flex", gap: "32px", justifyContent: "space-between", marginTop: "40px",
             }}>
               <MaterialMenu folders={[
                 { title: "Default folder" }, 
@@ -314,10 +312,10 @@ const PersonalSpacePage: FunctionComponent = () =>
                 ]}
                 />
                 <UploadedMaterialBlock {...UploadedMaterialProps}/>
-                <h2 style={{ fontSize: 22, marginRight: 10 }}>Current Uploads</h2>
-                {uploads.filter(u => u.state.type !== "completed").map((upload, index) =>
-                {
-                  return (
+                <FileUploadMenu uploads={uploads}/>
+                {/* <h2 style={{ fontSize: 22, marginRight: 10 }}>Current Uploads</h2>
+                {uploads.filter(u => u.state.type !== "completed").map((upload, index) => 
+                  (
                     <div key={index} style={{ margin: "10px 0" }}>
                       <strong>File Client Side UUID: {upload.fileClientSideUuid}</strong>
                       {upload.state.type === "uploading" ? (
@@ -332,8 +330,8 @@ const PersonalSpacePage: FunctionComponent = () =>
                         <p>{upload.state.type}</p>
                       )}
                     </div>
-                  );
-                })}
+                  
+                  ))} */}
                 {selectedFileIdForPreview && (
                   <DummyFileViewer fileId={selectedFileIdForPreview}/>
                 )}

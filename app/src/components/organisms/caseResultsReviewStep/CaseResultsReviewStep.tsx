@@ -1,5 +1,5 @@
 import { Button } from "@/components/atoms/Button/Button";
-import IconButtonBar from "@/components/iconButtonBar/IconButtonBar";
+import IconButtonBar from "@/components/organisms/iconButtonBar/IconButtonBar";
 import { ArrowDown } from "@/components/Icons/ArrowDown";
 import { ArrowUp } from "@/components/Icons/ArrowUp";
 import { Bookmark } from "@/components/Icons/Bookmark";

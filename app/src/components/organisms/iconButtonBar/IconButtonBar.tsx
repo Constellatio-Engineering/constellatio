@@ -1,6 +1,6 @@
 import React, { type ReactNode, type FunctionComponent } from "react";
 
-import IconButton from "../atoms/iconButton/IconButton";
+import IconButton from "../../atoms/iconButton/IconButton";
 
 interface IIcons 
 {

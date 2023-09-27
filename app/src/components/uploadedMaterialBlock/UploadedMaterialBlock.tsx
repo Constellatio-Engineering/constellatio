@@ -6,7 +6,7 @@ import React, { type FormEvent, type FunctionComponent } from "react";
 
 import * as styles from "./UploadedMaterialBlock.styles";
 import { Button } from "../atoms/Button/Button";
-import BadgeCard from "../badgeCard/BadgeCard";
+import BadgeCard from "../organisms/badgeCard/BadgeCard";
 // import FileUploader from "../organisms/fileUploader/FileUploader";
 import EmptyStateCard from "../organisms/emptyStateCard/EmptyStateCard";
 import { type FileWithClientSideUuid } from "../pages/personalSpacePage/PersonalSpacePage";

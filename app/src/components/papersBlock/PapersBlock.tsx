@@ -2,8 +2,8 @@ import { Title } from "@mantine/core";
 import React, { type FunctionComponent } from "react";
 
 import * as styles from "./PapersBlock.styles";
-import DocsTable from "../docsTable/DocsTable";
-import { type IDoc } from "../docsTable/DocTableData";
+import DocsTable from "../organisms/docsTable/DocsTable";
+import { type IDoc } from "../organisms/docsTable/DocTableData";
 import EmptyStateCard from "../organisms/emptyStateCard/EmptyStateCard";
 
 interface PapersBlockProps

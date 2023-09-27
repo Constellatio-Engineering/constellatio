@@ -71,10 +71,10 @@ const UploadedMaterialTable: FunctionComponent<UploadedMaterialTableProps> = ({ 
           <tr key={index}>
             <td css={styles.callToActionCell}><Checkbox/></td>
             <td css={styles.docName} className="primaryCell">
-              <BodyText styleType="body-01-medium" component="p" title={file?.filename}>{fileNameIcon(file)}{file?.filename}.{file?.fileExtension}</BodyText>
+              <BodyText styleType="body-01-medium" component="p" title={file?.filename + "." + file?.fileExtension}>{fileNameIcon(file)}{file?.filename}.{file?.fileExtension}</BodyText>
             </td>
-            <td> <BodyText styleType="body-01-medium" component="p">{formatDate(file.createdAt!)}</BodyText></td>
-            <td> <BodyText styleType="body-02-medium" component="p">Tags({999})</BodyText></td>
+            <td css={styles.docDate}> <BodyText styleType="body-01-medium" component="p">{formatDate(file.createdAt!)}</BodyText></td>
+            <td css={styles.docTags}> <BodyText styleType="body-02-medium" component="p">Tags({999})</BodyText></td>
             <td> <BodyText styleType="body-02-medium" component="p">file?.notes</BodyText></td>
             <td css={styles.callToActionCell}><DotsIcon/></td>
           </tr>
