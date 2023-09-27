@@ -1,6 +1,6 @@
 import { env } from "@/env.mjs";
+import useTenantToken from "@/hooks/useTenantToken";
 import useSearchStore from "@/stores/search.store";
-import { api } from "@/utils/api";
 import { searchIndices } from "@/utils/search";
 
 import { useQuery } from "@tanstack/react-query";
@@ -21,11 +21,7 @@ const SearchOverlayWrapper: FunctionComponent<SearchOverlayWrapperProps> = ({ ch
   const setSearchResults = useSearchStore((s) => s.setSearchResults);
   const setIsLoading = useSearchStore((s) => s.setIsLoading);
 
-  const { data: searchToken } = api.search.getTenantToken.useQuery(undefined, {
-    refetchOnMount: "always",
-    retry: false,
-    staleTime: env.NEXT_PUBLIC_MEILISEARCH_TENANT_TOKEN_EXPIRATION_TIME_MS - 1000,
-  });
+  const { searchToken } = useTenantToken();
 
   const meiliSearch = useMemo(() => !searchToken ? null : new MeiliSearch({
     apiKey: searchToken,

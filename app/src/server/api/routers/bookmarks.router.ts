@@ -39,7 +39,7 @@ export const bookmarksRouter = createTRPCRouter({
     }),
   getAllBookmarks: protectedProcedure
     .input(z.object({
-      resourceType: z.enum(allBookmarkResourceTypes),
+      resourceType: z.enum(allBookmarkResourceTypes).optional(),
     }).optional())
     .query(async ({ ctx: { userId }, input }) =>
     {
