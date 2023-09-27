@@ -2,6 +2,7 @@ import { CustomLink } from "@/components/atoms/CustomLink/CustomLink";
 import Label from "@/components/atoms/label/Label";
 import Tag from "@/components/atoms/tag/Tag";
 import useSearchStore from "@/stores/search.store";
+import { paths } from "@/utils/paths";
 
 import Link from "next/link";
 import React, { type FunctionComponent, type ReactNode } from "react";
@@ -42,7 +43,7 @@ const SearchOverlayLeftSide: FunctionComponent<SearchOverlayLeftSideProps> = ({ 
               {searchResults.cases.map((result) => (
                 <Link
                   key={result.id}
-                  href={`cases/${result.id}`}
+                  href={`${paths.cases}/${result.id}`}
                   className="suggestion__section__link">
                   <CustomLink styleType="link-content-title" component="p">
                     {result.title}
@@ -56,7 +57,7 @@ const SearchOverlayLeftSide: FunctionComponent<SearchOverlayLeftSideProps> = ({ 
               {searchResults.cases.map((result) => (
                 <Link
                   key={result.id}
-                  href={`cases/${result.id}`}
+                  href={`${paths.cases}/${result.id}`}
                   className="suggestion__section__link">
                   <CustomLink styleType="link-content-title" component="p">
                     {result.title}
