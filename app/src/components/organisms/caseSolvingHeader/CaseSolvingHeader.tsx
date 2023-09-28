@@ -38,6 +38,8 @@ const CaseSolvingHeader: FunctionComponent<ICaseSolvingHeaderProps> = ({
     { src: <Pin/>, title: "Pin" },
   ];
   const theme = useMantineTheme();
+  console.log({ overviewCard });
+  
   return (
     <div css={styles.wrapper({ theme, variant })}>
       <Container maw={1440}>

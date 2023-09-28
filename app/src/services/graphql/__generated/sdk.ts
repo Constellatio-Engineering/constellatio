@@ -1370,7 +1370,7 @@ export type IGenFullArticleFragment = { __typename: 'Article', id?: string | nul
     & IGenTopicFragment
   ) | null> | null };
 
-export type IGenFullCaseFragment = { __typename: 'Case', id?: string | null, title?: string | null, durationToCompleteInMinutes?: number | null, facts?: { __typename?: 'Case_facts', json?: any | null, connections?: Array<{ __typename: 'Caisy_Field_Document_NotFound' } | null> | null } | null, fullTextTasks?: (
+export type IGenFullCaseFragment = { __typename: 'Case', id?: string | null, title?: string | null, durationToCompleteInMinutes?: number | null, _meta?: { __typename?: 'CaisyDocument_Meta', updatedAt?: any | null } | null, facts?: { __typename?: 'Case_facts', json?: any | null, connections?: Array<{ __typename: 'Caisy_Field_Document_NotFound' } | null> | null } | null, fullTextTasks?: (
     { __typename?: 'Case_fullTextTasks' }
     & IGenCaseFullTextTasksFragment
   ) | null, legalArea?: (
@@ -1678,6 +1678,9 @@ export const CaseFullTextTasksFragmentDoc = gql`
 export const FullCaseFragmentDoc = gql`
     fragment FullCase on Case {
   __typename
+  _meta {
+    updatedAt
+  }
   id
   title
   durationToCompleteInMinutes
