@@ -18,9 +18,6 @@ const SearchOverlayWrapper: FunctionComponent<SearchOverlayWrapperProps> = ({ ch
 {
   const searchResults = useSearchStore((s) => s.searchResults);
   const searchValue = useSearchStore((s) => s.searchValue);
-  const setSearchResults = useSearchStore((s) => s.setSearchResults);
-  const setIsLoading = useSearchStore((s) => s.setIsLoading);
-
   const { searchToken } = useTenantToken();
 
   const meiliSearch = useMemo(() => !searchToken ? null : new MeiliSearch({
@@ -45,6 +42,10 @@ const SearchOverlayWrapper: FunctionComponent<SearchOverlayWrapperProps> = ({ ch
             q: searchValue,
           },
           {
+            indexUid: searchIndices.articles,
+            q: searchValue,
+          },
+          {
             indexUid: searchIndices.userUploads,
             q: searchValue,
           }
@@ -52,10 +53,11 @@ const SearchOverlayWrapper: FunctionComponent<SearchOverlayWrapperProps> = ({ ch
       });                                           
 
       return ({
+        // Be careful with the order of the results!
+        articles: results?.[1]?.hits ?? [],
         cases: results?.[0]?.hits ?? [],
-        userUploads: results?.[1]?.hits ?? [],
+        userUploads: results?.[2]?.hits ?? [],
       });
-
     },
     queryKey: ["search", searchValue],
     refetchOnMount: false,
@@ -67,10 +69,9 @@ const SearchOverlayWrapper: FunctionComponent<SearchOverlayWrapperProps> = ({ ch
 
   useEffect(() => 
   {
-    setSearchResults(searchDataRes);
-    setIsLoading(isLoading);
-  // eslint-disable-next-line react-hooks/exhaustive-deps
+    useSearchStore.getState().setSearchResults(searchDataRes);
   }, [searchDataRes, isLoading]);
+
   return (
     <>{children}</>
   );

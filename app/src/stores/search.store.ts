@@ -1,4 +1,4 @@
-import { type CaseSearchIndexItem, type UploadSearchIndexItem } from "@/utils/search";
+import { type ArticleSearchIndexItem, type CaseSearchIndexItem, type UploadSearchIndexItem } from "@/utils/search";
 
 import { type Hits } from "meilisearch";
 import { create } from "zustand";
@@ -10,6 +10,7 @@ type ToMeiliSearchResults<T> = {
 };
 
 type ArraySearchResults = {
+  articles: ArticleSearchIndexItem[];
   cases: CaseSearchIndexItem[];
   userUploads: UploadSearchIndexItem[];
 };
@@ -20,11 +21,9 @@ type SearchResults = MeiliSearchResults | ArraySearchResults;
 
 type SearchStoreProps = {
   isDrawerOpened: boolean;
-  isLoading: boolean;
   searchHistory: string[];
   searchResults: SearchResults;
   searchValue: string;
-  setIsLoading: (isLoading: boolean) => void;
   setSearchResults: (searchResults: MeiliSearchResults) => void;
   setSearchValue: (searchValue: string) => void;
   toggleDrawer: (isDrawerOpened: boolean) => void;
@@ -32,6 +31,7 @@ type SearchStoreProps = {
 };
 
 const initialSearchResults: SearchResults = {
+  articles: [],
   cases: [],
   userUploads: [],
 };
@@ -39,18 +39,10 @@ const initialSearchResults: SearchResults = {
 const useSearchStore = create(
   immer<SearchStoreProps>((set) => ({
     isDrawerOpened: false,
-    isLoading: true,
     searchHistory: ["d", "s", "3"],
     searchResults: initialSearchResults,
     searchValue: "",
-    setIsLoading: (isLoading) => 
-    {
-      set((state) => 
-      {
-        state.isLoading = isLoading;
-      });
-    },
-    setSearchResults: (searchResults) => 
+    setSearchResults: (searchResults) =>
     {
       set((state) => 
       {

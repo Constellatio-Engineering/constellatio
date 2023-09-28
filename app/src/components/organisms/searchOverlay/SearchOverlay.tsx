@@ -1,7 +1,7 @@
 import SearchBar from "@/components/molecules/searchBar/SearchBar";
 import useSearchStore from "@/stores/search.store";
 
-import { Drawer, Loader } from "@mantine/core";
+import { Drawer } from "@mantine/core";
 import { useRouter } from "next/router";
 import React, { useEffect, type FunctionComponent } from "react";
 
@@ -15,7 +15,6 @@ interface SearchOverlayProps {}
 const SearchOverlay: FunctionComponent<SearchOverlayProps> = () => 
 {
   const isDrawerOpened = useSearchStore((s) => s.isDrawerOpened);
-  const isLoading = useSearchStore((s) => s.isLoading);
   const searchValue = useSearchStore((s) => s.searchValue);
   const router = useRouter();
   const toggleDrawer = useSearchStore((s) => s.toggleDrawer);
@@ -24,10 +23,7 @@ const SearchOverlay: FunctionComponent<SearchOverlayProps> = () =>
   useEffect(() =>
   {
     toggleDrawer(false);
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [router.pathname]);
-
-  const DataIsLoading = hasInput && isLoading && <Loader color="brand-01.4" size="30px"/>;
+  }, [router.pathname, toggleDrawer]);
 
   return (
     <SearchOverlayWrapper hasInput={hasInput}>
@@ -40,8 +36,8 @@ const SearchOverlay: FunctionComponent<SearchOverlayProps> = () =>
         position="top"
         title={<SearchBar/>}
         styles={styles.drawerStyles()}>
-        <SearchOverlayLeftSide DataIsLoading={DataIsLoading} hasInput={hasInput}/>
-        <SearchOverlayRightSide DataIsLoading={DataIsLoading} hasInput={hasInput}/>
+        <SearchOverlayLeftSide hasInput={hasInput}/>
+        <SearchOverlayRightSide hasInput={hasInput}/>
       </Drawer>
     </SearchOverlayWrapper>
   );

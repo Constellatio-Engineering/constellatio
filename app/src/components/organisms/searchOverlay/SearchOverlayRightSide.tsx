@@ -8,17 +8,15 @@ import React, { type FunctionComponent, type ReactNode } from "react";
 import * as styles from "./SearchOverlay.styles";
 
 type SearchOverlayRightSideProps = {
-  readonly DataIsLoading: ReactNode;
   readonly hasInput: boolean;
 };
 
-const SearchOverlayRightSide: FunctionComponent<SearchOverlayRightSideProps> = ({ DataIsLoading, hasInput }) => 
+const SearchOverlayRightSide: FunctionComponent<SearchOverlayRightSideProps> = ({ hasInput }) =>
 {
   const searchResults = useSearchStore((s) => s.searchResults);
 
   return (
     <div css={styles.suggestionsRight}>
-      {DataIsLoading}
       {hasInput && searchResults.userUploads.length > 0 && (
         <>
           <div className="suggestion__section">
