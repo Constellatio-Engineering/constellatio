@@ -41,8 +41,6 @@ export const LoginForm: FunctionComponent = () =>
 
     try
     {
-      console.log("logging in...");
-
       const loginResult = await supabase.auth.signInWithPassword({
         email: formValues.email,
         password: formValues.password,
@@ -53,8 +51,6 @@ export const LoginForm: FunctionComponent = () =>
         console.log("login failed", loginResult.error);
         throw loginResult.error;
       }
-
-      console.log("successfully logged in. Redirecting to dashboard page...", loginResult.data);
 
       // await supabase.auth.setSession(loginResult.data.session);
       await apiContext.invalidate();
