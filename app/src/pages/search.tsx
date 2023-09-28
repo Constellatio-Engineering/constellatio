@@ -8,7 +8,7 @@ const Search: NextPage = () =>
 {
   const { isLoading, searchResults } = useSearchResults();
 
-  // console.log("searchResults", searchResults);
+  console.log("searchResults", searchResults);
 
   return (
     <Layout>
