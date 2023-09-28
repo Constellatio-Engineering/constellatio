@@ -10,8 +10,6 @@ import React, { useEffect, type FunctionComponent } from "react";
 
 import * as styles from "./DetailsPage.styles";
 
-// Omit<Omit<Partial<IGenCase & IGenArticle>, "__typename">, "variant"> & {readonly variant: "case" | "dictionary"};
-
 type IDetailsPageProps = {
   readonly content: IGenCase | IGenArticle | undefined;
   readonly variant: "case" | "dictionary";

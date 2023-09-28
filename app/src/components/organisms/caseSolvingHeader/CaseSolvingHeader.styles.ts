@@ -3,8 +3,6 @@ import type { MantineTheme } from "@mantine/styles";
 
 import { text } from "./../../atoms/contentMenuItem/ContentMenuItem.styles";
 
-// import BgLines from "../../Icons/bg-lines.png";
-
 export const wrapper = ({ theme, variant }: {
   theme: MantineTheme;
   variant: "case" | "dictionary";
