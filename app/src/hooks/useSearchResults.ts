@@ -17,7 +17,10 @@ const initialSearchResults: SearchResults = {
   userUploads: [],
 };
 
-type UseSearchResults = () => { searchResults: SearchResults };
+type UseSearchResults = () => {
+  isLoading: boolean;
+  searchResults: SearchResults;
+};
 
 const useSearchResults: UseSearchResults = () =>
 {
@@ -25,7 +28,7 @@ const useSearchResults: UseSearchResults = () =>
   const searchValue = useSearchBarStore((s) => s.searchValue);
   const hasInput = searchValue.length > 0;
 
-  const { data: searchResults = initialSearchResults } = useQuery({
+  const { data: searchResults = initialSearchResults, isLoading } = useQuery({
     enabled: hasInput && meilisearchInstance != null,
     keepPreviousData: true,
     queryFn: async () =>
@@ -67,7 +70,7 @@ const useSearchResults: UseSearchResults = () =>
     staleTime: 3000,
   });
 
-  return { searchResults };
+  return { isLoading, searchResults };
 };
 
 export default useSearchResults;
