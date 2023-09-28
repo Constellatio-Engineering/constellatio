@@ -24,11 +24,11 @@ const AppContainer: FunctionComponent<ConstellatioAppProps> = ({ Component, page
     <SessionContextProvider supabaseClient={supabase} initialSession={pageProps.initialSession}>
       <CustomThemingProvider>
         <ModalsProvider>
-          {/* <MeilisearchProvider> */}
-          <RouterTransition/>
-          <Notifications/>
-          <Component {...pageProps}/>
-          {/* </MeilisearchProvider> */}
+          <MeilisearchProvider>
+            <RouterTransition/>
+            <Notifications/>
+            <Component {...pageProps}/>
+          </MeilisearchProvider>
         </ModalsProvider>
       </CustomThemingProvider>
     </SessionContextProvider>
