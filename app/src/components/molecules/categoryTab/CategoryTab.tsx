@@ -22,8 +22,6 @@ const CategoryTab: FunctionComponent<CategoryTabProps> = ({
   variant
 }) => 
 {
-  console.log({ mainCategory });
-  
   const theme = useMantineTheme();
   return (
     <button
