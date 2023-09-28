@@ -64,7 +64,7 @@ export const colors: MantineThemeColors = {
   "neutrals-01": [
     "#FFFFFF", // 0
     "#F9F9F9", // 1
-    "#F0F0F0", // 2
+    "#F6F6F5", // 2
     "#F0F0F0", // 3
     "#ECECEC", // 4
     "#D6D6D6", // 5
@@ -89,7 +89,7 @@ export const colors: MantineThemeColors = {
     "#FFDFDF", // 0
     "#F0B3B2", // 1
     "#E58180", // 2
-    "#F9F9F9", // 3
+    "#CC0300", // 3
     "#8A1F17", // 4
     "#4C0000", // 5
     "#000000",
@@ -100,7 +100,7 @@ export const colors: MantineThemeColors = {
   "support-notice": [
     "#F4F6FE", // 0
     "#E9EDFD", // 1
-    "#C3DFCF ", // 2
+    "#C7D3FB", // 2
     "#96A8E4", // 3
     "#5B74C7", // 4
     "#3A4C88", // 5

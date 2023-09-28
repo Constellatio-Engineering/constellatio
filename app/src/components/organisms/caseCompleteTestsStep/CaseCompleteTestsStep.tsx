@@ -75,8 +75,7 @@ const CaseCompleteTestsStep: FunctionComponent<ICaseCompleteTestsStepProps> = ({
   {
     if(variant === "case" && fullTextTasks?.__typename === "Case_fullTextTasks") { setGamesIndexes(getGamesIndexes({ fullTextTasks })); }
 
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [fullTextTasks]);
+  }, [fullTextTasks, setGamesIndexes, variant]);
 
   const allHeadings = fullTextTasks?.json?.content?.filter((x: { attrs: { level: number }; type: "heading" }) => x.type === "heading");
 
