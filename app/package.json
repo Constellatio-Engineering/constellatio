@@ -4,8 +4,8 @@
   "private": true,
   "scripts": {
     "separatorDev": "---------------------- DEVELOPMENT ----------------------",
-    "dev": "next dev -p 3010",
-    "dev-with-migrations": "node -r dotenv-flow/config ci/apply-db-migrations.mjs && pnpm dev",
+    "dev-without-migrations": "next dev -p 3010",
+    "dev": "node -r dotenv-flow/config ci/apply-db-migrations.mjs && pnpm dev-without-migrations",
     "sepatatorLint": "---------------------- LINT ----------------------",
     "check-types": "tsc --noEmit",
     "eslint": "eslint --ext .js,.jsx,.ts,.tsx src",
