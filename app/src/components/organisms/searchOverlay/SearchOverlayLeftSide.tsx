@@ -66,7 +66,7 @@ const SearchOverlayLeftSide: FunctionComponent<SearchOverlayLeftSideProps> = ({ 
         <span className="emptyStateCard">
           <EmptyStateCard
             variant="For-small-areas"
-            title="No search results"
+            title="No search results in cases and dictionary"
             text="Please adjust your search if you’re looking for the materials in the categories mentioned above"
           />
         </span>
