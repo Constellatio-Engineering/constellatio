@@ -15,7 +15,7 @@ export const header = (theme: MantineTheme) => css`
     color:${theme.colors["neutrals-02"][1]};
     padding:24px  24px 24px 16px;
 `;
-export const content = (theme: MantineTheme) => css``;
-export const callToAction = (theme: MantineTheme) => css`
+export const content = css``;
+export const callToAction = css`
     padding:16px 24px;
 `;

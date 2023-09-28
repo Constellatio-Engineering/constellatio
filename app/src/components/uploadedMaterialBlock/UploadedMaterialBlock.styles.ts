@@ -16,7 +16,7 @@ export const uploadedMaterialBlockHead = (theme: MantineTheme) => css`
   border-bottom: 1px solid ${theme.colors["neutrals-01"][2]};
 `;
 
-export const badge = (theme: MantineTheme) => css`
+export const badge = css`
   width: 100%;
   height: 300px;
   position: relative;

@@ -2,7 +2,7 @@ import { CustomLink } from "@/components/atoms/CustomLink/CustomLink";
 import Label from "@/components/atoms/label/Label";
 import CategoryButton from "@/components/molecules/categoryButton/CategoryButton";
 import useSearchResults from "@/hooks/useSearchResults";
-import useSearchBarStore from "@/stores/searchBar.store";
+// import useSearchBarStore from "@/stores/searchBar.store";
 
 import React, { type FunctionComponent } from "react";
 

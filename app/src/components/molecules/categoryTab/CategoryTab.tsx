@@ -7,7 +7,12 @@ import React, { type FunctionComponent } from "react";
 
 import * as styles from "./CategoryTab.style";
 
-export type CategoryTabProps = IGenMainCategory & {readonly itemsNumber?: number;readonly selected?: boolean; readonly variant: "case" | "dictionary" | "red"};
+export type CategoryTabProps = IGenMainCategory & 
+{
+  readonly itemsNumber?: number;
+  readonly selected?: boolean; 
+  readonly variant: "case" | "dictionary" | "red";
+};
 
 const CategoryTab: FunctionComponent<CategoryTabProps> = ({
   icon,
@@ -17,6 +22,8 @@ const CategoryTab: FunctionComponent<CategoryTabProps> = ({
   variant
 }) => 
 {
+  console.log({ mainCategory });
+  
   const theme = useMantineTheme();
   return (
     <button
@@ -24,7 +31,7 @@ const CategoryTab: FunctionComponent<CategoryTabProps> = ({
       type="button"
       className={selected ? "selected" : ""}>
       {icon && icon?.src && icon?.src.includes(".svg") && <Svg className="icon" src={icon?.src}/>}
-      {mainCategory && <BodyText styleType="body-01-medium" component="p">{mainCategory}{itemsNumber !== null && itemsNumber !== undefined && <span className="counter"> ({itemsNumber})</span>}</BodyText>}
+      {mainCategory && <BodyText styleType="body-01-medium" component="p">{mainCategory}{itemsNumber != null && <span className="counter"> ({itemsNumber})</span>}</BodyText>}
     </button>
   );
 };

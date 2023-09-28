@@ -19,14 +19,18 @@ export const DocsTableData: FunctionComponent<IDoc> = ({
   lastModified,
   name,
   tagsNumber
-}) => (
-  <>
-    <td css={styles.callToActionCell}><Checkbox/></td>
-    <td css={styles.docName} className="primaryCell">
-      <BodyText styleType="body-01-medium" component="p">{name}</BodyText>
-    </td>
-    {lastModified && <td css={styles.docDate}> <BodyText styleType="body-01-medium" component="p">{formatDate(lastModified)}</BodyText></td>}
-    <td css={styles.docTags}> <BodyText styleType="body-02-medium" component="p">Tags({tagsNumber})</BodyText></td>
-    <td css={styles.callToActionCell}><DotsIcon/></td>
-  </>
-);
+}) => 
+{
+  if(body) { console.log(body); }
+  return (
+    <>
+      <td css={styles.callToActionCell}><Checkbox/></td>
+      <td css={styles.docName} className="primaryCell">
+        <BodyText styleType="body-01-medium" component="p">{name}</BodyText>
+      </td>
+      {lastModified && <td css={styles.docDate}> <BodyText styleType="body-01-medium" component="p">{formatDate(lastModified)}</BodyText></td>}
+      <td css={styles.docTags}> <BodyText styleType="body-02-medium" component="p">Tags({tagsNumber})</BodyText></td>
+      <td css={styles.callToActionCell}><DotsIcon/></td>
+    </>
+  );
+};

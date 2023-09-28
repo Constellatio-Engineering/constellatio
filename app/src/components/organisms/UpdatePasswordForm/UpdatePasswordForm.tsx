@@ -1,7 +1,7 @@
 import { Button } from "@/components/atoms/Button/Button";
 import { Input } from "@/components/atoms/Input/Input";
 import { PasswordValidationSchema } from "@/components/helpers/PasswordValidationSchema";
-import { type Database } from "@/lib/database.types";
+// import { type Database } from "@/lib/database.types";
 import { updatePasswordFormSchema } from "@/schemas/auth/updatePasswordForm.schema";
 import { supabase } from "@/supabase/client";
 
