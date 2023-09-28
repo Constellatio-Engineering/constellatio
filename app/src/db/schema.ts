@@ -38,6 +38,7 @@ export const bookmarksTable = pgTable("bookmarks", {
 }));
 
 export type BookmarkInsert = InferInsertModel<typeof bookmarksTable>;
+export type Bookmark = InferSelectModel<typeof bookmarksTable>;
 
 export const uploadsTable = pgTable("uploads", {
   id: serial("id").primaryKey(),

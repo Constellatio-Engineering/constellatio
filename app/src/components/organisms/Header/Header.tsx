@@ -1,7 +1,7 @@
 import { Button } from "@/components/atoms/Button/Button";
 import MenuTab from "@/components/atoms/menuTab/MenuTab";
 import SearchField from "@/components/molecules/searchField/SearchField";
-import useSearchStore from "@/stores/search.store";
+import useSearchBarStore from "@/stores/searchBar.store";
 import { isDevelopmentOrStaging } from "@/utils/env";
 
 import { Loader } from "@mantine/core";
@@ -31,7 +31,7 @@ export const Header: FC<HeaderProps> = ({ variant = "default" }) =>
   const links = ["CASES", "DICTIONARY"];
   const { pathname } = useRouter();
 
-  const toggleDrawer = useSearchStore(s => s.toggleDrawer);
+  const toggleDrawer = useSearchBarStore(s => s.toggleDrawer);
 
   const { isLoading: isRecreatingSearchIndices, mutate: recreateSearchIndices } = useMutation({
     mutationFn: async () => axios.post("/api/search/recreate-search-indices"),

@@ -5,6 +5,7 @@ import { createTRPCRouter, protectedProcedure } from "@/server/api/trpc";
 import { InternalServerError } from "@/utils/serverError";
 
 import { and, eq } from "drizzle-orm";
+import { type SQLWrapper } from "drizzle-orm/sql/index";
 import z from "zod";
 
 export const bookmarksRouter = createTRPCRouter({
@@ -38,19 +39,18 @@ export const bookmarksRouter = createTRPCRouter({
     }),
   getAllBookmarks: protectedProcedure
     .input(z.object({
-      resourceType: z.enum(allBookmarkResourceTypes),
+      resourceType: z.enum(allBookmarkResourceTypes).optional(),
     }).optional())
     .query(async ({ ctx: { userId }, input }) =>
     {
-      let getBookmarksQuery = db.select().from(bookmarksTable).where(eq(bookmarksTable.userId, userId));
+      const queryConditions: SQLWrapper[] = [eq(bookmarksTable.userId, userId)];
 
       if(input?.resourceType)
       {
-        getBookmarksQuery = getBookmarksQuery.where(eq(bookmarksTable.resourceType, input.resourceType));
+        queryConditions.push(eq(bookmarksTable.resourceType, input.resourceType));
       }
 
-      const result = await getBookmarksQuery;
-      return result;
+      return db.select().from(bookmarksTable).where(and(...queryConditions));
     }),
   removeBookmark: protectedProcedure
     .input(addOrRemoveBookmarkSchema)

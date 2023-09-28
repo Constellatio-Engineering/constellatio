@@ -1,15 +1,17 @@
 import { Button } from "@/components/atoms/Button/Button";
-import useSearchStore from "@/stores/search.store";
+import useSearchBarStore from "@/stores/searchBar.store";
+import { api } from "@/utils/api";
 
 import { type PropsOf } from "@emotion/react";
 import { type Meta, type StoryObj } from "@storybook/react";
-import { useEffect, type FunctionComponent } from "react";
+import { appWithTranslation } from "next-i18next";
+import { type FunctionComponent } from "react";
 
 import SearchOverlay from "./SearchOverlay";
 
 const Template: FunctionComponent<PropsOf<typeof SearchOverlay>> = (args) => 
 {
-  const toggleDrawer = useSearchStore(s => s.toggleDrawer);
+  const toggleDrawer = useSearchBarStore(s => s.toggleDrawer);
 
   return (
     <>
@@ -23,7 +25,7 @@ const meta: Meta = {
   argTypes: {
     
   },
-  component: Template,
+  component: api.withTRPC(appWithTranslation(Template)),
   parameters: {
     design: {
       type: "figma",

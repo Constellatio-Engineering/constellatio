@@ -1,5 +1,6 @@
 import { RouterTransition } from "@/components/atoms/RouterTransition/RouterTransition";
 import CustomThemingProvider from "@/provider/CustomThemingProvider";
+import MeilisearchProvider from "@/provider/MeilisearchProvider";
 import { supabase } from "@/supabase/client";
 import { api } from "@/utils/api";
 
@@ -11,28 +12,27 @@ import Head from "next/head";
 import { appWithTranslation } from "next-i18next";
 import { type FunctionComponent } from "react";
 
-type MyAppProps = AppProps<{ initialSession: Session }>;
+type ConstellatioAppProps = AppProps<{ initialSession: Session }>;
 
-const MyApp: FunctionComponent<MyAppProps> = ({ Component, pageProps }) =>
-{
-  return (
-    <>
-      <Head>
-        <title>Constellatio</title>
-        <link rel="shortcut icon" href="/favicon.png"/>
-        <meta name="viewport" content="minimum-scale=1, initial-scale=1, width=device-width"/>
-      </Head>
-      <SessionContextProvider supabaseClient={supabase} initialSession={pageProps.initialSession}>
-        <CustomThemingProvider>
-          <ModalsProvider>
+const AppContainer: FunctionComponent<ConstellatioAppProps> = ({ Component, pageProps }) => (
+  <>
+    <Head>
+      <title>Constellatio</title>
+      <link rel="shortcut icon" href="/favicon.png"/>
+      <meta name="viewport" content="minimum-scale=1, initial-scale=1, width=device-width"/>
+    </Head>
+    <SessionContextProvider supabaseClient={supabase} initialSession={pageProps.initialSession}>
+      <CustomThemingProvider>
+        <ModalsProvider>
+          <MeilisearchProvider>
             <RouterTransition/>
             <Notifications/>
             <Component {...pageProps}/>
-          </ModalsProvider>
-        </CustomThemingProvider>
-      </SessionContextProvider>
-    </>
-  );
-};
+          </MeilisearchProvider>
+        </ModalsProvider>
+      </CustomThemingProvider>
+    </SessionContextProvider>
+  </>
+);
 
-export default api.withTRPC(appWithTranslation(MyApp));
+export default api.withTRPC(appWithTranslation(AppContainer));

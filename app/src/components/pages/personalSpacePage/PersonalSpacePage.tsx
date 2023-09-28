@@ -8,6 +8,9 @@ import PersonalSpaceNavBar from "@/components/organisms/personalSpaceNavBar/Pers
 import DummyFileViewer from "@/components/pages/personalSpacePage/dummyFileViewer/DummyFileViewer";
 import PapersBlock from "@/components/papersBlock/PapersBlock";
 import UploadedMaterialBlock from "@/components/uploadedMaterialBlock/UploadedMaterialBlock";
+import useBookmarks from "@/hooks/useBookmarks";
+import useCases from "@/hooks/useCases";
+import useUploadedFiles from "@/hooks/useUploadedFiles";
 import { type ICasesOverviewProps } from "@/services/content/getCasesOverviewProps";
 import { type IGenArticleOverviewFragment, type IGenFullCaseFragment, type IGenMainCategory } from "@/services/graphql/__generated/sdk";
 import uploadsProgressStore from "@/stores/uploadsProgress.store";
@@ -37,15 +40,15 @@ export interface IUploadedMaterialProps
 const PersonalSpacePage: FunctionComponent = () =>
 {
   const apiContext = api.useContext();
-  const { data: allCases = [], isLoading: areCasesLoading } = api.caisy.getAllCases.useQuery();
-  const { data: bookmarks = [], isLoading: areBookmarksLoading } = api.bookmarks.getAllBookmarks.useQuery();
-  const { data: uploadedFiles = [], isLoading: isGetUploadedFilesLoading } = api.uploads.getUploadedFiles.useQuery();
+  const { allCases = [], isLoading: areCasesLoading } = useCases();
+  const { bookmarks, isLoading: areBookmarksLoading } = useBookmarks(undefined);
+  const { isLoading: isGetUploadedFilesLoading, uploadedFiles = [] } = useUploadedFiles();
   const allCasesBookmarks = bookmarks.filter(bookmark => bookmark?.resourceType === "case") ?? [];
   const bookmarkedCases = allCases.filter(caisyCase => allCasesBookmarks.some(bookmark => bookmark.resourceId === caisyCase.id));
   const mainCategoriesInBookmarkedCases = bookmarkedCases.map(bookmarkedCase => bookmarkedCase?.subCategoryField?.[0]?.mainCategory?.[0]);
   const bookmarkedCasesMainCategoriesUnique = mainCategoriesInBookmarkedCases.reduce<IGenMainCategory[]>((acc, current) => 
   {
-    if(current !== null && current !== undefined) 
+    if(current != null)
     {
       const x = acc.find((item: IGenMainCategory) => item.mainCategory === current.mainCategory);
       if(!x) 
@@ -199,11 +202,7 @@ const PersonalSpacePage: FunctionComponent = () =>
     setSelectedFiles(newSelectedFiles);
   };
 
-  const isFlavoriteTab = (id: string): boolean => 
-  {
-    if(id === categories?.[0]?.id) { return true; }
-    return false;
-  };
+  const isFavoriteTab = (id: string): boolean => id === categories?.[0]?.id;
 
   const areUploadsInProgress = uploads.some(u => u.state.type === "uploading");
   
@@ -244,9 +243,9 @@ const PersonalSpacePage: FunctionComponent = () =>
           setSelectedCategoryId={setSelectedCategoryId}
         />
       </div>
-      {isFlavoriteTab(selectedCategoryId ?? "") && <PersonalSpaceNavBar setSelectedTabId={setSelectedTabId} selectedTabId={selectedTabId} tabs={favoriteCategoryNavTabs}/>}
+      {isFavoriteTab(selectedCategoryId ?? "") && <PersonalSpaceNavBar setSelectedTabId={setSelectedTabId} selectedTabId={selectedTabId} tabs={favoriteCategoryNavTabs}/>}
       <Container maw={1440}>
-        {isFlavoriteTab(selectedCategoryId ?? "") ? (selectedTabId === FavCasesTabId ? (
+        {isFavoriteTab(selectedCategoryId ?? "") ? (selectedTabId === FavCasesTabId ? (
           <> 
             {(areBookmarksLoading || areCasesLoading) ? (
               <Loader sx={{ margin: "50px" }}/>

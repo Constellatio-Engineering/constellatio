@@ -1,5 +1,5 @@
 /* eslint-disable @typescript-eslint/naming-convention */
-import getAllCases, { type allCases } from "./getAllCases";
+import getAllCases, { type AllCases } from "./getAllCases";
 import {
   type IGenAssetFragment,
   type IGenSubCategoryFragment,
@@ -23,7 +23,7 @@ export type allSubCategories = Array<IGenSubCategoryFragment | null | undefined>
 export interface ICasesOverviewProps 
 {
   __typename: "case";
-  allCases: allCases;
+  allCases: AllCases;
   allMainCategories: allMainCategories;
   allSubCategories: allSubCategories;
 }

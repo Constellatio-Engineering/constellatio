@@ -1,6 +1,10 @@
 /* eslint-disable @typescript-eslint/ban-types, import/no-unused-modules */
 
+import { Bookmark } from "@/db/schema";
+
 import { type CSSObject, type MantineTheme } from "@mantine/core";
+import { type TRPCClientErrorBase } from "@trpc/client";
+import { type DefaultErrorShape } from "@trpc/server";
 import { type ComponentType } from "react";
 
 export type Values<T> = T[keyof T];
@@ -41,3 +45,8 @@ export type Optional<T, K extends keyof T> = Pick<Partial<T>, K> & Omit<T, K>;
 export type PartialUndefined<T, K extends keyof T> = {
   [P in keyof T]: P extends K ? T[P] | undefined : T[P];
 };
+
+export type UseQueryResult<T> = {
+  error: TRPCClientErrorBase<DefaultErrorShape> | null;
+  isLoading: boolean;
+} & T;

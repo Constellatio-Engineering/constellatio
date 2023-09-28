@@ -19,11 +19,12 @@ export const drawerStyles = () =>
           alignItems: "center",
           display: "flex",
           gap: "8px",
+          paddingLeft: "4px"
         },
+
         alignItems: "flex-start",
         display: "flex",
         flexDirection: "column",
-
         gap: "16px",
       },
 
@@ -43,6 +44,7 @@ export const drawerStyles = () =>
 
 export const suggestionsLeft = (theme: MantineTheme) => css`
 	width: 61%;
+	min-height: 100%;
 	display: flex;
 	flex-direction: column;
 	padding: 40px 0 60px 60px;
@@ -50,8 +52,16 @@ export const suggestionsLeft = (theme: MantineTheme) => css`
 	border-right: 1px solid ${theme.colors["neutrals-01"][3]};
 
 	.emptyStateCard {
+		display: flex;
+		justify-content: center;
+		height: 100%;
+
 		> div {
 			background-color: transparent;
+
+			> div {
+				height: 100%;
+			}
 		}
 	}
 
@@ -72,6 +82,7 @@ export const suggestionsRight = (theme: MantineTheme) => css`
 	flex-direction: column;
 	padding: 40px 60px;
 	gap: 52px;
+	min-height: 100%;
 
 
   .suggestion__section {
@@ -83,5 +94,12 @@ export const suggestionsRight = (theme: MantineTheme) => css`
 				line-height: 24px;
 			}
 		}
+	}
+
+	.popularCategories{
+		display: flex;
+		flex-direction: column;
+		gap: 12px;
+		align-self: stretch;
 	}
 `;
