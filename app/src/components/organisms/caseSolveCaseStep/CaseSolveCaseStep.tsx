@@ -21,6 +21,7 @@ const CaseSolveCaseStep: FunctionComponent<IGenCase> = ({ facts, title }) =>
   const setShowStepTwoModal = useCaseSolvingStore((state) => state.setShowStepTwoModal);
   const showStepTwoModal = useCaseSolvingStore((state) => state.showStepTwoModal);
   const solution = useCaseSolvingStore((state) => state.solution);
+  const setSolution = useCaseSolvingStore((state) => state.setSolution);
 
   useEffect(() => 
   {
@@ -39,9 +40,10 @@ const CaseSolveCaseStep: FunctionComponent<IGenCase> = ({ facts, title }) =>
           </BodyText>
           <RichtextEditorField
             content={solution ?? ""}
-            action={() => 
+            action={(editor) => 
             {
-              
+              const richTextContent: string = editor?.getHTML() ?? "";
+              setSolution(richTextContent);
               setShowStepTwoModal(true);
             }}
             variant="simple"

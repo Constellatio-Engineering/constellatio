@@ -89,7 +89,7 @@ export const colors: MantineThemeColors = {
     "#FFDFDF", // 0
     "#F0B3B2", // 1
     "#E58180", // 2
-    "#CC0300", // 3
+    "#F9F9F9", // 3
     "#8A1F17", // 4
     "#4C0000", // 5
     "#000000",

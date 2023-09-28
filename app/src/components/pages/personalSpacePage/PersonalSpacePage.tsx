@@ -91,7 +91,7 @@ const PersonalSpacePage: FunctionComponent = () =>
     mainCategory: "Materials"
   }];
 
-  const [selectedCategoryId, setSelectedCategoryId] = useState<IGenMainCategory["id"]>(categories?.[0]?.id as IGenMainCategory["id"]);
+  const [selectedCategoryId, setSelectedCategoryId] = useState<IGenMainCategory["id"]>(categories?.[1]?.id as IGenMainCategory["id"]);
   const { mutateAsync: createSignedUploadUrl } = api.uploads.createSignedUploadUrl.useMutation();
   const { mutateAsync: saveFileToDatabase } = api.uploads.saveFileToDatabase.useMutation();
   const FavCasesTabId = useId();
