@@ -69,9 +69,9 @@ const UploadedMaterialTable: FunctionComponent<UploadedMaterialTableProps> = ({ 
         </thead>
         <tbody css={styles.tableBody}/>
         {props?.uploadedFiles?.slice(0, showingFiles).map((file: IFile, index: number) => (
-          <tr key={index} 
-          // onClick={() => props?.setSelectedFileIdForPreview(file?.uuid)}
-          >
+          <tr
+            key={index} 
+            onClick={() => props?.setSelectedFileIdForPreview(file?.uuid)}>
             <td css={styles.callToActionCell}><Checkbox/></td>
             <td css={styles.docName} className="primaryCell">
               <BodyText styleType="body-01-medium" component="p" title={file?.filename + "." + file?.fileExtension}>{fileNameIcon(file)}{file?.filename}.{file?.fileExtension}</BodyText>
