@@ -64,7 +64,7 @@ export const colors: MantineThemeColors = {
   "neutrals-01": [
     "#FFFFFF", // 0
     "#F9F9F9", // 1
-    "#F6F6F5", // 2
+    "#F0F0F0", // 2
     "#F0F0F0", // 3
     "#ECECEC", // 4
     "#D6D6D6", // 5
