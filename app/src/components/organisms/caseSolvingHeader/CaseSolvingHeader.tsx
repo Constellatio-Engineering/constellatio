@@ -1,9 +1,9 @@
 import IconButton from "@/components/atoms/iconButton/IconButton";
-import IconButtonBar from "@/components/organisms/iconButtonBar/IconButtonBar";
 import { OverlayLines } from "@/components/Icons/bg-layer";
 import { Bookmark } from "@/components/Icons/Bookmark";
 import { Pin } from "@/components/Icons/Pin";
 import { Print } from "@/components/Icons/print";
+import IconButtonBar from "@/components/organisms/iconButtonBar/IconButtonBar";
 
 import { Container, Title, useMantineTheme } from "@mantine/core";
 import Link from "next/link";
