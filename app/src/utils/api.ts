@@ -7,6 +7,7 @@
 import { type AppRouter } from "@/server/api/root";
 import { supabase } from "@/supabase/client";
 import { type ClientError } from "@/utils/clientError";
+import { paths } from "@/utils/paths";
 
 import { QueryCache } from "@tanstack/react-query";
 import { httpBatchLink, TRPCClientError } from "@trpc/client";
@@ -65,8 +66,12 @@ export const api = createTRPCNext<AppRouter>({
 
             if(clientError.identifier === "unauthorized")
             {
-              console.log("Server responded with 'UNAUTHORIZED'. Redirecting to login");
-              window.location.replace("/login");
+              if(window.location.pathname !== paths.login)
+              {
+                console.log("Server responded with 'UNAUTHORIZED'. Redirecting to login");
+                window.location.replace(paths.login);
+              }
+
               void supabase.auth.signOut();
               return;
             }
