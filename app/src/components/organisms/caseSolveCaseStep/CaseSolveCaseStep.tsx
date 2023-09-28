@@ -46,6 +46,7 @@ const CaseSolveCaseStep: FunctionComponent<IGenCase> = ({ facts, title }) =>
               setSolution(richTextContent);
               setShowStepTwoModal(true);
             }}
+            button={{ text: "Submit and see results" }}
             variant="simple"
           />
           <Modal
