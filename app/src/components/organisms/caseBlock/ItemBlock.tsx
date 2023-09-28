@@ -48,16 +48,18 @@ const ItemBlock: FunctionComponent<ICaseBlockProps> = ({ blockHead, items, varia
 
           return (
             <tr key={caseIndex}>
-              <td>
+              <td className="primaryCell">
                 <Link passHref href={`/${variant === "case" ? "cases" : "dictionary"}/${item?.id}`}>
                   <TableCell variant="titleTableCell">
                     {item?.title}
                   </TableCell>
                 </Link>
               </td>
-              <td>
-                <StatusTableCell variant="notStarted"/>
-              </td>
+              {variant === "case" && (
+                <td>
+                  <StatusTableCell variant="notStarted"/>
+                </td>
+              )}
               {item?.__typename === "Case" && (
                 <td>
                   <TableCell variant="simpleTableCell" icon={<ClockIcon/>}>
