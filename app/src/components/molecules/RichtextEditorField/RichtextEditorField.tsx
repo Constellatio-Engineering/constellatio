@@ -14,7 +14,6 @@ export interface RichtextEditorFieldProps
 {
   readonly action?: (editor: Editor) => void;
   readonly button?: {
-   
     text?: string;
   };
   readonly content?: Content;
