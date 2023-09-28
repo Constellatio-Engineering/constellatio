@@ -176,6 +176,9 @@ dependencies:
   next-i18next:
     specifier: ^14.0.0
     version: 14.0.0(i18next@23.4.6)(next@13.4.19)(react-i18next@13.2.1)(react@18.2.0)
+  next-usequerystate:
+    specifier: ^1.8.1
+    version: 1.8.1(next@13.4.19)(react-dom@18.2.0)(react@18.2.0)
   postgres:
     specifier: 3.3.5
     version: 3.3.5
@@ -12493,6 +12496,10 @@ packages:
       yallist: 4.0.0
     dev: true
 
+  /mitt@3.0.1:
+    resolution: {integrity: sha512-vKivATfr97l2/QBCYAkXYDbrIWPM2IIKEl7YPhjCvKlG3kE2gm+uBo6nEXK3M5/Ffh/FLpKExzOQ3JJoJGFKBw==}
+    dev: false
+
   /mkdirp-classic@0.5.3:
     resolution: {integrity: sha512-gKLcREMhtuZRwRAfqP3RFW+TK4JqApVBtOIftVgjuABpAtpxhPGaDcfvbhNvD0B8iD1oUr/txX35NjcaY6Ns/A==}
 
@@ -12601,6 +12608,19 @@ packages:
 
   /next-tick@1.1.0:
     resolution: {integrity: sha512-CXdUiJembsNjuToQvxayPZF9Vqht7hewsvy2sOWafLvi2awflj9mOC6bHIg50orX8IJvWKY9wYQ/zB2kogPslQ==}
+
+  /next-usequerystate@1.8.1(next@13.4.19)(react-dom@18.2.0)(react@18.2.0):
+    resolution: {integrity: sha512-3daSBGtsEwz6TWLLdiNWeU4KxLL1psytBfwzswJWJ1K7UEqwciypobXz90BZpgK/h/vT1hmii3PRCeu34K4yjw==}
+    peerDependencies:
+      next: ^13.4
+      react: '*'
+      react-dom: '*'
+    dependencies:
+      mitt: 3.0.1
+      next: 13.4.19(@babel/core@7.22.20)(react-dom@18.2.0)(react@18.2.0)
+      react: 18.2.0
+      react-dom: 18.2.0(react@18.2.0)
+    dev: false
 
   /next@13.4.19(@babel/core@7.22.20)(react-dom@18.2.0)(react@18.2.0):
     resolution: {integrity: sha512-HuPSzzAbJ1T4BD8e0bs6B9C1kWQ6gv8ykZoRWs5AQoiIuqbGHHdQO7Ljuvg05Q0Z24E2ABozHe6FxDvI6HfyAw==}

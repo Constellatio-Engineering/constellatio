@@ -26,7 +26,7 @@ const useSearchResults: UseSearchResults = () =>
 {
   const { meilisearchInstance } = useContext(MeilisearchContext);
   const searchValue = useSearchBarStore((s) => s.searchValue);
-  const hasInput = searchValue.length > 0;
+  const hasInput = searchValue?.length > 0;
 
   const { data: searchResults = initialSearchResults, isLoading } = useQuery({
     enabled: hasInput && meilisearchInstance != null,
