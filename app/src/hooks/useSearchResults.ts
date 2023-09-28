@@ -1,4 +1,5 @@
 import { MeilisearchContext } from "@/provider/MeilisearchProvider";
+import useSearchBarStore from "@/stores/searchBar.store";
 import { type ArticleSearchIndexItem, type CaseSearchIndexItem, searchIndices, type UploadSearchIndexItem } from "@/utils/search";
 
 import { useQuery } from "@tanstack/react-query";
@@ -16,13 +17,12 @@ const initialSearchResults: SearchResults = {
   userUploads: [],
 };
 
-type UseSearchResults = (searchValue: string) => {
-  searchResults: SearchResults;
-};
+type UseSearchResults = () => { searchResults: SearchResults };
 
-const useSearchResults: UseSearchResults = (searchValue) =>
+const useSearchResults: UseSearchResults = () =>
 {
   const { meilisearchInstance } = useContext(MeilisearchContext);
+  const searchValue = useSearchBarStore((s) => s.searchValue);
   const hasInput = searchValue.length > 0;
 
   const { data: searchResults = initialSearchResults } = useQuery({
