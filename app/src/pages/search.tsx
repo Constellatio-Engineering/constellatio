@@ -6,7 +6,7 @@ import React from "react";
 
 const Search: NextPage = () => 
 {
-  const { isLoading, searchResults } = useSearchResults();
+  // const { isLoading, searchResults } = useSearchResults();
 
   // console.log("searchResults", searchResults);
 

@@ -4,7 +4,7 @@ import { CheckCircleGreenIcon } from "@/components/Icons/CheckCircleGreen";
 import { type UploadState } from "@/stores/uploadsProgress.store";
 
 import { RingProgress } from "@mantine/core";
-import React, { useState, type FunctionComponent } from "react";
+import React, { type FunctionComponent } from "react";
 
 import * as styles from "./FileUploadListItem.styles";
 

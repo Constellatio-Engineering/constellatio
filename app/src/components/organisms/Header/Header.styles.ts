@@ -1,5 +1,3 @@
-import { colors } from "@/constants/styles/colors";
-
 import { css } from "@emotion/react";
 import styled from "@emotion/styled";
 import { type MantineTheme } from "@mantine/styles";

@@ -24,7 +24,7 @@ export const wrapper = (theme: MantineTheme) => css`
   /* background-color: ${theme?.colors["neutrals-01"][2]}; */
 `;
 
-export const emptyStateCard = ({ theme, variant }: IEmptyCardProps) => css`
+export const emptyStateCard = ({ variant }: IEmptyCardProps) => css`
   padding: ${variant === "For-small-areas" ? "32px 20px 40px 20px" : "32px 0"};
   display: flex;
   flex-direction: column;
@@ -43,7 +43,7 @@ export const emptyStateCardTitle = ({ theme, variant }: IEmptyCardProps) => css`
   color: ${variant === "For-large-areas" ? theme?.colors?.["neutrals-02"][1] : theme?.colors?.["neutrals-01"][9]};
 `;
 
-export const emptyStateCardText = ({ theme, variant }: IEmptyCardProps) => css`
+export const emptyStateCardText = ({ theme }: IEmptyCardProps) => css`
   margin-bottom: 40px;
   color: ${theme?.colors["neutrals-01"][7]};
 `;

@@ -1,6 +1,7 @@
 import useSignedGetUrl from "@/hooks/useSignedGetUrl";
 
 import { Loader } from "@mantine/core";
+import Image from "next/image";
 import React, { type FunctionComponent } from "react";
 
 import * as styles from "./DummyFileViewer.styles";
@@ -32,7 +33,7 @@ const DummyFileViewer: FunctionComponent<DummyFileViewerProps> = ({ fileId }) =>
     <div css={styles.wrapper}>
       <h2 style={{ fontSize: 22 }}>File Viewer</h2>
       <p>ID of selected Image: {fileId}</p>
-      <img src={url} alt="image"/>
+      <Image src={url} alt="image"/>
     </div>
   );
 };

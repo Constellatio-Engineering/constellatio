@@ -18,7 +18,7 @@ export const wrapper = ({ opened, theme }: {
 	border-left: ${opened ? "3px solid black" : "none"};
 	cursor: pointer;
 `;
-export const title = (theme: MantineTheme) => css`
+export const title = css`
 	/* outline: 1px solid red; */
 `;
 export const text = ({ opened, theme }: {

@@ -1,11 +1,11 @@
 
 import { Svg } from "@/basic-components/SVG/Svg";
-import { type IGenArticleOverviewFragment, IGenCase, type IGenFullCaseFragment, type IGenMainCategory } from "@/services/graphql/__generated/sdk";
+import { type IGenArticleOverviewFragment, type IGenFullCaseFragment, type IGenMainCategory } from "@/services/graphql/__generated/sdk";
 
 import { Container } from "@mantine/core";
 import React, { type FunctionComponent } from "react";
 
-import * as styles from "./FavoriteCasesList.styles";
+// import * as styles from "./FavoriteCasesList.styles";
 import ItemBlock from "../caseBlock/ItemBlock";
 
 interface FavoriteCasesListProps

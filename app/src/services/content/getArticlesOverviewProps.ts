@@ -2,7 +2,6 @@
 import getAllArticles, { type allArticles } from "./getAllArticles";
 import { type allMainCategories } from "./getCasesOverviewProps";
 import {
-  type IGenAssetFragment,
   type IGenSubCategoryFragment,
 } from "../graphql/__generated/sdk";
 import { caisySDK } from "../graphql/getSdk";

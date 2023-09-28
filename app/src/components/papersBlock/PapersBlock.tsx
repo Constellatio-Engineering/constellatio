@@ -5,7 +5,6 @@ import React, { type FunctionComponent, useState } from "react";
 import * as styles from "./PapersBlock.styles";
 import { Button } from "../atoms/Button/Button";
 import { Input } from "../atoms/Input/Input";
-import { Cross } from "../Icons/Cross";
 import { NoteIcon } from "../Icons/Note";
 import { RichtextEditorField } from "../molecules/RichtextEditorField/RichtextEditorField";
 import SlidingPanelTitle from "../molecules/slidingPanelTitle/SlidingPanelTitle";

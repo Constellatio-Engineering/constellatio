@@ -5,9 +5,7 @@ import OverviewHeader from "@/components/organisms/OverviewHeader/OverviewHeader
 import { type IArticlesOverviewProps } from "@/services/content/getArticlesOverviewProps";
 import { type allSubCategories, type ICasesOverviewProps } from "@/services/content/getCasesOverviewProps";
 import { type IGenArticleOverviewFragment, type IGenFullCaseFragment, type IGenSubCategoryFragment } from "@/services/graphql/__generated/sdk";
-import { api } from "@/utils/api";
 
-import { notifications } from "@mantine/notifications";
 import {
   type FunctionComponent,
   useEffect,
@@ -71,7 +69,7 @@ const OverviewPage: FunctionComponent<IOverviewPageProps> = ({ content, variant 
           title={variant === "case" ? "Cases" : "Dictionary"}
         />
       )}
-      <div css={styles.ListWrapper({ empty: filteredSubcategories?.length && filteredSubcategories?.length > 0 ? false : true })}>
+      <div css={styles.ListWrapper}>
         {filteredSubcategories &&
           filteredSubcategories.length > 0 &&
           filteredSubcategories.map((item, itemIndex) => item?.subCategory && (
