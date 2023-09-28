@@ -15,6 +15,9 @@ export const searchRouter = createTRPCRouter({
     .query(async ({ ctx: { userId } }) =>
     {
       const searchRules: SearchRules = {
+        articles: {
+          filter: undefined,
+        },
         cases: {
           filter: undefined,
         },

@@ -1,5 +1,5 @@
 import { Button } from "@/components/atoms/Button/Button";
-import useSearchStore from "@/stores/search.store";
+import useSearchBarStore from "@/stores/searchBar.store";
 import { api } from "@/utils/api";
 
 import { type PropsOf } from "@emotion/react";
@@ -11,7 +11,7 @@ import SearchOverlay from "./SearchOverlay";
 
 const Template: FunctionComponent<PropsOf<typeof SearchOverlay>> = (args) => 
 {
-  const toggleDrawer = useSearchStore(s => s.toggleDrawer);
+  const toggleDrawer = useSearchBarStore(s => s.toggleDrawer);
 
   return (
     <>

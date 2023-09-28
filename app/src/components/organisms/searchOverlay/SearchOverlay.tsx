@@ -1,49 +1,42 @@
 import SearchBar from "@/components/molecules/searchBar/SearchBar";
-import useSearchStore from "@/stores/search.store";
+import useSearchBarStore from "@/stores/searchBar.store";
 
-import { Drawer, Loader } from "@mantine/core";
+import { Drawer } from "@mantine/core";
 import { useRouter } from "next/router";
 import React, { useEffect, type FunctionComponent } from "react";
 
 import * as styles from "./SearchOverlay.styles";
 import SearchOverlayLeftSide from "./SearchOverlayLeftSide";
 import SearchOverlayRightSide from "./SearchOverlayRightSide";
-import SearchOverlayWrapper from "./SearchOverlayWrapper";
 
 interface SearchOverlayProps {}
 
 const SearchOverlay: FunctionComponent<SearchOverlayProps> = () => 
 {
-  const isDrawerOpened = useSearchStore((s) => s.isDrawerOpened);
-  const isLoading = useSearchStore((s) => s.isLoading);
-  const searchValue = useSearchStore((s) => s.searchValue);
+  const isDrawerOpened = useSearchBarStore((s) => s.isDrawerOpened);
+  const searchValue = useSearchBarStore((s) => s.searchValue);
   const router = useRouter();
-  const toggleDrawer = useSearchStore((s) => s.toggleDrawer);
+  const toggleDrawer = useSearchBarStore((s) => s.toggleDrawer);
   const hasInput = searchValue.length > 0;
 
   useEffect(() =>
   {
     toggleDrawer(false);
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [router.pathname]);
-
-  const DataIsLoading = hasInput && isLoading && <Loader color="brand-01.4" size="30px"/>;
+  }, [router.pathname, toggleDrawer]);
 
   return (
-    <SearchOverlayWrapper hasInput={hasInput}>
-      <Drawer
-        padding={0}
-        withCloseButton={false}
-        returnFocus={false}
-        opened={isDrawerOpened}
-        onClose={() => toggleDrawer(false)}
-        position="top"
-        title={<SearchBar/>}
-        styles={styles.drawerStyles()}>
-        <SearchOverlayLeftSide DataIsLoading={DataIsLoading} hasInput={hasInput}/>
-        <SearchOverlayRightSide DataIsLoading={DataIsLoading} hasInput={hasInput}/>
-      </Drawer>
-    </SearchOverlayWrapper>
+    <Drawer
+      padding={0}
+      withCloseButton={false}
+      returnFocus={false}
+      opened={isDrawerOpened}
+      onClose={() => toggleDrawer(false)}
+      position="top"
+      title={<SearchBar/>}
+      styles={styles.drawerStyles()}>
+      <SearchOverlayLeftSide hasInput={hasInput}/>
+      <SearchOverlayRightSide hasInput={hasInput}/>
+    </Drawer>
   );
 };
 

@@ -1,21 +1,20 @@
 import { db } from "@/db/connection";
 import { env } from "@/env.mjs";
 import { meiliSearchAdmin } from "@/meilisearch/client";
+import getAllArticles from "@/services/content/getAllArticles";
 import getAllCases from "@/services/content/getAllCases";
+import { getArticleById } from "@/services/content/getArticleById";
 import { getCaseById } from "@/services/content/getCaseById";
 import { isDevelopmentOrStaging } from "@/utils/env";
 import {
-  type CaseSearchItemNodes, createCaseSearchIndexItem, createUploadsSearchIndexItem, searchIndices, type UploadSearchItemNodes
+  type ArticleSearchItemNodes,
+  type CaseSearchItemNodes, createArticleSearchIndexItem, createCaseSearchIndexItem, createUploadsSearchIndexItem, searchIndices, type UploadSearchItemNodes
 } from "@/utils/search";
 
 import { type NextApiHandler } from "next";
 
 const handler: NextApiHandler = async (req, res) =>
 {
-  /**
-   * TODO: Setting up the indices should be done in CI/CD
-   */
-
   if(!isDevelopmentOrStaging)
   {
     console.warn("This endpoint is only available in development or staging mode. Current mode is '" + env.NEXT_PUBLIC_DEPLOYMENT_ENVIRONMENT + "'");
@@ -32,17 +31,23 @@ const handler: NextApiHandler = async (req, res) =>
   await meiliSearchAdmin.deleteIndexIfExists(searchIndices.cases);
 
   const allCases = await getAllCases();
+  const allArticles = await getAllArticles();
 
-  const fetchAllCasesDetailsPromises = allCases.map(async (c) =>
-  {
-    const { Case } = await getCaseById({ id: c.id! });
-    return Case;
-  });
+  // return res.status(200).json({ message: "Success" });
 
+  // Cases
+  const fetchAllCasesDetailsPromises = allCases.map(async c => (await getCaseById({ id: c.id! })).Case);
   const allCasesWithDetails = await Promise.all(fetchAllCasesDetailsPromises);
   const allCasesSearchIndexItems = allCasesWithDetails.filter(Boolean).map(createCaseSearchIndexItem);
   const createCasesIndexTask = await meiliSearchAdmin.index(searchIndices.cases).addDocuments(allCasesSearchIndexItems);
 
+  // Articles
+  const fetchAllArticlesDetailsPromises = allArticles.map(async a => (await getArticleById({ id: a.id! })).Article);
+  const allArticlesWithDetails = await Promise.all(fetchAllArticlesDetailsPromises);
+  const allArticlesSearchIndexItems = allArticlesWithDetails.filter(Boolean).map(createArticleSearchIndexItem);
+  const createArticlesIndexTask = await meiliSearchAdmin.index(searchIndices.articles).addDocuments(allArticlesSearchIndexItems);
+
+  // User Uploads
   const allUserUploads = await db.query.uploadsTable.findMany();
   const allUserUploadsSearchIndexItems = allUserUploads.map(createUploadsSearchIndexItem);
   const createUploadsIndexTask = await meiliSearchAdmin.index(searchIndices.userUploads).addDocuments(allUserUploadsSearchIndexItems, { primaryKey: "uuid" });
@@ -50,6 +55,7 @@ const handler: NextApiHandler = async (req, res) =>
   const createIndicesTasks = await meiliSearchAdmin.waitForTasks([
     createCasesIndexTask.taskUid,
     createUploadsIndexTask.taskUid,
+    createArticlesIndexTask.taskUid,
   ], {
     intervalMs: 1000,
     timeOutMs: 1000 * 60 * 5,
@@ -68,6 +74,9 @@ const handler: NextApiHandler = async (req, res) =>
   const caseSearchableAttributes: CaseSearchItemNodes[] = ["title", "legalArea.legalAreaName", "mainCategory.mainCategory", "subCategory.subCategory", "tags.tagName"];
   const updateCasesRankingRulesTask = await meiliSearchAdmin.index(searchIndices.cases).updateSearchableAttributes(caseSearchableAttributes);
 
+  const articleSearchableAttributes: ArticleSearchItemNodes[] = ["title", "legalArea.legalAreaName", "mainCategory.mainCategory", "subCategory.subCategory", "tags.tagName"];
+  const updateArticlesRankingRulesTask = await meiliSearchAdmin.index(searchIndices.articles).updateSearchableAttributes(articleSearchableAttributes);
+
   const uploadsSearchableAttributes: UploadSearchItemNodes[] = ["originalFilename"];
   const updateUploadsRankingRulesTask = await meiliSearchAdmin.index(searchIndices.userUploads).updateSearchableAttributes(uploadsSearchableAttributes);
 
@@ -79,6 +88,7 @@ const handler: NextApiHandler = async (req, res) =>
 
   await meiliSearchAdmin.waitForTasks([
     updateCasesRankingRulesTask.taskUid,
+    updateArticlesRankingRulesTask.taskUid,
     updateUploadsRankingRulesTask.taskUid,
     updateUploadsDisplayedAttributesTask.taskUid,
     updateUploadsFilterableAttributesTask.taskUid,

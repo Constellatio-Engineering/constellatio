@@ -1,6 +1,7 @@
 import { type Upload } from "@/db/schema";
 import {
-  type IGenCase, type IGenLegalArea, type IGenMainCategory, type IGenSubCategory, type IGenTags 
+  type IGenArticle,
+  type IGenCase, type IGenLegalArea, type IGenMainCategory, type IGenSubCategory, type IGenTags
 } from "@/services/graphql/__generated/sdk";
 import {
   type DotSeparatedKeys,
@@ -8,6 +9,7 @@ import {
 } from "@/utils/types";
 
 export const searchIndices = {
+  articles: "articles",
   cases: "cases",
   userUploads: "user-uploads",
 } as const;
@@ -65,6 +67,59 @@ export const createCaseSearchIndexItem = (fullCase: IGenCase): CaseSearchIndexIt
   };
 
   return caseSearchIndexItem;
+};
+
+type ArticleSearchIndexItemContent = {
+  id: string;
+  legalArea: Pick<IGenLegalArea, "legalAreaName" | "id">;
+  mainCategory: Pick<IGenMainCategory, "mainCategory" | "id">;
+  subCategory: Pick<IGenSubCategory, "subCategory" | "id">;
+  tags: Array<Pick<IGenTags, "id" | "tagName">>;
+  title: string;
+};
+
+export type ArticleSearchIndexItem = NullableProperties<ArticleSearchIndexItemContent>;
+export type ArticleSearchItemNodes = RemoveUndefined<DotSeparatedKeys<ArticleSearchIndexItemContent>>;
+
+export const createArticleSearchIndexItem = (fullArticle: IGenArticle): ArticleSearchIndexItem =>
+{
+  let legalAreaName: Nullable<string>;
+
+  switch (fullArticle.legalArea?.__typename)
+  {
+    case "LegalArea":
+      legalAreaName = fullArticle.legalArea.legalAreaName;
+      break;
+    case "SubCategory":
+      legalAreaName = fullArticle.legalArea?.subCategory;
+      break;
+    default:
+      legalAreaName = null;
+      console.warn("Unknown legal area type" + fullArticle.legalArea?.__typename);
+  }
+
+  const articleSearchIndexItem: CaseSearchIndexItem = {
+    id: fullArticle.id,
+    legalArea: {
+      id: fullArticle.legalArea?.id,
+      legalAreaName,
+    },
+    mainCategory: {
+      id: fullArticle.mainCategoryField?.[0]?.id,
+      mainCategory: fullArticle.mainCategoryField?.[0]?.mainCategory,
+    },
+    subCategory: {
+      id: fullArticle.subCategoryField?.[0]?.id,
+      subCategory: fullArticle.subCategoryField?.[0]?.subCategory,
+    },
+    tags: fullArticle.tags?.map(tag => ({
+      id: tag?.id,
+      tagName: tag?.tagName,
+    })) || [],
+    title: fullArticle.title
+  };
+
+  return articleSearchIndexItem;
 };
 
 export type UploadSearchIndexItem = Pick<Upload, "uuid" | "originalFilename" | "userId">;
