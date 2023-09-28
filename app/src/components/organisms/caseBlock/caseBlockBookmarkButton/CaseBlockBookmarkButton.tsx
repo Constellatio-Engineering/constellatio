@@ -7,6 +7,7 @@ import { api } from "@/utils/api";
 import { Text } from "@mantine/core";
 import { modals } from "@mantine/modals";
 import { notifications } from "@mantine/notifications";
+import { useRouter } from "next/router";
 import React, { type FunctionComponent } from "react";
 
 interface ICaseBlockBookmarkButtonProps
@@ -19,7 +20,8 @@ interface ICaseBlockBookmarkButtonProps
 const CaseBlockBookmarkButton: FunctionComponent<ICaseBlockBookmarkButtonProps> = ({ areAllBookmarksLoading, caseId, isBookmarked }) =>
 {
   const apiContext = api.useContext();
-
+  const router = useRouter();
+  
   /**
    * Could add optimistic updates here later
    */
@@ -62,18 +64,26 @@ const CaseBlockBookmarkButton: FunctionComponent<ICaseBlockBookmarkButtonProps> 
         };
         if(isBookmarked)
         {
-          modals.openConfirmModal({
-            centered: true,
-            children: (
-              <Text size="sm">
-                Are you sure you want to delete this case from your favorites?
-              </Text>
-            ),
-            confirmProps: { color: "red" },
-            labels: { cancel: "No don't delete it", confirm: "Delete bookmark" },
-            onConfirm: () => removeBookmark(bookmarkData),
-            title: "Remove from favorites",
-          });
+
+          if(router?.route === "/personal-space")
+          {
+            modals.openConfirmModal({
+              centered: true,
+              children: (
+                <Text size="sm">
+                  Are you sure you want to delete this case from your favorites?
+                </Text>
+              ),
+              confirmProps: { color: "red" },
+              labels: { cancel: "No don't delete it", confirm: "Delete bookmark" },
+              onConfirm: () => removeBookmark(bookmarkData),
+              title: "Remove from favorites",
+            });
+          }
+          else 
+          {
+            removeBookmark(bookmarkData);
+          }
         }
         else
         {

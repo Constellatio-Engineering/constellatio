@@ -1,5 +1,4 @@
 import { Button } from "@/components/atoms/Button/Button";
-import IconButtonBar from "@/components/iconButtonBar/IconButtonBar";
 import { ArrowDown } from "@/components/Icons/ArrowDown";
 import { ArrowUp } from "@/components/Icons/ArrowUp";
 import { Bookmark } from "@/components/Icons/Bookmark";
@@ -19,6 +18,7 @@ import { useDisclosure } from "@mantine/hooks";
 import React, { useRef, type FunctionComponent, useEffect, useState } from "react";
 
 import * as styles from "./CaseResultsReviewStep.styles";
+import IconButtonBar from "../iconButtonBar/IconButtonBar";
 
 interface ICaseResultsReviewStepProps 
 {

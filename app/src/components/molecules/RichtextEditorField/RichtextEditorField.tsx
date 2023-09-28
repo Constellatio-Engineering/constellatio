@@ -4,7 +4,7 @@ import useCaseSolvingStore from "@/stores/caseSolving.store";
 
 import { RichTextEditor, Link } from "@mantine/tiptap";
 import { Placeholder } from "@tiptap/extension-placeholder";
-import { type Content, useEditor } from "@tiptap/react";
+import { type Content, useEditor, type Editor } from "@tiptap/react";
 import { StarterKit } from "@tiptap/starter-kit";
 import { type FC, useEffect } from "react";
 
@@ -12,12 +12,20 @@ import { ContentWrapper, richtextEditorFieldStyles } from "./RichtextEditorField
 
 export interface RichtextEditorFieldProps
 {
-  readonly action?: () => void;
+  readonly action?: (editor: Editor) => void;
+  readonly button?: {
+    text?: string;
+  };
   readonly content?: Content;
   readonly variant: "simple" | "with-legal-quote";
 }
 
-export const RichtextEditorField: FC<RichtextEditorFieldProps> = ({ action, content = "", variant }) =>
+export const RichtextEditorField: FC<RichtextEditorFieldProps> = ({
+  action,
+  button,
+  content = "",
+  variant
+}) =>
 {
   const editor = useEditor({
     content,
@@ -29,7 +37,6 @@ export const RichtextEditorField: FC<RichtextEditorFieldProps> = ({ action, cont
       }),
     ],
   });
-  const setSolution = useCaseSolvingStore((state) => state.setSolution);
   const setIsStepCompleted = useCaseSolvingStore((state) => state.setIsStepCompleted);
 
   useEffect(() =>
@@ -50,14 +57,7 @@ export const RichtextEditorField: FC<RichtextEditorFieldProps> = ({ action, cont
 
   const handleSubmit = (): void => 
   {
-    const richTextContent: string = editor?.getHTML() ?? "";
-    // add content to globalState ana send to supabase?
-    // store content locally with caseSolving.store.ts
-    setSolution(richTextContent);
-    console.log({ richTextContent });
-    
-    // closes modal and apply next step function
-    if(action) { action(); }
+    if(action && editor) { action(editor); }
   };
 
   return (
@@ -80,17 +80,19 @@ export const RichtextEditorField: FC<RichtextEditorFieldProps> = ({ action, cont
       </RichTextEditor.Toolbar>
       <ContentWrapper>
         <RichTextEditor.Content/>
-        <div>
-          <Button<"button">
-            styleType="primary"
-            size="large"
-            type="button"
-            onClick={handleSubmit}
-            leftIcon={<Check/>}
-            disabled={editor?.isEmpty}>
-            Submit and see results
-          </Button>
-        </div>
+        {button && (
+          <div>
+            <Button<"button">
+              styleType="primary"
+              size="large"
+              type="button"
+              onClick={handleSubmit}
+              leftIcon={<Check/>}
+              disabled={editor?.isEmpty}>
+              {button?.text}
+            </Button>
+          </div>
+        )}
       </ContentWrapper>
     </RichTextEditor>
   );
