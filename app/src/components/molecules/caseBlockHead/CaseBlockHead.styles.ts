@@ -8,7 +8,7 @@ export const detailText = (theme: MantineTheme): SerializedStyles => css`
 p{
     margin-top:10px;
 }
-color:${theme.colors["cc-cases"][2]}
+color:${theme.colors["neutrals-01"][7]};
 `;
 
 export const iconWrapper = css`
