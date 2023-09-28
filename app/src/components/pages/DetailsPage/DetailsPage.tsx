@@ -10,8 +10,6 @@ import React, { useEffect, type FunctionComponent } from "react";
 
 import * as styles from "./DetailsPage.styles";
 
-// Omit<Omit<Partial<IGenCase & IGenArticle>, "__typename">, "variant"> & {readonly variant: "case" | "dictionary"};
-
 type IDetailsPageProps = {
   readonly content: IGenCase | IGenArticle | undefined;
   readonly variant: "case" | "dictionary";
@@ -33,14 +31,21 @@ const DetailsPage: FunctionComponent<IDetailsPageProps> = ({ content, variant })
   // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [content?.__typename]);
 
-  console.log({ content });
-
   return (
     <>
       <CaseSolvingHeader
         title={content?.title ?? ""}
         variant={variant}
-        pathSlugs={[{ path: variant === "case" ? "/cases" : "/dictionary", slug: variant === "case" ? "Cases" : "Dictionary" }, { path: `/dictionaries/${content?.id}`, slug: content?.title ?? "" }]}
+        pathSlugs={[
+          {
+            path: variant === "case" ? "/cases" : "/dictionary", 
+            slug: variant === "case" ? "Cases" : "Dictionary" 
+          },
+          { 
+            path: `/${variant === "case" ? "cases" : "dictionary"}/${content?.id}`, 
+            slug: content?.title ?? "" 
+          }
+        ]}
         overviewCard={{
           lastUpdated: content?._meta?.updatedAt,
           legalArea: content?.legalArea,
