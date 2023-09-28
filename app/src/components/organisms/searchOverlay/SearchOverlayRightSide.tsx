@@ -14,8 +14,7 @@ type SearchOverlayRightSideProps = {
 
 const SearchOverlayRightSide: FunctionComponent<SearchOverlayRightSideProps> = ({ hasInput }) =>
 {
-  const searchValue = useSearchBarStore((s) => s.searchValue);
-  const { searchResults } = useSearchResults(searchValue);
+  const { searchResults } = useSearchResults();
 
   return (
     <div css={styles.suggestionsRight}>

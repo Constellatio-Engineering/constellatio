@@ -19,13 +19,13 @@ const SearchOverlayLeftSide: FunctionComponent<SearchOverlayLeftSideProps> = ({ 
 {
   const searchHistory = useSearchBarStore((s) => s.searchHistory);
   const setSearchValue = useSearchBarStore((s) => s.setSearchValue);
-  const searchValue = useSearchBarStore((s) => s.searchValue);
-  const { searchResults } = useSearchResults(searchValue);
+  const { isLoading, searchResults } = useSearchResults();
 
   // TODO: <div css={styles.suggestionsLeft}> can/should be extracted to a separate component because it is reused
   // TODO: Every suggestion section can/should be extracted to a separate component because it is reused
 
-  if(!hasInput)
+  // Loading should be so fast that it is okay to show the recent searches in the meantime, so it switches instantly from recent searches to results
+  if(!hasInput || isLoading)
   {
     return (
       <div css={styles.suggestionsLeft}>

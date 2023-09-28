@@ -1,4 +1,5 @@
 import { MeilisearchContext } from "@/provider/MeilisearchProvider";
+import useSearchBarStore from "@/stores/searchBar.store";
 import { type ArticleSearchIndexItem, type CaseSearchIndexItem, searchIndices, type UploadSearchIndexItem } from "@/utils/search";
 
 import { useQuery } from "@tanstack/react-query";
@@ -16,16 +17,18 @@ const initialSearchResults: SearchResults = {
   userUploads: [],
 };
 
-type UseSearchResults = (searchValue: string) => {
+type UseSearchResults = () => {
+  isLoading: boolean;
   searchResults: SearchResults;
 };
 
-const useSearchResults: UseSearchResults = (searchValue) =>
+const useSearchResults: UseSearchResults = () =>
 {
   const { meilisearchInstance } = useContext(MeilisearchContext);
+  const searchValue = useSearchBarStore((s) => s.searchValue);
   const hasInput = searchValue.length > 0;
 
-  const { data: searchResults = initialSearchResults } = useQuery({
+  const { data: searchResults = initialSearchResults, isLoading } = useQuery({
     enabled: hasInput && meilisearchInstance != null,
     keepPreviousData: true,
     queryFn: async () =>
@@ -67,7 +70,7 @@ const useSearchResults: UseSearchResults = (searchValue) =>
     staleTime: 3000,
   });
 
-  return { searchResults };
+  return { isLoading, searchResults };
 };
 
 export default useSearchResults;
