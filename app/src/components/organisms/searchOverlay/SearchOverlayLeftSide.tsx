@@ -1,7 +1,8 @@
 import { CustomLink } from "@/components/atoms/CustomLink/CustomLink";
 import Label from "@/components/atoms/label/Label";
 import Tag from "@/components/atoms/tag/Tag";
-import useSearchStore from "@/stores/search.store";
+import useSearchResults from "@/hooks/useSearchResults";
+import useSearchBarStore from "@/stores/searchBar.store";
 import { paths } from "@/utils/paths";
 
 import Link from "next/link";
@@ -16,9 +17,10 @@ type SearchOverlayLeftSideProps = {
 
 const SearchOverlayLeftSide: FunctionComponent<SearchOverlayLeftSideProps> = ({ hasInput }) =>
 {
-  const searchResults = useSearchStore((s) => s.searchResults);
-  const searchHistory = useSearchStore((s) => s.searchHistory);
-  const setSearchValue = useSearchStore((s) => s.setSearchValue);
+  const searchHistory = useSearchBarStore((s) => s.searchHistory);
+  const setSearchValue = useSearchBarStore((s) => s.setSearchValue);
+  const searchValue = useSearchBarStore((s) => s.searchValue);
+  const { searchResults } = useSearchResults(searchValue);
 
   // TODO: <div css={styles.suggestionsLeft}> can/should be extracted to a separate component because it is reused
   // TODO: Every suggestion section can/should be extracted to a separate component because it is reused
@@ -85,7 +87,7 @@ const SearchOverlayLeftSide: FunctionComponent<SearchOverlayLeftSideProps> = ({ 
               <CustomLink styleType="link-content-title" component="p">
                 {result.title}
               </CustomLink>
-              <Tag>{result.mainCategory.mainCategory}</Tag>
+              <Tag>{result.mainCategory?.mainCategory}</Tag>
             </Link>
           ))}
         </div>
@@ -101,7 +103,7 @@ const SearchOverlayLeftSide: FunctionComponent<SearchOverlayLeftSideProps> = ({ 
               <CustomLink styleType="link-content-title" component="p">
                 {article.title}
               </CustomLink>
-              <Tag>{article.mainCategory.mainCategory}</Tag>
+              <Tag>{article.mainCategory?.mainCategory}</Tag>
             </Link>
           ))}
         </div>

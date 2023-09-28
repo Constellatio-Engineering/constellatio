@@ -1,9 +1,10 @@
 import { CustomLink } from "@/components/atoms/CustomLink/CustomLink";
 import Label from "@/components/atoms/label/Label";
 import CategoryButton from "@/components/molecules/categoryButton/CategoryButton";
-import useSearchStore from "@/stores/search.store";
+import useSearchResults from "@/hooks/useSearchResults";
+import useSearchBarStore from "@/stores/searchBar.store";
 
-import React, { type FunctionComponent, type ReactNode } from "react";
+import React, { type FunctionComponent } from "react";
 
 import * as styles from "./SearchOverlay.styles";
 
@@ -13,7 +14,8 @@ type SearchOverlayRightSideProps = {
 
 const SearchOverlayRightSide: FunctionComponent<SearchOverlayRightSideProps> = ({ hasInput }) =>
 {
-  const searchResults = useSearchStore((s) => s.searchResults);
+  const searchValue = useSearchBarStore((s) => s.searchValue);
+  const { searchResults } = useSearchResults(searchValue);
 
   return (
     <div css={styles.suggestionsRight}>

@@ -1,7 +1,7 @@
 import { Input } from "@/components/atoms/Input/Input";
 import { CrossFilled } from "@/components/Icons/CrossFilled";
 import { Search } from "@/components/Icons/Search";
-import useSearchStore from "@/stores/search.store";
+import useSearchBarStore from "@/stores/searchBar.store";
 
 import { type TextInputProps } from "@mantine/core";
 import { useMantineTheme } from "@mantine/styles";
@@ -19,8 +19,8 @@ const SearchField: FunctionComponent<SearchFieldProps> = ({
 }) => 
 {
   const theme = useMantineTheme();
-  const searchValue = useSearchStore(s => s.searchValue);
-  const setSearchValue = useSearchStore(s => s.setSearchValue);
+  const searchValue = useSearchBarStore(s => s.searchValue);
+  const setSearchValue = useSearchBarStore(s => s.setSearchValue);
 
   const SearchIcon = <span css={styles.icon}><Search size={size === "normal" ? 20 : 16}/></span>;
 

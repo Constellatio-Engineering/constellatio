@@ -2,7 +2,7 @@ import { Button } from "@/components/atoms/Button/Button";
 import { CustomLink } from "@/components/atoms/CustomLink/CustomLink";
 import { Cross } from "@/components/Icons/Cross";
 import { Search } from "@/components/Icons/Search";
-import useSearchStore from "@/stores/search.store";
+import useSearchBarStore from "@/stores/searchBar.store";
 
 import { Input } from "@mantine/core";
 import React, { type FunctionComponent } from "react";
@@ -13,9 +13,9 @@ interface SearchBarProps {}
 
 const SearchBar: FunctionComponent<SearchBarProps> = () => 
 {
-  const searchValue = useSearchStore((s) => s.searchValue);
-  const setSearchValue = useSearchStore((s) => s.setSearchValue);
-  const toggleDrawer = useSearchStore((s) => s.toggleDrawer);
+  const searchValue = useSearchBarStore((s) => s.searchValue);
+  const setSearchValue = useSearchBarStore((s) => s.setSearchValue);
+  const toggleDrawer = useSearchBarStore((s) => s.toggleDrawer);
 
   const rightSection = searchValue ? (
     <>
