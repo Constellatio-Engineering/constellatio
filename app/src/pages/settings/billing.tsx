@@ -1,38 +1,29 @@
 import { Layout } from "@/components/layouts/Layout";
-import { postData } from "@/lib/post-data";
+import { api } from "@/utils/api";
 
 import { Button, Container, Title } from "@mantine/core";
+import axios from "axios";
 import { useRouter } from "next/router";
 import { type FunctionComponent, useState } from "react";
 
 const Billing: FunctionComponent = () =>
 {
   const router = useRouter();
-  const [opening, setOpening] = useState(false);
+  const { isLoading, mutateAsync: openStripePortal } = api.billing.openStripePortal.useMutation(); 
 
   const redirectToCustomerPortal = async (): Promise<void> =>
   {
-    setOpening(true);
-
     let url: string;
 
     try
     {
-      const postDataResult = await postData({
-        url: "/api/stripe/portal",
-      });
-
-      if(!postDataResult.url)
-      {
-        throw new Error("No url returned from api/stripe/portal");
-      }
-
-      url = postDataResult.url;
+      const { stripeUrl } = await openStripePortal();
+      url = stripeUrl;
     }
     catch (error)
     {
-      console.error(error);
-      return alert("An error occurred. Please look at the console for more details.");
+      console.error("error while getting stripe url", error);
+      return;
     }
 
     void router.push(url);
@@ -42,7 +33,7 @@ const Billing: FunctionComponent = () =>
     <Layout>
       <Container>
         <Title>Abonnement</Title>
-        <Button<"button"> mt="lg" loading={opening} onClick={redirectToCustomerPortal}>
+        <Button<"button"> mt="lg" loading={isLoading} onClick={redirectToCustomerPortal}>
           Stripe öffnen
         </Button>
       </Container>

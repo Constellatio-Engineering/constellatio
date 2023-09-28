@@ -10,12 +10,16 @@ export default async function handler(
   res: NextApiResponse
 ): Promise<void | NextApiResponse>
 {
+  console.log("handler");
+
   if(req.method !== "POST")
   {
     return res.status(405).setHeader("Allow", "POST").send("Wrong request method");
   }
 
   // TODO: Refactor this to add proper error handling
+
+  console.log("stripe portal");
 
   try
   {
