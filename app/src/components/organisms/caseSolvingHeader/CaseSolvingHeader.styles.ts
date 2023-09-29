@@ -1,7 +1,7 @@
 import { type SerializedStyles, css } from "@emotion/react";
 import type { MantineTheme } from "@mantine/styles";
 
-// import BgLines from "../../Icons/bg-lines.png";
+import { text } from "./../../atoms/contentMenuItem/ContentMenuItem.styles";
 
 export const wrapper = ({ theme, variant }: {
   theme: MantineTheme;
@@ -58,6 +58,11 @@ export const bodyText = (theme: MantineTheme): SerializedStyles => css`
   }
   .title {
     color: ${theme.colors["transparency-02"][1]};
+  }
+  .headline{
+    h1{
+    /* overflow: hidden; */
+    }
   }
   @media (max-width: 800px) {
     width: 100%;

@@ -157,7 +157,7 @@ export function getNestedHeadingIndex(item: IHeadingNode, allHeadings: any): num
   return null;
 }
 
-export const renderTOC = (toc: TOCItem[], depth: number = 0): JSX.Element => 
+export const renderTOC = (toc: TOCItem[], _: number = 0): JSX.Element => 
 {
   return (
     <ul>

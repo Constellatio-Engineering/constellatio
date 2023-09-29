@@ -27,7 +27,7 @@ type Story = StoryObj<typeof CaseSolvingHeader>;
 
 export const Case: Story = {
   args: {
-    pathSlugs: ["bread crumb", "bread crumb", "bread crumb"],
+    // pathSlugs: ["bread crumb", "bread crumb", "bread crumb"],
     // steps: ["COMPLETE TESTS", "SOLVE CASE", "REVIEW RESULTS"],
     title: "GesellschaftsR 3 | Die schiefe Markise",
     variant: "case"
@@ -36,7 +36,7 @@ export const Case: Story = {
 
 export const Dictionay: Story = {
   args: {
-    pathSlugs: ["bread crumb", "bread crumb", "bread crumb"],
+    // pathSlugs: ["bread crumb", "bread crumb", "bread crumb"],
     title: "GesellschaftsR 3 | Die schiefe Markise",
     variant: "dictionary",
   }

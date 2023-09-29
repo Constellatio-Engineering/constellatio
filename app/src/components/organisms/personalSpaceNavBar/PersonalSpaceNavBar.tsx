@@ -12,7 +12,7 @@ interface INavTab
   title: string;
 }
 
-interface PersonalSpaceNavBarProps
+export interface PersonalSpaceNavBarProps
 {
   readonly selectedTabId: string;
   readonly setSelectedTabId: React.Dispatch<React.SetStateAction<string>>;

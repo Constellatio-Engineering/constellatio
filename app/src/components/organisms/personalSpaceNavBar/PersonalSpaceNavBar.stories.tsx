@@ -1,9 +1,9 @@
 import { type Meta, type StoryObj } from "@storybook/react";
 import { type FunctionComponent } from "react";
 
-import PersonalSpaceNavBar, { type IPersonalSpaceNavBarProps } from "./PersonalSpaceNavBar";
+import PersonalSpaceNavBar, { type PersonalSpaceNavBarProps } from "./PersonalSpaceNavBar";
 
-const Template: FunctionComponent<IPersonalSpaceNavBarProps> = (args) => (<PersonalSpaceNavBar {...args}/>);
+const Template: FunctionComponent<PersonalSpaceNavBarProps> = (args) => (<PersonalSpaceNavBar {...args}/>);
 
 const meta: Meta = {
   argTypes: {

@@ -17,7 +17,7 @@ import uploadsProgressStore from "@/stores/uploadsProgress.store";
 import { api } from "@/utils/api";
 import { removeItemsByIndices } from "@/utils/utils";
 
-import { Container, Loader, ScrollArea, Text } from "@mantine/core";
+import { Container, Loader, Text } from "@mantine/core";
 import { modals } from "@mantine/modals";
 import axios from "axios";
 import Link from "next/link";

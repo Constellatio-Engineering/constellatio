@@ -1,4 +1,3 @@
-import IconButton from "@/components/atoms/iconButton/IconButton";
 import { OverlayLines } from "@/components/Icons/bg-layer";
 import { Bookmark } from "@/components/Icons/Bookmark";
 import { Pin } from "@/components/Icons/Pin";
@@ -7,7 +6,7 @@ import IconButtonBar from "@/components/organisms/iconButtonBar/IconButtonBar";
 
 import { Container, Title, useMantineTheme } from "@mantine/core";
 import Link from "next/link";
-import React, { type FunctionComponent, type ReactNode } from "react";
+import React, { type FunctionComponent } from "react";
 
 import * as styles from "./CaseSolvingHeader.styles";
 import OverviewCard, { type IOverviewCard } from "../overviewCard/OverviewCard";
@@ -39,6 +38,7 @@ const CaseSolvingHeader: FunctionComponent<ICaseSolvingHeaderProps> = ({
     { src: <Pin/>, title: "Pin" },
   ];
   const theme = useMantineTheme();
+  
   return (
     <div css={styles.wrapper({ theme, variant })}>
       <Container maw={1440}>

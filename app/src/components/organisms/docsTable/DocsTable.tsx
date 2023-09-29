@@ -1,4 +1,3 @@
-import { Spoiler } from "@mantine/core";
 import React, { useState, type FunctionComponent, useEffect } from "react";
 
 import * as styles from "./DocsTable.styles";
@@ -6,7 +5,6 @@ import { type IDoc, DocsTableData } from "./DocTableData";
 import { Button } from "../../atoms/Button/Button";
 import { CaptionText } from "../../atoms/CaptionText/CaptionText";
 import { ArrowDown } from "../../Icons/ArrowDown";
-import { ArrowUp } from "../../Icons/ArrowUp";
 
 interface DocsTableProps 
 {
