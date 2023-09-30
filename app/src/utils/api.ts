@@ -6,6 +6,7 @@
  * We also create a few inference helpers for input and output types.
  */
 import { type AppRouter } from "@/server/api/root";
+import { supabase } from "@/supabase/client";
 import { type ClientError } from "@/utils/clientError";
 import { paths } from "@/utils/paths";
 
@@ -72,8 +73,7 @@ export const api = createTRPCNext<AppRouter>({
                 window.location.replace(paths.login);
               }
 
-              /* const supabase = createPagesBrowserClient();
-              void supabase.auth.signOut();*/
+              void supabase.auth.signOut();
               return;
             }
           },
