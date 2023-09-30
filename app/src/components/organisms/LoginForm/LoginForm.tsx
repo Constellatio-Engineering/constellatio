@@ -3,11 +3,11 @@ import { CustomLink } from "@/components/atoms/CustomLink/CustomLink";
 import { Input } from "@/components/atoms/Input/Input";
 import { colors } from "@/constants/styles/colors";
 import { loginFormSchema } from "@/schemas/auth/loginForm.schema";
+import { supabase } from "@/supabase/client";
 import { api } from "@/utils/api";
 
 import { Stack } from "@mantine/core";
 import { useForm, zodResolver } from "@mantine/form";
-import { useSupabaseClient } from "@supabase/auth-helpers-react";
 import { AuthError } from "@supabase/gotrue-js";
 import { useAtom } from "jotai";
 import { useRouter } from "next/router"; 
@@ -19,7 +19,6 @@ type SignInError = "emailNotConfirmed" | "invalidCredentials" | "unknownError";
 
 export const LoginForm: FunctionComponent = () =>
 {
-  const supabase = useSupabaseClient();
   const apiContext = api.useContext();
   const [, setResetPasswordModalOpen] = useAtom(resetPasswordModalVisible);
   const router = useRouter();

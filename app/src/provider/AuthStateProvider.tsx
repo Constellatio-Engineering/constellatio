@@ -1,4 +1,5 @@
-import { useSupabaseClient } from "@supabase/auth-helpers-react";
+import { supabase } from "@/supabase/client";
+
 import {
   createContext, type FunctionComponent, type ReactNode, useEffect, useMemo, useRef, useState 
 } from "react";
@@ -19,17 +20,11 @@ type AuthStateProviderProps = {
 
 const AuthStateProvider: FunctionComponent<AuthStateProviderProps> = ({ children }) =>
 {
-  const supabase = useSupabaseClient();
   const [isUserLoggedIn, setIsUserLoggedIn] = useState<AuthStateContext["isUserLoggedIn"]>(null);
   const unsubscribeRef = useRef<() => void>();
 
   useEffect(() =>
   {
-    if(!supabase.auth)
-    {
-      return;
-    }
-
     if(unsubscribeRef.current)
     {
       unsubscribeRef.current();
@@ -43,7 +38,7 @@ const AuthStateProvider: FunctionComponent<AuthStateProviderProps> = ({ children
     unsubscribeRef.current = subscription.data.subscription.unsubscribe;
 
     return () => unsubscribeRef.current?.();
-  }, [supabase.auth]);
+  }, []);
 
   const memoizedContext: AuthStateContext = useMemo(() =>
   {
