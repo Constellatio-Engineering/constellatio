@@ -8,7 +8,7 @@ on:
 
 jobs:
   eslint:
-    name: Run Linting
+    name: Check for ESLint errors
     runs-on: ubuntu-latest
     defaults:
       run:
@@ -31,7 +31,7 @@ jobs:
       - name: Run ESLint
         run: pnpm eslint
   typecheck:
-    name: Run Linting
+    name: Check for TypeScript errors
     runs-on: ubuntu-latest
     defaults:
       run:
