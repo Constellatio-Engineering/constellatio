@@ -1,13 +1,13 @@
 /* eslint-disable import/no-unused-modules */
 import { getIsUserLoggedIn } from "@/utils/auth";
 
-import { createMiddlewareSupabaseClient } from "@supabase/auth-helpers-nextjs";
+import { createMiddlewareClient } from "@supabase/auth-helpers-nextjs";
 import { type NextMiddleware, NextResponse } from "next/server";
 
 export const middleware: NextMiddleware = async (req) =>
 {
   const res = NextResponse.next();
-  const supabase = createMiddlewareSupabaseClient({ req, res });
+  const supabase = createMiddlewareClient({ req, res });
 
   const isUserLoggedIn = await getIsUserLoggedIn(supabase);
 

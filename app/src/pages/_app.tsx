@@ -1,4 +1,5 @@
 import { RouterTransition } from "@/components/atoms/RouterTransition/RouterTransition";
+import AuthStateProvider from "@/provider/AuthStateProvider";
 import CustomThemingProvider from "@/provider/CustomThemingProvider";
 import MeilisearchProvider from "@/provider/MeilisearchProvider";
 import { supabase } from "@/supabase/client";
@@ -22,15 +23,17 @@ const AppContainer: FunctionComponent<ConstellatioAppProps> = ({ Component, page
       <meta name="viewport" content="minimum-scale=1, initial-scale=1, width=device-width"/>
     </Head>
     <SessionContextProvider supabaseClient={supabase} initialSession={pageProps.initialSession}>
-      <CustomThemingProvider>
-        <ModalsProvider>
-          <MeilisearchProvider>
-            <RouterTransition/>
-            <Notifications/>
-            <Component {...pageProps}/>
-          </MeilisearchProvider>
-        </ModalsProvider>
-      </CustomThemingProvider>
+      <AuthStateProvider>
+        <CustomThemingProvider>
+          <ModalsProvider>
+            <MeilisearchProvider>
+              <RouterTransition/>
+              <Notifications/>
+              <Component {...pageProps}/>
+            </MeilisearchProvider>
+          </ModalsProvider>
+        </CustomThemingProvider>
+      </AuthStateProvider>
     </SessionContextProvider>
   </>
 );

@@ -95,6 +95,12 @@
   },
   "overrides": [
     {
+      "files": ["src/schemas/**/*"],
+      "rules": {
+        "import/no-unused-modules": "off"
+      }
+    },
+    {
       "files": ["**/pages/**/*", "src/services/graphql/**/*", "*.stories.tsx"],
       "rules": {
         "import/no-unused-modules": "off"
@@ -109,6 +115,7 @@
     {
       "files": ["src/components/Icons/**/*"],
       "rules": {
+        "import/no-unused-modules": "off",
         "react/no-multi-comp": "off"
       }
     },

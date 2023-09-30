@@ -1,8 +1,6 @@
 import { type SerializedStyles, css } from "@emotion/react";
 import type { MantineTheme } from "@mantine/styles";
 
-import { text } from "./../../atoms/contentMenuItem/ContentMenuItem.styles";
-
 export const wrapper = ({ theme, variant }: {
   theme: MantineTheme;
   variant: "case" | "dictionary";
@@ -33,7 +31,7 @@ export const body = css`
   justify-content: space-between;
   align-items: center;
   flex-wrap: wrap;
-  padding: 100px 0px;
+  padding: 100px 0;
   @media (max-width: 800px) {
     justify-content: center;
     gap: 32px;
@@ -50,7 +48,7 @@ export const bodyText = (theme: MantineTheme): SerializedStyles => css`
     gap: 8px;
   }
   .bread-crumb {
-    margin: 32px 0px 8px 0;
+    margin: 32px 0 8px 0;
     a {
       color: ${theme.colors["transparency-01"][5]};
       text-transform: uppercase;
@@ -99,7 +97,6 @@ export const stepsBar = (theme: MantineTheme): SerializedStyles => css`
       align-items: center;
 
       span {
-        display: inline-block;
         background-color: ${theme.colors["support-notice"][5]};
         color: ${theme.colors["neutrals-01"][0]};
         width: 24px;

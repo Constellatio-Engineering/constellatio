@@ -1,3 +1,4 @@
+/* eslint-disable import/no-unused-modules */
 /**
  * This is the client-side entrypoint for your tRPC API. It is used to create the `api` object which
  * contains the Next.js App-wrapper, as well as your type-safe React Query hooks.
@@ -5,7 +6,6 @@
  * We also create a few inference helpers for input and output types.
  */
 import { type AppRouter } from "@/server/api/root";
-import { supabase } from "@/supabase/client";
 import { type ClientError } from "@/utils/clientError";
 import { paths } from "@/utils/paths";
 
@@ -72,7 +72,8 @@ export const api = createTRPCNext<AppRouter>({
                 window.location.replace(paths.login);
               }
 
-              void supabase.auth.signOut();
+              /* const supabase = createPagesBrowserClient();
+              void supabase.auth.signOut();*/
               return;
             }
           },
