@@ -1,20 +1,19 @@
 import { Button } from "@/components/atoms/Button/Button";
 import { Input } from "@/components/atoms/Input/Input";
 import { PasswordValidationSchema } from "@/components/helpers/PasswordValidationSchema";
-// import { type Database } from "@/lib/database.types";
 import { updatePasswordFormSchema } from "@/schemas/auth/updatePasswordForm.schema";
-import { supabase } from "@/supabase/client";
 
 import { Box, Stack, Title } from "@mantine/core";
 import { useForm, zodResolver } from "@mantine/form";
 import { useDisclosure } from "@mantine/hooks";
+import { useSupabaseClient } from "@supabase/auth-helpers-react";
 import { useRouter } from "next/router";
 import { type FunctionComponent, useState } from "react";
 
 export const UpdatePasswordForm: FunctionComponent = () =>
 {
+  const supabase = useSupabaseClient();
   const [isPasswordRevealed, { toggle }] = useDisclosure(false);
-
   const router = useRouter();
   const [submitting, setSubmitting] = useState(false);
   const form = useForm({

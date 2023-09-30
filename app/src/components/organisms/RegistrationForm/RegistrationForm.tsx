@@ -9,7 +9,6 @@ import { PasswordValidationSchema } from "@/components/helpers/PasswordValidatio
 import { allGenders, allUniversities } from "@/components/organisms/RegistrationForm/RegistrationForm.data";
 import { env } from "@/env.mjs";
 import { maximumAmountOfSemesters, type RegistrationFormSchema, registrationFormSchema } from "@/schemas/auth/registrationForm.schema";
-import { supabase } from "@/supabase/client";
 import { api } from "@/utils/api";
 import { isDevelopmentOrStaging } from "@/utils/env";
 import { getConfirmEmailUrl } from "@/utils/paths";
@@ -19,6 +18,7 @@ import { Box, Stack } from "@mantine/core";
 import { useForm, zodResolver } from "@mantine/form";
 import { useDisclosure } from "@mantine/hooks";
 import { notifications } from "@mantine/notifications";
+import { useSupabaseClient } from "@supabase/auth-helpers-react";
 import Link from "next/link";
 import { useRouter } from "next/router";
 import { useTranslation } from "next-i18next";
@@ -55,6 +55,7 @@ const initialValues: InitialValues = isDevelopmentOrStaging ? {
 
 export const RegistrationForm: FunctionComponent = () =>
 {
+  const supabase = useSupabaseClient();
   const { t } = useTranslation();
   const router = useRouter();
   const [isPasswordRevealed, { toggle }] = useDisclosure(false);

@@ -1,14 +1,15 @@
 import { env } from "@/env.mjs";
-import { supabase } from "@/supabase/client";
 import { api } from "@/utils/api";
 import { type UseQueryResult } from "@/utils/types";
 
+import { useSupabaseClient } from "@supabase/auth-helpers-react";
 import { useEffect, useState } from "react";
 
 type UseTenantToken = () => UseQueryResult<{ searchToken: string | undefined}>;
 
 const useTenantToken: UseTenantToken = () =>
 {
+  const supabase = useSupabaseClient();
   const [isUserLoggedIn, setIsUserLoggedIn] = useState(false);
 
   useEffect(() =>

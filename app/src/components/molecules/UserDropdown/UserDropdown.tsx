@@ -1,14 +1,15 @@
-import { supabase } from "@/supabase/client";
 import { api } from "@/utils/api";
 
 import { Avatar, Menu } from "@mantine/core";
 import { notifications } from "@mantine/notifications";
+import { useSupabaseClient } from "@supabase/auth-helpers-react";
 import { IconBrandStripe, IconLogout } from "@tabler/icons-react";
 import { useRouter } from "next/router";
 import { type FunctionComponent } from "react";
 
 export const UserDropdown: FunctionComponent = () =>
 {
+  const supabase = useSupabaseClient();
   const apiContext = api.useContext();
   const router = useRouter();
 
