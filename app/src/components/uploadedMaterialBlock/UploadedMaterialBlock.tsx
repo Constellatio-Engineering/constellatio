@@ -53,7 +53,6 @@ const UploadedMaterialBlock: FunctionComponent<UploadedMaterialBlockProps> = ({
   ...props
 }) => 
 {
-  
   return (
     <div css={styles.wrapper}>
       <div css={styles.uploadedMaterialBlockHead}>
@@ -86,25 +85,17 @@ const UploadedMaterialBlock: FunctionComponent<UploadedMaterialBlockProps> = ({
           </div>
         </form>
       </div>
-
       <div css={styles.content}>
-        {
-          props?.uploadedFiles?.length !== null && 
-          props?.uploadedFiles?.length !== undefined && 
-          props?.uploadedFiles?.length > 0 ? 
-            (
-              <UploadedMaterialTable {...props}/>
-            ) : 
-            (
-              <EmptyStateCard
-                variant="For-small-areas"
-                title="You haven’t uploaded any materials yet"
-                text="You can upload different materials to keep important files at one place "
-              />
-            )
-        }
+        {props?.uploadedFiles?.length > 0 ? (
+          <UploadedMaterialTable {...props}/>
+        ) : (
+          <EmptyStateCard
+            variant="For-small-areas"
+            title="You haven’t uploaded any materials yet"
+            text="You can upload different materials to keep important files at one place "
+          />
+        )}
       </div>
-
     </div>
   );
 };

@@ -18,9 +18,7 @@ interface FileUploadMenuProps
 const FileUploadMenu: FunctionComponent<FileUploadMenuProps> = ({ uploads }) => 
 {
   const [isShowMenu, setIsShowMenu] = React.useState<boolean>(false);
-
   const areUploadsInProgress = uploads.some(u => u.state.type === "uploading");
-  // const theme = useMantineTheme();
 
   useEffect(() =>
   {
@@ -33,7 +31,7 @@ const FileUploadMenu: FunctionComponent<FileUploadMenuProps> = ({ uploads }) =>
   return (
     <div css={styles.wrapper({ isShowMenu })}>
       <div css={styles.menuHeader}>
-        <SubtitleText styleType="subtitle-01-medium">Upload {uploads?.length} files</SubtitleText>
+        <SubtitleText styleType="subtitle-01-medium">Upload {uploads.length} files</SubtitleText>
         {/* {areUploadsInProgress ? "Cancel" : <span onClick={() => setIsShowMenu(false)}><Cross/></span>} */}
         <span onClick={() => setIsShowMenu(false)}><Cross/></span>
       </div>
@@ -41,18 +39,16 @@ const FileUploadMenu: FunctionComponent<FileUploadMenuProps> = ({ uploads }) =>
         <ScrollArea
           h={200}
           sx={{ borderRadius: "12px" }}>
-          {
-            uploads?.map((upload: UploadState, index: number) => upload && (
-              <React.Fragment key={index}>
-                <FileUploadListItem
-                  file={upload}
-                  title={upload.fileClientSideUuid}
-                  fileIcon={<FileIcon/>}
-                  progress={upload.state.type === "uploading" ? upload.state.progressInPercent : 100}
-                />
-              </React.Fragment>
-            ))
-          }
+          {uploads.map((upload: UploadState, index: number) => upload && (
+            <React.Fragment key={index}>
+              <FileUploadListItem
+                file={upload}
+                title={upload.fileNameWithExtension}
+                fileIcon={<FileIcon/>}
+                progress={upload.state.type === "uploading" ? upload.state.progressInPercent : 100}
+              />
+            </React.Fragment>
+          )).reverse()}
         </ScrollArea>
       </div>
     </div>

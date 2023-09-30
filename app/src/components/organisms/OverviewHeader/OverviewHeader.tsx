@@ -1,14 +1,14 @@
 import { OverlayLines } from "@/components/Icons/bg-layer";
 import { Trash } from "@/components/Icons/Trash";
 import { type ICasesOverviewProps } from "@/services/content/getCasesOverviewProps";
+import type {
+  Maybe, Scalars
+} from "@/services/graphql/__generated/sdk";
 
 import { Title, useMantineTheme } from "@mantine/core";
 import React, { type FunctionComponent, useState } from "react";
 
 import * as styles from "./OverviewHeader.styles";
-import type {
-  Maybe, Scalars
-} from "../../../services/graphql/__generated/sdk";
 import { LinkButton } from "../../atoms/LinkButton/LinkButton";
 import CategoryTab from "../../molecules/categoryTab/CategoryTab";
 import FiltersButton from "../../molecules/filtersButton/FiltersButton";
