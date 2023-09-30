@@ -11,7 +11,7 @@ export const getServerSideProps: GetServerSideProps = async (ctx) =>
     supabaseKey: env.SUPABASE_SERVICE_ROLE_KEY,
     supabaseUrl: env.NEXT_PUBLIC_SUPABASE_URL
   });
-
+  
   const isUserLoggedIn = await getIsUserLoggedIn(supabase);
 
   return {
