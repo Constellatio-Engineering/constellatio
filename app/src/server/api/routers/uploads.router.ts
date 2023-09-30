@@ -150,6 +150,9 @@ export const uploadsRouter = createTRPCRouter({
 
       const addUploadToIndexResult = await meiliSearchAdmin.waitForTask(addUploadToIndexTask.taskUid);
 
-      console.log("addUploadToIndexResult", addUploadToIndexResult);
+      if(addUploadToIndexResult.status !== "succeeded")
+      {
+        console.error("failed to add upload to index", addUploadToIndexResult);
+      }
     })
 });

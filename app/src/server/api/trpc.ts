@@ -12,7 +12,7 @@ import { type ClientError, clientErrors } from "@/utils/clientError";
 import { EmailAlreadyTakenError, UnauthorizedError } from "@/utils/serverError";
 import { sleep } from "@/utils/utils";
 
-import { createServerSupabaseClient, type SupabaseClient, type User } from "@supabase/auth-helpers-nextjs";
+import { createPagesServerClient, type SupabaseClient, type User } from "@supabase/auth-helpers-nextjs";
 import { type Session } from "@supabase/auth-helpers-react";
 import { initTRPC } from "@trpc/server";
 import { type CreateNextContextOptions } from "@trpc/server/adapters/next";
@@ -57,7 +57,7 @@ type TrpcContext = {
 
 export const createTRPCContext = async ({ req, res }: CreateNextContextOptions): Promise<TrpcContext> =>
 {
-  const supabaseServerClient = createServerSupabaseClient({ req, res }, {
+  const supabaseServerClient = createPagesServerClient({ req, res }, {
     supabaseKey: env.SUPABASE_SERVICE_ROLE_KEY,
     supabaseUrl: env.NEXT_PUBLIC_SUPABASE_URL
   });

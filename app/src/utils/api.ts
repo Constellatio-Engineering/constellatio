@@ -5,10 +5,10 @@
  * We also create a few inference helpers for input and output types.
  */
 import { type AppRouter } from "@/server/api/root";
-import { supabase } from "@/supabase/client";
 import { type ClientError } from "@/utils/clientError";
 import { paths } from "@/utils/paths";
 
+import { createPagesBrowserClient } from "@supabase/auth-helpers-nextjs";
 import { QueryCache } from "@tanstack/react-query";
 import { httpBatchLink, TRPCClientError } from "@trpc/client";
 import { createTRPCNext } from "@trpc/next";
@@ -72,7 +72,8 @@ export const api = createTRPCNext<AppRouter>({
                 window.location.replace(paths.login);
               }
 
-              void supabase.auth.signOut();
+              /* const supabase = createPagesBrowserClient();
+              void supabase.auth.signOut();*/
               return;
             }
           },

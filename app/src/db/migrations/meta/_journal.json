@@ -29,6 +29,20 @@
       "when": 1695410766623,
       "tag": "0003_curved_old_lace",
       "breakpoints": true
+    },
+    {
+      "idx": 4,
+      "version": "5",
+      "when": 1695920073627,
+      "tag": "0004_famous_power_man",
+      "breakpoints": true
+    },
+    {
+      "idx": 5,
+      "version": "5",
+      "when": 1695920074138,
+      "tag": "0005_yummy_daredevil",
+      "breakpoints": true
     }
   ]
 }

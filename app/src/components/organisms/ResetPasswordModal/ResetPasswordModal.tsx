@@ -2,11 +2,11 @@ import { BodyText } from "@/components/atoms/BodyText/BodyText";
 import { Button } from "@/components/atoms/Button/Button";
 import { Input } from "@/components/atoms/Input/Input";
 import { Modal } from "@/components/molecules/Modal/Modal";
-import { supabase } from "@/supabase/client";
 
 import { Stack } from "@mantine/core";
 import { useForm } from "@mantine/form";
 import { notifications } from "@mantine/notifications";
+import { useSupabaseClient } from "@supabase/auth-helpers-react";
 import { atom, useAtom } from "jotai";
 import { type FunctionComponent } from "react";
 
@@ -19,6 +19,7 @@ export const resetPasswordModalVisible = atom(false);
 
 export const ResetPasswordModal: FunctionComponent = () =>
 {
+  const supabase = useSupabaseClient();
   const [isOpen, setOpen] = useAtom(resetPasswordModalVisible);
   const form = useForm<ResetPasswordFormValues>();
 

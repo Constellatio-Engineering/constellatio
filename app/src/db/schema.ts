@@ -21,6 +21,7 @@ export const usersTable = pgTable("users", {
   gender: genderEnum("gender").notNull(),
   lastName: text("lastName").notNull(),
   semester: smallint("semester"),
+  stripeCustomerId: text("stripeCustomerId"),
   university: text("university").notNull()
 });
 

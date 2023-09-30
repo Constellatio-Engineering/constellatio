@@ -1,7 +1,7 @@
 import { env } from "@/env.mjs";
 import { getIsUserLoggedIn } from "@/utils/auth";
 
-import { createServerSupabaseClient } from "@supabase/auth-helpers-nextjs";
+import { createPagesServerClient } from "@supabase/auth-helpers-nextjs";
 import { type GetServerSideProps } from "next";
 import { type FunctionComponent } from "react";
 
@@ -9,7 +9,7 @@ export const getServerSideProps: GetServerSideProps = async (ctx) =>
 {
   console.log("--- index.ts getServerSideProps ---");
 
-  const supabase = createServerSupabaseClient(ctx, {
+  const supabase = createPagesServerClient(ctx, {
     supabaseKey: env.SUPABASE_SERVICE_ROLE_KEY,
     supabaseUrl: env.NEXT_PUBLIC_SUPABASE_URL
   });
