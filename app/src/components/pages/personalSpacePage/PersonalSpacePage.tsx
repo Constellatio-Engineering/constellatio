@@ -17,8 +17,7 @@ import uploadsProgressStore from "@/stores/uploadsProgress.store";
 import { api } from "@/utils/api";
 import { removeItemsByIndices } from "@/utils/utils";
 
-import { Container, Loader, Text } from "@mantine/core";
-import { modals } from "@mantine/modals";
+import { Container, Loader } from "@mantine/core";
 import axios from "axios";
 import Link from "next/link";
 import React, { type FormEvent, type FunctionComponent, useState, useId } from "react";
@@ -64,11 +63,6 @@ const PersonalSpacePage: FunctionComponent = () =>
   const [selectedFiles, setSelectedFiles] = useState<FileWithClientSideUuid[]>([]);
   const [selectedFileIdForPreview, setSelectedFileIdForPreview] = useState<string>();
 
-  const { mutate: removeBookmark } = api.bookmarks.removeBookmark.useMutation({
-    onError: e => console.log("error while removing bookmark:", e),
-    onSuccess: async () => apiContext.bookmarks.getAllBookmarks.invalidate(),
-  });
-
   const FavCategoryId = useId();
   const MaterialsCategoryId = useId();
   const categories: ICasesOverviewProps["allMainCategories"] = [{
@@ -98,23 +92,6 @@ const PersonalSpacePage: FunctionComponent = () =>
   const FavDictionaryTabId = useId();
   const FavForumsTabId = useId();
   const FavHighlightsTabId = useId();
-
-  // Function To Delete a Bookmarked Case with the Case Id - copied and used inside the tabel inside ItemBlock
-  const openDeleteBookmark = (caseId: string): void =>
-  {
-    modals.openConfirmModal({
-      centered: true,
-      children: (
-        <Text size="sm">
-          Are you sure you want to delete this case from your favorites?
-        </Text>
-      ),
-      confirmProps: { color: "red" },
-      labels: { cancel: "No don't delete it", confirm: "Delete bookmark" },
-      onConfirm: () => removeBookmark({ resourceId: caseId, resourceType: "case" }),
-      title: "Remove from favorites",
-    });
-  };
 
   const uploadFile = async (file: File, clientSideUuid: string): Promise<void> =>
   {

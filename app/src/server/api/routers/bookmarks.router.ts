@@ -2,10 +2,8 @@ import { db } from "@/db/connection";
 import { allBookmarkResourceTypes, type BookmarkInsert, bookmarksTable } from "@/db/schema";
 import { addOrRemoveBookmarkSchema } from "@/schemas/bookmarks/addOrRemoveBookmark.schema";
 import { createTRPCRouter, protectedProcedure } from "@/server/api/trpc";
-import { InternalServerError } from "@/utils/serverError";
 
-import { and, eq } from "drizzle-orm";
-import { type SQLWrapper } from "drizzle-orm/sql/index";
+import { and, eq, type SQLWrapper } from "drizzle-orm";
 import z from "zod";
 
 export const bookmarksRouter = createTRPCRouter({

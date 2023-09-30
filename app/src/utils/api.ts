@@ -1,3 +1,4 @@
+/* eslint-disable import/no-unused-modules */
 /**
  * This is the client-side entrypoint for your tRPC API. It is used to create the `api` object which
  * contains the Next.js App-wrapper, as well as your type-safe React Query hooks.
@@ -8,7 +9,6 @@ import { type AppRouter } from "@/server/api/root";
 import { type ClientError } from "@/utils/clientError";
 import { paths } from "@/utils/paths";
 
-import { createPagesBrowserClient } from "@supabase/auth-helpers-nextjs";
 import { QueryCache } from "@tanstack/react-query";
 import { httpBatchLink, TRPCClientError } from "@trpc/client";
 import { createTRPCNext } from "@trpc/next";

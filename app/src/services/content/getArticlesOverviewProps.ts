@@ -6,7 +6,7 @@ import {
 } from "../graphql/__generated/sdk";
 import { caisySDK } from "../graphql/getSdk";
 
-export type allSubCategories = Array<IGenSubCategoryFragment | null | undefined> & {
+type allSubCategories = Array<IGenSubCategoryFragment | null | undefined> & {
   __typename?: "SubCategory" | undefined;
 };
 
