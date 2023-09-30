@@ -1,6 +1,8 @@
 import { createEnv } from "@t3-oss/env-nextjs";
 import { z } from "zod";
 
+const urlValidation = z.string().url().refine(url => !url.endsWith("/"), { message: "urls must not end with a trailing slash" });
+
 export const env = createEnv({
   /**
    * Specify your server-side environment variables schema here. This way you can ensure the app
@@ -8,7 +10,7 @@ export const env = createEnv({
    */
   server: {
     SUPABASE_SERVICE_ROLE_KEY: z.string(),
-    DATABASE_URL: z.string().url(),
+    DATABASE_URL: urlValidation,
     CAISY_API_KEY: z.string(),
     CAISY_PROJECT_ID: z.string(),
     STRIPE_SECRET_KEY: z.string(),
@@ -17,7 +19,7 @@ export const env = createEnv({
     GOOGLE_CLOUD_STORAGE_BUCKET_NAME: z.string(),
     GOOGLE_SERVICE_ACCOUNT_BASE64: z.string(),
     MEILISEARCH_MASTER_API_KEY: z.string(),
-    MEILISEARCH_HOST_URL: z.string().url(),
+    MEILISEARCH_HOST_URL: urlValidation,
   },
 
   /**
@@ -27,14 +29,13 @@ export const env = createEnv({
    */
   client: {
     NEXT_PUBLIC_SUPABASE_ANON_KEY: z.string(),
-    NEXT_PUBLIC_SUPABASE_URL: z.string().url(),
-    NEXT_PUBLIC_WEBSITE_URL: z.string().url(),
+    NEXT_PUBLIC_SUPABASE_URL: urlValidation,
+    NEXT_PUBLIC_WEBSITE_URL: urlValidation,
     NEXT_PUBLIC_MAXIMUM_FILE_UPLOAD_SIZE_IN_MB: z.string().pipe(z.coerce.number().int().min(1).max(999)),
-    NEXT_PUBLIC_MEILISEARCH_PUBLIC_URL: z.string().url(),
+    NEXT_PUBLIC_MEILISEARCH_PUBLIC_URL: urlValidation,
     NEXT_PUBLIC_MEILISEARCH_TENANT_TOKEN_EXPIRATION_TIME_MS: z.string().pipe(z.coerce.number().int().min(10_000)),
     NEXT_PUBLIC_SIGN_UP_DEFAULT_EMAIL: z.string().email().optional(),
     NEXT_PUBLIC_DEPLOYMENT_ENVIRONMENT: z.enum(["development", "staging", "production"]),
-    NEXT_PUBLIC_FRONTEND_URL: z.string().url(),
   },
 
   /**
@@ -49,7 +50,6 @@ export const env = createEnv({
     DATABASE_URL: process.env.DATABASE_URL,
     STRIPE_SECRET_KEY: process.env.STRIPE_SECRET_KEY,
     NEXT_PUBLIC_SIGN_UP_DEFAULT_EMAIL: process.env.NEXT_PUBLIC_SIGN_UP_DEFAULT_EMAIL,
-    NEXT_PUBLIC_FRONTEND_URL: process.env.NEXT_PUBLIC_FRONTEND_URL,
     CAISY_API_KEY: process.env.CAISY_API_KEY,
     CAISY_PROJECT_ID: process.env.CAISY_PROJECT_ID,
     NEXT_PUBLIC_WEBSITE_URL: process.env.NEXT_PUBLIC_WEBSITE_URL,

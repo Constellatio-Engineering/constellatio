@@ -2,14 +2,13 @@ import { Layout } from "@/components/layouts/Layout";
 import { api } from "@/utils/api";
 
 import { Button, Container, Title } from "@mantine/core";
-import axios from "axios";
 import { useRouter } from "next/router";
-import { type FunctionComponent, useState } from "react";
+import { type FunctionComponent } from "react";
 
 const Billing: FunctionComponent = () =>
 {
   const router = useRouter();
-  const { isLoading, mutateAsync: openStripePortal } = api.billing.openStripePortal.useMutation(); 
+  const { isLoading, mutateAsync: generateStripeSessionUrl } = api.billing.generateStripeSessionUrl.useMutation();
 
   const redirectToCustomerPortal = async (): Promise<void> =>
   {
@@ -17,12 +16,12 @@ const Billing: FunctionComponent = () =>
 
     try
     {
-      const { stripeUrl } = await openStripePortal();
+      const { stripeUrl } = await generateStripeSessionUrl();
       url = stripeUrl;
     }
     catch (error)
     {
-      console.error("error while getting stripe url", error);
+      console.error("error while getting stripe session url", error);
       return;
     }
 

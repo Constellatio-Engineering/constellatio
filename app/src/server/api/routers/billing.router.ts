@@ -1,15 +1,14 @@
 import { db } from "@/db/connection";
 import { usersTable } from "@/db/schema";
-import { getURL } from "@/lib/get-url";
+import { env } from "@/env.mjs";
 import { stripe } from "@/lib/stripe";
-import { createOrRetrieveCustomer } from "@/lib/supabase-admin";
 import { createTRPCRouter, protectedProcedure } from "@/server/api/trpc";
 import { InternalServerError } from "@/utils/serverError";
 
 import { eq } from "drizzle-orm";
 
 export const billingRouter = createTRPCRouter({
-  openStripePortal: protectedProcedure.mutation(async ({ ctx: { supabaseServerClient, userId } }) =>
+  generateStripeSessionUrl: protectedProcedure.mutation(async ({ ctx: { userId } }) =>
   {
     const user = await db.query.usersTable.findFirst({ where: eq(usersTable.id, userId) });
 
@@ -35,28 +34,11 @@ export const billingRouter = createTRPCRouter({
       await db.update(usersTable).set({ stripeCustomerId }).where(eq(usersTable.id, user.id));
     }
 
-    try
-    {
-      const stripeCustomerId = await createOrRetrieveCustomer({
-        email: user.email,
-        uuid: user.id,
-      });
+    const { url } = await stripe.billingPortal.sessions.create({
+      customer: stripeCustomerId,
+      return_url: `${env.NEXT_PUBLIC_WEBSITE_URL}/settings/billing`,
+    });
 
-      const { url } = await stripe.billingPortal.sessions.create({
-        customer: stripeCustomerId,
-        return_url: `${getURL()}/settings/billing`,
-      });
-
-      return res.status(200).json({
-        url,
-      });
-    }
-    catch (error: unknown)
-    {
-      console.log(error);
-      return res.status(500).send("Something went wrong");
-    }
-
-    return { stripeUrl: "test" };
+    return { stripeUrl: url };
   })
 });

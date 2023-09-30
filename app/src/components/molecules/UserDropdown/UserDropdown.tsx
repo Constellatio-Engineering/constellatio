@@ -22,7 +22,8 @@ export const UserDropdown: FunctionComponent = () =>
   {
     try
     {
-      await supabase.auth.signOut();
+      const test = await supabase.auth.signOut();
+      console.log(test);
       await router.replace("/login");
       await apiContext.invalidate();
 
