@@ -31,7 +31,7 @@ const UploadedMaterialTable: FunctionComponent<UploadedMaterialTableProps> = ({ 
 
   const fileNameIcon = (file: IFile): React.ReactNode => 
   {
-    switch (file?.fileExtension) 
+    switch (file.fileExtension)
     {
       case "png":
         return <ImageIcon/>;
@@ -48,7 +48,8 @@ const UploadedMaterialTable: FunctionComponent<UploadedMaterialTableProps> = ({ 
       case "mp4":
         return <VideoIcon/>;
       default:
-        return <></>;
+        console.error("Unknown file extension", file.fileExtension);
+        return null;
     }
   };
   
@@ -74,7 +75,9 @@ const UploadedMaterialTable: FunctionComponent<UploadedMaterialTableProps> = ({ 
             onClick={() => props?.setSelectedFileIdForPreview(file?.uuid)}>
             <td css={styles.callToActionCell}><Checkbox/></td>
             <td css={styles.docName} className="primaryCell">
-              <BodyText styleType="body-01-medium" component="p" title={file?.filename + "." + file?.fileExtension}>{fileNameIcon(file)}{file?.filename}.{file?.fileExtension}</BodyText>
+              <BodyText styleType="body-01-medium" component="p" title={file.originalFilename + "." + file.fileExtension}>
+                {fileNameIcon(file)}{`${file.originalFilename}.${file.fileExtension}`}
+              </BodyText>
             </td>
             <td css={styles.docDate}> <BodyText styleType="body-01-medium" component="p">{formatDate(file.createdAt!)}</BodyText></td>
             <td css={styles.docTags}> <BodyText styleType="body-02-medium" component="p">Tags({999})</BodyText></td>

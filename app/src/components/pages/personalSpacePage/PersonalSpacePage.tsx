@@ -105,9 +105,13 @@ const PersonalSpacePage: FunctionComponent = () =>
 
     console.log("uploading file '", `${originalFileName}'...`);
 
-    setUploadState(clientSideUuid, {
-      progressInPercent: 0,
-      type: "uploading"
+    setUploadState({
+      clientSideUuid,
+      fileNameWithExtension: originalFileName,
+      state: {
+        progressInPercent: 0,
+        type: "uploading"
+      }
     });
 
     const { filename, uploadUrl } = await createSignedUploadUrl({
@@ -120,11 +124,15 @@ const PersonalSpacePage: FunctionComponent = () =>
       headers: { "Content-Type": file.type },
       onUploadProgress: ({ progress = 0 }) =>
       {
-        setUploadState(clientSideUuid, progress === 1 ? {
-          type: "completed"
-        } : {
-          progressInPercent: progress * 100,
-          type: "uploading"
+        setUploadState({
+          clientSideUuid,
+          fileNameWithExtension: originalFileName,
+          state: progress === 1 ? {
+            type: "completed"
+          } : {
+            progressInPercent: progress * 100,
+            type: "uploading"
+          }
         });
       }
     });
@@ -158,7 +166,11 @@ const PersonalSpacePage: FunctionComponent = () =>
       catch (e: unknown)
       {
         console.log("error while uploading file", e);
-        setUploadState(clientSideUuid, { type: "failed" });
+        setUploadState({
+          clientSideUuid,
+          fileNameWithExtension: file.name,
+          state: { type: "failed" }
+        });
         return Promise.reject(e);
       }
     });
