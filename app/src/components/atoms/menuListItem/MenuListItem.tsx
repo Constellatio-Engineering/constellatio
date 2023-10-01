@@ -14,6 +14,7 @@ interface MenuListItemProps
   readonly active?: boolean;
   readonly icon: React.ReactNode;
   readonly onClick: () => void;
+  readonly onDelete: () => void;
   readonly title: string;
 }
 
@@ -21,6 +22,7 @@ const MenuListItem: FunctionComponent<MenuListItemProps & React.HTMLProps<HTMLDi
   active,
   icon,
   onClick,
+  onDelete,
   title,
 }) =>
 {
@@ -39,7 +41,7 @@ const MenuListItem: FunctionComponent<MenuListItemProps & React.HTMLProps<HTMLDi
           <Menu.Divider/>
           <Menu.Item><span className="label"><MoveDownIcon/>Download</span></Menu.Item>
           <Menu.Divider/>
-          <Menu.Item><span className="label"><Trash/>Delete</span></Menu.Item>
+          <Menu.Item onClick={onDelete}><span className="label"><Trash/>Delete</span></Menu.Item>
         </Menu.Dropdown>
       </Menu>
     </div>

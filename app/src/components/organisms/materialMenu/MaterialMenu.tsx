@@ -24,6 +24,11 @@ const MaterialMenu: FunctionComponent<MaterialMenuProps> = ({ folders, selectedF
     onError: (error) => console.error("error while creating folder", error),
     onSuccess: async () => apiContext.uploads.getFolders.invalidate()
   });
+  const { mutate: deleteFolder } = api.uploads.deleteFolder.useMutation({
+    onError: (error) => console.error("error while deleting folder", error),
+    onMutate: () => console.log("deleting folder"),
+    onSuccess: async () => apiContext.uploads.getFolders.invalidate()
+  });
 
   return (
     <div css={styles.wrapper}>
@@ -36,11 +41,13 @@ const MaterialMenu: FunctionComponent<MaterialMenuProps> = ({ folders, selectedF
           title="Default folder"
           onClick={() => setSelectedFolderId(null)}
           active={selectedFolderId == null}
+          onDelete={() => window.alert("Default folder cannot be deleted for now")}
           icon={<FolderIcon/>}
         />
         {folders?.map((folder, folderIndex) => (
           <MenuListItem
             onClick={() => setSelectedFolderId(folder.id)}
+            onDelete={() => deleteFolder({ folderId: folder.id })}
             key={folderIndex}
             title={folder.name}
             active={folder.id === selectedFolderId}

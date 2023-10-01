@@ -4,6 +4,7 @@ import { env } from "@/env.mjs";
 import { meiliSearchAdmin } from "@/meilisearch/client";
 import { addUploadSchema } from "@/schemas/uploads/addUpload.schema";
 import { createFolderSchema } from "@/schemas/uploads/createFolder.schema";
+import { deleteFolderSchema } from "@/schemas/uploads/deleteFolder.schema";
 import { deleteUploadSchema } from "@/schemas/uploads/deleteUpload.schema";
 import { getUploadedFilesSchema } from "@/schemas/uploads/getUploadedFiles.schema";
 import { createTRPCRouter, protectedProcedure } from "@/server/api/trpc";
@@ -101,6 +102,24 @@ export const uploadsRouter = createTRPCRouter({
         serverFilename: filenameWithTimestamp,
         uploadUrl: url
       });
+    }),
+  deleteFolder: protectedProcedure
+    .input(deleteFolderSchema)
+    .mutation(async ({ ctx: { userId }, input: { folderId } }) =>
+    {
+      await db.delete(uploadedFiles).where(
+        and(
+          eq(uploadedFiles.userId, userId),
+          eq(uploadedFiles.folderId, folderId)
+        )
+      );
+
+      await db.delete(uploadFolders).where(
+        and(
+          eq(uploadFolders.userId, userId),
+          eq(uploadFolders.id, folderId)
+        )
+      );
     }),
   deleteUploadedFile: protectedProcedure
     .input(deleteUploadSchema)

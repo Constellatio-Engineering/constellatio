@@ -287,8 +287,8 @@ const PersonalSpacePage: FunctionComponent = () =>
               />
               <div style={{ flex: 1, maxWidth: "75%" }}>
                 <PapersBlock docs={[
-                  { lastModified: new Date(), name: "Cosntellatio doc name", tagsNumber: 0 },
-                  { lastModified: new Date(), name: "Cosntellatio doc name", tagsNumber: 0 },
+                  { lastModified: new Date(), name: "Constellatio doc name", tagsNumber: 0 },
+                  { lastModified: new Date(), name: "Constellatio doc name", tagsNumber: 0 },
                 ]}
                 />
                 <UploadedMaterialBlock
