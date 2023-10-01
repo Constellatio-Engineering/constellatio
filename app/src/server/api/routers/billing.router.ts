@@ -1,5 +1,5 @@
 import { db } from "@/db/connection";
-import { usersTable } from "@/db/schema";
+import { users } from "@/db/schema";
 import { env } from "@/env.mjs";
 import { stripe } from "@/lib/stripe";
 import { createTRPCRouter, protectedProcedure } from "@/server/api/trpc";
@@ -10,7 +10,7 @@ import { eq } from "drizzle-orm";
 export const billingRouter = createTRPCRouter({
   generateStripeSessionUrl: protectedProcedure.mutation(async ({ ctx: { userId } }) =>
   {
-    const user = await db.query.usersTable.findFirst({ where: eq(usersTable.id, userId) });
+    const user = await db.query.users.findFirst({ where: eq(users.id, userId) });
 
     if(!user)
     {
@@ -31,7 +31,7 @@ export const billingRouter = createTRPCRouter({
 
       stripeCustomerId = customer.id;
 
-      await db.update(usersTable).set({ stripeCustomerId }).where(eq(usersTable.id, user.id));
+      await db.update(users).set({ stripeCustomerId }).where(eq(users.id, user.id));
     }
 
     const { url } = await stripe.billingPortal.sessions.create({

@@ -23,7 +23,7 @@ const SearchOverlayRightSide: FunctionComponent<SearchOverlayRightSideProps> = (
           <div className="suggestion__section">
             <Label variant="neutral">Your materials</Label>
             {searchResults.userUploads.map((result) => (
-              <span key={result.uuid} className="suggestion__section__link">
+              <span key={result.id} className="suggestion__section__link">
                 <CustomLink styleType="link-content" component="p">
                   {result.originalFilename}
                 </CustomLink>

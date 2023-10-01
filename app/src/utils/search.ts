@@ -1,4 +1,4 @@
-import { type Upload } from "@/db/schema";
+import { type UploadedFile } from "@/db/schema";
 import {
   type IGenArticle,
   type IGenCase, type IGenLegalArea, type IGenMainCategory, type IGenSubCategory, type IGenTags
@@ -122,14 +122,14 @@ export const createArticleSearchIndexItem = (fullArticle: IGenArticle): ArticleS
   return articleSearchIndexItem;
 };
 
-export type UploadSearchIndexItem = Pick<Upload, "uuid" | "originalFilename" | "userId">;
+export type UploadSearchIndexItem = Pick<UploadedFile, "id" | "originalFilename" | "userId">;
 export type UploadSearchItemNodes = RemoveUndefined<DotSeparatedKeys<UploadSearchIndexItem>>;
 
 export const createUploadsSearchIndexItem = ({
+  id,
   originalFilename,
-  userId,
-  uuid
-}: Pick<Upload, "originalFilename" | "userId" | "uuid">): UploadSearchIndexItem =>
+  userId
+}: Pick<UploadedFile, "originalFilename" | "userId" | "id">): UploadSearchIndexItem =>
 {
-  return ({ originalFilename, userId, uuid });
+  return ({ id, originalFilename, userId });
 };

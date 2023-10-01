@@ -1,12 +1,12 @@
-import { type Upload } from "@/db/schema";
+import { type UploadedFile } from "@/db/schema";
 import { api } from "@/utils/api";
 import { type UseQueryResult } from "@/utils/types";
 
-type UseUploadedFiles = () => UseQueryResult<{ uploadedFiles: Upload[] }>;
+type UseUploadedFiles = (folderId: string | null) => UseQueryResult<{ uploadedFiles: UploadedFile[] }>;
 
-const useUploadedFiles: UseUploadedFiles = () =>
+const useUploadedFiles: UseUploadedFiles = (folderId) =>
 {
-  const { data: uploadedFiles = [], error, isLoading } = api.uploads.getUploadedFiles.useQuery(undefined, {
+  const { data: uploadedFiles = [], error, isLoading } = api.uploads.getUploadedFiles.useQuery({ folderId }, {
     refetchOnMount: "always",
     staleTime: Infinity
   });
