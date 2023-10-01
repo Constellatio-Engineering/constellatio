@@ -91,7 +91,7 @@
     "embla-carousel-react": "^7.1.0",
     "fastest-levenshtein": "^1.0.16",
     "google-auth-library": "^9.0.0",
-    "graphql": "^16.8.0",
+    "graphql": "^16.8.1",
     "graphql-request": "^6.1.0",
     "graphql-tag": "^2.12.6",
     "i18next": "^23.5.1",

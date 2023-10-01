@@ -9,8 +9,7 @@ type ICategoryTabStyleProps = {
 export const wrapper = ({ theme }: ICategoryTabStyleProps) => css`
   outline: 0;
   border: 0;
-
-  background-color: ${theme.colors["neutrals-01"][0]};
+  background-color: ${theme.colors["neutrals-01"][2]};
   color: ${theme.colors["neutrals-02"][1]};
   /* progressive/body/body-01@medium */
   display: flex;
@@ -45,6 +44,7 @@ export const wrapper = ({ theme }: ICategoryTabStyleProps) => css`
   }
   &.selected {
     position: relative;
+    background-color: ${theme.colors["neutrals-01"][0]};
     &::after {
       position: absolute;
       content: "";

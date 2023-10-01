@@ -54,7 +54,7 @@ const PapersBlock: FunctionComponent<PapersBlockProps> = (props) =>
         </div>
       </Drawer>
       <div css={styles.papersBlockHead}>
-        <Title order={4}>Cosntellatio docs <span className="count">({props?.docs?.length ?? 0})</span></Title>
+        <Title order={4}>Constellatio docs <span className="count">({props?.docs?.length ?? 0})</span></Title>
         <Button<"button">
           styleType="secondarySimple" 
           leftIcon={<NoteIcon/>}
@@ -71,7 +71,7 @@ const PapersBlock: FunctionComponent<PapersBlockProps> = (props) =>
             <EmptyStateCard 
               variant="For-small-areas" 
               title="You haven’t created any docs yet"
-              text="Cosntellatio docs are text documents where you leave your notes, summaries, etc"
+              text="Constellatio docs are text documents where you leave your notes, summaries, etc"
             />
           )
       }
