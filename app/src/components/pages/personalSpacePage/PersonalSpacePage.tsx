@@ -43,7 +43,7 @@ const PersonalSpacePage: FunctionComponent = () =>
   const [selectedFolderId, setSelectedFolderId] = useState<string | null>(null);
   const { allCases = [], isLoading: areCasesLoading } = useCases();
   const { bookmarks, isLoading: areBookmarksLoading } = useBookmarks(undefined);
-  const { folders = [], isLoading: isGetFoldersLoading } = useUploadFolders();
+  const { folders = [] } = useUploadFolders();
   const { isLoading: isGetUploadedFilesLoading, uploadedFiles = [] } = useUploadedFiles(selectedFolderId);
   const allCasesBookmarks = bookmarks.filter(bookmark => bookmark?.resourceType === "case") ?? [];
   const bookmarkedCases = allCases.filter(caisyCase => allCasesBookmarks.some(bookmark => bookmark.resourceId === caisyCase.id));

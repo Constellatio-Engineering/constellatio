@@ -1,3 +1,4 @@
+/* eslint-disable max-lines */
 import { db } from "@/db/connection";
 import { uploadFolders, type UploadedFileInsert, uploadedFiles } from "@/db/schema";
 import { env } from "@/env.mjs";
