@@ -1,1 +1,20 @@
-{"version":"5","dialect":"pg","entries":[]}
+{
+  "version": "5",
+  "dialect": "pg",
+  "entries": [
+    {
+      "idx": 0,
+      "version": "5",
+      "when": 1696125788735,
+      "tag": "0000_sturdy_chamber",
+      "breakpoints": true
+    },
+    {
+      "idx": 1,
+      "version": "5",
+      "when": 1696125789211,
+      "tag": "0001_round_luke_cage",
+      "breakpoints": true
+    }
+  ]
+}
