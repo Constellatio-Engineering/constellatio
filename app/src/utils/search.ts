@@ -133,3 +133,5 @@ export const createUploadsSearchIndexItem = ({
 {
   return ({ id, originalFilename, userId });
 };
+
+export const uploadSearchIndexItemPrimaryKey: keyof UploadSearchIndexItem = "id";

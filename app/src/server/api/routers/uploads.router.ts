@@ -9,7 +9,7 @@ import { deleteFolderSchema } from "@/schemas/uploads/deleteFolder.schema";
 import { deleteUploadSchema } from "@/schemas/uploads/deleteUpload.schema";
 import { getUploadedFilesSchema } from "@/schemas/uploads/getUploadedFiles.schema";
 import { createTRPCRouter, protectedProcedure } from "@/server/api/trpc";
-import { createUploadsSearchIndexItem, searchIndices } from "@/utils/search";
+import { createUploadsSearchIndexItem, searchIndices, uploadSearchIndexItemPrimaryKey } from "@/utils/search";
 import { BadFileError, FileTooLargeError, NotFoundError } from "@/utils/serverError";
 
 import { Storage } from "@google-cloud/storage";
@@ -145,8 +145,6 @@ export const uploadsRouter = createTRPCRouter({
     .input(getUploadedFilesSchema)
     .query(async ({ ctx: { userId }, input: { folderId } }) =>
     {
-      console.log("getUploadedFiles");
-
       const queryConditions: SQLWrapper[] = [eq(uploadedFiles.userId, userId)];
 
       if(folderId)
@@ -209,7 +207,7 @@ export const uploadsRouter = createTRPCRouter({
 
       const addUploadToIndexTask = await meiliSearchAdmin
         .index(searchIndices.userUploads)
-        .addDocuments([searchIndexItem], { primaryKey: "uuid" });
+        .addDocuments([searchIndexItem], { primaryKey: uploadSearchIndexItemPrimaryKey });
 
       const addUploadToIndexResult = await meiliSearchAdmin.waitForTask(addUploadToIndexTask.taskUid);
 

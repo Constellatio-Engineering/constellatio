@@ -8,7 +8,14 @@ import { getCaseById } from "@/services/content/getCaseById";
 import { isDevelopmentOrStaging } from "@/utils/env";
 import {
   type ArticleSearchItemNodes,
-  type CaseSearchItemNodes, createArticleSearchIndexItem, createCaseSearchIndexItem, createUploadsSearchIndexItem, searchIndices, type UploadSearchItemNodes
+  type CaseSearchItemNodes,
+  createArticleSearchIndexItem,
+  createCaseSearchIndexItem,
+  createUploadsSearchIndexItem,
+  searchIndices,
+  type UploadSearchIndexItem,
+  uploadSearchIndexItemPrimaryKey,
+  type UploadSearchItemNodes
 } from "@/utils/search";
 
 import { type NextApiHandler } from "next";
@@ -52,7 +59,9 @@ const handler: NextApiHandler = async (req, res) =>
   // User Uploads
   const allUserUploads = await db.query.uploadedFiles.findMany();
   const allUserUploadsSearchIndexItems = allUserUploads.map(createUploadsSearchIndexItem);
-  const createUploadsIndexTask = await meiliSearchAdmin.index(searchIndices.userUploads).addDocuments(allUserUploadsSearchIndexItems, { primaryKey: "uuid" });
+  const createUploadsIndexTask = await meiliSearchAdmin.index(searchIndices.userUploads).addDocuments(allUserUploadsSearchIndexItems, {
+    primaryKey: uploadSearchIndexItemPrimaryKey
+  });
 
   const createIndicesTasks = await meiliSearchAdmin.waitForTasks([
     createCasesIndexTask.taskUid,
