@@ -1,6 +1,6 @@
 {
-  "id": "c067e9c1-af0e-4bac-b8c4-1e579d9236cb",
-  "prevId": "4c362859-bdc5-420e-81e8-0383f7c3782c",
+  "id": "b42a5b40-020b-42b6-bb8c-fe0703a89552",
+  "prevId": "84d6bbe5-da34-465a-b3c4-e24c860bedcd",
   "version": "5",
   "dialect": "pg",
   "tables": {
@@ -10,12 +10,6 @@
       "columns": {
         "id": {
           "name": "id",
-          "type": "serial",
-          "primaryKey": true,
-          "notNull": true
-        },
-        "uuid": {
-          "name": "uuid",
           "type": "uuid",
           "primaryKey": false,
           "notNull": true,
@@ -60,15 +54,15 @@
             "id"
           ],
           "onUpdate": "no action",
-          "onDelete": "cascade"
+          "onDelete": "no action"
         }
       },
       "compositePrimaryKeys": {},
       "uniqueConstraints": {
-        "bookmarks_uuid_unique": {
-          "name": "bookmarks_uuid_unique",
+        "bookmarks_id_unique": {
+          "name": "bookmarks_id_unique",
           "columns": [
-            "uuid"
+            "id"
           ],
           "nullsNotDistinct": false
         },
@@ -83,28 +77,74 @@
         }
       }
     },
-    "uploads": {
-      "name": "uploads",
+    "uploadFolders": {
+      "name": "uploadFolders",
       "schema": "",
       "columns": {
         "id": {
           "name": "id",
-          "type": "serial",
-          "primaryKey": true,
-          "notNull": true
-        },
-        "uuid": {
-          "name": "uuid",
           "type": "uuid",
           "primaryKey": false,
           "notNull": true,
           "default": "gen_random_uuid()"
         },
-        "clientSideUuid": {
-          "name": "clientSideUuid",
+        "created_at": {
+          "name": "created_at",
+          "type": "timestamp",
+          "primaryKey": false,
+          "notNull": false,
+          "default": "now()"
+        },
+        "userId": {
+          "name": "userId",
           "type": "uuid",
           "primaryKey": false,
           "notNull": true
+        },
+        "name": {
+          "name": "name",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true
+        }
+      },
+      "indexes": {},
+      "foreignKeys": {
+        "uploadFolders_userId_users_id_fk": {
+          "name": "uploadFolders_userId_users_id_fk",
+          "tableFrom": "uploadFolders",
+          "columnsFrom": [
+            "userId"
+          ],
+          "tableTo": "users",
+          "columnsTo": [
+            "id"
+          ],
+          "onUpdate": "no action",
+          "onDelete": "no action"
+        }
+      },
+      "compositePrimaryKeys": {},
+      "uniqueConstraints": {
+        "uploadFolders_id_unique": {
+          "name": "uploadFolders_id_unique",
+          "columns": [
+            "id"
+          ],
+          "nullsNotDistinct": false
+        }
+      }
+    },
+    "uploadedFiles": {
+      "name": "uploadedFiles",
+      "schema": "",
+      "columns": {
+        "id": {
+          "name": "id",
+          "type": "uuid",
+          "primaryKey": false,
+          "notNull": true,
+          "default": "gen_random_uuid()"
         },
         "userId": {
           "name": "userId",
@@ -119,8 +159,14 @@
           "notNull": false,
           "default": "now()"
         },
-        "filename": {
-          "name": "filename",
+        "folderId": {
+          "name": "folderId",
+          "type": "uuid",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "serverFilename": {
+          "name": "serverFilename",
           "type": "text",
           "primaryKey": false,
           "notNull": true
@@ -146,9 +192,9 @@
       },
       "indexes": {},
       "foreignKeys": {
-        "uploads_userId_users_id_fk": {
-          "name": "uploads_userId_users_id_fk",
-          "tableFrom": "uploads",
+        "uploadedFiles_userId_users_id_fk": {
+          "name": "uploadedFiles_userId_users_id_fk",
+          "tableFrom": "uploadedFiles",
           "columnsFrom": [
             "userId"
           ],
@@ -157,15 +203,28 @@
             "id"
           ],
           "onUpdate": "no action",
-          "onDelete": "cascade"
+          "onDelete": "no action"
+        },
+        "uploadedFiles_folderId_uploadFolders_id_fk": {
+          "name": "uploadedFiles_folderId_uploadFolders_id_fk",
+          "tableFrom": "uploadedFiles",
+          "columnsFrom": [
+            "folderId"
+          ],
+          "tableTo": "uploadFolders",
+          "columnsTo": [
+            "id"
+          ],
+          "onUpdate": "no action",
+          "onDelete": "no action"
         }
       },
       "compositePrimaryKeys": {},
       "uniqueConstraints": {
-        "uploads_uuid_unique": {
-          "name": "uploads_uuid_unique",
+        "uploadedFiles_id_unique": {
+          "name": "uploadedFiles_id_unique",
           "columns": [
-            "uuid"
+            "id"
           ],
           "nullsNotDistinct": false
         }
@@ -178,7 +237,7 @@
         "id": {
           "name": "id",
           "type": "uuid",
-          "primaryKey": false,
+          "primaryKey": true,
           "notNull": true
         },
         "email": {
@@ -214,6 +273,12 @@
         "semester": {
           "name": "semester",
           "type": "smallint",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "stripeCustomerId": {
+          "name": "stripeCustomerId",
+          "type": "text",
           "primaryKey": false,
           "notNull": false
         },

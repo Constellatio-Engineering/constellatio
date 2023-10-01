@@ -1,5 +1,5 @@
 import { db } from "@/db/connection";
-import { type UserInsert, usersTable } from "@/db/schema";
+import { type UserInsert, users } from "@/db/schema";
 import { registrationFormSchema } from "@/schemas/auth/registrationForm.schema";
 import { createTRPCRouter, publicProcedure } from "@/server/api/trpc";
 import { getConfirmEmailUrl } from "@/utils/paths";
@@ -46,7 +46,7 @@ export const authenticationRouter = createTRPCRouter({
           university: input.university
         };
 
-        await db.insert(usersTable).values(userToInsert);
+        await db.insert(users).values(userToInsert);
       }
       catch (e: unknown)
       {

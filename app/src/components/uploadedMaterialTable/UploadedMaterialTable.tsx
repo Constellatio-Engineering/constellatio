@@ -1,3 +1,5 @@
+import { type UploadedFile } from "@/db/schema";
+
 import React, { type FunctionComponent, useState, useEffect } from "react";
 
 import * as styles from "./UploadedMaterialTable.styles";
@@ -10,32 +12,36 @@ import { DotsIcon } from "../Icons/dots";
 import { FileIcon } from "../Icons/FileIcon";
 import { ImageIcon } from "../Icons/image";
 import { VideoIcon } from "../Icons/Video";
-import { type IFile } from "../uploadedMaterialBlock/UploadedMaterialBlock";
 
 interface UploadedMaterialTableProps
 {
   readonly isGetUploadedFilesLoading?: boolean;
   readonly setSelectedFileIdForPreview: React.Dispatch<React.SetStateAction<string | undefined>>;
-  readonly uploadedFiles?: IFile[];
+  readonly uploadedFiles?: UploadedFile[];
 }
 const formatDate = (date: Date): string => `${String(date.getDate()).padStart(2, "0")}.${String(date.getMonth() + 1).padStart(2, "0")}.${date.getFullYear()}`;
 
-const UploadedMaterialTable: FunctionComponent<UploadedMaterialTableProps> = ({ ...props }) => 
+const UploadedMaterialTable: FunctionComponent<UploadedMaterialTableProps> = ({
+  isGetUploadedFilesLoading,
+  setSelectedFileIdForPreview,
+  uploadedFiles
+}) =>
 {
   const [showingFiles, setShowingFiles] = useState<number>(5);
   const [isShowingFullTable, setIsShowingFullTable] = useState<boolean>(false);
   useEffect(() =>
   {
-    setIsShowingFullTable(showingFiles >= (props?.uploadedFiles?.length ?? 0));
-  }, [showingFiles, props?.uploadedFiles]);
+    setIsShowingFullTable(showingFiles >= (uploadedFiles?.length ?? 0));
+  }, [showingFiles, uploadedFiles]);
 
-  const fileNameIcon = (file: IFile): React.ReactNode => 
+  const fileNameIcon = (file: UploadedFile): React.ReactNode =>
   {
-    switch (file.fileExtension)
+    switch (file.fileExtension.toLowerCase())
     {
       case "png":
         return <ImageIcon/>;
       case "jpeg":
+      case "jpg":
         return <ImageIcon/>;
       case "pdf":
         return <FileIcon/>;
@@ -52,8 +58,8 @@ const UploadedMaterialTable: FunctionComponent<UploadedMaterialTableProps> = ({ 
         return null;
     }
   };
-  
-  return props?.isGetUploadedFilesLoading ? <>Loading... </> : (
+
+  return isGetUploadedFilesLoading ? <>Loading... </> : (
     <>
       <table css={styles.tableWrapper}>
         <thead css={styles.tableHead}>
@@ -69,14 +75,14 @@ const UploadedMaterialTable: FunctionComponent<UploadedMaterialTableProps> = ({ 
           </tr>
         </thead>
         <tbody css={styles.tableBody}/>
-        {props?.uploadedFiles?.slice(0, showingFiles).map((file: IFile, index: number) => (
+        {uploadedFiles?.slice(0, showingFiles).map((file, index) => (
           <tr
-            key={index} 
-            onClick={() => props?.setSelectedFileIdForPreview(file?.uuid)}>
+            key={index}
+            onClick={() => setSelectedFileIdForPreview(file.id)}>
             <td css={styles.callToActionCell}><Checkbox/></td>
             <td css={styles.docName} className="primaryCell">
-              <BodyText styleType="body-01-medium" component="p" title={file.originalFilename + "." + file.fileExtension}>
-                {fileNameIcon(file)}{`${file.originalFilename}.${file.fileExtension}`}
+              <BodyText styleType="body-01-medium" component="p" title={file.originalFilename}>
+                {fileNameIcon(file)}{file.originalFilename}
               </BodyText>
             </td>
             <td css={styles.docDate}> <BodyText styleType="body-01-medium" component="p">{formatDate(file.createdAt!)}</BodyText></td>
@@ -86,21 +92,20 @@ const UploadedMaterialTable: FunctionComponent<UploadedMaterialTableProps> = ({ 
           </tr>
         ))}
       </table>
-      {!isShowingFullTable && props?.uploadedFiles?.length && (
+      {!isShowingFullTable && uploadedFiles?.length && (
         <div css={styles.showMoreButton}>
           <Button<"button">
             styleType="tertiary"
             rightIcon={<ArrowDown size={20}/>}
             size="medium"
-            onClick={() => 
+            onClick={() =>
             {
               setShowingFiles(prev => prev + 10);
             }}>
-            Show {props?.uploadedFiles?.length - showingFiles < 10 ? props?.uploadedFiles?.length - showingFiles : 10} More
+            Show {uploadedFiles?.length - showingFiles < 10 ? uploadedFiles?.length - showingFiles : 10} More
           </Button>
         </div>
       )}
-      
     </>
   );
 };

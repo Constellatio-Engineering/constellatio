@@ -1,4 +1,4 @@
-/* eslint-disable react/jsx-newline */
+import { type UploadedFile } from "@/db/schema";
 import { getRandomUuid } from "@/utils/utils";
 
 import { Title } from "@mantine/core";
@@ -12,37 +12,16 @@ import EmptyStateCard from "../organisms/emptyStateCard/EmptyStateCard";
 import { type FileWithClientSideUuid } from "../pages/personalSpacePage/PersonalSpacePage";
 import UploadedMaterialTable from "../uploadedMaterialTable/UploadedMaterialTable";
 
-export interface IFile 
-{
-  clientSideUuid: string;
-  createdAt: Date | null;
-  fileExtension: string;
-  filename: string;
-  id: number;
-  originalFilename: string;
-  sizeInBytes: number;
-  userId: string;
-  uuid: string;
-}
-// interface UploadedMaterialBlockProps 
-// {
-//   readonly areUploadsInProgress: boolean;
-//   readonly fileInputRef: React.RefObject<HTMLInputElement>;
-//   readonly onSubmit: (e: FormEvent<HTMLFormElement>) => Promise<void>;
-//   readonly selectedFiles: FileWithClientSideUuid[];
-//   readonly setSelectedFiles: React.Dispatch<React.SetStateAction<FileWithClientSideUuid[]>>;
-//   // readonly uploadedMaterial?: IFile[];
-// }
-  type UploadedMaterialBlockProps = {
-    readonly areUploadsInProgress: boolean;
-    readonly fileInputRef: React.RefObject<HTMLInputElement>;
-    readonly isGetUploadedFilesLoading: boolean;
-    readonly onSubmit: (e: FormEvent<HTMLFormElement>) => Promise<void>;
-    readonly selectedFiles: FileWithClientSideUuid[];
-    readonly setSelectedFileIdForPreview: React.Dispatch<React.SetStateAction<string | undefined>>;
-    readonly setSelectedFiles: React.Dispatch<React.SetStateAction<FileWithClientSideUuid[]>>;
-    readonly uploadedFiles: IFile[];
-  };
+type UploadedMaterialBlockProps = {
+  readonly areUploadsInProgress: boolean;
+  readonly fileInputRef: React.RefObject<HTMLInputElement>;
+  readonly isGetUploadedFilesLoading: boolean;
+  readonly onSubmit: (e: FormEvent<HTMLFormElement>) => Promise<void>;
+  readonly selectedFiles: FileWithClientSideUuid[];
+  readonly setSelectedFileIdForPreview: React.Dispatch<React.SetStateAction<string | undefined>>;
+  readonly setSelectedFiles: React.Dispatch<React.SetStateAction<FileWithClientSideUuid[]>>;
+  readonly uploadedFiles: UploadedFile[];
+};
 
 const UploadedMaterialBlock: FunctionComponent<UploadedMaterialBlockProps> = ({
   areUploadsInProgress,
