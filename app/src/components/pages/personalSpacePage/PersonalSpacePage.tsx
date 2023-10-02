@@ -1,3 +1,4 @@
+import FileViewer from "@/components/fileViewer/FileViewer";
 import EmptyStateCard from "@/components/organisms/emptyStateCard/EmptyStateCard";
 import FavoriteCasesList from "@/components/organisms/favoriteCasesList/FavoriteCasesList";
 import FileUploadMenu from "@/components/organisms/fileUploadMenu/FileUploadMenu";
@@ -10,6 +11,7 @@ import UploadedMaterialBlock from "@/components/uploadedMaterialBlock/UploadedMa
 import useBookmarks from "@/hooks/useBookmarks";
 import useCases from "@/hooks/useCases";
 import useDocuments from "@/hooks/useDocuments";
+import useSignedGetUrl from "@/hooks/useSignedGetUrl";
 import useUploadedFiles from "@/hooks/useUploadedFiles";
 import useUploadFolders from "@/hooks/useUploadFolders";
 import { type IGenArticleOverviewFragment, type IGenFullCaseFragment, type IGenMainCategory } from "@/services/graphql/__generated/sdk";
@@ -77,6 +79,13 @@ const PersonalSpacePage: FunctionComponent = () =>
   const favoriteCategoryNavTabs = [{ id: FavCasesTabId, itemsPerTab: bookmarkedCases?.length ?? 0, title: "CASES" }, { id: FavDictionaryTabId, itemsPerTab: 999, title: "DICTIONARY" }, { id: FavForumsTabId, itemsPerTab: 999, title: "FORUM" }, { id: FavHighlightsTabId, itemsPerTab: 999, title: "HIGHLIGHTS" }];
   const [selectedTabId, setSelectedTabId] = useState<string>(favoriteCategoryNavTabs?.[0]?.id as string);
   const casesByMainCategory = (id: string): Array<({ _typename?: "Case" | undefined } & IGenFullCaseFragment) | null | undefined> | IGenArticleOverviewFragment[] | undefined => bookmarkedCases?.filter(bookmarkedCase => bookmarkedCase.subCategoryField?.[0]?.mainCategory?.[0]?.id === id);
+  const [showFileViewerModal, setShowFileViewerModal] = useState<boolean>(false);
+  React.useEffect(() => 
+  {
+    if(selectedFileIdForPreview) { setShowFileViewerModal(true); }
+    if(!selectedFileIdForPreview) { setShowFileViewerModal(false); }
+    
+  }, [selectedFileIdForPreview]);
   return (
     <div css={styles.wrapper}>
       <div css={styles.header}>
@@ -162,9 +171,7 @@ const PersonalSpacePage: FunctionComponent = () =>
                   selectedFolderId={selectedFolderId}
                 />
                 <FileUploadMenu uploads={uploads}/>
-                {selectedFileIdForPreview && (
-                  <DummyFileViewer fileId={selectedFileIdForPreview}/>
-                )}
+                {selectedFileIdForPreview && <FileViewer fileId={selectedFileIdForPreview} showFileViewerModal={showFileViewerModal}/>}
               </div>
             </div>
           </>

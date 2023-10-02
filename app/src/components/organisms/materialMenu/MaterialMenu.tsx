@@ -4,10 +4,10 @@ import { AlertCard } from "@/components/atoms/Card/AlertCard";
 import { Input } from "@/components/atoms/Input/Input";
 import { LinkButton } from "@/components/atoms/LinkButton/LinkButton";
 import MenuListItem from "@/components/atoms/menuListItem/MenuListItem";
-import CutomAlertCard from "@/components/molecules/cutomAlertCard/CutomAlertCard";
 import { Cross } from "@/components/Icons/Cross";
 import { FolderIcon } from "@/components/Icons/Folder";
 import { Plus } from "@/components/Icons/Plus";
+import CutomAlertCard from "@/components/molecules/cutomAlertCard/CutomAlertCard";
 import { type UploadFolder } from "@/db/schema";
 import { api } from "@/utils/api";
 
@@ -86,8 +86,7 @@ const MaterialMenu: FunctionComponent<MaterialMenuProps> = ({ folders, selectedF
         <LinkButton
           icon={<Plus/>}
           onClick={open}
-          title="Create new folder"
-          
+          title="Create new folder"   
         />
         <Modal
           opened={opened}

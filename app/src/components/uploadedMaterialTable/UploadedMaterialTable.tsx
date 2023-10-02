@@ -75,22 +75,24 @@ const UploadedMaterialTable: FunctionComponent<UploadedMaterialTableProps> = ({
             <th/>
           </tr>
         </thead>
-        <tbody css={styles.tableBody}/>
-        {uploadedFiles?.slice(0, showingFiles).map((file, index) => (
-          <tr
-            key={index}>
-            <td css={styles.callToActionCell}><Checkbox/></td>
-            <td css={styles.docName} className="primaryCell">
-              <BodyText styleType="body-01-medium" component="p" title={file.originalFilename}>
-                {fileNameIcon(file)}{file.originalFilename}
-              </BodyText>
-            </td>
-            <td css={styles.docDate}> <BodyText styleType="body-01-medium" component="p">{formatDate(file.createdAt!)}</BodyText></td>
-            <td css={styles.docTags}> <BodyText styleType="body-02-medium" component="p">Tags ({0})</BodyText></td>
-            <td css={styles.cellNote}> <BodyText styleType="body-02-medium" component="p"><NotepadFilled/>Notes</BodyText></td>
-            <td css={styles.callToActionCell}><DotsIcon/></td>
-          </tr>
-        ))}
+        <tbody css={styles.tableBody}>
+          {uploadedFiles?.slice(0, showingFiles).map((file, index) => (
+            <tr
+              key={index}
+              onClick={() => setSelectedFileIdForPreview(file.id)}>
+              <td css={styles.callToActionCell}><Checkbox/></td>
+              <td css={styles.docName} className="primaryCell">
+                <BodyText styleType="body-01-medium" component="p" title={file.originalFilename}>
+                  {fileNameIcon(file)}{file.originalFilename}
+                </BodyText>
+              </td>
+              <td css={styles.docDate}> <BodyText styleType="body-01-medium" component="p">{formatDate(file.createdAt!)}</BodyText></td>
+              <td css={styles.docTags}> <BodyText styleType="body-02-medium" component="p">Tags ({0})</BodyText></td>
+              <td css={styles.cellNote}> <BodyText styleType="body-02-medium" component="p"><NotepadFilled/>Notes</BodyText></td>
+              <td css={styles.callToActionCell}><DotsIcon/></td>
+            </tr>
+          ))}
+        </tbody>
       </table>
       {!isShowingFullTable && uploadedFiles?.length && (
         <div css={styles.showMoreButton}>

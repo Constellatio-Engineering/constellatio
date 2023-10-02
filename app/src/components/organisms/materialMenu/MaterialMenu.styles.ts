@@ -19,15 +19,17 @@ export const header = (theme: MantineTheme) => css`
     padding:24px  24px 24px 16px;
 `;
 export const content = css``;
-export const callToAction = css`
+export const callToAction = (theme: MantineTheme) => css`
     padding:16px 24px;
+    background: ${theme.colors["neutrals-01"][0]};
+    border-radius: 0 0 12px 12px;
 `;
 
 type ModalStyles = Styles<ModalStylesNames, UnknownMantineStylesParams>;
 
 export const modalStyles = (): ModalStyles => 
 {
-  const styles: ModalStyles = (theme: MantineTheme) => ({
+  const styles: ModalStyles = () => ({
     body: {
       ".modal-call-to-action": {
         alignItems: "center",
