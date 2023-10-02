@@ -2,6 +2,7 @@ import { authenticationRouter } from "@/server/api/routers/authentication.router
 import { billingRouter } from "@/server/api/routers/billing.router";
 import { bookmarksRouter } from "@/server/api/routers/bookmarks.router";
 import { caisyRouter } from "@/server/api/routers/caisy.router";
+import { documentsRouter } from "@/server/api/routers/documents.router";
 import { searchRouter } from "@/server/api/routers/search.router";
 import { uploadsRouter } from "@/server/api/routers/uploads.router";
 import { createTRPCRouter } from "@/server/api/trpc";
@@ -16,6 +17,7 @@ export const appRouter = createTRPCRouter({
   billing: billingRouter,
   bookmarks: bookmarksRouter,
   caisy: caisyRouter,
+  documents: documentsRouter,
   search: searchRouter,
   uploads: uploadsRouter,
 });

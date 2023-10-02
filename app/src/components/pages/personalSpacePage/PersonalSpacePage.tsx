@@ -10,6 +10,7 @@ import PapersBlock from "@/components/papersBlock/PapersBlock";
 import UploadedMaterialBlock from "@/components/uploadedMaterialBlock/UploadedMaterialBlock";
 import useBookmarks from "@/hooks/useBookmarks";
 import useCases from "@/hooks/useCases";
+import useDocuments from "@/hooks/useDocuments";
 import useUploadedFiles from "@/hooks/useUploadedFiles";
 import useUploadFolders from "@/hooks/useUploadFolders";
 import { type ICasesOverviewProps } from "@/services/content/getCasesOverviewProps";
@@ -44,7 +45,8 @@ const PersonalSpacePage: FunctionComponent = () =>
   const { allCases = [], isLoading: areCasesLoading } = useCases();
   const { bookmarks, isLoading: areBookmarksLoading } = useBookmarks(undefined);
   const { folders = [] } = useUploadFolders();
-  const { isLoading: isGetUploadedFilesLoading, uploadedFiles = [] } = useUploadedFiles(selectedFolderId);
+  const { isLoading: isGetUploadedFilesLoading, uploadedFiles } = useUploadedFiles(selectedFolderId);
+  const { documents } = useDocuments(selectedFolderId);
   const allCasesBookmarks = bookmarks.filter(bookmark => bookmark?.resourceType === "case") ?? [];
   const bookmarkedCases = allCases.filter(caisyCase => allCasesBookmarks.some(bookmark => bookmark.resourceId === caisyCase.id));
   const mainCategoriesInBookmarkedCases = bookmarkedCases.map(bookmarkedCase => bookmarkedCase?.subCategoryField?.[0]?.mainCategory?.[0]);
@@ -286,11 +288,7 @@ const PersonalSpacePage: FunctionComponent = () =>
                 folders={folders}
               />
               <div style={{ flex: 1, maxWidth: "75%" }}>
-                <PapersBlock docs={[
-                  { lastModified: new Date(), name: "Constellatio doc name", tagsNumber: 0 },
-                  { lastModified: new Date(), name: "Constellatio doc name", tagsNumber: 0 },
-                ]}
-                />
+                <PapersBlock docs={documents} selectedFolderId={selectedFolderId}/>
                 <UploadedMaterialBlock
                   areUploadsInProgress={areUploadsInProgress}
                   fileInputRef={fileInputRef}
