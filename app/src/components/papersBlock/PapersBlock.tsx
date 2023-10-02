@@ -14,10 +14,11 @@ import EmptyStateCard from "../organisms/emptyStateCard/EmptyStateCard";
 interface PapersBlockProps
 {
   readonly docs: Document[];
+  readonly isLoading: boolean;
   readonly selectedFolderId: string | null;
 }
 
-const PapersBlock: FunctionComponent<PapersBlockProps> = ({ docs, selectedFolderId }) =>
+const PapersBlock: FunctionComponent<PapersBlockProps> = ({ docs, isLoading, selectedFolderId }) =>
 {
   const setCreateDocumentState = useDocumentEditorStore(s => s.setCreateDocumentState);
 
@@ -33,16 +34,20 @@ const PapersBlock: FunctionComponent<PapersBlockProps> = ({ docs, selectedFolder
           Create doc
         </Button>
       </div>
-      {docs.length > 0 ? (
-        <div css={styles.papersBlockTable}>
-          <DocsTable docs={docs}/>
-        </div>
-      ) : (
-        <EmptyStateCard 
-          variant="For-small-areas" 
-          title="You haven’t created any docs yet"
-          text="Constellatio docs are text documents where you leave your notes, summaries, etc"
-        />
+      {!isLoading && (
+        <>
+          {docs.length > 0 ? (
+            <div css={styles.papersBlockTable}>
+              <DocsTable docs={docs}/>
+            </div>
+          ) : (
+            <EmptyStateCard
+              variant="For-small-areas"
+              title="You haven’t created any docs yet"
+              text="Constellatio docs are text documents where you leave your notes, summaries, etc"
+            />
+          )}
+        </>
       )}
     </div>
   );

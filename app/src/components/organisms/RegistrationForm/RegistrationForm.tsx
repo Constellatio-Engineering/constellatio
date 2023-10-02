@@ -65,6 +65,7 @@ export const RegistrationForm: FunctionComponent = () =>
   });
   const [shouldShowEmailConfirmationDialog, setShouldShowEmailConfirmationDialog] = useState<boolean>(false);
   const lastConfirmationEmailTimestamp = useRef<number>();
+  const registerMutationStartTimestamp = useRef<number>();
 
   useEffect(() =>
   {
@@ -85,6 +86,21 @@ export const RegistrationForm: FunctionComponent = () =>
         message: "We couldn't sign you up. Please try again.",
         title: "Oops!",
       });
+    },
+    onMutate: () =>
+    {
+      registerMutationStartTimestamp.current = performance.now();
+    },
+    onSettled: () =>
+    {
+      if(!registerMutationStartTimestamp.current)
+      {
+        console.log("register mutation was not started");
+        return;
+      }
+
+      const duration = performance.now() - registerMutationStartTimestamp.current;
+      console.log(`register mutation took ${duration}ms`);
     },
     onSuccess: async result =>
     {

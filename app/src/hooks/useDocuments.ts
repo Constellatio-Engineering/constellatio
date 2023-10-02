@@ -2,11 +2,20 @@ import { type Document } from "@/db/schema";
 import { api } from "@/utils/api";
 import { type UseQueryResult } from "@/utils/types";
 
-type UseDocuments = (folderId: string | null) => UseQueryResult<{ documents: Document[] }>;
+type UseDocuments = (folderId: string | null) => UseQueryResult<{
+  documents: Document[];
+  isRefetching: boolean;
+}>;
 
 const useDocuments: UseDocuments = (folderId) =>
 {
-  const { data: documents = [], error, isLoading } = api.documents.getDocuments.useQuery({ folderId }, {
+  const {
+    data: documents = [],
+    error,
+    isLoading,
+    isRefetching
+  } = api.documents.getDocuments.useQuery({ folderId }, {
+    keepPreviousData: true,
     refetchOnMount: "always",
     staleTime: Infinity
   });
@@ -14,7 +23,8 @@ const useDocuments: UseDocuments = (folderId) =>
   return { 
     documents: documents ?? [],
     error,
-    isLoading
+    isLoading,
+    isRefetching
   };
 };
 

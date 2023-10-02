@@ -1,5 +1,5 @@
 import { db } from "@/db/connection";
-import { documents, uploadedFiles } from "@/db/schema";
+import { type DocumentInsert, documents, uploadedFiles } from "@/db/schema";
 import { createDocumentSchema } from "@/schemas/documents/createDocument.schema";
 import { deleteDocumentSchema } from "@/schemas/documents/deleteDocument.schema";
 import { getDocumentsSchema } from "@/schemas/documents/getDocuments.schema";
@@ -15,10 +15,12 @@ export const documentsRouter = createTRPCRouter({
     .input(createDocumentSchema)
     .mutation(async ({ ctx: { userId }, input: newDocument }) =>
     {
-      await db.insert(documents).values({
+      const documentInsert: DocumentInsert = {
         ...newDocument,
         userId
-      });
+      };
+
+      return db.insert(documents).values(documentInsert).returning();
     }),
   deleteDocument: protectedProcedure
     .input(deleteDocumentSchema)
@@ -58,11 +60,12 @@ export const documentsRouter = createTRPCRouter({
         ...updatedDocumentValues
       } = updatedDocument;
 
-      await db.update(documents)
+      return db.update(documents)
         .set(updatedDocumentValues)
         .where(and(
           eq(documents.id, id),
           eq(documents.userId, userId)
-        ));
+        ))
+        .returning();
     })
 });
