@@ -161,7 +161,7 @@ export type IGenArticle_FullTextTasksConnectionsArgs = {
   locale?: InputMaybe<Scalars['String']['input']>;
 };
 
-export type IGenArticle_FullTextTasks_Connections = IGenCallout | IGenCardSelectionGame | IGenDragNDropGame | IGenFillInGapsGame | IGenImageWrapperCard;
+export type IGenArticle_FullTextTasks_Connections = IGenAsset | IGenCallout | IGenCardSelectionGame | IGenDragNDropGame | IGenFillInGapsGame | IGenImageWrapperCard;
 
 export type IGenArticle_LegalArea = IGenLegalArea | IGenSubCategory;
 
@@ -589,7 +589,7 @@ export type IGenCase_FullTextTasksConnectionsArgs = {
   locale?: InputMaybe<Scalars['String']['input']>;
 };
 
-export type IGenCase_FullTextTasks_Connections = IGenCallout | IGenCardSelectionGame | IGenDragNDropGame | IGenFillInGapsGame | IGenImageWrapperCard;
+export type IGenCase_FullTextTasks_Connections = IGenAsset | IGenCallout | IGenCardSelectionGame | IGenDragNDropGame | IGenFillInGapsGame | IGenImageWrapperCard;
 
 export type IGenCase_LegalArea = IGenLegalArea | IGenSubCategory;
 
@@ -1288,6 +1288,9 @@ export type IGenTopic_Where = {
 };
 
 export type IGenArticleFullTextTasksFragment = { __typename: 'Article_fullTextTasks', json?: any | null, connections?: Array<(
+    { __typename: 'Asset' }
+    & IGenAssetFragment
+  ) | (
     { __typename: 'Callout' }
     & IGenCalloutFragment
   ) | (
@@ -1299,10 +1302,7 @@ export type IGenArticleFullTextTasksFragment = { __typename: 'Article_fullTextTa
   ) | (
     { __typename: 'FillInGapsGame' }
     & IGenFillInGapsGameFragment
-  ) | (
-    { __typename: 'ImageWrapperCard' }
-    & IGenImageWrapperCardFragment
-  ) | null> | null };
+  ) | { __typename: 'ImageWrapperCard' } | null> | null };
 
 export type IGenArticleOverviewFragment = { __typename: 'Article', id?: string | null, title?: string | null, subCategoryField?: Array<(
     { __typename?: 'SubCategory' }
@@ -1319,6 +1319,9 @@ export type IGenCalloutFragment = { __typename: 'Callout', id?: string | null, c
 export type IGenCardSelectionGameFragment = { __typename?: 'CardSelectionGame', id?: string | null, game?: any | null, question?: string | null, helpNote?: { __typename?: 'CardSelectionGame_helpNote', json?: any | null, connections?: Array<{ __typename: 'Caisy_Field_Document_NotFound' } | null> | null } | null };
 
 export type IGenCaseFullTextTasksFragment = { __typename: 'Case_fullTextTasks', json?: any | null, connections?: Array<(
+    { __typename: 'Asset' }
+    & IGenAssetFragment
+  ) | (
     { __typename: 'Callout' }
     & IGenCalloutFragment
   ) | (
@@ -1330,10 +1333,7 @@ export type IGenCaseFullTextTasksFragment = { __typename: 'Case_fullTextTasks', 
   ) | (
     { __typename: 'FillInGapsGame' }
     & IGenFillInGapsGameFragment
-  ) | (
-    { __typename: 'ImageWrapperCard' }
-    & IGenImageWrapperCardFragment
-  ) | null> | null };
+  ) | { __typename: 'ImageWrapperCard' } | null> | null };
 
 export type IGenCaseOverviewFragment = { __typename: 'Case', id?: string | null, title?: string | null, durationToCompleteInMinutes?: number | null, subCategoryField?: Array<(
     { __typename?: 'SubCategory' }
@@ -1392,11 +1392,6 @@ export type IGenFullCaseFragment = { __typename: 'Case', id?: string | null, tit
     { __typename?: 'Topic' }
     & IGenTopicFragment
   ) | null> | null, resolution?: { __typename?: 'Case_resolution', json?: any | null, connections?: Array<{ __typename: 'Caisy_Field_Document_NotFound' } | null> | null } | null };
-
-export type IGenImageWrapperCardFragment = { __typename: 'ImageWrapperCard', id?: string | null, downloadable?: boolean | null, image?: (
-    { __typename?: 'Asset' }
-    & IGenAssetFragment
-  ) | null };
 
 export type IGenLegalAreaFragment = { __typename: 'LegalArea', id?: string | null, legalAreaName?: string | null };
 
@@ -1583,16 +1578,6 @@ export const DragNDropGameFragmentDoc = gql`
   }
 }
     `;
-export const ImageWrapperCardFragmentDoc = gql`
-    fragment ImageWrapperCard on ImageWrapperCard {
-  __typename
-  id
-  downloadable
-  image {
-    ...Asset
-  }
-}
-    `;
 export const CalloutFragmentDoc = gql`
     fragment Callout on Callout {
   __typename
@@ -1616,8 +1601,8 @@ export const ArticleFullTextTasksFragmentDoc = gql`
     ...FillInGapsGame
     ...CardSelectionGame
     ...DragNDropGame
-    ...ImageWrapperCard
     ...Callout
+    ...Asset
   }
 }
     `;
@@ -1670,8 +1655,8 @@ export const CaseFullTextTasksFragmentDoc = gql`
     ...FillInGapsGame
     ...CardSelectionGame
     ...DragNDropGame
-    ...ImageWrapperCard
     ...Callout
+    ...Asset
   }
 }
     `;
@@ -1795,9 +1780,8 @@ ${ArticleFullTextTasksFragmentDoc}
 ${FillInGapsGameFragmentDoc}
 ${CardSelectionGameFragmentDoc}
 ${DragNDropGameFragmentDoc}
-${ImageWrapperCardFragmentDoc}
-${AssetFragmentDoc}
 ${CalloutFragmentDoc}
+${AssetFragmentDoc}
 ${LegalAreaFragmentDoc}
 ${SubCategoryFragmentDoc}
 ${MainCategoryFragmentDoc}
@@ -1814,9 +1798,8 @@ ${CaseFullTextTasksFragmentDoc}
 ${FillInGapsGameFragmentDoc}
 ${CardSelectionGameFragmentDoc}
 ${DragNDropGameFragmentDoc}
-${ImageWrapperCardFragmentDoc}
-${AssetFragmentDoc}
 ${CalloutFragmentDoc}
+${AssetFragmentDoc}
 ${LegalAreaFragmentDoc}
 ${SubCategoryFragmentDoc}
 ${MainCategoryFragmentDoc}

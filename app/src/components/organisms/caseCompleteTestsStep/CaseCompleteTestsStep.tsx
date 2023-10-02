@@ -88,18 +88,6 @@ const CaseCompleteTestsStep: FunctionComponent<ICaseCompleteTestsStepProps> = ({
       {
         switch (component?.__typename) 
         {
-          case "ImageWrapperCard":
-            if(node?.attrs?.documentId === component?.id) 
-            {
-              return (
-                <div
-                  css={styles.componentWrapper}
-                  key={`${component?.__typename}-${index}`}>
-                  <ImageWrapperCard {...component}/>
-                </div>
-              );
-            }
-            break;
           case "Callout":
             if(node?.attrs?.documentId === component?.id) 
             {
@@ -125,7 +113,7 @@ const CaseCompleteTestsStep: FunctionComponent<ICaseCompleteTestsStepProps> = ({
             }
             break;
           case "DragNDropGame":
-            if(node?.attrs?.documentId === component?.id) 
+            if(node?.attrs?.documentId === component?.id)                                     
             {
               return (
                 <div
@@ -144,6 +132,18 @@ const CaseCompleteTestsStep: FunctionComponent<ICaseCompleteTestsStepProps> = ({
                   css={styles.gameComponentWrapper}
                   key={`${component?.__typename}-${index}`}>
                   <FillGapsGame {...component}/>
+                </div>
+              );
+            }
+            break;
+          case "Asset":
+            if(node?.attrs?.documentId === component?.id) 
+            {
+              return (
+                <div
+                  css={styles.componentWrapper}
+                  key={`${component?.__typename}-${index}`}>
+                  <ImageWrapperCard {...component}/>
                 </div>
               );
             }
