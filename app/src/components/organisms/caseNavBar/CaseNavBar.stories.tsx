@@ -25,32 +25,27 @@ type Story = StoryObj<typeof CaseNavBar>;
 
 export const Default: Story = {
   args: {
-    activeStep: 0,
     variant: "case",
   },
 };
 export const StepOneWithProgress: Story = {
   args: {
-    activeStep: 0,
     variant: "case",
   },
 };
 export const StepTwo: Story = {
   args: {
-    activeStep: 1,
     variant: "case",
   },
 };
 export const StepTwoWithProgress: Story = {
   args: {
-    activeStep: 1,
     variant: "case",
   },
 };
 
 export const StepThree: Story = {
   args: {
-    activeStep: 2,
     variant: "case",
   },
 };

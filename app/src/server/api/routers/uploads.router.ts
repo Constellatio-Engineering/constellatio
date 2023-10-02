@@ -1,16 +1,22 @@
+/* eslint-disable max-lines */
 import { db } from "@/db/connection";
-import { type UploadInsert, uploadsTable } from "@/db/schema";
+import { uploadFolders, type UploadedFileInsert, uploadedFiles } from "@/db/schema";
 import { env } from "@/env.mjs";
 import { meiliSearchAdmin } from "@/meilisearch/client";
 import { addUploadSchema } from "@/schemas/uploads/addUpload.schema";
+import { createFolderSchema } from "@/schemas/uploads/createFolder.schema";
+import { deleteFolderSchema } from "@/schemas/uploads/deleteFolder.schema";
 import { deleteUploadSchema } from "@/schemas/uploads/deleteUpload.schema";
+import { getUploadedFilesSchema } from "@/schemas/uploads/getUploadedFiles.schema";
 import { createTRPCRouter, protectedProcedure } from "@/server/api/trpc";
-import { createUploadsSearchIndexItem, searchIndices } from "@/utils/search";
+import { createUploadsSearchIndexItem, searchIndices, uploadSearchIndexItemPrimaryKey } from "@/utils/search";
 import { BadFileError, FileTooLargeError, NotFoundError } from "@/utils/serverError";
-import { getFileNameWithoutExtension } from "@/utils/utils";
 
 import { Storage } from "@google-cloud/storage";
-import { and, desc, eq } from "drizzle-orm";
+import {
+  and, asc, desc, eq, isNull
+} from "drizzle-orm";
+import { type SQLWrapper } from "drizzle-orm";
 import { type CredentialBody } from "google-auth-library";
 import { z } from "zod";
 
@@ -24,16 +30,25 @@ const storage = new Storage({
 });
 
 export const uploadsRouter = createTRPCRouter({
+  createFolder: protectedProcedure
+    .input(createFolderSchema)
+    .mutation(async ({ ctx: { userId }, input: { name } }) =>
+    {
+      await db.insert(uploadFolders).values({
+        name,
+        userId
+      });
+    }),
   createSignedGetUrl: protectedProcedure
     .input(z.object({
       fileId: z.string(),
     }))
     .query(async ({ ctx: { userId }, input: { fileId } }) =>
     {
-      const file = await db.query.uploadsTable.findFirst({
+      const file = await db.query.uploadedFiles.findFirst({
         where: and(
-          eq(uploadsTable.userId, userId),
-          eq(uploadsTable.uuid, fileId)
+          eq(uploadedFiles.userId, userId),
+          eq(uploadedFiles.id, fileId)
         )
       });
 
@@ -42,9 +57,11 @@ export const uploadsRouter = createTRPCRouter({
         throw new NotFoundError();
       }
 
+      console.log(file.createdAt);
+
       const [url] = await storage
         .bucket(env.GOOGLE_CLOUD_STORAGE_BUCKET_NAME)
-        .file(`${userId}/${file.filename + "." + file.fileExtension}`)
+        .file(`${userId}/${file.serverFilename}`)
         .getSignedUrl({
           action: "read",
           expires: Date.now() + 15 * 60 * 1000,
@@ -85,71 +102,112 @@ export const uploadsRouter = createTRPCRouter({
         });
 
       return ({
-        filename: filenameWithTimestamp,
+        serverFilename: filenameWithTimestamp,
         uploadUrl: url
       });
     }),
+  deleteFolder: protectedProcedure
+    .input(deleteFolderSchema)
+    .mutation(async ({ ctx: { userId }, input: { folderId } }) =>
+    {
+      await db.delete(uploadedFiles).where(
+        and(
+          eq(uploadedFiles.userId, userId),
+          eq(uploadedFiles.folderId, folderId)
+        )
+      );
+
+      await db.delete(uploadFolders).where(
+        and(
+          eq(uploadFolders.userId, userId),
+          eq(uploadFolders.id, folderId)
+        )
+      );
+    }),
   deleteUploadedFile: protectedProcedure
     .input(deleteUploadSchema)
-    .mutation(async ({ ctx: { userId }, input: { fileUuid } }) =>
+    .mutation(async ({ ctx: { userId }, input: { fileId } }) =>
     {
-      const deleteResult = await db.delete(uploadsTable).where(and(
-        eq(uploadsTable.userId, userId),
-        eq(uploadsTable.uuid, fileUuid)
+      const deleteResult = await db.delete(uploadedFiles).where(and(
+        eq(uploadedFiles.userId, userId),
+        eq(uploadedFiles.id, fileId)
       ));
 
       console.log("deleteResult", deleteResult);
     }),
-  getUploadedFiles: protectedProcedure
+  getFolders: protectedProcedure
     .query(async ({ ctx: { userId } }) =>
     {
-      return db.query.uploadsTable.findMany({
-        orderBy: [desc(uploadsTable.createdAt)],
-        where: eq(uploadsTable.userId, userId)
+      return db.query.uploadFolders.findMany({
+        orderBy: [asc(uploadFolders.name)],
+        where: eq(uploadFolders.userId, userId)
+      });
+    }),
+  getUploadedFiles: protectedProcedure
+    .input(getUploadedFilesSchema)
+    .query(async ({ ctx: { userId }, input: { folderId } }) =>
+    {
+      const queryConditions: SQLWrapper[] = [eq(uploadedFiles.userId, userId)];
+
+      if(folderId)
+      {
+        queryConditions.push(eq(uploadedFiles.folderId, folderId));
+      }
+      else
+      {
+        queryConditions.push(isNull(uploadedFiles.folderId));
+      }
+
+      return db.query.uploadedFiles.findMany({
+        orderBy: [desc(uploadedFiles.createdAt)],
+        where: and(...queryConditions)
       });
     }),
   saveFileToDatabase: protectedProcedure
     .input(addUploadSchema)
-    .mutation(async ({ ctx, input }) =>
+    .mutation(async ({ ctx: { userId }, input }) =>
     {
       const {
-        clientSideUuid,
-        filename,
         fileSizeInBytes,
-        originalFilename
+        folderId,
+        id,
+        originalFilename,
+        serverFilename
       } = input;
 
-      const fileNameWithoutExtension = getFileNameWithoutExtension(filename);
-      const originalFilenameWithoutExtension = getFileNameWithoutExtension(originalFilename);
-      const fileExtension = filename.split(".").pop();
+      const fileExtension = serverFilename.split(".").pop();
 
       if(!fileExtension)
       {
         throw new BadFileError(new Error("File has no extension"));
       }
 
-      const uploadInsert: UploadInsert = {
-        clientSideUuid,
+      const uploadInsert: UploadedFileInsert = {
         fileExtension,
-        filename: fileNameWithoutExtension,
-        originalFilename: originalFilenameWithoutExtension,
+        folderId,
+        id,
+        originalFilename,
+        serverFilename,
         sizeInBytes: fileSizeInBytes,
-        userId: ctx.userId
+        userId
       };
 
-      const insertResult = await db.insert(uploadsTable).values(uploadInsert).returning({ uid: uploadsTable.uuid });
+      const insertResult = await db.insert(uploadedFiles).values(uploadInsert).returning({ id: uploadedFiles.id });
 
       const searchIndexItem = createUploadsSearchIndexItem({
         ...uploadInsert,
-        uuid: insertResult[0]!.uid
+        id: insertResult[0]!.id
       });
 
       const addUploadToIndexTask = await meiliSearchAdmin
         .index(searchIndices.userUploads)
-        .addDocuments([searchIndexItem], { primaryKey: "uuid" });
+        .addDocuments([searchIndexItem], { primaryKey: uploadSearchIndexItemPrimaryKey });
 
       const addUploadToIndexResult = await meiliSearchAdmin.waitForTask(addUploadToIndexTask.taskUid);
 
-      console.log("addUploadToIndexResult", addUploadToIndexResult);
+      if(addUploadToIndexResult.status !== "succeeded")
+      {
+        console.error("failed to add upload to index", addUploadToIndexResult);
+      }
     })
 });

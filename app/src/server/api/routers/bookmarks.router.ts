@@ -1,11 +1,9 @@
 import { db } from "@/db/connection";
-import { allBookmarkResourceTypes, type BookmarkInsert, bookmarksTable } from "@/db/schema";
+import { allBookmarkResourceTypes, type BookmarkInsert, bookmarks } from "@/db/schema";
 import { addOrRemoveBookmarkSchema } from "@/schemas/bookmarks/addOrRemoveBookmark.schema";
 import { createTRPCRouter, protectedProcedure } from "@/server/api/trpc";
-import { InternalServerError } from "@/utils/serverError";
 
-import { and, eq } from "drizzle-orm";
-import { type SQLWrapper } from "drizzle-orm/sql/index";
+import { and, eq, type SQLWrapper } from "drizzle-orm";
 import z from "zod";
 
 export const bookmarksRouter = createTRPCRouter({
@@ -13,11 +11,11 @@ export const bookmarksRouter = createTRPCRouter({
     .input(addOrRemoveBookmarkSchema)
     .mutation(async ({ ctx: { userId }, input }) =>
     {
-      const existingBookmark = await db.query.bookmarksTable.findFirst({
+      const existingBookmark = await db.query.bookmarks.findFirst({
         where: and(
-          eq(bookmarksTable.resourceId, input.resourceId),
-          eq(bookmarksTable.resourceType, input.resourceType),
-          eq(bookmarksTable.userId, userId)
+          eq(bookmarks.resourceId, input.resourceId),
+          eq(bookmarks.resourceType, input.resourceType),
+          eq(bookmarks.userId, userId)
         )
       });
 
@@ -35,7 +33,7 @@ export const bookmarksRouter = createTRPCRouter({
 
       console.log(`inserting bookmark for ${input.resourceType} with id ${input.resourceId}`);
 
-      await db.insert(bookmarksTable).values(bookmarkInsert);
+      await db.insert(bookmarks).values(bookmarkInsert);
     }),
   getAllBookmarks: protectedProcedure
     .input(z.object({
@@ -43,14 +41,14 @@ export const bookmarksRouter = createTRPCRouter({
     }).optional())
     .query(async ({ ctx: { userId }, input }) =>
     {
-      const queryConditions: SQLWrapper[] = [eq(bookmarksTable.userId, userId)];
+      const queryConditions: SQLWrapper[] = [eq(bookmarks.userId, userId)];
 
       if(input?.resourceType)
       {
-        queryConditions.push(eq(bookmarksTable.resourceType, input.resourceType));
+        queryConditions.push(eq(bookmarks.resourceType, input.resourceType));
       }
 
-      return db.select().from(bookmarksTable).where(and(...queryConditions));
+      return db.select().from(bookmarks).where(and(...queryConditions));
     }),
   removeBookmark: protectedProcedure
     .input(addOrRemoveBookmarkSchema)
@@ -58,11 +56,11 @@ export const bookmarksRouter = createTRPCRouter({
     {
       console.log(`removing bookmark for ${input.resourceType} with id ${input.resourceId}`);
 
-      await db.delete(bookmarksTable).where(
+      await db.delete(bookmarks).where(
         and(
-          eq(bookmarksTable.resourceId, input.resourceId),
-          eq(bookmarksTable.resourceType, input.resourceType),
-          eq(bookmarksTable.userId, userId)
+          eq(bookmarks.resourceId, input.resourceId),
+          eq(bookmarks.resourceType, input.resourceType),
+          eq(bookmarks.userId, userId)
         )
       );
     })

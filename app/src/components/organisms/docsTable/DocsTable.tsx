@@ -1,30 +1,37 @@
-import { Spoiler } from "@mantine/core";
+import { type Document } from "@/db/schema";
+import useDocumentEditorStore from "@/stores/documentEditor.store";
+
 import React, { useState, type FunctionComponent, useEffect } from "react";
 
 import * as styles from "./DocsTable.styles";
-import { type IDoc, DocsTableData } from "./DocTableData";
+import { DocsTableData } from "./DocTableData";
 import { Button } from "../../atoms/Button/Button";
 import { CaptionText } from "../../atoms/CaptionText/CaptionText";
 import { ArrowDown } from "../../Icons/ArrowDown";
-import { ArrowUp } from "../../Icons/ArrowUp";
 
 interface DocsTableProps 
 {
-  readonly docs?: IDoc[];
+  readonly docs: Document[];
 }
 
 const DocsTable: FunctionComponent<DocsTableProps> = ({ docs }) => 
 {
+  const setEditDocumentState = useDocumentEditorStore(s => s.setEditDocumentState);
   const [showingDocs, setShowingDocs] = useState<number>(5);
   // const isShowingFullTable = showingDocs >= (docs?.length ?? 0);
   const [isShowingFullTable, setIsShowingFullTable] = useState<boolean>(false);
+
   useEffect(() =>
   {
     setIsShowingFullTable(showingDocs >= (docs?.length ?? 0));
-  }
-  , [showingDocs, docs]);
+  }, [showingDocs, docs]);
 
-  return (docs?.length !== null && docs?.length !== undefined) && docs?.length >= 1 ? (
+  if(docs.length === 0)
+  {
+    return null;
+  }
+
+  return (
     <div css={styles.wrapper}>
       <table css={styles.tableWrapper}>
         <thead css={styles.tableHead}>
@@ -39,9 +46,10 @@ const DocsTable: FunctionComponent<DocsTableProps> = ({ docs }) =>
           </tr>
         </thead>
         <tbody css={styles.tableBody}>
-
-          {docs?.slice(0, showingDocs)?.map((doc: IDoc, index: number) => (
-            <tr key={index}>
+          {docs.slice(0, showingDocs).map(doc => (
+            <tr
+              key={doc.id}
+              onClick={() => setEditDocumentState(doc)}>
               <DocsTableData {...doc}/>
             </tr>
           ))}
@@ -53,19 +61,13 @@ const DocsTable: FunctionComponent<DocsTableProps> = ({ docs }) =>
             styleType="tertiary"
             rightIcon={<ArrowDown size={20}/>}
             size="medium"
-            onClick={() => 
-            {
-              setShowingDocs(prev => prev + 10);
-            }}>
+            onClick={() => setShowingDocs(prev => prev + 10)}>
             Show {docs?.length - showingDocs < 10 ? docs?.length - showingDocs : 10} More
           </Button>
         </div>
       )}
     </div>
-  ) : (
-    <></>
   );
-}
-  ;
+};
 
 export default DocsTable;

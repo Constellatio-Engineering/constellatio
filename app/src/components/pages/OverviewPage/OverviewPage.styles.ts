@@ -1,7 +1,7 @@
 import { type SerializedStyles, css } from "@emotion/react";
 import { type MantineTheme } from "@mantine/styles";
 
-export const ListWrapper = ({ empty }: {empty?: boolean}) => css`
+export const ListWrapper = css`
 transform: translateY(-120px);
 width: 90%;
 margin: 0 auto;

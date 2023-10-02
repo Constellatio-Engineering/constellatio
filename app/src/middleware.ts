@@ -1,37 +1,39 @@
 /* eslint-disable import/no-unused-modules */
 import { getIsUserLoggedIn } from "@/utils/auth";
 
-import { createMiddlewareSupabaseClient } from "@supabase/auth-helpers-nextjs";
+import { createMiddlewareClient } from "@supabase/auth-helpers-nextjs";
 import { type NextMiddleware, NextResponse } from "next/server";
 
 export const middleware: NextMiddleware = async (req) =>
 {
   const res = NextResponse.next();
-  const supabase = createMiddlewareSupabaseClient({ req, res });
-
+  const supabase = createMiddlewareClient({ req, res });
   const isUserLoggedIn = await getIsUserLoggedIn(supabase);
+  const { data: { user }, error: getUserError } = await supabase.auth.getUser();
 
-  if(!isUserLoggedIn)
+  if(!isUserLoggedIn || getUserError)
   {
+    if(getUserError)
+    {
+      console.log("User seems to be logged in but there was an error getting the user. Logging out user.", getUserError);
+      await supabase.auth.signOut();
+    }
+    else
+    {
+      console.log("User is not logged in.");
+    }
+
     const redirectUrl = req.nextUrl.clone();
     redirectUrl.pathname = "/login";
     redirectUrl.searchParams.set("redirectedFrom", req.nextUrl.pathname);
-    console.log("User is not logged in. Redirecting to: ", redirectUrl.toString());
+    console.log("Redirecting to: ", redirectUrl.toString());
     return NextResponse.redirect(redirectUrl);
-  }
-
-  const { data: { user }, error: getUserError } = await supabase.auth.getUser();
-
-  if(getUserError)
-  {
-    console.log("User is logged in but there was an error getting the user. Do nothing for now. This should be investigated", getUserError);
-    return res;
   }
 
   if(!user)
   {
-    console.log("User is logged in but was null. This should not happen. Do nothing for now");
-    return res;
+    console.log("User is logged in but was null. This should not happen but doing nothing for now. This should be investigated.");
+    return NextResponse.next();
   }
 
   if(!user.confirmed_at)

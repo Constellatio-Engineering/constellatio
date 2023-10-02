@@ -1,47 +1,41 @@
 {
-  "id": "c067e9c1-af0e-4bac-b8c4-1e579d9236cb",
-  "prevId": "4c362859-bdc5-420e-81e8-0383f7c3782c",
+  "id": "8aaa956e-49ae-487c-9650-cd2d1ed2acd5",
+  "prevId": "b90af83e-f9f6-4e3c-be92-bd34d756a442",
   "version": "5",
   "dialect": "pg",
   "tables": {
-    "bookmarks": {
-      "name": "bookmarks",
+    "Bookmark": {
+      "name": "Bookmark",
       "schema": "",
       "columns": {
-        "id": {
-          "name": "id",
-          "type": "serial",
-          "primaryKey": true,
-          "notNull": true
-        },
-        "uuid": {
-          "name": "uuid",
+        "Id": {
+          "name": "Id",
           "type": "uuid",
           "primaryKey": false,
           "notNull": true,
           "default": "gen_random_uuid()"
         },
-        "userId": {
-          "name": "userId",
+        "UserId": {
+          "name": "UserId",
           "type": "uuid",
           "primaryKey": false,
           "notNull": true
         },
-        "resourceType": {
-          "name": "resourceType",
-          "type": "resourceType",
+        "ResourceType": {
+          "name": "ResourceType",
+          "type": "ResourceType",
           "primaryKey": false,
           "notNull": true
         },
-        "created_at": {
-          "name": "created_at",
+        "CreatedAt": {
+          "name": "CreatedAt",
           "type": "timestamp",
           "primaryKey": false,
-          "notNull": false,
+          "notNull": true,
           "default": "now()"
         },
-        "resourceId": {
-          "name": "resourceId",
+        "ResourceId": {
+          "name": "ResourceId",
           "type": "uuid",
           "primaryKey": false,
           "notNull": true
@@ -49,96 +43,238 @@
       },
       "indexes": {},
       "foreignKeys": {
-        "bookmarks_userId_users_id_fk": {
-          "name": "bookmarks_userId_users_id_fk",
-          "tableFrom": "bookmarks",
+        "Bookmark_UserId_User_Id_fk": {
+          "name": "Bookmark_UserId_User_Id_fk",
+          "tableFrom": "Bookmark",
           "columnsFrom": [
-            "userId"
+            "UserId"
           ],
-          "tableTo": "users",
+          "tableTo": "User",
           "columnsTo": [
-            "id"
+            "Id"
           ],
           "onUpdate": "no action",
-          "onDelete": "cascade"
+          "onDelete": "no action"
         }
       },
       "compositePrimaryKeys": {},
       "uniqueConstraints": {
-        "bookmarks_uuid_unique": {
-          "name": "bookmarks_uuid_unique",
+        "Bookmark_Id_unique": {
+          "name": "Bookmark_Id_unique",
           "columns": [
-            "uuid"
+            "Id"
           ],
           "nullsNotDistinct": false
         },
-        "bookmarks_resourceType_resourceId_userId_unique": {
-          "name": "bookmarks_resourceType_resourceId_userId_unique",
+        "Bookmark_ResourceType_ResourceId_UserId_unique": {
+          "name": "Bookmark_ResourceType_ResourceId_UserId_unique",
           "columns": [
-            "resourceType",
-            "resourceId",
-            "userId"
+            "ResourceType",
+            "ResourceId",
+            "UserId"
           ],
           "nullsNotDistinct": false
         }
       }
     },
-    "uploads": {
-      "name": "uploads",
+    "Document": {
+      "name": "Document",
       "schema": "",
       "columns": {
-        "id": {
-          "name": "id",
-          "type": "serial",
-          "primaryKey": true,
-          "notNull": true
-        },
-        "uuid": {
-          "name": "uuid",
+        "Id": {
+          "name": "Id",
           "type": "uuid",
           "primaryKey": false,
           "notNull": true,
           "default": "gen_random_uuid()"
         },
-        "clientSideUuid": {
-          "name": "clientSideUuid",
+        "UserId": {
+          "name": "UserId",
           "type": "uuid",
           "primaryKey": false,
           "notNull": true
         },
-        "userId": {
-          "name": "userId",
-          "type": "uuid",
-          "primaryKey": false,
-          "notNull": true
-        },
-        "created_at": {
-          "name": "created_at",
+        "CreatedAt": {
+          "name": "CreatedAt",
           "type": "timestamp",
           "primaryKey": false,
-          "notNull": false,
+          "notNull": true,
           "default": "now()"
         },
-        "filename": {
-          "name": "filename",
+        "UpdatedAt": {
+          "name": "UpdatedAt",
+          "type": "timestamp",
+          "primaryKey": false,
+          "notNull": true,
+          "default": "now()"
+        },
+        "FolderId": {
+          "name": "FolderId",
+          "type": "uuid",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "Name": {
+          "name": "Name",
           "type": "text",
           "primaryKey": false,
           "notNull": true
         },
-        "originalFilename": {
-          "name": "originalFilename",
+        "Content": {
+          "name": "Content",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true
+        }
+      },
+      "indexes": {},
+      "foreignKeys": {
+        "Document_UserId_User_Id_fk": {
+          "name": "Document_UserId_User_Id_fk",
+          "tableFrom": "Document",
+          "columnsFrom": [
+            "UserId"
+          ],
+          "tableTo": "User",
+          "columnsTo": [
+            "Id"
+          ],
+          "onUpdate": "no action",
+          "onDelete": "no action"
+        },
+        "Document_FolderId_UploadFolder_Id_fk": {
+          "name": "Document_FolderId_UploadFolder_Id_fk",
+          "tableFrom": "Document",
+          "columnsFrom": [
+            "FolderId"
+          ],
+          "tableTo": "UploadFolder",
+          "columnsTo": [
+            "Id"
+          ],
+          "onUpdate": "no action",
+          "onDelete": "no action"
+        }
+      },
+      "compositePrimaryKeys": {},
+      "uniqueConstraints": {
+        "Document_Id_unique": {
+          "name": "Document_Id_unique",
+          "columns": [
+            "Id"
+          ],
+          "nullsNotDistinct": false
+        }
+      }
+    },
+    "UploadFolder": {
+      "name": "UploadFolder",
+      "schema": "",
+      "columns": {
+        "Id": {
+          "name": "Id",
+          "type": "uuid",
+          "primaryKey": false,
+          "notNull": true,
+          "default": "gen_random_uuid()"
+        },
+        "CreatedAt": {
+          "name": "CreatedAt",
+          "type": "timestamp",
+          "primaryKey": false,
+          "notNull": true,
+          "default": "now()"
+        },
+        "UserId": {
+          "name": "UserId",
+          "type": "uuid",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "Name": {
+          "name": "Name",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true
+        }
+      },
+      "indexes": {},
+      "foreignKeys": {
+        "UploadFolder_UserId_User_Id_fk": {
+          "name": "UploadFolder_UserId_User_Id_fk",
+          "tableFrom": "UploadFolder",
+          "columnsFrom": [
+            "UserId"
+          ],
+          "tableTo": "User",
+          "columnsTo": [
+            "Id"
+          ],
+          "onUpdate": "no action",
+          "onDelete": "no action"
+        }
+      },
+      "compositePrimaryKeys": {},
+      "uniqueConstraints": {
+        "UploadFolder_Id_unique": {
+          "name": "UploadFolder_Id_unique",
+          "columns": [
+            "Id"
+          ],
+          "nullsNotDistinct": false
+        }
+      }
+    },
+    "UploadedFile": {
+      "name": "UploadedFile",
+      "schema": "",
+      "columns": {
+        "Id": {
+          "name": "Id",
+          "type": "uuid",
+          "primaryKey": false,
+          "notNull": true,
+          "default": "gen_random_uuid()"
+        },
+        "UserId": {
+          "name": "UserId",
+          "type": "uuid",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "CreatedAt": {
+          "name": "CreatedAt",
+          "type": "timestamp",
+          "primaryKey": false,
+          "notNull": true,
+          "default": "now()"
+        },
+        "FolderId": {
+          "name": "FolderId",
+          "type": "uuid",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "ServerFilename": {
+          "name": "ServerFilename",
           "type": "text",
           "primaryKey": false,
           "notNull": true
         },
-        "sizeInBytes": {
-          "name": "sizeInBytes",
+        "OriginalFilename": {
+          "name": "OriginalFilename",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "SizeInBytes": {
+          "name": "SizeInBytes",
           "type": "integer",
           "primaryKey": false,
           "notNull": true
         },
-        "fileExtension": {
-          "name": "fileExtension",
+        "FileExtension": {
+          "name": "FileExtension",
           "type": "text",
           "primaryKey": false,
           "notNull": true
@@ -146,79 +282,98 @@
       },
       "indexes": {},
       "foreignKeys": {
-        "uploads_userId_users_id_fk": {
-          "name": "uploads_userId_users_id_fk",
-          "tableFrom": "uploads",
+        "UploadedFile_UserId_User_Id_fk": {
+          "name": "UploadedFile_UserId_User_Id_fk",
+          "tableFrom": "UploadedFile",
           "columnsFrom": [
-            "userId"
+            "UserId"
           ],
-          "tableTo": "users",
+          "tableTo": "User",
           "columnsTo": [
-            "id"
+            "Id"
           ],
           "onUpdate": "no action",
-          "onDelete": "cascade"
+          "onDelete": "no action"
+        },
+        "UploadedFile_FolderId_UploadFolder_Id_fk": {
+          "name": "UploadedFile_FolderId_UploadFolder_Id_fk",
+          "tableFrom": "UploadedFile",
+          "columnsFrom": [
+            "FolderId"
+          ],
+          "tableTo": "UploadFolder",
+          "columnsTo": [
+            "Id"
+          ],
+          "onUpdate": "no action",
+          "onDelete": "no action"
         }
       },
       "compositePrimaryKeys": {},
       "uniqueConstraints": {
-        "uploads_uuid_unique": {
-          "name": "uploads_uuid_unique",
+        "UploadedFile_Id_unique": {
+          "name": "UploadedFile_Id_unique",
           "columns": [
-            "uuid"
+            "Id"
           ],
           "nullsNotDistinct": false
         }
       }
     },
-    "users": {
-      "name": "users",
+    "User": {
+      "name": "User",
       "schema": "",
       "columns": {
-        "id": {
-          "name": "id",
+        "Id": {
+          "name": "Id",
           "type": "uuid",
-          "primaryKey": false,
+          "primaryKey": true,
           "notNull": true
         },
-        "email": {
-          "name": "email",
+        "Email": {
+          "name": "Email",
           "type": "text",
           "primaryKey": false,
           "notNull": true
         },
-        "displayName": {
-          "name": "displayName",
+        "DisplayName": {
+          "name": "DisplayName",
           "type": "text",
           "primaryKey": false,
           "notNull": true
         },
-        "firstName": {
-          "name": "firstName",
+        "FirstName": {
+          "name": "FirstName",
           "type": "text",
           "primaryKey": false,
           "notNull": true
         },
-        "gender": {
-          "name": "gender",
-          "type": "gender",
+        "Gender": {
+          "name": "Gender",
+          "type": "Gender",
           "primaryKey": false,
           "notNull": true
         },
-        "lastName": {
-          "name": "lastName",
+        "LastName": {
+          "name": "LastName",
           "type": "text",
           "primaryKey": false,
           "notNull": true
         },
-        "semester": {
-          "name": "semester",
+        "Semester": {
+          "name": "Semester",
           "type": "smallint",
           "primaryKey": false,
           "notNull": false
         },
-        "university": {
-          "name": "university",
+        "StripeCustomerId": {
+          "name": "StripeCustomerId",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "University": {
+          "name": "University",
           "type": "text",
           "primaryKey": false,
           "notNull": true
@@ -228,17 +383,17 @@
       "foreignKeys": {},
       "compositePrimaryKeys": {},
       "uniqueConstraints": {
-        "users_id_unique": {
-          "name": "users_id_unique",
+        "User_Id_unique": {
+          "name": "User_Id_unique",
           "columns": [
-            "id"
+            "Id"
           ],
           "nullsNotDistinct": false
         },
-        "users_email_unique": {
-          "name": "users_email_unique",
+        "User_Email_unique": {
+          "name": "User_Email_unique",
           "columns": [
-            "email"
+            "Email"
           ],
           "nullsNotDistinct": false
         }
@@ -246,16 +401,16 @@
     }
   },
   "enums": {
-    "gender": {
-      "name": "gender",
+    "Gender": {
+      "name": "Gender",
       "values": {
         "male": "male",
         "female": "female",
         "diverse": "diverse"
       }
     },
-    "resourceType": {
-      "name": "resourceType",
+    "ResourceType": {
+      "name": "ResourceType",
       "values": {
         "article": "article",
         "case": "case"

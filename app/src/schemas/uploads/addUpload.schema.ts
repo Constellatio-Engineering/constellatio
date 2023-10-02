@@ -1,10 +1,11 @@
 import { z } from "zod";
 
 export const addUploadSchema = z.object({
-  clientSideUuid: z.string(),
   fileSizeInBytes: z.number().int().min(1),
-  filename: z.string(),
+  folderId: z.string().uuid().nullable(),
+  id: z.string().uuid(),
   originalFilename: z.string(),
+  serverFilename: z.string()
 });
 
 export type AddUploadSchema = z.input<typeof addUploadSchema>;

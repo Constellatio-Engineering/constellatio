@@ -14,5 +14,5 @@ export const paths = {
 
 export const getConfirmEmailUrl = (): string =>
 {
-  return env.NEXT_PUBLIC_FRONTEND_URL + paths.confirm;
+  return env.NEXT_PUBLIC_WEBSITE_URL + paths.confirm;
 };

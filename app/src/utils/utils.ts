@@ -1,6 +1,6 @@
+/* eslint-disable import/no-unused-modules */
 import { v4 as uuidV4 } from "uuid";
 
-// eslint-disable-next-line import/no-unused-modules
 export const sleep = async (ms: number): Promise<void> => new Promise(resolve => setTimeout(resolve, ms));
 
 export const getFileNameWithoutExtension = (filename: string): string =>

@@ -1,5 +1,4 @@
 import CaisyImg from "@/basic-components/CaisyImg";
-import { BodyText } from "@/components/atoms/BodyText/BodyText";
 import { FloatingButton } from "@/components/atoms/FloatingButton/FloatingButton";
 import { type IGenImageWrapperCard } from "@/services/graphql/__generated/sdk";
 

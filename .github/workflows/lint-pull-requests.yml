@@ -1,0 +1,55 @@
+name: Lint Pull Requests
+
+on:
+  pull_request:
+    branches:
+      - development
+      - main
+
+jobs:
+  eslint:
+    name: Check for ESLint errors
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: app
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v3
+      - name: Setup pnpm
+        uses: pnpm/action-setup@v2
+        with:
+          version: 8
+      - name: Setup Node
+        uses: actions/setup-node@v3
+        with:
+          node-version: 18
+          cache-dependency-path: ./app/pnpm-lock.yaml
+          cache: 'pnpm'
+      - name: Install Dependencies
+        run: pnpm install
+      - name: Run ESLint
+        run: pnpm eslint
+  typecheck:
+    name: Check for TypeScript errors
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: app
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v3
+      - name: Setup pnpm
+        uses: pnpm/action-setup@v2
+        with:
+          version: 8
+      - name: Setup Node
+        uses: actions/setup-node@v3
+        with:
+          node-version: 18
+          cache-dependency-path: ./app/pnpm-lock.yaml
+          cache: 'pnpm'
+      - name: Install Dependencies
+        run: pnpm install
+      - name: Run type checking
+        run: pnpm check-types

@@ -16,6 +16,9 @@ export const f_FullCase = gql`
 	${f_CaseFullTextTasks}
 	fragment FullCase on Case {
 		__typename
+		_meta{
+			updatedAt
+		}
 		id
 		title
 		durationToCompleteInMinutes

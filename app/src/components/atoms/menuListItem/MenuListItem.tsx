@@ -13,20 +13,24 @@ interface MenuListItemProps
 {
   readonly active?: boolean;
   readonly icon: React.ReactNode;
+  readonly onClick: () => void;
+  readonly onDelete: () => void;
   readonly title: string;
-
 }
 
 const MenuListItem: FunctionComponent<MenuListItemProps & React.HTMLProps<HTMLDivElement>> = ({
   active,
   icon,
+  onClick,
+  onDelete,
   title,
-  ...props
-}) => 
+}) =>
 {
+  // TODO @Hassan <div> with onClick prop should be a button instead of a paragraph due to accessibility reasons
+
   const theme = useMantineTheme();
   return (
-    <div {...props} css={styles.wrapper({ active, theme })}>
+    <div onClick={onClick} css={styles.wrapper({ active, theme })}>
       <Menu width={250} position="left-start">
         <BodyText styleType="body-01-medium" component="p">
           <span className="label">{icon}{title}</span><Menu.Target><span className="dots"><DotsIcon/></span></Menu.Target>
@@ -37,7 +41,7 @@ const MenuListItem: FunctionComponent<MenuListItemProps & React.HTMLProps<HTMLDi
           <Menu.Divider/>
           <Menu.Item><span className="label"><MoveDownIcon/>Download</span></Menu.Item>
           <Menu.Divider/>
-          <Menu.Item><span className="label"><Trash/>Delete</span></Menu.Item>
+          <Menu.Item onClick={onDelete}><span className="label"><Trash/>Delete</span></Menu.Item>
         </Menu.Dropdown>
       </Menu>
     </div>

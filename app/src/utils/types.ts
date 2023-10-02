@@ -1,6 +1,6 @@
 /* eslint-disable @typescript-eslint/ban-types, import/no-unused-modules */
 
-import { Bookmark } from "@/db/schema";
+// import { Bookmark } from "@/db/schema";
 
 import { type CSSObject, type MantineTheme } from "@mantine/core";
 import { type TRPCClientErrorBase } from "@trpc/client";

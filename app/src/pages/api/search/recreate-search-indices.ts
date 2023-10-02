@@ -8,7 +8,13 @@ import { getCaseById } from "@/services/content/getCaseById";
 import { isDevelopmentOrStaging } from "@/utils/env";
 import {
   type ArticleSearchItemNodes,
-  type CaseSearchItemNodes, createArticleSearchIndexItem, createCaseSearchIndexItem, createUploadsSearchIndexItem, searchIndices, type UploadSearchItemNodes
+  type CaseSearchItemNodes,
+  createArticleSearchIndexItem,
+  createCaseSearchIndexItem,
+  createUploadsSearchIndexItem,
+  searchIndices,
+  uploadSearchIndexItemPrimaryKey,
+  type UploadSearchItemNodes
 } from "@/utils/search";
 
 import { type NextApiHandler } from "next";
@@ -29,6 +35,8 @@ const handler: NextApiHandler = async (req, res) =>
   console.log("Creating meilisearch index for cases. This may take a while...");
 
   await meiliSearchAdmin.deleteIndexIfExists(searchIndices.cases);
+  await meiliSearchAdmin.deleteIndexIfExists(searchIndices.userUploads);
+  await meiliSearchAdmin.deleteIndexIfExists(searchIndices.articles);
 
   const allCases = await getAllCases();
   const allArticles = await getAllArticles();
@@ -48,9 +56,11 @@ const handler: NextApiHandler = async (req, res) =>
   const createArticlesIndexTask = await meiliSearchAdmin.index(searchIndices.articles).addDocuments(allArticlesSearchIndexItems);
 
   // User Uploads
-  const allUserUploads = await db.query.uploadsTable.findMany();
+  const allUserUploads = await db.query.uploadedFiles.findMany();
   const allUserUploadsSearchIndexItems = allUserUploads.map(createUploadsSearchIndexItem);
-  const createUploadsIndexTask = await meiliSearchAdmin.index(searchIndices.userUploads).addDocuments(allUserUploadsSearchIndexItems, { primaryKey: "uuid" });
+  const createUploadsIndexTask = await meiliSearchAdmin.index(searchIndices.userUploads).addDocuments(allUserUploadsSearchIndexItems, {
+    primaryKey: uploadSearchIndexItemPrimaryKey
+  });
 
   const createIndicesTasks = await meiliSearchAdmin.waitForTasks([
     createCasesIndexTask.taskUid,
@@ -80,7 +90,7 @@ const handler: NextApiHandler = async (req, res) =>
   const uploadsSearchableAttributes: UploadSearchItemNodes[] = ["originalFilename"];
   const updateUploadsRankingRulesTask = await meiliSearchAdmin.index(searchIndices.userUploads).updateSearchableAttributes(uploadsSearchableAttributes);
 
-  const uploadsDisplayedAttributes: UploadSearchItemNodes[] = ["originalFilename", "uuid", "userId"];
+  const uploadsDisplayedAttributes: UploadSearchItemNodes[] = ["originalFilename", "id", "userId"];
   const updateUploadsDisplayedAttributesTask = await meiliSearchAdmin.index(searchIndices.userUploads).updateDisplayedAttributes(uploadsDisplayedAttributes);
 
   const uploadsFilterableAttributes: UploadSearchItemNodes[] = ["userId"];

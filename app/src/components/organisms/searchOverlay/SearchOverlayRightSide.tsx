@@ -2,7 +2,7 @@ import { CustomLink } from "@/components/atoms/CustomLink/CustomLink";
 import Label from "@/components/atoms/label/Label";
 import CategoryButton from "@/components/molecules/categoryButton/CategoryButton";
 import useSearchResults from "@/hooks/useSearchResults";
-import useSearchBarStore from "@/stores/searchBar.store";
+// import useSearchBarStore from "@/stores/searchBar.store";
 
 import React, { type FunctionComponent } from "react";
 
@@ -23,7 +23,7 @@ const SearchOverlayRightSide: FunctionComponent<SearchOverlayRightSideProps> = (
           <div className="suggestion__section">
             <Label variant="neutral">Your materials</Label>
             {searchResults.userUploads.map((result) => (
-              <span key={result.uuid} className="suggestion__section__link">
+              <span key={result.id} className="suggestion__section__link">
                 <CustomLink styleType="link-content" component="p">
                   {result.originalFilename}
                 </CustomLink>
