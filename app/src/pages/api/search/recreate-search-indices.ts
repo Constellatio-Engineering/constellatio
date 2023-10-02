@@ -13,7 +13,6 @@ import {
   createCaseSearchIndexItem,
   createUploadsSearchIndexItem,
   searchIndices,
-  type UploadSearchIndexItem,
   uploadSearchIndexItemPrimaryKey,
   type UploadSearchItemNodes
 } from "@/utils/search";
