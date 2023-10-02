@@ -12,11 +12,15 @@ export const authenticationRouter = createTRPCRouter({
     {
       const start = performance.now();
 
+      console.time("Supabase sign up");
+
       const { data: signUpData, error: signUpError } = await supabaseServerClient.auth.signUp({
         email: input.email,
         options: { emailRedirectTo: getConfirmEmailUrl() },
         password: input.password
       });
+
+      console.timeEnd("Supabase sign up");
 
       if(signUpError)
       {
@@ -48,7 +52,11 @@ export const authenticationRouter = createTRPCRouter({
           university: input.university
         };
 
+        console.time("Inserting user into db");
+
         await db.insert(users).values(userToInsert);
+
+        console.timeEnd("Inserting user into db");
       }
       catch (e: unknown)
       {
