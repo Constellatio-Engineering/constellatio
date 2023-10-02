@@ -1,11 +1,10 @@
-/* eslint-disable max-lines */
+import FileViewer from "@/components/fileViewer/FileViewer";
 import EmptyStateCard from "@/components/organisms/emptyStateCard/EmptyStateCard";
 import FavoriteCasesList from "@/components/organisms/favoriteCasesList/FavoriteCasesList";
 import FileUploadMenu from "@/components/organisms/fileUploadMenu/FileUploadMenu";
 import MaterialMenu from "@/components/organisms/materialMenu/MaterialMenu";
 import OverviewHeader from "@/components/organisms/OverviewHeader/OverviewHeader";
 import PersonalSpaceNavBar from "@/components/organisms/personalSpaceNavBar/PersonalSpaceNavBar";
-import DummyFileViewer from "@/components/pages/personalSpacePage/dummyFileViewer/DummyFileViewer";
 import PapersBlock from "@/components/papersBlock/PapersBlock";
 import UploadedMaterialBlock from "@/components/uploadedMaterialBlock/UploadedMaterialBlock";
 import useBookmarks from "@/hooks/useBookmarks";
@@ -13,17 +12,14 @@ import useCases from "@/hooks/useCases";
 import useDocuments from "@/hooks/useDocuments";
 import useUploadedFiles from "@/hooks/useUploadedFiles";
 import useUploadFolders from "@/hooks/useUploadFolders";
-import { type ICasesOverviewProps } from "@/services/content/getCasesOverviewProps";
 import { type IGenArticleOverviewFragment, type IGenFullCaseFragment, type IGenMainCategory } from "@/services/graphql/__generated/sdk";
 import uploadsProgressStore from "@/stores/uploadsProgress.store";
-import { api } from "@/utils/api";
-import { removeItemsByIndices } from "@/utils/utils";
 
 import { Container, Loader } from "@mantine/core";
-import axios from "axios";
 import Link from "next/link";
-import React, { type FormEvent, type FunctionComponent, useState, useId } from "react";
+import React, { type FunctionComponent, useState, useId, useEffect } from "react";
 
+import { categoriesHelper } from "./PersonalSpaceHelper";
 import * as styles from "./PersonalSpacePage.styles";
 import BookmarkIconSvg from "../../../../public/images/icons/bookmark.svg";
 import FileIconSvg from "../../../../public/images/icons/file.svg";
@@ -33,20 +29,14 @@ export type FileWithClientSideUuid = {
   file: File;
 };
 
-export interface IUploadedMaterialProps 
-{
-
-}
-
 const PersonalSpacePage: FunctionComponent = () =>
 {
-  const apiContext = api.useContext();
   const [selectedFolderId, setSelectedFolderId] = useState<string | null>(null);
   const { allCases = [], isLoading: areCasesLoading } = useCases();
   const { bookmarks, isLoading: areBookmarksLoading } = useBookmarks(undefined);
   const { folders = [] } = useUploadFolders();
   const { isLoading: isGetUploadedFilesLoading, uploadedFiles } = useUploadedFiles(selectedFolderId);
-  const { documents } = useDocuments(selectedFolderId);
+  const { documents, isLoading: isGetDocumentsLoading, isRefetching: isRefetchingDocuments } = useDocuments(selectedFolderId);
   const allCasesBookmarks = bookmarks.filter(bookmark => bookmark?.resourceType === "case") ?? [];
   const bookmarkedCases = allCases.filter(caisyCase => allCasesBookmarks.some(bookmark => bookmark.resourceId === caisyCase.id));
   const mainCategoriesInBookmarkedCases = bookmarkedCases.map(bookmarkedCase => bookmarkedCase?.subCategoryField?.[0]?.mainCategory?.[0]);
@@ -62,159 +52,41 @@ const PersonalSpacePage: FunctionComponent = () =>
     }
     return acc;
   }, []);
-
   const fileInputRef = React.useRef<HTMLInputElement>(null);
   const { setUploadState, uploads } = uploadsProgressStore();
   const [selectedFiles, setSelectedFiles] = useState<FileWithClientSideUuid[]>([]);
   const [selectedFileIdForPreview, setSelectedFileIdForPreview] = useState<string>();
-
   const FavCategoryId = useId();
   const MaterialsCategoryId = useId();
-  const categories: ICasesOverviewProps["allMainCategories"] = [{
-    __typename: "MainCategory",
-    casesPerCategory: bookmarkedCases?.length ?? 0,
-    icon: {
-      src: BookmarkIconSvg.src,
-      title: "bookmark-icon"
-    },
-    id: FavCategoryId,
-    mainCategory: "Favourites"
+  const categories = categoriesHelper({
+    BookmarkIconSvg,
+    FavCategoryId,
+    bookmarkedCasesLength: bookmarkedCases?.length ?? 0
   }, {
-    __typename: "MainCategory",
-    casesPerCategory: uploadedFiles?.length ?? 0,
-    icon: {
-      src: FileIconSvg.src,
-      title: "file-category-icon"
-    },
-    id: MaterialsCategoryId,
-    mainCategory: "Materials"
-  }];
-
+    FileIconSvg,
+    MaterialsCategoryId,
+    uploadedFilesLength: uploadedFiles?.length ?? 0,
+  });
   const [selectedCategoryId, setSelectedCategoryId] = useState<IGenMainCategory["id"]>(categories?.[1]?.id as IGenMainCategory["id"]);
-  const { mutateAsync: createSignedUploadUrl } = api.uploads.createSignedUploadUrl.useMutation();
-  const { mutateAsync: saveFileToDatabase } = api.uploads.saveFileToDatabase.useMutation();
   const FavCasesTabId = useId();
   const FavDictionaryTabId = useId();
   const FavForumsTabId = useId();
   const FavHighlightsTabId = useId();
-
-  const uploadFile = async (file: File, clientSideUuid: string): Promise<void> =>
-  {
-    if(selectedFiles.length === 0)
-    {
-      console.log("no files selected");
-      return;
-    }
-
-    const originalFileName = file.name;
-
-    console.log("uploading file '", `${originalFileName}'...`);
-
-    setUploadState({
-      clientSideUuid,
-      fileNameWithExtension: originalFileName,
-      state: {
-        progressInPercent: 0,
-        type: "uploading"
-      }
-    });
-
-    const { serverFilename, uploadUrl } = await createSignedUploadUrl({
-      contentType: file.type,
-      fileSizeInBytes: file.size,
-      filename: originalFileName,
-    });
-
-    await axios.put(uploadUrl, file, {
-      headers: { "Content-Type": file.type },
-      onUploadProgress: ({ progress = 0 }) =>
-      {
-        setUploadState({
-          clientSideUuid,
-          fileNameWithExtension: originalFileName,
-          state: progress === 1 ? {
-            type: "completed"
-          } : {
-            progressInPercent: progress * 100,
-            type: "uploading"
-          }
-        });
-      }
-    });
-
-    await saveFileToDatabase({
-      fileSizeInBytes: file.size,
-      folderId: selectedFolderId,
-      id: clientSideUuid,
-      originalFilename: originalFileName,
-      serverFilename
-    });
-
-    console.log("file uploaded successfully");
-  };
-
-  const onSubmit = async (e: FormEvent<HTMLFormElement>): Promise<void> =>
-  {
-    e.preventDefault();
-
-    if(fileInputRef.current)
-    {
-      fileInputRef.current.value = "";
-    }
-
-    const uploads: Array<Promise<void>> = selectedFiles.map(async ({ clientSideUuid, file }) =>
-    {
-      try
-      {
-        await uploadFile(file, clientSideUuid);
-        await apiContext.uploads.getUploadedFiles.invalidate();
-      }
-      catch (e: unknown)
-      {
-        console.log("error while uploading file", e);
-        setUploadState({
-          clientSideUuid,
-          fileNameWithExtension: file.name,
-          state: { type: "failed" }
-        });
-        return Promise.reject(e);
-      }
-    });
-
-    const uploadResults = await Promise.allSettled(uploads);
-
-    const indicesOfSuccessfulUploads: number[] = [];
-
-    uploadResults.forEach((result, index) =>
-    {
-      if(result.status === "fulfilled")
-      {
-        indicesOfSuccessfulUploads.push(index);
-      }
-    });
-
-    const newSelectedFiles = removeItemsByIndices<FileWithClientSideUuid>(selectedFiles, indicesOfSuccessfulUploads);
-    setSelectedFiles(newSelectedFiles);
-  };
-
   const isFavoriteTab = (id: string): boolean => id === categories?.[0]?.id;
-
   const areUploadsInProgress = uploads.some(u => u.state.type === "uploading");
-  
   const favoriteCategoryNavTabs = [{ id: FavCasesTabId, itemsPerTab: bookmarkedCases?.length ?? 0, title: "CASES" }, { id: FavDictionaryTabId, itemsPerTab: 999, title: "DICTIONARY" }, { id: FavForumsTabId, itemsPerTab: 999, title: "FORUM" }, { id: FavHighlightsTabId, itemsPerTab: 999, title: "HIGHLIGHTS" }];
   const [selectedTabId, setSelectedTabId] = useState<string>(favoriteCategoryNavTabs?.[0]?.id as string);
+  const casesByMainCategory = (id: string): Array<({ _typename?: "Case" | undefined } & IGenFullCaseFragment) | null | undefined> | IGenArticleOverviewFragment[] | undefined => bookmarkedCases?.filter(bookmarkedCase => bookmarkedCase.subCategoryField?.[0]?.mainCategory?.[0]?.id === id);
+  const [showFileViewerModal, setShowFileViewerModal] = useState<boolean>(false);
 
-  // FUNCTION RETURNING ALL CASES USING THEIR SUBCATEGORY WITH THE SUBCATEGORY ID
-  // const casesBySubcategoryId = (id: string) => 
-  // {
-  //   return bookmarkedCases.filter(bookmarkedCase => bookmarkedCase.subCategoryField?.[0]?.id === id);
-  // };
-
-  const casesByMainCategory = (id: string): Array<({ _typename?: "Case" | undefined } & IGenFullCaseFragment) | null | undefined> | IGenArticleOverviewFragment[] | undefined =>
+  useEffect(() =>
   {
-    const cases = bookmarkedCases?.filter(bookmarkedCase => bookmarkedCase.subCategoryField?.[0]?.mainCategory?.[0]?.id === id);
-    return cases;
-  };
+    if(selectedFileIdForPreview) { setShowFileViewerModal(true); }
+    if(!selectedFileIdForPreview) { setShowFileViewerModal(false); }
+  }, [selectedFileIdForPreview]);
+
+  console.log("isLoading", isGetDocumentsLoading);
+  console.log("isRefetching", isRefetchingDocuments);
 
   return (
     <div css={styles.wrapper}>
@@ -288,21 +160,20 @@ const PersonalSpacePage: FunctionComponent = () =>
                 folders={folders}
               />
               <div style={{ flex: 1, maxWidth: "75%" }}>
-                <PapersBlock docs={documents} selectedFolderId={selectedFolderId}/>
+                <PapersBlock docs={documents} selectedFolderId={selectedFolderId} isLoading={isGetDocumentsLoading}/>
                 <UploadedMaterialBlock
                   areUploadsInProgress={areUploadsInProgress}
                   fileInputRef={fileInputRef}
                   isGetUploadedFilesLoading={isGetUploadedFilesLoading}
-                  onSubmit={onSubmit}
+                  setUploadState={setUploadState}
                   selectedFiles={selectedFiles}
                   setSelectedFileIdForPreview={setSelectedFileIdForPreview}
                   setSelectedFiles={setSelectedFiles}
                   uploadedFiles={uploadedFiles}
+                  selectedFolderId={selectedFolderId}
                 />
                 <FileUploadMenu uploads={uploads}/>
-                {selectedFileIdForPreview && (
-                  <DummyFileViewer fileId={selectedFileIdForPreview}/>
-                )}
+                {selectedFileIdForPreview && <FileViewer fileId={selectedFileIdForPreview} showFileViewerModal={showFileViewerModal}/>}
               </div>
             </div>
           </>

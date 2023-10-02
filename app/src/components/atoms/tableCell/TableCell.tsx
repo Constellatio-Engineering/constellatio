@@ -18,7 +18,7 @@ const TableCell: FunctionComponent<ITableCellProps> = ({ children, icon, variant
   return (
     <button css={styles.wrapper({ theme, variant })} type="button">
       {icon && <div css={styles.iconWrapper({ variant })}>{icon}</div>}
-      <BodyText styleType={variant === "titleTableCell" ? "body-01-medium" : "body-02-medium"} component="p">
+      <BodyText styleType={variant === "titleTableCell" ? "body-01-medium" : "body-02-medium"} component="p" title={JSON.stringify(children)}>
         {children}
       </BodyText>
     </button>

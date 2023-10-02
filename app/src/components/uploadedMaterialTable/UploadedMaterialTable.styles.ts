@@ -58,6 +58,13 @@ export const docDate = (theme: MantineTheme) => css`
 export const docTags = (theme: MantineTheme) => css`
   color: ${theme.colors["neutrals-01"][9]};
 `;
+export const cellNote = (theme: MantineTheme) => css`
+  color: ${theme.colors["neutrals-01"][9]};
+  svg{
+    vertical-align: text-bottom;
+    margin-right: 8px;
+  }
+`;
 
 export const showMoreButton = (theme: MantineTheme) => css`
   position: relative;

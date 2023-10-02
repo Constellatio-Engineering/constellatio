@@ -10,6 +10,8 @@ export const authenticationRouter = createTRPCRouter({
     .input(registrationFormSchema)
     .mutation(async ({ ctx: { supabaseServerClient }, input }) =>
     {
+      const start = performance.now();
+
       const { data: signUpData, error: signUpError } = await supabaseServerClient.auth.signUp({
         email: input.email,
         options: { emailRedirectTo: getConfirmEmailUrl() },
@@ -64,9 +66,15 @@ export const authenticationRouter = createTRPCRouter({
 
       if(!signUpData.session)
       {
+        const end = performance.now();
+        console.log(`Sign up took ${end - start}ms`);
+
         // Sign up was successful, but email confirmation is enabled. The user needs to confirm their email address.
         return ({ resultType: "emailConfirmationRequired" }) as const;
       }
+
+      const end = performance.now();
+      console.log(`Sign up took ${end - start}ms`);
 
       // If the session is available right after sign up, it means that email confirmation is disabled.
       return ({
