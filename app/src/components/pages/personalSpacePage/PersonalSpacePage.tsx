@@ -5,13 +5,11 @@ import FileUploadMenu from "@/components/organisms/fileUploadMenu/FileUploadMenu
 import MaterialMenu from "@/components/organisms/materialMenu/MaterialMenu";
 import OverviewHeader from "@/components/organisms/OverviewHeader/OverviewHeader";
 import PersonalSpaceNavBar from "@/components/organisms/personalSpaceNavBar/PersonalSpaceNavBar";
-import DummyFileViewer from "@/components/pages/personalSpacePage/dummyFileViewer/DummyFileViewer";
 import PapersBlock from "@/components/papersBlock/PapersBlock";
 import UploadedMaterialBlock from "@/components/uploadedMaterialBlock/UploadedMaterialBlock";
 import useBookmarks from "@/hooks/useBookmarks";
 import useCases from "@/hooks/useCases";
 import useDocuments from "@/hooks/useDocuments";
-import useSignedGetUrl from "@/hooks/useSignedGetUrl";
 import useUploadedFiles from "@/hooks/useUploadedFiles";
 import useUploadFolders from "@/hooks/useUploadFolders";
 import { type IGenArticleOverviewFragment, type IGenFullCaseFragment, type IGenMainCategory } from "@/services/graphql/__generated/sdk";

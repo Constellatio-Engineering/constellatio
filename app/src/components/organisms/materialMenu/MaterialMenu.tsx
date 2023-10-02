@@ -1,6 +1,5 @@
 import { BodyText } from "@/components/atoms/BodyText/BodyText";
 import { Button, type TButton } from "@/components/atoms/Button/Button";
-import { AlertCard } from "@/components/atoms/Card/AlertCard";
 import { Input } from "@/components/atoms/Input/Input";
 import { LinkButton } from "@/components/atoms/LinkButton/LinkButton";
 import MenuListItem from "@/components/atoms/menuListItem/MenuListItem";

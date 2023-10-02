@@ -57,9 +57,9 @@ const FileViewer: FunctionComponent<FileViewerProps> = ({ fileId, showFileViewer
     {
       close();
     }
-  }, [fileUrl, showFileViewerModal]);
+  }, [close, fileUrl, open, showFileViewerModal]);
 
-  const renderFile = () => 
+  const renderFile = (): React.ReactNode => 
   {
     switch (fileType) 
     {
@@ -112,8 +112,7 @@ const FileViewer: FunctionComponent<FileViewerProps> = ({ fileId, showFileViewer
       withCloseButton={false}
       closeOnClickOutside
       closeOnEscape
-      styles={styles.modalStyles()}
-      >
+      styles={styles.modalStyles()}>
       {!isGetUrlLoading ? <div css={styles.wrapper}>{renderFile()}</div> : "Loading..."}
     </Modal>
   );
