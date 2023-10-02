@@ -29,13 +29,14 @@ const UploadedMaterialBlock: FunctionComponent<UploadedMaterialBlockProps> = ({
   onSubmit,
   selectedFiles,
   setSelectedFiles,
+  uploadedFiles,
   ...props
 }) => 
 {
   return (
     <div css={styles.wrapper}>
       <div css={styles.uploadedMaterialBlockHead}>
-        <Title order={4}>Uploaded materials <span>({props?.uploadedFiles?.length ?? 0})</span></Title>
+        <Title order={4}>Uploaded materials <span>({uploadedFiles.length ?? 0})</span></Title>
       </div>
       <div css={styles.uploader}>
         <form
@@ -65,7 +66,7 @@ const UploadedMaterialBlock: FunctionComponent<UploadedMaterialBlockProps> = ({
         </form>
       </div>
       <div css={styles.content}>
-        {props?.uploadedFiles?.length > 0 ? (
+        {uploadedFiles?.length > 0 ? (
           <UploadedMaterialTable {...props}/>
         ) : (
           <EmptyStateCard

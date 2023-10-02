@@ -1,80 +1,49 @@
-import { Drawer, ScrollArea, Title } from "@mantine/core";
-import { useDisclosure } from "@mantine/hooks";
-import React, { type FunctionComponent, useState } from "react";
+import DocumentEditor from "@/components/papersBlock/documentEditor/DocumentEditor";
+import { type Document } from "@/db/schema";
+import useDocumentEditorStore from "@/stores/documentEditor.store";
+
+import { Title } from "@mantine/core";
+import React, { type FunctionComponent } from "react";
 
 import * as styles from "./PapersBlock.styles";
 import { Button } from "../atoms/Button/Button";
-import { Input } from "../atoms/Input/Input";
 import { NoteIcon } from "../Icons/Note";
-import { RichtextEditorField } from "../molecules/RichtextEditorField/RichtextEditorField";
-import SlidingPanelTitle from "../molecules/slidingPanelTitle/SlidingPanelTitle";
 import DocsTable from "../organisms/docsTable/DocsTable";
-import { type IDoc } from "../organisms/docsTable/DocTableData";
 import EmptyStateCard from "../organisms/emptyStateCard/EmptyStateCard";
 
 interface PapersBlockProps
 {
-  readonly docs?: IDoc[];
+  readonly docs: Document[];
+  readonly selectedFolderId: string | null;
 }
 
-const PapersBlock: FunctionComponent<PapersBlockProps> = (props) => 
+const PapersBlock: FunctionComponent<PapersBlockProps> = ({ docs, selectedFolderId }) =>
 {
-  const [opened, { close, open }] = useDisclosure(false);
-  const [newDoc, setNewDoc] = useState<IDoc>({
-    body: "", name: ""
-  });
+  const setCreateDocumentState = useDocumentEditorStore(s => s.setCreateDocumentState);
 
   return (
     <div css={styles.wrapper}>
-      <Drawer
-        opened={opened}
-        onClose={close}
-        title={<SlidingPanelTitle title="Create Constellatio doc" variant="default" closeButtonAction={() => close()}/>}
-        position="right"
-        withCloseButton={false}
-        size="xl"
-        scrollAreaComponent={ScrollArea.Autosize}
-        styles={styles.drawerStyles()}>
-        <div className="form">
-          <Input
-            label="Doc name"
-            inputType="text"
-            value={newDoc.name}
-            onChange={(e) => setNewDoc(prev => ({ ...prev, name: e.target.value }))}
-          />
-          <RichtextEditorField
-            variant="with-legal-quote"
-            content=""
-           
-          />
-        </div>
-        <div className="call-to-action">
-          <Button<"button"> styleType="secondarySimple" onClick={() => close()}>Cancel</Button>
-          <Button<"button"> styleType="primary" disabled>Save</Button>
-        </div>
-      </Drawer>
+      <DocumentEditor/>
       <div css={styles.papersBlockHead}>
-        <Title order={4}>Constellatio docs <span className="count">({props?.docs?.length ?? 0})</span></Title>
+        <Title order={4}>Constellatio docs <span className="count">({docs.length ?? 0})</span></Title>
         <Button<"button">
           styleType="secondarySimple" 
           leftIcon={<NoteIcon/>}
-          onClick={() => open()}> Create doc
+          onClick={() => setCreateDocumentState({ folderId: selectedFolderId })}>
+          Create doc
         </Button>
       </div>
-      {
-        props?.docs?.length ? (
-          <div css={styles.papersBlockTable}>
-            <DocsTable {...props}/> 
-          </div>
-        ) : 
-          (
-            <EmptyStateCard 
-              variant="For-small-areas" 
-              title="You haven’t created any docs yet"
-              text="Constellatio docs are text documents where you leave your notes, summaries, etc"
-            />
-          )
-      }
+      {docs.length > 0 ? (
+        <div css={styles.papersBlockTable}>
+          <DocsTable docs={docs}/>
+        </div>
+      ) : (
+        <EmptyStateCard 
+          variant="For-small-areas" 
+          title="You haven’t created any docs yet"
+          text="Constellatio docs are text documents where you leave your notes, summaries, etc"
+        />
+      )}
     </div>
   );
 };

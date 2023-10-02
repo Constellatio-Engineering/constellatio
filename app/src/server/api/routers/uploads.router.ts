@@ -57,6 +57,8 @@ export const uploadsRouter = createTRPCRouter({
         throw new NotFoundError();
       }
 
+      console.log(file.createdAt);
+
       const [url] = await storage
         .bucket(env.GOOGLE_CLOUD_STORAGE_BUCKET_NAME)
         .file(`${userId}/${file.serverFilename}`)
@@ -159,14 +161,6 @@ export const uploadsRouter = createTRPCRouter({
       return db.query.uploadedFiles.findMany({
         orderBy: [desc(uploadedFiles.createdAt)],
         where: and(...queryConditions)
-      });
-    }),
-  getUploadedFilesBackup: protectedProcedure
-    .query(async ({ ctx: { userId } }) =>
-    {
-      return db.query.uploadedFiles.findMany({
-        orderBy: [desc(uploadedFiles.createdAt)],
-        where: eq(uploadedFiles.userId, userId)
       });
     }),
   saveFileToDatabase: protectedProcedure
