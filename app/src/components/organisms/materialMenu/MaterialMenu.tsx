@@ -1,8 +1,10 @@
 import { BodyText } from "@/components/atoms/BodyText/BodyText";
 import { Button, type TButton } from "@/components/atoms/Button/Button";
+import { AlertCard } from "@/components/atoms/Card/AlertCard";
 import { Input } from "@/components/atoms/Input/Input";
 import { LinkButton } from "@/components/atoms/LinkButton/LinkButton";
 import MenuListItem from "@/components/atoms/menuListItem/MenuListItem";
+import CutomAlertCard from "@/components/molecules/cutomAlertCard/CutomAlertCard";
 import { Cross } from "@/components/Icons/Cross";
 import { FolderIcon } from "@/components/Icons/Folder";
 import { Plus } from "@/components/Icons/Plus";
@@ -24,17 +26,34 @@ interface MaterialMenuProps
 
 const MaterialMenu: FunctionComponent<MaterialMenuProps> = ({ folders, selectedFolderId, setSelectedFolderId }) =>
 {
+  const [err, setErr] = React.useState<{message: string;type: "create"|"delete"|null}>({ message: "", type: null });
   const [opened, { close, open }] = useDisclosure(false);
 
   const apiContext = api.useContext();
   const { mutate: createFolder } = api.uploads.createFolder.useMutation({
-    onError: (error) => console.error("error while creating folder", error),
-    onSuccess: async () => apiContext.uploads.getFolders.invalidate()
+    onError: (error) => 
+    {
+      setErr({ message: error.message, type: "create" });
+      console.error("error while creating folder", error);
+    },
+    onSuccess: async () => 
+    {
+      setErr({ message: "", type: null });
+      await apiContext.uploads.getFolders.invalidate();
+    }
   });
   const { mutate: deleteFolder } = api.uploads.deleteFolder.useMutation({
-    onError: (error) => console.error("error while deleting folder", error),
+    onError: (error) => 
+    {
+      setErr(({ message: error.message, type: "delete" }));
+      console.error("error while deleting folder", error);
+    },
     onMutate: () => console.log("deleting folder"),
-    onSuccess: async () => apiContext.uploads.getFolders.invalidate()
+    onSuccess: async () => 
+    {
+      setErr({ message: "", type: null });
+      await apiContext.uploads.getFolders.invalidate();
+    }
   });
   const [newFolderName, setNewFolderName] = React.useState<string>("");
   
@@ -77,8 +96,11 @@ const MaterialMenu: FunctionComponent<MaterialMenuProps> = ({ folders, selectedF
           styles={styles.modalStyles()}
           withCloseButton={false}
           centered>
-          <Cross size={32}/>
+          <span className="close-btn">
+            <Cross size={32}/>
+          </span>
           <Title order={3}>Create folder</Title>
+          {err.type && <CutomAlertCard variant="error" message={err.message}/>}
           <div className="new-folder-input">
             <BodyText styleType="body-01-regular" component="label">Folder name</BodyText>
             <Input
@@ -95,7 +117,7 @@ const MaterialMenu: FunctionComponent<MaterialMenuProps> = ({ folders, selectedF
             </Button>
             <Button<"button">
               styleType="primary"
-              disabled={newFolderName.length <= 0}
+              disabled={newFolderName.trim().length <= 0}
               onClick={() => 
               {
                 setNewFolderName("");

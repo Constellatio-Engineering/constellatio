@@ -48,14 +48,14 @@ export const modalStyles = (): ModalStyles =>
     }
     ,
     content: {
-      borderRadius: "12px",
-      position: "relative",
-      svg: {
+      ".close-btn": {
         cursor: "pointer",
         position: "absolute",
         right: "24px",
         top: "24px",
-      }
+      },
+      borderRadius: "12px",
+      position: "relative"
     },
     header: {
       padddingTop: "36px",

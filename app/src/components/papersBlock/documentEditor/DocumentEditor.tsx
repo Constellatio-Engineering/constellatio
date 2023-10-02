@@ -1,5 +1,6 @@
 import { Button } from "@/components/atoms/Button/Button";
 import { Input } from "@/components/atoms/Input/Input";
+import { RichtextEditorField } from "@/components/molecules/RichtextEditorField/RichtextEditorField";
 import SlidingPanelTitle from "@/components/molecules/slidingPanelTitle/SlidingPanelTitle";
 import * as styles from "@/components/papersBlock/PapersBlock.styles";
 import { type CreateDocumentSchema } from "@/schemas/documents/createDocument.schema";
@@ -68,18 +69,11 @@ const DocumentEditor: FunctionComponent<DocumentEditorProps> = () =>
             value={editorValues.name}
             onChange={(e) => updateEditorDocument({ name: e.target.value })}
           />
-          <Input
-            label="Doc content"
-            inputType="text"
-            value={editorValues.content}
-            onChange={(e) => updateEditorDocument({ content: e.target.value })}
+          <RichtextEditorField
+            variant="with-legal-quote"
+            content={editorValues.content}
+            onChange={(e) => updateEditorDocument({ content: e.editor.getHTML() })}
           />
-          {/* TODO: We need a Richtext Editor component with a onChange */}
-          {/* <RichtextEditorField
-          variant="with-legal-quote"
-          content={content}
-          onChange={(e) => updateEditorDocument({ content: e.target.value })}
-        />*/}
         </div>
       )}
       <div className="call-to-action">
