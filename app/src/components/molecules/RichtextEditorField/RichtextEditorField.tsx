@@ -32,7 +32,6 @@ export const RichtextEditorField: FC<RichtextEditorFieldProps> = ({
     content,
     extensions: [
       StarterKit,
-      
       Link,
       Placeholder.configure({
         placeholder: `${variant === "simple" ? "Enter your case solution here..." : "Start typing here..."} `,
