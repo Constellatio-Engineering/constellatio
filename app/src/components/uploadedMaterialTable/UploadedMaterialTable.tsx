@@ -11,6 +11,7 @@ import { ArrowDown } from "../Icons/ArrowDown";
 import { DotsIcon } from "../Icons/dots";
 import { FileIcon } from "../Icons/FileIcon";
 import { ImageIcon } from "../Icons/image";
+import { NotepadFilled } from "../Icons/NotepadFilled";
 import { VideoIcon } from "../Icons/Video";
 
 interface UploadedMaterialTableProps
@@ -77,8 +78,7 @@ const UploadedMaterialTable: FunctionComponent<UploadedMaterialTableProps> = ({
         <tbody css={styles.tableBody}/>
         {uploadedFiles?.slice(0, showingFiles).map((file, index) => (
           <tr
-            key={index}
-            onClick={() => setSelectedFileIdForPreview(file.id)}>
+            key={index}>
             <td css={styles.callToActionCell}><Checkbox/></td>
             <td css={styles.docName} className="primaryCell">
               <BodyText styleType="body-01-medium" component="p" title={file.originalFilename}>
@@ -86,8 +86,8 @@ const UploadedMaterialTable: FunctionComponent<UploadedMaterialTableProps> = ({
               </BodyText>
             </td>
             <td css={styles.docDate}> <BodyText styleType="body-01-medium" component="p">{formatDate(file.createdAt!)}</BodyText></td>
-            <td css={styles.docTags}> <BodyText styleType="body-02-medium" component="p">Tags({999})</BodyText></td>
-            <td> <BodyText styleType="body-02-medium" component="p">file?.notes</BodyText></td>
+            <td css={styles.docTags}> <BodyText styleType="body-02-medium" component="p">Tags ({0})</BodyText></td>
+            <td css={styles.cellNote}> <BodyText styleType="body-02-medium" component="p"><NotepadFilled/>Notes</BodyText></td>
             <td css={styles.callToActionCell}><DotsIcon/></td>
           </tr>
         ))}

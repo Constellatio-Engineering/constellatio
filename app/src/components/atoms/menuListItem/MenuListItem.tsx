@@ -30,10 +30,10 @@ const MenuListItem: FunctionComponent<MenuListItemProps & React.HTMLProps<HTMLDi
 
   const theme = useMantineTheme();
   return (
-    <div onClick={onClick} css={styles.wrapper({ active, theme })}>
+    <button type="button" onClick={onClick} css={styles.wrapper({ active, theme })}>
       <Menu width={250} position="left-start">
         <BodyText styleType="body-01-medium" component="p">
-          <span className="label">{icon}{title}</span><Menu.Target><span className="dots"><DotsIcon/></span></Menu.Target>
+          <span className="label" title={title}>{icon}{title}</span><Menu.Target><span className="dots"><DotsIcon/></span></Menu.Target>
         </BodyText>
         {/* Menu content */}
         <Menu.Dropdown>
@@ -44,7 +44,7 @@ const MenuListItem: FunctionComponent<MenuListItemProps & React.HTMLProps<HTMLDi
           <Menu.Item onClick={onDelete}><span className="label"><Trash/>Delete</span></Menu.Item>
         </Menu.Dropdown>
       </Menu>
-    </div>
+    </button>
   );
 };
 

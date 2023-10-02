@@ -1,5 +1,8 @@
+import { type UnknownMantineStylesParams } from "@/utils/types";
+
 import { css } from "@emotion/react";
-import { type MantineTheme } from "@mantine/styles";
+import { type ModalStylesNames } from "@mantine/core";
+import { type Styles, type MantineTheme } from "@mantine/styles";
 
 export const wrapper = (theme: MantineTheme) => css`
     background-color: ${theme.colors["neutrals-01"][0]};
@@ -19,3 +22,45 @@ export const content = css``;
 export const callToAction = css`
     padding:16px 24px;
 `;
+
+type ModalStyles = Styles<ModalStylesNames, UnknownMantineStylesParams>;
+
+export const modalStyles = (): ModalStyles => 
+{
+  const styles: ModalStyles = (theme: MantineTheme) => ({
+    body: {
+      ".modal-call-to-action": {
+        alignItems: "center",
+        button: {
+          flex: 1
+        },
+        display: "flex",
+        gap: "4px",
+        justifyContent: "center",
+      },
+      ".new-folder-input": {
+        display: "flex",
+        flexDirection: "column",
+        gap: "4px",
+        marginBlock: "24px",
+      },
+      padding: "36px"
+    }
+    ,
+    content: {
+      borderRadius: "12px",
+      position: "relative",
+      svg: {
+        cursor: "pointer",
+        position: "absolute",
+        right: "24px",
+        top: "24px",
+      }
+    },
+    header: {
+      padddingTop: "36px",
+      padding: 0,
+    },
+  }); return styles;
+};
+    

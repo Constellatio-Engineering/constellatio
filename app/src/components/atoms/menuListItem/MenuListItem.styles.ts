@@ -10,9 +10,14 @@ p{ svg{
 `;
 
 export const wrapper = ({ active, theme }: {active?: boolean;theme: MantineTheme}) => css`
-  padding: 12px 16px;
+  border: 0;  
+  outline: 0;
+padding: 12px 16px;
   cursor: pointer;
   border-bottom: 1px solid ${theme.colors["neutrals-01"][3]};
+  width:100%;
+  text-align: left;
+
   background-color: ${theme.colors["neutrals-01"][0]};
   &:hover {
     background-color: ${theme.colors["neutrals-01"][2]};
