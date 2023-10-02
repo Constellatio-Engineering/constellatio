@@ -33,6 +33,7 @@ const UploadedMaterialBlock: FunctionComponent<UploadedMaterialBlockProps> = ({
   ...props
 }) => 
 {
+  
   return (
     <div css={styles.wrapper}>
       <div css={styles.uploadedMaterialBlockHead}>
@@ -67,7 +68,7 @@ const UploadedMaterialBlock: FunctionComponent<UploadedMaterialBlockProps> = ({
       </div>
       <div css={styles.content}>
         {uploadedFiles?.length > 0 ? (
-          <UploadedMaterialTable {...props}/>
+          <UploadedMaterialTable uploadedFiles={uploadedFiles} {...props}/>
         ) : (
           <EmptyStateCard
             variant="For-small-areas"
