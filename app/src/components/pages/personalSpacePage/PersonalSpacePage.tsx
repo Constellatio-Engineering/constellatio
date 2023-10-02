@@ -85,9 +85,6 @@ const PersonalSpacePage: FunctionComponent = () =>
     if(!selectedFileIdForPreview) { setShowFileViewerModal(false); }
   }, [selectedFileIdForPreview]);
 
-  console.log("isLoading", isGetDocumentsLoading);
-  console.log("isRefetching", isRefetchingDocuments);
-
   return (
     <div css={styles.wrapper}>
       <div css={styles.header}>
