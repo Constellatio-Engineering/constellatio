@@ -9,7 +9,8 @@ import { Timer } from "@/components/Icons/timer";
 import { Trash } from "@/components/Icons/Trash";
 import { type IGenLegalArea, type IGenTags } from "@/services/graphql/__generated/sdk";
 
-import { ScrollArea, useMantineTheme } from "@mantine/core";
+import { Modal, Title, useMantineTheme } from "@mantine/core";
+import { useDisclosure } from "@mantine/hooks";
 import { type Maybe } from "@trpc/server";
 import React, { type FunctionComponent } from "react";
 
@@ -77,6 +78,7 @@ const OverviewCard: FunctionComponent<IOverviewCard> = ({
   views,
 }) => 
 {
+  const [opened, { close, open }] = useDisclosure(false);
 
   const theme = useMantineTheme();
   return (
@@ -134,18 +136,27 @@ const OverviewCard: FunctionComponent<IOverviewCard> = ({
         )}
         <div css={styles.row({ theme, variant })}>
           <div className="row-title">
-            <CaptionText styleType="caption-01-medium" component="p">TAGS</CaptionText>
+            <CaptionText styleType="caption-01-medium" component="button" onClick={open}>TAGS</CaptionText>
           </div>
-          <ScrollArea>
-            <div className="row-value tags-values">
-              {
-                tags &&
-                tags.map((tag, tagIndex) => (
+          {/* <ScrollArea> */}
+          <div className="row-value tags-values" onClick={open}>
+            {tags?.map((tag, tagIndex) => (
+              <Tag key={tagIndex}>{tag?.tagName}</Tag>
+            ))}
+            <Modal
+              opened={opened}
+              onClose={close}
+              title={<Title order={3}>All tags</Title>}
+              centered>
+              <div css={styles.tagsModal}>
+                {tags?.map((tag, tagIndex) => (
                   <Tag key={tagIndex}>{tag?.tagName}</Tag>
-                ))
-              }
-            </div>
-          </ScrollArea>
+                ))}
+              </div>
+            </Modal>
+
+          </div>
+          {/* </ScrollArea> */}
         </div>
         {
           variant === "case" && (
