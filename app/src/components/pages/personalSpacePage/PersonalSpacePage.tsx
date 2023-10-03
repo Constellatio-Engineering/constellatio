@@ -12,7 +12,7 @@ import useCases from "@/hooks/useCases";
 import useDocuments from "@/hooks/useDocuments";
 import useUploadedFiles from "@/hooks/useUploadedFiles";
 import useUploadFolders from "@/hooks/useUploadFolders";
-import { type IGenArticleOverviewFragment, type IGenFullCaseFragment, type IGenMainCategory } from "@/services/graphql/__generated/sdk";
+import { type IGenCase, type IGenArticleOverviewFragment, type IGenFullCaseFragment, type IGenMainCategory } from "@/services/graphql/__generated/sdk";
 import uploadsProgressStore from "@/stores/uploadsProgress.store";
 
 import { Container, Loader } from "@mantine/core";
@@ -38,8 +38,9 @@ const PersonalSpacePage: FunctionComponent = () =>
   const { isLoading: isGetUploadedFilesLoading, uploadedFiles } = useUploadedFiles(selectedFolderId);
   const { documents } = useDocuments(selectedFolderId);
   const allCasesBookmarks = bookmarks.filter(bookmark => bookmark?.resourceType === "case") ?? [];
+  // const caseType: IGenCase = { __typename: "Case", mainCategoryField: [{ mainCategory }] };
   const bookmarkedCases = allCases.filter(caisyCase => allCasesBookmarks.some(bookmark => bookmark.resourceId === caisyCase.id));
-  const mainCategoriesInBookmarkedCases = bookmarkedCases.map(bookmarkedCase => bookmarkedCase?.subCategoryField?.[0]?.mainCategory?.[0]);
+  const mainCategoriesInBookmarkedCases = bookmarkedCases.map((bookmarkedCase) => bookmarkedCase?.mainCategoryField?.[0]?.mainCategory);
   const bookmarkedCasesMainCategoriesUnique = mainCategoriesInBookmarkedCases.reduce<IGenMainCategory[]>((acc, current) => 
   {
     if(current != null)
@@ -76,7 +77,7 @@ const PersonalSpacePage: FunctionComponent = () =>
   const areUploadsInProgress = uploads.some(u => u.state.type === "uploading");
   const favoriteCategoryNavTabs = [{ id: FavCasesTabId, itemsPerTab: bookmarkedCases?.length ?? 0, title: "CASES" }, { id: FavDictionaryTabId, itemsPerTab: 999, title: "DICTIONARY" }, { id: FavForumsTabId, itemsPerTab: 999, title: "FORUM" }, { id: FavHighlightsTabId, itemsPerTab: 999, title: "HIGHLIGHTS" }];
   const [selectedTabId, setSelectedTabId] = useState<string>(favoriteCategoryNavTabs?.[0]?.id as string);
-  const casesByMainCategory = (id: string): Array<({ _typename?: "Case" | undefined } & IGenFullCaseFragment) | null | undefined> | IGenArticleOverviewFragment[] | undefined => bookmarkedCases?.filter(bookmarkedCase => bookmarkedCase.subCategoryField?.[0]?.mainCategory?.[0]?.id === id);
+  const casesByMainCategory = (id: string): Array<({ _typename?: "Case" | undefined } & IGenFullCaseFragment) | null | undefined> | IGenArticleOverviewFragment[] | undefined => bookmarkedCases?.filter((bookmarkedCase) => bookmarkedCase?.mainCategoryField?.[0]?.id === id);
   const [showFileViewerModal, setShowFileViewerModal] = useState<boolean>(false);
   React.useEffect(() => 
   {
