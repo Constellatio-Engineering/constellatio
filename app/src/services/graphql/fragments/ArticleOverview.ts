@@ -1,17 +1,17 @@
 import { gql } from "graphql-request";
 
-import { f_SubCategory } from "./SubCategory";
+import { f_LegalArea } from "./LegalArea";
 import { f_Topic } from "./Topic";
 
 export const f_ArticleOverview = gql`
-	${f_SubCategory}
 	${f_Topic}
+	${f_LegalArea}
 	fragment ArticleOverview on Article {
 		__typename
 		id
 		title
-		subCategoryField {
-			...SubCategory
+		legalArea{
+			...LegalArea
 		}
 		topic {
 			...Topic

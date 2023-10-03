@@ -25,7 +25,6 @@ export type IGenArticle = {
   id?: Maybe<Scalars['ID']['output']>;
   legalArea?: Maybe<IGenArticle_LegalArea>;
   mainCategoryField?: Maybe<Array<Maybe<IGenArticle_MainCategoryField>>>;
-  subCategoryField?: Maybe<Array<Maybe<IGenArticle_SubCategoryField>>>;
   tags?: Maybe<Array<Maybe<IGenArticle_Tags>>>;
   title?: Maybe<Scalars['String']['output']>;
   topic?: Maybe<Array<Maybe<IGenArticle_Topic>>>;
@@ -43,13 +42,6 @@ export type IGenArticleLegalAreaArgs = {
 
 
 export type IGenArticleMainCategoryFieldArgs = {
-  after?: InputMaybe<Scalars['String']['input']>;
-  first?: InputMaybe<Scalars['Int']['input']>;
-  locale?: InputMaybe<Scalars['String']['input']>;
-};
-
-
-export type IGenArticleSubCategoryFieldArgs = {
   after?: InputMaybe<Scalars['String']['input']>;
   first?: InputMaybe<Scalars['Int']['input']>;
   locale?: InputMaybe<Scalars['String']['input']>;
@@ -105,19 +97,10 @@ export type IGenArticle_Sort = {
   legalArea?: InputMaybe<IGenOrder>;
   mainCategoryField?: InputMaybe<IGenOrder>;
   publishedAt?: InputMaybe<IGenOrder>;
-  subCategoryField?: InputMaybe<IGenOrder>;
   tags?: InputMaybe<IGenOrder>;
   title?: InputMaybe<IGenOrder>;
   topic?: InputMaybe<IGenOrder>;
   updatedAt?: InputMaybe<IGenOrder>;
-};
-
-export type IGenArticle_SubCategoryField_Where = {
-  findOne?: InputMaybe<IGenArticle_SubCategoryField_WhereConnection>;
-};
-
-export type IGenArticle_SubCategoryField_WhereConnection = {
-  SubCategory?: InputMaybe<IGenSubCategory_Nested_Where>;
 };
 
 export type IGenArticle_Tags_Where = {
@@ -142,7 +125,6 @@ export type IGenArticle_Where = {
   fullTextTasks?: InputMaybe<IGenCaisyField_Richtext_Where>;
   legalArea?: InputMaybe<IGenArticle_LegalArea_Where>;
   mainCategoryField?: InputMaybe<IGenArticle_MainCategoryField_Where>;
-  subCategoryField?: InputMaybe<IGenArticle_SubCategoryField_Where>;
   tags?: InputMaybe<IGenArticle_Tags_Where>;
   title?: InputMaybe<IGenCaisyField_String_Where>;
   topic?: InputMaybe<IGenArticle_Topic_Where>;
@@ -161,13 +143,11 @@ export type IGenArticle_FullTextTasksConnectionsArgs = {
   locale?: InputMaybe<Scalars['String']['input']>;
 };
 
-export type IGenArticle_FullTextTasks_Connections = IGenAsset | IGenCallout | IGenCardSelectionGame | IGenDragNDropGame | IGenFillInGapsGame | IGenImageWrapperCard;
+export type IGenArticle_FullTextTasks_Connections = IGenAsset | IGenCallout | IGenCardSelectionGame | IGenDragNDropGame | IGenFillInGapsGame;
 
 export type IGenArticle_LegalArea = IGenLegalArea | IGenSubCategory;
 
 export type IGenArticle_MainCategoryField = IGenMainCategory;
-
-export type IGenArticle_SubCategoryField = IGenSubCategory;
 
 export type IGenArticle_Tags = IGenTags;
 
@@ -424,7 +404,6 @@ export type IGenCase = {
   legalArea?: Maybe<IGenCase_LegalArea>;
   mainCategoryField?: Maybe<Array<Maybe<IGenCase_MainCategoryField>>>;
   resolution?: Maybe<IGenCase_Resolution>;
-  subCategoryField?: Maybe<Array<Maybe<IGenCase_SubCategoryField>>>;
   tags?: Maybe<Array<Maybe<IGenCase_Tags>>>;
   title?: Maybe<Scalars['String']['output']>;
   topic?: Maybe<Array<Maybe<IGenCase_Topic>>>;
@@ -454,13 +433,6 @@ export type IGenCaseMainCategoryFieldArgs = {
 
 
 export type IGenCaseResolutionArgs = {
-  locale?: InputMaybe<Scalars['String']['input']>;
-};
-
-
-export type IGenCaseSubCategoryFieldArgs = {
-  after?: InputMaybe<Scalars['String']['input']>;
-  first?: InputMaybe<Scalars['Int']['input']>;
   locale?: InputMaybe<Scalars['String']['input']>;
 };
 
@@ -515,19 +487,10 @@ export type IGenCase_Sort = {
   legalArea?: InputMaybe<IGenOrder>;
   mainCategoryField?: InputMaybe<IGenOrder>;
   publishedAt?: InputMaybe<IGenOrder>;
-  subCategoryField?: InputMaybe<IGenOrder>;
   tags?: InputMaybe<IGenOrder>;
   title?: InputMaybe<IGenOrder>;
   topic?: InputMaybe<IGenOrder>;
   updatedAt?: InputMaybe<IGenOrder>;
-};
-
-export type IGenCase_SubCategoryField_Where = {
-  findOne?: InputMaybe<IGenCase_SubCategoryField_WhereConnection>;
-};
-
-export type IGenCase_SubCategoryField_WhereConnection = {
-  SubCategory?: InputMaybe<IGenSubCategory_Nested_Where>;
 };
 
 export type IGenCase_Tags_Where = {
@@ -555,7 +518,6 @@ export type IGenCase_Where = {
   legalArea?: InputMaybe<IGenCase_LegalArea_Where>;
   mainCategoryField?: InputMaybe<IGenCase_MainCategoryField_Where>;
   resolution?: InputMaybe<IGenCaisyField_Richtext_Where>;
-  subCategoryField?: InputMaybe<IGenCase_SubCategoryField_Where>;
   tags?: InputMaybe<IGenCase_Tags_Where>;
   title?: InputMaybe<IGenCaisyField_String_Where>;
   topic?: InputMaybe<IGenCase_Topic_Where>;
@@ -589,7 +551,7 @@ export type IGenCase_FullTextTasksConnectionsArgs = {
   locale?: InputMaybe<Scalars['String']['input']>;
 };
 
-export type IGenCase_FullTextTasks_Connections = IGenAsset | IGenCallout | IGenCardSelectionGame | IGenDragNDropGame | IGenFillInGapsGame | IGenImageWrapperCard;
+export type IGenCase_FullTextTasks_Connections = IGenAsset | IGenCallout | IGenCardSelectionGame | IGenDragNDropGame | IGenFillInGapsGame;
 
 export type IGenCase_LegalArea = IGenLegalArea | IGenSubCategory;
 
@@ -609,8 +571,6 @@ export type IGenCase_ResolutionConnectionsArgs = {
 };
 
 export type IGenCase_Resolution_Connections = IGenCaisy_Field_Document_NotFound;
-
-export type IGenCase_SubCategoryField = IGenSubCategory;
 
 export type IGenCase_Tags = IGenTags;
 
@@ -751,49 +711,6 @@ export type IGenFillInGapsGame_HelpNoteConnectionsArgs = {
 
 export type IGenFillInGapsGame_HelpNote_Connections = IGenCaisy_Field_Document_NotFound;
 
-export type IGenImageWrapperCard = {
-  __typename?: 'ImageWrapperCard';
-  _meta?: Maybe<IGenCaisyDocument_Meta>;
-  downloadable?: Maybe<Scalars['Boolean']['output']>;
-  id?: Maybe<Scalars['ID']['output']>;
-  image?: Maybe<IGenAsset>;
-};
-
-
-export type IGenImageWrapperCardImageArgs = {
-  after?: InputMaybe<Scalars['String']['input']>;
-  first?: InputMaybe<Scalars['Int']['input']>;
-  locale?: InputMaybe<Scalars['String']['input']>;
-};
-
-export type IGenImageWrapperCard_Connection = {
-  __typename?: 'ImageWrapperCard_Connection';
-  edges?: Maybe<Array<Maybe<IGenImageWrapperCard_ConnectionEdge>>>;
-  pageInfo?: Maybe<IGenPageInfo>;
-  totalCount?: Maybe<Scalars['Int']['output']>;
-};
-
-export type IGenImageWrapperCard_ConnectionEdge = {
-  __typename?: 'ImageWrapperCard_ConnectionEdge';
-  cursor?: Maybe<Scalars['String']['output']>;
-  node?: Maybe<IGenImageWrapperCard>;
-};
-
-export type IGenImageWrapperCard_Sort = {
-  createdAt?: InputMaybe<IGenOrder>;
-  downloadable?: InputMaybe<IGenOrder>;
-  id?: InputMaybe<IGenOrder>;
-  image?: InputMaybe<IGenOrder>;
-  publishedAt?: InputMaybe<IGenOrder>;
-  updatedAt?: InputMaybe<IGenOrder>;
-};
-
-export type IGenImageWrapperCard_Where = {
-  AND?: InputMaybe<Array<InputMaybe<IGenImageWrapperCard_Where>>>;
-  OR?: InputMaybe<Array<InputMaybe<IGenImageWrapperCard_Where>>>;
-  downloadable?: InputMaybe<Scalars['Boolean']['input']>;
-};
-
 export type IGenLegalArea = {
   __typename?: 'LegalArea';
   _meta?: Maybe<IGenCaisyDocument_Meta>;
@@ -905,7 +822,6 @@ export type IGenQuery = {
   Case?: Maybe<IGenCase>;
   DragNDropGame?: Maybe<IGenDragNDropGame>;
   FillInGapsGame?: Maybe<IGenFillInGapsGame>;
-  ImageWrapperCard?: Maybe<IGenImageWrapperCard>;
   LegalArea?: Maybe<IGenLegalArea>;
   MainCategory?: Maybe<IGenMainCategory>;
   SubCategory?: Maybe<IGenSubCategory>;
@@ -918,7 +834,6 @@ export type IGenQuery = {
   allCase?: Maybe<IGenCase_Connection>;
   allDragNDropGame?: Maybe<IGenDragNDropGame_Connection>;
   allFillInGapsGame?: Maybe<IGenFillInGapsGame_Connection>;
-  allImageWrapperCard?: Maybe<IGenImageWrapperCard_Connection>;
   allLegalArea?: Maybe<IGenLegalArea_Connection>;
   allMainCategory?: Maybe<IGenMainCategory_Connection>;
   allSubCategory?: Maybe<IGenSubCategory_Connection>;
@@ -964,12 +879,6 @@ export type IGenQueryDragNDropGameArgs = {
 
 
 export type IGenQueryFillInGapsGameArgs = {
-  id: Scalars['ID']['input'];
-  locale?: InputMaybe<Scalars['String']['input']>;
-};
-
-
-export type IGenQueryImageWrapperCardArgs = {
   id: Scalars['ID']['input'];
   locale?: InputMaybe<Scalars['String']['input']>;
 };
@@ -1079,17 +988,6 @@ export type IGenQueryAllFillInGapsGameArgs = {
   locale?: InputMaybe<Scalars['String']['input']>;
   sort?: InputMaybe<Array<InputMaybe<IGenFillInGapsGame_Sort>>>;
   where?: InputMaybe<Array<InputMaybe<IGenFillInGapsGame_Where>>>;
-};
-
-
-export type IGenQueryAllImageWrapperCardArgs = {
-  after?: InputMaybe<Scalars['String']['input']>;
-  before?: InputMaybe<Scalars['String']['input']>;
-  first?: InputMaybe<Scalars['Int']['input']>;
-  last?: InputMaybe<Scalars['Int']['input']>;
-  locale?: InputMaybe<Scalars['String']['input']>;
-  sort?: InputMaybe<Array<InputMaybe<IGenImageWrapperCard_Sort>>>;
-  where?: InputMaybe<Array<InputMaybe<IGenImageWrapperCard_Where>>>;
 };
 
 
@@ -1302,12 +1200,12 @@ export type IGenArticleFullTextTasksFragment = { __typename: 'Article_fullTextTa
   ) | (
     { __typename: 'FillInGapsGame' }
     & IGenFillInGapsGameFragment
-  ) | { __typename: 'ImageWrapperCard' } | null> | null };
+  ) | null> | null };
 
-export type IGenArticleOverviewFragment = { __typename: 'Article', id?: string | null, title?: string | null, subCategoryField?: Array<(
-    { __typename?: 'SubCategory' }
-    & IGenSubCategoryFragment
-  ) | null> | null, topic?: Array<(
+export type IGenArticleOverviewFragment = { __typename: 'Article', id?: string | null, title?: string | null, legalArea?: (
+    { __typename?: 'LegalArea' }
+    & IGenLegalAreaFragment
+  ) | { __typename?: 'SubCategory' } | null, topic?: Array<(
     { __typename?: 'Topic' }
     & IGenTopicFragment
   ) | null> | null };
@@ -1333,12 +1231,12 @@ export type IGenCaseFullTextTasksFragment = { __typename: 'Case_fullTextTasks', 
   ) | (
     { __typename: 'FillInGapsGame' }
     & IGenFillInGapsGameFragment
-  ) | { __typename: 'ImageWrapperCard' } | null> | null };
+  ) | null> | null };
 
-export type IGenCaseOverviewFragment = { __typename: 'Case', id?: string | null, title?: string | null, durationToCompleteInMinutes?: number | null, subCategoryField?: Array<(
-    { __typename?: 'SubCategory' }
-    & IGenSubCategoryFragment
-  ) | null> | null, topic?: Array<(
+export type IGenCaseOverviewFragment = { __typename: 'Case', id?: string | null, title?: string | null, durationToCompleteInMinutes?: number | null, legalArea?: (
+    { __typename?: 'LegalArea' }
+    & IGenLegalAreaFragment
+  ) | { __typename?: 'SubCategory' } | null, topic?: Array<(
     { __typename?: 'Topic' }
     & IGenTopicFragment
   ) | null> | null };
@@ -1353,15 +1251,9 @@ export type IGenFullArticleFragment = { __typename: 'Article', id?: string | nul
   ) | null, legalArea?: (
     { __typename?: 'LegalArea' }
     & IGenLegalAreaFragment
-  ) | (
-    { __typename?: 'SubCategory' }
-    & IGenSubCategoryFragment
-  ) | null, mainCategoryField?: Array<(
+  ) | { __typename?: 'SubCategory' } | null, mainCategoryField?: Array<(
     { __typename?: 'MainCategory' }
     & IGenMainCategoryFragment
-  ) | null> | null, subCategoryField?: Array<(
-    { __typename?: 'SubCategory' }
-    & IGenSubCategoryFragment
   ) | null> | null, tags?: Array<(
     { __typename?: 'Tags' }
     & IGenTagsFragment
@@ -1376,15 +1268,9 @@ export type IGenFullCaseFragment = { __typename: 'Case', id?: string | null, tit
   ) | null, legalArea?: (
     { __typename?: 'LegalArea' }
     & IGenLegalAreaFragment
-  ) | (
-    { __typename?: 'SubCategory' }
-    & IGenSubCategoryFragment
-  ) | null, mainCategoryField?: Array<(
+  ) | { __typename?: 'SubCategory' } | null, mainCategoryField?: Array<(
     { __typename?: 'MainCategory' }
     & IGenMainCategoryFragment
-  ) | null> | null, subCategoryField?: Array<(
-    { __typename?: 'SubCategory' }
-    & IGenSubCategoryFragment
   ) | null> | null, tags?: Array<(
     { __typename?: 'Tags' }
     & IGenTagsFragment
@@ -1393,17 +1279,12 @@ export type IGenFullCaseFragment = { __typename: 'Case', id?: string | null, tit
     & IGenTopicFragment
   ) | null> | null, resolution?: { __typename?: 'Case_resolution', json?: any | null, connections?: Array<{ __typename: 'Caisy_Field_Document_NotFound' } | null> | null } | null };
 
-export type IGenLegalAreaFragment = { __typename: 'LegalArea', id?: string | null, legalAreaName?: string | null };
+export type IGenLegalAreaFragment = { __typename: 'LegalArea', legalAreaName?: string | null, id?: string | null };
 
 export type IGenMainCategoryFragment = { __typename: 'MainCategory', id?: string | null, mainCategory?: string | null, icon?: (
     { __typename?: 'Asset' }
     & IGenAssetFragment
   ) | null };
-
-export type IGenSubCategoryFragment = { __typename: 'SubCategory', id?: string | null, subCategory?: string | null, mainCategory?: Array<(
-    { __typename?: 'MainCategory' }
-    & IGenMainCategoryFragment
-  ) | null> | null };
 
 export type IGenTagsFragment = { __typename: 'Tags', id?: string | null, tagName?: string | null };
 
@@ -1429,20 +1310,20 @@ export type IGenGetAllArticleOverviewQuery = { __typename?: 'Query', allArticle?
         & IGenArticleOverviewFragment
       ) | null } | null> | null } | null };
 
+export type IGenQ_All_LegalAreaQueryVariables = Exact<{ [key: string]: never; }>;
+
+
+export type IGenQ_All_LegalAreaQuery = { __typename?: 'Query', allLegalArea?: { __typename?: 'LegalArea_Connection', totalCount?: number | null, edges?: Array<{ __typename?: 'LegalArea_ConnectionEdge', node?: (
+        { __typename?: 'LegalArea' }
+        & IGenLegalAreaFragment
+      ) | null } | null> | null } | null };
+
 export type IGenGetAllMainCategoryQueryVariables = Exact<{ [key: string]: never; }>;
 
 
 export type IGenGetAllMainCategoryQuery = { __typename?: 'Query', allMainCategory?: { __typename?: 'MainCategory_Connection', totalCount?: number | null, edges?: Array<{ __typename?: 'MainCategory_ConnectionEdge', node?: (
         { __typename?: 'MainCategory' }
         & IGenMainCategoryFragment
-      ) | null } | null> | null } | null };
-
-export type IGenGetAllSubCategoryQueryVariables = Exact<{ [key: string]: never; }>;
-
-
-export type IGenGetAllSubCategoryQuery = { __typename?: 'Query', allSubCategory?: { __typename?: 'SubCategory_Connection', totalCount?: number | null, edges?: Array<{ __typename?: 'SubCategory_ConnectionEdge', node?: (
-        { __typename?: 'SubCategory' }
-        & IGenSubCategoryFragment
       ) | null } | null> | null } | null };
 
 export type IGenGetArticleByIdQueryVariables = Exact<{
@@ -1465,37 +1346,11 @@ export type IGenGetCaseByIdQuery = { __typename?: 'Query', Case?: (
     & IGenFullCaseFragment
   ) | null };
 
-export const AssetFragmentDoc = gql`
-    fragment Asset on Asset {
-  title
-  src
-  originType
-  keywords
+export const LegalAreaFragmentDoc = gql`
+    fragment LegalArea on LegalArea {
+  legalAreaName
   id
-  dominantColor
-  description
-  copyright
-  author
-}
-    `;
-export const MainCategoryFragmentDoc = gql`
-    fragment MainCategory on MainCategory {
   __typename
-  id
-  icon {
-    ...Asset
-  }
-  mainCategory
-}
-    `;
-export const SubCategoryFragmentDoc = gql`
-    fragment SubCategory on SubCategory {
-  __typename
-  id
-  subCategory
-  mainCategory {
-    ...MainCategory
-  }
 }
     `;
 export const TopicFragmentDoc = gql`
@@ -1510,8 +1365,8 @@ export const ArticleOverviewFragmentDoc = gql`
   __typename
   id
   title
-  subCategoryField {
-    ...SubCategory
+  legalArea {
+    ...LegalArea
   }
   topic {
     ...Topic
@@ -1524,8 +1379,8 @@ export const CaseOverviewFragmentDoc = gql`
   id
   title
   durationToCompleteInMinutes
-  subCategoryField {
-    ...SubCategory
+  legalArea {
+    ...LegalArea
   }
   topic {
     ...Topic
@@ -1592,6 +1447,19 @@ export const CalloutFragmentDoc = gql`
   }
 }
     `;
+export const AssetFragmentDoc = gql`
+    fragment Asset on Asset {
+  title
+  src
+  originType
+  keywords
+  id
+  dominantColor
+  description
+  copyright
+  author
+}
+    `;
 export const ArticleFullTextTasksFragmentDoc = gql`
     fragment ArticleFullTextTasks on Article_fullTextTasks {
   __typename
@@ -1606,11 +1474,14 @@ export const ArticleFullTextTasksFragmentDoc = gql`
   }
 }
     `;
-export const LegalAreaFragmentDoc = gql`
-    fragment LegalArea on LegalArea {
+export const MainCategoryFragmentDoc = gql`
+    fragment MainCategory on MainCategory {
   __typename
   id
-  legalAreaName
+  icon {
+    ...Asset
+  }
+  mainCategory
 }
     `;
 export const TagsFragmentDoc = gql`
@@ -1630,13 +1501,9 @@ export const FullArticleFragmentDoc = gql`
   }
   legalArea {
     ...LegalArea
-    ...SubCategory
   }
   mainCategoryField {
     ...MainCategory
-  }
-  subCategoryField {
-    ...SubCategory
   }
   tags {
     ...Tags
@@ -1680,13 +1547,9 @@ export const FullCaseFragmentDoc = gql`
   }
   legalArea {
     ...LegalArea
-    ...SubCategory
   }
   mainCategoryField {
     ...MainCategory
-  }
-  subCategoryField {
-    ...SubCategory
   }
   tags {
     ...Tags
@@ -1718,9 +1581,7 @@ export const GetAllCaseOverviewDocument = gql`
   }
 }
     ${CaseOverviewFragmentDoc}
-${SubCategoryFragmentDoc}
-${MainCategoryFragmentDoc}
-${AssetFragmentDoc}
+${LegalAreaFragmentDoc}
 ${TopicFragmentDoc}`;
 export const GetAllArticleOverviewDocument = gql`
     query getAllArticleOverview($after: String) {
@@ -1738,10 +1599,20 @@ export const GetAllArticleOverviewDocument = gql`
   }
 }
     ${ArticleOverviewFragmentDoc}
-${SubCategoryFragmentDoc}
-${MainCategoryFragmentDoc}
-${AssetFragmentDoc}
+${LegalAreaFragmentDoc}
 ${TopicFragmentDoc}`;
+export const Q_All_LegalAreaDocument = gql`
+    query q_all_LegalArea {
+  allLegalArea {
+    totalCount
+    edges {
+      node {
+        ...LegalArea
+      }
+    }
+  }
+}
+    ${LegalAreaFragmentDoc}`;
 export const GetAllMainCategoryDocument = gql`
     query getAllMainCategory {
   allMainCategory {
@@ -1754,20 +1625,6 @@ export const GetAllMainCategoryDocument = gql`
   }
 }
     ${MainCategoryFragmentDoc}
-${AssetFragmentDoc}`;
-export const GetAllSubCategoryDocument = gql`
-    query getAllSubCategory {
-  allSubCategory {
-    totalCount
-    edges {
-      node {
-        ...SubCategory
-      }
-    }
-  }
-}
-    ${SubCategoryFragmentDoc}
-${MainCategoryFragmentDoc}
 ${AssetFragmentDoc}`;
 export const GetArticleByIdDocument = gql`
     query getArticleById($id: ID!) {
@@ -1783,7 +1640,6 @@ ${DragNDropGameFragmentDoc}
 ${CalloutFragmentDoc}
 ${AssetFragmentDoc}
 ${LegalAreaFragmentDoc}
-${SubCategoryFragmentDoc}
 ${MainCategoryFragmentDoc}
 ${TagsFragmentDoc}
 ${TopicFragmentDoc}`;
@@ -1801,7 +1657,6 @@ ${DragNDropGameFragmentDoc}
 ${CalloutFragmentDoc}
 ${AssetFragmentDoc}
 ${LegalAreaFragmentDoc}
-${SubCategoryFragmentDoc}
 ${MainCategoryFragmentDoc}
 ${TagsFragmentDoc}
 ${TopicFragmentDoc}`;
@@ -1814,11 +1669,11 @@ export function getSdk<C, E>(requester: Requester<C, E>) {
     getAllArticleOverview(variables?: IGenGetAllArticleOverviewQueryVariables, options?: C): Promise<IGenGetAllArticleOverviewQuery> {
       return requester<IGenGetAllArticleOverviewQuery, IGenGetAllArticleOverviewQueryVariables>(GetAllArticleOverviewDocument, variables, options) as Promise<IGenGetAllArticleOverviewQuery>;
     },
+    q_all_LegalArea(variables?: IGenQ_All_LegalAreaQueryVariables, options?: C): Promise<IGenQ_All_LegalAreaQuery> {
+      return requester<IGenQ_All_LegalAreaQuery, IGenQ_All_LegalAreaQueryVariables>(Q_All_LegalAreaDocument, variables, options) as Promise<IGenQ_All_LegalAreaQuery>;
+    },
     getAllMainCategory(variables?: IGenGetAllMainCategoryQueryVariables, options?: C): Promise<IGenGetAllMainCategoryQuery> {
       return requester<IGenGetAllMainCategoryQuery, IGenGetAllMainCategoryQueryVariables>(GetAllMainCategoryDocument, variables, options) as Promise<IGenGetAllMainCategoryQuery>;
-    },
-    getAllSubCategory(variables?: IGenGetAllSubCategoryQueryVariables, options?: C): Promise<IGenGetAllSubCategoryQuery> {
-      return requester<IGenGetAllSubCategoryQuery, IGenGetAllSubCategoryQueryVariables>(GetAllSubCategoryDocument, variables, options) as Promise<IGenGetAllSubCategoryQuery>;
     },
     getArticleById(variables: IGenGetArticleByIdQueryVariables, options?: C): Promise<IGenGetArticleByIdQuery> {
       return requester<IGenGetArticleByIdQuery, IGenGetArticleByIdQueryVariables>(GetArticleByIdDocument, variables, options) as Promise<IGenGetArticleByIdQuery>;
