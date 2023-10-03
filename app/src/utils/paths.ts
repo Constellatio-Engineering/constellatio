@@ -9,6 +9,7 @@ export const paths = {
   profile: "/profile",
   recover: "/recover",
   register: "/register",
+  search: "/search",
 };
 
 export const getConfirmEmailUrl = (): string =>
