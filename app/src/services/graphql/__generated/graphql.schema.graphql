@@ -240,7 +240,7 @@ type Article_fullTextTasks {
 }
 
 """"""
-union Article_fullTextTasks_Connections = Callout | CardSelectionGame | DragNDropGame | FillInGapsGame | ImageWrapperCard
+union Article_fullTextTasks_Connections = Asset | Callout | CardSelectionGame | DragNDropGame | FillInGapsGame | ImageWrapperCard
 
 """"""
 union Article_legalArea = LegalArea | SubCategory
@@ -1021,7 +1021,7 @@ type Case_fullTextTasks {
 }
 
 """"""
-union Case_fullTextTasks_Connections = Callout | CardSelectionGame | DragNDropGame | FillInGapsGame | ImageWrapperCard
+union Case_fullTextTasks_Connections = Asset | Callout | CardSelectionGame | DragNDropGame | FillInGapsGame | ImageWrapperCard
 
 """"""
 union Case_legalArea = LegalArea | SubCategory

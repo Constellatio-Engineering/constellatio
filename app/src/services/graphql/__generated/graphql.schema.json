@@ -988,6 +988,11 @@
         "possibleTypes": [
           {
             "kind": "OBJECT",
+            "name": "Asset",
+            "ofType": null
+          },
+          {
+            "kind": "OBJECT",
             "name": "Callout",
             "ofType": null
           },
@@ -4203,6 +4208,11 @@
         "interfaces": null,
         "enumValues": null,
         "possibleTypes": [
+          {
+            "kind": "OBJECT",
+            "name": "Asset",
+            "ofType": null
+          },
           {
             "kind": "OBJECT",
             "name": "Callout",
