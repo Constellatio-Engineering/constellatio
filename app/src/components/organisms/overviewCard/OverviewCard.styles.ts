@@ -97,6 +97,7 @@ export const row = ({ tableTheme, theme }: IOverviewCardStyles): SerializedStyle
     justify-content: flex-start;
     align-items: center;
     overflow-x: hidden;
+    cursor: pointer;
 
     &::-webkit-scrollbar {
       display: none;

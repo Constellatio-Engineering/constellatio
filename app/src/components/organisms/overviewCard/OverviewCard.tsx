@@ -143,19 +143,25 @@ const OverviewCard: FunctionComponent<IOverviewCard> = ({
             {tags?.map((tag, tagIndex) => (
               <Tag key={tagIndex}>{tag?.tagName}</Tag>
             ))}
-            <Modal
-              opened={opened}
-              onClose={close}
-              title={<Title order={3}>All tags</Title>}
-              centered>
-              <div css={styles.tagsModal}>
-                {tags?.map((tag, tagIndex) => (
-                  <Tag key={tagIndex}>{tag?.tagName}</Tag>
-                ))}
-              </div>
-            </Modal>
-
+          
           </div>
+          <Modal
+            opened={opened}
+            onClose={close}
+            title={<Title order={3}>All tags</Title>}
+            centered
+            closeOnClickOutside
+            styles={{
+              root: {
+                borderRadius: 12,
+              }
+            }}>
+            <div css={styles.tagsModal}>
+              {tags?.map((tag, tagIndex) => (
+                <Tag key={tagIndex}>{tag?.tagName}</Tag>
+              ))}
+            </div>
+          </Modal>
           {/* </ScrollArea> */}
         </div>
         {
