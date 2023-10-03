@@ -8,7 +8,7 @@ import {
 } from "@mantine/core";
 import React, { type ButtonHTMLAttributes, type FC } from "react";
 
-type TButton = (ButtonProps | ButtonHTMLAttributes<HTMLButtonElement>) & {
+export type TButton = (ButtonProps | ButtonHTMLAttributes<HTMLButtonElement>) & {
   readonly size?: "large" | "medium";
   readonly styleOverwrite?: CSSObject | undefined;
   readonly styleType: "primary" | "secondarySimple" | "secondarySubtle" | "tertiary";

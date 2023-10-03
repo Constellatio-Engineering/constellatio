@@ -1,7 +1,7 @@
 import { type Document } from "@/db/schema";
 import useDocumentEditorStore from "@/stores/documentEditor.store";
 
-import React, { useState, type FunctionComponent, useEffect } from "react";
+import React, { useState, type FunctionComponent } from "react";
 
 import * as styles from "./DocsTable.styles";
 import { DocsTableData } from "./DocTableData";
@@ -14,22 +14,11 @@ interface DocsTableProps
   readonly docs: Document[];
 }
 
-const DocsTable: FunctionComponent<DocsTableProps> = ({ docs }) => 
+const DocsTable: FunctionComponent<DocsTableProps> = ({ docs }) =>
 {
-  const setEditDocumentState = useDocumentEditorStore(s => s.setEditDocumentState);
+  const setViewDocumentState = useDocumentEditorStore(s => s.setViewDocumentState);
   const [showingDocs, setShowingDocs] = useState<number>(5);
-  // const isShowingFullTable = showingDocs >= (docs?.length ?? 0);
-  const [isShowingFullTable, setIsShowingFullTable] = useState<boolean>(false);
-
-  useEffect(() =>
-  {
-    setIsShowingFullTable(showingDocs >= (docs?.length ?? 0));
-  }, [showingDocs, docs]);
-
-  if(docs.length === 0)
-  {
-    return null;
-  }
+  const isShowingFullTable = showingDocs >= (docs.length ?? 0);
 
   return (
     <div css={styles.wrapper}>
@@ -49,20 +38,20 @@ const DocsTable: FunctionComponent<DocsTableProps> = ({ docs }) =>
           {docs.slice(0, showingDocs).map(doc => (
             <tr
               key={doc.id}
-              onClick={() => setEditDocumentState(doc)}>
+              onClick={() => setViewDocumentState(doc)}>
               <DocsTableData {...doc}/>
             </tr>
           ))}
         </tbody>
       </table>
-      {!(isShowingFullTable) && (
+      {!isShowingFullTable && (
         <div css={styles.showMoreButton}>
           <Button<"button">
             styleType="tertiary"
             rightIcon={<ArrowDown size={20}/>}
             size="medium"
             onClick={() => setShowingDocs(prev => prev + 10)}>
-            Show {docs?.length - showingDocs < 10 ? docs?.length - showingDocs : 10} More
+            Show {docs.length - showingDocs < 10 ? docs.length - showingDocs : 10} More
           </Button>
         </div>
       )}
