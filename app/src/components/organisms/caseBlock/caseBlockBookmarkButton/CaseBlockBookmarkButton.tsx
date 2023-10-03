@@ -8,7 +8,7 @@ import { Text } from "@mantine/core";
 import { modals } from "@mantine/modals";
 import { notifications } from "@mantine/notifications";
 import { useRouter } from "next/router";
-import React, { type FunctionComponent } from "react";
+import React, { type FunctionComponent, useRef } from "react";
 
 interface ICaseBlockBookmarkButtonProps
 {
@@ -21,6 +21,7 @@ const CaseBlockBookmarkButton: FunctionComponent<ICaseBlockBookmarkButtonProps> 
 {
   const apiContext = api.useContext();
   const router = useRouter();
+  const addBookmarkMutationStartTimestamp = useRef<number>();
   
   /**
    * Could add optimistic updates here later
@@ -43,7 +44,21 @@ const CaseBlockBookmarkButton: FunctionComponent<ICaseBlockBookmarkButtonProps> 
 
   const { isLoading: isAddingBookmarkLoading, mutate: addBookmark } = api.bookmarks.addBookmark.useMutation({
     onError: e => onError(e, "add"),
-    onSuccess: onBookmarkAddedOrRemoved,
+    onMutate: () =>
+    {
+      addBookmarkMutationStartTimestamp.current = performance.now();
+    },
+    onSettled: () =>
+    {
+      if(!addBookmarkMutationStartTimestamp.current)
+      {
+        return;
+      }
+
+      const duration = performance.now() - addBookmarkMutationStartTimestamp.current;
+      console.log(`add bookmark mutation took ${duration}ms`);
+    },
+    onSuccess: onBookmarkAddedOrRemoved
   });
 
   const { isLoading: isRemovingBookmarkLoading, mutate: removeBookmark } = api.bookmarks.removeBookmark.useMutation({
