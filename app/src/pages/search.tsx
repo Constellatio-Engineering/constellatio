@@ -1,14 +1,14 @@
 import { Layout } from "@/components/layouts/Layout";
-import useSearchResults from "@/hooks/useSearchResults";
+// import useSearchResults from "@/hooks/useSearchResults";
 import useSearchBarStore from "@/stores/searchBar.store";
 
-import { type NextPageContext, type NextPage } from "next";
+import { type NextPage } from "next";
 import { useRouter } from "next/router";
 import { useEffect } from "react";
 
 const Search: NextPage = () => 
 {
-  const { isLoading, searchResults } = useSearchResults();
+  // const { isLoading, searchResults } = useSearchResults();
   const router = useRouter();
   const searchValue = useSearchBarStore((s) => s.searchValue);
   const setSearchValue = useSearchBarStore((s) => s.setSearchValue);
@@ -22,6 +22,7 @@ const Search: NextPage = () =>
         setSearchValue(router.query.find as string);
       }
     }
+  // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [router.query.find]);
 
   console.log("router.query.find", router.query.find);
