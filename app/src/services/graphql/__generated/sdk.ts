@@ -1207,6 +1207,9 @@ export type IGenArticleOverviewFragment = { __typename: 'Article', id?: string |
   ) | { __typename?: 'SubCategory' } | null, topic?: Array<(
     { __typename?: 'Topic' }
     & IGenTopicFragment
+  ) | null> | null, mainCategoryField?: Array<(
+    { __typename?: 'MainCategory' }
+    & IGenMainCategoryFragment
   ) | null> | null };
 
 export type IGenAssetFragment = { __typename?: 'Asset', title?: string | null, src?: string | null, originType?: string | null, keywords?: string | null, id?: string | null, dominantColor?: string | null, description?: string | null, copyright?: string | null, author?: string | null };
@@ -1380,19 +1383,6 @@ export const TopicFragmentDoc = gql`
   topicName
 }
     `;
-export const ArticleOverviewFragmentDoc = gql`
-    fragment ArticleOverview on Article {
-  __typename
-  id
-  title
-  legalArea {
-    ...LegalArea
-  }
-  topic {
-    ...Topic
-  }
-}
-    `;
 export const AssetFragmentDoc = gql`
     fragment Asset on Asset {
   title
@@ -1414,6 +1404,22 @@ export const MainCategoryFragmentDoc = gql`
     ...Asset
   }
   mainCategory
+}
+    `;
+export const ArticleOverviewFragmentDoc = gql`
+    fragment ArticleOverview on Article {
+  __typename
+  id
+  title
+  legalArea {
+    ...LegalArea
+  }
+  topic {
+    ...Topic
+  }
+  mainCategoryField {
+    ...MainCategory
+  }
 }
     `;
 export const CaseOverviewFragmentDoc = gql`
@@ -1663,7 +1669,9 @@ export const GetAllArticleOverviewDocument = gql`
 }
     ${ArticleOverviewFragmentDoc}
 ${LegalAreaFragmentDoc}
-${TopicFragmentDoc}`;
+${TopicFragmentDoc}
+${MainCategoryFragmentDoc}
+${AssetFragmentDoc}`;
 export const GetAllLegalAreaDocument = gql`
     query getAllLegalArea {
   allLegalArea {

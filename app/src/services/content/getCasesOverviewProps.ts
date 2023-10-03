@@ -1,36 +1,16 @@
 /* eslint-disable @typescript-eslint/naming-convention */
 import getAllCases, { type AllCases } from "./getAllCases";
 import {
-  type IGenAssetFragment,
   type IGenGetAllMainCategoryQuery,
   type IGenGetAllLegalAreaQuery,
-  type IGenMainCategoryFragment,
 } from "../graphql/__generated/sdk";
 import { caisySDK } from "../graphql/getSdk";
-
-export type allMainCategories = Array<{
-  __typename?: "MainCategory" | undefined;
-  casesPerCategory: number;
-  icon?: ({
-    __typename?: "Asset" | undefined;
-  } & IGenAssetFragment) | null | undefined;
-  id?: string | null | undefined;
-  mainCategory?: string | null | undefined;
-}> | null;
-
 export interface ICasesOverviewProps 
 {
   __typename: "case";
   allCases: AllCases;
   allLegalAreaRes: IGenGetAllLegalAreaQuery;
-  allMainCategoriesRes: Array<{
-    __typename?: "MainCategory" | undefined;
-    icon?: ({
-      __typename?: "Asset" | undefined;
-    } & IGenAssetFragment) | null | undefined;
-    id?: string | null | undefined;
-    mainCategory?: string | null | undefined;
-  }> | undefined;
+  allMainCategoriesRes: IGenGetAllMainCategoryQuery;
 }
 
 const getCasesOverviewProps = async (): Promise<ICasesOverviewProps> => 

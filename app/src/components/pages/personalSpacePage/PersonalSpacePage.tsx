@@ -39,7 +39,7 @@ const PersonalSpacePage: FunctionComponent = () =>
   const { documents } = useDocuments(selectedFolderId);
   const allCasesBookmarks = bookmarks.filter(bookmark => bookmark?.resourceType === "case") ?? [];
   const bookmarkedCases = allCases.filter(caisyCase => allCasesBookmarks.some(bookmark => bookmark.resourceId === caisyCase.id));
-  const mainCategoriesInBookmarkedCases = bookmarkedCases.map(bookmarkedCase => bookmarkedCase?.subCategoryField?.[0]?.mainCategory?.[0]);
+  const mainCategoriesInBookmarkedCases = bookmarkedCases.map(bookmarkedCase => bookmarkedCase?.mainCategoryField?.[0]);
   const bookmarkedCasesMainCategoriesUnique = mainCategoriesInBookmarkedCases.reduce<IGenMainCategory[]>((acc, current) => 
   {
     if(current != null)
@@ -67,7 +67,7 @@ const PersonalSpacePage: FunctionComponent = () =>
     MaterialsCategoryId,
     uploadedFilesLength: uploadedFiles?.length ?? 0,
   });
-  const [selectedCategoryId, setSelectedCategoryId] = useState<IGenMainCategory["id"]>(categories?.[1]?.id as IGenMainCategory["id"]);
+  const [selectedCategory, setSelectedCategory] = useState<IGenMainCategory>(categories?.[1]);
   const FavCasesTabId = useId();
   const FavDictionaryTabId = useId();
   const FavForumsTabId = useId();
@@ -91,13 +91,13 @@ const PersonalSpacePage: FunctionComponent = () =>
           title="Personal Space"
           variant="red"
           categories={categories}
-          selectedCategoryId={selectedCategoryId ?? ""}
-          setSelectedCategoryId={setSelectedCategoryId}
+          selectedCategory={selectedCategory ?? ""}
+          setSelectedCategory={setSelectedCategory}
         />
       </div>
-      {isFavoriteTab(selectedCategoryId ?? "") && <PersonalSpaceNavBar setSelectedTabId={setSelectedTabId} selectedTabId={selectedTabId} tabs={favoriteCategoryNavTabs}/>}
+      {isFavoriteTab(selectedCategory?.id ?? "") && <PersonalSpaceNavBar setSelectedTabId={setSelectedTabId} selectedTabId={selectedTabId} tabs={favoriteCategoryNavTabs}/>}
       <Container maw={1440}>
-        {isFavoriteTab(selectedCategoryId ?? "") ? (selectedTabId === FavCasesTabId ? (
+        {isFavoriteTab(selectedCategory?.id ?? "") ? (selectedTabId === FavCasesTabId ? (
           <> 
             {(areBookmarksLoading || areCasesLoading) ? (
               <Loader sx={{ margin: "50px" }}/>
@@ -156,7 +156,7 @@ const PersonalSpacePage: FunctionComponent = () =>
                 folders={folders}
               />
               <div style={{ flex: 1, maxWidth: "75%" }}>
-                <PapersBlock docs={documents} selectedFolderId={selectedFolderId}/>
+                <PapersBlock docs={documents} selectedFolderId={selectedFolderId} isLoading={false}/>
                 <UploadedMaterialBlock
                   areUploadsInProgress={areUploadsInProgress}
                   fileInputRef={fileInputRef}

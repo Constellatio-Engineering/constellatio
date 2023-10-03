@@ -77,7 +77,7 @@ const OverviewPage: FunctionComponent<IOverviewPageProps> = ({ content, variant 
 
   const isCategoryEmpty = (): boolean => 
   {
-    const isEmpty: boolean = content?.allCases.filter((x: IGenCase) => (x?.mainCategoryField?.[0]?.id === selectedCategory?.id))?.length <= 0;
+    const isEmpty: boolean = content?.allCases?.filter((x: IGenCase) => (x?.mainCategoryField?.[0]?.id === selectedCategory?.id))?.length <= 0;
     return isEmpty;
   };
 

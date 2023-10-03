@@ -24,9 +24,19 @@ Awaited<ReturnType<typeof getArticlesOverviewProps>>
 
 const NextPage: FunctionComponent<IArticlesOverviewProps> = (props) => 
 {
+  const { allArticles, allLegalAreaRes, allMainCategories } = props;
+  console.log("article", { props });
+
+  const content = {
+    ...props,
+    allArticles,
+    allLegalAreaRes: allLegalAreaRes?.allLegalArea?.edges?.map((edge) => edge?.node),
+    allMainCategories,
+  };
+
   return (
     <Layout>
-      <OverviewPage content={props} variant="dictionary"/>      
+      <OverviewPage content={content} variant="dictionary"/>      
     </Layout>
   );
 };

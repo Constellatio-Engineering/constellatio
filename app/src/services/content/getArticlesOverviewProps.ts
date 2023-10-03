@@ -1,53 +1,52 @@
 /* eslint-disable @typescript-eslint/naming-convention */
 import getAllArticles, { type allArticles } from "./getAllArticles";
-import { type allMainCategories } from "./getCasesOverviewProps";
 import {
-  type IGenSubCategoryFragment,
+  type IGenGetAllMainCategoryQuery,
+  type IGenGetAllLegalAreaQuery,
+  type IGenAssetFragment,
 } from "../graphql/__generated/sdk";
 import { caisySDK } from "../graphql/getSdk";
-
-type allSubCategories = Array<IGenSubCategoryFragment | null | undefined> & {
-  __typename?: "SubCategory" | undefined;
-};
 
 export interface IArticlesOverviewProps 
 {
   __typename: "dictionary";
   allArticles: allArticles;
-  allMainCategories: allMainCategories;
-  allSubCategories: allSubCategories;
+  allLegalAreaRes: IGenGetAllLegalAreaQuery;
+  allMainCategories: Array<{
+    __typename?: "MainCategory" | undefined;
+    casesPerCategory: number;
+    icon?: ({
+      __typename?: "Asset" | undefined;
+    } & IGenAssetFragment) | null | undefined;
+    id?: string | null | undefined;
+    mainCategory?: string | null | undefined;
+  }> | null;
 }
 
 const getArticlesOverviewProps = async (): Promise<IArticlesOverviewProps> => 
 {
   try 
   {
-    const [allMainCategoriesRes, allSubCategoriesRes, allArticlesRes] = await Promise.all([
+    const [allMainCategoriesRes, allLegalAreaRes, allArticlesRes] = await Promise.all([
       caisySDK.getAllMainCategory(),
-      caisySDK.getAllSubCategory(), getAllArticles()
+      caisySDK.getAllLegalArea(), 
+      getAllArticles()
     ]);
 
     const allMainCategories = (
       allMainCategoriesRes?.allMainCategory?.edges?.map((category) => ({
-        casesPerCategory: allArticlesRes?.filter((caseItem) =>
-          caseItem?.subCategoryField?.some(
-            (subCategoryForEachArticle) =>
-              subCategoryForEachArticle?.mainCategory?.[0]?.id ===
-							category?.node?.id
-          )
+        casesPerCategory: allArticlesRes?.filter((articleItem) =>
+          articleItem?.mainCategoryField?.[0]?.id === category?.node?.id
         ).length,
         ...category?.node,
       })) || null
     );
 
-    const allSubCategories = allSubCategoriesRes?.allSubCategory?.edges?.map((subCategory) => subCategory?.node
-    ) || [];
-
     return {
       __typename: "dictionary",
       allArticles: allArticlesRes,
-      allMainCategories,
-      allSubCategories,
+      allLegalAreaRes,
+      allMainCategories
     };
   }
   catch (error) 
