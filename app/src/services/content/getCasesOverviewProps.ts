@@ -4,6 +4,7 @@ import {
   type IGenAssetFragment,
   type IGenGetAllMainCategoryQuery,
   type IGenGetAllLegalAreaQuery,
+  type IGenMainCategoryFragment,
 } from "../graphql/__generated/sdk";
 import { caisySDK } from "../graphql/getSdk";
 
@@ -22,7 +23,14 @@ export interface ICasesOverviewProps
   __typename: "case";
   allCases: AllCases;
   allLegalAreaRes: IGenGetAllLegalAreaQuery;
-  allMainCategoriesRes: IGenGetAllMainCategoryQuery;
+  allMainCategoriesRes: Array<{
+    __typename?: "MainCategory" | undefined;
+    icon?: ({
+      __typename?: "Asset" | undefined;
+    } & IGenAssetFragment) | null | undefined;
+    id?: string | null | undefined;
+    mainCategory?: string | null | undefined;
+  }> | undefined;
 }
 
 const getCasesOverviewProps = async (): Promise<ICasesOverviewProps> => 
