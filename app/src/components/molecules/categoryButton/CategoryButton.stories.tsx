@@ -29,7 +29,7 @@ type Story = StoryObj<typeof CategoryButton>;
 
 export const Default: Story = {
   args: {
-    children: "Category / Subcategory",
+    children: "Category",
   },
 };
 

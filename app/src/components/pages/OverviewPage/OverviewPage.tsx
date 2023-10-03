@@ -4,8 +4,9 @@ import EmptyStateCard from "@/components/organisms/emptyStateCard/EmptyStateCard
 import OverviewHeader from "@/components/organisms/OverviewHeader/OverviewHeader";
 import { type IArticlesOverviewProps } from "@/services/content/getArticlesOverviewProps";
 import { type allSubCategories, type ICasesOverviewProps } from "@/services/content/getCasesOverviewProps";
-import { type IGenArticleOverviewFragment, type IGenFullCaseFragment, type IGenSubCategoryFragment } from "@/services/graphql/__generated/sdk";
+import { type IGenMainCategory, type IGenArticleOverviewFragment, type IGenFullCaseFragment, type IGenSubCategoryFragment } from "@/services/graphql/__generated/sdk";
 
+import { useRouter } from "next/router";
 import {
   type FunctionComponent,
   useEffect,
@@ -24,52 +25,74 @@ interface IOverviewPageProps
 const OverviewPage: FunctionComponent<IOverviewPageProps> = ({ content, variant }) => 
 {
 
-  const [selectedCategoryId, setSelectedCategoryId] = useState<string>(
-    content?.allMainCategories?.[0]?.id ?? ""
+  const [selectedCategory, setSelectedCategory] = useState<IGenMainCategory | null>(
+    content?.allMainCategories?.[0] ?? null
   );
-  const [filteredSubcategories, setFilteredSubcategories] = useState<
-  allSubCategories | undefined
-  >(undefined);
+
+  const router = useRouter();
+
   useEffect(() => 
   {
-    setFilteredSubcategories(
-      content?.allSubCategories?.filter(
-        (item) => item?.mainCategory?.[0]?.id === selectedCategoryId
-      )
-    );
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [selectedCategoryId]);
+    router.query.category = selectedCategory?.mainCategory?.trim() ?? "";
+    void router.push(router);
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [selectedCategory?.id]);
 
-  const allCasesOfSubcategory = (item: IGenSubCategoryFragment): Array<({
-    _typename?: "Case" | undefined;
-  } & IGenFullCaseFragment) | null | undefined> | undefined => content?.__typename === "case" ?
-    content?.allCases?.filter((caseItem) => caseItem?.subCategoryField?.some((e) => e?.id === item?.id)) : undefined;
+  // const [filteredSubcategories, setFilteredSubcategories] = useState<
+  // allSubCategories | undefined
+  // >(undefined);
+  // useEffect(() => 
+  // {
+  //   setFilteredSubcategories(
+  //     content?.allSubCategories?.filter(
+  //       (item) => item?.mainCategory?.[0]?.id === selectedCategoryId
+  //     )
+  //   );
+  //   // eslint-disable-next-line react-hooks/exhaustive-deps
+  // }, [selectedCategoryId]);
 
-  const allArticlesOfSubcategory = (item: IGenSubCategoryFragment):
-  IGenArticleOverviewFragment[] | undefined => content?.__typename === "dictionary" ? 
-    content?.allArticles?.filter((caseItem) => caseItem?.subCategoryField?.some((e) => e?.id === item?.id)) : undefined;
+  // const allCasesOfSubcategory = (item: IGenSubCategoryFragment): Array<({
+  //   _typename?: "Case" | undefined;
+  // } & IGenFullCaseFragment) | null | undefined> | undefined => content?.__typename === "case" ?
+  //   content?.allCases?.filter((caseItem) => caseItem?.subCategoryField?.some((e) => e?.id === item?.id)) : undefined;
+
+  // const allArticlesOfSubcategory = (item: IGenSubCategoryFragment):
+  // IGenArticleOverviewFragment[] | undefined => content?.__typename === "dictionary" ? 
+  //   content?.allArticles?.filter((caseItem) => caseItem?.subCategoryField?.some((e) => e?.id === item?.id)) : undefined;
     
-  const isCategoryEmpty = (selectedMainCategory: string): boolean => 
+  // const isCategoryEmpty = (selectedMainCategory: string): boolean => 
+  // {
+  //   const allMainCategories = content?.allMainCategories;
+  //   const selectedMainCategoryObject = allMainCategories?.filter(x => x?.id === selectedMainCategory)?.[0];
+  //   const casesPerCategory = selectedMainCategoryObject?.casesPerCategory;
+  //   const isCategoryEmpty = casesPerCategory !== undefined && casesPerCategory !== null && casesPerCategory <= 0 ? true : false;
+  //   return isCategoryEmpty;
+  // };
+  const listOfUsedLegalAreas = [];
+  content?.allMainCategoryCases?.forEach((item) => 
   {
-    const allMainCategories = content?.allMainCategories;
-    const selectedMainCategoryObject = allMainCategories?.filter(x => x?.id === selectedMainCategory)?.[0];
-    const casesPerCategory = selectedMainCategoryObject?.casesPerCategory;
-    const isCategoryEmpty = casesPerCategory !== undefined && casesPerCategory !== null && casesPerCategory <= 0 ? true : false;
-    return isCategoryEmpty;
-  };
-  
+    if(item.legalArea)
+    {
+      if(listOfUsedLegalAreas.filter(x => x.id === item.legalArea.id).length <= 0)
+      {
+        listOfUsedLegalAreas.push(item.legalArea);
+      }
+    }
+  });
+  console.log({ listOfUsedLegalAreas });
+
   return (
     <div css={styles.Page}>
       {content?.allMainCategories && (
         <OverviewHeader
           variant={variant}
-          selectedCategoryId={selectedCategoryId}
-          setSelectedCategoryId={setSelectedCategoryId}
+          selectedCategory={selectedCategory}
+          setSelectedCategory={setSelectedCategory}
           categories={content?.allMainCategories}
           title={variant === "case" ? "Cases" : "Dictionary"}
         />
       )}
-      <div css={styles.ListWrapper}>
+      {/* <div css={styles.ListWrapper}>
         {filteredSubcategories &&
           filteredSubcategories.length > 0 &&
           filteredSubcategories.map((item, itemIndex) => item?.subCategory && (
@@ -93,7 +116,7 @@ const OverviewPage: FunctionComponent<IOverviewPageProps> = ({ content, variant 
           text="Please check back soon for the latest updates"
           variant="For-large-areas"
         />
-      )}
+      )} */}
     </div>
   );
 };

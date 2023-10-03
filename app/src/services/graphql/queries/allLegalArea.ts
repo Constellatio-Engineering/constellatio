@@ -2,9 +2,9 @@ import { gql } from "graphql-request";
 
 import { f_LegalArea } from "../fragments/LegalArea";
 
-export const q_all_LegalArea = gql`
+export const getAllLegalArea = gql`
   ${f_LegalArea}
-  query q_all_LegalArea {
+  query getAllLegalArea {
     allLegalArea {
       totalCount
       edges {

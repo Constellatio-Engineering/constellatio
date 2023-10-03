@@ -401,7 +401,7 @@ export type IGenCase = {
   facts?: Maybe<IGenCase_Facts>;
   fullTextTasks?: Maybe<IGenCase_FullTextTasks>;
   id?: Maybe<Scalars['ID']['output']>;
-  legalArea?: Maybe<IGenCase_LegalArea>;
+  legalArea?: Maybe<IGenLegalArea>;
   mainCategoryField?: Maybe<Array<Maybe<IGenCase_MainCategoryField>>>;
   resolution?: Maybe<IGenCase_Resolution>;
   tags?: Maybe<Array<Maybe<IGenCase_Tags>>>;
@@ -421,6 +421,8 @@ export type IGenCaseFullTextTasksArgs = {
 
 
 export type IGenCaseLegalAreaArgs = {
+  after?: InputMaybe<Scalars['String']['input']>;
+  first?: InputMaybe<Scalars['Int']['input']>;
   locale?: InputMaybe<Scalars['String']['input']>;
 };
 
@@ -469,7 +471,6 @@ export type IGenCase_LegalArea_Where = {
 
 export type IGenCase_LegalArea_WhereConnection = {
   LegalArea?: InputMaybe<IGenLegalArea_Nested_Where>;
-  SubCategory?: InputMaybe<IGenSubCategory_Nested_Where>;
 };
 
 export type IGenCase_MainCategoryField_Where = {
@@ -552,8 +553,6 @@ export type IGenCase_FullTextTasksConnectionsArgs = {
 };
 
 export type IGenCase_FullTextTasks_Connections = IGenAsset | IGenCallout | IGenCardSelectionGame | IGenDragNDropGame | IGenFillInGapsGame;
-
-export type IGenCase_LegalArea = IGenLegalArea | IGenSubCategory;
 
 export type IGenCase_MainCategoryField = IGenMainCategory;
 
@@ -1236,7 +1235,7 @@ export type IGenCaseFullTextTasksFragment = { __typename: 'Case_fullTextTasks', 
 export type IGenCaseOverviewFragment = { __typename: 'Case', id?: string | null, title?: string | null, durationToCompleteInMinutes?: number | null, legalArea?: (
     { __typename?: 'LegalArea' }
     & IGenLegalAreaFragment
-  ) | { __typename?: 'SubCategory' } | null, topic?: Array<(
+  ) | null, topic?: Array<(
     { __typename?: 'Topic' }
     & IGenTopicFragment
   ) | null> | null };
@@ -1268,7 +1267,7 @@ export type IGenFullCaseFragment = { __typename: 'Case', id?: string | null, tit
   ) | null, legalArea?: (
     { __typename?: 'LegalArea' }
     & IGenLegalAreaFragment
-  ) | { __typename?: 'SubCategory' } | null, mainCategoryField?: Array<(
+  ) | null, mainCategoryField?: Array<(
     { __typename?: 'MainCategory' }
     & IGenMainCategoryFragment
   ) | null> | null, tags?: Array<(
@@ -1290,6 +1289,16 @@ export type IGenTagsFragment = { __typename: 'Tags', id?: string | null, tagName
 
 export type IGenTopicFragment = { __typename: 'Topic', id?: string | null, topicName?: string | null };
 
+export type IGenGetAllCasesByMainCategoryQueryVariables = Exact<{
+  mainCategory: Scalars['String']['input'];
+}>;
+
+
+export type IGenGetAllCasesByMainCategoryQuery = { __typename?: 'Query', allCase?: { __typename?: 'Case_Connection', totalCount?: number | null, edges?: Array<{ __typename?: 'Case_ConnectionEdge', node?: (
+        { __typename?: 'Case' }
+        & IGenFullCaseFragment
+      ) | null } | null> | null } | null };
+
 export type IGenGetAllCaseOverviewQueryVariables = Exact<{
   after?: InputMaybe<Scalars['String']['input']>;
 }>;
@@ -1299,6 +1308,14 @@ export type IGenGetAllCaseOverviewQuery = { __typename?: 'Query', allCase?: { __
         { __typename?: 'Case' }
         & IGenCaseOverviewFragment
       ) | null } | null> | null } | null };
+
+export type IGenGetAllCasesByCategoryDetailsQueryVariables = Exact<{
+  legalAreaName: Scalars['String']['input'];
+  mainCategory: Scalars['String']['input'];
+}>;
+
+
+export type IGenGetAllCasesByCategoryDetailsQuery = { __typename?: 'Query', allCase?: { __typename?: 'Case_Connection', totalCount?: number | null, edges?: Array<{ __typename?: 'Case_ConnectionEdge', node?: { __typename?: 'Case', id?: string | null } | null } | null> | null } | null };
 
 export type IGenGetAllArticleOverviewQueryVariables = Exact<{
   after?: InputMaybe<Scalars['String']['input']>;
@@ -1310,10 +1327,10 @@ export type IGenGetAllArticleOverviewQuery = { __typename?: 'Query', allArticle?
         & IGenArticleOverviewFragment
       ) | null } | null> | null } | null };
 
-export type IGenQ_All_LegalAreaQueryVariables = Exact<{ [key: string]: never; }>;
+export type IGenGetAllLegalAreaQueryVariables = Exact<{ [key: string]: never; }>;
 
 
-export type IGenQ_All_LegalAreaQuery = { __typename?: 'Query', allLegalArea?: { __typename?: 'LegalArea_Connection', totalCount?: number | null, edges?: Array<{ __typename?: 'LegalArea_ConnectionEdge', node?: (
+export type IGenGetAllLegalAreaQuery = { __typename?: 'Query', allLegalArea?: { __typename?: 'LegalArea_Connection', totalCount?: number | null, edges?: Array<{ __typename?: 'LegalArea_ConnectionEdge', node?: (
         { __typename?: 'LegalArea' }
         & IGenLegalAreaFragment
       ) | null } | null> | null } | null };
@@ -1565,6 +1582,30 @@ export const FullCaseFragmentDoc = gql`
   }
 }
     `;
+export const GetAllCasesByMainCategoryDocument = gql`
+    query getAllCasesByMainCategory($mainCategory: String!) {
+  allCase(
+    where: {AND: [{mainCategoryField: {findOne: {MainCategory: {mainCategory: {eq: $mainCategory}}}}}]}
+  ) {
+    totalCount
+    edges {
+      node {
+        ...FullCase
+      }
+    }
+  }
+}
+    ${FullCaseFragmentDoc}
+${CaseFullTextTasksFragmentDoc}
+${FillInGapsGameFragmentDoc}
+${CardSelectionGameFragmentDoc}
+${DragNDropGameFragmentDoc}
+${CalloutFragmentDoc}
+${AssetFragmentDoc}
+${LegalAreaFragmentDoc}
+${MainCategoryFragmentDoc}
+${TagsFragmentDoc}
+${TopicFragmentDoc}`;
 export const GetAllCaseOverviewDocument = gql`
     query getAllCaseOverview($after: String) {
   allCase(first: 100, after: $after) {
@@ -1583,6 +1624,20 @@ export const GetAllCaseOverviewDocument = gql`
     ${CaseOverviewFragmentDoc}
 ${LegalAreaFragmentDoc}
 ${TopicFragmentDoc}`;
+export const GetAllCasesByCategoryDetailsDocument = gql`
+    query getAllCasesByCategoryDetails($legalAreaName: String!, $mainCategory: String!) {
+  allCase(
+    where: {legalArea: {findOne: {LegalArea: {legalAreaName: {eq: $legalAreaName}}}}, mainCategoryField: {findOne: {MainCategory: {mainCategory: {eq: $mainCategory}}}}}
+  ) {
+    edges {
+      node {
+        id
+      }
+    }
+    totalCount
+  }
+}
+    `;
 export const GetAllArticleOverviewDocument = gql`
     query getAllArticleOverview($after: String) {
   allArticle(first: 100, after: $after) {
@@ -1601,8 +1656,8 @@ export const GetAllArticleOverviewDocument = gql`
     ${ArticleOverviewFragmentDoc}
 ${LegalAreaFragmentDoc}
 ${TopicFragmentDoc}`;
-export const Q_All_LegalAreaDocument = gql`
-    query q_all_LegalArea {
+export const GetAllLegalAreaDocument = gql`
+    query getAllLegalArea {
   allLegalArea {
     totalCount
     edges {
@@ -1663,14 +1718,20 @@ ${TopicFragmentDoc}`;
 export type Requester<C = {}, E = unknown> = <R, V>(doc: DocumentNode, vars?: V, options?: C) => Promise<R> | AsyncIterable<R>
 export function getSdk<C, E>(requester: Requester<C, E>) {
   return {
+    getAllCasesByMainCategory(variables: IGenGetAllCasesByMainCategoryQueryVariables, options?: C): Promise<IGenGetAllCasesByMainCategoryQuery> {
+      return requester<IGenGetAllCasesByMainCategoryQuery, IGenGetAllCasesByMainCategoryQueryVariables>(GetAllCasesByMainCategoryDocument, variables, options) as Promise<IGenGetAllCasesByMainCategoryQuery>;
+    },
     getAllCaseOverview(variables?: IGenGetAllCaseOverviewQueryVariables, options?: C): Promise<IGenGetAllCaseOverviewQuery> {
       return requester<IGenGetAllCaseOverviewQuery, IGenGetAllCaseOverviewQueryVariables>(GetAllCaseOverviewDocument, variables, options) as Promise<IGenGetAllCaseOverviewQuery>;
+    },
+    getAllCasesByCategoryDetails(variables: IGenGetAllCasesByCategoryDetailsQueryVariables, options?: C): Promise<IGenGetAllCasesByCategoryDetailsQuery> {
+      return requester<IGenGetAllCasesByCategoryDetailsQuery, IGenGetAllCasesByCategoryDetailsQueryVariables>(GetAllCasesByCategoryDetailsDocument, variables, options) as Promise<IGenGetAllCasesByCategoryDetailsQuery>;
     },
     getAllArticleOverview(variables?: IGenGetAllArticleOverviewQueryVariables, options?: C): Promise<IGenGetAllArticleOverviewQuery> {
       return requester<IGenGetAllArticleOverviewQuery, IGenGetAllArticleOverviewQueryVariables>(GetAllArticleOverviewDocument, variables, options) as Promise<IGenGetAllArticleOverviewQuery>;
     },
-    q_all_LegalArea(variables?: IGenQ_All_LegalAreaQueryVariables, options?: C): Promise<IGenQ_All_LegalAreaQuery> {
-      return requester<IGenQ_All_LegalAreaQuery, IGenQ_All_LegalAreaQueryVariables>(Q_All_LegalAreaDocument, variables, options) as Promise<IGenQ_All_LegalAreaQuery>;
+    getAllLegalArea(variables?: IGenGetAllLegalAreaQueryVariables, options?: C): Promise<IGenGetAllLegalAreaQuery> {
+      return requester<IGenGetAllLegalAreaQuery, IGenGetAllLegalAreaQueryVariables>(GetAllLegalAreaDocument, variables, options) as Promise<IGenGetAllLegalAreaQuery>;
     },
     getAllMainCategory(variables?: IGenGetAllMainCategoryQueryVariables, options?: C): Promise<IGenGetAllMainCategoryQuery> {
       return requester<IGenGetAllMainCategoryQuery, IGenGetAllMainCategoryQueryVariables>(GetAllMainCategoryDocument, variables, options) as Promise<IGenGetAllMainCategoryQuery>;

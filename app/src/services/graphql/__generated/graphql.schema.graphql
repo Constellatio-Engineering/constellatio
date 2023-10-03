@@ -718,7 +718,18 @@ type Case {
   id: ID
 
   """"""
-  legalArea(locale: String): Case_legalArea
+  legalArea(
+    """
+    The cursor to start the pagination from. In this case the curser equals the id for the (last) element. If not set, we wil start from the beginning.
+    """
+    after: String
+
+    """The number of items to return. Default and max value is 100."""
+    first: Int = 100
+
+    """"""
+    locale: String
+  ): LegalArea
 
   """"""
   mainCategoryField(
@@ -800,9 +811,6 @@ input Case_LegalArea_Where {
 input Case_LegalArea_WhereConnection {
   """"""
   LegalArea: LegalArea_Nested_Where
-
-  """"""
-  SubCategory: SubCategory_Nested_Where
 }
 
 """"""
@@ -955,9 +963,6 @@ type Case_fullTextTasks {
 
 """"""
 union Case_fullTextTasks_Connections = Asset | Callout | CardSelectionGame | DragNDropGame | FillInGapsGame
-
-""""""
-union Case_legalArea = LegalArea | SubCategory
 
 """"""
 union Case_mainCategoryField = MainCategory
