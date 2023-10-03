@@ -1,7 +1,6 @@
 /* eslint-disable @typescript-eslint/naming-convention */
 import getAllArticles, { type allArticles } from "./getAllArticles";
 import {
-  type IGenGetAllMainCategoryQuery,
   type IGenGetAllLegalAreaQuery,
   type IGenAssetFragment,
 } from "../graphql/__generated/sdk";

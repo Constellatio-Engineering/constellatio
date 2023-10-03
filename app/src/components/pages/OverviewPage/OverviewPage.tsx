@@ -3,15 +3,14 @@ import CaseBlock from "@/components/organisms/caseBlock/ItemBlock";
 import EmptyStateCard from "@/components/organisms/emptyStateCard/EmptyStateCard";
 import OverviewHeader from "@/components/organisms/OverviewHeader/OverviewHeader";
 import { type IArticlesOverviewProps } from "@/services/content/getArticlesOverviewProps";
-import { type allSubCategories, type ICasesOverviewProps } from "@/services/content/getCasesOverviewProps";
+import { type ICasesOverviewProps } from "@/services/content/getCasesOverviewProps";
 import {
-  type IGenMainCategory, type IGenArticleOverviewFragment, type IGenFullCaseFragment, type IGenSubCategoryFragment, type IGenLegalArea, type IGenCase, type IGenArticle 
+  type IGenMainCategory, type IGenLegalArea, type IGenCase, type IGenArticle 
 } from "@/services/graphql/__generated/sdk";
 
-import { useRouter } from "next/router";
 import {
   type FunctionComponent,
-  useEffect, Fragment,
+  Fragment,
   useState,
 } from "react";
 

@@ -24,13 +24,13 @@ Awaited<ReturnType<typeof getCasesOverviewProps>>
 
 const NextPage: FunctionComponent<ICasesOverviewProps> = (props) => 
 {
-  const { allCases, allLegalAreaRes, allMainCategoriesRes } = props;
+  const { allCases, allLegalAreaRes, allMainCategories } = props;
   console.log("casess", { props });
   const content = {
-    __typename: "case",
+    ...props,
     allCases,
     allLegalAreaRes: allLegalAreaRes?.allLegalArea?.edges?.map((edge) => edge?.node),
-    allMainCategories: allMainCategoriesRes?.allMainCategory?.edges?.map((edge) => ({ ...edge?.node, casesPerCategory: props.allCases.filter(x => x.mainCategoryField?.[0]?.id === edge?.node?.id)?.length })),
+    allMainCategories
   };
   return (
     <Layout>
