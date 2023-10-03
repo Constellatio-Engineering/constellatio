@@ -1,14 +1,14 @@
 import { CustomLink } from "@/components/atoms/CustomLink/CustomLink";
-import Label from "@/components/atoms/label/Label";
 import Tag from "@/components/atoms/tag/Tag";
 import useSearchResults from "@/hooks/useSearchResults";
 import useSearchBarStore from "@/stores/searchBar.store";
 import { paths } from "@/utils/paths";
 
 import Link from "next/link";
-import React, { type FunctionComponent } from "react";
+import { type FunctionComponent } from "react";
 
 import * as styles from "./SearchOverlay.styles";
+import SuggestionSection from "./SuggestionSection";
 import EmptyStateCard from "../emptyStateCard/EmptyStateCard";
 
 type SearchOverlayLeftSideProps = {
@@ -29,8 +29,7 @@ const SearchOverlayLeftSide: FunctionComponent<SearchOverlayLeftSideProps> = ({ 
   {
     return (
       <div css={styles.suggestionsLeft}>
-        <div className="suggestion__section">
-          <Label variant="neutral">Recent searches</Label>
+        <SuggestionSection label="recent searches" labelVariant="neutral">
           {searchHistory.map((result, index) => (
             <span
               onClick={() => setSearchValue(result)}
@@ -41,9 +40,8 @@ const SearchOverlayLeftSide: FunctionComponent<SearchOverlayLeftSideProps> = ({ 
               </CustomLink>
             </span>
           ))}
-        </div>
-        <div className="suggestion__section">
-          <Label variant="neutral">popular searches</Label>
+        </SuggestionSection>
+        <SuggestionSection label="popular search" labelVariant="neutral">
           {searchHistory.map((result, index) => (
             <span
               onClick={() => setSearchValue(result)}
@@ -54,7 +52,7 @@ const SearchOverlayLeftSide: FunctionComponent<SearchOverlayLeftSideProps> = ({ 
               </CustomLink>
             </span>
           ))}
-        </div>
+        </SuggestionSection>
       </div>
     );
   }
@@ -77,8 +75,7 @@ const SearchOverlayLeftSide: FunctionComponent<SearchOverlayLeftSideProps> = ({ 
   return (
     <div css={styles.suggestionsLeft}>
       {searchResults.cases.length > 0 && (
-        <div className="suggestion__section">
-          <Label variant="case">Cases</Label>
+        <SuggestionSection label="Cases" labelVariant="case">
           {searchResults.cases.map((result) => (
             <Link
               key={result.id}
@@ -90,11 +87,10 @@ const SearchOverlayLeftSide: FunctionComponent<SearchOverlayLeftSideProps> = ({ 
               <Tag>{result.mainCategory?.mainCategory}</Tag>
             </Link>
           ))}
-        </div>
+        </SuggestionSection>
       )}
       {searchResults.articles.length > 0 && (
-        <div className="suggestion__section">
-          <Label variant="dictionary">Dictionary</Label>
+        <SuggestionSection label="Dictionary" labelVariant="dictionary">
           {searchResults.articles.map((article) => (
             <Link
               key={article.id}
@@ -106,7 +102,7 @@ const SearchOverlayLeftSide: FunctionComponent<SearchOverlayLeftSideProps> = ({ 
               <Tag>{article.mainCategory?.mainCategory}</Tag>
             </Link>
           ))}
-        </div>
+        </SuggestionSection>
       )}
     </div>
   );

@@ -1,12 +1,11 @@
 import { CustomLink } from "@/components/atoms/CustomLink/CustomLink";
-import Label from "@/components/atoms/label/Label";
 import CategoryButton from "@/components/molecules/categoryButton/CategoryButton";
 import useSearchResults from "@/hooks/useSearchResults";
-// import useSearchBarStore from "@/stores/searchBar.store";
 
-import React, { type FunctionComponent } from "react";
+import { type FunctionComponent } from "react";
 
 import * as styles from "./SearchOverlay.styles";
+import SuggestionSection from "./SuggestionSection";
 
 type SearchOverlayRightSideProps = {
   readonly hasInput: boolean;
@@ -20,8 +19,7 @@ const SearchOverlayRightSide: FunctionComponent<SearchOverlayRightSideProps> = (
     <div css={styles.suggestionsRight}>
       {hasInput && searchResults.userUploads.length > 0 && (
         <>
-          <div className="suggestion__section">
-            <Label variant="neutral">Your materials</Label>
+          <SuggestionSection label="Your materials" labelVariant="neutral">
             {searchResults.userUploads.map((result) => (
               <span key={result.id} className="suggestion__section__link">
                 <CustomLink styleType="link-content" component="p">
@@ -29,11 +27,10 @@ const SearchOverlayRightSide: FunctionComponent<SearchOverlayRightSideProps> = (
                 </CustomLink>
               </span>
             ))}
-          </div>
+          </SuggestionSection>
         </>
       )}
-      <div className="suggestion__section">
-        <Label variant="neutral">popular categories</Label>
+      <SuggestionSection label="popular categories" labelVariant="neutral">
         <div className="popularCategories">
           <span className="suggestion__section__link">
             <CategoryButton>Cases / Civil law / labor law</CategoryButton>
@@ -53,7 +50,7 @@ const SearchOverlayRightSide: FunctionComponent<SearchOverlayRightSideProps> = (
             <CategoryButton>Cases / Civil law / labor law</CategoryButton>
           </span>
         </div>
-      </div>
+      </SuggestionSection>
     </div>
   );
 };
