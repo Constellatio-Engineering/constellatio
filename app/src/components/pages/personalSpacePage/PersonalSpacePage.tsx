@@ -17,7 +17,7 @@ import uploadsProgressStore from "@/stores/uploadsProgress.store";
 
 import { Container, Loader } from "@mantine/core";
 import Link from "next/link";
-import React, { type FunctionComponent, useState, useId } from "react";
+import React, { type FunctionComponent, useState, useId, useEffect } from "react";
 
 import { categoriesHelper } from "./PersonalSpaceHelper";
 import * as styles from "./PersonalSpacePage.styles";
@@ -36,7 +36,7 @@ const PersonalSpacePage: FunctionComponent = () =>
   const { bookmarks, isLoading: areBookmarksLoading } = useBookmarks(undefined);
   const { folders = [] } = useUploadFolders();
   const { isLoading: isGetUploadedFilesLoading, uploadedFiles } = useUploadedFiles(selectedFolderId);
-  const { documents } = useDocuments(selectedFolderId);
+  const { documents, isLoading: isGetDocumentsLoading, isRefetching: isRefetchingDocuments } = useDocuments(selectedFolderId);
   const allCasesBookmarks = bookmarks.filter(bookmark => bookmark?.resourceType === "case") ?? [];
   // const caseType: IGenCase = { __typename: "Case", mainCategoryField: [{ mainCategory }] };
   const bookmarkedCases = allCases.filter(caisyCase => allCasesBookmarks.some(bookmark => bookmark.resourceId === caisyCase.id));
@@ -79,12 +79,13 @@ const PersonalSpacePage: FunctionComponent = () =>
   const [selectedTabId, setSelectedTabId] = useState<string>(favoriteCategoryNavTabs?.[0]?.id as string);
   const casesByMainCategory = (id: string): Array<({ _typename?: "Case" | undefined } & IGenFullCaseFragment) | null | undefined> | IGenArticleOverviewFragment[] | undefined => bookmarkedCases?.filter((bookmarkedCase) => bookmarkedCase?.mainCategoryField?.[0]?.id === id);
   const [showFileViewerModal, setShowFileViewerModal] = useState<boolean>(false);
-  React.useEffect(() => 
+
+  useEffect(() =>
   {
     if(selectedFileIdForPreview) { setShowFileViewerModal(true); }
     if(!selectedFileIdForPreview) { setShowFileViewerModal(false); }
-    
   }, [selectedFileIdForPreview]);
+
   return (
     <div css={styles.wrapper}>
       <div css={styles.header}>
@@ -157,7 +158,7 @@ const PersonalSpacePage: FunctionComponent = () =>
                 folders={folders}
               />
               <div style={{ flex: 1, maxWidth: "75%" }}>
-                <PapersBlock docs={documents} selectedFolderId={selectedFolderId}/>
+                <PapersBlock docs={documents} selectedFolderId={selectedFolderId} isLoading={isGetDocumentsLoading}/>
                 <UploadedMaterialBlock
                   areUploadsInProgress={areUploadsInProgress}
                   fileInputRef={fileInputRef}

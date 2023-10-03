@@ -12,24 +12,36 @@ type EditorClosed = {
 };
 
 type EditDocument = {
+  document: Document;
   originalDocument: Document;
-  selectedDocument: Document;
   state: "edit";
 };
 
 type CreateDocument = {
-  newDocument: NewDocument;
+  document: NewDocument;
   state: "create";
 };
 
-type EditorState = EditorClosed | EditDocument | CreateDocument;
+type ViewDocument = {
+  document: Document;
+  state: "view";
+};
+
+export type EditorStateDrawerOpened = EditDocument | CreateDocument | ViewDocument;
+type EditorState = EditorClosed | EditorStateDrawerOpened;
+
+type ComputedEditorValues = {
+  hasUnsavedChanges: boolean;
+  title: string;
+};
 
 type DocumentEditorStoreProps = {
   closeEditor: () => void;
   editorState: EditorState;
-  getEditorDocumentValues: () => Document | NewDocument | null;
+  getComputedValues: () => ComputedEditorValues;
   setCreateDocumentState: (params: { folderId: string | null }) => void;
   setEditDocumentState: (document: Document) => void;
+  setViewDocumentState: (document: Document) => void;
   updateEditorDocument: (documentUpdate: DocumentUpdate) => void;
 };
 
@@ -47,30 +59,61 @@ const useDocumentEditorStore = create(
     editorState: {
       state: "closed",
     },
-    getEditorDocumentValues: () =>
+    getComputedValues: () =>
     {
       const { editorState } = get();
+
+      let computedValues: ComputedEditorValues;
 
       switch (editorState.state)
       {
         case "closed":
         {
-          return null;
+          computedValues = {
+            hasUnsavedChanges: false,
+            title: "",
+          };
+          break;
         }
         case "edit":
         {
-          return editorState.selectedDocument;
+          const hasUnsavedChanges = (editorState.document.name !== editorState.originalDocument.name) || (editorState.document.content !== editorState.originalDocument.content);
+
+          computedValues = {
+            hasUnsavedChanges,
+            title: `Edit ${editorState.originalDocument.name}`,
+          };
+
+          break;
+        }
+        case "view":
+        {
+          computedValues = {
+            hasUnsavedChanges: false,
+            title: editorState.document.name,
+          };
+          break;
         }
         case "create":
         {
-          return editorState.newDocument;
+          computedValues = {
+            hasUnsavedChanges: editorState.document.name !== "",
+            title: "Create new Constellatio doc",
+          };
+          break;
         }
         default:
         {
           console.error(`Unknown editor state: ${editorState}`);
-          return null;
+          computedValues = {
+            hasUnsavedChanges: false,
+            title: "",
+          };
+          break;
         }
       }
+
+      return computedValues;
     },
     setCreateDocumentState: ({ folderId }) =>
     {
@@ -79,7 +122,7 @@ const useDocumentEditorStore = create(
       set((state) =>
       {
         state.editorState = {
-          newDocument: {
+          document: {
             content: "",
             folderId,
             id: newDocumentId,
@@ -94,9 +137,19 @@ const useDocumentEditorStore = create(
       set((state) =>
       {
         state.editorState = {
+          document,
           originalDocument: document,
-          selectedDocument: document,
           state: "edit"
+        };
+      });
+    },
+    setViewDocumentState: (document) =>
+    {
+      set((state) =>
+      {
+        state.editorState = {
+          document,
+          state: "view"
         };
       });
     },
@@ -113,16 +166,16 @@ const useDocumentEditorStore = create(
         {
           case "edit":
           {
-            editorState.selectedDocument = {
-              ...editorState.selectedDocument,
+            editorState.document = {
+              ...editorState.document,
               ...documentUpdate
             };
             break;
           }
           case "create":
           {
-            editorState.newDocument = {
-              ...editorState.newDocument,
+            editorState.document = {
+              ...editorState.document,
               ...documentUpdate
             };
             break;

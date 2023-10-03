@@ -9,7 +9,7 @@ if(!connectionString)
   throw new Error("DATABASE_URL environment variable is not set");
 }
 
-const sql = postgres(connectionString, { max: 1 })
+const sql = postgres(connectionString)
 const db = drizzle(sql);
 
 try
@@ -18,7 +18,7 @@ try
 }
 catch (e)
 {
-  console.log("Error while applying migrations. Did you generate migrations first?", e);
+  console.log("Error while applying migrations:", e);
   process.exit(1);
 }
 

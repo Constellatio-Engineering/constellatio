@@ -1,5 +1,4 @@
 import { Container, Flex, Title } from "@mantine/core";
-import Image from "next/image";
 import React, { type FunctionComponent } from "react";
 
 import visual from "../../../../public/images/Registration-visual.png";
@@ -29,9 +28,9 @@ export const RegistrationVisualHeader: FunctionComponent = () =>
           maw="100%"
           justify="space-between"
           align="center">
-          <Image
-            priority
-            src={visual}
+          {/* eslint-disable-next-line @next/next/no-img-element */}
+          <img
+            src={visual.src}
             style={{ height: "auto", maxWidth: "100%", objectFit: "contain" }}
             alt="Registration-visual"
           />

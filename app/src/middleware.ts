@@ -6,10 +6,21 @@ import { type NextMiddleware, NextResponse } from "next/server";
 
 export const middleware: NextMiddleware = async (req) =>
 {
+  console.time("Middleware");
+
   const res = NextResponse.next();
+
+  console.time("Creating supabase client");
   const supabase = createMiddlewareClient({ req, res });
+  console.timeEnd("Creating supabase client");
+
+  console.time("Checking if user is logged in");
   const isUserLoggedIn = await getIsUserLoggedIn(supabase);
+  console.timeEnd("Checking if user is logged in");
+
+  console.time("Getting user");
   const { data: { user }, error: getUserError } = await supabase.auth.getUser();
+  console.timeEnd("Getting user");
 
   if(!isUserLoggedIn || getUserError)
   {
@@ -41,6 +52,8 @@ export const middleware: NextMiddleware = async (req) =>
     // In this case this happens, we should send an additional confirmation email and redirect to an explanation page
     console.warn("User is not confirmed. This should not happen. User: ", user);
   }
+
+  console.timeEnd("Middleware");
 
   return NextResponse.next();
 };
