@@ -1,6 +1,6 @@
 import { OverlayLines } from "@/components/Icons/bg-layer";
 import { Trash } from "@/components/Icons/Trash";
-import { type ICasesOverviewProps } from "@/services/content/getCasesOverviewProps";
+import { type IArticlesOverviewProps } from "@/services/content/getArticlesOverviewProps";
 import type {
   IGenMainCategory,
   Maybe, Scalars
@@ -17,9 +17,9 @@ import FilterTag from "../../molecules/filterTag/FilterTag";
 
 export interface ICasesOverviewHeaderProps 
 {
-  readonly categories?: ICasesOverviewProps["allMainCategories"];
+  readonly categories?: IArticlesOverviewProps["allMainCategories"];
   readonly selectedCategory?: IGenMainCategory;
-  readonly setSelectedCategory?: (id: string) => void;
+  readonly setSelectedCategory?: React.Dispatch<React.SetStateAction<IGenMainCategory>> ;
   readonly title?: Maybe<Scalars["String"]["output"]>;
   readonly variant: "case" | "dictionary" | "red";
 }
@@ -35,7 +35,7 @@ const OverviewHeader: FunctionComponent<ICasesOverviewHeaderProps> = ({
   const theme = useMantineTheme();
   // const [filters, setFilters] = useState<string[]>(["Filter One", "Filter Two", "Filter Three", "Filter Four", "Filter Five", "Filter Six"]);
   const [filters, setFilters] = useState<string[]>([]);
-
+  console.log({ categories });
   return (
     <div css={styles.contentHeader({ theme, variant })} className="header">
       <div id="overlay-lines">
@@ -43,7 +43,7 @@ const OverviewHeader: FunctionComponent<ICasesOverviewHeaderProps> = ({
       </div>
       <Title order={1} css={styles.title({ theme, variant })}>{title}</Title>
       <div css={styles.categoriesButtons}>
-        {categories?.map((category, index: number) => category?.id && setSelectedCategory && (
+        {categories && categories.map((category: IGenMainCategory & {casesPerCategory: number}, index: number) => category?.id && setSelectedCategory && (
           <div key={index} onClick={() => setSelectedCategory(category)}>
             <CategoryTab
               {...category}

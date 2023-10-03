@@ -138,10 +138,12 @@ const OverviewCard: FunctionComponent<IOverviewCard> = ({
           </div>
           <ScrollArea>
             <div className="row-value tags-values">
-              {tags &&
-                [...tags]?.map((tag, tagIndex) => (
+              {
+                tags &&
+                tags.map((tag, tagIndex) => (
                   <Tag key={tagIndex}>{tag?.tagName}</Tag>
-                ))}
+                ))
+              }
             </div>
           </ScrollArea>
         </div>

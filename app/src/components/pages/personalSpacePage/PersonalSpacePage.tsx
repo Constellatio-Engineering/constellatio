@@ -76,7 +76,7 @@ const PersonalSpacePage: FunctionComponent = () =>
   const areUploadsInProgress = uploads.some(u => u.state.type === "uploading");
   const favoriteCategoryNavTabs = [{ id: FavCasesTabId, itemsPerTab: bookmarkedCases?.length ?? 0, title: "CASES" }, { id: FavDictionaryTabId, itemsPerTab: 999, title: "DICTIONARY" }, { id: FavForumsTabId, itemsPerTab: 999, title: "FORUM" }, { id: FavHighlightsTabId, itemsPerTab: 999, title: "HIGHLIGHTS" }];
   const [selectedTabId, setSelectedTabId] = useState<string>(favoriteCategoryNavTabs?.[0]?.id as string);
-  const casesByMainCategory = (id: string): Array<({ _typename?: "Case" | undefined } & IGenFullCaseFragment) | null | undefined> | IGenArticleOverviewFragment[] | undefined => bookmarkedCases?.filter(bookmarkedCase => bookmarkedCase.subCategoryField?.[0]?.mainCategory?.[0]?.id === id);
+  const casesByMainCategory = (id: string): Array<({ _typename?: "Case" | undefined } & IGenFullCaseFragment) | null | undefined> | IGenArticleOverviewFragment[] | undefined => bookmarkedCases?.filter(bookmarkedCase => bookmarkedCase.mainCategoryField?.[0]?.id === id);
   const [showFileViewerModal, setShowFileViewerModal] = useState<boolean>(false);
   React.useEffect(() => 
   {
@@ -84,6 +84,7 @@ const PersonalSpacePage: FunctionComponent = () =>
     if(!selectedFileIdForPreview) { setShowFileViewerModal(false); }
     
   }, [selectedFileIdForPreview]);
+  console.log({ bookmarkedCases, casesByMainCategory });
   return (
     <div css={styles.wrapper}>
       <div css={styles.header}>
