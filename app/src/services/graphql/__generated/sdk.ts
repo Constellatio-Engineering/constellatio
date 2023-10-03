@@ -1238,6 +1238,9 @@ export type IGenCaseOverviewFragment = { __typename: 'Case', id?: string | null,
   ) | null, topic?: Array<(
     { __typename?: 'Topic' }
     & IGenTopicFragment
+  ) | null> | null, mainCategoryField?: Array<(
+    { __typename?: 'MainCategory' }
+    & IGenMainCategoryFragment
   ) | null> | null };
 
 export type IGenDragNDropGameFragment = { __typename: 'DragNDropGame', id?: string | null, game?: any | null, question?: string | null, helpNote?: { __typename?: 'DragNDropGame_helpNote', json?: any | null, connections?: Array<{ __typename: 'Caisy_Field_Document_NotFound' } | null> | null } | null };
@@ -1390,6 +1393,29 @@ export const ArticleOverviewFragmentDoc = gql`
   }
 }
     `;
+export const AssetFragmentDoc = gql`
+    fragment Asset on Asset {
+  title
+  src
+  originType
+  keywords
+  id
+  dominantColor
+  description
+  copyright
+  author
+}
+    `;
+export const MainCategoryFragmentDoc = gql`
+    fragment MainCategory on MainCategory {
+  __typename
+  id
+  icon {
+    ...Asset
+  }
+  mainCategory
+}
+    `;
 export const CaseOverviewFragmentDoc = gql`
     fragment CaseOverview on Case {
   __typename
@@ -1401,6 +1427,9 @@ export const CaseOverviewFragmentDoc = gql`
   }
   topic {
     ...Topic
+  }
+  mainCategoryField {
+    ...MainCategory
   }
 }
     `;
@@ -1464,19 +1493,6 @@ export const CalloutFragmentDoc = gql`
   }
 }
     `;
-export const AssetFragmentDoc = gql`
-    fragment Asset on Asset {
-  title
-  src
-  originType
-  keywords
-  id
-  dominantColor
-  description
-  copyright
-  author
-}
-    `;
 export const ArticleFullTextTasksFragmentDoc = gql`
     fragment ArticleFullTextTasks on Article_fullTextTasks {
   __typename
@@ -1489,16 +1505,6 @@ export const ArticleFullTextTasksFragmentDoc = gql`
     ...Callout
     ...Asset
   }
-}
-    `;
-export const MainCategoryFragmentDoc = gql`
-    fragment MainCategory on MainCategory {
-  __typename
-  id
-  icon {
-    ...Asset
-  }
-  mainCategory
 }
     `;
 export const TagsFragmentDoc = gql`
@@ -1623,7 +1629,9 @@ export const GetAllCaseOverviewDocument = gql`
 }
     ${CaseOverviewFragmentDoc}
 ${LegalAreaFragmentDoc}
-${TopicFragmentDoc}`;
+${TopicFragmentDoc}
+${MainCategoryFragmentDoc}
+${AssetFragmentDoc}`;
 export const GetAllCasesByCategoryDetailsDocument = gql`
     query getAllCasesByCategoryDetails($legalAreaName: String!, $mainCategory: String!) {
   allCase(

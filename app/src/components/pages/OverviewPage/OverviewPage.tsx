@@ -4,14 +4,15 @@ import EmptyStateCard from "@/components/organisms/emptyStateCard/EmptyStateCard
 import OverviewHeader from "@/components/organisms/OverviewHeader/OverviewHeader";
 import { type IArticlesOverviewProps } from "@/services/content/getArticlesOverviewProps";
 import { type allSubCategories, type ICasesOverviewProps } from "@/services/content/getCasesOverviewProps";
-import { type IGenMainCategory, type IGenArticleOverviewFragment, type IGenFullCaseFragment, type IGenSubCategoryFragment } from "@/services/graphql/__generated/sdk";
+import {
+  type IGenMainCategory, type IGenArticleOverviewFragment, type IGenFullCaseFragment, type IGenSubCategoryFragment, type IGenLegalArea, type IGenCase 
+} from "@/services/graphql/__generated/sdk";
 
 import { useRouter } from "next/router";
 import {
   type FunctionComponent,
-  useEffect,
+  useEffect, Fragment,
   useState,
-  Fragment,
 } from "react";
 
 import * as styles from "./OverviewPage.styles";
@@ -28,58 +29,58 @@ const OverviewPage: FunctionComponent<IOverviewPageProps> = ({ content, variant 
   const [selectedCategory, setSelectedCategory] = useState<IGenMainCategory | null>(
     content?.allMainCategories?.[0] ?? null
   );
+  
+  // const router = useRouter();
 
-  const router = useRouter();
-
-  useEffect(() => 
-  {
-    router.query.category = selectedCategory?.mainCategory?.trim() ?? "";
-    void router.push(router);
-  // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [selectedCategory?.id]);
+  // useEffect(() => 
+  // {
+  //   router.push({ href: "/", query: { category: selectedCategory?.mainCategory ?? "" } });
+  // // eslint-disable-next-line react-hooks/exhaustive-deps
+  // }, [selectedCategory?.id]);
 
   // const [filteredSubcategories, setFilteredSubcategories] = useState<
   // allSubCategories | undefined
   // >(undefined);
-  // useEffect(() => 
-  // {
-  //   setFilteredSubcategories(
-  //     content?.allSubCategories?.filter(
-  //       (item) => item?.mainCategory?.[0]?.id === selectedCategoryId
-  //     )
-  //   );
-  //   // eslint-disable-next-line react-hooks/exhaustive-deps
-  // }, [selectedCategoryId]);
 
-  // const allCasesOfSubcategory = (item: IGenSubCategoryFragment): Array<({
-  //   _typename?: "Case" | undefined;
-  // } & IGenFullCaseFragment) | null | undefined> | undefined => content?.__typename === "case" ?
-  //   content?.allCases?.filter((caseItem) => caseItem?.subCategoryField?.some((e) => e?.id === item?.id)) : undefined;
+  const [filteredLegalAreas, setFilteredLegalAreas] = useState(content?.allLegalAreaRes);
+
+  useEffect(() => 
+  {
+    console.log({ selectedCategory });
+    
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [selectedCategory?.id]);
+
+  const allCasesOfLegalArea = (item: IGenLegalArea): Array<({
+    _typename?: "Case" | undefined;
+  } & IGenCase) | null | undefined> | undefined => 
+  {
+    if(content?.__typename === "case")
+    {
+      return content?.allCases.filter(x => (x.legalArea?.id === item?.id && x.mainCategoryField?.[0]?.id === selectedCategory?.id));
+    }
+    return undefined;
+  };
+  console.log({ content });
 
   // const allArticlesOfSubcategory = (item: IGenSubCategoryFragment):
   // IGenArticleOverviewFragment[] | undefined => content?.__typename === "dictionary" ? 
   //   content?.allArticles?.filter((caseItem) => caseItem?.subCategoryField?.some((e) => e?.id === item?.id)) : undefined;
     
-  // const isCategoryEmpty = (selectedMainCategory: string): boolean => 
+  // const isCategoryEmpty = (selectedCategory: IGenMainCategory): boolean => 
   // {
   //   const allMainCategories = content?.allMainCategories;
-  //   const selectedMainCategoryObject = allMainCategories?.filter(x => x?.id === selectedMainCategory)?.[0];
-  //   const casesPerCategory = selectedMainCategoryObject?.casesPerCategory;
+  //   const casesPerCategory = selectedMainCategory?.casesPerCategory;
   //   const isCategoryEmpty = casesPerCategory !== undefined && casesPerCategory !== null && casesPerCategory <= 0 ? true : false;
   //   return isCategoryEmpty;
   // };
-  const listOfUsedLegalAreas = [];
-  content?.allMainCategoryCases?.forEach((item) => 
+
+  const isCategoryEmpty = (): boolean => 
   {
-    if(item.legalArea)
-    {
-      if(listOfUsedLegalAreas.filter(x => x.id === item.legalArea.id).length <= 0)
-      {
-        listOfUsedLegalAreas.push(item.legalArea);
-      }
-    }
-  });
-  console.log({ listOfUsedLegalAreas });
+    const filterr = content?.allCases.filter((x: IGenCase) => (x?.mainCategoryField?.[0]?.id === selectedCategory?.id))?.length <= 0;
+    return filterr;
+    
+  };
 
   return (
     <div css={styles.Page}>
@@ -92,31 +93,30 @@ const OverviewPage: FunctionComponent<IOverviewPageProps> = ({ content, variant 
           title={variant === "case" ? "Cases" : "Dictionary"}
         />
       )}
-      {/* <div css={styles.ListWrapper}>
-        {filteredSubcategories &&
-          filteredSubcategories.length > 0 &&
-          filteredSubcategories.map((item, itemIndex) => item?.subCategory && (
-            <Fragment key={itemIndex}>
-              <CaseBlock
-                variant={variant}
-                blockHead={{
-                  blockType: "itemsBlock", categoryName: item?.subCategory, completedCases: 0, items: variant === "case" ? allCasesOfSubcategory(item)?.length : allArticlesOfSubcategory(item)?.length, variant
-                }}
-                items={variant === "case" ? allCasesOfSubcategory(item) : allArticlesOfSubcategory(item)}
-              />
-            </Fragment>
-          )
-          )}
+      <div css={styles.ListWrapper}>
+
+        {filteredLegalAreas?.map((item: IGenLegalArea, itemIndex: number) => item?.legalAreaName && (
+          <Fragment key={itemIndex}>
+            <CaseBlock
+              variant={variant}
+              blockHead={{
+                blockType: "itemsBlock", categoryName: item?.legalAreaName, completedCases: 0, items: variant === "case" ? allCasesOfLegalArea(item)?.length : allCasesOfLegalArea(item)?.length, variant
+              }}
+              items={variant === "case" ? allCasesOfLegalArea(item) : allCasesOfLegalArea(item)}
+            />
+          </Fragment>
+        )
+        )}
 
       </div>
-      {isCategoryEmpty(selectedCategoryId) && (
+      {isCategoryEmpty() && (
         <EmptyStateCard
           button={<><CivilLawIcon/>Explore Civil law cases</>}
           title="We're currently working hard to bring you engaging cases to solve"
           text="Please check back soon for the latest updates"
           variant="For-large-areas"
         />
-      )} */}
+      )}
     </div>
   );
 };

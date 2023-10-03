@@ -21,8 +21,8 @@ export interface ICasesOverviewProps
 {
   __typename: "case";
   allCases: AllCases;
+  allLegalAreaRes: IGenGetAllLegalAreaQuery;
   allMainCategoriesRes: IGenGetAllMainCategoryQuery;
-  // allSubCategories: allSubCategories;
 }
 
 const getCasesOverviewProps = async (): Promise<ICasesOverviewProps> => 
@@ -32,20 +32,11 @@ const getCasesOverviewProps = async (): Promise<ICasesOverviewProps> =>
     const [allMainCategoriesRes, allCasesRes, allLegalAreaRes]: [IGenGetAllMainCategoryQuery, AllCases, IGenGetAllLegalAreaQuery] = await Promise.all([
       caisySDK.getAllMainCategory(), getAllCases(), caisySDK.getAllLegalArea()
     ]);
-
-    // const allMainCategories = (
-    //   allMainCategoriesRes?.allMainCategory?.edges?.map((category) => ({
-,
-    //     ...category?.node,
-    //   })) || null
-    // );
-
-    // const allSubCategories = allSubCategoriesRes?.allSubCategory?.edges?.map((subCategory) => subCategory?.node
-    // ) || [];
-
+  
     return {
       __typename: "case",
       allCases: allCasesRes,
+      allLegalAreaRes, 
       allMainCategoriesRes,
     };
   }
