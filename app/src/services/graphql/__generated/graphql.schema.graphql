@@ -10,7 +10,18 @@ type Article {
   id: ID
 
   """"""
-  legalArea(locale: String): Article_legalArea
+  legalArea(
+    """
+    The cursor to start the pagination from. In this case the curser equals the id for the (last) element. If not set, we wil start from the beginning.
+    """
+    after: String
+
+    """The number of items to return. Default and max value is 100."""
+    first: Int = 100
+
+    """"""
+    locale: String
+  ): LegalArea
 
   """"""
   mainCategoryField(
@@ -89,9 +100,6 @@ input Article_LegalArea_Where {
 input Article_LegalArea_WhereConnection {
   """"""
   LegalArea: LegalArea_Nested_Where
-
-  """"""
-  SubCategory: SubCategory_Nested_Where
 }
 
 """"""
@@ -209,9 +217,6 @@ type Article_fullTextTasks {
 
 """"""
 union Article_fullTextTasks_Connections = Asset | Callout | CardSelectionGame | DragNDropGame | FillInGapsGame
-
-""""""
-union Article_legalArea = LegalArea | SubCategory
 
 """"""
 union Article_mainCategoryField = MainCategory
@@ -1543,18 +1548,6 @@ input SubCategory_MainCategory_Where {
 input SubCategory_MainCategory_WhereConnection {
   """"""
   MainCategory: MainCategory_Nested_Where
-}
-
-""""""
-input SubCategory_Nested_Where {
-  """"""
-  AND: [SubCategory_Nested_Where]
-
-  """"""
-  OR: [SubCategory_Nested_Where]
-
-  """"""
-  subCategory: CaisyField_String_Where
 }
 
 """"""

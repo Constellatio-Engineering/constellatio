@@ -23,7 +23,7 @@ export type IGenArticle = {
   _meta?: Maybe<IGenCaisyDocument_Meta>;
   fullTextTasks?: Maybe<IGenArticle_FullTextTasks>;
   id?: Maybe<Scalars['ID']['output']>;
-  legalArea?: Maybe<IGenArticle_LegalArea>;
+  legalArea?: Maybe<IGenLegalArea>;
   mainCategoryField?: Maybe<Array<Maybe<IGenArticle_MainCategoryField>>>;
   tags?: Maybe<Array<Maybe<IGenArticle_Tags>>>;
   title?: Maybe<Scalars['String']['output']>;
@@ -37,6 +37,8 @@ export type IGenArticleFullTextTasksArgs = {
 
 
 export type IGenArticleLegalAreaArgs = {
+  after?: InputMaybe<Scalars['String']['input']>;
+  first?: InputMaybe<Scalars['Int']['input']>;
   locale?: InputMaybe<Scalars['String']['input']>;
 };
 
@@ -80,7 +82,6 @@ export type IGenArticle_LegalArea_Where = {
 
 export type IGenArticle_LegalArea_WhereConnection = {
   LegalArea?: InputMaybe<IGenLegalArea_Nested_Where>;
-  SubCategory?: InputMaybe<IGenSubCategory_Nested_Where>;
 };
 
 export type IGenArticle_MainCategoryField_Where = {
@@ -144,8 +145,6 @@ export type IGenArticle_FullTextTasksConnectionsArgs = {
 };
 
 export type IGenArticle_FullTextTasks_Connections = IGenAsset | IGenCallout | IGenCardSelectionGame | IGenDragNDropGame | IGenFillInGapsGame;
-
-export type IGenArticle_LegalArea = IGenLegalArea | IGenSubCategory;
 
 export type IGenArticle_MainCategoryField = IGenMainCategory;
 
@@ -1080,12 +1079,6 @@ export type IGenSubCategory_MainCategory_WhereConnection = {
   MainCategory?: InputMaybe<IGenMainCategory_Nested_Where>;
 };
 
-export type IGenSubCategory_Nested_Where = {
-  AND?: InputMaybe<Array<InputMaybe<IGenSubCategory_Nested_Where>>>;
-  OR?: InputMaybe<Array<InputMaybe<IGenSubCategory_Nested_Where>>>;
-  subCategory?: InputMaybe<IGenCaisyField_String_Where>;
-};
-
 export type IGenSubCategory_Sort = {
   createdAt?: InputMaybe<IGenOrder>;
   id?: InputMaybe<IGenOrder>;
@@ -1204,7 +1197,7 @@ export type IGenArticleFullTextTasksFragment = { __typename: 'Article_fullTextTa
 export type IGenArticleOverviewFragment = { __typename: 'Article', id?: string | null, title?: string | null, legalArea?: (
     { __typename?: 'LegalArea' }
     & IGenLegalAreaFragment
-  ) | { __typename?: 'SubCategory' } | null, topic?: Array<(
+  ) | null, topic?: Array<(
     { __typename?: 'Topic' }
     & IGenTopicFragment
   ) | null> | null, mainCategoryField?: Array<(
@@ -1256,7 +1249,7 @@ export type IGenFullArticleFragment = { __typename: 'Article', id?: string | nul
   ) | null, legalArea?: (
     { __typename?: 'LegalArea' }
     & IGenLegalAreaFragment
-  ) | { __typename?: 'SubCategory' } | null, mainCategoryField?: Array<(
+  ) | null, mainCategoryField?: Array<(
     { __typename?: 'MainCategory' }
     & IGenMainCategoryFragment
   ) | null> | null, tags?: Array<(
