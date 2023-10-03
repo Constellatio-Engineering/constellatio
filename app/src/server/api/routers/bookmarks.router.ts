@@ -11,6 +11,8 @@ export const bookmarksRouter = createTRPCRouter({
     .input(addOrRemoveBookmarkSchema)
     .mutation(async ({ ctx: { userId }, input }) =>
     {
+      const start = performance.now();
+
       const existingBookmark = await db.query.bookmarks.findFirst({
         where: and(
           eq(bookmarks.resourceId, input.resourceId),
@@ -31,9 +33,9 @@ export const bookmarksRouter = createTRPCRouter({
         userId,
       };
 
-      console.log(`inserting bookmark for ${input.resourceType} with id ${input.resourceId}`);
-
       await db.insert(bookmarks).values(bookmarkInsert);
+
+      console.log(`inserting bookmark took ${performance.now() - start}ms`);
     }),
   getAllBookmarks: protectedProcedure
     .input(z.object({
