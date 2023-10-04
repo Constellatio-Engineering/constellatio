@@ -1,4 +1,3 @@
-/* eslint-disable max-lines */
 import FileViewer from "@/components/fileViewer/FileViewer";
 import EmptyStateCard from "@/components/organisms/emptyStateCard/EmptyStateCard";
 import FavoriteCasesList from "@/components/organisms/favoriteCasesList/FavoriteCasesList";
@@ -47,10 +46,7 @@ const PersonalSpacePage: FunctionComponent = () =>
     if(current != null)
     {
       const x = acc.find((item: IGenMainCategory) => item.mainCategory === current.mainCategory);
-      if(!x) 
-      {
-        return acc.concat([current]);
-      }
+      if(!x) { return acc.concat([current]); }
     }
     return acc;
   }, []);
@@ -69,7 +65,6 @@ const PersonalSpacePage: FunctionComponent = () =>
     MaterialsCategoryId,
     uploadedFilesLength: uploadedFiles?.length ?? 0,
   });
-
   const [selectedCategory, setSelectedCategory] = useState<IGenMainCategory | undefined>(categories?.[0]);
   const FavCasesTabId = useId();
   const FavDictionaryTabId = useId();
@@ -84,7 +79,6 @@ const PersonalSpacePage: FunctionComponent = () =>
     return bookmarkedCase.mainCategoryField?.[0]?.id === id;
   });
   const [showFileViewerModal, setShowFileViewerModal] = useState<boolean>(false);
-
   return (
     <div css={styles.wrapper}>
       <div css={styles.header}>
