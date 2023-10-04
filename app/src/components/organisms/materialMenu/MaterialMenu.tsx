@@ -93,7 +93,7 @@ const MaterialMenu: FunctionComponent<MaterialMenuProps> = ({ folders, selectedF
           styles={styles.modalStyles()}
           withCloseButton={false}
           centered>
-          <span className="close-btn">
+          <span className="close-btn" onClick={close}>
             <Cross size={32}/>
           </span>
           <Title order={3}>Create folder</Title>
