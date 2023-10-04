@@ -1,5 +1,4 @@
 import { type Document } from "@/db/schema";
-import useDocumentEditorStore from "@/stores/documentEditor.store";
 
 import React, { useState, type FunctionComponent } from "react";
 

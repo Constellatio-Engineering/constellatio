@@ -175,7 +175,6 @@ const PersonalSpacePage: FunctionComponent = () =>
                   <FileViewer
                     fileId={selectedFileIdForPreview}
                     setShowFileViewerModal={setShowFileViewerModal}
-                    setSelectedFileIdForPreview={setSelectedFileIdForPreview}
                     showFileViewerModal={showFileViewerModal}
                   />
                 )}

@@ -1,7 +1,7 @@
 
 import useSignedGetUrl from "@/hooks/useSignedGetUrl";
 
-import { Modal } from "@mantine/core";
+import { Modal, ScrollArea } from "@mantine/core";
 // import { useDisclosure } from "@mantine/hooks";
 import Image from "next/image";
 import React, { type FunctionComponent, useEffect, useState } from "react";
@@ -11,14 +11,14 @@ import * as styles from "./FileViewer.styles";
 interface FileViewerProps
 {
   readonly fileId: string;
-  readonly setSelectedFileIdForPreview: React.Dispatch<React.SetStateAction<string | undefined>>;
+  // readonly setSelectedFileIdForPreview: React.Dispatch<React.SetStateAction<string | undefined>>;
   readonly setShowFileViewerModal: React.Dispatch<React.SetStateAction<boolean>>;
   readonly showFileViewerModal: boolean;
 }
 
 const FileViewer: FunctionComponent<FileViewerProps> = ({
   fileId,
-  setSelectedFileIdForPreview,
+  // setSelectedFileIdForPreview,
   setShowFileViewerModal,
   showFileViewerModal
 }) => 
@@ -102,17 +102,19 @@ const FileViewer: FunctionComponent<FileViewerProps> = ({
   };
 
   return (
-    <Modal 
-      centered 
-      miw={1080}
-      opened={showFileViewerModal} 
-      onClose={() => setShowFileViewerModal(false)} 
-      withCloseButton={false}
-      closeOnClickOutside
-      closeOnEscape
-      styles={styles.modalStyles()}>
-      {!isGetUrlLoading ? <div css={styles.wrapper}>{renderFile()}</div> : "Loading..."}
-    </Modal>
+    <ScrollArea>
+      <Modal 
+        centered 
+        miw={1080}
+        opened={showFileViewerModal} 
+        onClose={() => setShowFileViewerModal(false)} 
+        withCloseButton={false}
+        closeOnClickOutside
+        closeOnEscape
+        styles={styles.modalStyles()}>
+        {!isGetUrlLoading ? <div css={styles.wrapper}>{renderFile()}</div> : "Loading..."}
+      </Modal>
+    </ScrollArea>
   );
 
 };

@@ -29,7 +29,7 @@ const UploadedMaterialNoteDrawer: FunctionComponent<UploadedMaterialNoteDrawerPr
   showNoteDrewer
 }) => 
 {
-  const [isNoteExists, setIsNoteExists] = useState<boolean>(false);
+  const isNoteExists = false;
   return (
     <Drawer
       opened={showNoteDrewer}

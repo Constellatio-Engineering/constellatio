@@ -7,11 +7,12 @@ import { NoteIcon } from "../Icons/Note";
 
 interface MaterialsLabelProps
 {
-  readonly variant: "paper" | "file";
   readonly title: string;
+  readonly variant: "paper" | "file";
 }
 
-const MaterialsLabel: FunctionComponent<MaterialsLabelProps> = ({ title,variant }) => {
+const MaterialsLabel: FunctionComponent<MaterialsLabelProps> = ({ title, variant }) => 
+{
   return (
     <div css={styles.wrapper}>
       {variant === "paper" ? (
@@ -19,7 +20,7 @@ const MaterialsLabel: FunctionComponent<MaterialsLabelProps> = ({ title,variant 
       ) : (
         <NoteIcon/>
       )}
-     <CaptionText styleType={"caption-01-medium"}>{title}</CaptionText>
+      <CaptionText styleType="caption-01-medium">{title}</CaptionText>
     </div>
   );
 };

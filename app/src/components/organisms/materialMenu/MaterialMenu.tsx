@@ -108,7 +108,7 @@ const MaterialMenu: FunctionComponent<MaterialMenuProps> = ({ folders, selectedF
           </div>
           <div className="modal-call-to-action">
             <Button<"button">
-              styleType={"secondarySubtle" as TButton["styleType"]}
+              styleType={"secondarySimple" as TButton["styleType"]}
               onClick={close}>
               Cancel
             </Button>
