@@ -25,9 +25,6 @@ const Search: NextPage = () =>
   // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [router.query.find]);
 
-  console.log("router.query.find", router.query.find);
-  console.log("searchValue", searchValue);
-
   return (
     <Layout>
       <div>search</div>

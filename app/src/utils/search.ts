@@ -1,11 +1,11 @@
 import { type UploadedFile } from "@/db/schema";
 import {
   type IGenArticle,
-  type IGenCase, type IGenLegalArea, type IGenMainCategory, type IGenSubCategory, type IGenTags
+  type IGenCase, type IGenLegalArea, type IGenMainCategory, type IGenTags
 } from "@/services/graphql/__generated/sdk";
 import {
   type DotSeparatedKeys,
-  type Nullable, type NullableProperties, type RemoveUndefined, type Values
+  type NullableProperties, type RemoveUndefined, type Values
 } from "@/utils/types";
 
 export const searchIndices = {
@@ -20,7 +20,6 @@ type CaseSearchIndexItemContent = {
   id: string;
   legalArea: Pick<IGenLegalArea, "legalAreaName" | "id">;
   mainCategory: Pick<IGenMainCategory, "mainCategory" | "id">;
-  subCategory: Pick<IGenSubCategory, "subCategory" | "id">;
   tags: Array<Pick<IGenTags, "id" | "tagName">>;
   title: string;
 };
@@ -30,20 +29,7 @@ export type CaseSearchItemNodes = RemoveUndefined<DotSeparatedKeys<CaseSearchInd
 
 export const createCaseSearchIndexItem = (fullCase: IGenCase): CaseSearchIndexItem =>
 {
-  let legalAreaName: Nullable<string>;
-
-  switch (fullCase.legalArea?.__typename)
-  {
-    case "LegalArea":
-      legalAreaName = fullCase.legalArea.legalAreaName;
-      break;
-    case "SubCategory":
-      legalAreaName = fullCase.legalArea?.subCategory;
-      break;
-    default:
-      legalAreaName = null;
-      console.warn("Unknown legal area type" + fullCase.legalArea?.__typename);
-  }
+  const legalAreaName = fullCase.legalArea?.legalAreaName;
 
   const caseSearchIndexItem: CaseSearchIndexItem = {
     id: fullCase.id,
@@ -54,10 +40,6 @@ export const createCaseSearchIndexItem = (fullCase: IGenCase): CaseSearchIndexIt
     mainCategory: {
       id: fullCase.mainCategoryField?.[0]?.id,
       mainCategory: fullCase.mainCategoryField?.[0]?.mainCategory,
-    },
-    subCategory: {
-      id: fullCase.subCategoryField?.[0]?.id,
-      subCategory: fullCase.subCategoryField?.[0]?.subCategory,
     },
     tags: fullCase.tags?.map(tag => ({
       id: tag?.id,
@@ -73,7 +55,6 @@ type ArticleSearchIndexItemContent = {
   id: string;
   legalArea: Pick<IGenLegalArea, "legalAreaName" | "id">;
   mainCategory: Pick<IGenMainCategory, "mainCategory" | "id">;
-  subCategory: Pick<IGenSubCategory, "subCategory" | "id">;
   tags: Array<Pick<IGenTags, "id" | "tagName">>;
   title: string;
 };
@@ -83,22 +64,9 @@ export type ArticleSearchItemNodes = RemoveUndefined<DotSeparatedKeys<ArticleSea
 
 export const createArticleSearchIndexItem = (fullArticle: IGenArticle): ArticleSearchIndexItem =>
 {
-  let legalAreaName: Nullable<string>;
+  const legalAreaName = fullArticle.legalArea?.legalAreaName;
 
-  switch (fullArticle.legalArea?.__typename)
-  {
-    case "LegalArea":
-      legalAreaName = fullArticle.legalArea.legalAreaName;
-      break;
-    case "SubCategory":
-      legalAreaName = fullArticle.legalArea?.subCategory;
-      break;
-    default:
-      legalAreaName = null;
-      console.warn("Unknown legal area type" + fullArticle.legalArea?.__typename);
-  }
-
-  const articleSearchIndexItem: CaseSearchIndexItem = {
+  const articleSearchIndexItem: ArticleSearchIndexItem = {
     id: fullArticle.id,
     legalArea: {
       id: fullArticle.legalArea?.id,
@@ -107,10 +75,6 @@ export const createArticleSearchIndexItem = (fullArticle: IGenArticle): ArticleS
     mainCategory: {
       id: fullArticle.mainCategoryField?.[0]?.id,
       mainCategory: fullArticle.mainCategoryField?.[0]?.mainCategory,
-    },
-    subCategory: {
-      id: fullArticle.subCategoryField?.[0]?.id,
-      subCategory: fullArticle.subCategoryField?.[0]?.subCategory,
     },
     tags: fullArticle.tags?.map(tag => ({
       id: tag?.id,

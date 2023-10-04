@@ -56,8 +56,6 @@ export const bookmarksRouter = createTRPCRouter({
     .input(addOrRemoveBookmarkSchema)
     .mutation(async ({ ctx: { userId }, input }) =>
     {
-      console.log(`removing bookmark for ${input.resourceType} with id ${input.resourceId}`);
-
       await db.delete(bookmarks).where(
         and(
           eq(bookmarks.resourceId, input.resourceId),

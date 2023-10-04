@@ -1,45 +1,66 @@
 import { Layout } from "@/components/layouts/Layout";
 import DetailsPage from "@/components/pages/DetailsPage/DetailsPage";
+import getAllCases from "@/services/content/getAllCases";
 import { getCaseById } from "@/services/content/getCaseById";
 import { type IGenCase } from "@/services/graphql/__generated/sdk";
 
-import type { GetStaticProps, GetStaticPaths } from "next";
+import type { GetStaticProps, GetStaticPaths, GetStaticPathsResult } from "next";
 import { type FunctionComponent } from "react";
 
-interface ICasePageProps 
+import { type ParsedUrlQuery } from "querystring";
+
+interface Params extends ParsedUrlQuery
 {
-  readonly legalCase: IGenCase;
+  id: string;
 }
 
-export const getStaticProps: GetStaticProps = async ({ params }) => 
+export const getStaticPaths: GetStaticPaths<Params> = async () =>
 {
-  const id = Array.isArray(params?.id) ? (params?.id[0] ?? "") : (params?.id ?? "");
-  const resCase = await getCaseById({ id });
+  const allCases = await getAllCases();
+  const paths: GetStaticPathsResult<Params>["paths"] = allCases
+    .filter(legalCase => Boolean(legalCase.id))
+    .map((legalCase) => ({
+      params: {
+        id: legalCase.id!,
+      }
+    }));
+
   return {
-    props: {
-      id,
-      legalCase: resCase?.Case ?? null
-    }, 
+    fallback: true,
+    paths
+  };
+};
+
+type GetCaseDetailPagePropsResult = {
+  readonly legalCase: IGenCase;
+};
+
+export const getStaticProps: GetStaticProps<GetCaseDetailPagePropsResult, Params> = async ({ params }) =>
+{
+  const { legalCase } = await getCaseById({ id: params?.id });
+
+  if(!legalCase)
+  {
+    return {
+      notFound: true,
+      revalidate: false
+    };
+  }
+
+  return {
+    props: { legalCase },
     revalidate: 10
   };
 
 };
 
-const NextPage: FunctionComponent<ICasePageProps> = ({ legalCase }) => 
+const NextPage: FunctionComponent<GetCaseDetailPagePropsResult> = ({ legalCase }) =>
 {
   return (
     <Layout>
       <DetailsPage variant="case" content={legalCase}/>
     </Layout>
   );
-};
-
-export const getStaticPaths: GetStaticPaths = () => 
-{
-  return {
-    fallback: true,
-    paths: []
-  };
 };
 
 export default NextPage;

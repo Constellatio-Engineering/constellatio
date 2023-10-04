@@ -7,9 +7,10 @@ import Tag from "@/components/atoms/tag/Tag";
 import { Show } from "@/components/Icons/Show";
 import { Timer } from "@/components/Icons/timer";
 import { Trash } from "@/components/Icons/Trash";
-import { type IGenSubCategory, type IGenLegalArea, type IGenTags } from "@/services/graphql/__generated/sdk";
+import { type IGenLegalArea, type IGenTags } from "@/services/graphql/__generated/sdk";
 
-import { ScrollArea, useMantineTheme } from "@mantine/core";
+import { Modal, Title, useMantineTheme } from "@mantine/core";
+import { useDisclosure } from "@mantine/hooks";
 import { type Maybe } from "@trpc/server";
 import React, { type FunctionComponent } from "react";
 
@@ -18,7 +19,7 @@ import * as styles from "./OverviewCard.styles";
 export interface IOverviewCard 
 {
   readonly lastUpdated: Date;
-  readonly legalArea: Maybe<IGenLegalArea> | Maybe<IGenSubCategory> | undefined;
+  readonly legalArea: Maybe<IGenLegalArea> | undefined;
   readonly status?: IStatusLabel["variant"];
   readonly tags: Maybe<Array<Maybe<IGenTags>>> | undefined;
   readonly timeInMinutes?: number;
@@ -77,6 +78,7 @@ const OverviewCard: FunctionComponent<IOverviewCard> = ({
   views,
 }) => 
 {
+  const [opened, { close, open }] = useDisclosure(false);
 
   const theme = useMantineTheme();
   return (
@@ -111,13 +113,12 @@ const OverviewCard: FunctionComponent<IOverviewCard> = ({
         <table style={{ textAlign: "left", }}>
           <thead>
             <tr>
-              {((legalArea?.__typename === "LegalArea" && legalArea?.legalAreaName) || (legalArea?.__typename === "SubCategory" && legalArea?.subCategory)) && <th style={{ color: "#949494", padding: "16px 32px 8px 16px" }}><CaptionText styleType="caption-01-medium">LEGAL AREA</CaptionText></th>}
+              {(legalArea?.__typename === "LegalArea" && legalArea?.legalAreaName) && <th style={{ color: "#949494", padding: "16px 32px 8px 16px" }}><CaptionText styleType="caption-01-medium">LEGAL AREA</CaptionText></th>}
               {variant === "case" && topic && (<th style={{ color: "#949494", padding: "16px 32px 8px 16px" }}><CaptionText styleType="caption-01-medium" component="p">TOPIC</CaptionText> </th>)}
             </tr>
           </thead>
           <tbody>
             <tr>
-              {(legalArea?.__typename === "SubCategory" && legalArea?.subCategory) && <td style={{ color: "black", padding: "4px 32px 16px 16px" }}><BodyText styleType="body-01-medium">{legalArea?.subCategory}</BodyText></td>}
               {(legalArea?.__typename === "LegalArea" && legalArea?.legalAreaName) && <td style={{ color: "black", padding: "4px 32px 16px 16px" }}><BodyText styleType="body-01-medium">{legalArea?.legalAreaName}</BodyText></td>}
               {variant === "case" && topic && <td style={{ color: "black", padding: "4px 32px 16px 16px" }}><BodyText styleType="body-01-medium">{topic}</BodyText></td>}
             </tr>
@@ -135,16 +136,33 @@ const OverviewCard: FunctionComponent<IOverviewCard> = ({
         )}
         <div css={styles.row({ theme, variant })}>
           <div className="row-title">
-            <CaptionText styleType="caption-01-medium" component="p">TAGS</CaptionText>
+            <CaptionText styleType="caption-01-medium" component="button" onClick={open}>TAGS</CaptionText>
           </div>
-          <ScrollArea>
-            <div className="row-value tags-values">
-              {tags &&
-                [...tags]?.map((tag, tagIndex) => (
-                  <Tag key={tagIndex}>{tag?.tagName}</Tag>
-                ))}
+          {/* <ScrollArea> */}
+          <div className="row-value tags-values" onClick={open}>
+            {tags?.map((tag, tagIndex) => (
+              <Tag key={tagIndex}>{tag?.tagName}</Tag>
+            ))}
+          
+          </div>
+          <Modal
+            opened={opened}
+            onClose={close}
+            title={<Title order={3}>All tags</Title>}
+            centered
+            closeOnClickOutside
+            styles={{
+              root: {
+                borderRadius: 12,
+              }
+            }}>
+            <div css={styles.tagsModal}>
+              {tags?.map((tag, tagIndex) => (
+                <Tag key={tagIndex}>{tag?.tagName}</Tag>
+              ))}
             </div>
-          </ScrollArea>
+          </Modal>
+          {/* </ScrollArea> */}
         </div>
         {
           variant === "case" && (

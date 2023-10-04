@@ -1,12 +1,19 @@
 import { type Bookmark, type BookmarkResourceType } from "@/db/schema";
+import { type AppRouter } from "@/server/api/root";
 import { api } from "@/utils/api";
 import { type UseQueryResult } from "@/utils/types";
 
-type UseBookmarks = (resourceType: BookmarkResourceType | undefined) => UseQueryResult<{ bookmarks: Bookmark[] }>;
+import { type inferReactQueryProcedureOptions } from "@trpc/react-query";
 
-const useBookmarks: UseBookmarks = (resourceType) =>
+type UseBookmarks = (
+  resourceType: BookmarkResourceType | undefined,
+  options?: inferReactQueryProcedureOptions<AppRouter>["bookmarks"]["getAllBookmarks"]
+) => UseQueryResult<{ bookmarks: Bookmark[] }>;
+
+const useBookmarks: UseBookmarks = (resourceType, options) =>
 {
   const { data: bookmarks, error, isLoading } = api.bookmarks.getAllBookmarks.useQuery({ resourceType }, {
+    ...options,
     queryKey: ["bookmarks.getAllBookmarks", { resourceType }],
     refetchOnMount: "always",
     staleTime: Infinity

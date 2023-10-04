@@ -57,8 +57,6 @@ export const uploadsRouter = createTRPCRouter({
         throw new NotFoundError();
       }
 
-      console.log(file.createdAt);
-
       const [url] = await storage
         .bucket(env.GOOGLE_CLOUD_STORAGE_BUCKET_NAME)
         .file(`${userId}/${file.serverFilename}`)

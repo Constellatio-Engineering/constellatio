@@ -10,7 +10,18 @@ type Article {
   id: ID
 
   """"""
-  legalArea(locale: String): Article_legalArea
+  legalArea(
+    """
+    The cursor to start the pagination from. In this case the curser equals the id for the (last) element. If not set, we wil start from the beginning.
+    """
+    after: String
+
+    """The number of items to return. Default and max value is 100."""
+    first: Int = 100
+
+    """"""
+    locale: String
+  ): LegalArea
 
   """"""
   mainCategoryField(
@@ -25,20 +36,6 @@ type Article {
     """"""
     locale: String
   ): [Article_mainCategoryField]
-
-  """"""
-  subCategoryField(
-    """
-    The cursor to start the pagination from. In this case the curser equals the id for the (last) element. If not set, we wil start from the beginning.
-    """
-    after: String
-
-    """The number of items to return. Default and max value is 100."""
-    first: Int = 100
-
-    """"""
-    locale: String
-  ): [Article_subCategoryField]
 
   """"""
   tags(
@@ -103,9 +100,6 @@ input Article_LegalArea_Where {
 input Article_LegalArea_WhereConnection {
   """"""
   LegalArea: LegalArea_Nested_Where
-
-  """"""
-  SubCategory: SubCategory_Nested_Where
 }
 
 """"""
@@ -138,9 +132,6 @@ input Article_Sort {
   publishedAt: Order
 
   """"""
-  subCategoryField: Order
-
-  """"""
   tags: Order
 
   """"""
@@ -151,18 +142,6 @@ input Article_Sort {
 
   """"""
   updatedAt: Order
-}
-
-""""""
-input Article_SubCategoryField_Where {
-  """"""
-  findOne: Article_SubCategoryField_WhereConnection
-}
-
-""""""
-input Article_SubCategoryField_WhereConnection {
-  """"""
-  SubCategory: SubCategory_Nested_Where
 }
 
 """"""
@@ -207,9 +186,6 @@ input Article_Where {
   mainCategoryField: Article_MainCategoryField_Where
 
   """"""
-  subCategoryField: Article_SubCategoryField_Where
-
-  """"""
   tags: Article_Tags_Where
 
   """"""
@@ -240,16 +216,10 @@ type Article_fullTextTasks {
 }
 
 """"""
-union Article_fullTextTasks_Connections = Asset | Callout | CardSelectionGame | DragNDropGame | FillInGapsGame | ImageWrapperCard
-
-""""""
-union Article_legalArea = LegalArea | SubCategory
+union Article_fullTextTasks_Connections = Asset | Callout | CardSelectionGame | DragNDropGame | FillInGapsGame
 
 """"""
 union Article_mainCategoryField = MainCategory
-
-""""""
-union Article_subCategoryField = SubCategory
 
 """"""
 union Article_tags = Tags
@@ -753,7 +723,18 @@ type Case {
   id: ID
 
   """"""
-  legalArea(locale: String): Case_legalArea
+  legalArea(
+    """
+    The cursor to start the pagination from. In this case the curser equals the id for the (last) element. If not set, we wil start from the beginning.
+    """
+    after: String
+
+    """The number of items to return. Default and max value is 100."""
+    first: Int = 100
+
+    """"""
+    locale: String
+  ): LegalArea
 
   """"""
   mainCategoryField(
@@ -771,20 +752,6 @@ type Case {
 
   """"""
   resolution(locale: String): Case_resolution
-
-  """"""
-  subCategoryField(
-    """
-    The cursor to start the pagination from. In this case the curser equals the id for the (last) element. If not set, we wil start from the beginning.
-    """
-    after: String
-
-    """The number of items to return. Default and max value is 100."""
-    first: Int = 100
-
-    """"""
-    locale: String
-  ): [Case_subCategoryField]
 
   """"""
   tags(
@@ -849,9 +816,6 @@ input Case_LegalArea_Where {
 input Case_LegalArea_WhereConnection {
   """"""
   LegalArea: LegalArea_Nested_Where
-
-  """"""
-  SubCategory: SubCategory_Nested_Where
 }
 
 """"""
@@ -887,9 +851,6 @@ input Case_Sort {
   publishedAt: Order
 
   """"""
-  subCategoryField: Order
-
-  """"""
   tags: Order
 
   """"""
@@ -900,18 +861,6 @@ input Case_Sort {
 
   """"""
   updatedAt: Order
-}
-
-""""""
-input Case_SubCategoryField_Where {
-  """"""
-  findOne: Case_SubCategoryField_WhereConnection
-}
-
-""""""
-input Case_SubCategoryField_WhereConnection {
-  """"""
-  SubCategory: SubCategory_Nested_Where
 }
 
 """"""
@@ -963,9 +912,6 @@ input Case_Where {
 
   """"""
   resolution: CaisyField_Richtext_Where
-
-  """"""
-  subCategoryField: Case_SubCategoryField_Where
 
   """"""
   tags: Case_Tags_Where
@@ -1021,10 +967,7 @@ type Case_fullTextTasks {
 }
 
 """"""
-union Case_fullTextTasks_Connections = Asset | Callout | CardSelectionGame | DragNDropGame | FillInGapsGame | ImageWrapperCard
-
-""""""
-union Case_legalArea = LegalArea | SubCategory
+union Case_fullTextTasks_Connections = Asset | Callout | CardSelectionGame | DragNDropGame | FillInGapsGame
 
 """"""
 union Case_mainCategoryField = MainCategory
@@ -1051,9 +994,6 @@ type Case_resolution {
 
 """"""
 union Case_resolution_Connections = Caisy_Field_Document_NotFound
-
-""""""
-union Case_subCategoryField = SubCategory
 
 """"""
 union Case_tags = Tags
@@ -1282,86 +1222,6 @@ type FillInGapsGame_helpNote {
 """"""
 union FillInGapsGame_helpNote_Connections = Caisy_Field_Document_NotFound
 
-""""""
-type ImageWrapperCard {
-  """"""
-  _meta: CaisyDocument_Meta
-
-  """"""
-  downloadable: Boolean
-
-  """"""
-  id: ID
-
-  """"""
-  image(
-    """
-    The cursor to start the pagination from. In this case the curser equals the id for the (last) element. If not set, we wil start from the beginning.
-    """
-    after: String
-
-    """The number of items to return. Default and max value is 100."""
-    first: Int = 100
-
-    """"""
-    locale: String
-  ): Asset
-}
-
-""""""
-type ImageWrapperCard_Connection {
-  """"""
-  edges: [ImageWrapperCard_ConnectionEdge]
-
-  """"""
-  pageInfo: PageInfo
-
-  """"""
-  totalCount: Int
-}
-
-""""""
-type ImageWrapperCard_ConnectionEdge {
-  """"""
-  cursor: String
-
-  """"""
-  node: ImageWrapperCard
-}
-
-""""""
-input ImageWrapperCard_Sort {
-  """"""
-  createdAt: Order
-
-  """"""
-  downloadable: Order
-
-  """"""
-  id: Order
-
-  """"""
-  image: Order
-
-  """"""
-  publishedAt: Order
-
-  """"""
-  updatedAt: Order
-}
-
-""""""
-input ImageWrapperCard_Where {
-  """"""
-  AND: [ImageWrapperCard_Where]
-
-  """"""
-  OR: [ImageWrapperCard_Where]
-
-  """"""
-  downloadable: Boolean
-}
-
 """Any JSON value"""
 scalar JSON
 
@@ -1580,9 +1440,6 @@ type Query {
   FillInGapsGame(id: ID!, locale: String): FillInGapsGame
 
   """"""
-  ImageWrapperCard(id: ID!, locale: String): ImageWrapperCard
-
-  """"""
   LegalArea(id: ID!, locale: String): LegalArea
 
   """"""
@@ -1617,9 +1474,6 @@ type Query {
 
   """"""
   allFillInGapsGame(after: String, before: String, first: Int, last: Int, locale: String, sort: [FillInGapsGame_Sort], where: [FillInGapsGame_Where]): FillInGapsGame_Connection
-
-  """"""
-  allImageWrapperCard(after: String, before: String, first: Int, last: Int, locale: String, sort: [ImageWrapperCard_Sort], where: [ImageWrapperCard_Where]): ImageWrapperCard_Connection
 
   """"""
   allLegalArea(after: String, before: String, first: Int, last: Int, locale: String, sort: [LegalArea_Sort], where: [LegalArea_Where]): LegalArea_Connection
@@ -1694,18 +1548,6 @@ input SubCategory_MainCategory_Where {
 input SubCategory_MainCategory_WhereConnection {
   """"""
   MainCategory: MainCategory_Nested_Where
-}
-
-""""""
-input SubCategory_Nested_Where {
-  """"""
-  AND: [SubCategory_Nested_Where]
-
-  """"""
-  OR: [SubCategory_Nested_Where]
-
-  """"""
-  subCategory: CaisyField_String_Where
 }
 
 """"""
