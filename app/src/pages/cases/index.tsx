@@ -1,4 +1,3 @@
-
 import { Layout } from "@/components/layouts/Layout";
 import OverviewPage from "@/components/pages/OverviewPage/OverviewPage";
 import getCasesOverviewProps, { type ICasesOverviewProps } from "@/services/content/getCasesOverviewProps";
@@ -6,37 +5,22 @@ import getCasesOverviewProps, { type ICasesOverviewProps } from "@/services/cont
 import { type GetStaticProps } from "next";
 import { type FunctionComponent } from "react";
 
-export const getStaticProps: GetStaticProps<
-Awaited<ReturnType<typeof getCasesOverviewProps>>
-> = async () => 
-{
+type GetCasesOverviewPagePropsResult = ICasesOverviewProps;
 
+export const getStaticProps: GetStaticProps<GetCasesOverviewPagePropsResult> = async () =>
+{
   const resAllCases = await getCasesOverviewProps();
 
   return {
-    props: {
-      ...(resAllCases || null),
-    },
+    props: resAllCases,
     revalidate: 10,
   };
-
 };
 
-const NextPage: FunctionComponent<ICasesOverviewProps> = (props) => 
-{
-  const { allCases, allLegalAreaRes, allMainCategories } = props;
-  console.log("casess", { props });
-  const content = {
-    ...props,
-    allCases,
-    allLegalAreaRes: allLegalAreaRes?.allLegalArea?.edges?.map((edge) => edge?.node),
-    allMainCategories
-  };
-  return (
-    <Layout>
-      <OverviewPage variant="case" content={content}/>      
-    </Layout>
-  );
-};
+const NextPage: FunctionComponent<GetCasesOverviewPagePropsResult> = (casesOverviewProps) => (
+  <Layout>
+    <OverviewPage variant="case" content={casesOverviewProps}/>
+  </Layout>
+);
 
 export default NextPage;

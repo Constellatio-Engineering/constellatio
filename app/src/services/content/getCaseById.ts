@@ -3,14 +3,21 @@ import { caisySDK } from "../graphql/getSdk";
 
 interface getCaseByIdProps
 {
-  Case: IGenCase | null;
+  legalCase: IGenCase | null;
 }
 
-export const getCaseById = async ({ id }: {id: string}): Promise<getCaseByIdProps> =>
+export const getCaseById = async ({ id }: {id: string | undefined}): Promise<getCaseByIdProps> =>
 {
+  if(id == null)
+  {
+    return {
+      legalCase: null,
+    };
+  }
+
   const { Case } = await caisySDK.getCaseById({ id });
     
   return {
-    Case: Case || null,
+    legalCase: Case || null,
   };
 };

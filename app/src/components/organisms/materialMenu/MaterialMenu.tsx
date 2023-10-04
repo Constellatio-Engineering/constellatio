@@ -47,7 +47,6 @@ const MaterialMenu: FunctionComponent<MaterialMenuProps> = ({ folders, selectedF
       setErr(({ message: error.message, type: "delete" }));
       console.error("error while deleting folder", error);
     },
-    onMutate: () => console.log("deleting folder"),
     onSuccess: async () => 
     {
       setErr({ message: "", type: null });

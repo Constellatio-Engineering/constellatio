@@ -14,6 +14,7 @@ import useUploadedFiles from "@/hooks/useUploadedFiles";
 import useUploadFolders from "@/hooks/useUploadFolders";
 import { type IGenArticleOverviewFragment, type IGenFullCaseFragment, type IGenMainCategory } from "@/services/graphql/__generated/sdk";
 import uploadsProgressStore from "@/stores/uploadsProgress.store";
+import { type Nullable } from "@/utils/types"; 
 
 import { Container, Loader } from "@mantine/core";
 import Link from "next/link";
@@ -67,7 +68,8 @@ const PersonalSpacePage: FunctionComponent = () =>
     MaterialsCategoryId,
     uploadedFilesLength: uploadedFiles?.length ?? 0,
   });
-  const [selectedCategory, setSelectedCategory] = useState<IGenMainCategory>(categories?.[1]);
+
+  const [selectedCategory, setSelectedCategory] = useState<IGenMainCategory | undefined>(categories?.[1]);
   const FavCasesTabId = useId();
   const FavDictionaryTabId = useId();
   const FavForumsTabId = useId();
@@ -76,7 +78,10 @@ const PersonalSpacePage: FunctionComponent = () =>
   const areUploadsInProgress = uploads.some(u => u.state.type === "uploading");
   const favoriteCategoryNavTabs = [{ id: FavCasesTabId, itemsPerTab: bookmarkedCases?.length ?? 0, title: "CASES" }, { id: FavDictionaryTabId, itemsPerTab: 999, title: "DICTIONARY" }, { id: FavForumsTabId, itemsPerTab: 999, title: "FORUM" }, { id: FavHighlightsTabId, itemsPerTab: 999, title: "HIGHLIGHTS" }];
   const [selectedTabId, setSelectedTabId] = useState<string>(favoriteCategoryNavTabs?.[0]?.id as string);
-  const casesByMainCategory = (id: string): Array<({ _typename?: "Case" | undefined } & IGenFullCaseFragment) | null | undefined> | IGenArticleOverviewFragment[] | undefined => bookmarkedCases?.filter(bookmarkedCase => bookmarkedCase.mainCategoryField?.[0]?.id === id);
+  const casesByMainCategory = (id: Nullable<string>): IGenFullCaseFragment[] | IGenArticleOverviewFragment[] => bookmarkedCases?.filter(bookmarkedCase =>
+  {
+    return bookmarkedCase.mainCategoryField?.[0]?.id === id;
+  });
   const [showFileViewerModal, setShowFileViewerModal] = useState<boolean>(false);
   React.useEffect(() => 
   {
@@ -84,7 +89,7 @@ const PersonalSpacePage: FunctionComponent = () =>
     if(!selectedFileIdForPreview) { setShowFileViewerModal(false); }
     
   }, [selectedFileIdForPreview]);
-  console.log({ bookmarkedCases, casesByMainCategory });
+
   return (
     <div css={styles.wrapper}>
       <div css={styles.header}>
@@ -92,7 +97,7 @@ const PersonalSpacePage: FunctionComponent = () =>
           title="Personal Space"
           variant="red"
           categories={categories}
-          selectedCategory={selectedCategory ?? ""}
+          selectedCategory={selectedCategory}
           setSelectedCategory={setSelectedCategory}
         />
       </div>

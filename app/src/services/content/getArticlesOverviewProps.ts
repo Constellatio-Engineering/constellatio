@@ -38,19 +38,19 @@ const getArticlesOverviewProps = async (): Promise<IArticlesOverviewProps> =>
           articleItem?.mainCategoryField?.[0]?.id === category?.node?.id
         ).length,
         ...category?.node,
-      })) || null
+      }))
     );
 
     return {
       __typename: "dictionary",
       allArticles: allArticlesRes,
       allLegalAreaRes,
-      allMainCategories
+      allMainCategories: allMainCategories || [],
     };
   }
   catch (error) 
   {
-    console.error("Error fetching case overview props:", error);
+    console.error("Error fetching dictionary overview props:", error);
     throw error;
   }
 };

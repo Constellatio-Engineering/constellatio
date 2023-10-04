@@ -44,13 +44,13 @@ const handler: NextApiHandler = async (req, res) =>
   // return res.status(200).json({ message: "Success" });
 
   // Cases
-  const fetchAllCasesDetailsPromises = allCases.map(async c => (await getCaseById({ id: c.id! })).Case);
+  const fetchAllCasesDetailsPromises = allCases.map(async c => (await getCaseById({ id: c.id! })).legalCase);
   const allCasesWithDetails = await Promise.all(fetchAllCasesDetailsPromises);
   const allCasesSearchIndexItems = allCasesWithDetails.filter(Boolean).map(createCaseSearchIndexItem);
   const createCasesIndexTask = await meiliSearchAdmin.index(searchIndices.cases).addDocuments(allCasesSearchIndexItems);
 
   // Articles
-  const fetchAllArticlesDetailsPromises = allArticles.map(async a => (await getArticleById({ id: a.id! })).Article);
+  const fetchAllArticlesDetailsPromises = allArticles.map(async a => (await getArticleById({ id: a.id! })).article);
   const allArticlesWithDetails = await Promise.all(fetchAllArticlesDetailsPromises);
   const allArticlesSearchIndexItems = allArticlesWithDetails.filter(Boolean).map(createArticleSearchIndexItem);
   const createArticlesIndexTask = await meiliSearchAdmin.index(searchIndices.articles).addDocuments(allArticlesSearchIndexItems);
@@ -81,10 +81,10 @@ const handler: NextApiHandler = async (req, res) =>
 
   console.log("Updating ranking rules for indices...");
 
-  const caseSearchableAttributes: CaseSearchItemNodes[] = ["title", "legalArea.legalAreaName", "mainCategory.mainCategory", "subCategory.subCategory", "tags.tagName"];
+  const caseSearchableAttributes: CaseSearchItemNodes[] = ["title", "legalArea.legalAreaName", "mainCategory.mainCategory", "tags.tagName"];
   const updateCasesRankingRulesTask = await meiliSearchAdmin.index(searchIndices.cases).updateSearchableAttributes(caseSearchableAttributes);
 
-  const articleSearchableAttributes: ArticleSearchItemNodes[] = ["title", "legalArea.legalAreaName", "mainCategory.mainCategory", "subCategory.subCategory", "tags.tagName"];
+  const articleSearchableAttributes: ArticleSearchItemNodes[] = ["title", "legalArea.legalAreaName", "mainCategory.mainCategory", "tags.tagName"];
   const updateArticlesRankingRulesTask = await meiliSearchAdmin.index(searchIndices.articles).updateSearchableAttributes(articleSearchableAttributes);
 
   const uploadsSearchableAttributes: UploadSearchItemNodes[] = ["originalFilename"];

@@ -19,7 +19,7 @@ export interface ICasesOverviewProps
     } & IGenAssetFragment) | null | undefined;
     id?: string | null | undefined;
     mainCategory?: string | null | undefined;
-  }> | null;
+  }>;
 }
 
 const getCasesOverviewProps = async (): Promise<ICasesOverviewProps> => 
@@ -27,7 +27,9 @@ const getCasesOverviewProps = async (): Promise<ICasesOverviewProps> =>
   try 
   {
     const [allMainCategoriesRes, allCasesRes, allLegalAreaRes]: [IGenGetAllMainCategoryQuery, AllCases, IGenGetAllLegalAreaQuery] = await Promise.all([
-      caisySDK.getAllMainCategory(), getAllCases(), caisySDK.getAllLegalArea()
+      caisySDK.getAllMainCategory(),
+      getAllCases(),
+      caisySDK.getAllLegalArea()
     ]);
 
     const allMainCategories = (
@@ -36,14 +38,14 @@ const getCasesOverviewProps = async (): Promise<ICasesOverviewProps> =>
           caseItem?.mainCategoryField?.[0]?.id === category?.node?.id
         ).length,
         ...category?.node,
-      })) || null
+      }))
     );
   
     return {
       __typename: "case",
       allCases: allCasesRes,
       allLegalAreaRes, 
-      allMainCategories,
+      allMainCategories: allMainCategories || [],
     };
   }
   catch (error) 

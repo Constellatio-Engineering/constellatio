@@ -19,7 +19,7 @@ export interface ICasesOverviewHeaderProps
 {
   readonly categories?: IArticlesOverviewProps["allMainCategories"];
   readonly selectedCategory?: IGenMainCategory;
-  readonly setSelectedCategory?: React.Dispatch<React.SetStateAction<IGenMainCategory>> ;
+  readonly setSelectedCategory?: React.Dispatch<React.SetStateAction<IGenMainCategory | undefined>> ;
   readonly title?: Maybe<Scalars["String"]["output"]>;
   readonly variant: "case" | "dictionary" | "red";
 }
@@ -35,7 +35,7 @@ const OverviewHeader: FunctionComponent<ICasesOverviewHeaderProps> = ({
   const theme = useMantineTheme();
   // const [filters, setFilters] = useState<string[]>(["Filter One", "Filter Two", "Filter Three", "Filter Four", "Filter Five", "Filter Six"]);
   const [filters, setFilters] = useState<string[]>([]);
-  console.log({ categories });
+
   return (
     <div css={styles.contentHeader({ theme, variant })} className="header">
       <div id="overlay-lines">

@@ -1,4 +1,3 @@
-
 import { Layout } from "@/components/layouts/Layout";
 import OverviewPage from "@/components/pages/OverviewPage/OverviewPage";
 import getArticlesOverviewProps, { type IArticlesOverviewProps } from "@/services/content/getArticlesOverviewProps";
@@ -6,39 +5,23 @@ import getArticlesOverviewProps, { type IArticlesOverviewProps } from "@/service
 import { type GetStaticProps } from "next";
 import { type FunctionComponent, } from "react";
 
-export const getStaticProps: GetStaticProps<
-Awaited<ReturnType<typeof getArticlesOverviewProps>>
-> = async () => 
-{
+type GetArticlesOverviewPagePropsResult = IArticlesOverviewProps;
 
+export const getStaticProps: GetStaticProps<GetArticlesOverviewPagePropsResult> = async () =>
+{
   const allArticles = await getArticlesOverviewProps();
 
   return {
-    props: {
-      ...(allArticles || null)
-    },
+    props: allArticles,
     revalidate: 10,
   };
 
 };
 
-const NextPage: FunctionComponent<IArticlesOverviewProps> = (props) => 
-{
-  const { allArticles, allLegalAreaRes, allMainCategories } = props;
-  console.log("article", { props });
-
-  const content = {
-    ...props,
-    allArticles,
-    allLegalAreaRes: allLegalAreaRes?.allLegalArea?.edges?.map((edge) => edge?.node),
-    allMainCategories,
-  };
-
-  return (
-    <Layout>
-      <OverviewPage content={content} variant="dictionary"/>      
-    </Layout>
-  );
-};
+const NextPage: FunctionComponent<GetArticlesOverviewPagePropsResult> = (articlesOverviewProps) => (
+  <Layout>
+    <OverviewPage content={articlesOverviewProps} variant="dictionary"/>
+  </Layout>
+);
 
 export default NextPage;

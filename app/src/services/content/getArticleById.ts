@@ -3,18 +3,21 @@ import { caisySDK } from "../graphql/getSdk";
 
 interface IGetArticleByIdProps 
 {
-  Article: IGenArticle | null;
+  article: IGenArticle | null;
 }
 
-export const getArticleById = async ({
-  id,
-}: {
-  id: string;
-}): Promise<IGetArticleByIdProps> => 
+export const getArticleById = async ({ id }: { id: string | undefined}): Promise<IGetArticleByIdProps> =>
 {
+  if(id == null)
+  {
+    return {
+      article: null,
+    };
+  }
+
   const { Article } = await caisySDK.getArticleById({ id });
 
   return {
-    Article: Article || null,
+    article: Article || null,
   };
 };

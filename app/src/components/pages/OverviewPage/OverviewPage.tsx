@@ -5,7 +5,7 @@ import OverviewHeader from "@/components/organisms/OverviewHeader/OverviewHeader
 import { type IArticlesOverviewProps } from "@/services/content/getArticlesOverviewProps";
 import { type ICasesOverviewProps } from "@/services/content/getCasesOverviewProps";
 import {
-  type IGenMainCategory, type IGenLegalArea, type IGenCase, type IGenArticle 
+  type IGenMainCategory, type IGenLegalArea, type IGenCase, type IGenArticle, type IGenCaseOverviewFragment, type IGenArticleOverviewFragment
 } from "@/services/graphql/__generated/sdk";
 
 import {
@@ -16,51 +16,49 @@ import {
 
 import * as styles from "./OverviewPage.styles";
 
-interface IOverviewPageProps 
+type CasesOverviewPageProps = {
+  content: ICasesOverviewProps;
+  variant: "case";
+};
+
+type ArticlesOverviewPageProps = {
+  content: IArticlesOverviewProps;
+  variant: "dictionary";
+};
+
+type OverviewPageProps = CasesOverviewPageProps | ArticlesOverviewPageProps;
+
+const OverviewPage: FunctionComponent<OverviewPageProps> = ({ content, variant }) =>
 {
-  readonly content: ICasesOverviewProps | IArticlesOverviewProps | undefined;
-  readonly variant: "case" | "dictionary";
-}
+  const [selectedCategory, setSelectedCategory] = useState<IGenMainCategory | undefined>(content.allMainCategories?.[0]);
+  const filteredLegalAreas = (content.allLegalAreaRes.allLegalArea?.edges
+    ?.map(legalArea => legalArea?.node)
+    .filter(legalArea => Boolean(legalArea)) || []) as IGenLegalArea[];
 
-const OverviewPage: FunctionComponent<IOverviewPageProps> = ({ content, variant }) => 
-{
-
-  const [selectedCategory, setSelectedCategory] = useState<IGenMainCategory | null>(
-    content?.allMainCategories?.[0] ?? null
-  );
-
-  const [filteredLegalAreas, setFilteredLegalAreas] = useState(content?.allLegalAreaRes);
-
-  const allCasesOfLegalArea = (item: IGenLegalArea): Array<({
-    _typename?: "Case" | undefined;
-  } & IGenCase) | null | undefined> | undefined => 
+  const getAllCasesOfLegalArea = (item: IGenLegalArea): IGenCaseOverviewFragment[] =>
   {
-    if(content?.__typename === "case")
+    if(content?.__typename !== "case")
     {
-      return content?.allCases.filter(x => (x.legalArea?.id === item?.id && x.mainCategoryField?.[0]?.id === selectedCategory?.id));
+      return [];
     }
-    return undefined;
-  };
-  console.log({ content });
-
-  const allArticlesOfLegalArea = (item: IGenLegalArea): Array<({
-    _typename?: "Case" | undefined;
-  } & IGenArticle) | null | undefined> | undefined => 
-  {
-    if(content?.__typename === "dictionary")
-    {
-      return content?.allArticles.filter(x => (x.legalArea?.id === item?.id && x.mainCategoryField?.[0]?.id === selectedCategory?.id));
-    }
-    return undefined;
+    return content?.allCases.filter(x => (x.legalArea?.id === item?.id && x.mainCategoryField?.[0]?.id === selectedCategory?.id));
   };
 
-  const isCategoryEmpty = (): boolean => 
+  const getAllArticlesOfLegalArea = (item: IGenLegalArea): IGenArticleOverviewFragment[] =>
+  {
+    if(content?.__typename !== "dictionary")
+    {
+      return [];
+    }
+    return content?.allArticles.filter(x => (x.legalArea?.id === item?.id && x.mainCategoryField?.[0]?.id === selectedCategory?.id));
+  };
+
+  const getIsCategoryEmpty = (): boolean =>
   {
     const isEmpty: boolean = content?.__typename === "case" ? 
       content?.allCases?.filter((x: IGenCase) => (x?.mainCategoryField?.[0]?.id === selectedCategory?.id))?.length <= 0 : 
       content?.allArticles?.filter((x: IGenArticle) => (x?.mainCategoryField?.[0]?.id === selectedCategory?.id))?.length <= 0;
 
-    console.log({ isEmpty });
     return isEmpty;
   };
 
@@ -76,22 +74,28 @@ const OverviewPage: FunctionComponent<IOverviewPageProps> = ({ content, variant 
         />
       )}
       <div css={styles.ListWrapper}>
+        {filteredLegalAreas.map((item, itemIndex) =>
+        {
+          const items = variant === "case" ? getAllCasesOfLegalArea(item) : getAllArticlesOfLegalArea(item);
 
-        {filteredLegalAreas?.map((item: IGenLegalArea, itemIndex: number) => item?.legalAreaName && (
-          <Fragment key={itemIndex}>
-            <CaseBlock
-              variant={variant}
-              blockHead={{
-                blockType: "itemsBlock", categoryName: item?.legalAreaName, completedCases: 0, items: variant === "case" ? allCasesOfLegalArea(item)?.length : allArticlesOfLegalArea(item)?.length, variant
-              }}
-              items={variant === "case" ? allCasesOfLegalArea(item) : allArticlesOfLegalArea(item)}
-            />
-          </Fragment>
-        )
-        )}
-
+          return item.legalAreaName && (
+            <Fragment key={itemIndex}>
+              <CaseBlock
+                variant={variant}
+                blockHead={{
+                  blockType: "itemsBlock",
+                  categoryName: item.legalAreaName,
+                  completedCases: 0,
+                  items: items.length,
+                  variant
+                }}
+                items={items}
+              />
+            </Fragment>
+          );
+        })}
       </div>
-      {isCategoryEmpty() && (
+      {getIsCategoryEmpty() && (
         <EmptyStateCard
           button={<><CivilLawIcon/>Explore Civil law cases</>}
           title={`We're currently working hard to bring you ${variant === "case" ? "engaging cases to solve" : "interesting articles"}`}

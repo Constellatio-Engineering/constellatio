@@ -13,41 +13,45 @@ import * as styles from "./ItemBlock.styles";
 import { timeFormatter } from "../overviewCard/OverviewCard";
 import Table, { type DictionaryTableProps, type CasesTableProps } from "../table/Table";
 
+const CasesTable: CasesTableProps = {
+  type: "cases",
+  variant: "cases"
+};
+
+const DictionaryTable: DictionaryTableProps = {
+  type: "dictionary",
+  variant: "dictionary"
+};
+
 export interface ICaseBlockProps 
 {
   readonly blockHead: ICaseBlockHeadProps;
-  readonly items?: Array<({
-    _typename?: "Case" | undefined;
-  } & IGenFullCaseFragment) | null | undefined> | undefined | IGenArticleOverviewFragment[];
+  readonly items: IGenFullCaseFragment[] | IGenArticleOverviewFragment[];
   readonly variant: "case" | "dictionary";
 }
 
 const ItemBlock: FunctionComponent<ICaseBlockProps> = ({ blockHead, items, variant }) => 
 {
-  const CasesTable: CasesTableProps =
-  { 
-    type: "cases",
-    variant: "cases"  
-  };
+  const { bookmarks: casesBookmarks, isLoading: isGetCasesBookmarksLoading } = useBookmarks("case", {
+    enabled: variant === "case"
+  });
+  const { bookmarks: articlesBookmarks, isLoading: isGetArticlesBookmarksLoading } = useBookmarks("article", {
+    enabled: variant === "dictionary"
+  });
+  const bookmarks = variant === "case" ? casesBookmarks : articlesBookmarks;
+  const isLoading = variant === "case" ? isGetCasesBookmarksLoading : isGetArticlesBookmarksLoading;
 
-  const DictionaryTable: DictionaryTableProps = 
-  {
-    type: "dictionary", 
-    variant: "dictionary"  
-  };
-
-  const { bookmarks: casesBookmarks, isLoading } = useBookmarks("case");
-
-  return items && items.length > 0 ? (
+  return (
     <div css={styles.wrapper}>
       <CaseBlockHead {...blockHead}/>
       <Table tableType={variant === "case" ? CasesTable : DictionaryTable}>
-        {items?.map((item, caseIndex) => 
+        {items.map((item) =>
         {
-          const isBookmarked = casesBookmarks?.some(bookmark => bookmark?.resourceId === item?.id) || false;
+          const isBookmarked = bookmarks.some(bookmark => bookmark?.resourceId === item?.id) || false;
+          const topicsCombined = item?.topic?.map((item) => item?.topicName).join(", ") || "";
 
           return (
-            <tr key={caseIndex}>
+            <tr key={item.id}>
               <td className="primaryCell">
                 <Link passHref href={`/${variant === "case" ? "cases" : "dictionary"}/${item?.id}`}>
                   <TableCell variant="titleTableCell">
@@ -67,14 +71,15 @@ const ItemBlock: FunctionComponent<ICaseBlockProps> = ({ blockHead, items, varia
                   </TableCell>
                 </td>
               )}
-              <td>
-                <TableCell variant="simpleTableCell">{item?.subCategoryField?.map((item) => item?.subCategory).join(", ")}</TableCell>
+              <td title={topicsCombined}>
+                <TableCell variant="simpleTableCell">{topicsCombined}</TableCell>
               </td>
               <td>
                 <CaseBlockBookmarkButton
                   areAllBookmarksLoading={isLoading}
                   isBookmarked={isBookmarked}
-                  caseId={item!.id!}
+                  caseId={item.id}
+                  variant={variant}
                 />
               </td>
             </tr>
@@ -82,7 +87,7 @@ const ItemBlock: FunctionComponent<ICaseBlockProps> = ({ blockHead, items, varia
         })}
       </Table>
     </div>
-  ) : null;
+  );
 };
 
 export default ItemBlock;
