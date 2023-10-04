@@ -76,6 +76,9 @@ export const tableHeaders = ({
             {
               title: "",
             },
+            {
+              title: "",
+            },
           ];
 
         case "search":

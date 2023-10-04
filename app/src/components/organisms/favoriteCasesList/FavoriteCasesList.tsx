@@ -25,6 +25,7 @@ const FavoriteCasesList: FunctionComponent<FavoriteCasesListProps> = ({ bookmark
           <React.Fragment key={blockIndex}>
             <ItemBlock
               variant="case"
+              tableType="favorites"
               blockHead={{
                 blockType: "facouritItemsBlock",
                 categoryName: mainCategoryBlock.mainCategory ?? "",

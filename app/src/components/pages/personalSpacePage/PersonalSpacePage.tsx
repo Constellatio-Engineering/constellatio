@@ -70,7 +70,7 @@ const PersonalSpacePage: FunctionComponent = () =>
     uploadedFilesLength: uploadedFiles?.length ?? 0,
   });
 
-  const [selectedCategory, setSelectedCategory] = useState<IGenMainCategory | undefined>(categories?.[1]);
+  const [selectedCategory, setSelectedCategory] = useState<IGenMainCategory | undefined>(categories?.[0]);
   const FavCasesTabId = useId();
   const FavDictionaryTabId = useId();
   const FavForumsTabId = useId();
