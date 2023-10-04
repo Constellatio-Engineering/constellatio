@@ -42,7 +42,7 @@ const CaseCompleteTestsStep: FunctionComponent<ICaseCompleteTestsStepProps> = ({
 
   const renderedCaseContent = useMemo(() => 
   {
-    if(fullTextTasks?.json?.content.length >= 1) 
+    if(fullTextTasks?.json?.content?.length >= 1)
     {
       return {
         ...fullTextTasks,
@@ -58,23 +58,21 @@ const CaseCompleteTestsStep: FunctionComponent<ICaseCompleteTestsStepProps> = ({
     }
   }, [fullTextTasks, latestGameIndex, isLastGame]);
 
-  const content = useMemo(
-    () =>
-    {
-      const items = variant === "case" ? renderedCaseContent?.json?.content : fullTextTasks?.json?.content;
-      return items?.filter(
-        (contentItem: { content: Array<{ text: string }>; type: string }) =>
-          contentItem?.type === "heading"
-      );
-    },
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-    [renderedCaseContent]
-  );
+  const content = useMemo(() =>
+  {
+    const items = variant === "case" ? renderedCaseContent?.json?.content : fullTextTasks?.json?.content;
+    return items?.filter(
+      (contentItem: { content: Array<{ text: string }>; type: string }) =>
+        contentItem?.type === "heading"
+    );
+  }, [fullTextTasks?.json?.content, renderedCaseContent?.json?.content, variant]);
 
   useEffect(() => 
   {
-    if(variant === "case" && fullTextTasks?.__typename === "Case_fullTextTasks") { setGamesIndexes(getGamesIndexes({ fullTextTasks })); }
-
+    if(variant === "case" && fullTextTasks?.__typename === "Case_fullTextTasks")
+    {
+      setGamesIndexes(getGamesIndexes({ fullTextTasks })); 
+    }
   }, [fullTextTasks, setGamesIndexes, variant]);
 
   const allHeadings = fullTextTasks?.json?.content?.filter((x: { attrs: { level: number }; type: "heading" }) => x.type === "heading");
@@ -88,18 +86,6 @@ const CaseCompleteTestsStep: FunctionComponent<ICaseCompleteTestsStepProps> = ({
       {
         switch (component?.__typename) 
         {
-          case "ImageWrapperCard":
-            if(node?.attrs?.documentId === component?.id) 
-            {
-              return (
-                <div
-                  css={styles.componentWrapper}
-                  key={`${component?.__typename}-${index}`}>
-                  <ImageWrapperCard {...component}/>
-                </div>
-              );
-            }
-            break;
           case "Callout":
             if(node?.attrs?.documentId === component?.id) 
             {
@@ -125,7 +111,7 @@ const CaseCompleteTestsStep: FunctionComponent<ICaseCompleteTestsStepProps> = ({
             }
             break;
           case "DragNDropGame":
-            if(node?.attrs?.documentId === component?.id) 
+            if(node?.attrs?.documentId === component?.id)                                     
             {
               return (
                 <div
@@ -144,6 +130,18 @@ const CaseCompleteTestsStep: FunctionComponent<ICaseCompleteTestsStepProps> = ({
                   css={styles.gameComponentWrapper}
                   key={`${component?.__typename}-${index}`}>
                   <FillGapsGame {...component}/>
+                </div>
+              );
+            }
+            break;
+          case "Asset":
+            if(node?.attrs?.documentId === component?.id) 
+            {
+              return (
+                <div
+                  css={styles.componentWrapper}
+                  key={`${component?.__typename}-${index}`}>
+                  <ImageWrapperCard {...component}/>
                 </div>
               );
             }

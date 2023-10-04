@@ -95,7 +95,6 @@ export const RegistrationForm: FunctionComponent = () =>
     {
       if(!registerMutationStartTimestamp.current)
       {
-        console.log("register mutation was not started");
         return;
       }
 

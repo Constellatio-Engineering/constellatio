@@ -17,12 +17,12 @@ const SearchOverlay: FunctionComponent<SearchOverlayProps> = () =>
   const searchValue = useSearchBarStore((s) => s.searchValue);
   const router = useRouter();
   const toggleDrawer = useSearchBarStore((s) => s.toggleDrawer);
-  const hasInput = searchValue.length > 0;
+  const hasInput = searchValue?.length > 0;
 
   useEffect(() =>
   {
     toggleDrawer(false);
-  }, [router.pathname, toggleDrawer]);
+  }, [router.pathname, toggleDrawer, router.query.find]);
 
   return (
     <Drawer

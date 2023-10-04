@@ -2,9 +2,7 @@
 import { type IGenArticleOverviewFragment } from "../graphql/__generated/sdk";
 import { caisySDK } from "../graphql/getSdk";
 
-export type allArticles = Array<IGenArticleOverviewFragment & {
-  __typename?: "Article" | undefined;
-}>;
+export type allArticles = IGenArticleOverviewFragment[];
 
 type GetAllArticlesProps = {
   after?: string;

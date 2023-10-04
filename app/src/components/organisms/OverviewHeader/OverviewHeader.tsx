@@ -1,7 +1,8 @@
 import { OverlayLines } from "@/components/Icons/bg-layer";
 import { Trash } from "@/components/Icons/Trash";
-import { type ICasesOverviewProps } from "@/services/content/getCasesOverviewProps";
+import { type IArticlesOverviewProps } from "@/services/content/getArticlesOverviewProps";
 import type {
+  IGenMainCategory,
   Maybe, Scalars
 } from "@/services/graphql/__generated/sdk";
 
@@ -16,17 +17,17 @@ import FilterTag from "../../molecules/filterTag/FilterTag";
 
 export interface ICasesOverviewHeaderProps 
 {
-  readonly categories?: ICasesOverviewProps["allMainCategories"];
-  readonly selectedCategoryId?: string;
-  readonly setSelectedCategoryId: (id: string) => void;
+  readonly categories?: IArticlesOverviewProps["allMainCategories"];
+  readonly selectedCategory?: IGenMainCategory;
+  readonly setSelectedCategory?: React.Dispatch<React.SetStateAction<IGenMainCategory | undefined>> ;
   readonly title?: Maybe<Scalars["String"]["output"]>;
   readonly variant: "case" | "dictionary" | "red";
 }
 
 const OverviewHeader: FunctionComponent<ICasesOverviewHeaderProps> = ({
   categories,
-  selectedCategoryId,
-  setSelectedCategoryId,
+  selectedCategory,
+  setSelectedCategory,
   title,
   variant
 }) => 
@@ -42,12 +43,12 @@ const OverviewHeader: FunctionComponent<ICasesOverviewHeaderProps> = ({
       </div>
       <Title order={1} css={styles.title({ theme, variant })}>{title}</Title>
       <div css={styles.categoriesButtons}>
-        {categories?.map((category, index: number) => category?.id && (
-          <div key={index} onClick={() => setSelectedCategoryId(`${category?.id}`)}>
+        {categories && categories.map((category: IGenMainCategory & {casesPerCategory: number}, index: number) => category?.id && setSelectedCategory && (
+          <div key={index} onClick={() => setSelectedCategory(category)}>
             <CategoryTab
               {...category}
               itemsNumber={category?.casesPerCategory}
-              selected={category?.id === selectedCategoryId}
+              selected={category?.id === selectedCategory?.id}
               variant={variant}
             />
           </div>
