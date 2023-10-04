@@ -1,5 +1,5 @@
 import { Layout } from "@/components/layouts/Layout";
-// import useSearchResults from "@/hooks/useSearchResults";
+import SearchPage from "@/components/pages/searchPage/SearchPage";
 import useSearchBarStore from "@/stores/searchBar.store";
 
 import { type NextPage } from "next";
@@ -8,7 +8,6 @@ import { useEffect } from "react";
 
 const Search: NextPage = () => 
 {
-  // const { isLoading, searchResults } = useSearchResults();
   const router = useRouter();
   const searchValue = useSearchBarStore((s) => s.searchValue);
   const setSearchValue = useSearchBarStore((s) => s.setSearchValue);
@@ -27,15 +26,9 @@ const Search: NextPage = () =>
 
   return (
     <Layout>
-      <div>search</div>
+      <SearchPage/>
     </Layout>
   );
 };
-
-// Search.getInitialProps = async ({ asPath, pathname, query }: NextPageContext) => 
-// {
-//   console.log("query", query, "pathname", pathname, "asPath", asPath);
-//   return {};
-// };
 
 export default Search;
