@@ -18,6 +18,7 @@ interface UploadedMaterialTableProps
 {
   readonly isGetUploadedFilesLoading?: boolean;
   readonly setSelectedFileIdForPreview: React.Dispatch<React.SetStateAction<string | undefined>>;
+  readonly setShowFileViewerModal: React.Dispatch<React.SetStateAction<boolean>>;
   readonly uploadedFiles?: UploadedFile[];
 }
 const formatDate = (date: Date): string => `${String(date.getDate()).padStart(2, "0")}.${String(date.getMonth() + 1).padStart(2, "0")}.${date.getFullYear()}`;
@@ -25,6 +26,7 @@ const formatDate = (date: Date): string => `${String(date.getDate()).padStart(2,
 const UploadedMaterialTable: FunctionComponent<UploadedMaterialTableProps> = ({
   isGetUploadedFilesLoading,
   setSelectedFileIdForPreview,
+  setShowFileViewerModal,
   uploadedFiles
 }) =>
 {
@@ -79,7 +81,11 @@ const UploadedMaterialTable: FunctionComponent<UploadedMaterialTableProps> = ({
           {uploadedFiles?.slice(0, showingFiles).map((file, index) => (
             <tr
               key={index}
-              onClick={() => setSelectedFileIdForPreview(file.id)}>
+              onClick={() => 
+              {
+                setSelectedFileIdForPreview(file.id);
+                setShowFileViewerModal(true);
+              }}>
               <td css={styles.callToActionCell}><Checkbox/></td>
               <td css={styles.docName} className="primaryCell">
                 <BodyText styleType="body-01-medium" component="p" title={file.originalFilename}>
