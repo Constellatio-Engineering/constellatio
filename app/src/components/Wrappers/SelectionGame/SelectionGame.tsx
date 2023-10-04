@@ -52,8 +52,6 @@ export const SelectionGameWrapper: FunctionComponent = () =>
     },
   });
 
-  console.log(value);
-
   const onSubmitHandler = (): void => 
   {
     setValue({

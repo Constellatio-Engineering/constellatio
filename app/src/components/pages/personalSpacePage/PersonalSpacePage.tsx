@@ -14,10 +14,11 @@ import useUploadedFiles from "@/hooks/useUploadedFiles";
 import useUploadFolders from "@/hooks/useUploadFolders";
 import { type IGenArticleOverviewFragment, type IGenFullCaseFragment, type IGenMainCategory } from "@/services/graphql/__generated/sdk";
 import uploadsProgressStore from "@/stores/uploadsProgress.store";
+import { type Nullable } from "@/utils/types"; 
 
 import { Container, Loader } from "@mantine/core";
 import Link from "next/link";
-import React, { type FunctionComponent, useState, useId, useEffect } from "react";
+import React, { type FunctionComponent, useState, useId } from "react";
 
 import { categoriesHelper } from "./PersonalSpaceHelper";
 import * as styles from "./PersonalSpacePage.styles";
@@ -36,10 +37,10 @@ const PersonalSpacePage: FunctionComponent = () =>
   const { bookmarks, isLoading: areBookmarksLoading } = useBookmarks(undefined);
   const { folders = [] } = useUploadFolders();
   const { isLoading: isGetUploadedFilesLoading, uploadedFiles } = useUploadedFiles(selectedFolderId);
-  const { documents, isLoading: isGetDocumentsLoading, isRefetching: isRefetchingDocuments } = useDocuments(selectedFolderId);
+  const { documents } = useDocuments(selectedFolderId);
   const allCasesBookmarks = bookmarks.filter(bookmark => bookmark?.resourceType === "case") ?? [];
   const bookmarkedCases = allCases.filter(caisyCase => allCasesBookmarks.some(bookmark => bookmark.resourceId === caisyCase.id));
-  const mainCategoriesInBookmarkedCases = bookmarkedCases.map(bookmarkedCase => bookmarkedCase?.subCategoryField?.[0]?.mainCategory?.[0]);
+  const mainCategoriesInBookmarkedCases = bookmarkedCases.map(bookmarkedCase => bookmarkedCase?.mainCategoryField?.[0]);
   const bookmarkedCasesMainCategoriesUnique = mainCategoriesInBookmarkedCases.reduce<IGenMainCategory[]>((acc, current) => 
   {
     if(current != null)
@@ -67,7 +68,8 @@ const PersonalSpacePage: FunctionComponent = () =>
     MaterialsCategoryId,
     uploadedFilesLength: uploadedFiles?.length ?? 0,
   });
-  const [selectedCategoryId, setSelectedCategoryId] = useState<IGenMainCategory["id"]>(categories?.[1]?.id as IGenMainCategory["id"]);
+
+  const [selectedCategory, setSelectedCategory] = useState<IGenMainCategory | undefined>(categories?.[1]);
   const FavCasesTabId = useId();
   const FavDictionaryTabId = useId();
   const FavForumsTabId = useId();
@@ -76,13 +78,16 @@ const PersonalSpacePage: FunctionComponent = () =>
   const areUploadsInProgress = uploads.some(u => u.state.type === "uploading");
   const favoriteCategoryNavTabs = [{ id: FavCasesTabId, itemsPerTab: bookmarkedCases?.length ?? 0, title: "CASES" }, { id: FavDictionaryTabId, itemsPerTab: 999, title: "DICTIONARY" }, { id: FavForumsTabId, itemsPerTab: 999, title: "FORUM" }, { id: FavHighlightsTabId, itemsPerTab: 999, title: "HIGHLIGHTS" }];
   const [selectedTabId, setSelectedTabId] = useState<string>(favoriteCategoryNavTabs?.[0]?.id as string);
-  const casesByMainCategory = (id: string): Array<({ _typename?: "Case" | undefined } & IGenFullCaseFragment) | null | undefined> | IGenArticleOverviewFragment[] | undefined => bookmarkedCases?.filter(bookmarkedCase => bookmarkedCase.subCategoryField?.[0]?.mainCategory?.[0]?.id === id);
+  const casesByMainCategory = (id: Nullable<string>): IGenFullCaseFragment[] | IGenArticleOverviewFragment[] => bookmarkedCases?.filter(bookmarkedCase =>
+  {
+    return bookmarkedCase.mainCategoryField?.[0]?.id === id;
+  });
   const [showFileViewerModal, setShowFileViewerModal] = useState<boolean>(false);
-
-  useEffect(() =>
+  React.useEffect(() => 
   {
     if(selectedFileIdForPreview) { setShowFileViewerModal(true); }
     if(!selectedFileIdForPreview) { setShowFileViewerModal(false); }
+    
   }, [selectedFileIdForPreview]);
 
   return (
@@ -92,13 +97,13 @@ const PersonalSpacePage: FunctionComponent = () =>
           title="Personal Space"
           variant="red"
           categories={categories}
-          selectedCategoryId={selectedCategoryId ?? ""}
-          setSelectedCategoryId={setSelectedCategoryId}
+          selectedCategory={selectedCategory}
+          setSelectedCategory={setSelectedCategory}
         />
       </div>
-      {isFavoriteTab(selectedCategoryId ?? "") && <PersonalSpaceNavBar setSelectedTabId={setSelectedTabId} selectedTabId={selectedTabId} tabs={favoriteCategoryNavTabs}/>}
+      {isFavoriteTab(selectedCategory?.id ?? "") && <PersonalSpaceNavBar setSelectedTabId={setSelectedTabId} selectedTabId={selectedTabId} tabs={favoriteCategoryNavTabs}/>}
       <Container maw={1440}>
-        {isFavoriteTab(selectedCategoryId ?? "") ? (selectedTabId === FavCasesTabId ? (
+        {isFavoriteTab(selectedCategory?.id ?? "") ? (selectedTabId === FavCasesTabId ? (
           <> 
             {(areBookmarksLoading || areCasesLoading) ? (
               <Loader sx={{ margin: "50px" }}/>
@@ -157,7 +162,7 @@ const PersonalSpacePage: FunctionComponent = () =>
                 folders={folders}
               />
               <div style={{ flex: 1, maxWidth: "75%" }}>
-                <PapersBlock docs={documents} selectedFolderId={selectedFolderId} isLoading={isGetDocumentsLoading}/>
+                <PapersBlock docs={documents} selectedFolderId={selectedFolderId} isLoading={false}/>
                 <UploadedMaterialBlock
                   areUploadsInProgress={areUploadsInProgress}
                   fileInputRef={fileInputRef}

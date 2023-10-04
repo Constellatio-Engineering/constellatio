@@ -1,47 +1,65 @@
 import { Layout } from "@/components/layouts/Layout";
 import DetailsPage from "@/components/pages/DetailsPage/DetailsPage";
+import getAllArticles from "@/services/content/getAllArticles";
 import { getArticleById } from "@/services/content/getArticleById";
 import { type IGenArticle } from "@/services/graphql/__generated/sdk";
 
-import type { GetStaticProps, GetStaticPaths } from "next";
+import { type GetStaticPathsResult, type GetStaticProps, type GetStaticPaths } from "next";
 import { type FunctionComponent } from "react";
 
-interface ICasePageProps 
+import { type ParsedUrlQuery } from "querystring";
+
+interface Params extends ParsedUrlQuery
 {
-  readonly legalArticle: IGenArticle;
+  id: string;
 }
 
-export const getStaticProps: GetStaticProps = async ({ params }) => 
+export const getStaticPaths: GetStaticPaths<Params> = async () =>
 {
-  const id = Array.isArray(params?.id) ? (params?.id[0] ?? "") : (params?.id ?? "");
-  const resArticle = await getArticleById({ id });
-  return {
-    props: {
-      id,
-      legalArticle: resArticle?.Article ?? null
-    }, 
-    revalidate: 10
-  };
+  const allArticles = await getAllArticles();
+  const paths: GetStaticPathsResult<Params>["paths"] = allArticles
+    .filter(article => Boolean(article.id))
+    .map((article) => ({
+      params: {
+        id: article.id!,
+      }
+    }));
 
-};
-
-const NextPage: FunctionComponent<ICasePageProps> = ({ legalArticle }) => 
-{
-  // console.log({ legalArticle });
-  
-  return (
-    <Layout>
-      <DetailsPage content={legalArticle} variant="dictionary"/>
-    </Layout>
-  );
-};
-
-export const getStaticPaths: GetStaticPaths = () => 
-{
   return {
     fallback: true,
-    paths: []
+    paths
   };
+};
+
+type GetArticleDetailPagePropsResult = {
+  readonly article: IGenArticle;
+};
+
+export const getStaticProps: GetStaticProps<GetArticleDetailPagePropsResult, Params> = async ({ params }) =>
+{
+  const { article } = await getArticleById({ id: params?.id });
+
+  if(!article)
+  {
+    return {
+      notFound: true,
+      revalidate: false
+    };
+  }
+
+  return {
+    props: { article },
+    revalidate: 10
+  };
+};
+
+const NextPage: FunctionComponent<GetArticleDetailPagePropsResult> = ({ article }) =>
+{
+  return (
+    <Layout>
+      <DetailsPage content={article} variant="dictionary"/>
+    </Layout>
+  );
 };
 
 export default NextPage;

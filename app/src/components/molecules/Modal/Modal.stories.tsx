@@ -19,11 +19,7 @@ const Template: FunctionComponent<ModalProps> = (args) =>
         {...args}
         opened={isOpened}
         centered
-        onClose={() => 
-        {
-          console.log("Closed");
-          close();
-        }}>
+        onClose={close}>
         <Text>
           Amet minim mollit non deserunt ullamco est sit aliqua dolor do amet sint. Velit officia consequat duis enim
           velit mollit.

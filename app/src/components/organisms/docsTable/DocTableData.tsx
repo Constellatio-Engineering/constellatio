@@ -1,7 +1,11 @@
 
+// import { Edit } from "@/components/Icons/Edit";
+// import { MoveDownIcon } from "@/components/Icons/MoveDown";
+// import { Trash } from "@/components/Icons/Trash";
 import { type Document } from "@/db/schema";
 import useDocumentEditorStore from "@/stores/documentEditor.store";
 
+// import { Menu } from "@mantine/core";
 import { type FunctionComponent } from "react";
 
 import * as styles from "./DocsTable.styles";
@@ -24,6 +28,24 @@ export const DocsTableData: FunctionComponent<Document> = (document) =>
       </td>
       <td css={styles.docDate}><BodyText styleType="body-01-medium" component="p">{formatDate(updatedAt)}</BodyText></td>
       <td css={styles.docTags}><BodyText styleType="body-02-medium" component="p">TODO</BodyText></td>
+      {/* <td css={styles.callToActionCell}>
+        
+        <Menu>
+          <Menu.Target>
+            <DotsIcon/>
+          </Menu.Target>
+          <Menu.Dropdown>
+            <Menu.Item><span className="label"><Edit/>Rename</span></Menu.Item>
+            <Menu.Divider/>
+            <Menu.Item><span className="label"><MoveDownIcon/>Download</span></Menu.Item>
+            <Menu.Divider/>
+            <Menu.Item onClick={() => {}}><span className="label"><Trash/>Delete</span></Menu.Item>
+          </Menu.Dropdown>
+    
+        </Menu>
+        
+      </td> */}
+ 
       <td
         css={styles.callToActionCell}
         onClick={(e) =>

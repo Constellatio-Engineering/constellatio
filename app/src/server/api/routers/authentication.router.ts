@@ -10,9 +10,9 @@ export const authenticationRouter = createTRPCRouter({
     .input(registrationFormSchema)
     .mutation(async ({ ctx: { supabaseServerClient }, input }) =>
     {
-      const start = performance.now();
+      console.log("--- Registering user ---");
 
-      console.time("Supabase sign up");
+      const start = performance.now();
 
       const { data: signUpData, error: signUpError } = await supabaseServerClient.auth.signUp({
         email: input.email,
@@ -20,7 +20,7 @@ export const authenticationRouter = createTRPCRouter({
         password: input.password
       });
 
-      console.timeEnd("Supabase sign up");
+      console.log(`supabase sign up took ${performance.now() - start}ms`);
 
       if(signUpError)
       {
@@ -52,11 +52,11 @@ export const authenticationRouter = createTRPCRouter({
           university: input.university
         };
 
-        console.time("Inserting user into db");
+        const insertStart = performance.now();
 
         await db.insert(users).values(userToInsert);
 
-        console.timeEnd("Inserting user into db");
+        console.log(`Inserting user into db took ${performance.now() - insertStart}ms`);
       }
       catch (e: unknown)
       {
@@ -72,17 +72,13 @@ export const authenticationRouter = createTRPCRouter({
         throw new InternalServerError(new Error("Error while inserting user: " + e));
       }
 
+      console.log(`Complete sign up took ${performance.now() - start}ms`);
+
       if(!signUpData.session)
       {
-        const end = performance.now();
-        console.log(`Sign up took ${end - start}ms`);
-
         // Sign up was successful, but email confirmation is enabled. The user needs to confirm their email address.
         return ({ resultType: "emailConfirmationRequired" }) as const;
       }
-
-      const end = performance.now();
-      console.log(`Sign up took ${end - start}ms`);
 
       // If the session is available right after sign up, it means that email confirmation is disabled.
       return ({

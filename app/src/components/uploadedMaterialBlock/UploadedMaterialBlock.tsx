@@ -48,7 +48,7 @@ const UploadedMaterialBlock: FunctionComponent<UploadedMaterialBlockProps> = ({
       return;
     }
     const originalFileName = file.name;
-    console.log("uploading file '", `${originalFileName}'...`);
+
     setUploadState({
       clientSideUuid,
       fileNameWithExtension: originalFileName,
@@ -85,7 +85,6 @@ const UploadedMaterialBlock: FunctionComponent<UploadedMaterialBlockProps> = ({
       originalFilename: originalFileName,
       serverFilename
     });
-    console.log("file uploaded successfully");
   };
   const onSubmit = async (e: FormEvent<HTMLFormElement>): Promise<void> =>
   {
