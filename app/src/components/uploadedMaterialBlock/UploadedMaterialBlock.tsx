@@ -22,6 +22,7 @@ type UploadedMaterialBlockProps = {
   readonly selectedFolderId: string | null;
   readonly setSelectedFileIdForPreview: React.Dispatch<React.SetStateAction<string | undefined>>;
   readonly setSelectedFiles: React.Dispatch<React.SetStateAction<FileWithClientSideUuid[]>>;
+  readonly setShowFileViewerModal: React.Dispatch<React.SetStateAction<boolean>>;
   readonly setUploadState: (newState: UploadState) => void;
   readonly uploadedFiles: UploadedFile[];
 };

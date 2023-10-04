@@ -1,11 +1,12 @@
-
-// import { Edit } from "@/components/Icons/Edit";
-// import { MoveDownIcon } from "@/components/Icons/MoveDown";
-// import { Trash } from "@/components/Icons/Trash";
+import { DownloadIcon } from "@/components/Icons/DownloadIcon";
+import { Edit } from "@/components/Icons/Edit";
+import { FolderIcon } from "@/components/Icons/Folder";
+import { Trash } from "@/components/Icons/Trash";
 import { type Document } from "@/db/schema";
 import useDocumentEditorStore from "@/stores/documentEditor.store";
 
 // import { Menu } from "@mantine/core";
+import { Menu } from "@mantine/core";
 import { type FunctionComponent } from "react";
 
 import * as styles from "./DocsTable.styles";
@@ -18,42 +19,35 @@ const formatDate = (date: Date): string => `${String(date.getDate()).padStart(2,
 export const DocsTableData: FunctionComponent<Document> = (document) =>
 {
   const { name, updatedAt } = document;
-  const setEditDocumentState = useDocumentEditorStore(s => s.setEditDocumentState);
+  const { setEditDocumentState, setViewDocumentState } = useDocumentEditorStore(s => s);
 
   return (
     <>
       <td css={styles.callToActionCell}><Checkbox/></td>
-      <td css={styles.docName} className="primaryCell">
+      <td
+        css={styles.docName}
+        className="primaryCell"
+        onClick={() => setViewDocumentState(document)}>
         <BodyText styleType="body-01-medium" component="p">{name}</BodyText>
       </td>
       <td css={styles.docDate}><BodyText styleType="body-01-medium" component="p">{formatDate(updatedAt)}</BodyText></td>
-      <td css={styles.docTags}><BodyText styleType="body-02-medium" component="p">TODO</BodyText></td>
-      {/* <td css={styles.callToActionCell}>
-        
-        <Menu>
+      <td css={styles.docTags}><BodyText styleType="body-02-medium" component="p">Tags (999)</BodyText></td>
+      <td
+        css={styles.callToActionCell}> 
+        <Menu shadow="md" width={200}>
           <Menu.Target>
-            <DotsIcon/>
+            <button type="button" css={styles.callToActionCell}><DotsIcon/></button>
           </Menu.Target>
           <Menu.Dropdown>
-            <Menu.Item><span className="label"><Edit/>Rename</span></Menu.Item>
+            <Menu.Item><span className="label" onClick={() => { setEditDocumentState(document); }}><Edit/>Rename and edit</span></Menu.Item>
             <Menu.Divider/>
-            <Menu.Item><span className="label"><MoveDownIcon/>Download</span></Menu.Item>
+            <Menu.Item><span className="label"><FolderIcon/>Move to</span></Menu.Item>
+            <Menu.Divider/>
+            <Menu.Item><span className="label"><DownloadIcon/>Download</span></Menu.Item>
             <Menu.Divider/>
             <Menu.Item onClick={() => {}}><span className="label"><Trash/>Delete</span></Menu.Item>
           </Menu.Dropdown>
-    
         </Menu>
-        
-      </td> */}
- 
-      <td
-        css={styles.callToActionCell}
-        onClick={(e) =>
-        {
-          e.stopPropagation();
-          setEditDocumentState(document);
-        }}>
-        <DotsIcon/>
       </td>
     </>
   );

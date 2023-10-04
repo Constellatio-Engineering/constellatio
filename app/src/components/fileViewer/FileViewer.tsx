@@ -1,8 +1,8 @@
 
 import useSignedGetUrl from "@/hooks/useSignedGetUrl";
 
-import { Modal } from "@mantine/core";
-import { useDisclosure } from "@mantine/hooks";
+import { Modal, ScrollArea } from "@mantine/core";
+// import { useDisclosure } from "@mantine/hooks";
 import Image from "next/image";
 import React, { type FunctionComponent, useEffect, useState } from "react";
 
@@ -11,12 +11,18 @@ import * as styles from "./FileViewer.styles";
 interface FileViewerProps
 {
   readonly fileId: string;
+  // readonly setSelectedFileIdForPreview: React.Dispatch<React.SetStateAction<string | undefined>>;
+  readonly setShowFileViewerModal: React.Dispatch<React.SetStateAction<boolean>>;
   readonly showFileViewerModal: boolean;
 }
 
-const FileViewer: FunctionComponent<FileViewerProps> = ({ fileId, showFileViewerModal }) => 
+const FileViewer: FunctionComponent<FileViewerProps> = ({
+  fileId,
+  // setSelectedFileIdForPreview,
+  setShowFileViewerModal,
+  showFileViewerModal
+}) => 
 {
-  const [opened, { close, open }] = useDisclosure(false);
 
   const { isLoading: isGetUrlLoading, url: fileUrl } = useSignedGetUrl(fileId);
   const [fileType, setFileType] = useState<string | null>(null);
@@ -49,15 +55,7 @@ const FileViewer: FunctionComponent<FileViewerProps> = ({ fileId, showFileViewer
     };
     const type = getFileType(fileUrl ?? "");
     setFileType(type);
-    if(showFileViewerModal)
-    {
-      open();
-    }
-    else 
-    {
-      close();
-    }
-  }, [close, fileUrl, open, showFileViewerModal]);
+  }, [fileUrl]);
 
   const renderFile = (): React.ReactNode => 
   {
@@ -104,17 +102,19 @@ const FileViewer: FunctionComponent<FileViewerProps> = ({ fileId, showFileViewer
   };
 
   return (
-    <Modal 
-      centered 
-      miw={1080}
-      opened={opened} 
-      onClose={close} 
-      withCloseButton={false}
-      closeOnClickOutside
-      closeOnEscape
-      styles={styles.modalStyles()}>
-      {!isGetUrlLoading ? <div css={styles.wrapper}>{renderFile()}</div> : "Loading..."}
-    </Modal>
+    <ScrollArea>
+      <Modal 
+        centered 
+        miw={1080}
+        opened={showFileViewerModal} 
+        onClose={() => setShowFileViewerModal(false)} 
+        withCloseButton={false}
+        closeOnClickOutside
+        closeOnEscape
+        styles={styles.modalStyles()}>
+        {!isGetUrlLoading ? <div css={styles.wrapper}>{renderFile()}</div> : "Loading..."}
+      </Modal>
+    </ScrollArea>
   );
 
 };

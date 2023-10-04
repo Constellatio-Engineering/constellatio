@@ -72,6 +72,7 @@ const EditorForm: FunctionComponent<EditorFormProps> = ({ editorState }) =>
         }
 
         setEditDocumentState(createdDocument);
+        closeEditor();
         break;
       }
       case "edit":
@@ -91,6 +92,7 @@ const EditorForm: FunctionComponent<EditorFormProps> = ({ editorState }) =>
         }
 
         setEditDocumentState(updatedDocument);
+        // closeEditor();
         break;
       }
       default:
