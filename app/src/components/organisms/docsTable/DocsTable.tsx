@@ -16,7 +16,6 @@ interface DocsTableProps
 
 const DocsTable: FunctionComponent<DocsTableProps> = ({ docs }) =>
 {
-  const setViewDocumentState = useDocumentEditorStore(s => s.setViewDocumentState);
   const [showingDocs, setShowingDocs] = useState<number>(5);
   const isShowingFullTable = showingDocs >= (docs.length ?? 0);
 
@@ -37,8 +36,7 @@ const DocsTable: FunctionComponent<DocsTableProps> = ({ docs }) =>
         <tbody css={styles.tableBody}>
           {docs.slice(0, showingDocs).map(doc => (
             <tr
-              key={doc.id}
-              onClick={() => setViewDocumentState(doc)}>
+              key={doc.id}>
               <DocsTableData {...doc}/>
             </tr>
           ))}
