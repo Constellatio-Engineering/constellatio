@@ -41,7 +41,7 @@ const ItemBlock: FunctionComponent<ICaseBlockProps> = ({ blockHead, items, varia
   const bookmarks = variant === "case" ? casesBookmarks : articlesBookmarks;
   const isLoading = variant === "case" ? isGetCasesBookmarksLoading : isGetArticlesBookmarksLoading;
 
-  return (
+  return items.length > 0 ? (
     <div css={styles.wrapper}>
       <CaseBlockHead {...blockHead}/>
       <Table tableType={variant === "case" ? CasesTable : DictionaryTable}>
@@ -72,7 +72,7 @@ const ItemBlock: FunctionComponent<ICaseBlockProps> = ({ blockHead, items, varia
                 </td>
               )}
               <td title={topicsCombined}>
-                <TableCell variant="simpleTableCell">{topicsCombined}</TableCell>
+                <TableCell variant="simpleTableCell">{item?.topic?.[0]?.topicName}</TableCell>
               </td>
               <td>
                 <CaseBlockBookmarkButton
@@ -87,7 +87,7 @@ const ItemBlock: FunctionComponent<ICaseBlockProps> = ({ blockHead, items, varia
         })}
       </Table>
     </div>
-  );
+  ) : null;
 };
 
 export default ItemBlock;
