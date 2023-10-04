@@ -64,6 +64,9 @@ export const modalStyles = (): ModalStyles =>
 {
   const styles: ModalStyles = () => ({
     body: {
+      ".delete-folder-text": {
+        marginTop: "16px",
+      },
       ".modal-call-to-action": {
         alignItems: "center",
         button: {
@@ -79,9 +82,6 @@ export const modalStyles = (): ModalStyles =>
         flexDirection: "column",
         gap: "4px",
         marginTop: "24px",
-      },
-      p: {
-        marginTop: "16px",
       },
       padding: "36px",
     },

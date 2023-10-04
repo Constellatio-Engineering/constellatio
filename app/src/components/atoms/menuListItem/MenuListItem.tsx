@@ -8,7 +8,7 @@ import CutomAlertCard from "@/components/molecules/cutomAlertCard/CutomAlertCard
 import {
   Menu, Modal, Title, useMantineTheme 
 } from "@mantine/core";
-import React, { type FunctionComponent } from "react";
+import React, { type HTMLProps, type ReactNode, useState, type FunctionComponent } from "react";
 
 import * as styles from "./MenuListItem.styles";
 import { BodyText } from "../BodyText/BodyText";
@@ -18,13 +18,13 @@ import { Input } from "../Input/Input";
 interface MenuListItemProps
 {
   readonly active?: boolean;
-  readonly icon: React.ReactNode;
+  readonly icon: ReactNode;
   readonly onClick: () => void;
   readonly onDelete: () => void;
   readonly title: string;
 }
 
-const MenuListItem: FunctionComponent<MenuListItemProps & React.HTMLProps<HTMLButtonElement>> = ({
+const MenuListItem: FunctionComponent<MenuListItemProps & HTMLProps<HTMLButtonElement>> = ({
   active,
   icon,
   onClick,
@@ -32,9 +32,11 @@ const MenuListItem: FunctionComponent<MenuListItemProps & React.HTMLProps<HTMLBu
   title,
 }) =>
 {
-  const [showRenameModal, setShowRenameModal] = React.useState<boolean>(false);
-  const [showDeleteModal, setShowDeleteModal] = React.useState<boolean>(false);
-  const [newFolderName, setNewFolderName] = React.useState<string>("");
+  // const [err, setErr] = useState<string>("Now There's an error");
+  const err = false;
+  const [showRenameModal, setShowRenameModal] = useState<boolean>(false);
+  const [showDeleteModal, setShowDeleteModal] = useState<boolean>(false);
+  const [newFolderName, setNewFolderName] = useState<string>("");
   const theme = useMantineTheme();
   return (
     <>
@@ -67,7 +69,7 @@ const MenuListItem: FunctionComponent<MenuListItemProps & React.HTMLProps<HTMLBu
           <Cross size={32}/>
         </span>
         <Title order={3}>Rename folder</Title>
-        {/* {err.type && <CutomAlertCard variant="error" message={err.message}/>} */}
+        {err && <CutomAlertCard variant="error" message={err}/>}
         <div className="new-folder-input">
           <BodyText styleType="body-01-regular" component="label">Folder name</BodyText>
           <Input
@@ -101,7 +103,7 @@ const MenuListItem: FunctionComponent<MenuListItemProps & React.HTMLProps<HTMLBu
         </span>
         <Title order={3}>Delete folder</Title>
         {/* {err.type && <CutomAlertCard variant="error" message={err.message}/>} */}
-        <BodyText styleType="body-01-regular" component="p">Are you sure you want to delete <strong>Folder name</strong>?</BodyText>
+        <BodyText styleType="body-01-regular" component="p" className="delete-folder-text">Are you sure you want to delete <strong>Folder name</strong>?</BodyText>
         <div className="modal-call-to-action">
           <Button<"button">
             styleType={"secondarySimple" as TButton["styleType"]}
