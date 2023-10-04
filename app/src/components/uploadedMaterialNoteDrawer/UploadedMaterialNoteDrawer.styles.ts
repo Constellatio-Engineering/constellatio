@@ -45,3 +45,16 @@ button{
   flex:1;
 }
 `;
+export const existingNote = (theme: MantineTheme) => css`
+padding:24px 32px;
+background-color: ${theme.colors["neutrals-01"][0]};
+`;
+export const existingNoteActions = (theme: MantineTheme) => css`
+   background: ${theme.colors["neutrals-01"][0]};
+   button{
+        margin-right: 8px;
+    }
+    svg{
+        margin-right: 8px;
+    }
+`;

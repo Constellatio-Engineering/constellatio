@@ -1,10 +1,13 @@
 import { type UploadedFile } from "@/db/schema";
 
+import { RichTextRenderer } from "@caisy/rich-text-react-renderer";
 import { Drawer } from "@mantine/core";
-import React, { type Dispatch, type FunctionComponent } from "react";
+import React, { useState, type Dispatch, type FunctionComponent } from "react";
 
 import * as styles from "./UploadedMaterialNoteDrawer.styles";
 import { Button } from "../atoms/Button/Button";
+import { Edit } from "../Icons/Edit";
+import { Trash } from "../Icons/Trash";
 import { RichtextEditorField } from "../molecules/RichtextEditorField/RichtextEditorField";
 import SlidingPanelTitle from "../molecules/slidingPanelTitle/SlidingPanelTitle";
 import SlidingPanelFileTypeRow from "../slidingPanelFileTypeRow/SlidingPanelFileTypeRow";
@@ -26,6 +29,7 @@ const UploadedMaterialNoteDrawer: FunctionComponent<UploadedMaterialNoteDrawerPr
   showNoteDrewer
 }) => 
 {
+  const [isNoteExists, setIsNoteExists] = useState<boolean>(false);
   return (
     <Drawer
       opened={showNoteDrewer}
@@ -45,40 +49,67 @@ const UploadedMaterialNoteDrawer: FunctionComponent<UploadedMaterialNoteDrawerPr
         />
       )}>
       <SlidingPanelFileTypeRow title={selectedFileNote?.originalFilename ?? ""} fileExtention={selectedFileNote?.fileExtension ?? ""}/>
-      <div css={styles.MaterialNoteRichText}>
-        <RichtextEditorField
-          content={noteRichtext}
-          onChange={(e) => 
-          {
-            if(e.editor.getText().trim() === "")
-            {
-              setNoteRichtext("");
-            }
-            else 
-            {
-              setNoteRichtext(e.editor.getHTML());
-            }
-          }}
-          variant="with-legal-quote"
+      {!isNoteExists && (
+        <>
+          <div css={styles.MaterialNoteRichText}>
+            <RichtextEditorField
+              content={noteRichtext}
+              onChange={(e) => 
+              {
+                if(e.editor.getText().trim() === "")
+                {
+                  setNoteRichtext("");
+                }
+                else 
+                {
+                  setNoteRichtext(e.editor.getHTML());
+                }
+              }}
+              variant="with-legal-quote"
        
-        />
-      </div>
-      <div css={styles.MaterialNotesCallToAction}>
-        <Button<"button">
-          styleType="secondarySimple"
-          onClick={() => setShowNoteDrewer(false)}>
-          Cancel
-        </Button>
-        <Button<"button">
-          styleType="primary"
-          disabled={noteRichtext === "" ? true : false}
-          onClick={() => 
-          {
-            alert(noteRichtext);
-          }}>
-          Save
-        </Button>
-      </div>
+            />
+          </div>
+          <div css={styles.MaterialNotesCallToAction}>
+            <Button<"button">
+              styleType="secondarySimple"
+              onClick={() => setShowNoteDrewer(false)}>
+              Cancel
+            </Button>
+            <Button<"button">
+              styleType="primary"
+              disabled={noteRichtext === "" ? true : false}
+              onClick={() => 
+              {
+                alert(noteRichtext);
+              }}>
+              Save
+            </Button>
+          </div>
+        </>
+      )}
+      {
+        isNoteExists && (
+
+          <>
+            {/* selectedFileNote.note */}
+            <div css={styles.existingNote}>
+              <div css={styles.existingNoteActions}>
+                <Button<"button">
+                  styleType="secondarySubtle"
+                  onClick={() => {}}>
+                  <Edit/> Edit
+                </Button>
+                <Button<"button">
+                  styleType="secondarySubtle"
+                  onClick={() => {}}>
+                  <Trash/> Delete
+                </Button>
+              </div>
+              <RichTextRenderer node={undefined}/>
+            </div>
+          </>
+        )
+      }
     </Drawer>
   );
 };
