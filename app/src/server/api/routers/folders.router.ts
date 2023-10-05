@@ -7,7 +7,7 @@ import { deleteFiles } from "@/server/api/services/uploads.services";
 import { createTRPCRouter, protectedProcedure } from "@/server/api/trpc";
 
 import {
-  and, asc, eq, inArray
+  and, asc, eq
 } from "drizzle-orm";
 
 export const foldersRouter = createTRPCRouter({

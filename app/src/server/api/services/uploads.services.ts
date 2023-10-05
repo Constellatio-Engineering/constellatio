@@ -2,7 +2,7 @@ import { db } from "@/db/connection";
 import { uploadedFiles } from "@/db/schema";
 import { env } from "@/env.mjs";
 import { cloudStorage } from "@/lib/cloud-storage";
-import { getIndicesOfSucceededPromises, getItemsByIndices, removeItemsByIndices } from "@/utils/utils";
+import { getIndicesOfSucceededPromises, getItemsByIndices } from "@/utils/utils";
 
 import { and, eq, inArray } from "drizzle-orm";
 

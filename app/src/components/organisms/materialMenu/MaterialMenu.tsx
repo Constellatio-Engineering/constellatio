@@ -6,7 +6,6 @@ import MenuListItem from "@/components/atoms/menuListItem/MenuListItem";
 import { Cross } from "@/components/Icons/Cross";
 import { FolderIcon } from "@/components/Icons/Folder";
 import { Plus } from "@/components/Icons/Plus";
-import CutomAlertCard from "@/components/molecules/cutomAlertCard/CutomAlertCard";
 import { type UploadFolder } from "@/db/schema";
 import { api } from "@/utils/api";
 
