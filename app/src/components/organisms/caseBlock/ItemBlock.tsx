@@ -4,6 +4,7 @@ import { ClockIcon } from "@/components/Icons/ClockIcon";
 import CaseBlockHead, { type ICaseBlockHeadProps } from "@/components/molecules/caseBlockHead/CaseBlockHead";
 import CaseBlockBookmarkButton from "@/components/organisms/caseBlock/caseBlockBookmarkButton/CaseBlockBookmarkButton";
 import useBookmarks from "@/hooks/useBookmarks";
+import { SearchResults } from "@/hooks/useSearchResults";
 import { type IGenArticleOverviewFragment, type IGenFullCaseFragment } from "@/services/graphql/__generated/sdk";
 
 import Link from "next/link";
@@ -23,11 +24,16 @@ const DictionaryTable: DictionaryTableProps = {
   variant: "dictionary"
 };
 
+const SearchTable: DictionaryTableProps | CasesTableProps = {
+  type: "cases",
+  variant: "search"
+};
+
 export interface ICaseBlockProps 
 {
   readonly blockHead: ICaseBlockHeadProps;
-  readonly items: IGenFullCaseFragment[] | IGenArticleOverviewFragment[];
-  readonly variant: "case" | "dictionary";
+  readonly items: IGenFullCaseFragment[] | IGenArticleOverviewFragment[] ;
+  readonly variant: "case" | "dictionary" | "search";
 }
 
 const ItemBlock: FunctionComponent<ICaseBlockProps> = ({ blockHead, items, variant }) => 
@@ -44,7 +50,7 @@ const ItemBlock: FunctionComponent<ICaseBlockProps> = ({ blockHead, items, varia
   return items.length > 0 ? (
     <div css={styles.wrapper}>
       <CaseBlockHead {...blockHead}/>
-      <Table tableType={variant === "case" ? CasesTable : DictionaryTable}>
+      <Table tableType={variant === "case" ? CasesTable : variant === "dictionary" ? DictionaryTable : SearchTable}>
         {items.map((item) =>
         {
           const isBookmarked = bookmarks.some(bookmark => bookmark?.resourceId === item?.id) || false;

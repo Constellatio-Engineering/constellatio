@@ -5,7 +5,7 @@ import { type ArticleSearchIndexItem, type CaseSearchIndexItem, searchIndices, t
 import { useQuery } from "@tanstack/react-query";
 import { useContext } from "react";
 
-type SearchResults = {
+export type SearchResults = {
   articles: ArticleSearchIndexItem[];
   cases: CaseSearchIndexItem[];
   userUploads: UploadSearchIndexItem[];

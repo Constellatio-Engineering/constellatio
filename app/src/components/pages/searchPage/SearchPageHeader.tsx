@@ -24,19 +24,10 @@ const SearchPageHeader: FunctionComponent = () =>
       {
         try 
         {
-          if(!tabQuery)
-          {
-            await setTabQuery(Object.keys(searchResults)?.[0] ?? "articles");
-          }
-          else 
-          {
-            await setTabQuery(routerTabQuery as string);
-          }
+          if(!tabQuery) { await setTabQuery(Object.keys(searchResults)?.[0] ?? "articles"); }
+          else { await setTabQuery(routerTabQuery as string); }
         }
-        catch (error) 
-        {
-          console.error(error);
-        }
+        catch (error) { console.error(error); }
       })();
       
     }
