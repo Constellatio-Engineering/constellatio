@@ -1,4 +1,5 @@
 import { type UploadedFile } from "@/db/schema";
+import { api } from "@/utils/api";
 
 import { Checkbox } from "@mantine/core";
 import React, { type FunctionComponent } from "react";
@@ -56,6 +57,12 @@ const UploadedMaterialTableBody: FunctionComponent<UploadedMaterialTableBodyProp
   uploadedFiles
 }) => 
 {
+  const apiContext = api.useContext();
+  const { mutate: deleteFile } = api.uploads.deleteUploadedFiles.useMutation({
+    onError: (e) => console.log("error while deleting file", e),
+    onSuccess: async () => apiContext.uploads.getUploadedFiles.invalidate()
+  });
+
   return (
     <>
       {uploadedFiles?.slice(0, showingFiles).map((file, index) => (
@@ -87,7 +94,11 @@ const UploadedMaterialTableBody: FunctionComponent<UploadedMaterialTableBodyProp
               }}><Notepad/>Add Notes
             </BodyText>
           </td>
-          <td css={styles.callToActionCell}><DotsIcon/></td>
+          <td
+            css={styles.callToActionCell}
+            onClick={() => deleteFile({ fileIds: [file.id] })}>
+            <DotsIcon/>
+          </td>
         </tr>
       ))}
     </>

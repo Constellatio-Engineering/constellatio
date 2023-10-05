@@ -2,13 +2,13 @@ import { type SerializedStyles, css } from "@emotion/react";
 import { type MantineTheme } from "@mantine/styles";
 
 export const ListWrapper = css`
-transform: translateY(-120px);
-width: 90%;
-margin: 0 auto;
-display: grid;
-position: relative;
-z-index: 3;
-max-width: 1440px;
+  transform: translateY(-100px);
+  width: 90%;
+  margin: 0 auto;
+  display: grid;
+  position: relative;
+  z-index: 3;
+  max-width: 1440px;
 `;
 
 export const Page = (theme: MantineTheme): SerializedStyles => css`

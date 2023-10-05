@@ -1,4 +1,4 @@
-import { supabase } from "@/supabase/client";
+import { supabase } from "@/lib/supabase";
 
 import {
   createContext, type FunctionComponent, type ReactNode, useEffect, useMemo, useRef, useState 

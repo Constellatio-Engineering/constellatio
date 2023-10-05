@@ -1,7 +1,7 @@
 import { type UploadedFile } from "@/db/schema";
 import { type UploadState } from "@/stores/uploadsProgress.store";
 import { api } from "@/utils/api";
-import { getRandomUuid, removeItemsByIndices } from "@/utils/utils";
+import { getIndicesOfSucceededPromises, getRandomUuid, removeItemsByIndices } from "@/utils/utils";
 
 import { Title } from "@mantine/core";
 import axios from "axios";
@@ -113,14 +113,7 @@ const UploadedMaterialBlock: FunctionComponent<UploadedMaterialBlockProps> = ({
       }
     });
     const uploadResults = await Promise.allSettled(uploads);
-    const indicesOfSuccessfulUploads: number[] = [];
-    uploadResults.forEach((result, index) =>
-    {
-      if(result.status === "fulfilled")
-      {
-        indicesOfSuccessfulUploads.push(index);
-      }
-    });
+    const indicesOfSuccessfulUploads = getIndicesOfSucceededPromises(uploadResults);
     const newSelectedFiles = removeItemsByIndices<FileWithClientSideUuid>(selectedFiles, indicesOfSuccessfulUploads);
     setSelectedFiles(newSelectedFiles);
   };
@@ -158,7 +151,7 @@ const UploadedMaterialBlock: FunctionComponent<UploadedMaterialBlockProps> = ({
       </div>
       <div css={styles.content}>
         {uploadedFiles?.length > 0 ? (
-          <UploadedMaterialTable uploadedFiles={uploadedFiles} {...props}/>
+          <UploadedMaterialTable {...props} uploadedFiles={uploadedFiles}/>
         ) : (
           <EmptyStateCard
             variant="For-small-areas"
