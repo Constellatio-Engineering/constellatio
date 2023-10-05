@@ -4,12 +4,13 @@ export const paths = {
   cases: "/cases",
   confirm: "/confirm",
   dictionary: "/dictionary",
+  downloadDocument: "/api/documents/download",
   login: "/login",
   personalSpace: "/personal-space",
   profile: "/profile",
   recover: "/recover",
   register: "/register",
-  search: "/search",
+  search: "/search"
 };
 
 export const getConfirmEmailUrl = (): string =>

@@ -9,54 +9,19 @@ export const middleware: NextMiddleware = async (req) =>
   console.time("Middleware");
 
   const res = NextResponse.next();
-
-  console.time("Creating supabase client");
   const supabase = createMiddlewareClient({ req, res });
-  console.timeEnd("Creating supabase client");
+  const { isUserLoggedIn } = await getIsUserLoggedIn(supabase);
 
-  console.time("Checking if user is logged in");
-  const isUserLoggedIn = await getIsUserLoggedIn(supabase);
-  console.timeEnd("Checking if user is logged in");
-
-  console.time("Getting user");
-  const { data: { user }, error: getUserError } = await supabase.auth.getUser();
-  console.timeEnd("Getting user");
-
-  if(!isUserLoggedIn || getUserError)
+  if(!isUserLoggedIn)
   {
-    if(getUserError)
-    {
-      console.log("User seems to be logged in but there was an error getting the user. Logging out user.", getUserError);
-      await supabase.auth.signOut();
-    }
-    else
-    {
-      console.log("User is not logged in.");
-    }
-
     const redirectUrl = req.nextUrl.clone();
     redirectUrl.pathname = "/login";
     redirectUrl.searchParams.set("redirectedFrom", req.nextUrl.pathname);
-    console.log("Redirecting to: ", redirectUrl.toString());
+    console.log("User is not logged in. Redirecting to: ", redirectUrl.toString());
     return NextResponse.redirect(redirectUrl);
   }
 
-  if(!user)
-  {
-    console.log("User is logged in but was null. This should not happen but doing nothing for now. This should be investigated.");
-    return NextResponse.next();
-  }
-
-  if(!user.confirmed_at)
-  {
-    // In this case this happens, we should send an additional confirmation email and redirect to an explanation page
-    console.warn("User is not confirmed. This should not happen. User: ", user);
-  }
-
   console.timeEnd("Middleware");
-
-  console.log("User " + user.id);
-
   return NextResponse.next();
 };
 
