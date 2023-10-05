@@ -39,5 +39,10 @@ export const casesCard = css`
 `;
 export const favoritesTab = css``;
 export const uploadedMaterialsTab = css`
-    
+     display: flex;
+    justify-content: flex-start;
+    align-content: center;
+    flex-wrap: wrap;
+    gap: 16px;
+    margin: 24px 0;
 `;

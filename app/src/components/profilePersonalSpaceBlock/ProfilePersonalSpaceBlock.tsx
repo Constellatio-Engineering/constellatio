@@ -1,5 +1,7 @@
 import useBookmarks from "@/hooks/useBookmarks";
 import useCases from "@/hooks/useCases";
+import useUploadedFiles from "@/hooks/useUploadedFiles";
+import useUploadFolders from "@/hooks/useUploadFolders";
 import { type IGenCase } from "@/services/graphql/__generated/sdk";
 
 import Link from "next/link";
@@ -19,11 +21,13 @@ const ProfilePersonalSpaceBlock: FunctionComponent = () =>
 {
   const router = useRouter();
   const [selectedTab, setSelectedTab] = useState<number>(0);
-  const { bookmarks, isLoading } = useBookmarks(undefined);
+  const { bookmarks, isLoading: isUseBookmarksLoading, } = useBookmarks(undefined);
   const allCasesBookmarks = bookmarks.filter(bookmark => bookmark?.resourceType === "case") ?? [];
-  const { allCases = [] } = useCases();
+  const { allCases = [], isLoading: isUseCasesLoading, } = useCases();
   const bookmarkedCases = allCases.filter(caisyCase => allCasesBookmarks.some(bookmark => bookmark.resourceId === caisyCase.id));
-  const tabs = [{ icon: { src: <Bookmark/> }, number: bookmarkedCases?.length, title: "favorites" }, { icon: { src: <FileIcon/> }, number: 0, title: " materials" }];
+  const { folders = [] } = useUploadFolders();
+  const { isLoading: isGetUploadedFilesLoading, uploadedFiles } = useUploadedFiles(folders[0]?.id ?? "");
+  const tabs = [{ icon: { src: <Bookmark/> }, number: bookmarkedCases?.length, title: "favorites" }, { icon: { src: <FileIcon/> }, number: uploadedFiles?.length, title: " materials" }];
 
   return (
     <div css={styles.wrapper}>
@@ -32,25 +36,25 @@ const ProfilePersonalSpaceBlock: FunctionComponent = () =>
         <div css={styles.favoritesTab}>
           <div css={styles.casesCard}>
             {
-              isLoading ? ("Loading...") : 
-                bookmarkedCases && 
+             
+              bookmarkedCases && 
               bookmarkedCases.length > 0 ? (
-                    bookmarkedCases?.slice(0, 6)?.map((bookmarkCase: IGenCase, index: number) => bookmarkCase && (
-                      <React.Fragment key={index}>
-                        <FavoriteCard
-                          onClick={async () => router.push(`/cases/${bookmarkCase?.id}`)}
-                          title={bookmarkCase.title ?? ""}
-                          variant="case"
-                        />
-                      </React.Fragment>
-                    ))
-                  ) : (
-                    <EmptyStateCard 
-                      title="You haven not saved any materials yet"
-                      text="You can save cases, dictionary articles, forum questions and highlighted text to Favourites"
-                      variant="For-small-areas"
-                    />
-                  )
+                  bookmarkedCases?.slice(0, 6)?.map((bookmarkCase: IGenCase, index: number) => bookmarkCase && (
+                    <React.Fragment key={index}>
+                      <FavoriteCard
+                        onClick={async () => router.push(`/cases/${bookmarkCase?.id}`)}
+                        title={bookmarkCase.title ?? ""}
+                        variant="case"
+                      />
+                    </React.Fragment>
+                  ))
+                ) : (
+                  <EmptyStateCard 
+                    title="You haven not saved any materials yet"
+                    text="You can save cases, dictionary articles, forum questions and highlighted text to Favourites"
+                    variant="For-small-areas"
+                  />
+                )
             }
           </div>
           {bookmarkedCases && bookmarkedCases?.length > 6 && (
@@ -65,7 +69,21 @@ const ProfilePersonalSpaceBlock: FunctionComponent = () =>
       {
         selectedTab === 1 && (
           <div css={styles.uploadedMaterialsTab}>
-            <MaterialCard title=" the card with long titlews" fileExtension="pdf" materialType="paper"/>
+            {uploadedFiles.slice(0, 6).map((file, index) => (
+              <MaterialCard
+                title={file?.originalFilename}
+                fileExtension={file?.fileExtension}
+                materialType="paper"
+                key={index}
+              />
+            ))}
+            {uploadedFiles.length > 6 && (
+              <Link href="/personal-space">
+                <Button<"button"> styleType="secondarySimple">
+                  View all
+                </Button>
+              </Link>
+            )}
           </div>
         )
       }

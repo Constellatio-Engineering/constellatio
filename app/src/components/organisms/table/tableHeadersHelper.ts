@@ -104,6 +104,7 @@ export const tableHeaders = ({
           ];
 
         default:
+          console.error("tableType.variant is not defined", tableType);
           return [];
       }
 
