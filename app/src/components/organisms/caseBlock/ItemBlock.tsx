@@ -79,7 +79,7 @@ const ItemBlock: FunctionComponent<ICaseBlockProps> = ({
             <tr key={item.id}>
               <td className="primaryCell">
                 <Link passHref href={`/${variant === "case" ? "cases" : "dictionary"}/${item?.id}`}>
-                  <TableCell variant="titleTableCell">
+                  <TableCell variant="titleTableCell" clickable>
                     {item?.title}
                   </TableCell>
                 </Link>

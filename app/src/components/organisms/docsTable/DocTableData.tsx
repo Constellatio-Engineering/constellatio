@@ -32,23 +32,21 @@ export const DocsTableData: FunctionComponent<Document> = (document) =>
       </td>
       <td css={styles.docDate}><BodyText styleType="body-01-medium" component="p">{formatDate(updatedAt)}</BodyText></td>
       <td css={styles.docTags}><BodyText styleType="body-02-medium" component="p">Tags (999)</BodyText></td>
-      <td
-        css={styles.callToActionCell}> 
-        <Menu shadow="md" width={200}>
-          <Menu.Target>
-            <span><button type="button" css={styles.callToActionCell}><DotsIcon/></button></span>
-          </Menu.Target>
-          <Menu.Dropdown>
-            <Menu.Item><span className="label" onClick={() => { setEditDocumentState(document); }}><Edit/>Rename and edit</span></Menu.Item>
-            <Menu.Divider/>
-            <Menu.Item><span className="label"><FolderIcon/>Move to</span></Menu.Item>
-            <Menu.Divider/>
-            <Menu.Item><span className="label"><DownloadIcon/>Download</span></Menu.Item>
-            <Menu.Divider/>
-            <Menu.Item onClick={() => {}}><span className="label"><Trash/>Delete</span></Menu.Item>
-          </Menu.Dropdown>
-        </Menu>
-      </td>
+      <Menu shadow="md" width={200}>
+        <Menu.Target>
+          <td css={styles.callToActionCell}>    <span><button type="button" css={styles.callToActionCell}><DotsIcon/></button></span></td>
+        </Menu.Target>
+        <Menu.Dropdown>
+          <Menu.Item><span className="label" onClick={() => { setEditDocumentState(document); }}><Edit/>Rename and edit</span></Menu.Item>
+          <Menu.Divider/>
+          <Menu.Item><span className="label"><FolderIcon/>Move to</span></Menu.Item>
+          <Menu.Divider/>
+          <Menu.Item><span className="label"><DownloadIcon/>Download</span></Menu.Item>
+          <Menu.Divider/>
+          <Menu.Item onClick={() => {}}><span className="label"><Trash/>Delete</span></Menu.Item>
+        </Menu.Dropdown>
+      </Menu>
+     
     </>
   );
 };

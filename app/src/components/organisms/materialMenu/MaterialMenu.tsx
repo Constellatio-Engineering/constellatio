@@ -2,7 +2,7 @@ import { BodyText } from "@/components/atoms/BodyText/BodyText";
 import { Button, type TButton } from "@/components/atoms/Button/Button";
 import { Input } from "@/components/atoms/Input/Input";
 import { LinkButton } from "@/components/atoms/LinkButton/LinkButton";
-import MenuListItem from "@/components/atoms/menuListItem/MenuListItem";
+import MaterialsMenuListItem from "@/components/atoms/materialMenuListItem/MaterialsMenuListItem";
 import { Cross } from "@/components/Icons/Cross";
 import { FolderIcon } from "@/components/Icons/Folder";
 import { Plus } from "@/components/Icons/Plus";
@@ -61,7 +61,7 @@ const MaterialMenu: FunctionComponent<MaterialMenuProps> = ({ folders, selectedF
         <Title order={4}>Your folders</Title>
       </div>      
       <div css={styles.content}>
-        <MenuListItem
+        <MaterialsMenuListItem
           key="default-folder"
           title="Default folder"
           onClick={() => setSelectedFolderId(null)}
@@ -70,7 +70,7 @@ const MaterialMenu: FunctionComponent<MaterialMenuProps> = ({ folders, selectedF
           icon={<FolderIcon/>}
         />
         {folders?.map((folder, folderIndex) => (
-          <MenuListItem
+          <MaterialsMenuListItem
             onClick={() => setSelectedFolderId(folder.id)}
             onDelete={() => deleteFolder({ folderId: folder.id })}
             key={folderIndex}

@@ -24,7 +24,7 @@ interface MenuListItemProps
   readonly title: string;
 }
 
-const MenuListItem: FunctionComponent<MenuListItemProps & HTMLProps<HTMLButtonElement>> = ({
+const MaterialsMenuListItem: FunctionComponent<MenuListItemProps & HTMLProps<HTMLButtonElement>> = ({
   active,
   icon,
   onClick,
@@ -125,4 +125,4 @@ const MenuListItem: FunctionComponent<MenuListItemProps & HTMLProps<HTMLButtonEl
   );
 };
 
-export default MenuListItem;
+export default MaterialsMenuListItem;

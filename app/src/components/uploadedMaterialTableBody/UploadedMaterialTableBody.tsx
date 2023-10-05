@@ -91,24 +91,23 @@ const UploadedMaterialTableBody: FunctionComponent<UploadedMaterialTableBodyProp
               }}><Notepad/>Add Notes
             </BodyText>
           </td>
-          {/* <td css={styles.callToActionCell}><DotsIcon/></td> */}
-          <td
-            css={styles.callToActionCell}> 
-            <Menu shadow="md" width={200}>
-              <Menu.Target>
-                <span><button type="button" css={styles.callToActionCell}><DotsIcon/></button></span>
-              </Menu.Target>
-              <Menu.Dropdown>
-                <Menu.Item><span className="label" onClick={() => { }}><Edit/>Rename</span></Menu.Item>
-                <Menu.Divider/>
-                <Menu.Item><span className="label"><FolderIcon/>Move to</span></Menu.Item>
-                <Menu.Divider/>
-                <Menu.Item><span className="label"><DownloadIcon/>Download</span></Menu.Item>
-                <Menu.Divider/>
-                <Menu.Item onClick={() => {}}><span className="label"><Trash/>Delete</span></Menu.Item>
-              </Menu.Dropdown>
-            </Menu>
-          </td>
+          <Menu shadow="md" width={200}>
+            <Menu.Target>
+              <td
+                css={styles.callToActionCell}>   <span><button type="button" css={styles.callToActionCell}><DotsIcon/></button></span>  
+              </td>
+            </Menu.Target>
+            <Menu.Dropdown>
+              <Menu.Item><span className="label" onClick={() => { }}><Edit/>Rename</span></Menu.Item>
+              <Menu.Divider/>
+              <Menu.Item><span className="label"><FolderIcon/>Move to</span></Menu.Item>
+              <Menu.Divider/>
+              <Menu.Item><span className="label"><DownloadIcon/>Download</span></Menu.Item>
+              <Menu.Divider/>
+              <Menu.Item onClick={() => {}}><span className="label"><Trash/>Delete</span></Menu.Item>
+            </Menu.Dropdown>
+          </Menu>
+        
         </tr>
       ))}
     </>

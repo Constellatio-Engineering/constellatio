@@ -23,7 +23,7 @@ export const headerImgs = css`
     }
     &:nth-child(3) {
       position: absolute;
-      left: -9%;
+      left: -5%;
       top: -12%;
     }
   }
