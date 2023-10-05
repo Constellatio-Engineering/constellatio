@@ -1,14 +1,18 @@
 import { type UploadedFile } from "@/db/schema";
 
-import { Checkbox } from "@mantine/core";
+import { Checkbox, Menu } from "@mantine/core";
 import React, { type FunctionComponent } from "react";
 
 import * as styles from "./UploadedMaterialTableBody.styles";
 import { BodyText } from "../atoms/BodyText/BodyText";
 import { DotsIcon } from "../Icons/dots";
+import { DownloadIcon } from "../Icons/DownloadIcon";
+import { Edit } from "../Icons/Edit";
 import { FileIcon } from "../Icons/FileIcon";
+import { FolderIcon } from "../Icons/Folder";
 import { ImageIcon } from "../Icons/image";
 import { Notepad } from "../Icons/Notepad";
+import { Trash } from "../Icons/Trash";
 import { VideoIcon } from "../Icons/Video";
 
 interface UploadedMaterialTableBodyProps
@@ -87,7 +91,24 @@ const UploadedMaterialTableBody: FunctionComponent<UploadedMaterialTableBodyProp
               }}><Notepad/>Add Notes
             </BodyText>
           </td>
-          <td css={styles.callToActionCell}><DotsIcon/></td>
+          {/* <td css={styles.callToActionCell}><DotsIcon/></td> */}
+          <td
+            css={styles.callToActionCell}> 
+            <Menu shadow="md" width={200}>
+              <Menu.Target>
+                <span><button type="button" css={styles.callToActionCell}><DotsIcon/></button></span>
+              </Menu.Target>
+              <Menu.Dropdown>
+                <Menu.Item><span className="label" onClick={() => { }}><Edit/>Rename</span></Menu.Item>
+                <Menu.Divider/>
+                <Menu.Item><span className="label"><FolderIcon/>Move to</span></Menu.Item>
+                <Menu.Divider/>
+                <Menu.Item><span className="label"><DownloadIcon/>Download</span></Menu.Item>
+                <Menu.Divider/>
+                <Menu.Item onClick={() => {}}><span className="label"><Trash/>Delete</span></Menu.Item>
+              </Menu.Dropdown>
+            </Menu>
+          </td>
         </tr>
       ))}
     </>

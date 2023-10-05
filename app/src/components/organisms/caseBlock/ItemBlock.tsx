@@ -109,7 +109,9 @@ const ItemBlock: FunctionComponent<ICaseBlockProps> = ({
                 />
               </td>
               {tableType === "favorites" && (
-                <TableCell variant="simpleTableCell" icon={<Notepad/>}>Notes</TableCell>
+                <td>
+                  <TableCell variant="simpleTableCell" icon={<Notepad/>}>Notes</TableCell>
+                </td>
               )}
             </tr>
           );

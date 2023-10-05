@@ -55,8 +55,8 @@ export const callToActionCell = css`
 background-color: transparent;
 border:0;
 outline:0;
-
 `;
+
 export const docName = (theme: MantineTheme) => css`
   color: ${theme.colors["neutrals-02"][1]};
 `;

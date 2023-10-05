@@ -36,7 +36,7 @@ export const DocsTableData: FunctionComponent<Document> = (document) =>
         css={styles.callToActionCell}> 
         <Menu shadow="md" width={200}>
           <Menu.Target>
-            <button type="button" css={styles.callToActionCell}><DotsIcon/></button>
+            <span><button type="button" css={styles.callToActionCell}><DotsIcon/></button></span>
           </Menu.Target>
           <Menu.Dropdown>
             <Menu.Item><span className="label" onClick={() => { setEditDocumentState(document); }}><Edit/>Rename and edit</span></Menu.Item>

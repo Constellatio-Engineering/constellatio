@@ -16,12 +16,14 @@ const TableCell: FunctionComponent<ITableCellProps> = ({ children, icon, variant
   const theme = useMantineTheme();
 
   return (
-    <button css={styles.wrapper({ theme, variant })} type="button">
-      {icon && <div css={styles.iconWrapper({ variant })}>{icon}</div>}
-      <BodyText styleType={variant === "titleTableCell" ? "body-01-medium" : "body-02-medium"} component="p" title={JSON.stringify(children)}>
-        {children}
-      </BodyText>
-    </button>
+    <div>
+      <button css={styles.wrapper({ theme, variant })} type="button">
+        {icon && <div css={styles.iconWrapper({ variant })}>{icon}</div>}
+        <BodyText styleType={variant === "titleTableCell" ? "body-01-medium" : "body-02-medium"} component="p" title={JSON.stringify(children)}>
+          {children}
+        </BodyText>
+      </button>
+    </div>
   );
 };
 

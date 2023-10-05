@@ -39,7 +39,7 @@ const MenuListItem: FunctionComponent<MenuListItemProps & HTMLProps<HTMLButtonEl
   const [newFolderName, setNewFolderName] = useState<string>("");
   const theme = useMantineTheme();
   return (
-    <>
+    <div>
       <button type="button" onClick={onClick} css={styles.wrapper({ active, theme })}>
         <Menu width={250} position="left-start">
           <BodyText styleType="body-01-medium" component="p">
@@ -121,7 +121,7 @@ const MenuListItem: FunctionComponent<MenuListItemProps & HTMLProps<HTMLButtonEl
           </Button>
         </div>
       </Modal>
-    </>
+    </div>
   );
 };
 
