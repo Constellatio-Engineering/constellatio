@@ -4,6 +4,7 @@ import { FolderIcon } from "@/components/Icons/Folder";
 import { Trash } from "@/components/Icons/Trash";
 import { type Document } from "@/db/schema";
 import useDocumentEditorStore from "@/stores/documentEditor.store";
+import { paths } from "@/utils/paths";
 
 import { Menu } from "@mantine/core";
 import axios from "axios";
@@ -27,7 +28,7 @@ export const DocsTableData: FunctionComponent<Document> = (doc) =>
 
     try 
     {
-      const response = await axios.post("/api/test", { documentId, }, {
+      const response = await axios.post(paths.downloadDocument, { documentId, }, {
         responseType: "blob",
       });
 

@@ -1,16 +1,24 @@
 import { db } from "@/db/connection";
 import { documents } from "@/db/schema";
 import { downloadDocumentSchema } from "@/schemas/documents/downloadDocument.schema";
+import { getIsUserLoggedIn } from "@/utils/auth";
 import { createPdfBuffer } from "@/utils/pdf";
 
+import { createPagesServerClient } from "@supabase/auth-helpers-nextjs";
 import { and, eq } from "drizzle-orm";
 import { type NextApiHandler } from "next";
-import { z } from "zod";
 
 const handler: NextApiHandler = async (req, res) =>
 {
-  const { documentId } = req.body;
+  const supabase = createPagesServerClient({ req, res });
+  const getIsUserLoggedInResult = await getIsUserLoggedIn(supabase);
 
+  if(!getIsUserLoggedInResult.isUserLoggedIn)
+  {
+    return res.status(401).json({ error: "Unauthorized" });
+  }
+
+  const { user } = getIsUserLoggedInResult;
   const parsedBody = downloadDocumentSchema.safeParse(req.body);
 
   if(!parsedBody.success)
@@ -20,8 +28,8 @@ const handler: NextApiHandler = async (req, res) =>
 
   const doc = await db.query.documents.findFirst({
     where: and(
-      eq(documents.id, documentId),
-      // eq(documents.userId, userId)
+      eq(documents.id, parsedBody.data.documentId),
+      eq(documents.userId, user.id)
     ) 
   });
 
