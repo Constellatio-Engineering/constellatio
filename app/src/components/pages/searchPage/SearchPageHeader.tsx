@@ -4,7 +4,7 @@ import useSearchResults from "@/hooks/useSearchResults";
 import { Title } from "@mantine/core";
 import { useRouter } from "next/router";
 import { useQueryState } from "next-usequerystate";
-import React, { useEffect, type FunctionComponent, useState } from "react";
+import { useEffect, type FunctionComponent } from "react";
 
 import * as styles from "./SearchPage.styles";
 import { SearchPageHeaderBgLayer } from "./SearchPageHeaderBgLayer";
@@ -12,32 +12,40 @@ import { SearchPageHeaderBgLayer } from "./SearchPageHeaderBgLayer";
 const SearchPageHeader: FunctionComponent = () => 
 {
   const router = useRouter();
+  const routerTabQuery = router.query.tab as string;
   const { searchResults } = useSearchResults();
   const [tabQuery, setTabQuery] = useQueryState("tab");
-  // Used set State instead of useQueryState because I get react hydration warning
-  const [activeTab, setActiveTab] = useState<string>(Object.keys(searchResults)?.[0] ?? "");
 
   useEffect(() => 
   {
     if(typeof window !== "undefined")
     {
-      if(router.query.tab !== tabQuery) 
+      void (async () => 
       {
-        void (async () => 
+        try 
         {
-          try 
+          if(!tabQuery)
           {
-            await setTabQuery(router.query.tab as string);
-            setActiveTab(router.query.tab as string);
+            await setTabQuery(Object.keys(searchResults)?.[0] ?? "articles");
           }
-          catch (error) 
+          else 
           {
-            console.error(error);
+            await setTabQuery(routerTabQuery as string);
           }
-        })();
-      }
+        }
+        catch (error) 
+        {
+          console.error(error);
+        }
+      })();
+      
     }
-  }, [tabQuery, setTabQuery, router.query.tab, searchResults]);
+
+  /** 
+   * if added tabQuery to the dependency array, it will cause issues activating menu tab on route change or sharing url
+  */
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [setTabQuery, routerTabQuery, searchResults]);
 
   return (
     <div css={styles.headerWrapper}>
@@ -47,13 +55,13 @@ const SearchPageHeader: FunctionComponent = () =>
           <SearchPageHeaderBgLayer/>
         </span>
       </div>
-      <div css={styles.navBar}>
+      <div css={styles.navBar}>                                        
         {Object.keys(searchResults).map((item, index) => (
           <MenuTab
             key={index}
             title={item}
             number={(searchResults as { [key: string]: unknown[] })[item]?.length}
-            active={router.query.tab ? activeTab === item : false}
+            active={tabQuery === item}
             onClick={async () => 
             {
               await router.replace({ query: { ...router.query, tab: item } });
