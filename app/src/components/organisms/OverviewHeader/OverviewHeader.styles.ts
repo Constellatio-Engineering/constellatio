@@ -1,3 +1,5 @@
+import { headerHeightPx } from "@/components/organisms/Header/Header.styles";
+
 import { css } from "@emotion/react";
 import { type MantineTheme } from "@mantine/styles";
 
@@ -12,8 +14,9 @@ export const contentHeader = ({ theme, variant }: {
   align-items: center;
   justify-content: center;
   gap: 32px;
-  /* min-height: 50vh; */
-  height: 680px;
+  padding-top: ${headerHeightPx}px;
+  height: 600px;
+  max-height: 50vh;
   background: ${variant === "case" ? theme.colors["cc-cases"][2] : variant === "dictionary" ? theme.colors["cc-dictionary"][2] : variant === "red" && theme.colors["brand-01"][4]} url("/images/overview-header-bg.svg") no-repeat center center;
 #overlay-lines{
   position: absolute;

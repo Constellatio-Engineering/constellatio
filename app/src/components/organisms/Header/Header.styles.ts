@@ -10,11 +10,13 @@ const DefaultHeader = css`
 	justify-content: space-between;
 `;
 
+export const headerHeightPx = 60;
+
 export const wrapper = ({ theme, variant }: {
   theme: MantineTheme;
   variant: "default" | "simple";
 }) => css`
-	height: 60px;
+	height: ${headerHeightPx}px;
 	width: 100%;
 	max-width: 1440px;
 	margin:0 auto;
