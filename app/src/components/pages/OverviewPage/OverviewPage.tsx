@@ -89,6 +89,7 @@ const OverviewPage: FunctionComponent<OverviewPageProps> = ({ content, variant }
                   items: items.length,
                   variant
                 }}
+                tableType="cases"
                 items={items}
               />
             </Fragment>

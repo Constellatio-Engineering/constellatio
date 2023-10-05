@@ -46,10 +46,7 @@ const PersonalSpacePage: FunctionComponent = () =>
     if(current != null)
     {
       const x = acc.find((item: IGenMainCategory) => item.mainCategory === current.mainCategory);
-      if(!x) 
-      {
-        return acc.concat([current]);
-      }
+      if(!x) { return acc.concat([current]); }
     }
     return acc;
   }, []);
@@ -68,28 +65,20 @@ const PersonalSpacePage: FunctionComponent = () =>
     MaterialsCategoryId,
     uploadedFilesLength: uploadedFiles?.length ?? 0,
   });
-
-  const [selectedCategory, setSelectedCategory] = useState<IGenMainCategory | undefined>(categories?.[1]);
+  const [selectedCategory, setSelectedCategory] = useState<IGenMainCategory | undefined>(categories?.[0]);
   const FavCasesTabId = useId();
   const FavDictionaryTabId = useId();
   const FavForumsTabId = useId();
   const FavHighlightsTabId = useId();
   const isFavoriteTab = (id: string): boolean => id === categories?.[0]?.id;
   const areUploadsInProgress = uploads.some(u => u.state.type === "uploading");
-  const favoriteCategoryNavTabs = [{ id: FavCasesTabId, itemsPerTab: bookmarkedCases?.length ?? 0, title: "CASES" }, { id: FavDictionaryTabId, itemsPerTab: 999, title: "DICTIONARY" }, { id: FavForumsTabId, itemsPerTab: 999, title: "FORUM" }, { id: FavHighlightsTabId, itemsPerTab: 999, title: "HIGHLIGHTS" }];
+  const favoriteCategoryNavTabs = [{ id: FavCasesTabId, itemsPerTab: bookmarkedCases?.length ?? 0, title: "CASES" }, { id: FavDictionaryTabId, itemsPerTab: 0, title: "DICTIONARY" }];
   const [selectedTabId, setSelectedTabId] = useState<string>(favoriteCategoryNavTabs?.[0]?.id as string);
   const casesByMainCategory = (id: Nullable<string>): IGenFullCaseFragment[] | IGenArticleOverviewFragment[] => bookmarkedCases?.filter(bookmarkedCase =>
   {
     return bookmarkedCase.mainCategoryField?.[0]?.id === id;
   });
   const [showFileViewerModal, setShowFileViewerModal] = useState<boolean>(false);
-  React.useEffect(() => 
-  {
-    if(selectedFileIdForPreview) { setShowFileViewerModal(true); }
-    if(!selectedFileIdForPreview) { setShowFileViewerModal(false); }
-    
-  }, [selectedFileIdForPreview]);
-
   return (
     <div css={styles.wrapper}>
       <div css={styles.header}>
@@ -170,12 +159,19 @@ const PersonalSpacePage: FunctionComponent = () =>
                   setUploadState={setUploadState}
                   selectedFiles={selectedFiles}
                   setSelectedFileIdForPreview={setSelectedFileIdForPreview}
+                  setShowFileViewerModal={setShowFileViewerModal}
                   setSelectedFiles={setSelectedFiles}
                   uploadedFiles={uploadedFiles}
                   selectedFolderId={selectedFolderId}
                 />
                 <FileUploadMenu uploads={uploads}/>
-                {selectedFileIdForPreview && <FileViewer fileId={selectedFileIdForPreview} showFileViewerModal={showFileViewerModal}/>}
+                {selectedFileIdForPreview && (
+                  <FileViewer
+                    fileId={selectedFileIdForPreview}
+                    setShowFileViewerModal={setShowFileViewerModal}
+                    showFileViewerModal={showFileViewerModal}
+                  />
+                )}
               </div>
             </div>
           </>
@@ -184,5 +180,4 @@ const PersonalSpacePage: FunctionComponent = () =>
     </div>
   );
 };
-
 export default PersonalSpacePage;

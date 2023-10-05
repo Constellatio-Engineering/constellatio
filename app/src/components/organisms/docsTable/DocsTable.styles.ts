@@ -23,6 +23,9 @@ export const tableWrapper = (theme: MantineTheme) => css`
     width: max-content;
     vertical-align: middle;
     white-space: nowrap;
+    &:hover{
+      background-color: ${theme.colors["neutrals-01"][1]};
+    }
   }
 
   tr {
@@ -30,6 +33,12 @@ export const tableWrapper = (theme: MantineTheme) => css`
   }
   .primaryCell {
     width: 100%;
+  }
+  .label{
+    svg{
+      vertical-align: text-bottom;
+      margin-right: 8px;
+    }
   }
 `;
 
@@ -42,7 +51,12 @@ export const tableBody = (theme: MantineTheme) => css`
   background: ${theme.colors["neutrals-01"][0]};
 `;
 
-export const callToActionCell = css``;
+export const callToActionCell = css`
+background-color: transparent;
+border:0;
+outline:0;
+
+`;
 export const docName = (theme: MantineTheme) => css`
   color: ${theme.colors["neutrals-02"][1]};
 `;

@@ -3,7 +3,7 @@ import { css } from "@emotion/react";
 export const table = css`
   .primaryCell{
     width: 100%;
-    max-width: 500px;
+    max-width: 350px;
     overflow: hidden;
     p{
       white-space: nowrap;

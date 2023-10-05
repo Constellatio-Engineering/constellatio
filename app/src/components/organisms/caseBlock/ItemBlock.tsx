@@ -1,6 +1,7 @@
 import StatusTableCell from "@/components/atoms/statusTableCell/StatusTableCell";
 import TableCell from "@/components/atoms/tableCell/TableCell";
 import { ClockIcon } from "@/components/Icons/ClockIcon";
+import { Notepad } from "@/components/Icons/Notepad";
 import CaseBlockHead, { type ICaseBlockHeadProps } from "@/components/molecules/caseBlockHead/CaseBlockHead";
 import CaseBlockBookmarkButton from "@/components/organisms/caseBlock/caseBlockBookmarkButton/CaseBlockBookmarkButton";
 import useBookmarks from "@/hooks/useBookmarks";
@@ -23,14 +24,25 @@ const DictionaryTable: DictionaryTableProps = {
   variant: "dictionary"
 };
 
+const FavoriteCasesTable: CasesTableProps = {
+  type: "cases",
+  variant: "favorites"
+};
+
 export interface ICaseBlockProps 
 {
   readonly blockHead: ICaseBlockHeadProps;
   readonly items: IGenFullCaseFragment[] | IGenArticleOverviewFragment[];
+  readonly tableType?: "all-cases" | "cases" | "favorites" | "search" | "dictionary";
   readonly variant: "case" | "dictionary";
 }
 
-const ItemBlock: FunctionComponent<ICaseBlockProps> = ({ blockHead, items, variant }) => 
+const ItemBlock: FunctionComponent<ICaseBlockProps> = ({
+  blockHead,
+  items,
+  tableType,
+  variant
+}) => 
 {
   const { bookmarks: casesBookmarks, isLoading: isGetCasesBookmarksLoading } = useBookmarks("case", {
     enabled: variant === "case"
@@ -41,10 +53,23 @@ const ItemBlock: FunctionComponent<ICaseBlockProps> = ({ blockHead, items, varia
   const bookmarks = variant === "case" ? casesBookmarks : articlesBookmarks;
   const isLoading = variant === "case" ? isGetCasesBookmarksLoading : isGetArticlesBookmarksLoading;
 
-  return (
+  const tableTypePicker = (): DictionaryTableProps | CasesTableProps => 
+  {
+    switch (variant) 
+    {
+      case "case":
+        return tableType === "cases" ? CasesTable : tableType === "favorites" ? FavoriteCasesTable : CasesTable;
+      case "dictionary":
+        return DictionaryTable;
+      default:
+        return CasesTable;
+    }
+  };
+
+  return items.length > 0 ? (
     <div css={styles.wrapper}>
       <CaseBlockHead {...blockHead}/>
-      <Table tableType={variant === "case" ? CasesTable : DictionaryTable}>
+      <Table tableType={tableTypePicker()}>
         {items.map((item) =>
         {
           const isBookmarked = bookmarks.some(bookmark => bookmark?.resourceId === item?.id) || false;
@@ -72,8 +97,9 @@ const ItemBlock: FunctionComponent<ICaseBlockProps> = ({ blockHead, items, varia
                 </td>
               )}
               <td title={topicsCombined}>
-                <TableCell variant="simpleTableCell">{topicsCombined}</TableCell>
+                <TableCell variant="simpleTableCell">{item?.topic?.[0]?.topicName}</TableCell>
               </td>
+              {tableType === "favorites" && <td><TableCell variant="simpleTableCell">{item?.legalArea?.legalAreaName}</TableCell></td>}
               <td>
                 <CaseBlockBookmarkButton
                   areAllBookmarksLoading={isLoading}
@@ -82,12 +108,15 @@ const ItemBlock: FunctionComponent<ICaseBlockProps> = ({ blockHead, items, varia
                   variant={variant}
                 />
               </td>
+              {tableType === "favorites" && (
+                <TableCell variant="simpleTableCell" icon={<Notepad/>}>Notes</TableCell>
+              )}
             </tr>
           );
         })}
       </Table>
     </div>
-  );
+  ) : null;
 };
 
 export default ItemBlock;

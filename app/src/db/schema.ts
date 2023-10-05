@@ -29,7 +29,7 @@ export type UserInsert = InferInsertModel<typeof users>;
 export type User = InferSelectModel<typeof users>;
 
 export const bookmarks = pgTable("Bookmark", {
-  id: uuid("Id").defaultRandom().unique().notNull(),
+  id: uuid("Id").defaultRandom().unique().notNull().primaryKey(),
   userId: uuid("UserId").references(() => users.id, { onDelete: "no action" }).notNull(),
   resourceType: resourceTypeEnum("ResourceType").notNull(),
   createdAt: timestamp("CreatedAt").defaultNow().notNull(),
@@ -42,7 +42,7 @@ export type BookmarkInsert = InferInsertModel<typeof bookmarks>;
 export type Bookmark = InferSelectModel<typeof bookmarks>;
 
 export const uploadFolders = pgTable("UploadFolder", {
-  id: uuid("Id").defaultRandom().unique().notNull(),
+  id: uuid("Id").defaultRandom().unique().notNull().primaryKey(),
   createdAt: timestamp("CreatedAt").defaultNow().notNull(),
   userId: uuid("UserId").references(() => users.id, { onDelete: "no action" }).notNull(),
   name: text("Name").notNull()
@@ -52,7 +52,7 @@ export type UploadFolderInsert = InferInsertModel<typeof uploadFolders>;
 export type UploadFolder = InferSelectModel<typeof uploadFolders>;
 
 export const uploadedFiles = pgTable("UploadedFile", {
-  id: uuid("Id").defaultRandom().unique().notNull(),
+  id: uuid("Id").defaultRandom().unique().notNull().primaryKey(),
   userId: uuid("UserId").references(() => users.id, { onDelete: "no action" }).notNull(),
   createdAt: timestamp("CreatedAt").defaultNow().notNull(),
   folderId: uuid("FolderId").references(() => uploadFolders.id, { onDelete: "no action" }),
@@ -66,7 +66,7 @@ export type UploadedFileInsert = InferInsertModel<typeof uploadedFiles>;
 export type UploadedFile = InferSelectModel<typeof uploadedFiles>;
 
 export const documents = pgTable("Document", {
-  id: uuid("Id").defaultRandom().unique().notNull(),
+  id: uuid("Id").defaultRandom().unique().notNull().primaryKey(),
   userId: uuid("UserId").references(() => users.id, { onDelete: "no action" }).notNull(),
   createdAt: timestamp("CreatedAt").defaultNow().notNull(),
   updatedAt: timestamp("UpdatedAt").defaultNow().notNull(),
