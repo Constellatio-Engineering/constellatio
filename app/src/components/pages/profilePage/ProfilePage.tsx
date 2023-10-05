@@ -21,7 +21,11 @@ const ProfilePage: FunctionComponent = () =>
   return (
     <div css={styles.wrapper}>
       <ProfilePageHeader/>
-      <Container maw={1440} sx={{ display: "flex", gap: "64px", padding: "0px 60px;" }}>
+      <Container
+        maw={1440}
+        sx={{
+          alignItems: "flex-start", display: "flex", gap: "64px", padding: "0px 60px;" 
+        }}>
         <ProfileMenu tabs={tabs} setTabs={setTabs}/>
         <ProfileOverview/>
       </Container>

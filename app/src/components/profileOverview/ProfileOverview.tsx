@@ -1,7 +1,7 @@
+import { Title } from "@mantine/core";
 import React, { type FunctionComponent } from "react";
 
 import * as styles from "./ProfileOverview.styles";
-import { Title } from "@mantine/core";
 import ProfilePersonalSpaceBlock from "../profilePersonalSpaceBlock/ProfilePersonalSpaceBlock";
 
 const ProfileOverview: FunctionComponent = () => (

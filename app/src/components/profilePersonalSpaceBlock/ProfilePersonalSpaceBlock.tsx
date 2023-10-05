@@ -1,62 +1,74 @@
-import React, { type FunctionComponent,useState } from "react";
+import useBookmarks from "@/hooks/useBookmarks";
+import useCases from "@/hooks/useCases";
+import { type IGenCase } from "@/services/graphql/__generated/sdk";
+
+import Link from "next/link";
+import { useRouter } from "next/router";
+import React, { type FunctionComponent, useState } from "react";
 
 import * as styles from "./ProfilePersonalSpaceBlock.styles";
-import IconButton from "../atoms/iconButton/IconButton";
-import { FolderIcon } from "../Icons/Folder";
-import { CaptionText } from "../atoms/CaptionText/CaptionText";
-import { SubtitleText } from "../atoms/SubtitleText/SubtitleText";
-import { Tabs } from "@mantine/core";
-import { Trash } from "../Icons/Trash";
+import { Button } from "../atoms/Button/Button";
+import FavoriteCard from "../favoriteCard/FavoriteCard";
 import { Bookmark } from "../Icons/Bookmark";
 import { FileIcon } from "../Icons/FileIcon";
-import { Switcher } from "../molecules/Switcher/Switcher";
-import { SwitcherTab } from "../atoms/Switcher-tab/SwitcherTab";
+import MaterialCard from "../materialCard/MaterialCard";
+import EmptyStateCard from "../organisms/emptyStateCard/EmptyStateCard";
+import ProfilePersonalSpaceBlockHead from "../profilePersonalSpaceBlockHead/ProfilePersonalSpaceBlockHead";
 
-interface ProfilePersonalSpaceBlockProps
+const ProfilePersonalSpaceBlock: FunctionComponent = () => 
 {
+  const router = useRouter();
+  const [selectedTab, setSelectedTab] = useState<number>(0);
+  const { bookmarks, isLoading } = useBookmarks(undefined);
+  const allCasesBookmarks = bookmarks.filter(bookmark => bookmark?.resourceType === "case") ?? [];
+  const { allCases = [] } = useCases();
+  const bookmarkedCases = allCases.filter(caisyCase => allCasesBookmarks.some(bookmark => bookmark.resourceId === caisyCase.id));
+  const tabs = [{ icon: { src: <Bookmark/> }, number: bookmarkedCases?.length, title: "favorites" }, { icon: { src: <FileIcon/> }, number: 0, title: " materials" }];
 
-}
-
-const ProfilePersonalSpaceBlock: FunctionComponent<ProfilePersonalSpaceBlockProps> = ({  }) => {
-  
-  const tabs = [{title:"favorites",number:0, icon:{src: <Bookmark/>}},{title:" materials",number:0,icon:{src:<FileIcon/>}}];
-  const [selectedTab, setSelectedTab] = useState<number>(0)
   return (
     <div css={styles.wrapper}>
-      <div css={styles.blockHead}>
-       <div css={styles.blockHeadText}>
-       <IconButton icon={<FolderIcon />} css={styles.blockHeadIcon} onClick={() => { } } size={"big"}/>
-        <div>
-          <div css={styles.blockHeadDescription}><CaptionText styleType={"caption-01-medium"} component="p">PERSONAL SPACE</CaptionText></div>
-          <div css={styles.blockHeadTitle}><SubtitleText styleType="subtitle-01-medium" component="p">{tabs[selectedTab]?.number} {tabs[selectedTab]?.title}</SubtitleText></div>
+      <ProfilePersonalSpaceBlockHead selectedTab={selectedTab} setSelectedTab={setSelectedTab} tabs={tabs}/>
+      {selectedTab === 0 && (
+        <div css={styles.favoritesTab}>
+          <div css={styles.casesCard}>
+            {
+              isLoading ? ("Loading...") : 
+                bookmarkedCases && 
+              bookmarkedCases.length > 0 ? (
+                    bookmarkedCases?.slice(0, 6)?.map((bookmarkCase: IGenCase, index: number) => bookmarkCase && (
+                      <React.Fragment key={index}>
+                        <FavoriteCard
+                          onClick={async () => router.push(`/cases/${bookmarkCase?.id}`)}
+                          title={bookmarkCase.title ?? ""}
+                          variant="case"
+                        />
+                      </React.Fragment>
+                    ))
+                  ) : (
+                    <EmptyStateCard 
+                      title="You haven not saved any materials yet"
+                      text="You can save cases, dictionary articles, forum questions and highlighted text to Favourites"
+                      variant="For-small-areas"
+                    />
+                  )
+            }
+          </div>
+          {bookmarkedCases && bookmarkedCases?.length > 6 && (
+            <Link href="/personal-space">
+              <Button<"button"> styleType="secondarySimple">
+                View all
+              </Button>
+            </Link>
+          )}
         </div>
-       </div>
-       <div css={styles.blockHeadCallToAction}>
-         {/* <Switch */}
-         <Switcher
-          className="switcher"
-          size="medium"
-          defaultValue={tabs[selectedTab]?.title}
-          tabStyleOverwrite={{ flex: "1" }}>
-         
-            <Tabs.List>
-              {tabs && tabs?.map((tab, tabIndex) => (
-                <React.Fragment key={tabIndex}>
-                  <SwitcherTab
-                    icon={tab?.icon?.src ?? <Trash/>}
-                    value={tab.title}
-                    onClick={() => setSelectedTab(tabIndex)}
-                    >{tab.title}
-                  </SwitcherTab>
-                </React.Fragment>
-              ))}
-            </Tabs.List>
-          
-        
-        </Switcher>
-
-       </div>
-      </div>
+      )}
+      {
+        selectedTab === 1 && (
+          <div css={styles.uploadedMaterialsTab}>
+            <MaterialCard title=" the card with long titlews" fileExtension="pdf" materialType="paper"/>
+          </div>
+        )
+      }
     </div>
   );
 };

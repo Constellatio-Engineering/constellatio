@@ -1,5 +1,5 @@
 import { css } from "@emotion/react";
-import { MantineTheme } from "@mantine/styles";
+import { type MantineTheme } from "@mantine/styles";
 
 export const wrapper = (theme: MantineTheme) => css`
     background: ${theme.colors["neutrals-01"][0]};
@@ -8,14 +8,14 @@ export const wrapper = (theme: MantineTheme) => css`
     min-width: 100%;
     padding: 40px 32px 32px 28px;
 `;
-export const blockHead = (theme: MantineTheme) => css`
+export const blockHead = css`
     display: flex;
     justify-content: space-between;
     align-items: center;
     gap: 8px;
-    /* outline:1px solid; */
+    margin-bottom: 32px;
 `;
-export const blockHeadText = (theme: MantineTheme) => css`
+export const blockHeadText = css`
     display: flex;
     justify-content: flex-start;
     align-items: center;
@@ -26,6 +26,18 @@ export const blockHeadDescription = (theme: MantineTheme) => css`
 `;
 export const blockHeadTitle = css``;
 export const blockHeadIcon = css`
-pointer-events:none;
+    pointer-events:none;
 `;
-export const blockHeadCallToAction = (theme: MantineTheme) => css``;
+export const blockHeadCallToAction = css``;
+export const casesCard = css`
+    display: flex;
+    justify-content: flex-start;
+    align-content: center;
+    flex-wrap: wrap;
+    gap: 16px;
+    margin: 24px 0;
+`;
+export const favoritesTab = css``;
+export const uploadedMaterialsTab = css`
+    
+`;
