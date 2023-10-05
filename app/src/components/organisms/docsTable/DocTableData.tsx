@@ -5,8 +5,8 @@ import { Trash } from "@/components/Icons/Trash";
 import { type Document } from "@/db/schema";
 import useDocumentEditorStore from "@/stores/documentEditor.store";
 
-// import { Menu } from "@mantine/core";
 import { Menu } from "@mantine/core";
+import axios from "axios";
 import { type FunctionComponent } from "react";
 
 import * as styles from "./DocsTable.styles";
@@ -16,10 +16,38 @@ import { DotsIcon } from "../../Icons/dots";
 
 const formatDate = (date: Date): string => `${String(date.getDate()).padStart(2, "0")}.${String(date.getMonth() + 1).padStart(2, "0")}.${date.getFullYear()}`;
 
-export const DocsTableData: FunctionComponent<Document> = (document) =>
+export const DocsTableData: FunctionComponent<Document> = (doc) =>
 {
-  const { name, updatedAt } = document;
+  const { id: documentId, name, updatedAt } = doc;
   const { setEditDocumentState, setViewDocumentState } = useDocumentEditorStore(s => s);
+
+  const download = async (): Promise<void> =>
+  {
+    let pdfBlob: Blob;
+
+    try 
+    {
+      const response = await axios.post("/api/test", { documentId, }, {
+        responseType: "blob",
+      });
+
+      pdfBlob = new Blob([response.data], { type: "application/pdf" });
+    }
+    catch (error) 
+    {
+      console.error("Error while downloading pdf:", error);
+      return;
+    }
+
+    const url = window.URL.createObjectURL(pdfBlob);
+    const a = document.createElement("a");
+
+    a.href = url;
+    a.download = `${name}.pdf`;
+    a.click();
+
+    window.URL.revokeObjectURL(url);
+  };
 
   return (
     <>
@@ -27,7 +55,7 @@ export const DocsTableData: FunctionComponent<Document> = (document) =>
       <td
         css={styles.docName}
         className="primaryCell"
-        onClick={() => setViewDocumentState(document)}>
+        onClick={() => setViewDocumentState(doc)}>
         <BodyText styleType="body-01-medium" component="p">{name}</BodyText>
       </td>
       <td css={styles.docDate}><BodyText styleType="body-01-medium" component="p">{formatDate(updatedAt)}</BodyText></td>
@@ -39,11 +67,11 @@ export const DocsTableData: FunctionComponent<Document> = (document) =>
             <button type="button" css={styles.callToActionCell}><DotsIcon/></button>
           </Menu.Target>
           <Menu.Dropdown>
-            <Menu.Item><span className="label" onClick={() => { setEditDocumentState(document); }}><Edit/>Rename and edit</span></Menu.Item>
+            <Menu.Item><span className="label" onClick={() => { setEditDocumentState(doc); }}><Edit/>Rename and edit</span></Menu.Item>
             <Menu.Divider/>
             <Menu.Item><span className="label"><FolderIcon/>Move to</span></Menu.Item>
             <Menu.Divider/>
-            <Menu.Item><span className="label"><DownloadIcon/>Download</span></Menu.Item>
+            <Menu.Item onClick={download}><span className="label"><DownloadIcon/>Download</span></Menu.Item>
             <Menu.Divider/>
             <Menu.Item onClick={() => {}}><span className="label"><Trash/>Delete</span></Menu.Item>
           </Menu.Dropdown>

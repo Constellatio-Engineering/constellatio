@@ -4,8 +4,11 @@ import { getIsUserLoggedIn } from "@/utils/auth";
 import { createMiddlewareClient } from "@supabase/auth-helpers-nextjs";
 import { type NextMiddleware, NextResponse } from "next/server";
 
+const downloadDocuemtPath = "/api/documents/download";
+
 export const middleware: NextMiddleware = async (req) =>
 {
+  console.log("Middleware", req.nextUrl.pathname);
   console.time("Middleware");
 
   const res = NextResponse.next();
@@ -21,6 +24,11 @@ export const middleware: NextMiddleware = async (req) =>
   console.time("Getting user");
   const { data: { user }, error: getUserError } = await supabase.auth.getUser();
   console.timeEnd("Getting user");
+
+  if(req.nextUrl.pathname === downloadDocuemtPath)
+  {
+    console.log("is download document path");
+  }
 
   if(!isUserLoggedIn || getUserError)
   {
