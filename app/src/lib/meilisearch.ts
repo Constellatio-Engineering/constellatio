@@ -1,6 +1,12 @@
-import { meiliSearchAdmin } from "@/meilisearch/client";
+import { env } from "@/env.mjs";
 
 import { type Key } from "meilisearch";
+import { MeiliSearch } from "meilisearch";
+
+export const meiliSearchAdmin = new MeiliSearch({
+  apiKey: env.MEILISEARCH_MASTER_API_KEY,
+  host: env.MEILISEARCH_HOST_URL
+});
 
 export const getDefaultSearchApiKey = async (): Promise<Key> =>
 {

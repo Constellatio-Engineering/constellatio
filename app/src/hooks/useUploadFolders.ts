@@ -6,7 +6,7 @@ type UseUploadFolders = () => UseQueryResult<{ folders: UploadFolder[] }>;
 
 const useUploadFolders: UseUploadFolders = () =>
 {
-  const { data: folders = [], error, isLoading } = api.uploads.getFolders.useQuery(undefined, {
+  const { data: folders = [], error, isLoading } = api.folders.getFolders.useQuery(undefined, {
     refetchOnMount: "always",
     staleTime: Infinity
   });

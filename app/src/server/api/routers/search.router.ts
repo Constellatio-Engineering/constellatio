@@ -1,6 +1,5 @@
 import { env } from "@/env.mjs";
-import { meiliSearchAdmin } from "@/meilisearch/client";
-import { getDefaultSearchApiKey } from "@/meilisearch/getDefaultSearchApiKey";
+import { getDefaultSearchApiKey, meiliSearchAdmin } from "@/lib/meilisearch";
 import { createTRPCRouter, protectedProcedure } from "@/server/api/trpc";
 import { type SearchIndex } from "@/utils/search";
 

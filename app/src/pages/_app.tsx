@@ -1,9 +1,9 @@
 import { RouterTransition } from "@/components/atoms/RouterTransition/RouterTransition";
 import { env } from "@/env.mjs";
+import { supabase } from "@/lib/supabase";
 import AuthStateProvider from "@/provider/AuthStateProvider";
 import CustomThemingProvider from "@/provider/CustomThemingProvider";
 import MeilisearchProvider from "@/provider/MeilisearchProvider";
-import { supabase } from "@/supabase/client";
 import { api } from "@/utils/api";
 
 import { ModalsProvider } from "@mantine/modals";

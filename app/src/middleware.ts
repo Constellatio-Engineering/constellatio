@@ -55,6 +55,8 @@ export const middleware: NextMiddleware = async (req) =>
 
   console.timeEnd("Middleware");
 
+  console.log("User " + user.id);
+
   return NextResponse.next();
 };
 

@@ -15,6 +15,20 @@
       "when": 1696220123414,
       "tag": "0001_furry_jack_flag",
       "breakpoints": true
+    },
+    {
+      "idx": 2,
+      "version": "5",
+      "when": 1696500933124,
+      "tag": "0002_long_chat",
+      "breakpoints": true
+    },
+    {
+      "idx": 3,
+      "version": "5",
+      "when": 1696500933619,
+      "tag": "0003_furry_toro",
+      "breakpoints": true
     }
   ]
 }

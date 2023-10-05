@@ -1,8 +1,8 @@
 import { Button } from "@/components/atoms/Button/Button";
 import { Input } from "@/components/atoms/Input/Input";
 import { PasswordValidationSchema } from "@/components/helpers/PasswordValidationSchema";
+import { supabase } from "@/lib/supabase";
 import { updatePasswordFormSchema } from "@/schemas/auth/updatePasswordForm.schema";
-import { supabase } from "@/supabase/client";
 
 import { Box, Stack, Title } from "@mantine/core";
 import { useForm, zodResolver } from "@mantine/form";

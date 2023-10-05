@@ -25,9 +25,11 @@ export const wrapper = ({ theme, variant }: {
 `;
 
 export const SHeader = styled.header`
-background: #fff;
-	position: sticky;
+  background: #fff;
+	position: fixed;
 	top: 0;
+  width: 100%;
+  left: 0;
 	z-index: 40;
 `;
 export const links = css`

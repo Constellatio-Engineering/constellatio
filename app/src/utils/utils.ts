@@ -8,6 +8,21 @@ export const getFileNameWithoutExtension = (filename: string): string =>
   return filename.split(".").slice(0, -1).join(".");
 };
 
+export const getIndicesOfSucceededPromises = (promiseResults: Array<PromiseSettledResult<unknown>>): number[] =>
+{
+  const indicesOfSuccessfulUploads: number[] = [];
+
+  promiseResults.forEach((result, index) =>
+  {
+    if(result.status === "fulfilled")
+    {
+      indicesOfSuccessfulUploads.push(index);
+    }
+  });
+
+  return indicesOfSuccessfulUploads;
+};
+
 export const removeItemsByIndices = <T>(arrayToDeleteItemsFrom: T[], indices: number[]): T[] =>
 {
   const resultArray = [...arrayToDeleteItemsFrom];
@@ -21,6 +36,21 @@ export const removeItemsByIndices = <T>(arrayToDeleteItemsFrom: T[], indices: nu
     if(index >= 0 && index < resultArray.length) 
     {
       resultArray.splice(index, 1);
+    }
+  }
+
+  return resultArray;
+};
+
+export const getItemsByIndices = <T>(arrayToGetItemsFrom: T[], indices: number[]): T[] =>
+{
+  const resultArray: T[] = [];
+
+  for(const index of indices)
+  {
+    if(index >= 0 && index < arrayToGetItemsFrom.length)
+    {
+      resultArray.push(arrayToGetItemsFrom[index]!);
     }
   }
 

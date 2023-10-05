@@ -2,7 +2,7 @@ import { BodyText } from "@/components/atoms/BodyText/BodyText";
 import { Button } from "@/components/atoms/Button/Button";
 import { Input } from "@/components/atoms/Input/Input";
 import { Modal } from "@/components/molecules/Modal/Modal";
-import { supabase } from "@/supabase/client";
+import { supabase } from "@/lib/supabase";
 
 import { Stack } from "@mantine/core";
 import { useForm } from "@mantine/form";
