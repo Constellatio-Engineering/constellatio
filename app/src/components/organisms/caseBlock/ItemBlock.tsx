@@ -24,8 +24,13 @@ const DictionaryTable: DictionaryTableProps = {
   variant: "dictionary"
 };
 
-const SearchTable: DictionaryTableProps | CasesTableProps = {
+const SearchTableCase: CasesTableProps = {
   type: "cases",
+  variant: "search"
+};
+
+const SearchTableDictionary: DictionaryTableProps = {
+  type: "dictionary",
   variant: "search"
 };
 
@@ -33,7 +38,7 @@ export interface ICaseBlockProps
 {
   readonly blockHead: ICaseBlockHeadProps;
   readonly items: IGenFullCaseFragment[] | IGenArticleOverviewFragment[] ;
-  readonly variant: "case" | "dictionary" | "search";
+  readonly variant: "case" | "dictionary" | "caseSearch" | "dictionarySearch";
 }
 
 const ItemBlock: FunctionComponent<ICaseBlockProps> = ({ blockHead, items, variant }) => 
@@ -50,7 +55,7 @@ const ItemBlock: FunctionComponent<ICaseBlockProps> = ({ blockHead, items, varia
   return items.length > 0 ? (
     <div css={styles.wrapper}>
       <CaseBlockHead {...blockHead}/>
-      <Table tableType={variant === "case" ? CasesTable : variant === "dictionary" ? DictionaryTable : SearchTable}>
+      <Table tableType={variant === "case" ? CasesTable : variant === "dictionary" ? DictionaryTable : variant === "caseSearch" ? SearchTableCase : variant === "dictionarySearch" ? SearchTableDictionary : CasesTable}>
         {items.map((item) =>
         {
           const isBookmarked = bookmarks.some(bookmark => bookmark?.resourceId === item?.id) || false;
@@ -65,7 +70,7 @@ const ItemBlock: FunctionComponent<ICaseBlockProps> = ({ blockHead, items, varia
                   </TableCell>
                 </Link>
               </td>
-              {variant === "case" && (
+              {variant === "case" || variant === "caseSearch" && (
                 <td>
                   <StatusTableCell variant="notStarted"/>
                 </td>

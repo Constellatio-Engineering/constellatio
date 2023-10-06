@@ -20,7 +20,7 @@ const SearchPageResults: FunctionComponent = () =>
           items: (searchResults as { [key: string]: unknown[] })[routerTabQuery]?.length,
           variant: "case",
         }}
-        variant="search"
+        variant="caseSearch"
         // items={(searchResults as { [key: string]: ICaseBlockProps["items"] })[routerTabQuery]}
         items={searchResults.cases.map(item => ({
           __typename: "Case", id: item.id, legalArea: { __typename: "LegalArea", ...item.legalArea }, mainCategoryField: item.mainCategory, title: item.title
