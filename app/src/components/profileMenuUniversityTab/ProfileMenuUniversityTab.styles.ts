@@ -1,5 +1,5 @@
 import { css } from "@emotion/react";
-import { MantineTheme } from "@mantine/styles";
+import { type MantineTheme } from "@mantine/styles";
 
 export const wrapper = css`
     padding: 12px 16px;
@@ -20,4 +20,4 @@ export const text = css`
 `;
 export const semesterText = (theme: MantineTheme) => css`
     color: ${theme.colors["neutrals-01"][7]};
-`
+`;

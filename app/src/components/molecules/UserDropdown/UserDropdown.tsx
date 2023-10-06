@@ -1,5 +1,6 @@
 import { supabase } from "@/lib/supabase";
 import { api } from "@/utils/api";
+import { paths } from "@/utils/paths";
 
 import { Avatar, Menu } from "@mantine/core";
 import { notifications } from "@mantine/notifications";
@@ -46,7 +47,7 @@ export const UserDropdown: FunctionComponent = () =>
       </Menu.Target>
       <Menu.Dropdown>
         <Menu.Item
-          onClick={(): void => router.push("/profile")}
+          onClick={() => void router.push(`${paths.profile}`)}
           icon={<IconUser size="0.9rem" stroke={1.5}/>}>
           Overview
         </Menu.Item>

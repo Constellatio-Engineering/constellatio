@@ -2,7 +2,6 @@
 import getAllArticles, { type allArticles } from "./getAllArticles";
 import {
   type IGenGetAllLegalAreaQuery,
-  type IGenAssetFragment,
   type IGenMainCategory,
 } from "../graphql/__generated/sdk";
 import { caisySDK } from "../graphql/getSdk";
