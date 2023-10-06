@@ -10,4 +10,5 @@ export const wrapper = (theme: MantineTheme) => css`
     align-items: center;
     border-radius: 12px;
     overflow: hidden;
+    box-shadow: 0px 8px 44px 0px rgba(0, 0, 0, 0.04);
 `;
