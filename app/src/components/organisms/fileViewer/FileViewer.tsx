@@ -1,4 +1,5 @@
 
+import CaisyImg from "@/basic-components/CaisyImg";
 import useSignedGetUrl from "@/hooks/useSignedGetUrl";
 
 import { Modal, ScrollArea } from "@mantine/core";
@@ -72,11 +73,9 @@ const FileViewer: FunctionComponent<FileViewerProps> = ({
         );
       case "image":
         return (
-          <Image
+          <CaisyImg
             src={fileUrl ?? ""}
-            width={1920}
-            height={1080}
-            alt="Image"
+            
           />
         );
       case "video":
@@ -102,19 +101,17 @@ const FileViewer: FunctionComponent<FileViewerProps> = ({
   };
 
   return (
-    <ScrollArea>
-      <Modal 
-        centered 
-        miw={1080}
-        opened={showFileViewerModal} 
-        onClose={() => setShowFileViewerModal(false)} 
-        withCloseButton={false}
-        closeOnClickOutside
-        closeOnEscape
-        styles={styles.modalStyles()}>
-        {!isGetUrlLoading ? <div css={styles.wrapper}>{renderFile()}</div> : "Loading..."}
-      </Modal>
-    </ScrollArea>
+    <Modal 
+      centered 
+      miw={1080}
+      opened={showFileViewerModal} 
+      onClose={() => setShowFileViewerModal(false)} 
+      withCloseButton={false}
+      closeOnClickOutside
+      closeOnEscape
+      styles={styles.modalStyles()}>
+      {!isGetUrlLoading ? <div css={styles.wrapper}>{renderFile()}</div> : "Loading..."}
+    </Modal>
   );
 
 };

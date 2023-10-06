@@ -34,6 +34,17 @@ export const modalStyles = (): ModalStyles =>
 
 export const wrapper = css`
 min-width: 600px;
-height: 100vh;
-overflow: visible;
+min-height: 50vh;
+
+img{
+  width: 100%;
+  height: 100%;
+  margin:0 auto;
+  object-fit: contain;
+}
+embed,iframe{
+  width: 100%;
+  height: 86vh;
+  object-fit: contain;
+}
 `;
