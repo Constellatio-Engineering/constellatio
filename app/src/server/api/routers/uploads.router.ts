@@ -1,44 +1,23 @@
-/* eslint-disable max-lines */
 import { db } from "@/db/connection";
-import { uploadFolders, type UploadedFileInsert, uploadedFiles } from "@/db/schema";
+import { type UploadedFileInsert, uploadedFiles } from "@/db/schema";
 import { env } from "@/env.mjs";
-import { meiliSearchAdmin } from "@/meilisearch/client";
+import { cloudStorage } from "@/lib/cloud-storage";
+import { meiliSearchAdmin } from "@/lib/meilisearch";
 import { addUploadSchema } from "@/schemas/uploads/addUpload.schema";
-import { createFolderSchema } from "@/schemas/uploads/createFolder.schema";
-import { deleteFolderSchema } from "@/schemas/uploads/deleteFolder.schema";
 import { deleteUploadSchema } from "@/schemas/uploads/deleteUpload.schema";
 import { getUploadedFilesSchema } from "@/schemas/uploads/getUploadedFiles.schema";
+import { deleteFiles } from "@/server/api/services/uploads.services";
 import { createTRPCRouter, protectedProcedure } from "@/server/api/trpc";
 import { createUploadsSearchIndexItem, searchIndices, uploadSearchIndexItemPrimaryKey } from "@/utils/search";
 import { BadFileError, FileTooLargeError, NotFoundError } from "@/utils/serverError";
 
-import { Storage } from "@google-cloud/storage";
 import {
-  and, asc, desc, eq, isNull
+  and, desc, eq, inArray, isNull
 } from "drizzle-orm";
 import { type SQLWrapper } from "drizzle-orm";
-import { type CredentialBody } from "google-auth-library";
 import { z } from "zod";
 
-const base64ServiceAccount = env.GOOGLE_SERVICE_ACCOUNT_BASE64;
-const serviceAccountBuffer = Buffer.from(base64ServiceAccount, "base64");
-const cloudStorageCredentials = JSON.parse(serviceAccountBuffer.toString()) as CredentialBody;
-
-const storage = new Storage({
-  credentials: cloudStorageCredentials,
-  projectId: env.GOOGLE_CLOUD_STORAGE_PROJECT_ID,
-});
-
 export const uploadsRouter = createTRPCRouter({
-  createFolder: protectedProcedure
-    .input(createFolderSchema)
-    .mutation(async ({ ctx: { userId }, input: { name } }) =>
-    {
-      await db.insert(uploadFolders).values({
-        name,
-        userId
-      });
-    }),
   createSignedGetUrl: protectedProcedure
     .input(z.object({
       fileId: z.string(),
@@ -57,7 +36,7 @@ export const uploadsRouter = createTRPCRouter({
         throw new NotFoundError();
       }
 
-      const [url] = await storage
+      const [url] = await cloudStorage
         .bucket(env.GOOGLE_CLOUD_STORAGE_BUCKET_NAME)
         .file(`${userId}/${file.serverFilename}`)
         .getSignedUrl({
@@ -86,7 +65,7 @@ export const uploadsRouter = createTRPCRouter({
       const filenameWithoutSpaces = filename.replace(/\s/g, "-");
       const filenameWithTimestamp = `${Date.now()}-${filenameWithoutSpaces}`;
 
-      const [url] = await storage
+      const [url] = await cloudStorage
         .bucket(env.GOOGLE_CLOUD_STORAGE_BUCKET_NAME)
         .file(`${userId}/${filenameWithTimestamp}`)
         .getSignedUrl({
@@ -104,42 +83,18 @@ export const uploadsRouter = createTRPCRouter({
         uploadUrl: url
       });
     }),
-  deleteFolder: protectedProcedure
-    .input(deleteFolderSchema)
-    .mutation(async ({ ctx: { userId }, input: { folderId } }) =>
-    {
-      await db.delete(uploadedFiles).where(
-        and(
-          eq(uploadedFiles.userId, userId),
-          eq(uploadedFiles.folderId, folderId)
-        )
-      );
-
-      await db.delete(uploadFolders).where(
-        and(
-          eq(uploadFolders.userId, userId),
-          eq(uploadFolders.id, folderId)
-        )
-      );
-    }),
-  deleteUploadedFile: protectedProcedure
+  deleteUploadedFiles: protectedProcedure
     .input(deleteUploadSchema)
-    .mutation(async ({ ctx: { userId }, input: { fileId } }) =>
+    .mutation(async ({ ctx: { userId }, input: { fileIds } }) =>
     {
-      const deleteResult = await db.delete(uploadedFiles).where(and(
-        eq(uploadedFiles.userId, userId),
-        eq(uploadedFiles.id, fileId)
-      ));
-
-      console.log("deleteResult", deleteResult);
-    }),
-  getFolders: protectedProcedure
-    .query(async ({ ctx: { userId } }) =>
-    {
-      return db.query.uploadFolders.findMany({
-        orderBy: [asc(uploadFolders.name)],
-        where: eq(uploadFolders.userId, userId)
+      const files = await db.query.uploadedFiles.findMany({
+        where: and(
+          eq(uploadedFiles.userId, userId),
+          inArray(uploadedFiles.id, fileIds)
+        )
       });
+
+      await deleteFiles({ files, userId });
     }),
   getUploadedFiles: protectedProcedure
     .input(getUploadedFilesSchema)

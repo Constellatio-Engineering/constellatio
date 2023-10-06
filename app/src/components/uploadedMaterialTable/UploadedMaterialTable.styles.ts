@@ -1,5 +1,8 @@
+import { type UnknownMantineStylesParams } from "@/utils/types";
+
 import { css } from "@emotion/react";
-import { type MantineTheme } from "@mantine/styles";
+import { type DrawerStylesNames } from "@mantine/core";
+import { type Styles, type MantineTheme } from "@mantine/styles";
 
 export const tableWrapper = (theme: MantineTheme) => css`
   text-align: left;
@@ -17,6 +20,9 @@ export const tableWrapper = (theme: MantineTheme) => css`
     width: max-content;
     vertical-align: middle;
     white-space: nowrap;
+    &:hover{
+      background: ${theme.colors["neutrals-01"][1]};
+    }
   }
   tr {
     border: 1px solid ${theme.colors["neutrals-01"][2]};
@@ -51,6 +57,7 @@ export const tableBody = (theme: MantineTheme) => css`
 export const callToActionCell = css``;
 export const docName = (theme: MantineTheme) => css`
   color: ${theme.colors["neutrals-02"][1]};
+  cursor: pointer;
 `;
 export const docDate = (theme: MantineTheme) => css`
   color: ${theme.colors["neutrals-01"][7]};
@@ -60,6 +67,7 @@ export const docTags = (theme: MantineTheme) => css`
 `;
 export const cellNote = (theme: MantineTheme) => css`
   color: ${theme.colors["neutrals-01"][9]};
+  cursor: pointer;
   svg{
     vertical-align: text-bottom;
     margin-right: 8px;
@@ -80,4 +88,46 @@ export const showMoreButton = (theme: MantineTheme) => css`
     ${theme.colors["neutrals-01"][0]} 40%,
     transparent 100%
   );
+`;
+
+type DrawerStylesProps = Styles<DrawerStylesNames, UnknownMantineStylesParams>;
+
+export const drawerStyles = () => 
+{
+  const styles: DrawerStylesProps = (theme: MantineTheme) => ({
+    body: {
+      padding: "0px"
+    },
+    content: {
+      background: theme.colors["neutrals-01"][1],
+    },
+    header: {
+      padding: "0px",
+    },
+    title: {
+      width: "100%",
+    }
+  });
+  return styles;
+};
+
+export const MaterialNoteRichText = css`
+  margin: 24px 32px;
+`;
+
+export const MaterialNotesCallToAction = (theme: MantineTheme) => css`
+position: absolute;
+bottom: 0;
+left: 0;
+width: 100%;
+display:flex;
+justify-content: center;
+align-items: center;
+padding:32px;
+gap:12px;
+background: ${theme.colors["neutrals-01"][0]};
+border-top: 1px solid ${theme.colors["neutrals-01"][3]};
+button{
+  flex:1;
+}
 `;

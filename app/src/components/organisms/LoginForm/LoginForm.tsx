@@ -2,8 +2,8 @@ import { Button } from "@/components/atoms/Button/Button";
 import { CustomLink } from "@/components/atoms/CustomLink/CustomLink";
 import { Input } from "@/components/atoms/Input/Input";
 import { colors } from "@/constants/styles/colors";
+import { supabase } from "@/lib/supabase";
 import { loginFormSchema } from "@/schemas/auth/loginForm.schema";
-import { supabase } from "@/supabase/client";
 import { api } from "@/utils/api";
 
 import { Stack } from "@mantine/core";

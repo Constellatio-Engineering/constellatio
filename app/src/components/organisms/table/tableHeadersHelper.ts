@@ -76,6 +76,9 @@ export const tableHeaders = ({
             {
               title: "",
             },
+            {
+              title: "",
+            },
           ];
 
         case "search":
@@ -101,7 +104,7 @@ export const tableHeaders = ({
           ];
 
         default:
-          console.error("Invalid table type", tableType);
+          console.error("tableType.variant is not defined", tableType);
           return [];
       }
 

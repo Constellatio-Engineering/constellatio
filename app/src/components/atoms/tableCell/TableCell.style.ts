@@ -1,10 +1,28 @@
 import { type SerializedStyles, css } from "@emotion/react";
 import { type MantineTheme } from "@mantine/styles";
 
+const CSSClickableEffect = (theme: MantineTheme) => css`
+  &:hover {
+	border-color: ${theme.colors["neutrals-01"][4]};
+		background-color: ${theme.colors["neutrals-01"][1]};
+  }
+  &:active {
+		border-color: ${theme.colors["neutrals-01"][3]};
+		background-color: ${theme.colors["neutrals-01"][2]};
+	}
+
+	&:focus {
+		border-color: ${theme.colors["neutrals-01"][4]};
+		background-color: ${theme.colors["neutrals-01"][1]};
+	}
+	`;
+
 export const wrapper = ({
+  clickable,
   theme,
-  variant,
+  variant
 }: {
+  clickable?: boolean;
   theme: MantineTheme;
   variant: "titleTableCell" | "simpleTableCell";
 }): SerializedStyles => css`
@@ -24,20 +42,9 @@ export const wrapper = ({
     : theme.colors["neutrals-01"][9]};
 	transition: border-color 0.3s ease-in, background-color 0.3s ease-in;
 
-	&:hover {
-		border-color: ${theme.colors["neutrals-01"][4]};
-		background-color: ${theme.colors["neutrals-01"][1]};
-	}
+	${clickable && CSSClickableEffect(theme)}
 
-	&:active {
-		border-color: ${theme.colors["neutrals-01"][3]};
-		background-color: ${theme.colors["neutrals-01"][2]};
-	}
-
-	&:focus {
-		border-color: ${theme.colors["neutrals-01"][4]};
-		background-color: ${theme.colors["neutrals-01"][1]};
-	}
+	
 `;
 
 export const iconWrapper = ({

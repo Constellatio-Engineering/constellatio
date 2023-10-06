@@ -1,6 +1,7 @@
 import StatusTableCell from "@/components/atoms/statusTableCell/StatusTableCell";
 import TableCell from "@/components/atoms/tableCell/TableCell";
 import { ClockIcon } from "@/components/Icons/ClockIcon";
+import { Notepad } from "@/components/Icons/Notepad";
 import CaseBlockHead, { type ICaseBlockHeadProps } from "@/components/molecules/caseBlockHead/CaseBlockHead";
 import CaseBlockBookmarkButton from "@/components/organisms/caseBlock/caseBlockBookmarkButton/CaseBlockBookmarkButton";
 import useBookmarks from "@/hooks/useBookmarks";
@@ -24,6 +25,11 @@ const DictionaryTable: DictionaryTableProps = {
   variant: "dictionary"
 };
 
+const FavoriteCasesTable: CasesTableProps = {
+  type: "cases",
+  variant: "favorites"
+};
+
 const SearchTableCase: CasesTableProps = {
   type: "cases",
   variant: "search"
@@ -38,10 +44,16 @@ export interface ICaseBlockProps
 {
   readonly blockHead: ICaseBlockHeadProps;
   readonly items: IGenFullCaseFragment[] | IGenArticleOverviewFragment[] ;
+  readonly tableType?: "all-cases" | "cases" | "favorites" | "search" | "dictionary";
   readonly variant: "case" | "dictionary" | "caseSearch" | "dictionarySearch";
 }
 
-const ItemBlock: FunctionComponent<ICaseBlockProps> = ({ blockHead, items, variant }) => 
+const ItemBlock: FunctionComponent<ICaseBlockProps> = ({
+  blockHead,
+  items,
+  tableType,
+  variant
+}) => 
 {
   const { bookmarks: casesBookmarks, isLoading: isGetCasesBookmarksLoading } = useBookmarks("case", {
     enabled: variant === "case"
@@ -52,10 +64,23 @@ const ItemBlock: FunctionComponent<ICaseBlockProps> = ({ blockHead, items, varia
   const bookmarks = variant === "case" ? casesBookmarks : articlesBookmarks;
   const isLoading = variant === "case" ? isGetCasesBookmarksLoading : isGetArticlesBookmarksLoading;
 
+  const tableTypePicker = (): DictionaryTableProps | CasesTableProps => 
+  {
+    switch (variant) 
+    {
+      case "case":
+        return tableType === "cases" ? CasesTable : tableType === "favorites" ? FavoriteCasesTable : CasesTable;
+      case "dictionary":
+        return DictionaryTable;
+      default:
+        return CasesTable;
+    }
+  };
+
   return items.length > 0 ? (
     <div css={styles.wrapper}>
       <CaseBlockHead {...blockHead}/>
-      <Table tableType={variant === "case" ? CasesTable : variant === "dictionary" ? DictionaryTable : variant === "caseSearch" ? SearchTableCase : variant === "dictionarySearch" ? SearchTableDictionary : CasesTable}>
+      <Table tableType={tableTypePicker()}>
         {items.map((item) =>
         {
           const isBookmarked = bookmarks.some(bookmark => bookmark?.resourceId === item?.id) || false;
@@ -65,7 +90,7 @@ const ItemBlock: FunctionComponent<ICaseBlockProps> = ({ blockHead, items, varia
             <tr key={item.id}>
               <td className="primaryCell">
                 <Link passHref href={`/${variant === "case" ? "cases" : "dictionary"}/${item?.id}`}>
-                  <TableCell variant="titleTableCell">
+                  <TableCell variant="titleTableCell" clickable>
                     {item?.title}
                   </TableCell>
                 </Link>
@@ -85,6 +110,7 @@ const ItemBlock: FunctionComponent<ICaseBlockProps> = ({ blockHead, items, varia
               <td title={topicsCombined}>
                 <TableCell variant="simpleTableCell">{item?.topic?.[0]?.topicName}</TableCell>
               </td>
+              {tableType === "favorites" && <td><TableCell variant="simpleTableCell">{item?.legalArea?.legalAreaName}</TableCell></td>}
               <td>
                 <CaseBlockBookmarkButton
                   areAllBookmarksLoading={isLoading}
@@ -93,6 +119,11 @@ const ItemBlock: FunctionComponent<ICaseBlockProps> = ({ blockHead, items, varia
                   variant={variant}
                 />
               </td>
+              {tableType === "favorites" && (
+                <td>
+                  <TableCell variant="simpleTableCell" icon={<Notepad/>}>Notes</TableCell>
+                </td>
+              )}
             </tr>
           );
         })}

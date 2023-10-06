@@ -1,11 +1,13 @@
-
-// import { Edit } from "@/components/Icons/Edit";
-// import { MoveDownIcon } from "@/components/Icons/MoveDown";
-// import { Trash } from "@/components/Icons/Trash";
+import { DownloadIcon } from "@/components/Icons/DownloadIcon";
+import { Edit } from "@/components/Icons/Edit";
+import { FolderIcon } from "@/components/Icons/Folder";
+import { Trash } from "@/components/Icons/Trash";
 import { type Document } from "@/db/schema";
 import useDocumentEditorStore from "@/stores/documentEditor.store";
+import { paths } from "@/utils/paths";
 
-// import { Menu } from "@mantine/core";
+import { Menu } from "@mantine/core";
+import axios from "axios";
 import { type FunctionComponent } from "react";
 
 import * as styles from "./DocsTable.styles";
@@ -15,45 +17,66 @@ import { DotsIcon } from "../../Icons/dots";
 
 const formatDate = (date: Date): string => `${String(date.getDate()).padStart(2, "0")}.${String(date.getMonth() + 1).padStart(2, "0")}.${date.getFullYear()}`;
 
-export const DocsTableData: FunctionComponent<Document> = (document) =>
+export const DocsTableData: FunctionComponent<Document> = (doc) =>
 {
-  const { name, updatedAt } = document;
-  const setEditDocumentState = useDocumentEditorStore(s => s.setEditDocumentState);
+  const { id: documentId, name, updatedAt } = doc;
+  const { setEditDocumentState, setViewDocumentState } = useDocumentEditorStore(s => s);
+
+  const download = async (): Promise<void> =>
+  {
+    let pdfBlob: Blob;
+
+    try 
+    {
+      const response = await axios.post(paths.downloadDocument, { documentId, }, {
+        responseType: "blob",
+      });
+
+      pdfBlob = new Blob([response.data], { type: "application/pdf" });
+    }
+    catch (error) 
+    {
+      console.error("Error while downloading pdf:", error);
+      return;
+    }
+
+    const url = window.URL.createObjectURL(pdfBlob);
+    const a = document.createElement("a");
+
+    a.href = url;
+    a.download = `${name}.pdf`;
+    a.click();
+
+    window.URL.revokeObjectURL(url);
+  };
 
   return (
     <>
       <td css={styles.callToActionCell}><Checkbox/></td>
-      <td css={styles.docName} className="primaryCell">
+      <td
+        css={styles.docName}
+        className="primaryCell"
+        onClick={() => setViewDocumentState(doc)}>
         <BodyText styleType="body-01-medium" component="p">{name}</BodyText>
       </td>
       <td css={styles.docDate}><BodyText styleType="body-01-medium" component="p">{formatDate(updatedAt)}</BodyText></td>
-      <td css={styles.docTags}><BodyText styleType="body-02-medium" component="p">TODO</BodyText></td>
-      {/* <td css={styles.callToActionCell}>
-        
-        <Menu>
+      <td css={styles.docTags}><BodyText styleType="body-02-medium" component="p">Tags (999)</BodyText></td>
+      <td
+        css={styles.callToActionCell}> 
+        <Menu shadow="md" width={200}>
           <Menu.Target>
-            <DotsIcon/>
+            <button type="button" css={styles.callToActionCell}><DotsIcon/></button>
           </Menu.Target>
           <Menu.Dropdown>
-            <Menu.Item><span className="label"><Edit/>Rename</span></Menu.Item>
+            <Menu.Item><span className="label" onClick={() => { setEditDocumentState(doc); }}><Edit/>Rename and edit</span></Menu.Item>
             <Menu.Divider/>
-            <Menu.Item><span className="label"><MoveDownIcon/>Download</span></Menu.Item>
+            <Menu.Item><span className="label"><FolderIcon/>Move to</span></Menu.Item>
+            <Menu.Divider/>
+            <Menu.Item onClick={download}><span className="label"><DownloadIcon/>Download</span></Menu.Item>
             <Menu.Divider/>
             <Menu.Item onClick={() => {}}><span className="label"><Trash/>Delete</span></Menu.Item>
           </Menu.Dropdown>
-    
         </Menu>
-        
-      </td> */}
- 
-      <td
-        css={styles.callToActionCell}
-        onClick={(e) =>
-        {
-          e.stopPropagation();
-          setEditDocumentState(document);
-        }}>
-        <DotsIcon/>
       </td>
     </>
   );

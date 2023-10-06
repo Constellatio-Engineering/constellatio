@@ -1,9 +1,10 @@
-import { supabase } from "@/supabase/client";
+import { supabase } from "@/lib/supabase";
 import { api } from "@/utils/api";
+import { paths } from "@/utils/paths";
 
 import { Avatar, Menu } from "@mantine/core";
 import { notifications } from "@mantine/notifications";
-import { IconBrandStripe, IconLogout } from "@tabler/icons-react";
+import { IconBrandStripe, IconLogout, IconUser } from "@tabler/icons-react";
 import { useRouter } from "next/router";
 import { type FunctionComponent } from "react";
 
@@ -45,6 +46,11 @@ export const UserDropdown: FunctionComponent = () =>
         <Avatar radius="xl"/>
       </Menu.Target>
       <Menu.Dropdown>
+        <Menu.Item
+          onClick={() => void router.push(`${paths.profile}`)}
+          icon={<IconUser size="0.9rem" stroke={1.5}/>}>
+          Overview
+        </Menu.Item>
         <Menu.Item
           onClick={handleSubscription}
           icon={<IconBrandStripe size="0.9rem" stroke={1.5}/>}>
