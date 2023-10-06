@@ -69,15 +69,17 @@ const ProfilePersonalSpaceBlock: FunctionComponent = () =>
       {
         isGetUploadedFilesLoading ? ("loading...") :
           selectedTab === 1 && (
-            <div css={styles.uploadedMaterialsTab}>
-              {uploadedFiles.slice(0, 6).map((file, index) => (
-                <MaterialCard
-                  title={file?.originalFilename}
-                  fileExtension={file?.fileExtension}
-                  materialType="paper"
-                  key={index}
-                />
-              ))}
+            <div>
+              <div css={styles.uploadedMaterialsTab}>
+                {uploadedFiles.slice(0, 6).map((file, index) => (
+                  <MaterialCard
+                    title={file?.originalFilename}
+                    fileExtension={file?.fileExtension}
+                    materialType="paper"
+                    key={index}
+                  />
+                ))}
+              </div>
               {uploadedFiles.length > 6 && (
                 <Link href="/personal-space">
                   <Button<"button"> styleType="secondarySimple">

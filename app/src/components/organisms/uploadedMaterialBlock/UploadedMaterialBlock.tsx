@@ -1,3 +1,5 @@
+import { Button } from "@/components/atoms/Button/Button";
+import { type FileWithClientSideUuid } from "@/components/pages/personalSpacePage/PersonalSpacePage";
 import { type UploadedFile } from "@/db/schema";
 import { type UploadState } from "@/stores/uploadsProgress.store";
 import { api } from "@/utils/api";
@@ -8,10 +10,8 @@ import axios from "axios";
 import React, { type FormEvent, type FunctionComponent } from "react";
 
 import * as styles from "./UploadedMaterialBlock.styles";
-import { Button } from "../atoms/Button/Button";
-import BadgeCard from "../organisms/badgeCard/BadgeCard";
-import EmptyStateCard from "../organisms/emptyStateCard/EmptyStateCard";
-import { type FileWithClientSideUuid } from "../pages/personalSpacePage/PersonalSpacePage";
+import BadgeCard from "../badgeCard/BadgeCard";
+import EmptyStateCard from "../emptyStateCard/EmptyStateCard";
 import UploadedMaterialTable from "../uploadedMaterialTable/UploadedMaterialTable";
 
 type UploadedMaterialBlockProps = {

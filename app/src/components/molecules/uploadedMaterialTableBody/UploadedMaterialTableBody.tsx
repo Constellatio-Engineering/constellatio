@@ -1,3 +1,13 @@
+import { BodyText } from "@/components/atoms/BodyText/BodyText";
+import { DotsIcon } from "@/components/Icons/dots";
+import { DownloadIcon } from "@/components/Icons/DownloadIcon";
+import { Edit } from "@/components/Icons/Edit";
+import { FileIcon } from "@/components/Icons/FileIcon";
+import { FolderIcon } from "@/components/Icons/Folder";
+import { ImageIcon } from "@/components/Icons/image";
+import { Notepad } from "@/components/Icons/Notepad";
+import { Trash } from "@/components/Icons/Trash";
+import { VideoIcon } from "@/components/Icons/Video";
 import { type UploadedFile } from "@/db/schema";
 import { api } from "@/utils/api";
 
@@ -5,16 +15,6 @@ import { Checkbox, Menu } from "@mantine/core";
 import React, { type FunctionComponent } from "react";
 
 import * as styles from "./UploadedMaterialTableBody.styles";
-import { BodyText } from "../atoms/BodyText/BodyText";
-import { DotsIcon } from "../Icons/dots";
-import { DownloadIcon } from "../Icons/DownloadIcon";
-import { Edit } from "../Icons/Edit";
-import { FileIcon } from "../Icons/FileIcon";
-import { FolderIcon } from "../Icons/Folder";
-import { ImageIcon } from "../Icons/image";
-import { Notepad } from "../Icons/Notepad";
-import { Trash } from "../Icons/Trash";
-import { VideoIcon } from "../Icons/Video";
 
 interface UploadedMaterialTableBodyProps
 {

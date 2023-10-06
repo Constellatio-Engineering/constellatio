@@ -1,13 +1,13 @@
+import { Button } from "@/components/atoms/Button/Button";
+import { ArrowDown } from "@/components/Icons/ArrowDown";
+import UploadedMaterialTableBody from "@/components/molecules/uploadedMaterialTableBody/UploadedMaterialTableBody";
+import UploadedMaterialTableHead from "@/components/molecules/uploadedMaterialTableHead/UploadedMaterialTableHead";
 import { type UploadedFile } from "@/db/schema";
 
 import React, { type FunctionComponent, useState, useEffect } from "react";
 
 import * as styles from "./UploadedMaterialTable.styles";
-import { Button } from "../atoms/Button/Button";
-import { ArrowDown } from "../Icons/ArrowDown";
 import UploadedMaterialNoteDrawer from "../uploadedMaterialNoteDrawer/UploadedMaterialNoteDrawer";
-import UploadedMaterialTableBody from "../uploadedMaterialTableBody/UploadedMaterialTableBody";
-import UploadedMaterialTableHead from "../uploadedMaterialTableHead/UploadedMaterialTableHead";
 
 interface UploadedMaterialTableProps
 {
@@ -66,7 +66,7 @@ const UploadedMaterialTable: FunctionComponent<UploadedMaterialTableProps> = ({
           </Button>
         </div>
       )}
-      <UploadedMaterialNoteDrawer 
+      <UploadedMaterialNoteDrawer
         showNoteDrewer={showNoteDrewer} 
         setShowNoteDrewer={setShowNoteDrewer} 
         noteRichtext={noteRichtext} 

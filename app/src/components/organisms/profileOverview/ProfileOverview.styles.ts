@@ -2,7 +2,6 @@ import { css } from "@emotion/react";
 import { type MantineTheme } from "@mantine/styles";
 
 export const wrapper = css`
-    margin-top: 54px; 
     width: 100%;
 `;
 export const title = (theme: MantineTheme) => css`

@@ -19,16 +19,32 @@ const ProfilePage: FunctionComponent<IProfilePageProps> = ({ allMainCategory }) 
     { selected: false, title: "Subscription" },
   ]);
 
+  const contentPicker = (tabs: ITab[]): React.ReactNode => 
+  {
+    const tab = tabs.find(x => x.selected);
+    console.log({ tab });
+    switch (tab?.title)
+    {
+      case "Overview":
+        return <ProfileOverview allMainCategory={allMainCategory}/>;
+      case "Profile Details":
+        return <>Profile Details</>;
+      default:
+        console.log(`Unknown tab: ${tab?.title}, create tab case in ProfilePage component`);
+        return <>{`Unknown tab: ${tab?.title}, create tab case in ProfilePage component`}</>;
+    }
+  };
+
   return (
     <div css={styles.wrapper}>
       <ProfilePageHeader/>
       <Container
         maw={1440}
         sx={{
-          alignItems: "flex-start", display: "flex", gap: "64px", padding: "0px 60px;" 
+          alignItems: "flex-start", display: "flex", gap: "64px", padding: "32px 60px;" 
         }}>
         <ProfileMenu tabs={tabs} setTabs={setTabs}/>
-        <ProfileOverview allMainCategory={allMainCategory}/>
+        {contentPicker(tabs)}
       </Container>
     </div>
   );

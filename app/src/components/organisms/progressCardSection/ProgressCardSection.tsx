@@ -16,7 +16,6 @@ const ProgressCardSection: FunctionComponent<ProgressCardSectionProps> = ({
   mainCategories
 }) => 
 {
-  console.log({ mainCategories });
   return (
     <div css={styles.wrapper}>
       {

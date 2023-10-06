@@ -1,3 +1,10 @@
+
+import { Button } from "@/components/atoms/Button/Button";
+import { Edit } from "@/components/Icons/Edit";
+import { Trash } from "@/components/Icons/Trash";
+import { RichtextEditorField } from "@/components/molecules/RichtextEditorField/RichtextEditorField";
+import SlidingPanelFileTypeRow from "@/components/molecules/slidingPanelFileTypeRow/SlidingPanelFileTypeRow";
+import SlidingPanelTitle from "@/components/molecules/slidingPanelTitle/SlidingPanelTitle";
 import { type UploadedFile } from "@/db/schema";
 
 import { RichTextRenderer } from "@caisy/rich-text-react-renderer";
@@ -5,12 +12,6 @@ import { Drawer } from "@mantine/core";
 import React, { type Dispatch, type FunctionComponent } from "react";
 
 import * as styles from "./UploadedMaterialNoteDrawer.styles";
-import { Button } from "../atoms/Button/Button";
-import { Edit } from "../Icons/Edit";
-import { Trash } from "../Icons/Trash";
-import { RichtextEditorField } from "../molecules/RichtextEditorField/RichtextEditorField";
-import SlidingPanelTitle from "../molecules/slidingPanelTitle/SlidingPanelTitle";
-import SlidingPanelFileTypeRow from "../slidingPanelFileTypeRow/SlidingPanelFileTypeRow";
 
 interface UploadedMaterialNoteDrawerProps
 {

@@ -1,6 +1,7 @@
+import { CaptionText } from "@/components/atoms/CaptionText/CaptionText";
+
 import React, { type FunctionComponent } from "react";
 
-import { CaptionText } from "../atoms/CaptionText/CaptionText";
 const UploadedMaterialTableHead: FunctionComponent = () => 
 {
   return (

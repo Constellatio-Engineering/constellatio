@@ -23,9 +23,7 @@ const ProfileMenuMainProfileInfo: FunctionComponent = () =>
         <div css={styles.profileNameText}>
           <Title order={2}>Cameron Williamson</Title>
         </div>
-        <p css={styles.profileNameHandler}>
-          <BodyText styleType="body-01-medium" component="p">@cameron123</BodyText>
-        </p>
+        <BodyText styleType="body-01-medium" css={styles.profileNameHandler} component="p">@cameron123</BodyText>
       </div>
     </div> 
   );
