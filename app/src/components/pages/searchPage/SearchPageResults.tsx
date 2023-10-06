@@ -1,8 +1,9 @@
 import { Svg } from "@/basic-components/SVG/Svg";
 import ItemBlock from "@/components/organisms/caseBlock/ItemBlock";
 import useSearchResults, { type SearchResults } from "@/hooks/useSearchResults";
-import { type IGenArticleOverviewFragment, type IGenFullArticleFragment, type IGenFullCaseFragment } from "@/services/graphql/__generated/sdk";
+import { type IGenArticleOverviewFragment, type IGenFullCaseFragment } from "@/services/graphql/__generated/sdk";
 import { type ArticleSearchIndexItem, type CaseSearchIndexItem } from "@/utils/search";
+import { type CommonKeysInTypes } from "@/utils/types";
 
 import { useRouter } from "next/router";
 import React, { Fragment, type FunctionComponent } from "react";
@@ -31,14 +32,30 @@ const SearchPageResults: FunctionComponent = () =>
       };
     });
 
-    // console.log("groupedCases", groupedResultsByCategory);
+    const commonItemsProps = (item: CommonKeysInTypes<CaseSearchIndexItem, ArticleSearchIndexItem>):
+    Pick<CommonKeysInTypes<IGenArticleOverviewFragment, IGenFullCaseFragment>, "id" | "legalArea" | "title" | "topic"> => ({
+      id: item?.id,
+      legalArea: {
+        __typename: "LegalArea",
+        id: item.legalArea?.id,
+        legalAreaName: item.legalArea?.legalAreaName,
+      },
+      title: item.title,
+      topic: item.topic?.map(topicItem => ({
+        __typename: "Topic",
+        id: topicItem.id,
+        topicName: topicItem.topicName,
+      })),
+    });
 
     return (
       <div>
         {groupedResultsByCategory?.map((categoryGroup, index) =>
         {
+          const caseItems = categoryGroup.items as SearchResults["cases"];
+          const articleItems = categoryGroup.items as SearchResults["articles"];
           const { mainCategory } = categoryGroup;
-          const mainCategoryItem = mainCategory?.icon;
+          const mainCategoryIcon = mainCategory?.icon;
           return (
             <Fragment key={index}>
               <ItemBlock
@@ -48,45 +65,20 @@ const SearchPageResults: FunctionComponent = () =>
                   blockType: "searchBlock",
                   categoryName: mainCategory?.mainCategory ?? "",
                   icon: {
-                    alt: mainCategoryItem?.description ?? (mainCategoryItem?.title || ""),
-                    src: <Svg src={mainCategoryItem?.src}/>
+                    alt: mainCategoryIcon?.description ?? (mainCategoryIcon?.title || ""),
+                    src: <Svg src={mainCategoryIcon?.src}/>
                   },
                   items: categoryGroup.items?.length,
                   variant: routerTabQuery === "cases" ? "case" : "dictionary"
                 }}
-                items={categoryGroup.items?.map((item) => 
-                  "durationToCompleteInMinutes" in item ? ({
-                    __typename: "Case",
-                    durationToCompleteInMinutes: item.durationToCompleteInMinutes,
-                    id: item.id,
-                    legalArea: {
-                      __typename: "LegalArea",
-                      id: item.legalArea?.id,
-                      legalAreaName: item.legalArea?.legalAreaName,
-                    },
-                    title: item.title,
-                    topic: item.topic?.map(topicItem => ({
-                      __typename: "Topic",
-                      id: topicItem.id,
-                      topicName: topicItem.topicName,
-                    })),
-                  } as IGenFullCaseFragment) : ({
-                    __typename: "Article",
-                    id: item.id,
-                    legalArea: {
-                      __typename: "LegalArea",
-                      id: item.legalArea?.id,
-                      legalAreaName: item.legalArea?.legalAreaName,
-                    },
-                    title: item.title,
-                    topic: item.topic?.map(topicItem => ({
-                      __typename: "Topic",
-                      id: topicItem.id,
-                      topicName: topicItem.topicName,
-                    }))
-                  } as IGenArticleOverviewFragment)
-                )}
-
+                items={routerTabQuery === "cases" ? caseItems?.map(item => ({
+                  __typename: "Case",
+                  durationToCompleteInMinutes: item.durationToCompleteInMinutes,
+                  ...commonItemsProps(item)
+                })) : articleItems?.map(item => ({
+                  __typename: "Article",
+                  ...commonItemsProps(item)
+                }))}
               />
             </Fragment>
           );

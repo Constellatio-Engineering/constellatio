@@ -50,3 +50,7 @@ export type UseQueryResult<T> = {
   error: TRPCClientErrorBase<DefaultErrorShape> | null;
   isLoading: boolean;
 } & T;
+
+export type CommonKeysInTypes<T1, T2> = {
+  [K in keyof T1 & keyof T2]: T1[K];
+};
