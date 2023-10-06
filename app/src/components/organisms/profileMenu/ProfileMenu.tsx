@@ -7,6 +7,7 @@ import { api } from "@/utils/api";
 import { notifications } from "@mantine/notifications";
 import { IconLogout } from "@tabler/icons-react";
 import router from "next/router";
+import { useQueryState } from "next-usequerystate";
 import React, { type FunctionComponent } from "react";
 
 import * as styles from "./ProfileMenu.styles";
@@ -46,6 +47,8 @@ const ProfileMenu: FunctionComponent<IProfileMenu> = ({ setTabs, tabs }) =>
     }
   };
 
+  const [query, setQuery] = useQueryState("q");
+
   return (
     <div css={styles.wrapper}>
       <ProfileMenuMainProfileInfo/>
@@ -59,7 +62,8 @@ const ProfileMenu: FunctionComponent<IProfileMenu> = ({ setTabs, tabs }) =>
             icon={tab.icon}
             onClick={() => 
             {
-              // await router.push({ query: { q: tab.slug } });
+              // void router.replace({ query: { q: tab.slug } });
+              void setQuery(tab.slug);
               setTabs(tabs.map((x: ITab) => x.slug === tab.slug ? ({ ...x, selected: true }) : ({ ...x, selected: false })));
             }}
           />

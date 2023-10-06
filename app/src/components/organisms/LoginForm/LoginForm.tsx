@@ -55,7 +55,7 @@ export const LoginForm: FunctionComponent = () =>
 
       // await supabase.auth.setSession(loginResult.data.session);
       await apiContext.invalidate();
-      await router.replace(`${paths.cases}}`);
+      await router.replace(`${paths.cases}`);
     }
     catch (error)
     {

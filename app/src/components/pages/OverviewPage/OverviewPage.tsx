@@ -1,18 +1,20 @@
 import { CivilLawIcon } from "@/components/Icons/CivilLawIcon";
 import CaseBlock from "@/components/organisms/caseBlock/ItemBlock";
 import EmptyStateCard from "@/components/organisms/emptyStateCard/EmptyStateCard";
-import OverviewHeader from "@/components/organisms/OverviewHeader/OverviewHeader";
+import OverviewHeader, { slugFormatter } from "@/components/organisms/OverviewHeader/OverviewHeader";
 import { type IArticlesOverviewProps } from "@/services/content/getArticlesOverviewProps";
 import { type ICasesOverviewProps } from "@/services/content/getCasesOverviewProps";
 import {
   type IGenMainCategory, type IGenLegalArea, type IGenCase, type IGenArticle, type IGenCaseOverviewFragment, type IGenArticleOverviewFragment
 } from "@/services/graphql/__generated/sdk";
 
+import { useRouter } from "next/router";
 import {
   type FunctionComponent,
   Fragment,
   useState,
 } from "react";
+import React from "react";
 
 import * as styles from "./OverviewPage.styles";
 
@@ -31,6 +33,17 @@ type OverviewPageProps = CasesOverviewPageProps | ArticlesOverviewPageProps;
 const OverviewPage: FunctionComponent<OverviewPageProps> = ({ content, variant }) =>
 {
   const [selectedCategory, setSelectedCategory] = useState<IGenMainCategory | undefined>(content.allMainCategories?.[0]);
+  const router = useRouter();
+  React.useEffect(() => 
+  {
+    if(router.query.q)
+    {
+      setSelectedCategory(content.allMainCategories?.find(x => slugFormatter(x.mainCategory ?? "") === router.query.q));
+    }
+
+  // Donot add selectedCategory to the dependency array => infinite loop 
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [router.query.q]);
   const filteredLegalAreas = (content.allLegalAreaRes.allLegalArea?.edges
     ?.map(legalArea => legalArea?.node)
     .filter(legalArea => Boolean(legalArea)) || []) as IGenLegalArea[];

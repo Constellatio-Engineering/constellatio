@@ -6,6 +6,7 @@ import ProfilePageHeader from "@/components/organisms/profilePageHeader/ProfileP
 import { type IProfilePageProps } from "@/pages/profile";
 
 import { Container } from "@mantine/core";
+import { useRouter } from "next/router";
 import React, { useState, type FunctionComponent } from "react";
 
 import * as styles from "./ProfilePage.styles";
@@ -37,6 +38,17 @@ const ProfilePage: FunctionComponent<IProfilePageProps> = ({ allMainCategory }) 
         return <>{`Unknown tab: ${tab?.title}, create tab type case in ProfilePage component`}</>;
     }
   };
+
+  const router = useRouter();
+  React.useEffect(() => 
+  {
+    if(router.query.q)
+    {
+      setTabs(tabs.map((x: ITab) => x.slug === router.query.q ? ({ ...x, selected: true }) : ({ ...x, selected: false })));
+    }
+  // DO NOT ADD {tabs} TO THE DEPENDENCY ARRAY => 
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [router.query.q]);
 
   return (
     <div css={styles.wrapper}>
