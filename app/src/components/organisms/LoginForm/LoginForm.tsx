@@ -5,6 +5,7 @@ import { colors } from "@/constants/styles/colors";
 import { supabase } from "@/lib/supabase";
 import { loginFormSchema } from "@/schemas/auth/loginForm.schema";
 import { api } from "@/utils/api";
+import { paths } from "@/utils/paths";
 
 import { Stack } from "@mantine/core";
 import { useForm, zodResolver } from "@mantine/form";
@@ -54,7 +55,7 @@ export const LoginForm: FunctionComponent = () =>
 
       // await supabase.auth.setSession(loginResult.data.session);
       await apiContext.invalidate();
-      await router.replace("/dashboard");
+      await router.replace(`${paths.cases}}`);
     }
     catch (error)
     {

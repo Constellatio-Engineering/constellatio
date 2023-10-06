@@ -10,6 +10,7 @@ export const wrapper = (theme: MantineTheme) => css`
     justify-content: space-between;
     align-items: center;
     flex:1;
+    min-width: 270px;
     border-right: 1px solid ${theme.colors["neutrals-01"][3]};
     &:hover{
         background-color: ${theme.colors["neutrals-01"][1]};

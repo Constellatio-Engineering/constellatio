@@ -44,7 +44,7 @@ const ProfilePage: FunctionComponent<IProfilePageProps> = ({ allMainCategory }) 
       <Container
         maw={1440}
         sx={{
-          alignItems: "flex-start", display: "flex", gap: "64px", padding: "32px 60px;" 
+          alignItems: "flex-start", display: "flex", flexDirection: "row", gap: "32px", justifyContent: "flex-start", padding: "32px ",
         }}>
         <ProfileMenu tabs={tabs} setTabs={setTabs}/>
         {contentPicker(tabs)}
