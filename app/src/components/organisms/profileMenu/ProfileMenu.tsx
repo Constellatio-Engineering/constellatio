@@ -1,6 +1,5 @@
 import { LinkButton } from "@/components/atoms/LinkButton/LinkButton";
 import ProfileMenuUniversityTab from "@/components/atoms/profileMenuUniversityTab/ProfileMenuUniversityTab";
-import { NoteIcon } from "@/components/Icons/Note";
 import MenuListItem from "@/components/molecules/menuListItem/MenuListItem";
 import { supabase } from "@/lib/supabase";
 import { api } from "@/utils/api";
@@ -16,6 +15,7 @@ import ProfileMenuMainProfileInfo from "./ProfileMenuMainProfileInfo";
 export type ITab ={
   icon?: React.ReactNode;
   selected: boolean;
+  slug: string;
   title: string;
 };
 type IProfileMenu = {
@@ -59,7 +59,8 @@ const ProfileMenu: FunctionComponent<IProfileMenu> = ({ setTabs, tabs }) =>
             icon={tab.icon}
             onClick={() => 
             {
-              setTabs(tabs.map((x: {selected: boolean;title: string}) => x.title === tab.title ? ({ ...x, selected: true }) : ({ ...x, selected: false })));
+              // await router.push({ query: { q: tab.slug } });
+              setTabs(tabs.map((x: ITab) => x.slug === tab.slug ? ({ ...x, selected: true }) : ({ ...x, selected: false })));
             }}
           />
         )
