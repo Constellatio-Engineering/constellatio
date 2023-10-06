@@ -3,6 +3,7 @@ import ProfileDetailsTab from "@/components/organisms/profileDetailsTab/ProfileD
 import ProfileMenu, { type ITab } from "@/components/organisms/profileMenu/ProfileMenu";
 import ProfileOverview from "@/components/organisms/profileOverview/ProfileOverview";
 import ProfilePageHeader from "@/components/organisms/profilePageHeader/ProfilePageHeader";
+import ProfileNotificationsTab from "@/components/profileNotificationsTab/ProfileNotificationsTab";
 import { type IProfilePageProps } from "@/pages/profile";
 
 import { Container } from "@mantine/core";
@@ -18,7 +19,7 @@ const ProfilePage: FunctionComponent<IProfilePageProps> = ({ allMainCategory }) 
     { selected: false, slug: "profile-details", title: "Profile Details" },
     { selected: false, slug: "change-password", title: "Change Password" },
     // { selected: false, slug: "history", title: "History" },
-    // { selected: false, slug: "notifications", title: "Notifications" },
+    { selected: false, slug: "notifications", title: "Notifications" },
     // { selected: false, slug: "subscription", title: "Subscription" },
   ]);
 
@@ -33,6 +34,8 @@ const ProfilePage: FunctionComponent<IProfilePageProps> = ({ allMainCategory }) 
         return <ProfileDetailsTab/>;
       case "Change Password":
         return <ChangePasswordTab/>;
+      case "Notifications":
+        return <ProfileNotificationsTab/>;  
       default:
         console.log(`Unknown tab: ${tab?.title}, create tab type case in ProfilePage component`);
         return <>{`Unknown tab: ${tab?.title}, create tab type case in ProfilePage component`}</>;
