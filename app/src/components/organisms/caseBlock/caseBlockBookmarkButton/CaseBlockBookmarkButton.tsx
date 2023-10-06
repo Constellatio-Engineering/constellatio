@@ -85,8 +85,7 @@ const CaseBlockBookmarkButton: FunctionComponent<ICaseBlockBookmarkButtonProps> 
 
     const bookmarkData: AddOrRemoveBookmarkSchema = {
       resourceId: caseId,
-      resourceType: variant === "case" || variant === "caseSearch" ? "case" : "article",
-
+      resourceType: variant === "case" ? "case" : "article"
     };
 
     if(!isBookmarked)

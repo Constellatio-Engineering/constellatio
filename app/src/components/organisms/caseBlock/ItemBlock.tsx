@@ -5,7 +5,6 @@ import { Notepad } from "@/components/Icons/Notepad";
 import CaseBlockHead, { type ICaseBlockHeadProps } from "@/components/molecules/caseBlockHead/CaseBlockHead";
 import CaseBlockBookmarkButton from "@/components/organisms/caseBlock/caseBlockBookmarkButton/CaseBlockBookmarkButton";
 import useBookmarks from "@/hooks/useBookmarks";
-import { SearchResults } from "@/hooks/useSearchResults";
 import { type IGenArticleOverviewFragment, type IGenFullCaseFragment } from "@/services/graphql/__generated/sdk";
 
 import Link from "next/link";
@@ -43,9 +42,9 @@ const SearchTableDictionary: DictionaryTableProps = {
 export interface ICaseBlockProps 
 {
   readonly blockHead: ICaseBlockHeadProps;
-  readonly items: IGenFullCaseFragment[] | IGenArticleOverviewFragment[] ;
+  readonly items: IGenFullCaseFragment[] | IGenArticleOverviewFragment[] | undefined;
   readonly tableType?: "all-cases" | "cases" | "favorites" | "search" | "dictionary";
-  readonly variant: "case" | "dictionary" | "caseSearch" | "dictionarySearch";
+  readonly variant: "case" | "dictionary";
 }
 
 const ItemBlock: FunctionComponent<ICaseBlockProps> = ({
@@ -69,25 +68,25 @@ const ItemBlock: FunctionComponent<ICaseBlockProps> = ({
     switch (variant) 
     {
       case "case":
-        return tableType === "cases" ? CasesTable : tableType === "favorites" ? FavoriteCasesTable : CasesTable;
+        return tableType === "cases" ? CasesTable : tableType === "favorites" ? FavoriteCasesTable : tableType === "search" ? SearchTableCase : CasesTable;
       case "dictionary":
-        return DictionaryTable;
+        return tableType === "dictionary" ? DictionaryTable : tableType === "search" ? SearchTableDictionary : DictionaryTable;
       default:
         return CasesTable;
     }
   };
 
-  return items.length > 0 ? (
+  return items && items?.length > 0 ? (
     <div css={styles.wrapper}>
       <CaseBlockHead {...blockHead}/>
       <Table tableType={tableTypePicker()}>
-        {items.map((item) =>
+        {items?.map((item) =>
         {
           const isBookmarked = bookmarks.some(bookmark => bookmark?.resourceId === item?.id) || false;
           const topicsCombined = item?.topic?.map((item) => item?.topicName).join(", ") || "";
 
-          return (
-            <tr key={item.id}>
+          return item && item.id && (
+            <tr key={item?.id}>
               <td className="primaryCell">
                 <Link passHref href={`/${variant === "case" ? "cases" : "dictionary"}/${item?.id}`}>
                   <TableCell variant="titleTableCell" clickable>
@@ -95,7 +94,7 @@ const ItemBlock: FunctionComponent<ICaseBlockProps> = ({
                   </TableCell>
                 </Link>
               </td>
-              {variant === "case" || variant === "caseSearch" && (
+              {variant === "case" && (
                 <td>
                   <StatusTableCell variant="notStarted"/>
                 </td>
@@ -107,6 +106,7 @@ const ItemBlock: FunctionComponent<ICaseBlockProps> = ({
                   </TableCell>
                 </td>
               )}
+              {tableType === "search" && <td><TableCell variant="simpleTableCell">{item?.legalArea?.legalAreaName}</TableCell></td>}
               <td title={topicsCombined}>
                 <TableCell variant="simpleTableCell">{item?.topic?.[0]?.topicName}</TableCell>
               </td>
@@ -115,7 +115,7 @@ const ItemBlock: FunctionComponent<ICaseBlockProps> = ({
                 <CaseBlockBookmarkButton
                   areAllBookmarksLoading={isLoading}
                   isBookmarked={isBookmarked}
-                  caseId={item.id}
+                  caseId={item?.id}
                   variant={variant}
                 />
               </td>
@@ -133,4 +133,3 @@ const ItemBlock: FunctionComponent<ICaseBlockProps> = ({
 };
 
 export default ItemBlock;
-

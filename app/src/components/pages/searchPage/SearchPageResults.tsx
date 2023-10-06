@@ -1,33 +1,101 @@
-import ItemBlock, { type ICaseBlockProps } from "@/components/organisms/caseBlock/ItemBlock";
-import useSearchResults from "@/hooks/useSearchResults";
+import { Svg } from "@/basic-components/SVG/Svg";
+import ItemBlock from "@/components/organisms/caseBlock/ItemBlock";
+import useSearchResults, { type SearchResults } from "@/hooks/useSearchResults";
+import { type IGenArticleOverviewFragment, type IGenFullArticleFragment, type IGenFullCaseFragment } from "@/services/graphql/__generated/sdk";
+import { type ArticleSearchIndexItem, type CaseSearchIndexItem } from "@/utils/search";
 
 import { useRouter } from "next/router";
-import React, { type FunctionComponent } from "react";
+import React, { Fragment, type FunctionComponent } from "react";
 
 const SearchPageResults: FunctionComponent = () => 
 {
   const { searchResults } = useSearchResults();
   const router = useRouter();
-  const routerTabQuery = router.query.tab as string;
+  const routerTabQuery = router.query.tab as keyof SearchResults;
+  console.log("routerTabQuery", routerTabQuery);
+  
+  if(routerTabQuery === "userUploads") { return; }
+  else 
+  {
+    const filteredMainCategories = searchResults[routerTabQuery]?.map((item) => item.mainCategory).filter((mainCategory, index, arr) =>
+      index === arr.findIndex((el) => (
+        el?.id === mainCategory?.id
+      ))
+    );
 
-  return (
-    <div>
-      <ItemBlock
-        blockHead={{
-          blockType: "searchBlock",
-          categoryName: "hi",
-          completedCases: 6,
-          items: (searchResults as { [key: string]: unknown[] })[routerTabQuery]?.length,
-          variant: "case",
-        }}
-        variant="caseSearch"
-        // items={(searchResults as { [key: string]: ICaseBlockProps["items"] })[routerTabQuery]}
-        items={searchResults.cases.map(item => ({
-          __typename: "Case", id: item.id, legalArea: { __typename: "LegalArea", ...item.legalArea }, mainCategoryField: item.mainCategory, title: item.title
-        }))}
-      />
-    </div>
-  );
+    const groupedResultsByCategory = filteredMainCategories?.map((mainCategory) =>
+    {
+      return {
+        items: searchResults[routerTabQuery]?.filter((item) => item.mainCategory?.id === mainCategory?.id) as SearchResults["cases"] | SearchResults["articles"],
+        mainCategory: mainCategory as CaseSearchIndexItem["mainCategory"] | ArticleSearchIndexItem["mainCategory"]
+      };
+    });
+
+    // console.log("groupedCases", groupedResultsByCategory);
+
+    return (
+      <div>
+        {groupedResultsByCategory?.map((categoryGroup, index) =>
+        {
+          const { mainCategory } = categoryGroup;
+          const mainCategoryItem = mainCategory?.icon;
+          return (
+            <Fragment key={index}>
+              <ItemBlock
+                variant={routerTabQuery === "cases" ? "case" : "dictionary"}
+                tableType="search"
+                blockHead={{
+                  blockType: "searchBlock",
+                  categoryName: mainCategory?.mainCategory ?? "",
+                  icon: {
+                    alt: mainCategoryItem?.description ?? (mainCategoryItem?.title || ""),
+                    src: <Svg src={mainCategoryItem?.src}/>
+                  },
+                  items: categoryGroup.items?.length,
+                  variant: routerTabQuery === "cases" ? "case" : "dictionary"
+                }}
+                items={categoryGroup.items?.map((item) => 
+                  "durationToCompleteInMinutes" in item ? ({
+                    __typename: "Case",
+                    durationToCompleteInMinutes: item.durationToCompleteInMinutes,
+                    id: item.id,
+                    legalArea: {
+                      __typename: "LegalArea",
+                      id: item.legalArea?.id,
+                      legalAreaName: item.legalArea?.legalAreaName,
+                    },
+                    title: item.title,
+                    topic: item.topic?.map(topicItem => ({
+                      __typename: "Topic",
+                      id: topicItem.id,
+                      topicName: topicItem.topicName,
+                    })),
+                  } as IGenFullCaseFragment) : ({
+                    __typename: "Article",
+                    id: item.id,
+                    legalArea: {
+                      __typename: "LegalArea",
+                      id: item.legalArea?.id,
+                      legalAreaName: item.legalArea?.legalAreaName,
+                    },
+                    title: item.title,
+                    topic: item.topic?.map(topicItem => ({
+                      __typename: "Topic",
+                      id: topicItem.id,
+                      topicName: topicItem.topicName,
+                    }))
+                  } as IGenArticleOverviewFragment)
+                )}
+
+              />
+            </Fragment>
+          );
+        }
+        )}
+      </div>
+    );
+  }
+
 };
 
 export default SearchPageResults;

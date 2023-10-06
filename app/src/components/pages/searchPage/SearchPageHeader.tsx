@@ -1,5 +1,5 @@
 import MenuTab from "@/components/atoms/menuTab/MenuTab";
-import useSearchResults from "@/hooks/useSearchResults";
+import useSearchResults, { type SearchResults } from "@/hooks/useSearchResults";
 
 import { Title } from "@mantine/core";
 import { useRouter } from "next/router";
@@ -24,17 +24,17 @@ const SearchPageHeader: FunctionComponent = () =>
       {
         try 
         {
-          if(!tabQuery) { await setTabQuery(Object.keys(searchResults)?.[0] ?? "articles"); }
+          if(!tabQuery) 
+          {
+            await setTabQuery(Object.keys(searchResults)?.[0] ?? "articles");
+            await router.replace({ query: { ...router.query, tab: Object.keys(searchResults)?.[0] ?? "articles" } });
+          }
           else { await setTabQuery(routerTabQuery as string); }
         }
         catch (error) { console.error(error); }
       })();
-      
     }
-
-  /** 
-   * if added tabQuery to the dependency array, it will cause issues activating menu tab on route change or sharing url
-  */
+    // if added tabQuery to the dependency array, it will cause issues activating menu tab on route change or sharing url
   // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [setTabQuery, routerTabQuery, searchResults]);
 
@@ -47,19 +47,23 @@ const SearchPageHeader: FunctionComponent = () =>
         </span>
       </div>
       <div css={styles.navBar}>                                        
-        {Object.keys(searchResults).map((item, index) => (
-          <MenuTab
-            key={index}
-            title={item}
-            number={(searchResults as { [key: string]: unknown[] })[item]?.length}
-            active={tabQuery === item}
-            onClick={async () => 
-            {
-              await router.replace({ query: { ...router.query, tab: item } });
-              await setTabQuery(item);
-            }}
-          />
-        ))}
+        {Object.keys(searchResults).map((i, index) => 
+        {
+          const item = i as keyof SearchResults;
+          return (
+            <MenuTab
+              key={index}
+              title={item}
+              number={searchResults[item]?.length}
+              active={tabQuery === item}
+              onClick={async () => 
+              {
+                await router.replace({ query: { ...router.query, tab: item } });
+                await setTabQuery(item);
+              }}
+            />
+          );
+        })}
       </div>
     </div>
   );
