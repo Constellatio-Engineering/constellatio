@@ -3,7 +3,6 @@ import { DotsIcon } from "@/components/Icons/dots";
 import { Edit } from "@/components/Icons/Edit";
 import { MoveDownIcon } from "@/components/Icons/MoveDown";
 import { Trash } from "@/components/Icons/Trash";
-import CutomAlertCard from "@/components/molecules/cutomAlertCard/CutomAlertCard";
 
 import {
   Menu, Modal, Title, useMantineTheme 
@@ -20,7 +19,8 @@ interface MenuListItemProps
   readonly active?: boolean;
   readonly icon: ReactNode;
   readonly onClick: () => void;
-  readonly onDelete: () => void;
+  readonly onDelete?: () => void;
+  readonly onRename?: (newName: string) => void;
   readonly title: string;
 }
 
@@ -29,35 +29,48 @@ const MaterialsMenuListItem: FunctionComponent<MenuListItemProps & HTMLProps<HTM
   icon,
   onClick,
   onDelete,
+  onRename,
   title,
 }) =>
 {
-  // const [err, setErr] = useState<string>("Now There's an error");
-  const err = false;
   const [showRenameModal, setShowRenameModal] = useState<boolean>(false);
   const [showDeleteModal, setShowDeleteModal] = useState<boolean>(false);
   const [newFolderName, setNewFolderName] = useState<string>("");
   const theme = useMantineTheme();
+
   return (
     <div>
       <button type="button" onClick={onClick} css={styles.wrapper({ active, theme })}>
-        <Menu width={250} position="left-start">
+        <Menu
+          width={200}
+          position="bottom-end"
+          offset={{
+            crossAxis: 0,
+            mainAxis: 0
+          }}>
           <BodyText styleType="body-01-medium" component="p">
-            <span css={styles.label} title={title}>{icon}{title}</span><Menu.Target><span className="dots"><DotsIcon/></span></Menu.Target>
+            <span css={styles.label} title={title}>{icon}{title}</span>
+            <Menu.Target>
+              <span className="dots" onClick={e => e.stopPropagation()}><DotsIcon/></span>
+            </Menu.Target>
           </BodyText>
-          {/* Menu content */}
           <Menu.Dropdown>
-            <Menu.Item><span css={styles.dropDownLabel} onClick={() => setShowRenameModal(true)}><Edit/>Rename</span></Menu.Item>
+            {onRename && (
+              <Menu.Item>
+                <span css={styles.dropDownLabel} onClick={() => setShowRenameModal(true)}><Edit/>Rename</span>
+              </Menu.Item>
+            )}
             <Menu.Item><span css={styles.dropDownLabel}><MoveDownIcon/>Download</span></Menu.Item>
-            <Menu.Item>
-              <span
-                onClick={() => setShowDeleteModal(true)}
-                css={styles.dropDownLabel}><Trash/>Delete
-              </span>
-            </Menu.Item>
+            {onDelete && (
+              <Menu.Item>
+                <span
+                  onClick={() => setShowDeleteModal(true)}
+                  css={styles.dropDownLabel}><Trash/>Delete
+                </span>
+              </Menu.Item>
+            )}
           </Menu.Dropdown>
         </Menu>
-       
       </button>
       <Modal
         opened={showRenameModal}
@@ -69,7 +82,6 @@ const MaterialsMenuListItem: FunctionComponent<MenuListItemProps & HTMLProps<HTM
           <Cross size={32}/>
         </span>
         <Title order={3}>Rename folder</Title>
-        {err && <CutomAlertCard variant="error" message={err}/>}
         <div className="new-folder-input">
           <BodyText styleType="body-01-regular" component="label">Folder name</BodyText>
           <Input
@@ -87,7 +99,11 @@ const MaterialsMenuListItem: FunctionComponent<MenuListItemProps & HTMLProps<HTM
           <Button<"button">
             styleType="primary"
             disabled={newFolderName?.trim()?.length <= 0}
-            onClick={() => {}}>
+            onClick={() => 
+            {
+              setShowRenameModal(false);
+              onRename?.(newFolderName);
+            }}>
             Save
           </Button>
         </div>
@@ -102,7 +118,6 @@ const MaterialsMenuListItem: FunctionComponent<MenuListItemProps & HTMLProps<HTM
           <Cross size={32}/>
         </span>
         <Title order={3}>Delete folder</Title>
-        {/* {err.type && <CutomAlertCard variant="error" message={err.message}/>} */}
         <BodyText styleType="body-01-regular" component="p" className="delete-folder-text">Are you sure you want to delete <strong>Folder name</strong>?</BodyText>
         <div className="modal-call-to-action">
           <Button<"button">
@@ -115,7 +130,7 @@ const MaterialsMenuListItem: FunctionComponent<MenuListItemProps & HTMLProps<HTM
             onClick={() => 
             {
               setShowDeleteModal(false);
-              onDelete();
+              onDelete?.();
             }}>
             Yes, Delete
           </Button>

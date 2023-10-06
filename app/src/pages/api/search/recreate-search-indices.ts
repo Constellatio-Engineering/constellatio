@@ -1,6 +1,6 @@
 import { db } from "@/db/connection";
 import { env } from "@/env.mjs";
-import { meiliSearchAdmin } from "@/meilisearch/client";
+import { meiliSearchAdmin } from "@/lib/meilisearch";
 import getAllArticles from "@/services/content/getAllArticles";
 import getAllCases from "@/services/content/getAllCases";
 import { getArticleById } from "@/services/content/getArticleById";

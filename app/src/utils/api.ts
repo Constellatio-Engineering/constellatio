@@ -5,8 +5,8 @@
  *
  * We also create a few inference helpers for input and output types.
  */
+import { supabase } from "@/lib/supabase";
 import { type AppRouter } from "@/server/api/root";
-import { supabase } from "@/supabase/client";
 import { type ClientError } from "@/utils/clientError";
 import { paths } from "@/utils/paths";
 

@@ -2,7 +2,7 @@ import { type UploadedFile } from "@/db/schema";
 
 import { RichTextRenderer } from "@caisy/rich-text-react-renderer";
 import { Drawer } from "@mantine/core";
-import React, { useState, type Dispatch, type FunctionComponent } from "react";
+import React, { type Dispatch, type FunctionComponent } from "react";
 
 import * as styles from "./UploadedMaterialNoteDrawer.styles";
 import { Button } from "../atoms/Button/Button";

@@ -1,4 +1,4 @@
-import { supabase } from "@/supabase/client";
+import { supabase } from "@/lib/supabase";
 import { api } from "@/utils/api";
 
 import { Avatar, Menu } from "@mantine/core";
