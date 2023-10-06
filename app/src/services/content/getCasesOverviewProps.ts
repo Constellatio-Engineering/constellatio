@@ -1,9 +1,9 @@
 /* eslint-disable @typescript-eslint/naming-convention */
 import getAllCases, { type AllCases } from "./getAllCases";
+import { type IMainCategory } from "./getArticlesOverviewProps";
 import {
   type IGenGetAllMainCategoryQuery,
   type IGenGetAllLegalAreaQuery,
-  type IGenAssetFragment,
 } from "../graphql/__generated/sdk";
 import { caisySDK } from "../graphql/getSdk";
 export interface ICasesOverviewProps 
@@ -11,15 +11,7 @@ export interface ICasesOverviewProps
   __typename: "case";
   allCases: AllCases;
   allLegalAreaRes: IGenGetAllLegalAreaQuery;
-  allMainCategories: Array<{
-    __typename?: "MainCategory" | undefined;
-    casesPerCategory: number;
-    icon?: ({
-      __typename?: "Asset" | undefined;
-    } & IGenAssetFragment) | null | undefined;
-    id?: string | null | undefined;
-    mainCategory?: string | null | undefined;
-  }>;
+  allMainCategories: IMainCategory[];
 }
 
 const getCasesOverviewProps = async (): Promise<ICasesOverviewProps> => 
@@ -39,13 +31,13 @@ const getCasesOverviewProps = async (): Promise<ICasesOverviewProps> =>
         ).length,
         ...category?.node,
       }))
-    );
+    ) || [];
   
     return {
       __typename: "case",
       allCases: allCasesRes,
       allLegalAreaRes, 
-      allMainCategories: allMainCategories || [],
+      allMainCategories,
     };
   }
   catch (error) 

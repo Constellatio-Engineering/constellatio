@@ -8,7 +8,10 @@ export const wrapper = (theme: MantineTheme) => css`
     justify-content: center;
     align-items: center;
     gap: 4px;
+    border-radius: 1000px;
+    width: fit-content;
     svg{
         color: ${theme.colors["neutrals-01"][7]};
     }
+    border: 1px solid ${theme.colors["neutrals-01"][3]};
 `;

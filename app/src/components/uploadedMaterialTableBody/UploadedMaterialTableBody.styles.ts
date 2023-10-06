@@ -42,6 +42,7 @@ export const tableWrapper = (theme: MantineTheme) => css`
       gap: 8px;
     }
   }
+  
 `;
 
 export const tableHead = (theme: MantineTheme) => css`
@@ -54,7 +55,17 @@ export const tableBody = (theme: MantineTheme) => css`
 
 `;
 
-export const callToActionCell = css``;
+export const callToActionCell = css`
+background-color: transparent;
+border:0;
+outline:0;
+.label{
+    svg{
+      vertical-align: text-bottom;
+      margin-right: 8px;
+    }
+  }
+`;
 export const docName = (theme: MantineTheme) => css`
   color: ${theme.colors["neutrals-02"][1]};
   cursor: pointer;

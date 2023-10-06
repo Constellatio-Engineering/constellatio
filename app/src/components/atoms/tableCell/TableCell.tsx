@@ -7,21 +7,29 @@ import { BodyText } from "../BodyText/BodyText";
 export interface ITableCellProps 
 {
   readonly children: ReactNode;
+  readonly clickable?: boolean;
   readonly icon?: ReactNode | null;
   readonly variant: "titleTableCell" | "simpleTableCell";
 }
 
-const TableCell: FunctionComponent<ITableCellProps> = ({ children, icon, variant }) => 
+const TableCell: FunctionComponent<ITableCellProps> = ({
+  children,
+  clickable,
+  icon,
+  variant
+}) => 
 {
   const theme = useMantineTheme();
 
   return (
-    <button css={styles.wrapper({ theme, variant })} type="button">
-      {icon && <div css={styles.iconWrapper({ variant })}>{icon}</div>}
-      <BodyText styleType={variant === "titleTableCell" ? "body-01-medium" : "body-02-medium"} component="p" title={JSON.stringify(children)}>
-        {children}
-      </BodyText>
-    </button>
+    <div>
+      <button css={styles.wrapper({ clickable, theme, variant })} type="button">
+        {icon && <div css={styles.iconWrapper({ variant })}>{icon}</div>}
+        <BodyText styleType={variant === "titleTableCell" ? "body-01-medium" : "body-02-medium"} component="p" title={JSON.stringify(children)}>
+          {children}
+        </BodyText>
+      </button>
+    </div>
   );
 };
 

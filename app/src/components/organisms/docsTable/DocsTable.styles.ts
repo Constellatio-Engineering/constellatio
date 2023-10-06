@@ -6,6 +6,12 @@ export const wrapper = css`
   position: relative;
 `;
 
+const CSSClickableEffect = (theme: MantineTheme) => css`
+ &:hover{
+      background-color: ${theme.colors["neutrals-01"][1]};
+    }
+`;
+
 export const tableWrapper = (theme: MantineTheme) => css`
   text-align: left;
   border-radius: 12px;
@@ -23,9 +29,7 @@ export const tableWrapper = (theme: MantineTheme) => css`
     width: max-content;
     vertical-align: middle;
     white-space: nowrap;
-    &:hover{
-      background-color: ${theme.colors["neutrals-01"][1]};
-    }
+   
   }
 
   tr {
@@ -33,6 +37,7 @@ export const tableWrapper = (theme: MantineTheme) => css`
   }
   .primaryCell {
     width: 100%;
+    cursor: pointer;
   }
   .label{
     svg{
@@ -51,20 +56,24 @@ export const tableBody = (theme: MantineTheme) => css`
   background: ${theme.colors["neutrals-01"][0]};
 `;
 
-export const callToActionCell = css`
+export const callToActionCell = (theme: MantineTheme) => css`
 background-color: transparent;
 border:0;
 outline:0;
-
+cursor: pointer;
+${CSSClickableEffect(theme)};
 `;
+
 export const docName = (theme: MantineTheme) => css`
   color: ${theme.colors["neutrals-02"][1]};
+  ${CSSClickableEffect(theme)};
 `;
 export const docDate = (theme: MantineTheme) => css`
   color: ${theme.colors["neutrals-01"][7]};
 `;
 export const docTags = (theme: MantineTheme) => css`
   color: ${theme.colors["neutrals-01"][9]};
+  
 `;
 
 export const showMoreButton = (theme: MantineTheme) => css`

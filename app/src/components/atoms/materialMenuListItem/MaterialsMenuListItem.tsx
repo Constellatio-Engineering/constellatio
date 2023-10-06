@@ -24,7 +24,7 @@ interface MenuListItemProps
   readonly title: string;
 }
 
-const MenuListItem: FunctionComponent<MenuListItemProps & HTMLProps<HTMLButtonElement>> = ({
+const MaterialsMenuListItem: FunctionComponent<MenuListItemProps & HTMLProps<HTMLButtonElement>> = ({
   active,
   icon,
   onClick,
@@ -39,7 +39,7 @@ const MenuListItem: FunctionComponent<MenuListItemProps & HTMLProps<HTMLButtonEl
   const theme = useMantineTheme();
 
   return (
-    <>
+    <div>
       <button type="button" onClick={onClick} css={styles.wrapper({ active, theme })}>
         <Menu
           width={200}
@@ -136,8 +136,8 @@ const MenuListItem: FunctionComponent<MenuListItemProps & HTMLProps<HTMLButtonEl
           </Button>
         </div>
       </Modal>
-    </>
+    </div>
   );
 };
 
-export default MenuListItem;
+export default MaterialsMenuListItem;
