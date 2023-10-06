@@ -1,5 +1,5 @@
 import { css } from "@emotion/react";
-import { MantineTheme } from "@mantine/styles";
+import { type MantineTheme } from "@mantine/styles";
 
 export const wrapper = (theme: MantineTheme) => css`
     .mantine-InputWrapper-root{
@@ -8,7 +8,7 @@ export const wrapper = (theme: MantineTheme) => css`
         border-radius: 8px;
     }
     .mantine-Text-root{
-        color: ${theme.colors['neutrals-01'][9]};
+        color: ${theme.colors["neutrals-01"][9]};
     }
 }
 form{

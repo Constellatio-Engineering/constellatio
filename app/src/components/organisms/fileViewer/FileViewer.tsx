@@ -2,9 +2,7 @@
 import CaisyImg from "@/basic-components/CaisyImg";
 import useSignedGetUrl from "@/hooks/useSignedGetUrl";
 
-import { Modal, ScrollArea } from "@mantine/core";
-// import { useDisclosure } from "@mantine/hooks";
-import Image from "next/image";
+import { Modal } from "@mantine/core";
 import React, { type FunctionComponent, useEffect, useState } from "react";
 
 import * as styles from "./FileViewer.styles";
