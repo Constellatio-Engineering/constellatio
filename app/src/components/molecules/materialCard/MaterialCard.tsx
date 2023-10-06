@@ -1,8 +1,9 @@
+import MaterialsLabel from "@/components/atoms/materialsLabel/MaterialsLabel";
+import { SubtitleText } from "@/components/atoms/SubtitleText/SubtitleText";
+
 import React, { type FunctionComponent } from "react";
 
 import * as styles from "./MaterialCard.styles";
-import { SubtitleText } from "../atoms/SubtitleText/SubtitleText";
-import MaterialsLabel from "../materialsLabel/MaterialsLabel";
 
 interface MaterialCardProps
 {

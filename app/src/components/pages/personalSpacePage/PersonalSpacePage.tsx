@@ -1,4 +1,3 @@
-import FileViewer from "@/components/fileViewer/FileViewer";
 import EmptyStateCard from "@/components/organisms/emptyStateCard/EmptyStateCard";
 import FavoriteCasesList from "@/components/organisms/favoriteCasesList/FavoriteCasesList";
 import FileUploadMenu from "@/components/organisms/fileUploadMenu/FileUploadMenu";
@@ -6,7 +5,6 @@ import MaterialMenu from "@/components/organisms/materialMenu/MaterialMenu";
 import OverviewHeader from "@/components/organisms/OverviewHeader/OverviewHeader";
 import PersonalSpaceNavBar from "@/components/organisms/personalSpaceNavBar/PersonalSpaceNavBar";
 import PapersBlock from "@/components/papersBlock/PapersBlock";
-import UploadedMaterialBlock from "@/components/uploadedMaterialBlock/UploadedMaterialBlock";
 import useBookmarks from "@/hooks/useBookmarks";
 import useCases from "@/hooks/useCases";
 import useDocuments from "@/hooks/useDocuments";
@@ -24,6 +22,9 @@ import { categoriesHelper } from "./PersonalSpaceHelper";
 import * as styles from "./PersonalSpacePage.styles";
 import BookmarkIconSvg from "../../../../public/images/icons/bookmark.svg";
 import FileIconSvg from "../../../../public/images/icons/file.svg";
+
+import FileViewer from "@/components/fileViewer/FileViewer";
+import UploadedMaterialBlock from "@/components/uploadedMaterialBlock/UploadedMaterialBlock";
 
 export type FileWithClientSideUuid = {
   clientSideUuid: string;

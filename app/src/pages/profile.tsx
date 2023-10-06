@@ -1,28 +1,37 @@
 import { Layout } from "@/components/layouts/Layout";
 import ProfilePage from "@/components/pages/profilePage/ProfilePage";
+import { type IGenMainCategory, type IGenGetAllMainCategoryQuery } from "@/services/graphql/__generated/sdk";
+import { caisySDK } from "@/services/graphql/getSdk";
 
 import { type GetStaticProps } from "next/types";
 import React, { type FunctionComponent } from "react";
 
-type IProfilePageProps = { 
+export type IProfilePageProps = { 
+  // readonly allMainCategory: Array<({
+  //   _typename?: "MainCategory" | undefined;
+  // } & IGenMainCategoryFragment) | null | undefined>;
+  readonly allMainCategory: Array<IGenMainCategory | null | undefined>;
   readonly data: string;
 };
 
-export const getStaticProps: GetStaticProps<IProfilePageProps> = () =>
+export const getStaticProps: GetStaticProps<IProfilePageProps> = async () =>
 {
+
+  const allCategoryRes: IGenGetAllMainCategoryQuery = await caisySDK.getAllMainCategory();
   return {
     props: {
-      data: "data"
+      allMainCategory: allCategoryRes?.allMainCategory?.edges?.map((edge) => edge!.node) ?? [],
+      data: "data",
     }
   };
 };
 
-const Page: FunctionComponent<IProfilePageProps> = ({ data }) =>
+const Page: FunctionComponent<IProfilePageProps> = (props) =>
 {
-  console.log({ data });
+  // console.log({ allMainCategory, data });
   return (
     <Layout>
-      <ProfilePage/>
+      <ProfilePage {...props}/>
     </Layout>
   );
 };

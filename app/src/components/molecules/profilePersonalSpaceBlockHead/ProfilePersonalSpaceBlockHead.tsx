@@ -1,16 +1,16 @@
 
+import { CaptionText } from "@/components/atoms/CaptionText/CaptionText";
+import IconButton from "@/components/atoms/iconButton/IconButton";
+import { SubtitleText } from "@/components/atoms/SubtitleText/SubtitleText";
+import { SwitcherTab } from "@/components/atoms/Switcher-tab/SwitcherTab";
+import { FolderIcon } from "@/components/Icons/Folder";
+import { Trash } from "@/components/Icons/Trash";
+
 import { Tabs } from "@mantine/core";
 import React, { type FunctionComponent } from "react";
 
-import { CaptionText } from "../atoms/CaptionText/CaptionText";
-import IconButton from "../atoms/iconButton/IconButton";
-import { SubtitleText } from "../atoms/SubtitleText/SubtitleText";
-import { SwitcherTab } from "../atoms/Switcher-tab/SwitcherTab";
-import { FolderIcon } from "../Icons/Folder";
-import { Trash } from "../Icons/Trash";
-import { Switcher } from "../molecules/Switcher/Switcher";
-// import { tabs } from "../organisms/caseNavBar/CaseNavBar.styles";
-import * as styles from "../profilePersonalSpaceBlock/ProfilePersonalSpaceBlock.styles";
+import * as styles from "../../organisms/profilePersonalSpaceBlock/ProfilePersonalSpaceBlock.styles";
+import { Switcher } from "../Switcher/Switcher";
 
 interface ProfilePersonalSpaceBlockHeadProps
 {

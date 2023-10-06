@@ -1,10 +1,11 @@
+import IconButton from "@/components/atoms/iconButton/IconButton";
+import Label from "@/components/atoms/label/Label";
+import { BookmarkFilledIcon } from "@/components/Icons/BookmarkFilledIcon";
+
 import { Title } from "@mantine/core";
 import React, { type FunctionComponent } from "react";
 
 import * as styles from "./FavoriteCard.styles";
-import IconButton from "../atoms/iconButton/IconButton";
-import Label from "../atoms/label/Label";
-import { BookmarkFilledIcon } from "../Icons/BookmarkFilledIcon";
 
 interface FavoriteCardProps extends React.HTMLAttributes<HTMLDivElement>  
 {

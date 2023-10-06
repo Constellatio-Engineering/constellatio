@@ -1,12 +1,13 @@
+import { LinkButton } from "@/components/atoms/LinkButton/LinkButton";
+import ProfileMenuUniversityTab from "@/components/atoms/profileMenuUniversityTab/ProfileMenuUniversityTab";
+import { NoteIcon } from "@/components/Icons/Note";
+import MenuListItem from "@/components/molecules/menuListItem/MenuListItem";
+
 import { IconLogout } from "@tabler/icons-react";
 import React, { type FunctionComponent } from "react";
 
 import * as styles from "./ProfileMenu.styles";
 import ProfileMenuMainProfileInfo from "./ProfileMenuMainProfileInfo";
-import { LinkButton } from "../atoms/LinkButton/LinkButton";
-import { NoteIcon } from "../Icons/Note";
-import MenuListItem from "../menuListItem/MenuListItem";
-import ProfileMenuUniversityTab from "../profileMenuUniversityTab/ProfileMenuUniversityTab";
 
 export type ITab ={
   icon?: React.ReactNode;

@@ -1,8 +1,9 @@
+import { BodyText } from "@/components/atoms/BodyText/BodyText";
+
 import { useMantineTheme } from "@mantine/styles";
 import React, { type FunctionComponent } from "react";
 
 import * as styles from "./MenuListItem.styles";
-import { BodyText } from "../atoms/BodyText/BodyText";
 
 // make this interface accepts a button tag attributes
 interface MenuListItemProps extends React.ButtonHTMLAttributes<HTMLButtonElement>

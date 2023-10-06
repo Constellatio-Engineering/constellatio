@@ -1,9 +1,10 @@
+import { MoveDownIcon } from "@/components/Icons/MoveDown";
+import { NoteIcon } from "@/components/Icons/Note";
+
 import React, { type FunctionComponent } from "react";
 
 import * as styles from "./MaterialsLabel.styles";
-import { CaptionText } from "../atoms/CaptionText/CaptionText";
-import { MoveDownIcon } from "../Icons/MoveDown";
-import { NoteIcon } from "../Icons/Note";
+import { CaptionText } from "../CaptionText/CaptionText";
 
 interface MaterialsLabelProps
 {

@@ -3,8 +3,8 @@ import CaisyImg from "@/basic-components/CaisyImg";
 import React, { type FunctionComponent } from "react";
 
 import * as styles from "./ProfilePageHeader.styles";
-import Flag from "../../../public/images/flag-big.png";
-import OverviewHeader from "../organisms/OverviewHeader/OverviewHeader";
+import Flag from "../../../../public/images/flag-big.png";
+import OverviewHeader from "../OverviewHeader/OverviewHeader";
 
 const ProfilePageHeader: FunctionComponent = () => 
 {

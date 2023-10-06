@@ -3,7 +3,7 @@ import CaisyImg from "@/basic-components/CaisyImg";
 import React, { type FunctionComponent } from "react";
 
 import * as styles from "./ProfileMenuUniversityTab.styles";
-import { BodyText } from "../atoms/BodyText/BodyText";
+import { BodyText } from "../BodyText/BodyText";
 
 interface ProfileMenuUniversityTabProps
 {

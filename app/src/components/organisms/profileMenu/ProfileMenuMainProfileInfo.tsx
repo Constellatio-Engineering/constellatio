@@ -1,10 +1,10 @@
 import CaisyImg from "@/basic-components/CaisyImg";
+import { BodyText } from "@/components/atoms/BodyText/BodyText";
 
 import { Title } from "@mantine/core";
 import { type FunctionComponent } from "react";
 
 import * as styles from "./ProfileMenu.styles";
-import { BodyText } from "../atoms/BodyText/BodyText";
 
 const ProfileMenuMainProfileInfo: FunctionComponent = () => 
 {

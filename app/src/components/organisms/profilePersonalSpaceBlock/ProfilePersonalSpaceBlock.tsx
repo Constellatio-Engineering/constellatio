@@ -1,3 +1,9 @@
+import { Button } from "@/components/atoms/Button/Button";
+import { Bookmark } from "@/components/Icons/Bookmark";
+import { FileIcon } from "@/components/Icons/FileIcon";
+import FavoriteCard from "@/components/molecules/favoriteCard/FavoriteCard";
+import MaterialCard from "@/components/molecules/materialCard/MaterialCard";
+import ProfilePersonalSpaceBlockHead from "@/components/molecules/profilePersonalSpaceBlockHead/ProfilePersonalSpaceBlockHead";
 import useBookmarks from "@/hooks/useBookmarks";
 import useCases from "@/hooks/useCases";
 import useUploadedFiles from "@/hooks/useUploadedFiles";
@@ -9,13 +15,7 @@ import { useRouter } from "next/router";
 import React, { type FunctionComponent, useState } from "react";
 
 import * as styles from "./ProfilePersonalSpaceBlock.styles";
-import { Button } from "../atoms/Button/Button";
-import FavoriteCard from "../favoriteCard/FavoriteCard";
-import { Bookmark } from "../Icons/Bookmark";
-import { FileIcon } from "../Icons/FileIcon";
-import MaterialCard from "../materialCard/MaterialCard";
-import EmptyStateCard from "../organisms/emptyStateCard/EmptyStateCard";
-import ProfilePersonalSpaceBlockHead from "../profilePersonalSpaceBlockHead/ProfilePersonalSpaceBlockHead";
+import EmptyStateCard from "../emptyStateCard/EmptyStateCard";
 
 const ProfilePersonalSpaceBlock: FunctionComponent = () => 
 {
