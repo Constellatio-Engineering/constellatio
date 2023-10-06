@@ -7,6 +7,7 @@ export const wrapper = (theme: MantineTheme) => css`
     min-height: 300px;
     min-width: 100%;
     padding: 40px 32px 32px 28px;
+    box-shadow: 0px 8px 44px 0px rgba(0, 0, 0, 0.04);
 `;
 export const blockHead = css`
     display: flex;

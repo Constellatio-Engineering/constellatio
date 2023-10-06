@@ -116,31 +116,34 @@ const MaterialMenu: FunctionComponent<MaterialMenuProps> = ({ folders, selectedF
             <Cross size={32}/>
           </span>
           <Title order={3}>Create folder</Title>
-          <div className="new-folder-input">
-            <BodyText styleType="body-01-regular" component="label">Folder name</BodyText>
-            <Input
-              inputType="text"
-              value={newFolderName} 
-              onChange={(e) => setNewFolderName(e.currentTarget.value)}
-            />
-          </div>
-          <div className="modal-call-to-action">
-            <Button<"button">
-              styleType={"secondarySimple" as TButton["styleType"]}
-              onClick={close}>
-              Cancel
-            </Button>
-            <Button<"button">
-              styleType="primary"
-              disabled={newFolderName.trim().length <= 0}
-              onClick={() => 
-              {
-                setNewFolderName("");
-                createFolder({ name: newFolderName });
-                close();
-              }}>Create
-            </Button>
-          </div>
+          <form onSubmit={(e) => e.preventDefault()}>
+            <div className="new-folder-input">
+              <BodyText styleType="body-01-regular" component="label">Folder name</BodyText>
+              <Input
+                inputType="text"
+                value={newFolderName}
+                onChange={(e) => setNewFolderName(e.currentTarget.value)}
+              />
+            </div>
+            <div className="modal-call-to-action">
+              <Button<"button">
+                styleType={"secondarySimple" as TButton["styleType"]}
+                onClick={close}>
+                Cancel
+              </Button>
+              <Button<"button">
+                type="submit"
+                styleType="primary"
+                disabled={newFolderName.trim().length <= 0}
+                onClick={() =>
+                {
+                  setNewFolderName("");
+                  createFolder({ name: newFolderName });
+                  close();
+                }}>Create
+              </Button>
+            </div>
+          </form>
         </Modal>
       </div>
     </div>

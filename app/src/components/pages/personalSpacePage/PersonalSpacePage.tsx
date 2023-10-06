@@ -3,7 +3,7 @@ import FavoriteCasesList from "@/components/organisms/favoriteCasesList/Favorite
 import FileUploadMenu from "@/components/organisms/fileUploadMenu/FileUploadMenu";
 import FileViewer from "@/components/organisms/fileViewer/FileViewer";
 import MaterialMenu from "@/components/organisms/materialMenu/MaterialMenu";
-import OverviewHeader from "@/components/organisms/OverviewHeader/OverviewHeader";
+import OverviewHeader, { slugFormatter } from "@/components/organisms/OverviewHeader/OverviewHeader";
 import PersonalSpaceNavBar from "@/components/organisms/personalSpaceNavBar/PersonalSpaceNavBar";
 import UploadedMaterialBlock from "@/components/organisms/uploadedMaterialBlock/UploadedMaterialBlock";
 import PapersBlock from "@/components/papersBlock/PapersBlock";
@@ -18,7 +18,8 @@ import { type Nullable } from "@/utils/types";
 
 import { Container, Loader } from "@mantine/core";
 import Link from "next/link";
-import React, { type FunctionComponent, useState, useId } from "react";
+import { useRouter } from "next/router";
+import React, { type FunctionComponent, useState, useId, useEffect } from "react";
 
 import { categoriesHelper } from "./PersonalSpaceHelper";
 import * as styles from "./PersonalSpacePage.styles";
@@ -68,8 +69,6 @@ const PersonalSpacePage: FunctionComponent = () =>
   const [selectedCategory, setSelectedCategory] = useState<IGenMainCategory | undefined>(categories?.[0]);
   const FavCasesTabId = useId();
   const FavDictionaryTabId = useId();
-  const FavForumsTabId = useId();
-  const FavHighlightsTabId = useId();
   const isFavoriteTab = (id: string): boolean => id === categories?.[0]?.id;
   const areUploadsInProgress = uploads.some(u => u.state.type === "uploading");
   const favoriteCategoryNavTabs = [{ id: FavCasesTabId, itemsPerTab: bookmarkedCases?.length ?? 0, title: "CASES" }, { id: FavDictionaryTabId, itemsPerTab: 0, title: "DICTIONARY" }];
@@ -78,6 +77,16 @@ const PersonalSpacePage: FunctionComponent = () =>
   {
     return bookmarkedCase.mainCategoryField?.[0]?.id === id;
   });
+  const router = useRouter();
+  useEffect(() => 
+  {
+    if(router.query.q)
+    {
+      setSelectedCategory(categories?.find(x => slugFormatter(x.mainCategory ?? "") === router.query.q));
+    }
+  // Do not add selectedCategory to the dependency array, it will cause an infinite loop
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [router.query.q]);
   const [showFileViewerModal, setShowFileViewerModal] = useState<boolean>(false);
   return (
     <div css={styles.wrapper}>
@@ -115,27 +124,11 @@ const PersonalSpacePage: FunctionComponent = () =>
             )}
         
           </>
-        ) : selectedTabId === FavDictionaryTabId ? (
+        ) : selectedTabId === FavDictionaryTabId && (
           <>
             <EmptyStateCard
               button={<Link href="/dictionary">Explore Articles</Link>}
               title="You haven’t saved any Articles yet"
-              text="You can save cases, dictionary articles, forum questions and highlighted text to Favourites"
-              variant="For-large-areas"
-            />
-          </>
-        ) : selectedTabId === FavForumsTabId ? (
-          <>
-            <EmptyStateCard
-              title="You haven’t saved any Forums yet"
-              text="You can save cases, dictionary articles, forum questions and highlighted text to Favourites"
-              variant="For-large-areas"
-            />
-          </>
-        ) : selectedTabId === FavHighlightsTabId && (
-          <>
-            <EmptyStateCard
-              title="You haven’t saved any Highlights yet"
               text="You can save cases, dictionary articles, forum questions and highlighted text to Favourites"
               variant="For-large-areas"
             />

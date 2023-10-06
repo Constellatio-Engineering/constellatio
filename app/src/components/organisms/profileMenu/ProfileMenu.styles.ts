@@ -2,7 +2,8 @@ import { css } from "@emotion/react";
 import { type MantineTheme } from "@mantine/styles";
 
 export const wrapper = (theme: MantineTheme) => css`
-  width: 336px;
+  width:320px;
+  min-width:320px;
   background-color: ${theme.colors["neutrals-01"][0]};
   border-radius: 12px;
   box-shadow: 0px 8px 44px 0px rgba(0, 0, 0, 0.04);
@@ -28,7 +29,7 @@ export const profileImage = css`
 `;
 export const profileName = css`
   margin-top: 8px;
-  width: 90%;
+  width: 100%;
 `;
 export const profileNameText = (theme: MantineTheme) => css`
   color: ${theme.colors["neutrals-02"][1]};

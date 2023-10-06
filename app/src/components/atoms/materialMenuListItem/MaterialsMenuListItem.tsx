@@ -82,31 +82,34 @@ const MaterialsMenuListItem: FunctionComponent<MenuListItemProps & HTMLProps<HTM
           <Cross size={32}/>
         </span>
         <Title order={3}>Rename folder</Title>
-        <div className="new-folder-input">
-          <BodyText styleType="body-01-regular" component="label">Folder name</BodyText>
-          <Input
-            inputType="text"
-            value={newFolderName} 
-            onChange={(e) => { setNewFolderName(e.target.value); }}
-          />
-        </div>
-        <div className="modal-call-to-action">
-          <Button<"button">
-            styleType={"secondarySimple" as TButton["styleType"]}
-            onClick={() => setShowRenameModal(false)}>
-            Cancel
-          </Button>
-          <Button<"button">
-            styleType="primary"
-            disabled={newFolderName?.trim()?.length <= 0}
-            onClick={() => 
-            {
-              setShowRenameModal(false);
-              onRename?.(newFolderName);
-            }}>
-            Save
-          </Button>
-        </div>
+        <form onSubmit={e => e.preventDefault()}>
+          <div className="new-folder-input">
+            <BodyText styleType="body-01-regular" component="label">Folder name</BodyText>
+            <Input
+              inputType="text"
+              value={newFolderName}
+              onChange={(e) => { setNewFolderName(e.target.value); }}
+            />
+          </div>
+          <div className="modal-call-to-action">
+            <Button<"button">
+              styleType={"secondarySimple" as TButton["styleType"]}
+              onClick={() => setShowRenameModal(false)}>
+              Cancel
+            </Button>
+            <Button<"button">
+              styleType="primary"
+              type="submit"
+              disabled={newFolderName?.trim()?.length <= 0}
+              onClick={() =>
+              {
+                setShowRenameModal(false);
+                onRename?.(newFolderName);
+              }}>
+              Save
+            </Button>
+          </div>
+        </form>
       </Modal>
       <Modal
         opened={showDeleteModal}
