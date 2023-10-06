@@ -1,3 +1,5 @@
+import ChangePasswordTab from "@/components/organisms/changePasswordTab/ChangePasswordTab";
+import ProfileDetailsTab from "@/components/organisms/profileDetailsTab/ProfileDetailsTab";
 import ProfileMenu, { type ITab } from "@/components/organisms/profileMenu/ProfileMenu";
 import ProfileOverview from "@/components/organisms/profileOverview/ProfileOverview";
 import ProfilePageHeader from "@/components/organisms/profilePageHeader/ProfilePageHeader";
@@ -14,24 +16,25 @@ const ProfilePage: FunctionComponent<IProfilePageProps> = ({ allMainCategory }) 
     { selected: true, title: "Overview" },
     { selected: false, title: "Profile Details" },
     { selected: false, title: "Change Password" },
-    { selected: false, title: "History" },
-    { selected: false, title: "Notifications" },
-    { selected: false, title: "Subscription" },
+    // { selected: false, title: "History" },
+    // { selected: false, title: "Notifications" },
+    // { selected: false, title: "Subscription" },
   ]);
 
   const contentPicker = (tabs: ITab[]): React.ReactNode => 
   {
     const tab = tabs.find(x => x.selected);
-    console.log({ tab });
     switch (tab?.title)
     {
       case "Overview":
         return <ProfileOverview allMainCategory={allMainCategory}/>;
       case "Profile Details":
-        return <>Profile Details</>;
+        return <ProfileDetailsTab/>;
+      case "Change Password":
+        return <ChangePasswordTab/>;
       default:
-        console.log(`Unknown tab: ${tab?.title}, create tab case in ProfilePage component`);
-        return <>{`Unknown tab: ${tab?.title}, create tab case in ProfilePage component`}</>;
+        console.log(`Unknown tab: ${tab?.title}, create tab type case in ProfilePage component`);
+        return <>{`Unknown tab: ${tab?.title}, create tab type case in ProfilePage component`}</>;
     }
   };
 

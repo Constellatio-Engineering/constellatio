@@ -10,6 +10,7 @@ import useUploadedFiles from "@/hooks/useUploadedFiles";
 import useUploadFolders from "@/hooks/useUploadFolders";
 import { type IGenCase } from "@/services/graphql/__generated/sdk";
 
+import { Loader } from "@mantine/core";
 import Link from "next/link";
 import { useRouter } from "next/router";
 import React, { type FunctionComponent, useState } from "react";
@@ -36,7 +37,7 @@ const ProfilePersonalSpaceBlock: FunctionComponent = () =>
         <div css={styles.favoritesTab}>
           <div css={styles.casesCard}>
             {
-              (isUseBookmarksLoading || isUseCasesLoading) ? ("loading...") :
+              (isUseBookmarksLoading || isUseCasesLoading) ? (<Loader sx={{ margin: "0px" }}/>) :
                 bookmarkedCases && 
               bookmarkedCases.length > 0 ? (
                     bookmarkedCases?.slice(0, 6)?.map((bookmarkCase: IGenCase, index: number) => bookmarkCase && (
@@ -67,28 +68,31 @@ const ProfilePersonalSpaceBlock: FunctionComponent = () =>
         </div>
       )}
       {
-        isGetUploadedFilesLoading ? ("loading...") :
-          selectedTab === 1 && (
-            <div>
-              <div css={styles.uploadedMaterialsTab}>
-                {uploadedFiles.slice(0, 6).map((file, index) => (
-                  <MaterialCard
-                    title={file?.originalFilename}
-                    fileExtension={file?.fileExtension}
-                    materialType="paper"
-                    key={index}
-                  />
-                ))}
+      
+        selectedTab === 1 ? 
+          isGetUploadedFilesLoading ? (<Loader sx={{ margin: "0px" }}/>) :
+            (
+              <div>
+                <div css={styles.uploadedMaterialsTab}>
+                  {uploadedFiles.slice(0, 6).map((file, index) => (
+                    <MaterialCard
+                      title={file?.originalFilename}
+                      fileExtension={file?.fileExtension}
+                      materialType="paper"
+                      key={index}
+                    />
+                  ))}
+                </div>
+                {uploadedFiles.length > 6 && (
+                  <Link href="/personal-space">
+                    <Button<"button"> styleType="secondarySimple">
+                      View all
+                    </Button>
+                  </Link>
+                )}
               </div>
-              {uploadedFiles.length > 6 && (
-                <Link href="/personal-space">
-                  <Button<"button"> styleType="secondarySimple">
-                    View all
-                  </Button>
-                </Link>
-              )}
-            </div>
-          )
+            )
+          : null
       }
     </div>
   );
