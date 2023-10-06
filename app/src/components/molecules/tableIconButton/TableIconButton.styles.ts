@@ -13,7 +13,7 @@ export const wrapper = (theme: MantineTheme): SerializedStyles => css`
 	background-color: ${theme.colors["neutrals-01"][0]};
 	transition: border-color 0.3s ease-in, background-color 0.3s ease-in;
 
-	&:hover {
+	/* &:hover {
 		border-color: ${theme.colors["neutrals-01"][4]};
 		background-color: ${theme.colors["neutrals-01"][1]};
 	}
@@ -26,5 +26,6 @@ export const wrapper = (theme: MantineTheme): SerializedStyles => css`
   &:focus-within{
     border-color: ${theme.colors["neutrals-01"][4]};
     background-color: ${theme.colors["neutrals-01"][1]};
-  }
+  } */
+
 `;
