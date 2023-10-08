@@ -32,13 +32,15 @@ type UploadedMaterialBlockProps = {
 const UploadedMaterialBlock: FunctionComponent<UploadedMaterialBlockProps> = ({
   areUploadsInProgress,
   fileInputRef,
+  isGetUploadedFilesLoading,
   selectedFiles,
   selectedFolderId,
+  setSelectedFileIdForPreview,
   setSelectedFiles,
+  setShowFileViewerModal,
   setUploadState,
   uploadedFiles,
-  ...props
-}) => 
+}) =>
 {
   const { invalidateUploadedFiles } = useContextAndErrorIfNull(InvalidateQueriesContext);
   const { mutateAsync: saveFileToDatabase } = api.uploads.saveFileToDatabase.useMutation();
@@ -153,7 +155,13 @@ const UploadedMaterialBlock: FunctionComponent<UploadedMaterialBlockProps> = ({
       </div>
       <div css={styles.content}>
         {uploadedFiles?.length > 0 ? (
-          <UploadedMaterialTable {...props} uploadedFiles={uploadedFiles}/>
+          <UploadedMaterialTable
+            setShowFileViewerModal={setShowFileViewerModal}
+            setSelectedFileIdForPreview={setSelectedFileIdForPreview}
+            isGetUploadedFilesLoading={isGetUploadedFilesLoading}
+            uploadedFiles={uploadedFiles}
+            selectedFolderId={selectedFolderId}
+          />
         ) : (
           <EmptyStateCard
             variant="For-small-areas"

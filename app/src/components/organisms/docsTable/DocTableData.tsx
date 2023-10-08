@@ -8,7 +8,10 @@ import { FolderIcon } from "@/components/Icons/Folder";
 import { Trash } from "@/components/Icons/Trash";
 // import MoveToModal from "@/components/moveToModal/MoveToModal";
 import { type Document } from "@/db/schema";
+import useContextAndErrorIfNull from "@/hooks/useContextAndErrorIfNull";
+import { InvalidateQueriesContext } from "@/provider/InvalidateQueriesProvider";
 import useDocumentEditorStore from "@/stores/documentEditor.store";
+import { api } from "@/utils/api";
 import { paths } from "@/utils/paths";
 
 import {
@@ -27,8 +30,19 @@ const formatDate = (date: Date): string => `${String(date.getDate()).padStart(2,
 
 export const DocsTableData: FunctionComponent<Document> = (doc) =>
 {
-  const { id: documentId, name, updatedAt } = doc;
+  const {
+    folderId,
+    id: documentId,
+    name,
+    updatedAt
+  } = doc;
+
+  const { invalidateDocuments } = useContextAndErrorIfNull(InvalidateQueriesContext);
   const { setEditDocumentState, setViewDocumentState } = useDocumentEditorStore(s => s);
+  const { mutate: deleteDocument } = api.documents.deleteDocument.useMutation({
+    onError: (error) => console.error("Error while deleting document:", error),
+    onSuccess: async () => invalidateDocuments({ folderId }),
+  });
 
   const download = async (): Promise<void> =>
   {
@@ -78,14 +92,13 @@ export const DocsTableData: FunctionComponent<Document> = (doc) =>
             <button type="button" className="dots-btn"><DotsIcon/></button>
           </Menu.Target>
           <Menu.Dropdown>
-            
             <Menu.Item><DropdownItem onClick={() => { setEditDocumentState(doc); }} icon={<Edit/>} label="Rename and edit"/></Menu.Item>
             <Menu.Divider/>
             <Menu.Item><DropdownItem icon={<FolderIcon/>} label="Move to" onClick={() => { }}/></Menu.Item>
             <Menu.Divider/>
             <Menu.Item><DropdownItem icon={<DownloadIcon/>} label="Download" onClick={download}/></Menu.Item>
             <Menu.Divider/>
-            <Menu.Item><DropdownItem icon={<Trash/>} label="Delete" onClick={() => { }}/></Menu.Item>
+            <Menu.Item><DropdownItem icon={<Trash/>} label="Download" onClick={() => deleteDocument({ id: documentId })}/></Menu.Item>
           </Menu.Dropdown>
         </Menu>
         {/* Modal */}

@@ -4,7 +4,7 @@ import UploadedMaterialTableBody from "@/components/molecules/uploadedMaterialTa
 import UploadedMaterialTableHead from "@/components/molecules/uploadedMaterialTableHead/UploadedMaterialTableHead";
 import { type UploadedFile } from "@/db/schema";
 
-import React, { type FunctionComponent, useState, useEffect } from "react";
+import React, { type FunctionComponent, useState } from "react";
 
 import * as styles from "./UploadedMaterialTable.styles";
 import UploadedMaterialNoteDrawer from "../uploadedMaterialNoteDrawer/UploadedMaterialNoteDrawer";
@@ -12,6 +12,7 @@ import UploadedMaterialNoteDrawer from "../uploadedMaterialNoteDrawer/UploadedMa
 interface UploadedMaterialTableProps
 {
   readonly isGetUploadedFilesLoading?: boolean;
+  readonly selectedFolderId: string | null;
   readonly setSelectedFileIdForPreview?: React.Dispatch<React.SetStateAction<string | undefined>>;
   readonly setShowFileViewerModal?: React.Dispatch<React.SetStateAction<boolean>>;
   readonly uploadedFiles?: Partial<UploadedFile[]>;
@@ -19,6 +20,7 @@ interface UploadedMaterialTableProps
 }
 const UploadedMaterialTable: FunctionComponent<UploadedMaterialTableProps> = ({
   isGetUploadedFilesLoading,
+  selectedFolderId,
   setSelectedFileIdForPreview,
   setShowFileViewerModal,
   uploadedFiles,
@@ -31,11 +33,7 @@ const UploadedMaterialTable: FunctionComponent<UploadedMaterialTableProps> = ({
   const [noteRichtext, setNoteRichtext] = useState<string>("");
   const [showNoteDrawer, setShowNoteDrawer] = useState<boolean>(false);
   const [showingFiles, setShowingFiles] = useState<number>(5);
-  const [isShowingFullTable, setIsShowingFullTable] = useState<boolean>(false);
-  useEffect(() =>
-  {
-    setIsShowingFullTable(showingFiles >= (uploadedFiles?.length ?? 0));
-  }, [showingFiles, uploadedFiles]);
+  const isShowingFullTable = showingFiles >= (uploadedFiles?.length ?? 0);
 
   return isGetUploadedFilesLoading ? <>Loading... </> : (
     <div>
@@ -46,7 +44,8 @@ const UploadedMaterialTable: FunctionComponent<UploadedMaterialTableProps> = ({
         <tbody css={styles.tableBody}>
           <UploadedMaterialTableBody
             showingFiles={showingFiles}
-            uploadedFiles={uploadedFiles} 
+            uploadedFiles={uploadedFiles}
+            selectedFolderId={selectedFolderId}
             setSelectedFileIdForPreview={setSelectedFileIdForPreview} 
             setShowFileViewerModal={setShowFileViewerModal}
             setSelectedFileNote={setSelectedFileNote}
