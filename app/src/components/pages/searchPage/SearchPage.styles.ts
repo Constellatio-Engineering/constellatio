@@ -57,3 +57,10 @@ export const selectedFiltersArea = css`
 	gap: 8px;
 	flex-wrap: wrap;
 `;
+
+export const searchPageResults = css`
+	/* border: 4px solid red; */
+	max-width: 1440px;
+	margin: 0 auto;
+	padding: 32px 60px;
+`;

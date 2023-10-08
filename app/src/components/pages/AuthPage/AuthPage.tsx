@@ -27,6 +27,7 @@ export const AuthPage: FC<AuthPageProps> = ({ tab }) =>
       justify="space-between"
       bg="brand-01.5"
       sx={{ height: "100vh", minHeight: 600, overflow: "hidden" }}>
+     
       <RegistrationVisualHeader/>
       <Container
         w="100%"
@@ -36,12 +37,16 @@ export const AuthPage: FC<AuthPageProps> = ({ tab }) =>
           borderRadius: `${theme.radius["radius-16"]} 0 0 ${theme.radius["radius-16"]}`,
           overflowY: "auto",
           padding: 0,
+          // this is to get rid of the right red bar to the right of the form, but gets too big on small screens
+          // margin:0,
         })}>
-        <Header variant="simple"/>
+        <Header variant="relative"/>
         <Container
           w={500}
           pt={50}
-          pb={tab === "register" ? "spacing-100" : 0}>
+          pb={tab === "register" ? "spacing-100" : 0}
+          sx={{ marginTop: "180px" }}>
+          
           <Switcher
             size="big"
             value={tab}

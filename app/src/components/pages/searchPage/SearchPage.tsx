@@ -1,4 +1,4 @@
-import useSearchResults from "@/hooks/useSearchResults";
+// import useSearchResults from "@/hooks/useSearchResults";
 
 import React, { type FunctionComponent } from "react";
 
@@ -11,7 +11,7 @@ interface SearchPageProps {}
 
 const SearchPage: FunctionComponent<SearchPageProps> = () => 
 {
-  const { isLoading, searchResults } = useSearchResults();
+  // const { isLoading, searchResults } = useSearchResults();
 
   // console.log("searchResults", searchResults);
 
@@ -20,7 +20,7 @@ const SearchPage: FunctionComponent<SearchPageProps> = () =>
       <SearchPageHeader/>
       <SearchPageFiltering/>
       <SearchPageResults/>
-      SearchPage
+      {/* SearchPage */}
     </div>
   );
 };
