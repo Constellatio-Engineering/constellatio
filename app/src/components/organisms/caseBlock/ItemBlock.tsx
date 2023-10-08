@@ -5,7 +5,7 @@ import { Notepad } from "@/components/Icons/Notepad";
 import CaseBlockHead, { type ICaseBlockHeadProps } from "@/components/molecules/caseBlockHead/CaseBlockHead";
 import CaseBlockBookmarkButton from "@/components/organisms/caseBlock/caseBlockBookmarkButton/CaseBlockBookmarkButton";
 import useBookmarks from "@/hooks/useBookmarks";
-import { type IGenArticleOverviewFragment, type IGenFullCaseFragment } from "@/services/graphql/__generated/sdk";
+import { type IGenArticle, type IGenFullCaseFragment } from "@/services/graphql/__generated/sdk";
 
 import Link from "next/link";
 import React, { type FunctionComponent } from "react";
@@ -28,6 +28,10 @@ const FavoriteCasesTable: CasesTableProps = {
   type: "cases",
   variant: "favorites"
 };
+const FavoriteDictionaryTable: DictionaryTableProps = {
+  type: "dictionary",
+  variant: "favorites"
+};
 
 const SearchTableCase: CasesTableProps = {
   type: "cases",
@@ -42,7 +46,7 @@ const SearchTableDictionary: DictionaryTableProps = {
 export interface ICaseBlockProps 
 {
   readonly blockHead: ICaseBlockHeadProps;
-  readonly items: IGenFullCaseFragment[] | IGenArticleOverviewFragment[] | undefined;
+  readonly items: IGenFullCaseFragment[] | IGenArticle[];
   readonly tableType?: "all-cases" | "cases" | "favorites" | "search" | "dictionary";
   readonly variant: "case" | "dictionary";
 }
@@ -70,7 +74,7 @@ const ItemBlock: FunctionComponent<ICaseBlockProps> = ({
       case "case":
         return tableType === "cases" ? CasesTable : tableType === "favorites" ? FavoriteCasesTable : tableType === "search" ? SearchTableCase : CasesTable;
       case "dictionary":
-        return tableType === "dictionary" ? DictionaryTable : tableType === "search" ? SearchTableDictionary : DictionaryTable;
+        return tableType === "dictionary" ? DictionaryTable : tableType === "favorites" ? FavoriteDictionaryTable : tableType === "search" ? SearchTableDictionary : DictionaryTable;
       default:
         return CasesTable;
     }

@@ -12,6 +12,9 @@ export const f_ArticleOverview = gql`
 		__typename
 		id
 		title
+		_meta{
+			createdAt
+		}
 		legalArea{
 			...LegalArea
 		}

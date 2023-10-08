@@ -1,6 +1,6 @@
 import { Svg } from "@/basic-components/SVG/Svg";
 import ItemBlock from "@/components/organisms/caseBlock/ItemBlock";
-import UploadedMaterialTable from "@/components/uploadedMaterialTable/UploadedMaterialTable";
+import UploadedMaterialTable from "@/components/organisms/uploadedMaterialTable/UploadedMaterialTable";
 import useSearchResults, { type SearchResults } from "@/hooks/useSearchResults";
 import { type IGenArticleOverviewFragment, type IGenFullCaseFragment } from "@/services/graphql/__generated/sdk";
 import { type ArticleSearchIndexItem, type CaseSearchIndexItem } from "@/utils/search";

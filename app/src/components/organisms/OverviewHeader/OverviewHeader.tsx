@@ -7,6 +7,7 @@ import type {
 } from "@/services/graphql/__generated/sdk";
 
 import { Title, useMantineTheme } from "@mantine/core";
+import { useQueryState } from "next-usequerystate";
 import React, { type FunctionComponent, useState } from "react";
 
 import * as styles from "./OverviewHeader.styles";
@@ -24,6 +25,8 @@ export interface ICasesOverviewHeaderProps
   readonly variant: "case" | "dictionary" | "red";
 }
 
+export const slugFormatter = (name: string): string => name.toLowerCase().replace(/\s+/g, "-").replace(/[^a-z0-9-]/g, "").replace(/-+/g, "-");
+
 const OverviewHeader: FunctionComponent<ICasesOverviewHeaderProps> = ({
   categories,
   selectedCategory,
@@ -33,9 +36,8 @@ const OverviewHeader: FunctionComponent<ICasesOverviewHeaderProps> = ({
 }) => 
 {
   const theme = useMantineTheme();
-  // const [filters, setFilters] = useState<string[]>(["Filter One", "Filter Two", "Filter Three", "Filter Four", "Filter Five", "Filter Six"]);
   const [filters, setFilters] = useState<string[]>([]);
-
+  const [, setTabQuery] = useQueryState("q");
   return (
     <div css={styles.contentHeader({ theme, variant })} className="header">
       <div id="overlay-lines">
@@ -44,7 +46,13 @@ const OverviewHeader: FunctionComponent<ICasesOverviewHeaderProps> = ({
       <Title order={1} css={styles.title({ theme, variant })}>{title}</Title>
       <div css={styles.categoriesButtons}>
         {categories && categories.map((category: IGenMainCategory & {casesPerCategory: number}, index: number) => category?.id && setSelectedCategory && (
-          <div key={index} onClick={() => setSelectedCategory(category)}>
+          <div
+            key={index}
+            onClick={() => 
+            {
+              void setTabQuery(slugFormatter(category?.mainCategory ?? ""));
+              setSelectedCategory(category);
+            }}>
             <CategoryTab
               {...category}
               itemsNumber={category?.casesPerCategory}

@@ -11,9 +11,11 @@ interface LayoutProps
 }
 
 export const Layout: FunctionComponent<LayoutProps> = ({ children }) => (
-  <main css={styles.wrapper}>
+  <div css={styles.wrapper}>
     <Header variant="default"/>
-    {children}
+    <main css={styles.main}>
+      {children}
+    </main>
     <Footer/>
-  </main>
+  </div>
 );
