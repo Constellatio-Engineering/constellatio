@@ -1,5 +1,6 @@
 import { Svg } from "@/basic-components/SVG/Svg";
 import ItemBlock from "@/components/organisms/caseBlock/ItemBlock";
+import UploadedMaterialTable from "@/components/uploadedMaterialTable/UploadedMaterialTable";
 import useSearchResults, { type SearchResults } from "@/hooks/useSearchResults";
 import { type IGenArticleOverviewFragment, type IGenFullCaseFragment } from "@/services/graphql/__generated/sdk";
 import { type ArticleSearchIndexItem, type CaseSearchIndexItem } from "@/utils/search";
@@ -13,9 +14,12 @@ const SearchPageResults: FunctionComponent = () =>
   const { searchResults } = useSearchResults();
   const router = useRouter();
   const routerTabQuery = router.query.tab as keyof SearchResults;
-  console.log("routerTabQuery", routerTabQuery);
   
-  if(routerTabQuery === "userUploads") { return; }
+  if(routerTabQuery === "userUploads") 
+  { 
+    console.log(searchResults[routerTabQuery]);
+    return <UploadedMaterialTable uploadedFiles={searchResults[routerTabQuery]}/>;
+  }
   else 
   {
     const filteredMainCategories = searchResults[routerTabQuery]?.map((item) => item.mainCategory).filter((mainCategory, index, arr) =>

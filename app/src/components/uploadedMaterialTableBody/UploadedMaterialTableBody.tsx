@@ -28,7 +28,7 @@ interface UploadedMaterialTableBodyProps
 
 const fileNameIcon = (file: UploadedFile): React.ReactNode =>
 {
-  switch (file.fileExtension.toLowerCase())
+  switch (file?.fileExtension?.toLowerCase())
   {
     case "png":
       return <ImageIcon/>;
@@ -50,7 +50,7 @@ const fileNameIcon = (file: UploadedFile): React.ReactNode =>
       return null;
   }
 };
-const formatDate = (date: Date): string => `${String(date.getDate()).padStart(2, "0")}.${String(date.getMonth() + 1).padStart(2, "0")}.${date.getFullYear()}`;
+const formatDate = (date: Date): string => `${String(date?.getDate()).padStart(2, "0")}.${String(date?.getMonth() + 1).padStart(2, "0")}.${date?.getFullYear()}`;
 
 const UploadedMaterialTableBody: FunctionComponent<UploadedMaterialTableBodyProps> = ({
   setSelectedFileIdForPreview,
@@ -78,11 +78,11 @@ const UploadedMaterialTableBody: FunctionComponent<UploadedMaterialTableBodyProp
             className="primaryCell"
             onClick={() => 
             {
-              setSelectedFileIdForPreview(file.id);
+              setSelectedFileIdForPreview(file?.id);
               setShowFileViewerModal(true);
             }}>
-            <BodyText styleType="body-01-medium" component="p" title={file.originalFilename}>
-              {fileNameIcon(file)}{file.originalFilename}
+            <BodyText styleType="body-01-medium" component="p" title={file?.originalFilename}>
+              {fileNameIcon(file)}{file?.originalFilename}
             </BodyText>
           </td>
           <td css={styles.docDate}> <BodyText styleType="body-01-medium" component="p">{formatDate(file.createdAt!)}</BodyText></td>
