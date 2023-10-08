@@ -22,14 +22,16 @@ import { api } from "@/utils/api";
 import {
   Menu, Modal, Title, useMantineTheme 
 } from "@mantine/core";
+import { notifications } from "@mantine/notifications";
 import React, { type FunctionComponent } from "react";
 
 import * as styles from "./UploadedMaterialTableBody.styles";
 interface UploadedMaterialTableBodyProps
 {
-  readonly setSelectedFileIdForPreview: React.Dispatch<React.SetStateAction<string | undefined>>;
+  readonly selectedFolderId: string | null;
+  readonly setSelectedFileIdForPreview?: React.Dispatch<React.SetStateAction<string | undefined>>;
   readonly setSelectedFileNote: React.Dispatch<React.SetStateAction<UploadedFile | undefined>>;
-  readonly setShowFileViewerModal: React.Dispatch<React.SetStateAction<boolean>>; 
+  readonly setShowFileViewerModal?: React.Dispatch<React.SetStateAction<boolean>>;
   readonly setShowNoteDrawer: React.Dispatch<React.SetStateAction<boolean>>;
   readonly showingFiles: number;
   readonly uploadedFiles?: Partial<UploadedFile[]>;
@@ -62,7 +64,8 @@ const fileNameIcon = (file: UploadedFile): React.ReactNode =>
 };
 const formatDate = (date: Date): string => `${String(date?.getDate()).padStart(2, "0")}.${String(date?.getMonth() + 1).padStart(2, "0")}.${date?.getFullYear()}`;
 
-const UploadedMaterialTableBody: FunctionComponent<Partial<UploadedMaterialTableBodyProps>> = ({
+const UploadedMaterialTableBody: FunctionComponent<UploadedMaterialTableBodyProps> = ({
+  selectedFolderId,
   setSelectedFileIdForPreview,
   setSelectedFileNote,
   setShowFileViewerModal,
@@ -72,13 +75,20 @@ const UploadedMaterialTableBody: FunctionComponent<Partial<UploadedMaterialTable
   variant = "personalSpace"
 }) => 
 {
+  const theme = useMantineTheme();
   const { invalidateUploadedFiles } = useContextAndErrorIfNull(InvalidateQueriesContext);
-
   const { mutate: deleteFile } = api.uploads.deleteUploadedFiles.useMutation({
     onError: (e) => console.log("error while deleting file", e),
-    onSuccess: async () => invalidateUploadedFiles()
+    onSuccess: async () =>
+    {
+      notifications.show({
+        color: "green",
+        message: "Die Datei wurde erfolgreich gelöscht",
+        title: "Datei gelöscht"
+      });
+      await invalidateUploadedFiles({ folderId: selectedFolderId });
+    }
   });
-  const theme = useMantineTheme();
   const [showDeleteMaterialModal, setShowDeleteMaterialModal] = React.useState<boolean>(false);
   const [showRenameMaterialModal, setShowRenameMaterialModal] = React.useState<boolean>(false);
 
@@ -89,7 +99,7 @@ const UploadedMaterialTableBody: FunctionComponent<Partial<UploadedMaterialTable
           key={index}>
           <td><Checkbox/></td>
           <td
-            css={styles.docName({ clickable: setSelectedFileIdForPreview && setShowFileViewerModal ? true : false, theme })}
+            css={styles.docName({ clickable: !!(setSelectedFileIdForPreview && setShowFileViewerModal), theme })}
             className="primaryCell"
             onClick={() => 
             {

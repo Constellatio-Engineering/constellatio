@@ -18,8 +18,7 @@ const PersonalSpaceMaterialsTab: FunctionComponent<{
   readonly setSelectedFolderId: React.Dispatch<React.SetStateAction<string | null>>;
 }> = ({ selectedFolderId, setSelectedFolderId }) => 
 {
-  const { isLoading: isGetUploadedFilesLoading, uploadedFiles } =
-    useUploadedFiles(selectedFolderId);
+  const { isLoading: isGetUploadedFilesLoading, uploadedFiles } = useUploadedFiles(selectedFolderId);
   const { folders = [] } = useUploadFolders();
   const { documents } = useDocuments(selectedFolderId);
   const fileInputRef = React.useRef<HTMLInputElement>(null);
