@@ -29,7 +29,7 @@ const ProfilePersonalSpaceBlock: FunctionComponent = () =>
   const bookmarkedCases = allCases.filter(caisyCase => allCasesBookmarks.some(bookmark => bookmark.resourceId === caisyCase.id));
   const { allArticles = [], isLoading: areArticlesLoading } = useArticles(); 
   const { folders = [] } = useUploadFolders();
-  const { isLoading: isGetUploadedFilesLoading, uploadedFiles } = useUploadedFiles(folders[0]?.id ?? "");
+  const { isLoading: isGetUploadedFilesLoading, uploadedFiles } = useUploadedFiles(folders[0]?.id || null);
   const tabs = [
     { icon: { src: <Bookmark/> }, number: bookmarkedCases?.length, title: "favorites" }, 
     { icon: { src: <FileIcon/> }, number: uploadedFiles?.length, title: " materials" }
