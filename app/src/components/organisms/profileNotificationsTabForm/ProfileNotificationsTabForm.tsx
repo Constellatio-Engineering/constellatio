@@ -2,9 +2,9 @@ import { Checkbox } from "@mantine/core";
 import React, { type FunctionComponent } from "react";
 
 import * as styles from "./ProfileNotificationsTabForm.styles";
-import { BodyText } from "../atoms/BodyText/BodyText";
-import { Button } from "../atoms/Button/Button";
-import { Checkbox as CheckboxComp } from "../atoms/Checkbox/Checkbox";
+import { BodyText } from "../../atoms/BodyText/BodyText";
+import { Button } from "../../atoms/Button/Button";
+import { Checkbox as CheckboxComp } from "../../atoms/Checkbox/Checkbox";
 
 const ProfileNotificationsTabForm: FunctionComponent = () => 
 {

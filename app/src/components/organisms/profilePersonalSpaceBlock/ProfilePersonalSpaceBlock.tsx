@@ -4,11 +4,12 @@ import { FileIcon } from "@/components/Icons/FileIcon";
 import FavoriteCard from "@/components/molecules/favoriteCard/FavoriteCard";
 import MaterialCard from "@/components/molecules/materialCard/MaterialCard";
 import ProfilePersonalSpaceBlockHead from "@/components/molecules/profilePersonalSpaceBlockHead/ProfilePersonalSpaceBlockHead";
+import useArticles from "@/hooks/useArticles";
 import useBookmarks from "@/hooks/useBookmarks";
 import useCases from "@/hooks/useCases";
 import useUploadedFiles from "@/hooks/useUploadedFiles";
 import useUploadFolders from "@/hooks/useUploadFolders";
-import { type IGenCase } from "@/services/graphql/__generated/sdk";
+import { type IGenArticle, type IGenCase } from "@/services/graphql/__generated/sdk";
 
 import { Loader } from "@mantine/core";
 import Link from "next/link";
@@ -26,9 +27,17 @@ const ProfilePersonalSpaceBlock: FunctionComponent = () =>
   const allCasesBookmarks = bookmarks.filter(bookmark => bookmark?.resourceType === "case") ?? [];
   const { allCases = [], isLoading: isUseCasesLoading, } = useCases();
   const bookmarkedCases = allCases.filter(caisyCase => allCasesBookmarks.some(bookmark => bookmark.resourceId === caisyCase.id));
+  const { allArticles = [], isLoading: areArticlesLoading } = useArticles(); 
   const { folders = [] } = useUploadFolders();
   const { isLoading: isGetUploadedFilesLoading, uploadedFiles } = useUploadedFiles(folders[0]?.id ?? "");
-  const tabs = [{ icon: { src: <Bookmark/> }, number: bookmarkedCases?.length, title: "favorites" }, { icon: { src: <FileIcon/> }, number: uploadedFiles?.length, title: " materials" }];
+  const tabs = [
+    { icon: { src: <Bookmark/> }, number: bookmarkedCases?.length, title: "favorites" }, 
+    { icon: { src: <FileIcon/> }, number: uploadedFiles?.length, title: " materials" }
+  ];
+  const allArticlesBookmarks = bookmarks.filter(bookmark => bookmark?.resourceType === "article") ?? [];
+  const bookmarkedArticles = allArticles.filter((caisyArticle: IGenArticle) => allArticlesBookmarks.some(bookmark => bookmark.resourceId === caisyArticle.id));
+  const favoritesList = [...bookmarkedCases.slice(0, 3), ...bookmarkedArticles.slice(0, 3)];
+  console.log({ favoritesList });
 
   return (
     <div css={styles.wrapper}>
@@ -37,15 +46,23 @@ const ProfilePersonalSpaceBlock: FunctionComponent = () =>
         <div css={styles.favoritesTab}>
           <div css={styles.casesCard}>
             {
-              (isUseBookmarksLoading || isUseCasesLoading) ? (<Loader sx={{ margin: "0px" }}/>) :
-                bookmarkedCases && 
-              bookmarkedCases.length > 0 ? (
-                    bookmarkedCases?.slice(0, 6)?.map((bookmarkCase: IGenCase, index: number) => bookmarkCase && (
+              (isUseBookmarksLoading || isUseCasesLoading || areArticlesLoading) ? (<Loader sx={{ margin: "0px" }}/>) :
+                favoritesList && 
+              favoritesList.length > 0 ? (
+                    favoritesList?.sort((a, b) => new Date(b?._meta?.createdAt).getTime() - new Date(a?._meta?.createdAt).getTime())?.slice(0, 6)?.map((bookmarkedItem: IGenCase| IGenArticle, index: number) => (bookmarkedItem?.__typename === "Case") ? (
                       <React.Fragment key={index}>
                         <FavoriteCard
-                          onClick={async () => router.push(`/cases/${bookmarkCase?.id}`)}
-                          title={bookmarkCase.title ?? ""}
+                          onClick={async () => router.push(`/cases/${bookmarkedItem?.id}`)}
+                          title={bookmarkedItem.title ?? ""}
                           variant="case"
+                        />
+                      </React.Fragment>
+                    ) : (
+                      <React.Fragment key={index}>
+                        <FavoriteCard
+                          onClick={async () => router.push(`/dictionary/${bookmarkedItem?.id}`)}
+                          title={bookmarkedItem.title ?? ""}
+                          variant="dictionary"
                         />
                       </React.Fragment>
                     ))

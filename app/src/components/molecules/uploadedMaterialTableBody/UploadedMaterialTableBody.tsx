@@ -1,4 +1,5 @@
 import { BodyText } from "@/components/atoms/BodyText/BodyText";
+import { Checkbox } from "@/components/atoms/Checkbox/Checkbox";
 import { DotsIcon } from "@/components/Icons/dots";
 import { DownloadIcon } from "@/components/Icons/DownloadIcon";
 import { Edit } from "@/components/Icons/Edit";
@@ -11,7 +12,7 @@ import { VideoIcon } from "@/components/Icons/Video";
 import { type UploadedFile } from "@/db/schema";
 import { api } from "@/utils/api";
 
-import { Checkbox, Menu } from "@mantine/core";
+import { Menu } from "@mantine/core";
 import React, { type FunctionComponent } from "react";
 
 import * as styles from "./UploadedMaterialTableBody.styles";

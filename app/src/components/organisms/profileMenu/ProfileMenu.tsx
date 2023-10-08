@@ -47,8 +47,7 @@ const ProfileMenu: FunctionComponent<IProfileMenu> = ({ setTabs, tabs }) =>
     }
   };
 
-  const [query, setQuery] = useQueryState("q");
-
+  const [, setQuery] = useQueryState("q");
   return (
     <div css={styles.wrapper}>
       <ProfileMenuMainProfileInfo/>

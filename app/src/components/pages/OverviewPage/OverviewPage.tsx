@@ -5,7 +5,7 @@ import OverviewHeader, { slugFormatter } from "@/components/organisms/OverviewHe
 import { type IArticlesOverviewProps } from "@/services/content/getArticlesOverviewProps";
 import { type ICasesOverviewProps } from "@/services/content/getCasesOverviewProps";
 import {
-  type IGenMainCategory, type IGenLegalArea, type IGenCase, type IGenArticle, type IGenCaseOverviewFragment, type IGenArticleOverviewFragment
+  type IGenMainCategory, type IGenLegalArea, type IGenCase, type IGenArticle, type IGenCaseOverviewFragment,
 } from "@/services/graphql/__generated/sdk";
 
 import { useRouter } from "next/router";
@@ -57,7 +57,7 @@ const OverviewPage: FunctionComponent<OverviewPageProps> = ({ content, variant }
     return content?.allCases.filter(x => (x.legalArea?.id === item?.id && x.mainCategoryField?.[0]?.id === selectedCategory?.id));
   };
 
-  const getAllArticlesOfLegalArea = (item: IGenLegalArea): IGenArticleOverviewFragment[] =>
+  const getAllArticlesOfLegalArea = (item: IGenLegalArea): IGenArticle[] =>
   {
     if(content?.__typename !== "dictionary")
     {

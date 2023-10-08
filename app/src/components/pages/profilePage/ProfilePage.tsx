@@ -1,9 +1,9 @@
 import ChangePasswordTab from "@/components/organisms/changePasswordTab/ChangePasswordTab";
 import ProfileDetailsTab from "@/components/organisms/profileDetailsTab/ProfileDetailsTab";
 import ProfileMenu, { type ITab } from "@/components/organisms/profileMenu/ProfileMenu";
+import ProfileNotificationsTab from "@/components/organisms/profileNotificationsTab/ProfileNotificationsTab";
 import ProfileOverview from "@/components/organisms/profileOverview/ProfileOverview";
 import ProfilePageHeader from "@/components/organisms/profilePageHeader/ProfilePageHeader";
-import ProfileNotificationsTab from "@/components/profileNotificationsTab/ProfileNotificationsTab";
 import { type IProfilePageProps } from "@/pages/profile";
 
 import { Container } from "@mantine/core";
@@ -49,7 +49,7 @@ const ProfilePage: FunctionComponent<IProfilePageProps> = ({ allMainCategory }) 
     {
       setTabs(tabs.map((x: ITab) => x.slug === router.query.q ? ({ ...x, selected: true }) : ({ ...x, selected: false })));
     }
-  // DO NOT ADD {tabs} TO THE DEPENDENCY ARRAY => 
+  // DO NOT ADD {tabs} TO THE DEPENDENCY ARRAY, it causes infinite loop
   // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [router.query.q]);
 

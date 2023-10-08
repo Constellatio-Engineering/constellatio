@@ -38,7 +38,6 @@ const OverviewHeader: FunctionComponent<ICasesOverviewHeaderProps> = ({
   const theme = useMantineTheme();
   const [filters, setFilters] = useState<string[]>([]);
   const [, setTabQuery] = useQueryState("q");
-
   return (
     <div css={styles.contentHeader({ theme, variant })} className="header">
       <div id="overlay-lines">
