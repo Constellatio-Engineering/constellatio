@@ -1,14 +1,21 @@
+import { Button, type TButton } from "@/components/atoms/Button/Button";
 import { DropdownItem } from "@/components/atoms/Dropdown/DropdownItem";
+import { Cross } from "@/components/Icons/Cross";
 import { DownloadIcon } from "@/components/Icons/DownloadIcon";
 import { Edit } from "@/components/Icons/Edit";
+// import { FolderIcon } from "@/components/Icons/Folder";
 import { FolderIcon } from "@/components/Icons/Folder";
 import { Trash } from "@/components/Icons/Trash";
+// import MoveToModal from "@/components/moveToModal/MoveToModal";
 import { type Document } from "@/db/schema";
 import useDocumentEditorStore from "@/stores/documentEditor.store";
 import { paths } from "@/utils/paths";
 
-import { Menu } from "@mantine/core";
+import {
+  Menu, Modal, Title 
+} from "@mantine/core";
 import axios from "axios";
+import React, { useState } from "react";
 import { type FunctionComponent } from "react";
 
 import * as styles from "./DocsTable.styles";
@@ -50,10 +57,12 @@ export const DocsTableData: FunctionComponent<Document> = (doc) =>
 
     window.URL.revokeObjectURL(url);
   };
-
+  
+  const [showDeleteDocModal, setShowDeleteDocModal] = useState<boolean>(false);
+  // const [showMoveToModal, setShowMoveToModal] = useState(false);
   return (
     <>
-      <td css={styles.callToActionCell}><Checkbox/></td>
+      <td><Checkbox/></td>
       <td
         css={styles.docName}
         className="primaryCell"
@@ -61,12 +70,12 @@ export const DocsTableData: FunctionComponent<Document> = (doc) =>
         <BodyText styleType="body-01-medium" component="p">{name}</BodyText>
       </td>
       <td css={styles.docDate}><BodyText styleType="body-01-medium" component="p">{formatDate(updatedAt)}</BodyText></td>
-      <td css={styles.docTags}><BodyText styleType="body-02-medium" component="p">Tags (999)</BodyText></td>
+      <td css={styles.docTags}><BodyText styleType="body-02-medium" component="p"/></td>
       <td
         css={styles.callToActionCell}> 
         <Menu shadow="md" width={200}>
           <Menu.Target>
-            <button type="button" css={styles.callToActionCell}><DotsIcon/></button>
+            <button type="button" className="dots-btn"><DotsIcon/></button>
           </Menu.Target>
           <Menu.Dropdown>
             
@@ -79,6 +88,46 @@ export const DocsTableData: FunctionComponent<Document> = (doc) =>
             <Menu.Item><DropdownItem icon={<Trash/>} label="Delete" onClick={() => { }}/></Menu.Item>
           </Menu.Dropdown>
         </Menu>
+        {/* Modal */}
+        <Modal
+          opened={showDeleteDocModal}
+          withCloseButton={false}
+          centered
+          styles={styles.deleteModalStyle()}
+          onClose={() => { setShowDeleteDocModal(false); }}>
+          <span className="close-btn" onClick={() => setShowDeleteDocModal(false)}>
+            <Cross size={32}/>
+          </span>
+          <Title order={3}>Delete folder</Title>
+          <BodyText styleType="body-01-regular" component="p" className="delete-folder-text">Are you sure you want to delete <strong>Folder name</strong>?</BodyText>
+          <div className="modal-call-to-action">
+            <Button<"button">
+              styleType={"secondarySimple" as TButton["styleType"]}
+              onClick={() => setShowDeleteDocModal(false)}>
+              No, Keep
+            </Button>
+            <Button<"button">
+              styleType="primary"
+              onClick={() => 
+              {
+                setShowDeleteDocModal(false);
+              }}>
+              Yes, Delete
+            </Button>
+          </div>
+        </Modal>
+        {/* Modal */}
+        {/* <MoveToModal
+          close={function(): void 
+          {
+            setShowMoveToModal(false);
+          }}
+          action={function(): void 
+          {
+            throw new Error("Function not implemented.");
+          }}
+          isOpened={showMoveToModal}
+        /> */}
       </td>
     </>
   );

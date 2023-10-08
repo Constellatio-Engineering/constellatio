@@ -15,6 +15,7 @@ interface SlidingPanelFileTypeRowProps
 
 const SlidingPanelFileTypeRow: FunctionComponent<SlidingPanelFileTypeRowProps> = ({ fileExtension, title }) => 
 {
+  if(!fileExtension) { console.log({ fileExtension }); }
   return (
     <div css={styles.wrapper}>
       {/* <MaterialsLabel variant="file" title={fileExtension}/> */}

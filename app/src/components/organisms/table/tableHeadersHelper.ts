@@ -138,9 +138,9 @@ export const tableHeaders = ({
             {
               title: "",
             },
-            {
-              title: "",
-            },
+            // {
+            //   title: "",
+            // },
           ];
 
         case "search":

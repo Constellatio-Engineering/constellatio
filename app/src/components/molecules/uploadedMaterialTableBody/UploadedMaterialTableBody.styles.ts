@@ -1,7 +1,8 @@
+/* eslint-disable max-lines */
 import { type UnknownMantineStylesParams } from "@/utils/types";
 
 import { css } from "@emotion/react";
-import { type DrawerStylesNames } from "@mantine/core";
+import { type ModalStylesNames, type DrawerStylesNames } from "@mantine/core";
 import { type Styles, type MantineTheme } from "@mantine/styles";
 
 const CSSClickableEffect = (theme: MantineTheme) => css`
@@ -59,16 +60,33 @@ export const tableBody = (theme: MantineTheme) => css`
 
 `;
 
-export const callToActionCell = css`
+export const callToActionCell = (theme: MantineTheme) => css`
 background-color: transparent;
 border:0;
 outline:0;
-.label{
     svg{
       vertical-align: text-bottom;
       margin-right: 8px;
     }
+  ${CSSClickableEffect(theme)}
+  button{
+    width: 100%;  
+    height: 100%;
+    position:absolute;
+    top: 0;
+    left: 0;
+    background-color: transparent;
+    border:0;
+    outline:0;
+  ${CSSClickableEffect(theme)}
+padding-left: 5px;
+svg{
+  display:grid;
+    place-items: center;
+}
+
   }
+position:relative;
 `;
 export const docName = ({ clickable, theme }: {clickable?: boolean; theme: MantineTheme}) => css`
   color: ${theme.colors["neutrals-02"][1]};
@@ -88,6 +106,7 @@ export const cellNote = (theme: MantineTheme) => css`
     vertical-align: text-bottom;
     margin-right: 8px;
   }
+  ${CSSClickableEffect(theme)}
 
 `;
 
@@ -147,4 +166,72 @@ border-top: 1px solid ${theme.colors["neutrals-01"][3]};
 button{
   flex:1;
 }
+`;
+
+type ModalStyles = Styles<ModalStylesNames, UnknownMantineStylesParams>;
+
+export const modalStyles = (): ModalStyles => 
+{
+  const styles: ModalStyles = () => ({
+    body: {
+      ".delete-folder-text": {
+        marginTop: "16px",
+      },
+      ".modal-call-to-action": {
+        alignItems: "center",
+        button: {
+          flex: 1,
+        },
+        display: "flex",
+        gap: "4px",
+        justifyContent: "center",
+        marginTop: "24px",
+      },
+      ".new-folder-input": {
+        display: "flex",
+        flexDirection: "column",
+        gap: "4px",
+        marginTop: "24px",
+      },
+      padding: "36px",
+    },
+    content: {
+      ".close-btn": {
+        cursor: "pointer",
+        position: "absolute",
+        right: "24px",
+        top: "24px",
+      },
+      borderRadius: "12px",
+      position: "relative",
+    },
+    header: {
+      padddingTop: "36px",
+      padding: 0,
+    },
+    root: {
+      minWidth: "520px",
+    },
+  });
+  return styles;
+};
+
+export const label = (theme: MantineTheme) => css`
+  display: inline-block;
+  overflow: hidden;
+  white-space: nowrap;
+  width: 100%;
+  text-overflow: ellipsis;
+  svg {
+    margin-right: 8px;
+    vertical-align: bottom;
+    color: ${theme.colors["neutrals-01"][7]};
+  }
+`;
+
+export const dropDownLabel = (theme: MantineTheme) => css`
+${label(theme)};
+padding:12px 16px;
+
+
 `;
