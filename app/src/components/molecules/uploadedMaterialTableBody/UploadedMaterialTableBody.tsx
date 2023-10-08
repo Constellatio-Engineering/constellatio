@@ -4,6 +4,8 @@ import { Checkbox } from "@/components/atoms/Checkbox/Checkbox";
 import { FileIcon } from "@/components/Icons/FileIcon";
 import { ImageIcon } from "@/components/Icons/image";
 import { Notepad } from "@/components/Icons/Notepad";
+import { NotepadFilled } from "@/components/Icons/NotepadFilled";
+import { Trash } from "@/components/Icons/Trash";
 import { VideoIcon } from "@/components/Icons/Video";
 import MaterialOptionsMenu from "@/components/materialsOptionsMenu/MaterialsOptionsMenu";
 import { type UploadedFile } from "@/db/schema";
@@ -77,7 +79,7 @@ const UploadedMaterialTableBody: FunctionComponent<UploadedMaterialTableBodyProp
   // const [showDeleteMaterialModal, setShowDeleteMaterialModal] = React.useState<boolean>(false);
   return (
     <>
-      {uploadedFiles?.slice(0, showingFiles).map((file, index) => (
+      {uploadedFiles?.slice(0, showingFiles).filter(Boolean).map((file, index) => (
         <tr
           key={index}>
           {variant === "personalSpace" && <td><Checkbox/></td>}
@@ -88,12 +90,12 @@ const UploadedMaterialTableBody: FunctionComponent<UploadedMaterialTableBodyProp
             {
               if(setSelectedFileIdForPreview && setShowFileViewerModal)
               {
-                setSelectedFileIdForPreview(file?.id);
+                setSelectedFileIdForPreview(file.id);
                 setShowFileViewerModal(true);
               }  
             }}>
             <BodyText styleType="body-01-medium" component="p" title={file?.originalFilename}>
-              {file && file.fileExtension && fileNameIcon(file)}{file?.originalFilename}
+              {file.fileExtension && fileNameIcon(file)}{file?.originalFilename}
             </BodyText>
           </td>
           <td css={styles.docDate}> <BodyText styleType="body-01-medium" component="p">{file && file.createdAt && formatDate(file.createdAt)}</BodyText></td>
@@ -110,7 +112,9 @@ const UploadedMaterialTableBody: FunctionComponent<UploadedMaterialTableBodyProp
                     setSelectedFileNote(file);
                     setShowNoteDrawer(true);
                   }
-                }}><Notepad/>Add Notes
+                }}>
+                {file.notes.length > 0 ? <NotepadFilled/> : <Notepad/>}
+                Add Notes
               </BodyText>
             </td>
           )}
