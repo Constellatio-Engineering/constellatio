@@ -12,7 +12,7 @@ import { VideoIcon } from "@/components/Icons/Video";
 import { type UploadedFile } from "@/db/schema";
 import { api } from "@/utils/api";
 
-import { Menu } from "@mantine/core";
+import { Menu, useMantineTheme } from "@mantine/core";
 import React, { type FunctionComponent } from "react";
 
 import * as styles from "./UploadedMaterialTableBody.styles";
@@ -24,12 +24,12 @@ interface UploadedMaterialTableBodyProps
   readonly setShowFileViewerModal: React.Dispatch<React.SetStateAction<boolean>>; 
   readonly setShowNoteDrewer: React.Dispatch<React.SetStateAction<boolean>>;
   readonly showingFiles: number;
-  readonly uploadedFiles?: UploadedFile[];
+  readonly uploadedFiles?: Partial<UploadedFile[]>;
 }
 
 const fileNameIcon = (file: UploadedFile): React.ReactNode =>
 {
-  switch (file.fileExtension.toLowerCase())
+  switch (file?.fileExtension?.toLowerCase())
   {
     case "png":
       return <ImageIcon/>;
@@ -51,9 +51,9 @@ const fileNameIcon = (file: UploadedFile): React.ReactNode =>
       return null;
   }
 };
-const formatDate = (date: Date): string => `${String(date.getDate()).padStart(2, "0")}.${String(date.getMonth() + 1).padStart(2, "0")}.${date.getFullYear()}`;
+const formatDate = (date: Date): string => `${String(date?.getDate()).padStart(2, "0")}.${String(date?.getMonth() + 1).padStart(2, "0")}.${date?.getFullYear()}`;
 
-const UploadedMaterialTableBody: FunctionComponent<UploadedMaterialTableBodyProps> = ({
+const UploadedMaterialTableBody: FunctionComponent<Partial<UploadedMaterialTableBodyProps>> = ({
   setSelectedFileIdForPreview,
   setSelectedFileNote,
   setShowFileViewerModal,
@@ -67,7 +67,7 @@ const UploadedMaterialTableBody: FunctionComponent<UploadedMaterialTableBodyProp
     onError: (e) => console.log("error while deleting file", e),
     onSuccess: async () => apiContext.uploads.getUploadedFiles.invalidate()
   });
-
+  const theme = useMantineTheme();
   return (
     <>
       {uploadedFiles?.slice(0, showingFiles).map((file, index) => (
@@ -75,34 +75,40 @@ const UploadedMaterialTableBody: FunctionComponent<UploadedMaterialTableBodyProp
           key={index}>
           <td css={styles.callToActionCell}><Checkbox/></td>
           <td
-            css={styles.docName}
+            css={styles.docName({ clickable: setSelectedFileIdForPreview && setShowFileViewerModal ? true : false, theme })}
             className="primaryCell"
             onClick={() => 
             {
-              setSelectedFileIdForPreview(file.id);
-              setShowFileViewerModal(true);
+              if(setSelectedFileIdForPreview && setShowFileViewerModal)
+              {
+                setSelectedFileIdForPreview(file?.id);
+                setShowFileViewerModal(true);
+              }  
             }}>
-            <BodyText styleType="body-01-medium" component="p" title={file.originalFilename}>
-              {fileNameIcon(file)}{file.originalFilename}
+            <BodyText styleType="body-01-medium" component="p" title={file?.originalFilename}>
+              {file && fileNameIcon(file)}{file?.originalFilename}
             </BodyText>
           </td>
-          <td css={styles.docDate}> <BodyText styleType="body-01-medium" component="p">{formatDate(file.createdAt!)}</BodyText></td>
-          <td css={styles.docTags}> <BodyText styleType="body-02-medium" component="p">Tags ({0})</BodyText></td>
+          <td css={styles.docDate}> <BodyText styleType="body-01-medium" component="p">{file && file.createdAt && formatDate(file.createdAt)}</BodyText></td>
+          <td css={styles.docTags}> <BodyText styleType="body-02-medium" component="p"/></td>
           <td css={styles.cellNote}>
             <BodyText
               styleType="body-02-medium"
               component="p"
               onClick={() => 
               {
-                setSelectedFileNote(file);
-                setShowNoteDrewer(true);
+                if(setSelectedFileNote && setShowNoteDrewer)
+                {
+                  setSelectedFileNote(file);
+                  setShowNoteDrewer(true);
+                }
               }}><Notepad/>Add Notes
             </BodyText>
           </td>
           <Menu shadow="md" width={200}>
             <Menu.Target>
               <td
-                onClick={() => deleteFile({ fileIds: [file.id] })}
+                onClick={() => file && deleteFile({ fileIds: [file.id] })}
                 css={styles.callToActionCell}>
                 <span>
                   <button type="button" css={styles.callToActionCell}>

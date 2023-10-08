@@ -161,6 +161,7 @@ export const tableHeaders = ({
       }
 
     default:
+      console.error("Invalid table type", tableType);
       return [];
   }
 };

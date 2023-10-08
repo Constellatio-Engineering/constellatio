@@ -30,7 +30,7 @@ const FavoriteArticlesList: FunctionComponent<FavoriteArticlesListProps> = ({
               variant="dictionary"
               tableType="favorites"
               blockHead={{
-                blockType: "facouritItemsBlock",
+                blockType: "favoriteItemsBlock",
                 categoryName: mainCategoryBlock.mainCategory ?? "",
                 completedCases: 0,
                 icon: {

@@ -14,7 +14,8 @@ export const headerHeightPx = 60;
 
 export const wrapper = ({ theme, variant }: {
   theme: MantineTheme;
-  variant: "default" | "simple";
+  variant: "default" | "simple" | "relative";
+
 }) => css`
 	height: ${headerHeightPx}px;
 	width: 100%;
@@ -35,6 +36,28 @@ export const SHeader = styled.header`
 	z-index: 40;
 `;
 export const links = css`
+display: flex;
+gap: 16px;
+height: 100%;
+	align-items: center;
+	img{
+		margin-right: 40px;
+	}
+	span{
+	}
+	a{
+	color:black;
+}
+`;
+export const SHeaderRelative = styled.header`
+  background: #fff;
+  width: 100%;
+  height :60px;
+	z-index: 40;
+		display:grid;
+  place-items: center;
+`;
+export const linksRelative = css`
 display: flex;
 gap: 16px;
 height: 100%;

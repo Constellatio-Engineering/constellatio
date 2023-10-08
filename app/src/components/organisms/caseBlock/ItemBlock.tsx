@@ -33,6 +33,16 @@ const FavoriteDictionaryTable: DictionaryTableProps = {
   variant: "favorites"
 };
 
+const SearchTableCase: CasesTableProps = {
+  type: "cases",
+  variant: "search"
+};
+
+const SearchTableDictionary: DictionaryTableProps = {
+  type: "dictionary",
+  variant: "search"
+};
+
 export interface ICaseBlockProps 
 {
   readonly blockHead: ICaseBlockHeadProps;
@@ -62,25 +72,25 @@ const ItemBlock: FunctionComponent<ICaseBlockProps> = ({
     switch (variant) 
     {
       case "case":
-        return tableType === "cases" ? CasesTable : tableType === "favorites" ? FavoriteCasesTable : CasesTable;
+        return tableType === "cases" ? CasesTable : tableType === "favorites" ? FavoriteCasesTable : tableType === "search" ? SearchTableCase : CasesTable;
       case "dictionary":
-        return tableType === "dictionary" ? DictionaryTable : tableType === "favorites" ? FavoriteDictionaryTable : DictionaryTable;
+        return tableType === "dictionary" ? DictionaryTable : tableType === "favorites" ? FavoriteDictionaryTable : tableType === "search" ? SearchTableDictionary : DictionaryTable;
       default:
         return CasesTable;
     }
   };
 
-  return items.length > 0 ? (
+  return items && items?.length > 0 ? (
     <div css={styles.wrapper}>
       <CaseBlockHead {...blockHead}/>
       <Table tableType={tableTypePicker()}>
-        {items.map((item) =>
+        {items?.map((item) =>
         {
           const isBookmarked = bookmarks.some(bookmark => bookmark?.resourceId === item?.id) || false;
           const topicsCombined = item?.topic?.map((item) => item?.topicName).join(", ") || "";
 
-          return (
-            <tr key={item.id}>
+          return item && item.id && (
+            <tr key={item?.id}>
               <td className="primaryCell">
                 <Link passHref href={`/${variant === "case" ? "cases" : "dictionary"}/${item?.id}`}>
                   <TableCell variant="titleTableCell" clickable>
@@ -100,6 +110,7 @@ const ItemBlock: FunctionComponent<ICaseBlockProps> = ({
                   </TableCell>
                 </td>
               )}
+              {tableType === "search" && <td><TableCell variant="simpleTableCell">{item?.legalArea?.legalAreaName}</TableCell></td>}
               <td title={topicsCombined}>
                 <TableCell variant="simpleTableCell">{item?.topic?.[0]?.topicName}</TableCell>
               </td>
@@ -108,7 +119,7 @@ const ItemBlock: FunctionComponent<ICaseBlockProps> = ({
                 <CaseBlockBookmarkButton
                   areAllBookmarksLoading={isLoading}
                   isBookmarked={isBookmarked}
-                  caseId={item.id}
+                  caseId={item?.id}
                   variant={variant}
                 />
               </td>
@@ -126,4 +137,3 @@ const ItemBlock: FunctionComponent<ICaseBlockProps> = ({
 };
 
 export default ItemBlock;
-

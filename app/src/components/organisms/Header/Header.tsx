@@ -22,7 +22,7 @@ import SearchOverlay from "../searchOverlay/SearchOverlay";
 
 export interface HeaderProps 
 {
-  readonly variant?: "default" | "simple";
+  readonly variant?: "default" | "simple" | "relative";
 }
 
 export const Header: FC<HeaderProps> = ({ variant = "default" }) => 
@@ -53,7 +53,7 @@ export const Header: FC<HeaderProps> = ({ variant = "default" }) =>
         </div>
       </div>
     </SHeader>
-  ) : (
+  ) : variant === "default" ? (
     <>
       <SHeader>
         <div css={styles.wrapper({ theme, variant })}>
@@ -106,5 +106,11 @@ export const Header: FC<HeaderProps> = ({ variant = "default" }) =>
       </SHeader>
       <SearchOverlay/>
     </>
+  ) : variant === "relative" && (
+    <styles.SHeaderRelative>
+      <Link href="/">
+        <Image src={ConstellatioFullLogo} alt="Constellatio"/>
+      </Link>
+    </styles.SHeaderRelative>
   );
 };

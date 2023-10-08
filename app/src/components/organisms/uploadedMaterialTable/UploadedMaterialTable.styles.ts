@@ -20,9 +20,6 @@ export const tableWrapper = (theme: MantineTheme) => css`
     width: max-content;
     vertical-align: middle;
     white-space: nowrap;
-    &:hover{
-      background: ${theme.colors["neutrals-01"][1]};
-    }
   }
   tr {
     border: 1px solid ${theme.colors["neutrals-01"][2]};
@@ -58,6 +55,7 @@ export const callToActionCell = css``;
 export const docName = (theme: MantineTheme) => css`
   color: ${theme.colors["neutrals-02"][1]};
   cursor: pointer;
+  
 `;
 export const docDate = (theme: MantineTheme) => css`
   color: ${theme.colors["neutrals-01"][7]};

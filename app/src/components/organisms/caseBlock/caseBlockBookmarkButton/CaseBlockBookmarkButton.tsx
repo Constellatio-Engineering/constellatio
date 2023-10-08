@@ -12,12 +12,14 @@ import { notifications } from "@mantine/notifications";
 import { useRouter } from "next/router";
 import React, { type FunctionComponent, useRef } from "react";
 
+import { type ICaseBlockProps } from "../ItemBlock";
+
 interface ICaseBlockBookmarkButtonProps
 {
   readonly areAllBookmarksLoading: boolean;
   readonly caseId: Nullable<string>;
   readonly isBookmarked: boolean;
-  readonly variant: "case" | "dictionary";
+  readonly variant: ICaseBlockProps["variant"];
 }
 
 const CaseBlockBookmarkButton: FunctionComponent<ICaseBlockBookmarkButtonProps> = ({

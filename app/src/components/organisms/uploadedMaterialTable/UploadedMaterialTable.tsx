@@ -12,9 +12,9 @@ import UploadedMaterialNoteDrawer from "../uploadedMaterialNoteDrawer/UploadedMa
 interface UploadedMaterialTableProps
 {
   readonly isGetUploadedFilesLoading?: boolean;
-  readonly setSelectedFileIdForPreview: React.Dispatch<React.SetStateAction<string | undefined>>;
-  readonly setShowFileViewerModal: React.Dispatch<React.SetStateAction<boolean>>;
-  readonly uploadedFiles?: UploadedFile[];
+  readonly setSelectedFileIdForPreview?: React.Dispatch<React.SetStateAction<string | undefined>>;
+  readonly setShowFileViewerModal?: React.Dispatch<React.SetStateAction<boolean>>;
+  readonly uploadedFiles?: Partial<UploadedFile[]>;
 }
 const UploadedMaterialTable: FunctionComponent<UploadedMaterialTableProps> = ({
   isGetUploadedFilesLoading,
@@ -23,6 +23,7 @@ const UploadedMaterialTable: FunctionComponent<UploadedMaterialTableProps> = ({
   uploadedFiles
 }) =>
 {
+  console.log({ uploadedFiles });
   // if file has existing not it will be assigned to this state
   const [selectedFileNote, setSelectedFileNote] = useState<UploadedFile | undefined>(undefined); 
   
@@ -36,7 +37,7 @@ const UploadedMaterialTable: FunctionComponent<UploadedMaterialTableProps> = ({
   }, [showingFiles, uploadedFiles]);
 
   return isGetUploadedFilesLoading ? <>Loading... </> : (
-    <>
+    <div>
       <table css={styles.tableWrapper}>
         <thead css={styles.tableHead}>
           <UploadedMaterialTableHead/>
@@ -73,7 +74,7 @@ const UploadedMaterialTable: FunctionComponent<UploadedMaterialTableProps> = ({
         setNoteRichtext={setNoteRichtext}
         selectedFileNote={selectedFileNote}
       />
-    </>
+    </div>
   );
 };
 

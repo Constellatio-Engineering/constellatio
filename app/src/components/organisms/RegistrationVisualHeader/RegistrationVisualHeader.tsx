@@ -10,9 +10,11 @@ export const RegistrationVisualHeader: FunctionComponent = () =>
     <Container
       bg="brand-01.5"
       sx={() => ({
+        display: "grid",
         height: "100%",
         overflow: "auto",
         padding: 0,
+        placeItems: "center",
       })}>
       <Flex
         direction="column"

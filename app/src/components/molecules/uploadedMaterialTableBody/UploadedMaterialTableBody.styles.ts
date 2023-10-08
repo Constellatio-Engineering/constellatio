@@ -4,6 +4,13 @@ import { css } from "@emotion/react";
 import { type DrawerStylesNames } from "@mantine/core";
 import { type Styles, type MantineTheme } from "@mantine/styles";
 
+const CSSClickableEffect = (theme: MantineTheme) => css`
+&:hover{
+      background: ${theme.colors["neutrals-01"][1]};
+      cursor: pointer;
+    }
+`;
+
 export const tableWrapper = (theme: MantineTheme) => css`
   text-align: left;
   border-radius: 12px;
@@ -20,9 +27,6 @@ export const tableWrapper = (theme: MantineTheme) => css`
     width: max-content;
     vertical-align: middle;
     white-space: nowrap;
-    &:hover{
-      background: ${theme.colors["neutrals-01"][1]};
-    }
   }
   tr {
     border: 1px solid ${theme.colors["neutrals-01"][2]};
@@ -66,9 +70,10 @@ outline:0;
     }
   }
 `;
-export const docName = (theme: MantineTheme) => css`
+export const docName = ({ clickable, theme }: {clickable?: boolean; theme: MantineTheme}) => css`
   color: ${theme.colors["neutrals-02"][1]};
-  cursor: pointer;
+  ${clickable && CSSClickableEffect(theme)}
+
 `;
 export const docDate = (theme: MantineTheme) => css`
   color: ${theme.colors["neutrals-01"][7]};
@@ -83,6 +88,7 @@ export const cellNote = (theme: MantineTheme) => css`
     vertical-align: text-bottom;
     margin-right: 8px;
   }
+
 `;
 
 export const showMoreButton = (theme: MantineTheme) => css`
