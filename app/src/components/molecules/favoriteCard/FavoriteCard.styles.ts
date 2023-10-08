@@ -26,5 +26,6 @@ export const tags = css`
   justify-content: space-between;
   align-items: center;
   width: 100%;
+  pointer-events: none;
 `;
 export const title = css``;

@@ -49,7 +49,7 @@ const ProfilePage: FunctionComponent<IProfilePageProps> = ({ allMainCategory }) 
     {
       setTabs(tabs.map((x: ITab) => x.slug === router.query.q ? ({ ...x, selected: true }) : ({ ...x, selected: false })));
     }
-  // DO NOT ADD {tabs} TO THE DEPENDENCY ARRAY => 
+  // DO NOT ADD {tabs} TO THE DEPENDENCY ARRAY, it causes infinite loop
   // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [router.query.q]);
 

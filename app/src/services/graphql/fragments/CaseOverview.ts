@@ -12,6 +12,9 @@ export const f_CaseOverview = gql`
 		__typename
 		id
 		title
+		_meta{
+			createdAt
+		}
 		durationToCompleteInMinutes
 		legalArea{
 			...LegalArea
