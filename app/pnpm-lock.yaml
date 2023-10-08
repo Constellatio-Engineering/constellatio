@@ -6,187 +6,187 @@ settings:
 
 dependencies:
   '@caisy/rich-text-react-renderer':
-    specifier: ^0.7.3
+    specifier: 0.7.3
     version: 0.7.3(react-dom@18.2.0)(react@18.2.0)
   '@caisy/ui-extension-react':
-    specifier: ^0.2.2
+    specifier: 0.2.2
     version: 0.2.2(react@18.2.0)
   '@dnd-kit/core':
-    specifier: ^6.0.8
+    specifier: 6.0.8
     version: 6.0.8(react-dom@18.2.0)(react@18.2.0)
   '@dnd-kit/sortable':
-    specifier: ^7.0.2
+    specifier: 7.0.2
     version: 7.0.2(@dnd-kit/core@6.0.8)(react@18.2.0)
   '@dnd-kit/utilities':
-    specifier: ^3.2.1
+    specifier: 3.2.1
     version: 3.2.1(react@18.2.0)
   '@emotion/react':
-    specifier: ^11.11.1
+    specifier: 11.11.1
     version: 11.11.1(@types/react@18.2.21)(react@18.2.0)
   '@emotion/server':
-    specifier: ^11.11.0
+    specifier: 11.11.0
     version: 11.11.0
   '@emotion/styled':
-    specifier: ^11.11.0
+    specifier: 11.11.0
     version: 11.11.0(@emotion/react@11.11.1)(@types/react@18.2.21)(react@18.2.0)
   '@google-cloud/storage':
-    specifier: ^7.1.0
+    specifier: 7.1.0
     version: 7.1.0
   '@mantine/carousel':
-    specifier: ^6.0.19
+    specifier: 6.0.19
     version: 6.0.19(@mantine/core@6.0.19)(@mantine/hooks@6.0.19)(embla-carousel-react@7.1.0)(react@18.2.0)
   '@mantine/core':
-    specifier: ^6.0.19
+    specifier: 6.0.19
     version: 6.0.19(@emotion/react@11.11.1)(@mantine/hooks@6.0.19)(@types/react@18.2.21)(react-dom@18.2.0)(react@18.2.0)
   '@mantine/dates':
-    specifier: ^6.0.19
+    specifier: 6.0.19
     version: 6.0.19(@mantine/core@6.0.19)(@mantine/hooks@6.0.19)(dayjs@1.11.9)(react@18.2.0)
   '@mantine/dropzone':
-    specifier: ^6.0.19
+    specifier: 6.0.19
     version: 6.0.19(@mantine/core@6.0.19)(@mantine/hooks@6.0.19)(react-dom@18.2.0)(react@18.2.0)
   '@mantine/form':
-    specifier: ^6.0.19
+    specifier: 6.0.19
     version: 6.0.19(react@18.2.0)
   '@mantine/hooks':
-    specifier: ^6.0.19
+    specifier: 6.0.19
     version: 6.0.19(react@18.2.0)
   '@mantine/modals':
-    specifier: ^6.0.19
+    specifier: 6.0.19
     version: 6.0.19(@mantine/core@6.0.19)(@mantine/hooks@6.0.19)(react-dom@18.2.0)(react@18.2.0)
   '@mantine/next':
-    specifier: ^6.0.19
+    specifier: 6.0.19
     version: 6.0.19(@emotion/react@11.11.1)(@emotion/server@11.11.0)(next@13.5.3)(react-dom@18.2.0)(react@18.2.0)
   '@mantine/notifications':
-    specifier: ^6.0.19
+    specifier: 6.0.19
     version: 6.0.19(@mantine/core@6.0.19)(@mantine/hooks@6.0.19)(react-dom@18.2.0)(react@18.2.0)
   '@mantine/nprogress':
-    specifier: ^6.0.19
+    specifier: 6.0.19
     version: 6.0.19(@mantine/core@6.0.19)(@mantine/hooks@6.0.19)(react-dom@18.2.0)(react@18.2.0)
   '@mantine/prism':
-    specifier: ^6.0.19
+    specifier: 6.0.19
     version: 6.0.19(@mantine/core@6.0.19)(@mantine/hooks@6.0.19)(react-dom@18.2.0)(react@18.2.0)
   '@mantine/spotlight':
-    specifier: ^6.0.19
+    specifier: 6.0.19
     version: 6.0.19(@mantine/core@6.0.19)(@mantine/hooks@6.0.19)(react-dom@18.2.0)(react@18.2.0)
   '@mantine/styles':
-    specifier: ^6.0.19
+    specifier: 6.0.19
     version: 6.0.19(@emotion/react@11.11.1)(react-dom@18.2.0)(react@18.2.0)
   '@mantine/tiptap':
-    specifier: ^6.0.19
+    specifier: 6.0.19
     version: 6.0.19(@mantine/core@6.0.19)(@mantine/hooks@6.0.19)(@tabler/icons-react@2.32.0)(@tiptap/extension-link@2.1.6)(@tiptap/react@2.1.6)(react@18.2.0)
   '@stripe/stripe-js':
-    specifier: ^2.1.0
+    specifier: 2.1.0
     version: 2.1.0
   '@supabase/auth-helpers-nextjs':
-    specifier: ^0.8.1
+    specifier: 0.8.1
     version: 0.8.1(@supabase/supabase-js@2.37.0)
   '@supabase/auth-helpers-react':
-    specifier: ^0.4.2
+    specifier: 0.4.2
     version: 0.4.2(@supabase/supabase-js@2.37.0)
   '@supabase/gotrue-js':
-    specifier: ^2.54.0
+    specifier: 2.54.0
     version: 2.54.0
   '@supabase/supabase-js':
-    specifier: ^2.37.0
+    specifier: 2.37.0
     version: 2.37.0
   '@t3-oss/env-nextjs':
-    specifier: ^0.6.1
+    specifier: 0.6.1
     version: 0.6.1(typescript@5.1.6)(zod@3.22.2)
   '@tabler/icons-react':
-    specifier: ^2.32.0
+    specifier: 2.32.0
     version: 2.32.0(react@18.2.0)
   '@tanstack/react-query':
-    specifier: ^4.35.3
+    specifier: 4.35.3
     version: 4.35.3(react-dom@18.2.0)(react@18.2.0)
   '@tiptap/extension-link':
-    specifier: ^2.1.6
+    specifier: 2.1.6
     version: 2.1.6(@tiptap/core@2.1.11)(@tiptap/pm@2.1.6)
   '@tiptap/extension-placeholder':
-    specifier: ^2.1.6
+    specifier: 2.1.6
     version: 2.1.6(@tiptap/core@2.1.11)(@tiptap/pm@2.1.6)
   '@tiptap/pm':
-    specifier: ^2.1.6
+    specifier: 2.1.6
     version: 2.1.6
   '@tiptap/react':
-    specifier: ^2.1.6
+    specifier: 2.1.6
     version: 2.1.6(@tiptap/core@2.1.11)(@tiptap/pm@2.1.6)(react-dom@18.2.0)(react@18.2.0)
   '@tiptap/starter-kit':
-    specifier: ^2.1.6
+    specifier: 2.1.6
     version: 2.1.6(@tiptap/pm@2.1.6)
   '@trpc/client':
-    specifier: ^10.38.5
+    specifier: 10.38.5
     version: 10.38.5(@trpc/server@10.38.5)
   '@trpc/next':
-    specifier: ^10.38.5
+    specifier: 10.38.5
     version: 10.38.5(@tanstack/react-query@4.35.3)(@trpc/client@10.38.5)(@trpc/react-query@10.38.5)(@trpc/server@10.38.5)(next@13.5.3)(react-dom@18.2.0)(react@18.2.0)
   '@trpc/react-query':
-    specifier: ^10.38.5
+    specifier: 10.38.5
     version: 10.38.5(@tanstack/react-query@4.35.3)(@trpc/client@10.38.5)(@trpc/server@10.38.5)(react-dom@18.2.0)(react@18.2.0)
   '@trpc/server':
-    specifier: ^10.38.5
+    specifier: 10.38.5
     version: 10.38.5
   axios:
-    specifier: ^1.5.0
+    specifier: 1.5.0
     version: 1.5.0
   dayjs:
-    specifier: ^1.11.9
+    specifier: 1.11.9
     version: 1.11.9
   dotenv:
-    specifier: ^16.3.1
+    specifier: 16.3.1
     version: 16.3.1
   dotenv-flow:
-    specifier: ^3.3.0
+    specifier: 3.3.0
     version: 3.3.0
   drizzle-orm:
     specifier: 0.28.6
     version: 0.28.6(postgres@3.3.5)
   embla-carousel-react:
-    specifier: ^7.1.0
+    specifier: 7.1.0
     version: 7.1.0(react@18.2.0)
   fastest-levenshtein:
-    specifier: ^1.0.16
+    specifier: 1.0.16
     version: 1.0.16
   google-auth-library:
-    specifier: ^9.0.0
+    specifier: 9.0.0
     version: 9.0.0
   graphql:
-    specifier: ^16.8.1
+    specifier: 16.8.1
     version: 16.8.1
   graphql-request:
-    specifier: ^6.1.0
+    specifier: 6.1.0
     version: 6.1.0(graphql@16.8.1)
   graphql-tag:
-    specifier: ^2.12.6
+    specifier: 2.12.6
     version: 2.12.6(graphql@16.8.1)
   html-pdf-node:
-    specifier: ^1.0.8
+    specifier: 1.0.8
     version: 1.0.8
   i18next:
-    specifier: ^23.5.1
+    specifier: 23.5.1
     version: 23.5.1
   immer:
-    specifier: ^10.0.2
+    specifier: 10.0.2
     version: 10.0.2
   jotai:
-    specifier: ^2.3.1
+    specifier: 2.3.1
     version: 2.3.1(@types/react@18.2.21)(react@18.2.0)
   meilisearch:
-    specifier: ^0.34.2
+    specifier: 0.34.2
     version: 0.34.2
   next:
     specifier: 13.5.3
     version: 13.5.3(@babel/core@7.23.0)(react-dom@18.2.0)(react@18.2.0)
   next-i18next:
-    specifier: ^14.0.3
+    specifier: 14.0.3
     version: 14.0.3(i18next@23.5.1)(next@13.5.3)(react-i18next@13.2.2)(react@18.2.0)
   next-usequerystate:
-    specifier: ^1.8.1
+    specifier: 1.8.1
     version: 1.8.1(next@13.5.3)(react-dom@18.2.0)(react@18.2.0)
   postgres:
     specifier: 3.3.5
     version: 3.3.5
   puppeteer:
-    specifier: ^21.3.7
+    specifier: 21.3.7
     version: 21.3.7(typescript@5.1.6)
   react:
     specifier: 18.2.0
@@ -195,99 +195,99 @@ dependencies:
     specifier: 18.2.0
     version: 18.2.0(react@18.2.0)
   react-i18next:
-    specifier: ^13.2.2
+    specifier: 13.2.2
     version: 13.2.2(i18next@23.5.1)(react-dom@18.2.0)(react@18.2.0)
   sharp:
-    specifier: ^0.32.5
+    specifier: 0.32.5
     version: 0.32.5
   stripe:
-    specifier: ^13.8.0
+    specifier: 13.8.0
     version: 13.8.0
   superjson:
-    specifier: ^1.13.1
+    specifier: 1.13.1
     version: 1.13.1
   uuid:
-    specifier: ^9.0.1
+    specifier: 9.0.1
     version: 9.0.1
   zod:
-    specifier: ^3.22.2
+    specifier: 3.22.2
     version: 3.22.2
   zod-i18n-map:
-    specifier: ^2.19.0
+    specifier: 2.19.0
     version: 2.19.0(i18next@23.5.1)(zod@3.22.2)
   zustand:
-    specifier: ^4.4.1
+    specifier: 4.4.1
     version: 4.4.1(@types/react@18.2.21)(immer@10.0.2)(react@18.2.0)
 
 devDependencies:
   '@dualmeta/eslint-config-base':
-    specifier: ^1.0.18
-    version: 1.0.18(@typescript-eslint/eslint-plugin@6.4.1)(@typescript-eslint/parser@6.4.1)(eslint-import-resolver-typescript@3.6.0)(eslint-plugin-import@2.28.1)(eslint-plugin-newline-destructuring@1.2.1)(eslint-plugin-prefer-arrow@1.2.3)(eslint-plugin-sort-destructure-keys@1.5.0)(eslint-plugin-sort-keys-fix@1.1.2)(eslint-plugin-typescript-sort-keys@2.3.0)(eslint@8.47.0)(typescript@5.1.6)
+    specifier: 1.0.18
+    version: 1.0.18(@typescript-eslint/eslint-plugin@6.4.1)(@typescript-eslint/parser@6.4.1)(eslint-import-resolver-typescript@3.6.0)(eslint-plugin-import@2.28.1)(eslint-plugin-newline-destructuring@1.2.1)(eslint-plugin-prefer-arrow@1.2.3)(eslint-plugin-sort-destructure-keys@1.5.0)(eslint-plugin-sort-keys-fix@1.1.2)(eslint-plugin-typescript-sort-keys@3.0.0)(eslint@8.47.0)(typescript@5.1.6)
   '@dualmeta/eslint-config-next':
-    specifier: ^1.0.14
+    specifier: 1.0.14
     version: 1.0.14(@dualmeta/eslint-config-base@1.0.18)(@dualmeta/eslint-config-shared-react-rules@1.0.2)(eslint-config-next@13.4.19)(eslint@8.47.0)(next@13.5.3)
   '@dualmeta/eslint-config-shared-react-rules':
-    specifier: ^1.0.2
+    specifier: 1.0.2
     version: 1.0.2
   '@emotion/babel-preset-css-prop':
-    specifier: ^11.11.0
+    specifier: 11.11.0
     version: 11.11.0(@babel/core@7.23.0)
   '@graphql-codegen/cli':
-    specifier: ^4.0.1
+    specifier: 4.0.1
     version: 4.0.1(@types/node@18.17.12)(graphql@16.8.1)(typescript@5.1.6)
   '@graphql-codegen/introspection':
-    specifier: ^4.0.0
+    specifier: 4.0.0
     version: 4.0.0(graphql@16.8.1)
   '@graphql-codegen/typed-document-node':
-    specifier: ^5.0.1
+    specifier: 5.0.1
     version: 5.0.1(graphql@16.8.1)
   '@graphql-codegen/typescript':
-    specifier: ^4.0.1
+    specifier: 4.0.1
     version: 4.0.1(graphql@16.8.1)
   '@graphql-codegen/typescript-generic-sdk':
-    specifier: ^3.1.0
+    specifier: 3.1.0
     version: 3.1.0(graphql-tag@2.12.6)(graphql@16.8.1)
   '@graphql-codegen/typescript-operations':
-    specifier: ^4.0.1
+    specifier: 4.0.1
     version: 4.0.1(graphql@16.8.1)
   '@storybook/addon-designs':
-    specifier: ^7.0.5
+    specifier: 7.0.5
     version: 7.0.5(@storybook/addon-docs@7.4.5)(@storybook/addons@7.4.5)(@storybook/components@7.4.5)(@storybook/manager-api@7.4.5)(@storybook/preview-api@7.4.5)(@storybook/theming@7.4.5)(react-dom@18.2.0)(react@18.2.0)
   '@storybook/addon-docs':
-    specifier: ^7.4.5
+    specifier: 7.4.5
     version: 7.4.5(@types/react-dom@18.2.7)(@types/react@18.2.21)(react-dom@18.2.0)(react@18.2.0)
   '@storybook/addon-essentials':
-    specifier: ^7.4.5
+    specifier: 7.4.5
     version: 7.4.5(@types/react-dom@18.2.7)(@types/react@18.2.21)(react-dom@18.2.0)(react@18.2.0)
   '@storybook/addon-interactions':
-    specifier: ^7.4.5
+    specifier: 7.4.5
     version: 7.4.5(@types/react-dom@18.2.7)(@types/react@18.2.21)(react-dom@18.2.0)(react@18.2.0)
   '@storybook/addon-links':
-    specifier: ^7.4.5
+    specifier: 7.4.5
     version: 7.4.5(react-dom@18.2.0)(react@18.2.0)
   '@storybook/addon-styling':
-    specifier: ^1.3.7
+    specifier: 1.3.7
     version: 1.3.7(@types/react-dom@18.2.7)(@types/react@18.2.21)(less@4.2.0)(postcss@8.4.31)(react-dom@18.2.0)(react@18.2.0)(typescript@5.1.6)(webpack@5.88.2)
   '@storybook/blocks':
-    specifier: ^7.4.5
+    specifier: 7.4.5
     version: 7.4.5(@types/react-dom@18.2.7)(@types/react@18.2.21)(react-dom@18.2.0)(react@18.2.0)
   '@storybook/nextjs':
-    specifier: ^7.4.5
+    specifier: 7.4.5
     version: 7.4.5(@swc/core@1.3.91)(@types/react-dom@18.2.7)(@types/react@18.2.21)(esbuild@0.18.20)(next@13.5.3)(react-dom@18.2.0)(react@18.2.0)(typescript@5.1.6)(webpack@5.88.2)
   '@storybook/react':
-    specifier: ^7.4.5
+    specifier: 7.4.5
     version: 7.4.5(react-dom@18.2.0)(react@18.2.0)(typescript@5.1.6)
   '@storybook/testing-library':
-    specifier: ^0.2.2
+    specifier: 0.2.2
     version: 0.2.2
   '@total-typescript/ts-reset':
-    specifier: ^0.5.1
+    specifier: 0.5.1
     version: 0.5.1
   '@types/eslint':
-    specifier: ^8.44.2
+    specifier: 8.44.2
     version: 8.44.2
   '@types/html-pdf-node':
-    specifier: ^1.0.0
+    specifier: 1.0.0
     version: 1.0.0
   '@types/node':
     specifier: 18.17.12
@@ -299,61 +299,61 @@ devDependencies:
     specifier: 18.2.7
     version: 18.2.7
   '@types/uuid':
-    specifier: ^9.0.4
+    specifier: 9.0.4
     version: 9.0.4
   '@typescript-eslint/eslint-plugin':
-    specifier: ^6.4.1
+    specifier: 6.4.1
     version: 6.4.1(@typescript-eslint/parser@6.4.1)(eslint@8.47.0)(typescript@5.1.6)
   '@typescript-eslint/parser':
-    specifier: ^6.4.1
+    specifier: 6.4.1
     version: 6.4.1(eslint@8.47.0)(typescript@5.1.6)
   drizzle-kit:
     specifier: 0.19.13
     version: 0.19.13
   eslint:
-    specifier: ^8.47.0
+    specifier: 8.47.0
     version: 8.47.0
   eslint-config-next:
-    specifier: ^13.4.19
+    specifier: 13.4.19
     version: 13.4.19(eslint@8.47.0)(typescript@5.1.6)
   eslint-import-resolver-typescript:
-    specifier: ^3.6.0
+    specifier: 3.6.0
     version: 3.6.0(@typescript-eslint/parser@6.4.1)(eslint-import-resolver-node@0.3.9)(eslint-plugin-import@2.28.1)(eslint@8.47.0)
   eslint-plugin-import:
-    specifier: ^2.28.1
+    specifier: 2.28.1
     version: 2.28.1(@typescript-eslint/parser@6.4.1)(eslint-import-resolver-typescript@3.6.0)(eslint@8.47.0)
   eslint-plugin-newline-destructuring:
-    specifier: ^1.2.1
+    specifier: 1.2.1
     version: 1.2.1(eslint@8.47.0)
   eslint-plugin-prefer-arrow:
-    specifier: ^1.2.3
+    specifier: 1.2.3
     version: 1.2.3(eslint@8.47.0)
   eslint-plugin-react:
-    specifier: ^7.33.2
+    specifier: 7.33.2
     version: 7.33.2(eslint@8.47.0)
   eslint-plugin-sort-destructure-keys:
-    specifier: ^1.5.0
+    specifier: 1.5.0
     version: 1.5.0(eslint@8.47.0)
   eslint-plugin-sort-keys-fix:
-    specifier: ^1.1.2
+    specifier: 1.1.2
     version: 1.1.2
   eslint-plugin-storybook:
-    specifier: ^0.6.14
+    specifier: 0.6.14
     version: 0.6.14(eslint@8.47.0)(typescript@5.1.6)
   eslint-plugin-typescript-sort-keys:
-    specifier: ^2.3.0
-    version: 2.3.0(@typescript-eslint/parser@6.4.1)(eslint@8.47.0)(typescript@5.1.6)
+    specifier: 3.0.0
+    version: 3.0.0(@typescript-eslint/parser@6.4.1)(eslint@8.47.0)(typescript@5.1.6)
   plop:
-    specifier: ^3.1.2
+    specifier: 3.1.2
     version: 3.1.2
   storybook:
-    specifier: ^7.4.5
+    specifier: 7.4.5
     version: 7.4.5
   supabase:
-    specifier: ^1.99.5
+    specifier: 1.99.5
     version: 1.99.5
   tslib:
-    specifier: ^2.6.2
+    specifier: 2.6.2
     version: 2.6.2
   typescript:
     specifier: 5.1.6
@@ -1892,7 +1892,7 @@ packages:
     resolution: {integrity: sha512-ps5qF0tMxWRVu+V5gvCRrQNqlY92aTnIKdq27gm9LZMSdaKYZt6AVvSK1dlUMzs6Rt0Jm80b+eWct6xShBKhIw==}
     dev: true
 
-  /@dualmeta/eslint-config-base@1.0.18(@typescript-eslint/eslint-plugin@6.4.1)(@typescript-eslint/parser@6.4.1)(eslint-import-resolver-typescript@3.6.0)(eslint-plugin-import@2.28.1)(eslint-plugin-newline-destructuring@1.2.1)(eslint-plugin-prefer-arrow@1.2.3)(eslint-plugin-sort-destructure-keys@1.5.0)(eslint-plugin-sort-keys-fix@1.1.2)(eslint-plugin-typescript-sort-keys@2.3.0)(eslint@8.47.0)(typescript@5.1.6):
+  /@dualmeta/eslint-config-base@1.0.18(@typescript-eslint/eslint-plugin@6.4.1)(@typescript-eslint/parser@6.4.1)(eslint-import-resolver-typescript@3.6.0)(eslint-plugin-import@2.28.1)(eslint-plugin-newline-destructuring@1.2.1)(eslint-plugin-prefer-arrow@1.2.3)(eslint-plugin-sort-destructure-keys@1.5.0)(eslint-plugin-sort-keys-fix@1.1.2)(eslint-plugin-typescript-sort-keys@3.0.0)(eslint@8.47.0)(typescript@5.1.6):
     resolution: {integrity: sha512-xN8mnSSzheWjgwLkZejJy2Pl5ITwKKEGxx8cUleOt9ZJSorXvX+a4NxOYoNT+VJvbN1QpPRn7meQ8UdSrzNJzg==}
     peerDependencies:
       '@typescript-eslint/eslint-plugin': ^6.4.0
@@ -1919,7 +1919,7 @@ packages:
       eslint-plugin-prefer-arrow: 1.2.3(eslint@8.47.0)
       eslint-plugin-sort-destructure-keys: 1.5.0(eslint@8.47.0)
       eslint-plugin-sort-keys-fix: 1.1.2
-      eslint-plugin-typescript-sort-keys: 2.3.0(@typescript-eslint/parser@6.4.1)(eslint@8.47.0)(typescript@5.1.6)
+      eslint-plugin-typescript-sort-keys: 3.0.0(@typescript-eslint/parser@6.4.1)(eslint@8.47.0)(typescript@5.1.6)
       typescript: 5.1.6
     dev: true
 
@@ -1932,7 +1932,7 @@ packages:
       eslint-config-next: ^13.4.19
       next: ^13.4.19
     dependencies:
-      '@dualmeta/eslint-config-base': 1.0.18(@typescript-eslint/eslint-plugin@6.4.1)(@typescript-eslint/parser@6.4.1)(eslint-import-resolver-typescript@3.6.0)(eslint-plugin-import@2.28.1)(eslint-plugin-newline-destructuring@1.2.1)(eslint-plugin-prefer-arrow@1.2.3)(eslint-plugin-sort-destructure-keys@1.5.0)(eslint-plugin-sort-keys-fix@1.1.2)(eslint-plugin-typescript-sort-keys@2.3.0)(eslint@8.47.0)(typescript@5.1.6)
+      '@dualmeta/eslint-config-base': 1.0.18(@typescript-eslint/eslint-plugin@6.4.1)(@typescript-eslint/parser@6.4.1)(eslint-import-resolver-typescript@3.6.0)(eslint-plugin-import@2.28.1)(eslint-plugin-newline-destructuring@1.2.1)(eslint-plugin-prefer-arrow@1.2.3)(eslint-plugin-sort-destructure-keys@1.5.0)(eslint-plugin-sort-keys-fix@1.1.2)(eslint-plugin-typescript-sort-keys@3.0.0)(eslint@8.47.0)(typescript@5.1.6)
       '@dualmeta/eslint-config-shared-react-rules': 1.0.2
       eslint: 8.47.0
       eslint-config-next: 13.4.19(eslint@8.47.0)(typescript@5.1.6)
@@ -9818,12 +9818,12 @@ packages:
       - typescript
     dev: true
 
-  /eslint-plugin-typescript-sort-keys@2.3.0(@typescript-eslint/parser@6.4.1)(eslint@8.47.0)(typescript@5.1.6):
-    resolution: {integrity: sha512-3LAcYulo5gNYiPWee+TksITfvWeBuBjGgcSLTacPESFVKEoy8laOQuZvJlSCwTBHT2SCGIxr3bJ56zuux+3MCQ==}
-    engines: {node: 12 || >= 13.9}
+  /eslint-plugin-typescript-sort-keys@3.0.0(@typescript-eslint/parser@6.4.1)(eslint@8.47.0)(typescript@5.1.6):
+    resolution: {integrity: sha512-bMmI4prYlf3l/1O8j8Nsz11m+XfKEHRFk9aJqP91L4Hgy7I38lnitnYElDmPQaznE1oFlGgBcnkEizNT2NLylQ==}
+    engines: {node: '>= 16'}
     peerDependencies:
-      '@typescript-eslint/parser': ^1 || ^2 || ^3 || ^4 || ^5
-      eslint: ^5 || ^6 || ^7 || ^8
+      '@typescript-eslint/parser': ^6
+      eslint: ^7 || ^8
       typescript: ^3 || ^4 || ^5
     dependencies:
       '@typescript-eslint/experimental-utils': 5.62.0(eslint@8.47.0)(typescript@5.1.6)
