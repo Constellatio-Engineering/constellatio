@@ -27,7 +27,7 @@ const FavoriteCasesList: FunctionComponent<FavoriteCasesListProps> = ({ bookmark
               variant="case"
               tableType="favorites"
               blockHead={{
-                blockType: "facouritItemsBlock",
+                blockType: "favoriteItemsBlock",
                 categoryName: mainCategoryBlock.mainCategory ?? "",
                 completedCases: 999,
                 icon: {

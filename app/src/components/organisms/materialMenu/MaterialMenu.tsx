@@ -2,11 +2,13 @@ import { BodyText } from "@/components/atoms/BodyText/BodyText";
 import { Button, type TButton } from "@/components/atoms/Button/Button";
 import { Input } from "@/components/atoms/Input/Input";
 import { LinkButton } from "@/components/atoms/LinkButton/LinkButton";
-import MenuListItem from "@/components/atoms/menuListItem/MenuListItem";
+import MaterialsMenuListItem from "@/components/atoms/materialMenuListItem/MaterialsMenuListItem";
 import { Cross } from "@/components/Icons/Cross";
 import { FolderIcon } from "@/components/Icons/Folder";
 import { Plus } from "@/components/Icons/Plus";
 import { type UploadFolder } from "@/db/schema";
+import useContextAndErrorIfNull from "@/hooks/useContextAndErrorIfNull";
+import { InvalidateQueriesContext } from "@/provider/InvalidateQueriesProvider";
 import { api } from "@/utils/api";
 
 import { Title, Modal } from "@mantine/core";
@@ -25,8 +27,8 @@ interface MaterialMenuProps
 
 const MaterialMenu: FunctionComponent<MaterialMenuProps> = ({ folders, selectedFolderId, setSelectedFolderId }) =>
 {
+  const { invalidateFolders } = useContextAndErrorIfNull(InvalidateQueriesContext);
   const [opened, { close, open }] = useDisclosure(false);
-  const apiContext = api.useContext();
   const { mutate: createFolder } = api.folders.createFolder.useMutation({
     onError: (error) => 
     {
@@ -36,7 +38,7 @@ const MaterialMenu: FunctionComponent<MaterialMenuProps> = ({ folders, selectedF
         message: "Der Ordner konnte nicht erstellt werden",
       });
     },
-    onSuccess: async () => apiContext.folders.getFolders.invalidate()
+    onSuccess: invalidateFolders
   });
   const { mutate: renameFolder } = api.folders.renameFolder.useMutation({
     onError: (error) =>
@@ -47,7 +49,7 @@ const MaterialMenu: FunctionComponent<MaterialMenuProps> = ({ folders, selectedF
         message: "Der Name des Ordner konnte nicht geändert werden",
       });
     },
-    onSuccess: async () => apiContext.folders.getFolders.invalidate()
+    onSuccess: invalidateFolders
   });
   const { mutate: deleteFolder } = api.folders.deleteFolder.useMutation({
     onError: (error) => 
@@ -60,7 +62,7 @@ const MaterialMenu: FunctionComponent<MaterialMenuProps> = ({ folders, selectedF
     },
     onSuccess: async () => 
     {
-      await apiContext.folders.getFolders.invalidate();
+      await invalidateFolders();
       setSelectedFolderId(null);
       notifications.show({
         color: "green",
@@ -77,7 +79,7 @@ const MaterialMenu: FunctionComponent<MaterialMenuProps> = ({ folders, selectedF
         <Title order={4}>Your folders</Title>
       </div>      
       <div css={styles.content}>
-        <MenuListItem
+        <MaterialsMenuListItem
           key="default-folder"
           title="Default folder"
           onClick={() => setSelectedFolderId(null)}
@@ -85,7 +87,7 @@ const MaterialMenu: FunctionComponent<MaterialMenuProps> = ({ folders, selectedF
           icon={<FolderIcon/>}
         />
         {folders?.map((folder, folderIndex) => (
-          <MenuListItem
+          <MaterialsMenuListItem
             onClick={() => setSelectedFolderId(folder.id)}
             onDelete={() => deleteFolder({ folderId: folder.id })}
             onRename={(newName) => renameFolder({
@@ -116,31 +118,34 @@ const MaterialMenu: FunctionComponent<MaterialMenuProps> = ({ folders, selectedF
             <Cross size={32}/>
           </span>
           <Title order={3}>Create folder</Title>
-          <div className="new-folder-input">
-            <BodyText styleType="body-01-regular" component="label">Folder name</BodyText>
-            <Input
-              inputType="text"
-              value={newFolderName} 
-              onChange={(e) => setNewFolderName(e.currentTarget.value)}
-            />
-          </div>
-          <div className="modal-call-to-action">
-            <Button<"button">
-              styleType={"secondarySimple" as TButton["styleType"]}
-              onClick={close}>
-              Cancel
-            </Button>
-            <Button<"button">
-              styleType="primary"
-              disabled={newFolderName.trim().length <= 0}
-              onClick={() => 
-              {
-                setNewFolderName("");
-                createFolder({ name: newFolderName });
-                close();
-              }}>Create
-            </Button>
-          </div>
+          <form onSubmit={(e) => e.preventDefault()}>
+            <div className="new-folder-input">
+              <BodyText styleType="body-01-regular" component="label">Folder name</BodyText>
+              <Input
+                inputType="text"
+                value={newFolderName}
+                onChange={(e) => setNewFolderName(e.currentTarget.value)}
+              />
+            </div>
+            <div className="modal-call-to-action">
+              <Button<"button">
+                styleType={"secondarySimple" as TButton["styleType"]}
+                onClick={close}>
+                Cancel
+              </Button>
+              <Button<"button">
+                type="submit"
+                styleType="primary"
+                disabled={newFolderName.trim().length <= 0}
+                onClick={() =>
+                {
+                  setNewFolderName("");
+                  createFolder({ name: newFolderName });
+                  close();
+                }}>Create
+              </Button>
+            </div>
+          </form>
         </Modal>
       </div>
     </div>

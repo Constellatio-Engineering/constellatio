@@ -1,13 +1,24 @@
+import { Button, type TButton } from "@/components/atoms/Button/Button";
+import { DropdownItem } from "@/components/atoms/Dropdown/DropdownItem";
+import { Cross } from "@/components/Icons/Cross";
 import { DownloadIcon } from "@/components/Icons/DownloadIcon";
 import { Edit } from "@/components/Icons/Edit";
+// import { FolderIcon } from "@/components/Icons/Folder";
 import { FolderIcon } from "@/components/Icons/Folder";
 import { Trash } from "@/components/Icons/Trash";
+// import MoveToModal from "@/components/moveToModal/MoveToModal";
 import { type Document } from "@/db/schema";
+import useContextAndErrorIfNull from "@/hooks/useContextAndErrorIfNull";
+import { InvalidateQueriesContext } from "@/provider/InvalidateQueriesProvider";
 import useDocumentEditorStore from "@/stores/documentEditor.store";
+import { api } from "@/utils/api";
 import { paths } from "@/utils/paths";
 
-import { Menu } from "@mantine/core";
+import {
+  Menu, Modal, Title 
+} from "@mantine/core";
 import axios from "axios";
+import React, { useState } from "react";
 import { type FunctionComponent } from "react";
 
 import * as styles from "./DocsTable.styles";
@@ -19,8 +30,19 @@ const formatDate = (date: Date): string => `${String(date.getDate()).padStart(2,
 
 export const DocsTableData: FunctionComponent<Document> = (doc) =>
 {
-  const { id: documentId, name, updatedAt } = doc;
+  const {
+    folderId,
+    id: documentId,
+    name,
+    updatedAt
+  } = doc;
+
+  const { invalidateDocuments } = useContextAndErrorIfNull(InvalidateQueriesContext);
   const { setEditDocumentState, setViewDocumentState } = useDocumentEditorStore(s => s);
+  const { mutate: deleteDocument } = api.documents.deleteDocument.useMutation({
+    onError: (error) => console.error("Error while deleting document:", error),
+    onSuccess: async () => invalidateDocuments({ folderId }),
+  });
 
   const download = async (): Promise<void> =>
   {
@@ -49,10 +71,12 @@ export const DocsTableData: FunctionComponent<Document> = (doc) =>
 
     window.URL.revokeObjectURL(url);
   };
-
+  
+  const [showDeleteDocModal, setShowDeleteDocModal] = useState<boolean>(false);
+  // const [showMoveToModal, setShowMoveToModal] = useState(false);
   return (
     <>
-      <td css={styles.callToActionCell}><Checkbox/></td>
+      <td><Checkbox/></td>
       <td
         css={styles.docName}
         className="primaryCell"
@@ -60,23 +84,63 @@ export const DocsTableData: FunctionComponent<Document> = (doc) =>
         <BodyText styleType="body-01-medium" component="p">{name}</BodyText>
       </td>
       <td css={styles.docDate}><BodyText styleType="body-01-medium" component="p">{formatDate(updatedAt)}</BodyText></td>
-      <td css={styles.docTags}><BodyText styleType="body-02-medium" component="p">Tags (999)</BodyText></td>
+      <td css={styles.docTags}><BodyText styleType="body-02-medium" component="p"/></td>
       <td
         css={styles.callToActionCell}> 
         <Menu shadow="md" width={200}>
           <Menu.Target>
-            <button type="button" css={styles.callToActionCell}><DotsIcon/></button>
+            <button type="button" className="dots-btn"><DotsIcon/></button>
           </Menu.Target>
           <Menu.Dropdown>
-            <Menu.Item><span className="label" onClick={() => { setEditDocumentState(doc); }}><Edit/>Rename and edit</span></Menu.Item>
+            <Menu.Item><DropdownItem onClick={() => { setEditDocumentState(doc); }} icon={<Edit/>} label="Rename and edit"/></Menu.Item>
             <Menu.Divider/>
-            <Menu.Item><span className="label"><FolderIcon/>Move to</span></Menu.Item>
+            <Menu.Item><DropdownItem icon={<FolderIcon/>} label="Move to" onClick={() => { }}/></Menu.Item>
             <Menu.Divider/>
-            <Menu.Item onClick={download}><span className="label"><DownloadIcon/>Download</span></Menu.Item>
+            <Menu.Item><DropdownItem icon={<DownloadIcon/>} label="Download" onClick={download}/></Menu.Item>
             <Menu.Divider/>
-            <Menu.Item onClick={() => {}}><span className="label"><Trash/>Delete</span></Menu.Item>
+            <Menu.Item><DropdownItem icon={<Trash/>} label="Download" onClick={() => deleteDocument({ id: documentId })}/></Menu.Item>
           </Menu.Dropdown>
         </Menu>
+        {/* Modal */}
+        <Modal
+          opened={showDeleteDocModal}
+          withCloseButton={false}
+          centered
+          styles={styles.deleteModalStyle()}
+          onClose={() => { setShowDeleteDocModal(false); }}>
+          <span className="close-btn" onClick={() => setShowDeleteDocModal(false)}>
+            <Cross size={32}/>
+          </span>
+          <Title order={3}>Delete folder</Title>
+          <BodyText styleType="body-01-regular" component="p" className="delete-folder-text">Are you sure you want to delete <strong>Folder name</strong>?</BodyText>
+          <div className="modal-call-to-action">
+            <Button<"button">
+              styleType={"secondarySimple" as TButton["styleType"]}
+              onClick={() => setShowDeleteDocModal(false)}>
+              No, Keep
+            </Button>
+            <Button<"button">
+              styleType="primary"
+              onClick={() => 
+              {
+                setShowDeleteDocModal(false);
+              }}>
+              Yes, Delete
+            </Button>
+          </div>
+        </Modal>
+        {/* Modal */}
+        {/* <MoveToModal
+          close={function(): void 
+          {
+            setShowMoveToModal(false);
+          }}
+          action={function(): void 
+          {
+            throw new Error("Function not implemented.");
+          }}
+          isOpened={showMoveToModal}
+        /> */}
       </td>
     </>
   );

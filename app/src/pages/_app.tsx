@@ -3,6 +3,7 @@ import { env } from "@/env.mjs";
 import { supabase } from "@/lib/supabase";
 import AuthStateProvider from "@/provider/AuthStateProvider";
 import CustomThemingProvider from "@/provider/CustomThemingProvider";
+import InvalidateQueriesProvider from "@/provider/InvalidateQueriesProvider";
 import MeilisearchProvider from "@/provider/MeilisearchProvider";
 import { api } from "@/utils/api";
 
@@ -34,17 +35,19 @@ const AppContainer: FunctionComponent<ConstellatioAppProps> = ({ Component, page
         <meta name="viewport" content="minimum-scale=1, initial-scale=1, width=device-width"/>
       </Head>
       <SessionContextProvider supabaseClient={supabase} initialSession={pageProps.initialSession}>
-        <AuthStateProvider>
-          <CustomThemingProvider>
-            <ModalsProvider>
-              <MeilisearchProvider>
-                <RouterTransition/>
-                <Notifications/>
-                <Component {...pageProps}/>
-              </MeilisearchProvider>
-            </ModalsProvider>
-          </CustomThemingProvider>
-        </AuthStateProvider>
+        <InvalidateQueriesProvider>
+          <AuthStateProvider>
+            <CustomThemingProvider>
+              <ModalsProvider>
+                <MeilisearchProvider>
+                  <RouterTransition/>
+                  <Notifications/>
+                  <Component {...pageProps}/>
+                </MeilisearchProvider>
+              </ModalsProvider>
+            </CustomThemingProvider>
+          </AuthStateProvider>
+        </InvalidateQueriesProvider>
       </SessionContextProvider>
     </>
   );

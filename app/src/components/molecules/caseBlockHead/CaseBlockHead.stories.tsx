@@ -47,7 +47,7 @@ export const DictionaryBlock: Story = {
 };
 export const FouriteCasesBlock: Story = {
   args: {
-    blockType: "facouritItemsBlock",
+    blockType: "favoriteItemsBlock",
     categoryName: "Category Name",
     completedCases: 1,
     icon: { alt: "icon", src: <Trash/> },
@@ -58,7 +58,7 @@ export const FouriteCasesBlock: Story = {
 };
 export const FouriteDictionaryBlock: Story = {
   args: {
-    blockType: "facouritItemsBlock",
+    blockType: "favoriteItemsBlock",
     categoryName: "Category Name",
     completedCases: 1,
     items: 1,
@@ -69,7 +69,7 @@ export const FouriteDictionaryBlock: Story = {
 
 export const SearchCasesBlock: Story = {
   args: {
-    blockType: "seaechBlock",
+    blockType: "searchBlock",
     categoryName: "Category Name",
     completedCases: 1,
     items: 1,
@@ -80,7 +80,7 @@ export const SearchCasesBlock: Story = {
 
 export const SearchDictionaryBlock: Story = {
   args: {
-    blockType: "seaechBlock",
+    blockType: "searchBlock",
     categoryName: "Category Name",
     completedCases: 1,
     items: 1,

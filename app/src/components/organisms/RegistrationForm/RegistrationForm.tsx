@@ -161,7 +161,9 @@ export const RegistrationForm: FunctionComponent = () =>
   if(shouldShowEmailConfirmationDialog)
   {
     return (
-      <div style={{ display: "flex", flexDirection: "column", gap: 10 }}>
+      <div style={{
+        display: "flex", flexDirection: "column", gap: 10, 
+      }}>
         <h1>Bestätige deine E-Mail Adresse</h1>
         <p>Deine Registrierung war erfolgreich. Du musst jetzt noch deine E-Mail Adresse bestätigen. Bitte schaue in deinem Postfach nach einer E-Mail von uns.</p>
         <p>Nach erfolgreicher Bestätigung kannst du dich mit deinem neuen Account einloggen.</p>

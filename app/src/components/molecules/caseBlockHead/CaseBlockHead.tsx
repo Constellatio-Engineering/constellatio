@@ -10,7 +10,7 @@ import * as styles from "./CaseBlockHead.styles";
 
 export interface ICaseBlockHeadProps 
 {
-  readonly blockType: "itemsBlock" | "facouritItemsBlock" | "seaechBlock" | "searchPapersBlock" | "searchUploadedMaterials";
+  readonly blockType: "itemsBlock" | "favoriteItemsBlock" | "searchBlock" | "searchPapersBlock" | "searchUploadedMaterials";
   readonly categoryName?: string;
   readonly completedCases?: number;
   readonly icon?: { alt?: string; src: React.ReactNode };
@@ -50,13 +50,13 @@ const CaseBlockHead: FunctionComponent<ICaseBlockHeadProps> = ({
               : <Label variant="dictionary" title={`${items} ARTICLES`}/>}
           </>
         );
-      case "facouritItemsBlock":
+      case "favoriteItemsBlock":
         return (
           <>
             {items && variant === "case" ? <Label variant="case">{items} Cases</Label> : <Label variant="dictionary">{items} Articles</Label>}
           </>
         );
-      case "seaechBlock":
+      case "searchBlock":
         return (
 
           <>
@@ -90,7 +90,7 @@ const CaseBlockHead: FunctionComponent<ICaseBlockHeadProps> = ({
         </div>
       )}
       <div css={styles.title}>
-        {categoryName && (blockType === "itemsBlock" || blockType === "facouritItemsBlock" || blockType === "seaechBlock") && <Title order={3}>{categoryName}</Title>}
+        {categoryName && (blockType === "itemsBlock" || blockType === "favoriteItemsBlock" || blockType === "searchBlock") && <Title order={3}>{categoryName}</Title>}
         {blockType === "searchPapersBlock" ? <Title order={3}>Papers</Title> : blockType === "searchUploadedMaterials" && <Title order={3}>Uploaded materials</Title>}
       </div>
       <div className="details">

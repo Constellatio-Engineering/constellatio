@@ -1194,7 +1194,7 @@ export type IGenArticleFullTextTasksFragment = { __typename: 'Article_fullTextTa
     & IGenFillInGapsGameFragment
   ) | null> | null };
 
-export type IGenArticleOverviewFragment = { __typename: 'Article', id?: string | null, title?: string | null, legalArea?: (
+export type IGenArticleOverviewFragment = { __typename: 'Article', id?: string | null, title?: string | null, _meta?: { __typename?: 'CaisyDocument_Meta', createdAt?: any | null } | null, legalArea?: (
     { __typename?: 'LegalArea' }
     & IGenLegalAreaFragment
   ) | null, topic?: Array<(
@@ -1228,7 +1228,7 @@ export type IGenCaseFullTextTasksFragment = { __typename: 'Case_fullTextTasks', 
     & IGenFillInGapsGameFragment
   ) | null> | null };
 
-export type IGenCaseOverviewFragment = { __typename: 'Case', id?: string | null, title?: string | null, durationToCompleteInMinutes?: number | null, legalArea?: (
+export type IGenCaseOverviewFragment = { __typename: 'Case', id?: string | null, title?: string | null, durationToCompleteInMinutes?: number | null, _meta?: { __typename?: 'CaisyDocument_Meta', createdAt?: any | null } | null, legalArea?: (
     { __typename?: 'LegalArea' }
     & IGenLegalAreaFragment
   ) | null, topic?: Array<(
@@ -1404,6 +1404,9 @@ export const ArticleOverviewFragmentDoc = gql`
   __typename
   id
   title
+  _meta {
+    createdAt
+  }
   legalArea {
     ...LegalArea
   }
@@ -1420,6 +1423,9 @@ export const CaseOverviewFragmentDoc = gql`
   __typename
   id
   title
+  _meta {
+    createdAt
+  }
   durationToCompleteInMinutes
   legalArea {
     ...LegalArea
