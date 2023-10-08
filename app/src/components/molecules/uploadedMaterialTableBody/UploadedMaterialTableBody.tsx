@@ -22,6 +22,7 @@ import { api } from "@/utils/api";
 import {
   Menu, Modal, Title, useMantineTheme 
 } from "@mantine/core";
+import { notifications } from "@mantine/notifications";
 import React, { type FunctionComponent } from "react";
 
 import * as styles from "./UploadedMaterialTableBody.styles";
@@ -88,7 +89,6 @@ const UploadedMaterialTableBody: FunctionComponent<UploadedMaterialTableBodyProp
       await invalidateUploadedFiles({ folderId: selectedFolderId });
     }
   });
-  const theme = useMantineTheme();
   const [showDeleteMaterialModal, setShowDeleteMaterialModal] = React.useState<boolean>(false);
   const [showRenameMaterialModal, setShowRenameMaterialModal] = React.useState<boolean>(false);
 
