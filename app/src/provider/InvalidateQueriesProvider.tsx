@@ -28,21 +28,15 @@ const InvalidateQueriesProvider: FunctionComponent<InvalidateQueriesProviderProp
   const apiContext = api.useContext();
   const { invalidate: invalidateAll } = apiContext;
 
-  console.log("[render] InvalidateQueriesProvider");
-
-  const invalidateQueries: InvalidateQueries = useMemo(() =>
-  {
-    console.log("[useMemo] InvalidateQueriesProvider");
-
-    return ({
-      invalidateBookmarks: async (options) => apiContext.bookmarks.getAllBookmarks.invalidate(options),
-      invalidateDocuments: async (options) => apiContext.documents.getDocuments.invalidate(options),
-      invalidateEverything: async () => invalidateAll(),
-      invalidateFolders: async (options) => apiContext.folders.getFolders.invalidate(options),
-      invalidateUploadedFiles: async (options) => apiContext.uploads.getUploadedFiles.invalidate(options)
-    });
-  }, [
+  const invalidateQueries: InvalidateQueries = useMemo(() => ({
+    invalidateBookmarks: async (options) => apiContext.bookmarks.getAllBookmarks.invalidate(options),
+    invalidateDocuments: async (options) => apiContext.documents.getDocuments.invalidate(options),
+    invalidateEverything: async () => invalidateAll(),
+    invalidateFolders: async (options) => apiContext.folders.getFolders.invalidate(options),
+    invalidateUploadedFiles: async (options) => apiContext.uploads.getUploadedFiles.invalidate(options)
+  }), [
     invalidateAll,
+    apiContext.folders.getFolders,
     apiContext.documents.getDocuments,
     apiContext.bookmarks.getAllBookmarks,
     apiContext.uploads.getUploadedFiles
