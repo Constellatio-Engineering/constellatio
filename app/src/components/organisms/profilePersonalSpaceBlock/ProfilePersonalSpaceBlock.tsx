@@ -46,7 +46,7 @@ const ProfilePersonalSpaceBlock: FunctionComponent = () =>
         <div css={styles.favoritesTab}>
           <div css={styles.casesCard}>
             {
-              (isUseBookmarksLoading || isUseCasesLoading) ? (<Loader sx={{ margin: "0px" }}/>) :
+              (isUseBookmarksLoading || isUseCasesLoading || areArticlesLoading) ? (<Loader sx={{ margin: "0px" }}/>) :
                 favoritesList && 
               favoritesList.length > 0 ? (
                     favoritesList?.sort((a, b) => new Date(b?._meta?.createdAt).getTime() - new Date(a?._meta?.createdAt).getTime())?.slice(0, 6)?.map((bookmarkedItem: IGenCase| IGenArticle, index: number) => (bookmarkedItem?.__typename === "Case") ? (
