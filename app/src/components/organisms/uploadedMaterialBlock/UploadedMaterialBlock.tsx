@@ -1,6 +1,8 @@
 import { Button } from "@/components/atoms/Button/Button";
 import { type FileWithClientSideUuid } from "@/components/pages/personalSpacePage/PersonalSpacePage";
 import { type UploadedFile } from "@/db/schema";
+import useContextAndErrorIfNull from "@/hooks/useContextAndErrorIfNull";
+import { InvalidateQueriesContext } from "@/provider/InvalidateQueriesProvider";
 import { type UploadState } from "@/stores/uploadsProgress.store";
 import { api } from "@/utils/api";
 import { getIndicesOfSucceededPromises, getRandomUuid, removeItemsByIndices } from "@/utils/utils";
@@ -38,8 +40,8 @@ const UploadedMaterialBlock: FunctionComponent<UploadedMaterialBlockProps> = ({
   ...props
 }) => 
 {
+  const { invalidateUploadedFiles } = useContextAndErrorIfNull(InvalidateQueriesContext);
   const { mutateAsync: saveFileToDatabase } = api.uploads.saveFileToDatabase.useMutation();
-  const apiContext = api.useContext();
   const { mutateAsync: createSignedUploadUrl } = api.uploads.createSignedUploadUrl.useMutation();
   const uploadFile = async (file: File, clientSideUuid: string): Promise<void> =>
   {
@@ -99,7 +101,7 @@ const UploadedMaterialBlock: FunctionComponent<UploadedMaterialBlockProps> = ({
       try
       {
         await uploadFile(file, clientSideUuid);
-        await apiContext.uploads.getUploadedFiles.invalidate();
+        await invalidateUploadedFiles();
       }
       catch (e: unknown)
       {

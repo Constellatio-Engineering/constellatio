@@ -1,5 +1,6 @@
+import useContextAndErrorIfNull from "@/hooks/useContextAndErrorIfNull";
 import { supabase } from "@/lib/supabase";
-import { api } from "@/utils/api";
+import { InvalidateQueriesContext } from "@/provider/InvalidateQueriesProvider";
 import { paths } from "@/utils/paths";
 
 import { Avatar, Menu } from "@mantine/core";
@@ -10,7 +11,7 @@ import { type FunctionComponent } from "react";
 
 export const UserDropdown: FunctionComponent = () =>
 {
-  const apiContext = api.useContext();
+  const { invalidateEverything } = useContextAndErrorIfNull(InvalidateQueriesContext);
   const router = useRouter();
 
   const handleSubscription = async (): Promise<void> =>
@@ -24,7 +25,7 @@ export const UserDropdown: FunctionComponent = () =>
     {
       await supabase.auth.signOut();
       await router.replace("/login");
-      await apiContext.invalidate();
+      await invalidateEverything();
 
       notifications.show({
         message: "Come back soon!",

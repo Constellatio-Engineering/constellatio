@@ -2,9 +2,10 @@ import { Button } from "@/components/atoms/Button/Button";
 import { CustomLink } from "@/components/atoms/CustomLink/CustomLink";
 import { Input } from "@/components/atoms/Input/Input";
 import { colors } from "@/constants/styles/colors";
+import useContextAndErrorIfNull from "@/hooks/useContextAndErrorIfNull";
 import { supabase } from "@/lib/supabase";
+import { InvalidateQueriesContext } from "@/provider/InvalidateQueriesProvider";
 import { loginFormSchema } from "@/schemas/auth/loginForm.schema";
-import { api } from "@/utils/api";
 import { paths } from "@/utils/paths";
 
 import { Stack } from "@mantine/core";
@@ -20,7 +21,7 @@ type SignInError = "emailNotConfirmed" | "invalidCredentials" | "unknownError";
 
 export const LoginForm: FunctionComponent = () =>
 {
-  const apiContext = api.useContext();
+  const { invalidateEverything } = useContextAndErrorIfNull(InvalidateQueriesContext);
   const [, setResetPasswordModalOpen] = useAtom(resetPasswordModalVisible);
   const router = useRouter();
   const [isLoginInProgress, setIsLoginInProgress] = useState(false);
@@ -53,8 +54,7 @@ export const LoginForm: FunctionComponent = () =>
         throw loginResult.error;
       }
 
-      // await supabase.auth.setSession(loginResult.data.session);
-      await apiContext.invalidate();
+      await invalidateEverything();
       await router.replace(`${paths.cases}`);
     }
     catch (error)

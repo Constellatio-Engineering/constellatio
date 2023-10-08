@@ -1,6 +1,8 @@
 import { Bookmark } from "@/components/Icons/Bookmark";
 import { BookmarkFilledIcon } from "@/components/Icons/BookmarkFilledIcon";
 import TableIconButton from "@/components/molecules/tableIconButton/TableIconButton";
+import useContextAndErrorIfNull from "@/hooks/useContextAndErrorIfNull";
+import { InvalidateQueriesContext } from "@/provider/InvalidateQueriesProvider";
 import { type AddOrRemoveBookmarkSchema } from "@/schemas/bookmarks/addOrRemoveBookmark.schema";
 import { api } from "@/utils/api";
 import { paths } from "@/utils/paths";
@@ -29,18 +31,13 @@ const CaseBlockBookmarkButton: FunctionComponent<ICaseBlockBookmarkButtonProps> 
   variant
 }) =>
 {
-  const apiContext = api.useContext();
+  const { invalidateBookmarks } = useContextAndErrorIfNull(InvalidateQueriesContext);
   const router = useRouter();
   const addBookmarkMutationStartTimestamp = useRef<number>();
   
   /**
    * Could add optimistic updates here later
    */
-
-  const onBookmarkAddedOrRemoved = async (): Promise<void> =>
-  {
-    await apiContext.bookmarks.getAllBookmarks.invalidate();
-  };
 
   const onError = (e: unknown, type: "add" | "remove"): void =>
   {
@@ -68,12 +65,12 @@ const CaseBlockBookmarkButton: FunctionComponent<ICaseBlockBookmarkButtonProps> 
       const duration = performance.now() - addBookmarkMutationStartTimestamp.current;
       console.log(`add bookmark mutation took ${duration}ms`);
     },
-    onSuccess: onBookmarkAddedOrRemoved
+    onSuccess: invalidateBookmarks
   });
 
   const { isLoading: isRemovingBookmarkLoading, mutate: removeBookmark } = api.bookmarks.removeBookmark.useMutation({
     onError: e => onError(e, "remove"),
-    onSuccess: onBookmarkAddedOrRemoved,
+    onSuccess: invalidateBookmarks,
   });
 
   const onBookmarkIconClick = (): void =>
