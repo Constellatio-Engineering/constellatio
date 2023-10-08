@@ -30,9 +30,10 @@ interface UploadedMaterialTableBodyProps
   readonly setSelectedFileIdForPreview: React.Dispatch<React.SetStateAction<string | undefined>>;
   readonly setSelectedFileNote: React.Dispatch<React.SetStateAction<UploadedFile | undefined>>;
   readonly setShowFileViewerModal: React.Dispatch<React.SetStateAction<boolean>>; 
-  readonly setShowNoteDrewer: React.Dispatch<React.SetStateAction<boolean>>;
+  readonly setShowNoteDrawer: React.Dispatch<React.SetStateAction<boolean>>;
   readonly showingFiles: number;
   readonly uploadedFiles?: Partial<UploadedFile[]>;
+  readonly variant: "personalSpace" | "searchPapers";
 }
 
 const fileNameIcon = (file: UploadedFile): React.ReactNode =>
@@ -55,7 +56,7 @@ const fileNameIcon = (file: UploadedFile): React.ReactNode =>
     case "mp4":
       return <VideoIcon/>;
     default:
-      console.error("Unknown file extension", file.fileExtension);
+      console.error(`Unknown file extension ${file.fileExtension}`);
       return null;
   }
 };
@@ -65,9 +66,10 @@ const UploadedMaterialTableBody: FunctionComponent<Partial<UploadedMaterialTable
   setSelectedFileIdForPreview,
   setSelectedFileNote,
   setShowFileViewerModal,
-  setShowNoteDrewer,
+  setShowNoteDrawer,
   showingFiles,
-  uploadedFiles
+  uploadedFiles,
+  variant = "personalSpace"
 }) => 
 {
   const { invalidateUploadedFiles } = useContextAndErrorIfNull(InvalidateQueriesContext);
@@ -98,26 +100,28 @@ const UploadedMaterialTableBody: FunctionComponent<Partial<UploadedMaterialTable
               }  
             }}>
             <BodyText styleType="body-01-medium" component="p" title={file?.originalFilename}>
-              {file && fileNameIcon(file)}{file?.originalFilename}
+              {file && file.fileExtension && fileNameIcon(file)}{file?.originalFilename}
             </BodyText>
           </td>
           <td css={styles.docDate}> <BodyText styleType="body-01-medium" component="p">{file && file.createdAt && formatDate(file.createdAt)}</BodyText></td>
           <td css={styles.docTags}> <BodyText styleType="body-02-medium" component="p"/></td>
-          <td css={styles.cellNote}>
-            <BodyText
-              styleType="body-02-medium"
-              component="p"
-              onClick={() => 
-              {
-                if(setSelectedFileNote && setShowNoteDrewer)
+          {variant === "personalSpace" && (
+            <td css={styles.cellNote}>
+              <BodyText
+                styleType="body-02-medium"
+                component="p"
+                onClick={() => 
                 {
-                  setSelectedFileNote(file);
-                  setShowNoteDrewer(true);
-                }
-              }}><Notepad/>Add Notes
-            </BodyText>
-          </td>
-          <Menu shadow="md" width={200}>
+                  if(setSelectedFileNote && setShowNoteDrawer)
+                  {
+                    setSelectedFileNote(file);
+                    setShowNoteDrawer(true);
+                  }
+                }}><Notepad/>Add Notes
+              </BodyText>
+            </td>
+          )}
+          <Menu shadow="elevation-big" radius="12px" width={200}>
             <Menu.Target>
               <td
                 css={styles.callToActionCell}

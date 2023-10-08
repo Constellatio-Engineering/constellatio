@@ -22,7 +22,7 @@ export const menuTabStyles = ({ active, disabled, theme }: {
   color: ${theme.colors["neutrals-02"][1]};
   white-space: nowrap;
   cursor: pointer;
-  span {
+  p {
     display: flex;
     align-items: center;
     justify-content: flex-start;

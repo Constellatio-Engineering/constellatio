@@ -2,11 +2,15 @@ import { CaptionText } from "@/components/atoms/CaptionText/CaptionText";
 
 import React, { type FunctionComponent } from "react";
 
-const UploadedMaterialTableHead: FunctionComponent = () => 
+type UploadedMaterialTableHeadProps = {
+  readonly variant: "personalSpace" | "searchPapers";
+};
+
+const UploadedMaterialTableHead: FunctionComponent<UploadedMaterialTableHeadProps> = ({ variant = "personalSpace" }) => 
 {
   return (
     <tr>
-      <th/>
+      {variant === "personalSpace" && <th/>}
       <th className="primaryCell">
         <CaptionText styleType="caption-01-medium" component="p">
           FILE NAME
@@ -22,11 +26,13 @@ const UploadedMaterialTableHead: FunctionComponent = () =>
           TAGS
         </CaptionText>
       </th>
-      <th>
-        <CaptionText styleType="caption-01-medium" component="p">
-          NOTES
-        </CaptionText>
-      </th>
+      {variant === "personalSpace" && (
+        <th>
+          <CaptionText styleType="caption-01-medium" component="p">
+            NOTES
+          </CaptionText>
+        </th>
+      )}
       <th/>
     </tr>
   );

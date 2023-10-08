@@ -9,16 +9,16 @@ import * as styles from "./SlidingPanelFileTypeRow.styles";
 
 interface SlidingPanelFileTypeRowProps
 {
-  readonly fileExtention: string;
+  readonly fileExtension: string;
   readonly title: string;
 }
 
-const SlidingPanelFileTypeRow: FunctionComponent<SlidingPanelFileTypeRowProps> = ({ fileExtention, title }) => 
+const SlidingPanelFileTypeRow: FunctionComponent<SlidingPanelFileTypeRowProps> = ({ fileExtension, title }) => 
 {
-  if(!fileExtention) { console.log({ fileExtention }); }
+  if(!fileExtension) { console.log({ fileExtension }); }
   return (
     <div css={styles.wrapper}>
-      {/* <MaterialsLabel variant="file" title={fileExtention}/> */}
+      {/* <MaterialsLabel variant="file" title={fileExtension}/> */}
       <Label variant="case" title="CASES"/>
       {title && <SubtitleText styleType="subtitle-01-medium">{title}</SubtitleText>}
     </div>
