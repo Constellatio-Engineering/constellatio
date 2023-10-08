@@ -123,11 +123,11 @@ const ItemBlock: FunctionComponent<ICaseBlockProps> = ({
                   variant={variant}
                 />
               </td>
-              {tableType === "favorites" && (
+              {/* {tableType === "favorites" && (
                 <td>
                   <TableCell variant="simpleTableCell" icon={<Notepad/>}>Notes</TableCell>
                 </td>
-              )}
+              )} */}
             </tr>
           );
         })}
