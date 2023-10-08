@@ -1,5 +1,10 @@
+/* eslint-disable max-lines */
 import { BodyText } from "@/components/atoms/BodyText/BodyText";
+import { Button, type TButton } from "@/components/atoms/Button/Button";
 import { Checkbox } from "@/components/atoms/Checkbox/Checkbox";
+import { DropdownItem } from "@/components/atoms/Dropdown/DropdownItem";
+import { Input } from "@/components/atoms/Input/Input";
+import { Cross } from "@/components/Icons/Cross";
 import { DotsIcon } from "@/components/Icons/dots";
 import { DownloadIcon } from "@/components/Icons/DownloadIcon";
 import { Edit } from "@/components/Icons/Edit";
@@ -14,11 +19,12 @@ import useContextAndErrorIfNull from "@/hooks/useContextAndErrorIfNull";
 import { InvalidateQueriesContext } from "@/provider/InvalidateQueriesProvider";
 import { api } from "@/utils/api";
 
-import { Menu, useMantineTheme } from "@mantine/core";
+import {
+  Menu, Modal, Title, useMantineTheme 
+} from "@mantine/core";
 import React, { type FunctionComponent } from "react";
 
 import * as styles from "./UploadedMaterialTableBody.styles";
-
 interface UploadedMaterialTableBodyProps
 {
   readonly setSelectedFileIdForPreview: React.Dispatch<React.SetStateAction<string | undefined>>;
@@ -71,12 +77,15 @@ const UploadedMaterialTableBody: FunctionComponent<Partial<UploadedMaterialTable
     onSuccess: async () => invalidateUploadedFiles()
   });
   const theme = useMantineTheme();
+  const [showDeleteMaterialModal, setShowDeleteMaterialModal] = React.useState<boolean>(false);
+  const [showRenameMaterialModal, setShowRenameMaterialModal] = React.useState<boolean>(false);
+
   return (
     <>
       {uploadedFiles?.slice(0, showingFiles).map((file, index) => (
         <tr
           key={index}>
-          <td css={styles.callToActionCell}><Checkbox/></td>
+          <td><Checkbox/></td>
           <td
             css={styles.docName({ clickable: setSelectedFileIdForPreview && setShowFileViewerModal ? true : false, theme })}
             className="primaryCell"
@@ -111,28 +120,102 @@ const UploadedMaterialTableBody: FunctionComponent<Partial<UploadedMaterialTable
           <Menu shadow="md" width={200}>
             <Menu.Target>
               <td
-                onClick={() => file && deleteFile({ fileIds: [file.id] })}
-                css={styles.callToActionCell}>
-                <span>
-                  <button type="button" css={styles.callToActionCell}>
-                    <DotsIcon/>
-                  </button>
-                </span>  
+                css={styles.callToActionCell}
+                onClick={() => {}}>
+                <button type="button">
+                  <DotsIcon/>
+                </button>
               </td>
             </Menu.Target>
             <Menu.Dropdown>
-              <Menu.Item><span className="label" onClick={() => { }}><Edit/>Rename</span></Menu.Item>
+              <Menu.Item onClick={() => setShowRenameMaterialModal(true)}>
+                <DropdownItem icon={<Edit/>} label="Rename"/>
+              </Menu.Item>
+              {/* <Menu.Divider/>
+              <Menu.Item>
+                <DropdownItem icon={<FolderIcon/>} label="Move to"/>
+              </Menu.Item> */}
+              {/* <Menu.Divider/>
+              <Menu.Item>
+                <DropdownItem icon={<DownloadIcon/>} label="Download"/>
+              </Menu.Item> */}
               <Menu.Divider/>
-              <Menu.Item><span className="label"><FolderIcon/>Move to</span></Menu.Item>
-              <Menu.Divider/>
-              <Menu.Item><span className="label"><DownloadIcon/>Download</span></Menu.Item>
-              <Menu.Divider/>
-              <Menu.Item onClick={() => {}}><span className="label"><Trash/>Delete</span></Menu.Item>
+              {/* <Menu.Item onClick={() => file && deleteFile({ fileIds: [file.id] })}><span className="label"><Trash/>Delete</span></Menu.Item> */}
+              <Menu.Item onClick={() => setShowDeleteMaterialModal(true)}><DropdownItem icon={<Trash/>} label="Delete"/></Menu.Item>
             </Menu.Dropdown>
           </Menu>
-        
+          {/* POP UPS ------------------------------------------------------------------------------------- */}
+          <Modal
+            opened={showDeleteMaterialModal}
+            withCloseButton={false}
+            centered
+            styles={styles.modalStyles()}
+            onClose={() => { setShowDeleteMaterialModal(false); }}>
+            <span className="close-btn" onClick={() => setShowDeleteMaterialModal(false)}>
+              <Cross size={32}/>
+            </span>
+            <Title order={3}>Delete folder</Title>
+            <BodyText styleType="body-01-regular" component="p" className="delete-folder-text">Are you sure you want to delete <strong>Folder name</strong>?</BodyText>
+            <div className="modal-call-to-action">
+              <Button<"button">
+                styleType={"secondarySimple" as TButton["styleType"]}
+                onClick={() => setShowDeleteMaterialModal(false)}>
+                No, Keep
+              </Button>
+              <Button<"button">
+                styleType="primary"
+                onClick={() => 
+                {
+                  if(file) { deleteFile({ fileIds: [file.id] }); }
+                  setShowDeleteMaterialModal(false);
+                }}>
+                Yes, Delete
+              </Button>
+            </div>
+          </Modal>
+          <Modal
+            opened={showRenameMaterialModal}
+            withCloseButton={false}
+            centered
+            styles={styles.modalStyles()}
+            onClose={() => { setShowRenameMaterialModal(false); }}>
+            <span className="close-btn" onClick={() => setShowRenameMaterialModal(false)}>
+              <Cross size={32}/>
+            </span>
+            <Title order={3}>Rename folder</Title>
+            <form onSubmit={e => e.preventDefault()}>
+              <div className="new-folder-input">
+                <BodyText styleType="body-01-regular" component="label">Folder name</BodyText>
+                <Input
+                  inputType="text"
+                  // value={newFolderName}
+                  // onChange={(e) => { setNewFolderName(e.target.value); }}
+                />
+              </div>
+              <div className="modal-call-to-action">
+                <Button<"button">
+                  styleType={"secondarySimple" as TButton["styleType"]}
+                  onClick={() => setShowRenameMaterialModal(false)}>
+                  Cancel
+                </Button>
+                <Button<"button">
+                  styleType="primary"
+                  type="submit"
+                  // disabled={newFolderName?.trim()?.length <= 0}
+                  onClick={() =>
+                  {
+                    setShowRenameMaterialModal(false);
+                    // onRename?.(newFolderName);
+                  }}>
+                  Save
+                </Button>
+              </div>
+            </form>
+          </Modal>
+
         </tr>
       ))}
+     
     </>
   );
 };

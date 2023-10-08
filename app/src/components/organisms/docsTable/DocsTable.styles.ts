@@ -1,5 +1,10 @@
+/* eslint-disable max-lines */
+import { type UnknownMantineStylesParams } from "@/utils/types";
+
 import { css } from "@emotion/react";
-import { type MantineTheme } from "@mantine/styles";
+import { type ModalStylesNames } from "@mantine/core";
+import { type Styles, type MantineTheme } from "@mantine/styles";
+
 export const wrapper = css`
   display: flex;
   flex-direction: column;
@@ -15,7 +20,7 @@ const CSSClickableEffect = (theme: MantineTheme) => css`
 export const tableWrapper = (theme: MantineTheme) => css`
   text-align: left;
   border-radius: 12px;
-  overflow: hidden;
+  /* overflow: hidden; */
   width: 100%;
   outline: 1px solid ${theme.colors["neutrals-01"][1]};
   td {
@@ -62,6 +67,18 @@ border:0;
 outline:0;
 cursor: pointer;
 ${CSSClickableEffect(theme)};
+position:relative;
+.dots-btn {
+  position:absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  background: transparent;
+  border: 0;
+  outline: 0;
+  ${CSSClickableEffect(theme)};
+
+}
 `;
 
 export const docName = (theme: MantineTheme) => css`
@@ -91,3 +108,96 @@ export const showMoreButton = (theme: MantineTheme) => css`
     ${theme.colors["neutrals-01"][0]}
   );
 `;
+
+type ModalStyles = Styles<ModalStylesNames, UnknownMantineStylesParams>;
+
+export const deleteModalStyle = (): ModalStyles => 
+{
+  const styles: ModalStyles = () => ({
+    body: {
+      ".delete-folder-text": {
+        marginTop: "16px",
+      },
+      ".modal-call-to-action": {
+        alignItems: "center",
+        button: {
+          flex: 1,
+        },
+        display: "flex",
+        gap: "4px",
+        justifyContent: "center",
+        marginTop: "24px",
+      },
+      ".new-folder-input": {
+        display: "flex",
+        flexDirection: "column",
+        gap: "4px",
+        marginTop: "24px",
+      },
+      padding: "36px",
+    },
+    content: {
+      ".close-btn": {
+        cursor: "pointer",
+        position: "absolute",
+        right: "24px",
+        top: "24px",
+      },
+      borderRadius: "12px",
+      position: "relative",
+    },
+    header: {
+      padddingTop: "36px",
+      padding: 0,
+    },
+    root: {
+      minWidth: "520px",
+    },
+  }); return styles;
+};
+    
+export const MoveToModal = (): ModalStyles => 
+{
+  const styles: ModalStyles = () => ({
+    body: {
+      ".delete-folder-text": {
+        marginTop: "16px",
+      },
+      ".modal-call-to-action": {
+        alignItems: "center",
+        button: {
+          flex: 1,
+        },
+        display: "flex",
+        gap: "4px",
+        justifyContent: "center",
+        marginTop: "24px",
+      },
+      ".new-folder-input": {
+        display: "flex",
+        flexDirection: "column",
+        gap: "4px",
+        marginTop: "24px",
+      },
+      padding: "36px",
+    },
+    content: {
+      ".close-btn": {
+        cursor: "pointer",
+        position: "absolute",
+        right: "24px",
+        top: "24px",
+      },
+      borderRadius: "12px",
+      position: "relative",
+    },
+    header: {
+      padddingTop: "36px",
+      padding: 0,
+    },
+    root: {
+      minWidth: "520px",
+    },
+  }); return styles;
+};
+    

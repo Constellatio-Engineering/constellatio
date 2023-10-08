@@ -23,7 +23,6 @@ const UploadedMaterialTable: FunctionComponent<UploadedMaterialTableProps> = ({
   uploadedFiles
 }) =>
 {
-  console.log({ uploadedFiles });
   // if file has existing not it will be assigned to this state
   const [selectedFileNote, setSelectedFileNote] = useState<UploadedFile | undefined>(undefined); 
   
