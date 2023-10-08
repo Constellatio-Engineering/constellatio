@@ -15,20 +15,21 @@ interface UploadedMaterialTableProps
   readonly setSelectedFileIdForPreview?: React.Dispatch<React.SetStateAction<string | undefined>>;
   readonly setShowFileViewerModal?: React.Dispatch<React.SetStateAction<boolean>>;
   readonly uploadedFiles?: Partial<UploadedFile[]>;
+  readonly variant?: "personalSpace" | "searchPapers";
 }
 const UploadedMaterialTable: FunctionComponent<UploadedMaterialTableProps> = ({
   isGetUploadedFilesLoading,
   setSelectedFileIdForPreview,
   setShowFileViewerModal,
-  uploadedFiles
+  uploadedFiles,
+  variant = "personalSpace"
 }) =>
 {
-  console.log({ uploadedFiles });
   // if file has existing not it will be assigned to this state
   const [selectedFileNote, setSelectedFileNote] = useState<UploadedFile | undefined>(undefined); 
   
   const [noteRichtext, setNoteRichtext] = useState<string>("");
-  const [showNoteDrewer, setShowNoteDrewer] = useState<boolean>(false);
+  const [showNoteDrawer, setShowNoteDrawer] = useState<boolean>(false);
   const [showingFiles, setShowingFiles] = useState<number>(5);
   const [isShowingFullTable, setIsShowingFullTable] = useState<boolean>(false);
   useEffect(() =>
@@ -40,7 +41,7 @@ const UploadedMaterialTable: FunctionComponent<UploadedMaterialTableProps> = ({
     <div>
       <table css={styles.tableWrapper}>
         <thead css={styles.tableHead}>
-          <UploadedMaterialTableHead/>
+          <UploadedMaterialTableHead variant={variant}/>
         </thead>
         <tbody css={styles.tableBody}>
           <UploadedMaterialTableBody 
@@ -49,7 +50,8 @@ const UploadedMaterialTable: FunctionComponent<UploadedMaterialTableProps> = ({
             setSelectedFileIdForPreview={setSelectedFileIdForPreview} 
             setShowFileViewerModal={setShowFileViewerModal}
             setSelectedFileNote={setSelectedFileNote}
-            setShowNoteDrewer={setShowNoteDrewer}
+            setShowNoteDrawer={setShowNoteDrawer}
+            variant={variant}
           />
         </tbody>
       </table>
@@ -68,8 +70,8 @@ const UploadedMaterialTable: FunctionComponent<UploadedMaterialTableProps> = ({
         </div>
       )}
       <UploadedMaterialNoteDrawer
-        showNoteDrewer={showNoteDrewer} 
-        setShowNoteDrewer={setShowNoteDrewer} 
+        showNoteDrawer={showNoteDrawer} 
+        setShowNoteDrawer={setShowNoteDrawer} 
         noteRichtext={noteRichtext} 
         setNoteRichtext={setNoteRichtext}
         selectedFileNote={selectedFileNote}

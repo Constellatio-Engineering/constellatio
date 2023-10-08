@@ -1,3 +1,4 @@
+import { DropdownItem } from "@/components/atoms/Dropdown/DropdownItem";
 import { DownloadIcon } from "@/components/Icons/DownloadIcon";
 import { Edit } from "@/components/Icons/Edit";
 import { FolderIcon } from "@/components/Icons/Folder";
@@ -68,13 +69,14 @@ export const DocsTableData: FunctionComponent<Document> = (doc) =>
             <button type="button" css={styles.callToActionCell}><DotsIcon/></button>
           </Menu.Target>
           <Menu.Dropdown>
-            <Menu.Item><span className="label" onClick={() => { setEditDocumentState(doc); }}><Edit/>Rename and edit</span></Menu.Item>
+            
+            <Menu.Item><DropdownItem onClick={() => { setEditDocumentState(doc); }} icon={<Edit/>} label="Rename and edit"/></Menu.Item>
             <Menu.Divider/>
-            <Menu.Item><span className="label"><FolderIcon/>Move to</span></Menu.Item>
+            <Menu.Item><DropdownItem icon={<FolderIcon/>} label="Move to" onClick={() => { }}/></Menu.Item>
             <Menu.Divider/>
-            <Menu.Item onClick={download}><span className="label"><DownloadIcon/>Download</span></Menu.Item>
+            <Menu.Item><DropdownItem icon={<DownloadIcon/>} label="Download" onClick={download}/></Menu.Item>
             <Menu.Divider/>
-            <Menu.Item onClick={() => {}}><span className="label"><Trash/>Delete</span></Menu.Item>
+            <Menu.Item><DropdownItem icon={<Trash/>} label="Delete" onClick={() => { }}/></Menu.Item>
           </Menu.Dropdown>
         </Menu>
       </td>
