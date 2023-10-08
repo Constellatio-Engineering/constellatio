@@ -1,7 +1,7 @@
 import StatusTableCell from "@/components/atoms/statusTableCell/StatusTableCell";
 import TableCell from "@/components/atoms/tableCell/TableCell";
 import { ClockIcon } from "@/components/Icons/ClockIcon";
-import { Notepad } from "@/components/Icons/Notepad";
+// import { Notepad } from "@/ckomponents/Icons/Notepad";
 import CaseBlockHead, { type ICaseBlockHeadProps } from "@/components/molecules/caseBlockHead/CaseBlockHead";
 import CaseBlockBookmarkButton from "@/components/organisms/caseBlock/caseBlockBookmarkButton/CaseBlockBookmarkButton";
 import useBookmarks from "@/hooks/useBookmarks";

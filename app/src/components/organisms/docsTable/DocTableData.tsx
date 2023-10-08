@@ -1,12 +1,12 @@
 import { Button, type TButton } from "@/components/atoms/Button/Button";
 import { DropdownItem } from "@/components/atoms/Dropdown/DropdownItem";
-import { Input } from "@/components/atoms/Input/Input";
+// import { Input } from "@/components/atoms/Input/Input";
 import { Cross } from "@/components/Icons/Cross";
 import { DownloadIcon } from "@/components/Icons/DownloadIcon";
 import { Edit } from "@/components/Icons/Edit";
-import { FolderIcon } from "@/components/Icons/Folder";
+// import { FolderIcon } from "@/components/Icons/Folder";
 import { Trash } from "@/components/Icons/Trash";
-import MoveToModal from "@/components/moveToModal/MoveToModal";
+// import MoveToModal from "@/components/moveToModal/MoveToModal";
 import { type Document } from "@/db/schema";
 import useDocumentEditorStore from "@/stores/documentEditor.store";
 import { paths } from "@/utils/paths";
@@ -59,7 +59,7 @@ export const DocsTableData: FunctionComponent<Document> = (doc) =>
   };
   
   const [showDeleteDocModal, setShowDeleteDocModal] = useState<boolean>(false);
-  const [showMoveToModal, setShowMoveToModal] = useState(false);
+  // const [showMoveToModal, setShowMoveToModal] = useState(false);
   return (
     <>
       <td><Checkbox/></td>
