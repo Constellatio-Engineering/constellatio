@@ -3,19 +3,17 @@ import { env } from "@/env.mjs";
 import { supabase } from "@/lib/supabase";
 import AuthStateProvider from "@/provider/AuthStateProvider";
 import CustomThemingProvider from "@/provider/CustomThemingProvider";
+import InvalidateQueriesProvider from "@/provider/InvalidateQueriesProvider";
 import MeilisearchProvider from "@/provider/MeilisearchProvider";
 import { api } from "@/utils/api";
 
 import { ModalsProvider } from "@mantine/modals";
 import { Notifications } from "@mantine/notifications";
 import { type Session, SessionContextProvider } from "@supabase/auth-helpers-react";
-import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { type AppProps } from "next/app";
 import Head from "next/head";
 import { appWithTranslation } from "next-i18next";
 import { type FunctionComponent } from "react";
-
-const queryClient = new QueryClient();
 
 type ConstellatioAppProps = AppProps<{ initialSession: Session }>;
 
@@ -36,8 +34,8 @@ const AppContainer: FunctionComponent<ConstellatioAppProps> = ({ Component, page
         <link rel="shortcut icon" href="/favicon.png"/>
         <meta name="viewport" content="minimum-scale=1, initial-scale=1, width=device-width"/>
       </Head>
-      <QueryClientProvider client={queryClient}>
-        <SessionContextProvider supabaseClient={supabase} initialSession={pageProps.initialSession}>
+      <SessionContextProvider supabaseClient={supabase} initialSession={pageProps.initialSession}>
+        <InvalidateQueriesProvider>
           <AuthStateProvider>
             <CustomThemingProvider>
               <ModalsProvider>
@@ -49,8 +47,8 @@ const AppContainer: FunctionComponent<ConstellatioAppProps> = ({ Component, page
               </ModalsProvider>
             </CustomThemingProvider>
           </AuthStateProvider>
-        </SessionContextProvider>
-      </QueryClientProvider>
+        </InvalidateQueriesProvider>
+      </SessionContextProvider>
     </>
   );
 };

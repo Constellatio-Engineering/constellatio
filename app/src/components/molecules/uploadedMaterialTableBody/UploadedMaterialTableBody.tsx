@@ -10,6 +10,8 @@ import { Notepad } from "@/components/Icons/Notepad";
 import { Trash } from "@/components/Icons/Trash";
 import { VideoIcon } from "@/components/Icons/Video";
 import { type UploadedFile } from "@/db/schema";
+import useContextAndErrorIfNull from "@/hooks/useContextAndErrorIfNull";
+import { InvalidateQueriesContext } from "@/provider/InvalidateQueriesProvider";
 import { api } from "@/utils/api";
 
 import { Menu, useMantineTheme } from "@mantine/core";
@@ -62,10 +64,11 @@ const UploadedMaterialTableBody: FunctionComponent<Partial<UploadedMaterialTable
   uploadedFiles
 }) => 
 {
-  const apiContext = api.useContext();
+  const { invalidateUploadedFiles } = useContextAndErrorIfNull(InvalidateQueriesContext);
+
   const { mutate: deleteFile } = api.uploads.deleteUploadedFiles.useMutation({
     onError: (e) => console.log("error while deleting file", e),
-    onSuccess: async () => apiContext.uploads.getUploadedFiles.invalidate()
+    onSuccess: async () => invalidateUploadedFiles()
   });
   const theme = useMantineTheme();
   return (

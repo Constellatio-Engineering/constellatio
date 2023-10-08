@@ -1,6 +1,8 @@
 import { Button } from "@/components/atoms/Button/Button";
 import { Input } from "@/components/atoms/Input/Input";
 import { RichtextEditorField } from "@/components/molecules/RichtextEditorField/RichtextEditorField";
+import useContextAndErrorIfNull from "@/hooks/useContextAndErrorIfNull";
+import { InvalidateQueriesContext } from "@/provider/InvalidateQueriesProvider";
 import { type CreateDocumentSchema } from "@/schemas/documents/createDocument.schema";
 import { type UpdateDocumentSchema } from "@/schemas/documents/updateDocument.schema";
 import useDocumentEditorStore, { type EditorStateDrawerOpened } from "@/stores/documentEditor.store";
@@ -15,21 +17,21 @@ interface EditorFormProps
 
 const EditorForm: FunctionComponent<EditorFormProps> = ({ editorState }) =>
 {
+  const { invalidateDocuments } = useContextAndErrorIfNull(InvalidateQueriesContext);
   const { document, state } = editorState;
-  const apiContext = api.useContext();
-  const onSuccessfulMutation = async (): Promise<void> => apiContext.documents.getDocuments.invalidate();
   const updateEditorDocument = useDocumentEditorStore(s => s.updateEditorDocument);
   const closeEditor = useDocumentEditorStore(s => s.closeEditor);
   const setEditDocumentState = useDocumentEditorStore(s => s.setEditDocumentState);
   const { hasUnsavedChanges } = useDocumentEditorStore(s => s.getComputedValues());
+  const invalidateDocumentsForCurrentFolder = async (): Promise<void> => invalidateDocuments({ folderId: document.folderId });
 
   const { mutateAsync: createDocument } = api.documents.createDocument.useMutation({
     onError: (error) => console.log("error while creating document", error),
-    onSuccess: onSuccessfulMutation
+    onSuccess: invalidateDocumentsForCurrentFolder
   });
   const { mutateAsync: updateDocument } = api.documents.updateDocument.useMutation({
     onError: (error) => console.log("error while updating document", error),
-    onSuccess: onSuccessfulMutation
+    onSuccess: invalidateDocumentsForCurrentFolder
   });
 
   const onCancel = (): void =>

@@ -7,6 +7,8 @@ import { Cross } from "@/components/Icons/Cross";
 import { FolderIcon } from "@/components/Icons/Folder";
 import { Plus } from "@/components/Icons/Plus";
 import { type UploadFolder } from "@/db/schema";
+import useContextAndErrorIfNull from "@/hooks/useContextAndErrorIfNull";
+import { InvalidateQueriesContext } from "@/provider/InvalidateQueriesProvider";
 import { api } from "@/utils/api";
 
 import { Title, Modal } from "@mantine/core";
@@ -25,8 +27,8 @@ interface MaterialMenuProps
 
 const MaterialMenu: FunctionComponent<MaterialMenuProps> = ({ folders, selectedFolderId, setSelectedFolderId }) =>
 {
+  const { invalidateFolders } = useContextAndErrorIfNull(InvalidateQueriesContext);
   const [opened, { close, open }] = useDisclosure(false);
-  const apiContext = api.useContext();
   const { mutate: createFolder } = api.folders.createFolder.useMutation({
     onError: (error) => 
     {
@@ -36,7 +38,7 @@ const MaterialMenu: FunctionComponent<MaterialMenuProps> = ({ folders, selectedF
         message: "Der Ordner konnte nicht erstellt werden",
       });
     },
-    onSuccess: async () => apiContext.folders.getFolders.invalidate()
+    onSuccess: invalidateFolders
   });
   const { mutate: renameFolder } = api.folders.renameFolder.useMutation({
     onError: (error) =>
@@ -47,7 +49,7 @@ const MaterialMenu: FunctionComponent<MaterialMenuProps> = ({ folders, selectedF
         message: "Der Name des Ordner konnte nicht geändert werden",
       });
     },
-    onSuccess: async () => apiContext.folders.getFolders.invalidate()
+    onSuccess: invalidateFolders
   });
   const { mutate: deleteFolder } = api.folders.deleteFolder.useMutation({
     onError: (error) => 
@@ -60,7 +62,7 @@ const MaterialMenu: FunctionComponent<MaterialMenuProps> = ({ folders, selectedF
     },
     onSuccess: async () => 
     {
-      await apiContext.folders.getFolders.invalidate();
+      await invalidateFolders();
       setSelectedFolderId(null);
       notifications.show({
         color: "green",

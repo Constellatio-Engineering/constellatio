@@ -1,8 +1,9 @@
 import { LinkButton } from "@/components/atoms/LinkButton/LinkButton";
 import ProfileMenuUniversityTab from "@/components/atoms/profileMenuUniversityTab/ProfileMenuUniversityTab";
 import MenuListItem from "@/components/molecules/menuListItem/MenuListItem";
+import useContextAndErrorIfNull from "@/hooks/useContextAndErrorIfNull";
 import { supabase } from "@/lib/supabase";
-import { api } from "@/utils/api";
+import { InvalidateQueriesContext } from "@/provider/InvalidateQueriesProvider";
 
 import { notifications } from "@mantine/notifications";
 import { IconLogout } from "@tabler/icons-react";
@@ -26,15 +27,15 @@ type IProfileMenu = {
 
 const ProfileMenu: FunctionComponent<IProfileMenu> = ({ setTabs, tabs }) => 
 {
+  const { invalidateEverything } = useContextAndErrorIfNull(InvalidateQueriesContext);
   const placeHolderImg = "https://s3-alpha-sig.figma.com/img/6a78/feaa/1d046e0702962fc5ca99328cf4b4a2b8?Expires=1697414400&Signature=GIyeLjG6TqueeJrryvnnTVn3YHQxIyx9eygPZLKR0A0RhHVOemXY~9ufFcWnZ9whuNlsmM57QXTkmurO0~ZtTMaaoWoAncU-ZCXgaLJ2VC6SEArntutwf6-eBbMlx7KovpogLSUuFffVlNNr-n1MiBickmFewOQWhAqcIexe7EyFcDwd2-g-JKEqSj7DICypulIIL25gpCuH7VQojPgcESsHDIX7wgXaOo9EqlFzn1~Gbi1DKAcj0ep-d~hqd2WsPISgCL7oG~m7ET13ayNn8PItbg64iPba7keXZhllv2rxS15ObfF25sIY66jU3NPD7j0B6mw7tumT2gNXyRMGcQ__&Key-Pair-Id=APKAQ4GOSFWCVNEHN3O4";
-  const apiContext = api.useContext();
   const handleSignOut = async (): Promise<void> =>
   {
     try
     {
       await supabase.auth.signOut();
       await router.replace("/login");
-      await apiContext.invalidate();
+      await invalidateEverything();
 
       notifications.show({
         message: "Come back soon!",
