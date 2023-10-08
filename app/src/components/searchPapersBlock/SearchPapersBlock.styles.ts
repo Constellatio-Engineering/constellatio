@@ -4,11 +4,16 @@ import { type MantineTheme } from "@mantine/styles";
 export const wrapper = (theme: MantineTheme) => css`
 background: ${theme.colors["neutrals-01"][0]};
 padding: 32px;
-border-radius: 12px;
+border-radius: 8px;
 display: flex;  
-justify-content: space-between;
+gap: 60px;
 align-items: flex-start;
 overflow:hidden;
+box-shadow: ${theme.shadows["elevation-big"]};
+
+> div :nth-of-type(2) {
+  width: 100%;
+}
 `;
 export const blockHeadTitle = css`
 

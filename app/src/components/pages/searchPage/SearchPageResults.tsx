@@ -40,16 +40,19 @@ const SearchPageResults: FunctionComponent = () =>
   if(routerTabQuery === "userUploads") 
   { 
     return (
-      <div css={styles.searchPageResults}>
-        <SearchPapersBlock 
-          table={(
-            <UploadedMaterialTable 
-              uploadedFiles={searchResults[routerTabQuery] as UploadedFile[]}
-            />
-          )}
-          numberOfTableItems={searchResults[routerTabQuery]?.length}
-        />
-      </div>
+      searchResults[routerTabQuery]?.length > 0 && (
+        <div css={styles.searchPageResults}>
+          <SearchPapersBlock 
+            table={(
+              <UploadedMaterialTable 
+                uploadedFiles={searchResults[routerTabQuery] as UploadedFile[]}
+                variant="searchPapers"
+              />
+            )}
+            numberOfTableItems={searchResults[routerTabQuery]?.length}
+          />
+        </div>
+      )
     );
   }
   else 
@@ -85,42 +88,44 @@ const SearchPageResults: FunctionComponent = () =>
     });
 
     return (
-      <div css={styles.searchPageResults}>
-        {groupedResultsByCategory?.map((categoryGroup, index) =>
-        {
-          const caseItems = categoryGroup.items as SearchResults["cases"];
-          const articleItems = categoryGroup.items as SearchResults["articles"];
-          const { mainCategory } = categoryGroup;
-          const mainCategoryIcon = mainCategory?.icon;
-          return (
-            <Fragment key={index}>
-              <ItemBlock
-                variant={routerTabQuery === "cases" ? "case" : "dictionary"}
-                tableType="search"
-                blockHead={{
-                  blockType: "searchBlock",
-                  categoryName: mainCategory?.mainCategory ?? "",
-                  icon: {
-                    alt: mainCategoryIcon?.description ?? (mainCategoryIcon?.title || ""),
-                    src: <Svg src={mainCategoryIcon?.src}/>
-                  },
-                  items: categoryGroup.items?.length,
-                  variant: routerTabQuery === "cases" ? "case" : "dictionary"
-                }}
-                items={routerTabQuery === "cases" ? caseItems?.map(item => ({
-                  __typename: "Case",
-                  durationToCompleteInMinutes: item.durationToCompleteInMinutes,
-                  ...commonItemsProps(item)
-                })) : articleItems?.map(item => ({
-                  __typename: "Article",
-                  ...commonItemsProps(item)
-                }))}
-              />
-            </Fragment>
-          );
-        }
-        )}
-      </div>
+      searchResults[routerTabQuery]?.length > 0 && (
+        <div css={styles.searchPageResults}>
+          {groupedResultsByCategory?.map((categoryGroup, index) =>
+          {
+            const caseItems = categoryGroup.items as SearchResults["cases"];
+            const articleItems = categoryGroup.items as SearchResults["articles"];
+            const { mainCategory } = categoryGroup;
+            const mainCategoryIcon = mainCategory?.icon;
+            return (
+              <Fragment key={index}>
+                <ItemBlock
+                  variant={routerTabQuery === "cases" ? "case" : "dictionary"}
+                  tableType="search"
+                  blockHead={{
+                    blockType: "searchBlock",
+                    categoryName: mainCategory?.mainCategory ?? "",
+                    icon: {
+                      alt: mainCategoryIcon?.description ?? (mainCategoryIcon?.title || ""),
+                      src: <Svg src={mainCategoryIcon?.src}/>
+                    },
+                    items: categoryGroup.items?.length,
+                    variant: routerTabQuery === "cases" ? "case" : "dictionary"
+                  }}
+                  items={routerTabQuery === "cases" ? caseItems?.map(item => ({
+                    __typename: "Case",
+                    durationToCompleteInMinutes: item.durationToCompleteInMinutes,
+                    ...commonItemsProps(item)
+                  })) : articleItems?.map(item => ({
+                    __typename: "Article",
+                    ...commonItemsProps(item)
+                  }))}
+                />
+              </Fragment>
+            );
+          }
+          )}
+        </div>
+      )
     );
   }
 

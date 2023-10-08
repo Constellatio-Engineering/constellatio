@@ -18,23 +18,23 @@ interface UploadedMaterialNoteDrawerProps
   readonly noteRichtext: string;
   readonly selectedFileNote: UploadedFile | undefined;
   readonly setNoteRichtext: Dispatch<React.SetStateAction<string>>;
-  readonly setShowNoteDrewer: Dispatch<React.SetStateAction<boolean>>;
-  readonly showNoteDrewer: boolean;
+  readonly setShowNoteDrawer: Dispatch<React.SetStateAction<boolean>>;
+  readonly showNoteDrawer: boolean;
 }
 
 const UploadedMaterialNoteDrawer: FunctionComponent<UploadedMaterialNoteDrawerProps> = ({
   noteRichtext,
   selectedFileNote,
   setNoteRichtext,
-  setShowNoteDrewer,
-  showNoteDrewer
+  setShowNoteDrawer,
+  showNoteDrawer
 }) => 
 {
   const isNoteExists = false;
   return (
     <Drawer
-      opened={showNoteDrewer}
-      onClose={() => setShowNoteDrewer(false)}
+      opened={showNoteDrawer}
+      onClose={() => setShowNoteDrawer(false)}
       withCloseButton={false}
       position="right"
       size="xl"
@@ -45,11 +45,11 @@ const UploadedMaterialNoteDrawer: FunctionComponent<UploadedMaterialNoteDrawerPr
           variant="default"
           closeButtonAction={() => 
           {
-            setShowNoteDrewer(false);
+            setShowNoteDrawer(false);
           }}
         />
       )}>
-      <SlidingPanelFileTypeRow title={selectedFileNote?.originalFilename ?? ""} fileExtention={selectedFileNote?.fileExtension ?? ""}/>
+      <SlidingPanelFileTypeRow title={selectedFileNote?.originalFilename ?? ""} fileExtension={selectedFileNote?.fileExtension ?? ""}/>
       {!isNoteExists && (
         <>
           <div css={styles.MaterialNoteRichText}>
@@ -67,13 +67,12 @@ const UploadedMaterialNoteDrawer: FunctionComponent<UploadedMaterialNoteDrawerPr
                 }
               }}
               variant="with-legal-quote"
-       
             />
           </div>
           <div css={styles.MaterialNotesCallToAction}>
             <Button<"button">
               styleType="secondarySimple"
-              onClick={() => setShowNoteDrewer(false)}>
+              onClick={() => setShowNoteDrawer(false)}>
               Cancel
             </Button>
             <Button<"button">

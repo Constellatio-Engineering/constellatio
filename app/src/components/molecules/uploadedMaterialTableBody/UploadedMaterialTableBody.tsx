@@ -1,5 +1,6 @@
 import { BodyText } from "@/components/atoms/BodyText/BodyText";
 import { Checkbox } from "@/components/atoms/Checkbox/Checkbox";
+import { DropdownItem } from "@/components/atoms/Dropdown/DropdownItem";
 import { DotsIcon } from "@/components/Icons/dots";
 import { DownloadIcon } from "@/components/Icons/DownloadIcon";
 import { Edit } from "@/components/Icons/Edit";
@@ -24,9 +25,10 @@ interface UploadedMaterialTableBodyProps
   readonly setSelectedFileIdForPreview: React.Dispatch<React.SetStateAction<string | undefined>>;
   readonly setSelectedFileNote: React.Dispatch<React.SetStateAction<UploadedFile | undefined>>;
   readonly setShowFileViewerModal: React.Dispatch<React.SetStateAction<boolean>>; 
-  readonly setShowNoteDrewer: React.Dispatch<React.SetStateAction<boolean>>;
+  readonly setShowNoteDrawer: React.Dispatch<React.SetStateAction<boolean>>;
   readonly showingFiles: number;
   readonly uploadedFiles?: Partial<UploadedFile[]>;
+  readonly variant: "personalSpace" | "searchPapers";
 }
 
 const fileNameIcon = (file: UploadedFile): React.ReactNode =>
@@ -49,7 +51,7 @@ const fileNameIcon = (file: UploadedFile): React.ReactNode =>
     case "mp4":
       return <VideoIcon/>;
     default:
-      console.error("Unknown file extension", file.fileExtension);
+      console.error(`Unknown file extension ${file.fileExtension}`);
       return null;
   }
 };
@@ -59,9 +61,10 @@ const UploadedMaterialTableBody: FunctionComponent<Partial<UploadedMaterialTable
   setSelectedFileIdForPreview,
   setSelectedFileNote,
   setShowFileViewerModal,
-  setShowNoteDrewer,
+  setShowNoteDrawer,
   showingFiles,
-  uploadedFiles
+  uploadedFiles,
+  variant = "personalSpace"
 }) => 
 {
   const { invalidateUploadedFiles } = useContextAndErrorIfNull(InvalidateQueriesContext);
@@ -76,7 +79,7 @@ const UploadedMaterialTableBody: FunctionComponent<Partial<UploadedMaterialTable
       {uploadedFiles?.slice(0, showingFiles).map((file, index) => (
         <tr
           key={index}>
-          <td css={styles.callToActionCell}><Checkbox/></td>
+          {variant === "personalSpace" && <td css={styles.callToActionCell}><Checkbox/></td>}
           <td
             css={styles.docName({ clickable: setSelectedFileIdForPreview && setShowFileViewerModal ? true : false, theme })}
             className="primaryCell"
@@ -89,26 +92,28 @@ const UploadedMaterialTableBody: FunctionComponent<Partial<UploadedMaterialTable
               }  
             }}>
             <BodyText styleType="body-01-medium" component="p" title={file?.originalFilename}>
-              {file && fileNameIcon(file)}{file?.originalFilename}
+              {file && file.fileExtension && fileNameIcon(file)}{file?.originalFilename}
             </BodyText>
           </td>
           <td css={styles.docDate}> <BodyText styleType="body-01-medium" component="p">{file && file.createdAt && formatDate(file.createdAt)}</BodyText></td>
           <td css={styles.docTags}> <BodyText styleType="body-02-medium" component="p"/></td>
-          <td css={styles.cellNote}>
-            <BodyText
-              styleType="body-02-medium"
-              component="p"
-              onClick={() => 
-              {
-                if(setSelectedFileNote && setShowNoteDrewer)
+          {variant === "personalSpace" && (
+            <td css={styles.cellNote}>
+              <BodyText
+                styleType="body-02-medium"
+                component="p"
+                onClick={() => 
                 {
-                  setSelectedFileNote(file);
-                  setShowNoteDrewer(true);
-                }
-              }}><Notepad/>Add Notes
-            </BodyText>
-          </td>
-          <Menu shadow="md" width={200}>
+                  if(setSelectedFileNote && setShowNoteDrawer)
+                  {
+                    setSelectedFileNote(file);
+                    setShowNoteDrawer(true);
+                  }
+                }}><Notepad/>Add Notes
+              </BodyText>
+            </td>
+          )}
+          <Menu shadow="elevation-big" radius="12px" width={200}>
             <Menu.Target>
               <td
                 onClick={() => file && deleteFile({ fileIds: [file.id] })}
@@ -121,13 +126,13 @@ const UploadedMaterialTableBody: FunctionComponent<Partial<UploadedMaterialTable
               </td>
             </Menu.Target>
             <Menu.Dropdown>
-              <Menu.Item><span className="label" onClick={() => { }}><Edit/>Rename</span></Menu.Item>
+              <Menu.Item><DropdownItem icon={<Edit/>} label="Rename" onClick={() => { }}/></Menu.Item>
               <Menu.Divider/>
-              <Menu.Item><span className="label"><FolderIcon/>Move to</span></Menu.Item>
+              <Menu.Item><DropdownItem icon={<FolderIcon/>} label="Move to" onClick={() => { }}/></Menu.Item>
               <Menu.Divider/>
-              <Menu.Item><span className="label"><DownloadIcon/>Download</span></Menu.Item>
+              <Menu.Item><DropdownItem icon={<DownloadIcon/>} label="Download" onClick={() => { }}/></Menu.Item>
               <Menu.Divider/>
-              <Menu.Item onClick={() => {}}><span className="label"><Trash/>Delete</span></Menu.Item>
+              <Menu.Item><DropdownItem icon={<Trash/>} label="Delete" onClick={() => { }}/></Menu.Item>
             </Menu.Dropdown>
           </Menu>
         

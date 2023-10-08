@@ -26,7 +26,7 @@ type Story = StoryObj<typeof SlidingPanelFileTypeRow>;
 
 export const Default: Story = {
   args: {
-    fileExtention: "pdf",
+    fileExtension: "pdf",
     title: "Title"
   },
 };
