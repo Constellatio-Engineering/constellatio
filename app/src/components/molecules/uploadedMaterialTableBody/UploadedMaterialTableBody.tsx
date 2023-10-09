@@ -81,7 +81,7 @@ const UploadedMaterialTableBody: FunctionComponent<UploadedMaterialTableBodyProp
       {uploadedFiles?.slice(0, showingFiles).map((file, index) => (
         <tr
           key={index}>
-          <td><Checkbox/></td>
+          {variant === "personalSpace" && <td><Checkbox/></td>}
           <td
             css={styles.docName({ clickable: !!(setSelectedFileIdForPreview && setShowFileViewerModal), theme })}
             className="primaryCell"

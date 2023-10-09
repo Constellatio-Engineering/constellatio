@@ -48,6 +48,7 @@ const SearchPageResults: FunctionComponent = () =>
                 uploadedFiles={searchResults[routerTabQuery] as UploadedFile[]}
                 variant="searchPapers"
                 selectedFolderId={null} // TODO
+                
               />
             )}
             numberOfTableItems={searchResults[routerTabQuery]?.length}

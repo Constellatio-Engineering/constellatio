@@ -12,13 +12,6 @@ const CSSClickableEffect = (theme: MantineTheme) => css`
   }
 `;
 
-export const mainDiv = css`
-border:5px solid red;
-.mantine-text-root{
-  color:red;
-}
-`;
-
 export const tableWrapper = (theme: MantineTheme) => css`
   text-align: left;
   border-radius: 12px;
@@ -212,8 +205,8 @@ export const modalStyles = (): ModalStyles =>
       position: "relative",
     },
     header: {
-      padddingTop: "36px",
       padding: 0,
+      paddingTop: "36px",
     },
     root: {
       minWidth: "520px",

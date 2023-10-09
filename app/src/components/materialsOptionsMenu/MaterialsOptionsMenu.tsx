@@ -40,7 +40,7 @@ const MaterialOptionsMenu: FunctionComponent<MaterialOptionsMenuProps> = ({ file
     onSuccess: async () => invalidateUploadedFiles()
   });
   return (
-    <div css={styles.mainDiv}>
+    <> 
       <Menu shadow="elevation-big" radius="12px" width={200}>
         <Menu.Target>
           <td
@@ -56,13 +56,13 @@ const MaterialOptionsMenu: FunctionComponent<MaterialOptionsMenuProps> = ({ file
             <DropdownItem icon={<Edit/>} label="Rename"/>
           </Menu.Item>
           {/* <Menu.Divider/>
-              <Menu.Item>
-                <DropdownItem icon={<FolderIcon/>} label="Move to"/>
-              </Menu.Item> */}
+           <Menu.Item>
+             <DropdownItem icon={<FolderIcon/>} label="Move to"/>
+           </Menu.Item> */}
           {/* <Menu.Divider/>
-              <Menu.Item>
-                <DropdownItem icon={<DownloadIcon/>} label="Download"/>
-              </Menu.Item> */}
+           <Menu.Item>
+             <DropdownItem icon={<DownloadIcon/>} label="Download"/>
+           </Menu.Item> */}
           <Menu.Divider/>
           {/* <Menu.Item onClick={() => file && deleteFile({ fileIds: [file.id] })}><span className="label"><Trash/>Delete</span></Menu.Item> */}
           <Menu.Item onClick={() => setShowDeleteMaterialModal(true)}><DropdownItem icon={<Trash/>} label="Delete"/></Menu.Item>
@@ -113,8 +113,6 @@ const MaterialOptionsMenu: FunctionComponent<MaterialOptionsMenuProps> = ({ file
             <BodyText styleType="body-01-regular" component="label">File name</BodyText>
             <Input
               inputType="text"
-              // value={newFolderName}
-              // onChange={(e) => { setNewFolderName(e.target.value); }}
             />
           </div>
           <div className="modal-call-to-action">
@@ -130,14 +128,14 @@ const MaterialOptionsMenu: FunctionComponent<MaterialOptionsMenuProps> = ({ file
               onClick={() =>
               {
                 setShowRenameMaterialModal(false);
-                // onRename?.(newFolderName);
+              // onRename?.(newFolderName);
               }}>
               Save
             </Button>
           </div>
         </form>
       </Modal>
-    </div>
+    </>
   );
 };
 
