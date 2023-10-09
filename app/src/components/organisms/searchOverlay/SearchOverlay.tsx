@@ -22,7 +22,7 @@ const SearchOverlay: FunctionComponent<SearchOverlayProps> = () =>
   useEffect(() =>
   {
     toggleDrawer(false);
-  }, [router.pathname, toggleDrawer, router.query.find]);
+  }, [router.pathname, toggleDrawer, router.query]);
 
   return (
     <Drawer
