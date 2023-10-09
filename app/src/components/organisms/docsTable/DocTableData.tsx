@@ -98,7 +98,7 @@ export const DocsTableData: FunctionComponent<Document> = (doc) =>
             <Menu.Divider/>
             <Menu.Item><DropdownItem icon={<DownloadIcon/>} label="Download" onClick={download}/></Menu.Item>
             <Menu.Divider/>
-            <Menu.Item><DropdownItem icon={<Trash/>} label="Download" onClick={() => deleteDocument({ id: documentId })}/></Menu.Item>
+            <Menu.Item><DropdownItem icon={<Trash/>} label="Download" onClick={() => setShowDeleteDocModal(true)}/></Menu.Item>
           </Menu.Dropdown>
         </Menu>
         {/* Modal */}
@@ -111,8 +111,8 @@ export const DocsTableData: FunctionComponent<Document> = (doc) =>
           <span className="close-btn" onClick={() => setShowDeleteDocModal(false)}>
             <Cross size={32}/>
           </span>
-          <Title order={3}>Delete folder</Title>
-          <BodyText styleType="body-01-regular" component="p" className="delete-folder-text">Are you sure you want to delete <strong>Folder name</strong>?</BodyText>
+          <Title order={3}>Delete document</Title>
+          <BodyText styleType="body-01-regular" component="p" className="delete-folder-text">Are you sure you want to document <strong>{doc?.name}</strong>?</BodyText>
           <div className="modal-call-to-action">
             <Button<"button">
               styleType={"secondarySimple" as TButton["styleType"]}
@@ -123,6 +123,7 @@ export const DocsTableData: FunctionComponent<Document> = (doc) =>
               styleType="primary"
               onClick={() => 
               {
+                deleteDocument({ id: documentId });
                 setShowDeleteDocModal(false);
               }}>
               Yes, Delete
