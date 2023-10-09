@@ -3,6 +3,7 @@ import PapersBlock from "@/components/papersBlock/PapersBlock";
 import useDocuments from "@/hooks/useDocuments";
 import useUploadedFiles from "@/hooks/useUploadedFiles";
 import useUploadFolders from "@/hooks/useUploadFolders";
+import useMaterialsStore from "@/stores/materials.store";
 import uploadsProgressStore from "@/stores/uploadsProgress.store";
 
 import { Container } from "@mantine/core";
@@ -26,13 +27,10 @@ const PersonalSpaceMaterialsTab: FunctionComponent<{
   const [selectedFiles, setSelectedFiles] = useState<FileWithClientSideUuid[]>(
     []
   );
-  const [selectedFileIdForPreview, setSelectedFileIdForPreview] =
-    useState<string>();
+  const { selectedFileIdForPreview } = useMaterialsStore();
   const areUploadsInProgress = uploads.some(
     (u) => u.state.type === "uploading"
   );
-  const [showFileViewerModal, setShowFileViewerModal] =
-    useState<boolean>(false);
   return (
     <Container maw={1440}>
       <div
@@ -60,19 +58,13 @@ const PersonalSpaceMaterialsTab: FunctionComponent<{
             isGetUploadedFilesLoading={isGetUploadedFilesLoading}
             setUploadState={setUploadState}
             selectedFiles={selectedFiles}
-            setSelectedFileIdForPreview={setSelectedFileIdForPreview}
-            setShowFileViewerModal={setShowFileViewerModal}
             setSelectedFiles={setSelectedFiles}
             uploadedFiles={uploadedFiles}
             selectedFolderId={selectedFolderId}
           />
           <FileUploadMenu uploads={uploads}/>
           {selectedFileIdForPreview && (
-            <FileViewer
-              fileId={selectedFileIdForPreview}
-              setShowFileViewerModal={setShowFileViewerModal}
-              showFileViewerModal={showFileViewerModal}
-            />
+            <FileViewer/>
           )}
         </div>
       </div>

@@ -1,10 +1,12 @@
 import { Svg } from "@/basic-components/SVG/Svg";
 import ItemBlock from "@/components/organisms/caseBlock/ItemBlock";
+import FileViewer from "@/components/organisms/fileViewer/FileViewer";
 import UploadedMaterialTable from "@/components/organisms/uploadedMaterialTable/UploadedMaterialTable";
 import SearchPapersBlock from "@/components/searchPapersBlock/SearchPapersBlock";
 import { type UploadedFile } from "@/db/schema";
 import useSearchResults, { type SearchResults } from "@/hooks/useSearchResults";
 import { type IGenArticleOverviewFragment, type IGenFullCaseFragment } from "@/services/graphql/__generated/sdk";
+import useMaterialsStore from "@/stores/materials.store";
 import { type ArticleSearchIndexItem, type CaseSearchIndexItem } from "@/utils/search";
 import { type CommonKeysInTypes } from "@/utils/types";
 
@@ -36,6 +38,7 @@ const SearchPageResults: FunctionComponent = () =>
   const { searchResults } = useSearchResults();
   const router = useRouter();
   const routerTabQuery = router.query.tab as keyof SearchResults;
+  const { selectedFileIdForPreview } = useMaterialsStore();
   
   if(routerTabQuery === "userUploads") 
   { 
@@ -49,12 +52,13 @@ const SearchPageResults: FunctionComponent = () =>
                 uploadedFiles={searchResults[routerTabQuery] as UploadedFile[]}
                 variant="searchPapers"
                 selectedFolderId={null} // TODO
-                // setSelectedFileIdForPreview={}
-                // setShowFileViewerModal={}
               />
             )}
             numberOfTableItems={searchResults[routerTabQuery]?.length}
           />
+          {selectedFileIdForPreview && (
+            <FileViewer/>
+          )}
         </div>
       )
     );

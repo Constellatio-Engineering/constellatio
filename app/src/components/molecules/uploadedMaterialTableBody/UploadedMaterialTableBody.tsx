@@ -7,9 +7,7 @@ import { Notepad } from "@/components/Icons/Notepad";
 import { VideoIcon } from "@/components/Icons/Video";
 import MaterialOptionsMenu from "@/components/materialsOptionsMenu/MaterialsOptionsMenu";
 import { type UploadedFile } from "@/db/schema";
-// import useContextAndErrorIfNull from "@/hooks/useContextAndErrorIfNull";
-// import { InvalidateQueriesContext } from "@/provider/InvalidateQueriesProvider";
-// import { api } from "@/utils/api";
+import useMaterialsStore from "@/stores/materials.store";
 
 import {
   useMantineTheme 
@@ -20,10 +18,8 @@ import React, { type FunctionComponent } from "react";
 import * as styles from "./UploadedMaterialTableBody.styles";
 interface UploadedMaterialTableBodyProps
 {
-  readonly selectedFolderId: string | null;
-  readonly setSelectedFileIdForPreview?: React.Dispatch<React.SetStateAction<string | undefined>>;
+  // readonly selectedFolderId: string | null;
   readonly setSelectedFileNote: React.Dispatch<React.SetStateAction<UploadedFile | undefined>>;
-  readonly setShowFileViewerModal?: React.Dispatch<React.SetStateAction<boolean>>;
   readonly setShowNoteDrawer: React.Dispatch<React.SetStateAction<boolean>>;
   readonly showingFiles: number;
   readonly uploadedFiles?: Partial<UploadedFile[]>;
@@ -57,24 +53,16 @@ const fileNameIcon = (file: UploadedFile): React.ReactNode =>
 const formatDate = (date: Date): string => `${String(date?.getDate()).padStart(2, "0")}.${String(date?.getMonth() + 1).padStart(2, "0")}.${date?.getFullYear()}`;
 
 const UploadedMaterialTableBody: FunctionComponent<UploadedMaterialTableBodyProps> = ({
-  selectedFolderId,
-  setSelectedFileIdForPreview,
+  // selectedFolderId,
   setSelectedFileNote,
-  setShowFileViewerModal,
   setShowNoteDrawer,
   showingFiles,
   uploadedFiles,
   variant = "personalSpace"
 }) => 
 {
-  // const { invalidateUploadedFiles } = useContextAndErrorIfNull(InvalidateQueriesContext);
-
-  // const { mutate: deleteFile } = api.uploads.deleteUploadedFiles.useMutation({
-  //   onError: (e) => console.log("error while deleting file", e),
-  //   onSuccess: async () => invalidateUploadedFiles()
-  // });
   const theme = useMantineTheme();
-  // const [showDeleteMaterialModal, setShowDeleteMaterialModal] = React.useState<boolean>(false);
+  const { setSelectedFileIdForPreview, setShowFileViewerModal } = useMaterialsStore();
   return (
     <>
       {uploadedFiles?.slice(0, showingFiles).map((file, index) => (
@@ -82,13 +70,14 @@ const UploadedMaterialTableBody: FunctionComponent<UploadedMaterialTableBodyProp
           key={index}>
           {variant === "personalSpace" && <td><Checkbox/></td>}
           <td
-            css={styles.docName({ clickable: !!(setSelectedFileIdForPreview && setShowFileViewerModal), theme })}
+            css={styles.docName({ clickable: true, theme })}
             className="primaryCell"
             onClick={() => 
             {
-              if(setSelectedFileIdForPreview && setShowFileViewerModal)
+              if(file?.id)
               {
-                setSelectedFileIdForPreview(file?.id);
+                console.log("file", file);
+                setSelectedFileIdForPreview(file.id);
                 setShowFileViewerModal(true);
               }  
             }}>

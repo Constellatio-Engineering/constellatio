@@ -22,9 +22,7 @@ type UploadedMaterialBlockProps = {
   readonly isGetUploadedFilesLoading: boolean;
   readonly selectedFiles: FileWithClientSideUuid[];
   readonly selectedFolderId: string | null;
-  readonly setSelectedFileIdForPreview: React.Dispatch<React.SetStateAction<string | undefined>>;
   readonly setSelectedFiles: React.Dispatch<React.SetStateAction<FileWithClientSideUuid[]>>;
-  readonly setShowFileViewerModal: React.Dispatch<React.SetStateAction<boolean>>;
   readonly setUploadState: (newState: UploadState) => void;
   readonly uploadedFiles: UploadedFile[];
 };
@@ -35,9 +33,7 @@ const UploadedMaterialBlock: FunctionComponent<UploadedMaterialBlockProps> = ({
   isGetUploadedFilesLoading,
   selectedFiles,
   selectedFolderId,
-  setSelectedFileIdForPreview,
   setSelectedFiles,
-  setShowFileViewerModal,
   setUploadState,
   uploadedFiles,
 }) =>
@@ -156,8 +152,6 @@ const UploadedMaterialBlock: FunctionComponent<UploadedMaterialBlockProps> = ({
       <div css={styles.content}>
         {uploadedFiles?.length > 0 ? (
           <UploadedMaterialTable
-            setShowFileViewerModal={setShowFileViewerModal}
-            setSelectedFileIdForPreview={setSelectedFileIdForPreview}
             isGetUploadedFilesLoading={isGetUploadedFilesLoading}
             uploadedFiles={uploadedFiles}
             selectedFolderId={selectedFolderId}
