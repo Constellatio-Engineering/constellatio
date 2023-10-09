@@ -18,6 +18,7 @@ import React, { type FunctionComponent, useState } from "react";
 
 import * as styles from "./ProfilePersonalSpaceBlock.styles";
 import EmptyStateCard from "../emptyStateCard/EmptyStateCard";
+import FileViewer from "../fileViewer/FileViewer";
 
 const ProfilePersonalSpaceBlock: FunctionComponent = () => 
 {
@@ -95,6 +96,7 @@ const ProfilePersonalSpaceBlock: FunctionComponent = () =>
                     <MaterialCard
                       title={file?.originalFilename}
                       fileExtension={file?.fileExtension}
+                      id={file?.id}
                       materialType="paper"
                       key={index}
                     />
@@ -107,6 +109,7 @@ const ProfilePersonalSpaceBlock: FunctionComponent = () =>
                     </Button>
                   </Link>
                 )}
+                <FileViewer/>
               </div>
             )
           : null

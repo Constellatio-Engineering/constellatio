@@ -13,5 +13,12 @@ height: 160px;
     flex-direction: column;
     justify-content: space-between;
     align-items: flex-start;
+    cursor: pointer;
+    &:hover {
+    background: ${theme.colors["neutrals-01"][1]};
+  }
+  &:active {
+    background: ${theme.colors["neutrals-01"][2]};
+  }
 `;
 export const tag = css``;
