@@ -11,7 +11,7 @@ import * as styles from "./FileViewer.styles";
 const FileViewer: FunctionComponent = () => 
 {
   const { selectedFileIdForPreview: fileId, setShowFileViewerModal, showFileViewerModal } = useMaterialsStore();
-  const { error, isLoading: isGetUrlLoading, url: fileUrl } = useSignedGetUrl(fileId);
+  const { isLoading: isGetUrlLoading, url: fileUrl } = useSignedGetUrl(fileId);
   const [fileType, setFileType] = useState<string | null>(null);
 
   useEffect(() => 
