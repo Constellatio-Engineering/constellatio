@@ -44,16 +44,16 @@ export const wrapper = ({ active, theme }: {
     }
   }
   .mantine-Menu-item{
-    padding:0;
+    /* padding:0; */
   }
   .mantine-Menu-dropdown {
-    padding: 0;
+    /* padding: 0; */
     border-radius: 12px;
   }
   .mantine-Menu-itemLabel{
-    padding:0;
-    margin:0;
-    border-bottom: 1px solid ${theme.colors["neutrals-01"][3]};
+    /* padding:0;
+    margin:0; */
+    /* border-bottom: 1px solid ${theme.colors["neutrals-01"][3]}; */
   }
   ${active && CSSActiveStyles(theme)}
 `;

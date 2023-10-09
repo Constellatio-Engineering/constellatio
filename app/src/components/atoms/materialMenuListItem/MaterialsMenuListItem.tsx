@@ -12,6 +12,7 @@ import React, { type HTMLProps, type ReactNode, useState, type FunctionComponent
 import * as styles from "./../materialMenuListItem/MenuListItem.styles";
 import { BodyText } from "../BodyText/BodyText";
 import { Button, type TButton } from "../Button/Button";
+import { DropdownItem } from "../Dropdown/DropdownItem";
 import { Input } from "../Input/Input";
 
 interface MenuListItemProps
@@ -57,16 +58,17 @@ const MaterialsMenuListItem: FunctionComponent<MenuListItemProps & HTMLProps<HTM
           <Menu.Dropdown>
             {onRename && (
               <Menu.Item onClick={e => e.stopPropagation()}>
-                <span css={styles.dropDownLabel} onClick={() => setShowRenameModal(true)}><Edit/>Rename</span>
+                <DropdownItem onClick={() => setShowRenameModal(true)} icon={<Edit/>} label="Rename"/>
               </Menu.Item>
             )}
-            <Menu.Item><span css={styles.dropDownLabel}><MoveDownIcon/>Download</span></Menu.Item>
+            <Menu.Divider/>
+            <Menu.Item>
+              <DropdownItem onClick={() => setShowRenameModal(true)} icon={<MoveDownIcon/>} label="Download"/>
+            </Menu.Item>
+            <Menu.Divider/>
             {onDelete && (
               <Menu.Item onClick={e => e.stopPropagation()}>
-                <span
-                  onClick={() => setShowDeleteModal(true)}
-                  css={styles.dropDownLabel}><Trash/>Delete
-                </span>
+                <DropdownItem onClick={() => setShowDeleteModal(true)} icon={<Trash/>} label="Delete"/>
               </Menu.Item>
             )}
           </Menu.Dropdown>

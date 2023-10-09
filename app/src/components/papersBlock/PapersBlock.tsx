@@ -7,6 +7,7 @@ import React, { type FunctionComponent } from "react";
 
 import * as styles from "./PapersBlock.styles";
 import { Button } from "../atoms/Button/Button";
+import { SubtitleText } from "../atoms/SubtitleText/SubtitleText";
 import { NoteIcon } from "../Icons/Note";
 import DocsTable from "../organisms/docsTable/DocsTable";
 import EmptyStateCard from "../organisms/emptyStateCard/EmptyStateCard";
@@ -26,7 +27,8 @@ const PapersBlock: FunctionComponent<PapersBlockProps> = ({ docs, isLoading, sel
     <div css={styles.wrapper}>
       <DocumentEditor/>
       <div css={styles.papersBlockHead}>
-        <Title order={4}>Constellatio docs <span className="count">({docs.length ?? 0})</span></Title>
+        <Title order={4}>Constellatio docs <SubtitleText className="count" component="span" styleType="subtitle-01-medium">({docs.length ?? 0})</SubtitleText>
+        </Title>
         <Button<"button">
           styleType="secondarySimple" 
           leftIcon={<NoteIcon/>}

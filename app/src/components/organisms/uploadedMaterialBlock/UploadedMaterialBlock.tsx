@@ -1,4 +1,5 @@
 import { Button } from "@/components/atoms/Button/Button";
+import { SubtitleText } from "@/components/atoms/SubtitleText/SubtitleText";
 import { type FileWithClientSideUuid } from "@/components/pages/personalSpacePage/PersonalSpacePage";
 import { type UploadedFile } from "@/db/schema";
 import useContextAndErrorIfNull from "@/hooks/useContextAndErrorIfNull";
@@ -120,7 +121,7 @@ const UploadedMaterialBlock: FunctionComponent<UploadedMaterialBlockProps> = ({
   return (
     <div css={styles.wrapper}>
       <div css={styles.uploadedMaterialBlockHead}>
-        <Title order={4}>Uploaded materials <span>({uploadedFiles.length ?? 0})</span></Title>
+        <Title order={4}>Uploaded materials{" "}<SubtitleText className="count" component="span" styleType="subtitle-01-medium">({uploadedFiles.length ?? 0})</SubtitleText></Title>
       </div>
       <div css={styles.uploader}>
         <form

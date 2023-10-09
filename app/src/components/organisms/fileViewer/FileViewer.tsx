@@ -10,7 +10,10 @@ import * as styles from "./FileViewer.styles";
 
 const FileViewer: FunctionComponent = () => 
 {
-  const { selectedFileIdForPreview: fileId, setShowFileViewerModal, showFileViewerModal } = useMaterialsStore();
+  // const { selectedFileIdForPreview: fileId, setShowFileViewerModal, showFileViewerModal } = useMaterialsStore();
+  const fileId = useMaterialsStore(s => s.selectedFileIdForPreview);
+  const setShowFileViewerModal = useMaterialsStore(s => s.setShowFileViewerModal);
+  const showFileViewerModal = useMaterialsStore(s => s.showFileViewerModal);
   const { isLoading: isGetUrlLoading, url: fileUrl } = useSignedGetUrl(fileId);
   const [fileType, setFileType] = useState<string | null>(null);
 
@@ -90,7 +93,6 @@ const FileViewer: FunctionComponent = () =>
     <Modal
       lockScroll={false} 
       centered 
-      lockScroll={false}
       miw={1080}
       opened={showFileViewerModal} 
       onClose={() => setShowFileViewerModal(false)} 
