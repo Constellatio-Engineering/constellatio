@@ -5,19 +5,29 @@ import { immer } from "zustand/middleware/immer";
 interface MaterialsStore
 {
   selectedFileIdForPreview: string;
+  selectedFolderId: string | null;
   setSelectedFileIdForPreview: (selectedFileIdForPreview: string) => void;
+  setSelectedFolderId: (selectedFolderId: string | null) => void;
   setShowFileViewerModal: (showFileViewerModal: boolean) => void;
   showFileViewerModal: boolean;
 }
 
 const useMaterialsStore = create(
-  immer<MaterialsStore>((set, get) => ({
+  immer<MaterialsStore>((set, _) => ({
     selectedFileIdForPreview: "",
+    selectedFolderId: null,
     setSelectedFileIdForPreview: (selectedFileIdForPreview) =>
     {
       set((state) =>
       {
         state.selectedFileIdForPreview = selectedFileIdForPreview;
+      });
+    },
+    setSelectedFolderId: (selectedFolderId) =>
+    {
+      set((state) =>
+      {
+        state.selectedFolderId = selectedFolderId;
       });
     },
     setShowFileViewerModal: (showFileViewerModal) =>

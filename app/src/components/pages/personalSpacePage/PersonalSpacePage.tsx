@@ -4,8 +4,10 @@ import PersonalSpaceMaterialsTab from "@/components/organisms/personalSpaceMater
 import useArticles from "@/hooks/useArticles";
 import useBookmarks from "@/hooks/useBookmarks";
 import useCases from "@/hooks/useCases";
+import useDocuments from "@/hooks/useDocuments";
 import useUploadedFiles from "@/hooks/useUploadedFiles";
 import { type IGenArticle, type IGenMainCategory } from "@/services/graphql/__generated/sdk";
+import useMaterialsStore from "@/stores/materials.store";
 
 import { useRouter } from "next/router";
 import React, { type FunctionComponent, useState, useId } from "react";
@@ -22,13 +24,20 @@ export type FileWithClientSideUuid = {
 
 const PersonalSpacePage: FunctionComponent = () =>
 {
-  const [selectedFolderId, setSelectedFolderId] = useState<string | null>(null);
+  // const { folders = [] } = useUploadFolders();
   const { allCases = [] } = useCases();
   const { allArticles = [] } = useArticles(); 
   const { bookmarks } = useBookmarks(undefined);
+  const selectedFolderId = useMaterialsStore(s => s.selectedFolderId);
+  const { documents } = useDocuments(selectedFolderId);
   const { uploadedFiles } = useUploadedFiles(selectedFolderId);
 
-  console.log("uploadedFiles", uploadedFiles);
+  // const allItemsInMaterialsTab = [];
+  // for(const folder of folders)
+  // {
+  //   const { documents } = useDocuments(folder.id);
+  //   allItemsInMaterialsTab.push(...documents);
+  // }
 
   const allCasesBookmarks = bookmarks.filter(bookmark => bookmark?.resourceType === "case") ?? [];
   const bookmarkedCases = allCases.filter(caisyCase => allCasesBookmarks.some(bookmark => bookmark.resourceId === caisyCase.id));
@@ -39,11 +48,11 @@ const PersonalSpacePage: FunctionComponent = () =>
   const categories = categoriesHelper({
     BookmarkIconSvg,
     FavCategoryId,
-    bookmarkedCasesLength: bookmarkedCases?.length + bookmarkedArticles?.length ?? 0
+    bookmarkedCasesLength: (bookmarkedCases?.length + bookmarkedArticles?.length) ?? 0
   }, {
     FileIconSvg,
     MaterialsCategoryId,
-    uploadedFilesLength: uploadedFiles?.length ?? 0,
+    uploadedFilesLength: (uploadedFiles?.length + documents?.length) ?? 0,
   });
   const [selectedCategory, setSelectedCategory] = useState<IGenMainCategory | undefined>(categories?.[0]);
   const isFavoriteTab = (id: string): boolean => id === categories?.[0]?.id;
@@ -71,12 +80,8 @@ const PersonalSpacePage: FunctionComponent = () =>
       {  
         isFavoriteTab(selectedCategory?.id ?? "") ?
           <PersonalSpaceFavoriteTab/>
-          : (
-            <PersonalSpaceMaterialsTab
-              selectedFolderId={selectedFolderId}
-              setSelectedFolderId={setSelectedFolderId}
-            />
-          )
+          : 
+          <PersonalSpaceMaterialsTab/>
       }
     </div>
   );

@@ -6,9 +6,11 @@ import MaterialsMenuListItem from "@/components/atoms/materialMenuListItem/Mater
 import { Cross } from "@/components/Icons/Cross";
 import { FolderIcon } from "@/components/Icons/Folder";
 import { Plus } from "@/components/Icons/Plus";
-import { type UploadFolder } from "@/db/schema";
+// import { type UploadFolder } from "@/db/schema";
 import useContextAndErrorIfNull from "@/hooks/useContextAndErrorIfNull";
+import useUploadFolders from "@/hooks/useUploadFolders";
 import { InvalidateQueriesContext } from "@/provider/InvalidateQueriesProvider";
+import useMaterialsStore from "@/stores/materials.store";
 import { api } from "@/utils/api";
 
 import { Title, Modal } from "@mantine/core";
@@ -18,15 +20,11 @@ import React, { type FunctionComponent } from "react";
 
 import * as styles from "./MaterialMenu.styles";
 
-interface MaterialMenuProps
+const MaterialMenu: FunctionComponent = () =>
 {
-  readonly folders: UploadFolder[];
-  readonly selectedFolderId: string | null;
-  readonly setSelectedFolderId: (folderId: string | null) => void;
-}
-
-const MaterialMenu: FunctionComponent<MaterialMenuProps> = ({ folders, selectedFolderId, setSelectedFolderId }) =>
-{
+  const selectedFolderId = useMaterialsStore(s => s.selectedFolderId);
+  const setSelectedFolderId = useMaterialsStore(s => s.setSelectedFolderId);
+  const { folders = [] } = useUploadFolders();
   const { invalidateFolders } = useContextAndErrorIfNull(InvalidateQueriesContext);
   const [opened, { close, open }] = useDisclosure(false);
   const { mutate: createFolder } = api.folders.createFolder.useMutation({
