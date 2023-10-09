@@ -47,6 +47,14 @@ export const tableWrapper = (theme: MantineTheme) => css`
       gap: 8px;
     }
   }
+  .mantine-Menu-dropdown {
+    padding: 0;
+    border-radius: 12px; 
+  }
+  .mantine-Menu-item {
+    border-bottom: 1px solid ${theme.colors["neutrals-01"][3]};
+    border-radius:0px;
+  }
   
 `;
 
@@ -84,6 +92,7 @@ svg{
   display:grid;
     place-items: center;
 }
+
 
   }
 position:relative;
@@ -124,6 +133,7 @@ export const showMoreButton = (theme: MantineTheme) => css`
     ${theme.colors["neutrals-01"][0]} 40%,
     transparent 100%
   );
+
 `;
 
 type DrawerStylesProps = Styles<DrawerStylesNames, UnknownMantineStylesParams>;

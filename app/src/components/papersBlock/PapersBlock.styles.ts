@@ -21,6 +21,9 @@ export const papersBlockHead = (theme: MantineTheme) => css`
     .count{
         color: ${theme.colors["neutrals-01"][7]};
     }
+    h4{
+      color: ${theme.colors["neutrals-02"][1]};
+    }
         padding:24px;
     border-bottom: 1px solid ${theme.colors["neutrals-01"][2]};
 `;

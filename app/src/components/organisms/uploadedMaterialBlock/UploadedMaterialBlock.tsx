@@ -1,4 +1,5 @@
 import { Button } from "@/components/atoms/Button/Button";
+import { SubtitleText } from "@/components/atoms/SubtitleText/SubtitleText";
 import { type FileWithClientSideUuid } from "@/components/pages/personalSpacePage/PersonalSpacePage";
 import { type UploadedFile } from "@/db/schema";
 import useContextAndErrorIfNull from "@/hooks/useContextAndErrorIfNull";
@@ -22,9 +23,7 @@ type UploadedMaterialBlockProps = {
   readonly isGetUploadedFilesLoading: boolean;
   readonly selectedFiles: FileWithClientSideUuid[];
   readonly selectedFolderId: string | null;
-  readonly setSelectedFileIdForPreview: React.Dispatch<React.SetStateAction<string | undefined>>;
   readonly setSelectedFiles: React.Dispatch<React.SetStateAction<FileWithClientSideUuid[]>>;
-  readonly setShowFileViewerModal: React.Dispatch<React.SetStateAction<boolean>>;
   readonly setUploadState: (newState: UploadState) => void;
   readonly uploadedFiles: UploadedFile[];
 };
@@ -35,9 +34,7 @@ const UploadedMaterialBlock: FunctionComponent<UploadedMaterialBlockProps> = ({
   isGetUploadedFilesLoading,
   selectedFiles,
   selectedFolderId,
-  setSelectedFileIdForPreview,
   setSelectedFiles,
-  setShowFileViewerModal,
   setUploadState,
   uploadedFiles,
 }) =>
@@ -124,7 +121,7 @@ const UploadedMaterialBlock: FunctionComponent<UploadedMaterialBlockProps> = ({
   return (
     <div css={styles.wrapper}>
       <div css={styles.uploadedMaterialBlockHead}>
-        <Title order={4}>Uploaded materials <span>({uploadedFiles.length ?? 0})</span></Title>
+        <Title order={4}>Uploaded materials{" "}<SubtitleText className="count" component="span" styleType="subtitle-01-medium">({uploadedFiles.length ?? 0})</SubtitleText></Title>
       </div>
       <div css={styles.uploader}>
         <form
@@ -156,8 +153,6 @@ const UploadedMaterialBlock: FunctionComponent<UploadedMaterialBlockProps> = ({
       <div css={styles.content}>
         {uploadedFiles?.length > 0 ? (
           <UploadedMaterialTable
-            setShowFileViewerModal={setShowFileViewerModal}
-            setSelectedFileIdForPreview={setSelectedFileIdForPreview}
             isGetUploadedFilesLoading={isGetUploadedFilesLoading}
             uploadedFiles={uploadedFiles}
             // selectedFolderId={selectedFolderId}

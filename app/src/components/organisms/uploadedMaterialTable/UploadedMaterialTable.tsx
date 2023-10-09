@@ -13,16 +13,12 @@ interface UploadedMaterialTableProps
 {
   readonly isGetUploadedFilesLoading?: boolean;
   // readonly selectedFolderId: string | null;
-  readonly setSelectedFileIdForPreview?: React.Dispatch<React.SetStateAction<string | undefined>>;
-  readonly setShowFileViewerModal?: React.Dispatch<React.SetStateAction<boolean>>;
-  readonly uploadedFiles?: UploadedFile[];
+  readonly uploadedFiles?: Partial<UploadedFile[]>;
   readonly variant?: "personalSpace" | "searchPapers";
 }
 const UploadedMaterialTable: FunctionComponent<UploadedMaterialTableProps> = ({
   isGetUploadedFilesLoading,
   // selectedFolderId,
-  setSelectedFileIdForPreview,
-  setShowFileViewerModal,
   uploadedFiles,
   variant = "personalSpace"
 }) =>
@@ -45,8 +41,6 @@ const UploadedMaterialTable: FunctionComponent<UploadedMaterialTableProps> = ({
             showingFiles={showingFiles}
             uploadedFiles={uploadedFiles}
             // selectedFolderId={selectedFolderId}
-            setSelectedFileIdForPreview={setSelectedFileIdForPreview} 
-            setShowFileViewerModal={setShowFileViewerModal}
             setSelectedFileNote={setSelectedFileNote}
             setShowNoteDrawer={setShowNoteDrawer}
             variant={variant}

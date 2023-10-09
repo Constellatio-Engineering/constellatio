@@ -1,6 +1,9 @@
 import { Button } from "@/components/atoms/Button/Button";
 import { Input } from "@/components/atoms/Input/Input";
+import { Edit } from "@/components/Icons/Edit";
+import { Trash } from "@/components/Icons/Trash";
 import { RichtextEditorField } from "@/components/molecules/RichtextEditorField/RichtextEditorField";
+import { type Document } from "@/db/schema";
 import useContextAndErrorIfNull from "@/hooks/useContextAndErrorIfNull";
 import { InvalidateQueriesContext } from "@/provider/InvalidateQueriesProvider";
 import { type CreateDocumentSchema } from "@/schemas/documents/createDocument.schema";
@@ -10,6 +13,7 @@ import { api } from "@/utils/api";
 
 import React, { type FunctionComponent } from "react";
 
+import * as styles from "./EditorForm.styles";
 interface EditorFormProps
 {
   readonly editorState: EditorStateDrawerOpened;
@@ -17,13 +21,15 @@ interface EditorFormProps
 
 const EditorForm: FunctionComponent<EditorFormProps> = ({ editorState }) =>
 {
+  // const editorState = useDocumentEditorStore(s => s.editorState);
+
   const { invalidateDocuments } = useContextAndErrorIfNull(InvalidateQueriesContext);
   const { document, state } = editorState;
   const updateEditorDocument = useDocumentEditorStore(s => s.updateEditorDocument);
   const closeEditor = useDocumentEditorStore(s => s.closeEditor);
   const setEditDocumentState = useDocumentEditorStore(s => s.setEditDocumentState);
   const { hasUnsavedChanges } = useDocumentEditorStore(s => s.getComputedValues());
-  const invalidateDocumentsForCurrentFolder = async (): Promise<void> => invalidateDocuments({ folderId: document.folderId });
+  const invalidateDocumentsForCurrentFolder = async (): Promise<void> => invalidateDocuments({ folderId: document.folderId as string });
 
   const { mutateAsync: createDocument } = api.documents.createDocument.useMutation({
     onError: (error) => console.log("error while creating document", error),
@@ -104,13 +110,38 @@ const EditorForm: FunctionComponent<EditorFormProps> = ({ editorState }) =>
     }
   };
 
+  const { mutate: deleteDocument } = api.documents.deleteDocument.useMutation({
+    onError: (error) => console.error("Error while deleting document:", error),
+    onSuccess: invalidateDocumentsForCurrentFolder,
+  });
   // TODO: Validate the form
 
   return (
     <>
       <div className="form">
         {editorState.state === "view" && (
-          <div dangerouslySetInnerHTML={{ __html: document.content }}/>
+          <>
+
+            <div css={styles.existingNote}>
+              <div css={styles.existingNoteActions}>
+                <Button<"button">
+                  styleType="secondarySubtle"
+                  onClick={() => setEditDocumentState(document as Document)}>
+                  <Edit/> Edit
+                </Button>
+                <Button<"button">
+                  styleType="secondarySubtle"
+                  onClick={() => 
+                  {
+                    deleteDocument({ id: document?.id });
+                    closeEditor();
+                  }}>
+                  <Trash/> Delete
+                </Button>
+              </div>
+              <div dangerouslySetInnerHTML={{ __html: document.content }}/>
+            </div>
+          </>
         )}
         {(editorState.state === "create" || editorState.state === "edit") && (
           <>

@@ -90,7 +90,6 @@ const UploadedMaterialNoteDrawer: FunctionComponent<UploadedMaterialNoteDrawerPr
       )}
       {
         isNoteExists && (
-
           <>
             {/* selectedFileNote.note */}
             <div css={styles.existingNote}>
