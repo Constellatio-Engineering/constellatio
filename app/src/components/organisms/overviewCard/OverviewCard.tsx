@@ -147,6 +147,7 @@ const OverviewCard: FunctionComponent<IOverviewCard> = ({
           </div>
           <Modal
             opened={opened}
+            lockScroll={false}
             onClose={close}
             title={<Title order={3}>All tags</Title>}
             centered

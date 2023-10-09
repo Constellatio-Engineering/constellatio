@@ -152,6 +152,7 @@ const CaseResultsReviewStep: FunctionComponent<ICaseResultsReviewStepProps> = ({
       </Container>
       <Modal
         opened={isOpened}
+        lockScroll={false}
         centered
         title="Reset case progress?"
         onClose={() => 

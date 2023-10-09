@@ -1,5 +1,5 @@
-/* eslint-disable sort-keys-fix/sort-keys-fix */
-import { type InferInsertModel, type InferSelectModel } from "drizzle-orm";
+/* eslint-disable sort-keys-fix/sort-keys-fix, @typescript-eslint/no-use-before-define */
+import { type InferInsertModel, type InferSelectModel, relations } from "drizzle-orm";
 import {
   text, pgTable, integer, pgEnum, uuid, smallint, unique, timestamp
 } from "drizzle-orm/pg-core";
@@ -62,8 +62,14 @@ export const uploadedFiles = pgTable("UploadedFile", {
   fileExtension: text("FileExtension").notNull()
 });
 
+export const uploadedFilesRelations = relations(uploadedFiles, ({ many }) => ({
+  notes: many(notes),
+}));
+
 export type UploadedFileInsert = InferInsertModel<typeof uploadedFiles>;
-export type UploadedFile = InferSelectModel<typeof uploadedFiles>;
+export type UploadedFile = InferSelectModel<typeof uploadedFiles> & {
+  notes: Note[];
+};
 
 export const documents = pgTable("Document", {
   id: uuid("Id").defaultRandom().unique().notNull().primaryKey(),
@@ -77,3 +83,22 @@ export const documents = pgTable("Document", {
 
 export type DocumentInsert = InferInsertModel<typeof documents>;
 export type Document = InferSelectModel<typeof documents>;
+
+export const notes = pgTable("Note", {
+  id: uuid("Id").defaultRandom().unique().notNull().primaryKey(),
+  userId: uuid("UserId").references(() => users.id, { onDelete: "no action" }).notNull(),
+  fileId: uuid("FileId").references(() => uploadedFiles.id, { onDelete: "no action" }).notNull(),
+  createdAt: timestamp("CreatedAt").defaultNow().notNull(),
+  updatedAt: timestamp("UpdatedAt").defaultNow().notNull(),
+  content: text("Content").notNull(),
+});
+
+export const notesRelations = relations(notes, ({ one }) => ({
+  uploadedFile: one(uploadedFiles, {
+    fields: [notes.fileId],
+    references: [uploadedFiles.id]
+  }),
+}));
+
+export type NoteInsert = InferInsertModel<typeof notes>;
+export type Note = InferSelectModel<typeof notes>;
