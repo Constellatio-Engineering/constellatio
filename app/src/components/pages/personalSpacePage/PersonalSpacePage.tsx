@@ -27,6 +27,9 @@ const PersonalSpacePage: FunctionComponent = () =>
   const { allArticles = [] } = useArticles(); 
   const { bookmarks } = useBookmarks(undefined);
   const { uploadedFiles } = useUploadedFiles(selectedFolderId);
+
+  console.log("uploadedFiles", uploadedFiles);
+
   const allCasesBookmarks = bookmarks.filter(bookmark => bookmark?.resourceType === "case") ?? [];
   const bookmarkedCases = allCases.filter(caisyCase => allCasesBookmarks.some(bookmark => bookmark.resourceId === caisyCase.id));
   const allArticlesBookmarks = bookmarks.filter(bookmark => bookmark?.resourceType === "article") ?? [];

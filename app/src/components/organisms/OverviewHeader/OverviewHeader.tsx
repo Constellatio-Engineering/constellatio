@@ -25,7 +25,11 @@ export interface ICasesOverviewHeaderProps
   readonly variant: "case" | "dictionary" | "red";
 }
 
-export const slugFormatter = (name: string): string => name.toLowerCase().replace(/\s+/g, "-").replace(/[^a-z0-9-]/g, "").replace(/-+/g, "-");
+export const slugFormatter = (name: string): string => name
+  .toLowerCase()
+  .replace(/\s+/g, "-")
+  .replace(/[^a-z0-9-]/g, "")
+  .replace(/-+/g, "-");
 
 const OverviewHeader: FunctionComponent<ICasesOverviewHeaderProps> = ({
   categories,

@@ -31,14 +31,13 @@ const ProfilePersonalSpaceBlock: FunctionComponent = () =>
   const { allArticles = [], isLoading: areArticlesLoading } = useArticles(); 
   const { folders = [] } = useUploadFolders();
   const { isLoading: isGetUploadedFilesLoading, uploadedFiles } = useUploadedFiles(folders[0]?.id || null);
-  const tabs = [
-    { icon: { src: <Bookmark/> }, number: bookmarkedCases?.length, title: "favorites" }, 
-    { icon: { src: <FileIcon/> }, number: uploadedFiles?.length, title: " materials" }
-  ];
   const allArticlesBookmarks = bookmarks.filter(bookmark => bookmark?.resourceType === "article") ?? [];
   const bookmarkedArticles = allArticles.filter((caisyArticle: IGenArticle) => allArticlesBookmarks.some(bookmark => bookmark.resourceId === caisyArticle.id));
   const favoritesList = [...bookmarkedCases.slice(0, 3), ...bookmarkedArticles.slice(0, 3)];
-  console.log({ favoritesList });
+  const tabs = [
+    { icon: { src: <Bookmark/> }, number: (bookmarkedCases?.length + bookmarkedArticles?.length) ?? 0, title: "favorites" }, 
+    { icon: { src: <FileIcon/> }, number: uploadedFiles?.length, title: " materials" }
+  ];
 
   return (
     <div css={styles.wrapper}>

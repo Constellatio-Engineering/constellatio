@@ -29,6 +29,27 @@
       "when": 1696500933619,
       "tag": "0003_furry_toro",
       "breakpoints": true
+    },
+    {
+      "idx": 4,
+      "version": "5",
+      "when": 1696802669500,
+      "tag": "0004_cheerful_domino",
+      "breakpoints": true
+    },
+    {
+      "idx": 5,
+      "version": "5",
+      "when": 1696802669983,
+      "tag": "0005_wild_madrox",
+      "breakpoints": true
+    },
+    {
+      "idx": 6,
+      "version": "5",
+      "when": 1696804933447,
+      "tag": "0006_lyrical_blizzard",
+      "breakpoints": true
     }
   ]
 }

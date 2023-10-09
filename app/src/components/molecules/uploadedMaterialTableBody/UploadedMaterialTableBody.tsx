@@ -4,6 +4,7 @@ import { Checkbox } from "@/components/atoms/Checkbox/Checkbox";
 import { FileIcon } from "@/components/Icons/FileIcon";
 import { ImageIcon } from "@/components/Icons/image";
 import { Notepad } from "@/components/Icons/Notepad";
+import { NotepadFilled } from "@/components/Icons/NotepadFilled";
 import { VideoIcon } from "@/components/Icons/Video";
 import MaterialOptionsMenu from "@/components/materialsOptionsMenu/MaterialsOptionsMenu";
 import { type UploadedFile } from "@/db/schema";
@@ -12,7 +13,6 @@ import useMaterialsStore from "@/stores/materials.store";
 import {
   useMantineTheme 
 } from "@mantine/core";
-// import { notifications } from "@mantine/notifications";
 import React, { type FunctionComponent } from "react";
 
 import * as styles from "./UploadedMaterialTableBody.styles";
@@ -50,7 +50,17 @@ const fileNameIcon = (file: UploadedFile): React.ReactNode =>
       return null;
   }
 };
+
 const formatDate = (date: Date): string => `${String(date?.getDate()).padStart(2, "0")}.${String(date?.getMonth() + 1).padStart(2, "0")}.${date?.getFullYear()}`;
+
+interface UploadedMaterialTableBodyProps
+{
+  readonly setSelectedFileNote: React.Dispatch<React.SetStateAction<UploadedFile | undefined>>;
+  readonly setShowNoteDrawer: React.Dispatch<React.SetStateAction<boolean>>;
+  readonly showingFiles: number;
+  readonly uploadedFiles?: Partial<UploadedFile[]>;
+  readonly variant: "personalSpace" | "searchPapers";
+}
 
 const UploadedMaterialTableBody: FunctionComponent<UploadedMaterialTableBodyProps> = ({
   // selectedFolderId,
@@ -65,7 +75,7 @@ const UploadedMaterialTableBody: FunctionComponent<UploadedMaterialTableBodyProp
   const { setSelectedFileIdForPreview, setShowFileViewerModal } = useMaterialsStore();
   return (
     <>
-      {uploadedFiles?.slice(0, showingFiles).map((file, index) => (
+      {uploadedFiles?.slice(0, showingFiles).filter(Boolean).map((file, index) => (
         <tr
           key={index}>
           {variant === "personalSpace" && <td><Checkbox/></td>}
@@ -76,13 +86,13 @@ const UploadedMaterialTableBody: FunctionComponent<UploadedMaterialTableBodyProp
             {
               if(file?.id)
               {
-                console.log("file", file);
+                // console.log("file", file);
                 setSelectedFileIdForPreview(file.id);
                 setShowFileViewerModal(true);
               }  
             }}>
             <BodyText styleType="body-01-medium" component="p" title={file?.originalFilename}>
-              {file && file.fileExtension && fileNameIcon(file)}{file?.originalFilename}
+              {file.fileExtension && fileNameIcon(file)}{file?.originalFilename}
             </BodyText>
           </td>
           <td css={styles.docDate}> <BodyText styleType="body-01-medium" component="p">{file && file.createdAt && formatDate(file.createdAt)}</BodyText></td>
@@ -99,7 +109,9 @@ const UploadedMaterialTableBody: FunctionComponent<UploadedMaterialTableBodyProp
                     setSelectedFileNote(file);
                     setShowNoteDrawer(true);
                   }
-                }}><Notepad/>Add Notes
+                }}>
+                {file.notes.length > 0 ? <NotepadFilled/> : <Notepad/>}
+                Add Notes
               </BodyText>
             </td>
           )}

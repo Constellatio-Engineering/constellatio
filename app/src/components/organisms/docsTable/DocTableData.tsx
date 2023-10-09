@@ -94,8 +94,8 @@ export const DocsTableData: FunctionComponent<Document> = (doc) =>
           <Menu.Dropdown>
             <Menu.Item><DropdownItem onClick={() => { setEditDocumentState(doc); }} icon={<Edit/>} label="Rename and edit"/></Menu.Item>
             <Menu.Divider/>
-            <Menu.Item><DropdownItem icon={<FolderIcon/>} label="Move to" onClick={() => { }}/></Menu.Item>
-            <Menu.Divider/>
+            {/* <Menu.Item><DropdownItem icon={<FolderIcon/>} label="Move to" onClick={() => { }}/></Menu.Item>
+            <Menu.Divider/> */}
             <Menu.Item><DropdownItem icon={<DownloadIcon/>} label="Download" onClick={download}/></Menu.Item>
             <Menu.Divider/>
             <Menu.Item>
@@ -121,8 +121,8 @@ export const DocsTableData: FunctionComponent<Document> = (doc) =>
           <span className="close-btn" onClick={() => setShowDeleteDocModal(false)}>
             <Cross size={32}/>
           </span>
-          <Title order={3}>Delete Document</Title>
-          <BodyText styleType="body-01-regular" component="p" className="delete-folder-text">Are you sure you want to delete document <strong>{doc?.name}</strong>?</BodyText>
+          <Title order={3}>Delete document</Title>
+          <BodyText styleType="body-01-regular" component="p" className="delete-folder-text">Are you sure you want to document <strong>{doc?.name}</strong>?</BodyText>
           <div className="modal-call-to-action">
             <Button<"button">
               styleType={"secondarySimple" as TButton["styleType"]}

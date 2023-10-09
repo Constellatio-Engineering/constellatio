@@ -25,7 +25,6 @@ const UploadedMaterialTable: FunctionComponent<UploadedMaterialTableProps> = ({
 {
   // if file has existing not it will be assigned to this state
   const [selectedFileNote, setSelectedFileNote] = useState<UploadedFile | undefined>(undefined); 
-  
   const [noteRichtext, setNoteRichtext] = useState<string>("");
   const [showNoteDrawer, setShowNoteDrawer] = useState<boolean>(false);
   const [showingFiles, setShowingFiles] = useState<number>(5);

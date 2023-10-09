@@ -48,7 +48,7 @@ const SearchPageResults: FunctionComponent = () =>
         <div css={styles.searchPageResults}>
           <SearchPapersBlock 
             table={(
-              <UploadedMaterialTable 
+              <UploadedMaterialTable
                 uploadedFiles={searchResults[routerTabQuery] as UploadedFile[]}
                 variant="searchPapers"
                 // selectedFolderId={null} // TODO
