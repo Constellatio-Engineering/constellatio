@@ -4,6 +4,7 @@ import { bookmarksRouter } from "@/server/api/routers/bookmarks.router";
 import { caisyRouter } from "@/server/api/routers/caisy.router";
 import { documentsRouter } from "@/server/api/routers/documents.router";
 import { foldersRouter } from "@/server/api/routers/folders.router";
+import { notesRouter } from "@/server/api/routers/notes.router";
 import { searchRouter } from "@/server/api/routers/search.router";
 import { uploadsRouter } from "@/server/api/routers/uploads.router";
 import { createTRPCRouter } from "@/server/api/trpc";
@@ -20,6 +21,7 @@ export const appRouter = createTRPCRouter({
   caisy: caisyRouter,
   documents: documentsRouter,
   folders: foldersRouter,
+  notes: notesRouter,
   search: searchRouter,
   uploads: uploadsRouter,
 });

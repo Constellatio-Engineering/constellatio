@@ -5,32 +5,16 @@ import { FileIcon } from "@/components/Icons/FileIcon";
 import { ImageIcon } from "@/components/Icons/image";
 import { Notepad } from "@/components/Icons/Notepad";
 import { NotepadFilled } from "@/components/Icons/NotepadFilled";
-import { Trash } from "@/components/Icons/Trash";
 import { VideoIcon } from "@/components/Icons/Video";
 import MaterialOptionsMenu from "@/components/materialsOptionsMenu/MaterialsOptionsMenu";
 import { type UploadedFile } from "@/db/schema";
-// import useContextAndErrorIfNull from "@/hooks/useContextAndErrorIfNull";
-// import { InvalidateQueriesContext } from "@/provider/InvalidateQueriesProvider";
-// import { api } from "@/utils/api";
 
 import {
   useMantineTheme 
 } from "@mantine/core";
-// import { notifications } from "@mantine/notifications";
 import React, { type FunctionComponent } from "react";
 
 import * as styles from "./UploadedMaterialTableBody.styles";
-interface UploadedMaterialTableBodyProps
-{
-  readonly selectedFolderId: string | null;
-  readonly setSelectedFileIdForPreview?: React.Dispatch<React.SetStateAction<string | undefined>>;
-  readonly setSelectedFileNote: React.Dispatch<React.SetStateAction<UploadedFile | undefined>>;
-  readonly setShowFileViewerModal?: React.Dispatch<React.SetStateAction<boolean>>;
-  readonly setShowNoteDrawer: React.Dispatch<React.SetStateAction<boolean>>;
-  readonly showingFiles: number;
-  readonly uploadedFiles?: Partial<UploadedFile[]>;
-  readonly variant: "personalSpace" | "searchPapers";
-}
 
 const fileNameIcon = (file: UploadedFile): React.ReactNode =>
 {
@@ -56,10 +40,21 @@ const fileNameIcon = (file: UploadedFile): React.ReactNode =>
       return null;
   }
 };
+
 const formatDate = (date: Date): string => `${String(date?.getDate()).padStart(2, "0")}.${String(date?.getMonth() + 1).padStart(2, "0")}.${date?.getFullYear()}`;
 
+interface UploadedMaterialTableBodyProps
+{
+  readonly setSelectedFileIdForPreview?: React.Dispatch<React.SetStateAction<string | undefined>>;
+  readonly setSelectedFileNote: React.Dispatch<React.SetStateAction<UploadedFile | undefined>>;
+  readonly setShowFileViewerModal?: React.Dispatch<React.SetStateAction<boolean>>;
+  readonly setShowNoteDrawer: React.Dispatch<React.SetStateAction<boolean>>;
+  readonly showingFiles: number;
+  readonly uploadedFiles?: Partial<UploadedFile[]>;
+  readonly variant: "personalSpace" | "searchPapers";
+}
+
 const UploadedMaterialTableBody: FunctionComponent<UploadedMaterialTableBodyProps> = ({
-  selectedFolderId,
   setSelectedFileIdForPreview,
   setSelectedFileNote,
   setShowFileViewerModal,
@@ -69,14 +64,8 @@ const UploadedMaterialTableBody: FunctionComponent<UploadedMaterialTableBodyProp
   variant = "personalSpace"
 }) => 
 {
-  // const { invalidateUploadedFiles } = useContextAndErrorIfNull(InvalidateQueriesContext);
-
-  // const { mutate: deleteFile } = api.uploads.deleteUploadedFiles.useMutation({
-  //   onError: (e) => console.log("error while deleting file", e),
-  //   onSuccess: async () => invalidateUploadedFiles()
-  // });
   const theme = useMantineTheme();
-  // const [showDeleteMaterialModal, setShowDeleteMaterialModal] = React.useState<boolean>(false);
+
   return (
     <>
       {uploadedFiles?.slice(0, showingFiles).filter(Boolean).map((file, index) => (

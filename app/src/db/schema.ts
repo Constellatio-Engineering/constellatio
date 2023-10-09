@@ -1,4 +1,4 @@
-/* eslint-disable sort-keys-fix/sort-keys-fix */
+/* eslint-disable sort-keys-fix/sort-keys-fix, @typescript-eslint/no-use-before-define */
 import { type InferInsertModel, type InferSelectModel, relations } from "drizzle-orm";
 import {
   text, pgTable, integer, pgEnum, uuid, smallint, unique, timestamp
@@ -69,7 +69,7 @@ export const uploadedFilesRelations = relations(uploadedFiles, ({ many }) => ({
 export type UploadedFileInsert = InferInsertModel<typeof uploadedFiles>;
 export type UploadedFile = InferSelectModel<typeof uploadedFiles> & {
   notes: Note[];
-}
+};
 
 export const documents = pgTable("Document", {
   id: uuid("Id").defaultRandom().unique().notNull().primaryKey(),

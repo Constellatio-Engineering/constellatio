@@ -2,7 +2,7 @@
 import { type UnknownMantineStylesParams } from "@/utils/types";
 
 import { css } from "@emotion/react";
-import { type ModalStylesNames, type DrawerStylesNames } from "@mantine/core";
+import { type ModalStylesNames } from "@mantine/core";
 import { type Styles, type MantineTheme } from "@mantine/styles";
 
 const CSSClickableEffect = (theme: MantineTheme) => css`
