@@ -16,6 +16,7 @@ const DocumentEditor: FunctionComponent<DocumentEditorProps> = () =>
 
   return (
     <Drawer
+      lockScroll={false}
       opened={editorState.state !== "closed"}
       onClose={closeEditor}
       title={<SlidingPanelTitle title={title} variant="default" closeButtonAction={closeEditor}/>}

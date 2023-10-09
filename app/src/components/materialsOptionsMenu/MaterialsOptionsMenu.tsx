@@ -70,6 +70,7 @@ const MaterialOptionsMenu: FunctionComponent<MaterialOptionsMenuProps> = ({ file
       </Menu>
       {/* POP UPS ------------------------------------------------------------------------------------- */}
       <Modal
+        lockScroll={false}
         opened={showDeleteMaterialModal}
         withCloseButton={false}
         centered
@@ -100,6 +101,7 @@ const MaterialOptionsMenu: FunctionComponent<MaterialOptionsMenuProps> = ({ file
       {/* second MODAL */}
       <Modal
         opened={showRenameMaterialModal}
+        lockScroll={false}
         withCloseButton={false}
         centered
         styles={styles.modalStyles()}

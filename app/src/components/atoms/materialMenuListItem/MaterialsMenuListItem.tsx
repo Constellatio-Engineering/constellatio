@@ -73,6 +73,7 @@ const MaterialsMenuListItem: FunctionComponent<MenuListItemProps & HTMLProps<HTM
         </Menu>
       </button>
       <Modal
+        lockScroll={false}
         opened={showRenameModal}
         withCloseButton={false}
         centered
@@ -112,6 +113,7 @@ const MaterialsMenuListItem: FunctionComponent<MenuListItemProps & HTMLProps<HTM
         </form>
       </Modal>
       <Modal
+        lockScroll={false}
         opened={showDeleteModal}
         withCloseButton={false}
         centered

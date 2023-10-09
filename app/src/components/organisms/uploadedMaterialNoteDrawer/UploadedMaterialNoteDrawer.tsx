@@ -33,6 +33,7 @@ const UploadedMaterialNoteDrawer: FunctionComponent<UploadedMaterialNoteDrawerPr
   const isNoteExists = false;
   return (
     <Drawer
+      lockScroll={false}
       opened={showNoteDrawer}
       onClose={() => setShowNoteDrawer(false)}
       withCloseButton={false}
