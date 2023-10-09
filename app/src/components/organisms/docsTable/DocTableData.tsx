@@ -103,6 +103,7 @@ export const DocsTableData: FunctionComponent<Document> = (doc) =>
         </Menu>
         {/* Modal */}
         <Modal
+          lockScroll={false}
           opened={showDeleteDocModal}
           withCloseButton={false}
           centered

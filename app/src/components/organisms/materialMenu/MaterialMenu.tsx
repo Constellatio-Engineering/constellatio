@@ -108,6 +108,7 @@ const MaterialMenu: FunctionComponent<MaterialMenuProps> = ({ folders, selectedF
           title="Create new folder"   
         />
         <Modal
+          lockScroll={false}
           opened={opened}
           onClose={close}
           title=""

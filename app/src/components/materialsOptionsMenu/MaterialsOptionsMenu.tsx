@@ -72,6 +72,7 @@ const MaterialOptionsMenu: FunctionComponent<MaterialOptionsMenuProps> = ({ file
       <Modal
         opened={showDeleteMaterialModal}
         withCloseButton={false}
+        lockScroll={false}
         centered
         styles={styles.modalStyles()}
         onClose={() => { setShowDeleteMaterialModal(false); }}>
@@ -99,6 +100,7 @@ const MaterialOptionsMenu: FunctionComponent<MaterialOptionsMenuProps> = ({ file
       </Modal>
       {/* second MODAL */}
       <Modal
+        lockScroll={false}
         opened={showRenameMaterialModal}
         withCloseButton={false}
         centered
