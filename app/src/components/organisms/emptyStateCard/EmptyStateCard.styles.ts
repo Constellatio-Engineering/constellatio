@@ -25,7 +25,7 @@ export const wrapper = css`
 `;
 
 export const emptyStateCard = ({ variant }: IEmptyCardProps) => css`
-  padding: ${variant === "For-small-areas" ? "32px 20px 40px 20px" : "32px 0"};
+  padding: ${variant === "For-small-areas" ? "32px 20px 40px" : "60px 0"};
   display: flex;
   flex-direction: column;
   justify-content: center;

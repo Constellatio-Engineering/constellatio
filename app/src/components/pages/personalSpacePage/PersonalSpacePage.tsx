@@ -44,9 +44,6 @@ const PersonalSpacePage: FunctionComponent = () =>
   });
   const [selectedCategory, setSelectedCategory] = useState<IGenMainCategory | undefined>(categories?.[0]);
   const isFavoriteTab = (id: string): boolean => id === categories?.[0]?.id;
-  const PersonalSpaceMaterialsTabProps = {
-    selectedFolderId, setSelectedFolderId
-  };
   const router = useRouter();
   React.useEffect(() => 
   {
@@ -71,8 +68,12 @@ const PersonalSpacePage: FunctionComponent = () =>
       {  
         isFavoriteTab(selectedCategory?.id ?? "") ?
           <PersonalSpaceFavoriteTab/>
-          : 
-          <PersonalSpaceMaterialsTab {...PersonalSpaceMaterialsTabProps}/>
+          : (
+            <PersonalSpaceMaterialsTab
+              selectedFolderId={selectedFolderId}
+              setSelectedFolderId={setSelectedFolderId}
+            />
+          )
       }
     </div>
   );

@@ -56,13 +56,13 @@ const MaterialsMenuListItem: FunctionComponent<MenuListItemProps & HTMLProps<HTM
           </BodyText>
           <Menu.Dropdown>
             {onRename && (
-              <Menu.Item>
+              <Menu.Item onClick={e => e.stopPropagation()}>
                 <span css={styles.dropDownLabel} onClick={() => setShowRenameModal(true)}><Edit/>Rename</span>
               </Menu.Item>
             )}
             <Menu.Item><span css={styles.dropDownLabel}><MoveDownIcon/>Download</span></Menu.Item>
             {onDelete && (
-              <Menu.Item>
+              <Menu.Item onClick={e => e.stopPropagation()}>
                 <span
                   onClick={() => setShowDeleteModal(true)}
                   css={styles.dropDownLabel}><Trash/>Delete
