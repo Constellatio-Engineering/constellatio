@@ -66,7 +66,6 @@ const CaseSolveCaseStep: FunctionComponent<IGenCase> = ({ facts, title }) =>
           <Modal
             lockScroll={false}
             opened={showStepTwoModal}
-            lockScroll={false}
             centered
             onClose={function(): void 
             {

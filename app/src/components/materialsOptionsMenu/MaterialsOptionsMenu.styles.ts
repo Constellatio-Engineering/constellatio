@@ -47,6 +47,14 @@ export const tableWrapper = (theme: MantineTheme) => css`
       gap: 8px;
     }
   }
+  .mantine-Menu-dropdown {
+    padding: 0;
+    border-radius: 12px; 
+  }
+  .mantine-Menu-item {
+    border-bottom: 1px solid ${theme.colors["neutrals-01"][3]};
+    border-radius:0px;
+  }
 `;
 
 export const tableHead = (theme: MantineTheme) => css`

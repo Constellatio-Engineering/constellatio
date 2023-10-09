@@ -57,18 +57,24 @@ const MaterialsMenuListItem: FunctionComponent<MenuListItemProps & HTMLProps<HTM
           </BodyText>
           <Menu.Dropdown>
             {onRename && (
-              <Menu.Item onClick={e => e.stopPropagation()}>
-                <DropdownItem onClick={() => setShowRenameModal(true)} icon={<Edit/>} label="Rename"/>
+              <Menu.Item onClick={e => 
+              {
+                e.stopPropagation();
+                setShowRenameModal(true);
+              }}>
+                <DropdownItem icon={<Edit/>} label="Rename"/>
               </Menu.Item>
             )}
-            <Menu.Divider/>
-            <Menu.Item>
-              <DropdownItem onClick={() => setShowRenameModal(true)} icon={<MoveDownIcon/>} label="Download"/>
+            <Menu.Item onClick={() => {}}>
+              <DropdownItem icon={<MoveDownIcon/>} label="Download"/>
             </Menu.Item>
-            <Menu.Divider/>
             {onDelete && (
-              <Menu.Item onClick={e => e.stopPropagation()}>
-                <DropdownItem onClick={() => setShowDeleteModal(true)} icon={<Trash/>} label="Delete"/>
+              <Menu.Item onClick={e => 
+              {
+                e.stopPropagation();
+                setShowDeleteModal(true);
+              }}>
+                <DropdownItem icon={<Trash/>} label="Delete"/>
               </Menu.Item>
             )}
           </Menu.Dropdown>
