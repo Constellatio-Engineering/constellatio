@@ -9,7 +9,7 @@ import {
 } from "@mantine/core";
 import React, { type HTMLProps, type ReactNode, useState, type FunctionComponent } from "react";
 
-import * as styles from "./MenuListItem.styles";
+import * as styles from "./../materialMenuListItem/MenuListItem.styles";
 import { BodyText } from "../BodyText/BodyText";
 import { Button, type TButton } from "../Button/Button";
 import { Input } from "../Input/Input";
