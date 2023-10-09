@@ -160,7 +160,7 @@ const UploadedMaterialBlock: FunctionComponent<UploadedMaterialBlockProps> = ({
             setSelectedFileIdForPreview={setSelectedFileIdForPreview}
             isGetUploadedFilesLoading={isGetUploadedFilesLoading}
             uploadedFiles={uploadedFiles}
-            selectedFolderId={selectedFolderId}
+            // selectedFolderId={selectedFolderId}
           />
         ) : (
           <EmptyStateCard

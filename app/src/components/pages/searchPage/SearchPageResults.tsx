@@ -48,7 +48,7 @@ const SearchPageResults: FunctionComponent = () =>
               <UploadedMaterialTable 
                 uploadedFiles={searchResults[routerTabQuery] as UploadedFile[]}
                 variant="searchPapers"
-                selectedFolderId={null} // TODO
+                // selectedFolderId={null} // TODO
                 // setSelectedFileIdForPreview={}
                 // setShowFileViewerModal={}
               />

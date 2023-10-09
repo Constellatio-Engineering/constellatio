@@ -12,7 +12,7 @@ import UploadedMaterialNoteDrawer from "../uploadedMaterialNoteDrawer/UploadedMa
 interface UploadedMaterialTableProps
 {
   readonly isGetUploadedFilesLoading?: boolean;
-  readonly selectedFolderId: string | null;
+  // readonly selectedFolderId: string | null;
   readonly setSelectedFileIdForPreview?: React.Dispatch<React.SetStateAction<string | undefined>>;
   readonly setShowFileViewerModal?: React.Dispatch<React.SetStateAction<boolean>>;
   readonly uploadedFiles?: UploadedFile[];
@@ -20,7 +20,7 @@ interface UploadedMaterialTableProps
 }
 const UploadedMaterialTable: FunctionComponent<UploadedMaterialTableProps> = ({
   isGetUploadedFilesLoading,
-  selectedFolderId,
+  // selectedFolderId,
   setSelectedFileIdForPreview,
   setShowFileViewerModal,
   uploadedFiles,
@@ -44,7 +44,7 @@ const UploadedMaterialTable: FunctionComponent<UploadedMaterialTableProps> = ({
           <UploadedMaterialTableBody
             showingFiles={showingFiles}
             uploadedFiles={uploadedFiles}
-            selectedFolderId={selectedFolderId}
+            // selectedFolderId={selectedFolderId}
             setSelectedFileIdForPreview={setSelectedFileIdForPreview} 
             setShowFileViewerModal={setShowFileViewerModal}
             setSelectedFileNote={setSelectedFileNote}
