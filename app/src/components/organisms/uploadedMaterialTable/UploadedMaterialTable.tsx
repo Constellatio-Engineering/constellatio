@@ -15,7 +15,7 @@ interface UploadedMaterialTableProps
   readonly selectedFolderId: string | null;
   readonly setSelectedFileIdForPreview?: React.Dispatch<React.SetStateAction<string | undefined>>;
   readonly setShowFileViewerModal?: React.Dispatch<React.SetStateAction<boolean>>;
-  readonly uploadedFiles?: Partial<UploadedFile[]>;
+  readonly uploadedFiles?: UploadedFile[];
   readonly variant?: "personalSpace" | "searchPapers";
 }
 const UploadedMaterialTable: FunctionComponent<UploadedMaterialTableProps> = ({
@@ -29,7 +29,6 @@ const UploadedMaterialTable: FunctionComponent<UploadedMaterialTableProps> = ({
 {
   // if file has existing not it will be assigned to this state
   const [selectedFileNote, setSelectedFileNote] = useState<UploadedFile | undefined>(undefined); 
-  
   const [noteRichtext, setNoteRichtext] = useState<string>("");
   const [showNoteDrawer, setShowNoteDrawer] = useState<boolean>(false);
   const [showingFiles, setShowingFiles] = useState<number>(5);

@@ -113,7 +113,10 @@ export const uploadsRouter = createTRPCRouter({
 
       return db.query.uploadedFiles.findMany({
         orderBy: [desc(uploadedFiles.createdAt)],
-        where: and(...queryConditions)
+        where: and(...queryConditions),
+        with: {
+          notes: true
+        }
       });
     }),
   saveFileToDatabase: protectedProcedure
