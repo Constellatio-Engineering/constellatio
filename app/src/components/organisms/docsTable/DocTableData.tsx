@@ -94,15 +94,16 @@ export const DocsTableData: FunctionComponent<Document> = (doc) =>
           <Menu.Dropdown>
             <Menu.Item><DropdownItem onClick={() => { setEditDocumentState(doc); }} icon={<Edit/>} label="Rename and edit"/></Menu.Item>
             <Menu.Divider/>
-            <Menu.Item><DropdownItem icon={<FolderIcon/>} label="Move to" onClick={() => { }}/></Menu.Item>
-            <Menu.Divider/>
+            {/* <Menu.Item><DropdownItem icon={<FolderIcon/>} label="Move to" onClick={() => { }}/></Menu.Item>
+            <Menu.Divider/> */}
             <Menu.Item><DropdownItem icon={<DownloadIcon/>} label="Download" onClick={download}/></Menu.Item>
             <Menu.Divider/>
-            <Menu.Item><DropdownItem icon={<Trash/>} label="Download" onClick={() => setShowDeleteDocModal(true)}/></Menu.Item>
+            <Menu.Item><DropdownItem icon={<Trash/>} label="Delete" onClick={() => setShowDeleteDocModal(true)}/></Menu.Item>
           </Menu.Dropdown>
         </Menu>
         {/* Modal */}
         <Modal
+          lockScroll={false}
           opened={showDeleteDocModal}
           withCloseButton={false}
           centered
