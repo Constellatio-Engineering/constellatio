@@ -75,7 +75,6 @@ const UploadedMaterialTableBody: FunctionComponent<UploadedMaterialTableBodyProp
   // });
   const theme = useMantineTheme();
   // const [showDeleteMaterialModal, setShowDeleteMaterialModal] = React.useState<boolean>(false);
-
   return (
     <>
       {uploadedFiles?.slice(0, showingFiles).map((file, index) => (
@@ -115,10 +114,10 @@ const UploadedMaterialTableBody: FunctionComponent<UploadedMaterialTableBodyProp
               </BodyText>
             </td>
           )}
+          {variant === "searchPapers" && <td/>}
           {file && <MaterialOptionsMenu file={file}/>}
         </tr>
       ))}
-     
     </>
   );
 };

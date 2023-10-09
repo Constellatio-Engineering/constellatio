@@ -39,6 +39,7 @@ const SearchPageResults: FunctionComponent = () =>
   
   if(routerTabQuery === "userUploads") 
   { 
+    console.log("searchResults[routerTabQuery]", searchResults[routerTabQuery]);
     return (
       searchResults[routerTabQuery]?.length > 0 && (
         <div css={styles.searchPageResults}>
@@ -48,7 +49,8 @@ const SearchPageResults: FunctionComponent = () =>
                 uploadedFiles={searchResults[routerTabQuery] as UploadedFile[]}
                 variant="searchPapers"
                 selectedFolderId={null} // TODO
-                
+                // setSelectedFileIdForPreview={}
+                // setShowFileViewerModal={}
               />
             )}
             numberOfTableItems={searchResults[routerTabQuery]?.length}
