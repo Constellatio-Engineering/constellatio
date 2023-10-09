@@ -19,7 +19,7 @@ export const drawerStyles = () =>
           alignItems: "center",
           display: "flex",
           gap: "8px",
-          paddingLeft: "4px"
+          paddingLeft: "4px",
         },
 
         alignItems: "flex-start",
@@ -71,6 +71,10 @@ export const suggestionsLeft = (theme: MantineTheme) => css`
 				font-size: 18px;
 				font-weight: 400;
 				line-height: 28px;
+				max-width: 580px;
+				overflow: hidden;
+				text-overflow: ellipsis;
+				white-space: nowrap;
 			}
 		}
 	}
@@ -84,11 +88,10 @@ export const suggestionsRight = (theme: MantineTheme) => css`
 	gap: 52px;
 	min-height: 100%;
 
-
-  .suggestion__section {
+	.suggestion__section {
 		&__link {
 			> p {
-        font-family: ${theme.fontFamily};
+				font-family: ${theme.fontFamily};
 				font-size: 16px;
 				font-weight: 500;
 				line-height: 24px;
@@ -96,7 +99,7 @@ export const suggestionsRight = (theme: MantineTheme) => css`
 		}
 	}
 
-	.popularCategories{
+	.popularCategories {
 		display: flex;
 		flex-direction: column;
 		gap: 12px;

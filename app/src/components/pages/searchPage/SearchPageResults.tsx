@@ -1,5 +1,6 @@
 import { Svg } from "@/basic-components/SVG/Svg";
 import ItemBlock from "@/components/organisms/caseBlock/ItemBlock";
+import EmptyStateCard from "@/components/organisms/emptyStateCard/EmptyStateCard";
 import FileViewer from "@/components/organisms/fileViewer/FileViewer";
 import UploadedMaterialTable from "@/components/organisms/uploadedMaterialTable/UploadedMaterialTable";
 import SearchPapersBlock from "@/components/searchPapersBlock/SearchPapersBlock";
@@ -96,7 +97,7 @@ const SearchPageResults: FunctionComponent = () =>
     });
 
     return (
-      searchResults[routerTabQuery]?.length > 0 && (
+      searchResults[routerTabQuery]?.length > 0 ? (
         <div css={styles.searchPageResults}>
           {groupedResultsByCategory?.map((categoryGroup, index) =>
           {
@@ -133,7 +134,7 @@ const SearchPageResults: FunctionComponent = () =>
           }
           )}
         </div>
-      )
+      ) : <EmptyStateCard title={`No search results found for “${router.query.find}” at ${routerTabQuery}`} text="check other tabs or try different search entry" variant="For-large-areas"/>
     );
   }
 
