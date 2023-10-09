@@ -12,6 +12,13 @@ const CSSClickableEffect = (theme: MantineTheme) => css`
   }
 `;
 
+export const mainDiv = css`
+border:5px solid red;
+.mantine-text-root{
+  color:red;
+}
+`;
+
 export const tableWrapper = (theme: MantineTheme) => css`
   text-align: left;
   border-radius: 12px;
@@ -125,26 +132,26 @@ export const showMoreButton = (theme: MantineTheme) => css`
   );
 `;
 
-type DrawerStylesProps = Styles<DrawerStylesNames, UnknownMantineStylesParams>;
+// type DrawerStylesProps = Styles<DrawerStylesNames, UnknownMantineStylesParams>;
 
-export const drawerStyles = () => 
-{
-  const styles: DrawerStylesProps = (theme: MantineTheme) => ({
-    body: {
-      padding: "0px",
-    },
-    content: {
-      background: theme.colors["neutrals-01"][1],
-    },
-    header: {
-      padding: "0px",
-    },
-    title: {
-      width: "100%",
-    },
-  });
-  return styles;
-};
+// export const drawerStyles = () => 
+// {
+//   const styles: DrawerStylesProps = (theme: MantineTheme) => ({
+//     body: {
+//       padding: "0px",
+//     },
+//     content: {
+//       background: theme.colors["neutrals-01"][1],
+//     },
+//     header: {
+//       padding: "0px",
+//     },
+//     title: {
+//       width: "100%",
+//     },
+//   });
+//   return styles;
+// };
 
 export const MaterialNoteRichText = css`
   margin: 24px 32px;

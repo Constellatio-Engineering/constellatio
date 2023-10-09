@@ -40,7 +40,7 @@ const MaterialOptionsMenu: FunctionComponent<MaterialOptionsMenuProps> = ({ file
     onSuccess: async () => invalidateUploadedFiles()
   });
   return (
-    <>
+    <div css={styles.mainDiv}>
       <Menu shadow="elevation-big" radius="12px" width={200}>
         <Menu.Target>
           <td
@@ -73,7 +73,7 @@ const MaterialOptionsMenu: FunctionComponent<MaterialOptionsMenuProps> = ({ file
         opened={showDeleteMaterialModal}
         withCloseButton={false}
         centered
-        // styles={styles.modalStyles()}
+        styles={styles.modalStyles()}
         onClose={() => { setShowDeleteMaterialModal(false); }}>
         <span className="close-btn" onClick={() => setShowDeleteMaterialModal(false)}>
           <Cross size={32}/>
@@ -102,7 +102,7 @@ const MaterialOptionsMenu: FunctionComponent<MaterialOptionsMenuProps> = ({ file
         opened={showRenameMaterialModal}
         withCloseButton={false}
         centered
-        // styles={styles.modalStyles()}
+        styles={styles.modalStyles()}
         onClose={() => { setShowRenameMaterialModal(false); }}>
         <span className="close-btn" onClick={() => setShowRenameMaterialModal(false)}>
           <Cross size={32}/>
@@ -137,7 +137,7 @@ const MaterialOptionsMenu: FunctionComponent<MaterialOptionsMenuProps> = ({ file
           </div>
         </form>
       </Modal>
-    </>
+    </div>
   );
 };
 
