@@ -36,8 +36,8 @@ export const DocsTableData: FunctionComponent<Document> = (doc) =>
     updatedAt
   } = doc;
 
-  const { invalidateDocuments } = useContextAndErrorIfNull(InvalidateQueriesContext);
   const { setEditDocumentState, setViewDocumentState } = useDocumentEditorStore(s => s);
+  const { invalidateDocuments } = useContextAndErrorIfNull(InvalidateQueriesContext);
   const { mutate: deleteDocument } = api.documents.deleteDocument.useMutation({
     onError: (error) => console.error("Error while deleting document:", error),
     onSuccess: async () => invalidateDocuments({ folderId }),
