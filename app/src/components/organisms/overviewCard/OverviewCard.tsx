@@ -140,7 +140,12 @@ const OverviewCard: FunctionComponent<IOverviewCard> = ({
             <CaptionText styleType="caption-01-medium" component="button" onClick={open}>TAGS</CaptionText>
           </div>
           {/* <ScrollArea> */}
-          <div className="row-value tags-values" onClick={open}>
+          <div
+            className="row-value tags-values"
+            onClick={() => 
+            {
+              if(tags?.length != null && tags?.length > 0) { open(); }
+            }}>
             {tags?.map((tag, tagIndex) => (
               <Tag key={tagIndex}>{tag?.tagName}</Tag>
             ))}

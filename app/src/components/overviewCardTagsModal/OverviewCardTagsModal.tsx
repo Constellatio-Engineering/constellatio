@@ -5,6 +5,7 @@ import { type Maybe } from "@trpc/server";
 import React, { type FunctionComponent } from "react";
 
 import * as styles from "./../organisms/overviewCard/OverviewCard.styles";
+import { BodyText } from "../atoms/BodyText/BodyText";
 import Tag from "../atoms/tag/Tag";
 
 interface OverviewCardTagsModalProps
@@ -23,6 +24,7 @@ const OverviewCardTagsModal: FunctionComponent<OverviewCardTagsModalProps> = ({ 
       onClose={close}
       title={<Title order={3}>All tags</Title>}
       centered
+      size="xl"
       closeOnClickOutside
       styles={{
         content: {
@@ -30,9 +32,9 @@ const OverviewCardTagsModal: FunctionComponent<OverviewCardTagsModalProps> = ({ 
         }
       }}>
       <div css={styles.tagsModal}>
-        {tags?.map((tag, tagIndex) => (
+        {tags && tags.length > 0 ? tags?.map((tag, tagIndex) => (
           <Tag key={tagIndex}>{tag?.tagName}</Tag>
-        ))}
+        )) : <><BodyText styleType="body-01-medium">No tags assigned to this document</BodyText></>}
       </div>
     </Modal>
   );
