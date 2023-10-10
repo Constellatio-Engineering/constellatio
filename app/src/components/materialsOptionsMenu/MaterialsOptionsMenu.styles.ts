@@ -67,31 +67,28 @@ export const tableBody = (theme: MantineTheme) => css`
 `;
 
 export const callToActionCell = (theme: MantineTheme) => css`
-  background-color: transparent;
   border: 0;
   outline: 0;
   svg {
-    vertical-align: text-bottom;
-    margin-right: 8px;
+    display: grid;
+    place-items: center;
+
   }
-  ${CSSClickableEffect(theme)}
   button {
     width: 100%;
     height: 100%;
     position: absolute;
     top: 0;
     left: 0;
-    background-color: transparent;
     border: 0;
     outline: 0;
+    display: grid;
+    place-items: center;
+    background: ${theme.colors["neutrals-01"][0]};
     ${CSSClickableEffect(theme)}
-    padding-left: 5px;
-    svg {
-      display: grid;
-      place-items: center;
-    }
   }
   position: relative;
+  min-width: 60px;
 `;
 
 export const docName = ({ clickable, theme }: {
