@@ -22,12 +22,20 @@ const SearchPageResults: FunctionComponent = () =>
   const routerTabQuery = router.query.tab as keyof SearchResults;
   const { selectedFileIdForPreview } = useMaterialsStore();
 
+  const NoResultsFound = (
+    <EmptyStateCard 
+      title={`No search results found ${router.query.find && `for “${router.query.find}”`} ${routerTabQuery && `at ${routerTabQuery}`}`} 
+      text="check other tabs or try different search entry"
+      variant="For-large-areas"
+    />
+  );
+
   const date = new Date();
   
   if(routerTabQuery === "userUploads") 
   { 
     return (
-      searchResults[routerTabQuery]?.length > 0 && (
+      searchResults[routerTabQuery]?.length > 0 ? (
         <div css={styles.searchPageResults}>
           <SearchPapersBlock 
             table={(
@@ -53,7 +61,7 @@ const SearchPageResults: FunctionComponent = () =>
             <FileViewer/>
           )}
         </div>
-      )
+      ) : NoResultsFound
     );
   }
   else 
@@ -126,7 +134,9 @@ const SearchPageResults: FunctionComponent = () =>
           }
           )}
         </div>
-      ) : <EmptyStateCard title={`No search results found for “${router.query.find}” at ${routerTabQuery}`} text="check other tabs or try different search entry" variant="For-large-areas"/>
+      ) : (
+        NoResultsFound
+      )
     );
   }
 
