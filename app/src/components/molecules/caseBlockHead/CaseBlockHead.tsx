@@ -89,7 +89,7 @@ const CaseBlockHead: FunctionComponent<ICaseBlockHeadProps> = ({
           <IconButton icon={icon.src} size="medium"/>
         </div>
       )}
-      <div css={styles.title}>
+      <div css={styles.title} lang="de">
         {categoryName && (blockType === "itemsBlock" || blockType === "favoriteItemsBlock" || blockType === "searchBlock") && <Title order={3}>{categoryName}</Title>}
         {blockType === "searchPapersBlock" ? <Title order={3}>Papers</Title> : blockType === "searchUploadedMaterials" && <Title order={3}>Uploaded materials</Title>}
       </div>
