@@ -5,6 +5,7 @@ export const wrapper = (theme: MantineTheme) => css`
   background-color: ${theme.colors["neutrals-01"][0]};
   max-width: 100%;
   border-radius: 12px;
+  box-shadow: 0px 8px 44px 0px rgba(0, 0, 0, 0.04);
 `;
 
 export const uploadedMaterialBlockHead = (theme: MantineTheme) => css`
@@ -35,7 +36,7 @@ export const badge = css`
   }
   .uploadBtn {
     position: absolute;
-    bottom: 24px;
+    top: 55px;
     left: 50%;
     transform: translateX(-50%);
   }

@@ -12,6 +12,7 @@ export const wrapper = (theme: MantineTheme) => css`
         .test{
             background:red;
         }
+        box-shadow: 0px 8px 44px 0px rgba(0, 0, 0, 0.04);
 `;
 export const papersBlockHead = (theme: MantineTheme) => css`
     color: ${theme.colors["neutrals-02"][0]};

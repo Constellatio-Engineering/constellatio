@@ -140,14 +140,16 @@ const UploadedMaterialBlock: FunctionComponent<UploadedMaterialBlockProps> = ({
               setSelectedFiles(filesWithUuid);
             }}
           />
-          <div className="uploadBtn">
-            <Button<"button">
-              styleType="primary"
-              disabled={selectedFiles.length === 0 || areUploadsInProgress}
-              type="submit">
-              Upload
-            </Button>
-          </div>
+          {selectedFiles.length > 0 && (
+            <div className="uploadBtn">
+              <Button<"button">
+                styleType="primary"
+                disabled={areUploadsInProgress}
+                type="submit">
+                Upload
+              </Button>
+            </div>
+          )}
         </form>
       </div>
       <div css={styles.content}>
