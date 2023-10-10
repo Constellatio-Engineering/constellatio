@@ -18,16 +18,12 @@ const SearchPage: FunctionComponent<SearchPageProps> = () =>
   const { searchResults } = useSearchResults();
   const searchValue = useSearchBarStore((s) => s.searchValue);
 
-  // const { isLoading, searchResults } = useSearchResults();
-
-  // console.log("searchResults", searchResults);
-
   return (
     <div css={styles.wrapper}>
       {Object.values(searchResults).every((result) => result.length === 0) ? (
         <EmptyStateCard
           variant="For-large-areas"
-          title={`No Search Results Found for “${searchValue}”`}
+          title={`No Search Results Found ${searchValue && `for “${searchValue}”`}`}
           text="Try different search Entry"
         />
       ) : (
