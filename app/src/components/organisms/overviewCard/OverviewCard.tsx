@@ -7,9 +7,10 @@ import Tag from "@/components/atoms/tag/Tag";
 import { Show } from "@/components/Icons/Show";
 import { Timer } from "@/components/Icons/timer";
 import { Trash } from "@/components/Icons/Trash";
+import OverviewCardTagsModal from "@/components/overviewCardTagsModal/OverviewCardTagsModal";
 import { type IGenLegalArea, type IGenTags } from "@/services/graphql/__generated/sdk";
 
-import { Modal, Title, useMantineTheme } from "@mantine/core";
+import { useMantineTheme } from "@mantine/core";
 import { useDisclosure } from "@mantine/hooks";
 import { type Maybe } from "@trpc/server";
 import React, { type FunctionComponent } from "react";
@@ -145,25 +146,7 @@ const OverviewCard: FunctionComponent<IOverviewCard> = ({
             ))}
           
           </div>
-          <Modal
-            lockScroll={false}
-            opened={opened}
-            onClose={close}
-            title={<Title order={3}>All tags</Title>}
-            centered
-            closeOnClickOutside
-            styles={{
-              root: {
-                borderRadius: 12,
-              }
-            }}>
-            <div css={styles.tagsModal}>
-              {tags?.map((tag, tagIndex) => (
-                <Tag key={tagIndex}>{tag?.tagName}</Tag>
-              ))}
-            </div>
-          </Modal>
-          {/* </ScrollArea> */}
+          <OverviewCardTagsModal opened={opened} tags={tags} close={close}/>
         </div>
         {
           variant === "case" && (
