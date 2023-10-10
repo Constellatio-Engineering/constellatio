@@ -1,5 +1,3 @@
-
-import { BodyText } from "@/components/atoms/BodyText/BodyText";
 import { Button } from "@/components/atoms/Button/Button";
 import { Edit } from "@/components/Icons/Edit";
 import { Trash } from "@/components/Icons/Trash";
@@ -7,36 +5,41 @@ import { RichtextEditorField } from "@/components/molecules/RichtextEditorField/
 import SlidingPanelFileTypeRow from "@/components/molecules/slidingPanelFileTypeRow/SlidingPanelFileTypeRow";
 import SlidingPanelTitle from "@/components/molecules/slidingPanelTitle/SlidingPanelTitle";
 import { type UploadedFile } from "@/db/schema";
+import useNoteEditorStore from "@/stores/noteEditor.store";
 
 import { Drawer } from "@mantine/core";
 import React, { type Dispatch, type FunctionComponent } from "react";
 
+import EditorForm from "./editorForm/EditorForm";
 import * as styles from "./UploadedMaterialNoteDrawer.styles";
 
-interface UploadedMaterialNoteDrawerProps
+interface UploadedMaterialNoteDrawerProps 
 {
-  readonly noteRichtext: string;
-  readonly selectedFileNote: UploadedFile | undefined;
-  readonly setNoteRichtext: Dispatch<React.SetStateAction<string>>;
-  readonly setShowNoteDrawer: Dispatch<React.SetStateAction<boolean>>;
-  readonly showNoteDrawer: boolean;
+  readonly selectedFolderId: string | null;
 }
 
 const UploadedMaterialNoteDrawer: FunctionComponent<UploadedMaterialNoteDrawerProps> = ({
-  noteRichtext,
-  selectedFileNote,
-  setNoteRichtext,
-  setShowNoteDrawer,
-  showNoteDrawer
-}) => 
+  selectedFolderId
+}) =>
 {
-  const isNoteExists = true;
-  const [showDeleteNoteWindow, setShowDeleteNoteWindow] = React.useState(false);
+  const {
+    closeEditor,
+    editorState,
+    setEditNoteState,
+    updateNote
+  } = useNoteEditorStore();
+  const { hasUnsavedChanges } = useNoteEditorStore(s => s.getComputedValues());
+
+  if(editorState.state === "edit")
+  {
+    editorState.note;
+  }
+
   return (
     <Drawer
       lockScroll={false}
-      opened={showNoteDrawer}
-      onClose={() => setShowNoteDrawer(false)}
+      opened={editorState.state === "edit"}
+      onClose={closeEditor}
       withCloseButton={false}
       position="right"
       size="xl"
@@ -45,14 +48,17 @@ const UploadedMaterialNoteDrawer: FunctionComponent<UploadedMaterialNoteDrawerPr
         <SlidingPanelTitle
           title="Notes"
           variant="default"
-          closeButtonAction={() => 
-          {
-            setShowNoteDrawer(false);
-          }}
+          closeButtonAction={closeEditor}
         />
       )}>
       <SlidingPanelFileTypeRow title={selectedFileNote?.originalFilename ?? ""} fileExtension={selectedFileNote?.fileExtension ?? ""}/>
-      {!isNoteExists && (
+      {editorState.state !== "closed" && (
+        <EditorForm
+          editorState={editorState}
+          selectedFolderId={selectedFolderId}
+        />
+      )}
+      {editorState.state === "view" && (
         <>
           <div css={styles.MaterialNoteRichText}>
             <RichtextEditorField

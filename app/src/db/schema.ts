@@ -62,13 +62,13 @@ export const uploadedFiles = pgTable("UploadedFile", {
   fileExtension: text("FileExtension").notNull()
 });
 
-export const uploadedFilesRelations = relations(uploadedFiles, ({ many }) => ({
-  notes: many(notes),
+export const uploadedFilesRelations = relations(uploadedFiles, ({ one }) => ({
+  note: one(notes),
 }));
 
 export type UploadedFileInsert = InferInsertModel<typeof uploadedFiles>;
 export type UploadedFile = InferSelectModel<typeof uploadedFiles> & {
-  notes: Note[];
+  note: Note | null;
 };
 
 export const documents = pgTable("Document", {
