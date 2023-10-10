@@ -44,8 +44,7 @@ const MaterialOptionsMenu: FunctionComponent<MaterialOptionsMenuProps> = ({ file
       <Menu shadow="elevation-big" radius="12px" width={200}>
         <Menu.Target>
           <td
-            css={styles.callToActionCell}
-            onClick={() => {}}>
+            css={styles.callToActionCell}>
             <button type="button">
               <DotsIcon/>
             </button>

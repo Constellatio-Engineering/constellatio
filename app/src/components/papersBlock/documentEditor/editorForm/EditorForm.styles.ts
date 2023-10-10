@@ -9,8 +9,9 @@ export const wrapper = css`
 
 `;
 export const existingNoteActions = (theme: MantineTheme) => css`
-   background: ${theme.colors["neutrals-01"][1]};
-   margin-bottom: 24px;
+   background: ${theme.colors["neutrals-01"][0]};
+padding: 24px;
+   width: 100%;
    button{
         margin-right: 8px;
     }
@@ -20,6 +21,30 @@ export const existingNoteActions = (theme: MantineTheme) => css`
 `;
 
 export const existingNote = (theme: MantineTheme) => css`
-padding:24px 32px;
+/* padding:24px 32px; */
 background-color: ${theme.colors["neutrals-01"][1]};
+position: relative;
+`;
+export const docContent = css`
+padding: 24px;
+`;
+export const deleteDocWindow = css`
+  position: absolute;
+      top:82px;
+      left:0;
+      width: 100%;
+      height: 100%;
+      display:flex;
+      flex-direction: column;
+      gap:16px;
+      place-items: center;
+      align-items: center;
+      justify-content: center;
+      background: linear-gradient(to bottom, white 50%, transparent 100%);
+      button{
+        margin-right: 8px ;
+      }
+`;
+export const createDocForm = css`
+padding: 24px;
 `;

@@ -206,7 +206,7 @@ const CaseCompleteTestsStep: FunctionComponent<ICaseCompleteTestsStepProps> = ({
                   paragraph: richTextParagraphOverwrite
                 }}
               />
-              {isLastGame && <SolveCaseGame onGameStartHandler={() => setCaseStepIndex(1)}/>}
+              {isLastGame && variant === "case" && <SolveCaseGame onGameStartHandler={() => setCaseStepIndex(1)}/>}
             </div>
           </div>
         )}

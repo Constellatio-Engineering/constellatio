@@ -12,6 +12,7 @@ export const wrapper = (theme: MantineTheme) => css`
         .test{
             background:red;
         }
+        box-shadow: 0px 8px 44px 0px rgba(0, 0, 0, 0.04);
 `;
 export const papersBlockHead = (theme: MantineTheme) => css`
     color: ${theme.colors["neutrals-02"][0]};
@@ -46,7 +47,7 @@ export const drawerStyles = () =>
         display: "flex",
         gap: "12px",
         justifyContent: "space-between",
-        padding: "32px",
+        padding: "24px",
         textAlign: "center",
         width: "100%"
       },
@@ -54,15 +55,14 @@ export const drawerStyles = () =>
         input: {
           marginBottom: "24px"
         },
-        padding: "0 32px",
         width: "100%"
       },
       alignItems: "flex-start",
       display: "flex",
       flexDirection: "column",
-      height: "calc(100vh - 101px)",
+      height: "calc(100vh - 77px)",
       justifyContent: "space-between",
-      marginTop: "24px",
+      // marginTop: "24px",
       padding: "24px 0 0 0",
       width: "100%",
     },

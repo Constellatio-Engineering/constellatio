@@ -1,39 +1,48 @@
 import { css } from "@emotion/react";
+import { type MantineTheme } from "@mantine/styles";
 
 export const table = css`
-  .primaryCell{
-    width: 100%;
+  border-radius: 12px;
+  overflow: hidden;
+  box-sizing: border-box;
+  .primaryCell {
+    width: 90%;
     max-width: 350px;
     overflow: hidden;
-    p{
+    p {
       white-space: nowrap;
       overflow: hidden;
       text-overflow: ellipsis;
     }
   }
-	width: 100%;
-	vertical-align: middle;
+  width: 90%;
+  vertical-align: middle;
 
-	> * {
-    
-		vertical-align: middle;
+  > * {
+    vertical-align: middle;
     white-space: nowrap;
     min-width: max-content;
-	}
+  }
 `;
 
-export const tableHeader = css`
-	> * {
-		&, > * {
-			vertical-align: middle;
-		}
-	}
+export const tableHeader = (theme: MantineTheme) => css`
+  border: 1px solid ${theme.colors["neutrals-01"][3]};
+
+  > * {
+    &,
+    > * {
+      vertical-align: middle;
+    }
+  }
 `;
 
-export const tableBody = css`
-	> * {
-		&, > * {
-			vertical-align: middle;
-		}
-	}
+export const tableBody = (theme: MantineTheme) => css`
+border: 1px solid ${theme.colors["neutrals-01"][3]};
+  border-radius: 0 0 12px 12px ;
+  > * {
+    &,
+    > * {
+      vertical-align: middle;
+    }
+  }
 `;

@@ -71,8 +71,11 @@ background-color: transparent;
 border:0;
 outline:0;
 cursor: pointer;
-${CSSClickableEffect(theme)};
 position:relative;
+min-width: 50px;
+display: grid;
+place-items: center;
+min-height: 55px;
 .dots-btn {
   position:absolute;
   inset: 0;

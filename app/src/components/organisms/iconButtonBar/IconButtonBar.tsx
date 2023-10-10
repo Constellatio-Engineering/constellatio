@@ -11,6 +11,7 @@ interface IIcons
 
 const IconButtonBar: FunctionComponent<{ readonly icons: IIcons[] }> = ({ icons }) => (
   <>
+
     {icons?.map(({ size, src, title }, index) => (
       <IconButton
         key={index}
