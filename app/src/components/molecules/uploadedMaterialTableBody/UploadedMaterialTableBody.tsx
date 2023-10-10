@@ -18,7 +18,6 @@ import React, { type FunctionComponent } from "react";
 import * as styles from "./UploadedMaterialTableBody.styles";
 interface UploadedMaterialTableBodyProps
 {
-  // readonly selectedFolderId: string | null;
   readonly setSelectedFileNote: React.Dispatch<React.SetStateAction<UploadedFile | undefined>>;
   readonly setShowNoteDrawer: React.Dispatch<React.SetStateAction<boolean>>;
   readonly showingFiles: number;
@@ -86,7 +85,6 @@ const UploadedMaterialTableBody: FunctionComponent<UploadedMaterialTableBodyProp
             {
               if(file?.id)
               {
-                // console.log("file", file);
                 setSelectedFileIdForPreview(file.id);
                 setShowFileViewerModal(true);
               }  
@@ -98,18 +96,19 @@ const UploadedMaterialTableBody: FunctionComponent<UploadedMaterialTableBodyProp
           <td css={styles.docDate}> <BodyText styleType="body-01-medium" component="p">{file && file.createdAt && formatDate(file.createdAt)}</BodyText></td>
           <td css={styles.docTags}> <BodyText styleType="body-02-medium" component="p"/></td>
           {variant === "personalSpace" && (
-            <td css={styles.cellNote}>
+            <td
+              css={styles.cellNote}
+              onClick={() => 
+              {
+                if(setSelectedFileNote && setShowNoteDrawer)
+                {
+                  setSelectedFileNote(file);
+                  setShowNoteDrawer(true);
+                }
+              }}>
               <BodyText
                 styleType="body-02-medium"
-                component="p"
-                onClick={() => 
-                {
-                  if(setSelectedFileNote && setShowNoteDrawer)
-                  {
-                    setSelectedFileNote(file);
-                    setShowNoteDrawer(true);
-                  }
-                }}>
+                component="p">
                 {file.notes.length > 0 ? <NotepadFilled/> : <Notepad/>}
                 Add Notes
               </BodyText>

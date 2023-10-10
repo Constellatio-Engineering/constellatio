@@ -17,7 +17,8 @@ cursor: default;
 `;
 
 export const title = css`
-width: 60%;
-white-space: nowrap;
+width: 100%;
 margin: 12px 0 24px 0;
+overflow: hidden;
+hyphens: auto;
 `;

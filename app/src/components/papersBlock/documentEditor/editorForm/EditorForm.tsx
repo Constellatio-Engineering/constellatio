@@ -1,9 +1,9 @@
+import { BodyText } from "@/components/atoms/BodyText/BodyText";
 import { Button } from "@/components/atoms/Button/Button";
 import { Input } from "@/components/atoms/Input/Input";
 import { Edit } from "@/components/Icons/Edit";
 import { Trash } from "@/components/Icons/Trash";
 import { RichtextEditorField } from "@/components/molecules/RichtextEditorField/RichtextEditorField";
-import { type Document } from "@/db/schema";
 import useContextAndErrorIfNull from "@/hooks/useContextAndErrorIfNull";
 import { InvalidateQueriesContext } from "@/provider/InvalidateQueriesProvider";
 import { type CreateDocumentSchema } from "@/schemas/documents/createDocument.schema";
@@ -18,11 +18,8 @@ interface EditorFormProps
 {
   readonly editorState: EditorStateDrawerOpened;
 }
-
 const EditorForm: FunctionComponent<EditorFormProps> = ({ editorState }) =>
 {
-  // const editorState = useDocumentEditorStore(s => s.editorState);
-
   const { invalidateDocuments } = useContextAndErrorIfNull(InvalidateQueriesContext);
   const { document, state } = editorState;
   const updateEditorDocument = useDocumentEditorStore(s => s.updateEditorDocument);
@@ -30,7 +27,6 @@ const EditorForm: FunctionComponent<EditorFormProps> = ({ editorState }) =>
   const setEditDocumentState = useDocumentEditorStore(s => s.setEditDocumentState);
   const { hasUnsavedChanges } = useDocumentEditorStore(s => s.getComputedValues());
   const invalidateDocumentsForCurrentFolder = async (): Promise<void> => invalidateDocuments({ folderId: document.folderId as string });
-
   const { mutateAsync: createDocument } = api.documents.createDocument.useMutation({
     onError: (error) => console.log("error while creating document", error),
     onSuccess: invalidateDocumentsForCurrentFolder
@@ -39,7 +35,6 @@ const EditorForm: FunctionComponent<EditorFormProps> = ({ editorState }) =>
     onError: (error) => console.log("error while updating document", error),
     onSuccess: invalidateDocumentsForCurrentFolder
   });
-
   const onCancel = (): void =>
   {
     if(!hasUnsavedChanges)
@@ -57,7 +52,6 @@ const EditorForm: FunctionComponent<EditorFormProps> = ({ editorState }) =>
 
     closeEditor();
   };
-
   const onSave = async (): Promise<void> =>
   {
     switch (state)
@@ -109,42 +103,59 @@ const EditorForm: FunctionComponent<EditorFormProps> = ({ editorState }) =>
       }
     }
   };
-
   const { mutate: deleteDocument } = api.documents.deleteDocument.useMutation({
     onError: (error) => console.error("Error while deleting document:", error),
     onSuccess: invalidateDocumentsForCurrentFolder,
   });
-  // TODO: Validate the form
-
+  const [showConfirmDeleteDocWindow, setShowConfirmDeleteDocWindow] = React.useState<boolean>(false);
   return (
     <>
       <div className="form">
         {editorState.state === "view" && (
           <>
-
             <div css={styles.existingNote}>
               <div css={styles.existingNoteActions}>
                 <Button<"button">
                   styleType="secondarySubtle"
-                  onClick={() => setEditDocumentState(document as Document)}>
-                  <Edit/> Edit
+                  onClick={() => setEditDocumentState({ 
+                    content: document.content, 
+                    createdAt: new Date(), 
+                    folderId: document?.folderId, 
+                    id: document?.id, 
+                    name: document?.name, 
+                    updatedAt: new Date(), 
+                    userId: "" 
+                  })}>
+                  <Edit/>{" "}Edit
                 </Button>
                 <Button<"button">
                   styleType="secondarySubtle"
-                  onClick={() => 
-                  {
-                    deleteDocument({ id: document?.id });
-                    closeEditor();
-                  }}>
-                  <Trash/> Delete
+                  onClick={() => setShowConfirmDeleteDocWindow(true)}>
+                  <Trash/>{" "}Delete
                 </Button>
               </div>
-              <div dangerouslySetInnerHTML={{ __html: document.content }}/>
+              <div css={styles.docContent} dangerouslySetInnerHTML={{ __html: document.content }}/>
+              {showConfirmDeleteDocWindow && (
+                <div css={styles.deleteDocWindow}>
+                  <BodyText styleType="body-01-medium">Are you sure you want to delete this document?</BodyText>
+                  <div>
+                    <Button<"button"> styleType="secondarySimple" onClick={() => setShowConfirmDeleteDocWindow(false)}>No, keep</Button>
+                    <Button<"button">
+                      styleType="primary"
+                      onClick={() => 
+                      {
+                        deleteDocument({ id: document?.id });
+                        closeEditor();
+                      }}>Yes, delete
+                    </Button>
+                  </div>
+                </div>
+              )}
             </div>
           </>
         )}
         {(editorState.state === "create" || editorState.state === "edit") && (
-          <>
+          <div css={styles.createDocForm}>
             <Input
               label="Doc name"
               inputType="text"
@@ -156,7 +167,7 @@ const EditorForm: FunctionComponent<EditorFormProps> = ({ editorState }) =>
               content={document.content}
               onChange={(e) => updateEditorDocument({ content: e.editor.getHTML() })}
             />
-          </>
+          </div>
         )}
       </div>
       <div className="call-to-action">

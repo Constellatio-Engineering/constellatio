@@ -3,7 +3,7 @@ import CaisyImg from "@/basic-components/CaisyImg";
 import useSignedGetUrl from "@/hooks/useSignedGetUrl";
 import useMaterialsStore from "@/stores/materials.store";
 
-import { Modal } from "@mantine/core";
+import { Modal, ScrollArea } from "@mantine/core";
 import React, { type FunctionComponent, useEffect, useState } from "react";
 
 import * as styles from "./FileViewer.styles";
@@ -52,19 +52,20 @@ const FileViewer: FunctionComponent = () =>
     switch (fileType) 
     {
       case "pdf":
+        console.log({ fileUrl: fileUrl?.replace(".pdf", ".pdf&navpanes=0&scrollbar=0&toolbar=0&view=fit") });
         return (
           <embed
-            src={fileUrl}
+            src={`${fileUrl}`}
             type="application/pdf"
             width="100%"
             height="100%"
+            
           />
         );
       case "image":
         return (
           <CaisyImg
             src={fileUrl ?? ""}
-            
           />
         );
       case "video":
@@ -93,10 +94,10 @@ const FileViewer: FunctionComponent = () =>
     <Modal
       lockScroll={false} 
       centered 
-      miw={1080}
       opened={showFileViewerModal} 
       onClose={() => setShowFileViewerModal(false)} 
       withCloseButton={false}
+      scrollAreaComponent={ScrollArea.Autosize}
       closeOnClickOutside
       closeOnEscape
       styles={styles.modalStyles()}>
