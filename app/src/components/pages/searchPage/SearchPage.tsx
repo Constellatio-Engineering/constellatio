@@ -4,7 +4,6 @@ import EmptyStateCard from "@/components/organisms/emptyStateCard/EmptyStateCard
 import useSearchResults from "@/hooks/useSearchResults";
 import useSearchBarStore from "@/stores/searchBar.store";
 
-import { useRouter } from "next/router";
 import React, { type FunctionComponent } from "react";
 
 import * as styles from "./SearchPage.styles";

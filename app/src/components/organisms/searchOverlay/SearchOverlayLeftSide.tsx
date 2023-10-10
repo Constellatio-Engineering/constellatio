@@ -5,7 +5,6 @@ import useSearchResults from "@/hooks/useSearchResults";
 import useSearchBarStore from "@/stores/searchBar.store";
 import { paths } from "@/utils/paths";
 
-import { useMantineTheme } from "@mantine/styles";
 import Link from "next/link";
 import { type FunctionComponent } from "react";
 
@@ -22,14 +21,13 @@ const SearchOverlayLeftSide: FunctionComponent<SearchOverlayLeftSideProps> = ({ 
   const searchHistory = useSearchBarStore((s) => s.searchHistory);
   const setSearchValue = useSearchBarStore((s) => s.setSearchValue);
   const { isLoading, searchResults } = useSearchResults();
-  const theme = useMantineTheme();
   const hasNoResults = searchResults.cases.length === 0 && searchResults.articles.length === 0;
 
   // Loading should be so fast that it is okay to show the recent searches in the meantime, so it switches instantly from recent searches to results
   if(!hasInput || isLoading) 
   {
     return (
-      <div css={styles.suggestionsLeft({ hasInput, hasNoResults, theme })}>
+      <div css={styles.suggestionsLeft({ hasInput, hasNoResults })}>
         <SuggestionSection label="recent searches" labelVariant="neutral">
           {searchHistory.length > 0 ? (
             searchHistory.map((result, index) => (
@@ -67,7 +65,7 @@ const SearchOverlayLeftSide: FunctionComponent<SearchOverlayLeftSideProps> = ({ 
   if(hasNoResults) 
   {
     return (
-      <div css={styles.suggestionsLeft({ hasInput, hasNoResults, theme })}>
+      <div css={styles.suggestionsLeft({ hasInput, hasNoResults })}>
         <span className="emptyStateCard">
           <EmptyStateCard
             variant="For-small-areas"
@@ -80,7 +78,7 @@ const SearchOverlayLeftSide: FunctionComponent<SearchOverlayLeftSideProps> = ({ 
   }
 
   return (
-    <div css={styles.suggestionsLeft({ hasInput, hasNoResults, theme })}>
+    <div css={styles.suggestionsLeft({ hasInput, hasNoResults })}>
       {searchResults.cases.length > 0 && (
         <SuggestionSection label="Cases" labelVariant="case">
           {searchResults.cases.slice(0, 9).map((result) => (

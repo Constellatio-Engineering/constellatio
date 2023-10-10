@@ -4,7 +4,6 @@ import EmptyStateCard from "@/components/organisms/emptyStateCard/EmptyStateCard
 import FileViewer from "@/components/organisms/fileViewer/FileViewer";
 import UploadedMaterialTable from "@/components/organisms/uploadedMaterialTable/UploadedMaterialTable";
 import SearchPapersBlock from "@/components/searchPapersBlock/SearchPapersBlock";
-import { type UploadedFile } from "@/db/schema";
 import useSearchResults, { type SearchResults } from "@/hooks/useSearchResults";
 import { type IGenArticleOverviewFragment, type IGenFullCaseFragment } from "@/services/graphql/__generated/sdk";
 import useMaterialsStore from "@/stores/materials.store";
@@ -12,7 +11,7 @@ import { type ArticleSearchIndexItem, type CaseSearchIndexItem } from "@/utils/s
 import { type CommonKeysInTypes } from "@/utils/types";
 
 import { useRouter } from "next/router";
-import React, { Fragment, type FunctionComponent } from "react";
+import { Fragment, type FunctionComponent } from "react";
 
 import * as styles from "./SearchPage.styles";
 
@@ -27,7 +26,6 @@ const SearchPageResults: FunctionComponent = () =>
   
   if(routerTabQuery === "userUploads") 
   { 
-    console.log("searchResults[routerTabQuery]", searchResults[routerTabQuery]);
     return (
       searchResults[routerTabQuery]?.length > 0 && (
         <div css={styles.searchPageResults}>

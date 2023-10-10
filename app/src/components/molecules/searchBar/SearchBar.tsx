@@ -58,8 +58,6 @@ const SearchBar: FunctionComponent<SearchBarProps> = () =>
     })();
   }, [searchValue, setSearchQuery]);
 
-  console.log("searchHistory", localSearchHistory);
-
   useEffect(() => 
   {
     if(typeof window !== "undefined") 
