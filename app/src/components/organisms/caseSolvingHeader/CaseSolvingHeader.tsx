@@ -4,10 +4,10 @@ import { BookmarkFilledIcon } from "@/components/Icons/BookmarkFilledIcon";
 import { Pin } from "@/components/Icons/Pin";
 import { Print } from "@/components/Icons/print";
 import IconButtonBar from "@/components/organisms/iconButtonBar/IconButtonBar";
-import useArticles from "@/hooks/useArticles";
-import useBookmarks from "@/hooks/useBookmarks";
-import useCases from "@/hooks/useCases";
-import { type IGenArticle } from "@/services/graphql/__generated/sdk";
+// import useArticles from "@/hooks/useArticles";
+// import useBookmarks from "@/hooks/useBookmarks";
+// import useCases from "@/hooks/useCases";
+// import { type IGenArticle } from "@/services/graphql/__generated/sdk";
 
 import { Container, Title, useMantineTheme } from "@mantine/core";
 import Link from "next/link";
@@ -25,7 +25,6 @@ export interface ICaseSolvingHeaderProps
 {
   readonly overviewCard: IOverviewCard;
   readonly pathSlugs?: IBreadcrumbItem[];
-  // readonly steps?: string[];
   readonly title: string;
   readonly variant: "case" | "dictionary";
 }
@@ -37,14 +36,15 @@ const CaseSolvingHeader: FunctionComponent<ICaseSolvingHeaderProps> = ({
   variant
 }) => 
 {
-  const { allCases = [] } = useCases();
-  const { allArticles = [] } = useArticles();
-  const { bookmarks } = useBookmarks(undefined);
-  const allCasesBookmarks = bookmarks.filter(bookmark => bookmark?.resourceType === "case") ?? [];
-  const allArticlesBookmarks = bookmarks.filter(bookmark => bookmark?.resourceType === "article") ?? [];
-  const bookmarkedArticles = allArticles.filter((caisyArticle: IGenArticle) => allArticlesBookmarks.some(bookmark => bookmark.resourceId === caisyArticle.id));
-  const bookmarkedCases = allCases.filter(caisyCase => allCasesBookmarks.some(bookmark => bookmark.resourceId === caisyCase.id));
-  const isItemBookmarked = bookmarkedCases.some(bookmark => bookmark.title === title) || bookmarkedArticles?.some(bookmark => bookmark.title === title) || false;
+  // const { allCases = [] } = useCases();
+  // const { allArticles = [] } = useArticles();
+  // const { bookmarks } = useBookmarks(undefined);
+  // const allCasesBookmarks = bookmarks.filter(bookmark => bookmark?.resourceType === "case") ?? [];
+  // const allArticlesBookmarks = bookmarks.filter(bookmark => bookmark?.resourceType === "article") ?? [];
+  // const bookmarkedArticles = allArticles.filter((caisyArticle: IGenArticle) => allArticlesBookmarks.some(bookmark => bookmark.resourceId === caisyArticle.id));
+  // const bookmarkedCases = allCases.filter(caisyCase => allCasesBookmarks.some(bookmark => bookmark.resourceId === caisyCase.id));
+  // const isItemBookmarked = bookmarkedCases.some(bookmark => bookmark.title === title) || bookmarkedArticles?.some(bookmark => bookmark.title === title) || false;
+  const isItemBookmarked = false;
   const icons = [
     { src: isItemBookmarked ? <BookmarkFilledIcon/> : <Bookmark/>, title: "Bookmark" },
     { src: <Print/>, title: "Print" },
