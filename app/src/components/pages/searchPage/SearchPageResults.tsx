@@ -18,28 +18,12 @@ import * as styles from "./SearchPage.styles";
 
 const SearchPageResults: FunctionComponent = () => 
 {
-
-  // WE NEED THE ObjectOfUploadedMaterialsSearch OBJECT TO BE THE SAME AS THE AcceptedObject OBJECT to remove the as UploadedFile[]
-  // const ObjectOfUploadedMaterialsSearch = {
-  //   id: "84b87741-7760-4b81-9a07-2811373b58fb",
-  //   originalFilename: "screencapture-hassanmostafaa-github-io-BlueCircle-2023-09-03-19_56_59screencapture-hassanmostafaa-github-io-TravelShare-2023-09-03-19_56_33screencapture-hassanmostafaa-github-io-TravelShare-2023-09-03-19_56.png",
-  //   userId: "ba075a97-6cdb-455d-a145-67f3f1965f79"
-  // };
-  // const AcceptedObject = {
-  //   createdAt: "2023-10-06T16:53:11.000Z",
-  //   fileExtension: "png",
-  //   folderId: null,
-  //   id: "3a426f7a-bfa1-4264-aaec-b9b2414762c9",
-  //   originalFilename: "screencapture-hassan-mostafa-vercel-app-2023-09-03-19_58_11 - Copy (2).png",
-  //   serverFilename: "1696611189270-screencapture-hassan-mostafa-vercel-app-2023-09-03-19_58_11---Copy-(2).png",
-  //   sizeInBytes: 747491,
-  //   userId: "ba075a97-6cdb-455d-a145-67f3f1965f79"
-  // };
-
   const { searchResults } = useSearchResults();
   const router = useRouter();
   const routerTabQuery = router.query.tab as keyof SearchResults;
   const { selectedFileIdForPreview } = useMaterialsStore();
+
+  const date = new Date();
   
   if(routerTabQuery === "userUploads") 
   { 
@@ -50,7 +34,17 @@ const SearchPageResults: FunctionComponent = () =>
           <SearchPapersBlock 
             table={(
               <UploadedMaterialTable
-                uploadedFiles={searchResults[routerTabQuery] as UploadedFile[]}
+                uploadedFiles={searchResults[routerTabQuery].map(file => ({
+                  createdAt: date,
+                  fileExtension: "",
+                  folderId: "",
+                  id: file.id,
+                  notes: [],
+                  originalFilename: file.originalFilename,
+                  serverFilename: "",
+                  sizeInBytes: 1,
+                  userId: file.userId
+                }))}
                 variant="searchPapers"
                 // selectedFolderId={null} // TODO
               />
