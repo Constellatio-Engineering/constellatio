@@ -3,6 +3,7 @@ import CaseNavBar from "@/components/organisms/caseNavBar/CaseNavBar";
 import CaseResultsReviewStep from "@/components/organisms/caseResultsReviewStep/CaseResultsReviewStep";
 import CaseSolveCaseStep from "@/components/organisms/caseSolveCaseStep/CaseSolveCaseStep";
 import CaseSolvingHeader from "@/components/organisms/caseSolvingHeader/CaseSolvingHeader";
+import { slugFormatter } from "@/components/organisms/OverviewHeader/OverviewHeader";
 import { type IGenArticle, type IGenCase } from "@/services/graphql/__generated/sdk";
 import useCaseSolvingStore from "@/stores/caseSolving.store";
 
@@ -41,9 +42,13 @@ const DetailsPage: FunctionComponent<IDetailsPageProps> = ({ content, variant })
             path: variant === "case" ? "/cases" : "/dictionary", 
             slug: variant === "case" ? "Cases" : "Dictionary" 
           },
+          {
+            path: variant === "case" ? `/cases?q=${slugFormatter(content?.mainCategoryField?.[0]?.mainCategory ?? "")}` : `/dictionary?q=${slugFormatter(content?.mainCategoryField?.[0]?.mainCategory ?? "")}`, 
+            slug: content?.mainCategoryField?.[0]?.mainCategory ?? "" 
+          },
           { 
             path: `/${variant === "case" ? "cases" : "dictionary"}/${content?.id}`, 
-            slug: content?.title ?? "" 
+            slug: content?.title?.length && content?.title?.length > 40 ? content?.title?.slice(0, 40) + " ..." : "Undefined Title" 
           }
         ]}
         overviewCard={{
