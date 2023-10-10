@@ -21,7 +21,7 @@ const ProfileBadgeCard: FunctionComponent<ProfileBadgeCardProps> = ({ descriptio
   const theme = useMantineTheme();
   const [isExpanded, setIsExpanded] = React.useState<boolean>(true);
   return (
-    <div css={styles.wrapper({ isExpanded, theme })}>
+    <div css={styles.wrapper({ isExpanded, theme })} onClick={() => setIsExpanded(prev => !prev)}>
       <div css={styles.badgeWrapper({ isExpanded, theme })}>
         <span css={styles.checkCircle}><CheckCircleRed/></span>
         <CaisyImg src={FlagImg.src}/>
