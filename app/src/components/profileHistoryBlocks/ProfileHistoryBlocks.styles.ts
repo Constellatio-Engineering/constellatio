@@ -1,5 +1,5 @@
 import { css } from "@emotion/react";
-import { MantineTheme } from "@mantine/styles";
+import { type MantineTheme } from "@mantine/styles";
 
 export const wrapper = css`
   width: 100%;
@@ -29,7 +29,7 @@ export const timeCell = (theme: MantineTheme) => css`
 export const blockTitle = css`
   flex: 1;
 `;
-export const blockCategory =  (theme: MantineTheme) => css`
+export const blockCategory = (theme: MantineTheme) => css`
     color: ${theme.colors["neutrals-02"][0]};
     text-align: left;
     min-width: 90px;
