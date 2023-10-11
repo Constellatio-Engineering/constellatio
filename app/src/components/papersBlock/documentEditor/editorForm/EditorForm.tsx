@@ -79,6 +79,7 @@ const EditorForm: FunctionComponent<EditorFormProps> = ({ editorState }) =>
       }
       case "edit":
       {
+        // TODO : SHOULDN'T THE UpdatedAt BE UPDATED HERE?
         const documentUpdate: UpdateDocumentSchema = {
           content: document.content,
           id: document.id,
