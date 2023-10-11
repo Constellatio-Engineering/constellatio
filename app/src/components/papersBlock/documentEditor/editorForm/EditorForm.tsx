@@ -117,15 +117,20 @@ const EditorForm: FunctionComponent<EditorFormProps> = ({ editorState }) =>
               <div css={styles.existingNoteActions}>
                 <Button<"button">
                   styleType="secondarySubtle"
-                  onClick={() => setEditDocumentState({ 
-                    content: document.content, 
-                    createdAt: new Date(), 
-                    folderId: document?.folderId, 
-                    id: document?.id, 
-                    name: document?.name, 
-                    updatedAt: new Date(), 
-                    userId: "" 
-                  })}>
+                  onClick={() => 
+                  {
+                    // TODO : FIX : DOCUMENT TYPE DOESN'T MATCH EDITDOCUMENTSTATE TYPE
+
+                    // setEditDocumentState({ 
+                    //   content: document.content, 
+                    //   // createdAt: document., 
+                    //   folderId: document?.folderId, 
+                    //   id: document?.id, 
+                    //   name: document?.name, 
+                    //   // updatedAt: new Date(), 
+                    //   // userId: "" 
+                    // });
+                  }}>
                   <Edit/>{" "}Edit
                 </Button>
                 <Button<"button">
