@@ -12,8 +12,6 @@ const Search: NextPage = () =>
   const searchValue = useSearchBarStore((s) => s.searchValue);
   const setSearchValue = useSearchBarStore((s) => s.setSearchValue);
 
-  // console.log("router", router);
-
   useEffect(() => 
   {
     if(typeof window !== "undefined")

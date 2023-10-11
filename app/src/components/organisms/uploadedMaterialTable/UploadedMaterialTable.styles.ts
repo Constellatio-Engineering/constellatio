@@ -8,7 +8,16 @@ export const tableWrapper = (theme: MantineTheme) => css`
   text-align: left;
   border-radius: 12px;
   overflow: hidden;
-  outline: 1px solid ${theme.colors["neutrals-01"][1]};
+  outline: 1px solid ${theme.colors["neutrals-01"][3]};
+  .mantine-Menu-dropdown {
+    padding: 0;
+    border-radius: 12px; 
+  }
+  .mantine-Menu-item {
+    border-bottom: 1px solid ${theme.colors["neutrals-01"][3]};
+    border-radius:0px; 
+
+  }
   td {
     padding: 16px;
   }
@@ -22,7 +31,7 @@ export const tableWrapper = (theme: MantineTheme) => css`
     white-space: nowrap;
   }
   tr {
-    border: 1px solid ${theme.colors["neutrals-01"][2]};
+    border: 1px solid ${theme.colors["neutrals-01"][3]};
   }
   .primaryCell {
     width: 100%;

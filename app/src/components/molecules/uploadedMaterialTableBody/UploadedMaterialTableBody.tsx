@@ -8,6 +8,7 @@ import { NotepadFilled } from "@/components/Icons/NotepadFilled";
 import { VideoIcon } from "@/components/Icons/Video";
 import MaterialOptionsMenu from "@/components/materialsOptionsMenu/MaterialsOptionsMenu";
 import { type UploadedFile } from "@/db/schema";
+import useMaterialsStore from "@/stores/materials.store";
 
 import {
   useMantineTheme 
@@ -15,6 +16,14 @@ import {
 import React, { type FunctionComponent } from "react";
 
 import * as styles from "./UploadedMaterialTableBody.styles";
+interface UploadedMaterialTableBodyProps
+{
+  readonly setSelectedFileNote: React.Dispatch<React.SetStateAction<UploadedFile | undefined>>;
+  readonly setShowNoteDrawer: React.Dispatch<React.SetStateAction<boolean>>;
+  readonly showingFiles: number;
+  readonly uploadedFiles?: Partial<UploadedFile[]>;
+  readonly variant: "personalSpace" | "searchPapers";
+}
 
 const fileNameIcon = (file: UploadedFile): React.ReactNode =>
 {
@@ -45,9 +54,7 @@ const formatDate = (date: Date): string => `${String(date?.getDate()).padStart(2
 
 interface UploadedMaterialTableBodyProps
 {
-  readonly setSelectedFileIdForPreview?: React.Dispatch<React.SetStateAction<string | undefined>>;
   readonly setSelectedFileNote: React.Dispatch<React.SetStateAction<UploadedFile | undefined>>;
-  readonly setShowFileViewerModal?: React.Dispatch<React.SetStateAction<boolean>>;
   readonly setShowNoteDrawer: React.Dispatch<React.SetStateAction<boolean>>;
   readonly showingFiles: number;
   readonly uploadedFiles?: Partial<UploadedFile[]>;
@@ -55,9 +62,8 @@ interface UploadedMaterialTableBodyProps
 }
 
 const UploadedMaterialTableBody: FunctionComponent<UploadedMaterialTableBodyProps> = ({
-  setSelectedFileIdForPreview,
+  // selectedFolderId,
   setSelectedFileNote,
-  setShowFileViewerModal,
   setShowNoteDrawer,
   showingFiles,
   uploadedFiles,
@@ -65,7 +71,7 @@ const UploadedMaterialTableBody: FunctionComponent<UploadedMaterialTableBodyProp
 }) => 
 {
   const theme = useMantineTheme();
-
+  const { setSelectedFileIdForPreview, setShowFileViewerModal } = useMaterialsStore();
   return (
     <>
       {uploadedFiles?.slice(0, showingFiles).filter(Boolean).map((file, index) => (
@@ -73,11 +79,11 @@ const UploadedMaterialTableBody: FunctionComponent<UploadedMaterialTableBodyProp
           key={index}>
           {variant === "personalSpace" && <td><Checkbox/></td>}
           <td
-            css={styles.docName({ clickable: !!(setSelectedFileIdForPreview && setShowFileViewerModal), theme })}
+            css={styles.docName({ clickable: true, theme })}
             className="primaryCell"
             onClick={() => 
             {
-              if(setSelectedFileIdForPreview && setShowFileViewerModal)
+              if(file?.id)
               {
                 setSelectedFileIdForPreview(file.id);
                 setShowFileViewerModal(true);
@@ -90,18 +96,19 @@ const UploadedMaterialTableBody: FunctionComponent<UploadedMaterialTableBodyProp
           <td css={styles.docDate}> <BodyText styleType="body-01-medium" component="p">{file && file.createdAt && formatDate(file.createdAt)}</BodyText></td>
           <td css={styles.docTags}> <BodyText styleType="body-02-medium" component="p"/></td>
           {variant === "personalSpace" && (
-            <td css={styles.cellNote}>
+            <td
+              css={styles.cellNote}
+              onClick={() => 
+              {
+                if(setSelectedFileNote && setShowNoteDrawer)
+                {
+                  setSelectedFileNote(file);
+                  setShowNoteDrawer(true);
+                }
+              }}>
               <BodyText
                 styleType="body-02-medium"
-                component="p"
-                onClick={() => 
-                {
-                  if(setSelectedFileNote && setShowNoteDrawer)
-                  {
-                    setSelectedFileNote(file);
-                    setShowNoteDrawer(true);
-                  }
-                }}>
+                component="p">
                 {file.notes.length > 0 ? <NotepadFilled/> : <Notepad/>}
                 Add Notes
               </BodyText>

@@ -2,7 +2,8 @@ import { type FileWithClientSideUuid } from "@/components/pages/personalSpacePag
 import PapersBlock from "@/components/papersBlock/PapersBlock";
 import useDocuments from "@/hooks/useDocuments";
 import useUploadedFiles from "@/hooks/useUploadedFiles";
-import useUploadFolders from "@/hooks/useUploadFolders";
+// import useUploadFolders from "@/hooks/useUploadFolders";
+import useMaterialsStore from "@/stores/materials.store";
 import uploadsProgressStore from "@/stores/uploadsProgress.store";
 
 import { Container } from "@mantine/core";
@@ -13,26 +14,20 @@ import FileViewer from "../fileViewer/FileViewer";
 import MaterialMenu from "../materialMenu/MaterialMenu";
 import UploadedMaterialBlock from "../uploadedMaterialBlock/UploadedMaterialBlock";
 
-const PersonalSpaceMaterialsTab: FunctionComponent<{
-  readonly selectedFolderId: string | null;
-  readonly setSelectedFolderId: React.Dispatch<React.SetStateAction<string | null>>;
-}> = ({ selectedFolderId, setSelectedFolderId }) => 
+const PersonalSpaceMaterialsTab: FunctionComponent = () => 
 {
+  const selectedFolderId = useMaterialsStore(s => s.selectedFolderId);
   const { isLoading: isGetUploadedFilesLoading, uploadedFiles } = useUploadedFiles(selectedFolderId);
-  const { folders = [] } = useUploadFolders();
   const { documents } = useDocuments(selectedFolderId);
   const fileInputRef = React.useRef<HTMLInputElement>(null);
   const { setUploadState, uploads } = uploadsProgressStore();
   const [selectedFiles, setSelectedFiles] = useState<FileWithClientSideUuid[]>(
     []
   );
-  const [selectedFileIdForPreview, setSelectedFileIdForPreview] =
-    useState<string>();
+  const { selectedFileIdForPreview } = useMaterialsStore();
   const areUploadsInProgress = uploads.some(
     (u) => u.state.type === "uploading"
   );
-  const [showFileViewerModal, setShowFileViewerModal] =
-    useState<boolean>(false);
   return (
     <Container maw={1440}>
       <div
@@ -43,11 +38,7 @@ const PersonalSpaceMaterialsTab: FunctionComponent<{
           justifyContent: "space-between",
           marginTop: "40px",
         }}>
-        <MaterialMenu
-          selectedFolderId={selectedFolderId}
-          setSelectedFolderId={setSelectedFolderId}
-          folders={folders}
-        />
+        <MaterialMenu/>
         <div style={{ flex: 1, maxWidth: "75%" }}>
           <PapersBlock
             docs={documents}
@@ -60,19 +51,13 @@ const PersonalSpaceMaterialsTab: FunctionComponent<{
             isGetUploadedFilesLoading={isGetUploadedFilesLoading}
             setUploadState={setUploadState}
             selectedFiles={selectedFiles}
-            setSelectedFileIdForPreview={setSelectedFileIdForPreview}
-            setShowFileViewerModal={setShowFileViewerModal}
             setSelectedFiles={setSelectedFiles}
             uploadedFiles={uploadedFiles}
             selectedFolderId={selectedFolderId}
           />
           <FileUploadMenu uploads={uploads}/>
           {selectedFileIdForPreview && (
-            <FileViewer
-              fileId={selectedFileIdForPreview}
-              setShowFileViewerModal={setShowFileViewerModal}
-              showFileViewerModal={showFileViewerModal}
-            />
+            <FileViewer/>
           )}
         </div>
       </div>

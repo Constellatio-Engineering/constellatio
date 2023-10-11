@@ -1,28 +1,19 @@
 
 import CaisyImg from "@/basic-components/CaisyImg";
 import useSignedGetUrl from "@/hooks/useSignedGetUrl";
+import useMaterialsStore from "@/stores/materials.store";
 
-import { Modal } from "@mantine/core";
+import { Modal, ScrollArea } from "@mantine/core";
 import React, { type FunctionComponent, useEffect, useState } from "react";
 
 import * as styles from "./FileViewer.styles";
 
-interface FileViewerProps
+const FileViewer: FunctionComponent = () => 
 {
-  readonly fileId: string;
-  // readonly setSelectedFileIdForPreview: React.Dispatch<React.SetStateAction<string | undefined>>;
-  readonly setShowFileViewerModal: React.Dispatch<React.SetStateAction<boolean>>;
-  readonly showFileViewerModal: boolean;
-}
-
-const FileViewer: FunctionComponent<FileViewerProps> = ({
-  fileId,
-  // setSelectedFileIdForPreview,
-  setShowFileViewerModal,
-  showFileViewerModal
-}) => 
-{
-
+  // const { selectedFileIdForPreview: fileId, setShowFileViewerModal, showFileViewerModal } = useMaterialsStore();
+  const fileId = useMaterialsStore(s => s.selectedFileIdForPreview);
+  const setShowFileViewerModal = useMaterialsStore(s => s.setShowFileViewerModal);
+  const showFileViewerModal = useMaterialsStore(s => s.showFileViewerModal);
   const { isLoading: isGetUrlLoading, url: fileUrl } = useSignedGetUrl(fileId);
   const [fileType, setFileType] = useState<string | null>(null);
 
@@ -61,19 +52,20 @@ const FileViewer: FunctionComponent<FileViewerProps> = ({
     switch (fileType) 
     {
       case "pdf":
+        console.log({ fileUrl: fileUrl?.replace(".pdf", ".pdf&navpanes=0&scrollbar=0&toolbar=0&view=fit") });
         return (
           <embed
-            src={fileUrl}
+            src={`${fileUrl}`}
             type="application/pdf"
             width="100%"
             height="100%"
+            
           />
         );
       case "image":
         return (
           <CaisyImg
             src={fileUrl ?? ""}
-            
           />
         );
       case "video":
@@ -99,13 +91,13 @@ const FileViewer: FunctionComponent<FileViewerProps> = ({
   };
 
   return (
-    <Modal 
+    <Modal
+      lockScroll={false} 
       centered 
-      lockScroll={false}
-      miw={1080}
       opened={showFileViewerModal} 
       onClose={() => setShowFileViewerModal(false)} 
       withCloseButton={false}
+      scrollAreaComponent={ScrollArea.Autosize}
       closeOnClickOutside
       closeOnEscape
       styles={styles.modalStyles()}>

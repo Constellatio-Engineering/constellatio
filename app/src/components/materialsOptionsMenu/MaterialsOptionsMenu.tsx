@@ -44,8 +44,7 @@ const MaterialOptionsMenu: FunctionComponent<MaterialOptionsMenuProps> = ({ file
       <Menu shadow="elevation-big" radius="12px" width={200}>
         <Menu.Target>
           <td
-            css={styles.callToActionCell}
-            onClick={() => {}}>
+            css={styles.callToActionCell}>
             <button type="button">
               <DotsIcon/>
             </button>
@@ -55,15 +54,14 @@ const MaterialOptionsMenu: FunctionComponent<MaterialOptionsMenuProps> = ({ file
           <Menu.Item onClick={() => setShowRenameMaterialModal(true)}>
             <DropdownItem icon={<Edit/>} label="Rename"/>
           </Menu.Item>
-          {/* <Menu.Divider/>
+          {/*
            <Menu.Item>
              <DropdownItem icon={<FolderIcon/>} label="Move to"/>
            </Menu.Item> */}
-          {/* <Menu.Divider/>
+          {/*
            <Menu.Item>
              <DropdownItem icon={<DownloadIcon/>} label="Download"/>
            </Menu.Item> */}
-          <Menu.Divider/>
           {/* <Menu.Item onClick={() => file && deleteFile({ fileIds: [file.id] })}><span className="label"><Trash/>Delete</span></Menu.Item> */}
           <Menu.Item onClick={() => setShowDeleteMaterialModal(true)}><DropdownItem icon={<Trash/>} label="Delete"/></Menu.Item>
         </Menu.Dropdown>
@@ -100,8 +98,8 @@ const MaterialOptionsMenu: FunctionComponent<MaterialOptionsMenuProps> = ({ file
       </Modal>
       {/* second MODAL */}
       <Modal
-        opened={showRenameMaterialModal}
         lockScroll={false}
+        opened={showRenameMaterialModal}
         withCloseButton={false}
         centered
         styles={styles.modalStyles()}

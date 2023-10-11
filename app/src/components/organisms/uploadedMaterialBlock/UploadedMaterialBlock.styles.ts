@@ -5,12 +5,16 @@ export const wrapper = (theme: MantineTheme) => css`
   background-color: ${theme.colors["neutrals-01"][0]};
   max-width: 100%;
   border-radius: 12px;
+  box-shadow: 0px 8px 44px 0px rgba(0, 0, 0, 0.04);
 `;
 
 export const uploadedMaterialBlockHead = (theme: MantineTheme) => css`
   color: ${theme.colors["neutrals-02"][0]};
   span {
     color: ${theme.colors["neutrals-01"][7]};
+  }
+  h4{
+    color: ${theme.colors["neutrals-02"][1]};
   }
   padding: 24px;
   border-bottom: 1px solid ${theme.colors["neutrals-01"][2]};
@@ -32,7 +36,7 @@ export const badge = css`
   }
   .uploadBtn {
     position: absolute;
-    bottom: 24px;
+    top: 55px;
     left: 50%;
     transform: translateX(-50%);
   }

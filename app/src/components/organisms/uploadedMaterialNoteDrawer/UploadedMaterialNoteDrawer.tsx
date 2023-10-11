@@ -1,4 +1,5 @@
 
+import { BodyText } from "@/components/atoms/BodyText/BodyText";
 import { Button } from "@/components/atoms/Button/Button";
 import { Edit } from "@/components/Icons/Edit";
 import { Trash } from "@/components/Icons/Trash";
@@ -7,7 +8,6 @@ import SlidingPanelFileTypeRow from "@/components/molecules/slidingPanelFileType
 import SlidingPanelTitle from "@/components/molecules/slidingPanelTitle/SlidingPanelTitle";
 import { type UploadedFile } from "@/db/schema";
 
-import { RichTextRenderer } from "@caisy/rich-text-react-renderer";
 import { Drawer } from "@mantine/core";
 import React, { type Dispatch, type FunctionComponent } from "react";
 
@@ -30,7 +30,8 @@ const UploadedMaterialNoteDrawer: FunctionComponent<UploadedMaterialNoteDrawerPr
   showNoteDrawer
 }) => 
 {
-  const isNoteExists = false;
+  const isNoteExists = true;
+  const [showDeleteNoteWindow, setShowDeleteNoteWindow] = React.useState(false);
   return (
     <Drawer
       lockScroll={false}
@@ -90,7 +91,6 @@ const UploadedMaterialNoteDrawer: FunctionComponent<UploadedMaterialNoteDrawerPr
       )}
       {
         isNoteExists && (
-
           <>
             {/* selectedFileNote.note */}
             <div css={styles.existingNote}>
@@ -98,16 +98,37 @@ const UploadedMaterialNoteDrawer: FunctionComponent<UploadedMaterialNoteDrawerPr
                 <Button<"button">
                   styleType="secondarySubtle"
                   onClick={() => {}}>
-                  <Edit/> Edit
+                  <Edit/>{" "}Edit
                 </Button>
                 <Button<"button">
                   styleType="secondarySubtle"
-                  onClick={() => {}}>
-                  <Trash/> Delete
+                  onClick={() => 
+                  {
+                    setShowDeleteNoteWindow(true);
+                  }}>
+                  <Trash/>{" "}Delete
                 </Button>
               </div>
-              <RichTextRenderer node={undefined}/>
+              <div dangerouslySetInnerHTML={{ __html: "The Note" }}/>
+              {showDeleteNoteWindow && (
+                <div className="deleteNoteBlock">
+                  <BodyText styleType="body-01-medium">Are you sure you want to delete your notes?</BodyText>
+                  <div>
+                    <Button<"button">
+                      styleType="secondarySimple"
+                      onClick={() => setShowDeleteNoteWindow(false)}>
+                      No, keep
+                    </Button>
+                    <Button<"button">
+                      styleType="primary"
+                      onClick={() => {}}>
+                      Yes, delete
+                    </Button>
+                  </div>
+                </div>
+              )}
             </div>
+          
           </>
         )
       }
