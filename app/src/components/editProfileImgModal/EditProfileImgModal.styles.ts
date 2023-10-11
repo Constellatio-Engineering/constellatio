@@ -23,6 +23,7 @@ export const modalStyles = (): ModalStyles =>
     },
     header: {
       padding: "0",
+      position: "relative",
     },
     title: {
       padding: "0",

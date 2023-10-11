@@ -11,7 +11,7 @@ import * as styles from "./ProfileMenu.styles";
 
 const ProfileMenuMainProfileInfo: FunctionComponent = () => 
 {
-  const [showEditImgModal, setShowEditImgModal] = React.useState<boolean>(true);
+  const [showEditImgModal, setShowEditImgModal] = React.useState<boolean>(false);
   return (
     <div css={styles.profileInfo}>
       <div css={styles.profileImageWrapper}>
