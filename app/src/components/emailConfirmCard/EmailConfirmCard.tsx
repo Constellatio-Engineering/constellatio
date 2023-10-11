@@ -24,6 +24,7 @@ const EmailConfirmCard: FunctionComponent<EmailConfirmCardProps> = ({
   {
     if(typeof window !== "undefined") 
     {
+      console.log(params);
       if(params.error) 
       {
         setCard({
@@ -39,14 +40,14 @@ const EmailConfirmCard: FunctionComponent<EmailConfirmCardProps> = ({
         });
       }
     }
-  }, [params.error, params.error_description]);
+  }, [params, params.error, params.error_description]);
   return (
     <div css={styles.wrapper}>
       <Title order={2} css={styles.title}>
         {card.title}
       </Title>
       <BodyText styleType="body-01-regular" component="p">
-        {params.error_description}
+        {card.desc}
       </BodyText>
     </div>
   );
