@@ -24,7 +24,6 @@ const EmailConfirmCard: FunctionComponent<EmailConfirmCardProps> = ({
   {
     if(typeof window !== "undefined") 
     {
-      console.log(params);
       if(params.error) 
       {
         setCard({
