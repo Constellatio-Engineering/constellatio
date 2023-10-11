@@ -1,13 +1,17 @@
+import CaisyImg from "@/basic-components/CaisyImg";
+import { BodyText } from "@/components/atoms/BodyText/BodyText";
 import useContextAndErrorIfNull from "@/hooks/useContextAndErrorIfNull";
 import { supabase } from "@/lib/supabase";
 import { InvalidateQueriesContext } from "@/provider/InvalidateQueriesProvider";
 import { paths } from "@/utils/paths";
 
-import { Avatar, Menu } from "@mantine/core";
+import { Avatar, Menu, Title } from "@mantine/core";
 import { notifications } from "@mantine/notifications";
 import { IconBrandStripe, IconLogout, IconUser } from "@tabler/icons-react";
 import { useRouter } from "next/router";
 import { type FunctionComponent } from "react";
+
+import * as styles from "./UserDropdown.styles";
 
 export const UserDropdown: FunctionComponent = () =>
 {
@@ -42,11 +46,25 @@ export const UserDropdown: FunctionComponent = () =>
     <Menu
       width={200}
       position="bottom-end"
-      transitionProps={{ transition: "pop-top-right" }}>
+      radius={12}
+      transitionProps={{ transition: "pop-top-right" }}
+      styles={styles.menuStyles()}>
       <Menu.Target>
         <Avatar radius="xl"/>
       </Menu.Target>
       <Menu.Dropdown>
+        <Menu.Item
+          css={styles.menuItem}
+          onClick={() => void router.push(`${paths.profile}`)}
+          icon={null}>
+          <div className="user-info">
+            <CaisyImg src="https://via.placeholder.com/60" width={60} height={60}/>
+            <div>
+              <Title order={4}>John Doe</Title>
+              <BodyText styleType="body-02-medium" component="p">@johndoe</BodyText>
+            </div>
+          </div>
+        </Menu.Item>
         <Menu.Item
           onClick={() => void router.push(`${paths.profile}`)}
           icon={<IconUser size="0.9rem" stroke={1.5}/>}>
