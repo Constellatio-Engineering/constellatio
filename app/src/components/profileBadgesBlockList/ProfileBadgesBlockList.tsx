@@ -11,19 +11,19 @@ const ProfileBadgesBlockList: FunctionComponent = () =>
   const badges = [
     { description: "You provided feedback to improve design or content", name: "badge1" }, 
     { description: "You provided feedback to improve design or content", name: "badge2" },
-    { description: "You provided feedback to improve design or content", name: "badge2" },
-    { description: "You provided feedback to improve design or content", name: "badge2" },
-    { description: "You provided feedback to improve design or content", name: "badge2" },
-    { description: "You provided feedback to improve design or content", name: "badge2" },
-    { description: "You provided feedback to improve design or content", name: "badge2" },
-    { description: "You provided feedback to improve design or content", name: "badge2" },
-    { description: "You provided feedback to improve design or content", name: "badge2" },
-    { description: "You provided feedback to improve design or content", name: "badge2" },
-    { description: "You provided feedback to improve design or content", name: "badge2" },
-    { description: "You provided feedback to improve design or content", name: "badge2" },
-    { description: "You provided feedback to improve design or content", name: "badge2" },
-    { description: "You provided feedback to improve design or content", name: "badge2" },
-    { description: "You provided feedback to improve design or content", name: "badge3" }
+    // { description: "You provided feedback to improve design or content", name: "badge2" },
+    // { description: "You provided feedback to improve design or content", name: "badge2" },
+    // { description: "You provided feedback to improve design or content", name: "badge2" },
+    // { description: "You provided feedback to improve design or content", name: "badge2" },
+    // { description: "You provided feedback to improve design or content", name: "badge2" },
+    // { description: "You provided feedback to improve design or content", name: "badge2" },
+    // { description: "You provided feedback to improve design or content", name: "badge2" },
+    // { description: "You provided feedback to improve design or content", name: "badge2" },
+    // { description: "You provided feedback to improve design or content", name: "badge2" },
+    // { description: "You provided feedback to improve design or content", name: "badge2" },
+    // { description: "You provided feedback to improve design or content", name: "badge2" },
+    // { description: "You provided feedback to improve design or content", name: "badge2" },
+    // { description: "You provided feedback to improve design or content", name: "badge3" }
   ];
   const [showAll, setShowAll] = React.useState<boolean>(false);
   return (
@@ -35,15 +35,17 @@ const ProfileBadgesBlockList: FunctionComponent = () =>
           </Fragment>
         ))
       }
-      <div css={styles.showAllArea}>
-        {!showAll && <span css={styles.showAllGredient}/>}
-        <Button<"button">
-          css={styles.showAllButton}
-          onClick={() => setShowAll(!showAll)}
-          styleType="tertiary"
-          type="button">{showAll ? <>Show less{" "}<ArrowUp/></> : <>Show all{" "}<ArrowDown/></>}
-        </Button>
-      </div>
+      {badges?.length > 9 && (
+        <div css={styles.showAllArea}>
+          {!showAll && <span css={styles.showAllGredient}/>}
+          <Button<"button">
+            css={styles.showAllButton}
+            onClick={() => setShowAll(!showAll)}
+            styleType="tertiary"
+            type="button">{showAll ? <>Show less{" "}<ArrowUp/></> : <>Show all{" "}<ArrowDown/></>}
+          </Button>
+        </div>
+      )}
     </div>
   );
 };
