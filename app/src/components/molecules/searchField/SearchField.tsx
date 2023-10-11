@@ -34,6 +34,7 @@ const SearchField: FunctionComponent<SearchFieldProps> = ({
         name="searchFieldSmall"
         placeholder="Search"
         icon={SearchIcon}
+        defaultValue={searchValue}
         rightSection={ResetIcon}
         {...props}
       />

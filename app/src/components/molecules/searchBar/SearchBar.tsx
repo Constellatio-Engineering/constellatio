@@ -7,9 +7,10 @@ import useSearchBarStore from "@/stores/searchBar.store";
 import { paths } from "@/utils/paths";
 
 import { Input } from "@mantine/core";
+import { useLocalStorage } from "@mantine/hooks";
 import { useRouter } from "next/router";
 import { useQueryState } from "next-usequerystate";
-import React, { useEffect, type FunctionComponent } from "react";
+import React, { useEffect, type FunctionComponent, type FormEventHandler } from "react";
 
 import * as styles from "./SearchBar.styles";
 
@@ -23,6 +24,12 @@ const SearchBar: FunctionComponent<SearchBarProps> = () =>
   const [searchQuery, setSearchQuery] = useQueryState("find");
   const router = useRouter();
   const { searchResults } = useSearchResults();
+  const setGlobalSearchHistory = useSearchBarStore((s) => s.setSearchHistory);
+
+  const [localSearchHistory, setLocalSearchHistory] = useLocalStorage({
+    defaultValue: [] as string[],
+    key: "searchHistory",
+  });
 
   const rightSection = searchValue ? (
     <>
@@ -51,12 +58,28 @@ const SearchBar: FunctionComponent<SearchBarProps> = () =>
     })();
   }, [searchValue, setSearchQuery]);
 
-  return (
-    <form onSubmit={(e) => 
+  useEffect(() => 
+  {
+    if(typeof window !== "undefined") 
     {
-      e.preventDefault();
-      void router.push({ pathname: `${paths.search}`, query: { find: `${searchQuery}` } });
-    }}>
+      setGlobalSearchHistory(localSearchHistory);
+    }
+  }, [localSearchHistory, setGlobalSearchHistory]);
+
+  const onSubmitSearchHandler: FormEventHandler<HTMLFormElement> = (e) => 
+  {
+    e.preventDefault();
+
+    if(!localSearchHistory.find((search) => search?.trim().toLowerCase() === searchValue?.trim().toLowerCase()))
+    {
+      setLocalSearchHistory((prev) => [...prev, searchValue]);
+    }
+
+    void router.push({ pathname: `${paths.search}`, query: { find: `${searchQuery}` } });
+  };
+
+  return (
+    <form onSubmit={onSubmitSearchHandler}>
       <Input
         data-autofocus
         type="search"

@@ -1,9 +1,9 @@
 import { Svg } from "@/basic-components/SVG/Svg";
 import ItemBlock from "@/components/organisms/caseBlock/ItemBlock";
+import EmptyStateCard from "@/components/organisms/emptyStateCard/EmptyStateCard";
 import FileViewer from "@/components/organisms/fileViewer/FileViewer";
 import UploadedMaterialTable from "@/components/organisms/uploadedMaterialTable/UploadedMaterialTable";
 import SearchPapersBlock from "@/components/searchPapersBlock/SearchPapersBlock";
-import { type UploadedFile } from "@/db/schema";
 import useSearchResults, { type SearchResults } from "@/hooks/useSearchResults";
 import { type IGenArticleOverviewFragment, type IGenFullCaseFragment } from "@/services/graphql/__generated/sdk";
 import useMaterialsStore from "@/stores/materials.store";
@@ -11,45 +11,46 @@ import { type ArticleSearchIndexItem, type CaseSearchIndexItem } from "@/utils/s
 import { type CommonKeysInTypes } from "@/utils/types";
 
 import { useRouter } from "next/router";
-import React, { Fragment, type FunctionComponent } from "react";
+import { Fragment, type FunctionComponent } from "react";
 
 import * as styles from "./SearchPage.styles";
 
 const SearchPageResults: FunctionComponent = () => 
 {
-
-  // WE NEED THE ObjectOfUploadedMaterialsSearch OBJECT TO BE THE SAME AS THE AcceptedObject OBJECT to remove the as UploadedFile[]
-  // const ObjectOfUploadedMaterialsSearch = {
-  //   id: "84b87741-7760-4b81-9a07-2811373b58fb",
-  //   originalFilename: "screencapture-hassanmostafaa-github-io-BlueCircle-2023-09-03-19_56_59screencapture-hassanmostafaa-github-io-TravelShare-2023-09-03-19_56_33screencapture-hassanmostafaa-github-io-TravelShare-2023-09-03-19_56.png",
-  //   userId: "ba075a97-6cdb-455d-a145-67f3f1965f79"
-  // };
-  // const AcceptedObject = {
-  //   createdAt: "2023-10-06T16:53:11.000Z",
-  //   fileExtension: "png",
-  //   folderId: null,
-  //   id: "3a426f7a-bfa1-4264-aaec-b9b2414762c9",
-  //   originalFilename: "screencapture-hassan-mostafa-vercel-app-2023-09-03-19_58_11 - Copy (2).png",
-  //   serverFilename: "1696611189270-screencapture-hassan-mostafa-vercel-app-2023-09-03-19_58_11---Copy-(2).png",
-  //   sizeInBytes: 747491,
-  //   userId: "ba075a97-6cdb-455d-a145-67f3f1965f79"
-  // };
-
   const { searchResults } = useSearchResults();
   const router = useRouter();
   const routerTabQuery = router.query.tab as keyof SearchResults;
   const { selectedFileIdForPreview } = useMaterialsStore();
+
+  const NoResultsFound = (
+    <EmptyStateCard 
+      title={`No search results found ${router.query.find && `for “${router.query.find}”`} ${routerTabQuery && `at ${routerTabQuery}`}`} 
+      text="check other tabs or try different search entry"
+      variant="For-large-areas"
+    />
+  );
+
+  const date = new Date();
   
   if(routerTabQuery === "userUploads") 
   { 
-    console.log("searchResults[routerTabQuery]", searchResults[routerTabQuery]);
     return (
-      searchResults[routerTabQuery]?.length > 0 && (
+      searchResults[routerTabQuery]?.length > 0 ? (
         <div css={styles.searchPageResults}>
           <SearchPapersBlock 
             table={(
               <UploadedMaterialTable
-                uploadedFiles={searchResults[routerTabQuery] as UploadedFile[]}
+                uploadedFiles={searchResults[routerTabQuery].map(file => ({
+                  createdAt: date,
+                  fileExtension: "",
+                  folderId: "",
+                  id: file.id,
+                  notes: [],
+                  originalFilename: file.originalFilename,
+                  serverFilename: "",
+                  sizeInBytes: 1,
+                  userId: file.userId
+                }))}
                 variant="searchPapers"
                 // selectedFolderId={null} // TODO
               />
@@ -60,7 +61,7 @@ const SearchPageResults: FunctionComponent = () =>
             <FileViewer/>
           )}
         </div>
-      )
+      ) : NoResultsFound
     );
   }
   else 
@@ -96,7 +97,7 @@ const SearchPageResults: FunctionComponent = () =>
     });
 
     return (
-      searchResults[routerTabQuery]?.length > 0 && (
+      searchResults[routerTabQuery]?.length > 0 ? (
         <div css={styles.searchPageResults}>
           {groupedResultsByCategory?.map((categoryGroup, index) =>
           {
@@ -133,6 +134,8 @@ const SearchPageResults: FunctionComponent = () =>
           }
           )}
         </div>
+      ) : (
+        NoResultsFound
       )
     );
   }

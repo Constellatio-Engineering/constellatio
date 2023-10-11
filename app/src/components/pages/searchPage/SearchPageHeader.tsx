@@ -16,6 +16,9 @@ const SearchPageHeader: FunctionComponent = () =>
   const { searchResults } = useSearchResults();
   const [tabQuery, setTabQuery] = useQueryState("tab");
 
+  const closestTabWithResults = Object.values(searchResults).findIndex(result => result.length > 0);
+  const totalSearchResults = Object.values(searchResults).reduce((acc, curr) => acc + curr.length, 0);
+
   useEffect(() => 
   {
     if(typeof window !== "undefined")
@@ -26,8 +29,8 @@ const SearchPageHeader: FunctionComponent = () =>
         {
           if(!tabQuery) 
           {
-            await setTabQuery(Object.keys(searchResults)?.[0] ?? "articles");
-            await router.replace({ query: { ...router.query, tab: Object.keys(searchResults)?.[0] ?? "articles" } });
+            await setTabQuery(Object.keys(searchResults)?.[closestTabWithResults] ?? "articles");
+            await router.replace({ query: { ...router.query, tab: Object.keys(searchResults)?.[closestTabWithResults] ?? "articles" } });
           }
           else { await setTabQuery(routerTabQuery as string); }
         }
@@ -41,7 +44,7 @@ const SearchPageHeader: FunctionComponent = () =>
   return (
     <div css={styles.headerWrapper}>
       <div css={styles.header}>
-        <Title order={2}>54 results for “Corporate”</Title>
+        <Title order={2}>{totalSearchResults} result{totalSearchResults > 1 && "s"} for “{router.query.find}”</Title>
         <span css={styles.headerBg}>
           <SearchPageHeaderBgLayer/>
         </span>
