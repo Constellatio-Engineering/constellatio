@@ -15,7 +15,7 @@ import { isDevelopmentOrStaging } from "@/utils/env";
 import { getConfirmEmailUrl } from "@/utils/paths";
 import { type PartialUndefined } from "@/utils/types";
 
-import { Box, Stack } from "@mantine/core";
+import { Box, Stack, Title } from "@mantine/core";
 import { useForm, zodResolver } from "@mantine/form";
 import { useDisclosure } from "@mantine/hooks";
 import { notifications } from "@mantine/notifications";
@@ -162,22 +162,36 @@ export const RegistrationForm: FunctionComponent = () =>
   {
     return (
       <div style={{
-        display: "flex", flexDirection: "column", gap: 10, 
+        display: "flex", flexDirection: "column", gap: 24, placeItems: "center"
       }}>
-        <h1>Bestätige deine E-Mail Adresse</h1>
-        <p>Deine Registrierung war erfolgreich. Du musst jetzt noch deine E-Mail Adresse bestätigen. Bitte schaue in deinem Postfach nach einer E-Mail von uns.</p>
-        <p>Nach erfolgreicher Bestätigung kannst du dich mit deinem neuen Account einloggen.</p>
-        <p>Keine E-Mail erhalten? Drücke auf den Button, um eine neue E-Mail zu erhalten.</p>
-        <div style={{ alignItems: "center", display: "flex", gap: 12 }}>
-          <Button<"button"> styleType="tertiary" onClick={resendConfirmationEmail}>
-            E-Mail erneut senden
-          </Button>
-          <Link href="/login" passHref>
-            <Button<"button"> styleType="primary">
-              Weiter zum Login
-            </Button>
-          </Link>
+        <Title ta="center" order={3}>Confirm your email</Title>
+        <div style={{ display: "grid", gap: "10px" }}>
+          {/* <BodyText styleType="body-01-regular">Deine Registrierung war erfolgreich. Du musst jetzt noch deine E-Mail Adresse bestätigen. Bitte schaue in deinem Postfach nach einer E-Mail von uns. </BodyText> */}
+          <BodyText ta="center" styleType="body-01-regular">We have sent an email to <strong>{form.values.email}</strong>. Click on the link to activate your account.</BodyText>
+          {/* <BodyText styleType="body-01-regular">Nach erfolgreicher Bestätigung kannst du dich mit deinem neuen Account einloggen.</BodyText> */}
         </div>
+        {/* <BodyText ta="center" styleType="body-01-regular">Keine E-Mail erhalten? Drücke auf den Button, um eine neue E-Mail zu erhalten.</BodyText> */}
+        {/* <Button<"button"> styleType="tertiary" onClick={resendConfirmationEmail}>
+            E-Mail erneut senden
+          </Button> */}
+        <Link href="/login" passHref>
+          <Button<"button"> styleType="primary">
+            Goto Sign in page
+          </Button>
+        </Link>
+        {/* <Link href="/login" passHref>
+          <Button<"button"> styleType="primary">
+            Weiter zum Login
+          </Button>
+        </Link> */}
+        <BodyText
+          pos="absolute"
+          bottom={48}
+          ta="center"
+          styleType="body-01-regular">
+          Didn not receive an email?{" "}
+          <CustomLink styleType="link-primary" href="#" onClick={resendConfirmationEmail}>Send again</CustomLink>
+        </BodyText>
       </div>
     );
   }
@@ -285,6 +299,22 @@ export const RegistrationForm: FunctionComponent = () =>
           Konto erstellen
         </Button>
       </Stack>
+      <BodyText
+        mt={40}
+        component="p"
+        styleType="body-02-medium"
+        ta="center"
+        c="neutrals-01.7">
+        Hinweis: Diese Version von Constellatio ist nur für die Verwendung am Computer optimiert.
+        Wenn du technische Fragen hast, wende dich bitte an unseren
+        Support unter&nbsp;
+        <CustomLink
+          href="mailto:webmaster@constellatio.de"
+          styleType="link-secondary"
+          c="neutrals-01.7">
+          webmaster@constellatio.de
+        </CustomLink>
+      </BodyText>
     </form>
   );
 };

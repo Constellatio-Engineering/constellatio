@@ -1,3 +1,4 @@
+import { BodyText } from "@/components/atoms/BodyText/BodyText";
 import { Button } from "@/components/atoms/Button/Button";
 import { AlertCard } from "@/components/atoms/Card/AlertCard";
 import { CustomLink } from "@/components/atoms/CustomLink/CustomLink";
@@ -131,6 +132,22 @@ export const LoginForm: FunctionComponent = () =>
         </Stack>
       </form>
       <ResetPasswordModal/>
+      <BodyText
+        mt={40}
+        component="p"
+        styleType="body-02-medium"
+        ta="center"
+        c="neutrals-01.7">
+        Hinweis: Diese Version von Constellatio ist nur für die Verwendung am Computer optimiert.
+        Wenn du technische Fragen hast, wende dich bitte an unseren
+        Support unter&nbsp;
+        <CustomLink
+          href="mailto:webmaster@constellatio.de"
+          styleType="link-secondary"
+          c="neutrals-01.7">
+          webmaster@constellatio.de
+        </CustomLink>
+      </BodyText>
     </>
   );
 };

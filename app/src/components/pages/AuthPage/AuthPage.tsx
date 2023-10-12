@@ -65,21 +65,7 @@ export const AuthPage: FC<AuthPageProps> = ({ tab }) =>
               <RegistrationForm/>
             </Tabs.Panel>
           </Switcher>
-          <BodyText
-            component="p"
-            styleType="body-02-medium"
-            ta="center"
-            c="neutrals-01.7">
-            Hinweis: Diese Version von Constellatio ist nur für die Verwendung am Computer optimiert.
-            Wenn du technische Fragen hast, wende dich bitte an unseren
-            Support unter&nbsp;
-            <CustomLink
-              href="mailto:webmaster@constellatio.de"
-              styleType="link-secondary"
-              c="neutrals-01.7">
-              webmaster@constellatio.de
-            </CustomLink>
-          </BodyText>
+      
         </Container>
       </Container>
     </Flex>
