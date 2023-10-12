@@ -11,8 +11,12 @@ export const wrapper = (theme: MantineTheme) => css`
         color: ${theme.colors["neutrals-01"][9]};
     }
 }
+h3{
+    margin-bottom: 24px;
+}
 form{
-    margin-top: 32px;
+    margin-top: 24px;
+    display:inline-block;
     width: 440px;
     button{
         margin-top: 24px;

@@ -1,3 +1,5 @@
+import { AlertCard } from "@/components/atoms/Card/AlertCard";
+
 import { Input, TextInput, Title } from "@mantine/core";
 import { useForm } from "@mantine/form";
 import React, { type FunctionComponent } from "react";
@@ -8,7 +10,8 @@ import { Button } from "../../atoms/Button/Button";
 
 const ProfileDetailsTab: FunctionComponent = () => 
 {
-
+  const [err, setErr] = React.useState<boolean>(true);
+  const [success, setSuccess] = React.useState<boolean>(true);
   const form = useForm({
     initialValues: {
       email: "johndoe@mail.com",
@@ -29,6 +32,8 @@ const ProfileDetailsTab: FunctionComponent = () =>
   return (
     <div css={styles.wrapper}>
       <Title order={3}>Profile details</Title>
+      {err && <AlertCard variant="error">Sorry, we weren not able to save changes. Please, try again</AlertCard>}
+      {success && <AlertCard stylesOverwrite={{ justifyContent: "flex-start", textAlign: "left" }} variant="success">Your changes have been saved</AlertCard>}
       <form onSubmit={handleSubmit}>
         <Input.Wrapper label={<BodyText styleType="body-01-regular">First name</BodyText>} description="" error="">
           <TextInput placeholder="" type="text" {...form.getInputProps("fName")}/>

@@ -11,8 +11,6 @@ import { Container } from "@mantine/core";
 import { useRouter } from "next/router";
 import React, { useState, type FunctionComponent } from "react";
 
-import * as styles from "./ProfilePage.styles";
-
 const ProfilePage: FunctionComponent<IProfilePageProps> = ({ allMainCategory }) =>
 {
   const [tabs, setTabs] = useState<ITab[]>([
@@ -57,7 +55,7 @@ const ProfilePage: FunctionComponent<IProfilePageProps> = ({ allMainCategory }) 
   }, [router.query.q]);
 
   return (
-    <div css={styles.wrapper}>
+    <div>
       <ProfilePageHeader/>
       <Container
         maw={1440}
