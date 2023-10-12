@@ -1,4 +1,5 @@
 
+import { Cross } from "@/components/Icons/Cross";
 import { Modal } from "@/components/molecules/Modal/Modal";
 import ResetPasswordForm from "@/components/resetPasswordForm/ResetPasswordForm";
 
@@ -16,7 +17,15 @@ export const ResetPasswordModal: FunctionComponent = () =>
     <Modal
       opened={isOpen}
       onClose={handleClose}
+      withCloseButton={false}
       centered>
+      <span
+        onClick={handleClose}
+        style={{
+          cursor: "pointer", position: "absolute", right: "20px", top: "20px" 
+        }}>
+        <Cross size={32}/>
+      </span>
       <ResetPasswordForm/>
     </Modal>
   );
