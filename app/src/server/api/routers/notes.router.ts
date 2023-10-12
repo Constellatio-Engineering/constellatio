@@ -52,6 +52,11 @@ export const notesRouter = createTRPCRouter({
 
       const filesInFolder = await db.select({ id: uploadedFiles.id }).from(uploadedFiles).where(and(...queryConditions));
 
+      if(filesInFolder.length === 0)
+      {
+        return [];
+      }
+
       const result = await db.select().from(notes).where(and(
         eq(notes.userId, userId),
         inArray(notes.fileId, filesInFolder.map(({ id }) => id)),

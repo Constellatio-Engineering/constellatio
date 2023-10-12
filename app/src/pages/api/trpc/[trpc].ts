@@ -7,7 +7,7 @@ export default createNextApiHandler({
   createContext: createTRPCContext,
   onError: ({ error, path }) =>
   {
-    console.error(`❌ tRPC failed on ${path ?? "<no-path>"}: ${error.message}`, error.stack);
+    console.error(`❌ tRPC failed on ${path ?? "<no-path>"}: ${error.message}`);
   },
   router: appRouter,
 });

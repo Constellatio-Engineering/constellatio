@@ -1,5 +1,5 @@
 import { db } from "@/db/connection";
-import { notes, type UploadedFileInsert, uploadedFiles } from "@/db/schema";
+import { type UploadedFileInsert, uploadedFiles } from "@/db/schema";
 import { env } from "@/env.mjs";
 import { cloudStorage } from "@/lib/cloud-storage";
 import { meiliSearchAdmin } from "@/lib/meilisearch";

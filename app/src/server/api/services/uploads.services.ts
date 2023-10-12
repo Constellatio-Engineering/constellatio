@@ -2,7 +2,6 @@ import { db } from "@/db/connection";
 import { notes, uploadedFiles } from "@/db/schema";
 import { env } from "@/env.mjs";
 import { cloudStorage } from "@/lib/cloud-storage";
-import { getIndicesOfSucceededPromises, getItemsByIndices } from "@/utils/utils";
 
 import { and, eq, inArray } from "drizzle-orm";
 
