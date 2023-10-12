@@ -176,7 +176,7 @@ export const RegistrationForm: FunctionComponent = () =>
           </Button> */}
         <Link href="/login" passHref>
           <Button<"button"> styleType="primary">
-            Goto Sign in page
+            Go to Sign in page
           </Button>
         </Link>
         {/* <Link href="/login" passHref>
