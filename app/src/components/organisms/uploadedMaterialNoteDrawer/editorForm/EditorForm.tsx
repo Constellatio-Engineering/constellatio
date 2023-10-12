@@ -4,10 +4,9 @@ import { Edit } from "@/components/Icons/Edit";
 import { Trash } from "@/components/Icons/Trash";
 import { RichtextEditorField } from "@/components/molecules/RichtextEditorField/RichtextEditorField";
 import SlidingPanelFileTypeRow from "@/components/molecules/slidingPanelFileTypeRow/SlidingPanelFileTypeRow";
-import { type Note } from "@/db/schema";
 import useContextAndErrorIfNull from "@/hooks/useContextAndErrorIfNull";
+import useUploadedFiles from "@/hooks/useUploadedFiles";
 import { InvalidateQueriesContext } from "@/provider/InvalidateQueriesProvider";
-import { type UpdateDocumentSchema } from "@/schemas/documents/updateDocument.schema";
 import { type CreateNoteSchema } from "@/schemas/notes/createNote.schema";
 import { type UpdateNoteSchema } from "@/schemas/notes/updateNote.schema";
 import useNoteEditorStore, { type EditorStateDrawerOpened } from "@/stores/noteEditor.store";
@@ -33,6 +32,8 @@ const EditorForm: FunctionComponent<EditorFormProps> = ({ editorState, selectedF
   const { hasUnsavedChanges } = useNoteEditorStore(s => s.getComputedValues());
   const [shouldShowDeleteNoteWindow, setShouldShowDeleteNoteWindow] = useState<boolean>(false);
   const _invalidateNotes = async (): Promise<void> => invalidateNotes({ folderId: selectedFolderId });
+  const { uploadedFiles } = useUploadedFiles(selectedFolderId);
+  const file = uploadedFiles?.find(file => file.id === note.fileId);
 
   const { mutateAsync: createNote } = api.notes.createNote.useMutation({
     onError: (error) => console.log("error while creating note", error),
@@ -121,11 +122,13 @@ const EditorForm: FunctionComponent<EditorFormProps> = ({ editorState, selectedF
     }
   };
 
-  // TODO: Validate the form
-
   return (
     <>
-      <SlidingPanelFileTypeRow title="originalFilename" fileExtension="fileExtension"/>
+      <SlidingPanelFileTypeRow
+        variant="file"
+        fileName={file?.originalFilename || ""}
+        fileExtension={file?.fileExtension || ""}
+      /> 
       <div className="form">
         {(editorState.state === "create" || editorState.state === "edit") && (
           <>

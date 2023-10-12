@@ -3,10 +3,12 @@ import { contentValidation, folderIdValidation, idValidation, nameValidation } f
 import { z } from "zod";
 
 export const updateDocumentSchema = z.object({
-  content: contentValidation.optional(),
-  folderId: folderIdValidation.optional(),
   id: idValidation,
-  name: nameValidation.optional()
+  updatedValues: z.object({
+    content: contentValidation.optional(),
+    folderId: folderIdValidation.optional(),
+    name: nameValidation.optional(),
+  }),
 });
 
 export type UpdateDocumentSchema = z.input<typeof updateDocumentSchema>;

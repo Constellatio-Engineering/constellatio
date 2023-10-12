@@ -89,11 +89,12 @@ const EditorForm: FunctionComponent<EditorFormProps> = ({ editorState }) =>
       }
       case "edit":
       {
-        // TODO : SHOULDN'T THE UpdatedAt BE UPDATED HERE?
         const documentUpdate: UpdateDocumentSchema = {
-          content: document.content,
           id: document.id,
-          name: document.name,
+          updatedValues: {
+            content: document.content,
+            name: document.name,
+          },
         };
 
         const [updatedDocument] = await updateDocument(documentUpdate);
@@ -124,20 +125,7 @@ const EditorForm: FunctionComponent<EditorFormProps> = ({ editorState }) =>
               <div css={styles.existingNoteActions}>
                 <Button<"button">
                   styleType="secondarySubtle"
-                  onClick={() => 
-                  {
-                    // TODO : FIX : DOCUMENT TYPE DOESN'T MATCH EDITDOCUMENTSTATE TYPE
-
-                    // setEditDocumentState({ 
-                    //   content: document.content, 
-                    //   // createdAt: document., 
-                    //   folderId: document?.folderId, 
-                    //   id: document?.id, 
-                    //   name: document?.name, 
-                    //   // updatedAt: new Date(), 
-                    //   // userId: "" 
-                    // });
-                  }}>
+                  onClick={() => setEditDocumentState(editorState.document)}>
                   <Edit/>{" "}Edit
                 </Button>
                 <Button<"button">

@@ -2,7 +2,7 @@ import { Button } from "@/components/atoms/Button/Button";
 import { ArrowDown } from "@/components/Icons/ArrowDown";
 import UploadedMaterialTableBody from "@/components/molecules/uploadedMaterialTableBody/UploadedMaterialTableBody";
 import UploadedMaterialTableHead from "@/components/molecules/uploadedMaterialTableHead/UploadedMaterialTableHead";
-import { type Note, type UploadedFile, type UploadedFileWithNote } from "@/db/schema";
+import { type UploadedFileWithNote } from "@/db/schema";
 
 import React, { type FunctionComponent, useState } from "react";
 
