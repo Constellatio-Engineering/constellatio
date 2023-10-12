@@ -1,5 +1,5 @@
-import { BodyText } from "@/components/atoms/BodyText/BodyText";
-import { CustomLink } from "@/components/atoms/CustomLink/CustomLink";
+// import { BodyText } from "@/components/atoms/BodyText/BodyText";
+// import { CustomLink } from "@/components/atoms/CustomLink/CustomLink";
 import { SwitcherTab } from "@/components/atoms/Switcher-tab/SwitcherTab";
 import { Switcher } from "@/components/molecules/Switcher/Switcher";
 import { Header } from "@/components/organisms/Header/Header";
@@ -35,14 +35,15 @@ export const AuthPage: FC<AuthPageProps> = ({ tab }) =>
         sx={(theme) => ({
           backgroundColor: theme.colors["neutrals-01"][0],
           borderRadius: `${theme.radius["radius-16"]} 0 0 ${theme.radius["radius-16"]}`,
-          overflowY: "auto",
-          padding: 0,
           // this is to get rid of the right red bar to the right of the form, but gets too big on small screens
-          // margin:0,
+          marginRight: 0,
+          overflowY: "auto",
+          paddingTop: "0px !important",
+          
         })}>
         <Header variant="relative"/>
         <Container
-          w={500}
+          w={440}
           pt={50}
           pb={tab === "register" ? "spacing-100" : 0}
           sx={{ marginTop: "180px" }}>
@@ -64,17 +65,7 @@ export const AuthPage: FC<AuthPageProps> = ({ tab }) =>
               <RegistrationForm/>
             </Tabs.Panel>
           </Switcher>
-          <BodyText component="p" styleType="body-02-medium" c="neutrals-01.7">
-            Hinweis: Diese Version von Constellatio ist nur für die Verwendung am Computer optimiert.
-            Wenn du technische Fragen hast, wende dich bitte an unseren
-            Support unter&nbsp;
-            <CustomLink
-              href="mailto:webmaster@constellatio.de"
-              styleType="link-secondary"
-              c="neutrals-01.7">
-              webmaster@constellatio.de
-            </CustomLink>
-          </BodyText>
+      
         </Container>
       </Container>
     </Flex>

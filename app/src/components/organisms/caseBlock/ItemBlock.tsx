@@ -1,3 +1,4 @@
+import { Button } from "@/components/atoms/Button/Button";
 import StatusTableCell from "@/components/atoms/statusTableCell/StatusTableCell";
 import TableCell from "@/components/atoms/tableCell/TableCell";
 import { ClockIcon } from "@/components/Icons/ClockIcon";
@@ -8,7 +9,7 @@ import useBookmarks from "@/hooks/useBookmarks";
 import { type IGenArticle, type IGenFullCaseFragment } from "@/services/graphql/__generated/sdk";
 
 import Link from "next/link";
-import React, { type FunctionComponent } from "react";
+import React, { Fragment, type FunctionComponent } from "react";
 
 import * as styles from "./ItemBlock.styles";
 import { timeFormatter } from "../overviewCard/OverviewCard";
@@ -80,58 +81,71 @@ const ItemBlock: FunctionComponent<ICaseBlockProps> = ({
     }
   };
 
+  const [numberOfShowingItems, setNumberOfShowingItems] = React.useState<number>(5);
+
   return items && items?.length > 0 ? (
     <div css={styles.wrapper}>
       <CaseBlockHead {...blockHead}/>
-      <Table tableType={tableTypePicker()}>
-        {items?.map((item) =>
-        {
-          const isBookmarked = bookmarks.some(bookmark => bookmark?.resourceId === item?.id) || false;
-          const topicsCombined = item?.topic?.map((item) => item?.topicName).join(", ") || "";
-
-          return item && item.id && (
-            <tr key={item?.id}>
-              <td className="primaryCell">
-                <Link passHref href={`/${variant === "case" ? "cases" : "dictionary"}/${item?.id}`}>
-                  <TableCell variant="titleTableCell" clickable>
-                    {item?.title}
-                  </TableCell>
-                </Link>
-              </td>
-              {variant === "case" && (
-                <td>
-                  <StatusTableCell variant="notStarted"/>
+      <span style={{ width: "100%" }}>
+        <Table tableType={tableTypePicker()}>
+          {items?.slice(0, numberOfShowingItems)?.map((item) =>
+          {
+            const isBookmarked = bookmarks.some(bookmark => bookmark?.resourceId === item?.id) || false;
+            const topicsCombined = item?.topic?.map((item) => item?.topicName).join(", ") || "";
+            return item && item.id && (
+              <tr key={item?.id}>
+                <td className="primaryCell">
+                  <Link passHref href={`/${variant === "case" ? "cases" : "dictionary"}/${item?.id}`}>
+                    <TableCell variant="titleTableCell" clickable>
+                      {item?.title}
+                    </TableCell>
+                  </Link>
                 </td>
-              )}
-              {item?.__typename === "Case" && (
-                <td>
-                  <TableCell variant="simpleTableCell" icon={<ClockIcon/>}>
-                    {timeFormatter(item?.durationToCompleteInMinutes ?? 0)}
-                  </TableCell>
+                {variant === "case" && (
+                  <td>
+                    <StatusTableCell variant="notStarted"/>
+                  </td>
+                )}
+                {item?.__typename === "Case" && (
+                  <td>
+                    <TableCell variant="simpleTableCell" icon={<ClockIcon/>}>
+                      {timeFormatter(item?.durationToCompleteInMinutes ?? 0)}
+                    </TableCell>
+                  </td>
+                )}
+                {tableType === "search" && <td><TableCell variant="simpleTableCell">{item?.legalArea?.legalAreaName}</TableCell></td>}
+                <td title={topicsCombined}>
+                  <TableCell variant="simpleTableCell">{item?.topic?.[0]?.topicName}</TableCell>
                 </td>
-              )}
-              {tableType === "search" && <td><TableCell variant="simpleTableCell">{item?.legalArea?.legalAreaName}</TableCell></td>}
-              <td title={topicsCombined}>
-                <TableCell variant="simpleTableCell">{item?.topic?.[0]?.topicName}</TableCell>
-              </td>
-              {tableType === "favorites" && <td><TableCell variant="simpleTableCell">{item?.legalArea?.legalAreaName}</TableCell></td>}
-              <td>
-                <CaseBlockBookmarkButton
-                  areAllBookmarksLoading={isLoading}
-                  isBookmarked={isBookmarked}
-                  caseId={item?.id}
-                  variant={variant}
-                />
-              </td>
-              {/* {tableType === "favorites" && (
+                {tableType === "favorites" && <td><TableCell variant="simpleTableCell">{item?.legalArea?.legalAreaName}</TableCell></td>}
                 <td>
-                  <TableCell variant="simpleTableCell" icon={<Notepad/>}>Notes</TableCell>
+                  <CaseBlockBookmarkButton
+                    areAllBookmarksLoading={isLoading}
+                    isBookmarked={isBookmarked}
+                    caseId={item?.id}
+                    variant={variant}
+                  />
                 </td>
-              )} */}
-            </tr>
-          );
-        })}
-      </Table>
+                {/* {tableType === "favorites" && (
+                  <td>
+                    <TableCell variant="simpleTableCell" icon={<Notepad/>}>Notes</TableCell>
+                  </td>
+                )} */}
+              </tr>
+            );
+          })}
+        </Table>
+        {items?.length > numberOfShowingItems && (
+          <div css={styles.expandTableButtonArea}>
+            <>
+              <span className="linearGredient"/>
+              <Button<"button"> css={styles.expandTableButton} styleType="tertiary" onClick={() => setNumberOfShowingItems(prev => prev + 10)}>
+                {items?.length - numberOfShowingItems > 10 ? 10 : items?.length - numberOfShowingItems} weitere anzeigen
+              </Button>
+            </>
+          </div>
+        )}
+      </span>
     </div>
   ) : null;
 };
