@@ -35,6 +35,7 @@ const UploadedMaterialTable: FunctionComponent<UploadedMaterialTableProps> = ({
         </thead>
         <tbody css={styles.tableBody}>
           <UploadedMaterialTableBody
+            selectedFolderId={selectedFolderId}
             showingFiles={showingFiles}
             uploadedFiles={uploadedFiles}
             variant={variant}
