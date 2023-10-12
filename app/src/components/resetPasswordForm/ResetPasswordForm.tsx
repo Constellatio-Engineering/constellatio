@@ -10,7 +10,7 @@ import { BodyText } from "../atoms/BodyText/BodyText";
 import { Button } from "../atoms/Button/Button";
 import { Input } from "../atoms/Input/Input";
 
-export interface ResetPasswordFormValues 
+interface ResetPasswordFormValues 
 {
   email: string;
 }

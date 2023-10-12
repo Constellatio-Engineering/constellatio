@@ -1,11 +1,13 @@
-import React, { type FunctionComponent } from "react";
 import { BodyText } from "@/components/atoms/BodyText/BodyText";
+
 import { Title } from "@mantine/core";
+import React, { type FunctionComponent } from "react";
+
 import * as styles from "./TestsPage.styles";
 import ResetPasswordForm from "../resetPasswordForm/ResetPasswordForm";
 
-
-const TestsPage: FunctionComponent= () => {
+const TestsPage: FunctionComponent = () => 
+{
   return (
     <div css={styles.wrapper}>
       <Title order={3}>Tests page to test unimplemented components</Title>

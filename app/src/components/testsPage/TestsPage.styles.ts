@@ -8,4 +8,4 @@ export const wrapper = css`
 export const components = css`
 border-top: 2px solid lightgray;
 
-`
+`;
