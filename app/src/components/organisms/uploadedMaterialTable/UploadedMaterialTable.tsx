@@ -2,7 +2,7 @@ import { Button } from "@/components/atoms/Button/Button";
 import { ArrowDown } from "@/components/Icons/ArrowDown";
 import UploadedMaterialTableBody from "@/components/molecules/uploadedMaterialTableBody/UploadedMaterialTableBody";
 import UploadedMaterialTableHead from "@/components/molecules/uploadedMaterialTableHead/UploadedMaterialTableHead";
-import { type UploadedFile } from "@/db/schema";
+import { type UploadedFileWithNote } from "@/db/schema";
 
 import React, { type FunctionComponent, useState } from "react";
 
@@ -12,21 +12,18 @@ import UploadedMaterialNoteDrawer from "../uploadedMaterialNoteDrawer/UploadedMa
 interface UploadedMaterialTableProps
 {
   readonly isGetUploadedFilesLoading?: boolean;
-  // readonly selectedFolderId: string | null;
-  readonly uploadedFiles?: Partial<UploadedFile[]>;
+  readonly selectedFolderId: string | null;
+  readonly uploadedFiles: UploadedFileWithNote[];
   readonly variant?: "personalSpace" | "searchPapers";
 }
+
 const UploadedMaterialTable: FunctionComponent<UploadedMaterialTableProps> = ({
   isGetUploadedFilesLoading,
-  // selectedFolderId,
+  selectedFolderId,
   uploadedFiles,
-  variant = "personalSpace"
+  variant = "personalSpace",
 }) =>
 {
-  // if file has existing not it will be assigned to this state
-  const [selectedFileNote, setSelectedFileNote] = useState<UploadedFile | undefined>(undefined); 
-  const [noteRichtext, setNoteRichtext] = useState<string>("");
-  const [showNoteDrawer, setShowNoteDrawer] = useState<boolean>(false);
   const [showingFiles, setShowingFiles] = useState<number>(5);
   const isShowingFullTable = showingFiles >= (uploadedFiles?.length ?? 0);
 
@@ -40,9 +37,6 @@ const UploadedMaterialTable: FunctionComponent<UploadedMaterialTableProps> = ({
           <UploadedMaterialTableBody
             showingFiles={showingFiles}
             uploadedFiles={uploadedFiles}
-            // selectedFolderId={selectedFolderId}
-            setSelectedFileNote={setSelectedFileNote}
-            setShowNoteDrawer={setShowNoteDrawer}
             variant={variant}
           />
         </tbody>
@@ -53,21 +47,12 @@ const UploadedMaterialTable: FunctionComponent<UploadedMaterialTableProps> = ({
             styleType="tertiary"
             rightIcon={<ArrowDown size={20}/>}
             size="medium"
-            onClick={() =>
-            {
-              setShowingFiles(prev => prev + 10);
-            }}>
+            onClick={() => setShowingFiles(prev => prev + 10)}>
             Show {uploadedFiles?.length - showingFiles < 10 ? uploadedFiles?.length - showingFiles : 10} More
           </Button>
         </div>
       )}
-      <UploadedMaterialNoteDrawer
-        showNoteDrawer={showNoteDrawer} 
-        setShowNoteDrawer={setShowNoteDrawer} 
-        noteRichtext={noteRichtext} 
-        setNoteRichtext={setNoteRichtext}
-        selectedFileNote={selectedFileNote}
-      />
+      <UploadedMaterialNoteDrawer selectedFolderId={selectedFolderId}/>
     </div>
   );
 };

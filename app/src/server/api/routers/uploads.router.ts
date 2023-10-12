@@ -1,5 +1,5 @@
 import { db } from "@/db/connection";
-import { type UploadedFileInsert, uploadedFiles } from "@/db/schema";
+import { notes, type UploadedFileInsert, uploadedFiles } from "@/db/schema";
 import { env } from "@/env.mjs";
 import { cloudStorage } from "@/lib/cloud-storage";
 import { meiliSearchAdmin } from "@/lib/meilisearch";
@@ -114,9 +114,6 @@ export const uploadsRouter = createTRPCRouter({
       return db.query.uploadedFiles.findMany({
         orderBy: [desc(uploadedFiles.createdAt)],
         where: and(...queryConditions),
-        with: {
-          notes: true
-        }
       });
     }),
   saveFileToDatabase: protectedProcedure

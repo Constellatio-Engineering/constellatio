@@ -8,12 +8,14 @@ type InvalidateDocumentsOptions = inferProcedureInput<AppRouter["documents"]["ge
 type InvalidateUploadedFilesOptions = inferProcedureInput<AppRouter["uploads"]["getUploadedFiles"]>;
 type InvalidateFoldersOptions = inferProcedureInput<AppRouter["folders"]["getFolders"]>;
 type InvalidateBookmarksOptions = inferProcedureInput<AppRouter["bookmarks"]["getAllBookmarks"]>;
+type InvalidateNotesOptions = inferProcedureInput<AppRouter["notes"]["getNotes"]>;
 
 type InvalidateQueries = {
   invalidateBookmarks: (options?: InvalidateBookmarksOptions) => Promise<void>;
   invalidateDocuments: (options?: InvalidateDocumentsOptions) => Promise<void>;
   invalidateEverything: () => Promise<void>;
   invalidateFolders: (options?: InvalidateFoldersOptions) => Promise<void>;
+  invalidateNotes: (options?: InvalidateNotesOptions) => Promise<void>;
   invalidateUploadedFiles: (options?: InvalidateUploadedFilesOptions) => Promise<void>;
 };
 
@@ -33,12 +35,14 @@ const InvalidateQueriesProvider: FunctionComponent<InvalidateQueriesProviderProp
     invalidateDocuments: async (options) => apiContext.documents.getDocuments.invalidate(options),
     invalidateEverything: async () => invalidateAll(),
     invalidateFolders: async (options) => apiContext.folders.getFolders.invalidate(options),
+    invalidateNotes: async (options) => apiContext.notes.getNotes.invalidate(options),
     invalidateUploadedFiles: async (options) => apiContext.uploads.getUploadedFiles.invalidate(options)
   }), [
     invalidateAll,
     apiContext.folders.getFolders,
     apiContext.documents.getDocuments,
     apiContext.bookmarks.getAllBookmarks,
+    apiContext.notes.getNotes,
     apiContext.uploads.getUploadedFiles
   ]);
 

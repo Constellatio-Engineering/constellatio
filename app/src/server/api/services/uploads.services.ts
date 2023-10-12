@@ -1,5 +1,5 @@
 import { db } from "@/db/connection";
-import { uploadedFiles } from "@/db/schema";
+import { notes, uploadedFiles } from "@/db/schema";
 import { env } from "@/env.mjs";
 import { cloudStorage } from "@/lib/cloud-storage";
 import { getIndicesOfSucceededPromises, getItemsByIndices } from "@/utils/utils";
@@ -23,6 +23,7 @@ export const deleteFiles: DeleteFiles = async ({ files, userId }) =>
     return;
   }
 
+  const fileIds = files.map(file => file.id);
   const deleteFilesPromises = files.map(async file =>
   {
     return cloudStorage
@@ -31,17 +32,15 @@ export const deleteFiles: DeleteFiles = async ({ files, userId }) =>
       .delete();
   });
 
-  const cloudStorageDeleteResults = await Promise.allSettled(deleteFilesPromises);
-  const indicesOfSuccessfulDeletions = getIndicesOfSucceededPromises(cloudStorageDeleteResults);
-  const deletedFiles = getItemsByIndices<File>(files, indicesOfSuccessfulDeletions);
+  await Promise.allSettled(deleteFilesPromises);
 
-  if(deletedFiles.length === 0)
-  {
-    return;
-  }
+  await db.delete(notes).where(and(
+    eq(notes.userId, userId),
+    inArray(notes.fileId, fileIds)
+  ));
 
   await db.delete(uploadedFiles).where(and(
     eq(uploadedFiles.userId, userId),
-    inArray(uploadedFiles.id, deletedFiles.map(f => f.id))
+    inArray(uploadedFiles.id, fileIds)
   ));
 };

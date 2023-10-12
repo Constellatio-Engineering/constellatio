@@ -1,42 +1,28 @@
 import { db } from "@/db/connection";
-import { notes } from "@/db/schema";
-import { createOrUpdateNoteSchema } from "@/schemas/notes/createOrUpdateNote.schema";
+import { type NoteInsert, notes, uploadedFiles } from "@/db/schema";
+import { createNoteSchema } from "@/schemas/notes/createNote.schema";
 import { deleteNoteSchema } from "@/schemas/notes/deleteNote.schema";
+import { getNotesSchema } from "@/schemas/notes/getNotes.schema";
+import { updateNoteSchema } from "@/schemas/notes/updateNote.schema";
 import { createTRPCRouter, protectedProcedure } from "@/server/api/trpc";
 
 import {
-  and, eq,
+  and, eq, inArray, isNull, type SQLWrapper,
 } from "drizzle-orm";
 
 export const notesRouter = createTRPCRouter({
-  createOrUpdateNote: protectedProcedure
-    .input(createOrUpdateNoteSchema)
-    .mutation(async ({ ctx: { userId }, input: { content, fileId } }) =>
+  createNote: protectedProcedure
+    .input(createNoteSchema)
+    .mutation(async ({ ctx: { userId }, input: { content, fileId, id } }) =>
     {
-      const existingNote = await db.query.notes.findFirst({
-        where: and(
-          eq(notes.userId, userId),
-          eq(notes.fileId, fileId)
-        )
-      });
+      const noteInsert: NoteInsert = {
+        content,
+        fileId,
+        id,
+        userId
+      };
 
-      if(!existingNote)
-      {
-        return db.insert(notes).values({
-          content,
-          fileId,
-          userId,
-        }).returning();
-      }
-      else
-      {
-        return db.update(notes).set({ content }).where(
-          and(
-            eq(notes.userId, userId),
-            eq(notes.fileId, fileId)
-          )
-        ).returning();
-      }
+      return db.insert(notes).values(noteInsert).returning();
     }),
   deleteNote: protectedProcedure
     .input(deleteNoteSchema)
@@ -49,11 +35,10 @@ export const notesRouter = createTRPCRouter({
         )
       );
     }),
-  /* getNotes: protectedProcedure
+  getNotes: protectedProcedure
     .input(getNotesSchema)
     .query(async ({ ctx: { userId }, input: { folderId } }) =>
     {
-      // this is duplicated in getUploadedFiles
       const queryConditions: SQLWrapper[] = [eq(uploadedFiles.userId, userId)];
 
       if(folderId)
@@ -65,15 +50,28 @@ export const notesRouter = createTRPCRouter({
         queryConditions.push(isNull(uploadedFiles.folderId));
       }
 
-      const filesInFolder = await db.query.uploadedFiles.findMany({
-        where: and(...queryConditions)
-      });
+      const filesInFolder = await db.select({ id: uploadedFiles.id }).from(uploadedFiles).where(and(...queryConditions));
 
-      return db.query.notes.findMany({
-        where: and(
-          eq(notes.userId, userId),
-          inArray(notes.fileId, filesInFolder.map(file => file.id)),
-        )
-      });
-    }),*/
+      const result = await db.select().from(notes).where(and(
+        eq(notes.userId, userId),
+        inArray(notes.fileId, filesInFolder.map(({ id }) => id)),
+      ));
+
+      return result;
+    }),
+  updateNote: protectedProcedure
+    .input(updateNoteSchema)
+    .mutation(async ({ ctx: { userId }, input: updatedNote }) =>
+    {
+      const { fileId, updatedValues } = updatedNote;
+
+      return db.update(notes)
+        .set(updatedValues)
+        .where(
+          and(
+            eq(notes.userId, userId),
+            eq(notes.fileId, fileId)
+          )
+        ).returning();
+    }),
 });
