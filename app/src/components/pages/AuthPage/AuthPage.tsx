@@ -43,7 +43,7 @@ export const AuthPage: FC<AuthPageProps> = ({ tab }) =>
         })}>
         <Header variant="relative"/>
         <Container
-          w={500}
+          w={440}
           pt={50}
           pb={tab === "register" ? "spacing-100" : 0}
           sx={{ marginTop: "180px" }}>
@@ -65,7 +65,11 @@ export const AuthPage: FC<AuthPageProps> = ({ tab }) =>
               <RegistrationForm/>
             </Tabs.Panel>
           </Switcher>
-          <BodyText component="p" styleType="body-02-medium" c="neutrals-01.7">
+          <BodyText
+            component="p"
+            styleType="body-02-medium"
+            ta="center"
+            c="neutrals-01.7">
             Hinweis: Diese Version von Constellatio ist nur für die Verwendung am Computer optimiert.
             Wenn du technische Fragen hast, wende dich bitte an unseren
             Support unter&nbsp;

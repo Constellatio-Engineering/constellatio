@@ -1,4 +1,5 @@
 import { Button } from "@/components/atoms/Button/Button";
+import { AlertCard } from "@/components/atoms/Card/AlertCard";
 import { CustomLink } from "@/components/atoms/CustomLink/CustomLink";
 import { Input } from "@/components/atoms/Input/Input";
 import { colors } from "@/constants/styles/colors";
@@ -94,15 +95,9 @@ export const LoginForm: FunctionComponent = () =>
 
   return (
     <>
-      {signInError && (
-        <div style={{ backgroundColor: "rgba(255,0,77,0.24)", marginBottom: 40, padding: 30 }}>
-          <p>
-            {signInError === "emailNotConfirmed" && "Du musst zuerst deine E-Mail Adresse bestätigen. Eine Bestätigungsmail wurde dir zugesendet."}
-            {signInError === "invalidCredentials" && "Wir konnten keinen Account mit diesen Anmeldedaten finden. Bitte überprüfe deine Eingaben."}
-            {signInError === "unknownError" && "Es ist ein unbekannter Fehler aufgetreten. Bitte versuche es erneut."}
-          </p>
-        </div>
-      )}
+      {signInError === "emailNotConfirmed" && <AlertCard stylesOverwrite={{ marginBottom: "40px" }} variant="error">Du musst zuerst deine E-Mail Adresse bestätigen. Eine Bestätigungsmail wurde dir zugesendet.</AlertCard>}
+      {signInError === "invalidCredentials" && <AlertCard stylesOverwrite={{ marginBottom: "40px" }} variant="error">Wir konnten keinen Account mit diesen Anmeldedaten finden. Bitte überprüfe deine Eingaben.</AlertCard>}
+      {signInError === "unknownError" && <AlertCard stylesOverwrite={{ marginBottom: "40px" }} variant="error">Es ist ein unbekannter Fehler aufgetreten. Bitte versuche es erneut.</AlertCard>}
       <form onSubmit={handleSubmit}>
         <Stack spacing="spacing-24">
           <Stack spacing="spacing-12">
