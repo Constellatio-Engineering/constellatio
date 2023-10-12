@@ -1,4 +1,6 @@
+import { BodyText } from "@/components/atoms/BodyText/BodyText";
 import { Button } from "@/components/atoms/Button/Button";
+import { AlertCard } from "@/components/atoms/Card/AlertCard";
 import { CustomLink } from "@/components/atoms/CustomLink/CustomLink";
 import { Input } from "@/components/atoms/Input/Input";
 import { colors } from "@/constants/styles/colors";
@@ -94,15 +96,9 @@ export const LoginForm: FunctionComponent = () =>
 
   return (
     <>
-      {signInError && (
-        <div style={{ backgroundColor: "rgba(255,0,77,0.24)", marginBottom: 40, padding: 30 }}>
-          <p>
-            {signInError === "emailNotConfirmed" && "Du musst zuerst deine E-Mail Adresse bestätigen. Eine Bestätigungsmail wurde dir zugesendet."}
-            {signInError === "invalidCredentials" && "Wir konnten keinen Account mit diesen Anmeldedaten finden. Bitte überprüfe deine Eingaben."}
-            {signInError === "unknownError" && "Es ist ein unbekannter Fehler aufgetreten. Bitte versuche es erneut."}
-          </p>
-        </div>
-      )}
+      {signInError === "emailNotConfirmed" && <AlertCard stylesOverwrite={{ marginBottom: "40px" }} variant="error">Du musst zuerst deine E-Mail Adresse bestätigen. Eine Bestätigungsmail wurde dir zugesendet.</AlertCard>}
+      {signInError === "invalidCredentials" && <AlertCard stylesOverwrite={{ marginBottom: "40px" }} variant="error">Wir konnten keinen Account mit diesen Anmeldedaten finden. Bitte überprüfe deine Eingaben.</AlertCard>}
+      {signInError === "unknownError" && <AlertCard stylesOverwrite={{ marginBottom: "40px" }} variant="error">Es ist ein unbekannter Fehler aufgetreten. Bitte versuche es erneut.</AlertCard>}
       <form onSubmit={handleSubmit}>
         <Stack spacing="spacing-24">
           <Stack spacing="spacing-12">
@@ -136,6 +132,22 @@ export const LoginForm: FunctionComponent = () =>
         </Stack>
       </form>
       <ResetPasswordModal/>
+      <BodyText
+        mt={40}
+        component="p"
+        styleType="body-02-medium"
+        ta="center"
+        c="neutrals-01.7">
+        Hinweis: Diese Version von Constellatio ist nur für die Verwendung am Computer optimiert.
+        Wenn du technische Fragen hast, wende dich bitte an unseren
+        Support unter&nbsp;
+        <CustomLink
+          href="mailto:webmaster@constellatio.de"
+          styleType="link-secondary"
+          c="neutrals-01.7">
+          webmaster@constellatio.de
+        </CustomLink>
+      </BodyText>
     </>
   );
 };

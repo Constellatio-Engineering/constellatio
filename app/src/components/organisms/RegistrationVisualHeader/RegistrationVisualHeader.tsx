@@ -10,11 +10,13 @@ export const RegistrationVisualHeader: FunctionComponent = () =>
     <Container
       bg="brand-01.5"
       sx={() => ({
-        display: "grid",
+        alignItems: "center",
+        display: "flex",
+        flexDirection: "column",
         height: "100%",
+        justifyContent: "space-between",
         overflow: "auto",
         padding: 0,
-        placeItems: "center",
       })}>
       <Flex
         direction="column"
@@ -23,7 +25,7 @@ export const RegistrationVisualHeader: FunctionComponent = () =>
         mah="100%"
         maw="90%"
         sx={{ margin: "0 auto", overflow: "hidden" }}
-        pt={64}>
+        pt={130}>
         <Flex
           px={20}
           direction="column"
@@ -41,12 +43,12 @@ export const RegistrationVisualHeader: FunctionComponent = () =>
             align="center"
             order={3}
             c="neutrals-01.0"
-            w="65%">
-            Making learning process easy and fun
+            w="96%">
+            Mit Constellatio endlich auf das Wesentliche konzentrieren
           </Title>
         </Flex>
-        <Footer variant="simpleColoredBg"/>
       </Flex>
+      <Footer variant="simpleColoredBg"/>
     </Container>
   );
 };
