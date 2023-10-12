@@ -35,10 +35,11 @@ export const AuthPage: FC<AuthPageProps> = ({ tab }) =>
         sx={(theme) => ({
           backgroundColor: theme.colors["neutrals-01"][0],
           borderRadius: `${theme.radius["radius-16"]} 0 0 ${theme.radius["radius-16"]}`,
-          overflowY: "auto",
-          padding: 0,
           // this is to get rid of the right red bar to the right of the form, but gets too big on small screens
-          // margin:0,
+          marginRight: 0,
+          overflowY: "auto",
+          paddingTop: "0px !important",
+          
         })}>
         <Header variant="relative"/>
         <Container
