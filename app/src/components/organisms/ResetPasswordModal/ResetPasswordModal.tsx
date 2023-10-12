@@ -2,6 +2,7 @@ import { BodyText } from "@/components/atoms/BodyText/BodyText";
 import { Button } from "@/components/atoms/Button/Button";
 import { Input } from "@/components/atoms/Input/Input";
 import { Modal } from "@/components/molecules/Modal/Modal";
+import ResetPasswordForm from "@/components/resetPasswordForm/ResetPasswordForm";
 import { supabase } from "@/lib/supabase";
 
 import { Stack } from "@mantine/core";
@@ -46,20 +47,8 @@ export const ResetPasswordModal: FunctionComponent = () =>
     <Modal
       opened={isOpen}
       onClose={handleClose}
-      title="Passwort zurücksetzen"
       centered>
-      <form onSubmit={handleSubmit} style={{ width: "100%" }}>
-        <Stack spacing="spacing-24">
-          <BodyText component="p" styleType="body-01-regular">
-            You will receive an email from us with a link. Clicking this link will take you to a page where you can
-            enter your new password.
-          </BodyText>
-          <Input inputType="text" label="E-Mail Adresse" {...form.getInputProps("email")}/>
-          <Button<"button"> styleType="primary" type="submit">
-            Zurücksetzen
-          </Button>
-        </Stack>
-      </form>
+      <ResetPasswordForm/>
     </Modal>
   );
 };
