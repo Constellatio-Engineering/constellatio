@@ -1,6 +1,7 @@
 /* eslint-disable max-lines */
 import { BodyText } from "@/components/atoms/BodyText/BodyText";
 import { Button } from "@/components/atoms/Button/Button";
+import { AlertCard } from "@/components/atoms/Card/AlertCard";
 import { Checkbox } from "@/components/atoms/Checkbox/Checkbox";
 import { CustomLink } from "@/components/atoms/CustomLink/CustomLink";
 import { Dropdown } from "@/components/atoms/Dropdown/Dropdown";
@@ -66,6 +67,7 @@ export const RegistrationForm: FunctionComponent = () =>
   const [shouldShowEmailConfirmationDialog, setShouldShowEmailConfirmationDialog] = useState<boolean>(false);
   const lastConfirmationEmailTimestamp = useRef<number>();
   const registerMutationStartTimestamp = useRef<number>();
+  const [countdown, setCountdown] = useState<number>(0);
 
   useEffect(() =>
   {
@@ -132,6 +134,20 @@ export const RegistrationForm: FunctionComponent = () =>
         message: "Bitte warte noch einen Moment, bevor du eine weitere E-Mail anforderst",
         title: "Ups!",
       });
+      lastConfirmationEmailTimestamp.current = Date.now();
+      // Start countdown again after sending email
+      const intervalId = setInterval(() => 
+      {
+        const timeElapsed = lastConfirmationEmailTimestamp.current ? Date.now() - lastConfirmationEmailTimestamp.current : 0;
+        const remainingTime = Math.max(0, 10 - Math.ceil(timeElapsed / 1000));
+ 
+        setCountdown(remainingTime);
+ 
+        if(remainingTime === 0) 
+        {
+          clearInterval(intervalId);
+        }
+      }, 1000);
       return;
     }
 
@@ -158,6 +174,24 @@ export const RegistrationForm: FunctionComponent = () =>
     });
   };
 
+  useEffect(() => 
+  {
+    const intervalId = setInterval(() => 
+    {
+      const timeElapsed = lastConfirmationEmailTimestamp?.current ? lastConfirmationEmailTimestamp?.current : 0;
+      const remainingTime = Math.max(0, 10 - Math.ceil(timeElapsed / 1000));
+
+      setCountdown(remainingTime);
+
+      if(remainingTime === 0) 
+      {
+        clearInterval(intervalId);
+      }
+    }, 1000);
+
+    return () => clearInterval(intervalId);
+  }, []);
+  
   if(shouldShowEmailConfirmationDialog)
   {
     return (
@@ -165,6 +199,7 @@ export const RegistrationForm: FunctionComponent = () =>
         display: "flex", flexDirection: "column", gap: 24, placeItems: "center"
       }}>
         <Title ta="center" order={3}>Confirm your email</Title>
+        {countdown > 0 && countdown < 10 && <AlertCard variant="error">You can send a confirmation email again after {countdown} seconds</AlertCard>}
         <div style={{ display: "grid", gap: "10px" }}>
           {/* <BodyText styleType="body-01-regular">Deine Registrierung war erfolgreich. Du musst jetzt noch deine E-Mail Adresse bestätigen. Bitte schaue in deinem Postfach nach einer E-Mail von uns. </BodyText> */}
           <BodyText ta="center" styleType="body-01-regular">We have sent an email to <strong>{form.values.email}</strong>. Click on the link to activate your account.</BodyText>
@@ -184,6 +219,7 @@ export const RegistrationForm: FunctionComponent = () =>
             Weiter zum Login
           </Button>
         </Link> */}
+        
         <BodyText
           pos="absolute"
           bottom={48}
