@@ -32,8 +32,8 @@ const ProfileDetailsTab: FunctionComponent = () =>
   return (
     <div css={styles.wrapper}>
       <Title order={3}>Profile details</Title>
-      {err && <AlertCard variant="error">Sorry, we weren not able to save changes. Please, try again</AlertCard>}
-      {success && <AlertCard stylesOverwrite={{ justifyContent: "flex-start", textAlign: "left" }} variant="success">Your changes have been saved</AlertCard>}
+      {err && <AlertCard onClick={() => setErr(false)} variant="error">Sorry, we weren not able to save changes. Please, try again</AlertCard>}
+      {success && <AlertCard onClick={() => setSuccess(false)} stylesOverwrite={{ justifyContent: "flex-start", textAlign: "left" }} variant="success">Your changes have been saved</AlertCard>}
       <form onSubmit={handleSubmit}>
         <Input.Wrapper label={<BodyText styleType="body-01-regular">First name</BodyText>} description="" error="">
           <TextInput placeholder="" type="text" {...form.getInputProps("fName")}/>
