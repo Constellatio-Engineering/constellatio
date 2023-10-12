@@ -5,7 +5,7 @@ import { supabase } from "@/lib/supabase";
 import { InvalidateQueriesContext } from "@/provider/InvalidateQueriesProvider";
 import { paths } from "@/utils/paths";
 
-import { Avatar, Menu, Title } from "@mantine/core";
+import { Menu, Title } from "@mantine/core";
 import { notifications } from "@mantine/notifications";
 import { IconBrandStripe, IconLogout, IconUser } from "@tabler/icons-react";
 import { useRouter } from "next/router";
@@ -50,7 +50,9 @@ export const UserDropdown: FunctionComponent = () =>
       transitionProps={{ transition: "pop-top-right" }}
       styles={styles.menuStyles()}>
       <Menu.Target>
-        <Avatar radius="xl"/>
+        <div css={styles.target}>
+          <CaisyImg src="https://via.placeholder.com/36" width={36} height={36}/>
+        </div>
       </Menu.Target>
       <Menu.Dropdown>
         <Menu.Item
