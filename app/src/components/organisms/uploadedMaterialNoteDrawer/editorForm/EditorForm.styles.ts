@@ -1,6 +1,27 @@
-
 import { css } from "@emotion/react";
 import { type MantineTheme } from "@mantine/styles";
+
+export const MaterialNoteRichText = css`
+  margin: 24px 32px;
+`;
+
+export const MaterialNotesCallToAction = (theme: MantineTheme) => css`
+position: absolute;
+bottom: 0;
+left: 0;
+width: 100%;
+display:flex;
+justify-content: center;
+align-items: center;
+padding:32px;
+gap:12px;
+background: ${theme.colors["neutrals-01"][0]};
+border-top: 1px solid ${theme.colors["neutrals-01"][3]};
+button{
+  flex:1;
+}
+`;
+
 export const wrapper = css`
 .mantine-Drawer-body {
     /* padding:0; */

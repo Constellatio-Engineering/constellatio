@@ -1,28 +1,33 @@
-import { type Document, type Note, type UploadedFile } from "@/db/schema";
+import { type Note, type UploadedFile } from "@/db/schema";
 import { getRandomUuid } from "@/utils/utils";
 
 import { create } from "zustand";
 import { immer } from "zustand/middleware/immer";
 
 type NoteUpdate = Partial<Pick<Note, "content">>;
-type NewNote = Pick<Note, "content" | "fileId">;
+type NewNote = Pick<Note, "id" | "content" | "fileId">;
 
 type EditorClosed = {
   state: "closed";
 };
 
 type EditNote = {
-  note: Note | NewNote;
-  originalNote: Note | null;
+  originalNote: Note;
+  parentFile: UploadedFile;
   state: "edit";
 };
 
+type CreateNote = {
+  parentFile: (Omit<UploadedFile, "note"> & { note: NewNote });
+  state: "create";
+};
+
 type ViewNote = {
-  note: Note;
+  parentFile: UploadedFile;
   state: "view";
 };
 
-export type EditorStateDrawerOpened = EditNote | ViewNote;
+export type EditorStateDrawerOpened = EditNote | CreateNote | ViewNote;
 type EditorState = EditorClosed | EditorStateDrawerOpened;
 
 type ComputedEditorValues = {
@@ -33,6 +38,7 @@ type NoteEditorStoreProps = {
   closeEditor: () => void;
   editorState: EditorState;
   getComputedValues: () => ComputedEditorValues;
+  setCreateNoteState: (file: UploadedFile) => void;
   setEditNoteState: (file: UploadedFile) => void;
   setViewNoteState: (file: UploadedFile) => void;
   updateNote: (noteUpdate: NoteUpdate) => void;
@@ -70,7 +76,7 @@ const useNoteEditorStore = create(
         }
         case "edit":
         {
-          const { note, originalNote } = editorState;
+          const { originalNote, parentFile: { note } } = editorState;
           let hasUnsavedChanges: boolean;
 
           if(originalNote == null && note?.content != null)
@@ -100,32 +106,54 @@ const useNoteEditorStore = create(
 
       return computedValues;
     },
-    setEditNoteState: ({ id: fileId, note }) =>
+    setCreateNoteState: (parentFile) =>
     {
+      const newNoteId = getRandomUuid();
+
       set((state) =>
       {
         state.editorState = {
-          note: note ?? {
-            content: "",
-            fileId,
+          parentFile: {
+            ...parentFile,
+            note: {
+              content: "",
+              fileId: parentFile.id,
+              id: newNoteId,
+            }
           },
-          originalNote: note,
+          state: "create"
+        };
+      });
+    },
+    setEditNoteState: (parentFile) =>
+    {
+      set((state) =>
+      {
+        if(parentFile.note == null)
+        {
+          console.error("Cannot set edit note state when note is null");
+          return;
+        }
+
+        state.editorState = {
+          originalNote: parentFile.note,
+          parentFile,
           state: "edit"
         };
       });
     },
-    setViewNoteState: ({ note }) =>
+    setViewNoteState: (parentFile) =>
     {
-      if(note == null)
+      if(parentFile.note == null)
       {
-        console.error("Cannot set view note state with null note");
+        console.error("Cannot set view note state when note is null");
         return;
       }
 
       set((state) =>
       {
         state.editorState = {
-          note,
+          parentFile,
           state: "view"
         };
       });
@@ -134,14 +162,14 @@ const useNoteEditorStore = create(
     {
       set(({ editorState }) =>
       {
-        if(editorState.state !== "edit")
+        if(editorState.state !== "edit" || editorState.parentFile.note == null)
         {
-          throw new Error("Cannot update note when editor is not in edit state");
+          throw new Error("Cannot update note when editor is not in edit state or note is null");
         }
 
-        editorState.note = {
-          ...editorState.note,
-          ...noteUpdate
+        editorState.parentFile.note = {
+          ...editorState.parentFile.note,
+          ...noteUpdate,
         };
       });
     },

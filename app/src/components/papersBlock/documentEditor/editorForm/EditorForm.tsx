@@ -26,15 +26,24 @@ const EditorForm: FunctionComponent<EditorFormProps> = ({ editorState }) =>
   const closeEditor = useDocumentEditorStore(s => s.closeEditor);
   const setEditDocumentState = useDocumentEditorStore(s => s.setEditDocumentState);
   const { hasUnsavedChanges } = useDocumentEditorStore(s => s.getComputedValues());
+  const [showConfirmDeleteDocWindow, setShowConfirmDeleteDocWindow] = React.useState<boolean>(false);
   const invalidateDocumentsForCurrentFolder = async (): Promise<void> => invalidateDocuments({ folderId: document.folderId as string });
+
   const { mutateAsync: createDocument } = api.documents.createDocument.useMutation({
     onError: (error) => console.log("error while creating document", error),
     onSuccess: invalidateDocumentsForCurrentFolder
   });
+
   const { mutateAsync: updateDocument } = api.documents.updateDocument.useMutation({
     onError: (error) => console.log("error while updating document", error),
     onSuccess: invalidateDocumentsForCurrentFolder
   });
+
+  const { mutate: deleteDocument } = api.documents.deleteDocument.useMutation({
+    onError: (error) => console.error("Error while deleting document:", error),
+    onSuccess: invalidateDocumentsForCurrentFolder,
+  });
+
   const onCancel = (): void =>
   {
     if(!hasUnsavedChanges)
@@ -52,6 +61,7 @@ const EditorForm: FunctionComponent<EditorFormProps> = ({ editorState }) =>
 
     closeEditor();
   };
+
   const onSave = async (): Promise<void> =>
   {
     switch (state)
@@ -104,11 +114,7 @@ const EditorForm: FunctionComponent<EditorFormProps> = ({ editorState }) =>
       }
     }
   };
-  const { mutate: deleteDocument } = api.documents.deleteDocument.useMutation({
-    onError: (error) => console.error("Error while deleting document:", error),
-    onSuccess: invalidateDocumentsForCurrentFolder,
-  });
-  const [showConfirmDeleteDocWindow, setShowConfirmDeleteDocWindow] = React.useState<boolean>(false);
+
   return (
     <>
       <div className="form">

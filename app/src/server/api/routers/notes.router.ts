@@ -1,7 +1,8 @@
 import { db } from "@/db/connection";
-import { notes } from "@/db/schema";
-import { createOrUpdateNoteSchema } from "@/schemas/notes/createOrUpdateNote.schema";
+import { type NoteInsert, notes } from "@/db/schema";
+import { createNoteSchema } from "@/schemas/notes/createNote.schema";
 import { deleteNoteSchema } from "@/schemas/notes/deleteNote.schema";
+import { updateNoteSchema } from "@/schemas/notes/updateNote.schema";
 import { createTRPCRouter, protectedProcedure } from "@/server/api/trpc";
 
 import {
@@ -9,34 +10,18 @@ import {
 } from "drizzle-orm";
 
 export const notesRouter = createTRPCRouter({
-  createOrUpdateNote: protectedProcedure
-    .input(createOrUpdateNoteSchema)
-    .mutation(async ({ ctx: { userId }, input: { content, fileId } }) =>
+  createNote: protectedProcedure
+    .input(createNoteSchema)
+    .mutation(async ({ ctx: { userId }, input: { content, fileId, id } }) =>
     {
-      const existingNote = await db.query.notes.findFirst({
-        where: and(
-          eq(notes.userId, userId),
-          eq(notes.fileId, fileId)
-        )
-      });
+      const noteInsert: NoteInsert = {
+        content,
+        fileId,
+        id,
+        userId
+      };
 
-      if(!existingNote)
-      {
-        return db.insert(notes).values({
-          content,
-          fileId,
-          userId,
-        }).returning();
-      }
-      else
-      {
-        return db.update(notes).set({ content }).where(
-          and(
-            eq(notes.userId, userId),
-            eq(notes.fileId, fileId)
-          )
-        ).returning();
-      }
+      return db.insert(notes).values(noteInsert).returning();
     }),
   deleteNote: protectedProcedure
     .input(deleteNoteSchema)
@@ -48,6 +33,21 @@ export const notesRouter = createTRPCRouter({
           eq(notes.fileId, fileId)
         )
       );
+    }),
+  updateNote: protectedProcedure
+    .input(updateNoteSchema)
+    .mutation(async ({ ctx: { userId }, input: updatedNote }) =>
+    {
+      const { fileId, updatedValues } = updatedNote;
+
+      return db.update(notes)
+        .set(updatedValues)
+        .where(
+          and(
+            eq(notes.userId, userId),
+            eq(notes.fileId, fileId)
+          )
+        ).returning();
     }),
   /* getNotes: protectedProcedure
     .input(getNotesSchema)

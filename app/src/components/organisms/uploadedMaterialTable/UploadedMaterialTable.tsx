@@ -13,7 +13,7 @@ interface UploadedMaterialTableProps
 {
   readonly isGetUploadedFilesLoading?: boolean;
   readonly selectedFolderId: string | null;
-  readonly uploadedFiles?: Partial<UploadedFile[]>;
+  readonly uploadedFiles?: UploadedFile[];
   readonly variant?: "personalSpace" | "searchPapers";
 }
 
@@ -35,7 +35,6 @@ const UploadedMaterialTable: FunctionComponent<UploadedMaterialTableProps> = ({
         </thead>
         <tbody css={styles.tableBody}>
           <UploadedMaterialTableBody
-            selectedFolderId={selectedFolderId}
             showingFiles={showingFiles}
             uploadedFiles={uploadedFiles}
             variant={variant}

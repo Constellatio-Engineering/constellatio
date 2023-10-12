@@ -45,6 +45,7 @@ const SearchPageResults: FunctionComponent = () =>
                   fileExtension: "",
                   folderId: "",
                   id: file.id,
+                  note: null,
                   notes: [],
                   originalFilename: file.originalFilename,
                   serverFilename: "",
@@ -52,7 +53,7 @@ const SearchPageResults: FunctionComponent = () =>
                   userId: file.userId
                 }))}
                 variant="searchPapers"
-                // selectedFolderId={null} // TODO
+                selectedFolderId={null} // TODO
               />
             )}
             numberOfTableItems={searchResults[routerTabQuery]?.length}

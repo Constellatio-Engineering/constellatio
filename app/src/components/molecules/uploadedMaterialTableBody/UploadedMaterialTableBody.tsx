@@ -47,14 +47,12 @@ const formatDate = (date: Date): string => `${String(date?.getDate()).padStart(2
 
 interface UploadedMaterialTableBodyProps
 {
-  readonly selectedFolderId: string | null;
   readonly showingFiles: number;
   readonly uploadedFiles?: Partial<UploadedFile[]>;
   readonly variant: "personalSpace" | "searchPapers";
 }
 
 const UploadedMaterialTableBody: FunctionComponent<UploadedMaterialTableBodyProps> = ({
-  selectedFolderId,
   showingFiles,
   uploadedFiles,
   variant = "personalSpace",
@@ -62,8 +60,8 @@ const UploadedMaterialTableBody: FunctionComponent<UploadedMaterialTableBodyProp
 {
   const theme = useMantineTheme();
   const { setSelectedFileIdForPreview, setShowFileViewerModal } = useMaterialsStore();
-  const setEditNoteState = useNoteEditorStore(s => s.setEditNoteState);
   const setViewNoteState = useNoteEditorStore(s => s.setViewNoteState);
+  const setCreateNoteState = useNoteEditorStore(s => s.setCreateNoteState);
 
   return (
     <>
@@ -103,7 +101,7 @@ const UploadedMaterialTableBody: FunctionComponent<UploadedMaterialTableBodyProp
                     }
                     else
                     {
-                      setEditNoteState(file);
+                      setCreateNoteState(file);
                     }
                   }}>
                   {note ? <NotepadFilled/> : <Notepad/>}
