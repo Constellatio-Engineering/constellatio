@@ -4,6 +4,7 @@ import * as styles from "./ProfileHistoryBlocks.styles";
 import { BodyText } from "../atoms/BodyText/BodyText";
 import Label from "../atoms/label/Label";
 import { SubtitleText } from "../atoms/SubtitleText/SubtitleText";
+import EmptyStateCard from "../organisms/emptyStateCard/EmptyStateCard";
 
 interface IProfileHistoryBlocksProps 
 {
@@ -76,39 +77,44 @@ const ProfileHistoryBlocks: FunctionComponent = () =>
       viewedDate: new Date("2023-03-16T10:00:00Z"),
     },
   ];
-  const uniqueDays = extractUniqueDays(visitedItems);
+  const uniqueDays = extractUniqueDays([]);
   return (
     <div css={styles.wrapper}>
       <div css={styles.list}>
-        {uniqueDays.map((day, index) => (
-          <div css={styles.listItem} key={index}>
-            <div css={styles.blockDate}><SubtitleText styleType="subtitle-01-medium" component="p">{formatDate(new Date())}</SubtitleText></div>
-            <div css={styles.table}>
-              {visitedItems.map((item, index) => 
-              {
-                const isSameDay = day === `${item.viewedDate.getFullYear()}-${String(item.viewedDate.getMonth() + 1).padStart(2, "0")}-${String(item.viewedDate.getDate()).padStart(2, "0")}`;
-                if(isSameDay) 
-                {
-                  return (
-                    <Fragment key={index}>
-                      <div css={styles.tableRow}>
-                        <BodyText styleType="body-02-medium" component="p" css={styles.timeCell}>
-                          {item.viewedDate?.getHours()}:{item.viewedDate?.getMinutes() > 10 ? item.viewedDate?.getMinutes() : `0${item.viewedDate?.getMinutes()}`}
-                        </BodyText>
-                        <div css={styles.blockType}>
-                          <Label variant={item?.documentType ?? "case"} title={item?.documentType}/>
-                        </div>
-                        <BodyText css={styles.blockTitle} styleType="body-01-medium" component="p">{item.documentName}</BodyText>
-                        <BodyText css={styles.blockCategory} styleType="body-02-medium" component="p">{item.documentMainCategory}</BodyText>
-                      </div>
-                    </Fragment>
-                  );
-                }
-                else { return <></>; }
-              })}
-            </div>
-          </div>
-        ))}
+        {
+          uniqueDays?.length > 0 ? 
+            (uniqueDays.map((day, index) => (
+              <div css={styles.listItem} key={index}>
+                <div css={styles.blockDate}><SubtitleText styleType="subtitle-01-medium" component="p">{formatDate(new Date())}</SubtitleText></div>
+                <div css={styles.table}>
+                  {visitedItems.map((item, index) => 
+                  {
+                    const isSameDay = day === `${item.viewedDate.getFullYear()}-${String(item.viewedDate.getMonth() + 1).padStart(2, "0")}-${String(item.viewedDate.getDate()).padStart(2, "0")}`;
+                    if(isSameDay) 
+                    {
+                      return (
+                        <Fragment key={index}>
+                          <div css={styles.tableRow}>
+                            <BodyText styleType="body-02-medium" component="p" css={styles.timeCell}>
+                              {item.viewedDate?.getHours()}:{item.viewedDate?.getMinutes() > 10 ? item.viewedDate?.getMinutes() : `0${item.viewedDate?.getMinutes()}`}
+                            </BodyText>
+                            <div css={styles.blockType}>
+                              <Label variant={item?.documentType ?? "case"} title={item?.documentType}/>
+                            </div>
+                            <BodyText css={styles.blockTitle} styleType="body-01-medium" component="p">{item.documentName}</BodyText>
+                            <BodyText css={styles.blockCategory} styleType="body-02-medium" component="p">{item.documentMainCategory}</BodyText>
+                          </div>
+                        </Fragment>
+                      );
+                    }
+                    else { return <></>; }
+                  })}
+                </div>
+              </div>
+            ))) : (
+              <EmptyStateCard text="Here you can access the view history of cases, dictionary, and forum" title="You haven not viewed any materials yet" variant="For-small-areas"/>
+            )
+        }
       </div>
     </div>
   );
