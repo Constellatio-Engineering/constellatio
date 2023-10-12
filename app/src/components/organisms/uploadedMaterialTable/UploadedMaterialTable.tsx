@@ -2,7 +2,7 @@ import { Button } from "@/components/atoms/Button/Button";
 import { ArrowDown } from "@/components/Icons/ArrowDown";
 import UploadedMaterialTableBody from "@/components/molecules/uploadedMaterialTableBody/UploadedMaterialTableBody";
 import UploadedMaterialTableHead from "@/components/molecules/uploadedMaterialTableHead/UploadedMaterialTableHead";
-import { type UploadedFile } from "@/db/schema";
+import { type Note, type UploadedFile, type UploadedFileWithNote } from "@/db/schema";
 
 import React, { type FunctionComponent, useState } from "react";
 
@@ -13,7 +13,7 @@ interface UploadedMaterialTableProps
 {
   readonly isGetUploadedFilesLoading?: boolean;
   readonly selectedFolderId: string | null;
-  readonly uploadedFiles?: UploadedFile[];
+  readonly uploadedFiles: UploadedFileWithNote[];
   readonly variant?: "personalSpace" | "searchPapers";
 }
 
@@ -21,7 +21,7 @@ const UploadedMaterialTable: FunctionComponent<UploadedMaterialTableProps> = ({
   isGetUploadedFilesLoading,
   selectedFolderId,
   uploadedFiles,
-  variant = "personalSpace"
+  variant = "personalSpace",
 }) =>
 {
   const [showingFiles, setShowingFiles] = useState<number>(5);

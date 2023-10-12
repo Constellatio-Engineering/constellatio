@@ -1,4 +1,4 @@
-import { type Note, type UploadedFile } from "@/db/schema";
+import { type Note } from "@/db/schema";
 import { getRandomUuid } from "@/utils/utils";
 
 import { create } from "zustand";
@@ -12,18 +12,18 @@ type EditorClosed = {
 };
 
 type EditNote = {
+  note: Note;
   originalNote: Note;
-  parentFile: UploadedFile;
   state: "edit";
 };
 
 type CreateNote = {
-  parentFile: (Omit<UploadedFile, "note"> & { note: NewNote });
+  note: NewNote;
   state: "create";
 };
 
 type ViewNote = {
-  parentFile: UploadedFile;
+  note: Note;
   state: "view";
 };
 
@@ -38,9 +38,9 @@ type NoteEditorStoreProps = {
   closeEditor: () => void;
   editorState: EditorState;
   getComputedValues: () => ComputedEditorValues;
-  setCreateNoteState: (file: UploadedFile) => void;
-  setEditNoteState: (file: UploadedFile) => void;
-  setViewNoteState: (file: UploadedFile) => void;
+  setCreateNoteState: (params: { fileId: string }) => void;
+  setEditNoteState: (note: Note) => void;
+  setViewNoteState: (note: Note) => void;
   updateNote: (noteUpdate: NoteUpdate) => void;
 };
 
@@ -74,12 +74,18 @@ const useNoteEditorStore = create(
           computedValues = { hasUnsavedChanges: false };
           break;
         }
+        case "create":
+        {
+          const { note } = editorState;
+          computedValues = { hasUnsavedChanges: note.content.length > 0 };
+          break;
+        }
         case "edit":
         {
-          const { originalNote, parentFile: { note } } = editorState;
+          const { note, originalNote } = editorState;
           let hasUnsavedChanges: boolean;
 
-          if(originalNote == null && note?.content != null)
+          if(originalNote == null && note?.content.length > 0)
           {
             hasUnsavedChanges = true;
           }
@@ -98,7 +104,7 @@ const useNoteEditorStore = create(
         }
         default:
         {
-          console.error(`Unknown editor state: ${editorState}`);
+          console.error("Unknown editor state:", editorState);
           computedValues = { hasUnsavedChanges: false };
           break;
         }
@@ -106,45 +112,42 @@ const useNoteEditorStore = create(
 
       return computedValues;
     },
-    setCreateNoteState: (parentFile) =>
+    setCreateNoteState: ({ fileId }) =>
     {
       const newNoteId = getRandomUuid();
 
       set((state) =>
       {
         state.editorState = {
-          parentFile: {
-            ...parentFile,
-            note: {
-              content: "",
-              fileId: parentFile.id,
-              id: newNoteId,
-            }
+          note: {
+            content: "",
+            fileId,
+            id: newNoteId,
           },
           state: "create"
         };
       });
     },
-    setEditNoteState: (parentFile) =>
+    setEditNoteState: (note) =>
     {
+      if(note == null)
+      {
+        console.error("Cannot set edit note state when note is null");
+        return;
+      }
+
       set((state) =>
       {
-        if(parentFile.note == null)
-        {
-          console.error("Cannot set edit note state when note is null");
-          return;
-        }
-
         state.editorState = {
-          originalNote: parentFile.note,
-          parentFile,
+          note,
+          originalNote: note,
           state: "edit"
         };
       });
     },
-    setViewNoteState: (parentFile) =>
+    setViewNoteState: (note) =>
     {
-      if(parentFile.note == null)
+      if(note == null)
       {
         console.error("Cannot set view note state when note is null");
         return;
@@ -153,7 +156,7 @@ const useNoteEditorStore = create(
       set((state) =>
       {
         state.editorState = {
-          parentFile,
+          note,
           state: "view"
         };
       });
@@ -162,14 +165,14 @@ const useNoteEditorStore = create(
     {
       set(({ editorState }) =>
       {
-        if(editorState.state !== "edit" || editorState.parentFile.note == null)
+        if(editorState.state !== "edit" && editorState.state !== "create")
         {
-          throw new Error("Cannot update note when editor is not in edit state or note is null");
+          throw new Error("Cannot update note when editor is not in edit state");
         }
 
-        editorState.parentFile.note = {
-          ...editorState.parentFile.note,
-          ...noteUpdate,
+        editorState.note = {
+          ...editorState.note,
+          ...noteUpdate
         };
       });
     },

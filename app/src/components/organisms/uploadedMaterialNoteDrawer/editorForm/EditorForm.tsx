@@ -1,18 +1,16 @@
 import { BodyText } from "@/components/atoms/BodyText/BodyText";
 import { Button } from "@/components/atoms/Button/Button";
-import { Input } from "@/components/atoms/Input/Input";
 import { Edit } from "@/components/Icons/Edit";
 import { Trash } from "@/components/Icons/Trash";
 import { RichtextEditorField } from "@/components/molecules/RichtextEditorField/RichtextEditorField";
 import SlidingPanelFileTypeRow from "@/components/molecules/slidingPanelFileTypeRow/SlidingPanelFileTypeRow";
-import { type Document } from "@/db/schema";
+import { type Note } from "@/db/schema";
 import useContextAndErrorIfNull from "@/hooks/useContextAndErrorIfNull";
 import { InvalidateQueriesContext } from "@/provider/InvalidateQueriesProvider";
-import { type CreateDocumentSchema } from "@/schemas/documents/createDocument.schema";
 import { type UpdateDocumentSchema } from "@/schemas/documents/updateDocument.schema";
-import { type CreateNoteSchema, type CreateOrUpdateNoteSchema } from "@/schemas/notes/createNote.schema";
-import useNoteEditorStore from "@/stores/noteEditor.store";
-import useDocumentEditorStore, { type EditorStateDrawerOpened } from "@/stores/noteEditor.store";
+import { type CreateNoteSchema } from "@/schemas/notes/createNote.schema";
+import { type UpdateNoteSchema } from "@/schemas/notes/updateNote.schema";
+import useNoteEditorStore, { type EditorStateDrawerOpened } from "@/stores/noteEditor.store";
 import { api } from "@/utils/api";
 
 import React, { type FunctionComponent, useState } from "react";
@@ -27,24 +25,32 @@ interface EditorFormProps
 
 const EditorForm: FunctionComponent<EditorFormProps> = ({ editorState, selectedFolderId }) =>
 {
-  // const editorState = useDocumentEditorStore(s => s.editorState);
-
-  const { invalidateUploadedFiles } = useContextAndErrorIfNull(InvalidateQueriesContext);
-  const { parentFile: { note }, state } = editorState;
-  const updateNoteInEditor = useDocumentEditorStore(s => s.updateNote);
-  const closeEditor = useDocumentEditorStore(s => s.closeEditor);
-  const setEditNoteState = useDocumentEditorStore(s => s.setEditNoteState);
-  const { hasUnsavedChanges } = useDocumentEditorStore(s => s.getComputedValues());
+  const { invalidateNotes } = useContextAndErrorIfNull(InvalidateQueriesContext);
+  const { note, state } = editorState;
+  const updateNoteInEditor = useNoteEditorStore(s => s.updateNote);
+  const closeEditor = useNoteEditorStore(s => s.closeEditor);
+  const setEditNoteState = useNoteEditorStore(s => s.setEditNoteState);
+  const { hasUnsavedChanges } = useNoteEditorStore(s => s.getComputedValues());
   const [shouldShowDeleteNoteWindow, setShouldShowDeleteNoteWindow] = useState<boolean>(false);
+  const _invalidateNotes = async (): Promise<void> => invalidateNotes({ folderId: selectedFolderId });
 
   const { mutateAsync: createNote } = api.notes.createNote.useMutation({
     onError: (error) => console.log("error while creating note", error),
-    onSuccess: async (): Promise<void> => invalidateUploadedFiles({ folderId: selectedFolderId })
+    onSuccess: _invalidateNotes
   });
 
   const { mutateAsync: updateNote } = api.notes.updateNote.useMutation({
     onError: (error) => console.log("error while updating note", error),
-    onSuccess: async (): Promise<void> => invalidateUploadedFiles({ folderId: selectedFolderId })
+    onSuccess: _invalidateNotes
+  });
+
+  const { mutate: deleteNote } = api.notes.deleteNote.useMutation({
+    onError: (error) => console.log("error while deleting note", error),
+    onSuccess: async () =>
+    {
+      await _invalidateNotes();
+      closeEditor();
+    }
   });
 
   const onCancel = (): void =>
@@ -63,30 +69,6 @@ const EditorForm: FunctionComponent<EditorFormProps> = ({ editorState, selectedF
     }
 
     closeEditor();
-  };
-
-  const onSave2 = async (): Promise<void> =>
-  {
-    if(state !== "edit" && state !== "create")
-    {
-      console.error("Can only save when state is edit or create");
-      return;
-    }
-
-    const noteUpdate: CreateOrUpdateNoteSchema = {
-      content: note.content,
-      fileId: note.fileId,
-    };
-
-    const [updatedNote] = await createNote(noteUpdate);
-
-    if(!updatedNote)
-    {
-      console.error("Error while saving note, updatedNote is null");
-      return;
-    }
-
-    updateNoteInEditor({ content: updatedNote.content });
   };
 
   const onSave = async (): Promise<void> =>
@@ -109,31 +91,27 @@ const EditorForm: FunctionComponent<EditorFormProps> = ({ editorState, selectedF
           return;
         }
 
-        const editorState = useNoteEditorStore.getState().editorState.
-
-          setEditNoteState(createdNote);
-        closeEditor();
+        setEditNoteState(createdNote);
         break;
       }
       case "edit":
       {
-        // TODO : SHOULDN'T THE UpdatedAt BE UPDATED HERE?
-        const documentUpdate: UpdateDocumentSchema = {
-          content: document.content,
-          id: document.id,
-          name: document.name,
+        const noteUpdate: UpdateNoteSchema = {
+          fileId: note.fileId,
+          updatedValues: {
+            content: note.content,
+          }
         };
 
-        const [updatedDocument] = await updateDocument(documentUpdate);
+        const [updatedNote] = await updateNote(noteUpdate);
 
-        if(!updatedDocument)
+        if(!updatedNote)
         {
-          console.error("Error while updating document, updatedDocument is null");
+          console.error("Error while updating note, updatedNote is null");
           return;
         }
 
-        setEditDocumentState(updatedDocument);
-        // closeEditor();
+        setEditNoteState(updatedNote);
         break;
       }
       default:
@@ -143,14 +121,7 @@ const EditorForm: FunctionComponent<EditorFormProps> = ({ editorState, selectedF
     }
   };
 
-  /* const { mutate: deleteDocument } = api.documents.deleteDocument.useMutation({
-    onError: (error) => console.error("Error while deleting document:", error),
-    onSuccess: invalidateDocumentsForCurrentFolder,
-  });*/
-
   // TODO: Validate the form
-
-  console.log(editorState);
 
   return (
     <>
@@ -161,7 +132,7 @@ const EditorForm: FunctionComponent<EditorFormProps> = ({ editorState, selectedF
             <div css={styles.MaterialNoteRichText}>
               <RichtextEditorField
                 content={note.content}
-                onChange={async (e) => updateNote({ content: e.editor.getText().trim() === "" ? "" : e.editor.getHTML() })}
+                onChange={e => updateNoteInEditor({ content: e.editor.getText().trim() === "" ? "" : e.editor.getHTML() })}
                 variant="with-legal-quote"
               />
             </div>
@@ -173,7 +144,7 @@ const EditorForm: FunctionComponent<EditorFormProps> = ({ editorState, selectedF
               </Button>
               <Button<"button">
                 styleType="primary"
-                disabled={note.content === ""}
+                disabled={!hasUnsavedChanges}
                 onClick={onSave}>
                 Save
               </Button>
@@ -185,7 +156,7 @@ const EditorForm: FunctionComponent<EditorFormProps> = ({ editorState, selectedF
             <div css={styles.existingNoteActions}>
               <Button<"button">
                 styleType="secondarySubtle"
-                onClick={() => {}}>
+                onClick={() => setEditNoteState(editorState.note)}>
                 <Edit/>{" "}Edit
               </Button>
               <Button<"button">
@@ -206,7 +177,7 @@ const EditorForm: FunctionComponent<EditorFormProps> = ({ editorState, selectedF
                   </Button>
                   <Button<"button">
                     styleType="primary"
-                    onClick={() => {}}>
+                    onClick={() => deleteNote({ fileId: editorState.note.fileId })}>
                     Yes, delete
                   </Button>
                 </div>

@@ -1,12 +1,13 @@
 import { db } from "@/db/connection";
-import { type NoteInsert, notes } from "@/db/schema";
+import { type NoteInsert, notes, uploadedFiles } from "@/db/schema";
 import { createNoteSchema } from "@/schemas/notes/createNote.schema";
 import { deleteNoteSchema } from "@/schemas/notes/deleteNote.schema";
+import { getNotesSchema } from "@/schemas/notes/getNotes.schema";
 import { updateNoteSchema } from "@/schemas/notes/updateNote.schema";
 import { createTRPCRouter, protectedProcedure } from "@/server/api/trpc";
 
 import {
-  and, eq,
+  and, eq, inArray, isNull, type SQLWrapper,
 } from "drizzle-orm";
 
 export const notesRouter = createTRPCRouter({
@@ -34,6 +35,30 @@ export const notesRouter = createTRPCRouter({
         )
       );
     }),
+  getNotes: protectedProcedure
+    .input(getNotesSchema)
+    .query(async ({ ctx: { userId }, input: { folderId } }) =>
+    {
+      const queryConditions: SQLWrapper[] = [eq(uploadedFiles.userId, userId)];
+
+      if(folderId)
+      {
+        queryConditions.push(eq(uploadedFiles.folderId, folderId));
+      }
+      else
+      {
+        queryConditions.push(isNull(uploadedFiles.folderId));
+      }
+
+      const filesInFolder = await db.select({ id: uploadedFiles.id }).from(uploadedFiles).where(and(...queryConditions));
+
+      const result = await db.select().from(notes).where(and(
+        eq(notes.userId, userId),
+        inArray(notes.fileId, filesInFolder.map(({ id }) => id)),
+      ));
+
+      return result;
+    }),
   updateNote: protectedProcedure
     .input(updateNoteSchema)
     .mutation(async ({ ctx: { userId }, input: updatedNote }) =>
@@ -49,31 +74,4 @@ export const notesRouter = createTRPCRouter({
           )
         ).returning();
     }),
-  /* getNotes: protectedProcedure
-    .input(getNotesSchema)
-    .query(async ({ ctx: { userId }, input: { folderId } }) =>
-    {
-      // this is duplicated in getUploadedFiles
-      const queryConditions: SQLWrapper[] = [eq(uploadedFiles.userId, userId)];
-
-      if(folderId)
-      {
-        queryConditions.push(eq(uploadedFiles.folderId, folderId));
-      }
-      else
-      {
-        queryConditions.push(isNull(uploadedFiles.folderId));
-      }
-
-      const filesInFolder = await db.query.uploadedFiles.findMany({
-        where: and(...queryConditions)
-      });
-
-      return db.query.notes.findMany({
-        where: and(
-          eq(notes.userId, userId),
-          inArray(notes.fileId, filesInFolder.map(file => file.id)),
-        )
-      });
-    }),*/
 });

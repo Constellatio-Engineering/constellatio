@@ -7,7 +7,7 @@ import { Notepad } from "@/components/Icons/Notepad";
 import { NotepadFilled } from "@/components/Icons/NotepadFilled";
 import { VideoIcon } from "@/components/Icons/Video";
 import MaterialOptionsMenu from "@/components/materialsOptionsMenu/MaterialsOptionsMenu";
-import { type UploadedFile } from "@/db/schema";
+import { type UploadedFile, type UploadedFileWithNote } from "@/db/schema";
 import useMaterialsStore from "@/stores/materials.store";
 import useNoteEditorStore from "@/stores/noteEditor.store";
 
@@ -48,7 +48,7 @@ const formatDate = (date: Date): string => `${String(date?.getDate()).padStart(2
 interface UploadedMaterialTableBodyProps
 {
   readonly showingFiles: number;
-  readonly uploadedFiles?: Partial<UploadedFile[]>;
+  readonly uploadedFiles?: UploadedFileWithNote[];
   readonly variant: "personalSpace" | "searchPapers";
 }
 
@@ -68,8 +68,6 @@ const UploadedMaterialTableBody: FunctionComponent<UploadedMaterialTableBodyProp
       {uploadedFiles?.slice(0, showingFiles).filter(Boolean).map((file) =>
       {
         const { note } = file;
-
-        console.log("file", file.originalFilename, "note", file.note);
 
         return (
           <tr key={file.id}>
@@ -97,15 +95,24 @@ const UploadedMaterialTableBody: FunctionComponent<UploadedMaterialTableBodyProp
                   {
                     if(note)
                     {
-                      setViewNoteState(file);
+                      setViewNoteState(note);
                     }
                     else
                     {
-                      setCreateNoteState(file);
+                      setCreateNoteState({ fileId: file.id });
                     }
                   }}>
-                  {note ? <NotepadFilled/> : <Notepad/>}
-                  Add Notes
+                  {note ? (
+                    <>
+                      <NotepadFilled/>
+                      View Notes
+                    </>
+                  ) : (
+                    <>
+                      <Notepad/>
+                      Add Notes
+                    </>
+                  )}
                 </BodyText>
               </td>
             )}

@@ -1,8 +1,8 @@
 import { Button } from "@/components/atoms/Button/Button";
 import { SubtitleText } from "@/components/atoms/SubtitleText/SubtitleText";
 import { type FileWithClientSideUuid } from "@/components/pages/personalSpacePage/PersonalSpacePage";
-import { type UploadedFile } from "@/db/schema";
 import useContextAndErrorIfNull from "@/hooks/useContextAndErrorIfNull";
+import useUploadedFilesWithNotes from "@/hooks/useUploadedFilesWithNotes";
 import { InvalidateQueriesContext } from "@/provider/InvalidateQueriesProvider";
 import { type UploadState } from "@/stores/uploadsProgress.store";
 import { api } from "@/utils/api";
@@ -10,7 +10,7 @@ import { getIndicesOfSucceededPromises, getRandomUuid, removeItemsByIndices } fr
 
 import { Title } from "@mantine/core";
 import axios from "axios";
-import React, { type FormEvent, type FunctionComponent } from "react";
+import React, { type FormEvent, type FunctionComponent, useState } from "react";
 
 import * as styles from "./UploadedMaterialBlock.styles";
 import BadgeCard from "../badgeCard/BadgeCard";
@@ -20,28 +20,23 @@ import UploadedMaterialTable from "../uploadedMaterialTable/UploadedMaterialTabl
 type UploadedMaterialBlockProps = {
   readonly areUploadsInProgress: boolean;
   readonly fileInputRef: React.RefObject<HTMLInputElement>;
-  readonly isGetUploadedFilesLoading: boolean;
-  readonly selectedFiles: FileWithClientSideUuid[];
   readonly selectedFolderId: string | null;
-  readonly setSelectedFiles: React.Dispatch<React.SetStateAction<FileWithClientSideUuid[]>>;
   readonly setUploadState: (newState: UploadState) => void;
-  readonly uploadedFiles: UploadedFile[];
 };
 
 const UploadedMaterialBlock: FunctionComponent<UploadedMaterialBlockProps> = ({
   areUploadsInProgress,
   fileInputRef,
-  isGetUploadedFilesLoading,
-  selectedFiles,
   selectedFolderId,
-  setSelectedFiles,
   setUploadState,
-  uploadedFiles,
 }) =>
 {
+  const [selectedFiles, setSelectedFiles] = useState<FileWithClientSideUuid[]>([]);
+  const { isLoading: isGetUploadedFilesLoading, uploadedFilesWithNotes: uploadedFiles } = useUploadedFilesWithNotes(selectedFolderId);
   const { invalidateUploadedFiles } = useContextAndErrorIfNull(InvalidateQueriesContext);
   const { mutateAsync: saveFileToDatabase } = api.uploads.saveFileToDatabase.useMutation();
   const { mutateAsync: createSignedUploadUrl } = api.uploads.createSignedUploadUrl.useMutation();
+
   const uploadFile = async (file: File, clientSideUuid: string): Promise<void> =>
   {
     if(selectedFiles.length === 0)
@@ -88,6 +83,7 @@ const UploadedMaterialBlock: FunctionComponent<UploadedMaterialBlockProps> = ({
       serverFilename
     });
   };
+
   const onSubmit = async (e: FormEvent<HTMLFormElement>): Promise<void> =>
   {
     e.preventDefault();
@@ -118,6 +114,7 @@ const UploadedMaterialBlock: FunctionComponent<UploadedMaterialBlockProps> = ({
     const newSelectedFiles = removeItemsByIndices<FileWithClientSideUuid>(selectedFiles, indicesOfSuccessfulUploads);
     setSelectedFiles(newSelectedFiles);
   };
+
   return (
     <div css={styles.wrapper}>
       <div css={styles.uploadedMaterialBlockHead}>
