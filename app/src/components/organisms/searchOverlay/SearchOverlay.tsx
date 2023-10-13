@@ -1,5 +1,5 @@
 import SearchBar from "@/components/molecules/searchBar/SearchBar";
-import useSearchResults from "@/hooks/useSearchResults";
+import useGetPopularSearch from "@/hooks/useGetPopularSearch";
 import useSearchBarStore from "@/stores/searchBar.store";
 
 import { Drawer } from "@mantine/core";
@@ -14,15 +14,15 @@ interface SearchOverlayProps {}
 
 const SearchOverlay: FunctionComponent<SearchOverlayProps> = () => 
 {
+  const { error, popularSearch } = useGetPopularSearch();
+
+  console.log(popularSearch, error);
+
   const isDrawerOpened = useSearchBarStore((s) => s.isDrawerOpened);
   const searchValue = useSearchBarStore((s) => s.searchValue);
   const router = useRouter();
   const toggleDrawer = useSearchBarStore((s) => s.toggleDrawer);
   const hasInput = searchValue?.length > 0;
-
-  const { popularSearches } = useSearchResults();
-
-  console.log(popularSearches);
 
   useEffect(() =>
   {

@@ -1,26 +1,11 @@
 import { Layout } from "@/components/layouts/Layout";
 import PersonalSpacePage from "@/components/pages/personalSpacePage/PersonalSpacePage";
-import getPopularSearches from "@/services/content/getPopularSearches";
 
-import { type NextPage, type GetStaticProps } from "next";
-import React, { type FunctionComponent } from "react";
+import { type NextPage } from "next";
+import React from "react";
 
-type TPageProps = Awaited<ReturnType<typeof getPopularSearches>>;
-
-export const getStaticProps: GetStaticProps<TPageProps> = async () => 
+const Page: NextPage = () =>
 {
-  const resPopularSearches = await getPopularSearches();
-
-  return {
-    props: resPopularSearches,
-    revalidate: 10,
-  };
-}; 
-
-const Page: NextPage<TPageProps> = (props) =>
-{
-  // console.log(props);
-
   return (
     <Layout>
       <PersonalSpacePage/>

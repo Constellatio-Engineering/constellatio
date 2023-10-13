@@ -1,6 +1,4 @@
 import { MeilisearchContext } from "@/provider/MeilisearchProvider";
-import type getPopularSearches from "@/services/content/getPopularSearches";
-import { type IGenSearch } from "@/services/graphql/__generated/sdk";
 import useSearchBarStore from "@/stores/searchBar.store";
 import { type ArticleSearchIndexItem, type CaseSearchIndexItem, searchIndices, type UploadSearchIndexItem } from "@/utils/search";
 
@@ -21,7 +19,6 @@ const initialSearchResults: SearchResults = {
 
 type UseSearchResults = () => {
   isLoading: boolean;
-  popularSearches: Promise<IGenSearch>;
   searchResults: SearchResults;
 };
 
@@ -73,22 +70,7 @@ const useSearchResults: UseSearchResults = () =>
     staleTime: 3000,
   });
 
-  // const popularSearches: typeof popularSearches = fetch("/api/search/getPopularSearchesFromCaisy").then(async (res) => res.json());
-
-  // const popularSearchesRes = async (): Promise<IGenSearch> => 
-  // {
-  //   const res = await fetch("/api/search/getPopularSearchesFromCaisy");
-  //   const json = await res.json();
-  //   const data = await json;
-
-  //   return data;
-  // };
-
-  // const popularSearches = popularSearchesRes();
-
-  const popularSearches = fetch("/api/search/getPopularSearchesFromCaisy").then(async (res) => res.json());
-
-  return { isLoading, popularSearches, searchResults };
+  return { isLoading, searchResults };
 };
 
 export default useSearchResults;
