@@ -1446,6 +1446,12 @@ type Query {
   MainCategory(id: ID!, locale: String): MainCategory
 
   """"""
+  Search(locale: String): Search
+
+  """"""
+  SearchEntry(id: ID!, locale: String): SearchEntry
+
+  """"""
   SubCategory(id: ID!, locale: String): SubCategory
 
   """"""
@@ -1482,6 +1488,9 @@ type Query {
   allMainCategory(after: String, before: String, first: Int, last: Int, locale: String, sort: [MainCategory_Sort], where: [MainCategory_Where]): MainCategory_Connection
 
   """"""
+  allSearchEntry(after: String, before: String, first: Int, last: Int, locale: String, sort: [SearchEntry_Sort], where: [SearchEntry_Where]): SearchEntry_Connection
+
+  """"""
   allSubCategory(after: String, before: String, first: Int, last: Int, locale: String, sort: [SubCategory_Sort], where: [SubCategory_Where]): SubCategory_Connection
 
   """"""
@@ -1490,6 +1499,112 @@ type Query {
   """"""
   allTopic(after: String, before: String, first: Int, last: Int, locale: String, sort: [Topic_Sort], where: [Topic_Where]): Topic_Connection
 }
+
+""""""
+type Search {
+  """"""
+  _meta: CaisyDocument_Meta
+
+  """"""
+  id: ID
+
+  """"""
+  popularCategories(
+    """
+    The cursor to start the pagination from. In this case the curser equals the id for the (last) element. If not set, we wil start from the beginning.
+    """
+    after: String
+
+    """The number of items to return. Default and max value is 100."""
+    first: Int = 100
+
+    """"""
+    locale: String
+  ): [Search_popularCategories]
+
+  """"""
+  popularSearches(
+    """
+    The cursor to start the pagination from. In this case the curser equals the id for the (last) element. If not set, we wil start from the beginning.
+    """
+    after: String
+
+    """The number of items to return. Default and max value is 100."""
+    first: Int = 100
+
+    """"""
+    locale: String
+  ): [Search_popularSearches]
+}
+
+""""""
+type SearchEntry {
+  """"""
+  _meta: CaisyDocument_Meta
+
+  """"""
+  id: ID
+
+  """"""
+  searchField: String
+}
+
+""""""
+type SearchEntry_Connection {
+  """"""
+  edges: [SearchEntry_ConnectionEdge]
+
+  """"""
+  pageInfo: PageInfo
+
+  """"""
+  totalCount: Int
+}
+
+""""""
+type SearchEntry_ConnectionEdge {
+  """"""
+  cursor: String
+
+  """"""
+  node: SearchEntry
+}
+
+""""""
+input SearchEntry_Sort {
+  """"""
+  createdAt: Order
+
+  """"""
+  id: Order
+
+  """"""
+  publishedAt: Order
+
+  """"""
+  searchField: Order
+
+  """"""
+  updatedAt: Order
+}
+
+""""""
+input SearchEntry_Where {
+  """"""
+  AND: [SearchEntry_Where]
+
+  """"""
+  OR: [SearchEntry_Where]
+
+  """"""
+  searchField: CaisyField_String_Where
+}
+
+""""""
+union Search_popularCategories = SearchEntry
+
+""""""
+union Search_popularSearches = SearchEntry
 
 """"""
 type SubCategory {
