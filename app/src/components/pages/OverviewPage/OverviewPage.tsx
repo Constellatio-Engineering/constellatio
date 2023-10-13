@@ -13,7 +13,7 @@ import {
   type IGenCaseOverviewFragment,
 } from "@/services/graphql/__generated/sdk";
 
-import { Loader } from "@mantine/core";
+// import { Loader } from "@mantine/core";
 import { useRouter } from "next/router";
 import { useQueryState } from "next-usequerystate";
 import { type FunctionComponent, Fragment, useEffect } from "react";
@@ -42,6 +42,7 @@ const OverviewPage: FunctionComponent<OverviewPageProps> = ({ content, variant }
 
   useEffect(() => 
   {
+    console.log(router.query.category);
     if(typeof window !== "undefined") 
     {
       void (async () => 
@@ -172,7 +173,7 @@ const OverviewPage: FunctionComponent<OverviewPageProps> = ({ content, variant }
           variant="For-large-areas"
         />
       )}
-      {!router.query.category && <Loader m="50px"/>}
+      {/* {!router.query.category && <Loader m="50px"/>} */}
     </div>
   );
 };
