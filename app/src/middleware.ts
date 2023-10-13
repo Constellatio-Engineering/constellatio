@@ -41,6 +41,6 @@ export const config = {
      *
      * CAUTION: This does not work for the root path ("/")!
      */
-    "/((?!api|login|register|confirm|recover|_next/static|_next/image|favicon.*|extension).*)",
+    "/((?!api|login|register|confirm|recover|_next/static|_next/image|favicon.*|extension|tests).*)",
   ],
 };

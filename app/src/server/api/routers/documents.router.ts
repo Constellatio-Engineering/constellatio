@@ -53,15 +53,15 @@ export const documentsRouter = createTRPCRouter({
     }),
   updateDocument: protectedProcedure
     .input(updateDocumentSchema)
-    .mutation(async ({ ctx: { userId }, input: updatedDocument }) =>
+    .mutation(async ({ ctx: { userId }, input: documentUpdate }) =>
     {
-      const {
-        id,
-        ...updatedDocumentValues
-      } = updatedDocument;
+      const { id, updatedValues } = documentUpdate;
 
       return db.update(documents)
-        .set(updatedDocumentValues)
+        .set({
+          ...updatedValues,
+          updatedAt: new Date()
+        })
         .where(and(
           eq(documents.id, id),
           eq(documents.userId, userId)

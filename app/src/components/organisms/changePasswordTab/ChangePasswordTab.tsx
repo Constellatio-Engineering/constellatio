@@ -1,4 +1,6 @@
 
+import { AlertCard } from "@/components/atoms/Card/AlertCard";
+
 import { Input, TextInput, Title } from "@mantine/core";
 import { useForm } from "@mantine/form";
 import React, { type FunctionComponent } from "react";
@@ -16,6 +18,8 @@ const ChangePasswordTab: FunctionComponent = () =>
       newPassword: "",
     },
   });
+  const [err, setErr] = React.useState<boolean>(true);
+  const [success, setSuccess] = React.useState<boolean>(true);
   const handleSubmit = (e: React.FormEvent<HTMLFormElement>): void => 
   {
     e.preventDefault();
@@ -24,6 +28,8 @@ const ChangePasswordTab: FunctionComponent = () =>
   return (
     <div css={styles.wrapper}>
       <Title order={3}>Change password</Title>
+      {err && <AlertCard onClick={() => setErr(false)} variant="error">Sorry, we weren not able to change password. Please, try again</AlertCard>}
+      {success && <AlertCard onClick={() => setSuccess(false)} variant="success">Your password has been changed</AlertCard>}
       <form onSubmit={handleSubmit}>
         <Input.Wrapper label={<BodyText styleType="body-01-regular">Current password</BodyText>} description="" error="">
           <TextInput placeholder="" type="text" {...form.getInputProps("currentPassword")}/>

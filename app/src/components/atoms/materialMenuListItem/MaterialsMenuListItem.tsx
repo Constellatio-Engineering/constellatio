@@ -1,7 +1,6 @@
 import { Cross } from "@/components/Icons/Cross";
 import { DotsIcon } from "@/components/Icons/dots";
 import { Edit } from "@/components/Icons/Edit";
-import { MoveDownIcon } from "@/components/Icons/MoveDown";
 import { Trash } from "@/components/Icons/Trash";
 
 import {
@@ -18,6 +17,7 @@ import { Input } from "../Input/Input";
 interface MenuListItemProps
 {
   readonly active?: boolean;
+  readonly hideContextMenu?: boolean;
   readonly icon: ReactNode;
   readonly onClick: () => void;
   readonly onDelete?: () => void;
@@ -27,6 +27,7 @@ interface MenuListItemProps
 
 const MaterialsMenuListItem: FunctionComponent<MenuListItemProps & HTMLProps<HTMLButtonElement>> = ({
   active,
+  hideContextMenu,
   icon,
   onClick,
   onDelete,
@@ -51,13 +52,15 @@ const MaterialsMenuListItem: FunctionComponent<MenuListItemProps & HTMLProps<HTM
           }}>
           <BodyText styleType="body-01-medium" component="p">
             <span css={styles.label} title={title}>{icon}{title}</span>
-            <Menu.Target>
-              <span className="dots" onClick={e => e.stopPropagation()}><DotsIcon/></span>
-            </Menu.Target>
+            {!hideContextMenu && (
+              <Menu.Target>
+                <span className="dots" onClick={e => e.stopPropagation()}><DotsIcon/></span>
+              </Menu.Target>
+            )}
           </BodyText>
           <Menu.Dropdown>
             {onRename && (
-              <Menu.Item onClick={e => 
+              <Menu.Item onClick={e =>
               {
                 e.stopPropagation();
                 setShowRenameModal(true);
@@ -65,11 +68,11 @@ const MaterialsMenuListItem: FunctionComponent<MenuListItemProps & HTMLProps<HTM
                 <DropdownItem icon={<Edit/>} label="Rename"/>
               </Menu.Item>
             )}
-            <Menu.Item onClick={() => {}}>
+            {/* <Menu.Item onClick={() => {}}>
               <DropdownItem icon={<MoveDownIcon/>} label="Download"/>
-            </Menu.Item>
+            </Menu.Item>*/}
             {onDelete && (
-              <Menu.Item onClick={e => 
+              <Menu.Item onClick={e =>
               {
                 e.stopPropagation();
                 setShowDeleteModal(true);

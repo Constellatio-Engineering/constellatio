@@ -8,7 +8,7 @@ import useArticles from "@/hooks/useArticles";
 import useBookmarks from "@/hooks/useBookmarks";
 import useCases from "@/hooks/useCases";
 import useUploadedFiles from "@/hooks/useUploadedFiles";
-import useUploadFolders from "@/hooks/useUploadFolders";
+// import useUploadFolders from "@/hooks/useUploadFolders";
 import { type IGenArticle, type IGenCase } from "@/services/graphql/__generated/sdk";
 
 import { Loader } from "@mantine/core";
@@ -29,16 +29,17 @@ const ProfilePersonalSpaceBlock: FunctionComponent = () =>
   const { allCases = [], isLoading: isUseCasesLoading, } = useCases();
   const bookmarkedCases = allCases.filter(caisyCase => allCasesBookmarks.some(bookmark => bookmark.resourceId === caisyCase.id));
   const { allArticles = [], isLoading: areArticlesLoading } = useArticles(); 
-  const { folders = [] } = useUploadFolders();
-  const { isLoading: isGetUploadedFilesLoading, uploadedFiles } = useUploadedFiles(folders[0]?.id || null);
+  // const { folders = [] } = useUploadFolders();
+  const { isLoading: isGetUploadedFilesLoading, uploadedFiles } = useUploadedFiles(null);
   const allArticlesBookmarks = bookmarks.filter(bookmark => bookmark?.resourceType === "article") ?? [];
   const bookmarkedArticles = allArticles.filter((caisyArticle: IGenArticle) => allArticlesBookmarks.some(bookmark => bookmark.resourceId === caisyArticle.id));
-  const favoritesList = [...bookmarkedCases.slice(0, 3), ...bookmarkedArticles.slice(0, 3)];
+  const favoritesList = [...bookmarkedCases, ...bookmarkedArticles];
   const tabs = [
     { icon: { src: <Bookmark/> }, number: (bookmarkedCases?.length + bookmarkedArticles?.length) ?? 0, title: "favorites" }, 
     { icon: { src: <FileIcon/> }, number: uploadedFiles?.length, title: " materials" }
   ];
 
+  console.log({ uploadedFiles });
   return (
     <div css={styles.wrapper}>
       <ProfilePersonalSpaceBlockHead selectedTab={selectedTab} setSelectedTab={setSelectedTab} tabs={tabs}/>

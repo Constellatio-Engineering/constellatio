@@ -1,3 +1,4 @@
+import ProfileBadgesBlock from "@/components/profileBadgesBlock/ProfileBadgesBlock";
 import { type IProfilePageProps } from "@/pages/profile";
 
 import { Title } from "@mantine/core";
@@ -12,6 +13,7 @@ const ProfileOverview: FunctionComponent<{readonly allMainCategory: IProfilePage
     <Title order={3} css={styles.title}>Overview</Title>
     <ProfilePersonalSpaceBlock/>
     <ProgressCardSection mainCategories={allMainCategory}/>
+    <ProfileBadgesBlock/>
   </div>
 );
 

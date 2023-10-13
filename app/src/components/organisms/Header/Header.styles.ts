@@ -62,9 +62,7 @@ display: flex;
 gap: 16px;
 height: 100%;
 	align-items: center;
-	img{
-		margin-right: 40px;
-	}
+
 	span{
 	}
 	a{
@@ -78,6 +76,7 @@ justify-content: flex-end;
 align-items: center;
 gap: 16px;
 position: relative;
+
 .vertical-line{
 	background-color: ${theme.colors["neutrals-01"][3]};
 	color: ${theme.colors["neutrals-01"][3]} ;
