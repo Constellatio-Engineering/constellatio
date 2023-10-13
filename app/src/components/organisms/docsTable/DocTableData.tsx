@@ -12,10 +12,13 @@ import { InvalidateQueriesContext } from "@/provider/InvalidateQueriesProvider";
 import useDocumentEditorStore from "@/stores/documentEditor.store";
 import { api } from "@/utils/api";
 import { paths } from "@/utils/paths";
+import { downloadFileFromUrl } from "@/utils/utils";
 
 import {
-  Menu, Modal, Title 
+  Menu, Modal, Title
 } from "@mantine/core";
+import { notifications } from "@mantine/notifications";
+import { useMutation } from "@tanstack/react-query";
 import axios from "axios";
 import React, { useState } from "react";
 import { type FunctionComponent } from "react";
@@ -36,6 +39,7 @@ export const DocsTableData: FunctionComponent<Document> = (doc) =>
     updatedAt
   } = doc;
 
+  const downloadDocumentNotificationId = `downloading-document${documentId}`;
   const { setEditDocumentState, setViewDocumentState } = useDocumentEditorStore(s => s);
   const { invalidateDocuments } = useContextAndErrorIfNull(InvalidateQueriesContext);
   const { mutate: deleteDocument } = api.documents.deleteDocument.useMutation({
@@ -43,36 +47,54 @@ export const DocsTableData: FunctionComponent<Document> = (doc) =>
     onSuccess: async () => invalidateDocuments({ folderId }),
   });
 
-  const download = async (): Promise<void> =>
-  {
-    let pdfBlob: Blob;
-
-    try 
+  const { isLoading: isDownloading, mutate: downloadDocument } = useMutation({
+    mutationFn: async () =>
     {
-      const response = await axios.post(paths.downloadDocument, { documentId, }, {
-        responseType: "blob",
-      });
-
-      pdfBlob = new Blob([response.data], { type: "application/pdf" });
-    }
-    catch (error) 
+      const response = await axios.post(paths.downloadDocument, { documentId, }, { responseType: "blob" });
+      const pdfBlob = new Blob([response.data], { type: "application/pdf" });
+      const url = window.URL.createObjectURL(pdfBlob);
+      await downloadFileFromUrl(url, `${name}.pdf`);
+    },
+    onError: (error) =>
     {
       console.error("Error while downloading pdf:", error);
-      return;
-    }
-
-    const url = window.URL.createObjectURL(pdfBlob);
-    const a = document.createElement("a");
-
-    a.href = url;
-    a.download = `${name}.pdf`;
-    a.click();
-
-    window.URL.revokeObjectURL(url);
-  };
+      notifications.update({
+        autoClose: false,
+        color: "red",
+        id: downloadDocumentNotificationId,
+        loading: false,
+        message: "Es ist ein Fehler beim Herunterladen der Datei aufgetreten.",
+        title: "Fehler",
+      });
+    },
+    onMutate: () =>
+    {
+      notifications.show({
+        autoClose: false,
+        color: "blue",
+        id: downloadDocumentNotificationId,
+        loading: true,
+        message: "Bitte warte, während die Datei heruntergeladen wird.",
+        title: "Datei wird heruntergeladen",
+      });
+    },
+    onSuccess: () =>
+    {
+      notifications.update({
+        autoClose: 3000,
+        color: "green",
+        id: downloadDocumentNotificationId,
+        loading: false,
+        message: "Die Datei wurde erfolgreich heruntergeladen.",
+        title: "Erfolgreich heruntergeladen",
+      });
+    },
+    retry: false
+  });
   
   const [showDeleteDocModal, setShowDeleteDocModal] = useState<boolean>(false);
   // const [showMoveToModal, setShowMoveToModal] = useState(false);
+
   return (
     <>
       <td><Checkbox/></td>
@@ -91,9 +113,15 @@ export const DocsTableData: FunctionComponent<Document> = (doc) =>
             <button type="button" className="dots-btn"><DotsIcon/></button>
           </Menu.Target>
           <Menu.Dropdown>
-            <Menu.Item onClick={() => setEditDocumentState(doc)}><DropdownItem icon={<Edit/>} label="Rename and edit"/></Menu.Item>
-            <Menu.Item><DropdownItem icon={<FolderIcon/>} label="Move to" onClick={() => { }}/></Menu.Item>
-            <Menu.Item onClick={download}><DropdownItem icon={<DownloadIcon/>} label="Download"/></Menu.Item>
+            <Menu.Item onClick={() => setEditDocumentState(doc)}>
+              <DropdownItem icon={<Edit/>} label="Rename and edit"/>
+            </Menu.Item>
+            <Menu.Item>
+              <DropdownItem icon={<FolderIcon/>} label="Move to" onClick={() => { }}/>
+            </Menu.Item>
+            <Menu.Item disabled={isDownloading} onClick={() => downloadDocument()}>
+              <DropdownItem icon={<DownloadIcon/>} label="Download"/>
+            </Menu.Item>
             <Menu.Item onClick={() => setShowDeleteDocModal(true)}>
               <DropdownItem icon={<Trash/>} label="Delete"/>
             </Menu.Item>
