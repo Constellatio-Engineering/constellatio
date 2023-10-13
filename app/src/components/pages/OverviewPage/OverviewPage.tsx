@@ -49,11 +49,12 @@ const OverviewPage: FunctionComponent<OverviewPageProps> = ({ content, variant }
       {
         try 
         {
-          if(!selectedCategorySlug) 
+          if(!selectedCategorySlug || router.query.category === undefined) 
           {
             await setSelectedCategorySlug(
               slugFormatter(content.allMainCategories?.[0]?.mainCategory ?? "")
             );
+            await router.replace({ query: { category: slugFormatter(content.allMainCategories?.[0]?.mainCategory ?? "") } }, undefined, { shallow: true });
           }
         }
         catch (error) 
