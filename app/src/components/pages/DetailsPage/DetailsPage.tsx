@@ -48,7 +48,7 @@ const DetailsPage: FunctionComponent<IDetailsPageProps> = ({ content, variant })
           },
           { 
             path: `/${variant === "case" ? "cases" : "dictionary"}/${content?.id}`, 
-            slug: content?.title?.length && content?.title?.length > 40 ? content?.title?.slice(0, 40) + " ..." : "Undefined Title" 
+            slug: content?.title?.length && content?.title?.length > 40 ? content?.title?.slice(0, 40) + " ..." : content?.title ?? ""
           }
         ]}
         overviewCard={{
