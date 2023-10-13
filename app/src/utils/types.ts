@@ -46,8 +46,10 @@ export type PartialUndefined<T, K extends keyof T> = {
   [P in keyof T]: P extends K ? T[P] | undefined : T[P];
 };
 
+export type TrpcClientErrorBase = TRPCClientErrorBase<DefaultErrorShape> | null;
+
 export type UseQueryResult<T> = {
-  error: TRPCClientErrorBase<DefaultErrorShape> | null;
+  error: TrpcClientErrorBase;
   isLoading: boolean;
 } & T;
 

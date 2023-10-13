@@ -1,13 +1,10 @@
-import { type FileWithClientSideUuid } from "@/components/pages/personalSpacePage/PersonalSpacePage";
 import PapersBlock from "@/components/papersBlock/PapersBlock";
 import useDocuments from "@/hooks/useDocuments";
-import useUploadedFiles from "@/hooks/useUploadedFiles";
-// import useUploadFolders from "@/hooks/useUploadFolders";
 import useMaterialsStore from "@/stores/materials.store";
 import uploadsProgressStore from "@/stores/uploadsProgress.store";
 
 import { Container } from "@mantine/core";
-import React, { useState, type FunctionComponent } from "react";
+import React, { type FunctionComponent } from "react";
 
 import FileUploadMenu from "../fileUploadMenu/FileUploadMenu";
 import FileViewer from "../fileViewer/FileViewer";
@@ -17,17 +14,12 @@ import UploadedMaterialBlock from "../uploadedMaterialBlock/UploadedMaterialBloc
 const PersonalSpaceMaterialsTab: FunctionComponent = () => 
 {
   const selectedFolderId = useMaterialsStore(s => s.selectedFolderId);
-  const { isLoading: isGetUploadedFilesLoading, uploadedFiles } = useUploadedFiles(selectedFolderId);
   const { documents } = useDocuments(selectedFolderId);
   const fileInputRef = React.useRef<HTMLInputElement>(null);
   const { setUploadState, uploads } = uploadsProgressStore();
-  const [selectedFiles, setSelectedFiles] = useState<FileWithClientSideUuid[]>(
-    []
-  );
   const { selectedFileIdForPreview } = useMaterialsStore();
-  const areUploadsInProgress = uploads.some(
-    (u) => u.state.type === "uploading"
-  );
+  const areUploadsInProgress = uploads.some(u => u.state.type === "uploading");
+
   return (
     <Container maw={1440}>
       <div
@@ -48,11 +40,7 @@ const PersonalSpaceMaterialsTab: FunctionComponent = () =>
           <UploadedMaterialBlock
             areUploadsInProgress={areUploadsInProgress}
             fileInputRef={fileInputRef}
-            isGetUploadedFilesLoading={isGetUploadedFilesLoading}
             setUploadState={setUploadState}
-            selectedFiles={selectedFiles}
-            setSelectedFiles={setSelectedFiles}
-            uploadedFiles={uploadedFiles}
             selectedFolderId={selectedFolderId}
           />
           <FileUploadMenu uploads={uploads}/>
