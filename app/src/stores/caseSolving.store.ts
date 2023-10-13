@@ -24,7 +24,7 @@ interface ICaseSolvingStore
 
 const useCaseSolvingStore = create(
   immer<ICaseSolvingStore>((set, get) => ({
-    caseStepIndex: 0,
+    caseStepIndex: 1,
     gamesIndexes: [],
     getNextGameIndex: () => 
     {

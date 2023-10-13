@@ -44,7 +44,6 @@ const CaseResultsReviewStep: FunctionComponent<ICaseResultsReviewStepProps> = ({
   {
     if(solution && solutionContent.current !== undefined) 
     {
-      solutionContent.current!.innerHTML = solution;
       setSolutionElementHight(solutionContent.current!.offsetHeight);
     }
   }, [solution]);
@@ -94,7 +93,7 @@ const CaseResultsReviewStep: FunctionComponent<ICaseResultsReviewStepProps> = ({
           <div css={styles.leftSideWrapper}>
             {facts?.json && (
               <div css={styles.factsWrapper}>
-                <Accordion variant="separated" defaultValue="facts">
+                <Accordion variant="separated">
                   <Accordion.Item value="facts">
                     <Accordion.Control>
                       <Title order={3}>Facts</Title>
@@ -117,21 +116,21 @@ const CaseResultsReviewStep: FunctionComponent<ICaseResultsReviewStepProps> = ({
                 </div>
               </div>
               {
-                solutionElementHight > 240 ? (
+                solutionElementHight > 220 ? (
                   <Spoiler
                     hideLabel={ShowLessBtn}
                     maxHeight={220}
                     showLabel={ShowAllBtn}
                     styles={styles.spoilerStyles({ isExpandSolution })}>
                     <div className="solution-content">
-                      <ScrollArea h={isExpandSolution && solutionElementHight > 240 ? 500 : undefined} offsetScrollbars>
-                        <div ref={solutionContent}/>
+                      <ScrollArea h={isExpandSolution && solutionElementHight > 220 ? 500 : undefined} offsetScrollbars>
+                        <div ref={solutionContent} dangerouslySetInnerHTML={{ __html: solution }}/>
                       </ScrollArea>
                     </div>
                   </Spoiler>
                 ) : (
                   <div className="solution-content">
-                    <div ref={solutionContent}/>
+                    <div ref={solutionContent} dangerouslySetInnerHTML={{ __html: solution }}/>
                   </div>
                 )
               }

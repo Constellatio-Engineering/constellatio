@@ -8,7 +8,7 @@ import type {
 
 import { Title, useMantineTheme } from "@mantine/core";
 import { type Options } from "next-usequerystate";
-import React, { type FunctionComponent, useState, useEffect } from "react";
+import React, { type FunctionComponent, useState } from "react";
 
 import * as styles from "./OverviewHeader.styles";
 import { LinkButton } from "../../atoms/LinkButton/LinkButton";
@@ -41,12 +41,6 @@ const OverviewHeader: FunctionComponent<ICasesOverviewHeaderProps> = ({
 {
   const theme = useMantineTheme();
   const [filters, setFilters] = useState<string[]>([]);
-  // const [, setTabQuery] = useQueryState("q");
-  useEffect(() =>
-  {
-    // console.log({ selectedCategorySlug });
-  }
-  , [selectedCategorySlug]);
   return (
     <div css={styles.contentHeader({ theme, variant })} className="header">
       <div id="overlay-lines">

@@ -42,7 +42,7 @@ const OverviewPage: FunctionComponent<OverviewPageProps> = ({ content, variant }
 
   useEffect(() => 
   {
-    console.log(router.query.category);
+    // console.log(router.query.category);
     if(typeof window !== "undefined") 
     {
       void (async () => 
@@ -51,6 +51,7 @@ const OverviewPage: FunctionComponent<OverviewPageProps> = ({ content, variant }
         {
           if(!selectedCategorySlug || router.query.category === undefined) 
           {
+            // console.log("!selectedCategorySlug || router.query.category === undefined");
             await setSelectedCategorySlug(
               slugFormatter(content.allMainCategories?.[0]?.mainCategory ?? "")
             );

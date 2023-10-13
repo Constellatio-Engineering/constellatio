@@ -1,12 +1,13 @@
 import { css } from "@emotion/react";
 import { type MantineTheme } from "@mantine/styles";
+// import { Karla } from "next/font/google";
 
 export const MaterialNoteRichText = css`
   margin: 24px 32px;
 `;
 export const MaterialNotesCallToAction = (theme: MantineTheme) => css`
-  position: absolute;
-  bottom: 0;
+  position: sticky;
+  bottom: 0px;
   left: 0;
   width: 100%;
   display: flex;
@@ -20,12 +21,7 @@ export const MaterialNotesCallToAction = (theme: MantineTheme) => css`
     flex: 1;
   }
 `;
-export const wrapper = css`
-  .mantine-Drawer-body {
-    /* padding:0; */
-    background-color: white;
-  }
-`;
+export const wrapper = css``;
 export const existingNote = (theme: MantineTheme) => css`
   padding: 24px 32px;
   background-color: ${theme.colors["neutrals-01"][0]};
@@ -76,6 +72,16 @@ export const richtext = (theme: MantineTheme) => css`
       display: block;
       height: 20px;
       width: 20px;
+    }
+  }
+  all: inherit;
+  ul{
+    list-style: disc;
+  }
+  ol{
+    list-style: decimal;
+    li{
+      /* font-family: Karla; */
     }
   }
 `;

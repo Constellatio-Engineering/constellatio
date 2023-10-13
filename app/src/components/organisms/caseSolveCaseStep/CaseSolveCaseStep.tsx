@@ -7,7 +7,7 @@ import { type IGenCase } from "@/services/graphql/__generated/sdk";
 import useCaseSolvingStore from "@/stores/caseSolving.store";
 
 import { Title } from "@mantine/core";
-import { type EditorEvents } from "@tiptap/react";
+// import { type EditorEvents } from "@tiptap/react";
 import Image from "next/image";
 import React, { useEffect, type FunctionComponent } from "react";
 
@@ -31,17 +31,17 @@ const CaseSolveCaseStep: FunctionComponent<IGenCase> = ({ facts, title }) =>
     setHasCaseSolvingStarted(true);
   // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
-  const updateCaseCompleteStateOnUpdate = (e: EditorEvents["update"]): void => 
-  {
-    if(e.editor?.isEmpty)
-    {
-      setIsStepCompleted(false);
-    }
-    else 
-    {
-      setIsStepCompleted(true);
-    }
-  };
+  // const updateCaseCompleteStateOnUpdate = (e: EditorEvents["update"]): void => 
+  // {
+  //   if(e.editor?.isEmpty)
+  //   {
+  //     setIsStepCompleted(false);
+  //   }
+  //   else 
+  //   {
+  //     setIsStepCompleted(true);
+  //   }
+  // };
 
   return (
     <div css={styles.wrapper} id="solveCaseStepContent">
@@ -52,7 +52,7 @@ const CaseSolveCaseStep: FunctionComponent<IGenCase> = ({ facts, title }) =>
             Of course, the question of whether and how a shareholder can be excluded can also arise in the oHG. Read the related article after handling this case.
           </BodyText>
           <RichtextEditorField
-            onChange={(e) => updateCaseCompleteStateOnUpdate(e)}
+            onChange={() => {}}
             content={solution ?? ""}
             action={(editor) => 
             {
