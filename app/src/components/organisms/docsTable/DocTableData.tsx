@@ -50,22 +50,8 @@ export const DocsTableData: FunctionComponent<Document> = (doc) =>
   const { isLoading: isDownloading, mutate: downloadDocument } = useMutation({
     mutationFn: async () =>
     {
-      let pdfBlob: Blob;
-
-      try
-      {
-        const response = await axios.post(paths.downloadDocument, { documentId, }, {
-          responseType: "blob",
-        });
-
-        pdfBlob = new Blob([response.data], { type: "application/pdf" });
-      }
-      catch (error)
-      {
-        console.error("Error while downloading pdf:", error);
-        return;
-      }
-
+      const response = await axios.post(paths.downloadDocument, { documentId, }, { responseType: "blob" });
+      const pdfBlob = new Blob([response.data], { type: "application/pdf" });
       const url = window.URL.createObjectURL(pdfBlob);
       await downloadFileFromUrl(url, `${name}.pdf`);
     },
@@ -84,6 +70,7 @@ export const DocsTableData: FunctionComponent<Document> = (doc) =>
     onMutate: () =>
     {
       notifications.show({
+        autoClose: false,
         color: "blue",
         id: downloadDocumentNotificationId,
         loading: true,
