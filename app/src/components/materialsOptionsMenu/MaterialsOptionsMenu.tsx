@@ -1,9 +1,12 @@
+import { type UploadedFile } from "@/db/schema";
 import useContextAndErrorIfNull from "@/hooks/useContextAndErrorIfNull";
 import { InvalidateQueriesContext } from "@/provider/InvalidateQueriesProvider";
+import useRenameFileModalStore from "@/stores/renameFileModal.store";
 import { api } from "@/utils/api";
+import { downloadFileFromUrl } from "@/utils/utils";
 
 import { Menu, Modal, Title } from "@mantine/core";
-import React, { type FunctionComponent } from "react";
+import React, { type FunctionComponent, useState } from "react";
 
 import * as styles from "./MaterialsOptionsMenu.styles";
 import { BodyText } from "../atoms/BodyText/BodyText";
@@ -12,33 +15,47 @@ import { DropdownItem } from "../atoms/Dropdown/DropdownItem";
 import { Input } from "../atoms/Input/Input";
 import { Cross } from "../Icons/Cross";
 import { DotsIcon } from "../Icons/dots";
+import { DownloadIcon } from "../Icons/DownloadIcon";
 import { Edit } from "../Icons/Edit";
+import { FolderIcon } from "../Icons/Folder";
 import { Trash } from "../Icons/Trash";
 
 interface MaterialOptionsMenuProps
 {
-  readonly file: {
-    createdAt: Date;
-    fileExtension: string;
-    folderId: string | null;
-    id: string;
-    originalFilename: string;
-    serverFilename: string;
-    sizeInBytes: number;
-    userId: string;
-  }; 
+  readonly file: UploadedFile;
+  readonly selectedFolderId: string | null;
 }
 
-const MaterialOptionsMenu: FunctionComponent<MaterialOptionsMenuProps> = ({ file }) => 
+const MaterialOptionsMenu: FunctionComponent<MaterialOptionsMenuProps> = ({ file, selectedFolderId }) =>
 {
-  const [showDeleteMaterialModal, setShowDeleteMaterialModal] = React.useState<boolean>(false);
-  const [showRenameMaterialModal, setShowRenameMaterialModal] = React.useState<boolean>(false);
-  
   const { invalidateUploadedFiles } = useContextAndErrorIfNull(InvalidateQueriesContext);
+  const renameFileModalState = useRenameFileModalStore(s => s.renameFileModal);
+  const openRenameFileModal = useRenameFileModalStore(s => s.openRenameFileModal);
+  const closeRenameFileModal = useRenameFileModalStore(s => s.closeRenameFileModal);
+  const updateFilename = useRenameFileModalStore(s => s.updateFilename);
+  const hasUnsavedChanges = useRenameFileModalStore(s => s.getHasUnsavedChanges());
+  const [isDeleteMaterialModalOpen, setIsDeleteMaterialModalOpen] = useState<boolean>(false);
+  const _invalidateUploadedFiles = async (): Promise<void> => invalidateUploadedFiles({ folderId: selectedFolderId });
+  const isRenameFileModalOpen = renameFileModalState.modalState === "open" && renameFileModalState.fileId === file.id;
+
+  const { isLoading: isCreateSignedGetUrlLoading, mutateAsync: createSignedGetUrl } = api.uploads.createSignedGetUrl.useMutation({
+    onError: (e) => console.log("error while creating signed get url", e)
+  });
+
+  const { mutate: renameFile } = api.uploads.renameFile.useMutation({
+    onError: (e) => console.log("error while renaming file", e),
+    onSuccess: async () =>
+    {
+      await _invalidateUploadedFiles();
+      closeRenameFileModal();
+    }
+  });
+
   const { mutate: deleteFile } = api.uploads.deleteUploadedFiles.useMutation({
     onError: (e) => console.log("error while deleting file", e),
-    onSuccess: async () => invalidateUploadedFiles()
+    onSuccess: _invalidateUploadedFiles
   });
+
   return (
     <> 
       <Menu shadow="elevation-big" radius="12px" width={200}>
@@ -51,30 +68,32 @@ const MaterialOptionsMenu: FunctionComponent<MaterialOptionsMenuProps> = ({ file
           </td>
         </Menu.Target>
         <Menu.Dropdown>
-          <Menu.Item onClick={() => setShowRenameMaterialModal(true)}>
+          <Menu.Item onClick={() => openRenameFileModal(file)}>
             <DropdownItem icon={<Edit/>} label="Rename"/>
           </Menu.Item>
-          {/*
-           <Menu.Item>
-             <DropdownItem icon={<FolderIcon/>} label="Move to"/>
-           </Menu.Item> */}
-          {/*
-           <Menu.Item>
-             <DropdownItem icon={<DownloadIcon/>} label="Download"/>
-           </Menu.Item> */}
-          {/* <Menu.Item onClick={() => file && deleteFile({ fileIds: [file.id] })}><span className="label"><Trash/>Delete</span></Menu.Item> */}
-          <Menu.Item onClick={() => setShowDeleteMaterialModal(true)}><DropdownItem icon={<Trash/>} label="Delete"/></Menu.Item>
+          <Menu.Item>
+            <DropdownItem icon={<FolderIcon/>} label="Move to"/>
+          </Menu.Item>
+          <Menu.Item
+            onClick={async () =>
+            {
+              const url = await createSignedGetUrl({ fileId: file.id });
+              await downloadFileFromUrl(url, file.originalFilename);
+            }}>
+            <DropdownItem icon={<DownloadIcon/>} label="Download"/>
+          </Menu.Item>
+          <Menu.Item onClick={() => setIsDeleteMaterialModalOpen(true)}><DropdownItem icon={<Trash/>} label="Delete"/></Menu.Item>
         </Menu.Dropdown>
       </Menu>
       {/* POP UPS ------------------------------------------------------------------------------------- */}
       <Modal
         lockScroll={false}
-        opened={showDeleteMaterialModal}
+        opened={isDeleteMaterialModalOpen}
         withCloseButton={false}
         centered
         styles={styles.modalStyles()}
-        onClose={() => { setShowDeleteMaterialModal(false); }}>
-        <span className="close-btn" onClick={() => setShowDeleteMaterialModal(false)}>
+        onClose={() => { setIsDeleteMaterialModalOpen(false); }}>
+        <span className="close-btn" onClick={() => setIsDeleteMaterialModalOpen(false)}>
           <Cross size={32}/>
         </span>
         <Title order={3}>Delete File</Title>
@@ -82,7 +101,7 @@ const MaterialOptionsMenu: FunctionComponent<MaterialOptionsMenuProps> = ({ file
         <div className="modal-call-to-action">
           <Button<"button">
             styleType={"secondarySimple" as TButton["styleType"]}
-            onClick={() => setShowDeleteMaterialModal(false)}>
+            onClick={() => setIsDeleteMaterialModalOpen(false)}>
             No, Keep
           </Button>
           <Button<"button">
@@ -90,50 +109,54 @@ const MaterialOptionsMenu: FunctionComponent<MaterialOptionsMenuProps> = ({ file
             onClick={() => 
             {
               if(file) { deleteFile({ fileIds: [file.id] }); }
-              setShowDeleteMaterialModal(false);
+              setIsDeleteMaterialModalOpen(false);
             }}>
             Yes, Delete
           </Button>
         </div>
       </Modal>
-      {/* second MODAL */}
       <Modal
         lockScroll={false}
-        opened={showRenameMaterialModal}
+        opened={isRenameFileModalOpen}
         withCloseButton={false}
         centered
         styles={styles.modalStyles()}
-        onClose={() => { setShowRenameMaterialModal(false); }}>
-        <span className="close-btn" onClick={() => setShowRenameMaterialModal(false)}>
-          <Cross size={32}/>
-        </span>
-        <Title order={3}>Rename file</Title>
-        <form onSubmit={e => e.preventDefault()}>
-          <div className="new-folder-input">
-            <BodyText styleType="body-01-regular" component="label">File name</BodyText>
-            <Input
-              inputType="text"
-            />
-          </div>
-          <div className="modal-call-to-action">
-            <Button<"button">
-              styleType={"secondarySimple" as TButton["styleType"]}
-              onClick={() => setShowRenameMaterialModal(false)}>
-              Cancel
-            </Button>
-            <Button<"button">
-              styleType="primary"
-              type="submit"
-              // disabled={newFolderName?.trim()?.length <= 0}
-              onClick={() =>
-              {
-                setShowRenameMaterialModal(false);
-              // onRename?.(newFolderName);
-              }}>
-              Save
-            </Button>
-          </div>
-        </form>
+        onClose={closeRenameFileModal}>
+        {isRenameFileModalOpen && (
+          <>
+            <span className="close-btn" onClick={closeRenameFileModal}>
+              <Cross size={32}/>
+            </span>
+            <Title order={3}>Rename file</Title>
+            <form onSubmit={e => e.preventDefault()}>
+              <div className="new-folder-input">
+                <BodyText styleType="body-01-regular" component="label">File name</BodyText>
+                <Input
+                  inputType="text"
+                  value={renameFileModalState.newFilename}
+                  onChange={e => updateFilename(e.target.value)}
+                />
+              </div>
+              <div className="modal-call-to-action">
+                <Button<"button">
+                  styleType={"secondarySimple" as TButton["styleType"]}
+                  onClick={closeRenameFileModal}>
+                  Cancel
+                </Button>
+                <Button<"button">
+                  styleType="primary"
+                  type="submit"
+                  disabled={!hasUnsavedChanges}
+                  onClick={() => renameFile({
+                    id: renameFileModalState.fileId,
+                    newFilename: `${renameFileModalState.newFilename}.${file.fileExtension}`
+                  })}>
+                  Save
+                </Button>
+              </div>
+            </form>
+          </>
+        )}
       </Modal>
     </>
   );

@@ -1,11 +1,12 @@
 import { db } from "@/db/connection";
-import { notes, type UploadedFileInsert, uploadedFiles } from "@/db/schema";
+import { type UploadedFileInsert, uploadedFiles } from "@/db/schema";
 import { env } from "@/env.mjs";
 import { cloudStorage } from "@/lib/cloud-storage";
 import { meiliSearchAdmin } from "@/lib/meilisearch";
 import { addUploadSchema } from "@/schemas/uploads/addUpload.schema";
 import { deleteUploadSchema } from "@/schemas/uploads/deleteUpload.schema";
 import { getUploadedFilesSchema } from "@/schemas/uploads/getUploadedFiles.schema";
+import { renameUploadedFile } from "@/schemas/uploads/renameUploadedFile.schema";
 import { deleteFiles } from "@/server/api/services/uploads.services";
 import { createTRPCRouter, protectedProcedure } from "@/server/api/trpc";
 import { createUploadsSearchIndexItem, searchIndices, uploadSearchIndexItemPrimaryKey } from "@/utils/search";
@@ -22,7 +23,7 @@ export const uploadsRouter = createTRPCRouter({
     .input(z.object({
       fileId: z.string(),
     }))
-    .query(async ({ ctx: { userId }, input: { fileId } }) =>
+    .mutation(async ({ ctx: { userId }, input: { fileId } }) =>
     {
       const file = await db.query.uploadedFiles.findFirst({
         where: and(
@@ -115,6 +116,15 @@ export const uploadsRouter = createTRPCRouter({
         orderBy: [desc(uploadedFiles.createdAt)],
         where: and(...queryConditions),
       });
+    }),
+  renameFile: protectedProcedure
+    .input(renameUploadedFile)
+    .mutation(async ({ ctx: { userId }, input: { id, newFilename } }) =>
+    {
+      await db.update(uploadedFiles).set({ originalFilename: newFilename }).where(and(
+        eq(uploadedFiles.userId, userId),
+        eq(uploadedFiles.id, id)
+      ));
     }),
   saveFileToDatabase: protectedProcedure
     .input(addUploadSchema)
