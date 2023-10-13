@@ -74,6 +74,9 @@ dependencies:
   '@mantine/tiptap':
     specifier: 6.0.19
     version: 6.0.19(@mantine/core@6.0.19)(@mantine/hooks@6.0.19)(@tabler/icons-react@2.32.0)(@tiptap/extension-link@2.1.6)(@tiptap/react@2.1.6)(react@18.2.0)
+  '@sparticuz/chromium-min':
+    specifier: 117.0.0
+    version: 117.0.0
   '@stripe/stripe-js':
     specifier: 2.1.0
     version: 2.1.0
@@ -4555,6 +4558,16 @@ packages:
   /@sinclair/typebox@0.27.8:
     resolution: {integrity: sha512-+Fj43pSMwJs4KRrH/938Uf+uAELIgVBmQzg/q1YG10djyfA3TnrU8N8XzqCh/okZdszqBQTZf96idMfE5lnwTA==}
     dev: true
+
+  /@sparticuz/chromium-min@117.0.0:
+    resolution: {integrity: sha512-T4UvMm7Rw1puIhLxysnU1eLAcddtGswRqpIUVjXU1adXf5gR8a2ywD+HFo/J+ZEmdSgju3uT48pJqSqEywDdmg==}
+    engines: {node: '>= 16'}
+    dependencies:
+      follow-redirects: 1.15.3
+      tar-fs: 3.0.4
+    transitivePeerDependencies:
+      - debug
+    dev: false
 
   /@storybook/addon-actions@7.4.5(@types/react-dom@18.2.7)(@types/react@18.2.21)(react-dom@18.2.0)(react@18.2.0):
     resolution: {integrity: sha512-FkjJWmPN/+duLSkRwfa2bwlwjKfY6yCXYn7CRzn3rb64B8f50NB79zAgVLHjkJh9l6T3DIlWtol6vqPHj1aRpw==}
