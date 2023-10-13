@@ -38,7 +38,7 @@ const MaterialOptionsMenu: FunctionComponent<MaterialOptionsMenuProps> = ({ file
   const _invalidateUploadedFiles = async (): Promise<void> => invalidateUploadedFiles({ folderId: selectedFolderId });
   const isRenameFileModalOpen = renameFileModalState.modalState === "open" && renameFileModalState.fileId === file.id;
 
-  const { isLoading: isCreateSignedGetUrlLoading, mutateAsync: createSignedGetUrl } = api.uploads.createSignedGetUrl.useMutation({
+  const { mutateAsync: createSignedGetUrl } = api.uploads.createSignedGetUrl.useMutation({
     onError: (e) => console.log("error while creating signed get url", e)
   });
 

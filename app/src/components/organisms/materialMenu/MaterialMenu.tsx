@@ -83,6 +83,7 @@ const MaterialMenu: FunctionComponent = () =>
           onClick={() => setSelectedFolderId(null)}
           active={selectedFolderId == null}
           icon={<FolderIcon/>}
+          hideContextMenu
         />
         {folders?.map((folder, folderIndex) => (
           <MaterialsMenuListItem
