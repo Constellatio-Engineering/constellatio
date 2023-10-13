@@ -3,6 +3,7 @@ import useContextAndErrorIfNull from "@/hooks/useContextAndErrorIfNull";
 import { InvalidateQueriesContext } from "@/provider/InvalidateQueriesProvider";
 import useRenameFileModalStore from "@/stores/renameFileModal.store";
 import { api } from "@/utils/api";
+import { downloadFileFromUrl } from "@/utils/utils";
 
 import { Menu, Modal, Title } from "@mantine/core";
 import React, { type FunctionComponent, useState } from "react";
@@ -37,6 +38,10 @@ const MaterialOptionsMenu: FunctionComponent<MaterialOptionsMenuProps> = ({ file
   const _invalidateUploadedFiles = async (): Promise<void> => invalidateUploadedFiles({ folderId: selectedFolderId });
   const isRenameFileModalOpen = renameFileModalState.modalState === "open" && renameFileModalState.fileId === file.id;
 
+  const { isLoading: isCreateSignedGetUrlLoading, mutateAsync: createSignedGetUrl } = api.uploads.createSignedGetUrl.useMutation({
+    onError: (e) => console.log("error while creating signed get url", e)
+  });
+
   const { mutate: renameFile } = api.uploads.renameFile.useMutation({
     onError: (e) => console.log("error while renaming file", e),
     onSuccess: async () =>
@@ -69,7 +74,12 @@ const MaterialOptionsMenu: FunctionComponent<MaterialOptionsMenuProps> = ({ file
           <Menu.Item>
             <DropdownItem icon={<FolderIcon/>} label="Move to"/>
           </Menu.Item>
-          <Menu.Item>
+          <Menu.Item
+            onClick={async () =>
+            {
+              const url = await createSignedGetUrl({ fileId: file.id });
+              await downloadFileFromUrl(url, file.originalFilename);
+            }}>
             <DropdownItem icon={<DownloadIcon/>} label="Download"/>
           </Menu.Item>
           <Menu.Item onClick={() => setIsDeleteMaterialModalOpen(true)}><DropdownItem icon={<Trash/>} label="Delete"/></Menu.Item>

@@ -23,7 +23,7 @@ export const uploadsRouter = createTRPCRouter({
     .input(z.object({
       fileId: z.string(),
     }))
-    .query(async ({ ctx: { userId }, input: { fileId } }) =>
+    .mutation(async ({ ctx: { userId }, input: { fileId } }) =>
     {
       const file = await db.query.uploadedFiles.findFirst({
         where: and(
