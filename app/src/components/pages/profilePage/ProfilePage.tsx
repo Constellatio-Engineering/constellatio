@@ -9,10 +9,12 @@ import { type IProfilePageProps } from "@/pages/profile";
 
 import { Container } from "@mantine/core";
 import { useRouter } from "next/router";
+import { useQueryState } from "next-usequerystate";
 import React, { useState, type FunctionComponent } from "react";
 
 const ProfilePage: FunctionComponent<IProfilePageProps> = ({ allMainCategory }) =>
 {
+  const [query, setQuery] = useQueryState("tab");
   const [tabs, setTabs] = useState<ITab[]>([
     { selected: true, slug: "overview", title: "Overview" },
     { selected: false, slug: "profile-details", title: "Profile Details" },
@@ -46,26 +48,44 @@ const ProfilePage: FunctionComponent<IProfilePageProps> = ({ allMainCategory }) 
   const router = useRouter();
   React.useEffect(() => 
   {
-    if(router.query.q)
+    if(typeof window !== "undefined") 
     {
-      setTabs(tabs.map((x: ITab) => x.slug === router.query.q ? ({ ...x, selected: true }) : ({ ...x, selected: false })));
+      void (async () => 
+      {
+        try 
+        {
+          if(!query) 
+          {
+            await router.replace({ query: { tab: tabs?.[0]?.slug ?? "" } });
+          } 
+          else 
+          {
+            setTabs(tabs.map((x: ITab) => x.slug === query ? ({ ...x, selected: true }) : ({ ...x, selected: false })));
+          }
+        }
+        catch (error) 
+        {
+          console.error(error);
+        }
+      })();
     }
-  // DO NOT ADD {tabs} TO THE DEPENDENCY ARRAY, it causes infinite loop
-  // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [router.query.q]);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [router.query.tab, setQuery]);
 
-  return (
-    <div>
-      <ProfilePageHeader/>
-      <Container
-        maw={1440}
-        sx={{
-          alignItems: "flex-start", display: "flex", flexDirection: "row", gap: "32px", justifyContent: "flex-start", padding: "32px ",
-        }}>
-        <ProfileMenu tabs={tabs} setTabs={setTabs}/>
-        {contentPicker(tabs)}
-      </Container>
-    </div>
+  return router.query.tab && (
+    <> 
+      <div>
+        <ProfilePageHeader/>
+        <Container
+          maw={1440}
+          sx={{
+            alignItems: "flex-start", display: "flex", flexDirection: "row", gap: "32px", justifyContent: "flex-start", padding: "32px ",
+          }}>
+          <ProfileMenu tabs={tabs} setQuery={setQuery} setTabs={setTabs}/>
+          {contentPicker(tabs)}
+        </Container>
+      </div>
+    </>
   );
 };
 

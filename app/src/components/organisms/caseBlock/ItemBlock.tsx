@@ -1,6 +1,7 @@
 import { Button } from "@/components/atoms/Button/Button";
 import StatusTableCell from "@/components/atoms/statusTableCell/StatusTableCell";
 import TableCell from "@/components/atoms/tableCell/TableCell";
+import { ArrowDown } from "@/components/Icons/ArrowDown";
 import { ClockIcon } from "@/components/Icons/ClockIcon";
 // import { Notepad } from "@/ckomponents/Icons/Notepad";
 import CaseBlockHead, { type ICaseBlockHeadProps } from "@/components/molecules/caseBlockHead/CaseBlockHead";
@@ -140,7 +141,7 @@ const ItemBlock: FunctionComponent<ICaseBlockProps> = ({
             <>
               <span className="linearGredient"/>
               <Button<"button"> css={styles.expandTableButton} styleType="tertiary" onClick={() => setNumberOfShowingItems(prev => prev + 10)}>
-                {items?.length - numberOfShowingItems > 10 ? 10 : items?.length - numberOfShowingItems} weitere anzeigen
+                {items?.length - numberOfShowingItems > 10 ? 10 : items?.length - numberOfShowingItems} weitere anzeigen <ArrowDown/>
               </Button>
             </>
           </div>

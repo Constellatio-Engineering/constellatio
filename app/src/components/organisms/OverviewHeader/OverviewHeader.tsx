@@ -7,8 +7,8 @@ import type {
 } from "@/services/graphql/__generated/sdk";
 
 import { Title, useMantineTheme } from "@mantine/core";
-import { useQueryState } from "next-usequerystate";
-import React, { type FunctionComponent, useState } from "react";
+import { type Options } from "next-usequerystate";
+import React, { type FunctionComponent, useState, useEffect } from "react";
 
 import * as styles from "./OverviewHeader.styles";
 import { LinkButton } from "../../atoms/LinkButton/LinkButton";
@@ -19,8 +19,8 @@ import FilterTag from "../../molecules/filterTag/FilterTag";
 export interface ICasesOverviewHeaderProps 
 {
   readonly categories?: IArticlesOverviewProps["allMainCategories"];
-  readonly selectedCategory?: IGenMainCategory;
-  readonly setSelectedCategory?: React.Dispatch<React.SetStateAction<IGenMainCategory | undefined>> ;
+  readonly selectedCategorySlug?: IGenMainCategory["mainCategory"];
+  readonly setSelectedCategorySlug?: (value: string | ((old: string | null) => string | null) | null, options?: Options | undefined) => Promise<URLSearchParams>;
   readonly title?: Maybe<Scalars["String"]["output"]>;
   readonly variant: "case" | "dictionary" | "red";
 }
@@ -33,15 +33,20 @@ export const slugFormatter = (name: string): string => name
 
 const OverviewHeader: FunctionComponent<ICasesOverviewHeaderProps> = ({
   categories,
-  selectedCategory,
-  setSelectedCategory,
+  selectedCategorySlug,
+  setSelectedCategorySlug,
   title,
   variant
 }) => 
 {
   const theme = useMantineTheme();
   const [filters, setFilters] = useState<string[]>([]);
-  const [, setTabQuery] = useQueryState("q");
+  // const [, setTabQuery] = useQueryState("q");
+  useEffect(() =>
+  {
+    // console.log({ selectedCategorySlug });
+  }
+  , [selectedCategorySlug]);
   return (
     <div css={styles.contentHeader({ theme, variant })} className="header">
       <div id="overlay-lines">
@@ -49,18 +54,18 @@ const OverviewHeader: FunctionComponent<ICasesOverviewHeaderProps> = ({
       </div>
       <Title order={1} css={styles.title({ theme, variant })}>{title}</Title>
       <div css={styles.categoriesButtons}>
-        {categories && categories.map((category: IGenMainCategory & {casesPerCategory: number}, index: number) => category?.id && setSelectedCategory && (
+        {categories && categories.map((category: IGenMainCategory & {casesPerCategory: number}, index: number) => category?.mainCategory && setSelectedCategorySlug && (
           <div
             key={index}
-            onClick={() => 
+            onClick={async () => 
             {
-              void setTabQuery(slugFormatter(category?.mainCategory ?? ""));
-              setSelectedCategory(category);
+              await setSelectedCategorySlug(slugFormatter(category?.mainCategory ?? ""));
             }}>
             <CategoryTab
               {...category}
               itemsNumber={category?.casesPerCategory}
-              selected={category?.id === selectedCategory?.id}
+              // selected={isCategorySelected(category)}
+              selected={selectedCategorySlug === slugFormatter(category?.mainCategory)}
               variant={variant}
             />
           </div>
