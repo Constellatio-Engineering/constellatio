@@ -105,13 +105,6 @@ export const Header: FC<HeaderProps> = ({ variant = "default" }) =>
         </div>
       </SHeader>
       <SearchOverlay/>
-      <SearchOverlay/>
-      <SearchOverlay/>
-      <SearchOverlay/>
-      <SearchOverlay/>
-      <SearchOverlay/>
-      <SearchOverlay/>
-      <SearchOverlay/>
     </>
   ) : variant === "relative" && (
     <styles.SHeaderRelative>
