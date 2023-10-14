@@ -8,7 +8,7 @@ import useContextAndErrorIfNull from "@/hooks/useContextAndErrorIfNull";
 import { supabase } from "@/lib/supabase";
 import { InvalidateQueriesContext } from "@/provider/InvalidateQueriesProvider";
 import { loginFormSchema } from "@/schemas/auth/loginForm.schema";
-import { paths } from "@/utils/paths";
+import { paths, queryParams } from "@/utils/paths";
 
 import { Stack } from "@mantine/core";
 import { useForm, zodResolver } from "@mantine/form";
@@ -23,9 +23,10 @@ type SignInError = "emailNotConfirmed" | "invalidCredentials" | "unknownError";
 
 export const LoginForm: FunctionComponent = () =>
 {
+  const router = useRouter();
+  const wasPasswordUpdated = router.query[queryParams.passwordResetSuccess] === "true";
   const { invalidateEverything } = useContextAndErrorIfNull(InvalidateQueriesContext);
   const [, setResetPasswordModalOpen] = useAtom(resetPasswordModalVisible);
-  const router = useRouter();
   const [isLoginInProgress, setIsLoginInProgress] = useState(false);
   const [signInError, setSignInError] = useState<SignInError>();
   const form = useForm({
@@ -99,6 +100,7 @@ export const LoginForm: FunctionComponent = () =>
       {signInError === "emailNotConfirmed" && <AlertCard stylesOverwrite={{ marginBottom: "40px" }} variant="error">Du musst zuerst deine E-Mail Adresse bestätigen. Eine Bestätigungsmail wurde dir zugesendet.</AlertCard>}
       {signInError === "invalidCredentials" && <AlertCard stylesOverwrite={{ marginBottom: "40px" }} variant="error">Wir konnten keinen Account mit diesen Anmeldedaten finden. Bitte überprüfe deine Eingaben.</AlertCard>}
       {signInError === "unknownError" && <AlertCard stylesOverwrite={{ marginBottom: "40px" }} variant="error">Es ist ein unbekannter Fehler aufgetreten. Bitte versuche es erneut.</AlertCard>}
+      {wasPasswordUpdated && <AlertCard stylesOverwrite={{ marginBottom: "40px" }} variant="success">Dein Passwort wurde erfolgreich geändert. Du kannst dich jetzt mit deinem neuen Passwort anmelden.</AlertCard>}
       <form onSubmit={handleSubmit}>
         <Stack spacing="spacing-24">
           <Stack spacing="spacing-12">

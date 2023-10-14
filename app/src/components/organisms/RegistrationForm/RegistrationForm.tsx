@@ -225,7 +225,7 @@ export const RegistrationForm: FunctionComponent = () =>
           bottom={48}
           ta="center"
           styleType="body-01-regular">
-          Didn not receive an email?{" "}
+          Did not receive an email?{" "}
           <CustomLink styleType="link-primary" href="#" onClick={resendConfirmationEmail}>Send again</CustomLink>
         </BodyText>
       </div>
