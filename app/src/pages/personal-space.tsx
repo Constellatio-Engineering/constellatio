@@ -1,9 +1,9 @@
 import { Layout } from "@/components/layouts/Layout";
 import PersonalSpacePage from "@/components/pages/personalSpacePage/PersonalSpacePage";
 
-import React, { type FunctionComponent } from "react";
+import { type NextPage } from "next";
 
-const Page: FunctionComponent = () =>
+const Page: NextPage = () =>
 {
   return (
     <Layout>

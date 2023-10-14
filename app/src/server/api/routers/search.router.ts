@@ -1,6 +1,7 @@
 import { env } from "@/env.mjs";
 import { getDefaultSearchApiKey, meiliSearchAdmin } from "@/lib/meilisearch";
 import { createTRPCRouter, protectedProcedure } from "@/server/api/trpc";
+import getPopularSearches from "@/services/content/getPopularSearches";
 import { type SearchIndex } from "@/utils/search";
 
 type SearchRules = {
@@ -10,6 +11,11 @@ type SearchRules = {
 };
 
 export const searchRouter = createTRPCRouter({
+  getPopularSearch: protectedProcedure
+    .query(async () =>
+    {
+      return getPopularSearches();
+    }),
   getTenantToken: protectedProcedure
     .query(async ({ ctx: { userId } }) =>
     {

@@ -822,6 +822,8 @@ export type IGenQuery = {
   FillInGapsGame?: Maybe<IGenFillInGapsGame>;
   LegalArea?: Maybe<IGenLegalArea>;
   MainCategory?: Maybe<IGenMainCategory>;
+  Search?: Maybe<IGenSearch>;
+  SearchEntry?: Maybe<IGenSearchEntry>;
   SubCategory?: Maybe<IGenSubCategory>;
   Tags?: Maybe<IGenTags>;
   Topic?: Maybe<IGenTopic>;
@@ -834,6 +836,7 @@ export type IGenQuery = {
   allFillInGapsGame?: Maybe<IGenFillInGapsGame_Connection>;
   allLegalArea?: Maybe<IGenLegalArea_Connection>;
   allMainCategory?: Maybe<IGenMainCategory_Connection>;
+  allSearchEntry?: Maybe<IGenSearchEntry_Connection>;
   allSubCategory?: Maybe<IGenSubCategory_Connection>;
   allTags?: Maybe<IGenTags_Connection>;
   allTopic?: Maybe<IGenTopic_Connection>;
@@ -889,6 +892,17 @@ export type IGenQueryLegalAreaArgs = {
 
 
 export type IGenQueryMainCategoryArgs = {
+  id: Scalars['ID']['input'];
+  locale?: InputMaybe<Scalars['String']['input']>;
+};
+
+
+export type IGenQuerySearchArgs = {
+  locale?: InputMaybe<Scalars['String']['input']>;
+};
+
+
+export type IGenQuerySearchEntryArgs = {
   id: Scalars['ID']['input'];
   locale?: InputMaybe<Scalars['String']['input']>;
 };
@@ -1011,6 +1025,17 @@ export type IGenQueryAllMainCategoryArgs = {
 };
 
 
+export type IGenQueryAllSearchEntryArgs = {
+  after?: InputMaybe<Scalars['String']['input']>;
+  before?: InputMaybe<Scalars['String']['input']>;
+  first?: InputMaybe<Scalars['Int']['input']>;
+  last?: InputMaybe<Scalars['Int']['input']>;
+  locale?: InputMaybe<Scalars['String']['input']>;
+  sort?: InputMaybe<Array<InputMaybe<IGenSearchEntry_Sort>>>;
+  where?: InputMaybe<Array<InputMaybe<IGenSearchEntry_Where>>>;
+};
+
+
 export type IGenQueryAllSubCategoryArgs = {
   after?: InputMaybe<Scalars['String']['input']>;
   before?: InputMaybe<Scalars['String']['input']>;
@@ -1042,6 +1067,66 @@ export type IGenQueryAllTopicArgs = {
   sort?: InputMaybe<Array<InputMaybe<IGenTopic_Sort>>>;
   where?: InputMaybe<Array<InputMaybe<IGenTopic_Where>>>;
 };
+
+export type IGenSearch = {
+  __typename?: 'Search';
+  _meta?: Maybe<IGenCaisyDocument_Meta>;
+  id?: Maybe<Scalars['ID']['output']>;
+  popularCategories?: Maybe<Array<Maybe<IGenSearch_PopularCategories>>>;
+  popularSearches?: Maybe<Array<Maybe<IGenSearch_PopularSearches>>>;
+};
+
+
+export type IGenSearchPopularCategoriesArgs = {
+  after?: InputMaybe<Scalars['String']['input']>;
+  first?: InputMaybe<Scalars['Int']['input']>;
+  locale?: InputMaybe<Scalars['String']['input']>;
+};
+
+
+export type IGenSearchPopularSearchesArgs = {
+  after?: InputMaybe<Scalars['String']['input']>;
+  first?: InputMaybe<Scalars['Int']['input']>;
+  locale?: InputMaybe<Scalars['String']['input']>;
+};
+
+export type IGenSearchEntry = {
+  __typename?: 'SearchEntry';
+  _meta?: Maybe<IGenCaisyDocument_Meta>;
+  id?: Maybe<Scalars['ID']['output']>;
+  searchField?: Maybe<Scalars['String']['output']>;
+};
+
+export type IGenSearchEntry_Connection = {
+  __typename?: 'SearchEntry_Connection';
+  edges?: Maybe<Array<Maybe<IGenSearchEntry_ConnectionEdge>>>;
+  pageInfo?: Maybe<IGenPageInfo>;
+  totalCount?: Maybe<Scalars['Int']['output']>;
+};
+
+export type IGenSearchEntry_ConnectionEdge = {
+  __typename?: 'SearchEntry_ConnectionEdge';
+  cursor?: Maybe<Scalars['String']['output']>;
+  node?: Maybe<IGenSearchEntry>;
+};
+
+export type IGenSearchEntry_Sort = {
+  createdAt?: InputMaybe<IGenOrder>;
+  id?: InputMaybe<IGenOrder>;
+  publishedAt?: InputMaybe<IGenOrder>;
+  searchField?: InputMaybe<IGenOrder>;
+  updatedAt?: InputMaybe<IGenOrder>;
+};
+
+export type IGenSearchEntry_Where = {
+  AND?: InputMaybe<Array<InputMaybe<IGenSearchEntry_Where>>>;
+  OR?: InputMaybe<Array<InputMaybe<IGenSearchEntry_Where>>>;
+  searchField?: InputMaybe<IGenCaisyField_String_Where>;
+};
+
+export type IGenSearch_PopularCategories = IGenSearchEntry;
+
+export type IGenSearch_PopularSearches = IGenSearchEntry;
 
 export type IGenSubCategory = {
   __typename?: 'SubCategory';
@@ -1284,9 +1369,22 @@ export type IGenMainCategoryFragment = { __typename: 'MainCategory', id?: string
     & IGenAssetFragment
   ) | null };
 
+export type IGenSearchEntryFragment = { __typename: 'SearchEntry', id?: string | null, searchField?: string | null };
+
 export type IGenTagsFragment = { __typename: 'Tags', id?: string | null, tagName?: string | null };
 
 export type IGenTopicFragment = { __typename: 'Topic', id?: string | null, topicName?: string | null };
+
+export type IGenGetPopularSearchesQueryVariables = Exact<{ [key: string]: never; }>;
+
+
+export type IGenGetPopularSearchesQuery = { __typename?: 'Query', Search?: { __typename: 'Search', id?: string | null, popularCategories?: Array<(
+      { __typename?: 'SearchEntry' }
+      & IGenSearchEntryFragment
+    ) | null> | null, popularSearches?: Array<(
+      { __typename?: 'SearchEntry' }
+      & IGenSearchEntryFragment
+    ) | null> | null } | null };
 
 export type IGenGetAllCasesByMainCategoryQueryVariables = Exact<{
   mainCategory: Scalars['String']['input'];
@@ -1593,6 +1691,27 @@ export const FullCaseFragmentDoc = gql`
   }
 }
     `;
+export const SearchEntryFragmentDoc = gql`
+    fragment SearchEntry on SearchEntry {
+  __typename
+  id
+  searchField
+}
+    `;
+export const GetPopularSearchesDocument = gql`
+    query getPopularSearches {
+  Search {
+    __typename
+    id
+    popularCategories {
+      ...SearchEntry
+    }
+    popularSearches {
+      ...SearchEntry
+    }
+  }
+}
+    ${SearchEntryFragmentDoc}`;
 export const GetAllCasesByMainCategoryDocument = gql`
     query getAllCasesByMainCategory($mainCategory: String!) {
   allCase(
@@ -1733,6 +1852,9 @@ ${TopicFragmentDoc}`;
 export type Requester<C = {}, E = unknown> = <R, V>(doc: DocumentNode, vars?: V, options?: C) => Promise<R> | AsyncIterable<R>
 export function getSdk<C, E>(requester: Requester<C, E>) {
   return {
+    getPopularSearches(variables?: IGenGetPopularSearchesQueryVariables, options?: C): Promise<IGenGetPopularSearchesQuery> {
+      return requester<IGenGetPopularSearchesQuery, IGenGetPopularSearchesQueryVariables>(GetPopularSearchesDocument, variables, options) as Promise<IGenGetPopularSearchesQuery>;
+    },
     getAllCasesByMainCategory(variables: IGenGetAllCasesByMainCategoryQueryVariables, options?: C): Promise<IGenGetAllCasesByMainCategoryQuery> {
       return requester<IGenGetAllCasesByMainCategoryQuery, IGenGetAllCasesByMainCategoryQueryVariables>(GetAllCasesByMainCategoryDocument, variables, options) as Promise<IGenGetAllCasesByMainCategoryQuery>;
     },

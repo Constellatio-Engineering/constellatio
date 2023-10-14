@@ -1,17 +1,20 @@
-
 import { Cross } from "@/components/Icons/Cross";
 import { Modal } from "@/components/molecules/Modal/Modal";
+import ResetPasswordSuccess from "@/components/organisms/ResetPasswordModal/resetPasswordSuccess/ResetPasswordSuccess";
 import ResetPasswordForm from "@/components/resetPasswordForm/ResetPasswordForm";
 
 import { atom, useAtom } from "jotai";
-import { type FunctionComponent } from "react";
+import { type FunctionComponent, useState } from "react";
 
 export const resetPasswordModalVisible = atom(false);
+
+export type ResetPasswordModalProgress = "form" | "success";
 
 export const ResetPasswordModal: FunctionComponent = () =>
 {
   const [isOpen, setOpen] = useAtom(resetPasswordModalVisible);
   const handleClose = (): void => setOpen(false);
+  const [progress, setProgress] = useState<ResetPasswordModalProgress>("form");
 
   return (
     <Modal
@@ -26,7 +29,8 @@ export const ResetPasswordModal: FunctionComponent = () =>
         }}>
         <Cross size={32}/>
       </span>
-      <ResetPasswordForm/>
+      {progress === "form" && <ResetPasswordForm setProgress={setProgress}/>}
+      {progress === "success" && <ResetPasswordSuccess closeModal={handleClose}/>}
     </Modal>
   );
 };

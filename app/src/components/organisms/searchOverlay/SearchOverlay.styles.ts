@@ -42,23 +42,14 @@ export const drawerStyles = () =>
   return styles;
 };
 
-export const suggestionsLeft = ({ hasInput, hasNoResults }: {
-  hasInput: boolean;
-  hasNoResults: boolean;
-}) => css`
+export const suggestionsLeft = (theme: MantineTheme) => css`
 	width: 61%;
 	min-height: 100%;
 	display: flex;
 	flex-direction: column;
 	padding: 40px 0 60px 60px;
 	gap: 40px;
-
-	${hasInput &&
-	hasNoResults &&
-	css`
-		margin: 0 auto;
-		width: 100%;
-	`}
+	border-right: 1px solid ${theme.colors["neutrals-01"][3]};
 
 	.emptyStateCard {
 		display: flex;
@@ -96,7 +87,6 @@ export const suggestionsRight = (theme: MantineTheme) => css`
 	padding: 40px 60px;
 	gap: 52px;
 	min-height: 100%;
-	border-left: 1px solid ${theme.colors["neutrals-01"][3]};
 
 	.suggestion__section {
 		&__link {
