@@ -13,6 +13,10 @@ export const paths = {
   search: "/search"
 };
 
+export const queryParams = {
+  passwordResetSuccess: "passwordResetSuccess",
+};
+
 export const getConfirmEmailUrl = (): string =>
 {
   return env.NEXT_PUBLIC_WEBSITE_URL + paths.confirm;

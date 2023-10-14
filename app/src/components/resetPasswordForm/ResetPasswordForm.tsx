@@ -70,6 +70,7 @@ const ResetPasswordForm: FunctionComponent<Props> = ({ setProgress }) =>
           <Input
             inputType="text"
             label="Email"
+            title="Email"
             {...emailFormInputProps}
             onChange={e =>
             {

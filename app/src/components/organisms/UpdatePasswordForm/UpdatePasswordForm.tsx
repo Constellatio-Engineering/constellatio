@@ -1,81 +1,108 @@
 import { Button } from "@/components/atoms/Button/Button";
+import { AlertCard } from "@/components/atoms/Card/AlertCard";
 import { Input } from "@/components/atoms/Input/Input";
 import { PasswordValidationSchema } from "@/components/helpers/PasswordValidationSchema";
 import { supabase } from "@/lib/supabase";
-import { updatePasswordFormSchema } from "@/schemas/auth/updatePasswordForm.schema";
+import { type UpdatePasswordFormSchema, updatePasswordFormSchema } from "@/schemas/auth/updatePasswordForm.schema";
+import { paths, queryParams } from "@/utils/paths";
 
 import { Box, Stack, Title } from "@mantine/core";
 import { useForm, zodResolver } from "@mantine/form";
 import { useDisclosure } from "@mantine/hooks";
+import { AuthApiError } from "@supabase/gotrue-js";
+import { useMutation } from "@tanstack/react-query";
 import { useRouter } from "next/router";
-import { type FunctionComponent, useState } from "react";
+import { type FunctionComponent } from "react";
+
+const initialValues: UpdatePasswordFormSchema = {
+  password: "",
+  passwordConfirm: "",
+};
 
 export const UpdatePasswordForm: FunctionComponent = () =>
 {
-  const [isPasswordRevealed, { toggle }] = useDisclosure(false);
   const router = useRouter();
-  const [submitting, setSubmitting] = useState(false);
-  const form = useForm({
-    initialValues: {
-      password: "",
-      passwordConfirm: "",
-    },
+  const [isPasswordRevealed, { toggle }] = useDisclosure(false);
+  const form = useForm<UpdatePasswordFormSchema>({
+    initialValues,
     validate: zodResolver(updatePasswordFormSchema),
     validateInputOnBlur: true,
   });
 
-  const handleSubmit = form.onSubmit(async (formValues) =>
-  {
-    try
+  const { error, isLoading, mutate: updatePassword } = useMutation({
+    mutationFn: async (password: string) =>
     {
-      setSubmitting(true);
-      await supabase.auth.updateUser({ password: formValues.password });
-      await router.replace("/");
-    }
-    catch (error)
-    {
-      console.log("error updating password:", error);
-    }
-    finally
-    {
-      setSubmitting(false);
-    }
+      const updatePasswordResult = await supabase.auth.updateUser({ password });
+
+      if(updatePasswordResult.error)
+      {
+        throw updatePasswordResult.error;
+      }
+    },
+    onError: (error) => console.log("error updating password:", error),
+    onSuccess: async () => router.replace(`${paths.login}?${queryParams.passwordResetSuccess}=true`),
   });
 
+  let errorType: "unknownError" | "passwordsMatch" | null = null;
+
+  if(error)
+  {
+    if(error instanceof AuthApiError && error.message === "New password should be different from the old password.")
+    {
+      errorType = "passwordsMatch";
+    }
+    else
+    {
+      errorType = "unknownError";
+    }
+  }
+
   return (
-    <>
-      <form onSubmit={handleSubmit}>
-        <Stack spacing="spacing-32">
-          <Title order={3} align="center" c="neutrals-02.1">
-            Set new password
-          </Title>
-          <Stack spacing="spacing-12">
-            <Box>
-              <Input
-                inputType="password"
-                label="Password"
-                title="Password"
-                {...form.getInputProps("password")}
-                onVisibilityChange={toggle}
-              />
-              <PasswordValidationSchema passwordValue={form.values.password} isPasswordRevealed={isPasswordRevealed}/>
-            </Box>
+    <form onSubmit={form.onSubmit((formValues) => updatePassword(formValues.password))}>
+      <Stack spacing="spacing-32">
+        <Title order={3} align="center" c="neutrals-02.1">
+          Set new password
+        </Title>
+        {errorType === "passwordsMatch" && (
+          <AlertCard variant="error">
+            Das neue Passwort muss sich vom alten Passwort unterscheiden.
+          </AlertCard>
+        )}
+        {errorType === "unknownError" && (
+          <AlertCard variant="error">
+            Da ist etwas schief gelaufen. Bitte versuche es erneut.
+          </AlertCard>
+        )}
+        <Stack spacing="spacing-12">
+          <Box>
             <Input
+              {...form.getInputProps("password")}
               inputType="password"
-              label="Confirm Password"
-              title="Confirm Password"
-              {...form.getInputProps("passwordConfirm")}
+              label="Password"
+              title="Password"
+              onVisibilityChange={toggle}
             />
-          </Stack>
-          <Button<"button">
-            styleType="primary"
-            type="submit"
-            title="Reset Password"
-            loading={submitting}>
-            Reset Password
-          </Button>
+            <PasswordValidationSchema
+              passwordValue={form.values.password}
+              isPasswordRevealed={isPasswordRevealed}
+            />
+          </Box>
+          <Input
+            {...form.getInputProps("passwordConfirm")}
+            inputType="password"
+            error={form.errors.passwordConfirm}
+            label="Confirm Password"
+            title="Confirm Password"
+          />
         </Stack>
-      </form>
-    </>
+        <Button<"button">
+          styleType="primary"
+          type="submit"
+          title="Reset Password"
+          loading={isLoading}>
+          Reset Password
+        </Button>
+      </Stack>
+    </form>
   );
 };
