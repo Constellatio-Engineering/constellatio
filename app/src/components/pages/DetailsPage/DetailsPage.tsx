@@ -4,10 +4,15 @@ import CaseResultsReviewStep from "@/components/organisms/caseResultsReviewStep/
 import CaseSolveCaseStep from "@/components/organisms/caseSolveCaseStep/CaseSolveCaseStep";
 import CaseSolvingHeader from "@/components/organisms/caseSolvingHeader/CaseSolvingHeader";
 import { slugFormatter } from "@/components/organisms/OverviewHeader/OverviewHeader";
+import useArticleViews from "@/hooks/useArticleViews";
+import useCaseViews from "@/hooks/useCaseViews";
+import useContextAndErrorIfNull from "@/hooks/useContextAndErrorIfNull";
+import { InvalidateQueriesContext } from "@/provider/InvalidateQueriesProvider";
 import { type IGenArticle, type IGenCase } from "@/services/graphql/__generated/sdk";
 import useCaseSolvingStore from "@/stores/caseSolving.store";
+import { api } from "@/utils/api";
 
-import React, { useEffect, type FunctionComponent } from "react";
+import React, { useEffect, type FunctionComponent, useRef } from "react";
 
 import * as styles from "./DetailsPage.styles";
 
@@ -18,18 +23,47 @@ type IDetailsPageProps = {
 
 const DetailsPage: FunctionComponent<IDetailsPageProps> = ({ content, variant }) => 
 {
-  const setHasCaseSolvingStarted = useCaseSolvingStore((state) => state.setHasCaseSolvingStarted);
+  const { invalidateArticleViews, invalidateCaseViews } = useContextAndErrorIfNull(InvalidateQueriesContext);
   const caseStepIndex = useCaseSolvingStore((state) => state.caseStepIndex);
-  const setCaseStepIndex = useCaseSolvingStore((state) => state.setCaseStepIndex);
+  const contentId = content?.id;
+  const { mutate: addArticleView } = api.views.addArticleView.useMutation({
+    onSuccess: async () => invalidateArticleViews({ articleId: contentId! })
+  });
+  const { mutate: addCaseView } = api.views.addCaseView.useMutation({
+    onSuccess: async () => invalidateCaseViews({ caseId: contentId! })
+  });
+  const wasViewCountUpdated = useRef<boolean>(false);
+  const { count: articleViews } = useArticleViews(content?.__typename === "Article" ? contentId : null);
+  const { count: caseViews } = useCaseViews(content?.__typename === "Case" ? contentId : null);
+
+  useEffect(() =>
+  {
+    if(!contentId || !content?.__typename || wasViewCountUpdated.current)
+    {
+      return;
+    }
+
+    if(content?.__typename === "Case")
+    {
+      addCaseView({ caseId: contentId });
+    }
+    else if(content?.__typename === "Article")
+    {
+      addArticleView({ articleId: contentId });
+    }
+
+    wasViewCountUpdated.current = true;
+  }, [addArticleView, addCaseView, content?.__typename, contentId]);
 
   useEffect(() => 
   {
+    const { setCaseStepIndex, setHasCaseSolvingStarted } = useCaseSolvingStore.getState();
+
     if(content?.__typename === "Article")
     {
       setCaseStepIndex(0);
       setHasCaseSolvingStarted(true);
     }
-  // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [content?.__typename]);
 
   return (
@@ -59,7 +93,7 @@ const DetailsPage: FunctionComponent<IDetailsPageProps> = ({ content, variant })
           timeInMinutes: content?.__typename === "Case" && content.durationToCompleteInMinutes ? content.durationToCompleteInMinutes : undefined,
           topic: content?.topic?.[0]?.topicName ?? "",
           variant,
-          views: 0,
+          views: content?.__typename === "Article" ? articleViews : caseViews,
         }}
       />
       <CaseNavBar

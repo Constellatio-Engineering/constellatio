@@ -50,6 +50,20 @@
       "when": 1696804933447,
       "tag": "0006_lyrical_blizzard",
       "breakpoints": true
+    },
+    {
+      "idx": 7,
+      "version": "5",
+      "when": 1697360354397,
+      "tag": "0007_spicy_sue_storm",
+      "breakpoints": true
+    },
+    {
+      "idx": 8,
+      "version": "5",
+      "when": 1697360354889,
+      "tag": "0008_faulty_molly_hayes",
+      "breakpoints": true
     }
   ]
 }

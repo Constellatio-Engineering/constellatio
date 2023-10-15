@@ -7,6 +7,7 @@ import { foldersRouter } from "@/server/api/routers/folders.router";
 import { notesRouter } from "@/server/api/routers/notes.router";
 import { searchRouter } from "@/server/api/routers/search.router";
 import { uploadsRouter } from "@/server/api/routers/uploads.router";
+import { viewsRouter } from "@/server/api/routers/views.router";
 import { createTRPCRouter } from "@/server/api/trpc";
 
 /**
@@ -24,6 +25,7 @@ export const appRouter = createTRPCRouter({
   notes: notesRouter,
   search: searchRouter,
   uploads: uploadsRouter,
+  views: viewsRouter,
 });
 
 // export type definition of API

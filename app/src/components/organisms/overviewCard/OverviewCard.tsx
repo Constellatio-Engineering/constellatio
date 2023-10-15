@@ -86,13 +86,11 @@ const OverviewCard: FunctionComponent<IOverviewCard> = ({
     <div css={styles.wrapper()}>
       <div css={styles.topDetails({ theme, variant })}>
         <div className="left-side">
-          {views !== undefined && views !== null && (
-            <div className="views">
-              <CaptionText styleType="caption-01-bold">
-                <Show/> {views} VIEWS
-              </CaptionText>
-            </div>
-          )}
+          <div className="views">
+            <CaptionText styleType="caption-01-bold">
+              <Show/> {views} VIEWS
+            </CaptionText>
+          </div>
           {variant === "case" && (timeInMinutes !== null && timeInMinutes !== undefined) && (
             <div className="time">
               <CaptionText styleType="caption-01-bold">
