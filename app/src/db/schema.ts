@@ -10,8 +10,14 @@ export type GenderIdentifier = typeof allGenderIdentifiers[number];
 export const allBookmarkResourceTypes = ["article", "case"] as const;
 export type BookmarkResourceType = typeof allBookmarkResourceTypes[number];
 
+export const allCaseProgressStates = ["not-started", "in-progress", "completed"] as const;
+export type CaseProgressState = typeof allCaseProgressStates[number];
+
 export const genderEnum = pgEnum("Gender", allGenderIdentifiers);
 export const resourceTypeEnum = pgEnum("ResourceType", allBookmarkResourceTypes);
+export const caseProgressStateEnum = pgEnum("CaseProgressState", allCaseProgressStates);
+
+// TODO: Go through all queries and come up with useful indexes
 
 export const users = pgTable("User", {
   id: uuid("Id").unique().notNull().primaryKey(),
@@ -94,7 +100,7 @@ export type UploadedFileWithNote = UploadedFile & { note: Note | null };
 
 export const cases_views = pgTable("Case_View", {
   userId: uuid("UserId").references(() => users.id, { onDelete: "no action" }).notNull(),
-  caseId: uuid("CaseId"),
+  caseId: uuid("CaseId").notNull(),
 }, table => ({
   caseIdIndex: index("CaseId_Index").on(table.caseId),
   pk: primaryKey(table.userId, table.caseId),
@@ -105,7 +111,7 @@ export type CaseView = InferSelectModel<typeof cases_views>;
 
 export const articles_views = pgTable("Article_View", {
   userId: uuid("UserId").references(() => users.id, { onDelete: "no action" }).notNull(),
-  articleId: uuid("ArticleId"),
+  articleId: uuid("ArticleId").notNull(),
 }, table => ({
   articleIdIndex: index("ArticleId_Index").on(table.articleId),
   pk: primaryKey(table.userId, table.articleId),
@@ -113,3 +119,15 @@ export const articles_views = pgTable("Article_View", {
 
 export type ArticleViewInsert = InferInsertModel<typeof articles_views>;
 export type ArticleView = InferSelectModel<typeof articles_views>;
+
+export const casesProgress = pgTable("CasesProgress", {
+  caseId: uuid("CaseId").notNull(),
+  userId: uuid("UserId").references(() => users.id, { onDelete: "no action" }).notNull(),
+  progressState: caseProgressStateEnum("ProgressState").notNull().default("not-started"),
+}, table => ({
+  caseId_userId_Index: index("CaseId_UserId_Index").on(table.userId, table.caseId),
+  pk: primaryKey(table.userId, table.caseId),
+}));
+
+export type CaseProgressInsert = InferInsertModel<typeof casesProgress>;
+export type CaseProgress = InferSelectModel<typeof casesProgress>;

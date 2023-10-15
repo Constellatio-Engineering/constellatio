@@ -1,4 +1,5 @@
 import { CompletedStatusLabelIcon, InProgressStatusLabelIcon, NotStartedStatusLabelIcon } from "@/components/Icons/StatusLabelIcons";
+import { type CaseProgressState } from "@/db/schema";
 
 import React, { type FunctionComponent, type PropsWithChildren } from "react";
 
@@ -8,14 +9,14 @@ import { BodyText } from "../BodyText/BodyText";
 export interface IStatusLabel extends PropsWithChildren 
 {
   // readonly title?: string;
-  readonly variant: "notStarted" | "inProgress" | "completed";
+  readonly variant: CaseProgressState;
 }
 
 const StatusLabel: FunctionComponent<IStatusLabel> = ({ variant }) => 
 {
   switch (variant) 
   {
-    case "inProgress":
+    case "in-progress":
       return (
         <div css={styles.inProgress}>
           <InProgressStatusLabelIcon/>
@@ -29,7 +30,7 @@ const StatusLabel: FunctionComponent<IStatusLabel> = ({ variant }) =>
           <BodyText styleType="body-02-medium" component="p">Completed</BodyText>
         </div>
       );
-    case "notStarted":
+    case "not-started":
       return (
         <div css={styles.notStarted}>
           <NotStartedStatusLabelIcon/>

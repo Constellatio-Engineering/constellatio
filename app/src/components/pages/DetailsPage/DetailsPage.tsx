@@ -1,3 +1,4 @@
+import ErrorPage from "@/components/errorPage/ErrorPage";
 import CaseCompleteTestsStep from "@/components/organisms/caseCompleteTestsStep/CaseCompleteTestsStep";
 import CaseNavBar from "@/components/organisms/caseNavBar/CaseNavBar";
 import CaseResultsReviewStep from "@/components/organisms/caseResultsReviewStep/CaseResultsReviewStep";
@@ -35,6 +36,9 @@ const DetailsPage: FunctionComponent<IDetailsPageProps> = ({ content, variant })
   const wasViewCountUpdated = useRef<boolean>(false);
   const { count: articleViews } = useArticleViews(content?.__typename === "Article" ? contentId : null);
   const { count: caseViews } = useCaseViews(content?.__typename === "Case" ? contentId : null);
+  const { data: caseProgress } = api.casesProgress.getCaseProgress.useQuery({ caseId: contentId! }, {
+    enabled: variant === "case" && contentId != null
+  });
 
   useEffect(() =>
   {
@@ -66,6 +70,13 @@ const DetailsPage: FunctionComponent<IDetailsPageProps> = ({ content, variant })
     }
   }, [content?.__typename]);
 
+  if(contentId == null)
+  {
+    return (
+      <ErrorPage error="case/article ID was not found"/>
+    );
+  }
+
   return (
     <>
       <CaseSolvingHeader
@@ -88,7 +99,7 @@ const DetailsPage: FunctionComponent<IDetailsPageProps> = ({ content, variant })
         overviewCard={{
           lastUpdated: content?._meta?.updatedAt,
           legalArea: content?.legalArea,
-          status: "notStarted",
+          status: caseProgress?.progressState,
           tags: content?.tags,
           timeInMinutes: content?.__typename === "Case" && content.durationToCompleteInMinutes ? content.durationToCompleteInMinutes : undefined,
           topic: content?.topic?.[0]?.topicName ?? "",
@@ -102,6 +113,7 @@ const DetailsPage: FunctionComponent<IDetailsPageProps> = ({ content, variant })
       <div css={styles.mainContainer}>
         {content?.fullTextTasks && caseStepIndex === 0 && (
           <CaseCompleteTestsStep {...{
+            caseId: contentId,
             facts: content?.__typename === "Case" ? content?.facts : undefined,
             fullTextTasks: content?.fullTextTasks,
             variant

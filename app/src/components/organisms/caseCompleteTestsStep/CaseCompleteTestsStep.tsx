@@ -3,6 +3,7 @@ import { Button } from "@/components/atoms/Button/Button";
 import { richTextHeadingOverwrite } from "@/components/helpers/richTextHeadingOverwrite";
 import { type Maybe, type IGenCase_Facts, type IGenCase_FullTextTasks, type IGenArticle_FullTextTasks } from "@/services/graphql/__generated/sdk";
 import useCaseSolvingStore from "@/stores/caseSolving.store";
+import { api } from "@/utils/api";
 import type { IDocumentLink, IHeadingNode } from "types/richtext";
 
 import { Container, Title } from "@mantine/core";
@@ -25,20 +26,31 @@ import { SolveCaseGame } from "../SolveCaseGame/SolveCaseGame";
 
 interface ICaseCompleteTestsStepProps 
 {
+  readonly caseId: string;
   readonly facts: Maybe<IGenCase_Facts> | undefined;
   readonly fullTextTasks: Maybe<IGenCase_FullTextTasks> | Maybe<IGenArticle_FullTextTasks>;
   readonly variant?: "case" | "dictionary";
 }
 
-const CaseCompleteTestsStep: FunctionComponent<ICaseCompleteTestsStepProps> = ({ facts, fullTextTasks, variant }) => 
+const CaseCompleteTestsStep: FunctionComponent<ICaseCompleteTestsStepProps> = ({
+  caseId,
+  facts,
+  fullTextTasks,
+  variant
+}) =>
 {
-  const getNextGameIndex = useCaseSolvingStore((state) => state.getNextGameIndex);
+  // const getNextGameIndex = useCaseSolvingStore((state) => state.getNextGameIndex);
   const hasCaseSolvingStarted = useCaseSolvingStore((state) => state.hasCaseSolvingStarted);
   const isLastGame = useCaseSolvingStore((state) => state.isLastGame);
   const latestGameIndex = useCaseSolvingStore((state) => state.latestGameIndex);
   const setGamesIndexes = useCaseSolvingStore((state) => state.setGamesIndexes);
-  const setHasCaseSolvingStarted = useCaseSolvingStore((state) => state.setHasCaseSolvingStarted);
+  // const setHasCaseSolvingStarted = useCaseSolvingStore((state) => state.setHasCaseSolvingStarted);
   const setCaseStepIndex = useCaseSolvingStore((state) => state.setCaseStepIndex);
+
+  const { mutate: setProgressState } = api.casesProgress.setProgressState.useMutation({
+    onError: (error) => console.error(error),
+    onSuccess: () => console.log("Progress state updated")
+  });
 
   const renderedCaseContent = useMemo(() => 
   {
@@ -175,8 +187,9 @@ const CaseCompleteTestsStep: FunctionComponent<ICaseCompleteTestsStepProps> = ({
               type="button"
               onClick={() => 
               {
-                setHasCaseSolvingStarted(true); 
-                getNextGameIndex(); 
+                setProgressState({ caseId, progressState: "in-progress" });
+                // setHasCaseSolvingStarted(true);
+                // getNextGameIndex();
               }}>
               Start solving case
             </Button>
