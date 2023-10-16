@@ -29,13 +29,16 @@ const StatusLabel: FunctionComponent<IStatusLabel> = ({ variant }) =>
           <BodyText styleType="body-02-medium" component="p">Completed</BodyText>
         </div>
       );
-    default:
+    case "notStarted":
       return (
         <div css={styles.notStarted}>
           <NotStartedStatusLabelIcon/>
-          <BodyText styleType="body-02-medium" component="p">Not Selected</BodyText>
+          <BodyText styleType="body-02-medium" component="p">Not Started</BodyText>
         </div>
       );
+    default:
+      console.log("Invalid status label variant: " + variant);
+      return null;
   }
 };
 

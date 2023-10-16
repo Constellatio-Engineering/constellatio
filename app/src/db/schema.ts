@@ -1,7 +1,7 @@
-/* eslint-disable sort-keys-fix/sort-keys-fix */
+/* eslint-disable sort-keys-fix/sort-keys-fix,@typescript-eslint/naming-convention */
 import { type InferInsertModel, type InferSelectModel } from "drizzle-orm";
 import {
-  text, pgTable, integer, pgEnum, uuid, smallint, unique, timestamp
+  text, pgTable, integer, pgEnum, uuid, smallint, unique, timestamp, primaryKey, index
 } from "drizzle-orm/pg-core";
 
 export const allGenderIdentifiers = ["male", "female", "diverse",] as const;
@@ -91,3 +91,25 @@ export type NoteInsert = InferInsertModel<typeof notes>;
 export type Note = InferSelectModel<typeof notes>;
 
 export type UploadedFileWithNote = UploadedFile & { note: Note | null };
+
+export const cases_views = pgTable("Case_View", {
+  userId: uuid("UserId").references(() => users.id, { onDelete: "no action" }).notNull(),
+  caseId: uuid("CaseId"),
+}, table => ({
+  caseIdIndex: index("CaseId_Index").on(table.caseId),
+  pk: primaryKey(table.userId, table.caseId),
+}));
+
+export type CaseViewInsert = InferInsertModel<typeof cases_views>;
+export type CaseView = InferSelectModel<typeof cases_views>;
+
+export const articles_views = pgTable("Article_View", {
+  userId: uuid("UserId").references(() => users.id, { onDelete: "no action" }).notNull(),
+  articleId: uuid("ArticleId"),
+}, table => ({
+  articleIdIndex: index("ArticleId_Index").on(table.articleId),
+  pk: primaryKey(table.userId, table.articleId),
+}));
+
+export type ArticleViewInsert = InferInsertModel<typeof articles_views>;
+export type ArticleView = InferSelectModel<typeof articles_views>;

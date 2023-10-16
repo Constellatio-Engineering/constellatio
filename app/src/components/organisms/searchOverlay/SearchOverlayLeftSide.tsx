@@ -1,6 +1,6 @@
-import { BodyText } from "@/components/atoms/BodyText/BodyText";
 import { CustomLink } from "@/components/atoms/CustomLink/CustomLink";
 import Tag from "@/components/atoms/tag/Tag";
+import useGetPopularSearch from "@/hooks/useGetPopularSearch";
 import useSearchResults from "@/hooks/useSearchResults";
 import useSearchBarStore from "@/stores/searchBar.store";
 import { paths } from "@/utils/paths";
@@ -16,56 +16,49 @@ type SearchOverlayLeftSideProps = {
   readonly hasInput: boolean;
 };
 
-const SearchOverlayLeftSide: FunctionComponent<SearchOverlayLeftSideProps> = ({ hasInput }) => 
+const SearchOverlayLeftSide: FunctionComponent<SearchOverlayLeftSideProps> = ({ hasInput }) =>
 {
   const searchHistory = useSearchBarStore((s) => s.searchHistory);
-  const setSearchValue = useSearchBarStore((s) => s.setSearchValue);
   const { isLoading, searchResults } = useSearchResults();
-  const hasNoResults = searchResults.cases.length === 0 && searchResults.articles.length === 0;
+  const { popularSearch } = useGetPopularSearch();
 
   // Loading should be so fast that it is okay to show the recent searches in the meantime, so it switches instantly from recent searches to results
-  if(!hasInput || isLoading) 
+  if(!hasInput || isLoading)
   {
     return (
-      <div css={styles.suggestionsLeft({ hasInput, hasNoResults })}>
+      <div css={styles.suggestionsLeft}>
         <SuggestionSection label="recent searches" labelVariant="neutral">
-          {searchHistory.length > 0 ? (
-            searchHistory.map((result, index) => (
-              <span
-                onClick={() => setSearchValue(result)}
-                key={index}
-                className="suggestion__section__link">
-                <CustomLink styleType="link-content-title" component="p">
-                  {result}
-                </CustomLink>
-              </span>
-            ))
-          ) : (
-            <BodyText styleType="body-01-medium" c="neutrals-02.1">
-              Your search history is clean
-            </BodyText>
-          )}
-        </SuggestionSection>
-        {/* <SuggestionSection label="popular search" labelVariant="neutral">
           {searchHistory.map((result, index) => (
-            <span
-              onClick={() => setSearchValue(result)}
+            <Link
+              href={`${paths.search}?find=${result}`}
               key={index}
               className="suggestion__section__link">
               <CustomLink styleType="link-content-title" component="p">
                 {result}
               </CustomLink>
-            </span>
+            </Link>
           ))}
-        </SuggestionSection> */}
+        </SuggestionSection>
+        <SuggestionSection label="popular search" labelVariant="neutral">
+          {popularSearch?.popularSearches?.map((result) => (
+            <Link
+              href={`${paths.search}?find=${result?.searchField}`}
+              key={result?.id}
+              className="suggestion__section__link">
+              <CustomLink styleType="link-content-title" component="p">
+                {result?.searchField}
+              </CustomLink>
+            </Link>
+          ))}
+        </SuggestionSection>
       </div>
     );
   }
 
-  if(hasNoResults) 
+  if(searchResults.cases.length === 0 && searchResults.articles.length === 0)
   {
     return (
-      <div css={styles.suggestionsLeft({ hasInput, hasNoResults })}>
+      <div css={styles.suggestionsLeft}>
         <span className="emptyStateCard">
           <EmptyStateCard
             variant="For-small-areas"
@@ -78,7 +71,7 @@ const SearchOverlayLeftSide: FunctionComponent<SearchOverlayLeftSideProps> = ({ 
   }
 
   return (
-    <div css={styles.suggestionsLeft({ hasInput, hasNoResults })}>
+    <div css={styles.suggestionsLeft}>
       {searchResults.cases.length > 0 && (
         <SuggestionSection label="Cases" labelVariant="case">
           {searchResults.cases.slice(0, 9).map((result) => (

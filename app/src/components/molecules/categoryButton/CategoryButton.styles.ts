@@ -13,6 +13,7 @@ export const wrapper = (theme: MantineTheme) => css`
   border: 1px solid ${theme.colors["neutrals-01"][3]};
   background-color: ${theme.colors["neutrals-01"][0]};
   transition: border-color 0.3s ease-in-out;
+  color: ${theme.colors["neutrals-02"][1]};
 
   > p {
     overflow: hidden;
