@@ -11,10 +11,12 @@ type InvalidateBookmarksOptions = inferProcedureInput<AppRouter["bookmarks"]["ge
 type InvalidateNotesOptions = inferProcedureInput<AppRouter["notes"]["getNotes"]>;
 type InvalidateArticleViewsOptions = inferProcedureInput<AppRouter["views"]["getArticleViews"]>;
 type InvalidateCaseViewsOptions = inferProcedureInput<AppRouter["views"]["getCaseViews"]>;
+type InvalidateCaseProgressOptions = inferProcedureInput<AppRouter["casesProgress"]["getCaseProgress"]>;
 
 type InvalidateQueries = {
   invalidateArticleViews: (options: InvalidateArticleViewsOptions) => Promise<void>;
   invalidateBookmarks: (options?: InvalidateBookmarksOptions) => Promise<void>;
+  invalidateCaseProgress: (options?: InvalidateCaseProgressOptions) => Promise<void>;
   invalidateCaseViews: (options: InvalidateCaseViewsOptions) => Promise<void>;
   invalidateDocuments: (options?: InvalidateDocumentsOptions) => Promise<void>;
   invalidateEverything: () => Promise<void>;
@@ -37,6 +39,7 @@ const InvalidateQueriesProvider: FunctionComponent<InvalidateQueriesProviderProp
   const invalidateQueries: InvalidateQueries = useMemo(() => ({
     invalidateArticleViews: async (options) => apiContext.views.getArticleViews.invalidate(options),
     invalidateBookmarks: async (options) => apiContext.bookmarks.getAllBookmarks.invalidate(options),
+    invalidateCaseProgress: async (options) => apiContext.casesProgress.getCaseProgress.invalidate(options),
     invalidateCaseViews: async (options) => apiContext.views.getCaseViews.invalidate(options),
     invalidateDocuments: async (options) => apiContext.documents.getDocuments.invalidate(options),
     invalidateEverything: async () => invalidateAll(),
@@ -51,7 +54,8 @@ const InvalidateQueriesProvider: FunctionComponent<InvalidateQueriesProviderProp
     apiContext.documents.getDocuments,
     apiContext.bookmarks.getAllBookmarks,
     apiContext.notes.getNotes,
-    apiContext.uploads.getUploadedFiles
+    apiContext.uploads.getUploadedFiles,
+    apiContext.casesProgress.getCaseProgress
   ]);
 
   return (

@@ -6,12 +6,14 @@ import CaseSolveCaseStep from "@/components/organisms/caseSolveCaseStep/CaseSolv
 import CaseSolvingHeader from "@/components/organisms/caseSolvingHeader/CaseSolvingHeader";
 import { slugFormatter } from "@/components/organisms/OverviewHeader/OverviewHeader";
 import useArticleViews from "@/hooks/useArticleViews";
+import useCaseProgress from "@/hooks/useCaseProgress";
 import useCaseViews from "@/hooks/useCaseViews";
 import useContextAndErrorIfNull from "@/hooks/useContextAndErrorIfNull";
 import { InvalidateQueriesContext } from "@/provider/InvalidateQueriesProvider";
 import { type IGenArticle, type IGenCase } from "@/services/graphql/__generated/sdk";
 import useCaseSolvingStore from "@/stores/caseSolving.store";
 import { api } from "@/utils/api";
+import { paths } from "@/utils/paths";
 
 import React, { useEffect, type FunctionComponent, useRef } from "react";
 
@@ -27,6 +29,8 @@ const DetailsPage: FunctionComponent<IDetailsPageProps> = ({ content, variant })
   const { invalidateArticleViews, invalidateCaseViews } = useContextAndErrorIfNull(InvalidateQueriesContext);
   const caseStepIndex = useCaseSolvingStore((state) => state.caseStepIndex);
   const contentId = content?.id;
+  const caseId = content?.__typename === "Case" ? contentId : undefined;
+  const articleId = content?.__typename === "Article" ? contentId : undefined;
   const { mutate: addArticleView } = api.views.addArticleView.useMutation({
     onSuccess: async () => invalidateArticleViews({ articleId: contentId! })
   });
@@ -34,11 +38,9 @@ const DetailsPage: FunctionComponent<IDetailsPageProps> = ({ content, variant })
     onSuccess: async () => invalidateCaseViews({ caseId: contentId! })
   });
   const wasViewCountUpdated = useRef<boolean>(false);
-  const { count: articleViews } = useArticleViews(content?.__typename === "Article" ? contentId : null);
-  const { count: caseViews } = useCaseViews(content?.__typename === "Case" ? contentId : null);
-  const { data: caseProgress } = api.casesProgress.getCaseProgress.useQuery({ caseId: contentId! }, {
-    enabled: variant === "case" && contentId != null
-  });
+  const { count: articleViews } = useArticleViews(articleId);
+  const { count: caseViews } = useCaseViews(caseId);
+  const { caseProgress } = useCaseProgress(caseId);
 
   useEffect(() =>
   {
@@ -84,7 +86,7 @@ const DetailsPage: FunctionComponent<IDetailsPageProps> = ({ content, variant })
         variant={variant}
         pathSlugs={[
           {
-            path: variant === "case" ? "/cases" : "/dictionary", 
+            path: variant === "case" ? paths.cases : paths.dictionary,
             slug: variant === "case" ? "Cases" : "Dictionary" 
           },
           {
@@ -97,6 +99,7 @@ const DetailsPage: FunctionComponent<IDetailsPageProps> = ({ content, variant })
           }
         ]}
         overviewCard={{
+          contentId,
           lastUpdated: content?._meta?.updatedAt,
           legalArea: content?.legalArea,
           status: caseProgress?.progressState,
@@ -129,7 +132,9 @@ const DetailsPage: FunctionComponent<IDetailsPageProps> = ({ content, variant })
         )}
         {content?.__typename === "Case" && content?.facts && content?.resolution && content?.title && caseStepIndex === 2 && (
           <CaseResultsReviewStep {...{
-            facts: content?.facts, resolution: content?.resolution, title: content?.title 
+            facts: content?.facts,
+            resolution: content?.resolution,
+            title: content?.title
           }}
           />
         )}

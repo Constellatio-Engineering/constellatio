@@ -1,6 +1,8 @@
 /* eslint-disable max-lines */
 import { Button } from "@/components/atoms/Button/Button";
 import { richTextHeadingOverwrite } from "@/components/helpers/richTextHeadingOverwrite";
+import useContextAndErrorIfNull from "@/hooks/useContextAndErrorIfNull";
+import { InvalidateQueriesContext } from "@/provider/InvalidateQueriesProvider";
 import { type Maybe, type IGenCase_Facts, type IGenCase_FullTextTasks, type IGenArticle_FullTextTasks } from "@/services/graphql/__generated/sdk";
 import useCaseSolvingStore from "@/stores/caseSolving.store";
 import { api } from "@/utils/api";
@@ -39,17 +41,17 @@ const CaseCompleteTestsStep: FunctionComponent<ICaseCompleteTestsStepProps> = ({
   variant
 }) =>
 {
-  // const getNextGameIndex = useCaseSolvingStore((state) => state.getNextGameIndex);
+  const { invalidateCaseProgress } = useContextAndErrorIfNull(InvalidateQueriesContext);
+  const getNextGameIndex = useCaseSolvingStore((state) => state.getNextGameIndex);
   const hasCaseSolvingStarted = useCaseSolvingStore((state) => state.hasCaseSolvingStarted);
   const isLastGame = useCaseSolvingStore((state) => state.isLastGame);
   const latestGameIndex = useCaseSolvingStore((state) => state.latestGameIndex);
   const setGamesIndexes = useCaseSolvingStore((state) => state.setGamesIndexes);
-  // const setHasCaseSolvingStarted = useCaseSolvingStore((state) => state.setHasCaseSolvingStarted);
+  const setHasCaseSolvingStarted = useCaseSolvingStore((state) => state.setHasCaseSolvingStarted);
   const setCaseStepIndex = useCaseSolvingStore((state) => state.setCaseStepIndex);
-
   const { mutate: setProgressState } = api.casesProgress.setProgressState.useMutation({
     onError: (error) => console.error(error),
-    onSuccess: () => console.log("Progress state updated")
+    onSuccess: async () => invalidateCaseProgress({ caseId })
   });
 
   const renderedCaseContent = useMemo(() => 
@@ -176,9 +178,7 @@ const CaseCompleteTestsStep: FunctionComponent<ICaseCompleteTestsStepProps> = ({
           <Title order={2}>Facts</Title>
           <Richtext
             data={facts}
-            richTextOverwrite={{
-              paragraph: richTextParagraphOverwrite,
-            }}
+            richTextOverwrite={{ paragraph: richTextParagraphOverwrite }}
           />
           {!hasCaseSolvingStarted && (
             <Button<"button">
@@ -188,8 +188,8 @@ const CaseCompleteTestsStep: FunctionComponent<ICaseCompleteTestsStepProps> = ({
               onClick={() => 
               {
                 setProgressState({ caseId, progressState: "in-progress" });
-                // setHasCaseSolvingStarted(true);
-                // getNextGameIndex();
+                setHasCaseSolvingStarted(true);
+                getNextGameIndex();
               }}>
               Start solving case
             </Button>

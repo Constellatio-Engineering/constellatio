@@ -2,10 +2,14 @@ import { db } from "@/db/connection";
 import { type CaseProgress, casesProgress } from "@/db/schema";
 import { getCaseProgressSchema } from "@/schemas/caseProgress/getCaseProgress.schema";
 import { getCasesProgressSchema } from "@/schemas/caseProgress/getCasesProgress.schema";
+import { resetCaseProgressSchema } from "@/schemas/caseProgress/resetCaseProgress.schema";
 import { setCaseProgressStateSchema } from "@/schemas/caseProgress/setCaseProgressState.schema";
 import { createTRPCRouter, protectedProcedure } from "@/server/api/trpc";
 
 import { and, eq, inArray, type SQLWrapper } from "drizzle-orm";
+
+export type GetCaseProgressResult = Pick<CaseProgress, "progressState" | "caseId">;
+type GetCasesProgressResult = GetCaseProgressResult[];
 
 export const caseProgressRouter = createTRPCRouter({
   getCaseProgress: protectedProcedure
@@ -19,16 +23,24 @@ export const caseProgressRouter = createTRPCRouter({
         ),
       });
 
+      let getCaseProgressResult: GetCaseProgressResult;
+
       if(!caseProgress)
       {
-        return {
+        getCaseProgressResult = {
           caseId,
-          progressState: "not-started",
-          userId,
-        } satisfies CaseProgress;
+          progressState: "not-started"
+        };
+      }
+      else
+      {
+        getCaseProgressResult = {
+          caseId,
+          progressState: caseProgress.progressState
+        };
       }
 
-      return caseProgress;
+      return getCaseProgressResult;
     }),
   getCasesProgress: protectedProcedure
     .input(getCasesProgressSchema)
@@ -42,17 +54,31 @@ export const caseProgressRouter = createTRPCRouter({
         queryConditions.push(inArray(casesProgress.caseId, caseIds));
       }
 
-      return db.query.casesProgress.findMany({
+      const casesProgressQueryResult = await db.query.casesProgress.findMany({
         where: and(...queryConditions),
       });
+
+      const filteredResult: GetCasesProgressResult = casesProgressQueryResult.map(({ caseId, progressState }) => ({
+        caseId,
+        progressState
+      }));
+
+      return filteredResult;
     }),
   resetProgress: protectedProcedure
-    .mutation(() =>
+    .input(resetCaseProgressSchema)
+    .mutation(async ({ ctx: { userId }, input: { caseId } }) =>
     {
-      // Set case progress to "not-started"
-      // Reset all games progress
+      await db.delete(casesProgress).where(
+        and(
+          eq(casesProgress.userId, userId),
+          eq(casesProgress.caseId, caseId),
+        )
+      );
 
-      console.log("resetProgress");
+      /*
+       * TODO - reset all games progress
+       */
     }),
   setProgressState: protectedProcedure
     .input(setCaseProgressStateSchema)

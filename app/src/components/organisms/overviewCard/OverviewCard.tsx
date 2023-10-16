@@ -1,4 +1,4 @@
-
+/* eslint-disable max-lines */
 import { BodyText } from "@/components/atoms/BodyText/BodyText";
 import { CaptionText } from "@/components/atoms/CaptionText/CaptionText";
 import { LinkButton } from "@/components/atoms/LinkButton/LinkButton";
@@ -8,7 +8,10 @@ import { Show } from "@/components/Icons/Show";
 import { Timer } from "@/components/Icons/timer";
 import { Trash } from "@/components/Icons/Trash";
 import OverviewCardTagsModal from "@/components/overviewCardTagsModal/OverviewCardTagsModal";
+import useContextAndErrorIfNull from "@/hooks/useContextAndErrorIfNull";
+import { InvalidateQueriesContext } from "@/provider/InvalidateQueriesProvider";
 import { type IGenLegalArea, type IGenTags } from "@/services/graphql/__generated/sdk";
+import { api } from "@/utils/api";
 
 import { useMantineTheme } from "@mantine/core";
 import { useDisclosure } from "@mantine/hooks";
@@ -19,6 +22,7 @@ import * as styles from "./OverviewCard.styles";
 
 export interface IOverviewCard 
 {
+  readonly contentId: string;
   readonly lastUpdated: Date;
   readonly legalArea: Maybe<IGenLegalArea> | undefined;
   readonly status?: IStatusLabel["variant"];
@@ -69,6 +73,7 @@ function formatDate(inputDate: string | number | Date): string
 }
 
 const OverviewCard: FunctionComponent<IOverviewCard> = ({
+  contentId,
   lastUpdated,
   legalArea,
   status,
@@ -79,6 +84,11 @@ const OverviewCard: FunctionComponent<IOverviewCard> = ({
   views,
 }) => 
 {
+  const { invalidateCaseProgress } = useContextAndErrorIfNull(InvalidateQueriesContext);
+  const { mutate: resetCaseProgress } = api.casesProgress.resetProgress.useMutation({
+    onError: (error) => console.error(error),
+    onSuccess: async () => invalidateCaseProgress({ caseId: contentId })
+  });
   const [opened, { close, open }] = useDisclosure(false);
 
   const theme = useMantineTheme();
@@ -168,13 +178,16 @@ const OverviewCard: FunctionComponent<IOverviewCard> = ({
                 <CaptionText styleType="caption-01-medium">STATUS</CaptionText>
               </div>
               <div className="row-value">
-                {
-                  status && (
-                    <StatusLabel variant={status}/>
-                  )
-                }
+                {status && (
+                  <StatusLabel variant={status}/>
+                )}
                 <div className="reset-button">
-                  <LinkButton size="medium" title="Reset case progress" icon={<Trash/>}/>
+                  <LinkButton
+                    onClick={() => resetCaseProgress({ caseId: contentId })}
+                    size="medium"
+                    title="Reset case progress"
+                    icon={<Trash/>}
+                  />
                 </div>
               </div>
             </div>

@@ -69,9 +69,7 @@ const CaseSolvingHeader: FunctionComponent<ICaseSolvingHeaderProps> = ({
             </div>
           </div>
           <div css={styles.bodyCard}>
-            <OverviewCard
-              {...overviewCard}
-            />
+            <OverviewCard {...overviewCard}/>
           </div>
         </div>
       </Container>
