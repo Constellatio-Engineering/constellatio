@@ -51,7 +51,7 @@ const MaterialsMenuListItem: FunctionComponent<MenuListItemProps & HTMLProps<HTM
             mainAxis: 0
           }}>
           <BodyText styleType="body-01-medium" component="p">
-            <span css={styles.label} title={title}>{icon}{title}</span>
+            <span css={styles.label({ active, theme })} title={title}>{icon}{title}</span>
             {!hideContextMenu && (
               <Menu.Target>
                 <span className="dots" onClick={e => e.stopPropagation()}><DotsIcon/></span>
