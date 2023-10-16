@@ -25,7 +25,7 @@ const MenuTab: FunctionComponent<IMenuTabProps> = ({
   const theme = useMantineTheme();
   return title || icon ? (
     <div {...props} css={styles.menuTabStyles({ active, disabled, theme })}>
-      <CaptionText styleType="caption-01-bold" component="p">
+      <CaptionText styleType="caption-01-bold" component="p" tt="uppercase">
         {icon && icon}
         {title}{" "}
         {number !== null && number !== undefined && (

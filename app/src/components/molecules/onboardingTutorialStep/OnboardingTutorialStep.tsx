@@ -2,6 +2,7 @@ import { Button } from "@/components/atoms/Button/Button";
 import CountLabel from "@/components/atoms/countLabel/CountLabel";
 import { SubtitleText } from "@/components/atoms/SubtitleText/SubtitleText";
 
+import { Popover } from "@mantine/core";
 import React, { type ReactNode, type FunctionComponent } from "react";
 
 import * as styles from "./OnboardingTutorialStep.styles";
@@ -10,6 +11,7 @@ interface OnboardingTutorialStepProps
 {
   readonly children: ReactNode;
   readonly currentStep: number;
+  readonly isLastStep?: boolean;
   readonly onNextPressHandler?: () => void;
   readonly onSkipPressHandler?: () => void;
   readonly stepTitle: string;
@@ -21,6 +23,7 @@ OnboardingTutorialStepProps
 > = ({
   children,
   currentStep,
+  isLastStep,
   onNextPressHandler,
   onSkipPressHandler,
   stepTitle,
@@ -28,7 +31,7 @@ OnboardingTutorialStepProps
 }) => 
 {
   return (
-    <div css={styles.wrapper}>
+    <Popover.Dropdown sx={styles.popoverDropdownStyles()}>
       <div css={styles.stepHeader}>
         {stepTitle && (
           <SubtitleText styleType="subtitle-01-bold" c="neutrals-01.0">{stepTitle}</SubtitleText>
@@ -46,21 +49,23 @@ OnboardingTutorialStepProps
       <div css={styles.stepBody}>
         <div css={styles.itemsContainer}>{children}</div>
         <div css={styles.buttonsWrapper}>
-          <Button<"button">
-            styleType="secondarySimple"
-            size="large"
-            onClick={onSkipPressHandler}
-            fullWidth>Take Tour Later
-          </Button>
+          {!isLastStep && (
+            <Button<"button">
+              styleType="secondarySimple"
+              size="large"
+              onClick={onSkipPressHandler}
+              fullWidth>Take Tour Later
+            </Button>
+          )}
           <Button<"button">
             styleType="primary"
             size="large"
             onClick={onNextPressHandler}
-            fullWidth>Next
+            fullWidth>{isLastStep ? "Finish tour" : "Next"}
           </Button>
         </div>
       </div>
-    </div>
+    </Popover.Dropdown>
   );
 };
 

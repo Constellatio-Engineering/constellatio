@@ -1,13 +1,22 @@
+import { type MantineCssObjectStyles } from "@/utils/types";
+
 import { css } from "@emotion/react";
 import { type MantineTheme } from "@mantine/styles";
 
-export const wrapper = (theme: MantineTheme) => css`
-	display: flex;
-	flex-direction: column;
-	background-color: ${theme.colors["neutrals-02"][1]};
-	box-shadow: 0px 8px 24px 0px rgba(0, 0, 0, 0.16);
-	border-radius: 12px 12px 14px 14px;
-`;
+export const popoverDropdownStyles = () => 
+{
+  const styles: MantineCssObjectStyles = (theme) => ({
+    backgroundColor: theme.colors["neutrals-02"][1],
+    border: "none",
+    borderRadius: "12px 12px 14px 14px",
+    boxShadow: "0px 8px 24px 0px rgba(0, 0, 0, 0.16)",
+    display: "flex",
+    flexDirection: "column",
+    padding: 0,
+  }); 
+
+  return styles;
+};
 
 export const stepHeader = css`
 	display: flex;
