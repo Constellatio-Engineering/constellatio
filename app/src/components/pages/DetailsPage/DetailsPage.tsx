@@ -43,7 +43,7 @@ const DetailsPage: FunctionComponent<IDetailsPageProps> = ({ content, variant })
             slug: variant === "case" ? "Cases" : "Dictionary" 
           },
           {
-            path: variant === "case" ? `/cases?q=${slugFormatter(content?.mainCategoryField?.[0]?.mainCategory ?? "")}` : `/dictionary?q=${slugFormatter(content?.mainCategoryField?.[0]?.mainCategory ?? "")}`, 
+            path: variant === "case" ? `/cases?category=${slugFormatter(content?.mainCategoryField?.[0]?.mainCategory ?? "")}` : `/dictionary?category=${slugFormatter(content?.mainCategoryField?.[0]?.mainCategory ?? "")}`, 
             slug: content?.mainCategoryField?.[0]?.mainCategory ?? "" 
           },
           { 

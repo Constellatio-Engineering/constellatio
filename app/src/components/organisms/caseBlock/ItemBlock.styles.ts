@@ -52,3 +52,14 @@ export const expandTableButtonArea = (theme: MantineTheme) => css`
         ${CSSCommonExpandButtonStyles(theme)}
     }
 `;
+
+export const topicCell = css`
+min-width: 100px;
+max-width: 100px;
+p{
+    width: 100%;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+`;

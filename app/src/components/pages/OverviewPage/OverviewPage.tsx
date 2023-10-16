@@ -65,7 +65,7 @@ const OverviewPage: FunctionComponent<OverviewPageProps> = ({ content, variant }
       })();
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [router.query.category, setSelectedCategorySlug, content.allMainCategories]);
+  }, [router.query.category, setSelectedCategorySlug]);
 
   const filteredLegalAreas = (content.allLegalAreaRes.allLegalArea?.edges
     ?.map((legalArea) => legalArea?.node)
@@ -160,12 +160,12 @@ const OverviewPage: FunctionComponent<OverviewPageProps> = ({ content, variant }
       </div>
       {router.query.category && getIsCategoryEmpty() && (
         <EmptyStateCard
-          button={(
-            <>
-              <CivilLawIcon/>
-              Explore Civil law cases
-            </>
-          )}
+          // button={(
+          //   <>
+          //     <CivilLawIcon/>
+          //     Explore Civil law cases
+          //   </>
+          // )}
           title={`We're currently working hard to bring you ${
             variant === "case"
               ? "engaging cases to solve"

@@ -96,7 +96,7 @@ const ItemBlock: FunctionComponent<ICaseBlockProps> = ({
             return item && item.id && (
               <tr key={item?.id}>
                 <td className="primaryCell">
-                  <Link passHref href={`/${variant === "case" ? "cases" : "dictionary"}/${item?.id}`}>
+                  <Link passHref shallow href={`/${variant === "case" ? "cases" : "dictionary"}/${item?.id}`}>
                     <TableCell variant="titleTableCell" clickable>
                       {item?.title}
                     </TableCell>
@@ -115,7 +115,7 @@ const ItemBlock: FunctionComponent<ICaseBlockProps> = ({
                   </td>
                 )}
                 {tableType === "search" && <td><TableCell variant="simpleTableCell">{item?.legalArea?.legalAreaName}</TableCell></td>}
-                <td title={topicsCombined}>
+                <td css={styles.topicCell} title={topicsCombined}>
                   <TableCell variant="simpleTableCell">{item?.topic?.[0]?.topicName}</TableCell>
                 </td>
                 {tableType === "favorites" && <td><TableCell variant="simpleTableCell">{item?.legalArea?.legalAreaName}</TableCell></td>}
