@@ -1,5 +1,6 @@
 /* eslint-disable max-lines */
 import { Button } from "@/components/atoms/Button/Button";
+import { type IStatusLabel } from "@/components/atoms/statusLabel/StatusLabel";
 import { richTextHeadingOverwrite } from "@/components/helpers/richTextHeadingOverwrite";
 import useContextAndErrorIfNull from "@/hooks/useContextAndErrorIfNull";
 import { InvalidateQueriesContext } from "@/provider/InvalidateQueriesProvider";
@@ -31,6 +32,7 @@ interface ICaseCompleteTestsStepProps
   readonly caseId: string;
   readonly facts: Maybe<IGenCase_Facts> | undefined;
   readonly fullTextTasks: Maybe<IGenCase_FullTextTasks> | Maybe<IGenArticle_FullTextTasks>;
+  readonly progressState: IStatusLabel["progressState"] | undefined;
   readonly variant?: "case" | "dictionary";
 }
 
@@ -38,6 +40,7 @@ const CaseCompleteTestsStep: FunctionComponent<ICaseCompleteTestsStepProps> = ({
   caseId,
   facts,
   fullTextTasks,
+  progressState,
   variant
 }) =>
 {
@@ -88,6 +91,18 @@ const CaseCompleteTestsStep: FunctionComponent<ICaseCompleteTestsStepProps> = ({
       setGamesIndexes(getGamesIndexes({ fullTextTasks })); 
     }
   }, [fullTextTasks, setGamesIndexes, variant]);
+
+  useEffect(() =>
+  {
+    if(progressState == null)
+    {
+      return;
+    }
+
+    setHasCaseSolvingStarted(progressState !== "not-started");
+    getNextGameIndex();
+
+  }, [getNextGameIndex, progressState, setHasCaseSolvingStarted]);
 
   const allHeadings = fullTextTasks?.json?.content?.filter((x: { attrs: { level: number }; type: "heading" }) => x.type === "heading");
 
@@ -171,6 +186,11 @@ const CaseCompleteTestsStep: FunctionComponent<ICaseCompleteTestsStepProps> = ({
       : null;
   }, [fullTextTasks]);
 
+  if(hasCaseSolvingStarted == null)
+  {
+    return null;
+  }
+
   return (
     <Container maw={1440}>
       <div css={styles.contentWrapper} id="completeTestsStepContent">
@@ -180,7 +200,7 @@ const CaseCompleteTestsStep: FunctionComponent<ICaseCompleteTestsStepProps> = ({
             data={facts}
             richTextOverwrite={{ paragraph: richTextParagraphOverwrite }}
           />
-          {!hasCaseSolvingStarted && (
+          {hasCaseSolvingStarted === false && (
             <Button<"button">
               styleType="primary"
               size="large"
@@ -207,8 +227,7 @@ const CaseCompleteTestsStep: FunctionComponent<ICaseCompleteTestsStepProps> = ({
             </div>
             <div css={styles.fullTextAndTasksWrapper}>
               <Richtext
-                // eslint-disable-next-line @typescript-eslint/no-explicit-any
-                data={variant === "case" ? renderedCaseContent as any : fullTextTasks}
+                data={variant === "case" ? renderedCaseContent : fullTextTasks}
                 richTextOverwrite={{
                   documentLink: documentLinkOverwrite,
                   heading: (props) => 

@@ -8,10 +8,10 @@ interface ICaseSolvingStore
   caseStepIndex: CaseStepIndexProps;
   gamesIndexes: number[];
   getNextGameIndex: () => void;
-  hasCaseSolvingStarted: boolean;
+  hasCaseSolvingStarted: boolean | undefined;
   isLastGame: boolean;
   isStepCompleted: boolean;
-  latestGameIndex: number ;
+  latestGameIndex: number;
   setCaseStepIndex: (caseStepIndex: CaseStepIndexProps) => void;
   setGamesIndexes: (gamesIndexes: number[]) => void;
   setHasCaseSolvingStarted: (hasCaseSolvingStarted: boolean) => void;
@@ -46,7 +46,7 @@ const useCaseSolvingStore = create(
         }
       });
     },
-    hasCaseSolvingStarted: false,
+    hasCaseSolvingStarted: undefined,
     isLastGame: false,
     isStepCompleted: false,
     latestGameIndex: 0,
@@ -94,7 +94,6 @@ const useCaseSolvingStore = create(
     },
     showStepTwoModal: false,
     solution: ""
-
   }))
 );
 

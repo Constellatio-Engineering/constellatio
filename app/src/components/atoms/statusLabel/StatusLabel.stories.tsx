@@ -28,16 +28,16 @@ type Story = StoryObj<typeof StatusLabel>;
 
 export const NotStarted: Story = {
   args: {
-    variant: "not-started",
+    progressState: "not-started",
   },
 };
 export const InProgress: Story = {
   args: {
-    variant: "in-progress",
+    progressState: "in-progress",
   },
 };
 export const Completed: Story = {
   args: {
-    variant: "completed",
+    progressState: "completed",
   },
 };

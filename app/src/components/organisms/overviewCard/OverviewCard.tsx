@@ -25,7 +25,7 @@ export interface IOverviewCard
   readonly contentId: string;
   readonly lastUpdated: Date;
   readonly legalArea: Maybe<IGenLegalArea> | undefined;
-  readonly status?: IStatusLabel["variant"];
+  readonly progressState?: IStatusLabel["progressState"];
   readonly tags: Maybe<Array<Maybe<IGenTags>>> | undefined;
   readonly timeInMinutes?: number;
   readonly topic: string;
@@ -76,7 +76,7 @@ const OverviewCard: FunctionComponent<IOverviewCard> = ({
   contentId,
   lastUpdated,
   legalArea,
-  status,
+  progressState,
   tags,
   timeInMinutes,
   topic,
@@ -178,8 +178,8 @@ const OverviewCard: FunctionComponent<IOverviewCard> = ({
                 <CaptionText styleType="caption-01-medium">STATUS</CaptionText>
               </div>
               <div className="row-value">
-                {status && (
-                  <StatusLabel variant={status}/>
+                {progressState && (
+                  <StatusLabel progressState={progressState}/>
                 )}
                 <div className="reset-button">
                   <LinkButton

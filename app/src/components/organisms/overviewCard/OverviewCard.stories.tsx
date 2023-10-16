@@ -32,7 +32,7 @@ export const Case: Story = {
   args: {
     lastUpdated: new Date(),
     legalArea: { legalAreaName: "Labor law" },
-    status: "in-progress",
+    progressState: "in-progress",
     tags: [{ tagName: "Labor law" }, { tagName: "Civil law" }, { tagName: "Internal relationship of partnerships" }],
     timeInMinutes: 120,
     topic: "Basic of labor law",

@@ -9,12 +9,12 @@ import { BodyText } from "../BodyText/BodyText";
 export interface IStatusLabel extends PropsWithChildren 
 {
   // readonly title?: string;
-  readonly variant: CaseProgressState;
+  readonly progressState: CaseProgressState;
 }
 
-const StatusLabel: FunctionComponent<IStatusLabel> = ({ variant }) => 
+const StatusLabel: FunctionComponent<IStatusLabel> = ({ progressState }) =>
 {
-  switch (variant) 
+  switch (progressState)
   {
     case "in-progress":
       return (
@@ -38,7 +38,7 @@ const StatusLabel: FunctionComponent<IStatusLabel> = ({ variant }) =>
         </div>
       );
     default:
-      console.log("Invalid status label variant: " + variant);
+      console.log("Invalid status label variant: " + progressState);
       return null;
   }
 };

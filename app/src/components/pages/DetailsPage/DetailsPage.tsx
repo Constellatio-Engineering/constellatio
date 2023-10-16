@@ -102,7 +102,7 @@ const DetailsPage: FunctionComponent<IDetailsPageProps> = ({ content, variant })
           contentId,
           lastUpdated: content?._meta?.updatedAt,
           legalArea: content?.legalArea,
-          status: caseProgress?.progressState,
+          progressState: caseProgress?.progressState,
           tags: content?.tags,
           timeInMinutes: content?.__typename === "Case" && content.durationToCompleteInMinutes ? content.durationToCompleteInMinutes : undefined,
           topic: content?.topic?.[0]?.topicName ?? "",
@@ -110,15 +110,14 @@ const DetailsPage: FunctionComponent<IDetailsPageProps> = ({ content, variant })
           views: content?.__typename === "Article" ? articleViews : caseViews,
         }}
       />
-      <CaseNavBar
-        variant={variant}
-      />
+      <CaseNavBar variant={variant}/>
       <div css={styles.mainContainer}>
         {content?.fullTextTasks && caseStepIndex === 0 && (
           <CaseCompleteTestsStep {...{
             caseId: contentId,
             facts: content?.__typename === "Case" ? content?.facts : undefined,
             fullTextTasks: content?.fullTextTasks,
+            progressState: caseProgress?.progressState,
             variant
           }}
           />

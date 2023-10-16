@@ -5,14 +5,14 @@ import StatusLabel, { type IStatusLabel } from "../statusLabel/StatusLabel";
 
 export interface IStatusTableCellProps
 {
-  readonly variant: IStatusLabel["variant"];
+  readonly variant: IStatusLabel["progressState"];
 }
 
 const StatusTableCell: FunctionComponent<IStatusTableCellProps> = ({ variant }) => 
 {
   return (
     <button type="button" css={styles.wrapper}>
-      <StatusLabel variant={variant}/>
+      <StatusLabel progressState={variant}/>
     </button>
   );
 };

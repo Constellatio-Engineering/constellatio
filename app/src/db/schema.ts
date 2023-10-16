@@ -13,9 +13,13 @@ export type BookmarkResourceType = typeof allBookmarkResourceTypes[number];
 export const allCaseProgressStates = ["not-started", "in-progress", "completed"] as const;
 export type CaseProgressState = typeof allCaseProgressStates[number];
 
+export const allGameProgressStates = ["not-started", "completed"] as const;
+export type GameProgressState = typeof allGameProgressStates[number];
+
 export const genderEnum = pgEnum("Gender", allGenderIdentifiers);
 export const resourceTypeEnum = pgEnum("ResourceType", allBookmarkResourceTypes);
 export const caseProgressStateEnum = pgEnum("CaseProgressState", allCaseProgressStates);
+export const gameProgressStateEnum = pgEnum("GameProgressState", allGameProgressStates);
 
 // TODO: Go through all queries and come up with useful indexes
 
@@ -70,6 +74,7 @@ export const uploadedFiles = pgTable("UploadedFile", {
 
 export type UploadedFileInsert = InferInsertModel<typeof uploadedFiles>;
 export type UploadedFile = InferSelectModel<typeof uploadedFiles>;
+export type UploadedFileWithNote = UploadedFile & { note: Note | null };
 
 export const documents = pgTable("Document", {
   id: uuid("Id").defaultRandom().unique().notNull().primaryKey(),
@@ -96,9 +101,7 @@ export const notes = pgTable("Note", {
 export type NoteInsert = InferInsertModel<typeof notes>;
 export type Note = InferSelectModel<typeof notes>;
 
-export type UploadedFileWithNote = UploadedFile & { note: Note | null };
-
-export const cases_views = pgTable("Case_View", {
+export const casesViews = pgTable("Case_View", {
   userId: uuid("UserId").references(() => users.id, { onDelete: "no action" }).notNull(),
   caseId: uuid("CaseId").notNull(),
 }, table => ({
@@ -106,10 +109,10 @@ export const cases_views = pgTable("Case_View", {
   pk: primaryKey(table.userId, table.caseId),
 }));
 
-export type CaseViewInsert = InferInsertModel<typeof cases_views>;
-export type CaseView = InferSelectModel<typeof cases_views>;
+export type CaseViewInsert = InferInsertModel<typeof casesViews>;
+export type CaseView = InferSelectModel<typeof casesViews>;
 
-export const articles_views = pgTable("Article_View", {
+export const articlesViews = pgTable("ArticleView", {
   userId: uuid("UserId").references(() => users.id, { onDelete: "no action" }).notNull(),
   articleId: uuid("ArticleId").notNull(),
 }, table => ({
@@ -117,8 +120,8 @@ export const articles_views = pgTable("Article_View", {
   pk: primaryKey(table.userId, table.articleId),
 }));
 
-export type ArticleViewInsert = InferInsertModel<typeof articles_views>;
-export type ArticleView = InferSelectModel<typeof articles_views>;
+export type ArticleViewInsert = InferInsertModel<typeof articlesViews>;
+export type ArticleView = InferSelectModel<typeof articlesViews>;
 
 export const casesProgress = pgTable("CasesProgress", {
   caseId: uuid("CaseId").notNull(),
@@ -131,3 +134,15 @@ export const casesProgress = pgTable("CasesProgress", {
 
 export type CaseProgressInsert = InferInsertModel<typeof casesProgress>;
 export type CaseProgress = InferSelectModel<typeof casesProgress>;
+
+export const gamesProgress = pgTable("GameProgress", {
+  gameId: uuid("GameId").notNull(),
+  userId: uuid("UserId").references(() => users.id, { onDelete: "no action" }).notNull(),
+  progressState: gameProgressStateEnum("ProgressState").notNull().default("not-started"),
+}, table => ({
+  gameId_userId_Index: index("GameId_UserId_Index").on(table.userId, table.gameId),
+  pk: primaryKey(table.userId, table.gameId),
+}));
+
+export type GameProgressInsert = InferInsertModel<typeof gamesProgress>;
+export type GameProgress = InferSelectModel<typeof gamesProgress>;
