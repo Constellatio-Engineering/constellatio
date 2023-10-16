@@ -135,6 +135,7 @@ const UploadedMaterialBlock: FunctionComponent<UploadedMaterialBlockProps> = ({
             type="file"
             disabled={areUploadsInProgress}
             multiple
+            accept=".pdf, .jpg, .jpeg, .png, .gif, .mp4, .webm, .docx, .doc"
             onChange={e =>
             {
               const files = Array.from(e.target.files ?? []);

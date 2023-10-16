@@ -23,20 +23,19 @@ const ProfileNotificationsTabForm: FunctionComponent = () =>
     setSuccess("Your changes have been saved"); 
   
   };
-  
+  // TODO: utilize err and success for eslint
+  if(err && success) { return; }
   return (
     <div css={styles.wrapper}>
       <form onSubmit={handleSubmit}>
         <BodyText css={styles.formHeader} styleType="body-01-regular">Email me when:</BodyText>
-        {success && (
-          <AlertCard
-            stylesOverwrite={{
-              width: "100%" 
-            }}
-            variant="success">{success}
-          </AlertCard>
-        )}
-        {err && <AlertCard variant="error">{err}</AlertCard>}
+        <AlertCard
+          stylesOverwrite={{
+            width: "100%" 
+          }}
+          variant="success">Your changes have been saved
+        </AlertCard>
+        <AlertCard variant="error">Sorry, we weren’t able to save changes. Please, try again</AlertCard>
         <Checkbox.Group value={value} onChange={setValue}>
           <CheckboxComp value="replies-to-questions" label={<BodyText styleType="body-01-medium" component="p">Someone replies to my question in Forum</BodyText>} css={styles.checkBox}/>
           <CheckboxComp value="replies-to-answers" label={<BodyText styleType="body-01-medium" component="p">Someone replies to my answer in Forum</BodyText>} css={styles.checkBox}/>

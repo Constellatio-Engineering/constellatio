@@ -1,6 +1,6 @@
 /* eslint-disable max-lines */
 import { BodyText } from "@/components/atoms/BodyText/BodyText";
-import { Checkbox } from "@/components/atoms/Checkbox/Checkbox";
+// import { Checkbox } from "@/components/atoms/Checkbox/Checkbox";
 import { FileIcon } from "@/components/Icons/FileIcon";
 import { ImageIcon } from "@/components/Icons/image";
 import { Notepad } from "@/components/Icons/Notepad";
@@ -73,7 +73,9 @@ const UploadedMaterialTableBody: FunctionComponent<UploadedMaterialTableBodyProp
 
         return (
           <tr key={file.id}>
-            {variant === "personalSpace" && <td><Checkbox/></td>}
+            {variant === "personalSpace" && 
+            // <td><Checkbox/></td>
+            <></>}
             <td
               css={styles.docName({ clickable: true, theme })}
               className="primaryCell"
@@ -89,21 +91,22 @@ const UploadedMaterialTableBody: FunctionComponent<UploadedMaterialTableBodyProp
             <td css={styles.docDate}><BodyText styleType="body-01-medium" component="p">{file && file.createdAt && formatDate(file.createdAt)}</BodyText></td>
             <td css={styles.docTags}><BodyText styleType="body-02-medium" component="p"/></td>
             {variant === "personalSpace" && (
-              <td css={styles.cellNote}>
+              <td
+                css={styles.cellNote}
+                onClick={() =>
+                {
+                  if(note)
+                  {
+                    setViewNoteState(note);
+                  }
+                  else
+                  {
+                    setCreateNoteState({ fileId: file.id });
+                  }
+                }}>
                 <BodyText
                   styleType="body-02-medium"
-                  component="p"
-                  onClick={() =>
-                  {
-                    if(note)
-                    {
-                      setViewNoteState(note);
-                    }
-                    else
-                    {
-                      setCreateNoteState({ fileId: file.id });
-                    }
-                  }}>
+                  component="p">
                   {note ? (
                     <>
                       <NotepadFilled/>

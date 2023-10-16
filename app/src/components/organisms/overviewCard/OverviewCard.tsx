@@ -109,7 +109,7 @@ const OverviewCard: FunctionComponent<IOverviewCard> = ({
         )}
       </div>
       <div css={styles.cardBody({ theme, variant })}>
-        <table style={{ textAlign: "left", }}>
+        <table style={{ borderBottom: "1px solid #F0F0F0", textAlign: "left", width: "100%" }}>
           <thead>
             <tr>
               {(legalArea?.__typename === "LegalArea" && legalArea?.legalAreaName) && <th style={{ color: "#949494", padding: "16px 32px 8px 16px" }}><CaptionText styleType="caption-01-medium">LEGAL AREA</CaptionText></th>}
@@ -135,7 +135,11 @@ const OverviewCard: FunctionComponent<IOverviewCard> = ({
         )}
         <div css={styles.row({ theme, variant })}>
           <div className="row-title">
-            <CaptionText styleType="caption-01-medium" component="button" onClick={open}>TAGS</CaptionText>
+            <CaptionText
+              styleType="caption-01-medium"
+              component="p"
+              onClick={open}>TAGS
+            </CaptionText>
           </div>
           {/* <ScrollArea> */}
           <div
@@ -147,8 +151,14 @@ const OverviewCard: FunctionComponent<IOverviewCard> = ({
             {tags?.map((tag, tagIndex) => (
               <Tag key={tagIndex}>{tag?.tagName}</Tag>
             ))}
-          
           </div>
+          <BodyText
+            type="button"
+            css={styles.seeAllTagsButton}
+            onClick={open}
+            styleType="body-01-regular"
+            component="button">See all
+          </BodyText>
           <OverviewCardTagsModal opened={opened} tags={tags} close={close}/>
         </div>
         {

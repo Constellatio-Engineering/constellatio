@@ -5,5 +5,6 @@ export const f_Topic = gql`
 		__typename
 		id
 		topicName
+		sorting
 	}
 `;

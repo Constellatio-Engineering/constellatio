@@ -6,11 +6,12 @@ import useBookmarks from "@/hooks/useBookmarks";
 import useCases from "@/hooks/useCases";
 import useDocuments from "@/hooks/useDocuments";
 import useUploadedFiles from "@/hooks/useUploadedFiles";
-import { type IGenArticle, type IGenMainCategory } from "@/services/graphql/__generated/sdk";
+import { type IGenArticle } from "@/services/graphql/__generated/sdk";
 import useMaterialsStore from "@/stores/materials.store";
 
 import { useRouter } from "next/router";
-import React, { type FunctionComponent, useState, useId } from "react";
+import { useQueryState } from "next-usequerystate";
+import React, { type FunctionComponent, useId } from "react";
 
 import { categoriesHelper } from "./PersonalSpaceHelper";
 import * as styles from "./PersonalSpacePage.styles";
@@ -54,34 +55,62 @@ const PersonalSpacePage: FunctionComponent = () =>
     MaterialsCategoryId,
     uploadedFilesLength: (uploadedFiles?.length + documents?.length) ?? 0,
   });
-  const [selectedCategory, setSelectedCategory] = useState<IGenMainCategory | undefined>(categories?.[0]);
-  const isFavoriteTab = (id: string): boolean => id === categories?.[0]?.id;
+  // const [selectedCategory, setSelectedCategory] = useState<IGenMainCategory | undefined>(categories?.[0]);
+  const isFavoriteTab = (slug: string): boolean => slug === slugFormatter(categories?.[0]?.mainCategory ?? "");
   const router = useRouter();
+  const [selectedCategorySlug, setSelectedCategorySlug] = useQueryState("category");
   React.useEffect(() => 
   {
-    if(router.query.q)
+    if(typeof window !== "undefined") 
     {
-      setSelectedCategory(categories.filter((x) => slugFormatter(x.mainCategory ?? "") === router.query.q)?.[0] ?? categories?.[0]);
+      void (async () => 
+      {
+        try 
+        {
+          if(!selectedCategorySlug) 
+          {
+            await setSelectedCategorySlug(
+              slugFormatter(categories?.[0]?.mainCategory ?? "")
+            );
+            await router.replace({
+              query: {
+                ...router.query,
+                category: slugFormatter(
+                  categories?.[0]?.mainCategory ?? ""
+                ),
+              },
+            });
+          }
+        }
+        catch (error) 
+        {
+          console.error(error);
+        }
+      })();
     }
-  // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [router.query.q]);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [router.query.category, setSelectedCategorySlug]);
 
   return (
     <div css={styles.wrapper}>
-      <div css={styles.header}>
-        <OverviewHeader
-          title="Personal Space"
-          variant="red"
-          categories={categories}
-          selectedCategory={selectedCategory}
-          setSelectedCategory={setSelectedCategory}
-        />
-      </div>
-      {  
-        isFavoriteTab(selectedCategory?.id ?? "") ?
-          <PersonalSpaceFavoriteTab/>
-          : 
-          <PersonalSpaceMaterialsTab/>
+      {
+        router.query.category && (
+          <>
+            <div css={styles.header}>
+              <OverviewHeader
+                title="Personal Space"
+                variant="red"
+                categories={categories}
+                selectedCategorySlug={selectedCategorySlug}
+                setSelectedCategorySlug={setSelectedCategorySlug}
+              />
+            </div>
+            {isFavoriteTab(selectedCategorySlug ?? "") ?
+              <PersonalSpaceFavoriteTab/>
+              : 
+              <PersonalSpaceMaterialsTab/>}
+          </>
+        )
       }
     </div>
   );

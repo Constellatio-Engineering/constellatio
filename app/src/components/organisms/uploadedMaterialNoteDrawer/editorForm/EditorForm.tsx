@@ -168,7 +168,7 @@ const EditorForm: FunctionComponent<EditorFormProps> = ({ editorState, selectedF
                 <Trash/>{" "}Delete
               </Button>
             </div>
-            <div dangerouslySetInnerHTML={{ __html: note.content }}/>
+            <div css={styles.richtext} dangerouslySetInnerHTML={{ __html: note.content }}/>
             {shouldShowDeleteNoteWindow && (
               <div className="deleteNoteBlock">
                 <BodyText styleType="body-01-medium">Are you sure you want to delete your notes?</BodyText>

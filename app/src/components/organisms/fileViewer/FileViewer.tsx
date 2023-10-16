@@ -52,7 +52,6 @@ const FileViewer: FunctionComponent = () =>
     switch (fileType) 
     {
       case "pdf":
-        console.log({ fileUrl: fileUrl?.replace(".pdf", ".pdf&navpanes=0&scrollbar=0&toolbar=0&view=fit") });
         return (
           <embed
             src={`${fileUrl}`}

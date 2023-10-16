@@ -8,7 +8,7 @@ import { InvalidateQueriesContext } from "@/provider/InvalidateQueriesProvider";
 import { notifications } from "@mantine/notifications";
 import { IconLogout } from "@tabler/icons-react";
 import router from "next/router";
-import { useQueryState } from "next-usequerystate";
+import { type Options } from "next-usequerystate";
 import React, { type FunctionComponent } from "react";
 
 import * as styles from "./ProfileMenu.styles";
@@ -21,11 +21,12 @@ export type ITab ={
   title: string;
 };
 type IProfileMenu = {
+  readonly setQuery: (value: string | ((old: string | null) => string | null) | null, options?: Options | undefined) => Promise<URLSearchParams>;
   readonly setTabs: React.Dispatch<React.SetStateAction<ITab[]>>;
   readonly tabs: ITab[];
 };
 
-const ProfileMenu: FunctionComponent<IProfileMenu> = ({ setTabs, tabs }) => 
+const ProfileMenu: FunctionComponent<IProfileMenu> = ({ setQuery, setTabs, tabs }) => 
 {
   const { invalidateEverything } = useContextAndErrorIfNull(InvalidateQueriesContext);
   const placeHolderImg = "https://s3-alpha-sig.figma.com/img/6a78/feaa/1d046e0702962fc5ca99328cf4b4a2b8?Expires=1697414400&Signature=GIyeLjG6TqueeJrryvnnTVn3YHQxIyx9eygPZLKR0A0RhHVOemXY~9ufFcWnZ9whuNlsmM57QXTkmurO0~ZtTMaaoWoAncU-ZCXgaLJ2VC6SEArntutwf6-eBbMlx7KovpogLSUuFffVlNNr-n1MiBickmFewOQWhAqcIexe7EyFcDwd2-g-JKEqSj7DICypulIIL25gpCuH7VQojPgcESsHDIX7wgXaOo9EqlFzn1~Gbi1DKAcj0ep-d~hqd2WsPISgCL7oG~m7ET13ayNn8PItbg64iPba7keXZhllv2rxS15ObfF25sIY66jU3NPD7j0B6mw7tumT2gNXyRMGcQ__&Key-Pair-Id=APKAQ4GOSFWCVNEHN3O4";
@@ -48,7 +49,6 @@ const ProfileMenu: FunctionComponent<IProfileMenu> = ({ setTabs, tabs }) =>
     }
   };
 
-  const [, setQuery] = useQueryState("q");
   return (
     <div css={styles.wrapper}>
       <ProfileMenuMainProfileInfo/>

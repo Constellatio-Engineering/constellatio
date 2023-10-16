@@ -60,8 +60,7 @@ export const cardBody = ({
 
 export const row = ({ tableTheme, theme }: IOverviewCardStyles): SerializedStyles => css`
   padding: 16px;
-  color: green;
-  border-bottom: 1px solid ${theme.colors["neutrals-01"][3]};
+  border-bottom: 1px solid ${theme.colors["neutrals-01"][2]};
   .row-title {
     color: ${theme.colors["neutrals-01"][7]};
     display: flex;
@@ -98,11 +97,11 @@ export const row = ({ tableTheme, theme }: IOverviewCardStyles): SerializedStyle
     align-items: center;
     overflow-x: hidden;
     cursor: pointer;
-
+    position:relative;
     &::-webkit-scrollbar {
       display: none;
     }
-    padding-bottom: 16px;
+    /* padding-bottom: 16px; */
   }
   &:last-child {
     border-bottom: none;
@@ -113,6 +112,19 @@ export const tagsModal = css`
   display: flex;
   flex-wrap: wrap;
   gap: 8px;
-  justify-content: center;
+  justify-content: flex-start;
   align-items: center;
+  * {
+    flex: 1
+  }
+`;
+
+export const seeAllTagsButton = (theme: MantineTheme) => css`
+margin-left: auto;
+display: block;
+margin-top: 12px;
+border:0;
+outline:0;
+color: ${theme.colors["neutrals-01"][9]};
+background-color: transparent;
 `;
