@@ -40,10 +40,12 @@
     "setCloudStorageDevelopmentCors": "gsutil cors set google/cloud-storage-cors/development.cors-config.json gs://constellatio-user-uploads-development",
     "setCloudStorageStagingCors": "gsutil cors set google/cloud-storage-cors/staging.cors-config.json gs://constellatio-user-uploads-staging",
     "separatorOther": "---------------------- OTHER ----------------------",
-    "printCopiedToClipboard": "echo 'Copied to clipboard'"
+    "printCopiedToClipboard": "echo 'Copied to clipboard'",
+    "localtunnel": "lt --subdomain constelaltio-app-development --port 3010"
   },
   "dependencies": {
     "@caisy/rich-text-react-renderer": "0.7.3",
+    "@caisy/sdk": "1.2.16",
     "@caisy/ui-extension-react": "0.2.2",
     "@dnd-kit/core": "6.0.8",
     "@dnd-kit/sortable": "7.0.2",
@@ -99,6 +101,7 @@
     "i18next": "23.5.1",
     "immer": "10.0.2",
     "jotai": "2.3.1",
+    "localtunnel": "2.0.2",
     "meilisearch": "0.34.2",
     "next": "13.5.3",
     "next-i18next": "14.0.3",

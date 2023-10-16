@@ -20,6 +20,7 @@ export const env = createEnv({
     GOOGLE_SERVICE_ACCOUNT_BASE64: z.string(),
     MEILISEARCH_MASTER_API_KEY: z.string(),
     MEILISEARCH_HOST_URL: urlValidation,
+    CAISY_WEBHOOKS_SECRET_KEY: z.string(),
   },
 
   /**
@@ -62,6 +63,7 @@ export const env = createEnv({
     MEILISEARCH_HOST_URL: process.env.MEILISEARCH_HOST_URL,
     MEILISEARCH_MASTER_API_KEY: process.env.MEILISEARCH_MASTER_API_KEY,
     NEXT_PUBLIC_MEILISEARCH_TENANT_TOKEN_EXPIRATION_TIME_MS: process.env.NEXT_PUBLIC_MEILISEARCH_TENANT_TOKEN_EXPIRATION_TIME_MS,
+    CAISY_WEBHOOKS_SECRET_KEY: process.env.CAISY_WEBHOOKS_SECRET_KEY,
   },
   /**
    * Run `build` or `dev` with `SKIP_ENV_VALIDATION` to skip env validation.
