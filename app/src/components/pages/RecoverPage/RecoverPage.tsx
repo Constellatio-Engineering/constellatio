@@ -1,9 +1,12 @@
+import { BodyText } from "@/components/atoms/BodyText/BodyText";
+import { Button } from "@/components/atoms/Button/Button";
+import { AlertCard } from "@/components/atoms/Card/AlertCard";
 import { Footer } from "@/components/organisms/Footer/Footer";
 import { Header } from "@/components/organisms/Header/Header";
 import { UpdatePasswordForm } from "@/components/organisms/UpdatePasswordForm/UpdatePasswordForm";
 import { paths } from "@/utils/paths";
 
-import { Box, Stack } from "@mantine/core";
+import { Box, Stack, Title } from "@mantine/core";
 import Link from "next/link";
 import { useRouter } from "next/router";
 import { type FunctionComponent, useEffect, useState } from "react";
@@ -41,25 +44,35 @@ const RecoverPage: FunctionComponent = () =>
   }
 
   return (
-    <Stack align="center" h="100vh" justify="center">
+    <>
       <Header variant="simple"/>
-      <Box w={440}>
-        {renderedContent === "updatePasswordForm" ? (
-          <UpdatePasswordForm/>
-        ) : (
-          <div>
-            <h1>{renderedContent === "linkExpired" ? "Link expired" : "Something went wrong"}</h1>
-            <p>Please go back to Login and reset your password again</p>
-            <Link href={paths.login}>
-              <button type="button">Back to Login</button>
-            </Link>
-            <p>Note from Kotti: This button should be a link that looks like a button</p>
-          </div>
-        )}
-      </Box>
-      <div style={{ height: 50 }}/>
+      <Stack
+        align="center"
+        h="90vh"
+        justify="center">
+        <Box w={440}>
+          {renderedContent === "updatePasswordForm" ? (
+            <UpdatePasswordForm/>
+          ) : (
+            <>
+              <Title order={3} ta="center" mb={24}>{renderedContent === "linkExpired" ? "Link expired" : "Something went wrong"}</Title>
+              <AlertCard mb={24} variant="error"> {renderedContent === "linkExpired" ? "Your password reset link has expired or the link has already been used" : "Something went wrong sending the reset password link. Do not worry, you can request it again"}</AlertCard>
+              <BodyText styleType="body-01-medium" ta="center" component="p">Please go back to Login and reset your password again</BodyText>
+              <Link href={paths.login}>
+                <Button<"button">
+                  style={{ display: "block", width: "100%" }}
+                  styleType="primary"
+                  type="button"
+                  size="large"
+                  mt={24}>Back to Login
+                </Button>
+              </Link>
+            </>
+          )}
+        </Box>
+      </Stack>
       <Footer variant="simpleWhiteBg"/>
-    </Stack>
+    </>
   );
 };
 
