@@ -87,12 +87,12 @@ const CaseNavBar: FunctionComponent<ICaseNavBarProps> = ({ variant }) =>
           </div>
         )}
       </div>
-      {hasCaseSolvingStarted && <div css={styles.progressBar({ progress, theme, variant })}/>}
+      {hasCaseSolvingStarted && <div css={styles.progressBar({ progress: 0, theme, variant })}/>}
     </div>
   ) : (
     <div css={styles.componentArea({ theme, variant })}>
       <div css={styles.wrapper({ variant })}>
-        {hasCaseSolvingStarted && <div css={styles.progressBar({ progress, theme, variant })}/>}
+        {hasCaseSolvingStarted && <div css={styles.progressBar({ progress: 0, theme, variant })}/>}
       </div>
     </div>
   );

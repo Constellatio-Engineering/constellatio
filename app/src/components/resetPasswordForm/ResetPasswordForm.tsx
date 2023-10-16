@@ -67,7 +67,6 @@ const ResetPasswordForm: FunctionComponent<Props> = ({ setProgress }) =>
             You will receive an email from us with a link. Clicking this link will take you to a page where you can
             enter your new password.
           </BodyText>
-          {hasError && <AlertCard variant="error">Unexpected error while sending the link</AlertCard>}
           <Input
             inputType="text"
             label="Email"

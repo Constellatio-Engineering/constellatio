@@ -1,6 +1,6 @@
 /* eslint-disable max-lines */
 import { BodyText } from "@/components/atoms/BodyText/BodyText";
-import { Checkbox } from "@/components/atoms/Checkbox/Checkbox";
+// import { Checkbox } from "@/components/atoms/Checkbox/Checkbox";
 import { FileIcon } from "@/components/Icons/FileIcon";
 import { ImageIcon } from "@/components/Icons/image";
 import { Notepad } from "@/components/Icons/Notepad";
@@ -73,7 +73,9 @@ const UploadedMaterialTableBody: FunctionComponent<UploadedMaterialTableBodyProp
 
         return (
           <tr key={file.id}>
-            {variant === "personalSpace" && <td><Checkbox/></td>}
+            {variant === "personalSpace" && 
+            // <td><Checkbox/></td>
+            <></>}
             <td
               css={styles.docName({ clickable: true, theme })}
               className="primaryCell"

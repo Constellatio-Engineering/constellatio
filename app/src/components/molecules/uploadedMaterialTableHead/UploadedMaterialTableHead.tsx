@@ -10,7 +10,7 @@ const UploadedMaterialTableHead: FunctionComponent<UploadedMaterialTableHeadProp
 {
   return (
     <tr>
-      {variant === "personalSpace" && <th/>}
+      {/* {variant === "personalSpace" && <th/>} */}
       <th className="primaryCell">
         <CaptionText tt="uppercase" styleType="caption-01-medium" component="p">
           FILE NAME

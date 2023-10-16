@@ -71,9 +71,9 @@ const MaterialOptionsMenu: FunctionComponent<MaterialOptionsMenuProps> = ({ file
           <Menu.Item onClick={() => openRenameFileModal(file)}>
             <DropdownItem icon={<Edit/>} label="Rename"/>
           </Menu.Item>
-          <Menu.Item>
+          {/* <Menu.Item>
             <DropdownItem icon={<FolderIcon/>} label="Move to"/>
-          </Menu.Item>
+          </Menu.Item> */}
           <Menu.Item
             onClick={async () =>
             {

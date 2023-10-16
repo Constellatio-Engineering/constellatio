@@ -20,8 +20,8 @@ const ProfilePage: FunctionComponent<IProfilePageProps> = ({ allMainCategory }) 
     { selected: false, slug: "profile-details", title: "Profile Details" },
     { selected: false, slug: "change-password", title: "Change Password" },
     { selected: false, slug: "history", title: "History" },
-    { selected: false, slug: "notifications", title: "Notifications" },
-    // { selected: false, slug: "subscription", title: "Subscription" },
+    // { selected: false, slug: "notifications", title: "Notifications" },
+    { selected: false, slug: "subscription", title: "Subscription" },
   ]);
 
   const contentPicker = (tabs: ITab[]): React.ReactNode => 

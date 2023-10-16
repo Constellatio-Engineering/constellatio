@@ -48,7 +48,6 @@ const OverviewPage: FunctionComponent<OverviewPageProps> = ({ content, variant }
 
   useEffect(() => 
   {
-    // console.log(router.query.category);
     if(typeof window !== "undefined") 
     {
       void (async () => 
@@ -108,7 +107,6 @@ const OverviewPage: FunctionComponent<OverviewPageProps> = ({ content, variant }
 
   const getIsCategoryEmpty = (): boolean => 
   {
-    console.log("content", content, "selectedCategorySlug", selectedCategorySlug);
     const isEmpty: boolean =
       content?.__typename === "case"
         ? content?.allCases?.filter(
