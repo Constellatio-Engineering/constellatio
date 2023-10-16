@@ -55,8 +55,8 @@ export const expandTableButtonArea = (theme: MantineTheme) => css`
 
 export const topicCell = css`
 min-width: 100px;
-max-width: 100px;
 p{
+    text-align: left;
     width: 100%;
     white-space: nowrap;
     overflow: hidden;

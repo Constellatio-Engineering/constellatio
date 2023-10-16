@@ -1,3 +1,4 @@
+/* eslint-disable max-lines */
 import CaseBlock from "@/components/organisms/caseBlock/ItemBlock";
 import EmptyStateCard from "@/components/organisms/emptyStateCard/EmptyStateCard";
 import OverviewHeader, {
@@ -29,6 +30,12 @@ type ArticlesOverviewPageProps = {
   content: IArticlesOverviewProps;
   variant: "dictionary";
 };
+
+function extractNumeric(title: string): number | null 
+{
+  const match = title.match(/\d+/);
+  return match ? parseInt(match[0], 10) : null;
+}
 
 type OverviewPageProps = CasesOverviewPageProps | ArticlesOverviewPageProps;
 
@@ -114,7 +121,6 @@ const OverviewPage: FunctionComponent<OverviewPageProps> = ({ content, variant }
             slugFormatter(x?.mainCategoryField?.[0]?.mainCategory ?? "") ===
               selectedCategorySlug
         )?.length <= 0;
-
     return isEmpty;
   };
 
@@ -130,12 +136,40 @@ const OverviewPage: FunctionComponent<OverviewPageProps> = ({ content, variant }
         />
       )}
       <div css={styles.ListWrapper}>
-        {router.query.category && filteredLegalAreas.map((item, itemIndex) => 
+        {router.query.category && filteredLegalAreas.sort((a, b) => 
+        {
+          if(a.sorting === null) { return 1; }  
+          if(b.sorting === null) { return -1; } 
+          return a.sorting! - b.sorting!;
+        }).map((item, itemIndex) => 
         {
           const items =
             variant === "case"
-              ? getAllCasesOfLegalArea(item)
-              : getAllArticlesOfLegalArea(item);
+              ? getAllCasesOfLegalArea(item)?.sort((a, b) => 
+              {
+                const numA = extractNumeric(a.title ?? "");
+                const numB = extractNumeric(b.title ?? "");
+            
+                if(numA !== null && numB !== null) 
+                {
+                  return numA - numB;
+                }
+                return a?.title?.localeCompare(b.title ?? "") ?? -1;
+              })
+              : getAllArticlesOfLegalArea(item)?.sort((a, b) => 
+              {
+                const sortingA = a?.topic?.[0]?.sorting;
+                const sortingB = b?.topic?.[0]?.sorting;
+                if(sortingA === null || sortingA === undefined) 
+                {
+                  return 1;
+                }
+                if(sortingB === null || sortingB === undefined) 
+                {
+                  return -1;
+                }
+                return sortingA - sortingB;
+              }) || [];
 
           return (
             item.legalAreaName && (

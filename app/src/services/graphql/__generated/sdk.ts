@@ -714,6 +714,7 @@ export type IGenLegalArea = {
   _meta?: Maybe<IGenCaisyDocument_Meta>;
   id?: Maybe<Scalars['ID']['output']>;
   legalAreaName?: Maybe<Scalars['String']['output']>;
+  sorting?: Maybe<Scalars['Int']['output']>;
 };
 
 export type IGenLegalArea_Connection = {
@@ -733,6 +734,7 @@ export type IGenLegalArea_Nested_Where = {
   AND?: InputMaybe<Array<InputMaybe<IGenLegalArea_Nested_Where>>>;
   OR?: InputMaybe<Array<InputMaybe<IGenLegalArea_Nested_Where>>>;
   legalAreaName?: InputMaybe<IGenCaisyField_String_Where>;
+  sorting?: InputMaybe<IGenCaisyField_Number_WhereInt>;
 };
 
 export type IGenLegalArea_Sort = {
@@ -740,6 +742,7 @@ export type IGenLegalArea_Sort = {
   id?: InputMaybe<IGenOrder>;
   legalAreaName?: InputMaybe<IGenOrder>;
   publishedAt?: InputMaybe<IGenOrder>;
+  sorting?: InputMaybe<IGenOrder>;
   updatedAt?: InputMaybe<IGenOrder>;
 };
 
@@ -747,6 +750,7 @@ export type IGenLegalArea_Where = {
   AND?: InputMaybe<Array<InputMaybe<IGenLegalArea_Where>>>;
   OR?: InputMaybe<Array<InputMaybe<IGenLegalArea_Where>>>;
   legalAreaName?: InputMaybe<IGenCaisyField_String_Where>;
+  sorting?: InputMaybe<IGenCaisyField_Number_WhereInt>;
 };
 
 export type IGenMainCategory = {
@@ -1226,6 +1230,7 @@ export type IGenTopic = {
   __typename?: 'Topic';
   _meta?: Maybe<IGenCaisyDocument_Meta>;
   id?: Maybe<Scalars['ID']['output']>;
+  sorting?: Maybe<Scalars['Int']['output']>;
   topicName?: Maybe<Scalars['String']['output']>;
 };
 
@@ -1245,6 +1250,7 @@ export type IGenTopic_ConnectionEdge = {
 export type IGenTopic_Nested_Where = {
   AND?: InputMaybe<Array<InputMaybe<IGenTopic_Nested_Where>>>;
   OR?: InputMaybe<Array<InputMaybe<IGenTopic_Nested_Where>>>;
+  sorting?: InputMaybe<IGenCaisyField_Number_WhereInt>;
   topicName?: InputMaybe<IGenCaisyField_String_Where>;
 };
 
@@ -1252,6 +1258,7 @@ export type IGenTopic_Sort = {
   createdAt?: InputMaybe<IGenOrder>;
   id?: InputMaybe<IGenOrder>;
   publishedAt?: InputMaybe<IGenOrder>;
+  sorting?: InputMaybe<IGenOrder>;
   topicName?: InputMaybe<IGenOrder>;
   updatedAt?: InputMaybe<IGenOrder>;
 };
@@ -1259,6 +1266,7 @@ export type IGenTopic_Sort = {
 export type IGenTopic_Where = {
   AND?: InputMaybe<Array<InputMaybe<IGenTopic_Where>>>;
   OR?: InputMaybe<Array<InputMaybe<IGenTopic_Where>>>;
+  sorting?: InputMaybe<IGenCaisyField_Number_WhereInt>;
   topicName?: InputMaybe<IGenCaisyField_String_Where>;
 };
 
@@ -1362,7 +1370,7 @@ export type IGenFullCaseFragment = { __typename: 'Case', id?: string | null, tit
     & IGenTopicFragment
   ) | null> | null, resolution?: { __typename?: 'Case_resolution', json?: any | null, connections?: Array<{ __typename: 'Caisy_Field_Document_NotFound' } | null> | null } | null };
 
-export type IGenLegalAreaFragment = { __typename: 'LegalArea', legalAreaName?: string | null, id?: string | null };
+export type IGenLegalAreaFragment = { __typename: 'LegalArea', legalAreaName?: string | null, id?: string | null, sorting?: number | null };
 
 export type IGenMainCategoryFragment = { __typename: 'MainCategory', id?: string | null, mainCategory?: string | null, icon?: (
     { __typename?: 'Asset' }
@@ -1373,7 +1381,7 @@ export type IGenSearchEntryFragment = { __typename: 'SearchEntry', id?: string |
 
 export type IGenTagsFragment = { __typename: 'Tags', id?: string | null, tagName?: string | null };
 
-export type IGenTopicFragment = { __typename: 'Topic', id?: string | null, topicName?: string | null };
+export type IGenTopicFragment = { __typename: 'Topic', id?: string | null, topicName?: string | null, sorting?: number | null };
 
 export type IGenGetPopularSearchesQueryVariables = Exact<{ [key: string]: never; }>;
 
@@ -1464,6 +1472,7 @@ export const LegalAreaFragmentDoc = gql`
     fragment LegalArea on LegalArea {
   legalAreaName
   id
+  sorting
   __typename
 }
     `;
@@ -1472,6 +1481,7 @@ export const TopicFragmentDoc = gql`
   __typename
   id
   topicName
+  sorting
 }
     `;
 export const AssetFragmentDoc = gql`
