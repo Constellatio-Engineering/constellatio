@@ -1,4 +1,3 @@
-import { CivilLawIcon } from "@/components/Icons/CivilLawIcon";
 import CaseBlock from "@/components/organisms/caseBlock/ItemBlock";
 import EmptyStateCard from "@/components/organisms/emptyStateCard/EmptyStateCard";
 import OverviewHeader, {
