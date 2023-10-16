@@ -51,11 +51,10 @@ const OverviewPage: FunctionComponent<OverviewPageProps> = ({ content, variant }
         {
           if(!selectedCategorySlug || router.query.category === undefined) 
           {
-            // console.log("!selectedCategorySlug || router.query.category === undefined");
             await setSelectedCategorySlug(
               slugFormatter(content.allMainCategories?.[0]?.mainCategory ?? "")
             );
-            await router.replace({ query: { category: slugFormatter(content.allMainCategories?.[0]?.mainCategory ?? "") } }, undefined, { shallow: true });
+            await router.replace({ query: { category: slugFormatter(content.allMainCategories?.[0]?.mainCategory ?? "") } });
           }
         }
         catch (error) 
@@ -103,6 +102,7 @@ const OverviewPage: FunctionComponent<OverviewPageProps> = ({ content, variant }
 
   const getIsCategoryEmpty = (): boolean => 
   {
+    console.log("content", content, "selectedCategorySlug", selectedCategorySlug);
     const isEmpty: boolean =
       content?.__typename === "case"
         ? content?.allCases?.filter(
@@ -158,14 +158,8 @@ const OverviewPage: FunctionComponent<OverviewPageProps> = ({ content, variant }
           );
         })}
       </div>
-      {router.query.category && getIsCategoryEmpty() && (
+      {selectedCategorySlug && getIsCategoryEmpty() && (
         <EmptyStateCard
-          // button={(
-          //   <>
-          //     <CivilLawIcon/>
-          //     Explore Civil law cases
-          //   </>
-          // )}
           title={`We're currently working hard to bring you ${
             variant === "case"
               ? "engaging cases to solve"
@@ -175,7 +169,6 @@ const OverviewPage: FunctionComponent<OverviewPageProps> = ({ content, variant }
           variant="For-large-areas"
         />
       )}
-      {/* {!router.query.category && <Loader m="50px"/>} */}
     </div>
   );
 };
