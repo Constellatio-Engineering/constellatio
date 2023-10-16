@@ -126,12 +126,13 @@ const CaseBlockBookmarkButton: FunctionComponent<ICaseBlockBookmarkButtonProps> 
         opened={showDeleteBookmarkModal}
         centered
         lockScroll
+        withCloseButton={false}
         onClose={function(): void 
         {
           setShowDeleteBookmarkModal(false);
         }}>
         <Title order={3}>Remove from favorites?</Title>
-        <BodyText ta="center" styleType="body-01-regular" component="p">
+        <BodyText styleType="body-01-regular" component="p">
           Are you sure you want to delete this case from your favorites?
         </BodyText>
         <div className="buttons">
