@@ -13,6 +13,7 @@ interface SearchOverlayProps {}
 
 const SearchOverlay: FunctionComponent<SearchOverlayProps> = () => 
 {
+
   const isDrawerOpened = useSearchBarStore((s) => s.isDrawerOpened);
   const searchValue = useSearchBarStore((s) => s.searchValue);
   const router = useRouter();

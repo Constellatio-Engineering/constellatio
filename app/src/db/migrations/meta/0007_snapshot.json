@@ -1,0 +1,614 @@
+{
+  "version": "5",
+  "dialect": "pg",
+  "id": "76bb7ab3-30ca-4bde-903c-a735f0ae748a",
+  "prevId": "a1a054d2-0ee6-415e-89d2-b5b6bd90b93b",
+  "tables": {
+    "Article_View": {
+      "name": "Article_View",
+      "schema": "",
+      "columns": {
+        "UserId": {
+          "name": "UserId",
+          "type": "uuid",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "ArticleId": {
+          "name": "ArticleId",
+          "type": "uuid",
+          "primaryKey": false,
+          "notNull": false
+        }
+      },
+      "indexes": {
+        "ArticleId_Index": {
+          "name": "ArticleId_Index",
+          "columns": [
+            "ArticleId"
+          ],
+          "isUnique": false
+        }
+      },
+      "foreignKeys": {
+        "Article_View_UserId_User_Id_fk": {
+          "name": "Article_View_UserId_User_Id_fk",
+          "tableFrom": "Article_View",
+          "tableTo": "User",
+          "columnsFrom": [
+            "UserId"
+          ],
+          "columnsTo": [
+            "Id"
+          ],
+          "onDelete": "no action",
+          "onUpdate": "no action"
+        }
+      },
+      "compositePrimaryKeys": {
+        "Article_View_UserId_ArticleId": {
+          "name": "Article_View_UserId_ArticleId",
+          "columns": [
+            "UserId",
+            "ArticleId"
+          ]
+        }
+      },
+      "uniqueConstraints": {}
+    },
+    "Bookmark": {
+      "name": "Bookmark",
+      "schema": "",
+      "columns": {
+        "Id": {
+          "name": "Id",
+          "type": "uuid",
+          "primaryKey": true,
+          "notNull": true,
+          "default": "gen_random_uuid()"
+        },
+        "UserId": {
+          "name": "UserId",
+          "type": "uuid",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "ResourceType": {
+          "name": "ResourceType",
+          "type": "ResourceType",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "CreatedAt": {
+          "name": "CreatedAt",
+          "type": "timestamp",
+          "primaryKey": false,
+          "notNull": true,
+          "default": "now()"
+        },
+        "ResourceId": {
+          "name": "ResourceId",
+          "type": "uuid",
+          "primaryKey": false,
+          "notNull": true
+        }
+      },
+      "indexes": {},
+      "foreignKeys": {
+        "Bookmark_UserId_User_Id_fk": {
+          "name": "Bookmark_UserId_User_Id_fk",
+          "tableFrom": "Bookmark",
+          "tableTo": "User",
+          "columnsFrom": [
+            "UserId"
+          ],
+          "columnsTo": [
+            "Id"
+          ],
+          "onDelete": "no action",
+          "onUpdate": "no action"
+        }
+      },
+      "compositePrimaryKeys": {},
+      "uniqueConstraints": {
+        "Bookmark_Id_unique": {
+          "name": "Bookmark_Id_unique",
+          "nullsNotDistinct": false,
+          "columns": [
+            "Id"
+          ]
+        },
+        "Bookmark_ResourceType_ResourceId_UserId_unique": {
+          "name": "Bookmark_ResourceType_ResourceId_UserId_unique",
+          "nullsNotDistinct": false,
+          "columns": [
+            "ResourceType",
+            "ResourceId",
+            "UserId"
+          ]
+        }
+      }
+    },
+    "Case_View": {
+      "name": "Case_View",
+      "schema": "",
+      "columns": {
+        "UserId": {
+          "name": "UserId",
+          "type": "uuid",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "CaseId": {
+          "name": "CaseId",
+          "type": "uuid",
+          "primaryKey": false,
+          "notNull": false
+        }
+      },
+      "indexes": {
+        "CaseId_Index": {
+          "name": "CaseId_Index",
+          "columns": [
+            "CaseId"
+          ],
+          "isUnique": false
+        }
+      },
+      "foreignKeys": {
+        "Case_View_UserId_User_Id_fk": {
+          "name": "Case_View_UserId_User_Id_fk",
+          "tableFrom": "Case_View",
+          "tableTo": "User",
+          "columnsFrom": [
+            "UserId"
+          ],
+          "columnsTo": [
+            "Id"
+          ],
+          "onDelete": "no action",
+          "onUpdate": "no action"
+        }
+      },
+      "compositePrimaryKeys": {
+        "Case_View_UserId_CaseId": {
+          "name": "Case_View_UserId_CaseId",
+          "columns": [
+            "UserId",
+            "CaseId"
+          ]
+        }
+      },
+      "uniqueConstraints": {}
+    },
+    "Document": {
+      "name": "Document",
+      "schema": "",
+      "columns": {
+        "Id": {
+          "name": "Id",
+          "type": "uuid",
+          "primaryKey": true,
+          "notNull": true,
+          "default": "gen_random_uuid()"
+        },
+        "UserId": {
+          "name": "UserId",
+          "type": "uuid",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "CreatedAt": {
+          "name": "CreatedAt",
+          "type": "timestamp",
+          "primaryKey": false,
+          "notNull": true,
+          "default": "now()"
+        },
+        "UpdatedAt": {
+          "name": "UpdatedAt",
+          "type": "timestamp",
+          "primaryKey": false,
+          "notNull": true,
+          "default": "now()"
+        },
+        "FolderId": {
+          "name": "FolderId",
+          "type": "uuid",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "Name": {
+          "name": "Name",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "Content": {
+          "name": "Content",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true
+        }
+      },
+      "indexes": {},
+      "foreignKeys": {
+        "Document_UserId_User_Id_fk": {
+          "name": "Document_UserId_User_Id_fk",
+          "tableFrom": "Document",
+          "tableTo": "User",
+          "columnsFrom": [
+            "UserId"
+          ],
+          "columnsTo": [
+            "Id"
+          ],
+          "onDelete": "no action",
+          "onUpdate": "no action"
+        },
+        "Document_FolderId_UploadFolder_Id_fk": {
+          "name": "Document_FolderId_UploadFolder_Id_fk",
+          "tableFrom": "Document",
+          "tableTo": "UploadFolder",
+          "columnsFrom": [
+            "FolderId"
+          ],
+          "columnsTo": [
+            "Id"
+          ],
+          "onDelete": "no action",
+          "onUpdate": "no action"
+        }
+      },
+      "compositePrimaryKeys": {},
+      "uniqueConstraints": {
+        "Document_Id_unique": {
+          "name": "Document_Id_unique",
+          "nullsNotDistinct": false,
+          "columns": [
+            "Id"
+          ]
+        }
+      }
+    },
+    "Note": {
+      "name": "Note",
+      "schema": "",
+      "columns": {
+        "Id": {
+          "name": "Id",
+          "type": "uuid",
+          "primaryKey": true,
+          "notNull": true,
+          "default": "gen_random_uuid()"
+        },
+        "UserId": {
+          "name": "UserId",
+          "type": "uuid",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "FileId": {
+          "name": "FileId",
+          "type": "uuid",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "CreatedAt": {
+          "name": "CreatedAt",
+          "type": "timestamp",
+          "primaryKey": false,
+          "notNull": true,
+          "default": "now()"
+        },
+        "UpdatedAt": {
+          "name": "UpdatedAt",
+          "type": "timestamp",
+          "primaryKey": false,
+          "notNull": true,
+          "default": "now()"
+        },
+        "Content": {
+          "name": "Content",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true
+        }
+      },
+      "indexes": {},
+      "foreignKeys": {
+        "Note_UserId_User_Id_fk": {
+          "name": "Note_UserId_User_Id_fk",
+          "tableFrom": "Note",
+          "tableTo": "User",
+          "columnsFrom": [
+            "UserId"
+          ],
+          "columnsTo": [
+            "Id"
+          ],
+          "onDelete": "no action",
+          "onUpdate": "no action"
+        },
+        "Note_FileId_UploadedFile_Id_fk": {
+          "name": "Note_FileId_UploadedFile_Id_fk",
+          "tableFrom": "Note",
+          "tableTo": "UploadedFile",
+          "columnsFrom": [
+            "FileId"
+          ],
+          "columnsTo": [
+            "Id"
+          ],
+          "onDelete": "no action",
+          "onUpdate": "no action"
+        }
+      },
+      "compositePrimaryKeys": {},
+      "uniqueConstraints": {
+        "Note_Id_unique": {
+          "name": "Note_Id_unique",
+          "nullsNotDistinct": false,
+          "columns": [
+            "Id"
+          ]
+        }
+      }
+    },
+    "UploadFolder": {
+      "name": "UploadFolder",
+      "schema": "",
+      "columns": {
+        "Id": {
+          "name": "Id",
+          "type": "uuid",
+          "primaryKey": true,
+          "notNull": true,
+          "default": "gen_random_uuid()"
+        },
+        "CreatedAt": {
+          "name": "CreatedAt",
+          "type": "timestamp",
+          "primaryKey": false,
+          "notNull": true,
+          "default": "now()"
+        },
+        "UserId": {
+          "name": "UserId",
+          "type": "uuid",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "Name": {
+          "name": "Name",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true
+        }
+      },
+      "indexes": {},
+      "foreignKeys": {
+        "UploadFolder_UserId_User_Id_fk": {
+          "name": "UploadFolder_UserId_User_Id_fk",
+          "tableFrom": "UploadFolder",
+          "tableTo": "User",
+          "columnsFrom": [
+            "UserId"
+          ],
+          "columnsTo": [
+            "Id"
+          ],
+          "onDelete": "no action",
+          "onUpdate": "no action"
+        }
+      },
+      "compositePrimaryKeys": {},
+      "uniqueConstraints": {
+        "UploadFolder_Id_unique": {
+          "name": "UploadFolder_Id_unique",
+          "nullsNotDistinct": false,
+          "columns": [
+            "Id"
+          ]
+        }
+      }
+    },
+    "UploadedFile": {
+      "name": "UploadedFile",
+      "schema": "",
+      "columns": {
+        "Id": {
+          "name": "Id",
+          "type": "uuid",
+          "primaryKey": true,
+          "notNull": true,
+          "default": "gen_random_uuid()"
+        },
+        "UserId": {
+          "name": "UserId",
+          "type": "uuid",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "CreatedAt": {
+          "name": "CreatedAt",
+          "type": "timestamp",
+          "primaryKey": false,
+          "notNull": true,
+          "default": "now()"
+        },
+        "FolderId": {
+          "name": "FolderId",
+          "type": "uuid",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "ServerFilename": {
+          "name": "ServerFilename",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "OriginalFilename": {
+          "name": "OriginalFilename",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "SizeInBytes": {
+          "name": "SizeInBytes",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "FileExtension": {
+          "name": "FileExtension",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true
+        }
+      },
+      "indexes": {},
+      "foreignKeys": {
+        "UploadedFile_UserId_User_Id_fk": {
+          "name": "UploadedFile_UserId_User_Id_fk",
+          "tableFrom": "UploadedFile",
+          "tableTo": "User",
+          "columnsFrom": [
+            "UserId"
+          ],
+          "columnsTo": [
+            "Id"
+          ],
+          "onDelete": "no action",
+          "onUpdate": "no action"
+        },
+        "UploadedFile_FolderId_UploadFolder_Id_fk": {
+          "name": "UploadedFile_FolderId_UploadFolder_Id_fk",
+          "tableFrom": "UploadedFile",
+          "tableTo": "UploadFolder",
+          "columnsFrom": [
+            "FolderId"
+          ],
+          "columnsTo": [
+            "Id"
+          ],
+          "onDelete": "no action",
+          "onUpdate": "no action"
+        }
+      },
+      "compositePrimaryKeys": {},
+      "uniqueConstraints": {
+        "UploadedFile_Id_unique": {
+          "name": "UploadedFile_Id_unique",
+          "nullsNotDistinct": false,
+          "columns": [
+            "Id"
+          ]
+        }
+      }
+    },
+    "User": {
+      "name": "User",
+      "schema": "",
+      "columns": {
+        "Id": {
+          "name": "Id",
+          "type": "uuid",
+          "primaryKey": true,
+          "notNull": true
+        },
+        "Email": {
+          "name": "Email",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "DisplayName": {
+          "name": "DisplayName",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "FirstName": {
+          "name": "FirstName",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "Gender": {
+          "name": "Gender",
+          "type": "Gender",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "LastName": {
+          "name": "LastName",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "Semester": {
+          "name": "Semester",
+          "type": "smallint",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "StripeCustomerId": {
+          "name": "StripeCustomerId",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "University": {
+          "name": "University",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true
+        }
+      },
+      "indexes": {},
+      "foreignKeys": {},
+      "compositePrimaryKeys": {},
+      "uniqueConstraints": {
+        "User_Id_unique": {
+          "name": "User_Id_unique",
+          "nullsNotDistinct": false,
+          "columns": [
+            "Id"
+          ]
+        },
+        "User_Email_unique": {
+          "name": "User_Email_unique",
+          "nullsNotDistinct": false,
+          "columns": [
+            "Email"
+          ]
+        }
+      }
+    }
+  },
+  "enums": {
+    "Gender": {
+      "name": "Gender",
+      "values": {
+        "male": "male",
+        "female": "female",
+        "diverse": "diverse"
+      }
+    },
+    "ResourceType": {
+      "name": "ResourceType",
+      "values": {
+        "article": "article",
+        "case": "case"
+      }
+    }
+  },
+  "schemas": {},
+  "_meta": {
+    "schemas": {},
+    "tables": {},
+    "columns": {}
+  }
+}

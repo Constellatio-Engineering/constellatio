@@ -19,7 +19,6 @@ export interface AuthPageProps
 export const AuthPage: FC<AuthPageProps> = ({ tab }) =>
 {
   const router = useRouter();
-
   const handleTabChange: (value: AuthPageProps["tab"]) => Promise<boolean> = async (value) => router.push(`/${value}`);
 
   return (
@@ -27,7 +26,6 @@ export const AuthPage: FC<AuthPageProps> = ({ tab }) =>
       justify="space-between"
       bg="brand-01.5"
       sx={{ height: "100vh", minHeight: 600, overflow: "hidden" }}>
-     
       <RegistrationVisualHeader/>
       <Container
         w="100%"
@@ -47,7 +45,6 @@ export const AuthPage: FC<AuthPageProps> = ({ tab }) =>
           pt={50}
           pb={tab === "register" ? "spacing-100" : 0}
           sx={{ marginTop: "180px" }}>
-          
           <Switcher
             size="big"
             value={tab}
@@ -65,7 +62,6 @@ export const AuthPage: FC<AuthPageProps> = ({ tab }) =>
               <RegistrationForm/>
             </Tabs.Panel>
           </Switcher>
-      
         </Container>
       </Container>
     </Flex>
