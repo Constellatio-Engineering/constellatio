@@ -11,11 +11,14 @@ import { DragNDropCard } from "@/components/molecules/DraggableCard/DragNDropCar
 import { GhostDropCard } from "@/components/molecules/GhostDropCard/GhostDropCard";
 import { HelpNote } from "@/components/molecules/HelpNote/HelpNote";
 import { ResultCard } from "@/components/molecules/ResultCard/ResultCard";
+import useContextAndErrorIfNull from "@/hooks/useContextAndErrorIfNull";
+import { InvalidateQueriesContext } from "@/provider/InvalidateQueriesProvider";
 import { type IGenDragNDropGame } from "@/services/graphql/__generated/sdk";
 import useCaseSolvingStore from "@/stores/caseSolving.store";
 import useDragDropGameStore, {
   type TDragAndDropGameOptionType,
 } from "@/stores/dragDropGame.store";
+import { api } from "@/utils/api";
 import { shuffleArray } from "@/utils/array";
 
 import {
@@ -37,18 +40,23 @@ import {
   TitleWrapper,
 } from "./DragDropGame.styles";
 
-export type TDragDropGame = Pick<
-IGenDragNDropGame,
-"game" | "helpNote" | "question" | "id"
->;
+export type TDragDropGame = Pick<IGenDragNDropGame, "game" | "helpNote" | "question" | "id"> & {
+  readonly caseId: string;
+};
 
 export const DragDropGame: FC<TDragDropGame> = ({
+  caseId,
   game,
   helpNote,
   id,
   question,
 }) => 
 {
+  const { invalidateGamesProgress } = useContextAndErrorIfNull(InvalidateQueriesContext);
+  const { mutate: setGameProgress } = api.gamesProgress.setGameProgress.useMutation({
+    onError: (error) => console.error("Error while setting game progress", error),
+    onSuccess: async () => invalidateGamesProgress({ caseId })
+  });
   const getNextGameIndex = useCaseSolvingStore((s) => s.getNextGameIndex);
   const gameState = useDragDropGameStore((s) => s.getGameState(id));
   const allGames = useDragDropGameStore((s) => s.games);
@@ -331,11 +339,18 @@ export const DragDropGame: FC<TDragDropGame> = ({
             styleType="primary"
             size="large"
             leftIcon={gameStatus === "inprogress" ? <Check/> : <Reload/>}
-            onClick={
-              gameStatus === "inprogress"
-                ? onGameFinishHandler
-                : onGameResetHandler
-            }
+            onClick={() =>
+            {
+              if(gameStatus === "inprogress")
+              {
+                setGameProgress({ gameId: id, progressState: "completed" });
+                onGameFinishHandler();
+              }
+              else
+              {
+                onGameResetHandler();
+              }
+            }}
             disabled={gameStatus === "inprogress" && droppedItems.length < 1}>
             {gameStatus === "inprogress" ? "Check my answers" : "Solve again"}
           </Button>

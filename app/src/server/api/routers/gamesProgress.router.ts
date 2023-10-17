@@ -53,7 +53,7 @@ export const gamesProgressRouter = createTRPCRouter({
         }
       });
 
-      console.log("_gamesProgress: ", _gamesProgress);
+      console.log("gamesProgress: ", resultArray);
 
       return resultArray;
     }),
@@ -70,6 +70,7 @@ export const gamesProgressRouter = createTRPCRouter({
 
       if(existingGameProgress)
       {
+        console.log("gameProgress exists, updating...");
         await db.update(gamesProgress).set({ progressState }).where(
           and(
             eq(gamesProgress.userId, userId),
@@ -78,11 +79,15 @@ export const gamesProgressRouter = createTRPCRouter({
         );
         return;
       }
-
-      await db.insert(gamesProgress).values({
-        gameId,
-        progressState,
-        userId,
-      });
+      else
+      {
+        console.log("gameProgress does not exist, inserting...");
+        await db.insert(gamesProgress).values({
+          gameId,
+          progressState,
+          userId,
+        });
+        return;
+      }
     })
 });

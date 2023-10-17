@@ -1,14 +1,23 @@
 import { type IGenCardSelectionGame, type IGenCase, type IGenDragNDropGame, type IGenFillInGapsGame } from "@/services/graphql/__generated/sdk";
 import { type Nullable } from "@/utils/types";
 
-export type Game = (IGenCardSelectionGame | IGenDragNDropGame | IGenFillInGapsGame) & {
-  indexInContentArray: number;
+type Game = (IGenCardSelectionGame | IGenDragNDropGame | IGenFillInGapsGame) & {
+  indexInFullTextTasksJson: number;
 };
 export type Games = Game[];
 
 export const getGamesFromCase = (legalCase: Nullable<IGenCase>): Games =>
 {
-  const connections = legalCase?.fullTextTasks?.connections;
+  console.log("------ getGamesFromCase ------");
+
+  const fullTextTasks = legalCase?.fullTextTasks;
+
+  console.log("connections: ", fullTextTasks?.connections);
+  console.log("json: ", fullTextTasks?.json);
+
+  console.log("------ getGamesFromCase ------");
+
+  const connections = fullTextTasks?.connections;
 
   if(!connections)
   {
@@ -16,26 +25,25 @@ export const getGamesFromCase = (legalCase: Nullable<IGenCase>): Games =>
   }
 
   const games: Games = connections
-    .map((connection, index) =>
+    .map(connection =>
     {
       const contentType = connection?.__typename;
 
-      if(!contentType)
+      if(!contentType || !(contentType === "CardSelectionGame" || contentType === "DragNDropGame" || contentType === "FillInGapsGame"))
       {
         return null;
       }
 
-      if(contentType === "CardSelectionGame" || contentType === "DragNDropGame" || contentType === "FillInGapsGame")
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
+      const gameIndex = fullTextTasks?.json?.content?.findIndex((item: any) =>
       {
-        return {
-          ...connection,
-          indexInContentArray: index
-        };
-      }
-      else
-      {
-        return null;
-      }
+        return item?.type === "documentLink" && item?.attrs?.documentId === connection?.id;
+      });
+
+      return {
+        ...connection,
+        indexInFullTextTasksJson: gameIndex
+      };
     })
     .filter(Boolean);
 

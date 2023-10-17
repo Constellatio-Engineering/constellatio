@@ -1,10 +1,12 @@
 import { db } from "@/db/connection";
-import { type CaseProgress, casesProgress } from "@/db/schema";
+import { type CaseProgress, casesProgress, gamesProgress } from "@/db/schema";
 import { getCaseProgressSchema } from "@/schemas/caseProgress/getCaseProgress.schema";
 import { getCasesProgressSchema } from "@/schemas/caseProgress/getCasesProgress.schema";
 import { resetCaseProgressSchema } from "@/schemas/caseProgress/resetCaseProgress.schema";
 import { setCaseProgressStateSchema } from "@/schemas/caseProgress/setCaseProgressState.schema";
 import { createTRPCRouter, protectedProcedure } from "@/server/api/trpc";
+import { caisySDK } from "@/services/graphql/getSdk";
+import { getGamesFromCase } from "@/utils/case";
 
 import { and, eq, inArray, type SQLWrapper } from "drizzle-orm";
 
@@ -69,16 +71,26 @@ export const caseProgressRouter = createTRPCRouter({
     .input(resetCaseProgressSchema)
     .mutation(async ({ ctx: { userId }, input: { caseId } }) =>
     {
+      const caseFromCms = await caisySDK.getCaseById({ id: caseId });
+      const games = getGamesFromCase(caseFromCms.Case);
+      const gameIds = games?.map(({ id }) => id).filter(Boolean);
+
+      if(gameIds.length > 0)
+      {
+        await db.delete(gamesProgress).where(
+          and(
+            eq(gamesProgress.userId, userId),
+            inArray(gamesProgress.gameId, gameIds),
+          )
+        );
+      }
+
       await db.delete(casesProgress).where(
         and(
           eq(casesProgress.userId, userId),
           eq(casesProgress.caseId, caseId),
         )
       );
-
-      /*
-       * TODO - reset all games progress
-       */
     }),
   setProgressState: protectedProcedure
     .input(setCaseProgressStateSchema)

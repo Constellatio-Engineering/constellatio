@@ -2,22 +2,19 @@
 import { Button } from "@/components/atoms/Button/Button";
 import { type IStatusLabel } from "@/components/atoms/statusLabel/StatusLabel";
 import { richTextHeadingOverwrite } from "@/components/helpers/richTextHeadingOverwrite";
-import { casesProgress } from "@/db/schema";
+import { type GameProgress } from "@/db/schema";
 import useContextAndErrorIfNull from "@/hooks/useContextAndErrorIfNull";
-import { type GamesProgress } from "@/hooks/useGamesProgress";
 import { InvalidateQueriesContext } from "@/provider/InvalidateQueriesProvider";
 import { type Maybe, type IGenCase_Facts, type IGenCase_FullTextTasks, type IGenArticle_FullTextTasks } from "@/services/graphql/__generated/sdk";
-import useCaseSolvingStore from "@/stores/caseSolving.store";
 import { api } from "@/utils/api";
 import { type Games } from "@/utils/case";
 import type { IDocumentLink, IHeadingNode } from "types/richtext";
 
 import { Container, Title } from "@mantine/core";
 import {
-  type FunctionComponent, useEffect, useMemo, useCallback
+  type FunctionComponent, useMemo, useCallback
 } from "react";
 
-import { getGamesIndexes } from "./caseCompleteTestsStep.helper";
 import * as styles from "./CaseCompleteTestsStep.styles";
 import { richTextParagraphOverwrite } from "../../helpers/richTextParagraphOverwrite";
 import { ImageWrapperCard } from "../../molecules/ImageWrapperCard/ImageWrapperCard";
@@ -36,7 +33,7 @@ interface ICaseCompleteTestsStepProps
   readonly facts: Maybe<IGenCase_Facts> | undefined;
   readonly fullTextTasks: Maybe<IGenCase_FullTextTasks> | Maybe<IGenArticle_FullTextTasks>;
   readonly games: Games;
-  readonly gamesProgress: GamesProgress;
+  readonly gamesProgress: GameProgress[];
   readonly progressState: IStatusLabel["progressState"] | undefined;
   readonly variant?: "case" | "dictionary";
 }
@@ -51,6 +48,8 @@ const CaseCompleteTestsStep: FunctionComponent<ICaseCompleteTestsStepProps> = ({
   variant
 }) =>
 {
+  console.log("-----------------");
+
   const { invalidateCaseProgress } = useContextAndErrorIfNull(InvalidateQueriesContext);
   const { mutate: setProgressState } = api.casesProgress.setProgressState.useMutation({
     onError: (error) => console.error(error),
@@ -69,20 +68,23 @@ const CaseCompleteTestsStep: FunctionComponent<ICaseCompleteTestsStepProps> = ({
   {
     // this gets the first game that is not completed, which is effectively the current game
     const gameProgress = gamesProgress.find(gameProgress => gameProgress.gameId === game.id);
-    return (!gameProgress || gameProgress?.progressState === "not-started");
+    return gameProgress?.progressState === "not-started";
   });
   const currentGame = games[currentGameIndex];
-  const currentGameIndexInContentArray = currentGame?.indexInContentArray || 0;
+  const currentGameIndexInFullTextTasksJson = currentGame?.indexInFullTextTasksJson || 0;
 
   // TODO Error handling if there is no next game
   const nextGameIndex = currentGameIndex + 1;
   const nextGame = games[nextGameIndex];
-  const nextGameIndexInContentArray = nextGame?.indexInContentArray;
+  const nextGameIndexInFullTextTasksJson = nextGame?.indexInFullTextTasksJson;
 
-  // console.log("currentGameIndex", currentGameIndex);
-  // console.log("currentGame", currentGame);
-  // console.log("nextGameIndex", nextGameIndex);
-  // console.log("nextGame", nextGame);
+  console.log("games", games);
+
+  console.log("currentGameIndex", currentGameIndex);
+  console.log("currentGame", currentGame);
+  console.log("nextGameIndex", nextGameIndex);
+  console.log("nextGame", nextGame);
+  console.log("nextGameIndexInContentArray", nextGameIndexInFullTextTasksJson);
 
   const isLastGame = currentGameIndex === games.length - 1;
 
@@ -91,46 +93,35 @@ const CaseCompleteTestsStep: FunctionComponent<ICaseCompleteTestsStepProps> = ({
   const progressForSecondLastGame = gamesProgress.find(gameProgress => gameProgress.gameId === secondLastGame?.id);
   const isLastGame = progressForSecondLastGame?.progressState === "completed";*/
 
-  const renderedCaseContent = useMemo(() => 
+  let renderedCaseContent: IGenCase_FullTextTasks | IGenArticle_FullTextTasks | null;
+
+  if(fullTextTasks?.json?.content?.length >= 1)
   {
-    if(fullTextTasks?.json?.content?.length >= 1)
-    {
-      return {
-        ...fullTextTasks,
-        json: {
-          ...fullTextTasks?.json,
-          content: isLastGame ? fullTextTasks?.json?.content : fullTextTasks?.json?.content?.slice(0, (nextGameIndexInContentArray || 0) + 1),
-        },
-      };
-    }
-    else 
-    {
-      return fullTextTasks;
-    }
-  }, [fullTextTasks, isLastGame, nextGameIndexInContentArray]);
+    renderedCaseContent = {
+      ...fullTextTasks,
+      json: {
+        ...fullTextTasks?.json,
+        content: isLastGame ? fullTextTasks?.json?.content : fullTextTasks?.json?.content?.slice(0, (currentGameIndexInFullTextTasksJson || 0) + 1),
+      },
+    };
+  }
+  else
+  {
+    renderedCaseContent = fullTextTasks;
+  }
 
   const content = useMemo(() =>
   {
     const items = variant === "case" ? renderedCaseContent?.json?.content : fullTextTasks?.json?.content;
-    return items?.filter((contentItem: { content: Array<{ text: string }>; type: string }) =>
-      contentItem?.type === "heading"
-    );
+    return items?.filter((contentItem: { content: Array<{ text: string }>; type: string }) => contentItem?.type === "heading");
   }, [fullTextTasks?.json?.content, renderedCaseContent?.json?.content, variant]);
-
-  /* useEffect(() =>
-  {
-    if(variant === "case" && fullTextTasks?.__typename === "Case_fullTextTasks")
-    {
-      setGamesIndexes(getGamesIndexes({ fullTextTasks })); 
-    }
-  }, [fullTextTasks, setGamesIndexes, variant]);*/
 
   const allHeadings = fullTextTasks?.json?.content?.filter((x: { attrs: { level: number }; type: "heading" }) => x.type === "heading");
 
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  const documentLinkOverwrite = useCallback((props: any) => 
+  const documentLinkOverwrite = useCallback((props: any) =>
   {
-    const node = props!.node as unknown as IDocumentLink;
+    const node = props.node as unknown as IDocumentLink;
     return node && fullTextTasks?.connections
       ? fullTextTasks.connections?.map((component, index) => 
       {
@@ -155,7 +146,7 @@ const CaseCompleteTestsStep: FunctionComponent<ICaseCompleteTestsStepProps> = ({
                 <div
                   css={styles.gameComponentWrapper}
                   key={`${component?.__typename}-${index}`}>
-                  <SelectionCardGame {...component}/>
+                  <SelectionCardGame {...component} caseId={caseId}/>
                 </div>
               );
             }
@@ -167,7 +158,7 @@ const CaseCompleteTestsStep: FunctionComponent<ICaseCompleteTestsStepProps> = ({
                 <div
                   css={styles.gameComponentWrapper}
                   key={`${component?.__typename}-${index}`}>
-                  <DragDropGame {...component}/>
+                  <DragDropGame {...component} caseId={caseId}/>
                 </div>
               );
             }
@@ -179,7 +170,7 @@ const CaseCompleteTestsStep: FunctionComponent<ICaseCompleteTestsStepProps> = ({
                 <div
                   css={styles.gameComponentWrapper}
                   key={`${component?.__typename}-${index}`}>
-                  <FillGapsGame {...component}/>
+                  <FillGapsGame {...component} caseId={caseId}/>
                 </div>
               );
             }
@@ -221,11 +212,7 @@ const CaseCompleteTestsStep: FunctionComponent<ICaseCompleteTestsStepProps> = ({
               styleType="primary"
               size="large"
               type="button"
-              onClick={() => 
-              {
-                setProgressState({ caseId, progressState: "in-progress" });
-                // getNextGameIndex();
-              }}>
+              onClick={() => setProgressState({ caseId, progressState: "in-progress" })}>
               Start solving case
             </Button>
           )}

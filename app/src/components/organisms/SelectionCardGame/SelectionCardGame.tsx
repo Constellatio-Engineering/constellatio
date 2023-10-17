@@ -7,12 +7,14 @@ import { Reload } from "@/components/Icons/Reload";
 import { HelpNote } from "@/components/molecules/HelpNote/HelpNote";
 import { ResultCard } from "@/components/molecules/ResultCard/ResultCard";
 import { SelectionCard } from "@/components/molecules/SelectionCard/SelectionCard";
+import useContextAndErrorIfNull from "@/hooks/useContextAndErrorIfNull";
+import { InvalidateQueriesContext } from "@/provider/InvalidateQueriesProvider";
 import { type IGenCardSelectionGame } from "@/services/graphql/__generated/sdk";
-import useCaseSolvingStore from "@/stores/caseSolving.store";
 import useSelectionCardGameStore, {
   type TCardGameOption,
   type TCardGameOptionWithCheck,
 } from "@/stores/selectionCardGame.store";
+import { api } from "@/utils/api";
 import { shuffleArray } from "@/utils/array";
 
 import { Title, LoadingOverlay } from "@mantine/core";
@@ -27,18 +29,23 @@ import {
   TitleWrapper,
 } from "./SelectionCardGame.styles";
 
-export type SelectionCardGameProps = Pick<
-IGenCardSelectionGame,
-"game" | "helpNote" | "question" | "id"
->;
+export type SelectionCardGameProps = Pick<IGenCardSelectionGame, "game" | "helpNote" | "question" | "id"> & {
+  readonly caseId: string;
+};
 
 let SelectionCardGame: FC<SelectionCardGameProps> = ({
+  caseId,
   game,
   helpNote,
   id,
   question
 }) => 
 {
+  const { invalidateGamesProgress } = useContextAndErrorIfNull(InvalidateQueriesContext);
+  const { mutate: setGameProgress } = api.gamesProgress.setGameProgress.useMutation({
+    onError: (error) => console.error("Error while setting game progress", error),
+    onSuccess: async () => invalidateGamesProgress({ caseId })
+  });
   const gameState = useSelectionCardGameStore((s) => s.getGameState(id));
   const allGames = useSelectionCardGameStore((s) => s.games);
   const updateGameState = useSelectionCardGameStore((s) => s.updateGameState);
@@ -52,13 +59,11 @@ let SelectionCardGame: FC<SelectionCardGameProps> = ({
     }
   }, [allGames, gameState, id, initializeNewGameState]);
 
-  const optionsWithCheckProp: TCardGameOptionWithCheck[] = useMemo(
-    () =>
-      game?.options?.map((option: TCardGameOption) => ({
-        ...option,
-        checked: false,
-      })),
-    [game?.options]
+  const optionsWithCheckProp: TCardGameOptionWithCheck[] = useMemo(() =>
+    game?.options?.map((option: TCardGameOption) => ({
+      ...option,
+      checked: false,
+    })), [game?.options]
   );
 
   useEffect(() => 
@@ -82,9 +87,7 @@ let SelectionCardGame: FC<SelectionCardGameProps> = ({
     resultMessage
   } = gameState ?? {};
 
-  const filteredCorrectAnswers = optionsItems?.filter(
-    (item) => item.correctAnswer
-  );
+  const filteredCorrectAnswers = optionsItems?.filter((item) => item.correctAnswer);
 
   const checkWinCondition = (): boolean => 
   {
@@ -121,7 +124,10 @@ let SelectionCardGame: FC<SelectionCardGameProps> = ({
     const optionsShuffled = shuffleArray<TCardGameOptionWithCheck>(optionsWithCheckProp);
 
     updateGameState(id, {
-      gameStatus: "inprogress", optionsItems: optionsShuffled, resetCounter: resetCounter + 1, resultMessage: "" 
+      gameStatus: "inprogress",
+      optionsItems: optionsShuffled,
+      resetCounter: resetCounter + 1,
+      resultMessage: ""
     });
   };
 
@@ -195,11 +201,18 @@ let SelectionCardGame: FC<SelectionCardGameProps> = ({
             styleType="primary"
             size="large"
             leftIcon={gameStatus === "inprogress" ? <Check/> : <Reload/>}
-            onClick={
-              gameStatus === "inprogress"
-                ? onGameFinishHandler
-                : onGameResetHandler
-            }
+            onClick={() =>
+            {
+              if(gameStatus === "inprogress")
+              {
+                setGameProgress({ gameId: id, progressState: "completed" });
+                onGameFinishHandler();
+              }
+              else
+              {
+                onGameResetHandler();
+              }
+            }}
             disabled={
               gameStatus === "inprogress" &&
 							optionsItems.every((item) => !item.checked)
