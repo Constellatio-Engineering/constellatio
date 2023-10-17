@@ -1,21 +1,17 @@
+import { Button } from "@/components/atoms/Button/Button";
+import { ArrowDown } from "@/components/Icons/ArrowDown";
+import { ArrowUp } from "@/components/Icons/ArrowUp";
+
 import React, { Fragment, type FunctionComponent } from "react";
 
 import * as styles from "./ProfileBadgesBlockList.styles";
-import { Button } from "../atoms/Button/Button";
-import { ArrowDown } from "../Icons/ArrowDown";
-import { ArrowUp } from "../Icons/ArrowUp";
 import ProfileBadgeCard from "../profileBadgeCard/ProfileBadgeCard";
 
 const ProfileBadgesBlockList: FunctionComponent = () => 
 {
   const badges = [
     { description: "You provided feedback to improve design or content", name: "badge1" }, 
-    { description: "You provided feedback to improve design or content", name: "badge2" },
-    // { description: "You provided feedback to improve design or content", name: "badge2" },
-    // { description: "You provided feedback to improve design or content", name: "badge2" },
-    // { description: "You provided feedback to improve design or content", name: "badge2" },
-    // { description: "You provided feedback to improve design or content", name: "badge2" },
-    // { description: "You provided feedback to improve design or content", name: "badge2" },
+    { checked: true, description: "You provided feedback to improve design or content", name: "badge2" },
     // { description: "You provided feedback to improve design or content", name: "badge2" },
     // { description: "You provided feedback to improve design or content", name: "badge2" },
     // { description: "You provided feedback to improve design or content", name: "badge2" },
@@ -31,7 +27,7 @@ const ProfileBadgesBlockList: FunctionComponent = () =>
       {
         badges?.slice(0, showAll ? badges?.length : 9)?.map((badge, badgeIndex) => (
           <Fragment key={badgeIndex}>
-            <ProfileBadgeCard name={badge.name} description={badge.description}/>
+            <ProfileBadgeCard {...badge}/>
           </Fragment>
         ))
       }

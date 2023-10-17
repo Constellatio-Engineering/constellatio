@@ -1,16 +1,16 @@
 import ChangePasswordTab from "@/components/organisms/changePasswordTab/ChangePasswordTab";
 import ProfileDetailsTab from "@/components/organisms/profileDetailsTab/ProfileDetailsTab";
+import ProfileHistoryTab from "@/components/organisms/profileHistoryTab/ProfileHistoryTab";
 import ProfileMenu, { type ITab } from "@/components/organisms/profileMenu/ProfileMenu";
 import ProfileNotificationsTab from "@/components/organisms/profileNotificationsTab/ProfileNotificationsTab";
 import ProfileOverview from "@/components/organisms/profileOverview/ProfileOverview";
 import ProfilePageHeader from "@/components/organisms/profilePageHeader/ProfilePageHeader";
-import ProfileHistoryTab from "@/components/profileHistoryTab/ProfileHistoryTab";
 import { type IProfilePageProps } from "@/pages/profile";
 
-import { Container } from "@mantine/core";
+import { Container, useMantineTheme } from "@mantine/core";
 import { useRouter } from "next/router";
 import { useQueryState } from "next-usequerystate";
-import React, { useState, type FunctionComponent } from "react";
+import React, { useState, type FunctionComponent, type ReactNode, useEffect } from "react";
 
 const ProfilePage: FunctionComponent<IProfilePageProps> = ({ allMainCategory }) =>
 {
@@ -20,11 +20,11 @@ const ProfilePage: FunctionComponent<IProfilePageProps> = ({ allMainCategory }) 
     { selected: false, slug: "profile-details", title: "Profile Details" },
     { selected: false, slug: "change-password", title: "Change Password" },
     { selected: false, slug: "history", title: "History" },
-    // { selected: false, slug: "notifications", title: "Notifications" },
     { selected: false, slug: "subscription", title: "Subscription" },
+    // { selected: false, slug: "notifications", title: "Notifications" },
   ]);
 
-  const contentPicker = (tabs: ITab[]): React.ReactNode => 
+  const contentPicker = (tabs: ITab[]): ReactNode => 
   {
     const tab = tabs?.find(x => x.selected);
     switch (tab?.title)
@@ -46,7 +46,7 @@ const ProfilePage: FunctionComponent<IProfilePageProps> = ({ allMainCategory }) 
   };
 
   const router = useRouter();
-  React.useEffect(() => 
+  useEffect(() => 
   {
     if(typeof window !== "undefined") 
     {
@@ -71,7 +71,7 @@ const ProfilePage: FunctionComponent<IProfilePageProps> = ({ allMainCategory }) 
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [router.query.tab, setQuery]);
-
+  const theme = useMantineTheme();
   return router.query.tab && (
     <> 
       <div>
@@ -79,7 +79,17 @@ const ProfilePage: FunctionComponent<IProfilePageProps> = ({ allMainCategory }) 
         <Container
           maw={1440}
           sx={{
-            alignItems: "flex-start", display: "flex", flexDirection: "row", gap: "32px", justifyContent: "flex-start", padding: "32px ",
+            alignItems: "flex-start",
+            background: theme.colors["neutrals-01"][1],
+            display: "flex",
+            flexDirection: "row",
+            gap: "32px",
+            justifyContent: "flex-start",
+            padding: "32px ",
+            position: "relative",
+            transform: "translateY(-100px)",
+            width: "100%",
+            zIndex: 3 
           }}>
           <ProfileMenu tabs={tabs} setQuery={setQuery} setTabs={setTabs}/>
           {contentPicker(tabs)}

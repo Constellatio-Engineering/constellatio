@@ -91,7 +91,7 @@ const useFillGapsGameStore = create(
           const possibleCorrectAnswer = correctAnswers?.correctAnswers?.[index]?.split(";");
           for(const possibleAnswer of possibleCorrectAnswer!)
           {
-            const userAnswer = answer.trim().toLowerCase();
+            const userAnswer = answer?.trim()?.toLowerCase();
             const correctAnswer = possibleAnswer.trim().toLowerCase();
             
             if(!isNaN(Number(userAnswer)) || correctAnswer!.length <= 4)
@@ -107,7 +107,7 @@ const useFillGapsGameStore = create(
             else 
             {
               // check for distance
-              const dist = distance(userAnswer, correctAnswer!);
+              const dist = distance(userAnswer ?? "", correctAnswer!);
               if(dist <= 2)
               {
                 isAnswerCorrect = true;

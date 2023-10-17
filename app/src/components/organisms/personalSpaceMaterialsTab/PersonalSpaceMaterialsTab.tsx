@@ -21,7 +21,7 @@ const PersonalSpaceMaterialsTab: FunctionComponent = () =>
   const areUploadsInProgress = uploads.some(u => u.state.type === "uploading");
 
   return (
-    <Container maw={1440}>
+    <Container p="0px 61px" maw={1440}>
       <div
         style={{
           alignItems: "flex-start",

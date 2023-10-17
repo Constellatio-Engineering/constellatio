@@ -1,10 +1,11 @@
 import { Cross } from "@/components/Icons/Cross";
 import { Modal } from "@/components/molecules/Modal/Modal";
-import ResetPasswordSuccess from "@/components/organisms/ResetPasswordModal/resetPasswordSuccess/ResetPasswordSuccess";
-import ResetPasswordForm from "@/components/resetPasswordForm/ResetPasswordForm";
+import ResetPasswordForm from "@/components/molecules/resetPasswordForm/ResetPasswordForm";
 
 import { atom, useAtom } from "jotai";
 import { type FunctionComponent, useState } from "react";
+
+import ResetPasswordSuccess from "./resetPasswordSuccess/ResetPasswordSuccess";
 
 export const resetPasswordModalVisible = atom(false);
 
