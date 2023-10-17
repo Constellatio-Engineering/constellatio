@@ -14,7 +14,6 @@ import { ResultCard } from "@/components/molecules/ResultCard/ResultCard";
 import useContextAndErrorIfNull from "@/hooks/useContextAndErrorIfNull";
 import { InvalidateQueriesContext } from "@/provider/InvalidateQueriesProvider";
 import { type IGenDragNDropGame } from "@/services/graphql/__generated/sdk";
-import useCaseSolvingStore from "@/stores/caseSolving.store";
 import useDragDropGameStore, {
   type TDragAndDropGameOptionType,
 } from "@/stores/dragDropGame.store";
@@ -57,7 +56,6 @@ export const DragDropGame: FC<TDragDropGame> = ({
     onError: (error) => console.error("Error while setting game progress", error),
     onSuccess: async () => invalidateGamesProgress({ caseId })
   });
-  const getNextGameIndex = useCaseSolvingStore((s) => s.getNextGameIndex);
   const gameState = useDragDropGameStore((s) => s.getGameState(id));
   const allGames = useDragDropGameStore((s) => s.games);
   const updateGameState = useDragDropGameStore((s) => s.updateGameState);
@@ -229,7 +227,7 @@ export const DragDropGame: FC<TDragDropGame> = ({
 
     if(!gameSubmitted) 
     {
-      getNextGameIndex();
+      // getNextGameIndex();
       updateGameState({
         caseId,
         gameId: id,

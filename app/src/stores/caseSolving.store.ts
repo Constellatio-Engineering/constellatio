@@ -6,15 +6,8 @@ export type CaseStepIndex = 0 | 1 | 2;
 interface ICaseSolvingStore 
 {
   caseStepIndex: CaseStepIndex;
-  gamesIndexes: number[];
-  getNextGameIndex: () => void;
-  hasCaseSolvingStarted: boolean | undefined;
-  isLastGame: boolean;
   isStepCompleted: boolean;
-  latestGameIndex: number;
   setCaseStepIndex: (caseStepIndex: CaseStepIndex) => void;
-  setGamesIndexes: (gamesIndexes: number[]) => void;
-  setHasCaseSolvingStarted: (hasCaseSolvingStarted: boolean) => void;
   setIsStepCompleted: (isCompleted: boolean) => void;
   setShowStepTwoModal: (showStepTwoModal: boolean) => void;
   setSolution: (solution: string) => void;
@@ -23,52 +16,14 @@ interface ICaseSolvingStore
 }
 
 const useCaseSolvingStore = create(
-  immer<ICaseSolvingStore>((set, get) => ({
+  immer<ICaseSolvingStore>((set) => ({
     caseStepIndex: 0,
-    gamesIndexes: [],
-    getNextGameIndex: () => 
-    {
-      set((state) => 
-      {
-        const currentGameIndex = get().gamesIndexes.indexOf(get().latestGameIndex);
-        const gamesIndexes = get().gamesIndexes.length - 1;
-        if(currentGameIndex < gamesIndexes) 
-        {
-          const nextGameIndex = get().gamesIndexes[currentGameIndex + 1];
-          if(nextGameIndex !== undefined) 
-          {
-            state.latestGameIndex = nextGameIndex;
-          } 
-        }
-        else if(currentGameIndex !== -1 && currentGameIndex === get().gamesIndexes.length - 1) 
-        {
-          state.isLastGame = true;
-        }
-      });
-    },
-    hasCaseSolvingStarted: undefined,
-    isLastGame: false,
     isStepCompleted: false,
-    latestGameIndex: 0,
     setCaseStepIndex: (caseStepIndex) => 
     {
       set((state) => 
       {
         state.caseStepIndex = caseStepIndex;
-      });
-    },
-    setGamesIndexes: (gamesIndexes) => 
-    {
-      set((state) => 
-      {
-        state.gamesIndexes = gamesIndexes;
-      });
-    },
-    setHasCaseSolvingStarted: (hasCaseSolvingStarted) => 
-    {
-      set((state) => 
-      {
-        state.hasCaseSolvingStarted = hasCaseSolvingStarted;
       });
     },
     setIsStepCompleted(isCompleted) 
