@@ -13,6 +13,8 @@ const ProfileNotificationsTabForm: FunctionComponent = () =>
   const [value, setValue] = React.useState<string[]>([]);
   const [err, setErr] = React.useState<string>("");
   const [success, setSuccess] = React.useState<string>("");
+  // TODO not being used
+  console.log("not being used", { err, success });
   const handleSubmit = (e: React.FormEvent<HTMLFormElement>): void => 
   {
     

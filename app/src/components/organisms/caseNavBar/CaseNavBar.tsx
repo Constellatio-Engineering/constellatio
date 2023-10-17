@@ -25,7 +25,8 @@ const CaseNavBar: FunctionComponent<ICaseNavBarProps> = ({ variant }) =>
   const isStepCompleted = useCaseSolvingStore((state) => state.isStepCompleted);
   const setShowStepTwoModal = useCaseSolvingStore((state) => state.setShowStepTwoModal);
   const caseStepIndex = useCaseSolvingStore((state) => state.caseStepIndex);
-
+  // TODO REMOVE THIS CONSOLE LOG - util not being used
+  console.log("progress => not being used", progress);
   useEffect(() => 
   {
     const handleScroll = (): void => 

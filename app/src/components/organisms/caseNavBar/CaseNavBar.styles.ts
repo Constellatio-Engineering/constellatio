@@ -24,7 +24,7 @@ export const wrapper = ({ variant }: {
   justify-content: space-between;
   align-items: center;
   flex-wrap: wrap;
-  padding:16px 0;
+  padding:16px 60px;
   /* position: -webkit-sticky; */
   max-width: 1440px;
   margin: 0 auto;  
