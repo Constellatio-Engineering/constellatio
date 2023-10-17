@@ -35,7 +35,7 @@ export const gamesProgressRouter = createTRPCRouter({
         )
       });
 
-      console.log("gamesProgress: ", _gamesProgress);
+      console.log("_gamesProgress: ", _gamesProgress);
 
       return _gamesProgress;
     })

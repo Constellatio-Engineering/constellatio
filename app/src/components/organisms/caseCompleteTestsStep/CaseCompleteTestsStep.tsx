@@ -61,6 +61,10 @@ const CaseCompleteTestsStep: FunctionComponent<ICaseCompleteTestsStepProps> = ({
   // TODO: What happens when there is just one game in the case
   // TODO: Go trough the code again and make sure every case is handled
 
+  // console.log("games", games);
+  console.log("gamesProgress", gamesProgress);
+  // console.log("fullTextTasks", fullTextTasks);
+
   const currentGameIndex = games.findIndex(game =>
   {
     // this gets the first game that is not completed, which is effectively the current game
@@ -75,10 +79,10 @@ const CaseCompleteTestsStep: FunctionComponent<ICaseCompleteTestsStepProps> = ({
   const nextGame = games[nextGameIndex];
   const nextGameIndexInContentArray = nextGame?.indexInContentArray;
 
-  console.log("currentGameIndex", currentGameIndex);
-  console.log("currentGame", currentGame);
-  console.log("nextGameIndex", nextGameIndex);
-  console.log("nextGame", nextGame);
+  // console.log("currentGameIndex", currentGameIndex);
+  // console.log("currentGame", currentGame);
+  // console.log("nextGameIndex", nextGameIndex);
+  // console.log("nextGame", nextGame);
 
   const isLastGame = currentGameIndex === games.length - 1;
 
@@ -91,9 +95,6 @@ const CaseCompleteTestsStep: FunctionComponent<ICaseCompleteTestsStepProps> = ({
   {
     if(fullTextTasks?.json?.content?.length >= 1)
     {
-      console.log(fullTextTasks?.json?.content?.slice(0, (nextGameIndexInContentArray || 0) + 1));
-      console.log(nextGameIndexInContentArray);
-
       return {
         ...fullTextTasks,
         json: {
