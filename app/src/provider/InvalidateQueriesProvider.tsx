@@ -12,6 +12,7 @@ type InvalidateNotesOptions = inferProcedureInput<AppRouter["notes"]["getNotes"]
 type InvalidateArticleViewsOptions = inferProcedureInput<AppRouter["views"]["getArticleViews"]>;
 type InvalidateCaseViewsOptions = inferProcedureInput<AppRouter["views"]["getCaseViews"]>;
 type InvalidateCaseProgressOptions = inferProcedureInput<AppRouter["casesProgress"]["getCaseProgress"]>;
+type InvalidateGamesProgressOptions = inferProcedureInput<AppRouter["gamesProgress"]["getGamesProgress"]>;
 
 type InvalidateQueries = {
   invalidateArticleViews: (options: InvalidateArticleViewsOptions) => Promise<void>;
@@ -21,6 +22,7 @@ type InvalidateQueries = {
   invalidateDocuments: (options?: InvalidateDocumentsOptions) => Promise<void>;
   invalidateEverything: () => Promise<void>;
   invalidateFolders: (options?: InvalidateFoldersOptions) => Promise<void>;
+  invalidateGamesProgress: (options: InvalidateGamesProgressOptions) => Promise<void>;
   invalidateNotes: (options?: InvalidateNotesOptions) => Promise<void>;
   invalidateUploadedFiles: (options?: InvalidateUploadedFilesOptions) => Promise<void>;
 };
@@ -44,6 +46,7 @@ const InvalidateQueriesProvider: FunctionComponent<InvalidateQueriesProviderProp
     invalidateDocuments: async (options) => apiContext.documents.getDocuments.invalidate(options),
     invalidateEverything: async () => invalidateAll(),
     invalidateFolders: async (options) => apiContext.folders.getFolders.invalidate(options),
+    invalidateGamesProgress: async (options) => apiContext.gamesProgress.getGamesProgress.invalidate(options),
     invalidateNotes: async (options) => apiContext.notes.getNotes.invalidate(options),
     invalidateUploadedFiles: async (options) => apiContext.uploads.getUploadedFiles.invalidate(options)
   }), [
@@ -55,7 +58,8 @@ const InvalidateQueriesProvider: FunctionComponent<InvalidateQueriesProviderProp
     apiContext.bookmarks.getAllBookmarks,
     apiContext.notes.getNotes,
     apiContext.uploads.getUploadedFiles,
-    apiContext.casesProgress.getCaseProgress
+    apiContext.casesProgress.getCaseProgress,
+    apiContext.gamesProgress.getGamesProgress
   ]);
 
   return (

@@ -1,6 +1,7 @@
 import { db } from "@/db/connection";
 import { type GameProgress, gamesProgress } from "@/db/schema";
 import { getGamesProgressSchema } from "@/schemas/gamesProgress/getGamesProgress.schema";
+import { setGameProgressStateSchema } from "@/schemas/gamesProgress/setGameProgressState.schema";
 import { createTRPCRouter, protectedProcedure } from "@/server/api/trpc";
 import { caisySDK } from "@/services/graphql/getSdk";
 import { getGamesFromCase } from "@/utils/case";
@@ -55,5 +56,33 @@ export const gamesProgressRouter = createTRPCRouter({
       console.log("_gamesProgress: ", _gamesProgress);
 
       return resultArray;
+    }),
+  setGameProgress: protectedProcedure
+    .input(setGameProgressStateSchema)
+    .mutation(async ({ ctx: { userId }, input: { gameId, progressState } }) =>
+    {
+      const existingGameProgress = await db.query.gamesProgress.findFirst({
+        where: and(
+          eq(gamesProgress.userId, userId),
+          eq(gamesProgress.gameId, gameId)
+        )
+      });
+
+      if(existingGameProgress)
+      {
+        await db.update(gamesProgress).set({ progressState }).where(
+          and(
+            eq(gamesProgress.userId, userId),
+            eq(gamesProgress.gameId, gameId)
+          )
+        );
+        return;
+      }
+
+      await db.insert(gamesProgress).values({
+        gameId,
+        progressState,
+        userId,
+      });
     })
 });
