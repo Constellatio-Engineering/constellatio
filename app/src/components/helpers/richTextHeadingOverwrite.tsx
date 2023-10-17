@@ -24,7 +24,7 @@ export const richTextHeadingOverwrite = ({
           ...props,
           node: {
             ...props.node,
-            content: [{ ...props.node.content[0], text: getNumericalLabel(level - 1, index) + " " }, ...props.node.content]
+            content: [{ ...props.node.content[0], text: getNumericalLabel(level, index) + " " }, ...props.node.content]
           }
         }}
         />
