@@ -111,7 +111,7 @@ let SelectionCardGame: FC<SelectionCardGameProps> = ({
 
     if(!gameSubmitted)
     {
-      getNextGameIndex();
+      // getNextGameIndex(); TODO
       updateGameState(id, { gameSubmitted: true });
     }
   };

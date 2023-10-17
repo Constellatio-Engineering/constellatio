@@ -2,6 +2,7 @@
 import { Button } from "@/components/atoms/Button/Button";
 import { type IStatusLabel } from "@/components/atoms/statusLabel/StatusLabel";
 import { richTextHeadingOverwrite } from "@/components/helpers/richTextHeadingOverwrite";
+import { casesProgress } from "@/db/schema";
 import useContextAndErrorIfNull from "@/hooks/useContextAndErrorIfNull";
 import { type GamesProgress } from "@/hooks/useGamesProgress";
 import { InvalidateQueriesContext } from "@/provider/InvalidateQueriesProvider";
@@ -56,19 +57,48 @@ const CaseCompleteTestsStep: FunctionComponent<ICaseCompleteTestsStepProps> = ({
     onSuccess: async () => invalidateCaseProgress({ caseId })
   });
 
-  const secondLastGame = games.at(-2);
+  // TODO: What happens when there are no games at all in the case
+  // TODO: What happens when there is just one game in the case
+  // TODO: Go trough the code again and make sure every case is handled
+
+  const currentGameIndex = games.findIndex(game =>
+  {
+    // this gets the first game that is not completed, which is effectively the current game
+    const gameProgress = gamesProgress.find(gameProgress => gameProgress.gameId === game.id);
+    return (!gameProgress || gameProgress?.progressState === "not-started");
+  });
+  const currentGame = games[currentGameIndex];
+  const currentGameIndexInContentArray = currentGame?.indexInContentArray || 0;
+
+  // TODO Error handling if there is no next game
+  const nextGameIndex = currentGameIndex + 1;
+  const nextGame = games[nextGameIndex];
+  const nextGameIndexInContentArray = nextGame?.indexInContentArray;
+
+  console.log("currentGameIndex", currentGameIndex);
+  console.log("currentGame", currentGame);
+  console.log("nextGameIndex", nextGameIndex);
+  console.log("nextGame", nextGame);
+
+  const isLastGame = currentGameIndex === games.length - 1;
+
+  // TODO: If there is only one game in the case this wont work
+  /* const secondLastGame = games.at(-2);
   const progressForSecondLastGame = gamesProgress.find(gameProgress => gameProgress.gameId === secondLastGame?.id);
-  const isLastGame = progressForSecondLastGame?.progressState === "completed";
+  const isLastGame = progressForSecondLastGame?.progressState === "completed";*/
 
   const renderedCaseContent = useMemo(() => 
   {
     if(fullTextTasks?.json?.content?.length >= 1)
     {
+      console.log(fullTextTasks?.json?.content?.slice(0, (nextGameIndexInContentArray || 0) + 1));
+      console.log(nextGameIndexInContentArray);
+
       return {
         ...fullTextTasks,
         json: {
           ...fullTextTasks?.json,
-          content: isLastGame ? fullTextTasks?.json?.content : fullTextTasks?.json?.content?.slice(0, latestGameIndex + 1),
+          content: isLastGame ? fullTextTasks?.json?.content : fullTextTasks?.json?.content?.slice(0, (nextGameIndexInContentArray || 0) + 1),
         },
       };
     }
@@ -76,7 +106,7 @@ const CaseCompleteTestsStep: FunctionComponent<ICaseCompleteTestsStepProps> = ({
     {
       return fullTextTasks;
     }
-  }, []);
+  }, [fullTextTasks, isLastGame, nextGameIndexInContentArray]);
 
   const content = useMemo(() =>
   {
@@ -86,13 +116,13 @@ const CaseCompleteTestsStep: FunctionComponent<ICaseCompleteTestsStepProps> = ({
     );
   }, [fullTextTasks?.json?.content, renderedCaseContent?.json?.content, variant]);
 
-  useEffect(() => 
+  /* useEffect(() =>
   {
     if(variant === "case" && fullTextTasks?.__typename === "Case_fullTextTasks")
     {
       setGamesIndexes(getGamesIndexes({ fullTextTasks })); 
     }
-  }, [fullTextTasks, setGamesIndexes, variant]);
+  }, [fullTextTasks, setGamesIndexes, variant]);*/
 
   const allHeadings = fullTextTasks?.json?.content?.filter((x: { attrs: { level: number }; type: "heading" }) => x.type === "heading");
 
@@ -185,7 +215,7 @@ const CaseCompleteTestsStep: FunctionComponent<ICaseCompleteTestsStepProps> = ({
             data={facts}
             richTextOverwrite={{ paragraph: richTextParagraphOverwrite }}
           />
-          {hasCaseSolvingStarted === false && (
+          {progressState === "not-started" && (
             <Button<"button">
               styleType="primary"
               size="large"
@@ -193,14 +223,13 @@ const CaseCompleteTestsStep: FunctionComponent<ICaseCompleteTestsStepProps> = ({
               onClick={() => 
               {
                 setProgressState({ caseId, progressState: "in-progress" });
-                setHasCaseSolvingStarted(true);
-                getNextGameIndex();
+                // getNextGameIndex();
               }}>
               Start solving case
             </Button>
           )}
         </div>
-        {hasCaseSolvingStarted && (
+        {progressState === "in-progress" && (
           <div css={styles.content}>
             <div css={styles.toc}>
               <FloatingPanel
@@ -223,7 +252,15 @@ const CaseCompleteTestsStep: FunctionComponent<ICaseCompleteTestsStepProps> = ({
                   paragraph: richTextParagraphOverwrite
                 }}
               />
-              {isLastGame && variant === "case" && <SolveCaseGame onGameStartHandler={() => setCaseStepIndex(1)}/>}
+              {isLastGame && variant === "case" && (
+                <SolveCaseGame
+                  onGameStartHandler={() =>
+                  {
+                    console.log("TODO");
+                  // setCaseStepIndex(1);
+                  }}
+                />
+              )}
             </div>
           </div>
         )}

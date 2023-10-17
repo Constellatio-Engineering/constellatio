@@ -18,22 +18,6 @@ const CaseNavBar: FunctionComponent<ICaseNavBarProps> = ({ variant }) =>
 {
   const theme = useMantineTheme();
   const steps = ["COMPLETE TESTS", "SOLVE CASE", "REVIEW REUSLTS"];
-  const [progress, setProgress] = useState<number>(0);
-
-  useEffect(() => 
-  {
-    const handleScroll = (): void => 
-    {
-      if(caseStepIndex === 0) { setProgress(calculateScrollProgress("completeTestsStepContent")); }
-      if(caseStepIndex === 1) { setProgress(calculateScrollProgress("solveCaseStepContent")); }
-      if(caseStepIndex === 2) { setProgress(calculateScrollProgress("ResultsReviewStepContent")); }
-    };
-    if(hasCaseSolvingStarted)
-    {
-      window.addEventListener("scroll", () => setTimeout(() => handleScroll(), 500)); 
-    }
-    return () => window.removeEventListener("scroll", () => setTimeout(() => handleScroll(), 0));
-  }, [caseStepIndex, hasCaseSolvingStarted]);
 
   const handleCallToAction = (): void => 
   {
@@ -45,7 +29,6 @@ const CaseNavBar: FunctionComponent<ICaseNavBarProps> = ({ variant }) =>
   };
 
   // TODO: utilize progress bar
-  if(progress) { return; }
   return variant === "case" ? (
     <div css={styles.componentArea({ theme, variant })}>
       <div css={styles.wrapper({ variant })}>

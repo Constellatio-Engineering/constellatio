@@ -113,7 +113,6 @@ const DetailsPage: FunctionComponent<IDetailsPageProps> = ({ content, variant })
         console.log("case in progress and not all games completed, caseStepIndex = 0");
         caseStepIndex = 0;
       }
-
       break;
     }
     case "completed":
@@ -154,7 +153,7 @@ const DetailsPage: FunctionComponent<IDetailsPageProps> = ({ content, variant })
           variant,
         }}
       />
-      <CaseNavBar variant={variant}/>
+      {/* <CaseNavBar variant={variant}/>*/}
       <div css={styles.mainContainer}>
         {content?.fullTextTasks && caseStepIndex === 0 && (
           <CaseCompleteTestsStep

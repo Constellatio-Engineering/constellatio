@@ -45,6 +45,7 @@ let FillGapsGame: FC<TFillGapsGame> = ({
   question,
 }) => 
 {
+  // const getNextGameIndex = useCaseSolvingStore((s) => s.getNextGameIndex);
   const gameState = useFillGapsGameStore((s) => s.getGameState(id));
   const allGames = useFillGapsGameStore((s) => s.games);
   const updateGameState = useFillGapsGameStore((s) => s.updateGameState);
@@ -127,7 +128,8 @@ let FillGapsGame: FC<TFillGapsGame> = ({
     if(!gameSubmitted) 
     {
       updateGameState(id, { gameSubmitted: true });
-      getNextGameIndex();
+      // getNextGameIndex(); TODO
+      // Store game progress in the database
     }
 
     const allCorrect = checkAnswers({ gameId: id });
