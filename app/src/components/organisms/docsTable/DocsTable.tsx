@@ -27,7 +27,7 @@ const DocsTable: FunctionComponent<DocsTableProps> = ({ docs }) =>
               <CaptionText styleType="caption-01-medium" component="p">DOC NAME</CaptionText>
             </th>
             <th><CaptionText styleType="caption-01-medium" component="p">LAST MODIFIED</CaptionText></th>
-            <th><CaptionText styleType="caption-01-medium" component="p">TAGS</CaptionText></th>
+            {/* <th><CaptionText styleType="caption-01-medium" component="p">TAGS</CaptionText></th> */}
             <th/>
           </tr>
         </thead>

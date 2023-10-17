@@ -89,7 +89,7 @@ const UploadedMaterialTableBody: FunctionComponent<UploadedMaterialTableBodyProp
               </BodyText>
             </td>
             <td css={styles.docDate}><BodyText styleType="body-01-medium" component="p">{file && file.createdAt && formatDate(file.createdAt)}</BodyText></td>
-            <td css={styles.docTags}><BodyText styleType="body-02-medium" component="p"/></td>
+            {/* <td css={styles.docTags}><BodyText styleType="body-02-medium" component="p"/></td> */}
             {variant === "personalSpace" && (
               <td
                 css={styles.cellNote}
