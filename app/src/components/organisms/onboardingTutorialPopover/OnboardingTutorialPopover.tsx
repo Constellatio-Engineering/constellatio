@@ -2,8 +2,6 @@ import { Popover } from "@mantine/core";
 import { type FloatingPosition } from "@mantine/core/lib/Floating";
 import { type ReactNode, type FunctionComponent } from "react";
 
-import * as styles from "./OnboardingTutorialPopover.styles";
-
 interface OnboardingTutorialPopoverProps 
 {
   readonly floatingPosition?: FloatingPosition | undefined;
