@@ -39,7 +39,6 @@ let SelectionCardGame: FC<SelectionCardGameProps> = ({
   question
 }) => 
 {
-  const getNextGameIndex = useCaseSolvingStore((s) => s.getNextGameIndex);
   const gameState = useSelectionCardGameStore((s) => s.getGameState(id));
   const allGames = useSelectionCardGameStore((s) => s.games);
   const updateGameState = useSelectionCardGameStore((s) => s.updateGameState);

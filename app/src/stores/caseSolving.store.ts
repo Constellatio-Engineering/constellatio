@@ -1,18 +1,18 @@
 import { create } from "zustand";
 import { immer } from "zustand/middleware/immer";
 
-type CaseStepIndexProps = 0 | 1 | 2;
+export type CaseStepIndex = 0 | 1 | 2;
 
 interface ICaseSolvingStore 
 {
-  caseStepIndex: CaseStepIndexProps;
+  caseStepIndex: CaseStepIndex;
   gamesIndexes: number[];
   getNextGameIndex: () => void;
   hasCaseSolvingStarted: boolean | undefined;
   isLastGame: boolean;
   isStepCompleted: boolean;
   latestGameIndex: number;
-  setCaseStepIndex: (caseStepIndex: CaseStepIndexProps) => void;
+  setCaseStepIndex: (caseStepIndex: CaseStepIndex) => void;
   setGamesIndexes: (gamesIndexes: number[]) => void;
   setHasCaseSolvingStarted: (hasCaseSolvingStarted: boolean) => void;
   setIsStepCompleted: (isCompleted: boolean) => void;

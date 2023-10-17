@@ -5,14 +5,14 @@ import CaseResultsReviewStep from "@/components/organisms/caseResultsReviewStep/
 import CaseSolveCaseStep from "@/components/organisms/caseSolveCaseStep/CaseSolveCaseStep";
 import CaseSolvingHeader from "@/components/organisms/caseSolvingHeader/CaseSolvingHeader";
 import { slugFormatter } from "@/components/organisms/OverviewHeader/OverviewHeader";
-import useArticleViews from "@/hooks/useArticleViews";
 import useCaseProgress from "@/hooks/useCaseProgress";
-import useCaseViews from "@/hooks/useCaseViews";
 import useContextAndErrorIfNull from "@/hooks/useContextAndErrorIfNull";
+import useGamesProgress from "@/hooks/useGamesProgress";
 import { InvalidateQueriesContext } from "@/provider/InvalidateQueriesProvider";
 import { type IGenArticle, type IGenCase } from "@/services/graphql/__generated/sdk";
-import useCaseSolvingStore from "@/stores/caseSolving.store";
+import { type CaseStepIndex } from "@/stores/caseSolving.store";
 import { api } from "@/utils/api";
+import { getGamesFromCase } from "@/utils/case";
 import { paths } from "@/utils/paths";
 
 import React, { useEffect, type FunctionComponent, useRef } from "react";
@@ -27,10 +27,8 @@ type IDetailsPageProps = {
 const DetailsPage: FunctionComponent<IDetailsPageProps> = ({ content, variant }) => 
 {
   const { invalidateArticleViews, invalidateCaseViews } = useContextAndErrorIfNull(InvalidateQueriesContext);
-  const caseStepIndex = useCaseSolvingStore((state) => state.caseStepIndex);
   const contentId = content?.id;
   const caseId = content?.__typename === "Case" ? contentId : undefined;
-  const articleId = content?.__typename === "Article" ? contentId : undefined;
   const { mutate: addArticleView } = api.views.addArticleView.useMutation({
     onSuccess: async () => invalidateArticleViews({ articleId: contentId! })
   });
@@ -38,9 +36,9 @@ const DetailsPage: FunctionComponent<IDetailsPageProps> = ({ content, variant })
     onSuccess: async () => invalidateCaseViews({ caseId: contentId! })
   });
   const wasViewCountUpdated = useRef<boolean>(false);
-  const { count: articleViews } = useArticleViews(articleId);
-  const { count: caseViews } = useCaseViews(caseId);
-  const { caseProgress } = useCaseProgress(caseId);
+  const { caseProgress, isLoading: isCaseProgressLoading } = useCaseProgress(caseId);
+  const { gamesProgress, isLoading: isGamesProgressLoading } = useGamesProgress(caseId);
+  const games = content?.__typename === "Case" ? getGamesFromCase(content) : [];
 
   useEffect(() =>
   {
@@ -61,7 +59,7 @@ const DetailsPage: FunctionComponent<IDetailsPageProps> = ({ content, variant })
     wasViewCountUpdated.current = true;
   }, [addArticleView, addCaseView, content?.__typename, contentId]);
 
-  useEffect(() => 
+  /* useEffect(() =>
   {
     const { setCaseStepIndex, setHasCaseSolvingStarted } = useCaseSolvingStore.getState();
 
@@ -70,13 +68,60 @@ const DetailsPage: FunctionComponent<IDetailsPageProps> = ({ content, variant })
       setCaseStepIndex(0);
       setHasCaseSolvingStarted(true);
     }
-  }, [content?.__typename]);
+  }, [content?.__typename]);*/
 
   if(contentId == null)
   {
     return (
       <ErrorPage error="case/article ID was not found"/>
     );
+  }
+
+  if(isCaseProgressLoading || isGamesProgressLoading)
+  {
+    return (
+      <div>Loading...</div>
+    );
+  }
+
+  if(caseProgress == null || gamesProgress == null)
+  {
+    return (
+      <ErrorPage error="case progress was not found"/>
+    );
+  }
+
+  let caseStepIndex: CaseStepIndex;
+
+  switch (caseProgress.progressState)
+  {
+    case "not-started":
+    {
+      console.log("case not started, caseStepIndex = 0");
+      caseStepIndex = 0;
+      break;
+    }
+    case "in-progress":
+    {
+      if(gamesProgress.filter(({ progressState }) => progressState === "completed").length === games.length)
+      {
+        console.log("case in progress and all games completed, caseStepIndex = 1");
+        caseStepIndex = 1;
+      }
+      else
+      {
+        console.log("case in progress and not all games completed, caseStepIndex = 0");
+        caseStepIndex = 0;
+      }
+
+      break;
+    }
+    case "completed":
+    {
+      console.log("case completed, caseStepIndex = 2");
+      caseStepIndex = 2;
+      break;
+    }
   }
 
   return (
@@ -107,22 +152,22 @@ const DetailsPage: FunctionComponent<IDetailsPageProps> = ({ content, variant })
           timeInMinutes: content?.__typename === "Case" && content.durationToCompleteInMinutes ? content.durationToCompleteInMinutes : undefined,
           topic: content?.topic?.[0]?.topicName ?? "",
           variant,
-          views: content?.__typename === "Article" ? articleViews : caseViews,
         }}
       />
       <CaseNavBar variant={variant}/>
       <div css={styles.mainContainer}>
         {content?.fullTextTasks && caseStepIndex === 0 && (
-          <CaseCompleteTestsStep {...{
-            caseId: contentId,
-            facts: content?.__typename === "Case" ? content?.facts : undefined,
-            fullTextTasks: content?.fullTextTasks,
-            progressState: caseProgress?.progressState,
-            variant
-          }}
+          <CaseCompleteTestsStep
+            games={games}
+            gamesProgress={gamesProgress}
+            caseId={contentId}
+            facts={content?.__typename === "Case" ? content?.facts : undefined}
+            fullTextTasks={content?.fullTextTasks}
+            progressState={caseProgress?.progressState}
+            variant={variant}
           />
         )}
-        {content?.__typename === "Case" && caseStepIndex === 1 && (
+        {/* {content?.__typename === "Case" && caseStepIndex === 1 && (
           <CaseSolveCaseStep {...{
             facts: content?.facts,
             title: content?.title
@@ -136,7 +181,7 @@ const DetailsPage: FunctionComponent<IDetailsPageProps> = ({ content, variant })
             title: content?.title
           }}
           />
-        )}
+        )}*/}
       </div>
     </>
   );

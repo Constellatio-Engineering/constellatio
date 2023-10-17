@@ -16,19 +16,10 @@ import modalImg from "../../Icons/CaseResultModalIcon.png";
 
 const CaseSolveCaseStep: FunctionComponent<IGenCase> = ({ facts, title }) => 
 {
-  const {
-    setCaseStepIndex,
-    setHasCaseSolvingStarted,
-    setIsStepCompleted,
-    setShowStepTwoModal,
-    setSolution,
-    showStepTwoModal,
-    solution
-  } = useCaseSolvingStore((state) => state);
   useEffect(() => 
   {
-    setIsStepCompleted(false);
-    setHasCaseSolvingStarted(true);
+    // setIsStepCompleted(false);
+    // setHasCaseSolvingStarted(true);
   // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
   // const updateCaseCompleteStateOnUpdate = (e: EditorEvents["update"]): void => 

@@ -8,6 +8,8 @@ import { Show } from "@/components/Icons/Show";
 import { Timer } from "@/components/Icons/timer";
 import { Trash } from "@/components/Icons/Trash";
 import OverviewCardTagsModal from "@/components/overviewCardTagsModal/OverviewCardTagsModal";
+import useArticleViews from "@/hooks/useArticleViews";
+import useCaseViews from "@/hooks/useCaseViews";
 import useContextAndErrorIfNull from "@/hooks/useContextAndErrorIfNull";
 import { InvalidateQueriesContext } from "@/provider/InvalidateQueriesProvider";
 import { type IGenLegalArea, type IGenTags } from "@/services/graphql/__generated/sdk";
@@ -30,7 +32,6 @@ export interface IOverviewCard
   readonly timeInMinutes?: number;
   readonly topic: string;
   readonly variant: "case" | "dictionary";
-  readonly views: number;
 }
 
 export function timeFormatter(minutes: number): string 
@@ -81,9 +82,12 @@ const OverviewCard: FunctionComponent<IOverviewCard> = ({
   timeInMinutes,
   topic,
   variant,
-  views,
 }) => 
 {
+  const { count: articleViews } = useArticleViews(contentId);
+  const { count: caseViews } = useCaseViews(contentId);
+  const views = variant === "dictionary" ? articleViews : caseViews;
+
   const { invalidateCaseProgress } = useContextAndErrorIfNull(InvalidateQueriesContext);
   const { mutate: resetCaseProgress } = api.casesProgress.resetProgress.useMutation({
     onError: (error) => console.error(error),

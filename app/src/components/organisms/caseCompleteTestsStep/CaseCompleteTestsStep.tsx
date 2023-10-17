@@ -3,10 +3,12 @@ import { Button } from "@/components/atoms/Button/Button";
 import { type IStatusLabel } from "@/components/atoms/statusLabel/StatusLabel";
 import { richTextHeadingOverwrite } from "@/components/helpers/richTextHeadingOverwrite";
 import useContextAndErrorIfNull from "@/hooks/useContextAndErrorIfNull";
+import { type GamesProgress } from "@/hooks/useGamesProgress";
 import { InvalidateQueriesContext } from "@/provider/InvalidateQueriesProvider";
 import { type Maybe, type IGenCase_Facts, type IGenCase_FullTextTasks, type IGenArticle_FullTextTasks } from "@/services/graphql/__generated/sdk";
 import useCaseSolvingStore from "@/stores/caseSolving.store";
 import { api } from "@/utils/api";
+import { type Games } from "@/utils/case";
 import type { IDocumentLink, IHeadingNode } from "types/richtext";
 
 import { Container, Title } from "@mantine/core";
@@ -32,6 +34,8 @@ interface ICaseCompleteTestsStepProps
   readonly caseId: string;
   readonly facts: Maybe<IGenCase_Facts> | undefined;
   readonly fullTextTasks: Maybe<IGenCase_FullTextTasks> | Maybe<IGenArticle_FullTextTasks>;
+  readonly games: Games;
+  readonly gamesProgress: GamesProgress;
   readonly progressState: IStatusLabel["progressState"] | undefined;
   readonly variant?: "case" | "dictionary";
 }
@@ -40,22 +44,21 @@ const CaseCompleteTestsStep: FunctionComponent<ICaseCompleteTestsStepProps> = ({
   caseId,
   facts,
   fullTextTasks,
+  games,
+  gamesProgress,
   progressState,
   variant
 }) =>
 {
   const { invalidateCaseProgress } = useContextAndErrorIfNull(InvalidateQueriesContext);
-  const getNextGameIndex = useCaseSolvingStore((state) => state.getNextGameIndex);
-  const hasCaseSolvingStarted = useCaseSolvingStore((state) => state.hasCaseSolvingStarted);
-  const isLastGame = useCaseSolvingStore((state) => state.isLastGame);
-  const latestGameIndex = useCaseSolvingStore((state) => state.latestGameIndex);
-  const setGamesIndexes = useCaseSolvingStore((state) => state.setGamesIndexes);
-  const setHasCaseSolvingStarted = useCaseSolvingStore((state) => state.setHasCaseSolvingStarted);
-  const setCaseStepIndex = useCaseSolvingStore((state) => state.setCaseStepIndex);
   const { mutate: setProgressState } = api.casesProgress.setProgressState.useMutation({
     onError: (error) => console.error(error),
     onSuccess: async () => invalidateCaseProgress({ caseId })
   });
+
+  const secondLastGame = games.at(-2);
+  const progressForSecondLastGame = gamesProgress.find(gameProgress => gameProgress.gameId === secondLastGame?.id);
+  const isLastGame = progressForSecondLastGame?.progressState === "completed";
 
   const renderedCaseContent = useMemo(() => 
   {
@@ -73,14 +76,13 @@ const CaseCompleteTestsStep: FunctionComponent<ICaseCompleteTestsStepProps> = ({
     {
       return fullTextTasks;
     }
-  }, [fullTextTasks, latestGameIndex, isLastGame]);
+  }, []);
 
   const content = useMemo(() =>
   {
     const items = variant === "case" ? renderedCaseContent?.json?.content : fullTextTasks?.json?.content;
-    return items?.filter(
-      (contentItem: { content: Array<{ text: string }>; type: string }) =>
-        contentItem?.type === "heading"
+    return items?.filter((contentItem: { content: Array<{ text: string }>; type: string }) =>
+      contentItem?.type === "heading"
     );
   }, [fullTextTasks?.json?.content, renderedCaseContent?.json?.content, variant]);
 
@@ -91,18 +93,6 @@ const CaseCompleteTestsStep: FunctionComponent<ICaseCompleteTestsStepProps> = ({
       setGamesIndexes(getGamesIndexes({ fullTextTasks })); 
     }
   }, [fullTextTasks, setGamesIndexes, variant]);
-
-  useEffect(() =>
-  {
-    if(progressState == null)
-    {
-      return;
-    }
-
-    setHasCaseSolvingStarted(progressState !== "not-started");
-    getNextGameIndex();
-
-  }, [getNextGameIndex, progressState, setHasCaseSolvingStarted]);
 
   const allHeadings = fullTextTasks?.json?.content?.filter((x: { attrs: { level: number }; type: "heading" }) => x.type === "heading");
 
@@ -185,11 +175,6 @@ const CaseCompleteTestsStep: FunctionComponent<ICaseCompleteTestsStepProps> = ({
       })
       : null;
   }, [fullTextTasks]);
-
-  if(hasCaseSolvingStarted == null)
-  {
-    return null;
-  }
 
   return (
     <Container maw={1440}>

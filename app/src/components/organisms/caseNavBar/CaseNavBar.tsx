@@ -18,13 +18,7 @@ const CaseNavBar: FunctionComponent<ICaseNavBarProps> = ({ variant }) =>
 {
   const theme = useMantineTheme();
   const steps = ["COMPLETE TESTS", "SOLVE CASE", "REVIEW REUSLTS"];
-  const setCaseStepIndex = useCaseSolvingStore((state) => state.setCaseStepIndex);
   const [progress, setProgress] = useState<number>(0);
-  const isLastGame = useCaseSolvingStore((state) => state.isLastGame);
-  const hasCaseSolvingStarted = useCaseSolvingStore((state) => state.hasCaseSolvingStarted);
-  const isStepCompleted = useCaseSolvingStore((state) => state.isStepCompleted);
-  const setShowStepTwoModal = useCaseSolvingStore((state) => state.setShowStepTwoModal);
-  const caseStepIndex = useCaseSolvingStore((state) => state.caseStepIndex);
 
   useEffect(() => 
   {
