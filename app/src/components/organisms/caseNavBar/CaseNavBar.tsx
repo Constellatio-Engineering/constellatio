@@ -50,8 +50,6 @@ const CaseNavBar: FunctionComponent<ICaseNavBarProps> = ({ variant }) =>
     }
   };
 
-  // TODO: utilize progress bar
-  if(progress) { return; }
   return variant === "case" ? (
     <div css={styles.componentArea({ theme, variant })}>
       <div css={styles.wrapper({ variant })}>

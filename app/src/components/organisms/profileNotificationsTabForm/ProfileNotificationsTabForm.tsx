@@ -23,8 +23,6 @@ const ProfileNotificationsTabForm: FunctionComponent = () =>
     setSuccess("Your changes have been saved"); 
   
   };
-  // TODO: utilize err and success for eslint
-  if(err && success) { return; }
   return (
     <div css={styles.wrapper}>
       <form onSubmit={handleSubmit}>

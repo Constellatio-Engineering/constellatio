@@ -83,7 +83,6 @@ const ItemBlock: FunctionComponent<ICaseBlockProps> = ({
   };
 
   const [numberOfShowingItems, setNumberOfShowingItems] = React.useState<number>(5);
-
   return items && items?.length > 0 ? (
     <div css={styles.wrapper}>
       <CaseBlockHead {...blockHead}/>
@@ -116,7 +115,7 @@ const ItemBlock: FunctionComponent<ICaseBlockProps> = ({
                 )}
                 {tableType === "search" && <td><TableCell variant="simpleTableCell">{item?.legalArea?.legalAreaName}</TableCell></td>}
                 <td css={styles.topicCell} title={topicsCombined}>
-                  <TableCell variant="simpleTableCell">{item?.topic?.[0]?.topicName}</TableCell>
+                  <TableCell variant="simpleTableCell">{item?.topic?.[0]?.topicName} : {item?.topic?.[0]?.sorting}</TableCell>
                 </td>
                 {tableType === "favorites" && <td><TableCell variant="simpleTableCell">{item?.legalArea?.legalAreaName}</TableCell></td>}
                 <td>

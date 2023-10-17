@@ -54,7 +54,7 @@ const OverviewPage: FunctionComponent<OverviewPageProps> = ({ content, variant }
       {
         try 
         {
-          if(!selectedCategorySlug || router.query.category === undefined) 
+          if(!selectedCategorySlug) 
           {
             await setSelectedCategorySlug(
               slugFormatter(content.allMainCategories?.[0]?.mainCategory ?? "")
@@ -69,7 +69,7 @@ const OverviewPage: FunctionComponent<OverviewPageProps> = ({ content, variant }
       })();
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [router.query.category, setSelectedCategorySlug]);
+  }, [router.query.category, setSelectedCategorySlug, content.allMainCategories?.[0]?.mainCategory]);
 
   const filteredLegalAreas = (content.allLegalAreaRes.allLegalArea?.edges
     ?.map((legalArea) => legalArea?.node)
@@ -189,7 +189,7 @@ const OverviewPage: FunctionComponent<OverviewPageProps> = ({ content, variant }
           );
         })}
       </div>
-      {selectedCategorySlug && getIsCategoryEmpty() && (
+      {selectedCategorySlug && router.query.category && getIsCategoryEmpty() && (
         <EmptyStateCard
           title={`We're currently working hard to bring you ${
             variant === "case"
