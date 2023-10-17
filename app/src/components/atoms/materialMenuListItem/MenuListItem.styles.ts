@@ -4,12 +4,12 @@ import { css } from "@emotion/react";
 import { type ModalStylesNames } from "@mantine/core";
 import { type Styles, type MantineTheme } from "@mantine/styles";
 
-const CSSActiveStyles = (theme: MantineTheme) => css`
+const CSSActiveStyles = ({ active, theme }: {active?: boolean; theme: MantineTheme}) => css`
   background-color: ${theme.colors["neutrals-01"][3]};
   border-left: 3px solid ${theme.colors["neutrals-02"][1]};
   p {
     svg {
-      color: ${theme.colors["neutrals-02"][1]};
+      color: ${active ? theme.colors["neutrals-02"][1] : theme.colors["neutrals-01"][7]};
     }
   }
 `;
@@ -56,7 +56,7 @@ export const wrapper = ({ active, theme }: {
     /* padding:0;
     margin:0; */
   }
-  ${active && CSSActiveStyles(theme)}
+  ${active && CSSActiveStyles({ active, theme })}
 `;
 
 type ModalStyles = Styles<ModalStylesNames, UnknownMantineStylesParams>;
@@ -107,22 +107,21 @@ export const modalStyles = (): ModalStyles =>
   return styles;
 };
 
-export const label = (theme: MantineTheme) => css`
+export const label = ({ active, theme }: {active?: boolean;theme: MantineTheme}) => css`
   display: inline-block;
   overflow: hidden;
   white-space: nowrap;
   width: 100%;
   text-overflow: ellipsis;
+  color:${active ? theme.colors["neutrals-02"][1] : theme.colors["neutrals-01"][9]};
   svg {
     margin-right: 8px;
     vertical-align: bottom;
-    color: ${theme.colors["neutrals-01"][7]};
+    color:${active ? theme.colors["neutrals-02"][1] : theme.colors["neutrals-01"][7]};
   }
 `;
 
 export const dropDownLabel = (theme: MantineTheme) => css`
-${label(theme)};
+${label({ theme })};
 padding:12px 16px;
-
-
 `;

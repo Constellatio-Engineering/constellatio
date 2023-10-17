@@ -77,6 +77,8 @@ const ProfileHistoryBlocks: FunctionComponent = () =>
       viewedDate: new Date("2023-03-16T10:00:00Z"),
     },
   ];
+  // filled states
+  // const uniqueDays = extractUniqueDays(visitedItems);
   const uniqueDays = extractUniqueDays([]);
   return (
     <div css={styles.wrapper}>

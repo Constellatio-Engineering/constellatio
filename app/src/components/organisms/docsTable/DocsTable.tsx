@@ -23,7 +23,6 @@ const DocsTable: FunctionComponent<DocsTableProps> = ({ docs }) =>
       <table css={styles.tableWrapper}>
         <thead css={styles.tableHead}>
           <tr>
-            <th/>
             <th className="primaryCell">
               <CaptionText styleType="caption-01-medium" component="p">DOC NAME</CaptionText>
             </th>

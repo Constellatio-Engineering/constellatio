@@ -1,4 +1,4 @@
-import { css } from "@emotion/react";
+import { type SerializedStyles, css } from "@emotion/react";
 import { type MantineTheme } from "@mantine/styles";
 
 export const wrapper = css`
@@ -21,36 +21,45 @@ span > table {
 export const expandTableButton = css`
     margin: 0 auto;
     display: block;
-
 `;
-const CSSCommonExpandButtonStyles = (theme: MantineTheme) => css`
+const CSSCommonExpandButtonStyles = (theme: MantineTheme): SerializedStyles => css`
     content: "";
     position: absolute;
     width: 38%;
     background: ${theme.colors["neutrals-01"][3]};
-    height: 3px;
+    height: 2px;
     top: 50%;
 `;
 
 export const expandTableButtonArea = (theme: MantineTheme) => css`
-background-color: ${theme.colors["neutrals-01"][0]};
+    background-color: ${theme.colors["neutrals-01"][0]};
     position: relative;
-.linearGredient{
-    content: "";
-    position: absolute;
-    width: 100%;
-    background:linear-gradient(to bottom, transparent 0%,${theme.colors["neutrals-01"][0]} 100%) ;
-    height: 350%;
-    top: -350%;
-    left: 0;
-}
-&::after{
-${CSSCommonExpandButtonStyles(theme)}
-}
-&::before{
-    
-right: 0;
+    .linearGredient{
+        content: "";
+        position: absolute;
+        width: 100%;
+        background:linear-gradient(to bottom, transparent 0%,${theme.colors["neutrals-01"][0]} 100%) ;
+        height: 350%;
+        top: -350%;
+    pointer-events: none;
+        left: 0;
+    }
+    &::after{
+        ${CSSCommonExpandButtonStyles(theme)}
+    }
+    &::before{
+        right: 0;
+        ${CSSCommonExpandButtonStyles(theme)}
+    }
+`;
 
-    ${CSSCommonExpandButtonStyles(theme)}
+export const topicCell = css`
+min-width: 100px;
+p{
+    text-align: left;
+    width: 100%;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
 }
 `;

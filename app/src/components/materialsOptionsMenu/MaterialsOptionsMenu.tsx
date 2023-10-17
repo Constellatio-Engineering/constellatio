@@ -17,7 +17,7 @@ import { Cross } from "../Icons/Cross";
 import { DotsIcon } from "../Icons/dots";
 import { DownloadIcon } from "../Icons/DownloadIcon";
 import { Edit } from "../Icons/Edit";
-import { FolderIcon } from "../Icons/Folder";
+// import { FolderIcon } from "../Icons/Folder";
 import { Trash } from "../Icons/Trash";
 
 interface MaterialOptionsMenuProps
@@ -71,9 +71,9 @@ const MaterialOptionsMenu: FunctionComponent<MaterialOptionsMenuProps> = ({ file
           <Menu.Item onClick={() => openRenameFileModal(file)}>
             <DropdownItem icon={<Edit/>} label="Rename"/>
           </Menu.Item>
-          <Menu.Item>
+          {/* <Menu.Item>
             <DropdownItem icon={<FolderIcon/>} label="Move to"/>
-          </Menu.Item>
+          </Menu.Item> */}
           <Menu.Item
             onClick={async () =>
             {

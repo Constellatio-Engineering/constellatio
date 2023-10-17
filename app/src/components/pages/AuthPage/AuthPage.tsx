@@ -1,5 +1,3 @@
-// import { BodyText } from "@/components/atoms/BodyText/BodyText";
-// import { CustomLink } from "@/components/atoms/CustomLink/CustomLink";
 import { SwitcherTab } from "@/components/atoms/Switcher-tab/SwitcherTab";
 import { Switcher } from "@/components/molecules/Switcher/Switcher";
 import { Header } from "@/components/organisms/Header/Header";
