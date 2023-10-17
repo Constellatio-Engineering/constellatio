@@ -21,6 +21,8 @@ export const env = createEnv({
     MEILISEARCH_MASTER_API_KEY: z.string(),
     MEILISEARCH_HOST_URL: urlValidation,
     CAISY_WEBHOOKS_SECRET_KEY: z.string(),
+    CAISY_CASE_BLUEPRINT_ID: z.string(),
+    CAISY_ARTICLE_BLUEPRINT_ID: z.string(),
   },
 
   /**
@@ -64,6 +66,8 @@ export const env = createEnv({
     MEILISEARCH_MASTER_API_KEY: process.env.MEILISEARCH_MASTER_API_KEY,
     NEXT_PUBLIC_MEILISEARCH_TENANT_TOKEN_EXPIRATION_TIME_MS: process.env.NEXT_PUBLIC_MEILISEARCH_TENANT_TOKEN_EXPIRATION_TIME_MS,
     CAISY_WEBHOOKS_SECRET_KEY: process.env.CAISY_WEBHOOKS_SECRET_KEY,
+    CAISY_CASE_BLUEPRINT_ID: process.env.CAISY_CASE_BLUEPRINT_ID,
+    CAISY_ARTICLE_BLUEPRINT_ID: process.env.CAISY_ARTICLE_BLUEPRINT_ID,
   },
   /**
    * Run `build` or `dev` with `SKIP_ENV_VALIDATION` to skip env validation.
