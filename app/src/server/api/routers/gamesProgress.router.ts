@@ -1,5 +1,5 @@
 import { db } from "@/db/connection";
-import { gamesProgress } from "@/db/schema";
+import { type GameProgress, gamesProgress } from "@/db/schema";
 import { getGamesProgressSchema } from "@/schemas/gamesProgress/getGamesProgress.schema";
 import { createTRPCRouter, protectedProcedure } from "@/server/api/trpc";
 import { caisySDK } from "@/services/graphql/getSdk";
@@ -16,7 +16,6 @@ export const gamesProgressRouter = createTRPCRouter({
 
       const caseFromCms = await caisySDK.getCaseById({ id: caseId });
       const games = getGamesFromCase(caseFromCms.Case);
-
       const gameIds = games?.map(({ id }) => id).filter(Boolean);
 
       if(!gameIds || gameIds.length === 0)
@@ -35,8 +34,26 @@ export const gamesProgressRouter = createTRPCRouter({
         )
       });
 
+      const resultArray: GameProgress[] = gameIds.map(gameId =>
+      {
+        const gameProgress = _gamesProgress.find(({ gameId: _gameId }) => _gameId === gameId);
+
+        if(!gameProgress)
+        {
+          return ({
+            gameId,
+            progressState: "not-started",
+            userId
+          });
+        }
+        else
+        {
+          return gameProgress;
+        }
+      });
+
       console.log("_gamesProgress: ", _gamesProgress);
 
-      return _gamesProgress;
+      return resultArray;
     })
 });

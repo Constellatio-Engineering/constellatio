@@ -1,11 +1,8 @@
-import { type AppRouter } from "@/server/api/root";
+import { type GameProgress } from "@/db/schema";
 import { api } from "@/utils/api";
 import { type Nullable, type UseQueryResult } from "@/utils/types";
 
-import { type inferProcedureOutput } from "@trpc/server";
-
-export type GamesProgress = inferProcedureOutput<AppRouter["gamesProgress"]["getGamesProgress"]>;
-type UseGamesProgress = (caseId: Nullable<string>) => UseQueryResult<{ gamesProgress: GamesProgress | undefined }>;
+type UseGamesProgress = (caseId: Nullable<string>) => UseQueryResult<{ gamesProgress: GameProgress[] | undefined }>;
 
 const useGamesProgress: UseGamesProgress = (caseId) =>
 {
