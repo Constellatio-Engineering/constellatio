@@ -69,7 +69,7 @@ const PersonalSpaceFavoriteTab: FunctionComponent = () =>
   {
     if(router.query.tab)
     {
-      setSelectedTabId(favoriteCategoryNavTabs.filter((x) => slugFormatter(x.title) === router.query.tab)[0]?.id as string);
+      setSelectedTabId(favoriteCategoryNavTabs.filter((x) => slugFormatter(x.title) === router.query.tab)[0]?.id ?? "");
     }
   // Adding selectedTabId to the dependency array will cause an infinite loop
   // eslint-disable-next-line react-hooks/exhaustive-deps

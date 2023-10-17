@@ -3,7 +3,6 @@ import { DropdownItem } from "@/components/atoms/Dropdown/DropdownItem";
 import { Cross } from "@/components/Icons/Cross";
 import { DownloadIcon } from "@/components/Icons/DownloadIcon";
 import { Edit } from "@/components/Icons/Edit";
-import { FolderIcon } from "@/components/Icons/Folder";
 import { Trash } from "@/components/Icons/Trash";
 // import MoveToModal from "@/components/moveToModal/MoveToModal";
 import { type Document } from "@/db/schema";
@@ -25,7 +24,7 @@ import { type FunctionComponent } from "react";
 
 import * as styles from "./DocsTable.styles";
 import { BodyText } from "../../atoms/BodyText/BodyText";
-import { Checkbox } from "../../atoms/Checkbox/Checkbox";
+// import { Checkbox } from "../../atoms/Checkbox/Checkbox";
 import { DotsIcon } from "../../Icons/dots";
 
 const formatDate = (date: Date): string => `${String(date.getDate()).padStart(2, "0")}.${String(date.getMonth() + 1).padStart(2, "0")}.${date.getFullYear()}`;
@@ -97,7 +96,7 @@ export const DocsTableData: FunctionComponent<Document> = (doc) =>
 
   return (
     <>
-      <td><Checkbox/></td>
+      {/* <td><Checkbox/></td> */}
       <td
         css={styles.docName}
         className="primaryCell"
@@ -116,9 +115,9 @@ export const DocsTableData: FunctionComponent<Document> = (doc) =>
             <Menu.Item onClick={() => setEditDocumentState(doc)}>
               <DropdownItem icon={<Edit/>} label="Rename and edit"/>
             </Menu.Item>
-            <Menu.Item>
+            {/* <Menu.Item>
               <DropdownItem icon={<FolderIcon/>} label="Move to" onClick={() => { }}/>
-            </Menu.Item>
+            </Menu.Item> */}
             <Menu.Item disabled={isDownloading} onClick={() => downloadDocument()}>
               <DropdownItem icon={<DownloadIcon/>} label="Download"/>
             </Menu.Item>
@@ -157,18 +156,6 @@ export const DocsTableData: FunctionComponent<Document> = (doc) =>
             </Button>
           </div>
         </Modal>
-        {/* Modal */}
-        {/* <MoveToModal
-          close={function(): void 
-          {
-            setShowMoveToModal(false);
-          }}
-          action={function(): void 
-          {
-            throw new Error("Function not implemented.");
-          }}
-          isOpened={showMoveToModal}
-        /> */}
       </td>
     </>
   );

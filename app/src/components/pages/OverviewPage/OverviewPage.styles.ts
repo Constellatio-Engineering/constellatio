@@ -3,7 +3,7 @@ import { type MantineTheme } from "@mantine/styles";
 
 export const ListWrapper = css`
   transform: translateY(-100px);
-  width: 90%;
+  width: 95%;
   margin: 0 auto;
   display: grid;
   position: relative;

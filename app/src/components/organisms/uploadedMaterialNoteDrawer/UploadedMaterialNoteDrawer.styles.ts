@@ -10,7 +10,13 @@ export const drawerStyles = () =>
 {
   const styles: DrawerStylesProps = (theme: MantineTheme) => ({
     body: {
+      ".form": {
+        position: "relative"
+      },
+    
+      minHeight: "90vh",
       padding: "0px"
+      
     },
     content: {
       background: theme.colors["neutrals-01"][1],

@@ -77,12 +77,12 @@ const DetailsPage: FunctionComponent<IDetailsPageProps> = ({ content, variant })
             slug: variant === "case" ? "Cases" : "Dictionary" 
           },
           {
-            path: variant === "case" ? `/cases?q=${slugFormatter(content?.mainCategoryField?.[0]?.mainCategory ?? "")}` : `/dictionary?q=${slugFormatter(content?.mainCategoryField?.[0]?.mainCategory ?? "")}`, 
+            path: variant === "case" ? `/cases?category=${slugFormatter(content?.mainCategoryField?.[0]?.mainCategory ?? "")}` : `/dictionary?category=${slugFormatter(content?.mainCategoryField?.[0]?.mainCategory ?? "")}`, 
             slug: content?.mainCategoryField?.[0]?.mainCategory ?? "" 
           },
           { 
             path: `/${variant === "case" ? "cases" : "dictionary"}/${content?.id}`, 
-            slug: content?.title?.length && content?.title?.length > 40 ? content?.title?.slice(0, 40) + " ..." : "Undefined Title" 
+            slug: content?.title?.length && content?.title?.length > 40 ? content?.title?.slice(0, 40) + " ..." : content?.title ?? ""
           }
         ]}
         overviewCard={{

@@ -1235,6 +1235,9 @@ type LegalArea {
 
   """"""
   legalAreaName: String
+
+  """"""
+  sorting: Int
 }
 
 """"""
@@ -1268,6 +1271,9 @@ input LegalArea_Nested_Where {
 
   """"""
   legalAreaName: CaisyField_String_Where
+
+  """"""
+  sorting: CaisyField_Number_WhereInt
 }
 
 """"""
@@ -1285,6 +1291,9 @@ input LegalArea_Sort {
   publishedAt: Order
 
   """"""
+  sorting: Order
+
+  """"""
   updatedAt: Order
 }
 
@@ -1298,6 +1307,9 @@ input LegalArea_Where {
 
   """"""
   legalAreaName: CaisyField_String_Where
+
+  """"""
+  sorting: CaisyField_Number_WhereInt
 }
 
 """"""
@@ -1788,6 +1800,9 @@ type Topic {
   id: ID
 
   """"""
+  sorting: Int
+
+  """"""
   topicName: String
 }
 
@@ -1821,6 +1836,9 @@ input Topic_Nested_Where {
   OR: [Topic_Nested_Where]
 
   """"""
+  sorting: CaisyField_Number_WhereInt
+
+  """"""
   topicName: CaisyField_String_Where
 }
 
@@ -1836,6 +1854,9 @@ input Topic_Sort {
   publishedAt: Order
 
   """"""
+  sorting: Order
+
+  """"""
   topicName: Order
 
   """"""
@@ -1849,6 +1870,9 @@ input Topic_Where {
 
   """"""
   OR: [Topic_Where]
+
+  """"""
+  sorting: CaisyField_Number_WhereInt
 
   """"""
   topicName: CaisyField_String_Where
