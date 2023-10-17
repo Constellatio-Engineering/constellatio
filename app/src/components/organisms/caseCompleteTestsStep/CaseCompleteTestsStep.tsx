@@ -30,24 +30,30 @@ import { SolveCaseGame } from "../SolveCaseGame/SolveCaseGame";
 interface ICaseCompleteTestsStepProps 
 {
   readonly caseId: string;
+  readonly currentGameIndexInFullTextTasksJson: number;
   readonly facts: Maybe<IGenCase_Facts> | undefined;
   readonly fullTextTasks: Maybe<IGenCase_FullTextTasks> | Maybe<IGenArticle_FullTextTasks>;
   readonly games: Games;
   readonly gamesProgress: GameProgress[];
+  readonly isLastGame: boolean;
   readonly progressState: IStatusLabel["progressState"] | undefined;
   readonly variant?: "case" | "dictionary";
 }
 
 const CaseCompleteTestsStep: FunctionComponent<ICaseCompleteTestsStepProps> = ({
   caseId,
+  currentGameIndexInFullTextTasksJson,
   facts,
   fullTextTasks,
-  games,
-  gamesProgress,
+  isLastGame,
   progressState,
   variant
 }) =>
 {
+  // TODO: What happens when there are no games at all in the case
+  // TODO: What happens when there is just one game in the case
+  // TODO: Go trough the code again and make sure every case is handled
+
   console.log("-----------------");
 
   const { invalidateCaseProgress } = useContextAndErrorIfNull(InvalidateQueriesContext);
@@ -55,43 +61,6 @@ const CaseCompleteTestsStep: FunctionComponent<ICaseCompleteTestsStepProps> = ({
     onError: (error) => console.error(error),
     onSuccess: async () => invalidateCaseProgress({ caseId })
   });
-
-  // TODO: What happens when there are no games at all in the case
-  // TODO: What happens when there is just one game in the case
-  // TODO: Go trough the code again and make sure every case is handled
-
-  // console.log("games", games);
-  console.log("gamesProgress", gamesProgress);
-  // console.log("fullTextTasks", fullTextTasks);
-
-  const currentGameIndex = games.findIndex(game =>
-  {
-    // this gets the first game that is not completed, which is effectively the current game
-    const gameProgress = gamesProgress.find(gameProgress => gameProgress.gameId === game.id);
-    return gameProgress?.progressState === "not-started";
-  });
-  const currentGame = games[currentGameIndex];
-  const currentGameIndexInFullTextTasksJson = currentGame?.indexInFullTextTasksJson || 0;
-
-  // TODO Error handling if there is no next game
-  const nextGameIndex = currentGameIndex + 1;
-  const nextGame = games[nextGameIndex];
-  const nextGameIndexInFullTextTasksJson = nextGame?.indexInFullTextTasksJson;
-
-  console.log("games", games);
-
-  console.log("currentGameIndex", currentGameIndex);
-  console.log("currentGame", currentGame);
-  console.log("nextGameIndex", nextGameIndex);
-  console.log("nextGame", nextGame);
-  console.log("nextGameIndexInContentArray", nextGameIndexInFullTextTasksJson);
-
-  const isLastGame = currentGameIndex === games.length - 1;
-
-  // TODO: If there is only one game in the case this wont work
-  /* const secondLastGame = games.at(-2);
-  const progressForSecondLastGame = gamesProgress.find(gameProgress => gameProgress.gameId === secondLastGame?.id);
-  const isLastGame = progressForSecondLastGame?.progressState === "completed";*/
 
   let renderedCaseContent: IGenCase_FullTextTasks | IGenArticle_FullTextTasks | null;
 
@@ -196,7 +165,7 @@ const CaseCompleteTestsStep: FunctionComponent<ICaseCompleteTestsStepProps> = ({
         return null;
       })
       : null;
-  }, [fullTextTasks]);
+  }, [caseId, fullTextTasks?.connections]);
 
   return (
     <Container maw={1440}>

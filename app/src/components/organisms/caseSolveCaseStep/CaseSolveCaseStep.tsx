@@ -16,6 +16,16 @@ import modalImg from "../../Icons/CaseResultModalIcon.png";
 
 const CaseSolveCaseStep: FunctionComponent<IGenCase> = ({ facts, title }) => 
 {
+  const {
+    setCaseStepIndex,
+    setHasCaseSolvingStarted,
+    setIsStepCompleted,
+    setShowStepTwoModal,
+    setSolution,
+    showStepTwoModal,
+    solution
+  } = useCaseSolvingStore((state) => state);
+
   useEffect(() => 
   {
     // setIsStepCompleted(false);

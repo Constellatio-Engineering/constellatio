@@ -52,7 +52,6 @@ let FillGapsGame: FC<TFillGapsGame> = ({
     onError: (error) => console.error("Error while setting game progress", error),
     onSuccess: async () => invalidateGamesProgress({ caseId })
   });
-  // const getNextGameIndex = useCaseSolvingStore((s) => s.getNextGameIndex);
   const gameState = useFillGapsGameStore((s) => s.getGameState(id));
   const allGames = useFillGapsGameStore((s) => s.games);
   const updateGameState = useFillGapsGameStore((s) => s.updateGameState);
@@ -63,7 +62,7 @@ let FillGapsGame: FC<TFillGapsGame> = ({
   {
     if(gameState == null && id != null) 
     {
-      initializeNewGameState(id);
+      initializeNewGameState({ caseId, id });
     }
   }, [allGames, gameState, id, initializeNewGameState]);
 
@@ -128,34 +127,44 @@ let FillGapsGame: FC<TFillGapsGame> = ({
     gameStatus,
     gameSubmitted,
     resultMessage,
-  } = gameState ?? {};
+  } = gameState;
 
   const handleCheckAnswers = (): void => 
   {
     if(!gameSubmitted) 
     {
-      updateGameState(id, { gameSubmitted: true });
+      updateGameState({
+        caseId,
+        id,
+        update: { gameSubmitted: true },
+      });
       // getNextGameIndex(); TODO
       // Store game progress in the database
     }
 
     const allCorrect = checkAnswers({ gameId: id });
 
-    updateGameState(id, {
-      gameStatus: allCorrect ? "win" : "lose",
-      resultMessage: allCorrect
-        ? "Congrats! all answers are correct!"
-        : "Some answers are incorrect. Please try again.",
+    updateGameState({
+      caseId,
+      id,
+      update: {
+        gameStatus: allCorrect ? "win" : "lose",
+        resultMessage: allCorrect ? "Congrats! all answers are correct!" : "Some answers are incorrect. Please try again.",
+      },
     });
   };
 
   const handleResetGame = (): void => 
   {
-    updateGameState(id, {
-      answerResult: [],
-      gameStatus: "inprogress",
-      resultMessage: "",
-      userAnswers: [],
+    updateGameState({
+      caseId,
+      id,
+      update: {
+        answerResult: [],
+        gameStatus: "inprogress",
+        resultMessage: "",
+        userAnswers: [],
+      },
     });
   };
 

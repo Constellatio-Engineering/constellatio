@@ -13,6 +13,9 @@ import useCaseViews from "@/hooks/useCaseViews";
 import useContextAndErrorIfNull from "@/hooks/useContextAndErrorIfNull";
 import { InvalidateQueriesContext } from "@/provider/InvalidateQueriesProvider";
 import { type IGenLegalArea, type IGenTags } from "@/services/graphql/__generated/sdk";
+import useDragDropGameStore from "@/stores/dragDropGame.store";
+import useFillGapsGameStore from "@/stores/fillGapsGame.store";
+import useSelectionCardGameStore from "@/stores/selectionCardGame.store";
 import { api } from "@/utils/api";
 
 import { useMantineTheme } from "@mantine/core";
@@ -84,6 +87,9 @@ const OverviewCard: FunctionComponent<IOverviewCard> = ({
   variant,
 }) => 
 {
+  const resetSelectionCardGames = useSelectionCardGameStore(s => s.resetGamesForCase);
+  const resetDragDropGames = useDragDropGameStore(s => s.resetGamesForCase);
+  const resetFillGapsGames = useFillGapsGameStore(s => s.resetGamesForCase);
   const { count: articleViews } = useArticleViews(contentId);
   const { count: caseViews } = useCaseViews(contentId);
   const views = variant === "dictionary" ? articleViews : caseViews;
@@ -91,7 +97,13 @@ const OverviewCard: FunctionComponent<IOverviewCard> = ({
   const { invalidateCaseProgress } = useContextAndErrorIfNull(InvalidateQueriesContext);
   const { mutate: resetCaseProgress } = api.casesProgress.resetProgress.useMutation({
     onError: (error) => console.error(error),
-    onSuccess: async () => invalidateCaseProgress({ caseId: contentId })
+    onSuccess: async () =>
+    {
+      await invalidateCaseProgress({ caseId: contentId });
+      resetFillGapsGames(contentId);
+      resetSelectionCardGames(contentId);
+      resetDragDropGames(contentId);
+    }
   });
   const [opened, { close, open }] = useDisclosure(false);
 

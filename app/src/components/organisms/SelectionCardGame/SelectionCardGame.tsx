@@ -55,9 +55,9 @@ let SelectionCardGame: FC<SelectionCardGameProps> = ({
   {
     if(gameState == null && id != null) 
     {
-      initializeNewGameState(id);
+      initializeNewGameState({ caseId, gameId: id });
     }
-  }, [allGames, gameState, id, initializeNewGameState]);
+  }, [allGames, caseId, gameState, id, initializeNewGameState]);
 
   const optionsWithCheckProp: TCardGameOptionWithCheck[] = useMemo(() =>
     game?.options?.map((option: TCardGameOption) => ({
@@ -70,7 +70,12 @@ let SelectionCardGame: FC<SelectionCardGameProps> = ({
   {
     const optionsShuffled = shuffleArray<TCardGameOptionWithCheck>(optionsWithCheckProp);
 
-    updateGameState(id!, { optionsItems: optionsShuffled });
+    updateGameState({
+      caseId,
+      gameId: id!,
+      update: { optionsItems: optionsShuffled }
+    });
+
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [optionsWithCheckProp]);
 
@@ -105,17 +110,28 @@ let SelectionCardGame: FC<SelectionCardGameProps> = ({
 
     if(winCondition) 
     {
-      updateGameState(id, { gameStatus: "win", resultMessage: "Congrats! all answers are correct!" });
+      updateGameState({
+        caseId,
+        gameId: id,
+        update: { gameStatus: "win", resultMessage: "Congrats! all answers are correct!" }
+      });
     }
     else 
     {
-      updateGameState(id, { gameStatus: "lose", resultMessage: "Answers are incorrect!" });
+      updateGameState({
+        caseId,
+        gameId: id,
+        update: { gameStatus: "lose", resultMessage: "Answers are incorrect!" }
+      });
     }
 
     if(!gameSubmitted)
     {
-      // getNextGameIndex(); TODO
-      updateGameState(id, { gameSubmitted: true });
+      updateGameState({
+        caseId,
+        gameId: id,
+        update: { gameSubmitted: true }
+      });
     }
   };
 
@@ -123,11 +139,15 @@ let SelectionCardGame: FC<SelectionCardGameProps> = ({
   {
     const optionsShuffled = shuffleArray<TCardGameOptionWithCheck>(optionsWithCheckProp);
 
-    updateGameState(id, {
-      gameStatus: "inprogress",
-      optionsItems: optionsShuffled,
-      resetCounter: resetCounter + 1,
-      resultMessage: ""
+    updateGameState({
+      caseId,
+      gameId: id,
+      update: {
+        gameStatus: "inprogress",
+        optionsItems: optionsShuffled,
+        resetCounter: resetCounter + 1,
+        resultMessage: ""
+      }
     });
   };
 
@@ -161,7 +181,17 @@ let SelectionCardGame: FC<SelectionCardGameProps> = ({
                 onCheckHandler={(e) => 
                 {
                   const { checked } = e.target;
-                  updateGameState(id, { optionsItems: optionsItems.map((item) => item.id === option.id ? { ...item, checked } : item) });
+
+                  updateGameState({
+                    caseId,
+                    gameId: id,
+                    update: {
+                      optionsItems: optionsItems.map((item) =>
+                      {
+                        return item.id === option.id ? { ...item, checked } : item;
+                      })
+                    }
+                  });
                 }}
                 key={`${option.id} - ${resetCounter}`}
                 label={option.label}
@@ -183,10 +213,7 @@ let SelectionCardGame: FC<SelectionCardGameProps> = ({
         {gameStatus !== "inprogress" && (
           <>
             <ResultCard
-              droppedCorrectCards={
-                filteredCorrectAnswers.filter((item) => item.checked).length ??
-								null
-              }
+              droppedCorrectCards={filteredCorrectAnswers.filter((item) => item.checked).length ?? null}
               totalCorrectCards={filteredCorrectAnswers.length ?? null}
               variant={gameStatus}
               message={resultMessage}

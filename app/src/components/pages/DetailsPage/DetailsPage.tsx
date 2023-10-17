@@ -123,6 +123,15 @@ const DetailsPage: FunctionComponent<IDetailsPageProps> = ({ content, variant })
     }
   }
 
+  const currentGameIndex = games.findIndex(game =>
+  {
+    const gameProgress = gamesProgress.find(gameProgress => gameProgress.gameId === game.id);
+    return gameProgress?.progressState === "not-started";
+  });
+  const currentGame = games[currentGameIndex];
+  const currentGameIndexInFullTextTasksJson = currentGame?.indexInFullTextTasksJson || 0;
+  const isLastGame = currentGameIndex === games.length - 1;
+
   return (
     <>
       <CaseSolvingHeader
@@ -153,10 +162,17 @@ const DetailsPage: FunctionComponent<IDetailsPageProps> = ({ content, variant })
           variant,
         }}
       />
-      {/* <CaseNavBar variant={variant}/>*/}
+      <CaseNavBar
+        variant={variant}
+        caseStepIndex={caseStepIndex}
+        isLastGame={isLastGame}
+        caseProgressState={caseProgress.progressState}
+      />
       <div css={styles.mainContainer}>
         {content?.fullTextTasks && caseStepIndex === 0 && (
           <CaseCompleteTestsStep
+            isLastGame={isLastGame}
+            currentGameIndexInFullTextTasksJson={currentGameIndexInFullTextTasksJson}
             games={games}
             gamesProgress={gamesProgress}
             caseId={contentId}

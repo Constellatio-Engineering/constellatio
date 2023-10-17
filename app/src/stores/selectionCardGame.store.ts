@@ -10,6 +10,7 @@ export type TCardGameOptionWithCheck = TCardGameOption & { checked: boolean };
 type GameStatus = "win" | "lose" | "inprogress";
 
 type SelectionCardGameState = {
+  caseId: string;
   gameId: string;
   gameStatus: GameStatus;
   gameSubmitted: boolean;
@@ -23,18 +24,32 @@ type SelectionCardGameStateUpdate = Partial<Pick<SelectionCardGameState, "gameSt
 type TSelectionCardGameStore = {
   games: SelectionCardGameState[];
   getGameState: (gameId: Nullable<string>) => SelectionCardGameState | undefined;
-  initializeNewGameState: (gameId: string) => void;
-  updateGameState: (gameId: string, update: SelectionCardGameStateUpdate) => void;
+  initializeNewGameState: (params: {
+    caseId: string;
+    gameId: string;
+  }) => void;
+  resetGamesForCase: (caseId: string) => void;
+  updateGameState: (params: {
+    caseId: string;
+    gameId: string;
+    update: SelectionCardGameStateUpdate;
+  }) => void;
 };
 
-const defaultSelectionCardGameState: SelectionCardGameState = {
-  gameId: "",
+type GetDefaultSelectionCardGameState = (params: {
+  caseId: string;
+  gameId: string;
+}) => SelectionCardGameState;
+
+const getDefaultSelectionCardGameState: GetDefaultSelectionCardGameState = ({ caseId, gameId }) => ({
+  caseId,
+  gameId,
   gameStatus: "inprogress",
   gameSubmitted: false,
   optionsItems: [],
   resetCounter: 0,
   resultMessage: "",
-};
+});
 
 const useSelectionCardGameStore = create(immer<TSelectionCardGameStore> ((set, get) => ({
   games: [],
@@ -54,7 +69,7 @@ const useSelectionCardGameStore = create(immer<TSelectionCardGameStore> ((set, g
     return game;
   },
 
-  initializeNewGameState: (gameId) =>
+  initializeNewGameState: ({ caseId, gameId }) =>
   {
     const existingGame = get().games.find(game => game.gameId === gameId);
 
@@ -66,13 +81,29 @@ const useSelectionCardGameStore = create(immer<TSelectionCardGameStore> ((set, g
     set((state) =>
     {
       state.games = state.games.concat({
-        ...defaultSelectionCardGameState,
+        ...getDefaultSelectionCardGameState({ caseId, gameId }),
         gameId,
       });
     });
   },
 
-  updateGameState: (gameId, update) =>
+  resetGamesForCase: (caseId) =>
+  {
+    set((state) =>
+    {
+      state.games = state.games.map((game) =>
+      {
+        if(game.caseId === caseId)
+        {
+          return getDefaultSelectionCardGameState({ caseId, gameId: game.gameId });
+        }
+
+        return game;
+      });
+    });
+  },
+
+  updateGameState: ({ caseId, gameId, update }) =>
   {
     set((state) =>
     {
@@ -81,8 +112,7 @@ const useSelectionCardGameStore = create(immer<TSelectionCardGameStore> ((set, g
       if(gameIndex === -1)
       {
         const newGame: SelectionCardGameState = {
-          ...defaultSelectionCardGameState,
-          gameId,
+          ...getDefaultSelectionCardGameState({ caseId, gameId }),
           ...update,
         };
 

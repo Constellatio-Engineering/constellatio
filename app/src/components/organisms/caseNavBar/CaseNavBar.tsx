@@ -1,7 +1,8 @@
 import { Button } from "@/components/atoms/Button/Button";
 import { CaptionText } from "@/components/atoms/CaptionText/CaptionText";
 import { Check } from "@/components/Icons/Check";
-import useCaseSolvingStore from "@/stores/caseSolving.store";
+import { type CaseProgressState } from "@/db/schema";
+import useCaseSolvingStore, { type CaseStepIndex } from "@/stores/caseSolving.store";
 
 import { useMantineTheme } from "@mantine/core";
 import React, { type FunctionComponent, useState, useEffect } from "react";
@@ -11,13 +12,25 @@ import { calculateScrollProgress } from "./caseNavbarHelper";
 
 export interface ICaseNavBarProps 
 {
+  readonly caseProgressState: CaseProgressState;
+  readonly caseStepIndex: CaseStepIndex;
+  readonly isLastGame: boolean;
   readonly variant: "case" | "dictionary";
 }
 
-const CaseNavBar: FunctionComponent<ICaseNavBarProps> = ({ variant }) => 
+const CaseNavBar: FunctionComponent<ICaseNavBarProps> = ({
+  caseProgressState,
+  caseStepIndex,
+  isLastGame,
+  variant
+}) =>
 {
   const theme = useMantineTheme();
   const steps = ["COMPLETE TESTS", "SOLVE CASE", "REVIEW REUSLTS"];
+
+  const setShowStepTwoModal = useCaseSolvingStore(s => s.setShowStepTwoModal);
+  const setCaseStepIndex = useCaseSolvingStore(s => s.setCaseStepIndex);
+  const isStepCompleted = false;
 
   const handleCallToAction = (): void => 
   {
@@ -66,12 +79,12 @@ const CaseNavBar: FunctionComponent<ICaseNavBarProps> = ({ variant }) =>
           </div>
         )}
       </div>
-      {hasCaseSolvingStarted && <div css={styles.progressBar({ progress: 0, theme, variant })}/>}
+      {caseProgressState === "in-progress" && <div css={styles.progressBar({ progress: 0, theme, variant })}/>}
     </div>
   ) : (
     <div css={styles.componentArea({ theme, variant })}>
       <div css={styles.wrapper({ variant })}>
-        {hasCaseSolvingStarted && <div css={styles.progressBar({ progress: 0, theme, variant })}/>}
+        {caseProgressState === "in-progress" && <div css={styles.progressBar({ progress: 0, theme, variant })}/>}
       </div>
     </div>
   );
