@@ -93,7 +93,7 @@ export const Header: FC<HeaderProps> = ({ variant = "default" }) =>
             <Link href="/personal-space">
               <MenuTab
                 title="Personal Space"
-                icon={<IconFolder/>}
+                icon={<IconFolder size={20}/>}
                 active={pathname?.toLowerCase().includes("personal-space")}
               />
             </Link>
