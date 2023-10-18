@@ -25,8 +25,25 @@ export const existingNote = (theme: MantineTheme) => css`
 background-color: ${theme.colors["neutrals-01"][1]};
 position: relative;
 `;
-export const docContent = css`
-padding: 24px;
+export const docContent = (theme: MantineTheme) => css`
+background: ${theme.colors["neutrals-01"][0]};
+padding: 0 24px;
+min-height: calc(100vh - 250px);
+blockquote {
+    padding:20px;
+    background: ${theme.colors["neutrals-01"][1]};
+    border: 1px solid ${theme.colors["neutrals-01"][3]};
+    border-radius: 12px;
+    margin: 24px 0;
+    &::before{
+      background-image: url("/images/icons/quote-icon.svg");
+      background-repeat: no-repeat;
+      content: "";
+      display: block;
+      height: 20px;
+      width: 20px;
+    }
+  }
 `;
 export const deleteDocWindow = css`
   position: absolute;

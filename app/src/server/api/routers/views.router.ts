@@ -1,6 +1,6 @@
 import { db } from "@/db/connection";
 import {
-  articles_views, cases_views
+  articlesViews, casesViews
 } from "@/db/schema";
 import { addArticleViewSchema } from "@/schemas/views/addArticleView.schema";
 import { addCaseViewSchema } from "@/schemas/views/addCaseView.schema";
@@ -15,10 +15,10 @@ export const viewsRouter = createTRPCRouter({
     .input(addArticleViewSchema)
     .mutation(async ({ ctx: { userId }, input: { articleId } }) =>
     {
-      const existingView = await db.query.articles_views.findFirst({
+      const existingView = await db.query.articlesViews.findFirst({
         where: and(
-          eq(articles_views.userId, userId),
-          eq(articles_views.articleId, articleId),
+          eq(articlesViews.userId, userId),
+          eq(articlesViews.articleId, articleId),
         )
       });
 
@@ -27,16 +27,16 @@ export const viewsRouter = createTRPCRouter({
         return;
       }
 
-      await db.insert(articles_views).values({ articleId, userId });
+      await db.insert(articlesViews).values({ articleId, userId });
     }),
   addCaseView: protectedProcedure
     .input(addCaseViewSchema)
     .mutation(async ({ ctx: { userId }, input: { caseId } }) =>
     {
-      const existingView = await db.query.cases_views.findFirst({
+      const existingView = await db.query.casesViews.findFirst({
         where: and(
-          eq(cases_views.userId, userId),
-          eq(cases_views.caseId, caseId),
+          eq(casesViews.userId, userId),
+          eq(casesViews.caseId, caseId),
         )
       });
 
@@ -45,20 +45,20 @@ export const viewsRouter = createTRPCRouter({
         return;
       }
       
-      await db.insert(cases_views).values({ caseId, userId });
+      await db.insert(casesViews).values({ caseId, userId });
     }),
   getArticleViews: protectedProcedure
     .input(getArticleViewsSchema)
     .query(async ({ input: { articleId } }) =>
     {
-      const [result] = await db.select({ count: sql<number>`count(*)` }).from(articles_views).where(eq(articles_views.articleId, articleId));
+      const [result] = await db.select({ count: sql<number>`count(*)` }).from(articlesViews).where(eq(articlesViews.articleId, articleId));
       return result?.count ?? 0;
     }),
   getCaseViews: protectedProcedure
     .input(getCaseViewsSchema)
     .query(async ({ input: { caseId } }) =>
     {
-      const [result] = await db.select({ count: sql<number>`count(*)` }).from(cases_views).where(eq(cases_views.caseId, caseId));
+      const [result] = await db.select({ count: sql<number>`count(*)` }).from(casesViews).where(eq(casesViews.caseId, caseId));
       return result?.count ?? 0;
     }),
 });

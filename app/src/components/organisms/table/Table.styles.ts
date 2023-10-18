@@ -4,10 +4,9 @@ import { type MantineTheme } from "@mantine/styles";
 export const table = css`
   border-radius: 12px;
   overflow: hidden;
-  box-sizing: border-box;
   .primaryCell {
-    width: 90%;
-    max-width: 350px;
+    width: 80%;
+    max-width: 150px;
     overflow: hidden;
     p {
       white-space: nowrap;
@@ -15,7 +14,7 @@ export const table = css`
       text-overflow: ellipsis;
     }
   }
-  width: 90%;
+  /* width: 90%; */
   vertical-align: middle;
 
   > * {

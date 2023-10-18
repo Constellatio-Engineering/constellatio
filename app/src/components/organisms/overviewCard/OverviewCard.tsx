@@ -1,4 +1,4 @@
-
+/* eslint-disable max-lines */
 import { BodyText } from "@/components/atoms/BodyText/BodyText";
 import { CaptionText } from "@/components/atoms/CaptionText/CaptionText";
 import { LinkButton } from "@/components/atoms/LinkButton/LinkButton";
@@ -8,6 +8,9 @@ import { Show } from "@/components/Icons/Show";
 import { Timer } from "@/components/Icons/timer";
 import { Trash } from "@/components/Icons/Trash";
 import OverviewCardTagsModal from "@/components/overviewCardTagsModal/OverviewCardTagsModal";
+import useArticleViews from "@/hooks/useArticleViews";
+import useCaseViews from "@/hooks/useCaseViews";
+import useResetCaseProgress from "@/hooks/useResetCaseProgress";
 import { type IGenLegalArea, type IGenTags } from "@/services/graphql/__generated/sdk";
 
 import { useMantineTheme } from "@mantine/core";
@@ -19,14 +22,14 @@ import * as styles from "./OverviewCard.styles";
 
 export interface IOverviewCard 
 {
+  readonly contentId: string;
   readonly lastUpdated: Date;
   readonly legalArea: Maybe<IGenLegalArea> | undefined;
-  readonly status?: IStatusLabel["variant"];
+  readonly progressState?: IStatusLabel["progressState"];
   readonly tags: Maybe<Array<Maybe<IGenTags>>> | undefined;
   readonly timeInMinutes?: number;
   readonly topic: string;
   readonly variant: "case" | "dictionary";
-  readonly views: number;
 }
 
 export function timeFormatter(minutes: number): string 
@@ -69,19 +72,23 @@ function formatDate(inputDate: string | number | Date): string
 }
 
 const OverviewCard: FunctionComponent<IOverviewCard> = ({
+  contentId,
   lastUpdated,
   legalArea,
-  status,
+  progressState,
   tags,
   timeInMinutes,
   topic,
   variant,
-  views,
 }) => 
 {
+  const resetCaseProgress = useResetCaseProgress();
+  const { count: articleViews } = useArticleViews(contentId);
+  const { count: caseViews } = useCaseViews(contentId);
+  const views = variant === "dictionary" ? articleViews : caseViews;
   const [opened, { close, open }] = useDisclosure(false);
-
   const theme = useMantineTheme();
+
   return (
     <div css={styles.wrapper()}>
       <div css={styles.topDetails({ theme, variant })}>
@@ -109,7 +116,7 @@ const OverviewCard: FunctionComponent<IOverviewCard> = ({
         )}
       </div>
       <div css={styles.cardBody({ theme, variant })}>
-        <table style={{ textAlign: "left", }}>
+        <table style={{ borderBottom: "1px solid #F0F0F0", textAlign: "left", width: "100%" }}>
           <thead>
             <tr>
               {(legalArea?.__typename === "LegalArea" && legalArea?.legalAreaName) && <th style={{ color: "#949494", padding: "16px 32px 8px 16px" }}><CaptionText styleType="caption-01-medium">LEGAL AREA</CaptionText></th>}
@@ -135,7 +142,11 @@ const OverviewCard: FunctionComponent<IOverviewCard> = ({
         )}
         <div css={styles.row({ theme, variant })}>
           <div className="row-title">
-            <CaptionText styleType="caption-01-medium" component="button" onClick={open}>TAGS</CaptionText>
+            <CaptionText
+              styleType="caption-01-medium"
+              component="p"
+              onClick={open}>TAGS
+            </CaptionText>
           </div>
           {/* <ScrollArea> */}
           <div
@@ -147,8 +158,14 @@ const OverviewCard: FunctionComponent<IOverviewCard> = ({
             {tags?.map((tag, tagIndex) => (
               <Tag key={tagIndex}>{tag?.tagName}</Tag>
             ))}
-          
           </div>
+          <BodyText
+            type="button"
+            css={styles.seeAllTagsButton}
+            onClick={open}
+            styleType="body-01-regular"
+            component="button">See all
+          </BodyText>
           <OverviewCardTagsModal opened={opened} tags={tags} close={close}/>
         </div>
         {
@@ -158,13 +175,16 @@ const OverviewCard: FunctionComponent<IOverviewCard> = ({
                 <CaptionText styleType="caption-01-medium">STATUS</CaptionText>
               </div>
               <div className="row-value">
-                {
-                  status && (
-                    <StatusLabel variant={status}/>
-                  )
-                }
+                {progressState && (
+                  <StatusLabel progressState={progressState}/>
+                )}
                 <div className="reset-button">
-                  <LinkButton size="medium" title="Reset case progress" icon={<Trash/>}/>
+                  <LinkButton
+                    onClick={() => resetCaseProgress({ caseId: contentId })}
+                    size="medium"
+                    title="Reset case progress"
+                    icon={<Trash/>}
+                  />
                 </div>
               </div>
             </div>

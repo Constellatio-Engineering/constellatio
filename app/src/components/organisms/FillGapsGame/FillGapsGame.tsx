@@ -9,9 +9,11 @@ import { HintsAccordion } from "@/components/molecules/HintsAccordion/HintsAccor
 import { ResultCard } from "@/components/molecules/ResultCard/ResultCard";
 import { Richtext } from "@/components/molecules/Richtext/Richtext";
 import RichtextOverwrite from "@/components/organisms/FillGapsGame/RichtextOverwrite";
+import useContextAndErrorIfNull from "@/hooks/useContextAndErrorIfNull";
+import { InvalidateQueriesContext } from "@/provider/InvalidateQueriesProvider";
 import { type IGenFillInGapsGame } from "@/services/graphql/__generated/sdk";
-import useCaseSolvingStore from "@/stores/caseSolving.store";
 import useFillGapsGameStore from "@/stores/fillGapsGame.store";
+import { api } from "@/utils/api";
 
 import { Title } from "@mantine/core";
 import {
@@ -33,19 +35,23 @@ import {
   stylesOverwrite,
 } from "./FillGapsGame.styles";
 
-export type TFillGapsGame = Pick<
-IGenFillInGapsGame,
-"fillGameParagraph" | "helpNote" | "question" | "id"
->;
+export type TFillGapsGame = Pick<IGenFillInGapsGame, "fillGameParagraph" | "helpNote" | "question" | "id"> & {
+  readonly caseId: string;
+};
 
 let FillGapsGame: FC<TFillGapsGame> = ({
+  caseId,
   fillGameParagraph,
   helpNote,
   id,
   question,
 }) => 
 {
-  const getNextGameIndex = useCaseSolvingStore((s) => s.getNextGameIndex);
+  const { invalidateGamesProgress } = useContextAndErrorIfNull(InvalidateQueriesContext);
+  const { mutate: setGameProgress } = api.gamesProgress.setGameProgress.useMutation({
+    onError: (error) => console.error("Error while setting game progress", error),
+    onSuccess: async () => invalidateGamesProgress({ caseId })
+  });
   const gameState = useFillGapsGameStore((s) => s.getGameState(id));
   const allGames = useFillGapsGameStore((s) => s.games);
   const updateGameState = useFillGapsGameStore((s) => s.updateGameState);
@@ -56,9 +62,9 @@ let FillGapsGame: FC<TFillGapsGame> = ({
   {
     if(gameState == null && id != null) 
     {
-      initializeNewGameState(id);
+      initializeNewGameState({ caseId, id });
     }
-  }, [allGames, gameState, id, initializeNewGameState]);
+  }, [allGames, caseId, gameState, id, initializeNewGameState]);
 
   const correctAnswersArr = useMemo(() => 
   {
@@ -121,33 +127,44 @@ let FillGapsGame: FC<TFillGapsGame> = ({
     gameStatus,
     gameSubmitted,
     resultMessage,
-  } = gameState ?? {};
+  } = gameState;
 
   const handleCheckAnswers = (): void => 
   {
     if(!gameSubmitted) 
     {
-      updateGameState(id, { gameSubmitted: true });
-      getNextGameIndex();
+      updateGameState({
+        caseId,
+        id,
+        update: { gameSubmitted: true },
+      });
+      // getNextGameIndex(); TODO
+      // Store game progress in the database
     }
 
     const allCorrect = checkAnswers({ gameId: id });
 
-    updateGameState(id, {
-      gameStatus: allCorrect ? "win" : "lose",
-      resultMessage: allCorrect
-        ? "Congrats! all answers are correct!"
-        : "Some answers are incorrect. Please try again.",
+    updateGameState({
+      caseId,
+      id,
+      update: {
+        gameStatus: allCorrect ? "win" : "lose",
+        resultMessage: allCorrect ? "Congrats! all answers are correct!" : "Some answers are incorrect. Please try again.",
+      },
     });
   };
 
   const handleResetGame = (): void => 
   {
-    updateGameState(id, {
-      answerResult: [],
-      gameStatus: "inprogress",
-      resultMessage: "",
-      userAnswers: [],
+    updateGameState({
+      caseId,
+      id,
+      update: {
+        answerResult: [],
+        gameStatus: "inprogress",
+        resultMessage: "",
+        userAnswers: [],
+      },
     });
   };
 
@@ -208,7 +225,18 @@ let FillGapsGame: FC<TFillGapsGame> = ({
             styleType="primary"
             size="large"
             leftIcon={gameStatus === "inprogress" ? <Check/> : <Reload/>}
-            onClick={gameStatus === "inprogress" ? handleCheckAnswers : handleResetGame}
+            onClick={() =>
+            {
+              if(gameStatus === "inprogress")
+              {
+                setGameProgress({ gameId: id, progressState: "completed" });
+                handleCheckAnswers();
+              }
+              else
+              {
+                handleResetGame();
+              }
+            }}
             disabled={
               gameStatus === "inprogress" &&
 							userEntriesArr.length !== correctAnswersArr.length

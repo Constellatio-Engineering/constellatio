@@ -5,7 +5,7 @@ import { RichTextEditor, Link } from "@mantine/tiptap";
 import { Placeholder } from "@tiptap/extension-placeholder";
 import { type Content, useEditor, type Editor, type EditorEvents } from "@tiptap/react";
 import { StarterKit } from "@tiptap/starter-kit";
-import React, { type FC } from "react";
+import React, { type FC, useEffect } from "react";
 
 import { ContentWrapper, richtextEditorFieldStyles } from "./RichtextEditorField.styles";
 
@@ -16,7 +16,8 @@ export interface RichtextEditorFieldProps
     text?: string;
   };
   readonly content?: Content;
-  readonly onChange: (e: EditorEvents["update"]) => void;
+  readonly disabled?: boolean;
+  readonly onChange?: (e: EditorEvents["update"]) => void;
   readonly variant: "simple" | "with-legal-quote";
 }
 
@@ -24,12 +25,14 @@ export const RichtextEditorField: FC<RichtextEditorFieldProps> = ({
   action,
   button,
   content = "",
+  disabled,
   onChange,
   variant
 }) =>
 {
   const editor = useEditor({
     content,
+    editable: !disabled,
     extensions: [
       StarterKit,
       Link,
@@ -37,13 +40,30 @@ export const RichtextEditorField: FC<RichtextEditorFieldProps> = ({
         placeholder: `${variant === "simple" ? "Enter your case solution here..." : "Start typing here..."} `,
       }),
     ],
-    onUpdate: (e) => onChange(e),
+    onUpdate: (e) =>
+    {
+      if(onChange)
+      {
+        onChange(e);
+      }
+    },
   });
 
   const handleSubmit = (): void => 
   {
     if(action && editor) { action(editor); }
   };
+
+  useEffect(() =>
+  {
+    if(!editor)
+    {
+      return;
+    }
+
+    editor.setOptions({ editable: !disabled });
+  }, [disabled, editor]);
+
   return (
     <RichTextEditor
       editor={editor}

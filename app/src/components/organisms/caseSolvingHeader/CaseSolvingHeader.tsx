@@ -1,13 +1,6 @@
 import { OverlayLines } from "@/components/Icons/bg-layer";
-import { Bookmark } from "@/components/Icons/Bookmark";
-import { BookmarkFilledIcon } from "@/components/Icons/BookmarkFilledIcon";
-import { Pin } from "@/components/Icons/Pin";
 import { Print } from "@/components/Icons/print";
 import IconButtonBar from "@/components/organisms/iconButtonBar/IconButtonBar";
-// import useArticles from "@/hooks/useArticles";
-// import useBookmarks from "@/hooks/useBookmarks";
-// import useCases from "@/hooks/useCases";
-// import { type IGenArticle } from "@/services/graphql/__generated/sdk";
 
 import { Container, Title, useMantineTheme } from "@mantine/core";
 import Link from "next/link";
@@ -36,6 +29,9 @@ const CaseSolvingHeader: FunctionComponent<ICaseSolvingHeaderProps> = ({
   variant
 }) => 
 {
+
+  // TODO FIND A BETTER WAY TO CHECK IF ITEM IS BOOKMARKED
+
   // const { allCases = [] } = useCases();
   // const { allArticles = [] } = useArticles();
   // const { bookmarks } = useBookmarks(undefined);
@@ -44,11 +40,11 @@ const CaseSolvingHeader: FunctionComponent<ICaseSolvingHeaderProps> = ({
   // const bookmarkedArticles = allArticles.filter((caisyArticle: IGenArticle) => allArticlesBookmarks.some(bookmark => bookmark.resourceId === caisyArticle.id));
   // const bookmarkedCases = allCases.filter(caisyCase => allCasesBookmarks.some(bookmark => bookmark.resourceId === caisyCase.id));
   // const isItemBookmarked = bookmarkedCases.some(bookmark => bookmark.title === title) || bookmarkedArticles?.some(bookmark => bookmark.title === title) || false;
-  const isItemBookmarked = false;
+  // const isItemBookmarked = false;
   const icons = [
-    { src: isItemBookmarked ? <BookmarkFilledIcon/> : <Bookmark/>, title: "Bookmark" },
+    // { src: isItemBookmarked ? <BookmarkFilledIcon/> : <Bookmark/>, title: "Bookmark" },
     { src: <Print/>, title: "Print" },
-    { src: <Pin/>, title: "Pin" },
+    // { src: <Pin/>, title: "Pin" },
   ];
   const theme = useMantineTheme();
   
@@ -73,9 +69,7 @@ const CaseSolvingHeader: FunctionComponent<ICaseSolvingHeaderProps> = ({
             </div>
           </div>
           <div css={styles.bodyCard}>
-            <OverviewCard
-              {...overviewCard}
-            />
+            <OverviewCard {...overviewCard}/>
           </div>
         </div>
       </Container>

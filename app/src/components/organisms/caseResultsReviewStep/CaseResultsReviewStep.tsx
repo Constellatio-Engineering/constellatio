@@ -8,8 +8,9 @@ import { Pen } from "@/components/Icons/Pen";
 import { Print } from "@/components/Icons/print";
 import { Modal } from "@/components/molecules/Modal/Modal";
 import { Richtext } from "@/components/molecules/Richtext/Richtext";
+import useResetCaseProgress from "@/hooks/useResetCaseProgress";
+import useSubmittedCaseSolution from "@/hooks/useSubmittedCaseSolution";
 import { type IGenCase_Resolution, type IGenCase_Facts, type Maybe } from "@/services/graphql/__generated/sdk";
-import caseSolvingStore from "@/stores/caseSolving.store";
 
 import {
   Accordion, Container, Group, ScrollArea, Spoiler, Text, Title
@@ -22,18 +23,25 @@ import IconButtonBar from "../iconButtonBar/IconButtonBar";
 
 interface ICaseResultsReviewStepProps 
 {
+  readonly caseId: string;
   readonly facts: Maybe<IGenCase_Facts>;
   readonly resolution: Maybe<IGenCase_Resolution>;
   readonly title: string;
 }
 
-const CaseResultsReviewStep: FunctionComponent<ICaseResultsReviewStepProps> = ({ facts, resolution, title }) => 
+const CaseResultsReviewStep: FunctionComponent<ICaseResultsReviewStepProps> = ({
+  caseId,
+  facts,
+  resolution,
+  title
+}) =>
 {
+  const resetCaseProgress = useResetCaseProgress();
   const [isExpandSolution, setIsExpandSolution] = useState<boolean>(false);
-  const solution = caseSolvingStore((s) => s.solution);
+  const { isLoading, submittedCaseSolution } = useSubmittedCaseSolution(caseId);
   const solutionContent = useRef<HTMLDivElement>(null);
-  const [solutionElementHight, setSolutionElementHight] = React.useState<number>(0);
-  const setCaseStepIndex = caseSolvingStore((state) => state.setCaseStepIndex);
+  const [solutionElementHeight, setSolutionElementHeight] = React.useState<number>(0);
+  const solution: string = isLoading ? "lädt..." : (submittedCaseSolution?.solution || "");
 
   const icons = [
     { src: <Bookmark/>, title: "Bookmark" },
@@ -44,8 +52,7 @@ const CaseResultsReviewStep: FunctionComponent<ICaseResultsReviewStepProps> = ({
   {
     if(solution && solutionContent.current !== undefined) 
     {
-      solutionContent.current!.innerHTML = solution;
-      setSolutionElementHight(solutionContent.current!.offsetHeight);
+      setSolutionElementHeight(solutionContent.current!.offsetHeight);
     }
   }, [solution]);
 
@@ -53,18 +60,6 @@ const CaseResultsReviewStep: FunctionComponent<ICaseResultsReviewStepProps> = ({
   const editButtonClick = (): void => 
   {
     open();
-  };
-
-  const resetProgressButton = (): void => 
-  {
-    close();
-    setCaseStepIndex(0);
-  };
-
-  const keepProgressButton = (): void => 
-  {
-    close();
-    setCaseStepIndex(1);
   };
 
   const ShowAllBtn = (
@@ -94,7 +89,7 @@ const CaseResultsReviewStep: FunctionComponent<ICaseResultsReviewStepProps> = ({
           <div css={styles.leftSideWrapper}>
             {facts?.json && (
               <div css={styles.factsWrapper}>
-                <Accordion variant="separated" defaultValue="facts">
+                <Accordion variant="separated">
                   <Accordion.Item value="facts">
                     <Accordion.Control>
                       <Title order={3}>Facts</Title>
@@ -117,21 +112,21 @@ const CaseResultsReviewStep: FunctionComponent<ICaseResultsReviewStepProps> = ({
                 </div>
               </div>
               {
-                solutionElementHight > 240 ? (
+                solutionElementHeight > 220 ? (
                   <Spoiler
                     hideLabel={ShowLessBtn}
                     maxHeight={220}
                     showLabel={ShowAllBtn}
                     styles={styles.spoilerStyles({ isExpandSolution })}>
                     <div className="solution-content">
-                      <ScrollArea h={isExpandSolution && solutionElementHight > 240 ? 500 : undefined} offsetScrollbars>
-                        <div ref={solutionContent}/>
+                      <ScrollArea h={isExpandSolution && solutionElementHeight > 220 ? 500 : undefined} offsetScrollbars>
+                        <div ref={solutionContent} dangerouslySetInnerHTML={{ __html: solution }}/>
                       </ScrollArea>
                     </div>
                   </Spoiler>
                 ) : (
                   <div className="solution-content">
-                    <div ref={solutionContent}/>
+                    <div ref={solutionContent} dangerouslySetInnerHTML={{ __html: solution }}/>
                   </div>
                 )
               }
@@ -155,18 +150,15 @@ const CaseResultsReviewStep: FunctionComponent<ICaseResultsReviewStepProps> = ({
         opened={isOpened}
         centered
         title="Reset case progress?"
-        onClose={() => 
-        {
-          close();
-        }}>
+        onClose={close}>
         <Text>
           Are you sure you want to delete all your test answers and case solution in {title} case?
         </Text>
         <Group noWrap grow w="100%">
-          <Button<"button"> onClick={() => keepProgressButton()} fullWidth styleType="secondarySimple">
+          <Button<"button"> onClick={close} fullWidth styleType="secondarySimple">
             No, keep data
           </Button>
-          <Button<"button"> onClick={() => resetProgressButton()} styleType="primary" fullWidth>
+          <Button<"button"> onClick={() => resetCaseProgress({ caseId })} styleType="primary" fullWidth>
             Yes, reset progress
           </Button>
         </Group>

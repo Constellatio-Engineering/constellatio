@@ -38,8 +38,6 @@ const ProfilePersonalSpaceBlock: FunctionComponent = () =>
     { icon: { src: <Bookmark/> }, number: (bookmarkedCases?.length + bookmarkedArticles?.length) ?? 0, title: "favorites" }, 
     { icon: { src: <FileIcon/> }, number: uploadedFiles?.length, title: " materials" }
   ];
-
-  console.log({ uploadedFiles });
   return (
     <div css={styles.wrapper}>
       <ProfilePersonalSpaceBlockHead selectedTab={selectedTab} setSelectedTab={setSelectedTab} tabs={tabs}/>

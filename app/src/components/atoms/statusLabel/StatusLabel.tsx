@@ -1,4 +1,5 @@
 import { CompletedStatusLabelIcon, InProgressStatusLabelIcon, NotStartedStatusLabelIcon } from "@/components/Icons/StatusLabelIcons";
+import { type CaseProgressState } from "@/db/schema";
 
 import React, { type FunctionComponent, type PropsWithChildren } from "react";
 
@@ -8,14 +9,15 @@ import { BodyText } from "../BodyText/BodyText";
 export interface IStatusLabel extends PropsWithChildren 
 {
   // readonly title?: string;
-  readonly variant: "notStarted" | "inProgress" | "completed";
+  readonly progressState: CaseProgressState;
 }
 
-const StatusLabel: FunctionComponent<IStatusLabel> = ({ variant }) => 
+const StatusLabel: FunctionComponent<IStatusLabel> = ({ progressState }) =>
 {
-  switch (variant) 
+  switch (progressState)
   {
-    case "inProgress":
+    case "completing-tests":
+    case "solving-case":
       return (
         <div css={styles.inProgress}>
           <InProgressStatusLabelIcon/>
@@ -29,13 +31,16 @@ const StatusLabel: FunctionComponent<IStatusLabel> = ({ variant }) =>
           <BodyText styleType="body-02-medium" component="p">Completed</BodyText>
         </div>
       );
-    default:
+    case "not-started":
       return (
         <div css={styles.notStarted}>
           <NotStartedStatusLabelIcon/>
-          <BodyText styleType="body-02-medium" component="p">Not Selected</BodyText>
+          <BodyText styleType="body-02-medium" component="p">Not Started</BodyText>
         </div>
       );
+    default:
+      console.log("Invalid status label variant: " + progressState);
+      return null;
   }
 };
 

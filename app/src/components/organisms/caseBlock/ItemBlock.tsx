@@ -1,6 +1,7 @@
 import { Button } from "@/components/atoms/Button/Button";
 import StatusTableCell from "@/components/atoms/statusTableCell/StatusTableCell";
 import TableCell from "@/components/atoms/tableCell/TableCell";
+import { ArrowDown } from "@/components/Icons/ArrowDown";
 import { ClockIcon } from "@/components/Icons/ClockIcon";
 // import { Notepad } from "@/ckomponents/Icons/Notepad";
 import CaseBlockHead, { type ICaseBlockHeadProps } from "@/components/molecules/caseBlockHead/CaseBlockHead";
@@ -95,7 +96,7 @@ const ItemBlock: FunctionComponent<ICaseBlockProps> = ({
             return item && item.id && (
               <tr key={item?.id}>
                 <td className="primaryCell">
-                  <Link passHref href={`/${variant === "case" ? "cases" : "dictionary"}/${item?.id}`}>
+                  <Link passHref shallow href={`/${variant === "case" ? "cases" : "dictionary"}/${item?.id}`}>
                     <TableCell variant="titleTableCell" clickable>
                       {item?.title}
                     </TableCell>
@@ -103,7 +104,7 @@ const ItemBlock: FunctionComponent<ICaseBlockProps> = ({
                 </td>
                 {variant === "case" && (
                   <td>
-                    <StatusTableCell variant="notStarted"/>
+                    <StatusTableCell variant="not-started"/>
                   </td>
                 )}
                 {item?.__typename === "Case" && (
@@ -114,7 +115,7 @@ const ItemBlock: FunctionComponent<ICaseBlockProps> = ({
                   </td>
                 )}
                 {tableType === "search" && <td><TableCell variant="simpleTableCell">{item?.legalArea?.legalAreaName}</TableCell></td>}
-                <td title={topicsCombined}>
+                <td css={styles.topicCell} title={topicsCombined}>
                   <TableCell variant="simpleTableCell">{item?.topic?.[0]?.topicName}</TableCell>
                 </td>
                 {tableType === "favorites" && <td><TableCell variant="simpleTableCell">{item?.legalArea?.legalAreaName}</TableCell></td>}
@@ -140,7 +141,7 @@ const ItemBlock: FunctionComponent<ICaseBlockProps> = ({
             <>
               <span className="linearGredient"/>
               <Button<"button"> css={styles.expandTableButton} styleType="tertiary" onClick={() => setNumberOfShowingItems(prev => prev + 10)}>
-                {items?.length - numberOfShowingItems > 10 ? 10 : items?.length - numberOfShowingItems} weitere anzeigen
+                {items?.length - numberOfShowingItems > 10 ? 10 : items?.length - numberOfShowingItems} weitere anzeigen <ArrowDown/>
               </Button>
             </>
           </div>

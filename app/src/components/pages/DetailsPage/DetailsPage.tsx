@@ -1,16 +1,20 @@
+/* eslint-disable max-lines */
+import ErrorPage from "@/components/errorPage/ErrorPage";
 import CaseCompleteTestsStep from "@/components/organisms/caseCompleteTestsStep/CaseCompleteTestsStep";
 import CaseNavBar from "@/components/organisms/caseNavBar/CaseNavBar";
 import CaseResultsReviewStep from "@/components/organisms/caseResultsReviewStep/CaseResultsReviewStep";
 import CaseSolveCaseStep from "@/components/organisms/caseSolveCaseStep/CaseSolveCaseStep";
 import CaseSolvingHeader from "@/components/organisms/caseSolvingHeader/CaseSolvingHeader";
 import { slugFormatter } from "@/components/organisms/OverviewHeader/OverviewHeader";
-import useArticleViews from "@/hooks/useArticleViews";
-import useCaseViews from "@/hooks/useCaseViews";
+import useCaseProgress from "@/hooks/useCaseProgress";
 import useContextAndErrorIfNull from "@/hooks/useContextAndErrorIfNull";
+import useGamesProgress from "@/hooks/useGamesProgress";
 import { InvalidateQueriesContext } from "@/provider/InvalidateQueriesProvider";
 import { type IGenArticle, type IGenCase } from "@/services/graphql/__generated/sdk";
-import useCaseSolvingStore from "@/stores/caseSolving.store";
+import useCaseSolvingStore, { type CaseStepIndex } from "@/stores/caseSolving.store";
 import { api } from "@/utils/api";
+import { getGamesFromCase } from "@/utils/case";
+import { paths } from "@/utils/paths";
 
 import React, { useEffect, type FunctionComponent, useRef } from "react";
 
@@ -24,8 +28,8 @@ type IDetailsPageProps = {
 const DetailsPage: FunctionComponent<IDetailsPageProps> = ({ content, variant }) => 
 {
   const { invalidateArticleViews, invalidateCaseViews } = useContextAndErrorIfNull(InvalidateQueriesContext);
-  const caseStepIndex = useCaseSolvingStore((state) => state.caseStepIndex);
   const contentId = content?.id;
+  const caseId = content?.__typename === "Case" ? contentId : undefined;
   const { mutate: addArticleView } = api.views.addArticleView.useMutation({
     onSuccess: async () => invalidateArticleViews({ articleId: contentId! })
   });
@@ -33,8 +37,11 @@ const DetailsPage: FunctionComponent<IDetailsPageProps> = ({ content, variant })
     onSuccess: async () => invalidateCaseViews({ caseId: contentId! })
   });
   const wasViewCountUpdated = useRef<boolean>(false);
-  const { count: articleViews } = useArticleViews(content?.__typename === "Article" ? contentId : null);
-  const { count: caseViews } = useCaseViews(content?.__typename === "Case" ? contentId : null);
+  const { caseProgress, isLoading: isCaseProgressLoading } = useCaseProgress(caseId);
+  const { gamesProgress, isLoading: isGamesProgressLoading } = useGamesProgress(caseId);
+  const games = content?.__typename === "Case" ? getGamesFromCase(content) : [];
+  const caseStepIndex = useCaseSolvingStore(s => s.caseStepIndex);
+  const progressState = caseProgress?.progressState;
 
   useEffect(() =>
   {
@@ -46,25 +53,84 @@ const DetailsPage: FunctionComponent<IDetailsPageProps> = ({ content, variant })
     if(content?.__typename === "Case")
     {
       addCaseView({ caseId: contentId });
+      wasViewCountUpdated.current = true;
     }
     else if(content?.__typename === "Article")
     {
       addArticleView({ articleId: contentId });
+      wasViewCountUpdated.current = true;
     }
-
-    wasViewCountUpdated.current = true;
   }, [addArticleView, addCaseView, content?.__typename, contentId]);
 
-  useEffect(() => 
+  useEffect(() =>
   {
-    const { setCaseStepIndex, setHasCaseSolvingStarted } = useCaseSolvingStore.getState();
-
-    if(content?.__typename === "Article")
+    if(progressState == null)
     {
-      setCaseStepIndex(0);
-      setHasCaseSolvingStarted(true);
+      return;
     }
-  }, [content?.__typename]);
+
+    let _caseStepIndex: CaseStepIndex;
+
+    switch (progressState)
+    {
+      case "not-started":
+      {
+        _caseStepIndex = 0;
+        break;
+      }
+      case "completing-tests":
+      {
+        _caseStepIndex = 0;
+        break;
+      }
+      case "solving-case":
+      {
+        _caseStepIndex = 1;
+        break;
+      }
+      case "completed":
+      {
+        _caseStepIndex = 2;
+        break;
+      }
+      default:
+      {
+        _caseStepIndex = 0;
+        break;
+      }
+    }
+
+    useCaseSolvingStore.getState().setCaseStepIndex(_caseStepIndex);
+
+  }, [progressState]);
+
+  if(contentId == null)
+  {
+    return (
+      <ErrorPage error="case/article ID was not found"/>
+    );
+  }
+
+  if(isCaseProgressLoading || isGamesProgressLoading || caseStepIndex == null)
+  {
+    return null;
+  }
+
+  if(caseProgress == null || gamesProgress == null)
+  {
+    return (
+      <ErrorPage error="case progress was not found"/>
+    );
+  }
+
+  const currentGameIndex = games.findIndex(game =>
+  {
+    const gameProgress = gamesProgress.find(gameProgress => gameProgress.gameId === game.id);
+    return gameProgress?.progressState === "not-started";
+  });
+  const currentGame = games[currentGameIndex];
+  const currentGameIndexInFullTextTasksJson = currentGame?.indexInFullTextTasksJson || 0;
+  const isLastGame = currentGameIndex === games.length - 1;
 
   return (
     <>
@@ -73,52 +139,62 @@ const DetailsPage: FunctionComponent<IDetailsPageProps> = ({ content, variant })
         variant={variant}
         pathSlugs={[
           {
-            path: variant === "case" ? "/cases" : "/dictionary", 
+            path: variant === "case" ? paths.cases : paths.dictionary,
             slug: variant === "case" ? "Cases" : "Dictionary" 
           },
           {
-            path: variant === "case" ? `/cases?q=${slugFormatter(content?.mainCategoryField?.[0]?.mainCategory ?? "")}` : `/dictionary?q=${slugFormatter(content?.mainCategoryField?.[0]?.mainCategory ?? "")}`, 
+            path: variant === "case" ? `${paths.cases}?category=${slugFormatter(content?.mainCategoryField?.[0]?.mainCategory ?? "")}` : `${paths.dictionary}?category=${slugFormatter(content?.mainCategoryField?.[0]?.mainCategory ?? "")}`, 
             slug: content?.mainCategoryField?.[0]?.mainCategory ?? "" 
           },
           { 
-            path: `/${variant === "case" ? "cases" : "dictionary"}/${content?.id}`, 
-            slug: content?.title?.length && content?.title?.length > 40 ? content?.title?.slice(0, 40) + " ..." : "Undefined Title" 
+            path: `${variant === "case" ? paths.cases : paths.dictionary}/${content?.id}`,
+            slug: content?.title?.length && content?.title?.length > 40 ? content?.title?.slice(0, 40) + " ..." : content?.title ?? ""
           }
         ]}
         overviewCard={{
+          contentId,
           lastUpdated: content?._meta?.updatedAt,
           legalArea: content?.legalArea,
-          status: "notStarted",
+          progressState: caseProgress?.progressState,
           tags: content?.tags,
           timeInMinutes: content?.__typename === "Case" && content.durationToCompleteInMinutes ? content.durationToCompleteInMinutes : undefined,
           topic: content?.topic?.[0]?.topicName ?? "",
           variant,
-          views: content?.__typename === "Article" ? articleViews : caseViews,
         }}
       />
       <CaseNavBar
         variant={variant}
+        caseStepIndex={caseStepIndex}
+        caseProgressState={caseProgress.progressState}
       />
       <div css={styles.mainContainer}>
         {content?.fullTextTasks && caseStepIndex === 0 && (
-          <CaseCompleteTestsStep {...{
-            facts: content?.__typename === "Case" ? content?.facts : undefined,
-            fullTextTasks: content?.fullTextTasks,
-            variant
-          }}
+          <CaseCompleteTestsStep
+            isLastGame={isLastGame}
+            currentGameIndexInFullTextTasksJson={currentGameIndexInFullTextTasksJson}
+            games={games}
+            gamesProgress={gamesProgress}
+            caseId={contentId}
+            facts={content?.__typename === "Case" ? content?.facts : undefined}
+            fullTextTasks={content?.fullTextTasks}
+            progressState={caseProgress?.progressState}
+            variant={variant}
           />
         )}
         {content?.__typename === "Case" && caseStepIndex === 1 && (
-          <CaseSolveCaseStep {...{
-            facts: content?.facts,
-            title: content?.title
-          }}
+          <CaseSolveCaseStep
+            id={contentId}
+            progressState={caseProgress?.progressState}
+            facts={content?.facts}
+            title={content?.title}
           />
         )}
         {content?.__typename === "Case" && content?.facts && content?.resolution && content?.title && caseStepIndex === 2 && (
-          <CaseResultsReviewStep {...{
-            facts: content?.facts, resolution: content?.resolution, title: content?.title 
-          }}
+          <CaseResultsReviewStep
+            caseId={contentId}
+            facts={content?.facts}
+            resolution={content?.resolution}
+            title={content?.title}
           />
         )}
       </div>
