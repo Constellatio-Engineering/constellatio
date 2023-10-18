@@ -14,6 +14,7 @@ type InvalidateCaseViewsOptions = inferProcedureInput<AppRouter["views"]["getCas
 type InvalidateCaseProgressOptions = inferProcedureInput<AppRouter["casesProgress"]["getCaseProgress"]>;
 type InvalidateGamesProgressOptions = inferProcedureInput<AppRouter["gamesProgress"]["getGamesProgress"]>;
 type InvalidateSubmittedCaseSolutionOptions = inferProcedureInput<AppRouter["casesProgress"]["getSubmittedSolution"]>;
+type InvalidateOnboardingResult = inferProcedureInput<AppRouter["users"]["getOnboardingResult"]>;
 
 type InvalidateQueries = {
   invalidateArticleViews: (options: InvalidateArticleViewsOptions) => Promise<void>;
@@ -25,6 +26,7 @@ type InvalidateQueries = {
   invalidateFolders: (options?: InvalidateFoldersOptions) => Promise<void>;
   invalidateGamesProgress: (options: InvalidateGamesProgressOptions) => Promise<void>;
   invalidateNotes: (options?: InvalidateNotesOptions) => Promise<void>;
+  invalidateOnboardingResult: (options?: InvalidateOnboardingResult) => Promise<void>;
   invalidateSubmittedCaseSolution: (options: InvalidateSubmittedCaseSolutionOptions) => Promise<void>;
   invalidateUploadedFiles: (options?: InvalidateUploadedFilesOptions) => Promise<void>;
 };
@@ -50,6 +52,7 @@ const InvalidateQueriesProvider: FunctionComponent<InvalidateQueriesProviderProp
     invalidateFolders: async (options) => apiContext.folders.getFolders.invalidate(options),
     invalidateGamesProgress: async (options) => apiContext.gamesProgress.getGamesProgress.invalidate(options),
     invalidateNotes: async (options) => apiContext.notes.getNotes.invalidate(options),
+    invalidateOnboardingResult: async (options) => apiContext.users.getOnboardingResult.invalidate(options),
     invalidateSubmittedCaseSolution: async (options) => apiContext.casesProgress.getSubmittedSolution.invalidate(options),
     invalidateUploadedFiles: async (options) => apiContext.uploads.getUploadedFiles.invalidate(options)
   }), [
@@ -63,7 +66,8 @@ const InvalidateQueriesProvider: FunctionComponent<InvalidateQueriesProviderProp
     apiContext.uploads.getUploadedFiles,
     apiContext.casesProgress.getCaseProgress,
     apiContext.gamesProgress.getGamesProgress,
-    apiContext.casesProgress.getSubmittedSolution
+    apiContext.casesProgress.getSubmittedSolution,
+    apiContext.users.getOnboardingResult
   ]);
 
   return (

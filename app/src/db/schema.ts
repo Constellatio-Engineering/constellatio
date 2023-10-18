@@ -7,6 +7,9 @@ import {
 export const allGenderIdentifiers = ["male", "female", "diverse",] as const;
 export type GenderIdentifier = typeof allGenderIdentifiers[number];
 
+export const allOnboardingResults = ["skipped", "completed"] as const;
+export type OnboardingResult = typeof allOnboardingResults[number];
+
 export const allBookmarkResourceTypes = ["article", "case"] as const;
 export type BookmarkResourceType = typeof allBookmarkResourceTypes[number];
 
@@ -17,6 +20,7 @@ export const allGameProgressStates = ["not-started", "completed"] as const;
 export type GameProgressState = typeof allGameProgressStates[number];
 
 export const genderEnum = pgEnum("Gender", allGenderIdentifiers);
+export const onboardingResultEnum = pgEnum("OnboardingResult", allOnboardingResults);
 export const resourceTypeEnum = pgEnum("ResourceType", allBookmarkResourceTypes);
 export const caseProgressStateEnum = pgEnum("CaseProgressState", allCaseProgressStates);
 export const gameProgressStateEnum = pgEnum("GameProgressState", allGameProgressStates);
@@ -32,7 +36,8 @@ export const users = pgTable("User", {
   lastName: text("LastName").notNull(),
   semester: smallint("Semester"),
   stripeCustomerId: text("StripeCustomerId"),
-  university: text("University").notNull()
+  university: text("University").notNull(),
+  onboardingResult: onboardingResultEnum("OnboardingResult"),
 });
 
 export type UserInsert = InferInsertModel<typeof users>;

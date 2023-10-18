@@ -1,0 +1,9 @@
+import { allOnboardingResults } from "@/db/schema";
+
+import { z } from "zod";
+
+export const setOnboardingResultSchema = z.object({
+  result: z.enum(allOnboardingResults)
+});
+
+export type SetOnboardingResultSchema = z.input<typeof setOnboardingResultSchema>;
