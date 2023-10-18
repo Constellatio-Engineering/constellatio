@@ -155,9 +155,7 @@ const OverviewCard: FunctionComponent<IOverviewCard> = ({
             {
               if(tags?.length != null && tags?.length > 0) { open(); }
             }}>
-            {tags?.map((tag, tagIndex) => (
-              <Tag key={tagIndex}>{tag?.tagName}</Tag>
-            ))}
+            {tags?.map((tag, tagIndex) => !tag?.tagName?.startsWith("§") ? (<Tag key={tagIndex}>{tag?.tagName}</Tag>) : <></>)}
           </div>
           <BodyText
             type="button"

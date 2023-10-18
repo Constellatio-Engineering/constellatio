@@ -1,10 +1,11 @@
+import { BodyText } from "@/components/atoms/BodyText/BodyText";
+import Label from "@/components/atoms/label/Label";
+import { SubtitleText } from "@/components/atoms/SubtitleText/SubtitleText";
+
 import React, { Fragment, type FunctionComponent } from "react";
 
 import * as styles from "./ProfileHistoryBlocks.styles";
-import { BodyText } from "../atoms/BodyText/BodyText";
-import Label from "../atoms/label/Label";
-import { SubtitleText } from "../atoms/SubtitleText/SubtitleText";
-import EmptyStateCard from "../organisms/emptyStateCard/EmptyStateCard";
+import EmptyStateCard from "../emptyStateCard/EmptyStateCard";
 
 interface IProfileHistoryBlocksProps 
 {

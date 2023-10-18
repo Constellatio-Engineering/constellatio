@@ -21,11 +21,11 @@ const UploadedMaterialTableHead: FunctionComponent<UploadedMaterialTableHeadProp
           DATE CREATED
         </CaptionText>
       </th>
-      <th>
+      {/* <th>
         <CaptionText tt="uppercase" styleType="caption-01-medium" component="p">
           TAGS
         </CaptionText>
-      </th>
+      </th> */}
       {variant === "searchPapers" && (
         <th>
           <CaptionText tt="uppercase" styleType="caption-01-medium" component="p">

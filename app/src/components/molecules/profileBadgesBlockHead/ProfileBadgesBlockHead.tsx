@@ -1,10 +1,11 @@
+import { CaptionText } from "@/components/atoms/CaptionText/CaptionText";
+import IconButton from "@/components/atoms/iconButton/IconButton";
+import { SubtitleText } from "@/components/atoms/SubtitleText/SubtitleText";
+import { MedalIcon } from "@/components/Icons/MedalIcon";
+
 import React, { type FunctionComponent } from "react";
 
-import * as styles from "./../profileBadgesBlock/ProfileBadgesBlock.styles";
-import { CaptionText } from "../atoms/CaptionText/CaptionText";
-import IconButton from "../atoms/iconButton/IconButton";
-import { SubtitleText } from "../atoms/SubtitleText/SubtitleText";
-import { MedalIcon } from "../Icons/MedalIcon";
+import * as styles from "./../../organisms/profileBadgesBlock/ProfileBadgesBlock.styles";
 
 const ProfileBadgesBlockHead: FunctionComponent = () => 
 {

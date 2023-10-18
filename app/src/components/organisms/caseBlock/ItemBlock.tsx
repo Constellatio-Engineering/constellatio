@@ -83,7 +83,6 @@ const ItemBlock: FunctionComponent<ICaseBlockProps> = ({
   };
 
   const [numberOfShowingItems, setNumberOfShowingItems] = React.useState<number>(5);
-
   return items && items?.length > 0 ? (
     <div css={styles.wrapper}>
       <CaseBlockHead {...blockHead}/>
@@ -104,6 +103,7 @@ const ItemBlock: FunctionComponent<ICaseBlockProps> = ({
                 </td>
                 {variant === "case" && (
                   <td>
+                    {/* THIS WILL GET caseId instead of variant */}
                     <StatusTableCell variant="not-started"/>
                   </td>
                 )}

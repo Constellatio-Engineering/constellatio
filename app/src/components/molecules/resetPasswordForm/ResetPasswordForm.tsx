@@ -1,4 +1,7 @@
+import { BodyText } from "@/components/atoms/BodyText/BodyText";
+import { Button } from "@/components/atoms/Button/Button";
 import { AlertCard } from "@/components/atoms/Card/AlertCard";
+import { Input } from "@/components/atoms/Input/Input";
 import { type ResetPasswordModalProgress } from "@/components/organisms/ResetPasswordModal/ResetPasswordModal";
 import { env } from "@/env.mjs";
 import { supabase } from "@/lib/supabase";
@@ -9,9 +12,6 @@ import { useForm } from "@mantine/form";
 import React, { type Dispatch, type FunctionComponent, type SetStateAction, useState } from "react";
 
 import * as styles from "./ResetPasswordForm.styles";
-import { BodyText } from "../atoms/BodyText/BodyText";
-import { Button } from "../atoms/Button/Button";
-import { Input } from "../atoms/Input/Input";
 
 interface ResetPasswordFormValues
 {

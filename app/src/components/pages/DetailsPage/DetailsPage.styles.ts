@@ -1,7 +1,7 @@
 import { css } from "@emotion/react";
 
 export const mainContainer = css`
-	padding: 60px 0;
+	padding: 60px;
 `;
 
 export const contentWrapper = css``;

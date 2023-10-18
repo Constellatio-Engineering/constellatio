@@ -278,7 +278,7 @@ export const DragDropGame: FC<TDragDropGame> = ({
           <Game>
             <Options>
               <LoadingOverlay
-                visible={optionsItems?.length < 1}
+                visible={optionsItems?.length < 1 && droppedItems?.length === 0}
                 radius="radius-12"
               />
               {optionsItems?.map((option) =>

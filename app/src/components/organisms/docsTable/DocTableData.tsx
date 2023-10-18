@@ -104,7 +104,7 @@ export const DocsTableData: FunctionComponent<Document> = (doc) =>
         <BodyText styleType="body-01-medium" component="p">{name}</BodyText>
       </td>
       <td css={styles.docDate}><BodyText styleType="body-01-medium" component="p">{formatDate(updatedAt)}</BodyText></td>
-      <td css={styles.docTags}><BodyText styleType="body-02-medium" component="p"/></td>
+      {/* <td css={styles.docTags}><BodyText styleType="body-02-medium" component="p"/></td> */}
       <td
         css={styles.callToActionCell}> 
         <Menu shadow="md" width={200}>

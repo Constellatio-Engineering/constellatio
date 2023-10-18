@@ -1,5 +1,6 @@
 import { LinkButton } from "@/components/atoms/LinkButton/LinkButton";
 import ProfileMenuUniversityTab from "@/components/atoms/profileMenuUniversityTab/ProfileMenuUniversityTab";
+import { NoteIcon } from "@/components/Icons/Note";
 import MenuListItem from "@/components/molecules/menuListItem/MenuListItem";
 import useContextAndErrorIfNull from "@/hooks/useContextAndErrorIfNull";
 import { supabase } from "@/lib/supabase";
@@ -62,7 +63,6 @@ const ProfileMenu: FunctionComponent<IProfileMenu> = ({ setQuery, setTabs, tabs 
             icon={tab.icon}
             onClick={() => 
             {
-              // void router.replace({ query: { q: tab.slug } });
               void setQuery(tab.slug);
               setTabs(tabs.map((x: ITab) => x.slug === tab.slug ? ({ ...x, selected: true }) : ({ ...x, selected: false })));
             }}
@@ -71,7 +71,7 @@ const ProfileMenu: FunctionComponent<IProfileMenu> = ({ setQuery, setTabs, tabs 
         )}
       </div>
       <div css={styles.groupedLinks}>
-        {/* <LinkButton title="View onboarding tips" icon={<NoteIcon/>}/> */}
+        <LinkButton title="View onboarding tips" icon={<NoteIcon/>}/>
         <LinkButton title="Log out" onClick={async () => handleSignOut()} icon={<IconLogout/>}/>
       </div>
     </div>

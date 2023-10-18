@@ -27,8 +27,8 @@ position: relative;
 `;
 export const docContent = (theme: MantineTheme) => css`
 background: ${theme.colors["neutrals-01"][0]};
-padding: 0 24px;
-min-height: calc(100vh - 250px);
+padding: 24px;
+min-height: calc(100vh - 255px);
 blockquote {
     padding:20px;
     background: ${theme.colors["neutrals-01"][1]};

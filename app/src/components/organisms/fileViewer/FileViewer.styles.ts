@@ -10,13 +10,13 @@ export const modalStyles = (): ModalStyles =>
   const styles: ModalStyles = () => ({
     body: {
       // maxHeight: "100%",
+      padding: "0",
     },
     
     content: {
-      
       background: "black",
       minWidth: "80vw",
-      width: "max-content",
+      width: "max-content"
     },
     root: {
       overflow: "hidden",

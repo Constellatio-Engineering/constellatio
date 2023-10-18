@@ -14,7 +14,8 @@ export const searchRouter = createTRPCRouter({
   getPopularSearch: protectedProcedure
     .query(async () =>
     {
-      return getPopularSearches();
+      const popularSearchRes = await getPopularSearches();
+      return popularSearchRes;
     }),
   getTenantToken: protectedProcedure
     .query(async ({ ctx: { userId } }) =>
