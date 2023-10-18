@@ -8,6 +8,7 @@ import { ClockIcon } from "@/components/Icons/ClockIcon";
 import CaseBlockHead, { type ICaseBlockHeadProps } from "@/components/molecules/caseBlockHead/CaseBlockHead";
 import CaseBlockBookmarkButton from "@/components/organisms/caseBlock/caseBlockBookmarkButton/CaseBlockBookmarkButton";
 import useBookmarks from "@/hooks/useBookmarks";
+import useCasesProgress from "@/hooks/useCasesProgress";
 import { type IGenArticle, type IGenFullCaseFragment } from "@/services/graphql/__generated/sdk";
 
 import Link from "next/link";
@@ -63,6 +64,8 @@ const ItemBlock: FunctionComponent<ICaseBlockProps> = ({
   variant
 }) => 
 {
+  const { casesProgress } = useCasesProgress();
+  console.log("casesProgress", casesProgress);
   const { bookmarks: casesBookmarks, isLoading: isGetCasesBookmarksLoading } = useBookmarks("case", {
     enabled: variant === "case"
   });
@@ -93,6 +96,8 @@ const ItemBlock: FunctionComponent<ICaseBlockProps> = ({
         <Table tableType={tableTypePicker()}>
           {items?.slice(0, numberOfShowingItems)?.map((item) =>
           {
+            const caseProgress = casesProgress?.find((caseProgress) => caseProgress?.caseId === item?.id);
+
             const isBookmarked = bookmarks.some(bookmark => bookmark?.resourceId === item?.id) || false;
             const topicsCombined = item?.topic?.map((item) => item?.topicName).join(", ") || "";
             return item && item.id && (
@@ -107,7 +112,7 @@ const ItemBlock: FunctionComponent<ICaseBlockProps> = ({
                 {variant === "case" && (
                   <td>
                     {/* THIS WILL GET caseId instead of variant */}
-                    <StatusTableCell progressState={progressState}/>
+                    <StatusTableCell progressState={caseProgress?.progressState || "not-started"}/>
                   </td>
                 )}
                 {item?.__typename === "Case" && (
