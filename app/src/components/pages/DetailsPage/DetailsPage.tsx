@@ -1,3 +1,4 @@
+/* eslint-disable max-lines */
 import ErrorPage from "@/components/errorPage/ErrorPage";
 import CaseCompleteTestsStep from "@/components/organisms/caseCompleteTestsStep/CaseCompleteTestsStep";
 import CaseNavBar from "@/components/organisms/caseNavBar/CaseNavBar";
@@ -39,7 +40,11 @@ const DetailsPage: FunctionComponent<IDetailsPageProps> = ({ content, variant })
   const { caseProgress, isLoading: isCaseProgressLoading } = useCaseProgress(caseId);
   const { gamesProgress, isLoading: isGamesProgressLoading } = useGamesProgress(caseId);
   const games = content?.__typename === "Case" ? getGamesFromCase(content) : [];
-  const overrideCaseStepIndex = useCaseSolvingStore(s => s.overrideCaseStepIndex);
+  const caseStepIndex = useCaseSolvingStore(s => s.caseStepIndex);
+  const progressState = caseProgress?.progressState;
+
+  console.log("progressState", progressState);
+  console.log("caseStepIndex", caseStepIndex);
 
   useEffect(() =>
   {
@@ -60,6 +65,53 @@ const DetailsPage: FunctionComponent<IDetailsPageProps> = ({ content, variant })
     }
   }, [addArticleView, addCaseView, content?.__typename, contentId]);
 
+  useEffect(() =>
+  {
+    if(progressState == null)
+    {
+      return;
+    }
+
+    let _caseStepIndex: CaseStepIndex;
+
+    switch (progressState)
+    {
+      case "not-started":
+      {
+        console.log("case not started, caseStepIndex = 0");
+        _caseStepIndex = 0;
+        break;
+      }
+      case "completing-tests":
+      {
+        console.log("case completing tests, caseStepIndex = 0");
+        _caseStepIndex = 0;
+        break;
+      }
+      case "solving-case":
+      {
+        console.log("case solving case, caseStepIndex = 1");
+        _caseStepIndex = 1;
+        break;
+      }
+      case "completed":
+      {
+        console.log("case completed, caseStepIndex = 2");
+        _caseStepIndex = 2;
+        break;
+      }
+      default:
+      {
+        console.error("unknown case progress state", progressState);
+        _caseStepIndex = 0;
+        break;
+      }
+    }
+
+    useCaseSolvingStore.getState().setCaseStepIndex(_caseStepIndex);
+
+  }, [progressState]);
+
   if(contentId == null)
   {
     return (
@@ -67,7 +119,7 @@ const DetailsPage: FunctionComponent<IDetailsPageProps> = ({ content, variant })
     );
   }
 
-  if(isCaseProgressLoading || isGamesProgressLoading)
+  if(isCaseProgressLoading || isGamesProgressLoading || caseStepIndex == null)
   {
     return null;
   }
@@ -77,36 +129,6 @@ const DetailsPage: FunctionComponent<IDetailsPageProps> = ({ content, variant })
     return (
       <ErrorPage error="case progress was not found"/>
     );
-  }
-
-  let caseStepIndex: CaseStepIndex;
-
-  switch (caseProgress.progressState)
-  {
-    case "not-started":
-    {
-      console.log("case not started, caseStepIndex = 0");
-      caseStepIndex = 0;
-      break;
-    }
-    case "completing-tests":
-    {
-      console.log("case completing tests, caseStepIndex = 0");
-      caseStepIndex = 0;
-      break;
-    }
-    case "solving-case":
-    {
-      console.log("case solving case, caseStepIndex = 1");
-      caseStepIndex = 1;
-      break;
-    }
-    case "completed":
-    {
-      console.log("case completed, caseStepIndex = 2");
-      caseStepIndex = 2;
-      break;
-    }
   }
 
   const currentGameIndex = games.findIndex(game =>

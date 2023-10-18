@@ -56,8 +56,6 @@ const CaseCompleteTestsStep: FunctionComponent<ICaseCompleteTestsStepProps> = ({
   // TODO: What happens when there is just one game in the case
   // TODO: Go trough the code again and make sure every case is handled
 
-  console.log("-----------------");
-
   const completedGames = gamesProgress.filter(({ progressState }) => progressState === "completed");
   const areAllGamesCompleted = completedGames.length === games.length;
   const { invalidateCaseProgress } = useContextAndErrorIfNull(InvalidateQueriesContext);
@@ -67,11 +65,12 @@ const CaseCompleteTestsStep: FunctionComponent<ICaseCompleteTestsStepProps> = ({
   });
   let renderedCaseContent: IGenCase_FullTextTasks | IGenArticle_FullTextTasks | null;
 
+  /* console.log("-----------------");
   console.log("completedGames", completedGames);
   console.log("areAllGamesCompleted", areAllGamesCompleted);
   console.log("gamesProgress", gamesProgress);
   console.log("games", games);
-  console.log("currentGameIndexInFullTextTasksJson", currentGameIndexInFullTextTasksJson);
+  console.log("currentGameIndexInFullTextTasksJson", currentGameIndexInFullTextTasksJson);*/
 
   if(fullTextTasks?.json?.content?.length >= 1 && !areAllGamesCompleted)
   {
@@ -195,7 +194,7 @@ const CaseCompleteTestsStep: FunctionComponent<ICaseCompleteTestsStepProps> = ({
             </Button>
           )}
         </div>
-        {progressState === "completing-tests" && (
+        {progressState !== "not-started" && (
           <div css={styles.content}>
             <div css={styles.toc}>
               <FloatingPanel
@@ -218,7 +217,7 @@ const CaseCompleteTestsStep: FunctionComponent<ICaseCompleteTestsStepProps> = ({
                   paragraph: richTextParagraphOverwrite
                 }}
               />
-              {areAllGamesCompleted && variant === "case" && (
+              {(areAllGamesCompleted && variant === "case" && progressState === "completing-tests") && (
                 <SolveCaseGame onGameStartHandler={() => setProgressState({ caseId, progressState: "solving-case" })}/>
               )}
             </div>

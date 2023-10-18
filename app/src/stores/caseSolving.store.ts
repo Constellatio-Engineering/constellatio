@@ -8,9 +8,9 @@ export type CaseStepIndex = 0 | 1 | 2;
 
 interface ICaseSolvingStore 
 {
-  overrideCaseStepIndex: CaseStepIndex | undefined;
-  resetOverrideCaseStepIndex: () => void;
-  setOverrideCaseStepIndex: (caseStepIndex: CaseStepIndex, caseProgressState: CaseProgressState) => void;
+  caseStepIndex: CaseStepIndex | undefined;
+  overrideCaseStepIndex: (caseStepIndex: CaseStepIndex, caseProgressState: CaseProgressState) => void;
+  setCaseStepIndex: (caseStepIndex: CaseStepIndex) => void;
   setShowStepTwoModal: (showStepTwoModal: boolean) => void;
   setSolution: (solution: string) => void;
   showStepTwoModal: boolean;
@@ -19,27 +19,26 @@ interface ICaseSolvingStore
 
 const useCaseSolvingStore = create(
   immer<ICaseSolvingStore>((set) => ({
-    overrideCaseStepIndex: undefined,
-    resetOverrideCaseStepIndex: () =>
-    {
-      set((state) =>
-      {
-        state.overrideCaseStepIndex = undefined;
-      });
-    },
-    setOverrideCaseStepIndex: (caseStepIndex, caseProgressState) =>
+    caseStepIndex: undefined,
+    overrideCaseStepIndex: (caseStepIndex, caseProgressState) =>
     {
       const caseProgressStateAsNumber = getCaseProgressStateAsNumber(caseProgressState);
 
-      if(caseStepIndex >= caseProgressStateAsNumber)
+      if(caseStepIndex > caseProgressStateAsNumber)
       {
-        console.log("You can't click on this step yet");
         return;
       }
 
       set((state) => 
       {
-        state.overrideCaseStepIndex = caseStepIndex;
+        state.caseStepIndex = caseStepIndex;
+      });
+    },
+    setCaseStepIndex: (caseStepIndex) =>
+    {
+      set((state) =>
+      {
+        state.caseStepIndex = caseStepIndex;
       });
     },
     setShowStepTwoModal: (showStepTwoModal) =>

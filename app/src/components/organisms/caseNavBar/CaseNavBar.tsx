@@ -19,11 +19,11 @@ const CaseNavBar: FunctionComponent<ICaseNavBarProps> = ({ caseProgressState, ca
 {
   const theme = useMantineTheme();
   const steps = ["COMPLETE TESTS", "SOLVE CASE", "REVIEW RESULTS"];
-  const setOverrideCaseStepIndex = useCaseSolvingStore(s => s.setOverrideCaseStepIndex);
+  const overrideCaseStepIndex = useCaseSolvingStore(s => s.overrideCaseStepIndex);
 
   const onStepClick = (index: number): void =>
   {
-    setOverrideCaseStepIndex(index as CaseStepIndex, caseProgressState);
+    overrideCaseStepIndex(index as CaseStepIndex, caseProgressState);
   };
 
   // TODO: utilize progress bar

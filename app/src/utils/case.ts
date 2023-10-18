@@ -9,15 +9,7 @@ export type Games = Game[];
 
 export const getGamesFromCase = (legalCase: Nullable<IGenCase>): Games =>
 {
-  console.log("------ getGamesFromCase ------");
-
   const fullTextTasks = legalCase?.fullTextTasks;
-
-  console.log("connections: ", fullTextTasks?.connections);
-  console.log("json: ", fullTextTasks?.json);
-
-  console.log("------ getGamesFromCase ------");
-
   const connections = fullTextTasks?.connections;
 
   if(!connections)
