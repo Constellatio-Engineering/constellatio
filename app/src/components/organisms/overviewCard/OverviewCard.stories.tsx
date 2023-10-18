@@ -33,7 +33,7 @@ export const Case: Story = {
     contentId: "",
     lastUpdated: new Date(),
     legalArea: { legalAreaName: "Labor law" },
-    progressState: "in-progress",
+    progressState: "completing-tests",
     tags: [{ tagName: "Labor law" }, { tagName: "Civil law" }, { tagName: "Internal relationship of partnerships" }],
     timeInMinutes: 120,
     topic: "Basic of labor law",

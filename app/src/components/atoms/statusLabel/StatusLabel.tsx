@@ -16,7 +16,8 @@ const StatusLabel: FunctionComponent<IStatusLabel> = ({ progressState }) =>
 {
   switch (progressState)
   {
-    case "in-progress":
+    case "completing-tests":
+    case "solving-case":
       return (
         <div css={styles.inProgress}>
           <InProgressStatusLabelIcon/>

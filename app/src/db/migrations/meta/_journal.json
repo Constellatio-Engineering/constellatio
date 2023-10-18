@@ -120,6 +120,20 @@
       "when": 1697492701852,
       "tag": "0016_dear_dakota_north",
       "breakpoints": true
+    },
+    {
+      "idx": 17,
+      "version": "5",
+      "when": 1697589533818,
+      "tag": "0017_powerful_randall",
+      "breakpoints": true
+    },
+    {
+      "idx": 18,
+      "version": "5",
+      "when": 1697589534317,
+      "tag": "0018_giant_gladiator",
+      "breakpoints": true
     }
   ]
 }

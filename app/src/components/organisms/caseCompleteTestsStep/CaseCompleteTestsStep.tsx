@@ -45,6 +45,8 @@ const CaseCompleteTestsStep: FunctionComponent<ICaseCompleteTestsStepProps> = ({
   currentGameIndexInFullTextTasksJson,
   facts,
   fullTextTasks,
+  games,
+  gamesProgress,
   isLastGame,
   progressState,
   variant
@@ -56,15 +58,22 @@ const CaseCompleteTestsStep: FunctionComponent<ICaseCompleteTestsStepProps> = ({
 
   console.log("-----------------");
 
+  const completedGames = gamesProgress.filter(({ progressState }) => progressState === "completed");
+  const areAllGamesCompleted = completedGames.length === games.length;
   const { invalidateCaseProgress } = useContextAndErrorIfNull(InvalidateQueriesContext);
   const { mutate: setProgressState } = api.casesProgress.setProgressState.useMutation({
     onError: (error) => console.error(error),
     onSuccess: async () => invalidateCaseProgress({ caseId })
   });
-
   let renderedCaseContent: IGenCase_FullTextTasks | IGenArticle_FullTextTasks | null;
 
-  if(fullTextTasks?.json?.content?.length >= 1)
+  console.log("completedGames", completedGames);
+  console.log("areAllGamesCompleted", areAllGamesCompleted);
+  console.log("gamesProgress", gamesProgress);
+  console.log("games", games);
+  console.log("currentGameIndexInFullTextTasksJson", currentGameIndexInFullTextTasksJson);
+
+  if(fullTextTasks?.json?.content?.length >= 1 && !areAllGamesCompleted)
   {
     renderedCaseContent = {
       ...fullTextTasks,
@@ -181,12 +190,12 @@ const CaseCompleteTestsStep: FunctionComponent<ICaseCompleteTestsStepProps> = ({
               styleType="primary"
               size="large"
               type="button"
-              onClick={() => setProgressState({ caseId, progressState: "in-progress" })}>
+              onClick={() => setProgressState({ caseId, progressState: "completing-tests" })}>
               Start solving case
             </Button>
           )}
         </div>
-        {progressState === "in-progress" && (
+        {progressState === "completing-tests" && (
           <div css={styles.content}>
             <div css={styles.toc}>
               <FloatingPanel
@@ -209,14 +218,8 @@ const CaseCompleteTestsStep: FunctionComponent<ICaseCompleteTestsStepProps> = ({
                   paragraph: richTextParagraphOverwrite
                 }}
               />
-              {isLastGame && variant === "case" && (
-                <SolveCaseGame
-                  onGameStartHandler={() =>
-                  {
-                    console.log("TODO");
-                  // setCaseStepIndex(1);
-                  }}
-                />
+              {areAllGamesCompleted && variant === "case" && (
+                <SolveCaseGame onGameStartHandler={() => setProgressState({ caseId, progressState: "solving-case" })}/>
               )}
             </div>
           </div>

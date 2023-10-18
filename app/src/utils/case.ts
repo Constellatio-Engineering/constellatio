@@ -1,3 +1,4 @@
+import { type CaseProgressState } from "@/db/schema";
 import { type IGenCardSelectionGame, type IGenCase, type IGenDragNDropGame, type IGenFillInGapsGame } from "@/services/graphql/__generated/sdk";
 import { type Nullable } from "@/utils/types";
 
@@ -48,4 +49,37 @@ export const getGamesFromCase = (legalCase: Nullable<IGenCase>): Games =>
     .filter(Boolean);
 
   return games;
+};
+
+export const getCaseProgressStateAsNumber = (progressState: CaseProgressState): number =>
+{
+  let caseProgressStateAsNumber: number;
+
+  switch (progressState)
+  {
+    case "not-started":
+    case "completing-tests":
+    {
+      caseProgressStateAsNumber = 0;
+      break;
+    }
+    case "solving-case":
+    {
+      caseProgressStateAsNumber = 1;
+      break;
+    }
+    case "completed":
+    {
+      caseProgressStateAsNumber = 2;
+      break;
+    }
+    default:
+    {
+      console.error("Unknown caseProgressState: ", progressState);
+      caseProgressStateAsNumber = 0;
+      break;
+    }
+  }
+
+  return caseProgressStateAsNumber;
 };

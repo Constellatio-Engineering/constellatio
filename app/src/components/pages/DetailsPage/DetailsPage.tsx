@@ -10,7 +10,7 @@ import useContextAndErrorIfNull from "@/hooks/useContextAndErrorIfNull";
 import useGamesProgress from "@/hooks/useGamesProgress";
 import { InvalidateQueriesContext } from "@/provider/InvalidateQueriesProvider";
 import { type IGenArticle, type IGenCase } from "@/services/graphql/__generated/sdk";
-import { type CaseStepIndex } from "@/stores/caseSolving.store";
+import useCaseSolvingStore, { type CaseStepIndex } from "@/stores/caseSolving.store";
 import { api } from "@/utils/api";
 import { getGamesFromCase } from "@/utils/case";
 import { paths } from "@/utils/paths";
@@ -39,6 +39,7 @@ const DetailsPage: FunctionComponent<IDetailsPageProps> = ({ content, variant })
   const { caseProgress, isLoading: isCaseProgressLoading } = useCaseProgress(caseId);
   const { gamesProgress, isLoading: isGamesProgressLoading } = useGamesProgress(caseId);
   const games = content?.__typename === "Case" ? getGamesFromCase(content) : [];
+  const overrideCaseStepIndex = useCaseSolvingStore(s => s.overrideCaseStepIndex);
 
   useEffect(() =>
   {
@@ -50,25 +51,14 @@ const DetailsPage: FunctionComponent<IDetailsPageProps> = ({ content, variant })
     if(content?.__typename === "Case")
     {
       addCaseView({ caseId: contentId });
+      wasViewCountUpdated.current = true;
     }
     else if(content?.__typename === "Article")
     {
       addArticleView({ articleId: contentId });
+      wasViewCountUpdated.current = true;
     }
-
-    wasViewCountUpdated.current = true;
   }, [addArticleView, addCaseView, content?.__typename, contentId]);
-
-  /* useEffect(() =>
-  {
-    const { setCaseStepIndex, setHasCaseSolvingStarted } = useCaseSolvingStore.getState();
-
-    if(content?.__typename === "Article")
-    {
-      setCaseStepIndex(0);
-      setHasCaseSolvingStarted(true);
-    }
-  }, [content?.__typename]);*/
 
   if(contentId == null)
   {
@@ -79,9 +69,7 @@ const DetailsPage: FunctionComponent<IDetailsPageProps> = ({ content, variant })
 
   if(isCaseProgressLoading || isGamesProgressLoading)
   {
-    return (
-      <div>Loading...</div>
-    );
+    return null;
   }
 
   if(caseProgress == null || gamesProgress == null)
@@ -101,18 +89,16 @@ const DetailsPage: FunctionComponent<IDetailsPageProps> = ({ content, variant })
       caseStepIndex = 0;
       break;
     }
-    case "in-progress":
+    case "completing-tests":
     {
-      if(gamesProgress.filter(({ progressState }) => progressState === "completed").length === games.length)
-      {
-        console.log("case in progress and all games completed, caseStepIndex = 1");
-        caseStepIndex = 1;
-      }
-      else
-      {
-        console.log("case in progress and not all games completed, caseStepIndex = 0");
-        caseStepIndex = 0;
-      }
+      console.log("case completing tests, caseStepIndex = 0");
+      caseStepIndex = 0;
+      break;
+    }
+    case "solving-case":
+    {
+      console.log("case solving case, caseStepIndex = 1");
+      caseStepIndex = 1;
       break;
     }
     case "completed":
@@ -143,11 +129,11 @@ const DetailsPage: FunctionComponent<IDetailsPageProps> = ({ content, variant })
             slug: variant === "case" ? "Cases" : "Dictionary" 
           },
           {
-            path: variant === "case" ? `/cases?category=${slugFormatter(content?.mainCategoryField?.[0]?.mainCategory ?? "")}` : `/dictionary?category=${slugFormatter(content?.mainCategoryField?.[0]?.mainCategory ?? "")}`, 
+            path: variant === "case" ? `${paths.cases}?category=${slugFormatter(content?.mainCategoryField?.[0]?.mainCategory ?? "")}` : `${paths.dictionary}?category=${slugFormatter(content?.mainCategoryField?.[0]?.mainCategory ?? "")}`, 
             slug: content?.mainCategoryField?.[0]?.mainCategory ?? "" 
           },
           { 
-            path: `/${variant === "case" ? "cases" : "dictionary"}/${content?.id}`, 
+            path: `${variant === "case" ? paths.cases : paths.dictionary}/${content?.id}`,
             slug: content?.title?.length && content?.title?.length > 40 ? content?.title?.slice(0, 40) + " ..." : content?.title ?? ""
           }
         ]}
@@ -165,7 +151,6 @@ const DetailsPage: FunctionComponent<IDetailsPageProps> = ({ content, variant })
       <CaseNavBar
         variant={variant}
         caseStepIndex={caseStepIndex}
-        isLastGame={isLastGame}
         caseProgressState={caseProgress.progressState}
       />
       <div css={styles.mainContainer}>
@@ -182,21 +167,20 @@ const DetailsPage: FunctionComponent<IDetailsPageProps> = ({ content, variant })
             variant={variant}
           />
         )}
-        {/* {content?.__typename === "Case" && caseStepIndex === 1 && (
-          <CaseSolveCaseStep {...{
-            facts: content?.facts,
-            title: content?.title
-          }}
+        {content?.__typename === "Case" && caseStepIndex === 1 && (
+          <CaseSolveCaseStep
+            id={contentId}
+            facts={content?.facts}
+            title={content?.title}
           />
         )}
         {content?.__typename === "Case" && content?.facts && content?.resolution && content?.title && caseStepIndex === 2 && (
-          <CaseResultsReviewStep {...{
-            facts: content?.facts,
-            resolution: content?.resolution,
-            title: content?.title
-          }}
+          <CaseResultsReviewStep
+            facts={content?.facts}
+            resolution={content?.resolution}
+            title={content?.title}
           />
-        )}*/}
+        )}
       </div>
     </>
   );

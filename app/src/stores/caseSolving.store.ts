@@ -1,3 +1,6 @@
+import { type CaseProgressState } from "@/db/schema";
+import { getCaseProgressStateAsNumber } from "@/utils/case";
+
 import { create } from "zustand";
 import { immer } from "zustand/middleware/immer";
 
@@ -5,10 +8,9 @@ export type CaseStepIndex = 0 | 1 | 2;
 
 interface ICaseSolvingStore 
 {
-  caseStepIndex: CaseStepIndex;
-  isStepCompleted: boolean;
-  setCaseStepIndex: (caseStepIndex: CaseStepIndex) => void;
-  setIsStepCompleted: (isCompleted: boolean) => void;
+  overrideCaseStepIndex: CaseStepIndex | undefined;
+  resetOverrideCaseStepIndex: () => void;
+  setOverrideCaseStepIndex: (caseStepIndex: CaseStepIndex, caseProgressState: CaseProgressState) => void;
   setShowStepTwoModal: (showStepTwoModal: boolean) => void;
   setSolution: (solution: string) => void;
   showStepTwoModal: boolean;
@@ -17,20 +19,27 @@ interface ICaseSolvingStore
 
 const useCaseSolvingStore = create(
   immer<ICaseSolvingStore>((set) => ({
-    caseStepIndex: 0,
-    isStepCompleted: false,
-    setCaseStepIndex: (caseStepIndex) => 
+    overrideCaseStepIndex: undefined,
+    resetOverrideCaseStepIndex: () =>
     {
-      set((state) => 
+      set((state) =>
       {
-        state.caseStepIndex = caseStepIndex;
+        state.overrideCaseStepIndex = undefined;
       });
     },
-    setIsStepCompleted(isCompleted) 
+    setOverrideCaseStepIndex: (caseStepIndex, caseProgressState) =>
     {
+      const caseProgressStateAsNumber = getCaseProgressStateAsNumber(caseProgressState);
+
+      if(caseStepIndex >= caseProgressStateAsNumber)
+      {
+        console.log("You can't click on this step yet");
+        return;
+      }
+
       set((state) => 
       {
-        state.isStepCompleted = isCompleted;
+        state.overrideCaseStepIndex = caseStepIndex;
       });
     },
     setShowStepTwoModal: (showStepTwoModal) =>

@@ -13,6 +13,7 @@ import useCaseViews from "@/hooks/useCaseViews";
 import useContextAndErrorIfNull from "@/hooks/useContextAndErrorIfNull";
 import { InvalidateQueriesContext } from "@/provider/InvalidateQueriesProvider";
 import { type IGenLegalArea, type IGenTags } from "@/services/graphql/__generated/sdk";
+import useCaseSolvingStore from "@/stores/caseSolving.store";
 import useDragDropGameStore from "@/stores/dragDropGame.store";
 import useFillGapsGameStore from "@/stores/fillGapsGame.store";
 import useSelectionCardGameStore from "@/stores/selectionCardGame.store";
@@ -93,16 +94,19 @@ const OverviewCard: FunctionComponent<IOverviewCard> = ({
   const { count: articleViews } = useArticleViews(contentId);
   const { count: caseViews } = useCaseViews(contentId);
   const views = variant === "dictionary" ? articleViews : caseViews;
+  const resetOverrideCaseStepIndex = useCaseSolvingStore(s => s.resetOverrideCaseStepIndex);
 
-  const { invalidateCaseProgress } = useContextAndErrorIfNull(InvalidateQueriesContext);
+  const { invalidateCaseProgress, invalidateGamesProgress } = useContextAndErrorIfNull(InvalidateQueriesContext);
   const { mutate: resetCaseProgress } = api.casesProgress.resetProgress.useMutation({
     onError: (error) => console.error(error),
     onSuccess: async () =>
     {
+      await invalidateGamesProgress({ caseId: contentId });
       await invalidateCaseProgress({ caseId: contentId });
       resetFillGapsGames(contentId);
       resetSelectionCardGames(contentId);
       resetDragDropGames(contentId);
+      resetOverrideCaseStepIndex();
     }
   });
   const [opened, { close, open }] = useDisclosure(false);

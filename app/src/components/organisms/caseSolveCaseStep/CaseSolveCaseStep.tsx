@@ -3,34 +3,41 @@ import { Button } from "@/components/atoms/Button/Button";
 import { Modal } from "@/components/molecules/Modal/Modal";
 import { Richtext } from "@/components/molecules/Richtext/Richtext";
 import { RichtextEditorField } from "@/components/molecules/RichtextEditorField/RichtextEditorField";
+import useContextAndErrorIfNull from "@/hooks/useContextAndErrorIfNull";
+import { InvalidateQueriesContext } from "@/provider/InvalidateQueriesProvider";
 import { type IGenCase } from "@/services/graphql/__generated/sdk";
 import useCaseSolvingStore from "@/stores/caseSolving.store";
+import { api } from "@/utils/api";
+import { type Nullable } from "@/utils/types";
 
 import { Title } from "@mantine/core";
-// import { type EditorEvents } from "@tiptap/react";
 import Image from "next/image";
-import React, { useEffect, type FunctionComponent } from "react";
+import React, { type FunctionComponent } from "react";
 
 import * as styles from "./CaseSolveCaseStep.styles";
 import modalImg from "../../Icons/CaseResultModalIcon.png";
 
-const CaseSolveCaseStep: FunctionComponent<IGenCase> = ({ facts, title }) => 
+type Props = {
+  readonly facts: IGenCase["facts"]; 
+  readonly id: string;
+  readonly title: Nullable<string>;
+};
+
+const CaseSolveCaseStep: FunctionComponent<Props> = ({ facts, id, title }) =>
 {
   const {
-    setCaseStepIndex,
-    setIsStepCompleted,
     setShowStepTwoModal,
     setSolution,
     showStepTwoModal,
     solution
   } = useCaseSolvingStore((state) => state);
 
-  useEffect(() => 
-  {
-    // setIsStepCompleted(false);
-    // setHasCaseSolvingStarted(true);
-  // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
+  const { invalidateCaseProgress } = useContextAndErrorIfNull(InvalidateQueriesContext);
+  const { mutate: setProgressState } = api.casesProgress.setProgressState.useMutation({
+    onError: (error) => console.error(error),
+    onSuccess: async () => invalidateCaseProgress({ caseId: id })
+  });
+
   // const updateCaseCompleteStateOnUpdate = (e: EditorEvents["update"]): void => 
   // {
   //   if(e.editor?.isEmpty)
@@ -67,10 +74,7 @@ const CaseSolveCaseStep: FunctionComponent<IGenCase> = ({ facts, title }) =>
             lockScroll={false}
             opened={showStepTwoModal}
             centered
-            onClose={function(): void 
-            {
-              setShowStepTwoModal(false);
-            }}>
+            onClose={() => setShowStepTwoModal(false)}>
             <Image
               src={modalImg?.src}
               width={70}
@@ -83,12 +87,10 @@ const CaseSolveCaseStep: FunctionComponent<IGenCase> = ({ facts, title }) =>
             </BodyText>
             <Button<"button">
               styleType="primary"
-              onClick={() => 
+              onClick={() =>
               {
-              // next casePage step
-                setCaseStepIndex(2);
-                // close modal
                 setShowStepTwoModal(false);
+                setProgressState({ caseId: id, progressState: "solving-case" });
               }}
               fullWidth>
               Review results
@@ -96,7 +98,7 @@ const CaseSolveCaseStep: FunctionComponent<IGenCase> = ({ facts, title }) =>
           </Modal>
         </div>
       )}
-      {facts && facts.json && (
+      {facts?.json && (
         <div css={styles.factsWrapper}>
           <Title order={3}>Facts</Title>
           <Richtext data={facts}/>

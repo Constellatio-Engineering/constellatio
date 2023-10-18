@@ -10,7 +10,7 @@ export type GenderIdentifier = typeof allGenderIdentifiers[number];
 export const allBookmarkResourceTypes = ["article", "case"] as const;
 export type BookmarkResourceType = typeof allBookmarkResourceTypes[number];
 
-export const allCaseProgressStates = ["not-started", "in-progress", "completed"] as const;
+export const allCaseProgressStates = ["not-started", "completing-tests", "solving-case", "completed"] as const;
 export type CaseProgressState = typeof allCaseProgressStates[number];
 
 export const allGameProgressStates = ["not-started", "completed"] as const;

@@ -33,7 +33,7 @@ export const NotStarted: Story = {
 };
 export const InProgress: Story = {
   args: {
-    progressState: "in-progress",
+    progressState: "completing-tests",
   },
 };
 export const Completed: Story = {
