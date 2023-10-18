@@ -1,9 +1,11 @@
 import { BodyText } from "@/components/atoms/BodyText/BodyText";
 import { Button } from "@/components/atoms/Button/Button";
+import { type IStatusLabel } from "@/components/atoms/statusLabel/StatusLabel";
 import { Modal } from "@/components/molecules/Modal/Modal";
 import { Richtext } from "@/components/molecules/Richtext/Richtext";
 import { RichtextEditorField } from "@/components/molecules/RichtextEditorField/RichtextEditorField";
 import useContextAndErrorIfNull from "@/hooks/useContextAndErrorIfNull";
+import useSubmittedCaseSolution from "@/hooks/useSubmittedCaseSolution";
 import { InvalidateQueriesContext } from "@/provider/InvalidateQueriesProvider";
 import { type IGenCase } from "@/services/graphql/__generated/sdk";
 import useCaseSolvingStore from "@/stores/caseSolving.store";
@@ -11,6 +13,7 @@ import { api } from "@/utils/api";
 import { type Nullable } from "@/utils/types";
 
 import { Title } from "@mantine/core";
+import { notifications } from "@mantine/notifications";
 import Image from "next/image";
 import React, { type FunctionComponent } from "react";
 
@@ -20,35 +23,48 @@ import modalImg from "../../Icons/CaseResultModalIcon.png";
 type Props = {
   readonly facts: IGenCase["facts"]; 
   readonly id: string;
+  readonly progressState: IStatusLabel["progressState"] | undefined;
   readonly title: Nullable<string>;
 };
 
-const CaseSolveCaseStep: FunctionComponent<Props> = ({ facts, id, title }) =>
+const CaseSolveCaseStep: FunctionComponent<Props> = ({
+  facts,
+  id,
+  progressState,
+  title
+}) =>
 {
-  const {
-    setShowStepTwoModal,
-    setSolution,
-    showStepTwoModal,
-    solution
-  } = useCaseSolvingStore((state) => state);
-
-  const { invalidateCaseProgress } = useContextAndErrorIfNull(InvalidateQueriesContext);
+  const { setShowStepTwoModal, showStepTwoModal } = useCaseSolvingStore((state) => state);
+  const { invalidateCaseProgress, invalidateSubmittedCaseSolution } = useContextAndErrorIfNull(InvalidateQueriesContext);
+  const { isLoading, submittedCaseSolution } = useSubmittedCaseSolution(id);
   const { mutate: setProgressState } = api.casesProgress.setProgressState.useMutation({
     onError: (error) => console.error(error),
     onSuccess: async () => invalidateCaseProgress({ caseId: id })
   });
+  const { mutate: submitSolution } = api.casesProgress.submitSolution.useMutation({
+    onError: (error) =>
+    {
+      console.log("error while submitting solution", error);
+      notifications.show({
+        color: "red",
+        message: "Leider ist beim Einreichen deiner Lösung ein Fehler aufgetreten. Bitte versuche es erneut.",
+        title: "Ups...",
+      });
+    },
+    onSuccess: async () =>
+    {
+      console.log("solution submitted");
+      await invalidateSubmittedCaseSolution({ caseId: id });
+      setShowStepTwoModal(true);
+    }
+  });
 
-  // const updateCaseCompleteStateOnUpdate = (e: EditorEvents["update"]): void => 
-  // {
-  //   if(e.editor?.isEmpty)
-  //   {
-  //     setIsStepCompleted(false);
-  //   }
-  //   else 
-  //   {
-  //     setIsStepCompleted(true);
-  //   }
-  // };
+  if(isLoading)
+  {
+    return null; 
+  }
+
+  const isDisabled = progressState !== "solving-case";
 
   return (
     <div css={styles.wrapper} id="solveCaseStepContent">
@@ -59,15 +75,16 @@ const CaseSolveCaseStep: FunctionComponent<Props> = ({ facts, id, title }) =>
             Of course, the question of whether and how a shareholder can be excluded can also arise in the oHG. Read the related article after handling this case.
           </BodyText>
           <RichtextEditorField
-            onChange={() => {}}
-            content={solution ?? ""}
-            action={(editor) => 
+            disabled={isDisabled}
+            content={submittedCaseSolution?.solution ?? ""}
+            action={(editor) =>
             {
-              const richTextContent: string = editor?.getHTML() ?? "";
-              setSolution(richTextContent);
-              setShowStepTwoModal(true);
+              submitSolution({ 
+                caseId: id,
+                solution: editor?.getHTML() ?? ""
+              });
             }}
-            button={{ text: "Submit and see results" }}
+            button={!isDisabled ? { text: "Submit and see results" } : undefined}
             variant="simple"
           />
           <Modal
@@ -90,7 +107,7 @@ const CaseSolveCaseStep: FunctionComponent<Props> = ({ facts, id, title }) =>
               onClick={() =>
               {
                 setShowStepTwoModal(false);
-                setProgressState({ caseId: id, progressState: "solving-case" });
+                setProgressState({ caseId: id, progressState: "completed" });
               }}
               fullWidth>
               Review results

@@ -64,7 +64,7 @@ let FillGapsGame: FC<TFillGapsGame> = ({
     {
       initializeNewGameState({ caseId, id });
     }
-  }, [allGames, gameState, id, initializeNewGameState]);
+  }, [allGames, caseId, gameState, id, initializeNewGameState]);
 
   const correctAnswersArr = useMemo(() => 
   {

@@ -134,6 +134,20 @@
       "when": 1697589534317,
       "tag": "0018_giant_gladiator",
       "breakpoints": true
+    },
+    {
+      "idx": 19,
+      "version": "5",
+      "when": 1697599419351,
+      "tag": "0019_famous_yellow_claw",
+      "breakpoints": true
+    },
+    {
+      "idx": 20,
+      "version": "5",
+      "when": 1697599419885,
+      "tag": "0020_youthful_amphibian",
+      "breakpoints": true
     }
   ]
 }

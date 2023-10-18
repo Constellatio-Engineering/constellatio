@@ -43,9 +43,6 @@ const DetailsPage: FunctionComponent<IDetailsPageProps> = ({ content, variant })
   const caseStepIndex = useCaseSolvingStore(s => s.caseStepIndex);
   const progressState = caseProgress?.progressState;
 
-  console.log("progressState", progressState);
-  console.log("caseStepIndex", caseStepIndex);
-
   useEffect(() =>
   {
     if(!contentId || !content?.__typename || wasViewCountUpdated.current)
@@ -78,31 +75,26 @@ const DetailsPage: FunctionComponent<IDetailsPageProps> = ({ content, variant })
     {
       case "not-started":
       {
-        console.log("case not started, caseStepIndex = 0");
         _caseStepIndex = 0;
         break;
       }
       case "completing-tests":
       {
-        console.log("case completing tests, caseStepIndex = 0");
         _caseStepIndex = 0;
         break;
       }
       case "solving-case":
       {
-        console.log("case solving case, caseStepIndex = 1");
         _caseStepIndex = 1;
         break;
       }
       case "completed":
       {
-        console.log("case completed, caseStepIndex = 2");
         _caseStepIndex = 2;
         break;
       }
       default:
       {
-        console.error("unknown case progress state", progressState);
         _caseStepIndex = 0;
         break;
       }
@@ -192,12 +184,14 @@ const DetailsPage: FunctionComponent<IDetailsPageProps> = ({ content, variant })
         {content?.__typename === "Case" && caseStepIndex === 1 && (
           <CaseSolveCaseStep
             id={contentId}
+            progressState={caseProgress?.progressState}
             facts={content?.facts}
             title={content?.title}
           />
         )}
         {content?.__typename === "Case" && content?.facts && content?.resolution && content?.title && caseStepIndex === 2 && (
           <CaseResultsReviewStep
+            caseId={contentId}
             facts={content?.facts}
             resolution={content?.resolution}
             title={content?.title}

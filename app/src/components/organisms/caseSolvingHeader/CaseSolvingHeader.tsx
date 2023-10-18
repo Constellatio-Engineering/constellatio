@@ -1,8 +1,6 @@
 import { OverlayLines } from "@/components/Icons/bg-layer";
 import { Print } from "@/components/Icons/print";
 import IconButtonBar from "@/components/organisms/iconButtonBar/IconButtonBar";
-import useArticleViews from "@/hooks/useArticleViews";
-import useCaseViews from "@/hooks/useCaseViews";
 
 import { Container, Title, useMantineTheme } from "@mantine/core";
 import Link from "next/link";
