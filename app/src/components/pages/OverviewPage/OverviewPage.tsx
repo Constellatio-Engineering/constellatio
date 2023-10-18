@@ -4,6 +4,7 @@ import EmptyStateCard from "@/components/organisms/emptyStateCard/EmptyStateCard
 import OverviewHeader, {
   slugFormatter,
 } from "@/components/organisms/OverviewHeader/OverviewHeader";
+import useCasesProgress from "@/hooks/useCasesProgress";
 import { type IArticlesOverviewProps } from "@/services/content/getArticlesOverviewProps";
 import { type ICasesOverviewProps } from "@/services/content/getCasesOverviewProps";
 import {
@@ -41,10 +42,12 @@ type OverviewPageProps = CasesOverviewPageProps | ArticlesOverviewPageProps;
 
 const OverviewPage: FunctionComponent<OverviewPageProps> = ({ content, variant }) => 
 {
-  const [selectedCategorySlug, setSelectedCategorySlug] =
-    useQueryState("category");
-  // const [selectedCategory, setSelectedCategory] = useState<Maybe<string> | undefined>(content.allMainCategories?.[0]?.mainCategory);
+  const { casesProgress } = useCasesProgress();
+  const [selectedCategorySlug, setSelectedCategorySlug] = useQueryState("category");
   const router = useRouter();
+  // const [selectedCategory, setSelectedCategory] = useState<Maybe<string> | undefined>(content.allMainCategories?.[0]?.mainCategory);
+
+  console.log("casesProgress", casesProgress);
 
   useEffect(() => 
   {
