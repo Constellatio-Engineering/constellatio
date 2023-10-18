@@ -93,7 +93,7 @@ export const item = ({
   theme: MantineTheme;
 }) => css`
   display: flex;
-  align-items: center;
+  align-items: baseline;
   justify-content: space-between;
   color: ${isTopLevel && isExpanded
     ? theme?.colors["neutrals-02"][1]

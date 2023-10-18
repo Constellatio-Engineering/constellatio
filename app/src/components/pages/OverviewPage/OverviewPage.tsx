@@ -1,5 +1,5 @@
 /* eslint-disable max-lines */
-import CaseBlock from "@/components/organisms/caseBlock/ItemBlock";
+import ItemBlock from "@/components/organisms/caseBlock/ItemBlock";
 import EmptyStateCard from "@/components/organisms/emptyStateCard/EmptyStateCard";
 import OverviewHeader, {
   slugFormatter,
@@ -41,10 +41,9 @@ type OverviewPageProps = CasesOverviewPageProps | ArticlesOverviewPageProps;
 
 const OverviewPage: FunctionComponent<OverviewPageProps> = ({ content, variant }) => 
 {
-  const [selectedCategorySlug, setSelectedCategorySlug] =
-    useQueryState("category");
-  // const [selectedCategory, setSelectedCategory] = useState<Maybe<string> | undefined>(content.allMainCategories?.[0]?.mainCategory);
+  const [selectedCategorySlug, setSelectedCategorySlug] = useQueryState("category");
   const router = useRouter();
+  // const [selectedCategory, setSelectedCategory] = useState<Maybe<string> | undefined>(content.allMainCategories?.[0]?.mainCategory);
 
   useEffect(() => 
   {
@@ -141,38 +140,37 @@ const OverviewPage: FunctionComponent<OverviewPageProps> = ({ content, variant }
           return a.sorting! - b.sorting!;
         }).map((item, itemIndex) => 
         {
-          const items =
-            variant === "case"
-              ? getAllCasesOfLegalArea(item)?.sort((a, b) => 
-              {
-                const numA = extractNumeric(a.title ?? "");
-                const numB = extractNumeric(b.title ?? "");
+          const items = variant === "case"
+            ? getAllCasesOfLegalArea(item)?.sort((a, b) => 
+            {
+              const numA = extractNumeric(a.title ?? "");
+              const numB = extractNumeric(b.title ?? "");
             
-                if(numA !== null && numB !== null) 
-                {
-                  return numA - numB;
-                }
-                return a?.title?.localeCompare(b.title ?? "") ?? -1;
-              })
-              : getAllArticlesOfLegalArea(item)?.sort((a, b) => 
+              if(numA !== null && numB !== null) 
               {
-                const sortingA = a?.topic?.[0]?.sorting;
-                const sortingB = b?.topic?.[0]?.sorting;
-                if(sortingA === null || sortingA === undefined) 
-                {
-                  return 1;
-                }
-                if(sortingB === null || sortingB === undefined) 
-                {
-                  return -1;
-                }
-                return sortingA - sortingB;
-              }) || [];
+                return numA - numB;
+              }
+              return a?.title?.localeCompare(b.title ?? "") ?? -1;
+            })
+            : getAllArticlesOfLegalArea(item)?.sort((a, b) => 
+            {
+              const sortingA = a?.topic?.[0]?.sorting;
+              const sortingB = b?.topic?.[0]?.sorting;
+              if(sortingA === null || sortingA === undefined) 
+              {
+                return 1;
+              }
+              if(sortingB === null || sortingB === undefined) 
+              {
+                return -1;
+              }
+              return sortingA - sortingB;
+            }) || [];
 
           return (
             item.legalAreaName && (
               <Fragment key={itemIndex}>
-                <CaseBlock
+                <ItemBlock
                   variant={variant}
                   blockHead={{
                     blockType: "itemsBlock",

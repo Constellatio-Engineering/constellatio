@@ -1,6 +1,7 @@
 import { BodyText } from "@/components/atoms/BodyText/BodyText";
 import { Button } from "@/components/atoms/Button/Button";
 import { type IStatusLabel } from "@/components/atoms/statusLabel/StatusLabel";
+import { Flag } from "@/components/Icons/Flag";
 import { Modal } from "@/components/molecules/Modal/Modal";
 import { Richtext } from "@/components/molecules/Richtext/Richtext";
 import { RichtextEditorField } from "@/components/molecules/RichtextEditorField/RichtextEditorField";
@@ -14,11 +15,9 @@ import { type Nullable } from "@/utils/types";
 
 import { Title } from "@mantine/core";
 import { notifications } from "@mantine/notifications";
-import Image from "next/image";
 import React, { type FunctionComponent } from "react";
 
 import * as styles from "./CaseSolveCaseStep.styles";
-import modalImg from "../../Icons/CaseResultModalIcon.png";
 
 type Props = {
   readonly facts: IGenCase["facts"]; 
@@ -92,12 +91,7 @@ const CaseSolveCaseStep: FunctionComponent<Props> = ({
             opened={showStepTwoModal}
             centered
             onClose={() => setShowStepTwoModal(false)}>
-            <Image
-              src={modalImg?.src}
-              width={70}
-              height={70}
-              alt="modal img"
-            />
+            <Flag/>
             <Title order={3}>Great job!</Title>
             <BodyText styleType="body-01-regular" component="p">
               Your solution has been saved. Now you can compare your solution to the resolution.
