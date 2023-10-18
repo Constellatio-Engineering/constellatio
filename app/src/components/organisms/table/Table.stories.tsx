@@ -23,7 +23,7 @@ const Template: FunctionComponent<ITableProps> = (args) => (
           </Link>
         </td>
         <td>
-          <StatusTableCell variant="not-started"/>
+          <StatusTableCell progressState="not-started"/>
         </td>
         <td>
           <TableCell variant="simpleTableCell" icon={<ClockIcon/>}>
