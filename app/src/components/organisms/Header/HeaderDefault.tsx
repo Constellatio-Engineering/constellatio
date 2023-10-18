@@ -10,8 +10,12 @@ import OnboardingTutorialStep from "@/components/molecules/onboardingTutorialSte
 import OnboardingTutorialStepItem from "@/components/molecules/onboardingTutorialStep/OnboardingTutorialStepItem";
 import SearchField from "@/components/molecules/searchField/SearchField";
 import { UserDropdown } from "@/components/molecules/UserDropdown/UserDropdown";
+import useContextAndErrorIfNull from "@/hooks/useContextAndErrorIfNull";
+import useOnboardingResult from "@/hooks/useOnboardingResult";
+import { InvalidateQueriesContext } from "@/provider/InvalidateQueriesProvider";
 import useSearchBarStore from "@/stores/searchBar.store";
-import { isDevelopmentOrStaging } from "@/utils/env";
+import { api } from "@/utils/api";
+import { isDevelopment } from "@/utils/env";
 import { paths } from "@/utils/paths";
 
 import { Loader } from "@mantine/core";
@@ -32,11 +36,18 @@ import SearchOverlay from "../searchOverlay/SearchOverlay";
 
 const HeaderDefault: FunctionComponent = () => 
 {
+  const { invalidateOnboardingResult } = useContextAndErrorIfNull(InvalidateQueriesContext);
   const links = ["cases", "dictionary"];
   const { pathname } = useRouter();
   const theme = useMantineTheme();
-
+  const { isLoading: isGetOnboardingResultLoading, onboardingResult } = useOnboardingResult();
+  const showOnboarding = !isGetOnboardingResultLoading && onboardingResult === null;
   const toggleDrawer = useSearchBarStore((s) => s.toggleDrawer);
+
+  const { mutate: setOnboardingResult } = api.users.setOnboardingResult.useMutation({
+    onError: (error) => console.error("Error while setting onboarding result", error),
+    onSuccess: async () => invalidateOnboardingResult()
+  });
 
   const { isLoading: isRecreatingSearchIndices, mutate: recreateSearchIndices } = useMutation({
     mutationFn: async () => axios.post("/api/search/recreate-search-indices"),
@@ -48,18 +59,13 @@ const HeaderDefault: FunctionComponent = () =>
     onSuccess: () => console.log("successfully recreated search indices"),
   });
 
-  const [hasCompletedOnboarding, setHasCompletedOnboarding] =
-		useState<boolean>(false);
-
-  const [onboardingSteps, setOnboardingSteps] = useState<
-  Array<{ opened: boolean; step: number }>
-  >([
+  const [onboardingSteps, setOnboardingSteps] = useState<Array<{ opened: boolean; step: number }>>([
     { opened: true, step: 1 },
     { opened: false, step: 2 },
     { opened: false, step: 3 },
   ]);
 
-  return hasCompletedOnboarding ? (
+  return !showOnboarding ? (
     <>
       <SHeader>
         <div css={styles.wrapper({ theme, variant: "default" })}>
@@ -77,7 +83,7 @@ const HeaderDefault: FunctionComponent = () =>
             ))}
           </div>
           <div css={styles.profileArea}>
-            {isDevelopmentOrStaging && (
+            {isDevelopment && (
               <div style={{ alignItems: "center", display: "flex" }}>
                 <Button<"button">
                   styleType="secondarySubtle"
@@ -129,7 +135,7 @@ const HeaderDefault: FunctionComponent = () =>
                       totalSteps={3}
                       stepTitle="Welcome to Constellatio!"
                       onNextPressHandler={() => setOnboardingSteps([{ opened: false, step: 1 }, { opened: true, step: 2 }, { opened: false, step: 3 }])}
-                      onSkipPressHandler={() => setHasCompletedOnboarding(true)}>
+                      onSkipPressHandler={() => setOnboardingResult({ result: "skipped" })}>
                       <OnboardingTutorialStepItem icon={<CasesIcon size={20}/>} itemTitle="Cases" itemDescription="Interactive games and guided solutions"/>
                       <OnboardingTutorialStepItem icon={<BookmarkBook size={20}/>} itemTitle="Dictionary" itemDescription="Detailed explanations for in-depth understanding"/>
                     </OnboardingTutorialStep>
@@ -158,7 +164,7 @@ const HeaderDefault: FunctionComponent = () =>
             )}
           </div>
           <div css={styles.profileArea}>
-            {isDevelopmentOrStaging && (
+            {isDevelopment && (
               <div style={{ alignItems: "center", display: "flex" }}>
                 <Button<"button">
                   styleType="secondarySubtle"
@@ -180,7 +186,7 @@ const HeaderDefault: FunctionComponent = () =>
                   currentStep={3}
                   totalSteps={3}
                   stepTitle="Search"
-                  onNextPressHandler={() => setHasCompletedOnboarding(true)}>
+                  onNextPressHandler={() => setOnboardingResult({ result: "completed" })}>
                   <OnboardingTutorialStepItem icon={<Search size={20}/>} itemTitle="Vast search" itemDescription="Save your time and search for everything at the speed of light"/>
                 </OnboardingTutorialStep>
               )}
@@ -208,7 +214,7 @@ const HeaderDefault: FunctionComponent = () =>
                   totalSteps={3}
                   stepTitle="Personal space"
                   onNextPressHandler={() => setOnboardingSteps([{ opened: false, step: 1 }, { opened: false, step: 2 }, { opened: true, step: 3 }])}
-                  onSkipPressHandler={() => setHasCompletedOnboarding(true)}>
+                  onSkipPressHandler={() => setOnboardingResult({ result: "skipped" })}>
                   <OnboardingTutorialStepItem icon={<Bookmark size={20}/>} itemTitle="Favourites" itemDescription="Save cases, dictionary articles, highlighted text and forum questions"/>
                   <OnboardingTutorialStepItem icon={<DownloadIcon size={20}/>} itemTitle="Your materials" itemDescription="Upload files to keep everything in one place"/>
                 </OnboardingTutorialStep>

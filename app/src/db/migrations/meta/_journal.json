@@ -148,6 +148,20 @@
       "when": 1697599419885,
       "tag": "0020_youthful_amphibian",
       "breakpoints": true
+    },
+    {
+      "idx": 21,
+      "version": "5",
+      "when": 1697604969670,
+      "tag": "0021_slim_red_ghost",
+      "breakpoints": true
+    },
+    {
+      "idx": 22,
+      "version": "5",
+      "when": 1697604970184,
+      "tag": "0022_thick_photon",
+      "breakpoints": true
     }
   ]
 }
