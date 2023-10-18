@@ -1,0 +1,1 @@
+ALTER TABLE "CasesProgress" RENAME COLUMN "CaseProgress" TO "ProgressState";

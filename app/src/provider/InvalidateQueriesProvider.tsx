@@ -11,15 +11,21 @@ type InvalidateBookmarksOptions = inferProcedureInput<AppRouter["bookmarks"]["ge
 type InvalidateNotesOptions = inferProcedureInput<AppRouter["notes"]["getNotes"]>;
 type InvalidateArticleViewsOptions = inferProcedureInput<AppRouter["views"]["getArticleViews"]>;
 type InvalidateCaseViewsOptions = inferProcedureInput<AppRouter["views"]["getCaseViews"]>;
+type InvalidateCaseProgressOptions = inferProcedureInput<AppRouter["casesProgress"]["getCaseProgress"]>;
+type InvalidateGamesProgressOptions = inferProcedureInput<AppRouter["gamesProgress"]["getGamesProgress"]>;
+type InvalidateSubmittedCaseSolutionOptions = inferProcedureInput<AppRouter["casesProgress"]["getSubmittedSolution"]>;
 
 type InvalidateQueries = {
   invalidateArticleViews: (options: InvalidateArticleViewsOptions) => Promise<void>;
   invalidateBookmarks: (options?: InvalidateBookmarksOptions) => Promise<void>;
+  invalidateCaseProgress: (options?: InvalidateCaseProgressOptions) => Promise<void>;
   invalidateCaseViews: (options: InvalidateCaseViewsOptions) => Promise<void>;
   invalidateDocuments: (options?: InvalidateDocumentsOptions) => Promise<void>;
   invalidateEverything: () => Promise<void>;
   invalidateFolders: (options?: InvalidateFoldersOptions) => Promise<void>;
+  invalidateGamesProgress: (options: InvalidateGamesProgressOptions) => Promise<void>;
   invalidateNotes: (options?: InvalidateNotesOptions) => Promise<void>;
+  invalidateSubmittedCaseSolution: (options: InvalidateSubmittedCaseSolutionOptions) => Promise<void>;
   invalidateUploadedFiles: (options?: InvalidateUploadedFilesOptions) => Promise<void>;
 };
 
@@ -37,11 +43,14 @@ const InvalidateQueriesProvider: FunctionComponent<InvalidateQueriesProviderProp
   const invalidateQueries: InvalidateQueries = useMemo(() => ({
     invalidateArticleViews: async (options) => apiContext.views.getArticleViews.invalidate(options),
     invalidateBookmarks: async (options) => apiContext.bookmarks.getAllBookmarks.invalidate(options),
+    invalidateCaseProgress: async (options) => apiContext.casesProgress.getCaseProgress.invalidate(options),
     invalidateCaseViews: async (options) => apiContext.views.getCaseViews.invalidate(options),
     invalidateDocuments: async (options) => apiContext.documents.getDocuments.invalidate(options),
     invalidateEverything: async () => invalidateAll(),
     invalidateFolders: async (options) => apiContext.folders.getFolders.invalidate(options),
+    invalidateGamesProgress: async (options) => apiContext.gamesProgress.getGamesProgress.invalidate(options),
     invalidateNotes: async (options) => apiContext.notes.getNotes.invalidate(options),
+    invalidateSubmittedCaseSolution: async (options) => apiContext.casesProgress.getSubmittedSolution.invalidate(options),
     invalidateUploadedFiles: async (options) => apiContext.uploads.getUploadedFiles.invalidate(options)
   }), [
     invalidateAll,
@@ -51,7 +60,10 @@ const InvalidateQueriesProvider: FunctionComponent<InvalidateQueriesProviderProp
     apiContext.documents.getDocuments,
     apiContext.bookmarks.getAllBookmarks,
     apiContext.notes.getNotes,
-    apiContext.uploads.getUploadedFiles
+    apiContext.uploads.getUploadedFiles,
+    apiContext.casesProgress.getCaseProgress,
+    apiContext.gamesProgress.getGamesProgress,
+    apiContext.casesProgress.getSubmittedSolution
   ]);
 
   return (
