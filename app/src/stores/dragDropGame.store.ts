@@ -10,6 +10,7 @@ type GameStatus = "win" | "lose" | "inprogress";
 
 type DragDropGameState = {
   activeId: string | null;
+  caseId: string;
   droppedItems: TDragAndDropGameOptionType[];
   gameId: string;
   gameStatus: GameStatus;
@@ -23,19 +24,33 @@ type DragDropGameStateUpdate = Partial<Pick<DragDropGameState, "gameStatus" | "g
 type IDragDropGameStore = {
   games: DragDropGameState[];
   getGameState: (gameId: Nullable<string>) => DragDropGameState | undefined;
-  initializeNewGameState: (gameId: string) => void;
-  updateGameState: (gameId: string, update: DragDropGameStateUpdate) => void;
+  initializeNewGameState: (params: {
+    caseId: string;
+    gameId: string;
+  }) => void;
+  resetGamesForCase: (caseId: string) => void;
+  updateGameState: (params: {
+    caseId: string;
+    gameId: string;
+    update: DragDropGameStateUpdate;
+  }) => void;
 };
 
-const defaultDragDropGameState: DragDropGameState = {
+type GetDefaultDragDropGameState = (params: {
+  caseId: string;
+  gameId: string;
+}) => DragDropGameState;
+
+const getDefaultDragDropGameState: GetDefaultDragDropGameState = ({ caseId, gameId }) => ({
   activeId: null,
+  caseId,
   droppedItems: [],
-  gameId: "",
+  gameId,
   gameStatus: "inprogress",
   gameSubmitted: false,
   optionsItems: [],
   resultMessage: "",
-};
+});
 
 const useDragDropGameStore = create(
   immer<IDragDropGameStore>((set, get) => ({
@@ -56,7 +71,7 @@ const useDragDropGameStore = create(
       return game;
     },
 
-    initializeNewGameState: (gameId) =>
+    initializeNewGameState: ({ caseId, gameId }) =>
     {
       const existingGame = get().games.find(game => game.gameId === gameId);
 
@@ -68,13 +83,29 @@ const useDragDropGameStore = create(
       set((state) =>
       {
         state.games = state.games.concat({
-          ...defaultDragDropGameState,
+          ...getDefaultDragDropGameState({ caseId, gameId }),
           gameId,
         });
       });
     },
 
-    updateGameState: (gameId, update) =>
+    resetGamesForCase: (caseId) =>
+    {
+      set((state) =>
+      {
+        state.games = state.games.map((game) =>
+        {
+          if(game.caseId === caseId)
+          {
+            return getDefaultDragDropGameState({ caseId, gameId: game.gameId });
+          }
+
+          return game;
+        });
+      });
+    },
+
+    updateGameState: ({ caseId, gameId, update }) =>
     {
       set((state) =>
       {
@@ -83,8 +114,7 @@ const useDragDropGameStore = create(
         if(gameIndex === -1)
         {
           const newGame: DragDropGameState = {
-            ...defaultDragDropGameState,
-            gameId,
+            ...getDefaultDragDropGameState({ caseId, gameId }),
             ...update,
           };
 

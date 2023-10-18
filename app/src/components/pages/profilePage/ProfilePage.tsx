@@ -77,22 +77,27 @@ const ProfilePage: FunctionComponent<IProfilePageProps> = ({ allMainCategory }) 
       <div>
         <ProfilePageHeader/>
         <Container
-          maw={1440}
+          maw="100%"
           sx={{
-            alignItems: "flex-start",
             background: theme.colors["neutrals-01"][1],
-            display: "flex",
-            flexDirection: "row",
-            gap: "32px",
-            justifyContent: "flex-start",
-            padding: "32px ",
+            padding: "54px 60px 0 60px",
             position: "relative",
-            transform: "translateY(-100px)",
-            width: "100%",
-            zIndex: 3 
+            transform: "translateY(-150px)",
+            zIndex: 4
           }}>
-          <ProfileMenu tabs={tabs} setQuery={setQuery} setTabs={setTabs}/>
-          {contentPicker(tabs)}
+          <Container
+            maw={1440}
+            sx={{
+              alignItems: "flex-start", 
+              display: "flex",
+              flexDirection: "row",
+              gap: "32px",
+              justifyContent: "flex-start",
+              position: "relative",
+            }}>
+            <ProfileMenu tabs={tabs} setQuery={setQuery} setTabs={setTabs}/>
+            {contentPicker(tabs)}
+          </Container>
         </Container>
       </div>
     </>

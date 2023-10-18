@@ -24,6 +24,7 @@ type AnswersResultPerParagraph = {
 
 type FillGapsGameState = {
   answerResult: AnswersResultPerParagraph[];
+  caseId: string;
   correctAnswers: CorrectAnswersPerParagraph[];
   gameStatus: GameStatus;
   gameSubmitted: boolean;
@@ -38,21 +39,35 @@ type FillGapsGameStore = {
   checkAnswers: (params: { gameId: string }) => boolean;
   games: FillGapsGameState[];
   getGameState: (id: Nullable<string>) => FillGapsGameState | undefined;
-  initializeNewGameState: (id: string) => void;
+  initializeNewGameState: (params: {
+    caseId: string;
+    id: string;
+  }) => void;
+  resetGamesForCase: (caseId: string) => void;
   updateCorrectAnswer: (params: { gameId: string; innerContent: string[]; path: string}) => void;
-  updateGameState: (id: string, update: FillGapsGameStateUpdate) => void;
+  updateGameState: (params: {
+    caseId: string;
+    id: string;
+    update: FillGapsGameStateUpdate;
+  }) => void;
   updateUserAnswer: (params: { gameId: string; index: number; path: string; value: string}) => void;
 };
 
-const defaultFillGapsGameState: FillGapsGameState = {
+type GetDefaultFillGapsGameState = (params: {
+  caseId: string;
+  id: string;
+}) => FillGapsGameState;
+
+const getDefaultFillGapsGameState: GetDefaultFillGapsGameState = ({ caseId, id }) => ({
   answerResult: [],
+  caseId,
   correctAnswers: [],
   gameStatus: "inprogress",
   gameSubmitted: false,
-  id: "",
+  id,
   resultMessage: "",
   userAnswers: [],
-};
+});
 
 const useFillGapsGameStore = create(
   immer<FillGapsGameStore>((set, get) => ({
@@ -152,9 +167,8 @@ const useFillGapsGameStore = create(
       return game;
     },
 
-    initializeNewGameState: (id) =>
+    initializeNewGameState: ({ caseId, id }) =>
     {
-
       const existingGame = get().games.find(game => game.id === id);
 
       if(existingGame)
@@ -164,9 +178,23 @@ const useFillGapsGameStore = create(
 
       set((state) =>
       {
-        state.games = state.games.concat({
-          ...defaultFillGapsGameState,
-          id,
+        const defaultFillGapsGameState = getDefaultFillGapsGameState({ caseId, id });
+        state.games = state.games.concat(defaultFillGapsGameState);
+      });
+    },
+
+    resetGamesForCase: (caseId) =>
+    {
+      set((state) =>
+      {
+        state.games = state.games.map((game) =>
+        {
+          if(game.caseId === caseId)
+          {
+            return getDefaultFillGapsGameState({ caseId, id: game.id });
+          }
+
+          return game;
         });
       });
     },
@@ -209,7 +237,7 @@ const useFillGapsGameStore = create(
       });
     },
 
-    updateGameState: (id, update) =>
+    updateGameState: ({ caseId, id, update }) =>
     {
       set((state) =>
       {
@@ -218,8 +246,7 @@ const useFillGapsGameStore = create(
         if(gameIndex === -1)
         {
           const newGame: FillGapsGameState = {
-            ...defaultFillGapsGameState,
-            id,
+            ...getDefaultFillGapsGameState({ caseId, id }),
             ...update,
           };
 

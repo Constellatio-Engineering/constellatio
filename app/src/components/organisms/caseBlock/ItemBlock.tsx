@@ -103,7 +103,8 @@ const ItemBlock: FunctionComponent<ICaseBlockProps> = ({
                 </td>
                 {variant === "case" && (
                   <td>
-                    <StatusTableCell variant="notStarted"/>
+                    {/* THIS WILL GET caseId instead of variant */}
+                    <StatusTableCell variant="not-started"/>
                   </td>
                 )}
                 {item?.__typename === "Case" && (

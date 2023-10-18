@@ -1,24 +1,13 @@
-import { Button } from "@/components/atoms/Button/Button";
-import MenuTab from "@/components/atoms/menuTab/MenuTab";
-import SearchField from "@/components/molecules/searchField/SearchField";
-import useSearchBarStore from "@/stores/searchBar.store";
-import { isDevelopmentOrStaging } from "@/utils/env";
 
-import { Loader } from "@mantine/core";
 import { useMantineTheme } from "@mantine/styles";
-import { IconFolder } from "@tabler/icons-react";
-import { useMutation } from "@tanstack/react-query";
-import axios, { AxiosError } from "axios";
 import Image from "next/image";
 import Link from "next/link";
-import { useRouter } from "next/router";
 import { type FC } from "react";
 
 import { SHeader } from "./Header.styles";
 import * as styles from "./Header.styles";
+import HeaderDefault from "./HeaderDefault";
 import ConstellatioFullLogo from "../../../../public/images/icons/constellatio-full-logo.svg";
-import { UserDropdown } from "../../molecules/UserDropdown/UserDropdown";
-import SearchOverlay from "../searchOverlay/SearchOverlay";
 
 export interface HeaderProps 
 {
@@ -28,20 +17,6 @@ export interface HeaderProps
 export const Header: FC<HeaderProps> = ({ variant = "default" }) => 
 {
   const theme = useMantineTheme();
-  const links = ["CASES", "DICTIONARY"];
-  const { pathname } = useRouter();
-
-  const toggleDrawer = useSearchBarStore(s => s.toggleDrawer);
-
-  const { isLoading: isRecreatingSearchIndices, mutate: recreateSearchIndices } = useMutation({
-    mutationFn: async () => axios.post("/api/search/recreate-search-indices"),
-    onError: (e: unknown) =>
-      console.log(
-        "error while recreating search indices",
-        e instanceof AxiosError ? e.response?.data : e
-      ),
-    onSuccess: () => console.log("successfully recreated search indices"),
-  });
 
   return variant === "simple" ? (
     <SHeader>
@@ -54,58 +29,7 @@ export const Header: FC<HeaderProps> = ({ variant = "default" }) =>
       </div>
     </SHeader>
   ) : variant === "default" ? (
-    <>
-      <SHeader>
-        <div css={styles.wrapper({ theme, variant })}>
-          <div css={styles.links}>
-            <Link href="/">
-              <Image src={ConstellatioFullLogo} alt="Constellatio"/>
-            </Link>
-            {links.map((link, linkIndex) => (
-              <Link href={`/${link.toLowerCase()}`} key={linkIndex}>
-                <MenuTab
-                  active={pathname?.toLowerCase().includes(link.toLowerCase())}
-                  title={link}
-                />
-              </Link>
-            ))}
-          </div>
-          <div css={styles.profileArea}>
-            {isDevelopmentOrStaging && (
-              <div style={{ alignItems: "center", display: "flex" }}>
-                <Button<"button">
-                  styleType="secondarySubtle"
-                  disabled={isRecreatingSearchIndices}
-                  type="button"
-                  onClick={() => recreateSearchIndices()}
-                  style={{ marginRight: 10 }}>
-                  Recreate Search Indices
-                </Button>
-                {isRecreatingSearchIndices && <Loader size={22}/>}
-              </div>
-            )}
-            <div className="search-input">
-              <SearchField
-                size="small"
-                onClick={() => toggleDrawer(true)}
-              />
-            </div>
-            <Link href="/personal-space">
-              <MenuTab
-                title="Personal Space"
-                icon={<IconFolder size={20}/>}
-                active={pathname?.toLowerCase().includes("personal-space")}
-              />
-            </Link>
-            <span className="vertical-line">s</span>
-            <div>
-              <UserDropdown/>
-            </div>
-          </div>
-        </div>
-      </SHeader>
-      <SearchOverlay/>
-    </>
+    <HeaderDefault/>
   ) : variant === "relative" && (
     <styles.SHeaderRelative>
       <Link href="/">

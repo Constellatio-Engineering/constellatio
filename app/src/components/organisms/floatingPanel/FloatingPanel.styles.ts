@@ -54,9 +54,10 @@ export const wrapper = ({ hidden, theme }: {
       justify-content: center;
       gap: 12px;
       padding: 20px;
-      background-color: transparent;
+      background-color: ${theme.colors["neutrals-01"][0]};
       border-top: 2px solid ${theme.colors["neutrals-01"][4]};
       position: relative;
+      z-index: 1;
       &::before {
         content: "";
         position: absolute;

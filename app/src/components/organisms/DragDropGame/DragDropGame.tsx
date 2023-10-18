@@ -11,11 +11,13 @@ import { DragNDropCard } from "@/components/molecules/DraggableCard/DragNDropCar
 import { GhostDropCard } from "@/components/molecules/GhostDropCard/GhostDropCard";
 import { HelpNote } from "@/components/molecules/HelpNote/HelpNote";
 import { ResultCard } from "@/components/molecules/ResultCard/ResultCard";
+import useContextAndErrorIfNull from "@/hooks/useContextAndErrorIfNull";
+import { InvalidateQueriesContext } from "@/provider/InvalidateQueriesProvider";
 import { type IGenDragNDropGame } from "@/services/graphql/__generated/sdk";
-import useCaseSolvingStore from "@/stores/caseSolving.store";
 import useDragDropGameStore, {
   type TDragAndDropGameOptionType,
 } from "@/stores/dragDropGame.store";
+import { api } from "@/utils/api";
 import { shuffleArray } from "@/utils/array";
 
 import {
@@ -37,31 +39,35 @@ import {
   TitleWrapper,
 } from "./DragDropGame.styles";
 
-export type TDragDropGame = Pick<
-IGenDragNDropGame,
-"game" | "helpNote" | "question" | "id"
->;
+export type TDragDropGame = Pick<IGenDragNDropGame, "game" | "helpNote" | "question" | "id"> & {
+  readonly caseId: string;
+};
 
 export const DragDropGame: FC<TDragDropGame> = ({
+  caseId,
   game,
   helpNote,
   id,
   question,
 }) => 
 {
-  const getNextGameIndex = useCaseSolvingStore((s) => s.getNextGameIndex);
+  const { invalidateGamesProgress } = useContextAndErrorIfNull(InvalidateQueriesContext);
+  const { mutate: setGameProgress } = api.gamesProgress.setGameProgress.useMutation({
+    onError: (error) => console.error("Error while setting game progress", error),
+    onSuccess: async () => invalidateGamesProgress({ caseId })
+  });
   const gameState = useDragDropGameStore((s) => s.getGameState(id));
   const allGames = useDragDropGameStore((s) => s.games);
   const updateGameState = useDragDropGameStore((s) => s.updateGameState);
   const initializeNewGameState = useDragDropGameStore((s) => s.initializeNewGameState);
 
-  useEffect(() => 
+  useEffect(() =>
   {
     if(gameState == null && id != null) 
     {
-      initializeNewGameState(id);
+      initializeNewGameState({ caseId, gameId: id });
     }
-  }, [allGames, gameState, id, initializeNewGameState]);
+  }, [allGames, caseId, gameState, id, initializeNewGameState]);
 
   const originalOptions: TDragAndDropGameOptionType[] = useMemo(
     () => game?.options ?? [],
@@ -70,9 +76,12 @@ export const DragDropGame: FC<TDragDropGame> = ({
 
   useEffect(() => 
   {
-    const optionsShuffled =
-			shuffleArray<TDragAndDropGameOptionType>(originalOptions);
-    updateGameState(id!, { optionsItems: optionsShuffled });
+    const optionsShuffled = shuffleArray<TDragAndDropGameOptionType>(originalOptions);
+    updateGameState({
+      caseId,
+      gameId: id!,
+      update: { optionsItems: optionsShuffled }
+    });
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [originalOptions]);
 
@@ -93,17 +102,26 @@ export const DragDropGame: FC<TDragDropGame> = ({
   const handleDragEnd = (event: DragEndEvent): void => 
   {
     const { active, over } = event;
-    updateGameState(id, { activeId: null });
-    if(over && over.id === "droppable") 
+
+    updateGameState({
+      caseId,
+      gameId: id,
+      update: { activeId: null }
+    });
+
+    if(over && over.id === "droppable")
     {
       const activeItem = optionsItems.find((item) => item.id === active.id);
+
       if(activeItem) 
       {
-        updateGameState(id, { droppedItems: [...droppedItems, activeItem] });
-        updateGameState(id, {
-          optionsItems: optionsItems.filter(
-            (item) => item.id !== activeItem.id
-          ),
+        updateGameState({
+          caseId,
+          gameId: id,
+          update: {
+            droppedItems: [...droppedItems, activeItem],
+            optionsItems: optionsItems.filter((item) => item.id !== activeItem.id)
+          }
         });
       }
     }
@@ -111,7 +129,13 @@ export const DragDropGame: FC<TDragDropGame> = ({
 
   const handleDragStart = (event: DragStartEvent): void => 
   {
-    updateGameState(id, { activeId: event.active.id.toString() });
+    updateGameState({
+      caseId,
+      gameId: id,
+      update: {
+        activeId: event.active.id.toString()
+      }
+    });
   };
 
   const checkWinCondition = (): boolean =>
@@ -143,23 +167,35 @@ export const DragDropGame: FC<TDragDropGame> = ({
       const orderCorrect = checkOrder();
       if(winCondition && orderCorrect) 
       {
-        updateGameState(id, {
-          gameStatus: "win",
-          resultMessage: "Congrats! all answers are correct!",
+        updateGameState({
+          caseId,
+          gameId: id,
+          update: {
+            gameStatus: "win",
+            resultMessage: "Congrats! all answers are correct!",
+          }
         });
       }
       else if(winCondition && !orderCorrect) 
       {
-        updateGameState(id, {
-          gameStatus: "lose",
-          resultMessage: "You have all correct answers but in wrong order!",
+        updateGameState({
+          caseId,
+          gameId: id,
+          update: {
+            gameStatus: "lose",
+            resultMessage: "You have all correct answers but in wrong order!",
+          }
         });
       }
       else 
       {
-        updateGameState(id, {
-          gameStatus: "lose",
-          resultMessage: "Answers are incorrect!",
+        updateGameState({
+          caseId,
+          gameId: id,
+          update: {
+            gameStatus: "lose",
+            resultMessage: "Answers are incorrect!",
+          }
         });
       }
     }
@@ -167,36 +203,52 @@ export const DragDropGame: FC<TDragDropGame> = ({
     {
       if(winCondition) 
       {
-        updateGameState(id, {
-          gameStatus: "win",
-          resultMessage: "Congrats! all answers are correct!",
+        updateGameState({
+          caseId,
+          gameId: id,
+          update: {
+            gameStatus: "win",
+            resultMessage: "Congrats! all answers are correct!",
+          }
         });
       }
       else 
       {
-        updateGameState(id, {
-          gameStatus: "lose",
-          resultMessage: "Answers are incorrect!",
+        updateGameState({
+          caseId,
+          gameId: id,
+          update: {
+            gameStatus: "lose",
+            resultMessage: "Answers are incorrect!",
+          }
         });
       }
     }
 
     if(!gameSubmitted) 
     {
-      getNextGameIndex();
-      updateGameState(id, { gameSubmitted: true });
+      // getNextGameIndex();
+      updateGameState({
+        caseId,
+        gameId: id,
+        update: { gameSubmitted: true }
+      });
     }
   };
 
   const onGameResetHandler = (): void => 
   {
-    const originalOptionsShuffled =
-			shuffleArray<TDragAndDropGameOptionType>(originalOptions);
-    updateGameState(id, {
-      droppedItems: [],
-      gameStatus: "inprogress",
-      optionsItems: originalOptionsShuffled,
-      resultMessage: "",
+    const originalOptionsShuffled = shuffleArray<TDragAndDropGameOptionType>(originalOptions);
+
+    updateGameState({
+      caseId,
+      gameId: id,
+      update: {
+        droppedItems: [],
+        gameStatus: "inprogress",
+        optionsItems: originalOptionsShuffled,
+        resultMessage: "",
+      }
     });
   };
 
@@ -286,11 +338,13 @@ export const DragDropGame: FC<TDragDropGame> = ({
                       dropped
                       onDeleteHandler={() => 
                       {
-                        updateGameState(id, {
-                          droppedItems: droppedItems.filter(
-                            (card) => card.id !== item.id
-                          ),
-                          optionsItems: [...optionsItems, item],
+                        updateGameState({
+                          caseId,
+                          gameId: id,
+                          update: {
+                            droppedItems: droppedItems.filter((card) => card.id !== item.id),
+                            optionsItems: [...optionsItems, item],
+                          }
                         });
                       }}
                     />
@@ -331,11 +385,18 @@ export const DragDropGame: FC<TDragDropGame> = ({
             styleType="primary"
             size="large"
             leftIcon={gameStatus === "inprogress" ? <Check/> : <Reload/>}
-            onClick={
-              gameStatus === "inprogress"
-                ? onGameFinishHandler
-                : onGameResetHandler
-            }
+            onClick={() =>
+            {
+              if(gameStatus === "inprogress")
+              {
+                setGameProgress({ gameId: id, progressState: "completed" });
+                onGameFinishHandler();
+              }
+              else
+              {
+                onGameResetHandler();
+              }
+            }}
             disabled={gameStatus === "inprogress" && droppedItems.length < 1}>
             {gameStatus === "inprogress" ? "Check my answers" : "Solve again"}
           </Button>
