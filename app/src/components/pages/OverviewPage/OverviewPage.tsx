@@ -1,5 +1,5 @@
 /* eslint-disable max-lines */
-import CaseBlock from "@/components/organisms/caseBlock/ItemBlock";
+import ItemBlock from "@/components/organisms/caseBlock/ItemBlock";
 import EmptyStateCard from "@/components/organisms/emptyStateCard/EmptyStateCard";
 import OverviewHeader, {
   slugFormatter,
@@ -172,8 +172,9 @@ const OverviewPage: FunctionComponent<OverviewPageProps> = ({ content, variant }
           return (
             item.legalAreaName && (
               <Fragment key={itemIndex}>
-                <CaseBlock
+                <ItemBlock
                   variant={variant}
+                  progressState="completed"
                   blockHead={{
                     blockType: "itemsBlock",
                     categoryName: item.legalAreaName,

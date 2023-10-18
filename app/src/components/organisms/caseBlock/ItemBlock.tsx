@@ -1,4 +1,5 @@
 import { Button } from "@/components/atoms/Button/Button";
+import { type IStatusLabel } from "@/components/atoms/statusLabel/StatusLabel";
 import StatusTableCell from "@/components/atoms/statusTableCell/StatusTableCell";
 import TableCell from "@/components/atoms/tableCell/TableCell";
 import { ArrowDown } from "@/components/Icons/ArrowDown";
@@ -49,6 +50,7 @@ export interface ICaseBlockProps
 {
   readonly blockHead: ICaseBlockHeadProps;
   readonly items: IGenFullCaseFragment[] | IGenArticle[];
+  readonly progressState: IStatusLabel["progressState"];
   readonly tableType?: "all-cases" | "cases" | "favorites" | "search" | "dictionary";
   readonly variant: "case" | "dictionary";
 }
@@ -56,6 +58,7 @@ export interface ICaseBlockProps
 const ItemBlock: FunctionComponent<ICaseBlockProps> = ({
   blockHead,
   items,
+  progressState,
   tableType,
   variant
 }) => 
@@ -104,7 +107,7 @@ const ItemBlock: FunctionComponent<ICaseBlockProps> = ({
                 {variant === "case" && (
                   <td>
                     {/* THIS WILL GET caseId instead of variant */}
-                    <StatusTableCell variant="not-started"/>
+                    <StatusTableCell progressState={progressState}/>
                   </td>
                 )}
                 {item?.__typename === "Case" && (
