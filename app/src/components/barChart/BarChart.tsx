@@ -25,9 +25,9 @@ const BarChart: React.FC = () => {
   return (
     <div css={styles.barChartContainer}>
       {/* <div>RNG</div> */}
-      {days.map((month, index) => (
+      {months.map((month, index) => (
         <div key={month} css={styles.barChartMonth}>
-          <Bar height={daysData[index] ?? 0} />
+          <Bar height={yearsData[index] ?? 0} />
           <span>{month}</span>
         </div>
       ))}
