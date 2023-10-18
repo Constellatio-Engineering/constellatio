@@ -62,7 +62,7 @@ const ItemBlock: FunctionComponent<ICaseBlockProps> = ({
 }) => 
 {
   const { casesProgress } = useCasesProgress();
-  console.log("casesProgress", casesProgress);
+
   const { bookmarks: casesBookmarks, isLoading: isGetCasesBookmarksLoading } = useBookmarks("case", {
     enabled: variant === "case"
   });
@@ -109,7 +109,7 @@ const ItemBlock: FunctionComponent<ICaseBlockProps> = ({
                 {variant === "case" && (
                   <td>
                     {/* THIS WILL GET caseId instead of variant */}
-                    <StatusTableCell variant={caseProgress?.progressState || "not-started"}/>
+                    <StatusTableCell progressState={caseProgress?.progressState || "not-started"}/>
                   </td>
                 )}
                 {item?.__typename === "Case" && (
