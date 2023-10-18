@@ -4,7 +4,6 @@ import EmptyStateCard from "@/components/organisms/emptyStateCard/EmptyStateCard
 import OverviewHeader, {
   slugFormatter,
 } from "@/components/organisms/OverviewHeader/OverviewHeader";
-import useCasesProgress from "@/hooks/useCasesProgress";
 import { type IArticlesOverviewProps } from "@/services/content/getArticlesOverviewProps";
 import { type ICasesOverviewProps } from "@/services/content/getCasesOverviewProps";
 import {
