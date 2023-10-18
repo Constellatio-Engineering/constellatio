@@ -2,8 +2,13 @@ import { css } from "@emotion/react";
 import { type MantineTheme } from "@mantine/styles";
 
 const CSSHiddenCard = css`
-  height: 317px;
+  height: 217px;
   overflow: hidden;
+  pointer-events: none;
+  margin-left: auto;
+  * > {
+    filter: blur(3px);
+  }
 `;
 
 export const wrapper = ({ hidden, theme }: {
@@ -28,7 +33,7 @@ export const wrapper = ({ hidden, theme }: {
 		align-items: center;
 		justify-content: flex-start;
 		gap:4px;	
-	}
+    }
   }
   overflow: visible;
 
@@ -55,15 +60,18 @@ export const wrapper = ({ hidden, theme }: {
       &::before {
         content: "";
         position: absolute;
-        top: -111%;
+        top: -181%;
+        z-index: 1;
         left: 0;
         width: 100%;
-        height: 110%;
+        pointer-events: fill;
+        height: 180%;
         background: linear-gradient(
           180deg,
-          rgba(255, 255, 255, 0) 43%,
-          white 97%
+          rgba(255, 255, 255, 0.5) 0%,
+          ${theme.colors["neutrals-01"][0]} 97%
         );
+        backdrop-filter: blur(1px);
       }
     }
   }

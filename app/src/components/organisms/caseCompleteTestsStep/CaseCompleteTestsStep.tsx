@@ -168,30 +168,30 @@ const CaseCompleteTestsStep: FunctionComponent<ICaseCompleteTestsStepProps> = ({
               paragraph: richTextParagraphOverwrite,
             }}
           />
-          {!hasCaseSolvingStarted && (
-            <Button<"button">
-              styleType="primary"
-              size="large"
-              type="button"
-              onClick={() => 
-              {
-                setHasCaseSolvingStarted(true); 
-                getNextGameIndex(); 
-              }}>
-              Start solving case
-            </Button>
-          )}
         </div>
-        {hasCaseSolvingStarted && (
-          <div css={styles.content}>
-            <div css={styles.toc}>
-              <FloatingPanel
-                hidden={false}
-                facts={facts}
-                content={content}
-                variant={variant}
-              />
-            </div>
+        {!hasCaseSolvingStarted && (
+          <Button<"button">
+            styleType="primary"
+            size="large"
+            type="button"
+            onClick={() => 
+            {
+              setHasCaseSolvingStarted(true); 
+              getNextGameIndex(); 
+            }}>
+            Start solving case
+          </Button>
+        )}
+        <div css={styles.content}>
+          <div css={styles.toc}>
+            <FloatingPanel
+              hidden={!hasCaseSolvingStarted}
+              facts={facts}
+              content={content}
+              variant={variant}
+            />
+          </div>
+          {hasCaseSolvingStarted && (
             <div css={styles.fullTextAndTasksWrapper}>
               <Richtext
                 // eslint-disable-next-line @typescript-eslint/no-explicit-any
@@ -208,8 +208,8 @@ const CaseCompleteTestsStep: FunctionComponent<ICaseCompleteTestsStepProps> = ({
               />
               {isLastGame && variant === "case" && <SolveCaseGame onGameStartHandler={() => setCaseStepIndex(1)}/>}
             </div>
-          </div>
-        )}
+          )}
+        </div>
       </div>
     </Container>
   );
