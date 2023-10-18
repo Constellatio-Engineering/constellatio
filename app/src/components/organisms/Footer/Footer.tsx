@@ -25,7 +25,6 @@ export const Footer: FC<FooterProps> = ({ variant = "default" }) =>
           <Group position="apart">
             <Group spacing="spacing-16">
               <LinkButton icon={<Help/>} title="Need help?" size="big"/>
-              <LinkButton icon={<Heart/>} title="Support us" size="big"/>
             </Group>
             <Group spacing="spacing-8">
               <Image src={ConstellatioLogoIcon} alt="Constellatio"/>{" "}
