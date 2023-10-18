@@ -111,12 +111,12 @@ const DetailsPage: FunctionComponent<IDetailsPageProps> = ({ content, variant })
     );
   }
 
-  if(isCaseProgressLoading || isGamesProgressLoading || caseStepIndex == null)
+  if((isCaseProgressLoading || isGamesProgressLoading || caseStepIndex == null) && variant === "case")
   {
     return null;
   }
 
-  if(caseProgress == null || gamesProgress == null)
+  if((caseProgress == null || gamesProgress == null) && variant === "case")
   {
     return (
       <ErrorPage error="case progress was not found"/>
@@ -125,7 +125,7 @@ const DetailsPage: FunctionComponent<IDetailsPageProps> = ({ content, variant })
 
   const currentGameIndex = games.findIndex(game =>
   {
-    const gameProgress = gamesProgress.find(gameProgress => gameProgress.gameId === game.id);
+    const gameProgress = gamesProgress?.find(gameProgress => gameProgress.gameId === game.id);
     return gameProgress?.progressState === "not-started";
   });
   const currentGame = games[currentGameIndex];
@@ -162,18 +162,22 @@ const DetailsPage: FunctionComponent<IDetailsPageProps> = ({ content, variant })
           variant,
         }}
       />
-      <CaseNavBar
-        variant={variant}
-        caseStepIndex={caseStepIndex}
-        caseProgressState={caseProgress.progressState}
-      />
+      {
+        variant === "case" && (
+          <CaseNavBar
+            variant={variant}
+            caseStepIndex={caseStepIndex!}
+            caseProgressState={caseProgress!.progressState}
+          />
+        )
+      }
       <div css={styles.mainContainer}>
-        {content?.fullTextTasks && caseStepIndex === 0 && (
+        {content?.fullTextTasks && (variant === "case" ? caseStepIndex === 0 : true) && (
           <CaseCompleteTestsStep
             isLastGame={isLastGame}
             currentGameIndexInFullTextTasksJson={currentGameIndexInFullTextTasksJson}
             games={games}
-            gamesProgress={gamesProgress}
+            gamesProgress={gamesProgress ?? []}
             caseId={contentId}
             facts={content?.__typename === "Case" ? content?.facts : undefined}
             fullTextTasks={content?.fullTextTasks}
