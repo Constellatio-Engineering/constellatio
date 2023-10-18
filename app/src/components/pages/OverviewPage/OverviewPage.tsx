@@ -172,7 +172,6 @@ const OverviewPage: FunctionComponent<OverviewPageProps> = ({ content, variant }
               <Fragment key={itemIndex}>
                 <ItemBlock
                   variant={variant}
-                  progressState="completed"
                   blockHead={{
                     blockType: "itemsBlock",
                     categoryName: item.legalAreaName,
