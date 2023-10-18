@@ -7,5 +7,4 @@ export const wrapper = css`
   align-items: center;
   height: 80vh;
   padding: 5vh 20px;
-  background-color: red;
 `;

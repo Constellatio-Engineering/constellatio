@@ -178,13 +178,15 @@ const CaseCompleteTestsStep: FunctionComponent<ICaseCompleteTestsStepProps> = ({
   return (
     <Container maw={1440}>
       <div css={styles.contentWrapper} id="completeTestsStepContent">
-        <div css={styles.facts}>
-          <Title order={2}>Facts</Title>
-          <Richtext
-            data={facts}
-            richTextOverwrite={{ paragraph: richTextParagraphOverwrite }}
-          />
-        </div>
+        {variant === "case" && (
+          <div css={styles.facts}>
+            <Title order={2}>Facts</Title>
+            <Richtext
+              data={facts}
+              richTextOverwrite={{ paragraph: richTextParagraphOverwrite }}
+            />
+          </div>
+        )}
         {progressState === "not-started" && (
           <Button<"button">
             styleType="primary"
