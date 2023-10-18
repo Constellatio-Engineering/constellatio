@@ -7,6 +7,7 @@ import { getNumericalLabel, renderTOC, type TOCItem } from "./generateTocHelper"
 import { BodyText } from "../../atoms/BodyText/BodyText";
 import { ArrowSolidDown } from "../../Icons/arrow-solid-down";
 import { ArrowSolidRight } from "../../Icons/arrow-solid-right";
+import { slugFormatter } from "../OverviewHeader/OverviewHeader";
 export const TOCItemComponent: React.FC<{ readonly depth: number; readonly item: TOCItem; readonly itemNumber: number; readonly total: number }> = ({
   depth,
   item,
@@ -27,13 +28,13 @@ export const TOCItemComponent: React.FC<{ readonly depth: number; readonly item:
     }}>
       <span
         onClick={handleToggle}
-        style={{ cursor: "pointer" }}
         css={styles.item({
-          isExpandable: item.children.length > 0, isExpanded, isTopLevel: depth === 0, theme 
+
+          isExpandable: item.children.length > 0, isExpanded, isTopLevel: true, theme 
         })}>
         <div style={{ display: "flex", justifyContent: "flex-start", padding: "0 16px" }}>
           <BodyText component="p" styleType="body-01-medium">{item.children.length > 0 && (isExpanded ? <ArrowSolidDown/> : <ArrowSolidRight/>)}</BodyText>
-          <BodyText component="p" styleType="body-01-medium">{getNumericalLabel(depth + 1, itemNumber - 1)}<Link href={`#${item.text}`}>&nbsp;{item.text}</Link> </BodyText>
+          <BodyText component="p" styleType="body-01-medium">{getNumericalLabel(depth + 1, itemNumber - 1)}&nbsp;{item.text}</BodyText>
         </div>
         {depth === 0 && <div style={{ paddingRight: "24px" }}>{itemNumber}/{total}</div>}
       </span>

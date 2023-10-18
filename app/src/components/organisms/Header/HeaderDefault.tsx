@@ -37,7 +37,7 @@ import SearchOverlay from "../searchOverlay/SearchOverlay";
 const HeaderDefault: FunctionComponent = () => 
 {
   const { invalidateOnboardingResult } = useContextAndErrorIfNull(InvalidateQueriesContext);
-  const links = ["cases", "dictionary"];
+  const links = ["Fälle", "Lexikon"];
   const { pathname } = useRouter();
   const theme = useMantineTheme();
   const { isLoading: isGetOnboardingResultLoading, onboardingResult } = useOnboardingResult();
@@ -74,7 +74,7 @@ const HeaderDefault: FunctionComponent = () =>
               <Image src={ConstellatioFullLogo} alt="Constellatio"/>
             </Link>
             {links.map((link, linkIndex) => (
-              <Link href={`/${link.toLowerCase()}`} key={linkIndex}>
+              <Link href={`/${link === "Fälle" ? "cases" : "dictionary"}`} key={linkIndex}>
                 <MenuTab
                   active={pathname?.toLowerCase().includes(link.toLowerCase())}
                   title={link}

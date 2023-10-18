@@ -126,6 +126,8 @@ export const item = ({
     position: absolute;
     left: 3px;
   }
+  vertical-align: baseline;
+  cursor: pointer;
 `;
 
 export const facts = css`
