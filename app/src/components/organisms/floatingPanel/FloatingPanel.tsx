@@ -60,7 +60,7 @@ const FloatingPanel: FunctionComponent<IFloatingPanelProps> = ({
           size="medium"
           defaultValue={selectedTab}
           tabStyleOverwrite={{ flex: "1" }}>
-          {variant === "case" && facts && (
+          {variant === "case" && facts && !hidden && (
             <Tabs.List>
               {tabs && tabs?.map((tab, tabIndex) => (
                 <React.Fragment key={tabIndex}>

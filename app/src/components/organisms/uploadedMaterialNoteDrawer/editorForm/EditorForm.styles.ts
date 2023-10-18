@@ -28,7 +28,7 @@ export const existingNote = (theme: MantineTheme) => css`
   min-height: 78vh;
   .deleteNoteBlock {
     position: absolute;
-    top: 140px;
+    top: 0px;
     left: 0;
     width: 100%;
     height: 30%;
@@ -74,7 +74,6 @@ export const richtext = (theme: MantineTheme) => css`
       width: 20px;
     }
   }
-  all: inherit;
   ul{
     list-style: disc;
   }

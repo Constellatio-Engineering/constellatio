@@ -92,6 +92,7 @@ const FileViewer: FunctionComponent = () =>
   return (
     <Modal
       lockScroll={false} 
+      radius={12}
       centered 
       opened={showFileViewerModal} 
       onClose={() => setShowFileViewerModal(false)} 

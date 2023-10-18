@@ -122,7 +122,7 @@ export const tagsModal = css`
 export const seeAllTagsButton = (theme: MantineTheme) => css`
 margin-left: auto;
 display: block;
-margin-top: 12px;
+margin-top: 8px;
 border:0;
 outline:0;
 color: ${theme.colors["neutrals-01"][9]};

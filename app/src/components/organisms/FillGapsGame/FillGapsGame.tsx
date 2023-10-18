@@ -57,7 +57,6 @@ let FillGapsGame: FC<TFillGapsGame> = ({
   const updateGameState = useFillGapsGameStore((s) => s.updateGameState);
   const initializeNewGameState = useFillGapsGameStore((s) => s.initializeNewGameState);
   const checkAnswers = useFillGapsGameStore((s) => s.checkAnswers);
-
   useEffect(() => 
   {
     if(gameState == null && id != null) 
@@ -78,7 +77,6 @@ let FillGapsGame: FC<TFillGapsGame> = ({
     );
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [gameState?.correctAnswers]);
-
   const userEntriesArr = useMemo(() => 
   {
     if(!gameState?.userAnswers) 
@@ -90,7 +88,6 @@ let FillGapsGame: FC<TFillGapsGame> = ({
       []
     );
   }, [gameState?.userAnswers]);
-
   const richtextOverwrite = useCallback(
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
     (props: any): ReactElement => 

@@ -102,7 +102,7 @@ const HeaderDefault: FunctionComponent = () =>
             <Link href={`${paths.personalSpace}`}>
               <MenuTab
                 title="Personal Space"
-                icon={<IconFolder/>}
+                icon={<IconFolder size={20}/>}
                 active={pathname?.toLowerCase().includes("personal-space")}
               />
             </Link>
@@ -203,7 +203,7 @@ const HeaderDefault: FunctionComponent = () =>
                 <Link href={`${paths.personalSpace}`}>
                   <MenuTab
                     title="Personal Space"
-                    icon={<IconFolder/>}
+                    icon={<IconFolder size={20}/>}
                     active={pathname?.toLowerCase().includes("personal-space")}
                   />
                 </Link>

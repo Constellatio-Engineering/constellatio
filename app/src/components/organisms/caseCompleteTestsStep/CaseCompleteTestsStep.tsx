@@ -184,26 +184,26 @@ const CaseCompleteTestsStep: FunctionComponent<ICaseCompleteTestsStepProps> = ({
             data={facts}
             richTextOverwrite={{ paragraph: richTextParagraphOverwrite }}
           />
-          {progressState === "not-started" && (
-            <Button<"button">
-              styleType="primary"
-              size="large"
-              type="button"
-              onClick={() => setProgressState({ caseId, progressState: "completing-tests" })}>
-              Start solving case
-            </Button>
-          )}
         </div>
-        {progressState !== "not-started" && (
-          <div css={styles.content}>
-            <div css={styles.toc}>
-              <FloatingPanel
-                hidden={false}
-                facts={facts}
-                content={content}
-                variant={variant}
-              />
-            </div>
+        {progressState === "not-started" && (
+          <Button<"button">
+            styleType="primary"
+            size="large"
+            type="button"
+            onClick={() => setProgressState({ caseId, progressState: "completing-tests" })}>
+            Start solving case
+          </Button>
+        )}
+        <div css={styles.content}>
+          <div css={styles.toc}>
+            <FloatingPanel
+              hidden={progressState === "not-started"}
+              facts={facts}
+              content={content}
+              variant={variant}
+            />
+          </div>
+          {progressState !== "not-started" && (
             <div css={styles.fullTextAndTasksWrapper}>
               <Richtext
                 data={variant === "case" ? renderedCaseContent : fullTextTasks}
@@ -221,8 +221,8 @@ const CaseCompleteTestsStep: FunctionComponent<ICaseCompleteTestsStepProps> = ({
                 <SolveCaseGame onGameStartHandler={() => setProgressState({ caseId, progressState: "solving-case" })}/>
               )}
             </div>
-          </div>
-        )}
+          )}
+        </div>
       </div>
     </Container>
   );

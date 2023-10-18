@@ -2,9 +2,9 @@ import { Title } from "@mantine/core";
 import React, { type FunctionComponent } from "react";
 
 import * as styles from "./SearchPapersBlock.styles";
-import IconButton from "../atoms/iconButton/IconButton";
-import Label from "../atoms/label/Label";
-import { DownloadIcon } from "../Icons/DownloadIcon";
+import IconButton from "../../atoms/iconButton/IconButton";
+import Label from "../../atoms/label/Label";
+import { DownloadIcon } from "../../Icons/DownloadIcon";
 
 interface SearchPapersBlockProps
 {
