@@ -1,13 +1,13 @@
 import { gql } from "graphql-request";
 
-export const getAllCasesByMainCategory = gql`
-  query getAllCasesByMainCategory($mainCategoryName: String!) {
+export const getAllCasesByLegalArea = gql`
+  query getAllCasesByLegalArea($legalAreaName: String!) {
     allCase(
       where: {
         AND: [
           {
-            mainCategoryField: {
-              findOne: { MainCategory: { mainCategory: { eq: $mainCategoryName } } }
+            legalArea: {
+              findOne: { LegalArea: { legalAreaName: { eq: $legalAreaName } } }
             }
           }
         ]

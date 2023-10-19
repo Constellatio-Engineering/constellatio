@@ -5,5 +5,11 @@
   "devCommand": "pnpm dev",
   "framework": "nextjs",
   "regions": ["fra1"],
-  "public": false
+  "public": false,
+  "crons": [
+    {
+      "path": "/api/cron/update-search-indexes",
+      "schedule": "*/1 * * * *"
+    }
+  ]
 }
