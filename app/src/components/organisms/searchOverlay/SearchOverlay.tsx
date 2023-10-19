@@ -30,6 +30,7 @@ const SearchOverlay: FunctionComponent<SearchOverlayProps> = () =>
       padding={0}
       withCloseButton={false}
       returnFocus={false}
+      lockScroll={false}
       opened={isDrawerOpened}
       onClose={() => toggleDrawer(false)}
       position="top"
