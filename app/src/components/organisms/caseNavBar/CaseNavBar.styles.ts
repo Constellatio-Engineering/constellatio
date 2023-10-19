@@ -24,11 +24,14 @@ export const wrapper = ({ variant }: {
   justify-content: space-between;
   align-items: center;
   flex-wrap: wrap;
-  padding:16px 60px;
-  /* position: -webkit-sticky; */
   max-width: 1440px;
   margin: 0 auto;  
+  padding:16px 48px;
   ${variant === "dictionary" && DictionaryCSS}
+
+  @media (max-width: 800px) {
+    padding: 16px 12px;
+  } 
 `;
 
 export const tabs = css`

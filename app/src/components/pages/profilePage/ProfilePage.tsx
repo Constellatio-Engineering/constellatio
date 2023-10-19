@@ -7,10 +7,12 @@ import ProfileOverview from "@/components/organisms/profileOverview/ProfileOverv
 import ProfilePageHeader from "@/components/organisms/profilePageHeader/ProfilePageHeader";
 import { type IProfilePageProps } from "@/pages/profile";
 
-import { Container, useMantineTheme } from "@mantine/core";
+import { Container } from "@mantine/core";
 import { useRouter } from "next/router";
 import { useQueryState } from "next-usequerystate";
 import React, { useState, type FunctionComponent, type ReactNode, useEffect } from "react";
+
+import * as styles from "./ProfilePage.styles";
 
 const ProfilePage: FunctionComponent<IProfilePageProps> = ({ allMainCategory }) =>
 {
@@ -71,30 +73,16 @@ const ProfilePage: FunctionComponent<IProfilePageProps> = ({ allMainCategory }) 
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [router.query.tab, setQuery]);
-  const theme = useMantineTheme();
   return router.query.tab && (
     <> 
       <div>
         <ProfilePageHeader/>
         <Container
           maw="100%"
-          sx={{
-            background: theme.colors["neutrals-01"][1],
-            padding: "54px 60px 0 60px",
-            position: "relative",
-            transform: "translateY(-150px)",
-            zIndex: 4
-          }}>
+          css={styles.outerContianer}>
           <Container
             maw={1440}
-            sx={{
-              alignItems: "flex-start", 
-              display: "flex",
-              flexDirection: "row",
-              gap: "32px",
-              justifyContent: "flex-start",
-              position: "relative",
-            }}>
+            css={styles.innerContainer}>
             <ProfileMenu tabs={tabs} setQuery={setQuery} setTabs={setTabs}/>
             {contentPicker(tabs)}
           </Container>

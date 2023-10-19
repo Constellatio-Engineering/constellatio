@@ -10,6 +10,12 @@ export const wrapper = (theme: MantineTheme) => css`
   transform: translateY(-220px);
   z-index: 3;
   position: relative;
+
+  @media screen and (max-width: 1024px) {
+  transform: translateY(0px);
+    
+    width: 100%;
+    }
 `;
 export const profileInfo = css`
   text-align: center;

@@ -108,3 +108,11 @@ export const stepsBar = (theme: MantineTheme): SerializedStyles => css`
     }
   }
 `;
+
+export const container = css`
+padding:60px;
+max-width: 1440px;
+@media screen and (max-width: 1024px) {
+  padding: 24px;
+}
+`;

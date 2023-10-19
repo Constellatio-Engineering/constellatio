@@ -30,7 +30,7 @@ const ProfileLearningTimeBlockHeader: FunctionComponent<{
         <div>
           <div css={styles.blockHeadDescription}>
             <CaptionText styleType="caption-01-medium" component="p">
-              YEAR&apso;S AVERAGE LEARNING TIME
+              YEAR&lsquo;S AVERAGE LEARNING TIME
             </CaptionText>
           </div>
           <div css={styles.blockHeadTitle}>
