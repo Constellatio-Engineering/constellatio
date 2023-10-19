@@ -44,23 +44,23 @@ const CaseBlockHead: FunctionComponent<ICaseBlockHeadProps> = ({
             {(completedCases !== null || completedCases !== undefined) && items && variant === "case" ? (
               <div css={styles.detailText}>
                 <CountLabel count={completedCases ?? 0} total={items} variant="cases"/>
-                <CaptionText component="p" styleType="caption-01-bold">CASES COMPLETED</CaptionText>
+                <CaptionText component="p" styleType="caption-01-bold">ABGESCHLOSSENE FÄLLE</CaptionText>
               </div>
             )
-              : <Label variant="dictionary" title={`${items} ARTICLES`}/>}
+              : <Label variant="dictionary" title={`${items} LEXIKON`}/>}
           </>
         );
       case "favoriteItemsBlock":
         return (
           <>
-            {items && variant === "case" ? <Label variant="case">{items} Cases</Label> : <Label variant="dictionary">{items} Articles</Label>}
+            {items && variant === "case" ? <Label variant="case">{items} Fälle</Label> : <Label variant="dictionary">{items} Articles</Label>}
           </>
         );
       case "searchBlock":
         return (
 
           <>
-            {items && variant === "case" ? <Label variant="case">{items} Cases</Label> : <Label variant="dictionary">{items} Articles</Label>}
+            {items && variant === "case" ? <Label variant="case">{items} Fälle</Label> : <Label variant="dictionary">{items} Articles</Label>}
           </>
         );
       case "searchPapersBlock":

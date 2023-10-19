@@ -17,6 +17,11 @@ box-shadow: 0px 8px 44px 0px #0000000a;
 span > table {
     width:100%;
 }
+
+@media screen and (max-width: 1024px) {
+    flex-direction: column;
+    padding: 24px;
+}
 `;
 export const expandTableButton = css`
     margin: 0 auto;

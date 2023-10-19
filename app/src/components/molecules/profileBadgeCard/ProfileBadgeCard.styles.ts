@@ -9,21 +9,20 @@ interface IProfilePageProps
 
 const CSSIsExpandedStyles = css`
   min-width: 270px;
-  min-height: 176px;
   flex: 1;
 `;
 export const wrapper = ({ isExpanded }: IProfilePageProps) => css`
   min-width: 160px;
-  min-height: 176px;
   border-radius: 12px;
   overflow: hidden;
   ${isExpanded && CSSIsExpandedStyles}
-`;
-export const badgeWrapper = ({ theme }: IProfilePageProps) => css`
+  `;
+export const badgeWrapper = ({ isExpanded, theme }: IProfilePageProps) => css`
   background-color: ${theme.colors["neutrals-01"][1]};
   border: 1px solid ${theme.colors["neutrals-01"][3]};
   padding: 24px 16px 16px 16px;
   display: flex;
+  min-width: 160px;
   flex-direction: column;
   align-items: center;
   justify-content: space-between;
@@ -32,10 +31,11 @@ export const badgeWrapper = ({ theme }: IProfilePageProps) => css`
     fill: red;
   }
   position: relative;
-`;
+  border-radius: ${!isExpanded ? "12px" : "12px 12px 0 0"};
+  `;
 export const badgeTitle = (theme: MantineTheme) => css`
   color: ${theme.colors["neutrals-02"][1]};
-`;
+  `;
 export const badgeDescriptionArea = (theme: MantineTheme) => css`
   background-color: ${theme.colors["neutrals-01"][0]};
   text-align: center;

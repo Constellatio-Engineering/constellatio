@@ -7,9 +7,15 @@ export const wrapper = (theme: MantineTheme) => css`
   background-color: ${theme.colors["neutrals-01"][0]};
   border-radius: 12px;
   box-shadow: 0px 8px 44px 0px rgba(0, 0, 0, 0.04);
-  transform: translateY(-220px);
+  margin-top: -220px;
   z-index: 3;
   position: relative;
+
+  @media screen and (max-width: 1024px) {
+  transform: translateY(0px);
+    
+    width: 100%;
+    }
 `;
 export const profileInfo = css`
   text-align: center;

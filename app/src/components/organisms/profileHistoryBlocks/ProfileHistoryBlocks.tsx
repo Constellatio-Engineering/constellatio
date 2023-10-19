@@ -79,8 +79,8 @@ const ProfileHistoryBlocks: FunctionComponent = () =>
     },
   ];
   // filled states
-  // const uniqueDays = extractUniqueDays(visitedItems);
-  const uniqueDays = extractUniqueDays([]);
+  const uniqueDays = extractUniqueDays(visitedItems);
+  // const uniqueDays = extractUniqueDays([]);
   return (
     <div css={styles.wrapper}>
       <div css={styles.list}>
@@ -88,7 +88,7 @@ const ProfileHistoryBlocks: FunctionComponent = () =>
           uniqueDays?.length > 0 ? 
             (uniqueDays.map((day, index) => (
               <div css={styles.listItem} key={index}>
-                <div css={styles.blockDate}><SubtitleText styleType="subtitle-01-medium" component="p">{formatDate(new Date())}</SubtitleText></div>
+                <div css={styles.blockDate}><SubtitleText styleType="subtitle-01-medium" component="p">{formatDate(new Date(day))}</SubtitleText></div>
                 <div css={styles.table}>
                   {visitedItems.map((item, index) => 
                   {
@@ -102,7 +102,7 @@ const ProfileHistoryBlocks: FunctionComponent = () =>
                               {item.viewedDate?.getHours()}:{item.viewedDate?.getMinutes() > 10 ? item.viewedDate?.getMinutes() : `0${item.viewedDate?.getMinutes()}`}
                             </BodyText>
                             <div css={styles.blockType}>
-                              <Label variant={item?.documentType ?? "case"} title={item?.documentType}/>
+                              <Label variant={item?.documentType ?? "case"} title={item?.documentType === "case" ? "Fälle" : "Lexikon"}/>
                             </div>
                             <BodyText css={styles.blockTitle} styleType="body-01-medium" component="p">{item.documentName}</BodyText>
                             <BodyText css={styles.blockCategory} styleType="body-02-medium" component="p">{item.documentMainCategory}</BodyText>

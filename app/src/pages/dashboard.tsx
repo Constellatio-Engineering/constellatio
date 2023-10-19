@@ -1,11 +1,10 @@
+import DashboardPage from "@/components/dashboardPage/DashboardPage";
 import { Layout } from "@/components/layouts/Layout";
 import { getCommonProps } from "@/utils/commonProps";
-import { paths } from "@/utils/paths";
 
 import { type GetServerSideProps } from "next";
-import Router from "next/router";
 import { type SSRConfig } from "next-i18next";
-import { useEffect, type FunctionComponent } from "react";
+import { type FunctionComponent } from "react";
 
 import { defaultLocale } from "../../next.config.mjs";
 
@@ -35,14 +34,9 @@ export const getServerSideProps: GetServerSideProps<ServerSidePropsResult> = asy
 
 const Dashboard: FunctionComponent<ServerSidePropsResult> = () =>
 {
-  useEffect(() => 
-  {
-    void Router.push(`${paths.cases}`);
-  }
-  , []);
   return (
     <Layout>
-      hi this is dashboard
+      <DashboardPage/>
     </Layout>
   );
 };

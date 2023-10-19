@@ -5,12 +5,15 @@ import ProfileMenu, { type ITab } from "@/components/organisms/profileMenu/Profi
 import ProfileNotificationsTab from "@/components/organisms/profileNotificationsTab/ProfileNotificationsTab";
 import ProfileOverview from "@/components/organisms/profileOverview/ProfileOverview";
 import ProfilePageHeader from "@/components/organisms/profilePageHeader/ProfilePageHeader";
+import SubscriptionTab from "@/components/subscriptionTab/SubscriptionTab";
 import { type IProfilePageProps } from "@/pages/profile";
 
-import { Container, useMantineTheme } from "@mantine/core";
+import { Container } from "@mantine/core";
 import { useRouter } from "next/router";
 import { useQueryState } from "next-usequerystate";
 import React, { useState, type FunctionComponent, type ReactNode, useEffect } from "react";
+
+import * as styles from "./ProfilePage.styles";
 
 const ProfilePage: FunctionComponent<IProfilePageProps> = ({ allMainCategory }) =>
 {
@@ -39,6 +42,8 @@ const ProfilePage: FunctionComponent<IProfilePageProps> = ({ allMainCategory }) 
         return <ProfileNotificationsTab/>;  
       case "History":
         return <ProfileHistoryTab/>;
+      case "Subscription":
+        return <SubscriptionTab subscriptionStatus="You are currently using a free 5-day trial. You can purchase a subscription by clicking the button below:"/>;
       default:
         console.log(`Unknown tab: ${tab?.title}, create tab type case in ProfilePage component`);
         return <>{`Unknown tab: ${tab?.title}, create tab type case in ProfilePage component`}</>;
@@ -71,30 +76,16 @@ const ProfilePage: FunctionComponent<IProfilePageProps> = ({ allMainCategory }) 
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [router.query.tab, setQuery]);
-  const theme = useMantineTheme();
   return router.query.tab && (
     <> 
       <div>
         <ProfilePageHeader/>
         <Container
           maw="100%"
-          sx={{
-            background: theme.colors["neutrals-01"][1],
-            padding: "54px 60px 0 60px",
-            position: "relative",
-            transform: "translateY(-150px)",
-            zIndex: 4
-          }}>
+          css={styles.outerContianer}>
           <Container
             maw={1440}
-            sx={{
-              alignItems: "flex-start", 
-              display: "flex",
-              flexDirection: "row",
-              gap: "32px",
-              justifyContent: "flex-start",
-              position: "relative",
-            }}>
+            css={styles.innerContainer}>
             <ProfileMenu tabs={tabs} setQuery={setQuery} setTabs={setTabs}/>
             {contentPicker(tabs)}
           </Container>

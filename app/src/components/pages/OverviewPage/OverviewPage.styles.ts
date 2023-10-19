@@ -9,6 +9,9 @@ export const ListWrapper = css`
   position: relative;
   z-index: 3;
   max-width: 1440px;
+  @media screen and (max-width: 1024px) {
+    transform: translateY(0px);
+  }
 `;
 
 export const Page = (theme: MantineTheme): SerializedStyles => css`
