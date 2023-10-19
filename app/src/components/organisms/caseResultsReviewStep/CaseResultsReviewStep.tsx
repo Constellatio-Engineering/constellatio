@@ -10,19 +10,33 @@ import { Modal } from "@/components/molecules/Modal/Modal";
 import { Richtext } from "@/components/molecules/Richtext/Richtext";
 import useResetCaseProgress from "@/hooks/useResetCaseProgress";
 import useSubmittedCaseSolution from "@/hooks/useSubmittedCaseSolution";
-import { type IGenCase_Resolution, type IGenCase_Facts, type Maybe } from "@/services/graphql/__generated/sdk";
+import {
+  type IGenCase_Resolution,
+  type IGenCase_Facts,
+  type Maybe,
+} from "@/services/graphql/__generated/sdk";
 
 import {
-  Accordion, Container, Group, ScrollArea, Spoiler, Text, Title
+  Accordion,
+  Container,
+  Group,
+  ScrollArea,
+  Spoiler,
+  Text,
+  Title,
 } from "@mantine/core";
 import { useDisclosure } from "@mantine/hooks";
-import React, { useRef, type FunctionComponent, useEffect, useState } from "react";
+import React, {
+  useRef,
+  type FunctionComponent,
+  useEffect,
+  useState,
+} from "react";
 
 import * as styles from "./CaseResultsReviewStep.styles";
-import IconButtonBar from "../iconButtonBar/IconButtonBar";
+import IconButtonBar, { IIcons } from "../iconButtonBar/IconButtonBar";
 
-interface ICaseResultsReviewStepProps 
-{
+interface ICaseResultsReviewStepProps {
   readonly caseId: string;
   readonly facts: Maybe<IGenCase_Facts>;
   readonly resolution: Maybe<IGenCase_Resolution>;
@@ -33,41 +47,41 @@ const CaseResultsReviewStep: FunctionComponent<ICaseResultsReviewStepProps> = ({
   caseId,
   facts,
   resolution,
-  title
-}) =>
-{
+  title,
+}) => {
   const resetCaseProgress = useResetCaseProgress();
   const [isExpandSolution, setIsExpandSolution] = useState<boolean>(false);
   const { isLoading, submittedCaseSolution } = useSubmittedCaseSolution(caseId);
   const solutionContent = useRef<HTMLDivElement>(null);
-  const [solutionElementHeight, setSolutionElementHeight] = React.useState<number>(0);
-  const solution: string = isLoading ? "lädt..." : (submittedCaseSolution?.solution || "");
+  const [solutionElementHeight, setSolutionElementHeight] =
+    React.useState<number>(0);
+  const solution: string = isLoading
+    ? "lädt..."
+    : submittedCaseSolution?.solution || "";
 
-  const icons = [
-    { src: <Bookmark/>, title: "Bookmark" },
-    { src: <Print/>, title: "Print" },
+  const icons: IIcons[] = [
+    { src: <Bookmark />, title: "Bookmark", variant: "case" },
+    { src: <Print />, title: "Print", variant: "case" },
   ];
 
-  useEffect(() => 
-  {
-    if(solution && solutionContent.current !== undefined) 
-    {
+  useEffect(() => {
+    if (solution && solutionContent.current !== undefined) {
       setSolutionElementHeight(solutionContent.current!.offsetHeight);
     }
   }, [solution]);
 
   const [isOpened, { close, open }] = useDisclosure(false);
-  const editButtonClick = (): void => 
-  {
+  const editButtonClick = (): void => {
     open();
   };
 
   const ShowAllBtn = (
     <Button<"button">
       styleType="tertiary"
-      rightIcon={<ArrowDown size={20}/>}
+      rightIcon={<ArrowDown size={20} />}
       size="medium"
-      onClick={() => setIsExpandSolution(true)}>
+      onClick={() => setIsExpandSolution(true)}
+    >
       Show all
     </Button>
   );
@@ -75,9 +89,10 @@ const CaseResultsReviewStep: FunctionComponent<ICaseResultsReviewStepProps> = ({
   const ShowLessBtn = (
     <Button<"button">
       styleType="tertiary"
-      rightIcon={<ArrowUp size={20}/>}
+      rightIcon={<ArrowUp size={20} />}
       size="medium"
-      onClick={() => setIsExpandSolution(false)}>
+      onClick={() => setIsExpandSolution(false)}
+    >
       Show less
     </Button>
   );
@@ -96,7 +111,7 @@ const CaseResultsReviewStep: FunctionComponent<ICaseResultsReviewStepProps> = ({
                     </Accordion.Control>
                     <Accordion.Panel>
                       <ScrollArea h={500} offsetScrollbars>
-                        <Richtext data={facts}/>
+                        <Richtext data={facts} />
                       </ScrollArea>
                     </Accordion.Panel>
                   </Accordion.Item>
@@ -105,42 +120,62 @@ const CaseResultsReviewStep: FunctionComponent<ICaseResultsReviewStepProps> = ({
             )}
             <div css={styles.solutionWrapper}>
               <div className="solution-header">
-                <Title order={3}><Pen/> Your solution</Title>
+                <Title order={3}>
+                  <Pen /> Your solution
+                </Title>
                 <div className="edit-but">
-                  <Button<"button"> onClick={() => editButtonClick()} styleType="secondarySimple"><Edit/> Edit
+                  <Button<"button">
+                    onClick={() => editButtonClick()}
+                    styleType="secondarySimple"
+                  >
+                    <Edit /> Edit
                   </Button>
                 </div>
               </div>
-              {
-                solutionElementHeight > 220 ? (
-                  <Spoiler
-                    hideLabel={ShowLessBtn}
-                    maxHeight={220}
-                    showLabel={ShowAllBtn}
-                    styles={styles.spoilerStyles({ isExpandSolution })}>
-                    <div className="solution-content">
-                      <ScrollArea h={isExpandSolution && solutionElementHeight > 220 ? 500 : undefined} offsetScrollbars>
-                        <div ref={solutionContent} dangerouslySetInnerHTML={{ __html: solution }}/>
-                      </ScrollArea>
-                    </div>
-                  </Spoiler>
-                ) : (
+              {solutionElementHeight > 220 ? (
+                <Spoiler
+                  hideLabel={ShowLessBtn}
+                  maxHeight={220}
+                  showLabel={ShowAllBtn}
+                  styles={styles.spoilerStyles({ isExpandSolution })}
+                >
                   <div className="solution-content">
-                    <div ref={solutionContent} dangerouslySetInnerHTML={{ __html: solution }}/>
+                    <ScrollArea
+                      h={
+                        isExpandSolution && solutionElementHeight > 220
+                          ? 500
+                          : undefined
+                      }
+                      offsetScrollbars
+                    >
+                      <div
+                        ref={solutionContent}
+                        dangerouslySetInnerHTML={{ __html: solution }}
+                      />
+                    </ScrollArea>
                   </div>
-                )
-              }
+                </Spoiler>
+              ) : (
+                <div className="solution-content">
+                  <div
+                    ref={solutionContent}
+                    dangerouslySetInnerHTML={{ __html: solution }}
+                  />
+                </div>
+              )}
             </div>
           </div>
           {resolution?.json && (
             <div css={styles.resolutionWrapper}>
               <div className="resolution-header">
-                <Title order={2}><Notepad size={24}/> Resolution</Title>
+                <Title order={2}>
+                  <Notepad size={24} /> Resolution
+                </Title>
                 <div className="icons-bar">
-                  <IconButtonBar icons={icons}/>
+                  <IconButtonBar icons={icons} />
                 </div>
               </div>
-              <Richtext data={resolution}/>
+              <Richtext data={resolution} />
             </div>
           )}
         </div>
@@ -150,15 +185,25 @@ const CaseResultsReviewStep: FunctionComponent<ICaseResultsReviewStepProps> = ({
         opened={isOpened}
         centered
         title="Reset case progress?"
-        onClose={close}>
+        onClose={close}
+      >
         <Text>
-          Are you sure you want to delete all your test answers and case solution in {title} case?
+          Are you sure you want to delete all your test answers and case
+          solution in {title} case?
         </Text>
         <Group noWrap grow w="100%">
-          <Button<"button"> onClick={close} fullWidth styleType="secondarySimple">
+          <Button<"button">
+            onClick={close}
+            fullWidth
+            styleType="secondarySimple"
+          >
             No, keep data
           </Button>
-          <Button<"button"> onClick={() => resetCaseProgress({ caseId })} styleType="primary" fullWidth>
+          <Button<"button">
+            onClick={() => resetCaseProgress({ caseId })}
+            styleType="primary"
+            fullWidth
+          >
             Yes, reset progress
           </Button>
         </Group>

@@ -188,6 +188,9 @@ dependencies:
   postgres:
     specifier: 3.3.5
     version: 3.3.5
+  posthog-js:
+    specifier: 1.84.0
+    version: 1.84.0
   puppeteer-core:
     specifier: 21.3.8
     version: 21.3.8
@@ -10424,6 +10427,10 @@ packages:
     resolution: {integrity: sha512-3yurQZ2hD9VISAhJJP9bpYFNQrHHBXE2JxxjY5aLEcDi46RmAzJE2OC9FAde0yis5ElW0jTTzs0zfg/Cca4XqQ==}
     dev: true
 
+  /fflate@0.4.8:
+    resolution: {integrity: sha512-FJqqoDBR00Mdj9ppamLa/Y7vxm+PRmNWA67N846RvsoYVMKB4q3y/de5PA7gUmRMYK/8CMz2GDZQmCRN1wBcWA==}
+    dev: false
+
   /figures@3.2.0:
     resolution: {integrity: sha512-yaduQFRKLXYOGgEn6AZau90j3ggSOyiqXU0F9JZfeXYhNa+Jk4X+s45A2zg5jns87GAFa34BBm2kXw4XpNcbdg==}
     engines: {node: '>=8'}
@@ -13969,6 +13976,12 @@ packages:
 
   /postgres@3.3.5:
     resolution: {integrity: sha512-+JD93VELV9gHkqpV5gdL5/70HdGtEw4/XE1S4BC8f1mcPmdib3K5XsKVbnR1XcAyC41zOnifJ+9YRKxdIsXiUw==}
+    dev: false
+
+  /posthog-js@1.84.0:
+    resolution: {integrity: sha512-Wf3wSgPsRYMTJTlom+frAspm8gnlgRmAJ2hGJtFjL1RQUgER0DvkjWFBtfDSyO2Jh1Hb1v4Ll1wHgEAtN15qgQ==}
+    dependencies:
+      fflate: 0.4.8
     dev: false
 
   /prebuild-install@7.1.1:
