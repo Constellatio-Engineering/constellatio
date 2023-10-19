@@ -125,7 +125,7 @@ const CaseBlockBookmarkButton: FunctionComponent<ICaseBlockBookmarkButtonProps> 
       <Modal
         opened={showDeleteBookmarkModal}
         centered
-        lockScroll
+        lockScroll={false}
         withCloseButton={false}
         onClose={function(): void 
         {

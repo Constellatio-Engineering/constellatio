@@ -10,6 +10,9 @@ const CSSHiddenCard = css`
     filter: blur(3px);
   }
 `;
+const CSSHighlighted = (theme: MantineTheme) => css`
+background: ${theme.colors["cc-cases"][2]};
+`;
 
 export const wrapper = ({ hidden, theme }: {
   hidden?: boolean;
@@ -82,11 +85,13 @@ export const wrapper = ({ hidden, theme }: {
 `;
 
 export const item = ({
+  highlighted,
   isExpandable,
   isExpanded,
   isTopLevel,
-  theme,
+  theme
 }: {
+  highlighted?: boolean;
   isExpandable?: boolean;
   isExpanded?: boolean;
   isTopLevel?: boolean;
@@ -128,6 +133,7 @@ export const item = ({
   }
   vertical-align: baseline;
   cursor: pointer;
+  ${highlighted && CSSHighlighted(theme)}
 `;
 
 export const facts = css`

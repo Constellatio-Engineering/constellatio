@@ -26,15 +26,15 @@ const FileViewer: FunctionComponent = () =>
       {
         return "pdf";
       }
-      else if(["jpg", "jpeg", "png", "gif"].includes(extension)) 
+      else if(["jpg", "jpeg", "png", "gif"].includes(extension.toLocaleLowerCase())) 
       {
         return "image";
       }
-      else if(["mp4", "webm"].includes(extension)) 
+      else if(["mp4", "webm"].includes(extension.toLocaleLowerCase())) 
       {
         return "video";
       }
-      else if(["docx", "doc"].includes(extension)) 
+      else if(["docx", "doc"].includes(extension.toLocaleLowerCase())) 
       {
         return "document";
       }

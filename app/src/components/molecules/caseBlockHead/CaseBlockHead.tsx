@@ -47,20 +47,20 @@ const CaseBlockHead: FunctionComponent<ICaseBlockHeadProps> = ({
                 <CaptionText component="p" styleType="caption-01-bold">ABGESCHLOSSENE FÄLLE</CaptionText>
               </div>
             )
-              : <Label variant="dictionary" title={`${items} ARTICLES`}/>}
+              : <Label variant="dictionary" title={`${items} LEXIKON`}/>}
           </>
         );
       case "favoriteItemsBlock":
         return (
           <>
-            {items && variant === "case" ? <Label variant="case">{items} Cases</Label> : <Label variant="dictionary">{items} Articles</Label>}
+            {items && variant === "case" ? <Label variant="case">{items} Fälle</Label> : <Label variant="dictionary">{items} Articles</Label>}
           </>
         );
       case "searchBlock":
         return (
 
           <>
-            {items && variant === "case" ? <Label variant="case">{items} Cases</Label> : <Label variant="dictionary">{items} Articles</Label>}
+            {items && variant === "case" ? <Label variant="case">{items} Fälle</Label> : <Label variant="dictionary">{items} Articles</Label>}
           </>
         );
       case "searchPapersBlock":
