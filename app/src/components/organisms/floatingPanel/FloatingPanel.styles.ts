@@ -11,7 +11,8 @@ const CSSHiddenCard = css`
   }
 `;
 const CSSHighlighted = (theme: MantineTheme) => css`
-background: ${theme.colors["cc-cases"][2]};
+background: ${theme.colors["neutrals-01"][3]};
+outline: 1px solid ${theme.colors["neutrals-01"][1]};
 `;
 
 export const wrapper = ({ hidden, theme }: {
