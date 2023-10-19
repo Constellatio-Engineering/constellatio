@@ -13,6 +13,9 @@ export type OnboardingResult = typeof allOnboardingResults[number];
 export const allBookmarkResourceTypes = ["article", "case"] as const;
 export type BookmarkResourceType = typeof allBookmarkResourceTypes[number];
 
+export const allSearchIndexTypes = ["article", "case"] as const;
+export type SearchIndexType = typeof allSearchIndexTypes[number];
+
 export const allCaseProgressStates = ["not-started", "completing-tests", "solving-case", "completed"] as const;
 export type CaseProgressState = typeof allCaseProgressStates[number];
 
@@ -22,6 +25,7 @@ export type GameProgressState = typeof allGameProgressStates[number];
 export const genderEnum = pgEnum("Gender", allGenderIdentifiers);
 export const onboardingResultEnum = pgEnum("OnboardingResult", allOnboardingResults);
 export const resourceTypeEnum = pgEnum("ResourceType", allBookmarkResourceTypes);
+export const searchIndexTypeEnum = pgEnum("SearchIndexType", allSearchIndexTypes);
 export const caseProgressStateEnum = pgEnum("CaseProgressState", allCaseProgressStates);
 export const gameProgressStateEnum = pgEnum("GameProgressState", allGameProgressStates);
 
@@ -163,3 +167,8 @@ export const gamesProgress = pgTable("GameProgress", {
 
 export type GameProgressInsert = InferInsertModel<typeof gamesProgress>;
 export type GameProgress = InferSelectModel<typeof gamesProgress>;
+
+export const searchIndexUpdateQueue = pgTable("SearchIndexUpdateQueue", {
+  cmsId: uuid("CmsId").unique().notNull().primaryKey(),
+  resourceType: searchIndexTypeEnum("ResourceType").notNull(),
+});

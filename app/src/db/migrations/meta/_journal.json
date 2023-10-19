@@ -162,6 +162,20 @@
       "when": 1697604970184,
       "tag": "0022_thick_photon",
       "breakpoints": true
+    },
+    {
+      "idx": 23,
+      "version": "5",
+      "when": 1697728933345,
+      "tag": "0023_rich_professor_monster",
+      "breakpoints": true
+    },
+    {
+      "idx": 24,
+      "version": "5",
+      "when": 1697728933872,
+      "tag": "0024_silky_raza",
+      "breakpoints": true
     }
   ]
 }

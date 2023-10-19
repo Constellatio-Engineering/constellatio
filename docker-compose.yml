@@ -34,6 +34,7 @@ services:
 
   localtunnel:
     image: efrecon/localtunnel
+    restart: always
     extra_hosts:
       - "host.docker.internal:host-gateway"
     command:

@@ -23,6 +23,10 @@ export const env = createEnv({
     CAISY_WEBHOOKS_SECRET_KEY: z.string(),
     CAISY_CASE_BLUEPRINT_ID: z.string(),
     CAISY_ARTICLE_BLUEPRINT_ID: z.string(),
+    CAISY_MAIN_CATEGORY_BLUEPRINT_ID: z.string(),
+    CAISY_LEGAL_AREA_BLUEPRINT_ID: z.string(),
+    CAISY_TOPIC_BLUEPRINT_ID: z.string(),
+    CAISY_TAG_BLUEPRINT_ID: z.string(),
   },
 
   /**
@@ -68,6 +72,10 @@ export const env = createEnv({
     CAISY_WEBHOOKS_SECRET_KEY: process.env.CAISY_WEBHOOKS_SECRET_KEY,
     CAISY_CASE_BLUEPRINT_ID: process.env.CAISY_CASE_BLUEPRINT_ID,
     CAISY_ARTICLE_BLUEPRINT_ID: process.env.CAISY_ARTICLE_BLUEPRINT_ID,
+    CAISY_TAG_BLUEPRINT_ID: process.env.CAISY_TAG_BLUEPRINT_ID,
+    CAISY_MAIN_CATEGORY_BLUEPRINT_ID: process.env.CAISY_MAIN_CATEGORY_BLUEPRINT_ID,
+    CAISY_LEGAL_AREA_BLUEPRINT_ID: process.env.CAISY_LEGAL_AREA_BLUEPRINT_ID,
+    CAISY_TOPIC_BLUEPRINT_ID: process.env.CAISY_TOPIC_BLUEPRINT_ID,
   },
   /**
    * Run `build` or `dev` with `SKIP_ENV_VALIDATION` to skip env validation.
