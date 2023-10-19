@@ -12,7 +12,7 @@ import { env } from "@/env.mjs";
 import { supabase } from "@/lib/supabase";
 import { maximumAmountOfSemesters, type RegistrationFormSchema, registrationFormSchema } from "@/schemas/auth/registrationForm.schema";
 import { api } from "@/utils/api";
-import { isDevelopmentOrStaging } from "@/utils/env";
+import { isDevelopment } from "@/utils/env";
 import { getConfirmEmailUrl } from "@/utils/paths";
 import { type PartialUndefined } from "@/utils/types";
 
@@ -30,10 +30,10 @@ import { makeZodI18nMap } from "zod-i18n-map";
 // this means for the initial values of the form, these keys can be null since these are dropdowns
 type InitialValues = PartialUndefined<RegistrationFormSchema, "gender">;
 
-const initialValues: InitialValues = isDevelopmentOrStaging ? {
+const initialValues: InitialValues = isDevelopment ? {
   acceptTOS: true,
   displayName: "Constellatio Test User",
-  email: env.NEXT_PUBLIC_SIGN_UP_DEFAULT_EMAIL || (env.NEXT_PUBLIC_DEPLOYMENT_ENVIRONMENT === "development" ? "devUser@constellatio-dummy-mail.de" : ""),
+  email: env.NEXT_PUBLIC_SIGN_UP_DEFAULT_EMAIL || (isDevelopment ? "devUser@constellatio-dummy-mail.de" : ""),
   firstName: "Test",
   gender: allGenders[0]!.identifier,
   lastName: "User",
@@ -234,8 +234,10 @@ export const RegistrationForm: FunctionComponent = () =>
 
   return (
     <form onSubmit={handleSubmit}>
-      {isDevelopmentOrStaging && (
-        <p style={{ fontStyle: "italic", marginBottom: 30 }}>Note from developers: Form is only pre filled in development and staging, not in production.</p>
+      {isDevelopment && (
+        <p style={{ fontStyle: "italic", marginBottom: 30 }}>
+          Note from developers: Form is only pre filled in development not in production.
+        </p>
       )}
       <Stack spacing="spacing-24">
         <Stack spacing="spacing-12">
