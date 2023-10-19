@@ -1,5 +1,6 @@
 import { db } from "@/db/connection";
 import { searchIndexUpdateQueue } from "@/db/schema";
+import { env } from "@/env.mjs";
 import { meiliSearchAdmin } from "@/lib/meilisearch";
 import { addArticlesToSearchIndex, addCasesToSearchIndex } from "@/server/api/services/search.services";
 import getAllArticles from "@/services/content/getAllArticles";
@@ -107,8 +108,13 @@ const updateCases: UpdateCases = async () =>
   });
 };
 
-const handler: NextApiHandler = async (_req, res): Promise<void> =>
+const handler: NextApiHandler = async (req, res): Promise<void> =>
 {
+  if(req.headers.authorization !== `Bearer ${env.CRON_SECRET}`)
+  {
+    return res.status(401).json({ message: "Unauthorized" });
+  }
+
   console.log("----- [Cronjob] Update Search Indexes -----");
 
   const { createArticlesIndexTaskId, idsOfArticlesToUpdate, removeDeletedArticlesTaskId } = await updateArticles();
