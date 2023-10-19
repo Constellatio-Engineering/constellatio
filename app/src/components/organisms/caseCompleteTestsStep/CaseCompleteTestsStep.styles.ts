@@ -14,26 +14,40 @@ export const facts = (theme: MantineTheme) => css`
 	> button {
 		align-self: flex-start;
 	}
+	@media screen and (max-width: 1024px) {
+		max-width: 100%;
+
+	}
 `;
 
 export const content = css`
 	position: relative;
 	display: flex;
 	justify-content: space-between;
+	@media screen and (max-width: 1024px) {
+		display: block;
+	}
 `;
 
 export const toc = css`
 	position: sticky;
 	top: 104px;
 	order: 1;
-	margin-left: auto;
 	height: max-content;
+	margin: 24px;
+	@media screen and (max-width: 1024px) {
+		position: static;
+		margin: 32px 0px;
+	}
 `;
 
 export const fullTextAndTasksWrapper = css`
 	max-width: 52.5%;
 	/* padding: 0 44px; */
 	padding: 0 ;
+	@media screen and (max-width: 1024px) {
+		max-width:100%;
+	}
 `;
 
 export const componentWrapper = css`

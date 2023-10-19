@@ -28,7 +28,7 @@ export const DragNDropCard: FC<TDraggableCard> = ({
 {
   return (
     <ButtonCard status={status} dropped={dropped} {...props}>
-      <Flex gap="spacing-8" align="center">
+      <Flex gap="spacing-2" align="center">
         {status === "default" && (
           <div>
             <Handle/>

@@ -7,10 +7,7 @@ import IconButton from "../atoms/iconButton/IconButton";
 import { SubtitleText } from "../atoms/SubtitleText/SubtitleText";
 import { SwitcherTab } from "../atoms/Switcher-tab/SwitcherTab";
 import { ClockIcon } from "../Icons/ClockIcon";
-import { FolderIcon } from "../Icons/Folder";
-import { Trash } from "../Icons/Trash";
 import { Switcher } from "../molecules/Switcher/Switcher";
-import { tabs } from "../organisms/caseNavBar/CaseNavBar.styles";
 
 const ProfileLearningTimeBlockHeader: FunctionComponent<{
   readonly selectedTab: number;
