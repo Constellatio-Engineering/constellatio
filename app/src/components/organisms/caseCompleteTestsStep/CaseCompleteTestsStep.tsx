@@ -1,7 +1,6 @@
 /* eslint-disable max-lines */
 import { Button } from "@/components/atoms/Button/Button";
 import { type IStatusLabel } from "@/components/atoms/statusLabel/StatusLabel";
-import { RichTextHeadingOverwrite } from "@/components/helpers/RichTextHeadingOverwrite";
 import { type GameProgress } from "@/db/schema";
 import useContextAndErrorIfNull from "@/hooks/useContextAndErrorIfNull";
 import { InvalidateQueriesContext } from "@/provider/InvalidateQueriesProvider";
