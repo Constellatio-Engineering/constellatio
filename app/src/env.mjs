@@ -27,6 +27,7 @@ export const env = createEnv({
     CAISY_LEGAL_AREA_BLUEPRINT_ID: z.string(),
     CAISY_TOPIC_BLUEPRINT_ID: z.string(),
     CAISY_TAG_BLUEPRINT_ID: z.string(),
+    CRON_SECRET: z.string(),
   },
 
   /**
@@ -76,6 +77,7 @@ export const env = createEnv({
     CAISY_MAIN_CATEGORY_BLUEPRINT_ID: process.env.CAISY_MAIN_CATEGORY_BLUEPRINT_ID,
     CAISY_LEGAL_AREA_BLUEPRINT_ID: process.env.CAISY_LEGAL_AREA_BLUEPRINT_ID,
     CAISY_TOPIC_BLUEPRINT_ID: process.env.CAISY_TOPIC_BLUEPRINT_ID,
+    CRON_SECRET: process.env.CRON_SECRET,
   },
   /**
    * Run `build` or `dev` with `SKIP_ENV_VALIDATION` to skip env validation.
