@@ -1,5 +1,5 @@
 import { css } from "@emotion/react";
-import { MantineTheme } from "@mantine/styles";
+import { type MantineTheme } from "@mantine/styles";
 
 export const wrapper = (theme: MantineTheme) => css`
     background: ${theme.colors["neutrals-01"][0]};
@@ -19,7 +19,7 @@ export const discountBadge = (theme: MantineTheme) => css`
 `;
 export const price = (theme: MantineTheme) => css`
     color: ${theme.colors["neutrals-02"][1]};
-`
+`;
 export const totalPrice = css`
 /* Couldn't find it's typography */
 font-size: 44px;
@@ -33,4 +33,4 @@ export const undiscountedPrice = (theme: MantineTheme) => css`
     text-decoration: line-through;
     margin-right: 8px;
 
-`
+`;
