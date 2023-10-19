@@ -214,7 +214,7 @@ const CaseCompleteTestsStep: FunctionComponent<ICaseCompleteTestsStepProps> = ({
                   heading: (props) => 
                   {
                     const node = props!.node as unknown as IHeadingNode;
-                    return RichTextHeadingOverwrite({ depth: node?.attrs?.level, index: getNestedHeadingIndex(node, allHeadings), ...props });
+                    return RichTextHeadingOverwrite({ index: getNestedHeadingIndex(node, allHeadings), ...props });
                   },
                   paragraph: richTextParagraphOverwrite
                 }}
