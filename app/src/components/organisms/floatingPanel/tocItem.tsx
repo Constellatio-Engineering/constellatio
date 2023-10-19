@@ -49,8 +49,7 @@ export const TOCItemComponent: React.FC<{ readonly depth: number; readonly item:
     {
       setIsExpanded(true);
     }
-    
-  }, [observedHeadline]);
+  }, [item.text, observedHeadline]);
   return (
     <div
       onClick={(e) => scrollToElement(e, slugFormatter(item.text))}

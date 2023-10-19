@@ -1,6 +1,5 @@
 import { CaptionText } from "@/components/atoms/CaptionText/CaptionText";
 import { LinkButton } from "@/components/atoms/LinkButton/LinkButton";
-import { Heart } from "@/components/Icons/Heart";
 import { Help } from "@/components/Icons/Help";
 
 import { Flex, Group } from "@mantine/core";

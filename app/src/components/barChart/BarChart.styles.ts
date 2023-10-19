@@ -1,10 +1,7 @@
 import { css } from "@emotion/react";
-import { MantineTheme } from "@mantine/styles";
+import { type MantineTheme } from "@mantine/styles";
 
-export const bar = ({
-  height,
-  theme,
-}: {
+export const bar = ({ height, theme }: {
   height: number;
   theme: MantineTheme;
 }) => css`
@@ -17,7 +14,7 @@ export const bar = ({
   border: 1px solid ${theme.colors["neutrals-01"][3]};
   &::after {
       background-color: ${theme.colors["brand-02"][4]};
-      height: ${height*10}px;
+      height: ${height * 10}px;
       position: absolute;
     width: 9px;
     border-radius: 5px;

@@ -3,7 +3,7 @@ import { type IHeadingNode } from "types/richtext";
 
 // import { RichTextRenderer } from "@caisy/rich-text-react-renderer";
 import { useIntersection } from "@mantine/hooks";
-import React, { type ReactElement, useEffect, useRef } from "react";
+import React, { type ReactElement, type ReactNode, type ElementType } from "react";
 
 import { getNumericalLabel } from "../organisms/floatingPanel/generateTocHelper";
 import { slugFormatter } from "../organisms/OverviewHeader/OverviewHeader";
@@ -18,12 +18,11 @@ export const RichTextHeadingOverwrite = ({
 {
   const node = props!.node as unknown as IHeadingNode;
   const level = node.attrs.level as number;
-  const HeadingTag = `h${level}` as React.ElementType;
+  const HeadingTag = `h${level}` as ElementType;
   const { entry, ref } = useIntersection();
   const setObservedHeadline = useCaseSolvingStore(s => s.setObservedHeadline); 
-  const inView = (): React.ReactNode => 
+  const inView = (): ReactNode => 
   {
-    console.log("in view", entry.target.id);
     setObservedHeadline(entry.target.id);
     return <></>;
   };
