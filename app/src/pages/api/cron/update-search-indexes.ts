@@ -149,7 +149,7 @@ const handler: NextApiHandler = async (req, res): Promise<void> =>
     inArray(searchIndexUpdateQueue.cmsId, updatedCaseAndArticleIds)
   );
 
-  console.log("Search indexes updated successfully for cases and articles.");
+  console.log("Search indexes updated successfully for cases and articles");
 
   return res.status(200).json({ message: "Search indexes updated" });
 };
