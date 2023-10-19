@@ -58,16 +58,16 @@ const OverviewHeader: FunctionComponent<ICasesOverviewHeaderProps> = ({
             <CategoryTab
               {...category}
               itemsNumber={category?.casesPerCategory}
-              // selected={isCategorySelected(category)}
               selected={selectedCategorySlug === slugFormatter(category?.mainCategory)}
               variant={variant}
+              // selected={isCategorySelected(category)}
             />
           </div>
         ))}
       </div>
+      {/* this can be a helper or a provider with global state passed to the cases list for filters */}
       <div css={styles.filtersArea}>
         {filters.length > 0 && <FiltersButton title="Filters"/>}
-        {/* this can be a helper or a provider with global state passed to the cases list for filters */}
         {filters.length > 0 && (
           <>
             <div css={styles.selectedFiltersArea}>

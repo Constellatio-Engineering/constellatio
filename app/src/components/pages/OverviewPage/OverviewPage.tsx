@@ -129,7 +129,7 @@ const OverviewPage: FunctionComponent<OverviewPageProps> = ({ content, variant }
           selectedCategorySlug={selectedCategorySlug}
           setSelectedCategorySlug={setSelectedCategorySlug}
           categories={content?.allMainCategories}
-          title={variant === "case" ? "Cases" : "Dictionary"}
+          title={variant === "case" ? "Fälle" : "Lexikon"}
         />
       )}
       <div css={styles.ListWrapper}>

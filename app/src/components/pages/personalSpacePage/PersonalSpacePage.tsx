@@ -25,21 +25,12 @@ export type FileWithClientSideUuid = {
 
 const PersonalSpacePage: FunctionComponent = () =>
 {
-  // const { folders = [] } = useUploadFolders();
   const { allCases = [] } = useCases();
   const { allArticles = [] } = useArticles(); 
   const { bookmarks } = useBookmarks(undefined);
   const selectedFolderId = useMaterialsStore(s => s.selectedFolderId);
   const { documents } = useDocuments(selectedFolderId);
   const { uploadedFiles } = useUploadedFiles(selectedFolderId);
-
-  // const allItemsInMaterialsTab = [];
-  // for(const folder of folders)
-  // {
-  //   const { documents } = useDocuments(folder.id);
-  //   allItemsInMaterialsTab.push(...documents);
-  // }
-
   const allCasesBookmarks = bookmarks.filter(bookmark => bookmark?.resourceType === "case") ?? [];
   const bookmarkedCases = allCases.filter(caisyCase => allCasesBookmarks.some(bookmark => bookmark.resourceId === caisyCase.id));
   const allArticlesBookmarks = bookmarks.filter(bookmark => bookmark?.resourceType === "article") ?? [];
@@ -55,7 +46,6 @@ const PersonalSpacePage: FunctionComponent = () =>
     MaterialsCategoryId,
     uploadedFilesLength: (uploadedFiles?.length + documents?.length) ?? 0,
   });
-  // const [selectedCategory, setSelectedCategory] = useState<IGenMainCategory | undefined>(categories?.[0]);
   const isFavoriteTab = (slug: string): boolean => slug === slugFormatter(categories?.[0]?.mainCategory ?? "");
   const router = useRouter();
   const [selectedCategorySlug, setSelectedCategorySlug] = useQueryState("category");
@@ -105,10 +95,7 @@ const PersonalSpacePage: FunctionComponent = () =>
                 setSelectedCategorySlug={setSelectedCategorySlug}
               />
             </div>
-            {isFavoriteTab(selectedCategorySlug ?? "") ?
-              <PersonalSpaceFavoriteTab/>
-              : 
-              <PersonalSpaceMaterialsTab/>}
+            {isFavoriteTab(selectedCategorySlug ?? "") ? <PersonalSpaceFavoriteTab/> : <PersonalSpaceMaterialsTab/>}
           </>
         )
       }

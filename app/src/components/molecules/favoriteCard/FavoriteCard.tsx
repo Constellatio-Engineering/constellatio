@@ -24,7 +24,7 @@ const FavoriteCard: FunctionComponent<FavoriteCardProps> = ({
   return (
     <div css={styles.wrapper} {...props}>
       <div css={styles.tags}>
-        <Label variant={variant} title={variant}/>
+        <Label variant={variant} title={variant === "case" ? "Fälle" : "Lexikon"}/>
         <IconButton icon={icon ?? <BookmarkFilledIcon/>} size="big"/>
       </div>
       {title && <Title title={title} order={4} css={styles.title}>{title.slice(0, 40)}{title?.length > 45 && "..."}</Title>}

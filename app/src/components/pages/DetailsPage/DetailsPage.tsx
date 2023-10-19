@@ -140,7 +140,7 @@ const DetailsPage: FunctionComponent<IDetailsPageProps> = ({ content, variant })
         pathSlugs={[
           {
             path: variant === "case" ? paths.cases : paths.dictionary,
-            slug: variant === "case" ? "Cases" : "Dictionary" 
+            slug: variant === "case" ? "Fälle" : "Lexikon" 
           },
           {
             path: variant === "case" ? `${paths.cases}?category=${slugFormatter(content?.mainCategoryField?.[0]?.mainCategory ?? "")}` : `${paths.dictionary}?category=${slugFormatter(content?.mainCategoryField?.[0]?.mainCategory ?? "")}`, 
