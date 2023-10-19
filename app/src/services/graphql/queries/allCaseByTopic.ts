@@ -1,13 +1,13 @@
 import { gql } from "graphql-request";
 
-export const getAllCasesByMainCategory = gql`
-  query getAllCasesByMainCategory($mainCategoryName: String!) {
+export const getAllCasesByTopic = gql`
+  query getAllCasesByTopic($topicName: String!) {
     allCase(
       where: {
         AND: [
           {
-            mainCategoryField: {
-              findOne: { MainCategory: { mainCategory: { eq: $mainCategoryName } } }
+            topic: {
+              findOne: { Topic: { topicName: { eq: $topicName } } }
             }
           }
         ]

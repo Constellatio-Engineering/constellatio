@@ -1,28 +1,9 @@
-/* eslint-disable @typescript-eslint/naming-convention */
-import { db } from "@/db/connection";
-import { searchIndexUpdateQueue } from "@/db/schema";
 import { env } from "@/env.mjs";
+import { addArticlesAndCasesToSearchQueue, addContentToSearchQueue } from "@/server/api/services/search.services";
 import { caisySDK } from "@/services/graphql/getSdk";
 
 import { type NextApiHandler } from "next";
 import { z, ZodError } from "zod";
-
-/* type CaisyWebhookRequest = {
-  event_id?: string;
-  metadata?: {
-    blueprint_field_id?: string;
-    blueprint_id?: string;
-    document_id?: string;
-    document_locale_id?: string;
-  };
-  scope?: {
-    project_id?: string;
-  };
-  webhook?: {
-    trigger?: string;
-    webhook_id?: string;
-  };
-};*/
 
 const caisyWebhookSchema = z.object({
   metadata: z.object({
@@ -82,21 +63,112 @@ const handler: NextApiHandler = async (req, res): Promise<void> =>
   {
     case env.CAISY_CASE_BLUEPRINT_ID:
     {
-      // const { Case } = await caisySDK.getCaseById({ id: documentId });
-      await db.insert(searchIndexUpdateQueue).values({ cmsId: documentId, resourceType: "case" }).onConflictDoNothing();
+      console.log(`Case '${documentId}' changed. Adding it to the search index update queue...`);
+      await addContentToSearchQueue({ cmsId: documentId, resourceType: "case" });
       break;
     }
     case env.CAISY_ARTICLE_BLUEPRINT_ID:
     {
-      // const { Article } = await caisySDK.getArticleById({ id: documentId });
-      await db.insert(searchIndexUpdateQueue).values({ cmsId: documentId, resourceType: "article" }).onConflictDoNothing();
+      console.log(`Article '${documentId}' changed. Adding it to the search index update queue...`);
+      await addContentToSearchQueue({ cmsId: documentId, resourceType: "article" });
+      break;
+    }
+    case env.CAISY_TAG_BLUEPRINT_ID:
+    {
+      const { Tags: Tag } = await caisySDK.getTagsById({ id: documentId });
+      const tagName = Tag?.tagName;
+
+      if(!tagName)
+      {
+        console.warn("Tag has no name. Cannot update content with this tag.", Tag);
+        return res.status(500).json({ message: `Tag ${documentId} has no name. Cannot update content with this tag.` });
+      }
+
+      console.log(`Tag '${tagName}' changed. Updating all content with this tag.`);
+
+      const articlesWithTag = await caisySDK.getAllArticlesByTag({ tagName });
+      const casesWithTag = await caisySDK.getAllCasesByTag({ tagName });
+
+      console.log(`Found ${articlesWithTag?.allArticle?.totalCount} articles with tag ${tagName}. Adding them to the search index update queue...`);
+      console.log(`Found ${casesWithTag?.allCase?.totalCount} cases with tag ${tagName}. Adding them to the search index update queue...`);
+
+      await addArticlesAndCasesToSearchQueue({ articles: articlesWithTag, cases: casesWithTag });
+
+      break;
+    }
+    case env.CAISY_TOPIC_BLUEPRINT_ID:
+    {
+      const { Topic } = await caisySDK.getTopicById({ id: documentId });
+      const topicName = Topic?.topicName;
+
+      if(!topicName)
+      {
+        console.warn("Topic has no name. Cannot update content with this topic.", Topic);
+        return res.status(500).json({ message: `Topic ${documentId} has no name. Cannot update content with this topic.` });
+      }
+
+      console.log(`Topic '${topicName}' changed. Updating all content with this topic.`);
+
+      const articlesInTopic = await caisySDK.getAllArticlesByTopic({ topicName });
+      const casesInTopic = await caisySDK.getAllCasesByTopic({ topicName });
+
+      console.log(`Found ${articlesInTopic?.allArticle?.totalCount} articles in topic ${topicName}. Adding them to the search index update queue...`);
+      console.log(`Found ${casesInTopic?.allCase?.totalCount} cases in topic ${topicName}. Adding them to the search index update queue...`);
+
+      await addArticlesAndCasesToSearchQueue({ articles: articlesInTopic, cases: casesInTopic });
+
+      break;
+    }
+    case env.CAISY_LEGAL_AREA_BLUEPRINT_ID:
+    {
+      const { LegalArea } = await caisySDK.getLegalAreaById({ id: documentId });
+      const legalAreaName = LegalArea?.legalAreaName;
+
+      if(!legalAreaName)
+      {
+        console.warn("Legal Area has no name. Cannot update content with this legal area.", LegalArea);
+        return res.status(500).json({ message: `Legal Area ${documentId} has no name. Cannot update content with this legal area.` });
+      }
+
+      console.log(`Legal Area '${legalAreaName}' changed. Updating all content with this legal area.`);
+
+      const articlesInLegalArea = await caisySDK.getAllArticlesByLegalArea({ legalAreaName });
+      const casesInLegalArea = await caisySDK.getAllCasesByLegalArea({ legalAreaName });
+
+      console.log(`Found ${articlesInLegalArea?.allArticle?.totalCount} articles in legal area ${legalAreaName}. Adding them to the search index update queue...`);
+      console.log(`Found ${casesInLegalArea?.allCase?.totalCount} cases in legal area ${legalAreaName}. Adding them to the search index update queue...`);
+
+      await addArticlesAndCasesToSearchQueue({ articles: articlesInLegalArea, cases: casesInLegalArea });
+
+      break;
+    }
+    case env.CAISY_MAIN_CATEGORY_BLUEPRINT_ID:
+    {
+      const { MainCategory } = await caisySDK.getMainCategoryById({ id: documentId });
+      const mainCategoryName = MainCategory?.mainCategory;
+
+      if(!mainCategoryName)
+      {
+        console.warn("Main category has no name. Cannot update content with this main category.", MainCategory);
+        return res.status(500).json({ message: `Main category ${documentId} has no name. Cannot update content with this main category.` });
+      }
+
+      console.log(`Main category '${mainCategoryName}' changed. Updating all content with this main category.`);
+
+      const articlesInMainCategory = await caisySDK.getAllArticlesByMainCategory({ mainCategoryName });
+      const casesInMainCategory = await caisySDK.getAllCasesByMainCategory({ mainCategoryName });
+
+      console.log(`Found ${articlesInMainCategory?.allArticle?.totalCount} articles in main category ${mainCategoryName}. Adding them to the search index update queue...`);
+      console.log(`Found ${casesInMainCategory?.allCase?.totalCount} cases in main category ${mainCategoryName}. Adding them to the search index update queue...`);
+
+      await addArticlesAndCasesToSearchQueue({ articles: articlesInMainCategory, cases: casesInMainCategory });
+
       break;
     }
     default:
     {
-      console.log("unknown blueprint_id");
-      console.log(webhook);
-      return res.status(200).json({ message: `blueprint_id ${webhook.metadata.blueprint_id} has no corresponding search index` });
+      console.log(`blueprint_id '${webhook.metadata.blueprint_id}' has no corresponding search index`);
+      return res.status(200).json({ message: `blueprint_id '${webhook.metadata.blueprint_id}' has no corresponding search index` });
     }
   }
 

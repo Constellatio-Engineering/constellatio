@@ -1,8 +1,8 @@
 import { gql } from "graphql-request";
 
-export const getAllCasesByMainCategory = gql`
-  query getAllCasesByMainCategory($mainCategoryName: String!) {
-    allCase(
+export const getAllArticlesByMainCategory = gql`
+  query getAllArticlesByMainCategory($mainCategoryName: String!) {
+    allArticle(
       where: {
         AND: [
           {
@@ -10,7 +10,7 @@ export const getAllCasesByMainCategory = gql`
               findOne: { MainCategory: { mainCategory: { eq: $mainCategoryName } } }
             }
           }
-        ]
+        ] 
       }
     ) {
       totalCount

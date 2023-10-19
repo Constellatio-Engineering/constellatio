@@ -172,3 +172,6 @@ export const searchIndexUpdateQueue = pgTable("SearchIndexUpdateQueue", {
   cmsId: uuid("CmsId").unique().notNull().primaryKey(),
   resourceType: searchIndexTypeEnum("ResourceType").notNull(),
 });
+
+export type SearchIndexUpdateQueueInsert = InferInsertModel<typeof searchIndexUpdateQueue>;
+export type SearchIndexUpdateQueueItem = InferSelectModel<typeof searchIndexUpdateQueue>;
