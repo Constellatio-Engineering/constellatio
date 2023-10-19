@@ -34,10 +34,20 @@ import ConstellatioFullLogo from "../../../../public/images/icons/constellatio-f
 import OnboardingTutorialPopover from "../onboardingTutorialPopover/OnboardingTutorialPopover";
 import SearchOverlay from "../searchOverlay/SearchOverlay";
 
+interface IHeaderLink 
+{
+  slug: string;
+  title: string;
+}
+
 const HeaderDefault: FunctionComponent = () => 
 {
   const { invalidateOnboardingResult } = useContextAndErrorIfNull(InvalidateQueriesContext);
-  const links = ["Fälle", "Lexikon"];
+  const links: IHeaderLink[] = [
+    { slug: "dashboard", title: "Dashboard" },
+    { slug: "cases", title: "Fälle" }, 
+    { slug: "dictionary", title: "Lexikon" },
+  ];
   const { pathname } = useRouter();
   const theme = useMantineTheme();
   const { isLoading: isGetOnboardingResultLoading, onboardingResult } = useOnboardingResult();
@@ -73,11 +83,11 @@ const HeaderDefault: FunctionComponent = () =>
             <Link href="/">
               <Image src={ConstellatioFullLogo} alt="Constellatio"/>
             </Link>
-            {links.map((link, linkIndex) => (
-              <Link href={`/${link === "Fälle" ? "cases" : "dictionary"}`} key={linkIndex}>
+            {links.map((link: IHeaderLink, linkIndex: number) => (
+              <Link href={`/${link.slug}`} key={linkIndex}>
                 <MenuTab
-                  active={pathname?.toLowerCase().includes(link.toLowerCase())}
-                  title={link}
+                  active={pathname?.toLowerCase().includes(link.slug.toLowerCase())}
+                  title={link.title}
                 />
               </Link>
             ))}
@@ -129,23 +139,23 @@ const HeaderDefault: FunctionComponent = () =>
                     </OnboardingTutorialStep>
                   )}
                   popoverTarget={(
-                    <Link href={`/${link.toLowerCase()}`}>
+                    <Link href={`/${link.slug.toLowerCase()}`}>
                       <MenuTab
                         active={pathname
                           ?.toLowerCase()
-                          .includes(link.toLowerCase())}
-                        title={link}
+                          .includes(link.slug.toLowerCase())}
+                        title={link.title}
                       />
                     </Link>
                   )}
                 />
               ) : (
-                <Link href={`/${link.toLowerCase()}`} key={linkIndex}>
+                <Link href={`/${link.slug.toLowerCase()}`} key={linkIndex}>
                   <MenuTab
                     active={pathname
                       ?.toLowerCase()
-                      .includes(link.toLowerCase())}
-                    title={link}
+                      .includes(link.slug.toLowerCase())}
+                    title={link.title}
                   />
                 </Link>
               )

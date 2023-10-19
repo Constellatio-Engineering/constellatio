@@ -1,5 +1,3 @@
-import { headerHeightPx } from "@/components/organisms/Header/Header.styles";
-
 import { css } from "@emotion/react";
 import { type MantineTheme } from "@mantine/styles";
 
@@ -14,7 +12,6 @@ export const contentHeader = ({ theme, variant }: {
 	align-items: center;
 	justify-content: center;
 	gap: 32px;
-	padding-top: ${headerHeightPx}px;
 	height: 600px;
 	max-height: 50vh;
 	background: ${variant === "case"
@@ -39,7 +36,11 @@ export const contentHeader = ({ theme, variant }: {
 			height: 100%;
 		}
 	}
-`;
+
+	@media screen and (max-width: 1024px) {
+	height: 300px;
+	}
+	`;
 
 export const categoriesButtons = () => 
 {

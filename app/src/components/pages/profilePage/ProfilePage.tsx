@@ -5,6 +5,7 @@ import ProfileMenu, { type ITab } from "@/components/organisms/profileMenu/Profi
 import ProfileNotificationsTab from "@/components/organisms/profileNotificationsTab/ProfileNotificationsTab";
 import ProfileOverview from "@/components/organisms/profileOverview/ProfileOverview";
 import ProfilePageHeader from "@/components/organisms/profilePageHeader/ProfilePageHeader";
+import SubscriptionTab from "@/components/subscriptionTab/SubscriptionTab";
 import { type IProfilePageProps } from "@/pages/profile";
 
 import { Container } from "@mantine/core";
@@ -41,6 +42,8 @@ const ProfilePage: FunctionComponent<IProfilePageProps> = ({ allMainCategory }) 
         return <ProfileNotificationsTab/>;  
       case "History":
         return <ProfileHistoryTab/>;
+      case "Subscription":
+        return <SubscriptionTab subscriptionStatus="You are currently using a free 5-day trial. You can purchase a subscription by clicking the button below:"/>;
       default:
         console.log(`Unknown tab: ${tab?.title}, create tab type case in ProfilePage component`);
         return <>{`Unknown tab: ${tab?.title}, create tab type case in ProfilePage component`}</>;

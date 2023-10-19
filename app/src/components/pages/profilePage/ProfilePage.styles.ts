@@ -2,12 +2,12 @@ import { css } from "@emotion/react";
 import { type MantineTheme } from "@mantine/styles";
 
 export const outerContianer = (theme: MantineTheme) => css`
-  background: ${theme.colors["neutrals-01"][1]};
+  background: ${theme.colors["neutrals-01"][2]};
   padding: 54px 60px 0 60px;
   position: relative;
-  transform: translateY(-150px);
+  margin-top: -150px;
   z-index: 4;
-
+  min-height: 600px;
   @media screen and (max-width: 1024px) {
     padding: 24px;
   }
