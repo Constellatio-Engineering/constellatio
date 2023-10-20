@@ -23,7 +23,7 @@ const handler: NextApiHandler = async (req, res) =>
   {
     if(!signature)
     {
-      throw new InternalServerError(new Error("User not found"));
+      throw new InternalServerError(new Error("Missing stripe signature header"));
     }
     const rawBody = await getRawBody(req, { limit: "1mb" });
     event = stripe.webhooks.constructEvent(rawBody, signature, signingSecret);
