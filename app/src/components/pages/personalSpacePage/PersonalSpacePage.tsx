@@ -47,6 +47,7 @@ const PersonalSpacePage: FunctionComponent = () =>
     uploadedFilesLength: (uploadedFiles?.length + documents?.length) ?? 0,
   });
   const isFavoriteTab = (slug: string): boolean => slug === slugFormatter(categories?.[0]?.mainCategory ?? "");
+  const isMaterialsTab = (slug: string): boolean => slug === slugFormatter(categories?.[1]?.mainCategory ?? "");
   const router = useRouter();
   const [selectedCategorySlug, setSelectedCategorySlug] = useQueryState("category");
   React.useEffect(() => 
@@ -95,7 +96,7 @@ const PersonalSpacePage: FunctionComponent = () =>
                 setSelectedCategorySlug={setSelectedCategorySlug}
               />
             </div>
-            {isFavoriteTab(selectedCategorySlug ?? "") ? <PersonalSpaceFavoriteTab/> : <PersonalSpaceMaterialsTab/>}
+            {isFavoriteTab(selectedCategorySlug ?? "") ? <PersonalSpaceFavoriteTab/> : isMaterialsTab(selectedCategorySlug) && <PersonalSpaceMaterialsTab/>}
           </>
         )
       }

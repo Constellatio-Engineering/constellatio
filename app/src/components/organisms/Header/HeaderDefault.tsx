@@ -74,7 +74,6 @@ const HeaderDefault: FunctionComponent = () =>
     { opened: false, step: 2 },
     { opened: false, step: 3 },
   ]);
-  console.log({ pathname });
   return !showOnboarding ? (
     <>
       <SHeader>
@@ -86,7 +85,6 @@ const HeaderDefault: FunctionComponent = () =>
             {links.map(link => 
             {
               const route = link.slug.split("?")[0];
-              console.log({ linkSlug: link.slug, pathname });
               return (
                 <Link href={link.slug} key={link.slug}>
                   <MenuTab
