@@ -77,7 +77,7 @@ const ProfilePersonalSpaceBlock: FunctionComponent = () =>
             
           </div>
           {favoritesList && favoritesList?.length > 6 && (
-            <Link href={`/${paths.personalSpace}?category=favourites`}>
+            <Link href={`${paths.personalSpace}?category=favourites`}>
               <Button<"button"> styleType="secondarySimple">
                 View all
               </Button>
@@ -103,7 +103,7 @@ const ProfilePersonalSpaceBlock: FunctionComponent = () =>
                   ))}
                 </div>
                 {uploadedFiles.length > 6 && (
-                  <Link href={`/${paths.personalSpace}?category=materials`}>
+                  <Link href={`${paths.personalSpace}?category=materials`}>
                     <Button<"button"> styleType="secondarySimple">
                       View all
                     </Button>
