@@ -44,9 +44,9 @@ const HeaderDefault: FunctionComponent = () =>
 {
   const { invalidateOnboardingResult } = useContextAndErrorIfNull(InvalidateQueriesContext);
   const links: IHeaderLink[] = [
-    { slug: "dashboard", title: "Dashboard" },
-    { slug: "cases", title: "Fälle" }, 
-    { slug: "dictionary", title: "Lexikon" },
+    { slug: paths.dashboard, title: "Dashboard" },
+    { slug: paths.cases, title: "Fälle" },
+    { slug: paths.dictionary, title: "Lexikon" },
   ];
   const { pathname } = useRouter();
   const theme = useMantineTheme();
@@ -83,8 +83,8 @@ const HeaderDefault: FunctionComponent = () =>
             <Link href="/">
               <Image src={ConstellatioFullLogo} alt="Constellatio"/>
             </Link>
-            {links.map((link: IHeaderLink, linkIndex: number) => (
-              <Link href={`/${link.slug}`} key={linkIndex}>
+            {links.map(link => (
+              <Link href={link.slug} key={link.slug}>
                 <MenuTab
                   active={pathname?.toLowerCase().includes(link.slug.toLowerCase())}
                   title={link.title}

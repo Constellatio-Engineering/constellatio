@@ -3,6 +3,7 @@ import { env } from "@/env.mjs";
 export const paths = {
   cases: "/cases",
   confirm: "/confirm",
+  dashboard: "/dashboard",
   dictionary: "/dictionary",
   downloadDocument: "/api/documents/download",
   login: "/login",
