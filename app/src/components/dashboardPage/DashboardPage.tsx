@@ -2,10 +2,13 @@ import { Title } from "@mantine/core";
 import React, { type FunctionComponent } from "react";
 
 import * as styles from "./DashboardPage.styles";
+import DashboardHeader from "../dashboardHeader/DashboardHeader";
 
 const DashboardPage: FunctionComponent = () => (
   <div css={styles.wrapper}>
-    <Title order={3}>Dashboard</Title>
+    {/* <Title order={3}>Dashboard</Title> */}
+    <DashboardHeader/>
+ 
   </div>
 );
 

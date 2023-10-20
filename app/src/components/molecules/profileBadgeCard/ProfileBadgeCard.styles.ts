@@ -8,11 +8,11 @@ interface IProfilePageProps
 }
 
 const CSSIsExpandedStyles = css`
-  min-width: 270px;
+  width: 270px;
   flex: 1;
 `;
 export const wrapper = ({ isExpanded }: IProfilePageProps) => css`
-  min-width: 160px;
+  width: 160px;
   border-radius: 12px;
   overflow: hidden;
   ${isExpanded && CSSIsExpandedStyles}
@@ -22,7 +22,7 @@ export const badgeWrapper = ({ isExpanded, theme }: IProfilePageProps) => css`
   border: 1px solid ${theme.colors["neutrals-01"][3]};
   padding: 24px 16px 16px 16px;
   display: flex;
-  min-width: 160px;
+  width: 160px;
   flex-direction: column;
   align-items: center;
   justify-content: space-between;

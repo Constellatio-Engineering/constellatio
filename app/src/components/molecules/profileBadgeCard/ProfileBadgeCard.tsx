@@ -13,14 +13,21 @@ interface ProfileBadgeCardProps
   readonly checked?: boolean;
   readonly description: string;
   readonly name: string;
+  readonly size: "small" | "large";
 }
 
-const ProfileBadgeCard: FunctionComponent<ProfileBadgeCardProps> = ({ checked, description, name }) => 
+const ProfileBadgeCard: FunctionComponent<ProfileBadgeCardProps> = ({
+  checked,
+  description,
+  name,
+  size
+}) => 
 {
   const theme = useMantineTheme();
-  const [isExpanded, setIsExpanded] = React.useState<boolean>(true);
+  // const [isExpanded] = React.useState<boolean>(size === "large" ? true : false);
+  const isExpanded = size === "large" ? true : false;
   return (
-    <div css={styles.wrapper({ isExpanded, theme })} onClick={() => setIsExpanded(prev => !prev)}>
+    <div css={styles.wrapper({ isExpanded, theme })}>
       <div css={styles.badgeWrapper({ isExpanded, theme })}>
         {checked && <span css={styles.checkCircle}><CheckCircleRed/></span>}
         <CaisyImg src={FlagImg.src}/>
