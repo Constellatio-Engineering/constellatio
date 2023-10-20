@@ -6,6 +6,7 @@ import { RegistrationForm } from "@/components/organisms/RegistrationForm/Regist
 import { RegistrationVisualHeader } from "@/components/organisms/RegistrationVisualHeader/RegistrationVisualHeader";
 
 import { Container, Flex, Tabs } from "@mantine/core";
+import { useMediaQuery } from "@mantine/hooks";
 import { useRouter } from "next/router";
 import { type FC } from "react";
 
@@ -18,13 +19,14 @@ export const AuthPage: FC<AuthPageProps> = ({ tab }) =>
 {
   const router = useRouter();
   const handleTabChange: (value: AuthPageProps["tab"]) => Promise<boolean> = async (value) => router.push(`/${value}`);
+  const matches = useMediaQuery("(min-width: 860px)");
 
   return (
     <Flex
       justify="space-between"
       bg="brand-01.5"
       sx={{ height: "100vh", minHeight: 600, overflow: "hidden" }}>
-      <RegistrationVisualHeader/>
+      {matches && <RegistrationVisualHeader/>}
       <Container
         w="100%"
         pt={20}
@@ -35,7 +37,6 @@ export const AuthPage: FC<AuthPageProps> = ({ tab }) =>
           marginRight: 0,
           overflowY: "auto",
           paddingTop: "0px !important",
-          
         })}>
         <Header variant="relative"/>
         <Container
