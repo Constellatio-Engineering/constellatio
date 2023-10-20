@@ -65,7 +65,6 @@ export const TOCItemComponent: React.FC<{ readonly depth: number; readonly item:
           <BodyText component="p" styleType="body-01-medium">{item.children.length > 0 && (isExpanded ? <ArrowSolidDown/> : <ArrowSolidRight/>)}</BodyText>
           <BodyText component="p" styleType="body-01-medium">{getNumericalLabel(depth + 1, itemNumber - 1)}&nbsp;{item.text}</BodyText>
         </div>
-        {depth}
         {depth === 0 && <div style={{ paddingRight: "24px" }}>{itemNumber}/{total}</div>}
       </span>
       {isExpanded && item.children.length > 0 && renderTOC(item.children, depth + 1)}

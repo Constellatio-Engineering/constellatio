@@ -1,10 +1,10 @@
 import { env } from "@/env.mjs";
 
 export const paths = {
-  cases: "/cases",
+  cases: "/cases?category=civil-law",
   confirm: "/confirm",
   dashboard: "/dashboard",
-  dictionary: "/dictionary",
+  dictionary: "/dictionary?category=civil-law",
   downloadDocument: "/api/documents/download",
   login: "/login",
   personalSpace: "/personal-space",
