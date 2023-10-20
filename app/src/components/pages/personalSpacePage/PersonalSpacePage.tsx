@@ -96,7 +96,7 @@ const PersonalSpacePage: FunctionComponent = () =>
                 setSelectedCategorySlug={setSelectedCategorySlug}
               />
             </div>
-            {isFavoriteTab(selectedCategorySlug ?? "") ? <PersonalSpaceFavoriteTab/> : isMaterialsTab(selectedCategorySlug) && <PersonalSpaceMaterialsTab/>}
+            {isFavoriteTab(selectedCategorySlug ?? "") ? <PersonalSpaceFavoriteTab/> : isMaterialsTab(selectedCategorySlug ?? "") && <PersonalSpaceMaterialsTab/>}
           </>
         )
       }
