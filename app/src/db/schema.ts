@@ -1,7 +1,7 @@
 /* eslint-disable sort-keys-fix/sort-keys-fix,@typescript-eslint/naming-convention */
 import { type InferInsertModel, type InferSelectModel } from "drizzle-orm";
 import {
-  text, pgTable, integer, pgEnum, uuid, smallint, unique, timestamp, primaryKey, index
+  text, pgTable, integer, pgEnum, uuid, smallint, unique, timestamp, primaryKey, index, date
 } from "drizzle-orm/pg-core";
 
 export const allGenderIdentifiers = ["male", "female", "diverse",] as const;
@@ -42,6 +42,11 @@ export const users = pgTable("User", {
   stripeCustomerId: text("StripeCustomerId"),
   university: text("University").notNull(),
   onboardingResult: onboardingResultEnum("OnboardingResult"),
+  subscriptionStatus: text("SubscriptionStatus"),
+  subscriptionStartDate: timestamp("SubscriptionStartDate"),
+  subscriptionEndDate: timestamp("SubscriptionEndDate"),
+  subscriptionPeriod: text("SubscriptionPeriod"),
+  priceId: text("PriceId"),
 });
 
 export type UserInsert = InferInsertModel<typeof users>;
