@@ -1,30 +1,21 @@
-
 import MenuTab from "@/components/atoms/menuTab/MenuTab";
+import { type FavoriteCategoryNavTab } from "@/components/organisms/personalSpaceFavoriteTab/PersonalSpaceFavoriteTab";
 
 import { useQueryState } from "next-usequerystate";
-import React, { type FunctionComponent, useState } from "react";
+import React, { type FunctionComponent } from "react";
 
 import * as styles from "./PersonalSpaceNavBar.styles";
-import { slugFormatter } from "../OverviewHeader/OverviewHeader";
-
-interface INavTab 
-{
-  id: string;
-  itemsPerTab: number;
-  title: string;
-}
 
 export interface PersonalSpaceNavBarProps
 {
   readonly selectedTabId: string;
   readonly setSelectedTabId: React.Dispatch<React.SetStateAction<string>>;
-  readonly tabs: INavTab[];
+  readonly tabs: FavoriteCategoryNavTab[];
 }
 
 const PersonalSpaceNavBar: FunctionComponent<PersonalSpaceNavBarProps> = ({ selectedTabId, setSelectedTabId, tabs }) => 
 {
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
-  const [tab, setTab] = useState("tab");
+  const [, setFavoriteTabQuery] = useQueryState("tab");
 
   return (
     <div css={styles.wrapper}>
@@ -34,7 +25,7 @@ const PersonalSpaceNavBar: FunctionComponent<PersonalSpaceNavBarProps> = ({ sele
           number={tab.itemsPerTab}
           onClick={() => 
           {
-            setTab(slugFormatter(tab.title));
+            void setFavoriteTabQuery(tab.slug);
             setSelectedTabId(tab.id);
           }}
           title={`${tab.title}`}

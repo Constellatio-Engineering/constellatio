@@ -5,7 +5,6 @@ import CaseNavBar from "@/components/organisms/caseNavBar/CaseNavBar";
 import CaseResultsReviewStep from "@/components/organisms/caseResultsReviewStep/CaseResultsReviewStep";
 import CaseSolveCaseStep from "@/components/organisms/caseSolveCaseStep/CaseSolveCaseStep";
 import CaseSolvingHeader from "@/components/organisms/caseSolvingHeader/CaseSolvingHeader";
-import { slugFormatter } from "@/components/organisms/OverviewHeader/OverviewHeader";
 import useCaseProgress from "@/hooks/useCaseProgress";
 import useContextAndErrorIfNull from "@/hooks/useContextAndErrorIfNull";
 import useGamesProgress from "@/hooks/useGamesProgress";
@@ -143,7 +142,7 @@ const DetailsPage: FunctionComponent<IDetailsPageProps> = ({ content, variant })
             slug: variant === "case" ? "Fälle" : "Lexikon" 
           },
           {
-            path: variant === "case" ? `${paths.cases}?category=${slugFormatter(content?.mainCategoryField?.[0]?.mainCategory ?? "")}` : `${paths.dictionary}?category=${slugFormatter(content?.mainCategoryField?.[0]?.mainCategory ?? "")}`, 
+            path: variant === "case" ? `${paths.cases}?category=${content?.mainCategoryField?.[0]?.slug}` : `${paths.dictionary}?category=${content?.mainCategoryField?.[0]?.slug}`,
             slug: content?.mainCategoryField?.[0]?.slug ?? ""
           },
           { 

@@ -60,3 +60,5 @@ export type CommonKeysInTypes<T1, T2> = {
 export type WithChildren<T> = T & {
   children: ReactNode | ReactNode[];
 };
+
+export type NonEmptyArray<T> = [T, ...T[]] | [...T[], T] | [T, ...T[], T];

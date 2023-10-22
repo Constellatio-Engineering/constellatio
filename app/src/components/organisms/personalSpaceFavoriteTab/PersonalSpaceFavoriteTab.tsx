@@ -14,8 +14,14 @@ import React, { useId, type FunctionComponent, useState } from "react";
 import * as styles from "./PersonalSpaceFavoriteTab.styles";
 import EmptyStateCard from "../emptyStateCard/EmptyStateCard";
 import FavoriteCasesList from "../favoriteCasesList/FavoriteCasesList";
-import { slugFormatter } from "../OverviewHeader/OverviewHeader";
 import PersonalSpaceNavBar from "../personalSpaceNavBar/PersonalSpaceNavBar";
+
+export type FavoriteCategoryNavTab = {
+  id: string;
+  itemsPerTab: number;
+  slug: string;
+  title: string;
+};
 
 const PersonalSpaceFavoriteTab: FunctionComponent = () => 
 {
@@ -31,9 +37,21 @@ const PersonalSpaceFavoriteTab: FunctionComponent = () =>
   const bookmarkedCases = allCases.filter(caisyCase => allCasesBookmarks.some(bookmark => bookmark.resourceId === caisyCase.id));
   const bookmarkedArticles = allArticles.filter((caisyArticle: IGenArticle) => allArticlesBookmarks.some(bookmark => bookmark.resourceId === caisyArticle.id));
  
-  const favoriteCategoryNavTabs = [
-    { id: FavCasesTabId, itemsPerTab: bookmarkedCases?.length ?? 0, title: "FÄLLE" }, 
-    { id: FavDictionaryTabId, itemsPerTab: bookmarkedArticles?.length ?? 0, title: "LEXIKON" }];
+  const favoriteCategoryNavTabs: FavoriteCategoryNavTab[] = [
+    {
+      id: FavCasesTabId,
+      itemsPerTab: bookmarkedCases?.length ?? 0,
+      slug: "faelle",
+      title: "FÄLLE"
+    },
+    {
+      id: FavDictionaryTabId,
+      itemsPerTab: bookmarkedArticles?.length ?? 0,
+      slug: "lexikon",
+      title: "LEXIKON"
+    }
+  ];
+
   const [selectedTabId, setSelectedTabId] = useState<string>(favoriteCategoryNavTabs?.[0]?.id as string);
   const mainCategoriesInBookmarkedCases = bookmarkedCases.map(bookmarkedCase => bookmarkedCase?.mainCategoryField?.[0]);
   const mainCategoriesInBookmarkedArticles = bookmarkedArticles.map(bookmarkedCase => bookmarkedCase?.mainCategoryField?.[0]);
@@ -70,14 +88,18 @@ const PersonalSpaceFavoriteTab: FunctionComponent = () =>
   {
     if(router.query.tab)
     {
-      setSelectedTabId(favoriteCategoryNavTabs.filter((x) => slugFormatter(x.title) === router.query.tab)[0]?.id ?? "");
+      setSelectedTabId(favoriteCategoryNavTabs.filter((category) => category.slug === router.query.tab)[0]?.id ?? "");
     }
   // Adding selectedTabId to the dependency array will cause an infinite loop
   // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [router.query.tab]);
   return (
     <div css={styles.wrapper}>
-      <PersonalSpaceNavBar setSelectedTabId={setSelectedTabId} selectedTabId={selectedTabId} tabs={favoriteCategoryNavTabs}/>
+      <PersonalSpaceNavBar
+        setSelectedTabId={setSelectedTabId}
+        selectedTabId={selectedTabId}
+        tabs={favoriteCategoryNavTabs}
+      />
       {(selectedTabId === FavCasesTabId) ? (
         <> 
           {(areBookmarksLoading || areCasesLoading) ? (

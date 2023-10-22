@@ -5,9 +5,11 @@ export const categoriesHelper = (favCategoryData: {
   BookmarkIconSvg: IGenAsset;
   FavCategoryId: string;
   bookmarkedCasesLength: number;
+  slug: string;
 }, caterialsCategoryData: {
   FileIconSvg: IGenAsset;
   MaterialsCategoryId: string;
+  slug: string;
   uploadedFilesLength: number;
 }): ICasesOverviewProps["allMainCategories"] => 
 {
@@ -21,7 +23,8 @@ export const categoriesHelper = (favCategoryData: {
         title: "bookmark-icon"
       },
       id: favCategoryData?.FavCategoryId,
-      mainCategory: "Favourites"
+      mainCategory: "Favourites",
+      slug: favCategoryData.slug
     }, {
       __typename: "MainCategory",
       casesPerCategory: caterialsCategoryData?.uploadedFilesLength ?? 0,
@@ -30,7 +33,8 @@ export const categoriesHelper = (favCategoryData: {
         title: "file-category-icon"
       },
       id: caterialsCategoryData?.MaterialsCategoryId,
-      mainCategory: "Materials"
+      mainCategory: "Materials",
+      slug: caterialsCategoryData.slug
     }
   ];
 };

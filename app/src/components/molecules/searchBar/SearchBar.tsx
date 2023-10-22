@@ -9,7 +9,8 @@ import { paths } from "@/utils/paths";
 import { Input } from "@mantine/core";
 import { useLocalStorage } from "@mantine/hooks";
 import { useRouter } from "next/router";
-import React, { useEffect, type FunctionComponent, type FormEventHandler, useState } from "react";
+import { useQueryState } from "next-usequerystate";
+import React, { useEffect, type FunctionComponent, type FormEventHandler } from "react";
 
 import * as styles from "./SearchBar.styles";
 
@@ -20,7 +21,7 @@ const SearchBar: FunctionComponent<SearchBarProps> = () =>
   const searchValue = useSearchBarStore((s) => s.searchValue);
   const setSearchValue = useSearchBarStore((s) => s.setSearchValue);
   const toggleDrawer = useSearchBarStore((s) => s.toggleDrawer);
-  const [searchQuery, setSearchQuery] = useState("find");
+  const [searchQuery, setSearchQuery] = useQueryState("find");
   const router = useRouter();
   const { searchResults } = useSearchResults();
   const setGlobalSearchHistory = useSearchBarStore((s) => s.setSearchHistory);
@@ -44,17 +45,7 @@ const SearchBar: FunctionComponent<SearchBarProps> = () =>
 
   useEffect(() => 
   {
-    void (() =>
-    {
-      try 
-      {
-        setSearchQuery(searchValue);
-      }
-      catch (error) 
-      {
-        console.error(error);
-      }
-    })();
+    setSearchQuery(searchValue).catch((err) => console.error(err));
   }, [searchValue, setSearchQuery]);
 
   useEffect(() => 

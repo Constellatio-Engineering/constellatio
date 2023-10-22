@@ -44,9 +44,9 @@ const AppContainer: FunctionComponent<ConstellatioAppProps> = ({ Component, page
                 <MeilisearchProvider>
                   <RouterTransition/>
                   <Notifications/>
-                  {isRouterReady ? (
+                  {isRouterReady && (
                     <Component {...pageProps}/>
-                  ) : <h1>Loading...</h1>}
+                  )}
                 </MeilisearchProvider>
               </ModalsProvider>
             </CustomThemingProvider>

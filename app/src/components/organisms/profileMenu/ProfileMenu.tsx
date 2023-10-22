@@ -9,7 +9,6 @@ import { InvalidateQueriesContext } from "@/provider/InvalidateQueriesProvider";
 import { notifications } from "@mantine/notifications";
 import { IconLogout } from "@tabler/icons-react";
 import router from "next/router";
-import { type Options } from "next-usequerystate";
 import React, { type FunctionComponent } from "react";
 
 import * as styles from "./ProfileMenu.styles";
@@ -17,20 +16,21 @@ import ProfileMenuMainProfileInfo from "./ProfileMenuMainProfileInfo";
 
 export type ITab ={
   icon?: React.ReactNode;
-  selected: boolean;
   slug: string;
   title: string;
 };
+
 type IProfileMenu = {
-  readonly setQuery: (query: string) => void;
-  readonly setTabs: React.Dispatch<React.SetStateAction<ITab[]>>;
+  readonly activeTabSlug?: string;
+  readonly setTab: (tab: string) => Promise<URLSearchParams>;
   readonly tabs: ITab[];
 };
 
-const ProfileMenu: FunctionComponent<IProfileMenu> = ({ setQuery, setTabs, tabs }) => 
+const ProfileMenu: FunctionComponent<IProfileMenu> = ({ activeTabSlug, setTab, tabs }) =>
 {
   const { invalidateEverything } = useContextAndErrorIfNull(InvalidateQueriesContext);
   const placeHolderImg = "https://upload.wikimedia.org/wikipedia/commons/c/ce/Huberlin-logo.svg";
+
   const handleSignOut = async (): Promise<void> =>
   {
     try
@@ -46,7 +46,7 @@ const ProfileMenu: FunctionComponent<IProfileMenu> = ({ setQuery, setTabs, tabs 
     }
     catch (error) 
     {
-      console.log("error while signing out", error);
+      console.error("error while signing out", error);
     }
   };
 
@@ -55,17 +55,13 @@ const ProfileMenu: FunctionComponent<IProfileMenu> = ({ setQuery, setTabs, tabs 
       <ProfileMenuMainProfileInfo/>
       <ProfileMenuUniversityTab imgSrc={placeHolderImg} title="Humboldt University of Berlin" semester="II semester"/>
       <div css={styles.tabsList}>
-        {tabs && tabs.length > 0 && tabs.map((tab: ITab, index: number) => (
+        {tabs?.map(tab => (
           <MenuListItem
-            key={index}
+            key={tab.slug}
             title={tab.title}
-            selected={tab.selected}
+            selected={tab.slug === activeTabSlug}
             icon={tab.icon}
-            onClick={() => 
-            {
-              void setQuery(tab.slug);
-              setTabs(tabs.map((x: ITab) => x.slug === tab.slug ? ({ ...x, selected: true }) : ({ ...x, selected: false })));
-            }}
+            onClick={() => void setTab(tab.slug)}
           />
         )
         )}

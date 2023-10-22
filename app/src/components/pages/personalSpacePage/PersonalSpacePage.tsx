@@ -1,4 +1,4 @@
-import OverviewHeader, { slugFormatter } from "@/components/organisms/OverviewHeader/OverviewHeader";
+import OverviewHeader from "@/components/organisms/OverviewHeader/OverviewHeader";
 import PersonalSpaceFavoriteTab from "@/components/organisms/personalSpaceFavoriteTab/PersonalSpaceFavoriteTab";
 import PersonalSpaceMaterialsTab from "@/components/organisms/personalSpaceMaterialsTab/PersonalSpaceMaterialsTab";
 import useArticles from "@/hooks/useArticles";
@@ -9,8 +9,8 @@ import useUploadedFiles from "@/hooks/useUploadedFiles";
 import { type IGenArticle } from "@/services/graphql/__generated/sdk";
 import useMaterialsStore from "@/stores/materials.store";
 
-import { useRouter } from "next/router";
-import React, { type FunctionComponent, useId, useState } from "react";
+import { parseAsString, useQueryState } from "next-usequerystate";
+import React, { type FunctionComponent, useId } from "react";
 
 import { categoriesHelper } from "./PersonalSpaceHelper";
 import * as styles from "./PersonalSpacePage.styles";
@@ -39,62 +39,33 @@ const PersonalSpacePage: FunctionComponent = () =>
   const categories = categoriesHelper({
     BookmarkIconSvg,
     FavCategoryId,
-    bookmarkedCasesLength: (bookmarkedCases?.length + bookmarkedArticles?.length) ?? 0
+    bookmarkedCasesLength: (bookmarkedCases?.length + bookmarkedArticles?.length) ?? 0,
+    slug: "favorites"
   }, {
     FileIconSvg,
     MaterialsCategoryId,
+    slug: "materials",
     uploadedFilesLength: (uploadedFiles?.length + documents?.length) ?? 0,
   });
-  const isFavoriteTab = (slug: string): boolean => slug === categories?.[0]?.slug;
-  const isMaterialsTab = (slug: string): boolean => slug === categories?.[1]?.slug;
-  const router = useRouter();
-  const [selectedCategorySlug, setSelectedCategorySlug] = useState("category");
-  React.useEffect(() => 
-  {
-    if(typeof window !== "undefined") 
-    {
-      void (async () => 
-      {
-        try 
-        {
-          if(!selectedCategorySlug) 
-          {
-            setSelectedCategorySlug(categories?.[0]?.slug ?? "");
-            await router.replace({
-              query: {
-                ...router.query,
-                category: categories?.[0]?.slug ?? ""
-              },
-            });
-          }
-        }
-        catch (error) 
-        {
-          console.error(error);
-        }
-      })();
-    }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [router.query.category, setSelectedCategorySlug]);
+  const [selectedCategorySlug, setSelectedCategorySlug] = useQueryState("category", parseAsString.withDefault(categories?.[0]?.slug || ""));
+
+  console.log("selectedCategorySlug", selectedCategorySlug);
+  console.log(categories?.[0]?.slug);
+  console.log(categories?.[1]?.slug);
 
   return (
     <div css={styles.wrapper}>
-      {
-        router.query.category && (
-          <>
-            <div css={styles.header}>
-              <OverviewHeader
-                title="Personal Space"
-                variant="red"
-                categories={categories}
-                selectedCategorySlug={selectedCategorySlug}
-                setSelectedCategorySlug={setSelectedCategorySlug}
-              />
-            </div>
-            {isFavoriteTab(selectedCategorySlug ?? "") ? <PersonalSpaceFavoriteTab/> : isMaterialsTab(selectedCategorySlug ?? "") && <PersonalSpaceMaterialsTab/>}
-          </>
-        )
-      }
+      <div css={styles.header}>
+        <OverviewHeader
+          title="Personal Space"
+          variant="red"
+          categories={categories}
+          selectedCategorySlug={selectedCategorySlug}
+          setSelectedCategorySlug={setSelectedCategorySlug}
+        />
+      </div>
+      {selectedCategorySlug === categories?.[0]?.slug && <PersonalSpaceFavoriteTab/>}
+      {selectedCategorySlug === categories?.[1]?.slug && <PersonalSpaceMaterialsTab/>}
     </div>
   );
 };

@@ -1,10 +1,7 @@
 import { OverlayLines } from "@/components/Icons/bg-layer";
 import { Trash } from "@/components/Icons/Trash";
 import { type IArticlesOverviewProps } from "@/services/content/getArticlesOverviewProps";
-import type {
-  IGenMainCategory,
-  Maybe, Scalars
-} from "@/services/graphql/__generated/sdk";
+import type { Maybe, Scalars } from "@/services/graphql/__generated/sdk";
 
 import { Title, useMantineTheme } from "@mantine/core";
 import React, { type FunctionComponent, useState } from "react";
@@ -17,9 +14,9 @@ import FilterTag from "../../molecules/filterTag/FilterTag";
 
 export interface ICasesOverviewHeaderProps 
 {
-  readonly categories: IArticlesOverviewProps["allMainCategories"];
-  readonly selectedCategorySlug: string;
-  readonly setSelectedCategorySlug: (slug: string) => Promise<URLSearchParams>;
+  readonly categories?: IArticlesOverviewProps["allMainCategories"];
+  readonly selectedCategorySlug?: string;
+  readonly setSelectedCategorySlug?: (slug: string) => Promise<URLSearchParams>;
   readonly title?: Maybe<Scalars["String"]["output"]>;
   readonly variant: "case" | "dictionary" | "red";
 }
@@ -41,7 +38,7 @@ const OverviewHeader: FunctionComponent<ICasesOverviewHeaderProps> = ({
       </div>
       <Title order={1} css={styles.title({ theme, variant })}>{title}</Title>
       <div css={styles.categoriesButtons}>
-        {categories.filter(Boolean).map((category) => category?.slug && setSelectedCategorySlug && (
+        {categories?.filter(Boolean).map((category) => category?.slug && setSelectedCategorySlug && (
           <div
             key={category.id}
             onClick={async () => 
@@ -59,7 +56,6 @@ const OverviewHeader: FunctionComponent<ICasesOverviewHeaderProps> = ({
               itemsNumber={category?.casesPerCategory}
               selected={selectedCategorySlug === category.slug}
               variant={variant}
-              // selected={isCategorySelected(category)}
             />
           </div>
         ))}
