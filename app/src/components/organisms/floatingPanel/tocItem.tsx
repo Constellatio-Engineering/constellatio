@@ -1,4 +1,5 @@
 import useCaseSolvingStore from "@/stores/caseSolving.store";
+import { slugFormatter } from "@/utils/utils";
 
 import { useMantineTheme } from "@mantine/core";
 // import Link from "next/link";
@@ -10,7 +11,6 @@ import { getNumericalLabel, renderTOC, type TOCItem } from "./generateTocHelper"
 import { BodyText } from "../../atoms/BodyText/BodyText";
 import { ArrowSolidDown } from "../../Icons/arrow-solid-down";
 import { ArrowSolidRight } from "../../Icons/arrow-solid-right";
-import { slugFormatter } from "../OverviewHeader/OverviewHeader";
 
 const scrollToElement = (e: React.MouseEvent<HTMLDivElement>, targetId: string): void => 
 {

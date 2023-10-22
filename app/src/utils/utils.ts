@@ -70,3 +70,9 @@ export const downloadFileFromUrl = async (url: string, filename: string): Promis
   URL.revokeObjectURL(downloadLink.href);
   downloadLink.remove();
 };
+
+export const slugFormatter = (name: string): string => name
+  .toLowerCase()
+  .replace(/\s+/g, "-")
+  .replace(/[^a-z0-9-]/g, "")
+  .replace(/-+/g, "-");
