@@ -1514,6 +1514,13 @@ export type IGenGetCaseByIdQuery = { __typename?: 'Query', Case?: (
     & IGenFullCaseFragment
   ) | null };
 
+export type IGenGetAllCasesByIdQueryVariables = Exact<{
+  ids: Array<Scalars['ID']['input']> | Scalars['ID']['input'];
+}>;
+
+
+export type IGenGetAllCasesByIdQuery = { __typename?: 'Query', allCase?: { __typename?: 'Case_Connection', totalCount?: number | null, edges?: Array<{ __typename?: 'Case_ConnectionEdge', node?: { __typename?: 'Case', title?: string | null, id?: string | null } | null } | null> | null } | null };
+
 export type IGenGetLegalAreaByIdQueryVariables = Exact<{
   id: Scalars['ID']['input'];
 }>;
@@ -2029,6 +2036,19 @@ ${LegalAreaFragmentDoc}
 ${MainCategoryFragmentDoc}
 ${TagsFragmentDoc}
 ${TopicFragmentDoc}`;
+export const GetAllCasesByIdDocument = gql`
+    query getAllCasesById($ids: [ID!]!) {
+  allCase(where: {}) {
+    totalCount
+    edges {
+      node {
+        title
+        id
+      }
+    }
+  }
+}
+    `;
 export const GetLegalAreaByIdDocument = gql`
     query getLegalAreaById($id: ID!) {
   LegalArea(id: $id) {
@@ -2108,6 +2128,9 @@ export function getSdk<C, E>(requester: Requester<C, E>) {
     },
     getCaseById(variables: IGenGetCaseByIdQueryVariables, options?: C): Promise<IGenGetCaseByIdQuery> {
       return requester<IGenGetCaseByIdQuery, IGenGetCaseByIdQueryVariables>(GetCaseByIdDocument, variables, options) as Promise<IGenGetCaseByIdQuery>;
+    },
+    getAllCasesById(variables: IGenGetAllCasesByIdQueryVariables, options?: C): Promise<IGenGetAllCasesByIdQuery> {
+      return requester<IGenGetAllCasesByIdQuery, IGenGetAllCasesByIdQueryVariables>(GetAllCasesByIdDocument, variables, options) as Promise<IGenGetAllCasesByIdQuery>;
     },
     getLegalAreaById(variables: IGenGetLegalAreaByIdQueryVariables, options?: C): Promise<IGenGetLegalAreaByIdQuery> {
       return requester<IGenGetLegalAreaByIdQuery, IGenGetLegalAreaByIdQueryVariables>(GetLegalAreaByIdDocument, variables, options) as Promise<IGenGetLegalAreaByIdQuery>;

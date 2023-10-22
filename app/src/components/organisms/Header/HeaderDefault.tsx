@@ -74,7 +74,6 @@ const HeaderDefault: FunctionComponent = () =>
     { opened: false, step: 2 },
     { opened: false, step: 3 },
   ]);
-
   return !showOnboarding ? (
     <>
       <SHeader>
@@ -83,14 +82,18 @@ const HeaderDefault: FunctionComponent = () =>
             <Link href="/">
               <Image src={ConstellatioFullLogo} alt="Constellatio"/>
             </Link>
-            {links.map(link => (
-              <Link href={link.slug} key={link.slug}>
-                <MenuTab
-                  active={pathname?.toLowerCase().includes(link.slug.toLowerCase())}
-                  title={link.title}
-                />
-              </Link>
-            ))}
+            {links.map(link => 
+            {
+              const route = link.slug.split("?")[0];
+              return (
+                <Link href={link.slug} key={link.slug}>
+                  <MenuTab
+                    active={route?.toLowerCase().includes(pathname)}
+                    title={link.title}
+                  />
+                </Link>
+              );
+            })}
           </div>
           <div css={styles.profileArea}>
            

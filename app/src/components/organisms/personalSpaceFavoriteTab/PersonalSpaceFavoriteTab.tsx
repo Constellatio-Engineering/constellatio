@@ -3,6 +3,7 @@ import useArticles from "@/hooks/useArticles";
 import useBookmarks from "@/hooks/useBookmarks";
 import useCases from "@/hooks/useCases";
 import { type IGenMainCategory, type IGenFullCaseFragment, type IGenArticleOverviewFragment, type IGenArticle } from "@/services/graphql/__generated/sdk";
+import { paths } from "@/utils/paths";
 import { type Nullable } from "@/utils/types";
 
 import { Loader } from "@mantine/core";
@@ -88,7 +89,7 @@ const PersonalSpaceFavoriteTab: FunctionComponent = () =>
               </>
             ) : (
               <EmptyStateCard
-                button={<Link href="/cases">Explore Cases</Link>}
+                button={<Link href={paths.cases}>Explore Cases</Link>}
                 title="You haven’t saved any cases yet"
                 text="You can save cases, dictionary articles, forum questions and highlighted text to Favourites"
                 variant="For-large-areas"
