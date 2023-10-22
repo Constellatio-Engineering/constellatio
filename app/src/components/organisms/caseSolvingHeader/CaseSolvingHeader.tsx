@@ -60,7 +60,6 @@ const CaseSolvingHeader: FunctionComponent<ICaseSolvingHeaderProps> = ({
               <IconButtonBar icons={icons}/>
             </div>
             <div className="bread-crumb">
-              <h1>Slugs</h1>
               {pathSlugs?.map(({ path, slug }, index) => (
                 <Link key={index} href={path}>{slug}{index + 1 < pathSlugs.length ? " / " : ""}</Link>
               ))}

@@ -3,21 +3,17 @@ import ErrorPage from "@/components/errorPage/ErrorPage";
 import ItemBlock from "@/components/organisms/caseBlock/ItemBlock";
 import EmptyStateCard from "@/components/organisms/emptyStateCard/EmptyStateCard";
 import OverviewHeader from "@/components/organisms/OverviewHeader/OverviewHeader";
-import { type IArticlesOverviewProps, IMainCategory } from "@/services/content/getArticlesOverviewProps";
+import { type IArticlesOverviewProps } from "@/services/content/getArticlesOverviewProps";
 import { type ICasesOverviewProps } from "@/services/content/getCasesOverviewProps";
 import {
   type IGenLegalArea,
-  type IGenCase,
   type IGenArticle,
   type IGenCaseOverviewFragment,
 } from "@/services/graphql/__generated/sdk";
-import { type WithChildren } from "@/utils/types";
 
-// import { Loader } from "@mantine/core";
-import { useRouter } from "next/router";
 import { parseAsString, useQueryState } from "next-usequerystate";
 import {
-  type FunctionComponent, Fragment, useEffect, useState, type ReactNode 
+  type FunctionComponent, Fragment
 } from "react";
 import React from "react";
 
