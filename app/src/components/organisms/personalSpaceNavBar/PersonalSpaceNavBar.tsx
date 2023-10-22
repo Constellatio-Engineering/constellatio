@@ -1,35 +1,32 @@
 import MenuTab from "@/components/atoms/menuTab/MenuTab";
 import { type FavoriteCategoryNavTab } from "@/components/organisms/personalSpaceFavoriteTab/PersonalSpaceFavoriteTab";
+import { type NonEmptyArray } from "@/utils/types";
 
-import { useQueryState } from "next-usequerystate";
 import React, { type FunctionComponent } from "react";
 
 import * as styles from "./PersonalSpaceNavBar.styles";
 
 export interface PersonalSpaceNavBarProps
 {
-  readonly selectedTabId: string;
-  readonly setSelectedTabId: React.Dispatch<React.SetStateAction<string>>;
-  readonly tabs: FavoriteCategoryNavTab[];
+  readonly selectedTabSlug: string;
+  readonly setSelectedTabSlug: (slug: string) => Promise<URLSearchParams>;
+  readonly tabs: NonEmptyArray<FavoriteCategoryNavTab>;
 }
 
-const PersonalSpaceNavBar: FunctionComponent<PersonalSpaceNavBarProps> = ({ selectedTabId, setSelectedTabId, tabs }) => 
+const PersonalSpaceNavBar: FunctionComponent<PersonalSpaceNavBarProps> = ({ selectedTabSlug, setSelectedTabSlug, tabs }) =>
 {
-  const [, setFavoriteTabQuery] = useQueryState("tab");
-
   return (
     <div css={styles.wrapper}>
-      {tabs && tabs.map((tab, index) => (
+      {tabs.map((tab, index) => (
         <MenuTab
           key={index}
           number={tab.itemsPerTab}
           onClick={() => 
           {
-            void setFavoriteTabQuery(tab.slug);
-            setSelectedTabId(tab.id);
+            void setSelectedTabSlug(tab.slug);
           }}
           title={`${tab.title}`}
-          active={selectedTabId === tab.id}
+          active={selectedTabSlug === tab.slug}
         />
       ))}
     </div>

@@ -45,7 +45,7 @@ const SearchBar: FunctionComponent<SearchBarProps> = () =>
 
   useEffect(() => 
   {
-    setSearchQuery(searchValue).catch((err) => console.error(err));
+    void setSearchQuery(searchValue);
   }, [searchValue, setSearchQuery]);
 
   useEffect(() => 

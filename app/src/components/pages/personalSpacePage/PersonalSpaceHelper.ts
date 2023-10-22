@@ -6,7 +6,7 @@ export const categoriesHelper = (favCategoryData: {
   FavCategoryId: string;
   bookmarkedCasesLength: number;
   slug: string;
-}, caterialsCategoryData: {
+}, materialsCategoryData: {
   FileIconSvg: IGenAsset;
   MaterialsCategoryId: string;
   slug: string;
@@ -27,14 +27,14 @@ export const categoriesHelper = (favCategoryData: {
       slug: favCategoryData.slug
     }, {
       __typename: "MainCategory",
-      casesPerCategory: caterialsCategoryData?.uploadedFilesLength ?? 0,
+      casesPerCategory: materialsCategoryData?.uploadedFilesLength ?? 0,
       icon: {
-        src: caterialsCategoryData?.FileIconSvg.src,
+        src: materialsCategoryData?.FileIconSvg.src,
         title: "file-category-icon"
       },
-      id: caterialsCategoryData?.MaterialsCategoryId,
+      id: materialsCategoryData?.MaterialsCategoryId,
       mainCategory: "Materials",
-      slug: caterialsCategoryData.slug
+      slug: materialsCategoryData.slug
     }
   ];
 };

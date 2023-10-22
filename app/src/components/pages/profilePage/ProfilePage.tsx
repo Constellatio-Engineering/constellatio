@@ -1,28 +1,25 @@
 import ChangePasswordTab from "@/components/organisms/changePasswordTab/ChangePasswordTab";
 import ProfileDetailsTab from "@/components/organisms/profileDetailsTab/ProfileDetailsTab";
 import ProfileHistoryTab from "@/components/organisms/profileHistoryTab/ProfileHistoryTab";
-import ProfileMenu, { type ITab } from "@/components/organisms/profileMenu/ProfileMenu";
-import ProfileNotificationsTab from "@/components/organisms/profileNotificationsTab/ProfileNotificationsTab";
+import ProfileMenu from "@/components/organisms/profileMenu/ProfileMenu";
 import ProfileOverview from "@/components/organisms/profileOverview/ProfileOverview";
 import ProfilePageHeader from "@/components/organisms/profilePageHeader/ProfilePageHeader";
 import SubscriptionTab from "@/components/subscriptionTab/SubscriptionTab";
 import { type IProfilePageProps } from "@/pages/profile";
-import { type NonEmptyArray } from "@/utils/types";
 
 import { Container } from "@mantine/core";
-import { useRouter } from "next/router";
 import { parseAsString, useQueryState } from "next-usequerystate";
 import React, { type FunctionComponent, type ReactNode, useMemo } from "react";
 
 import * as styles from "./ProfilePage.styles";
 
-const tabs: NonEmptyArray<ITab> = [
+export const tabs = [
   { slug: "overview", title: "Overview" },
   { slug: "profile-details", title: "Profile Details" },
   { slug: "change-password", title: "Change Password" },
   { slug: "history", title: "History" },
   { slug: "subscription", title: "Subscription" },
-];
+] as const;
 
 const ProfilePage: FunctionComponent<IProfilePageProps> = ({ allMainCategory }) =>
 {
@@ -39,16 +36,16 @@ const ProfilePage: FunctionComponent<IProfilePageProps> = ({ allMainCategory }) 
         return <ProfileDetailsTab/>;
       case "Change Password":
         return <ChangePasswordTab/>;
-      case "Notifications":
-        return <ProfileNotificationsTab/>;
+      /* case "Notifications":
+        return <ProfileNotificationsTab/>;*/
       case "History":
         return <ProfileHistoryTab/>;
       case "Subscription":
         return <SubscriptionTab subscriptionStatus="You are currently using a free 5-day trial. You can purchase a subscription by clicking the button below:"/>;
       default:
-        return <>{`Unknown tab: ${activeTab?.title}, create tab type case in ProfilePage component`}</>;
+        return <>{`Unknown tab. Create tab type case in ProfilePage component: ${JSON.stringify(activeTab, null, 2)}`}</>;
     }
-  }, [activeTab?.title, allMainCategory]);
+  }, [activeTab, allMainCategory]);
 
   return (
     <> 

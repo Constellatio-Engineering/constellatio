@@ -49,10 +49,6 @@ const PersonalSpacePage: FunctionComponent = () =>
   });
   const [selectedCategorySlug, setSelectedCategorySlug] = useQueryState("category", parseAsString.withDefault(categories?.[0]?.slug || ""));
 
-  console.log("selectedCategorySlug", selectedCategorySlug);
-  console.log(categories?.[0]?.slug);
-  console.log(categories?.[1]?.slug);
-
   return (
     <div css={styles.wrapper}>
       <div css={styles.header}>

@@ -2,6 +2,7 @@ import { LinkButton } from "@/components/atoms/LinkButton/LinkButton";
 import ProfileMenuUniversityTab from "@/components/atoms/profileMenuUniversityTab/ProfileMenuUniversityTab";
 import { NoteIcon } from "@/components/Icons/Note";
 import MenuListItem from "@/components/molecules/menuListItem/MenuListItem";
+import { type tabs } from "@/components/pages/profilePage/ProfilePage";
 import useContextAndErrorIfNull from "@/hooks/useContextAndErrorIfNull";
 import { supabase } from "@/lib/supabase";
 import { InvalidateQueriesContext } from "@/provider/InvalidateQueriesProvider";
@@ -14,16 +15,16 @@ import React, { type FunctionComponent } from "react";
 import * as styles from "./ProfileMenu.styles";
 import ProfileMenuMainProfileInfo from "./ProfileMenuMainProfileInfo";
 
-export type ITab ={
+/* export type ITab ={
   icon?: React.ReactNode;
   slug: string;
   title: string;
-};
+};*/
 
 type IProfileMenu = {
   readonly activeTabSlug?: string;
   readonly setTab: (tab: string) => Promise<URLSearchParams>;
-  readonly tabs: ITab[];
+  readonly tabs: typeof tabs;
 };
 
 const ProfileMenu: FunctionComponent<IProfileMenu> = ({ activeTabSlug, setTab, tabs }) =>
@@ -60,7 +61,6 @@ const ProfileMenu: FunctionComponent<IProfileMenu> = ({ activeTabSlug, setTab, t
             key={tab.slug}
             title={tab.title}
             selected={tab.slug === activeTabSlug}
-            icon={tab.icon}
             onClick={() => void setTab(tab.slug)}
           />
         )

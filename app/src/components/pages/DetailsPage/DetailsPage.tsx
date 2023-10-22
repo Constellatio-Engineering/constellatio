@@ -130,6 +130,7 @@ const DetailsPage: FunctionComponent<IDetailsPageProps> = ({ content, variant })
   const currentGame = games[currentGameIndex];
   const currentGameIndexInFullTextTasksJson = currentGame?.indexInFullTextTasksJson || 0;
   const isLastGame = currentGameIndex === games.length - 1;
+  const mainCategorySlug = content?.mainCategoryField?.[0]?.slug;
 
   return (
     <>
@@ -142,8 +143,8 @@ const DetailsPage: FunctionComponent<IDetailsPageProps> = ({ content, variant })
             slug: variant === "case" ? "Fälle" : "Lexikon" 
           },
           {
-            path: variant === "case" ? `${paths.cases}?category=${content?.mainCategoryField?.[0]?.slug}` : `${paths.dictionary}?category=${content?.mainCategoryField?.[0]?.slug}`,
-            slug: content?.mainCategoryField?.[0]?.slug ?? ""
+            path: `${variant === "case" ? paths.cases : paths.dictionary}?category=${mainCategorySlug}`,
+            slug: mainCategorySlug ?? ""
           },
           { 
             path: `${variant === "case" ? paths.cases : paths.dictionary}/${content?.id}`,
