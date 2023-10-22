@@ -69,7 +69,7 @@ jobs:
         run: pnpm install
       # ======== End duplicate steps ========
       - name: Deploy to Vercel
-        run: vercel deploy --token=${{ secrets.VERCEL_ACCESS_TOKEN }}
+        run: vercel deploy --token=${{ secrets.VERCEL_ACCESS_TOKEN }} --scope ${{ vars.VERCEL_SCOPE }}
       - name: Apply Database Migrations
         id: apply-db-migrations
         run: node ci/apply-db-migrations.mjs
@@ -82,7 +82,7 @@ jobs:
         run: |
           captured_latestPreviewDeploymentUrl="${{ steps.get-latest-preview-deployment-id.outputs.LATEST_PREVIEW_DEPLOYMENT_URL }}"
           echo "Assigning staging alias domain '${{ vars.DEPLOYMENT_DOMAIN }}' to preview deployment with URL: $captured_latestPreviewDeploymentUrl"
-          vercel alias set $captured_latestPreviewDeploymentUrl ${{ vars.DEPLOYMENT_DOMAIN }} --token=${{ secrets.VERCEL_ACCESS_TOKEN }}
+          vercel alias set $captured_latestPreviewDeploymentUrl ${{ vars.DEPLOYMENT_DOMAIN }} --token=${{ secrets.VERCEL_ACCESS_TOKEN }} --scope ${{ vars.VERCEL_SCOPE }}
 
   deploy-production:
     name: Deploy Production to Vercel
@@ -117,7 +117,7 @@ jobs:
           result=$(node ./ci/get-latest-vercel-deployment.js "prefers-deployment-id" "production")
           echo "LATEST_DEPLOYMENT_ID=$result" >> $GITHUB_OUTPUT
       - name: Deploy to Vercel
-        run: vercel deploy --prod --token=${{ secrets.VERCEL_ACCESS_TOKEN }}
+        run: vercel deploy --prod --token=${{ secrets.VERCEL_ACCESS_TOKEN }} --scope ${{ vars.VERCEL_SCOPE }}
       - name: Apply Database Migrations
         id: apply-db-migrations
         run: node ci/apply-db-migrations.mjs
@@ -127,7 +127,7 @@ jobs:
           echo "Database migrations failed. Rolling back deployment."
           captured_latestDeploymentId="${{ steps.get-latest-deployment-id.outputs.LATEST_DEPLOYMENT_ID }}"
           echo "Rolling back deployment with ID: $captured_latestDeploymentId"
-          vercel rollback $captured_latestDeploymentId --token=${{ secrets.VERCEL_ACCESS_TOKEN }}
+          vercel rollback $captured_latestDeploymentId --token=${{ secrets.VERCEL_ACCESS_TOKEN }} --scope ${{ vars.VERCEL_SCOPE }}
       - name: Get Vercel Deployment URL of rolled back deployment
         if: failure() && steps.apply-db-migrations.conclusion == 'failure'
         id: get-rolled-back-deployment-url
@@ -139,5 +139,5 @@ jobs:
         run: |
           captured_rolledBackDeploymentUrl="${{ steps.get-rolled-back-deployment-url.outputs.ROLLED_BACK_DEPLOYMENT_URL }}"
           echo "Deleting rolled back deployment with URL: $captured_rolledBackDeploymentUrl"
-          vercel remove $captured_rolledBackDeploymentUrl --yes --token=${{ secrets.VERCEL_ACCESS_TOKEN }}
+          vercel remove $captured_rolledBackDeploymentUrl --yes --token=${{ secrets.VERCEL_ACCESS_TOKEN }} --scope ${{ vars.VERCEL_SCOPE }}
       
