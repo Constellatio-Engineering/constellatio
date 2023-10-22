@@ -22,7 +22,7 @@ export type ITab ={
   title: string;
 };
 type IProfileMenu = {
-  readonly setQuery: (value: string | ((old: string | null) => string | null) | null, options?: Options | undefined) => Promise<URLSearchParams>;
+  readonly setQuery: (query: string) => void;
   readonly setTabs: React.Dispatch<React.SetStateAction<ITab[]>>;
   readonly tabs: ITab[];
 };

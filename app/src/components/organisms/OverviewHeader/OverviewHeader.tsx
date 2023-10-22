@@ -7,7 +7,6 @@ import type {
 } from "@/services/graphql/__generated/sdk";
 
 import { Title, useMantineTheme } from "@mantine/core";
-import { type Options } from "next-usequerystate";
 import React, { type FunctionComponent, useState } from "react";
 
 import * as styles from "./OverviewHeader.styles";
@@ -18,18 +17,12 @@ import FilterTag from "../../molecules/filterTag/FilterTag";
 
 export interface ICasesOverviewHeaderProps 
 {
-  readonly categories?: IArticlesOverviewProps["allMainCategories"];
-  readonly selectedCategorySlug?: IGenMainCategory["mainCategory"];
-  readonly setSelectedCategorySlug?: (value: string | ((old: string | null) => string | null) | null, options?: Options | undefined) => Promise<URLSearchParams>;
+  readonly categories: IArticlesOverviewProps["allMainCategories"];
+  readonly selectedCategorySlug: string;
+  readonly setSelectedCategorySlug: (slug: string) => Promise<URLSearchParams>;
   readonly title?: Maybe<Scalars["String"]["output"]>;
   readonly variant: "case" | "dictionary" | "red";
 }
-
-export const slugFormatter = (name: string): string => name
-  .toLowerCase()
-  .replace(/\s+/g, "-")
-  .replace(/[^a-z0-9-]/g, "")
-  .replace(/-+/g, "-");
 
 const OverviewHeader: FunctionComponent<ICasesOverviewHeaderProps> = ({
   categories,
@@ -48,17 +41,23 @@ const OverviewHeader: FunctionComponent<ICasesOverviewHeaderProps> = ({
       </div>
       <Title order={1} css={styles.title({ theme, variant })}>{title}</Title>
       <div css={styles.categoriesButtons}>
-        {categories && categories.map((category: IGenMainCategory & {casesPerCategory: number}, index: number) => category?.mainCategory && setSelectedCategorySlug && (
+        {categories.filter(Boolean).map((category) => category?.slug && setSelectedCategorySlug && (
           <div
-            key={index}
+            key={category.id}
             onClick={async () => 
             {
-              await setSelectedCategorySlug(slugFormatter(category?.mainCategory ?? ""));
+              if(!category.slug)
+              {
+                console.error("Category slug is undefined");
+                return;
+              }
+
+              await setSelectedCategorySlug(category.slug);
             }}>
             <CategoryTab
               {...category}
               itemsNumber={category?.casesPerCategory}
-              selected={selectedCategorySlug === slugFormatter(category?.mainCategory)}
+              selected={selectedCategorySlug === category.slug}
               variant={variant}
               // selected={isCategorySelected(category)}
             />

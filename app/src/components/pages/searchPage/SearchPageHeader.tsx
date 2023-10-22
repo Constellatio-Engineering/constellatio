@@ -3,8 +3,7 @@ import useSearchResults, { type SearchResults } from "@/hooks/useSearchResults";
 
 import { Title } from "@mantine/core";
 import { useRouter } from "next/router";
-import { useQueryState } from "next-usequerystate";
-import { useEffect, type FunctionComponent } from "react";
+import { useEffect, type FunctionComponent, useState } from "react";
 
 import * as styles from "./SearchPage.styles";
 import { SearchPageHeaderBgLayer } from "./SearchPageHeaderBgLayer";
@@ -14,7 +13,7 @@ const SearchPageHeader: FunctionComponent = () =>
   const router = useRouter();
   const routerTabQuery = router.query.tab as string;
   const { searchResults } = useSearchResults();
-  const [tabQuery, setTabQuery] = useQueryState("tab");
+  const [tabQuery, setTabQuery] = useState("tab");
 
   const closestTabWithResults = Object.values(searchResults).findIndex(result => result.length > 0);
   const totalSearchResults = Object.values(searchResults).reduce((acc, curr) => acc + curr.length, 0);
@@ -29,10 +28,10 @@ const SearchPageHeader: FunctionComponent = () =>
         {
           if(!tabQuery) 
           {
-            await setTabQuery(Object.keys(searchResults)?.[closestTabWithResults] ?? "articles");
+            setTabQuery(Object.keys(searchResults)?.[closestTabWithResults] ?? "articles");
             await router.replace({ query: { ...router.query, tab: Object.keys(searchResults)?.[closestTabWithResults] ?? "articles" } });
           }
-          else { await setTabQuery(routerTabQuery as string); }
+          else { setTabQuery(routerTabQuery as string); }
         }
         catch (error) { console.error(error); }
       })();

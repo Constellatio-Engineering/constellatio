@@ -17,7 +17,7 @@ import * as styles from "./ProfilePage.styles";
 
 const ProfilePage: FunctionComponent<IProfilePageProps> = ({ allMainCategory }) =>
 {
-  const [query, setQuery] = useQueryState("tab");
+  const [query, setQuery] = useState("tab");
   const [tabs, setTabs] = useState<ITab[]>([
     { selected: true, slug: "overview", title: "Overview" },
     { selected: false, slug: "profile-details", title: "Profile Details" },

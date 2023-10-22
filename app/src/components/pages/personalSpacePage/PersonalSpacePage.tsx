@@ -10,8 +10,7 @@ import { type IGenArticle } from "@/services/graphql/__generated/sdk";
 import useMaterialsStore from "@/stores/materials.store";
 
 import { useRouter } from "next/router";
-import { useQueryState } from "next-usequerystate";
-import React, { type FunctionComponent, useId } from "react";
+import React, { type FunctionComponent, useId, useState } from "react";
 
 import { categoriesHelper } from "./PersonalSpaceHelper";
 import * as styles from "./PersonalSpacePage.styles";
@@ -46,10 +45,10 @@ const PersonalSpacePage: FunctionComponent = () =>
     MaterialsCategoryId,
     uploadedFilesLength: (uploadedFiles?.length + documents?.length) ?? 0,
   });
-  const isFavoriteTab = (slug: string): boolean => slug === slugFormatter(categories?.[0]?.mainCategory ?? "");
-  const isMaterialsTab = (slug: string): boolean => slug === slugFormatter(categories?.[1]?.mainCategory ?? "");
+  const isFavoriteTab = (slug: string): boolean => slug === categories?.[0]?.slug;
+  const isMaterialsTab = (slug: string): boolean => slug === categories?.[1]?.slug;
   const router = useRouter();
-  const [selectedCategorySlug, setSelectedCategorySlug] = useQueryState("category");
+  const [selectedCategorySlug, setSelectedCategorySlug] = useState("category");
   React.useEffect(() => 
   {
     if(typeof window !== "undefined") 
@@ -60,15 +59,11 @@ const PersonalSpacePage: FunctionComponent = () =>
         {
           if(!selectedCategorySlug) 
           {
-            await setSelectedCategorySlug(
-              slugFormatter(categories?.[0]?.mainCategory ?? "")
-            );
+            setSelectedCategorySlug(categories?.[0]?.slug ?? "");
             await router.replace({
               query: {
                 ...router.query,
-                category: slugFormatter(
-                  categories?.[0]?.mainCategory ?? ""
-                ),
+                category: categories?.[0]?.slug ?? ""
               },
             });
           }

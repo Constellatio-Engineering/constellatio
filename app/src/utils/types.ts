@@ -5,7 +5,7 @@
 import { type CSSObject, type MantineTheme } from "@mantine/core";
 import { type TRPCClientErrorBase } from "@trpc/client";
 import { type DefaultErrorShape } from "@trpc/server";
-import { type ComponentType } from "react";
+import { type ComponentType, type ReactNode } from "react";
 
 export type Values<T> = T[keyof T];
 
@@ -55,4 +55,8 @@ export type UseQueryResult<T> = {
 
 export type CommonKeysInTypes<T1, T2> = {
   [K in keyof T1 & keyof T2]: T1[K];
+};
+
+export type WithChildren<T> = T & {
+  children: ReactNode | ReactNode[];
 };

@@ -144,7 +144,7 @@ const DetailsPage: FunctionComponent<IDetailsPageProps> = ({ content, variant })
           },
           {
             path: variant === "case" ? `${paths.cases}?category=${slugFormatter(content?.mainCategoryField?.[0]?.mainCategory ?? "")}` : `${paths.dictionary}?category=${slugFormatter(content?.mainCategoryField?.[0]?.mainCategory ?? "")}`, 
-            slug: content?.mainCategoryField?.[0]?.mainCategory ?? "" 
+            slug: content?.mainCategoryField?.[0]?.slug ?? ""
           },
           { 
             path: `${variant === "case" ? paths.cases : paths.dictionary}/${content?.id}`,
