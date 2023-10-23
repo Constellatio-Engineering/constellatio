@@ -4,45 +4,49 @@ import { type MantineTheme } from "@mantine/styles";
 interface IProfilePageProps 
 {
   isExpanded?: boolean;
+  isSelected?: boolean;
   theme: MantineTheme;
 }
-
 const CSSIsExpandedStyles = css`
   width: 270px;
+  min-width: 270px;
   flex: 1;
 `;
 export const wrapper = ({ isExpanded }: IProfilePageProps) => css`
   width: 160px;
+  min-width: 160px;
   border-radius: 12px;
-  overflow: hidden;
-  ${isExpanded && CSSIsExpandedStyles}
-  `;
-export const badgeWrapper = ({ isExpanded, theme }: IProfilePageProps) => css`
+  ${isExpanded && CSSIsExpandedStyles};
+`;
+export const badgeWrapper = ({ isExpanded, isSelected, theme }: IProfilePageProps) => css`
   background-color: ${theme.colors["neutrals-01"][1]};
-  border: 1px solid ${theme.colors["neutrals-01"][3]};
+  border-top: 1px solid ${isSelected ? theme.colors["neutrals-01"][7] : theme.colors["neutrals-01"][3]};
+  border-left: 1px solid ${isSelected ? theme.colors["neutrals-01"][7] : theme.colors["neutrals-01"][3]};
+  border-right: 1px solid ${isSelected ? theme.colors["neutrals-01"][7] : theme.colors["neutrals-01"][3]};
+  border-bottom: 1px solid ${!isExpanded ? isSelected ? theme.colors["neutrals-01"][7] : theme.colors["neutrals-01"][3] : theme.colors["neutrals-01"][3]};
   padding: 24px 16px 16px 16px;
   display: flex;
-  width: 160px;
   flex-direction: column;
   align-items: center;
   justify-content: space-between;
   gap: 16px;
-  svg{
-    fill: red;
-  }
   position: relative;
   border-radius: ${!isExpanded ? "12px" : "12px 12px 0 0"};
+  width: 100%;
   `;
 export const badgeTitle = (theme: MantineTheme) => css`
   color: ${theme.colors["neutrals-02"][1]};
   `;
-export const badgeDescriptionArea = (theme: MantineTheme) => css`
+export const badgeDescriptionArea = ({ isSelected, theme }: IProfilePageProps) => css`
   background-color: ${theme.colors["neutrals-01"][0]};
   text-align: center;
   color: ${theme.colors["neutrals-01"][7]};
   padding: 16px;
   border-radius: 0 0 12px 12px;
-  border:1px solid ${theme.colors["neutrals-01"][3]};
+  
+  border-bottom:1px solid ${isSelected ? theme.colors["neutrals-01"][7] : theme.colors["neutrals-01"][3]};
+  border-right:1px solid ${isSelected ? theme.colors["neutrals-01"][7] : theme.colors["neutrals-01"][3]};
+  border-left:1px solid ${isSelected ? theme.colors["neutrals-01"][7] : theme.colors["neutrals-01"][3]};
 `;
 export const badgeDescriptionText = css``;
 export const checkCircle = css`

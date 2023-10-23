@@ -63,7 +63,7 @@ export const TOCItemComponent: React.FC<{ readonly depth: number; readonly item:
         })}>
         <div style={{ display: "flex", justifyContent: "flex-start", padding: "0 16px" }}>
           <BodyText component="p" styleType="body-01-medium">{item.children.length > 0 && (isExpanded ? <ArrowSolidDown/> : <ArrowSolidRight/>)}</BodyText>
-          <BodyText component="p" styleType="body-01-medium">{getNumericalLabel(depth + 1, itemNumber - 1)}&nbsp;{item.text}</BodyText>
+          <BodyText component="p" styleType="body-01-medium">{getNumericalLabel(depth, itemNumber - 1)}&nbsp;{item.text}</BodyText>
         </div>
         {depth === 0 && <div style={{ paddingRight: "24px" }}>{itemNumber}/{total}</div>}
       </span>

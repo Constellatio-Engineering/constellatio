@@ -6,7 +6,6 @@ export const wrapper = css`
   position: relative;
 `;
 export const contentContainer = css`
-  min-height: 50vh;
   position: absolute;
   top: 46px;
   left: 50%;

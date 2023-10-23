@@ -30,8 +30,8 @@ export const RichTextHeadingOverwrite = ({
     <HeadingTag 
       ref={ref}
       id={slugFormatter(node?.content?.[0]?.text ?? "")}>
-      {getNumericalLabel(level, index) + " "}
-      {props.children}
+      {getNumericalLabel(level, index)}
+      {" "}{node?.content?.[0]?.text}
       {entry?.isIntersecting && inView()}
     </HeadingTag>
   );

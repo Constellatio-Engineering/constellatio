@@ -8,6 +8,8 @@ export const contentContainer = css``;
 export const sections = css`
 max-width: 1440px;
 margin:0 auto;
-margin-top: 12rem;
-padding:0 60px;
+padding:240px 60px 100px 60px;
+display: flex;
+flex-direction: column;
+gap:100px;
 `;
