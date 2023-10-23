@@ -4,7 +4,7 @@ import EmptyStateCard from "@/components/organisms/emptyStateCard/EmptyStateCard
 import FileViewer from "@/components/organisms/fileViewer/FileViewer";
 import SearchPapersBlock from "@/components/organisms/searchPapersBlock/SearchPapersBlock";
 import UploadedMaterialTable from "@/components/organisms/uploadedMaterialTable/UploadedMaterialTable";
-import useSearchResults, { type SearchResults } from "@/hooks/useSearchResults";
+import useSearchResults, { type SearchResults, type SearchResultsKey } from "@/hooks/useSearchResults";
 import { type IGenArticleOverviewFragment, type IGenFullCaseFragment } from "@/services/graphql/__generated/sdk";
 import useMaterialsStore from "@/stores/materials.store";
 import { type ArticleSearchIndexItem, type CaseSearchIndexItem } from "@/utils/search";
@@ -16,7 +16,7 @@ import { Fragment, type FunctionComponent } from "react";
 import * as styles from "./SearchPage.styles";
 
 type Props = {
-  readonly tabQuery: string;
+  readonly tabQuery: SearchResultsKey;
 };
 
 const SearchPageResults: FunctionComponent<Props> = ({ tabQuery }) =>

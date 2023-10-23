@@ -12,6 +12,24 @@ import SearchPageFiltering from "./SearchPageFiltering";
 import SearchPageHeader from "./SearchPageHeader";
 import SearchPageResults from "./SearchPageResults";
 
+const tabSchema = createParser({
+  parse: (query: string) =>
+  {
+    switch (query)
+    {
+      case "userUploads": { return "userUploads"; }
+      case "cases": { return "cases"; }
+      case "articles": { return "articles"; }
+      default:
+      {
+        console.error(`Unknown tab query: ${query}`);
+        return "articles";
+      }
+    }
+  },
+  serialize: (query) => query
+});
+
 interface SearchPageProps {}
 
 const SearchPage: FunctionComponent<SearchPageProps> = () => 
@@ -21,37 +39,6 @@ const SearchPage: FunctionComponent<SearchPageProps> = () =>
   const closestTabWithResultsIndex = Object.values(searchResults).findIndex(result => result.length > 0);
   const totalSearchResults = Object.values(searchResults).reduce((acc, curr) => acc + curr.length, 0);
   const initialTab: SearchResultsKey = (Object.keys(searchResults) as SearchResultsKey[])[closestTabWithResultsIndex] ?? "articles";
-
-  const tabSchema = createParser({
-    parse: (query: string) =>
-    {
-      switch (query as SearchResultsKey)
-      {
-        case "userUploads":
-        {
-          return "userUploads" as const;
-        }
-        case "cases":
-        {
-          return "cases" as const;
-        }
-        case "articles":
-        {
-          return "articles" as const;
-        }
-        default:
-        {
-          console.error(`Unknown tab query: ${query}`);
-          return "articles" as const;
-        }
-      }
-    },
-    serialize: (query: SearchResultsKey) =>
-    {
-      return query;
-    }
-  });
-
   const [tabQuery, setTabQuery] = useQueryState<SearchResultsKey>("tab", tabSchema.withDefault(initialTab));
 
   return (
