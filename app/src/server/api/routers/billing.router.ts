@@ -3,6 +3,7 @@ import { users } from "@/db/schema";
 import { env } from "@/env.mjs";
 import { stripe } from "@/lib/stripe";
 import { createTRPCRouter, protectedProcedure } from "@/server/api/trpc";
+import { paths } from "@/utils/paths";
 import { InternalServerError } from "@/utils/serverError";
 
 import { eq } from "drizzle-orm";
@@ -35,7 +36,7 @@ export const billingRouter = createTRPCRouter({
     }
 
     const { url } = await stripe.checkout.sessions.create({
-      cancel_url: `${env.NEXT_PUBLIC_WEBSITE_URL}/settings/billing`,
+      cancel_url: `${env.NEXT_PUBLIC_WEBSITE_URL}${paths.profile}?tab=subscription`,
       customer: stripeCustomerId,
       line_items: [{ price: env.STRIPE_PREMIUM_PLAN_PRICE_ID, quantity: 1 }],
       mode: "subscription",
@@ -44,5 +45,17 @@ export const billingRouter = createTRPCRouter({
     });
 
     return { stripeUrl: url };
+  }),
+  getSubscriptionDetails: protectedProcedure.query(async ({ ctx: { userId } }) =>
+  {
+    const subscriptionDetails = await db
+      .select({
+        subscribedPlanPriceId: users.subscribedPlanPriceId,
+        subscriptionEndDate: users.subscriptionEndDate,
+        subscriptionStartDate: users.subscriptionStartDate, 
+        subscriptionStatus: users.subscriptionStatus
+      }).from(users).where(eq(users.id, userId));
+
+    return subscriptionDetails[0] ?? null;
   }),
 });
