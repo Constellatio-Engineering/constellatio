@@ -103,6 +103,7 @@
     "next-usequerystate": "1.8.4",
     "postgres": "3.4.0",
     "puppeteer-core": "21.4.0",
+    "raw-body": "2.5.2",
     "react": "18.2.0",
     "react-dom": "18.2.0",
     "react-i18next": "13.3.1",

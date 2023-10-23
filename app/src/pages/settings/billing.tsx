@@ -8,7 +8,7 @@ import { type FunctionComponent } from "react";
 const Billing: FunctionComponent = () =>
 {
   const router = useRouter();
-  const { isLoading, mutateAsync: generateStripeSessionUrl } = api.billing.generateStripeSessionUrl.useMutation();
+  const { isLoading, mutateAsync: generateStripeSessionUrl } = api.billing.generateStripeCheckoutSession.useMutation();
 
   const redirectToCustomerPortal = async (): Promise<void> =>
   {
@@ -17,7 +17,7 @@ const Billing: FunctionComponent = () =>
     try
     {
       const { stripeUrl } = await generateStripeSessionUrl();
-      url = stripeUrl;
+      url = stripeUrl ?? "";
     }
     catch (error)
     {

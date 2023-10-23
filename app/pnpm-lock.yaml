@@ -194,6 +194,9 @@ dependencies:
   puppeteer-core:
     specifier: 21.4.0
     version: 21.4.0
+  raw-body:
+    specifier: 2.5.2
+    version: 2.5.2
   react:
     specifier: 18.2.0
     version: 18.2.0
@@ -7824,15 +7827,8 @@ packages:
   /@types/eslint-scope@3.7.6:
     resolution: {integrity: sha512-zfM4ipmxVKWdxtDaJ3MP3pBurDXOCoyjvlpE3u6Qzrmw4BPbfm4/ambIeTk/r/J0iq/+2/xp0Fmt+gFvXJY2PQ==}
     dependencies:
-      '@types/eslint': 8.44.2
+      '@types/eslint': 8.44.6
       '@types/estree': 1.0.3
-    dev: true
-
-  /@types/eslint@8.44.2:
-    resolution: {integrity: sha512-sdPRb9K6iL5XZOmBubg8yiFp5yS/JdUDQsq5e6h95km91MCYMuvp7mh1fjPEYUhvHepKpZOjnEaMBR4PxjWDzg==}
-    dependencies:
-      '@types/estree': 1.0.3
-      '@types/json-schema': 7.0.14
     dev: true
 
   /@types/eslint@8.44.6:

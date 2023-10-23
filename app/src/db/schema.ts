@@ -42,6 +42,11 @@ export const users = pgTable("User", {
   stripeCustomerId: text("StripeCustomerId"),
   university: text("University").notNull(),
   onboardingResult: onboardingResultEnum("OnboardingResult"),
+  subscriptionStatus: text("SubscriptionStatus"),
+  subscriptionStartDate: timestamp("SubscriptionStartDate"),
+  subscriptionEndDate: timestamp("SubscriptionEndDate"),
+  subscriptionPeriod: text("SubscriptionPeriod"),
+  priceId: text("PriceId"),
 });
 
 export type UserInsert = InferInsertModel<typeof users>;
