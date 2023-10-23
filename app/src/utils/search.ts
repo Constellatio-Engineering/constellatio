@@ -1,4 +1,4 @@
-import { type UploadedFile } from "@/db/schema";
+import { type UploadedFile, type Document } from "@/db/schema";
 import {
   type IGenTopic,
   type IGenArticle,
@@ -12,6 +12,7 @@ import {
 export const searchIndices = {
   articles: "articles",
   cases: "cases",
+  userDocuments: "user-documents",
   userUploads: "user-uploads",
 } as const;
 
@@ -114,3 +115,13 @@ export const createUploadsSearchIndexItem = ({
 };
 
 export const uploadSearchIndexItemPrimaryKey: keyof UploadSearchIndexItem = "id";
+
+export type DocumentSearchIndexItem = Pick<Document, "id" | "name" | "content" | "userId">;
+export type DocumentSearchItemNodes = RemoveUndefined<DotSeparatedKeys<DocumentSearchIndexItem>>;
+
+export const createDocumentSearchIndexItem = ({ content, id, name, userId }: Pick<Document, "content" | "name" | "id" | "userId">): DocumentSearchIndexItem =>
+{
+  return ({ content, id, name, userId:  });
+};
+
+export const documentSearchIndexItemPrimaryKey: keyof DocumentSearchIndexItem = "id";

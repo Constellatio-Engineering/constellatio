@@ -1,13 +1,19 @@
 import { db } from "@/db/connection";
 import { env } from "@/env.mjs";
 import { meiliSearchAdmin } from "@/lib/meilisearch";
-import { addUserUploadsToSearchIndex, resetSearchIndex, addArticlesToSearchIndex, addCasesToSearchIndex } from "@/server/api/services/search.services";
+import {
+  addUserUploadsToSearchIndex,
+  resetSearchIndex,
+  addArticlesToSearchIndex,
+  addCasesToSearchIndex,
+  addUserDocumentsToSearchIndex
+} from "@/server/api/services/search.services";
 import getAllArticles from "@/services/content/getAllArticles";
 import getAllCases from "@/services/content/getAllCases";
 import { isDevelopmentOrStaging } from "@/utils/env";
 import {
   type ArticleSearchItemNodes,
-  type CaseSearchItemNodes,
+  type CaseSearchItemNodes, type DocumentSearchItemNodes,
   searchIndices,
   type UploadSearchItemNodes
 } from "@/utils/search";
@@ -34,6 +40,7 @@ const handler: NextApiHandler = async (req, res) =>
   const allCases = await getAllCases();
   const allArticles = await getAllArticles();
   const allUserUploads = await db.query.uploadedFiles.findMany();
+  const allUsersDocuments = await db.query.documents.findMany();
 
   const { createArticlesIndexTaskId } = await addArticlesToSearchIndex({
     articleIds: allArticles.map(a => a.id).filter(Boolean),
@@ -44,11 +51,13 @@ const handler: NextApiHandler = async (req, res) =>
   });
 
   const { createUploadsIndexTaskId } = await addUserUploadsToSearchIndex({ uploads: allUserUploads });
+  const { createDocumentsIndexTaskId } = await addUserDocumentsToSearchIndex({ documents: allUsersDocuments });
 
   const createIndicesTasks = await meiliSearchAdmin.waitForTasks([
     createCasesIndexTaskId,
     createUploadsIndexTaskId,
     createArticlesIndexTaskId,
+    createDocumentsIndexTaskId,
   ].filter(Boolean), {
     intervalMs: 1000,
     timeOutMs: 1000 * 60 * 5,
@@ -74,9 +83,15 @@ const handler: NextApiHandler = async (req, res) =>
   const uploadsSearchableAttributes: UploadSearchItemNodes[] = ["originalFilename"];
   const updateUploadsRankingRulesTask = await meiliSearchAdmin.index(searchIndices.userUploads).updateSearchableAttributes(uploadsSearchableAttributes);
 
+  const documentsSearchableAttributes: DocumentSearchItemNodes[] = ["name", "content"];
+  const updateDocumentsRankingRulesTask = await meiliSearchAdmin.index(searchIndices.userDocuments).updateSearchableAttributes(documentsSearchableAttributes);
+
   // Displayed attributes
   const uploadsDisplayedAttributes: UploadSearchItemNodes[] = ["originalFilename", "id", "userId"];
   const updateUploadsDisplayedAttributesTask = await meiliSearchAdmin.index(searchIndices.userUploads).updateDisplayedAttributes(uploadsDisplayedAttributes);
+
+  const documentsDisplayedAttributes: DocumentSearchItemNodes[] = ["name", "content", "id", "userId"];
+  const updateDocumentsDisplayedAttributesTask = await meiliSearchAdmin.index(searchIndices.userDocuments).updateDisplayedAttributes(documentsDisplayedAttributes);
 
   // Filterable attributes
   const casesFilterableAttributes: CaseSearchItemNodes[] = ["id"];
@@ -88,6 +103,9 @@ const handler: NextApiHandler = async (req, res) =>
   const uploadsFilterableAttributes: UploadSearchItemNodes[] = ["userId"];
   const updateUploadsFilterableAttributesTask = await meiliSearchAdmin.index(searchIndices.userUploads).updateFilterableAttributes(uploadsFilterableAttributes);
 
+  const documentsFilterableAttributes: DocumentSearchItemNodes[] = ["userId"];
+  const updateDocumentsFilterableAttributesTask = await meiliSearchAdmin.index(searchIndices.userDocuments).updateFilterableAttributes(documentsFilterableAttributes);
+
   await meiliSearchAdmin.waitForTasks([
     updateCasesRankingRulesTask.taskUid,
     updateArticlesRankingRulesTask.taskUid,
@@ -96,6 +114,9 @@ const handler: NextApiHandler = async (req, res) =>
     updateCasesFilterableAttributesTask.taskUid,
     updateArticlesFilterableAttributesTask.taskUid,
     updateUploadsFilterableAttributesTask.taskUid,
+    updateDocumentsRankingRulesTask.taskUid,
+    updateDocumentsDisplayedAttributesTask.taskUid,
+    updateDocumentsFilterableAttributesTask.taskUid,
   ], {
     intervalMs: 1000,
     timeOutMs: 1000 * 60 * 5,
