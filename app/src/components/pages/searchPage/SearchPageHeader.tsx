@@ -1,21 +1,22 @@
 import MenuTab from "@/components/atoms/menuTab/MenuTab";
-import useSearchResults, { type SearchResults } from "@/hooks/useSearchResults";
+import useSearchResults, { type SearchResults, type SearchResultsKey } from "@/hooks/useSearchResults";
 
 import { Title } from "@mantine/core";
 import { useRouter } from "next/router";
-import { parseAsString, useQueryState } from "next-usequerystate";
 import { type FunctionComponent } from "react";
 
 import * as styles from "./SearchPage.styles";
 import { SearchPageHeaderBgLayer } from "./SearchPageHeaderBgLayer";
 
-const SearchPageHeader: FunctionComponent = () => 
+type Props = {
+  readonly setTabQuery: (tab: SearchResultsKey) => Promise<URLSearchParams>;
+  readonly tabQuery: string;
+  readonly totalSearchResults: number;
+};
+
+const SearchPageHeader: FunctionComponent<Props> = ({ setTabQuery, tabQuery, totalSearchResults }) =>
 {
   const { searchResults } = useSearchResults();
-  const closestTabWithResults = Object.values(searchResults).findIndex(result => result.length > 0);
-  const totalSearchResults = Object.values(searchResults).reduce((acc, curr) => acc + curr.length, 0);
-  const initialTab = Object.keys(searchResults)?.[closestTabWithResults] ?? "articles";
-  const [tabQuery, setTabQuery] = useQueryState("tab", parseAsString.withDefault(initialTab));
   const { query } = useRouter();
 
   return (

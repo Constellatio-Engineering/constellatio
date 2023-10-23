@@ -1,9 +1,10 @@
 // import useSearchResults from "@/hooks/useSearchResults";
 
 import EmptyStateCard from "@/components/organisms/emptyStateCard/EmptyStateCard";
-import useSearchResults from "@/hooks/useSearchResults";
+import useSearchResults, { type SearchResultsKey } from "@/hooks/useSearchResults";
 import useSearchBarStore from "@/stores/searchBar.store";
 
+import { createParser, useQueryState } from "next-usequerystate";
 import React, { type FunctionComponent } from "react";
 
 import * as styles from "./SearchPage.styles";
@@ -17,6 +18,41 @@ const SearchPage: FunctionComponent<SearchPageProps> = () =>
 {
   const { searchResults } = useSearchResults();
   const searchValue = useSearchBarStore((s) => s.searchValue);
+  const closestTabWithResultsIndex = Object.values(searchResults).findIndex(result => result.length > 0);
+  const totalSearchResults = Object.values(searchResults).reduce((acc, curr) => acc + curr.length, 0);
+  const initialTab: SearchResultsKey = (Object.keys(searchResults) as SearchResultsKey[])[closestTabWithResultsIndex] ?? "articles";
+
+  const tabSchema = createParser({
+    parse: (query: string) =>
+    {
+      switch (query as SearchResultsKey)
+      {
+        case "userUploads":
+        {
+          return "userUploads" as const;
+        }
+        case "cases":
+        {
+          return "cases" as const;
+        }
+        case "articles":
+        {
+          return "articles" as const;
+        }
+        default:
+        {
+          console.error(`Unknown tab query: ${query}`);
+          return "articles" as const;
+        }
+      }
+    },
+    serialize: (query: SearchResultsKey) =>
+    {
+      return query;
+    }
+  });
+
+  const [tabQuery, setTabQuery] = useQueryState<SearchResultsKey>("tab", tabSchema.withDefault(initialTab));
 
   return (
     <div css={styles.wrapper}>
@@ -28,10 +64,16 @@ const SearchPage: FunctionComponent<SearchPageProps> = () =>
         />
       ) : (
         <>
-          <SearchPageHeader/>
+          <SearchPageHeader
+            totalSearchResults={totalSearchResults}
+            tabQuery={tabQuery}
+            setTabQuery={setTabQuery}
+          />
           <SearchPageFiltering/>
-          <SearchPageResults/>
-          {/* SearchPage */}
+          <SearchPageResults
+            tabQuery={tabQuery}
+
+          />
         </>
       )}
     </div>
