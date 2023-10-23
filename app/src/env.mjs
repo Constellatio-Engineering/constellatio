@@ -33,6 +33,8 @@ export const env = createEnv({
     CAISY_TOPIC_BLUEPRINT_ID: z.string(),
     CAISY_TAG_BLUEPRINT_ID: z.string(),
     CRON_SECRET: z.string(),
+    STRIPE_PRICE_ID: z.string(),
+    STRIPE_SIGNING_SECRET: z.string(),
   },
 
 	/**
@@ -44,19 +46,11 @@ export const env = createEnv({
 		NEXT_PUBLIC_SUPABASE_ANON_KEY: z.string(),
 		NEXT_PUBLIC_SUPABASE_URL: urlValidation,
 		NEXT_PUBLIC_WEBSITE_URL: urlValidation,
-		NEXT_PUBLIC_MAXIMUM_FILE_UPLOAD_SIZE_IN_MB: z
-			.string()
-			.pipe(z.coerce.number().int().min(1).max(999)),
+		NEXT_PUBLIC_MAXIMUM_FILE_UPLOAD_SIZE_IN_MB: z.string().pipe(z.coerce.number().int().min(1).max(999)),
 		NEXT_PUBLIC_MEILISEARCH_PUBLIC_URL: urlValidation,
-		NEXT_PUBLIC_MEILISEARCH_TENANT_TOKEN_EXPIRATION_TIME_MS: z
-			.string()
-			.pipe(z.coerce.number().int().min(10_000)),
+		NEXT_PUBLIC_MEILISEARCH_TENANT_TOKEN_EXPIRATION_TIME_MS: z.string().pipe(z.coerce.number().int().min(10_000)),
 		NEXT_PUBLIC_SIGN_UP_DEFAULT_EMAIL: z.string().email().optional(),
-		NEXT_PUBLIC_DEPLOYMENT_ENVIRONMENT: z.enum([
-			"development",
-			"staging",
-			"production",
-		]),
+		NEXT_PUBLIC_DEPLOYMENT_ENVIRONMENT: z.enum(["development", "staging", "production"]),
 		NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY: z.string(),
 	},
 
@@ -92,6 +86,9 @@ export const env = createEnv({
     CAISY_LEGAL_AREA_BLUEPRINT_ID: process.env.CAISY_LEGAL_AREA_BLUEPRINT_ID,
     CAISY_TOPIC_BLUEPRINT_ID: process.env.CAISY_TOPIC_BLUEPRINT_ID,
     CRON_SECRET: process.env.CRON_SECRET,
+    STRIPE_SIGNING_SECRET: process.env.STRIPE_SIGNING_SECRET,
+    STRIPE_PRICE_ID: process.env.STRIPE_PRICE_ID,
+    NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY: process.env.NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY,
   },
   /**
    * Run `build` or `dev` with `SKIP_ENV_VALIDATION` to skip env validation.

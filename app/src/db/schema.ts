@@ -1,7 +1,7 @@
 /* eslint-disable sort-keys-fix/sort-keys-fix,@typescript-eslint/naming-convention */
 import { type InferInsertModel, type InferSelectModel } from "drizzle-orm";
 import {
-  text, pgTable, integer, pgEnum, uuid, smallint, unique, timestamp, primaryKey, index, date
+  text, pgTable, integer, pgEnum, uuid, smallint, unique, timestamp, primaryKey, index
 } from "drizzle-orm/pg-core";
 
 export const allGenderIdentifiers = ["male", "female", "diverse",] as const;
