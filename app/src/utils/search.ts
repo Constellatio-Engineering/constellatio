@@ -104,6 +104,7 @@ export const createArticleSearchIndexItem = (fullArticle: IGenArticle): ArticleS
 
 export type UploadSearchIndexItem = Pick<UploadedFile, "id" | "originalFilename" | "userId">;
 export type UploadSearchItemNodes = RemoveUndefined<DotSeparatedKeys<UploadSearchIndexItem>>;
+export type UploadSearchItemUpdate = Partial<Omit<UploadSearchIndexItem, "id" | "userId">> & Pick<UploadSearchIndexItem, "id">;
 
 export const createUploadsSearchIndexItem = ({
   id,
@@ -118,6 +119,7 @@ export const uploadSearchIndexItemPrimaryKey: keyof UploadSearchIndexItem = "id"
 
 export type DocumentSearchIndexItem = Pick<Document, "id" | "name" | "content" | "userId">;
 export type DocumentSearchItemNodes = RemoveUndefined<DotSeparatedKeys<DocumentSearchIndexItem>>;
+export type DocumentSearchItemUpdate = Partial<Omit<DocumentSearchIndexItem, "id" | "userId">> & Pick<DocumentSearchIndexItem, "id">;
 
 export const createDocumentSearchIndexItem = ({
   content,

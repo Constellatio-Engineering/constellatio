@@ -7,7 +7,7 @@ type SearchStoreProps = {
   searchValue: string;
   setSearchHistory: (searchHistory: string[]) => void;
   setSearchValue: (searchValue: string) => void;
-  toggleDrawer: (isDrawerOpened: boolean) => void;
+  toggleDrawer: (isDrawerOpened: boolean, refetchSearchResults: () => void) => void;
 };
 
 const useSearchBarStore = create(immer<SearchStoreProps>((set) => (
@@ -29,8 +29,13 @@ const useSearchBarStore = create(immer<SearchStoreProps>((set) => (
         state.searchValue = searchValue;
       });
     },
-    toggleDrawer: (isDrawerOpened) => 
+    toggleDrawer: (isDrawerOpened, refetchSearchResults) =>
     {
+      if(isDrawerOpened)
+      {
+        refetchSearchResults();
+      }
+
       set((state) => 
       {
         state.isDrawerOpened = isDrawerOpened;

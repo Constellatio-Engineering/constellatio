@@ -12,6 +12,7 @@ import SearchField from "@/components/molecules/searchField/SearchField";
 import { UserDropdown } from "@/components/molecules/UserDropdown/UserDropdown";
 import useContextAndErrorIfNull from "@/hooks/useContextAndErrorIfNull";
 import useOnboardingResult from "@/hooks/useOnboardingResult";
+import useSearchResults from "@/hooks/useSearchResults";
 import { InvalidateQueriesContext } from "@/provider/InvalidateQueriesProvider";
 import useSearchBarStore from "@/stores/searchBar.store";
 import { api } from "@/utils/api";
@@ -48,6 +49,7 @@ const HeaderDefault: FunctionComponent = () =>
     { slug: paths.cases, title: "Fälle" },
     { slug: paths.dictionary, title: "Lexikon" },
   ];
+  const { refetch: refetchSearchResults } = useSearchResults();
   const { pathname } = useRouter();
   const theme = useMantineTheme();
   const { isLoading: isGetOnboardingResultLoading, onboardingResult } = useOnboardingResult();
@@ -110,7 +112,10 @@ const HeaderDefault: FunctionComponent = () =>
               </div>
             )}
             <div className="search-input">
-              <SearchField size="small" onClick={() => toggleDrawer(true)}/>
+              <SearchField
+                size="small"
+                onClick={() => toggleDrawer(true, refetchSearchResults)}
+              />
             </div>
             <Link href={`${paths.personalSpace}`}>
               <MenuTab
@@ -205,7 +210,10 @@ const HeaderDefault: FunctionComponent = () =>
               )}
               popoverTarget={(
                 <div className="search-input">
-                  <SearchField size="small" onClick={() => toggleDrawer(true)}/>
+                  <SearchField
+                    size="small"
+                    onClick={() => toggleDrawer(true, refetchSearchResults)}
+                  />
                 </div>
               )}
             />
