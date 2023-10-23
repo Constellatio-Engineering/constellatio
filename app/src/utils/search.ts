@@ -8,6 +8,7 @@ import {
   type DotSeparatedKeys,
   type NullableProperties, type RemoveUndefined, type Values
 } from "@/utils/types";
+import { removeHtmlTagsFromString } from "@/utils/utils";
 
 export const searchIndices = {
   articles: "articles",
@@ -129,7 +130,10 @@ export const createDocumentSearchIndexItem = ({
 }: Pick<Document, "content" | "name" | "id" | "userId">): DocumentSearchIndexItem =>
 {
   return ({
-    content, id, name, userId 
+    content: removeHtmlTagsFromString(content),
+    id,
+    name,
+    userId
   });
 };
 
