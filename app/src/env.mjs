@@ -33,7 +33,7 @@ export const env = createEnv({
     CAISY_TOPIC_BLUEPRINT_ID: z.string(),
     CAISY_TAG_BLUEPRINT_ID: z.string(),
     CRON_SECRET: z.string(),
-    STRIPE_PRICE_ID: z.string(),
+    STRIPE_PREMIUM_PLAN_PRICE_ID: z.string(),
     STRIPE_SIGNING_SECRET: z.string(),
   },
 
@@ -87,7 +87,7 @@ export const env = createEnv({
     CAISY_TOPIC_BLUEPRINT_ID: process.env.CAISY_TOPIC_BLUEPRINT_ID,
     CRON_SECRET: process.env.CRON_SECRET,
     STRIPE_SIGNING_SECRET: process.env.STRIPE_SIGNING_SECRET,
-    STRIPE_PRICE_ID: process.env.STRIPE_PRICE_ID,
+    STRIPE_PREMIUM_PLAN_PRICE_ID: process.env.STRIPE_PREMIUM_PLAN_PRICE_ID,
     NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY: process.env.NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY,
   },
   /**

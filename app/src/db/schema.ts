@@ -22,8 +22,8 @@ export type CaseProgressState = typeof allCaseProgressStates[number];
 export const allGameProgressStates = ["not-started", "completed"] as const;
 export type GameProgressState = typeof allGameProgressStates[number];
 
-// export const allSubscriptionStatuses = ["active", "canceled", "incomplete", "incomplete_expired", "past_due", "trialing", "unpaid", "paused"] as const;
-// export type SubscriptionStatus = typeof allSubscriptionStatuses[number];
+export const allSubscriptionStatuses = ["active", "canceled", "incomplete", "incomplete_expired", "past_due", "trialing", "unpaid", "paused"] as const;
+export type SubscriptionStatus = typeof allSubscriptionStatuses[number];
 
 export const genderEnum = pgEnum("Gender", allGenderIdentifiers);
 export const onboardingResultEnum = pgEnum("OnboardingResult", allOnboardingResults);
@@ -31,7 +31,7 @@ export const resourceTypeEnum = pgEnum("ResourceType", allBookmarkResourceTypes)
 export const searchIndexTypeEnum = pgEnum("SearchIndexType", allSearchIndexTypes);
 export const caseProgressStateEnum = pgEnum("CaseProgressState", allCaseProgressStates);
 export const gameProgressStateEnum = pgEnum("GameProgressState", allGameProgressStates);
-// export const subscriptionStatusEnum = pgEnum("SubscriptionStatus", allSubscriptionStatuses);
+export const subscriptionStatusEnum = pgEnum("SubscriptionStatus", allSubscriptionStatuses);
 
 // TODO: Go through all queries and come up with useful indexes
 
@@ -46,10 +46,10 @@ export const users = pgTable("User", {
   stripeCustomerId: text("StripeCustomerId"),
   university: text("University").notNull(),
   onboardingResult: onboardingResultEnum("OnboardingResult"),
-  subscriptionStatus: text("SubscriptionStatus"),
+  subscriptionStatus: subscriptionStatusEnum("SubscriptionStatus"),
   subscriptionStartDate: timestamp("SubscriptionStartDate"),
   subscriptionEndDate: timestamp("SubscriptionEndDate"),
-  priceId: text("PriceId"),
+  subscribedPlanPriceId: text("SubscribedPlanPriceId"),
 });
 
 export type UserInsert = InferInsertModel<typeof users>;

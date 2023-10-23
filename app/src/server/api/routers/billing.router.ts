@@ -37,7 +37,7 @@ export const billingRouter = createTRPCRouter({
     const { url } = await stripe.checkout.sessions.create({
       cancel_url: `${env.NEXT_PUBLIC_WEBSITE_URL}/settings/billing`,
       customer: stripeCustomerId,
-      line_items: [{ price: env.STRIPE_PRICE_ID, quantity: 1 }],
+      line_items: [{ price: env.STRIPE_PREMIUM_PLAN_PRICE_ID, quantity: 1 }],
       mode: "subscription",
       payment_method_types: ["card"],
       success_url: `${env.NEXT_PUBLIC_WEBSITE_URL}/settings/success`,

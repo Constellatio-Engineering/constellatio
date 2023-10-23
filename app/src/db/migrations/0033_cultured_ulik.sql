@@ -1,1 +1,0 @@
-ALTER TABLE "User" ALTER COLUMN "SubscriptionStatus" SET DATA TYPE text;

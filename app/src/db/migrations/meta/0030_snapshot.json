@@ -1,6 +1,6 @@
 {
-  "id": "bd44cb92-f008-4d95-b0d5-3b46ed83b81a",
-  "prevId": "88239d53-91dd-479c-a632-a08b8e9dcd1d",
+  "id": "33ce7c06-0f41-4da7-95ed-e78968f2eb37",
+  "prevId": "2df405b6-7f98-4d66-bdb1-2ca4794262c8",
   "version": "5",
   "dialect": "pg",
   "tables": {
@@ -783,7 +783,7 @@
         },
         "SubscriptionStatus": {
           "name": "SubscriptionStatus",
-          "type": "text",
+          "type": "SubscriptionStatus",
           "primaryKey": false,
           "notNull": false
         },
@@ -799,14 +799,8 @@
           "primaryKey": false,
           "notNull": false
         },
-        "SubscriptionPeriod": {
-          "name": "SubscriptionPeriod",
-          "type": "text",
-          "primaryKey": false,
-          "notNull": false
-        },
-        "PriceId": {
-          "name": "PriceId",
+        "SubscribedPlanPriceId": {
+          "name": "SubscribedPlanPriceId",
           "type": "text",
           "primaryKey": false,
           "notNull": false
@@ -877,6 +871,19 @@
       "values": {
         "article": "article",
         "case": "case"
+      }
+    },
+    "SubscriptionStatus": {
+      "name": "SubscriptionStatus",
+      "values": {
+        "active": "active",
+        "canceled": "canceled",
+        "incomplete": "incomplete",
+        "incomplete_expired": "incomplete_expired",
+        "past_due": "past_due",
+        "trialing": "trialing",
+        "unpaid": "unpaid",
+        "paused": "paused"
       }
     }
   },

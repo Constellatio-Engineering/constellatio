@@ -66,7 +66,7 @@ const handler: NextApiHandler = async (req, res) =>
           if(subscriptionStatus === "active")
           {
             await db.update(users).set({
-              priceId,
+              subscribedPlanPriceId: priceId,
               subscriptionEndDate,
               subscriptionStartDate,
               subscriptionStatus
@@ -83,7 +83,10 @@ const handler: NextApiHandler = async (req, res) =>
           if(subscriptionStatus !== "active")
           {
             await db.update(users).set({
-              priceId: null, subscriptionEndDate: null, subscriptionStartDate: null, subscriptionStatus
+              subscribedPlanPriceId: null,
+              subscriptionEndDate: null,
+              subscriptionStartDate: null,
+              subscriptionStatus
             }).where(eq(users.stripeCustomerId, stripeCustomerId));
           }
         };
