@@ -1,3 +1,4 @@
+import MoveToModal from "@/components/moveToModal/MoveToModal";
 import PapersBlock from "@/components/papersBlock/PapersBlock";
 import useDocuments from "@/hooks/useDocuments";
 import useMaterialsStore from "@/stores/materials.store";
@@ -20,7 +21,7 @@ const PersonalSpaceMaterialsTab: FunctionComponent = () =>
   const { setUploadState, uploads } = uploadsProgressStore();
   const { selectedFileIdForPreview } = useMaterialsStore();
   const areUploadsInProgress = uploads.some(u => u.state.type === "uploading");
-  const matches = useMediaQuery("(min-width: 1024px)");
+  const matches = useMediaQuery("(min-width: 1224px)");
 
   return (
     <Container p={matches ? "0px 61px" : "0px 32px"} maw={1440}>
@@ -52,6 +53,7 @@ const PersonalSpaceMaterialsTab: FunctionComponent = () =>
           )}
         </div>
       </div>
+      <MoveToModal/>
     </Container>
   );
 };
