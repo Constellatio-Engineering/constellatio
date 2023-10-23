@@ -12,6 +12,7 @@ import SearchField from "@/components/molecules/searchField/SearchField";
 import { UserDropdown } from "@/components/molecules/UserDropdown/UserDropdown";
 import useContextAndErrorIfNull from "@/hooks/useContextAndErrorIfNull";
 import useOnboardingResult from "@/hooks/useOnboardingResult";
+import useSearchResults from "@/hooks/useSearchResults";
 import { InvalidateQueriesContext } from "@/provider/InvalidateQueriesProvider";
 import useSearchBarStore from "@/stores/searchBar.store";
 import { api } from "@/utils/api";
@@ -48,6 +49,7 @@ const HeaderDefault: FunctionComponent = () =>
     { slug: paths.cases, title: "Fälle" },
     { slug: paths.dictionary, title: "Lexikon" },
   ];
+  const { refetch: refetchSearchResults } = useSearchResults();
   const { pathname } = useRouter();
   const theme = useMantineTheme();
   const { isLoading: isGetOnboardingResultLoading, onboardingResult } = useOnboardingResult();
@@ -96,9 +98,24 @@ const HeaderDefault: FunctionComponent = () =>
             })}
           </div>
           <div css={styles.profileArea}>
-           
+            {isDevelopment && (
+              <div style={{ alignItems: "center", display: "flex" }}>
+                <Button<"button">
+                  styleType="secondarySubtle"
+                  disabled={isRecreatingSearchIndices}
+                  type="button"
+                  onClick={() => recreateSearchIndices()}
+                  style={{ marginRight: 10 }}>
+                  Recreate Search Indices
+                </Button>
+                {isRecreatingSearchIndices && <Loader size={22}/>}
+              </div>
+            )}
             <div className="search-input">
-              <SearchField size="small" onClick={() => toggleDrawer(true)}/>
+              <SearchField
+                size="small"
+                onClick={() => toggleDrawer(true, refetchSearchResults)}
+              />
             </div>
             <Link href={`${paths.personalSpace}`}>
               <MenuTab
@@ -193,7 +210,10 @@ const HeaderDefault: FunctionComponent = () =>
               )}
               popoverTarget={(
                 <div className="search-input">
-                  <SearchField size="small" onClick={() => toggleDrawer(true)}/>
+                  <SearchField
+                    size="small"
+                    onClick={() => toggleDrawer(true, refetchSearchResults)}
+                  />
                 </div>
               )}
             />

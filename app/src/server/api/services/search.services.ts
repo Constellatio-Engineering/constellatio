@@ -1,5 +1,5 @@
 import { db } from "@/db/connection";
-import { searchIndexUpdateQueue, type SearchIndexUpdateQueueInsert, type UploadedFile } from "@/db/schema";
+import { type Document, searchIndexUpdateQueue, type SearchIndexUpdateQueueInsert, type UploadedFile } from "@/db/schema";
 import { meiliSearchAdmin } from "@/lib/meilisearch";
 import { getArticleById } from "@/services/content/getArticleById";
 import { getCaseById } from "@/services/content/getCaseById";
@@ -9,7 +9,13 @@ import {
   type IGenGetAllCasesByTopicQuery,
 } from "@/services/graphql/__generated/sdk";
 import {
-  createArticleSearchIndexItem, createCaseSearchIndexItem, createUploadsSearchIndexItem, searchIndices, uploadSearchIndexItemPrimaryKey 
+  createArticleSearchIndexItem,
+  createCaseSearchIndexItem,
+  createDocumentSearchIndexItem,
+  createUploadsSearchIndexItem,
+  documentSearchIndexItemPrimaryKey,
+  searchIndices,
+  uploadSearchIndexItemPrimaryKey
 } from "@/utils/search";
 
 export const addContentToSearchQueue = async (items: SearchIndexUpdateQueueInsert | SearchIndexUpdateQueueInsert[]): Promise<void> =>
@@ -42,6 +48,7 @@ export const resetSearchIndex = async (): Promise<void> =>
   await meiliSearchAdmin.deleteIndexIfExists(searchIndices.cases);
   await meiliSearchAdmin.deleteIndexIfExists(searchIndices.userUploads);
   await meiliSearchAdmin.deleteIndexIfExists(searchIndices.articles);
+  await meiliSearchAdmin.deleteIndexIfExists(searchIndices.userDocuments);
 };
 
 type AddArticlesToSearchIndex = (params: { articleIds: string[] }) => Promise<{
@@ -57,7 +64,7 @@ export const addArticlesToSearchIndex: AddArticlesToSearchIndex = async ({ artic
     const fetchAllArticlesDetailsPromises = articleIds.map(async id => (await getArticleById({ id })).article);
     const allArticlesWithDetails = await Promise.all(fetchAllArticlesDetailsPromises);
     const allArticlesSearchIndexItems = allArticlesWithDetails.filter(Boolean).map(createArticleSearchIndexItem);
-    const createArticlesIndexTask = await meiliSearchAdmin.index(searchIndices.articles).addDocuments(allArticlesSearchIndexItems);
+    const createArticlesIndexTask = await meiliSearchAdmin.index(searchIndices.articles).addDocuments([allArticlesSearchIndexItems[0]!]); // TODO Change
     createArticlesIndexTaskId = createArticlesIndexTask.taskUid;
   }
 
@@ -77,7 +84,7 @@ export const addCasesToSearchIndex: AddCasesToSearchIndex = async ({ caseIds }) 
     const fetchAllCasesDetailsPromises = caseIds.map(async id => (await getCaseById({ id })).legalCase);
     const allCasesWithDetails = await Promise.all(fetchAllCasesDetailsPromises);
     const allCasesSearchIndexItems = allCasesWithDetails.filter(Boolean).map(createCaseSearchIndexItem);
-    const createCasesIndexTask = await meiliSearchAdmin.index(searchIndices.cases).addDocuments(allCasesSearchIndexItems);
+    const createCasesIndexTask = await meiliSearchAdmin.index(searchIndices.cases).addDocuments([allCasesSearchIndexItems[0]!]); // TODO Change
     createCasesIndexTaskId = createCasesIndexTask.taskUid;
   }
 
@@ -102,4 +109,24 @@ export const addUserUploadsToSearchIndex: AddUserUploadsToSearchIndex = async ({
   }
 
   return { createUploadsIndexTaskId };
+};
+
+type AddUserDocumentsToSearchIndex = (params: { documents: Document[] }) => Promise<{
+  createDocumentsIndexTaskId: number | undefined;
+}>;
+
+export const addUserDocumentsToSearchIndex: AddUserDocumentsToSearchIndex = async ({ documents }) =>
+{
+  let createDocumentsIndexTaskId: number | undefined;
+
+  if(documents.length > 0)
+  {
+    const allUserDocumentsSearchIndexItems = documents.map(createDocumentSearchIndexItem);
+    const createDocumentsIndexTask = await meiliSearchAdmin.index(searchIndices.userDocuments).addDocuments(allUserDocumentsSearchIndexItems, {
+      primaryKey: documentSearchIndexItemPrimaryKey
+    });
+    createDocumentsIndexTaskId = createDocumentsIndexTask.taskUid;
+  }
+
+  return { createDocumentsIndexTaskId };
 };
