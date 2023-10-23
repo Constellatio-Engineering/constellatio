@@ -31,6 +31,27 @@ const BadgesCarousel: FunctionComponent = () => (
         size="small"
       />
     </Carousel.Slide>
+    <Carousel.Slide>
+      <ProfileBadgeCard
+        name="Test1"
+        description="Test1"
+        size="small"
+      />
+    </Carousel.Slide>
+    <Carousel.Slide> 
+      <ProfileBadgeCard
+        name="Tes2t"
+        description="Test2"
+        size="small"
+      />
+    </Carousel.Slide>
+    <Carousel.Slide> 
+      <ProfileBadgeCard
+        name="Tes3t"
+        description="Test3"
+        size="small"
+      />
+    </Carousel.Slide>
   </Carousel>
 );
 

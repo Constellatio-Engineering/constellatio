@@ -2,6 +2,7 @@ import { LinkButton } from "@/components/atoms/LinkButton/LinkButton";
 import ProfileMenuUniversityTab from "@/components/atoms/profileMenuUniversityTab/ProfileMenuUniversityTab";
 import { NoteIcon } from "@/components/Icons/Note";
 import MenuListItem from "@/components/molecules/menuListItem/MenuListItem";
+import { type ITab } from "@/components/pages/profilePage/ProfilePage";
 import useContextAndErrorIfNull from "@/hooks/useContextAndErrorIfNull";
 import { supabase } from "@/lib/supabase";
 import { InvalidateQueriesContext } from "@/provider/InvalidateQueriesProvider";
@@ -15,12 +16,6 @@ import React, { type FunctionComponent } from "react";
 import * as styles from "./ProfileMenu.styles";
 import ProfileMenuMainProfileInfo from "./ProfileMenuMainProfileInfo";
 
-export type ITab ={
-  icon?: React.ReactNode;
-  selected: boolean;
-  slug: string;
-  title: string;
-};
 type IProfileMenu = {
   readonly setQuery: (value: string | ((old: string | null) => string | null) | null, options?: Options | undefined) => Promise<URLSearchParams>;
   readonly setTabs: React.Dispatch<React.SetStateAction<ITab[]>>;

@@ -9,11 +9,11 @@ export const contentContainer = css`
   min-height: 50vh;
   position: absolute;
   top: 46px;
-  left: 0;
-  width: 100%;
+  left: 50%;
+  transform: translateX(-50%);
   z-index: 2;
-  border: 3px solid green;
   padding: 0 60px;
+  min-width: 1440px;
 `;
 export const headerTitle = (theme: MantineTheme) => css`
     color: ${theme.colors["neutrals-01"][0]};

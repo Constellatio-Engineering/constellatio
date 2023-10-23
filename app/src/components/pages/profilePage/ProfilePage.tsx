@@ -1,7 +1,7 @@
 import ChangePasswordTab from "@/components/organisms/changePasswordTab/ChangePasswordTab";
 import ProfileDetailsTab from "@/components/organisms/profileDetailsTab/ProfileDetailsTab";
 import ProfileHistoryTab from "@/components/organisms/profileHistoryTab/ProfileHistoryTab";
-import ProfileMenu, { type ITab } from "@/components/organisms/profileMenu/ProfileMenu";
+import ProfileMenu from "@/components/organisms/profileMenu/ProfileMenu";
 import ProfileNotificationsTab from "@/components/organisms/profileNotificationsTab/ProfileNotificationsTab";
 import ProfileOverview from "@/components/organisms/profileOverview/ProfileOverview";
 import ProfilePageHeader from "@/components/organisms/profilePageHeader/ProfilePageHeader";
@@ -14,6 +14,14 @@ import { useQueryState } from "next-usequerystate";
 import React, { useState, type FunctionComponent, type ReactNode, useEffect } from "react";
 
 import * as styles from "./ProfilePage.styles";
+
+export type ITab ={
+  icon?: React.ReactNode;
+  selected: boolean;
+  slug: IProfilePageTabs;
+  title: string;
+};
+export type IProfilePageTabs = "overview" | "profile-details" | "change-password" | "history" | "subscription" | "notifications";
 
 const ProfilePage: FunctionComponent<IProfilePageProps> = ({ allMainCategory }) =>
 {
@@ -30,19 +38,19 @@ const ProfilePage: FunctionComponent<IProfilePageProps> = ({ allMainCategory }) 
   const contentPicker = (tabs: ITab[]): ReactNode => 
   {
     const tab = tabs?.find(x => x.selected);
-    switch (tab?.title)
+    switch (tab?.slug)
     {
-      case "Overview":
+      case "overview":
         return <ProfileOverview allMainCategory={allMainCategory}/>;
-      case "Profile Details":
+      case "profile-details":
         return <ProfileDetailsTab/>;
-      case "Change Password":
+      case "change-password":
         return <ChangePasswordTab/>;
-      case "Notifications":
+      case "notifications":
         return <ProfileNotificationsTab/>;  
-      case "History":
+      case "history":
         return <ProfileHistoryTab/>;
-      case "Subscription":
+      case "subscription":
         return <SubscriptionTab subscriptionStatus="You are currently using a free 5-day trial. You can purchase a subscription by clicking the button below:"/>;
       default:
         console.log(`Unknown tab: ${tab?.title}, create tab type case in ProfilePage component`);

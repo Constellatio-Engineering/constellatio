@@ -9,4 +9,5 @@ export const wrapper = (theme: MantineTheme) => css`
     display: flex;
     flex-direction: column;
     justify-content:space-between ;
+    max-width: 950px;
 `;
