@@ -119,9 +119,16 @@ export const uploadSearchIndexItemPrimaryKey: keyof UploadSearchIndexItem = "id"
 export type DocumentSearchIndexItem = Pick<Document, "id" | "name" | "content" | "userId">;
 export type DocumentSearchItemNodes = RemoveUndefined<DotSeparatedKeys<DocumentSearchIndexItem>>;
 
-export const createDocumentSearchIndexItem = ({ content, id, name, userId }: Pick<Document, "content" | "name" | "id" | "userId">): DocumentSearchIndexItem =>
+export const createDocumentSearchIndexItem = ({
+  content,
+  id,
+  name,
+  userId
+}: Pick<Document, "content" | "name" | "id" | "userId">): DocumentSearchIndexItem =>
 {
-  return ({ content, id, name, userId:  });
+  return ({
+    content, id, name, userId 
+  });
 };
 
 export const documentSearchIndexItemPrimaryKey: keyof DocumentSearchIndexItem = "id";
