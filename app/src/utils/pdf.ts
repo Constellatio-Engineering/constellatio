@@ -1,60 +1,49 @@
-import type Chromium from "chrome-aws-lambda";
-import { type Browser as PuppeteerBrowser, type PuppeteerNode } from "puppeteer";
-import { type Browser as PuppeteerCoreBrowser, type PuppeteerNode as PuppeteerCoreNode } from "puppeteer-core";
-
-const isRunningOnVercel = process.env.AWS_LAMBDA_FUNCTION_VERSION != null;
-
-let chrome: typeof Chromium;
-let puppeteerCore: PuppeteerCoreNode;
-let puppeteer: PuppeteerNode;
-
-if(isRunningOnVercel)
-{
-  chrome = require("chrome-aws-lambda");
-  puppeteerCore = require("puppeteer-core");
-}
-else 
-{
-  puppeteer = require("puppeteer");
-}
+import puppeteer, { type Browser } from "puppeteer";
 
 export const createPdfBuffer = async (htmlContent: string): Promise<Buffer> =>
 {
-  let browser: PuppeteerBrowser | PuppeteerCoreBrowser;
+  console.log("--- Creating PDF buffer ---");
 
-  if(isRunningOnVercel)
+  let browser: Browser | null = null;
+
+  try
   {
-    browser = await puppeteerCore.launch({
-      args: [...chrome.args, "--hide-scrollbars", "--disable-web-security"],
-      defaultViewport: chrome.defaultViewport,
-      executablePath: await chrome.executablePath,
-      headless: true,
+    browser = await puppeteer.connect({
+      browserWSEndpoint: "wss://chrome.browserless.io?token=c891bdcb-f85e-435c-beb5-02d853052a08",
       ignoreHTTPSErrors: true,
+      protocolTimeout: 10000
     });
+
+    console.log("Browser connected");
+
+    const page = await browser.newPage();
+    await page.setContent(htmlContent);
+
+    console.log("Page content set");
+
+    const pdfBuffer = await page.pdf({
+      format: "a4",
+      margin: {
+        bottom: "2cm",
+        left: "2cm",
+        right: "2cm",
+        top: "2cm",
+      }
+    });
+
+    console.log("PDF buffer created");
+
+    return pdfBuffer;
   }
-  else
+  catch (e: any)
   {
-    browser = await puppeteer.launch({
-      args: ["--no-sandbox", "--disable-setuid-sandbox"],
-      headless: "new",
-      ignoreHTTPSErrors: true,
-    });
+    console.log("errrrrroooooor", e);
+    return await Promise.reject(e);
   }
-
-  const page = await browser.newPage();
-  await page.setContent(htmlContent);
-
-  const pdfBuffer = await page.pdf({
-    format: "a4",
-    margin: {
-      bottom: "2cm",
-      left: "2cm",
-      right: "2cm",
-      top: "2cm",
-    }
-  });
-
-  await browser.close();
-
-  return pdfBuffer;
+  finally
+  {
+    console.log("finally");
+    await browser?.close();
+    console.log("Browser closed");
+  }
 };
