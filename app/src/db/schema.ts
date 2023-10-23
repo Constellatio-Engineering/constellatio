@@ -22,12 +22,16 @@ export type CaseProgressState = typeof allCaseProgressStates[number];
 export const allGameProgressStates = ["not-started", "completed"] as const;
 export type GameProgressState = typeof allGameProgressStates[number];
 
+// export const allSubscriptionStatuses = ["active", "canceled", "incomplete", "incomplete_expired", "past_due", "trialing", "unpaid", "paused"] as const;
+// export type SubscriptionStatus = typeof allSubscriptionStatuses[number];
+
 export const genderEnum = pgEnum("Gender", allGenderIdentifiers);
 export const onboardingResultEnum = pgEnum("OnboardingResult", allOnboardingResults);
 export const resourceTypeEnum = pgEnum("ResourceType", allBookmarkResourceTypes);
 export const searchIndexTypeEnum = pgEnum("SearchIndexType", allSearchIndexTypes);
 export const caseProgressStateEnum = pgEnum("CaseProgressState", allCaseProgressStates);
 export const gameProgressStateEnum = pgEnum("GameProgressState", allGameProgressStates);
+// export const subscriptionStatusEnum = pgEnum("SubscriptionStatus", allSubscriptionStatuses);
 
 // TODO: Go through all queries and come up with useful indexes
 
@@ -45,7 +49,6 @@ export const users = pgTable("User", {
   subscriptionStatus: text("SubscriptionStatus"),
   subscriptionStartDate: timestamp("SubscriptionStartDate"),
   subscriptionEndDate: timestamp("SubscriptionEndDate"),
-  subscriptionPeriod: text("SubscriptionPeriod"),
   priceId: text("PriceId"),
 });
 

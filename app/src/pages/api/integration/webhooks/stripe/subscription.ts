@@ -58,7 +58,7 @@ const handler: NextApiHandler = async (req, res) =>
             return;
           }
 
-          const { id: priceId, interval: subscriptionPeriod } = subscriptionPlan;
+          const { id: priceId } = subscriptionPlan;
           const { current_period_end: currentPeriodEnd, current_period_start: currentPeriodStart } = subscriptionObj;
           const subscriptionStartDate = new Date(currentPeriodStart * 1000);
           const subscriptionEndDate = new Date(currentPeriodEnd * 1000);
@@ -68,7 +68,6 @@ const handler: NextApiHandler = async (req, res) =>
             await db.update(users).set({
               priceId,
               subscriptionEndDate,
-              subscriptionPeriod,
               subscriptionStartDate,
               subscriptionStatus
             }).where(eq(users.stripeCustomerId, stripeCustomerId));
@@ -84,7 +83,7 @@ const handler: NextApiHandler = async (req, res) =>
           if(subscriptionStatus !== "active")
           {
             await db.update(users).set({
-              priceId: null, subscriptionEndDate: null, subscriptionPeriod: null, subscriptionStartDate: null, subscriptionStatus
+              priceId: null, subscriptionEndDate: null, subscriptionStartDate: null, subscriptionStatus
             }).where(eq(users.stripeCustomerId, stripeCustomerId));
           }
         };
