@@ -8,7 +8,7 @@ import React, { type FunctionComponent } from "react";
 import * as styles from "./ProfileBadgeCard.styles";
 import FlagImg from "../../../../public/images/placeholder-flag.png";
 
-interface ProfileBadgeCardProps
+export interface ProfileBadgeCardProps
 {
   readonly description: string;
   readonly name: string;
