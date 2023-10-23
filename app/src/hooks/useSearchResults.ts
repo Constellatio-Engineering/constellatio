@@ -11,6 +11,8 @@ export type SearchResults = {
   userUploads: UploadSearchIndexItem[];
 };
 
+export type SearchResultsKey = keyof SearchResults;
+
 const initialSearchResults: SearchResults = {
   articles: [],
   cases: [],

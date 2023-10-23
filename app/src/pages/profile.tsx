@@ -28,7 +28,6 @@ export const getStaticProps: GetStaticProps<IProfilePageProps> = async () =>
 
 const Page: FunctionComponent<IProfilePageProps> = (props) =>
 {
-  // console.log({ allMainCategory, data });
   return (
     <Layout>
       <ProfilePage {...props}/>

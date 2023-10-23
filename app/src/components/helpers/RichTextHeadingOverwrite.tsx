@@ -1,4 +1,5 @@
 import useCaseSolvingStore from "@/stores/caseSolving.store";
+import { slugFormatter } from "@/utils/utils";
 import { type IHeadingNode } from "types/richtext";
 
 // import { RichTextRenderer } from "@caisy/rich-text-react-renderer";
@@ -6,7 +7,6 @@ import { useIntersection } from "@mantine/hooks";
 import React, { type ReactElement, type ReactNode, type ElementType } from "react";
 
 import { getNumericalLabel } from "../organisms/floatingPanel/generateTocHelper";
-import { slugFormatter } from "../organisms/OverviewHeader/OverviewHeader";
 /**
  * this function is used to overwrite the heading renderer in the rich text renderer and add the numerical label to the text
  */
@@ -37,8 +37,7 @@ export const RichTextHeadingOverwrite = ({
   );
 };
 
-{ 
-  /* {node?.content && (
+/* {node?.content && (
         <RichTextRenderer {...{
           ...props,
           node: {
@@ -49,4 +48,3 @@ export const RichTextHeadingOverwrite = ({
         />
       )} 
   */ 
-}

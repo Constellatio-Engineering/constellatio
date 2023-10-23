@@ -4,7 +4,7 @@ import EmptyStateCard from "@/components/organisms/emptyStateCard/EmptyStateCard
 import FileViewer from "@/components/organisms/fileViewer/FileViewer";
 import SearchPapersBlock from "@/components/organisms/searchPapersBlock/SearchPapersBlock";
 import UploadedMaterialTable from "@/components/organisms/uploadedMaterialTable/UploadedMaterialTable";
-import useSearchResults, { type SearchResults } from "@/hooks/useSearchResults";
+import useSearchResults, { type SearchResults, type SearchResultsKey } from "@/hooks/useSearchResults";
 import { type IGenArticleOverviewFragment, type IGenFullCaseFragment } from "@/services/graphql/__generated/sdk";
 import useMaterialsStore from "@/stores/materials.store";
 import { type ArticleSearchIndexItem, type CaseSearchIndexItem } from "@/utils/search";
@@ -15,16 +15,19 @@ import { Fragment, type FunctionComponent } from "react";
 
 import * as styles from "./SearchPage.styles";
 
-const SearchPageResults: FunctionComponent = () => 
+type Props = {
+  readonly tabQuery: SearchResultsKey;
+};
+
+const SearchPageResults: FunctionComponent<Props> = ({ tabQuery }) =>
 {
   const { searchResults } = useSearchResults();
   const router = useRouter();
-  const routerTabQuery = router.query.tab as keyof SearchResults;
   const { selectedFileIdForPreview } = useMaterialsStore();
 
   const NoResultsFound = (
     <EmptyStateCard 
-      title={`No search results found ${router.query.find && `for “${router.query.find}”`} ${routerTabQuery && `at ${routerTabQuery}`}`} 
+      title={`No search results found ${router.query.find && `for “${router.query.find}”`} ${tabQuery && `at ${tabQuery}`}`}
       text="check other tabs or try different search entry"
       variant="For-large-areas"
     />
@@ -32,15 +35,15 @@ const SearchPageResults: FunctionComponent = () =>
 
   const date = new Date();
   
-  if(routerTabQuery === "userUploads") 
+  if(tabQuery === "userUploads")
   { 
     return (
-      searchResults[routerTabQuery]?.length > 0 ? (
+      searchResults[tabQuery]?.length > 0 ? (
         <div css={styles.searchPageResults}>
           <SearchPapersBlock 
             table={(
               <UploadedMaterialTable
-                uploadedFiles={searchResults[routerTabQuery].map(file => ({
+                uploadedFiles={searchResults[tabQuery].map(file => ({
                   createdAt: date,
                   fileExtension: "",
                   folderId: "",
@@ -56,7 +59,7 @@ const SearchPageResults: FunctionComponent = () =>
                 selectedFolderId={null} // TODO
               />
             )}
-            numberOfTableItems={searchResults[routerTabQuery]?.length}
+            numberOfTableItems={searchResults[tabQuery]?.length}
           />
           {selectedFileIdForPreview && (
             <FileViewer/>
@@ -67,7 +70,7 @@ const SearchPageResults: FunctionComponent = () =>
   }
   else 
   {
-    const filteredMainCategories = searchResults[routerTabQuery]?.map((item) => item.mainCategory).filter((mainCategory, index, arr) =>
+    const filteredMainCategories = searchResults[tabQuery]?.map((item) => item.mainCategory).filter((mainCategory, index, arr) =>
       index === arr.findIndex((el) => (
         el?.id === mainCategory?.id
       ))
@@ -76,7 +79,7 @@ const SearchPageResults: FunctionComponent = () =>
     const groupedResultsByCategory = filteredMainCategories?.map((mainCategory) =>
     {
       return {
-        items: searchResults[routerTabQuery]?.filter((item) => item.mainCategory?.id === mainCategory?.id) as SearchResults["cases"] | SearchResults["articles"],
+        items: searchResults[tabQuery]?.filter((item) => item.mainCategory?.id === mainCategory?.id) as SearchResults["cases"] | SearchResults["articles"],
         mainCategory: mainCategory as CaseSearchIndexItem["mainCategory"] | ArticleSearchIndexItem["mainCategory"]
       };
     });
@@ -98,7 +101,7 @@ const SearchPageResults: FunctionComponent = () =>
     });
 
     return (
-      searchResults[routerTabQuery]?.length > 0 ? (
+      searchResults[tabQuery]?.length > 0 ? (
         <div css={styles.searchPageResults}>
           {groupedResultsByCategory?.map((categoryGroup, index) =>
           {
@@ -109,7 +112,7 @@ const SearchPageResults: FunctionComponent = () =>
             return (
               <Fragment key={index}>
                 <ItemBlock
-                  variant={routerTabQuery === "cases" ? "case" : "dictionary"}
+                  variant={tabQuery === "cases" ? "case" : "dictionary"}
                   tableType="search"
                   blockHead={{
                     blockType: "searchBlock",
@@ -119,9 +122,9 @@ const SearchPageResults: FunctionComponent = () =>
                       src: <Svg src={mainCategoryIcon?.src}/>
                     },
                     items: categoryGroup.items?.length,
-                    variant: routerTabQuery === "cases" ? "case" : "dictionary"
+                    variant: tabQuery === "cases" ? "case" : "dictionary"
                   }}
-                  items={routerTabQuery === "cases" ? caseItems?.map(item => ({
+                  items={tabQuery === "cases" ? caseItems?.map(item => ({
                     __typename: "Case",
                     durationToCompleteInMinutes: item.durationToCompleteInMinutes,
                     ...commonItemsProps(item)
