@@ -96,7 +96,19 @@ const HeaderDefault: FunctionComponent = () =>
             })}
           </div>
           <div css={styles.profileArea}>
-           
+            {isDevelopment && (
+              <div style={{ alignItems: "center", display: "flex" }}>
+                <Button<"button">
+                  styleType="secondarySubtle"
+                  disabled={isRecreatingSearchIndices}
+                  type="button"
+                  onClick={() => recreateSearchIndices()}
+                  style={{ marginRight: 10 }}>
+                  Recreate Search Indices
+                </Button>
+                {isRecreatingSearchIndices && <Loader size={22}/>}
+              </div>
+            )}
             <div className="search-input">
               <SearchField size="small" onClick={() => toggleDrawer(true)}/>
             </div>

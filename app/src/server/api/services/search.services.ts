@@ -57,7 +57,7 @@ export const addArticlesToSearchIndex: AddArticlesToSearchIndex = async ({ artic
     const fetchAllArticlesDetailsPromises = articleIds.map(async id => (await getArticleById({ id })).article);
     const allArticlesWithDetails = await Promise.all(fetchAllArticlesDetailsPromises);
     const allArticlesSearchIndexItems = allArticlesWithDetails.filter(Boolean).map(createArticleSearchIndexItem);
-    const createArticlesIndexTask = await meiliSearchAdmin.index(searchIndices.articles).addDocuments(allArticlesSearchIndexItems);
+    const createArticlesIndexTask = await meiliSearchAdmin.index(searchIndices.articles).addDocuments([allArticlesSearchIndexItems[0]!]); // TODO Change
     createArticlesIndexTaskId = createArticlesIndexTask.taskUid;
   }
 
@@ -77,7 +77,7 @@ export const addCasesToSearchIndex: AddCasesToSearchIndex = async ({ caseIds }) 
     const fetchAllCasesDetailsPromises = caseIds.map(async id => (await getCaseById({ id })).legalCase);
     const allCasesWithDetails = await Promise.all(fetchAllCasesDetailsPromises);
     const allCasesSearchIndexItems = allCasesWithDetails.filter(Boolean).map(createCaseSearchIndexItem);
-    const createCasesIndexTask = await meiliSearchAdmin.index(searchIndices.cases).addDocuments(allCasesSearchIndexItems);
+    const createCasesIndexTask = await meiliSearchAdmin.index(searchIndices.cases).addDocuments([allCasesSearchIndexItems[0]!]); // TODO Change
     createCasesIndexTaskId = createCasesIndexTask.taskUid;
   }
 
