@@ -183,6 +183,7 @@ export const uploadsRouter = createTRPCRouter({
 
       const searchIndexItem = createUploadsSearchIndexItem({
         ...uploadInsert,
+        folderId: uploadInsert.folderId || null,
         id: insertResult[0]!.id
       });
 

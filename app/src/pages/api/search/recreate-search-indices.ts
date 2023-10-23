@@ -100,10 +100,10 @@ const handler: NextApiHandler = async (req, res) =>
   const articlesFilterableAttributes: ArticleSearchItemNodes[] = ["id"];
   const updateArticlesFilterableAttributesTask = await meiliSearchAdmin.index(searchIndices.articles).updateFilterableAttributes(articlesFilterableAttributes);
 
-  const uploadsFilterableAttributes: UploadSearchItemNodes[] = ["id", "userId"];
+  const uploadsFilterableAttributes: UploadSearchItemNodes[] = ["id", "userId", "folderId"];
   const updateUploadsFilterableAttributesTask = await meiliSearchAdmin.index(searchIndices.userUploads).updateFilterableAttributes(uploadsFilterableAttributes);
 
-  const documentsFilterableAttributes: DocumentSearchItemNodes[] = ["id", "userId"];
+  const documentsFilterableAttributes: DocumentSearchItemNodes[] = ["id", "userId", "folderId"];
   const updateDocumentsFilterableAttributesTask = await meiliSearchAdmin.index(searchIndices.userDocuments).updateFilterableAttributes(documentsFilterableAttributes);
 
   await meiliSearchAdmin.waitForTasks([

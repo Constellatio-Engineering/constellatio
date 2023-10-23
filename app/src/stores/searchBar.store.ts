@@ -2,17 +2,34 @@ import { create } from "zustand";
 import { immer } from "zustand/middleware/immer";
 
 type SearchStoreProps = {
+  closeDrawer: () => void;
   isDrawerOpened: boolean;
+  openDrawer: (refetchSearchResults: () => void) => void;
   searchHistory: string[];
   searchValue: string;
   setSearchHistory: (searchHistory: string[]) => void;
   setSearchValue: (searchValue: string) => void;
-  toggleDrawer: (isDrawerOpened: boolean, refetchSearchResults: () => void) => void;
 };
 
 const useSearchBarStore = create(immer<SearchStoreProps>((set) => (
   {
+    closeDrawer: () =>
+    {
+      set((state) =>
+      {
+        state.isDrawerOpened = false;
+      });
+    },
     isDrawerOpened: false,
+    openDrawer: (refetchSearchResults) =>
+    {
+      refetchSearchResults();
+
+      set((state) => 
+      {
+        state.isDrawerOpened = true;
+      });
+    },
     searchHistory: [],
     searchValue: "",
     setSearchHistory: (searchHistory) =>
@@ -27,18 +44,6 @@ const useSearchBarStore = create(immer<SearchStoreProps>((set) => (
       set((state) => 
       {
         state.searchValue = searchValue;
-      });
-    },
-    toggleDrawer: (isDrawerOpened, refetchSearchResults) =>
-    {
-      if(isDrawerOpened)
-      {
-        refetchSearchResults();
-      }
-
-      set((state) => 
-      {
-        state.isDrawerOpened = isDrawerOpened;
       });
     },
   }))

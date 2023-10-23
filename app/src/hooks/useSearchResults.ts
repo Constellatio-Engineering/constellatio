@@ -5,7 +5,7 @@ import {
 } from "@/utils/search";
 
 import { useQuery } from "@tanstack/react-query";
-import { useContext } from "react";
+import { useContext, useEffect } from "react";
 
 export type SearchResults = {
   articles: ArticleSearchIndexItem[];
@@ -82,6 +82,12 @@ const useSearchResults: UseSearchResults = () =>
     refetchOnWindowFocus: false,
     retry: false,
   });
+
+  useEffect(() =>
+  {
+    console.log(searchResults.userUploads);
+    console.log(searchResults.userDocuments);
+  }, [searchResults]);
 
   return { isLoading, refetch, searchResults };
 };

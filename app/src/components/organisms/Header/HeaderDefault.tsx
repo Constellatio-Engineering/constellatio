@@ -54,7 +54,7 @@ const HeaderDefault: FunctionComponent = () =>
   const theme = useMantineTheme();
   const { isLoading: isGetOnboardingResultLoading, onboardingResult } = useOnboardingResult();
   const showOnboarding = !isGetOnboardingResultLoading && onboardingResult === null;
-  const toggleDrawer = useSearchBarStore((s) => s.toggleDrawer);
+  const openDrawer = useSearchBarStore((s) => s.openDrawer);
 
   const { mutate: setOnboardingResult } = api.users.setOnboardingResult.useMutation({
     onError: (error) => console.error("Error while setting onboarding result", error),
@@ -114,7 +114,7 @@ const HeaderDefault: FunctionComponent = () =>
             <div className="search-input">
               <SearchField
                 size="small"
-                onClick={() => toggleDrawer(true, refetchSearchResults)}
+                onClick={() => openDrawer(refetchSearchResults)}
               />
             </div>
             <Link href={`${paths.personalSpace}`}>
@@ -212,7 +212,7 @@ const HeaderDefault: FunctionComponent = () =>
                 <div className="search-input">
                   <SearchField
                     size="small"
-                    onClick={() => toggleDrawer(true, refetchSearchResults)}
+                    onClick={() => openDrawer(refetchSearchResults)}
                   />
                 </div>
               )}

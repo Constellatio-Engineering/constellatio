@@ -29,6 +29,7 @@ export const documentsRouter = createTRPCRouter({
 
       const searchIndexItem = createDocumentSearchIndexItem({
         ...documentInsert,
+        folderId: documentInsert.folderId || null,
         id: insertedDocument[0]!.id,
       });
 
@@ -66,7 +67,6 @@ export const documentsRouter = createTRPCRouter({
       {
         console.error("failed to remove document from index", removeDocumentFromIndexResult);
       }
-
     }),
   getDocuments: protectedProcedure
     .input(getDocumentsSchema)
