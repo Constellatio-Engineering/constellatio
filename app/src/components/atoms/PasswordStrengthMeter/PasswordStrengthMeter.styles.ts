@@ -31,7 +31,7 @@ export const styles = ({
       : isPasswordRevealed
         ? theme.colors["neutrals-01"][7]
         : error
-          ? theme.colors["neutrals-01"][7]
+          ? theme.colors["support-error"][3]
           : theme.colors["support-error"][3],
   },
 });

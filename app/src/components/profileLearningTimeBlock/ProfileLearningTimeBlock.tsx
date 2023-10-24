@@ -7,10 +7,11 @@ import ProfileLearningTimeBlockHeader from "../profileLearningTimeBlockHeader/Pr
 const ProfileLearningTimeBlock: FunctionComponent = () => 
 {
   const tabs = [{ title: "This week" }, { title: "This month" }, { title: "This year" }];
+  const [selectedTabIndex, setSelectedTabIndex] = React.useState(0);
   return (
     <div css={styles.wrapper}>
-      <ProfileLearningTimeBlockHeader selectedTab={0} tabs={tabs}/>
-      <BarChart chartType="months"/>
+      <ProfileLearningTimeBlockHeader selectedTab={selectedTabIndex} tabs={tabs}/>
+      <BarChart chartType={selectedTabIndex === 0 ? "days" : selectedTabIndex === 1 ? "months" : "months"}/>
     </div>
   );
 };

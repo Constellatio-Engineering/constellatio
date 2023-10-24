@@ -1,25 +1,25 @@
-import { BodyText } from "@/components/atoms/BodyText/BodyText";
 import { AlertCard } from "@/components/atoms/Card/AlertCard";
+import { Dropdown } from "@/components/atoms/Dropdown/Dropdown";
 import { Input } from "@/components/atoms/Input/Input";
-import { ArrowDown } from "@/components/Icons/ArrowDown";
+import { maximumAmountOfSemesters } from "@/schemas/auth/registrationForm.schema";
 
-import { Title, NativeSelect, useMantineTheme } from "@mantine/core";
+import { Title, Box } from "@mantine/core";
 import React, { type FunctionComponent } from "react";
 
 import * as styles from "./ProfileDetailsTab.styles";
 import { Button } from "../../atoms/Button/Button";
+import { decimalToRoman } from "../floatingPanel/generateTocHelper";
+import { allUniversities } from "../RegistrationForm/RegistrationForm.data";
 
 const ProfileDetailsTab: FunctionComponent = () => 
 {
   const [err, setErr] = React.useState<boolean>(true);
   const [success, setSuccess] = React.useState<boolean>(true);
-
   const handleSubmit = (e: React.FormEvent<HTMLFormElement>): void => 
   {
     e.preventDefault();
     console.log("submit");
   };
-  const theme = useMantineTheme();
   return (
     <div css={styles.wrapper}>
       <Title order={3}>Profile details</Title>
@@ -36,31 +36,32 @@ const ProfileDetailsTab: FunctionComponent = () =>
         <Input inputType="text" label="First name"/>
         <Input inputType="text" label="Last name"/>
         <Input inputType="text" label="Porfile name" error="This profile name already exists. Please try another name"/>
-        <NativeSelect
-          style={{ color: theme.colors["neutrals-01"][9] }}
-          label={<BodyText styleType="body-01-regular" style={{ color: theme.colors["neutrals-01"][9] }} component="p">Your university</BodyText>}
-          placeholder=""
-          data={["UCLA"]}
-          radius={8}
-          description=""
-          rightSection={<ArrowDown/>}
+        <Dropdown
+          // {...form.getInputProps("university")}
+          label="Universität"
+          title="Universität"
+          placeholder="Universität auswählen"
+          data={allUniversities}
+          searchable
         />
-        <NativeSelect
-          radius={8}
-          style={{ color: theme.colors["neutrals-01"][9], width: "240px" }}
-          label={(
-            <>
-              <BodyText styleType="body-01-regular" component="p">Semester</BodyText>
-              <BodyText styleType="body-02-medium" component="span">Optional</BodyText>
-            </>
-          )}
-          placeholder=""
-          data={["I Semester", "II Semester", "III Semester", "IV Semester"]}
-          description=""
-          rightSection={<ArrowDown/>}
-        />
+        <Box maw={240}>
+          <Dropdown
+            // {...form.getInputProps("semester")}
+            label="Semester"
+            title="Semester"
+            placeholder="Semester auswählen"
+            data={Array(maximumAmountOfSemesters).fill(null).map((_, i) => String(decimalToRoman(i + 1) + " Semester"))}
+          />
+        </Box>
         <Input inputType="text" label="Email" error="Please include an '@' in the email address"/>        
-        <Input inputType="password" label="Password (if changing email)" error="Sorry, your password doesn't match our records"/>        
+        {/* <Input inputType="password" label="Password (if changing email)" error="Sorry, your password doesn't match our records"/>      */}
+        <Input
+          inputType="password" 
+          label="Password (if changing email)"
+          error="Sorry, your password doesn't match our records"
+          // onVisibilityChange={toggle}
+          // {...form.getInputProps("password")}
+        />   
         <Button<"button"> size="large" type="submit" styleType="primary">Save changes</Button>
       </form>
     </div>

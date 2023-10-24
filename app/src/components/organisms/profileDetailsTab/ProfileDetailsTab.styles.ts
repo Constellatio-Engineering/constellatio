@@ -14,14 +14,7 @@ export const wrapper = (theme: MantineTheme) => css`
    .mantine-Input-rightSection{
     pointer-events: none;
     svg{
-        overflow: visible;
-        #alert{
-            transform: translateY(5px);
-        }
-    }
-button{
-        transform: translateY(-5px);
-        pointer-events: all;
+        transform: translateY(5px);
     }
    }
    .mantine-InputWrapper-label{
@@ -41,10 +34,10 @@ form{
     margin-top: 24px;
     display:inline-block;
     width: 100%;
-    button{
+    .mantine-Button-root {
         margin-top: 24px;
         width: 100%
-    }
+    } 
 }
 @media screen and (max-width: 1024px) {
         margin: 0 auto;
