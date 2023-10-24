@@ -18,6 +18,7 @@ type InvalidateGamesProgressOptions = inferProcedureInput<AppRouter["gamesProgre
 type InvalidateSubmittedCaseSolutionOptions = inferProcedureInput<AppRouter["casesProgress"]["getSubmittedSolution"]>;
 type InvalidateOnboardingResult = inferProcedureInput<AppRouter["users"]["getOnboardingResult"]>;
 type InvalidateUserDetailsResult = inferProcedureInput<AppRouter["users"]["getUserDetails"]>;
+type InvalidateProfilePicture = inferProcedureInput<AppRouter["users"]["getSignedProfilePictureUrl"]>;
 
 type InvalidateQueries = {
   invalidateArticleViews: (options: InvalidateArticleViewsOptions) => Promise<void>;
@@ -30,6 +31,7 @@ type InvalidateQueries = {
   invalidateGamesProgress: (options: InvalidateGamesProgressOptions) => Promise<void>;
   invalidateNotes: (options?: InvalidateNotesOptions) => Promise<void>;
   invalidateOnboardingResult: (options?: InvalidateOnboardingResult) => Promise<void>;
+  invalidateProfilePicture: (options?: InvalidateProfilePicture) => Promise<void>;
   invalidateSearchResults: (value?: string) => Promise<void>;
   invalidateSubmittedCaseSolution: (options: InvalidateSubmittedCaseSolutionOptions) => Promise<void>;
   invalidateUploadedFiles: (options?: InvalidateUploadedFilesOptions) => Promise<void>;
@@ -59,6 +61,7 @@ const InvalidateQueriesProvider: FunctionComponent<InvalidateQueriesProviderProp
     invalidateGamesProgress: async (options) => apiContext.gamesProgress.getGamesProgress.invalidate(options),
     invalidateNotes: async (options) => apiContext.notes.getNotes.invalidate(options),
     invalidateOnboardingResult: async (options) => apiContext.users.getOnboardingResult.invalidate(options),
+    invalidateProfilePicture: async (options) => apiContext.users.getSignedProfilePictureUrl.invalidate(options),
     invalidateSearchResults: async (value) => queryClient.invalidateQueries({ queryKey: [searchResultsQueryKey, value] }),
     invalidateSubmittedCaseSolution: async (options) => apiContext.casesProgress.getSubmittedSolution.invalidate(options),
     invalidateUploadedFiles: async (options) => apiContext.uploads.getUploadedFiles.invalidate(options),
@@ -76,6 +79,7 @@ const InvalidateQueriesProvider: FunctionComponent<InvalidateQueriesProviderProp
     apiContext.gamesProgress.getGamesProgress,
     apiContext.casesProgress.getSubmittedSolution,
     apiContext.users.getUserDetails,
+    apiContext.users.getSignedProfilePictureUrl,
     apiContext.users.getOnboardingResult,
     queryClient
   ]);

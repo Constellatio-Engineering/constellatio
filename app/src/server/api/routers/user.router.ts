@@ -14,11 +14,21 @@ import { eq, and } from "drizzle-orm";
 import { z } from "zod";
 
 export const usersRouter = createTRPCRouter({
-  createSignedProfilePictureUrl: protectedProcedure
+  getOnboardingResult: protectedProcedure
+    .query(async ({ ctx: { userId } }) =>
+    {
+      const onboardingResult = await db
+        .select({ onboardingResult: users.onboardingResult })
+        .from(users)
+        .where(eq(users.id, userId));
+
+      return onboardingResult[0]?.onboardingResult ?? null;
+    }),
+  getSignedProfilePictureUrl: protectedProcedure
     .input(z.object({
       fileId: z.string(),
     }))
-    .mutation(async ({ ctx: { userId }, input: { fileId } }) =>
+    .query(async ({ ctx: { userId }, input: { fileId } }) =>
     {
       const file = await db.query.profilePictures.findFirst({
         where: and(
@@ -33,16 +43,6 @@ export const usersRouter = createTRPCRouter({
       }
 
       return getClouStorageFileUrl({ serverFilename: file.serverFilename, userId });
-    }),
-  getOnboardingResult: protectedProcedure
-    .query(async ({ ctx: { userId } }) =>
-    {
-      const onboardingResult = await db
-        .select({ onboardingResult: users.onboardingResult })
-        .from(users)
-        .where(eq(users.id, userId));
-
-      return onboardingResult[0]?.onboardingResult ?? null;
     }),
   getUserDetails: protectedProcedure
     .query(async ({ ctx: { userId } }) =>

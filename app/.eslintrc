@@ -8,7 +8,6 @@
     "src/lib/database.types.ts"
   ],
   "rules": {
-    "no-use-before-define": ["error", { "variables": false }],
     "no-console": "off",
     "prefer-arrow/prefer-arrow-functions": "off",
     "@typescript-eslint/consistent-type-definitions": "off",

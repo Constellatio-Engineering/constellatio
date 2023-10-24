@@ -1,8 +1,6 @@
-import CaisyImg from "@/basic-components/CaisyImg";
 import { BodyText } from "@/components/atoms/BodyText/BodyText";
 import ProfilePicture from "@/components/molecules/profilePicture/ProfilePicture";
 import useContextAndErrorIfNull from "@/hooks/useContextAndErrorIfNull";
-import useSignedProfilePictureUrl from "@/hooks/useSignedProfilePictureUrl";
 import useUserDetails from "@/hooks/useUserDetails";
 import { supabase } from "@/lib/supabase";
 import { InvalidateQueriesContext } from "@/provider/InvalidateQueriesProvider";
@@ -11,7 +9,6 @@ import { paths } from "@/utils/paths";
 import { Menu, Title } from "@mantine/core";
 import { notifications } from "@mantine/notifications";
 import { IconBrandStripe, IconLogout, IconUser } from "@tabler/icons-react";
-import Image from "next/image";
 import { useRouter } from "next/router";
 import React, { type FunctionComponent } from "react";
 
@@ -19,7 +16,6 @@ import * as styles from "./UserDropdown.styles";
 
 export const UserDropdown: FunctionComponent = () =>
 {
-  const { url: profilePictureUrl } = useSignedProfilePictureUrl();
   const { userDetails } = useUserDetails();
   const { invalidateEverything } = useContextAndErrorIfNull(InvalidateQueriesContext);
   const router = useRouter();

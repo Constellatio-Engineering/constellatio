@@ -5,7 +5,7 @@ import {
 } from "@/utils/search";
 
 import { useQuery } from "@tanstack/react-query";
-import { useContext, useEffect } from "react";
+import { useContext } from "react";
 
 export type SearchResults = {
   articles: ArticleSearchIndexItem[];

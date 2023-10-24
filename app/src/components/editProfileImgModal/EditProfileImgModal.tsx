@@ -1,8 +1,6 @@
 /* eslint-disable max-lines */
 import ProfilePicture from "@/components/molecules/profilePicture/ProfilePicture";
 import useContextAndErrorIfNull from "@/hooks/useContextAndErrorIfNull";
-import useSignedProfilePictureUrl from "@/hooks/useSignedProfilePictureUrl";
-import useUserDetails from "@/hooks/useUserDetails";
 import { InvalidateQueriesContext } from "@/provider/InvalidateQueriesProvider";
 import { api } from "@/utils/api";
 import { getRandomUuid } from "@/utils/utils";
@@ -11,10 +9,8 @@ import { Modal, Title } from "@mantine/core";
 import { notifications } from "@mantine/notifications";
 import { useMutation } from "@tanstack/react-query";
 import axios from "axios";
-import Image from "next/image";
 import React, { type FunctionComponent, useEffect, useState } from "react";
 
-import { profilePictureWrapper } from "./EditProfileImgModal.styles";
 import * as styles from "./EditProfileImgModal.styles";
 import { BodyText } from "../atoms/BodyText/BodyText";
 import { Button } from "../atoms/Button/Button";
