@@ -43,7 +43,7 @@ export const AuthPage: FC<AuthPageProps> = ({ tab }) =>
           w={440}
           pt={50}
           pb={tab === "register" ? "spacing-100" : 0}
-          sx={{ marginTop: "180px" }}>
+          sx={{ marginTop: "80px" }}>
           <Switcher
             size="big"
             value={tab}

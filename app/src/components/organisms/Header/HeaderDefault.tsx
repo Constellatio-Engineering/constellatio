@@ -16,7 +16,7 @@ import useSearchResults from "@/hooks/useSearchResults";
 import { InvalidateQueriesContext } from "@/provider/InvalidateQueriesProvider";
 import useSearchBarStore from "@/stores/searchBar.store";
 import { api } from "@/utils/api";
-import { isDevelopment } from "@/utils/env";
+import { isDevelopment, isDevelopmentOrStaging } from "@/utils/env";
 import { paths } from "@/utils/paths";
 
 import { Loader } from "@mantine/core";
@@ -98,7 +98,7 @@ const HeaderDefault: FunctionComponent = () =>
             })}
           </div>
           <div css={styles.profileArea}>
-            {isDevelopment && (
+            {isDevelopmentOrStaging && (
               <div style={{ alignItems: "center", display: "flex" }}>
                 <Button<"button">
                   styleType="secondarySubtle"
@@ -182,7 +182,7 @@ const HeaderDefault: FunctionComponent = () =>
             )}
           </div>
           <div css={styles.profileArea}>
-            {isDevelopment && (
+            {isDevelopmentOrStaging && (
               <div style={{ alignItems: "center", display: "flex" }}>
                 <Button<"button">
                   styleType="secondarySubtle"
