@@ -12,9 +12,8 @@ export const wrapper = (theme: MantineTheme) => css`
         place-items: center;
     }
    .mantine-Input-rightSection{
-    pointer-events: none;
     svg{
-        transform: translateY(5px);
+        transform: translateY(6px);
     }
    }
    .mantine-InputWrapper-label{

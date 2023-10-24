@@ -23,7 +23,7 @@ export type TOCItem = {
   text: string;
 };
 
-export function decimalToRoman(decimal: number): string 
+function decimalToRoman(decimal: number): string 
 {
   if(decimal <= 0 || decimal >= 4000) 
   {
@@ -60,6 +60,7 @@ export function decimalToRoman(decimal: number): string
 
   return result;
 }
+console.log(decimalToRoman(1));
 
 export const generateTOC = (data: DataType[]): TOCItem[] => 
 {

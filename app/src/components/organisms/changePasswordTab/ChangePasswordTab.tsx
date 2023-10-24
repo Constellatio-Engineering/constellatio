@@ -3,16 +3,18 @@ import { Button } from "@/components/atoms/Button/Button";
 import { AlertCard } from "@/components/atoms/Card/AlertCard";
 import { Input } from "@/components/atoms/Input/Input";
 import { PasswordValidationSchema } from "@/components/helpers/PasswordValidationSchema";
-import { updatePasswordFormSchema, type UpdatePasswordFormSchema } from "@/schemas/auth/updatePasswordForm.schema";
+import { passwordSchema } from "@/schemas/auth/registrationForm.schema";
 
 import { Title } from "@mantine/core";
 import { useForm, zodResolver } from "@mantine/form";
 import { useDisclosure } from "@mantine/hooks";
 import React, { type FunctionComponent } from "react";
+import { z } from "zod";
 
 import * as styles from "../profileDetailsTab/ProfileDetailsTab.styles";
 
-const initialValues: UpdatePasswordFormSchema = {
+const initialValues = {
+  currentPassword: "",
   password: "",
   passwordConfirm: "",
 };
@@ -21,17 +23,36 @@ const ChangePasswordTab: FunctionComponent = () =>
 {
   const form = useForm({
     initialValues,
-    validate: zodResolver(updatePasswordFormSchema),
+    validate: zodResolver(z
+      .object({
+        currentPassword: z.string(),
+        password: passwordSchema,
+        passwordConfirm: z.string(),
+      })
+      .refine(data => data.passwordConfirm === data.password, {
+        message: "Die Passwörter stimmen nicht überein",
+        path: ["passwordConfirm"]
+      })),
     validateInputOnBlur: true,
 
   });
-  const [err, setErr] = React.useState<boolean>(true);
-  const [success, setSuccess] = React.useState<boolean>(true);
+  const [err, setErr] = React.useState<boolean>(false);
+  const [success, setSuccess] = React.useState<boolean>(false);
   const [isPasswordRevealed, { toggle }] = useDisclosure(false);
   const handleSubmit = (e: React.FormEvent<HTMLFormElement>): void => 
   {
     e.preventDefault();
-    console.log(form.values);
+    
+    if(Object.keys(form.errors).length > 0) 
+    {
+      setErr(true);
+      setSuccess(false);
+    }
+    else 
+    {
+      setErr(false);
+      setSuccess(true);
+    }
   };
   return (
     <div css={styles.wrapper}>

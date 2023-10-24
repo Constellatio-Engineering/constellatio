@@ -10,7 +10,7 @@ const ProfileLearningTimeBlock: FunctionComponent = () =>
   const [selectedTabIndex, setSelectedTabIndex] = React.useState(0);
   return (
     <div css={styles.wrapper}>
-      <ProfileLearningTimeBlockHeader selectedTab={selectedTabIndex} tabs={tabs}/>
+      <ProfileLearningTimeBlockHeader setSelectedTabIndex={setSelectedTabIndex} selectedTab={selectedTabIndex} tabs={tabs}/>
       <BarChart chartType={selectedTabIndex === 0 ? "days" : selectedTabIndex === 1 ? "months" : "months"}/>
     </div>
   );
