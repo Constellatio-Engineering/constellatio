@@ -15,6 +15,20 @@
       "when": 1698177130065,
       "tag": "0001_daffy_doctor_strange",
       "breakpoints": true
+    },
+    {
+      "idx": 2,
+      "version": "5",
+      "when": 1698182733295,
+      "tag": "0002_oval_lester",
+      "breakpoints": true
+    },
+    {
+      "idx": 3,
+      "version": "5",
+      "when": 1698182733889,
+      "tag": "0003_fantastic_komodo",
+      "breakpoints": true
     }
   ]
 }

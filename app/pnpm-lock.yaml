@@ -191,6 +191,9 @@ dependencies:
   postgres:
     specifier: 3.4.0
     version: 3.4.0
+  posthog-js:
+    specifier: 1.84.0
+    version: 1.84.0
   puppeteer-core:
     specifier: 21.4.0
     version: 21.4.0
