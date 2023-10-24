@@ -22,6 +22,8 @@ const SearchOverlayLeftSide: FunctionComponent<SearchOverlayLeftSideProps> = ({ 
   const { isLoading, searchResults } = useSearchResults();
   const { popularSearch } = useGetPopularSearch();
 
+  console.log("searchResults", searchResults);
+
   // Loading should be so fast that it is okay to show the recent searches in the meantime, so it switches instantly from recent searches to results
   if(!hasInput || isLoading)
   {
