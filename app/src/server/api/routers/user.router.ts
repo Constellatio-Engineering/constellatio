@@ -4,13 +4,36 @@ import {
 } from "@/db/schema";
 import { setOnboardingResultSchema } from "@/schemas/users/setOnboardingResult.schema";
 import { setProfilePictureSchema } from "@/schemas/users/setProfilePicture.schema";
+import { getClouStorageFileUrl } from "@/server/api/services/uploads.services";
 import { getUserWithRelations } from "@/server/api/services/users.service";
 import { createTRPCRouter, protectedProcedure } from "@/server/api/trpc";
 import { filterUserForClient } from "@/utils/filters";
+import { NotFoundError } from "@/utils/serverError";
 
-import { eq } from "drizzle-orm";
+import { eq, and } from "drizzle-orm";
+import { z } from "zod";
 
 export const usersRouter = createTRPCRouter({
+  createSignedProfilePictureUrl: protectedProcedure
+    .input(z.object({
+      fileId: z.string(),
+    }))
+    .mutation(async ({ ctx: { userId }, input: { fileId } }) =>
+    {
+      const file = await db.query.profilePictures.findFirst({
+        where: and(
+          eq(profilePictures.userId, userId),
+          eq(profilePictures.id, fileId)
+        )
+      });
+
+      if(!file)
+      {
+        throw new NotFoundError();
+      }
+
+      return getClouStorageFileUrl({ serverFilename: file.serverFilename, userId });
+    }),
   getOnboardingResult: protectedProcedure
     .query(async ({ ctx: { userId } }) =>
     {
@@ -43,6 +66,9 @@ export const usersRouter = createTRPCRouter({
         userId
       };
 
-      await db.insert(profilePictures).values(profilePictureInsert).returning();
+      await db.insert(profilePictures).values(profilePictureInsert).onConflictDoUpdate({
+        set: { id, serverFilename },
+        target: profilePictures.userId,
+      });
     })
 });

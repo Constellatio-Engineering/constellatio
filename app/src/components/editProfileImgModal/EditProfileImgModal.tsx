@@ -1,29 +1,27 @@
-import CaisyImg from "@/basic-components/CaisyImg";
-import { type FileWithClientSideUuid } from "@/components/pages/personalSpacePage/PersonalSpacePage";
+/* eslint-disable max-lines */
+import ProfilePicture from "@/components/molecules/profilePicture/ProfilePicture";
 import useContextAndErrorIfNull from "@/hooks/useContextAndErrorIfNull";
-import useSignedGetUrl from "@/hooks/useSignedGetUrl";
+import useSignedProfilePictureUrl from "@/hooks/useSignedProfilePictureUrl";
 import useUserDetails from "@/hooks/useUserDetails";
 import { InvalidateQueriesContext } from "@/provider/InvalidateQueriesProvider";
 import { api } from "@/utils/api";
-import { getIndicesOfSucceededPromises, getRandomUuid, removeItemsByIndices } from "@/utils/utils";
+import { getRandomUuid } from "@/utils/utils";
 
-import { Modal, Tabs, Title } from "@mantine/core";
+import { Modal, Title } from "@mantine/core";
 import { notifications } from "@mantine/notifications";
 import { useMutation } from "@tanstack/react-query";
 import axios from "axios";
 import Image from "next/image";
-import React, { type FormEvent, type FunctionComponent, useEffect, useState } from "react";
+import React, { type FunctionComponent, useEffect, useState } from "react";
 
+import { profilePictureWrapper } from "./EditProfileImgModal.styles";
 import * as styles from "./EditProfileImgModal.styles";
-import FlagImgPlaceholder from "../../../public/images/placeholder-flag.png";
 import { BodyText } from "../atoms/BodyText/BodyText";
 import { Button } from "../atoms/Button/Button";
 import IconButton from "../atoms/iconButton/IconButton";
-import { SwitcherTab } from "../atoms/Switcher-tab/SwitcherTab";
 import { Cross } from "../Icons/Cross";
 import { DownloadIcon } from "../Icons/DownloadIcon";
 import { Palette } from "../Icons/Palette";
-import { Trash } from "../Icons/Trash";
 import { Switcher } from "../molecules/Switcher/Switcher";
 
 interface EditProfileImgModalProps
@@ -44,8 +42,6 @@ const tabs = [
 
 const EditProfileImgModal: FunctionComponent<EditProfileImgModalProps> = ({ onClose, opened }) => 
 {
-  const { userDetails } = useUserDetails();
-  const { url: profilePictureUrl } = useSignedGetUrl(userDetails?.profilePicture?.id);
   const { invalidateUserDetails } = useContextAndErrorIfNull(InvalidateQueriesContext);
   const inputRef = React.useRef<HTMLInputElement>(null);
   // const [selectedTab, setSelectedTab] = React.useState<string>(tabs?.[0]?.title ?? "");
@@ -113,7 +109,7 @@ const EditProfileImgModal: FunctionComponent<EditProfileImgModalProps> = ({ onCl
     {
       setSelectedFile(undefined);
       notifications.update({
-        autoClose: 3000,
+        autoClose: false,
         color: "green",
         id: uploadFileNotificationId,
         loading: false,
@@ -171,13 +167,12 @@ const EditProfileImgModal: FunctionComponent<EditProfileImgModalProps> = ({ onCl
       styles={styles.modalStyles()}
       withCloseButton={false}
       centered>
-      <Image
-        css={styles.profileImage}
-        src={selectedFileUrl || profilePictureUrl || "https://via.placeholder.com/120"}
-        alt="Profilbild"
-        width={120}
-        height={120}
-      />
+      <div css={styles.profilePictureWrapper}>
+        <ProfilePicture
+          overwriteUrl={selectedFileUrl}
+          sizeInPx={120}
+        />
+      </div>
       <Switcher
         className="switcher"
         size="big"

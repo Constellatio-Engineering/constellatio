@@ -83,12 +83,6 @@ const useSearchResults: UseSearchResults = () =>
     retry: false,
   });
 
-  useEffect(() =>
-  {
-    console.log(searchResults.userUploads);
-    console.log(searchResults.userDocuments);
-  }, [searchResults]);
-
   return { isLoading, refetch, searchResults };
 };
 

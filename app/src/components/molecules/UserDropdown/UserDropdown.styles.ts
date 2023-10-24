@@ -55,11 +55,7 @@ export const target = (theme: MantineTheme) => css`
   cursor: pointer;
   width: 36px;
   height: 36px;
-  img {
-    border-radius: 50%;
-    border: 3px solid ${theme.colors["neutrals-01"][0]};
-    outline: 1px solid ${theme.colors["neutrals-01"][3]};
-    width: 100%;
-    height: 100%;
-  }
+  border-radius: 50%;
+  border: 3px solid ${theme.colors["neutrals-01"][0]};
+  outline: 1px solid ${theme.colors["neutrals-01"][3]};
 `;

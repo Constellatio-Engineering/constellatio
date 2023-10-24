@@ -33,6 +33,11 @@ export const modalStyles = (): ModalStyles =>
   });
   return styles;
 };
+
+export const profilePictureWrapper = css`
+  margin-top: 30px;
+`;
+
 export const closeButton = css`
   outline: 0;
   border: 0;
@@ -45,16 +50,6 @@ export const closeButton = css`
     height: 32px;
     color: #000;
   }
-`;
-export const profileImage = css`
-  width: 120px;
-  height: 120px;
-  position: relative;
-  border-radius: 50%;
-  margin: 24px auto;
-  display: block;
-  object-fit: cover;
-  object-position: center;
 `;
 
 export const uploadImgCard = (theme: MantineTheme) => css`

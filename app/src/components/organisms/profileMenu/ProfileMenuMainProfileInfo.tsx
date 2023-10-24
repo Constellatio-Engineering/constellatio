@@ -1,7 +1,7 @@
-import CaisyImg from "@/basic-components/CaisyImg";
 import { BodyText } from "@/components/atoms/BodyText/BodyText";
 import EditProfileImgModal from "@/components/editProfileImgModal/EditProfileImgModal";
 import { Edit } from "@/components/Icons/Edit";
+import ProfilePicture from "@/components/molecules/profilePicture/ProfilePicture";
 import { type UserDetails } from "@/components/pages/profilePage/ProfilePage";
 
 import { Title } from "@mantine/core";
@@ -10,18 +10,18 @@ import React from "react";
 
 import * as styles from "./ProfileMenu.styles";
 
+const profilePictureSizeInPx = 90;
+
 const ProfileMenuMainProfileInfo: FunctionComponent<UserDetails> = ({ userDetails }) =>
 {
   const [showEditImgModal, setShowEditImgModal] = React.useState<boolean>(false);
+
   return (
     <div css={styles.profileInfo}>
-      <div css={styles.profileImageWrapper}>
-        <CaisyImg
+      <div css={styles.profileImageWrapper(profilePictureSizeInPx)}>
+        <ProfilePicture
+          sizeInPx={profilePictureSizeInPx}
           onClick={() => setShowEditImgModal(true)}
-          css={styles.profileImage}
-          src="https://via.placeholder.com/90"
-          width={90}
-          height={90}
         />
         <span/>
         <Edit/>
@@ -32,7 +32,10 @@ const ProfileMenuMainProfileInfo: FunctionComponent<UserDetails> = ({ userDetail
         </div>
         <BodyText styleType="body-01-medium" css={styles.profileNameHandler} component="p">@{userDetails.displayName}</BodyText>
       </div>
-      <EditProfileImgModal opened={showEditImgModal} onClose={() => setShowEditImgModal(false)}/>
+      <EditProfileImgModal
+        opened={showEditImgModal}
+        onClose={() => setShowEditImgModal(false)}
+      />
     </div> 
   );
 };
