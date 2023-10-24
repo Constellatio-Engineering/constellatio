@@ -5,7 +5,7 @@ import { InvalidateQueriesContext } from "@/provider/InvalidateQueriesProvider";
 import { api } from "@/utils/api";
 import { getRandomUuid } from "@/utils/utils";
 
-import { Modal, Title } from "@mantine/core";
+import { Modal } from "@mantine/core";
 import { notifications } from "@mantine/notifications";
 import { useMutation } from "@tanstack/react-query";
 import axios from "axios";
@@ -15,7 +15,6 @@ import * as styles from "./EditProfileImgModal.styles";
 import { BodyText } from "../atoms/BodyText/BodyText";
 import { Button } from "../atoms/Button/Button";
 import IconButton from "../atoms/iconButton/IconButton";
-import { Cross } from "../Icons/Cross";
 import { DownloadIcon } from "../Icons/DownloadIcon";
 import { Palette } from "../Icons/Palette";
 import { Switcher } from "../molecules/Switcher/Switcher";

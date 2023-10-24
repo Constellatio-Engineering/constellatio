@@ -1,9 +1,8 @@
 import useCaseSolvingStore from "@/stores/caseSolving.store";
-import useTocStore from "@/stores/toc.store";
 import { slugFormatter } from "@/utils/utils";
 
 import { useMantineTheme } from "@mantine/core";
-import React, { useLayoutEffect, useRef, useState } from "react";
+import React, { useLayoutEffect, useState } from "react";
 
 import * as styles from "./FloatingPanel.styles";
 import { getNumericalLabel, renderTOC, type TOCItem } from "./generateTocHelper";
@@ -78,7 +77,6 @@ export const TOCItemComponent: React.FC<{ readonly depth: number; readonly item:
           <BodyText component="p" styleType="body-01-medium">{item.children.length > 0 && (isExpanded ? <ArrowSolidDown/> : <ArrowSolidRight/>)}</BodyText>
           <BodyText
             component="p"
-            ref={target}
             className={slugFormatter(item.text)}
             styleType="body-01-medium">{getNumericalLabel(depth, itemNumber - 1)}&nbsp;{item.text}
           </BodyText>

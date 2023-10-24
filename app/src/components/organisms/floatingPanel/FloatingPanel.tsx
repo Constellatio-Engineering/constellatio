@@ -3,13 +3,11 @@ import { richTextParagraphOverwrite } from "@/components/helpers/richTextParagra
 import { BoxIcon } from "@/components/Icons/BoxIcon";
 import { FileIcon } from "@/components/Icons/FileIcon";
 import { type IGenCase_Facts } from "@/services/graphql/__generated/sdk";
-import useCaseSolvingStore from "@/stores/caseSolving.store";
-import useTocStore from "@/stores/toc.store";
 
 import { ScrollArea, Tabs, useMantineTheme } from "@mantine/core";
 import { useScrollIntoView } from "@mantine/hooks";
 import { type Maybe } from "@trpc/server";
-import React, { useState, type FunctionComponent, useRef, useEffect } from "react";
+import React, { useState, type FunctionComponent } from "react";
 
 import * as styles from "./FloatingPanel.styles";
 import { type DataType, generateTOC, renderTOC } from "./generateTocHelper";
@@ -41,14 +39,13 @@ const FloatingPanel: FunctionComponent<IFloatingPanelProps> = ({
     { icon: { src: <FileIcon size={16}/> }, title: "Content" },
     { icon: { src: <BoxIcon size={16}/> }, title: "Facts" },
   ];
-  const { scrollableRef, scrollIntoView, targetRef } = useScrollIntoView<
+  const { scrollableRef } = useScrollIntoView<
   HTMLDivElement,
   HTMLDivElement
   >({ axis: "x" });
   const [selectedTab, setSelectedTab] = useState<"Content" | "Facts">(tabs?.[0]?.title ?? "Content");
   const toc = generateTOC(content);
   const theme = useMantineTheme();
-
 
   return content?.length > 0 ? (
     <ScrollArea
@@ -91,7 +88,7 @@ const FloatingPanel: FunctionComponent<IFloatingPanelProps> = ({
             </div>
           )}
         </Switcher>
-        {selectedTab === "Content" && content && renderTOC(toc)}</div>}
+        {selectedTab === "Content" && content && renderTOC(toc)}
         {facts && facts.json && selectedTab === "Facts" && facts && (
           <div css={styles.facts}>
             <Richtext data={facts} richTextOverwrite={{ paragraph: richTextParagraphOverwrite }}/>
