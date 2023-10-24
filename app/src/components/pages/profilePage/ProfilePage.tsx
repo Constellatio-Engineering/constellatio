@@ -38,19 +38,19 @@ const ProfilePage: FunctionComponent<ProfilePageProps> = ({ allMainCategory, use
 
   const renderedTab: ReactNode = useMemo(() =>
   {
-    switch (activeTab?.title)
+    switch (activeTab?.slug)
     {
-      case "Overview":
+      case "overview":
         return <ProfileOverview allMainCategory={allMainCategory}/>;
-      case "Profile Details":
+      case "profile-details":
         return <ProfileDetailsTab/>;
-      case "Change Password":
+      case "change-password":
         return <ChangePasswordTab/>;
       /* case "Notifications":
         return <ProfileNotificationsTab/>;*/
-      case "History":
+      case "history":
         return <ProfileHistoryTab/>;
-      case "Subscription":
+      case "subscription":
         return <SubscriptionTab subscriptionStatus="You are currently using a free 5-day trial. You can purchase a subscription by clicking the button below:"/>;
       default:
         return <>{`Unknown tab. Create tab type case in ProfilePage component: ${JSON.stringify(activeTab, null, 2)}`}</>;

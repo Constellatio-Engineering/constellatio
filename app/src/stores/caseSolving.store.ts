@@ -9,10 +9,10 @@ export type CaseStepIndex = 0 | 1 | 2;
 interface ICaseSolvingStore 
 {
   caseStepIndex: CaseStepIndex | undefined;
-  observedHeadline: string;
+  observedHeadline: {level: number; slug: string};
   overrideCaseStepIndex: (caseStepIndex: CaseStepIndex, caseProgressState: CaseProgressState) => void;
   setCaseStepIndex: (caseStepIndex: CaseStepIndex) => void;
-  setObservedHeadline: (observedHeadline: string) => void;
+  setObservedHeadline: (observedHeadline: {level: number; slug: string}) => void;
   setShowStepTwoModal: (showStepTwoModal: boolean) => void;
   showStepTwoModal: boolean;
 }
@@ -20,7 +20,7 @@ interface ICaseSolvingStore
 const useCaseSolvingStore = create(
   immer<ICaseSolvingStore>((set) => ({
     caseStepIndex: undefined,
-    observedHeadline: "",
+    observedHeadline: { level: 0, slug: "" },
     overrideCaseStepIndex: (caseStepIndex, caseProgressState) =>
     {
       const caseProgressStateAsNumber = getCaseProgressStateAsNumber(caseProgressState);
@@ -42,7 +42,7 @@ const useCaseSolvingStore = create(
         state.caseStepIndex = caseStepIndex;
       });
     },
-    setObservedHeadline(observedHeadline) 
+    setObservedHeadline: (observedHeadline) =>
     {
       set((state) => 
       {

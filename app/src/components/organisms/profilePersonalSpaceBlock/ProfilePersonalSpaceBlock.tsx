@@ -1,6 +1,6 @@
 import { Button } from "@/components/atoms/Button/Button";
 import { Bookmark } from "@/components/Icons/Bookmark";
-import { FileIcon } from "@/components/Icons/FileIcon";
+import { FileWhiteIcon } from "@/components/Icons/FileWhite";
 import FavoriteCard from "@/components/molecules/favoriteCard/FavoriteCard";
 import MaterialCard from "@/components/molecules/materialCard/MaterialCard";
 import ProfilePersonalSpaceBlockHead from "@/components/molecules/profilePersonalSpaceBlockHead/ProfilePersonalSpaceBlockHead";
@@ -37,7 +37,7 @@ const ProfilePersonalSpaceBlock: FunctionComponent = () =>
   const favoritesList = [...bookmarkedCases, ...bookmarkedArticles];
   const tabs = [
     { icon: { src: <Bookmark/> }, number: (bookmarkedCases?.length + bookmarkedArticles?.length) ?? 0, title: "favorites" }, 
-    { icon: { src: <FileIcon/> }, number: uploadedFiles?.length, title: " materials" }
+    { icon: { src: <FileWhiteIcon/> }, number: uploadedFiles?.length, title: " materials" }
   ];
   return (
     <div css={styles.wrapper}>

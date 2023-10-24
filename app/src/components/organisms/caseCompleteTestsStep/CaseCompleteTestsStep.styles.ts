@@ -35,6 +35,7 @@ export const toc = css`
 	order: 1;
 	height: max-content;
 	margin: 24px;
+	margin-left: auto;
 	@media screen and (max-width: 1024px) {
 		position: static;
 		margin: 32px 0px;

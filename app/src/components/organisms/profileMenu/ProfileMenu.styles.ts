@@ -10,10 +10,9 @@ export const wrapper = (theme: MantineTheme) => css`
   margin-top: -220px;
   z-index: 3;
   position: relative;
-
+  
   @media screen and (max-width: 1024px) {
-  transform: translateY(0px);
-    
+    margin-top: -250px;
     width: 100%;
     }
 `;
