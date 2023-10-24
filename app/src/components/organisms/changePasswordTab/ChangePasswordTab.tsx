@@ -27,7 +27,7 @@ const ChangePasswordTab: FunctionComponent = () =>
   });
   const [err, setErr] = React.useState<boolean>(true);
   const [success, setSuccess] = React.useState<boolean>(true);
-  const [isPasswordRevealed] = useDisclosure(false);
+  const [isPasswordRevealed, { toggle }] = useDisclosure(false);
   const handleSubmit = (e: React.FormEvent<HTMLFormElement>): void => 
   {
     e.preventDefault();
@@ -37,7 +37,7 @@ const ChangePasswordTab: FunctionComponent = () =>
     <div css={styles.wrapper}>
       <Title order={3}>Change password</Title>
       {err && <AlertCard onClick={() => setErr(false)} variant="error">Sorry, we weren not able to change password. Please, try again</AlertCard>}
-      {success && <AlertCard onClick={() => setSuccess(false)} variant="success">Your password has been changed</AlertCard>}
+      {success && <AlertCard style={{ display: "flex", justifyContent: "flex-start" }} onClick={() => setSuccess(false)} variant="success">Your password has been changed</AlertCard>}
       <form onSubmit={handleSubmit}>
         <Input
           inputType="password"
@@ -48,6 +48,7 @@ const ChangePasswordTab: FunctionComponent = () =>
         <Input
           inputType="password" 
           label="New password"
+          onVisibilityChange={toggle}
           {...form.getInputProps("password")}
         />
         <PasswordValidationSchema

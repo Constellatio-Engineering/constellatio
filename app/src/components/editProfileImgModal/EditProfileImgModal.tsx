@@ -1,6 +1,6 @@
 import CaisyImg from "@/basic-components/CaisyImg";
 
-import { Modal, Tabs, Title } from "@mantine/core";
+import { Tabs } from "@mantine/core";
 import React, { type FunctionComponent } from "react";
 
 import * as styles from "./EditProfileImgModal.styles";
@@ -9,10 +9,10 @@ import { BodyText } from "../atoms/BodyText/BodyText";
 import { Button } from "../atoms/Button/Button";
 import IconButton from "../atoms/iconButton/IconButton";
 import { SwitcherTab } from "../atoms/Switcher-tab/SwitcherTab";
-import { Cross } from "../Icons/Cross";
 import { DownloadIcon } from "../Icons/DownloadIcon";
 import { Palette } from "../Icons/Palette";
 import { Trash } from "../Icons/Trash";
+import { Modal } from "../molecules/Modal/Modal";
 import { Switcher } from "../molecules/Switcher/Switcher";
 
 interface EditProfileImgModalProps
@@ -32,9 +32,7 @@ const EditProfileImgModal: FunctionComponent<EditProfileImgModalProps> = ({ onCl
       opened={opened}
       onClose={onClose}
       lockScroll={false}
-      title={<><Title order={3}>Change profile image</Title><button type="button" onClick={() => onClose()} css={styles.closeButton}><Cross/></button></>}
-      styles={styles.modalStyles()}
-      withCloseButton={false}
+      title="Change profile image"
       centered>
       <CaisyImg
         onClick={() => {}}
