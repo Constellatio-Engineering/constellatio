@@ -51,9 +51,13 @@ export const TOCItemComponent: React.FC<{ readonly depth: number; readonly item:
       {
         return true;
       }
-      if(observedHeadline.slug !== slugFormatter(item.text) && item?.level === observedHeadline.level)
+      if(observedHeadline.slug !== slugFormatter(item.text) && item?.level >= observedHeadline.level)
       {
         return false;
+      }
+      if(observedHeadline.slug !== slugFormatter(item.text) && item?.level < observedHeadline.level)
+      {
+        return true;
       }
       return prevState;
     });
