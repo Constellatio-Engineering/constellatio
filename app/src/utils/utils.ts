@@ -76,3 +76,8 @@ export const slugFormatter = (name: string): string => name
   .replace(/\s+/g, "-")
   .replace(/[^a-z0-9-]/g, "")
   .replace(/-+/g, "-");
+
+export const removeHtmlTagsFromString = (htmlString: string): string =>
+{
+  return htmlString.replace(/<\/?[^>]+(>|$)/g, "");
+};

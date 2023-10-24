@@ -5,13 +5,15 @@ import { ArrowUp } from "@/components/Icons/ArrowUp";
 import React, { Fragment, type FunctionComponent } from "react";
 
 import * as styles from "./ProfileBadgesBlockList.styles";
-import ProfileBadgeCard from "../profileBadgeCard/ProfileBadgeCard";
+import ProfileBadgeCard, { type ProfileBadgeCardProps } from "../profileBadgeCard/ProfileBadgeCard";
 
 const ProfileBadgesBlockList: FunctionComponent = () => 
 {
-  const badges = [
-    { description: "You provided feedback to improve design or content", name: "badge1" }, 
-    { checked: true, description: "You provided feedback to improve design or content", name: "badge2" },
+  const badges: ProfileBadgeCardProps[] = [
+    { description: "You provided feedback to improve design or content", name: "badge1", size: "large" }, 
+    {
+      description: "You provided feedback to improve design or content", name: "badge2", selected: true, size: "large" 
+    },
     // { description: "You provided feedback to improve design or content", name: "badge2" },
     // { description: "You provided feedback to improve design or content", name: "badge2" },
     // { description: "You provided feedback to improve design or content", name: "badge2" },

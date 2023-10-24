@@ -11,11 +11,11 @@ import SearchOverlay from "./SearchOverlay";
 
 const Template: FunctionComponent<PropsOf<typeof SearchOverlay>> = (args) => 
 {
-  const toggleDrawer = useSearchBarStore(s => s.toggleDrawer);
+  const openDrawer = useSearchBarStore(s => s.openDrawer);
 
   return (
     <>
-      <Button<"button"> onClick={() => toggleDrawer(true)} styleType="primary">Open</Button>
+      <Button<"button"> onClick={() => openDrawer(() => {})} styleType="primary">Open</Button>
       <SearchOverlay {...args}/>
     </>
   );

@@ -34,7 +34,6 @@ const FileUploadListItem: FunctionComponent<FileUploadListItemProps> = ({
         {(file?.state?.type !== "failed") ? (progress < 100 ? (
           <div>
             {/* {!uploadInProgressHovered ? ( */}
-            
             <RingProgress
               size={24}
               thickness={4}
@@ -43,7 +42,6 @@ const FileUploadListItem: FunctionComponent<FileUploadListItemProps> = ({
                 { color: "red", value: progress ?? 0 },
               ]}
             />
-            
           </div>
         ) : <CheckCircleGreenIcon/>) :
           ""}
