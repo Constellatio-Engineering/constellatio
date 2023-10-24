@@ -1,5 +1,5 @@
-/* eslint-disable sort-keys-fix/sort-keys-fix,@typescript-eslint/naming-convention */
-import { type InferInsertModel, type InferSelectModel } from "drizzle-orm";
+/* eslint-disable sort-keys-fix/sort-keys-fix,@typescript-eslint/naming-convention,@typescript-eslint/no-use-before-define */
+import { type InferInsertModel, type InferSelectModel, relations } from "drizzle-orm";
 import {
   text, pgTable, integer, pgEnum, uuid, smallint, unique, timestamp, primaryKey, index
 } from "drizzle-orm/pg-core";
@@ -52,8 +52,28 @@ export const users = pgTable("User", {
   subscribedPlanPriceId: text("SubscribedPlanPriceId"),
 });
 
+export const usersRelations = relations(users, ({ many }) => ({
+  profilePictures: many(profilePictures),
+}));
+
 export type UserInsert = InferInsertModel<typeof users>;
 export type User = InferSelectModel<typeof users>;
+
+export const profilePictures = pgTable("ProfilePicture", {
+  id: uuid("Id").unique().notNull().primaryKey(),
+  serverFilename: text("ServerFilename").notNull(),
+  userId: uuid("UserId").references(() => users.id, { onDelete: "no action" }).notNull().unique(),
+});
+
+export const profilePicturesRelations = relations(profilePictures, ({ one }) => ({
+  user: one(users, {
+    fields: [profilePictures.userId],
+    references: [users.id],
+  }),
+}));
+
+export type ProfilePictureInsert = InferInsertModel<typeof profilePictures>;
+export type ProfilePicture = InferSelectModel<typeof profilePictures>;
 
 export const bookmarks = pgTable("Bookmark", {
   id: uuid("Id").defaultRandom().unique().notNull().primaryKey(),

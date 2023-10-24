@@ -19,20 +19,28 @@ export const wrapper = (theme: MantineTheme) => css`
 export const profileInfo = css`
   text-align: center;
   padding: 16px 24px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
 `;
-export const profileImageWrapper = css`
+export const profileImageWrapper = (width: number) => css`
   position: relative;
+  display: flex;
+  justify-content: center;
+  cursor: pointer;
+  width: ${width}px;
   svg {
     position: absolute;
     color: white;
     top: 70px;
     left: 50%;
     transform: translate(-50%, -50%);
-    display: none;
+    opacity: 0;
+    transition: opacity 0.1s ease-in-out;
   }
   span {
     pointer-events: none;
-    display: none;
+    opacity: 0;
     content: "";
     position: absolute;
     width: 90px;
@@ -42,6 +50,7 @@ export const profileImageWrapper = css`
     transform: translateX(-50%);
     border-radius: 50%;
     overflow: hidden;
+    transition: opacity 0.1s ease-in-out;
 
     &::after {
       content: "";
@@ -53,12 +62,11 @@ export const profileImageWrapper = css`
       left: 0px;
     }
   }
-  img:hover + span + svg {
-    display: block;
-    pointer-events: none;
-  }
-  img:hover + span {
-    display: block;
+  :hover {
+    span, svg {
+      opacity: 1;
+      pointer-events: none;
+    }
   }
 `;
 export const profileNameHandler = (theme: MantineTheme) => css`

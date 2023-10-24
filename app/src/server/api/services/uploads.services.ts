@@ -43,3 +43,22 @@ export const deleteFiles: DeleteFiles = async ({ files, userId }) =>
     inArray(uploadedFiles.id, fileIds)
   ));
 };
+
+type GetClouStorageFileUrl = (params: {
+  serverFilename: string;
+  userId: string;
+}) => Promise<string>;
+
+export const getClouStorageFileUrl: GetClouStorageFileUrl = async ({ serverFilename, userId }): Promise<string> =>
+{
+  const [url] = await cloudStorage
+    .bucket(env.GOOGLE_CLOUD_STORAGE_BUCKET_NAME)
+    .file(`${userId}/${serverFilename}`)
+    .getSignedUrl({
+      action: "read",
+      expires: Date.now() + 15 * 60 * 1000,
+      version: "v4",
+    });
+
+  return url;
+};
