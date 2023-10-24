@@ -5,12 +5,34 @@ export const wrapper = (theme: MantineTheme) => css`
         width: 440px;
     .mantine-InputWrapper-root{
     margin-bottom: 12px;
-    input{
+    input, select,.mantine-PasswordInput-input{
         border-radius: 8px;
+        height: 48px;
+        display: grid;
+        place-items: center;
     }
-    .mantine-Text-root{
-        color: ${theme.colors["neutrals-01"][9]};
+   .mantine-Input-rightSection{
+    pointer-events: none;
+    svg{
+        overflow: visible;
+        #alert{
+            transform: translateY(5px);
+        }
     }
+button{
+        transform: translateY(-5px);
+        pointer-events: all;
+    }
+   }
+   .mantine-InputWrapper-label{
+    width:100%;
+    display:flex;
+    justify-content: space-between;
+    align-items: center;
+    span{
+        color: ${theme.colors["neutrals-01"][7]};
+    }
+   }
 }
 h3{
     margin-bottom: 24px;
