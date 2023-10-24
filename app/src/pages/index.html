@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html>
+  <head> </head>
+  <body>
+    <script>
+      async function track(data) {
+        const { userId, event } = data;
+        const dataToInsert = {
+          userId,
+          ...event,
+        };
+        /* console.log(dataToInsert); */
+        //await db.insert(tracking).values(dataToInsert);
+      }
+
+      /* 
+          SCHEMA (tracking)
+          
+          id:int (index autoincrease) 
+          createdAt:Date @createdAt   
+          updatedAt:Date @updatedAt   
+          url:string
+          userId:uuid (weiß nicht ob es dann wie in prisma auch noch user als feld benötigt)
+          eventId:string
+          eventTargetId:string | null
+      
+        */
+
+      //STATE -------------------------------------------------------------------------
+      let documentIsHidden = false;
+      setDocumentVisibilityState(); //setState?
+
+      //FUNCTIONS ---------------------------------------------------------------------
+      function getCurrentTime() {
+        return new Date().getTime();
+      }
+
+      function setDocumentVisibilityState() {
+        documentIsHidden = document.hidden;
+      }
+
+      function sendPageEnterEvent() {
+        track({
+          userId: "userTestId",
+          url: "placeholder",
+          event: {
+            eventId: "page-enter",
+            eventTimestamp: getCurrentTime(),
+          },
+        });
+      }
+
+      function sendPageLeaveEvent() {
+        track({
+          userId: "userTestId",
+          url: "placeholder",
+          event: {
+            eventId: "page-leave",
+            eventTimestamp: getCurrentTime(),
+          },
+        });
+      }
+
+      //LISTENERS --------------------------------------------------------------------
+      document.addEventListener("visibilitychange", setDocumentVisibilityState);
+
+      //wie gebe ich hier am besten url mit?*
+      document.addEventListener("routeChangeComplete", sendPageEnterEvent);
+
+      //wie gebe ich hier am besten url mit?*
+      window.addEventListener("beforeunload", sendPageLeaveEvent);
+
+      //INTERVALL --------------------------------------------------------------------
+      setInterval(() => {
+        if (!documentIsHidden) {
+          track({
+            userId: "userTestId",
+            url: "placeholder",
+            event: {
+              eventId: "activePing",
+              eventTimestamp: getCurrentTime(),
+            },
+          });
+        }
+      }, 5000);
+    </script>
+  </body>
+</html>
