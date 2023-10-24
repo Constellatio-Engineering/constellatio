@@ -5,7 +5,7 @@ import { InvalidateQueriesContext } from "@/provider/InvalidateQueriesProvider";
 import { api } from "@/utils/api";
 import { getRandomUuid } from "@/utils/utils";
 
-import { Modal, Title } from "@mantine/core";
+import { Modal } from "@mantine/core";
 import { notifications } from "@mantine/notifications";
 import { useMutation } from "@tanstack/react-query";
 import axios from "axios";
@@ -15,7 +15,6 @@ import * as styles from "./EditProfileImgModal.styles";
 import { BodyText } from "../atoms/BodyText/BodyText";
 import { Button } from "../atoms/Button/Button";
 import IconButton from "../atoms/iconButton/IconButton";
-import { Cross } from "../Icons/Cross";
 import { DownloadIcon } from "../Icons/DownloadIcon";
 import { Palette } from "../Icons/Palette";
 import { Switcher } from "../molecules/Switcher/Switcher";
@@ -159,9 +158,7 @@ const EditProfileImgModal: FunctionComponent<EditProfileImgModalProps> = ({ onCl
       opened={opened}
       onClose={onClose}
       lockScroll={false}
-      title={<><Title order={3}>Change profile image</Title><button type="button" onClick={() => onClose()} css={styles.closeButton}><Cross/></button></>}
-      styles={styles.modalStyles()}
-      withCloseButton={false}
+      title="Change profile image"
       centered>
       <div css={styles.profilePictureWrapper}>
         <ProfilePicture

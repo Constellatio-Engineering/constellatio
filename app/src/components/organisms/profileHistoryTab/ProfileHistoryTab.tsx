@@ -8,7 +8,6 @@ const ProfileHistoryTab: FunctionComponent = () => (
   <div style={{ width: "100%" }}>
     <Title order={3} css={styles.tabHeader}>History</Title>
     <ProfileHistoryBlocks/>
-
   </div>
 );
 
