@@ -1,3 +1,5 @@
+import { NoteIcon } from "@/components/Icons/Note";
+
 import { Title } from "@mantine/core";
 import React, { type FunctionComponent } from "react";
 
@@ -10,16 +12,17 @@ interface SearchPapersBlockProps
 {
   readonly numberOfTableItems?: number;
   readonly table: React.ReactNode;
+  readonly variant: "userDocuments" | "userUploads";
 }
 
-const SearchPapersBlock: FunctionComponent<SearchPapersBlockProps> = ({ numberOfTableItems, table }) => 
+const SearchPapersBlock: FunctionComponent<SearchPapersBlockProps> = ({ numberOfTableItems, table, variant }) => 
 {
   return table ? (
     <div css={styles.wrapper}>
       <div>
-        <IconButton icon={<DownloadIcon/>} size="big"/>
-        <Title order={3} css={styles.blockHeadTitle}>Uploaded material</Title>
-        <div><Label title={`${numberOfTableItems ?? 0} FILES`} variant="neutral"/></div>
+        <IconButton icon={variant === "userUploads" ? <DownloadIcon/> : <NoteIcon/>} size="big"/>
+        <Title order={3} css={styles.blockHeadTitle}>{variant === "userUploads" ? "Uploaded material" : "Cosntellatio docs"}</Title>
+        <div><Label title={`${numberOfTableItems ?? 0} ${variant === "userUploads" ? "FILES" : "DOCS"}`} variant="neutral"/></div>
       </div>
       {table && table}
     </div>

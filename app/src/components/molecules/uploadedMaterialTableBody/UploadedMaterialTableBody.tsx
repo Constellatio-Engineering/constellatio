@@ -121,7 +121,7 @@ const UploadedMaterialTableBody: FunctionComponent<UploadedMaterialTableBodyProp
                 </BodyText>
               </td>
             )}
-            {variant === "searchPapers" && <td/>}
+            {/* {variant === "searchPapers" && <td/>} */}
             {file && (
               <MaterialOptionsMenu
                 selectedFolderId={selectedFolderId}

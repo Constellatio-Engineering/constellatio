@@ -1,5 +1,6 @@
 import { Svg } from "@/basic-components/SVG/Svg";
 import ItemBlock from "@/components/organisms/caseBlock/ItemBlock";
+import DocsTable from "@/components/organisms/docsTable/DocsTable";
 import EmptyStateCard from "@/components/organisms/emptyStateCard/EmptyStateCard";
 import FileViewer from "@/components/organisms/fileViewer/FileViewer";
 import SearchPapersBlock from "@/components/organisms/searchPapersBlock/SearchPapersBlock";
@@ -24,6 +25,8 @@ const SearchPageResults: FunctionComponent<Props> = ({ tabQuery }) =>
   const { searchResults } = useSearchResults();
   const router = useRouter();
   const { selectedFileIdForPreview } = useMaterialsStore();
+
+  console.log("searchResults", searchResults);
 
   const NoResultsFound = (
     <EmptyStateCard
@@ -112,48 +115,72 @@ const SearchPageResults: FunctionComponent<Props> = ({ tabQuery }) =>
         )
       );
     }
-    case "userDocuments":
-    {
-      return (
-        searchResults[tabQuery]?.map(userDocument => (
-          <div key={userDocument.id}>
-            <p>Title: {userDocument.name}</p>
-          </div>
-        ))
-      );
-    }
     case "userUploads":
     {
       return (
-        searchResults[tabQuery]?.length > 0 ? (
+        (searchResults.userUploads?.length > 0 || searchResults.userDocuments?.length > 0) ? (
           <div css={styles.searchPageResults}>
-            <SearchPapersBlock
-              table={(
-                <UploadedMaterialTable
-                  uploadedFiles={searchResults[tabQuery].map(file => ({
-                    createdAt: date,
-                    fileExtension: "",
-                    folderId: "",
-                    id: file.id,
-                    note: null,
-                    notes: [],
-                    originalFilename: file.originalFilename,
-                    serverFilename: "",
-                    sizeInBytes: 1,
-                    userId: file.userId
-                  }))}
-                  variant="searchPapers"
-                  selectedFolderId={null} // TODO
-                />
-              )}
-              numberOfTableItems={searchResults[tabQuery]?.length}
-            />
-            {selectedFileIdForPreview && (
-              <FileViewer/>
-            )}
+            {
+              searchResults.userDocuments?.length > 0 && (
+                <>
+                  <SearchPapersBlock
+                    variant="userDocuments"
+                    table={(
+                      <DocsTable docs={searchResults.userDocuments.map(doc => ({
+                        content: doc.content,
+                        createdAt: date,
+                        folderId: doc.folderId, 
+                        id: doc.id, 
+                        name: doc.name,
+                        updatedAt: date, 
+                        userId: doc.userId
+                      }))}
+                      />
+                    )}
+                    numberOfTableItems={searchResults.userDocuments?.length}
+                  />
+                </>
+              )
+            }
+            {
+              searchResults.userUploads?.length > 0 && (
+                <>
+                  <SearchPapersBlock
+                    variant="userUploads"
+                    table={(
+                      <UploadedMaterialTable
+                        uploadedFiles={searchResults.userUploads.map(file => ({
+                          createdAt: date,
+                          fileExtension: "",
+                          folderId: "",
+                          id: file.id,
+                          note: null,
+                          notes: [],
+                          originalFilename: file.originalFilename,
+                          serverFilename: "",
+                          sizeInBytes: 1,
+                          userId: file.userId
+                        }))}
+                        variant="searchPapers"
+                        selectedFolderId={null}
+                      />
+                    )}
+                    numberOfTableItems={searchResults.userUploads?.length}
+                  />
+                  {selectedFileIdForPreview && (
+                    <FileViewer/>
+                  )}
+                </>
+              )
+            }
           </div>
         ) : NoResultsFound
       );
+    }
+    default:
+    {
+      console.error(`Unknown tab query: ${tabQuery}`);
+      return null;
     }
   }
 };
