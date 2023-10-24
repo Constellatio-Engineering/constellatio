@@ -50,6 +50,7 @@ const ProfileDetailsTab: FunctionComponent = () =>
     })),
     validateInputOnBlur: true,
   });
+
   const handleSubmit = (e: React.FormEvent<HTMLFormElement>): void => 
   {
     e.preventDefault();

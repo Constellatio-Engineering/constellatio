@@ -16,6 +16,9 @@ export const passwordSchema = z.string().refine(password => passwordRequirements
 
 export const maximumAmountOfSemesters = 15 as const;
 
+export const displayNameValidation = z.string().min(2, { message: "Ein Anzeigename ist erforderlich" });
+export const emailValidation = z.string().email({ message: "Ungültige E-Mail Adresse" });
+
 export const registrationFormSchema = z
   .object({
     acceptTOS: z.literal<boolean>(true, {
