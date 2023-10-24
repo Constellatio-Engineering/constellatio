@@ -8,7 +8,7 @@ export const bar = ({ height, theme }: {
   width: 11px;
   margin: 0 0px 8px 0px;
   border-radius: 5px;
-  height:180px;
+  height:160px;
   position: relative;
   background-color: ${theme.colors["neutrals-01"][2]};
   border: 1px solid ${theme.colors["neutrals-01"][3]};
@@ -26,7 +26,7 @@ export const barChartContainer = css`
   display: flex;
   align-items: flex-end;
   justify-content: space-between;
-  min-height: 190px;
+  min-height: 160px;
 `;
 export const barChartMonth = css`
   display: flex;

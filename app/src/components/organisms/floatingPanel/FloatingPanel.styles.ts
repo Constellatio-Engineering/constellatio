@@ -5,7 +5,6 @@ const CSSHiddenCard = css`
   height: 217px;
   overflow: hidden;
   pointer-events: none;
-  margin-left: auto;
   * > {
     filter: blur(3px);
   }
@@ -27,6 +26,7 @@ export const wrapper = ({ hidden, theme }: {
     padding: 16px 24px 16px 24px;
     position: sticky;
     top: 0;
+    right:0;
     background-color: ${theme.colors["neutrals-01"][0]};
     z-index: 1;
   }
@@ -40,7 +40,6 @@ export const wrapper = ({ hidden, theme }: {
     }
   }
   overflow: visible;
-
   ${hidden && CSSHiddenCard}
   .hidden-overlay {
     position: absolute;

@@ -10,7 +10,7 @@ const ProfileLearningTimeBlock: FunctionComponent = () =>
   return (
     <div css={styles.wrapper}>
       <ProfileLearningTimeBlockHeader selectedTab={0} tabs={tabs}/>
-      <BarChart/>
+      <BarChart chartType="months"/>
     </div>
   );
 };
