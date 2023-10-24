@@ -27,6 +27,9 @@ export const searchRouter = createTRPCRouter({
         cases: {
           filter: undefined,
         },
+        "user-documents": {
+          filter: `userId = ${userId}`,
+        },
         "user-uploads": {
           filter: `userId = ${userId}`,
         }

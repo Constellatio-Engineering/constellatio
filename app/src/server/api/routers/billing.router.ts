@@ -8,7 +8,7 @@ import { InternalServerError } from "@/utils/serverError";
 import { eq } from "drizzle-orm";
 
 export const billingRouter = createTRPCRouter({
-  generateStripeSessionUrl: protectedProcedure.mutation(async ({ ctx: { userId } }) =>
+  generateStripeCheckoutSession: protectedProcedure.mutation(async ({ ctx: { userId } }) =>
   {
     const user = await db.query.users.findFirst({ where: eq(users.id, userId) });
 
@@ -34,11 +34,15 @@ export const billingRouter = createTRPCRouter({
       await db.update(users).set({ stripeCustomerId }).where(eq(users.id, user.id));
     }
 
-    const { url } = await stripe.billingPortal.sessions.create({
+    const { url } = await stripe.checkout.sessions.create({
+      cancel_url: `${env.NEXT_PUBLIC_WEBSITE_URL}/settings/billing`,
       customer: stripeCustomerId,
-      return_url: `${env.NEXT_PUBLIC_WEBSITE_URL}/settings/billing`,
+      line_items: [{ price: env.STRIPE_PREMIUM_PLAN_PRICE_ID, quantity: 1 }],
+      mode: "subscription",
+      payment_method_types: ["card"],
+      success_url: `${env.NEXT_PUBLIC_WEBSITE_URL}/settings/success`,
     });
 
     return { stripeUrl: url };
-  })
+  }),
 });

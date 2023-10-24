@@ -20,7 +20,7 @@ const SearchBar: FunctionComponent<SearchBarProps> = () =>
 {
   const searchValue = useSearchBarStore((s) => s.searchValue);
   const setSearchValue = useSearchBarStore((s) => s.setSearchValue);
-  const toggleDrawer = useSearchBarStore((s) => s.toggleDrawer);
+  const closeDrawer = useSearchBarStore((s) => s.closeDrawer);
   const [searchQuery, setSearchQuery] = useQueryState("find");
   const router = useRouter();
   const { searchResults } = useSearchResults();
@@ -37,25 +37,15 @@ const SearchBar: FunctionComponent<SearchBarProps> = () =>
       <Button<"button"> styleType="primary" type="submit" disabled={Object.values(searchResults).every(result => result.length === 0)}>
         View all results
       </Button>
-      <span onClick={() => toggleDrawer(false)} className="closeBtn"><Cross size={32}/></span>
+      <span onClick={() => closeDrawer()} className="closeBtn"><Cross size={32}/></span>
     </>
   ) : (
-    <span onClick={() => toggleDrawer(false)} className="closeBtn"><Cross size={32}/></span>
+    <span onClick={() => closeDrawer()} className="closeBtn"><Cross size={32}/></span>
   );
 
   useEffect(() => 
   {
-    void (async () => 
-    {
-      try 
-      {
-        await setSearchQuery(searchValue);
-      }
-      catch (error) 
-      {
-        console.error(error);
-      }
-    })();
+    void setSearchQuery(searchValue);
   }, [searchValue, setSearchQuery]);
 
   useEffect(() => 

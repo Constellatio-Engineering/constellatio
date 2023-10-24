@@ -1,3 +1,4 @@
+/* eslint-disable sort-keys-fix/sort-keys-fix */
 import { type IHeadingNode } from "types/richtext";
 
 import { TOCItemComponent } from "./tocItem";
@@ -22,7 +23,44 @@ export type TOCItem = {
   text: string;
 };
 
-// const numericalStyles = ["upper-alpha", "lower-roman", "decimal", "lower-alpha"];
+function decimalToRoman(decimal: number): string 
+{
+  if(decimal <= 0 || decimal >= 4000) 
+  {
+    throw new Error("Input out of range (1-3999)");
+  }
+
+  const romanNumerals: Array<[string, number]> = [
+    ["M", 1000],
+    ["CM", 900],
+    ["D", 500],
+    ["CD", 400],
+    ["C", 100],
+    ["XC", 90],
+    ["L", 50],
+    ["XL", 40],
+    ["X", 10],
+    ["IX", 9],
+    ["V", 5],
+    ["IV", 4],
+    ["I", 1],
+  ];
+
+  let result = "";
+  let remaining = decimal;
+
+  for(const [roman, value] of romanNumerals) 
+  {
+    while(remaining >= value) 
+    {
+      result += roman;
+      remaining -= value;
+    }
+  }
+
+  return result;
+}
+console.log(decimalToRoman(1));
 
 export const generateTOC = (data: DataType[]): TOCItem[] => 
 {
@@ -62,17 +100,17 @@ export function getNumericalLabel(depth: number, index: number): string
 {
   switch (depth) 
   {
-    case 0:
-      return String.fromCharCode(65 + index) + ".";
     case 1:
-      return ["I", "II", "III", "IV", "V", "VI", "VII", "VIII", "IX", "X"][index] + ".";
+      return String.fromCharCode(65 + index) + ".";
     case 2:
-      return (index + 1) + ".";
+      return ["I", "II", "III", "IV", "V", "VI", "VII", "VIII", "IX", "X"][index] + ".";
     case 3:
-      return String.fromCharCode(97 + index) + ")";
+      return (index + 1) + ".";
     case 4:
-      return String.fromCharCode(97 + index) + String.fromCharCode(97 + index) + ")";
+      return String.fromCharCode(97 + index) + ")";
     case 5:
+      return String.fromCharCode(97 + index) + String.fromCharCode(97 + index) + ")";
+    case 6:
       return (
         String.fromCharCode(97 + index) +
         String.fromCharCode(97 + index) +
@@ -84,57 +122,13 @@ export function getNumericalLabel(depth: number, index: number): string
   }
 }
 
-// const RomanNumerals = {
-//   toRoman(num: number) 
-//   {
-//     const lookup: { [key: string]: number } = {
-//       C: 100,
-//       CD: 400,
-//       CM: 900,
-//       D: 500,
-//       I: 1,
-//       IV: 4,
-//       IX: 9,
-//       L: 50,
-//       M: 1000,
-//       V: 5,
-//       X: 10,
-//       XC: 90,
-//       XL: 40,
-//     };
-//     let roman = "";
-//     for(const i in lookup) 
-//     {
-//       if(lookup && lookup?.[i])
-//       {
-//         while(num >= lookup?.[i]) 
-//         {
-//           roman += i;
-//           num -= lookup?.[i];
-//         }
-//       }
-//     }
-//     return roman;
-//   },
-// };
-// export function getNumbering(count: number, level: number): string 
-// {
-//   const numberingTypes = [
-//     (count: number) => String.fromCharCode(64 + count), // A, B, C, ...
-//     (count: number) => RomanNumerals.toRoman(count), // I, II, III, ...
-//     (count: number) => count.toString(), // 1, 2, 3, ...
-//     (count: number) => String.fromCharCode(97 + count - 1), // a, b, c, ...
-//     (count: number) => String.fromCharCode(97 + count - 1) + ")", // aa), bb), cc), ...
-//   ];
-//   return numberingTypes[level - 1] ? numberingTypes[level - 1](count) : count.toString();
-// }
-
 // eslint-disable-next-line import/no-unused-modules, @typescript-eslint/no-explicit-any
 export function getNestedHeadingIndex(item: IHeadingNode, allHeadings: any): number | null 
 {
   const level = item.attrs?.level;
   if(level === undefined) 
   {
+
     return null;
   }
 
@@ -143,7 +137,7 @@ export function getNestedHeadingIndex(item: IHeadingNode, allHeadings: any): num
   {
     if(currentItem.attrs?.level === level) 
     {
-      currentIndex++;
+      currentIndex = currentIndex + 1;
       if(JSON.stringify(item) === JSON.stringify(currentItem)) 
       {
         return currentIndex;
@@ -164,7 +158,7 @@ export const renderTOC = (toc: TOCItem[], _: number = 0): JSX.Element =>
       {toc.map((item, index) => item && item?.text && (
         <li key={index} style={{ listStyleType: "none" }}>
           <TOCItemComponent
-            depth={item?.level - 1}
+            depth={item?.level ?? 1}
             item={item}
             itemNumber={index + 1}
             total={toc?.length}

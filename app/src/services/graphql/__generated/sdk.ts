@@ -759,6 +759,7 @@ export type IGenMainCategory = {
   icon?: Maybe<IGenAsset>;
   id?: Maybe<Scalars['ID']['output']>;
   mainCategory?: Maybe<Scalars['String']['output']>;
+  slug?: Maybe<Scalars['String']['output']>;
 };
 
 
@@ -785,6 +786,7 @@ export type IGenMainCategory_Nested_Where = {
   AND?: InputMaybe<Array<InputMaybe<IGenMainCategory_Nested_Where>>>;
   OR?: InputMaybe<Array<InputMaybe<IGenMainCategory_Nested_Where>>>;
   mainCategory?: InputMaybe<IGenCaisyField_String_Where>;
+  slug?: InputMaybe<IGenCaisyField_String_Where>;
 };
 
 export type IGenMainCategory_Sort = {
@@ -793,6 +795,7 @@ export type IGenMainCategory_Sort = {
   id?: InputMaybe<IGenOrder>;
   mainCategory?: InputMaybe<IGenOrder>;
   publishedAt?: InputMaybe<IGenOrder>;
+  slug?: InputMaybe<IGenOrder>;
   updatedAt?: InputMaybe<IGenOrder>;
 };
 
@@ -800,6 +803,7 @@ export type IGenMainCategory_Where = {
   AND?: InputMaybe<Array<InputMaybe<IGenMainCategory_Where>>>;
   OR?: InputMaybe<Array<InputMaybe<IGenMainCategory_Where>>>;
   mainCategory?: InputMaybe<IGenCaisyField_String_Where>;
+  slug?: InputMaybe<IGenCaisyField_String_Where>;
 };
 
 export enum IGenOrder {
@@ -1372,7 +1376,7 @@ export type IGenFullCaseFragment = { __typename: 'Case', id?: string | null, tit
 
 export type IGenLegalAreaFragment = { __typename: 'LegalArea', legalAreaName?: string | null, id?: string | null, sorting?: number | null };
 
-export type IGenMainCategoryFragment = { __typename: 'MainCategory', id?: string | null, mainCategory?: string | null, icon?: (
+export type IGenMainCategoryFragment = { __typename: 'MainCategory', id?: string | null, mainCategory?: string | null, slug?: string | null, icon?: (
     { __typename?: 'Asset' }
     & IGenAssetFragment
   ) | null };
@@ -1598,6 +1602,7 @@ export const MainCategoryFragmentDoc = gql`
     ...Asset
   }
   mainCategory
+  slug
 }
     `;
 export const ArticleOverviewFragmentDoc = gql`

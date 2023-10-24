@@ -1,25 +1,29 @@
 /* eslint-disable max-lines */
+import ErrorPage from "@/components/errorPage/ErrorPage";
 import ItemBlock from "@/components/organisms/caseBlock/ItemBlock";
 import EmptyStateCard from "@/components/organisms/emptyStateCard/EmptyStateCard";
-import OverviewHeader, {
-  slugFormatter,
-} from "@/components/organisms/OverviewHeader/OverviewHeader";
+import OverviewHeader from "@/components/organisms/OverviewHeader/OverviewHeader";
 import { type IArticlesOverviewProps } from "@/services/content/getArticlesOverviewProps";
 import { type ICasesOverviewProps } from "@/services/content/getCasesOverviewProps";
 import {
   type IGenLegalArea,
-  type IGenCase,
   type IGenArticle,
   type IGenCaseOverviewFragment,
 } from "@/services/graphql/__generated/sdk";
 
-// import { Loader } from "@mantine/core";
-import { useRouter } from "next/router";
-import { useQueryState } from "next-usequerystate";
-import { type FunctionComponent, Fragment, useEffect } from "react";
+import { parseAsString, useQueryState } from "next-usequerystate";
+import {
+  type FunctionComponent, Fragment
+} from "react";
 import React from "react";
 
 import * as styles from "./OverviewPage.styles";
+
+function extractNumeric(title: string): number | null
+{
+  const match = title.match(/\d+/);
+  return match ? parseInt(match[0], 10) : null;
+}
 
 type CasesOverviewPageProps = {
   content: ICasesOverviewProps;
@@ -31,44 +35,14 @@ type ArticlesOverviewPageProps = {
   variant: "dictionary";
 };
 
-function extractNumeric(title: string): number | null 
-{
-  const match = title.match(/\d+/);
-  return match ? parseInt(match[0], 10) : null;
-}
-
 type OverviewPageProps = CasesOverviewPageProps | ArticlesOverviewPageProps;
+type OverviewPageContentProps = OverviewPageProps & {
+  readonly initialCategorySlug: string;
+};
 
-const OverviewPage: FunctionComponent<OverviewPageProps> = ({ content, variant }) => 
+const OverviewPageContent: FunctionComponent<OverviewPageContentProps> = ({ content, initialCategorySlug, variant }) =>
 {
-  const [selectedCategorySlug, setSelectedCategorySlug] = useQueryState("category");
-  const router = useRouter();
-  // const [selectedCategory, setSelectedCategory] = useState<Maybe<string> | undefined>(content.allMainCategories?.[0]?.mainCategory);
-
-  useEffect(() => 
-  {
-    if(typeof window !== "undefined") 
-    {
-      void (async () => 
-      {
-        try 
-        {
-          if(!selectedCategorySlug) 
-          {
-            await setSelectedCategorySlug(
-              slugFormatter(content.allMainCategories?.[0]?.mainCategory ?? "")
-            );
-            await router.replace({ query: { category: slugFormatter(content.allMainCategories?.[0]?.mainCategory ?? "") } });
-          }
-        }
-        catch (error) 
-        {
-          console.error(error);
-        }
-      })();
-    }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [router.query.category, setSelectedCategorySlug, content.allMainCategories?.[0]?.mainCategory]);
+  const [selectedCategorySlug, setSelectedCategorySlug] = useQueryState("category", parseAsString.withDefault(initialCategorySlug));
 
   const filteredLegalAreas = (content.allLegalAreaRes.allLegalArea?.edges
     ?.map((legalArea) => legalArea?.node)
@@ -76,54 +50,36 @@ const OverviewPage: FunctionComponent<OverviewPageProps> = ({ content, variant }
 
   const getAllCasesOfLegalArea = (
     item: IGenLegalArea
-  ): IGenCaseOverviewFragment[] => 
+  ): IGenCaseOverviewFragment[] =>
   {
-    if(content?.__typename !== "case") 
+    if(content?.__typename !== "case")
     {
       return [];
     }
-    return content?.allCases.filter(
-      (x) =>
-        x.legalArea?.id === item?.id &&
-        slugFormatter(x.mainCategoryField?.[0]?.mainCategory ?? "") ===
-          selectedCategorySlug
+    return content?.allCases.filter((x) =>
+      x.legalArea?.id === item?.id && x.mainCategoryField?.[0]?.slug === selectedCategorySlug
     );
   };
 
-  const getAllArticlesOfLegalArea = (item: IGenLegalArea): IGenArticle[] => 
+  const getAllArticlesOfLegalArea = (item: IGenLegalArea): IGenArticle[] =>
   {
-    if(content?.__typename !== "dictionary") 
+    if(content?.__typename !== "dictionary")
     {
       return [];
     }
-    return content?.allArticles.filter(
-      (x) =>
-        x.legalArea?.id === item?.id &&
-        slugFormatter(x.mainCategoryField?.[0]?.mainCategory ?? "") ===
-          selectedCategorySlug
-    );
+    return content?.allArticles.filter((x) => x.legalArea?.id === item?.id && x.mainCategoryField?.[0]?.slug === selectedCategorySlug);
   };
 
-  const getIsCategoryEmpty = (): boolean => 
+  const getIsCategoryEmpty = (): boolean =>
   {
-    const isEmpty: boolean =
-      content?.__typename === "case"
-        ? content?.allCases?.filter(
-          (x: IGenCase) =>
-            slugFormatter(x?.mainCategoryField?.[0]?.mainCategory ?? "") ===
-              selectedCategorySlug
-        )?.length <= 0
-        : content?.allArticles?.filter(
-          (x: IGenArticle) =>
-            slugFormatter(x?.mainCategoryField?.[0]?.mainCategory ?? "") ===
-              selectedCategorySlug
-        )?.length <= 0;
-    return isEmpty;
+    return content?.__typename === "case"
+      ? content?.allCases?.filter((x) => x?.mainCategoryField?.[0]?.slug === selectedCategorySlug)?.length <= 0
+      : content?.allArticles?.filter((x) => x?.mainCategoryField?.[0]?.slug === selectedCategorySlug)?.length <= 0;
   };
 
   return (
     <div css={styles.Page}>
-      {content?.allMainCategories && router.query.category && (
+      {content?.allMainCategories && (
         <OverviewHeader
           variant={variant}
           selectedCategorySlug={selectedCategorySlug}
@@ -133,61 +89,63 @@ const OverviewPage: FunctionComponent<OverviewPageProps> = ({ content, variant }
         />
       )}
       <div css={styles.ListWrapper}>
-        {router.query.category && filteredLegalAreas.sort((a, b) => 
-        {
-          if(a.sorting === null) { return 1; }  
-          if(b.sorting === null) { return -1; } 
-          return a.sorting! - b.sorting!;
-        }).map((item, itemIndex) => 
-        {
-          const items = variant === "case"
-            ? getAllCasesOfLegalArea(item)?.sort((a, b) => 
-            {
-              const numA = extractNumeric(a.title ?? "");
-              const numB = extractNumeric(b.title ?? "");
-            
-              if(numA !== null && numB !== null) 
+        {filteredLegalAreas
+          .sort((a, b) =>
+          {
+            if(a.sorting === null) { return 1; }
+            if(b.sorting === null) { return -1; }
+            return a.sorting! - b.sorting!;
+          })
+          .map((item, itemIndex) =>
+          {
+            const items = variant === "case"
+              ? getAllCasesOfLegalArea(item)?.sort((a, b) =>
               {
-                return numA - numB;
-              }
-              return a?.title?.localeCompare(b.title ?? "") ?? -1;
-            })
-            : getAllArticlesOfLegalArea(item)?.sort((a, b) => 
-            {
-              const sortingA = a?.topic?.[0]?.sorting;
-              const sortingB = b?.topic?.[0]?.sorting;
-              if(sortingA === null || sortingA === undefined) 
-              {
-                return 1;
-              }
-              if(sortingB === null || sortingB === undefined) 
-              {
-                return -1;
-              }
-              return sortingA - sortingB;
-            }) || [];
+                const numA = extractNumeric(a.title ?? "");
+                const numB = extractNumeric(b.title ?? "");
 
-          return (
-            item.legalAreaName && (
-              <Fragment key={itemIndex}>
-                <ItemBlock
-                  variant={variant}
-                  blockHead={{
-                    blockType: "itemsBlock",
-                    categoryName: item.legalAreaName,
-                    completedCases: 0,
-                    items: items.length,
-                    variant,
-                  }}
-                  tableType="cases"
-                  items={items}
-                />
-              </Fragment>
-            )
-          );
-        })}
+                if(numA !== null && numB !== null)
+                {
+                  return numA - numB;
+                }
+                return a?.title?.localeCompare(b.title ?? "") ?? -1;
+              })
+              : getAllArticlesOfLegalArea(item)?.sort((a, b) =>
+              {
+                const sortingA = a?.topic?.[0]?.sorting;
+                const sortingB = b?.topic?.[0]?.sorting;
+                if(sortingA === null || sortingA === undefined)
+                {
+                  return 1;
+                }
+                if(sortingB === null || sortingB === undefined)
+                {
+                  return -1;
+                }
+                return sortingA - sortingB;
+              }) || [];
+
+            return (
+              item.legalAreaName && (
+                <Fragment key={itemIndex}>
+                  <ItemBlock
+                    variant={variant}
+                    blockHead={{
+                      blockType: "itemsBlock",
+                      categoryName: item.legalAreaName,
+                      completedCases: 0,
+                      items: items.length,
+                      variant,
+                    }}
+                    tableType="cases"
+                    items={items}
+                  />
+                </Fragment>
+              )
+            );
+          })}
       </div>
-      {selectedCategorySlug && router.query.category && getIsCategoryEmpty() && (
+      {getIsCategoryEmpty() && (
         <EmptyStateCard
           title={`We're currently working hard to bring you ${
             variant === "case"
@@ -199,6 +157,31 @@ const OverviewPage: FunctionComponent<OverviewPageProps> = ({ content, variant }
         />
       )}
     </div>
+  );
+};
+
+const OverviewPage: FunctionComponent<OverviewPageProps> = (props) =>
+{
+  const { content } = props;
+  const categories = content?.allMainCategories;
+
+  if(!categories || categories.length === 0)
+  {
+    return <ErrorPage error="Categories not found"/>;
+  }
+
+  const initialCategorySlug = categories[0]!.slug;
+
+  if(!initialCategorySlug)
+  {
+    return <ErrorPage error="Initial category has no slug"/>;
+  }
+
+  return (
+    <OverviewPageContent
+      {...props}
+      initialCategorySlug={initialCategorySlug}
+    />
   );
 };
 

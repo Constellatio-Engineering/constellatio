@@ -1,16 +1,14 @@
 import useCaseSolvingStore from "@/stores/caseSolving.store";
+import { slugFormatter } from "@/utils/utils";
 
 import { useMantineTheme } from "@mantine/core";
-// import Link from "next/link";
-// import { useWindowScroll } from "@mantine/hooks";
-import React, { useEffect, useState } from "react";
+import React, { useLayoutEffect, useState } from "react";
 
 import * as styles from "./FloatingPanel.styles";
 import { getNumericalLabel, renderTOC, type TOCItem } from "./generateTocHelper";
 import { BodyText } from "../../atoms/BodyText/BodyText";
 import { ArrowSolidDown } from "../../Icons/arrow-solid-down";
 import { ArrowSolidRight } from "../../Icons/arrow-solid-right";
-import { slugFormatter } from "../OverviewHeader/OverviewHeader";
 
 const scrollToElement = (e: React.MouseEvent<HTMLDivElement>, targetId: string): void => 
 {
@@ -18,7 +16,7 @@ const scrollToElement = (e: React.MouseEvent<HTMLDivElement>, targetId: string):
   const targetElement = document.getElementById(targetId);
   if(targetElement) 
   {
-    const targetOffset = targetElement.getBoundingClientRect().top + window.scrollY - 70;
+    const targetOffset = targetElement.getBoundingClientRect().top + window.scrollY - 350;
     window.scrollTo({ top: targetOffset, });
   }
 };
@@ -33,6 +31,10 @@ export const TOCItemComponent: React.FC<{ readonly depth: number; readonly item:
   const [isExpanded, setIsExpanded] = useState(false);
   const [highlighted, setHighlighted] = useState<boolean>(false);
   // const [scroll, scrollTo] = useWindowScroll();
+  // const { scrollIntoView, targetRef } = useScrollIntoView<HTMLDivElement>({
+  //   offset: 60,
+    
+  // });
   const handleToggle = (): void => 
   {
     setHighlighted(!highlighted);
@@ -42,14 +44,24 @@ export const TOCItemComponent: React.FC<{ readonly depth: number; readonly item:
     }
   };
   const theme = useMantineTheme();
+  // const target = useRef(null);
   const observedHeadline = useCaseSolvingStore(s => s.observedHeadline);
-  useEffect(() => 
+  useLayoutEffect(() => 
   {
-    if(observedHeadline === slugFormatter(item.text))
+    setIsExpanded(prevState => 
     {
-      setIsExpanded(true);
-    }
-  }, [item.text, observedHeadline]);
+      if(slugFormatter(item.text) === observedHeadline.slug || item.level >= observedHeadline.level)
+      {
+        return true;
+      }
+      if(slugFormatter(item.text) !== observedHeadline.slug && item.level === observedHeadline.level)
+      {
+        return false;
+      }
+      return prevState; 
+    });
+  }, [item?.level, item.text, observedHeadline.level, observedHeadline.slug]);
+
   return (
     <div
       onClick={(e) => scrollToElement(e, slugFormatter(item.text))}
@@ -59,11 +71,15 @@ export const TOCItemComponent: React.FC<{ readonly depth: number; readonly item:
       <span
         onClick={handleToggle}
         css={styles.item({
-          highlighted: observedHeadline === slugFormatter(item.text), isExpandable: item.children.length > 0, isExpanded, isTopLevel: true, theme
+          highlighted: observedHeadline.slug === slugFormatter(item.text), isExpandable: item.children.length > 0, isExpanded, isTopLevel: true, theme
         })}>
         <div style={{ display: "flex", justifyContent: "flex-start", padding: "0 16px" }}>
           <BodyText component="p" styleType="body-01-medium">{item.children.length > 0 && (isExpanded ? <ArrowSolidDown/> : <ArrowSolidRight/>)}</BodyText>
-          <BodyText component="p" styleType="body-01-medium">{getNumericalLabel(depth + 1, itemNumber - 1)}&nbsp;{item.text}</BodyText>
+          <BodyText
+            component="p"
+            className={slugFormatter(item.text)}
+            styleType="body-01-medium">{getNumericalLabel(depth, itemNumber - 1)}&nbsp;{item.text}
+          </BodyText>
         </div>
         {depth === 0 && <div style={{ paddingRight: "24px" }}>{itemNumber}/{total}</div>}
       </span>

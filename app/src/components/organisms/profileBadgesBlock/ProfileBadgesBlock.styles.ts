@@ -24,3 +24,9 @@ color: ${theme.colors["neutrals-01"][7]};
 export const counter = (theme: MantineTheme) => css`
 color: ${theme.colors["neutrals-02"][1]};
 `;
+export const headerLayout = css`
+   align-items: center;
+    display: flex;
+    justify-content: space-between;
+    width: 100%;
+    `;

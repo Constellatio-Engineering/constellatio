@@ -1,5 +1,6 @@
 import { RouterTransition } from "@/components/atoms/RouterTransition/RouterTransition";
 import { env } from "@/env.mjs";
+import { useIsRouterReady } from "@/hooks/useIsRouterReady";
 import { supabase } from "@/lib/supabase";
 import AuthStateProvider from "@/provider/AuthStateProvider";
 import CustomThemingProvider from "@/provider/CustomThemingProvider";
@@ -19,6 +20,7 @@ type ConstellatioAppProps = AppProps<{ initialSession: Session }>;
 
 const AppContainer: FunctionComponent<ConstellatioAppProps> = ({ Component, pageProps }) =>
 {
+  const isRouterReady = useIsRouterReady();
   const isProduction = env.NEXT_PUBLIC_DEPLOYMENT_ENVIRONMENT === "production";
   let title = "Constellatio";
 
@@ -42,7 +44,9 @@ const AppContainer: FunctionComponent<ConstellatioAppProps> = ({ Component, page
                 <MeilisearchProvider>
                   <RouterTransition/>
                   <Notifications/>
-                  <Component {...pageProps}/>
+                  {isRouterReady && (
+                    <Component {...pageProps}/>
+                  )}
                 </MeilisearchProvider>
               </ModalsProvider>
             </CustomThemingProvider>

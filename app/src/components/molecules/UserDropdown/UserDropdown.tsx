@@ -1,6 +1,7 @@
-import CaisyImg from "@/basic-components/CaisyImg";
 import { BodyText } from "@/components/atoms/BodyText/BodyText";
+import ProfilePicture from "@/components/molecules/profilePicture/ProfilePicture";
 import useContextAndErrorIfNull from "@/hooks/useContextAndErrorIfNull";
+import useUserDetails from "@/hooks/useUserDetails";
 import { supabase } from "@/lib/supabase";
 import { InvalidateQueriesContext } from "@/provider/InvalidateQueriesProvider";
 import { paths } from "@/utils/paths";
@@ -9,12 +10,13 @@ import { Menu, Title } from "@mantine/core";
 import { notifications } from "@mantine/notifications";
 import { IconBrandStripe, IconLogout, IconUser } from "@tabler/icons-react";
 import { useRouter } from "next/router";
-import { type FunctionComponent } from "react";
+import React, { type FunctionComponent } from "react";
 
 import * as styles from "./UserDropdown.styles";
 
 export const UserDropdown: FunctionComponent = () =>
 {
+  const { userDetails } = useUserDetails();
   const { invalidateEverything } = useContextAndErrorIfNull(InvalidateQueriesContext);
   const router = useRouter();
 
@@ -42,6 +44,15 @@ export const UserDropdown: FunctionComponent = () =>
     }
   };
 
+  if(!userDetails)
+  {
+    return (
+      <div css={styles.placeholder}/>
+    );
+  }
+
+  const { displayName, firstName, lastName } = userDetails;
+
   return (
     <Menu
       width={200}
@@ -51,7 +62,7 @@ export const UserDropdown: FunctionComponent = () =>
       styles={styles.menuStyles()}>
       <Menu.Target>
         <div css={styles.target}>
-          <CaisyImg src="https://via.placeholder.com/36" width={36} height={36}/>
+          <ProfilePicture sizeInPx={30}/>
         </div>
       </Menu.Target>
       <Menu.Dropdown>
@@ -60,10 +71,10 @@ export const UserDropdown: FunctionComponent = () =>
           onClick={() => void router.push(`${paths.profile}`)}
           icon={null}>
           <div className="user-info">
-            <CaisyImg src="https://via.placeholder.com/60" width={60} height={60}/>
+            <ProfilePicture sizeInPx={60}/>
             <div>
-              <Title order={4}>John Doe</Title>
-              <BodyText styleType="body-02-medium" component="p">@johndoe</BodyText>
+              <Title order={4}>{`${firstName} ${lastName}`}</Title>
+              <BodyText styleType="body-02-medium" component="p">@{displayName}</BodyText>
             </div>
           </div>
         </Menu.Item>
