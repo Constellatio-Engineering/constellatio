@@ -32,3 +32,11 @@ services:
       - ./caddy/data:/data
       - ./caddy/config:/config
 
+  localtunnel:
+    image: efrecon/localtunnel
+    restart: always
+    extra_hosts:
+      - "host.docker.internal:host-gateway"
+    command:
+      --local-host host.docker.internal --subdomain constellatio-app-development --port 3010
+

@@ -11,6 +11,12 @@ export const wrapper = (theme: MantineTheme) => css`
     width: 312px;
     height: auto;
     max-height: 400px;
+    margin: 0 auto;
+
+  @media screen and (max-width: 1024px) {
+    width: 100%;
+  }
+
 `;
 export const header = (theme: MantineTheme) => css`
     color:${theme.colors["neutrals-02"][1]};

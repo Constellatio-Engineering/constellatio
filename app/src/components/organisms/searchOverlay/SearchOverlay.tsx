@@ -13,25 +13,25 @@ interface SearchOverlayProps {}
 
 const SearchOverlay: FunctionComponent<SearchOverlayProps> = () => 
 {
-
   const isDrawerOpened = useSearchBarStore((s) => s.isDrawerOpened);
   const searchValue = useSearchBarStore((s) => s.searchValue);
   const router = useRouter();
-  const toggleDrawer = useSearchBarStore((s) => s.toggleDrawer);
+  const closeDrawer = useSearchBarStore((s) => s.closeDrawer);
   const hasInput = searchValue?.length > 0;
 
   useEffect(() =>
   {
-    toggleDrawer(false);
-  }, [router.pathname, toggleDrawer, router.query]);
+    closeDrawer();
+  }, [router.pathname, closeDrawer, router.query]);
 
   return (
     <Drawer
       padding={0}
       withCloseButton={false}
       returnFocus={false}
+      lockScroll={false}
       opened={isDrawerOpened}
-      onClose={() => toggleDrawer(false)}
+      onClose={closeDrawer}
       position="top"
       title={<SearchBar/>}
       styles={styles.drawerStyles()}>

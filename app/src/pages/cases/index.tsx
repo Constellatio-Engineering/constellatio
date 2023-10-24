@@ -9,10 +9,10 @@ type GetCasesOverviewPagePropsResult = ICasesOverviewProps;
 
 export const getStaticProps: GetStaticProps<GetCasesOverviewPagePropsResult> = async () =>
 {
-  const resAllCases = await getCasesOverviewProps();
+  const casesOverviewProps = await getCasesOverviewProps();
 
   return {
-    props: resAllCases,
+    props: casesOverviewProps,
     revalidate: 10,
   };
 };

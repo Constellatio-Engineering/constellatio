@@ -5,6 +5,7 @@ import { FileIcon } from "@/components/Icons/FileIcon";
 import { type IGenCase_Facts } from "@/services/graphql/__generated/sdk";
 
 import { ScrollArea, Tabs, useMantineTheme } from "@mantine/core";
+import { useScrollIntoView } from "@mantine/hooks";
 import { type Maybe } from "@trpc/server";
 import React, { useState, type FunctionComponent } from "react";
 
@@ -38,12 +39,20 @@ const FloatingPanel: FunctionComponent<IFloatingPanelProps> = ({
     { icon: { src: <FileIcon size={16}/> }, title: "Content" },
     { icon: { src: <BoxIcon size={16}/> }, title: "Facts" },
   ];
+  const { scrollableRef } = useScrollIntoView<
+  HTMLDivElement,
+  HTMLDivElement
+  >({ axis: "x" });
   const [selectedTab, setSelectedTab] = useState<"Content" | "Facts">(tabs?.[0]?.title ?? "Content");
   const toc = generateTOC(content);
   const theme = useMantineTheme();
 
   return content?.length > 0 ? (
-    <ScrollArea h={hidden ? 300 : 600} styles={() => ({ scrollbar: { zIndex: 1 } })} sx={{ borderRadius: "12px" }}>
+    <ScrollArea
+      ref={scrollableRef}
+      h={hidden ? 300 : 600}
+      styles={() => ({ scrollbar: { zIndex: 1 } })}
+      sx={{ borderRadius: "12px" }}>
       <div css={styles.wrapper({ hidden, theme })}>
         {hidden && (
           <div className="hidden-overlay">

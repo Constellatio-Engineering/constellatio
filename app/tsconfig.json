@@ -57,5 +57,5 @@
 		"**/*.cjs",
 		"**/*.mjs"
 	],
-	"exclude": ["node_modules"],
+	"exclude": ["node_modules", "test-cronjobs.mjs"],
 }

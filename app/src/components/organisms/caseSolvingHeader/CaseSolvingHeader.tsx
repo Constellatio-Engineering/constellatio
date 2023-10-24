@@ -41,14 +41,14 @@ const CaseSolvingHeader: FunctionComponent<ICaseSolvingHeaderProps> = ({
   // const isItemBookmarked = false;
   const icons: IIcons[] = [
     // { src: isItemBookmarked ? <BookmarkFilledIcon/> : <Bookmark/>, title: "Bookmark" },
-    { src: <Print />, title: "Print", variant: "case" },
     // { src: <Pin/>, title: "Pin" },
+    { src: <Print/>, title: "Print" },
   ];
   const theme = useMantineTheme();
 
   return (
     <div css={styles.wrapper({ theme, variant })}>
-      <Container p={60} maw={1440}>
+      <Container css={styles.container}>
         <div id="overlay-lines">
           <OverlayLines />
         </div>

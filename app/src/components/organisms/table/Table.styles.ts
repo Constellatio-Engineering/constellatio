@@ -14,7 +14,6 @@ export const table = css`
       text-overflow: ellipsis;
     }
   }
-  /* width: 90%; */
   vertical-align: middle;
 
   > * {
@@ -22,6 +21,7 @@ export const table = css`
     white-space: nowrap;
     min-width: max-content;
   }
+  border: 1px solid red;
 `;
 
 export const tableHeader = (theme: MantineTheme) => css`
@@ -36,7 +36,7 @@ export const tableHeader = (theme: MantineTheme) => css`
 `;
 
 export const tableBody = (theme: MantineTheme) => css`
-border: 1px solid ${theme.colors["neutrals-01"][3]};
+border-inline: 2px solid ${theme.colors["neutrals-01"][3]};
   border-radius: 0 0 12px 12px ;
   > * {
     &,

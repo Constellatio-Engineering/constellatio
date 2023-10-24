@@ -1,5 +1,6 @@
 import { RouterTransition } from "@/components/atoms/RouterTransition/RouterTransition";
 import { env } from "@/env.mjs";
+import { useIsRouterReady } from "@/hooks/useIsRouterReady";
 import { supabase } from "@/lib/supabase";
 import AuthStateProvider from "@/provider/AuthStateProvider";
 import CustomThemingProvider from "@/provider/CustomThemingProvider";
@@ -43,6 +44,7 @@ type ConstellatioAppProps = AppProps<{ initialSession: Session }>;
 
 const AppContainer: FunctionComponent<ConstellatioAppProps> = ({ Component, pageProps, router }) => 
 {
+  const isRouterReady = useIsRouterReady();
   const isProduction = env.NEXT_PUBLIC_DEPLOYMENT_ENVIRONMENT === "production";
   let title = "Constellatio";
 
@@ -75,24 +77,22 @@ const AppContainer: FunctionComponent<ConstellatioAppProps> = ({ Component, page
           content="minimum-scale=1, initial-scale=1, width=device-width"
         />
       </Head>
-      <SessionContextProvider
-        supabaseClient={supabase}
-        initialSession={pageProps.initialSession}>
-        <PostHogProvider client={posthog}>
-          <InvalidateQueriesProvider>
-            <AuthStateProvider>
-              <CustomThemingProvider>
-                <ModalsProvider>
-                  <MeilisearchProvider>
-                    <RouterTransition/>
-                    <Notifications/>
+      <SessionContextProvider supabaseClient={supabase} initialSession={pageProps.initialSession}>
+        <InvalidateQueriesProvider>
+          <AuthStateProvider>
+            <CustomThemingProvider>
+              <ModalsProvider>
+                <MeilisearchProvider>
+                  <RouterTransition/>
+                  <Notifications/>
+                  {isRouterReady && (
                     <Component {...pageProps}/>
-                  </MeilisearchProvider>
-                </ModalsProvider>
-              </CustomThemingProvider>
-            </AuthStateProvider>
-          </InvalidateQueriesProvider>
-        </PostHogProvider>
+                  )}
+                </MeilisearchProvider>
+              </ModalsProvider>
+            </CustomThemingProvider>
+          </AuthStateProvider>
+        </InvalidateQueriesProvider>
       </SessionContextProvider>
     </>
   );

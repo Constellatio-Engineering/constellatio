@@ -2,7 +2,7 @@ import { BodyText } from "@/components/atoms/BodyText/BodyText";
 import Label from "@/components/atoms/label/Label";
 import { SubtitleText } from "@/components/atoms/SubtitleText/SubtitleText";
 
-import React, { Fragment, type FunctionComponent } from "react";
+import React, { type FunctionComponent } from "react";
 
 import * as styles from "./ProfileHistoryBlocks.styles";
 import EmptyStateCard from "../emptyStateCard/EmptyStateCard";
@@ -86,31 +86,29 @@ const ProfileHistoryBlocks: FunctionComponent = () =>
       <div css={styles.list}>
         {
           uniqueDays?.length > 0 ? 
-            (uniqueDays.map((day, index) => (
-              <div css={styles.listItem} key={index}>
-                <div css={styles.blockDate}><SubtitleText styleType="subtitle-01-medium" component="p">{formatDate(new Date())}</SubtitleText></div>
+            (uniqueDays.map((day, dayIndex) => (
+              <div css={styles.listItem} key={dayIndex}>
+                <div css={styles.blockDate}><SubtitleText styleType="subtitle-01-medium" component="p">{formatDate(new Date(day))}</SubtitleText></div>
                 <div css={styles.table}>
-                  {visitedItems.map((item, index) => 
+                  {visitedItems.map((item, itemIndex) => 
                   {
                     const isSameDay = day === `${item.viewedDate.getFullYear()}-${String(item.viewedDate.getMonth() + 1).padStart(2, "0")}-${String(item.viewedDate.getDate()).padStart(2, "0")}`;
                     if(isSameDay) 
                     {
                       return (
-                        <Fragment key={index}>
-                          <div css={styles.tableRow}>
-                            <BodyText styleType="body-02-medium" component="p" css={styles.timeCell}>
-                              {item.viewedDate?.getHours()}:{item.viewedDate?.getMinutes() > 10 ? item.viewedDate?.getMinutes() : `0${item.viewedDate?.getMinutes()}`}
-                            </BodyText>
-                            <div css={styles.blockType}>
-                              <Label variant={item?.documentType ?? "case"} title={item?.documentType}/>
-                            </div>
-                            <BodyText css={styles.blockTitle} styleType="body-01-medium" component="p">{item.documentName}</BodyText>
-                            <BodyText css={styles.blockCategory} styleType="body-02-medium" component="p">{item.documentMainCategory}</BodyText>
+                        <div key={itemIndex} css={styles.tableRow}>
+                          <BodyText styleType="body-02-medium" component="p" css={styles.timeCell}>
+                            {item.viewedDate?.getHours()}:{item.viewedDate?.getMinutes() > 10 ? item.viewedDate?.getMinutes() : `0${item.viewedDate?.getMinutes()}`}
+                          </BodyText>
+                          <div css={styles.blockType}>
+                            <Label variant={item?.documentType ?? "case"} title={item?.documentType === "case" ? "Fälle" : "Lexikon"}/>
                           </div>
-                        </Fragment>
+                          <BodyText css={styles.blockTitle} styleType="body-01-medium" component="p">{item.documentName}</BodyText>
+                          <BodyText css={styles.blockCategory} styleType="body-02-medium" component="p">{item.documentMainCategory}</BodyText>
+                        </div>
                       );
                     }
-                    else { return <></>; }
+                    else { return null; }
                   })}
                 </div>
               </div>

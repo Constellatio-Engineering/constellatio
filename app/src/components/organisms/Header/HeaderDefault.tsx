@@ -12,10 +12,11 @@ import SearchField from "@/components/molecules/searchField/SearchField";
 import { UserDropdown } from "@/components/molecules/UserDropdown/UserDropdown";
 import useContextAndErrorIfNull from "@/hooks/useContextAndErrorIfNull";
 import useOnboardingResult from "@/hooks/useOnboardingResult";
+import useSearchResults from "@/hooks/useSearchResults";
 import { InvalidateQueriesContext } from "@/provider/InvalidateQueriesProvider";
 import useSearchBarStore from "@/stores/searchBar.store";
 import { api } from "@/utils/api";
-import { isDevelopment } from "@/utils/env";
+import { isDevelopment, isDevelopmentOrStaging } from "@/utils/env";
 import { paths } from "@/utils/paths";
 
 import { Loader } from "@mantine/core";
@@ -34,15 +35,26 @@ import ConstellatioFullLogo from "../../../../public/images/icons/constellatio-f
 import OnboardingTutorialPopover from "../onboardingTutorialPopover/OnboardingTutorialPopover";
 import SearchOverlay from "../searchOverlay/SearchOverlay";
 
+interface IHeaderLink 
+{
+  slug: string;
+  title: string;
+}
+
 const HeaderDefault: FunctionComponent = () => 
 {
   const { invalidateOnboardingResult } = useContextAndErrorIfNull(InvalidateQueriesContext);
-  const links = ["cases", "dictionary"];
+  const links: IHeaderLink[] = [
+    { slug: paths.dashboard, title: "Dashboard" },
+    { slug: paths.cases, title: "Fälle" },
+    { slug: paths.dictionary, title: "Lexikon" },
+  ];
+  const { refetch: refetchSearchResults } = useSearchResults();
   const { pathname } = useRouter();
   const theme = useMantineTheme();
   const { isLoading: isGetOnboardingResultLoading, onboardingResult } = useOnboardingResult();
   const showOnboarding = !isGetOnboardingResultLoading && onboardingResult === null;
-  const toggleDrawer = useSearchBarStore((s) => s.toggleDrawer);
+  const openDrawer = useSearchBarStore((s) => s.openDrawer);
 
   const { mutate: setOnboardingResult } = api.users.setOnboardingResult.useMutation({
     onError: (error) => console.error("Error while setting onboarding result", error),
@@ -64,7 +76,6 @@ const HeaderDefault: FunctionComponent = () =>
     { opened: false, step: 2 },
     { opened: false, step: 3 },
   ]);
-
   return !showOnboarding ? (
     <>
       <SHeader>
@@ -73,17 +84,21 @@ const HeaderDefault: FunctionComponent = () =>
             <Link href="/">
               <Image src={ConstellatioFullLogo} alt="Constellatio"/>
             </Link>
-            {links.map((link, linkIndex) => (
-              <Link href={`/${link.toLowerCase()}`} key={linkIndex}>
-                <MenuTab
-                  active={pathname?.toLowerCase().includes(link.toLowerCase())}
-                  title={link}
-                />
-              </Link>
-            ))}
+            {links.map(link => 
+            {
+              const route = link.slug.split("?")[0];
+              return (
+                <Link href={link.slug} key={link.slug}>
+                  <MenuTab
+                    active={route?.toLowerCase().includes(pathname)}
+                    title={link.title}
+                  />
+                </Link>
+              );
+            })}
           </div>
           <div css={styles.profileArea}>
-            {isDevelopment && (
+            {isDevelopmentOrStaging && (
               <div style={{ alignItems: "center", display: "flex" }}>
                 <Button<"button">
                   styleType="secondarySubtle"
@@ -97,7 +112,10 @@ const HeaderDefault: FunctionComponent = () =>
               </div>
             )}
             <div className="search-input">
-              <SearchField size="small" onClick={() => toggleDrawer(true)}/>
+              <SearchField
+                size="small"
+                onClick={() => openDrawer(refetchSearchResults)}
+              />
             </div>
             <Link href={`${paths.personalSpace}`}>
               <MenuTab
@@ -141,30 +159,30 @@ const HeaderDefault: FunctionComponent = () =>
                     </OnboardingTutorialStep>
                   )}
                   popoverTarget={(
-                    <Link href={`/${link.toLowerCase()}`}>
+                    <Link href={`/${link.slug.toLowerCase()}`}>
                       <MenuTab
                         active={pathname
                           ?.toLowerCase()
-                          .includes(link.toLowerCase())}
-                        title={link}
+                          .includes(link.slug.toLowerCase())}
+                        title={link.title}
                       />
                     </Link>
                   )}
                 />
               ) : (
-                <Link href={`/${link.toLowerCase()}`} key={linkIndex}>
+                <Link href={`/${link.slug.toLowerCase()}`} key={linkIndex}>
                   <MenuTab
                     active={pathname
                       ?.toLowerCase()
-                      .includes(link.toLowerCase())}
-                    title={link}
+                      .includes(link.slug.toLowerCase())}
+                    title={link.title}
                   />
                 </Link>
               )
             )}
           </div>
           <div css={styles.profileArea}>
-            {isDevelopment && (
+            {isDevelopmentOrStaging && (
               <div style={{ alignItems: "center", display: "flex" }}>
                 <Button<"button">
                   styleType="secondarySubtle"
@@ -192,7 +210,10 @@ const HeaderDefault: FunctionComponent = () =>
               )}
               popoverTarget={(
                 <div className="search-input">
-                  <SearchField size="small" onClick={() => toggleDrawer(true)}/>
+                  <SearchField
+                    size="small"
+                    onClick={() => openDrawer(refetchSearchResults)}
+                  />
                 </div>
               )}
             />

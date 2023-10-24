@@ -1,26 +1,22 @@
-// get all cases by main category
 import { gql } from "graphql-request";
 
-import { f_FullCase } from "../fragments/FullCase";
-
 export const getAllCasesByMainCategory = gql`
-  ${f_FullCase}
-  query getAllCasesByMainCategory($mainCategory: String!) {
+  query getAllCasesByMainCategory($mainCategoryName: String!) {
     allCase(
       where: {
         AND: [
           {
             mainCategoryField: {
-              findOne: { MainCategory: { mainCategory: { eq: $mainCategory } } }
+              findOne: { MainCategory: { mainCategory: { eq: $mainCategoryName } } }
             }
           }
         ]
       }
     ) {
-        totalCount
+      totalCount
       edges {
         node {
-          ...FullCase
+          id
         }
       }
     }

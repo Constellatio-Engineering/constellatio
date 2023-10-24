@@ -1,5 +1,5 @@
-/* eslint-disable sort-keys-fix/sort-keys-fix,@typescript-eslint/naming-convention */
-import { type InferInsertModel, type InferSelectModel } from "drizzle-orm";
+/* eslint-disable sort-keys-fix/sort-keys-fix,@typescript-eslint/naming-convention,@typescript-eslint/no-use-before-define */
+import { type InferInsertModel, type InferSelectModel, relations } from "drizzle-orm";
 import {
   text, pgTable, integer, pgEnum, uuid, smallint, unique, timestamp, primaryKey, index
 } from "drizzle-orm/pg-core";
@@ -13,17 +13,25 @@ export type OnboardingResult = typeof allOnboardingResults[number];
 export const allBookmarkResourceTypes = ["article", "case"] as const;
 export type BookmarkResourceType = typeof allBookmarkResourceTypes[number];
 
+export const allSearchIndexTypes = ["article", "case"] as const;
+export type SearchIndexType = typeof allSearchIndexTypes[number];
+
 export const allCaseProgressStates = ["not-started", "completing-tests", "solving-case", "completed"] as const;
 export type CaseProgressState = typeof allCaseProgressStates[number];
 
 export const allGameProgressStates = ["not-started", "completed"] as const;
 export type GameProgressState = typeof allGameProgressStates[number];
 
+export const allSubscriptionStatuses = ["active", "canceled", "incomplete", "incomplete_expired", "past_due", "trialing", "unpaid", "paused"] as const;
+export type SubscriptionStatus = typeof allSubscriptionStatuses[number];
+
 export const genderEnum = pgEnum("Gender", allGenderIdentifiers);
 export const onboardingResultEnum = pgEnum("OnboardingResult", allOnboardingResults);
 export const resourceTypeEnum = pgEnum("ResourceType", allBookmarkResourceTypes);
+export const searchIndexTypeEnum = pgEnum("SearchIndexType", allSearchIndexTypes);
 export const caseProgressStateEnum = pgEnum("CaseProgressState", allCaseProgressStates);
 export const gameProgressStateEnum = pgEnum("GameProgressState", allGameProgressStates);
+export const subscriptionStatusEnum = pgEnum("SubscriptionStatus", allSubscriptionStatuses);
 
 // TODO: Go through all queries and come up with useful indexes
 
@@ -38,10 +46,34 @@ export const users = pgTable("User", {
   stripeCustomerId: text("StripeCustomerId"),
   university: text("University").notNull(),
   onboardingResult: onboardingResultEnum("OnboardingResult"),
+  subscriptionStatus: subscriptionStatusEnum("SubscriptionStatus"),
+  subscriptionStartDate: timestamp("SubscriptionStartDate"),
+  subscriptionEndDate: timestamp("SubscriptionEndDate"),
+  subscribedPlanPriceId: text("SubscribedPlanPriceId"),
 });
+
+export const usersRelations = relations(users, ({ many }) => ({
+  profilePictures: many(profilePictures),
+}));
 
 export type UserInsert = InferInsertModel<typeof users>;
 export type User = InferSelectModel<typeof users>;
+
+export const profilePictures = pgTable("ProfilePicture", {
+  id: uuid("Id").unique().notNull().primaryKey(),
+  serverFilename: text("ServerFilename").notNull(),
+  userId: uuid("UserId").references(() => users.id, { onDelete: "no action" }).notNull().unique(),
+});
+
+export const profilePicturesRelations = relations(profilePictures, ({ one }) => ({
+  user: one(users, {
+    fields: [profilePictures.userId],
+    references: [users.id],
+  }),
+}));
+
+export type ProfilePictureInsert = InferInsertModel<typeof profilePictures>;
+export type ProfilePicture = InferSelectModel<typeof profilePictures>;
 
 export const bookmarks = pgTable("Bookmark", {
   id: uuid("Id").defaultRandom().unique().notNull().primaryKey(),
@@ -163,3 +195,11 @@ export const gamesProgress = pgTable("GameProgress", {
 
 export type GameProgressInsert = InferInsertModel<typeof gamesProgress>;
 export type GameProgress = InferSelectModel<typeof gamesProgress>;
+
+export const searchIndexUpdateQueue = pgTable("SearchIndexUpdateQueue", {
+  cmsId: uuid("CmsId").unique().notNull().primaryKey(),
+  resourceType: searchIndexTypeEnum("ResourceType").notNull(),
+});
+
+export type SearchIndexUpdateQueueInsert = InferInsertModel<typeof searchIndexUpdateQueue>;
+export type SearchIndexUpdateQueueItem = InferSelectModel<typeof searchIndexUpdateQueue>;

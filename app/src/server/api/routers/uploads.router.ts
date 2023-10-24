@@ -7,9 +7,9 @@ import { addUploadSchema } from "@/schemas/uploads/addUpload.schema";
 import { deleteUploadSchema } from "@/schemas/uploads/deleteUpload.schema";
 import { getUploadedFilesSchema } from "@/schemas/uploads/getUploadedFiles.schema";
 import { renameUploadedFile } from "@/schemas/uploads/renameUploadedFile.schema";
-import { deleteFiles } from "@/server/api/services/uploads.services";
+import { deleteFiles, getClouStorageFileUrl } from "@/server/api/services/uploads.services";
 import { createTRPCRouter, protectedProcedure } from "@/server/api/trpc";
-import { createUploadsSearchIndexItem, searchIndices, uploadSearchIndexItemPrimaryKey } from "@/utils/search";
+import { createUploadsSearchIndexItem, searchIndices, uploadSearchIndexItemPrimaryKey, type UploadSearchItemUpdate } from "@/utils/search";
 import { BadFileError, FileTooLargeError, NotFoundError } from "@/utils/serverError";
 
 import {
@@ -37,16 +37,7 @@ export const uploadsRouter = createTRPCRouter({
         throw new NotFoundError();
       }
 
-      const [url] = await cloudStorage
-        .bucket(env.GOOGLE_CLOUD_STORAGE_BUCKET_NAME)
-        .file(`${userId}/${file.serverFilename}`)
-        .getSignedUrl({
-          action: "read",
-          expires: Date.now() + 15 * 60 * 1000,
-          version: "v4",
-        });
-
-      return url;
+      return getClouStorageFileUrl({ serverFilename: file.serverFilename, userId });
     }),
   createSignedUploadUrl: protectedProcedure
     .input(z.object({
@@ -96,6 +87,17 @@ export const uploadsRouter = createTRPCRouter({
       });
 
       await deleteFiles({ files, userId });
+
+      const removeDeletedFilesFromIndex = await meiliSearchAdmin.index(searchIndices.userUploads).deleteDocuments({
+        filter: `id IN [${fileIds.join(", ")}]`
+      });
+
+      const removeFileFromIndexResult = await meiliSearchAdmin.waitForTask(removeDeletedFilesFromIndex.taskUid);
+
+      if(removeFileFromIndexResult.status !== "succeeded")
+      {
+        console.error("failed to remove file index", removeFileFromIndexResult);
+      }
     }),
   getUploadedFiles: protectedProcedure
     .input(getUploadedFilesSchema)
@@ -125,6 +127,19 @@ export const uploadsRouter = createTRPCRouter({
         eq(uploadedFiles.userId, userId),
         eq(uploadedFiles.id, id)
       ));
+
+      const fileUpdate: UploadSearchItemUpdate = {
+        id,
+        originalFilename: newFilename
+      };
+
+      const renameUploadInIndexTask = await meiliSearchAdmin.index(searchIndices.userUploads).updateDocuments([fileUpdate]);
+      const addUploadToIndexResult = await meiliSearchAdmin.waitForTask(renameUploadInIndexTask.taskUid);
+
+      if(addUploadToIndexResult.status !== "succeeded")
+      {
+        console.error("failed to add upload to index", addUploadToIndexResult);
+      }
     }),
   saveFileToDatabase: protectedProcedure
     .input(addUploadSchema)
@@ -159,6 +174,7 @@ export const uploadsRouter = createTRPCRouter({
 
       const searchIndexItem = createUploadsSearchIndexItem({
         ...uploadInsert,
+        folderId: uploadInsert.folderId || null,
         id: insertResult[0]!.id
       });
 

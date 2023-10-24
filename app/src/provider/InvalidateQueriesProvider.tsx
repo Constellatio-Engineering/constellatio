@@ -1,6 +1,8 @@
+import { searchResultsQueryKey } from "@/hooks/useSearchResults";
 import { type AppRouter } from "@/server/api/root";
 import { api } from "@/utils/api";
 
+import { useQueryClient } from "@tanstack/react-query";
 import { type inferProcedureInput } from "@trpc/server";
 import { createContext, type FunctionComponent, type ReactNode, useMemo } from "react";
 
@@ -15,6 +17,8 @@ type InvalidateCaseProgressOptions = inferProcedureInput<AppRouter["casesProgres
 type InvalidateGamesProgressOptions = inferProcedureInput<AppRouter["gamesProgress"]["getGamesProgress"]>;
 type InvalidateSubmittedCaseSolutionOptions = inferProcedureInput<AppRouter["casesProgress"]["getSubmittedSolution"]>;
 type InvalidateOnboardingResult = inferProcedureInput<AppRouter["users"]["getOnboardingResult"]>;
+type InvalidateUserDetailsResult = inferProcedureInput<AppRouter["users"]["getUserDetails"]>;
+type InvalidateProfilePicture = inferProcedureInput<AppRouter["users"]["getSignedProfilePictureUrl"]>;
 
 type InvalidateQueries = {
   invalidateArticleViews: (options: InvalidateArticleViewsOptions) => Promise<void>;
@@ -27,8 +31,11 @@ type InvalidateQueries = {
   invalidateGamesProgress: (options: InvalidateGamesProgressOptions) => Promise<void>;
   invalidateNotes: (options?: InvalidateNotesOptions) => Promise<void>;
   invalidateOnboardingResult: (options?: InvalidateOnboardingResult) => Promise<void>;
+  invalidateProfilePicture: (options?: InvalidateProfilePicture) => Promise<void>;
+  invalidateSearchResults: (value?: string) => Promise<void>;
   invalidateSubmittedCaseSolution: (options: InvalidateSubmittedCaseSolutionOptions) => Promise<void>;
   invalidateUploadedFiles: (options?: InvalidateUploadedFilesOptions) => Promise<void>;
+  invalidateUserDetails: (options?: InvalidateUserDetailsResult) => Promise<void>;
 };
 
 export const InvalidateQueriesContext = createContext<InvalidateQueries | null>(null);
@@ -39,7 +46,8 @@ type InvalidateQueriesProviderProps = {
 
 const InvalidateQueriesProvider: FunctionComponent<InvalidateQueriesProviderProps> = ({ children }) =>
 {
-  const apiContext = api.useContext();
+  const apiContext = api.useUtils();
+  const queryClient = useQueryClient();
   const { invalidate: invalidateAll } = apiContext;
 
   const invalidateQueries: InvalidateQueries = useMemo(() => ({
@@ -53,8 +61,11 @@ const InvalidateQueriesProvider: FunctionComponent<InvalidateQueriesProviderProp
     invalidateGamesProgress: async (options) => apiContext.gamesProgress.getGamesProgress.invalidate(options),
     invalidateNotes: async (options) => apiContext.notes.getNotes.invalidate(options),
     invalidateOnboardingResult: async (options) => apiContext.users.getOnboardingResult.invalidate(options),
+    invalidateProfilePicture: async (options) => apiContext.users.getSignedProfilePictureUrl.invalidate(options),
+    invalidateSearchResults: async (value) => queryClient.invalidateQueries({ queryKey: [searchResultsQueryKey, value] }),
     invalidateSubmittedCaseSolution: async (options) => apiContext.casesProgress.getSubmittedSolution.invalidate(options),
-    invalidateUploadedFiles: async (options) => apiContext.uploads.getUploadedFiles.invalidate(options)
+    invalidateUploadedFiles: async (options) => apiContext.uploads.getUploadedFiles.invalidate(options),
+    invalidateUserDetails: async (options) => apiContext.users.getUserDetails.invalidate(options)
   }), [
     invalidateAll,
     apiContext.folders.getFolders,
@@ -67,7 +78,10 @@ const InvalidateQueriesProvider: FunctionComponent<InvalidateQueriesProviderProp
     apiContext.casesProgress.getCaseProgress,
     apiContext.gamesProgress.getGamesProgress,
     apiContext.casesProgress.getSubmittedSolution,
-    apiContext.users.getOnboardingResult
+    apiContext.users.getUserDetails,
+    apiContext.users.getSignedProfilePictureUrl,
+    apiContext.users.getOnboardingResult,
+    queryClient
   ]);
 
   return (

@@ -13,8 +13,6 @@ export const gamesProgressRouter = createTRPCRouter({
     .input(getGamesProgressSchema)
     .query(async ({ ctx: { userId }, input: { caseId } }) =>
     {
-      console.log("get games progress for caseId: ", caseId);
-
       const caseFromCms = await caisySDK.getCaseById({ id: caseId });
       const games = getGamesFromCase(caseFromCms.Case);
       const gameIds = games?.map(({ id }) => id).filter(Boolean);
@@ -24,9 +22,6 @@ export const gamesProgressRouter = createTRPCRouter({
         console.log("no games found for caseId: ", caseId);
         return [];
       }
-
-      // console.log("games: ", games);
-      console.log("gameIds: ", gameIds);
 
       const _gamesProgress = await db.query.gamesProgress.findMany({
         where: and(
@@ -52,8 +47,6 @@ export const gamesProgressRouter = createTRPCRouter({
           return gameProgress;
         }
       });
-
-      console.log("gamesProgress: ", resultArray);
 
       return resultArray;
     }),

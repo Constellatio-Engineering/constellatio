@@ -12,7 +12,7 @@ import { env } from "@/env.mjs";
 import { supabase } from "@/lib/supabase";
 import { maximumAmountOfSemesters, type RegistrationFormSchema, registrationFormSchema } from "@/schemas/auth/registrationForm.schema";
 import { api } from "@/utils/api";
-import { isDevelopment } from "@/utils/env";
+import { isDevelopmentOrStaging } from "@/utils/env";
 import { getConfirmEmailUrl } from "@/utils/paths";
 import { type PartialUndefined } from "@/utils/types";
 
@@ -30,10 +30,10 @@ import { makeZodI18nMap } from "zod-i18n-map";
 // this means for the initial values of the form, these keys can be null since these are dropdowns
 type InitialValues = PartialUndefined<RegistrationFormSchema, "gender">;
 
-const initialValues: InitialValues = isDevelopment ? {
+const initialValues: InitialValues = isDevelopmentOrStaging ? {
   acceptTOS: true,
   displayName: "Constellatio Test User",
-  email: env.NEXT_PUBLIC_SIGN_UP_DEFAULT_EMAIL || (isDevelopment ? "devUser@constellatio-dummy-mail.de" : ""),
+  email: env.NEXT_PUBLIC_SIGN_UP_DEFAULT_EMAIL || (isDevelopmentOrStaging ? "devUser@constellatio-dummy-mail.de" : ""),
   firstName: "Test",
   gender: allGenders[0]!.identifier,
   lastName: "User",
@@ -66,7 +66,6 @@ export const RegistrationForm: FunctionComponent = () =>
   });
   const [shouldShowEmailConfirmationDialog, setShouldShowEmailConfirmationDialog] = useState<boolean>(false);
   const lastConfirmationEmailTimestamp = useRef<number>();
-  const registerMutationStartTimestamp = useRef<number>();
   const [countdown, setCountdown] = useState<number>(0);
 
   useEffect(() =>
@@ -85,23 +84,11 @@ export const RegistrationForm: FunctionComponent = () =>
 
       console.log("error while register:", e);
       notifications.show({
+        autoClose: false,
+        color: "red",
         message: "We couldn't sign you up. Please try again.",
         title: "Oops!",
       });
-    },
-    onMutate: () =>
-    {
-      registerMutationStartTimestamp.current = performance.now();
-    },
-    onSettled: () =>
-    {
-      if(!registerMutationStartTimestamp.current)
-      {
-        return;
-      }
-
-      const duration = performance.now() - registerMutationStartTimestamp.current;
-      console.log(`register mutation took ${duration}ms`);
     },
     onSuccess: async result =>
     {
@@ -109,13 +96,11 @@ export const RegistrationForm: FunctionComponent = () =>
       {
         case "emailConfirmationRequired":
         {
-          console.log("email confirmation required");
           setShouldShowEmailConfirmationDialog(true);
           break;
         }
         case "signupComplete":
         {
-          console.log("signup complete. redirecting to home page...");
           await supabase.auth.setSession(result.session);
           await router.replace("/");
           break;
@@ -234,9 +219,9 @@ export const RegistrationForm: FunctionComponent = () =>
 
   return (
     <form onSubmit={handleSubmit}>
-      {isDevelopment && (
+      {isDevelopmentOrStaging && (
         <p style={{ fontStyle: "italic", marginBottom: 30 }}>
-          Note from developers: Form is only pre filled in development not in production.
+          Note from developers: Form is only pre filled in development and staging, not in production.
         </p>
       )}
       <Stack spacing="spacing-24">
