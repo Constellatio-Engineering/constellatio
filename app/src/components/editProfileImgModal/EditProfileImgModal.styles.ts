@@ -51,10 +51,12 @@ export const profileImage = css`
   height: 120px;
   position: relative;
   border-radius: 50%;
-  cursor: pointer;
   margin: 24px auto;
   display: block;
+  object-fit: cover;
+  object-position: center;
 `;
+
 export const uploadImgCard = (theme: MantineTheme) => css`
   margin-top: 20px;
   margin-bottom: 24px;

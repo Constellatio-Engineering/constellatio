@@ -1,8 +1,12 @@
+import { type usersRouter } from "@/server/api/routers/user.router";
 import { api } from "@/utils/api";
-import { type UserFiltered } from "@/utils/filters";
 import { type UseQueryResult } from "@/utils/types";
 
-type UseUserDetails = () => UseQueryResult<{ userDetails: UserFiltered | undefined }>;
+import { type inferProcedureOutput } from "@trpc/server";
+
+type UseUserDetails = () => UseQueryResult<{
+  userDetails: inferProcedureOutput<typeof usersRouter["getUserDetails"]> | undefined;
+}>;
 
 const useUserDetails: UseUserDetails = () =>
 {

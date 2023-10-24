@@ -9,7 +9,7 @@ export const wrapper = css`
     gap: 10px;
 `;
 
-const iconSize = 54;
+const iconSize = 50;
 
 export const universityIconWrapper = css`
   width: ${iconSize}px;
@@ -22,8 +22,8 @@ export const universityIconWrapper = css`
   border-radius: 50%;
   border: 1px solid #e0e0e0;
   img {
-    opacity: 1;
-    width: 62%;
+    opacity: .9;
+    width: 60%;
     height: auto;
     transform: translateY(-1px);
   }

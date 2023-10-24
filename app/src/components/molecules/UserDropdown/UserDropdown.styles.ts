@@ -9,6 +9,14 @@ import {
 
 type MenuStyles = Styles<MenuStylesNames, UnknownMantineStylesParams>;
 
+export const placeholder = css`
+  width: 36px;
+  height: 36px;
+  background-color: #ffffff;
+  border: solid 1px #e0e0e0;
+  border-radius: 50%;
+`;
+
 export const menuStyles = (): MenuStyles => 
 {
   const styles: MenuStyles = (theme: MantineTheme) => ({
@@ -44,12 +52,14 @@ export const menuItem = (theme: MantineTheme) => css`
   }
 `;
 export const target = (theme: MantineTheme) => css`
-cursor: pointer;
+  cursor: pointer;
+  width: 36px;
+  height: 36px;
   img {
     border-radius: 50%;
     border: 3px solid ${theme.colors["neutrals-01"][0]};
     outline: 1px solid ${theme.colors["neutrals-01"][3]};
-    width: 36px;
-    height: 36px;
+    width: 100%;
+    height: 100%;
   }
 `;

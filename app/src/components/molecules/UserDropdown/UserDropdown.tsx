@@ -1,6 +1,7 @@
 import CaisyImg from "@/basic-components/CaisyImg";
 import { BodyText } from "@/components/atoms/BodyText/BodyText";
 import useContextAndErrorIfNull from "@/hooks/useContextAndErrorIfNull";
+import useUserDetails from "@/hooks/useUserDetails";
 import { supabase } from "@/lib/supabase";
 import { InvalidateQueriesContext } from "@/provider/InvalidateQueriesProvider";
 import { paths } from "@/utils/paths";
@@ -15,6 +16,7 @@ import * as styles from "./UserDropdown.styles";
 
 export const UserDropdown: FunctionComponent = () =>
 {
+  const { userDetails } = useUserDetails();
   const { invalidateEverything } = useContextAndErrorIfNull(InvalidateQueriesContext);
   const router = useRouter();
 
@@ -42,6 +44,15 @@ export const UserDropdown: FunctionComponent = () =>
     }
   };
 
+  if(!userDetails)
+  {
+    return (
+      <div css={styles.placeholder}/>
+    );
+  }
+
+  const { displayName, firstName, lastName } = userDetails;
+
   return (
     <Menu
       width={200}
@@ -62,8 +73,8 @@ export const UserDropdown: FunctionComponent = () =>
           <div className="user-info">
             <CaisyImg src="https://via.placeholder.com/60" width={60} height={60}/>
             <div>
-              <Title order={4}>John Doe</Title>
-              <BodyText styleType="body-02-medium" component="p">@johndoe</BodyText>
+              <Title order={4}>{`${firstName} ${lastName}`}</Title>
+              <BodyText styleType="body-02-medium" component="p">@{displayName}</BodyText>
             </div>
           </div>
         </Menu.Item>

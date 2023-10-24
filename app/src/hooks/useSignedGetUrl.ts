@@ -3,7 +3,7 @@ import { type UseQueryResult } from "@/utils/types";
 
 import { useEffect } from "react";
 
-type UseSignedGetUrl = (fileId: string) => UseQueryResult<{ url: string | undefined}>;
+type UseSignedGetUrl = (fileId: string | undefined) => UseQueryResult<{ url: string | undefined}>;
 
 const useSignedGetUrl: UseSignedGetUrl = (fileId) =>
 {
