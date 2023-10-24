@@ -15,10 +15,11 @@ import SearchPageResults from "./SearchPageResults";
 const tabSchema = createParser({
   parse: (query: string) =>
   {
-    switch (query)
+    switch (query as SearchResultsKey)
     {
       case "userUploads": { return "userUploads"; }
       case "cases": { return "cases"; }
+      case "userDocuments": { return "userDocuments"; }
       case "articles": { return "articles"; }
       default:
       {
