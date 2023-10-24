@@ -9,7 +9,7 @@ await import("./src/env.mjs");
 /** @type {import("next").NextConfig} */
 const config = {
   images:{
-    domains: ["storage.googleapis.com"]
+    domains: ["storage.googleapis.com", "via.placeholder.com"]
   },
   reactStrictMode: true,
   compiler: {

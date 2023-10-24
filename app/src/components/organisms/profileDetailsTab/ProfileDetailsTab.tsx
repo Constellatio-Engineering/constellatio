@@ -12,6 +12,7 @@ const ProfileDetailsTab: FunctionComponent = () =>
 {
   const [err, setErr] = React.useState<boolean>(true);
   const [success, setSuccess] = React.useState<boolean>(true);
+
   const form = useForm({
     initialValues: {
       email: "johndoe@mail.com",
@@ -22,6 +23,7 @@ const ProfileDetailsTab: FunctionComponent = () =>
       university: "UCLA"
     },
   });
+
   const handleSubmit = (e: React.FormEvent<HTMLFormElement>): void => 
   {
     e.preventDefault();
@@ -35,25 +37,71 @@ const ProfileDetailsTab: FunctionComponent = () =>
       {err && <AlertCard onClick={() => setErr(false)} variant="error">Sorry, we weren not able to save changes. Please, try again</AlertCard>}
       {success && <AlertCard onClick={() => setSuccess(false)} stylesOverwrite={{ justifyContent: "flex-start", textAlign: "left" }} variant="success">Your changes have been saved</AlertCard>}
       <form onSubmit={handleSubmit}>
-        <Input.Wrapper label={<BodyText styleType="body-01-regular">First name</BodyText>} description="" error="">
-          <TextInput placeholder="" type="text" {...form.getInputProps("fName")}/>
+        <Input.Wrapper
+          label={<BodyText styleType="body-01-regular">First name</BodyText>}
+          description=""
+          error="">
+          <TextInput
+            placeholder=""
+            type="text"
+            {...form.getInputProps("fName")}
+          />
         </Input.Wrapper>
-        <Input.Wrapper label={<BodyText styleType="body-01-regular">Last name</BodyText>} description="" error="">
-          <TextInput placeholder="" type="text" {...form.getInputProps("lName")}/>
+        <Input.Wrapper
+          label={<BodyText styleType="body-01-regular">Last name</BodyText>}
+          description=""
+          error="">
+          <TextInput
+            placeholder=""
+            type="text"
+            {...form.getInputProps("lName")}
+          />
         </Input.Wrapper>
-        <Input.Wrapper label={<BodyText styleType="body-01-regular">Porfile name</BodyText>} description="" error="">
-          <TextInput placeholder="" type="text" {...form.getInputProps("profileName")}/>
+        <Input.Wrapper
+          label={<BodyText styleType="body-01-regular">Profile name</BodyText>}
+          description=""
+          error="">
+          <TextInput
+            placeholder=""
+            type="text"
+            {...form.getInputProps("profileName")}
+          />
         </Input.Wrapper>
-        <Input.Wrapper label={<BodyText styleType="body-01-regular">Your university</BodyText>} description="" error="">
-          <TextInput placeholder="" type="text" {...form.getInputProps("university")}/>
+        <Input.Wrapper
+          label={<BodyText styleType="body-01-regular">Your university</BodyText>}
+          description=""
+          error="">
+          <TextInput
+            placeholder=""
+            type="text"
+            {...form.getInputProps("university")}
+          />
         </Input.Wrapper>
-        <Input.Wrapper label={<BodyText styleType="body-01-regular">Semester</BodyText>} description="" error="">
-          <TextInput placeholder="" type="text" {...form.getInputProps("semester")}/>
+        <Input.Wrapper
+          label={<BodyText styleType="body-01-regular">Semester</BodyText>}
+          description=""
+          error="">
+          <TextInput
+            placeholder=""
+            type="text"
+            {...form.getInputProps("semester")}
+          />
         </Input.Wrapper>
-        <Input.Wrapper label={<BodyText styleType="body-01-regular">Email</BodyText>} description="" error="">
-          <TextInput placeholder="" type="text" {...form.getInputProps("email")}/>
+        <Input.Wrapper
+          label={<BodyText styleType="body-01-regular">Email</BodyText>}
+          description=""
+          error="">
+          <TextInput
+            placeholder=""
+            type="text"
+            {...form.getInputProps("email")}
+          />
         </Input.Wrapper>
-        <Button<"button"> type="submit" styleType="primary">Save changes</Button>
+        <Button<"button">
+          type="submit"
+          styleType="primary">
+          Save changes
+        </Button>
       </form>
     </div>
   );

@@ -28,7 +28,7 @@ const ChangePasswordTab: FunctionComponent = () =>
   return (
     <div css={styles.wrapper}>
       <Title order={3}>Change password</Title>
-      {err && <AlertCard onClick={() => setErr(false)} variant="error">Sorry, we weren not able to change password. Please, try again</AlertCard>}
+      {err && <AlertCard onClick={() => setErr(false)} variant="error">Sorry, we were not able to change password. Please, try again</AlertCard>}
       {success && <AlertCard onClick={() => setSuccess(false)} variant="success">Your password has been changed</AlertCard>}
       <form onSubmit={handleSubmit}>
         <Input.Wrapper label={<BodyText styleType="body-01-regular">Current password</BodyText>} description="" error="">

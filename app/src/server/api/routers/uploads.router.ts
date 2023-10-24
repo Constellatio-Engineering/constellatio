@@ -7,7 +7,7 @@ import { addUploadSchema } from "@/schemas/uploads/addUpload.schema";
 import { deleteUploadSchema } from "@/schemas/uploads/deleteUpload.schema";
 import { getUploadedFilesSchema } from "@/schemas/uploads/getUploadedFiles.schema";
 import { renameUploadedFile } from "@/schemas/uploads/renameUploadedFile.schema";
-import { deleteFiles } from "@/server/api/services/uploads.services";
+import { deleteFiles, getClouStorageFileUrl } from "@/server/api/services/uploads.services";
 import { createTRPCRouter, protectedProcedure } from "@/server/api/trpc";
 import { createUploadsSearchIndexItem, searchIndices, uploadSearchIndexItemPrimaryKey, type UploadSearchItemUpdate } from "@/utils/search";
 import { BadFileError, FileTooLargeError, NotFoundError } from "@/utils/serverError";
@@ -37,16 +37,7 @@ export const uploadsRouter = createTRPCRouter({
         throw new NotFoundError();
       }
 
-      const [url] = await cloudStorage
-        .bucket(env.GOOGLE_CLOUD_STORAGE_BUCKET_NAME)
-        .file(`${userId}/${file.serverFilename}`)
-        .getSignedUrl({
-          action: "read",
-          expires: Date.now() + 15 * 60 * 1000,
-          version: "v4",
-        });
-
-      return url;
+      return getClouStorageFileUrl({ serverFilename: file.serverFilename, userId });
     }),
   createSignedUploadUrl: protectedProcedure
     .input(z.object({
