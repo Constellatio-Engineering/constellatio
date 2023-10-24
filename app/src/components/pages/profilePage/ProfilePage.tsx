@@ -1,3 +1,4 @@
+import ErrorPage from "@/components/errorPage/ErrorPage";
 import ChangePasswordTab from "@/components/organisms/changePasswordTab/ChangePasswordTab";
 import ProfileDetailsTab from "@/components/organisms/profileDetailsTab/ProfileDetailsTab";
 import ProfileHistoryTab from "@/components/organisms/profileHistoryTab/ProfileHistoryTab";
@@ -5,7 +6,9 @@ import ProfileMenu from "@/components/organisms/profileMenu/ProfileMenu";
 import ProfileOverview from "@/components/organisms/profileOverview/ProfileOverview";
 import ProfilePageHeader from "@/components/organisms/profilePageHeader/ProfilePageHeader";
 import SubscriptionTab from "@/components/subscriptionTab/SubscriptionTab";
+import useUserDetails from "@/hooks/useUserDetails";
 import { type IProfilePageProps } from "@/pages/profile";
+import { type UserFiltered } from "@/utils/filters";
 
 import { Container } from "@mantine/core";
 import { parseAsString, useQueryState } from "next-usequerystate";
@@ -21,10 +24,17 @@ export const tabs = [
   { slug: "subscription", title: "Subscription" },
 ] as const;
 
-const ProfilePage: FunctionComponent<IProfilePageProps> = ({ allMainCategory }) =>
+export type UserDetails = {
+  readonly userDetails: UserFiltered;
+};
+type ProfilePageProps = IProfilePageProps & UserDetails;
+
+const ProfilePage: FunctionComponent<ProfilePageProps> = ({ allMainCategory, userDetails }) =>
 {
   const [tab, setTab] = useQueryState("tab", parseAsString.withDefault(tabs[0]!.slug));
   const activeTab = tabs?.find(x => x.slug === tab);
+
+  console.log("userDetails", userDetails);
 
   const renderedTab: ReactNode = useMemo(() =>
   {
@@ -48,26 +58,53 @@ const ProfilePage: FunctionComponent<IProfilePageProps> = ({ allMainCategory }) 
   }, [activeTab, allMainCategory]);
 
   return (
-    <> 
-      <div>
-        <ProfilePageHeader/>
+    <div>
+      <ProfilePageHeader/>
+      <Container
+        maw="100%"
+        css={styles.outerContianer}>
         <Container
-          maw="100%"
-          css={styles.outerContianer}>
-          <Container
-            maw={1440}
-            css={styles.innerContainer}>
-            <ProfileMenu
-              tabs={tabs}
-              setTab={setTab}
-              activeTabSlug={activeTab?.slug}
-            />
-            {renderedTab}
-          </Container>
+          maw={1440}
+          css={styles.innerContainer}>
+          <ProfileMenu
+            tabs={tabs}
+            setTab={setTab}
+            userDetails={userDetails}
+            activeTabSlug={activeTab?.slug}
+          />
+          {renderedTab}
         </Container>
-      </div>
-    </>
+      </Container>
+    </div>
   );
 };
 
-export default ProfilePage;
+type ProfilePageWrapperProps = IProfilePageProps;
+
+const ProfilePageWrapper: FunctionComponent<ProfilePageWrapperProps> = (props) =>
+{
+  const { error, isLoading, userDetails } = useUserDetails();
+
+  if(isLoading)
+  {
+    return null;
+  }
+
+  if(error)
+  {
+    return (
+      <ErrorPage error={error.message}/>
+    );
+  }
+
+  if(!userDetails)
+  {
+    return (
+      <ErrorPage error="User Details not found"/>
+    );
+  }
+
+  return <ProfilePage {...props} userDetails={userDetails}/>;
+};
+
+export default ProfilePageWrapper;
