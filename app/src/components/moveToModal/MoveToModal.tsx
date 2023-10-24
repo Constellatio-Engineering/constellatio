@@ -13,7 +13,7 @@ const MoveToModal: FunctionComponent = () =>
 { 
   const theme = useMantineTheme();
   const selected = true;
-  const [opened, { close }] = useDisclosure(false);
+  const [opened, { close }] = useDisclosure(true);
   
   return (
     <Modal
@@ -54,13 +54,13 @@ const MoveToModal: FunctionComponent = () =>
         <Button<"button">
           styleType="secondarySimple"
           size="large"
-          onClick={() => {}}>
+          onClick={close}>
           Cancel
         </Button>
         <Button<"button">
           styleType="primary"
           size="large"
-          onClick={() => {}}>
+          onClick={close}>
           Move
         </Button>
       </div>

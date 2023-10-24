@@ -21,14 +21,16 @@ export const RichTextHeadingOverwrite = ({
   const HeadingTag = `h${level}` as ElementType;
   const { entry, ref } = useIntersection();
   const setObservedHeadline = useCaseSolvingStore(s => s.setObservedHeadline); 
+  // const observedHeadline = useCaseSolvingStore(s => s.observedHeadline); 
   const inView = (): ReactNode => 
   {
-    setObservedHeadline(entry.target.id);
+    setObservedHeadline({ level, slug: entry.target.id });
     return <></>;
   };
   return (
     <HeadingTag 
       ref={ref}
+      key={slugFormatter(node?.content?.[0]?.text ?? "")}
       id={slugFormatter(node?.content?.[0]?.text ?? "")}>
       {getNumericalLabel(level, index)}
       {" "}{node?.content?.[0]?.text}
