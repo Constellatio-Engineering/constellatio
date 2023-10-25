@@ -27,7 +27,7 @@ import { useState, type FunctionComponent } from "react";
 
 import HeaderDefaultLinkItem from "./HeaderDefaultLinkItem";
 import HeaderDefaultRecreateSearch from "./HeaderDefaultRecreateSearch";
-import ConstellatioFullLogo from "../../../../../public/images/icons/constellatio-full-logo.svg";
+import ConstellatioFullLogoPng from "../../../../../public/images/full-logo.png";
 import OnboardingTutorialPopover from "../../onboardingTutorialPopover/OnboardingTutorialPopover";
 import SearchOverlay from "../../searchOverlay/SearchOverlay";
 import { SHeader } from "../Header.styles";
@@ -71,7 +71,7 @@ const HeaderDefault: FunctionComponent = () =>
         <div css={styles.wrapper({ theme, variant: "default" })}>
           <div css={styles.links}>
             <Link href="/">
-              <Image src={ConstellatioFullLogo} alt="Constellatio"/>
+              <Image src={ConstellatioFullLogoPng} alt="Constellatio" width={140}/>
             </Link>
             {links.map((link, linkIndex) =>
               linkIndex === 0 ? (
