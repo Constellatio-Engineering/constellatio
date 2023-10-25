@@ -1,12 +1,5 @@
 import { db } from "@/db/connection";
-import {
-  type ProfilePictureInsert,
-  profilePictures,
-  userPings,
-  users,
-} from "@/db/schema";
-import { setOnboardingResultSchema } from "@/schemas/users/setOnboardingResult.schema";
-import { setProfilePictureSchema } from "@/schemas/users/setProfilePicture.schema";
+import { userPings } from "@/db/schema";
 import { getClouStorageFileUrl } from "@/server/api/services/uploads.services";
 import { getUserWithRelations } from "@/server/api/services/users.service";
 import {
@@ -17,7 +10,7 @@ import {
 import { filterUserForClient } from "@/utils/filters";
 import { NotFoundError } from "@/utils/serverError";
 
-import { eq, gte, and, lt, sql, desc } from "drizzle-orm";
+import { eq, and, asc } from "drizzle-orm";
 import { z } from "zod";
 
 export const trackingRouter = createTRPCRouter({
@@ -46,7 +39,7 @@ export const trackingRouter = createTRPCRouter({
       const sessionPing = await db
         .select()
         .from(userPings)
-        .orderBy(desc(userPings.updatedAt))
+        .orderBy(asc(userPings.updatedAt))
         .where(and(eq(userPings.userId, userId), eq(userPings.url, url)))
         .limit(1);
 
