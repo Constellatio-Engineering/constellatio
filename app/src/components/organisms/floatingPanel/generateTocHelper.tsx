@@ -60,7 +60,6 @@ function decimalToRoman(decimal: number): string
 
   return result;
 }
-console.log(decimalToRoman(1));
 
 export const generateTOC = (data: DataType[]): TOCItem[] => 
 {
@@ -103,7 +102,7 @@ export function getNumericalLabel(depth: number, index: number): string
     case 1:
       return String.fromCharCode(65 + index) + ".";
     case 2:
-      return ["I", "II", "III", "IV", "V", "VI", "VII", "VIII", "IX", "X"][index] + ".";
+      return String(decimalToRoman(index + 1) + ".");
     case 3:
       return (index + 1) + ".";
     case 4:
