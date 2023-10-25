@@ -5,9 +5,8 @@ export const wrapper = (theme: MantineTheme) => css`
     background-color: ${theme.colors["neutrals-01"][0]};
     border-radius: 12px;
     padding: 24px;
-    flex: 1;
     display: flex;
     flex-direction: column;
-    justify-content:space-between ;
-    max-width: 950px;
+    justify-content:space-between;
+    /* max-width: 950px; */width: 70%;
 `;

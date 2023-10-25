@@ -18,8 +18,10 @@ import { Modal } from "../molecules/Modal/Modal";
 const DashboardPage: FunctionComponent = () => 
 {
   const [opened, { close, open }] = useDisclosure(false);
-  const endingDate: Date = new Date("2023-10-25");
   const today: Date = new Date();
+  const tomorrow = new Date(today);
+  tomorrow.setDate(tomorrow.getDate() + 1);
+  const endingDate: Date = tomorrow;
   today.setHours(0, 0, 0, 0);
   endingDate.setHours(0, 0, 0, 0);
   const diffTime = endingDate.getTime() - today.getTime();

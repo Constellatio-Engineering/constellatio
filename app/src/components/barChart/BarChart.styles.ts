@@ -8,7 +8,7 @@ export const bar = ({ height, theme }: {
   width: 11px;
   margin: 0 0px 8px 0px;
   border-radius: 5px;
-  height:160px;
+  height:120px;
   position: relative;
   background-color: ${theme.colors["neutrals-01"][2]};
   border: 1px solid ${theme.colors["neutrals-01"][3]};

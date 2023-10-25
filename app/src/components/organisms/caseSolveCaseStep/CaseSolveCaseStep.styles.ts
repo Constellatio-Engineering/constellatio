@@ -4,16 +4,17 @@ export const wrapper = css`
 	display: flex;
 	justify-content: space-between;
 	align-items: flex-start;
-	gap: 24px;
-	@media screen and (max-width: 1000px) {
-		flex-direction: column-reverse;
+	gap: 50px;
+	
+	@media screen and (max-width: 1100px) {
+		flex-direction: column;
 	}
 
 	max-width: 1440px;
 	margin: 0 auto;
 `;
 export const textAreaWrapper = css`
-	padding: 0 44px;
+	/* padding: 0 44px; */
 	h2 {
 		margin-bottom: 24px;
 	}
@@ -23,11 +24,11 @@ export const textAreaWrapper = css`
 `;
 export const factsWrapper = css`
 	max-width: 50%;
-	padding: 8px 24px 16px 24px;
+	/* padding: 8px 24px 16px 24px; */
 	h3 {
 		margin-bottom: 16px;
 	}
-	@media screen and (max-width: 1000px) {
+	@media screen and (max-width: 1100px) {
 		max-width: 100%;
 	}
 `;
