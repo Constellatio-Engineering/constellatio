@@ -8,7 +8,7 @@ import Label from "../atoms/label/Label";
 
 const DashboardCasesBlockHeader: FunctionComponent = () => 
 {
-  const matches = useMediaQuery("(min-width: 1200px)");
+  const isBigScreen = useMediaQuery("(min-width: 1200px)");
   
   return (
     <div css={styles.wrapper}>
@@ -16,7 +16,7 @@ const DashboardCasesBlockHeader: FunctionComponent = () =>
         <Label variant="case" title="Cases"/>
         <Title css={styles.casesHeaderTitle} order={2}>Next cases to complete</Title>
       </div>
-      <Button<"button"> size={matches ? "large" : "medium"} styleType="secondarySimple">View All</Button>
+      <Button<"button"> size={isBigScreen ? "large" : "medium"} styleType="secondarySimple">View All</Button>
     </div>
   );
 };

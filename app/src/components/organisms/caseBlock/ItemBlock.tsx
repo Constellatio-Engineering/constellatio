@@ -10,8 +10,9 @@ import useBookmarks from "@/hooks/useBookmarks";
 import useCasesProgress from "@/hooks/useCasesProgress";
 import { type IGenArticle, type IGenFullCaseFragment } from "@/services/graphql/__generated/sdk";
 
+// import { useMediaQuery } from "@mantine/hooks";
 import Link from "next/link";
-import React, { Fragment, type FunctionComponent } from "react";
+import React, { type FunctionComponent } from "react";
 
 import * as styles from "./ItemBlock.styles";
 import { timeFormatter } from "../overviewCard/OverviewCard";
@@ -84,6 +85,8 @@ const ItemBlock: FunctionComponent<ICaseBlockProps> = ({
         return CasesTable;
     }
   };
+  // const matches = useMediaQuery("(min-width: 1100px)");
+  // const isSmallScreensOnFavorite = !matches && tableType === "favorites";
 
   const [numberOfShowingItems, setNumberOfShowingItems] = React.useState<number>(5);
   return items && items?.length > 0 ? (

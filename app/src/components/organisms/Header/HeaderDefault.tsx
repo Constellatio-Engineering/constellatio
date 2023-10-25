@@ -20,6 +20,7 @@ import { isDevelopmentOrStaging } from "@/utils/env";
 import { paths } from "@/utils/paths";
 
 import { Loader } from "@mantine/core";
+import { useMediaQuery } from "@mantine/hooks";
 import { useMantineTheme } from "@mantine/styles";
 import { IconFolder } from "@tabler/icons-react";
 import { useMutation } from "@tanstack/react-query";
@@ -32,6 +33,7 @@ import { useState, type FunctionComponent } from "react";
 import * as styles from "./Header.styles";
 import { SHeader } from "./Header.styles";
 import ConstellatioFullLogo from "../../../../public/images/icons/constellatio-full-logo.svg";
+import ConstellatioLogoIcon from "../../../../public/images/icons/constellatio-icon.svg";
 import OnboardingTutorialPopover from "../onboardingTutorialPopover/OnboardingTutorialPopover";
 import SearchOverlay from "../searchOverlay/SearchOverlay";
 
@@ -76,13 +78,14 @@ const HeaderDefault: FunctionComponent = () =>
     { opened: false, step: 2 },
     { opened: false, step: 3 },
   ]);
+  const isTabletScreen = useMediaQuery("(max-width: 1100px)");
   return !showOnboarding ? (
     <>
       <SHeader>
         <div css={styles.wrapper({ theme, variant: "default" })}>
           <div css={styles.links}>
             <Link href="/">
-              <Image src={ConstellatioFullLogo} alt="Constellatio"/>
+              <Image src={isTabletScreen ? ConstellatioLogoIcon : ConstellatioFullLogo} alt="Constellatio"/>
             </Link>
             {links.map(link => 
             {
@@ -104,8 +107,8 @@ const HeaderDefault: FunctionComponent = () =>
                   styleType="secondarySubtle"
                   disabled={isRecreatingSearchIndices}
                   type="button"
-                  onClick={() => recreateSearchIndices()}
-                  style={{ marginRight: 10 }}>
+                  size="medium"
+                  onClick={() => recreateSearchIndices()}>
                   Recreate Search Indices
                 </Button>
                 {isRecreatingSearchIndices && <Loader size={22}/>}
@@ -139,7 +142,7 @@ const HeaderDefault: FunctionComponent = () =>
         <div css={styles.wrapper({ theme, variant: "default" })}>
           <div css={styles.links}>
             <Link href="/">
-              <Image src={ConstellatioFullLogo} alt="Constellatio"/>
+              <Image src={isTabletScreen ? ConstellatioLogoIcon : ConstellatioFullLogo} alt="Constellatio"/>
             </Link>
             {links.map((link, linkIndex) =>
               linkIndex === 0 ? (

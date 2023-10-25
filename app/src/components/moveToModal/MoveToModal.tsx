@@ -19,6 +19,7 @@ const MoveToModal: FunctionComponent = () =>
     <Modal
       onClose={close}
       opened={opened}
+      radius={12}
       title={<Title order={3}>Move item to: </Title>}
       styles={{
         body: {
