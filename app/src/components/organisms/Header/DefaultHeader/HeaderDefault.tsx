@@ -15,7 +15,7 @@ import useSearchResults from "@/hooks/useSearchResults";
 import { InvalidateQueriesContext } from "@/provider/InvalidateQueriesProvider";
 import useSearchBarStore from "@/stores/searchBar.store";
 import { api } from "@/utils/api";
-import { isDevelopment } from "@/utils/env";
+import { isDevelopmentOrStaging } from "@/utils/env";
 import { paths } from "@/utils/paths";
 
 import { useMantineTheme } from "@mantine/styles";
@@ -104,7 +104,7 @@ const HeaderDefault: FunctionComponent = () =>
             )}
           </div>
           <div css={styles.profileArea}>
-            {isDevelopment && <HeaderDefaultRecreateSearch/>}
+            {isDevelopmentOrStaging && <HeaderDefaultRecreateSearch/>}
             {
               showOnboarding ? (
                 <OnboardingTutorialPopover
