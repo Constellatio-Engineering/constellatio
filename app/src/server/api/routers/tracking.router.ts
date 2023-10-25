@@ -17,7 +17,9 @@ import {
 import { filterUserForClient } from "@/utils/filters";
 import { NotFoundError } from "@/utils/serverError";
 
-import { eq, gte, and, lt, sql } from "drizzle-orm";
+import {
+  eq, gte, and, lt, sql 
+} from "drizzle-orm";
 import { z } from "zod";
 
 export const trackingRouter = createTRPCRouter({
@@ -36,8 +38,11 @@ export const trackingRouter = createTRPCRouter({
         url: z.string().url(),
       })
     )
-    .mutation(async ({ ctx: { userId }, input: { url } }) => {
-      const timestamp60SecondsAgo = Date.now() - 1000 * 60;
+    .mutation(async ({ ctx: { userId }, input: { url } }) => 
+    {
+      console.log("ping", userId, url);
+
+      /* const timestamp60SecondsAgo = Date.now() - 1000 * 60;
 
       const isInSessionSchedul = await db
         .select()
@@ -48,6 +53,6 @@ export const trackingRouter = createTRPCRouter({
             eq(userPings.url, dataToInsert.url),
             lt(new Date(userPings.updatedAt).getTime(), timestamp60SecondsAgo)
           )
-        );
+        );*/
     }),
 });
