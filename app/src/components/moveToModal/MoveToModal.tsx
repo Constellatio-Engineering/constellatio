@@ -1,4 +1,4 @@
-import { Title, useMantineTheme } from "@mantine/core";
+import { useMantineTheme } from "@mantine/core";
 import { useDisclosure } from "@mantine/hooks";
 import React, { type FunctionComponent } from "react";
 
