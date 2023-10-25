@@ -60,12 +60,9 @@ const MaterialOptionsMenu: FunctionComponent<MaterialOptionsMenuProps> = ({ file
     <> 
       <Menu shadow="elevation-big" radius="12px" width={200}>
         <Menu.Target>
-          <td
-            css={styles.callToActionCell}>
-            <button type="button">
-              <DotsIcon/>
-            </button>
-          </td>
+          <button type="button" css={styles.callToActionCell}>
+            <DotsIcon/>
+          </button>
         </Menu.Target>
         <Menu.Dropdown>
           <Menu.Item onClick={() => openRenameFileModal(file)}>

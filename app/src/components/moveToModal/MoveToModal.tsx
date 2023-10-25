@@ -1,4 +1,4 @@
-import { Title, useMantineTheme } from "@mantine/core";
+import { useMantineTheme } from "@mantine/core";
 import { useDisclosure } from "@mantine/hooks";
 import React, { type FunctionComponent } from "react";
 
@@ -19,7 +19,7 @@ const MoveToModal: FunctionComponent = () =>
     <Modal
       onClose={close}
       opened={opened}
-      title={<Title order={3}>Move item to: </Title>}
+      title="Move item to:" 
       styles={{
         body: {
           padding: "0"
@@ -33,6 +33,12 @@ const MoveToModal: FunctionComponent = () =>
           },
           width: "32px",
         },
+        title: {
+          fontFamily: theme.headings.fontFamily,
+          fontSize: theme.fontSizes["spacing-24"],
+          fontWeight: 400,
+          lineHeight: theme.spacing["spacing-36"],
+        }
       }}
       centered>
       <div css={styles.item({ selected, theme })}>
