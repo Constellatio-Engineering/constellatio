@@ -24,19 +24,17 @@ import { appWithTranslation } from "next-i18next";
 import posthog from "posthog-js";
 import { PostHogProvider } from "posthog-js/react";
 import { type FunctionComponent, useEffect, useState } from "react";
+import { track } from "@/utils/tracking";
 
 // new for GA4
- 
+
 // Check that PostHog is client-side
-if(typeof window !== "undefined") 
-{
+if (typeof window !== "undefined") {
   posthog.init(process.env.NEXT_PUBLIC_POSTHOG_KEY as string, {
     api_host: process.env.NEXT_PUBLIC_POSTHOG_HOST || "https://app.posthog.com",
     // Enable debug mode in development
-    loaded: (posthog) => 
-    {
-      if(process.env.NODE_ENV === "development") 
-      {
+    loaded: (posthog) => {
+      if (process.env.NODE_ENV === "development") {
         posthog.debug();
       }
     },
@@ -47,67 +45,52 @@ const getCurrentTime = (): number => new Date().getTime();
 
 type ConstellatioAppProps = AppProps<{ initialSession: Session }>;
 
-const AppContainer: FunctionComponent<ConstellatioAppProps> = ({ Component, pageProps, router }) => 
-{
+const AppContainer: FunctionComponent<ConstellatioAppProps> = ({
+  Component,
+  pageProps,
+  router, // TODO:: check komtm ursprünglich von postHog / GA integration
+}) => {
   const isRouterReady = useIsRouterReady();
   const isProduction = env.NEXT_PUBLIC_DEPLOYMENT_ENVIRONMENT === "production";
   const [isDocumentVisible, setIsDocumentVisible] = useState<boolean>(false);
 
   let title = "Constellatio";
 
-  if(!isProduction) 
-  {
+  if (!isProduction) {
     title += ` - ${env.NEXT_PUBLIC_DEPLOYMENT_ENVIRONMENT}`;
   }
 
-  const onVisibilityChange = (e: Event): void =>
-  {
-    console.log("visibility changed", e);
-  };
-
-  const onPageEnter = (): void =>
-  {
-    track({
-      event: {
-        eventId: "page-enter",
-        eventTimestamp: getCurrentTime(),
-      },
-      url: "placeholder",
-      userId: "userTestId",
-    });
-  };
-
-  const onPageLeave = (): void =>
-  {
-    track({
-      event: {
-        eventId: "page-leave",
-        eventTimestamp: getCurrentTime(),
-      },
-      url: "placeholder",
-      userId: "userTestId",
-    });
-  };
-
-  useEffect(() =>
-  {
+  useEffect(() => {
+    const onVisibilityChange = (): void => {
+      setIsDocumentVisible(!document.hidden);
+    };
     document.addEventListener("visibilitychange", onVisibilityChange);
-    document.addEventListener("routeChangeComplete", onPageEnter);
-    window.addEventListener("beforeunload", onPageLeave);
-
-    return () =>
-    {
+    return () => {
       document.removeEventListener("visibilitychange", onVisibilityChange);
-      document.removeEventListener("routeChangeComplete", onPageEnter);
-      window.removeEventListener("beforeunload", onPageLeave);
     };
   }, []);
+
+  //INTERVALL --------------------------------------------------------------------
+  setInterval(() => {
+    if (isDocumentVisible) {
+      const path = router.asPath;
+      const queryString = new URLSearchParams(router.query).toString();
+      const fullURL = `${path}${queryString ? `?${queryString}` : ""}`;
+
+      track({
+        //userId: "userTestId", TODO:: kommt erst im trpc mit rein wenn ichs richtig verstanden habe
+        url: fullURL,
+        eventType: "activePing",
+        timestamp: getCurrentTime(),
+      });
+    }
+  }, 10000);
 
   return (
     <>
       <Head>
         <title>{title}</title>
-        <link rel="shortcut icon" href="/favicon.png"/>
+        <link rel="shortcut icon" href="/favicon.png" />
         <meta
           name="viewport"
           content="minimum-scale=1, initial-scale=1, width=device-width"
@@ -115,15 +98,16 @@ const AppContainer: FunctionComponent<ConstellatioAppProps> = ({ Component, page
       </Head>
       <SessionContextProvider
         supabaseClient={supabase}
-        initialSession={pageProps.initialSession}>
+        initialSession={pageProps.initialSession}
+      >
         <InvalidateQueriesProvider>
           <AuthStateProvider>
             <CustomThemingProvider>
               <ModalsProvider>
                 <MeilisearchProvider>
-                  <RouterTransition/>
-                  <Notifications/>
-                  {isRouterReady && <Component {...pageProps}/>}
+                  <RouterTransition />
+                  <Notifications />
+                  {isRouterReady && <Component {...pageProps} />}
                 </MeilisearchProvider>
               </ModalsProvider>
             </CustomThemingProvider>
