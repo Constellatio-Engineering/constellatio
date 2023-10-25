@@ -17,42 +17,62 @@ import {
 import { filterUserForClient } from "@/utils/filters";
 import { NotFoundError } from "@/utils/serverError";
 
-import {
-  eq, gte, and, lt, sql 
-} from "drizzle-orm";
+import { eq, gte, and, lt, sql, desc } from "drizzle-orm";
 import { z } from "zod";
 
 export const trackingRouter = createTRPCRouter({
-  /* trackPageEnter: publicProcedure
-    .input(z.object({
-      timestamp: z.number().int().nonnegative(),
-      url: z.string().url(),
-    }))
-    .mutation(({ ctx: { session }, input: { timestamp, url } }) =>
-    {
-
-    })*/
   ping: protectedProcedure
     .input(
       z.object({
-        url: z.string().url(),
+        url: z.string().refine(
+          (value) => {
+            const isFullURL = /^https?:\/\//.test(value);
+            const isRelativeURL = value.startsWith("/");
+            return isFullURL || isRelativeURL;
+          },
+          {
+            message: "Invalid URL format",
+          }
+        ),
       })
     )
-    .mutation(async ({ ctx: { userId }, input: { url } }) => 
-    {
+
+    .mutation(async ({ ctx: { userId }, input: { url } }) => {
       console.log("ping", userId, url);
 
-      /* const timestamp60SecondsAgo = Date.now() - 1000 * 60;
+      const currentTime = Date.now();
+      const timestampSchedul = currentTime - 1000 * 60;
 
-      const isInSessionSchedul = await db
+      const sessionPing = await db
         .select()
-        .from(userPings) //                              updatedAt in DB < (new Date(updatedAt).getTime() - timestamp60SecondsAgo)
-        .where(
-          and(
-            eq(userPings.userId, userId),
-            eq(userPings.url, dataToInsert.url),
-            lt(new Date(userPings.updatedAt).getTime(), timestamp60SecondsAgo)
-          )
-        );*/
+        .from(userPings)
+        .orderBy(desc(userPings.updatedAt))
+        .where(and(eq(userPings.userId, userId), eq(userPings.url, url)))
+        .limit(1);
+
+      if (
+        !sessionPing ||
+        sessionPing.length === 0 ||
+        !sessionPing[0]?.updatedAt
+      ) {
+        // Create a new entry
+        db.insert(userPings).values({ userId: userId, url: url });
+      } else {
+        const sessionUpdatedAtTime = new Date(
+          sessionPing[0].updatedAt
+        ).getTime();
+
+        const timeDifference = currentTime - sessionUpdatedAtTime;
+
+        if (timeDifference > timestampSchedul) {
+          // Create a new entry
+          db.insert(userPings).values({ userId: userId, url: url });
+        } else {
+          // Update the updatedAt timestamp to the current date
+          db.update(userPings)
+            .set({ updatedAt: new Date() }) // Use new Date() to set the current date
+            .where(eq(userPings.id, sessionPing[0].id));
+        }
+      }
     }),
 });
