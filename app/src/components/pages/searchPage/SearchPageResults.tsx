@@ -5,6 +5,7 @@ import EmptyStateCard from "@/components/organisms/emptyStateCard/EmptyStateCard
 import FileViewer from "@/components/organisms/fileViewer/FileViewer";
 import SearchPapersBlock from "@/components/organisms/searchPapersBlock/SearchPapersBlock";
 import UploadedMaterialTable from "@/components/organisms/uploadedMaterialTable/UploadedMaterialTable";
+import DocumentEditor from "@/components/papersBlock/documentEditor/DocumentEditor";
 import useSearchResults, { type SearchResults, type SearchResultsKey } from "@/hooks/useSearchResults";
 import { type IGenArticleOverviewFragment, type IGenFullCaseFragment } from "@/services/graphql/__generated/sdk";
 import useMaterialsStore from "@/stores/materials.store";
@@ -139,6 +140,7 @@ const SearchPageResults: FunctionComponent<Props> = ({ tabQuery }) =>
                     )}
                     numberOfTableItems={searchResults.userDocuments?.length}
                   />
+                  <DocumentEditor/>
                 </>
               )
             }

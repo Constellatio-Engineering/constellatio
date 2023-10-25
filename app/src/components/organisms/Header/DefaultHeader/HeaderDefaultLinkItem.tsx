@@ -14,7 +14,7 @@ type HeaderDefaultLinkItemProps = {
 const HeaderDefaultLinkItem: FunctionComponent<HeaderDefaultLinkItemProps> = ({ link, pathname }) => 
 {
   return (
-    <Link href={`/${link.slug.toLowerCase()}`}>
+    <Link href={`${link.slug.toLowerCase()}`}>
       <MenuTab
         active={pathname
           ?.toLowerCase()

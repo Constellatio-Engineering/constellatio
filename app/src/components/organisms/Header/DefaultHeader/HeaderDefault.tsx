@@ -54,8 +54,6 @@ const HeaderDefault: FunctionComponent = () =>
   const showOnboarding = !isGetOnboardingResultLoading && onboardingResult === null;
   const openDrawer = useSearchBarStore((s) => s.openDrawer);
 
-  console.log("onboardingResult", showOnboarding);
-
   const { mutate: setOnboardingResult } = api.users.setOnboardingResult.useMutation({
     onError: (error) => console.error("Error while setting onboarding result", error),
     onSuccess: async () => invalidateOnboardingResult()
