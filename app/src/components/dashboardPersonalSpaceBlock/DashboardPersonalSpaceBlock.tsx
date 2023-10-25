@@ -32,10 +32,10 @@ const DashboardPersonalSpaceBlock: FunctionComponent = () =>
             size="big">
             <Tabs.List>
               <SwitcherTab value="favorites" onClick={() => setSwitcherValue("favorites")} icon={<Bookmark/>}>
-                <BodyText styleType="body-01-medium" component="p">Favorites</BodyText>
+                <BodyText styleType="body-01-medium" component="p">Favoriten</BodyText>
               </SwitcherTab>
               <SwitcherTab value="materials" onClick={() => setSwitcherValue("materials")} icon={<FileWhiteIcon/>}>
-                <BodyText styleType="body-01-medium" component="p">Your materials</BodyText>
+                <BodyText styleType="body-01-medium" component="p">Deine Dateien</BodyText>
               </SwitcherTab>
             </Tabs.List>
           </Switcher>
@@ -54,8 +54,8 @@ const DashboardPersonalSpaceBlock: FunctionComponent = () =>
                 )) : (
                   <div css={styles.emptyCard}>
                     <EmptyStateCard
-                      title="You haven not saved any materials yet"
-                      text="You can save cases, dictionary articles, forum questions and highlighted text to Favourites"
+                      title="Du hast noch keine Dateien hochgeladen"
+                      text="Du kannst jetzt jetzt eigene Dateien hochladen und in deinem persönlichen Bereich ablegen."
                       variant="For-small-areas"
                     />
                   </div>
@@ -80,8 +80,8 @@ const DashboardPersonalSpaceBlock: FunctionComponent = () =>
               : (
                 <div css={styles.emptyCard}>
                   <EmptyStateCard
-                    title="You haven not uploaded any materials yet"
-                    text="You can save cases, dictionary articles, forum questions and highlighted text to Favourites"
+                    title="Noch keine Favoriten vorhanden"
+                    text="Speichere jetzt Fälle oder Lexikonartikel als Favoriten in deinem persönlichen Bereich."
                     variant="For-small-areas"
                   />
                 </div>

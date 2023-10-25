@@ -37,11 +37,11 @@ export function timeFormatter(minutes: number): string
   if(minutes >= 60) 
   {
     const hours = Math.floor(minutes / 60);
-    return `${hours} HOUR${hours > 1 ? "S" : ""}`;
+    return `${hours} ${hours > 1 ? "Stunden" : "Stunde"}`;
   }
   else 
   {
-    return `${minutes} MINUTE${minutes !== 1 ? "S" : ""}`;
+    return `${minutes} MINUTE${minutes !== 1 ? "N" : ""}`;
   }
 }
 function formatDate(inputDate: string | number | Date): string 
@@ -52,18 +52,18 @@ function formatDate(inputDate: string | number | Date): string
   // Get day, month, and year
   const day = date.getDate();
   const months = [
-    "January",
-    "February",
-    "March",
+    "Januar",
+    "Februar",
+    "März",
     "April",
-    "May",
-    "June",
-    "July",
+    "Mai",
+    "Juni",
+    "Juli",
     "August",
     "September",
-    "October",
+    "Oktober",
     "November",
-    "December",
+    "Dezember",
   ];
   const monthName = months[date.getMonth()];
   const year = date.getFullYear();
@@ -94,8 +94,8 @@ const OverviewCard: FunctionComponent<IOverviewCard> = ({
       <div css={styles.topDetails({ theme, variant })}>
         <div className="left-side">
           <div className="views">
-            <CaptionText styleType="caption-01-bold">
-              <Show/> {views} VIEWS
+            <CaptionText styleType="caption-01-bold" tt="uppercase">
+              <Show/> {views} Aufrufe
             </CaptionText>
           </div>
           {variant === "case" && (timeInMinutes !== null && timeInMinutes !== undefined) && (
@@ -108,7 +108,7 @@ const OverviewCard: FunctionComponent<IOverviewCard> = ({
         </div>
         {lastUpdated && (
           <div className="right-side">
-            <BodyText styleType="body-02-medium">Last updated: </BodyText>
+            <BodyText styleType="body-02-medium">Zuletzt aktualisiert: </BodyText>
             <CaptionText styleType="caption-01-bold">
               {formatDate(lastUpdated)}
             </CaptionText>
@@ -119,8 +119,8 @@ const OverviewCard: FunctionComponent<IOverviewCard> = ({
         <table style={{ borderBottom: "1px solid #F0F0F0", textAlign: "left", width: "100%" }}>
           <thead>
             <tr>
-              {(legalArea?.__typename === "LegalArea" && legalArea?.legalAreaName) && <th style={{ color: "#949494", padding: "16px 32px 8px 16px" }}><CaptionText styleType="caption-01-medium">LEGAL AREA</CaptionText></th>}
-              {variant === "case" && topic && (<th style={{ color: "#949494", padding: "16px 32px 8px 16px" }}><CaptionText styleType="caption-01-medium" component="p">TOPIC</CaptionText> </th>)}
+              {(legalArea?.__typename === "LegalArea" && legalArea?.legalAreaName) && <th style={{ color: "#949494", padding: "16px 32px 8px 16px" }}><CaptionText styleType="caption-01-medium" tt="uppercase">Rechtsgebiet</CaptionText></th>}
+              {variant === "case" && topic && (<th style={{ color: "#949494", padding: "16px 32px 8px 16px" }}><CaptionText styleType="caption-01-medium" component="p" tt="uppercase">Thema</CaptionText> </th>)}
             </tr>
           </thead>
           <tbody>
@@ -133,7 +133,7 @@ const OverviewCard: FunctionComponent<IOverviewCard> = ({
         {variant === "dictionary" && (
           <div css={styles.row({ theme, variant })}>
             <div className="row-title">
-              <CaptionText styleType="caption-01-medium" component="p">TOPIC</CaptionText>
+              <CaptionText styleType="caption-01-medium" component="p" tt="capitalize">Thema</CaptionText>
             </div>
             <div className="row-value">
               <BodyText styleType="body-01-medium">{topic}</BodyText>
@@ -162,7 +162,7 @@ const OverviewCard: FunctionComponent<IOverviewCard> = ({
             css={styles.seeAllTagsButton}
             onClick={open}
             styleType="body-01-regular"
-            component="button">See all
+            component="button">Alle ansehen
           </BodyText>
           <OverviewCardTagsModal opened={opened} tags={tags} close={close}/>
         </div>
@@ -180,7 +180,7 @@ const OverviewCard: FunctionComponent<IOverviewCard> = ({
                   <LinkButton
                     onClick={() => resetCaseProgress({ caseId: contentId })}
                     size="medium"
-                    title="Reset case progress"
+                    title="Fall neu starten"
                     icon={<Trash/>}
                   />
                 </div>

@@ -19,19 +19,19 @@ const DashboardCasesBlockTable: FunctionComponent = () =>
           <thead>
             <tr>
               <th className="primaryCell">
-                <CaptionText styleType="caption-01-medium" component="p">CASES</CaptionText>
+                <CaptionText styleType="caption-01-medium" component="p">Fälle</CaptionText>
               </th>
               <th>
-                <CaptionText styleType="caption-01-medium" component="p">STATUS</CaptionText>
+                <CaptionText styleType="caption-01-medium" component="p">Status</CaptionText>
               </th>
               <th>
-                <CaptionText styleType="caption-01-medium" component="p">DURATION</CaptionText>
+                <CaptionText styleType="caption-01-medium" component="p">Bearbeitungszeit</CaptionText>
               </th>
-              <th>
+              {/* <th>
                 <CaptionText styleType="caption-01-medium" component="p">LEGAL FIELD</CaptionText>
-              </th>
+              </th> */}
               <th>
-                <CaptionText styleType="caption-01-medium" component="p">LEGAL AREA</CaptionText>
+                <CaptionText styleType="caption-01-medium" component="p">Rechtsgebiet</CaptionText>
               </th>
               {/* BOOKMARK ICON CELL */}
               <th/>
@@ -49,9 +49,9 @@ const DashboardCasesBlockTable: FunctionComponent = () =>
                 <td>
                   <BodyText styleType="body-01-medium" component="p">1h</BodyText>
                 </td>
-                <td>
+                {/* <td>
                   <BodyText styleType="body-01-medium" component="p">MAIN CATEGORY</BodyText>
-                </td>
+                </td> */}
                 <td>
                   <BodyText styleType="body-01-medium" component="p">LEGAL</BodyText>
                 </td>
@@ -70,8 +70,8 @@ const DashboardCasesBlockTable: FunctionComponent = () =>
       )}
       {tableItems?.length === 0 && (
         <EmptyStateCard
-          title="You have no cases to complete"
-          text="You can save cases, dictionary articles, forum questions and highlighted text to Favourites"
+          title="Du hast bereits alle Fälle gelöst"
+          text="In Kürze findest du hier weitere Fälle, die wir gerade für dich erstellen"
           variant="For-small-areas"
         />
       )}

@@ -29,8 +29,9 @@ const SearchField: FunctionComponent<SearchFieldProps> = ({
       <Input
         inputType="text"
         type="text"
-        name="searchFieldSmall"
-        placeholder="Search"
+        name="Suche"
+        title="Suche"
+        placeholder="Suche"
         icon={SearchIcon}
         defaultValue=""
         rightSection={ResetIcon}
