@@ -1,6 +1,6 @@
 import { css } from "@emotion/react";
 
-export const wwwrapper = css`
+export const wrapper = css`
   position: relative;
 `;
 
