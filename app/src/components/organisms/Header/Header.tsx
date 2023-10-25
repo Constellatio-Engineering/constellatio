@@ -7,7 +7,7 @@ import { type FC } from "react";
 import HeaderDefault from "./DefaultHeader/HeaderDefault";
 import { SHeader } from "./Header.styles";
 import * as styles from "./Header.styles";
-import ConstellatioFullLogo from "../../../../public/images/icons/constellatio-full-logo.svg";
+import ConstellatioFullLogoPng from "../../../../public/images/full-logo.png";
 
 export interface HeaderProps 
 {
@@ -23,7 +23,7 @@ export const Header: FC<HeaderProps> = ({ variant = "default" }) =>
       <div css={styles.wrapper({ theme, variant })}>
         <div>
           <Link href="/">
-            <Image src={ConstellatioFullLogo} alt="Constellatio"/>
+            <Image src={ConstellatioFullLogoPng} alt="Constellatio" width={150}/>
           </Link>
         </div>
       </div>
@@ -33,7 +33,7 @@ export const Header: FC<HeaderProps> = ({ variant = "default" }) =>
   ) : variant === "relative" && (
     <styles.SHeaderRelative>
       <Link href="/">
-        <Image src={ConstellatioFullLogo} alt="Constellatio"/>
+        <Image src={ConstellatioFullLogoPng} alt="Constellatio" width={150}/>
       </Link>
     </styles.SHeaderRelative>
   );
