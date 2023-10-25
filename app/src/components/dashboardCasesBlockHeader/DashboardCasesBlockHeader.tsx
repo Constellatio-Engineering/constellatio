@@ -9,9 +9,9 @@ const DashboardCasesBlockHeader: FunctionComponent = () => (
   <div css={styles.wrapper}>
     <div>
       <Label variant="case" title="Cases"/>
-      <Title css={styles.casesHeaderTitle} order={2}>Next cases to complete</Title>
+      <Title css={styles.casesHeaderTitle} order={2}>Nächste offene Fälle</Title>
     </div>
-    <Button<"button"> styleType="secondarySimple">View All</Button>
+    <Button<"button"> styleType="secondarySimple">Alle ansehen</Button>
   </div>
 );
 

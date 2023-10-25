@@ -97,8 +97,8 @@ export const LoginForm: FunctionComponent = () =>
 
   return (
     <>
-      {signInError === "emailNotConfirmed" && <AlertCard stylesOverwrite={{ marginBottom: "40px" }} variant="error">Du musst zuerst deine E-Mail Adresse bestätigen. Eine Bestätigungsmail wurde dir zugesendet.</AlertCard>}
-      {signInError === "invalidCredentials" && <AlertCard stylesOverwrite={{ marginBottom: "40px" }} variant="error">Wir konnten keinen Account mit diesen Anmeldedaten finden. Bitte überprüfe deine Eingaben.</AlertCard>}
+      {signInError === "emailNotConfirmed" && <AlertCard stylesOverwrite={{ marginBottom: "40px" }} variant="error">Du musst zuerst deine E-Mail-Adresse bestätigen. Eine Bestätigungsmail wurde dir zugesendet.</AlertCard>}
+      {signInError === "invalidCredentials" && <AlertCard stylesOverwrite={{ marginBottom: "40px" }} variant="error">Wir konnten kein Konto mit diesen Anmeldedaten finden. Bitte überprüfe deine Eingaben.</AlertCard>}
       {signInError === "unknownError" && <AlertCard stylesOverwrite={{ marginBottom: "40px" }} variant="error">Es ist ein unbekannter Fehler aufgetreten. Bitte versuche es erneut.</AlertCard>}
       {wasPasswordUpdated && <AlertCard stylesOverwrite={{ marginBottom: "40px" }} variant="success">Dein Passwort wurde erfolgreich geändert. Du kannst dich jetzt mit deinem neuen Passwort anmelden.</AlertCard>}
       <form onSubmit={handleSubmit}>
@@ -106,14 +106,14 @@ export const LoginForm: FunctionComponent = () =>
           <Stack spacing="spacing-12">
             <Input
               inputType="text"
-              label="Email"
-              title="Email"
+              label="E-Mail"
+              title="E-Mail"
               {...form.getInputProps("email")}
             />
             <Input
               inputType="password"
-              label="Password"
-              title="password"
+              label="Passwort"
+              title="Passwort"
               {...form.getInputProps("password")}
             />
           </Stack>
@@ -122,14 +122,21 @@ export const LoginForm: FunctionComponent = () =>
             component="button"
             onClick={openResetPasswordModal}
             stylesOverwrite={{ color: colors["neutrals-02"][2], textAlign: "left" }}>
-            Forgot Password?
+            Passwort vergessen?
+          </CustomLink>
+          <CustomLink
+            styleType="link-secondary"
+            component="button"
+            onClick={() => void router.push(paths.register)}
+            stylesOverwrite={{ color: colors["neutrals-02"][2], textAlign: "left" }}>
+            Du hast noch kein Konto?
           </CustomLink>
           <Button<"button">
             styleType="primary"
             type="submit"
-            title="Log in"
+            title="Anmelden"
             loading={isLoginInProgress}>
-            Log in
+            Anmelden
           </Button>
         </Stack>
       </form>

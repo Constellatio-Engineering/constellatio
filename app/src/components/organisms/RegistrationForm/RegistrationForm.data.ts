@@ -6,6 +6,7 @@ type Gender = {
 };
 
 export const allUniversities = [
+  "-",
   "Albert-Ludwigs-Universität Freiburg",
   "Bucerius Law School",
   "Christian-Albrechts-Universität zu Kiel",
