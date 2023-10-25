@@ -1,7 +1,7 @@
 /* eslint-disable sort-keys-fix/sort-keys-fix,@typescript-eslint/naming-convention,@typescript-eslint/no-use-before-define */
 import { type InferInsertModel, type InferSelectModel, relations } from "drizzle-orm";
 import {
-  text, pgTable, integer, pgEnum, uuid, smallint, unique, timestamp, primaryKey, index
+  text, pgTable, integer, pgEnum, uuid, smallint, unique, timestamp, primaryKey, index, serial
 } from "drizzle-orm/pg-core";
 
 export const allGenderIdentifiers = ["male", "female", "diverse",] as const;
@@ -203,3 +203,14 @@ export const searchIndexUpdateQueue = pgTable("SearchIndexUpdateQueue", {
 
 export type SearchIndexUpdateQueueInsert = InferInsertModel<typeof searchIndexUpdateQueue>;
 export type SearchIndexUpdateQueueItem = InferSelectModel<typeof searchIndexUpdateQueue>;
+
+export const userPings = pgTable("UserPing", {
+  id: serial("Id").primaryKey(),
+  userId: uuid("UserId").references(() => users.id, { onDelete: "no action" }),
+  createdAt: timestamp("CreatedAt").defaultNow().notNull(),
+  updatedAt: timestamp("UpdatedAt").defaultNow().notNull(),
+  url: text("Url").notNull(),
+});
+
+export type UserPingInsert = InferInsertModel<typeof userPings>;
+export type UserPing = InferSelectModel<typeof userPings>;
