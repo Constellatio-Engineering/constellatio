@@ -111,7 +111,7 @@ const PersonalSpaceFavoriteTab: FunctionComponent = () =>
                 <FavoriteArticlesList {...favoriteArticlesListProps}/>
               ) : ( 
                 <EmptyStateCard
-                  button={<Link href="/dictionary">Explore Articles</Link>}
+                  button={<Link href={paths.dictionary}>Explore Articles</Link>}
                   title="You haven’t saved any Articles yet"
                   text="You can save cases, dictionary articles, forum questions and highlighted text to Favourites"
                   variant="For-large-areas"

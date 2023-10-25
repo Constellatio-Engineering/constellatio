@@ -18,8 +18,10 @@ import { Modal } from "../molecules/Modal/Modal";
 const DashboardPage: FunctionComponent = () => 
 {
   const [opened, { close, open }] = useDisclosure(false);
-  const endingDate: Date = new Date("2023-10-25");
   const today: Date = new Date();
+  const tomorrow = new Date(today);
+  tomorrow.setDate(tomorrow.getDate() + 1);
+  const endingDate: Date = tomorrow;
   today.setHours(0, 0, 0, 0);
   endingDate.setHours(0, 0, 0, 0);
   const diffTime = endingDate.getTime() - today.getTime();
@@ -41,7 +43,7 @@ const DashboardPage: FunctionComponent = () =>
         <DashboardPersonalSpaceBlock/>
         <DashboardCasesBlock/>
       </div>
-      {/* <Modal
+      <Modal
         opened={opened}
         centered
         lockScroll={diffDays <= 0 ? true : false}
@@ -57,7 +59,7 @@ const DashboardPage: FunctionComponent = () =>
         </Title>
         <BodyText ta="center" styleType="body-01-regular" component="p">Jetzt Constellatio abonnieren, um weiterhin alle Vorteile digitalen Lernens zu genießen</BodyText>
         <Link href={`${paths.profile}?tab=subscription`} style={{ width: "100%" }}><Button<"button"> size="large" miw="100%" styleType="primary">Jetzt abonnieren</Button></Link> 
-      </Modal> */}
+      </Modal>
     </div>
   );
 };

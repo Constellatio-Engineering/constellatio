@@ -20,6 +20,7 @@ const MoveToModal: FunctionComponent = () =>
       onClose={close}
       opened={opened}
       title="Move item to:" 
+      radius={12}
       styles={{
         body: {
           padding: "0"

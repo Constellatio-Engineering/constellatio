@@ -7,13 +7,8 @@ export const outerContianer = (theme: MantineTheme) => css`
   position: relative;
   z-index: 4;
   min-height: 600px;
-  margin-top: -150px;
-  @media screen and (max-width: 1024px) {
-    margin-top: 0px;
+  @media screen and (max-width: 1100px) {
     padding: 24px;
-  }
-  @media screen and (max-width: 800px) {
-    padding: 12px;
   }
 
 `;
@@ -25,7 +20,7 @@ export const innerContainer = css`
   justify-content: flex-start;
   position: relative;
 
-    @media screen and (max-width: 1024px) {
+    @media screen and (max-width: 1100px) {
         flex-direction: column;
     }
 `;

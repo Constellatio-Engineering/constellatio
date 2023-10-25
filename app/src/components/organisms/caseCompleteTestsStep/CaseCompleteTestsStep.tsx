@@ -11,6 +11,7 @@ import { type Games } from "@/utils/case";
 import type { IDocumentLink, IHeadingNode } from "types/richtext";
 
 import { Container, Title } from "@mantine/core";
+import { useMediaQuery } from "@mantine/hooks";
 import {
   type FunctionComponent, useMemo, useCallback
 } from "react";
@@ -64,6 +65,7 @@ const CaseCompleteTestsStep: FunctionComponent<ICaseCompleteTestsStepProps> = ({
     onSuccess: async () => invalidateCaseProgress({ caseId })
   });
   let renderedCaseContent: IGenCase_FullTextTasks | IGenArticle_FullTextTasks | null;
+  const isBigScreen = useMediaQuery("(min-width: 1100px)");
 
   /* console.log("-----------------");
   console.log("completedGames", completedGames);
@@ -197,14 +199,16 @@ const CaseCompleteTestsStep: FunctionComponent<ICaseCompleteTestsStepProps> = ({
           </Button>
         )}
         <div css={styles.content}>
-          <div css={styles.toc}>
-            <FloatingPanel
-              hidden={progressState === "not-started"}
-              facts={facts}
-              content={content}
-              variant={variant}
-            />
-          </div>
+          {isBigScreen && (
+            <div css={styles.toc}>
+              <FloatingPanel
+                hidden={progressState === "not-started"}
+                facts={facts}
+                content={content}
+                variant={variant}
+              />
+            </div>
+          )}
           {progressState !== "not-started" && (
             <div css={styles.fullTextAndTasksWrapper}>
               <Richtext

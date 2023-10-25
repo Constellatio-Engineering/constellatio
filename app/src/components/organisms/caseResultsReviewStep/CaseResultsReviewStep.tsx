@@ -1,4 +1,5 @@
 import { Button } from "@/components/atoms/Button/Button";
+import { RichTextHeadingOverwrite } from "@/components/helpers/RichTextHeadingOverwrite";
 import { ArrowDown } from "@/components/Icons/ArrowDown";
 import { ArrowUp } from "@/components/Icons/ArrowUp";
 import { Bookmark } from "@/components/Icons/Bookmark";
@@ -11,6 +12,7 @@ import { Richtext } from "@/components/molecules/Richtext/Richtext";
 import useResetCaseProgress from "@/hooks/useResetCaseProgress";
 import useSubmittedCaseSolution from "@/hooks/useSubmittedCaseSolution";
 import { type IGenCase_Resolution, type IGenCase_Facts, type Maybe } from "@/services/graphql/__generated/sdk";
+import { type IHeadingNode } from "types/richtext";
 
 import {
   Accordion, Container, Group, ScrollArea, Spoiler, Text, Title
@@ -19,6 +21,7 @@ import { useDisclosure } from "@mantine/hooks";
 import React, { useRef, type FunctionComponent, useEffect, useState } from "react";
 
 import * as styles from "./CaseResultsReviewStep.styles";
+import { getNestedHeadingIndex } from "../floatingPanel/generateTocHelper";
 import IconButtonBar from "../iconButtonBar/IconButtonBar";
 
 interface ICaseResultsReviewStepProps 
@@ -42,7 +45,7 @@ const CaseResultsReviewStep: FunctionComponent<ICaseResultsReviewStepProps> = ({
   const solutionContent = useRef<HTMLDivElement>(null);
   const [solutionElementHeight, setSolutionElementHeight] = React.useState<number>(0);
   const solution: string = isLoading ? "lädt..." : (submittedCaseSolution?.solution || "");
-
+  const allResolutionHeadings = resolution?.json?.content?.filter((x: { attrs: { level: number }; type: "heading" }) => x.type === "heading");
   const icons = [
     { src: <Bookmark/>, title: "Bookmark" },
     { src: <Print/>, title: "Print" },
@@ -140,7 +143,16 @@ const CaseResultsReviewStep: FunctionComponent<ICaseResultsReviewStepProps> = ({
                   <IconButtonBar icons={icons}/>
                 </div>
               </div>
-              <Richtext data={resolution}/>
+              <Richtext
+                data={resolution}
+                richTextOverwrite={{
+                  heading: (props) => 
+                  {
+                    const node = props!.node as unknown as IHeadingNode;
+                    return RichTextHeadingOverwrite({ index: getNestedHeadingIndex(node, allResolutionHeadings), ...props });
+                  },
+                }}
+              />
             </div>
           )}
         </div>

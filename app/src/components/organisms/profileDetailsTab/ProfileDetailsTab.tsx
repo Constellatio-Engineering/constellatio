@@ -5,6 +5,7 @@ import { maximumAmountOfSemesters } from "@/schemas/auth/registrationForm.schema
 
 import { Title, Box } from "@mantine/core";
 import { useForm, zodResolver } from "@mantine/form";
+import { useMediaQuery } from "@mantine/hooks";
 import React, { type FunctionComponent } from "react";
 import { z } from "zod";
 
@@ -28,6 +29,7 @@ const ProfileDetailsTab: FunctionComponent = () =>
 {
   const [err, setErr] = React.useState<boolean>(false);
   const [success, setSuccess] = React.useState<boolean>(false);
+  const isTabletScreen = useMediaQuery("(max-width: 1100px)"); 
 
   const form = useForm<InitialValues>({
     initialValues: {
@@ -67,7 +69,7 @@ const ProfileDetailsTab: FunctionComponent = () =>
   };
   return (
     <div css={styles.wrapper}>
-      <Title order={3}>Profile details</Title>
+      {!isTabletScreen && <Title order={3}>Profile details</Title>}
       {err && <AlertCard onClick={() => setErr(false)} variant="error">Sorry, we weren not able to save changes. Please, try again</AlertCard>}
       {success && (
         <AlertCard

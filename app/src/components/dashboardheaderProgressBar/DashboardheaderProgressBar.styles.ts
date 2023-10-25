@@ -22,9 +22,9 @@ export const track = (theme: MantineTheme) => css`
   display: flex;
   align-items: center;
 `;
-export const progress = (theme: MantineTheme) => css`
+export const progress = ({ progress, theme }: {progress: number; theme: MantineTheme}) => css`
   position: absolute;
-  width: 17%;
+  width: ${progress}%;
   height: 100%;
   border-radius: 12px;
   border: 2px solid ${theme.colors["transparency-02"][3]};

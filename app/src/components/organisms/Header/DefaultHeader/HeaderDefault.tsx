@@ -18,6 +18,7 @@ import { api } from "@/utils/api";
 import { isDevelopmentOrStaging } from "@/utils/env";
 import { paths } from "@/utils/paths";
 
+import { useMediaQuery } from "@mantine/hooks";
 import { useMantineTheme } from "@mantine/styles";
 import { IconFolder } from "@tabler/icons-react";
 import Image from "next/image";
@@ -27,7 +28,8 @@ import { useState, type FunctionComponent } from "react";
 
 import HeaderDefaultLinkItem from "./HeaderDefaultLinkItem";
 import HeaderDefaultRecreateSearch from "./HeaderDefaultRecreateSearch";
-import ConstellatioFullLogoPng from "../../../../../public/images/full-logo.png";
+import ConstellatioFullLogo from "../../../../../public/images/icons/constellatio-full-logo.svg";
+import ConnstellatioLogoIcon from "../../../../../public/images/icons/constellatio-icon.svg";
 import OnboardingTutorialPopover from "../../onboardingTutorialPopover/OnboardingTutorialPopover";
 import SearchOverlay from "../../searchOverlay/SearchOverlay";
 import { SHeader } from "../Header.styles";
@@ -47,6 +49,7 @@ const HeaderDefault: FunctionComponent = () =>
     { slug: paths.cases, title: "Fälle" },
     { slug: paths.dictionary, title: "Lexikon" },
   ];
+  const isTabletScreen = useMediaQuery("(max-width: 1024px)");
   const { refetch: refetchSearchResults } = useSearchResults();
   const { pathname } = useRouter();
   const theme = useMantineTheme();
@@ -71,7 +74,7 @@ const HeaderDefault: FunctionComponent = () =>
         <div css={styles.wrapper({ theme, variant: "default" })}>
           <div css={styles.links}>
             <Link href="/">
-              <Image src={ConstellatioFullLogoPng} alt="Constellatio" width={140}/>
+              <Image src={isTabletScreen ? ConnstellatioLogoIcon : ConstellatioFullLogo} alt="Constellatio"/>
             </Link>
             {links.map((link, linkIndex) =>
               linkIndex === 0 ? (

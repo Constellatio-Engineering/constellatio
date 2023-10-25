@@ -17,7 +17,7 @@ export interface HeaderProps
 export const Header: FC<HeaderProps> = ({ variant = "default" }) => 
 {
   const theme = useMantineTheme();
-
+  // const isTabletScreen = useMediaQuery("(max-width: 1100px)");
   return variant === "simple" ? (
     <SHeader>
       <div css={styles.wrapper({ theme, variant })}>

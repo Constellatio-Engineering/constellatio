@@ -5,12 +5,14 @@ import ProfileHistoryTab from "@/components/organisms/profileHistoryTab/ProfileH
 import ProfileMenu from "@/components/organisms/profileMenu/ProfileMenu";
 import ProfileOverview from "@/components/organisms/profileOverview/ProfileOverview";
 import ProfilePageHeader from "@/components/organisms/profilePageHeader/ProfilePageHeader";
+import ProfileNavMenuTablet from "@/components/profileNavMenuTablet/ProfileNavMenuTablet";
 import SubscriptionTab from "@/components/subscriptionTab/SubscriptionTab";
 import useUserDetails from "@/hooks/useUserDetails";
 import { type IProfilePageProps } from "@/pages/profile";
 import { type UserFiltered } from "@/utils/filters";
 
 import { Container } from "@mantine/core";
+import { useMediaQuery } from "@mantine/hooks";
 import { parseAsString, useQueryState } from "next-usequerystate";
 import React, { type FunctionComponent, type ReactNode, useMemo } from "react";
 
@@ -56,10 +58,17 @@ const ProfilePage: FunctionComponent<ProfilePageProps> = ({ allMainCategory, use
         return <>{`Unknown tab. Create tab type case in ProfilePage component: ${JSON.stringify(activeTab, null, 2)}`}</>;
     }
   }, [activeTab, allMainCategory]);
-
+  const isTabletScreen = useMediaQuery("(max-width: 1100px)");
   return (
     <div>
       <ProfilePageHeader/>
+      {isTabletScreen && (
+        <ProfileNavMenuTablet
+          tabs={tabs}
+          setTab={setTab}
+          activeTabSlug={activeTab?.slug}
+        />
+      )}
       <Container
         maw="100%"
         css={styles.outerContianer}>
