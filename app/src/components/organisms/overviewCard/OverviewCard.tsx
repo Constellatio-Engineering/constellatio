@@ -88,6 +88,8 @@ const OverviewCard: FunctionComponent<IOverviewCard> = ({
   const views = variant === "dictionary" ? articleViews : caseViews;
   const [opened, { close, open }] = useDisclosure(false);
   const theme = useMantineTheme();
+  const initialFilteredTags = tags?.filter((tag) => !tag?.tagName?.startsWith("§"));
+  const filteredTags = (initialFilteredTags && initialFilteredTags.length === 0) ? tags : initialFilteredTags;
 
   return (
     <div css={styles.wrapper()}>
@@ -142,20 +144,11 @@ const OverviewCard: FunctionComponent<IOverviewCard> = ({
         )}
         <div css={styles.row({ theme, variant })}>
           <div className="row-title">
-            <CaptionText
-              styleType="caption-01-medium"
-              component="p"
-              onClick={open}>TAGS
-            </CaptionText>
+            <CaptionText styleType="caption-01-medium" component="p">TAGS</CaptionText>
           </div>
           {/* <ScrollArea> */}
-          <div
-            className="row-value tags-values"
-            onClick={() => 
-            {
-              if(tags?.length != null && tags?.length > 0) { open(); }
-            }}>
-            {tags?.map((tag, tagIndex) => !tag?.tagName?.startsWith("§") ? (<Tag key={tagIndex}>{tag?.tagName}</Tag>) : null)}
+          <div className="row-value tags-values">
+            {filteredTags?.map((tag, tagIndex) => <Tag key={tagIndex}>{tag?.tagName}</Tag>)}
           </div>
           <BodyText
             type="button"
