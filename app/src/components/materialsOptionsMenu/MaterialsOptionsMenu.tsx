@@ -1,6 +1,5 @@
 import { type UploadedFile } from "@/db/schema";
-import useContextAndErrorIfNull from "@/hooks/useContextAndErrorIfNull";
-import { InvalidateQueriesContext } from "@/provider/InvalidateQueriesProvider";
+import { useOnUploadedFileMutation } from "@/hooks/useOnUploadedFileMutation";
 import useRenameFileModalStore from "@/stores/renameFileModal.store";
 import { api } from "@/utils/api";
 import { downloadFileFromUrl } from "@/utils/utils";
@@ -28,32 +27,28 @@ interface MaterialOptionsMenuProps
 
 const MaterialOptionsMenu: FunctionComponent<MaterialOptionsMenuProps> = ({ file, selectedFolderId }) =>
 {
-  const { invalidateUploadedFiles } = useContextAndErrorIfNull(InvalidateQueriesContext);
   const renameFileModalState = useRenameFileModalStore(s => s.renameFileModal);
   const openRenameFileModal = useRenameFileModalStore(s => s.openRenameFileModal);
   const closeRenameFileModal = useRenameFileModalStore(s => s.closeRenameFileModal);
   const updateFilename = useRenameFileModalStore(s => s.updateFilename);
   const hasUnsavedChanges = useRenameFileModalStore(s => s.getHasUnsavedChanges());
   const [isDeleteMaterialModalOpen, setIsDeleteMaterialModalOpen] = useState<boolean>(false);
-  const _invalidateUploadedFiles = async (): Promise<void> => invalidateUploadedFiles({ folderId: selectedFolderId });
+  const { onUploadedFileMutation } = useOnUploadedFileMutation({ folderId: selectedFolderId });
   const isRenameFileModalOpen = renameFileModalState.modalState === "open" && renameFileModalState.fileId === file.id;
-
   const { mutateAsync: createSignedGetUrl } = api.uploads.createSignedGetUrl.useMutation({
     onError: (e) => console.log("error while creating signed get url", e)
   });
-
   const { mutate: renameFile } = api.uploads.renameFile.useMutation({
     onError: (e) => console.log("error while renaming file", e),
     onSuccess: async () =>
     {
-      await _invalidateUploadedFiles();
+      await onUploadedFileMutation();
       closeRenameFileModal();
     }
   });
-
   const { mutate: deleteFile } = api.uploads.deleteUploadedFiles.useMutation({
     onError: (e) => console.log("error while deleting file", e),
-    onSuccess: _invalidateUploadedFiles
+    onSuccess: onUploadedFileMutation
   });
 
   return (

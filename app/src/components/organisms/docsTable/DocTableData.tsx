@@ -7,8 +7,7 @@ import { FolderIcon } from "@/components/Icons/Folder";
 import { Trash } from "@/components/Icons/Trash";
 // import MoveToModal from "@/components/moveToModal/MoveToModal";
 import { type Document } from "@/db/schema";
-import useContextAndErrorIfNull from "@/hooks/useContextAndErrorIfNull";
-import { InvalidateQueriesContext } from "@/provider/InvalidateQueriesProvider";
+import { useOnDocumentMutation } from "@/hooks/useOnDocumentMutation";
 import useDocumentEditorStore from "@/stores/documentEditor.store";
 import { api } from "@/utils/api";
 import { paths } from "@/utils/paths";
@@ -39,12 +38,12 @@ export const DocsTableData: FunctionComponent<Document> = (doc) =>
     updatedAt
   } = doc;
 
+  const { onDocumentMutation } = useOnDocumentMutation({ folderId });
   const downloadDocumentNotificationId = `downloading-document${documentId}`;
   const { setEditDocumentState, setViewDocumentState } = useDocumentEditorStore(s => s);
-  const { invalidateDocuments } = useContextAndErrorIfNull(InvalidateQueriesContext);
   const { mutate: deleteDocument } = api.documents.deleteDocument.useMutation({
     onError: (error) => console.error("Error while deleting document:", error),
-    onSuccess: async () => invalidateDocuments({ folderId }),
+    onSuccess: onDocumentMutation
   });
 
   const { isLoading: isDownloading, mutate: downloadDocument } = useMutation({
