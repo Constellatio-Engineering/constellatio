@@ -8,4 +8,8 @@ export const wrapper = (theme: MantineTheme) => css`
     border-top: 12px solid ${theme?.colors?.blue?.[2]};
     display:flex;
     gap:140px;
+    @media screen and (max-width: 1200px) {
+        flex-direction:column;
+        gap:0px;
+    }
 `;

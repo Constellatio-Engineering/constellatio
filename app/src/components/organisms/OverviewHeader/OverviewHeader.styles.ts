@@ -37,9 +37,9 @@ export const contentHeader = ({ theme, variant }: {
 		}
 	}
 
-	@media screen and (max-width: 1024px) {
+	/* @media screen and (max-width: 1024px) {
 	height: 300px;
-	}
+	} */
 	`;
 
 export const categoriesButtons = () => 

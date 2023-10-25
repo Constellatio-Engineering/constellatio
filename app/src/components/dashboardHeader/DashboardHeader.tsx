@@ -8,17 +8,19 @@ import LearninTimeCard from "../learninTimeCard/LearninTimeCard";
 import OverviewHeader from "../organisms/OverviewHeader/OverviewHeader";
 
 const DashboardHeader: FunctionComponent = () => (
-  <div css={styles.wrapper}>
-    <OverviewHeader variant="red"/>
-    <div css={styles.contentContainer}>
-      <Title css={styles.headerTitle} order={1}>Welcome Back, fName!</Title>
-      <DashboardheaderProgressBar/>
-      <div css={styles.headerCardsArea}>
-        <LearninTimeCard/>
-        <BadgesCarouselBlock/>
+  <>
+    <div css={styles.wrapper}>
+      <OverviewHeader variant="red"/>
+      <div css={styles.contentContainer}>
+        <Title css={styles.headerTitle} order={1}>Welcome Back, fName!</Title>
+        <DashboardheaderProgressBar/>
+        <div css={styles.headerCardsArea}>
+          <LearninTimeCard/>
+          <BadgesCarouselBlock/>
+        </div>
       </div>
     </div>
-  </div>
+  </>
 );
 
 export default DashboardHeader;
