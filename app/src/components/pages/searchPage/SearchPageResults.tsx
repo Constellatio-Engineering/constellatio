@@ -127,15 +127,17 @@ const SearchPageResults: FunctionComponent<Props> = ({ tabQuery }) =>
                   <SearchPapersBlock
                     variant="userDocuments"
                     table={(
-                      <DocsTable docs={searchResults.userDocuments.map(doc => ({
-                        content: doc.content,
-                        createdAt: date,
-                        folderId: doc.folderId, 
-                        id: doc.id, 
-                        name: doc.name,
-                        updatedAt: date, 
-                        userId: doc.userId
-                      }))}
+                      <DocsTable
+                        docs={searchResults.userDocuments.map(doc => ({
+                          content: doc.content,
+                          createdAt: date,
+                          folderId: doc.folderId, 
+                          id: doc.id, 
+                          name: doc.name,
+                          updatedAt: date, 
+                          userId: doc.userId
+                        }))}
+                        variant="searchPapers"
                       />
                     )}
                     numberOfTableItems={searchResults.userDocuments?.length}

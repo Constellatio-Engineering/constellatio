@@ -8,12 +8,19 @@ import { type Styles, type MantineTheme } from "@mantine/styles";
 const CSSClickableEffect = (theme: MantineTheme) => css`
 	&:hover {
 		background: ${theme.colors["neutrals-01"][1]};
-		cursor: pointer;
 	}
 `;
 
 export const optionsCell = (theme: MantineTheme) => css`
-${CSSClickableEffect(theme)}
+	cursor: pointer;
+	transition: background 0.3s ease;
+&:hover {
+	background: ${theme.colors["neutrals-01"][1]};
+	
+	> button {
+		background: ${theme.colors["neutrals-01"][1]};
+	}
+}
 `;
 
 export const tableWrapper = (theme: MantineTheme) => css`
@@ -118,6 +125,14 @@ export const cellNote = (theme: MantineTheme) => css`
 		margin-right: 8px;
 	}
 	${CSSClickableEffect(theme)}
+`;
+
+export const cellFolder = (theme: MantineTheme) => css`
+	color: ${theme.colors["neutrals-01"][9]};
+	svg {
+		vertical-align: text-bottom;
+		margin-right: 8px;
+	}
 `;
 
 export const showMoreButton = (theme: MantineTheme) => css`

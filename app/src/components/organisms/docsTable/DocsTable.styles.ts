@@ -89,12 +89,19 @@ min-height: 55px;
 }
 .mantine-Menu-dropdown {
   padding: 0;
-  border-radius: 12px;
 }
 .mantine-Menu-item {
   border-bottom: 1px solid ${theme.colors["neutrals-01"][3]};
   border-radius:0px;
 }
+`;
+
+export const cellFolder = (theme: MantineTheme) => css`
+	color: ${theme.colors["neutrals-01"][9]};
+	svg {
+		vertical-align: text-bottom;
+		margin-right: 8px;
+	}
 `;
 
 export const docName = (theme: MantineTheme) => css`

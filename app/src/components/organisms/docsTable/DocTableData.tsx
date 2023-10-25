@@ -3,6 +3,7 @@ import { DropdownItem } from "@/components/atoms/Dropdown/DropdownItem";
 import { Cross } from "@/components/Icons/Cross";
 import { DownloadIcon } from "@/components/Icons/DownloadIcon";
 import { Edit } from "@/components/Icons/Edit";
+import { FolderIcon } from "@/components/Icons/Folder";
 import { Trash } from "@/components/Icons/Trash";
 // import MoveToModal from "@/components/moveToModal/MoveToModal";
 import { type Document } from "@/db/schema";
@@ -105,9 +106,21 @@ export const DocsTableData: FunctionComponent<Document> = (doc) =>
       </td>
       <td css={styles.docDate}><BodyText styleType="body-01-medium" component="p">{formatDate(updatedAt)}</BodyText></td>
       {/* <td css={styles.docTags}><BodyText styleType="body-02-medium" component="p"/></td> */}
+      <td css={styles.cellFolder}>
+        <BodyText
+          styleType="body-02-medium"
+          c="neutrals-01.9"
+          component="p">
+          <FolderIcon/>
+          FOLDER
+        </BodyText>
+      </td>
       <td
         css={styles.callToActionCell}> 
-        <Menu shadow="md" width={200}>
+        <Menu
+          shadow="elevation-big"
+          width={200}
+          radius="12px">
           <Menu.Target>
             <button type="button" className="dots-btn"><DotsIcon/></button>
           </Menu.Target>
@@ -126,37 +139,38 @@ export const DocsTableData: FunctionComponent<Document> = (doc) =>
             </Menu.Item>
           </Menu.Dropdown>
         </Menu>
-        {/* Modal */}
-        <Modal
-          lockScroll={false}
-          opened={showDeleteDocModal}
-          withCloseButton={false}
-          centered
-          styles={styles.deleteModalStyle()}
-          onClose={() => { setShowDeleteDocModal(false); }}>
-          <span className="close-btn" onClick={() => setShowDeleteDocModal(false)}>
-            <Cross size={32}/>
-          </span>
-          <Title order={3}>Delete document</Title>
-          <BodyText styleType="body-01-regular" component="p" className="delete-folder-text">Are you sure you want to document <strong>{doc?.name}</strong>?</BodyText>
-          <div className="modal-call-to-action">
-            <Button<"button">
-              styleType={"secondarySimple" as TButton["styleType"]}
-              onClick={() => setShowDeleteDocModal(false)}>
-              No, Keep
-            </Button>
-            <Button<"button">
-              styleType="primary"
-              onClick={() => 
-              {
-                deleteDocument({ id: documentId });
-                setShowDeleteDocModal(false);
-              }}>
-              Yes, Delete
-            </Button>
-          </div>
-        </Modal>
       </td>
+      {/* Modal */}
+      <Modal
+        lockScroll={false}
+        opened={showDeleteDocModal}
+        withCloseButton={false}
+        centered
+        styles={styles.deleteModalStyle()}
+        onClose={() => { setShowDeleteDocModal(false); }}>
+        <span className="close-btn" onClick={() => setShowDeleteDocModal(false)}>
+          <Cross size={32}/>
+        </span>
+        <Title order={3}>Delete document</Title>
+        <BodyText styleType="body-01-regular" component="p" className="delete-folder-text">Are you sure you want to document <strong>{doc?.name}</strong>?</BodyText>
+        <div className="modal-call-to-action">
+          <Button<"button">
+            styleType={"secondarySimple" as TButton["styleType"]}
+            onClick={() => setShowDeleteDocModal(false)}>
+            No, Keep
+          </Button>
+          <Button<"button">
+            styleType="primary"
+            onClick={() => 
+            {
+              deleteDocument({ id: documentId });
+              setShowDeleteDocModal(false);
+            }}>
+            Yes, Delete
+          </Button>
+        </div>
+      </Modal>
+      
     </>
   );
 };
