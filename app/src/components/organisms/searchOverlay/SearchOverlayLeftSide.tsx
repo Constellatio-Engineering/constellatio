@@ -27,7 +27,7 @@ const SearchOverlayLeftSide: FunctionComponent<SearchOverlayLeftSideProps> = ({ 
   {
     return (
       <div css={styles.suggestionsLeft}>
-        <SuggestionSection label="recent searches" labelVariant="neutral">
+        <SuggestionSection label="Zuletzt gesucht" labelVariant="neutral">
           {searchHistory.map((result, index) => (
             <Link
               href={`${paths.search}?find=${result}`}
@@ -39,7 +39,7 @@ const SearchOverlayLeftSide: FunctionComponent<SearchOverlayLeftSideProps> = ({ 
             </Link>
           ))}
         </SuggestionSection>
-        <SuggestionSection label="popular search" labelVariant="neutral">
+        <SuggestionSection label="Häufig gesucht" labelVariant="neutral">
           {popularSearch?.popularSearches?.map((result) => (
             <Link
               href={`${paths.search}?find=${result?.searchField}`}
@@ -62,8 +62,8 @@ const SearchOverlayLeftSide: FunctionComponent<SearchOverlayLeftSideProps> = ({ 
         <span className="emptyStateCard">
           <EmptyStateCard
             variant="For-small-areas"
-            title="No search results in cases and dictionary"
-            text="Please adjust your search if you’re looking for the materials in the categories mentioned above"
+            title="Keine Ergebnisse"
+            text="Bitte versuche es mit anderen Begriffen oder Tags, um relevante Inhalte zu finden."
           />
         </span>
       </div>
@@ -73,7 +73,7 @@ const SearchOverlayLeftSide: FunctionComponent<SearchOverlayLeftSideProps> = ({ 
   return (
     <div css={styles.suggestionsLeft}>
       {searchResults.cases.length > 0 && (
-        <SuggestionSection label="Cases" labelVariant="case">
+        <SuggestionSection label="Fälle" labelVariant="case">
           {searchResults.cases.slice(0, 9).map((result) => (
             <Link
               key={result.id}
@@ -88,7 +88,7 @@ const SearchOverlayLeftSide: FunctionComponent<SearchOverlayLeftSideProps> = ({ 
         </SuggestionSection>
       )}
       {searchResults.articles.length > 0 && (
-        <SuggestionSection label="Dictionary" labelVariant="dictionary">
+        <SuggestionSection label="LEXIKON" labelVariant="dictionary">
           {searchResults.articles.slice(0, 9).map((article) => (
             <Link
               key={article.id}

@@ -147,12 +147,12 @@ const OverviewPageContent: FunctionComponent<OverviewPageContentProps> = ({ cont
       </div>
       {getIsCategoryEmpty() && (
         <EmptyStateCard
-          title={`We're currently working hard to bring you ${
+          title={`Das Angebot von Constellatio wird ständig erweitert. In Kürze findest du hier ${
             variant === "case"
-              ? "engaging cases to solve"
-              : "interesting articles"
+              ? "interaktive Fälle"
+              : "verlinkte Lexikon-Artikel mit eingängigen Visualisierungen"
           }`}
-          text="Please check back soon for the latest updates"
+          text=""
           variant="For-large-areas"
         />
       )}

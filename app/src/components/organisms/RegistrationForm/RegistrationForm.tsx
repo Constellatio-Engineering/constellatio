@@ -8,12 +8,13 @@ import { Dropdown } from "@/components/atoms/Dropdown/Dropdown";
 import { Input } from "@/components/atoms/Input/Input";
 import { PasswordValidationSchema } from "@/components/helpers/PasswordValidationSchema";
 import { allGenders, allUniversities } from "@/components/organisms/RegistrationForm/RegistrationForm.data";
+import { colors } from "@/constants/styles/colors";
 import { env } from "@/env.mjs";
 import { supabase } from "@/lib/supabase";
 import { maximumAmountOfSemesters, type RegistrationFormSchema, registrationFormSchema } from "@/schemas/auth/registrationForm.schema";
 import { api } from "@/utils/api";
 import { isDevelopmentOrStaging } from "@/utils/env";
-import { getConfirmEmailUrl } from "@/utils/paths";
+import { getConfirmEmailUrl, paths } from "@/utils/paths";
 import { type PartialUndefined } from "@/utils/types";
 
 import { Box, Stack, Title } from "@mantine/core";
@@ -226,6 +227,13 @@ export const RegistrationForm: FunctionComponent = () =>
       )}
       <Stack spacing="spacing-24">
         <Stack spacing="spacing-12">
+          <CustomLink
+            styleType="link-secondary"
+            component="button"
+            onClick={() => void router.push(paths.login)}
+            stylesOverwrite={{ color: colors["neutrals-02"][2], textAlign: "left" }}>
+            Du hast schon ein Konto?
+          </CustomLink>
           <Input
             {...form.getInputProps("firstName")}
             inputType="text"

@@ -19,12 +19,11 @@ const tabSchema = createParser({
     {
       case "userUploads": { return "userUploads"; }
       case "cases": { return "cases"; }
-      case "userDocuments": { return "userDocuments"; }
       case "articles": { return "articles"; }
       default:
       {
         console.error(`Unknown tab query: ${query}`);
-        return "articles";
+        return "cases";
       }
     }
   },

@@ -4,9 +4,9 @@ import Image from "next/image";
 import Link from "next/link";
 import { type FC } from "react";
 
+import HeaderDefault from "./DefaultHeader/HeaderDefault";
 import { SHeader } from "./Header.styles";
 import * as styles from "./Header.styles";
-import HeaderDefault from "./HeaderDefault";
 import ConstellatioFullLogo from "../../../../public/images/icons/constellatio-full-logo.svg";
 
 export interface HeaderProps 

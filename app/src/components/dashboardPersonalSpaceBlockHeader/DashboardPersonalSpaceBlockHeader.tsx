@@ -14,9 +14,9 @@ const DashboardPersonalSpaceBlockHeader: FunctionComponent = () =>
 
   return (
     <div css={styles.wrapper}>
-      <Title css={styles.headerTitle} order={2}>Personal space</Title>
+      <Title css={styles.headerTitle} order={2} tt="capitalize">Persönlicher Bereich</Title>
       <Link href={`${paths.personalSpace}`}>
-        <Button<"button"> styleType="secondarySimple" size={matches ? "large" : "medium"} type="button">View all</Button>
+        <Button<"button"> styleType="secondarySimple" type="button" size={matches ? "large" : "medium"}>Alle ansehen</Button>
       </Link>
     </div>
   );

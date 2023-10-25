@@ -26,13 +26,13 @@ const UploadedMaterialTableHead: FunctionComponent<UploadedMaterialTableHeadProp
           TAGS
         </CaptionText>
       </th> */}
-      {variant === "searchPapers" && (
+      {/* {variant === "searchPapers" && (
         <th>
           <CaptionText tt="uppercase" styleType="caption-01-medium" component="p">
             Folder
           </CaptionText>
         </th>
-      )}
+      )} */}
       {variant === "personalSpace" && (
         <th>
           <CaptionText tt="uppercase" styleType="caption-01-medium" component="p">

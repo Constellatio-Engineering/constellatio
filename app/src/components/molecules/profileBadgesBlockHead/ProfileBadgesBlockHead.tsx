@@ -20,7 +20,7 @@ const ProfileBadgesBlockHead: FunctionComponent = () =>
           <CaptionText css={styles.title} styleType="caption-01-medium" component="p">Badges</CaptionText>
           <SubtitleText css={styles.counter} styleType="subtitle-01-medium" component="p">0 / 0</SubtitleText>
         </div>
-        <Button<"button"> onClick={() => setIsBadgesDrawerOpened(true)} styleType="secondarySimple">See all</Button>
+        <Button<"button"> onClick={() => setIsBadgesDrawerOpened(true)} styleType="secondarySimple">Alle ansehen</Button>
       </div>
     </div>
   );

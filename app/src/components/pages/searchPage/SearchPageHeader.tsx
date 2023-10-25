@@ -1,5 +1,5 @@
 import MenuTab from "@/components/atoms/menuTab/MenuTab";
-import useSearchResults, { type SearchResults, type SearchResultsKey } from "@/hooks/useSearchResults";
+import useSearchResults, { type SearchResultsKey } from "@/hooks/useSearchResults";
 
 import { Title } from "@mantine/core";
 import { useRouter } from "next/router";
@@ -19,6 +19,20 @@ const SearchPageHeader: FunctionComponent<Props> = ({ setTabQuery, tabQuery, tot
   const { searchResults } = useSearchResults();
   const { query } = useRouter();
 
+  const tabItems: Array<{
+    label: SearchResultsKey;
+    resultsCount: number;
+  }> = [{
+    label: "cases",
+    resultsCount: searchResults.cases?.length
+  }, {
+    label: "articles",
+    resultsCount: searchResults.articles?.length
+  }, {
+    label: "userUploads",
+    resultsCount: searchResults.userUploads?.length + searchResults.userDocuments?.length
+  }];
+
   return (
     <div css={styles.headerWrapper}>
       <div css={styles.header}>
@@ -28,16 +42,15 @@ const SearchPageHeader: FunctionComponent<Props> = ({ setTabQuery, tabQuery, tot
         </span>
       </div>
       <div css={styles.navBar}>                                        
-        {Object.keys(searchResults).map((i, index) => 
+        {tabItems.map((item, index) => 
         {
-          const item = i as keyof SearchResults;
           return (
             <MenuTab
               key={index}
-              title={item}
-              number={searchResults[item]?.length}
-              active={tabQuery === item}
-              onClick={() => void setTabQuery(item)}
+              title={item.label}
+              number={item.resultsCount}
+              active={tabQuery === item.label}
+              onClick={() => void setTabQuery(item.label)}
             />
           );
         })}

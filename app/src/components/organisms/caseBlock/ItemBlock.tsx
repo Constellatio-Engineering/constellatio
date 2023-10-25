@@ -9,6 +9,7 @@ import CaseBlockBookmarkButton from "@/components/organisms/caseBlock/caseBlockB
 import useBookmarks from "@/hooks/useBookmarks";
 import useCasesProgress from "@/hooks/useCasesProgress";
 import { type IGenArticle, type IGenFullCaseFragment } from "@/services/graphql/__generated/sdk";
+import { paths } from "@/utils/paths";
 
 // import { useMediaQuery } from "@mantine/hooks";
 import Link from "next/link";
@@ -103,7 +104,7 @@ const ItemBlock: FunctionComponent<ICaseBlockProps> = ({
             return item && item.id && (
               <tr key={item?.id}>
                 <td className="primaryCell">
-                  <Link passHref shallow href={`/${variant === "case" ? "cases" : "dictionary"}/${item?.id}`}>
+                  <Link passHref shallow href={`${variant === "case" ? paths.cases : paths.dictionary}/${item?.id}`}>
                     <TableCell variant="titleTableCell" clickable>
                       {item?.title}
                     </TableCell>
