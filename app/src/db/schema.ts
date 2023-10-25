@@ -326,8 +326,12 @@ export type SearchIndexUpdateQueueItem = InferSelectModel<
 export const userPings = pgTable("UserPing", {
   id: serial("Id").primaryKey(),
   userId: uuid("UserId").references(() => users.id, { onDelete: "no action" }),
-  createdAt: timestamp("CreatedAt", { mode: "date" }).defaultNow().notNull(),
-  updatedAt: timestamp("UpdatedAt", { mode: "date" }).defaultNow().notNull(),
+  createdAt: timestamp("CreatedAt", { mode: "date", withTimezone: true })
+    .defaultNow()
+    .notNull(),
+  updatedAt: timestamp("UpdatedAt", { mode: "date", withTimezone: true })
+    .defaultNow()
+    .notNull(),
   url: text("Url").notNull(),
 });
 
