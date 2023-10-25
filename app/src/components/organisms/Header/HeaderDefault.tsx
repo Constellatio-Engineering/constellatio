@@ -16,7 +16,7 @@ import useSearchResults from "@/hooks/useSearchResults";
 import { InvalidateQueriesContext } from "@/provider/InvalidateQueriesProvider";
 import useSearchBarStore from "@/stores/searchBar.store";
 import { api } from "@/utils/api";
-import { isDevelopment, isDevelopmentOrStaging } from "@/utils/env";
+import { isDevelopmentOrStaging } from "@/utils/env";
 import { paths } from "@/utils/paths";
 
 import { Loader } from "@mantine/core";
