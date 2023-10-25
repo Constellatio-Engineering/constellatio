@@ -37,8 +37,6 @@ const SearchPageResults: FunctionComponent<Props> = ({ tabQuery }) =>
     />
   );
 
-  const date = new Date();
-
   switch (tabQuery)
   {
     case "articles":
@@ -130,11 +128,11 @@ const SearchPageResults: FunctionComponent<Props> = ({ tabQuery }) =>
                       <DocsTable
                         docs={searchResults.userDocuments.map(doc => ({
                           content: doc.content,
-                          createdAt: date,
-                          folderId: doc.folderId, 
-                          id: doc.id, 
+                          createdAt: new Date(doc.createdAt),
+                          folderId: doc.folderId,
+                          id: doc.id,
                           name: doc.name,
-                          updatedAt: date, 
+                          updatedAt: new Date(doc.updatedAt),
                           userId: doc.userId
                         }))}
                         variant="searchPapers"
@@ -154,7 +152,7 @@ const SearchPageResults: FunctionComponent<Props> = ({ tabQuery }) =>
                     table={(
                       <UploadedMaterialTable
                         uploadedFiles={searchResults.userUploads.map(file => ({
-                          createdAt: date,
+                          createdAt: new Date(file.createdAt),
                           fileExtension: "",
                           folderId: "",
                           id: file.id,
