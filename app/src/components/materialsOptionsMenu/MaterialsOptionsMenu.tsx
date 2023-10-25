@@ -58,7 +58,10 @@ const MaterialOptionsMenu: FunctionComponent<MaterialOptionsMenuProps> = ({ file
 
   return (
     <> 
-      <Menu shadow="elevation-big" radius="12px" width={200}>
+      <Menu
+        shadow="elevation-big"
+        radius="12px"
+        width={200}>
         <Menu.Target>
           <button type="button" css={styles.callToActionCell}>
             <DotsIcon/>

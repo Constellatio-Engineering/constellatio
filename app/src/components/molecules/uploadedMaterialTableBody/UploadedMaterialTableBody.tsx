@@ -2,6 +2,7 @@
 import { BodyText } from "@/components/atoms/BodyText/BodyText";
 // import { Checkbox } from "@/components/atoms/Checkbox/Checkbox";
 import { FileIcon } from "@/components/Icons/FileIcon";
+import { FolderIcon } from "@/components/Icons/Folder";
 import { ImageIcon } from "@/components/Icons/image";
 import { Notepad } from "@/components/Icons/Notepad";
 import { NotepadFilled } from "@/components/Icons/NotepadFilled";
@@ -121,7 +122,17 @@ const UploadedMaterialTableBody: FunctionComponent<UploadedMaterialTableBodyProp
                 </BodyText>
               </td>
             )}
-            {/* {variant === "searchPapers" && <td/>} */}
+            {variant === "searchPapers" && (
+              <td css={styles.cellFolder}>
+                <BodyText
+                  styleType="body-02-medium"
+                  c="neutrals-01.9"
+                  component="p">
+                  <FolderIcon/>
+                  FOLDER
+                </BodyText>
+              </td>
+            )}
             {file && (
               <td css={styles.optionsCell}>
                 <MaterialOptionsMenu

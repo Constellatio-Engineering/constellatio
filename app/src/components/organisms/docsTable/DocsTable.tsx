@@ -11,9 +11,10 @@ import { ArrowDown } from "../../Icons/ArrowDown";
 interface DocsTableProps 
 {
   readonly docs: Document[];
+  readonly variant?: "personalSpace" | "searchPapers";
 }
 
-const DocsTable: FunctionComponent<DocsTableProps> = ({ docs }) =>
+const DocsTable: FunctionComponent<DocsTableProps> = ({ docs, variant = "personalSpace" }) =>
 {
   const [showingDocs, setShowingDocs] = useState<number>(5);
   const isShowingFullTable = showingDocs >= (docs.length ?? 0);
@@ -27,6 +28,13 @@ const DocsTable: FunctionComponent<DocsTableProps> = ({ docs }) =>
               <CaptionText styleType="caption-01-medium" component="p">DOC NAME</CaptionText>
             </th>
             <th><CaptionText styleType="caption-01-medium" component="p">LAST MODIFIED</CaptionText></th>
+            {variant === "searchPapers" && (
+              <th>
+                <CaptionText tt="uppercase" styleType="caption-01-medium" component="p">
+                  Folder
+                </CaptionText>
+              </th>
+            )}
             {/* <th><CaptionText styleType="caption-01-medium" component="p">TAGS</CaptionText></th> */}
             <th/>
           </tr>
