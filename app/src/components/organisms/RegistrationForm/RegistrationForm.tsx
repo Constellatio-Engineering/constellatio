@@ -13,8 +13,8 @@ import { env } from "@/env.mjs";
 import { supabase } from "@/lib/supabase";
 import { maximumAmountOfSemesters, type RegistrationFormSchema, registrationFormSchema } from "@/schemas/auth/registrationForm.schema";
 import { api } from "@/utils/api";
-import { isDevelopmentOrStaging } from "@/utils/env";
-import { getConfirmEmailUrl, paths } from "@/utils/paths";
+import { isDevelopment, isDevelopmentOrStaging } from "@/utils/env";
+import { getConfirmEmailUrl } from "@/utils/paths";
 import { type PartialUndefined } from "@/utils/types";
 
 import { Box, Stack, Title } from "@mantine/core";
@@ -34,7 +34,7 @@ type InitialValues = PartialUndefined<RegistrationFormSchema, "gender">;
 const initialValues: InitialValues = isDevelopmentOrStaging ? {
   acceptTOS: true,
   displayName: "Constellatio Test User",
-  email: env.NEXT_PUBLIC_SIGN_UP_DEFAULT_EMAIL || (isDevelopmentOrStaging ? "devUser@constellatio-dummy-mail.de" : ""),
+  email: env.NEXT_PUBLIC_SIGN_UP_DEFAULT_EMAIL || (isDevelopment ? "devUser@constellatio-dummy-mail.de" : ""),
   firstName: "Test",
   gender: allGenders[0]!.identifier,
   lastName: "User",

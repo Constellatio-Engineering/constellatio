@@ -5,6 +5,8 @@ import { createTRPCRouter, publicProcedure } from "@/server/api/trpc";
 import { getConfirmEmailUrl } from "@/utils/paths";
 import { EmailAlreadyTakenError, InternalServerError, RegisterError } from "@/utils/serverError";
 
+import { eq } from "drizzle-orm";
+
 export const authenticationRouter = createTRPCRouter({
   register: publicProcedure
     .input(registrationFormSchema)
@@ -13,6 +15,16 @@ export const authenticationRouter = createTRPCRouter({
       console.log("--- Registering user ---");
 
       const start = performance.now();
+
+      const existingUser = await db.query.users.findFirst({
+        where: eq(users.email, input.email)
+      });
+
+      if(existingUser)
+      {
+        console.log("User with email already exists", existingUser);
+        throw new EmailAlreadyTakenError();
+      }
 
       const { data: signUpData, error: signUpError } = await supabaseServerClient.auth.signUp({
         email: input.email,
@@ -24,11 +36,7 @@ export const authenticationRouter = createTRPCRouter({
 
       if(signUpError)
       {
-        if(signUpError.message === "User already registered")
-        {
-          throw new EmailAlreadyTakenError();
-        }
-
+        console.log("error occurred while signing up", signUpError);
         throw new RegisterError(signUpError);
       }
 
@@ -52,11 +60,7 @@ export const authenticationRouter = createTRPCRouter({
           university: input.university
         };
 
-        const insertStart = performance.now();
-
         await db.insert(users).values(userToInsert);
-
-        console.log(`Inserting user into db took ${performance.now() - insertStart}ms`);
       }
       catch (e: unknown)
       {
