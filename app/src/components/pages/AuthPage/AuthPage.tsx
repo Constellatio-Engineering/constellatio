@@ -19,7 +19,7 @@ export const AuthPage: FC<AuthPageProps> = ({ tab }) =>
 {
   const router = useRouter();
   const handleTabChange: (value: AuthPageProps["tab"]) => Promise<boolean> = async (value) => router.push(`/${value}`);
-  const isBigScreen = useMediaQuery("(min-width: 1100px)");
+  const isBigScreen = useMediaQuery("(min-width: 961px)");
 
   return (
     <Flex

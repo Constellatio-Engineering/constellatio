@@ -22,20 +22,19 @@ export const RegistrationVisualHeader: FunctionComponent = () =>
         direction="column"
         justify="space-between"
         align="center"
-        mah="100%"
-        maw="90%"
-        sx={{ margin: "0 auto", overflow: "hidden" }}
-        pt={130}>
+        sx={{ 
+          alignItems: "center", display: "flex", height: "100%", justifyContent: "center", margin: "0 auto", maxWidth: "100%", overflow: "hidden", padding: 0,
+
+        }}>
         <Flex
           px={20}
           direction="column"
-          maw="100%"
-          justify="space-between"
+          justify="center"
           align="center">
           {/* eslint-disable-next-line @next/next/no-img-element */}
           <img
             src={visual.src}
-            style={{ height: "auto", maxWidth: "100%", objectFit: "contain" }}
+            style={{ maxWidth: "100%", objectFit: "contain" }}
             alt="Registration-visual"
           />
           <Title
