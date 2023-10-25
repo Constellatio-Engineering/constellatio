@@ -13,7 +13,7 @@ import { env } from "@/env.mjs";
 import { supabase } from "@/lib/supabase";
 import { maximumAmountOfSemesters, type RegistrationFormSchema, registrationFormSchema } from "@/schemas/auth/registrationForm.schema";
 import { api } from "@/utils/api";
-import { isDevelopmentOrStaging } from "@/utils/env";
+import { isDevelopment, isDevelopmentOrStaging } from "@/utils/env";
 import { getConfirmEmailUrl, paths } from "@/utils/paths";
 import { type PartialUndefined } from "@/utils/types";
 
@@ -24,6 +24,7 @@ import { notifications } from "@mantine/notifications";
 import Link from "next/link";
 import { useRouter } from "next/router";
 import { useTranslation } from "next-i18next";
+import { parseAsBoolean, useQueryState } from "next-usequerystate";
 import { type FunctionComponent, useEffect, useRef, useState } from "react";
 import z from "zod";
 import { makeZodI18nMap } from "zod-i18n-map";
@@ -34,7 +35,7 @@ type InitialValues = PartialUndefined<RegistrationFormSchema, "gender">;
 const initialValues: InitialValues = isDevelopmentOrStaging ? {
   acceptTOS: true,
   displayName: "Constellatio Test User",
-  email: env.NEXT_PUBLIC_SIGN_UP_DEFAULT_EMAIL || (isDevelopmentOrStaging ? "devUser@constellatio-dummy-mail.de" : ""),
+  email: env.NEXT_PUBLIC_SIGN_UP_DEFAULT_EMAIL || (isDevelopment ? "devUser@constellatio-dummy-mail.de" : ""),
   firstName: "Test",
   gender: allGenders[0]!.identifier,
   lastName: "User",
@@ -55,6 +56,8 @@ const initialValues: InitialValues = isDevelopmentOrStaging ? {
   university: "",
 };
 
+const resendEmailConfirmationTimeout = env.NEXT_PUBLIC_RESEND_EMAIL_CONFIRMATION_TIMEOUT_IN_SECONDS * 1000;
+
 export const RegistrationForm: FunctionComponent = () =>
 {
   const { t } = useTranslation();
@@ -67,7 +70,6 @@ export const RegistrationForm: FunctionComponent = () =>
   });
   const [shouldShowEmailConfirmationDialog, setShouldShowEmailConfirmationDialog] = useState<boolean>(false);
   const lastConfirmationEmailTimestamp = useRef<number>();
-  const [countdown, setCountdown] = useState<number>(0);
 
   useEffect(() =>
   {
@@ -97,7 +99,7 @@ export const RegistrationForm: FunctionComponent = () =>
       {
         case "emailConfirmationRequired":
         {
-          setShouldShowEmailConfirmationDialog(true);
+          void setShouldShowEmailConfirmationDialog(true);
           break;
         }
         case "signupComplete":
@@ -114,26 +116,14 @@ export const RegistrationForm: FunctionComponent = () =>
 
   const resendConfirmationEmail = async (): Promise<void> =>
   {
-    if(lastConfirmationEmailTimestamp.current && (Date.now() - lastConfirmationEmailTimestamp.current < 10000))
+    if(lastConfirmationEmailTimestamp.current && (Date.now() - lastConfirmationEmailTimestamp.current < resendEmailConfirmationTimeout))
     {
       notifications.show({
-        message: "Bitte warte noch einen Moment, bevor du eine weitere E-Mail anforderst",
-        title: "Ups!",
+        color: "red",
+        message: `Bitte warte mindestens ${env.NEXT_PUBLIC_RESEND_EMAIL_CONFIRMATION_TIMEOUT_IN_SECONDS} Sekunden, bevor du eine weitere E-Mail anforderst`,
+        title: "Einen Moment...",
       });
-      lastConfirmationEmailTimestamp.current = Date.now();
-      // Start countdown again after sending email
-      const intervalId = setInterval(() => 
-      {
-        const timeElapsed = lastConfirmationEmailTimestamp.current ? Date.now() - lastConfirmationEmailTimestamp.current : 0;
-        const remainingTime = Math.max(0, 10 - Math.ceil(timeElapsed / 1000));
- 
-        setCountdown(remainingTime);
- 
-        if(remainingTime === 0) 
-        {
-          clearInterval(intervalId);
-        }
-      }, 1000);
+
       return;
     }
 
@@ -148,6 +138,7 @@ export const RegistrationForm: FunctionComponent = () =>
     if(error)
     {
       notifications.show({
+        color: "red",
         message: "Deine Bestätigungs-E-Mail konnte nicht erneut gesendet werden. Bitte versuche es später erneut.",
         title: "Ups!",
       });
@@ -155,64 +146,52 @@ export const RegistrationForm: FunctionComponent = () =>
     }
 
     notifications.show({
+      color: "green",
       message: "Deine Bestätigungs-E-Mail wurde erneut gesendet.",
       title: "E-Mail gesendet!",
     });
   };
-
-  useEffect(() => 
-  {
-    const intervalId = setInterval(() => 
-    {
-      const timeElapsed = lastConfirmationEmailTimestamp?.current ? lastConfirmationEmailTimestamp?.current : 0;
-      const remainingTime = Math.max(0, 10 - Math.ceil(timeElapsed / 1000));
-
-      setCountdown(remainingTime);
-
-      if(remainingTime === 0) 
-      {
-        clearInterval(intervalId);
-      }
-    }, 1000);
-
-    return () => clearInterval(intervalId);
-  }, []);
   
   if(shouldShowEmailConfirmationDialog)
   {
     return (
       <div style={{
-        display: "flex", flexDirection: "column", gap: 24, placeItems: "center"
+        display: "flex",
+        flexDirection: "column",
+        gap: 24,
+        marginTop: 40,
+        placeItems: "center"
       }}>
-        <Title ta="center" order={3}>Confirm your email</Title>
-        {countdown > 0 && countdown < 10 && <AlertCard variant="error">You can send a confirmation email again after {countdown} seconds</AlertCard>}
+        <Title ta="center" order={3}>Bestätige deine E-Mail Adresse</Title>
         <div style={{ display: "grid", gap: "10px" }}>
-          {/* <BodyText styleType="body-01-regular">Deine Registrierung war erfolgreich. Du musst jetzt noch deine E-Mail Adresse bestätigen. Bitte schaue in deinem Postfach nach einer E-Mail von uns. </BodyText> */}
-          <BodyText ta="center" styleType="body-01-regular">We have sent an email to <strong>{form.values.email}</strong>. Click on the link to activate your account.</BodyText>
-          {/* <BodyText styleType="body-01-regular">Nach erfolgreicher Bestätigung kannst du dich mit deinem neuen Account einloggen.</BodyText> */}
+          <BodyText ta="center" styleType="body-01-regular">
+            Wir haben eine E-Mail an {form.values.email ? <strong>{form.values.email}</strong> : "deine E-Mail Adresse"} geschickt.
+            Klicke auf den Link, um deinen Account zu aktivieren.
+          </BodyText>
+          <BodyText ta="center" styleType="body-01-regular">
+            Nach erfolgreicher Bestätigung kannst du dich mit deinem neuen Account einloggen.
+          </BodyText>
         </div>
-        {/* <BodyText ta="center" styleType="body-01-regular">Keine E-Mail erhalten? Drücke auf den Button, um eine neue E-Mail zu erhalten.</BodyText> */}
-        {/* <Button<"button"> styleType="tertiary" onClick={resendConfirmationEmail}>
-            E-Mail erneut senden
-          </Button> */}
         <Link href="/login" passHref>
-          <Button<"button"> styleType="primary">
-            Go to Sign in page
-          </Button>
-        </Link>
-        {/* <Link href="/login" passHref>
           <Button<"button"> styleType="primary">
             Weiter zum Login
           </Button>
-        </Link> */}
-        
+        </Link>
         <BodyText
           pos="absolute"
           bottom={48}
           ta="center"
           styleType="body-01-regular">
-          Did not receive an email?{" "}
-          <CustomLink styleType="link-primary" href="#" onClick={resendConfirmationEmail}>Send again</CustomLink>
+          Du hast keine E-Mail erhalten?{" "}
+          <CustomLink
+            styleType="link-primary"
+            onClick={async (e) =>
+            {
+              e.preventDefault();
+              await resendConfirmationEmail();
+            }}>
+            Neue E-Mail anfordern
+          </CustomLink>
         </BodyText>
       </div>
     );
