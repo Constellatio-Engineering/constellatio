@@ -1,5 +1,8 @@
+import { type UnknownMantineStylesParams } from "@/utils/types";
+
 import { css } from "@emotion/react";
-import { type MantineTheme } from "@mantine/styles";
+import { type ModalStylesNames } from "@mantine/core";
+import { type Styles, type MantineTheme } from "@mantine/styles";
 
 export const wrapper = css`
     width: 100%;
@@ -47,3 +50,45 @@ border-bottom: 1px solid ${theme.colors["neutrals-01"][3]};
 export const createButton = css`
 padding:24px 16px;
 `;
+
+type ModalStyles = Styles<ModalStylesNames, UnknownMantineStylesParams>;
+
+export const modalStyles = (): ModalStyles => 
+{
+  const styles: ModalStyles = () => ({
+    body: {
+      ".modal-call-to-action": {
+        alignItems: "center",
+        button: {
+          flex: 1
+        },
+        display: "flex",
+        gap: "4px",
+        justifyContent: "center",
+      },
+      ".new-folder-input": {
+        display: "flex",
+        flexDirection: "column",
+        gap: "4px",
+        marginBlock: "24px",
+      },
+      padding: "36px"
+    }
+    ,
+    content: {
+      ".close-btn": {
+        cursor: "pointer",
+        position: "absolute",
+        right: "24px",
+        top: "24px",
+      },
+      borderRadius: "12px",
+      position: "relative"
+    },
+    header: {
+      padddingTop: "36px",
+      padding: 0,
+    },
+  }); return styles;
+};
+    
