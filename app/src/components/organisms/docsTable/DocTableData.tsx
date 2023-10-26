@@ -7,12 +7,9 @@ import { Edit } from "@/components/Icons/Edit";
 import { FolderIcon } from "@/components/Icons/Folder";
 import { Trash } from "@/components/Icons/Trash";
 import MoveToModal from "@/components/moveToModal/MoveToModal";
-// import MoveToModal from "@/components/moveToModal/MoveToModal";
 import { type Document } from "@/db/schema";
-import useContextAndErrorIfNull from "@/hooks/useContextAndErrorIfNull";
 import { useOnDocumentMutation } from "@/hooks/useOnDocumentMutation";
 import useUploadFolders from "@/hooks/useUploadFolders";
-import { InvalidateQueriesContext } from "@/provider/InvalidateQueriesProvider";
 import useDocumentEditorStore from "@/stores/documentEditor.store";
 import { api } from "@/utils/api";
 import { getFolderName } from "@/utils/folders";
@@ -43,8 +40,7 @@ export const DocsTableData: FunctionComponent<Document> = (doc) =>
     updatedAt
   } = doc;
 
-  const { invalidateDocuments } = useContextAndErrorIfNull(InvalidateQueriesContext);
-  const { onDocumentMutation } = useOnDocumentMutation({ folderId });
+  const { onDocumentMutation } = useOnDocumentMutation();
   const downloadDocumentNotificationId = `downloading-document${documentId}`;
   const { setEditDocumentState, setViewDocumentState } = useDocumentEditorStore(s => s);
   const { folders } = useUploadFolders();
@@ -59,16 +55,16 @@ export const DocsTableData: FunctionComponent<Document> = (doc) =>
 
       if(newFolderId)
       {
-        await invalidateDocuments({ folderId: newFolderId });
+        await onDocumentMutation({ folderId: newFolderId });
       }
 
       setShowMoveToModal(false);
-      await invalidateDocuments({ folderId });
+      await onDocumentMutation({ folderId });
     },
   });
   const { mutate: deleteDocument } = api.documents.deleteDocument.useMutation({
     onError: (error) => console.error("Error while deleting document:", error),
-    onSuccess: onDocumentMutation
+    onSuccess: async () => onDocumentMutation({ folderId })
   });
 
   const { isLoading: isDownloading, mutate: downloadDocument } = useMutation({
@@ -150,7 +146,7 @@ export const DocsTableData: FunctionComponent<Document> = (doc) =>
               <DropdownItem icon={<Edit/>} label="Bearbeiten"/>
             </Menu.Item>
             <Menu.Item>
-              <DropdownItem icon={<FolderIcon/>} label="Move to" onClick={() => setShowMoveToModal(true)}/>
+              <DropdownItem icon={<FolderIcon/>} label="Verschieben" onClick={() => setShowMoveToModal(true)}/>
             </Menu.Item> 
             <Menu.Item disabled={isDownloading} onClick={() => downloadDocument()}>
               <DropdownItem icon={<DownloadIcon/>} label="Download"/>
@@ -172,8 +168,10 @@ export const DocsTableData: FunctionComponent<Document> = (doc) =>
         <span className="close-btn" onClick={() => setShowDeleteDocModal(false)}>
           <Cross size={32}/>
         </span>
-        <Title order={3}>Delete document</Title>
-        <BodyText styleType="body-01-regular" component="p" className="delete-folder-text">Are you sure you want to delete document <strong>{doc?.name}</strong>?</BodyText>
+        <Title order={3}>Dokument löschen</Title>
+        <BodyText styleType="body-01-regular" component="p" className="delete-folder-text">
+          Bist du sicher, dass du das Dokument <strong>{doc?.name}</strong> löschen möchtest?
+        </BodyText>
         <div className="modal-call-to-action">
           <Button<"button">
             styleType={"secondarySimple" as TButton["styleType"]}
@@ -194,8 +192,6 @@ export const DocsTableData: FunctionComponent<Document> = (doc) =>
       <MoveToModal
         onSubmit={(newFolderId) =>
         {
-          console.log();
-
           updateDocument({
             id: documentId,
             updatedValues: { folderId: newFolderId }

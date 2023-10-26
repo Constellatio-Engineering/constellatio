@@ -124,12 +124,12 @@ const MaterialOptionsMenu: FunctionComponent<MaterialOptionsMenuProps> = ({ file
           onClick={() => setIsDeleteMaterialModalOpen(false)}>
           <Cross size={32}/>
         </span>
-        <Title order={3}>Delete File</Title>
+        <Title order={3}>Datei löschen</Title>
         <BodyText
           styleType="body-01-regular"
           component="p"
           className="delete-folder-text">
-          Are you sure you want to delete{" "}
+          Bist du sicher?{" "}
           <strong>{file.originalFilename}</strong>?
         </BodyText>
         <div className="modal-call-to-action">
@@ -164,11 +164,11 @@ const MaterialOptionsMenu: FunctionComponent<MaterialOptionsMenuProps> = ({ file
             <span className="close-btn" onClick={closeRenameFileModal}>
               <Cross size={32}/>
             </span>
-            <Title order={3}>Rename file</Title>
+            <Title order={3}>Datei umbenennen</Title>
             <form onSubmit={(e) => e.preventDefault()}>
               <div className="new-folder-input">
                 <BodyText styleType="body-01-regular" component="label">
-                  File name
+                  Dateiname
                 </BodyText>
                 <Input
                   inputType="text"
@@ -193,7 +193,7 @@ const MaterialOptionsMenu: FunctionComponent<MaterialOptionsMenuProps> = ({ file
                         name: `${renameFileModalState.newFilename}.${file.fileExtension}`
                       },
                     })}>
-                  Save
+                  Speichern
                 </Button>
               </div>
             </form>
