@@ -1,5 +1,7 @@
 import { db } from "@/db/connection";
-import { type Document, searchIndexUpdateQueue, type SearchIndexUpdateQueueInsert, type UploadedFile } from "@/db/schema";
+import {
+  type Document, searchIndexUpdateQueue, type SearchIndexUpdateQueueInsert, type UploadedFile
+} from "@/db/schema";
 import { meiliSearchAdmin } from "@/lib/meilisearch";
 import { getArticleById } from "@/services/content/getArticleById";
 import { getCaseById } from "@/services/content/getCaseById";
@@ -91,7 +93,9 @@ export const addCasesToSearchIndex: AddCasesToSearchIndex = async ({ caseIds }) 
   return { createCasesIndexTaskId };
 };
 
-type AddUserUploadsToSearchIndex = (params: { uploads: UploadedFile[] }) => Promise<{
+type AddUserUploadsToSearchIndex = (params: {
+  uploads: UploadedFile[];
+}) => Promise<{
   createUploadsIndexTaskId: number | undefined;
 }>;
 
@@ -111,7 +115,9 @@ export const addUserUploadsToSearchIndex: AddUserUploadsToSearchIndex = async ({
   return { createUploadsIndexTaskId };
 };
 
-type AddUserDocumentsToSearchIndex = (params: { documents: Document[] }) => Promise<{
+type AddUserDocumentsToSearchIndex = (params: {
+  documents: Document[];
+}) => Promise<{
   createDocumentsIndexTaskId: number | undefined;
 }>;
 

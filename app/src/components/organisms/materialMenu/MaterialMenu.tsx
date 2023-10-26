@@ -12,6 +12,7 @@ import useUploadFolders from "@/hooks/useUploadFolders";
 import { InvalidateQueriesContext } from "@/provider/InvalidateQueriesProvider";
 import useMaterialsStore from "@/stores/materials.store";
 import { api } from "@/utils/api";
+import { defaultFolderName } from "@/utils/translations";
 
 import { Title, Modal } from "@mantine/core";
 import { useDisclosure } from "@mantine/hooks";
@@ -79,7 +80,7 @@ const MaterialMenu: FunctionComponent = () =>
       <div css={styles.content}>
         <MaterialsMenuListItem
           key="default-folder"
-          title="Default folder"
+          title={defaultFolderName}
           onClick={() => setSelectedFolderId(null)}
           active={selectedFolderId == null}
           icon={<FolderIcon/>}

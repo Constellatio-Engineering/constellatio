@@ -26,9 +26,15 @@ export type RemoveSymbol<T> = T extends symbol ? never : T;
 export type DotSeparatedKeys<T, Prefix extends string = ""> = {
   [K in keyof T]: T[K] extends object
     ? T[K] extends unknown[]
-      ? `${Prefix}${K & string}.${Exclude<RemoveSymbol<keyof T[K][0]>, keyof unknown[]>}` | DotSeparatedKeys<T[K][0], `${Prefix}${K & string}.`>
-      : DotSeparatedKeys<T[K], `${Prefix}${K & string}.`>
-    : `${Prefix}${K & string}`;
+      ? T[K][0] extends Date
+        ? `${Prefix}${K & string}`
+        : `${Prefix}${K & string}.${Exclude<RemoveSymbol<keyof T[K][0]>, keyof unknown[]>}` | DotSeparatedKeys<T[K][0], `${Prefix}${K & string}.`>
+      : T[K] extends Date
+        ? `${Prefix}${K & string}`
+        : DotSeparatedKeys<T[K], `${Prefix}${K & string}.`>
+    : T[K] extends Date
+      ? `${Prefix}${K & string}`
+      : `${Prefix}${K & string}`;
 }[keyof T];
 
 export type MantineCssObjectStyles = (theme: MantineTheme) => CSSObject;

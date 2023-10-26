@@ -8,9 +8,12 @@ import { Trash } from "@/components/Icons/Trash";
 // import MoveToModal from "@/components/moveToModal/MoveToModal";
 import { type Document } from "@/db/schema";
 import { useOnDocumentMutation } from "@/hooks/useOnDocumentMutation";
+import useUploadFolders from "@/hooks/useUploadFolders";
 import useDocumentEditorStore from "@/stores/documentEditor.store";
 import { api } from "@/utils/api";
+import { getFolderName } from "@/utils/folders";
 import { paths } from "@/utils/paths";
+import { defaultFolderName } from "@/utils/translations";
 import { downloadFileFromUrl } from "@/utils/utils";
 
 import {
@@ -41,6 +44,8 @@ export const DocsTableData: FunctionComponent<Document> = (doc) =>
   const { onDocumentMutation } = useOnDocumentMutation({ folderId });
   const downloadDocumentNotificationId = `downloading-document${documentId}`;
   const { setEditDocumentState, setViewDocumentState } = useDocumentEditorStore(s => s);
+  const { folders } = useUploadFolders();
+  const folderName = getFolderName(doc.folderId, folders);
   const { mutate: deleteDocument } = api.documents.deleteDocument.useMutation({
     onError: (error) => console.error("Error while deleting document:", error),
     onSuccess: onDocumentMutation
@@ -111,7 +116,7 @@ export const DocsTableData: FunctionComponent<Document> = (doc) =>
           c="neutrals-01.9"
           component="p">
           <FolderIcon/>
-          FOLDER
+          {folderName}
         </BodyText>
       </td>
       <td
