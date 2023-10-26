@@ -7,6 +7,10 @@ export const wrapper = (sizeInPx: number) => css`
   background-color: #ffffff;
   overflow: hidden;
   margin: 0 auto;
+  svg{
+    width: ${sizeInPx}px;
+    height: ${sizeInPx}px;
+  }
 `;
 
 export const image = css`
