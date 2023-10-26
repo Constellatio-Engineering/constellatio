@@ -23,7 +23,7 @@ const PersonalSpaceMaterialsTab: FunctionComponent = () =>
   const { setUploadState, uploads } = uploadsProgressStore();
   const { selectedFileIdForPreview } = useMaterialsStore();
   const areUploadsInProgress = uploads.some(u => u.state.type === "uploading");
-  const isBigScreen = useMediaQuery("(min-width: 1224px)");
+  const isBigScreen = useMediaQuery("(min-width: 1200px)");
 
   return (
     <Container p={isBigScreen ? "0px 61px" : "0px 32px"} maw={1440}>

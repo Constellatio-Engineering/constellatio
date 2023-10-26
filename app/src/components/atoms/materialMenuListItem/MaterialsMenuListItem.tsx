@@ -41,8 +41,8 @@ const MaterialsMenuListItem: FunctionComponent<MenuListItemProps & HTMLProps<HTM
   const theme = useMantineTheme();
 
   return (
-    <div>
-      <button type="button" onClick={onClick} css={styles.wrapper({ active, theme })}>
+    <>
+      <div onClick={onClick} css={styles.wrapper({ active, theme })}>
         <Menu
           width={200}
           position="bottom-end"
@@ -82,7 +82,7 @@ const MaterialsMenuListItem: FunctionComponent<MenuListItemProps & HTMLProps<HTM
             )}
           </Menu.Dropdown>
         </Menu>
-      </button>
+      </div>
       <Modal
         lockScroll={false}
         opened={showRenameModal}
@@ -152,7 +152,7 @@ const MaterialsMenuListItem: FunctionComponent<MenuListItemProps & HTMLProps<HTM
           </Button>
         </div>
       </Modal>
-    </div>
+    </>
   );
 };
 
