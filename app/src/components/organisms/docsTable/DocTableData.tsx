@@ -13,15 +13,13 @@ import useUploadFolders from "@/hooks/useUploadFolders";
 import useDocumentEditorStore from "@/stores/documentEditor.store";
 import { api } from "@/utils/api";
 import { getFolderName } from "@/utils/folders";
+import { paths } from "@/utils/paths";
+import { downloadFileFromUrl } from "@/utils/utils";
 
 import { Menu, Modal, Title } from "@mantine/core";
-// import { paths } from "@/utils/paths";
-// import { downloadFileFromUrl } from "@/utils/utils";
-// import { notifications } from "@mantine/notifications";
-// import { useMutation } from "@tanstack/react-query";
-// import axios from "axios";
-// import MoveToModal from "@/components/moveToModal/MoveToModal";
-// import { DownloadIcon } from "@/components/Icons/DownloadIcon";
+import { notifications } from "@mantine/notifications";
+import { useMutation } from "@tanstack/react-query";
+import axios from "axios";
 import React, { useState } from "react";
 import { type FunctionComponent } from "react";
 
@@ -67,7 +65,7 @@ export const DocsTableData: FunctionComponent<Document> = (doc) =>
     onSuccess: async () => onDocumentMutation({ folderId })
   });
 
-  /*   const { isLoading: isDownloading, mutate: downloadDocument } = useMutation({
+  const { isLoading: isDownloading, mutate: downloadDocument } = useMutation({
     mutationFn: async () =>
     {
       const response = await axios.post(paths.downloadDocument, { documentId, }, { responseType: "blob" });
@@ -148,7 +146,7 @@ export const DocsTableData: FunctionComponent<Document> = (doc) =>
             <Menu.Item>
               <DropdownItem icon={<FolderIcon/>} label="Verschieben" onClick={() => setShowMoveToModal(true)}/>
             </Menu.Item> 
-            <Menu.Item disabled={isDownloading} onClick={() => downloadDocument()}>
+            <Menu.Item style={{ display: "none" }} disabled={isDownloading} onClick={() => downloadDocument()}>
               <DropdownItem icon={<DownloadIcon/>} label="Download"/>
             </Menu.Item>
             <Menu.Item onClick={() => setShowDeleteDocModal(true)}>

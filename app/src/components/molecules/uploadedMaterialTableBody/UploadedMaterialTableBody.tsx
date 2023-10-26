@@ -115,12 +115,12 @@ const UploadedMaterialTableBody: FunctionComponent<UploadedMaterialTableBodyProp
                   {note ? (
                     <>
                       <NotepadFilled/>
-                      ansehen
+                      Ansehen
                     </>
                   ) : (
                     <>
                       <Notepad/>
-                      schreiben
+                      Erstellen
                     </>
                   )}
                 </BodyText>
