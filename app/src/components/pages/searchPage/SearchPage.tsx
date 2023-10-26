@@ -46,8 +46,8 @@ const SearchPage: FunctionComponent<SearchPageProps> = () =>
       {Object.values(searchResults).every((result) => result.length === 0) ? (
         <EmptyStateCard
           variant="For-large-areas"
-          title={`No Search Results Found ${searchValue && `for “${searchValue}”`}`}
-          text="Try different search Entry"
+          title={`Keine Ergebnisse ${searchValue && `für “${searchValue}”`}`}
+          text="Bitte versuche es mit anderen Begriffen oder Tags, um relevante Inhalte zu finden."
         />
       ) : (
         <>

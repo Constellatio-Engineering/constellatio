@@ -2,6 +2,7 @@ import { Button, type TButton } from "@/components/atoms/Button/Button";
 import { DropdownItem } from "@/components/atoms/Dropdown/DropdownItem";
 import { Cross } from "@/components/Icons/Cross";
 // import { DownloadIcon } from "@/components/Icons/DownloadIcon";
+import { DownloadIcon } from "@/components/Icons/DownloadIcon";
 import { Edit } from "@/components/Icons/Edit";
 import { FolderIcon } from "@/components/Icons/Folder";
 import { Trash } from "@/components/Icons/Trash";
@@ -12,22 +13,20 @@ import useUploadFolders from "@/hooks/useUploadFolders";
 import useDocumentEditorStore from "@/stores/documentEditor.store";
 import { api } from "@/utils/api";
 import { getFolderName } from "@/utils/folders";
-// import { paths } from "@/utils/paths";
-// import { defaultFolderName } from "@/utils/translations";
-// import { downloadFileFromUrl } from "@/utils/utils";
+import { paths } from "@/utils/paths";
+import { downloadFileFromUrl } from "@/utils/utils";
 
 import {
   Menu, Modal, Title
 } from "@mantine/core";
-// import { notifications } from "@mantine/notifications";
-// import { useMutation } from "@tanstack/react-query";
-// import axios from "axios";
+import { notifications } from "@mantine/notifications";
+import { useMutation } from "@tanstack/react-query";
+import axios from "axios";
 import React, { useState } from "react";
 import { type FunctionComponent } from "react";
 
 import * as styles from "./DocsTable.styles";
 import { BodyText } from "../../atoms/BodyText/BodyText";
-// import { Checkbox } from "../../atoms/Checkbox/Checkbox";
 import { DotsIcon } from "../../Icons/dots";
 
 const formatDate = (date: Date): string => `${String(date.getDate()).padStart(2, "0")}.${String(date.getMonth() + 1).padStart(2, "0")}.${date.getFullYear()}`;
@@ -42,7 +41,7 @@ export const DocsTableData: FunctionComponent<Document> = (doc) =>
   } = doc;
 
   const { onDocumentMutation } = useOnDocumentMutation({ folderId });
-  // const downloadDocumentNotificationId = `downloading-document${documentId}`;
+  const downloadDocumentNotificationId = `downloading-document${documentId}`;
   const { setEditDocumentState, setViewDocumentState } = useDocumentEditorStore(s => s);
   const { folders } = useUploadFolders();
   const folderName = getFolderName(folderId, folders);
@@ -51,50 +50,50 @@ export const DocsTableData: FunctionComponent<Document> = (doc) =>
     onSuccess: onDocumentMutation
   });
 
-  // const { isLoading: isDownloading, mutate: downloadDocument } = useMutation({
-  //   mutationFn: async () =>
-  //   {
-  //     const response = await axios.post(paths.downloadDocument, { documentId, }, { responseType: "blob" });
-  //     const pdfBlob = new Blob([response.data], { type: "application/pdf" });
-  //     const url = window.URL.createObjectURL(pdfBlob);
-  //     await downloadFileFromUrl(url, `${name}.pdf`);
-  //   },
-  //   onError: (error) =>
-  //   {
-  //     console.error("Error while downloading pdf:", error);
-  //     notifications.update({
-  //       autoClose: false,
-  //       color: "red",
-  //       id: downloadDocumentNotificationId,
-  //       loading: false,
-  //       message: "Es ist ein Fehler beim Herunterladen der Datei aufgetreten.",
-  //       title: "Fehler",
-  //     });
-  //   },
-  //   onMutate: () =>
-  //   {
-  //     notifications.show({
-  //       autoClose: false,
-  //       color: "blue",
-  //       id: downloadDocumentNotificationId,
-  //       loading: true,
-  //       message: "Bitte warte, während die Datei heruntergeladen wird.",
-  //       title: "Datei wird heruntergeladen",
-  //     });
-  //   },
-  //   onSuccess: () =>
-  //   {
-  //     notifications.update({
-  //       autoClose: 3000,
-  //       color: "green",
-  //       id: downloadDocumentNotificationId,
-  //       loading: false,
-  //       message: "Die Datei wurde erfolgreich heruntergeladen.",
-  //       title: "Erfolgreich heruntergeladen",
-  //     });
-  //   },
-  //   retry: false
-  // });
+  const { isLoading: isDownloading, mutate: downloadDocument } = useMutation({
+    mutationFn: async () =>
+    {
+      const response = await axios.post(paths.downloadDocument, { documentId, }, { responseType: "blob" });
+      const pdfBlob = new Blob([response.data], { type: "application/pdf" });
+      const url = window.URL.createObjectURL(pdfBlob);
+      await downloadFileFromUrl(url, `${name}.pdf`);
+    },
+    onError: (error) =>
+    {
+      console.error("Error while downloading pdf:", error);
+      notifications.update({
+        autoClose: false,
+        color: "red",
+        id: downloadDocumentNotificationId,
+        loading: false,
+        message: "Es ist ein Fehler beim Herunterladen der Datei aufgetreten.",
+        title: "Fehler",
+      });
+    },
+    onMutate: () =>
+    {
+      notifications.show({
+        autoClose: false,
+        color: "blue",
+        id: downloadDocumentNotificationId,
+        loading: true,
+        message: "Bitte warte, während die Datei heruntergeladen wird.",
+        title: "Datei wird heruntergeladen",
+      });
+    },
+    onSuccess: () =>
+    {
+      notifications.update({
+        autoClose: 3000,
+        color: "green",
+        id: downloadDocumentNotificationId,
+        loading: false,
+        message: "Die Datei wurde erfolgreich heruntergeladen.",
+        title: "Erfolgreich heruntergeladen",
+      });
+    },
+    retry: false
+  });
   
   const [showDeleteDocModal, setShowDeleteDocModal] = useState<boolean>(false);
   // const [showMoveToModal, setShowMoveToModal] = useState(false);
@@ -130,16 +129,16 @@ export const DocsTableData: FunctionComponent<Document> = (doc) =>
           </Menu.Target>
           <Menu.Dropdown>
             <Menu.Item onClick={() => setEditDocumentState(doc)}>
-              <DropdownItem icon={<Edit/>} label="Rename and edit"/>
+              <DropdownItem icon={<Edit/>} label="Bearbeiten"/>
             </Menu.Item>
             {/* <Menu.Item>
               <DropdownItem icon={<FolderIcon/>} label="Move to" onClick={() => { }}/>
             </Menu.Item> */}
-            {/* <Menu.Item disabled={isDownloading} onClick={() => downloadDocument()}>
-              <DropdownItem icon={<DownloadIcon/>} label="Download"/>
-            </Menu.Item> */}
+            <Menu.Item disabled={isDownloading} onClick={() => downloadDocument()}>
+              <DropdownItem icon={<DownloadIcon/>} label="Herunterladen"/>
+            </Menu.Item>
             <Menu.Item onClick={() => setShowDeleteDocModal(true)}>
-              <DropdownItem icon={<Trash/>} label="Delete"/>
+              <DropdownItem icon={<Trash/>} label="Löschen"/>
             </Menu.Item>
           </Menu.Dropdown>
         </Menu>
@@ -155,13 +154,13 @@ export const DocsTableData: FunctionComponent<Document> = (doc) =>
         <span className="close-btn" onClick={() => setShowDeleteDocModal(false)}>
           <Cross size={32}/>
         </span>
-        <Title order={3}>Delete document</Title>
-        <BodyText styleType="body-01-regular" component="p" className="delete-folder-text">Are you sure you want to document <strong>{doc?.name}</strong>?</BodyText>
+        <Title order={3}>Constellatio Doc löschen</Title>
+        <BodyText styleType="body-01-regular" component="p" className="delete-folder-text">Bist du sicher, dass du das Constellatio Doc&nbsp;<strong>{doc?.name}</strong>&nbsp;löschen möchtest?</BodyText>
         <div className="modal-call-to-action">
           <Button<"button">
             styleType={"secondarySimple" as TButton["styleType"]}
             onClick={() => setShowDeleteDocModal(false)}>
-            No, Keep
+            Nein, behalten
           </Button>
           <Button<"button">
             styleType="primary"
@@ -170,7 +169,7 @@ export const DocsTableData: FunctionComponent<Document> = (doc) =>
               deleteDocument({ id: documentId });
               setShowDeleteDocModal(false);
             }}>
-            Yes, Delete
+            Ja, löschen
           </Button>
         </div>
       </Modal>
