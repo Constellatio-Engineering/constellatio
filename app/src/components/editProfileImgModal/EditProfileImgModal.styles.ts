@@ -103,4 +103,18 @@ export const libraryArea = (theme: MantineTheme) => css`
    border: 3px solid ${theme.colors["neutrals-01"][0]};
    outline: 1px solid ${theme.colors["neutrals-01"][3]};
   }
+  svg{
+    background-color: ${theme.colors["neutrals-01"][2]};
+    border-radius: 50%;
+    width: 90px;
+    height: 90px;
+   margin-right: 10px;
+   margin-bottom: 10px;
+  }
+`;
+export const avatarIcon = ({theme, selected}:{selected?:boolean; theme: MantineTheme}) => css`
+svg{
+  border: 3px solid ${selected ? theme.colors['neutrals-01'][0] : theme.colors["neutrals-01"][0]};
+  outline: 1px solid ${selected ? theme.colors['neutrals-02'][1] : theme.colors["neutrals-01"][3]};
+}
 `;
