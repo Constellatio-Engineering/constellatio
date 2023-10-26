@@ -5,7 +5,7 @@ import { InvalidateQueriesContext } from "@/provider/InvalidateQueriesProvider";
 import { api } from "@/utils/api";
 import { getRandomUuid } from "@/utils/utils";
 
-import { Modal } from "@mantine/core";
+import { Tabs, useMantineTheme } from "@mantine/core";
 import { notifications } from "@mantine/notifications";
 import { useMutation } from "@tanstack/react-query";
 import axios from "axios";
@@ -15,8 +15,12 @@ import * as styles from "./EditProfileImgModal.styles";
 import { BodyText } from "../atoms/BodyText/BodyText";
 import { Button } from "../atoms/Button/Button";
 import IconButton from "../atoms/iconButton/IconButton";
+import { SwitcherTab } from "../atoms/Switcher-tab/SwitcherTab";
 import { DownloadIcon } from "../Icons/DownloadIcon";
 import { Palette } from "../Icons/Palette";
+import { ProfileAvatar, type IProfilePictureAvatars } from "../Icons/ProfileAvatar";
+import { Trash } from "../Icons/Trash";
+import { Modal } from "../molecules/Modal/Modal";
 import { Switcher } from "../molecules/Switcher/Switcher";
 
 interface EditProfileImgModalProps
@@ -39,14 +43,18 @@ const EditProfileImgModal: FunctionComponent<EditProfileImgModalProps> = ({ onCl
 {
   const { invalidateUserDetails } = useContextAndErrorIfNull(InvalidateQueriesContext);
   const inputRef = React.useRef<HTMLInputElement>(null);
-  // const [selectedTab, setSelectedTab] = React.useState<string>(tabs?.[0]?.title ?? "");
+  const [selectedTab, setSelectedTab] = React.useState<string>(tabs?.[0]?.title ?? "");
   const [selectedFile, setSelectedFile] = useState<SelectedFile>();
-  const selectedTab = tabs?.[0]?.title ?? "";
+  // const selectedTab = tabs?.[0]?.title ?? "";
   const selectedFileUrl = selectedFile?.file && URL.createObjectURL(selectedFile?.file);
   const { mutateAsync: createSignedUploadUrl } = api.uploads.createSignedUploadUrl.useMutation();
   const { mutateAsync: setProfilePicture } = api.users.setProfilePicture.useMutation();
   const fileInputRef = React.useRef<HTMLInputElement>(null);
   const uploadFileNotificationId = `upload-file-${selectedFile?.clientSideUuid}`;
+  const avatarTypes: Array<IProfilePictureAvatars["type"]> = [
+    "avatar-01", "avatar-02", "avatar-03", "avatar-04", "avatar-05", "avatar-06", "avatar-07"
+  ];
+  const theme = useMantineTheme();
   const { isLoading, mutate: uploadFile } = useMutation({
     mutationFn: async (): Promise<void> =>
     {
@@ -171,7 +179,7 @@ const EditProfileImgModal: FunctionComponent<EditProfileImgModalProps> = ({ onCl
         size="big"
         defaultValue={selectedTab}
         tabStyleOverwrite={{ flex: "1" }}>
-        {/* <Tabs.List>
+        <Tabs.List>
           {tabs && tabs?.map((tab, tabIndex) => (
             <React.Fragment key={tabIndex}>
               <SwitcherTab
@@ -181,7 +189,7 @@ const EditProfileImgModal: FunctionComponent<EditProfileImgModalProps> = ({ onCl
               </SwitcherTab>
             </React.Fragment>
           ))}
-        </Tabs.List>*/}
+        </Tabs.List>
         {selectedTab === tabs[0]?.title && (
           <div css={styles.uploadImgCard} onClick={() => inputRef.current?.click()}>
             <IconButton
@@ -216,21 +224,19 @@ const EditProfileImgModal: FunctionComponent<EditProfileImgModalProps> = ({ onCl
             />
           </div>
         )}
-        {/* {selectedTab === tabs[1]?.title && (
+        {selectedTab === tabs[1]?.title && (
           <div css={styles.libraryArea}>{
-            [...new Array(3)].map((_, i) => (
-              <CaisyImg
-                key={i}
-                onClick={() => { console.log(`clicked img: ${i + 1} from library`); }}
-                css={styles.profileImage}
-                src={FlagImgPlaceholder.src}
-                width={90}
-                height={90}
-              />
-            ))
+            avatarTypes.map((_, i) => 
+            {
+              const avatarType = avatarTypes[i];
+              if(!avatarType) { return null; }
+              return (
+                <span css={styles.avatarIcon({ selected: i === 0, theme })} key={i}><ProfileAvatar type={avatarType}/></span>
+              );
+            })
           }
           </div>
-        )}*/}
+        )}
         <Button<"button">
           css={styles.saveButton}
           styleType="primary"
