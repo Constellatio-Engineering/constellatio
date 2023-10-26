@@ -45,7 +45,7 @@ const PapersBlock: FunctionComponent<PapersBlockProps> = ({ docs, isLoading, sel
           ) : (
             <EmptyStateCard
               variant="For-small-areas"
-              title="You haven’t created any docs yet"
+              title="You haven not created any docs yet"
               text="Constellatio docs are text documents where you leave your notes, summaries, etc"
             />
           )}
