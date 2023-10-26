@@ -20,12 +20,7 @@ export const useOnUploadedFileMutation: UseOnUploadedFileMutation = () =>
   {
     if(pathname.startsWith(paths.search))
     {
-      console.log("invalidating search results");
       await invalidateSearchResults();
-    }
-    else 
-    {
-      console.log("not invalidating search results");
     }
     await invalidateUploadedFiles({ folderId });
   }, [invalidateSearchResults, invalidateUploadedFiles, pathname]);
