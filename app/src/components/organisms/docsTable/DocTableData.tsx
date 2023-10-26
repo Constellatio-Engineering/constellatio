@@ -1,27 +1,24 @@
 import { Button, type TButton } from "@/components/atoms/Button/Button";
 import { DropdownItem } from "@/components/atoms/Dropdown/DropdownItem";
 import { Cross } from "@/components/Icons/Cross";
-// import { DownloadIcon } from "@/components/Icons/DownloadIcon";
-import { DownloadIcon } from "@/components/Icons/DownloadIcon";
 import { Edit } from "@/components/Icons/Edit";
 import { FolderIcon } from "@/components/Icons/Folder";
 import { Trash } from "@/components/Icons/Trash";
-// import MoveToModal from "@/components/moveToModal/MoveToModal";
 import { type Document } from "@/db/schema";
 import { useOnDocumentMutation } from "@/hooks/useOnDocumentMutation";
 import useUploadFolders from "@/hooks/useUploadFolders";
 import useDocumentEditorStore from "@/stores/documentEditor.store";
 import { api } from "@/utils/api";
 import { getFolderName } from "@/utils/folders";
-import { paths } from "@/utils/paths";
-import { downloadFileFromUrl } from "@/utils/utils";
 
-import {
-  Menu, Modal, Title
-} from "@mantine/core";
-import { notifications } from "@mantine/notifications";
-import { useMutation } from "@tanstack/react-query";
-import axios from "axios";
+import { Menu, Modal, Title } from "@mantine/core";
+// import { paths } from "@/utils/paths";
+// import { downloadFileFromUrl } from "@/utils/utils";
+// import { notifications } from "@mantine/notifications";
+// import { useMutation } from "@tanstack/react-query";
+// import axios from "axios";
+// import MoveToModal from "@/components/moveToModal/MoveToModal";
+// import { DownloadIcon } from "@/components/Icons/DownloadIcon";
 import React, { useState } from "react";
 import { type FunctionComponent } from "react";
 
@@ -41,7 +38,7 @@ export const DocsTableData: FunctionComponent<Document> = (doc) =>
   } = doc;
 
   const { onDocumentMutation } = useOnDocumentMutation({ folderId });
-  const downloadDocumentNotificationId = `downloading-document${documentId}`;
+  // const downloadDocumentNotificationId = `downloading-document${documentId}`;
   const { setEditDocumentState, setViewDocumentState } = useDocumentEditorStore(s => s);
   const { folders } = useUploadFolders();
   const folderName = getFolderName(folderId, folders);
@@ -50,7 +47,7 @@ export const DocsTableData: FunctionComponent<Document> = (doc) =>
     onSuccess: onDocumentMutation
   });
 
-  const { isLoading: isDownloading, mutate: downloadDocument } = useMutation({
+  /*   const { isLoading: isDownloading, mutate: downloadDocument } = useMutation({
     mutationFn: async () =>
     {
       const response = await axios.post(paths.downloadDocument, { documentId, }, { responseType: "blob" });
@@ -93,7 +90,7 @@ export const DocsTableData: FunctionComponent<Document> = (doc) =>
       });
     },
     retry: false
-  });
+  }); */
   
   const [showDeleteDocModal, setShowDeleteDocModal] = useState<boolean>(false);
   // const [showMoveToModal, setShowMoveToModal] = useState(false);
@@ -134,9 +131,9 @@ export const DocsTableData: FunctionComponent<Document> = (doc) =>
             {/* <Menu.Item>
               <DropdownItem icon={<FolderIcon/>} label="Move to" onClick={() => { }}/>
             </Menu.Item> */}
-            <Menu.Item disabled={isDownloading} onClick={() => downloadDocument()}>
+            {/* <Menu.Item disabled={isDownloading} onClick={() => downloadDocument()}>
               <DropdownItem icon={<DownloadIcon/>} label="Herunterladen"/>
-            </Menu.Item>
+            </Menu.Item> */}
             <Menu.Item onClick={() => setShowDeleteDocModal(true)}>
               <DropdownItem icon={<Trash/>} label="Löschen"/>
             </Menu.Item>
