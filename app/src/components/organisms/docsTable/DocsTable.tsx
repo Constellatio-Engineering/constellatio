@@ -22,20 +22,20 @@ const DocsTable: FunctionComponent<DocsTableProps> = ({ docs, variant = "persona
   return (
     <div css={styles.wrapper}>
       <table css={styles.tableWrapper}>
-        <thead css={styles.tableHead}>
+        <thead>
           <tr>
             <th className="primaryCell">
               <CaptionText styleType="caption-01-medium" component="p">DOC NAME</CaptionText>
             </th>
             <th><CaptionText styleType="caption-01-medium" component="p">LAST MODIFIED</CaptionText></th>
             {variant === "searchPapers" && (
-              <th>
-                <CaptionText tt="uppercase" styleType="caption-01-medium" component="p">
-                  Folder
-                </CaptionText>
-              </th>
+              <th/>
             )}
-            {/* <th><CaptionText styleType="caption-01-medium" component="p">TAGS</CaptionText></th> */}
+            <th>
+              <CaptionText tt="uppercase" styleType="caption-01-medium" component="p">
+                FOLDER         
+              </CaptionText>
+            </th>
             <th/>
           </tr>
         </thead>

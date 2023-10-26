@@ -17,13 +17,14 @@ export const mdoal = css`
 
 `;
 export const item = ({ selected, theme }: {selected?: boolean; theme: MantineTheme}) => css`
-border-block: 1px solid ${theme.colors["neutrals-01"][3]};
+border-bottom: 1px solid ${theme.colors["neutrals-01"][3]};
     width: 100%;
     display: flex;
     align-items: center;
     justify-content: flex-start;
     padding: 0 36px;
     height: 60px;
+    cursor: pointer;
     gap:16px;
     &:hover {
         background-color: ${theme.colors["neutrals-01"][1]};

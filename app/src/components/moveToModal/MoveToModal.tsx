@@ -1,6 +1,6 @@
 import { useMantineTheme } from "@mantine/core";
 import { useDisclosure } from "@mantine/hooks";
-import React, { type FunctionComponent } from "react";
+import React, { useState, type FunctionComponent } from "react";
 
 import * as styles from "./MoveToModal.styles";
 import { BodyText } from "../atoms/BodyText/BodyText";
@@ -12,13 +12,15 @@ import { Modal } from "../molecules/Modal/Modal";
 const MoveToModal: FunctionComponent = () => 
 { 
   const theme = useMantineTheme();
-  const selected = true;
-  const [opened, { close }] = useDisclosure(true);
-  
+  // const selected = true;
+  const [selectedNewFolder, setSelectedNewFolder] = useState("");
+  const [opened, { close }] = useDisclosure(false);
+  const existingFolders = ["folder1", "folder2"];
   return (
     <Modal
       onClose={close}
       opened={opened}
+      lockScroll={false}
       title="Move item to:" 
       radius={12}
       styles={{
@@ -42,21 +44,24 @@ const MoveToModal: FunctionComponent = () =>
         }
       }}
       centered>
-      <div css={styles.item({ selected, theme })}>
-        <CustomRadio name="check" value="check1" checked/>
-        <FolderIcon/>
-        <BodyText styleType="body-01-medium" htmlFor="check1" component="label">Default folder</BodyText>
-      </div>
-      <div css={styles.item({ selected: false, theme })}>
-        <CustomRadio name="check" value="check2"/>
-        <FolderIcon/>
-        <BodyText styleType="body-01-medium" htmlFor="check2" component="label">Folder</BodyText>
-      </div> 
-      <div css={styles.item({ selected: false, theme })}>
-        <CustomRadio name="check" value="check3"/>
-        <FolderIcon/>
-        <BodyText styleType="body-01-medium" htmlFor="check3" component="label">Folder</BodyText>
-      </div>
+      {existingFolders?.map((folder, folderIndex) => (
+        <div
+          css={styles.item({ selected: selectedNewFolder === folder, theme })}
+          key={folderIndex}
+          onClick={(e) => 
+          {
+            const checkbox = e.currentTarget?.firstChild?.firstChild?.firstChild?.firstChild;
+            if(checkbox && "checked" in checkbox) 
+            {
+              checkbox.checked = true;
+              setSelectedNewFolder(folder);
+            }
+          }}>
+          <CustomRadio name="check" value={folder}/>
+          <FolderIcon/>
+          <BodyText styleType="body-01-medium" htmlFor={folder} component="label">{folder}</BodyText>
+        </div>
+      ))}
       <div css={styles.callToAction}>
         <Button<"button">
           styleType="secondarySimple"

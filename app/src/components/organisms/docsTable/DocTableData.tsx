@@ -12,16 +12,16 @@ import useUploadFolders from "@/hooks/useUploadFolders";
 import useDocumentEditorStore from "@/stores/documentEditor.store";
 import { api } from "@/utils/api";
 import { getFolderName } from "@/utils/folders";
-import { paths } from "@/utils/paths";
+// import { paths } from "@/utils/paths";
 // import { defaultFolderName } from "@/utils/translations";
-import { downloadFileFromUrl } from "@/utils/utils";
+// import { downloadFileFromUrl } from "@/utils/utils";
 
 import {
   Menu, Modal, Title
 } from "@mantine/core";
-import { notifications } from "@mantine/notifications";
-import { useMutation } from "@tanstack/react-query";
-import axios from "axios";
+// import { notifications } from "@mantine/notifications";
+// import { useMutation } from "@tanstack/react-query";
+// import axios from "axios";
 import React, { useState } from "react";
 import { type FunctionComponent } from "react";
 
