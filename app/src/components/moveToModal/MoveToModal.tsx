@@ -1,6 +1,8 @@
+import useUploadFolders from "@/hooks/useUploadFolders";
+import { defaultFolderName } from "@/utils/translations";
+
 import { useMantineTheme } from "@mantine/core";
-import { useDisclosure } from "@mantine/hooks";
-import React, { type FunctionComponent } from "react";
+import React, { type FunctionComponent, useState } from "react";
 
 import * as styles from "./MoveToModal.styles";
 import { BodyText } from "../atoms/BodyText/BodyText";
@@ -9,16 +11,28 @@ import CustomRadio from "../customRadio/CustomRadio";
 import { FolderIcon } from "../Icons/Folder";
 import { Modal } from "../molecules/Modal/Modal";
 
-const MoveToModal: FunctionComponent = () => 
-{ 
+type Props = {
+  readonly close: () => void;
+  readonly currentFolderId: string | null;
+  readonly isOpened: boolean;
+  readonly onSubmit: (folderId: string | null) => void;
+};
+
+const MoveToModal: FunctionComponent<Props> = ({
+  close,
+  currentFolderId,
+  isOpened,
+  onSubmit
+}) =>
+{
+  const { folders } = useUploadFolders();
   const theme = useMantineTheme();
-  const selected = true;
-  const [opened, { close }] = useDisclosure(true);
-  
+  const [selectedFolderId, setSelectedFolderId] = useState<string | null>(currentFolderId);
+
   return (
     <Modal
       onClose={close}
-      opened={opened}
+      opened={isOpened}
       title="Move item to:" 
       radius={12}
       styles={{
@@ -42,21 +56,28 @@ const MoveToModal: FunctionComponent = () =>
         }
       }}
       centered>
-      <div css={styles.item({ selected, theme })}>
-        <CustomRadio name="check" value="check1" checked/>
+      <div
+        onClick={() => setSelectedFolderId(null)}
+        css={styles.item({ selected: selectedFolderId === null, theme })}>
+        <CustomRadio name="check" checked={selectedFolderId === null} onChange={() => setSelectedFolderId(null)}/>
         <FolderIcon/>
-        <BodyText styleType="body-01-medium" htmlFor="check1" component="label">Default folder</BodyText>
+        <BodyText styleType="body-01-medium" htmlFor="check1" component="label">{defaultFolderName}</BodyText>
       </div>
-      <div css={styles.item({ selected: false, theme })}>
-        <CustomRadio name="check" value="check2"/>
-        <FolderIcon/>
-        <BodyText styleType="body-01-medium" htmlFor="check2" component="label">Folder</BodyText>
-      </div> 
-      <div css={styles.item({ selected: false, theme })}>
-        <CustomRadio name="check" value="check3"/>
-        <FolderIcon/>
-        <BodyText styleType="body-01-medium" htmlFor="check3" component="label">Folder</BodyText>
-      </div>
+      {folders.map((folder) =>
+      {
+        const isChecked = selectedFolderId === folder.id;
+
+        return (
+          <div
+            key={folder.id}
+            onClick={() => setSelectedFolderId(folder.id)}
+            css={styles.item({ selected: isChecked, theme })}>
+            <CustomRadio name="check" checked={isChecked} onChange={() => setSelectedFolderId(folder.id)}/>
+            <FolderIcon/>
+            <BodyText styleType="body-01-medium" htmlFor="check1" component="label">{folder.name}</BodyText>
+          </div>
+        );
+      })}
       <div css={styles.callToAction}>
         <Button<"button">
           styleType="secondarySimple"
@@ -67,7 +88,8 @@ const MoveToModal: FunctionComponent = () =>
         <Button<"button">
           styleType="primary"
           size="large"
-          onClick={close}>
+          disabled={selectedFolderId === undefined || selectedFolderId === currentFolderId}
+          onClick={() => onSubmit(selectedFolderId)}>
           Move
         </Button>
       </div>
