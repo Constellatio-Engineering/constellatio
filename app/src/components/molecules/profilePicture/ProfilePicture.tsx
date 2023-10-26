@@ -1,10 +1,10 @@
+import { ProfileAvatar, type IProfilePictureAvatars } from "@/components/Icons/ProfileAvatar";
 import useSignedProfilePictureUrl from "@/hooks/useSignedProfilePictureUrl";
 
 import Image from "next/image";
 import React, { type ComponentProps, type FunctionComponent } from "react";
 
 import * as styles from "./ProfilePicture.styles";
-import { IProfilePictureAvatars, ProfilePictureAvatar } from "@/components/Icons/ProfilePictureAvatar";
 import genericProfileIcon from "../../../../public/images/icons/generic-user-icon.svg";
 
 interface ProfilePictureProps extends ComponentProps<"div">
@@ -20,13 +20,13 @@ const ProfilePicture: FunctionComponent<ProfilePictureProps> = ({
 }) =>
 {
   const { url: profilePictureUrl } = useSignedProfilePictureUrl();
-  const userChosenAvatar: IProfilePictureAvatars['type'] | false = false 
+  const userChosenAvatar: IProfilePictureAvatars["type"] | false = false; 
   return (
     <div {...props} css={styles.wrapper(sizeInPx)}>
-      {userChosenAvatar && ( <ProfilePictureAvatar type={userChosenAvatar ?? "avatar-01"}/>)}
-    <Image
+      {userChosenAvatar && (<ProfileAvatar type={userChosenAvatar ?? "avatar-01"}/>)}
+      <Image
         css={styles.image}
-        src={overwriteUrl || profilePictureUrl || genericProfileIcon.src }
+        src={overwriteUrl || profilePictureUrl || genericProfileIcon.src}
         alt="Profilbild"
         width={sizeInPx}
         height={sizeInPx}
@@ -37,4 +37,4 @@ const ProfilePicture: FunctionComponent<ProfilePictureProps> = ({
 };
 
 export default ProfilePicture;
-{/* */}
+{ /* */ }

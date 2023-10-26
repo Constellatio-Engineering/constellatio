@@ -112,9 +112,9 @@ export const libraryArea = (theme: MantineTheme) => css`
    margin-bottom: 10px;
   }
 `;
-export const avatarIcon = ({theme, selected}:{selected?:boolean; theme: MantineTheme}) => css`
+export const avatarIcon = ({ selected, theme }: {selected?: boolean; theme: MantineTheme}) => css`
 svg{
-  border: 3px solid ${selected ? theme.colors['neutrals-01'][0] : theme.colors["neutrals-01"][0]};
-  outline: 1px solid ${selected ? theme.colors['neutrals-02'][1] : theme.colors["neutrals-01"][3]};
+  border: 3px solid ${selected ? theme.colors["neutrals-01"][0] : theme.colors["neutrals-01"][0]};
+  outline: 1px solid ${selected ? theme.colors["neutrals-02"][1] : theme.colors["neutrals-01"][3]};
 }
 `;

@@ -32,17 +32,20 @@ export const TOCItemComponent: React.FC<{ readonly depth: number; readonly item:
   const [isExpanded, setIsExpanded] = useState(false);
   const observedHeadline = useCaseSolvingStore(s => s.observedHeadline);
   const shouldBeHighlighted = slugFormatter(item.text) === observedHeadline.slug;
-  const shouldBeExpanded = (): boolean => {
+  const shouldBeExpanded = (): boolean => 
+  {
     const currentItemSlug = slugFormatter(item.text);
     const currentItemLevel = item.level;
-    if (currentItemSlug === observedHeadline.slug && currentItemLevel === observedHeadline.level) {  
-        return true;
+    if(currentItemSlug === observedHeadline.slug && currentItemLevel === observedHeadline.level) 
+    {  
+      return true;
     }
-    if (currentItemSlug !== observedHeadline.slug && currentItemLevel < observedHeadline.level) {
-        return true;
+    if(currentItemSlug !== observedHeadline.slug && currentItemLevel < observedHeadline.level) 
+    {
+      return true;
     }
-    return false
-};
+    return false;
+  };
 
   const handleToggle = (): void => 
   {

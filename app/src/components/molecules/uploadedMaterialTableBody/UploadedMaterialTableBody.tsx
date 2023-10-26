@@ -1,5 +1,6 @@
 /* eslint-disable max-lines */
 import { BodyText } from "@/components/atoms/BodyText/BodyText";
+import { FileWhiteIcon } from "@/components/Icons/FileWhite";
 import { FolderIcon } from "@/components/Icons/Folder";
 import { ImageIcon } from "@/components/Icons/image";
 import { Notepad } from "@/components/Icons/Notepad";
@@ -18,7 +19,6 @@ import {
 import React, { type FunctionComponent } from "react";
 
 import * as styles from "./UploadedMaterialTableBody.styles";
-import { FileWhiteIcon } from "@/components/Icons/FileWhite";
 
 const fileNameIcon = (file: UploadedFile): React.ReactNode =>
 {
@@ -67,7 +67,6 @@ const UploadedMaterialTableBody: FunctionComponent<UploadedMaterialTableBodyProp
   const setViewNoteState = useNoteEditorStore(s => s.setViewNoteState);
   const setCreateNoteState = useNoteEditorStore(s => s.setCreateNoteState);
   const { folders } = useUploadFolders();
-
 
   return (
     <>
@@ -143,8 +142,9 @@ const UploadedMaterialTableBody: FunctionComponent<UploadedMaterialTableBodyProp
                 onClick={(e => 
                 {
                   const menuTarget = e.currentTarget.firstChild;
-                  if (menuTarget instanceof HTMLElement) {
-                      menuTarget.click();
+                  if(menuTarget instanceof HTMLElement) 
+                  {
+                    menuTarget.click();
                   }
                 })}>
                 <MaterialOptionsMenu

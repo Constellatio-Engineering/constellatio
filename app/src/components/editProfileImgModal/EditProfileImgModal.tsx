@@ -15,14 +15,13 @@ import * as styles from "./EditProfileImgModal.styles";
 import { BodyText } from "../atoms/BodyText/BodyText";
 import { Button } from "../atoms/Button/Button";
 import IconButton from "../atoms/iconButton/IconButton";
+import { SwitcherTab } from "../atoms/Switcher-tab/SwitcherTab";
 import { DownloadIcon } from "../Icons/DownloadIcon";
 import { Palette } from "../Icons/Palette";
-import { Switcher } from "../molecules/Switcher/Switcher";
-import { SwitcherTab } from "../atoms/Switcher-tab/SwitcherTab";
+import { ProfileAvatar, type IProfilePictureAvatars } from "../Icons/ProfileAvatar";
 import { Trash } from "../Icons/Trash";
-import CaisyImg from "@/basic-components/CaisyImg";
-import { IProfilePictureAvatars, ProfilePictureAvatar } from "../Icons/ProfilePictureAvatar";
 import { Modal } from "../molecules/Modal/Modal";
+import { Switcher } from "../molecules/Switcher/Switcher";
 
 interface EditProfileImgModalProps
 {
@@ -52,7 +51,7 @@ const EditProfileImgModal: FunctionComponent<EditProfileImgModalProps> = ({ onCl
   const { mutateAsync: setProfilePicture } = api.users.setProfilePicture.useMutation();
   const fileInputRef = React.useRef<HTMLInputElement>(null);
   const uploadFileNotificationId = `upload-file-${selectedFile?.clientSideUuid}`;
-  const avatarTypes: (IProfilePictureAvatars['type'])[] = [
+  const avatarTypes: Array<IProfilePictureAvatars["type"]> = [
     "avatar-01", "avatar-02", "avatar-03", "avatar-04", "avatar-05", "avatar-06", "avatar-07"
   ];
   const theme = useMantineTheme();
@@ -227,12 +226,14 @@ const EditProfileImgModal: FunctionComponent<EditProfileImgModalProps> = ({ onCl
         )}
         {selectedTab === tabs[1]?.title && (
           <div css={styles.libraryArea}>{
-            avatarTypes.map((_, i) => {
+            avatarTypes.map((_, i) => 
+            {
               const avatarType = avatarTypes[i];
-              if (!avatarType) { return null; }
-              return(
-                <span css={styles.avatarIcon({theme, selected: i === 0})} key={i}><ProfilePictureAvatar type={avatarType}/></span>
-            )})
+              if(!avatarType) { return null; }
+              return (
+                <span css={styles.avatarIcon({ selected: i === 0, theme })} key={i}><ProfileAvatar type={avatarType}/></span>
+              );
+            })
           }
           </div>
         )}

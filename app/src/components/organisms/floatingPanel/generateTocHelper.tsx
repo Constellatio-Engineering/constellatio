@@ -153,7 +153,7 @@ export function getNestedHeadingIndex(item: IHeadingNode, allHeadings: any): num
 export const renderTOC = (toc: TOCItem[], _: number = 0): JSX.Element => 
 {
   return (
-    <ul style={{paddingBottom:"20px", border:"0px solid red"}}>
+    <ul style={{ paddingBottom: "20px", border: "0px solid red" }}>
       {toc.map((item, index) => item && item?.text && (
         <li key={index} style={{ listStyleType: "none" }}>
           <TOCItemComponent
