@@ -1,3 +1,4 @@
+
 import FoldersMenuTablet from "@/components/foldersMenuTablet/FoldersMenuTablet";
 import MoveToModal from "@/components/moveToModal/MoveToModal";
 import PapersBlock from "@/components/papersBlock/PapersBlock";
