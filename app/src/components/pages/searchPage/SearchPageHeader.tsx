@@ -14,29 +14,46 @@ type Props = {
   readonly totalSearchResults: number;
 };
 
+type TabItemType = {
+  label: string;
+  resultsCount: number;
+};
+
 const SearchPageHeader: FunctionComponent<Props> = ({ setTabQuery, tabQuery, totalSearchResults }) =>
 {
   const { searchResults } = useSearchResults();
   const { query } = useRouter();
 
-  const tabItems: Array<{
-    label: SearchResultsKey;
-    resultsCount: number;
-  }> = [{
-    label: "cases",
+  const tabItems: TabItemType[] = [{
+    label: "Fälle",
     resultsCount: searchResults.cases?.length
   }, {
-    label: "articles",
+    label: "Lexikon",
     resultsCount: searchResults.articles?.length
   }, {
-    label: "userUploads",
+    label: "Deine Dateien",
     resultsCount: searchResults.userUploads?.length + searchResults.userDocuments?.length
   }];
+
+  const itemAsSearchResultsKey = (item: TabItemType): SearchResultsKey => 
+  {
+    switch (item.label)
+    {
+      case "Fälle": return "cases"; 
+      case "Lexikon": return "articles"; 
+      case "Deine Dateien": return "userUploads"; 
+      default:
+      {
+        console.error(`Unknown tab query: ${item.label}`);
+        return "cases";
+      }
+    }
+  };
 
   return (
     <div css={styles.headerWrapper}>
       <div css={styles.header}>
-        <Title order={2}>{totalSearchResults} result{totalSearchResults > 1 && "s"} for “{query.find}”</Title>
+        <Title order={2}>{totalSearchResults} {totalSearchResults > 1 ? "Ergebnisse" : "Ergebnis"} für “{query.find}”</Title>
         <span css={styles.headerBg}>
           <SearchPageHeaderBgLayer/>
         </span>
@@ -49,8 +66,8 @@ const SearchPageHeader: FunctionComponent<Props> = ({ setTabQuery, tabQuery, tot
               key={index}
               title={item.label}
               number={item.resultsCount}
-              active={tabQuery === item.label}
-              onClick={() => void setTabQuery(item.label)}
+              active={tabQuery === itemAsSearchResultsKey(item)}
+              onClick={() => void setTabQuery(itemAsSearchResultsKey(item))}
             />
           );
         })}

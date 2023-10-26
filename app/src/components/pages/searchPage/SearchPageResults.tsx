@@ -31,8 +31,8 @@ const SearchPageResults: FunctionComponent<Props> = ({ tabQuery }) =>
 
   const NoResultsFound = (
     <EmptyStateCard
-      title={`No search results found ${router.query.find && `for “${router.query.find}”`} ${tabQuery && `at ${tabQuery}`}`}
-      text="check other tabs or try different search entry"
+      title={`Keine Ergebnisse ${router.query.find && `für “${router.query.find}”`} ${tabQuery && `in ${tabQuery}`}`}
+      text="Schaue in anderen Kategorien oder starte eine neue Suche"
       variant="For-large-areas"
     />
   );
@@ -134,7 +134,6 @@ const SearchPageResults: FunctionComponent<Props> = ({ tabQuery }) =>
                         updatedAt: new Date(doc.updatedAt),
                         userId: doc.userId
                       }))}
-                      variant="searchPapers"
                     />
                   )}
                   numberOfTableItems={searchResults.userDocuments?.length}

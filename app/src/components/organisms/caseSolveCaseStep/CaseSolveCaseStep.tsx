@@ -69,9 +69,10 @@ const CaseSolveCaseStep: FunctionComponent<Props> = ({
     <div css={styles.wrapper} id="solveCaseStepContent">
       {title && (
         <div css={styles.textAreaWrapper}>
-          <Title order={2}>Solve case {title}</Title>
+          <Title order={2}>Gutachten verfassen</Title>
           <BodyText styleType="body-01-regular" component="p">
-            Of course, the question of whether and how a shareholder can be excluded can also arise in the oHG. Read the related article after handling this case.
+            Im Textfeld kannst du deine Klausurlösung oder -gliederung herunterschreiben, wie du es auch in der normalen Klausur machen würdest.
+            Anschließend kannst du dir die Musterlösung anzeigen lassen und sie mit deiner Ausarbeitung vergleichen.
           </BodyText>
           <RichtextEditorField
             disabled={isDisabled}
@@ -83,7 +84,7 @@ const CaseSolveCaseStep: FunctionComponent<Props> = ({
                 solution: editor?.getHTML() ?? ""
               });
             }}
-            button={!isDisabled ? { text: "Submit and see results" } : undefined}
+            button={!isDisabled ? { text: "Lösung abgeben" } : undefined}
             variant="simple"
           />
           <Modal
@@ -92,9 +93,9 @@ const CaseSolveCaseStep: FunctionComponent<Props> = ({
             centered
             onClose={() => setShowStepTwoModal(false)}>
             <Flag/>
-            <Title order={3}>Great job!</Title>
-            <BodyText styleType="body-01-regular" component="p">
-              Your solution has been saved. Now you can compare your solution to the resolution.
+            <Title order={3}>Gut gemacht!</Title>
+            <BodyText styleType="body-01-regular" component="p" ta="center">
+              Dein Gutachten wurde gespeichert. Du kannst es nun mit der Musterlösung vergleichen
             </BodyText>
             <Button<"button">
               styleType="primary"
@@ -104,14 +105,14 @@ const CaseSolveCaseStep: FunctionComponent<Props> = ({
                 setProgressState({ caseId: id, progressState: "completed" });
               }}
               fullWidth>
-              Review results
+              Musterlösung anzeigen
             </Button>
           </Modal>
         </div>
       )}
       {facts?.json && (
         <div css={styles.factsWrapper}>
-          <Title order={3}>Facts</Title>
+          <Title order={2}>Sachverhalt</Title>
           <Richtext data={facts}/>
         </div>
       )}

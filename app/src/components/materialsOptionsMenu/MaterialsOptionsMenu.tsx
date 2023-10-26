@@ -64,7 +64,7 @@ const MaterialOptionsMenu: FunctionComponent<MaterialOptionsMenuProps> = ({ file
         </Menu.Target>
         <Menu.Dropdown>
           <Menu.Item onClick={() => openRenameFileModal(file)}>
-            <DropdownItem icon={<Edit/>} label="Rename"/>
+            <DropdownItem icon={<Edit/>} label="Umbenennen"/>
           </Menu.Item>
           {/* <Menu.Item>
             <DropdownItem icon={<FolderIcon/>} label="Move to"/>
@@ -75,9 +75,9 @@ const MaterialOptionsMenu: FunctionComponent<MaterialOptionsMenuProps> = ({ file
               const url = await createSignedGetUrl({ fileId: file.id });
               await downloadFileFromUrl(url, file.originalFilename);
             }}>
-            <DropdownItem icon={<DownloadIcon/>} label="Download"/>
+            <DropdownItem icon={<DownloadIcon/>} label="Herunterladen"/>
           </Menu.Item>
-          <Menu.Item onClick={() => setIsDeleteMaterialModalOpen(true)}><DropdownItem icon={<Trash/>} label="Delete"/></Menu.Item>
+          <Menu.Item onClick={() => setIsDeleteMaterialModalOpen(true)}><DropdownItem icon={<Trash/>} label="Löschen"/></Menu.Item>
         </Menu.Dropdown>
       </Menu>
       {/* POP UPS ------------------------------------------------------------------------------------- */}
@@ -91,13 +91,13 @@ const MaterialOptionsMenu: FunctionComponent<MaterialOptionsMenuProps> = ({ file
         <span className="close-btn" onClick={() => setIsDeleteMaterialModalOpen(false)}>
           <Cross size={32}/>
         </span>
-        <Title order={3}>Delete File</Title>
-        <BodyText styleType="body-01-regular" component="p" className="delete-folder-text">Are you sure you want to delete <strong>{file.originalFilename}</strong>?</BodyText>
+        <Title order={3}>Datei löschen</Title>
+        <BodyText styleType="body-01-regular" component="p" className="delete-folder-text">Bist du sicher, dass du die Datei&nbsp;<strong>{file.originalFilename}</strong>&nbsp;löschen möchtest?</BodyText>
         <div className="modal-call-to-action">
           <Button<"button">
             styleType={"secondarySimple" as TButton["styleType"]}
             onClick={() => setIsDeleteMaterialModalOpen(false)}>
-            No, Keep
+            Nein, behalten
           </Button>
           <Button<"button">
             styleType="primary"
@@ -106,7 +106,7 @@ const MaterialOptionsMenu: FunctionComponent<MaterialOptionsMenuProps> = ({ file
               if(file) { deleteFile({ fileIds: [file.id] }); }
               setIsDeleteMaterialModalOpen(false);
             }}>
-            Yes, Delete
+            Ja, löschen
           </Button>
         </div>
       </Modal>
@@ -122,10 +122,10 @@ const MaterialOptionsMenu: FunctionComponent<MaterialOptionsMenuProps> = ({ file
             <span className="close-btn" onClick={closeRenameFileModal}>
               <Cross size={32}/>
             </span>
-            <Title order={3}>Rename file</Title>
+            <Title order={3}>Datei umbenennen</Title>
             <form onSubmit={e => e.preventDefault()}>
               <div className="new-folder-input">
-                <BodyText styleType="body-01-regular" component="label">File name</BodyText>
+                <BodyText styleType="body-01-regular" component="label">Dateiname</BodyText>
                 <Input
                   inputType="text"
                   value={renameFileModalState.newFilename}
@@ -136,7 +136,7 @@ const MaterialOptionsMenu: FunctionComponent<MaterialOptionsMenuProps> = ({ file
                 <Button<"button">
                   styleType={"secondarySimple" as TButton["styleType"]}
                   onClick={closeRenameFileModal}>
-                  Cancel
+                  Abbrechen
                 </Button>
                 <Button<"button">
                   styleType="primary"
@@ -146,7 +146,7 @@ const MaterialOptionsMenu: FunctionComponent<MaterialOptionsMenuProps> = ({ file
                     id: renameFileModalState.fileId,
                     newFilename: `${renameFileModalState.newFilename}.${file.fileExtension}`
                   })}>
-                  Save
+                  Speichern
                 </Button>
               </div>
             </form>
