@@ -16,7 +16,7 @@ const scrollToElement = (e: React.MouseEvent<HTMLDivElement>, targetId: string):
   const targetElement = document.getElementById(targetId);
   if(targetElement) 
   {
-    const targetOffset = targetElement.getBoundingClientRect().top + window.scrollY - 350;
+    const targetOffset = targetElement.getBoundingClientRect().top + window.scrollY - 82;
     window.scrollTo({ top: targetOffset, });
   }
 };
@@ -34,15 +34,17 @@ export const TOCItemComponent: React.FC<{ readonly depth: number; readonly item:
   const shouldBeHighlighted = slugFormatter(item.text) === observedHeadline.slug;
   const shouldBeExpanded = (): boolean => 
   {
-    if(slugFormatter(item.text) === observedHeadline.slug || item.level >= observedHeadline.level) 
+    const currentItemSlug = slugFormatter(item.text);
+    const currentItemLevel = item.level;
+    if(currentItemSlug === observedHeadline.slug && currentItemLevel === observedHeadline.level) 
+    {  
+      return true;
+    }
+    if(currentItemSlug !== observedHeadline.slug && currentItemLevel < observedHeadline.level) 
     {
       return true;
     }
-    if(slugFormatter(item.text) !== observedHeadline.slug && item.level === observedHeadline.level) 
-    {
-      return false;
-    }
-    return isExpanded;
+    return false;
   };
 
   const handleToggle = (): void => 
@@ -57,7 +59,7 @@ export const TOCItemComponent: React.FC<{ readonly depth: number; readonly item:
     <div
       onClick={(e) => scrollToElement(e, slugFormatter(item.text))}
       style={{
-        paddingLeft: ((depth === 1 || depth >= 5) ? 0 : depth + 20) + "px"
+        paddingInline: ((depth === 1 || depth >= 5) ? 0 : depth + 20) + "px"
       }}>
       <span
         onClick={handleToggle}

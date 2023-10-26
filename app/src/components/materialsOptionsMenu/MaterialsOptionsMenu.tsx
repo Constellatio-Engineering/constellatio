@@ -18,6 +18,7 @@ import { DownloadIcon } from "../Icons/DownloadIcon";
 import { Edit } from "../Icons/Edit";
 // import { FolderIcon } from "../Icons/Folder";
 import { Trash } from "../Icons/Trash";
+import MoveToModal from "../moveToModal/MoveToModal";
 
 interface MaterialOptionsMenuProps
 {
@@ -50,6 +51,15 @@ const MaterialOptionsMenu: FunctionComponent<MaterialOptionsMenuProps> = ({ file
     onError: (e) => console.log("error while deleting file", e),
     onSuccess: onUploadedFileMutation
   });
+
+  const [showMoveToModal, setShowMoveToModal] = useState(false);
+
+  // we need an update material function like updateDocument function inside DocTableData.tsx
+  
+  // const { mutate: updateUploadedMaterial } = api.uploads..useMutation({
+  //   onError: (error) => console.log("error while updating material", error),
+  //   onSuccess: async (_data, variables) => {},
+  // });
 
   return (
     <> 
@@ -153,6 +163,12 @@ const MaterialOptionsMenu: FunctionComponent<MaterialOptionsMenuProps> = ({ file
           </>
         )}
       </Modal>
+      <MoveToModal
+        onSubmit={(newFolderId) =>{}}
+        close={() => setShowMoveToModal(false)}
+        currentFolderId={file.id}
+        isOpened={showMoveToModal}
+      />
     </>
   );
 };

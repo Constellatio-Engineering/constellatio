@@ -4,9 +4,13 @@ export const wrapper = (sizeInPx: number) => css`
   width: ${sizeInPx}px;
   height: ${sizeInPx}px;
   border-radius: 50%;
-  background-color: #ffffff;
+  background-color: transparent;
   overflow: hidden;
   margin: 0 auto;
+  svg{
+    width: ${sizeInPx}px;
+    height: ${sizeInPx}px;
+  }
 `;
 
 export const image = css`
