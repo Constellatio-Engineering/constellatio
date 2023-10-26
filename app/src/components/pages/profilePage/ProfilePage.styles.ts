@@ -7,7 +7,9 @@ export const outerContianer = (theme: MantineTheme) => css`
   position: relative;
   z-index: 4;
   min-height: 600px;
+  margin-top: -150px;
   @media screen and (max-width: 1100px) {
+    margin-top: 0px;
     padding: 24px;
   }
 

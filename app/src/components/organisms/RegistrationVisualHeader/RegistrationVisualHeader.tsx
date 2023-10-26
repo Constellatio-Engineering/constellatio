@@ -1,7 +1,7 @@
 import { Container, Flex, Title } from "@mantine/core";
 import React, { type FunctionComponent } from "react";
 
-import visual from "../../../../public/images/Registration-visual.png";
+import visual from "../../../../public/images/Registration-visual.svg";
 import { Footer } from "../Footer/Footer";
 
 export const RegistrationVisualHeader: FunctionComponent = () =>
@@ -34,7 +34,7 @@ export const RegistrationVisualHeader: FunctionComponent = () =>
           {/* eslint-disable-next-line @next/next/no-img-element */}
           <img
             src={visual.src}
-            style={{ maxWidth: "100%", objectFit: "contain" }}
+            style={{ aspectRatio: "1", maxWidth: "100%", objectFit: "contain" }}
             alt="Registration-visual"
           />
           <Title
