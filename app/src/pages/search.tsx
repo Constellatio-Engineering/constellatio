@@ -12,7 +12,7 @@ const Search: NextPage = () =>
   const searchValue = useSearchBarStore((s) => s.searchValue);
   const setSearchValue = useSearchBarStore((s) => s.setSearchValue);
 
-  useEffect(() => 
+  /*   useEffect(() => 
   {
     if(typeof window !== "undefined")
     {
@@ -22,7 +22,7 @@ const Search: NextPage = () =>
       }
     }
   // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [router.query.find]);
+  }, [router.query.find]); */
 
   return (
     <Layout>

@@ -134,7 +134,6 @@ const SearchPageResults: FunctionComponent<Props> = ({ tabQuery }) =>
                         updatedAt: new Date(doc.updatedAt),
                         userId: doc.userId
                       }))}
-                      variant="searchPapers"
                     />
                   )}
                   numberOfTableItems={searchResults.userDocuments?.length}
