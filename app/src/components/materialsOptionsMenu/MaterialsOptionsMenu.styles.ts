@@ -239,7 +239,7 @@ export const optionsCell = (theme: MantineTheme) => css`
 	background: ${theme.colors["neutrals-01"][1]};
 	
 	> button {
-		background: ${theme.colors["neutrals-01"][1]};
+		background: ${theme.colors["neutrals-01"][1]}; 
 	}
 }
 `;

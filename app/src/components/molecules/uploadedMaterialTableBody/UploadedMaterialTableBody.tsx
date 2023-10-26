@@ -29,7 +29,7 @@ const fileNameIcon = (file: UploadedFile): React.ReactNode =>
     case "jpeg":
     case "jpg":
       return <ImageIcon/>;
-    case "pdf":
+    case "pdf": 
       return <FileWhiteIcon/>;
     case "docx":
       return <FileWhiteIcon/>;
@@ -137,11 +137,10 @@ const UploadedMaterialTableBody: FunctionComponent<UploadedMaterialTableBodyProp
               </td>
             )}
             {file && (
-             
-                <MaterialOptionsMenu
-                  selectedFolderId={selectedFolderId}
-                  file={file}
-                />
+              <MaterialOptionsMenu
+                selectedFolderId={selectedFolderId}
+                file={file}
+              />
             )}
           </tr>
         );

@@ -150,7 +150,7 @@ const SearchPageResults: FunctionComponent<Props> = ({ tabQuery }) =>
                     <UploadedMaterialTable
                       uploadedFiles={searchResults.userUploads.map(file => ({
                         createdAt: new Date(file.createdAt),
-                        fileExtension: "",
+                        fileExtension: file.fileExtension,
                         folderId: file.folderId,
                         id: file.id,
                         note: null,

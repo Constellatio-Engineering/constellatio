@@ -1,3 +1,4 @@
+/* eslint-disable max-lines */
 import { db } from "@/db/connection";
 import { type UploadedFileInsert, uploadedFiles } from "@/db/schema";
 import { env } from "@/env.mjs";
@@ -6,10 +7,12 @@ import { meiliSearchAdmin } from "@/lib/meilisearch";
 import { addUploadSchema } from "@/schemas/uploads/addUpload.schema";
 import { deleteUploadSchema } from "@/schemas/uploads/deleteUpload.schema";
 import { getUploadedFilesSchema } from "@/schemas/uploads/getUploadedFiles.schema";
-import { renameUploadedFile } from "@/schemas/uploads/renameUploadedFile.schema";
+import { updateUploadedFileSchema } from "@/schemas/uploads/updateUploadedFile.schema";
 import { deleteFiles, getClouStorageFileUrl } from "@/server/api/services/uploads.services";
 import { createTRPCRouter, protectedProcedure } from "@/server/api/trpc";
-import { createUploadsSearchIndexItem, searchIndices, uploadSearchIndexItemPrimaryKey, type UploadSearchItemUpdate } from "@/utils/search";
+import {
+  createUploadsSearchIndexItem, searchIndices, uploadSearchIndexItemPrimaryKey, type UploadSearchItemUpdate
+} from "@/utils/search";
 import { BadFileError, FileTooLargeError, NotFoundError } from "@/utils/serverError";
 
 import {
@@ -119,28 +122,6 @@ export const uploadsRouter = createTRPCRouter({
         where: and(...queryConditions),
       });
     }),
-  renameFile: protectedProcedure
-    .input(renameUploadedFile)
-    .mutation(async ({ ctx: { userId }, input: { id, newFilename } }) =>
-    {
-      await db.update(uploadedFiles).set({ originalFilename: newFilename }).where(and(
-        eq(uploadedFiles.userId, userId),
-        eq(uploadedFiles.id, id)
-      ));
-
-      const fileUpdate: UploadSearchItemUpdate = {
-        id,
-        originalFilename: newFilename
-      };
-
-      const renameUploadInIndexTask = await meiliSearchAdmin.index(searchIndices.userUploads).updateDocuments([fileUpdate]);
-      const addUploadToIndexResult = await meiliSearchAdmin.waitForTask(renameUploadInIndexTask.taskUid);
-
-      if(addUploadToIndexResult.status !== "succeeded")
-      {
-        console.error("failed to add upload to index", addUploadToIndexResult);
-      }
-    }),
   saveFileToDatabase: protectedProcedure
     .input(addUploadSchema)
     .mutation(async ({ ctx: { userId }, input }) =>
@@ -189,5 +170,41 @@ export const uploadsRouter = createTRPCRouter({
       {
         console.error("failed to add upload to index", addUploadToIndexResult);
       }
+    }),
+  updateFile: protectedProcedure
+    .input(updateUploadedFileSchema)
+    .mutation(async ({ ctx: { userId }, input: fileUpdate }) =>
+    {
+      const { id, updatedValues } = fileUpdate;
+
+      const _updatedValues: Partial<UploadedFileInsert> = {
+        folderId: updatedValues.folderId,
+        originalFilename: updatedValues.name,
+      };
+
+      console.log("name", updatedValues.name);
+
+      const updatedFile = await db.update(uploadedFiles)
+        .set(_updatedValues)
+        .where(and(
+          eq(uploadedFiles.id, id),
+          eq(uploadedFiles.userId, userId)
+        ))
+        .returning();
+
+      const searchIndexUploadedFileUpdate: UploadSearchItemUpdate = {
+        ..._updatedValues,
+        id,
+      };
+
+      const updateFileInIndexTask = await meiliSearchAdmin.index(searchIndices.userUploads).updateDocuments([searchIndexUploadedFileUpdate]);
+      const updateFileInIndexResult = await meiliSearchAdmin.waitForTask(updateFileInIndexTask.taskUid);
+
+      if(updateFileInIndexResult.status !== "succeeded")
+      {
+        console.error("failed to update uploaded file in index", updateFileInIndexResult);
+      }
+
+      return updatedFile;
     })
 });

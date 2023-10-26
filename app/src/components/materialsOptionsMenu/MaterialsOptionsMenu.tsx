@@ -35,25 +35,32 @@ const MaterialOptionsMenu: FunctionComponent<MaterialOptionsMenuProps> = ({ file
   const updateFilename = useRenameFileModalStore((s) => s.updateFilename);
   const hasUnsavedChanges = useRenameFileModalStore((s) => s.getHasUnsavedChanges());
   const [isDeleteMaterialModalOpen, setIsDeleteMaterialModalOpen] = useState<boolean>(false);
-  const { onUploadedFileMutation } = useOnUploadedFileMutation({ folderId: selectedFolderId });
+  const { onUploadedFileMutation } = useOnUploadedFileMutation();
   const isRenameFileModalOpen = renameFileModalState.modalState === "open" && renameFileModalState.fileId === file.id;
+  const [showMoveToModal, setShowMoveToModal] = useState(false);
   const { mutateAsync: createSignedGetUrl } = api.uploads.createSignedGetUrl.useMutation({
     onError: (e) => console.log("error while creating signed get url", e),
   });
-  const { mutate: renameFile } = api.uploads.renameFile.useMutation({
+  const { mutate: updateFile } = api.uploads.updateFile.useMutation({
     onError: (e) => console.log("error while renaming file", e),
-    onSuccess: async () => 
+    onSuccess: async (_data, variables) =>
     {
-      await onUploadedFileMutation();
+      const newFolderId = variables.updatedValues.folderId;
+
+      if(newFolderId)
+      {
+        await onUploadedFileMutation({ folderId: newFolderId });
+      }
+
       closeRenameFileModal();
+      setShowMoveToModal(false);
+      await onUploadedFileMutation({ folderId: selectedFolderId });
     },
   });
   const { mutate: deleteFile } = api.uploads.deleteUploadedFiles.useMutation({
     onError: (e) => console.log("error while deleting file", e),
-    onSuccess: onUploadedFileMutation,
+    onSuccess: async () => onUploadedFileMutation({ folderId: selectedFolderId }),
   });
-
-  const [showMoveToModal, setShowMoveToModal] = useState(false);
 
   // we need an update material function like updateDocument function inside DocTableData.tsx
 
@@ -180,9 +187,11 @@ const MaterialOptionsMenu: FunctionComponent<MaterialOptionsMenuProps> = ({ file
                   type="submit"
                   disabled={!hasUnsavedChanges}
                   onClick={() =>
-                    renameFile({
+                    updateFile({
                       id: renameFileModalState.fileId,
-                      newFilename: `${renameFileModalState.newFilename}.${file.fileExtension}`,
+                      updatedValues: {
+                        name: `${renameFileModalState.newFilename}.${file.fileExtension}`
+                      },
                     })}>
                   Save
                 </Button>
@@ -194,10 +203,10 @@ const MaterialOptionsMenu: FunctionComponent<MaterialOptionsMenuProps> = ({ file
       <MoveToModal
         onSubmit={(newFolderId) => 
         {
-          console.log(
-            "Uploaded Material table move to on submit function: arg",
-            newFolderId
-          );
+          updateFile({
+            id: file.id,
+            updatedValues: { folderId: newFolderId }
+          });
         }}
         close={() => setShowMoveToModal(false)}
         currentFolderId={file.id}

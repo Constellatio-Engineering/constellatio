@@ -195,6 +195,8 @@ export const DocsTableData: FunctionComponent<Document> = (doc) =>
       <MoveToModal
         onSubmit={(newFolderId) =>
         {
+          console.log();
+
           updateDocument({
             id: documentId,
             updatedValues: { folderId: newFolderId }

@@ -11,8 +11,6 @@ const CSSClickableEffect = (theme: MantineTheme) => css`
 	}
 `;
 
-
-
 export const tableWrapper = (theme: MantineTheme) => css`
 	text-align: left;
 	border-radius: 12px;
