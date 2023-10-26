@@ -11,18 +11,6 @@ const CSSClickableEffect = (theme: MantineTheme) => css`
 	}
 `;
 
-export const optionsCell = (theme: MantineTheme) => css`
-	cursor: pointer;
-	transition: background 0.3s ease;
-&:hover {
-	background: ${theme.colors["neutrals-01"][1]};
-	
-	> button {
-		background: ${theme.colors["neutrals-01"][1]};
-	}
-}
-`;
-
 export const tableWrapper = (theme: MantineTheme) => css`
 	text-align: left;
 	border-radius: 12px;

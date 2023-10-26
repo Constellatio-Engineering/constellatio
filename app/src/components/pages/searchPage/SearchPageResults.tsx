@@ -27,8 +27,6 @@ const SearchPageResults: FunctionComponent<Props> = ({ tabQuery }) =>
   const router = useRouter();
   const { selectedFileIdForPreview } = useMaterialsStore();
 
-  console.log("searchResults", searchResults);
-
   const NoResultsFound = (
     <EmptyStateCard
       title={`Keine Ergebnisse ${router.query.find && `für “${router.query.find}”`} ${tabQuery && `in ${tabQuery}`}`}
@@ -149,7 +147,7 @@ const SearchPageResults: FunctionComponent<Props> = ({ tabQuery }) =>
                     <UploadedMaterialTable
                       uploadedFiles={searchResults.userUploads.map(file => ({
                         createdAt: new Date(file.createdAt),
-                        fileExtension: "",
+                        fileExtension: file.fileExtension,
                         folderId: file.folderId,
                         id: file.id,
                         note: null,
