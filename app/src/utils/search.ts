@@ -6,7 +6,7 @@ import {
 } from "@/services/graphql/__generated/sdk";
 import {
   type DotSeparatedKeys,
-  type NullableProperties, type Prettify, type RemoveUndefined, type Values
+  type NullableProperties, type RemoveUndefined, type Values
 } from "@/utils/types";
 import { removeHtmlTagsFromString } from "@/utils/utils";
 
@@ -116,7 +116,11 @@ export const createUploadsSearchIndexItem = ({
 }: UploadSearchIndexItem): UploadSearchIndexItem =>
 {
   return ({
-    createdAt, folderId, id, originalFilename, userId
+    createdAt, 
+    folderId,
+    id,
+    originalFilename,
+    userId
   });
 };
 

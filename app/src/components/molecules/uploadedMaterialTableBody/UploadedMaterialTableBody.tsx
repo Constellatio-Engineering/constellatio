@@ -9,8 +9,10 @@ import { NotepadFilled } from "@/components/Icons/NotepadFilled";
 import { VideoIcon } from "@/components/Icons/Video";
 import MaterialOptionsMenu from "@/components/materialsOptionsMenu/MaterialsOptionsMenu";
 import { type UploadedFile, type UploadedFileWithNote } from "@/db/schema";
+import useUploadFolders from "@/hooks/useUploadFolders";
 import useMaterialsStore from "@/stores/materials.store";
 import useNoteEditorStore from "@/stores/noteEditor.store";
+import { getFolderName } from "@/utils/folders";
 
 import {
   useMantineTheme 
@@ -65,12 +67,14 @@ const UploadedMaterialTableBody: FunctionComponent<UploadedMaterialTableBodyProp
   const { setSelectedFileIdForPreview, setShowFileViewerModal } = useMaterialsStore();
   const setViewNoteState = useNoteEditorStore(s => s.setViewNoteState);
   const setCreateNoteState = useNoteEditorStore(s => s.setCreateNoteState);
+  const { folders } = useUploadFolders();
 
   return (
     <>
       {uploadedFiles?.slice(0, showingFiles).filter(Boolean).map((file) =>
       {
         const { note } = file;
+        const folderName = getFolderName(file.folderId, folders);
 
         return (
           <tr key={file.id}>
@@ -129,7 +133,7 @@ const UploadedMaterialTableBody: FunctionComponent<UploadedMaterialTableBodyProp
                   c="neutrals-01.9"
                   component="p">
                   <FolderIcon/>
-                  FOLDER
+                  {folderName}
                 </BodyText>
               </td>
             )}

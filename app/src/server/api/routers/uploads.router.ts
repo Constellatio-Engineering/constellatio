@@ -170,10 +170,11 @@ export const uploadsRouter = createTRPCRouter({
         userId
       };
 
-      const insertResult = await db.insert(uploadedFiles).values(uploadInsert).returning({ id: uploadedFiles.id });
+      const insertResult = await db.insert(uploadedFiles).values(uploadInsert).returning();
 
       const searchIndexItem = createUploadsSearchIndexItem({
         ...uploadInsert,
+        createdAt: insertResult[0]!.createdAt,
         folderId: uploadInsert.folderId || null,
         id: insertResult[0]!.id
       });

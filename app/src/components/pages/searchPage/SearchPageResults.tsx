@@ -119,62 +119,58 @@ const SearchPageResults: FunctionComponent<Props> = ({ tabQuery }) =>
       return (
         (searchResults.userUploads?.length > 0 || searchResults.userDocuments?.length > 0) ? (
           <div css={styles.searchPageResults}>
-            {
-              searchResults.userDocuments?.length > 0 && (
-                <>
-                  <SearchPapersBlock
-                    variant="userDocuments"
-                    table={(
-                      <DocsTable
-                        docs={searchResults.userDocuments.map(doc => ({
-                          content: doc.content,
-                          createdAt: new Date(doc.createdAt),
-                          folderId: doc.folderId,
-                          id: doc.id,
-                          name: doc.name,
-                          updatedAt: new Date(doc.updatedAt),
-                          userId: doc.userId
-                        }))}
-                        variant="searchPapers"
-                      />
-                    )}
-                    numberOfTableItems={searchResults.userDocuments?.length}
-                  />
-                  <DocumentEditor/>
-                </>
-              )
-            }
-            {
-              searchResults.userUploads?.length > 0 && (
-                <>
-                  <SearchPapersBlock
-                    variant="userUploads"
-                    table={(
-                      <UploadedMaterialTable
-                        uploadedFiles={searchResults.userUploads.map(file => ({
-                          createdAt: new Date(file.createdAt),
-                          fileExtension: "",
-                          folderId: "",
-                          id: file.id,
-                          note: null,
-                          notes: [],
-                          originalFilename: file.originalFilename,
-                          serverFilename: "",
-                          sizeInBytes: 1,
-                          userId: file.userId
-                        }))}
-                        variant="searchPapers"
-                        selectedFolderId={null}
-                      />
-                    )}
-                    numberOfTableItems={searchResults.userUploads?.length}
-                  />
-                  {selectedFileIdForPreview && (
-                    <FileViewer/>
+            {searchResults.userDocuments?.length > 0 && (
+              <>
+                <SearchPapersBlock
+                  variant="userDocuments"
+                  table={(
+                    <DocsTable
+                      docs={searchResults.userDocuments.map(doc => ({
+                        content: doc.content,
+                        createdAt: new Date(doc.createdAt),
+                        folderId: doc.folderId,
+                        id: doc.id,
+                        name: doc.name,
+                        updatedAt: new Date(doc.updatedAt),
+                        userId: doc.userId
+                      }))}
+                      variant="searchPapers"
+                    />
                   )}
-                </>
-              )
-            }
+                  numberOfTableItems={searchResults.userDocuments?.length}
+                />
+                <DocumentEditor/>
+              </>
+            )}
+            {searchResults.userUploads?.length > 0 && (
+              <>
+                <SearchPapersBlock
+                  variant="userUploads"
+                  table={(
+                    <UploadedMaterialTable
+                      uploadedFiles={searchResults.userUploads.map(file => ({
+                        createdAt: new Date(file.createdAt),
+                        fileExtension: "",
+                        folderId: file.folderId,
+                        id: file.id,
+                        note: null,
+                        notes: [],
+                        originalFilename: file.originalFilename,
+                        serverFilename: "",
+                        sizeInBytes: 1,
+                        userId: file.userId
+                      }))}
+                      variant="searchPapers"
+                      selectedFolderId={null}
+                    />
+                  )}
+                  numberOfTableItems={searchResults.userUploads?.length}
+                />
+                {selectedFileIdForPreview && (
+                  <FileViewer/>
+                )}
+              </>
+            )}
           </div>
         ) : NoResultsFound
       );

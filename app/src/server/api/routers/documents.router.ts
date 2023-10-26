@@ -29,8 +29,10 @@ export const documentsRouter = createTRPCRouter({
 
       const searchIndexItem = createDocumentSearchIndexItem({
         ...documentInsert,
+        createdAt: insertedDocument[0]!.createdAt,
         folderId: documentInsert.folderId || null,
         id: insertedDocument[0]!.id,
+        updatedAt: insertedDocument[0]!.updatedAt,
       });
 
       const addDocumentToIndexTask = await meiliSearchAdmin
