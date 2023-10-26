@@ -1,7 +1,6 @@
 /* eslint-disable max-lines */
 import { BodyText } from "@/components/atoms/BodyText/BodyText";
-// import { Checkbox } from "@/components/atoms/Checkbox/Checkbox";
-import { FileIcon } from "@/components/Icons/FileIcon";
+import { FileWhiteIcon } from "@/components/Icons/FileWhite";
 import { FolderIcon } from "@/components/Icons/Folder";
 import { ImageIcon } from "@/components/Icons/image";
 import { Notepad } from "@/components/Icons/Notepad";
@@ -31,13 +30,13 @@ const fileNameIcon = (file: UploadedFile): React.ReactNode =>
     case "jpg":
       return <ImageIcon/>;
     case "pdf":
-      return <FileIcon/>;
+      return <FileWhiteIcon/>;
     case "docx":
-      return <FileIcon/>;
+      return <FileWhiteIcon/>;
     case "xls":
-      return <FileIcon/>;
+      return <FileWhiteIcon/>;
     case "xlsx":
-      return <FileIcon/>;
+      return <FileWhiteIcon/>;
     case "mp4":
       return <VideoIcon/>;
     default:
@@ -111,16 +110,17 @@ const UploadedMaterialTableBody: FunctionComponent<UploadedMaterialTableBodyProp
                 }}>
                 <BodyText
                   styleType="body-02-medium"
-                  component="p">
+                  component="p"
+                  tt="capitalize">
                   {note ? (
                     <>
                       <NotepadFilled/>
-                      View Notes
+                      ansehen
                     </>
                   ) : (
                     <>
                       <Notepad/>
-                      Add Notes
+                      schreiben
                     </>
                   )}
                 </BodyText>
@@ -138,7 +138,16 @@ const UploadedMaterialTableBody: FunctionComponent<UploadedMaterialTableBodyProp
               </td>
             )}
             {file && (
-              <td css={styles.optionsCell}>
+              <td
+                css={styles.optionsCell}
+                onClick={(e => 
+                {
+                  const menuTarget = e.currentTarget.firstChild;
+                  if(menuTarget instanceof HTMLElement) 
+                  {
+                    menuTarget.click();
+                  }
+                })}>
                 <MaterialOptionsMenu
                   selectedFolderId={selectedFolderId}
                   file={file}

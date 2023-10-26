@@ -25,8 +25,8 @@ export const textAreaWrapper = css`
 export const factsWrapper = css`
 	max-width: 50%;
 	/* padding: 8px 24px 16px 24px; */
-	h3 {
-		margin-bottom: 16px;
+	h2 {
+		margin-bottom: 24px;
 	}
 	@media screen and (max-width: 1100px) {
 		max-width: 100%;

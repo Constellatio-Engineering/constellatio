@@ -8,7 +8,7 @@ import IconButton from "../../atoms/iconButton/IconButton";
 import Label from "../../atoms/label/Label";
 import { DownloadIcon } from "../../Icons/DownloadIcon";
 
-interface SearchPapersBlockProps
+interface SearchPapersBlockProps 
 {
   readonly numberOfTableItems?: number;
   readonly table: React.ReactNode;
@@ -20,13 +20,35 @@ const SearchPapersBlock: FunctionComponent<SearchPapersBlockProps> = ({ numberOf
   return table ? (
     <div css={styles.wrapper}>
       <div>
-        <IconButton icon={variant === "userUploads" ? <DownloadIcon/> : <NoteIcon/>} size="big"/>
-        <Title order={3} css={styles.blockHeadTitle}>{variant === "userUploads" ? "Uploaded material" : "Cosntellatio docs"}</Title>
-        <div><Label title={`${numberOfTableItems ?? 0} ${variant === "userUploads" ? "FILES" : "DOCS"}`} variant="neutral"/></div>
+        <IconButton
+          icon={variant === "userUploads" ? <DownloadIcon/> : <NoteIcon/>}
+          size="big"
+        />
+        <Title order={3} css={styles.blockHeadTitle}>
+          {variant === "userUploads"
+            ? "Hochgeladene Dateien"
+            : "Constellatio Docs"}
+        </Title>
+        <div>
+          <Label
+            title={`${numberOfTableItems ?? 0} ${
+              variant === "userUploads"
+                ? numberOfTableItems && numberOfTableItems > 1
+                  ? "Dateien"
+                  : "Datei"
+                : numberOfTableItems && numberOfTableItems > 1
+                  ? "Constellatio Docs"
+                  : "Constellatio Doc"
+            }`}
+            variant="neutral"
+          />
+        </div>
       </div>
       {table && table}
     </div>
-  ) : <></>;
+  ) : (
+    <></>
+  );
 };
 
 export default SearchPapersBlock;

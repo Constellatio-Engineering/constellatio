@@ -5,7 +5,7 @@ import { css } from "@emotion/react";
 import { type ModalStylesNames } from "@mantine/core";
 import { type Styles, type MantineTheme } from "@mantine/styles";
 
-export const wrapper = (theme: MantineTheme) => css`
+export const wrapper = css`
   display: flex;
   flex-direction: column;
   position: relative;

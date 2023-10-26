@@ -146,7 +146,7 @@ let FillGapsGame: FC<TFillGapsGame> = ({
       id,
       update: {
         gameStatus: allCorrect ? "win" : "lose",
-        resultMessage: allCorrect ? "Congrats! all answers are correct!" : "Some answers are incorrect. Please try again.",
+        resultMessage: allCorrect ? "Sehr gut! Du hast die Frage richtig beantwortet." : "Deine Antwort war leider nicht korrekt.",
       },
     });
   };
@@ -169,7 +169,7 @@ let FillGapsGame: FC<TFillGapsGame> = ({
     <Container>
       <TitleWrapper>
         <Gamification/>
-        <Title order={4}>Fill in the gaps</Title>
+        <Title order={4}>Lückentext</Title>
       </TitleWrapper>
       <GameWrapper>
         {question && (
@@ -179,10 +179,10 @@ let FillGapsGame: FC<TFillGapsGame> = ({
         )}
         <LegendWrapper>
           <BodyText component="p" styleType="body-01-regular">
-            Correct answer
+            Richtige Antwort
           </BodyText>
           <BodyText component="p" styleType="body-01-regular">
-            Incorrect answer
+            Falsche Antwort
           </BodyText>
         </LegendWrapper>
         <Game>
@@ -238,7 +238,7 @@ let FillGapsGame: FC<TFillGapsGame> = ({
               gameStatus === "inprogress" &&
 							userEntriesArr.length !== correctAnswersArr.length
             }>
-            {gameStatus === "inprogress" ? "Check my answers" : "Solve again"}
+            {gameStatus === "inprogress" ? "Antwort prüfen" : "Erneut lösen"}
           </Button>
         </div>
       </GameWrapper>

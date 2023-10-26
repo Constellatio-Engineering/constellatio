@@ -107,7 +107,7 @@ let RichtextOverwrite: FC<TRichtextOverwrite> = ({ id, path, text }) =>
               key={`${index}${currentInputIndex}}`}
               onChange={createChangeHandler(currentInputIndex)}
               status="default"
-              placeholder="fill the gap"
+              placeholder="ausfüllen"
             />
           ) : (
             <FillGapInput
@@ -116,7 +116,7 @@ let RichtextOverwrite: FC<TRichtextOverwrite> = ({ id, path, text }) =>
               onChange={createChangeHandler(currentInputIndex)}
               index={answerIndex + 1}
               status={answerResultValue === "correct" ? "success" : "error"}
-              placeholder="fill the gap"
+              placeholder="ausfüllen"
             />
           );
         }

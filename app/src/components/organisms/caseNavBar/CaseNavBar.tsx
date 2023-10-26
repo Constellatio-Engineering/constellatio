@@ -18,7 +18,7 @@ export interface ICaseNavBarProps
 const CaseNavBar: FunctionComponent<ICaseNavBarProps> = ({ caseProgressState, caseStepIndex, variant }) =>
 {
   const theme = useMantineTheme();
-  const steps = ["COMPLETE TESTS", "SOLVE CASE", "REVIEW RESULTS"];
+  const steps = ["Fall bearbeiten", "Lösung abgeben", "Musterlösung"];
   const overrideCaseStepIndex = useCaseSolvingStore(s => s.overrideCaseStepIndex);
 
   const onStepClick = (index: number): void =>
@@ -40,6 +40,7 @@ const CaseNavBar: FunctionComponent<ICaseNavBarProps> = ({ caseProgressState, ca
 
             return (
               <CaptionText
+                tt="uppercase"
                 component="p"
                 key={index}
                 onClick={() => onStepClick(index)}

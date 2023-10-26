@@ -24,12 +24,21 @@ const DocsTable: FunctionComponent<DocsTableProps> = ({ docs }) =>
         <thead>
           <tr>
             <th className="primaryCell">
-              <CaptionText styleType="caption-01-medium" component="p">DOC NAME</CaptionText>
+              <CaptionText styleType="caption-01-medium" component="p" tt="uppercase">
+                Name
+              </CaptionText>
             </th>
-            <th><CaptionText styleType="caption-01-medium" component="p">LAST MODIFIED</CaptionText></th>
             <th>
-              <CaptionText tt="uppercase" styleType="caption-01-medium" component="p">
-                FOLDER         
+              <CaptionText styleType="caption-01-medium" component="p" tt="uppercase">
+                Zuletzt geändert
+              </CaptionText>
+            </th>
+            <th>
+              <CaptionText
+                tt="uppercase"
+                styleType="caption-01-medium"
+                component="p">
+                Ordner
               </CaptionText>
             </th>
             <th/>
@@ -51,7 +60,7 @@ const DocsTable: FunctionComponent<DocsTableProps> = ({ docs }) =>
             rightIcon={<ArrowDown size={20}/>}
             size="medium"
             onClick={() => setShowingDocs(prev => prev + 10)}>
-            Show {docs.length - showingDocs < 10 ? docs.length - showingDocs : 10} More
+            Weitere {docs.length - showingDocs < 10 ? docs.length - showingDocs : 10} anzeigen
           </Button>
         </div>
       )}
