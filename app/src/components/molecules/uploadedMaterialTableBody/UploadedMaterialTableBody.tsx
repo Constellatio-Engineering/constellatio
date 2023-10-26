@@ -1,7 +1,5 @@
 /* eslint-disable max-lines */
 import { BodyText } from "@/components/atoms/BodyText/BodyText";
-// import { Checkbox } from "@/components/atoms/Checkbox/Checkbox";
-import { FileIcon } from "@/components/Icons/FileIcon";
 import { FolderIcon } from "@/components/Icons/Folder";
 import { ImageIcon } from "@/components/Icons/image";
 import { Notepad } from "@/components/Icons/Notepad";
@@ -20,6 +18,7 @@ import {
 import React, { type FunctionComponent } from "react";
 
 import * as styles from "./UploadedMaterialTableBody.styles";
+import { FileWhiteIcon } from "@/components/Icons/FileWhite";
 
 const fileNameIcon = (file: UploadedFile): React.ReactNode =>
 {
@@ -31,13 +30,13 @@ const fileNameIcon = (file: UploadedFile): React.ReactNode =>
     case "jpg":
       return <ImageIcon/>;
     case "pdf":
-      return <FileIcon/>;
+      return <FileWhiteIcon/>;
     case "docx":
-      return <FileIcon/>;
+      return <FileWhiteIcon/>;
     case "xls":
-      return <FileIcon/>;
+      return <FileWhiteIcon/>;
     case "xlsx":
-      return <FileIcon/>;
+      return <FileWhiteIcon/>;
     case "mp4":
       return <VideoIcon/>;
     default:
@@ -68,6 +67,7 @@ const UploadedMaterialTableBody: FunctionComponent<UploadedMaterialTableBodyProp
   const setViewNoteState = useNoteEditorStore(s => s.setViewNoteState);
   const setCreateNoteState = useNoteEditorStore(s => s.setCreateNoteState);
   const { folders } = useUploadFolders();
+
 
   return (
     <>
@@ -138,7 +138,15 @@ const UploadedMaterialTableBody: FunctionComponent<UploadedMaterialTableBodyProp
               </td>
             )}
             {file && (
-              <td css={styles.optionsCell}>
+              <td
+                css={styles.optionsCell}
+                onClick={(e => 
+                {
+                  const menuTarget = e.currentTarget.firstChild;
+                  if (menuTarget instanceof HTMLElement) {
+                      menuTarget.click();
+                  }
+                })}>
                 <MaterialOptionsMenu
                   selectedFolderId={selectedFolderId}
                   file={file}
