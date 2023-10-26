@@ -53,7 +53,7 @@ const PersonalSpacePage: FunctionComponent = () =>
     <div css={styles.wrapper}>
       <div css={styles.header}>
         <OverviewHeader
-          title="Personal Space"
+          title="Persönlicher Bereich"
           variant="red"
           categories={categories}
           selectedCategorySlug={selectedCategorySlug}

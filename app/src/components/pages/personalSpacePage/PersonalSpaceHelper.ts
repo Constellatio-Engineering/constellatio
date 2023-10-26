@@ -23,7 +23,7 @@ export const categoriesHelper = (favCategoryData: {
         title: "bookmark-icon"
       },
       id: favCategoryData?.FavCategoryId,
-      mainCategory: "Favourites",
+      mainCategory: "Favoriten",
       slug: favCategoryData.slug
     }, {
       __typename: "MainCategory",
@@ -33,7 +33,7 @@ export const categoriesHelper = (favCategoryData: {
         title: "file-category-icon"
       },
       id: materialsCategoryData?.MaterialsCategoryId,
-      mainCategory: "Materials",
+      mainCategory: "Deine Dateien",
       slug: materialsCategoryData.slug
     }
   ];
