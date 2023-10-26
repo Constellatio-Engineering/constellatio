@@ -30,7 +30,6 @@ import { type FunctionComponent } from "react";
 
 import * as styles from "./DocsTable.styles";
 import { BodyText } from "../../atoms/BodyText/BodyText";
-// import { Checkbox } from "../../atoms/Checkbox/Checkbox";
 import { DotsIcon } from "../../Icons/dots";
 
 const formatDate = (date: Date): string => `${String(date.getDate()).padStart(2, "0")}.${String(date.getMonth() + 1).padStart(2, "0")}.${date.getFullYear()}`;
@@ -148,7 +147,7 @@ export const DocsTableData: FunctionComponent<Document> = (doc) =>
           </Menu.Target>
           <Menu.Dropdown>
             <Menu.Item onClick={() => setEditDocumentState(doc)}>
-              <DropdownItem icon={<Edit/>} label="Rename and edit"/>
+              <DropdownItem icon={<Edit/>} label="Bearbeiten"/>
             </Menu.Item>
             <Menu.Item>
               <DropdownItem icon={<FolderIcon/>} label="Move to" onClick={() => setShowMoveToModal(true)}/>
@@ -157,7 +156,7 @@ export const DocsTableData: FunctionComponent<Document> = (doc) =>
               <DropdownItem icon={<DownloadIcon/>} label="Download"/>
             </Menu.Item>
             <Menu.Item onClick={() => setShowDeleteDocModal(true)}>
-              <DropdownItem icon={<Trash/>} label="Delete"/>
+              <DropdownItem icon={<Trash/>} label="Löschen"/>
             </Menu.Item>
           </Menu.Dropdown>
         </Menu>
@@ -179,7 +178,7 @@ export const DocsTableData: FunctionComponent<Document> = (doc) =>
           <Button<"button">
             styleType={"secondarySimple" as TButton["styleType"]}
             onClick={() => setShowDeleteDocModal(false)}>
-            No, Keep
+            Nein, behalten
           </Button>
           <Button<"button">
             styleType="primary"
@@ -188,7 +187,7 @@ export const DocsTableData: FunctionComponent<Document> = (doc) =>
               deleteDocument({ id: documentId });
               setShowDeleteDocModal(false);
             }}>
-            Yes, Delete
+            Ja, löschen
           </Button>
         </div>
       </Modal>

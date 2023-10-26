@@ -150,7 +150,7 @@ const ItemBlock: FunctionComponent<ICaseBlockProps> = ({
             <>
               <span className="linearGredient"/>
               <Button<"button"> css={styles.expandTableButton} styleType="tertiary" onClick={() => setNumberOfShowingItems(prev => prev + 10)}>
-                {items?.length - numberOfShowingItems > 10 ? 10 : items?.length - numberOfShowingItems} weitere anzeigen <ArrowDown/>
+                {items?.length - numberOfShowingItems > 10 ? 10 : items?.length - numberOfShowingItems} Weitere anzeigen <ArrowDown/>
               </Button>
             </>
           </div>

@@ -110,16 +110,17 @@ const UploadedMaterialTableBody: FunctionComponent<UploadedMaterialTableBodyProp
                 }}>
                 <BodyText
                   styleType="body-02-medium"
-                  component="p">
+                  component="p"
+                  tt="capitalize">
                   {note ? (
                     <>
                       <NotepadFilled/>
-                      View Notes
+                      ansehen
                     </>
                   ) : (
                     <>
                       <Notepad/>
-                      Add Notes
+                      schreiben
                     </>
                   )}
                 </BodyText>

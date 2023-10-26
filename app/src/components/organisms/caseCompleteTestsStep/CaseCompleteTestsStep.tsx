@@ -182,7 +182,7 @@ const CaseCompleteTestsStep: FunctionComponent<ICaseCompleteTestsStepProps> = ({
       <div css={styles.contentWrapper} id="completeTestsStepContent">
         {variant === "case" && (
           <div css={styles.facts}>
-            <Title order={2}>Facts</Title>
+            <Title order={2}>Sachverhalt</Title>
             <Richtext
               data={facts}
               richTextOverwrite={{ paragraph: richTextParagraphOverwrite }}
@@ -195,7 +195,7 @@ const CaseCompleteTestsStep: FunctionComponent<ICaseCompleteTestsStepProps> = ({
             size="large"
             type="button"
             onClick={() => setProgressState({ caseId, progressState: "completing-tests" })}>
-            Start solving case
+            Geführte Lösung starten
           </Button>
         )}
         <div css={styles.content}>

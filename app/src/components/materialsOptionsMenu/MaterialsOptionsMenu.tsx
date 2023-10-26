@@ -136,7 +136,7 @@ const MaterialOptionsMenu: FunctionComponent<MaterialOptionsMenuProps> = ({ file
           <Button<"button">
             styleType={"secondarySimple" as TButton["styleType"]}
             onClick={() => setIsDeleteMaterialModalOpen(false)}>
-            No, Keep
+            Nein, behalten
           </Button>
           <Button<"button">
             styleType="primary"
@@ -148,7 +148,7 @@ const MaterialOptionsMenu: FunctionComponent<MaterialOptionsMenuProps> = ({ file
               }
               setIsDeleteMaterialModalOpen(false);
             }}>
-            Yes, Delete
+            Ja, löschen
           </Button>
         </div>
       </Modal>
@@ -180,7 +180,7 @@ const MaterialOptionsMenu: FunctionComponent<MaterialOptionsMenuProps> = ({ file
                 <Button<"button">
                   styleType={"secondarySimple" as TButton["styleType"]}
                   onClick={closeRenameFileModal}>
-                  Cancel
+                  Abbrechen
                 </Button>
                 <Button<"button">
                   styleType="primary"
