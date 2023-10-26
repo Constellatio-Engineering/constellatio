@@ -137,21 +137,11 @@ const UploadedMaterialTableBody: FunctionComponent<UploadedMaterialTableBodyProp
               </td>
             )}
             {file && (
-              <td
-                css={styles.optionsCell}
-                onClick={(e => 
-                {
-                  const menuTarget = e.currentTarget.firstChild;
-                  if(menuTarget instanceof HTMLElement) 
-                  {
-                    menuTarget.click();
-                  }
-                })}>
+             
                 <MaterialOptionsMenu
                   selectedFolderId={selectedFolderId}
                   file={file}
                 />
-              </td>
             )}
           </tr>
         );
