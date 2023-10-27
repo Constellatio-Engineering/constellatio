@@ -86,6 +86,7 @@ const FloatingPanel: FunctionComponent<IFloatingPanelProps> = ({
             </div>
           )}
         </Switcher>
+        {/* {selectedTab === "Gliederung" && content && renderTOC(toc)} */}
         {selectedTab === "Gliederung" && content && renderTOC(toc)}
         {facts && facts.json && selectedTab === "Sachverhalt" && facts && (
           <div css={styles.facts}>

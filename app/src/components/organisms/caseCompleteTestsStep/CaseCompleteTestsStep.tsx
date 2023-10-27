@@ -1,6 +1,7 @@
 /* eslint-disable max-lines */
 import { Button } from "@/components/atoms/Button/Button";
 import { type IStatusLabel } from "@/components/atoms/statusLabel/StatusLabel";
+import FloatingPanelTablet from "@/components/floatingPanelTablet/FloatingPanelTablet";
 import { RichTextHeadingOverwrite } from "@/components/helpers/RichTextHeadingOverwrite";
 import { type GameProgress } from "@/db/schema";
 import useContextAndErrorIfNull from "@/hooks/useContextAndErrorIfNull";
@@ -212,6 +213,14 @@ const CaseCompleteTestsStep: FunctionComponent<ICaseCompleteTestsStepProps> = ({
               />
             </div>
           )}
+          {!isBigScreen && (
+            <FloatingPanelTablet
+              hidden={progressState === "not-started"}
+              facts={facts}
+              content={content}
+              variant={variant}
+            />
+          )}
           {progressState !== "not-started" && (
             <div css={styles.fullTextAndTasksWrapper}>
               <Richtext
@@ -221,7 +230,6 @@ const CaseCompleteTestsStep: FunctionComponent<ICaseCompleteTestsStepProps> = ({
                   heading: (props) => 
                   {
                     const node = props!.node as unknown as IHeadingNode;
-                    // console.log({ allHeadings, node, return: getNestedHeadingIndex(node, allHeadings) });
                     return RichTextHeadingOverwrite({ index: getNestedHeadingIndex(node, allHeadings), ...props });
                   },
                   paragraph: richTextParagraphOverwrite
