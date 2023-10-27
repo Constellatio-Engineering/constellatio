@@ -11,13 +11,11 @@ import { NotepadFilled } from "../Icons/NotepadFilled";
 import SlidingPanelTitle from "../molecules/slidingPanelTitle/SlidingPanelTitle";
 import FloatingPanel, { type IFloatingPanelProps } from "../organisms/floatingPanel/FloatingPanel";
 
-const FloatingPanelTablet: FunctionComponent<IFloatingPanelProps & { readonly varitant: "case" | "dictionary" }> = ({
-  variant,
-  ...props
-}) => 
+const FloatingPanelTablet: FunctionComponent<IFloatingPanelProps> = (props) => 
 {
   const [opened, { close, open }] = useDisclosure(false);
   const drawerStyles: Styles<ModalBaseStylesNames> = { body: { padding: 0 } };
+  const { variant } = props;
   return (
     <div css={styles.wrapper}>
       <div css={styles.buttonsGroup}>
