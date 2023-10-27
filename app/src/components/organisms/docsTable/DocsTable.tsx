@@ -46,8 +46,7 @@ const DocsTable: FunctionComponent<DocsTableProps> = ({ docs }) =>
         </thead>
         <tbody css={styles.tableBody}>
           {docs.slice(0, showingDocs).map(doc => (
-            <tr
-              key={doc.id}>
+            <tr key={doc.id}>
               <DocsTableData {...doc}/>
             </tr>
           ))}

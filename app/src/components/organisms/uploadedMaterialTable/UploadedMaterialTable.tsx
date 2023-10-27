@@ -27,7 +27,7 @@ const UploadedMaterialTable: FunctionComponent<UploadedMaterialTableProps> = ({
   const [showingFiles, setShowingFiles] = useState<number>(5);
   const isShowingFullTable = showingFiles >= (uploadedFiles?.length ?? 0);
 
-  return isGetUploadedFilesLoading ? <>Loading... </> : (
+  return isGetUploadedFilesLoading ? null : (
     <div>
       <table css={styles.tableWrapper}>
         <thead css={styles.tableHead}>
@@ -49,7 +49,7 @@ const UploadedMaterialTable: FunctionComponent<UploadedMaterialTableProps> = ({
             rightIcon={<ArrowDown size={20}/>}
             size="medium"
             onClick={() => setShowingFiles(prev => prev + 10)}>
-            Show {uploadedFiles?.length - showingFiles < 10 ? uploadedFiles?.length - showingFiles : 10} More
+            Zeige {uploadedFiles?.length - showingFiles < 10 ? uploadedFiles?.length - showingFiles : 10} weitere
           </Button>
         </div>
       )}

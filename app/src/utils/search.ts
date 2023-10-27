@@ -103,12 +103,14 @@ export const createArticleSearchIndexItem = (fullArticle: IGenArticle): ArticleS
   return articleSearchIndexItem;
 };
 
-export type UploadSearchIndexItem = Pick<UploadedFile, "id" | "originalFilename" | "userId" | "folderId" | "createdAt">;
+export type UploadSearchIndexItem = Pick<UploadedFile, "id" | "originalFilename" | "userId" | "folderId" | "createdAt" | "fileExtension" | "contentType">;
 export type UploadSearchItemNodes = RemoveUndefined<DotSeparatedKeys<UploadSearchIndexItem>>;
 export type UploadSearchItemUpdate = Partial<Omit<UploadSearchIndexItem, "id" | "userId">> & Pick<UploadSearchIndexItem, "id">;
 
 export const createUploadsSearchIndexItem = ({
+  contentType,
   createdAt,
+  fileExtension,
   folderId,
   id,
   originalFilename,
@@ -116,7 +118,9 @@ export const createUploadsSearchIndexItem = ({
 }: UploadSearchIndexItem): UploadSearchIndexItem =>
 {
   return ({
-    createdAt, 
+    contentType,
+    createdAt,
+    fileExtension,
     folderId,
     id,
     originalFilename,

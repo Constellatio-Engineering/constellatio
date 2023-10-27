@@ -35,6 +35,7 @@
     "setGoogleCloudProject": "gcloud config set project idyllic-psyche-400317",
     "setCloudStorageDevelopmentCors": "gsutil cors set google/cloud-storage-cors/development.cors-config.json gs://constellatio-user-uploads-development",
     "setCloudStorageStagingCors": "gsutil cors set google/cloud-storage-cors/staging.cors-config.json gs://constellatio-user-uploads-staging",
+    "setCloudStorageProductionCors": "gsutil cors set google/cloud-storage-cors/production.cors-config.json gs://constellatio-user-uploads-production",
     "separatorOther": "---------------------- OTHER ----------------------",
     "printCopiedToClipboard": "echo 'Copied to clipboard'",
     "localtunnel": "lt --subdomain constelaltio-app-development --port 3010"

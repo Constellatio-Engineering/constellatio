@@ -97,11 +97,15 @@ export const documentsRouter = createTRPCRouter({
       const { id, updatedValues } = documentUpdate;
       const { content: updatedContent } = updatedValues;
 
-      const updatedDocument = db.update(documents)
-        .set({
-          ...updatedValues,
-          updatedAt: new Date()
-        })
+      const _updatedValues: Partial<DocumentInsert> = {
+        content: updatedValues.content,
+        folderId: updatedValues.folderId,
+        name: updatedValues.name,
+        updatedAt: new Date()
+      };
+
+      const updatedDocument = await db.update(documents)
+        .set(_updatedValues)
         .where(and(
           eq(documents.id, id),
           eq(documents.userId, userId)
