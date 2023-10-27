@@ -6,7 +6,7 @@ import { resetStyles } from "@/styles/resets.style";
 
 import { Global } from "@emotion/react";
 import {
-  MantineProvider, type MantineTheme, type ScrollAreaStylesNames, type ScrollAreaStylesParams, type Styles 
+  MantineProvider, type ScrollAreaStylesNames, type ScrollAreaStylesParams, type Styles
 } from "@mantine/core";
 import { Karla, Libre_Baskerville } from "next/font/google";
 import React, { type FunctionComponent, type ReactNode } from "react";
@@ -30,7 +30,7 @@ interface Props
 
 const CustomThemingProvider: FunctionComponent<Props> = ({ children }) =>
 {
-  const scrollAreaStyles: Styles<ScrollAreaStylesNames, ScrollAreaStylesParams> = (theme: MantineTheme) => ({
+  const scrollAreaStyles: Styles<ScrollAreaStylesNames, ScrollAreaStylesParams> = theme => ({
     scrollbar: {
       backgroundColor: theme.colors["neutrals-01"][0],
     },

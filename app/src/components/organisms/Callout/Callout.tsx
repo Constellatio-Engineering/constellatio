@@ -1,69 +1,59 @@
-import CaisyIcon from "@/basic-components/CaisyIcon";
-import { BodyText } from "@/components/atoms/BodyText/BodyText";
 import { Button } from "@/components/atoms/Button/Button";
 import { ArrowDown } from "@/components/Icons/ArrowDown";
 import { ArrowUp } from "@/components/Icons/ArrowUp";
 import { Richtext } from "@/components/molecules/Richtext/Richtext";
 import { type IGenCallout } from "@/services/graphql/__generated/sdk";
 
-import { Box, Group, Spoiler, Stack } from "@mantine/core";
+import { Group, Spoiler, Stack } from "@mantine/core";
 import React, { type FC } from "react";
 
 import { RichTextStyles, calloutStyles, spoilerStyles } from "./Callout.styles";
+import { HeadingType } from "./HeadingType";
 
-type TCallout = IGenCallout;
+export type CalloutProps = IGenCallout;
 
-export const Callout: FC<TCallout> = ({
-  expandable,
-  icon,
-  text,
-  title
-}) => 
+export const Callout: FC<CalloutProps> = ({ calloutType, expandable, text }) => 
 {
   const [isContentHide, setIsContentHide] = React.useState<boolean>(true);
 
   const ShowAllBtn = (
-    <Button
-      component="a"
+    <Button<"a">
       styleType="tertiary"
       rightIcon={<ArrowDown size={20}/>}
       size="medium"
-      onClick={() => setIsContentHide(false)}>
-      Show all
+      onClick={() => setIsContentHide(false)}
+      component="a">
+      Ausklappen
     </Button>
   );
 
   const ShowLessBtn = (
-    <Button
-      component="a"
+    <Button<"a">
       styleType="tertiary"
       rightIcon={<ArrowUp size={20}/>}
       size="medium"
-      onClick={() => setIsContentHide(true)}>
-      Show less
+      onClick={() => setIsContentHide(true)}
+      component="a">
+      Einklappen
     </Button>
   );
+
   return (
     <Stack spacing="spacing-4" sx={calloutStyles()}>
       <Group spacing="spacing-8">
-        {icon?.src && <CaisyIcon src={icon.src} description={icon?.description ?? ""}/>}
-        {title && (
-          <BodyText component="p" styleType="body-01-bold">
-            {title}
-          </BodyText>
-        )}
+        <HeadingType calloutType={calloutType}/>
       </Group>
-      {text?.richTextContent?.json &&
+      {text?.json &&
         (expandable ? (
           <Spoiler
             hideLabel={ShowLessBtn}
             maxHeight={190}
             showLabel={ShowAllBtn}
             styles={spoilerStyles({ isContentHide })}>
-            <Richtext richTextContent={text.richTextContent} stylesOverwrite={RichTextStyles}/>
+            <Richtext data={text} stylesOverwrite={RichTextStyles}/>
           </Spoiler>
         ) : (
-          <Richtext richTextContent={text.richTextContent} stylesOverwrite={RichTextStyles}/>
+          <Richtext data={text} stylesOverwrite={RichTextStyles}/>
         ))}
     </Stack>
   );

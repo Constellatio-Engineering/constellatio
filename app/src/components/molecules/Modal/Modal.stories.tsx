@@ -1,42 +1,39 @@
 import { Button } from "@/components/atoms/Button/Button";
 
 import {
-  Box, Group, Stack, Text, Title 
+  Group, Text
 } from "@mantine/core";
 import { useDisclosure } from "@mantine/hooks";
 import { type Meta, type StoryObj } from "@storybook/react";
+import { type FunctionComponent } from "react";
 
-import { Modal } from "./Modal";
+import { Modal, type ModalProps } from "./Modal";
 
-const Template = (args: any) => 
+const Template: FunctionComponent<ModalProps> = (args) =>
 {
   const [isOpened, { close, open }] = useDisclosure(false);
 
   return (
     <>
       <Modal
+        {...args}
         opened={isOpened}
         centered
-        onClose={() => 
-        {
-          console.log("Closed");
-          close();
-        }}
-        {...args}>
+        onClose={close}>
         <Text>
           Amet minim mollit non deserunt ullamco est sit aliqua dolor do amet sint. Velit officia consequat duis enim
           velit mollit.
         </Text>
         <Group noWrap grow w="100%">
-          <Button onClick={close} fullWidth styleType="secondarySimple">
+          <Button<"button"> onClick={close} fullWidth styleType="secondarySimple">
             Close Modal
           </Button>
-          <Button styleType="primary" fullWidth>
+          <Button<"button"> styleType="primary" fullWidth>
             Primary Button
           </Button>
         </Group>
       </Modal>
-      <Button
+      <Button<"button">
         onClick={open}
         title="Open Modal"
         type="button"

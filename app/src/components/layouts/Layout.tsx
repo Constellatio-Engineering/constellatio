@@ -1,20 +1,21 @@
-import { Footer } from "@/components/organisms/Footer/Footer";
 import { Header } from "@/components/organisms/Header/Header";
 
-import { AppShell } from "@mantine/core";
-import { type ReactNode } from "react";
+import { type FunctionComponent, type ReactNode } from "react";
+
+import * as styles from "./Layout.styles";
+import { Footer } from "../organisms/Footer/Footer";
 
 interface LayoutProps 
 {
   readonly children?: ReactNode;
 }
 
-export function Layout({ children }: LayoutProps) 
-{
-  return (
-    <div>
-      <Header/>
+export const Layout: FunctionComponent<LayoutProps> = ({ children }) => (
+  <div css={styles.wrapper}>
+    <Header variant="default"/>
+    <main css={styles.main}>
       {children}
-    </div>
-  );
-}
+    </main>
+    <Footer/>
+  </div>
+);

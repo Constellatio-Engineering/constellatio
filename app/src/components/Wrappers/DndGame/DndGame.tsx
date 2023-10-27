@@ -1,3 +1,4 @@
+/* eslint-disable max-lines */
 import { BodyText } from "@/components/atoms/BodyText/BodyText";
 import { Button } from "@/components/atoms/Button/Button";
 import { Input } from "@/components/atoms/Input/Input";
@@ -6,7 +7,7 @@ import { Cross } from "@/components/Icons/Cross";
 
 import { useCaisyField } from "@caisy/ui-extension-react";
 import {
-  DndContext, KeyboardSensor, PointerSensor, closestCenter, useSensor, useSensors 
+  DndContext, type DragEndEvent, KeyboardSensor, PointerSensor, closestCenter, useSensor, useSensors 
 } from "@dnd-kit/core";
 import {
   SortableContext,
@@ -17,7 +18,7 @@ import {
 import { Box, Title, Switch } from "@mantine/core";
 import { useForm } from "@mantine/form";
 import { randomId } from "@mantine/hooks";
-import React, { useState } from "react";
+import React, { type FC, useState } from "react";
 
 import {
   CardItem,
@@ -34,7 +35,7 @@ import { Handle } from "../../Icons/Handle";
 
 export interface TValue 
 {
-  options: { correctAnswer: boolean; id: string; label: string }[];
+  options: Array<{ correctAnswer: boolean; id: string; label: string }>;
   orderRequired: boolean;
 }
 
@@ -52,7 +53,7 @@ interface ICaisy
   value: TValue;
 }
 
-export const DndWrapper = () => 
+export const DndWrapper: FC = () => 
 {
   const [checked, setChecked] = useState(false);
 
@@ -72,7 +73,7 @@ export const DndWrapper = () =>
     },
   });
 
-  const onSubmitHandler = () => 
+  const onSubmitHandler = (): void => 
   {
     setValue({
       ...value,
@@ -88,22 +89,18 @@ export const DndWrapper = () =>
     form.values.option = "";
   };
 
-  function handleDragEnd(event) 
+  function handleDragEnd(event: DragEndEvent): void 
   {
     const { active, over } = event;
 
-    if(active.id !== over.id) 
+    if(active.id !== over?.id) 
     {
-      // @ts-ignore
-      setValue(() => 
-      {
-        const oldIndex = value.options.findIndex((option) => option.id === active.id);
-        const newIndex = value.options.findIndex((option) => option.id === over.id);
-
-        return {
-          ...value,
-          options: arrayMove(value.options, oldIndex, newIndex),
-        };
+      const oldIndex = value.options.findIndex((option) => option.id === active.id);
+      const newIndex = value.options.findIndex((option) => option.id === over?.id);
+      const newOptions = arrayMove(value.options, oldIndex, newIndex);
+      setValue({
+        ...value,
+        options: newOptions,
       });
     }
   }
@@ -113,13 +110,19 @@ export const DndWrapper = () =>
       Loading...
     </BodyText>
   ) : !value ? (
-    <Button styleType="tertiary" onClick={() => setValue({ options: [], orderRequired: false })} w="25%">
+    <Button<"button">
+    // Disabled this rule because ESLint doesn't recognize the type of the Button component
+      // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+      // @ts-ignore
+      styleType="tertiary"
+      onClick={() => setValue({ options: [], orderRequired: false })}
+      w="25%">
       Reload
     </Button>
   ) : (
     <Container>
       <Title order={3}>Add Options for Drag N Drop Game</Title>
-      <Button
+      <Button<"button">
         styleType="primary"
         onClick={() => setValue({ options: [], orderRequired: false })}
         w="20%"
@@ -131,7 +134,7 @@ export const DndWrapper = () =>
           <Box component="form" onSubmit={form.onSubmit(() => onSubmitHandler())}>
             <Input inputType="text" label="Add an option" {...form.getInputProps("option")}/>
             <Box
-              sx={(theme) => ({
+              sx={() => ({
                 alignItems: "center",
                 display: "flex",
                 justifyContent: "space-between",
@@ -156,7 +159,7 @@ export const DndWrapper = () =>
                 }}
                 styles={switchStyle({ checked })}
               />
-              <Button
+              <Button<"button">
                 styleType="primary"
                 type="submit"
                 disabled={form.getInputProps("option")?.value?.length <= 1}

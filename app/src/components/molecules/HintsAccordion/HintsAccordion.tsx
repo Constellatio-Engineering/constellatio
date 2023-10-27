@@ -5,20 +5,20 @@ import React, { type FC, useState } from "react";
 
 import { ItemWrapper, hintsAccordionStyles } from "./HintsAccordion.styles";
 
-interface THintsAccordion 
+export interface HintsAccordionProps
 {
   readonly items: string[];
 }
 
-export const HintsAccordion: FC<THintsAccordion> = ({ items }) => 
+export const HintsAccordion: FC<HintsAccordionProps> = ({ items }) =>
 {
   const [value, setValue] = useState<string | null>(null);
   return (
-    <Accordion onChange={setValue} value={value} styles={hintsAccordionStyles({})}>
+    <Accordion onChange={setValue} value={value} styles={hintsAccordionStyles()}>
       <Accordion.Item value="hints">
         <Accordion.Control>
           <BodyText styleType="body-01-regular" component="p">
-            {value ? "Hide correct answers" : "Show correct answers"}
+            {value ? "Antwort ausblenden" : "Antwort einblenden"}
           </BodyText>
         </Accordion.Control>
         <Accordion.Panel>

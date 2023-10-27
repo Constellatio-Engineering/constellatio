@@ -1,26 +1,34 @@
+import { BodyText } from "@/components/atoms/BodyText/BodyText";
 import { Button } from "@/components/atoms/Button/Button";
+import { AlertCard } from "@/components/atoms/Card/AlertCard";
 import { CustomLink } from "@/components/atoms/CustomLink/CustomLink";
 import { Input } from "@/components/atoms/Input/Input";
 import { colors } from "@/constants/styles/colors";
-import { type Database } from "@/lib/database.types";
-import { loginFormSchema } from "@/schemas/LoginFormSchema";
+import useContextAndErrorIfNull from "@/hooks/useContextAndErrorIfNull";
+import { supabase } from "@/lib/supabase";
+import { InvalidateQueriesContext } from "@/provider/InvalidateQueriesProvider";
+import { loginFormSchema } from "@/schemas/auth/loginForm.schema";
+import { paths, queryParams } from "@/utils/paths";
 
 import { Stack } from "@mantine/core";
 import { useForm, zodResolver } from "@mantine/form";
-import { notifications } from "@mantine/notifications";
-import { createPagesBrowserClient } from "@supabase/auth-helpers-nextjs";
+import { AuthError } from "@supabase/gotrue-js";
 import { useAtom } from "jotai";
 import { useRouter } from "next/router"; 
 import { type FunctionComponent, useState } from "react";
 
 import { ResetPasswordModal, resetPasswordModalVisible } from "../ResetPasswordModal/ResetPasswordModal";
 
+type SignInError = "emailNotConfirmed" | "invalidCredentials" | "unknownError";
+
 export const LoginForm: FunctionComponent = () =>
 {
-  const [_, setResetPasswordModalOpen] = useAtom(resetPasswordModalVisible);
-  const supabase = createPagesBrowserClient<Database>();
   const router = useRouter();
-  const [submitting, setSubmitting] = useState(false);
+  const wasPasswordUpdated = router.query[queryParams.passwordResetSuccess] === "true";
+  const { invalidateEverything } = useContextAndErrorIfNull(InvalidateQueriesContext);
+  const [, setResetPasswordModalOpen] = useAtom(resetPasswordModalVisible);
+  const [isLoginInProgress, setIsLoginInProgress] = useState(false);
+  const [signInError, setSignInError] = useState<SignInError>();
   const form = useForm({
     initialValues: {
       email: "",
@@ -34,54 +42,78 @@ export const LoginForm: FunctionComponent = () =>
 
   const handleSubmit = form.onSubmit(async (formValues) =>
   {
+    setIsLoginInProgress(true);
+
     try
     {
-      setSubmitting(true);
-
-      notifications.show({
-        message: "The login handler was called",
-        title: "Login handler",
-      });
-
-      const result = await supabase.auth.signInWithPassword({
+      const loginResult = await supabase.auth.signInWithPassword({
         email: formValues.email,
         password: formValues.password,
       });
 
-      if(result.error)
+      if(loginResult.error)
       {
-        throw result.error;
+        console.log("login failed", loginResult.error);
+        throw loginResult.error;
       }
 
-      console.log("successfully logged in, redirecting to home page");
-
-      await router.replace("/");
+      await invalidateEverything();
+      await router.replace(`${paths.cases}`);
     }
     catch (error)
     {
-      console.log("error while logging in", error);
+      if(!(error instanceof AuthError))
+      {
+        console.log("Something went wrong while logging in", error);
+        setSignInError("unknownError");
+        return;
+      }
+
+      switch (error.message)
+      {
+        case "Email not confirmed":
+        {
+          setSignInError("emailNotConfirmed");
+          break;
+        }
+        case "Invalid login credentials":
+        {
+          setSignInError("invalidCredentials");
+          break;
+        }
+        default:
+        {
+          console.log("error while logging in", error);
+          setSignInError("unknownError");
+          break;
+        }
+      }
     }
     finally
     {
-      setSubmitting(false);
+      setIsLoginInProgress(false);
     }
   });
 
   return (
     <>
+      {signInError === "emailNotConfirmed" && <AlertCard stylesOverwrite={{ marginBottom: "40px" }} variant="error">Du musst zuerst deine E-Mail-Adresse bestätigen. Eine Bestätigungsmail wurde dir zugesendet.</AlertCard>}
+      {signInError === "invalidCredentials" && <AlertCard stylesOverwrite={{ marginBottom: "40px" }} variant="error">Wir konnten kein Konto mit diesen Anmeldedaten finden. Bitte überprüfe deine Eingaben.</AlertCard>}
+      {signInError === "unknownError" && <AlertCard stylesOverwrite={{ marginBottom: "40px" }} variant="error">Es ist ein unbekannter Fehler aufgetreten. Bitte versuche es erneut.</AlertCard>}
+      {wasPasswordUpdated && <AlertCard stylesOverwrite={{ marginBottom: "40px" }} variant="success">Dein Passwort wurde erfolgreich geändert. Du kannst dich jetzt mit deinem neuen Passwort anmelden.</AlertCard>}
       <form onSubmit={handleSubmit}>
         <Stack spacing="spacing-24">
           <Stack spacing="spacing-12">
             <Input
               inputType="text"
-              label="Email"
-              title="Email"
+              label="E-Mail"
+              title="E-Mail"
               {...form.getInputProps("email")}
             />
             <Input
               inputType="password"
-              label="Password"
-              title="password"
+              label="Passwort"
+              title="Passwort"
               {...form.getInputProps("password")}
             />
           </Stack>
@@ -90,20 +122,41 @@ export const LoginForm: FunctionComponent = () =>
             component="button"
             onClick={openResetPasswordModal}
             stylesOverwrite={{ color: colors["neutrals-02"][2], textAlign: "left" }}>
-            Forgot Password?
+            Passwort vergessen?
           </CustomLink>
-          <Button
-            /* eslint-disable-next-line @typescript-eslint/ban-ts-comment */
-            /* @ts-ignore */ // there is a bug with typescript, so we need to ignore this
+          <CustomLink
+            styleType="link-secondary"
+            component="button"
+            onClick={() => void router.push(paths.register)}
+            stylesOverwrite={{ color: colors["neutrals-02"][2], textAlign: "left" }}>
+            Du hast noch kein Konto?
+          </CustomLink>
+          <Button<"button">
             styleType="primary"
             type="submit"
-            title="Log in"
-            loading={submitting}>
-            Log in
+            title="Anmelden"
+            loading={isLoginInProgress}>
+            Anmelden
           </Button>
         </Stack>
       </form>
       <ResetPasswordModal/>
+      <BodyText
+        mt={40}
+        component="p"
+        styleType="body-02-medium"
+        ta="center"
+        c="neutrals-01.7">
+        Hinweis: Diese Version von Constellatio ist nur für die Verwendung am Computer optimiert.
+        Wenn du technische Fragen hast, wende dich bitte an unseren
+        Support unter&nbsp;
+        <CustomLink
+          href="mailto:webmaster@constellatio.de"
+          styleType="link-secondary"
+          c="neutrals-01.7">
+          webmaster@constellatio.de
+        </CustomLink>
+      </BodyText>
     </>
   );
 };

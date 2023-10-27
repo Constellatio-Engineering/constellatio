@@ -1,20 +1,19 @@
 import {
   Button as MantineButton,
   type ButtonProps,
-  type MantineTheme,
   type Styles,
-  type ButtonStylesParams,
   type ButtonStylesNames,
   type CSSObject,
-  createPolymorphicComponent,
+  createPolymorphicComponent, type ButtonStylesParams,
 } from "@mantine/core";
 import React, { type ButtonHTMLAttributes, type FC } from "react";
 
-type TButton = (ButtonProps | ButtonHTMLAttributes<HTMLButtonElement>) & {
+export type TButton = (ButtonProps | ButtonHTMLAttributes<HTMLButtonElement>) & {
   readonly size?: "large" | "medium";
   readonly styleOverwrite?: CSSObject | undefined;
   readonly styleType: "primary" | "secondarySimple" | "secondarySubtle" | "tertiary";
 };
+
 const _Button: FC<TButton> = ({
   children,
   size = "large",
@@ -23,7 +22,7 @@ const _Button: FC<TButton> = ({
   ...props
 }) => 
 {
-  const styles: Styles<ButtonStylesNames, ButtonStylesParams> = (theme: MantineTheme) => ({
+  const styles: Styles<ButtonStylesNames, ButtonStylesParams> = theme => ({
     leftIcon: {
       marginRight: theme.spacing["spacing-4"],
     },

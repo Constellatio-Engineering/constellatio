@@ -1,35 +1,40 @@
 import { Container, Flex, Title } from "@mantine/core";
-import Image from "next/image";
-import React from "react";
+import React, { type FunctionComponent } from "react";
 
-import visual from "../../../../public/images/Registration-visual.png";
+import visual from "../../../../public/images/Registration-visual.svg";
 import { Footer } from "../Footer/Footer";
 
-export const RegistrationVisualHeader = () => 
+export const RegistrationVisualHeader: FunctionComponent = () =>
 {
   return (
     <Container
       bg="brand-01.5"
       sx={() => ({
+        alignItems: "center",
+        display: "flex",
+        flexDirection: "column",
         height: "100%",
-        overflow: "scroll",
+        justifyContent: "space-between",
+        overflow: "auto",
         padding: 0,
       })}>
       <Flex
         direction="column"
         justify="space-between"
         align="center"
-        h="100%"
-        pt={64}>
+        sx={{ 
+          alignItems: "center", display: "flex", height: "100%", justifyContent: "center", margin: "0 auto", maxWidth: "100%", overflow: "hidden", padding: 0,
+
+        }}>
         <Flex
           px={20}
           direction="column"
-          justify="space-between"
+          justify="center"
           align="center">
-          <Image
-            priority
-            src={visual}
-            style={{ height: "auto", maxWidth: 550 }}
+          {/* eslint-disable-next-line @next/next/no-img-element */}
+          <img
+            src={visual.src}
+            style={{ aspectRatio: "1", maxWidth: "100%", objectFit: "contain" }}
             alt="Registration-visual"
           />
           <Title
@@ -37,12 +42,12 @@ export const RegistrationVisualHeader = () =>
             align="center"
             order={3}
             c="neutrals-01.0"
-            w="65%">
-            Making learning process easy and fun
+            w="96%">
+            Mit Constellatio endlich auf das Wesentliche konzentrieren
           </Title>
         </Flex>
-        <Footer variant="simpleColoredBg"/>
       </Flex>
+      <Footer variant="simpleColoredBg"/>
     </Container>
   );
 };

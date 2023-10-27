@@ -1,53 +1,28 @@
 /* eslint-disable import/no-unused-modules */
-import type { Database } from "@/lib/database.types";
+import { getIsUserLoggedIn } from "@/utils/auth";
 
 import { createMiddlewareClient } from "@supabase/auth-helpers-nextjs";
-import { NextResponse } from "next/server";
-import type { NextRequest, NextMiddleware } from "next/server";
+import { type NextMiddleware, NextResponse } from "next/server";
 
-export const middleware: NextMiddleware = async (req: NextRequest) =>
+export const middleware: NextMiddleware = async (req) =>
 {
-  console.log("--- middleware ---");
+  console.time("Middleware");
 
   const res = NextResponse.next();
-  const supabase = createMiddlewareClient<Database>({ req, res });
-  const { data: { session }, error: authError } = await supabase.auth.getSession();
+  const supabase = createMiddlewareClient({ req, res });
+  const { isUserLoggedIn } = await getIsUserLoggedIn(supabase);
 
-  if(authError != null)
-  {
-    console.error("Error getting session", authError);
-    return res;
-  }
-
-  if(!session?.user)
+  if(!isUserLoggedIn)
   {
     const redirectUrl = req.nextUrl.clone();
-
     redirectUrl.pathname = "/login";
     redirectUrl.searchParams.set("redirectedFrom", req.nextUrl.pathname);
-
+    console.log("User is not logged in. Redirecting to: ", redirectUrl.toString());
     return NextResponse.redirect(redirectUrl);
   }
 
-  const { data: userData, error: getUserError } = await supabase.auth.getUser();
-
-  if(getUserError != null)
-  {
-    console.error("Error getting user", getUserError);
-    return res;
-  }
-
-  if(userData.user?.confirmed_at)
-  {
-    return res;
-  }
-
-  const redirectUrl = req.nextUrl.clone();
-
-  redirectUrl.pathname = "/confirm";
-  redirectUrl.searchParams.set("redirectedFrom", req.nextUrl.pathname);
-
-  return NextResponse.redirect(redirectUrl);
+  console.timeEnd("Middleware");
+  return NextResponse.next();
 };
 
 export const config = {
@@ -57,12 +32,15 @@ export const config = {
      * - api (API routes)
      * - login (login route)
      * - register (registration route)
+     * - recover (recover password route)
      * - confirm (email confirmation route)
      * - _next/static (static files)
      * - _next/image (image optimization files)
-     * - favicon.ico (favicon file)
+     * - favicon.* (favicon files)
      * - extension (Caisy UI extension)
+     *
+     * CAUTION: This does not work for the root path ("/")!
      */
-    "/((?!api|login|register|confirm|_next/static|_next/image|favicon.*|extension).*)",
+    "/((?!api|login|register|confirm|recover|_next/static|_next/image|favicon.*|extension|tests).*)",
   ],
 };

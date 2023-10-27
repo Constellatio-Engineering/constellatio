@@ -8,7 +8,7 @@ import React, { type FC, type ReactNode, useState } from "react";
 
 import { ResultWrapper } from "./SelectionCard.styles";
 
-interface TSelectionCard 
+export interface SelectionCardProps
 {
   readonly disabled?: boolean;
   readonly label: ReactNode | null;
@@ -17,7 +17,7 @@ interface TSelectionCard
   readonly status: "default" | "success" | "error";
 }
 
-export const SelectionCard: FC<TSelectionCard> = ({
+export const SelectionCard: FC<SelectionCardProps> = ({
   disabled,
   label,
   onCheckHandler,

@@ -1,15 +1,15 @@
 import { Draggable } from "@/components/helpers/Draggable";
-import { RadioUnselected } from "@/components/Icons/RadioUnselected";
 
-import { DndContext, useDroppable, DragOverlay } from "@dnd-kit/core";
+import {
+  DndContext, useDroppable, DragOverlay, type DragEndEvent, type DragStartEvent 
+} from "@dnd-kit/core";
 import { Box, Flex } from "@mantine/core";
 import { type Meta, type StoryObj } from "@storybook/react";
-import { type ReactNode, useState } from "react";
-import { set, z } from "zod";
+import { type ReactNode, useState, type FC } from "react";
 
-import { DragNDropCard } from "./DragNDropCard";
+import { DragNDropCard, type TDraggableCard } from "./DragNDropCard";
 
-const Droppable = ({ children }: { readonly children: ReactNode }) => 
+const Droppable: FC<{ readonly children: ReactNode }> = ({ children }) => 
 {
   const { isOver, setNodeRef } = useDroppable({
     id: "droppable",
@@ -33,7 +33,7 @@ const Droppable = ({ children }: { readonly children: ReactNode }) =>
   );
 };
 
-const Template = (args: any) => 
+const Template: FC<TDraggableCard> = (args) => 
 {
   const [isDropped, setIsDropped] = useState(false);
   const [activeId, setActiveId] = useState<string | null>(null);
@@ -44,7 +44,7 @@ const Template = (args: any) =>
     </Draggable>
   );
 
-  const handleDragEnd = (event) => 
+  const handleDragEnd = (event: DragEndEvent): void => 
   {
     setActiveId(null);
     if(event.over && event.over.id === "droppable") 
@@ -57,9 +57,9 @@ const Template = (args: any) =>
     }
   };
 
-  const handleDragStart = (event) => 
+  const handleDragStart = (event: DragStartEvent): void => 
   {
-    setActiveId(event.active.id);
+    setActiveId(event.active.id.toString());
   };
 
   return (
@@ -81,7 +81,7 @@ const Template = (args: any) =>
             transform: "translate3d(0, 0, 0)",
             zIndex: 1,
           }}>
-          {activeId ? <DragNDropCard {...args} icon={<RadioUnselected/>} label="OVERLAY"/> : null}
+          {activeId ? <DragNDropCard {...args} label="OVERLAY"/> : null}
         </DragOverlay>
       </Flex>
     </DndContext>
@@ -108,9 +108,9 @@ const meta: Meta = {
   title: "Molecules/Gamification/DragNDropCard",
 };
 
-export default meta;
-
 type Story = StoryObj<typeof DragNDropCard>;
+
+export default meta;
 
 export const Default: Story = {
   args: {

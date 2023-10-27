@@ -7,7 +7,7 @@ import { useCaisyField } from "@caisy/ui-extension-react";
 import { Box, Title, Switch } from "@mantine/core";
 import { useForm } from "@mantine/form";
 import { randomId } from "@mantine/hooks";
-import React, { useState } from "react";
+import { type FunctionComponent, useState } from "react";
 
 import {
   CardItem,
@@ -22,7 +22,7 @@ import { Check } from "../../Icons/Check";
 
 export interface TValue 
 {
-  options: { correctAnswer: boolean; id: string; label: string }[];
+  options: Array<{ correctAnswer: boolean; id: string; label: string }>;
 }
 
 interface ICaisy 
@@ -39,7 +39,7 @@ interface ICaisy
   value: TValue;
 }
 
-export const SelectionGameWrapper = () => 
+export const SelectionGameWrapper: FunctionComponent = () => 
 {
   const [checked, setChecked] = useState(false);
 
@@ -52,9 +52,7 @@ export const SelectionGameWrapper = () =>
     },
   });
 
-  console.log(value);
-
-  const onSubmitHandler = () => 
+  const onSubmitHandler = (): void => 
   {
     setValue({
       ...value,
@@ -75,13 +73,16 @@ export const SelectionGameWrapper = () =>
       Loading...
     </BodyText>
   ) : !value ? (
-    <Button styleType="tertiary" onClick={() => setValue({ options: [] })} w="25%">
+    <Button<"button">
+      styleType="tertiary"
+      onClick={() => setValue({ options: [] })}
+      w="25%">
       Reload
     </Button>
   ) : (
     <Container>
       <Title order={3}>Add Options for Card Selection Game</Title>
-      <Button
+      <Button<"button">
         styleType="primary"
         onClick={() => setValue({ options: [] })}
         w="20%"
@@ -93,7 +94,7 @@ export const SelectionGameWrapper = () =>
           <Box component="form" onSubmit={form.onSubmit(() => onSubmitHandler())}>
             <Input inputType="text" label="Add an option" {...form.getInputProps("option")}/>
             <Box
-              sx={(theme) => ({
+              sx={() => ({
                 alignItems: "center",
                 display: "flex",
                 justifyContent: "space-between",
@@ -118,7 +119,7 @@ export const SelectionGameWrapper = () =>
                 }}
                 styles={switchStyle({ checked })}
               />
-              <Button
+              <Button<"button">
                 styleType="primary"
                 type="submit"
                 disabled={form.getInputProps("option")?.value?.length <= 1}

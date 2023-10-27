@@ -1,13 +1,15 @@
-import { css } from "@emotion/react";
+import { css, type SerializedStyles } from "@emotion/react";
 import styled from "@emotion/styled";
 
-export const SRichtext = styled.div<{ stylesOverwrite: any }>`
+export const SRichtext = styled.div<{ stylesOverwrite?: SerializedStyles }>`
   ${({ theme }) => css`
-    p {
+    > p,
+    > ul p,
+    > ol p {
       font-size: ${theme.fontSizes["spacing-16"]};
       font-weight: 400;
       line-height: ${theme.spacing["spacing-24"]};
-      padding-bottom: ${theme.spacing["spacing-12"]};
+      padding-bottom: ${theme.spacing["spacing-24"]};
 
       strong {
         font-weight: 700;
@@ -29,36 +31,28 @@ export const SRichtext = styled.div<{ stylesOverwrite: any }>`
     }
 
     ul {
+      padding-bottom: 24px;
       li {
         display: flex;
-        align-items: center;
+        align-items: baseline;
         gap: ${theme.spacing["spacing-8"]};
 
         &::before {
           content: "";
           background-color: ${theme.colors["neutrals-02"][1]};
           width: 5px;
+          min-width: 5px;
           height: 5px;
+          min-height: 5px;
           border-radius: 50%;
         }
       }
     }
 
     ol {
-      counter-reset: li;
-
+      list-style-type: decimal;
       li {
-        display: flex;
-        align-items: center;
-        gap: 3px;
-        
-
-        &::before {
-          content: counters(li, "") ".";
-          counter-increment: li;
-          font-family: "Karla, sans-serif";
-          font-weight: inherit;
-        }
+        transform: translateX(15px);
       }
     }
 
@@ -71,7 +65,7 @@ export const SRichtext = styled.div<{ stylesOverwrite: any }>`
       }
     }
 
-    h5 {
+    > h5 {
       font-size: ${theme.fontSizes["spacing-18"]};
       font-weight: 500;
       line-height: ${theme.spacing["spacing-24"]};
@@ -82,7 +76,7 @@ export const SRichtext = styled.div<{ stylesOverwrite: any }>`
       }
     }
 
-    h6 {
+    > h6 {
       font-size: ${theme.fontSizes["spacing-16"]};
       font-weight: 500;
       line-height: ${theme.spacing["spacing-24"]};
@@ -94,7 +88,7 @@ export const SRichtext = styled.div<{ stylesOverwrite: any }>`
     }
   `}
 
-  h1, h2, h3, h4 {
+  > h1, > h2, > h3, > h4 {
     font-family: ${({ theme }) => theme.headings.fontFamily};
     padding-bottom: ${({ theme }) => theme.spacing["spacing-24"]};
 
@@ -103,16 +97,16 @@ export const SRichtext = styled.div<{ stylesOverwrite: any }>`
     }
   }
 
-  h2 {
+  > h2 {
     ${({ theme }) => ({ ...theme.headings.sizes.h2 })}
   }
 
-  h3 {
+  > h3 {
     ${({ theme }) => ({ ...theme.headings.sizes.h3 })}
     line-height: ${({ theme }) => theme.spacing["spacing-32"]};
   }
 
-  h4 {
+  > h4 {
     ${({ theme }) => ({ ...theme.headings.sizes.h4 })}
   }
 

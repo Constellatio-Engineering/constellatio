@@ -1,11 +1,13 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import { env } from "@/env.mjs";
 
 import { print } from "graphql";
+import { GraphQLError } from "graphql/index";
 import { GraphQLClient } from "graphql-request";
 
 import { getSdk as getSdkWithClient, type Requester } from "./__generated/sdk";
 
-const requester: Requester<any> = async (doc: any, vars: any) => 
+const requester: Requester<any> = async (doc: any, vars: any) =>
 {
   if(!env.CAISY_PROJECT_ID || env.CAISY_PROJECT_ID === "")
   {
@@ -30,9 +32,9 @@ const requester: Requester<any> = async (doc: any, vars: any) =>
     const res = await client.rawRequest(print(doc), vars);
     return res?.data as any;
   }
-  catch (err: any) 
+  catch (err: unknown)
   {
-    if(env.NODE_ENV === "development")
+    if(err instanceof GraphQLError)
     {
       console.error(
         "Error in GraphQL request:",

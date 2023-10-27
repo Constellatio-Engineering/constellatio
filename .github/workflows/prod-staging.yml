@@ -1,0 +1,143 @@
+name: Lint and Deploy to Vercel for Production and Staging
+
+env:
+  VERCEL_ORG_ID: ${{ secrets.VERCEL_ORG_ID }}
+  VERCEL_TEAM_ID: ${{ secrets.VERCEL_TEAM_ID }}
+  VERCEL_PROJECT_ID: ${{ secrets.VERCEL_PROJECT_ID }}
+  VERCEL_ACCESS_TOKEN: ${{ secrets.VERCEL_ACCESS_TOKEN }}
+  DATABASE_URL: ${{ secrets.DATABASE_URL }}
+
+on:
+  push:
+    branches:
+      - staging
+      - main
+
+jobs:
+
+  lint:
+    name: Run Linting
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: app
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v3
+      - name: Setup pnpm
+        uses: pnpm/action-setup@v2
+        with:
+          version: 8
+      - name: Setup Node
+        uses: actions/setup-node@v3
+        with:
+          node-version: 18
+          cache-dependency-path: ./app/pnpm-lock.yaml
+          cache: 'pnpm'
+      - name: Install Dependencies
+        run: pnpm install
+      - name: Run type checking
+        run: pnpm check-types
+      - name: Run ESLint
+        run: pnpm eslint
+
+  deploy-staging:
+    name: Deploy Staging to Vercel
+    if: github.ref == 'refs/heads/staging'
+    environment: staging
+    needs:
+      - lint
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: app
+    steps:
+      # ======== Begin duplicate steps from deploy-production ========
+      - name: Checkout code
+        uses: actions/checkout@v3
+      - name: Setup pnpm
+        uses: pnpm/action-setup@v2
+        with:
+          version: 8
+      - name: Setup Node
+        uses: actions/setup-node@v3
+        with:
+          node-version: 18
+          cache-dependency-path: ./app/pnpm-lock.yaml
+          cache: 'pnpm'
+      - name: Install Dependencies
+        run: pnpm install
+      # ======== End duplicate steps ========
+      - name: Deploy to Vercel
+        run: vercel deploy --token=${{ secrets.VERCEL_ACCESS_TOKEN }} --scope ${{ vars.VERCEL_SCOPE }}
+      - name: Apply Database Migrations
+        id: apply-db-migrations
+        run: node ci/apply-db-migrations.mjs
+      - name: Get Latest Vercel Preview Deployment ID
+        id: get-latest-preview-deployment-id
+        run: |
+          result=$(node ./ci/get-latest-vercel-deployment.js "prefers-deployment-url" "preview")
+          echo "LATEST_PREVIEW_DEPLOYMENT_URL=$result" >> $GITHUB_OUTPUT
+      - name: Assign staging alias/domain to latest preview deployment
+        run: |
+          captured_latestPreviewDeploymentUrl="${{ steps.get-latest-preview-deployment-id.outputs.LATEST_PREVIEW_DEPLOYMENT_URL }}"
+          echo "Assigning staging alias domain '${{ vars.DEPLOYMENT_DOMAIN }}' to preview deployment with URL: $captured_latestPreviewDeploymentUrl"
+          vercel alias set $captured_latestPreviewDeploymentUrl ${{ vars.DEPLOYMENT_DOMAIN }} --token=${{ secrets.VERCEL_ACCESS_TOKEN }} --scope ${{ vars.VERCEL_SCOPE }}
+
+  deploy-production:
+    name: Deploy Production to Vercel
+    if: github.ref == 'refs/heads/main'
+    environment: production
+    needs:
+      - lint
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: app
+    steps:
+      # ======== Begin duplicate steps from deploy-staging ========
+      - name: Checkout code
+        uses: actions/checkout@v3
+      - name: Setup pnpm
+        uses: pnpm/action-setup@v2
+        with:
+          version: 8
+      - name: Setup Node
+        uses: actions/setup-node@v3
+        with:
+          node-version: 18
+          cache-dependency-path: ./app/pnpm-lock.yaml
+          cache: 'pnpm'
+      - name: Install Dependencies
+        run: pnpm install
+      # ======== End duplicate steps ========
+      - name: Get Latest Vercel Production Deployment ID
+        id: get-latest-deployment-id
+        run: |
+          result=$(node ./ci/get-latest-vercel-deployment.js "prefers-deployment-id" "production")
+          echo "LATEST_DEPLOYMENT_ID=$result" >> $GITHUB_OUTPUT
+      - name: Deploy to Vercel
+        run: vercel deploy --prod --token=${{ secrets.VERCEL_ACCESS_TOKEN }} --scope ${{ vars.VERCEL_SCOPE }}
+      - name: Apply Database Migrations
+        id: apply-db-migrations
+        run: node ci/apply-db-migrations.mjs
+      - name: Rollback Vercel Deployment after failed database migrations
+        if: failure() && steps.apply-db-migrations.conclusion == 'failure'
+        run: |
+          echo "Database migrations failed. Rolling back deployment."
+          captured_latestDeploymentId="${{ steps.get-latest-deployment-id.outputs.LATEST_DEPLOYMENT_ID }}"
+          echo "Rolling back deployment with ID: $captured_latestDeploymentId"
+          vercel rollback $captured_latestDeploymentId --token=${{ secrets.VERCEL_ACCESS_TOKEN }} --scope ${{ vars.VERCEL_SCOPE }}
+      - name: Get Vercel Deployment URL of rolled back deployment
+        if: failure() && steps.apply-db-migrations.conclusion == 'failure'
+        id: get-rolled-back-deployment-url
+        run: |
+          result=$(node ./ci/get-latest-vercel-deployment.js "prefers-deployment-url" "production")
+          echo "ROLLED_BACK_DEPLOYMENT_URL=$result" >> $GITHUB_OUTPUT
+      - name: Delete rolled back deployment from Vercel
+        if: failure() && steps.apply-db-migrations.conclusion == 'failure'
+        run: |
+          captured_rolledBackDeploymentUrl="${{ steps.get-rolled-back-deployment-url.outputs.ROLLED_BACK_DEPLOYMENT_URL }}"
+          echo "Deleting rolled back deployment with URL: $captured_rolledBackDeploymentUrl"
+          vercel remove $captured_rolledBackDeploymentUrl --yes --token=${{ secrets.VERCEL_ACCESS_TOKEN }} --scope ${{ vars.VERCEL_SCOPE }}
+      

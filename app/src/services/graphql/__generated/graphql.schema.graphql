@@ -1,4 +1,233 @@
 """"""
+type Article {
+  """"""
+  _meta: CaisyDocument_Meta
+
+  """"""
+  fullTextTasks(locale: String): Article_fullTextTasks
+
+  """"""
+  id: ID
+
+  """"""
+  legalArea(
+    """
+    The cursor to start the pagination from. In this case the curser equals the id for the (last) element. If not set, we wil start from the beginning.
+    """
+    after: String
+
+    """The number of items to return. Default and max value is 100."""
+    first: Int = 100
+
+    """"""
+    locale: String
+  ): LegalArea
+
+  """"""
+  mainCategoryField(
+    """
+    The cursor to start the pagination from. In this case the curser equals the id for the (last) element. If not set, we wil start from the beginning.
+    """
+    after: String
+
+    """The number of items to return. Default and max value is 100."""
+    first: Int = 100
+
+    """"""
+    locale: String
+  ): [Article_mainCategoryField]
+
+  """"""
+  tags(
+    """
+    The cursor to start the pagination from. In this case the curser equals the id for the (last) element. If not set, we wil start from the beginning.
+    """
+    after: String
+
+    """The number of items to return. Default and max value is 100."""
+    first: Int = 100
+
+    """"""
+    locale: String
+  ): [Article_tags]
+
+  """"""
+  title: String
+
+  """"""
+  topic(
+    """
+    The cursor to start the pagination from. In this case the curser equals the id for the (last) element. If not set, we wil start from the beginning.
+    """
+    after: String
+
+    """The number of items to return. Default and max value is 100."""
+    first: Int = 100
+
+    """"""
+    locale: String
+  ): [Article_topic]
+}
+
+""""""
+type Article_Connection {
+  """"""
+  edges: [Article_ConnectionEdge]
+
+  """"""
+  pageInfo: PageInfo
+
+  """"""
+  totalCount: Int
+}
+
+""""""
+type Article_ConnectionEdge {
+  """"""
+  cursor: String
+
+  """"""
+  node: Article
+}
+
+""""""
+input Article_LegalArea_Where {
+  """"""
+  findOne: Article_LegalArea_WhereConnection
+}
+
+""""""
+input Article_LegalArea_WhereConnection {
+  """"""
+  LegalArea: LegalArea_Nested_Where
+}
+
+""""""
+input Article_MainCategoryField_Where {
+  """"""
+  findOne: Article_MainCategoryField_WhereConnection
+}
+
+""""""
+input Article_MainCategoryField_WhereConnection {
+  """"""
+  MainCategory: MainCategory_Nested_Where
+}
+
+""""""
+input Article_Sort {
+  """"""
+  createdAt: Order
+
+  """"""
+  id: Order
+
+  """"""
+  legalArea: Order
+
+  """"""
+  mainCategoryField: Order
+
+  """"""
+  publishedAt: Order
+
+  """"""
+  tags: Order
+
+  """"""
+  title: Order
+
+  """"""
+  topic: Order
+
+  """"""
+  updatedAt: Order
+}
+
+""""""
+input Article_Tags_Where {
+  """"""
+  findOne: Article_Tags_WhereConnection
+}
+
+""""""
+input Article_Tags_WhereConnection {
+  """"""
+  Tags: Tags_Nested_Where
+}
+
+""""""
+input Article_Topic_Where {
+  """"""
+  findOne: Article_Topic_WhereConnection
+}
+
+""""""
+input Article_Topic_WhereConnection {
+  """"""
+  Topic: Topic_Nested_Where
+}
+
+""""""
+input Article_Where {
+  """"""
+  AND: [Article_Where]
+
+  """"""
+  OR: [Article_Where]
+
+  """"""
+  fullTextTasks: CaisyField_Richtext_Where
+
+  """"""
+  legalArea: Article_LegalArea_Where
+
+  """"""
+  mainCategoryField: Article_MainCategoryField_Where
+
+  """"""
+  tags: Article_Tags_Where
+
+  """"""
+  title: CaisyField_String_Where
+
+  """"""
+  topic: Article_Topic_Where
+}
+
+""""""
+type Article_fullTextTasks {
+  """"""
+  connections(
+    """
+    The cursor to start the pagination from. In this case the curser equals the id for the (last) element. If not set, we wil start from the beginning.
+    """
+    after: String
+
+    """The number of items to return. Default and max value is 100."""
+    first: Int = 100
+
+    """"""
+    locale: String
+  ): [Article_fullTextTasks_Connections]
+
+  """"""
+  json: JSON
+}
+
+""""""
+union Article_fullTextTasks_Connections = Asset | Callout | CardSelectionGame | DragNDropGame | FillInGapsGame
+
+""""""
+union Article_mainCategoryField = MainCategory
+
+""""""
+union Article_tags = Tags
+
+""""""
+union Article_topic = Topic
+
+""""""
 type Asset {
   """"""
   _meta: CaisyDocument_Meta
@@ -76,6 +305,9 @@ input Asset_Sort {
   copyright: Order
 
   """"""
+  createdAt: Order
+
+  """"""
   description: Order
 
   """"""
@@ -83,6 +315,9 @@ input Asset_Sort {
 
   """"""
   height: Order
+
+  """"""
+  id: Order
 
   """"""
   keywords: Order
@@ -94,7 +329,13 @@ input Asset_Sort {
   originalName: Order
 
   """"""
+  publishedAt: Order
+
+  """"""
   title: Order
+
+  """"""
+  updatedAt: Order
 
   """"""
   width: Order
@@ -235,44 +476,49 @@ type Callout {
   _meta: CaisyDocument_Meta
 
   """"""
-  expandable: Boolean
+  calloutType: String
 
   """"""
-  icon(
-    """
-    The cursor to start the pagination from. In this case the curser equals the id for the (last) element. If not set, we wil start from the beginning.
-    """
-    after: String
-
-    """The number of items to return. Default and max value is 100."""
-    first: Int = 100
-
-    """"""
-    locale: String
-  ): Asset
+  expandable: Boolean
 
   """"""
   id: ID
 
   """"""
-  internalTitle: String
-
-  """"""
-  text(
-    """
-    The cursor to start the pagination from. In this case the curser equals the id for the (last) element. If not set, we wil start from the beginning.
-    """
-    after: String
-
-    """The number of items to return. Default and max value is 100."""
-    first: Int = 100
-
-    """"""
-    locale: String
-  ): TextElement
+  text(locale: String): Callout_text
 
   """"""
   title: String
+}
+
+""""""
+enum Callout_CalloutType {
+  """"""
+  bestPractice
+
+  """"""
+  definition
+
+  """"""
+  example
+
+  """"""
+  lawReference
+
+  """"""
+  quote
+
+  """"""
+  remember
+
+  """"""
+  specialProblem
+}
+
+""""""
+input Callout_CalloutType_Where {
+  """"""
+  eq: Callout_CalloutType
 }
 
 """"""
@@ -299,19 +545,25 @@ type Callout_ConnectionEdge {
 """"""
 input Callout_Sort {
   """"""
+  calloutType: Order
+
+  """"""
+  createdAt: Order
+
+  """"""
   expandable: Order
 
   """"""
-  icon: Order
+  id: Order
 
   """"""
-  internalTitle: Order
-
-  """"""
-  text: Order
+  publishedAt: Order
 
   """"""
   title: Order
+
+  """"""
+  updatedAt: Order
 }
 
 """"""
@@ -323,31 +575,22 @@ input Callout_Where {
   OR: [Callout_Where]
 
   """"""
+  calloutType: Callout_CalloutType_Where
+
+  """"""
   expandable: Boolean
 
   """"""
-  internalTitle: CaisyField_String_Where
+  text: CaisyField_Richtext_Where
 
   """"""
   title: CaisyField_String_Where
 }
 
 """"""
-type Case {
+type Callout_text {
   """"""
-  _meta: CaisyDocument_Meta
-
-  """"""
-  facts(locale: String): Case_facts
-
-  """"""
-  id: ID
-
-  """"""
-  legalArea: String
-
-  """"""
-  sections(
+  connections(
     """
     The cursor to start the pagination from. In this case the curser equals the id for the (last) element. If not set, we wil start from the beginning.
     """
@@ -358,7 +601,171 @@ type Case {
 
     """"""
     locale: String
-  ): [Case_sections]
+  ): [Callout_text_Connections]
+
+  """"""
+  json: JSON
+}
+
+""""""
+union Callout_text_Connections = Caisy_Field_Document_NotFound
+
+""""""
+type CardSelectionGame {
+  """"""
+  _meta: CaisyDocument_Meta
+
+  """"""
+  game: JSON
+
+  """"""
+  helpNote(locale: String): CardSelectionGame_helpNote
+
+  """"""
+  id: ID
+
+  """"""
+  question: String
+}
+
+""""""
+type CardSelectionGame_Connection {
+  """"""
+  edges: [CardSelectionGame_ConnectionEdge]
+
+  """"""
+  pageInfo: PageInfo
+
+  """"""
+  totalCount: Int
+}
+
+""""""
+type CardSelectionGame_ConnectionEdge {
+  """"""
+  cursor: String
+
+  """"""
+  node: CardSelectionGame
+}
+
+""""""
+input CardSelectionGame_Sort {
+  """"""
+  createdAt: Order
+
+  """"""
+  id: Order
+
+  """"""
+  publishedAt: Order
+
+  """"""
+  question: Order
+
+  """"""
+  updatedAt: Order
+}
+
+""""""
+input CardSelectionGame_Where {
+  """"""
+  AND: [CardSelectionGame_Where]
+
+  """"""
+  OR: [CardSelectionGame_Where]
+
+  """"""
+  helpNote: CaisyField_Richtext_Where
+
+  """"""
+  question: CaisyField_String_Where
+}
+
+""""""
+type CardSelectionGame_helpNote {
+  """"""
+  connections(
+    """
+    The cursor to start the pagination from. In this case the curser equals the id for the (last) element. If not set, we wil start from the beginning.
+    """
+    after: String
+
+    """The number of items to return. Default and max value is 100."""
+    first: Int = 100
+
+    """"""
+    locale: String
+  ): [CardSelectionGame_helpNote_Connections]
+
+  """"""
+  json: JSON
+}
+
+""""""
+union CardSelectionGame_helpNote_Connections = Caisy_Field_Document_NotFound
+
+""""""
+type Case {
+  """"""
+  _meta: CaisyDocument_Meta
+
+  """"""
+  durationToCompleteInMinutes: Int
+
+  """"""
+  facts(locale: String): Case_facts
+
+  """"""
+  fullTextTasks(locale: String): Case_fullTextTasks
+
+  """"""
+  id: ID
+
+  """"""
+  legalArea(
+    """
+    The cursor to start the pagination from. In this case the curser equals the id for the (last) element. If not set, we wil start from the beginning.
+    """
+    after: String
+
+    """The number of items to return. Default and max value is 100."""
+    first: Int = 100
+
+    """"""
+    locale: String
+  ): LegalArea
+
+  """"""
+  mainCategoryField(
+    """
+    The cursor to start the pagination from. In this case the curser equals the id for the (last) element. If not set, we wil start from the beginning.
+    """
+    after: String
+
+    """The number of items to return. Default and max value is 100."""
+    first: Int = 100
+
+    """"""
+    locale: String
+  ): [Case_mainCategoryField]
+
+  """"""
+  resolution(locale: String): Case_resolution
+
+  """"""
+  tags(
+    """
+    The cursor to start the pagination from. In this case the curser equals the id for the (last) element. If not set, we wil start from the beginning.
+    """
+    after: String
+
+    """The number of items to return. Default and max value is 100."""
+    first: Int = 100
+
+    """"""
+    locale: String
+  ): [Case_tags]
 
   """"""
   title: String
@@ -375,105 +782,8 @@ type Case {
 
     """"""
     locale: String
-  ): Topic
+  ): [Case_topic]
 }
-
-""""""
-type CaseSection {
-  """"""
-  _meta: CaisyDocument_Meta
-
-  """"""
-  content(locale: String): CaseSection_content
-
-  """"""
-  game(
-    """
-    The cursor to start the pagination from. In this case the curser equals the id for the (last) element. If not set, we wil start from the beginning.
-    """
-    after: String
-
-    """The number of items to return. Default and max value is 100."""
-    first: Int = 100
-
-    """"""
-    locale: String
-  ): DragNDrop
-
-  """"""
-  id: ID
-
-  """"""
-  title: String
-}
-
-""""""
-type CaseSection_Connection {
-  """"""
-  edges: [CaseSection_ConnectionEdge]
-
-  """"""
-  pageInfo: PageInfo
-
-  """"""
-  totalCount: Int
-}
-
-""""""
-type CaseSection_ConnectionEdge {
-  """"""
-  cursor: String
-
-  """"""
-  node: CaseSection
-}
-
-""""""
-input CaseSection_Sort {
-  """"""
-  game: Order
-
-  """"""
-  title: Order
-}
-
-""""""
-input CaseSection_Where {
-  """"""
-  AND: [CaseSection_Where]
-
-  """"""
-  OR: [CaseSection_Where]
-
-  """"""
-  content: CaisyField_Richtext_Where
-
-  """"""
-  title: CaisyField_String_Where
-}
-
-""""""
-type CaseSection_content {
-  """"""
-  connections(
-    """
-    The cursor to start the pagination from. In this case the curser equals the id for the (last) element. If not set, we wil start from the beginning.
-    """
-    after: String
-
-    """The number of items to return. Default and max value is 100."""
-    first: Int = 100
-
-    """"""
-    locale: String
-  ): [CaseSection_content_Connections]
-
-  """"""
-  json: JSON
-}
-
-""""""
-union CaseSection_content_Connections = Caisy_Field_Document_NotFound
 
 """"""
 type Case_Connection {
@@ -497,33 +807,84 @@ type Case_ConnectionEdge {
 }
 
 """"""
-enum Case_LegalArea {
+input Case_LegalArea_Where {
   """"""
-  civil_law
-
-  """"""
-  public_law
+  findOne: Case_LegalArea_WhereConnection
 }
 
 """"""
-input Case_LegalArea_Where {
+input Case_LegalArea_WhereConnection {
   """"""
-  eq: Case_LegalArea
+  LegalArea: LegalArea_Nested_Where
+}
+
+""""""
+input Case_MainCategoryField_Where {
+  """"""
+  findOne: Case_MainCategoryField_WhereConnection
+}
+
+""""""
+input Case_MainCategoryField_WhereConnection {
+  """"""
+  MainCategory: MainCategory_Nested_Where
 }
 
 """"""
 input Case_Sort {
   """"""
+  createdAt: Order
+
+  """"""
+  durationToCompleteInMinutes: Order
+
+  """"""
+  id: Order
+
+  """"""
   legalArea: Order
 
   """"""
-  sections: Order
+  mainCategoryField: Order
+
+  """"""
+  publishedAt: Order
+
+  """"""
+  tags: Order
 
   """"""
   title: Order
 
   """"""
   topic: Order
+
+  """"""
+  updatedAt: Order
+}
+
+""""""
+input Case_Tags_Where {
+  """"""
+  findOne: Case_Tags_WhereConnection
+}
+
+""""""
+input Case_Tags_WhereConnection {
+  """"""
+  Tags: Tags_Nested_Where
+}
+
+""""""
+input Case_Topic_Where {
+  """"""
+  findOne: Case_Topic_WhereConnection
+}
+
+""""""
+input Case_Topic_WhereConnection {
+  """"""
+  Topic: Topic_Nested_Where
 }
 
 """"""
@@ -535,13 +896,31 @@ input Case_Where {
   OR: [Case_Where]
 
   """"""
+  durationToCompleteInMinutes: CaisyField_Number_WhereInt
+
+  """"""
   facts: CaisyField_Richtext_Where
+
+  """"""
+  fullTextTasks: CaisyField_Richtext_Where
 
   """"""
   legalArea: Case_LegalArea_Where
 
   """"""
+  mainCategoryField: Case_MainCategoryField_Where
+
+  """"""
+  resolution: CaisyField_Richtext_Where
+
+  """"""
+  tags: Case_Tags_Where
+
+  """"""
   title: CaisyField_String_Where
+
+  """"""
+  topic: Case_Topic_Where
 }
 
 """"""
@@ -568,23 +947,9 @@ type Case_facts {
 union Case_facts_Connections = Caisy_Field_Document_NotFound
 
 """"""
-union Case_sections = CaseSection
-
-"""
-The `DateTime` scalar type represents a DateTime. The DateTime is serialized as an RFC 3339 quoted string
-"""
-scalar DateTime
-
-""""""
-type DragNDrop {
+type Case_fullTextTasks {
   """"""
-  _meta: CaisyDocument_Meta
-
-  """"""
-  game: JSON
-
-  """"""
-  helpNote(
+  connections(
     """
     The cursor to start the pagination from. In this case the curser equals the id for the (last) element. If not set, we wil start from the beginning.
     """
@@ -595,22 +960,74 @@ type DragNDrop {
 
     """"""
     locale: String
-  ): TextElement
+  ): [Case_fullTextTasks_Connections]
+
+  """"""
+  json: JSON
+}
+
+""""""
+union Case_fullTextTasks_Connections = Asset | Callout | CardSelectionGame | DragNDropGame | FillInGapsGame
+
+""""""
+union Case_mainCategoryField = MainCategory
+
+""""""
+type Case_resolution {
+  """"""
+  connections(
+    """
+    The cursor to start the pagination from. In this case the curser equals the id for the (last) element. If not set, we wil start from the beginning.
+    """
+    after: String
+
+    """The number of items to return. Default and max value is 100."""
+    first: Int = 100
+
+    """"""
+    locale: String
+  ): [Case_resolution_Connections]
+
+  """"""
+  json: JSON
+}
+
+""""""
+union Case_resolution_Connections = Caisy_Field_Document_NotFound
+
+""""""
+union Case_tags = Tags
+
+""""""
+union Case_topic = Topic
+
+"""
+The `DateTime` scalar type represents a DateTime. The DateTime is serialized as an RFC 3339 quoted string
+"""
+scalar DateTime
+
+""""""
+type DragNDropGame {
+  """"""
+  _meta: CaisyDocument_Meta
+
+  """"""
+  game: JSON
+
+  """"""
+  helpNote(locale: String): DragNDropGame_helpNote
 
   """"""
   id: ID
-
-  """"""
-  internalTitle: String
 
   """"""
   question: String
 }
 
 """"""
-type DragNDrop_Connection {
+type DragNDropGame_Connection {
   """"""
-  edges: [DragNDrop_ConnectionEdge]
+  edges: [DragNDropGame_ConnectionEdge]
 
   """"""
   pageInfo: PageInfo
@@ -620,40 +1037,69 @@ type DragNDrop_Connection {
 }
 
 """"""
-type DragNDrop_ConnectionEdge {
+type DragNDropGame_ConnectionEdge {
   """"""
   cursor: String
 
   """"""
-  node: DragNDrop
+  node: DragNDropGame
 }
 
 """"""
-input DragNDrop_Sort {
+input DragNDropGame_Sort {
   """"""
-  helpNote: Order
+  createdAt: Order
 
   """"""
-  internalTitle: Order
+  id: Order
+
+  """"""
+  publishedAt: Order
 
   """"""
   question: Order
+
+  """"""
+  updatedAt: Order
 }
 
 """"""
-input DragNDrop_Where {
+input DragNDropGame_Where {
   """"""
-  AND: [DragNDrop_Where]
+  AND: [DragNDropGame_Where]
 
   """"""
-  OR: [DragNDrop_Where]
+  OR: [DragNDropGame_Where]
 
   """"""
-  internalTitle: CaisyField_String_Where
+  helpNote: CaisyField_Richtext_Where
 
   """"""
   question: CaisyField_String_Where
 }
+
+""""""
+type DragNDropGame_helpNote {
+  """"""
+  connections(
+    """
+    The cursor to start the pagination from. In this case the curser equals the id for the (last) element. If not set, we wil start from the beginning.
+    """
+    after: String
+
+    """The number of items to return. Default and max value is 100."""
+    first: Int = 100
+
+    """"""
+    locale: String
+  ): [DragNDropGame_helpNote_Connections]
+
+  """"""
+  json: JSON
+}
+
+""""""
+union DragNDropGame_helpNote_Connections = Caisy_Field_Document_NotFound
 
 """"""
 type FillInGapsGame {
@@ -661,38 +1107,13 @@ type FillInGapsGame {
   _meta: CaisyDocument_Meta
 
   """"""
-  fillGameParagraph(
-    """
-    The cursor to start the pagination from. In this case the curser equals the id for the (last) element. If not set, we wil start from the beginning.
-    """
-    after: String
-
-    """The number of items to return. Default and max value is 100."""
-    first: Int = 100
-
-    """"""
-    locale: String
-  ): TextElement
+  fillGameParagraph(locale: String): FillInGapsGame_fillGameParagraph
 
   """"""
-  helpNote(
-    """
-    The cursor to start the pagination from. In this case the curser equals the id for the (last) element. If not set, we wil start from the beginning.
-    """
-    after: String
-
-    """The number of items to return. Default and max value is 100."""
-    first: Int = 100
-
-    """"""
-    locale: String
-  ): TextElement
+  helpNote(locale: String): FillInGapsGame_helpNote
 
   """"""
   id: ID
-
-  """"""
-  internalTitle: String
 
   """"""
   question: String
@@ -722,16 +1143,19 @@ type FillInGapsGame_ConnectionEdge {
 """"""
 input FillInGapsGame_Sort {
   """"""
-  fillGameParagraph: Order
+  createdAt: Order
 
   """"""
-  helpNote: Order
+  id: Order
 
   """"""
-  internalTitle: Order
+  publishedAt: Order
 
   """"""
   question: Order
+
+  """"""
+  updatedAt: Order
 }
 
 """"""
@@ -743,25 +1167,19 @@ input FillInGapsGame_Where {
   OR: [FillInGapsGame_Where]
 
   """"""
-  internalTitle: CaisyField_String_Where
+  fillGameParagraph: CaisyField_Richtext_Where
+
+  """"""
+  helpNote: CaisyField_Richtext_Where
 
   """"""
   question: CaisyField_String_Where
 }
 
 """"""
-type ImageWrapperCard {
+type FillInGapsGame_fillGameParagraph {
   """"""
-  _meta: CaisyDocument_Meta
-
-  """"""
-  downloadable: Boolean
-
-  """"""
-  id: ID
-
-  """"""
-  image(
+  connections(
     """
     The cursor to start the pagination from. In this case the curser equals the id for the (last) element. If not set, we wil start from the beginning.
     """
@@ -772,68 +1190,37 @@ type ImageWrapperCard {
 
     """"""
     locale: String
-  ): Asset
+  ): [FillInGapsGame_fillGameParagraph_Connections]
 
   """"""
-  internalTitle: String
-
-  """"""
-  title: String
+  json: JSON
 }
 
 """"""
-type ImageWrapperCard_Connection {
+union FillInGapsGame_fillGameParagraph_Connections = Caisy_Field_Document_NotFound
+
+""""""
+type FillInGapsGame_helpNote {
   """"""
-  edges: [ImageWrapperCard_ConnectionEdge]
+  connections(
+    """
+    The cursor to start the pagination from. In this case the curser equals the id for the (last) element. If not set, we wil start from the beginning.
+    """
+    after: String
+
+    """The number of items to return. Default and max value is 100."""
+    first: Int = 100
+
+    """"""
+    locale: String
+  ): [FillInGapsGame_helpNote_Connections]
 
   """"""
-  pageInfo: PageInfo
-
-  """"""
-  totalCount: Int
+  json: JSON
 }
 
 """"""
-type ImageWrapperCard_ConnectionEdge {
-  """"""
-  cursor: String
-
-  """"""
-  node: ImageWrapperCard
-}
-
-""""""
-input ImageWrapperCard_Sort {
-  """"""
-  downloadable: Order
-
-  """"""
-  image: Order
-
-  """"""
-  internalTitle: Order
-
-  """"""
-  title: Order
-}
-
-""""""
-input ImageWrapperCard_Where {
-  """"""
-  AND: [ImageWrapperCard_Where]
-
-  """"""
-  OR: [ImageWrapperCard_Where]
-
-  """"""
-  downloadable: Boolean
-
-  """"""
-  internalTitle: CaisyField_String_Where
-
-  """"""
-  title: CaisyField_String_Where
-}
+union FillInGapsGame_helpNote_Connections = Caisy_Field_Document_NotFound
 
 """Any JSON value"""
 scalar JSON
@@ -847,7 +1234,10 @@ type LegalArea {
   id: ID
 
   """"""
-  title: String
+  legalAreaName: String
+
+  """"""
+  sorting: Int
 }
 
 """"""
@@ -872,9 +1262,39 @@ type LegalArea_ConnectionEdge {
 }
 
 """"""
+input LegalArea_Nested_Where {
+  """"""
+  AND: [LegalArea_Nested_Where]
+
+  """"""
+  OR: [LegalArea_Nested_Where]
+
+  """"""
+  legalAreaName: CaisyField_String_Where
+
+  """"""
+  sorting: CaisyField_Number_WhereInt
+}
+
+""""""
 input LegalArea_Sort {
   """"""
-  title: Order
+  createdAt: Order
+
+  """"""
+  id: Order
+
+  """"""
+  legalAreaName: Order
+
+  """"""
+  publishedAt: Order
+
+  """"""
+  sorting: Order
+
+  """"""
+  updatedAt: Order
 }
 
 """"""
@@ -886,25 +1306,19 @@ input LegalArea_Where {
   OR: [LegalArea_Where]
 
   """"""
-  title: CaisyField_String_Where
+  legalAreaName: CaisyField_String_Where
+
+  """"""
+  sorting: CaisyField_Number_WhereInt
 }
 
 """"""
-enum Order {
-  """"""
-  ASC
-
-  """"""
-  DESC
-}
-
-""""""
-type Page {
+type MainCategory {
   """"""
   _meta: CaisyDocument_Meta
 
   """"""
-  components(
+  icon(
     """
     The cursor to start the pagination from. In this case the curser equals the id for the (last) element. If not set, we wil start from the beginning.
     """
@@ -915,19 +1329,100 @@ type Page {
 
     """"""
     locale: String
-  ): [Page_components]
+  ): Asset
 
   """"""
   id: ID
 
   """"""
-  internalTitle: String
-
-  """"""
-  nameInNavigation: String
+  mainCategory: String
 
   """"""
   slug: String
+}
+
+""""""
+type MainCategory_Connection {
+  """"""
+  edges: [MainCategory_ConnectionEdge]
+
+  """"""
+  pageInfo: PageInfo
+
+  """"""
+  totalCount: Int
+}
+
+""""""
+type MainCategory_ConnectionEdge {
+  """"""
+  cursor: String
+
+  """"""
+  node: MainCategory
+}
+
+""""""
+input MainCategory_Nested_Where {
+  """"""
+  AND: [MainCategory_Nested_Where]
+
+  """"""
+  OR: [MainCategory_Nested_Where]
+
+  """"""
+  mainCategory: CaisyField_String_Where
+
+  """"""
+  slug: CaisyField_String_Where
+}
+
+""""""
+input MainCategory_Sort {
+  """"""
+  createdAt: Order
+
+  """"""
+  icon: Order
+
+  """"""
+  id: Order
+
+  """"""
+  mainCategory: Order
+
+  """"""
+  publishedAt: Order
+
+  """"""
+  slug: Order
+
+  """"""
+  updatedAt: Order
+}
+
+""""""
+input MainCategory_Where {
+  """"""
+  AND: [MainCategory_Where]
+
+  """"""
+  OR: [MainCategory_Where]
+
+  """"""
+  mainCategory: CaisyField_String_Where
+
+  """"""
+  slug: CaisyField_String_Where
+}
+
+""""""
+enum Order {
+  """"""
+  ASC
+
+  """"""
+  DESC
 }
 
 """"""
@@ -946,64 +1441,10 @@ type PageInfo {
 }
 
 """"""
-type Page_Connection {
-  """"""
-  edges: [Page_ConnectionEdge]
-
-  """"""
-  pageInfo: PageInfo
-
-  """"""
-  totalCount: Int
-}
-
-""""""
-type Page_ConnectionEdge {
-  """"""
-  cursor: String
-
-  """"""
-  node: Page
-}
-
-""""""
-input Page_Sort {
-  """"""
-  components: Order
-
-  """"""
-  internalTitle: Order
-
-  """"""
-  nameInNavigation: Order
-
-  """"""
-  slug: Order
-}
-
-""""""
-input Page_Where {
-  """"""
-  AND: [Page_Where]
-
-  """"""
-  OR: [Page_Where]
-
-  """"""
-  internalTitle: CaisyField_String_Where
-
-  """"""
-  nameInNavigation: CaisyField_String_Where
-
-  """"""
-  slug: CaisyField_String_Where
-}
-
-""""""
-union Page_components = Callout | CaseSection | DragNDrop | FillInGapsGame | ImageWrapperCard | LegalArea | SelectionCard | TextElement | Topic
-
-""""""
 type Query {
+  """"""
+  Article(id: ID!, locale: String): Article
+
   """"""
   Asset(id: ID!, locale: String): Asset
 
@@ -1011,34 +1452,40 @@ type Query {
   Callout(id: ID!, locale: String): Callout
 
   """"""
+  CardSelectionGame(id: ID!, locale: String): CardSelectionGame
+
+  """"""
   Case(id: ID!, locale: String): Case
 
   """"""
-  CaseSection(id: ID!, locale: String): CaseSection
-
-  """"""
-  DragNDrop(id: ID!, locale: String): DragNDrop
+  DragNDropGame(id: ID!, locale: String): DragNDropGame
 
   """"""
   FillInGapsGame(id: ID!, locale: String): FillInGapsGame
 
   """"""
-  ImageWrapperCard(id: ID!, locale: String): ImageWrapperCard
-
-  """"""
   LegalArea(id: ID!, locale: String): LegalArea
 
   """"""
-  Page(id: ID!, locale: String): Page
+  MainCategory(id: ID!, locale: String): MainCategory
 
   """"""
-  SelectionCard(id: ID!, locale: String): SelectionCard
+  Search(locale: String): Search
 
   """"""
-  TextElement(id: ID!, locale: String): TextElement
+  SearchEntry(id: ID!, locale: String): SearchEntry
+
+  """"""
+  SubCategory(id: ID!, locale: String): SubCategory
+
+  """"""
+  Tags(id: ID!, locale: String): Tags
 
   """"""
   Topic(id: ID!, locale: String): Topic
+
+  """"""
+  allArticle(after: String, before: String, first: Int, last: Int, locale: String, sort: [Article_Sort], where: [Article_Where]): Article_Connection
 
   """"""
   allAsset(after: String, before: String, first: Int, last: Int, locale: String, sort: [Asset_Sort], where: [Asset_Where]): Asset_Connection
@@ -1047,46 +1494,46 @@ type Query {
   allCallout(after: String, before: String, first: Int, last: Int, locale: String, sort: [Callout_Sort], where: [Callout_Where]): Callout_Connection
 
   """"""
+  allCardSelectionGame(after: String, before: String, first: Int, last: Int, locale: String, sort: [CardSelectionGame_Sort], where: [CardSelectionGame_Where]): CardSelectionGame_Connection
+
+  """"""
   allCase(after: String, before: String, first: Int, last: Int, locale: String, sort: [Case_Sort], where: [Case_Where]): Case_Connection
 
   """"""
-  allCaseSection(after: String, before: String, first: Int, last: Int, locale: String, sort: [CaseSection_Sort], where: [CaseSection_Where]): CaseSection_Connection
-
-  """"""
-  allDragNDrop(after: String, before: String, first: Int, last: Int, locale: String, sort: [DragNDrop_Sort], where: [DragNDrop_Where]): DragNDrop_Connection
+  allDragNDropGame(after: String, before: String, first: Int, last: Int, locale: String, sort: [DragNDropGame_Sort], where: [DragNDropGame_Where]): DragNDropGame_Connection
 
   """"""
   allFillInGapsGame(after: String, before: String, first: Int, last: Int, locale: String, sort: [FillInGapsGame_Sort], where: [FillInGapsGame_Where]): FillInGapsGame_Connection
 
   """"""
-  allImageWrapperCard(after: String, before: String, first: Int, last: Int, locale: String, sort: [ImageWrapperCard_Sort], where: [ImageWrapperCard_Where]): ImageWrapperCard_Connection
-
-  """"""
   allLegalArea(after: String, before: String, first: Int, last: Int, locale: String, sort: [LegalArea_Sort], where: [LegalArea_Where]): LegalArea_Connection
 
   """"""
-  allPage(after: String, before: String, first: Int, last: Int, locale: String, sort: [Page_Sort], where: [Page_Where]): Page_Connection
+  allMainCategory(after: String, before: String, first: Int, last: Int, locale: String, sort: [MainCategory_Sort], where: [MainCategory_Where]): MainCategory_Connection
 
   """"""
-  allSelectionCard(after: String, before: String, first: Int, last: Int, locale: String, sort: [SelectionCard_Sort], where: [SelectionCard_Where]): SelectionCard_Connection
+  allSearchEntry(after: String, before: String, first: Int, last: Int, locale: String, sort: [SearchEntry_Sort], where: [SearchEntry_Where]): SearchEntry_Connection
 
   """"""
-  allTextElement(after: String, before: String, first: Int, last: Int, locale: String, sort: [TextElement_Sort], where: [TextElement_Where]): TextElement_Connection
+  allSubCategory(after: String, before: String, first: Int, last: Int, locale: String, sort: [SubCategory_Sort], where: [SubCategory_Where]): SubCategory_Connection
+
+  """"""
+  allTags(after: String, before: String, first: Int, last: Int, locale: String, sort: [Tags_Sort], where: [Tags_Where]): Tags_Connection
 
   """"""
   allTopic(after: String, before: String, first: Int, last: Int, locale: String, sort: [Topic_Sort], where: [Topic_Where]): Topic_Connection
 }
 
 """"""
-type SelectionCard {
+type Search {
   """"""
   _meta: CaisyDocument_Meta
 
   """"""
-  game: JSON
+  id: ID
 
   """"""
-  helpNote(
+  popularCategories(
     """
     The cursor to start the pagination from. In this case the curser equals the id for the (last) element. If not set, we wil start from the beginning.
     """
@@ -1097,127 +1544,10 @@ type SelectionCard {
 
     """"""
     locale: String
-  ): TextElement
+  ): [Search_popularCategories]
 
   """"""
-  id: ID
-
-  """"""
-  internalTitle: String
-
-  """"""
-  question: String
-}
-
-""""""
-type SelectionCard_Connection {
-  """"""
-  edges: [SelectionCard_ConnectionEdge]
-
-  """"""
-  pageInfo: PageInfo
-
-  """"""
-  totalCount: Int
-}
-
-""""""
-type SelectionCard_ConnectionEdge {
-  """"""
-  cursor: String
-
-  """"""
-  node: SelectionCard
-}
-
-""""""
-input SelectionCard_Sort {
-  """"""
-  helpNote: Order
-
-  """"""
-  internalTitle: Order
-
-  """"""
-  question: Order
-}
-
-""""""
-input SelectionCard_Where {
-  """"""
-  AND: [SelectionCard_Where]
-
-  """"""
-  OR: [SelectionCard_Where]
-
-  """"""
-  internalTitle: CaisyField_String_Where
-
-  """"""
-  question: CaisyField_String_Where
-}
-
-""""""
-type TextElement {
-  """"""
-  _meta: CaisyDocument_Meta
-
-  """"""
-  id: ID
-
-  """"""
-  internalTitle: String
-
-  """"""
-  richTextContent(locale: String): TextElement_richTextContent
-}
-
-""""""
-type TextElement_Connection {
-  """"""
-  edges: [TextElement_ConnectionEdge]
-
-  """"""
-  pageInfo: PageInfo
-
-  """"""
-  totalCount: Int
-}
-
-""""""
-type TextElement_ConnectionEdge {
-  """"""
-  cursor: String
-
-  """"""
-  node: TextElement
-}
-
-""""""
-input TextElement_Sort {
-  """"""
-  internalTitle: Order
-}
-
-""""""
-input TextElement_Where {
-  """"""
-  AND: [TextElement_Where]
-
-  """"""
-  OR: [TextElement_Where]
-
-  """"""
-  internalTitle: CaisyField_String_Where
-
-  """"""
-  richTextContent: CaisyField_Richtext_Where
-}
-
-""""""
-type TextElement_richTextContent {
-  """"""
-  connections(
+  popularSearches(
     """
     The cursor to start the pagination from. In this case the curser equals the id for the (last) element. If not set, we wil start from the beginning.
     """
@@ -1228,14 +1558,250 @@ type TextElement_richTextContent {
 
     """"""
     locale: String
-  ): [TextElement_richTextContent_Connections]
-
-  """"""
-  json: JSON
+  ): [Search_popularSearches]
 }
 
 """"""
-union TextElement_richTextContent_Connections = Caisy_Field_Document_NotFound
+type SearchEntry {
+  """"""
+  _meta: CaisyDocument_Meta
+
+  """"""
+  id: ID
+
+  """"""
+  searchField: String
+}
+
+""""""
+type SearchEntry_Connection {
+  """"""
+  edges: [SearchEntry_ConnectionEdge]
+
+  """"""
+  pageInfo: PageInfo
+
+  """"""
+  totalCount: Int
+}
+
+""""""
+type SearchEntry_ConnectionEdge {
+  """"""
+  cursor: String
+
+  """"""
+  node: SearchEntry
+}
+
+""""""
+input SearchEntry_Sort {
+  """"""
+  createdAt: Order
+
+  """"""
+  id: Order
+
+  """"""
+  publishedAt: Order
+
+  """"""
+  searchField: Order
+
+  """"""
+  updatedAt: Order
+}
+
+""""""
+input SearchEntry_Where {
+  """"""
+  AND: [SearchEntry_Where]
+
+  """"""
+  OR: [SearchEntry_Where]
+
+  """"""
+  searchField: CaisyField_String_Where
+}
+
+""""""
+union Search_popularCategories = SearchEntry
+
+""""""
+union Search_popularSearches = SearchEntry
+
+""""""
+type SubCategory {
+  """"""
+  _meta: CaisyDocument_Meta
+
+  """"""
+  id: ID
+
+  """"""
+  mainCategory(
+    """
+    The cursor to start the pagination from. In this case the curser equals the id for the (last) element. If not set, we wil start from the beginning.
+    """
+    after: String
+
+    """The number of items to return. Default and max value is 100."""
+    first: Int = 100
+
+    """"""
+    locale: String
+  ): [SubCategory_mainCategory]
+
+  """"""
+  subCategory: String
+}
+
+""""""
+type SubCategory_Connection {
+  """"""
+  edges: [SubCategory_ConnectionEdge]
+
+  """"""
+  pageInfo: PageInfo
+
+  """"""
+  totalCount: Int
+}
+
+""""""
+type SubCategory_ConnectionEdge {
+  """"""
+  cursor: String
+
+  """"""
+  node: SubCategory
+}
+
+""""""
+input SubCategory_MainCategory_Where {
+  """"""
+  findOne: SubCategory_MainCategory_WhereConnection
+}
+
+""""""
+input SubCategory_MainCategory_WhereConnection {
+  """"""
+  MainCategory: MainCategory_Nested_Where
+}
+
+""""""
+input SubCategory_Sort {
+  """"""
+  createdAt: Order
+
+  """"""
+  id: Order
+
+  """"""
+  mainCategory: Order
+
+  """"""
+  publishedAt: Order
+
+  """"""
+  subCategory: Order
+
+  """"""
+  updatedAt: Order
+}
+
+""""""
+input SubCategory_Where {
+  """"""
+  AND: [SubCategory_Where]
+
+  """"""
+  OR: [SubCategory_Where]
+
+  """"""
+  mainCategory: SubCategory_MainCategory_Where
+
+  """"""
+  subCategory: CaisyField_String_Where
+}
+
+""""""
+union SubCategory_mainCategory = MainCategory
+
+""""""
+type Tags {
+  """"""
+  _meta: CaisyDocument_Meta
+
+  """"""
+  id: ID
+
+  """"""
+  tagName: String
+}
+
+""""""
+type Tags_Connection {
+  """"""
+  edges: [Tags_ConnectionEdge]
+
+  """"""
+  pageInfo: PageInfo
+
+  """"""
+  totalCount: Int
+}
+
+""""""
+type Tags_ConnectionEdge {
+  """"""
+  cursor: String
+
+  """"""
+  node: Tags
+}
+
+""""""
+input Tags_Nested_Where {
+  """"""
+  AND: [Tags_Nested_Where]
+
+  """"""
+  OR: [Tags_Nested_Where]
+
+  """"""
+  tagName: CaisyField_String_Where
+}
+
+""""""
+input Tags_Sort {
+  """"""
+  createdAt: Order
+
+  """"""
+  id: Order
+
+  """"""
+  publishedAt: Order
+
+  """"""
+  tagName: Order
+
+  """"""
+  updatedAt: Order
+}
+
+""""""
+input Tags_Where {
+  """"""
+  AND: [Tags_Where]
+
+  """"""
+  OR: [Tags_Where]
+
+  """"""
+  tagName: CaisyField_String_Where
+}
 
 """"""
 type Topic {
@@ -1246,21 +1812,10 @@ type Topic {
   id: ID
 
   """"""
-  legalArea(
-    """
-    The cursor to start the pagination from. In this case the curser equals the id for the (last) element. If not set, we wil start from the beginning.
-    """
-    after: String
-
-    """The number of items to return. Default and max value is 100."""
-    first: Int = 100
-
-    """"""
-    locale: String
-  ): LegalArea
+  sorting: Int
 
   """"""
-  title: String
+  topicName: String
 }
 
 """"""
@@ -1285,12 +1840,39 @@ type Topic_ConnectionEdge {
 }
 
 """"""
-input Topic_Sort {
+input Topic_Nested_Where {
   """"""
-  legalArea: Order
+  AND: [Topic_Nested_Where]
 
   """"""
-  title: Order
+  OR: [Topic_Nested_Where]
+
+  """"""
+  sorting: CaisyField_Number_WhereInt
+
+  """"""
+  topicName: CaisyField_String_Where
+}
+
+""""""
+input Topic_Sort {
+  """"""
+  createdAt: Order
+
+  """"""
+  id: Order
+
+  """"""
+  publishedAt: Order
+
+  """"""
+  sorting: Order
+
+  """"""
+  topicName: Order
+
+  """"""
+  updatedAt: Order
 }
 
 """"""
@@ -1302,5 +1884,8 @@ input Topic_Where {
   OR: [Topic_Where]
 
   """"""
-  title: CaisyField_String_Where
+  sorting: CaisyField_Number_WhereInt
+
+  """"""
+  topicName: CaisyField_String_Where
 }

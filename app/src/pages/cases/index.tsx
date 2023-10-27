@@ -1,32 +1,26 @@
 import { Layout } from "@/components/layouts/Layout";
-import { type IGenCasesQuery } from "@/services/graphql/__generated/sdk";
-import { caisySDK } from "@/services/graphql/getSdk";
+import OverviewPage from "@/components/pages/OverviewPage/OverviewPage";
+import getCasesOverviewProps, { type ICasesOverviewProps } from "@/services/content/getCasesOverviewProps";
 
 import { type GetStaticProps } from "next";
-import Link from "next/link";
+import { type FunctionComponent } from "react";
 
-export default function Cases({ cases }: { readonly cases: IGenCasesQuery }) 
-{
-  return (
-    <Layout>
-      <ul>
-        {cases.allCase?.edges?.map((edge) => (
-          <li key={edge?.node?.id}>
-            <Link href={`/cases/${edge?.node?.id}`}>{edge?.node?.title}</Link>
-          </li>
-        ))}
-      </ul>
-    </Layout>
-  );
-}
+type GetCasesOverviewPagePropsResult = ICasesOverviewProps;
 
-export const getStaticProps: GetStaticProps = async () => 
+export const getStaticProps: GetStaticProps<GetCasesOverviewPagePropsResult> = async () =>
 {
-  const cases = await caisySDK.Cases();
+  const casesOverviewProps = await getCasesOverviewProps();
 
   return {
-    props: {
-      cases,
-    },
+    props: casesOverviewProps,
+    revalidate: 10,
   };
 };
+
+const NextPage: FunctionComponent<GetCasesOverviewPagePropsResult> = (casesOverviewProps) => (
+  <Layout>
+    <OverviewPage variant="case" content={casesOverviewProps}/>
+  </Layout>
+);
+
+export default NextPage;

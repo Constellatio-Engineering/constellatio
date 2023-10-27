@@ -1,3 +1,4 @@
+/* eslint-disable max-lines */
 import { BodyText } from "@/components/atoms/BodyText/BodyText";
 import { Button } from "@/components/atoms/Button/Button";
 import { Check } from "@/components/Icons/Check";
@@ -8,11 +9,21 @@ import { HintsAccordion } from "@/components/molecules/HintsAccordion/HintsAccor
 import { ResultCard } from "@/components/molecules/ResultCard/ResultCard";
 import { Richtext } from "@/components/molecules/Richtext/Richtext";
 import RichtextOverwrite from "@/components/organisms/FillGapsGame/RichtextOverwrite";
+import useContextAndErrorIfNull from "@/hooks/useContextAndErrorIfNull";
+import { InvalidateQueriesContext } from "@/provider/InvalidateQueriesProvider";
 import { type IGenFillInGapsGame } from "@/services/graphql/__generated/sdk";
+import useFillGapsGameStore from "@/stores/fillGapsGame.store";
+import { api } from "@/utils/api";
 
 import { Title } from "@mantine/core";
-import { distance } from "fastest-levenshtein";
-import React, { type FC, useRef, useState } from "react";
+import {
+  type FC,
+  type ReactElement,
+  memo,
+  useEffect,
+  useCallback,
+  useMemo,
+} from "react";
 
 import {
   Container,
@@ -24,137 +35,141 @@ import {
   stylesOverwrite,
 } from "./FillGapsGame.styles";
 
-type TFillGapsGame = Pick<IGenFillInGapsGame, "fillGameParagraph" | "helpNote" | "question">;
-
-const countPlaceholders = (content) => 
-{
-  let count = 0;
-  const regex = /{{.*?}}/g;
-
-  content.forEach((item) => 
-  {
-    if(item.type === "text" && item.text) 
-    {
-      const matches = item.text.match(regex) || [];
-      count += matches.length;
-    }
-    if(item.content) 
-    {
-      count += countPlaceholders(item.content);
-    }
-  });
-
-  return count;
+export type TFillGapsGame = Pick<IGenFillInGapsGame, "fillGameParagraph" | "helpNote" | "question" | "id"> & {
+  readonly caseId: string;
 };
 
-export const FillGapsGame: FC<TFillGapsGame> = ({ fillGameParagraph, helpNote, question }) => 
+let FillGapsGame: FC<TFillGapsGame> = ({
+  caseId,
+  fillGameParagraph,
+  helpNote,
+  id,
+  question,
+}) => 
 {
-  const [gameStatus, setGameStatus] = useState<"win" | "lose" | "inprogress">("inprogress");
-  const [resultMessage, setResultMessage] = useState<string>("");
-  const totalPlaceholders = countPlaceholders(fillGameParagraph?.richTextContent?.json?.content || {});
-  const [userAnswers, setUserAnswers] = useState<string[]>(new Array(totalPlaceholders).fill(""));
-  const [answerResult, setAnswerResult] = useState<string[]>(new Array(totalPlaceholders).fill(""));
-  const inputCounter = useRef(0);
-  const correctAnswers = useRef<string[]>([]);
-  const focusedIndex = useRef<number | null>(null);
-
-  const handleInputChange = (index: number, value: string) => 
+  const { invalidateGamesProgress } = useContextAndErrorIfNull(InvalidateQueriesContext);
+  const { mutate: setGameProgress } = api.gamesProgress.setGameProgress.useMutation({
+    onError: (error) => console.error("Error while setting game progress", error),
+    onSuccess: async () => invalidateGamesProgress({ caseId })
+  });
+  const gameState = useFillGapsGameStore((s) => s.getGameState(id));
+  const allGames = useFillGapsGameStore((s) => s.games);
+  const updateGameState = useFillGapsGameStore((s) => s.updateGameState);
+  const initializeNewGameState = useFillGapsGameStore((s) => s.initializeNewGameState);
+  const checkAnswers = useFillGapsGameStore((s) => s.checkAnswers);
+  useEffect(() => 
   {
-    setUserAnswers((prevAnswers) => 
+    if(gameState == null && id != null) 
     {
-      const newAnswers = [...prevAnswers];
-      newAnswers[index] = value;
-      return newAnswers;
+      initializeNewGameState({ caseId, id });
+    }
+  }, [allGames, caseId, gameState, id, initializeNewGameState]);
+
+  const correctAnswersArr = useMemo(() => 
+  {
+    if(!gameState?.correctAnswers) 
+    {
+      return [];
+    }
+    return gameState.correctAnswers?.reduce<string[]>(
+      (acc, curr) => acc.concat(curr.correctAnswers),
+      []
+    );
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [gameState?.correctAnswers]);
+  const userEntriesArr = useMemo(() => 
+  {
+    if(!gameState?.userAnswers) 
+    {
+      return [];
+    }
+    return gameState.userAnswers.reduce<string[]>(
+      (acc, curr) => acc.concat(curr.answers),
+      []
+    );
+  }, [gameState?.userAnswers]);
+  const richtextOverwrite = useCallback(
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    (props: any): ReactElement => 
+    {
+      const textArr: string[] = [];
+
+      if(!props.node.content || props.node?.content?.length <= 0) { return <></>; }
+
+      for(const el of props.node.content) 
+      {
+        textArr.push(el.text);
+      }
+      
+      const text = textArr?.join(" ");
+
+      return (
+        <RichtextOverwrite
+          id={id!}
+          path={props.path}
+          text={text}
+        />
+      );
+    },
+    [id]
+  );
+
+  if(!gameState || !id) 
+  {
+    return null;
+  }
+
+  const {
+    answerResult,
+    gameStatus,
+    gameSubmitted,
+    resultMessage,
+  } = gameState;
+
+  const handleCheckAnswers = (): void => 
+  {
+    if(!gameSubmitted) 
+    {
+      updateGameState({
+        caseId,
+        id,
+        update: { gameSubmitted: true },
+      });
+      // getNextGameIndex(); TODO
+      // Store game progress in the database
+    }
+
+    const allCorrect = checkAnswers({ gameId: id });
+
+    updateGameState({
+      caseId,
+      id,
+      update: {
+        gameStatus: allCorrect ? "win" : "lose",
+        resultMessage: allCorrect ? "Sehr gut! Du hast die Frage richtig beantwortet." : "Deine Antwort war leider nicht korrekt.",
+      },
     });
   };
 
-  // console.log("userAnswers", userAnswers);
-  // console.log("correctAnswers", correctAnswers.current);
-  // console.log(gameStatus);
-  // console.log(answerResult);
-
-  const checkAnswers = (): boolean => 
+  const handleResetGame = (): void => 
   {
-    if(userAnswers.length !== correctAnswers.current.length) { return false; }
-
-    let allCorrect = true;
-    const newAnswerResult: string[] = [];
-
-    for(let i = 0; i < userAnswers.length; i++) 
-    {
-      const possibleCorrectAnswers = correctAnswers.current[i].split(";");
-      let isAnswerCorrect = false;
-
-      for(const possibleAnswer of possibleCorrectAnswers) 
-      {
-        const userAnswer = userAnswers[i].toLowerCase();
-        const correctAnswer = possibleAnswer.toLowerCase();
-
-        if(!isNaN(Number(correctAnswer)) || correctAnswer.length <= 4) 
-        {
-          // If correct answer is number or a short word, require an exact match
-          if(userAnswer === correctAnswer) 
-          {
-            isAnswerCorrect = true;
-            break;
-          }
-        }
-        else 
-        {
-          // check for distance
-          const dist = distance(userAnswer, correctAnswer);
-          if(dist <= 2) 
-          {
-            isAnswerCorrect = true;
-            break;
-          }
-        }
-      }
-
-      if(isAnswerCorrect) 
-      {
-        newAnswerResult.push("correct");
-      }
-      else 
-      {
-        newAnswerResult.push("incorrect");
-        allCorrect = false;
-      }
-    }
-
-    setAnswerResult(newAnswerResult);
-    return allCorrect;
-  };
-
-  const handleCheckAnswers = () => 
-  {
-    if(checkAnswers()) 
-    {
-      // all answers are correct
-      setGameStatus("win");
-      setResultMessage("Congrats! all answers are correct!");
-    }
-    else 
-    {
-      // at least one answer is incorrect
-      setGameStatus("lose");
-      setResultMessage("Some answers are incorrect. Please try again.");
-    }
-  };
-
-  const handleResetGame = () => 
-  {
-    setGameStatus("inprogress");
-    inputCounter.current = 0;
-    correctAnswers.current = [];
-    setUserAnswers(new Array(totalPlaceholders).fill(""));
-    setAnswerResult(new Array(totalPlaceholders).fill(""));
+    updateGameState({
+      caseId,
+      id,
+      update: {
+        answerResult: [],
+        gameStatus: "inprogress",
+        resultMessage: "",
+        userAnswers: [],
+      },
+    });
   };
 
   return (
     <Container>
       <TitleWrapper>
-        <Gamification/> <Title order={4}>Fill in the gaps</Title>
+        <Gamification/>
+        <Title order={4}>Lückentext</Title>
       </TitleWrapper>
       <GameWrapper>
         {question && (
@@ -164,34 +179,19 @@ export const FillGapsGame: FC<TFillGapsGame> = ({ fillGameParagraph, helpNote, q
         )}
         <LegendWrapper>
           <BodyText component="p" styleType="body-01-regular">
-            Correct answer
+            Richtige Antwort
           </BodyText>
           <BodyText component="p" styleType="body-01-regular">
-            Incorrect answer
+            Falsche Antwort
           </BodyText>
         </LegendWrapper>
         <Game>
           <Options>
-            {fillGameParagraph?.richTextContent?.json && (
+            {fillGameParagraph?.json && (
               <Richtext
-                richTextContent={fillGameParagraph.richTextContent}
+                data={fillGameParagraph}
                 richTextOverwrite={{
-                  paragraph: (props) => 
-                  {
-                    return (
-                      <RichtextOverwrite
-                        // @ts-ignore
-                        text={props?.children?.[0]?.props?.node.text}
-                        correctAnswers={correctAnswers}
-                        handleInputChange={handleInputChange}
-                        inputCounter={inputCounter}
-                        userAnswers={userAnswers}
-                        focusedIndex={focusedIndex}
-                        gameStatus={gameStatus}
-                        answerResult={answerResult}
-                      />
-                    );
-                  },
+                  paragraph: richtextOverwrite,
                 }}
                 stylesOverwrite={stylesOverwrite}
               />
@@ -200,27 +200,52 @@ export const FillGapsGame: FC<TFillGapsGame> = ({ fillGameParagraph, helpNote, q
         </Game>
         {gameStatus !== "inprogress" && (
           <>
-            <HintsAccordion items={correctAnswers.current}/>
+            <HintsAccordion items={correctAnswersArr}/>
             <ResultCard
-              droppedCorrectCards={answerResult.filter((item) => item === "correct").length ?? null}
-              totalCorrectCards={correctAnswers.current.length ?? null}
+              droppedCorrectCards={
+                answerResult
+                  .reduce<string[]>(
+                  (acc, curr) => acc.concat(curr.answersResult),
+                  []
+                )
+                  .filter((item) => item === "correct").length ?? null
+              }
+              totalCorrectCards={correctAnswersArr.length}
               variant={gameStatus}
               message={resultMessage}
             />
-            {helpNote?.richTextContent?.json && <HelpNote richTextContent={helpNote?.richTextContent}/>}
+            {helpNote?.json && <HelpNote data={helpNote}/>}
           </>
         )}
         <div>
-          <Button
+          <Button<"button">
             styleType="primary"
             size="large"
             leftIcon={gameStatus === "inprogress" ? <Check/> : <Reload/>}
-            onClick={gameStatus === "inprogress" ? handleCheckAnswers : handleResetGame}
-            disabled={gameStatus === "inprogress" && userAnswers.some((answer) => answer.trim() === "")}>
-            {gameStatus === "inprogress" ? "Check my answers" : "Solve again"}
+            onClick={() =>
+            {
+              if(gameStatus === "inprogress")
+              {
+                setGameProgress({ gameId: id, progressState: "completed" });
+                handleCheckAnswers();
+              }
+              else
+              {
+                handleResetGame();
+              }
+            }}
+            disabled={
+              gameStatus === "inprogress" &&
+							userEntriesArr.length !== correctAnswersArr.length
+            }>
+            {gameStatus === "inprogress" ? "Antwort prüfen" : "Erneut lösen"}
           </Button>
         </div>
       </GameWrapper>
     </Container>
   );
 };
+
+FillGapsGame = memo(FillGapsGame);
+
+export default FillGapsGame;

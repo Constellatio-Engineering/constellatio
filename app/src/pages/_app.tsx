@@ -1,38 +1,60 @@
 import { RouterTransition } from "@/components/atoms/RouterTransition/RouterTransition";
+import { env } from "@/env.mjs";
+import { useIsRouterReady } from "@/hooks/useIsRouterReady";
+import { supabase } from "@/lib/supabase";
+import AuthStateProvider from "@/provider/AuthStateProvider";
 import CustomThemingProvider from "@/provider/CustomThemingProvider";
+import InvalidateQueriesProvider from "@/provider/InvalidateQueriesProvider";
+import MeilisearchProvider from "@/provider/MeilisearchProvider";
 import { api } from "@/utils/api";
 
+import { ModalsProvider } from "@mantine/modals";
 import { Notifications } from "@mantine/notifications";
-import { createPagesBrowserClient } from "@supabase/auth-helpers-nextjs";
 import { type Session, SessionContextProvider } from "@supabase/auth-helpers-react";
 import { type AppProps } from "next/app";
 import Head from "next/head";
-import { type FunctionComponent, useMemo } from "react";
+import { appWithTranslation } from "next-i18next";
+import { type FunctionComponent } from "react";
 
-import "../styles.css";
+type ConstellatioAppProps = AppProps<{ initialSession: Session }>;
 
-type MyAppProps = AppProps<{ initialSession: Session }>;
-
-const MyApp: FunctionComponent<MyAppProps> = ({ Component, pageProps }) =>
+const AppContainer: FunctionComponent<ConstellatioAppProps> = ({ Component, pageProps }) =>
 {
-  const supabaseClient = useMemo(() => createPagesBrowserClient(), []);
+  const isRouterReady = useIsRouterReady();
+  const isProduction = env.NEXT_PUBLIC_DEPLOYMENT_ENVIRONMENT === "production";
+  let title = "Constellatio";
+
+  if(!isProduction)
+  {
+    title += ` - ${env.NEXT_PUBLIC_DEPLOYMENT_ENVIRONMENT}`;
+  }
 
   return (
     <>
       <Head>
-        <title>Constellatio</title>
+        <title>{title}</title>
         <link rel="shortcut icon" href="/favicon.png"/>
         <meta name="viewport" content="minimum-scale=1, initial-scale=1, width=device-width"/>
       </Head>
-      <SessionContextProvider supabaseClient={supabaseClient} initialSession={pageProps.initialSession}>
-        <CustomThemingProvider>
-          <RouterTransition/>
-          <Notifications/>
-          <Component {...pageProps}/>
-        </CustomThemingProvider>
+      <SessionContextProvider supabaseClient={supabase} initialSession={pageProps.initialSession}>
+        <InvalidateQueriesProvider>
+          <AuthStateProvider>
+            <CustomThemingProvider>
+              <ModalsProvider>
+                <MeilisearchProvider>
+                  <RouterTransition/>
+                  <Notifications/>
+                  {isRouterReady && (
+                    <Component {...pageProps}/>
+                  )}
+                </MeilisearchProvider>
+              </ModalsProvider>
+            </CustomThemingProvider>
+          </AuthStateProvider>
+        </InvalidateQueriesProvider>
       </SessionContextProvider>
     </>
   );
 };
 
-export default api.withTRPC(MyApp);
+export default api.withTRPC(appWithTranslation(AppContainer));

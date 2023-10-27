@@ -7,11 +7,16 @@
  * need to use are documented accordingly near the end.
  */
 
-import { createPagesServerClient } from "@supabase/auth-helpers-nextjs";
+import { env } from "@/env.mjs";
+import { type ClientError, clientErrors } from "@/utils/clientError";
+import { EmailAlreadyTakenError, UnauthorizedError } from "@/utils/serverError";
+import { sleep } from "@/utils/utils";
+
+import { createPagesServerClient, type SupabaseClient, type User } from "@supabase/auth-helpers-nextjs";
+import { type Session } from "@supabase/auth-helpers-react";
 import { initTRPC } from "@trpc/server";
 import { type CreateNextContextOptions } from "@trpc/server/adapters/next";
 import superjson from "superjson";
-import { ZodError } from "zod";
 
 /**
  * 1. CONTEXT
@@ -44,17 +49,34 @@ const createInnerTRPCContext = (_opts: CreateContextOptions): Record<string, nev
  *
  * @see https://trpc.io/docs/context
  */
-export const createTRPCContext = async ({ req, res }: CreateNextContextOptions): Promise<null> =>
+type TrpcContext = {
+  session: Session | null;
+  supabaseServerClient: SupabaseClient;
+  user: User | null;
+};
+
+export const createTRPCContext = async ({ req, res }: CreateNextContextOptions): Promise<TrpcContext> =>
 {
-  const supabaseServerClient = createPagesServerClient({ req, res });
+  const supabaseServerClient = createPagesServerClient({ req, res }, {
+    supabaseKey: env.SUPABASE_SERVICE_ROLE_KEY,
+    supabaseUrl: env.NEXT_PUBLIC_SUPABASE_URL
+  });
+
   const { data: { user } } = await supabaseServerClient.auth.getUser();
   const { data: { session } } = await supabaseServerClient.auth.getSession();
 
-  console.log("--- createTRPCContext ---");
-  console.log("user", user);
-  console.log("session", session);
+  if(env.THROTTLE_REQUESTS_IN_MS && env.NEXT_PUBLIC_DEPLOYMENT_ENVIRONMENT === "development")
+  {
+    // Caution: This is only for testing purposes in development. It will slow down the API response time.
+    console.info(`Caution: Requests are throttled for ${env.THROTTLE_REQUESTS_IN_MS}ms due to 'env.THROTTLE_REQUESTS_IN_MS' being set.`);
+    await sleep(env.THROTTLE_REQUESTS_IN_MS);
+  }
 
-  return null;
+  return {
+    session,
+    supabaseServerClient,
+    user
+  };
 };
 
 /**
@@ -64,11 +86,38 @@ export const createTRPCContext = async ({ req, res }: CreateNextContextOptions):
  * ZodErrors so that you get typesafety on the frontend if your procedure fails due to validation
  * errors on the backend.
  */
-
 const t = initTRPC
   .context<typeof createTRPCContext>()
   .create({
     errorFormatter: ({ error, shape }) =>
+    {
+      let errorData: ClientError;
+
+      if(error instanceof EmailAlreadyTakenError)
+      {
+        errorData = clientErrors["email-already-taken"];
+      }
+      else if(error instanceof UnauthorizedError)
+      {
+        errorData = clientErrors.unauthorized;
+      }
+      else
+      {
+        console.warn("Unhandled Server Error. Please check tRPC error formatter in your 'trpc.ts' file. Error was:", error);
+        errorData = clientErrors["internal-server-error"];
+      }
+
+      return {
+        ...shape, // TODO: Dont return shape, at least nor for internal server errors
+        data: {
+          clientError: errorData,
+          code: error.code,
+          httpStatus: shape.data.httpStatus,
+        },
+      };
+    },
+    isDev: process.env.NODE_ENV === "development",
+    /* errorFormatter: ({ error, shape }) =>
     {
       return {
         ...shape,
@@ -78,7 +127,7 @@ const t = initTRPC
           error.cause instanceof ZodError ? error.cause.flatten() : null,
         },
       };
-    },
+    },*/
     transformer: superjson,
   });
 
@@ -104,3 +153,22 @@ export const createTRPCRouter = t.router;
  * are logged in.
  */
 export const publicProcedure = t.procedure;
+
+const enforceUserIsAuthenticated = t.middleware(async ({ ctx, next }) =>
+{
+  const { session } = ctx;
+
+  if(!session)
+  {
+    throw new UnauthorizedError();
+  }
+
+  return next({
+    ctx: {
+      session,
+      userId: session.user.id
+    },
+  });
+});
+
+export const protectedProcedure = t.procedure.use(enforceUserIsAuthenticated);

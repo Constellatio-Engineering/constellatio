@@ -1,9 +1,6 @@
 import type { StorybookConfig } from "@storybook/nextjs";
-const prettierConfig = require("../.prettierrc");
 
 const config: StorybookConfig = {
-  stories: ["../src/**/*.mdx", "../src/**/*.stories.@(js|jsx|ts|tsx)"],
-  staticDirs: ["../public"],
   addons: [
     "@storybook/addon-links",
     "@storybook/addon-essentials",
@@ -13,21 +10,26 @@ const config: StorybookConfig = {
     {
       name: "@storybook/addon-docs",
       options: {
-        rule: {
-          include: ["../src/components/"], // You can specify directories
-        },
-        loaderOptions: {
-          prettierConfig,
+        rule: { 
+          include: ["../src/components/"],
         },
       },
     },
   ],
+  // eslint-disable-next-line @typescript-eslint/require-await
+  babel: async (options) => ({
+    ...options,
+    presets: [...options.presets || [], "@emotion/babel-preset-css-prop"],
+  }),
+  docs: {
+    autodocs: true,
+  },
   framework: {
     name: "@storybook/nextjs",
     options: {},
   },
-  docs: {
-    autodocs: true,
-  },
+  staticDirs: ["../public"],
+  stories: ["../src/**/*.mdx", "../src/**/*.stories.@(js|jsx|ts|tsx)"],
 };
+
 export default config;

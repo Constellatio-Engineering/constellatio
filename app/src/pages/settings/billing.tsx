@@ -1,40 +1,43 @@
 import { Layout } from "@/components/layouts/Layout";
-import { postData } from "@/lib/post-data";
+import { api } from "@/utils/api";
 
 import { Button, Container, Title } from "@mantine/core";
 import { useRouter } from "next/router";
-import { useState } from "react";
+import { type FunctionComponent } from "react";
 
-export default function Billing() 
+const Billing: FunctionComponent = () =>
 {
   const router = useRouter();
-  const [opening, setOpening] = useState(false);
+  const { isLoading, mutateAsync: generateStripeSessionUrl } = api.billing.generateStripeCheckoutSession.useMutation();
 
-  const redirectToCustomerPortal = async () => 
+  const redirectToCustomerPortal = async (): Promise<void> =>
   {
-    try 
-    {
-      setOpening(true);
+    let url: string;
 
-      const { url } = await postData({
-        url: "/api/stripe/portal",
-      });
-      router.push(url);
-    }
-    catch (error) 
+    try
     {
-      if(error) { return alert((error as Error).message); }
+      const { stripeUrl } = await generateStripeSessionUrl();
+      url = stripeUrl ?? "";
     }
+    catch (error)
+    {
+      console.error("error while getting stripe session url", error);
+      return;
+    }
+
+    void router.push(url);
   };
 
   return (
     <Layout>
       <Container>
         <Title>Abonnement</Title>
-        <Button mt="lg" loading={opening} onClick={redirectToCustomerPortal}>
+        <Button<"button"> mt="lg" loading={isLoading} onClick={redirectToCustomerPortal}>
           Stripe öffnen
         </Button>
       </Container>
     </Layout>
   );
-}
+};
+
+export default Billing;

@@ -1,11 +1,10 @@
-import { Header } from "@/components/organisms/Header/Header";
-
 import { Container } from "@mantine/core";
 import { type Meta, type StoryObj } from "@storybook/react";
+import { type FunctionComponent } from "react";
 
-import { AuthPage } from "./AuthPage";
+import { AuthPage, type AuthPageProps } from "./AuthPage";
 
-const Template = (args: any) => (
+const Template: FunctionComponent<AuthPageProps> = args => (
   <Container maw={1440} p={0}>
     <AuthPage {...args}/>
   </Container>

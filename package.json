@@ -8,9 +8,11 @@
     "start:dev": "docker compose up",
     "start:dev-force-rebuild": "docker compose up --build --force-recreate",
     "separatorSupabase": "---------------------- SUPABASE ----------------------",
-    "start:supabase": "supabase start",
+    "start:supabase": "supabase start --ignore-health-check",
     "stop:supabase": "supabase stop",
-    "reset:supabase": "supabase stop --no-backup",
+    "restart:supabase": "supabase stop && pnpm start:supabase",
+    "reset:supabase": "supabase stop --no-backup && pnpm start:supabase",
+    "supabase:status": "supabase status",
     "separatorDocker": "---------------------- DOCKER ----------------------",
     "docker:stop-containers": "docker stop $(docker ps -a -q)",
     "docker:delete-containers": "docker rm -vf $(docker ps -aq)",
@@ -19,9 +21,10 @@
     "docker:prune": "pnpm docker:stop-containers && pnpm docker:delete-containers && pnpm docker:delete-images && docker system prune -a -f --volumes",
     "separatorUtils": "---------------------- UTILS ----------------------",
     "install-ssl-certificates": "cd caddy && sh ./install-ssl-certificates.sh",
+    "install-ssl-certificates-win": "cd caddy && sh ./install-ssl-certificates-win.sh",
     "reset:node_modules": "rm pnpm-lock.yaml && find . -name node_modules -type d -prune -exec rm -rf '{}' + && pnpm install"
   },
   "devDependencies": {
-    "supabase": "^1.86.2"
+    "supabase": "^1.99.5"
   }
 }

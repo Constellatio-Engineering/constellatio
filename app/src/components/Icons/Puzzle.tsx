@@ -1,4 +1,8 @@
-export const Puzzle = ({ size = 16 }: { readonly size?: number }) => (
+import { type FunctionComponent } from "react";
+
+export const Puzzle: FunctionComponent<{ readonly size?: number }> = ({
+  size = 16,
+}) => (
   <svg
     width={size}
     height={size}

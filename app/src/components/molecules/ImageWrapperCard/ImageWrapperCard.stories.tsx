@@ -1,9 +1,10 @@
 import { Box } from "@mantine/core";
 import { type Meta, type StoryObj } from "@storybook/react";
+import { type FunctionComponent } from "react";
 
-import { ImageWrapperCard } from "./ImageWrapperCard";
+import { ImageWrapperCard, type ImageWrapperCardProps } from "./ImageWrapperCard";
 
-const Template = (args: any) => (
+const Template: FunctionComponent = (args: ImageWrapperCardProps) => (
   <Box w={670}>
     <ImageWrapperCard {...args}/>
   </Box>
@@ -27,19 +28,14 @@ type Story = StoryObj<typeof ImageWrapperCard>;
 
 export const Default: Story = {
   args: {
-    downloadable: true,
+    author: "",
+    copyright: "",
+    description: "",
+    dominantColor: "#c7c8c9",
     id: "56daf83d-cfda-4fa9-adfd-96a38a8493f1",
-    image: {
-      author: "",
-      copyright: "",
-      description: "",
-      dominantColor: "#c7c8c9",
-      id: "5b8adbe9-11b3-4d96-94a8-2e22de45496e",
-      keywords: "",
-      originType: "image/png",
-      src: "https://assets.caisy.io/assets/21691a6c-f949-491d-99a3-079a4bd23818/5b8adbe9-11b3-4d96-94a8-2e22de45496e/c7543241-3713-46e1-8389-0cefbb0f2bb4Rectangle5.png",
-      title: "Rectangle 5",
-    },
-    title: "Image example below",
+    keywords: "",
+    originType: "image/png",
+    src: "https://assets.caisy.io/assets/21691a6c-f949-491d-99a3-079a4bd23818/5b8adbe9-11b3-4d96-94a8-2e22de45496e/c7543241-3713-46e1-8389-0cefbb0f2bb4Rectangle5.png",
+    title: "Rectangle 5",
   },
 };

@@ -1,6 +1,5 @@
 import { CaptionText } from "@/components/atoms/CaptionText/CaptionText";
 import { LinkButton } from "@/components/atoms/LinkButton/LinkButton";
-import { Heart } from "@/components/Icons/Heart";
 import { Help } from "@/components/Icons/Help";
 
 import { Flex, Group } from "@mantine/core";
@@ -11,12 +10,12 @@ import { SFooter } from "./Footer.style";
 import ConstellatioLogoIcon from "../../../../public/images/icons/constellatio-icon.svg";
 import ConstellatioLogoWhiteIcon from "../../../../public/images/icons/logo-symbol-white.svg";
 
-interface TFooter 
+export interface FooterProps
 {
   readonly variant?: "default" | "simpleColoredBg" | "simpleWhiteBg";
 }
 
-export const Footer: FC<TFooter> = ({ variant = "default" }) => 
+export const Footer: FC<FooterProps> = ({ variant = "default" }) =>
 {
   return (
     <>
@@ -24,8 +23,7 @@ export const Footer: FC<TFooter> = ({ variant = "default" }) =>
         <SFooter variant={variant}>
           <Group position="apart">
             <Group spacing="spacing-16">
-              <LinkButton icon={<Help/>} title="Need help?" size="big"/>
-              <LinkButton icon={<Heart/>} title="Support us" size="big"/>
+              <LinkButton icon={<Help/>} title="Hilfe" size="big"/>
             </Group>
             <Group spacing="spacing-8">
               <Image src={ConstellatioLogoIcon} alt="Constellatio"/>{" "}
@@ -34,7 +32,7 @@ export const Footer: FC<TFooter> = ({ variant = "default" }) =>
                 styleType="caption-01-medium"
                 tt="uppercase"
                 c="neutrals-01.9">
-                &copy; Constellatio 2023. All Rights Reserved.
+                &reg; Constellatio 2023
               </CaptionText>
             </Group>
           </Group>
@@ -49,7 +47,7 @@ export const Footer: FC<TFooter> = ({ variant = "default" }) =>
                 styleType="caption-01-medium"
                 tt="uppercase"
                 c="neutrals-01.0">
-                &copy; Constellatio 2023. All Rights Reserved.
+                &reg; Constellatio 2023
               </CaptionText>
             </Group>
           </Flex>
@@ -64,7 +62,7 @@ export const Footer: FC<TFooter> = ({ variant = "default" }) =>
                 styleType="caption-01-medium"
                 tt="uppercase"
                 c="neutrals-01.9">
-                &copy; Constellatio 2023. All Rights Reserved.
+                &reg; Constellatio 2023
               </CaptionText>
             </Group>
           </Flex>

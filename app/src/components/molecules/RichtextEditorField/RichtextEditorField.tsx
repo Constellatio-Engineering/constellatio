@@ -2,34 +2,72 @@ import { Button } from "@/components/atoms/Button/Button";
 import { Check } from "@/components/Icons/Check";
 
 import { RichTextEditor, Link } from "@mantine/tiptap";
-import Placeholder from "@tiptap/extension-placeholder";
-import { type Content, useEditor } from "@tiptap/react";
-import StarterKit from "@tiptap/starter-kit";
-import { type FC } from "react";
+import { Placeholder } from "@tiptap/extension-placeholder";
+import { type Content, useEditor, type Editor, type EditorEvents } from "@tiptap/react";
+import { StarterKit } from "@tiptap/starter-kit";
+import React, { type FC, useEffect } from "react";
 
 import { ContentWrapper, richtextEditorFieldStyles } from "./RichtextEditorField.styles";
 
-interface TRichtextEditorField 
+export interface RichtextEditorFieldProps
 {
+  readonly action?: (editor: Editor) => void;
+  readonly button?: {
+    text?: string;
+  };
   readonly content?: Content;
+  readonly disabled?: boolean;
+  readonly onChange?: (e: EditorEvents["update"]) => void;
   readonly variant: "simple" | "with-legal-quote";
 }
 
-export const RichtextEditorField: FC<TRichtextEditorField> = ({ content = "", variant }) => 
+export const RichtextEditorField: FC<RichtextEditorFieldProps> = ({
+  action,
+  button,
+  content = "",
+  disabled,
+  onChange,
+  variant
+}) =>
 {
   const editor = useEditor({
     content,
+    editable: !disabled,
     extensions: [
       StarterKit,
       Link,
       Placeholder.configure({
-        placeholder: `${variant === "simple" ? "Enter your case solution here..." : "Start typing here..."} `,
+        placeholder: `${variant === "simple" ? "Gutachten verfassen..." : "Beginne hier..."} `,
       }),
     ],
+    onUpdate: (e) =>
+    {
+      if(onChange)
+      {
+        onChange(e);
+      }
+    },
   });
 
+  const handleSubmit = (): void => 
+  {
+    if(action && editor) { action(editor); }
+  };
+
+  useEffect(() =>
+  {
+    if(!editor)
+    {
+      return;
+    }
+
+    editor.setOptions({ editable: !disabled });
+  }, [disabled, editor]);
+
   return (
-    <RichTextEditor editor={editor} styles={richtextEditorFieldStyles({})}>
+    <RichTextEditor
+      editor={editor}
+      styles={richtextEditorFieldStyles()}>
       <RichTextEditor.Toolbar>
         <RichTextEditor.ControlsGroup>
           <RichTextEditor.Bold/>
@@ -48,16 +86,19 @@ export const RichtextEditorField: FC<TRichtextEditorField> = ({ content = "", va
       </RichTextEditor.Toolbar>
       <ContentWrapper>
         <RichTextEditor.Content/>
-        <div>
-          <Button
-            styleType="primary"
-            size="large"
-            type="button"
-            leftIcon={<Check/>}
-            disabled={editor?.isEmpty}>
-            Submit and see results
-          </Button>
-        </div>
+        {button && (
+          <div>
+            <Button<"button">
+              styleType="primary"
+              size="large"
+              type="button"
+              onClick={handleSubmit}
+              leftIcon={<Check/>}
+              disabled={editor?.isEmpty}>
+              {button?.text}
+            </Button>
+          </div>
+        )}
       </ContentWrapper>
     </RichTextEditor>
   );

@@ -1,36 +1,40 @@
+
+import { useMantineTheme } from "@mantine/styles";
 import Image from "next/image";
 import Link from "next/link";
 import { type FC } from "react";
 
-import { SHeader } from "./Header.style";
-import ConstellatioFullLogo from "../../../../public/images/icons/constellatio-full-logo.svg";
-import { UserDropdown } from "../../molecules/UserDropdown/UserDropdown";
+import HeaderDefault from "./DefaultHeader/HeaderDefault";
+import { SHeader } from "./Header.styles";
+import * as styles from "./Header.styles";
+import ConstellatioFullLogoPng from "../../../../public/images/full-logo.png";
 
-interface THeader 
+export interface HeaderProps 
 {
-  readonly variant?: "default" | "simple";
+  readonly variant?: "default" | "simple" | "relative";
 }
 
-export const Header: FC<THeader> = ({ variant = "default" }) => 
+export const Header: FC<HeaderProps> = ({ variant = "default" }) => 
 {
+  const theme = useMantineTheme();
+  // const isTabletScreen = useMediaQuery("(max-width: 1100px)");
   return variant === "simple" ? (
-    <SHeader variant={variant}>
-      <div>
-        <Link href="/">
-          <Image src={ConstellatioFullLogo} alt="Constellatio"/>
-        </Link>
+    <SHeader>
+      <div css={styles.wrapper({ theme, variant })}>
+        <div>
+          <Link href="/">
+            <Image src={ConstellatioFullLogoPng} alt="Constellatio" width={150}/>
+          </Link>
+        </div>
       </div>
     </SHeader>
-  ) : (
-    <SHeader variant={variant}>
-      <div>
-        <Link href="/">
-          <Image src={ConstellatioFullLogo} alt="Constellatio"/>
-        </Link>
-      </div>
-      <div>
-        <UserDropdown/>
-      </div>
-    </SHeader>
+  ) : variant === "default" ? (
+    <HeaderDefault/>
+  ) : variant === "relative" && (
+    <styles.SHeaderRelative>
+      <Link href="/">
+        <Image src={ConstellatioFullLogoPng} alt="Constellatio" width={150}/>
+      </Link>
+    </styles.SHeaderRelative>
   );
 };

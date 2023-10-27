@@ -1,17 +1,21 @@
+import { api } from "@/utils/api";
+
 import { Box } from "@mantine/core";
 import { type Meta, type StoryObj } from "@storybook/react";
+import { appWithTranslation } from "next-i18next";
+import { type FunctionComponent } from "react";
 
 import { RegistrationForm } from "./RegistrationForm";
 
-const Template = (args: any) => (
+const Template: FunctionComponent = () => (
   <Box w={400}>
-    <RegistrationForm {...args}/>
+    <RegistrationForm/>
   </Box>
 );
 
 const meta: Meta = {
   argTypes: {},
-  component: Template,
+  component: api.withTRPC(appWithTranslation(Template)),
   parameters: {
     design: {
       type: "figma",

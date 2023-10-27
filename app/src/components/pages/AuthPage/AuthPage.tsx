@@ -1,5 +1,3 @@
-import { BodyText } from "@/components/atoms/BodyText/BodyText";
-import { CustomLink } from "@/components/atoms/CustomLink/CustomLink";
 import { SwitcherTab } from "@/components/atoms/Switcher-tab/SwitcherTab";
 import { Switcher } from "@/components/molecules/Switcher/Switcher";
 import { Header } from "@/components/organisms/Header/Header";
@@ -7,32 +5,45 @@ import { LoginForm } from "@/components/organisms/LoginForm/LoginForm";
 import { RegistrationForm } from "@/components/organisms/RegistrationForm/RegistrationForm";
 import { RegistrationVisualHeader } from "@/components/organisms/RegistrationVisualHeader/RegistrationVisualHeader";
 
-import { Box, Container, Flex, Tabs } from "@mantine/core";
+import { Container, Flex, Tabs } from "@mantine/core";
+import { useMediaQuery } from "@mantine/hooks";
 import { useRouter } from "next/router";
+import { type FC } from "react";
 
-interface AuthPageProps 
+export interface AuthPageProps
 {
   readonly tab: "login" | "register";
 }
 
-export function AuthPage({ tab }: AuthPageProps) 
+export const AuthPage: FC<AuthPageProps> = ({ tab }) =>
 {
   const router = useRouter();
+  const handleTabChange: (value: AuthPageProps["tab"]) => Promise<boolean> = async (value) => router.push(`/${value}`);
+  const isBigScreen = useMediaQuery("(min-width: 961px)");
 
-  const handleTabChange = async (value: AuthPageProps["tab"]) => router.push(`/${value}`);
   return (
-    <Flex justify="space-between" bg="brand-01.5" sx={{ height: "100vh", minHeight: 600, overflow: "hidden" }}>
-      <RegistrationVisualHeader/>
+    <Flex
+      justify="space-between"
+      bg="brand-01.5"
+      sx={{ height: "100vh", minHeight: 600, overflow: "hidden" }}>
+      {isBigScreen && <RegistrationVisualHeader/>}
       <Container
         w="100%"
+        pt={20}
         sx={(theme) => ({
           backgroundColor: theme.colors["neutrals-01"][0],
-          borderRadius: `${theme.radius["radius-16"]} 0 0 ${theme.radius["radius-16"]}`,
-          overflowY: "scroll",
-          padding: 0,
+          borderRadius: isBigScreen ? `${theme.radius["radius-16"]} 0 0 ${theme.radius["radius-16"]}` : 0,
+          // this is to get rid of the right red bar to the right of the form, but gets too big on small screens
+          marginRight: 0,
+          overflowY: "auto",
+          paddingTop: "0px !important",
         })}>
-        <Header variant="simple"/>
-        <Container w={440} pt={120} pb={tab === "register" ? "spacing-100" : 0}>
+        <Header variant="relative"/>
+        <Container
+          w={440}
+          pt={50}
+          pb={tab === "register" ? "spacing-100" : 0}
+          sx={{ marginTop: "80px" }}>
           <Switcher
             size="big"
             value={tab}
@@ -50,15 +61,8 @@ export function AuthPage({ tab }: AuthPageProps)
               <RegistrationForm/>
             </Tabs.Panel>
           </Switcher>
-          <BodyText component="p" styleType="body-02-medium" c="neutrals-01.7">
-            Note: This version of Constellatio is optimized for computer use only. If you have any technical questions,
-            please contact our support at&nbsp;
-            <CustomLink href="mailto:webmaster@constellatio.de" styleType="link-secondary" c="neutrals-01.7">
-              webmaster@constellatio.de
-            </CustomLink>
-          </BodyText>
         </Container>
       </Container>
     </Flex>
   );
-}
+};

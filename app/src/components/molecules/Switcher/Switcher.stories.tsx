@@ -2,12 +2,21 @@ import { SwitcherTab } from "@/components/atoms/Switcher-tab/SwitcherTab";
 import { Puzzle } from "@/components/Icons/Puzzle";
 
 import { Box, Flex, Tabs } from "@mantine/core";
+import { type MantineStyleSystemProps } from "@mantine/styles/lib/theme/types/MantineStyleSystem";
 import { type Meta, type StoryObj } from "@storybook/react";
+import { type FunctionComponent } from "react";
 
-import { Switcher } from "./Switcher";
+import { Switcher, type SwitcherProps } from "./Switcher";
 
-const Template = (args: any) => (
-  <Box w={args.w ?? "fit-content"}>
+type TemplateProps = SwitcherProps & {
+  readonly w?: MantineStyleSystemProps["w"];
+};
+
+const Template: FunctionComponent<TemplateProps> = ({
+  w,
+  ...args
+}) => (
+  <Box w={w ?? "fit-content"}>
     <Flex>
       <Switcher defaultValue="value2" {...args}/>
     </Flex>

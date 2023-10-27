@@ -1,3 +1,4 @@
+/* eslint-disable max-lines */
 import { BodyText } from "@/components/atoms/BodyText/BodyText";
 import { Button } from "@/components/atoms/Button/Button";
 import { Check } from "@/components/Icons/Check";
@@ -6,80 +7,154 @@ import { Reload } from "@/components/Icons/Reload";
 import { HelpNote } from "@/components/molecules/HelpNote/HelpNote";
 import { ResultCard } from "@/components/molecules/ResultCard/ResultCard";
 import { SelectionCard } from "@/components/molecules/SelectionCard/SelectionCard";
-import { type IGenSelectionCard } from "@/services/graphql/__generated/sdk";
+import useContextAndErrorIfNull from "@/hooks/useContextAndErrorIfNull";
+import { InvalidateQueriesContext } from "@/provider/InvalidateQueriesProvider";
+import { type IGenCardSelectionGame } from "@/services/graphql/__generated/sdk";
+import useSelectionCardGameStore, {
+  type TCardGameOption,
+  type TCardGameOptionWithCheck,
+} from "@/stores/selectionCardGame.store";
+import { api } from "@/utils/api";
+import { shuffleArray } from "@/utils/array";
 
 import { Title, LoadingOverlay } from "@mantine/core";
-import React, { type FC, useEffect, useState } from "react";
+import { type FC, useEffect, useMemo, memo } from "react";
 
 import {
-  Container, Game, GameWrapper, LegendWrapper, Options, TitleWrapper 
+  Container,
+  Game,
+  GameWrapper,
+  LegendWrapper,
+  Options,
+  TitleWrapper,
 } from "./SelectionCardGame.styles";
 
-type TSelectionCardGame = Pick<IGenSelectionCard, "game" | "helpNote" | "question">;
-
-const shuffleOptions = (arr) => 
-{
-  for(let i = arr.length - 1; i > 0; i--) 
-  {
-    const j = Math.floor(Math.random() * (i + 1));
-    [arr[i], arr[j]] = [arr[j], arr[i]];
-  }
-  return arr;
+export type SelectionCardGameProps = Pick<IGenCardSelectionGame, "game" | "helpNote" | "question" | "id"> & {
+  readonly caseId: string;
 };
 
-export const SelectionCardGame: FC<TSelectionCardGame> = ({ game, helpNote, question }) => 
+let SelectionCardGame: FC<SelectionCardGameProps> = ({
+  caseId,
+  game,
+  helpNote,
+  id,
+  question
+}) => 
 {
-  const optionsWithCheckProp = game?.options?.map((option) => ({ ...option, checked: false }));
-  const originalOptions = JSON.parse(JSON.stringify(optionsWithCheckProp ?? []));
-  const [optionsItems, setOptionsItems] = useState<any[]>([]);
-  const [gameStatus, setGameStatus] = useState<"win" | "lose" | "inprogress">("inprogress");
-  const [resultMessage, setResultMessage] = useState<string>("");
-  const [resetCount, setResetCount] = useState(0);
+  const { invalidateGamesProgress } = useContextAndErrorIfNull(InvalidateQueriesContext);
+  const { mutate: setGameProgress } = api.gamesProgress.setGameProgress.useMutation({
+    onError: (error) => console.error("Error while setting game progress", error),
+    onSuccess: async () => invalidateGamesProgress({ caseId })
+  });
+  const gameState = useSelectionCardGameStore((s) => s.getGameState(id));
+  const allGames = useSelectionCardGameStore((s) => s.games);
+  const updateGameState = useSelectionCardGameStore((s) => s.updateGameState);
+  const initializeNewGameState = useSelectionCardGameStore((s) => s.initializeNewGameState);
 
   useEffect(() => 
   {
-    setOptionsItems(shuffleOptions(originalOptions));
+    if(gameState == null && id != null) 
+    {
+      initializeNewGameState({ caseId, gameId: id });
+    }
+  }, [allGames, caseId, gameState, id, initializeNewGameState]);
+
+  const optionsWithCheckProp: TCardGameOptionWithCheck[] = useMemo(() =>
+    game?.options?.map((option: TCardGameOption) => ({
+      ...option,
+      checked: false,
+    })), [game?.options]
+  );
+
+  useEffect(() => 
+  {
+    const optionsShuffled = shuffleArray<TCardGameOptionWithCheck>(optionsWithCheckProp);
+
+    updateGameState({
+      caseId,
+      gameId: id!,
+      update: { optionsItems: optionsShuffled }
+    });
+
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
+  }, [optionsWithCheckProp]);
 
-  const filteredCorrectAnswers = optionsItems.filter((item) => item.correctAnswer);
+  if(!gameState || !id) 
+  {
+    return null;
+  }
 
-  const checkWinCondition = () => 
+  const {
+    gameStatus,
+    gameSubmitted,
+    optionsItems,
+    resetCounter,
+    resultMessage
+  } = gameState ?? {};
+
+  const filteredCorrectAnswers = optionsItems?.filter((item) => item.correctAnswer);
+
+  const checkWinCondition = (): boolean => 
   {
     const checkedAnswers = optionsItems.filter((item) => item.checked);
 
     return (
-      filteredCorrectAnswers.every((item) => item.checked) && checkedAnswers.length === filteredCorrectAnswers.length
+      filteredCorrectAnswers.every((item) => item.checked) &&
+			checkedAnswers.length === filteredCorrectAnswers.length
     );
   };
 
-  const onGameFinishHandler = () => 
+  const onGameFinishHandler = (): void => 
   {
     const winCondition = checkWinCondition();
 
     if(winCondition) 
     {
-      setGameStatus("win");
-      setResultMessage("Congrats! all answers are correct!");
+      updateGameState({
+        caseId,
+        gameId: id,
+        update: { gameStatus: "win", resultMessage: "Sehr gut! Du hast die Frage richtig beantwortet." }
+      });
     }
     else 
     {
-      setGameStatus("lose");
-      setResultMessage("Answers are incorrect!");
+      updateGameState({
+        caseId,
+        gameId: id,
+        update: { gameStatus: "lose", resultMessage: "Deine Antwort war leider nicht korrekt." }
+      });
+    }
+
+    if(!gameSubmitted)
+    {
+      updateGameState({
+        caseId,
+        gameId: id,
+        update: { gameSubmitted: true }
+      });
     }
   };
 
-  const onGameResetHandler = () => 
+  const onGameResetHandler = (): void => 
   {
-    setGameStatus("inprogress");
-    setOptionsItems(shuffleOptions(originalOptions));
-    setResetCount((prevCount) => prevCount + 1);
+    const optionsShuffled = shuffleArray<TCardGameOptionWithCheck>(optionsWithCheckProp);
+
+    updateGameState({
+      caseId,
+      gameId: id,
+      update: {
+        gameStatus: "inprogress",
+        optionsItems: optionsShuffled,
+        resetCounter: resetCounter + 1,
+        resultMessage: ""
+      }
+    });
   };
 
   return (
     <Container>
       <TitleWrapper>
-        <Gamification/> <Title order={4}>Choose the right answers</Title>
+        <Gamification/> <Title order={4}>Multiple Choice</Title>
       </TitleWrapper>
       <GameWrapper>
         {question && (
@@ -89,26 +164,39 @@ export const SelectionCardGame: FC<TSelectionCardGame> = ({ game, helpNote, ques
         )}
         <LegendWrapper>
           <BodyText component="p" styleType="body-01-regular">
-            Correct answer
+            Richtige Antwort
           </BodyText>
           <BodyText component="p" styleType="body-01-regular">
-            Incorrect answer
+            Falsche Antwort
           </BodyText>
         </LegendWrapper>
         <Game>
           <Options>
-            <LoadingOverlay visible={optionsItems.length < 1} radius="radius-12"/>
+            <LoadingOverlay
+              visible={optionsItems.length < 1}
+              radius="radius-12"
+            />
             {optionsItems.map((option) => (
               <SelectionCard
                 onCheckHandler={(e) => 
                 {
                   const { checked } = e.target;
-                  setOptionsItems((prev) => prev.map((item) => (item.id === option.id ? { ...item, checked } : item)));
+
+                  updateGameState({
+                    caseId,
+                    gameId: id,
+                    update: {
+                      optionsItems: optionsItems.map((item) =>
+                      {
+                        return item.id === option.id ? { ...item, checked } : item;
+                      })
+                    }
+                  });
                 }}
-                key={`${option.id} - ${resetCount}`}
+                key={`${option.id} - ${resetCounter}`}
                 label={option.label}
                 disabled={gameStatus !== "inprogress"}
-                result={option.correctAnswer ? "Correct" : "Incorrect"}
+                result={option.correctAnswer ? "Richtig" : "Falsch"}
                 status={
                   gameStatus === "inprogress"
                     ? "default"
@@ -130,20 +218,40 @@ export const SelectionCardGame: FC<TSelectionCardGame> = ({ game, helpNote, ques
               variant={gameStatus}
               message={resultMessage}
             />
-            {helpNote?.richTextContent?.json && <HelpNote richTextContent={helpNote?.richTextContent}/>}
+            {helpNote?.json && (
+              <HelpNote data={helpNote}/>
+            )}
           </>
         )}
         <div>
-          <Button
+          <Button<"button">
             styleType="primary"
             size="large"
             leftIcon={gameStatus === "inprogress" ? <Check/> : <Reload/>}
-            onClick={gameStatus === "inprogress" ? onGameFinishHandler : onGameResetHandler}
-            disabled={gameStatus === "inprogress" && optionsItems.every((item) => !item.checked)}>
-            {gameStatus === "inprogress" ? "Check my answers" : "Solve again"}
+            onClick={() =>
+            {
+              if(gameStatus === "inprogress")
+              {
+                setGameProgress({ gameId: id, progressState: "completed" });
+                onGameFinishHandler();
+              }
+              else
+              {
+                onGameResetHandler();
+              }
+            }}
+            disabled={
+              gameStatus === "inprogress" &&
+							optionsItems.every((item) => !item.checked)
+            }>
+            {gameStatus === "inprogress" ? "Antwort prüfen" : "Erneut lösen"}
           </Button>
         </div>
       </GameWrapper>
     </Container>
   );
 };
+
+SelectionCardGame = memo(SelectionCardGame);
+
+export default SelectionCardGame;

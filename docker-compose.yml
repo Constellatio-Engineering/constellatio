@@ -4,6 +4,19 @@ version: '3.9'
 
 services:
 
+  meilisearch:
+    image: getmeili/meilisearch:v1.3
+    container_name: meilisearch
+    restart: always
+    extra_hosts:
+      - "host.docker.internal:host-gateway"
+    env_file:
+      - ./meilisearch/.env
+    ports:
+      - '7700:7700'
+    volumes:
+      - ./meilisearch/data:/meili_data
+
   caddy:
     image: caddy:2.4.3-alpine
     extra_hosts:
@@ -18,4 +31,12 @@ services:
       - ./caddy/certs:/data/certs
       - ./caddy/data:/data
       - ./caddy/config:/config
+
+  localtunnel:
+    image: efrecon/localtunnel
+    restart: always
+    extra_hosts:
+      - "host.docker.internal:host-gateway"
+    command:
+      --local-host host.docker.internal --subdomain constellatio-app-development --port 3010
 
