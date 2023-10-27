@@ -5,6 +5,30 @@ EXCEPTION
 END $$;
 --> statement-breakpoint
 DO $$ BEGIN
+ CREATE TYPE "DocumentFileExtension" AS ENUM('pdf');
+EXCEPTION
+ WHEN duplicate_object THEN null;
+END $$;
+--> statement-breakpoint
+DO $$ BEGIN
+ CREATE TYPE "DocumentFileMimeType" AS ENUM('application/pdf');
+EXCEPTION
+ WHEN duplicate_object THEN null;
+END $$;
+--> statement-breakpoint
+DO $$ BEGIN
+ CREATE TYPE "FileExtension" AS ENUM('jpg', 'jpeg', 'png', 'pdf');
+EXCEPTION
+ WHEN duplicate_object THEN null;
+END $$;
+--> statement-breakpoint
+DO $$ BEGIN
+ CREATE TYPE "FileMimeType" AS ENUM('image/jpeg', 'image/png', 'application/pdf');
+EXCEPTION
+ WHEN duplicate_object THEN null;
+END $$;
+--> statement-breakpoint
+DO $$ BEGIN
  CREATE TYPE "GameProgressState" AS ENUM('not-started', 'completed');
 EXCEPTION
  WHEN duplicate_object THEN null;
@@ -12,6 +36,18 @@ END $$;
 --> statement-breakpoint
 DO $$ BEGIN
  CREATE TYPE "Gender" AS ENUM('male', 'female', 'diverse');
+EXCEPTION
+ WHEN duplicate_object THEN null;
+END $$;
+--> statement-breakpoint
+DO $$ BEGIN
+ CREATE TYPE "ImageFileExtension" AS ENUM('jpg', 'jpeg', 'png');
+EXCEPTION
+ WHEN duplicate_object THEN null;
+END $$;
+--> statement-breakpoint
+DO $$ BEGIN
+ CREATE TYPE "ImageFileMimeType" AS ENUM('image/jpeg', 'image/png');
 EXCEPTION
  WHEN duplicate_object THEN null;
 END $$;
@@ -107,6 +143,8 @@ CREATE TABLE IF NOT EXISTS "Note" (
 CREATE TABLE IF NOT EXISTS "ProfilePicture" (
 	"Id" uuid PRIMARY KEY NOT NULL,
 	"ServerFilename" text NOT NULL,
+	"FileExtension" "ImageFileExtension" NOT NULL,
+	"ContentType" "ImageFileMimeType" NOT NULL,
 	"UserId" uuid NOT NULL,
 	CONSTRAINT "ProfilePicture_Id_unique" UNIQUE("Id"),
 	CONSTRAINT "ProfilePicture_UserId_unique" UNIQUE("UserId")
@@ -134,7 +172,8 @@ CREATE TABLE IF NOT EXISTS "UploadedFile" (
 	"ServerFilename" text NOT NULL,
 	"OriginalFilename" text NOT NULL,
 	"SizeInBytes" integer NOT NULL,
-	"FileExtension" text NOT NULL,
+	"FileExtension" "FileExtension" NOT NULL,
+	"ContentType" "FileMimeType" NOT NULL,
 	CONSTRAINT "UploadedFile_Id_unique" UNIQUE("Id")
 );
 --> statement-breakpoint

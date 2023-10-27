@@ -1,19 +1,20 @@
 /* eslint-disable max-lines */
 import { db } from "@/db/connection";
-import { type UploadedFileInsert, uploadedFiles } from "@/db/schema";
-import { env } from "@/env.mjs";
-import { cloudStorage } from "@/lib/cloud-storage";
+import {
+  fileExtensions, fileMimeTypes, type UploadedFileInsert, uploadedFiles
+} from "@/db/schema";
 import { meiliSearchAdmin } from "@/lib/meilisearch";
 import { addUploadSchema } from "@/schemas/uploads/addUpload.schema";
+import { generateCreateSignedUploadUrlSchema } from "@/schemas/uploads/createSignedUploadUrl.schema";
 import { deleteUploadSchema } from "@/schemas/uploads/deleteUpload.schema";
 import { getUploadedFilesSchema } from "@/schemas/uploads/getUploadedFiles.schema";
 import { updateUploadedFileSchema } from "@/schemas/uploads/updateUploadedFile.schema";
-import { deleteFiles, getClouStorageFileUrl } from "@/server/api/services/uploads.services";
+import { deleteFiles, getClouStorageFileUrl, getSignedCloudStorageUploadUrl } from "@/server/api/services/uploads.services";
 import { createTRPCRouter, protectedProcedure } from "@/server/api/trpc";
 import {
   createUploadsSearchIndexItem, searchIndices, uploadSearchIndexItemPrimaryKey, type UploadSearchItemUpdate
 } from "@/utils/search";
-import { BadFileError, FileTooLargeError, NotFoundError } from "@/utils/serverError";
+import { NotFoundError } from "@/utils/serverError";
 
 import {
   and, desc, eq, inArray, isNull
@@ -40,43 +41,17 @@ export const uploadsRouter = createTRPCRouter({
         throw new NotFoundError();
       }
 
-      return getClouStorageFileUrl({ serverFilename: file.serverFilename, userId });
+      return getClouStorageFileUrl({
+        serverFilename: file.serverFilename,
+        staleTime: 1000 * 60 * 15,
+        userId // 15 minutes
+      });
     }),
   createSignedUploadUrl: protectedProcedure
-    .input(z.object({
-      contentType: z.string(),
-      fileSizeInBytes: z.number().int().min(1),
-      filename: z.string(),
-    }))
-    .mutation(async ({ ctx: { userId }, input: { contentType, filename, fileSizeInBytes } }) =>
+    .input(generateCreateSignedUploadUrlSchema(fileExtensions, fileMimeTypes))
+    .mutation(async ({ ctx: { userId }, input: file }) =>
     {
-      const uploadFileSizeLimitInBytes = env.NEXT_PUBLIC_MAXIMUM_FILE_UPLOAD_SIZE_IN_MB * 1_000_000;
-
-      if(fileSizeInBytes > uploadFileSizeLimitInBytes)
-      {
-        throw new FileTooLargeError();
-      }
-
-      const filenameWithoutSpaces = filename.replace(/\s/g, "-");
-      const filenameWithTimestamp = `${Date.now()}-${filenameWithoutSpaces}`;
-
-      const [url] = await cloudStorage
-        .bucket(env.GOOGLE_CLOUD_STORAGE_BUCKET_NAME)
-        .file(`${userId}/${filenameWithTimestamp}`)
-        .getSignedUrl({
-          action: "write",
-          contentType,
-          expires: Date.now() + 5 * 60 * 1000, 
-          extensionHeaders: {
-            "content-length": fileSizeInBytes
-          },
-          version: "v4"
-        });
-
-      return ({
-        serverFilename: filenameWithTimestamp,
-        uploadUrl: url
-      });
+      return getSignedCloudStorageUploadUrl({ file, userId });
     }),
   deleteUploadedFiles: protectedProcedure
     .input(deleteUploadSchema)
@@ -127,22 +102,18 @@ export const uploadsRouter = createTRPCRouter({
     .mutation(async ({ ctx: { userId }, input }) =>
     {
       const {
+        contentType,
+        fileExtensionLowercase,
         fileSizeInBytes,
         folderId,
         id,
         originalFilename,
-        serverFilename
+        serverFilename,
       } = input;
 
-      const fileExtension = serverFilename.split(".").pop();
-
-      if(!fileExtension)
-      {
-        throw new BadFileError(new Error("File has no extension"));
-      }
-
       const uploadInsert: UploadedFileInsert = {
-        fileExtension,
+        contentType,
+        fileExtension: fileExtensionLowercase,
         folderId,
         id,
         originalFilename,
