@@ -1,3 +1,4 @@
+import { type SelectedFile } from "@/components/organisms/uploadedMaterialBlock/UploadedMaterialBlock";
 import { fileExtensions } from "@/db/schema";
 import { env } from "@/env.mjs";
 
@@ -7,7 +8,6 @@ import * as styles from "./BadgeCard.styles";
 import { BodyText } from "../../atoms/BodyText/BodyText";
 import IconButton from "../../atoms/iconButton/IconButton";
 import { DownloadIcon } from "../../Icons/DownloadIcon";
-import { type SelectedFile } from "../../pages/personalSpacePage/PersonalSpacePage";
 interface BadgeCardProps
 {
   readonly selectedFiles: SelectedFile[];
@@ -26,9 +26,9 @@ const BadgeCard: FunctionComponent<BadgeCardProps> = ({ selectedFiles }) =>
           </BodyText>
         )}
         <BodyText styleType="body-01-regular">
-          {selectedFiles?.length > 0 ? selectedFiles.map(({ clientSideUuid, file }, i) => (
+          {selectedFiles?.length > 0 ? selectedFiles.map(({ clientSideUuid, fileProps }, i) => (
             <p key={clientSideUuid}>
-              {`${i + 1}. ${file?.filename}`}
+              {`${i + 1}. ${fileProps?.filename}`}
             </p>
           )) : (
             `Maximum file size: ${env.NEXT_PUBLIC_MAXIMUM_FILE_UPLOAD_SIZE_IN_MB} MB`

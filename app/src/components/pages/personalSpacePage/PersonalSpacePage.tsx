@@ -1,13 +1,11 @@
 import OverviewHeader from "@/components/organisms/OverviewHeader/OverviewHeader";
 import PersonalSpaceFavoriteTab from "@/components/organisms/personalSpaceFavoriteTab/PersonalSpaceFavoriteTab";
 import PersonalSpaceMaterialsTab from "@/components/organisms/personalSpaceMaterialsTab/PersonalSpaceMaterialsTab";
-import { type FileExtension, type FileMimeType } from "@/db/schema";
 import useArticles from "@/hooks/useArticles";
 import useBookmarks from "@/hooks/useBookmarks";
 import useCases from "@/hooks/useCases";
 import useDocuments from "@/hooks/useDocuments";
 import useUploadedFiles from "@/hooks/useUploadedFiles";
-import { type UploadableFile } from "@/schemas/uploads/createSignedUploadUrl.schema";
 import { type IGenArticle } from "@/services/graphql/__generated/sdk";
 import useMaterialsStore from "@/stores/materials.store";
 
@@ -18,11 +16,6 @@ import { categoriesHelper } from "./PersonalSpaceHelper";
 import * as styles from "./PersonalSpacePage.styles";
 import BookmarkIconSvg from "../../../../public/images/icons/bookmark.svg";
 import FileIconSvg from "../../../../public/images/icons/file.svg";
-
-export type SelectedFile = {
-  clientSideUuid: string;
-  file: UploadableFile<FileExtension, FileMimeType>;
-};
 
 const PersonalSpacePage: FunctionComponent = () =>
 {

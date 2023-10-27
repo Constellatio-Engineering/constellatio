@@ -3,6 +3,7 @@ import {
   imageFileExtensions, imageFileMimeTypes,
   type ProfilePictureInsert, profilePictures, users
 } from "@/db/schema";
+import { env } from "@/env.mjs";
 import { generateCreateSignedUploadUrlSchema } from "@/schemas/uploads/createSignedUploadUrl.schema";
 import { setOnboardingResultSchema } from "@/schemas/users/setOnboardingResult.schema";
 import { setProfilePictureSchema } from "@/schemas/users/setProfilePicture.schema";
@@ -14,6 +15,8 @@ import { NotFoundError } from "@/utils/serverError";
 
 import { eq, and } from "drizzle-orm";
 import { z } from "zod";
+
+export const profilePictureStaleTime = 1000 * 60 * 60; // 1 hour
 
 export const usersRouter = createTRPCRouter({
   createSignedProfilePictureUploadUrl: protectedProcedure
@@ -50,7 +53,11 @@ export const usersRouter = createTRPCRouter({
         throw new NotFoundError();
       }
 
-      return getClouStorageFileUrl({ serverFilename: file.serverFilename, userId });
+      return getClouStorageFileUrl({
+        serverFilename: file.serverFilename,
+        staleTime: env.NEXT_PUBLIC_PROFILE_PICTURE_STALE_TIME_IN_SECONDS * 1000,
+        userId 
+      });
     }),
   getUserDetails: protectedProcedure
     .query(async ({ ctx: { userId } }) =>

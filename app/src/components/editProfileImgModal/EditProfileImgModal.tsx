@@ -27,15 +27,10 @@ import { Trash } from "../Icons/Trash";
 import { Modal } from "../molecules/Modal/Modal";
 import { Switcher } from "../molecules/Switcher/Switcher";
 
-interface EditProfileImgModalProps
-{
-  readonly onClose: () => void;
-  readonly opened: boolean;
-}
-
 type SelectedFile = {
-  readonly clientSideUuid: string;
-  readonly file: File;
+  clientSideUuid: string;
+  file: File;
+  fileProps: UploadableFile<ImageFileExtension, ImageFileMimeType>;
 };
 
 const tabs = [
@@ -43,13 +38,19 @@ const tabs = [
   { icon: <Palette/>, title: "Constellatio library" }
 ] as const;
 
+interface EditProfileImgModalProps
+{
+  readonly onClose: () => void;
+  readonly opened: boolean;
+}
+
 const EditProfileImgModal: FunctionComponent<EditProfileImgModalProps> = ({ onClose, opened }) => 
 {
   const { invalidateUserDetails } = useContextAndErrorIfNull(InvalidateQueriesContext);
   const inputRef = React.useRef<HTMLInputElement>(null);
-  const [selectedTab, setSelectedTab] = React.useState<string>(tabs?.[0]?.title ?? "");
+  // const [selectedTab, setSelectedTab] = React.useState<string>(tabs?.[0]?.title ?? "");
   const [selectedFile, setSelectedFile] = useState<SelectedFile>();
-  // const selectedTab = tabs?.[0]?.title ?? "";
+  const selectedTab = tabs?.[0]?.title ?? "";
   const selectedFileUrl = selectedFile?.file && URL.createObjectURL(selectedFile?.file);
   const { mutateAsync: createSignedUploadUrl } = api.users.createSignedProfilePictureUploadUrl.useMutation();
   const { mutateAsync: setProfilePicture } = api.users.setProfilePicture.useMutation();
@@ -68,43 +69,21 @@ const EditProfileImgModal: FunctionComponent<EditProfileImgModalProps> = ({ onCl
         return;
       }
 
-      const { clientSideUuid, file } = selectedFile;
-
-      const fileToUpload: CreateSignedUploadUrlSchema = {
-        contentType: file.type,
-        fileSizeInBytes: file.size,
-        filename: file.name
-      };
-
-      let parsedFile: UploadableFile<ImageFileExtension, ImageFileMimeType>;
-
-      try
-      {
-        parsedFile = await (generateCreateSignedUploadUrlSchema(imageFileExtensions, imageFileMimeTypes).parseAsync(fileToUpload));
-      }
-      catch (e: unknown)
-      {
-        notifications.show({
-          color: "red",
-          message: "Die Datei konnten nicht hochgeladen werden, da sie zu groß ist oder ein ungültiges Format hat",
-          title: "Ungültige Datei"
-        });
-        return;
-      }
+      const { clientSideUuid, file, fileProps } = selectedFile;
 
       const { serverFilename, uploadUrl } = await createSignedUploadUrl({
-        contentType: parsedFile.contentType,
-        fileSizeInBytes: parsedFile.fileSizeInBytes,
-        filename: parsedFile.filename,
+        contentType: fileProps.contentType,
+        fileSizeInBytes: fileProps.fileSizeInBytes,
+        filename: fileProps.filename,
       });
 
-      await axios.put(uploadUrl, parsedFile, {
-        headers: { "Content-Type": parsedFile.contentType },
+      await axios.put(uploadUrl, file, {
+        headers: { "Content-Type": fileProps.contentType },
       });
 
       await setProfilePicture({
-        contentType: parsedFile.contentType,
-        fileExtensionLowercase: parsedFile.fileExtensionLowercase,
+        contentType: fileProps.contentType,
+        fileExtensionLowercase: fileProps.fileExtensionLowercase,
         id: clientSideUuid,
         serverFilename,
       });
@@ -149,6 +128,40 @@ const EditProfileImgModal: FunctionComponent<EditProfileImgModalProps> = ({ onCl
     },
   });
 
+  const onFileSelected = (e: React.ChangeEvent<HTMLInputElement>): void =>
+  {
+    const file = e.target.files?.[0];
+
+    if(!file)
+    {
+      return;
+    }
+
+    const fileProps: CreateSignedUploadUrlSchema = {
+      contentType: file.type,
+      fileSizeInBytes: file.size,
+      filename: file.name
+    };
+
+    const parsedFileProps = generateCreateSignedUploadUrlSchema(imageFileExtensions, imageFileMimeTypes).safeParse(fileProps);
+
+    if(!parsedFileProps.success)
+    {
+      notifications.show({
+        color: "red",
+        message: "Die Datei konnten nicht hochgeladen werden, da sie zu groß ist oder ein ungültiges Format hat",
+        title: "Ungültige Datei"
+      });
+      return;
+    }
+
+    setSelectedFile({
+      clientSideUuid: getRandomUuid(),
+      file,
+      fileProps: parsedFileProps.data
+    });
+  };
+
   useEffect(() =>
   {
     if(!opened && selectedFile)
@@ -175,7 +188,7 @@ const EditProfileImgModal: FunctionComponent<EditProfileImgModalProps> = ({ onCl
         size="big"
         defaultValue={selectedTab}
         tabStyleOverwrite={{ flex: "1" }}>
-        <Tabs.List>
+        {/* <Tabs.List>
           {tabs && tabs?.map((tab, tabIndex) => (
             <React.Fragment key={tabIndex}>
               <SwitcherTab
@@ -185,7 +198,7 @@ const EditProfileImgModal: FunctionComponent<EditProfileImgModalProps> = ({ onCl
               </SwitcherTab>
             </React.Fragment>
           ))}
-        </Tabs.List>
+        </Tabs.List>*/}
         {selectedTab === tabs[0]?.title && (
           <div css={styles.uploadImgCard} onClick={() => inputRef.current?.click()}>
             <IconButton
@@ -205,17 +218,7 @@ const EditProfileImgModal: FunctionComponent<EditProfileImgModalProps> = ({ onCl
               disabled={isLoading}
               multiple={false}
               accept={imageFileExtensions.map(ext => `.${ext}`).join(", ")}
-              onChange={(e) =>
-              {
-                const file = e.target.files?.[0];
-
-                if(!file)
-                {
-                  return;
-                }
-
-                setSelectedFile({ clientSideUuid: getRandomUuid(), file });
-              }}
+              onChange={onFileSelected}
               css={styles.uploadImgInput}
             />
           </div>

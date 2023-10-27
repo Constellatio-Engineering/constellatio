@@ -1,9 +1,8 @@
 /* eslint-disable max-lines */
 import { Button } from "@/components/atoms/Button/Button";
 import { SubtitleText } from "@/components/atoms/SubtitleText/SubtitleText";
-import { type SelectedFile } from "@/components/pages/personalSpacePage/PersonalSpacePage";
 import {
-  type FileExtension, fileExtensions, type FileMimeType, fileMimeTypes
+  type FileExtension, fileExtensions, type FileMimeType, fileMimeTypes, imageFileExtensions
 } from "@/db/schema";
 import useContextAndErrorIfNull from "@/hooks/useContextAndErrorIfNull";
 import useUploadedFilesWithNotes from "@/hooks/useUploadedFilesWithNotes";
@@ -11,7 +10,6 @@ import { InvalidateQueriesContext } from "@/provider/InvalidateQueriesProvider";
 import { type CreateSignedUploadUrlSchema, generateCreateSignedUploadUrlSchema, type UploadableFile } from "@/schemas/uploads/createSignedUploadUrl.schema";
 import { type UploadState } from "@/stores/uploadsProgress.store";
 import { api } from "@/utils/api";
-import { getFileExtensionLowercase } from "@/utils/files";
 import { getIndicesOfSucceededPromises, getRandomUuid, removeItemsByIndices } from "@/utils/utils";
 
 import { Title } from "@mantine/core";
@@ -23,6 +21,12 @@ import * as styles from "./UploadedMaterialBlock.styles";
 import BadgeCard from "../badgeCard/BadgeCard";
 import EmptyStateCard from "../emptyStateCard/EmptyStateCard";
 import UploadedMaterialTable from "../uploadedMaterialTable/UploadedMaterialTable";
+
+export type SelectedFile = {
+  clientSideUuid: string;
+  file: File;
+  fileProps: UploadableFile<FileExtension, FileMimeType>;
+};
 
 type UploadedMaterialBlockProps = {
   readonly areUploadsInProgress: boolean;
@@ -44,36 +48,32 @@ const UploadedMaterialBlock: FunctionComponent<UploadedMaterialBlockProps> = ({
   const { mutateAsync: saveFileToDatabase } = api.uploads.saveFileToDatabase.useMutation();
   const { mutateAsync: createSignedUploadUrl } = api.uploads.createSignedUploadUrl.useMutation();
 
-  const uploadFile = async (file: UploadableFile<FileExtension, FileMimeType>, clientSideUuid: string): Promise<void> =>
+  const uploadFile = async ({ clientSideUuid, file, fileProps }: SelectedFile): Promise<void> =>
   {
-    if(selectedFiles.length === 0)
+    if(selectedFiles.length === 0) 
     {
       console.log("no files selected");
       return;
     }
 
-    const originalFileName = file.filename;
-
     setUploadState({
       clientSideUuid,
-      fileNameWithExtension: originalFileName,
+      fileNameWithExtension: fileProps.filename,
       state: {
         progressInPercent: 0,
         type: "uploading"
       }
     });
 
-    const { serverFilename, uploadUrl } = await createSignedUploadUrl(file);
-
-    console.log("uploadUrl", uploadUrl);
+    const { serverFilename, uploadUrl } = await createSignedUploadUrl(fileProps);
 
     await axios.put(uploadUrl, file, {
-      headers: { "Content-Type": file.contentType },
+      headers: { "Content-Type": fileProps.contentType },
       onUploadProgress: ({ progress = 0 }) =>
       {
         setUploadState({
           clientSideUuid,
-          fileNameWithExtension: originalFileName,
+          fileNameWithExtension: fileProps.filename,
           state: progress === 1 ? {
             type: "completed"
           } : {
@@ -85,12 +85,12 @@ const UploadedMaterialBlock: FunctionComponent<UploadedMaterialBlockProps> = ({
     });
 
     await saveFileToDatabase({
-      contentType: file.contentType,
-      fileExtensionLowercase: file.fileExtensionLowercase,
-      fileSizeInBytes: file.fileSizeInBytes,
+      contentType: fileProps.contentType,
+      fileExtensionLowercase: fileProps.fileExtensionLowercase,
+      fileSizeInBytes: fileProps.fileSizeInBytes,
       folderId: selectedFolderId,
       id: clientSideUuid,
-      originalFilename: originalFileName,
+      originalFilename: fileProps.filename,
       serverFilename
     });
   };
@@ -98,23 +98,25 @@ const UploadedMaterialBlock: FunctionComponent<UploadedMaterialBlockProps> = ({
   const onSubmit = async (e: FormEvent<HTMLFormElement>): Promise<void> =>
   {
     e.preventDefault();
+
     if(fileInputRef.current)
     {
       fileInputRef.current.value = "";
     }
-    const uploads: Array<Promise<void>> = selectedFiles.map(async ({ clientSideUuid, file }) =>
+
+    const uploads: Array<Promise<void>> = selectedFiles.map(async (selectedFile) =>
     {
       try
       {
-        await uploadFile(file, clientSideUuid);
+        await uploadFile(selectedFile);
         await invalidateUploadedFiles();
       }
       catch (e: unknown)
       {
         console.log("error while uploading file", e);
         setUploadState({
-          clientSideUuid,
-          fileNameWithExtension: file.filename,
+          clientSideUuid: selectedFile.clientSideUuid,
+          fileNameWithExtension: selectedFile.fileProps.filename,
           state: { type: "failed" }
         });
         return Promise.reject(e);
@@ -128,23 +130,27 @@ const UploadedMaterialBlock: FunctionComponent<UploadedMaterialBlockProps> = ({
 
   const onFilesSelected = (e: ChangeEvent<HTMLInputElement>): void =>
   {
-    const files: CreateSignedUploadUrlSchema[] = Array.from(e.target.files ?? []).map(file => ({
-      contentType: file.type,
-      fileExtensionLowercase: getFileExtensionLowercase(file.name),
-      fileSizeInBytes: file.size,
-      filename: file.name
-    }));
+    const selectedFiles: File[] = Array.from(e.target.files ?? []);
+    const invalidFiles: File[] = [];
+    let validFiles: SelectedFile[] = [];
 
-    const invalidFiles: CreateSignedUploadUrlSchema[] = [];
-    let validFiles: Array<UploadableFile<FileExtension, FileMimeType>> = [];
-
-    files.forEach(file =>
+    selectedFiles.forEach(file =>
     {
-      const parseIsValidFile = generateCreateSignedUploadUrlSchema(fileExtensions, fileMimeTypes).safeParse(file);
+      const fileProps: CreateSignedUploadUrlSchema = {
+        contentType: file.type,
+        fileSizeInBytes: file.size,
+        filename: file.name
+      };
 
-      if(parseIsValidFile.success)
+      const parsedFileProps = generateCreateSignedUploadUrlSchema(fileExtensions, fileMimeTypes).safeParse(fileProps);
+
+      if(parsedFileProps.success)
       {
-        validFiles.push(parseIsValidFile.data);
+        validFiles.push({
+          clientSideUuid: getRandomUuid(),
+          file,
+          fileProps: parsedFileProps.data
+        });
       }
       else
       {
@@ -157,7 +163,7 @@ const UploadedMaterialBlock: FunctionComponent<UploadedMaterialBlockProps> = ({
       notifications.show({
         autoClose: false,
         color: "red",
-        message: "Die folgenden Dateien konnten nicht hochgeladen werden, da sie zu groß sind oder ein ungültiges Format haben: " + invalidFiles.map(file => file.filename).join(", "),
+        message: `Die folgenden Dateien konnten nicht hochgeladen werden, da sie zu groß sind oder ein ungültiges Format haben: ${invalidFiles.map(file => file.name).join(", ")}`,
         title: "Ungültige Dateien"
       });
     }
@@ -173,13 +179,7 @@ const UploadedMaterialBlock: FunctionComponent<UploadedMaterialBlockProps> = ({
       });
     }
 
-    const filesWithUuid: SelectedFile[] = validFiles
-      .map(file => ({
-        clientSideUuid: getRandomUuid(),
-        file
-      }));
-
-    setSelectedFiles(filesWithUuid);
+    setSelectedFiles(validFiles);
   };
 
   return (
@@ -202,6 +202,7 @@ const UploadedMaterialBlock: FunctionComponent<UploadedMaterialBlockProps> = ({
             type="file"
             disabled={areUploadsInProgress}
             multiple
+            accept={fileExtensions.map(ext => `.${ext}`).join(", ")}
             onChange={onFilesSelected}
           />
           {selectedFiles.length > 0 && (

@@ -47,17 +47,18 @@ export const deleteFiles: DeleteFiles = async ({ files, userId }) =>
 
 type GetClouStorageFileUrl = (params: {
   serverFilename: string;
+  staleTime: number;
   userId: string;
 }) => Promise<string>;
 
-export const getClouStorageFileUrl: GetClouStorageFileUrl = async ({ serverFilename, userId }): Promise<string> =>
+export const getClouStorageFileUrl: GetClouStorageFileUrl = async ({ serverFilename, staleTime, userId }): Promise<string> =>
 {
   const [url] = await cloudStorage
     .bucket(env.GOOGLE_CLOUD_STORAGE_BUCKET_NAME)
     .file(`${userId}/${serverFilename}`)
     .getSignedUrl({
       action: "read",
-      expires: Date.now() + 15 * 60 * 1000,
+      expires: Date.now() + staleTime,
       version: "v4",
     });
 
@@ -76,13 +77,6 @@ export const getSignedCloudStorageUploadUrl: GetSignedCloudStorageUploadUrl = as
 {
   const filenameWithoutSpaces = file.filename.replace(/\s/g, "-");
   const filenameWithTimestamp = `${Date.now()}-${filenameWithoutSpaces}`;
-
-  console.log("---------------");
-  console.log("env.GOOGLE_CLOUD_STORAGE_BUCKET_NAME", env.GOOGLE_CLOUD_STORAGE_BUCKET_NAME);
-  console.log("filenameWithTimestamp", filenameWithTimestamp);
-  console.log("file.contentType", file.contentType);
-  console.log("file.fileSizeInBytes", file.fileSizeInBytes);
-  console.log("filename", `${userId}/${filenameWithTimestamp}`);
 
   const [url] = await cloudStorage
     .bucket(env.GOOGLE_CLOUD_STORAGE_BUCKET_NAME)
