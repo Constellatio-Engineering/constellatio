@@ -19,10 +19,10 @@ import React, { type FunctionComponent, type ReactNode, useMemo } from "react";
 import * as styles from "./ProfilePage.styles";
 
 export const tabs = [
-  { slug: "overview", title: "Overview" },
-  { slug: "profile-details", title: "Profile Details" },
-  { slug: "change-password", title: "Change Password" },
-  { slug: "history", title: "History" },
+  { slug: "overview", title: "Übersicht" },
+  { slug: "profile-details", title: "Deine Daten" },
+  { slug: "change-password", title: "Passwort ändern" },
+  { slug: "history", title: "Verlauf" },
   { slug: "subscription", title: "Subscription" },
 ] as const;
 

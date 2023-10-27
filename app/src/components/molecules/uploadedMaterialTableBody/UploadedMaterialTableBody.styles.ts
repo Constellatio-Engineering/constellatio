@@ -30,7 +30,9 @@ export const tableWrapper = (theme: MantineTheme) => css`
 	}
 	tr {
 		border: 1px solid ${theme.colors["neutrals-01"][2]};
+		width:100%;
 	}
+	
 	.primaryCell {
 		width: 100%;
 
