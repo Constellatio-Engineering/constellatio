@@ -75,7 +75,7 @@ const MaterialMenu: FunctionComponent = () =>
   return (
     <div css={styles.wrapper}>
       <div css={styles.header}>
-        <Title order={4}>Your folders</Title>
+        <Title order={4}>Deine Ordner</Title>
       </div>      
       <div css={styles.content}>
         <MaterialsMenuListItem
@@ -105,7 +105,7 @@ const MaterialMenu: FunctionComponent = () =>
         <LinkButton
           icon={<Plus/>}
           onClick={open}
-          title="Create new folder"   
+          title="Neuen Ordner erstellen"   
         />
         <Modal
           lockScroll={false}
@@ -118,10 +118,10 @@ const MaterialMenu: FunctionComponent = () =>
           <span className="close-btn" onClick={close}>
             <Cross size={32}/>
           </span>
-          <Title order={3}>Create folder</Title>
+          <Title order={3}>Ordner erstellen</Title>
           <form onSubmit={(e) => e.preventDefault()}>
             <div className="new-folder-input">
-              <BodyText styleType="body-01-regular" component="label">Folder name</BodyText>
+              <BodyText styleType="body-01-regular" component="label">Ordnername</BodyText>
               <Input
                 inputType="text"
                 value={newFolderName}
@@ -132,7 +132,7 @@ const MaterialMenu: FunctionComponent = () =>
               <Button<"button">
                 styleType={"secondarySimple" as TButton["styleType"]}
                 onClick={close}>
-                Cancel
+                Abbrechen
               </Button>
               <Button<"button">
                 type="submit"
@@ -144,7 +144,7 @@ const MaterialMenu: FunctionComponent = () =>
                   createFolder({ name: newFolderName });
                   console.log("el mfrod y2fl");
                   close();
-                }}>Create
+                }}>Erstellen
               </Button>
             </div>
           </form>

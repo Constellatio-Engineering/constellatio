@@ -113,7 +113,7 @@ const ProfileHistoryBlocks: FunctionComponent = () =>
                 </div>
               </div>
             ))) : (
-              <EmptyStateCard text="Here you can access the view history of cases, dictionary, and forum" title="You haven not viewed any materials yet" variant="For-small-areas"/>
+              <EmptyStateCard text="Du hast dir noch keine Inhalte angeschaut" title="Hier siehst du den Verlauf der von dir aufgerufenen Inhalte." variant="For-small-areas"/>
             )
         }
       </div>

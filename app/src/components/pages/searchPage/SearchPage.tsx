@@ -59,7 +59,6 @@ const SearchPage: FunctionComponent<SearchPageProps> = () =>
           <SearchPageFiltering/>
           <SearchPageResults
             tabQuery={tabQuery}
-
           />
         </>
       )}

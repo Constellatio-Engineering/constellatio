@@ -20,10 +20,10 @@ import * as styles from "./ProfilePage.styles";
 
 export const tabs = [
   { slug: "overview", title: "Übersicht" },
-  { slug: "profile-details", title: "Deine Daten" },
-  { slug: "change-password", title: "Passwort ändern" },
   { slug: "history", title: "Verlauf" },
-  { slug: "subscription", title: "Subscription" },
+  { slug: "profile-details", title: "Einstellungen" },
+  { slug: "change-password", title: "Passwort ändern" },
+  { slug: "subscription", title: "Vertrag" },
 ] as const;
 
 export type UserDetails = {
@@ -35,8 +35,6 @@ const ProfilePage: FunctionComponent<ProfilePageProps> = ({ allMainCategory, use
 {
   const [tab, setTab] = useQueryState("tab", parseAsString.withDefault(tabs[0]!.slug));
   const activeTab = tabs?.find(x => x.slug === tab);
-
-  console.log("userDetails", userDetails);
 
   const renderedTab: ReactNode = useMemo(() =>
   {

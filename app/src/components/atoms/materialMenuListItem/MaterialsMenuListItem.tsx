@@ -66,11 +66,11 @@ const MaterialsMenuListItem: FunctionComponent<MenuListItemProps & HTMLProps<HTM
                 setShowRenameModal(true);
                 setNewFolderName(title);
               }}>
-                <DropdownItem icon={<Edit/>} label="Rename"/>
+                <DropdownItem icon={<Edit/>} label="Umbenennen"/>
               </Menu.Item>
             )}
             {/* <Menu.Item onClick={() => {}}>
-              <DropdownItem icon={<MoveDownIcon/>} label="Download"/>
+              <DropdownItem icon={<MoveDownIcon/>} label="Herunterladen"/>
             </Menu.Item>*/}
             {onDelete && (
               <Menu.Item onClick={e =>
@@ -78,7 +78,7 @@ const MaterialsMenuListItem: FunctionComponent<MenuListItemProps & HTMLProps<HTM
                 e.stopPropagation();
                 setShowDeleteModal(true);
               }}>
-                <DropdownItem icon={<Trash/>} label="Delete"/>
+                <DropdownItem icon={<Trash/>} label="Löschen"/>
               </Menu.Item>
             )}
           </Menu.Dropdown>
@@ -94,10 +94,10 @@ const MaterialsMenuListItem: FunctionComponent<MenuListItemProps & HTMLProps<HTM
         <span className="close-btn" onClick={() => setShowRenameModal(false)}>
           <Cross size={32}/>
         </span>
-        <Title order={3}>Rename folder</Title>
+        <Title order={3}>Datei umbenennen</Title>
         <form onSubmit={e => e.preventDefault()}>
           <div className="new-folder-input">
-            <BodyText styleType="body-01-regular" component="label">Folder name</BodyText>
+            <BodyText styleType="body-01-regular" component="label">Ordnername</BodyText>
             <Input
               inputType="text"
               value={newFolderName}
@@ -108,7 +108,7 @@ const MaterialsMenuListItem: FunctionComponent<MenuListItemProps & HTMLProps<HTM
             <Button<"button">
               styleType={"secondarySimple" as TButton["styleType"]}
               onClick={() => setShowRenameModal(false)}>
-              Cancel
+              Abbrechen
             </Button>
             <Button<"button">
               styleType="primary"
@@ -119,7 +119,7 @@ const MaterialsMenuListItem: FunctionComponent<MenuListItemProps & HTMLProps<HTM
                 setShowRenameModal(false);
                 onRename?.(newFolderName);
               }}>
-              Save
+              Speichern
             </Button>
           </div>
         </form>
@@ -134,13 +134,13 @@ const MaterialsMenuListItem: FunctionComponent<MenuListItemProps & HTMLProps<HTM
         <span className="close-btn" onClick={() => setShowDeleteModal(false)}>
           <Cross size={32}/>
         </span>
-        <Title order={3}>Delete folder</Title>
-        <BodyText styleType="body-01-regular" component="p" className="delete-folder-text">Are you sure you want to delete <strong>{title}</strong>?</BodyText>
+        <Title order={3}>Ordner löschen</Title>
+        <BodyText styleType="body-01-regular" component="p" className="delete-folder-text">Bist du sicher, dass du den Ordner&nbsp;<strong>{title}</strong>&nbsp;löschen mächtest?</BodyText>
         <div className="modal-call-to-action">
           <Button<"button">
             styleType={"secondarySimple" as TButton["styleType"]}
             onClick={() => setShowDeleteModal(false)}>
-            No, Keep
+            Nein, behalten
           </Button>
           <Button<"button">
             styleType="primary"
@@ -149,7 +149,7 @@ const MaterialsMenuListItem: FunctionComponent<MenuListItemProps & HTMLProps<HTM
               setShowDeleteModal(false);
               onDelete?.();
             }}>
-            Yes, Delete
+            Ja, löschen
           </Button>
         </div>
       </Modal>

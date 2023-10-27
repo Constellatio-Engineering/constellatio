@@ -16,7 +16,7 @@ interface ProfilePersonalSpaceBlockHeadProps
 {
   readonly selectedTab: number;
   readonly setSelectedTab: React.Dispatch<React.SetStateAction<number>>;
-  readonly tabs: Array<{ icon?: { src: React.ReactNode }; number: number; title: string }>;
+  readonly tabs: Array<{ icon?: { src: React.ReactNode }; number: number; subtitle: string; title: string }>;
 }
 
 const ProfilePersonalSpaceBlockHead: FunctionComponent<ProfilePersonalSpaceBlockHeadProps> = ({ selectedTab, setSelectedTab, tabs }) => 
@@ -31,8 +31,8 @@ const ProfilePersonalSpaceBlockHead: FunctionComponent<ProfilePersonalSpaceBlock
           size="big"
         />
         <div>
-          <div css={styles.blockHeadDescription}><CaptionText styleType="caption-01-medium" component="p">PERSONAL SPACE</CaptionText></div>
-          <div css={styles.blockHeadTitle}><SubtitleText styleType="subtitle-01-medium" component="p">{tabs[selectedTab]?.number} {tabs[selectedTab]?.title}</SubtitleText></div>
+          <div css={styles.blockHeadDescription}><CaptionText styleType="caption-01-medium" component="p" tt="uppercase">Persönlicher Bereich</CaptionText></div>
+          <div css={styles.blockHeadTitle}><SubtitleText styleType="subtitle-01-medium" component="p">{(tabs[selectedTab]?.number ?? 0) > 1 ? `${tabs[selectedTab]?.number} ${tabs[selectedTab]?.subtitle}` : ""}</SubtitleText></div>
         </div>
       </div>
       <div css={styles.blockHeadCallToAction}>
@@ -42,7 +42,7 @@ const ProfilePersonalSpaceBlockHead: FunctionComponent<ProfilePersonalSpaceBlock
           size="medium"
           defaultValue={tabs[selectedTab]?.title}
           tabStyleOverwrite={{ flex: "1" }}>
-     
+
           <Tabs.List>
             {tabs && tabs?.map((tab, tabIndex) => (
               <React.Fragment key={tabIndex}>

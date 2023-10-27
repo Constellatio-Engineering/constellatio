@@ -7,7 +7,6 @@ interface OnboardingTutorialPopoverProps
   readonly floatingPosition?: FloatingPosition | undefined;
   readonly opened: boolean; 
   readonly popoverMenu: ReactNode;
-  readonly popoverOnchange: (opened: boolean) => void;
   readonly popoverTarget: ReactNode;
 }
 
@@ -15,7 +14,6 @@ const OnboardingTutorialPopover: FunctionComponent<OnboardingTutorialPopoverProp
   floatingPosition,
   opened,
   popoverMenu,
-  popoverOnchange,
   popoverTarget
 }) => 
 {
@@ -28,12 +26,11 @@ const OnboardingTutorialPopover: FunctionComponent<OnboardingTutorialPopoverProp
       closeOnClickOutside={false}
       closeOnEscape={false}
       opened={opened}
-      onChange={popoverOnchange}
       styles={(theme) => ({
         arrow: {
           backgroundColor: theme.colors["neutrals-02"][1],
           border: `1px solid ${theme.colors["neutrals-02"][1]}`,
-        }
+        },
       })}>
       <Popover.Target>{popoverTarget}</Popover.Target>
       {popoverMenu}
