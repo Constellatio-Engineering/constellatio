@@ -10,28 +10,28 @@ import { type Dispatch, type FunctionComponent, type SetStateAction } from "reac
 import HeaderItemLink, { type THeaderItemLinkProps } from "./HeaderItemLink";
 
 type OnboardingFirstStepProps = THeaderItemLinkProps & { 
-  readonly onboardingSteps: number;
-  readonly setOnboardingSteps: Dispatch<SetStateAction<number>>;
+  readonly onboardingStepsIndex: number;
+  readonly setOnboardingStepsIndex: Dispatch<SetStateAction<number>>;
 };
 
 const OnboardingFirstStep: FunctionComponent<OnboardingFirstStepProps> = ({
   link,
-  onboardingSteps,
+  onboardingStepsIndex,
   pathname,
-  setOnboardingSteps
+  setOnboardingStepsIndex
 }) => 
 {
   const { setOnboardingResult } = useSetOnboardingResult();
 
   return (
     <OnboardingTutorialPopover
-      opened={onboardingSteps === 1}
+      opened={onboardingStepsIndex === 0}
       popoverMenu={(
         <OnboardingTutorialStep
           currentStep={1}
           totalSteps={3}
           stepTitle="Willkommen bei Constellatio!"
-          onNextPressHandler={() => setOnboardingSteps(2)}
+          onNextPressHandler={() => setOnboardingStepsIndex(1)}
           onSkipPressHandler={() => setOnboardingResult({ result: "skipped" })}>
           <OnboardingTutorialStepItem icon={<CasesIcon size={20}/>} itemTitle="Fälle" itemDescription="Die Wissensvermittlung findet anhand interaktiver Fälle statt."/>
           <OnboardingTutorialStepItem icon={<BookmarkBook size={20}/>} itemTitle="Lexikon" itemDescription="Detaillierte und abstrakte Darstellungen findest du in den verlinkten Lexikon-Artikeln."/>

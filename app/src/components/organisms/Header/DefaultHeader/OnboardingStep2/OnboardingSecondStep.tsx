@@ -10,17 +10,17 @@ import { type Dispatch, type FunctionComponent, type SetStateAction } from "reac
 import HeaderItemPersonalSpace, { type THeaderItemPersonalSpaceProps } from "./HeaderItemPersonalSpace";
 
 type TOnboardingSecondStep = THeaderItemPersonalSpaceProps & {
-  readonly onboardingSteps: number;
-  readonly setOnboardingSteps: Dispatch<SetStateAction<number>>;
+  readonly onboardingStepsIndex: number;
+  readonly setOnboardingStepsIndex: Dispatch<SetStateAction<number>>;
 };
 
-const OnboardingSecondStep: FunctionComponent<TOnboardingSecondStep> = ({ onboardingSteps, pathname, setOnboardingSteps }) => 
+const OnboardingSecondStep: FunctionComponent<TOnboardingSecondStep> = ({ onboardingStepsIndex, pathname, setOnboardingStepsIndex }) => 
 {
   const { setOnboardingResult } = useSetOnboardingResult();
 
   return (
     <OnboardingTutorialPopover
-      opened={onboardingSteps === 2}
+      opened={onboardingStepsIndex === 1}
       popoverTarget={(
         <HeaderItemPersonalSpace pathname={pathname}/>
       )}
@@ -29,7 +29,7 @@ const OnboardingSecondStep: FunctionComponent<TOnboardingSecondStep> = ({ onboar
           currentStep={2}
           totalSteps={3}
           stepTitle="Persönlicher Bereich"
-          onNextPressHandler={() => setOnboardingSteps(3)}
+          onNextPressHandler={() => setOnboardingStepsIndex(2)}
           onSkipPressHandler={() => setOnboardingResult({ result: "skipped" })}>
           <OnboardingTutorialStepItem icon={<Bookmark size={20}/>} itemTitle="Favoriten" itemDescription="Speichere deine wichtigsten Inhalte mit nur einem Klick."/>
           <OnboardingTutorialStepItem icon={<DownloadIcon size={20}/>} itemTitle="Deine Dateien" itemDescription="Dein gesamtes Wissen an einem Ort: Lade vorhandene Unterlagen in die Jura-Cloud."/>

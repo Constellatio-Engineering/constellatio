@@ -1,4 +1,3 @@
-import { BodyText } from "@/components/atoms/BodyText/BodyText";
 import { Button } from "@/components/atoms/Button/Button";
 import { Bookmark } from "@/components/Icons/Bookmark";
 import { BookmarkFilledIcon } from "@/components/Icons/BookmarkFilledIcon";

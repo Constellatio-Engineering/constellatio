@@ -4,21 +4,21 @@ import OnboardingTutorialStepItem from "@/components/molecules/onboardingTutoria
 import OnboardingTutorialPopover from "@/components/organisms/onboardingTutorialPopover/OnboardingTutorialPopover";
 import useSetOnboardingResult from "@/hooks/useSetOnboardingResult";
 
-import { type Dispatch, type FunctionComponent, type SetStateAction } from "react";
+import { type FunctionComponent } from "react";
 
 import HeaderItemSearchBar from "./HeaderItemSearchBar";
 
 type TOnboardingThirdStepProps = {
-  readonly onboardingSteps: number;
+  readonly onboardingStepsIndex: number;
 };
 
-const OnboardingThirdStep: FunctionComponent<TOnboardingThirdStepProps> = ({ onboardingSteps }) => 
+const OnboardingThirdStep: FunctionComponent<TOnboardingThirdStepProps> = ({ onboardingStepsIndex }) => 
 {
   const { setOnboardingResult } = useSetOnboardingResult();
 
   return (
     <OnboardingTutorialPopover
-      opened={onboardingSteps === 3}
+      opened={onboardingStepsIndex === 2}
       popoverMenu={(
         <OnboardingTutorialStep
           isLastStep

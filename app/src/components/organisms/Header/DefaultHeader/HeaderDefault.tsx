@@ -42,13 +42,13 @@ const HeaderDefault: FunctionComponent = () =>
     { slug: paths.dictionary, title: "Lexikon" },
   ];
 
-  const [onboardingSteps, setOnboardingSteps] = useState<number>(1);
+  const [onboardingStepsIndex, setOnboardingStepsIndex] = useState<number>(0);
 
   useEffect(() => 
   {
-    if(onboardingResult === "completed") 
+    if(onboardingResult == null) 
     {
-      setOnboardingSteps(1);
+      setOnboardingStepsIndex(0);
     }
   }, [onboardingResult]);
   
@@ -67,8 +67,8 @@ const HeaderDefault: FunctionComponent = () =>
                     key={linkIndex}
                     link={link}
                     pathname={pathname}
-                    onboardingSteps={onboardingSteps}
-                    setOnboardingSteps={setOnboardingSteps}
+                    onboardingStepsIndex={onboardingStepsIndex}
+                    setOnboardingStepsIndex={setOnboardingStepsIndex}
                   />
                 ) : (
                   <HeaderItemLink link={link} pathname={pathname} key={linkIndex}/>
@@ -82,14 +82,14 @@ const HeaderDefault: FunctionComponent = () =>
             {isDevelopment && <HeaderDefaultRecreateSearch/>}
             {
               showOnboarding ? (
-                <OnboardingThirdStep onboardingSteps={onboardingSteps}/>
+                <OnboardingThirdStep onboardingStepsIndex={onboardingStepsIndex}/>
               ) : (
                 <HeaderItemSearchBar/>
               )
             }
             {
               showOnboarding ? (
-                <OnboardingSecondStep onboardingSteps={onboardingSteps} pathname={pathname} setOnboardingSteps={setOnboardingSteps}/>
+                <OnboardingSecondStep onboardingStepsIndex={onboardingStepsIndex} pathname={pathname} setOnboardingStepsIndex={setOnboardingStepsIndex}/>
               ) : (
                 <HeaderItemPersonalSpace pathname={pathname}/>
               )

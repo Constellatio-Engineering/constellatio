@@ -1,4 +1,3 @@
-import ProfileLearningTimeBlock from "@/components/profileLearningTimeBlock/ProfileLearningTimeBlock";
 import { type IProfilePageProps } from "@/pages/profile";
 
 import { Title } from "@mantine/core";
