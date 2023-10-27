@@ -19,10 +19,10 @@ import React, { type FunctionComponent, type ReactNode, useMemo } from "react";
 import * as styles from "./ProfilePage.styles";
 
 export const tabs = [
-  { slug: "overview", title: "Overview" },
-  { slug: "profile-details", title: "Profile Details" },
-  { slug: "change-password", title: "Change Password" },
-  { slug: "history", title: "History" },
+  { slug: "overview", title: "Übersicht" },
+  { slug: "profile-details", title: "Deine Daten" },
+  { slug: "change-password", title: "Passwort ändern" },
+  { slug: "history", title: "Verlauf" },
   { slug: "subscription", title: "Subscription" },
 ] as const;
 
@@ -48,14 +48,14 @@ const ProfilePage: FunctionComponent<ProfilePageProps> = ({ allMainCategory, use
         return <ProfileDetailsTab/>;
       case "change-password":
         return <ChangePasswordTab/>;
-      /* case "Notifications":
-        return <ProfileNotificationsTab/>;*/
       case "history":
         return <ProfileHistoryTab/>;
       case "subscription":
         return <SubscriptionTab subscriptionStatus="You are currently using a free 5-day trial. You can purchase a subscription by clicking the button below:"/>;
       default:
         return <>{`Unknown tab. Create tab type case in ProfilePage component: ${JSON.stringify(activeTab, null, 2)}`}</>;
+      /* case "Notifications":
+        return <ProfileNotificationsTab/>;*/
     }
   }, [activeTab, allMainCategory]);
   const isTabletScreen = useMediaQuery("(max-width: 1100px)");

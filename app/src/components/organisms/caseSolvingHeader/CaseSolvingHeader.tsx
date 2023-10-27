@@ -50,7 +50,7 @@ const CaseSolvingHeader: FunctionComponent<ICaseSolvingHeaderProps> = ({
   
   return (
     <div css={styles.wrapper({ theme, variant })}>
-      <Container css={styles.container}>
+      <Container p={0} css={styles.container}>
         <div id="overlay-lines">
           <OverlayLines/>
         </div>

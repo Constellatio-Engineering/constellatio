@@ -64,6 +64,7 @@ const MaterialsMenuListItem: FunctionComponent<MenuListItemProps & HTMLProps<HTM
               {
                 e.stopPropagation();
                 setShowRenameModal(true);
+                setNewFolderName(title);
               }}>
                 <DropdownItem icon={<Edit/>} label="Rename"/>
               </Menu.Item>
@@ -134,7 +135,7 @@ const MaterialsMenuListItem: FunctionComponent<MenuListItemProps & HTMLProps<HTM
           <Cross size={32}/>
         </span>
         <Title order={3}>Delete folder</Title>
-        <BodyText styleType="body-01-regular" component="p" className="delete-folder-text">Are you sure you want to delete <strong>Folder name</strong>?</BodyText>
+        <BodyText styleType="body-01-regular" component="p" className="delete-folder-text">Are you sure you want to delete <strong>{title}</strong>?</BodyText>
         <div className="modal-call-to-action">
           <Button<"button">
             styleType={"secondarySimple" as TButton["styleType"]}
