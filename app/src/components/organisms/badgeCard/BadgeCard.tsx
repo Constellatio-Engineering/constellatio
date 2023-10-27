@@ -1,3 +1,5 @@
+import { env } from "@/env.mjs";
+
 import React, { type FunctionComponent } from "react";
 
 import * as styles from "./BadgeCard.styles";
@@ -18,7 +20,20 @@ const BadgeCard: FunctionComponent<BadgeCardProps> = ({ selectedFiles }) =>
       <BodyText styleType="body-01-medium">Drag & drop file here or click to upload</BodyText>
       <div className="text">
         {selectedFiles?.length <= 0 && <BodyText styleType="body-01-regular">Supported formats: JPG, PNG, MP4, PDF, DOCX, XLSX</BodyText>}
-        <BodyText styleType="body-01-regular">{selectedFiles?.length !== null && selectedFiles?.length !== undefined && selectedFiles?.length > 0 ? selectedFiles.map((x, i) => <p key={i}>{`${i + 1}. ${x?.file?.name} `}</p>) : "Maximum file size: 10 MB"}</BodyText>
+        <BodyText styleType="body-01-regular">
+          {selectedFiles?.length > 0 ? selectedFiles.map(({ clientSideUuid, file }, i) =>
+          {
+            console.log(file.type);
+
+            return (
+              <p key={clientSideUuid}>
+                {`${i + 1}. ${file?.name}`}
+              </p>
+            );
+          }) : (
+            `Maximum file size: ${env.NEXT_PUBLIC_MAXIMUM_FILE_UPLOAD_SIZE_IN_MB} MB`
+          )}
+        </BodyText>
       </div>
     </div>
   );

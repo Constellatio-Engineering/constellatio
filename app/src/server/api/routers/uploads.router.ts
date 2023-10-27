@@ -5,6 +5,7 @@ import { env } from "@/env.mjs";
 import { cloudStorage } from "@/lib/cloud-storage";
 import { meiliSearchAdmin } from "@/lib/meilisearch";
 import { addUploadSchema } from "@/schemas/uploads/addUpload.schema";
+import { createSignedUploadUrlSchema } from "@/schemas/uploads/createSignedUploadUrl.schema";
 import { deleteUploadSchema } from "@/schemas/uploads/deleteUpload.schema";
 import { getUploadedFilesSchema } from "@/schemas/uploads/getUploadedFiles.schema";
 import { updateUploadedFileSchema } from "@/schemas/uploads/updateUploadedFile.schema";
@@ -43,12 +44,16 @@ export const uploadsRouter = createTRPCRouter({
       return getClouStorageFileUrl({ serverFilename: file.serverFilename, userId });
     }),
   createSignedUploadUrl: protectedProcedure
-    .input(z.object({
-      contentType: z.string(),
-      fileSizeInBytes: z.number().int().min(1),
-      filename: z.string(),
-    }))
-    .mutation(async ({ ctx: { userId }, input: { contentType, filename, fileSizeInBytes } }) =>
+    .input(createSignedUploadUrlSchema)
+    .mutation(async ({
+      ctx: { userId },
+      input: {
+        contentType,
+        fileExtensionLowercase,
+        filename,
+        fileSizeInBytes
+      } 
+    }) =>
     {
       const uploadFileSizeLimitInBytes = env.NEXT_PUBLIC_MAXIMUM_FILE_UPLOAD_SIZE_IN_MB * 1_000_000;
 
@@ -68,7 +73,8 @@ export const uploadsRouter = createTRPCRouter({
           contentType,
           expires: Date.now() + 5 * 60 * 1000, 
           extensionHeaders: {
-            "content-length": fileSizeInBytes
+            "content-length": fileSizeInBytes,
+            "x-goog-meta-extension": fileExtensionLowercase
           },
           version: "v4"
         });
