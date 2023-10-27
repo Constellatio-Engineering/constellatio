@@ -26,20 +26,27 @@ export interface ITableProps extends PropsWithChildren
   /**
    * refer to Storybook for use cases
    */
+  readonly isTablet?: boolean;
   readonly tableType: CasesTableProps | DictionaryTableProps;
 }
 
-const Table: FunctionComponent<ITableProps> = ({ children, tableType }) => 
+const Table: FunctionComponent<ITableProps> = ({ children, isTablet, tableType }) => 
 {
   return (
     <table css={styles.table}>
       <thead css={styles.tableHeader}>
         <tr>
-          {tableHeaders({ tableType }).map((header, i) => (
-            <th key={`${header}-${i}`}>
-              <ColumnHeader title={header.title}/>
-            </th>
-          ))}
+          {tableHeaders({ tableType }).map((header, i) => 
+          {
+            if(tableType.variant === "favorites" && isTablet && header.title === "Bearbeitungszeit") { return <></>; }  
+            
+            return (
+              <th key={`${header}-${i}`}>
+                <ColumnHeader title={header.title}/>
+              </th>
+            );
+            
+          })}
         </tr>
       </thead>
       <tbody css={styles.tableBody}>{children}</tbody>
