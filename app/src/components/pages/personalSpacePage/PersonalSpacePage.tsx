@@ -6,6 +6,7 @@ import useBookmarks from "@/hooks/useBookmarks";
 import useCases from "@/hooks/useCases";
 import useDocuments from "@/hooks/useDocuments";
 import useUploadedFiles from "@/hooks/useUploadedFiles";
+import { type CreateSignedUploadUrlSchema, type UploadableFile } from "@/schemas/uploads/createSignedUploadUrl.schema";
 import { type IGenArticle } from "@/services/graphql/__generated/sdk";
 import useMaterialsStore from "@/stores/materials.store";
 
@@ -17,9 +18,9 @@ import * as styles from "./PersonalSpacePage.styles";
 import BookmarkIconSvg from "../../../../public/images/icons/bookmark.svg";
 import FileIconSvg from "../../../../public/images/icons/file.svg";
 
-export type FileWithClientSideUuid = {
+export type SelectedFile = {
   clientSideUuid: string;
-  file: File;
+  file: UploadableFile;
 };
 
 const PersonalSpacePage: FunctionComponent = () =>

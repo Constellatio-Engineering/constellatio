@@ -58,16 +58,23 @@ export const usersRouter = createTRPCRouter({
     }),
   setProfilePicture: protectedProcedure
     .input(setProfilePictureSchema)
-    .mutation(async ({ ctx: { userId }, input: { id, serverFilename } }) =>
+    .mutation(async ({ ctx: { userId }, input: file }) =>
     {
       const profilePictureInsert: ProfilePictureInsert = {
-        id,
-        serverFilename,
-        userId
+        contentType: file.contentType,
+        fileExtension: file.fileExtensionLowercase,
+        id: file.id,
+        serverFilename: file.serverFilename,
+        userId,
       };
 
       await db.insert(profilePictures).values(profilePictureInsert).onConflictDoUpdate({
-        set: { id, serverFilename },
+        set: {
+          contentType: profilePictureInsert.contentType,
+          fileExtension: profilePictureInsert.fileExtension,
+          id: profilePictureInsert.id,
+          serverFilename: profilePictureInsert.serverFilename,
+        },
         target: profilePictures.userId,
       });
     })

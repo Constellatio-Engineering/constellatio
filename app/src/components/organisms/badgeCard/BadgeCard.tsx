@@ -6,10 +6,10 @@ import * as styles from "./BadgeCard.styles";
 import { BodyText } from "../../atoms/BodyText/BodyText";
 import IconButton from "../../atoms/iconButton/IconButton";
 import { DownloadIcon } from "../../Icons/DownloadIcon";
-import { type FileWithClientSideUuid } from "../../pages/personalSpacePage/PersonalSpacePage";
+import { type SelectedFile } from "../../pages/personalSpacePage/PersonalSpacePage";
 interface BadgeCardProps
 {
-  readonly selectedFiles: FileWithClientSideUuid[];
+  readonly selectedFiles: SelectedFile[];
 }
 
 const BadgeCard: FunctionComponent<BadgeCardProps> = ({ selectedFiles }) => 
@@ -21,16 +21,11 @@ const BadgeCard: FunctionComponent<BadgeCardProps> = ({ selectedFiles }) =>
       <div className="text">
         {selectedFiles?.length <= 0 && <BodyText styleType="body-01-regular">Supported formats: JPG, PNG, MP4, PDF, DOCX, XLSX</BodyText>}
         <BodyText styleType="body-01-regular">
-          {selectedFiles?.length > 0 ? selectedFiles.map(({ clientSideUuid, file }, i) =>
-          {
-            console.log(file.type);
-
-            return (
-              <p key={clientSideUuid}>
-                {`${i + 1}. ${file?.name}`}
-              </p>
-            );
-          }) : (
+          {selectedFiles?.length > 0 ? selectedFiles.map(({ clientSideUuid, file }, i) => (
+            <p key={clientSideUuid}>
+              {`${i + 1}. ${file?.filename}`}
+            </p>
+          )) : (
             `Maximum file size: ${env.NEXT_PUBLIC_MAXIMUM_FILE_UPLOAD_SIZE_IN_MB} MB`
           )}
         </BodyText>

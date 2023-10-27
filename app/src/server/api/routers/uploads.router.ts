@@ -55,13 +55,6 @@ export const uploadsRouter = createTRPCRouter({
       } 
     }) =>
     {
-      const uploadFileSizeLimitInBytes = env.NEXT_PUBLIC_MAXIMUM_FILE_UPLOAD_SIZE_IN_MB * 1_000_000;
-
-      if(fileSizeInBytes > uploadFileSizeLimitInBytes)
-      {
-        throw new FileTooLargeError();
-      }
-
       const filenameWithoutSpaces = filename.replace(/\s/g, "-");
       const filenameWithTimestamp = `${Date.now()}-${filenameWithoutSpaces}`;
 
@@ -133,22 +126,18 @@ export const uploadsRouter = createTRPCRouter({
     .mutation(async ({ ctx: { userId }, input }) =>
     {
       const {
+        contentType,
+        fileExtensionLowercase,
         fileSizeInBytes,
         folderId,
         id,
         originalFilename,
-        serverFilename
+        serverFilename,
       } = input;
 
-      const fileExtension = serverFilename.split(".").pop();
-
-      if(!fileExtension)
-      {
-        throw new BadFileError(new Error("File has no extension"));
-      }
-
       const uploadInsert: UploadedFileInsert = {
-        fileExtension,
+        contentType,
+        fileExtension: fileExtensionLowercase,
         folderId,
         id,
         originalFilename,
