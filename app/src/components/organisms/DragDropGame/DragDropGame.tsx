@@ -4,7 +4,7 @@ import { Button } from "@/components/atoms/Button/Button";
 import { Draggable } from "@/components/helpers/Draggable";
 import { Droppable } from "@/components/helpers/Droppable";
 import { Check } from "@/components/Icons/Check";
-import { Flag } from "@/components/Icons/Flag";
+import { DragAndDropGameIcon } from "@/components/Icons/DragAndDropGameIcon";
 import { Gamification } from "@/components/Icons/Gamification";
 import { Reload } from "@/components/Icons/Reload";
 import { DragNDropCard } from "@/components/molecules/DraggableCard/DragNDropCard";
@@ -317,7 +317,7 @@ export const DragDropGame: FC<TDragDropGame> = ({
                   <GhostDropCard/>
                 ) : (
                   <EmptyPlaceholder>
-                    <Flag/>
+                    <DragAndDropGameIcon size={140}/>
                     <BodyText
                       component="p"
                       align="center"

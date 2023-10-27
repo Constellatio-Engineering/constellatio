@@ -1,13 +1,12 @@
 import useDashboardPageStore from "@/stores/dashboardPage.store";
 
 import { Carousel } from "@mantine/carousel";
-import { Drawer, ScrollArea } from "@mantine/core";
 import React, { type FunctionComponent } from "react";
 
+import BadgesDrawer from "../badgesDrawer/BadgesDrawer";
 import { ArrowLeftWithLine } from "../Icons/ArrowLeftWithLine";
 import { ArrowRightWithLine } from "../Icons/ArrowRightWithLine";
 import ProfileBadgeCard from "../molecules/profileBadgeCard/ProfileBadgeCard";
-import SlidingPanelTitle from "../molecules/slidingPanelTitle/SlidingPanelTitle";
 
 const BadgesCarousel: FunctionComponent = () => 
 {
@@ -34,39 +33,7 @@ const BadgesCarousel: FunctionComponent = () =>
           />
         </Carousel.Slide>
       ))}
-      <Drawer
-        opened={isBadgesDrawerOpened}
-        onClose={() => setIsBadgesDrawerOpened(false)}
-        scrollAreaComponent={ScrollArea.Autosize}
-        styles={{
-          body: { padding: "0" }
-        }}
-        withCloseButton={false}
-        size="lg"
-        position="right">
-        {/* Drawer content */}
-        <SlidingPanelTitle
-          title="Badges"
-          variant="default"
-          closeButtonAction={() => setIsBadgesDrawerOpened(false)}
-        />
-        <div css={{
-          display: "flex",
-          flexWrap: "wrap",
-          gap: "16px",
-          padding: "16px 32px"
-        }}>
-          {badges.map((badge, index) => (
-            <ProfileBadgeCard
-              key={index}
-              name="Test1"
-              description="Test1"
-              size="large"
-             
-            />
-          ))}
-        </div>
-      </Drawer>
+      <BadgesDrawer close={() => setIsBadgesDrawerOpened(false)} opened={isBadgesDrawerOpened}/>
     </Carousel>
   );
 };

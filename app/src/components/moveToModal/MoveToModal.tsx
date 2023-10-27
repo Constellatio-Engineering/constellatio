@@ -33,6 +33,7 @@ const MoveToModal: FunctionComponent<Props> = ({
     <Modal
       onClose={close}
       opened={isOpened}
+      lockScroll={false}
       title="Move item to:" 
       radius={12}
       styles={{

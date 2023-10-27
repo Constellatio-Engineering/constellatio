@@ -32,10 +32,27 @@ export const tableWrapper = (theme: MantineTheme) => css`
   }
   tr {
     border: 1px solid ${theme.colors["neutrals-01"][3]};
-  }
+    td{
+      transition: all 300ms ease-in-out;
+      *{
+        transition: all 300ms ease-in-out;
+      }
+    }
+    &:hover {
+      td {
+        transition: all 300ms ease-in-out;
+        background-color: ${theme.colors["neutrals-01"][3]};
+       > button{
+          background-color: ${theme.colors["neutrals-01"][3]};
+          transition: all 300ms ease-in-out;
+        }
+      }
+    }
+    }
+   
   .primaryCell {
     width: 100%;
-    
+    cursor: pointer;
     p {
       max-width: 550px;
       overflow: hidden;

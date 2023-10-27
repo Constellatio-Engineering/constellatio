@@ -1,7 +1,8 @@
 import { css } from "@emotion/react";
 import { type MantineTheme } from "@mantine/styles";
 
-export const contentWrapper = css``;
+export const contentWrapper = css`
+`;
 
 export const facts = (theme: MantineTheme) => css`
 	max-width: 52.5%;

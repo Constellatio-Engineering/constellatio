@@ -64,6 +64,7 @@ const MaterialsMenuListItem: FunctionComponent<MenuListItemProps & HTMLProps<HTM
               {
                 e.stopPropagation();
                 setShowRenameModal(true);
+                setNewFolderName(title);
               }}>
                 <DropdownItem icon={<Edit/>} label="Umbenennen"/>
               </Menu.Item>

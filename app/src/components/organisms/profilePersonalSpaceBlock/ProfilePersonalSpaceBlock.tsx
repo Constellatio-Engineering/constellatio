@@ -4,9 +4,7 @@ import { FileWhiteIcon } from "@/components/Icons/FileWhite";
 import FavoriteCard from "@/components/molecules/favoriteCard/FavoriteCard";
 import MaterialCard from "@/components/molecules/materialCard/MaterialCard";
 import ProfilePersonalSpaceBlockHead from "@/components/molecules/profilePersonalSpaceBlockHead/ProfilePersonalSpaceBlockHead";
-import useArticles from "@/hooks/useArticles";
-import useBookmarks from "@/hooks/useBookmarks";
-import useCases from "@/hooks/useCases";
+import useAllFavorites from "@/hooks/useAllFavorites";
 import useUploadedFiles from "@/hooks/useUploadedFiles";
 // import useUploadFolders from "@/hooks/useUploadFolders";
 import { type IGenArticle, type IGenCase } from "@/services/graphql/__generated/sdk";
@@ -25,16 +23,16 @@ const ProfilePersonalSpaceBlock: FunctionComponent = () =>
 {
   const router = useRouter();
   const [selectedTab, setSelectedTab] = useState<number>(0);
-  const { bookmarks, isLoading: isUseBookmarksLoading, } = useBookmarks(undefined);
-  const allCasesBookmarks = bookmarks.filter(bookmark => bookmark?.resourceType === "case") ?? [];
-  const { allCases = [], isLoading: isUseCasesLoading, } = useCases();
-  const bookmarkedCases = allCases.filter(caisyCase => allCasesBookmarks.some(bookmark => bookmark.resourceId === caisyCase.id));
-  const { allArticles = [], isLoading: areArticlesLoading } = useArticles(); 
-  // const { folders = [] } = useUploadFolders();
   const { isLoading: isGetUploadedFilesLoading, uploadedFiles } = useUploadedFiles(null);
-  const allArticlesBookmarks = bookmarks.filter(bookmark => bookmark?.resourceType === "article") ?? [];
-  const bookmarkedArticles = allArticles.filter((caisyArticle: IGenArticle) => allArticlesBookmarks.some(bookmark => bookmark.resourceId === caisyArticle.id));
-  const favoritesList = [...bookmarkedCases, ...bookmarkedArticles];
+
+  const {
+    areArticlesLoading,
+    bookmarkedArticles,
+    bookmarkedCases, 
+    favoritesList, 
+    isUseBookmarksLoading, 
+    isUseCasesLoading
+  } = useAllFavorites();
 
   const favoritesCount = (bookmarkedCases?.length + bookmarkedArticles?.length);
   const uploadedFilesCount = uploadedFiles?.length;
