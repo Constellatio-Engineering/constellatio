@@ -41,7 +41,11 @@ export const uploadsRouter = createTRPCRouter({
         throw new NotFoundError();
       }
 
-      return getClouStorageFileUrl({ serverFilename: file.serverFilename, userId });
+      return getClouStorageFileUrl({
+        serverFilename: file.serverFilename,
+        staleTime: 1000 * 60 * 15,
+        userId // 15 minutes
+      });
     }),
   createSignedUploadUrl: protectedProcedure
     .input(generateCreateSignedUploadUrlSchema(fileExtensions, fileMimeTypes))

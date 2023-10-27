@@ -9,7 +9,6 @@ import { type CreateSignedUploadUrlSchema, generateCreateSignedUploadUrlSchema, 
 import { api } from "@/utils/api";
 import { getRandomUuid } from "@/utils/utils";
 
-import { Tabs, useMantineTheme } from "@mantine/core";
 import { notifications } from "@mantine/notifications";
 import { useMutation } from "@tanstack/react-query";
 import axios from "axios";
@@ -19,11 +18,8 @@ import * as styles from "./EditProfileImgModal.styles";
 import { BodyText } from "../atoms/BodyText/BodyText";
 import { Button } from "../atoms/Button/Button";
 import IconButton from "../atoms/iconButton/IconButton";
-import { SwitcherTab } from "../atoms/Switcher-tab/SwitcherTab";
 import { DownloadIcon } from "../Icons/DownloadIcon";
 import { Palette } from "../Icons/Palette";
-import { ProfileAvatar, type IProfilePictureAvatars } from "../Icons/ProfileAvatar";
-import { Trash } from "../Icons/Trash";
 import { Modal } from "../molecules/Modal/Modal";
 import { Switcher } from "../molecules/Switcher/Switcher";
 
@@ -56,10 +52,10 @@ const EditProfileImgModal: FunctionComponent<EditProfileImgModalProps> = ({ onCl
   const { mutateAsync: setProfilePicture } = api.users.setProfilePicture.useMutation();
   const fileInputRef = React.useRef<HTMLInputElement>(null);
   const uploadFileNotificationId = `upload-file-${selectedFile?.clientSideUuid}`;
-  const avatarTypes: Array<IProfilePictureAvatars["type"]> = [
+  /* const avatarTypes: Array<IProfilePictureAvatars["type"]> = [
     "avatar-01", "avatar-02", "avatar-03", "avatar-04", "avatar-05", "avatar-06", "avatar-07"
   ];
-  const theme = useMantineTheme();
+  const theme = useMantineTheme();*/
   const { isLoading, mutate: uploadFile } = useMutation({
     mutationFn: async (): Promise<void> =>
     {
@@ -223,7 +219,7 @@ const EditProfileImgModal: FunctionComponent<EditProfileImgModalProps> = ({ onCl
             />
           </div>
         )}
-        {selectedTab === tabs[1]?.title && (
+        {/* {selectedTab === tabs[1]?.title && (
           <div css={styles.libraryArea}>{
             avatarTypes.map((_, i) => 
             {
@@ -235,7 +231,7 @@ const EditProfileImgModal: FunctionComponent<EditProfileImgModalProps> = ({ onCl
             })
           }
           </div>
-        )}
+        )}*/}
         <Button<"button">
           css={styles.saveButton}
           styleType="primary"

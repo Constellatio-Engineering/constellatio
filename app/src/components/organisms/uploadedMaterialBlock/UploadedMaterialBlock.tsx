@@ -2,7 +2,7 @@
 import { Button } from "@/components/atoms/Button/Button";
 import { SubtitleText } from "@/components/atoms/SubtitleText/SubtitleText";
 import {
-  type FileExtension, fileExtensions, type FileMimeType, fileMimeTypes, imageFileExtensions
+  type FileExtension, fileExtensions, type FileMimeType, fileMimeTypes
 } from "@/db/schema";
 import useContextAndErrorIfNull from "@/hooks/useContextAndErrorIfNull";
 import useUploadedFilesWithNotes from "@/hooks/useUploadedFilesWithNotes";

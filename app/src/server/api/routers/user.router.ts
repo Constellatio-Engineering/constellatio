@@ -16,8 +16,6 @@ import { NotFoundError } from "@/utils/serverError";
 import { eq, and } from "drizzle-orm";
 import { z } from "zod";
 
-export const profilePictureStaleTime = 1000 * 60 * 60; // 1 hour
-
 export const usersRouter = createTRPCRouter({
   createSignedProfilePictureUploadUrl: protectedProcedure
     .input(generateCreateSignedUploadUrlSchema(imageFileExtensions, imageFileMimeTypes))
