@@ -16,15 +16,21 @@ export const authenticationRouter = createTRPCRouter({
 
       const start = performance.now();
 
+      console.log("input", input);
+
       const existingUser = await db.query.users.findFirst({
         where: eq(users.email, input.email)
       });
+
+      console.log("existingUser", existingUser);
 
       if(existingUser)
       {
         console.log("User with email already exists", existingUser);
         throw new EmailAlreadyTakenError();
       }
+
+      console.log("No user with email exists");
 
       const { data: signUpData, error: signUpError } = await supabaseServerClient.auth.signUp({
         email: input.email,
