@@ -1,4 +1,3 @@
-import CaisyImg from "@/basic-components/CaisyImg";
 import { BodyText } from "@/components/atoms/BodyText/BodyText";
 import { Button } from "@/components/atoms/Button/Button";
 import { SubtitleText } from "@/components/atoms/SubtitleText/SubtitleText";
@@ -8,7 +7,6 @@ import { Title, useMantineTheme } from "@mantine/core";
 import React, { type ReactNode, type FunctionComponent } from "react";
 
 import * as styles from "./EmptyStateCard.styles";
-import placeHolderFlagImg from "../../../../public/images/placeholder-flag.png";
 
 export interface IEmptyStateCardProps 
 {
