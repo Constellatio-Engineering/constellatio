@@ -11,8 +11,9 @@ const Search: NextPage = () =>
   const router = useRouter();
   const searchValue = useSearchBarStore((s) => s.searchValue);
   const setSearchValue = useSearchBarStore((s) => s.setSearchValue);
+  console.log("searchValue", searchValue, "router.query.find", router);
 
-  /*   useEffect(() => 
+  useEffect(() => 
   {
     if(typeof window !== "undefined")
     {
@@ -22,7 +23,7 @@ const Search: NextPage = () =>
       }
     }
   // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [router.query.find]); */
+  }, [router.query.find]);
 
   return (
     <Layout>
