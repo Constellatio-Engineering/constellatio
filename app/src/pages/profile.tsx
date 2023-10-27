@@ -1,4 +1,5 @@
 import { Layout } from "@/components/layouts/Layout";
+import PageHead from "@/components/pageHead/PageHead";
 import ProfilePageWrapper from "@/components/pages/profilePage/ProfilePage";
 import { type IGenMainCategory, type IGenGetAllMainCategoryQuery } from "@/services/graphql/__generated/sdk";
 import { caisySDK } from "@/services/graphql/getSdk";
@@ -8,9 +9,6 @@ import { type GetStaticProps } from "next/types";
 import React, { type FunctionComponent } from "react";
 
 export type IProfilePageProps = { 
-  // readonly allMainCategory: Array<({
-  //   _typename?: "MainCategory" | undefined;
-  // } & IGenMainCategoryFragment) | null | undefined>;
   readonly allMainCategory: Array<Nullable<IGenMainCategory>>;
   readonly data: string;
 };
@@ -31,9 +29,12 @@ export const getStaticProps: GetStaticProps<IProfilePageProps> = async () =>
 const Page: FunctionComponent<IProfilePageProps> = (props) =>
 {
   return (
-    <Layout>
-      <ProfilePageWrapper {...props}/>
-    </Layout>
+    <>
+      <PageHead pageTitle="Profil"/>
+      <Layout>
+        <ProfilePageWrapper {...props}/>
+      </Layout>
+    </>
   );
 };
 
