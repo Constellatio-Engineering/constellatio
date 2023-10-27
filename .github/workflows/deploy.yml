@@ -43,9 +43,15 @@ jobs:
 
   deploy:
     name: Deploy to Vercel
-#    needs:
+    #    needs:
 #      - lint
     runs-on: ubuntu-latest
+    environment: |-
+      ${{
+         github.ref_name == 'main'    && 'production'
+      || github.ref_name == 'staging' && 'staging'
+      ||                                 'development'
+      }}
     defaults:
       run:
         working-directory: app
