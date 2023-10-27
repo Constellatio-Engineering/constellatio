@@ -31,6 +31,7 @@ export const tableWrapper = (theme: MantineTheme) => css`
   }
   th {
     padding: 8px 16px;
+    color: ${theme.colors["neutrals-01"][7]};
     &:first-of-type{
       border-collapse: collapse;
       border-radius: 12px 0px 0 0;

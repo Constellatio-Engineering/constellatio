@@ -6,7 +6,9 @@ export const wrapper = css`
   `;
 export const contentContainer = css`
   position: absolute;
-  top: 46px;
+  /* when we enable the progress component in the header we will have to adjust this top to be  top: 46px; */
+  /* top: 46px; */
+  top: 100px;
   left: 50%;
   transform: translateX(-50%);
   z-index: 2;
@@ -21,7 +23,7 @@ max-width: 1440px;
 export const headerTitle = (theme: MantineTheme) => css`
     color: ${theme.colors["neutrals-01"][0]};
     text-align: center;
-    margin-bottom: 52px;
+    /* margin-bottom: 52px; */
 `;
 export const headerCardsArea = css`
   display:flex;

@@ -189,7 +189,7 @@ const FoldersMenuTablet: FunctionComponent = () =>
               {
                 setNewFolderName("");
                 createFolder({ name: newFolderName });
-                close();
+                setShowCreateFolderModal(false);
               }}>Create
             </Button>
           </div>

@@ -8,7 +8,9 @@ export const contentContainer = css``;
 export const sections = css`
 max-width: 1440px;
 margin:0 auto;
-padding:240px 60px 100px 60px;
+/* when we enable the progress in the header we need to make this padding [top] around 240px */
+/* padding:240px 60px 100px 60px; */
+padding:150px 60px 100px 60px;
 display: flex;
 flex-direction: column;
 gap:100px;

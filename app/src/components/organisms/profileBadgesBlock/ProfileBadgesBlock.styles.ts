@@ -17,6 +17,7 @@ export const badgesBlockHeader = css`
     justify-content: flex-start;
     align-items: center;
     gap: 8px;
+    margin-bottom: 24px;
 `;
 export const title = (theme: MantineTheme) => css`
 color: ${theme.colors["neutrals-01"][7]};

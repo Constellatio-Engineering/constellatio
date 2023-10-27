@@ -5,8 +5,8 @@ import React, { type FunctionComponent } from "react";
 
 import * as styles from "./DashboardHeader.styles";
 import BadgesCarouselBlock from "../badgesCarouselBlock/BadgesCarouselBlock";
-import DashboardheaderProgressBar from "../dashboardheaderProgressBar/DashboardheaderProgressBar";
-import LearninTimeCard from "../learninTimeCard/LearninTimeCard";
+// import DashboardheaderProgressBar from "../dashboardheaderProgressBar/DashboardheaderProgressBar";
+// import LearninTimeCard from "../learninTimeCard/LearninTimeCard";
 import OverviewHeader from "../organisms/OverviewHeader/OverviewHeader";
 
 const DashboardHeader: FunctionComponent = () => 
@@ -17,9 +17,9 @@ const DashboardHeader: FunctionComponent = () =>
       <OverviewHeader variant="red"/>
       <div css={styles.contentContainer}>
         <Title css={styles.headerTitle} order={1}>Willkommen zurück, {userDetails?.firstName}!</Title>
-        <DashboardheaderProgressBar/>
+        {/* <DashboardheaderProgressBar/> */}
         <div css={styles.headerCardsArea}>
-          <LearninTimeCard/>
+          {/* <LearninTimeCard/> */}
           <BadgesCarouselBlock/>
         </div>
       </div>

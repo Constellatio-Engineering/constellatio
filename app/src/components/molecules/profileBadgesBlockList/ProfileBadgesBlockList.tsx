@@ -13,15 +13,7 @@ const ProfileBadgesBlockList: FunctionComponent = () =>
     { description: "You provided feedback to improve design or content", name: "badge1", size: "large" }, 
     {
       description: "You provided feedback to improve design or content", name: "badge2", selected: true, size: "large" 
-    },
-    // { description: "You provided feedback to improve design or content", name: "badge2" },
-    // { description: "You provided feedback to improve design or content", name: "badge2" },
-    // { description: "You provided feedback to improve design or content", name: "badge2" },
-    // { description: "You provided feedback to improve design or content", name: "badge2" },
-    // { description: "You provided feedback to improve design or content", name: "badge2" },
-    // { description: "You provided feedback to improve design or content", name: "badge2" },
-    // { description: "You provided feedback to improve design or content", name: "badge2" },
-    // { description: "You provided feedback to improve design or content", name: "badge3" }
+    }
   ];
   const [showAll, setShowAll] = React.useState<boolean>(false);
   return (
