@@ -13,6 +13,7 @@ justify-content: space-between;
 align-items: center;
 .mantine-Menu-dropdown{
     padding:0;
+    padding-top: 6px;
     border-radius: 12px !important;
 overflow: hidden;
 }

@@ -9,8 +9,8 @@ import useMaterialsStore from "@/stores/materials.store";
 import { api } from "@/utils/api";
 import { defaultFolderName } from "@/utils/translations";
 
-import { Menu, Modal, Title } from "@mantine/core";
-import { useDisclosure } from "@mantine/hooks";
+import { Menu, Title } from "@mantine/core";
+// import { useDisclosure } from "@mantine/hooks";
 import { notifications } from "@mantine/notifications";
 import React, { type FunctionComponent } from "react";
 
@@ -24,6 +24,7 @@ import { Edit } from "../Icons/Edit";
 import { FolderIcon } from "../Icons/Folder";
 import { Plus } from "../Icons/Plus";
 import { Trash } from "../Icons/Trash";
+import { Modal } from "../molecules/Modal/Modal";
 
 const FoldersMenuTablet: FunctionComponent = () => 
 {
@@ -31,7 +32,10 @@ const FoldersMenuTablet: FunctionComponent = () =>
   const setSelectedFolderId = useMaterialsStore(s => s.setSelectedFolderId);
   const { folders = [] } = useUploadFolders();
   const { invalidateFolders } = useContextAndErrorIfNull(InvalidateQueriesContext);
-  const [opened, { close, open }] = useDisclosure(false);
+  // const [opened, showCreateFolderModal close, open }] = useDisclosure(false);
+  const [showCreateFolderModal, setShowCreateFolderModal] = React.useState<boolean>(false);
+  const [showRenameModal, setShowRenameModal] = React.useState<boolean>(false);
+  const [showDeleteModal, setShowDeleteModal] = React.useState<boolean>(false);
   const { mutate: createFolder } = api.folders.createFolder.useMutation({
     onError: (error) => 
     {
@@ -81,7 +85,9 @@ const FoldersMenuTablet: FunctionComponent = () =>
       <div css={styles.selectedFolder}>
         <Menu
           shadow="md"
+          closeOnClickOutside={false}
           radius={12}
+          zIndex={3}
           position="bottom-start"
           width={300}>
           <Menu.Target>
@@ -117,7 +123,7 @@ const FoldersMenuTablet: FunctionComponent = () =>
             <div css={styles.createButton}>
               <LinkButton
                 icon={<Plus/>}
-                onClick={open}
+                onClick={() => setShowCreateFolderModal(true)}
                 title="Create new folder"
               />
             </div>
@@ -127,7 +133,7 @@ const FoldersMenuTablet: FunctionComponent = () =>
           {selectedFolderId && (
             <Button<"button"> 
               styleType="secondarySubtle" 
-              onClick={() => { console.log("rename btn"); }} 
+              onClick={() => { setShowRenameModal(true); }} 
               size="medium" 
               leftIcon={<Edit/>}>
               Rename
@@ -139,7 +145,7 @@ const FoldersMenuTablet: FunctionComponent = () =>
             (
               <Button<"button"> 
                 styleType="secondarySubtle" 
-                onClick={() => { console.log("delete btn"); }} 
+                onClick={() => { setShowDeleteModal(true); }} 
                 size="medium" 
                 leftIcon={<Trash/>}>
                 Delete
@@ -150,13 +156,13 @@ const FoldersMenuTablet: FunctionComponent = () =>
       {/* MODAL _____________________________ */}
       <Modal
         lockScroll={false}
-        opened={opened}
-        onClose={close}
+        opened={showCreateFolderModal}
+        onClose={() => setShowCreateFolderModal(false)}
         title=""
         styles={styles.modalStyles()}
         withCloseButton={false}
         centered>
-        <span className="close-btn" onClick={close}>
+        <span className="close-btn" onClick={() => setShowCreateFolderModal(false)}>
           <Cross size={32}/>
         </span>
         <Title order={3}>Create folder</Title>
@@ -172,7 +178,7 @@ const FoldersMenuTablet: FunctionComponent = () =>
           <div className="modal-call-to-action">
             <Button<"button">
               styleType={"secondarySimple" as TButton["styleType"]}
-              onClick={close}>
+              onClick={() => setShowCreateFolderModal(false)}>
               Cancel
             </Button>
             <Button<"button">
@@ -188,6 +194,89 @@ const FoldersMenuTablet: FunctionComponent = () =>
             </Button>
           </div>
         </form>
+      </Modal>
+      <Modal
+        lockScroll={false}
+        opened={showRenameModal}
+        withCloseButton={false}
+        centered
+        styles={styles.modalStyles()}
+        onClose={() => { setShowRenameModal(false); }}>
+        <span className="close-btn" onClick={() => setShowRenameModal(false)}>
+          <Cross size={32}/>
+        </span>
+        <Title order={3}>Rename folder</Title>
+        <form onSubmit={e => e.preventDefault()}>
+          <div className="new-folder-input">
+            <BodyText styleType="body-01-regular" component="label">Folder name</BodyText>
+            <Input
+              inputType="text"
+              value={newFolderName}
+              onChange={(e) => { setNewFolderName(e.target.value); }}
+            />
+          </div>
+          <div className="modal-call-to-action">
+            <Button<"button">
+              styleType={"secondarySimple" as TButton["styleType"]}
+              onClick={() => setShowRenameModal(false)}>
+              Cancel
+            </Button>
+            <Button<"button">
+              styleType="primary"
+              type="submit"
+              disabled={newFolderName?.trim()?.length <= 0}
+              onClick={() =>
+              {
+                setShowRenameModal(false);
+                // just a state this can be an empty string
+                setNewFolderName(currentFolder?.name ?? "");
+                if(currentFolder && currentFolder.id)
+                {
+                  renameFolder({ folderId: currentFolder?.id, newName: newFolderName });
+                }
+              }}>
+              Save
+            </Button>
+          </div>
+        </form>
+      </Modal>
+      <Modal
+        lockScroll={false}
+        opened={showDeleteModal}
+        withCloseButton={false}
+        centered
+        styles={styles.modalStyles()}
+        onClose={() => { setShowDeleteModal(false); }}>
+        <span className="close-btn" onClick={() => setShowDeleteModal(false)}>
+          <Cross size={32}/>
+        </span>
+        <Title order={3}>Delete folder</Title>
+        <BodyText
+          mb={24}
+          mt={16}
+          styleType="body-01-regular"
+          component="p"
+          className="delete-folder-text">Are you sure you want to delete <strong>{currentFolder?.name}</strong>?
+        </BodyText>
+        <div className="modal-call-to-action">
+          <Button<"button">
+            styleType={"secondarySimple" as TButton["styleType"]}
+            onClick={() => setShowDeleteModal(false)}>
+            No, Keep
+          </Button>
+          <Button<"button">
+            styleType="primary"
+            onClick={() => 
+            {
+              setShowDeleteModal(false);
+              if(currentFolder && currentFolder.id)
+              {
+                deleteFolder({ folderId: currentFolder?.id });
+              }
+            }}>
+            Yes, Delete
+          </Button>
+        </div>
       </Modal>
     </div>
   );

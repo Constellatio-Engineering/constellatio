@@ -60,7 +60,25 @@ export const tableWrapper = (theme: MantineTheme) => css`
 `;
 
 export const tableBody = (theme: MantineTheme) => css`
-  background: ${theme.colors["neutrals-01"][0]};
+
+  tr{
+    td{
+      transition: all 300ms ease-in-out;
+      *{
+        transition: all 300ms ease-in-out;
+      }
+    }
+    &:hover {
+      td {
+        transition: all 300ms ease-in-out;
+        background-color: ${theme.colors["neutrals-01"][2]};
+       > button{
+          background-color: ${theme.colors["neutrals-01"][2]};
+          transition: all 300ms ease-in-out;
+        }
+      }
+    }
+  }
 `;
 
 export const callToActionCell = (theme: MantineTheme) => css`
