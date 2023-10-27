@@ -11,7 +11,6 @@ const Search: NextPage = () =>
   const router = useRouter();
   const searchValue = useSearchBarStore((s) => s.searchValue);
   const setSearchValue = useSearchBarStore((s) => s.setSearchValue);
-  console.log("searchValue", searchValue, "router.query.find", router);
 
   useEffect(() => 
   {

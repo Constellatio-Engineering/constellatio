@@ -38,7 +38,6 @@ const SearchPage: FunctionComponent<SearchPageProps> = () =>
   const totalSearchResults = Object.values(searchResults).reduce((acc, curr) => acc + curr.length, 0);
   const initialTab: SearchResultsKey = (Object.keys(searchResults) as SearchResultsKey[])[closestTabWithResultsIndex] ?? "articles";
   const [tabQuery, setTabQuery] = useQueryState<SearchResultsKey>("tab", tabSchema.withDefault(initialTab));
-  console.log("tabQuery", tabQuery);
 
   return (
     <div css={styles.wrapper}>
