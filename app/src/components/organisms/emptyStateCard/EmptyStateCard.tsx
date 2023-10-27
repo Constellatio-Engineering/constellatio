@@ -2,6 +2,7 @@ import CaisyImg from "@/basic-components/CaisyImg";
 import { BodyText } from "@/components/atoms/BodyText/BodyText";
 import { Button } from "@/components/atoms/Button/Button";
 import { SubtitleText } from "@/components/atoms/SubtitleText/SubtitleText";
+import { EmptyStateCardIcon } from "@/components/Icons/EmptyStateCardIcon";
 
 import { Title, useMantineTheme } from "@mantine/core";
 import React, { type ReactNode, type FunctionComponent } from "react";
@@ -32,7 +33,7 @@ const EmptyStateCard: FunctionComponent<IEmptyStateCardProps> = ({
       <div css={styles.emptyStateCard({ theme, variant })}>
         {!hideIcon && (
           <div css={styles.emptyStateCardImage({ variant })}>
-            <CaisyImg src={placeHolderFlagImg.src} description="empty card img"/>
+            <EmptyStateCardIcon/>
           </div>
         )}
         <div css={styles.emptyStateCardTitle({ theme, variant })}>

@@ -1,7 +1,7 @@
 import { BodyText } from "@/components/atoms/BodyText/BodyText";
 import { Button } from "@/components/atoms/Button/Button";
 import { type IStatusLabel } from "@/components/atoms/statusLabel/StatusLabel";
-import { Flag } from "@/components/Icons/Flag";
+import { CaseSolvedIcon } from "@/components/Icons/CaseSolved";
 import { Modal } from "@/components/molecules/Modal/Modal";
 import { Richtext } from "@/components/molecules/Richtext/Richtext";
 import { RichtextEditorField } from "@/components/molecules/RichtextEditorField/RichtextEditorField";
@@ -92,7 +92,7 @@ const CaseSolveCaseStep: FunctionComponent<Props> = ({
             opened={showStepTwoModal}
             centered
             onClose={() => setShowStepTwoModal(false)}>
-            <Flag/>
+            <CaseSolvedIcon size={120}/>
             <Title order={3}>Gut gemacht!</Title>
             <BodyText styleType="body-01-regular" component="p" ta="center">
               Dein Gutachten wurde gespeichert. Du kannst es nun mit der Musterlösung vergleichen
