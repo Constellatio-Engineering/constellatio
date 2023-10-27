@@ -38,7 +38,7 @@ const Table: FunctionComponent<ITableProps> = ({ children, isTablet, tableType }
         <tr>
           {tableHeaders({ tableType }).map((header, i) => 
           {
-            if(tableType.variant === "favorites" && isTablet && header.title === "Bearbeitungszeit") { return <></>; }  
+            if(tableType.variant === "favorites" && isTablet && header.title === "Bearbeitungszeit") { return null; }  
             
             return (
               <th key={`${header}-${i}`}>

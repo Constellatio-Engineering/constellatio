@@ -13,7 +13,7 @@ export const wrapper = (theme: MantineTheme) => css`
     max-height: 400px;
     margin: 0 auto;
 
-  @media screen and (max-width: 1024px) {
+  @media screen and (max-width: 1100px) {
     width: 100%;
   }
 

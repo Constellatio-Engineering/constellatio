@@ -182,7 +182,7 @@ const CaseCompleteTestsStep: FunctionComponent<ICaseCompleteTestsStepProps> = ({
   }, [caseId, fullTextTasks?.connections]);
 
   return (
-    <Container maw={1440}>
+    <Container p={0} maw={1440}>
       <div css={styles.contentWrapper} id="completeTestsStepContent">
         {variant === "case" && (
           <div css={styles.facts}>

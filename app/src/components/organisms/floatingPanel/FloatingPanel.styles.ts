@@ -83,7 +83,7 @@ export const wrapper = ({ hidden, theme }: {
   border-radius: 12px;
   overflow: auto;
   box-shadow: 0px 8px 44px 0px rgba(0, 0, 0, 0.04);
-  @media screen and (max-width: 1024px) {
+  @media screen and (max-width: 1100px) {
     width: 100%;
   }
 
