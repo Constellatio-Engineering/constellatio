@@ -10,7 +10,7 @@ const ProfileHistoryTab: FunctionComponent = () =>
   const isTabletScreen = useMediaQuery("(max-width: 1100px)"); 
   return (
     <div style={{ width: "100%" }}>
-      {!isTabletScreen && <Title order={3} css={styles.tabHeader}>History</Title>}
+      {!isTabletScreen && <Title order={3} css={styles.tabHeader}>Verlauf</Title>}
       <ProfileHistoryBlocks/>
     </div>
   );

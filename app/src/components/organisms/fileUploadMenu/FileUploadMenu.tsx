@@ -19,6 +19,7 @@ const FileUploadMenu: FunctionComponent<FileUploadMenuProps> = ({ uploads }) =>
 {
   const [isShowMenu, setIsShowMenu] = React.useState<boolean>(false);
   const areUploadsInProgress = uploads.some(u => u.state.type === "uploading");
+  const uploadedFilesCount = uploads.length;
 
   useEffect(() =>
   {
@@ -31,7 +32,7 @@ const FileUploadMenu: FunctionComponent<FileUploadMenuProps> = ({ uploads }) =>
   return (
     <div css={styles.wrapper({ isShowMenu })}>
       <div css={styles.menuHeader}>
-        <SubtitleText styleType="subtitle-01-medium">Upload {uploads.length} files</SubtitleText>
+        <SubtitleText styleType="subtitle-01-medium">{uploadedFilesCount > 1 ? `${uploadedFilesCount} Uploads abgeschlossen` : `${uploadedFilesCount} Upload abgeschlossen`}</SubtitleText>
         {/* {areUploadsInProgress ? "Cancel" : <span onClick={() => setIsShowMenu(false)}><Cross/></span>} */}
         <span onClick={() => setIsShowMenu(false)}><Cross/></span>
       </div>

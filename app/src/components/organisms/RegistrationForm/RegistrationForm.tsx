@@ -87,7 +87,7 @@ export const RegistrationForm: FunctionComponent = () =>
       notifications.show({
         autoClose: false,
         color: "red",
-        message: "We couldn't sign you up. Please try again.",
+        message: "Das Konto konnte nicht erstellt werden. Bitte versuche es nochmal.",
         title: "Oops!",
       });
     },

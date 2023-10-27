@@ -1,4 +1,3 @@
-import ProfileLearningTimeBlock from "@/components/profileLearningTimeBlock/ProfileLearningTimeBlock";
 import { type IProfilePageProps } from "@/pages/profile";
 
 import { Title } from "@mantine/core";
@@ -15,10 +14,10 @@ const ProfileOverview: FunctionComponent<{readonly allMainCategory: IProfilePage
   const isTabletScreen = useMediaQuery("(max-width: 1100px)"); 
   return (
     <div css={styles.wrapper}>
-      {!isTabletScreen && <Title order={3} css={styles.title}>Overview</Title>}
+      {!isTabletScreen && <Title order={3} css={styles.title}>Übersicht</Title>}
       <ProfilePersonalSpaceBlock/>
       <ProgressCardSection mainCategories={allMainCategory}/>
-      <ProfileLearningTimeBlock/>
+      {/* <ProfileLearningTimeBlock/> */}
       <ProfileBadgesBlock/>
     </div>
   );

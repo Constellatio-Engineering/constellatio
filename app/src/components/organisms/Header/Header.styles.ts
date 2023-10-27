@@ -39,6 +39,7 @@ export const links = css`
   gap: 16px;
   height: 100%;
   align-items: center;
+  margin-right: 24px;
   img {
     margin-right: 40px;
   }

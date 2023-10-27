@@ -26,9 +26,19 @@ const getLatestVercelDeployment = async () =>
   const projectId = process.env.VERCEL_PROJECT_ID;
   const teamId = process.env.VERCEL_TEAM_ID;
 
-  if(!accessToken || !projectId || !teamId)
+  if(!accessToken)
   {
-    throw new Error("VERCEL_ACCESS_TOKEN, VERCEL_TEAM_ID and VERCEL_PROJECT_ID must be set");
+    throw new Error("VERCEL_ACCESS_TOKEN is not set");
+  }
+
+  if(!projectId)
+  {
+    throw new Error("VERCEL_PROJECT_ID is not set");
+  }
+
+  if(!teamId)
+  {
+    throw new Error("VERCEL_TEAM_ID is not set");
   }
 
   let data;
@@ -54,8 +64,15 @@ const getLatestVercelDeployment = async () =>
     throw new Error(`Error while getting deployments: ${JSON.stringify(e.response.data)}`);
   }
 
-  const latestDeploymentId = data.deployments[0].uid;
-  const latestDeploymentUrl = data.deployments[0].url;
+  const latestDeployment = data.deployments[0];
+
+  if(!latestDeployment)
+  {
+    throw new Error("No deployments found");
+  }
+
+  const latestDeploymentId = latestDeployment.uid;
+  const latestDeploymentUrl = latestDeployment.url;
 
   if(!latestDeploymentId)
   {

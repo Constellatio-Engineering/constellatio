@@ -41,18 +41,21 @@ jobs:
       - name: Run ESLint
         run: pnpm eslint
 
-  deploy-staging:
-    name: Deploy Staging to Vercel
-    if: github.ref == 'refs/heads/staging'
-    environment: staging
+  deploy:
+    name: Deploy to Vercel
     needs:
       - lint
     runs-on: ubuntu-latest
+    environment: |-
+      ${{
+         github.ref_name == 'main'    && 'production'
+      || github.ref_name == 'staging' && 'staging'
+      ||                                 'development'
+      }}
     defaults:
       run:
         working-directory: app
     steps:
-      # ======== Begin duplicate steps from deploy-production ========
       - name: Checkout code
         uses: actions/checkout@v3
       - name: Setup pnpm
@@ -67,57 +70,13 @@ jobs:
           cache: 'pnpm'
       - name: Install Dependencies
         run: pnpm install
-      # ======== End duplicate steps ========
-      - name: Deploy to Vercel
-        run: vercel deploy --token=${{ secrets.VERCEL_ACCESS_TOKEN }} --scope ${{ vars.VERCEL_SCOPE }}
-      - name: Apply Database Migrations
-        id: apply-db-migrations
-        run: node ci/apply-db-migrations.mjs
-      - name: Get Latest Vercel Preview Deployment ID
-        id: get-latest-preview-deployment-id
-        run: |
-          result=$(node ./ci/get-latest-vercel-deployment.js "prefers-deployment-url" "preview")
-          echo "LATEST_PREVIEW_DEPLOYMENT_URL=$result" >> $GITHUB_OUTPUT
-      - name: Assign staging alias/domain to latest preview deployment
-        run: |
-          captured_latestPreviewDeploymentUrl="${{ steps.get-latest-preview-deployment-id.outputs.LATEST_PREVIEW_DEPLOYMENT_URL }}"
-          echo "Assigning staging alias domain '${{ vars.DEPLOYMENT_DOMAIN }}' to preview deployment with URL: $captured_latestPreviewDeploymentUrl"
-          vercel alias set $captured_latestPreviewDeploymentUrl ${{ vars.DEPLOYMENT_DOMAIN }} --token=${{ secrets.VERCEL_ACCESS_TOKEN }} --scope ${{ vars.VERCEL_SCOPE }}
-
-  deploy-production:
-    name: Deploy Production to Vercel
-    if: github.ref == 'refs/heads/main'
-    environment: production
-    needs:
-      - lint
-    runs-on: ubuntu-latest
-    defaults:
-      run:
-        working-directory: app
-    steps:
-      # ======== Begin duplicate steps from deploy-staging ========
-      - name: Checkout code
-        uses: actions/checkout@v3
-      - name: Setup pnpm
-        uses: pnpm/action-setup@v2
-        with:
-          version: 8
-      - name: Setup Node
-        uses: actions/setup-node@v3
-        with:
-          node-version: 18
-          cache-dependency-path: ./app/pnpm-lock.yaml
-          cache: 'pnpm'
-      - name: Install Dependencies
-        run: pnpm install
-      # ======== End duplicate steps ========
-      - name: Get Latest Vercel Production Deployment ID
+      - name: Get Latest Vercel Deployment ID
         id: get-latest-deployment-id
         run: |
           result=$(node ./ci/get-latest-vercel-deployment.js "prefers-deployment-id" "production")
           echo "LATEST_DEPLOYMENT_ID=$result" >> $GITHUB_OUTPUT
       - name: Deploy to Vercel
-        run: vercel deploy --prod --token=${{ secrets.VERCEL_ACCESS_TOKEN }} --scope ${{ vars.VERCEL_SCOPE }}
+        run: vercel deploy --prod --token=${{ secrets.VERCEL_ACCESS_TOKEN }} --scope=${{ vars.VERCEL_SCOPE }} --name=${{ vars.VERCEL_PROJECT_NAME }} --yes
       - name: Apply Database Migrations
         id: apply-db-migrations
         run: node ci/apply-db-migrations.mjs

@@ -4,6 +4,7 @@ import { NoteIcon } from "@/components/Icons/Note";
 import MenuListItem from "@/components/molecules/menuListItem/MenuListItem";
 import { type tabs, type UserDetails } from "@/components/pages/profilePage/ProfilePage";
 import useContextAndErrorIfNull from "@/hooks/useContextAndErrorIfNull";
+import useSetOnboardingResult from "@/hooks/useSetOnboardingResult";
 import { supabase } from "@/lib/supabase";
 import { InvalidateQueriesContext } from "@/provider/InvalidateQueriesProvider";
 import { paths } from "@/utils/paths";
@@ -31,6 +32,7 @@ const ProfileMenu: FunctionComponent<IProfileMenu> = ({
 }) =>
 {
   const { invalidateEverything } = useContextAndErrorIfNull(InvalidateQueriesContext);
+  const { setOnboardingResult } = useSetOnboardingResult();
 
   const handleSignOut = async (): Promise<void> =>
   {
@@ -41,8 +43,8 @@ const ProfileMenu: FunctionComponent<IProfileMenu> = ({
       await invalidateEverything();
 
       notifications.show({
-        message: "Come back soon!",
-        title: "Signed out",
+        message: "Bis bald bei Constellatio!",
+        title: "Ausloggen",
       });
     }
     catch (error) 
@@ -69,8 +71,8 @@ const ProfileMenu: FunctionComponent<IProfileMenu> = ({
             ))}
           </div>
           <div css={styles.groupedLinks}>
-            <LinkButton title="View onboarding tips" icon={<NoteIcon/>}/>
-            <LinkButton title="Log out" onClick={async () => handleSignOut()} icon={<IconLogout/>}/>
+            <LinkButton title="Einführung wiederholen" icon={<NoteIcon/>} onClick={() => setOnboardingResult({ result: null })}/>
+            <LinkButton title="Ausloggen" onClick={async () => handleSignOut()} icon={<IconLogout/>}/>
           </div>
         </>
       )}

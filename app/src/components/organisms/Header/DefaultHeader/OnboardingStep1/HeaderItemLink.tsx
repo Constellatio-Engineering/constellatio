@@ -1,9 +1,9 @@
 import MenuTab from "@/components/atoms/menuTab/MenuTab";
 
 import Link from "next/link";
-import { type FunctionComponent } from "react";
+import { type ForwardRefRenderFunction, forwardRef } from "react";
 
-type HeaderDefaultLinkItemProps = {
+export type THeaderItemLinkProps = {
   readonly link: {
     slug: string;
     title: string;
@@ -11,10 +11,10 @@ type HeaderDefaultLinkItemProps = {
   readonly pathname: string;
 };
 
-const HeaderDefaultLinkItem: FunctionComponent<HeaderDefaultLinkItemProps> = ({ link, pathname }) => 
+const HeaderItemLink: ForwardRefRenderFunction<HTMLAnchorElement, THeaderItemLinkProps> = ({ link, pathname }, ref) => 
 {
   return (
-    <Link href={`${link.slug.toLowerCase()}`}>
+    <Link href={`${link.slug.toLowerCase()}`} ref={ref}>
       <MenuTab
         active={pathname
           ?.toLowerCase()
@@ -25,4 +25,4 @@ const HeaderDefaultLinkItem: FunctionComponent<HeaderDefaultLinkItemProps> = ({ 
   );
 };
 
-export default HeaderDefaultLinkItem;
+export default forwardRef(HeaderItemLink);

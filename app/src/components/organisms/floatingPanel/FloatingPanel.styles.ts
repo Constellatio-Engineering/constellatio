@@ -82,18 +82,18 @@ export const wrapper = ({ hidden, theme }: {
 
   border-radius: 12px;
   overflow: auto;
-  box-shadow: 0px 8px 44px 0px rgba(0, 0, 0, 0.04);
-  @media screen and (max-width: 1024px) {
+
+  @media screen and (max-width: 1100px) {
     width: 100%;
   }
-
+  padding-bottom: 24px;
 `;
 
 export const item = ({
   highlighted,
-  isExpandable,
+  // isExpandable,
   isExpanded,
-  isTopLevel,
+  // isTopLevel,
   theme
 }: {
   highlighted?: boolean;
@@ -105,20 +105,20 @@ export const item = ({
   display: flex;
   align-items: baseline;
   justify-content: space-between;
-  color: ${isTopLevel && isExpanded
+  color: ${isExpanded
     ? theme?.colors["neutrals-02"][1]
     : theme?.colors?.["neutrals-01"]?.[9]};
   a {
-    color: ${isTopLevel && isExpanded
+    color: ${isExpanded
     ? theme?.colors["neutrals-02"][1]
     : theme?.colors?.["neutrals-01"]?.[9]};
   }
-  background: ${isTopLevel && isExpandable && isExpanded
-    ? theme?.colors["neutrals-01"][2]
+  background: ${isExpanded
+    ? theme?.colors["neutrals-01"][1]
     : theme?.colors?.["neutrals-01"]?.[0]};
   border-bottom: 1px solid ${theme.colors["neutrals-01"][4]};
   border-left: 3px solid
-    ${isTopLevel && isExpandable && isExpanded
+    ${isExpanded
     ? theme.colors["neutrals-02"][1]
     : "transparent"};
   &:hover {
@@ -144,4 +144,6 @@ export const item = ({
 
 export const facts = css`
   padding: 0 24px;
+`;
+export const renderTOCList = css`
 `;

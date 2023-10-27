@@ -12,7 +12,7 @@ const SubscriptionTab: FunctionComponent<{readonly subscriptionStatus?: string}>
   const isTabletScreen = useMediaQuery("(max-width: 1100px)"); 
   return (
     <div css={styles.wrapper}>
-      {!isTabletScreen && <Title order={3}>Subscription</Title>}
+      {!isTabletScreen && <Title order={3}>Vertrag</Title>}
       <BodyText m="32px 0" styleType="body-01-regular" component="p">{subscriptionStatus ?? "Manage your subscription by clicking the button below:"}</BodyText>
       <SubscriptionCard/>
       <Button<"button"> styleType="primary" style={{ display: "block", width: "100%" }}>Manage subscription</Button>

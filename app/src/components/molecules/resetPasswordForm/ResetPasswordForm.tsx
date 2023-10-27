@@ -64,13 +64,12 @@ const ResetPasswordForm: FunctionComponent<Props> = ({ setProgress }) =>
       <form onSubmit={handleSubmit} style={{ width: "100%" }}>
         <Stack spacing="spacing-24">
           <BodyText component="p" styleType="body-01-regular">
-            You will receive an email from us with a link. Clicking this link will take you to a page where you can
-            enter your new password.
+            Wir senden dir eine E-Mail mit einem Link. Wenn du auf diesen Link klickst, kannst du dein neues Passwort eingeben.
           </BodyText>
           <Input
             inputType="text"
-            label="Email"
-            title="Email"
+            label="E-Mail"
+            title="E-Mail"
             {...emailFormInputProps}
             onChange={e =>
             {
