@@ -158,7 +158,7 @@ const EditorForm: FunctionComponent<EditorFormProps> = ({ editorState }) =>
         {(editorState.state === "create" || editorState.state === "edit") && (
           <div css={styles.createDocForm}>
             <Input
-              label="Doc name"
+              label="Name"
               inputType="text"
               value={document.name}
               onChange={(e) => updateEditorDocument({ name: e.target.value })}

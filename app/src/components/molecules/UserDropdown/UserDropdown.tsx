@@ -81,7 +81,7 @@ export const UserDropdown: FunctionComponent = () =>
         <Menu.Item
           onClick={handleSignOut}
           icon={<IconLogout size="0.9rem" stroke={1.5}/>}>
-          Abmelden
+          Ausloggen
         </Menu.Item>
       </Menu.Dropdown>
     </Menu>

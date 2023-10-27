@@ -35,9 +35,17 @@ const ProfilePersonalSpaceBlock: FunctionComponent = () =>
   const allArticlesBookmarks = bookmarks.filter(bookmark => bookmark?.resourceType === "article") ?? [];
   const bookmarkedArticles = allArticles.filter((caisyArticle: IGenArticle) => allArticlesBookmarks.some(bookmark => bookmark.resourceId === caisyArticle.id));
   const favoritesList = [...bookmarkedCases, ...bookmarkedArticles];
+
+  const favoritesCount = (bookmarkedCases?.length + bookmarkedArticles?.length);
+  const uploadedFilesCount = uploadedFiles?.length;
+
   const tabs = [
-    { icon: { src: <Bookmark/> }, number: (bookmarkedCases?.length + bookmarkedArticles?.length) ?? 0, title: "favorites" }, 
-    { icon: { src: <FileWhiteIcon/> }, number: uploadedFiles?.length, title: " materials" }
+    {
+      icon: { src: <Bookmark/> }, number: favoritesCount, subtitle: favoritesCount > 1 ? "Favoriten" : "Favorit", title: "Favoriten" 
+    }, 
+    {
+      icon: { src: <FileWhiteIcon/> }, number: uploadedFilesCount, subtitle: uploadedFilesCount > 1 ? "Dateien" : "Datei", title: "Deine Dateien" 
+    }
   ];
   return (
     <div css={styles.wrapper}>
@@ -68,8 +76,8 @@ const ProfilePersonalSpaceBlock: FunctionComponent = () =>
                     ))
                   ) : (
                     <EmptyStateCard 
-                      title="You haven not saved any materials yet"
-                      text="You can save cases, dictionary articles, forum questions and highlighted text to Favourites"
+                      title="Noch keine Favoriten vorhanden"
+                      text="Speichere jetzt Fälle oder Lexikonartikel als Favoriten in deinem persönlichen Bereich."
                       variant="For-small-areas"
                     />
                   )
@@ -79,33 +87,42 @@ const ProfilePersonalSpaceBlock: FunctionComponent = () =>
           {favoritesList && favoritesList?.length > 6 && (
             <Link href={`${paths.personalSpace}?category=favourites`}>
               <Button<"button"> styleType="secondarySimple">
-                View all
+                Alle anzeigen
               </Button>
             </Link>
           )}
         </div>
       )}
       {
-      
-        selectedTab === 1 ? 
+        selectedTab === 1 ?
           isGetUploadedFilesLoading ? (<Loader sx={{ margin: "0px" }}/>) :
             (
               <div>
                 <div css={styles.uploadedMaterialsTab}>
-                  {uploadedFiles.slice(0, 6).map((file, index) => (
-                    <MaterialCard
-                      title={file?.originalFilename}
-                      fileExtension={file?.fileExtension}
-                      id={file?.id}
-                      materialType="paper"
-                      key={index}
+                  {uploadedFilesCount > 0 ? (
+                    <>
+                      {uploadedFiles.slice(0, 6).map((file, index) => (
+                        <MaterialCard
+                          title={file?.originalFilename}
+                          fileExtension={file?.fileExtension}
+                          id={file?.id}
+                          materialType="paper"
+                          key={index}
+                        />
+                      ))}
+                    </>
+                  ) : (
+                    <EmptyStateCard 
+                      title="Du hast noch keine Dateien hochgeladen"
+                      text="Du kannst jetzt jetzt eigene Dateien hochladen und in deinem persönlichen Bereich ablegen."
+                      variant="For-small-areas"
                     />
-                  ))}
+                  )}
                 </div>
-                {uploadedFiles.length > 6 && (
+                {uploadedFilesCount > 6 && (
                   <Link href={`${paths.personalSpace}?category=materials`}>
                     <Button<"button"> styleType="secondarySimple">
-                      View all
+                      Alle anzeigenl
                     </Button>
                   </Link>
                 )}

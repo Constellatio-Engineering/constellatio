@@ -54,8 +54,8 @@ const DashboardPersonalSpaceBlock: FunctionComponent = () =>
                 )) : (
                   <div css={styles.emptyCard}>
                     <EmptyStateCard
-                      title="Du hast noch keine Dateien hochgeladen"
-                      text="Du kannst jetzt jetzt eigene Dateien hochladen und in deinem persönlichen Bereich ablegen."
+                      title="Noch keine Favoriten vorhanden"
+                      text="Speichere jetzt Fälle oder Lexikonartikel als Favoriten in deinem persönlichen Bereich."
                       variant="For-small-areas"
                     />
                   </div>
@@ -80,8 +80,8 @@ const DashboardPersonalSpaceBlock: FunctionComponent = () =>
               : (
                 <div css={styles.emptyCard}>
                   <EmptyStateCard
-                    title="Noch keine Favoriten vorhanden"
-                    text="Speichere jetzt Fälle oder Lexikonartikel als Favoriten in deinem persönlichen Bereich."
+                    title="Du hast noch keine Dateien hochgeladen"
+                    text="Du kannst jetzt jetzt eigene Dateien hochladen und in deinem persönlichen Bereich ablegen."
                     variant="For-small-areas"
                   />
                 </div>

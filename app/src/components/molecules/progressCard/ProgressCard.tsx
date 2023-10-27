@@ -33,7 +33,7 @@ const ProgressCard: FunctionComponent<ProgressCardProps> = ({
           <CountLabel count={completed} total={total} variant="cases"/>
         </div>
       )}
-      <Link href={`${paths.cases}`} css={styles.link}>Complete more cases <ArrowRight/></Link>
+      <Link href={`${paths.cases}`} css={styles.link}>Zur Fallübersicht<ArrowRight/></Link>
     </div>
   );
 };

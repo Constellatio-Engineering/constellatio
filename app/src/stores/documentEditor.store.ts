@@ -98,7 +98,7 @@ const useDocumentEditorStore = create(
         {
           computedValues = {
             hasUnsavedChanges: editorState.document.name !== "",
-            title: "Neues Constellatio Dokument erstellen",
+            title: "Neues Constellatio Doc erstellen",
           };
           break;
         }

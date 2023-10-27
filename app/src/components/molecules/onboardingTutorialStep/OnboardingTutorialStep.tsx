@@ -54,14 +54,14 @@ OnboardingTutorialStepProps
               styleType="secondarySimple"
               size="large"
               onClick={onSkipPressHandler}
-              fullWidth>Take Tour Later
+              fullWidth>Später ansehen
             </Button>
           )}
           <Button<"button">
             styleType="primary"
             size="large"
             onClick={onNextPressHandler}
-            fullWidth>{isLastStep ? "Finish tour" : "Next"}
+            fullWidth>{isLastStep ? "Tour beenden" : "Weiter"}
           </Button>
         </div>
       </div>

@@ -19,11 +19,11 @@ import React, { type FunctionComponent, type ReactNode, useMemo } from "react";
 import * as styles from "./ProfilePage.styles";
 
 export const tabs = [
-  { slug: "overview", title: "Overview" },
-  { slug: "profile-details", title: "Profile Details" },
-  { slug: "change-password", title: "Change Password" },
-  { slug: "history", title: "History" },
-  { slug: "subscription", title: "Subscription" },
+  { slug: "overview", title: "Übersicht" },
+  { slug: "history", title: "Verlauf" },
+  { slug: "profile-details", title: "Einstellungen" },
+  { slug: "change-password", title: "Passwort ändern" },
+  { slug: "subscription", title: "Vertrag" },
 ] as const;
 
 export type UserDetails = {
@@ -35,8 +35,6 @@ const ProfilePage: FunctionComponent<ProfilePageProps> = ({ allMainCategory, use
 {
   const [tab, setTab] = useQueryState("tab", parseAsString.withDefault(tabs[0]!.slug));
   const activeTab = tabs?.find(x => x.slug === tab);
-
-  console.log("userDetails", userDetails);
 
   const renderedTab: ReactNode = useMemo(() =>
   {
