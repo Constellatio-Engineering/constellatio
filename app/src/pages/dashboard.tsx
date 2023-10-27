@@ -1,5 +1,6 @@
 import DashboardPage from "@/components/dashboardPage/DashboardPage";
 import { Layout } from "@/components/layouts/Layout";
+import PageHead from "@/components/pageHead/PageHead";
 import { getCommonProps } from "@/utils/commonProps";
 
 import { type GetServerSideProps } from "next";
@@ -35,9 +36,12 @@ export const getServerSideProps: GetServerSideProps<ServerSidePropsResult> = asy
 const Dashboard: FunctionComponent<ServerSidePropsResult> = () =>
 {
   return (
-    <Layout>
-      <DashboardPage/>
-    </Layout>
+    <>
+      <PageHead pageTitle="Dashboard"/>
+      <Layout>
+        <DashboardPage/>
+      </Layout>
+    </>
   );
 };
 

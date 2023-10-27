@@ -55,6 +55,7 @@ export const env = createEnv({
 		NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY: z.string(),
     NEXT_PUBLIC_RESEND_EMAIL_CONFIRMATION_TIMEOUT_IN_SECONDS: z.string().pipe(z.coerce.number().int().min(1).max(3600)),
     NEXT_PUBLIC_PROFILE_PICTURE_STALE_TIME_IN_SECONDS: z.string().pipe(z.coerce.number().int().min(1).max(36000)),
+    NEXT_PUBLIC_APP_NAME: z.string(),
   },
 
   /**
@@ -95,6 +96,7 @@ export const env = createEnv({
     NEXT_PUBLIC_RESEND_EMAIL_CONFIRMATION_TIMEOUT_IN_SECONDS: process.env.NEXT_PUBLIC_RESEND_EMAIL_CONFIRMATION_TIMEOUT_IN_SECONDS,
     NEXT_PUBLIC_PROFILE_PICTURE_STALE_TIME_IN_SECONDS: process.env.NEXT_PUBLIC_PROFILE_PICTURE_STALE_TIME_IN_SECONDS,
     RECREATE_SEARCH_INDEX_SECRET: process.env.RECREATE_SEARCH_INDEX_SECRET,
+    NEXT_PUBLIC_APP_NAME: process.env.NEXT_PUBLIC_APP_NAME,
   },
   /**
    * Run `build` or `dev` with `SKIP_ENV_VALIDATION` to skip env validation.
