@@ -15,7 +15,7 @@ import useSearchResults from "@/hooks/useSearchResults";
 import { InvalidateQueriesContext } from "@/provider/InvalidateQueriesProvider";
 import useSearchBarStore from "@/stores/searchBar.store";
 import { api } from "@/utils/api";
-import { isDevelopmentOrStaging } from "@/utils/env";
+import { isDevelopment } from "@/utils/env";
 import { paths } from "@/utils/paths";
 
 import { useMediaQuery } from "@mantine/hooks";
@@ -107,7 +107,7 @@ const HeaderDefault: FunctionComponent = () =>
             )}
           </div>
           <div css={styles.profileArea}>
-            {isDevelopmentOrStaging && <HeaderDefaultRecreateSearch/>}
+            {isDevelopment && <HeaderDefaultRecreateSearch/>}
             {
               showOnboarding ? (
                 <OnboardingTutorialPopover
