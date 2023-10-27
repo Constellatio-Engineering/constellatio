@@ -1,7 +1,11 @@
 /* eslint-disable max-lines */
 import ProfilePicture from "@/components/molecules/profilePicture/ProfilePicture";
+import {
+  type ImageFileExtension, imageFileExtensions, type ImageFileMimeType, imageFileMimeTypes
+} from "@/db/schema";
 import useContextAndErrorIfNull from "@/hooks/useContextAndErrorIfNull";
 import { InvalidateQueriesContext } from "@/provider/InvalidateQueriesProvider";
+import { type CreateSignedUploadUrlSchema, generateCreateSignedUploadUrlSchema, type UploadableFile } from "@/schemas/uploads/createSignedUploadUrl.schema";
 import { api } from "@/utils/api";
 import { getRandomUuid } from "@/utils/utils";
 
@@ -47,7 +51,7 @@ const EditProfileImgModal: FunctionComponent<EditProfileImgModalProps> = ({ onCl
   const [selectedFile, setSelectedFile] = useState<SelectedFile>();
   // const selectedTab = tabs?.[0]?.title ?? "";
   const selectedFileUrl = selectedFile?.file && URL.createObjectURL(selectedFile?.file);
-  const { mutateAsync: createSignedUploadUrl } = api.uploads.createSignedUploadUrl.useMutation();
+  const { mutateAsync: createSignedUploadUrl } = api.users.createSignedProfilePictureUploadUrl.useMutation();
   const { mutateAsync: setProfilePicture } = api.users.setProfilePicture.useMutation();
   const fileInputRef = React.useRef<HTMLInputElement>(null);
   const uploadFileNotificationId = `upload-file-${selectedFile?.clientSideUuid}`;
@@ -65,19 +69,42 @@ const EditProfileImgModal: FunctionComponent<EditProfileImgModalProps> = ({ onCl
       }
 
       const { clientSideUuid, file } = selectedFile;
-      const originalFileName = file.name;
 
-      const { serverFilename, uploadUrl } = await createSignedUploadUrl({
+      const fileToUpload: CreateSignedUploadUrlSchema = {
         contentType: file.type,
         fileSizeInBytes: file.size,
-        filename: originalFileName,
+        filename: file.name
+      };
+
+      let parsedFile: UploadableFile<ImageFileExtension, ImageFileMimeType>;
+
+      try
+      {
+        parsedFile = await (generateCreateSignedUploadUrlSchema(imageFileExtensions, imageFileMimeTypes).parseAsync(fileToUpload));
+      }
+      catch (e: unknown)
+      {
+        notifications.show({
+          color: "red",
+          message: "Die Datei konnten nicht hochgeladen werden, da sie zu groß ist oder ein ungültiges Format hat",
+          title: "Ungültige Datei"
+        });
+        return;
+      }
+
+      const { serverFilename, uploadUrl } = await createSignedUploadUrl({
+        contentType: parsedFile.contentType,
+        fileSizeInBytes: parsedFile.fileSizeInBytes,
+        filename: parsedFile.filename,
       });
 
-      await axios.put(uploadUrl, file, {
-        headers: { "Content-Type": file.type },
+      await axios.put(uploadUrl, parsedFile, {
+        headers: { "Content-Type": parsedFile.contentType },
       });
 
       await setProfilePicture({
+        contentType: parsedFile.contentType,
+        fileExtensionLowercase: parsedFile.fileExtensionLowercase,
         id: clientSideUuid,
         serverFilename,
       });
@@ -130,37 +157,6 @@ const EditProfileImgModal: FunctionComponent<EditProfileImgModalProps> = ({ onCl
     }
   }, [opened, selectedFile]);
 
-  /* const onSubmit = async (e: FormEvent<HTMLFormElement>): Promise<void> =>
-  {
-    e.preventDefault();
-    if(fileInputRef.current)
-    {
-      fileInputRef.current.value = "";
-    }
-    const uploads: Array<Promise<void>> = selectedFiles.map(async ({ clientSideUuid, file }) =>
-    {
-      try
-      {
-        await uploadFile(file, clientSideUuid);
-        await invalidateUploadedFiles();
-      }
-      catch (e: unknown)
-      {
-        console.log("error while uploading file", e);
-        setUploadState({
-          clientSideUuid,
-          fileNameWithExtension: file.name,
-          state: { type: "failed" }
-        });
-        return Promise.reject(e);
-      }
-    });
-    const uploadResults = await Promise.allSettled(uploads);
-    const indicesOfSuccessfulUploads = getIndicesOfSucceededPromises(uploadResults);
-    const newSelectedFiles = removeItemsByIndices<FileWithClientSideUuid>(selectedFiles, indicesOfSuccessfulUploads);
-    setSelectedFiles(newSelectedFiles);
-  };*/
-
   return (
     <Modal
       opened={opened}
@@ -208,7 +204,7 @@ const EditProfileImgModal: FunctionComponent<EditProfileImgModalProps> = ({ onCl
               type="file"
               disabled={isLoading}
               multiple={false}
-              accept="image/*"
+              accept={imageFileExtensions.map(ext => `.${ext}`).join(", ")}
               onChange={(e) =>
               {
                 const file = e.target.files?.[0];

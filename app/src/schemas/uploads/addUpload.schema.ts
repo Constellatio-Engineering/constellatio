@@ -1,10 +1,10 @@
-import { fileExtensions } from "@/db/schema";
-import { contentTypeValidation, filenameValidation, folderIdValidation, idValidation } from "@/schemas/uploads/uploadedFile.validation";
+import { fileExtensions, fileMimeTypes } from "@/db/schema";
+import { filenameValidation, folderIdValidation, generateContentTypeValidation, idValidation } from "@/schemas/uploads/uploadedFile.validation";
 
 import { z } from "zod";
 
 export const addUploadSchema = z.object({
-  contentType: contentTypeValidation,
+  contentType: generateContentTypeValidation(fileMimeTypes),
   fileExtensionLowercase: z.enum(fileExtensions),
   fileSizeInBytes: z.number().int().min(1),
   folderId: folderIdValidation,

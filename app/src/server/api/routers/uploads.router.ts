@@ -1,20 +1,20 @@
 /* eslint-disable max-lines */
 import { db } from "@/db/connection";
-import { type UploadedFileInsert, uploadedFiles } from "@/db/schema";
-import { env } from "@/env.mjs";
-import { cloudStorage } from "@/lib/cloud-storage";
+import {
+  fileExtensions, fileMimeTypes, type UploadedFileInsert, uploadedFiles
+} from "@/db/schema";
 import { meiliSearchAdmin } from "@/lib/meilisearch";
 import { addUploadSchema } from "@/schemas/uploads/addUpload.schema";
-import { createSignedUploadUrlSchema } from "@/schemas/uploads/createSignedUploadUrl.schema";
+import { generateCreateSignedUploadUrlSchema } from "@/schemas/uploads/createSignedUploadUrl.schema";
 import { deleteUploadSchema } from "@/schemas/uploads/deleteUpload.schema";
 import { getUploadedFilesSchema } from "@/schemas/uploads/getUploadedFiles.schema";
 import { updateUploadedFileSchema } from "@/schemas/uploads/updateUploadedFile.schema";
-import { deleteFiles, getClouStorageFileUrl } from "@/server/api/services/uploads.services";
+import { deleteFiles, getClouStorageFileUrl, getSignedCloudStorageUploadUrl } from "@/server/api/services/uploads.services";
 import { createTRPCRouter, protectedProcedure } from "@/server/api/trpc";
 import {
   createUploadsSearchIndexItem, searchIndices, uploadSearchIndexItemPrimaryKey, type UploadSearchItemUpdate
 } from "@/utils/search";
-import { BadFileError, FileTooLargeError, NotFoundError } from "@/utils/serverError";
+import { NotFoundError } from "@/utils/serverError";
 
 import {
   and, desc, eq, inArray, isNull
@@ -44,38 +44,10 @@ export const uploadsRouter = createTRPCRouter({
       return getClouStorageFileUrl({ serverFilename: file.serverFilename, userId });
     }),
   createSignedUploadUrl: protectedProcedure
-    .input(createSignedUploadUrlSchema)
-    .mutation(async ({
-      ctx: { userId },
-      input: {
-        contentType,
-        fileExtensionLowercase,
-        filename,
-        fileSizeInBytes
-      } 
-    }) =>
+    .input(generateCreateSignedUploadUrlSchema(fileExtensions, fileMimeTypes))
+    .mutation(async ({ ctx: { userId }, input: file }) =>
     {
-      const filenameWithoutSpaces = filename.replace(/\s/g, "-");
-      const filenameWithTimestamp = `${Date.now()}-${filenameWithoutSpaces}`;
-
-      const [url] = await cloudStorage
-        .bucket(env.GOOGLE_CLOUD_STORAGE_BUCKET_NAME)
-        .file(`${userId}/${filenameWithTimestamp}`)
-        .getSignedUrl({
-          action: "write",
-          contentType,
-          expires: Date.now() + 5 * 60 * 1000, 
-          extensionHeaders: {
-            "content-length": fileSizeInBytes,
-            "x-goog-meta-extension": fileExtensionLowercase
-          },
-          version: "v4"
-        });
-
-      return ({
-        serverFilename: filenameWithTimestamp,
-        uploadUrl: url
-      });
+      return getSignedCloudStorageUploadUrl({ file, userId });
     }),
   deleteUploadedFiles: protectedProcedure
     .input(deleteUploadSchema)

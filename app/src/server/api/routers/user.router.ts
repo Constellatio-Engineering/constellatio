@@ -1,10 +1,12 @@
 import { db } from "@/db/connection";
 import {
+  imageFileExtensions, imageFileMimeTypes,
   type ProfilePictureInsert, profilePictures, users
 } from "@/db/schema";
+import { generateCreateSignedUploadUrlSchema } from "@/schemas/uploads/createSignedUploadUrl.schema";
 import { setOnboardingResultSchema } from "@/schemas/users/setOnboardingResult.schema";
 import { setProfilePictureSchema } from "@/schemas/users/setProfilePicture.schema";
-import { getClouStorageFileUrl } from "@/server/api/services/uploads.services";
+import { getClouStorageFileUrl, getSignedCloudStorageUploadUrl } from "@/server/api/services/uploads.services";
 import { getUserWithRelations } from "@/server/api/services/users.service";
 import { createTRPCRouter, protectedProcedure } from "@/server/api/trpc";
 import { filterUserForClient } from "@/utils/filters";
@@ -14,6 +16,12 @@ import { eq, and } from "drizzle-orm";
 import { z } from "zod";
 
 export const usersRouter = createTRPCRouter({
+  createSignedProfilePictureUploadUrl: protectedProcedure
+    .input(generateCreateSignedUploadUrlSchema(imageFileExtensions, imageFileMimeTypes))
+    .mutation(async ({ ctx: { userId }, input: file }) =>
+    {
+      return getSignedCloudStorageUploadUrl({ file, userId });
+    }),
   getOnboardingResult: protectedProcedure
     .query(async ({ ctx: { userId } }) =>
     {

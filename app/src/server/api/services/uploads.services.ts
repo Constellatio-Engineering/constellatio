@@ -1,7 +1,8 @@
 import { db } from "@/db/connection";
-import { notes, uploadedFiles } from "@/db/schema";
+import { type FileExtension, type FileMimeType, notes, uploadedFiles } from "@/db/schema";
 import { env } from "@/env.mjs";
 import { cloudStorage } from "@/lib/cloud-storage";
+import { type UploadableFile } from "@/schemas/uploads/createSignedUploadUrl.schema";
 
 import { and, eq, inArray } from "drizzle-orm";
 
@@ -61,4 +62,43 @@ export const getClouStorageFileUrl: GetClouStorageFileUrl = async ({ serverFilen
     });
 
   return url;
+};
+
+type GetSignedCloudStorageUploadUrl = (params: {
+  file: UploadableFile<FileExtension, FileMimeType>;
+  userId: string;
+}) => Promise<{
+  serverFilename: string;
+  uploadUrl: string;
+}>;
+
+export const getSignedCloudStorageUploadUrl: GetSignedCloudStorageUploadUrl = async ({ file, userId }) =>
+{
+  const filenameWithoutSpaces = file.filename.replace(/\s/g, "-");
+  const filenameWithTimestamp = `${Date.now()}-${filenameWithoutSpaces}`;
+
+  console.log("---------------");
+  console.log("env.GOOGLE_CLOUD_STORAGE_BUCKET_NAME", env.GOOGLE_CLOUD_STORAGE_BUCKET_NAME);
+  console.log("filenameWithTimestamp", filenameWithTimestamp);
+  console.log("file.contentType", file.contentType);
+  console.log("file.fileSizeInBytes", file.fileSizeInBytes);
+  console.log("filename", `${userId}/${filenameWithTimestamp}`);
+
+  const [url] = await cloudStorage
+    .bucket(env.GOOGLE_CLOUD_STORAGE_BUCKET_NAME)
+    .file(`${userId}/${filenameWithTimestamp}`)
+    .getSignedUrl({
+      action: "write",
+      contentType: file.contentType,
+      expires: Date.now() + 5 * 60 * 1000,
+      extensionHeaders: {
+        "content-length": file.fileSizeInBytes,
+      },
+      version: "v4"
+    });
+
+  return ({
+    serverFilename: filenameWithTimestamp,
+    uploadUrl: url
+  });
 };

@@ -1,6 +1,6 @@
 {
-  "id": "92a9b72a-c97f-46d1-ad78-f0380e318f27",
-  "prevId": "504b8616-5de9-4410-ac16-cdb601a5a173",
+  "id": "6e392f19-195c-44d3-8a30-843f82c28343",
+  "prevId": "d42a25bd-fa08-4570-94b6-b635c65bc819",
   "version": "5",
   "dialect": "pg",
   "tables": {
@@ -550,6 +550,18 @@
           "primaryKey": false,
           "notNull": true
         },
+        "FileExtension": {
+          "name": "FileExtension",
+          "type": "ImageFileExtension",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "ContentType": {
+          "name": "ContentType",
+          "type": "ImageFileMimeType",
+          "primaryKey": false,
+          "notNull": true
+        },
         "UserId": {
           "name": "UserId",
           "type": "uuid",
@@ -729,7 +741,13 @@
         },
         "FileExtension": {
           "name": "FileExtension",
-          "type": "text",
+          "type": "FileExtension",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "ContentType": {
+          "name": "ContentType",
+          "type": "FileMimeType",
           "primaryKey": false,
           "notNull": true
         }
@@ -894,6 +912,35 @@
         "completed": "completed"
       }
     },
+    "DocumentFileExtension": {
+      "name": "DocumentFileExtension",
+      "values": {
+        "pdf": "pdf"
+      }
+    },
+    "DocumentFileMimeType": {
+      "name": "DocumentFileMimeType",
+      "values": {
+        "application/pdf": "application/pdf"
+      }
+    },
+    "FileExtension": {
+      "name": "FileExtension",
+      "values": {
+        "jpg": "jpg",
+        "jpeg": "jpeg",
+        "png": "png",
+        "pdf": "pdf"
+      }
+    },
+    "FileMimeType": {
+      "name": "FileMimeType",
+      "values": {
+        "image/jpeg": "image/jpeg",
+        "image/png": "image/png",
+        "application/pdf": "application/pdf"
+      }
+    },
     "GameProgressState": {
       "name": "GameProgressState",
       "values": {
@@ -907,6 +954,21 @@
         "male": "male",
         "female": "female",
         "diverse": "diverse"
+      }
+    },
+    "ImageFileExtension": {
+      "name": "ImageFileExtension",
+      "values": {
+        "jpg": "jpg",
+        "jpeg": "jpeg",
+        "png": "png"
+      }
+    },
+    "ImageFileMimeType": {
+      "name": "ImageFileMimeType",
+      "values": {
+        "image/jpeg": "image/jpeg",
+        "image/png": "image/png"
       }
     },
     "OnboardingResult": {

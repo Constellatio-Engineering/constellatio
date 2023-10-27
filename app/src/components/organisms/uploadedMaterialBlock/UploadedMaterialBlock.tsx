@@ -2,11 +2,13 @@
 import { Button } from "@/components/atoms/Button/Button";
 import { SubtitleText } from "@/components/atoms/SubtitleText/SubtitleText";
 import { type SelectedFile } from "@/components/pages/personalSpacePage/PersonalSpacePage";
-import { fileExtensions } from "@/db/schema";
+import {
+  type FileExtension, fileExtensions, type FileMimeType, fileMimeTypes
+} from "@/db/schema";
 import useContextAndErrorIfNull from "@/hooks/useContextAndErrorIfNull";
 import useUploadedFilesWithNotes from "@/hooks/useUploadedFilesWithNotes";
 import { InvalidateQueriesContext } from "@/provider/InvalidateQueriesProvider";
-import { type CreateSignedUploadUrlSchema, createSignedUploadUrlSchema, type UploadableFile } from "@/schemas/uploads/createSignedUploadUrl.schema";
+import { type CreateSignedUploadUrlSchema, generateCreateSignedUploadUrlSchema, type UploadableFile } from "@/schemas/uploads/createSignedUploadUrl.schema";
 import { type UploadState } from "@/stores/uploadsProgress.store";
 import { api } from "@/utils/api";
 import { getFileExtensionLowercase } from "@/utils/files";
@@ -42,7 +44,7 @@ const UploadedMaterialBlock: FunctionComponent<UploadedMaterialBlockProps> = ({
   const { mutateAsync: saveFileToDatabase } = api.uploads.saveFileToDatabase.useMutation();
   const { mutateAsync: createSignedUploadUrl } = api.uploads.createSignedUploadUrl.useMutation();
 
-  const uploadFile = async (file: UploadableFile, clientSideUuid: string): Promise<void> =>
+  const uploadFile = async (file: UploadableFile<FileExtension, FileMimeType>, clientSideUuid: string): Promise<void> =>
   {
     if(selectedFiles.length === 0)
     {
@@ -62,6 +64,8 @@ const UploadedMaterialBlock: FunctionComponent<UploadedMaterialBlockProps> = ({
     });
 
     const { serverFilename, uploadUrl } = await createSignedUploadUrl(file);
+
+    console.log("uploadUrl", uploadUrl);
 
     await axios.put(uploadUrl, file, {
       headers: { "Content-Type": file.contentType },
@@ -132,11 +136,11 @@ const UploadedMaterialBlock: FunctionComponent<UploadedMaterialBlockProps> = ({
     }));
 
     const invalidFiles: CreateSignedUploadUrlSchema[] = [];
-    let validFiles: UploadableFile[] = [];
+    let validFiles: Array<UploadableFile<FileExtension, FileMimeType>> = [];
 
     files.forEach(file =>
     {
-      const parseIsValidFile = createSignedUploadUrlSchema.safeParse(file);
+      const parseIsValidFile = generateCreateSignedUploadUrlSchema(fileExtensions, fileMimeTypes).safeParse(file);
 
       if(parseIsValidFile.success)
       {
@@ -151,6 +155,7 @@ const UploadedMaterialBlock: FunctionComponent<UploadedMaterialBlockProps> = ({
     if(invalidFiles.length > 0)
     {
       notifications.show({
+        autoClose: false,
         color: "red",
         message: "Die folgenden Dateien konnten nicht hochgeladen werden, da sie zu groß sind oder ein ungültiges Format haben: " + invalidFiles.map(file => file.filename).join(", "),
         title: "Ungültige Dateien"
@@ -161,6 +166,7 @@ const UploadedMaterialBlock: FunctionComponent<UploadedMaterialBlockProps> = ({
     {
       validFiles = validFiles.slice(0, 10);
       notifications.show({
+        autoClose: false,
         color: "red",
         message: "Du kannst maximal 10 Dateien gleichzeitig hochladen.",
         title: "Zu viele Dateien"
@@ -196,7 +202,6 @@ const UploadedMaterialBlock: FunctionComponent<UploadedMaterialBlockProps> = ({
             type="file"
             disabled={areUploadsInProgress}
             multiple
-            accept={fileExtensions.join(", ")}
             onChange={onFilesSelected}
           />
           {selectedFiles.length > 0 && (

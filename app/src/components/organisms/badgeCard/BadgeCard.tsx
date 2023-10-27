@@ -1,3 +1,4 @@
+import { fileExtensions } from "@/db/schema";
 import { env } from "@/env.mjs";
 
 import React, { type FunctionComponent } from "react";
@@ -19,7 +20,11 @@ const BadgeCard: FunctionComponent<BadgeCardProps> = ({ selectedFiles }) =>
       <IconButton icon={<DownloadIcon/>} size="big"/>
       <BodyText styleType="body-01-medium">Drag & drop file here or click to upload</BodyText>
       <div className="text">
-        {selectedFiles?.length <= 0 && <BodyText styleType="body-01-regular">Supported formats: JPG, PNG, MP4, PDF, DOCX, XLSX</BodyText>}
+        {selectedFiles?.length <= 0 && (
+          <BodyText styleType="body-01-regular">
+            Supported formats: {fileExtensions.map(ext => ext.toUpperCase()).join(", ")}
+          </BodyText>
+        )}
         <BodyText styleType="body-01-regular">
           {selectedFiles?.length > 0 ? selectedFiles.map(({ clientSideUuid, file }, i) => (
             <p key={clientSideUuid}>

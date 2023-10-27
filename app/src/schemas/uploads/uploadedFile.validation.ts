@@ -1,4 +1,5 @@
-import { type FileMimeType, fileMimeTypes } from "@/db/schema";
+/* eslint-disable @typescript-eslint/explicit-function-return-type */
+import { type FileMimeType } from "@/db/schema";
 import { getFileExtensionLowercase } from "@/utils/files";
 
 import { z } from "zod";
@@ -10,10 +11,9 @@ export const filenameValidation = z.string().min(1).max(255).refine(filename => 
   path: ["filename"]
 });
 
-export const contentTypeValidationOld = z.enum(fileMimeTypes);
-export const contentTypeValidation = z
+export const generateContentTypeValidation = <T extends FileMimeType>(mimeTypes: readonly T[]) => z
   .string()
-  .refine(contentType => fileMimeTypes.includes(contentType), {
-    message: `Der Dateityp ist nicht erlaubt. Erlaubte Dateitypen: ${fileMimeTypes.join(", ")}`,
+  .refine(contentType => mimeTypes.includes(contentType as T), {
+    message: `Der Dateityp ist nicht erlaubt. Erlaubte Dateitypen: ${mimeTypes.join(", ")}`,
   })
-  .transform(contentType => contentType as FileMimeType);
+  .transform(contentType => contentType as T);
