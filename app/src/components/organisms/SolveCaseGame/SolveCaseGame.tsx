@@ -17,15 +17,15 @@ export const SolveCaseGame: FC<SolveCaseGameProps> = ({ onGameStartHandler }) =>
   return (
     <Container>
       <TitleWrapper>
-        <Pen/> <Title order={4}>Solve this case</Title>
+        <Pen/> <Title order={4}>Lösung verfassen</Title>
       </TitleWrapper>
       <GameWrapper>
         <BodyText component="p" styleType="body-01-regular">
-          Awesome job! Now, you’re ready to solve the case.
+          Sehr gut. Du hast die Schwerpunkte des Sachverhaltes erarbeitet.
         </BodyText>
         <div>
           <Button<"button"> styleType="primary" size="large" onClick={onGameStartHandler}>
-            Start solving this case
+            Jetzt starten!
           </Button>
         </div>
       </GameWrapper>

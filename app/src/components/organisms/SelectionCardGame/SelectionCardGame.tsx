@@ -113,7 +113,7 @@ let SelectionCardGame: FC<SelectionCardGameProps> = ({
       updateGameState({
         caseId,
         gameId: id,
-        update: { gameStatus: "win", resultMessage: "Congrats! all answers are correct!" }
+        update: { gameStatus: "win", resultMessage: "Sehr gut! Du hast die Frage richtig beantwortet." }
       });
     }
     else 
@@ -121,7 +121,7 @@ let SelectionCardGame: FC<SelectionCardGameProps> = ({
       updateGameState({
         caseId,
         gameId: id,
-        update: { gameStatus: "lose", resultMessage: "Answers are incorrect!" }
+        update: { gameStatus: "lose", resultMessage: "Deine Antwort war leider nicht korrekt." }
       });
     }
 
@@ -154,7 +154,7 @@ let SelectionCardGame: FC<SelectionCardGameProps> = ({
   return (
     <Container>
       <TitleWrapper>
-        <Gamification/> <Title order={4}>Choose the right answers</Title>
+        <Gamification/> <Title order={4}>Multiple Choice</Title>
       </TitleWrapper>
       <GameWrapper>
         {question && (
@@ -164,10 +164,10 @@ let SelectionCardGame: FC<SelectionCardGameProps> = ({
         )}
         <LegendWrapper>
           <BodyText component="p" styleType="body-01-regular">
-            Correct answer
+            Richtige Antwort
           </BodyText>
           <BodyText component="p" styleType="body-01-regular">
-            Incorrect answer
+            Falsche Antwort
           </BodyText>
         </LegendWrapper>
         <Game>
@@ -196,7 +196,7 @@ let SelectionCardGame: FC<SelectionCardGameProps> = ({
                 key={`${option.id} - ${resetCounter}`}
                 label={option.label}
                 disabled={gameStatus !== "inprogress"}
-                result={option.correctAnswer ? "Correct" : "Incorrect"}
+                result={option.correctAnswer ? "Richtig" : "Falsch"}
                 status={
                   gameStatus === "inprogress"
                     ? "default"
@@ -244,7 +244,7 @@ let SelectionCardGame: FC<SelectionCardGameProps> = ({
               gameStatus === "inprogress" &&
 							optionsItems.every((item) => !item.checked)
             }>
-            {gameStatus === "inprogress" ? "Check my answers" : "Solve again"}
+            {gameStatus === "inprogress" ? "Antwort prüfen" : "Erneut lösen"}
           </Button>
         </div>
       </GameWrapper>

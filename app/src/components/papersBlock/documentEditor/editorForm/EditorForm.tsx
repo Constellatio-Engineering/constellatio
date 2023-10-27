@@ -27,21 +27,22 @@ const EditorForm: FunctionComponent<EditorFormProps> = ({ editorState }) =>
   const setEditDocumentState = useDocumentEditorStore(s => s.setEditDocumentState);
   const { hasUnsavedChanges } = useDocumentEditorStore(s => s.getComputedValues());
   const [showConfirmDeleteDocWindow, setShowConfirmDeleteDocWindow] = React.useState<boolean>(false);
-  const { onDocumentMutation } = useOnDocumentMutation({ folderId: document.folderId });
+  const { onDocumentMutation } = useOnDocumentMutation();
+  const invalidateDocuments = async (): Promise<void> => onDocumentMutation({ folderId: document.folderId });
 
   const { mutateAsync: createDocument } = api.documents.createDocument.useMutation({
     onError: (error) => console.log("error while creating document", error),
-    onSuccess: onDocumentMutation
+    onSuccess: invalidateDocuments
   });
 
   const { mutateAsync: updateDocument } = api.documents.updateDocument.useMutation({
     onError: (error) => console.log("error while updating document", error),
-    onSuccess: onDocumentMutation
+    onSuccess: invalidateDocuments
   });
 
   const { mutate: deleteDocument } = api.documents.deleteDocument.useMutation({
     onMutate: (error) => console.log("deleting document", error),
-    onSuccess: onDocumentMutation,
+    onSuccess: invalidateDocuments,
   });
 
   const onCancel = (): void =>
@@ -126,27 +127,27 @@ const EditorForm: FunctionComponent<EditorFormProps> = ({ editorState }) =>
                 <Button<"button">
                   styleType="secondarySubtle"
                   onClick={() => setEditDocumentState(editorState.document)}>
-                  <Edit/>{" "}Edit
+                  <Edit/>{" "}Bearbeiten
                 </Button>
                 <Button<"button">
                   styleType="secondarySubtle"
                   onClick={() => setShowConfirmDeleteDocWindow(true)}>
-                  <Trash/>{" "}Delete
+                  <Trash/>{" "}Löschen
                 </Button>
               </div>
               <div css={styles.docContent} dangerouslySetInnerHTML={{ __html: document.content }}/>
               {showConfirmDeleteDocWindow && (
                 <div css={styles.deleteDocWindow}>
-                  <BodyText styleType="body-01-medium">Are you sure you want to delete this document?</BodyText>
+                  <BodyText styleType="body-01-medium">Bist du sicher, dass du dieses Dokument löschen möchtest?</BodyText>
                   <div>
-                    <Button<"button"> styleType="secondarySimple" onClick={() => setShowConfirmDeleteDocWindow(false)}>No, keep</Button>
+                    <Button<"button"> styleType="secondarySimple" onClick={() => setShowConfirmDeleteDocWindow(false)}>Nein, behalten</Button>
                     <Button<"button">
                       styleType="primary"
                       onClick={() => 
                       {
                         deleteDocument({ id: document?.id });
                         closeEditor();
-                      }}>Yes, delete
+                      }}>Ja, löschen
                     </Button>
                   </div>
                 </div>
@@ -174,13 +175,13 @@ const EditorForm: FunctionComponent<EditorFormProps> = ({ editorState }) =>
         <Button<"button">
           styleType="secondarySimple"
           onClick={onCancel}>
-          Cancel
+          Abbrechen
         </Button>
         <Button<"button">
           styleType="primary"
           disabled={!hasUnsavedChanges}
           onClick={onSave}>
-          Save
+          Speichern
         </Button>
       </div>
     </>

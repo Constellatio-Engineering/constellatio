@@ -11,10 +11,9 @@ import { ArrowDown } from "../../Icons/ArrowDown";
 interface DocsTableProps 
 {
   readonly docs: Document[];
-  readonly variant?: "personalSpace" | "searchPapers";
 }
 
-const DocsTable: FunctionComponent<DocsTableProps> = ({ docs, variant = "personalSpace" }) =>
+const DocsTable: FunctionComponent<DocsTableProps> = ({ docs }) =>
 {
   const [showingDocs, setShowingDocs] = useState<number>(5);
   const isShowingFullTable = showingDocs >= (docs.length ?? 0);
@@ -25,15 +24,21 @@ const DocsTable: FunctionComponent<DocsTableProps> = ({ docs, variant = "persona
         <thead>
           <tr>
             <th className="primaryCell">
-              <CaptionText styleType="caption-01-medium" component="p">DOC NAME</CaptionText>
+              <CaptionText styleType="caption-01-medium" component="p" tt="uppercase">
+                Name
+              </CaptionText>
             </th>
-            <th><CaptionText styleType="caption-01-medium" component="p">LAST MODIFIED</CaptionText></th>
-            {variant === "searchPapers" && (
-              <th/>
-            )}
             <th>
-              <CaptionText tt="uppercase" styleType="caption-01-medium" component="p">
-                FOLDER         
+              <CaptionText styleType="caption-01-medium" component="p" tt="uppercase">
+                Zuletzt geändert
+              </CaptionText>
+            </th>
+            <th>
+              <CaptionText
+                tt="uppercase"
+                styleType="caption-01-medium"
+                component="p">
+                Ordner
               </CaptionText>
             </th>
             <th/>
@@ -41,8 +46,7 @@ const DocsTable: FunctionComponent<DocsTableProps> = ({ docs, variant = "persona
         </thead>
         <tbody css={styles.tableBody}>
           {docs.slice(0, showingDocs).map(doc => (
-            <tr
-              key={doc.id}>
+            <tr key={doc.id}>
               <DocsTableData {...doc}/>
             </tr>
           ))}
@@ -55,7 +59,7 @@ const DocsTable: FunctionComponent<DocsTableProps> = ({ docs, variant = "persona
             rightIcon={<ArrowDown size={20}/>}
             size="medium"
             onClick={() => setShowingDocs(prev => prev + 10)}>
-            Show {docs.length - showingDocs < 10 ? docs.length - showingDocs : 10} More
+            Weitere {docs.length - showingDocs < 10 ? docs.length - showingDocs : 10} anzeigen
           </Button>
         </div>
       )}

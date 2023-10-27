@@ -17,31 +17,32 @@ export const Callout: FC<CalloutProps> = ({ calloutType, expandable, text }) =>
   const [isContentHide, setIsContentHide] = React.useState<boolean>(true);
 
   const ShowAllBtn = (
-    <Button<"button">
+    <Button<"a">
       styleType="tertiary"
       rightIcon={<ArrowDown size={20}/>}
       size="medium"
-      onClick={() => setIsContentHide(false)}>
-      Show all
+      onClick={() => setIsContentHide(false)}
+      component="a">
+      Ausklappen
     </Button>
   );
 
   const ShowLessBtn = (
-    <Button<"button">
+    <Button<"a">
       styleType="tertiary"
       rightIcon={<ArrowUp size={20}/>}
       size="medium"
-      onClick={() => setIsContentHide(true)}>
-      Show less
+      onClick={() => setIsContentHide(true)}
+      component="a">
+      Einklappen
     </Button>
   );
+
   return (
     <Stack spacing="spacing-4" sx={calloutStyles()}>
-      {calloutType && (
-        <Group spacing="spacing-8">
-          <HeadingType calloutType={calloutType}/>
-        </Group>
-      )}
+      <Group spacing="spacing-8">
+        <HeadingType calloutType={calloutType}/>
+      </Group>
       {text?.json &&
         (expandable ? (
           <Spoiler

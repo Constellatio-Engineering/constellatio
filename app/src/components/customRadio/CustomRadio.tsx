@@ -3,10 +3,18 @@ import React, { type FunctionComponent } from "react";
 
 // import * as styles from "./CustomRadio.styles";
 
-const CustomRadio: FunctionComponent<{readonly checked?: boolean; readonly name?: string; readonly value?: string}> = ({
+type Props = {
+  readonly checked?: boolean;
+  readonly name?: string;
+  readonly onChange: (selected: boolean) => void;
+  readonly value?: string;
+};
+
+const CustomRadio: FunctionComponent<Props> = ({
   checked,
   name,
-  value
+  onChange,
+  value,
 }) => 
 {
   return (
@@ -18,31 +26,30 @@ const CustomRadio: FunctionComponent<{readonly checked?: boolean; readonly name?
               background: "black",
               borderRadius: "50%",
               content: "''",
-              height: "13px",
+              height: "10px",
               left: "20%",
               position: "absolute",
               top: "20%",
-              width: "13px",
+              width: "10px",
               zIndex: 3,
             },
             background: "white",
             border: "2px solid black",
             borderRadius: "50%",
-            height: "25px",
             left: "0",
             position: "relative",
             svg: {
               display: "none"
             },
             top: "0",
-            width: "25px"
           },
         },
       }}
+      onChange={(event) => onChange(event.target.checked)}
       name={name}
       value={value}
+      checked={checked}
       id={value}
-      defaultChecked={checked}
     />
   );
 };

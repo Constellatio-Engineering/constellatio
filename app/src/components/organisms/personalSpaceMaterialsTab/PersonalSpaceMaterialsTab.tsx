@@ -1,6 +1,5 @@
 
 import FoldersMenuTablet from "@/components/foldersMenuTablet/FoldersMenuTablet";
-import MoveToModal from "@/components/moveToModal/MoveToModal";
 import PapersBlock from "@/components/papersBlock/PapersBlock";
 import useDocuments from "@/hooks/useDocuments";
 import useMaterialsStore from "@/stores/materials.store";
@@ -56,7 +55,6 @@ const PersonalSpaceMaterialsTab: FunctionComponent = () =>
           )}
         </div>
       </div>
-      <MoveToModal/>
     </Container>
   );
 };

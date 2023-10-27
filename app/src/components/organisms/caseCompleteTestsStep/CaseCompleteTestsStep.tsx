@@ -6,6 +6,7 @@ import { type GameProgress } from "@/db/schema";
 import useContextAndErrorIfNull from "@/hooks/useContextAndErrorIfNull";
 import { InvalidateQueriesContext } from "@/provider/InvalidateQueriesProvider";
 import { type Maybe, type IGenCase_Facts, type IGenCase_FullTextTasks, type IGenArticle_FullTextTasks } from "@/services/graphql/__generated/sdk";
+import useCaseSolvingStore from "@/stores/caseSolving.store";
 import { api } from "@/utils/api";
 import { type Games } from "@/utils/case";
 import type { IDocumentLink, IHeadingNode } from "types/richtext";
@@ -64,6 +65,8 @@ const CaseCompleteTestsStep: FunctionComponent<ICaseCompleteTestsStepProps> = ({
     onError: (error) => console.error(error),
     onSuccess: async () => invalidateCaseProgress({ caseId })
   });
+  const overrideCaseStepIndex = useCaseSolvingStore(s => s.overrideCaseStepIndex);
+
   let renderedCaseContent: IGenCase_FullTextTasks | IGenArticle_FullTextTasks | null;
   const isBigScreen = useMediaQuery("(min-width: 1100px)");
 
@@ -182,7 +185,7 @@ const CaseCompleteTestsStep: FunctionComponent<ICaseCompleteTestsStepProps> = ({
       <div css={styles.contentWrapper} id="completeTestsStepContent">
         {variant === "case" && (
           <div css={styles.facts}>
-            <Title order={2}>Facts</Title>
+            <Title order={2}>Sachverhalt</Title>
             <Richtext
               data={facts}
               richTextOverwrite={{ paragraph: richTextParagraphOverwrite }}
@@ -195,7 +198,7 @@ const CaseCompleteTestsStep: FunctionComponent<ICaseCompleteTestsStepProps> = ({
             size="large"
             type="button"
             onClick={() => setProgressState({ caseId, progressState: "completing-tests" })}>
-            Start solving case
+            Geführte Lösung starten
           </Button>
         )}
         <div css={styles.content}>
@@ -224,8 +227,13 @@ const CaseCompleteTestsStep: FunctionComponent<ICaseCompleteTestsStepProps> = ({
                   paragraph: richTextParagraphOverwrite
                 }}
               />
-              {(areAllGamesCompleted && variant === "case" && progressState === "completing-tests") && (
-                <SolveCaseGame onGameStartHandler={() => setProgressState({ caseId, progressState: "solving-case" })}/>
+              {(areAllGamesCompleted && variant === "case") && (
+                <SolveCaseGame onGameStartHandler={() => 
+                {
+                  if(progressState === "completing-tests") { setProgressState({ caseId, progressState: "solving-case" }); }
+                  else { overrideCaseStepIndex(1, progressState ?? "not-started"); }
+                }}
+                />
               )}
             </div>
           )}

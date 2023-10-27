@@ -17,11 +17,6 @@ import * as styles from "./PersonalSpacePage.styles";
 import BookmarkIconSvg from "../../../../public/images/icons/bookmark.svg";
 import FileIconSvg from "../../../../public/images/icons/file.svg";
 
-export type FileWithClientSideUuid = {
-  clientSideUuid: string;
-  file: File;
-};
-
 const PersonalSpacePage: FunctionComponent = () =>
 {
   const { allCases = [] } = useCases();
