@@ -46,8 +46,8 @@ const CommonYaxisProps = (theme: MantineTheme) => css`
 content: "";
   position: absolute;
   transform: translateY(-50%);
-  left: 38px;
-  width: calc(100% - 45px);
+  left: 30px;
+  width: calc(100% - 40px);
   height: 2px;
   background-color: ${theme.colors["neutrals-01"][3]};
 `;
