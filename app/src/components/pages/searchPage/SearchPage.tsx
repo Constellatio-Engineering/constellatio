@@ -16,11 +16,12 @@ const tabSchema = createParser({
     switch (query as SearchResultsKey)
     {
       case "userUploads": { return "userUploads"; }
+      case "userDocuments": { return "userUploads"; }
       case "cases": { return "cases"; }
       case "articles": { return "articles"; }
       default:
       {
-        console.error(`Unknown tab query: ${query}`);
+        console.error(`Unknown tab querys: ${query}`);
         return "cases";
       }
     }

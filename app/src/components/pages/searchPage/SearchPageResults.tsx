@@ -113,7 +113,7 @@ const SearchPageResults: FunctionComponent<Props> = ({ tabQuery }) =>
         )
       );
     }
-    case "userUploads":
+    case ("userUploads" || "userDocuments"):
     {
       return (
         (searchResults.userUploads?.length > 0 || searchResults.userDocuments?.length > 0) ? (
@@ -176,7 +176,7 @@ const SearchPageResults: FunctionComponent<Props> = ({ tabQuery }) =>
     }
     default:
     {
-      console.error(`Unknown tab query: ${tabQuery}`);
+      console.error(`Unknown tab queryz: ${tabQuery}`);
       return null;
     }
   }

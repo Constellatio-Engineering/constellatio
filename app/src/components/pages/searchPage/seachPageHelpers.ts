@@ -14,7 +14,7 @@ export const convertTabsAsSearchResultsKey = (item: TabItemType): SearchResultsK
     case "Deine Dateien": return "userUploads"; 
     default:
     {
-      console.error(`Unknown tab query: ${item.label}`);
+      console.error(`Unknown item tab: ${item.label}`);
       return "cases";
     }
   }
@@ -29,7 +29,7 @@ export const convertTabQueryAsItemTab = (query: string): string =>
     case "userUploads": return "Deine Dateien"; 
     default:
     {
-      console.error(`Unknown tab query: ${query}`);
+      console.error(`Unknown tab queryd: ${query}`);
       return "Lexikon";
     }
   }
