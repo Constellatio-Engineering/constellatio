@@ -7,6 +7,7 @@ import CustomThemingProvider from "@/provider/CustomThemingProvider";
 import InvalidateQueriesProvider from "@/provider/InvalidateQueriesProvider";
 import MeilisearchProvider from "@/provider/MeilisearchProvider";
 import { api } from "@/utils/api";
+import { isDevelopment, isStaging } from "@/utils/env";
 
 import { ModalsProvider } from "@mantine/modals";
 import { Notifications } from "@mantine/notifications";
@@ -33,7 +34,7 @@ const AppContainer: FunctionComponent<ConstellatioAppProps> = ({ Component, page
     <>
       <Head>
         <title>{title}</title>
-        <link rel="shortcut icon" href="/favicon.png"/>
+        <link rel="shortcut icon" href={isStaging ? "/favicon-staging.png" : "/favicon.png"}/>
         <meta name="viewport" content="minimum-scale=1, initial-scale=1, width=device-width"/>
       </Head>
       <SessionContextProvider supabaseClient={supabase} initialSession={pageProps.initialSession}>
