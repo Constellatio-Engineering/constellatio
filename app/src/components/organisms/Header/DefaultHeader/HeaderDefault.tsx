@@ -82,7 +82,7 @@ const HeaderDefault: FunctionComponent = () =>
             {isDevelopment && <HeaderDefaultRecreateSearch/>}
             {
               showOnboarding ? (
-                <OnboardingThirdStep onboardingStepsIndex={onboardingStepsIndex}/>
+                <OnboardingThirdStep onboardingStepsIndex={onboardingStepsIndex} setOnboardingStepsIndex={setOnboardingStepsIndex}/>
               ) : (
                 <HeaderItemSearchBar/>
               )

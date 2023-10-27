@@ -4,15 +4,16 @@ import OnboardingTutorialStepItem from "@/components/molecules/onboardingTutoria
 import OnboardingTutorialPopover from "@/components/organisms/onboardingTutorialPopover/OnboardingTutorialPopover";
 import useSetOnboardingResult from "@/hooks/useSetOnboardingResult";
 
-import { type FunctionComponent } from "react";
+import { type Dispatch, type SetStateAction, type FunctionComponent } from "react";
 
 import HeaderItemSearchBar from "./HeaderItemSearchBar";
 
 type TOnboardingThirdStepProps = {
   readonly onboardingStepsIndex: number;
+  readonly setOnboardingStepsIndex: Dispatch<SetStateAction<number>>;
 };
 
-const OnboardingThirdStep: FunctionComponent<TOnboardingThirdStepProps> = ({ onboardingStepsIndex }) => 
+const OnboardingThirdStep: FunctionComponent<TOnboardingThirdStepProps> = ({ onboardingStepsIndex, setOnboardingStepsIndex }) => 
 {
   const { setOnboardingResult } = useSetOnboardingResult();
 
@@ -25,7 +26,11 @@ const OnboardingThirdStep: FunctionComponent<TOnboardingThirdStepProps> = ({ onb
           currentStep={3}
           totalSteps={3}
           stepTitle="Suche"
-          onNextPressHandler={() => setOnboardingResult({ result: "completed" })}>
+          onNextPressHandler={() => 
+          {
+            setOnboardingResult({ result: "completed" });
+            setOnboardingStepsIndex(-1);
+          }}>
           <OnboardingTutorialStepItem icon={<Search size={20}/>} itemTitle="Umfassende, blitzschnelle Suche" itemDescription="Dank ausgeklügelter Filtermöglichkeiten und neuester Technik findest du immer sofort deine benötigten Inhalte."/>
         </OnboardingTutorialStep>
       )}
