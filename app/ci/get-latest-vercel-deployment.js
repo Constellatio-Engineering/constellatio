@@ -26,6 +26,21 @@ const getLatestVercelDeployment = async () =>
   const projectId = process.env.VERCEL_PROJECT_ID;
   const teamId = process.env.VERCEL_TEAM_ID;
 
+  if(!accessToken)
+  {
+    console.error("VERCEL_ACCESS_TOKEN is not set");
+  }
+  
+  if(!projectId)
+  {
+    console.error("VERCEL_PROJECT_ID is not set");
+  }
+
+  if(!teamId)
+  {
+    console.error("VERCEL_TEAM_ID is not set");
+  }
+
   if(!accessToken || !projectId || !teamId)
   {
     throw new Error("VERCEL_ACCESS_TOKEN, VERCEL_TEAM_ID and VERCEL_PROJECT_ID must be set");
