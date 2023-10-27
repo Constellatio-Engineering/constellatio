@@ -32,7 +32,8 @@ const ProfileLearningTimeBlockHeader: FunctionComponent<{
         <div>
           <div css={styles.blockHeadDescription}>
             <CaptionText styleType="caption-01-medium" component="p">
-              YEAR&lsquo;S AVERAGE LEARNING TIME
+              {/* Wöchentliche Lernzeit */}
+              Heutige Lernzeit
             </CaptionText>
           </div>
           <div css={styles.blockHeadTitle}>

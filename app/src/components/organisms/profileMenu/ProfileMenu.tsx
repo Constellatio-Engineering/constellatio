@@ -8,6 +8,7 @@ import { supabase } from "@/lib/supabase";
 import { InvalidateQueriesContext } from "@/provider/InvalidateQueriesProvider";
 import { paths } from "@/utils/paths";
 
+import { useMediaQuery } from "@mantine/hooks";
 import { notifications } from "@mantine/notifications";
 import { IconLogout } from "@tabler/icons-react";
 import router from "next/router";
@@ -49,25 +50,30 @@ const ProfileMenu: FunctionComponent<IProfileMenu> = ({
       console.error("error while signing out", error);
     }
   };
+  const isBigScreen = useMediaQuery("(min-width: 1100px)");
 
   return (
     <div css={styles.wrapper}>
       <ProfileMenuMainProfileInfo userDetails={userDetails}/>
       <ProfileMenuUniversityTab title={userDetails.university} semester={`${userDetails.semester}. Semester`}/>
-      <div css={styles.tabsList}>
-        {tabs.map(tab => (
-          <MenuListItem
-            key={tab.slug}
-            title={tab.title}
-            selected={tab.slug === activeTabSlug}
-            onClick={() => void setTab(tab.slug)}
-          />
-        ))}
-      </div>
-      <div css={styles.groupedLinks}>
-        <LinkButton title="View onboarding tips" icon={<NoteIcon/>}/>
-        <LinkButton title="Log out" onClick={async () => handleSignOut()} icon={<IconLogout/>}/>
-      </div>
+      {isBigScreen && (
+        <>
+          <div css={styles.tabsList}>
+            {tabs.map(tab => (
+              <MenuListItem
+                key={tab.slug}
+                title={tab.title}
+                selected={tab.slug === activeTabSlug}
+                onClick={() => void setTab(tab.slug)}
+              />
+            ))}
+          </div>
+          <div css={styles.groupedLinks}>
+            <LinkButton title="View onboarding tips" icon={<NoteIcon/>}/>
+            <LinkButton title="Log out" onClick={async () => handleSignOut()} icon={<IconLogout/>}/>
+          </div>
+        </>
+      )}
     </div>
   );
 };

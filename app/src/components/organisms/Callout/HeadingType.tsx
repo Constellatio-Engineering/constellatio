@@ -2,6 +2,7 @@ import { BodyText } from "@/components/atoms/BodyText/BodyText";
 import { AlertStoke } from "@/components/Icons/AlertStroke";
 import { Bookmark } from "@/components/Icons/Bookmark";
 import { MedalIcon } from "@/components/Icons/MedalIcon";
+import { PDFIcon } from "@/components/Icons/PDFIcon";
 import { Pen } from "@/components/Icons/Pen";
 import { Quote } from "@/components/Icons/Quote";
 import { StarIcon } from "@/components/Icons/StarIcon";
@@ -21,6 +22,38 @@ export const HeadingType: FunctionComponent<Pick<IGenCallout, "calloutType">> = 
         </>
       );
 
+    case "bestPractice":
+      return (
+        <>
+          <MedalIcon/>
+          <BodyText component="p" styleType="body-01-bold" tt="capitalize">Klausurtipp</BodyText>
+        </>
+      );
+
+    case "definition":
+      return (
+        <>
+          <Pen/>
+          <BodyText component="p" styleType="body-01-bold" tt="capitalize">Definition</BodyText>
+        </>
+      ); 
+
+    case "quote":
+      return (
+        <>
+          <Quote/>
+          <BodyText component="p" styleType="body-01-bold" tt="capitalize">Zitat</BodyText>
+        </>
+      );
+
+    case "example": 
+      return (
+        <>
+          <PDFIcon/>
+          <BodyText component="p" styleType="body-01-bold" tt="capitalize">Beispiel</BodyText>
+        </>
+      );
+
     case "lawReference":
       return (
         <>
@@ -36,30 +69,6 @@ export const HeadingType: FunctionComponent<Pick<IGenCallout, "calloutType">> = 
           <BodyText component="p" styleType="body-01-bold" tt="capitalize">Problem</BodyText>
         </>
       );
-
-    case "bestPractice":
-      return (
-        <>
-          <MedalIcon/>
-          <BodyText component="p" styleType="body-01-bold" tt="capitalize">Kausurtipp</BodyText>
-        </>
-      );
-
-    case "quote":
-      return (
-        <>
-          <Quote/>
-          <BodyText component="p" styleType="body-01-bold" tt="capitalize">Zitat</BodyText>
-        </>
-      );
-
-    case "definition":
-      return (
-        <>
-          <Pen/>
-          <BodyText component="p" styleType="body-01-bold" tt="capitalize">Definition</BodyText>
-        </>
-      ); 
 
     default:
       return (

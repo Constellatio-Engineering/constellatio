@@ -21,20 +21,27 @@ const SearchOverlayRightSide: FunctionComponent<SearchOverlayRightSideProps> = (
 
   return (
     <div css={styles.suggestionsRight}>
-      {hasInput && searchResults.userUploads.length > 0 && (
+      {hasInput && (searchResults.userDocuments.length > 0 || searchResults.userUploads.length > 0) && (
         <>
-          <SuggestionSection label="Your materials" labelVariant="neutral">
-            {searchResults.userUploads.map((result) => (
+          <SuggestionSection label="Deine Dateien" labelVariant="neutral">
+            {searchResults.userUploads.slice(0, 9).map((result) => (
               <Link href={`${paths.search}?.find=${result.originalFilename}&tab=userUploads`} key={result.id} className="suggestion__section__link">
                 <CustomLink styleType="link-content" component="p">
-                  {result.originalFilename}
+                  Hochgeladene Dateien / {result.originalFilename}
+                </CustomLink>
+              </Link>
+            ))}
+            {searchResults.userDocuments.slice(0, 9).map((result) => (
+              <Link href={`${paths.search}?.find=${result.name}&tab=userUploads`} key={result.id} className="suggestion__section__link">
+                <CustomLink styleType="link-content" component="p">
+                  Constellatio Docs / {result.name}
                 </CustomLink>
               </Link>
             ))}
           </SuggestionSection>
         </>
       )}
-      <SuggestionSection label="popular categories" labelVariant="neutral">
+      <SuggestionSection label="Häufige Rechtsgebiete" labelVariant="neutral">
         <div className="popularCategories">
           
           {popularSearch?.popularCategories?.map(result => (

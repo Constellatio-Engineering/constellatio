@@ -9,7 +9,6 @@ export const wrapper = css`
   display: flex;
   flex-direction: column;
   position: relative;
-  /* border-radius: 12px; */
   `;
 
 const CSSClickableEffect = (theme: MantineTheme) => css`
@@ -21,18 +20,25 @@ const CSSClickableEffect = (theme: MantineTheme) => css`
 export const tableWrapper = (theme: MantineTheme) => css`
   text-align: left;
   border-radius: 12px;
-  /* overflow: hidden; */
-  width: 100%;
+  border-collapse: collapse;
   outline: 1px solid ${theme.colors["neutrals-01"][3]};
-  /* outline:2px solid red; */border-radius: 12px;
+  width: 100%;
   thead{
-    border-radius: 12px 12px  0 0;
+    background: ${theme.colors["neutrals-01"][2]};
   }
   td {
     padding: 16px;
   }
   th {
     padding: 8px 16px;
+    &:first-of-type{
+      border-collapse: collapse;
+      border-radius: 12px 0px 0 0;
+    }
+    &:last-of-type{
+      border-collapse: collapse;
+      border-radius: 0px 12px 0 0px;
+    }
   }
   th,
   td {
@@ -45,21 +51,12 @@ export const tableWrapper = (theme: MantineTheme) => css`
     width: 100%;
     cursor: pointer;
   }
-  tr{
-    border-top: 1px solid ${theme.colors["neutrals-01"][3]};
-  }
   .label{
     svg{
       vertical-align: text-bottom;
       margin-right: 8px;
     }
   }
-`;
-
-export const tableHead = (theme: MantineTheme) => css`
-  background-color: #f6f6f5;
-  color: ${theme.colors["neutrals-01"][7]};
-  border-radius: 12px;
 `;
 
 export const tableBody = (theme: MantineTheme) => css`
@@ -89,12 +86,19 @@ min-height: 55px;
 }
 .mantine-Menu-dropdown {
   padding: 0;
-  border-radius: 12px;
 }
 .mantine-Menu-item {
   border-bottom: 1px solid ${theme.colors["neutrals-01"][3]};
   border-radius:0px;
 }
+`;
+
+export const cellFolder = (theme: MantineTheme) => css`
+	color: ${theme.colors["neutrals-01"][9]};
+	svg {
+		vertical-align: text-bottom;
+		margin-right: 8px;
+	}
 `;
 
 export const docName = (theme: MantineTheme) => css`

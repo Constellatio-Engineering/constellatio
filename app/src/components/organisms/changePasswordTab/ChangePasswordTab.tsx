@@ -7,7 +7,7 @@ import { passwordSchema } from "@/schemas/auth/registrationForm.schema";
 
 import { Title } from "@mantine/core";
 import { useForm, zodResolver } from "@mantine/form";
-import { useDisclosure } from "@mantine/hooks";
+import { useDisclosure, useMediaQuery } from "@mantine/hooks";
 import React, { type FunctionComponent } from "react";
 import { z } from "zod";
 
@@ -54,9 +54,11 @@ const ChangePasswordTab: FunctionComponent = () =>
       setSuccess(true);
     }
   };
+  const isTabletScreen = useMediaQuery("(max-width: 1100px)"); 
+
   return (
     <div css={styles.wrapper}>
-      <Title order={3}>Change password</Title>
+      {!isTabletScreen && <Title order={3}>Change password</Title>}
       {err && <AlertCard onClick={() => setErr(false)} variant="error">Sorry, we weren not able to change password. Please, try again</AlertCard>}
       {success && <AlertCard style={{ display: "flex", justifyContent: "flex-start" }} onClick={() => setSuccess(false)} variant="success">Your password has been changed</AlertCard>}
       <form onSubmit={handleSubmit}>

@@ -38,7 +38,7 @@ export class RegisterError extends TRPCError
   }
 }
 
-export class FileTooLargeError extends TRPCError
+/* export class FileTooLargeError extends TRPCError
 {
   public constructor()
   {
@@ -52,7 +52,7 @@ export class BadFileError extends TRPCError
   {
     super({ cause, code: "BAD_REQUEST" });
   }
-}
+}*/
 
 export class NotFoundError extends TRPCError
 {

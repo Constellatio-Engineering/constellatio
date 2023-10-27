@@ -8,8 +8,8 @@ border-radius: 8px;
 display: flex;  
 gap: 60px;
 align-items: flex-start;
-overflow:hidden;
 box-shadow: ${theme.shadows["elevation-big"]};
+margin: 24px 0;
 
 > div :nth-of-type(2) {
   width: 100%;

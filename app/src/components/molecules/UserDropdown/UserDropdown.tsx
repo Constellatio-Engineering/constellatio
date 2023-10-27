@@ -8,7 +8,7 @@ import { paths } from "@/utils/paths";
 
 import { Menu, Title } from "@mantine/core";
 import { notifications } from "@mantine/notifications";
-import { IconBrandStripe, IconLogout, IconUser } from "@tabler/icons-react";
+import { IconLogout, IconUser } from "@tabler/icons-react";
 import { useRouter } from "next/router";
 import React, { type FunctionComponent } from "react";
 
@@ -19,11 +19,6 @@ export const UserDropdown: FunctionComponent = () =>
   const { userDetails } = useUserDetails();
   const { invalidateEverything } = useContextAndErrorIfNull(InvalidateQueriesContext);
   const router = useRouter();
-
-  const handleSubscription = async (): Promise<void> =>
-  {
-    await router.push("/settings/billing");
-  };
 
   const handleSignOut = async (): Promise<void> =>
   {
@@ -81,12 +76,7 @@ export const UserDropdown: FunctionComponent = () =>
         <Menu.Item
           onClick={() => void router.push(`${paths.profile}`)}
           icon={<IconUser size="0.9rem" stroke={1.5}/>}>
-          Overview
-        </Menu.Item>
-        <Menu.Item
-          onClick={handleSubscription}
-          icon={<IconBrandStripe size="0.9rem" stroke={1.5}/>}>
-          Abonnement
+          Profil
         </Menu.Item>
         <Menu.Item
           onClick={handleSignOut}

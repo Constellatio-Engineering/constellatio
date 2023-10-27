@@ -9,9 +9,11 @@ import CaseBlockBookmarkButton from "@/components/organisms/caseBlock/caseBlockB
 import useBookmarks from "@/hooks/useBookmarks";
 import useCasesProgress from "@/hooks/useCasesProgress";
 import { type IGenArticle, type IGenFullCaseFragment } from "@/services/graphql/__generated/sdk";
+import { paths } from "@/utils/paths";
 
+// import { useMediaQuery } from "@mantine/hooks";
 import Link from "next/link";
-import React, { Fragment, type FunctionComponent } from "react";
+import React, { type FunctionComponent } from "react";
 
 import * as styles from "./ItemBlock.styles";
 import { timeFormatter } from "../overviewCard/OverviewCard";
@@ -84,6 +86,8 @@ const ItemBlock: FunctionComponent<ICaseBlockProps> = ({
         return CasesTable;
     }
   };
+  // const matches = useMediaQuery("(min-width: 1100px)");
+  // const isSmallScreensOnFavorite = !matches && tableType === "favorites";
 
   const [numberOfShowingItems, setNumberOfShowingItems] = React.useState<number>(5);
   return items && items?.length > 0 ? (
@@ -100,7 +104,7 @@ const ItemBlock: FunctionComponent<ICaseBlockProps> = ({
             return item && item.id && (
               <tr key={item?.id}>
                 <td className="primaryCell">
-                  <Link passHref shallow href={`/${variant === "case" ? "cases" : "dictionary"}/${item?.id}`}>
+                  <Link passHref shallow href={`${variant === "case" ? paths.cases : paths.dictionary}/${item?.id}`}>
                     <TableCell variant="titleTableCell" clickable>
                       {item?.title}
                     </TableCell>
@@ -146,7 +150,7 @@ const ItemBlock: FunctionComponent<ICaseBlockProps> = ({
             <>
               <span className="linearGredient"/>
               <Button<"button"> css={styles.expandTableButton} styleType="tertiary" onClick={() => setNumberOfShowingItems(prev => prev + 10)}>
-                {items?.length - numberOfShowingItems > 10 ? 10 : items?.length - numberOfShowingItems} weitere anzeigen <ArrowDown/>
+                {items?.length - numberOfShowingItems > 10 ? 10 : items?.length - numberOfShowingItems} Weitere anzeigen <ArrowDown/>
               </Button>
             </>
           </div>

@@ -33,10 +33,24 @@ const SearchBar: FunctionComponent<SearchBarProps> = () =>
 
   const rightSection = searchValue ? (
     <>
-      <CustomLink styleType="link-primary" component="button" onClick={() => setSearchValue("")}>Clear</CustomLink>
-      <Button<"button"> styleType="primary" type="submit" disabled={Object.values(searchResults).every(result => result.length === 0)}>
-        View all results
-      </Button>
+      <div css={styles.searchBtns}>
+        <CustomLink
+          styleType="link-primary"
+          component="button"
+          onClick={() => setSearchValue("")}
+          title="Neue Suche"
+          name="Neue Suche">
+          Neue Suche
+        </CustomLink>
+        <Button<"button">
+          styleType="primary"
+          type="submit"
+          disabled={Object.values(searchResults).every(result => result.length === 0)}
+          name="Alle Ergebnisse"
+          title="Alle Ergebnisse">
+          Alle Ergebnisse
+        </Button>
+      </div>
       <span onClick={() => closeDrawer()} className="closeBtn"><Cross size={32}/></span>
     </>
   ) : (
@@ -73,7 +87,9 @@ const SearchBar: FunctionComponent<SearchBarProps> = () =>
       <Input
         data-autofocus
         type="search"
-        placeholder="Type Here"
+        name="Durchsuchen"
+        title="Durchsuchen"
+        placeholder="Durchsuchen"
         styles={styles.inputStyles()}
         icon={<Search size={24}/>}
         value={searchValue}

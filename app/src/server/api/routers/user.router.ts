@@ -1,10 +1,13 @@
 import { db } from "@/db/connection";
 import {
+  imageFileExtensions, imageFileMimeTypes,
   type ProfilePictureInsert, profilePictures, users
 } from "@/db/schema";
+import { env } from "@/env.mjs";
+import { generateCreateSignedUploadUrlSchema } from "@/schemas/uploads/createSignedUploadUrl.schema";
 import { setOnboardingResultSchema } from "@/schemas/users/setOnboardingResult.schema";
 import { setProfilePictureSchema } from "@/schemas/users/setProfilePicture.schema";
-import { getClouStorageFileUrl } from "@/server/api/services/uploads.services";
+import { getClouStorageFileUrl, getSignedCloudStorageUploadUrl } from "@/server/api/services/uploads.services";
 import { getUserWithRelations } from "@/server/api/services/users.service";
 import { createTRPCRouter, protectedProcedure } from "@/server/api/trpc";
 import { filterUserForClient } from "@/utils/filters";
@@ -14,6 +17,12 @@ import { eq, and } from "drizzle-orm";
 import { z } from "zod";
 
 export const usersRouter = createTRPCRouter({
+  createSignedProfilePictureUploadUrl: protectedProcedure
+    .input(generateCreateSignedUploadUrlSchema(imageFileExtensions, imageFileMimeTypes))
+    .mutation(async ({ ctx: { userId }, input: file }) =>
+    {
+      return getSignedCloudStorageUploadUrl({ file, userId });
+    }),
   getOnboardingResult: protectedProcedure
     .query(async ({ ctx: { userId } }) =>
     {
@@ -42,7 +51,11 @@ export const usersRouter = createTRPCRouter({
         throw new NotFoundError();
       }
 
-      return getClouStorageFileUrl({ serverFilename: file.serverFilename, userId });
+      return getClouStorageFileUrl({
+        serverFilename: file.serverFilename,
+        staleTime: env.NEXT_PUBLIC_PROFILE_PICTURE_STALE_TIME_IN_SECONDS * 1000,
+        userId 
+      });
     }),
   getUserDetails: protectedProcedure
     .query(async ({ ctx: { userId } }) =>
@@ -58,16 +71,23 @@ export const usersRouter = createTRPCRouter({
     }),
   setProfilePicture: protectedProcedure
     .input(setProfilePictureSchema)
-    .mutation(async ({ ctx: { userId }, input: { id, serverFilename } }) =>
+    .mutation(async ({ ctx: { userId }, input: file }) =>
     {
       const profilePictureInsert: ProfilePictureInsert = {
-        id,
-        serverFilename,
-        userId
+        contentType: file.contentType,
+        fileExtension: file.fileExtensionLowercase,
+        id: file.id,
+        serverFilename: file.serverFilename,
+        userId,
       };
 
       await db.insert(profilePictures).values(profilePictureInsert).onConflictDoUpdate({
-        set: { id, serverFilename },
+        set: {
+          contentType: profilePictureInsert.contentType,
+          fileExtension: profilePictureInsert.fileExtension,
+          id: profilePictureInsert.id,
+          serverFilename: profilePictureInsert.serverFilename,
+        },
         target: profilePictures.userId,
       });
     })

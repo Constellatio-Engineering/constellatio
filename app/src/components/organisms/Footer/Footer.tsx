@@ -23,7 +23,7 @@ export const Footer: FC<FooterProps> = ({ variant = "default" }) =>
         <SFooter variant={variant}>
           <Group position="apart">
             <Group spacing="spacing-16">
-              <LinkButton icon={<Help/>} title="Need help?" size="big"/>
+              <LinkButton icon={<Help/>} title="Hilfe" size="big"/>
             </Group>
             <Group spacing="spacing-8">
               <Image src={ConstellatioLogoIcon} alt="Constellatio"/>{" "}
@@ -32,7 +32,7 @@ export const Footer: FC<FooterProps> = ({ variant = "default" }) =>
                 styleType="caption-01-medium"
                 tt="uppercase"
                 c="neutrals-01.9">
-                &copy; Constellatio 2023. All Rights Reserved.
+                &reg; Constellatio 2023
               </CaptionText>
             </Group>
           </Group>
@@ -47,7 +47,7 @@ export const Footer: FC<FooterProps> = ({ variant = "default" }) =>
                 styleType="caption-01-medium"
                 tt="uppercase"
                 c="neutrals-01.0">
-                &copy; Constellatio 2023. All Rights Reserved.
+                &reg; Constellatio 2023
               </CaptionText>
             </Group>
           </Flex>
@@ -62,7 +62,7 @@ export const Footer: FC<FooterProps> = ({ variant = "default" }) =>
                 styleType="caption-01-medium"
                 tt="uppercase"
                 c="neutrals-01.9">
-                &copy; Constellatio 2023. All Rights Reserved.
+                &reg; Constellatio 2023
               </CaptionText>
             </Group>
           </Flex>

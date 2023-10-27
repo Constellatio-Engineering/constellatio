@@ -139,6 +139,7 @@ export const item = ({
   vertical-align: baseline;
   cursor: pointer;
   ${highlighted && CSSHighlighted(theme)}
+  
 `;
 
 export const facts = css`

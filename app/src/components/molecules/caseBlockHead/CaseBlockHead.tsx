@@ -53,14 +53,14 @@ const CaseBlockHead: FunctionComponent<ICaseBlockHeadProps> = ({
       case "favoriteItemsBlock":
         return (
           <>
-            {items && variant === "case" ? <Label variant="case">{items} Fälle</Label> : <Label variant="dictionary">{items} Articles</Label>}
+            {items && variant === "case" ? <Label variant="case">{items} Fälle</Label> : <Label variant="dictionary">{items} Artikel</Label>}
           </>
         );
       case "searchBlock":
         return (
 
           <>
-            {items && variant === "case" ? <Label variant="case">{items} Fälle</Label> : <Label variant="dictionary">{items} Articles</Label>}
+            {items && variant === "case" ? <Label variant="case">{items} Fälle</Label> : <Label variant="dictionary">{items} Artikel</Label>}
           </>
         );
       case "searchPapersBlock":
@@ -91,7 +91,7 @@ const CaseBlockHead: FunctionComponent<ICaseBlockHeadProps> = ({
       )}
       <div css={styles.title} lang="de">
         {categoryName && (blockType === "itemsBlock" || blockType === "favoriteItemsBlock" || blockType === "searchBlock") && <Title order={3}>{categoryName}</Title>}
-        {blockType === "searchPapersBlock" ? <Title order={3}>Papers</Title> : blockType === "searchUploadedMaterials" && <Title order={3}>Uploaded materials</Title>}
+        {blockType === "searchPapersBlock" ? <Title order={3}>Papers</Title> : blockType === "searchUploadedMaterials" && <Title order={3}>Hochgeladene Dateien</Title>}
       </div>
       <div className="details">
         {detailRenderer({ blockType, variant })}

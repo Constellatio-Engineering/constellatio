@@ -37,7 +37,7 @@ export const RichtextEditorField: FC<RichtextEditorFieldProps> = ({
       StarterKit,
       Link,
       Placeholder.configure({
-        placeholder: `${variant === "simple" ? "Enter your case solution here..." : "Start typing here..."} `,
+        placeholder: `${variant === "simple" ? "Gutachten verfassen..." : "Beginne hier..."} `,
       }),
     ],
     onUpdate: (e) =>

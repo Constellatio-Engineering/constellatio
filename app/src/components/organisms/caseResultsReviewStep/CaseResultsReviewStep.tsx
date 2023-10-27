@@ -1,4 +1,5 @@
 import { Button } from "@/components/atoms/Button/Button";
+import { RichTextHeadingOverwrite } from "@/components/helpers/RichTextHeadingOverwrite";
 import { ArrowDown } from "@/components/Icons/ArrowDown";
 import { ArrowUp } from "@/components/Icons/ArrowUp";
 import { Bookmark } from "@/components/Icons/Bookmark";
@@ -11,6 +12,7 @@ import { Richtext } from "@/components/molecules/Richtext/Richtext";
 import useResetCaseProgress from "@/hooks/useResetCaseProgress";
 import useSubmittedCaseSolution from "@/hooks/useSubmittedCaseSolution";
 import { type IGenCase_Resolution, type IGenCase_Facts, type Maybe } from "@/services/graphql/__generated/sdk";
+import { type IHeadingNode } from "types/richtext";
 
 import {
   Accordion, Container, Group, ScrollArea, Spoiler, Text, Title
@@ -19,6 +21,7 @@ import { useDisclosure } from "@mantine/hooks";
 import React, { useRef, type FunctionComponent, useEffect, useState } from "react";
 
 import * as styles from "./CaseResultsReviewStep.styles";
+import { getNestedHeadingIndex } from "../floatingPanel/generateTocHelper";
 import IconButtonBar from "../iconButtonBar/IconButtonBar";
 
 interface ICaseResultsReviewStepProps 
@@ -42,7 +45,7 @@ const CaseResultsReviewStep: FunctionComponent<ICaseResultsReviewStepProps> = ({
   const solutionContent = useRef<HTMLDivElement>(null);
   const [solutionElementHeight, setSolutionElementHeight] = React.useState<number>(0);
   const solution: string = isLoading ? "lädt..." : (submittedCaseSolution?.solution || "");
-
+  const allResolutionHeadings = resolution?.json?.content?.filter((x: { attrs: { level: number }; type: "heading" }) => x.type === "heading");
   const icons = [
     { src: <Bookmark/>, title: "Bookmark" },
     { src: <Print/>, title: "Print" },
@@ -63,22 +66,24 @@ const CaseResultsReviewStep: FunctionComponent<ICaseResultsReviewStepProps> = ({
   };
 
   const ShowAllBtn = (
-    <Button<"button">
+    <Button<"a">
       styleType="tertiary"
       rightIcon={<ArrowDown size={20}/>}
       size="medium"
+      component="a"
       onClick={() => setIsExpandSolution(true)}>
-      Show all
+      Ausklappen
     </Button>
   );
 
   const ShowLessBtn = (
-    <Button<"button">
+    <Button<"a">
       styleType="tertiary"
       rightIcon={<ArrowUp size={20}/>}
       size="medium"
+      component="a"
       onClick={() => setIsExpandSolution(false)}>
-      Show less
+      Einklappen
     </Button>
   );
 
@@ -92,7 +97,7 @@ const CaseResultsReviewStep: FunctionComponent<ICaseResultsReviewStepProps> = ({
                 <Accordion variant="separated">
                   <Accordion.Item value="facts">
                     <Accordion.Control>
-                      <Title order={3}>Facts</Title>
+                      <Title order={3}>Sachverhalt</Title>
                     </Accordion.Control>
                     <Accordion.Panel>
                       <ScrollArea h={500} offsetScrollbars>
@@ -105,9 +110,9 @@ const CaseResultsReviewStep: FunctionComponent<ICaseResultsReviewStepProps> = ({
             )}
             <div css={styles.solutionWrapper}>
               <div className="solution-header">
-                <Title order={3}><Pen/> Your solution</Title>
+                <Title order={3}><Pen/> Deine Lösung</Title>
                 <div className="edit-but">
-                  <Button<"button"> onClick={() => editButtonClick()} styleType="secondarySimple"><Edit/> Edit
+                  <Button<"button"> onClick={() => editButtonClick()} styleType="secondarySimple"><Edit/> Bearbeiten
                   </Button>
                 </div>
               </div>
@@ -135,12 +140,21 @@ const CaseResultsReviewStep: FunctionComponent<ICaseResultsReviewStepProps> = ({
           {resolution?.json && (
             <div css={styles.resolutionWrapper}>
               <div className="resolution-header">
-                <Title order={2}><Notepad size={24}/> Resolution</Title>
+                <Title order={2}><Notepad size={24}/> Musterlösung</Title>
                 <div className="icons-bar">
                   <IconButtonBar icons={icons}/>
                 </div>
               </div>
-              <Richtext data={resolution}/>
+              <Richtext
+                data={resolution}
+                richTextOverwrite={{
+                  heading: (props) => 
+                  {
+                    const node = props!.node as unknown as IHeadingNode;
+                    return RichTextHeadingOverwrite({ index: getNestedHeadingIndex(node, allResolutionHeadings), ...props });
+                  },
+                }}
+              />
             </div>
           )}
         </div>

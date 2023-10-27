@@ -12,4 +12,9 @@ padding:240px 60px 100px 60px;
 display: flex;
 flex-direction: column;
 gap:100px;
+@media screen and (max-width: 1200px) {
+    padding:180px 60px 60px 60px;
+    gap:60px;
+
+}
 `;
