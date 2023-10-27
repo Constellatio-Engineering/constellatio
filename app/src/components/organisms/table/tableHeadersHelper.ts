@@ -5,7 +5,7 @@ type ITableHeaders = {
 };
 
 export const tableHeaders = ({
-  tableType,
+  tableType
 }: {
   tableType: ITableProps["tableType"];
 }): ITableHeaders[] => 
@@ -76,9 +76,6 @@ export const tableHeaders = ({
             {
               title: "",
             },
-            // {
-            //   title: "",
-            // },
           ];
 
         case "search":

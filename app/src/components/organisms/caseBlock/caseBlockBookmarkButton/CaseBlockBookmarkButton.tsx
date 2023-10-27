@@ -1,4 +1,3 @@
-import { BodyText } from "@/components/atoms/BodyText/BodyText";
 import { Button } from "@/components/atoms/Button/Button";
 import { Bookmark } from "@/components/Icons/Bookmark";
 import { BookmarkFilledIcon } from "@/components/Icons/BookmarkFilledIcon";
@@ -131,10 +130,7 @@ const CaseBlockBookmarkButton: FunctionComponent<ICaseBlockBookmarkButtonProps> 
         {
           setShowDeleteBookmarkModal(false);
         }}>
-        <Title order={3}>Remove from favorites?</Title>
-        <BodyText styleType="body-01-regular" component="p">
-          Are you sure you want to delete this case from your favorites?
-        </BodyText>
+        <Title order={3}>Aus den Favoriten entfernen?</Title>
         <div className="buttons">
           <Button<"button">
             type="button"
@@ -144,7 +140,8 @@ const CaseBlockBookmarkButton: FunctionComponent<ICaseBlockBookmarkButtonProps> 
             onClick={function(): void 
             {
               setShowDeleteBookmarkModal(false);
-            }}>No, keep
+            }}>
+            Nein, behalten
           </Button>
           <Button<"button">
             type="button"
@@ -161,7 +158,8 @@ const CaseBlockBookmarkButton: FunctionComponent<ICaseBlockBookmarkButtonProps> 
                 removeBookmark(bookmarkData);
               }
               setShowDeleteBookmarkModal(false);
-            }}>Yes, delete
+            }}>
+            Ja, entfernen
           </Button>
         </div>
       </Modal>

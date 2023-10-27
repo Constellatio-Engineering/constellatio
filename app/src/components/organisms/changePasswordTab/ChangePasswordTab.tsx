@@ -64,13 +64,13 @@ const ChangePasswordTab: FunctionComponent = () =>
       <form onSubmit={handleSubmit}>
         <Input
           inputType="password"
-          label="Current password"
-          description="Just to make sure it is you and protect your account"
-          error="Sorry, your password doesn't match our records"
+          label="Aktuelles Passwort"
+          description="Um dein Konto zu schützen, möchten wir sicher gehen, dass du es bist."
+          error="Sorry, das eingegebene Passwort stimmt nicht mit unserer Datenbank überein. "
         />
         <Input
           inputType="password" 
-          label="New password"
+          label="Neues Passwort"
           onVisibilityChange={toggle}
           {...form.getInputProps("password")}
         />
@@ -81,10 +81,10 @@ const ChangePasswordTab: FunctionComponent = () =>
         <Input 
           {...form.getInputProps("passwordConfirm")}
           inputType="password" 
-          label="Confirm password"
+          label="Neues Passwort erneut eingeben"
           error={form.errors.passwordConfirm}
         />
-        <Button<"button"> type="submit" styleType="primary" size="large">Change password</Button>
+        <Button<"button"> type="submit" styleType="primary" size="large">Passwort ändern</Button>
       </form>
     </div>
   );

@@ -40,7 +40,7 @@ export const IconWrapper = styled.div<{ variant: "win" | "lose" }>`
 
 export const LabelWrapper = styled.div<{ variant: "win" | "lose" }>`
   border-radius: ${({ theme }) => theme.radius["radius-8"]};
-
+  white-space: nowrap;
   > p {
     display: flex;
     padding: ${({ theme }) => theme.spacing["spacing-4"]} ${({ theme }) => theme.spacing["spacing-8"]};

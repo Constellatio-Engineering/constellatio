@@ -4,7 +4,7 @@ import { type IHeadingNode } from "types/richtext";
 
 // import { RichTextRenderer } from "@caisy/rich-text-react-renderer";
 import { useIntersection } from "@mantine/hooks";
-import React, { type ReactElement, type ReactNode, type ElementType } from "react";
+import React, { type ReactElement, type ElementType } from "react";
 
 import { getNumericalLabel } from "../organisms/floatingPanel/generateTocHelper";
 /**
@@ -21,12 +21,13 @@ export const RichTextHeadingOverwrite = ({
   const HeadingTag = `h${level}` as ElementType;
   const { entry, ref } = useIntersection();
   const setObservedHeadline = useCaseSolvingStore(s => s.setObservedHeadline); 
-  // const observedHeadline = useCaseSolvingStore(s => s.observedHeadline); 
-  const inView = (): ReactNode => 
+  React.useLayoutEffect(() => 
   {
-    setObservedHeadline({ level, slug: entry.target.id });
-    return <></>;
-  };
+    if(entry?.isIntersecting)
+    {
+      setObservedHeadline({ level, slug: entry.target.id });
+    }
+  }, [entry?.isIntersecting, entry?.target?.id, level, setObservedHeadline]);
   return (
     <HeadingTag 
       ref={ref}
@@ -34,7 +35,6 @@ export const RichTextHeadingOverwrite = ({
       id={slugFormatter(node?.content?.[0]?.text ?? "")}>
       {getNumericalLabel(level, index)}
       {" "}{node?.content?.[0]?.text}
-      {entry?.isIntersecting && inView()}
     </HeadingTag>
   );
 };

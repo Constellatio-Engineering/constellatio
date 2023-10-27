@@ -4,9 +4,7 @@ import { FileWhiteIcon } from "@/components/Icons/FileWhite";
 import FavoriteCard from "@/components/molecules/favoriteCard/FavoriteCard";
 import MaterialCard from "@/components/molecules/materialCard/MaterialCard";
 import ProfilePersonalSpaceBlockHead from "@/components/molecules/profilePersonalSpaceBlockHead/ProfilePersonalSpaceBlockHead";
-import useArticles from "@/hooks/useArticles";
-import useBookmarks from "@/hooks/useBookmarks";
-import useCases from "@/hooks/useCases";
+import useAllFavorites from "@/hooks/useAllFavorites";
 import useUploadedFiles from "@/hooks/useUploadedFiles";
 // import useUploadFolders from "@/hooks/useUploadFolders";
 import { type IGenArticle, type IGenCase } from "@/services/graphql/__generated/sdk";
@@ -25,19 +23,27 @@ const ProfilePersonalSpaceBlock: FunctionComponent = () =>
 {
   const router = useRouter();
   const [selectedTab, setSelectedTab] = useState<number>(0);
-  const { bookmarks, isLoading: isUseBookmarksLoading, } = useBookmarks(undefined);
-  const allCasesBookmarks = bookmarks.filter(bookmark => bookmark?.resourceType === "case") ?? [];
-  const { allCases = [], isLoading: isUseCasesLoading, } = useCases();
-  const bookmarkedCases = allCases.filter(caisyCase => allCasesBookmarks.some(bookmark => bookmark.resourceId === caisyCase.id));
-  const { allArticles = [], isLoading: areArticlesLoading } = useArticles(); 
-  // const { folders = [] } = useUploadFolders();
   const { isLoading: isGetUploadedFilesLoading, uploadedFiles } = useUploadedFiles(null);
-  const allArticlesBookmarks = bookmarks.filter(bookmark => bookmark?.resourceType === "article") ?? [];
-  const bookmarkedArticles = allArticles.filter((caisyArticle: IGenArticle) => allArticlesBookmarks.some(bookmark => bookmark.resourceId === caisyArticle.id));
-  const favoritesList = [...bookmarkedCases, ...bookmarkedArticles];
+
+  const {
+    areArticlesLoading,
+    bookmarkedArticles,
+    bookmarkedCases, 
+    favoritesList, 
+    isUseBookmarksLoading, 
+    isUseCasesLoading
+  } = useAllFavorites();
+
+  const favoritesCount = (bookmarkedCases?.length + bookmarkedArticles?.length);
+  const uploadedFilesCount = uploadedFiles?.length;
+
   const tabs = [
-    { icon: { src: <Bookmark/> }, number: (bookmarkedCases?.length + bookmarkedArticles?.length) ?? 0, title: "favorites" }, 
-    { icon: { src: <FileWhiteIcon/> }, number: uploadedFiles?.length, title: " materials" }
+    {
+      icon: { src: <Bookmark/> }, number: favoritesCount, subtitle: favoritesCount > 1 ? "Favoriten" : "Favorit", title: "Favoriten" 
+    }, 
+    {
+      icon: { src: <FileWhiteIcon/> }, number: uploadedFilesCount, subtitle: uploadedFilesCount > 1 ? "Dateien" : "Datei", title: "Deine Dateien" 
+    }
   ];
   return (
     <div css={styles.wrapper}>
@@ -68,8 +74,8 @@ const ProfilePersonalSpaceBlock: FunctionComponent = () =>
                     ))
                   ) : (
                     <EmptyStateCard 
-                      title="You haven not saved any materials yet"
-                      text="You can save cases, dictionary articles, forum questions and highlighted text to Favourites"
+                      title="Noch keine Favoriten vorhanden"
+                      text="Speichere jetzt Fälle oder Lexikonartikel als Favoriten in deinem persönlichen Bereich."
                       variant="For-small-areas"
                     />
                   )
@@ -79,33 +85,42 @@ const ProfilePersonalSpaceBlock: FunctionComponent = () =>
           {favoritesList && favoritesList?.length > 6 && (
             <Link href={`${paths.personalSpace}?category=favourites`}>
               <Button<"button"> styleType="secondarySimple">
-                View all
+                Alle anzeigen
               </Button>
             </Link>
           )}
         </div>
       )}
       {
-      
-        selectedTab === 1 ? 
+        selectedTab === 1 ?
           isGetUploadedFilesLoading ? (<Loader sx={{ margin: "0px" }}/>) :
             (
               <div>
                 <div css={styles.uploadedMaterialsTab}>
-                  {uploadedFiles.slice(0, 6).map((file, index) => (
-                    <MaterialCard
-                      title={file?.originalFilename}
-                      fileExtension={file?.fileExtension}
-                      id={file?.id}
-                      materialType="paper"
-                      key={index}
+                  {uploadedFilesCount > 0 ? (
+                    <>
+                      {uploadedFiles.slice(0, 6).map((file, index) => (
+                        <MaterialCard
+                          title={file?.originalFilename}
+                          fileExtension={file?.fileExtension}
+                          id={file?.id}
+                          materialType="paper"
+                          key={index}
+                        />
+                      ))}
+                    </>
+                  ) : (
+                    <EmptyStateCard 
+                      title="Du hast noch keine Dateien hochgeladen"
+                      text="Du kannst jetzt jetzt eigene Dateien hochladen und in deinem persönlichen Bereich ablegen."
+                      variant="For-small-areas"
                     />
-                  ))}
+                  )}
                 </div>
-                {uploadedFiles.length > 6 && (
+                {uploadedFilesCount > 6 && (
                   <Link href={`${paths.personalSpace}?category=materials`}>
                     <Button<"button"> styleType="secondarySimple">
-                      View all
+                      Alle anzeigenl
                     </Button>
                   </Link>
                 )}

@@ -18,9 +18,9 @@ const ResetPasswordSuccess: FunctionComponent<Props> = ({ closeModal }) =>
   return (
     <div css={styles.wrapper}>
       <CaisyImg src={FlagImg.src} width={70} height={70}/>
-      <Title mb={8} order={3}>Reset link has been sent</Title>
-      <BodyText mb={24} styleType="body-01-regular">A link with the information needed to reset your password has been sent to your email address.</BodyText>
-      <Button<"button"> type="button" onClick={closeModal} styleType="primary">Got it, close</Button>
+      <Title mb={8} order={3}>Der Link wurde versendet</Title>
+      <BodyText mb={24} styleType="body-01-regular">Bitte prüfe dein E-Mail-Postfach.</BodyText>
+      <Button<"button"> type="button" onClick={closeModal} styleType="primary">Schließen</Button>
     </div>
   );
 };

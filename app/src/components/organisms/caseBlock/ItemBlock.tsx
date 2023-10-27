@@ -3,7 +3,6 @@ import StatusTableCell from "@/components/atoms/statusTableCell/StatusTableCell"
 import TableCell from "@/components/atoms/tableCell/TableCell";
 import { ArrowDown } from "@/components/Icons/ArrowDown";
 import { ClockIcon } from "@/components/Icons/ClockIcon";
-// import { Notepad } from "@/ckomponents/Icons/Notepad";
 import CaseBlockHead, { type ICaseBlockHeadProps } from "@/components/molecules/caseBlockHead/CaseBlockHead";
 import CaseBlockBookmarkButton from "@/components/organisms/caseBlock/caseBlockBookmarkButton/CaseBlockBookmarkButton";
 import useBookmarks from "@/hooks/useBookmarks";
@@ -12,6 +11,7 @@ import { type IGenArticle, type IGenFullCaseFragment } from "@/services/graphql/
 import { paths } from "@/utils/paths";
 
 // import { useMediaQuery } from "@mantine/hooks";
+import { useMediaQuery } from "@mantine/hooks";
 import Link from "next/link";
 import React, { type FunctionComponent } from "react";
 
@@ -86,15 +86,16 @@ const ItemBlock: FunctionComponent<ICaseBlockProps> = ({
         return CasesTable;
     }
   };
-  // const matches = useMediaQuery("(min-width: 1100px)");
-  // const isSmallScreensOnFavorite = !matches && tableType === "favorites";
+  const isTablet = useMediaQuery("(max-width: 1100px)");
+  const isSmallScreensOnFavorite = isTablet && tableType === "favorites";
 
   const [numberOfShowingItems, setNumberOfShowingItems] = React.useState<number>(5);
+
   return items && items?.length > 0 ? (
     <div css={styles.wrapper}>
       <CaseBlockHead {...blockHead}/>
       <span style={{ width: "100%" }}>
-        <Table tableType={tableTypePicker()}>
+        <Table tableType={tableTypePicker()} isTablet={isTablet}>
           {items?.slice(0, numberOfShowingItems)?.map((item) =>
           {
             const caseProgress = casesProgress?.find((caseProgress) => caseProgress?.caseId === item?.id);
@@ -113,19 +114,25 @@ const ItemBlock: FunctionComponent<ICaseBlockProps> = ({
                 {variant === "case" && (
                   <td>
                     {/* THIS WILL GET caseId instead of variant */}
-                    <StatusTableCell progressState={caseProgress?.progressState || "not-started"}/>
+                    <Link passHref shallow href={`${variant === "case" ? paths.cases : paths.dictionary}/${item?.id}`}>
+                      <StatusTableCell progressState={caseProgress?.progressState || "not-started"}/>
+                    </Link>
                   </td>
                 )}
-                {item?.__typename === "Case" && (
+                {!isSmallScreensOnFavorite && item?.__typename === "Case" && (
                   <td>
-                    <TableCell variant="simpleTableCell" icon={<ClockIcon/>}>
-                      {timeFormatter(item?.durationToCompleteInMinutes ?? 0)}
-                    </TableCell>
+                    <Link passHref shallow href={`${variant === "case" ? paths.cases : paths.dictionary}/${item?.id}`}>
+                      <TableCell variant="simpleTableCell" icon={<ClockIcon/>}>
+                        {timeFormatter(item?.durationToCompleteInMinutes ?? 0)}
+                      </TableCell>
+                    </Link>
                   </td>
                 )}
                 {tableType === "search" && <td><TableCell variant="simpleTableCell">{item?.legalArea?.legalAreaName}</TableCell></td>}
                 <td css={styles.topicCell} title={topicsCombined}>
-                  <TableCell variant="simpleTableCell">{item?.topic?.[0]?.topicName}</TableCell>
+                  <Link passHref shallow href={`${variant === "case" ? paths.cases : paths.dictionary}/${item?.id}`}>
+                    <TableCell variant="simpleTableCell">{item?.topic?.[0]?.topicName}</TableCell>
+                  </Link>
                 </td>
                 {tableType === "favorites" && <td><TableCell variant="simpleTableCell">{item?.legalArea?.legalAreaName}</TableCell></td>}
                 <td>
