@@ -114,19 +114,25 @@ const ItemBlock: FunctionComponent<ICaseBlockProps> = ({
                 {variant === "case" && (
                   <td>
                     {/* THIS WILL GET caseId instead of variant */}
-                    <StatusTableCell progressState={caseProgress?.progressState || "not-started"}/>
+                    <Link passHref shallow href={`${variant === "case" ? paths.cases : paths.dictionary}/${item?.id}`}>
+                      <StatusTableCell progressState={caseProgress?.progressState || "not-started"}/>
+                    </Link>
                   </td>
                 )}
                 {!isSmallScreensOnFavorite && item?.__typename === "Case" && (
                   <td>
-                    <TableCell variant="simpleTableCell" icon={<ClockIcon/>}>
-                      {timeFormatter(item?.durationToCompleteInMinutes ?? 0)}
-                    </TableCell>
+                    <Link passHref shallow href={`${variant === "case" ? paths.cases : paths.dictionary}/${item?.id}`}>
+                      <TableCell variant="simpleTableCell" icon={<ClockIcon/>}>
+                        {timeFormatter(item?.durationToCompleteInMinutes ?? 0)}
+                      </TableCell>
+                    </Link>
                   </td>
                 )}
                 {tableType === "search" && <td><TableCell variant="simpleTableCell">{item?.legalArea?.legalAreaName}</TableCell></td>}
                 <td css={styles.topicCell} title={topicsCombined}>
-                  <TableCell variant="simpleTableCell">{item?.topic?.[0]?.topicName}</TableCell>
+                  <Link passHref shallow href={`${variant === "case" ? paths.cases : paths.dictionary}/${item?.id}`}>
+                    <TableCell variant="simpleTableCell">{item?.topic?.[0]?.topicName}</TableCell>
+                  </Link>
                 </td>
                 {tableType === "favorites" && <td><TableCell variant="simpleTableCell">{item?.legalArea?.legalAreaName}</TableCell></td>}
                 <td>
