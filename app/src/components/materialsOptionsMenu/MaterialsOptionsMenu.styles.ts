@@ -231,3 +231,15 @@ export const dropDownLabel = (theme: MantineTheme) => css`
 	${label(theme)};
 	padding: 12px 16px;
 `;
+
+export const optionsCell = (theme: MantineTheme) => css`
+	cursor: pointer;
+	transition: background 0.3s ease;
+&:hover {
+	background: ${theme.colors["neutrals-01"][1]};
+	
+	> button {
+		background: ${theme.colors["neutrals-01"][1]}; 
+	}
+}
+`;

@@ -1,7 +1,8 @@
 import { db } from "@/db/connection";
-import { notes, uploadedFiles } from "@/db/schema";
+import { type FileExtension, type FileMimeType, notes, uploadedFiles } from "@/db/schema";
 import { env } from "@/env.mjs";
 import { cloudStorage } from "@/lib/cloud-storage";
+import { type UploadableFile } from "@/schemas/uploads/createSignedUploadUrl.schema";
 
 import { and, eq, inArray } from "drizzle-orm";
 
@@ -46,19 +47,52 @@ export const deleteFiles: DeleteFiles = async ({ files, userId }) =>
 
 type GetClouStorageFileUrl = (params: {
   serverFilename: string;
+  staleTime: number;
   userId: string;
 }) => Promise<string>;
 
-export const getClouStorageFileUrl: GetClouStorageFileUrl = async ({ serverFilename, userId }): Promise<string> =>
+export const getClouStorageFileUrl: GetClouStorageFileUrl = async ({ serverFilename, staleTime, userId }): Promise<string> =>
 {
   const [url] = await cloudStorage
     .bucket(env.GOOGLE_CLOUD_STORAGE_BUCKET_NAME)
     .file(`${userId}/${serverFilename}`)
     .getSignedUrl({
       action: "read",
-      expires: Date.now() + 15 * 60 * 1000,
+      expires: Date.now() + staleTime,
       version: "v4",
     });
 
   return url;
+};
+
+type GetSignedCloudStorageUploadUrl = (params: {
+  file: UploadableFile<FileExtension, FileMimeType>;
+  userId: string;
+}) => Promise<{
+  serverFilename: string;
+  uploadUrl: string;
+}>;
+
+export const getSignedCloudStorageUploadUrl: GetSignedCloudStorageUploadUrl = async ({ file, userId }) =>
+{
+  const filenameWithoutSpaces = file.filename.replace(/\s/g, "-");
+  const filenameWithTimestamp = `${Date.now()}-${filenameWithoutSpaces}`;
+
+  const [url] = await cloudStorage
+    .bucket(env.GOOGLE_CLOUD_STORAGE_BUCKET_NAME)
+    .file(`${userId}/${filenameWithTimestamp}`)
+    .getSignedUrl({
+      action: "write",
+      contentType: file.contentType,
+      expires: Date.now() + 5 * 60 * 1000,
+      extensionHeaders: {
+        "content-length": file.fileSizeInBytes,
+      },
+      version: "v4"
+    });
+
+  return ({
+    serverFilename: filenameWithTimestamp,
+    uploadUrl: url
+  });
 };

@@ -29,7 +29,7 @@ const fileNameIcon = (file: UploadedFile): React.ReactNode =>
     case "jpeg":
     case "jpg":
       return <ImageIcon/>;
-    case "pdf":
+    case "pdf": 
       return <FileWhiteIcon/>;
     case "docx":
       return <FileWhiteIcon/>;
@@ -115,12 +115,12 @@ const UploadedMaterialTableBody: FunctionComponent<UploadedMaterialTableBodyProp
                   {note ? (
                     <>
                       <NotepadFilled/>
-                      ansehen
+                      Ansehen
                     </>
                   ) : (
                     <>
                       <Notepad/>
-                      schreiben
+                      Erstellen
                     </>
                   )}
                 </BodyText>
@@ -138,21 +138,10 @@ const UploadedMaterialTableBody: FunctionComponent<UploadedMaterialTableBodyProp
               </td>
             )}
             {file && (
-              <td
-                css={styles.optionsCell}
-                onClick={(e => 
-                {
-                  const menuTarget = e.currentTarget.firstChild;
-                  if(menuTarget instanceof HTMLElement) 
-                  {
-                    menuTarget.click();
-                  }
-                })}>
-                <MaterialOptionsMenu
-                  selectedFolderId={selectedFolderId}
-                  file={file}
-                />
-              </td>
+              <MaterialOptionsMenu
+                selectedFolderId={selectedFolderId}
+                file={file}
+              />
             )}
           </tr>
         );

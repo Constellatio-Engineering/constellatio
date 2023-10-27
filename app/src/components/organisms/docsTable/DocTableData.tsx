@@ -1,12 +1,12 @@
+/* eslint-disable max-lines */
 import { Button, type TButton } from "@/components/atoms/Button/Button";
 import { DropdownItem } from "@/components/atoms/Dropdown/DropdownItem";
 import { Cross } from "@/components/Icons/Cross";
-// import { DownloadIcon } from "@/components/Icons/DownloadIcon";
 import { DownloadIcon } from "@/components/Icons/DownloadIcon";
 import { Edit } from "@/components/Icons/Edit";
 import { FolderIcon } from "@/components/Icons/Folder";
 import { Trash } from "@/components/Icons/Trash";
-// import MoveToModal from "@/components/moveToModal/MoveToModal";
+import MoveToModal from "@/components/moveToModal/MoveToModal";
 import { type Document } from "@/db/schema";
 import { useOnDocumentMutation } from "@/hooks/useOnDocumentMutation";
 import useUploadFolders from "@/hooks/useUploadFolders";
@@ -16,9 +16,7 @@ import { getFolderName } from "@/utils/folders";
 import { paths } from "@/utils/paths";
 import { downloadFileFromUrl } from "@/utils/utils";
 
-import {
-  Menu, Modal, Title
-} from "@mantine/core";
+import { Menu, Modal, Title } from "@mantine/core";
 import { notifications } from "@mantine/notifications";
 import { useMutation } from "@tanstack/react-query";
 import axios from "axios";
@@ -40,14 +38,31 @@ export const DocsTableData: FunctionComponent<Document> = (doc) =>
     updatedAt
   } = doc;
 
-  const { onDocumentMutation } = useOnDocumentMutation({ folderId });
+  const { onDocumentMutation } = useOnDocumentMutation();
   const downloadDocumentNotificationId = `downloading-document${documentId}`;
   const { setEditDocumentState, setViewDocumentState } = useDocumentEditorStore(s => s);
   const { folders } = useUploadFolders();
   const folderName = getFolderName(folderId, folders);
+  const [showDeleteDocModal, setShowDeleteDocModal] = useState<boolean>(false);
+  const [showMoveToModal, setShowMoveToModal] = useState(false);
+  const { mutate: updateDocument } = api.documents.updateDocument.useMutation({
+    onError: (error) => console.log("error while updating document", error),
+    onSuccess: async (_data, variables) =>
+    {
+      const newFolderId = variables.updatedValues.folderId;
+
+      if(newFolderId)
+      {
+        await onDocumentMutation({ folderId: newFolderId });
+      }
+
+      setShowMoveToModal(false);
+      await onDocumentMutation({ folderId });
+    },
+  });
   const { mutate: deleteDocument } = api.documents.deleteDocument.useMutation({
     onError: (error) => console.error("Error while deleting document:", error),
-    onSuccess: onDocumentMutation
+    onSuccess: async () => onDocumentMutation({ folderId })
   });
 
   const { isLoading: isDownloading, mutate: downloadDocument } = useMutation({
@@ -94,9 +109,6 @@ export const DocsTableData: FunctionComponent<Document> = (doc) =>
     },
     retry: false
   });
-  
-  const [showDeleteDocModal, setShowDeleteDocModal] = useState<boolean>(false);
-  // const [showMoveToModal, setShowMoveToModal] = useState(false);
 
   return (
     <>
@@ -131,11 +143,11 @@ export const DocsTableData: FunctionComponent<Document> = (doc) =>
             <Menu.Item onClick={() => setEditDocumentState(doc)}>
               <DropdownItem icon={<Edit/>} label="Bearbeiten"/>
             </Menu.Item>
-            {/* <Menu.Item>
-              <DropdownItem icon={<FolderIcon/>} label="Move to" onClick={() => { }}/>
-            </Menu.Item> */}
-            <Menu.Item disabled={isDownloading} onClick={() => downloadDocument()}>
-              <DropdownItem icon={<DownloadIcon/>} label="Herunterladen"/>
+            <Menu.Item>
+              <DropdownItem icon={<FolderIcon/>} label="Verschieben" onClick={() => setShowMoveToModal(true)}/>
+            </Menu.Item> 
+            <Menu.Item style={{ display: "none" }} disabled={isDownloading} onClick={() => downloadDocument()}>
+              <DropdownItem icon={<DownloadIcon/>} label="Download"/>
             </Menu.Item>
             <Menu.Item onClick={() => setShowDeleteDocModal(true)}>
               <DropdownItem icon={<Trash/>} label="Löschen"/>
@@ -154,8 +166,10 @@ export const DocsTableData: FunctionComponent<Document> = (doc) =>
         <span className="close-btn" onClick={() => setShowDeleteDocModal(false)}>
           <Cross size={32}/>
         </span>
-        <Title order={3}>Constellatio Doc löschen</Title>
-        <BodyText styleType="body-01-regular" component="p" className="delete-folder-text">Bist du sicher, dass du das Constellatio Doc&nbsp;<strong>{doc?.name}</strong>&nbsp;löschen möchtest?</BodyText>
+        <Title order={3}>Dokument löschen</Title>
+        <BodyText styleType="body-01-regular" component="p" className="delete-folder-text">
+          Bist du sicher, dass du das Dokument <strong>{doc?.name}</strong> löschen möchtest?
+        </BodyText>
         <div className="modal-call-to-action">
           <Button<"button">
             styleType={"secondarySimple" as TButton["styleType"]}
@@ -173,7 +187,18 @@ export const DocsTableData: FunctionComponent<Document> = (doc) =>
           </Button>
         </div>
       </Modal>
-      
+      <MoveToModal
+        onSubmit={(newFolderId) =>
+        {
+          updateDocument({
+            id: documentId,
+            updatedValues: { folderId: newFolderId }
+          });
+        }}
+        close={() => setShowMoveToModal(false)}
+        currentFolderId={folderId}
+        isOpened={showMoveToModal}
+      />
     </>
   );
 };

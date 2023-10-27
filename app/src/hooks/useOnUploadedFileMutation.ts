@@ -5,25 +5,25 @@ import { paths } from "@/utils/paths";
 import { useRouter } from "next/router";
 import { useCallback } from "react";
 
-type UseOnUploadedFileMutation = (params: {
-  folderId: string | null;
-}) => {
-  onUploadedFileMutation: () => Promise<void>;
+type OnUploadedFileMutation = (params: { folderId: string | null }) => Promise<void>;
+
+type UseOnUploadedFileMutation = () => {
+  onUploadedFileMutation: OnUploadedFileMutation;
 };
 
-export const useOnUploadedFileMutation: UseOnUploadedFileMutation = ({ folderId }) =>
+export const useOnUploadedFileMutation: UseOnUploadedFileMutation = () =>
 {
   const { invalidateSearchResults, invalidateUploadedFiles } = useContextAndErrorIfNull(InvalidateQueriesContext);
   const { pathname } = useRouter();
 
-  const onUploadedFileMutation = useCallback(async () =>
+  const onUploadedFileMutation: OnUploadedFileMutation = useCallback(async ({ folderId }) =>
   {
     if(pathname.startsWith(paths.search))
     {
       await invalidateSearchResults();
     }
     await invalidateUploadedFiles({ folderId });
-  }, [folderId, invalidateSearchResults, invalidateUploadedFiles, pathname]);
+  }, [invalidateSearchResults, invalidateUploadedFiles, pathname]);
 
   return { onUploadedFileMutation };
 };

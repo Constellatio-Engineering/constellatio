@@ -5,25 +5,25 @@ import { paths } from "@/utils/paths";
 import { useRouter } from "next/router";
 import { useCallback } from "react";
 
-type UseOnDocumentMutation = (params: {
-  folderId: string | null;
-}) => {
-  onDocumentMutation: () => Promise<void>;
+type OnDocumentMutation = (params: { folderId: string | null }) => Promise<void>;
+
+type UseOnDocumentMutation = () => {
+  onDocumentMutation: OnDocumentMutation;
 };
 
-export const useOnDocumentMutation: UseOnDocumentMutation = ({ folderId }) =>
+export const useOnDocumentMutation: UseOnDocumentMutation = () =>
 {
   const { invalidateDocuments, invalidateSearchResults } = useContextAndErrorIfNull(InvalidateQueriesContext);
   const { pathname } = useRouter();
 
-  const onDocumentMutation = useCallback(async () =>
+  const onDocumentMutation: OnDocumentMutation = useCallback(async ({ folderId }) =>
   {
     if(pathname.startsWith(paths.search))
     {
       await invalidateSearchResults();
     }
     await invalidateDocuments({ folderId });
-  }, [folderId, invalidateDocuments, invalidateSearchResults, pathname]);
+  }, [invalidateDocuments, invalidateSearchResults, pathname]);
 
   return { onDocumentMutation };
 };
