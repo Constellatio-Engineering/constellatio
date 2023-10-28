@@ -1,5 +1,6 @@
 import { Button } from "@/components/atoms/Button/Button";
 import { RichTextHeadingOverwrite } from "@/components/helpers/RichTextHeadingOverwrite";
+import { richTextParagraphOverwrite } from "@/components/helpers/richTextParagraphOverwrite";
 import { ArrowDown } from "@/components/Icons/ArrowDown";
 import { ArrowUp } from "@/components/Icons/ArrowUp";
 import { Bookmark } from "@/components/Icons/Bookmark";
@@ -101,7 +102,7 @@ const CaseResultsReviewStep: FunctionComponent<ICaseResultsReviewStepProps> = ({
                     </Accordion.Control>
                     <Accordion.Panel>
                       <ScrollArea h={500} offsetScrollbars>
-                        <Richtext data={facts}/>
+                        <Richtext data={facts} richTextOverwrite={{ paragraph: richTextParagraphOverwrite }}/>
                       </ScrollArea>
                     </Accordion.Panel>
                   </Accordion.Item>
@@ -153,6 +154,7 @@ const CaseResultsReviewStep: FunctionComponent<ICaseResultsReviewStepProps> = ({
                     const node = props!.node as unknown as IHeadingNode;
                     return RichTextHeadingOverwrite({ index: getNestedHeadingIndex(node, allResolutionHeadings), ...props });
                   },
+                  paragraph: richTextParagraphOverwrite
                 }}
               />
             </div>
@@ -163,17 +165,17 @@ const CaseResultsReviewStep: FunctionComponent<ICaseResultsReviewStepProps> = ({
         lockScroll={false}
         opened={isOpened}
         centered
-        title="Reset case progress?"
+        title="Fallfortschritt zurücksetzen?"
         onClose={close}>
         <Text>
-          Are you sure you want to delete all your test answers and case solution in {title} case?
+          Bist du dir sicher, dass du deine Antworten in der geführten Lösung und dein Gutachten zu&nbsp;<strong>{title}</strong>&nbsp;löschen willst?
         </Text>
         <Group noWrap grow w="100%">
           <Button<"button"> onClick={close} fullWidth styleType="secondarySimple">
-            No, keep data
+            Nein, behalten
           </Button>
           <Button<"button"> onClick={() => resetCaseProgress({ caseId })} styleType="primary" fullWidth>
-            Yes, reset progress
+            Ja, zurücksetzen
           </Button>
         </Group>
       </Modal>

@@ -15,6 +15,7 @@ import { type CommonKeysInTypes } from "@/utils/types";
 import { useRouter } from "next/router";
 import { Fragment, type FunctionComponent } from "react";
 
+import { convertTabQueryAsItemTab } from "./seachPageHelpers";
 import * as styles from "./SearchPage.styles";
 
 type Props = {
@@ -29,7 +30,7 @@ const SearchPageResults: FunctionComponent<Props> = ({ tabQuery }) =>
 
   const NoResultsFound = (
     <EmptyStateCard
-      title={`Keine Ergebnisse ${router.query.find && `für “${router.query.find}”`} ${tabQuery && `in ${tabQuery}`}`}
+      title={`Keine Ergebnisse ${router.query.find && `für “${router.query.find}”`} ${convertTabQueryAsItemTab(tabQuery) && `in ${convertTabQueryAsItemTab(tabQuery)}`}`}
       text="Schaue in anderen Kategorien oder starte eine neue Suche"
       variant="For-large-areas"
     />
@@ -112,7 +113,7 @@ const SearchPageResults: FunctionComponent<Props> = ({ tabQuery }) =>
         )
       );
     }
-    case "userUploads":
+    case ("userUploads" || "userDocuments"):
     {
       return (
         (searchResults.userUploads?.length > 0 || searchResults.userDocuments?.length > 0) ? (
@@ -175,7 +176,7 @@ const SearchPageResults: FunctionComponent<Props> = ({ tabQuery }) =>
     }
     default:
     {
-      console.error(`Unknown tab query: ${tabQuery}`);
+      console.error(`Unknown tab query at SearchPageResults: ${tabQuery}`);
       return null;
     }
   }

@@ -5,6 +5,7 @@ import { Title } from "@mantine/core";
 import { useRouter } from "next/router";
 import { type FunctionComponent } from "react";
 
+import { type TabItemType, convertTabsAsSearchResultsKey } from "./seachPageHelpers";
 import * as styles from "./SearchPage.styles";
 import { SearchPageHeaderBgLayer } from "./SearchPageHeaderBgLayer";
 
@@ -12,11 +13,6 @@ type Props = {
   readonly setTabQuery: (tab: SearchResultsKey) => Promise<URLSearchParams>;
   readonly tabQuery: string;
   readonly totalSearchResults: number;
-};
-
-type TabItemType = {
-  label: string;
-  resultsCount: number;
 };
 
 const SearchPageHeader: FunctionComponent<Props> = ({ setTabQuery, tabQuery, totalSearchResults }) =>
@@ -35,21 +31,6 @@ const SearchPageHeader: FunctionComponent<Props> = ({ setTabQuery, tabQuery, tot
     resultsCount: searchResults.userUploads?.length + searchResults.userDocuments?.length
   }];
 
-  const itemAsSearchResultsKey = (item: TabItemType): SearchResultsKey => 
-  {
-    switch (item.label)
-    {
-      case "Fälle": return "cases"; 
-      case "Lexikon": return "articles"; 
-      case "Deine Dateien": return "userUploads"; 
-      default:
-      {
-        console.error(`Unknown tab query: ${item.label}`);
-        return "cases";
-      }
-    }
-  };
-
   return (
     <div css={styles.headerWrapper}>
       <div css={styles.header}>
@@ -66,8 +47,8 @@ const SearchPageHeader: FunctionComponent<Props> = ({ setTabQuery, tabQuery, tot
               key={index}
               title={item.label}
               number={item.resultsCount}
-              active={tabQuery === itemAsSearchResultsKey(item)}
-              onClick={() => void setTabQuery(itemAsSearchResultsKey(item))}
+              active={tabQuery === convertTabsAsSearchResultsKey(item)}
+              onClick={() => void setTabQuery(convertTabsAsSearchResultsKey(item))}
             />
           );
         })}

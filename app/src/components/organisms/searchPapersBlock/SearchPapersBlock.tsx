@@ -19,7 +19,7 @@ const SearchPapersBlock: FunctionComponent<SearchPapersBlockProps> = ({ numberOf
 {
   return table ? (
     <div css={styles.wrapper}>
-      <div>
+      <div css={styles.blockHeadWrapper}>
         <IconButton
           icon={variant === "userUploads" ? <DownloadIcon/> : <NoteIcon/>}
           size="big"

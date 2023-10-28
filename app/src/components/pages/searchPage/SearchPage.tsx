@@ -1,5 +1,3 @@
-// import useSearchResults from "@/hooks/useSearchResults";
-
 import EmptyStateCard from "@/components/organisms/emptyStateCard/EmptyStateCard";
 import useSearchResults, { type SearchResultsKey } from "@/hooks/useSearchResults";
 import useSearchBarStore from "@/stores/searchBar.store";
@@ -18,11 +16,12 @@ const tabSchema = createParser({
     switch (query as SearchResultsKey)
     {
       case "userUploads": { return "userUploads"; }
+      // case "userDocuments": { return "userUploads"; }
       case "cases": { return "cases"; }
       case "articles": { return "articles"; }
       default:
       {
-        console.error(`Unknown tab query: ${query}`);
+        console.error(`Unknown tab query at createParser: ${query}`);
         return "cases";
       }
     }
