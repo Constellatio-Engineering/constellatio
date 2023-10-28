@@ -1,51 +1,41 @@
+import useBadges from "@/hooks/useBadges";
+import useDashboardPageStore from "@/stores/dashboardPage.store";
+
 import { Drawer, ScrollArea } from "@mantine/core";
 import React, { type FunctionComponent } from "react";
 
+import * as styles from "./BadgesDrawer.styles";
 import ProfileBadgeCard from "../molecules/profileBadgeCard/ProfileBadgeCard";
 import SlidingPanelTitle from "../molecules/slidingPanelTitle/SlidingPanelTitle";
 
-interface BadgesDrawerProps
+const BadgesDrawer: FunctionComponent = () =>
 {
-  readonly close: () => void;
-  readonly open?: () => void;
-  readonly opened: boolean;
-}
+  const closeDrawer = useDashboardPageStore(s => s.closeDrawer);
+  const drawerState = useDashboardPageStore(s => s.drawerState);
+  const { getBadgesResult: { badges } } = useBadges();
 
-const BadgesDrawer: FunctionComponent<BadgesDrawerProps> = ({ close, open, opened }) => 
-{
-  const badges = [1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1];
-  if(open) { console.log(open); }
   return (
     <Drawer
-      opened={opened}
-      onClose={close}
+      opened={drawerState.isDrawerOpened}
+      onClose={closeDrawer}
       scrollAreaComponent={ScrollArea.Autosize}
       lockScroll={false}
-      styles={{
-        body: { padding: "0" }
-      }}
+      styles={{ body: { padding: "0" } }}
       withCloseButton={false}
-      size="lg"
+      size="xl"
       position="right">
-      {/* Drawer content */}
       <SlidingPanelTitle
         title="Badges"
         variant="default"
-        closeButtonAction={close}
+        closeButtonAction={closeDrawer}
       />
-      <div css={{
-        display: "flex",
-        flexWrap: "wrap",
-        gap: "16px",
-        padding: "16px 32px"
-      }}>
-        {badges.map((badge, index) => (
+      <div css={styles.badgesWrapper}>
+        {badges.map((badge) => (
           <ProfileBadgeCard
-            key={index}
-            name="Test1"
-            description="Test1"
+            key={badge.id}
+            {...badge}
             size="large"
-         
+            isHighlighted={drawerState.isDrawerOpened && drawerState.selectedBadgeId === badge.id}
           />
         ))}
       </div>
