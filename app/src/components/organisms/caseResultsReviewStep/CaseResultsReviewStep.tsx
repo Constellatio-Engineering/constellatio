@@ -165,17 +165,17 @@ const CaseResultsReviewStep: FunctionComponent<ICaseResultsReviewStepProps> = ({
         lockScroll={false}
         opened={isOpened}
         centered
-        title="Reset case progress?"
+        title="Fallfortschritt zurücksetzen?"
         onClose={close}>
         <Text>
-          Are you sure you want to delete all your test answers and case solution in {title} case?
+          Bist du dir sicher, dass du deine Antworten in der geführten Lösung und dein Gutachten zu&nbsp;<strong>{title}</strong>&nbsp;löschen willst?
         </Text>
         <Group noWrap grow w="100%">
           <Button<"button"> onClick={close} fullWidth styleType="secondarySimple">
-            No, keep data
+            Nein, behalten
           </Button>
           <Button<"button"> onClick={() => resetCaseProgress({ caseId })} styleType="primary" fullWidth>
-            Yes, reset progress
+            Ja, zurücksetzen
           </Button>
         </Group>
       </Modal>
