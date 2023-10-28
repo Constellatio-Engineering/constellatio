@@ -14,8 +14,6 @@ interface ProfileBadgeCardProps extends BadgeWithCompletedState
   readonly size: "small" | "large";
 }
 
-export const getBadgeHtmlId = (badgeId: string): string => `badge-${badgeId}`;
-
 const ProfileBadgeCard: FunctionComponent<ProfileBadgeCardProps> = ({
   description,
   id,
@@ -64,7 +62,6 @@ const ProfileBadgeCard: FunctionComponent<ProfileBadgeCardProps> = ({
   return (
     <div
       ref={wrapperRef}
-      id={getBadgeHtmlId(id)}
       onClick={() =>
       {
         if(publicationState === "published")

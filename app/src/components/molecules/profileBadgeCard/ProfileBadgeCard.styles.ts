@@ -29,6 +29,7 @@ export const wrapperLarge = (isHighlighted: boolean) => css`
   flex: 1;
   transition: outline-color 0.3s ease-in-out .3s;
   outline: 1px solid ${isHighlighted ? colors["neutrals-01"][9] : "transparent"};
+  scroll-margin: 70px !important;
 `;
 
 export const comingSoonOverlay = css`
