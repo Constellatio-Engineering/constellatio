@@ -13,7 +13,6 @@ import { useRouter } from "next/router";
 import React, { type FunctionComponent } from "react";
 
 import * as styles from "./UserDropdown.styles";
-import posthog from "posthog-js";
 
 export const UserDropdown: FunctionComponent = () => {
   const { userDetails } = useUserDetails();
@@ -31,8 +30,6 @@ export const UserDropdown: FunctionComponent = () => {
       await supabase.auth.signOut();
       await router.replace("/login");
       await invalidateEverything();
-      /* posthog.opt_in_capturing();
-      posthog.reset(); */
 
       notifications.show({
         message: "Come back soon!",

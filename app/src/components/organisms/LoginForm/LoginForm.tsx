@@ -21,7 +21,6 @@ import {
   ResetPasswordModal,
   resetPasswordModalVisible,
 } from "../ResetPasswordModal/ResetPasswordModal";
-import posthog from "posthog-js";
 
 type SignInError = "emailNotConfirmed" | "invalidCredentials" | "unknownError";
 
@@ -61,26 +60,6 @@ export const LoginForm: FunctionComponent = () => {
       }
 
       await invalidateEverything();
-
-      /* TODO:: ADD */
-      /* console.log("loginResult.data.user.id");
-      console.log(loginResult.data.user.id); */
-
-      /* posthog.identify(
-        loginResult.data.user.id, // Replace 'distinct_id' with your user's unique identifier
-        { email: loginResult.data.user.email } // optional: set additional user properties
-      ); */
-      /* posthog.
-      //posthog.opt_in_capturing();
-      posthog.startSessionRecording(); */
-
-      /* 
-      {enable_persistence:true}
-      */
-      /* posthog.opt_in_capturing(); */
-
-      //posthog.__autocapture = true;
-
       await router.replace(`${paths.cases}`);
     } catch (error) {
       if (!(error instanceof AuthError)) {
