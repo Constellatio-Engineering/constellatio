@@ -254,7 +254,10 @@ export const badgesRelations = relations(badges, ({ many }) => ({
 
 export type BadgeInsert = InferInsertModel<typeof badges>;
 export type Badge = InferSelectModel<typeof badges>;
-export type BadgeWithCompletedState = Badge & {isCompleted: boolean };
+export type BadgeWithUserData = Badge & {
+  isCompleted: boolean;
+  wasSeen: boolean;
+};
 
 export const usersToBadges = pgTable("User_to_Badge", {
   userId: uuid("UserId").references(() => users.id, { onDelete: "no action" }).notNull(),

@@ -1,6 +1,6 @@
 import { db } from "@/db/connection";
 import {
-  badges, type BadgeWithCompletedState, usersToBadges,
+  badges, type BadgeWithUserData, usersToBadges,
 } from "@/db/schema";
 import { createTRPCRouter, protectedProcedure } from "@/server/api/trpc";
 
@@ -23,7 +23,7 @@ export const badgesRouter = createTRPCRouter({
         },
       });
 
-      const badgesWithCompletedState: BadgeWithCompletedState[] = badgesQueryResult
+      const badgesWithCompletedState: BadgeWithUserData[] = badgesQueryResult
         .map((badge) => ({
           description: badge.description,
           id: badge.id,
@@ -31,6 +31,7 @@ export const badgesRouter = createTRPCRouter({
           isCompleted: badge.usersToBadges[0]?.hasCompletedBadge ?? false,
           name: badge.name,
           publicationState: badge.publicationState,
+          wasSeen: badge.usersToBadges[0]?.userBadgeState === "seen" ?? false,
         }))
         .sort((a, b) => 
         {

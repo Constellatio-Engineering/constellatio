@@ -5,9 +5,11 @@ const useBadges = () =>
 {
   const { data: badges, error, isLoading } = api.badges.getBadges.useQuery(undefined, {
     refetchOnMount: "always",
-    refetchOnWindowFocus: "always",
+    refetchOnWindowFocus: "always", // TODO
     // staleTime: Infinity
   });
+
+  console.log("useBadges", badges);
 
   return {
     error,

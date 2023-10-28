@@ -1,6 +1,6 @@
 import { BodyText } from "@/components/atoms/BodyText/BodyText";
 import { CheckCircleRed } from "@/components/Icons/CheckCirleRed";
-import { type BadgeWithCompletedState } from "@/db/schema";
+import { type BadgeWithUserData } from "@/db/schema";
 import useDashboardPageStore from "@/stores/dashboardPage.store";
 
 import Image from "next/image";
@@ -8,7 +8,7 @@ import React, { type FunctionComponent, useEffect, useRef, useState } from "reac
 
 import * as styles from "./ProfileBadgeCard.styles";
 
-interface ProfileBadgeCardProps extends BadgeWithCompletedState
+interface ProfileBadgeCardProps extends BadgeWithUserData
 {
   readonly isHighlighted?: boolean;
   readonly size: "small" | "large";
