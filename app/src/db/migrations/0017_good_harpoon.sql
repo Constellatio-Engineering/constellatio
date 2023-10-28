@@ -1,0 +1,1 @@
+ALTER TABLE "UserPing" ALTER COLUMN "UpdatedAt" SET DATA TYPE timestamp;

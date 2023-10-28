@@ -7,7 +7,6 @@ import CustomThemingProvider from "@/provider/CustomThemingProvider";
 import InvalidateQueriesProvider from "@/provider/InvalidateQueriesProvider";
 import MeilisearchProvider from "@/provider/MeilisearchProvider";
 import { api } from "@/utils/api";
-import { track } from "@/utils/tracking";
 
 import { ModalsProvider } from "@mantine/modals";
 import { Notifications } from "@mantine/notifications";
@@ -32,8 +31,6 @@ import React, {
   useState,
 } from "react";
 
-// new for GA4
-
 // Check that PostHog is client-side
 if (typeof window !== "undefined") {
   posthog.init(process.env.NEXT_PUBLIC_POSTHOG_KEY as string, {
@@ -44,6 +41,8 @@ if (typeof window !== "undefined") {
         posthog.debug();
       }
     },
+    autocapture: false,
+    //disable_persistence //? (default = false) Disable persisting user data across pages. This will disable cookies, session storage and local storage.
   });
 }
 
@@ -61,6 +60,7 @@ const AppContainer: FunctionComponent<ConstellatioAppProps> = ({
   const isRouterReady = useIsRouterReady();
   const isProduction = env.NEXT_PUBLIC_DEPLOYMENT_ENVIRONMENT === "production";
   const [isDocumentVisible, setIsDocumentVisible] = useState<boolean>(true);
+  const [isWindowInFocus, setIsWindowInFocus] = useState<boolean>(true);
   const interval = useRef<NodeJS.Timer>();
 
   let title = "Constellatio";
@@ -69,9 +69,21 @@ const AppContainer: FunctionComponent<ConstellatioAppProps> = ({
     title += ` - ${env.NEXT_PUBLIC_DEPLOYMENT_ENVIRONMENT}`;
   }
 
+  /* placeholder overlay feedback button */
+
+  /* const router = useRouter() */
   useEffect(() => {
-    const onVisibilityChange = (e): void => {
-      console.log("visibility change", e);
+    // Track page views
+    const handleRouteChange = () => posthog.capture("$pageview");
+    router.events.on("routeChangeComplete", handleRouteChange);
+
+    return () => {
+      router.events.off("routeChangeComplete", handleRouteChange);
+    };
+  }, []);
+
+  useEffect(() => {
+    const onVisibilityChange = (): void => {
       setIsDocumentVisible(!document.hidden);
     };
     document.addEventListener("visibilitychange", onVisibilityChange);
@@ -80,11 +92,31 @@ const AppContainer: FunctionComponent<ConstellatioAppProps> = ({
     };
   }, []);
 
+  useEffect(() => {
+    const onWindowBlur = (): void => {
+      setIsWindowInFocus(false);
+    };
+    window.addEventListener("blur", onWindowBlur);
+    return () => {
+      window.addEventListener("blur", onWindowBlur);
+    };
+  }, []);
+
+  useEffect(() => {
+    const onWindowBlur = (): void => {
+      setIsWindowInFocus(true);
+    };
+    window.addEventListener("focus", onWindowBlur);
+    return () => {
+      window.addEventListener("focus", onWindowBlur);
+    };
+  }, []);
+
   const onInterval = useCallback(() => {
     console.log("onInterval");
-
+    /* || !isWindowInFocus könnte man auch noch einbinden*/
     if (!isDocumentVisible) {
-      console.log("not visible, return");
+      console.log("not visible or not in focus => return");
       return;
     }
 
@@ -97,7 +129,7 @@ const AppContainer: FunctionComponent<ConstellatioAppProps> = ({
       clearInterval(interval.current);
     }
 
-    onInterval();
+    onInterval(); //TODO::check feuert aktuell glaub 2x beim betreten
 
     interval.current = setInterval(onInterval, 10000);
 
@@ -118,19 +150,21 @@ const AppContainer: FunctionComponent<ConstellatioAppProps> = ({
         supabaseClient={supabase}
         initialSession={pageProps.initialSession}
       >
-        <InvalidateQueriesProvider>
-          <AuthStateProvider>
-            <CustomThemingProvider>
-              <ModalsProvider>
-                <MeilisearchProvider>
-                  <RouterTransition />
-                  <Notifications />
-                  {isRouterReady && <Component {...pageProps} />}
-                </MeilisearchProvider>
-              </ModalsProvider>
-            </CustomThemingProvider>
-          </AuthStateProvider>
-        </InvalidateQueriesProvider>
+        <PostHogProvider client={posthog}>
+          <InvalidateQueriesProvider>
+            <AuthStateProvider>
+              <CustomThemingProvider>
+                <ModalsProvider>
+                  <MeilisearchProvider>
+                    <RouterTransition />
+                    <Notifications />
+                    {isRouterReady && <Component {...pageProps} />}
+                  </MeilisearchProvider>
+                </ModalsProvider>
+              </CustomThemingProvider>
+            </AuthStateProvider>
+          </InvalidateQueriesProvider>
+        </PostHogProvider>
       </SessionContextProvider>
     </>
   );

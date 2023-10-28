@@ -4,6 +4,7 @@ import {
   type InferSelectModel,
   relations,
 } from "drizzle-orm";
+import { int } from "drizzle-orm/mysql-core";
 import {
   text,
   pgTable,
@@ -326,13 +327,12 @@ export type SearchIndexUpdateQueueItem = InferSelectModel<
 export const userPings = pgTable("UserPing", {
   id: serial("Id").primaryKey(),
   userId: uuid("UserId").references(() => users.id, { onDelete: "no action" }),
-  createdAt: timestamp("CreatedAt", { mode: "date", withTimezone: true })
+  createdAt: timestamp("CreatedAt", { mode: "string", withTimezone: true })
     .defaultNow()
     .notNull(),
-  updatedAt: timestamp("UpdatedAt", { mode: "date", withTimezone: true })
-    .defaultNow()
-    .notNull(),
+  updatedAt: timestamp("UpdatedAt").defaultNow().notNull(),
   url: text("Url").notNull(),
+  pingCount: integer("pingCount").default(0).notNull(),
 });
 
 export type UserPingInsert = InferInsertModel<typeof userPings>;

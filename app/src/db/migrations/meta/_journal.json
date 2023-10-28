@@ -71,6 +71,69 @@
       "when": 1698260808501,
       "tag": "0009_heavy_rawhide_kid",
       "breakpoints": true
+    },
+    {
+      "idx": 10,
+      "version": "5",
+      "when": 1698283313811,
+      "tag": "0010_perpetual_cloak",
+      "breakpoints": true
+    },
+    {
+      "idx": 11,
+      "version": "5",
+      "when": 1698283315327,
+      "tag": "0011_curious_pyro",
+      "breakpoints": true
+    },
+    {
+      "idx": 12,
+      "version": "5",
+      "when": 1698285808553,
+      "tag": "0012_slim_sage",
+      "breakpoints": true
+    },
+    {
+      "idx": 13,
+      "version": "5",
+      "when": 1698285809657,
+      "tag": "0013_dapper_triathlon",
+      "breakpoints": true
+    },
+    {
+      "idx": 14,
+      "version": "5",
+      "when": 1698322845341,
+      "tag": "0014_equal_korath",
+      "breakpoints": true
+    },
+    {
+      "idx": 15,
+      "version": "5",
+      "when": 1698322847427,
+      "tag": "0015_famous_ender_wiggin",
+      "breakpoints": true
+    },
+    {
+      "idx": 16,
+      "version": "5",
+      "when": 1698323515103,
+      "tag": "0016_silly_mimic",
+      "breakpoints": true
+    },
+    {
+      "idx": 17,
+      "version": "5",
+      "when": 1698323834671,
+      "tag": "0017_good_harpoon",
+      "breakpoints": true
+    },
+    {
+      "idx": 18,
+      "version": "5",
+      "when": 1698323836238,
+      "tag": "0018_awesome_gladiator",
+      "breakpoints": true
     }
   ]
 }

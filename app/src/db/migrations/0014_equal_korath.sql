@@ -1,0 +1,1 @@
+ALTER TABLE "UserPing" ADD COLUMN "pingCount" integer DEFAULT 0 NOT NULL;

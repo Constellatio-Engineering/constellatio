@@ -14,18 +14,23 @@ import { Stack } from "@mantine/core";
 import { useForm, zodResolver } from "@mantine/form";
 import { AuthError } from "@supabase/gotrue-js";
 import { useAtom } from "jotai";
-import { useRouter } from "next/router"; 
+import { useRouter } from "next/router";
 import { type FunctionComponent, useState } from "react";
 
-import { ResetPasswordModal, resetPasswordModalVisible } from "../ResetPasswordModal/ResetPasswordModal";
+import {
+  ResetPasswordModal,
+  resetPasswordModalVisible,
+} from "../ResetPasswordModal/ResetPasswordModal";
 
 type SignInError = "emailNotConfirmed" | "invalidCredentials" | "unknownError";
 
-export const LoginForm: FunctionComponent = () =>
-{
+export const LoginForm: FunctionComponent = () => {
   const router = useRouter();
-  const wasPasswordUpdated = router.query[queryParams.passwordResetSuccess] === "true";
-  const { invalidateEverything } = useContextAndErrorIfNull(InvalidateQueriesContext);
+  const wasPasswordUpdated =
+    router.query[queryParams.passwordResetSuccess] === "true";
+  const { invalidateEverything } = useContextAndErrorIfNull(
+    InvalidateQueriesContext
+  );
   const [, setResetPasswordModalOpen] = useAtom(resetPasswordModalVisible);
   const [isLoginInProgress, setIsLoginInProgress] = useState(false);
   const [signInError, setSignInError] = useState<SignInError>();
@@ -40,67 +45,81 @@ export const LoginForm: FunctionComponent = () =>
 
   const openResetPasswordModal = (): void => setResetPasswordModalOpen(true);
 
-  const handleSubmit = form.onSubmit(async (formValues) =>
-  {
+  const handleSubmit = form.onSubmit(async (formValues) => {
     setIsLoginInProgress(true);
 
-    try
-    {
+    try {
       const loginResult = await supabase.auth.signInWithPassword({
         email: formValues.email,
         password: formValues.password,
       });
 
-      if(loginResult.error)
-      {
+      if (loginResult.error) {
         console.log("login failed", loginResult.error);
         throw loginResult.error;
       }
 
       await invalidateEverything();
+
+      /* TODO:: ADD
+posthog.identify(
+  loginResult.data.user.id,  // Replace 'distinct_id' with your user's unique identifier
+  { email: loginResult.data.user.email } // optional: set additional user properties
+);*/
+
       await router.replace(`${paths.cases}`);
-    }
-    catch (error)
-    {
-      if(!(error instanceof AuthError))
-      {
+    } catch (error) {
+      if (!(error instanceof AuthError)) {
         console.log("Something went wrong while logging in", error);
         setSignInError("unknownError");
         return;
       }
 
-      switch (error.message)
-      {
-        case "Email not confirmed":
-        {
+      switch (error.message) {
+        case "Email not confirmed": {
           setSignInError("emailNotConfirmed");
           break;
         }
-        case "Invalid login credentials":
-        {
+        case "Invalid login credentials": {
           setSignInError("invalidCredentials");
           break;
         }
-        default:
-        {
+        default: {
           console.log("error while logging in", error);
           setSignInError("unknownError");
           break;
         }
       }
-    }
-    finally
-    {
+    } finally {
       setIsLoginInProgress(false);
     }
   });
 
   return (
     <>
-      {signInError === "emailNotConfirmed" && <AlertCard stylesOverwrite={{ marginBottom: "40px" }} variant="error">Du musst zuerst deine E-Mail Adresse bestätigen. Eine Bestätigungsmail wurde dir zugesendet.</AlertCard>}
-      {signInError === "invalidCredentials" && <AlertCard stylesOverwrite={{ marginBottom: "40px" }} variant="error">Wir konnten keinen Account mit diesen Anmeldedaten finden. Bitte überprüfe deine Eingaben.</AlertCard>}
-      {signInError === "unknownError" && <AlertCard stylesOverwrite={{ marginBottom: "40px" }} variant="error">Es ist ein unbekannter Fehler aufgetreten. Bitte versuche es erneut.</AlertCard>}
-      {wasPasswordUpdated && <AlertCard stylesOverwrite={{ marginBottom: "40px" }} variant="success">Dein Passwort wurde erfolgreich geändert. Du kannst dich jetzt mit deinem neuen Passwort anmelden.</AlertCard>}
+      {signInError === "emailNotConfirmed" && (
+        <AlertCard stylesOverwrite={{ marginBottom: "40px" }} variant="error">
+          Du musst zuerst deine E-Mail Adresse bestätigen. Eine Bestätigungsmail
+          wurde dir zugesendet.
+        </AlertCard>
+      )}
+      {signInError === "invalidCredentials" && (
+        <AlertCard stylesOverwrite={{ marginBottom: "40px" }} variant="error">
+          Wir konnten keinen Account mit diesen Anmeldedaten finden. Bitte
+          überprüfe deine Eingaben.
+        </AlertCard>
+      )}
+      {signInError === "unknownError" && (
+        <AlertCard stylesOverwrite={{ marginBottom: "40px" }} variant="error">
+          Es ist ein unbekannter Fehler aufgetreten. Bitte versuche es erneut.
+        </AlertCard>
+      )}
+      {wasPasswordUpdated && (
+        <AlertCard stylesOverwrite={{ marginBottom: "40px" }} variant="success">
+          Dein Passwort wurde erfolgreich geändert. Du kannst dich jetzt mit
+          deinem neuen Passwort anmelden.
+        </AlertCard>
+      )}
       <form onSubmit={handleSubmit}>
         <Stack spacing="spacing-24">
           <Stack spacing="spacing-12">
@@ -121,32 +140,39 @@ export const LoginForm: FunctionComponent = () =>
             styleType="link-secondary"
             component="button"
             onClick={openResetPasswordModal}
-            stylesOverwrite={{ color: colors["neutrals-02"][2], textAlign: "left" }}>
+            stylesOverwrite={{
+              color: colors["neutrals-02"][2],
+              textAlign: "left",
+            }}
+          >
             Forgot Password?
           </CustomLink>
           <Button<"button">
             styleType="primary"
             type="submit"
             title="Log in"
-            loading={isLoginInProgress}>
+            loading={isLoginInProgress}
+          >
             Log in
           </Button>
         </Stack>
       </form>
-      <ResetPasswordModal/>
+      <ResetPasswordModal />
       <BodyText
         mt={40}
         component="p"
         styleType="body-02-medium"
         ta="center"
-        c="neutrals-01.7">
-        Hinweis: Diese Version von Constellatio ist nur für die Verwendung am Computer optimiert.
-        Wenn du technische Fragen hast, wende dich bitte an unseren
-        Support unter&nbsp;
+        c="neutrals-01.7"
+      >
+        Hinweis: Diese Version von Constellatio ist nur für die Verwendung am
+        Computer optimiert. Wenn du technische Fragen hast, wende dich bitte an
+        unseren Support unter&nbsp;
         <CustomLink
           href="mailto:webmaster@constellatio.de"
           styleType="link-secondary"
-          c="neutrals-01.7">
+          c="neutrals-01.7"
+        >
           webmaster@constellatio.de
         </CustomLink>
       </BodyText>
