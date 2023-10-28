@@ -1,21 +1,16 @@
 import { db } from "@/db/connection";
 import {
-  badges, users, usersToBadges,
+  badges, usersToBadges,
 } from "@/db/schema";
 import { createTRPCRouter, protectedProcedure } from "@/server/api/trpc";
 
-import {
-  and, asc, eq, exists, sql 
-} from "drizzle-orm";
+import { asc, eq, sql } from "drizzle-orm";
 
 export const badgesRouter = createTRPCRouter({
   getBadges: protectedProcedure
     .query(async ({ ctx: { userId } }) =>
     {
-      const result = await db.query.badges.findMany({
-        columns: {
-          name: true,
-        },
+      const badgesQueryResult = await db.query.badges.findMany({
         orderBy: [asc(badges.name)],
         with: {
           usersToBadges: {
@@ -27,31 +22,18 @@ export const badgesRouter = createTRPCRouter({
         }
       });
 
-      result.forEach((badge) =>
-      {
-        console.log("badge", {
-          name: badge.name,
-          usersToBadges: badge.usersToBadges
-        });
+      const badgesWithCompletedState = badgesQueryResult.map((badge) => ({
+        description: badge.description,
+        id: badge.id,
+        imageFilename: badge.imageFilename,
+        isCompleted: badge.usersToBadges[0]?.hasCompletedBadge ?? false,
+        name: badge.name,
+      }));
+
+      return ({
+        badges: badgesWithCompletedState,
+        completedCount: badgesWithCompletedState.filter((badge) => badge.isCompleted).length,
+        totalCount: badgesWithCompletedState.length,
       });
-
-      return result;
-
-      /* return db.query.badges.findMany({
-        orderBy: [asc(badges.name)],
-        with: {
-          usersToBadges: {
-            where: eq(usersToBadges.userId, userId),
-            with: {
-              user: {
-                columns: {},
-                extras: {
-                  hasCompletedBadge: sql<boolean>`count(${users.id})`.as("has_completed_badge"),
-                }
-              }
-            }
-          }
-        }
-      });*/
     }),
 });

@@ -8,11 +8,13 @@ const useBadges = () =>
     // staleTime: Infinity
   });
 
-  console.log("badges", badges);
-
   return {
-    badges: badges ?? [],
     error,
+    getBadgesResult: {
+      badges: badges?.badges ?? [],
+      completedCount: badges?.completedCount ?? 0,
+      totalCount: badges?.totalCount ?? 0,
+    },
     isLoading
   };
 };

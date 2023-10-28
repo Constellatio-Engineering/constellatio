@@ -3,14 +3,15 @@ import { BodyText } from "@/components/atoms/BodyText/BodyText";
 import { CheckCircleRed } from "@/components/Icons/CheckCirleRed";
 
 import { useMantineTheme } from "@mantine/core";
+import Image from "next/image";
 import React, { type FunctionComponent } from "react";
 
 import * as styles from "./ProfileBadgeCard.styles";
-import FlagImg from "../../../../public/images/placeholder-flag.png";
 
 export interface ProfileBadgeCardProps
 {
   readonly description: string;
+  readonly filename: string;
   readonly name: string;
   readonly selected?: boolean;
   readonly size: "small" | "large";
@@ -18,6 +19,7 @@ export interface ProfileBadgeCardProps
 
 const ProfileBadgeCard: FunctionComponent<ProfileBadgeCardProps> = ({
   description,
+  filename,
   name,
   selected,
   size
@@ -25,7 +27,7 @@ const ProfileBadgeCard: FunctionComponent<ProfileBadgeCardProps> = ({
 {
   const theme = useMantineTheme();
   // const [isExpanded] = React.useState<boolean>(size === "large" ? true : false);
-  const isExpanded = size === "large" ? true : false;
+  const isExpanded = size === "large";
   const [isSelected, setIsSelected] = React.useState<boolean>(selected ?? false);
   
   return (
@@ -41,11 +43,17 @@ const ProfileBadgeCard: FunctionComponent<ProfileBadgeCardProps> = ({
       }}>
       <div css={styles.badgeWrapper({ isExpanded, isSelected, theme })}>
         {isSelected && <span css={styles.checkCircle}><CheckCircleRed/></span>}
-        <CaisyImg src={FlagImg.src}/>
-        {name && <BodyText css={styles.badgeTitle} styleType="body-02-medium">{name}</BodyText>}
+        <div css={styles.imageWrapper}>
+          <Image
+            css={styles.image}
+            src={`/images/badges/${filename}`}
+            alt="badge symbol"
+            fill
+          />
+        </div>
+        <BodyText css={styles.badgeTitle} styleType="body-02-medium">{name}</BodyText>
       </div>
-      {isExpanded &&
-        description && (
+      {isExpanded && (
         <div css={styles.badgeDescriptionArea({ isSelected, theme })}>
           <BodyText css={styles.badgeDescriptionText} styleType="body-02-medium">{description}</BodyText>
         </div>

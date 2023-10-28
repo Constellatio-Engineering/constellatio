@@ -32,9 +32,10 @@ const SubscriptionModal: FunctionComponent = () =>
     console.log("Subscription ending in", diffDays);
     if(diffDays <= 1)
     {
-      open();
+      // open();
     }
   }, [diffDays, open]);
+
   return (
     <Modal
       opened={opened}

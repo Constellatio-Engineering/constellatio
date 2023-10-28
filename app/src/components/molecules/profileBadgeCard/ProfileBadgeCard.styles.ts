@@ -34,8 +34,22 @@ export const badgeWrapper = ({ isExpanded, isSelected, theme }: IProfilePageProp
   border-radius: ${!isExpanded ? "12px" : "12px 12px 0 0"};
   width: 100%;
   `;
+
+export const imageWrapper = css`
+  width: 100%;
+  height: 100px;
+  position: relative;
+`;
+
+export const image = css`
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+`;
+
 export const badgeTitle = (theme: MantineTheme) => css`
   color: ${theme.colors["neutrals-02"][1]};
+  text-align: center;
   `;
 export const badgeDescriptionArea = ({ isSelected, theme }: IProfilePageProps) => css`
   background-color: ${theme.colors["neutrals-01"][0]};
