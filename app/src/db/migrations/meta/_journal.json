@@ -15,6 +15,34 @@
       "when": 1698379997546,
       "tag": "0001_stormy_jane_foster",
       "breakpoints": true
+    },
+    {
+      "idx": 2,
+      "version": "5",
+      "when": 1698455044673,
+      "tag": "0002_curly_komodo",
+      "breakpoints": true
+    },
+    {
+      "idx": 3,
+      "version": "5",
+      "when": 1698455045174,
+      "tag": "0003_skinny_shotgun",
+      "breakpoints": true
+    },
+    {
+      "idx": 4,
+      "version": "5",
+      "when": 1698467488123,
+      "tag": "0004_marvelous_kitty_pryde",
+      "breakpoints": true
+    },
+    {
+      "idx": 5,
+      "version": "5",
+      "when": 1698467488623,
+      "tag": "0005_boring_bastion",
+      "breakpoints": true
     }
   ]
 }

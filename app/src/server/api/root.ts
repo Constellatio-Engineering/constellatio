@@ -1,4 +1,5 @@
 import { authenticationRouter } from "@/server/api/routers/authentication.router";
+import { badgesRouter } from "@/server/api/routers/badges.router";
 import { billingRouter } from "@/server/api/routers/billing.router";
 import { bookmarksRouter } from "@/server/api/routers/bookmarks.router";
 import { caisyRouter } from "@/server/api/routers/caisy.router";
@@ -14,12 +15,11 @@ import { viewsRouter } from "@/server/api/routers/views.router";
 import { createTRPCRouter } from "@/server/api/trpc";
 
 /**
- * This is the primary router for your server.
- *
  * All routers added in /api/routers should be manually added here.
  */
 export const appRouter = createTRPCRouter({
   authentication: authenticationRouter,
+  badges: badgesRouter,
   billing: billingRouter,
   bookmarks: bookmarksRouter,
   caisy: caisyRouter,

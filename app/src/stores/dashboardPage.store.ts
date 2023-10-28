@@ -1,19 +1,45 @@
 import { create } from "zustand";
 import { immer } from "zustand/middleware/immer";
 
-type DashbardPageProps = {
-  isBadgesDrawerOpened: boolean;
-  setIsBadgesDrawerOpened: (isBadgesDrawerOpened: boolean) => void;
+type DrawerOpenedState = {
+  isDrawerOpened: true;
+  selectedBadgeId: string | null;
 };
 
-const useDashboardPageStore = create(immer<DashbardPageProps>((set) => (
-  {
-    isBadgesDrawerOpened: false,
-    setIsBadgesDrawerOpened: (isBadgesDrawerOpened: boolean) => 
+type DrawerClosedState = {
+  isDrawerOpened: false;
+};
+
+type DashboardPageStoreProps = {
+  closeDrawer: () => void;
+  drawerState: DrawerOpenedState | DrawerClosedState;
+  openDrawer: (params: {
+    selectedBadgeId: string | null;
+  }) => void;
+};
+
+const useDashboardPageStore = create(
+  immer<DashboardPageStoreProps>((set) => ({
+    closeDrawer: () =>
     {
-      set((state) => 
+      set((state) =>
       {
-        state.isBadgesDrawerOpened = isBadgesDrawerOpened;
+        state.drawerState = {
+          isDrawerOpened: false
+        };
+      });
+    },
+    drawerState: {
+      isDrawerOpened: false
+    },
+    openDrawer: ({ selectedBadgeId }) =>
+    {
+      set((state) =>
+      {
+        state.drawerState = {
+          isDrawerOpened: true,
+          selectedBadgeId
+        };
       });
     },
   }))
