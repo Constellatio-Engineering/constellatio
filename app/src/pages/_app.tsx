@@ -16,8 +16,6 @@ import {
 } from "@supabase/auth-helpers-react";
 import { type AppProps } from "next/app";
 import Head from "next/head";
-import Router from "next/router";
-import Script from "next/script";
 import { appWithTranslation } from "next-i18next";
 
 // new posthog stuff
@@ -35,18 +33,24 @@ import React, {
 if (typeof window !== "undefined") {
   posthog.init(process.env.NEXT_PUBLIC_POSTHOG_KEY as string, {
     api_host: process.env.NEXT_PUBLIC_POSTHOG_HOST || "https://app.posthog.com",
-    // Enable debug mode in development
+    secure_cookie: true,
+    capture_pageview: false,
+
+    opt_out_capturing_by_default: true,
+    opt_out_persistence_by_default: true,
+    disable_cookie: true,
+    disable_persistence: true,
+    autocapture: true,
+    disable_session_recording: true,
+
     loaded: (posthog) => {
+      // Enable debug mode in development
       if (process.env.NODE_ENV === "development") {
-        posthog.debug();
+        posthog.debug(true);
       }
     },
-    autocapture: false,
-    //disable_persistence //? (default = false) Disable persisting user data across pages. This will disable cookies, session storage and local storage.
   });
 }
-
-const getCurrentTime = (): number => new Date().getTime();
 
 type ConstellatioAppProps = AppProps<{ initialSession: Session }>;
 
@@ -55,12 +59,14 @@ const AppContainer: FunctionComponent<ConstellatioAppProps> = ({
   pageProps,
   router,
 }) => {
-  const { mutate: ping, mutateAsync: pingAsync } =
-    api.tracking.ping.useMutation();
+  const { mutate: ping } = api.tracking.ping.useMutation();
   const isRouterReady = useIsRouterReady();
   const isProduction = env.NEXT_PUBLIC_DEPLOYMENT_ENVIRONMENT === "production";
-  const [isDocumentVisible, setIsDocumentVisible] = useState<boolean>(true);
-  const [isWindowInFocus, setIsWindowInFocus] = useState<boolean>(true);
+  const [isDocumentVisible, setIsDocumentVisible] = useState<null | boolean>(
+    null
+  );
+
+  const [isMouseInWindow, setIsMouseInWindow] = useState<null | boolean>(null);
   const interval = useRef<NodeJS.Timer>();
 
   let title = "Constellatio";
@@ -69,23 +75,52 @@ const AppContainer: FunctionComponent<ConstellatioAppProps> = ({
     title += ` - ${env.NEXT_PUBLIC_DEPLOYMENT_ENVIRONMENT}`;
   }
 
-  /* placeholder overlay feedback button */
+  /* TODO:: placeholder overlay feedback button */
 
-  /* const router = useRouter() */
   useEffect(() => {
-    // Track page views
     const handleRouteChange = () => posthog.capture("$pageview");
-    router.events.on("routeChangeComplete", handleRouteChange);
+
+    supabase.auth.onAuthStateChange((event, session) => {
+      //"INITIAL_SESSION" | "SIGNED_IN" | "SIGNED_OUT .. UPDATED etc vlt. noch ergänzen."
+      switch (event) {
+        case "SIGNED_IN": {
+          const id = session?.user?.id;
+          const email = session?.user?.email;
+          posthog.identify(id, { email: email });
+          posthog.opt_in_capturing();
+          break;
+        }
+        case "SIGNED_OUT": {
+          posthog.opt_out_capturing();
+          posthog.reset();
+        }
+      }
+
+      if (posthog.has_opted_in_capturing()) {
+        //TODO::development => production noch ändern
+        //TODO::remove process. => env.NODE_ENV => type error
+        if (process.env.NODE_ENV != "production") {
+          posthog.set_config({
+            disable_cookie: false,
+            disable_persistence: false,
+            autocapture: true,
+          });
+          posthog.startSessionRecording();
+        }
+        router.events.on("routeChangeComplete", handleRouteChange);
+      }
+    });
 
     return () => {
       router.events.off("routeChangeComplete", handleRouteChange);
     };
-  }, []);
+  }, [router, posthog]);
 
   useEffect(() => {
     const onVisibilityChange = (): void => {
       setIsDocumentVisible(!document.hidden);
     };
+    onVisibilityChange();
     document.addEventListener("visibilitychange", onVisibilityChange);
     return () => {
       document.removeEventListener("visibilitychange", onVisibilityChange);
@@ -93,36 +128,36 @@ const AppContainer: FunctionComponent<ConstellatioAppProps> = ({
   }, []);
 
   useEffect(() => {
-    const onWindowBlur = (): void => {
-      setIsWindowInFocus(false);
+    const onWindowMouseOut = (): void => {
+      setIsMouseInWindow(false);
     };
-    window.addEventListener("blur", onWindowBlur);
-    return () => {
-      window.addEventListener("blur", onWindowBlur);
-    };
-  }, []);
 
-  useEffect(() => {
-    const onWindowBlur = (): void => {
-      setIsWindowInFocus(true);
+    const onWindowMouseOver = (): void => {
+      setIsMouseInWindow(true);
     };
-    window.addEventListener("focus", onWindowBlur);
+
+    document.addEventListener("mouseleave", onWindowMouseOut);
+    document.addEventListener("mouseenter", onWindowMouseOver);
+
     return () => {
-      window.addEventListener("focus", onWindowBlur);
+      document.removeEventListener("mouseleave", onWindowMouseOut);
+      document.removeEventListener("mouseenter", onWindowMouseOver);
     };
   }, []);
 
   const onInterval = useCallback(() => {
-    console.log("onInterval");
-    /* || !isWindowInFocus könnte man auch noch einbinden*/
-    if (!isDocumentVisible) {
-      console.log("not visible or not in focus => return");
+    if (
+      !isDocumentVisible ||
+      !isMouseInWindow ||
+      !posthog.has_opted_in_capturing() ||
+      posthog.has_opted_out_capturing()
+    ) {
       return;
     }
 
     const path = router.asPath;
     ping({ url: path });
-  }, [isDocumentVisible, ping, router.asPath]);
+  }, [isDocumentVisible, isMouseInWindow, posthog, router.asPath, ping]);
 
   useEffect(() => {
     if (interval.current) {
@@ -131,7 +166,7 @@ const AppContainer: FunctionComponent<ConstellatioAppProps> = ({
 
     onInterval(); //TODO::check feuert aktuell glaub 2x beim betreten
 
-    interval.current = setInterval(onInterval, 10000);
+    interval.current = setInterval(onInterval, 5000);
 
     return () => clearInterval(interval.current);
   }, [onInterval]);

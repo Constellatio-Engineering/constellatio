@@ -31,8 +31,8 @@ export const UserDropdown: FunctionComponent = () => {
       await supabase.auth.signOut();
       await router.replace("/login");
       await invalidateEverything();
-
-      posthog.reset();
+      /* posthog.opt_in_capturing();
+      posthog.reset(); */
 
       notifications.show({
         message: "Come back soon!",

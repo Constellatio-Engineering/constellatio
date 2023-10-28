@@ -38,7 +38,7 @@ export const trackingRouter = createTRPCRouter({
       const tableData = {};
 
       test.forEach((t) => {
-        console.log(t);
+        //console.log(t);
 
         const converted = new Date(t.updatedAt).toLocaleString("de-DE");
         tableData[t.id] = {
@@ -155,9 +155,9 @@ export const trackingRouter = createTRPCRouter({
               60 /
               obj[year][month][day]["numberOfUniqueUserIds"];
 
-            console.log(obj[year][month][day]["numberOfUniqueUserIds"]);
-            console.log(obj[year][month][day]["sumOfSessionDuration"]);
-            console.log(obj[year][month][day]["averageOfUseTimeInMins"]);
+            //console.log(obj[year][month][day]["numberOfUniqueUserIds"]);
+            //console.log(obj[year][month][day]["sumOfSessionDuration"]);
+            //console.log(obj[year][month][day]["averageOfUseTimeInMins"]);
           }
         }
       }
@@ -217,7 +217,7 @@ export const trackingRouter = createTRPCRouter({
         Object.entries(hourlyUsage).sort()
       );
 
-      console.log(sortedHourlyUsage);
+      //console.log(sortedHourlyUsage);
 
       // Finde die Range der Nutzungszeiten pro Tag
       const dailyUsageRanges = {};
@@ -234,9 +234,7 @@ export const trackingRouter = createTRPCRouter({
       for (const date in dailyUsageRanges) {
         const minUsage = Math.min(...dailyUsageRanges[date]);
         const maxUsage = Math.max(...dailyUsageRanges[date]);
-        console.log(
-          `Date: ${date}, Min Usage: ${minUsage} mins, Max Usage: ${maxUsage} mins`
-        );
+        //console.log(`Date: ${date}, Min Usage: ${minUsage} mins, Max Usage: ${maxUsage} mins`);
       }
 
       //3.
@@ -304,9 +302,7 @@ export const trackingRouter = createTRPCRouter({
       for (const caseUrl in caseAvgTime) {
         const { totalTime, count } = caseAvgTime[caseUrl];
         const avgTime = totalTime / count;
-        console.log(
-          `Durchschnittliche Zeit für Nutzer auf ${caseUrl}: ${avgTime} Minuten`
-        );
+        //console.log(`Durchschnittliche Zeit für Nutzer auf ${caseUrl}: ${avgTime} Minuten`);
       }
     }),
 });
