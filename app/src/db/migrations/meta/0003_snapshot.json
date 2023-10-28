@@ -1,6 +1,6 @@
 {
-  "id": "39ec0872-2349-4173-b188-d0f2c529d10f",
-  "prevId": "19401a20-3a41-4145-8377-d063249b10d2",
+  "id": "06f64c43-62d5-473f-9de7-3732085305b0",
+  "prevId": "9cee7c67-1247-4253-ac0c-fa48a55250df",
   "version": "5",
   "dialect": "pg",
   "tables": {
@@ -84,6 +84,13 @@
           "type": "text",
           "primaryKey": false,
           "notNull": true
+        },
+        "PublicationState": {
+          "name": "PublicationState",
+          "type": "BadgePublicationState",
+          "primaryKey": false,
+          "notNull": true,
+          "default": "'not-listed'"
         }
       },
       "indexes": {},
@@ -959,6 +966,13 @@
           "type": "uuid",
           "primaryKey": false,
           "notNull": true
+        },
+        "UserBadgeState": {
+          "name": "UserBadgeState",
+          "type": "UserBadgeState",
+          "primaryKey": false,
+          "notNull": true,
+          "default": "'not-seen'"
         }
       },
       "indexes": {},
@@ -1003,6 +1017,14 @@
     }
   },
   "enums": {
+    "BadgePublicationState": {
+      "name": "BadgePublicationState",
+      "values": {
+        "not-listed": "not-listed",
+        "coming-soon": "coming-soon",
+        "published": "published"
+      }
+    },
     "CaseProgressState": {
       "name": "CaseProgressState",
       "values": {
@@ -1103,6 +1125,13 @@
         "trialing": "trialing",
         "unpaid": "unpaid",
         "paused": "paused"
+      }
+    },
+    "UserBadgeState": {
+      "name": "UserBadgeState",
+      "values": {
+        "not-seen": "not-seen",
+        "seen": "seen"
       }
     }
   },
