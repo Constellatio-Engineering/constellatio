@@ -12,23 +12,6 @@ export const badgesRouter = createTRPCRouter({
   getBadges: protectedProcedure
     .query(async ({ ctx: { userId } }) =>
     {
-      /* const subquery = db.select().from(usersToBadges).where(
-        and(
-          eq(usersToBadges.userId, userId),
-        )
-      ).as("subquery");
-
-      const result = await db.select({
-        description: badges.description,
-        id: badges.id,
-        imageFilename: badges.imageFilename,
-        isCompleted: sql`select * from ${usersToBadges} where ${usersToBadges.badgeId} = ${badges.id} and ${usersToBadges.userId} = ${userId} limit 1`,
-        // isCompleted2: exists(),
-        name: badges.name
-      }).from(badges).orderBy(asc(badges.name));
-
-      console.log(result);*/
-
       const result = await db.query.badges.findMany({
         columns: {
           name: true,
@@ -36,25 +19,20 @@ export const badgesRouter = createTRPCRouter({
         orderBy: [asc(badges.name)],
         with: {
           usersToBadges: {
+            extras: {
+              hasCompletedBadge: (sql<boolean>`exists(select * from ${usersToBadges})`.as("has_completed_badge")),
+            },
             where: eq(usersToBadges.userId, userId),
-            with: {
-              user: {
-                columns: { email: true },
-                extras: {
-                  hasCompletedBadge: sql<boolean>`exists(select * from ${usersToBadges})`.as("has_completed_badge"),
-                }
-              }
-            }
           }
         }
       });
 
       result.forEach((badge) =>
       {
-        if(badge.usersToBadges.length > 0)
-        {
-          console.log("badge", badge.usersToBadges);
-        }
+        console.log("badge", {
+          name: badge.name,
+          usersToBadges: badge.usersToBadges
+        });
       });
 
       return result;
