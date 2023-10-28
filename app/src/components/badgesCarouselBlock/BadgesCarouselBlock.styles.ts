@@ -14,4 +14,5 @@ export const wrapper = (theme: MantineTheme) => css`
     /* width: 70%; */
     margin-top: 50px;
     width: 100%;
+    min-height: 300px;
 `;

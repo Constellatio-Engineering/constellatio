@@ -176,7 +176,7 @@ const SearchPageResults: FunctionComponent<Props> = ({ tabQuery }) =>
     }
     default:
     {
-      console.error(`Unknown tab queryz: ${tabQuery}`);
+      console.error(`Unknown tab query at SearchPageResults: ${tabQuery}`);
       return null;
     }
   }

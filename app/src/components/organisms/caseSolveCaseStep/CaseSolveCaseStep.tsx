@@ -1,6 +1,7 @@
 import { BodyText } from "@/components/atoms/BodyText/BodyText";
 import { Button } from "@/components/atoms/Button/Button";
 import { type IStatusLabel } from "@/components/atoms/statusLabel/StatusLabel";
+import { richTextParagraphOverwrite } from "@/components/helpers/richTextParagraphOverwrite";
 import { CaseSolvedIcon } from "@/components/Icons/CaseSolved";
 import { Modal } from "@/components/molecules/Modal/Modal";
 import { Richtext } from "@/components/molecules/Richtext/Richtext";
@@ -113,7 +114,7 @@ const CaseSolveCaseStep: FunctionComponent<Props> = ({
       {facts?.json && (
         <div css={styles.factsWrapper}>
           <Title order={2}>Sachverhalt</Title>
-          <Richtext data={facts}/>
+          <Richtext data={facts} richTextOverwrite={{ paragraph: richTextParagraphOverwrite }}/>
         </div>
       )}
     </div>

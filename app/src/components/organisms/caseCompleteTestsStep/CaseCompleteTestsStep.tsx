@@ -232,7 +232,10 @@ const CaseCompleteTestsStep: FunctionComponent<ICaseCompleteTestsStepProps> = ({
                     const node = props!.node as unknown as IHeadingNode;
                     return RichTextHeadingOverwrite({ index: getNestedHeadingIndex(node, allHeadings), ...props });
                   },
-                  paragraph: richTextParagraphOverwrite
+                  paragraph: (props) => 
+                  {
+                    return richTextParagraphOverwrite(props);
+                  },
                 }}
               />
               {(areAllGamesCompleted && variant === "case") && (

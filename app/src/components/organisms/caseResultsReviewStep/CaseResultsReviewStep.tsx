@@ -1,5 +1,6 @@
 import { Button } from "@/components/atoms/Button/Button";
 import { RichTextHeadingOverwrite } from "@/components/helpers/RichTextHeadingOverwrite";
+import { richTextParagraphOverwrite } from "@/components/helpers/richTextParagraphOverwrite";
 import { ArrowDown } from "@/components/Icons/ArrowDown";
 import { ArrowUp } from "@/components/Icons/ArrowUp";
 import { Bookmark } from "@/components/Icons/Bookmark";
@@ -101,7 +102,7 @@ const CaseResultsReviewStep: FunctionComponent<ICaseResultsReviewStepProps> = ({
                     </Accordion.Control>
                     <Accordion.Panel>
                       <ScrollArea h={500} offsetScrollbars>
-                        <Richtext data={facts}/>
+                        <Richtext data={facts} richTextOverwrite={{ paragraph: richTextParagraphOverwrite }}/>
                       </ScrollArea>
                     </Accordion.Panel>
                   </Accordion.Item>
@@ -153,6 +154,7 @@ const CaseResultsReviewStep: FunctionComponent<ICaseResultsReviewStepProps> = ({
                     const node = props!.node as unknown as IHeadingNode;
                     return RichTextHeadingOverwrite({ index: getNestedHeadingIndex(node, allResolutionHeadings), ...props });
                   },
+                  paragraph: richTextParagraphOverwrite
                 }}
               />
             </div>
