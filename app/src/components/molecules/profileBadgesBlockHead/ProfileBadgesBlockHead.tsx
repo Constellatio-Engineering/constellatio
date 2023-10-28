@@ -13,8 +13,7 @@ import * as styles from "./../../organisms/profileBadgesBlock/ProfileBadgesBlock
 const ProfileBadgesBlockHead: FunctionComponent = () =>
 {
   const { getBadgesResult: { completedCount, totalCount } } = useBadges();
-
-  const setIsBadgesDrawerOpened = useDashboardPageStore(s => s.setIsBadgesDrawerOpened);
+  const openDrawer = useDashboardPageStore(s => s.openDrawer);
 
   return (
     <div css={styles.badgesBlockHeader}>
@@ -24,7 +23,7 @@ const ProfileBadgesBlockHead: FunctionComponent = () =>
           <CaptionText css={styles.title} styleType="caption-01-medium" component="p">Badges</CaptionText>
           <SubtitleText css={styles.counter} styleType="subtitle-01-medium" component="p">{completedCount} / {totalCount}</SubtitleText>
         </div>
-        <Button<"button"> onClick={() => setIsBadgesDrawerOpened(true)} styleType="secondarySimple">Alle ansehen</Button>
+        <Button<"button"> onClick={() => openDrawer({ selectedBadgeId: null })} styleType="secondarySimple">Alle ansehen</Button>
       </div>
     </div>
   );

@@ -36,6 +36,7 @@ export const env = createEnv({
     STRIPE_PREMIUM_PLAN_PRICE_ID: z.string(),
     STRIPE_SIGNING_SECRET: z.string(),
     RECREATE_SEARCH_INDEX_SECRET: z.string(),
+    POSTGRES_MAX_CONNECTIONS: z.string().pipe(z.coerce.number().int().min(1).max(9999)),
   },
 
 	/**
@@ -97,6 +98,7 @@ export const env = createEnv({
     NEXT_PUBLIC_PROFILE_PICTURE_STALE_TIME_IN_SECONDS: process.env.NEXT_PUBLIC_PROFILE_PICTURE_STALE_TIME_IN_SECONDS,
     RECREATE_SEARCH_INDEX_SECRET: process.env.RECREATE_SEARCH_INDEX_SECRET,
     NEXT_PUBLIC_APP_NAME: process.env.NEXT_PUBLIC_APP_NAME,
+    POSTGRES_MAX_CONNECTIONS: process.env.POSTGRES_MAX_CONNECTIONS,
   },
   /**
    * Run `build` or `dev` with `SKIP_ENV_VALIDATION` to skip env validation.

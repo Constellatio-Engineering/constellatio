@@ -1,24 +1,34 @@
+import { colors } from "@/constants/styles/colors";
+
 import { css } from "@emotion/react";
 import { type MantineTheme } from "@mantine/styles";
-
-type ProfileBadgeCardProps = {
-  isExpanded: boolean;
-  isSelected: boolean;
-  theme: MantineTheme;
-};
 
 export const wrapper = css`
   position: relative;
   border-radius: 12px;
+  background-color: ${colors["neutrals-01"][1]};
+`;
+
+export const wrapperDisabled = css`
+  pointer-events: none;
+  user-select: none;
+  cursor: default;
 `;
 
 export const wrapperSmall = css`
   width: 200px;
   min-width: 200px;
+  cursor: pointer;
+  transition: background-color 0.1s ease-in-out;
+  :hover, :active, :focus {
+    background-color: ${colors["neutrals-01"][2]};
+  }
 `;
 
-export const wrapperLarge = css`
+export const wrapperLarge = (isHighlighted: boolean) => css`
   flex: 1;
+  transition: outline-color 0.3s ease-in-out .3s;
+  outline: 1px solid ${isHighlighted ? colors["neutrals-01"][9] : "transparent"};
 `;
 
 export const comingSoonOverlay = css`
@@ -36,12 +46,8 @@ export const comingSoonOverlay = css`
   z-index: 1;
 `;
 
-export const badgeWrapper = ({ isExpanded, isSelected, theme }: ProfileBadgeCardProps) => css`
-  background-color: ${theme.colors["neutrals-01"][1]};
-  border-top: 1px solid ${isSelected ? theme.colors["neutrals-01"][7] : theme.colors["neutrals-01"][3]};
-  border-left: 1px solid ${isSelected ? theme.colors["neutrals-01"][7] : theme.colors["neutrals-01"][3]};
-  border-right: 1px solid ${isSelected ? theme.colors["neutrals-01"][7] : theme.colors["neutrals-01"][3]};
-  border-bottom: 1px solid ${!isExpanded ? isSelected ? theme.colors["neutrals-01"][7] : theme.colors["neutrals-01"][3] : theme.colors["neutrals-01"][3]};
+export const badgeWrapper = () => css`
+  border: 1px solid ${colors["neutrals-01"][3]};
   padding: 24px 16px 16px 16px;
   display: flex;
   flex-direction: column;
@@ -49,8 +55,12 @@ export const badgeWrapper = ({ isExpanded, isSelected, theme }: ProfileBadgeCard
   justify-content: space-between;
   gap: 16px;
   position: relative;
-  border-radius: ${!isExpanded ? "12px" : "12px 12px 0 0"};
+  border-radius: 12px;
   width: 100%;
+`;
+
+export const badgeWrapperSelected = css`
+  border: 1px solid ${colors["neutrals-01"][7]};
 `;
 
 export const contentComingSoon = css`
@@ -75,16 +85,13 @@ export const badgeTitle = (theme: MantineTheme) => css`
   text-align: center;
   `;
 
-export const badgeDescriptionArea = ({ isSelected, theme }: ProfileBadgeCardProps) => css`
-  background-color: ${theme.colors["neutrals-01"][0]};
+export const badgeDescriptionArea = () => css`
+  background-color: ${colors["neutrals-01"][0]};
   text-align: center;
-  color: ${theme.colors["neutrals-01"][7]};
+  color: ${colors["neutrals-01"][7]};
   padding: 16px;
   border-radius: 0 0 12px 12px;
-  
-  border-bottom:1px solid ${isSelected ? theme.colors["neutrals-01"][7] : theme.colors["neutrals-01"][3]};
-  border-right:1px solid ${isSelected ? theme.colors["neutrals-01"][7] : theme.colors["neutrals-01"][3]};
-  border-left:1px solid ${isSelected ? theme.colors["neutrals-01"][7] : theme.colors["neutrals-01"][3]};
+  border: solid 1px ${colors["neutrals-01"][3]};
 `;
 
 export const badgeDescriptionText = css``;

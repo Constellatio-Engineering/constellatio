@@ -1,5 +1,3 @@
-import useBadges from "@/hooks/useBadges";
-
 import React, { type FunctionComponent } from "react";
 
 import * as styles from "./BadgesCarouselBlock.styles";

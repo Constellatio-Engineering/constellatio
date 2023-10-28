@@ -1,5 +1,4 @@
 import useBadges from "@/hooks/useBadges";
-import useDashboardPageStore from "@/stores/dashboardPage.store";
 
 import { Carousel } from "@mantine/carousel";
 import React, { type FunctionComponent } from "react";
@@ -11,8 +10,6 @@ import ProfileBadgeCard from "../molecules/profileBadgeCard/ProfileBadgeCard";
 
 const BadgesCarousel: FunctionComponent = () => 
 {
-  const isBadgesDrawerOpened = useDashboardPageStore(s => s.isBadgesDrawerOpened);
-  const setIsBadgesDrawerOpened = useDashboardPageStore(s => s.setIsBadgesDrawerOpened);
   const { getBadgesResult: { badges } } = useBadges();
 
   return (
@@ -27,13 +24,10 @@ const BadgesCarousel: FunctionComponent = () =>
       slidesToScroll="auto">
       {badges.map((badge) => (
         <Carousel.Slide key={badge.id}>
-          <ProfileBadgeCard
-            {...badge}
-            size="small"
-          />
+          <ProfileBadgeCard {...badge} size="small"/>
         </Carousel.Slide>
       ))}
-      <BadgesDrawer close={() => setIsBadgesDrawerOpened(false)} opened={isBadgesDrawerOpened}/>
+      <BadgesDrawer/>
     </Carousel>
   );
 };
