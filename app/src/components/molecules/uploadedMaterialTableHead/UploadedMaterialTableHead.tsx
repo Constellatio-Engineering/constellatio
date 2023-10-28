@@ -12,13 +12,19 @@ const UploadedMaterialTableHead: FunctionComponent<UploadedMaterialTableHeadProp
     <tr>
       {/* {variant === "personalSpace" && <th/>} */}
       <th className="primaryCell">
-        <CaptionText tt="uppercase" styleType="caption-01-medium" component="p">
-          FILE NAME
+        <CaptionText
+          tt="uppercase"
+          styleType="caption-01-medium"
+          component="p">
+          Name
         </CaptionText>
       </th>
       <th>
-        <CaptionText tt="uppercase" styleType="caption-01-medium" component="p">
-          DATE CREATED
+        <CaptionText
+          tt="uppercase"
+          styleType="caption-01-medium"
+          component="p">
+          Hochgeladen am
         </CaptionText>
       </th>
       {/* <th>
@@ -28,15 +34,21 @@ const UploadedMaterialTableHead: FunctionComponent<UploadedMaterialTableHeadProp
       </th> */}
       {variant === "searchPapers" && (
         <th>
-          <CaptionText tt="uppercase" styleType="caption-01-medium" component="p">
-            Folder
+          <CaptionText
+            tt="uppercase"
+            styleType="caption-01-medium"
+            component="p">
+            Ordner
           </CaptionText>
         </th>
       )}
       {variant === "personalSpace" && (
         <th>
-          <CaptionText tt="uppercase" styleType="caption-01-medium" component="p">
-            NOTES
+          <CaptionText
+            tt="uppercase"
+            styleType="caption-01-medium"
+            component="p">
+            Notizen
           </CaptionText>
         </th>
       )}

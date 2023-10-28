@@ -7,7 +7,7 @@ export const passwordRequirements = [
   { label: "Mindestens 1 Ziffer", re: /[0-9]/ },
   { label: "Mindestens 1 Großbuchstaben", re: /[A-Z]/ },
   { label: "Mindestens 1 Kleinbuchstaben", re: /[a-z]/ },
-  { label: "Mindestens 1 Sonderzeichen: ! # $ & ( ) * + - = . , / ? @ { } [ ] ^ _ ~", re: /[!#$&()*+,-.=/?@{}[\]^_~]/ },
+  { label: "Mindestens 1 Sonderzeichen: ? ! $ & @ #", re: /[!#$&()*+,-.=/?@{}[\]^_~]/ },
 ];
 
 export const passwordSchema = z.string().refine(password => passwordRequirements.every(r => r.re.test(password)), {

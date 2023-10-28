@@ -5,19 +5,20 @@ type TRichTextElements = {
   type: ElementType;
 };
 
-export interface TextElement extends TRichTextElements 
+interface TextElement extends TRichTextElements 
 {
   content: [];
-  text: string;
-  type: "text"; 
+  marks: Array<{
+    attrs: { href: string }; 
+  }>;
+  text: string; 
+  type: "text";
 }
 
 export interface OverwriteProps 
 {
   children: Array<{
-    props: {
-      node: TextElement;
-    };
+    props: { node: TextElement };
   }>;
 }
 

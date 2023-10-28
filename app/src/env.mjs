@@ -35,6 +35,8 @@ export const env = createEnv({
     CRON_SECRET: z.string(),
     STRIPE_PREMIUM_PLAN_PRICE_ID: z.string(),
     STRIPE_SIGNING_SECRET: z.string(),
+    RECREATE_SEARCH_INDEX_SECRET: z.string(),
+    POSTGRES_MAX_CONNECTIONS: z.string().pipe(z.coerce.number().int().min(1).max(9999)),
   },
 
 	/**
@@ -52,7 +54,10 @@ export const env = createEnv({
 		NEXT_PUBLIC_SIGN_UP_DEFAULT_EMAIL: z.string().email().optional(),
 		NEXT_PUBLIC_DEPLOYMENT_ENVIRONMENT: z.enum(["development", "staging", "production"]),
 		NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY: z.string(),
-	},
+    NEXT_PUBLIC_RESEND_EMAIL_CONFIRMATION_TIMEOUT_IN_SECONDS: z.string().pipe(z.coerce.number().int().min(1).max(3600)),
+    NEXT_PUBLIC_PROFILE_PICTURE_STALE_TIME_IN_SECONDS: z.string().pipe(z.coerce.number().int().min(1).max(36000)),
+    NEXT_PUBLIC_APP_NAME: z.string(),
+  },
 
   /**
    * You can't destruct `process.env` as a regular object in the Next.js edge runtimes (e.g.
@@ -89,6 +94,11 @@ export const env = createEnv({
     STRIPE_SIGNING_SECRET: process.env.STRIPE_SIGNING_SECRET,
     STRIPE_PREMIUM_PLAN_PRICE_ID: process.env.STRIPE_PREMIUM_PLAN_PRICE_ID,
     NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY: process.env.NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY,
+    NEXT_PUBLIC_RESEND_EMAIL_CONFIRMATION_TIMEOUT_IN_SECONDS: process.env.NEXT_PUBLIC_RESEND_EMAIL_CONFIRMATION_TIMEOUT_IN_SECONDS,
+    NEXT_PUBLIC_PROFILE_PICTURE_STALE_TIME_IN_SECONDS: process.env.NEXT_PUBLIC_PROFILE_PICTURE_STALE_TIME_IN_SECONDS,
+    RECREATE_SEARCH_INDEX_SECRET: process.env.RECREATE_SEARCH_INDEX_SECRET,
+    NEXT_PUBLIC_APP_NAME: process.env.NEXT_PUBLIC_APP_NAME,
+    POSTGRES_MAX_CONNECTIONS: process.env.POSTGRES_MAX_CONNECTIONS,
   },
   /**
    * Run `build` or `dev` with `SKIP_ENV_VALIDATION` to skip env validation.

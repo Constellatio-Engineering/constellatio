@@ -11,4 +11,6 @@ const LearninTimeCard: FunctionComponent = () => (
   </div>
 );
 
+// temporary disbale unused eslint rule until we are going to use this comp
+// eslint-disable-next-line import/no-unused-modules
 export default LearninTimeCard;

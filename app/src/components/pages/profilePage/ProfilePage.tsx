@@ -5,23 +5,25 @@ import ProfileHistoryTab from "@/components/organisms/profileHistoryTab/ProfileH
 import ProfileMenu from "@/components/organisms/profileMenu/ProfileMenu";
 import ProfileOverview from "@/components/organisms/profileOverview/ProfileOverview";
 import ProfilePageHeader from "@/components/organisms/profilePageHeader/ProfilePageHeader";
+import ProfileNavMenuTablet from "@/components/profileNavMenuTablet/ProfileNavMenuTablet";
 import SubscriptionTab from "@/components/subscriptionTab/SubscriptionTab";
 import useUserDetails from "@/hooks/useUserDetails";
 import { type IProfilePageProps } from "@/pages/profile";
 import { type UserFiltered } from "@/utils/filters";
 
 import { Container } from "@mantine/core";
+import { useMediaQuery } from "@mantine/hooks";
 import { parseAsString, useQueryState } from "next-usequerystate";
 import React, { type FunctionComponent, type ReactNode, useMemo } from "react";
 
 import * as styles from "./ProfilePage.styles";
 
 export const tabs = [
-  { slug: "overview", title: "Overview" },
-  { slug: "profile-details", title: "Profile Details" },
-  { slug: "change-password", title: "Change Password" },
-  { slug: "history", title: "History" },
-  { slug: "subscription", title: "Subscription" },
+  { slug: "overview", title: "Übersicht" },
+  { slug: "history", title: "Verlauf" },
+  { slug: "profile-details", title: "Einstellungen" },
+  { slug: "change-password", title: "Passwort ändern" },
+  { slug: "subscription", title: "Vertrag" },
 ] as const;
 
 export type UserDetails = {
@@ -34,8 +36,6 @@ const ProfilePage: FunctionComponent<ProfilePageProps> = ({ allMainCategory, use
   const [tab, setTab] = useQueryState("tab", parseAsString.withDefault(tabs[0]!.slug));
   const activeTab = tabs?.find(x => x.slug === tab);
 
-  console.log("userDetails", userDetails);
-
   const renderedTab: ReactNode = useMemo(() =>
   {
     switch (activeTab?.slug)
@@ -46,20 +46,27 @@ const ProfilePage: FunctionComponent<ProfilePageProps> = ({ allMainCategory, use
         return <ProfileDetailsTab/>;
       case "change-password":
         return <ChangePasswordTab/>;
-      /* case "Notifications":
-        return <ProfileNotificationsTab/>;*/
       case "history":
         return <ProfileHistoryTab/>;
       case "subscription":
         return <SubscriptionTab subscriptionStatus="You are currently using a free 5-day trial. You can purchase a subscription by clicking the button below:"/>;
       default:
         return <>{`Unknown tab. Create tab type case in ProfilePage component: ${JSON.stringify(activeTab, null, 2)}`}</>;
+      /* case "Notifications":
+        return <ProfileNotificationsTab/>;*/
     }
   }, [activeTab, allMainCategory]);
-
+  const isTabletScreen = useMediaQuery("(max-width: 1100px)");
   return (
     <div>
       <ProfilePageHeader/>
+      {isTabletScreen && (
+        <ProfileNavMenuTablet
+          tabs={tabs}
+          setTab={setTab}
+          activeTabSlug={activeTab?.slug}
+        />
+      )}
       <Container
         maw="100%"
         css={styles.outerContianer}>

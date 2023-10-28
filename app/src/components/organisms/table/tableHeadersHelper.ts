@@ -5,7 +5,7 @@ type ITableHeaders = {
 };
 
 export const tableHeaders = ({
-  tableType,
+  tableType
 }: {
   tableType: ITableProps["tableType"];
 }): ITableHeaders[] => 
@@ -18,19 +18,19 @@ export const tableHeaders = ({
         case "all-cases":
           return [
             {
-              title: "case",
+              title: "Fälle",
             },
             {
-              title: "status",
+              title: "Status",
             },
             {
-              title: "duration",
+              title: "Bearbeitungszeit",
             },
             {
               title: "legal felid",
             },
             {
-              title: "legal area",
+              title: "Rechtsgebiet",
             },
             {
               title: "",
@@ -40,16 +40,16 @@ export const tableHeaders = ({
         case "cases":
           return [
             {
-              title: "case",
+              title: "Fälle",
             },
             {
-              title: "status",
+              title: "Status",
             },
             {
-              title: "duration",
+              title: "Bearbeitungszeit",
             },
             {
-              title: "topic",
+              title: "Thema",
             },
             {
               title: "",
@@ -59,44 +59,41 @@ export const tableHeaders = ({
         case "favorites":
           return [
             {
-              title: "case",
+              title: "Fälle",
             },
             {
-              title: "status",
+              title: "Status",
             },
             {
-              title: "duration",
+              title: "Bearbeitungszeit",
             },
             {
-              title: "legal area",
+              title: "Rechtsgebiet",
             },
             {
-              title: "topic",
+              title: "Thema",
             },
             {
               title: "",
             },
-            // {
-            //   title: "",
-            // },
           ];
 
         case "search":
           return [
             {
-              title: "case",
+              title: "Fälle",
             },
             {
-              title: "status",
+              title: "Status",
             },
             {
-              title: "duration",
+              title: "Bearbeitungszeit",
             },
             {
-              title: "legal area",
+              title: "Rechtsgebiet",
             },
             {
-              title: "topic",
+              title: "Thema",
             },
             {
               title: "",
@@ -114,10 +111,10 @@ export const tableHeaders = ({
         case "dictionary":
           return [
             {
-              title: "article",
+              title: "Artikel",
             },
             {
-              title: "topic",
+              title: "Thema",
             },
             {
               title: "",
@@ -127,13 +124,13 @@ export const tableHeaders = ({
         case "favorites":
           return [
             {
-              title: "article",
+              title: "Artikel",
             },
             {
-              title: "legal area",
+              title: "Rechtsgebiet",
             },
             {
-              title: "topic",
+              title: "Thema",
             },
             {
               title: "",
@@ -146,13 +143,13 @@ export const tableHeaders = ({
         case "search":
           return [
             {
-              title: "article",
+              title: "Artikel",
             },
             {
-              title: "legal area",
+              title: "Rechtsgebiet",
             },
             {
-              title: "topic",
+              title: "Thema",
             },
             {
               title: "",

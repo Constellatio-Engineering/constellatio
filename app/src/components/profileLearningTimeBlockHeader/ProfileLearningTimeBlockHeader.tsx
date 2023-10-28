@@ -11,12 +11,14 @@ import { Switcher } from "../molecules/Switcher/Switcher";
 
 const ProfileLearningTimeBlockHeader: FunctionComponent<{
   readonly selectedTab: number;
+  readonly setSelectedTabIndex?: React.Dispatch<React.SetStateAction<number>>;
   readonly tabs: Array<{
     icon?: { src?: React.ReactNode };
     number?: number;
     title: string;
+
   }>;
-}> = ({ selectedTab, tabs }) => 
+}> = ({ selectedTab, setSelectedTabIndex, tabs }) => 
 {
   return (
     <div css={styles.blockHead}>
@@ -30,7 +32,8 @@ const ProfileLearningTimeBlockHeader: FunctionComponent<{
         <div>
           <div css={styles.blockHeadDescription}>
             <CaptionText styleType="caption-01-medium" component="p">
-              YEAR&lsquo;S AVERAGE LEARNING TIME
+              {/* Wöchentliche Lernzeit */}
+              Heutige Lernzeit
             </CaptionText>
           </div>
           <div css={styles.blockHeadTitle}>
@@ -48,10 +51,11 @@ const ProfileLearningTimeBlockHeader: FunctionComponent<{
           defaultValue={tabs[selectedTab]?.title}
           tabStyleOverwrite={{ flex: "1", whiteSpace: "nowrap" }}>
           <Tabs.List>
-            {tabs &&
+            {setSelectedTabIndex && tabs &&
               tabs?.map((tab, tabIndex) => (
                 <React.Fragment key={tabIndex}>
                   <SwitcherTab
+                    onClick={() => setSelectedTabIndex(tabIndex)}
                     value={tab.title}>
                     {tab.title}
                   </SwitcherTab>

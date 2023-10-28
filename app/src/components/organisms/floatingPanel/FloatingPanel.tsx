@@ -5,6 +5,7 @@ import { FileIcon } from "@/components/Icons/FileIcon";
 import { type IGenCase_Facts } from "@/services/graphql/__generated/sdk";
 
 import { ScrollArea, Tabs, useMantineTheme } from "@mantine/core";
+import { useScrollIntoView } from "@mantine/hooks";
 import { type Maybe } from "@trpc/server";
 import React, { useState, type FunctionComponent } from "react";
 
@@ -18,7 +19,7 @@ import { ExclamationMark } from "../../Icons/vector";
 import { Richtext } from "../../molecules/Richtext/Richtext";
 import { Switcher } from "../../molecules/Switcher/Switcher";
 
-type ITableTab = { icon: {src: React.ReactNode}; title: "Content" | "Facts" };   
+type ITableTab = { icon: {src: React.ReactNode}; title: "Gliederung" | "Sachverhalt" };   
 export interface IFloatingPanelProps
 {
   readonly content: DataType[];
@@ -35,23 +36,29 @@ const FloatingPanel: FunctionComponent<IFloatingPanelProps> = ({
 }) => 
 {
   const tabs: ITableTab[] = [
-    { icon: { src: <FileIcon size={16}/> }, title: "Content" },
-    { icon: { src: <BoxIcon size={16}/> }, title: "Facts" },
+    { icon: { src: <FileIcon size={16}/> }, title: "Gliederung" },
+    { icon: { src: <BoxIcon size={16}/> }, title: "Sachverhalt" },
   ];
-  const [selectedTab, setSelectedTab] = useState<"Content" | "Facts">(tabs?.[0]?.title ?? "Content");
+  const { scrollableRef } = useScrollIntoView<
+  HTMLDivElement,
+  HTMLDivElement
+  >({ axis: "x" });
+  const [selectedTab, setSelectedTab] = useState<"Gliederung" | "Sachverhalt">(tabs?.[0]?.title ?? "Gliederung");
   const toc = generateTOC(content);
   const theme = useMantineTheme();
 
   return content?.length > 0 ? (
-    <ScrollArea h={hidden ? 300 : 600} styles={() => ({ scrollbar: { zIndex: 1 } })} sx={{ borderRadius: "12px" }}>
+    <ScrollArea
+      ref={scrollableRef}
+      h={hidden ? 300 : 600}
+      styles={() => ({ scrollbar: { zIndex: 1 } })}
+      sx={{ borderRadius: "12px" }}>
       <div css={styles.wrapper({ hidden, theme })}>
         {hidden && (
           <div className="hidden-overlay">
             <div>
               <IconButton icon={<ExclamationMark/>} size="medium"/>
-              <CaptionText styleType="caption-01-medium" component="p">To open the next chapter, please complete the tests
-                in the previous chapter.
-              </CaptionText>
+              <CaptionText styleType="caption-01-medium" component="p">Beginne mit der geführten Lösung, um das Inhaltsverzeichnis anzuzeigen.</CaptionText>
             </div>
           </div>
         )}
@@ -75,12 +82,13 @@ const FloatingPanel: FunctionComponent<IFloatingPanelProps> = ({
           )}
           {variant === "dictionary" && (
             <div className="card-header">
-              <BodyText styleType="body-01-medium" component="p"><FileIcon/>Content</BodyText>
+              <BodyText styleType="body-01-medium" component="p"><FileIcon/>Gliederung</BodyText>
             </div>
           )}
         </Switcher>
-        {selectedTab === "Content" && content && renderTOC(toc)}
-        {facts && facts.json && selectedTab === "Facts" && facts && (
+        {/* {selectedTab === "Gliederung" && content && renderTOC(toc)} */}
+        {selectedTab === "Gliederung" && content && renderTOC(toc)}
+        {facts && facts.json && selectedTab === "Sachverhalt" && facts && (
           <div css={styles.facts}>
             <Richtext data={facts} richTextOverwrite={{ paragraph: richTextParagraphOverwrite }}/>
           </div>

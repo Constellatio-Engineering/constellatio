@@ -1,5 +1,3 @@
-// import useSearchResults from "@/hooks/useSearchResults";
-
 import EmptyStateCard from "@/components/organisms/emptyStateCard/EmptyStateCard";
 import useSearchResults, { type SearchResultsKey } from "@/hooks/useSearchResults";
 import useSearchBarStore from "@/stores/searchBar.store";
@@ -18,13 +16,13 @@ const tabSchema = createParser({
     switch (query as SearchResultsKey)
     {
       case "userUploads": { return "userUploads"; }
+      // case "userDocuments": { return "userUploads"; }
       case "cases": { return "cases"; }
-      case "userDocuments": { return "userDocuments"; }
       case "articles": { return "articles"; }
       default:
       {
-        console.error(`Unknown tab query: ${query}`);
-        return "articles";
+        console.error(`Unknown tab query at createParser: ${query}`);
+        return "cases";
       }
     }
   },
@@ -47,8 +45,8 @@ const SearchPage: FunctionComponent<SearchPageProps> = () =>
       {Object.values(searchResults).every((result) => result.length === 0) ? (
         <EmptyStateCard
           variant="For-large-areas"
-          title={`No Search Results Found ${searchValue && `for “${searchValue}”`}`}
-          text="Try different search Entry"
+          title={`Keine Ergebnisse ${searchValue && `für “${searchValue}”`}`}
+          text="Bitte versuche es mit anderen Begriffen oder Tags, um relevante Inhalte zu finden."
         />
       ) : (
         <>
@@ -60,7 +58,6 @@ const SearchPage: FunctionComponent<SearchPageProps> = () =>
           <SearchPageFiltering/>
           <SearchPageResults
             tabQuery={tabQuery}
-
           />
         </>
       )}

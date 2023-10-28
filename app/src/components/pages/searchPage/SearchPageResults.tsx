@@ -1,9 +1,11 @@
 import { Svg } from "@/basic-components/SVG/Svg";
 import ItemBlock from "@/components/organisms/caseBlock/ItemBlock";
+import DocsTable from "@/components/organisms/docsTable/DocsTable";
 import EmptyStateCard from "@/components/organisms/emptyStateCard/EmptyStateCard";
 import FileViewer from "@/components/organisms/fileViewer/FileViewer";
 import SearchPapersBlock from "@/components/organisms/searchPapersBlock/SearchPapersBlock";
 import UploadedMaterialTable from "@/components/organisms/uploadedMaterialTable/UploadedMaterialTable";
+import DocumentEditor from "@/components/papersBlock/documentEditor/DocumentEditor";
 import useSearchResults, { type SearchResults, type SearchResultsKey } from "@/hooks/useSearchResults";
 import { type IGenArticleOverviewFragment, type IGenFullCaseFragment } from "@/services/graphql/__generated/sdk";
 import useMaterialsStore from "@/stores/materials.store";
@@ -13,6 +15,7 @@ import { type CommonKeysInTypes } from "@/utils/types";
 import { useRouter } from "next/router";
 import { Fragment, type FunctionComponent } from "react";
 
+import { convertTabQueryAsItemTab } from "./seachPageHelpers";
 import * as styles from "./SearchPage.styles";
 
 type Props = {
@@ -27,13 +30,11 @@ const SearchPageResults: FunctionComponent<Props> = ({ tabQuery }) =>
 
   const NoResultsFound = (
     <EmptyStateCard
-      title={`No search results found ${router.query.find && `for “${router.query.find}”`} ${tabQuery && `at ${tabQuery}`}`}
-      text="check other tabs or try different search entry"
+      title={`Keine Ergebnisse ${router.query.find && `für “${router.query.find}”`} ${convertTabQueryAsItemTab(tabQuery) && `in ${convertTabQueryAsItemTab(tabQuery)}`}`}
+      text="Schaue in anderen Kategorien oder starte eine neue Suche"
       variant="For-large-areas"
     />
   );
-
-  const date = new Date();
 
   switch (tabQuery)
   {
@@ -112,48 +113,71 @@ const SearchPageResults: FunctionComponent<Props> = ({ tabQuery }) =>
         )
       );
     }
-    case "userDocuments":
+    case ("userUploads" || "userDocuments"):
     {
       return (
-        searchResults[tabQuery]?.map(userDocument => (
-          <div key={userDocument.id}>
-            <p>Title: {userDocument.name}</p>
-          </div>
-        ))
-      );
-    }
-    case "userUploads":
-    {
-      return (
-        searchResults[tabQuery]?.length > 0 ? (
+        (searchResults.userUploads?.length > 0 || searchResults.userDocuments?.length > 0) ? (
           <div css={styles.searchPageResults}>
-            <SearchPapersBlock
-              table={(
-                <UploadedMaterialTable
-                  uploadedFiles={searchResults[tabQuery].map(file => ({
-                    createdAt: date,
-                    fileExtension: "",
-                    folderId: "",
-                    id: file.id,
-                    note: null,
-                    notes: [],
-                    originalFilename: file.originalFilename,
-                    serverFilename: "",
-                    sizeInBytes: 1,
-                    userId: file.userId
-                  }))}
-                  variant="searchPapers"
-                  selectedFolderId={null} // TODO
+            {searchResults.userDocuments?.length > 0 && (
+              <>
+                <SearchPapersBlock
+                  variant="userDocuments"
+                  table={(
+                    <DocsTable
+                      docs={searchResults.userDocuments.map(doc => ({
+                        content: doc.content,
+                        createdAt: new Date(doc.createdAt),
+                        folderId: doc.folderId,
+                        id: doc.id,
+                        name: doc.name,
+                        updatedAt: new Date(doc.updatedAt),
+                        userId: doc.userId
+                      }))}
+                    />
+                  )}
+                  numberOfTableItems={searchResults.userDocuments?.length}
                 />
-              )}
-              numberOfTableItems={searchResults[tabQuery]?.length}
-            />
-            {selectedFileIdForPreview && (
-              <FileViewer/>
+                <DocumentEditor/>
+              </>
+            )}
+            {searchResults.userUploads?.length > 0 && (
+              <>
+                <SearchPapersBlock
+                  variant="userUploads"
+                  table={(
+                    <UploadedMaterialTable
+                      uploadedFiles={searchResults.userUploads.map(file => ({
+                        contentType: file.contentType,
+                        createdAt: new Date(file.createdAt),
+                        fileExtension: file.fileExtension,
+                        folderId: file.folderId,
+                        id: file.id,
+                        note: null,
+                        notes: [],
+                        originalFilename: file.originalFilename,
+                        serverFilename: "",
+                        sizeInBytes: 1,
+                        userId: file.userId
+                      }))}
+                      variant="searchPapers"
+                      selectedFolderId={null}
+                    />
+                  )}
+                  numberOfTableItems={searchResults.userUploads?.length}
+                />
+                {selectedFileIdForPreview && (
+                  <FileViewer/>
+                )}
+              </>
             )}
           </div>
         ) : NoResultsFound
       );
+    }
+    default:
+    {
+      console.error(`Unknown tab query at SearchPageResults: ${tabQuery}`);
+      return null;
     }
   }
 };

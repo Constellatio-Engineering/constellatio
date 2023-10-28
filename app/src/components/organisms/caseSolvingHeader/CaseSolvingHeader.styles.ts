@@ -6,10 +6,10 @@ export const wrapper = ({ theme, variant }: {
   variant: "case" | "dictionary";
 }): SerializedStyles => css`
   position: relative;
+  padding :0 60px;
   background: ${variant === "case"
     ? theme.colors["cc-cases"][2]
     : theme.colors["cc-dictionary"][2]};
-  /* min-height: 60vh; */
   #overlay-lines {
     position: absolute;
     inset: 0;
@@ -22,7 +22,7 @@ export const wrapper = ({ theme, variant }: {
     ? theme.colors["cc-cases"][2]
     : theme.colors["cc-dictionary"][2]};
   }
-`;
+  `;
 
 export const body = css`
   position: relative;
@@ -31,9 +31,12 @@ export const body = css`
   justify-content: space-between;
   align-items: center;
   flex-wrap: wrap;
-  padding: 100px 0;
-  @media (max-width: 800px) {
+  min-width: 100%;
+  padding: 100px 32px 100px 0;
+  @media (max-width: 1100px) {
+    padding: 60px 0;
     justify-content: center;
+    text-align: center;
     gap: 32px;
   }
 `;
@@ -57,21 +60,19 @@ export const bodyText = (theme: MantineTheme): SerializedStyles => css`
   .title {
     color: ${theme.colors["transparency-02"][1]};
   }
-  .headline{
-    h1{
-    /* overflow: hidden; */
-    }
-  }
-  @media (max-width: 800px) {
+  @media (max-width: 1100px) {
     width: 100%;
-  }
+    .icons-bar {
+    justify-content: center;
+      }
+        }
 `;
 
 export const bodyCard = css`
   width: 45%;
   min-width: 350px;
   max-width: 536px;
-  @media (max-width: 800px) {
+  @media (max-width: 1100px) {
     width: 100%;
   }
 `;
@@ -110,9 +111,5 @@ export const stepsBar = (theme: MantineTheme): SerializedStyles => css`
 `;
 
 export const container = css`
-padding:60px;
 max-width: 1440px;
-@media screen and (max-width: 1024px) {
-  padding: 24px;
-}
 `;

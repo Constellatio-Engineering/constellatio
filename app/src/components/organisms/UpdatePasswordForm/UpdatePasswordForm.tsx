@@ -61,7 +61,7 @@ export const UpdatePasswordForm: FunctionComponent = () =>
     <form onSubmit={form.onSubmit((formValues) => updatePassword(formValues.password))}>
       <Stack spacing="spacing-32">
         <Title order={3} align="center" c="neutrals-02.1">
-          Set new password
+          Neues Passwort
         </Title>
         {errorType === "passwordsMatch" && (
           <AlertCard variant="error">
@@ -78,8 +78,8 @@ export const UpdatePasswordForm: FunctionComponent = () =>
             <Input
               {...form.getInputProps("password")}
               inputType="password"
-              label="Password"
-              title="Password"
+              label="Neues Passwort"
+              title="Neues Passwort"
               onVisibilityChange={toggle}
             />
             <PasswordValidationSchema
@@ -91,8 +91,8 @@ export const UpdatePasswordForm: FunctionComponent = () =>
             {...form.getInputProps("passwordConfirm")}
             inputType="password"
             error={form.errors.passwordConfirm}
-            label="Confirm Password"
-            title="Confirm Password"
+            label="Neues Passwort erneut eingeben"
+            title="Neues Passwort erneut eingeben"
           />
         </Stack>
         <Button<"button">
@@ -100,7 +100,7 @@ export const UpdatePasswordForm: FunctionComponent = () =>
           type="submit"
           title="Reset Password"
           loading={isLoading}>
-          Reset Password
+          Passwort zurücksetzen
         </Button>
       </Stack>
     </form>

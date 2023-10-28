@@ -1,21 +1,22 @@
+/* eslint-disable max-lines */
 import { Button, type TButton } from "@/components/atoms/Button/Button";
 import { DropdownItem } from "@/components/atoms/Dropdown/DropdownItem";
 import { Cross } from "@/components/Icons/Cross";
 import { DownloadIcon } from "@/components/Icons/DownloadIcon";
 import { Edit } from "@/components/Icons/Edit";
+import { FolderIcon } from "@/components/Icons/Folder";
 import { Trash } from "@/components/Icons/Trash";
-// import MoveToModal from "@/components/moveToModal/MoveToModal";
+import MoveToModal from "@/components/moveToModal/MoveToModal";
 import { type Document } from "@/db/schema";
-import useContextAndErrorIfNull from "@/hooks/useContextAndErrorIfNull";
-import { InvalidateQueriesContext } from "@/provider/InvalidateQueriesProvider";
+import { useOnDocumentMutation } from "@/hooks/useOnDocumentMutation";
+import useUploadFolders from "@/hooks/useUploadFolders";
 import useDocumentEditorStore from "@/stores/documentEditor.store";
 import { api } from "@/utils/api";
+import { getFolderName } from "@/utils/folders";
 import { paths } from "@/utils/paths";
 import { downloadFileFromUrl } from "@/utils/utils";
 
-import {
-  Menu, Modal, Title
-} from "@mantine/core";
+import { Menu, Modal, Title } from "@mantine/core";
 import { notifications } from "@mantine/notifications";
 import { useMutation } from "@tanstack/react-query";
 import axios from "axios";
@@ -24,7 +25,6 @@ import { type FunctionComponent } from "react";
 
 import * as styles from "./DocsTable.styles";
 import { BodyText } from "../../atoms/BodyText/BodyText";
-// import { Checkbox } from "../../atoms/Checkbox/Checkbox";
 import { DotsIcon } from "../../Icons/dots";
 
 const formatDate = (date: Date): string => `${String(date.getDate()).padStart(2, "0")}.${String(date.getMonth() + 1).padStart(2, "0")}.${date.getFullYear()}`;
@@ -38,12 +38,31 @@ export const DocsTableData: FunctionComponent<Document> = (doc) =>
     updatedAt
   } = doc;
 
+  const { onDocumentMutation } = useOnDocumentMutation();
   const downloadDocumentNotificationId = `downloading-document${documentId}`;
   const { setEditDocumentState, setViewDocumentState } = useDocumentEditorStore(s => s);
-  const { invalidateDocuments } = useContextAndErrorIfNull(InvalidateQueriesContext);
+  const { folders } = useUploadFolders();
+  const folderName = getFolderName(folderId, folders);
+  const [showDeleteDocModal, setShowDeleteDocModal] = useState<boolean>(false);
+  const [showMoveToModal, setShowMoveToModal] = useState(false);
+  const { mutate: updateDocument } = api.documents.updateDocument.useMutation({
+    onError: (error) => console.log("error while updating document", error),
+    onSuccess: async (_data, variables) =>
+    {
+      const newFolderId = variables.updatedValues.folderId;
+
+      if(newFolderId)
+      {
+        await onDocumentMutation({ folderId: newFolderId });
+      }
+
+      setShowMoveToModal(false);
+      await onDocumentMutation({ folderId });
+    },
+  });
   const { mutate: deleteDocument } = api.documents.deleteDocument.useMutation({
     onError: (error) => console.error("Error while deleting document:", error),
-    onSuccess: async () => invalidateDocuments({ folderId }),
+    onSuccess: async () => onDocumentMutation({ folderId })
   });
 
   const { isLoading: isDownloading, mutate: downloadDocument } = useMutation({
@@ -90,9 +109,6 @@ export const DocsTableData: FunctionComponent<Document> = (doc) =>
     },
     retry: false
   });
-  
-  const [showDeleteDocModal, setShowDeleteDocModal] = useState<boolean>(false);
-  // const [showMoveToModal, setShowMoveToModal] = useState(false);
 
   return (
     <>
@@ -105,58 +121,84 @@ export const DocsTableData: FunctionComponent<Document> = (doc) =>
       </td>
       <td css={styles.docDate}><BodyText styleType="body-01-medium" component="p">{formatDate(updatedAt)}</BodyText></td>
       {/* <td css={styles.docTags}><BodyText styleType="body-02-medium" component="p"/></td> */}
+      <td css={styles.cellFolder}>
+        <BodyText
+          styleType="body-02-medium"
+          c="neutrals-01.9"
+          component="p">
+          <FolderIcon/>
+          {folderName}
+        </BodyText>
+      </td>
       <td
         css={styles.callToActionCell}> 
-        <Menu shadow="md" width={200}>
+        <Menu
+          shadow="elevation-big"
+          width={200}
+          radius="12px">
           <Menu.Target>
             <button type="button" className="dots-btn"><DotsIcon/></button>
           </Menu.Target>
           <Menu.Dropdown>
             <Menu.Item onClick={() => setEditDocumentState(doc)}>
-              <DropdownItem icon={<Edit/>} label="Rename and edit"/>
+              <DropdownItem icon={<Edit/>} label="Bearbeiten"/>
             </Menu.Item>
-            {/* <Menu.Item>
-              <DropdownItem icon={<FolderIcon/>} label="Move to" onClick={() => { }}/>
-            </Menu.Item> */}
-            <Menu.Item disabled={isDownloading} onClick={() => downloadDocument()}>
-              <DropdownItem icon={<DownloadIcon/>} label="Download"/>
+            <Menu.Item>
+              <DropdownItem icon={<FolderIcon/>} label="Verschieben" onClick={() => setShowMoveToModal(true)}/>
+            </Menu.Item> 
+            <Menu.Item style={{ display: "none" }} disabled={isDownloading} onClick={() => downloadDocument()}>
+              <DropdownItem icon={<DownloadIcon/>} label="Herunterladen"/>
             </Menu.Item>
             <Menu.Item onClick={() => setShowDeleteDocModal(true)}>
-              <DropdownItem icon={<Trash/>} label="Delete"/>
+              <DropdownItem icon={<Trash/>} label="Löschen"/>
             </Menu.Item>
           </Menu.Dropdown>
         </Menu>
-        {/* Modal */}
-        <Modal
-          lockScroll={false}
-          opened={showDeleteDocModal}
-          withCloseButton={false}
-          centered
-          styles={styles.deleteModalStyle()}
-          onClose={() => { setShowDeleteDocModal(false); }}>
-          <span className="close-btn" onClick={() => setShowDeleteDocModal(false)}>
-            <Cross size={32}/>
-          </span>
-          <Title order={3}>Delete document</Title>
-          <BodyText styleType="body-01-regular" component="p" className="delete-folder-text">Are you sure you want to document <strong>{doc?.name}</strong>?</BodyText>
-          <div className="modal-call-to-action">
-            <Button<"button">
-              styleType={"secondarySimple" as TButton["styleType"]}
-              onClick={() => setShowDeleteDocModal(false)}>
-              No, Keep
-            </Button>
-            <Button<"button">
-              styleType="primary"
-              onClick={() => 
-              {
-                deleteDocument({ id: documentId });
-                setShowDeleteDocModal(false);
-              }}>
-              Yes, Delete
-            </Button>
-          </div>
-        </Modal>
       </td>
+      {/* Modal */}
+      <Modal
+        lockScroll={false}
+        opened={showDeleteDocModal}
+        withCloseButton={false}
+        centered
+        styles={styles.deleteModalStyle()}
+        onClose={() => { setShowDeleteDocModal(false); }}>
+        <span className="close-btn" onClick={() => setShowDeleteDocModal(false)}>
+          <Cross size={32}/>
+        </span>
+        <Title order={3}>Dokument löschen</Title>
+        <BodyText styleType="body-01-regular" component="p" className="delete-folder-text">
+          Bist du sicher, dass du das Dokument <strong>{doc?.name}</strong> löschen möchtest?
+        </BodyText>
+        <div className="modal-call-to-action">
+          <Button<"button">
+            styleType={"secondarySimple" as TButton["styleType"]}
+            onClick={() => setShowDeleteDocModal(false)}>
+            Nein, behalten
+          </Button>
+          <Button<"button">
+            styleType="primary"
+            onClick={() => 
+            {
+              deleteDocument({ id: documentId });
+              setShowDeleteDocModal(false);
+            }}>
+            Ja, löschen
+          </Button>
+        </div>
+      </Modal>
+      <MoveToModal
+        onSubmit={(newFolderId) =>
+        {
+          updateDocument({
+            id: documentId,
+            updatedValues: { folderId: newFolderId }
+          });
+        }}
+        close={() => setShowMoveToModal(false)}
+        currentFolderId={folderId}
+        isOpened={showMoveToModal}
+      />
     </>
   );
 };

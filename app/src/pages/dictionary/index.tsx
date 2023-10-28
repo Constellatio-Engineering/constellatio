@@ -1,4 +1,5 @@
 import { Layout } from "@/components/layouts/Layout";
+import PageHead from "@/components/pageHead/PageHead";
 import OverviewPage from "@/components/pages/OverviewPage/OverviewPage";
 import getArticlesOverviewProps, { type IArticlesOverviewProps } from "@/services/content/getArticlesOverviewProps";
 
@@ -19,9 +20,12 @@ export const getStaticProps: GetStaticProps<GetArticlesOverviewPagePropsResult> 
 };
 
 const NextPage: FunctionComponent<GetArticlesOverviewPagePropsResult> = (articlesOverviewProps) => (
-  <Layout>
-    <OverviewPage content={articlesOverviewProps} variant="dictionary"/>
-  </Layout>
+  <>
+    <PageHead pageTitle="Lexikon"/>
+    <Layout>
+      <OverviewPage content={articlesOverviewProps} variant="dictionary"/>
+    </Layout>
+  </>
 );
 
 export default NextPage;

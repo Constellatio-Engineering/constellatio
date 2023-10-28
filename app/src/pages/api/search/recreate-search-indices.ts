@@ -10,7 +10,7 @@ import {
 } from "@/server/api/services/search.services";
 import getAllArticles from "@/services/content/getAllArticles";
 import getAllCases from "@/services/content/getAllCases";
-import { isDevelopmentOrStaging } from "@/utils/env";
+import { isDevelopment } from "@/utils/env";
 import {
   type ArticleSearchItemNodes,
   type CaseSearchItemNodes, type DocumentSearchItemNodes,
@@ -22,10 +22,10 @@ import { type NextApiHandler } from "next";
 
 const handler: NextApiHandler = async (req, res) =>
 {
-  if(!isDevelopmentOrStaging)
+  if(!isDevelopment && (env.RECREATE_SEARCH_INDEX_SECRET !== req.query.secret))
   {
-    console.warn("This endpoint is only available in development or staging mode. Current mode is '" + env.NEXT_PUBLIC_DEPLOYMENT_ENVIRONMENT + "'");
-    return res.status(403).json({ message: "Forbidden" });
+    console.warn("Invalid secret");
+    return res.status(401).json({ message: "Unauthorized" });
   }
 
   if(req.method !== "POST")
@@ -87,10 +87,10 @@ const handler: NextApiHandler = async (req, res) =>
   const updateDocumentsRankingRulesTask = await meiliSearchAdmin.index(searchIndices.userDocuments).updateSearchableAttributes(documentsSearchableAttributes);
 
   // Displayed attributes
-  const uploadsDisplayedAttributes: UploadSearchItemNodes[] = ["originalFilename", "id", "userId"];
+  const uploadsDisplayedAttributes: UploadSearchItemNodes[] = ["originalFilename", "id", "userId", "createdAt", "folderId", "fileExtension", "contentType"];
   const updateUploadsDisplayedAttributesTask = await meiliSearchAdmin.index(searchIndices.userUploads).updateDisplayedAttributes(uploadsDisplayedAttributes);
 
-  const documentsDisplayedAttributes: DocumentSearchItemNodes[] = ["name", "content", "id", "userId"];
+  const documentsDisplayedAttributes: DocumentSearchItemNodes[] = ["name", "content", "id", "userId", "updatedAt", "createdAt", "folderId"];
   const updateDocumentsDisplayedAttributesTask = await meiliSearchAdmin.index(searchIndices.userDocuments).updateDisplayedAttributes(documentsDisplayedAttributes);
 
   // Filterable attributes

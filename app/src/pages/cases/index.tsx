@@ -1,4 +1,5 @@
 import { Layout } from "@/components/layouts/Layout";
+import PageHead from "@/components/pageHead/PageHead";
 import OverviewPage from "@/components/pages/OverviewPage/OverviewPage";
 import getCasesOverviewProps, { type ICasesOverviewProps } from "@/services/content/getCasesOverviewProps";
 
@@ -18,9 +19,12 @@ export const getStaticProps: GetStaticProps<GetCasesOverviewPagePropsResult> = a
 };
 
 const NextPage: FunctionComponent<GetCasesOverviewPagePropsResult> = (casesOverviewProps) => (
-  <Layout>
-    <OverviewPage variant="case" content={casesOverviewProps}/>
-  </Layout>
+  <>
+    <PageHead pageTitle="Fälle"/>
+    <Layout>
+      <OverviewPage variant="case" content={casesOverviewProps}/>
+    </Layout>
+  </>
 );
 
 export default NextPage;

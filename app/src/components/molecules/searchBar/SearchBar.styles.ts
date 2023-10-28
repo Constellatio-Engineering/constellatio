@@ -1,5 +1,6 @@
 import { type UnknownMantineStylesParams } from "@/utils/types";
 
+import { css } from "@emotion/react";
 import {
   type InputStylesNames,
   type MantineTheme,
@@ -63,3 +64,11 @@ export const inputStyles = () =>
 
   return styles;
 };
+
+export const searchBtns = css`
+width: 100%;
+display: flex;
+justify-content: space-between;
+align-items: center;
+gap: 50px;
+`;

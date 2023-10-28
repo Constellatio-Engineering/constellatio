@@ -17,6 +17,12 @@ export const content = css`
     align-items: flex-start;
     flex-direction: column;
   }
+  @media screen and (max-width: 1100px) {
+    flex-direction: column;
+    > div {
+      width: 100%;
+    }
+  }
 `;
 
 export const factsWrapper = (theme: MantineTheme) => css`
@@ -79,8 +85,11 @@ export const resolutionWrapper = css`
 `;
 
 export const leftSideWrapper = css`
-position: sticky;
-top: 80px;
+@media screen and (max-width: 1100px) {
+  position: relative;
+  top: 0px;
+
+}
 `;
 
 type SpoilerStyles = Styles<SpoilerStylesNames, SpoilerStylesParams>;

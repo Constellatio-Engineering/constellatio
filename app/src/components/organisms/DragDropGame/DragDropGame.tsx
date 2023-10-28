@@ -4,7 +4,7 @@ import { Button } from "@/components/atoms/Button/Button";
 import { Draggable } from "@/components/helpers/Draggable";
 import { Droppable } from "@/components/helpers/Droppable";
 import { Check } from "@/components/Icons/Check";
-import { Flag } from "@/components/Icons/Flag";
+import { DragAndDropGameIcon } from "@/components/Icons/DragAndDropGameIcon";
 import { Gamification } from "@/components/Icons/Gamification";
 import { Reload } from "@/components/Icons/Reload";
 import { DragNDropCard } from "@/components/molecules/DraggableCard/DragNDropCard";
@@ -172,7 +172,7 @@ export const DragDropGame: FC<TDragDropGame> = ({
           gameId: id,
           update: {
             gameStatus: "win",
-            resultMessage: "Congrats! all answers are correct!",
+            resultMessage: "Sehr gut! Du hast die Frage richtig beantwortet.",
           }
         });
       }
@@ -183,7 +183,7 @@ export const DragDropGame: FC<TDragDropGame> = ({
           gameId: id,
           update: {
             gameStatus: "lose",
-            resultMessage: "You have all correct answers but in wrong order!",
+            resultMessage: "Leider hast du die Antwortmöglichkeiten nicht korrekt angeordnet.",
           }
         });
       }
@@ -194,7 +194,7 @@ export const DragDropGame: FC<TDragDropGame> = ({
           gameId: id,
           update: {
             gameStatus: "lose",
-            resultMessage: "Answers are incorrect!",
+            resultMessage: "Deine Antwort war leider nicht korrekt.",
           }
         });
       }
@@ -208,7 +208,7 @@ export const DragDropGame: FC<TDragDropGame> = ({
           gameId: id,
           update: {
             gameStatus: "win",
-            resultMessage: "Congrats! all answers are correct!",
+            resultMessage: "Sehr gut! Du hast die Frage richtig beantwortet.",
           }
         });
       }
@@ -219,7 +219,7 @@ export const DragDropGame: FC<TDragDropGame> = ({
           gameId: id,
           update: {
             gameStatus: "lose",
-            resultMessage: "Answers are incorrect!",
+            resultMessage: "Deine Antwort war leider nicht korrekt.",
           }
         });
       }
@@ -255,9 +255,9 @@ export const DragDropGame: FC<TDragDropGame> = ({
   return (
     <Container>
       <TitleWrapper>
-        <Gamification/>{" "}
+        <Gamification/>
         <Title order={4}>
-          Drag all correct answers into the box on the right
+          Drag & Drop
         </Title>
       </TitleWrapper>
       <GameWrapper>
@@ -268,10 +268,10 @@ export const DragDropGame: FC<TDragDropGame> = ({
         )}
         <LegendWrapper>
           <BodyText component="p" styleType="body-01-regular">
-            Correct answer
+            Richtige Antwort
           </BodyText>
           <BodyText component="p" styleType="body-01-regular">
-            Incorrect answer
+            Falsche Antwort
           </BodyText>
         </LegendWrapper>
         <DndContext onDragEnd={handleDragEnd} onDragStart={handleDragStart}>
@@ -291,7 +291,7 @@ export const DragDropGame: FC<TDragDropGame> = ({
                     key={option.id}
                     label={option.label}
                     status={option.correctAnswer ? "success" : "error"}
-                    result={option.correctAnswer ? "Correct" : "Incorrect"}
+                    result={option.correctAnswer ? "Richtig" : "Falsch"}
                   />
                 )
               )}
@@ -317,12 +317,12 @@ export const DragDropGame: FC<TDragDropGame> = ({
                   <GhostDropCard/>
                 ) : (
                   <EmptyPlaceholder>
-                    <Flag/>
+                    <DragAndDropGameIcon size={140}/>
                     <BodyText
                       component="p"
                       align="center"
                       styleType="body-02-medium">
-                      Drag and drop correct answers from the left column
+                      Ziehe die richtigen Antworten in dieses Feld
                     </BodyText>
                   </EmptyPlaceholder>
                 )
@@ -355,7 +355,7 @@ export const DragDropGame: FC<TDragDropGame> = ({
                       id={item.id}
                       dropped
                       status={item.correctAnswer ? "success" : "error"}
-                      result={item.correctAnswer ? "Correct" : "Incorrect"}
+                      result={item.correctAnswer ? "Richtig" : "Falsch"}
                     />
                   );
                 })
@@ -398,7 +398,7 @@ export const DragDropGame: FC<TDragDropGame> = ({
               }
             }}
             disabled={gameStatus === "inprogress" && droppedItems.length < 1}>
-            {gameStatus === "inprogress" ? "Check my answers" : "Solve again"}
+            {gameStatus === "inprogress" ? "Antwort prüfen" : "Erneut lösen"}
           </Button>
         </div>
       </GameWrapper>

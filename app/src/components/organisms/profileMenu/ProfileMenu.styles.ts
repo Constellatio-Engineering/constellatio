@@ -11,10 +11,14 @@ export const wrapper = (theme: MantineTheme) => css`
   z-index: 3;
   position: relative;
   
-  @media screen and (max-width: 1024px) {
-    margin-top: -250px;
-    width: 100%;
-    }
+  @media screen and (max-width: 1100px) {
+    margin: 0;
+    min-width: 380px;
+    text-align: center;
+    position: absolute;
+    left: 50%;
+    transform: translate(-50%,-440px);
+}
 `;
 export const profileInfo = css`
   text-align: center;

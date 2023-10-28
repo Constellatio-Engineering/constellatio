@@ -29,8 +29,10 @@ export const documentsRouter = createTRPCRouter({
 
       const searchIndexItem = createDocumentSearchIndexItem({
         ...documentInsert,
+        createdAt: insertedDocument[0]!.createdAt,
         folderId: documentInsert.folderId || null,
         id: insertedDocument[0]!.id,
+        updatedAt: insertedDocument[0]!.updatedAt,
       });
 
       const addDocumentToIndexTask = await meiliSearchAdmin
@@ -95,11 +97,15 @@ export const documentsRouter = createTRPCRouter({
       const { id, updatedValues } = documentUpdate;
       const { content: updatedContent } = updatedValues;
 
-      const updatedDocument = db.update(documents)
-        .set({
-          ...updatedValues,
-          updatedAt: new Date()
-        })
+      const _updatedValues: Partial<DocumentInsert> = {
+        content: updatedValues.content,
+        folderId: updatedValues.folderId,
+        name: updatedValues.name,
+        updatedAt: new Date()
+      };
+
+      const updatedDocument = await db.update(documents)
+        .set(_updatedValues)
         .where(and(
           eq(documents.id, id),
           eq(documents.userId, userId)

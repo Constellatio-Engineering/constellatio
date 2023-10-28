@@ -32,6 +32,6 @@ export const styles = ({
         ? theme.colors["neutrals-01"][7]
         : error
           ? theme.colors["support-error"][3]
-          : "",
+          : theme.colors["support-error"][3],
   },
 });

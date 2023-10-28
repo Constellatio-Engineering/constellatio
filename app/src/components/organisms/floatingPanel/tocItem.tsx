@@ -2,9 +2,7 @@ import useCaseSolvingStore from "@/stores/caseSolving.store";
 import { slugFormatter } from "@/utils/utils";
 
 import { useMantineTheme } from "@mantine/core";
-// import Link from "next/link";
-// import { useWindowScroll } from "@mantine/hooks";
-import React, { useLayoutEffect, useState } from "react";
+import React, { useState } from "react";
 
 import * as styles from "./FloatingPanel.styles";
 import { getNumericalLabel, renderTOC, type TOCItem } from "./generateTocHelper";
@@ -18,65 +16,91 @@ const scrollToElement = (e: React.MouseEvent<HTMLDivElement>, targetId: string):
   const targetElement = document.getElementById(targetId);
   if(targetElement) 
   {
-    const targetOffset = targetElement.getBoundingClientRect().top + window.scrollY - 350;
+    const targetOffset = targetElement.getBoundingClientRect().top + window.scrollY - 100;
     window.scrollTo({ top: targetOffset, });
   }
 };
 
-export const TOCItemComponent: React.FC<{ readonly depth: number; readonly item: TOCItem; readonly itemNumber: number; readonly total: number }> = ({
+interface ITOCItemComponentProps 
+{
+  readonly depth: number;
+  readonly item: TOCItem;
+  readonly itemNumber: number;
+  readonly total: number;
+}
+
+export const TOCItemComponent: React.FC<ITOCItemComponentProps> = ({
   depth,
   item,
   itemNumber,
   total
 }) => 
 {
+  const theme = useMantineTheme();
   const [isExpanded, setIsExpanded] = useState(false);
-  const [highlighted, setHighlighted] = useState<boolean>(false);
-  // const [scroll, scrollTo] = useWindowScroll();
+  const observedHeadline = useCaseSolvingStore(s => s.observedHeadline);
+  const shouldBeHighlighted = slugFormatter(item.text) === observedHeadline.slug;
+  const [shouldBeExpandedState, setShouldBeExpandedState] = useState(false);
+  const shouldBeExpanded = React.useCallback((): boolean => 
+  {
+    if(item.children.length > 0)
+    {
+      const currentItemSlug = slugFormatter(item.text);
+      const currentItemLevel = item.level;
+      if(currentItemSlug === observedHeadline.slug && currentItemLevel === observedHeadline.level) 
+      {  
+        return true;
+      }
+      if(currentItemSlug !== observedHeadline.slug && currentItemLevel < observedHeadline.level) 
+      {
+        return true;
+      }
+    }
+    return false;
+  }, [item.children.length, item.level, item.text, observedHeadline.level, observedHeadline.slug]);
+  React.useLayoutEffect(() => 
+  {
+    setShouldBeExpandedState(shouldBeExpanded());
+  }, [shouldBeExpanded]);
+
   const handleToggle = (): void => 
   {
-    setHighlighted(!highlighted);
-    if(item.children.length > 0)
+    if(item.children.length > 0) 
     {
       setIsExpanded(!isExpanded);
     }
   };
-  const theme = useMantineTheme();
-  const observedHeadline = useCaseSolvingStore(s => s.observedHeadline);
-  useLayoutEffect(() => 
-  {
-    setIsExpanded(prevState => 
-    {
-      if(observedHeadline.slug === slugFormatter(item.text) && !prevState) 
-      {
-        return true;
-      }
-      if(observedHeadline.slug !== slugFormatter(item.text) && item?.level === observedHeadline.level)
-      {
-        return false;
-      }
-      return prevState;
-    });
-    
-  }, [item?.level, item.text, observedHeadline.level, observedHeadline.slug]);
+
   return (
     <div
       onClick={(e) => scrollToElement(e, slugFormatter(item.text))}
       style={{
-        paddingLeft: ((depth === 1 || depth >= 5) ? 0 : depth + 20) + "px" 
+        paddingLeft: ((depth === 1 || depth >= 5) ? 0 : depth + 20) + "px", 
       }}>
       <span
+        key={`listItem-${itemNumber}`}
         onClick={handleToggle}
         css={styles.item({
-          highlighted: observedHeadline.slug === slugFormatter(item.text), isExpandable: item.children.length > 0, isExpanded, isTopLevel: true, theme
+          highlighted: shouldBeHighlighted, 
+          isExpandable: item.children.length > 0, 
+          isExpanded: shouldBeExpandedState,
+          // isTopLevel: true, 
+          theme
         })}>
         <div style={{ display: "flex", justifyContent: "flex-start", padding: "0 16px" }}>
-          <BodyText component="p" styleType="body-01-medium">{item.children.length > 0 && (isExpanded ? <ArrowSolidDown/> : <ArrowSolidRight/>)}</BodyText>
-          <BodyText component="p" styleType="body-01-medium">{getNumericalLabel(depth, itemNumber - 1)}&nbsp;{item.text}</BodyText>
+          <BodyText component="p" styleType="body-01-medium">
+            {item.children.length > 0 && (shouldBeExpandedState ? <ArrowSolidDown/> : <ArrowSolidRight/>)}
+          </BodyText>
+          <BodyText
+            component="p"
+            className={slugFormatter(item.text)}
+            styleType="body-01-medium">
+            {getNumericalLabel(depth, itemNumber - 1)}&nbsp;{item.text}
+          </BodyText>
         </div>
-        {depth === 0 && <div style={{ paddingRight: "24px" }}>{itemNumber}/{total}</div>}
+        {depth === 0 && <div style={{}}>{itemNumber}/{total}</div>}
       </span>
-      {isExpanded && item.children.length > 0 && renderTOC(item.children, depth + 1)}
+      {shouldBeExpandedState && item.children.length > 0 && renderTOC(item.children, depth + 1)}
     </div>
   );
 };

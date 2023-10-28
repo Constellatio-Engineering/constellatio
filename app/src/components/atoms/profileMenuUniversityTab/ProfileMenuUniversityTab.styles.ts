@@ -7,6 +7,10 @@ export const wrapper = css`
     justify-content: flex-start;
     align-items: center;
     gap: 10px;
+    @media screen and (max-width: 1100px) {
+      flex-direction: column;
+      justify-content: center;
+    }
 `;
 
 const iconSize = 50;

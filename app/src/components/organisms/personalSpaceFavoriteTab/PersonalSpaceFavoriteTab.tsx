@@ -93,9 +93,9 @@ const PersonalSpaceFavoriteTab: FunctionComponent = () =>
               <FavoriteCasesList {...favoriteCasesListProps}/>
             ) : (
               <EmptyStateCard
-                button={<Link href={paths.cases}>Explore Cases</Link>}
-                title="You haven’t saved any cases yet"
-                text="You can save cases, dictionary articles, forum questions and highlighted text to Favourites"
+                button={<Link href={paths.cases}>Alle Fälle ansehen</Link>}
+                title="Du hast noch keine Fälle als Favoriten gespeichert"
+                text="Du kannst Fälle, Lexikon-Artikel und sogar einzelne markierte Textpassagen als deine persönlichen Favoriten speichern"
                 variant="For-large-areas"
               />
             )
@@ -111,9 +111,9 @@ const PersonalSpaceFavoriteTab: FunctionComponent = () =>
                 <FavoriteArticlesList {...favoriteArticlesListProps}/>
               ) : ( 
                 <EmptyStateCard
-                  button={<Link href="/dictionary">Explore Articles</Link>}
-                  title="You haven’t saved any Articles yet"
-                  text="You can save cases, dictionary articles, forum questions and highlighted text to Favourites"
+                  button={<Link href={paths.dictionary}>Alle Lexikon-Artikel ansehen</Link>}
+                  title="Du hast noch keine Lexikon-Artikel als Favoriten gespeichert"
+                  text="Du kannst Fälle, Lexikon-Artikel und sogar einzelne markierte Textpassagen als deine persönlichen Favoriten speichern"
                   variant="For-large-areas"
                 />
               )

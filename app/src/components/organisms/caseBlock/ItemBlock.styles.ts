@@ -1,10 +1,10 @@
 import { type SerializedStyles, css } from "@emotion/react";
 import { type MantineTheme } from "@mantine/styles";
 
-export const wrapper = css`
+export const wrapper = (theme: MantineTheme) => css`
 padding:32px;
 border-radius: 8px;
-background-color: #fff;
+background-color: ${theme.colors["neutrals-01"][0]};
 display: flex;
 justify-content: stretch;
 align-items: flex-start;    
@@ -16,9 +16,15 @@ z-index: 3;
 box-shadow: 0px 8px 44px 0px #0000000a;
 span > table {
     width:100%;
+    tbody tr:hover{
+        div,td div, div button,td button{
+            cursor: pointer;
+            background-color: ${theme.colors["neutrals-01"][3]};
+        }
+    }
 }
 
-@media screen and (max-width: 1024px) {
+@media screen and (max-width: 1200px) {
     flex-direction: column;
     padding: 24px;
 }

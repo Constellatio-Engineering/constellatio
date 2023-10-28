@@ -1,4 +1,4 @@
-/* eslint-disable sort-keys-fix/sort-keys-fix,@typescript-eslint/naming-convention,@typescript-eslint/no-use-before-define */
+/* eslint-disable sort-keys-fix/sort-keys-fix,@typescript-eslint/naming-convention,@typescript-eslint/no-use-before-define,max-lines */
 import { type InferInsertModel, type InferSelectModel, relations } from "drizzle-orm";
 import {
   text, pgTable, integer, pgEnum, uuid, smallint, unique, timestamp, primaryKey, index
@@ -25,6 +25,30 @@ export type GameProgressState = typeof allGameProgressStates[number];
 export const allSubscriptionStatuses = ["active", "canceled", "incomplete", "incomplete_expired", "past_due", "trialing", "unpaid", "paused"] as const;
 export type SubscriptionStatus = typeof allSubscriptionStatuses[number];
 
+export const imageFileExtensions = ["jpg", "jpeg", "png"] as const;
+export type ImageFileExtension = typeof imageFileExtensions[number];
+
+export const imageFileMimeTypes = ["image/jpeg", "image/png"] as const;
+export type ImageFileMimeType = typeof imageFileMimeTypes[number];
+
+export const documentFileExtensions = ["pdf"] as const;
+export type DocumentFileExtension = typeof documentFileExtensions[number];
+
+export const documentFileMimeTypes = ["application/pdf"] as const;
+export type DocumentFileMimeType = typeof documentFileMimeTypes[number];
+
+export const fileExtensions = [...imageFileExtensions, ...documentFileExtensions] as const;
+export type FileExtension = typeof fileExtensions[number];
+
+export const fileMimeTypes = [...imageFileMimeTypes, ...documentFileMimeTypes] as const;
+export type FileMimeType = typeof fileMimeTypes[number];
+
+export const badgePublicationState = ["not-listed", "coming-soon", "published"] as const;
+export type BadgePublicationState = typeof badgePublicationState[number];
+
+export const userBadgeStates = ["not-seen", "seen"] as const;
+export type UserBadgeState = typeof userBadgeStates[number];
+
 export const genderEnum = pgEnum("Gender", allGenderIdentifiers);
 export const onboardingResultEnum = pgEnum("OnboardingResult", allOnboardingResults);
 export const resourceTypeEnum = pgEnum("ResourceType", allBookmarkResourceTypes);
@@ -32,6 +56,14 @@ export const searchIndexTypeEnum = pgEnum("SearchIndexType", allSearchIndexTypes
 export const caseProgressStateEnum = pgEnum("CaseProgressState", allCaseProgressStates);
 export const gameProgressStateEnum = pgEnum("GameProgressState", allGameProgressStates);
 export const subscriptionStatusEnum = pgEnum("SubscriptionStatus", allSubscriptionStatuses);
+export const imageFileExtensionEnum = pgEnum("ImageFileExtension", imageFileExtensions);
+export const imageFileMimeTypeEnum = pgEnum("ImageFileMimeType", imageFileMimeTypes);
+export const documentFileExtensionEnum = pgEnum("DocumentFileExtension", documentFileExtensions);
+export const documentFileMimeTypeEnum = pgEnum("DocumentFileMimeType", documentFileMimeTypes);
+export const fileExtensionEnum = pgEnum("FileExtension", fileExtensions);
+export const fileMimeTypeEnum = pgEnum("FileMimeType", fileMimeTypes);
+export const userBadgeStateEnum = pgEnum("UserBadgeState", userBadgeStates);
+export const badgePublicationStateEnum = pgEnum("BadgePublicationState", badgePublicationState);
 
 // TODO: Go through all queries and come up with useful indexes
 
@@ -54,6 +86,7 @@ export const users = pgTable("User", {
 
 export const usersRelations = relations(users, ({ many }) => ({
   profilePictures: many(profilePictures),
+  usersToBadges: many(usersToBadges),
 }));
 
 export type UserInsert = InferInsertModel<typeof users>;
@@ -62,6 +95,8 @@ export type User = InferSelectModel<typeof users>;
 export const profilePictures = pgTable("ProfilePicture", {
   id: uuid("Id").unique().notNull().primaryKey(),
   serverFilename: text("ServerFilename").notNull(),
+  fileExtension: imageFileExtensionEnum("FileExtension").notNull(),
+  contentType: imageFileMimeTypeEnum("ContentType").notNull(),
   userId: uuid("UserId").references(() => users.id, { onDelete: "no action" }).notNull().unique(),
 });
 
@@ -106,7 +141,8 @@ export const uploadedFiles = pgTable("UploadedFile", {
   serverFilename: text("ServerFilename").notNull(),
   originalFilename: text("OriginalFilename").notNull(),
   sizeInBytes: integer("SizeInBytes").notNull(),
-  fileExtension: text("FileExtension").notNull()
+  fileExtension: fileExtensionEnum("FileExtension").notNull(),
+  contentType: fileMimeTypeEnum("ContentType").notNull(),
 });
 
 export type UploadedFileInsert = InferInsertModel<typeof uploadedFiles>;
@@ -203,3 +239,41 @@ export const searchIndexUpdateQueue = pgTable("SearchIndexUpdateQueue", {
 
 export type SearchIndexUpdateQueueInsert = InferInsertModel<typeof searchIndexUpdateQueue>;
 export type SearchIndexUpdateQueueItem = InferSelectModel<typeof searchIndexUpdateQueue>;
+
+export const badges = pgTable("Badge", {
+  id: uuid("Id").defaultRandom().unique().notNull().primaryKey(),
+  name: text("Name").notNull(),
+  description: text("Description").notNull(),
+  imageFilename: text("ImageFilename").notNull(),
+  publicationState: badgePublicationStateEnum("PublicationState").notNull().default("not-listed"),
+});
+
+export const badgesRelations = relations(badges, ({ many }) => ({
+  usersToBadges: many(usersToBadges),
+}));
+
+export type BadgeInsert = InferInsertModel<typeof badges>;
+export type Badge = InferSelectModel<typeof badges>;
+export type BadgeWithUserData = Badge & {
+  isCompleted: boolean;
+  wasSeen: boolean;
+};
+
+export const usersToBadges = pgTable("User_to_Badge", {
+  userId: uuid("UserId").references(() => users.id, { onDelete: "no action" }).notNull(),
+  badgeId: uuid("BadgeId").references(() => badges.id, { onDelete: "no action" }).notNull(),
+  userBadgeState: userBadgeStateEnum("UserBadgeState").notNull().default("not-seen"),
+}, (table) => ({
+  pk: primaryKey(table.userId, table.badgeId),
+}));
+
+export const usersToGroupsRelations = relations(usersToBadges, ({ one }) => ({
+  badge: one(badges, {
+    fields: [usersToBadges.badgeId],
+    references: [badges.id],
+  }),
+  user: one(users, {
+    fields: [usersToBadges.userId],
+    references: [users.id],
+  }),
+}));

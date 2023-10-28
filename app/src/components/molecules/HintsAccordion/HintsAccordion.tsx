@@ -18,7 +18,7 @@ export const HintsAccordion: FC<HintsAccordionProps> = ({ items }) =>
       <Accordion.Item value="hints">
         <Accordion.Control>
           <BodyText styleType="body-01-regular" component="p">
-            {value ? "Hide correct answers" : "Show correct answers"}
+            {value ? "Antwort ausblenden" : "Antwort einblenden"}
           </BodyText>
         </Accordion.Control>
         <Accordion.Panel>

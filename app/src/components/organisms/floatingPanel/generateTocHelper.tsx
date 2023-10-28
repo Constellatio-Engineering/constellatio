@@ -1,5 +1,7 @@
+/* eslint-disable sort-keys-fix/sort-keys-fix */
 import { type IHeadingNode } from "types/richtext";
 
+import * as styles from "./FloatingPanel.styles";
 import { TOCItemComponent } from "./tocItem";
 
 type ContentType = {
@@ -22,7 +24,43 @@ export type TOCItem = {
   text: string;
 };
 
-// const numericalStyles = ["upper-alpha", "lower-roman", "decimal", "lower-alpha"];
+function decimalToRoman(decimal: number): string 
+{
+  if(decimal <= 0 || decimal >= 4000) 
+  {
+    throw new Error("Input out of range (1-3999)");
+  }
+
+  const romanNumerals: Array<[string, number]> = [
+    ["M", 1000],
+    ["CM", 900],
+    ["D", 500],
+    ["CD", 400],
+    ["C", 100],
+    ["XC", 90],
+    ["L", 50],
+    ["XL", 40],
+    ["X", 10],
+    ["IX", 9],
+    ["V", 5],
+    ["IV", 4],
+    ["I", 1],
+  ];
+
+  let result = "";
+  let remaining = decimal;
+
+  for(const [roman, value] of romanNumerals) 
+  {
+    while(remaining >= value) 
+    {
+      result += roman;
+      remaining -= value;
+    }
+  }
+
+  return result;
+}
 
 export const generateTOC = (data: DataType[]): TOCItem[] => 
 {
@@ -65,7 +103,7 @@ export function getNumericalLabel(depth: number, index: number): string
     case 1:
       return String.fromCharCode(65 + index) + ".";
     case 2:
-      return ["I", "II", "III", "IV", "V", "VI", "VII", "VIII", "IX", "X"][index] + ".";
+      return String(decimalToRoman(index + 1) + ".");
     case 3:
       return (index + 1) + ".";
     case 4:
@@ -116,9 +154,9 @@ export function getNestedHeadingIndex(item: IHeadingNode, allHeadings: any): num
 export const renderTOC = (toc: TOCItem[], _: number = 0): JSX.Element => 
 {
   return (
-    <ul>
+    <ul css={styles.renderTOCList}>
       {toc.map((item, index) => item && item?.text && (
-        <li key={index} style={{ listStyleType: "none" }}>
+        <li key={`toc-ul-listItem-${index}`} style={{ listStyleType: "none" }}>
           <TOCItemComponent
             depth={item?.level ?? 1}
             item={item}

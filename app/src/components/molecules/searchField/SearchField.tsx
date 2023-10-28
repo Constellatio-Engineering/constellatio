@@ -1,5 +1,4 @@
 import { Input } from "@/components/atoms/Input/Input";
-import { CrossFilled } from "@/components/Icons/CrossFilled";
 import { Search } from "@/components/Icons/Search";
 import useSearchBarStore from "@/stores/searchBar.store";
 
@@ -20,20 +19,21 @@ const SearchField: FunctionComponent<SearchFieldProps> = ({
 {
   const theme = useMantineTheme();
   const searchValue = useSearchBarStore(s => s.searchValue);
-  const setSearchValue = useSearchBarStore(s => s.setSearchValue);
+  // const setSearchValue = useSearchBarStore(s => s.setSearchValue);
   const SearchIcon = <span css={styles.icon}><Search size={size === "normal" ? 20 : 16}/></span>;
-  const ResetIcon = <span onClick={() => setSearchValue("")} css={styles.icon}><CrossFilled size={size === "normal" ? 20 : 16}/></span>;
+  // const ResetIcon = <span onClick={() => setSearchValue("")} css={styles.icon}><CrossFilled size={size === "normal" ? 20 : 16}/></span>;
 
   return (
     <div css={styles.wrapper({ searchValue, size, theme })}>
       <Input
         inputType="text"
         type="text"
-        name="searchFieldSmall"
-        placeholder="Search"
+        name="Suche"
+        title="Suche"
+        placeholder="Suche"
         icon={SearchIcon}
-        defaultValue={searchValue}
-        rightSection={ResetIcon}
+        defaultValue=""
+        // rightSection={ResetIcon}
         {...props}
       />
     </div>

@@ -1,10 +1,11 @@
 import MenuTab from "@/components/atoms/menuTab/MenuTab";
-import useSearchResults, { type SearchResults, type SearchResultsKey } from "@/hooks/useSearchResults";
+import useSearchResults, { type SearchResultsKey } from "@/hooks/useSearchResults";
 
 import { Title } from "@mantine/core";
 import { useRouter } from "next/router";
 import { type FunctionComponent } from "react";
 
+import { type TabItemType, convertTabsAsSearchResultsKey } from "./seachPageHelpers";
 import * as styles from "./SearchPage.styles";
 import { SearchPageHeaderBgLayer } from "./SearchPageHeaderBgLayer";
 
@@ -19,25 +20,35 @@ const SearchPageHeader: FunctionComponent<Props> = ({ setTabQuery, tabQuery, tot
   const { searchResults } = useSearchResults();
   const { query } = useRouter();
 
+  const tabItems: TabItemType[] = [{
+    label: "Fälle",
+    resultsCount: searchResults.cases?.length
+  }, {
+    label: "Lexikon",
+    resultsCount: searchResults.articles?.length
+  }, {
+    label: "Deine Dateien",
+    resultsCount: searchResults.userUploads?.length + searchResults.userDocuments?.length
+  }];
+
   return (
     <div css={styles.headerWrapper}>
       <div css={styles.header}>
-        <Title order={2}>{totalSearchResults} result{totalSearchResults > 1 && "s"} for “{query.find}”</Title>
+        <Title order={2}>{totalSearchResults} {totalSearchResults > 1 ? "Ergebnisse" : "Ergebnis"} für “{query.find}”</Title>
         <span css={styles.headerBg}>
           <SearchPageHeaderBgLayer/>
         </span>
       </div>
       <div css={styles.navBar}>                                        
-        {Object.keys(searchResults).map((i, index) => 
+        {tabItems.map((item, index) => 
         {
-          const item = i as keyof SearchResults;
           return (
             <MenuTab
               key={index}
-              title={item}
-              number={searchResults[item]?.length}
-              active={tabQuery === item}
-              onClick={() => void setTabQuery(item)}
+              title={item.label}
+              number={item.resultsCount}
+              active={tabQuery === convertTabsAsSearchResultsKey(item)}
+              onClick={() => void setTabQuery(convertTabsAsSearchResultsKey(item))}
             />
           );
         })}

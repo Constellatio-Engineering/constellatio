@@ -1,4 +1,5 @@
 import { Layout } from "@/components/layouts/Layout";
+import PageHead from "@/components/pageHead/PageHead";
 import DetailsPage from "@/components/pages/DetailsPage/DetailsPage";
 import getAllCases from "@/services/content/getAllCases";
 import { getCaseById } from "@/services/content/getCaseById";
@@ -57,9 +58,12 @@ export const getStaticProps: GetStaticProps<GetCaseDetailPagePropsResult, Params
 const NextPage: FunctionComponent<GetCaseDetailPagePropsResult> = ({ legalCase }) =>
 {
   return (
-    <Layout>
-      <DetailsPage variant="case" content={legalCase}/>
-    </Layout>
+    <>
+      <PageHead pageTitle={legalCase.title || "Fälle"}/>
+      <Layout>
+        <DetailsPage variant="case" content={legalCase}/>
+      </Layout>
+    </>
   );
 };
 

@@ -6,7 +6,10 @@ type UseOnboardingResult = () => UseQueryResult<{ onboardingResult: User["onboar
 
 const useOnboardingResult: UseOnboardingResult = () =>
 {
-  const { data: onboardingResult, error, isLoading } = api.users.getOnboardingResult.useQuery();
+  const { data: onboardingResult, error, isLoading } = api.users.getOnboardingResult.useQuery(undefined, {
+    refetchOnMount: "always",
+    staleTime: Infinity
+  });
 
   return {
     error,

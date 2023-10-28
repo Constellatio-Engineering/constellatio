@@ -1,4 +1,5 @@
 import { Layout } from "@/components/layouts/Layout";
+import PageHead from "@/components/pageHead/PageHead";
 import SearchPage from "@/components/pages/searchPage/SearchPage";
 import useSearchBarStore from "@/stores/searchBar.store";
 
@@ -14,20 +15,20 @@ const Search: NextPage = () =>
 
   useEffect(() => 
   {
-    if(typeof window !== "undefined")
+    if(router.query.find !== searchValue)
     {
-      if(router.query.find !== searchValue) 
-      {
-        setSearchValue(router.query.find as string);
-      }
+      setSearchValue(router.query.find as string);
     }
   // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [router.query.find]);
 
   return (
-    <Layout>
-      <SearchPage/>
-    </Layout>
+    <>
+      <PageHead pageTitle={"Suchergebnisse" + (searchValue ? ` für ${searchValue}` : "")}/>
+      <Layout>
+        <SearchPage/>
+      </Layout>
+    </>
   );
 };
 

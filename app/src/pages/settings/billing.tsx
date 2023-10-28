@@ -1,4 +1,5 @@
 import { Layout } from "@/components/layouts/Layout";
+import PageHead from "@/components/pageHead/PageHead";
 import { api } from "@/utils/api";
 
 import { Button, Container, Title } from "@mantine/core";
@@ -29,14 +30,17 @@ const Billing: FunctionComponent = () =>
   };
 
   return (
-    <Layout>
-      <Container>
-        <Title>Abonnement</Title>
-        <Button<"button"> mt="lg" loading={isLoading} onClick={redirectToCustomerPortal}>
-          Stripe öffnen
-        </Button>
-      </Container>
-    </Layout>
+    <>
+      <PageHead pageTitle="Abonnement"/>
+      <Layout>
+        <Container>
+          <Title>Abonnement</Title>
+          <Button<"button"> mt="lg" loading={isLoading} onClick={redirectToCustomerPortal}>
+            Stripe öffnen
+          </Button>
+        </Container>
+      </Layout>
+    </>
   );
 };
 

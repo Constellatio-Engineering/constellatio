@@ -1,3 +1,4 @@
+import BadgesDrawer from "@/components/badgesDrawer/BadgesDrawer";
 import ProfileBadgesBlockHead from "@/components/molecules/profileBadgesBlockHead/ProfileBadgesBlockHead";
 import ProfileBadgesBlockList from "@/components/molecules/profileBadgesBlockList/ProfileBadgesBlockList";
 
@@ -11,6 +12,7 @@ const ProfileBadgesBlock: FunctionComponent = () =>
     <div css={styles.wrapper}>
       <ProfileBadgesBlockHead/>
       <ProfileBadgesBlockList/>
+      <BadgesDrawer/>
     </div>
   );
 };

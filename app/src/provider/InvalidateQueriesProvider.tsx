@@ -62,7 +62,17 @@ const InvalidateQueriesProvider: FunctionComponent<InvalidateQueriesProviderProp
     invalidateNotes: async (options) => apiContext.notes.getNotes.invalidate(options),
     invalidateOnboardingResult: async (options) => apiContext.users.getOnboardingResult.invalidate(options),
     invalidateProfilePicture: async (options) => apiContext.users.getSignedProfilePictureUrl.invalidate(options),
-    invalidateSearchResults: async (value) => queryClient.invalidateQueries({ queryKey: [searchResultsQueryKey, value] }),
+    invalidateSearchResults: async (value) =>
+    {
+      const queryKey = [searchResultsQueryKey];
+
+      if(value)
+      {
+        queryKey.push(value);
+      }
+
+      await queryClient.invalidateQueries({ queryKey });
+    },
     invalidateSubmittedCaseSolution: async (options) => apiContext.casesProgress.getSubmittedSolution.invalidate(options),
     invalidateUploadedFiles: async (options) => apiContext.uploads.getUploadedFiles.invalidate(options),
     invalidateUserDetails: async (options) => apiContext.users.getUserDetails.invalidate(options)

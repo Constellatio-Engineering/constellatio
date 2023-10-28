@@ -19,20 +19,20 @@ export const AuthPage: FC<AuthPageProps> = ({ tab }) =>
 {
   const router = useRouter();
   const handleTabChange: (value: AuthPageProps["tab"]) => Promise<boolean> = async (value) => router.push(`/${value}`);
-  const matches = useMediaQuery("(min-width: 860px)");
+  const isBigScreen = useMediaQuery("(min-width: 961px)");
 
   return (
     <Flex
       justify="space-between"
       bg="brand-01.5"
       sx={{ height: "100vh", minHeight: 600, overflow: "hidden" }}>
-      {matches && <RegistrationVisualHeader/>}
+      {isBigScreen && <RegistrationVisualHeader/>}
       <Container
         w="100%"
         pt={20}
         sx={(theme) => ({
           backgroundColor: theme.colors["neutrals-01"][0],
-          borderRadius: `${theme.radius["radius-16"]} 0 0 ${theme.radius["radius-16"]}`,
+          borderRadius: isBigScreen ? `${theme.radius["radius-16"]} 0 0 ${theme.radius["radius-16"]}` : 0,
           // this is to get rid of the right red bar to the right of the form, but gets too big on small screens
           marginRight: 0,
           overflowY: "auto",
@@ -43,7 +43,7 @@ export const AuthPage: FC<AuthPageProps> = ({ tab }) =>
           w={440}
           pt={50}
           pb={tab === "register" ? "spacing-100" : 0}
-          sx={{ marginTop: "180px" }}>
+          sx={{ marginTop: "80px" }}>
           <Switcher
             size="big"
             value={tab}

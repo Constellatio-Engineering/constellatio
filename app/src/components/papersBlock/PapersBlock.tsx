@@ -27,13 +27,13 @@ const PapersBlock: FunctionComponent<PapersBlockProps> = ({ docs, isLoading, sel
     <div css={styles.wrapper}>
       <DocumentEditor/>
       <div css={styles.papersBlockHead}>
-        <Title order={4}>Constellatio docs <SubtitleText className="count" component="span" styleType="subtitle-01-medium">({docs.length ?? 0})</SubtitleText>
+        <Title order={4}>Constellatio Docs <SubtitleText className="count" component="span" styleType="subtitle-01-medium">({docs.length ?? 0})</SubtitleText>
         </Title>
         <Button<"button">
           styleType="secondarySimple" 
           leftIcon={<NoteIcon/>}
           onClick={() => setCreateDocumentState({ folderId: selectedFolderId })}>
-          Create doc
+          Erstellen
         </Button>
       </div>
       {!isLoading && (
@@ -45,8 +45,9 @@ const PapersBlock: FunctionComponent<PapersBlockProps> = ({ docs, isLoading, sel
           ) : (
             <EmptyStateCard
               variant="For-small-areas"
-              title="You haven’t created any docs yet"
-              text="Constellatio docs are text documents where you leave your notes, summaries, etc"
+              title="Du hast noch keine Constellatio Docs erstellt"
+              text="Constellatio Docs sind deine digitalen Textdateien, in denen du Anmerkungen, Zusammenfassungen und vieles Weitere direkt in der Cloud speichern kannst.
+              Du kannst sie jederzeit als .pdf-Datei exportieren und herunterladen."
             />
           )}
         </>
