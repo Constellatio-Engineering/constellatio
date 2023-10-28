@@ -78,6 +78,7 @@ export const users = pgTable("User", {
 
 export const usersRelations = relations(users, ({ many }) => ({
   profilePictures: many(profilePictures),
+  usersToBadges: many(usersToBadges),
 }));
 
 export type UserInsert = InferInsertModel<typeof users>;
@@ -230,3 +231,35 @@ export const searchIndexUpdateQueue = pgTable("SearchIndexUpdateQueue", {
 
 export type SearchIndexUpdateQueueInsert = InferInsertModel<typeof searchIndexUpdateQueue>;
 export type SearchIndexUpdateQueueItem = InferSelectModel<typeof searchIndexUpdateQueue>;
+
+export const badges = pgTable("Badge", {
+  id: uuid("Id").defaultRandom().unique().notNull().primaryKey(),
+  name: text("Name").notNull(),
+  description: text("Description").notNull(),
+  imageFilename: text("ImageFilename").notNull(),
+});
+
+export const badgesRelations = relations(badges, ({ many }) => ({
+  usersToBadges: many(usersToBadges),
+}));
+
+export type BadgeInsert = InferInsertModel<typeof badges>;
+export type Badge = InferSelectModel<typeof badges>;
+
+export const usersToBadges = pgTable("User_to_Badge", {
+  userId: uuid("UserId").references(() => users.id, { onDelete: "no action" }).notNull(),
+  badgeId: uuid("BadgeId").references(() => badges.id, { onDelete: "no action" }).notNull(),
+}, (table) => ({
+  pk: primaryKey(table.userId, table.badgeId),
+}));
+
+export const usersToGroupsRelations = relations(usersToBadges, ({ one }) => ({
+  badge: one(badges, {
+    fields: [usersToBadges.badgeId],
+    references: [badges.id],
+  }),
+  user: one(users, {
+    fields: [usersToBadges.userId],
+    references: [users.id],
+  }),
+}));
