@@ -1,24 +1,42 @@
 import { css } from "@emotion/react";
 import { type MantineTheme } from "@mantine/styles";
 
-interface IProfilePageProps 
-{
-  isExpanded?: boolean;
-  isSelected?: boolean;
+type ProfileBadgeCardProps = {
+  isExpanded: boolean;
+  isSelected: boolean;
   theme: MantineTheme;
-}
-const CSSIsExpandedStyles = css`
-  width: 270px;
-  min-width: 270px;
+};
+
+export const wrapper = css`
+  position: relative;
+  border-radius: 12px;
+`;
+
+export const wrapperSmall = css`
+  width: 200px;
+  min-width: 200px;
+`;
+
+export const wrapperLarge = css`
   flex: 1;
 `;
-export const wrapper = ({ isExpanded }: IProfilePageProps) => css`
-  width: 160px;
-  min-width: 160px;
+
+export const comingSoonOverlay = css`
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  background-color: rgba(0,0,0,0.025);
   border-radius: 12px;
-  ${isExpanded && CSSIsExpandedStyles};
+  z-index: 1;
 `;
-export const badgeWrapper = ({ isExpanded, isSelected, theme }: IProfilePageProps) => css`
+
+export const badgeWrapper = ({ isExpanded, isSelected, theme }: ProfileBadgeCardProps) => css`
   background-color: ${theme.colors["neutrals-01"][1]};
   border-top: 1px solid ${isSelected ? theme.colors["neutrals-01"][7] : theme.colors["neutrals-01"][3]};
   border-left: 1px solid ${isSelected ? theme.colors["neutrals-01"][7] : theme.colors["neutrals-01"][3]};
@@ -33,7 +51,12 @@ export const badgeWrapper = ({ isExpanded, isSelected, theme }: IProfilePageProp
   position: relative;
   border-radius: ${!isExpanded ? "12px" : "12px 12px 0 0"};
   width: 100%;
-  `;
+`;
+
+export const contentComingSoon = css`
+  opacity: 0.18;
+  filter: blur(4px);
+`;
 
 export const imageWrapper = css`
   width: 100%;
@@ -51,7 +74,8 @@ export const badgeTitle = (theme: MantineTheme) => css`
   color: ${theme.colors["neutrals-02"][1]};
   text-align: center;
   `;
-export const badgeDescriptionArea = ({ isSelected, theme }: IProfilePageProps) => css`
+
+export const badgeDescriptionArea = ({ isSelected, theme }: ProfileBadgeCardProps) => css`
   background-color: ${theme.colors["neutrals-01"][0]};
   text-align: center;
   color: ${theme.colors["neutrals-01"][7]};
@@ -62,6 +86,7 @@ export const badgeDescriptionArea = ({ isSelected, theme }: IProfilePageProps) =
   border-right:1px solid ${isSelected ? theme.colors["neutrals-01"][7] : theme.colors["neutrals-01"][3]};
   border-left:1px solid ${isSelected ? theme.colors["neutrals-01"][7] : theme.colors["neutrals-01"][3]};
 `;
+
 export const badgeDescriptionText = css``;
 export const checkCircle = css`
     position: absolute;

@@ -1,60 +1,61 @@
-import CaisyImg from "@/basic-components/CaisyImg";
 import { BodyText } from "@/components/atoms/BodyText/BodyText";
 import { CheckCircleRed } from "@/components/Icons/CheckCirleRed";
+import { type BadgeWithCompletedState } from "@/db/schema";
 
 import { useMantineTheme } from "@mantine/core";
 import Image from "next/image";
 import React, { type FunctionComponent } from "react";
 
+import { contentComingSoon } from "./ProfileBadgeCard.styles";
 import * as styles from "./ProfileBadgeCard.styles";
 
-export interface ProfileBadgeCardProps
+export interface ProfileBadgeCardProps extends BadgeWithCompletedState
 {
-  readonly description: string;
-  readonly filename: string;
-  readonly name: string;
-  readonly selected?: boolean;
   readonly size: "small" | "large";
 }
 
 const ProfileBadgeCard: FunctionComponent<ProfileBadgeCardProps> = ({
   description,
-  filename,
+  imageFilename,
+  isCompleted,
   name,
-  selected,
+  publicationState,
   size
 }) => 
 {
   const theme = useMantineTheme();
-  // const [isExpanded] = React.useState<boolean>(size === "large" ? true : false);
-  const isExpanded = size === "large";
-  const [isSelected, setIsSelected] = React.useState<boolean>(selected ?? false);
-  
+  const isSelected = false;
+  const isComingSoon = publicationState === "coming-soon";
+  const isSmall = size === "small";
+  const isLarge = size === "large";
+
   return (
-    <div
-      css={styles.wrapper({ isExpanded, isSelected, theme })}
-      onClick={() => 
-      {
-        setIsSelected(true);
-        setTimeout(() => 
-        {
-          setIsSelected(false);
-        }, 7000);
-      }}>
-      <div css={styles.badgeWrapper({ isExpanded, isSelected, theme })}>
-        {isSelected && <span css={styles.checkCircle}><CheckCircleRed/></span>}
+    <div css={[styles.wrapper, isSmall ? styles.wrapperSmall : styles.wrapperLarge]}>
+      {isComingSoon && (
+        <div css={styles.comingSoonOverlay}>
+          <BodyText css={styles.badgeTitle} styleType="body-01-medium">Coming soon!</BodyText>
+        </div>
+      )}
+      <div css={[
+        styles.badgeWrapper({ isExpanded: isLarge, isSelected, theme }),
+        isComingSoon && styles.contentComingSoon
+      ]}>
+        {isCompleted && <span css={styles.checkCircle}><CheckCircleRed/></span>}
         <div css={styles.imageWrapper}>
           <Image
             css={styles.image}
-            src={`/images/badges/${filename}`}
+            src={`/images/badges/${imageFilename}`}
             alt="badge symbol"
             fill
           />
         </div>
-        <BodyText css={styles.badgeTitle} styleType="body-02-medium">{name}</BodyText>
+        <BodyText css={styles.badgeTitle} styleType="body-01-medium">{name}</BodyText>
       </div>
-      {isExpanded && (
-        <div css={styles.badgeDescriptionArea({ isSelected, theme })}>
+      {(isLarge) && (
+        <div css={[
+          styles.badgeDescriptionArea({ isExpanded: isLarge, isSelected, theme }),
+          isComingSoon && styles.contentComingSoon
+        ]}>
           <BodyText css={styles.badgeDescriptionText} styleType="body-02-medium">{description}</BodyText>
         </div>
       )}

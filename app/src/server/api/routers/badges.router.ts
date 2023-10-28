@@ -1,10 +1,10 @@
 import { db } from "@/db/connection";
 import {
-  badges, usersToBadges,
+  badges, type BadgeWithCompletedState, usersToBadges,
 } from "@/db/schema";
 import { createTRPCRouter, protectedProcedure } from "@/server/api/trpc";
 
-import { asc, eq, sql } from "drizzle-orm";
+import { asc, eq, ne, sql } from "drizzle-orm";
 
 export const badgesRouter = createTRPCRouter({
   getBadges: protectedProcedure
@@ -12,6 +12,7 @@ export const badgesRouter = createTRPCRouter({
     {
       const badgesQueryResult = await db.query.badges.findMany({
         orderBy: [asc(badges.name)],
+        where: ne(badges.publicationState, "not-listed"),
         with: {
           usersToBadges: {
             extras: {
@@ -19,16 +20,33 @@ export const badgesRouter = createTRPCRouter({
             },
             where: eq(usersToBadges.userId, userId),
           }
-        }
+        },
       });
 
-      const badgesWithCompletedState = badgesQueryResult.map((badge) => ({
-        description: badge.description,
-        id: badge.id,
-        imageFilename: badge.imageFilename,
-        isCompleted: badge.usersToBadges[0]?.hasCompletedBadge ?? false,
-        name: badge.name,
-      }));
+      const badgesWithCompletedState: BadgeWithCompletedState[] = badgesQueryResult
+        .map((badge) => ({
+          description: badge.description,
+          id: badge.id,
+          imageFilename: badge.imageFilename,
+          isCompleted: badge.usersToBadges[0]?.hasCompletedBadge ?? false,
+          name: badge.name,
+          publicationState: badge.publicationState,
+        }))
+        .sort((a, b) => 
+        {
+          if(a.publicationState === "published" && b.publicationState !== "published") 
+          {
+            return -1;
+          }
+          else if(a.publicationState !== "published" && b.publicationState === "published") 
+          {
+            return 1;
+          }
+          else 
+          {
+            return a.name.localeCompare(b.name);
+          }
+        });
 
       return ({
         badges: badgesWithCompletedState,

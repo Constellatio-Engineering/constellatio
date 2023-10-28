@@ -43,6 +43,12 @@ export type FileExtension = typeof fileExtensions[number];
 export const fileMimeTypes = [...imageFileMimeTypes, ...documentFileMimeTypes] as const;
 export type FileMimeType = typeof fileMimeTypes[number];
 
+export const badgePublicationState = ["not-listed", "coming-soon", "published"] as const;
+export type BadgePublicationState = typeof badgePublicationState[number];
+
+export const userBadgeStates = ["not-seen", "seen"] as const;
+export type UserBadgeState = typeof userBadgeStates[number];
+
 export const genderEnum = pgEnum("Gender", allGenderIdentifiers);
 export const onboardingResultEnum = pgEnum("OnboardingResult", allOnboardingResults);
 export const resourceTypeEnum = pgEnum("ResourceType", allBookmarkResourceTypes);
@@ -56,6 +62,8 @@ export const documentFileExtensionEnum = pgEnum("DocumentFileExtension", documen
 export const documentFileMimeTypeEnum = pgEnum("DocumentFileMimeType", documentFileMimeTypes);
 export const fileExtensionEnum = pgEnum("FileExtension", fileExtensions);
 export const fileMimeTypeEnum = pgEnum("FileMimeType", fileMimeTypes);
+export const userBadgeStateEnum = pgEnum("UserBadgeState", userBadgeStates);
+export const badgePublicationStateEnum = pgEnum("BadgePublicationState", badgePublicationState);
 
 // TODO: Go through all queries and come up with useful indexes
 
@@ -237,6 +245,7 @@ export const badges = pgTable("Badge", {
   name: text("Name").notNull(),
   description: text("Description").notNull(),
   imageFilename: text("ImageFilename").notNull(),
+  publicationState: badgePublicationStateEnum("PublicationState").notNull().default("not-listed"),
 });
 
 export const badgesRelations = relations(badges, ({ many }) => ({
@@ -245,10 +254,12 @@ export const badgesRelations = relations(badges, ({ many }) => ({
 
 export type BadgeInsert = InferInsertModel<typeof badges>;
 export type Badge = InferSelectModel<typeof badges>;
+export type BadgeWithCompletedState = Badge & {isCompleted: boolean };
 
 export const usersToBadges = pgTable("User_to_Badge", {
   userId: uuid("UserId").references(() => users.id, { onDelete: "no action" }).notNull(),
   badgeId: uuid("BadgeId").references(() => badges.id, { onDelete: "no action" }).notNull(),
+  userBadgeState: userBadgeStateEnum("UserBadgeState").notNull().default("not-seen"),
 }, (table) => ({
   pk: primaryKey(table.userId, table.badgeId),
 }));

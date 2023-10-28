@@ -1,5 +1,6 @@
 import { api } from "@/utils/api";
 
+// eslint-disable-next-line @typescript-eslint/explicit-function-return-type
 const useBadges = () =>
 {
   const { data: badges, error, isLoading } = api.badges.getBadges.useQuery(undefined, {

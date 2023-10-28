@@ -28,9 +28,7 @@ const BadgesCarousel: FunctionComponent = () =>
       {badges.map((badge) => (
         <Carousel.Slide key={badge.id}>
           <ProfileBadgeCard
-            filename={badge.imageFilename}
-            name={badge.name}
-            description={badge.description}
+            {...badge}
             size="small"
           />
         </Carousel.Slide>
