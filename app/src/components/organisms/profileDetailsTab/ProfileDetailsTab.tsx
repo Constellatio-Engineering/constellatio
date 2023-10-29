@@ -2,6 +2,8 @@ import { AlertCard } from "@/components/atoms/Card/AlertCard";
 import { Dropdown } from "@/components/atoms/Dropdown/Dropdown";
 import { Input } from "@/components/atoms/Input/Input";
 import { maximumAmountOfSemesters } from "@/schemas/auth/registrationForm.schema";
+import { type UpdateUserDetailsSchema, updateUserDetailsSchema } from "@/schemas/auth/updateUserDetails.schema";
+import { type UserFiltered } from "@/utils/filters";
 
 import { Title, Box } from "@mantine/core";
 import { useForm, zodResolver } from "@mantine/form";
@@ -14,59 +16,43 @@ import { Button } from "../../atoms/Button/Button";
 // import { decimalToRoman } from "../floatingPanel/generateTocHelper";
 import { allUniversities } from "../RegistrationForm/RegistrationForm.data";
 
-interface InitialValues 
-{
-  email: string;
-  firstName: string;
-  lastName: string;
-  password: string;
-  profileName: string;
-  semester: string | number | undefined;
-  university: string;
-}
+type Props = {
+  readonly userDetails: UserFiltered;
+};
 
-const ProfileDetailsTab: FunctionComponent = () => 
+const ProfileDetailsTab: FunctionComponent<Props> = ({ userDetails }) =>
 {
   const [err, setErr] = React.useState<boolean>(false);
   const [success, setSuccess] = React.useState<boolean>(false);
   const isTabletScreen = useMediaQuery("(max-width: 1100px)"); 
 
-  const form = useForm<InitialValues>({
+  const form = useForm<UpdateUserDetailsSchema>({
     initialValues: {
-      email: "",
-      firstName: "",
-      lastName: "",
-      password: "",
-      profileName: "",
-      semester: undefined,
-      university: "",
+      firstName: userDetails.firstName,
+      lastName: userDetails.lastName,
+      profileName: userDetails.displayName,
+      semester: String(userDetails.semester),
+      university: userDetails.university,
     },
-    validate: zodResolver(z.object({
-      email: z.string().email({ message: "Ungültige E-Mail Adresse" }),
-      firstName: z.string().min(2, { message: "Ein Vorname ist erforderlich" }),
-      lastName: z.string().min(2, { message: "Ein Anzeigename ist erforderlich" }),
-      password: z.string(),
-      profileName: z.string().min(2, { message: "Ein Anzeigename ist erforderlich" }),
-      semester: z.string().pipe(z.coerce.number().int().min(1).max(maximumAmountOfSemesters)).optional(),
-      university: z.string().min(1, { message: "Eine Uni ist erforderlich" }),
-    })),
+    validate: zodResolver(updateUserDetailsSchema),
     validateInputOnBlur: true,
   });
 
-  const handleSubmit = (e: React.FormEvent<HTMLFormElement>): void => 
+  const handleSubmit = (e: React.FormEvent<HTMLFormElement>): void =>
   {
     e.preventDefault();
-    if(Object.keys(form.errors).length > 0) 
+    if(Object.keys(form.errors).length > 0)
     {
       setErr(true);
       setSuccess(false);
     }
-    else 
+    else
     {
       setErr(false);
       setSuccess(true);
     }
   };
+
   return (
     <div css={styles.wrapper}>
       {!isTabletScreen && <Title order={3}>Einstellungen</Title>}
@@ -114,19 +100,6 @@ const ProfileDetailsTab: FunctionComponent = () =>
             data={Array(maximumAmountOfSemesters).fill(null).map((_, i) => String(i + 1))}
           />
         </Box>
-        <Input 
-          {...form.getInputProps("email")}
-          inputType="text"
-          label="E-Mail"
-        />        
-        {form.isValid("email") && (
-          <Input
-            inputType="password" 
-            label="Passwort eingeben, um E-Mail-Adresse zu ändern"
-            error="Sorry, your password doesn't match our records"
-            {...form.getInputProps("password")}
-          />
-        )}
         <Button<"button"> size="large" type="submit" styleType="primary">Änderungen speichern</Button>
       </form>
     </div>
