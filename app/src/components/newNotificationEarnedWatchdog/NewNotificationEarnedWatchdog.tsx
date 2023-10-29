@@ -17,6 +17,7 @@ import * as styles from "./NewNotificationEarnedWatchdog.styles";
  */
 const NewNotificationEarnedWatchdog: FunctionComponent = () =>
 {
+  const apiUtils = api.useUtils();
   const { invalidateBadges } = useContextAndErrorIfNull(InvalidateQueriesContext);
   const { getBadgesResult: { badges } } = useBadges();
   const [dismissedBadges, setDismissedBadges] = useLocalStorage<string[]>({
@@ -43,12 +44,38 @@ const NewNotificationEarnedWatchdog: FunctionComponent = () =>
   });
 
   const { mutate: markBadgeAsSeen } = api.badges.markBadgeAsSeen.useMutation({
-    onError: (error) => console.log(error),
-    onSuccess: invalidateBadges,
+    onError: (_err, variables) =>
+    {
+      // If an error occurs while marking a badge as seen, we add it to the dismissed badges so the modal can be closed anyway
+      setDismissedBadges((dismissedBadges) => [...dismissedBadges, variables.badgeId]);
+    },
+    onMutate: async ({ badgeId }) =>
+    {
+      // cancel outstanding getBadges request
+      await apiUtils.badges.getBadges.cancel();
+
+      // Get the data from the queryCache
+      const prevData = apiUtils.badges.getBadges.getData();
+
+      // Optimistically update the data to display the badge as seen
+      apiUtils.badges.getBadges.setData(undefined, (getBadgesResult) =>
+      {
+        const newBadges = [...(getBadgesResult?.badges ?? [])];
+        const badgeIndex = newBadges.findIndex(({ id }) => id === badgeId);
+        newBadges[badgeIndex]!.wasSeen = true;
+
+        return ({
+          badges: newBadges,
+          completedCount: prevData?.completedCount ?? 0,
+          totalCount: prevData?.totalCount ?? 0
+        });
+      });
+    },
+    onSettled: invalidateBadges,
   });
 
   const newEarnedBadges = badges
-    .filter(({ isCompleted, wasSeen }) => isCompleted && !wasSeen)
+    .filter(badge => badge.isCompleted && !badge.wasSeen)
     .filter(({ id }) => !dismissedBadges.includes(id));
   const currentBadge = newEarnedBadges[0];
 
@@ -60,7 +87,6 @@ const NewNotificationEarnedWatchdog: FunctionComponent = () =>
         {
           if(currentBadge)
           {
-            setDismissedBadges((dismissedBadges) => [...dismissedBadges, currentBadge.id]);
             markBadgeAsSeen({ badgeId: currentBadge.id });
           }
         }}
