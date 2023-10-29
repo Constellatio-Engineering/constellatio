@@ -1,7 +1,9 @@
 import BadgeImage from "@/components/badgeImage/BadgeImage";
 import { Modal } from "@/components/molecules/Modal/Modal";
+import { type BadgeWithUserData } from "@/db/schema";
 import useBadges from "@/hooks/useBadges";
 import useContextAndErrorIfNull from "@/hooks/useContextAndErrorIfNull";
+import { usePrevious } from "@/hooks/usePrevious";
 import { InvalidateQueriesContext } from "@/provider/InvalidateQueriesProvider";
 import { api } from "@/utils/api";
 
@@ -82,6 +84,19 @@ const NewNotificationEarnedWatchdog: FunctionComponent = () =>
     .filter(badge => badge.isCompleted && !badge.wasSeen)
     .filter(({ id }) => !dismissedBadges.includes(id));
   const currentBadge = newEarnedBadges[0];
+  const previousBadge = usePrevious(currentBadge);
+
+  // It the last badge was dismissed, show it until the modal is closed, otherwise the closing animation would look weird
+  let renderedBadge: BadgeWithUserData | undefined;
+
+  if(currentBadge)
+  {
+    renderedBadge = currentBadge;
+  }
+  else if(previousBadge && !currentBadge)
+  {
+    renderedBadge = previousBadge;
+  }
 
   return (
     <>
@@ -96,14 +111,14 @@ const NewNotificationEarnedWatchdog: FunctionComponent = () =>
         }}
         withCloseButton
         centered>
-        {currentBadge && (
+        {renderedBadge && (
           <div css={styles.contentWrapper}>
             <h1 style={{ fontSize: 26 }}>Neue Errungenschaft</h1>
             <div css={styles.imageWrapper}>
-              <BadgeImage filename={currentBadge.imageFilename} css={styles.image}/>
+              <BadgeImage filename={renderedBadge.imageFilename} css={styles.image}/>
             </div>
-            <h2 style={{ fontSize: 20 }}>{currentBadge.name}</h2>
-            <p>{currentBadge.description}</p>
+            <h2 style={{ fontSize: 20 }}>{renderedBadge.name}</h2>
+            <p>{renderedBadge.description}</p>
           </div>
         )}
       </Modal>
