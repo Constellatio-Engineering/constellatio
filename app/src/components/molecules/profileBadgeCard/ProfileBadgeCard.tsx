@@ -80,7 +80,11 @@ const ProfileBadgeCard: FunctionComponent<ProfileBadgeCardProps> = ({
           <BodyText css={styles.badgeTitle} styleType="body-01-medium">Coming soon!</BodyText>
         </div>
       )}
-      <div css={[styles.badgeWrapper, isComingSoon && styles.contentComingSoon]}>
+      <div css={[
+        styles.badgeWrapper,
+        isSmall ? styles.badgeWrapperSmall : styles.badgeWrapperLarge,
+        isComingSoon && styles.contentComingSoon
+      ]}>
         {isCompleted && <span css={styles.checkCircle}><CheckCircleRed/></span>}
         <div css={styles.imageWrapper}>
           <BadgeImage css={styles.badgeImage} filename={imageFilename}/>
