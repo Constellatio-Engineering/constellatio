@@ -1,4 +1,3 @@
-import ErrorPage from "@/components/errorPage/ErrorPage";
 import ChangePasswordTab from "@/components/organisms/changePasswordTab/ChangePasswordTab";
 import ProfileDetailsTab from "@/components/organisms/profileDetailsTab/ProfileDetailsTab";
 import ProfileHistoryTab from "@/components/organisms/profileHistoryTab/ProfileHistoryTab";
@@ -7,9 +6,7 @@ import ProfileOverview from "@/components/organisms/profileOverview/ProfileOverv
 import ProfilePageHeader from "@/components/organisms/profilePageHeader/ProfilePageHeader";
 import ProfileNavMenuTablet from "@/components/profileNavMenuTablet/ProfileNavMenuTablet";
 import SubscriptionTab from "@/components/subscriptionTab/SubscriptionTab";
-import useUserDetails from "@/hooks/useUserDetails";
 import { type IProfilePageProps } from "@/pages/profile";
-import { type UserFiltered } from "@/utils/filters";
 
 import { Container } from "@mantine/core";
 import { useMediaQuery } from "@mantine/hooks";
@@ -26,12 +23,9 @@ export const tabs = [
   { slug: "subscription", title: "Vertrag" },
 ] as const;
 
-export type UserDetails = {
-  readonly userDetails: UserFiltered;
-};
-type ProfilePageProps = IProfilePageProps & UserDetails;
+type ProfilePageProps = IProfilePageProps;
 
-const ProfilePage: FunctionComponent<ProfilePageProps> = ({ allMainCategory, userDetails }) =>
+const ProfilePage: FunctionComponent<ProfilePageProps> = ({ allMainCategory }) =>
 {
   const [tab, setTab] = useQueryState("tab", parseAsString.withDefault(tabs[0]!.slug));
   const activeTab = tabs?.find(x => x.slug === tab);
@@ -76,7 +70,6 @@ const ProfilePage: FunctionComponent<ProfilePageProps> = ({ allMainCategory, use
           <ProfileMenu
             tabs={tabs}
             setTab={setTab}
-            userDetails={userDetails}
             activeTabSlug={activeTab?.slug}
           />
           {renderedTab}
@@ -86,32 +79,4 @@ const ProfilePage: FunctionComponent<ProfilePageProps> = ({ allMainCategory, use
   );
 };
 
-type ProfilePageWrapperProps = IProfilePageProps;
-
-const ProfilePageWrapper: FunctionComponent<ProfilePageWrapperProps> = (props) =>
-{
-  const { error, isLoading, userDetails } = useUserDetails();
-
-  if(isLoading)
-  {
-    return null;
-  }
-
-  if(error)
-  {
-    return (
-      <ErrorPage error={error.message}/>
-    );
-  }
-
-  if(!userDetails)
-  {
-    return (
-      <ErrorPage error="User Details not found"/>
-    );
-  }
-
-  return <ProfilePage {...props} userDetails={userDetails}/>;
-};
-
-export default ProfilePageWrapper;
+export default ProfilePage;

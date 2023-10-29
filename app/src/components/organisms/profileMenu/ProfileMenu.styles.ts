@@ -20,6 +20,7 @@ export const wrapper = (theme: MantineTheme) => css`
     transform: translate(-50%,-440px);
 }
 `;
+
 export const profileInfo = css`
   text-align: center;
   padding: 16px 24px;
