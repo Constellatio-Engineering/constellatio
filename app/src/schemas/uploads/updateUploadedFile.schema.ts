@@ -1,4 +1,5 @@
-import { filenameValidation, folderIdValidation, idValidation } from "@/schemas/uploads/uploadedFile.validation";
+import { idValidation } from "@/schemas/common.validation";
+import { filenameValidation, folderIdValidation } from "@/schemas/uploads/uploadedFile.validation";
 
 import { z } from "zod";
 

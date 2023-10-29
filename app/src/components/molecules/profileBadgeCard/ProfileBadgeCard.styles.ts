@@ -75,7 +75,7 @@ export const imageWrapper = css`
   position: relative;
 `;
 
-export const image = css`
+export const badgeImage = css`
   width: 100%;
   height: 100%;
   object-fit: contain;

@@ -1,5 +1,6 @@
 import { fileExtensions, fileMimeTypes } from "@/db/schema";
-import { filenameValidation, folderIdValidation, generateContentTypeValidation, idValidation } from "@/schemas/uploads/uploadedFile.validation";
+import { idValidation } from "@/schemas/common.validation";
+import { filenameValidation, folderIdValidation, generateContentTypeValidation } from "@/schemas/uploads/uploadedFile.validation";
 
 import { z } from "zod";
 

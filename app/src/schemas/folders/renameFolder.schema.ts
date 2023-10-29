@@ -1,7 +1,9 @@
+import { idValidation } from "@/schemas/common.validation";
+
 import { z } from "zod";
 
 export const renameFolderSchema = z.object({
-  folderId: z.string().uuid(),
+  folderId: idValidation,
   newName: z.string().min(1)
 });
 

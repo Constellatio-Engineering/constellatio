@@ -1,4 +1,5 @@
 import { BodyText } from "@/components/atoms/BodyText/BodyText";
+import BadgeImage from "@/components/badgeImage/BadgeImage";
 import { CheckCircleRed } from "@/components/Icons/CheckCirleRed";
 import { type BadgeWithUserData } from "@/db/schema";
 import useDashboardPageStore from "@/stores/dashboardPage.store";
@@ -82,12 +83,7 @@ const ProfileBadgeCard: FunctionComponent<ProfileBadgeCardProps> = ({
       <div css={[styles.badgeWrapper, isComingSoon && styles.contentComingSoon]}>
         {isCompleted && <span css={styles.checkCircle}><CheckCircleRed/></span>}
         <div css={styles.imageWrapper}>
-          <Image
-            css={styles.image}
-            src={`/images/badges/${imageFilename}`}
-            alt="badge symbol"
-            fill
-          />
+          <BadgeImage css={styles.badgeImage} filename={imageFilename}/>
         </div>
         <BodyText css={styles.badgeTitle} styleType="body-01-medium">
           {name}

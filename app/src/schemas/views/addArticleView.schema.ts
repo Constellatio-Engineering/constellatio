@@ -1,7 +1,9 @@
+import { idValidation } from "@/schemas/common.validation";
+
 import { z } from "zod";
 
 export const addArticleViewSchema = z.object({
-  articleId: z.string().uuid(),
+  articleId: idValidation,
 });
 
 export type AddArticleViewSchema = z.input<typeof addArticleViewSchema>;

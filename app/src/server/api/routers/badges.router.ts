@@ -2,9 +2,12 @@ import { db } from "@/db/connection";
 import {
   badges, type BadgeWithUserData, usersToBadges,
 } from "@/db/schema";
+import { markBadgeAsSeenSchema } from "@/schemas/badges/markBadgeAsSeen.schema";
 import { createTRPCRouter, protectedProcedure } from "@/server/api/trpc";
 
-import { asc, eq, ne, sql } from "drizzle-orm";
+import {
+  and, asc, eq, ne, sql 
+} from "drizzle-orm";
 
 export const badgesRouter = createTRPCRouter({
   getBadges: protectedProcedure
@@ -54,5 +57,14 @@ export const badgesRouter = createTRPCRouter({
         completedCount: badgesWithCompletedState.filter((badge) => badge.isCompleted).length,
         totalCount: badgesWithCompletedState.length,
       });
+    }),
+  markBadgeAsSeen: protectedProcedure
+    .input(markBadgeAsSeenSchema)
+    .mutation(async ({ ctx: { userId }, input: { badgeId } }) =>
+    {
+      await db.update(usersToBadges).set({ userBadgeState: "seen" }).where(and(
+        eq(usersToBadges.badgeId, badgeId),
+        eq(usersToBadges.userId, userId),
+      ));
     }),
 });
