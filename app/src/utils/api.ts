@@ -1,4 +1,5 @@
 /* eslint-disable import/no-unused-modules */
+import { env } from "@/env.mjs";
 /**
  * This is the client-side entrypoint for your tRPC API. It is used to create the `api` object which
  * contains the Next.js App-wrapper, as well as your type-safe React Query hooks.
@@ -11,7 +12,7 @@ import { type ClientError } from "@/utils/clientError";
 import { paths } from "@/utils/paths";
 
 import { QueryCache } from "@tanstack/react-query";
-import { httpBatchLink, TRPCClientError } from "@trpc/client";
+import { httpBatchLink, loggerLink, TRPCClientError } from "@trpc/client";
 import { createTRPCNext } from "@trpc/next";
 import { type inferRouterInputs, type inferRouterOutputs } from "@trpc/server";
 import superjson from "superjson";
@@ -41,7 +42,7 @@ export const api = createTRPCNext<AppRouter>({
     return {
       links: [
         /* loggerLink({
-          enabled: (opts) => process.env.NODE_ENV === "development" || (opts.direction === "down" && opts.result instanceof Error),
+          enabled: (opts) => env.NEXT_PUBLIC_DEPLOYMENT_ENVIRONMENT === "development" || (opts.direction === "down" && opts.result instanceof Error),
         }),*/
         httpBatchLink({
           url: `${getBaseUrl()}/api/trpc`,

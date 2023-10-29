@@ -1,11 +1,17 @@
 import { api } from "@/utils/api";
 
+type Options = {
+  disabled?: boolean;
+};
+
 // eslint-disable-next-line @typescript-eslint/explicit-function-return-type
-const useBadges = () =>
+const useBadges = (options?: Options) =>
 {
+  // TODO
   const { data, error, isLoading } = api.badges.getBadges.useQuery(undefined, {
+    enabled: !options?.disabled,
     refetchOnMount: "always",
-    refetchOnWindowFocus: "always", // TODO
+    refetchOnWindowFocus: "always"
     // staleTime: Infinity
   });
 
