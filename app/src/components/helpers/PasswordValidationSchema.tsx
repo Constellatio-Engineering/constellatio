@@ -1,4 +1,4 @@
-import { passwordRequirements } from "@/schemas/auth/registrationForm.schema";
+import { passwordRequirements } from "@/schemas/auth/userData.validation";
 
 import { Stack } from "@mantine/core";
 import React, { type FC } from "react";

@@ -1,4 +1,4 @@
-import { passwordSchema } from "@/schemas/auth/registrationForm.schema";
+import { passwordSchema } from "@/schemas/auth/userData.validation";
 
 import { z } from "zod";
 

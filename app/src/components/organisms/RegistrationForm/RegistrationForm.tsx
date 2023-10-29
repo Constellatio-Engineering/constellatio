@@ -6,11 +6,12 @@ import { CustomLink } from "@/components/atoms/CustomLink/CustomLink";
 import { Dropdown } from "@/components/atoms/Dropdown/Dropdown";
 import { Input } from "@/components/atoms/Input/Input";
 import { PasswordValidationSchema } from "@/components/helpers/PasswordValidationSchema";
-import { allGenders, allUniversities } from "@/components/organisms/RegistrationForm/RegistrationForm.data";
+import { allGenders } from "@/components/organisms/RegistrationForm/RegistrationForm.data";
 import { colors } from "@/constants/styles/colors";
 import { env } from "@/env.mjs";
 import { supabase } from "@/lib/supabase";
-import { maximumAmountOfSemesters, type RegistrationFormSchema, registrationFormSchema } from "@/schemas/auth/registrationForm.schema";
+import { type RegistrationFormSchema, registrationFormSchema } from "@/schemas/auth/registrationForm.schema";
+import { allUniversities, maximumAmountOfSemesters } from "@/schemas/auth/userData.validation";
 import { api } from "@/utils/api";
 import { isDevelopment, isDevelopmentOrStaging } from "@/utils/env";
 import { getConfirmEmailUrl, paths } from "@/utils/paths";
@@ -51,7 +52,7 @@ const initialValues: InitialValues = isDevelopmentOrStaging ? {
   password: "",
   passwordConfirmation: "",
   semester: undefined,
-  university: "",
+  university: ""
 };
 
 const resendEmailConfirmationTimeout = env.NEXT_PUBLIC_RESEND_EMAIL_CONFIRMATION_TIMEOUT_IN_SECONDS * 1000;
@@ -110,7 +111,8 @@ export const RegistrationForm: FunctionComponent = () =>
     },
   });
 
-  const handleSubmit = form.onSubmit(formValues => register(formValues as RegistrationFormSchema));
+  // const handleSubmit = form.onSubmit(formValues => register(formValues as RegistrationFormSchema));
+  const handleSubmit = form.onSubmit(formValues => console.log(formValues));
 
   const resendConfirmationEmail = async (): Promise<void> =>
   {
@@ -266,7 +268,10 @@ export const RegistrationForm: FunctionComponent = () =>
             label="Universität"
             title="Universität"
             placeholder="Universität auswählen"
+            clearable
+            allowDeselect
             data={allUniversities}
+            nothingFound="Keine Universität gefunden..."
             searchable
           />
           <Box maw={240}>
@@ -275,7 +280,27 @@ export const RegistrationForm: FunctionComponent = () =>
               label="Semester"
               title="Semester"
               placeholder="Semester auswählen"
-              data={Array(maximumAmountOfSemesters).fill(null).map((_, i) => String(i + 1))}
+              data={Array(maximumAmountOfSemesters + 1).fill(null).map((_, i) =>
+              {
+                if(i === 0)
+                {
+                  return ({
+                    label: "Referendariat",
+                    value: String(i)
+                  });
+                }
+                else if(i === maximumAmountOfSemesters)
+                {
+                  return ({
+                    label: `> ${maximumAmountOfSemesters - 1}`,
+                    value: String(i)
+                  });
+                }
+                return ({
+                  label: String(i),
+                  value: String(i)
+                });
+              })}
             />
           </Box>
           <Dropdown

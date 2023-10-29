@@ -3,7 +3,7 @@ import { Button } from "@/components/atoms/Button/Button";
 import { AlertCard } from "@/components/atoms/Card/AlertCard";
 import { Input } from "@/components/atoms/Input/Input";
 import { PasswordValidationSchema } from "@/components/helpers/PasswordValidationSchema";
-import { passwordSchema } from "@/schemas/auth/registrationForm.schema";
+import { passwordSchema } from "@/schemas/auth/userData.validation";
 
 import { Title } from "@mantine/core";
 import { useForm, zodResolver } from "@mantine/form";

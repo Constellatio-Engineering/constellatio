@@ -1,8 +1,8 @@
 import { AlertCard } from "@/components/atoms/Card/AlertCard";
 import { Dropdown } from "@/components/atoms/Dropdown/Dropdown";
 import { Input } from "@/components/atoms/Input/Input";
-import { maximumAmountOfSemesters } from "@/schemas/auth/registrationForm.schema";
 import { type UpdateUserDetailsSchema, updateUserDetailsSchema } from "@/schemas/auth/updateUserDetails.schema";
+import { maximumAmountOfSemesters } from "@/schemas/auth/userData.validation";
 import { type UserFiltered } from "@/utils/filters";
 
 import { Title, Box } from "@mantine/core";

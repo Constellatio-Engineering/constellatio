@@ -1,40 +1,28 @@
-import { allGenderIdentifiers } from "@/db/schema";
+import {
+  emailValidation,
+  genderValidation,
+  nameValidation,
+  passwordSchema,
+  semesterValidation,
+  universityValidation
+} from "@/schemas/auth/userData.validation";
 
 import { z } from "zod";
-
-export const passwordRequirements = [
-  { label: "Mindestens 8 Zeichen", re: /.{8,}/ },
-  { label: "Mindestens 1 Ziffer", re: /[0-9]/ },
-  { label: "Mindestens 1 Großbuchstaben", re: /[A-Z]/ },
-  { label: "Mindestens 1 Kleinbuchstaben", re: /[a-z]/ },
-  { label: "Mindestens 1 Sonderzeichen: ? ! $ & @ #", re: /[!#$&()*+,-.=/?@{}[\]^_~]/ },
-];
-
-export const passwordSchema = z.string().refine(password => passwordRequirements.every(r => r.re.test(password)), {
-  message: "Password doesn't meet the requirements",
-});
-
-export const maximumAmountOfSemesters = 15 as const;
-
-export const displayNameValidation = z.string().min(2, { message: "Ein Anzeigename ist erforderlich" });
-export const emailValidation = z.string().email({ message: "Ungültige E-Mail Adresse" });
 
 export const registrationFormSchema = z
   .object({
     acceptTOS: z.literal<boolean>(true, {
       errorMap: (_error) => ({ message: "Du musst zustimmen" }),
     }),
-    displayName: z.string().min(2, { message: "Ein Anzeigename ist erforderlich" }),
-    email: z.string().email({ message: "Ungültige E-Mail Adresse" }),
-    firstName: z.string().min(2, { message: "Ein Vorname ist erforderlich" }),
-    gender: z.enum(allGenderIdentifiers, {
-      errorMap: (_issue, ctx) => ({ message: ctx.data == null ? "Ein Geschlecht ist erforderlich" : "Ungültiges Geschlecht" })
-    }),
-    lastName: z.string().min(2, { message: "Ein Anzeigename ist erforderlich" }),
+    displayName: nameValidation,
+    email: emailValidation,
+    firstName: nameValidation,
+    gender: genderValidation,
+    lastName: nameValidation,
     password: passwordSchema,
     passwordConfirmation: passwordSchema,
-    semester: z.string().pipe(z.coerce.number().int().min(1).max(maximumAmountOfSemesters)).optional(),
-    university: z.string().min(1, { message: "Eine Uni ist erforderlich" }),
+    semester: semesterValidation.optional(),
+    university: universityValidation,
   })
   .refine(data => data.passwordConfirmation === data.password, {
     message: "Die Passwörter stimmen nicht überein",
