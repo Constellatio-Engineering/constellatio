@@ -14,11 +14,13 @@ const BadgesCarousel: FunctionComponent = () =>
 {
   const { getBadgesResult: { badges }, isLoading } = useBadges();
   const theme = useMantineTheme();
+  // const { entry, ref } = useIntersection();
   return (
     <Carousel
       slideSize="160px"
-      controlsOffset={-10}
+      controlsOffset={0}
       controlSize={32}
+      withIndicators
       sx={{ 
         "&::after": {
           background: `linear-gradient(to left, ${theme.colors["neutrals-01"][0]} 0%, rgba(255,255,255,0) 10%)`,
@@ -32,7 +34,7 @@ const BadgesCarousel: FunctionComponent = () =>
           zIndex: 1
         },
         "&::before": {
-          background: `linear-gradient(to right, ${theme.colors["neutrals-01"][0]} 0%, rgba(255,255,255,0) 10%)`,
+          background: `linear-gradient(to right, ${theme.colors["neutrals-01"][0]} 0%, rgba(255,255,255,0) 2%)`,
           content: "''",
           height: "100%",
           left: "-1px",
@@ -47,8 +49,11 @@ const BadgesCarousel: FunctionComponent = () =>
             backgroundColor: theme.colors["neutrals-01"][0],
             opacity: 1,
           },
+          "[data-inactive]": {
+            opacity: 0,
+          },
           left: "-3.5%",
-          width: "107%"
+          width: "107%",
         },
         position: "relative"
       }}
