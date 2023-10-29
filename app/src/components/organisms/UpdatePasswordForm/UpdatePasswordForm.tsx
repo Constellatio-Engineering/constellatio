@@ -4,7 +4,8 @@ import { Input } from "@/components/atoms/Input/Input";
 import { PasswordValidationSchema } from "@/components/helpers/PasswordValidationSchema";
 import { supabase } from "@/lib/supabase";
 import { type UpdatePasswordFormSchema, updatePasswordFormSchema } from "@/schemas/auth/updatePasswordForm.schema";
-import { paths, queryParams } from "@/utils/paths";
+import { paths } from "@/utils/paths";
+import { queryParams } from "@/utils/query-params";
 
 import { Box, Stack, Title } from "@mantine/core";
 import { useForm, zodResolver } from "@mantine/form";
