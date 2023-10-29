@@ -10,7 +10,7 @@ import SubscriptionTab from "@/components/subscriptionTab/SubscriptionTab";
 import useUserDetails from "@/hooks/useUserDetails";
 import { type IProfilePageProps } from "@/pages/profile";
 
-import { Container, Skeleton } from "@mantine/core";
+import { Container } from "@mantine/core";
 import { useMediaQuery } from "@mantine/hooks";
 import { parseAsString, useQueryState } from "next-usequerystate";
 import React, { type FunctionComponent, type ReactNode, useMemo } from "react";

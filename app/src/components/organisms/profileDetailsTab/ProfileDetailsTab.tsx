@@ -9,7 +9,6 @@ import { Title, Box } from "@mantine/core";
 import { useForm, zodResolver } from "@mantine/form";
 import { useMediaQuery } from "@mantine/hooks";
 import React, { type FunctionComponent } from "react";
-import { z } from "zod";
 
 import * as styles from "./ProfileDetailsTab.styles";
 import { Button } from "../../atoms/Button/Button";

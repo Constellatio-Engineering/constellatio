@@ -1,4 +1,4 @@
-import { maximumAmountOfSemesters, passwordSchema } from "@/schemas/auth/registrationForm.schema";
+import { maximumAmountOfSemesters } from "@/schemas/auth/registrationForm.schema";
 
 import { z } from "zod";
 
