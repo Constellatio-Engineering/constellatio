@@ -1,6 +1,6 @@
 {
-  "id": "354870a6-859b-4f62-b7b0-504bf937bcef",
-  "prevId": "06f64c43-62d5-473f-9de7-3732085305b0",
+  "id": "d2a04ea1-3189-4c36-9dbd-643d33dda6b8",
+  "prevId": "1a84f37e-abbb-4529-9038-5e5d7d97f047",
   "version": "5",
   "dialect": "pg",
   "tables": {
@@ -67,6 +67,12 @@
           "notNull": true,
           "default": "gen_random_uuid()"
         },
+        "Slug": {
+          "name": "Slug",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true
+        },
         "Name": {
           "name": "Name",
           "type": "text",
@@ -101,6 +107,13 @@
           "name": "Badge_Id_unique",
           "columns": [
             "Id"
+          ],
+          "nullsNotDistinct": false
+        },
+        "Badge_Slug_unique": {
+          "name": "Badge_Slug_unique",
+          "columns": [
+            "Slug"
           ],
           "nullsNotDistinct": false
         }

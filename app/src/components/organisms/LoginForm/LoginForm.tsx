@@ -8,7 +8,8 @@ import useContextAndErrorIfNull from "@/hooks/useContextAndErrorIfNull";
 import { supabase } from "@/lib/supabase";
 import { InvalidateQueriesContext } from "@/provider/InvalidateQueriesProvider";
 import { loginFormSchema } from "@/schemas/auth/loginForm.schema";
-import { paths, queryParams } from "@/utils/paths";
+import { paths } from "@/utils/paths";
+import { queryParams } from "@/utils/query-params";
 
 import { Stack } from "@mantine/core";
 import { useForm, zodResolver } from "@mantine/form";
@@ -25,6 +26,7 @@ export const LoginForm: FunctionComponent = () =>
 {
   const router = useRouter();
   const wasPasswordUpdated = router.query[queryParams.passwordResetSuccess] === "true";
+  const redirectTo = router.query[queryParams.redirectedFrom];
   const { invalidateEverything } = useContextAndErrorIfNull(InvalidateQueriesContext);
   const [, setResetPasswordModalOpen] = useAtom(resetPasswordModalVisible);
   const [isLoginInProgress, setIsLoginInProgress] = useState(false);
@@ -58,7 +60,7 @@ export const LoginForm: FunctionComponent = () =>
       }
 
       await invalidateEverything();
-      await router.replace(`${paths.cases}`);
+      await router.replace(`${redirectTo || paths.dashboard}`);
     }
     catch (error)
     {

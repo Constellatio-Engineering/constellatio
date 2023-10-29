@@ -1,5 +1,6 @@
 /* eslint-disable react/jsx-max-props-per-line */
 import { RouterTransition } from "@/components/atoms/RouterTransition/RouterTransition";
+import NewNotificationEarnedWatchdog from "@/components/newNotificationEarnedWatchdog/NewNotificationEarnedWatchdog";
 import { env } from "@/env.mjs";
 import { useIsRouterReady } from "@/hooks/useIsRouterReady";
 import { supabase } from "@/lib/supabase";
@@ -86,6 +87,7 @@ const AppContainer: FunctionComponent<ConstellatioAppProps> = ({ Component, page
                 <MeilisearchProvider>
                   <RouterTransition/>
                   <Notifications/>
+                  <NewNotificationEarnedWatchdog/>
                   {isRouterReady && (
                     <Component {...pageProps}/>
                   )}

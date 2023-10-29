@@ -1,3 +1,4 @@
+import SkeletonSlide from "@/components/badgesCarousel/skeletonSlide/SkeletonSlide";
 import useBadges from "@/hooks/useBadges";
 
 import { Carousel } from "@mantine/carousel";
@@ -10,7 +11,7 @@ import ProfileBadgeCard from "../molecules/profileBadgeCard/ProfileBadgeCard";
 
 const BadgesCarousel: FunctionComponent = () => 
 {
-  const { getBadgesResult: { badges } } = useBadges();
+  const { getBadgesResult: { badges }, isLoading } = useBadges();
 
   return (
     <Carousel
@@ -22,6 +23,15 @@ const BadgesCarousel: FunctionComponent = () =>
       slideGap="16px"
       align="start"
       slidesToScroll="auto">
+      {isLoading && (
+        <>
+          {Array.from({ length: 3 }).map((_, index) => (
+            <Carousel.Slide key={index}>
+              <SkeletonSlide/>
+            </Carousel.Slide>
+          ))}
+        </>
+      )}
       {badges.map((badge) => (
         <Carousel.Slide key={badge.id}>
           <ProfileBadgeCard {...badge} size="small"/>

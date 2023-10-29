@@ -3,6 +3,9 @@ import { colors } from "@/constants/styles/colors";
 import { css } from "@emotion/react";
 import { type MantineTheme } from "@mantine/styles";
 
+export const smallBadgeCardWidth = 200;
+export const smallBadgeCardHeight = 180;
+
 export const wrapper = css`
   position: relative;
   border-radius: 12px;
@@ -16,8 +19,9 @@ export const wrapperDisabled = css`
 `;
 
 export const wrapperSmall = css`
-  width: 200px;
-  min-width: 200px;
+  width: ${smallBadgeCardWidth}px;
+  min-width: ${smallBadgeCardWidth}px;
+  height: ${smallBadgeCardHeight}px;
   cursor: pointer;
   transition: background-color 0.1s ease-in-out;
   :hover, :active, :focus {
@@ -47,17 +51,25 @@ export const comingSoonOverlay = css`
   z-index: 1;
 `;
 
-export const badgeWrapper = () => css`
+export const badgeWrapper = css`
   border: 1px solid ${colors["neutrals-01"][3]};
-  padding: 24px 16px 16px 16px;
   display: flex;
   flex-direction: column;
   align-items: center;
-  justify-content: space-between;
   gap: 16px;
   position: relative;
   border-radius: 12px;
   width: 100%;
+`;
+
+export const badgeWrapperSmall = css`
+  height: 100%;
+  justify-content: center;
+`;
+
+export const badgeWrapperLarge = css`
+  padding: 24px 16px 16px 16px;
+  justify-content: space-between;
 `;
 
 export const badgeWrapperSelected = css`
@@ -75,7 +87,7 @@ export const imageWrapper = css`
   position: relative;
 `;
 
-export const image = css`
+export const badgeImage = css`
   width: 100%;
   height: 100%;
   object-fit: contain;

@@ -1,9 +1,10 @@
 import { allBookmarkResourceTypes } from "@/db/schema";
+import { idValidation } from "@/schemas/common.validation";
 
 import { z } from "zod";
 
 export const addOrRemoveBookmarkSchema = z.object({
-  resourceId: z.string().uuid(),
+  resourceId: idValidation,
   resourceType: z.enum(allBookmarkResourceTypes),
 });
 

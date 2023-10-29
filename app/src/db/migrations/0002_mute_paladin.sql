@@ -12,11 +12,13 @@ END $$;
 --> statement-breakpoint
 CREATE TABLE IF NOT EXISTS "Badge" (
 	"Id" uuid PRIMARY KEY DEFAULT gen_random_uuid() NOT NULL,
+	"Slug" text NOT NULL,
 	"Name" text NOT NULL,
 	"Description" text NOT NULL,
 	"ImageFilename" text NOT NULL,
 	"PublicationState" "BadgePublicationState" DEFAULT 'not-listed' NOT NULL,
-	CONSTRAINT "Badge_Id_unique" UNIQUE("Id")
+	CONSTRAINT "Badge_Id_unique" UNIQUE("Id"),
+	CONSTRAINT "Badge_Slug_unique" UNIQUE("Slug")
 );
 --> statement-breakpoint
 CREATE TABLE IF NOT EXISTS "User_to_Badge" (
