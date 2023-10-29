@@ -1,7 +1,9 @@
+import { idValidation } from "@/schemas/common.validation";
+
 import { z } from "zod";
 
 export const getCaseViewsSchema = z.object({
-  caseId: z.string().uuid(),
+  caseId: idValidation,
 });
 
 export type GetCaseViewsSchema = z.input<typeof getCaseViewsSchema>;

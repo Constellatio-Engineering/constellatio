@@ -3,20 +3,18 @@ import { api } from "@/utils/api";
 // eslint-disable-next-line @typescript-eslint/explicit-function-return-type
 const useBadges = () =>
 {
-  const { data: badges, error, isLoading } = api.badges.getBadges.useQuery(undefined, {
+  const { data, error, isLoading } = api.badges.getBadges.useQuery(undefined, {
     refetchOnMount: "always",
     refetchOnWindowFocus: "always", // TODO
     // staleTime: Infinity
   });
 
-  console.log("useBadges", badges);
-
   return {
     error,
     getBadgesResult: {
-      badges: badges?.badges ?? [],
-      completedCount: badges?.completedCount ?? 0,
-      totalCount: badges?.totalCount ?? 0,
+      badges: data?.badges ?? [],
+      completedCount: data?.completedCount ?? 0,
+      totalCount: data?.totalCount ?? 0,
     },
     isLoading
   };

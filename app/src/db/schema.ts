@@ -242,6 +242,7 @@ export type SearchIndexUpdateQueueItem = InferSelectModel<typeof searchIndexUpda
 
 export const badges = pgTable("Badge", {
   id: uuid("Id").defaultRandom().unique().notNull().primaryKey(),
+  slug: text("Slug").notNull().unique(),
   name: text("Name").notNull(),
   description: text("Description").notNull(),
   imageFilename: text("ImageFilename").notNull(),

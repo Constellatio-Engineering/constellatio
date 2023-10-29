@@ -1,7 +1,7 @@
 {
   "version": "5",
   "dialect": "pg",
-  "id": "9cee7c67-1247-4253-ac0c-fa48a55250df",
+  "id": "ecdd6474-29c7-4c4f-8fa7-d86be17cf531",
   "prevId": "6e392f19-195c-44d3-8a30-843f82c28343",
   "tables": {
     "ArticleView": {
@@ -67,6 +67,12 @@
           "notNull": true,
           "default": "gen_random_uuid()"
         },
+        "Slug": {
+          "name": "Slug",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true
+        },
         "Name": {
           "name": "Name",
           "type": "text",
@@ -102,6 +108,13 @@
           "nullsNotDistinct": false,
           "columns": [
             "Id"
+          ]
+        },
+        "Badge_Slug_unique": {
+          "name": "Badge_Slug_unique",
+          "nullsNotDistinct": false,
+          "columns": [
+            "Slug"
           ]
         }
       }

@@ -12,9 +12,13 @@ export const globalStyles = css`
     scroll-behavior: smooth;
     overflow-x: hidden;
   }
-
+  
   html [id], body [id] {
     scroll-margin: 50px !important;
+  }
+  
+  body {
+    position: relative;
   }
   
   a, button {

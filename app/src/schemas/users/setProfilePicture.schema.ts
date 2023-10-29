@@ -1,4 +1,5 @@
 import { imageFileExtensions, type ImageFileMimeType, imageFileMimeTypes } from "@/db/schema";
+import { idValidation } from "@/schemas/common.validation";
 
 import { z } from "zod";
 
@@ -10,7 +11,7 @@ export const setProfilePictureSchema = z.object({
     })
     .transform(contentType => contentType as ImageFileMimeType),
   fileExtensionLowercase: z.enum(imageFileExtensions),
-  id: z.string().uuid(),
+  id: idValidation,
   serverFilename: z.string(),
 });
 

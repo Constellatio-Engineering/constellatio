@@ -1,4 +1,5 @@
-import { contentValidation, folderIdValidation, idValidation, nameValidation } from "@/schemas/documents/document.validation";
+import { idValidation } from "@/schemas/common.validation";
+import { contentValidation, folderIdValidation, nameValidation } from "@/schemas/documents/document.validation";
 
 import { z } from "zod";
 
