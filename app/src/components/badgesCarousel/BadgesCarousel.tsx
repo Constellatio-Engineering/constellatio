@@ -20,7 +20,6 @@ const BadgesCarousel: FunctionComponent = () =>
       slideSize="160px"
       controlsOffset={0}
       controlSize={32}
-      withIndicators
       sx={{ 
         "&::after": {
           background: `linear-gradient(to left, ${theme.colors["neutrals-01"][0]} 0%, rgba(255,255,255,0) 10%)`,

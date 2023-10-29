@@ -99,7 +99,7 @@ const NewNotificationEarnedWatchdog: FunctionComponent = () =>
   {
     renderedBadge = previousBadge;
   }
-
+  const close = (): void => currentBadge && markBadgeAsSeen({ badgeId: currentBadge.id });
   return (
     <>
       <Modal
@@ -109,17 +109,11 @@ const NewNotificationEarnedWatchdog: FunctionComponent = () =>
         size="lg"
         radius="12px"
         styles={styles.newEarnedModalStyle()}
-        onClose={() =>
-        {
-          if(currentBadge)
-          {
-            markBadgeAsSeen({ badgeId: currentBadge.id });
-          }
-        }}
+        onClose={close}
         centered>
         <div css={styles.customModalHeader}>
           <Title order={2}>Neue Errungenschaft</Title>
-          <span onClick={() => currentBadge && markBadgeAsSeen({ badgeId: currentBadge.id })}><Cross size={32}/></span>
+          <span onClick={close}><Cross size={32}/></span>
         </div>
         {renderedBadge && (
           <div css={styles.contentWrapper}>

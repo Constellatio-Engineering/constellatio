@@ -1,7 +1,7 @@
 import ErrorPage from "@/components/errorPage/ErrorPage";
 import ChangePasswordTab from "@/components/organisms/changePasswordTab/ChangePasswordTab";
 import ProfileDetailsTab from "@/components/organisms/profileDetailsTab/ProfileDetailsTab";
-import ProfileHistoryTab from "@/components/organisms/profileHistoryTab/ProfileHistoryTab";
+// import ProfileHistoryTab from "@/components/organisms/profileHistoryTab/ProfileHistoryTab";
 import ProfileMenu from "@/components/organisms/profileMenu/ProfileMenu";
 import ProfileOverview from "@/components/organisms/profileOverview/ProfileOverview";
 import ProfilePageHeader from "@/components/organisms/profilePageHeader/ProfilePageHeader";
@@ -20,10 +20,10 @@ import * as styles from "./ProfilePage.styles";
 
 export const tabs = [
   { slug: "overview", title: "Übersicht" },
-  { slug: "history", title: "Verlauf" },
   { slug: "profile-details", title: "Einstellungen" },
   { slug: "change-password", title: "Passwort ändern" },
   { slug: "subscription", title: "Vertrag" },
+  // { slug: "history", title: "Verlauf" },
 ] as const;
 
 export type UserDetails = {
@@ -46,12 +46,12 @@ const ProfilePage: FunctionComponent<ProfilePageProps> = ({ allMainCategory, use
         return <ProfileDetailsTab/>;
       case "change-password":
         return <ChangePasswordTab/>;
-      case "history":
-        return <ProfileHistoryTab/>;
       case "subscription":
         return <SubscriptionTab subscriptionStatus="You are currently using a free 5-day trial. You can purchase a subscription by clicking the button below:"/>;
       default:
         return <>{`Unknown tab. Create tab type case in ProfilePage component: ${JSON.stringify(activeTab, null, 2)}`}</>;
+      // case "history":
+      //   return <ProfileHistoryTab/>;
       /* case "Notifications":
         return <ProfileNotificationsTab/>;*/
     }

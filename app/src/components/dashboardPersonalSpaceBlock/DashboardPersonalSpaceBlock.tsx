@@ -49,7 +49,7 @@ const DashboardPersonalSpaceBlock: FunctionComponent = () =>
                 favoritesList.slice(0, 6).map((favorite, i) => favorite?.title && (
                   <FavoriteCard
                     key={i}
-                    onClick={async () => router.push(`/${favorite?.__typename === "Case" ? "cases" : "dictionary"}/${favorite?.id}`)}
+                    // onClick={async () => router.push(`/${favorite?.__typename === "Case" ? "cases" : "dictionary"}/${favorite?.id}`)}
                     title={favorite.title}
                     variant={favorite?.__typename === "Case" ? "case" : "dictionary"}
                   />
