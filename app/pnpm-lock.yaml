@@ -29,6 +29,9 @@ dependencies:
   '@emotion/styled':
     specifier: 11.11.0
     version: 11.11.0(@emotion/react@11.11.1)(@types/react@18.2.31)(react@18.2.0)
+  '@formbricks/js':
+    specifier: 1.1.4
+    version: 1.1.4
   '@google-cloud/storage':
     specifier: 7.3.1
     version: 7.3.1
@@ -3418,6 +3421,10 @@ packages:
 
   /@floating-ui/utils@0.1.6:
     resolution: {integrity: sha512-OfX7E2oUDYxtBvsuS4e/jSn4Q9Qb6DzgeYtsAdkPZ47znpoNsMgZw0+tVijiv3uGNR6dgNlty6r9rzIzHjtd/A==}
+
+  /@formbricks/js@1.1.4:
+    resolution: {integrity: sha512-GdtNHoLXa9NpUE+0TJNR36O2sigManTT88aqefOlUXAdcu48litgEd4QGuHLDnQKNRJxcdHkLjU4EhWvfras5g==}
+    dev: false
 
   /@google-cloud/paginator@5.0.0:
     resolution: {integrity: sha512-87aeg6QQcEPxGCOthnpUjvw4xAZ57G7pL8FS0C4e/81fr3FjkpUpibf1s2v5XGyGhUVGF4Jfg7yEcxqn2iUw1w==}

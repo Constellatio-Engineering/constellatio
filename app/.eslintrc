@@ -2,7 +2,11 @@
   "parserOptions": {
     "project": "./tsconfig.json"
   },
-  "extends": ["@dualmeta/eslint-config-next", "plugin:storybook/recommended"],
+  "extends": [
+    "@dualmeta/eslint-config-next",
+    "plugin:storybook/recommended"
+    //"formbricks"
+  ],
   "ignorePatterns": [
     "src/services/graphql/__generated/*",
     "src/lib/database.types.ts"
@@ -40,12 +44,7 @@
           "regex": "^f_|^q_",
           "match": false
         },
-        "selector": [
-          "variable",
-          "parameter",
-          "classProperty",
-          "typeProperty"
-        ]
+        "selector": ["variable", "parameter", "classProperty", "typeProperty"]
       },
       {
         "format": ["PascalCase"],
@@ -71,12 +70,7 @@
           "wont",
           "are"
         ],
-        "selector": [
-          "variable",
-          "parameter",
-          "classProperty",
-          "typeProperty"
-        ],
+        "selector": ["variable", "parameter", "classProperty", "typeProperty"],
         "types": ["boolean"]
       },
       {

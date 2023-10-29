@@ -18,6 +18,9 @@ import { type AppProps } from "next/app";
 import Head from "next/head";
 import { appWithTranslation } from "next-i18next";
 
+// new formbricks
+import formbricks from "@formbricks/js";
+
 // new posthog stuff
 import posthog from "posthog-js";
 import { PostHogProvider } from "posthog-js/react";
@@ -46,9 +49,15 @@ if (typeof window !== "undefined") {
     loaded: (posthog) => {
       // Enable debug mode in development
       if (process.env.NODE_ENV === "development") {
-        posthog.debug(true);
+        posthog.debug(false);
       }
     },
+  });
+
+  formbricks.init({
+    environmentId: "clo8cm8q03hmhpm0gx5exp7bq",
+    apiHost: "https://app.formbricks.com",
+    debug: true, // remove when in production
   });
 }
 
@@ -78,7 +87,16 @@ const AppContainer: FunctionComponent<ConstellatioAppProps> = ({
   /* TODO:: placeholder overlay feedback button */
 
   useEffect(() => {
-    const handleRouteChange = () => posthog.capture("$pageview");
+    console.log("kommt in useEffect");
+
+    const handleRouteChange = () => {
+      console.log("kommt in route change complete handler");
+
+      posthog.capture("$pageview");
+
+      //frmbricks
+      formbricks?.registerRouteChange;
+    };
 
     supabase.auth.onAuthStateChange((event, session) => {
       //"INITIAL_SESSION" | "SIGNED_IN" | "SIGNED_OUT .. UPDATED etc vlt. noch ergänzen."
@@ -88,11 +106,19 @@ const AppContainer: FunctionComponent<ConstellatioAppProps> = ({
           const email = session?.user?.email;
           posthog.identify(id, { email: email });
           posthog.opt_in_capturing();
+
+          //formbricks
+          formbricks.setUserId(id);
+          formbricks.setUserEmail(email);
+
           break;
         }
         case "SIGNED_OUT": {
           posthog.opt_out_capturing();
           posthog.reset();
+
+          //formbricks
+          formbricks.logout();
         }
       }
 
@@ -193,6 +219,10 @@ const AppContainer: FunctionComponent<ConstellatioAppProps> = ({
                   <MeilisearchProvider>
                     <RouterTransition />
                     <Notifications />
+                    <button id="feedback-btn" className="absolute">
+                      FEEDBACK GEBEN
+                    </button>
+
                     {isRouterReady && <Component {...pageProps} />}
                   </MeilisearchProvider>
                 </ModalsProvider>
