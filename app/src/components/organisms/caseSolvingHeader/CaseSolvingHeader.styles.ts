@@ -32,7 +32,7 @@ export const body = css`
   align-items: center;
   flex-wrap: wrap;
   min-width: 100%;
-  padding: 100px 32px 100px 0;
+  padding: 100px 0px 100px 0;
   @media (max-width: 1100px) {
     padding: 60px 0;
     justify-content: center;

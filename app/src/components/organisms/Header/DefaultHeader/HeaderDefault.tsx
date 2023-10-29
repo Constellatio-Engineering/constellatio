@@ -30,7 +30,7 @@ interface IHeaderLink
 }
 const HeaderDefault: FunctionComponent = () => 
 {
-  const isTabletScreen = useMediaQuery("(max-width: 1024px)");
+  const isTabletScreen = useMediaQuery("(max-width: 1100px)");
   const { pathname } = useRouter();
   const theme = useMantineTheme();
   const { isLoading: isGetOnboardingResultLoading, onboardingResult } = useOnboardingResult();

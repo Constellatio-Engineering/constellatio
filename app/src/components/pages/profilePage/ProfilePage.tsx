@@ -68,9 +68,11 @@ const ProfilePage: FunctionComponent<ProfilePageProps> = ({ allMainCategory, use
         />
       )}
       <Container
+        p={0}
         maw="100%"
         css={styles.outerContianer}>
         <Container
+          p={0}
           maw={1440}
           css={styles.innerContainer}>
           <ProfileMenu

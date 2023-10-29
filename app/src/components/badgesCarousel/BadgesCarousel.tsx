@@ -2,6 +2,7 @@ import SkeletonSlide from "@/components/badgesCarousel/skeletonSlide/SkeletonSli
 import useBadges from "@/hooks/useBadges";
 
 import { Carousel } from "@mantine/carousel";
+import { useMantineTheme } from "@mantine/styles";
 import React, { type FunctionComponent } from "react";
 
 import BadgesDrawer from "../badgesDrawer/BadgesDrawer";
@@ -12,12 +13,45 @@ import ProfileBadgeCard from "../molecules/profileBadgeCard/ProfileBadgeCard";
 const BadgesCarousel: FunctionComponent = () => 
 {
   const { getBadgesResult: { badges }, isLoading } = useBadges();
-
+  const theme = useMantineTheme();
   return (
     <Carousel
       slideSize="160px"
-      controlsOffset="xs"
+      controlsOffset={-10}
       controlSize={32}
+      sx={{ 
+        "&::after": {
+          background: `linear-gradient(to left, ${theme.colors["neutrals-01"][0]} 0%, rgba(255,255,255,0) 10%)`,
+          content: "''",
+          height: "100%",
+          left: "0px",
+          pointerEvents: "none",
+          position: "absolute",
+          top: 0,
+          width: "100%",
+          zIndex: 1
+        },
+        "&::before": {
+          background: `linear-gradient(to right, ${theme.colors["neutrals-01"][0]} 0%, rgba(255,255,255,0) 10%)`,
+          content: "''",
+          height: "100%",
+          left: "-1px",
+          pointerEvents: "none",
+          position: "absolute",
+          top: 0,
+          width: "100%",
+          zIndex: 1
+        },
+        ".mantine-Carousel-controls": {
+          ".mantine-Carousel-control": {
+            backgroundColor: theme.colors["neutrals-01"][0],
+            opacity: 1,
+          },
+          left: "-3.5%",
+          width: "107%"
+        },
+        position: "relative"
+      }}
       nextControlIcon={<ArrowRightWithLine size={16}/>}
       previousControlIcon={<ArrowLeftWithLine size={16}/>}
       slideGap="16px"

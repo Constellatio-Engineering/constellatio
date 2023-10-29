@@ -22,12 +22,13 @@ export const wrapper = ({ theme, variant }: {
   margin: 0 auto;
   display: flex;
   align-items: center;
-  padding: 0 ${theme.spacing["spacing-24"]};
+  /* padding: 0 ${theme.spacing["spacing-12"]}; */
   ${variant === "simple" ? SimpleHeader : DefaultHeader}
 `;
 
 export const SHeader = styled.header`
   background: #fff;
+  padding: 0 60px;
   position: fixed;
   top: 0;
   width: 100%;

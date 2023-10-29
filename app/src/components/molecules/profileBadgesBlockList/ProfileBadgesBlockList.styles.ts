@@ -11,6 +11,7 @@ position:absolute;
 export const wrapper = css`
   display: flex;
   gap: 24px;
+  /* gap: 10px; on max width no extra white space */
   flex-wrap: wrap;
 `;
 export const showAllArea = (theme: MantineTheme) => css`

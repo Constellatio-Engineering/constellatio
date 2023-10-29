@@ -18,7 +18,7 @@ const ProfileBadgesBlockHead: FunctionComponent = () =>
 
   return (
     <div css={styles.badgesBlockHeader}>
-      <IconButton icon={<MedalIcon/>} size="big"/>
+      <IconButton icon={<MedalIcon/>} style={{ pointerEvents: "none" }} size="big"/>
       <div css={styles.headerLayout}>
         <div>
           <CaptionText css={styles.title} styleType="caption-01-medium" component="p">Badges</CaptionText>
