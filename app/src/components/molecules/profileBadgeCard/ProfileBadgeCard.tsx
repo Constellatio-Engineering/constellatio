@@ -4,7 +4,6 @@ import { CheckCircleRed } from "@/components/Icons/CheckCirleRed";
 import { type BadgeWithUserData } from "@/db/schema";
 import useDashboardPageStore from "@/stores/dashboardPage.store";
 
-import Image from "next/image";
 import React, { type FunctionComponent, useEffect, useRef, useState } from "react";
 
 import * as styles from "./ProfileBadgeCard.styles";

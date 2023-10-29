@@ -8,6 +8,7 @@ import { InvalidateQueriesContext } from "@/provider/InvalidateQueriesProvider";
 import { api } from "@/utils/api";
 
 import { useLocalStorage } from "@mantine/hooks";
+import { useSession } from "@supabase/auth-helpers-react";
 import React, { type FunctionComponent } from "react";
 import { z } from "zod";
 
@@ -19,9 +20,10 @@ import * as styles from "./NewNotificationEarnedWatchdog.styles";
  */
 const NewNotificationEarnedWatchdog: FunctionComponent = () =>
 {
+  const session = useSession();
   const apiUtils = api.useUtils();
   const { invalidateBadges } = useContextAndErrorIfNull(InvalidateQueriesContext);
-  const { getBadgesResult: { badges } } = useBadges();
+  const { getBadgesResult: { badges } } = useBadges({ disabled: session == null });
   const [dismissedBadges, setDismissedBadges] = useLocalStorage<string[]>({
     defaultValue: [],
     deserialize: (localStorageValue) => 

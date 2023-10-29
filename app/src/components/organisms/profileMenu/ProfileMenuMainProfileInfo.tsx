@@ -2,7 +2,7 @@ import { BodyText } from "@/components/atoms/BodyText/BodyText";
 import EditProfileImgModal from "@/components/editProfileImgModal/EditProfileImgModal";
 import { Edit } from "@/components/Icons/Edit";
 import ProfilePicture from "@/components/molecules/profilePicture/ProfilePicture";
-import { type UserDetails } from "@/components/pages/profilePage/ProfilePage";
+import { type UserFiltered } from "@/utils/filters";
 
 import { Title } from "@mantine/core";
 import { type FunctionComponent } from "react";
@@ -12,7 +12,11 @@ import * as styles from "./ProfileMenu.styles";
 
 const profilePictureSizeInPx = 90;
 
-const ProfileMenuMainProfileInfo: FunctionComponent<UserDetails> = ({ userDetails }) =>
+type Props = {
+  readonly userDetails: UserFiltered;
+};
+
+const ProfileMenuMainProfileInfo: FunctionComponent<Props> = ({ userDetails }) =>
 {
   const [showEditImgModal, setShowEditImgModal] = React.useState<boolean>(false);
 

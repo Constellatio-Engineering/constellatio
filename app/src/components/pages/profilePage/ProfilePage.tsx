@@ -2,10 +2,12 @@ import ChangePasswordTab from "@/components/organisms/changePasswordTab/ChangePa
 import ProfileDetailsTab from "@/components/organisms/profileDetailsTab/ProfileDetailsTab";
 import ProfileHistoryTab from "@/components/organisms/profileHistoryTab/ProfileHistoryTab";
 import ProfileMenu from "@/components/organisms/profileMenu/ProfileMenu";
+import RenderedTabSkeleton from "@/components/organisms/profileMenu/renderedTabSkeleton/RenderedTabSkeleton";
 import ProfileOverview from "@/components/organisms/profileOverview/ProfileOverview";
 import ProfilePageHeader from "@/components/organisms/profilePageHeader/ProfilePageHeader";
 import ProfileNavMenuTablet from "@/components/profileNavMenuTablet/ProfileNavMenuTablet";
 import SubscriptionTab from "@/components/subscriptionTab/SubscriptionTab";
+import useUserDetails from "@/hooks/useUserDetails";
 import { type IProfilePageProps } from "@/pages/profile";
 
 import { Container } from "@mantine/core";
@@ -29,15 +31,30 @@ const ProfilePage: FunctionComponent<ProfilePageProps> = ({ allMainCategory }) =
 {
   const [tab, setTab] = useQueryState("tab", parseAsString.withDefault(tabs[0]!.slug));
   const activeTab = tabs?.find(x => x.slug === tab);
+  const { error, isLoading, userDetails } = useUserDetails();
 
   const renderedTab: ReactNode = useMemo(() =>
   {
+    if(isLoading)
+    {
+      return <RenderedTabSkeleton/>;
+    }
+
+    if(error || !userDetails)
+    {
+      return (
+        <div>
+          <h2>Da ist leider etwas schief gelaufen...</h2>
+        </div>
+      );
+    }
+
     switch (activeTab?.slug)
     {
       case "overview":
         return <ProfileOverview allMainCategory={allMainCategory}/>;
       case "profile-details":
-        return <ProfileDetailsTab/>;
+        return <ProfileDetailsTab userDetails={userDetails}/>;
       case "change-password":
         return <ChangePasswordTab/>;
       case "history":
@@ -49,8 +66,10 @@ const ProfilePage: FunctionComponent<ProfilePageProps> = ({ allMainCategory }) =
       /* case "Notifications":
         return <ProfileNotificationsTab/>;*/
     }
-  }, [activeTab, allMainCategory]);
+  }, [activeTab, allMainCategory, error, isLoading, userDetails]);
+
   const isTabletScreen = useMediaQuery("(max-width: 1100px)");
+
   return (
     <div>
       <ProfilePageHeader/>
