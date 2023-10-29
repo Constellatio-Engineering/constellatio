@@ -62,7 +62,11 @@ const NewNotificationEarnedWatchdog: FunctionComponent = () =>
       {
         const newBadges = [...(getBadgesResult?.badges ?? [])];
         const badgeIndex = newBadges.findIndex(({ id }) => id === badgeId);
-        newBadges[badgeIndex]!.wasSeen = true;
+
+        if(badgeIndex !== -1)
+        {
+          newBadges[badgeIndex]!.wasSeen = true;
+        }
 
         return ({
           badges: newBadges,
