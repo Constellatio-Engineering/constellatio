@@ -5,6 +5,7 @@ import { ArrowDown } from "@/components/Icons/ArrowDown";
 import { ClockIcon } from "@/components/Icons/ClockIcon";
 import CaseBlockHead, { type ICaseBlockHeadProps } from "@/components/molecules/caseBlockHead/CaseBlockHead";
 import CaseBlockBookmarkButton from "@/components/organisms/caseBlock/caseBlockBookmarkButton/CaseBlockBookmarkButton";
+// import useAllCasesWithProgress from "@/hooks/useAllCasesWithProgress";
 import useBookmarks from "@/hooks/useBookmarks";
 import useCasesProgress from "@/hooks/useCasesProgress";
 import { type IGenArticle, type IGenFullCaseFragment } from "@/services/graphql/__generated/sdk";
@@ -99,7 +100,6 @@ const ItemBlock: FunctionComponent<ICaseBlockProps> = ({
           {items?.slice(0, numberOfShowingItems)?.map((item) =>
           {
             const caseProgress = casesProgress?.find((caseProgress) => caseProgress?.caseId === item?.id);
-
             const isBookmarked = bookmarks.some(bookmark => bookmark?.resourceId === item?.id) || false;
             const topicsCombined = item?.topic?.map((item) => item?.topicName).join(", ") || "";
             return item && item.id && (
