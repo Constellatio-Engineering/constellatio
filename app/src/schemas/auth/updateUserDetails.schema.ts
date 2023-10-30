@@ -1,9 +1,10 @@
-import { nameValidation, semesterValidation, universityValidation } from "@/schemas/auth/userData.validation";
+import { emailValidation, nameValidation, semesterValidation, universityValidation } from "@/schemas/auth/userData.validation";
 
 import { z } from "zod";
 
 export const updateUserDetailsSchema = z.object({
   displayName: nameValidation.optional(),
+  email: emailValidation.optional(),
   firstName: nameValidation.optional(),
   lastName: nameValidation.optional(),
   semester: semesterValidation.optional(),

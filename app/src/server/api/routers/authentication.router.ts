@@ -57,7 +57,7 @@ export const authenticationRouter = createTRPCRouter({
           id: userId,
           lastName: input.lastName,
           semester: input.semester,
-          university: input.university
+          university: input.university,
         };
 
         await db.insert(users).values(userToInsert);

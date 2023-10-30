@@ -1,3 +1,4 @@
+import ChangeEmailTab from "@/components/organisms/changeEmailTab/ChangeEmailTab";
 import ChangePasswordTab from "@/components/organisms/changePasswordTab/ChangePasswordTab";
 import ProfileDetailsTab from "@/components/organisms/profileDetailsTab/ProfileDetailsTab";
 import ProfileMenu from "@/components/organisms/profileMenu/ProfileMenu";
@@ -14,9 +15,13 @@ import React, { type FunctionComponent, type ReactNode, useMemo } from "react";
 
 import * as styles from "./ProfilePage.styles";
 
+export const tabQueryKey = "tab";
+export const changeEmailTabSlug = "change-email";
+
 export const tabs = [
   { slug: "overview", title: "Übersicht" },
   { slug: "profile-details", title: "Einstellungen" },
+  { slug: changeEmailTabSlug, title: "E-Mail ändern" },
   { slug: "change-password", title: "Passwort ändern" },
   { slug: "subscription", title: "Vertrag" },
   // { slug: "history", title: "Verlauf" },
@@ -24,7 +29,7 @@ export const tabs = [
 
 const ProfilePage: FunctionComponent = () =>
 {
-  const [tab, setTab] = useQueryState("tab", parseAsString.withDefault(tabs[0]!.slug));
+  const [tab, setTab] = useQueryState(tabQueryKey, parseAsString.withDefault(tabs[0]!.slug));
   const activeTab = tabs?.find(x => x.slug === tab);
   const { error, isLoading, userDetails } = useUserDetails();
 
@@ -52,6 +57,10 @@ const ProfilePage: FunctionComponent = () =>
         return <ProfileDetailsTab userDetails={userDetails}/>;
       case "change-password":
         return <ChangePasswordTab/>;
+      case "change-email":
+        return <ChangeEmailTab userDetails={userDetails}/>;
+      /* case "history":
+        return <ProfileHistoryTab/>;*/
       case "subscription":
         return <SubscriptionTab subscriptionStatus="You are currently using a free 5-day trial. You can purchase a subscription by clicking the button below:"/>;
       default:
@@ -72,7 +81,7 @@ const ProfilePage: FunctionComponent = () =>
       <Container
         p={0}
         maw="100%"
-        css={styles.outerContianer}>
+        css={styles.outerContainer}>
         <Container
           p={0}
           maw={1440}
