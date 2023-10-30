@@ -1,3 +1,4 @@
+import ChangeEmailTab from "@/components/organisms/changeEmailTab/ChangeEmailTab";
 import ChangePasswordTab from "@/components/organisms/changePasswordTab/ChangePasswordTab";
 import ProfileDetailsTab from "@/components/organisms/profileDetailsTab/ProfileDetailsTab";
 import ProfileMenu from "@/components/organisms/profileMenu/ProfileMenu";
@@ -17,6 +18,7 @@ import * as styles from "./ProfilePage.styles";
 export const tabs = [
   { slug: "overview", title: "Übersicht" },
   { slug: "profile-details", title: "Einstellungen" },
+  { slug: "change-email", title: "E-Mail ändern" },
   { slug: "change-password", title: "Passwort ändern" },
   { slug: "subscription", title: "Vertrag" },
   // { slug: "history", title: "Verlauf" },
@@ -52,6 +54,10 @@ const ProfilePage: FunctionComponent = () =>
         return <ProfileDetailsTab userDetails={userDetails}/>;
       case "change-password":
         return <ChangePasswordTab/>;
+      case "change-email":
+        return <ChangeEmailTab/>;
+      /* case "history":
+        return <ProfileHistoryTab/>;*/
       case "subscription":
         return <SubscriptionTab subscriptionStatus="You are currently using a free 5-day trial. You can purchase a subscription by clicking the button below:"/>;
       default:
@@ -72,7 +78,7 @@ const ProfilePage: FunctionComponent = () =>
       <Container
         p={0}
         maw="100%"
-        css={styles.outerContianer}>
+        css={styles.outerContainer}>
         <Container
           p={0}
           maw={1440}

@@ -2,14 +2,13 @@ import { Button } from "@/components/atoms/Button/Button";
 import { AlertCard } from "@/components/atoms/Card/AlertCard";
 import { Input } from "@/components/atoms/Input/Input";
 import ErrorCard from "@/components/errorCard/ErrorCard";
-// import { PasswordValidationSchema } from "@/components/helpers/PasswordValidationSchema";
 import PasswordInput from "@/components/organisms/RegistrationForm/form/PasswordInput";
 import { supabase } from "@/lib/supabase";
 import { type UpdatePasswordSchema, updatePasswordSchema, type UpdatePasswordValues } from "@/schemas/auth/updatePassword.schema";
 
 import { Title } from "@mantine/core";
 import { useForm, zodResolver } from "@mantine/form";
-// import { useDisclosure } from "@mantine/hooks";
+import { useMediaQuery } from "@mantine/hooks";
 import { useUser } from "@supabase/auth-helpers-react";
 import { useMutation } from "@tanstack/react-query";
 import React, { type FunctionComponent } from "react";
@@ -18,7 +17,6 @@ import * as styles from "../profileDetailsTab/ProfileDetailsTab.styles";
 
 const ChangePasswordTab: FunctionComponent = () => 
 {
-  // const [isPasswordRevealed, { toggle }] = useDisclosure(true);
   const user = useUser();
 
   const initialValues: UpdatePasswordSchema = {
