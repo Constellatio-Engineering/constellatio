@@ -11,6 +11,7 @@ type UseUserDetails = () => UseQueryResult<{
 const useUserDetails: UseUserDetails = () =>
 {
   const { data: userDetails, error, isLoading } = api.users.getUserDetails.useQuery(undefined, {
+    refetchOnMount: "always",
     staleTime: Infinity
   });
   

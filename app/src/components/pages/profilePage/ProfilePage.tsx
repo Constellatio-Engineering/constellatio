@@ -15,10 +15,13 @@ import React, { type FunctionComponent, type ReactNode, useMemo } from "react";
 
 import * as styles from "./ProfilePage.styles";
 
+export const tabQueryKey = "tab";
+export const changeEmailTabSlug = "change-email";
+
 export const tabs = [
   { slug: "overview", title: "Übersicht" },
   { slug: "profile-details", title: "Einstellungen" },
-  { slug: "change-email", title: "E-Mail ändern" },
+  { slug: changeEmailTabSlug, title: "E-Mail ändern" },
   { slug: "change-password", title: "Passwort ändern" },
   { slug: "subscription", title: "Vertrag" },
   // { slug: "history", title: "Verlauf" },
@@ -26,7 +29,7 @@ export const tabs = [
 
 const ProfilePage: FunctionComponent = () =>
 {
-  const [tab, setTab] = useQueryState("tab", parseAsString.withDefault(tabs[0]!.slug));
+  const [tab, setTab] = useQueryState(tabQueryKey, parseAsString.withDefault(tabs[0]!.slug));
   const activeTab = tabs?.find(x => x.slug === tab);
   const { error, isLoading, userDetails } = useUserDetails();
 

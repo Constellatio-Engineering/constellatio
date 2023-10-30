@@ -22,17 +22,16 @@ type Props = {
   readonly userDetails: UserFiltered;
 };
 
-const initialValues: UpdateEmailSchema = {
-  newEmail: "",
-};
-
 const ChangeEmailTab: FunctionComponent<Props> = ({ userDetails }) =>
 {
   const { t } = useTranslation();
   const isTabletScreen = useMediaQuery("(max-width: 1100px)");
 
   const form = useForm<UpdateEmailSchema>({
-    initialValues,
+    initialValues: {
+      currentEmail: userDetails?.email ?? "",
+      newEmail: "",
+    },
     validate: zodResolver(updateEmailSchema),
     validateInputOnBlur: true,
   });
@@ -60,7 +59,10 @@ const ChangeEmailTab: FunctionComponent<Props> = ({ userDetails }) =>
         throw changeEmailResult.error;
       }
 
-      form.setValues(initialValues);
+      form.setValues({
+        currentEmail: formValues.newEmail,
+        newEmail: "",
+      });
     },
     onError: (error) =>
     {
@@ -73,7 +75,7 @@ const ChangeEmailTab: FunctionComponent<Props> = ({ userDetails }) =>
   return (
     <div css={styles.wrapper}>
       {!isTabletScreen && <Title order={3}>E-Mail Adresse ändern</Title>}
-      <p style={{ fontSize: 17 }}>Deine aktuelle E-Mail Adresse: <strong>{userDetails?.email}</strong></p>
+      <p style={{ fontSize: 17 }}>Deine aktuelle E-Mail Adresse ist <strong>{userDetails?.email}</strong></p>
       <div
         style={{
           backgroundColor: "#e3e3e3", height: 1, margin: "30px 0 30px", width: "100%"
@@ -107,7 +109,7 @@ const ChangeEmailTab: FunctionComponent<Props> = ({ userDetails }) =>
             styleType="primary"
             disabled={!form.isDirty() || isLoading}
             size="large">
-            1. Bestätigungslink senden
+            Bestätigungslink senden
           </Button>
         </form>
       )}
