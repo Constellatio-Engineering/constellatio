@@ -34,6 +34,7 @@ export const contentHeader = ({ theme, variant }: {
       : variant === "red" && theme.colors["brand-01"][4]};
 		svg {
 			height: 100%;
+			max-width: 100%;
 		}
 	}
 

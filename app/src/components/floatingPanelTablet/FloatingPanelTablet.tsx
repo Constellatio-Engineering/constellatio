@@ -2,7 +2,7 @@ import {
   Drawer, type ModalBaseStylesNames, type Styles, UnstyledButton 
 } from "@mantine/core";
 import { useDisclosure } from "@mantine/hooks";
-import React, { type FunctionComponent } from "react";
+import React, { useState, type FunctionComponent } from "react";
 
 import * as styles from "./FloatingPanelTablet.styles";
 import { BoxIcon } from "../Icons/BoxIcon";
@@ -16,12 +16,25 @@ const FloatingPanelTablet: FunctionComponent<IFloatingPanelProps> = (props) =>
   const [opened, { close, open }] = useDisclosure(false);
   const drawerStyles: Styles<ModalBaseStylesNames> = { body: { padding: 0 } };
   const { variant } = props;
+  const [selectedTab, setSelectedTab] = useState<"Gliederung" | "Sachverhalt">("Gliederung");
   return (
     <div css={styles.wrapper}>
       <div css={styles.buttonsGroup}>
         {/* <UnstyledButton onClick={() => { console.log("floating panel tablet note button"); }}><NotepadFilled/>Notes</UnstyledButton> */}
-        <UnstyledButton onClick={open}><FileIcon/>Content</UnstyledButton>
-        {variant === "case" && <UnstyledButton onClick={open}><BoxIcon/>Facts</UnstyledButton>}
+        <UnstyledButton onClick={() => 
+        {
+          setSelectedTab("Gliederung");
+          open();
+        }}><FileIcon/>Gliederung
+        </UnstyledButton>
+        {variant === "case" && (
+          <UnstyledButton onClick={() => 
+          {
+            setSelectedTab("Sachverhalt");
+            open();
+          }}><BoxIcon/>Sachverhalt
+          </UnstyledButton>
+        )}
       </div>
       <Drawer
         withCloseButton={false}
@@ -33,7 +46,7 @@ const FloatingPanelTablet: FunctionComponent<IFloatingPanelProps> = (props) =>
         onClose={close}>
         <SlidingPanelTitle closeButtonAction={close} title="Gliederung & Sachverhalt" variant="default"/>
         <div className="custom-content">
-          <FloatingPanel {...props}/>
+          <FloatingPanel selectedTab={selectedTab} {...props}/>
         </div>
       </Drawer>
     </div>

@@ -208,6 +208,7 @@ const CaseCompleteTestsStep: FunctionComponent<ICaseCompleteTestsStepProps> = ({
               facts={facts}
               content={content}
               variant={variant}
+              selectedTab="Gliederung"
             />
           </div>
           {/* FloatingPanelTablet show on tablet views only controlled by: CSS media query  */}
