@@ -7,7 +7,7 @@ import { type NextPage } from "next";
 
 const Confirm: NextPage = () => (
   <>
-    <PageHead pageTitle="Alte E-Mail bestätigen"/>
+    <PageHead pageTitle="Änderung der E-Mail bestätigen"/>
     <Header variant="simple"/>
     <ConfirmEmailChangePage/>
     <Footer variant="simpleWhiteBg"/> 
