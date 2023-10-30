@@ -1,5 +1,4 @@
 import { Title } from "@mantine/core";
-import { useMediaQuery } from "@mantine/hooks";
 import React, { type FunctionComponent } from "react";
 
 import * as styles from "./SubscriptionTab.styles";
@@ -9,10 +8,9 @@ import SubscriptionCard from "../subscriptionCard/SubscriptionCard";
 
 const SubscriptionTab: FunctionComponent<{readonly subscriptionStatus?: string}> = ({ subscriptionStatus }) => 
 {
-  const isTabletScreen = useMediaQuery("(max-width: 1100px)"); 
   return (
     <div css={styles.wrapper}>
-      {!isTabletScreen && <Title order={3}>Vertrag</Title>}
+      <Title css={styles.subscriptionTabTitle} order={3}>Vertrag</Title>
       <BodyText m="32px 0" styleType="body-01-regular" component="p">{subscriptionStatus ?? "Manage your subscription by clicking the button below:"}</BodyText>
       <SubscriptionCard/>
       <Button<"button"> styleType="primary" style={{ display: "block", width: "100%" }}>Manage subscription</Button>

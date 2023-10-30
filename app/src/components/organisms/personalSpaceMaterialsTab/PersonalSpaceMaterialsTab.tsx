@@ -5,8 +5,6 @@ import useDocuments from "@/hooks/useDocuments";
 import useMaterialsStore from "@/stores/materials.store";
 import uploadsProgressStore from "@/stores/uploadsProgress.store";
 
-import { Container } from "@mantine/core";
-import { useMediaQuery } from "@mantine/hooks";
 import React, { type FunctionComponent } from "react";
 
 import * as styles from "./PersonalSpaceMaterialsTab.styles";
@@ -22,10 +20,9 @@ const PersonalSpaceMaterialsTab: FunctionComponent = () =>
   const { setUploadState, uploads } = uploadsProgressStore();
   const { selectedFileIdForPreview } = useMaterialsStore();
   const areUploadsInProgress = uploads.some(u => u.state.type === "uploading");
-  const isBigScreen = useMediaQuery("(min-width: 1200px)");
 
   return (
-    <Container p={isBigScreen ? "0px 61px" : "0px 32px"} maw={1440}>
+    <div css={styles.container}>
       <div css={styles.materialTabContainerContent}>
         <MaterialMenu/>        
         <FoldersMenuTablet/>
@@ -47,7 +44,7 @@ const PersonalSpaceMaterialsTab: FunctionComponent = () =>
           )}
         </div>
       </div>
-    </Container>
+    </div>
   );
 };
 

@@ -7,3 +7,9 @@ export const wrapper = css`
         margin:0 auto;
     }
 `;
+export const subscriptionTabTitle = css`
+    display: block;
+    @media screen and (max-width: 1100px) {
+        display: none;
+    }
+`;
