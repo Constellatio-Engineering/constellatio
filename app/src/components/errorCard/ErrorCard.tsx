@@ -7,6 +7,7 @@ type HandledError =
   | "emailNotConfirmed"
   | "invalidCredentials"
   | "passwordsMatch"
+  | "emailAlreadyRegistered"
   | "unknownError";
 
 type OverwriteErrorMessages = {
@@ -36,6 +37,7 @@ const ErrorCard: FunctionComponent<ErrorCardsProps> = ({ error, marginBottom = 2
         case "Email not confirmed": { return "emailNotConfirmed"; }
         case "Invalid login credentials": { return "invalidCredentials"; }
         case "New password should be different from the old password.": { return "passwordsMatch"; }
+        case "A user with this email address has already been registered": { return "emailAlreadyRegistered"; }
         default: { return "unknownError"; }
       }
     }
@@ -63,6 +65,11 @@ const ErrorCard: FunctionComponent<ErrorCardsProps> = ({ error, marginBottom = 2
       {renderedError === "passwordsMatch" && (
         <AlertCard variant="error">
           {overwriteErrorMessages?.passwordsMatch ?? "Das neue Passwort muss sich vom alten Passwort unterscheiden."}
+        </AlertCard>
+      )}
+      {renderedError === "emailAlreadyRegistered" && (
+        <AlertCard variant="error">
+          {overwriteErrorMessages?.emailAlreadyRegistered ?? "Diese E-Mail Adresse wird bereits verwendet."}
         </AlertCard>
       )}
       {renderedError === "unknownError" && (

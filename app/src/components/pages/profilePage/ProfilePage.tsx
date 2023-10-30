@@ -55,7 +55,7 @@ const ProfilePage: FunctionComponent = () =>
       case "change-password":
         return <ChangePasswordTab/>;
       case "change-email":
-        return <ChangeEmailTab/>;
+        return <ChangeEmailTab userDetails={userDetails}/>;
       /* case "history":
         return <ProfileHistoryTab/>;*/
       case "subscription":

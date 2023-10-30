@@ -4,7 +4,7 @@ import React, { type FunctionComponent } from "react";
 import * as styles from "./ConfirmPage.styles";
 import EmailConfirmCard from "../emailConfirmCard/EmailConfirmCard";
 
-const ConfirmPage: FunctionComponent = () => 
+const ConfirmEmailPage: FunctionComponent = () =>
 {
   const router = useRouter();
   const urlSearchParams = new URLSearchParams(router.asPath.split("#")[1]);
@@ -16,4 +16,4 @@ const ConfirmPage: FunctionComponent = () =>
   );
 };
 
-export default ConfirmPage;
+export default ConfirmEmailPage;

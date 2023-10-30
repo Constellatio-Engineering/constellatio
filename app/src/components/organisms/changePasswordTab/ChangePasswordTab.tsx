@@ -11,12 +11,16 @@ import { useForm, zodResolver } from "@mantine/form";
 import { useMediaQuery } from "@mantine/hooks";
 import { useUser } from "@supabase/auth-helpers-react";
 import { useMutation } from "@tanstack/react-query";
-import React, { type FunctionComponent } from "react";
+import { useTranslation } from "next-i18next";
+import React, { type FunctionComponent, useEffect } from "react";
+import z from "zod";
+import { makeZodI18nMap } from "zod-i18n-map";
 
 import * as styles from "../profileDetailsTab/ProfileDetailsTab.styles";
 
 const ChangePasswordTab: FunctionComponent = () => 
 {
+  const { t } = useTranslation();
   const user = useUser();
 
   const initialValues: UpdatePasswordSchema = {
@@ -31,6 +35,11 @@ const ChangePasswordTab: FunctionComponent = () =>
     validate: zodResolver(updatePasswordSchema),
     validateInputOnBlur: true,
   });
+
+  useEffect(() =>
+  {
+    z.setErrorMap(makeZodI18nMap({ t }));
+  }, [t]);
 
   const {
     error,
