@@ -34,6 +34,7 @@ export const badgesRouter = createTRPCRouter({
           isCompleted: badge.usersToBadges[0]?.hasCompletedBadge ?? false,
           name: badge.name,
           publicationState: badge.publicationState,
+          slug: badge.slug,
           wasSeen: badge.usersToBadges[0]?.userBadgeState === "seen" ?? false,
         }))
         .sort((a, b) => 

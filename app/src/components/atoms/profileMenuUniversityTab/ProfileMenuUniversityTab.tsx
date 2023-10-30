@@ -1,4 +1,5 @@
 import CaisyImg from "@/basic-components/CaisyImg";
+import { transformSemesterToString } from "@/utils/data-transformation";
 
 import Image from "next/image";
 import React, { type FunctionComponent } from "react";
@@ -10,12 +11,22 @@ import { BodyText } from "../BodyText/BodyText";
 interface ProfileMenuUniversityTabProps
 {
   readonly imgSrc?: string;
-  readonly semester: string;
-  readonly title: string;
+  readonly semester: number | null;
+  readonly university: string | null;
 }
 
-const ProfileMenuUniversityTab: FunctionComponent<ProfileMenuUniversityTabProps> = ({ imgSrc, semester, title }) => 
+const ProfileMenuUniversityTab: FunctionComponent<ProfileMenuUniversityTabProps> = ({ imgSrc, semester, university }) =>
 {
+  if(!university && !semester)
+  {
+    return null;
+  }
+
+  if(!university)
+  {
+    university = "Keine Universität angegeben";
+  }
+
   return (
     <div css={styles.wrapper}>
       {imgSrc ? (
@@ -31,8 +42,8 @@ const ProfileMenuUniversityTab: FunctionComponent<ProfileMenuUniversityTabProps>
         </div>
       )}
       <div css={styles.text}>
-        {title && <BodyText styleType="body-01-medium" title={title} component="p">{title}</BodyText>}
-        {semester && <BodyText styleType="body-01-medium" component="p" css={styles.semesterText}>{semester}</BodyText>}
+        <BodyText styleType="body-01-medium" title={university} component="p">{university}</BodyText>
+        {(semester != null) && <BodyText styleType="body-01-medium" component="p" css={styles.semesterText}>{transformSemesterToString(semester, true)}</BodyText>}
       </div>
     </div>
   );

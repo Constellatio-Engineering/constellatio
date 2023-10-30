@@ -1,34 +1,26 @@
 import { Svg } from "@/basic-components/SVG/Svg";
 import ProgressCard from "@/components/molecules/progressCard/ProgressCard";
-import { type IProfilePageProps } from "@/pages/profile";
+import useMainCategories from "@/hooks/useMainCategories";
 
 import React, { type FunctionComponent } from "react";
 
 import * as styles from "./ProgressCardSection.styles";
 
-interface ProgressCardSectionProps
+const ProgressCardSection: FunctionComponent = () =>
 {
-  readonly mainCategories: IProfilePageProps["allMainCategory"];
+  const { allMainCategories } = useMainCategories();
 
-}
-
-const ProgressCardSection: FunctionComponent<ProgressCardSectionProps> = ({
-  mainCategories
-}) => 
-{
   return (
     <div css={styles.wrapper}>
-      {
-        mainCategories?.map((mainCategory, i) => (
-          <ProgressCard
-            key={i}
-            completed={12}
-            icon={<Svg src={mainCategory?.icon?.src}/>}
-            title={mainCategory?.mainCategory ?? ""}
-            total={0}
-          />
-        ))
-      } 
+      {allMainCategories?.map((mainCategory, i) => (
+        <ProgressCard
+          key={i}
+          completed={12}
+          icon={<Svg src={mainCategory?.icon?.src}/>}
+          title={mainCategory?.mainCategory ?? ""}
+          total={0}
+        />
+      ))} 
     </div>
   );
 };

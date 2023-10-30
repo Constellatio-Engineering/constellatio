@@ -4,6 +4,7 @@ import {
   type ProfilePictureInsert, profilePictures, users
 } from "@/db/schema";
 import { env } from "@/env.mjs";
+import { updateUserDetailsSchema } from "@/schemas/auth/updateUserDetails.schema";
 import { generateCreateSignedUploadUrlSchema } from "@/schemas/uploads/createSignedUploadUrl.schema";
 import { setOnboardingResultSchema } from "@/schemas/users/setOnboardingResult.schema";
 import { setProfilePictureSchema } from "@/schemas/users/setProfilePicture.schema";
@@ -90,5 +91,11 @@ export const usersRouter = createTRPCRouter({
         },
         target: profilePictures.userId,
       });
+    }),
+  updateUserDetails: protectedProcedure
+    .input(updateUserDetailsSchema)
+    .mutation(async ({ ctx: { userId }, input }) =>
+    {
+      await db.update(users).set(input).where(eq(users.id, userId));
     })
 });

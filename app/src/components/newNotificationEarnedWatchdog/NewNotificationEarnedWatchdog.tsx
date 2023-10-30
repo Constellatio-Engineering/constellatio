@@ -4,11 +4,12 @@ import { type BadgeWithUserData } from "@/db/schema";
 import useBadges from "@/hooks/useBadges";
 import useContextAndErrorIfNull from "@/hooks/useContextAndErrorIfNull";
 import { usePrevious } from "@/hooks/usePrevious";
+import { AuthStateContext } from "@/provider/AuthStateProvider";
 import { InvalidateQueriesContext } from "@/provider/InvalidateQueriesProvider";
 import { api } from "@/utils/api";
 
 import { useLocalStorage } from "@mantine/hooks";
-import React, { type FunctionComponent } from "react";
+import React, { type FunctionComponent, useContext } from "react";
 import { z } from "zod";
 
 import * as styles from "./NewNotificationEarnedWatchdog.styles";
@@ -19,9 +20,10 @@ import * as styles from "./NewNotificationEarnedWatchdog.styles";
  */
 const NewNotificationEarnedWatchdog: FunctionComponent = () =>
 {
+  const { isUserLoggedIn } = useContext(AuthStateContext);
   const apiUtils = api.useUtils();
   const { invalidateBadges } = useContextAndErrorIfNull(InvalidateQueriesContext);
-  const { getBadgesResult: { badges } } = useBadges();
+  const { getBadgesResult: { badges } } = useBadges({ disabled: !isUserLoggedIn });
   const [dismissedBadges, setDismissedBadges] = useLocalStorage<string[]>({
     defaultValue: [],
     deserialize: (localStorageValue) => 

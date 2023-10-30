@@ -20,9 +20,9 @@ export const AlertCard: FC<AlertCardProps> = ({
 {
   return (
     <Alert
+      {...props}
       styles={cardStyles({ stylesOverwrite, variant })}
-      icon={variant === "success" ? <CheckCircle size={24}/> : <AlertStoke size={24}/>}
-      {...props}>
+      icon={variant === "success" ? <CheckCircle size={24}/> : <AlertStoke size={24}/>}>
       {children}
     </Alert>
   );

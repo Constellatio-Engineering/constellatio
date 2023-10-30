@@ -13,7 +13,9 @@ import { isProduction } from "@/utils/env";
 
 import { ModalsProvider } from "@mantine/modals";
 import { Notifications } from "@mantine/notifications";
-import { type Session, SessionContextProvider } from "@supabase/auth-helpers-react";
+import {
+  type Session, SessionContextProvider
+} from "@supabase/auth-helpers-react";
 import { type AppProps } from "next/app";
 import Head from "next/head";
 import { useRouter } from "next/router";
