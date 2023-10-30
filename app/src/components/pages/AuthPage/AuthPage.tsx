@@ -10,6 +10,8 @@ import { useMediaQuery } from "@mantine/hooks";
 import { useRouter } from "next/router";
 import { type FC } from "react";
 
+import * as styles from "./AuthPage.styles";
+
 export interface AuthPageProps
 {
   readonly tab: "login" | "register";
@@ -19,21 +21,19 @@ export const AuthPage: FC<AuthPageProps> = ({ tab }) =>
 {
   const router = useRouter();
   const handleTabChange: (value: AuthPageProps["tab"]) => Promise<boolean> = async (value) => router.push(`/${value}`);
-  const isBigScreen = useMediaQuery("(min-width: 961px)");
 
   return (
     <Flex
       justify="space-between"
       bg="brand-01.5"
       sx={{ height: "100vh", minHeight: 600, overflow: "hidden" }}>
-      {isBigScreen && <RegistrationVisualHeader/>}
+      <RegistrationVisualHeader/>
       <Container
         w="100%"
         pt={20}
+        css={styles.wrapper}
         sx={(theme) => ({
           backgroundColor: theme.colors["neutrals-01"][0],
-          borderRadius: isBigScreen ? `${theme.radius["radius-16"]} 0 0 ${theme.radius["radius-16"]}` : 0,
-          // this is to get rid of the right red bar to the right of the form, but gets too big on small screens
           marginRight: 0,
           overflowY: "auto",
           paddingTop: "0px !important",

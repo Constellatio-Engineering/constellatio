@@ -21,8 +21,8 @@ export const registrationFormSchema = z
     lastName: nameValidation,
     password: passwordSchema,
     passwordConfirmation: passwordSchema,
-    semester: semesterValidation.optional(),
-    university: universityValidation,
+    semester: semesterValidation.nullable(),
+    university: universityValidation.nullable(),
   })
   .refine(data => data.passwordConfirmation === data.password, {
     message: "Die Passwörter stimmen nicht überein",

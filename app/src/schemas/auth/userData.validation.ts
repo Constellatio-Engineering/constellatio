@@ -1,4 +1,4 @@
-import { allGenderIdentifiers } from "@/db/schema";
+import { allGenderIdentifiers, type GenderIdentifier } from "@/db/schema";
 
 import { z } from "zod";
 
@@ -11,7 +11,6 @@ export const passwordRequirements = [
 ];
 
 export const allUniversities = [
-  "-",
   "Albert-Ludwigs-Universität Freiburg",
   "Bucerius Law School",
   "Christian-Albrechts-Universität zu Kiel",
@@ -60,41 +59,37 @@ export type University = typeof allUniversities[number];
 export const maximumAmountOfSemesters = 15 as const;
 export const nameValidation = z.string().min(2);
 export const emailValidation = z.string().email();
-export const genderValidation = z.enum(allGenderIdentifiers, {
+export const genderValidationOld = z.enum(allGenderIdentifiers, {
   errorMap: (_issue, { data }) => ({
     message: (data == null || data.length === 0) ? "Ein Geschlecht ist erforderlich" : "Ungültiges Geschlecht"
   })
 });
-export const semesterValidation = z.string().pipe(z.coerce.number().int().max(maximumAmountOfSemesters));
-export const universityValidationOld = z.enum(allUniversities, {
-  errorMap: (_issue, { data }) => ({
-    message: (data == null || data.length === 0) ? "Eine Universität ist erforderlich" : "Ungültige Universität"
-  })
-});
 
-export const universityValidation = z.string().transform((value, context) =>
+export const genderValidation = z.string().nullable().transform((value, context) =>
 {
   if(value == null || value.length === 0)
   {
     context.addIssue({
       code: z.ZodIssueCode.custom,
-      message: "Eine Universität ist erforderlich",
+      message: "Ein Geschlecht ist erforderlich",
     });
     return z.NEVER;
   }
 
-  if(!allUniversities.includes(value))
+  if(!allGenderIdentifiers.includes(value))
   {
     context.addIssue({
       code: z.ZodIssueCode.custom,
-      message: "Ungültige Universität",
+      message: "Ungültiges Geschlecht",
     });
     return z.NEVER;
   }
 
-  return value as University;
+  return value as GenderIdentifier;
 });
 
+export const semesterValidation = z.string().pipe(z.coerce.number().int().max(maximumAmountOfSemesters));
+export const universityValidation = z.enum(allUniversities);
 export const passwordSchema = z.string().refine(password => passwordRequirements.every(r => r.re.test(password)), {
   message: "Passwort erfüllt nicht die Anforderungen",
 });

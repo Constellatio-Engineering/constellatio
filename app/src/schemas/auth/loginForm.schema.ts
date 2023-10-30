@@ -4,5 +4,7 @@ import { z } from "zod";
 
 export const loginFormSchema = z.object({
   email: emailValidation,
-  password: z.string()
+  password: z.string().min(1)
 });
+
+export type LoginFormSchema = z.input<typeof loginFormSchema>;

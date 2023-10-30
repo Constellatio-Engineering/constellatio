@@ -7,7 +7,7 @@ import { colors } from "@/constants/styles/colors";
 import useContextAndErrorIfNull from "@/hooks/useContextAndErrorIfNull";
 import { supabase } from "@/lib/supabase";
 import { InvalidateQueriesContext } from "@/provider/InvalidateQueriesProvider";
-import { loginFormSchema } from "@/schemas/auth/loginForm.schema";
+import { type LoginFormSchema, loginFormSchema } from "@/schemas/auth/loginForm.schema";
 import { paths } from "@/utils/paths";
 import { queryParams } from "@/utils/query-params";
 
@@ -15,8 +15,12 @@ import { Stack } from "@mantine/core";
 import { useForm, zodResolver } from "@mantine/form";
 import { AuthError } from "@supabase/gotrue-js";
 import { useAtom } from "jotai";
+import Link from "next/link";
 import { useRouter } from "next/router"; 
-import { type FunctionComponent, useState } from "react";
+import { useTranslation } from "next-i18next";
+import { type FunctionComponent, useEffect, useState } from "react";
+import z from "zod";
+import { makeZodI18nMap } from "zod-i18n-map";
 
 import { ResetPasswordModal, resetPasswordModalVisible } from "../ResetPasswordModal/ResetPasswordModal";
 
@@ -24,6 +28,7 @@ type SignInError = "emailNotConfirmed" | "invalidCredentials" | "unknownError";
 
 export const LoginForm: FunctionComponent = () =>
 {
+  const { t } = useTranslation();
   const router = useRouter();
   const wasPasswordUpdated = router.query[queryParams.passwordResetSuccess] === "true";
   const redirectTo = router.query[queryParams.redirectedFrom];
@@ -31,7 +36,7 @@ export const LoginForm: FunctionComponent = () =>
   const [, setResetPasswordModalOpen] = useAtom(resetPasswordModalVisible);
   const [isLoginInProgress, setIsLoginInProgress] = useState(false);
   const [signInError, setSignInError] = useState<SignInError>();
-  const form = useForm({
+  const form = useForm<LoginFormSchema>({
     initialValues: {
       email: "",
       password: "",
@@ -39,6 +44,11 @@ export const LoginForm: FunctionComponent = () =>
     validate: zodResolver(loginFormSchema),
     validateInputOnBlur: true,
   });
+
+  useEffect(() =>
+  {
+    z.setErrorMap(makeZodI18nMap({ t }));
+  }, [t]);
 
   const openResetPasswordModal = (): void => setResetPasswordModalOpen(true);
 
@@ -128,8 +138,8 @@ export const LoginForm: FunctionComponent = () =>
           </CustomLink>
           <CustomLink
             styleType="link-secondary"
-            component="button"
-            onClick={() => void router.push(paths.register)}
+            component={Link}
+            href={paths.register}
             stylesOverwrite={{ color: colors["neutrals-02"][2], textAlign: "left" }}>
             Du hast noch kein Konto?
           </CustomLink>

@@ -2,7 +2,7 @@ import { AlertCard } from "@/components/atoms/Card/AlertCard";
 import { Dropdown } from "@/components/atoms/Dropdown/Dropdown";
 import { Input } from "@/components/atoms/Input/Input";
 import { type UpdateUserDetailsSchema, updateUserDetailsSchema } from "@/schemas/auth/updateUserDetails.schema";
-import { maximumAmountOfSemesters } from "@/schemas/auth/userData.validation";
+import { allUniversities, maximumAmountOfSemesters } from "@/schemas/auth/userData.validation";
 import { type UserFiltered } from "@/utils/filters";
 
 import { Title, Box } from "@mantine/core";
@@ -12,8 +12,6 @@ import React, { type FunctionComponent } from "react";
 
 import * as styles from "./ProfileDetailsTab.styles";
 import { Button } from "../../atoms/Button/Button";
-// import { decimalToRoman } from "../floatingPanel/generateTocHelper";
-import { allUniversities } from "../RegistrationForm/RegistrationForm.data";
 
 type Props = {
   readonly userDetails: UserFiltered;
