@@ -13,6 +13,10 @@ export const wrapper = (theme: MantineTheme) => css`
    left: 50%;
    transform: translateX(-50%);
    z-index: 3;
+   display:none;
+   @media screen and (max-width: 1100px) {
+      display:block;
+   }
    
 `;
 export const buttonsGroup = (theme: MantineTheme) => css`

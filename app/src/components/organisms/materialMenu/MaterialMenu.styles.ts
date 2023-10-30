@@ -13,8 +13,9 @@ export const wrapper = (theme: MantineTheme) => css`
     max-height: 400px;
     margin: 0 auto;
 
-  @media screen and (max-width: 1100px) {
-    width: 100%;
+  @media screen and (max-width: 1200px) {
+    /* width: 100%; */
+    display: none;
   }
 
 `;

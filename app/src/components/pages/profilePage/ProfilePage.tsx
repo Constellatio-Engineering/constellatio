@@ -17,7 +17,6 @@ import * as styles from "./ProfilePage.styles";
 
 export const tabs = [
   { slug: "overview", title: "Übersicht" },
-  /* { slug: "history", title: "Verlauf" },*/
   { slug: "profile-details", title: "Einstellungen" },
   { slug: "change-password", title: "Passwort ändern" },
   { slug: "subscription", title: "Vertrag" },
@@ -54,8 +53,6 @@ const ProfilePage: FunctionComponent = () =>
         return <ProfileDetailsTab userDetails={userDetails}/>;
       case "change-password":
         return <ChangePasswordTab/>;
-      /* case "history":
-        return <ProfileHistoryTab/>;*/
       case "subscription":
         return <SubscriptionTab subscriptionStatus="You are currently using a free 5-day trial. You can purchase a subscription by clicking the button below:"/>;
       default:

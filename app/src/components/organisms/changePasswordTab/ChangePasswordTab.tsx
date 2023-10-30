@@ -9,7 +9,7 @@ import { type UpdatePasswordSchema, updatePasswordSchema, type UpdatePasswordVal
 
 import { Title } from "@mantine/core";
 import { useForm, zodResolver } from "@mantine/form";
-import { useDisclosure, useMediaQuery } from "@mantine/hooks";
+import { useDisclosure } from "@mantine/hooks";
 import { useUser } from "@supabase/auth-helpers-react";
 import { useMutation } from "@tanstack/react-query";
 import React, { type FunctionComponent } from "react";
@@ -20,7 +20,6 @@ const ChangePasswordTab: FunctionComponent = () =>
 {
   const [isPasswordRevealed, { toggle }] = useDisclosure(true);
   const user = useUser();
-  const isTabletScreen = useMediaQuery("(max-width: 1100px)");
 
   const initialValues: UpdatePasswordSchema = {
     currentPassword: "",
@@ -90,7 +89,7 @@ const ChangePasswordTab: FunctionComponent = () =>
 
   return (
     <div css={styles.wrapper}>
-      {!isTabletScreen && <Title order={3}>Change password</Title>}
+      <Title css={styles.changePasswordTitle} order={3}>Change password</Title>
       <ErrorCard
         error={error}
         marginBottom={0}

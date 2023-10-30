@@ -3,7 +3,7 @@ import useOnboardingResult from "@/hooks/useOnboardingResult";
 import { isDevelopment } from "@/utils/env";
 import { paths } from "@/utils/paths";
 
-import { useMediaQuery } from "@mantine/hooks";
+// import { useMediaQuery } from "@mantine/hooks";
 import { useMantineTheme } from "@mantine/styles";
 import Image from "next/image";
 import Link from "next/link";
@@ -30,7 +30,6 @@ interface IHeaderLink
 }
 const HeaderDefault: FunctionComponent = () => 
 {
-  const isTabletScreen = useMediaQuery("(max-width: 1100px)");
   const { pathname } = useRouter();
   const theme = useMantineTheme();
   const { isLoading: isGetOnboardingResultLoading, onboardingResult } = useOnboardingResult();
@@ -58,7 +57,8 @@ const HeaderDefault: FunctionComponent = () =>
         <div css={styles.wrapper({ theme, variant: "default" })}>
           <div css={styles.links}>
             <Link href="/">
-              <Image src={isTabletScreen ? ConstellatioLogoIcon : ConstellatioFullLogo} alt="Constellatio"/>
+              <Image css={styles.tabletHeaderLogo} src={ConstellatioLogoIcon} alt="Constellatio"/>
+              <Image css={styles.headerLogo} src={ConstellatioFullLogo} alt="Constellatio"/>
             </Link>
             {links.map((link, linkIndex) => 
               linkIndex === 1 ? (

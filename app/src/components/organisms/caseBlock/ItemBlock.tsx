@@ -11,7 +11,6 @@ import useCasesProgress from "@/hooks/useCasesProgress";
 import { type IGenArticle, type IGenFullCaseFragment } from "@/services/graphql/__generated/sdk";
 import { paths } from "@/utils/paths";
 
-// import { useMediaQuery } from "@mantine/hooks";
 import { useMediaQuery } from "@mantine/hooks";
 import Link from "next/link";
 import React, { type FunctionComponent } from "react";

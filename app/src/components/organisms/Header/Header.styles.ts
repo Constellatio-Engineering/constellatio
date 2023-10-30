@@ -92,3 +92,15 @@ export const profileArea = (theme: MantineTheme) => css`
     overflow: hidden;
   }
 `;
+export const tabletHeaderLogo = css`
+  display: none;
+  @media screen and (max-width: 1100px) {
+    display: block;
+  }
+`;
+export const headerLogo = css`
+  display: block;
+  @media screen and (max-width: 1100px) {
+    display: none;
+  }
+`;
