@@ -8,7 +8,10 @@ import { type UserFiltered } from "@/utils/filters";
 import { Title, Box } from "@mantine/core";
 import { useForm, zodResolver } from "@mantine/form";
 import { useMediaQuery } from "@mantine/hooks";
-import React, { type FunctionComponent } from "react";
+import { useTranslation } from "next-i18next";
+import React, { type FunctionComponent, useEffect } from "react";
+import z from "zod";
+import { makeZodI18nMap } from "zod-i18n-map";
 
 import * as styles from "./ProfileDetailsTab.styles";
 import { Button } from "../../atoms/Button/Button";
@@ -19,6 +22,7 @@ type Props = {
 
 const ProfileDetailsTab: FunctionComponent<Props> = ({ userDetails }) =>
 {
+  const { t } = useTranslation();
   const isTabletScreen = useMediaQuery("(max-width: 1100px)");
   const form = useForm<UpdateUserDetailsSchema>({
     initialValues: {
@@ -31,6 +35,11 @@ const ProfileDetailsTab: FunctionComponent<Props> = ({ userDetails }) =>
     validate: zodResolver(updateUserDetailsSchema),
     validateInputOnBlur: true,
   });
+
+  useEffect(() =>
+  {
+    z.setErrorMap(makeZodI18nMap({ t }));
+  }, [t]);
 
   const onSubmit = (): void => console.log(form.values);
 
