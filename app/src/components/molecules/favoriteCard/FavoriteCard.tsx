@@ -1,6 +1,4 @@
-import IconButton from "@/components/atoms/iconButton/IconButton";
 import Label from "@/components/atoms/label/Label";
-import { BookmarkFilledIcon } from "@/components/Icons/BookmarkFilledIcon";
 
 import { Title } from "@mantine/core";
 import React, { type FunctionComponent } from "react";
@@ -16,16 +14,18 @@ interface FavoriteCardProps extends React.HTMLAttributes<HTMLDivElement>
 
 const FavoriteCard: FunctionComponent<FavoriteCardProps> = ({
   icon,
+  id: caseId,
   title,
   variant,
   ...props
 }) => 
 {
+
   return (
     <div css={styles.wrapper} {...props}>
       <div css={styles.tags}>
         <Label variant={variant} title={variant === "case" ? "Fälle" : "Lexikon"}/>
-        <IconButton icon={icon ?? <BookmarkFilledIcon/>} size="big"/>
+        {/* <IconButton onClick={() => onBookmarkIconClick()} icon={icon ?? <BookmarkFilledIcon/>} size="big"/> */}
       </div>
       {title && <Title title={title} order={4} css={styles.title}>{title.slice(0, 40)}{title?.length > 45 && "..."}</Title>}
     </div>

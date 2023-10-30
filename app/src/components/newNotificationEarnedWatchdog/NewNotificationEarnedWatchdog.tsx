@@ -1,5 +1,4 @@
 import BadgeImage from "@/components/badgeImage/BadgeImage";
-import { Modal } from "@/components/molecules/Modal/Modal";
 import { type BadgeWithUserData } from "@/db/schema";
 import useBadges from "@/hooks/useBadges";
 import useContextAndErrorIfNull from "@/hooks/useContextAndErrorIfNull";
@@ -8,11 +7,14 @@ import { AuthStateContext } from "@/provider/AuthStateProvider";
 import { InvalidateQueriesContext } from "@/provider/InvalidateQueriesProvider";
 import { api } from "@/utils/api";
 
+import { Modal, Title } from "@mantine/core";
 import { useLocalStorage } from "@mantine/hooks";
 import React, { type FunctionComponent, useContext } from "react";
 import { z } from "zod";
 
 import * as styles from "./NewNotificationEarnedWatchdog.styles";
+import { BodyText } from "../atoms/BodyText/BodyText";
+import { Cross } from "../Icons/Cross";
 
 /*
  * The dismissed badges are stored in localStorage in case an error occurs
@@ -99,28 +101,29 @@ const NewNotificationEarnedWatchdog: FunctionComponent = () =>
   {
     renderedBadge = previousBadge;
   }
-
+  const close = (): void => currentBadge && markBadgeAsSeen({ badgeId: currentBadge.id });
   return (
     <>
       <Modal
+        withCloseButton={false}
+        lockScroll={false}
         opened={newEarnedBadges.length > 0}
-        onClose={() =>
-        {
-          if(currentBadge)
-          {
-            markBadgeAsSeen({ badgeId: currentBadge.id });
-          }
-        }}
-        withCloseButton
+        size="lg"
+        radius="12px"
+        styles={styles.newEarnedModalStyle()}
+        onClose={close}
         centered>
+        <div css={styles.customModalHeader}>
+          <Title order={2}>Neue Errungenschaft</Title>
+          <span onClick={close}><Cross size={32}/></span>
+        </div>
         {renderedBadge && (
           <div css={styles.contentWrapper}>
-            <h1 style={{ fontSize: 26 }}>Neue Errungenschaft</h1>
             <div css={styles.imageWrapper}>
               <BadgeImage filename={renderedBadge.imageFilename} css={styles.image}/>
             </div>
-            <h2 style={{ fontSize: 20 }}>{renderedBadge.name}</h2>
-            <p>{renderedBadge.description}</p>
+            <BodyText styleType="body-01-bold" mb={8} component="h2">{renderedBadge.name}</BodyText>
+            <BodyText styleType="body-01-regular" component="h2">{renderedBadge.description}</BodyText>
           </div>
         )}
       </Modal>

@@ -13,7 +13,6 @@ import { type Games } from "@/utils/case";
 import type { IDocumentLink, IHeadingNode } from "types/richtext";
 
 import { Container, Title } from "@mantine/core";
-import { useMediaQuery } from "@mantine/hooks";
 import {
   type FunctionComponent, useMemo, useCallback
 } from "react";
@@ -69,7 +68,7 @@ const CaseCompleteTestsStep: FunctionComponent<ICaseCompleteTestsStepProps> = ({
   const overrideCaseStepIndex = useCaseSolvingStore(s => s.overrideCaseStepIndex);
 
   let renderedCaseContent: IGenCase_FullTextTasks | IGenArticle_FullTextTasks | null;
-  const isBigScreen = useMediaQuery("(min-width: 1100px)");
+  // const isBigScreen = useMediaQuery("(min-width: 1100px)");
 
   /* console.log("-----------------");
   console.log("completedGames", completedGames);
@@ -203,24 +202,22 @@ const CaseCompleteTestsStep: FunctionComponent<ICaseCompleteTestsStepProps> = ({
           </Button>
         )}
         <div css={styles.content}>
-          {isBigScreen && (
-            <div css={styles.toc}>
-              <FloatingPanel
-                hidden={progressState === "not-started"}
-                facts={facts}
-                content={content}
-                variant={variant}
-              />
-            </div>
-          )}
-          {!isBigScreen && (
-            <FloatingPanelTablet
+          <div css={styles.toc}>
+            <FloatingPanel
               hidden={progressState === "not-started"}
               facts={facts}
               content={content}
               variant={variant}
+              selectedTab="Gliederung"
             />
-          )}
+          </div>
+          {/* FloatingPanelTablet show on tablet views only controlled by: CSS media query  */}
+          <FloatingPanelTablet
+            hidden={progressState === "not-started"}
+            facts={facts}
+            content={content}
+            variant={variant}
+          />
           {progressState !== "not-started" && (
             <div css={styles.fullTextAndTasksWrapper}>
               <Richtext

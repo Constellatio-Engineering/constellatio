@@ -96,12 +96,22 @@ export const row = ({ tableTheme, theme }: IOverviewCardStyles): SerializedStyle
     justify-content: flex-start;
     align-items: center;
     overflow-x: hidden;
-    cursor: pointer;
     position:relative;
+    span {
+      pointer-events: none;
+    }
     &::-webkit-scrollbar {
       display: none;
     }
-    /* padding-bottom: 16px; */
+    &::after{
+      content: "";
+      position: absolute;
+      right: 0;
+      bottom: 0;
+      height: 100%;
+      width: 10%;
+      background: linear-gradient(to right, transparent, ${theme.colors["neutrals-01"][0]});
+    }
   }
   &:last-child {
     border-bottom: none;

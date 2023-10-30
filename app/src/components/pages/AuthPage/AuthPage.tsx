@@ -6,7 +6,6 @@ import { RegistrationForm } from "@/components/organisms/RegistrationForm/Regist
 import { RegistrationVisualHeader } from "@/components/organisms/RegistrationVisualHeader/RegistrationVisualHeader";
 
 import { Container, Flex, Tabs } from "@mantine/core";
-import { useMediaQuery } from "@mantine/hooks";
 import { useRouter } from "next/router";
 import { type FC } from "react";
 

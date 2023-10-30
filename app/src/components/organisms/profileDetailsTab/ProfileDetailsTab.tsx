@@ -12,7 +12,6 @@ import { type UserFiltered } from "@/utils/filters";
 
 import { Title } from "@mantine/core";
 import { useForm, zodResolver } from "@mantine/form";
-import { useMediaQuery } from "@mantine/hooks";
 import { notifications } from "@mantine/notifications";
 import { useTranslation } from "next-i18next";
 import React, { type FunctionComponent, useEffect } from "react";
@@ -30,7 +29,6 @@ const ProfileDetailsTab: FunctionComponent<Props> = ({ userDetails }) =>
 {
   const { invalidateUserDetails } = useContextAndErrorIfNull(InvalidateQueriesContext);
   const { t } = useTranslation();
-  const isTabletScreen = useMediaQuery("(max-width: 1100px)");
   const form = useForm<UpdateUserDetailsSchema>({
     initialValues: {
       displayName: userDetails.displayName,
@@ -77,7 +75,7 @@ const ProfileDetailsTab: FunctionComponent<Props> = ({ userDetails }) =>
 
   return (
     <div css={styles.wrapper}>
-      {!isTabletScreen && <Title order={3}>Einstellungen</Title>}
+      <Title css={styles.profileDetailsTabTitle} order={3}>Einstellungen</Title>
       {/* {err && <AlertCard onClick={() => setErr(false)} variant="error">Es tut uns leid, deine Eingaben konnten nicht gespeichert werden. Bitte versuche es erneut.</AlertCard>}*/}
       {/* {success && (
         <AlertCard

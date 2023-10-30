@@ -43,3 +43,15 @@ form{
     }
 
 `;
+export const profileDetailsTabTitle = css`
+    display:block;
+    @media screen and (max-width: 1100px) {
+        display:none;
+    }
+`;
+export const changePasswordTitle = css`
+    display:block;
+    @media screen and (max-width: 1100px) {
+        display:none;
+    }
+`;

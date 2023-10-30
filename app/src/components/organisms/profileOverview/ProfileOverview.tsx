@@ -1,5 +1,4 @@
 import { Title } from "@mantine/core";
-import { useMediaQuery } from "@mantine/hooks";
 import React, { type FunctionComponent } from "react";
 
 import * as styles from "./ProfileOverview.styles";
@@ -9,10 +8,9 @@ import ProgressCardSection from "../progressCardSection/ProgressCardSection";
 
 const ProfileOverview: FunctionComponent = () =>
 {
-  const isTabletScreen = useMediaQuery("(max-width: 1100px)"); 
   return (
     <div css={styles.wrapper}>
-      {!isTabletScreen && <Title order={3} css={styles.title}>Übersicht</Title>}
+      <Title order={3} css={styles.title}>Übersicht</Title>
       <ProfilePersonalSpaceBlock/>
       <ProgressCardSection/>
       {/* <ProfileLearningTimeBlock/> */}

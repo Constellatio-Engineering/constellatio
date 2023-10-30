@@ -50,7 +50,7 @@ const SubscriptionTab: FunctionComponent = () =>
 
   return (
     <div css={styles.wrapper}>
-      {!isTabletScreen && <Title order={3}>Vertrag</Title>}
+      {!isTabletScreen && <Title order={3} css={styles.subscriptionTabTitle}>Vertrag</Title>}
       <BodyText m="32px 0" styleType="body-01-bold" component="p">
         {subscriptionDetails.subscriptionStatus === "active" ? `Dein Abonnement läuft noch bis zum ${getDate()}` : subscriptionDetails.subscriptionStatus === "trialing" ? `Dein Test-Abo endet am ${getDate()}` : "Schließe jetzt dein Constellatio Abonnement ab:"}
       </BodyText>

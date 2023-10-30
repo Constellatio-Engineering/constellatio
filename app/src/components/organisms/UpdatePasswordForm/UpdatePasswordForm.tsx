@@ -1,5 +1,4 @@
 import { Button } from "@/components/atoms/Button/Button";
-import { AlertCard } from "@/components/atoms/Card/AlertCard";
 import { Input } from "@/components/atoms/Input/Input";
 import ErrorCard from "@/components/errorCard/ErrorCard";
 import { PasswordValidationSchema } from "@/components/helpers/PasswordValidationSchema";
@@ -11,7 +10,6 @@ import { queryParams } from "@/utils/query-params";
 import { Box, Stack, Title } from "@mantine/core";
 import { useForm, zodResolver } from "@mantine/form";
 import { useDisclosure } from "@mantine/hooks";
-import { AuthApiError } from "@supabase/gotrue-js";
 import { useMutation } from "@tanstack/react-query";
 import { useRouter } from "next/router";
 import { type FunctionComponent } from "react";
