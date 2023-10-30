@@ -12,7 +12,6 @@ import { supabase } from "@/lib/supabase";
 import { InvalidateQueriesContext } from "@/provider/InvalidateQueriesProvider";
 import { paths } from "@/utils/paths";
 
-import { useMediaQuery } from "@mantine/hooks";
 import { notifications } from "@mantine/notifications";
 import { IconLogout } from "@tabler/icons-react";
 import router from "next/router";
@@ -31,7 +30,6 @@ const ProfileMenu: FunctionComponent<IProfileMenu> = ({ activeTabSlug, setTab, t
 {
   const { invalidateEverything } = useContextAndErrorIfNull(InvalidateQueriesContext);
   const { setOnboardingResult } = useSetOnboardingResult();
-  const isBigScreen = useMediaQuery("(min-width: 1100px)");
   const { error, isLoading, userDetails } = useUserDetails();
 
   if(isLoading)
@@ -75,25 +73,23 @@ const ProfileMenu: FunctionComponent<IProfileMenu> = ({ activeTabSlug, setTab, t
   return (
     <div css={styles.wrapper}>
       <ProfileMenuMainProfileInfo userDetails={userDetails}/>
-      <ProfileMenuUniversityTab title={userDetails.university} semester={userDetails.semester}/>
-      {isBigScreen && (
-        <>
-          <div css={styles.tabsList}>
-            {tabs.map(tab => (
-              <MenuListItem
-                key={tab.slug}
-                title={tab.title}
-                selected={tab.slug === activeTabSlug}
-                onClick={() => void setTab(tab.slug)}
-              />
-            ))}
-          </div>
-          <div css={styles.groupedLinks}>
-            <LinkButton title="Einführung wiederholen" icon={<NoteIcon/>} onClick={() => setOnboardingResult({ result: null })}/>
-            <LinkButton title="Ausloggen" onClick={handleSignOut} icon={<IconLogout/>}/>
-          </div>
-        </>
-      )}
+      <ProfileMenuUniversityTab university={userDetails.university} semester={userDetails.semester}/>
+      <div css={styles.tabsListWrapper}>
+        <div css={styles.tabsList}>
+          {tabs.map(tab => (
+            <MenuListItem
+              key={tab.slug}
+              title={tab.title}
+              selected={tab.slug === activeTabSlug}
+              onClick={() => void setTab(tab.slug)}
+            />
+          ))}
+        </div>
+        <div css={styles.groupedLinks}>
+          <LinkButton title="Einführung wiederholen" icon={<NoteIcon/>} onClick={() => setOnboardingResult({ result: null })}/>
+          <LinkButton title="Ausloggen" onClick={handleSignOut} icon={<IconLogout/>}/>
+        </div>
+      </div>
     </div>
   );
 };
