@@ -1,7 +1,6 @@
 import { Svg } from "@/basic-components/SVG/Svg";
 import ProgressCard from "@/components/molecules/progressCard/ProgressCard";
-import useCases from "@/hooks/useCases";
-import useCasesProgress from "@/hooks/useCasesProgress";
+import useAllCasesWithProgress from "@/hooks/useAllCasesWithProgress";
 import { type IProfilePageProps } from "@/pages/profile";
 
 import React, { type FunctionComponent } from "react";
@@ -18,10 +17,7 @@ const ProgressCardSection: FunctionComponent<ProgressCardSectionProps> = ({
   mainCategories
 }) => 
 {
-  const { casesProgress } = useCasesProgress();
-  const { allCases } = useCases();
-  const allCasesProgressFiltered = allCases.filter(x => casesProgress?.some(y => y?.caseId === x?.id));
-  const casesWithProgress = allCasesProgressFiltered?.map(x => ({ ...x, progress: casesProgress?.find(y => y?.caseId === x?.id)?.progressState }));
+  const { cases: casesWithProgress } = useAllCasesWithProgress();
     
   return (
     <div css={styles.wrapper}>
