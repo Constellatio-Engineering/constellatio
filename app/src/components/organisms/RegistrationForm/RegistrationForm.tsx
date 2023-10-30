@@ -212,7 +212,7 @@ export const RegistrationForm: FunctionComponent = () =>
           <PasswordInput
             passwordInputProps={form.getInputProps("password")}
             confirmPasswordInputProps={form.getInputProps("passwordConfirmation")}
-            currentPassword={form.values.password}
+            passwordToValidate={form.values.password}
           />
           <UniversityDropdown {...form.getInputProps("university")}/>
           <SemesterDropdown {...form.getInputProps("semester")}/>

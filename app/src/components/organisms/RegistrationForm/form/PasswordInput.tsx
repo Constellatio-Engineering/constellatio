@@ -7,11 +7,19 @@ import React, { type FunctionComponent } from "react";
 
 type Props = {
   readonly confirmPasswordInputProps: TextInputProps;
-  readonly currentPassword: string;
+  readonly passwordConfirmLabelOverride?: string;
   readonly passwordInputProps: TextInputProps;
+  readonly passwordLabelOverride?: string;
+  readonly passwordToValidate: string;
 };
 
-const PasswordInput: FunctionComponent<Props> = ({ confirmPasswordInputProps, currentPassword, passwordInputProps }) =>
+const PasswordInput: FunctionComponent<Props> = ({
+  confirmPasswordInputProps,
+  passwordConfirmLabelOverride,
+  passwordInputProps,
+  passwordLabelOverride,
+  passwordToValidate
+}) =>
 {
   const [isPasswordRevealed, { toggle }] = useDisclosure(false);
 
@@ -21,20 +29,20 @@ const PasswordInput: FunctionComponent<Props> = ({ confirmPasswordInputProps, cu
         <Input
           {...passwordInputProps}
           inputType="password"
-          label="Passwort*"
+          label={passwordLabelOverride ?? "Passwort*"}
           title="Passwort"
           placeholder={"*".repeat(16)}
           onVisibilityChange={toggle}
         />
         <PasswordValidationSchema
-          passwordValue={currentPassword}
+          passwordValue={passwordToValidate}
           isPasswordRevealed={isPasswordRevealed}
         />
       </Box>
       <Input
         {...confirmPasswordInputProps}
         inputType="password"
-        label="Passwort bestätigen*"
+        label={passwordConfirmLabelOverride ?? "Passwort bestätigen*"}
         placeholder={"*".repeat(16)}
         title="Passwort bestätigen"
         onVisibilityChange={toggle}

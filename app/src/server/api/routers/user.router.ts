@@ -11,7 +11,7 @@ import { setProfilePictureSchema } from "@/schemas/users/setProfilePicture.schem
 import { getClouStorageFileUrl, getSignedCloudStorageUploadUrl } from "@/server/api/services/uploads.services";
 import { getUserWithRelations } from "@/server/api/services/users.service";
 import { createTRPCRouter, protectedProcedure } from "@/server/api/trpc";
-import { filterUpdatedUser, filterUserForClient } from "@/utils/filters";
+import { filterUserForClient } from "@/utils/filters";
 import { NotFoundError } from "@/utils/serverError";
 
 import { eq, and } from "drizzle-orm";

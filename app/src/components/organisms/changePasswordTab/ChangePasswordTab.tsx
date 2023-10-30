@@ -1,90 +1,131 @@
-
 import { Button } from "@/components/atoms/Button/Button";
 import { AlertCard } from "@/components/atoms/Card/AlertCard";
 import { Input } from "@/components/atoms/Input/Input";
+import ErrorCard from "@/components/errorCard/ErrorCard";
 import { PasswordValidationSchema } from "@/components/helpers/PasswordValidationSchema";
-import { passwordSchema } from "@/schemas/auth/userData.validation";
+import PasswordInput from "@/components/organisms/RegistrationForm/form/PasswordInput";
+import { supabase } from "@/lib/supabase";
+import { type UpdatePasswordSchema, updatePasswordSchema, type UpdatePasswordValues } from "@/schemas/auth/updatePassword.schema";
 
 import { Title } from "@mantine/core";
 import { useForm, zodResolver } from "@mantine/form";
 import { useDisclosure, useMediaQuery } from "@mantine/hooks";
+import { useUser } from "@supabase/auth-helpers-react";
+import { useMutation } from "@tanstack/react-query";
 import React, { type FunctionComponent } from "react";
-import { z } from "zod";
 
 import * as styles from "../profileDetailsTab/ProfileDetailsTab.styles";
 
-const initialValues = {
-  currentPassword: "",
-  password: "",
-  passwordConfirm: "",
-};
-
 const ChangePasswordTab: FunctionComponent = () => 
 {
-  const form = useForm({
-    initialValues,
-    validate: zodResolver(z
-      .object({
-        currentPassword: z.string(),
-        password: passwordSchema,
-        passwordConfirm: z.string(),
-      })
-      .refine(data => data.passwordConfirm === data.password, {
-        message: "Die Passwörter stimmen nicht überein",
-        path: ["passwordConfirm"]
-      })),
-    validateInputOnBlur: true,
+  const [isPasswordRevealed, { toggle }] = useDisclosure(true);
+  const user = useUser();
+  const isTabletScreen = useMediaQuery("(max-width: 1100px)");
 
-  });
-  const [err, setErr] = React.useState<boolean>(false);
-  const [success, setSuccess] = React.useState<boolean>(false);
-  const [isPasswordRevealed, { toggle }] = useDisclosure(false);
-  const handleSubmit = (e: React.FormEvent<HTMLFormElement>): void => 
-  {
-    e.preventDefault();
-    
-    if(Object.keys(form.errors).length > 0) 
-    {
-      setErr(true);
-      setSuccess(false);
-    }
-    else 
-    {
-      setErr(false);
-      setSuccess(true);
-    }
+  const initialValues: UpdatePasswordSchema = {
+    currentPassword: "",
+    email: user?.email || "",
+    newPassword: "",
+    newPasswordConfirm: "",
   };
-  const isTabletScreen = useMediaQuery("(max-width: 1100px)"); 
+
+  const form = useForm<UpdatePasswordSchema>({
+    initialValues,
+    validate: zodResolver(updatePasswordSchema),
+    validateInputOnBlur: true,
+  });
+
+  const {
+    error,
+    isLoading,
+    isSuccess,
+    mutate: changePassword,
+  } = useMutation({
+    mutationFn: async (formValues: UpdatePasswordValues) =>
+    {
+      // get current session so the user does not get logged out after failed password change with invalid current password
+      const { data, error: getCurrentSessionError } = await supabase.auth.getSession();
+
+      if(getCurrentSessionError)
+      {
+        throw getCurrentSessionError;
+      }
+
+      if(!data?.session)
+      {
+        throw new Error("Could not get current session");
+      }
+
+      const loginResult = await supabase.auth.signInWithPassword({
+        email: formValues.email,
+        password: formValues.currentPassword,
+      });
+
+      if(loginResult.error)
+      {
+        await supabase.auth.setSession({
+          access_token: data.session?.access_token,
+          refresh_token: data.session?.refresh_token,
+        });
+
+        throw loginResult.error;
+      }
+
+      const changePasswordResult = await supabase.auth.updateUser({ password: formValues.newPassword });
+
+      if(changePasswordResult.error)
+      {
+        throw changePasswordResult.error;
+      }
+
+      form.setValues(initialValues);
+    },
+    onError: (error) =>
+    {
+      console.error("error occurred while changing password", error);
+    },
+  });
+
+  const handleSubmit = form.onSubmit(formValues => changePassword(formValues as UpdatePasswordValues));
 
   return (
     <div css={styles.wrapper}>
       {!isTabletScreen && <Title order={3}>Change password</Title>}
-      {err && <AlertCard onClick={() => setErr(false)} variant="error">Sorry, we weren not able to change password. Please, try again</AlertCard>}
-      {success && <AlertCard style={{ display: "flex", justifyContent: "flex-start" }} onClick={() => setSuccess(false)} variant="success">Your password has been changed</AlertCard>}
+      <ErrorCard
+        error={error}
+        marginBottom={0}
+        overwriteErrorMessages={{
+          invalidCredentials: "Sorry, das eingegebene Passwort stimmt nicht mit unserer Datenbank überein.",
+          unknownError: "Sorry, we were not able to change password. Please, try again later.",
+        }}
+      />
+      {isSuccess && (
+        <AlertCard style={{ display: "flex", justifyContent: "flex-start" }} variant="success">
+          Your password has been changed
+        </AlertCard>
+      )}
       <form onSubmit={handleSubmit}>
         <Input
+          {...form.getInputProps("currentPassword")}
           inputType="password"
           label="Aktuelles Passwort"
           description="Um dein Konto zu schützen, möchten wir sicher gehen, dass du es bist."
-          error="Sorry, das eingegebene Passwort stimmt nicht mit unserer Datenbank überein. "
         />
-        <Input
-          inputType="password" 
-          label="Neues Passwort"
-          onVisibilityChange={toggle}
-          {...form.getInputProps("password")}
+        <PasswordInput
+          passwordInputProps={form.getInputProps("newPassword")}
+          passwordLabelOverride="Neues Passwort"
+          passwordConfirmLabelOverride="Neues Passwort erneut eingeben"
+          confirmPasswordInputProps={form.getInputProps("newPasswordConfirm")}
+          passwordToValidate={form.values.newPassword}
         />
-        <PasswordValidationSchema
-          passwordValue={form.values.password}
-          isPasswordRevealed={isPasswordRevealed}
-        />
-        <Input 
-          {...form.getInputProps("passwordConfirm")}
-          inputType="password" 
-          label="Neues Passwort erneut eingeben"
-          error={form.errors.passwordConfirm}
-        />
-        <Button<"button"> type="submit" styleType="primary" size="large">Passwort ändern</Button>
+        <Button<"button">
+          type="submit"
+          loading={isLoading}
+          styleType="primary"
+          disabled={!form.isDirty() || isLoading}
+          size="large">
+          Passwort ändern
+        </Button>
       </form>
     </div>
   );

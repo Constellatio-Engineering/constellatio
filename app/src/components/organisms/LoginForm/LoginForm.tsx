@@ -3,6 +3,7 @@ import { Button } from "@/components/atoms/Button/Button";
 import { AlertCard } from "@/components/atoms/Card/AlertCard";
 import { CustomLink } from "@/components/atoms/CustomLink/CustomLink";
 import { Input } from "@/components/atoms/Input/Input";
+import ErrorCard from "@/components/errorCard/ErrorCard";
 import { colors } from "@/constants/styles/colors";
 import useContextAndErrorIfNull from "@/hooks/useContextAndErrorIfNull";
 import { supabase } from "@/lib/supabase";
@@ -13,7 +14,6 @@ import { queryParams } from "@/utils/query-params";
 
 import { Stack } from "@mantine/core";
 import { useForm, zodResolver } from "@mantine/form";
-import { AuthError } from "@supabase/gotrue-js";
 import { useAtom } from "jotai";
 import Link from "next/link";
 import { useRouter } from "next/router"; 
@@ -24,8 +24,6 @@ import { makeZodI18nMap } from "zod-i18n-map";
 
 import { ResetPasswordModal, resetPasswordModalVisible } from "../ResetPasswordModal/ResetPasswordModal";
 
-type SignInError = "emailNotConfirmed" | "invalidCredentials" | "unknownError";
-
 export const LoginForm: FunctionComponent = () =>
 {
   const { t } = useTranslation();
@@ -35,7 +33,7 @@ export const LoginForm: FunctionComponent = () =>
   const { invalidateEverything } = useContextAndErrorIfNull(InvalidateQueriesContext);
   const [, setResetPasswordModalOpen] = useAtom(resetPasswordModalVisible);
   const [isLoginInProgress, setIsLoginInProgress] = useState(false);
-  const [signInError, setSignInError] = useState<SignInError>();
+  const [signInError, setSignInError] = useState<unknown>();
   const form = useForm<LoginFormSchema>({
     initialValues: {
       email: "",
@@ -74,32 +72,7 @@ export const LoginForm: FunctionComponent = () =>
     }
     catch (error)
     {
-      if(!(error instanceof AuthError))
-      {
-        console.log("Something went wrong while logging in", error);
-        setSignInError("unknownError");
-        return;
-      }
-
-      switch (error.message)
-      {
-        case "Email not confirmed":
-        {
-          setSignInError("emailNotConfirmed");
-          break;
-        }
-        case "Invalid login credentials":
-        {
-          setSignInError("invalidCredentials");
-          break;
-        }
-        default:
-        {
-          console.log("error while logging in", error);
-          setSignInError("unknownError");
-          break;
-        }
-      }
+      setSignInError(error);
     }
     finally
     {
@@ -109,9 +82,7 @@ export const LoginForm: FunctionComponent = () =>
 
   return (
     <>
-      {signInError === "emailNotConfirmed" && <AlertCard stylesOverwrite={{ marginBottom: "40px" }} variant="error">Du musst zuerst deine E-Mail-Adresse bestätigen. Eine Bestätigungsmail wurde dir zugesendet.</AlertCard>}
-      {signInError === "invalidCredentials" && <AlertCard stylesOverwrite={{ marginBottom: "40px" }} variant="error">Wir konnten kein Konto mit diesen Anmeldedaten finden. Bitte überprüfe deine Eingaben.</AlertCard>}
-      {signInError === "unknownError" && <AlertCard stylesOverwrite={{ marginBottom: "40px" }} variant="error">Es ist ein unbekannter Fehler aufgetreten. Bitte versuche es erneut.</AlertCard>}
+      <ErrorCard error={signInError}/>
       {wasPasswordUpdated && <AlertCard stylesOverwrite={{ marginBottom: "40px" }} variant="success">Dein Passwort wurde erfolgreich geändert. Du kannst dich jetzt mit deinem neuen Passwort anmelden.</AlertCard>}
       <form onSubmit={handleSubmit}>
         <Stack spacing="spacing-24">

@@ -2,6 +2,7 @@ import useContextAndErrorIfNull from "@/hooks/useContextAndErrorIfNull";
 import { supabase } from "@/lib/supabase";
 import { InvalidateQueriesContext } from "@/provider/InvalidateQueriesProvider";
 import { paths } from "@/utils/paths";
+import { sleep } from "@/utils/utils";
 
 import { notifications } from "@mantine/notifications";
 import router from "next/router";
@@ -18,8 +19,9 @@ export const useSignout: UseSignout = () =>
   {
     try
     {
-      await supabase.auth.signOut();
       await router.replace(paths.login);
+      await sleep(500);
+      await supabase.auth.signOut();
       await invalidateEverything();
 
       notifications.show({
