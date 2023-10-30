@@ -8,7 +8,6 @@ import { type UpdatePasswordSchema, updatePasswordSchema, type UpdatePasswordVal
 
 import { Title } from "@mantine/core";
 import { useForm, zodResolver } from "@mantine/form";
-import { useMediaQuery } from "@mantine/hooks";
 import { useUser } from "@supabase/auth-helpers-react";
 import { useMutation } from "@tanstack/react-query";
 import { useTranslation } from "next-i18next";
