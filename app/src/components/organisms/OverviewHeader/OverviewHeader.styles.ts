@@ -12,8 +12,8 @@ export const contentHeader = ({ theme, variant }: {
 	align-items: center;
 	justify-content: center;
 	gap: 32px;
-	height: 600px;
-	max-height: 50vh;
+	height: 500px;
+	/* max-height: 50vh; */
 	background: ${variant === "case"
     ? theme.colors["cc-cases"][2]
     : variant === "dictionary"

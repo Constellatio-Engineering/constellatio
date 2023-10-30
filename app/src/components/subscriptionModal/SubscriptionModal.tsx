@@ -15,24 +15,15 @@ import { Modal } from "../molecules/Modal/Modal";
 
 const SubscriptionModal: FunctionComponent = () => 
 {
-
-  // dummy logic to show the modal always with one day left
   const [opened, { close, open }] = useDisclosure(false);
-  const today: Date = new Date();
-  const tomorrow = new Date(today);
-  tomorrow.setDate(tomorrow.getDate() + 1);
-  const endingDate: Date = tomorrow;
-  today.setHours(0, 0, 0, 0);
-  endingDate.setHours(0, 0, 0, 0);
-  const diffTime = endingDate.getTime() - today.getTime();
-  const diffDays = diffTime / (1000 * 60 * 60 * 24);
+  const diffDays: number = 2;
 
   React.useEffect(() => 
   {
     console.log("Subscription ending in", diffDays);
     if(diffDays <= 1)
     {
-      // open();
+      open();
     }
   }, [diffDays, open]);
 

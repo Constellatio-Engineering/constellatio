@@ -51,8 +51,8 @@ const BadgesCarousel: FunctionComponent = () =>
           "[data-inactive]": {
             opacity: 0,
           },
-          left: "-3.5%",
-          width: "107%",
+          left: "-3%",
+          width: "106%",
         },
         position: "relative"
       }}
