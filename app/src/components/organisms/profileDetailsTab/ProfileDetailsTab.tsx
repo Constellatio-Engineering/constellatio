@@ -1,13 +1,19 @@
-import { AlertCard } from "@/components/atoms/Card/AlertCard";
-import { Dropdown } from "@/components/atoms/Dropdown/Dropdown";
-import { Input } from "@/components/atoms/Input/Input";
+import DisplayNameInput from "@/components/organisms/RegistrationForm/form/DisplayNameInput";
+import FirstNameInput from "@/components/organisms/RegistrationForm/form/FirstNameInput";
+import LastNameInput from "@/components/organisms/RegistrationForm/form/LastNameInput";
+import SemesterDropdown from "@/components/organisms/RegistrationForm/form/SemesterDropdown";
+import UniversityDropdown from "@/components/organisms/RegistrationForm/form/UniversityDropdown";
+import useContextAndErrorIfNull from "@/hooks/useContextAndErrorIfNull";
+import { InvalidateQueriesContext } from "@/provider/InvalidateQueriesProvider";
 import { type UpdateUserDetailsSchema, updateUserDetailsSchema } from "@/schemas/auth/updateUserDetails.schema";
-import { allUniversities, maximumAmountOfSemesters, type University } from "@/schemas/auth/userData.validation";
+import { type University } from "@/schemas/auth/userData.validation";
+import { api } from "@/utils/api";
 import { type UserFiltered } from "@/utils/filters";
 
-import { Title, Box } from "@mantine/core";
+import { Title } from "@mantine/core";
 import { useForm, zodResolver } from "@mantine/form";
 import { useMediaQuery } from "@mantine/hooks";
+import { notifications } from "@mantine/notifications";
 import { useTranslation } from "next-i18next";
 import React, { type FunctionComponent, useEffect } from "react";
 import z from "zod";
@@ -22,26 +28,52 @@ type Props = {
 
 const ProfileDetailsTab: FunctionComponent<Props> = ({ userDetails }) =>
 {
+  const { invalidateUserDetails } = useContextAndErrorIfNull(InvalidateQueriesContext);
   const { t } = useTranslation();
   const isTabletScreen = useMediaQuery("(max-width: 1100px)");
   const form = useForm<UpdateUserDetailsSchema>({
     initialValues: {
+      displayName: userDetails.displayName,
       firstName: userDetails.firstName,
       lastName: userDetails.lastName,
-      profileName: userDetails.displayName,
       semester: String(userDetails.semester),
       university: userDetails.university as University || null,
     },
     validate: zodResolver(updateUserDetailsSchema),
     validateInputOnBlur: true,
   });
+  const hasUnsavedChanges = form.isDirty();
 
   useEffect(() =>
   {
     z.setErrorMap(makeZodI18nMap({ t }));
   }, [t]);
 
-  const onSubmit = (): void => console.log(form.values);
+  const { isLoading: isUpdateUserDetailsLoading, mutate: updateUserDetails } = api.users.updateUserDetails.useMutation({
+    onError: e =>
+    {
+      console.log("error while updating user data:", e);
+      notifications.show({
+        autoClose: false,
+        color: "red",
+        message: "Leider ist beim Speichern deiner Änderungen ein Fehler aufgetreten. Bitte versuche es erneut.",
+        title: "Oops!",
+      });
+    },
+    onSuccess: () =>
+    {
+      void invalidateUserDetails();
+      form.resetDirty();
+      notifications.show({
+        autoClose: 5000,
+        color: "green",
+        message: "Deine Änderungen wurden erfolgreich gespeichert.",
+        title: "Erfolgreich gespeichert",
+      });
+    },
+  });
+
+  const onSubmit = form.onSubmit(formValues => updateUserDetails(formValues));
 
   return (
     <div css={styles.wrapper}>
@@ -56,41 +88,19 @@ const ProfileDetailsTab: FunctionComponent<Props> = ({ userDetails }) =>
         </AlertCard>
       )}*/}
       <form onSubmit={onSubmit}>
-        <Input
-          inputType="text"
-          label="Vorname" 
-          {...form.getInputProps("firstName")}
-        />
-        <Input
-          inputType="text"
-          label="Nachname"
-          {...form.getInputProps("lastName")}
-        />
-        <Input
-          inputType="text"
-          label="Anzeigename"
-          {...form.getInputProps("profileName")}
-        />
-        <Dropdown
-          {...form.getInputProps("university")}
-          label="Universität"
-          title="Universität"
-          placeholder="Universität auswählen"
-          data={allUniversities}
-          searchable
-        />
-        <Box maw={240}>
-          <Dropdown
-            {...form.getInputProps("semester")}
-            label="Semester"
-            title="Semester"
-            placeholder="Semester auswählen"
-            // THIS RENDERS THE FIGMA DESIGN OPTIONS BUT DOESN'T WORK WITH THE VALIDATOR
-            // data={Array(maximumAmountOfSemesters).fill(null).map((_, i) => String(decimalToRoman(i + 1) + " Semester"))}
-            data={Array(maximumAmountOfSemesters).fill(null).map((_, i) => String(i + 1))}
-          />
-        </Box>
-        <Button<"button"> size="large" type="submit" styleType="primary">Änderungen speichern</Button>
+        <FirstNameInput {...form.getInputProps("firstName")}/>
+        <LastNameInput {...form.getInputProps("lastName")}/>
+        <DisplayNameInput {...form.getInputProps("displayName")}/>
+        <UniversityDropdown {...form.getInputProps("university")}/>
+        <SemesterDropdown {...form.getInputProps("semester")}/>
+        <Button<"button">
+          size="large"
+          type="submit"
+          loading={isUpdateUserDetailsLoading}
+          styleType="primary"
+          disabled={!hasUnsavedChanges || isUpdateUserDetailsLoading}>
+          Änderungen speichern
+        </Button>
       </form>
     </div>
   );

@@ -75,7 +75,7 @@ const ProfileMenu: FunctionComponent<IProfileMenu> = ({ activeTabSlug, setTab, t
   return (
     <div css={styles.wrapper}>
       <ProfileMenuMainProfileInfo userDetails={userDetails}/>
-      <ProfileMenuUniversityTab title={userDetails.university} semester={`${userDetails.semester}. Semester`}/>
+      <ProfileMenuUniversityTab title={userDetails.university} semester={userDetails.semester}/>
       {isBigScreen && (
         <>
           <div css={styles.tabsList}>

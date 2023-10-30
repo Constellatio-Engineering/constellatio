@@ -4,13 +4,14 @@ import {
   type ProfilePictureInsert, profilePictures, users
 } from "@/db/schema";
 import { env } from "@/env.mjs";
+import { updateUserDetailsSchema } from "@/schemas/auth/updateUserDetails.schema";
 import { generateCreateSignedUploadUrlSchema } from "@/schemas/uploads/createSignedUploadUrl.schema";
 import { setOnboardingResultSchema } from "@/schemas/users/setOnboardingResult.schema";
 import { setProfilePictureSchema } from "@/schemas/users/setProfilePicture.schema";
 import { getClouStorageFileUrl, getSignedCloudStorageUploadUrl } from "@/server/api/services/uploads.services";
 import { getUserWithRelations } from "@/server/api/services/users.service";
 import { createTRPCRouter, protectedProcedure } from "@/server/api/trpc";
-import { filterUserForClient } from "@/utils/filters";
+import { filterUpdatedUser, filterUserForClient } from "@/utils/filters";
 import { NotFoundError } from "@/utils/serverError";
 
 import { eq, and } from "drizzle-orm";
@@ -90,5 +91,11 @@ export const usersRouter = createTRPCRouter({
         },
         target: profilePictures.userId,
       });
+    }),
+  updateUserDetails: protectedProcedure
+    .input(updateUserDetailsSchema)
+    .mutation(async ({ ctx: { userId }, input }) =>
+    {
+      await db.update(users).set(input).where(eq(users.id, userId));
     })
 });

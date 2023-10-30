@@ -3,9 +3,9 @@ import { nameValidation, semesterValidation, universityValidation } from "@/sche
 import { z } from "zod";
 
 export const updateUserDetailsSchema = z.object({
+  displayName: nameValidation.optional(),
   firstName: nameValidation.optional(),
   lastName: nameValidation.optional(),
-  profileName: nameValidation.optional(),
   semester: semesterValidation.optional(),
   university: universityValidation.nullable().optional(),
 });
