@@ -35,16 +35,24 @@ export const billingRouter = createTRPCRouter({
       await db.update(users).set({ stripeCustomerId }).where(eq(users.id, user.id));
     }
 
-    const { url } = await stripe.checkout.sessions.create({
+    const { url: checkoutSessionUrl } = await stripe.checkout.sessions.create({
+      allow_promotion_codes: true,
       cancel_url: `${env.NEXT_PUBLIC_WEBSITE_URL}${paths.profile}?tab=subscription`,
       customer: stripeCustomerId,
       line_items: [{ price: env.STRIPE_PREMIUM_PLAN_PRICE_ID, quantity: 1 }],
+      // locale: "de",
       mode: "subscription",
-      payment_method_types: ["card"],
-      success_url: `${env.NEXT_PUBLIC_WEBSITE_URL}/settings/success`,
+      payment_method_configuration: env.STRIPE_PAYMENT_METHODS_CONFIGURATION_ID,
+      success_url: `${env.NEXT_PUBLIC_WEBSITE_URL}${paths.paymentConfirm}`
     });
 
-    return { stripeUrl: url };
+    const { url: billingPortalSessionUrl } = await stripe.billingPortal.sessions.create({
+      customer: stripeCustomerId,
+      // locale: "de",
+      return_url: `${env.NEXT_PUBLIC_WEBSITE_URL}${paths.profile}?tab=subscription`
+    });
+
+    return { billingPortalSessionUrl, checkoutSessionUrl };
   }),
   getSubscriptionDetails: protectedProcedure.query(async ({ ctx: { userId } }) =>
   {

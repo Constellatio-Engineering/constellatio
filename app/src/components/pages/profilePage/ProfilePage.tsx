@@ -56,7 +56,7 @@ const ProfilePage: FunctionComponent = () =>
       /* case "history":
         return <ProfileHistoryTab/>;*/
       case "subscription":
-        return <SubscriptionTab subscriptionStatus="You are currently using a free 5-day trial. You can purchase a subscription by clicking the button below:"/>;
+        return <SubscriptionTab/>;
       default:
         return <>{`Unknown tab. Create tab type case in ProfilePage component: ${JSON.stringify(activeTab, null, 2)}`}</>;
       /* case "Notifications":

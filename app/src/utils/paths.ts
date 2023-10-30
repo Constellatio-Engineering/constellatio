@@ -7,11 +7,12 @@ export const paths = {
   dictionary: "/dictionary",
   downloadDocument: "/api/documents/download",
   login: "/login",
+  paymentConfirm: "/paymentSuccess",
   personalSpace: "/personal-space",
   profile: "/profile",
   recover: "/recover",
   register: "/register",
-  search: "/search"
+  search: "/search",
 };
 
 export const getConfirmEmailUrl = (): string =>

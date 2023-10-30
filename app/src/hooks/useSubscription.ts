@@ -4,7 +4,7 @@ import { api } from "@/utils/api";
 
 type UseSubscription = (
 ) => {
-  generateStripeSessionUrl: () => Promise<{ stripeUrl: string | null }>;
+  generateStripeSessionUrl: () => Promise<{ billingPortalSessionUrl: string; checkoutSessionUrl: string | null }>;
   isSessionLoading: boolean;
   isSubscriptionDetailsLoading: boolean;
   subscriptionDetails: {

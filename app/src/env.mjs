@@ -37,6 +37,8 @@ export const env = createEnv({
     STRIPE_SIGNING_SECRET: z.string(),
     RECREATE_SEARCH_INDEX_SECRET: z.string(),
     POSTGRES_MAX_CONNECTIONS: z.string().pipe(z.coerce.number().int().min(1).max(9999)),
+    STRIPE_PAYMENT_METHODS_CONFIGURATION_ID: z.string(),
+
   },
 
 	/**
@@ -99,6 +101,7 @@ export const env = createEnv({
     RECREATE_SEARCH_INDEX_SECRET: process.env.RECREATE_SEARCH_INDEX_SECRET,
     NEXT_PUBLIC_APP_NAME: process.env.NEXT_PUBLIC_APP_NAME,
     POSTGRES_MAX_CONNECTIONS: process.env.POSTGRES_MAX_CONNECTIONS,
+    STRIPE_PAYMENT_METHODS_CONFIGURATION_ID: process.env.STRIPE_PAYMENT_METHODS_CONFIGURATION_ID,
   },
   /**
    * Run `build` or `dev` with `SKIP_ENV_VALIDATION` to skip env validation.

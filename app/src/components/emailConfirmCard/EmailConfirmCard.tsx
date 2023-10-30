@@ -20,6 +20,7 @@ const EmailConfirmCard: FunctionComponent<EmailConfirmCardProps> = ({
 }) => 
 {
   const [card, setCard] = useState<ICardProps>({ desc: "", title: "" });
+  
   useEffect(() => 
   {
     if(typeof window !== "undefined") 
