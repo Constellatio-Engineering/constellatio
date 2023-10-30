@@ -14,6 +14,7 @@ export const wrapper = css`
   display: grid;
   grid-template-columns: repeat(3, 1fr);
   gap: 24px;
+  /* gap: 10px; on max width no extra white space */
   flex-wrap: wrap;
 `;
 

@@ -6,6 +6,10 @@ import { type Styles, type MantineTheme } from "@mantine/styles";
 
 export const wrapper = css`
     width: 100%;
+    display: none;
+  @media screen and (max-width: 1199px) {
+    display: block;
+  }
 `;
 export const selectedFolder = css`
 display: flex;

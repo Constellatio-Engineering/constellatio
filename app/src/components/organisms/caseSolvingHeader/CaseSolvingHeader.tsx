@@ -1,6 +1,16 @@
 import { OverlayLines } from "@/components/Icons/bg-layer";
+import { Bookmark } from "@/components/Icons/Bookmark";
+import { BookmarkFilledIcon } from "@/components/Icons/BookmarkFilledIcon";
 import { Print } from "@/components/Icons/print";
 import IconButtonBar from "@/components/organisms/iconButtonBar/IconButtonBar";
+import useArticles from "@/hooks/useArticles";
+import useBookmarks from "@/hooks/useBookmarks";
+import useCases from "@/hooks/useCases";
+import useContextAndErrorIfNull from "@/hooks/useContextAndErrorIfNull";
+import { InvalidateQueriesContext } from "@/provider/InvalidateQueriesProvider";
+import { type AddOrRemoveBookmarkSchema } from "@/schemas/bookmarks/addOrRemoveBookmark.schema";
+import { type Maybe, type IGenArticle } from "@/services/graphql/__generated/sdk";
+import { api } from "@/utils/api";
 
 import { Container, Title, useMantineTheme } from "@mantine/core";
 import Link from "next/link";
@@ -16,6 +26,7 @@ interface IBreadcrumbItem
 }
 export interface ICaseSolvingHeaderProps 
 {
+  readonly caseId?: Maybe<string> | undefined;
   readonly overviewCard: IOverviewCard;
   readonly pathSlugs?: IBreadcrumbItem[];
   readonly title: string;
@@ -23,28 +34,57 @@ export interface ICaseSolvingHeaderProps
 }
 
 const CaseSolvingHeader: FunctionComponent<ICaseSolvingHeaderProps> = ({
+  caseId,
   overviewCard,
   pathSlugs,
   title,
   variant
 }) => 
 {
+  const { allCases = [] } = useCases();
+  const { invalidateBookmarks } = useContextAndErrorIfNull(InvalidateQueriesContext);
+  const { allArticles = [] } = useArticles();
+  const { bookmarks } = useBookmarks(undefined);
+  const allCasesBookmarks = bookmarks.filter(bookmark => bookmark?.resourceType === "case") ?? [];
+  const allArticlesBookmarks = bookmarks.filter(bookmark => bookmark?.resourceType === "article") ?? [];
+  const bookmarkedArticles = allArticles.filter((caisyArticle: IGenArticle) => allArticlesBookmarks.some(bookmark => bookmark.resourceId === caisyArticle.id));
+  const bookmarkedCases = allCases.filter(caisyCase => allCasesBookmarks.some(bookmark => bookmark.resourceId === caisyCase.id));
+  const isItemBookmarked = bookmarkedCases.some(bookmark => bookmark.title === title) || bookmarkedArticles?.some(bookmark => bookmark.title === title) || false;
+  const { mutate: addBookmark } = api.bookmarks.addBookmark.useMutation({
+    onError: e => console.log("error in bookmarks:", e),
+    onSuccess: invalidateBookmarks
+  });
 
-  // TODO FIND A BETTER WAY TO CHECK IF ITEM IS BOOKMARKED
+  const { mutate: removeBookmark } = api.bookmarks.removeBookmark.useMutation({
+    onError: e => console.log("error in bookmarks:", e),
+    onSuccess: invalidateBookmarks,
+  });
+  const onBookmarkIconClick = (): void =>
+  {
+    if(!caseId)
+    {
+      return;
+    }
 
-  // const { allCases = [] } = useCases();
-  // const { allArticles = [] } = useArticles();
-  // const { bookmarks } = useBookmarks(undefined);
-  // const allCasesBookmarks = bookmarks.filter(bookmark => bookmark?.resourceType === "case") ?? [];
-  // const allArticlesBookmarks = bookmarks.filter(bookmark => bookmark?.resourceType === "article") ?? [];
-  // const bookmarkedArticles = allArticles.filter((caisyArticle: IGenArticle) => allArticlesBookmarks.some(bookmark => bookmark.resourceId === caisyArticle.id));
-  // const bookmarkedCases = allCases.filter(caisyCase => allCasesBookmarks.some(bookmark => bookmark.resourceId === caisyCase.id));
-  // const isItemBookmarked = bookmarkedCases.some(bookmark => bookmark.title === title) || bookmarkedArticles?.some(bookmark => bookmark.title === title) || false;
-  // const isItemBookmarked = false;
+    const bookmarkData: AddOrRemoveBookmarkSchema = {
+      resourceId: caseId,
+      resourceType: variant === "case" ? "case" : "article"
+    };
+
+    if(!isItemBookmarked)
+    {
+      addBookmark(bookmarkData);
+      return;
+    }
+    else
+    {
+      removeBookmark(bookmarkData);
+    }
+  };
   const icons = [
-    // { src: isItemBookmarked ? <BookmarkFilledIcon/> : <Bookmark/>, title: "Bookmark" },
+    { click: () => onBookmarkIconClick(), src: isItemBookmarked ? <BookmarkFilledIcon/> : <Bookmark/>, title: "Bookmark" },
     // { src: <Pin/>, title: "Pin" },
-    { src: <Print/>, title: "Print" },
+    { click: () => window.print(), src: <Print/>, title: "Print" },
   ];
   const theme = useMantineTheme();
   

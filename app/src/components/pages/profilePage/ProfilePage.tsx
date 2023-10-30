@@ -9,7 +9,6 @@ import SubscriptionTab from "@/components/subscriptionTab/SubscriptionTab";
 import useUserDetails from "@/hooks/useUserDetails";
 
 import { Container } from "@mantine/core";
-import { useMediaQuery } from "@mantine/hooks";
 import { parseAsString, useQueryState } from "next-usequerystate";
 import React, { type FunctionComponent, type ReactNode, useMemo } from "react";
 
@@ -17,10 +16,10 @@ import * as styles from "./ProfilePage.styles";
 
 export const tabs = [
   { slug: "overview", title: "Übersicht" },
-  /* { slug: "history", title: "Verlauf" },*/
   { slug: "profile-details", title: "Einstellungen" },
   { slug: "change-password", title: "Passwort ändern" },
   { slug: "subscription", title: "Vertrag" },
+  // { slug: "history", title: "Verlauf" },
 ] as const;
 
 const ProfilePage: FunctionComponent = () =>
@@ -53,8 +52,6 @@ const ProfilePage: FunctionComponent = () =>
         return <ProfileDetailsTab userDetails={userDetails}/>;
       case "change-password":
         return <ChangePasswordTab/>;
-      /* case "history":
-        return <ProfileHistoryTab/>;*/
       case "subscription":
         return <SubscriptionTab subscriptionStatus="You are currently using a free 5-day trial. You can purchase a subscription by clicking the button below:"/>;
       default:
@@ -64,22 +61,20 @@ const ProfilePage: FunctionComponent = () =>
     }
   }, [activeTab, error, isLoading, userDetails]);
 
-  const isTabletScreen = useMediaQuery("(max-width: 1100px)");
-
   return (
     <div>
       <ProfilePageHeader/>
-      {isTabletScreen && (
-        <ProfileNavMenuTablet
-          tabs={tabs}
-          setTab={setTab}
-          activeTabSlug={activeTab?.slug}
-        />
-      )}
+      <ProfileNavMenuTablet
+        tabs={tabs}
+        setTab={setTab}
+        activeTabSlug={activeTab?.slug}
+      />
       <Container
+        p={0}
         maw="100%"
         css={styles.outerContianer}>
         <Container
+          p={0}
           maw={1440}
           css={styles.innerContainer}>
           <ProfileMenu

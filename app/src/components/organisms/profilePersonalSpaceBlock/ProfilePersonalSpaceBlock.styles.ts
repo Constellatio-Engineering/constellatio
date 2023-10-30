@@ -31,6 +31,7 @@ export const blockHeadIcon = css`
 `;
 export const blockHeadCallToAction = css`
 	flex-basis: 35%;
+	white-space: nowrap;
 `;
 export const casesCard = css`
 	display: flex;
