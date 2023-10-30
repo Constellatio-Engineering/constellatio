@@ -2,7 +2,7 @@ import { AlertCard } from "@/components/atoms/Card/AlertCard";
 import { Dropdown } from "@/components/atoms/Dropdown/Dropdown";
 import { Input } from "@/components/atoms/Input/Input";
 import { type UpdateUserDetailsSchema, updateUserDetailsSchema } from "@/schemas/auth/updateUserDetails.schema";
-import { allUniversities, maximumAmountOfSemesters } from "@/schemas/auth/userData.validation";
+import { allUniversities, maximumAmountOfSemesters, type University } from "@/schemas/auth/userData.validation";
 import { type UserFiltered } from "@/utils/filters";
 
 import { Title, Box } from "@mantine/core";
@@ -19,50 +19,34 @@ type Props = {
 
 const ProfileDetailsTab: FunctionComponent<Props> = ({ userDetails }) =>
 {
-  const [err, setErr] = React.useState<boolean>(false);
-  const [success, setSuccess] = React.useState<boolean>(false);
-  const isTabletScreen = useMediaQuery("(max-width: 1100px)"); 
-
+  const isTabletScreen = useMediaQuery("(max-width: 1100px)");
   const form = useForm<UpdateUserDetailsSchema>({
     initialValues: {
       firstName: userDetails.firstName,
       lastName: userDetails.lastName,
       profileName: userDetails.displayName,
       semester: String(userDetails.semester),
-      university: userDetails.university,
+      university: userDetails.university as University || null,
     },
     validate: zodResolver(updateUserDetailsSchema),
     validateInputOnBlur: true,
   });
 
-  const handleSubmit = (e: React.FormEvent<HTMLFormElement>): void =>
-  {
-    e.preventDefault();
-    if(Object.keys(form.errors).length > 0)
-    {
-      setErr(true);
-      setSuccess(false);
-    }
-    else
-    {
-      setErr(false);
-      setSuccess(true);
-    }
-  };
+  const onSubmit = (): void => console.log(form.values);
 
   return (
     <div css={styles.wrapper}>
       {!isTabletScreen && <Title order={3}>Einstellungen</Title>}
-      {err && <AlertCard onClick={() => setErr(false)} variant="error">Es tut uns leid, deine Eingaben konnten nicht gespeichert werden. Bitte versuche es erneut.</AlertCard>}
-      {success && (
+      {/* {err && <AlertCard onClick={() => setErr(false)} variant="error">Es tut uns leid, deine Eingaben konnten nicht gespeichert werden. Bitte versuche es erneut.</AlertCard>}*/}
+      {/* {success && (
         <AlertCard
           style={{ justifyContent: "flex-start" }}
           onClick={() => setSuccess(false)}
           stylesOverwrite={{ display: "flex", justifyContent: "flex-start", textAlign: "left" }}
           variant="success">Deine Änderungen wurden gespeichert.
         </AlertCard>
-      )}
-      <form onSubmit={handleSubmit}>
+      )}*/}
+      <form onSubmit={onSubmit}>
         <Input
           inputType="text"
           label="Vorname" 

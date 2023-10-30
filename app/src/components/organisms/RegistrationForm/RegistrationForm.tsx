@@ -3,22 +3,25 @@ import { BodyText } from "@/components/atoms/BodyText/BodyText";
 import { Button } from "@/components/atoms/Button/Button";
 import { Checkbox } from "@/components/atoms/Checkbox/Checkbox";
 import { CustomLink } from "@/components/atoms/CustomLink/CustomLink";
-import { Dropdown } from "@/components/atoms/Dropdown/Dropdown";
-import { Input } from "@/components/atoms/Input/Input";
-import { PasswordValidationSchema } from "@/components/helpers/PasswordValidationSchema";
-import { allGenders } from "@/components/organisms/RegistrationForm/RegistrationForm.data";
+import DisplayNameInput from "@/components/organisms/RegistrationForm/form/DisplayNameInput";
+import EmailInput from "@/components/organisms/RegistrationForm/form/EmailInput";
+import FirstNameInput from "@/components/organisms/RegistrationForm/form/FirstNameInput";
+import GenderDropdown, { allGenders } from "@/components/organisms/RegistrationForm/form/GenderDropdown";
+import LastNameInput from "@/components/organisms/RegistrationForm/form/LastNameInput";
+import PasswordInput from "@/components/organisms/RegistrationForm/form/PasswordInput";
+import SemesterDropdown from "@/components/organisms/RegistrationForm/form/SemesterDropdown";
+import UniversityDropdown from "@/components/organisms/RegistrationForm/form/UniversityDropdown";
 import { colors } from "@/constants/styles/colors";
 import { env } from "@/env.mjs";
 import { supabase } from "@/lib/supabase";
 import { type RegistrationFormSchema, registrationFormSchema } from "@/schemas/auth/registrationForm.schema";
-import { allUniversities, maximumAmountOfSemesters } from "@/schemas/auth/userData.validation";
+import { allUniversities } from "@/schemas/auth/userData.validation";
 import { api } from "@/utils/api";
 import { isDevelopment, isDevelopmentOrStaging } from "@/utils/env";
 import { getConfirmEmailUrl, paths } from "@/utils/paths";
 
-import { Box, Stack, Title } from "@mantine/core";
+import { Stack, Title } from "@mantine/core";
 import { useForm, zodResolver } from "@mantine/form";
-import { useDisclosure } from "@mantine/hooks";
 import { notifications } from "@mantine/notifications";
 import Link from "next/link";
 import { useRouter } from "next/router";
@@ -57,7 +60,6 @@ export const RegistrationForm: FunctionComponent = () =>
 {
   const { t } = useTranslation();
   const router = useRouter();
-  const [isPasswordRevealed, { toggle }] = useDisclosure(false);
   const form = useForm<RegistrationFormSchema>({
     initialValues,
     validate: zodResolver(registrationFormSchema),
@@ -203,103 +205,18 @@ export const RegistrationForm: FunctionComponent = () =>
             stylesOverwrite={{ color: colors["neutrals-02"][2], marginBottom: 10, textAlign: "left" }}>
             Du hast schon ein Konto?
           </CustomLink>
-          <Input
-            {...form.getInputProps("firstName")}
-            inputType="text"
-            label="Vorname*"
-            title="Vorname"
-            placeholder="Maximilian"
+          <FirstNameInput {...form.getInputProps("firstName")}/>
+          <LastNameInput {...form.getInputProps("lastName")}/>
+          <DisplayNameInput {...form.getInputProps("displayName")}/>
+          <EmailInput {...form.getInputProps("email")}/>
+          <PasswordInput
+            passwordInputProps={form.getInputProps("password")}
+            confirmPasswordInputProps={form.getInputProps("passwordConfirmation")}
+            currentPassword={form.values.password}
           />
-          <Input
-            {...form.getInputProps("lastName")}
-            inputType="text"
-            label="Nachname*"
-            title="Nachname"
-            placeholder="Mustermann"
-          />
-          <Input
-            {...form.getInputProps("displayName")}
-            inputType="text"
-            label="Anzeigename*"
-            title="Anzeigename"
-            placeholder="Max"
-          />
-          <Input
-            {...form.getInputProps("email")}
-            inputType="text"
-            label="E-Mail*"
-            title="E-Mail"
-            placeholder="max.mustermann@mail.com"
-          />
-          <Box>
-            <Input
-              {...form.getInputProps("password")}
-              inputType="password"
-              label="Passwort*"
-              title="Passwort"
-              placeholder={"*".repeat(16)}
-              onVisibilityChange={toggle}
-            />
-            <PasswordValidationSchema
-              passwordValue={form.values.password}
-              isPasswordRevealed={isPasswordRevealed}
-            />
-          </Box>
-          <Input
-            {...form.getInputProps("passwordConfirmation")}
-            inputType="password"
-            label="Passwort bestätigen*"
-            placeholder={"*".repeat(16)}
-            title="Passwort bestätigen"
-            onVisibilityChange={toggle}
-          />
-          <Dropdown
-            {...form.getInputProps("university")}
-            label="Universität (optional)"
-            title="Universität"
-            placeholder="Universität auswählen"
-            clearable
-            allowDeselect
-            data={allUniversities}
-            nothingFound="Keine Universität gefunden..."
-            searchable
-          />
-          <Box maw={240}>
-            <Dropdown
-              {...form.getInputProps("semester")}
-              label="Semester*"
-              title="Semester"
-              placeholder="Semester auswählen"
-              data={Array(maximumAmountOfSemesters + 1).fill(null).map((_, i) =>
-              {
-                if(i === 0)
-                {
-                  return ({
-                    label: "Referendariat",
-                    value: String(i)
-                  });
-                }
-                else if(i === maximumAmountOfSemesters)
-                {
-                  return ({
-                    label: `> ${maximumAmountOfSemesters - 1}`,
-                    value: String(i)
-                  });
-                }
-                return ({
-                  label: String(i),
-                  value: String(i)
-                });
-              })}
-            />
-          </Box>
-          <Dropdown
-            {...form.getInputProps("gender")}
-            label="Geschlecht*"
-            title="Geschlecht"
-            placeholder="Geschlecht auswählen"
-            data={allGenders.map(gender => ({ label: gender.label, value: gender.identifier }))}
-          />
+          <UniversityDropdown {...form.getInputProps("university")}/>
+          <SemesterDropdown {...form.getInputProps("semester")}/>
+          <GenderDropdown {...form.getInputProps("gender")}/>
           <Checkbox
             {...form.getInputProps("acceptTOS", { type: "checkbox" })}
             label={(

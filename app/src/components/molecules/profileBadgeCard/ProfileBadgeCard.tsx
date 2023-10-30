@@ -11,6 +11,7 @@ import * as styles from "./ProfileBadgeCard.styles";
 interface ProfileBadgeCardProps extends BadgeWithUserData
 {
   readonly isHighlighted?: boolean;
+  readonly shouldSmallVariantAdjustSizeToParent?: boolean;
   readonly size: "small" | "large";
 }
 
@@ -22,6 +23,7 @@ const ProfileBadgeCard: FunctionComponent<ProfileBadgeCardProps> = ({
   isHighlighted = false,
   name,
   publicationState,
+  shouldSmallVariantAdjustSizeToParent = false,
   size,
 }) => 
 {
@@ -72,6 +74,7 @@ const ProfileBadgeCard: FunctionComponent<ProfileBadgeCardProps> = ({
       css={[
         styles.wrapper,
         isSmall ? styles.wrapperSmall : styles.wrapperLarge(shouldBeHighlighted),
+        (isSmall && shouldSmallVariantAdjustSizeToParent) && styles.wrapperSmallFullWidth,
         isComingSoon && styles.wrapperDisabled
       ]}>
       {isComingSoon && (

@@ -11,7 +11,7 @@ interface ProfileMenuUniversityTabProps
 {
   readonly imgSrc?: string;
   readonly semester: string;
-  readonly title: string;
+  readonly title: string | null;
 }
 
 const ProfileMenuUniversityTab: FunctionComponent<ProfileMenuUniversityTabProps> = ({ imgSrc, semester, title }) => 

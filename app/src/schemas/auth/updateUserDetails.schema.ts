@@ -7,7 +7,7 @@ export const updateUserDetailsSchema = z.object({
   lastName: nameValidation.optional(),
   profileName: nameValidation.optional(),
   semester: semesterValidation.optional(),
-  university: universityValidation.optional(),
+  university: universityValidation.nullable(),
 });
 
 export type UpdateUserDetailsSchema = z.input<typeof updateUserDetailsSchema>;

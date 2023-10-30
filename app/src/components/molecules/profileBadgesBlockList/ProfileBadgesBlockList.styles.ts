@@ -1,18 +1,22 @@
 import { css } from "@emotion/react";
 import { type MantineTheme } from "@mantine/styles";
+
 const CSSShowAllAreaCommons = (theme: MantineTheme) => css`
-position:absolute;
-        content: "";
-        top:50%;
-        background-color: ${theme.colors["neutrals-01"][3]};
-        width: 41%;
-        height: 1px;
+  position:absolute;
+  content: "";
+  top:50%;
+  background-color: ${theme.colors["neutrals-01"][3]};
+  width: 41%;
+  height: 1px;
 `;
+
 export const wrapper = css`
-  display: flex;
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
   gap: 24px;
   flex-wrap: wrap;
 `;
+
 export const showAllArea = (theme: MantineTheme) => css`
   background-color: ${theme.colors["neutrals-01"][0]};
   width: 100%;
