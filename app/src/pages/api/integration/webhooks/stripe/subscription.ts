@@ -46,7 +46,7 @@ const handler: NextApiHandler = async (req, res) =>
   {
     switch (event.type)
     {
-      case "customer.subscription.updated":
+      case "customer.subscription.updated": case "customer.subscription.created":
       {
         const updateSubscription = async (): Promise<void> =>
         {
@@ -63,15 +63,12 @@ const handler: NextApiHandler = async (req, res) =>
           const subscriptionStartDate = new Date(currentPeriodStart * 1000);
           const subscriptionEndDate = new Date(currentPeriodEnd * 1000);
 
-          if(subscriptionStatus === "active")
-          {
-            await db.update(users).set({
-              subscribedPlanPriceId: priceId,
-              subscriptionEndDate,
-              subscriptionStartDate,
-              subscriptionStatus
-            }).where(eq(users.stripeCustomerId, stripeCustomerId));
-          }
+          await db.update(users).set({
+            subscribedPlanPriceId: priceId,
+            subscriptionEndDate,
+            subscriptionStartDate,
+            subscriptionStatus
+          }).where(eq(users.stripeCustomerId, stripeCustomerId));
         };
         await updateSubscription();
         break;
@@ -80,15 +77,12 @@ const handler: NextApiHandler = async (req, res) =>
       {
         const deleteSubscription = async (): Promise<void> =>
         {
-          if(subscriptionStatus !== "active")
-          {
-            await db.update(users).set({
-              subscribedPlanPriceId: null,
-              subscriptionEndDate: null,
-              subscriptionStartDate: null,
-              subscriptionStatus
-            }).where(eq(users.stripeCustomerId, stripeCustomerId));
-          }
+          await db.update(users).set({
+            subscribedPlanPriceId: null,
+            subscriptionEndDate: null,
+            subscriptionStartDate: null,
+            subscriptionStatus
+          }).where(eq(users.stripeCustomerId, stripeCustomerId));
         };
         await deleteSubscription();
         break;

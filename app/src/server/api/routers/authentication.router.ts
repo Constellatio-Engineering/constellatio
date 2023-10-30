@@ -1,5 +1,7 @@
 import { db } from "@/db/connection";
 import { type UserInsert, users } from "@/db/schema";
+import { env } from "@/env.mjs";
+import { stripe } from "@/lib/stripe";
 import { registrationFormSchema } from "@/schemas/auth/registrationForm.schema";
 import { createTRPCRouter, publicProcedure } from "@/server/api/trpc";
 import { getConfirmEmailUrl } from "@/utils/paths";
@@ -47,6 +49,12 @@ export const authenticationRouter = createTRPCRouter({
         throw new InternalServerError(new Error("User ID was null after signUp. This should probably not happen and should be investigated."));
       }
 
+      const stripeCustomerId = await stripe.customers.create({
+        email: input.email,
+        metadata: { supabaseUuid: userId, },
+        name: `${input.firstName} ${input.lastName}`
+      });
+
       try
       {
         const userToInsert: UserInsert = {
@@ -57,7 +65,8 @@ export const authenticationRouter = createTRPCRouter({
           id: userId,
           lastName: input.lastName,
           semester: input.semester,
-          university: input.university,
+          stripeCustomerId: stripeCustomerId.id,
+          university: input.university
         };
 
         await db.insert(users).values(userToInsert);
@@ -76,7 +85,25 @@ export const authenticationRouter = createTRPCRouter({
         throw new InternalServerError(new Error("Error while inserting user: " + e));
       }
 
-      console.log(`Complete sign up took ${performance.now() - start}ms`);
+      console.log(`Complete sign up took ${performance.now() - start}ms`); 
+
+      try 
+      {
+        await stripe.subscriptions.create({
+          customer: stripeCustomerId.id,
+          items: [{ plan: env.STRIPE_PREMIUM_PLAN_PRICE_ID, quantity: 1 }],
+          trial_period_days: 10,
+          trial_settings: {
+            end_behavior: { missing_payment_method: "cancel" }
+          }
+        });
+      }
+      catch (error) 
+      {
+        console.error("Error while creating subscription", error);
+      }
+
+      console.log("Trail Period Started");
 
       if(!signUpData.session)
       {
