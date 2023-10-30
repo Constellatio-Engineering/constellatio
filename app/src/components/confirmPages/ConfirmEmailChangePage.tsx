@@ -1,10 +1,9 @@
 import { BodyText } from "@/components/atoms/BodyText/BodyText";
-import { supabase } from "@/lib/supabase";
 import { paths } from "@/utils/paths";
 
 import { Loader, Title } from "@mantine/core";
-import { useMutation } from "@tanstack/react-query";
-import { useRouter } from "next/router";
+import { useSession, useUser } from "@supabase/auth-helpers-react";
+import Router, { useRouter } from "next/router";
 import React, { type FunctionComponent, useEffect, useRef, useState } from "react";
 
 import * as styles from "./ConfirmPage.styles";
@@ -17,27 +16,6 @@ const ConfirmEmailChangePage: FunctionComponent = () =>
   const { code } = router.query;
   const redirectIntervalRef = useRef<NodeJS.Timer>();
   const [secondsUntilRedirect, setSecondsUntilRedirect] = useState<number>(4);
-
-  const { error: loginWithExchangeCodeError, isLoading: isLoginWithExchangeCodeLoading, mutate: loginWithExchangeCode } = useMutation({
-    mutationFn: async (code: string) =>
-    {
-      const loginResult = await supabase.auth.exchangeCodeForSession(code);
-
-      if(loginResult.error)
-      {
-        throw loginResult.error;
-      }
-
-      console.log("Successfully logged in with exchange code", loginResult.data);
-
-      await router.replace(paths.profile);
-    },
-    onError: (error: Error) => console.error("Could not login with exchange code", error),
-    onSuccess: () =>
-    {
-      console.log("Successfully logged in with exchange code. Redirecting...");
-    },
-  });
 
   useEffect(() =>
   {
@@ -60,12 +38,12 @@ const ConfirmEmailChangePage: FunctionComponent = () =>
         if(newSeconds <= 0)
         {
           clearInterval(redirectIntervalRef.current);
-          loginWithExchangeCode(code as string);
+          void Router.replace(paths.profile);
           return 0;
         }
         else
         {
-          return seconds - 1;
+          return newSeconds;
         }
       });
     }, 1000);
@@ -77,27 +55,22 @@ const ConfirmEmailChangePage: FunctionComponent = () =>
         clearInterval(redirectIntervalRef.current);
       }
     };
-  }, [code, loginWithExchangeCode]);
+  }, [code]);
 
   let title: string;
   let description: string;
-  let redirectText: string | null = null;
+  let showLoader = false;
 
   if(params.error)
   {
     title = "Da ist leider etwas schief gelaufen.";
     description = params.error_description ?? "";
   }
-  else if(loginWithExchangeCodeError)
-  {
-    title = "Da ist leider etwas schief gelaufen.";
-    description = loginWithExchangeCodeError.message;
-  }
   else if(code)
   {
     title = "Deine E-Mail Adresse wurde erfolgreich geändert.";
-    description = "Du kannst diesen Tab jetzt schließen und in deinem ursprünglichen Tab fortfahren";
-    redirectText = `Du wirst in ${secondsUntilRedirect} Sekunden automatisch weitergeleitet.`;
+    description = `Du wirst ${secondsUntilRedirect <= 0 ? "jetzt" : `in ${secondsUntilRedirect} Sekunden automatisch`} weitergeleitet.`;
+    showLoader = secondsUntilRedirect <= 0;
   }
   else if(params.message === "Confirmation link accepted. Please proceed to confirm link sent to the other email")
   {
@@ -116,22 +89,10 @@ const ConfirmEmailChangePage: FunctionComponent = () =>
       <Title order={2} css={styles.title}>
         {title}
       </Title>
-      <BodyText styleType="body-01-regular" component="p">
+      <BodyText styleType="body-01-regular" component="p" style={{ alignItems: "center", display: "flex", gap: 8 }}>
         {description}
+        {showLoader && <Loader size={22}/>}
       </BodyText>
-      {redirectText && (
-        <BodyText styleType="body-01-regular" component="p">
-          {redirectText}
-        </BodyText>
-      )}
-      {isLoginWithExchangeCodeLoading && (
-        <div style={{
-          alignItems: "center", display: "flex", fontSize: 18, gap: 8, marginTop: 50
-        }}>
-          <p>Du wirst jetzt weitergeleitet...</p>
-          <Loader size={22}/>
-        </div>
-      )}
     </div>
   );
 };
