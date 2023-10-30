@@ -4,7 +4,7 @@ import {
   text, pgTable, integer, pgEnum, uuid, smallint, unique, timestamp, primaryKey, index
 } from "drizzle-orm/pg-core";
 
-export const allGenderIdentifiers = ["male", "female", "diverse",] as const;
+export const allGenderIdentifiers = ["male", "female", "diverse"] as const;
 export type GenderIdentifier = typeof allGenderIdentifiers[number];
 
 export const allOnboardingResults = ["skipped", "completed"] as const;
@@ -76,7 +76,7 @@ export const users = pgTable("User", {
   lastName: text("LastName").notNull(),
   semester: smallint("Semester"),
   stripeCustomerId: text("StripeCustomerId"),
-  university: text("University").notNull(),
+  university: text("University"),
   onboardingResult: onboardingResultEnum("OnboardingResult"),
   subscriptionStatus: subscriptionStatusEnum("SubscriptionStatus"),
   subscriptionStartDate: timestamp("SubscriptionStartDate"),

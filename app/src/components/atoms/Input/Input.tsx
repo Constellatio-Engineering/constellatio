@@ -1,4 +1,3 @@
-/* eslint-disable react/no-unstable-nested-components */
 import { AlertFilled } from "@/components/Icons/AlertFilled";
 import { Hide } from "@/components/Icons/Hide";
 import { Show } from "@/components/Icons/Show";
@@ -32,6 +31,7 @@ export const Input: FC<InputProps> = ({
       })}
       error={error}
       disabled={disabled}
+      // eslint-disable-next-line react/no-unstable-nested-components
       visibilityToggleIcon={({ reveal }) => (reveal ? <Show/> : <Hide/>)}
       {...props}
     />

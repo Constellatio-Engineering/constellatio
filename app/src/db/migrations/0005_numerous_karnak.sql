@@ -1,0 +1,1 @@
+ALTER TABLE "User" ALTER COLUMN "University" DROP NOT NULL;

@@ -12,15 +12,18 @@ const ProfileBadgesBlockList: FunctionComponent = () =>
 {
   const { getBadgesResult: { badges } } = useBadges();
   const [showAll, setShowAll] = React.useState<boolean>(false);
+  const badgesToShowWithoutShowAll = 9;
 
   return (
-    <div css={styles.wrapper}>
-      {badges.slice(0, showAll ? badges.length : 9)?.map((badge, badgeIndex) => (
-        <Fragment key={badgeIndex}>
-          <ProfileBadgeCard {...badge} size="small"/>
-        </Fragment>
-      ))}
-      {badges.length > 9 && (
+    <>
+      <div css={styles.wrapper}>
+        {badges.slice(0, showAll ? badges.length : badgesToShowWithoutShowAll)?.map((badge, badgeIndex) => (
+          <Fragment key={badgeIndex}>
+            <ProfileBadgeCard {...badge} size="small" shouldSmallVariantAdjustSizeToParent/>
+          </Fragment>
+        ))}
+      </div>
+      {badges.length > badgesToShowWithoutShowAll && (
         <div css={styles.showAllArea}>
           {!showAll && <span css={styles.showAllGredient}/>}
           <Button<"button">
@@ -31,7 +34,7 @@ const ProfileBadgesBlockList: FunctionComponent = () =>
           </Button>
         </div>
       )}
-    </div>
+    </>
   );
 };
 
