@@ -148,7 +148,7 @@ const OverviewCard: FunctionComponent<IOverviewCard> = ({
           </div>
           {/* <ScrollArea> */}
           <div className="row-value tags-values">
-            {filteredTags?.map((tag, tagIndex) => <Tag key={tagIndex}>{tag?.tagName}</Tag>)}
+            {filteredTags?.map((tag, tagIndex) => <span key={tagIndex} style={{ pointerEvents: "none" }}><Tag>{tag?.tagName}</Tag></span>)}
           </div>
           <BodyText
             type="button"
