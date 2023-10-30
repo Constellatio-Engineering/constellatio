@@ -1,6 +1,5 @@
 import ChangePasswordTab from "@/components/organisms/changePasswordTab/ChangePasswordTab";
 import ProfileDetailsTab from "@/components/organisms/profileDetailsTab/ProfileDetailsTab";
-import ProfileHistoryTab from "@/components/organisms/profileHistoryTab/ProfileHistoryTab";
 import ProfileMenu from "@/components/organisms/profileMenu/ProfileMenu";
 import RenderedTabSkeleton from "@/components/organisms/profileMenu/renderedTabSkeleton/RenderedTabSkeleton";
 import ProfileOverview from "@/components/organisms/profileOverview/ProfileOverview";
@@ -8,7 +7,6 @@ import ProfilePageHeader from "@/components/organisms/profilePageHeader/ProfileP
 import ProfileNavMenuTablet from "@/components/profileNavMenuTablet/ProfileNavMenuTablet";
 import SubscriptionTab from "@/components/subscriptionTab/SubscriptionTab";
 import useUserDetails from "@/hooks/useUserDetails";
-import { type IProfilePageProps } from "@/pages/profile";
 
 import { Container } from "@mantine/core";
 import { useMediaQuery } from "@mantine/hooks";
@@ -19,15 +17,13 @@ import * as styles from "./ProfilePage.styles";
 
 export const tabs = [
   { slug: "overview", title: "Übersicht" },
-  { slug: "history", title: "Verlauf" },
+  /* { slug: "history", title: "Verlauf" },*/
   { slug: "profile-details", title: "Einstellungen" },
   { slug: "change-password", title: "Passwort ändern" },
   { slug: "subscription", title: "Vertrag" },
 ] as const;
 
-type ProfilePageProps = IProfilePageProps;
-
-const ProfilePage: FunctionComponent<ProfilePageProps> = ({ allMainCategory }) =>
+const ProfilePage: FunctionComponent = () =>
 {
   const [tab, setTab] = useQueryState("tab", parseAsString.withDefault(tabs[0]!.slug));
   const activeTab = tabs?.find(x => x.slug === tab);
@@ -52,13 +48,13 @@ const ProfilePage: FunctionComponent<ProfilePageProps> = ({ allMainCategory }) =
     switch (activeTab?.slug)
     {
       case "overview":
-        return <ProfileOverview allMainCategory={allMainCategory}/>;
+        return <ProfileOverview/>;
       case "profile-details":
         return <ProfileDetailsTab userDetails={userDetails}/>;
       case "change-password":
         return <ChangePasswordTab/>;
-      case "history":
-        return <ProfileHistoryTab/>;
+      /* case "history":
+        return <ProfileHistoryTab/>;*/
       case "subscription":
         return <SubscriptionTab subscriptionStatus="You are currently using a free 5-day trial. You can purchase a subscription by clicking the button below:"/>;
       default:
@@ -66,7 +62,7 @@ const ProfilePage: FunctionComponent<ProfilePageProps> = ({ allMainCategory }) =
       /* case "Notifications":
         return <ProfileNotificationsTab/>;*/
     }
-  }, [activeTab, allMainCategory, error, isLoading, userDetails]);
+  }, [activeTab, error, isLoading, userDetails]);
 
   const isTabletScreen = useMediaQuery("(max-width: 1100px)");
 

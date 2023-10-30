@@ -29,6 +29,11 @@ export const wrapperSmall = css`
   }
 `;
 
+export const wrapperSmallFullWidth = css`
+  width: 100%;
+  min-width: unset;
+`;
+
 export const wrapperLarge = (isHighlighted: boolean) => css`
   flex: 1;
   transition: outline-color 0.3s ease-in-out .3s;

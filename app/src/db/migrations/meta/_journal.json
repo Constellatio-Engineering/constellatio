@@ -36,6 +36,20 @@
       "when": 1698556713349,
       "tag": "0004_normal_avengers",
       "breakpoints": true
+    },
+    {
+      "idx": 5,
+      "version": "5",
+      "when": 1698623095537,
+      "tag": "0005_numerous_karnak",
+      "breakpoints": true
+    },
+    {
+      "idx": 6,
+      "version": "5",
+      "when": 1698623096047,
+      "tag": "0006_high_silver_centurion",
+      "breakpoints": true
     }
   ]
 }

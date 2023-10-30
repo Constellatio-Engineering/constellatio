@@ -32,7 +32,7 @@ const ProfileMenuMainProfileInfo: FunctionComponent<Props> = ({ userDetails }) =
       </div>
       <div css={styles.profileName}>
         <div css={styles.profileNameText}>
-          <Title order={2}>{userDetails.firstName + " " + userDetails.lastName}</Title>
+          <Title style={{ fontSize: 25 }} order={2}>{userDetails.firstName + " " + userDetails.lastName}</Title>
         </div>
         <BodyText styleType="body-01-medium" css={styles.profileNameHandler} component="p">@{userDetails.displayName}</BodyText>
       </div>

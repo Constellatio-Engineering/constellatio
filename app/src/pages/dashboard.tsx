@@ -16,22 +16,9 @@ export const getServerSideProps: GetServerSideProps<ServerSidePropsResult> = asy
   const commonProps = await getCommonProps({ locale });
 
   return {
-    props: {
-      ...commonProps,
-      test: "test",
-    },
+    props: commonProps,
   };
 };
-
-// type SearchResults = {
-//   cases: CaseSearchIndexItem[];
-//   userUploads: UploadSearchIndexItem[];
-// };
-
-// const initialSearchResults: SearchResults = {
-//   cases: [],
-//   userUploads: [],
-// };
 
 const Dashboard: FunctionComponent<ServerSidePropsResult> = () =>
 {

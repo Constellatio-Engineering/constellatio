@@ -91,6 +91,13 @@ export const profileName = css`
 export const profileNameText = (theme: MantineTheme) => css`
   color: ${theme.colors["neutrals-02"][1]};
 `;
+
+export const tabsListWrapper = css`
+  @media screen and (max-width: ${1100}px) {
+    display: none;
+  }
+`;
+
 export const tabsList = css``;
 export const groupedLinks = css`
   padding: 24px 16px;
