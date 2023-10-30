@@ -13,5 +13,6 @@ const ProfileHistoryTab: FunctionComponent = () =>
     </div>
   );
 };
-
+// File not imported anywhere yet, rule disabled till component is implemented and utilized
+// eslint-disable-next-line import/no-unused-modules
 export default ProfileHistoryTab;

@@ -2,7 +2,6 @@ import useAllFavorites from "@/hooks/useAllFavorites";
 import useUploadedFiles from "@/hooks/useUploadedFiles";
 
 import { Tabs } from "@mantine/core";
-import { useRouter } from "next/router";
 import React, { type FunctionComponent } from "react";
 
 import * as styles from "./DashboardPersonalSpaceBlock.styles";
@@ -19,7 +18,6 @@ import EmptyStateCard from "../organisms/emptyStateCard/EmptyStateCard";
 const DashboardPersonalSpaceBlock: FunctionComponent = () => 
 {
   const [switcherValue, setSwitcherValue] = React.useState<"favorites" | "materials">("favorites");
-  const router = useRouter();
   const { uploadedFiles } = useUploadedFiles(null);
   const { favoritesList } = useAllFavorites();
   return (
