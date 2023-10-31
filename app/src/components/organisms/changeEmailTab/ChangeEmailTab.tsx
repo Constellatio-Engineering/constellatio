@@ -1,14 +1,17 @@
+import { BodyText } from "@/components/atoms/BodyText/BodyText";
 import { Button } from "@/components/atoms/Button/Button";
+import { CaptionText } from "@/components/atoms/CaptionText/CaptionText";
 import { AlertCard } from "@/components/atoms/Card/AlertCard";
 import { Input } from "@/components/atoms/Input/Input";
 import ErrorCard from "@/components/errorCard/ErrorCard";
+import { Modal } from "@/components/molecules/Modal/Modal";
 import { supabase } from "@/lib/supabase";
 import { type UpdateEmailSchema, updateEmailSchema } from "@/schemas/auth/updateEmail.schema";
 import { type UserFiltered } from "@/utils/filters";
 import { getConfirmEmailChange } from "@/utils/paths";
 import { queryParams } from "@/utils/query-params";
 
-import { Modal, Title } from "@mantine/core";
+import { Title } from "@mantine/core";
 import { useForm, zodResolver } from "@mantine/form";
 import { useMediaQuery } from "@mantine/hooks";
 import { useMutation } from "@tanstack/react-query";
@@ -31,7 +34,7 @@ const ChangeEmailTab: FunctionComponent<Props> = ({ userDetails }) =>
   const wasEmailChangedSuccessfully = router.query[queryParams.emailChangeSuccess] === "true";
   const { t } = useTranslation();
   const isTabletScreen = useMediaQuery("(max-width: 1100px)");
-  const [isConfirmationModalOpen, setIsConfirmationModalOpen] = useState<boolean>(false);
+  const [isConfirmationModalOpen, setIsConfirmationModalOpen] = useState<boolean>(true);
 
   const form = useForm<UpdateEmailSchema>({
     initialValues: {
@@ -128,15 +131,17 @@ const ChangeEmailTab: FunctionComponent<Props> = ({ userDetails }) =>
       <Modal
         opened={isConfirmationModalOpen}
         onClose={() => setIsConfirmationModalOpen(false)}
+        withCloseButton={false}
+        closeOnClickOutside={false}
+        radius={12}
         centered
         size="xl">
         <div css={styles.modalContentWrapper}>
-          <h1>Wichtiger Hinweis</h1>
-          <p style={{ color: "red", fontSize: 30, fontWeight: 700 }}>Hint from Kotti: This must no be closable unless user presses the &apos;Verstanden&apos; button</p>
-          <p>Aus Sicherheitsgründen, musst du sowohl <strong>deine alte</strong>, als auch <strong>deine neue E-Mail Adresse</strong> bestätigen.</p>
-          <p>Bitte schaue daher in <strong>beiden Postfächern</strong> nach und bestätige beide Links.</p>
-          <p>Erst dann wird deine E-Mail Adresse geändert.</p>
-          <Button<"button"> styleType="primary" onClick={() => setIsConfirmationModalOpen(false)}>
+          <Title mb={24} order={3}>Wichtiger Hinweis</Title>
+          <CaptionText mb={12} styleType="caption-01-medium" component='p'>Aus Sicherheitsgründen, musst du sowohl <strong>deine alte</strong>, als auch <strong>deine neue E-Mail Adresse</strong> bestätigen.</CaptionText>
+          <BodyText styleType="body-01-medium" component="p">Bitte schaue daher in <strong>beiden Postfächern</strong> nach und bestätige beide Links.</BodyText>
+          <BodyText mb={24} styleType="body-01-medium" component="p">Erst dann wird deine E-Mail Adresse geändert.</BodyText>
+          <Button<"button"> size="large" styleType="primary" onClick={() => setIsConfirmationModalOpen(false)}>
             Verstanden
           </Button>
         </div>
