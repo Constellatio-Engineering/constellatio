@@ -3,11 +3,13 @@ import { type UserInsert, users } from "@/db/schema";
 import { env } from "@/env.mjs";
 import { stripe } from "@/lib/stripe";
 import { registrationFormSchema } from "@/schemas/auth/registrationForm.schema";
+import { addBadgeForUser } from "@/server/api/services/badges.services";
 import { createTRPCRouter, publicProcedure } from "@/server/api/trpc";
 import { getConfirmEmailUrl } from "@/utils/paths";
 import { EmailAlreadyTakenError, InternalServerError, RegisterError } from "@/utils/serverError";
+import { getDataFromStripeSubscription } from "@/utils/stripe";
 
-import { eq } from "drizzle-orm";
+import { eq, sql } from "drizzle-orm";
 
 export const authenticationRouter = createTRPCRouter({
   register: publicProcedure
@@ -24,7 +26,6 @@ export const authenticationRouter = createTRPCRouter({
 
       if(existingUser)
       {
-        console.log("User with email already exists", existingUser);
         throw new EmailAlreadyTakenError();
       }
 
@@ -49,14 +50,32 @@ export const authenticationRouter = createTRPCRouter({
         throw new InternalServerError(new Error("User ID was null after signUp. This should probably not happen and should be investigated."));
       }
 
-      const stripeCustomerId = await stripe.customers.create({
-        email: input.email,
-        metadata: { supabaseUuid: userId, },
-        name: `${input.firstName} ${input.lastName}`
-      });
+      let stripeCustomerId: string | undefined;
+      let subscriptionId: string | undefined;
 
       try
       {
+        const createCustomerResult = await stripe.customers.create({
+          email: input.email,
+          metadata: { supabaseUuid: userId, },
+          name: `${input.firstName} ${input.lastName}`
+        });
+
+        stripeCustomerId = createCustomerResult.id;
+
+        const subscription = await stripe.subscriptions.create({
+          customer: stripeCustomerId,
+          items: [{ plan: env.STRIPE_PREMIUM_PLAN_PRICE_ID, quantity: 1 }],
+          trial_period_days: 10,
+          trial_settings: {
+            end_behavior: { missing_payment_method: "cancel" }
+          }
+        });
+
+        subscriptionId = subscription.id;
+
+        const subscriptionData = getDataFromStripeSubscription(subscription);
+
         const userToInsert: UserInsert = {
           displayName: input.displayName,
           email: input.email,
@@ -65,8 +84,12 @@ export const authenticationRouter = createTRPCRouter({
           id: userId,
           lastName: input.lastName,
           semester: input.semester,
-          stripeCustomerId: stripeCustomerId.id,
-          university: input.university
+          stripeCustomerId,
+          subscribedPlanPriceId: subscriptionData.subscribedPlanPriceId,
+          subscriptionEndDate: subscriptionData.subscriptionEndDate,
+          subscriptionStartDate: subscriptionData.subscriptionStartDate,
+          subscriptionStatus: subscriptionData.subscriptionStatus,
+          university: input.university,
         };
 
         await db.insert(users).values(userToInsert);
@@ -75,46 +98,47 @@ export const authenticationRouter = createTRPCRouter({
       {
         console.log("Deleting user because insertion into public schema failed");
 
-        const deleteUserResult = await supabaseServerClient.auth.admin.deleteUser(userId);
+        const cleanups: Array<Promise<unknown> | undefined> = [
+          supabaseServerClient.auth.admin.deleteUser(userId),
+          stripeCustomerId ? stripe.customers.del(stripeCustomerId) : undefined,
+          subscriptionId ? stripe.subscriptions.cancel(subscriptionId) : undefined
+        ].filter(Boolean);
 
-        if(deleteUserResult.error)
+        const cleanupResults = await Promise.allSettled(cleanups);
+
+        console.log("Cleanup results", cleanupResults);
+
+        for(const cleanupResult of cleanupResults)
         {
-          console.log("Error while deleting user", deleteUserResult.error);
+          if(cleanupResult.status === "rejected")
+          {
+            console.error("Error while cleaning up after failed user insertion", cleanupResult.reason);
+          }
         }
 
-        throw new InternalServerError(new Error("Error while inserting user: " + e));
+        throw new InternalServerError(new Error("Error while creating user: " + e));
       }
 
-      console.log(`Complete sign up took ${performance.now() - start}ms`); 
+      const usersCount = (await db.select({ count: sql<number>`count(*)` }).from(users))?.[0]?.count;
 
-      try 
+      if(usersCount && usersCount <= 100)
       {
-        await stripe.subscriptions.create({
-          customer: stripeCustomerId.id,
-          items: [{ plan: env.STRIPE_PREMIUM_PLAN_PRICE_ID, quantity: 1 }],
-          trial_period_days: 10,
-          trial_settings: {
-            end_behavior: { missing_payment_method: "cancel" }
-          }
-        });
-      }
-      catch (error) 
-      {
-        console.error("Error while creating subscription", error);
+        console.log("is one of the first 100 users");
+        await addBadgeForUser({ badgeIdentifier: "one-of-100", userId });
       }
 
-      console.log("Trail Period Started");
+      console.log(`Complete sign up took ${performance.now() - start}ms`);
 
       if(!signUpData.session)
       {
         // Sign up was successful, but email confirmation is enabled. The user needs to confirm their email address.
-        return ({ resultType: "emailConfirmationRequired" }) as const;
+        return { resultType: "emailConfirmationRequired" } as const;
       }
 
       // If the session is available right after sign up, it means that email confirmation is disabled.
-      return ({
+      return {
         resultType: "signupComplete",
         session: signUpData.session
-      }) as const;
+      } as const;
     }),
 });

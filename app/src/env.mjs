@@ -38,7 +38,6 @@ export const env = createEnv({
     RECREATE_SEARCH_INDEX_SECRET: z.string(),
     POSTGRES_MAX_CONNECTIONS: z.string().pipe(z.coerce.number().int().min(1).max(9999)),
     STRIPE_PAYMENT_METHODS_CONFIGURATION_ID: z.string(),
-
   },
 
 	/**

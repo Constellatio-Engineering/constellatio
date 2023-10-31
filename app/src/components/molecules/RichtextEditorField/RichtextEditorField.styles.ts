@@ -125,6 +125,8 @@ export const ContentWrapper = styled.div`
   flex-direction: column;
   justify-content: space-between;
   padding: 20px;
+  resize: vertical;
+  overflow: auto;
 
   .mantine-RichTextEditor-typographyStylesProvider .mantine-RichTextEditor-content .ProseMirror {
     > blockquote {

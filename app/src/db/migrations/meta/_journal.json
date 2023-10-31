@@ -19,36 +19,29 @@
     {
       "idx": 2,
       "version": "5",
-      "when": 1698556662209,
-      "tag": "0002_mute_paladin",
+      "when": 1698716460526,
+      "tag": "0002_next_captain_britain",
       "breakpoints": true
     },
     {
       "idx": 3,
       "version": "5",
-      "when": 1698556662723,
-      "tag": "0003_tough_vapor",
+      "when": 1698716461047,
+      "tag": "0003_brainy_logan",
       "breakpoints": true
     },
     {
       "idx": 4,
       "version": "5",
-      "when": 1698556713349,
-      "tag": "0004_normal_avengers",
+      "when": 1698716468294,
+      "tag": "0004_tired_weapon_omega",
       "breakpoints": true
     },
     {
       "idx": 5,
       "version": "5",
-      "when": 1698623095537,
-      "tag": "0005_numerous_karnak",
-      "breakpoints": true
-    },
-    {
-      "idx": 6,
-      "version": "5",
-      "when": 1698623096047,
-      "tag": "0006_high_silver_centurion",
+      "when": 1698718971225,
+      "tag": "0005_lean_crusher_hogan",
       "breakpoints": true
     }
   ]

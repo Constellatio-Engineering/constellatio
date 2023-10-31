@@ -1,6 +1,4 @@
-import useContextAndErrorIfNull from "@/hooks/useContextAndErrorIfNull";
 import { supabase } from "@/lib/supabase";
-import { InvalidateQueriesContext } from "@/provider/InvalidateQueriesProvider";
 import { paths } from "@/utils/paths";
 import { sleep } from "@/utils/utils";
 
@@ -13,8 +11,6 @@ type UseSignout = () => {
 
 export const useSignout: UseSignout = () =>
 {
-  const { invalidateEverything } = useContextAndErrorIfNull(InvalidateQueriesContext);
-
   const handleSignOut = async (): Promise<void> =>
   {
     try
@@ -22,7 +18,6 @@ export const useSignout: UseSignout = () =>
       await router.replace(paths.login);
       await sleep(500);
       await supabase.auth.signOut();
-      await invalidateEverything();
 
       notifications.show({
         message: "Bis bald bei Constellatio!",

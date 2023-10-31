@@ -7,12 +7,11 @@ type Options = {
 // eslint-disable-next-line @typescript-eslint/explicit-function-return-type
 const useBadges = (options?: Options) =>
 {
-  // TODO
   const { data, error, isLoading } = api.badges.getBadges.useQuery(undefined, {
     enabled: !options?.disabled,
     refetchOnMount: "always",
-    refetchOnWindowFocus: "always"
-    // staleTime: Infinity
+    refetchOnWindowFocus: "always",
+    staleTime: Infinity
   });
 
   return {

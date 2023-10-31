@@ -1,7 +1,7 @@
 {
   "version": "5",
   "dialect": "pg",
-  "id": "ecdd6474-29c7-4c4f-8fa7-d86be17cf531",
+  "id": "dd04f274-20fe-4247-bad6-9f1280638bcf",
   "prevId": "6e392f19-195c-44d3-8a30-843f82c28343",
   "tables": {
     "ArticleView": {
@@ -67,9 +67,9 @@
           "notNull": true,
           "default": "gen_random_uuid()"
         },
-        "Slug": {
-          "name": "Slug",
-          "type": "text",
+        "Identifier": {
+          "name": "Identifier",
+          "type": "BadgeIdentifier",
           "primaryKey": false,
           "notNull": true
         },
@@ -110,11 +110,11 @@
             "Id"
           ]
         },
-        "Badge_Slug_unique": {
-          "name": "Badge_Slug_unique",
+        "Badge_Identifier_unique": {
+          "name": "Badge_Identifier_unique",
           "nullsNotDistinct": false,
           "columns": [
-            "Slug"
+            "Identifier"
           ]
         }
       }
@@ -911,7 +911,7 @@
           "name": "University",
           "type": "text",
           "primaryKey": false,
-          "notNull": true
+          "notNull": false
         },
         "OnboardingResult": {
           "name": "OnboardingResult",
@@ -1030,6 +1030,38 @@
     }
   },
   "enums": {
+    "BadgeIdentifier": {
+      "name": "BadgeIdentifier",
+      "values": {
+        "cases-starter": "cases-starter",
+        "power-user": "power-user",
+        "longevity-champion": "longevity-champion",
+        "master-of-cases": "master-of-cases",
+        "forum-pro": "forum-pro",
+        "perfect-week-achiever": "perfect-week-achiever",
+        "smart-guy-10": "smart-guy-10",
+        "one-of-100": "one-of-100",
+        "play-and-learn-25": "play-and-learn-25",
+        "smart-guy-25": "smart-guy-25",
+        "three-day-streak": "three-day-streak",
+        "play-and-learn-3": "play-and-learn-3",
+        "smart-guy-5": "smart-guy-5",
+        "dedication-awardee": "dedication-awardee",
+        "play-and-learn-50": "play-and-learn-50",
+        "master-of-dictionary": "master-of-dictionary",
+        "favorites-collector": "favorites-collector",
+        "power-user-1": "power-user-1",
+        "active-member-1": "active-member-1",
+        "feedback-guru": "feedback-guru",
+        "ugc-uploader-1": "ugc-uploader-1",
+        "active-member-10": "active-member-10",
+        "feedback-master": "feedback-master",
+        "ugc-uploader-10": "ugc-uploader-10",
+        "active-member-5": "active-member-5",
+        "feedback-enthusiast": "feedback-enthusiast",
+        "ugc-uploader-5": "ugc-uploader-5"
+      }
+    },
     "BadgePublicationState": {
       "name": "BadgePublicationState",
       "values": {

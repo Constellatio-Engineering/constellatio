@@ -6,15 +6,26 @@ import { usePrevious } from "@/hooks/usePrevious";
 import { AuthStateContext } from "@/provider/AuthStateProvider";
 import { InvalidateQueriesContext } from "@/provider/InvalidateQueriesProvider";
 import { api } from "@/utils/api";
+import { type Path } from "@/utils/paths";
 
 import { Modal, Title } from "@mantine/core";
 import { useLocalStorage } from "@mantine/hooks";
-import React, { type FunctionComponent, useContext } from "react";
+import { useRouter } from "next/router";
+import React, { type FunctionComponent, useContext, useMemo } from "react";
 import { z } from "zod";
 
 import * as styles from "./NewNotificationEarnedWatchdog.styles";
 import { BodyText } from "../atoms/BodyText/BodyText";
 import { Cross } from "../Icons/Cross";
+
+const disabledForPaths: Path[] = [
+  "/confirm",
+  "/paymentSuccess",
+  "/confirm-email-change",
+  "/recover",
+  "/register",
+  "/login",
+];
 
 /*
  * The dismissed badges are stored in localStorage in case an error occurs
@@ -24,6 +35,11 @@ const NewNotificationEarnedWatchdog: FunctionComponent = () =>
 {
   const { isUserLoggedIn } = useContext(AuthStateContext);
   const apiUtils = api.useUtils();
+  const router = useRouter();
+  const isDisabledForCurrentPath = useMemo(
+    () => disabledForPaths.some((path) => router.pathname.startsWith(path)),
+    [router.pathname]
+  );
   const { invalidateBadges } = useContextAndErrorIfNull(InvalidateQueriesContext);
   const { getBadgesResult: { badges } } = useBadges({ disabled: !isUserLoggedIn });
   const [dismissedBadges, setDismissedBadges] = useLocalStorage<string[]>({
@@ -101,29 +117,47 @@ const NewNotificationEarnedWatchdog: FunctionComponent = () =>
   {
     renderedBadge = previousBadge;
   }
-  const close = (): void => currentBadge && markBadgeAsSeen({ badgeId: currentBadge.id });
+
+  const onClose = (): void =>
+  {
+    if(currentBadge)
+    {
+      markBadgeAsSeen({ badgeId: currentBadge.id });
+    }
+  };
+
   return (
     <>
       <Modal
         withCloseButton={false}
         lockScroll={false}
-        opened={newEarnedBadges.length > 0}
+        opened={newEarnedBadges.length > 0 && !isDisabledForCurrentPath}
         size="lg"
         radius="12px"
         styles={styles.newEarnedModalStyle()}
-        onClose={close}
+        onClose={onClose}
         centered>
         <div css={styles.customModalHeader}>
           <Title order={2}>Neue Errungenschaft</Title>
-          <span onClick={close}><Cross size={32}/></span>
+          <span onClick={onClose}><Cross size={32}/></span>
         </div>
         {renderedBadge && (
           <div css={styles.contentWrapper}>
             <div css={styles.imageWrapper}>
               <BadgeImage filename={renderedBadge.imageFilename} css={styles.image}/>
             </div>
-            <BodyText styleType="body-01-bold" mb={8} component="h2">{renderedBadge.name}</BodyText>
-            <BodyText styleType="body-01-regular" component="h2">{renderedBadge.description}</BodyText>
+            <BodyText
+              styleType="body-01-bold"
+              style={{ fontSize: 20, margin: "12px 0 10px" }}
+              component="h2">
+              {renderedBadge.name}
+            </BodyText>
+            <BodyText
+              styleType="body-01-regular"
+              style={{ marginBottom: 10 }}
+              component="h2">
+              {renderedBadge.description}
+            </BodyText>
           </div>
         )}
       </Modal>

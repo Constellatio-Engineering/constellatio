@@ -20,23 +20,12 @@ const BadgesCarousel: FunctionComponent = () =>
       slideSize="160px"
       controlsOffset={0}
       controlSize={32}
-      sx={{ 
+      sx={{
         "&::after": {
           background: `linear-gradient(to left, ${theme.colors["neutrals-01"][0]} 0%, rgba(255,255,255,0) 10%)`,
           content: "''",
           height: "100%",
           left: "0px",
-          pointerEvents: "none",
-          position: "absolute",
-          top: 0,
-          width: "100%",
-          zIndex: 1
-        },
-        "&::before": {
-          background: `linear-gradient(to right, ${theme.colors["neutrals-01"][0]} 0%, rgba(255,255,255,0) 2%)`,
-          content: "''",
-          height: "100%",
-          left: "-1px",
           pointerEvents: "none",
           position: "absolute",
           top: 0,

@@ -13,6 +13,8 @@ export const badgesRouter = createTRPCRouter({
   getBadges: protectedProcedure
     .query(async ({ ctx: { userId } }) =>
     {
+      // TODO: Separate users progress on badges to a separate query and handle data merging on the client
+
       const badgesQueryResult = await db.query.badges.findMany({
         orderBy: [asc(badges.name)],
         where: ne(badges.publicationState, "not-listed"),
@@ -30,11 +32,11 @@ export const badgesRouter = createTRPCRouter({
         .map((badge) => ({
           description: badge.description,
           id: badge.id,
+          identifier: badge.identifier,
           imageFilename: badge.imageFilename,
           isCompleted: badge.usersToBadges[0]?.hasCompletedBadge ?? false,
           name: badge.name,
           publicationState: badge.publicationState,
-          slug: badge.slug,
           wasSeen: badge.usersToBadges[0]?.userBadgeState === "seen" ?? false,
         }))
         .sort((a, b) => 

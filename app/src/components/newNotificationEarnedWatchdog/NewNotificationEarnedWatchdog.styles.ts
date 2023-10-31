@@ -3,7 +3,7 @@ import { type UnknownMantineStylesParams } from "@/utils/types";
 import { css } from "@emotion/react";
 import { type Styles, type ModalStylesNames, type MantineTheme } from "@mantine/core";
 
-const imageSize = 200;
+const imageSize = 180;
 
 export const contentWrapper = css`
   display:grid;
@@ -27,30 +27,27 @@ type ModalStyles = Styles<ModalStylesNames, UnknownMantineStylesParams>;
 
 export const newEarnedModalStyle = (): ModalStyles => 
 {
-  const styles: ModalStyles = (theme: MantineTheme) => ({
+  const styles: ModalStyles = (_theme) => ({
     body: {
       display: "grid",
       padding: "32px",
       placeItems: "center",
     },
-    content: {
-      boxShadow: `0 0 60px ${theme.colors["brand-01"][2]}`,
-    },
     overlay: {
       backgroundColor: "rgba(0,0,0,0.5)",
     },
-    
   });
   return styles;
 };
+
 export const customModalHeader = (theme: MantineTheme) => css`
   text-align: center;
   color: ${theme.colors["neutrals-02"][1]};
   padding: 24px 0;
-  svg{
+  svg {
     position: absolute;
     top: 16px;
     right: 16px;
     cursor: pointer;
-}
+  }
 `;
