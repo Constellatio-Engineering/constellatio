@@ -7,6 +7,7 @@ export const paths = {
   dashboard: "/dashboard",
   dictionary: "/dictionary",
   downloadDocument: "/api/documents/download",
+  getSubscriptionStatus: "/api/user/get-subscription-status",
   login: "/login",
   paymentConfirm: "/paymentSuccess",
   personalSpace: "/personal-space",

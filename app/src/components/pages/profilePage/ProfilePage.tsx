@@ -18,13 +18,14 @@ import * as styles from "./ProfilePage.styles";
 
 export const tabQueryKey = "tab";
 export const changeEmailTabSlug = "change-email";
+export const subscriptionTabSlug = "subscription";
 
 export const tabs = [
   { slug: "overview", title: "Übersicht" },
   { slug: "profile-details", title: "Einstellungen" },
   { slug: changeEmailTabSlug, title: "E-Mail ändern" },
   { slug: "change-password", title: "Passwort ändern" },
-  { slug: "subscription", title: "Vertrag" },
+  { slug: subscriptionTabSlug, title: "Vertrag" },
   // { slug: "history", title: "Verlauf" },
 ] as const;
 
