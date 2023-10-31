@@ -30,6 +30,7 @@ const useBadges = (options?: Options) =>
     enabled: !isDisabledForCurrentPath && !options?.disabled,
     refetchOnMount: "always",
     refetchOnWindowFocus: "always",
+    retry: false,
     staleTime: Infinity
   });
 
