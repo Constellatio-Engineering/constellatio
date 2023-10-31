@@ -127,7 +127,7 @@ export const DocsTableData: FunctionComponent<Document> = (doc) =>
           c="neutrals-01.9"
           component="p">
           <FolderIcon/>
-          {folderName}
+          {folderName.length > 0 ? folderName : "Standard Ordner"}
         </BodyText>
       </td>
       <td
