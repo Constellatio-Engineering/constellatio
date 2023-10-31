@@ -5,18 +5,17 @@ import { type ModalStylesNames, type Styles } from "@mantine/core";
 
 type ModalStyles = Styles<ModalStylesNames, UnknownMantineStylesParams>;
 
-export const modalStyles = (): ModalStyles => 
+export const modalStyles = ({ extension }: {extension?: string | null}): ModalStyles => 
 {
   const styles: ModalStyles = () => ({
     body: {
-      // maxHeight: "100%",
       padding: "0",
     },
-    
     content: {
-      background: "black",
-      minWidth: "80vw",
-      width: "max-content"
+      background: extension === "img" ? "transparent" : "black",
+      boxShadow: "none",
+      minWidth: extension === "img" ? "min-content" : "80vw",
+      width: extension === "img" ? "100%" : "max-content"
     },
     root: {
       overflow: "hidden",

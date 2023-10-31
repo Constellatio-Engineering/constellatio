@@ -16,7 +16,7 @@ const FileViewer: FunctionComponent = () =>
   const showFileViewerModal = useMaterialsStore(s => s.showFileViewerModal);
   const { isLoading: isGetUrlLoading, url: fileUrl } = useSignedGetUrl(fileId);
   const [fileType, setFileType] = useState<string | null>(null);
-
+  const [extensionState, setExtensionState] = useState<string | null>(null);
   useEffect(() => 
   {
     const getFileType = (url: string): string | null => 
@@ -24,18 +24,22 @@ const FileViewer: FunctionComponent = () =>
       const extension = url?.split("/")[5]?.split(".")[1]?.split("?")[0] || "";
       if(extension === "pdf") 
       {
+        setExtensionState("pdf");
         return "pdf";
       }
       else if(["jpg", "jpeg", "png", "gif"].includes(extension.toLocaleLowerCase())) 
       {
+        setExtensionState("img");
         return "image";
       }
       else if(["mp4", "webm"].includes(extension.toLocaleLowerCase())) 
       {
+        setExtensionState("vid");
         return "video";
       }
       else if(["docx", "doc"].includes(extension.toLocaleLowerCase())) 
       {
+        setExtensionState("doc");
         return "document";
       }
       else 
@@ -58,7 +62,6 @@ const FileViewer: FunctionComponent = () =>
             type="application/pdf"
             width="100%"
             height="100%"
-            
           />
         );
       case "image":
@@ -100,7 +103,7 @@ const FileViewer: FunctionComponent = () =>
       scrollAreaComponent={ScrollArea.Autosize}
       closeOnClickOutside
       closeOnEscape
-      styles={styles.modalStyles()}>
+      styles={styles.modalStyles({ extension: extensionState })}>
       {!isGetUrlLoading ? <div css={styles.wrapper}>{renderFile()}</div> : "Loading..."}
     </Modal>
   );
