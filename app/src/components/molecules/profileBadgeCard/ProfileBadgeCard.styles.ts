@@ -20,6 +20,13 @@ export const wrapperDisabled = css`
   cursor: default;
 `;
 
+export const wrapperNotCompleted = css`
+  > * {
+    opacity: .55;
+    filter: grayscale(100%)
+  }
+`;
+
 export const wrapperSmall = css`
   width: ${smallBadgeCardWidth}px;
   min-width: ${smallBadgeCardWidth}px;

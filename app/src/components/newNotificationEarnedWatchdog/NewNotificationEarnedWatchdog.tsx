@@ -1,12 +1,11 @@
 import BadgeImage from "@/components/badgeImage/BadgeImage";
 import { type BadgeWithUserData } from "@/db/schema";
-import useBadges from "@/hooks/useBadges";
+import useBadges, { disabledForPaths } from "@/hooks/useBadges";
 import useContextAndErrorIfNull from "@/hooks/useContextAndErrorIfNull";
 import { usePrevious } from "@/hooks/usePrevious";
 import { AuthStateContext } from "@/provider/AuthStateProvider";
 import { InvalidateQueriesContext } from "@/provider/InvalidateQueriesProvider";
 import { api } from "@/utils/api";
-import { type Path } from "@/utils/paths";
 
 import { Modal, Title } from "@mantine/core";
 import { useLocalStorage } from "@mantine/hooks";
@@ -17,15 +16,6 @@ import { z } from "zod";
 import * as styles from "./NewNotificationEarnedWatchdog.styles";
 import { BodyText } from "../atoms/BodyText/BodyText";
 import { Cross } from "../Icons/Cross";
-
-const disabledForPaths: Path[] = [
-  "/confirm",
-  "/paymentSuccess",
-  "/confirm-email-change",
-  "/recover",
-  "/register",
-  "/login",
-];
 
 /*
  * The dismissed badges are stored in localStorage in case an error occurs

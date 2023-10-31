@@ -75,7 +75,8 @@ const ProfileBadgeCard: FunctionComponent<ProfileBadgeCardProps> = ({
         styles.wrapper,
         isSmall ? styles.wrapperSmall : styles.wrapperLarge(shouldBeHighlighted),
         (isSmall && shouldSmallVariantAdjustSizeToParent) && styles.wrapperSmallFullWidth,
-        isComingSoon && styles.wrapperDisabled
+        isComingSoon && styles.wrapperDisabled,
+        !isCompleted && styles.wrapperNotCompleted
       ]}>
       {isComingSoon && (
         <div css={styles.comingSoonOverlay}>
