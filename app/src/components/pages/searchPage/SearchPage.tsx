@@ -1,9 +1,9 @@
 import EmptyStateCard from "@/components/organisms/emptyStateCard/EmptyStateCard";
-import useSearchResults, { type SearchResults, type SearchResultsKey } from "@/hooks/useSearchResults";
+import useSearchResults, { type SearchResultsKey } from "@/hooks/useSearchResults";
 import useSearchBarStore from "@/stores/searchBar.store";
 
 import { createParser, useQueryState } from "next-usequerystate";
-import React, { type FunctionComponent } from "react";
+import React, { useMemo, type FunctionComponent } from "react";
 
 import * as styles from "./SearchPage.styles";
 import SearchPageFiltering from "./SearchPageFiltering";
@@ -13,9 +13,9 @@ import SearchPageResults from "./SearchPageResults";
 const tabSchema = createParser({
   parse: (query: string) =>
   {
-    switch (query as keyof SearchResults)
+    switch (query as SearchResultsKey)
     {
-      case "userUploads": case "userDocuments": { return "userUploads"; }
+      case "userUploads": { return "userUploads"; }
       case "cases": { return "cases"; }
       case "articles": { return "articles"; }
       default:
@@ -33,13 +33,14 @@ const SearchPage: FunctionComponent = () =>
   const { searchResults } = useSearchResults();
   const searchValue = useSearchBarStore((s) => s.searchValue);
   const closestTabWithResultsIndex = Object.values(searchResults).findIndex(result => result.length > 0);
-  // const tabs = Object.keys(searchResults) as keyof SearchResults;
-  // tabs.pop();
   const totalSearchResults = Object.values(searchResults).reduce((acc, curr) => acc + curr.length, 0);
-  const initialTab: SearchResultsKey = (Object.keys(searchResults) as SearchResultsKey[])[closestTabWithResultsIndex] ?? "articles";
-  const [tabQuery, setTabQuery] = useQueryState<SearchResultsKey>("tab", tabSchema.withDefault(initialTab));
+  const initialTab = useMemo(() => 
+  {
+    const tabs = Object.keys(searchResults).filter(tab => tab !== "userDocuments") as SearchResultsKey[];
+    return tabs[closestTabWithResultsIndex] ?? "articles";
+  }, [searchResults, closestTabWithResultsIndex]);
 
-  // console.log("initialTab", tabs);
+  const [tabQuery, setTabQuery] = useQueryState<SearchResultsKey>("tab", tabSchema.withDefault(initialTab));
 
   return (
     <div css={styles.wrapper}>

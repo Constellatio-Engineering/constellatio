@@ -27,7 +27,7 @@ const SubscriptionTab: FunctionComponent = () =>
     return `${day}/${month}/${year}`;
   };
 
-  const redirectToCustomerPortal = async (): Promise<void> =>
+  const redirectToStripeSession = async (): Promise<void> =>
   {
     let url: string;
 
@@ -58,7 +58,7 @@ const SubscriptionTab: FunctionComponent = () =>
       <Button<"button">
         styleType="primary"
         style={{ display: "block", width: "100%" }}
-        onClick={redirectToCustomerPortal}
+        onClick={redirectToStripeSession}
         loading={isSessionLoading}>
         {(subscriptionDetails.subscriptionStatus === "active" || subscriptionDetails.subscriptionStatus === "trialing") ? "Abonnement verwalten" : "Abonnieren"}
       </Button>

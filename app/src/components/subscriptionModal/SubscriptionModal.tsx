@@ -7,6 +7,7 @@ import { paths } from "@/utils/paths";
 import { Title } from "@mantine/core";
 import { useLocalStorage } from "@mantine/hooks";
 import Link from "next/link";
+import { useRouter } from "next/router";
 import { useMemo, type FunctionComponent, useState } from "react";
 import { z } from "zod";
 
@@ -19,7 +20,8 @@ const localStorageKey = "daysLeftToSubscriptionEnds";
 
 const SubscriptionModal: FunctionComponent = () => 
 {
-  const { subscriptionDetails } = useSubscription();
+  const router = useRouter();
+  const { generateStripeSessionUrl, subscriptionDetails } = useSubscription();
 
   const [daysCheckedForSubscriptionEnds, setDaysCheckedForSubscriptionEnds] = useLocalStorage<string[]>({
     defaultValue: [],
@@ -58,13 +60,35 @@ const SubscriptionModal: FunctionComponent = () =>
     const diffTime = endDate?.getTime() - today.getTime();
     const diffDays = diffTime / (1000 * 60 * 60 * 24);
 
-    return 0;
+    return diffDays;
   }, [subscriptionDetails]);
 
   const [wasClosed, setWasClosed] = useState(false);
 
-  const opend = !wasClosed && diffDays != null && diffDays <= 7 && !daysCheckedForSubscriptionEnds.includes(new Date().toISOString().split("T")[0] as string);
+  const opend = !wasClosed && diffDays != null && diffDays <= 10 && !daysCheckedForSubscriptionEnds.includes(new Date().toISOString().split("T")[0] as string) && subscriptionDetails.subscriptionStatus !== "active";
   const isModalLocked = diffDays == null || diffDays <= 0;
+
+  const redirectToStripeCheckout = async (): Promise<void> => 
+  {
+    let url: string;
+
+    try
+    {
+      const { checkoutSessionUrl } = await generateStripeSessionUrl();
+
+      if(!checkoutSessionUrl) { throw new Error("No checkout session url, Please contact your admin"); }
+
+      url = checkoutSessionUrl;
+    }
+    catch (error)
+    {
+      console.error("error while getting stripe session url", error);
+      return;
+    }
+
+    void router.push(url);
+
+  };
 
   return (
     <Modal
@@ -93,7 +117,12 @@ const SubscriptionModal: FunctionComponent = () =>
         
       </Title>
       <BodyText ta="center" styleType="body-01-regular" component="p">Jetzt Constellatio abonnieren, um weiterhin alle Vorteile digitalen Lernens zu genießen</BodyText>
-      <Link href={`${paths.profile}?tab=subscription`} style={{ width: "100%" }}><Button<"button"> size="large" miw="100%" styleType="primary">Jetzt abonnieren</Button></Link> 
+      <Button<"button">
+        size="large"
+        miw="100%"
+        styleType="primary"
+        onClick={redirectToStripeCheckout}>Jetzt abonnieren
+      </Button>
     </Modal>
   );
 };
