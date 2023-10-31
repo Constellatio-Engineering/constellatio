@@ -22,6 +22,8 @@ const SubscriptionModal: FunctionComponent = () =>
 {
   const router = useRouter();
   const { generateStripeSessionUrl, subscriptionDetails } = useSubscription();
+  const hasSubscription = subscriptionDetails.subscriptionStatus === "active" || subscriptionDetails.subscriptionStatus === "incomplete";
+  console.log("hasSubscription", hasSubscription);
 
   const [daysCheckedForSubscriptionEnds, setDaysCheckedForSubscriptionEnds] = useLocalStorage<string[]>({
     defaultValue: [],
@@ -65,7 +67,7 @@ const SubscriptionModal: FunctionComponent = () =>
 
   const [wasClosed, setWasClosed] = useState(false);
 
-  const opend = !wasClosed && diffDays != null && diffDays <= 10 && !daysCheckedForSubscriptionEnds.includes(new Date().toISOString().split("T")[0] as string) && subscriptionDetails.subscriptionStatus !== "active";
+  const opend = !wasClosed && diffDays != null && diffDays <= 10 && !daysCheckedForSubscriptionEnds.includes(new Date().toISOString().split("T")[0] as string) && !hasSubscription;
   const isModalLocked = diffDays == null || diffDays <= 0;
 
   const redirectToStripeCheckout = async (): Promise<void> => 

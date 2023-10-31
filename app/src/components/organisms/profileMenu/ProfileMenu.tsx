@@ -28,7 +28,7 @@ const ProfileMenu: FunctionComponent<IProfileMenu> = ({ activeTabSlug, setTab, t
   const { setOnboardingResult } = useSetOnboardingResult();
   const { error, isLoading, userDetails } = useUserDetails();
   const { subscriptionDetails } = useSubscription();
-  const hasSubscription = subscriptionDetails.subscriptionStatus === "trialing" || subscriptionDetails.subscriptionStatus === "active";
+  const hasSubscription = subscriptionDetails.subscriptionStatus === "trialing" || subscriptionDetails.subscriptionStatus === "active" || subscriptionDetails.subscriptionStatus === "incomplete";
 
   if(isLoading)
   {
