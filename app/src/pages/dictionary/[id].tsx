@@ -58,7 +58,7 @@ const NextPage: FunctionComponent<GetArticleDetailPagePropsResult> = ({ article 
 {
   return (
     <>
-      <PageHead pageTitle={article.title || "Lexikon"}/>
+      <PageHead pageTitle={article?.title || "Artikel ohne Titel"}/>
       <Layout>
         <DetailsPage content={article} variant="dictionary"/>
       </Layout>
