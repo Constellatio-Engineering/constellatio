@@ -20,6 +20,8 @@ const SearchPageHeader: FunctionComponent<Props> = ({ setTabQuery, tabQuery, tot
   const { searchResults } = useSearchResults();
   const { query } = useRouter();
 
+  console.log("tabQuery", tabQuery);
+
   const tabItems: TabItemType[] = [{
     label: "Fälle",
     resultsCount: searchResults.cases?.length

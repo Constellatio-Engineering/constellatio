@@ -1,5 +1,5 @@
 import EmptyStateCard from "@/components/organisms/emptyStateCard/EmptyStateCard";
-import useSearchResults, { type SearchResultsKey } from "@/hooks/useSearchResults";
+import useSearchResults, { type SearchResults, type SearchResultsKey } from "@/hooks/useSearchResults";
 import useSearchBarStore from "@/stores/searchBar.store";
 
 import { createParser, useQueryState } from "next-usequerystate";
@@ -13,10 +13,9 @@ import SearchPageResults from "./SearchPageResults";
 const tabSchema = createParser({
   parse: (query: string) =>
   {
-    switch (query as SearchResultsKey)
+    switch (query as keyof SearchResults)
     {
-      case "userUploads": { return "userUploads"; }
-      // case "userDocuments": { return "userUploads"; }
+      case "userUploads": case "userDocuments": { return "userUploads"; }
       case "cases": { return "cases"; }
       case "articles": { return "articles"; }
       default:
@@ -29,16 +28,18 @@ const tabSchema = createParser({
   serialize: (query) => query
 });
 
-interface SearchPageProps {}
-
-const SearchPage: FunctionComponent<SearchPageProps> = () => 
+const SearchPage: FunctionComponent = () => 
 {
   const { searchResults } = useSearchResults();
   const searchValue = useSearchBarStore((s) => s.searchValue);
   const closestTabWithResultsIndex = Object.values(searchResults).findIndex(result => result.length > 0);
+  // const tabs = Object.keys(searchResults) as keyof SearchResults;
+  // tabs.pop();
   const totalSearchResults = Object.values(searchResults).reduce((acc, curr) => acc + curr.length, 0);
   const initialTab: SearchResultsKey = (Object.keys(searchResults) as SearchResultsKey[])[closestTabWithResultsIndex] ?? "articles";
   const [tabQuery, setTabQuery] = useQueryState<SearchResultsKey>("tab", tabSchema.withDefault(initialTab));
+
+  // console.log("initialTab", tabs);
 
   return (
     <div css={styles.wrapper}>

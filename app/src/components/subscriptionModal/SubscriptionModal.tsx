@@ -58,7 +58,7 @@ const SubscriptionModal: FunctionComponent = () =>
     const diffTime = endDate?.getTime() - today.getTime();
     const diffDays = diffTime / (1000 * 60 * 60 * 24);
 
-    return diffDays;
+    return 0;
   }, [subscriptionDetails]);
 
   const [wasClosed, setWasClosed] = useState(false);
