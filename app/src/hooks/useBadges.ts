@@ -10,11 +10,11 @@ type Options = {
 
 export const disabledForPaths: Path[] = [
   "/confirm",
-  "/paymentSuccess",
   "/confirm-email-change",
   "/recover",
   "/register",
   "/login",
+  "/payment-success"
 ];
 
 // eslint-disable-next-line @typescript-eslint/explicit-function-return-type
