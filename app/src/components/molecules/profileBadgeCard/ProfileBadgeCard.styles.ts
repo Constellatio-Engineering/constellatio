@@ -10,7 +10,6 @@ export const wrapper = css`
   position: relative;
   border-radius: 12px;
   background-color: ${colors["neutrals-01"][1]};
-  overflow: hidden;
   border: solid 1px ${colors["neutrals-01"][3]};
 `;
 
@@ -47,7 +46,10 @@ export const wrapperLarge = (isHighlighted: boolean) => css`
   flex: 1;
   transition: outline-color 0.3s ease-in-out .3s;
   outline: 1px solid ${isHighlighted ? colors["neutrals-01"][9] : "transparent"};
-  scroll-margin: 70px !important;
+  scroll-margin: 100px !important;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
 `;
 
 export const comingSoonOverlay = css`
@@ -115,11 +117,11 @@ export const badgeTitle = (theme: MantineTheme) => css`
 export const badgeDescriptionArea = () => css`
   background-color: ${colors["neutrals-01"][0]};
   text-align: center;
+  flex: 1;
   color: ${colors["neutrals-01"][7]};
   padding: 16px;
   border-radius: 0 0 12px 12px;
   border: solid 1px ${colors["neutrals-01"][3]};
-  height: 100%;
 `;
 
 export const badgeDescriptionText = css``;

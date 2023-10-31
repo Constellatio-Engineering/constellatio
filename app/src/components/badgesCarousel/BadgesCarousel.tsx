@@ -52,7 +52,7 @@ const BadgesCarousel: FunctionComponent = () =>
       slidesToScroll="auto">
       {isLoading && (
         <>
-          {Array.from({ length: 3 }).map((_, index) => (
+          {Array.from({ length: 6 }).map((_, index) => (
             <Carousel.Slide key={index}>
               <SkeletonSlide/>
             </Carousel.Slide>
