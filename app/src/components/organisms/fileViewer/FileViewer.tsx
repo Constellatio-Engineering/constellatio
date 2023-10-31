@@ -68,6 +68,8 @@ const FileViewer: FunctionComponent = () =>
         return (
           <CaisyImg
             src={fileUrl ?? ""}
+            width="100%"
+            height="100%"
           />
         );
       case "video":
@@ -103,7 +105,7 @@ const FileViewer: FunctionComponent = () =>
       scrollAreaComponent={ScrollArea.Autosize}
       closeOnClickOutside
       closeOnEscape
-      styles={styles.modalStyles({ extension: extensionState })}>
+      styles={styles.modalStyles({ extensionState })}>
       {!isGetUrlLoading ? <div css={styles.wrapper}>{renderFile()}</div> : "Loading..."}
     </Modal>
   );
