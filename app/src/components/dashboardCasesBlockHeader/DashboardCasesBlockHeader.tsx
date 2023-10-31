@@ -1,5 +1,8 @@
+import { paths } from "@/utils/paths";
+
 import { Title } from "@mantine/core";
 import { useMediaQuery } from "@mantine/hooks";
+import Link from "next/link";
 import React, { type FunctionComponent } from "react";
 
 import * as styles from "./DashboardCasesBlockHeader.styles";
@@ -13,10 +16,12 @@ const DashboardCasesBlockHeader: FunctionComponent = () =>
   return (
     <div css={styles.wrapper}>
       <div>
-        <Label variant="case" title="Cases"/>
+        <Label variant="case" title="FÄLLE"/>
         <Title css={styles.casesHeaderTitle} order={2}>Nächste offene Fälle</Title>
       </div>
-      <Button<"button"> size={isBigScreen ? "large" : "medium"} styleType="secondarySimple">Alle ansehen</Button>
+      <Link href={paths.cases}>
+        <Button<"button"> size={isBigScreen ? "large" : "medium"} styleType="secondarySimple">Alle ansehen</Button>
+      </Link>
     </div>
   );
 };

@@ -73,7 +73,7 @@ const EditorForm: FunctionComponent<EditorFormProps> = ({ editorState }) =>
           content: document.content,
           folderId: document.folderId,
           id: document.id,
-          name: document.name,
+          name: document.name.trim(),
         };
 
         const [createdDocument] = await createDocument(newDocument);

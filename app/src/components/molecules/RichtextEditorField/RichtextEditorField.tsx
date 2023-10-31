@@ -41,6 +41,7 @@ export const RichtextEditorField: FC<RichtextEditorFieldProps> = ({
         placeholder: `${variant === "simple" ? "Gutachten verfassen..." : "Beginne hier..."} `,
       }),
     ],
+
     onUpdate: (e) =>
     {
       if(onChange)
@@ -48,6 +49,10 @@ export const RichtextEditorField: FC<RichtextEditorFieldProps> = ({
         onChange(e);
       }
     },
+
+    parseOptions: {
+      preserveWhitespace: true,
+    }
   });
 
   useEffect(() =>

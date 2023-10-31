@@ -14,7 +14,7 @@ export const casesTable = (theme: MantineTheme) => css`
   }
   tbody {
     tr {
-        transition: all 300ms ease-in-out;
+      transition: all 300ms ease-in-out;
       &:hover {
         transition: all 300ms ease-in-out;
         background: ${theme.colors["neutrals-01"][2]};
@@ -60,9 +60,15 @@ export const casesTable = (theme: MantineTheme) => css`
   .primaryCell {
     width: 100%;
     p {
-      /* max-width: 100%; */
+      max-width: 150px;
       overflow: hidden;
+      width: max-content;
       text-overflow: ellipsis;
+    }
+  }
+  @media screen and (max-width: 1200px) {
+    .hide-on-tablet {
+      display: none;
     }
   }
 `;

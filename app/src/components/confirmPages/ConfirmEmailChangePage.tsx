@@ -88,37 +88,40 @@ const ConfirmEmailChangePage: FunctionComponent = () =>
     };
   }, [code, updateUserDetailsInDb, userEmail]);
 
-  let title: string;
-  let description: string;
-  let showLoader = false;
+  const [title, setTitle] = useState<string>("");
+  const [description, setDescription] = useState<string>("");
+  const [showLoader, setShowLoader] = useState<boolean>(false);
 
-  if(params.error)
+  useEffect(() => 
   {
-    title = "Da ist leider etwas schief gelaufen.";
-    description = params.error_description ?? "";
-  }
-  else if(updateUserEmailError)
-  {
-    title = "Da ist leider etwas schief gelaufen.";
-    description = "Bitte wende dich an den Support. Wir sind stets bemüht, unsere Anwendung zu verbessern und freuen uns über deine Unterstützung.";
-  }
-  else if(code)
-  {
-    title = "Deine E-Mail Adresse wurde erfolgreich geändert.";
-    description = `Du wirst ${secondsUntilRedirect <= 0 ? "jetzt" : `in ${secondsUntilRedirect} Sekunden automatisch`} weitergeleitet.`;
-    showLoader = secondsUntilRedirect <= 0;
-  }
-  else if(params.message === "Confirmation link accepted. Please proceed to confirm link sent to the other email")
-  {
-    title = "Erste Bestätigung erfolgreich. Bitte bestätige nun auch die zweite E-Mail, die wir dir zugesendet haben.";
-    description = "Hinweis: Bei einer Änderung deiner E-Mail Adresse musst du immer sowohl die alte als auch die neue E-Mail Adresse bestätigen.";
-  }
-  else
-  {
-    console.log("Unexpected state:", params, router.query);
-    title = "Da ist leider etwas schief gelaufen.";
-    description = "Bitte wende dich an den Support. Wir sind stets bemüht, unsere Anwendung zu verbessern und freuen uns über deine Unterstützung.";
-  }
+    if(params.error) 
+    {
+      setTitle("Da ist leider etwas schief gelaufen.");
+      setDescription(params.error_description ?? "");
+    }
+    else if(updateUserEmailError) 
+    {
+      setTitle("Da ist leider etwas schief gelaufen.");
+      setDescription("Bitte wende dich an den Support. Wir sind stets bemüht, unsere Anwendung zu verbessern und freuen uns über deine Unterstützung.");
+    }
+    else if(code) 
+    {
+      setTitle("Deine E-Mail Adresse wurde erfolgreich geändert.");
+      setDescription(`Du wirst ${secondsUntilRedirect <= 0 ? "jetzt" : `in ${secondsUntilRedirect} Sekunden automatisch`} weitergeleitet.`);
+      setShowLoader(secondsUntilRedirect <= 0);
+    }
+    else if(params.message === "Confirmation link accepted. Please proceed to confirm link sent to the other email") 
+    {
+      setTitle("Erste Bestätigung erfolgreich. Bitte bestätige nun auch die zweite E-Mail, die wir dir zugesendet haben.");
+      setDescription("Hinweis: Bei einer Änderung deiner E-Mail Adresse musst du immer sowohl die alte als auch die neue E-Mail Adresse bestätigen.");
+    }
+    else 
+    {
+      console.log("Unexpected state:", params);
+      setTitle("Da ist leider etwas schief gelaufen.");
+      setDescription("Bitte wende dich an den Support. Wir sind stets bemüht, unsere Anwendung zu verbessern und freuen uns über deine Unterstützung.");
+    }
+  }, [params, updateUserEmailError, code, secondsUntilRedirect]);
 
   return (
     <div css={styles.wrapper}>

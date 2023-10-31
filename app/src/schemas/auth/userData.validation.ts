@@ -57,7 +57,7 @@ export const allUniversities = [
 export type University = typeof allUniversities[number];
 
 export const maximumAmountOfSemesters = 15 as const;
-export const nameValidation = z.string().min(2);
+export const nameValidation = z.string().trim().min(2);
 export const emailValidation = z.string().email();
 export const genderValidationOld = z.enum(allGenderIdentifiers, {
   errorMap: (_issue, { data }) => ({

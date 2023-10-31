@@ -15,6 +15,7 @@ import FavoriteCard from "../molecules/favoriteCard/FavoriteCard";
 import MaterialCard from "../molecules/materialCard/MaterialCard";
 import { Switcher } from "../molecules/Switcher/Switcher";
 import EmptyStateCard from "../organisms/emptyStateCard/EmptyStateCard";
+import FileViewer from "../organisms/fileViewer/FileViewer";
 
 const DashboardPersonalSpaceBlock: FunctionComponent = () => 
 {
@@ -72,7 +73,7 @@ const DashboardPersonalSpaceBlock: FunctionComponent = () =>
                 <MaterialCard
                   key={i}
                   fileExtension={material?.fileExtension}
-                  id=""
+                  id={material?.id}
                   materialType="file"
                   title={material.originalFilename}
                 />
@@ -88,6 +89,7 @@ const DashboardPersonalSpaceBlock: FunctionComponent = () =>
           </div>
         )}
       </div>
+      <FileViewer/>
     </div>
   );
 };

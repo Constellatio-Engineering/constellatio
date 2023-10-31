@@ -39,12 +39,10 @@ export const richtextEditorFieldStyles = (): RichtextEditorFieldStyles =>
           listStyle: "decimal",
           padding: "20px",
         },
-
         "& ul": {
           listStyle: "initial",
           padding: "20px",
         },
-
         "> *": {
           em: {
             fontStyle: "italic",
@@ -59,7 +57,6 @@ export const richtextEditorFieldStyles = (): RichtextEditorFieldStyles =>
         },
 
         padding: 0,
-
         paddingBottom: "32px",
       },
     },

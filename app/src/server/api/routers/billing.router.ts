@@ -40,7 +40,7 @@ export const billingRouter = createTRPCRouter({
       cancel_url: `${env.NEXT_PUBLIC_WEBSITE_URL}${paths.profile}?tab=subscription`,
       customer: stripeCustomerId,
       line_items: [{ price: env.STRIPE_PREMIUM_PLAN_PRICE_ID, quantity: 1 }],
-      // locale: "de",
+      locale: "de",
       mode: "subscription",
       payment_method_configuration: env.STRIPE_PAYMENT_METHODS_CONFIGURATION_ID,
       success_url: `${env.NEXT_PUBLIC_WEBSITE_URL}${paths.paymentConfirm}`
@@ -48,7 +48,7 @@ export const billingRouter = createTRPCRouter({
 
     const { url: billingPortalSessionUrl } = await stripe.billingPortal.sessions.create({
       customer: stripeCustomerId,
-      // locale: "de",
+      locale: "de",
       return_url: `${env.NEXT_PUBLIC_WEBSITE_URL}${paths.profile}?tab=subscription`
     });
 

@@ -6,6 +6,7 @@ export const wrapper = (theme: MantineTheme) => css`
   padding: 20px;
   flex: 1;
   min-width: 270px;
+  max-width: 314px;
   height: 160px;
   border-radius: 12px;
   display: flex;

@@ -93,17 +93,16 @@ const CaseSolveCaseStep: FunctionComponent<Props> = ({
             Im Textfeld kannst du deine Klausurlösung oder -gliederung herunterschreiben, wie du es auch in der normalen Klausur machen würdest.
             Anschließend kannst du dir die Musterlösung anzeigen lassen und sie mit deiner Ausarbeitung vergleichen.
           </BodyText>
-          {isSubmittedCaseSolutionLoading && (
+          {isSubmittedCaseSolutionLoading ? (
             <>
               <Skeleton height={30} style={{ marginBottom: 20 }}/>
               <Skeleton height={300} style={{ marginBottom: 20 }}/>
             </>
-          )}
-          {submittedCaseSolution != null && (
+          ) : (
             <RichtextEditorField
               disabled={isDisabled}
               onChange={({ editor }) => setEditorContent(editor.getHTML())}
-              initialContent={submittedCaseSolution.solution ?? ""}
+              initialContent={submittedCaseSolution?.solution ?? ""}
               buttons={[
                 {
                   action: (editor) => saveSolution({

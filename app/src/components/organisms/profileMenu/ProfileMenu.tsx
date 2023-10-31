@@ -7,6 +7,7 @@ import ProfileMenuSkeleton from "@/components/organisms/profileMenu/profileMenuS
 import { type tabs } from "@/components/pages/profilePage/ProfilePage";
 import useSetOnboardingResult from "@/hooks/useSetOnboardingResult";
 import { useSignout } from "@/hooks/useSignout";
+import useSubscription from "@/hooks/useSubscription";
 import useUserDetails from "@/hooks/useUserDetails";
 
 import { IconLogout } from "@tabler/icons-react";
@@ -26,6 +27,8 @@ const ProfileMenu: FunctionComponent<IProfileMenu> = ({ activeTabSlug, setTab, t
   const { handleSignOut } = useSignout();
   const { setOnboardingResult } = useSetOnboardingResult();
   const { error, isLoading, userDetails } = useUserDetails();
+  const { subscriptionDetails } = useSubscription();
+  const hasSubscription = subscriptionDetails.subscriptionStatus === "trialing" || subscriptionDetails.subscriptionStatus === "active" || subscriptionDetails.subscriptionStatus === "incomplete";
 
   if(isLoading)
   {
@@ -57,7 +60,7 @@ const ProfileMenu: FunctionComponent<IProfileMenu> = ({ activeTabSlug, setTab, t
               key={tab.slug}
               title={tab.title}
               selected={tab.slug === activeTabSlug}
-              onClick={() => void setTab(tab.slug)}
+              onClick={() => hasSubscription && void setTab(tab.slug)}
             />
           ))}
         </div>
