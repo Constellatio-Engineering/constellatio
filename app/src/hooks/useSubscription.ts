@@ -1,21 +1,8 @@
-
-import { type SubscriptionStatus } from "@/db/schema";
 import { api } from "@/utils/api";
+import { getHasSubscription } from "@/utils/subscription";
 
-type UseSubscription = (
-) => {
-  generateStripeSessionUrl: () => Promise<{ billingPortalSessionUrl: string; checkoutSessionUrl: string | null }>;
-  isSessionLoading: boolean;
-  isSubscriptionDetailsLoading: boolean;
-  subscriptionDetails: {
-    subscribedPlanPriceId: string | null;
-    subscriptionEndDate: Date | null;
-    subscriptionStartDate: Date | null;
-    subscriptionStatus: SubscriptionStatus | null;
-  } ;
-};
-
-const useSubscription: UseSubscription = () =>
+// eslint-disable-next-line @typescript-eslint/explicit-function-return-type
+const useSubscription = () =>
 {
   const { data: subscriptionDetails, isLoading: isSubscriptionDetailsLoading } = api.billing.getSubscriptionDetails.useQuery();
 
@@ -23,14 +10,10 @@ const useSubscription: UseSubscription = () =>
 
   return {
     generateStripeSessionUrl,
+    hasSubscription: getHasSubscription(subscriptionDetails),
     isSessionLoading, 
     isSubscriptionDetailsLoading,
-    subscriptionDetails: subscriptionDetails ?? {
-      subscribedPlanPriceId: null,
-      subscriptionEndDate: null,
-      subscriptionStartDate: null,
-      subscriptionStatus: null
-    }
+    subscriptionDetails
   };
 };
 
