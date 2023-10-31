@@ -8,8 +8,8 @@ import { AuthStateContext } from "@/provider/AuthStateProvider";
 import { paths } from "@/utils/paths";
 
 import { Container, Flex, Tabs } from "@mantine/core";
-import { useRouter } from "next/router";
-import { useContext, type FC, useEffect } from "react";
+import Router, { useRouter } from "next/router";
+import { useContext, type FC, useEffect, useRef } from "react";
 
 import * as styles from "./AuthPage.styles";
 
@@ -21,16 +21,18 @@ export interface AuthPageProps
 export const AuthPage: FC<AuthPageProps> = ({ tab }) =>
 {
   const router = useRouter();
-  const handleTabChange: (value: AuthPageProps["tab"]) => Promise<boolean> = async (value) => router.push(`/${value}`);
+  const handleTabChange = async (tab: AuthPageProps["tab"]): Promise<boolean> => router.push(`/${tab}`);
   const { isUserLoggedIn } = useContext(AuthStateContext);
+  const hasRedirectStarted = useRef<boolean>(false);
 
-  useEffect(() => 
+  useEffect(() =>
   {
-    if(isUserLoggedIn) 
-    { 
-      void router.push(paths.dashboard);
+    if(isUserLoggedIn && !hasRedirectStarted.current)
+    {
+      hasRedirectStarted.current = true;
+      void Router.push(paths.dashboard);
     }
-  }, [isUserLoggedIn, router]);
+  }, [isUserLoggedIn]);
 
   return (
     <Flex
