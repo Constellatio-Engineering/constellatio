@@ -9,12 +9,13 @@ export const modalStyles = ({ extensionState }: {extensionState: string | null})
 {
   const styles: ModalStyles = () => ({
     body: {
-      padding: extensionState === "pdf" ? "0px" : "auto",  
+      maxWidth: "90vw",  
+      padding: extensionState === "pdf" ? "0px" : "auto"
     },
     
     content: {
       boxShadow: "none",
-      minWidth: extensionState !== "img" ? "90vw" : "max-content",
+      minWidth: extensionState !== "img" ? "70vw" : "max-content"
     },
     root: {
       overflow: "hidden",
@@ -27,6 +28,7 @@ export const wrapper = css`
 display: flex;
 align-items: center;
 justify-content: center;
+width: 100%;
 img{
   margin: 0 auto;
   display:block;
@@ -38,7 +40,7 @@ img{
 }
 embed,iframe{
   width: 100%;
-  height: 90vh;
+  height: 80vh;
   object-fit: contain;
 }
 `;

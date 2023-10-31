@@ -9,7 +9,7 @@ import { paths } from "@/utils/paths";
 
 import { Container, Flex, Tabs } from "@mantine/core";
 import { useRouter } from "next/router";
-import { useContext, type FC, useEffect, useState } from "react";
+import { useContext, type FC, useEffect } from "react";
 
 import * as styles from "./AuthPage.styles";
 
