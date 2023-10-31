@@ -6,7 +6,7 @@ import FileViewer from "@/components/organisms/fileViewer/FileViewer";
 import SearchPapersBlock from "@/components/organisms/searchPapersBlock/SearchPapersBlock";
 import UploadedMaterialTable from "@/components/organisms/uploadedMaterialTable/UploadedMaterialTable";
 import DocumentEditor from "@/components/papersBlock/documentEditor/DocumentEditor";
-import useSearchResults, { type SearchResults, type SearchResultsKey } from "@/hooks/useSearchResults";
+import useSearchResults, { type SearchResultsKey, type SearchResults } from "@/hooks/useSearchResults";
 import { type IGenArticleOverviewFragment, type IGenFullCaseFragment } from "@/services/graphql/__generated/sdk";
 import useMaterialsStore from "@/stores/materials.store";
 import { type ArticleSearchIndexItem, type CaseSearchIndexItem } from "@/utils/search";
@@ -15,6 +15,7 @@ import { type CommonKeysInTypes } from "@/utils/types";
 import { useRouter } from "next/router";
 import { Fragment, type FunctionComponent } from "react";
 
+import { convertTabQueryAsItemTab } from "./seachPageHelpers";
 import * as styles from "./SearchPage.styles";
 
 type Props = {
@@ -29,7 +30,7 @@ const SearchPageResults: FunctionComponent<Props> = ({ tabQuery }) =>
 
   const NoResultsFound = (
     <EmptyStateCard
-      title={`Keine Ergebnisse ${router.query.find && `für “${router.query.find}”`} ${tabQuery && `in ${tabQuery}`}`}
+      title={`Keine Ergebnisse ${router.query.find && `für “${router.query.find}”`} ${convertTabQueryAsItemTab(tabQuery) && `in ${convertTabQueryAsItemTab(tabQuery)}`}`}
       text="Schaue in anderen Kategorien oder starte eine neue Suche"
       variant="For-large-areas"
     />
@@ -175,7 +176,7 @@ const SearchPageResults: FunctionComponent<Props> = ({ tabQuery }) =>
     }
     default:
     {
-      console.error(`Unknown tab query: ${tabQuery}`);
+      console.error(`Unknown tab query at SearchPageResults: ${tabQuery}`);
       return null;
     }
   }

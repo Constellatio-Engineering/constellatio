@@ -16,12 +16,20 @@ const scrollToElement = (e: React.MouseEvent<HTMLDivElement>, targetId: string):
   const targetElement = document.getElementById(targetId);
   if(targetElement) 
   {
-    const targetOffset = targetElement.getBoundingClientRect().top + window.scrollY - 82;
+    const targetOffset = targetElement.getBoundingClientRect().top + window.scrollY - 100;
     window.scrollTo({ top: targetOffset, });
   }
 };
 
-export const TOCItemComponent: React.FC<{ readonly depth: number; readonly item: TOCItem; readonly itemNumber: number; readonly total: number }> = ({
+interface ITOCItemComponentProps 
+{
+  readonly depth: number;
+  readonly item: TOCItem;
+  readonly itemNumber: number;
+  readonly total: number;
+}
+
+export const TOCItemComponent: React.FC<ITOCItemComponentProps> = ({
   depth,
   item,
   itemNumber,
@@ -32,20 +40,28 @@ export const TOCItemComponent: React.FC<{ readonly depth: number; readonly item:
   const [isExpanded, setIsExpanded] = useState(false);
   const observedHeadline = useCaseSolvingStore(s => s.observedHeadline);
   const shouldBeHighlighted = slugFormatter(item.text) === observedHeadline.slug;
-  const shouldBeExpanded = (): boolean => 
+  const [shouldBeExpandedState, setShouldBeExpandedState] = useState(false);
+  const shouldBeExpanded = React.useCallback((): boolean => 
   {
-    const currentItemSlug = slugFormatter(item.text);
-    const currentItemLevel = item.level;
-    if(currentItemSlug === observedHeadline.slug && currentItemLevel === observedHeadline.level) 
-    {  
-      return true;
-    }
-    if(currentItemSlug !== observedHeadline.slug && currentItemLevel < observedHeadline.level) 
+    if(item.children.length > 0)
     {
-      return true;
+      const currentItemSlug = slugFormatter(item.text);
+      const currentItemLevel = item.level;
+      if(currentItemSlug === observedHeadline.slug && currentItemLevel === observedHeadline.level) 
+      {  
+        return true;
+      }
+      if(currentItemSlug !== observedHeadline.slug && currentItemLevel < observedHeadline.level) 
+      {
+        return true;
+      }
     }
     return false;
-  };
+  }, [item.children.length, item.level, item.text, observedHeadline.level, observedHeadline.slug]);
+  React.useLayoutEffect(() => 
+  {
+    setShouldBeExpandedState(shouldBeExpanded());
+  }, [shouldBeExpanded]);
 
   const handleToggle = (): void => 
   {
@@ -59,20 +75,21 @@ export const TOCItemComponent: React.FC<{ readonly depth: number; readonly item:
     <div
       onClick={(e) => scrollToElement(e, slugFormatter(item.text))}
       style={{
-        paddingInline: ((depth === 1 || depth >= 5) ? 0 : depth + 20) + "px"
+        paddingLeft: ((depth === 1 || depth >= 5) ? 0 : depth + 20) + "px", 
       }}>
       <span
+        key={`listItem-${itemNumber}`}
         onClick={handleToggle}
         css={styles.item({
           highlighted: shouldBeHighlighted, 
           isExpandable: item.children.length > 0, 
-          isExpanded: shouldBeExpanded(), 
-          isTopLevel: true, 
+          isExpanded: shouldBeExpandedState,
+          // isTopLevel: true, 
           theme
         })}>
         <div style={{ display: "flex", justifyContent: "flex-start", padding: "0 16px" }}>
           <BodyText component="p" styleType="body-01-medium">
-            {item.children.length > 0 && (shouldBeExpanded() ? <ArrowSolidDown/> : <ArrowSolidRight/>)}
+            {item.children.length > 0 && (shouldBeExpandedState ? <ArrowSolidDown/> : <ArrowSolidRight/>)}
           </BodyText>
           <BodyText
             component="p"
@@ -81,9 +98,9 @@ export const TOCItemComponent: React.FC<{ readonly depth: number; readonly item:
             {getNumericalLabel(depth, itemNumber - 1)}&nbsp;{item.text}
           </BodyText>
         </div>
-        {depth === 0 && <div style={{ paddingRight: "24px" }}>{itemNumber}/{total}</div>}
+        {depth === 0 && <div style={{}}>{itemNumber}/{total}</div>}
       </span>
-      {shouldBeExpanded() && item.children.length > 0 && renderTOC(item.children, depth + 1)}
+      {shouldBeExpandedState && item.children.length > 0 && renderTOC(item.children, depth + 1)}
     </div>
   );
 };

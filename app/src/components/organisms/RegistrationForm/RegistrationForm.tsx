@@ -3,22 +3,25 @@ import { BodyText } from "@/components/atoms/BodyText/BodyText";
 import { Button } from "@/components/atoms/Button/Button";
 import { Checkbox } from "@/components/atoms/Checkbox/Checkbox";
 import { CustomLink } from "@/components/atoms/CustomLink/CustomLink";
-import { Dropdown } from "@/components/atoms/Dropdown/Dropdown";
-import { Input } from "@/components/atoms/Input/Input";
-import { PasswordValidationSchema } from "@/components/helpers/PasswordValidationSchema";
-import { allGenders, allUniversities } from "@/components/organisms/RegistrationForm/RegistrationForm.data";
+import DisplayNameInput from "@/components/organisms/RegistrationForm/form/DisplayNameInput";
+import EmailInput from "@/components/organisms/RegistrationForm/form/EmailInput";
+import FirstNameInput from "@/components/organisms/RegistrationForm/form/FirstNameInput";
+import GenderDropdown, { allGenders } from "@/components/organisms/RegistrationForm/form/GenderDropdown";
+import LastNameInput from "@/components/organisms/RegistrationForm/form/LastNameInput";
+import PasswordInput from "@/components/organisms/RegistrationForm/form/PasswordInput";
+import SemesterDropdown from "@/components/organisms/RegistrationForm/form/SemesterDropdown";
+import UniversityDropdown from "@/components/organisms/RegistrationForm/form/UniversityDropdown";
 import { colors } from "@/constants/styles/colors";
 import { env } from "@/env.mjs";
 import { supabase } from "@/lib/supabase";
-import { maximumAmountOfSemesters, type RegistrationFormSchema, registrationFormSchema } from "@/schemas/auth/registrationForm.schema";
+import { type RegistrationFormSchema, registrationFormSchema } from "@/schemas/auth/registrationForm.schema";
+import { allUniversities } from "@/schemas/auth/userData.validation";
 import { api } from "@/utils/api";
 import { isDevelopment, isDevelopmentOrStaging } from "@/utils/env";
 import { getConfirmEmailUrl, paths } from "@/utils/paths";
-import { type PartialUndefined } from "@/utils/types";
 
-import { Box, Stack, Title } from "@mantine/core";
+import { Stack, Title } from "@mantine/core";
 import { useForm, zodResolver } from "@mantine/form";
-import { useDisclosure } from "@mantine/hooks";
 import { notifications } from "@mantine/notifications";
 import Link from "next/link";
 import { useRouter } from "next/router";
@@ -27,10 +30,7 @@ import { type FunctionComponent, useEffect, useRef, useState } from "react";
 import z from "zod";
 import { makeZodI18nMap } from "zod-i18n-map";
 
-// this means for the initial values of the form, these keys can be null since these are dropdowns
-type InitialValues = PartialUndefined<RegistrationFormSchema, "gender">;
-
-const initialValues: InitialValues = isDevelopmentOrStaging ? {
+const initialValues: RegistrationFormSchema = isDevelopmentOrStaging ? {
   acceptTOS: true,
   displayName: "Constellatio Test User",
   email: env.NEXT_PUBLIC_SIGN_UP_DEFAULT_EMAIL || (isDevelopment ? "devUser@constellatio-dummy-mail.de" : ""),
@@ -40,18 +40,18 @@ const initialValues: InitialValues = isDevelopmentOrStaging ? {
   password: "Super-secure-password-123",
   passwordConfirmation: "Super-secure-password-123",
   semester: "7",
-  university: allUniversities[20] ?? "",
+  university: allUniversities[20] ?? null,
 } : {
   acceptTOS: false,
   displayName: "",
   email: "",
   firstName: "",
-  gender: undefined,
+  gender: null,
   lastName: "",
   password: "",
   passwordConfirmation: "",
-  semester: undefined,
-  university: "",
+  semester: null,
+  university: null,
 };
 
 const resendEmailConfirmationTimeout = env.NEXT_PUBLIC_RESEND_EMAIL_CONFIRMATION_TIMEOUT_IN_SECONDS * 1000;
@@ -60,8 +60,7 @@ export const RegistrationForm: FunctionComponent = () =>
 {
   const { t } = useTranslation();
   const router = useRouter();
-  const [isPasswordRevealed, { toggle }] = useDisclosure(false);
-  const form = useForm<InitialValues>({
+  const form = useForm<RegistrationFormSchema>({
     initialValues,
     validate: zodResolver(registrationFormSchema),
     validateInputOnBlur: true,
@@ -87,7 +86,7 @@ export const RegistrationForm: FunctionComponent = () =>
       notifications.show({
         autoClose: false,
         color: "red",
-        message: "We couldn't sign you up. Please try again.",
+        message: "Das Konto konnte nicht erstellt werden. Bitte versuche es nochmal.",
         title: "Oops!",
       });
     },
@@ -197,94 +196,27 @@ export const RegistrationForm: FunctionComponent = () =>
 
   return (
     <form onSubmit={handleSubmit}>
-      {isDevelopmentOrStaging && (
-        <p style={{ fontStyle: "italic", marginBottom: 30 }}>
-          Note from developers: Form is only pre filled in development and staging, not in production.
-        </p>
-      )}
       <Stack spacing="spacing-24">
         <Stack spacing="spacing-12">
           <CustomLink
             styleType="link-secondary"
-            component="button"
-            onClick={() => void router.push(paths.login)}
-            stylesOverwrite={{ color: colors["neutrals-02"][2], textAlign: "left" }}>
+            component={Link}
+            href={paths.login}
+            stylesOverwrite={{ color: colors["neutrals-02"][2], marginBottom: 10, textAlign: "left" }}>
             Du hast schon ein Konto?
           </CustomLink>
-          <Input
-            {...form.getInputProps("firstName")}
-            inputType="text"
-            label="Vorname"
-            title="Vorname"
-            placeholder="Maximilian"
+          <FirstNameInput {...form.getInputProps("firstName")}/>
+          <LastNameInput {...form.getInputProps("lastName")}/>
+          <DisplayNameInput {...form.getInputProps("displayName")}/>
+          <EmailInput {...form.getInputProps("email")}/>
+          <PasswordInput
+            passwordInputProps={form.getInputProps("password")}
+            confirmPasswordInputProps={form.getInputProps("passwordConfirmation")}
+            passwordToValidate={form.values.password}
           />
-          <Input
-            {...form.getInputProps("lastName")}
-            inputType="text"
-            label="Nachname"
-            title="Nachname"
-            placeholder="Mustermann"
-          />
-          <Input
-            {...form.getInputProps("displayName")}
-            inputType="text"
-            label="Anzeigename"
-            title="Anzeigename"
-            placeholder="Max"
-          />
-          <Input
-            {...form.getInputProps("email")}
-            inputType="text"
-            label="E-Mail"
-            title="E-Mail"
-            placeholder="max.mustermann@mail.com"
-          />
-          <Box>
-            <Input
-              {...form.getInputProps("password")}
-              inputType="password"
-              label="Passwort"
-              title="Passwort"
-              placeholder={"*".repeat(16)}
-              onVisibilityChange={toggle}
-            />
-            <PasswordValidationSchema
-              passwordValue={form.values.password}
-              isPasswordRevealed={isPasswordRevealed}
-            />
-          </Box>
-          <Input
-            {...form.getInputProps("passwordConfirmation")}
-            inputType="password"
-            label="Passwort bestätigen"
-            placeholder={"*".repeat(16)}
-            title="Passwort bestätigen"
-            onVisibilityChange={toggle}
-          />
-          <Dropdown
-            {...form.getInputProps("university")}
-            label="Universität"
-            title="Universität"
-            placeholder="Universität auswählen"
-            data={allUniversities}
-            searchable
-          />
-          <Box maw={240}>
-            <Dropdown
-              {...form.getInputProps("semester")}
-              label="Semester"
-              title="Semester"
-              placeholder="Semester auswählen"
-              data={Array(maximumAmountOfSemesters).fill(null).map((_, i) => String(i + 1))}
-            />
-          </Box>
-          <Dropdown
-            {...form.getInputProps("gender")}
-            label="Geschlecht"
-            title="Geschlecht"
-            placeholder="Geschlecht auswählen"
-            data={allGenders.map(gender => ({ label: gender.label, value: gender.identifier }))}
-          />
+          <UniversityDropdown {...form.getInputProps("university")}/>
+          <SemesterDropdown {...form.getInputProps("semester")}/>
+          <GenderDropdown {...form.getInputProps("gender")}/>
           <Checkbox
             {...form.getInputProps("acceptTOS", { type: "checkbox" })}
             label={(

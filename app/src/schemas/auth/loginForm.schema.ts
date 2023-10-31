@@ -1,6 +1,10 @@
+import { emailValidation } from "@/schemas/auth/userData.validation";
+
 import { z } from "zod";
 
 export const loginFormSchema = z.object({
-  email: z.string().email({ message: "Ungültige E-Mail Adresse" }),
-  password: z.string()
+  email: emailValidation,
+  password: z.string().min(1)
 });
+
+export type LoginFormSchema = z.input<typeof loginFormSchema>;

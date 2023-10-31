@@ -14,8 +14,8 @@ export const componentArea = ({ theme, variant }: {theme: MantineTheme;variant: 
   top: ${variant === "case" ? "0px" : "60px"};
   z-index: 41;
   width: 100%;
-  padding: 0px ;
- `;
+  padding: 0px 60px;
+  `;
 
 export const wrapper = ({ variant }: {
   variant: "case" | "dictionary";
@@ -26,11 +26,11 @@ export const wrapper = ({ variant }: {
   flex-wrap: wrap;
   max-width: 1440px;
   margin: 0 auto;  
-  padding:16px 48px;
+  padding:16px 0px;
   ${variant === "dictionary" && DictionaryCSS}
 
   @media (max-width: 800px) {
-    padding: 16px 12px;
+    padding: 16px 0px;
   } 
 `;
 
@@ -39,7 +39,7 @@ export const tabs = css`
   align-items: center;
   flex-wrap: wrap;
   gap: 16px;
-  margin-left: 12px;
+  /* margin-left: 12px; */
 `;
 export const tab = ({ active, completed, theme }: {
   active: boolean;

@@ -127,7 +127,7 @@ export const DocsTableData: FunctionComponent<Document> = (doc) =>
           c="neutrals-01.9"
           component="p">
           <FolderIcon/>
-          {folderName}
+          {folderName.length > 0 ? folderName : "Standard Ordner"}
         </BodyText>
       </td>
       <td
@@ -147,7 +147,7 @@ export const DocsTableData: FunctionComponent<Document> = (doc) =>
               <DropdownItem icon={<FolderIcon/>} label="Verschieben" onClick={() => setShowMoveToModal(true)}/>
             </Menu.Item> 
             <Menu.Item style={{ display: "none" }} disabled={isDownloading} onClick={() => downloadDocument()}>
-              <DropdownItem icon={<DownloadIcon/>} label="Download"/>
+              <DropdownItem icon={<DownloadIcon/>} label="Herunterladen"/>
             </Menu.Item>
             <Menu.Item onClick={() => setShowDeleteDocModal(true)}>
               <DropdownItem icon={<Trash/>} label="Löschen"/>

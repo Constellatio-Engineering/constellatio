@@ -1,39 +1,41 @@
 import { Layout } from "@/components/layouts/Layout";
+import PageHead from "@/components/pageHead/PageHead";
 import ProfilePageWrapper from "@/components/pages/profilePage/ProfilePage";
-import { type IGenMainCategory, type IGenGetAllMainCategoryQuery } from "@/services/graphql/__generated/sdk";
-import { caisySDK } from "@/services/graphql/getSdk";
+import { type IGenMainCategory } from "@/services/graphql/__generated/sdk";
+import { getCommonProps } from "@/utils/commonProps";
 import { type Nullable } from "@/utils/types";
 
-import { type GetStaticProps } from "next/types";
+import { type GetServerSideProps } from "next";
+import { type SSRConfig } from "next-i18next";
 import React, { type FunctionComponent } from "react";
 
+import { defaultLocale } from "../../next.config.mjs";
+
 export type IProfilePageProps = { 
-  // readonly allMainCategory: Array<({
-  //   _typename?: "MainCategory" | undefined;
-  // } & IGenMainCategoryFragment) | null | undefined>;
   readonly allMainCategory: Array<Nullable<IGenMainCategory>>;
   readonly data: string;
 };
 
-export const getStaticProps: GetStaticProps<IProfilePageProps> = async () =>
+type ServerSidePropsResult = SSRConfig;
+
+export const getServerSideProps: GetServerSideProps<ServerSidePropsResult> = async ({ locale = defaultLocale }) =>
 {
-  const allCategoryRes: IGenGetAllMainCategoryQuery = await caisySDK.getAllMainCategory();
+  const commonProps = await getCommonProps({ locale });
 
   return {
-    props: {
-      allMainCategory: allCategoryRes?.allMainCategory?.edges?.map((edge) => edge!.node) ?? [],
-      data: "data",
-    },
-    revalidate: 10,
+    props: commonProps,
   };
 };
 
-const Page: FunctionComponent<IProfilePageProps> = (props) =>
+const Page: FunctionComponent<ServerSidePropsResult> = () =>
 {
   return (
-    <Layout>
-      <ProfilePageWrapper {...props}/>
-    </Layout>
+    <>
+      <PageHead pageTitle="Profil"/>
+      <Layout>
+        <ProfilePageWrapper/>
+      </Layout>
+    </>
   );
 };
 

@@ -3,6 +3,7 @@ import { users } from "@/db/schema";
 import { env } from "@/env.mjs";
 import { stripe } from "@/lib/stripe";
 import { InternalServerError } from "@/utils/serverError";
+import { getDataFromStripeSubscription } from "@/utils/stripe";
 
 import { eq } from "drizzle-orm";
 import { type NextApiHandler } from "next";
@@ -35,7 +36,7 @@ const handler: NextApiHandler = async (req, res) =>
   catch (error) 
   {
     console.error(`webhook signature verification failed. ${error}`);
-    return res.status(400).end();
+    return res.status(400).json({ message: `Invalid request method ${error}` });
   }
 
   const subscriptionObj = event.data.object as Stripe.Subscription;
@@ -46,51 +47,32 @@ const handler: NextApiHandler = async (req, res) =>
   {
     switch (event.type)
     {
-      case "customer.subscription.updated":
+      case "customer.subscription.updated": case "customer.subscription.created":
       {
-        const updateSubscription = async (): Promise<void> =>
-        {
-          const subscriptionPlan = subscriptionObj?.items?.data?.[0]?.plan;
+        const subscriptionData = getDataFromStripeSubscription(subscriptionObj);
 
-          if(!subscriptionPlan)
-          {
-            console.warn("Subscription plan not found in webhook event");
-            return;
-          }
-
-          const { id: priceId } = subscriptionPlan;
-          const { current_period_end: currentPeriodEnd, current_period_start: currentPeriodStart } = subscriptionObj;
-          const subscriptionStartDate = new Date(currentPeriodStart * 1000);
-          const subscriptionEndDate = new Date(currentPeriodEnd * 1000);
-
-          if(subscriptionStatus === "active")
-          {
-            await db.update(users).set({
-              subscribedPlanPriceId: priceId,
-              subscriptionEndDate,
-              subscriptionStartDate,
-              subscriptionStatus
-            }).where(eq(users.stripeCustomerId, stripeCustomerId));
-          }
-        };
-        await updateSubscription();
+        await db
+          .update(users)
+          .set({
+            subscribedPlanPriceId: subscriptionData.subscribedPlanPriceId,
+            subscriptionEndDate: subscriptionData.subscriptionEndDate,
+            subscriptionStartDate: subscriptionData.subscriptionStartDate,
+            subscriptionStatus: subscriptionData.subscriptionStatus
+          })
+          .where(eq(users.stripeCustomerId, stripeCustomerId));
         break;
       }
       case "customer.subscription.deleted":
       {
-        const deleteSubscription = async (): Promise<void> =>
-        {
-          if(subscriptionStatus !== "active")
-          {
-            await db.update(users).set({
-              subscribedPlanPriceId: null,
-              subscriptionEndDate: null,
-              subscriptionStartDate: null,
-              subscriptionStatus
-            }).where(eq(users.stripeCustomerId, stripeCustomerId));
-          }
-        };
-        await deleteSubscription();
+        await db
+          .update(users)
+          .set({
+            subscribedPlanPriceId: null,
+            subscriptionEndDate: null,
+            subscriptionStartDate: null,
+            subscriptionStatus
+          })
+          .where(eq(users.stripeCustomerId, stripeCustomerId));
         break;
       }
       default:
@@ -99,15 +81,13 @@ const handler: NextApiHandler = async (req, res) =>
       }
     }
 
-    res.send({ success: true });
+    return res.send({ success: true });
   }
   catch (error) 
   {
     console.error(`webhook handler failed. ${error}`);
-    res.send({ success: false });
+    return res.send({ success: false });
   }
-
-  return;
 };
 
 export default handler;

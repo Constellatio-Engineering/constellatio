@@ -73,7 +73,7 @@ const EditorForm: FunctionComponent<EditorFormProps> = ({ editorState }) =>
           content: document.content,
           folderId: document.folderId,
           id: document.id,
-          name: document.name,
+          name: document.name.trim(),
         };
 
         const [createdDocument] = await createDocument(newDocument);
@@ -158,14 +158,14 @@ const EditorForm: FunctionComponent<EditorFormProps> = ({ editorState }) =>
         {(editorState.state === "create" || editorState.state === "edit") && (
           <div css={styles.createDocForm}>
             <Input
-              label="Doc name"
+              label="Name"
               inputType="text"
               value={document.name}
               onChange={(e) => updateEditorDocument({ name: e.target.value })}
             />
             <RichtextEditorField
               variant="with-legal-quote"
-              content={document.content}
+              initialContent={document.content}
               onChange={(e) => updateEditorDocument({ content: e.editor.getHTML() })}
             />
           </div>

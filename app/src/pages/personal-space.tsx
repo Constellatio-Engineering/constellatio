@@ -1,4 +1,5 @@
 import { Layout } from "@/components/layouts/Layout";
+import PageHead from "@/components/pageHead/PageHead";
 import PersonalSpacePage from "@/components/pages/personalSpacePage/PersonalSpacePage";
 
 import { type NextPage } from "next";
@@ -6,9 +7,12 @@ import { type NextPage } from "next";
 const Page: NextPage = () =>
 {
   return (
-    <Layout>
-      <PersonalSpacePage/>
-    </Layout>
+    <>
+      <PageHead pageTitle="Persönlicher Bereich"/>
+      <Layout>
+        <PersonalSpacePage/>
+      </Layout>
+    </>
   );
 };
 

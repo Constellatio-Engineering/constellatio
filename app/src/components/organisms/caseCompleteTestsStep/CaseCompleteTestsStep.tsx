@@ -1,6 +1,7 @@
 /* eslint-disable max-lines */
 import { Button } from "@/components/atoms/Button/Button";
 import { type IStatusLabel } from "@/components/atoms/statusLabel/StatusLabel";
+import FloatingPanelTablet from "@/components/floatingPanelTablet/FloatingPanelTablet";
 import { RichTextHeadingOverwrite } from "@/components/helpers/RichTextHeadingOverwrite";
 import { type GameProgress } from "@/db/schema";
 import useContextAndErrorIfNull from "@/hooks/useContextAndErrorIfNull";
@@ -12,7 +13,6 @@ import { type Games } from "@/utils/case";
 import type { IDocumentLink, IHeadingNode } from "types/richtext";
 
 import { Container, Title } from "@mantine/core";
-import { useMediaQuery } from "@mantine/hooks";
 import {
   type FunctionComponent, useMemo, useCallback
 } from "react";
@@ -68,7 +68,7 @@ const CaseCompleteTestsStep: FunctionComponent<ICaseCompleteTestsStepProps> = ({
   const overrideCaseStepIndex = useCaseSolvingStore(s => s.overrideCaseStepIndex);
 
   let renderedCaseContent: IGenCase_FullTextTasks | IGenArticle_FullTextTasks | null;
-  const isBigScreen = useMediaQuery("(min-width: 1100px)");
+  // const isBigScreen = useMediaQuery("(min-width: 1100px)");
 
   /* console.log("-----------------");
   console.log("completedGames", completedGames);
@@ -181,7 +181,7 @@ const CaseCompleteTestsStep: FunctionComponent<ICaseCompleteTestsStepProps> = ({
   }, [caseId, fullTextTasks?.connections]);
 
   return (
-    <Container maw={1440}>
+    <Container p={0} maw={1440}>
       <div css={styles.contentWrapper} id="completeTestsStepContent">
         {variant === "case" && (
           <div css={styles.facts}>
@@ -202,16 +202,22 @@ const CaseCompleteTestsStep: FunctionComponent<ICaseCompleteTestsStepProps> = ({
           </Button>
         )}
         <div css={styles.content}>
-          {isBigScreen && (
-            <div css={styles.toc}>
-              <FloatingPanel
-                hidden={progressState === "not-started"}
-                facts={facts}
-                content={content}
-                variant={variant}
-              />
-            </div>
-          )}
+          <div css={styles.toc}>
+            <FloatingPanel
+              hidden={progressState === "not-started"}
+              facts={facts}
+              content={content}
+              variant={variant}
+              selectedTab="Gliederung"
+            />
+          </div>
+          {/* FloatingPanelTablet show on tablet views only controlled by: CSS media query  */}
+          <FloatingPanelTablet
+            hidden={progressState === "not-started"}
+            facts={facts}
+            content={content}
+            variant={variant}
+          />
           {progressState !== "not-started" && (
             <div css={styles.fullTextAndTasksWrapper}>
               <Richtext
@@ -221,10 +227,9 @@ const CaseCompleteTestsStep: FunctionComponent<ICaseCompleteTestsStepProps> = ({
                   heading: (props) => 
                   {
                     const node = props!.node as unknown as IHeadingNode;
-                    // console.log({ allHeadings, node, return: getNestedHeadingIndex(node, allHeadings) });
                     return RichTextHeadingOverwrite({ index: getNestedHeadingIndex(node, allHeadings), ...props });
                   },
-                  paragraph: richTextParagraphOverwrite
+                  paragraph: richTextParagraphOverwrite,
                 }}
               />
               {(areAllGamesCompleted && variant === "case") && (

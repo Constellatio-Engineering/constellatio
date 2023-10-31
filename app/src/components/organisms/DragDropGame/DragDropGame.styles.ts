@@ -44,7 +44,7 @@ export const Game = styled.div`
     background-size: cover;
     background-position: center center;
   }
-  @media screen and (max-width: 1024px) {
+  @media screen and (max-width: 1100px) {
     flex-direction: column;
     gap: 24px;
   }

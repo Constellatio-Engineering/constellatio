@@ -1,4 +1,5 @@
 import FavoriteArticlesList from "@/components/favoriteArticlesList/FavoriteArticlesList";
+import UseQueryStateWrapper from "@/components/useQueryStateWrapper/UseQueryStateWrapper";
 import useArticles from "@/hooks/useArticles";
 import useBookmarks from "@/hooks/useBookmarks";
 import useCases from "@/hooks/useCases";
@@ -7,11 +8,10 @@ import { paths } from "@/utils/paths";
 import { type NonEmptyArray, type Nullable } from "@/utils/types";
 
 import { Loader } from "@mantine/core";
-import Link from "next/link";
+import { useRouter } from "next/router";
 import { parseAsString, useQueryState } from "next-usequerystate";
 import React, { type FunctionComponent } from "react";
 
-import * as styles from "./PersonalSpaceFavoriteTab.styles";
 import EmptyStateCard from "../emptyStateCard/EmptyStateCard";
 import FavoriteCasesList from "../favoriteCasesList/FavoriteCasesList";
 import PersonalSpaceNavBar from "../personalSpaceNavBar/PersonalSpaceNavBar";
@@ -22,7 +22,7 @@ export type FavoriteCategoryNavTab = {
   title: string;
 };
 
-const PersonalSpaceFavoriteTab: FunctionComponent = () => 
+const PersonalSpaceFavoriteTabContent: FunctionComponent = () =>
 {
   const { allCases = [], isLoading: areCasesLoading } = useCases();
   const { allArticles = [], isLoading: areArticlesLoading } = useArticles(); 
@@ -76,9 +76,9 @@ const PersonalSpaceFavoriteTab: FunctionComponent = () =>
   });
   const favoriteCasesListProps = { bookmarkedCasesMainCategoriesUnique, casesByMainCategory };
   const favoriteArticlesListProps = { ArticlesByMainCategory, bookmarkedArticlesMainCategoriesUnique };
-
+  const router = useRouter();
   return (
-    <div css={styles.wrapper}>
+    <div>
       <PersonalSpaceNavBar
         setSelectedTabSlug={setSelectedTabSlug}
         selectedTabSlug={selectedTabSlug}
@@ -93,10 +93,11 @@ const PersonalSpaceFavoriteTab: FunctionComponent = () =>
               <FavoriteCasesList {...favoriteCasesListProps}/>
             ) : (
               <EmptyStateCard
-                button={<Link href={paths.cases}>Explore Cases</Link>}
-                title="You haven’t saved any cases yet"
-                text="You can save cases, dictionary articles, forum questions and highlighted text to Favourites"
+                button="Alle Fälle ansehen"
+                title="Du hast noch keine Fälle als Favoriten gespeichert"
+                text="Du kannst Fälle, Lexikon-Artikel und sogar einzelne markierte Textpassagen als deine persönlichen Favoriten speichern"
                 variant="For-large-areas"
+                click={async () => router.push(paths.cases)}
               />
             )
           )}
@@ -111,10 +112,11 @@ const PersonalSpaceFavoriteTab: FunctionComponent = () =>
                 <FavoriteArticlesList {...favoriteArticlesListProps}/>
               ) : ( 
                 <EmptyStateCard
-                  button={<Link href={paths.dictionary}>Explore Articles</Link>}
-                  title="You haven’t saved any Articles yet"
-                  text="You can save cases, dictionary articles, forum questions and highlighted text to Favourites"
+                  button="Alle Lexikon-Artikel ansehen"
+                  title="Du hast noch keine Lexikon-Artikel als Favoriten gespeichert"
+                  text="Du kannst Fälle, Lexikon-Artikel und sogar einzelne markierte Textpassagen als deine persönlichen Favoriten speichern"
                   variant="For-large-areas"
+                  click={async () => router.push(paths.dictionary)}
                 />
               )
           }
@@ -122,6 +124,15 @@ const PersonalSpaceFavoriteTab: FunctionComponent = () =>
         </>
       )}
     </div>
+  );
+};
+
+const PersonalSpaceFavoriteTab: FunctionComponent = () =>
+{
+  return (
+    <UseQueryStateWrapper>
+      <PersonalSpaceFavoriteTabContent/>
+    </UseQueryStateWrapper>
   );
 };
 

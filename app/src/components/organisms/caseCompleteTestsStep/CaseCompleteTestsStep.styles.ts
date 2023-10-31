@@ -1,7 +1,8 @@
 import { css } from "@emotion/react";
 import { type MantineTheme } from "@mantine/styles";
 
-export const contentWrapper = css``;
+export const contentWrapper = css`
+`;
 
 export const facts = (theme: MantineTheme) => css`
 	max-width: 52.5%;
@@ -36,6 +37,9 @@ export const toc = css`
 	height: max-content;
 	margin: 24px;
 	margin-left: auto;
+	@media screen and (max-width: 1100px) {
+		display: none;
+	}
 `;
 
 export const fullTextAndTasksWrapper = css`

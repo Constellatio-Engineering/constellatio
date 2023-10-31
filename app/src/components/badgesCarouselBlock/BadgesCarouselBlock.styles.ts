@@ -8,5 +8,11 @@ export const wrapper = (theme: MantineTheme) => css`
     display: flex;
     flex-direction: column;
     justify-content:space-between;
-    /* max-width: 950px; */width: 70%;
+    
+    /* max-width: 950px; */
+    // when we enable the learning time component, we need to make this wdith around 70%
+    /* width: 70%; */
+    margin-top: 50px;
+    width: 100%;
+    min-height: 300px;
 `;

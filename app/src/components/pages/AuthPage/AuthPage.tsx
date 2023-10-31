@@ -4,11 +4,14 @@ import { Header } from "@/components/organisms/Header/Header";
 import { LoginForm } from "@/components/organisms/LoginForm/LoginForm";
 import { RegistrationForm } from "@/components/organisms/RegistrationForm/RegistrationForm";
 import { RegistrationVisualHeader } from "@/components/organisms/RegistrationVisualHeader/RegistrationVisualHeader";
+import { AuthStateContext } from "@/provider/AuthStateProvider";
+import { paths } from "@/utils/paths";
 
 import { Container, Flex, Tabs } from "@mantine/core";
-import { useMediaQuery } from "@mantine/hooks";
 import { useRouter } from "next/router";
-import { type FC } from "react";
+import { useContext, type FC, useEffect } from "react";
+
+import * as styles from "./AuthPage.styles";
 
 export interface AuthPageProps
 {
@@ -19,21 +22,28 @@ export const AuthPage: FC<AuthPageProps> = ({ tab }) =>
 {
   const router = useRouter();
   const handleTabChange: (value: AuthPageProps["tab"]) => Promise<boolean> = async (value) => router.push(`/${value}`);
-  const isBigScreen = useMediaQuery("(min-width: 961px)");
+  const { isUserLoggedIn } = useContext(AuthStateContext);
+
+  useEffect(() => 
+  {
+    if(isUserLoggedIn) 
+    { 
+      void router.push(paths.dashboard);
+    }
+  }, [isUserLoggedIn, router]);
 
   return (
     <Flex
       justify="space-between"
       bg="brand-01.5"
       sx={{ height: "100vh", minHeight: 600, overflow: "hidden" }}>
-      {isBigScreen && <RegistrationVisualHeader/>}
+      <RegistrationVisualHeader/>
       <Container
         w="100%"
         pt={20}
+        css={styles.wrapper}
         sx={(theme) => ({
           backgroundColor: theme.colors["neutrals-01"][0],
-          borderRadius: isBigScreen ? `${theme.radius["radius-16"]} 0 0 ${theme.radius["radius-16"]}` : 0,
-          // this is to get rid of the right red bar to the right of the form, but gets too big on small screens
           marginRight: 0,
           overflowY: "auto",
           paddingTop: "0px !important",

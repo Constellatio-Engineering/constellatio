@@ -2,6 +2,7 @@
 import CountLabel from "@/components/atoms/countLabel/CountLabel";
 import { ArrowRight } from "@/components/Icons/ArrowRight";
 import { paths } from "@/utils/paths";
+import { slugFormatter } from "@/utils/utils";
 
 import { Title } from "@mantine/core";
 import Link from "next/link";
@@ -21,7 +22,7 @@ const ProgressCard: FunctionComponent<ProgressCardProps> = ({
   completed,
   icon,
   title,
-  total 
+  total
 }) => 
 {
   return (
@@ -33,7 +34,7 @@ const ProgressCard: FunctionComponent<ProgressCardProps> = ({
           <CountLabel count={completed} total={total} variant="cases"/>
         </div>
       )}
-      <Link href={`${paths.cases}`} css={styles.link}>Complete more cases <ArrowRight/></Link>
+      <Link href={`${paths.cases}?category=${slugFormatter(title.replaceAll(" ", ""))}`} css={styles.link}>Zur Fallübersicht<ArrowRight/></Link>
     </div>
   );
 };

@@ -184,9 +184,9 @@ const UploadedMaterialBlock: FunctionComponent<UploadedMaterialBlockProps> = ({
 
   return (
     <div css={styles.wrapper}>
-      <div css={styles.uploadedMaterialBlockHead}>
+      <div css={styles.uploadedMaterialBlockHead} id="uploads">
         <Title order={4}>
-          Uploaded materials{" "}
+          Hochgeladene Dateien{" "}
           <SubtitleText className="count" component="span" styleType="subtitle-01-medium">
             ({uploadedFiles.length ?? 0})
           </SubtitleText>
@@ -211,7 +211,7 @@ const UploadedMaterialBlock: FunctionComponent<UploadedMaterialBlockProps> = ({
                 styleType="primary"
                 disabled={areUploadsInProgress}
                 type="submit">
-                Upload
+                Hochladen
               </Button>
             </div>
           )}
@@ -227,8 +227,8 @@ const UploadedMaterialBlock: FunctionComponent<UploadedMaterialBlockProps> = ({
         ) : (
           <EmptyStateCard
             variant="For-small-areas"
-            title="You haven’t uploaded any materials yet"
-            text="You can upload different materials to keep important files at one place "
+            title="Du hast noch keine Dateien hochgeladen"
+            text="Hier kannst du all deine Lernmaterialien wie zum Beispiel Vorlesungsfolien, Screenshots, Scans oder Word-Dateien an einem Ort speichern und verlinken."
           />
         )}
       </div>

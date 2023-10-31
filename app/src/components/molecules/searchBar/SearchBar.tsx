@@ -2,6 +2,7 @@ import { Button } from "@/components/atoms/Button/Button";
 import { CustomLink } from "@/components/atoms/CustomLink/CustomLink";
 import { Cross } from "@/components/Icons/Cross";
 import { Search } from "@/components/Icons/Search";
+import UseQueryStateWrapper from "@/components/useQueryStateWrapper/UseQueryStateWrapper";
 import useSearchResults from "@/hooks/useSearchResults";
 import useSearchBarStore from "@/stores/searchBar.store";
 import { paths } from "@/utils/paths";
@@ -14,9 +15,7 @@ import React, { useEffect, type FunctionComponent, type FormEventHandler } from 
 
 import * as styles from "./SearchBar.styles";
 
-interface SearchBarProps {}
-
-const SearchBar: FunctionComponent<SearchBarProps> = () => 
+const SearchBarContent: FunctionComponent = () =>
 {
   const searchValue = useSearchBarStore((s) => s.searchValue);
   const setSearchValue = useSearchBarStore((s) => s.setSearchValue);
@@ -97,6 +96,15 @@ const SearchBar: FunctionComponent<SearchBarProps> = () =>
         rightSection={rightSection}
       />
     </form>
+  );
+};
+
+const SearchBar: FunctionComponent = () =>
+{
+  return (
+    <UseQueryStateWrapper>
+      <SearchBarContent/>
+    </UseQueryStateWrapper>
   );
 };
 

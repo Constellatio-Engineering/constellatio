@@ -1,5 +1,4 @@
-import { Button } from "@/components/atoms/Button/Button";
-import { Check } from "@/components/Icons/Check";
+import { Button, type TButton } from "@/components/atoms/Button/Button";
 
 import { RichTextEditor, Link } from "@mantine/tiptap";
 import { Placeholder } from "@tiptap/extension-placeholder";
@@ -9,29 +8,31 @@ import React, { type FC, useEffect } from "react";
 
 import { ContentWrapper, richtextEditorFieldStyles } from "./RichtextEditorField.styles";
 
+type RichtextEditorButton = {
+  readonly action: (editor: Editor) => void;
+  readonly props: TButton;
+  readonly text: string;
+};
+
 export interface RichtextEditorFieldProps
 {
-  readonly action?: (editor: Editor) => void;
-  readonly button?: {
-    text?: string;
-  };
-  readonly content?: Content;
+  readonly buttons?: RichtextEditorButton[];
   readonly disabled?: boolean;
+  readonly initialContent: Content;
   readonly onChange?: (e: EditorEvents["update"]) => void;
   readonly variant: "simple" | "with-legal-quote";
 }
 
 export const RichtextEditorField: FC<RichtextEditorFieldProps> = ({
-  action,
-  button,
-  content = "",
+  buttons,
   disabled,
+  initialContent,
   onChange,
-  variant
+  variant,
 }) =>
 {
   const editor = useEditor({
-    content,
+    content: initialContent,
     editable: !disabled,
     extensions: [
       StarterKit,
@@ -40,6 +41,7 @@ export const RichtextEditorField: FC<RichtextEditorFieldProps> = ({
         placeholder: `${variant === "simple" ? "Gutachten verfassen..." : "Beginne hier..."} `,
       }),
     ],
+
     onUpdate: (e) =>
     {
       if(onChange)
@@ -47,21 +49,26 @@ export const RichtextEditorField: FC<RichtextEditorFieldProps> = ({
         onChange(e);
       }
     },
-  });
 
-  const handleSubmit = (): void => 
-  {
-    if(action && editor) { action(editor); }
-  };
+    parseOptions: {
+      preserveWhitespace: true,
+    }
+  });
 
   useEffect(() =>
   {
-    if(!editor)
+    if(editor)
     {
-      return;
+      editor.commands.setContent(initialContent);
     }
+  }, [initialContent, editor]);
 
-    editor.setOptions({ editable: !disabled });
+  useEffect(() =>
+  {
+    if(editor)
+    {
+      editor.setOptions({ editable: !disabled });
+    }
   }, [disabled, editor]);
 
   return (
@@ -86,17 +93,24 @@ export const RichtextEditorField: FC<RichtextEditorFieldProps> = ({
       </RichTextEditor.Toolbar>
       <ContentWrapper>
         <RichTextEditor.Content/>
-        {button && (
-          <div>
-            <Button<"button">
-              styleType="primary"
-              size="large"
-              type="button"
-              onClick={handleSubmit}
-              leftIcon={<Check/>}
-              disabled={editor?.isEmpty}>
-              {button?.text}
-            </Button>
+        {buttons && buttons.length > 0 && (
+          <div style={{ alignItems: "center", display: "flex", gap: 8 }}>
+            {buttons.map((button, index) => (
+              <Button<"button">
+                key={index}
+                {...button?.props}
+                type="button"
+                onClick={() =>
+                {
+                  if(editor)
+                  {
+                    button?.action(editor);
+                  }
+                }}
+                disabled={button.props.disabled || editor?.isEmpty}>
+                {button?.text}
+              </Button>
+            ))}
           </div>
         )}
       </ContentWrapper>

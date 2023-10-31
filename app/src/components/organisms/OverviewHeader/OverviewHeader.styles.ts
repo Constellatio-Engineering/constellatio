@@ -12,8 +12,8 @@ export const contentHeader = ({ theme, variant }: {
 	align-items: center;
 	justify-content: center;
 	gap: 32px;
-	height: 600px;
-	max-height: 50vh;
+	height: 500px;
+	/* max-height: 50vh; */
 	background: ${variant === "case"
     ? theme.colors["cc-cases"][2]
     : variant === "dictionary"
@@ -34,12 +34,10 @@ export const contentHeader = ({ theme, variant }: {
       : variant === "red" && theme.colors["brand-01"][4]};
 		svg {
 			height: 100%;
+			max-width: 100%;
 		}
 	}
 
-	/* @media screen and (max-width: 1024px) {
-	height: 300px;
-	} */
 	`;
 
 export const categoriesButtons = () => 

@@ -1,4 +1,4 @@
-import { type SupabaseClient, type User } from "@supabase/auth-helpers-nextjs";
+import { type SupabaseClient, type User, type Session } from "@supabase/auth-helpers-nextjs";
 
 const _getIsUserLoggedIn = async (supabaseClientInstance: SupabaseClient): Promise<GetIsUserLoggedInResult> =>
 {
@@ -36,6 +36,7 @@ const _getIsUserLoggedIn = async (supabaseClientInstance: SupabaseClient): Promi
 
   return {
     isUserLoggedIn: true,
+    session,
     user
   };
 };
@@ -44,6 +45,7 @@ type GetIsUserLoggedInResult = {
   isUserLoggedIn: false;
 } | {
   isUserLoggedIn: true;
+  session: Session;
   user: User;
 };
 

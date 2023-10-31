@@ -137,6 +137,7 @@ const DetailsPage: FunctionComponent<IDetailsPageProps> = ({ content, variant })
       <CaseSolvingHeader
         title={content?.title ?? ""}
         variant={variant}
+        caseId={content?.id}
         pathSlugs={[
           {
             path: variant === "case" ? paths.cases : paths.dictionary,

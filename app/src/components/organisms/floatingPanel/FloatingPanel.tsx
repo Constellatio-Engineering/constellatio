@@ -25,6 +25,7 @@ export interface IFloatingPanelProps
   readonly content: DataType[];
   readonly facts: Maybe<IGenCase_Facts> | undefined;
   readonly hidden?: boolean;
+  readonly selectedTab?: "Gliederung" | "Sachverhalt";
   readonly variant?: "dictionary" | "case";
 }
 
@@ -32,6 +33,7 @@ const FloatingPanel: FunctionComponent<IFloatingPanelProps> = ({
   content,
   facts,
   hidden,
+  selectedTab = "Gliederung",
   variant
 }) => 
 {
@@ -43,7 +45,7 @@ const FloatingPanel: FunctionComponent<IFloatingPanelProps> = ({
   HTMLDivElement,
   HTMLDivElement
   >({ axis: "x" });
-  const [selectedTab, setSelectedTab] = useState<"Gliederung" | "Sachverhalt">(tabs?.[0]?.title ?? "Gliederung");
+  const [selectedTabState, setSelectedTabState] = useState<"Gliederung" | "Sachverhalt">(selectedTab);
   const toc = generateTOC(content);
   const theme = useMantineTheme();
 
@@ -65,7 +67,7 @@ const FloatingPanel: FunctionComponent<IFloatingPanelProps> = ({
         <Switcher
           className="switcher"
           size="medium"
-          defaultValue={selectedTab}
+          defaultValue={selectedTabState}
           tabStyleOverwrite={{ flex: "1" }}>
           {variant === "case" && facts && !hidden && (
             <Tabs.List>
@@ -74,7 +76,7 @@ const FloatingPanel: FunctionComponent<IFloatingPanelProps> = ({
                   <SwitcherTab
                     icon={tab?.icon?.src ?? <Trash/>}
                     value={tab.title}
-                    onClick={() => setSelectedTab(tab?.title)}>{tab.title}
+                    onClick={() => setSelectedTabState(tab?.title)}>{tab.title}
                   </SwitcherTab>
                 </React.Fragment>
               ))}

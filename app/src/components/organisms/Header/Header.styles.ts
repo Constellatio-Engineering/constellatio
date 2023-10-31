@@ -22,12 +22,13 @@ export const wrapper = ({ theme, variant }: {
   margin: 0 auto;
   display: flex;
   align-items: center;
-  padding: 0 ${theme.spacing["spacing-24"]};
+  /* padding: 0 ${theme.spacing["spacing-12"]}; */
   ${variant === "simple" ? SimpleHeader : DefaultHeader}
 `;
 
 export const SHeader = styled.header`
   background: #fff;
+  padding: 0 60px;
   position: fixed;
   top: 0;
   width: 100%;
@@ -39,6 +40,7 @@ export const links = css`
   gap: 16px;
   height: 100%;
   align-items: center;
+  margin-right: 24px;
   img {
     margin-right: 40px;
   }
@@ -88,5 +90,17 @@ export const profileArea = (theme: MantineTheme) => css`
     position: relative;
     width: 2px;
     overflow: hidden;
+  }
+`;
+export const tabletHeaderLogo = css`
+  display: none;
+  @media screen and (max-width: 1100px) {
+    display: block;
+  }
+`;
+export const headerLogo = css`
+  display: block;
+  @media screen and (max-width: 1100px) {
+    display: none;
   }
 `;

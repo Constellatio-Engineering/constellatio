@@ -1,4 +1,5 @@
 import { Layout } from "@/components/layouts/Layout";
+import PageHead from "@/components/pageHead/PageHead";
 import DetailsPage from "@/components/pages/DetailsPage/DetailsPage";
 import getAllArticles from "@/services/content/getAllArticles";
 import { getArticleById } from "@/services/content/getArticleById";
@@ -56,9 +57,12 @@ export const getStaticProps: GetStaticProps<GetArticleDetailPagePropsResult, Par
 const NextPage: FunctionComponent<GetArticleDetailPagePropsResult> = ({ article }) =>
 {
   return (
-    <Layout>
-      <DetailsPage content={article} variant="dictionary"/>
-    </Layout>
+    <>
+      <PageHead pageTitle={article?.title || "Artikel ohne Titel"}/>
+      <Layout>
+        <DetailsPage content={article} variant="dictionary"/>
+      </Layout>
+    </>
   );
 };
 

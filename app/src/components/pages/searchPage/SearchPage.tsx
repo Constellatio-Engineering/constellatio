@@ -1,11 +1,9 @@
-// import useSearchResults from "@/hooks/useSearchResults";
-
 import EmptyStateCard from "@/components/organisms/emptyStateCard/EmptyStateCard";
 import useSearchResults, { type SearchResultsKey } from "@/hooks/useSearchResults";
 import useSearchBarStore from "@/stores/searchBar.store";
 
 import { createParser, useQueryState } from "next-usequerystate";
-import React, { type FunctionComponent } from "react";
+import React, { useMemo, type FunctionComponent } from "react";
 
 import * as styles from "./SearchPage.styles";
 import SearchPageFiltering from "./SearchPageFiltering";
@@ -22,7 +20,7 @@ const tabSchema = createParser({
       case "articles": { return "articles"; }
       default:
       {
-        console.error(`Unknown tab query: ${query}`);
+        console.error(`Unknown tab query at createParser: ${query}`);
         return "cases";
       }
     }
@@ -30,15 +28,18 @@ const tabSchema = createParser({
   serialize: (query) => query
 });
 
-interface SearchPageProps {}
-
-const SearchPage: FunctionComponent<SearchPageProps> = () => 
+const SearchPage: FunctionComponent = () => 
 {
   const { searchResults } = useSearchResults();
   const searchValue = useSearchBarStore((s) => s.searchValue);
   const closestTabWithResultsIndex = Object.values(searchResults).findIndex(result => result.length > 0);
   const totalSearchResults = Object.values(searchResults).reduce((acc, curr) => acc + curr.length, 0);
-  const initialTab: SearchResultsKey = (Object.keys(searchResults) as SearchResultsKey[])[closestTabWithResultsIndex] ?? "articles";
+  const initialTab = useMemo(() => 
+  {
+    const tabs = Object.keys(searchResults).filter(tab => tab !== "userDocuments") as SearchResultsKey[];
+    return tabs[closestTabWithResultsIndex] ?? "articles";
+  }, [searchResults, closestTabWithResultsIndex]);
+
   const [tabQuery, setTabQuery] = useQueryState<SearchResultsKey>("tab", tabSchema.withDefault(initialTab));
 
   return (
@@ -59,7 +60,6 @@ const SearchPage: FunctionComponent<SearchPageProps> = () =>
           <SearchPageFiltering/>
           <SearchPageResults
             tabQuery={tabQuery}
-
           />
         </>
       )}

@@ -39,12 +39,10 @@ export const richtextEditorFieldStyles = (): RichtextEditorFieldStyles =>
           listStyle: "decimal",
           padding: "20px",
         },
-
         "& ul": {
           listStyle: "initial",
           padding: "20px",
         },
-
         "> *": {
           em: {
             fontStyle: "italic",
@@ -59,7 +57,6 @@ export const richtextEditorFieldStyles = (): RichtextEditorFieldStyles =>
         },
 
         padding: 0,
-
         paddingBottom: "32px",
       },
     },
@@ -125,6 +122,8 @@ export const ContentWrapper = styled.div`
   flex-direction: column;
   justify-content: space-between;
   padding: 20px;
+  resize: vertical;
+  overflow: auto;
 
   .mantine-RichTextEditor-typographyStylesProvider .mantine-RichTextEditor-content .ProseMirror {
     > blockquote {

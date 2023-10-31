@@ -1,11 +1,11 @@
 /* eslint-disable @typescript-eslint/explicit-function-return-type */
 import { type FileMimeType } from "@/db/schema";
+import { idValidation } from "@/schemas/common.validation";
 import { getFileExtensionLowercase } from "@/utils/files";
 
 import { z } from "zod";
 
-export const idValidation = z.string().uuid();
-export const folderIdValidation = z.string().uuid().nullable();
+export const folderIdValidation = idValidation.nullable();
 export const filenameValidation = z.string().min(1).max(255).refine(filename => getFileExtensionLowercase(filename) != null, {
   message: "Der Dateiname muss eine Dateiendung haben.",
   path: ["filename"]

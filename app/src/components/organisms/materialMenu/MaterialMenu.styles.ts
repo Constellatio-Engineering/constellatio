@@ -13,8 +13,9 @@ export const wrapper = (theme: MantineTheme) => css`
     max-height: 400px;
     margin: 0 auto;
 
-  @media screen and (max-width: 1024px) {
-    width: 100%;
+  @media screen and (max-width: 1200px) {
+    /* width: 100%; */
+    display: none;
   }
 
 `;
@@ -24,7 +25,7 @@ export const header = (theme: MantineTheme) => css`
 `;
 export const content = css``;
 export const callToAction = (theme: MantineTheme) => css`
-    padding:16px 24px;
+    padding:16px;
     background: ${theme.colors["neutrals-01"][0]};
     border-radius: 0 0 12px 12px;
 `;

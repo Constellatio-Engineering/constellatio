@@ -1,6 +1,8 @@
 import { Container, Flex, Title } from "@mantine/core";
+import Image from "next/image";
 import React, { type FunctionComponent } from "react";
 
+import * as styles from "./RegistrationVisualHeader.style";
 import visual from "../../../../public/images/Registration-visual.svg";
 import { Footer } from "../Footer/Footer";
 
@@ -9,6 +11,7 @@ export const RegistrationVisualHeader: FunctionComponent = () =>
   return (
     <Container
       bg="brand-01.5"
+      css={styles.wrapper}
       sx={() => ({
         alignItems: "center",
         display: "flex",
@@ -24,17 +27,15 @@ export const RegistrationVisualHeader: FunctionComponent = () =>
         align="center"
         sx={{ 
           alignItems: "center", display: "flex", height: "100%", justifyContent: "center", margin: "0 auto", maxWidth: "100%", overflow: "hidden", padding: 0,
-
         }}>
         <Flex
           px={20}
           direction="column"
           justify="center"
           align="center">
-          {/* eslint-disable-next-line @next/next/no-img-element */}
-          <img
-            src={visual.src}
-            style={{ aspectRatio: "1", maxWidth: "100%", objectFit: "contain" }}
+          <Image
+            src={visual}
+            style={{ height: "auto", maxWidth: 460, width: "90%" }}
             alt="Registration-visual"
           />
           <Title

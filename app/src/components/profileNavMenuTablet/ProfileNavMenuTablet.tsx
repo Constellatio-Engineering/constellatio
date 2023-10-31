@@ -12,7 +12,6 @@ interface IProfileNavMenuTabletProps
 }
 const ProfileNavMenuTablet: FunctionComponent<IProfileNavMenuTabletProps> = ({ activeTabSlug, setTab, tabs }) => 
 {
-  // const tabs = [1,2,3]
   return (
     <div css={styles.wrapper}>
       {tabs.map((tab, index) => (

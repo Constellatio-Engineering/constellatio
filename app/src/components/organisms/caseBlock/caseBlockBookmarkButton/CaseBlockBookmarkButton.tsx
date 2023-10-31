@@ -1,8 +1,6 @@
-import { BodyText } from "@/components/atoms/BodyText/BodyText";
-import { Button } from "@/components/atoms/Button/Button";
+import DeleteBookmarkModal from "@/components/deleteBookmarkModal/DeleteBookmarkModal";
 import { Bookmark } from "@/components/Icons/Bookmark";
 import { BookmarkFilledIcon } from "@/components/Icons/BookmarkFilledIcon";
-import { Modal } from "@/components/molecules/Modal/Modal";
 import TableIconButton from "@/components/molecules/tableIconButton/TableIconButton";
 import useContextAndErrorIfNull from "@/hooks/useContextAndErrorIfNull";
 import { InvalidateQueriesContext } from "@/provider/InvalidateQueriesProvider";
@@ -11,9 +9,6 @@ import { api } from "@/utils/api";
 import { paths } from "@/utils/paths";
 import { type Nullable } from "@/utils/types";
 
-import { Title } from "@mantine/core";
-// import { modals } from "@mantine/modals";
-// import { notifications } from "@mantine/notifications";
 import { useRouter } from "next/router";
 import React, { type FunctionComponent, useRef } from "react";
 
@@ -46,11 +41,6 @@ const CaseBlockBookmarkButton: FunctionComponent<ICaseBlockBookmarkButtonProps> 
   const onError = (e: unknown, type: "add" | "remove"): void =>
   {
     console.log(`error while ${type === "add" ? "adding" : "removing"} bookmark:`, e);
-
-    // notifications.show({
-    //   message: `Bookmark couldn't be ${type === "add" ? "added" : "removed"}`,
-    //   title: "Oops!",
-    // });
   };
 
   const { isLoading: isAddingBookmarkLoading, mutate: addBookmark } = api.bookmarks.addBookmark.useMutation({
@@ -95,17 +85,8 @@ const CaseBlockBookmarkButton: FunctionComponent<ICaseBlockBookmarkButtonProps> 
       return;
     }
 
-    if(router?.route === paths.personalSpace)
+    if(router?.route === paths.personalSpace || router?.route === paths.dashboard)
     {
-      // modals.openConfirmModal({
-      //   centered: true,
-      //   children: <Text size="sm">Are you sure you want to delete this case from your favorites?</Text>,
-      //   confirmProps: { color: "red" },
-      //   labels: { cancel: "No don't delete it", confirm: "Delete bookmark" },
-      //   onConfirm: () => removeBookmark(bookmarkData),
-      //   title: "Remove from favorites",
-      // });
-
       setShowDeleteBookmarkModal(true);
     }
     else
@@ -122,49 +103,27 @@ const CaseBlockBookmarkButton: FunctionComponent<ICaseBlockBookmarkButtonProps> 
         disabled={areAllBookmarksLoading || isAddingBookmarkLoading || isRemovingBookmarkLoading}
         onClickHandler={onBookmarkIconClick}
       />
-      <Modal
-        opened={showDeleteBookmarkModal}
-        centered
-        lockScroll={false}
-        withCloseButton={false}
+      <DeleteBookmarkModal
         onClose={function(): void 
         {
           setShowDeleteBookmarkModal(false);
-        }}>
-        <Title order={3}>Remove from favorites?</Title>
-        <BodyText styleType="body-01-regular" component="p">
-          Are you sure you want to delete this case from your favorites?
-        </BodyText>
-        <div className="buttons">
-          <Button<"button">
-            type="button"
-            size="large"
-            style={{ marginRight: "12px" }}
-            styleType="secondarySimple"
-            onClick={function(): void 
+        }}
+        opened={showDeleteBookmarkModal}
+        onSubmit={
+          function(): void 
+          {
+            if(caseId)
             {
-              setShowDeleteBookmarkModal(false);
-            }}>No, keep
-          </Button>
-          <Button<"button">
-            type="button"
-            size="large"
-            styleType="primary"
-            onClick={function(): void 
-            {
-              if(caseId)
-              {
-                const bookmarkData: AddOrRemoveBookmarkSchema = {
-                  resourceId: caseId,
-                  resourceType: variant === "case" ? "case" : "article"
-                };
-                removeBookmark(bookmarkData);
-              }
-              setShowDeleteBookmarkModal(false);
-            }}>Yes, delete
-          </Button>
-        </div>
-      </Modal>
+              const bookmarkData: AddOrRemoveBookmarkSchema = {
+                resourceId: caseId,
+                resourceType: variant === "case" ? "case" : "article"
+              };
+              removeBookmark(bookmarkData);
+            }
+            setShowDeleteBookmarkModal(false);
+          }
+        }
+      />
     </>
   );
 };

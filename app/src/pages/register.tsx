@@ -1,3 +1,4 @@
+import PageHead from "@/components/pageHead/PageHead";
 import { AuthPage } from "@/components/pages/AuthPage/AuthPage";
 import { getCommonProps } from "@/utils/commonProps";
 
@@ -14,15 +15,15 @@ export const getServerSideProps: GetServerSideProps<ServerSidePropsResult> = asy
   const commonProps = await getCommonProps({ locale });
 
   return {
-    props: {
-      ...commonProps,
-      test: "test",
-    },
+    props: commonProps,
   };
 };
 
 const Login: FunctionComponent<ServerSidePropsResult> = () => (
-  <AuthPage tab="register"/>
+  <>
+    <PageHead pageTitle="Registrierung"/>
+    <AuthPage tab="register"/>
+  </>
 );
 
 export default Login;

@@ -13,6 +13,14 @@ export const globalStyles = css`
     overflow-x: hidden;
   }
   
+  html [id], body [id] {
+    scroll-margin: 50px !important;
+  }
+  
+  body {
+    position: relative;
+  }
+  
   a, button {
     cursor: pointer;
   }
@@ -30,6 +38,12 @@ export const globalStyles = css`
     font-weight: 700;
   }
 
+  .mantine-Notification-body {
+    > div {
+      font-size: 16px;
+    }
+  }
+  
   @supports (font: -apple-system-body) and (-webkit-appearance: none) {
     img[loading="lazy"] {
       clip-path: inset(0.6px)

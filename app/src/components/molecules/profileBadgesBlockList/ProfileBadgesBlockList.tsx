@@ -1,39 +1,29 @@
 import { Button } from "@/components/atoms/Button/Button";
 import { ArrowDown } from "@/components/Icons/ArrowDown";
 import { ArrowUp } from "@/components/Icons/ArrowUp";
+import useBadges from "@/hooks/useBadges";
 
 import React, { Fragment, type FunctionComponent } from "react";
 
 import * as styles from "./ProfileBadgesBlockList.styles";
-import ProfileBadgeCard, { type ProfileBadgeCardProps } from "../profileBadgeCard/ProfileBadgeCard";
+import ProfileBadgeCard from "../profileBadgeCard/ProfileBadgeCard";
 
 const ProfileBadgesBlockList: FunctionComponent = () => 
 {
-  const badges: ProfileBadgeCardProps[] = [
-    { description: "You provided feedback to improve design or content", name: "badge1", size: "large" }, 
-    {
-      description: "You provided feedback to improve design or content", name: "badge2", selected: true, size: "large" 
-    },
-    // { description: "You provided feedback to improve design or content", name: "badge2" },
-    // { description: "You provided feedback to improve design or content", name: "badge2" },
-    // { description: "You provided feedback to improve design or content", name: "badge2" },
-    // { description: "You provided feedback to improve design or content", name: "badge2" },
-    // { description: "You provided feedback to improve design or content", name: "badge2" },
-    // { description: "You provided feedback to improve design or content", name: "badge2" },
-    // { description: "You provided feedback to improve design or content", name: "badge2" },
-    // { description: "You provided feedback to improve design or content", name: "badge3" }
-  ];
+  const { getBadgesResult: { badges } } = useBadges();
   const [showAll, setShowAll] = React.useState<boolean>(false);
+  const badgesToShowWithoutShowAll = 9;
+
   return (
-    <div css={styles.wrapper}>
-      {
-        badges?.slice(0, showAll ? badges?.length : 9)?.map((badge, badgeIndex) => (
+    <>
+      <div css={styles.wrapper}>
+        {badges.slice(0, showAll ? badges.length : badgesToShowWithoutShowAll)?.map((badge, badgeIndex) => (
           <Fragment key={badgeIndex}>
-            <ProfileBadgeCard {...badge}/>
+            <ProfileBadgeCard {...badge} size="small" shouldSmallVariantAdjustSizeToParent/>
           </Fragment>
-        ))
-      }
-      {badges?.length > 9 && (
+        ))}
+      </div>
+      {badges.length > badgesToShowWithoutShowAll && (
         <div css={styles.showAllArea}>
           {!showAll && <span css={styles.showAllGredient}/>}
           <Button<"button">
@@ -44,7 +34,7 @@ const ProfileBadgesBlockList: FunctionComponent = () =>
           </Button>
         </div>
       )}
-    </div>
+    </>
   );
 };
 

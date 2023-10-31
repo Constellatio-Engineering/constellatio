@@ -3,6 +3,8 @@ import ErrorPage from "@/components/errorPage/ErrorPage";
 import ItemBlock from "@/components/organisms/caseBlock/ItemBlock";
 import EmptyStateCard from "@/components/organisms/emptyStateCard/EmptyStateCard";
 import OverviewHeader from "@/components/organisms/OverviewHeader/OverviewHeader";
+import UseQueryStateWrapper from "@/components/useQueryStateWrapper/UseQueryStateWrapper";
+import useAllCasesWithProgress from "@/hooks/useAllCasesWithProgress";
 import { type IArticlesOverviewProps } from "@/services/content/getArticlesOverviewProps";
 import { type ICasesOverviewProps } from "@/services/content/getCasesOverviewProps";
 import {
@@ -76,7 +78,8 @@ const OverviewPageContent: FunctionComponent<OverviewPageContentProps> = ({ cont
       ? content?.allCases?.filter((x) => x?.mainCategoryField?.[0]?.slug === selectedCategorySlug)?.length <= 0
       : content?.allArticles?.filter((x) => x?.mainCategoryField?.[0]?.slug === selectedCategorySlug)?.length <= 0;
   };
-
+  const { cases: allCasesWithProgress } = useAllCasesWithProgress();
+  const completeCases = allCasesWithProgress.filter(x => x?.progress === "completed");
   return (
     <div css={styles.Page}>
       {content?.allMainCategories && (
@@ -125,6 +128,8 @@ const OverviewPageContent: FunctionComponent<OverviewPageContentProps> = ({ cont
                 return sortingA - sortingB;
               }) || [];
 
+            const completed = completeCases.filter(x => x?.legalArea?.id === item?.id)?.length;
+
             return (
               item.legalAreaName && (
                 <Fragment key={itemIndex}>
@@ -133,7 +138,7 @@ const OverviewPageContent: FunctionComponent<OverviewPageContentProps> = ({ cont
                     blockHead={{
                       blockType: "itemsBlock",
                       categoryName: item.legalAreaName,
-                      completedCases: 0,
+                      completedCases: completed,
                       items: items.length,
                       variant,
                     }}
@@ -178,10 +183,9 @@ const OverviewPage: FunctionComponent<OverviewPageProps> = (props) =>
   }
 
   return (
-    <OverviewPageContent
-      {...props}
-      initialCategorySlug={initialCategorySlug}
-    />
+    <UseQueryStateWrapper>
+      <OverviewPageContent {...props} initialCategorySlug={initialCategorySlug}/>
+    </UseQueryStateWrapper>
   );
 };
 

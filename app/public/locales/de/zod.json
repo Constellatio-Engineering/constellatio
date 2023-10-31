@@ -31,9 +31,9 @@
         "not_inclusive": "Array muss mehr als {{minimum}} Element(e) enthalten"
       },
       "string": {
-        "exact": "String muss genau {{minimum}} Zeichen enthalten",
-        "inclusive": "String muss mindestens {{minimum}} Zeichen enthalten",
-        "not_inclusive": "String muss mehr als {{minimum}} Zeichen enthalten"
+        "exact": "Muss genau {{minimum}} Zeichen enthalten",
+        "inclusive": "Muss mindestens {{minimum}} Zeichen enthalten",
+        "not_inclusive": "Muss mehr als {{minimum}} Zeichen enthalten"
       },
       "number": {
         "exact": "Zahl muss genau {{minimum}} sein",
@@ -58,9 +58,9 @@
         "not_inclusive": "Array muss weniger als {{maximum}} Element(e) enthalten"
       },
       "string": {
-        "exact": "String muss genau {{maximum}} Zeichen enthalten",
+        "exact": "Muss genau {{maximum}} Zeichen enthalten",
         "inclusive": "String darf höchstens {{maximum}} Zeichen enthalten",
-        "not_inclusive": "String muss weniger als {{maximum}} Zeichen enthalten"
+        "not_inclusive": "Muss weniger als {{maximum}} Zeichen enthalten"
       },
       "number": {
         "exact": "Zahl muss genau {{maximum}} sein",

@@ -28,7 +28,7 @@ const SearchOverlayLeftSide: FunctionComponent<SearchOverlayLeftSideProps> = ({ 
     return (
       <div css={styles.suggestionsLeft}>
         <SuggestionSection label="Zuletzt gesucht" labelVariant="neutral">
-          {searchHistory.map((result, index) => (
+          {searchHistory.slice(0, 9).map((result, index) => (
             <Link
               href={`${paths.search}?find=${result}`}
               key={index}
