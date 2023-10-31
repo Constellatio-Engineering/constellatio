@@ -5,7 +5,7 @@
   "extends": [
     "@dualmeta/eslint-config-next",
     "plugin:storybook/recommended"
-    //"formbricks"
+    //TODO:: "formbricks" //im repo hat die person das hier und in package.json (auch auskommentiert iwie eingebunden)
   ],
   "ignorePatterns": [
     "src/services/graphql/__generated/*",

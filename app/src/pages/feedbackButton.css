@@ -1,0 +1,18 @@
+
+.feedback-button {
+  bottom:40;
+  z-index: 99999;
+  position: absolute;
+  bottom: 20px; /* Adjust the position as needed */
+  right: 20px; /* Adjust the position as needed */
+  padding: 10px 20px;
+  background-color: #AA0000;
+  color: white;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+}
+
+.feedback-button:hover {
+  background-color: #BA3333;
+}
