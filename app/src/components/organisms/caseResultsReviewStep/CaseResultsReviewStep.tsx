@@ -1,18 +1,26 @@
+/* eslint-disable max-lines */
 import { Button } from "@/components/atoms/Button/Button";
 import { RichTextHeadingOverwrite } from "@/components/helpers/RichTextHeadingOverwrite";
 import { richTextParagraphOverwrite } from "@/components/helpers/richTextParagraphOverwrite";
 import { ArrowDown } from "@/components/Icons/ArrowDown";
 import { ArrowUp } from "@/components/Icons/ArrowUp";
 import { Bookmark } from "@/components/Icons/Bookmark";
+import { BookmarkFilledIcon } from "@/components/Icons/BookmarkFilledIcon";
 import { Edit } from "@/components/Icons/Edit";
 import { Notepad } from "@/components/Icons/Notepad";
 import { Pen } from "@/components/Icons/Pen";
 import { Print } from "@/components/Icons/print";
 import { Modal } from "@/components/molecules/Modal/Modal";
 import { Richtext } from "@/components/molecules/Richtext/Richtext";
+import useBookmarks from "@/hooks/useBookmarks";
+import useCases from "@/hooks/useCases";
+import useContextAndErrorIfNull from "@/hooks/useContextAndErrorIfNull";
 import useResetCaseProgress from "@/hooks/useResetCaseProgress";
 import useSubmittedCaseSolution from "@/hooks/useSubmittedCaseSolution";
+import { InvalidateQueriesContext } from "@/provider/InvalidateQueriesProvider";
+import { type AddOrRemoveBookmarkSchema } from "@/schemas/bookmarks/addOrRemoveBookmark.schema";
 import { type IGenCase_Resolution, type IGenCase_Facts, type Maybe } from "@/services/graphql/__generated/sdk";
+import { api } from "@/utils/api";
 import { type IHeadingNode } from "types/richtext";
 
 import {
@@ -47,9 +55,47 @@ const CaseResultsReviewStep: FunctionComponent<ICaseResultsReviewStepProps> = ({
   const [solutionElementHeight, setSolutionElementHeight] = React.useState<number>(0);
   const solution: string = isLoading ? "lädt..." : (submittedCaseSolution?.solution || "");
   const allResolutionHeadings = resolution?.json?.content?.filter((x: { attrs: { level: number }; type: "heading" }) => x.type === "heading");
+  const { allCases = [] } = useCases();
+  const { invalidateBookmarks } = useContextAndErrorIfNull(InvalidateQueriesContext);
+  const { bookmarks } = useBookmarks(undefined);
+  const allCasesBookmarks = bookmarks.filter(bookmark => bookmark?.resourceType === "case") ?? [];
+  const bookmarkedCases = allCases.filter(caisyCase => allCasesBookmarks.some(bookmark => bookmark.resourceId === caisyCase.id));
+  const isItemBookmarked = bookmarkedCases.some(bookmark => bookmark.title === title) || false;
+  const { mutate: addBookmark } = api.bookmarks.addBookmark.useMutation({
+    onError: e => console.log("error in bookmarks:", e),
+    onSuccess: invalidateBookmarks
+  });
+
+  const { mutate: removeBookmark } = api.bookmarks.removeBookmark.useMutation({
+    onError: e => console.log("error in bookmarks:", e),
+    onSuccess: invalidateBookmarks,
+  });
+  const onBookmarkIconClick = (): void =>
+  {
+    if(!caseId)
+    {
+      return;
+    }
+
+    const bookmarkData: AddOrRemoveBookmarkSchema = {
+      resourceId: caseId,
+      resourceType: "case"
+    };
+
+    if(!isItemBookmarked)
+    {
+      addBookmark(bookmarkData);
+      return;
+    }
+    else
+    {
+      removeBookmark(bookmarkData);
+    }
+  };
   const icons = [
-    { src: <Bookmark/>, title: "Bookmark" },
-    { src: <Print/>, title: "Print" },
+    { click: () => onBookmarkIconClick(), src: isItemBookmarked ? <BookmarkFilledIcon/> : <Bookmark/>, title: "Bookmark" },
+    // { src: <Pin/>, title: "Pin" },
+    { click: () => window.print(), src: <Print/>, title: "Print" },
   ];
 
   useEffect(() => 

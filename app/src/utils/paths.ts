@@ -9,7 +9,7 @@ export const paths = {
   downloadDocument: "/api/documents/download",
   getSubscriptionStatus: "/api/user/get-subscription-status",
   login: "/login",
-  paymentConfirm: "/paymentSuccess",
+  paymentConfirm: "/payment-success",
   personalSpace: "/personal-space",
   profile: "/profile",
   recover: "/recover",

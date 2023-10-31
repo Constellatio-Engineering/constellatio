@@ -5,18 +5,16 @@ import { type ModalStylesNames, type Styles } from "@mantine/core";
 
 type ModalStyles = Styles<ModalStylesNames, UnknownMantineStylesParams>;
 
-export const modalStyles = (): ModalStyles => 
+export const modalStyles = ({ extensionState }: {extensionState: string | null}): ModalStyles => 
 {
   const styles: ModalStyles = () => ({
     body: {
-      // maxHeight: "100%",
-      padding: "0",
+      padding: extensionState === "pdf" ? "0px" : "auto",  
     },
     
     content: {
-      background: "black",
-      minWidth: "80vw",
-      width: "max-content"
+      boxShadow: "none",
+      minWidth: extensionState !== "img" ? "90vw" : "max-content",
     },
     root: {
       overflow: "hidden",
@@ -32,11 +30,15 @@ justify-content: center;
 img{
   margin: 0 auto;
   display:block;
+  object-fit: contain;
   max-width: 100%;
+  max-height: 86vh;
+  height: 100% !important;
+  width: 100%;
 }
 embed,iframe{
   width: 100%;
-  height: 86vh;
+  height: 90vh;
   object-fit: contain;
 }
 `;

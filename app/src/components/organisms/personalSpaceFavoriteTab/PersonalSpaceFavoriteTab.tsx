@@ -8,11 +8,10 @@ import { paths } from "@/utils/paths";
 import { type NonEmptyArray, type Nullable } from "@/utils/types";
 
 import { Loader } from "@mantine/core";
-import Link from "next/link";
+import { useRouter } from "next/router";
 import { parseAsString, useQueryState } from "next-usequerystate";
 import React, { type FunctionComponent } from "react";
 
-import * as styles from "./PersonalSpaceFavoriteTab.styles";
 import EmptyStateCard from "../emptyStateCard/EmptyStateCard";
 import FavoriteCasesList from "../favoriteCasesList/FavoriteCasesList";
 import PersonalSpaceNavBar from "../personalSpaceNavBar/PersonalSpaceNavBar";
@@ -77,9 +76,9 @@ const PersonalSpaceFavoriteTabContent: FunctionComponent = () =>
   });
   const favoriteCasesListProps = { bookmarkedCasesMainCategoriesUnique, casesByMainCategory };
   const favoriteArticlesListProps = { ArticlesByMainCategory, bookmarkedArticlesMainCategoriesUnique };
-
+  const router = useRouter();
   return (
-    <div css={styles.wrapper}>
+    <div>
       <PersonalSpaceNavBar
         setSelectedTabSlug={setSelectedTabSlug}
         selectedTabSlug={selectedTabSlug}
@@ -94,10 +93,11 @@ const PersonalSpaceFavoriteTabContent: FunctionComponent = () =>
               <FavoriteCasesList {...favoriteCasesListProps}/>
             ) : (
               <EmptyStateCard
-                button={<Link href={paths.cases}>Alle Fälle ansehen</Link>}
+                button="Alle Fälle ansehen"
                 title="Du hast noch keine Fälle als Favoriten gespeichert"
                 text="Du kannst Fälle, Lexikon-Artikel und sogar einzelne markierte Textpassagen als deine persönlichen Favoriten speichern"
                 variant="For-large-areas"
+                click={async () => router.push(paths.cases)}
               />
             )
           )}
@@ -112,10 +112,11 @@ const PersonalSpaceFavoriteTabContent: FunctionComponent = () =>
                 <FavoriteArticlesList {...favoriteArticlesListProps}/>
               ) : ( 
                 <EmptyStateCard
-                  button={<Link href={paths.dictionary}>Alle Lexikon-Artikel ansehen</Link>}
+                  button="Alle Lexikon-Artikel ansehen"
                   title="Du hast noch keine Lexikon-Artikel als Favoriten gespeichert"
                   text="Du kannst Fälle, Lexikon-Artikel und sogar einzelne markierte Textpassagen als deine persönlichen Favoriten speichern"
                   variant="For-large-areas"
+                  click={async () => router.push(paths.dictionary)}
                 />
               )
           }

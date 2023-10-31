@@ -138,11 +138,12 @@ const NewNotificationEarnedWatchdog: FunctionComponent = () =>
             </div>
             <BodyText
               styleType="body-01-bold"
-              style={{ fontSize: 20, margin: "12px 0 10px" }}
+              style={{ fontSize: 20, margin: "12px 0 10px", textAlign: "center" }}
               component="h2">
               {renderedBadge.name}
             </BodyText>
             <BodyText
+              ta="center"
               styleType="body-01-regular"
               style={{ marginBottom: 10 }}
               component="h2">
