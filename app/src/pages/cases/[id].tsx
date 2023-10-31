@@ -59,7 +59,7 @@ const NextPage: FunctionComponent<GetCaseDetailPagePropsResult> = ({ legalCase }
 {
   return (
     <>
-      <PageHead pageTitle={legalCase.title || "Fälle"}/>
+      <PageHead pageTitle={legalCase?.title || "Fall ohne Titel"}/>
       <Layout>
         <DetailsPage variant="case" content={legalCase}/>
       </Layout>
