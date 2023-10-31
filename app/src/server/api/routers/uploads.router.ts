@@ -45,7 +45,7 @@ export const uploadsRouter = createTRPCRouter({
       return getClouStorageFileUrl({
         serverFilename: file.serverFilename,
         staleTime: 1000 * 60 * 15,
-        userId // 15 minutes
+        userId
       });
     }),
   createSignedUploadUrl: protectedProcedure
@@ -125,7 +125,7 @@ export const uploadsRouter = createTRPCRouter({
 
       const insertResult = await db.insert(uploadedFiles).values(uploadInsert).returning();
 
-      await addBadgeForUser({ badgeIdentifier: "ugc-uploader-1", userId });
+      await addBadgeForUser({ badgeIdentifier: "ugc-1", userId });
 
       const searchIndexItem = createUploadsSearchIndexItem({
         ...uploadInsert,
@@ -155,8 +155,6 @@ export const uploadsRouter = createTRPCRouter({
         folderId: updatedValues.folderId,
         originalFilename: updatedValues.name,
       };
-
-      console.log("name", updatedValues.name);
 
       const updatedFile = await db.update(uploadedFiles)
         .set(_updatedValues)

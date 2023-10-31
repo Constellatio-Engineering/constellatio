@@ -124,7 +124,7 @@ export const authenticationRouter = createTRPCRouter({
       if(usersCount && usersCount <= 100)
       {
         console.log("is one of the first 100 users");
-        await addBadgeForUser({ badgeIdentifier: "one-of-100", userId });
+        await addBadgeForUser({ badgeIdentifier: "1-100", userId });
       }
 
       console.log(`Complete sign up took ${performance.now() - start}ms`);

@@ -133,7 +133,7 @@ export const caseProgressRouter = createTRPCRouter({
 
       if(progressState === "completed")
       {
-        await addBadgeForUser({ badgeIdentifier: "cases-starter", userId });
+        await addBadgeForUser({ badgeIdentifier: "fall-1", userId });
       }
     }),
   submitSolution: protectedProcedure

@@ -33,7 +33,7 @@ export const bookmarksRouter = createTRPCRouter({
       };
 
       await db.insert(bookmarks).values(bookmarkInsert);
-      await addBadgeForUser({ badgeIdentifier: "favorites-collector", userId });
+      await addBadgeForUser({ badgeIdentifier: "favorit", userId });
     }),
   getAllBookmarks: protectedProcedure
     .input(z.object({
