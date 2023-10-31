@@ -2,6 +2,7 @@
 import { type User } from "@/db/schema";
 import { env } from "@/env.mjs";
 import { getIsUserLoggedIn } from "@/utils/auth";
+import { isDevelopment } from "@/utils/env";
 import { paths } from "@/utils/paths";
 import { queryParams } from "@/utils/query-params";
 
@@ -35,7 +36,7 @@ export const middleware: NextMiddleware = async (req) =>
 
   try
   {
-    const response = await fetch(`http://localhost:3010/${paths.getSubscriptionStatus}?secret=${env.GET_SUBSCRIPTION_STATUS_SECRET}&userId=${getIsUserLoggedInResult.user.id}`);
+    const response = await fetch((isDevelopment ? "http://localhost:3010" : env.NEXT_PUBLIC_WEBSITE_URL) + `/${paths.getSubscriptionStatus}?secret=${env.GET_SUBSCRIPTION_STATUS_SECRET}&userId=${getIsUserLoggedInResult.user.id}`);
     const data = await response.json() as Pick<User, "subscriptionStatus">;
     subscriptionStatus = data.subscriptionStatus;
   }
