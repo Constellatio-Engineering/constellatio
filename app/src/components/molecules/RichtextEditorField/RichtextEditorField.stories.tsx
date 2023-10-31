@@ -33,7 +33,7 @@ type Story = StoryObj<typeof RichtextEditorField>;
 
 export const Default: Story = {
   args: {
-    content: "<p><strong>Bold</strong></p><p><em>Italic</em></p><p><strong><em>Italic Bold</em></strong></p><p>Nomal</p><p><br><br class=\"ProseMirror-trailingBreak\"></p><p>List:</p><ul><li><p>item</p></li><li><p>item</p></li></ul><p>Order:</p><ol><li><p>Item</p></li><li><p>Item</p></li></ol><p><br><br class=\"ProseMirror-trailingBreak\"></p><blockquote><p>Hello world</p></blockquote>",
+    initialContent: "<p><strong>Bold</strong></p><p><em>Italic</em></p><p><strong><em>Italic Bold</em></strong></p><p>Nomal</p><p><br><br class=\"ProseMirror-trailingBreak\"></p><p>List:</p><ul><li><p>item</p></li><li><p>item</p></li></ul><p>Order:</p><ol><li><p>Item</p></li><li><p>Item</p></li></ol><p><br><br class=\"ProseMirror-trailingBreak\"></p><blockquote><p>Hello world</p></blockquote>",
     variant: "with-legal-quote",
   },
 };
