@@ -2,11 +2,9 @@
 // import * as styles from "./SubscriptionModal.styles";
 import CaisyImg from "@/basic-components/CaisyImg";
 import useSubscription from "@/hooks/useSubscription";
-import { paths } from "@/utils/paths";
 
 import { Title } from "@mantine/core";
 import { useLocalStorage } from "@mantine/hooks";
-import Link from "next/link";
 import { useRouter } from "next/router";
 import { useMemo, type FunctionComponent, useState } from "react";
 import { z } from "zod";
@@ -23,7 +21,6 @@ const SubscriptionModal: FunctionComponent = () =>
   const router = useRouter();
   const { generateStripeSessionUrl, subscriptionDetails } = useSubscription();
   const hasSubscription = subscriptionDetails.subscriptionStatus === "active" || subscriptionDetails.subscriptionStatus === "incomplete";
-  console.log("hasSubscription", hasSubscription);
 
   const [daysCheckedForSubscriptionEnds, setDaysCheckedForSubscriptionEnds] = useLocalStorage<string[]>({
     defaultValue: [],
