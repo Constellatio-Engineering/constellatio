@@ -15,9 +15,9 @@ export const useSignout: UseSignout = () =>
   {
     try
     {
-      await router.replace(paths.login);
-      await sleep(500);
       await supabase.auth.signOut();
+      await sleep(250);
+      await router.replace(paths.login);
 
       notifications.show({
         message: "Bis bald bei Constellatio!",
