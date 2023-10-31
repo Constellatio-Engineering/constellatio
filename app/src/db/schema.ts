@@ -43,6 +43,37 @@ export type FileExtension = typeof fileExtensions[number];
 export const fileMimeTypes = [...imageFileMimeTypes, ...documentFileMimeTypes] as const;
 export type FileMimeType = typeof fileMimeTypes[number];
 
+const badgeIdentifiers = [
+  "cases-starter",
+  "power-user",
+  "longevity-champion",
+  "master-of-cases",
+  "forum-pro",
+  "perfect-week-achiever",
+  "smart-guy-10",
+  "one-of-100",
+  "play-and-learn-25",
+  "smart-guy-25",
+  "three-day-streak",
+  "play-and-learn-3",
+  "smart-guy-5",
+  "dedication-awardee",
+  "play-and-learn-50",
+  "master-of-dictionary",
+  "favorites-collector",
+  "power-user-1",
+  "active-member-1",
+  "feedback-guru",
+  "ugc-uploader-1",
+  "active-member-10",
+  "feedback-master",
+  "ugc-uploader-10",
+  "active-member-5",
+  "feedback-enthusiast",
+  "ugc-uploader-5"
+] as const;
+export type BadgeIdentifier = typeof badgeIdentifiers[number];
+
 export const badgePublicationState = ["not-listed", "coming-soon", "published"] as const;
 export type BadgePublicationState = typeof badgePublicationState[number];
 
@@ -62,6 +93,7 @@ export const documentFileExtensionEnum = pgEnum("DocumentFileExtension", documen
 export const documentFileMimeTypeEnum = pgEnum("DocumentFileMimeType", documentFileMimeTypes);
 export const fileExtensionEnum = pgEnum("FileExtension", fileExtensions);
 export const fileMimeTypeEnum = pgEnum("FileMimeType", fileMimeTypes);
+export const badgeIdentifierEnum = pgEnum("BadgeIdentifier", badgeIdentifiers);
 export const userBadgeStateEnum = pgEnum("UserBadgeState", userBadgeStates);
 export const badgePublicationStateEnum = pgEnum("BadgePublicationState", badgePublicationState);
 
@@ -242,7 +274,7 @@ export type SearchIndexUpdateQueueItem = InferSelectModel<typeof searchIndexUpda
 
 export const badges = pgTable("Badge", {
   id: uuid("Id").defaultRandom().unique().notNull().primaryKey(),
-  slug: text("Slug").notNull().unique(),
+  identifier: badgeIdentifierEnum("Identifier").notNull().unique(),
   name: text("Name").notNull(),
   description: text("Description").notNull(),
   imageFilename: text("ImageFilename").notNull(),
@@ -263,7 +295,7 @@ export type BadgeWithUserData = Badge & {
 export const usersToBadges = pgTable("User_to_Badge", {
   userId: uuid("UserId").references(() => users.id, { onDelete: "no action" }).notNull(),
   badgeId: uuid("BadgeId").references(() => badges.id, { onDelete: "no action" }).notNull(),
-  userBadgeState: userBadgeStateEnum("UserBadgeState").notNull().default("not-seen"),
+  userBadgeState: userBadgeStateEnum("UserBadgeState").default("not-seen").notNull(),
 }, (table) => ({
   pk: primaryKey(table.userId, table.badgeId),
 }));

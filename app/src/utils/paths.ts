@@ -14,7 +14,9 @@ export const paths = {
   recover: "/recover",
   register: "/register",
   search: "/search",
-};
+} as const;
+
+export type Path = typeof paths[keyof typeof paths];
 
 export const getConfirmEmailUrl = (): string =>
 {

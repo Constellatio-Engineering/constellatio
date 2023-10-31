@@ -87,7 +87,7 @@ const ProfileBadgeCard: FunctionComponent<ProfileBadgeCardProps> = ({
         isSmall ? styles.badgeWrapperSmall : styles.badgeWrapperLarge,
         isComingSoon && styles.contentComingSoon
       ]}>
-        {isCompleted && <span css={styles.checkCircle}><CheckCircleRed/></span>}
+        {isCompleted && <span css={styles.checkCircle}><CheckCircleRed size={22}/></span>}
         <div css={styles.imageWrapper}>
           <BadgeImage css={styles.badgeImage} filename={imageFilename}/>
         </div>

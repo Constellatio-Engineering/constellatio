@@ -1,6 +1,7 @@
 import { db } from "@/db/connection";
 import { allBookmarkResourceTypes, type BookmarkInsert, bookmarks } from "@/db/schema";
 import { addOrRemoveBookmarkSchema } from "@/schemas/bookmarks/addOrRemoveBookmark.schema";
+import { addBadgeForUser } from "@/server/api/services/badges.services";
 import { createTRPCRouter, protectedProcedure } from "@/server/api/trpc";
 
 import { and, eq, type SQLWrapper } from "drizzle-orm";
@@ -11,8 +12,6 @@ export const bookmarksRouter = createTRPCRouter({
     .input(addOrRemoveBookmarkSchema)
     .mutation(async ({ ctx: { userId }, input }) =>
     {
-      const start = performance.now();
-
       const existingBookmark = await db.query.bookmarks.findFirst({
         where: and(
           eq(bookmarks.resourceId, input.resourceId),
@@ -34,8 +33,7 @@ export const bookmarksRouter = createTRPCRouter({
       };
 
       await db.insert(bookmarks).values(bookmarkInsert);
-
-      console.log(`inserting bookmark took ${performance.now() - start}ms`);
+      await addBadgeForUser({ badgeIdentifier: "favorites-collector", userId });
     }),
   getAllBookmarks: protectedProcedure
     .input(z.object({
