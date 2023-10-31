@@ -7,6 +7,7 @@ import ProfileOverview from "@/components/organisms/profileOverview/ProfileOverv
 import ProfilePageHeader from "@/components/organisms/profilePageHeader/ProfilePageHeader";
 import ProfileNavMenuTablet from "@/components/profileNavMenuTablet/ProfileNavMenuTablet";
 import SubscriptionTab from "@/components/subscriptionTab/SubscriptionTab";
+import UseQueryStateWrapper from "@/components/useQueryStateWrapper/UseQueryStateWrapper";
 import useUserDetails from "@/hooks/useUserDetails";
 
 import { Container } from "@mantine/core";
@@ -27,7 +28,7 @@ export const tabs = [
   // { slug: "history", title: "Verlauf" },
 ] as const;
 
-const ProfilePage: FunctionComponent = () =>
+const ProfilePageContent: FunctionComponent = () =>
 {
   const [tab, setTab] = useQueryState(tabQueryKey, parseAsString.withDefault(tabs[0]!.slug));
   const activeTab = tabs?.find(x => x.slug === tab);
@@ -95,6 +96,15 @@ const ProfilePage: FunctionComponent = () =>
         </Container>
       </Container>
     </div>
+  );
+};
+
+const ProfilePage: FunctionComponent = () =>
+{
+  return (
+    <UseQueryStateWrapper>
+      <ProfilePageContent/>
+    </UseQueryStateWrapper>
   );
 };
 

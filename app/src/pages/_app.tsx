@@ -2,7 +2,6 @@
 import { RouterTransition } from "@/components/atoms/RouterTransition/RouterTransition";
 import NewNotificationEarnedWatchdog from "@/components/newNotificationEarnedWatchdog/NewNotificationEarnedWatchdog";
 import { env } from "@/env.mjs";
-import { useIsRouterReady } from "@/hooks/useIsRouterReady";
 import { supabase } from "@/lib/supabase";
 import AuthStateProvider from "@/provider/AuthStateProvider";
 import CustomThemingProvider from "@/provider/CustomThemingProvider";
@@ -26,7 +25,6 @@ type ConstellatioAppProps = AppProps<{ initialSession: Session }>;
 
 const AppContainer: FunctionComponent<ConstellatioAppProps> = ({ Component, pageProps }) =>
 {
-  const isRouterReady = useIsRouterReady();
   const router = useRouter();
   const { asPath } = router || "";
   const url = env.NEXT_PUBLIC_WEBSITE_URL + asPath;
@@ -90,9 +88,7 @@ const AppContainer: FunctionComponent<ConstellatioAppProps> = ({ Component, page
                   <RouterTransition/>
                   <Notifications/>
                   <NewNotificationEarnedWatchdog/>
-                  {isRouterReady && (
-                    <Component {...pageProps}/>
-                  )}
+                  <Component {...pageProps}/>
                 </MeilisearchProvider>
               </ModalsProvider>
             </CustomThemingProvider>

@@ -1,6 +1,7 @@
 import OverviewHeader from "@/components/organisms/OverviewHeader/OverviewHeader";
 import PersonalSpaceFavoriteTab from "@/components/organisms/personalSpaceFavoriteTab/PersonalSpaceFavoriteTab";
 import PersonalSpaceMaterialsTab from "@/components/organisms/personalSpaceMaterialsTab/PersonalSpaceMaterialsTab";
+import UseQueryStateWrapper from "@/components/useQueryStateWrapper/UseQueryStateWrapper";
 import useArticles from "@/hooks/useArticles";
 import useBookmarks from "@/hooks/useBookmarks";
 import useCases from "@/hooks/useCases";
@@ -17,7 +18,7 @@ import * as styles from "./PersonalSpacePage.styles";
 import BookmarkIconSvg from "../../../../public/images/icons/bookmark.svg";
 import FileIconSvg from "../../../../public/images/icons/file.svg";
 
-const PersonalSpacePage: FunctionComponent = () =>
+const PersonalSpacePageContent: FunctionComponent = () =>
 {
   const { allCases = [] } = useCases();
   const { allArticles = [] } = useArticles(); 
@@ -60,4 +61,14 @@ const PersonalSpacePage: FunctionComponent = () =>
     </div>
   );
 };
+
+const PersonalSpacePage: FunctionComponent = () =>
+{
+  return (
+    <UseQueryStateWrapper>
+      <PersonalSpacePageContent/>
+    </UseQueryStateWrapper>
+  );
+};
+
 export default PersonalSpacePage;

@@ -1,4 +1,5 @@
 import FavoriteArticlesList from "@/components/favoriteArticlesList/FavoriteArticlesList";
+import UseQueryStateWrapper from "@/components/useQueryStateWrapper/UseQueryStateWrapper";
 import useArticles from "@/hooks/useArticles";
 import useBookmarks from "@/hooks/useBookmarks";
 import useCases from "@/hooks/useCases";
@@ -22,7 +23,7 @@ export type FavoriteCategoryNavTab = {
   title: string;
 };
 
-const PersonalSpaceFavoriteTab: FunctionComponent = () => 
+const PersonalSpaceFavoriteTabContent: FunctionComponent = () =>
 {
   const { allCases = [], isLoading: areCasesLoading } = useCases();
   const { allArticles = [], isLoading: areArticlesLoading } = useArticles(); 
@@ -122,6 +123,15 @@ const PersonalSpaceFavoriteTab: FunctionComponent = () =>
         </>
       )}
     </div>
+  );
+};
+
+const PersonalSpaceFavoriteTab: FunctionComponent = () =>
+{
+  return (
+    <UseQueryStateWrapper>
+      <PersonalSpaceFavoriteTabContent/>
+    </UseQueryStateWrapper>
   );
 };
 
