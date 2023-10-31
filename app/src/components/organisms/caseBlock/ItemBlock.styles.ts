@@ -19,7 +19,7 @@ span > table {
     tbody tr:hover{
         div,td div, div button,td button{
             cursor: pointer;
-            background-color: ${theme.colors["neutrals-01"][3]};
+            background-color: ${theme.colors["neutrals-01"][2]};
         }
     }
 }

@@ -16,7 +16,10 @@ margin: 24px 0;
 }
 `;
 export const blockHeadTitle = css`
-
 margin-top: 12px;
 margin-bottom: 24px;
+`;
+
+export const blockHeadWrapper = css`
+width: 240px;
 `;

@@ -184,7 +184,7 @@ const UploadedMaterialBlock: FunctionComponent<UploadedMaterialBlockProps> = ({
 
   return (
     <div css={styles.wrapper}>
-      <div css={styles.uploadedMaterialBlockHead}>
+      <div css={styles.uploadedMaterialBlockHead} id="uploads">
         <Title order={4}>
           Hochgeladene Dateien{" "}
           <SubtitleText className="count" component="span" styleType="subtitle-01-medium">

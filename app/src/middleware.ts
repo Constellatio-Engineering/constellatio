@@ -1,12 +1,14 @@
 /* eslint-disable import/no-unused-modules */
 import { getIsUserLoggedIn } from "@/utils/auth";
+import { queryParams } from "@/utils/query-params";
 
 import { createMiddlewareClient } from "@supabase/auth-helpers-nextjs";
 import { type NextMiddleware, NextResponse } from "next/server";
 
 export const middleware: NextMiddleware = async (req) =>
 {
-  console.time("Middleware");
+  const time = new Date().toISOString();
+  console.time("Middleware at " + time);
 
   const res = NextResponse.next();
   const supabase = createMiddlewareClient({ req, res });
@@ -16,12 +18,13 @@ export const middleware: NextMiddleware = async (req) =>
   {
     const redirectUrl = req.nextUrl.clone();
     redirectUrl.pathname = "/login";
-    redirectUrl.searchParams.set("redirectedFrom", req.nextUrl.pathname);
+    redirectUrl.searchParams.set(queryParams.redirectedFrom, req.nextUrl.pathname + req.nextUrl.search);
     console.log("User is not logged in. Redirecting to: ", redirectUrl.toString());
+    console.timeEnd("Middleware at " + time);
     return NextResponse.redirect(redirectUrl);
   }
 
-  console.timeEnd("Middleware");
+  console.timeEnd("Middleware at " + time);
   return NextResponse.next();
 };
 
@@ -41,6 +44,6 @@ export const config = {
      *
      * CAUTION: This does not work for the root path ("/")!
      */
-    "/((?!api|login|register|confirm|recover|_next/static|_next/image|favicon.*|favicon*.*|extension|tests).*)",
+    "/((?!api|login|register|confirm|recover|static|.*\\..*|_next|extension|tests).*)",
   ],
 };

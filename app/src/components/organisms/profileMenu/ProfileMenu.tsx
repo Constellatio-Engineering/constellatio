@@ -1,81 +1,71 @@
 import { LinkButton } from "@/components/atoms/LinkButton/LinkButton";
 import ProfileMenuUniversityTab from "@/components/atoms/profileMenuUniversityTab/ProfileMenuUniversityTab";
+import ErrorPage from "@/components/errorPage/ErrorPage";
 import { NoteIcon } from "@/components/Icons/Note";
 import MenuListItem from "@/components/molecules/menuListItem/MenuListItem";
-import { type tabs, type UserDetails } from "@/components/pages/profilePage/ProfilePage";
-import useContextAndErrorIfNull from "@/hooks/useContextAndErrorIfNull";
+import ProfileMenuSkeleton from "@/components/organisms/profileMenu/profileMenuSkeleton/ProfileMenuSkeleton";
+import { type tabs } from "@/components/pages/profilePage/ProfilePage";
 import useSetOnboardingResult from "@/hooks/useSetOnboardingResult";
-import { supabase } from "@/lib/supabase";
-import { InvalidateQueriesContext } from "@/provider/InvalidateQueriesProvider";
-import { paths } from "@/utils/paths";
+import { useSignout } from "@/hooks/useSignout";
+import useUserDetails from "@/hooks/useUserDetails";
 
-import { useMediaQuery } from "@mantine/hooks";
-import { notifications } from "@mantine/notifications";
 import { IconLogout } from "@tabler/icons-react";
-import router from "next/router";
 import React, { type FunctionComponent } from "react";
 
 import * as styles from "./ProfileMenu.styles";
 import ProfileMenuMainProfileInfo from "./ProfileMenuMainProfileInfo";
 
-type IProfileMenu = UserDetails & {
+type IProfileMenu = {
   readonly activeTabSlug?: string;
   readonly setTab: (tab: string) => Promise<URLSearchParams>;
   readonly tabs: typeof tabs;
 };
 
-const ProfileMenu: FunctionComponent<IProfileMenu> = ({
-  activeTabSlug,
-  setTab,
-  tabs,
-  userDetails
-}) =>
+const ProfileMenu: FunctionComponent<IProfileMenu> = ({ activeTabSlug, setTab, tabs }) =>
 {
-  const { invalidateEverything } = useContextAndErrorIfNull(InvalidateQueriesContext);
+  const { handleSignOut } = useSignout();
   const { setOnboardingResult } = useSetOnboardingResult();
+  const { error, isLoading, userDetails } = useUserDetails();
 
-  const handleSignOut = async (): Promise<void> =>
+  if(isLoading)
   {
-    try
-    {
-      await supabase.auth.signOut();
-      await router.replace(paths.login);
-      await invalidateEverything();
+    return <ProfileMenuSkeleton/>;
+  }
 
-      notifications.show({
-        message: "Bis bald bei Constellatio!",
-        title: "Ausloggen",
-      });
-    }
-    catch (error) 
-    {
-      console.error("error while signing out", error);
-    }
-  };
-  const isBigScreen = useMediaQuery("(min-width: 1100px)");
+  if(error)
+  {
+    return (
+      <ErrorPage error={error.message}/>
+    );
+  }
+
+  if(!userDetails)
+  {
+    return (
+      <ErrorPage error="User Details not found"/>
+    );
+  }
 
   return (
     <div css={styles.wrapper}>
       <ProfileMenuMainProfileInfo userDetails={userDetails}/>
-      <ProfileMenuUniversityTab title={userDetails.university} semester={`${userDetails.semester}. Semester`}/>
-      {isBigScreen && (
-        <>
-          <div css={styles.tabsList}>
-            {tabs.map(tab => (
-              <MenuListItem
-                key={tab.slug}
-                title={tab.title}
-                selected={tab.slug === activeTabSlug}
-                onClick={() => void setTab(tab.slug)}
-              />
-            ))}
-          </div>
-          <div css={styles.groupedLinks}>
-            <LinkButton title="Einführung wiederholen" icon={<NoteIcon/>} onClick={() => setOnboardingResult({ result: null })}/>
-            <LinkButton title="Ausloggen" onClick={async () => handleSignOut()} icon={<IconLogout/>}/>
-          </div>
-        </>
-      )}
+      <ProfileMenuUniversityTab university={userDetails.university} semester={userDetails.semester}/>
+      <div css={styles.tabsListWrapper}>
+        <div css={styles.tabsList}>
+          {tabs.map(tab => (
+            <MenuListItem
+              key={tab.slug}
+              title={tab.title}
+              selected={tab.slug === activeTabSlug}
+              onClick={() => void setTab(tab.slug)}
+            />
+          ))}
+        </div>
+        <div css={styles.groupedLinks}>
+          <LinkButton title="Einführung wiederholen" icon={<NoteIcon/>} onClick={() => setOnboardingResult({ result: null })}/>
+          <LinkButton title="Ausloggen" onClick={handleSignOut} icon={<IconLogout/>}/>
+        </div>
+      </div>
     </div>
   );
 };

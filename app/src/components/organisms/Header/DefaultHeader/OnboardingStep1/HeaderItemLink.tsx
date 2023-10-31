@@ -16,9 +16,7 @@ const HeaderItemLink: ForwardRefRenderFunction<HTMLAnchorElement, THeaderItemLin
   return (
     <Link href={`${link.slug.toLowerCase()}`} ref={ref}>
       <MenuTab
-        active={pathname
-          ?.toLowerCase()
-          .includes(link.slug.toLowerCase())}
+        active={pathname?.toLowerCase().includes(link.slug.toLowerCase())}
         title={link.title}
       />
     </Link>

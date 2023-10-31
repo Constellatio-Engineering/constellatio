@@ -4,7 +4,7 @@ import {
   text, pgTable, integer, pgEnum, uuid, smallint, unique, timestamp, primaryKey, index
 } from "drizzle-orm/pg-core";
 
-export const allGenderIdentifiers = ["male", "female", "diverse",] as const;
+export const allGenderIdentifiers = ["male", "female", "diverse"] as const;
 export type GenderIdentifier = typeof allGenderIdentifiers[number];
 
 export const allOnboardingResults = ["skipped", "completed"] as const;
@@ -43,6 +43,46 @@ export type FileExtension = typeof fileExtensions[number];
 export const fileMimeTypes = [...imageFileMimeTypes, ...documentFileMimeTypes] as const;
 export type FileMimeType = typeof fileMimeTypes[number];
 
+const badgeIdentifiers = [
+  "fall-1",
+  "forum-power",
+  "disziplin",
+  "fall-profi-bgb-at",
+  "forum-profi",
+  "perfekte-woche",
+  "fall-10",
+  "1-100",
+  "game-master-25",
+  "fall-25",
+  "dauerbrenner",
+  "game-master-3",
+  "fall-5",
+  "entschlossenheit",
+  "game-master-50",
+  "lexikon-profi-bgb-at",
+  "lexikon-profi-deliktsrecht",
+  "lexikon-profi-sachenrecht",
+  "lexikon-profi-bereicherungsrecht",
+  "favorit",
+  "power-user-allgemein",
+  "forum-1",
+  "feedback-1",
+  "ugc-1",
+  "forum-10",
+  "feedback-10",
+  "ugc-10",
+  "forum-5",
+  "feedback-5",
+  "ugc-5"
+] as const;
+export type BadgeIdentifier = typeof badgeIdentifiers[number];
+
+export const badgePublicationState = ["not-listed", "coming-soon", "published"] as const;
+export type BadgePublicationState = typeof badgePublicationState[number];
+
+export const userBadgeStates = ["not-seen", "seen"] as const;
+export type UserBadgeState = typeof userBadgeStates[number];
+
 export const genderEnum = pgEnum("Gender", allGenderIdentifiers);
 export const onboardingResultEnum = pgEnum("OnboardingResult", allOnboardingResults);
 export const resourceTypeEnum = pgEnum("ResourceType", allBookmarkResourceTypes);
@@ -56,6 +96,9 @@ export const documentFileExtensionEnum = pgEnum("DocumentFileExtension", documen
 export const documentFileMimeTypeEnum = pgEnum("DocumentFileMimeType", documentFileMimeTypes);
 export const fileExtensionEnum = pgEnum("FileExtension", fileExtensions);
 export const fileMimeTypeEnum = pgEnum("FileMimeType", fileMimeTypes);
+export const badgeIdentifierEnum = pgEnum("BadgeIdentifier", badgeIdentifiers);
+export const userBadgeStateEnum = pgEnum("UserBadgeState", userBadgeStates);
+export const badgePublicationStateEnum = pgEnum("BadgePublicationState", badgePublicationState);
 
 // TODO: Go through all queries and come up with useful indexes
 
@@ -68,7 +111,7 @@ export const users = pgTable("User", {
   lastName: text("LastName").notNull(),
   semester: smallint("Semester"),
   stripeCustomerId: text("StripeCustomerId"),
-  university: text("University").notNull(),
+  university: text("University"),
   onboardingResult: onboardingResultEnum("OnboardingResult"),
   subscriptionStatus: subscriptionStatusEnum("SubscriptionStatus"),
   subscriptionStartDate: timestamp("SubscriptionStartDate"),
@@ -78,6 +121,7 @@ export const users = pgTable("User", {
 
 export const usersRelations = relations(users, ({ many }) => ({
   profilePictures: many(profilePictures),
+  usersToBadges: many(usersToBadges),
 }));
 
 export type UserInsert = InferInsertModel<typeof users>;
@@ -230,3 +274,42 @@ export const searchIndexUpdateQueue = pgTable("SearchIndexUpdateQueue", {
 
 export type SearchIndexUpdateQueueInsert = InferInsertModel<typeof searchIndexUpdateQueue>;
 export type SearchIndexUpdateQueueItem = InferSelectModel<typeof searchIndexUpdateQueue>;
+
+export const badges = pgTable("Badge", {
+  id: uuid("Id").defaultRandom().unique().notNull().primaryKey(),
+  identifier: badgeIdentifierEnum("Identifier").notNull().unique(),
+  name: text("Name").notNull(),
+  description: text("Description").notNull(),
+  imageFilename: text("ImageFilename").notNull(),
+  publicationState: badgePublicationStateEnum("PublicationState").notNull().default("not-listed"),
+});
+
+export const badgesRelations = relations(badges, ({ many }) => ({
+  usersToBadges: many(usersToBadges),
+}));
+
+export type BadgeInsert = InferInsertModel<typeof badges>;
+export type Badge = InferSelectModel<typeof badges>;
+export type BadgeWithUserData = Badge & {
+  isCompleted: boolean;
+  wasSeen: boolean;
+};
+
+export const usersToBadges = pgTable("User_to_Badge", {
+  userId: uuid("UserId").references(() => users.id, { onDelete: "no action" }).notNull(),
+  badgeId: uuid("BadgeId").references(() => badges.id, { onDelete: "no action" }).notNull(),
+  userBadgeState: userBadgeStateEnum("UserBadgeState").default("not-seen").notNull(),
+}, (table) => ({
+  pk: primaryKey(table.userId, table.badgeId),
+}));
+
+export const usersToGroupsRelations = relations(usersToBadges, ({ one }) => ({
+  badge: one(badges, {
+    fields: [usersToBadges.badgeId],
+    references: [badges.id],
+  }),
+  user: one(users, {
+    fields: [usersToBadges.userId],
+    references: [users.id],
+  }),
+}));

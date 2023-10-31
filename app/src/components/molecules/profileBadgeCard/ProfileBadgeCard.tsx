@@ -1,53 +1,103 @@
-import CaisyImg from "@/basic-components/CaisyImg";
 import { BodyText } from "@/components/atoms/BodyText/BodyText";
+import BadgeImage from "@/components/badgeImage/BadgeImage";
 import { CheckCircleRed } from "@/components/Icons/CheckCirleRed";
+import { type BadgeWithUserData } from "@/db/schema";
+import useDashboardPageStore from "@/stores/dashboardPage.store";
 
-import { useMantineTheme } from "@mantine/core";
-import React, { type FunctionComponent } from "react";
+import React, { type FunctionComponent, useEffect, useRef, useState } from "react";
 
 import * as styles from "./ProfileBadgeCard.styles";
-import FlagImg from "../../../../public/images/placeholder-flag.png";
 
-export interface ProfileBadgeCardProps
+interface ProfileBadgeCardProps extends BadgeWithUserData
 {
-  readonly description: string;
-  readonly name: string;
-  readonly selected?: boolean;
+  readonly isHighlighted?: boolean;
+  readonly shouldSmallVariantAdjustSizeToParent?: boolean;
   readonly size: "small" | "large";
 }
 
 const ProfileBadgeCard: FunctionComponent<ProfileBadgeCardProps> = ({
   description,
+  id,
+  imageFilename,
+  isCompleted,
+  isHighlighted = false,
   name,
-  selected,
-  size
+  publicationState,
+  shouldSmallVariantAdjustSizeToParent = false,
+  size,
 }) => 
 {
-  const theme = useMantineTheme();
-  // const [isExpanded] = React.useState<boolean>(size === "large" ? true : false);
-  const isExpanded = size === "large" ? true : false;
-  const [isSelected, setIsSelected] = React.useState<boolean>(selected ?? false);
-  
+  const isComingSoon = publicationState === "coming-soon";
+  const isSmall = size === "small";
+  const isLarge = size === "large";
+  const openDrawer = useDashboardPageStore(s => s.openDrawer);
+  const [shouldBeHighlighted, setShouldBeHighlighted] = useState<boolean>(false);
+  const timeoutRef = useRef<NodeJS.Timeout>();
+  const wrapperRef = useRef<HTMLDivElement>(null);
+
+  useEffect(() =>
+  {
+    if(timeoutRef.current)
+    {
+      clearTimeout(timeoutRef.current);
+    }
+
+    if(isHighlighted)
+    {
+      if(wrapperRef.current)
+      {
+        wrapperRef.current.scrollIntoView({ behavior: "smooth" });
+      }
+      setShouldBeHighlighted(true);
+      timeoutRef.current = setTimeout(() => setShouldBeHighlighted(false), 4000);
+    }
+
+    return () =>
+    {
+      if(timeoutRef.current)
+      {
+        clearTimeout(timeoutRef.current);
+      }
+    };
+  }, [isHighlighted]);
+
   return (
     <div
-      css={styles.wrapper({ isExpanded, isSelected, theme })}
-      onClick={() => 
+      ref={wrapperRef}
+      onClick={() =>
       {
-        setIsSelected(true);
-        setTimeout(() => 
+        if(publicationState === "published")
         {
-          setIsSelected(false);
-        }, 7000);
-      }}>
-      <div css={styles.badgeWrapper({ isExpanded, isSelected, theme })}>
-        {isSelected && <span css={styles.checkCircle}><CheckCircleRed/></span>}
-        <CaisyImg src={FlagImg.src}/>
-        {name && <BodyText css={styles.badgeTitle} styleType="body-02-medium">{name}</BodyText>}
+          openDrawer({ selectedBadgeId: id });
+        }
+      }}
+      css={[
+        styles.wrapper,
+        isSmall ? styles.wrapperSmall : styles.wrapperLarge(shouldBeHighlighted),
+        (isSmall && shouldSmallVariantAdjustSizeToParent) && styles.wrapperSmallFullWidth,
+        isComingSoon && styles.wrapperDisabled
+      ]}>
+      {isComingSoon && (
+        <div css={styles.comingSoonOverlay}>
+          <BodyText css={styles.badgeTitle} styleType="body-01-medium">Coming soon!</BodyText>
+        </div>
+      )}
+      <div css={[
+        styles.badgeWrapper,
+        isSmall ? styles.badgeWrapperSmall : styles.badgeWrapperLarge,
+        isComingSoon && styles.contentComingSoon
+      ]}>
+        {isCompleted && <span css={styles.checkCircle}><CheckCircleRed size={22}/></span>}
+        <div css={styles.imageWrapper}>
+          <BadgeImage css={styles.badgeImage} filename={imageFilename}/>
+        </div>
+        <BodyText css={styles.badgeTitle} styleType="body-01-medium">
+          {name}
+        </BodyText>
       </div>
-      {isExpanded &&
-        description && (
-        <div css={styles.badgeDescriptionArea({ isSelected, theme })}>
-          <BodyText css={styles.badgeDescriptionText} styleType="body-02-medium">{description}</BodyText>
+      {isLarge && (
+        <div css={[styles.badgeDescriptionArea, isComingSoon && styles.contentComingSoon]}>
+          <BodyText css={styles.badgeDescriptionText} styleType="body-01-medium">{description}</BodyText>
         </div>
       )}
     </div>

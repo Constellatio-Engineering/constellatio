@@ -18,8 +18,8 @@ import EmptyStateCard from "../organisms/emptyStateCard/EmptyStateCard";
 
 const DashboardPersonalSpaceBlock: FunctionComponent = () => 
 {
-  const [switcherValue, setSwitcherValue] = React.useState<"favorites" | "materials">("favorites");
   const router = useRouter();
+  const [switcherValue, setSwitcherValue] = React.useState<"favorites" | "materials">("favorites");
   const { uploadedFiles } = useUploadedFiles(null);
   const { favoritesList } = useAllFavorites();
   return (

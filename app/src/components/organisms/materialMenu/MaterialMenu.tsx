@@ -142,7 +142,6 @@ const MaterialMenu: FunctionComponent = () =>
                 {
                   setNewFolderName("");
                   createFolder({ name: newFolderName });
-                  console.log("el mfrod y2fl");
                   close();
                 }}>Erstellen
               </Button>

@@ -1,82 +1,95 @@
-import ErrorPage from "@/components/errorPage/ErrorPage";
+import ChangeEmailTab from "@/components/organisms/changeEmailTab/ChangeEmailTab";
 import ChangePasswordTab from "@/components/organisms/changePasswordTab/ChangePasswordTab";
 import ProfileDetailsTab from "@/components/organisms/profileDetailsTab/ProfileDetailsTab";
-import ProfileHistoryTab from "@/components/organisms/profileHistoryTab/ProfileHistoryTab";
 import ProfileMenu from "@/components/organisms/profileMenu/ProfileMenu";
+import RenderedTabSkeleton from "@/components/organisms/profileMenu/renderedTabSkeleton/RenderedTabSkeleton";
 import ProfileOverview from "@/components/organisms/profileOverview/ProfileOverview";
 import ProfilePageHeader from "@/components/organisms/profilePageHeader/ProfilePageHeader";
 import ProfileNavMenuTablet from "@/components/profileNavMenuTablet/ProfileNavMenuTablet";
 import SubscriptionTab from "@/components/subscriptionTab/SubscriptionTab";
+import UseQueryStateWrapper from "@/components/useQueryStateWrapper/UseQueryStateWrapper";
 import useUserDetails from "@/hooks/useUserDetails";
-import { type IProfilePageProps } from "@/pages/profile";
-import { type UserFiltered } from "@/utils/filters";
 
 import { Container } from "@mantine/core";
-import { useMediaQuery } from "@mantine/hooks";
 import { parseAsString, useQueryState } from "next-usequerystate";
 import React, { type FunctionComponent, type ReactNode, useMemo } from "react";
 
 import * as styles from "./ProfilePage.styles";
 
+export const tabQueryKey = "tab";
+export const changeEmailTabSlug = "change-email";
+
 export const tabs = [
   { slug: "overview", title: "Übersicht" },
-  { slug: "history", title: "Verlauf" },
   { slug: "profile-details", title: "Einstellungen" },
+  { slug: changeEmailTabSlug, title: "E-Mail ändern" },
   { slug: "change-password", title: "Passwort ändern" },
   { slug: "subscription", title: "Vertrag" },
+  // { slug: "history", title: "Verlauf" },
 ] as const;
 
-export type UserDetails = {
-  readonly userDetails: UserFiltered;
-};
-type ProfilePageProps = IProfilePageProps & UserDetails;
-
-const ProfilePage: FunctionComponent<ProfilePageProps> = ({ allMainCategory, userDetails }) =>
+const ProfilePageContent: FunctionComponent = () =>
 {
-  const [tab, setTab] = useQueryState("tab", parseAsString.withDefault(tabs[0]!.slug));
+  const [tab, setTab] = useQueryState(tabQueryKey, parseAsString.withDefault(tabs[0]!.slug));
   const activeTab = tabs?.find(x => x.slug === tab);
+  const { error, isLoading, userDetails } = useUserDetails();
 
   const renderedTab: ReactNode = useMemo(() =>
   {
+    if(isLoading)
+    {
+      return <RenderedTabSkeleton/>;
+    }
+
+    if(error || !userDetails)
+    {
+      return (
+        <div>
+          <h2>Da ist leider etwas schief gelaufen...</h2>
+        </div>
+      );
+    }
+
     switch (activeTab?.slug)
     {
       case "overview":
-        return <ProfileOverview allMainCategory={allMainCategory}/>;
+        return <ProfileOverview/>;
       case "profile-details":
-        return <ProfileDetailsTab/>;
+        return <ProfileDetailsTab userDetails={userDetails}/>;
       case "change-password":
         return <ChangePasswordTab/>;
-      case "history":
-        return <ProfileHistoryTab/>;
+      case "change-email":
+        return <ChangeEmailTab userDetails={userDetails}/>;
+      /* case "history":
+        return <ProfileHistoryTab/>;*/
       case "subscription":
-        return <SubscriptionTab subscriptionStatus="You are currently using a free 5-day trial. You can purchase a subscription by clicking the button below:"/>;
+        return <SubscriptionTab/>;
       default:
         return <>{`Unknown tab. Create tab type case in ProfilePage component: ${JSON.stringify(activeTab, null, 2)}`}</>;
       /* case "Notifications":
         return <ProfileNotificationsTab/>;*/
     }
-  }, [activeTab, allMainCategory]);
-  const isTabletScreen = useMediaQuery("(max-width: 1100px)");
+  }, [activeTab, error, isLoading, userDetails]);
+
   return (
     <div>
       <ProfilePageHeader/>
-      {isTabletScreen && (
-        <ProfileNavMenuTablet
-          tabs={tabs}
-          setTab={setTab}
-          activeTabSlug={activeTab?.slug}
-        />
-      )}
+      <ProfileNavMenuTablet
+        tabs={tabs}
+        setTab={setTab}
+        activeTabSlug={activeTab?.slug}
+      />
       <Container
+        p={0}
         maw="100%"
-        css={styles.outerContianer}>
+        css={styles.outerContainer}>
         <Container
+          p={0}
           maw={1440}
           css={styles.innerContainer}>
           <ProfileMenu
             tabs={tabs}
             setTab={setTab}
-            userDetails={userDetails}
             activeTabSlug={activeTab?.slug}
           />
           {renderedTab}
@@ -86,32 +99,13 @@ const ProfilePage: FunctionComponent<ProfilePageProps> = ({ allMainCategory, use
   );
 };
 
-type ProfilePageWrapperProps = IProfilePageProps;
-
-const ProfilePageWrapper: FunctionComponent<ProfilePageWrapperProps> = (props) =>
+const ProfilePage: FunctionComponent = () =>
 {
-  const { error, isLoading, userDetails } = useUserDetails();
-
-  if(isLoading)
-  {
-    return null;
-  }
-
-  if(error)
-  {
-    return (
-      <ErrorPage error={error.message}/>
-    );
-  }
-
-  if(!userDetails)
-  {
-    return (
-      <ErrorPage error="User Details not found"/>
-    );
-  }
-
-  return <ProfilePage {...props} userDetails={userDetails}/>;
+  return (
+    <UseQueryStateWrapper>
+      <ProfilePageContent/>
+    </UseQueryStateWrapper>
+  );
 };
 
-export default ProfilePageWrapper;
+export default ProfilePage;

@@ -83,7 +83,7 @@ const ProfilePersonalSpaceBlock: FunctionComponent = () =>
             
           </div>
           {favoritesList && favoritesList?.length > 6 && (
-            <Link href={`${paths.personalSpace}?category=favourites`}>
+            <Link href={`${paths.personalSpace}?category=favorites`}>
               <Button<"button"> styleType="secondarySimple">
                 Alle anzeigen
               </Button>
@@ -91,44 +91,42 @@ const ProfilePersonalSpaceBlock: FunctionComponent = () =>
           )}
         </div>
       )}
-      {
-        selectedTab === 1 ?
-          isGetUploadedFilesLoading ? (<Loader sx={{ margin: "0px" }}/>) :
-            (
-              <div>
-                <div css={styles.uploadedMaterialsTab}>
-                  {uploadedFilesCount > 0 ? (
-                    <>
-                      {uploadedFiles.slice(0, 6).map((file, index) => (
-                        <MaterialCard
-                          title={file?.originalFilename}
-                          fileExtension={file?.fileExtension}
-                          id={file?.id}
-                          materialType="paper"
-                          key={index}
-                        />
-                      ))}
-                    </>
-                  ) : (
-                    <EmptyStateCard 
-                      title="Du hast noch keine Dateien hochgeladen"
-                      text="Du kannst jetzt jetzt eigene Dateien hochladen und in deinem persönlichen Bereich ablegen."
-                      variant="For-small-areas"
-                    />
-                  )}
-                </div>
-                {uploadedFilesCount > 6 && (
-                  <Link href={`${paths.personalSpace}?category=materials`}>
-                    <Button<"button"> styleType="secondarySimple">
-                      Alle anzeigenl
-                    </Button>
-                  </Link>
+      {selectedTab === 1 ?
+        isGetUploadedFilesLoading ? (<Loader sx={{ margin: "0px" }}/>) :
+          (
+            <div>
+              <div css={styles.uploadedMaterialsTab}>
+                {uploadedFilesCount > 0 ? (
+                  <>
+                    {uploadedFiles.slice(0, 6).map((file, index) => (
+                      <MaterialCard
+                        title={file?.originalFilename}
+                        fileExtension={file?.fileExtension}
+                        id={file?.id}
+                        materialType="paper"
+                        key={index}
+                      />
+                    ))}
+                  </>
+                ) : (
+                  <EmptyStateCard 
+                    title="Du hast noch keine Dateien hochgeladen"
+                    text="Du kannst jetzt jetzt eigene Dateien hochladen und in deinem persönlichen Bereich ablegen."
+                    variant="For-small-areas"
+                  />
                 )}
-                <FileViewer/>
               </div>
-            )
-          : null
-      }
+              {uploadedFilesCount > 6 && (
+                <Link href={`${paths.personalSpace}?category=materials`}>
+                  <Button<"button"> styleType="secondarySimple">
+                    Alle anzeigenl
+                  </Button>
+                </Link>
+              )}
+              <FileViewer/>
+            </div>
+          )
+        : null}
     </div>
   );
 };

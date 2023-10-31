@@ -1,11 +1,14 @@
 import { db } from "@/db/connection";
-import { type CaseProgress, casesProgress, casesSolutions, gamesProgress } from "@/db/schema";
+import {
+  type CaseProgress, casesProgress, casesSolutions, gamesProgress
+} from "@/db/schema";
 import { getCaseProgressSchema } from "@/schemas/caseProgress/getCaseProgress.schema";
 import { getCasesProgressSchema } from "@/schemas/caseProgress/getCasesProgress.schema";
 import { getSubmittedCaseSolutionSchema } from "@/schemas/caseProgress/getSubmittedCaseSolution.schema";
 import { resetCaseProgressSchema } from "@/schemas/caseProgress/resetCaseProgress.schema";
 import { setCaseProgressStateSchema } from "@/schemas/caseProgress/setCaseProgressState.schema";
 import { submitCaseSolutionSchema } from "@/schemas/caseProgress/submitCaseSolution.schema";
+import { addBadgeForUser } from "@/server/api/services/badges.services";
 import { createTRPCRouter, protectedProcedure } from "@/server/api/trpc";
 import { caisySDK } from "@/services/graphql/getSdk";
 import { getGamesFromCase } from "@/utils/case";
@@ -120,33 +123,18 @@ export const caseProgressRouter = createTRPCRouter({
     .input(setCaseProgressStateSchema)
     .mutation(async ({ ctx: { userId }, input: { caseId, progressState } }) =>
     {
-      const existingCaseProgress = await db.query.casesProgress.findFirst({
-        where: and(
-          eq(casesProgress.userId, userId),
-          eq(casesProgress.caseId, caseId),
-        ),
-      });
+      await db
+        .insert(casesProgress)
+        .values({ caseId, progressState, userId })
+        .onConflictDoUpdate({
+          set: { progressState },
+          target: [casesProgress.caseId, casesProgress.userId],
+        });
 
-      if(existingCaseProgress)
+      if(progressState === "completed")
       {
-        console.log("caseProgress exists, updating...");
-
-        await db.update(casesProgress).set({ progressState }).where(
-          and(
-            eq(casesProgress.userId, userId),
-            eq(casesProgress.caseId, caseId),
-          )
-        );
-        return;
+        await addBadgeForUser({ badgeIdentifier: "fall-1", userId });
       }
-
-      console.log("caseProgress does not exist, inserting...");
-
-      await db.insert(casesProgress).values({
-        caseId,
-        progressState,
-        userId,
-      });
     }),
   submitSolution: protectedProcedure
     .input(submitCaseSolutionSchema)

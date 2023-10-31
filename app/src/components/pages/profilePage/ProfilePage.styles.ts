@@ -1,7 +1,7 @@
 import { css } from "@emotion/react";
 import { type MantineTheme } from "@mantine/styles";
 
-export const outerContianer = (theme: MantineTheme) => css`
+export const outerContainer = (theme: MantineTheme) => css`
   background: ${theme.colors["neutrals-01"][2]};
   padding: 54px 60px 0 60px;
   position: relative;
@@ -18,7 +18,7 @@ export const innerContainer = css`
   align-items: flex-start;
   display: flex;
   flex-direction: row;
-  gap: 32px;
+  gap: 50px;
   justify-content: flex-start;
   position: relative;
 

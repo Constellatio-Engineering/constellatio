@@ -1,4 +1,4 @@
-import { idValidation } from "@/schemas/documents/document.validation";
+import { idValidation } from "@/schemas/common.validation";
 
 import { z } from "zod";
 

@@ -12,11 +12,12 @@ import OverviewHeader from "../organisms/OverviewHeader/OverviewHeader";
 const DashboardHeader: FunctionComponent = () => 
 {
   const { userDetails } = useUserDetails();
+
   return (
     <div css={styles.wrapper}>
       <OverviewHeader variant="red"/>
       <div css={styles.contentContainer}>
-        <Title css={styles.headerTitle} order={1}>Willkommen zurück, {userDetails?.firstName}!</Title>
+        <Title css={styles.headerTitle} order={1}>Willkommen zurück{userDetails?.firstName && `, ${userDetails?.firstName}!`}</Title>
         {/* <DashboardheaderProgressBar/> */}
         <div css={styles.headerCardsArea}>
           {/* <LearninTimeCard/> */}

@@ -1,15 +1,15 @@
 import { Button } from "@/components/atoms/Button/Button";
-import { AlertCard } from "@/components/atoms/Card/AlertCard";
 import { Input } from "@/components/atoms/Input/Input";
+import ErrorCard from "@/components/errorCard/ErrorCard";
 import { PasswordValidationSchema } from "@/components/helpers/PasswordValidationSchema";
 import { supabase } from "@/lib/supabase";
 import { type UpdatePasswordFormSchema, updatePasswordFormSchema } from "@/schemas/auth/updatePasswordForm.schema";
-import { paths, queryParams } from "@/utils/paths";
+import { paths } from "@/utils/paths";
+import { queryParams } from "@/utils/query-params";
 
 import { Box, Stack, Title } from "@mantine/core";
 import { useForm, zodResolver } from "@mantine/form";
 import { useDisclosure } from "@mantine/hooks";
-import { AuthApiError } from "@supabase/gotrue-js";
 import { useMutation } from "@tanstack/react-query";
 import { useRouter } from "next/router";
 import { type FunctionComponent } from "react";
@@ -43,36 +43,13 @@ export const UpdatePasswordForm: FunctionComponent = () =>
     onSuccess: async () => router.replace(`${paths.login}?${queryParams.passwordResetSuccess}=true`),
   });
 
-  let errorType: "unknownError" | "passwordsMatch" | null = null;
-
-  if(error)
-  {
-    if(error instanceof AuthApiError && error.message === "New password should be different from the old password.")
-    {
-      errorType = "passwordsMatch";
-    }
-    else
-    {
-      errorType = "unknownError";
-    }
-  }
-
   return (
     <form onSubmit={form.onSubmit((formValues) => updatePassword(formValues.password))}>
       <Stack spacing="spacing-32">
         <Title order={3} align="center" c="neutrals-02.1">
           Neues Passwort
         </Title>
-        {errorType === "passwordsMatch" && (
-          <AlertCard variant="error">
-            Das neue Passwort muss sich vom alten Passwort unterscheiden.
-          </AlertCard>
-        )}
-        {errorType === "unknownError" && (
-          <AlertCard variant="error">
-            Da ist etwas schief gelaufen. Bitte versuche es erneut.
-          </AlertCard>
-        )}
+        <ErrorCard error={error} marginBottom={0}/>
         <Stack spacing="spacing-12">
           <Box>
             <Input

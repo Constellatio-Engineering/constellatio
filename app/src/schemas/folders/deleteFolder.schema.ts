@@ -1,7 +1,9 @@
+import { idValidation } from "@/schemas/common.validation";
+
 import { z } from "zod";
 
 export const deleteFolderSchema = z.object({
-  folderId: z.string().uuid()
+  folderId: idValidation
 });
 
 export type DeleteFolderSchema = z.input<typeof deleteFolderSchema>;

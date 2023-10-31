@@ -89,10 +89,10 @@ const MaterialOptionsMenu: FunctionComponent<MaterialOptionsMenuProps> = ({ file
           </Menu.Target>
           <Menu.Dropdown>
             <Menu.Item onClick={() => openRenameFileModal(file)}>
-              <DropdownItem icon={<Edit/>} label="Rename"/>
+              <DropdownItem icon={<Edit/>} label="Bearbeiten"/>
             </Menu.Item>
             <Menu.Item onClick={() => setShowMoveToModal(true)}>
-              <DropdownItem icon={<FolderIcon/>} label="Move to"/>
+              <DropdownItem icon={<FolderIcon/>} label="Verschieben"/>
             </Menu.Item>
             <Menu.Item
               onClick={async () => 
@@ -100,10 +100,10 @@ const MaterialOptionsMenu: FunctionComponent<MaterialOptionsMenuProps> = ({ file
                 const url = await createSignedGetUrl({ fileId: file.id });
                 await downloadFileFromUrl(url, file.originalFilename);
               }}>
-              <DropdownItem icon={<DownloadIcon/>} label="Download"/>
+              <DropdownItem icon={<DownloadIcon/>} label="Herunterladen"/>
             </Menu.Item>
             <Menu.Item onClick={() => setIsDeleteMaterialModalOpen(true)}>
-              <DropdownItem icon={<Trash/>} label="Delete"/>
+              <DropdownItem icon={<Trash/>} label="Löschen"/>
             </Menu.Item>
           </Menu.Dropdown>
         </Menu>

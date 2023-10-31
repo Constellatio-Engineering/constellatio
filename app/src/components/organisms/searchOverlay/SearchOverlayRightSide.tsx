@@ -25,14 +25,14 @@ const SearchOverlayRightSide: FunctionComponent<SearchOverlayRightSideProps> = (
         <>
           <SuggestionSection label="Deine Dateien" labelVariant="neutral">
             {searchResults.userUploads.slice(0, 9).map((result) => (
-              <Link href={`${paths.search}?.find=${result.originalFilename}&tab=userUploads`} key={result.id} className="suggestion__section__link">
+              <Link href={{ pathname: paths.search, query: { find: result.originalFilename, tab: "userUploads" } }} key={result.id} className="suggestion__section__link">
                 <CustomLink styleType="link-content" component="p">
                   Hochgeladene Dateien / {result.originalFilename}
                 </CustomLink>
               </Link>
             ))}
             {searchResults.userDocuments.slice(0, 9).map((result) => (
-              <Link href={`${paths.search}?.find=${result.name}&tab=userUploads`} key={result.id} className="suggestion__section__link">
+              <Link href={{ pathname: paths.search, query: { fine: result.name, tab: "userUploads" } }} key={result.id} className="suggestion__section__link">
                 <CustomLink styleType="link-content" component="p">
                   Constellatio Docs / {result.name}
                 </CustomLink>

@@ -1,18 +1,20 @@
 /* eslint-disable react/jsx-max-props-per-line */
 import { RouterTransition } from "@/components/atoms/RouterTransition/RouterTransition";
+import NewNotificationEarnedWatchdog from "@/components/newNotificationEarnedWatchdog/NewNotificationEarnedWatchdog";
 import { env } from "@/env.mjs";
-import { useIsRouterReady } from "@/hooks/useIsRouterReady";
 import { supabase } from "@/lib/supabase";
 import AuthStateProvider from "@/provider/AuthStateProvider";
 import CustomThemingProvider from "@/provider/CustomThemingProvider";
 import InvalidateQueriesProvider from "@/provider/InvalidateQueriesProvider";
 import MeilisearchProvider from "@/provider/MeilisearchProvider";
 import { api } from "@/utils/api";
-import { isDevelopment, isStaging } from "@/utils/env";
+import { isProduction } from "@/utils/env";
 
 import { ModalsProvider } from "@mantine/modals";
 import { Notifications } from "@mantine/notifications";
-import { type Session, SessionContextProvider } from "@supabase/auth-helpers-react";
+import {
+  type Session, SessionContextProvider
+} from "@supabase/auth-helpers-react";
 import { type AppProps } from "next/app";
 import Head from "next/head";
 import { useRouter } from "next/router";
@@ -23,15 +25,6 @@ type ConstellatioAppProps = AppProps<{ initialSession: Session }>;
 
 const AppContainer: FunctionComponent<ConstellatioAppProps> = ({ Component, pageProps }) =>
 {
-  const isRouterReady = useIsRouterReady();
-  const isProduction = env.NEXT_PUBLIC_DEPLOYMENT_ENVIRONMENT === "production";
-  /* let title = "Constellatio";
-
-  if(!isProduction)
-  {
-    title += ` - ${env.NEXT_PUBLIC_DEPLOYMENT_ENVIRONMENT}`;
-  }*/
-
   const router = useRouter();
   const { asPath } = router || "";
   const url = env.NEXT_PUBLIC_WEBSITE_URL + asPath;
@@ -94,9 +87,8 @@ const AppContainer: FunctionComponent<ConstellatioAppProps> = ({ Component, page
                 <MeilisearchProvider>
                   <RouterTransition/>
                   <Notifications/>
-                  {isRouterReady && (
-                    <Component {...pageProps}/>
-                  )}
+                  <NewNotificationEarnedWatchdog/>
+                  <Component {...pageProps}/>
                 </MeilisearchProvider>
               </ModalsProvider>
             </CustomThemingProvider>
