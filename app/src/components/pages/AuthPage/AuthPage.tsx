@@ -4,10 +4,12 @@ import { Header } from "@/components/organisms/Header/Header";
 import { LoginForm } from "@/components/organisms/LoginForm/LoginForm";
 import { RegistrationForm } from "@/components/organisms/RegistrationForm/RegistrationForm";
 import { RegistrationVisualHeader } from "@/components/organisms/RegistrationVisualHeader/RegistrationVisualHeader";
+import { AuthStateContext } from "@/provider/AuthStateProvider";
+import { paths } from "@/utils/paths";
 
 import { Container, Flex, Tabs } from "@mantine/core";
-import { useRouter } from "next/router";
-import { type FunctionComponent } from "react";
+import Router, { useRouter } from "next/router";
+import { useContext, type FC, useEffect, useRef } from "react";
 
 import * as styles from "./AuthPage.styles";
 
@@ -16,13 +18,21 @@ export interface AuthPageProps
   readonly tab: "login" | "register";
 }
 
-export const AuthPage: FunctionComponent<AuthPageProps> = ({ tab }) =>
+export const AuthPage: FC<AuthPageProps> = ({ tab }) =>
 {
   const router = useRouter();
-  const handleTabChange = async (tab: AuthPageProps["tab"]): Promise<boolean> =>
+  const handleTabChange = async (tab: AuthPageProps["tab"]): Promise<boolean> => router.push(`/${tab}`);
+  const { isUserLoggedIn } = useContext(AuthStateContext);
+  const hasRedirectStarted = useRef<boolean>(false);
+
+  useEffect(() =>
   {
-    return router.push(`/${tab}`);
-  };
+    if(isUserLoggedIn && !hasRedirectStarted.current)
+    {
+      hasRedirectStarted.current = true;
+      void Router.push(paths.dashboard);
+    }
+  }, [isUserLoggedIn]);
 
   return (
     <Flex
