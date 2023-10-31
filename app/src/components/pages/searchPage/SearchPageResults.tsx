@@ -6,7 +6,7 @@ import FileViewer from "@/components/organisms/fileViewer/FileViewer";
 import SearchPapersBlock from "@/components/organisms/searchPapersBlock/SearchPapersBlock";
 import UploadedMaterialTable from "@/components/organisms/uploadedMaterialTable/UploadedMaterialTable";
 import DocumentEditor from "@/components/papersBlock/documentEditor/DocumentEditor";
-import useSearchResults, { type SearchResults, type SearchResultsKey } from "@/hooks/useSearchResults";
+import useSearchResults, { type SearchResultsKey, type SearchResults } from "@/hooks/useSearchResults";
 import { type IGenArticleOverviewFragment, type IGenFullCaseFragment } from "@/services/graphql/__generated/sdk";
 import useMaterialsStore from "@/stores/materials.store";
 import { type ArticleSearchIndexItem, type CaseSearchIndexItem } from "@/utils/search";
@@ -113,7 +113,7 @@ const SearchPageResults: FunctionComponent<Props> = ({ tabQuery }) =>
         )
       );
     }
-    case ("userUploads" || "userDocuments"):
+    case "userUploads":
     {
       return (
         (searchResults.userUploads?.length > 0 || searchResults.userDocuments?.length > 0) ? (

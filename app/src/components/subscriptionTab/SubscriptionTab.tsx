@@ -13,11 +13,12 @@ const SubscriptionTab: FunctionComponent = () =>
 {
   const isTabletScreen = useMediaQuery("(max-width: 1100px)"); 
   const { generateStripeSessionUrl, isSessionLoading, subscriptionDetails } = useSubscription();
+  const hasSubscription = subscriptionDetails.subscriptionStatus === "active" || subscriptionDetails.subscriptionStatus === "incomplete" || subscriptionDetails.subscriptionStatus === "trialing";
   const router = useRouter();
 
   const getDate = (): string => 
   {
-    if(subscriptionDetails.subscriptionStatus === "active" || subscriptionDetails.subscriptionStatus === "trialing" && !subscriptionDetails.subscriptionEndDate) { console.error("No subscription end date, Please contact your admin"); }
+    if(hasSubscription && !subscriptionDetails.subscriptionEndDate) { console.error("No subscription end date, Please contact your admin"); }
 
     const rawEndData = subscriptionDetails.subscriptionEndDate;
     const day = String(rawEndData?.getUTCDate()).padStart(2, "0");  // padStart ensures it's always two digits
@@ -27,7 +28,7 @@ const SubscriptionTab: FunctionComponent = () =>
     return `${day}/${month}/${year}`;
   };
 
-  const redirectToCustomerPortal = async (): Promise<void> =>
+  const redirectToStripeSession = async (): Promise<void> =>
   {
     let url: string;
 
@@ -37,7 +38,7 @@ const SubscriptionTab: FunctionComponent = () =>
 
       if(!checkoutSessionUrl || !billingPortalSessionUrl) { throw new Error("No checkout or billing portal session url, Please contact your admin"); }
 
-      url = (subscriptionDetails.subscriptionStatus === "active" || subscriptionDetails.subscriptionStatus === "trialing") ? billingPortalSessionUrl : checkoutSessionUrl;
+      url = hasSubscription ? billingPortalSessionUrl : checkoutSessionUrl;
     }
     catch (error)
     {
@@ -58,9 +59,9 @@ const SubscriptionTab: FunctionComponent = () =>
       <Button<"button">
         styleType="primary"
         style={{ display: "block", width: "100%" }}
-        onClick={redirectToCustomerPortal}
+        onClick={redirectToStripeSession}
         loading={isSessionLoading}>
-        {(subscriptionDetails.subscriptionStatus === "active" || subscriptionDetails.subscriptionStatus === "trialing") ? "Abonnement verwalten" : "Abonnieren"}
+        {hasSubscription ? "Abonnement verwalten" : "Abonnieren"}
       </Button>
     </div>
   );

@@ -36,7 +36,7 @@ const handler: NextApiHandler = async (req, res) =>
   catch (error) 
   {
     console.error(`webhook signature verification failed. ${error}`);
-    return res.status(400).end();
+    return res.status(400).json({ message: `Invalid request method ${error}` });
   }
 
   const subscriptionObj = event.data.object as Stripe.Subscription;
