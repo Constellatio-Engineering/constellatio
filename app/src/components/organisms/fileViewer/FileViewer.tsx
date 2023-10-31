@@ -44,6 +44,7 @@ const FileViewer: FunctionComponent = () =>
       }
       else 
       {
+        setExtensionState(null);
         return null;
       }
     };

@@ -169,7 +169,7 @@ const EditProfileImgModal: FunctionComponent<EditProfileImgModalProps> = ({ onCl
   return (
     <Modal
       opened={opened}
-      onClose={onClose}
+      onClose={() => !isLoading && onClose()}
       lockScroll={false}
       title="Change profile image"
       centered>

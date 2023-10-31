@@ -64,10 +64,11 @@ const DashboardCasesBlockTable: FunctionComponent = () =>
                 <CaptionText
                   pl={21}
                   styleType="caption-01-medium"
-                  component="p">STATUS
+                  component="p">
+                  STATUS
                 </CaptionText>
               </th>
-              <th>
+              <th className="hide-on-tablet">
                 <CaptionText styleType="caption-01-medium" component="p">Bearbeitungszeit</CaptionText>
               </th>
               <th>
@@ -84,12 +85,12 @@ const DashboardCasesBlockTable: FunctionComponent = () =>
             {sortedCases.slice(0, 6).map((item, index) => (
               <tr key={index}>
                 <td className="primaryCell" onClick={() => routeToCase(item?.id)}>
-                  <BodyText styleType="body-01-medium" component="p">{item?.title}</BodyText>
+                  <BodyText styleType="body-01-medium" title={item?.title ?? ""} component="p">{item?.title}</BodyText>
                 </td>
                 <td onClick={() => routeToCase(item?.id)}>
                   <StatusTableCell progressState={item?.progress ?? "not-started"}/>
                 </td>
-                <td onClick={() => routeToCase(item?.id)}>
+                <td className="hide-on-tablet" onClick={() => routeToCase(item?.id)}>
                   <BodyText styleType="body-01-medium" css={styles.durationCell} component="p"><ClockIcon/>{timeFormatter(item?.durationToCompleteInMinutes ?? 0)}</BodyText>
                 </td>
                 <td onClick={() => routeToCase(item?.id)}>

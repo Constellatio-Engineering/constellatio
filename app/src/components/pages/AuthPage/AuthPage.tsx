@@ -4,10 +4,12 @@ import { Header } from "@/components/organisms/Header/Header";
 import { LoginForm } from "@/components/organisms/LoginForm/LoginForm";
 import { RegistrationForm } from "@/components/organisms/RegistrationForm/RegistrationForm";
 import { RegistrationVisualHeader } from "@/components/organisms/RegistrationVisualHeader/RegistrationVisualHeader";
+import { AuthStateContext } from "@/provider/AuthStateProvider";
+import { paths } from "@/utils/paths";
 
 import { Container, Flex, Tabs } from "@mantine/core";
 import { useRouter } from "next/router";
-import { type FC } from "react";
+import { useContext, type FC, useEffect } from "react";
 
 import * as styles from "./AuthPage.styles";
 
@@ -20,6 +22,15 @@ export const AuthPage: FC<AuthPageProps> = ({ tab }) =>
 {
   const router = useRouter();
   const handleTabChange: (value: AuthPageProps["tab"]) => Promise<boolean> = async (value) => router.push(`/${value}`);
+  const { isUserLoggedIn } = useContext(AuthStateContext);
+
+  useEffect(() => 
+  {
+    if(isUserLoggedIn) 
+    { 
+      void router.push(paths.dashboard);
+    }
+  }, [isUserLoggedIn, router]);
 
   return (
     <Flex
