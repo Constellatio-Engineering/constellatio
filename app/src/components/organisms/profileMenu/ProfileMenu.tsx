@@ -27,8 +27,7 @@ const ProfileMenu: FunctionComponent<IProfileMenu> = ({ activeTabSlug, setTab, t
   const { handleSignOut } = useSignout();
   const { setOnboardingResult } = useSetOnboardingResult();
   const { error, isLoading, userDetails } = useUserDetails();
-  const { subscriptionDetails } = useSubscription();
-  const hasSubscription = subscriptionDetails.subscriptionStatus === "trialing" || subscriptionDetails.subscriptionStatus === "active" || subscriptionDetails.subscriptionStatus === "incomplete";
+  const { hasSubscription } = useSubscription();
 
   if(isLoading)
   {
@@ -60,7 +59,13 @@ const ProfileMenu: FunctionComponent<IProfileMenu> = ({ activeTabSlug, setTab, t
               key={tab.slug}
               title={tab.title}
               selected={tab.slug === activeTabSlug}
-              onClick={() => hasSubscription && void setTab(tab.slug)}
+              onClick={() =>
+              {
+                if(hasSubscription)
+                {
+                  void setTab(tab.slug);
+                }
+              }}
             />
           ))}
         </div>

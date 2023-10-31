@@ -19,9 +19,7 @@ const localStorageKey = "daysLeftToSubscriptionEnds";
 const SubscriptionModal: FunctionComponent = () => 
 {
   const router = useRouter();
-  const { generateStripeSessionUrl, subscriptionDetails } = useSubscription();
-  const hasSubscription = subscriptionDetails.subscriptionStatus === "active" || subscriptionDetails.subscriptionStatus === "incomplete";
-
+  const { generateStripeSessionUrl, hasSubscription, subscriptionDetails } = useSubscription();
   const [daysCheckedForSubscriptionEnds, setDaysCheckedForSubscriptionEnds] = useLocalStorage<string[]>({
     defaultValue: [],
     deserialize: (localStorageValue) => 
@@ -47,9 +45,17 @@ const SubscriptionModal: FunctionComponent = () =>
 
   const diffDays = useMemo((): number | null => 
   {
+    if(subscriptionDetails == null)
+    {
+      return null; 
+    }
+
     const { subscriptionEndDate } = subscriptionDetails;
 
-    if(subscriptionEndDate == null) { return null; }
+    if(subscriptionEndDate == null)
+    {
+      return null; 
+    }
     
     const today: Date = new Date();
     const endDate = new Date(subscriptionEndDate);
@@ -63,8 +69,7 @@ const SubscriptionModal: FunctionComponent = () =>
   }, [subscriptionDetails]);
 
   const [wasClosed, setWasClosed] = useState(false);
-
-  const opend = !wasClosed && diffDays != null && diffDays <= 10 && !daysCheckedForSubscriptionEnds.includes(new Date().toISOString().split("T")[0] as string) && !hasSubscription;
+  const isOpened = !wasClosed && diffDays != null && diffDays <= 10 && !daysCheckedForSubscriptionEnds.includes(new Date().toISOString().split("T")[0] as string) && !hasSubscription;
   const isModalLocked = diffDays == null || diffDays <= 0;
 
   const redirectToStripeCheckout = async (): Promise<void> => 
@@ -91,9 +96,9 @@ const SubscriptionModal: FunctionComponent = () =>
 
   return (
     <Modal
-      opened={opend}
+      opened={isOpened}
       centered
-      lockScroll={opend}
+      lockScroll={isOpened}
       onClose={() => 
       {
         setWasClosed(true);

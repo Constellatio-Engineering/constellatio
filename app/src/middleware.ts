@@ -5,11 +5,10 @@ import { getIsUserLoggedIn } from "@/utils/auth";
 import { isDevelopment } from "@/utils/env";
 import { paths } from "@/utils/paths";
 import { queryParams } from "@/utils/query-params";
+import { getHasSubscription } from "@/utils/subscription";
 
 import { createMiddlewareClient } from "@supabase/auth-helpers-nextjs";
 import { type NextMiddleware, NextResponse } from "next/server";
-
-type SubscriptionStatus = Pick<User, "subscriptionStatus">;
 
 export const middleware: NextMiddleware = async (req) =>
 {
@@ -32,13 +31,13 @@ export const middleware: NextMiddleware = async (req) =>
 
   console.time("Middleware 2 at " + time);
 
-  let subscriptionStatus: SubscriptionStatus["subscriptionStatus"] | null = null;
+  let subscriptionStatus: Pick<User, "subscriptionStatus"> | null = null;
 
   try
   {
     const response = await fetch((isDevelopment ? "http://localhost:3010" : env.NEXT_PUBLIC_WEBSITE_URL) + `/${paths.getSubscriptionStatus}?secret=${env.GET_SUBSCRIPTION_STATUS_SECRET}&userId=${getIsUserLoggedInResult.user.id}`);
     const data = await response.json() as Pick<User, "subscriptionStatus">;
-    subscriptionStatus = data.subscriptionStatus;
+    subscriptionStatus = data;
   }
   catch (e: unknown)
   {
@@ -55,7 +54,7 @@ export const middleware: NextMiddleware = async (req) =>
     console.timeEnd("Middleware 2 at " + time);
   }
 
-  const hasSubscription = subscriptionStatus === "active" || subscriptionStatus === "trialing" || subscriptionStatus === "incomplete";
+  const hasSubscription = getHasSubscription(subscriptionStatus);
 
   if(!hasSubscription)
   {

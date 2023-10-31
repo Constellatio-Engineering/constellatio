@@ -56,14 +56,14 @@ export const billingRouter = createTRPCRouter({
   }),
   getSubscriptionDetails: protectedProcedure.query(async ({ ctx: { userId } }) =>
   {
-    const subscriptionDetails = await db
-      .select({
-        subscribedPlanPriceId: users.subscribedPlanPriceId,
-        subscriptionEndDate: users.subscriptionEndDate,
-        subscriptionStartDate: users.subscriptionStartDate, 
-        subscriptionStatus: users.subscriptionStatus
-      }).from(users).where(eq(users.id, userId));
-
-    return subscriptionDetails[0] ?? null;
+    return db.query.users.findFirst({
+      columns: {
+        subscribedPlanPriceId: true,
+        subscriptionEndDate: true,
+        subscriptionStartDate: true,
+        subscriptionStatus: true
+      },
+      where: eq(users.id, userId)
+    });
   }),
 });

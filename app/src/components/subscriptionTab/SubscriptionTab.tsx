@@ -1,6 +1,6 @@
 import useSubscription from "@/hooks/useSubscription";
 
-import { Title } from "@mantine/core";
+import { Skeleton, Title } from "@mantine/core";
 import { useMediaQuery } from "@mantine/hooks";
 import { useRouter } from "next/router";
 import React, { type FunctionComponent } from "react";
@@ -12,13 +12,21 @@ import { Button } from "../atoms/Button/Button";
 const SubscriptionTab: FunctionComponent = () => 
 {
   const isTabletScreen = useMediaQuery("(max-width: 1100px)"); 
-  const { generateStripeSessionUrl, isSessionLoading, subscriptionDetails } = useSubscription();
-  const hasSubscription = subscriptionDetails.subscriptionStatus === "active" || subscriptionDetails.subscriptionStatus === "incomplete" || subscriptionDetails.subscriptionStatus === "trialing";
+  const {
+    generateStripeSessionUrl,
+    hasSubscription,
+    isSessionLoading,
+    isSubscriptionDetailsLoading,
+    subscriptionDetails
+  } = useSubscription();
   const router = useRouter();
 
-  const getDate = (): string => 
+  const getDate = (): string | undefined =>
   {
-    if(hasSubscription && !subscriptionDetails.subscriptionEndDate) { console.error("No subscription end date, Please contact your admin"); }
+    if(subscriptionDetails == null)
+    {
+      return undefined;
+    }
 
     const rawEndData = subscriptionDetails.subscriptionEndDate;
     const day = String(rawEndData?.getUTCDate()).padStart(2, "0");  // padStart ensures it's always two digits
@@ -49,11 +57,35 @@ const SubscriptionTab: FunctionComponent = () =>
     void router.push(url);
   };
 
+  if(isSubscriptionDetailsLoading)
+  {
+    return (
+      <div css={styles.wrapper}>
+        <Skeleton height={32} mb={50} width={100}/>
+        <Skeleton height={20} mb={30} width="70%"/>
+        <Skeleton height={30} mb={30} width="100%"/>
+      </div>
+    );
+  }
+
+  if(subscriptionDetails == null)
+  {
+    return (
+      <BodyText m="32px 0" styleType="body-01-bold" component="p">
+        Das ist leider etwas schief gelaufen. Bitte versuche es später erneut.
+      </BodyText>
+    );
+  }
+
+  const { subscriptionStatus } = subscriptionDetails;
+
   return (
     <div css={styles.wrapper}>
       {!isTabletScreen && <Title order={3} css={styles.subscriptionTabTitle}>Vertrag</Title>}
       <BodyText m="32px 0" styleType="body-01-bold" component="p">
-        {subscriptionDetails.subscriptionStatus === "active" ? `Dein Abonnement läuft noch bis zum ${getDate()}` : subscriptionDetails.subscriptionStatus === "trialing" ? `Dein Test-Abo endet am ${getDate()}` : "Schließe jetzt dein Constellatio Abonnement ab:"}
+        {subscriptionStatus === "active" && `Dein Abonnement läuft noch bis zum ${getDate()}`}
+        {subscriptionStatus === "trialing" && `Dein Test-Abo endet am ${getDate()}`}
+        {!hasSubscription && "Schließe jetzt dein Constellatio Abonnement ab:"}
       </BodyText>
       {/* <SubscriptionCard/> */}
       <Button<"button">
