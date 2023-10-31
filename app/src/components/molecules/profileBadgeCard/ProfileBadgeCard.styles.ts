@@ -10,6 +10,8 @@ export const wrapper = css`
   position: relative;
   border-radius: 12px;
   background-color: ${colors["neutrals-01"][1]};
+  overflow: hidden;
+  border: solid 1px ${colors["neutrals-01"][3]};
 `;
 
 export const wrapperDisabled = css`
@@ -110,6 +112,7 @@ export const badgeDescriptionArea = () => css`
   padding: 16px;
   border-radius: 0 0 12px 12px;
   border: solid 1px ${colors["neutrals-01"][3]};
+  height: 100%;
 `;
 
 export const badgeDescriptionText = css``;

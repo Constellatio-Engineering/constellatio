@@ -11,6 +11,7 @@ import * as styles from "./EmptyStateCard.styles";
 export interface IEmptyStateCardProps 
 {
   readonly button?: ReactNode;
+  readonly click?: () => void;
   readonly hideIcon?: boolean;
   readonly text: string;
   readonly title: string;
@@ -19,6 +20,7 @@ export interface IEmptyStateCardProps
 
 const EmptyStateCard: FunctionComponent<IEmptyStateCardProps> = ({
   button,
+  click = () => {},
   hideIcon = false,
   text,
   title,
@@ -50,7 +52,7 @@ const EmptyStateCard: FunctionComponent<IEmptyStateCardProps> = ({
         </div>
         {button && variant === "For-large-areas" && (
           <div css={styles.callToAction({ theme })}>
-            <Button<"button"> styleType="primary" onClick={() => {}}>
+            <Button<"button"> styleType="primary" onClick={click}>
               {button}
             </Button>
           </div>

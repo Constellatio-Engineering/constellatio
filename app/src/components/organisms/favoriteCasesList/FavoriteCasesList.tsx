@@ -16,7 +16,7 @@ interface FavoriteCasesListProps
 const FavoriteCasesList: FunctionComponent<FavoriteCasesListProps> = ({ bookmarkedCasesMainCategoriesUnique, casesByMainCategory }) => 
 {
   return (
-    <Container maw={1440}>
+    <Container p={0} maw={1440}>
       {bookmarkedCasesMainCategoriesUnique.map((mainCategoryBlock, blockIndex) =>
       {
         const items = casesByMainCategory(mainCategoryBlock.id);
