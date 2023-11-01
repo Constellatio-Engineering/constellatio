@@ -22,11 +22,12 @@ export const AuthPage: FC<AuthPageProps> = ({ tab }) =>
 {
   const router = useRouter();
   const handleTabChange = async (tab: AuthPageProps["tab"]): Promise<boolean> => router.push(`/${tab}`);
-  const [showComputerRecommendedModal, setShowComputerRecommendedModal] = useState<boolean>(true);
+  const [showComputerRecommendedModal, setShowComputerRecommendedModal] = useState<boolean>(false);
   const isSmallScreen = useMediaQuery("(max-width: 768px)");
+  const isPhoneScreen = useMediaQuery("(max-width: 480px)");
   useEffect(() => 
   {
-    if(!isSmallScreen) { setShowComputerRecommendedModal(true); }
+    if(isSmallScreen) { setShowComputerRecommendedModal(true); }
   }, [isSmallScreen]);
   return (
     <Flex
@@ -48,7 +49,7 @@ export const AuthPage: FC<AuthPageProps> = ({ tab }) =>
         })}>
         <Header variant="relative"/>
         <Container
-          w={440}
+          w={isPhoneScreen ? 300 : 440}
           pt={50}
           pb={tab === "register" ? "spacing-100" : 0}
           sx={{ marginTop: "80px" }}>
@@ -60,7 +61,7 @@ export const AuthPage: FC<AuthPageProps> = ({ tab }) =>
             panelStyleOverwrite={{ padding: "40px 0" }}>
             <Tabs.List grow>
               <SwitcherTab value="login">Anmelden</SwitcherTab>
-              <SwitcherTab value="register">Konto erstellen</SwitcherTab>
+              <SwitcherTab style={{ whiteSpace: "nowrap" }} value="register">Konto erstellen</SwitcherTab>
             </Tabs.List>
             <Tabs.Panel value="login">
               <LoginForm/>
