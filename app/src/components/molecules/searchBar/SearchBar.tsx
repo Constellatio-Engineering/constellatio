@@ -2,7 +2,7 @@ import { Button } from "@/components/atoms/Button/Button";
 import { CustomLink } from "@/components/atoms/CustomLink/CustomLink";
 import { Cross } from "@/components/Icons/Cross";
 import { Search } from "@/components/Icons/Search";
-import UseQueryStateWrapper from "@/components/useQueryStateWrapper/UseQueryStateWrapper";
+import UseQueryStateWrapper from "@/components/Wrappers/useQueryStateWrapper/UseQueryStateWrapper";
 import useSearchResults from "@/hooks/useSearchResults";
 import useSearchBarStore from "@/stores/searchBar.store";
 import { paths } from "@/utils/paths";

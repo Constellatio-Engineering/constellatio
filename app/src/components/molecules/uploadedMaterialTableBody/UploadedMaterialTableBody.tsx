@@ -6,7 +6,6 @@ import { ImageIcon } from "@/components/Icons/image";
 import { Notepad } from "@/components/Icons/Notepad";
 import { NotepadFilled } from "@/components/Icons/NotepadFilled";
 import { VideoIcon } from "@/components/Icons/Video";
-import MaterialOptionsMenu from "@/components/materialsOptionsMenu/MaterialsOptionsMenu";
 import { type UploadedFile, type UploadedFileWithNote } from "@/db/schema";
 import useUploadFolders from "@/hooks/useUploadFolders";
 import useMaterialsStore from "@/stores/materials.store";
@@ -19,6 +18,7 @@ import {
 import React, { type FunctionComponent } from "react";
 
 import * as styles from "./UploadedMaterialTableBody.styles";
+import MaterialOptionsMenu from "../materialsOptionsMenu/MaterialsOptionsMenu";
 
 const fileNameIcon = (file: UploadedFile): React.ReactNode =>
 {

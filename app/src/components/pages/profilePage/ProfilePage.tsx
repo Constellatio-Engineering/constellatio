@@ -3,11 +3,11 @@ import ChangePasswordTab from "@/components/organisms/changePasswordTab/ChangePa
 import ProfileDetailsTab from "@/components/organisms/profileDetailsTab/ProfileDetailsTab";
 import ProfileMenu from "@/components/organisms/profileMenu/ProfileMenu";
 import RenderedTabSkeleton from "@/components/organisms/profileMenu/renderedTabSkeleton/RenderedTabSkeleton";
+import ProfileNavMenuTablet from "@/components/organisms/profileNavMenuTablet/ProfileNavMenuTablet";
 import ProfileOverview from "@/components/organisms/profileOverview/ProfileOverview";
 import ProfilePageHeader from "@/components/organisms/profilePageHeader/ProfilePageHeader";
-import ProfileNavMenuTablet from "@/components/profileNavMenuTablet/ProfileNavMenuTablet";
-import SubscriptionTab from "@/components/subscriptionTab/SubscriptionTab";
-import UseQueryStateWrapper from "@/components/useQueryStateWrapper/UseQueryStateWrapper";
+import SubscriptionTab from "@/components/organisms/subscriptionTab/SubscriptionTab";
+import UseQueryStateWrapper from "@/components/Wrappers/useQueryStateWrapper/UseQueryStateWrapper";
 import useUserDetails from "@/hooks/useUserDetails";
 
 import { Container } from "@mantine/core";
