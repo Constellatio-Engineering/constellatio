@@ -1,9 +1,9 @@
 import { LinkButton } from "@/components/atoms/LinkButton/LinkButton";
 import ProfileMenuUniversityTab from "@/components/atoms/profileMenuUniversityTab/ProfileMenuUniversityTab";
-import ErrorPage from "@/components/errorPage/ErrorPage";
 import { NoteIcon } from "@/components/Icons/Note";
 import MenuListItem from "@/components/molecules/menuListItem/MenuListItem";
 import ProfileMenuSkeleton from "@/components/organisms/profileMenu/profileMenuSkeleton/ProfileMenuSkeleton";
+import ErrorPage from "@/components/pages/errorPage/ErrorPage";
 import { type tabs } from "@/components/pages/profilePage/ProfilePage";
 import useSetOnboardingResult from "@/hooks/useSetOnboardingResult";
 import { useSignout } from "@/hooks/useSignout";
@@ -27,7 +27,7 @@ const ProfileMenu: FunctionComponent<IProfileMenu> = ({ activeTabSlug, setTab, t
   const { handleSignOut } = useSignout();
   const { setOnboardingResult } = useSetOnboardingResult();
   const { error, isLoading, userDetails } = useUserDetails();
-  const { hasSubscription } = useSubscription();
+  const { isOnPaidSubscription, isOnTrailSubscription } = useSubscription();
 
   if(isLoading)
   {
@@ -61,7 +61,7 @@ const ProfileMenu: FunctionComponent<IProfileMenu> = ({ activeTabSlug, setTab, t
               selected={tab.slug === activeTabSlug}
               onClick={() =>
               {
-                if(hasSubscription)
+                if(isOnTrailSubscription || isOnPaidSubscription)
                 {
                   void setTab(tab.slug);
                 }

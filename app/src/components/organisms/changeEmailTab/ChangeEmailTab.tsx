@@ -3,7 +3,7 @@ import { Button } from "@/components/atoms/Button/Button";
 import { CaptionText } from "@/components/atoms/CaptionText/CaptionText";
 import { AlertCard } from "@/components/atoms/Card/AlertCard";
 import { Input } from "@/components/atoms/Input/Input";
-import ErrorCard from "@/components/errorCard/ErrorCard";
+import ErrorCard from "@/components/molecules/errorCard/ErrorCard";
 import { Modal } from "@/components/molecules/Modal/Modal";
 import { supabase } from "@/lib/supabase";
 import { type UpdateEmailSchema, updateEmailSchema } from "@/schemas/auth/updateEmail.schema";

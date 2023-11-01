@@ -1,6 +1,4 @@
 
-import FoldersMenuTablet from "@/components/foldersMenuTablet/FoldersMenuTablet";
-import PapersBlock from "@/components/papersBlock/PapersBlock";
 import useDocuments from "@/hooks/useDocuments";
 import useMaterialsStore from "@/stores/materials.store";
 import uploadsProgressStore from "@/stores/uploadsProgress.store";
@@ -10,8 +8,11 @@ import React, { type FunctionComponent } from "react";
 import * as styles from "./PersonalSpaceMaterialsTab.styles";
 import FileUploadMenu from "../fileUploadMenu/FileUploadMenu";
 import FileViewer from "../fileViewer/FileViewer";
+import FoldersMenuTablet from "../foldersMenuTablet/FoldersMenuTablet";
 import MaterialMenu from "../materialMenu/MaterialMenu";
+import PapersBlock from "../papersBlock/PapersBlock";
 import UploadedMaterialBlock from "../uploadedMaterialBlock/UploadedMaterialBlock";
+
 const PersonalSpaceMaterialsTab: FunctionComponent = () => 
 {
   const selectedFolderId = useMaterialsStore(s => s.selectedFolderId);

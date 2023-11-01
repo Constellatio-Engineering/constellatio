@@ -7,7 +7,6 @@ import Tag from "@/components/atoms/tag/Tag";
 import { Show } from "@/components/Icons/Show";
 import { Timer } from "@/components/Icons/timer";
 import { Trash } from "@/components/Icons/Trash";
-import OverviewCardTagsModal from "@/components/overviewCardTagsModal/OverviewCardTagsModal";
 import useArticleViews from "@/hooks/useArticleViews";
 import useCaseViews from "@/hooks/useCaseViews";
 import useResetCaseProgress from "@/hooks/useResetCaseProgress";
@@ -19,6 +18,7 @@ import { type Maybe } from "@trpc/server";
 import React, { type FunctionComponent } from "react";
 
 import * as styles from "./OverviewCard.styles";
+import OverviewCardTagsModal from "../overviewCardTagsModal/OverviewCardTagsModal";
 
 export interface IOverviewCard 
 {
@@ -41,7 +41,7 @@ export function timeFormatter(minutes: number): string
   }
   else 
   {
-    return `${minutes} MINUTE${minutes !== 1 ? "N" : ""}`;
+    return `${minutes} Minute${minutes !== 1 ? "n" : ""}`;
   }
 }
 function formatDate(inputDate: string | number | Date): string 

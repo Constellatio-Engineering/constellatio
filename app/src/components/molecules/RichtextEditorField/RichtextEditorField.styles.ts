@@ -58,6 +58,8 @@ export const richtextEditorFieldStyles = (): RichtextEditorFieldStyles =>
 
         padding: 0,
         paddingBottom: "32px",
+        whiteSpace: "normal",
+        wordBreak: "break-word",
       },
     },
     root: {

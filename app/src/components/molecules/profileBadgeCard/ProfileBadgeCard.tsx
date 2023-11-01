@@ -1,5 +1,5 @@
+import BadgeImage from "@/components/atoms/badgeImage/BadgeImage";
 import { BodyText } from "@/components/atoms/BodyText/BodyText";
-import BadgeImage from "@/components/badgeImage/BadgeImage";
 import { CheckCircleRed } from "@/components/Icons/CheckCirleRed";
 import { type BadgeWithUserData } from "@/db/schema";
 import useDashboardPageStore from "@/stores/dashboardPage.store";

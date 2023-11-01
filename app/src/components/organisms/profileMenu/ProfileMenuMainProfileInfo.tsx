@@ -1,7 +1,7 @@
 import { BodyText } from "@/components/atoms/BodyText/BodyText";
-import EditProfileImgModal from "@/components/editProfileImgModal/EditProfileImgModal";
 import { Edit } from "@/components/Icons/Edit";
 import ProfilePicture from "@/components/molecules/profilePicture/ProfilePicture";
+import EditProfileImgModal from "@/components/organisms/editProfileImgModal/EditProfileImgModal";
 import { type UserFiltered } from "@/utils/filters";
 
 import { Title } from "@mantine/core";

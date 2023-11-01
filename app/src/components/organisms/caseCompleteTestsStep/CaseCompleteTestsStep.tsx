@@ -1,7 +1,6 @@
 /* eslint-disable max-lines */
 import { Button } from "@/components/atoms/Button/Button";
 import { type IStatusLabel } from "@/components/atoms/statusLabel/StatusLabel";
-import FloatingPanelTablet from "@/components/floatingPanelTablet/FloatingPanelTablet";
 import { RichTextHeadingOverwrite } from "@/components/helpers/RichTextHeadingOverwrite";
 import { type GameProgress } from "@/db/schema";
 import useContextAndErrorIfNull from "@/hooks/useContextAndErrorIfNull";
@@ -26,6 +25,7 @@ import { DragDropGame } from "../DragDropGame/DragDropGame";
 import FillGapsGame from "../FillGapsGame/FillGapsGame";
 import FloatingPanel from "../floatingPanel/FloatingPanel";
 import { getNestedHeadingIndex } from "../floatingPanel/generateTocHelper";
+import FloatingPanelTablet from "../floatingPanelTablet/FloatingPanelTablet";
 import SelectionCardGame from "../SelectionCardGame/SelectionCardGame";
 import { SolveCaseGame } from "../SolveCaseGame/SolveCaseGame";
 
@@ -37,7 +37,6 @@ interface ICaseCompleteTestsStepProps
   readonly fullTextTasks: Maybe<IGenCase_FullTextTasks> | Maybe<IGenArticle_FullTextTasks>;
   readonly games: Games;
   readonly gamesProgress: GameProgress[];
-  readonly isLastGame: boolean;
   readonly progressState: IStatusLabel["progressState"] | undefined;
   readonly variant?: "case" | "dictionary";
 }
@@ -49,7 +48,6 @@ const CaseCompleteTestsStep: FunctionComponent<ICaseCompleteTestsStepProps> = ({
   fullTextTasks,
   games,
   gamesProgress,
-  isLastGame,
   progressState,
   variant
 }) =>
@@ -70,12 +68,12 @@ const CaseCompleteTestsStep: FunctionComponent<ICaseCompleteTestsStepProps> = ({
   let renderedCaseContent: IGenCase_FullTextTasks | IGenArticle_FullTextTasks | null;
   // const isBigScreen = useMediaQuery("(min-width: 1100px)");
 
-  /* console.log("-----------------");
-  console.log("completedGames", completedGames);
-  console.log("areAllGamesCompleted", areAllGamesCompleted);
-  console.log("gamesProgress", gamesProgress);
-  console.log("games", games);
-  console.log("currentGameIndexInFullTextTasksJson", currentGameIndexInFullTextTasksJson);*/
+  // console.log("-----------------");
+  // console.log("completedGames", completedGames);
+  // console.log("areAllGamesCompleted", areAllGamesCompleted);
+  // console.log("gamesProgress", gamesProgress);
+  // console.log("games", games);
+  // console.log("currentGameIndexInFullTextTasksJson", currentGameIndexInFullTextTasksJson);
 
   if(fullTextTasks?.json?.content?.length >= 1 && !areAllGamesCompleted)
   {
@@ -83,7 +81,7 @@ const CaseCompleteTestsStep: FunctionComponent<ICaseCompleteTestsStepProps> = ({
       ...fullTextTasks,
       json: {
         ...fullTextTasks?.json,
-        content: isLastGame ? fullTextTasks?.json?.content : fullTextTasks?.json?.content?.slice(0, (currentGameIndexInFullTextTasksJson || 0) + 1),
+        content: areAllGamesCompleted ? fullTextTasks?.json?.content : fullTextTasks?.json?.content?.slice(0, (currentGameIndexInFullTextTasksJson || 0) + 1),
       },
     };
   }

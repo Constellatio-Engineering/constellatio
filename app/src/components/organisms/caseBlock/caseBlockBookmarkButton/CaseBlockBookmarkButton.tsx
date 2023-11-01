@@ -1,4 +1,3 @@
-import DeleteBookmarkModal from "@/components/deleteBookmarkModal/DeleteBookmarkModal";
 import { Bookmark } from "@/components/Icons/Bookmark";
 import { BookmarkFilledIcon } from "@/components/Icons/BookmarkFilledIcon";
 import TableIconButton from "@/components/molecules/tableIconButton/TableIconButton";
@@ -12,6 +11,7 @@ import { type Nullable } from "@/utils/types";
 import { useRouter } from "next/router";
 import React, { type FunctionComponent, useRef } from "react";
 
+import DeleteBookmarkModal from "../../deleteBookmarkModal/DeleteBookmarkModal";
 import { type ICaseBlockProps } from "../ItemBlock";
 
 interface ICaseBlockBookmarkButtonProps
