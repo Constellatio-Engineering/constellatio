@@ -20,14 +20,14 @@ const FavoriteCard: FunctionComponent<FavoriteCardProps> = ({
   ...props
 }) => 
 {
-
+  const numberOfLetters: number = 45;
   return (
     <div css={styles.wrapper} {...props}>
       <div css={styles.tags}>
         <Label variant={variant} title={variant === "case" ? "Fälle" : "Lexikon"}/>
         {/* <IconButton onClick={() => onBookmarkIconClick()} icon={icon ?? <BookmarkFilledIcon/>} size="big"/> */}
       </div>
-      {title && <Title title={title} order={4} css={styles.title}>{title.slice(0, 40)}{title?.length > 45 && "..."}</Title>}
+      {title && <Title title={title} order={4} css={styles.title}>{title.slice(0, numberOfLetters)}{title?.length > numberOfLetters && "..."}</Title>}
     </div>
   );
 };

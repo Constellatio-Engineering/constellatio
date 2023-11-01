@@ -1,5 +1,4 @@
-import FavoriteArticlesList from "@/components/favoriteArticlesList/FavoriteArticlesList";
-import UseQueryStateWrapper from "@/components/useQueryStateWrapper/UseQueryStateWrapper";
+import UseQueryStateWrapper from "@/components/Wrappers/useQueryStateWrapper/UseQueryStateWrapper";
 import useArticles from "@/hooks/useArticles";
 import useBookmarks from "@/hooks/useBookmarks";
 import useCases from "@/hooks/useCases";
@@ -13,6 +12,7 @@ import { parseAsString, useQueryState } from "next-usequerystate";
 import React, { type FunctionComponent } from "react";
 
 import EmptyStateCard from "../emptyStateCard/EmptyStateCard";
+import FavoriteArticlesList from "../favoriteArticlesList/FavoriteArticlesList";
 import FavoriteCasesList from "../favoriteCasesList/FavoriteCasesList";
 import PersonalSpaceNavBar from "../personalSpaceNavBar/PersonalSpaceNavBar";
 

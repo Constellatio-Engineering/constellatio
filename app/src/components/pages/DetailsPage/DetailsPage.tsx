@@ -1,5 +1,4 @@
 /* eslint-disable max-lines */
-import ErrorPage from "@/components/errorPage/ErrorPage";
 import CaseCompleteTestsStep from "@/components/organisms/caseCompleteTestsStep/CaseCompleteTestsStep";
 import CaseNavBar from "@/components/organisms/caseNavBar/CaseNavBar";
 import CaseResultsReviewStep from "@/components/organisms/caseResultsReviewStep/CaseResultsReviewStep";
@@ -18,6 +17,7 @@ import { paths } from "@/utils/paths";
 import React, { useEffect, type FunctionComponent, useRef } from "react";
 
 import * as styles from "./DetailsPage.styles";
+import ErrorPage from "../errorPage/ErrorPage";
 
 type IDetailsPageProps = {
   readonly content: IGenCase | IGenArticle | undefined;

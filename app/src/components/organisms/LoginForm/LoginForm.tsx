@@ -3,7 +3,7 @@ import { Button } from "@/components/atoms/Button/Button";
 import { AlertCard } from "@/components/atoms/Card/AlertCard";
 import { CustomLink } from "@/components/atoms/CustomLink/CustomLink";
 import { Input } from "@/components/atoms/Input/Input";
-import ErrorCard from "@/components/errorCard/ErrorCard";
+import ErrorCard from "@/components/molecules/errorCard/ErrorCard";
 import { colors } from "@/constants/styles/colors";
 import useContextAndErrorIfNull from "@/hooks/useContextAndErrorIfNull";
 import { supabase } from "@/lib/supabase";

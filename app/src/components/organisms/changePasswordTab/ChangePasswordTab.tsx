@@ -1,7 +1,7 @@
 import { Button } from "@/components/atoms/Button/Button";
 import { AlertCard } from "@/components/atoms/Card/AlertCard";
 import { Input } from "@/components/atoms/Input/Input";
-import ErrorCard from "@/components/errorCard/ErrorCard";
+import ErrorCard from "@/components/molecules/errorCard/ErrorCard";
 import PasswordInput from "@/components/organisms/RegistrationForm/form/PasswordInput";
 import { supabase } from "@/lib/supabase";
 import { type UpdatePasswordSchema, updatePasswordSchema, type UpdatePasswordValues } from "@/schemas/auth/updatePassword.schema";

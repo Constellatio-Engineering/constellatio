@@ -77,7 +77,8 @@ const useDocumentEditorStore = create(
         }
         case "edit":
         {
-          const hasUnsavedChanges = (editorState.document.name !== editorState.originalDocument.name) || (editorState.document.content !== editorState.originalDocument.content);
+          const hasUnsavedChanges = (editorState.document.name.trim() !== editorState.originalDocument.name) || 
+          (editorState.document.content !== editorState.originalDocument.content);
 
           computedValues = {
             hasUnsavedChanges,
@@ -97,7 +98,7 @@ const useDocumentEditorStore = create(
         case "create":
         {
           computedValues = {
-            hasUnsavedChanges: editorState.document.name !== "",
+            hasUnsavedChanges: editorState.document.name.trim() !== "",
             title: "Neues Constellatio Doc erstellen",
           };
           break;

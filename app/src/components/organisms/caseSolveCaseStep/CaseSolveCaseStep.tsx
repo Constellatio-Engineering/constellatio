@@ -136,6 +136,8 @@ const CaseSolveCaseStep: FunctionComponent<Props> = ({
             lockScroll={false}
             opened={showStepTwoModal}
             centered
+            closeOnEscape={false}
+            closeOnClickOutside={false}
             onClose={() => setShowStepTwoModal(false)}>
             <CaseSolvedIcon size={120}/>
             <Title order={3}>Gut gemacht!</Title>
