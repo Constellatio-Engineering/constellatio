@@ -14,7 +14,8 @@ const SubscriptionTab: FunctionComponent = () =>
   const isTabletScreen = useMediaQuery("(max-width: 1100px)"); 
   const {
     generateStripeSessionUrl,
-    hasSubscription,
+    isOnPaidSubscription,
+    isOnTrailSubscription,
     isSessionLoading,
     isSubscriptionDetailsLoading,
     subscriptionDetails
@@ -46,7 +47,7 @@ const SubscriptionTab: FunctionComponent = () =>
 
       if(!checkoutSessionUrl || !billingPortalSessionUrl) { throw new Error("No checkout or billing portal session url, Please contact your admin"); }
 
-      url = hasSubscription ? billingPortalSessionUrl : checkoutSessionUrl;
+      url = isOnPaidSubscription ? billingPortalSessionUrl : checkoutSessionUrl;
     }
     catch (error)
     {
@@ -77,15 +78,13 @@ const SubscriptionTab: FunctionComponent = () =>
     );
   }
 
-  const { subscriptionStatus } = subscriptionDetails;
-
   return (
     <div css={styles.wrapper}>
       {!isTabletScreen && <Title order={3} css={styles.subscriptionTabTitle}>Vertrag</Title>}
       <BodyText m="32px 0" styleType="body-01-bold" component="p">
-        {subscriptionStatus === "active" && `Dein Abonnement läuft noch bis zum ${getDate()}`}
-        {subscriptionStatus === "trialing" && `Dein Test-Abo endet am ${getDate()}`}
-        {!hasSubscription && "Schließe jetzt dein Constellatio Abonnement ab:"}
+        {isOnPaidSubscription && `Dein Abonnement läuft noch bis zum ${getDate()}`}
+        {isOnTrailSubscription && `Dein Test-Abo endet am ${getDate()}`}
+        {!isOnPaidSubscription && "Schließe jetzt dein Constellatio Abonnement ab:"}
       </BodyText>
       {/* <SubscriptionCard/> */}
       <Button<"button">
@@ -93,7 +92,7 @@ const SubscriptionTab: FunctionComponent = () =>
         style={{ display: "block", width: "100%" }}
         onClick={redirectToStripeSession}
         loading={isSessionLoading}>
-        {hasSubscription ? "Abonnement verwalten" : "Abonnieren"}
+        {(isOnPaidSubscription || isOnTrailSubscription) ? "Abonnement verwalten" : "Abonnieren"}
       </Button>
     </div>
   );

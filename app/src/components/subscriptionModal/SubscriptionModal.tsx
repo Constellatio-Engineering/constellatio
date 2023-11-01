@@ -19,7 +19,7 @@ const localStorageKey = "daysLeftToSubscriptionEnds";
 const SubscriptionModal: FunctionComponent = () => 
 {
   const router = useRouter();
-  const { generateStripeSessionUrl, hasSubscription, subscriptionDetails } = useSubscription();
+  const { generateStripeSessionUrl, isOnTrailSubscription, subscriptionDetails } = useSubscription();
   const [daysCheckedForSubscriptionEnds, setDaysCheckedForSubscriptionEnds] = useLocalStorage<string[]>({
     defaultValue: [],
     deserialize: (localStorageValue) => 
@@ -42,6 +42,8 @@ const SubscriptionModal: FunctionComponent = () =>
     key: localStorageKey,
     serialize: (value) => JSON.stringify(value),
   });
+
+  const todayDateAsString = new Date().toISOString().split("T")[0] as string;
 
   const diffDays = useMemo((): number | null => 
   {
@@ -69,7 +71,8 @@ const SubscriptionModal: FunctionComponent = () =>
   }, [subscriptionDetails]);
 
   const [wasClosed, setWasClosed] = useState(false);
-  const isOpened = !wasClosed && diffDays != null && diffDays <= 10 && !daysCheckedForSubscriptionEnds.includes(new Date().toISOString().split("T")[0] as string) && !hasSubscription;
+  const isOpened = !wasClosed && diffDays != null && diffDays <= 10 && !daysCheckedForSubscriptionEnds.includes(todayDateAsString) && isOnTrailSubscription;
+  console.log(!daysCheckedForSubscriptionEnds.includes(todayDateAsString));
   const isModalLocked = diffDays == null || diffDays <= 0;
 
   const redirectToStripeCheckout = async (): Promise<void> => 
@@ -102,7 +105,7 @@ const SubscriptionModal: FunctionComponent = () =>
       onClose={() => 
       {
         setWasClosed(true);
-        setDaysCheckedForSubscriptionEnds((prevDaysChecked) => [...prevDaysChecked, new Date().toISOString().split("T")[0] as string]);
+        setDaysCheckedForSubscriptionEnds((prevDaysChecked) => [...prevDaysChecked, todayDateAsString]);
       }}
       closeOnClickOutside={!isModalLocked}
       closeOnEscape={!isModalLocked}
@@ -113,7 +116,7 @@ const SubscriptionModal: FunctionComponent = () =>
         {
           diffDays != null && (
             <>
-              {diffDays === 1 && `Deine Testphase läuft nur noch ${diffDays} Tage`}
+              {isOnTrailSubscription && `Deine Testphase läuft nur noch ${diffDays} Tage`}
               {diffDays <= 0 && "Deine Testphase ist abgelaufen"}
             </>
           )
