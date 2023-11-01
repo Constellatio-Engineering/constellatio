@@ -54,7 +54,8 @@ export const middleware: NextMiddleware = async (req) =>
     console.timeEnd("Middleware 2 at " + time);
   }
 
-  const hasSubscription = getHasSubscription(subscriptionStatus);
+  const { isOnPaidSubscription, isOnTrailSubscription } = getHasSubscription(subscriptionStatus);
+  const hasSubscription = isOnPaidSubscription || isOnTrailSubscription;
 
   if(!hasSubscription)
   {
