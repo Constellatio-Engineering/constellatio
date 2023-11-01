@@ -84,7 +84,7 @@ const SubscriptionTab: FunctionComponent = () =>
       <BodyText m="32px 0" styleType="body-01-bold" component="p">
         {isOnPaidSubscription && `Dein Abonnement läuft noch bis zum ${getDate()}`}
         {isOnTrailSubscription && `Dein Test-Abo endet am ${getDate()}`}
-        {!isOnPaidSubscription && "Schließe jetzt dein Constellatio Abonnement ab:"}
+        {(!isOnPaidSubscription) && "Schließe jetzt dein Constellatio Abonnement ab:"}
       </BodyText>
       {/* <SubscriptionCard/> */}
       <Button<"button">
@@ -92,7 +92,7 @@ const SubscriptionTab: FunctionComponent = () =>
         style={{ display: "block", width: "100%" }}
         onClick={redirectToStripeSession}
         loading={isSessionLoading}>
-        {(isOnPaidSubscription || isOnTrailSubscription) ? "Abonnement verwalten" : "Abonnieren"}
+        {isOnPaidSubscription ? "Abonnement verwalten" : "Abonnieren"}
       </Button>
     </div>
   );
