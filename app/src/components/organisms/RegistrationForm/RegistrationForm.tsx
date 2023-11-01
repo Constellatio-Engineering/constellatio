@@ -30,6 +30,8 @@ import { type FunctionComponent, useEffect, useRef, useState } from "react";
 import z from "zod";
 import { makeZodI18nMap } from "zod-i18n-map";
 
+import * as styles from "./RegistrationForm.styles";
+
 const initialValues: RegistrationFormSchema = isDevelopmentOrStaging ? {
   acceptTOS: true,
   displayName: "Constellatio Test User",
@@ -219,11 +221,11 @@ export const RegistrationForm: FunctionComponent = () =>
           <Checkbox
             {...form.getInputProps("acceptTOS", { type: "checkbox" })}
             label={(
-              <BodyText component="p" styleType="body-01-medium">
+              <BodyText component="p" styleType="body-01-medium" css={styles.dataLinkWrapper}>
                 Ich akzeptiere die&nbsp;
-                <CustomLink styleType="link-primary" href="https://www.constellatio.de/agb">Allgemeinen Geschäftsbedingungen</CustomLink>
+                <CustomLink styleType="link-primary" href="https://www.constellatio.de/agb" target="_blank">Allgemeinen Geschäftsbedingungen</CustomLink>
                 &nbsp;und die&nbsp;
-                <CustomLink styleType="link-primary" href="https://www.constellatio.de/datenschutzerklaerung">Datenschutzerklärung</CustomLink>
+                <CustomLink styleType="link-primary" href="https://www.constellatio.de/datenschutzerklaerung" target="_blank">Datenschutzerklärung</CustomLink>
               </BodyText>
             )}
             title="acceptTOS"
