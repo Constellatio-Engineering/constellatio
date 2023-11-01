@@ -5,6 +5,7 @@ import { ClockIcon } from "@/components/Icons/ClockIcon";
 import CaseBlockBookmarkButton from "@/components/organisms/caseBlock/caseBlockBookmarkButton/CaseBlockBookmarkButton";
 import EmptyStateCard from "@/components/organisms/emptyStateCard/EmptyStateCard";
 import { timeFormatter } from "@/components/organisms/overviewCard/OverviewCard";
+import { extractNumeric } from "@/components/pages/OverviewPage/OverviewPage";
 import useBookmarks from "@/hooks/useBookmarks";
 import useCases from "@/hooks/useCases";
 import useCasesProgress from "@/hooks/useCasesProgress";
@@ -46,7 +47,17 @@ const DashboardCasesBlockTable: FunctionComponent = () =>
       progress: casesProgress?.find((caseProgress) => caseProgress?.caseId === caseItem?.id) ?? { caseId: "", progressState: "not-started" }
     };
   });
-  const sortedCases = casesWithProgress.sort((a, b) => getProgressWeight(b.progress.progressState) - getProgressWeight(a.progress.progressState)).
+  const sortedCases = casesWithProgress.sort((a, b) =>
+  {
+    const numA = extractNumeric(a.case.title ?? "");
+    const numB = extractNumeric(b.case.title ?? "");
+
+    if(numA !== null && numB !== null)
+    {
+      return numA - numB;
+    }
+    return a?.case?.title?.localeCompare(b.case.title ?? "") ?? -1;
+  }).sort((a, b) => getProgressWeight(b.progress.progressState) - getProgressWeight(a.progress.progressState)).
     map(item => ({ ...item.case, progress: item.progress?.progressState }));
   const { bookmarks: casesBookmarks, isLoading: isGetCasesBookmarksLoading } = useBookmarks("case", { enabled: true });
   const bookmarks = casesBookmarks;

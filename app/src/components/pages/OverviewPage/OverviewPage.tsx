@@ -21,7 +21,7 @@ import React from "react";
 import * as styles from "./OverviewPage.styles";
 import ErrorPage from "../errorPage/ErrorPage";
 
-function extractNumeric(title: string): number | null
+export function extractNumeric(title: string): number | null
 {
   const match = title.match(/\d+/);
   return match ? parseInt(match[0], 10) : null;

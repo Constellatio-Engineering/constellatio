@@ -15,13 +15,12 @@ const ComputerRecommendedModal: FunctionComponent<IComputerRecommendedModalProps
     ta="left" 
     centered 
     size="md" 
-    title="Computer screen recommended!" 
+    title="Bitte wechsle zu deinem Computer oder Tablet, um Constellatio zu nutzen." 
     opened={opened} 
     onClose={close}>
     <BodyText
       component="p"
-      styleType="body-02-medium"
-      c="neutrals-01.7">
+      styleType="body-01-regular">
       Hinweis: Diese Version von Constellatio ist nur für die Verwendung am Computer optimiert. Wenn du technische Fragen hast, wende dich bitte an unseren Support 
       unter&nbsp;
       <CustomLink
@@ -31,7 +30,7 @@ const ComputerRecommendedModal: FunctionComponent<IComputerRecommendedModalProps
         webmaster@constellatio.de
       </CustomLink>
     </BodyText>
-    <BodyText styleType="body-01-regular" component="p">Bitte wechsle zu deinem Computer oder Tablet, um Constellatio zu nutzen.</BodyText>
+    {/* <BodyText styleType="body-01-regular" component="p">Bitte wechsle zu deinem Computer oder Tablet, um Constellatio zu nutzen.</BodyText> */}
   </Modal>
 );
 
