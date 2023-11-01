@@ -31,7 +31,7 @@ export const HintsAccordion: FC<HintsAccordionProps> = ({ items }) =>
                 return (
                   <ItemWrapper key={index} index={index + 1}>
                     <BodyText styleType="body-01-regular" component="p">
-                      {splittedItem.map((answer) => answer.trim()).join(" or ")}
+                      {splittedItem.map((answer) => answer.trim()).join(" oder ")}
                     </BodyText>
                   </ItemWrapper>
                 );
