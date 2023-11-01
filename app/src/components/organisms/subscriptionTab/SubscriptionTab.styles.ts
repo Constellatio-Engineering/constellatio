@@ -5,6 +5,7 @@ export const wrapper = css`
 
     @media screen and (max-width: 1100px) {
         margin:0 auto;
+        text-align: center;
     }
 `;
 export const subscriptionTabTitle = css`

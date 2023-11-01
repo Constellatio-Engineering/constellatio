@@ -1,6 +1,7 @@
 import ChangeEmailTab from "@/components/organisms/changeEmailTab/ChangeEmailTab";
 import ChangePasswordTab from "@/components/organisms/changePasswordTab/ChangePasswordTab";
 import ProfileDetailsTab from "@/components/organisms/profileDetailsTab/ProfileDetailsTab";
+// import ProfileHistoryTab from "@/components/organisms/profileHistoryTab/ProfileHistoryTab";
 import ProfileMenu from "@/components/organisms/profileMenu/ProfileMenu";
 import RenderedTabSkeleton from "@/components/organisms/profileMenu/renderedTabSkeleton/RenderedTabSkeleton";
 import ProfileNavMenuTablet from "@/components/organisms/profileNavMenuTablet/ProfileNavMenuTablet";
@@ -61,8 +62,8 @@ const ProfilePageContent: FunctionComponent = () =>
         return <ChangePasswordTab/>;
       case "change-email":
         return <ChangeEmailTab userDetails={userDetails}/>;
-      /* case "history":
-        return <ProfileHistoryTab/>;*/
+      // case "history":
+      //   return <ProfileHistoryTab/>;
       case "subscription":
         return <SubscriptionTab/>;
       default:

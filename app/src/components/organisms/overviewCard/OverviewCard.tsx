@@ -41,7 +41,7 @@ export function timeFormatter(minutes: number): string
   }
   else 
   {
-    return `${minutes} MINUTE${minutes !== 1 ? "N" : ""}`;
+    return `${minutes} Minute${minutes !== 1 ? "n" : ""}`;
   }
 }
 function formatDate(inputDate: string | number | Date): string 

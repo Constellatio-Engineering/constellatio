@@ -1,7 +1,6 @@
 import useSubscription from "@/hooks/useSubscription";
 
 import { Skeleton, Title } from "@mantine/core";
-import { useMediaQuery } from "@mantine/hooks";
 import { useRouter } from "next/router";
 import React, { type FunctionComponent } from "react";
 
@@ -11,7 +10,6 @@ import { Button } from "../../atoms/Button/Button";
 
 const SubscriptionTab: FunctionComponent = () => 
 {
-  const isTabletScreen = useMediaQuery("(max-width: 1100px)"); 
   const {
     generateStripeSessionUrl,
     hasSubscription,
@@ -21,19 +19,25 @@ const SubscriptionTab: FunctionComponent = () =>
   } = useSubscription();
   const router = useRouter();
 
-  const getDate = (): string | undefined =>
+  const getDate = (): string | undefined => 
   {
-    if(subscriptionDetails == null)
-    {
-      return undefined;
-    }
-
+    if(subscriptionDetails == null) { return undefined; }
+  
     const rawEndData = subscriptionDetails.subscriptionEndDate;
-    const day = String(rawEndData?.getUTCDate()).padStart(2, "0");  // padStart ensures it's always two digits
-    const month = String((rawEndData?.getUTCMonth() ?? 0) + 1).padStart(2, "0");  // Months are 0-indexed in JS
-    const year = rawEndData?.getUTCFullYear();
-
-    return `${day}/${month}/${year}`;
+    if(!rawEndData) { return undefined; }
+  
+    const day = String(rawEndData.getUTCDate()).padStart(2, "0");  // padStart ensures it's always two digits
+  
+    // Array of month names to convert month number to month name
+    const monthNames = [
+      "January", "February", "March", "April", "May", "June", "July",
+      "August", "September", "October", "November", "December"
+    ];
+  
+    const monthName = monthNames[rawEndData.getUTCMonth()];  // Months are 0-indexed in JS
+    const year = rawEndData.getUTCFullYear();
+  
+    return `${day}. ${monthName} ${year}`;
   };
 
   const redirectToStripeSession = async (): Promise<void> =>
@@ -81,8 +85,8 @@ const SubscriptionTab: FunctionComponent = () =>
 
   return (
     <div css={styles.wrapper}>
-      {!isTabletScreen && <Title order={3} css={styles.subscriptionTabTitle}>Vertrag</Title>}
-      <BodyText m="32px 0" styleType="body-01-bold" component="p">
+      <Title order={3} css={styles.subscriptionTabTitle}>Vertrag</Title>
+      <BodyText m="32px 0" styleType="body-01-medium" component="p">
         {subscriptionStatus === "active" && `Dein Abonnement läuft noch bis zum ${getDate()}`}
         {subscriptionStatus === "trialing" && `Dein Test-Abo endet am ${getDate()}`}
         {!hasSubscription && "Schließe jetzt dein Constellatio Abonnement ab:"}
