@@ -1,3 +1,5 @@
+import { BodyText } from "@/components/atoms/BodyText/BodyText";
+import { Button } from "@/components/atoms/Button/Button";
 import useSubscription from "@/hooks/useSubscription";
 
 import { Skeleton, Title } from "@mantine/core";
@@ -6,8 +8,6 @@ import { useRouter } from "next/router";
 import React, { type FunctionComponent } from "react";
 
 import * as styles from "./SubscriptionTab.styles";
-import { BodyText } from "@/components/atoms/BodyText/BodyText";
-import { Button } from "@/components/atoms/Button/Button";
 
 const SubscriptionTab: FunctionComponent = () => 
 {
