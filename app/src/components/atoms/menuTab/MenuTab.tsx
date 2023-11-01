@@ -28,7 +28,7 @@ const MenuTab: FunctionComponent<IMenuTabProps> = ({
       <CaptionText styleType="caption-01-bold" component="p" tt="uppercase">
         {icon && icon}
         {title}{" "}
-        {number !== null && number !== undefined && (
+        {number !== null && number !== undefined && ( 
           <span css={styles.number}>({number})</span>
         )}
       </CaptionText>
