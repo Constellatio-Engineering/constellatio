@@ -1,5 +1,6 @@
 /* eslint-disable max-lines */
 import { Button } from "@/components/atoms/Button/Button";
+import { CaptionText } from "@/components/atoms/CaptionText/CaptionText";
 import { type IStatusLabel } from "@/components/atoms/statusLabel/StatusLabel";
 import { RichTextHeadingOverwrite } from "@/components/helpers/RichTextHeadingOverwrite";
 import { type GameProgress } from "@/db/schema";
@@ -230,14 +231,14 @@ const CaseCompleteTestsStep: FunctionComponent<ICaseCompleteTestsStepProps> = ({
                   paragraph: richTextParagraphOverwrite,
                 }}
               />
-              {(areAllGamesCompleted && variant === "case") && (
+              {(areAllGamesCompleted && variant === "case") ? (
                 <SolveCaseGame onGameStartHandler={() => 
                 {
                   if(progressState === "completing-tests") { setProgressState({ caseId, progressState: "solving-case" }); }
                   else { overrideCaseStepIndex(1, progressState ?? "not-started"); }
                 }}
                 />
-              )}
+              ) : <CaptionText styleType="caption-01-medium">Beantworte die Frage, um in der Fallbearbeitung weiter zu kommen.</CaptionText>}
             </div>
           )}
         </div>
