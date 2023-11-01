@@ -6,8 +6,8 @@ import { useRouter } from "next/router";
 import React, { type FunctionComponent } from "react";
 
 import * as styles from "./SubscriptionTab.styles";
-import { BodyText } from "../atoms/BodyText/BodyText";
-import { Button } from "../atoms/Button/Button";
+import { BodyText } from "@/components/atoms/BodyText/BodyText";
+import { Button } from "@/components/atoms/Button/Button";
 
 const SubscriptionTab: FunctionComponent = () => 
 {
