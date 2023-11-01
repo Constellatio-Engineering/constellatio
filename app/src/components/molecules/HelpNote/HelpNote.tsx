@@ -1,3 +1,4 @@
+import { richTextParagraphOverwrite } from "@/components/helpers/richTextParagraphOverwrite";
 import { InfoFilled } from "@/components/Icons/InfoFilled";
 
 import React, { type FC } from "react";
@@ -19,7 +20,7 @@ export const HelpNote: FC<HelpNoteProps> = ({ data }) =>
       </IconWrapper>
       {data?.json && (
         <RichTextWrapper>
-          <Richtext data={data}/>
+          <Richtext data={data} richTextOverwrite={{ paragraph: richTextParagraphOverwrite }}/>
         </RichTextWrapper>
       )}
     </Wrapper>

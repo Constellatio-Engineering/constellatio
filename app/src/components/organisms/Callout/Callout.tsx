@@ -1,4 +1,5 @@
 import { Button } from "@/components/atoms/Button/Button";
+import { richTextParagraphOverwrite } from "@/components/helpers/richTextParagraphOverwrite";
 import { ArrowDown } from "@/components/Icons/ArrowDown";
 import { ArrowUp } from "@/components/Icons/ArrowUp";
 import { Richtext } from "@/components/molecules/Richtext/Richtext";
@@ -53,7 +54,7 @@ export const Callout: FC<CalloutProps> = ({ calloutType, expandable, text }) =>
             <Richtext data={text} stylesOverwrite={RichTextStyles}/>
           </Spoiler>
         ) : (
-          <Richtext data={text} stylesOverwrite={RichTextStyles}/>
+          <Richtext data={text} stylesOverwrite={RichTextStyles} richTextOverwrite={{ paragraph: richTextParagraphOverwrite }}/>
         ))}
     </Stack>
   );

@@ -129,7 +129,6 @@ const DetailsPage: FunctionComponent<IDetailsPageProps> = ({ content, variant })
   });
   const currentGame = games[currentGameIndex];
   const currentGameIndexInFullTextTasksJson = currentGame?.indexInFullTextTasksJson || 0;
-  const isLastGame = currentGameIndex === games.length - 1;
   const mainCategorySlug = content?.mainCategoryField?.[0]?.slug;
 
   return (
@@ -175,7 +174,6 @@ const DetailsPage: FunctionComponent<IDetailsPageProps> = ({ content, variant })
       <div css={styles.mainContainer}>
         {content?.fullTextTasks && (variant === "case" ? caseStepIndex === 0 : true) && (
           <CaseCompleteTestsStep
-            isLastGame={isLastGame}
             currentGameIndexInFullTextTasksJson={currentGameIndexInFullTextTasksJson}
             games={games}
             gamesProgress={gamesProgress ?? []}
