@@ -16,7 +16,7 @@ export interface IMenuTabProps extends React.HTMLProps<HTMLDivElement>
 const MenuTab: FunctionComponent<IMenuTabProps> = ({
   active,
   disabled,
-  icon,
+  icon, 
   number,
   title,
   ...props
