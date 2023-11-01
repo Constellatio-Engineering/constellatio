@@ -122,7 +122,8 @@ export const tagsModal = css`
   display: flex;
   flex-wrap: wrap;
   gap: 8px;
-  justify-content: center;
+  margin-top: 12px;
+  justify-content: flex-start;
   align-items: center;
 `;
 

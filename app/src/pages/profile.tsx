@@ -1,5 +1,5 @@
 import { Layout } from "@/components/layouts/Layout";
-import PageHead from "@/components/pageHead/PageHead";
+import PageHead from "@/components/organisms/pageHead/PageHead";
 import ProfilePageWrapper from "@/components/pages/profilePage/ProfilePage";
 import { type IGenMainCategory } from "@/services/graphql/__generated/sdk";
 import { getCommonProps } from "@/utils/commonProps";

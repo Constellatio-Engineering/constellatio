@@ -1,6 +1,4 @@
 import { CaptionText } from "@/components/atoms/CaptionText/CaptionText";
-import { LinkButton } from "@/components/atoms/LinkButton/LinkButton";
-import { Help } from "@/components/Icons/Help";
 
 import { Flex, Group } from "@mantine/core";
 import Image from "next/image";
@@ -22,9 +20,7 @@ export const Footer: FC<FooterProps> = ({ variant = "default" }) =>
       {variant === "default" ? (
         <SFooter variant={variant}>
           <Group position="apart">
-            <Group spacing="spacing-16">
-              <LinkButton icon={<Help/>} title="Hilfe" size="big"/>
-            </Group>
+            <span/>
             <Group spacing="spacing-8">
               <Image src={ConstellatioLogoIcon} alt="Constellatio"/>{" "}
               <CaptionText

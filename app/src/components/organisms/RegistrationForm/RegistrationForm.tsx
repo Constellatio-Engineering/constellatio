@@ -67,7 +67,6 @@ export const RegistrationForm: FunctionComponent = () =>
   });
   const [shouldShowEmailConfirmationDialog, setShouldShowEmailConfirmationDialog] = useState<boolean>(false);
   const lastConfirmationEmailTimestamp = useRef<number>();
-
   useEffect(() =>
   {
     z.setErrorMap(makeZodI18nMap({ t }));
@@ -222,9 +221,9 @@ export const RegistrationForm: FunctionComponent = () =>
             label={(
               <BodyText component="p" styleType="body-01-medium">
                 Ich akzeptiere die&nbsp;
-                <CustomLink styleType="link-primary" href="#">
-                  Datenschutzerklärung
-                </CustomLink>
+                <CustomLink styleType="link-primary" href="https://www.constellatio.de/agb">Allgemeinen Geschäftsbedingungen</CustomLink>
+                &nbsp;und die&nbsp;
+                <CustomLink styleType="link-primary" href="https://www.constellatio.de/datenschutzerklaerung">Datenschutzerklärung</CustomLink>
               </BodyText>
             )}
             title="acceptTOS"

@@ -85,6 +85,8 @@ export const resolutionWrapper = css`
 `;
 
 export const leftSideWrapper = css`
+position: sticky;
+top: 80px;
 @media screen and (max-width: 1100px) {
   position: relative;
   top: 0px;

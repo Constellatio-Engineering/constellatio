@@ -1,4 +1,4 @@
-import PageHead from "@/components/pageHead/PageHead";
+import PageHead from "@/components/organisms/pageHead/PageHead";
 import { AuthPage } from "@/components/pages/AuthPage/AuthPage";
 import { getCommonProps } from "@/utils/commonProps";
 
