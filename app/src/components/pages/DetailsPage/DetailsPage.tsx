@@ -1,5 +1,4 @@
 /* eslint-disable max-lines */
-import ErrorPage from "@/components/errorPage/ErrorPage";
 import CaseCompleteTestsStep from "@/components/organisms/caseCompleteTestsStep/CaseCompleteTestsStep";
 import CaseNavBar from "@/components/organisms/caseNavBar/CaseNavBar";
 import CaseResultsReviewStep from "@/components/organisms/caseResultsReviewStep/CaseResultsReviewStep";
@@ -18,6 +17,7 @@ import { paths } from "@/utils/paths";
 import React, { useEffect, type FunctionComponent, useRef } from "react";
 
 import * as styles from "./DetailsPage.styles";
+import ErrorPage from "../errorPage/ErrorPage";
 
 type IDetailsPageProps = {
   readonly content: IGenCase | IGenArticle | undefined;
@@ -129,7 +129,6 @@ const DetailsPage: FunctionComponent<IDetailsPageProps> = ({ content, variant })
   });
   const currentGame = games[currentGameIndex];
   const currentGameIndexInFullTextTasksJson = currentGame?.indexInFullTextTasksJson || 0;
-  const isLastGame = currentGameIndex === games.length - 1;
   const mainCategorySlug = content?.mainCategoryField?.[0]?.slug;
 
   return (
@@ -175,7 +174,6 @@ const DetailsPage: FunctionComponent<IDetailsPageProps> = ({ content, variant })
       <div css={styles.mainContainer}>
         {content?.fullTextTasks && (variant === "case" ? caseStepIndex === 0 : true) && (
           <CaseCompleteTestsStep
-            isLastGame={isLastGame}
             currentGameIndexInFullTextTasksJson={currentGameIndexInFullTextTasksJson}
             games={games}
             gamesProgress={gamesProgress ?? []}

@@ -1,9 +1,8 @@
 /* eslint-disable max-lines */
-import ErrorPage from "@/components/errorPage/ErrorPage";
 import ItemBlock from "@/components/organisms/caseBlock/ItemBlock";
 import EmptyStateCard from "@/components/organisms/emptyStateCard/EmptyStateCard";
 import OverviewHeader from "@/components/organisms/OverviewHeader/OverviewHeader";
-import UseQueryStateWrapper from "@/components/useQueryStateWrapper/UseQueryStateWrapper";
+import UseQueryStateWrapper from "@/components/Wrappers/useQueryStateWrapper/UseQueryStateWrapper";
 import useAllCasesWithProgress from "@/hooks/useAllCasesWithProgress";
 import { type IArticlesOverviewProps } from "@/services/content/getArticlesOverviewProps";
 import { type ICasesOverviewProps } from "@/services/content/getCasesOverviewProps";
@@ -20,8 +19,9 @@ import {
 import React from "react";
 
 import * as styles from "./OverviewPage.styles";
+import ErrorPage from "../errorPage/ErrorPage";
 
-function extractNumeric(title: string): number | null
+export function extractNumeric(title: string): number | null
 {
   const match = title.match(/\d+/);
   return match ? parseInt(match[0], 10) : null;

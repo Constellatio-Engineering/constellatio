@@ -8,9 +8,12 @@ const useSubscription = () =>
 
   const { isLoading: isSessionLoading, mutateAsync: generateStripeSessionUrl } = api.billing.generateStripeCheckoutSession.useMutation();
 
+  const { isOnPaidSubscription, isOnTrailSubscription } = getHasSubscription(subscriptionDetails);
+
   return {
     generateStripeSessionUrl,
-    hasSubscription: getHasSubscription(subscriptionDetails),
+    isOnPaidSubscription,
+    isOnTrailSubscription,
     isSessionLoading, 
     isSubscriptionDetailsLoading,
     subscriptionDetails

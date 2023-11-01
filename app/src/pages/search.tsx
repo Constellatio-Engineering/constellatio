@@ -1,5 +1,5 @@
 import { Layout } from "@/components/layouts/Layout";
-import PageHead from "@/components/pageHead/PageHead";
+import PageHead from "@/components/organisms/pageHead/PageHead";
 import SearchPage from "@/components/pages/searchPage/SearchPage";
 import useSearchBarStore from "@/stores/searchBar.store";
 

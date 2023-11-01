@@ -1,7 +1,7 @@
-import ConfirmEmailChangePage from "@/components/confirmPages/ConfirmEmailChangePage";
 import { Footer } from "@/components/organisms/Footer/Footer";
 import { Header } from "@/components/organisms/Header/Header";
-import PageHead from "@/components/pageHead/PageHead";
+import PageHead from "@/components/organisms/pageHead/PageHead";
+import ConfirmEmailChangePage from "@/components/pages/confirmPages/ConfirmEmailChangePage";
 
 import { type NextPage } from "next";
 

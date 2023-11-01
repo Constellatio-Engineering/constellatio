@@ -1,5 +1,5 @@
 import { Layout } from "@/components/layouts/Layout";
-import PageHead from "@/components/pageHead/PageHead";
+import PageHead from "@/components/organisms/pageHead/PageHead";
 import DetailsPage from "@/components/pages/DetailsPage/DetailsPage";
 import getAllCases from "@/services/content/getAllCases";
 import { getCaseById } from "@/services/content/getCaseById";

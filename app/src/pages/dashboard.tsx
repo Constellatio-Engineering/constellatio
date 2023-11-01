@@ -1,6 +1,6 @@
-import DashboardPage from "@/components/dashboardPage/DashboardPage";
 import { Layout } from "@/components/layouts/Layout";
-import PageHead from "@/components/pageHead/PageHead";
+import PageHead from "@/components/organisms/pageHead/PageHead";
+import DashboardPage from "@/components/pages/dashboardPage/DashboardPage";
 import { getCommonProps } from "@/utils/commonProps";
 
 import { type GetServerSideProps } from "next";

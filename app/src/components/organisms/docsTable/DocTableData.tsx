@@ -6,7 +6,6 @@ import { DownloadIcon } from "@/components/Icons/DownloadIcon";
 import { Edit } from "@/components/Icons/Edit";
 import { FolderIcon } from "@/components/Icons/Folder";
 import { Trash } from "@/components/Icons/Trash";
-import MoveToModal from "@/components/moveToModal/MoveToModal";
 import { type Document } from "@/db/schema";
 import { useOnDocumentMutation } from "@/hooks/useOnDocumentMutation";
 import useUploadFolders from "@/hooks/useUploadFolders";
@@ -26,6 +25,7 @@ import { type FunctionComponent } from "react";
 import * as styles from "./DocsTable.styles";
 import { BodyText } from "../../atoms/BodyText/BodyText";
 import { DotsIcon } from "../../Icons/dots";
+import MoveToModal from "../moveToModal/MoveToModal";
 
 const formatDate = (date: Date): string => `${String(date.getDate()).padStart(2, "0")}.${String(date.getMonth() + 1).padStart(2, "0")}.${date.getFullYear()}`;
 
