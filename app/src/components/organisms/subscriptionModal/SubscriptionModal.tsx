@@ -20,7 +20,6 @@ const SubscriptionModal: FunctionComponent = () =>
 {
   const router = useRouter();
   const { generateStripeSessionUrl, isOnTrailSubscription, subscriptionDetails } = useSubscription();
-  // const [isParsed, setIsParsed] = useState(false);
   const [daysCheckedForSubscriptionEnds, setDaysCheckedForSubscriptionEnds] = useLocalStorage<string[]>({
     defaultValue: [],
     deserialize: (localStorageValue) => 
@@ -39,6 +38,7 @@ const SubscriptionModal: FunctionComponent = () =>
       }
       return daysLeftToSubscriptionEnds;
     },
+    getInitialValueInEffect: false,
     key: localStorageKey,
     serialize: (value) => 
     {
@@ -46,13 +46,10 @@ const SubscriptionModal: FunctionComponent = () =>
     }
   });
 
-  const todayDateAsString = useMemo(() => new Date().toISOString().split("T")[0] as string, []);
-
   const diffDays = useMemo((): number | null => 
   {
     if(subscriptionDetails == null)
     {
-      console.error("subscriptionDetails is null");
       return null; 
     }
 
@@ -75,9 +72,9 @@ const SubscriptionModal: FunctionComponent = () =>
   }, [subscriptionDetails]);
 
   const [wasClosed, setWasClosed] = useState(false);
+  const todayDateAsString = new Date().toISOString().split("T")[0] as string;
 
-  console.log("daysCheckedForSubscriptionEnds", daysCheckedForSubscriptionEnds);
-  const isOpened = !wasClosed && !daysCheckedForSubscriptionEnds.includes(todayDateAsString) && isOnTrailSubscription;
+  const isOpened = !wasClosed && !daysCheckedForSubscriptionEnds?.includes(todayDateAsString) && isOnTrailSubscription;
   const isModalLocked = diffDays == null || diffDays <= 0;
 
   const redirectToStripeCheckout = async (): Promise<void> => 
