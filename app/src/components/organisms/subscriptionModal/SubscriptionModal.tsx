@@ -9,7 +9,7 @@ import useSubscription from "@/hooks/useSubscription";
 import { Title } from "@mantine/core";
 import { useLocalStorage } from "@mantine/hooks";
 import { useRouter } from "next/router";
-import { useMemo, type FunctionComponent, useState, useEffect } from "react";
+import { useMemo, type FunctionComponent, useState } from "react";
 import { z } from "zod";
 
 import ModalFlag from "../../../../public/images/placeholder-flag.png";
