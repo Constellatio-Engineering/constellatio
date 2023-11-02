@@ -20,7 +20,7 @@ const SubscriptionModal: FunctionComponent = () =>
 {
   const router = useRouter();
   const { generateStripeSessionUrl, isOnTrailSubscription, subscriptionDetails } = useSubscription();
-  const [isParsed, setIsParsed] = useState(false);
+  // const [isParsed, setIsParsed] = useState(false);
   const [daysCheckedForSubscriptionEnds, setDaysCheckedForSubscriptionEnds] = useLocalStorage<string[]>({
     defaultValue: [],
     deserialize: (localStorageValue) => 
@@ -37,14 +37,11 @@ const SubscriptionModal: FunctionComponent = () =>
         localStorage.setItem(localStorageKey, JSON.stringify([]));
         daysLeftToSubscriptionEnds = [];
       }
-
-      setIsParsed(true);
       return daysLeftToSubscriptionEnds;
     },
     key: localStorageKey,
     serialize: (value) => 
     {
-      setIsParsed(true);
       return JSON.stringify(value);
     }
   });
@@ -55,6 +52,7 @@ const SubscriptionModal: FunctionComponent = () =>
   {
     if(subscriptionDetails == null)
     {
+      console.error("subscriptionDetails is null");
       return null; 
     }
 
@@ -78,7 +76,8 @@ const SubscriptionModal: FunctionComponent = () =>
 
   const [wasClosed, setWasClosed] = useState(false);
 
-  const isOpened = !wasClosed && isParsed && !daysCheckedForSubscriptionEnds.includes(todayDateAsString) && isOnTrailSubscription;
+  console.log("daysCheckedForSubscriptionEnds", daysCheckedForSubscriptionEnds);
+  const isOpened = !wasClosed && !daysCheckedForSubscriptionEnds.includes(todayDateAsString) && isOnTrailSubscription;
   const isModalLocked = diffDays == null || diffDays <= 0;
 
   const redirectToStripeCheckout = async (): Promise<void> => 
