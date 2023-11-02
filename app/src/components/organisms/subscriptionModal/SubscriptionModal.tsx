@@ -42,7 +42,11 @@ const SubscriptionModal: FunctionComponent = () =>
       return daysLeftToSubscriptionEnds;
     },
     key: localStorageKey,
-    serialize: (value) => JSON.stringify(value)
+    serialize: (value) => 
+    {
+      setIsParsed(true);
+      return JSON.stringify(value);
+    }
   });
 
   const todayDateAsString = useMemo(() => new Date().toISOString().split("T")[0] as string, []);
