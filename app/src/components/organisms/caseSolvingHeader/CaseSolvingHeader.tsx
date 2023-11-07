@@ -3,10 +3,12 @@ import { Bookmark } from "@/components/Icons/Bookmark";
 import { BookmarkFilledIcon } from "@/components/Icons/BookmarkFilledIcon";
 import { Print } from "@/components/Icons/print";
 import IconButtonBar from "@/components/organisms/iconButtonBar/IconButtonBar";
+import useAddBookmark from "@/hooks/useAddBookmark";
 import useArticles from "@/hooks/useArticles";
 import useBookmarks from "@/hooks/useBookmarks";
 import useCases from "@/hooks/useCases";
 import useContextAndErrorIfNull from "@/hooks/useContextAndErrorIfNull";
+import useRemoveBookmark from "@/hooks/useRemoveBookmark";
 import { InvalidateQueriesContext } from "@/provider/InvalidateQueriesProvider";
 import { type AddOrRemoveBookmarkSchema } from "@/schemas/bookmarks/addOrRemoveBookmark.schema";
 import { type Maybe, type IGenArticle } from "@/services/graphql/__generated/sdk";
@@ -50,15 +52,9 @@ const CaseSolvingHeader: FunctionComponent<ICaseSolvingHeaderProps> = ({
   const bookmarkedArticles = allArticles.filter((caisyArticle: IGenArticle) => allArticlesBookmarks.some(bookmark => bookmark.resourceId === caisyArticle.id));
   const bookmarkedCases = allCases.filter(caisyCase => allCasesBookmarks.some(bookmark => bookmark.resourceId === caisyCase.id));
   const isItemBookmarked = bookmarkedCases.some(bookmark => bookmark.title === title) || bookmarkedArticles?.some(bookmark => bookmark.title === title) || false;
-  const { mutate: addBookmark } = api.bookmarks.addBookmark.useMutation({
-    onError: e => console.log("error in bookmarks:", e),
-    onSuccess: invalidateBookmarks
-  });
+  const { mutate: addBookmark } = useAddBookmark();
+  const { mutate: removeBookmark } = useRemoveBookmark();
 
-  const { mutate: removeBookmark } = api.bookmarks.removeBookmark.useMutation({
-    onError: e => console.log("error in bookmarks:", e),
-    onSuccess: invalidateBookmarks,
-  });
   const onBookmarkIconClick = (): void =>
   {
     if(!caseId)
