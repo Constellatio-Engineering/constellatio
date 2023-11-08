@@ -7,12 +7,9 @@ import useAddBookmark from "@/hooks/useAddBookmark";
 import useArticles from "@/hooks/useArticles";
 import useBookmarks from "@/hooks/useBookmarks";
 import useCases from "@/hooks/useCases";
-import useContextAndErrorIfNull from "@/hooks/useContextAndErrorIfNull";
 import useRemoveBookmark from "@/hooks/useRemoveBookmark";
-import { InvalidateQueriesContext } from "@/provider/InvalidateQueriesProvider";
 import { type AddOrRemoveBookmarkSchema } from "@/schemas/bookmarks/addOrRemoveBookmark.schema";
 import { type Maybe, type IGenArticle } from "@/services/graphql/__generated/sdk";
-import { api } from "@/utils/api";
 
 import { Container, Title, useMantineTheme } from "@mantine/core";
 import Link from "next/link";
@@ -44,7 +41,6 @@ const CaseSolvingHeader: FunctionComponent<ICaseSolvingHeaderProps> = ({
 }) => 
 {
   const { allCases = [] } = useCases();
-  const { invalidateBookmarks } = useContextAndErrorIfNull(InvalidateQueriesContext);
   const { allArticles = [] } = useArticles();
   const { bookmarks } = useBookmarks(undefined);
   const allCasesBookmarks = bookmarks.filter(bookmark => bookmark?.resourceType === "case") ?? [];
@@ -53,7 +49,7 @@ const CaseSolvingHeader: FunctionComponent<ICaseSolvingHeaderProps> = ({
   const bookmarkedCases = allCases.filter(caisyCase => allCasesBookmarks.some(bookmark => bookmark.resourceId === caisyCase.id));
   const isItemBookmarked = bookmarkedCases.some(bookmark => bookmark.title === title) || bookmarkedArticles?.some(bookmark => bookmark.title === title) || false;
   const { mutate: addBookmark } = useAddBookmark();
-  const { mutate: removeBookmark } = useRemoveBookmark();
+  const { mutate: removeBookmark } = useRemoveBookmark({ shouldUseOptimisticUpdate: true });
 
   const onBookmarkIconClick = (): void =>
   {

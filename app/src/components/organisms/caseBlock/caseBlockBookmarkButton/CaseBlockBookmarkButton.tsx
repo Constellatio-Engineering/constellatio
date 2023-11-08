@@ -2,9 +2,7 @@ import { Bookmark } from "@/components/Icons/Bookmark";
 import { BookmarkFilledIcon } from "@/components/Icons/BookmarkFilledIcon";
 import TableIconButton from "@/components/molecules/tableIconButton/TableIconButton";
 import useAddBookmark from "@/hooks/useAddBookmark";
-import useContextAndErrorIfNull from "@/hooks/useContextAndErrorIfNull";
 import useRemoveBookmark from "@/hooks/useRemoveBookmark";
-import { InvalidateQueriesContext } from "@/provider/InvalidateQueriesProvider";
 import { type AddOrRemoveBookmarkSchema } from "@/schemas/bookmarks/addOrRemoveBookmark.schema";
 import { paths } from "@/utils/paths";
 import { type Nullable } from "@/utils/types";
@@ -31,9 +29,13 @@ const CaseBlockBookmarkButton: FunctionComponent<ICaseBlockBookmarkButtonProps> 
 }) =>
 {
   const router = useRouter();
+  const mustConfirmDeletion = router.pathname.startsWith(paths.personalSpace) || router.pathname.startsWith(paths.dashboard);
   const [showDeleteBookmarkModal, setShowDeleteBookmarkModal] = React.useState<boolean>(false);
   const { isLoading: isAddingBookmarkLoading, mutate: addBookmark } = useAddBookmark();
-  const { isLoading: isRemovingBookmarkLoading, mutate: removeBookmark } = useRemoveBookmark();
+  const {
+    isLoading: isRemovingBookmarkLoading,
+    mutate: removeBookmark
+  } = useRemoveBookmark({ shouldUseOptimisticUpdate: !mustConfirmDeletion });
 
   const onBookmarkIconClick = (): void =>
   {
@@ -53,7 +55,7 @@ const CaseBlockBookmarkButton: FunctionComponent<ICaseBlockBookmarkButtonProps> 
       return;
     }
 
-    if(router?.route === paths.personalSpace || router?.route === paths.dashboard)
+    if(mustConfirmDeletion)
     {
       setShowDeleteBookmarkModal(true);
     }

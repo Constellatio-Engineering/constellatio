@@ -3,11 +3,20 @@ import { api } from "@/utils/api";
 
 import useContextAndErrorIfNull from "./useContextAndErrorIfNull";
 
+type Params = {
+  shouldUseOptimisticUpdate: boolean;
+};
+
 // eslint-disable-next-line @typescript-eslint/explicit-function-return-type
-const useRemoveBookmark = () =>
+const useRemoveBookmark = ({ shouldUseOptimisticUpdate }: Params) =>
 {
   const utils = api.useUtils();
   const { invalidateBookmarks } = useContextAndErrorIfNull(InvalidateQueriesContext);
+
+  if(!shouldUseOptimisticUpdate)
+  {
+    return api.bookmarks.removeBookmark.useMutation({ onSuccess: invalidateBookmarks });
+  }
 
   return api.bookmarks.removeBookmark.useMutation({
     onError: (err, bookmarkToRemove, context) =>

@@ -60,7 +60,7 @@ const CaseResultsReviewStep: FunctionComponent<ICaseResultsReviewStepProps> = ({
   const bookmarkedCases = allCases.filter(caisyCase => allCasesBookmarks.some(bookmark => bookmark.resourceId === caisyCase.id));
   const isItemBookmarked = bookmarkedCases.some(bookmark => bookmark.title === title) || false;
   const { mutate: addBookmark } = useAddBookmark();
-  const { mutate: removeBookmark } = useRemoveBookmark();
+  const { mutate: removeBookmark } = useRemoveBookmark({ shouldUseOptimisticUpdate: true });
 
   const onBookmarkIconClick = (): void =>
   {
