@@ -1,12 +1,12 @@
 import { Layout } from "@/components/layouts/Layout";
 import PageHead from "@/components/organisms/pageHead/PageHead";
 import DetailsPage from "@/components/pages/DetailsPage/DetailsPage";
+import { type NextPageWithLayout } from "@/pages/_app";
 import getAllArticles from "@/services/content/getAllArticles";
 import { getArticleById } from "@/services/content/getArticleById";
 import { type IGenArticle } from "@/services/graphql/__generated/sdk";
 
 import { type GetStaticPathsResult, type GetStaticProps, type GetStaticPaths } from "next";
-import { type FunctionComponent } from "react";
 
 import { type ParsedUrlQuery } from "querystring";
 
@@ -54,16 +54,16 @@ export const getStaticProps: GetStaticProps<GetArticleDetailPagePropsResult, Par
   };
 };
 
-const NextPage: FunctionComponent<GetArticleDetailPagePropsResult> = ({ article }) =>
+const Page: NextPageWithLayout<GetArticleDetailPagePropsResult> = ({ article }) =>
 {
   return (
     <>
       <PageHead pageTitle={article?.title || "Artikel ohne Titel"}/>
-      <Layout>
-        <DetailsPage content={article} variant="dictionary"/>
-      </Layout>
+      <DetailsPage content={article} variant="dictionary"/>
     </>
   );
 };
 
-export default NextPage;
+Page.getLayout = Layout;
+
+export default Page;

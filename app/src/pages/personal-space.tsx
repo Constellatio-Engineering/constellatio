@@ -1,19 +1,20 @@
 import { Layout } from "@/components/layouts/Layout";
 import PageHead from "@/components/organisms/pageHead/PageHead";
 import PersonalSpacePage from "@/components/pages/personalSpacePage/PersonalSpacePage";
+import { type NextPageWithLayout } from "@/pages/_app";
 
-import { type NextPage } from "next";
+import React from "react";
 
-const Page: NextPage = () =>
+const Page: NextPageWithLayout = () =>
 {
   return (
     <>
       <PageHead pageTitle="Persönlicher Bereich"/>
-      <Layout>
-        <PersonalSpacePage/>
-      </Layout>
+      <PersonalSpacePage/>
     </>
   );
 };
+
+Page.getLayout = Layout;
 
 export default Page;
