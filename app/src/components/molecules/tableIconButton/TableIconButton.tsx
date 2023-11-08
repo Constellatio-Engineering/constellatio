@@ -11,6 +11,7 @@ import IconButton from "../../atoms/iconButton/IconButton";
 export interface ITableIconButtonProps 
 {
   readonly disabled?: boolean;
+  readonly dontUseDisabledStyles?: boolean;
   readonly icon: ReactNode;
   readonly isLoading?: boolean;
   readonly onClickHandler: MouseEventHandler<HTMLButtonElement>;
@@ -19,6 +20,7 @@ export interface ITableIconButtonProps
 
 const TableIconButton: FunctionComponent<ITableIconButtonProps> = ({
   disabled,
+  dontUseDisabledStyles,
   icon,
   isLoading,
   onClickHandler
@@ -31,6 +33,7 @@ const TableIconButton: FunctionComponent<ITableIconButtonProps> = ({
       {icon && (
         <IconButton
           disabled={disabled}
+          dontUseDisabledStyles={dontUseDisabledStyles}
           icon={RenderedIcon}
           size="medium"
           onClick={onClickHandler}

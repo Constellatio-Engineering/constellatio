@@ -1,15 +1,14 @@
 import { Bookmark } from "@/components/Icons/Bookmark";
 import { BookmarkFilledIcon } from "@/components/Icons/BookmarkFilledIcon";
 import TableIconButton from "@/components/molecules/tableIconButton/TableIconButton";
-import useContextAndErrorIfNull from "@/hooks/useContextAndErrorIfNull";
-import { InvalidateQueriesContext } from "@/provider/InvalidateQueriesProvider";
+import useAddBookmark from "@/hooks/useAddBookmark";
+import useRemoveBookmark from "@/hooks/useRemoveBookmark";
 import { type AddOrRemoveBookmarkSchema } from "@/schemas/bookmarks/addOrRemoveBookmark.schema";
-import { api } from "@/utils/api";
 import { paths } from "@/utils/paths";
 import { type Nullable } from "@/utils/types";
 
 import { useRouter } from "next/router";
-import React, { type FunctionComponent, useRef } from "react";
+import React, { type FunctionComponent } from "react";
 
 import DeleteBookmarkModal from "../../deleteBookmarkModal/DeleteBookmarkModal";
 import { type ICaseBlockProps } from "../ItemBlock";
@@ -29,43 +28,14 @@ const CaseBlockBookmarkButton: FunctionComponent<ICaseBlockBookmarkButtonProps> 
   variant
 }) =>
 {
-  const { invalidateBookmarks } = useContextAndErrorIfNull(InvalidateQueriesContext);
   const router = useRouter();
+  const mustConfirmDeletion = router.pathname.startsWith(paths.personalSpace) || router.pathname.startsWith(paths.dashboard);
   const [showDeleteBookmarkModal, setShowDeleteBookmarkModal] = React.useState<boolean>(false);
-  const addBookmarkMutationStartTimestamp = useRef<number>();
-  
-  /**
-   * Could add optimistic updates here later
-   */
-
-  const onError = (e: unknown, type: "add" | "remove"): void =>
-  {
-    console.log(`error while ${type === "add" ? "adding" : "removing"} bookmark:`, e);
-  };
-
-  const { isLoading: isAddingBookmarkLoading, mutate: addBookmark } = api.bookmarks.addBookmark.useMutation({
-    onError: e => onError(e, "add"),
-    onMutate: () =>
-    {
-      addBookmarkMutationStartTimestamp.current = performance.now();
-    },
-    onSettled: () =>
-    {
-      if(!addBookmarkMutationStartTimestamp.current)
-      {
-        return;
-      }
-
-      const duration = performance.now() - addBookmarkMutationStartTimestamp.current;
-      console.log(`add bookmark mutation took ${duration}ms`);
-    },
-    onSuccess: invalidateBookmarks
-  });
-
-  const { isLoading: isRemovingBookmarkLoading, mutate: removeBookmark } = api.bookmarks.removeBookmark.useMutation({
-    onError: e => onError(e, "remove"),
-    onSuccess: invalidateBookmarks,
-  });
+  const { isLoading: isAddingBookmarkLoading, mutate: addBookmark } = useAddBookmark();
+  const {
+    isLoading: isRemovingBookmarkLoading,
+    mutate: removeBookmark
+  } = useRemoveBookmark({ shouldUseOptimisticUpdate: !mustConfirmDeletion });
 
   const onBookmarkIconClick = (): void =>
   {
@@ -85,7 +55,7 @@ const CaseBlockBookmarkButton: FunctionComponent<ICaseBlockBookmarkButtonProps> 
       return;
     }
 
-    if(router?.route === paths.personalSpace || router?.route === paths.dashboard)
+    if(mustConfirmDeletion)
     {
       setShowDeleteBookmarkModal(true);
     }
@@ -100,6 +70,7 @@ const CaseBlockBookmarkButton: FunctionComponent<ICaseBlockBookmarkButtonProps> 
       <TableIconButton
         icon={isBookmarked ? <BookmarkFilledIcon/> : <Bookmark/>}
         isLoading={areAllBookmarksLoading}
+        dontUseDisabledStyles
         disabled={areAllBookmarksLoading || isAddingBookmarkLoading || isRemovingBookmarkLoading}
         onClickHandler={onBookmarkIconClick}
       />

@@ -8,6 +8,7 @@
 import { supabase } from "@/lib/supabase";
 import { type AppRouter } from "@/server/api/root";
 import { type ClientError } from "@/utils/clientError";
+import { showErrorNotification } from "@/utils/notifications";
 import { paths } from "@/utils/paths";
 
 import { QueryCache } from "@tanstack/react-query";
@@ -48,6 +49,19 @@ export const api = createTRPCNext<AppRouter>({
         }),
       ],
       queryClientConfig: {
+        defaultOptions: {
+          mutations: {
+            onError: (err, variables, context) =>
+            {
+              console.log("Something went wrong with a mutation: ", { context, err, variables });
+
+              showErrorNotification({
+                message: "Bitte versuche es später erneut oder wende dich an den Support.",
+                title: "Da ist leider etwas schief gelaufen.",
+              });
+            }
+          }
+        },
         queryCache: new QueryCache({
           onError: (err) =>
           {
@@ -67,13 +81,14 @@ export const api = createTRPCNext<AppRouter>({
 
             if(clientError.identifier === "unauthorized")
             {
+              void supabase.auth.signOut();
+
               if(window.location.pathname !== paths.login)
               {
                 console.log("Server responded with 'UNAUTHORIZED'. Redirecting to login");
                 window.location.replace(paths.login);
               }
 
-              void supabase.auth.signOut();
               return;
             }
           },
