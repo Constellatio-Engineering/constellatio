@@ -1,5 +1,6 @@
-/* eslint-disable react/jsx-max-props-per-line */
+/* eslint-disable react/jsx-max-props-per-line, max-lines */
 import { RouterTransition } from "@/components/atoms/RouterTransition/RouterTransition";
+import FeedbackButton from "@/components/molecules/feedbackButton/feedbackButton";
 import NewNotificationEarnedWatchdog from "@/components/molecules/newNotificationEarnedWatchdog/NewNotificationEarnedWatchdog";
 import SubscriptionModal from "@/components/organisms/subscriptionModal/SubscriptionModal";
 import { env } from "@/env.mjs";
@@ -13,6 +14,7 @@ import { api } from "@/utils/api";
 import { isProduction } from "@/utils/env";
 import { paths } from "@/utils/paths";
 
+import formbricks from "@formbricks/js";
 import { ModalsProvider } from "@mantine/modals";
 import { Notifications } from "@mantine/notifications";
 import {

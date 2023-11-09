@@ -36,6 +36,20 @@
       "when": 1698752337690,
       "tag": "0004_lazy_black_panther",
       "breakpoints": true
+    },
+    {
+      "idx": 5,
+      "version": "5",
+      "when": 1699398129583,
+      "tag": "0005_absent_punisher",
+      "breakpoints": true
+    },
+    {
+      "idx": 6,
+      "version": "5",
+      "when": 1699398135202,
+      "tag": "0006_swift_runaways",
+      "breakpoints": true
     }
   ]
 }
