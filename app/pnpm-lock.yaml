@@ -29,6 +29,9 @@ dependencies:
   '@emotion/styled':
     specifier: 11.11.0
     version: 11.11.0(@emotion/react@11.11.1)(@types/react@18.2.31)(react@18.2.0)
+  '@formbricks/js':
+    specifier: 1.1.4
+    version: 1.1.4
   '@google-cloud/storage':
     specifier: 7.3.1
     version: 7.3.1
@@ -188,6 +191,9 @@ dependencies:
   postgres:
     specifier: 3.4.0
     version: 3.4.0
+  posthog-js:
+    specifier: 1.88.1
+    version: 1.88.1
   puppeteer:
     specifier: 21.4.0
     version: 21.4.0(typescript@5.2.2)
@@ -3409,6 +3415,10 @@ packages:
 
   /@floating-ui/utils@0.1.6:
     resolution: {integrity: sha512-OfX7E2oUDYxtBvsuS4e/jSn4Q9Qb6DzgeYtsAdkPZ47znpoNsMgZw0+tVijiv3uGNR6dgNlty6r9rzIzHjtd/A==}
+
+  /@formbricks/js@1.1.4:
+    resolution: {integrity: sha512-GdtNHoLXa9NpUE+0TJNR36O2sigManTT88aqefOlUXAdcu48litgEd4QGuHLDnQKNRJxcdHkLjU4EhWvfras5g==}
+    dev: false
 
   /@google-cloud/paginator@5.0.0:
     resolution: {integrity: sha512-87aeg6QQcEPxGCOthnpUjvw4xAZ57G7pL8FS0C4e/81fr3FjkpUpibf1s2v5XGyGhUVGF4Jfg7yEcxqn2iUw1w==}
@@ -11753,6 +11763,10 @@ packages:
     resolution: {integrity: sha512-3yurQZ2hD9VISAhJJP9bpYFNQrHHBXE2JxxjY5aLEcDi46RmAzJE2OC9FAde0yis5ElW0jTTzs0zfg/Cca4XqQ==}
     dev: true
 
+  /fflate@0.4.8:
+    resolution: {integrity: sha512-FJqqoDBR00Mdj9ppamLa/Y7vxm+PRmNWA67N846RvsoYVMKB4q3y/de5PA7gUmRMYK/8CMz2GDZQmCRN1wBcWA==}
+    dev: false
+
   /figures@3.2.0:
     resolution: {integrity: sha512-yaduQFRKLXYOGgEn6AZau90j3ggSOyiqXU0F9JZfeXYhNa+Jk4X+s45A2zg5jns87GAFa34BBm2kXw4XpNcbdg==}
     engines: {node: '>=8'}
@@ -15330,6 +15344,12 @@ packages:
 
   /postgres@3.4.0:
     resolution: {integrity: sha512-d7UtSoCg4hUtzxM9aRi3J8BrM6t0h4bQmgAHG96cDCNpP9CnnWQRdRl7WWNvKs0oOaQU2InGoOi1jETmdZK02g==}
+    dev: false
+
+  /posthog-js@1.88.1:
+    resolution: {integrity: sha512-+8kFFU5KIcFSm8zB3tX8l0GSPyq/OtMtdrS9dYpMJk6nsEwXvOjkwFEpSrYzL5eGEpTPdbM65M52HvMqqsjpXw==}
+    dependencies:
+      fflate: 0.4.8
     dev: false
 
   /prebuild-install@7.1.1:

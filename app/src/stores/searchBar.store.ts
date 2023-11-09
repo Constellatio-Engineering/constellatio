@@ -1,5 +1,6 @@
 import { create } from "zustand";
 import { immer } from "zustand/middleware/immer";
+import posthog from "posthog-js";
 
 type SearchStoreProps = {
   closeDrawer: () => void;
@@ -11,9 +12,7 @@ type SearchStoreProps = {
   setSearchValue: (searchValue: string) => void;
 };
 
-const useSearchBarStore = create(immer<SearchStoreProps>((set) => (
-  {
-    closeDrawer: () =>
+const useSearchBarStore = create(immer<SearchStoreProps>((set) => ({ closeDrawer: () => 
     {
       set((state) =>
       {
@@ -21,11 +20,12 @@ const useSearchBarStore = create(immer<SearchStoreProps>((set) => (
       });
     },
     isDrawerOpened: false,
-    openDrawer: (refetchSearchResults) =>
+    openDrawer: (refetchSearchResults) => 
     {
+      posthog.capture("search-field-opened");
       refetchSearchResults();
 
-      set((state) => 
+      set((state) =>
       {
         state.isDrawerOpened = true;
       });
@@ -34,14 +34,14 @@ const useSearchBarStore = create(immer<SearchStoreProps>((set) => (
     searchValue: "",
     setSearchHistory: (searchHistory) =>
     {
-      set((state) => 
+      set((state) =>
       {
         state.searchHistory = searchHistory;
       });
     },
     setSearchValue: (searchValue) =>
     {
-      set((state) => 
+      set((state) =>
       {
         state.searchValue = searchValue;
       });
