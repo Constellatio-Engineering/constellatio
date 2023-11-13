@@ -60,7 +60,7 @@ const HeaderDefault: FunctionComponent = () =>
               <Image css={styles.tabletHeaderLogo} src={ConstellatioLogoIcon} alt="Constellatio"/>
               <Image css={styles.headerLogo} src={ConstellatioFullLogo} alt="Constellatio"/>
             </Link>
-            {links.map((link, linkIndex) => 
+            {links.map((link, linkIndex) =>
               linkIndex === 1 ? (
                 showOnboarding ? (
                   <OnboardingFirstStep

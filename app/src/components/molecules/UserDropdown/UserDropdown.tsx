@@ -6,7 +6,7 @@ import { paths } from "@/utils/paths";
 
 import { Menu, Title } from "@mantine/core";
 import { IconLogout, IconUser } from "@tabler/icons-react";
-import { useRouter } from "next/router";
+import Link from "next/link";
 import React, { type FunctionComponent } from "react";
 
 import * as styles from "./UserDropdown.styles";
@@ -15,7 +15,6 @@ export const UserDropdown: FunctionComponent = () =>
 {
   const { handleSignOut } = useSignout();
   const { userDetails } = useUserDetails();
-  const router = useRouter();
 
   if(!userDetails)
   {
@@ -40,8 +39,9 @@ export const UserDropdown: FunctionComponent = () =>
       </Menu.Target>
       <Menu.Dropdown>
         <Menu.Item
+          component={Link}
+          href={paths.profile}
           css={styles.menuItem}
-          onClick={() => void router.push(`${paths.profile}`)}
           icon={null}>
           <div className="user-info">
             <ProfilePicture sizeInPx={60}/>
@@ -52,7 +52,8 @@ export const UserDropdown: FunctionComponent = () =>
           </div>
         </Menu.Item>
         <Menu.Item
-          onClick={() => void router.push(`${paths.profile}`)}
+          component={Link}
+          href={paths.profile}
           icon={<IconUser size="0.9rem" stroke={1.5}/>}>
           Profil
         </Menu.Item>

@@ -8,6 +8,7 @@
     "src/lib/database.types.ts"
   ],
   "rules": {
+    "react/prop-types": "off",
     "react/no-multi-comp": "off",
     "no-console": "off",
     "prefer-arrow/prefer-arrow-functions": "off",
