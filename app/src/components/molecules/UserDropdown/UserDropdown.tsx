@@ -7,7 +7,6 @@ import { paths } from "@/utils/paths";
 import { Menu, Title } from "@mantine/core";
 import { IconLogout, IconUser } from "@tabler/icons-react";
 import Link from "next/link";
-import { useRouter } from "next/router";
 import React, { type FunctionComponent } from "react";
 
 import * as styles from "./UserDropdown.styles";
@@ -16,7 +15,6 @@ export const UserDropdown: FunctionComponent = () =>
 {
   const { handleSignOut } = useSignout();
   const { userDetails } = useUserDetails();
-  const router = useRouter();
 
   if(!userDetails)
   {
