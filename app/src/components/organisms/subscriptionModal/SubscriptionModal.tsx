@@ -82,7 +82,7 @@ const SubscriptionModal: FunctionComponent = () =>
     isOnTrailSubscription &&
     (diffDays === 3 || diffDays === 1 || diffDays === 0) &&
     isUserLoggedIn
-  );
+  ) ?? false;
   const isModalLocked = diffDays == null || diffDays <= 0;
 
   const redirectToStripeCheckout = async (): Promise<void> => 
@@ -126,7 +126,7 @@ const SubscriptionModal: FunctionComponent = () =>
         {
           diffDays != null && (
             <>
-              {isOnTrailSubscription && `Deine Testphase läuft nur noch ${diffDays} Tage`}
+              {isOnTrailSubscription && `Deine Testphase läuft nur noch ${diffDays} Tag${diffDays === 1 ? "" : "e"}`}
               {diffDays <= 0 && "Deine Testphase ist abgelaufen"}
             </>
           )

@@ -1,6 +1,5 @@
 /* eslint-disable max-lines */
 import { Button } from "@/components/atoms/Button/Button";
-import { CaptionText } from "@/components/atoms/CaptionText/CaptionText";
 import { type IStatusLabel } from "@/components/atoms/statusLabel/StatusLabel";
 import { RichTextHeadingOverwrite } from "@/components/helpers/RichTextHeadingOverwrite";
 import GameComponentWrapper from "@/components/molecules/gameComponentWrapper/GameComponentWrapper";
