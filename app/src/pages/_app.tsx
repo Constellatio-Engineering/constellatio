@@ -25,7 +25,11 @@ import { type AppProps } from "next/app";
 import Head from "next/head";
 import { useRouter } from "next/router";
 import { appWithTranslation } from "next-i18next";
-import React, { useEffect, type FunctionComponent, type ReactElement, type ReactNode } from "react";
+import { posthog } from "posthog-js";
+import { PostHogProvider } from "posthog-js/react";
+import React, {
+  useEffect, type FunctionComponent, type ReactElement, type ReactNode, useState, useRef, useCallback
+} from "react";
 
 export type NextPageWithLayout<P = object, IP = P> = NextPage<P, IP> & {
   getLayout?: (page: ReactElement) => ReactNode;
@@ -48,6 +52,35 @@ const Layout: FunctionComponent<LayoutProps> = ({ Component, pageProps }) =>
   }
 };
 
+if(typeof window !== "undefined")
+{
+  posthog.init(env.NEXT_PUBLIC_POSTHOG_KEY, {
+    api_host: env.NEXT_PUBLIC_POSTHOG_HOST,
+    autocapture: true,
+    capture_pageview: true,
+    disable_cookie: true,
+    disable_session_recording: true,
+    loaded: (posthog) =>
+    {
+      if(!isProduction)
+      {
+        posthog.debug(true);
+      }
+    },
+    opt_out_capturing_by_default: true,
+    opt_out_persistence_by_default: true,
+    secure_cookie: true,
+  });
+
+  void formbricks.init({
+    apiHost: env.NEXT_PUBLIC_FORMBRICKS_HOST,
+    debug: !isProduction,
+    environmentId: isProduction
+      ? env.NEXT_PUBLIC_FORMBRICKS_KEY_PRODUCTION
+      : env.NEXT_PUBLIC_FORMBRICKS_KEY_TESTINGS,
+  });
+}
+
 type ConstellatioAppProps = AppProps & {
   readonly Component: NextPageWithLayout;
 };
@@ -62,7 +95,175 @@ const AppContainer: FunctionComponent<ConstellatioAppProps> = ({ Component, page
   const ogImage = env.NEXT_PUBLIC_WEBSITE_URL + "/og_image.jpg";
   const ogImageUrlSplitUp = ogImage.split(".");
   const ogImageFileExtension = ogImageUrlSplitUp[ogImageUrlSplitUp.length - 1];
+  const { mutate: ping } = api.tracking.ping.useMutation();
+  const [isDocumentVisible, setIsDocumentVisible] = useState<null | boolean>(null);
+  const [isMouseInWindow, setIsMouseInWindow] = useState<null | boolean>(null);
+  const interval = useRef<NodeJS.Timer>();
+  const [postHogQueueIsStarted, setPostHogQueueIsStarted] = useState(false);
+  const [isFormbricksVerified, setIsFormbricksVerified] = useState<boolean>(false);
+  const [isSignedIn, setIsSignedIn] = useState<boolean>(false);
   let pageTitle = appTitle;
+
+  useEffect(() =>
+  {
+    supabase.auth.onAuthStateChange((event, session) =>
+    {
+      switch (event)
+      {
+        case "INITIAL_SESSION": {
+          if(!isSignedIn)
+          {
+            if(session)
+            {
+              setIsSignedIn(true);
+            }
+          }
+          break;
+        }
+        case "SIGNED_IN": {
+          if(!isSignedIn)
+          {
+            setIsSignedIn(true);
+          }
+          if(!posthog.has_opted_in_capturing())
+          {
+            const id = session?.user?.id;
+            const email = session?.user?.email;
+
+            posthog.identify(id, { email });
+            posthog.opt_in_capturing();
+
+            if(!postHogQueueIsStarted)
+            {
+              posthog._start_queue_if_opted_in();
+              setPostHogQueueIsStarted(true);
+
+              if(posthog.has_opted_in_capturing())
+              {
+                posthog.set_config({
+                  disable_cookie: false,
+                  disable_persistence: false,
+                });
+                if(isProduction)
+                {
+                  posthog.startSessionRecording();
+                }
+              }
+            }
+
+            if(!isFormbricksVerified)
+            {
+              void formbricks.setUserId(id);
+              void formbricks.setEmail(email);
+              setIsFormbricksVerified(true);
+            }
+          }
+          break;
+        }
+        case "SIGNED_OUT": {
+
+          setIsSignedIn(false);
+
+          posthog.stopSessionRecording();
+          if(posthog.has_opted_in_capturing())
+          {
+            posthog.opt_out_capturing();
+          }
+          posthog.set_config({
+            disable_cookie: true,
+            disable_persistence: true,
+          });
+          posthog.reset(true);
+
+          if(isFormbricksVerified)
+          {
+            void formbricks.logout();
+          }
+          break;
+        }
+        default:
+          break;
+      }
+    });
+  }, []);
+
+  useEffect(() =>
+  {
+    const handleRouteChange = (): void =>
+    {
+      posthog.capture("$pageview");
+      // eslint-disable-next-line @typescript-eslint/no-unused-expressions
+      formbricks?.registerRouteChange;
+    };
+    router.events.on("routeChangeComplete", handleRouteChange);
+
+    return () =>
+    {
+      router.events.off("routeChangeComplete", handleRouteChange);
+    };
+  }, []); // TODO:: check ob es mit leerem wie auch mit gefüllten depency array läuft (wenn depency drin ist eventuell gefahr dass zu oft feuert also EVENTS in Posthog checken)
+
+  useEffect(() =>
+  {
+    const onVisibilityChange = (): void =>
+    {
+      setIsDocumentVisible(!document.hidden);
+    };
+    onVisibilityChange();
+    document.addEventListener("visibilitychange", onVisibilityChange);
+    return () => document.removeEventListener("visibilitychange", onVisibilityChange);
+  }, []);
+
+  useEffect(() =>
+  {
+    const onWindowMouseOut = (): void =>
+    {
+      setIsMouseInWindow(false);
+    };
+
+    const onWindowMouseOver = (): void =>
+    {
+      setIsMouseInWindow(true);
+    };
+
+    document.addEventListener("mouseleave", onWindowMouseOut);
+    document.addEventListener("mouseenter", onWindowMouseOver);
+
+    return () =>
+    {
+      document.removeEventListener("mouseleave", onWindowMouseOut);
+      document.removeEventListener("mouseenter", onWindowMouseOver);
+    };
+  }, []);
+
+  const onInterval = useCallback((): void =>
+  {
+    if(
+      !isDocumentVisible ||
+      !isMouseInWindow ||
+      !posthog.has_opted_in_capturing() ||
+      posthog.has_opted_out_capturing()
+    )
+    {
+      return;
+    }
+
+    const currentPath = router.asPath;
+    ping({ url: currentPath });
+  }, [isDocumentVisible, isMouseInWindow, router.asPath, ping]);
+
+  useEffect(() =>
+  {
+    if(interval.current)
+    {
+      clearInterval(interval.current);
+    }
+
+    onInterval(); // TODO::check feuert aktuell glaub 2x beim betreten
+    interval.current = setInterval(onInterval, 5000);
+
+    return () => clearInterval(interval.current);
+  }, [onInterval]);
 
   useEffect(() =>
   {
@@ -119,17 +320,22 @@ const AppContainer: FunctionComponent<ConstellatioAppProps> = ({ Component, page
       <SessionContextProvider supabaseClient={supabase} initialSession={pageProps.initialSession}>
         <InvalidateQueriesProvider>
           <AuthStateProvider>
-            <CustomThemingProvider>
-              <ModalsProvider>
-                <MeilisearchProvider>
-                  <RouterTransition/>
-                  <Notifications/>
-                  <NewNotificationEarnedWatchdog/>
-                  <SubscriptionModal/>
-                  <Layout Component={Component} pageProps={pageProps}/>
-                </MeilisearchProvider>
-              </ModalsProvider>
-            </CustomThemingProvider>
+            <PostHogProvider client={posthog}>
+              <CustomThemingProvider>
+                <ModalsProvider>
+                  <MeilisearchProvider>
+                    <RouterTransition/>
+                    <Notifications/>
+                    <NewNotificationEarnedWatchdog/>
+                    <SubscriptionModal/>
+                    {isSignedIn && (
+                      <FeedbackButton/>
+                    )}
+                    <Layout Component={Component} pageProps={pageProps}/>
+                  </MeilisearchProvider>
+                </ModalsProvider>
+              </CustomThemingProvider>
+            </PostHogProvider>
           </AuthStateProvider>
         </InvalidateQueriesProvider>
       </SessionContextProvider>
