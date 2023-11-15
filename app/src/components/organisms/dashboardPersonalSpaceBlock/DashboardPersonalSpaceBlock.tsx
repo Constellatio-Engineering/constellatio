@@ -21,7 +21,7 @@ const DashboardPersonalSpaceBlock: FunctionComponent = () =>
 {
   const router = useRouter();
   const [switcherValue, setSwitcherValue] = React.useState<"favorites" | "materials">("favorites");
-  const { uploadedFiles } = useUploadedFiles(null);
+  const { uploadedFiles } = useUploadedFiles(undefined);
   const { favoritesList } = useAllFavorites();
   return (
     <div css={styles.wrapper}>
@@ -68,24 +68,23 @@ const DashboardPersonalSpaceBlock: FunctionComponent = () =>
         )}
         {switcherValue === "materials" && (
           <div css={styles.list}>
-            {uploadedFiles?.length > 0 ? 
-              uploadedFiles.slice(0, 6).map((material, i) => (
-                <MaterialCard
-                  key={i}
-                  fileExtension={material?.fileExtension}
-                  id={material?.id}
-                  materialType="file"
-                  title={material.originalFilename}
+            {uploadedFiles?.length > 0 ? uploadedFiles.slice(0, 6).map((material, i) => (
+              <MaterialCard
+                key={i}
+                fileExtension={material?.fileExtension}
+                id={material?.id}
+                materialType="file"
+                title={material.originalFilename}
+              />
+            )) : (
+              <div css={styles.emptyCard}>
+                <EmptyStateCard
+                  title="Du hast noch keine Dateien hochgeladen"
+                  text="Du kannst jetzt eigene Dateien hochladen und in deinem persönlichen Bereich ablegen."
+                  variant="For-small-areas"
                 />
-              )) : (
-                <div css={styles.emptyCard}>
-                  <EmptyStateCard
-                    title="Du hast noch keine Dateien hochgeladen"
-                    text="Du kannst jetzt jetzt eigene Dateien hochladen und in deinem persönlichen Bereich ablegen."
-                    variant="For-small-areas"
-                  />
-                </div>
-              )}
+              </div>
+            )}
           </div>
         )}
       </div>

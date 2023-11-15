@@ -1,6 +1,7 @@
 /* eslint-disable react/jsx-max-props-per-line */
 import { RouterTransition } from "@/components/atoms/RouterTransition/RouterTransition";
 import NewNotificationEarnedWatchdog from "@/components/molecules/newNotificationEarnedWatchdog/NewNotificationEarnedWatchdog";
+import SubscriptionModal from "@/components/organisms/subscriptionModal/SubscriptionModal";
 import { env } from "@/env.mjs";
 import { supabase } from "@/lib/supabase";
 import AuthStateProvider from "@/provider/AuthStateProvider";
@@ -122,6 +123,7 @@ const AppContainer: FunctionComponent<ConstellatioAppProps> = ({ Component, page
                   <RouterTransition/>
                   <Notifications/>
                   <NewNotificationEarnedWatchdog/>
+                  <SubscriptionModal/>
                   <Layout Component={Component} pageProps={pageProps}/>
                 </MeilisearchProvider>
               </ModalsProvider>
