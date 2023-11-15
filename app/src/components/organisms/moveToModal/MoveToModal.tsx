@@ -34,7 +34,7 @@ const MoveToModal: FunctionComponent<Props> = ({
       onClose={close}
       opened={isOpened}
       lockScroll={false}
-      title="Move item to:" 
+      title="Datei verschieben nach"
       radius={12}
       styles={{
         body: {
@@ -84,14 +84,14 @@ const MoveToModal: FunctionComponent<Props> = ({
           styleType="secondarySimple"
           size="large"
           onClick={close}>
-          Cancel
+          Abbrechen
         </Button>
         <Button<"button">
           styleType="primary"
           size="large"
           disabled={selectedFolderId === undefined || selectedFolderId === currentFolderId}
           onClick={() => onSubmit(selectedFolderId)}>
-          Move
+          Verschieben
         </Button>
       </div>
     </Modal>

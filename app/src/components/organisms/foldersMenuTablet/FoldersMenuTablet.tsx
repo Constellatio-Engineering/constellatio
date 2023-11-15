@@ -179,7 +179,7 @@ const FoldersMenuTablet: FunctionComponent = () =>
             <Button<"button">
               styleType={"secondarySimple" as TButton["styleType"]}
               onClick={() => setShowCreateFolderModal(false)}>
-              Cancel
+              Abbrechen
             </Button>
             <Button<"button">
               type="submit"
@@ -190,7 +190,8 @@ const FoldersMenuTablet: FunctionComponent = () =>
                 setNewFolderName("");
                 createFolder({ name: newFolderName });
                 setShowCreateFolderModal(false);
-              }}>Create
+              }}>
+              Erstellen
             </Button>
           </div>
         </form>
@@ -219,7 +220,7 @@ const FoldersMenuTablet: FunctionComponent = () =>
             <Button<"button">
               styleType={"secondarySimple" as TButton["styleType"]}
               onClick={() => setShowRenameModal(false)}>
-              Cancel
+              Abbrechen
             </Button>
             <Button<"button">
               styleType="primary"
@@ -235,7 +236,7 @@ const FoldersMenuTablet: FunctionComponent = () =>
                   renameFolder({ folderId: currentFolder?.id, newName: newFolderName });
                 }
               }}>
-              Save
+              Speichern
             </Button>
           </div>
         </form>

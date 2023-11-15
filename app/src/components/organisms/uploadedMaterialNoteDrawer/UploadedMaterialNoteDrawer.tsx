@@ -29,7 +29,7 @@ const UploadedMaterialNoteDrawer: FunctionComponent<UploadedMaterialNoteDrawerPr
       styles={styles.drawerStyles()}
       title={(
         <SlidingPanelTitle
-          title="Notes"
+          title="Notitzen"
           variant="default"
           closeButtonAction={closeEditor}
         />
