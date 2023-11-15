@@ -19,7 +19,16 @@ import { ExclamationMark } from "../../Icons/vector";
 import { Richtext } from "../../molecules/Richtext/Richtext";
 import { Switcher } from "../../molecules/Switcher/Switcher";
 
-type ITableTab = { icon: {src: React.ReactNode}; title: "Gliederung" | "Sachverhalt" };   
+type ITableTab = {
+  icon: { src: React.ReactNode };
+  title: "Gliederung" | "Sachverhalt";
+};
+
+const tabs: ITableTab[] = [
+  { icon: { src: <FileIcon size={16}/> }, title: "Gliederung" },
+  { icon: { src: <BoxIcon size={16}/> }, title: "Sachverhalt" },
+];
+
 export interface IFloatingPanelProps
 {
   readonly content: DataType[];
@@ -37,19 +46,12 @@ const FloatingPanel: FunctionComponent<IFloatingPanelProps> = ({
   variant
 }) => 
 {
-  const tabs: ITableTab[] = [
-    { icon: { src: <FileIcon size={16}/> }, title: "Gliederung" },
-    { icon: { src: <BoxIcon size={16}/> }, title: "Sachverhalt" },
-  ];
-  const { scrollableRef } = useScrollIntoView<
-  HTMLDivElement,
-  HTMLDivElement
-  >({ axis: "x" });
+  const { scrollableRef } = useScrollIntoView<HTMLDivElement, HTMLDivElement>({ axis: "x" });
   const [selectedTabState, setSelectedTabState] = useState<"Gliederung" | "Sachverhalt">(selectedTab);
   const toc = generateTOC(content);
   const theme = useMantineTheme();
 
-  return content?.length > 0 ? (
+  return content?.length > 0 && (
     <ScrollArea
       ref={scrollableRef}
       h={hidden ? 300 : 600}
@@ -88,16 +90,15 @@ const FloatingPanel: FunctionComponent<IFloatingPanelProps> = ({
             </div>
           )}
         </Switcher>
-        {selectedTab === "Gliederung" && content && renderTOC(toc)}
-        {facts && facts.json && selectedTab === "Sachverhalt" && facts && (
+        {selectedTabState === "Gliederung" && content && renderTOC(toc)}
+        {facts && facts.json && selectedTabState === "Sachverhalt" && (
           <div css={styles.facts}>
             <Richtext data={facts} richTextOverwrite={{ paragraph: richTextParagraphOverwrite }}/>
           </div>
         )}
       </div>
-  
     </ScrollArea>
-  ) : "";
+  );
 };
 
 export default FloatingPanel;
