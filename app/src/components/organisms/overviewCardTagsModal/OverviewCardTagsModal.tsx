@@ -24,7 +24,7 @@ const OverviewCardTagsModal: FunctionComponent<OverviewCardTagsModalProps> = ({ 
         opened={opened}
         onClose={close}
         centered
-        title="alle Tags"
+        title="Alle Tags"
         withCloseButton
         closeOnClickOutside>
         <div css={styles.tagsModal}>

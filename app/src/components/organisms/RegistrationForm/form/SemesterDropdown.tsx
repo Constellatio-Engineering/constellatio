@@ -11,13 +11,17 @@ const SemesterDropdown: FunctionComponent<Props> = (props) => (
   <Box maw={240}>
     <Dropdown
       {...props}
-      label="Semester*"
+      label="Semester (optional)"
       title="Semester"
       placeholder="Semester auswählen"
       data={Array(maximumAmountOfSemesters + 1).fill(null).map((_, i) => ({
         label: transformSemesterToString(i, true),
         value: String(i)
       }))}
+      clearable
+      allowDeselect
+      nothingFound="Semester nicht gefunden..."
+      searchable
     />
   </Box>
 );
