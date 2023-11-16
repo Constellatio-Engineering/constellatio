@@ -1,5 +1,4 @@
 import { SwitcherTab } from "@/components/atoms/Switcher-tab/SwitcherTab";
-import ComputerRecommendedModal from "@/components/computerRecommendedModal/ComputerRecommendedModal";
 import { Switcher } from "@/components/molecules/Switcher/Switcher";
 import { Header } from "@/components/organisms/Header/Header";
 import { LoginForm } from "@/components/organisms/LoginForm/LoginForm";
@@ -10,7 +9,7 @@ import { Container, Flex, Tabs } from "@mantine/core";
 import { useMediaQuery } from "@mantine/hooks";
 import { useRouter } from "next/router";
 import { useTranslation } from "next-i18next";
-import { useState, type FC, useEffect } from "react";
+import { type FC, useEffect } from "react";
 import z from "zod";
 import { makeZodI18nMap } from "zod-i18n-map";
 
@@ -26,19 +25,12 @@ export const AuthPage: FC<AuthPageProps> = ({ tab }) =>
   const { t } = useTranslation();
   const router = useRouter();
   const handleTabChange = async (tab: AuthPageProps["tab"]): Promise<boolean> => router.push(`/${tab}`);
-  const [showComputerRecommendedModal, setShowComputerRecommendedModal] = useState<boolean>(false);
-  const isSmallScreen = useMediaQuery("(max-width: 768px)");
   const isPhoneScreen = useMediaQuery("(max-width: 480px)");
 
   useEffect(() =>
   {
     z.setErrorMap(makeZodI18nMap({ t }));
   }, [t]);
-
-  useEffect(() => 
-  {
-    if(isSmallScreen) { setShowComputerRecommendedModal(true); }
-  }, [isSmallScreen]);
 
   return (
     <Flex
@@ -83,7 +75,6 @@ export const AuthPage: FC<AuthPageProps> = ({ tab }) =>
           </Switcher>
         </Container>
       </Container>
-      <ComputerRecommendedModal close={() => setShowComputerRecommendedModal(false)} opened={showComputerRecommendedModal}/>
     </Flex>
   );
 };
