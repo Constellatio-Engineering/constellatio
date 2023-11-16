@@ -167,6 +167,9 @@ export const RegistrationForm: FunctionComponent = () =>
             Klicke auf den Link, um deinen Account zu aktivieren.
           </BodyText>
           <BodyText ta="center" styleType="body-01-regular">
+            <strong>Bitte überprüfe auch deinen Spam-Ordner.</strong>
+          </BodyText>
+          <BodyText ta="center" styleType="body-01-regular">
             Nach erfolgreicher Bestätigung kannst du dich mit deinem neuen Account einloggen.
           </BodyText>
         </div>
