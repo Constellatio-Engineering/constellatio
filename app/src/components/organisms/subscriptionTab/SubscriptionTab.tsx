@@ -80,7 +80,7 @@ const SubscriptionTab: FunctionComponent = () =>
 
   return (
     <div css={styles.wrapper}>
-      {!isTabletScreen && <Title order={3} css={styles.subscriptionTabTitle}>Vertrag</Title>}
+      {!isTabletScreen && <Title order={3} css={styles.subscriptionTabTitle}>Abonnement</Title>}
       <BodyText m="32px 0" styleType="body-01-bold" component="p">
         {isOnPaidSubscription && `Dein Abonnement läuft noch bis zum ${getDate()}. `}
         {isOnTrailSubscription && `Dein Test-Abo endet am ${getDate()}. `}
