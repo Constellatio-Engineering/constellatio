@@ -107,6 +107,7 @@
     "react": "18.2.0",
     "react-dom": "18.2.0",
     "react-i18next": "13.3.1",
+    "react-password-strength-bar": "0.4.1",
     "sharp": "0.32.6",
     "stripe": "14.1.0",
     "superjson": "2.0.0",
