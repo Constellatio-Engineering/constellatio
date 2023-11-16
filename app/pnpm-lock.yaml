@@ -146,6 +146,9 @@ dependencies:
   fastest-levenshtein:
     specifier: 1.0.16
     version: 1.0.16
+  file-saver:
+    specifier: 2.0.5
+    version: 2.0.5
   google-auth-library:
     specifier: 9.1.0
     version: 9.1.0
@@ -295,6 +298,9 @@ devDependencies:
   '@types/eslint':
     specifier: 8.44.6
     version: 8.44.6
+  '@types/file-saver':
+    specifier: 2.0.7
+    version: 2.0.7
   '@types/html-pdf-node':
     specifier: 1.0.1
     version: 1.0.1
@@ -7881,6 +7887,10 @@ packages:
       '@types/serve-static': 1.15.4
     dev: true
 
+  /@types/file-saver@2.0.7:
+    resolution: {integrity: sha512-dNKVfHd/jk0SkR/exKGj2ggkB45MAkzvWCaqLUUgkyjITkGNzH8H+yUwr+BLJUBjZOe9w8X3wgmXhZDRg1ED6A==}
+    dev: true
+
   /@types/find-cache-dir@3.2.1:
     resolution: {integrity: sha512-frsJrz2t/CeGifcu/6uRo4b+SzAwT4NYCVPu1GN8IB9XTzrpPkGuV0tmh9mN+/L0PklAlsC3u5Fxt0ju00LXIw==}
     dev: true
@@ -11769,6 +11779,10 @@ packages:
     dependencies:
       flat-cache: 3.1.1
     dev: true
+
+  /file-saver@2.0.5:
+    resolution: {integrity: sha512-P9bmyZ3h/PRG+Nzga+rbdI4OEpNDzAVyy74uVO9ATgzLK6VtAsYybF/+TOCvrc0MO793d6+42lLyZTw7/ArVzA==}
+    dev: false
 
   /file-selector@0.6.0:
     resolution: {integrity: sha512-QlZ5yJC0VxHxQQsQhXvBaC7VRJ2uaxTf+Tfpu4Z/OcVQJVpZO+DGU0rkoVW5ce2SccxugvpBJoMvUs59iILYdw==}

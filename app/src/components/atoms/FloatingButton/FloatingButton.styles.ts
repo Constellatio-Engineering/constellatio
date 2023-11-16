@@ -1,3 +1,5 @@
+import { type FloatingButtonVariation } from "@/components/atoms/FloatingButton/FloatingButton";
+
 import { type ButtonStylesNames, type ButtonStylesParams, type MantineTheme, type Styles } from "@mantine/core";
 
 type FloatingButtonStyles = Styles<ButtonStylesNames, ButtonStylesParams>;
@@ -7,7 +9,7 @@ export const floatingButtonStyles = ({
   variation,
 }: {
   pinsNotificationsAmount?: number;
-  variation: "icon-big" | "icon-medium" | "pins" | "notes-notes" | "notes-no-notes";
+  variation: FloatingButtonVariation;
 }): FloatingButtonStyles =>
 {
   const styles: FloatingButtonStyles = (theme: MantineTheme) => ({
@@ -43,9 +45,7 @@ export const floatingButtonStyles = ({
         height: variation === "icon-medium" ? "16px" : "20px",
         width: variation === "icon-medium" ? "16px" : "20px",
       },
-
       transition: "all 0.3s ease",
-
       width: variation === "icon-medium" ? "32px" : "40px",
     },
     inner: {
@@ -109,13 +109,9 @@ export const floatingButtonStyles = ({
       boxShadow: theme.shadows["elevation-medium"],
       color: theme.colors["neutrals-02"][1],
       cursor: "pointer",
-
       display: "flex",
-
       justifyContent: "center",
-
       padding: 0,
-
       transition: "all 0.3s ease",
     },
   });
