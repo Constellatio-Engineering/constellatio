@@ -31,7 +31,7 @@ const OnboardingSecondStep: FunctionComponent<TOnboardingSecondStep> = ({ onboar
           stepTitle="Persönlicher Bereich"
           onNextPressHandler={() => setOnboardingStepsIndex(2)}
           onSkipPressHandler={() => setOnboardingResult({ result: "skipped" })}>
-          <OnboardingTutorialStepItem icon={<Bookmark size={20}/>} itemTitle="Favoriten" itemDescription="Speichere deine wichtigsten Inhalte mit nur einem Klick."/>
+          <OnboardingTutorialStepItem icon={<Bookmark size={20}/>} itemTitle="Favoriten" itemDescription="Füge Constellatio Inhalte mit nur einem Klick deinen Favoriten hinzu."/>
           <OnboardingTutorialStepItem icon={<DownloadIcon size={20}/>} itemTitle="Deine Dateien" itemDescription="Dein gesamtes Wissen an einem Ort: Lade vorhandene Unterlagen in die Jura-Cloud."/>
         </OnboardingTutorialStep>
       )}
