@@ -13,7 +13,7 @@ export const getServerSideProps: GetServerSideProps = async (ctx) =>
     supabaseUrl: env.NEXT_PUBLIC_SUPABASE_URL
   });
   
-  const isUserLoggedIn = await getIsUserLoggedIn(supabase);
+  const { isUserLoggedIn } = await getIsUserLoggedIn(supabase);
 
   return {
     redirect: {

@@ -37,66 +37,63 @@ const getBaseUrl = (): string =>
 
 /** A set of type-safe react-query hooks for your tRPC API. */
 export const api = createTRPCNext<AppRouter>({
-  config: () =>
-  {
-    return {
-      links: [
-        /* loggerLink({
+  config: () => ({
+    links: [
+      /* loggerLink({
           enabled: (opts) => env.NEXT_PUBLIC_DEPLOYMENT_ENVIRONMENT === "development" || (opts.direction === "down" && opts.result instanceof Error),
         }),*/
-        httpBatchLink({
-          url: `${getBaseUrl()}/api/trpc`,
-        }),
-      ],
-      queryClientConfig: {
-        defaultOptions: {
-          mutations: {
-            onError: (err, variables, context) =>
-            {
-              console.log("Something went wrong with a mutation: ", { context, err, variables });
+      httpBatchLink({
+        url: `${getBaseUrl()}/api/trpc`,
+      }),
+    ],
+    queryClientConfig: {
+      defaultOptions: {
+        mutations: {
+          onError: (err, variables, context) =>
+          {
+            console.log("Something went wrong with a mutation: ", { context, err, variables });
 
-              showErrorNotification({
-                message: "Bitte versuche es später erneut oder wende dich an den Support.",
-                title: "Da ist leider etwas schief gelaufen.",
-              });
+            showErrorNotification({
+              message: "Bitte versuche es später erneut oder wende dich an den Support.",
+              title: "Da ist leider etwas schief gelaufen.",
+            });
+          }
+        }
+      },
+      queryCache: new QueryCache({
+        onError: async (err) =>
+        {
+          if(!(err instanceof TRPCClientError))
+          {
+            console.error("QueryCache error: ", err);
+            return;
+          }
+
+          const clientError = err.data.clientError as ClientError;
+
+          if(!clientError)
+          {
+            console.warn("'clientError' not found in server response. Error was TRPCClientError: ", err);
+            return;
+          }
+
+          if(clientError.identifier === "unauthorized")
+          {
+            await supabase.auth.signOut();
+
+            if(!window.location.pathname.startsWith(paths.login))
+            {
+              console.log("Server responded with 'UNAUTHORIZED'. Redirecting to login");
+              window.location.replace(paths.login);
             }
+
+            return;
           }
         },
-        queryCache: new QueryCache({
-          onError: (err) =>
-          {
-            if(!(err instanceof TRPCClientError))
-            {
-              console.error("QueryCache error: ", err);
-              return;
-            }
-
-            const clientError = err.data.clientError as ClientError;
-
-            if(!clientError)
-            {
-              console.warn("'clientError' not found in server response. Error was TRPCClientError: ", err);
-              return;
-            }
-
-            if(clientError.identifier === "unauthorized")
-            {
-              void supabase.auth.signOut();
-
-              if(window.location.pathname !== paths.login)
-              {
-                console.log("Server responded with 'UNAUTHORIZED'. Redirecting to login");
-                window.location.replace(paths.login);
-              }
-
-              return;
-            }
-          },
-        }),
-      },
-      transformer: superjson,
-    };
-  },
+      }),
+    },
+    transformer: superjson,
+  }),
   ssr: false,
 });
 
