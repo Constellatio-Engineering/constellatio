@@ -89,7 +89,7 @@ const MaterialOptionsMenu: FunctionComponent<MaterialOptionsMenuProps> = ({ file
           </Menu.Target>
           <Menu.Dropdown>
             <Menu.Item onClick={() => openRenameFileModal(file)}>
-              <DropdownItem icon={<Edit/>} label="Bearbeiten"/>
+              <DropdownItem icon={<Edit/>} label="Umbenennen"/>
             </Menu.Item>
             <Menu.Item onClick={() => setShowMoveToModal(true)}>
               <DropdownItem icon={<FolderIcon/>} label="Verschieben"/>

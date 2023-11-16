@@ -1,12 +1,12 @@
 import { Layout } from "@/components/layouts/Layout";
 import PageHead from "@/components/organisms/pageHead/PageHead";
 import DetailsPage from "@/components/pages/DetailsPage/DetailsPage";
+import { type NextPageWithLayout } from "@/pages/_app";
 import getAllCases from "@/services/content/getAllCases";
 import { getCaseById } from "@/services/content/getCaseById";
 import { type IGenCase } from "@/services/graphql/__generated/sdk";
 
 import type { GetStaticProps, GetStaticPaths, GetStaticPathsResult } from "next";
-import { type FunctionComponent } from "react";
 
 import { type ParsedUrlQuery } from "querystring";
 
@@ -52,19 +52,18 @@ export const getStaticProps: GetStaticProps<GetCaseDetailPagePropsResult, Params
     props: { legalCase },
     revalidate: 10
   };
-
 };
 
-const NextPage: FunctionComponent<GetCaseDetailPagePropsResult> = ({ legalCase }) =>
+const Page: NextPageWithLayout<GetCaseDetailPagePropsResult> = ({ legalCase }) =>
 {
   return (
     <>
       <PageHead pageTitle={legalCase?.title || "Fall ohne Titel"}/>
-      <Layout>
-        <DetailsPage variant="case" content={legalCase}/>
-      </Layout>
+      <DetailsPage variant="case" content={legalCase}/>
     </>
   );
 };
 
-export default NextPage;
+Page.getLayout = Layout;
+
+export default Page;

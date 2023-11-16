@@ -29,6 +29,8 @@ export const authenticationRouter = createTRPCRouter({
         throw new EmailAlreadyTakenError();
       }
 
+      console.log("starting supabase sign up");
+
       const { data: signUpData, error: signUpError } = await supabaseServerClient.auth.signUp({
         email: input.email,
         options: { emailRedirectTo: getConfirmEmailUrl() },

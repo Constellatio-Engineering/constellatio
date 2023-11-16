@@ -1,13 +1,13 @@
 import { Layout } from "@/components/layouts/Layout";
 import PageHead from "@/components/organisms/pageHead/PageHead";
 import SearchPage from "@/components/pages/searchPage/SearchPage";
+import { type NextPageWithLayout } from "@/pages/_app";
 import useSearchBarStore from "@/stores/searchBar.store";
 
-import { type NextPage } from "next";
 import { useRouter } from "next/router";
 import { useEffect } from "react";
 
-const Search: NextPage = () => 
+const Search: NextPageWithLayout = () =>
 {
   const router = useRouter();
   const searchValue = useSearchBarStore((s) => s.searchValue);
@@ -25,11 +25,11 @@ const Search: NextPage = () =>
   return (
     <>
       <PageHead pageTitle={"Suchergebnisse" + (searchValue ? ` für ${searchValue}` : "")}/>
-      <Layout>
-        <SearchPage/>
-      </Layout>
+      <SearchPage/>
     </>
   );
 };
+
+Search.getLayout = Layout;
 
 export default Search;

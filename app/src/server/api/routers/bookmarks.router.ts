@@ -3,6 +3,7 @@ import { allBookmarkResourceTypes, type BookmarkInsert, bookmarks } from "@/db/s
 import { addOrRemoveBookmarkSchema } from "@/schemas/bookmarks/addOrRemoveBookmark.schema";
 import { addBadgeForUser } from "@/server/api/services/badges.services";
 import { createTRPCRouter, protectedProcedure } from "@/server/api/trpc";
+import { filterBookmarkForClient } from "@/utils/filters";
 
 import { and, eq, type SQLWrapper } from "drizzle-orm";
 import z from "zod";
@@ -48,7 +49,7 @@ export const bookmarksRouter = createTRPCRouter({
         queryConditions.push(eq(bookmarks.resourceType, input.resourceType));
       }
 
-      return db.select().from(bookmarks).where(and(...queryConditions));
+      return (await db.select().from(bookmarks).where(and(...queryConditions))).map(filterBookmarkForClient);
     }),
   removeBookmark: protectedProcedure
     .input(addOrRemoveBookmarkSchema)

@@ -134,8 +134,10 @@ const EditorForm: FunctionComponent<EditorFormProps> = ({ editorState, selectedF
           <>
             <div css={styles.MaterialNoteRichText}>
               <RichtextEditorField
-                initialContent={note.content}
-                onChange={e => updateNoteInEditor({ content: e.editor.getText().trim() === "" ? "" : e.editor.getHTML() })}
+                content={note.content}
+                onChange={e => updateNoteInEditor({
+                  content: e.editor.getText().trim() === "" ? "" : e.editor.getHTML()
+                })}
                 variant="with-legal-quote"
               />
             </div>
@@ -143,13 +145,13 @@ const EditorForm: FunctionComponent<EditorFormProps> = ({ editorState, selectedF
               <Button<"button">
                 styleType="secondarySimple"
                 onClick={onCancel}>
-                Cancel
+                Abbrechen
               </Button>
               <Button<"button">
                 styleType="primary"
                 disabled={!hasUnsavedChanges}
                 onClick={onSave}>
-                Save
+                Speichern
               </Button>
             </div>
           </>
@@ -160,28 +162,28 @@ const EditorForm: FunctionComponent<EditorFormProps> = ({ editorState, selectedF
               <Button<"button">
                 styleType="secondarySubtle"
                 onClick={() => setEditNoteState(editorState.note)}>
-                <Edit/>{" "}Edit
+                <Edit/>{" "}Bearbeiten
               </Button>
               <Button<"button">
                 styleType="secondarySubtle"
                 onClick={() => setShouldShowDeleteNoteWindow(true)}>
-                <Trash/>{" "}Delete
+                <Trash/>{" "}Löschen
               </Button>
             </div>
             <div css={styles.richtext} dangerouslySetInnerHTML={{ __html: note.content }}/>
             {shouldShowDeleteNoteWindow && (
               <div className="deleteNoteBlock">
-                <BodyText styleType="body-01-medium">Are you sure you want to delete your notes?</BodyText>
+                <BodyText styleType="body-01-medium">Bist du sicher, dass du deine Notizen löschen möchtest?</BodyText>
                 <div>
                   <Button<"button">
                     styleType="secondarySimple"
                     onClick={() => setShouldShowDeleteNoteWindow(false)}>
-                    No, keep
+                    Nein, behalten
                   </Button>
                   <Button<"button">
                     styleType="primary"
                     onClick={() => deleteNote({ fileId: editorState.note.fileId })}>
-                    Yes, delete
+                    Ja, löschen
                   </Button>
                 </div>
               </div>

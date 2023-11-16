@@ -54,7 +54,3 @@ export const fullTextAndTasksWrapper = css`
 export const componentWrapper = css`
 	padding-bottom: 24px;
 `;
-
-export const gameComponentWrapper = css`
-	padding-bottom: 72px;
-`;

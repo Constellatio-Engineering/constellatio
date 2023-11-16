@@ -88,7 +88,7 @@ export const uploadsRouter = createTRPCRouter({
       {
         queryConditions.push(eq(uploadedFiles.folderId, folderId));
       }
-      else
+      else if(folderId === null)
       {
         queryConditions.push(isNull(uploadedFiles.folderId));
       }

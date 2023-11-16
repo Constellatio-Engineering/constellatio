@@ -1,4 +1,4 @@
-import { type ProfilePicture } from "@/db/schema";
+import { type Bookmark, type ProfilePicture } from "@/db/schema";
 import { type UserWithRelations } from "@/server/api/services/users.service";
 
 export type UserFiltered = Pick<UserWithRelations, "email" | "gender" | "lastName" | "firstName" | "displayName" | "semester" | "university"> & {
@@ -14,4 +14,11 @@ export const filterUserForClient = (user: UserWithRelations): UserFiltered => ({
   profilePicture: user.profilePictures[0] ?? null,
   semester: user.semester,
   university: user.university
+});
+
+export type BookmarkFiltered = Pick<Bookmark, "resourceId" | "resourceType">;
+
+export const filterBookmarkForClient = (bookmark: Bookmark): BookmarkFiltered => ({
+  resourceId: bookmark.resourceId,
+  resourceType: bookmark.resourceType
 });

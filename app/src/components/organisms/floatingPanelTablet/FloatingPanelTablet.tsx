@@ -17,6 +17,7 @@ const FloatingPanelTablet: FunctionComponent<IFloatingPanelProps> = (props) =>
   const drawerStyles: Styles<ModalBaseStylesNames> = { body: { padding: 0 } };
   const { variant } = props;
   const [selectedTab, setSelectedTab] = useState<"Gliederung" | "Sachverhalt">("Gliederung");
+
   return (
     <div css={styles.wrapper}>
       <div css={styles.buttonsGroup}>
@@ -25,14 +26,16 @@ const FloatingPanelTablet: FunctionComponent<IFloatingPanelProps> = (props) =>
         {
           setSelectedTab("Gliederung");
           open();
-        }}><FileIcon/>Gliederung
+        }}>
+          <FileIcon/>Gliederung
         </UnstyledButton>
         {variant === "case" && (
           <UnstyledButton onClick={() => 
           {
             setSelectedTab("Sachverhalt");
             open();
-          }}><BoxIcon/>Sachverhalt
+          }}>
+            <BoxIcon/>Sachverhalt
           </UnstyledButton>
         )}
       </div>

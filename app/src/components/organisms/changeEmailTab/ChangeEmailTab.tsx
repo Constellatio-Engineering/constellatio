@@ -1,6 +1,5 @@
 import { BodyText } from "@/components/atoms/BodyText/BodyText";
 import { Button } from "@/components/atoms/Button/Button";
-import { CaptionText } from "@/components/atoms/CaptionText/CaptionText";
 import { AlertCard } from "@/components/atoms/Card/AlertCard";
 import { Input } from "@/components/atoms/Input/Input";
 import ErrorCard from "@/components/molecules/errorCard/ErrorCard";
@@ -132,14 +131,9 @@ const ChangeEmailTab: FunctionComponent<Props> = ({ userDetails }) =>
         size="xl">
         <div css={styles.modalContentWrapper}>
           <Title css={styles.changeEmailModalTitle} order={3}>Wichtiger Hinweis</Title>
-          <CaptionText
-            css={styles.changeEmailModalCaption}
-            mb={12}
-            styleType="caption-01-bold"
-            component='p'>Aus Sicherheitsgründen, musst du sowohl <strong>deine alte</strong>, als auch <strong>deine neue E-Mail Adresse</strong> bestätigen.
-          </CaptionText>
-          <BodyText styleType="body-01-medium" component="p">Bitte schaue daher in <strong>beiden Postfächern</strong> nach und bestätige beide Links.</BodyText>
-          <BodyText styleType="body-01-medium" component="p">Erst dann wird deine E-Mail Adresse geändert.</BodyText>
+          <BodyText styleType="body-01-medium" component="p">Aus Sicherheitsgründen, musst du sowohl <strong>deine alte</strong>, als auch <strong>deine neue E-Mail Adresse</strong> bestätigen.</BodyText>
+          <BodyText styleType="body-01-medium" component="p">Bitte schaue daher in <strong>beiden Postfächern</strong> nach und bestätige beide Links. Erst dann wird deine E-Mail Adresse geändert.</BodyText>
+          <BodyText styleType="body-01-medium" component="p">Solltest du keine E-Mail erhalten haben, schaue bitte auch in deinem Spam-Ordner nach.</BodyText>
           <Button<"button">
             css={styles.changeEmailButton}
             size="large"

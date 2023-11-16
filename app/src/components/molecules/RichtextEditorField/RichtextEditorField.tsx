@@ -17,22 +17,22 @@ type RichtextEditorButton = {
 export interface RichtextEditorFieldProps
 {
   readonly buttons?: RichtextEditorButton[];
+  readonly content: Content;
   readonly disabled?: boolean;
-  readonly initialContent: Content;
   readonly onChange?: (e: EditorEvents["update"]) => void;
   readonly variant: "simple" | "with-legal-quote";
 }
 
 export const RichtextEditorField: FC<RichtextEditorFieldProps> = ({
   buttons,
+  content,
   disabled,
-  initialContent,
   onChange,
   variant,
 }) =>
 {
   const editor = useEditor({
-    content: initialContent,
+    content,
     editable: !disabled,
     extensions: [
       StarterKit,
@@ -41,27 +41,11 @@ export const RichtextEditorField: FC<RichtextEditorFieldProps> = ({
         placeholder: `${variant === "simple" ? "Gutachten verfassen..." : "Beginne hier..."} `,
       }),
     ],
-
-    onUpdate: (e) =>
-    {
-      if(onChange)
-      {
-        onChange(e);
-      }
-    },
-
+    onUpdate: onChange,
     parseOptions: {
       preserveWhitespace: true,
     }
   });
-
-  useEffect(() =>
-  {
-    if(editor)
-    {
-      editor.commands.setContent(initialContent);
-    }
-  }, [initialContent, editor]);
 
   useEffect(() =>
   {

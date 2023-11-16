@@ -111,7 +111,7 @@ const ProfilePersonalSpaceBlock: FunctionComponent = () =>
                 ) : (
                   <EmptyStateCard 
                     title="Du hast noch keine Dateien hochgeladen"
-                    text="Du kannst jetzt jetzt eigene Dateien hochladen und in deinem persönlichen Bereich ablegen."
+                    text="Du kannst jetzt eigene Dateien hochladen und in deinem persönlichen Bereich ablegen."
                     variant="For-small-areas"
                   />
                 )}

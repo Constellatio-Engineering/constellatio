@@ -1,6 +1,8 @@
 /* eslint-disable react/jsx-max-props-per-line */
 import { RouterTransition } from "@/components/atoms/RouterTransition/RouterTransition";
+import ComputerRecommendedModal from "@/components/computerRecommendedModal/ComputerRecommendedModal";
 import NewNotificationEarnedWatchdog from "@/components/molecules/newNotificationEarnedWatchdog/NewNotificationEarnedWatchdog";
+import SubscriptionModal from "@/components/organisms/subscriptionModal/SubscriptionModal";
 import { env } from "@/env.mjs";
 import { supabase } from "@/lib/supabase";
 import AuthStateProvider from "@/provider/AuthStateProvider";
@@ -15,15 +17,41 @@ import { paths } from "@/utils/paths";
 import { ModalsProvider } from "@mantine/modals";
 import { Notifications } from "@mantine/notifications";
 import {
-  type Session, SessionContextProvider
+  SessionContextProvider
 } from "@supabase/auth-helpers-react";
+import { type NextPage } from "next";
 import { type AppProps } from "next/app";
 import Head from "next/head";
 import { useRouter } from "next/router";
 import { appWithTranslation } from "next-i18next";
-import React, { useEffect, type FunctionComponent } from "react";
+import React, {
+  useEffect, type FunctionComponent, type ReactElement, type ReactNode
+} from "react";
 
-type ConstellatioAppProps = AppProps<{ initialSession: Session }>;
+export type NextPageWithLayout<P = object, IP = P> = NextPage<P, IP> & {
+  getLayout?: (page: ReactElement) => ReactNode;
+};
+
+type LayoutProps = {
+  readonly Component: NextPageWithLayout;
+  readonly pageProps: object;
+};
+
+const Layout: FunctionComponent<LayoutProps> = ({ Component, pageProps }) =>
+{
+  if(Component.getLayout) 
+  {
+    return Component.getLayout(<Component {...pageProps}/>);
+  }
+  else 
+  {
+    return <Component {...pageProps}/>;
+  }
+};
+
+type ConstellatioAppProps = AppProps & {
+  readonly Component: NextPageWithLayout;
+};
 
 const AppContainer: FunctionComponent<ConstellatioAppProps> = ({ Component, pageProps }) =>
 {
@@ -36,18 +64,14 @@ const AppContainer: FunctionComponent<ConstellatioAppProps> = ({ Component, page
   const ogImageUrlSplitUp = ogImage.split(".");
   const ogImageFileExtension = ogImageUrlSplitUp[ogImageUrlSplitUp.length - 1];
   let pageTitle = appTitle;
-  const setSearchValue = useSearchBarStore((s) => s.setSearchValue);
 
-  useEffect(() => 
+  useEffect(() =>
   {
-    if(typeof window !== "undefined")
+    if(!pathname.startsWith(paths.search))
     {
-      if(pathname !== paths.search)
-      {
-        setSearchValue("");
-      }
+      useSearchBarStore.setState({ searchValue: "" });
     }
-  }, [pathname, setSearchValue]);
+  }, [pathname]);
 
   if(!isProduction)
   {
@@ -102,7 +126,9 @@ const AppContainer: FunctionComponent<ConstellatioAppProps> = ({ Component, page
                   <RouterTransition/>
                   <Notifications/>
                   <NewNotificationEarnedWatchdog/>
-                  <Component {...pageProps}/>
+                  <SubscriptionModal/>
+                  <ComputerRecommendedModal/>
+                  <Layout Component={Component} pageProps={pageProps}/>
                 </MeilisearchProvider>
               </ModalsProvider>
             </CustomThemingProvider>

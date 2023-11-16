@@ -8,6 +8,7 @@
 import { supabase } from "@/lib/supabase";
 import { type AppRouter } from "@/server/api/root";
 import { type ClientError } from "@/utils/clientError";
+import { showErrorNotification } from "@/utils/notifications";
 import { paths } from "@/utils/paths";
 
 import { QueryCache } from "@tanstack/react-query";
@@ -36,52 +37,63 @@ const getBaseUrl = (): string =>
 
 /** A set of type-safe react-query hooks for your tRPC API. */
 export const api = createTRPCNext<AppRouter>({
-  config: () =>
-  {
-    return {
-      links: [
-        /* loggerLink({
+  config: () => ({
+    links: [
+      /* loggerLink({
           enabled: (opts) => env.NEXT_PUBLIC_DEPLOYMENT_ENVIRONMENT === "development" || (opts.direction === "down" && opts.result instanceof Error),
         }),*/
-        httpBatchLink({
-          url: `${getBaseUrl()}/api/trpc`,
-        }),
-      ],
-      queryClientConfig: {
-        queryCache: new QueryCache({
-          onError: (err) =>
+      httpBatchLink({
+        url: `${getBaseUrl()}/api/trpc`,
+      }),
+    ],
+    queryClientConfig: {
+      defaultOptions: {
+        mutations: {
+          onError: (err, variables, context) =>
           {
-            if(!(err instanceof TRPCClientError))
-            {
-              console.error("QueryCache error: ", err);
-              return;
-            }
+            console.log("Something went wrong with a mutation: ", { context, err, variables });
 
-            const clientError = err.data.clientError as ClientError;
-
-            if(!clientError)
-            {
-              console.warn("'clientError' not found in server response. Error was TRPCClientError: ", err);
-              return;
-            }
-
-            if(clientError.identifier === "unauthorized")
-            {
-              if(window.location.pathname !== paths.login)
-              {
-                console.log("Server responded with 'UNAUTHORIZED'. Redirecting to login");
-                window.location.replace(paths.login);
-              }
-
-              void supabase.auth.signOut();
-              return;
-            }
-          },
-        }),
+            showErrorNotification({
+              message: "Bitte versuche es später erneut oder wende dich an den Support.",
+              title: "Da ist leider etwas schief gelaufen.",
+            });
+          }
+        }
       },
-      transformer: superjson,
-    };
-  },
+      queryCache: new QueryCache({
+        onError: async (err) =>
+        {
+          if(!(err instanceof TRPCClientError))
+          {
+            console.error("QueryCache error: ", err);
+            return;
+          }
+
+          const clientError = err.data.clientError as ClientError;
+
+          if(!clientError)
+          {
+            console.warn("'clientError' not found in server response. Error was TRPCClientError: ", err);
+            return;
+          }
+
+          if(clientError.identifier === "unauthorized")
+          {
+            await supabase.auth.signOut();
+
+            if(!window.location.pathname.startsWith(paths.login))
+            {
+              console.log("Server responded with 'UNAUTHORIZED'. Redirecting to login");
+              window.location.replace(paths.login);
+            }
+
+            return;
+          }
+        },
+      }),
+    },
+    transformer: superjson,
+  }),
   ssr: false,
 });
 

@@ -1,9 +1,9 @@
 import { Input } from "@/components/atoms/Input/Input";
-import { PasswordValidationSchema } from "@/components/helpers/PasswordValidationSchema";
+import { minimumPasswordLength } from "@/schemas/auth/userData.validation";
 
 import { Box, type TextInputProps } from "@mantine/core";
-import { useDisclosure } from "@mantine/hooks";
 import React, { type FunctionComponent } from "react";
+import PasswordStrengthBar from "react-password-strength-bar";
 
 type Props = {
   readonly confirmPasswordInputProps: TextInputProps;
@@ -21,8 +21,6 @@ const PasswordInput: FunctionComponent<Props> = ({
   passwordToValidate
 }) =>
 {
-  const [isPasswordRevealed, { toggle }] = useDisclosure(false);
-
   return (
     <>
       <Box>
@@ -32,20 +30,25 @@ const PasswordInput: FunctionComponent<Props> = ({
           label={passwordLabelOverride ?? "Passwort*"}
           title="Passwort"
           placeholder={"*".repeat(16)}
-          onVisibilityChange={toggle}
         />
-        <PasswordValidationSchema
+        <PasswordStrengthBar
+          password={passwordToValidate}
+          shortScoreWord="Zu kurz"
+          minLength={minimumPasswordLength}
+          scoreWords={["Schwach", "Okay", "Gut", "Stark", "Sehr stark"]}
+        />
+        {/* <PasswordValidationSchema
           passwordValue={passwordToValidate}
           isPasswordRevealed={isPasswordRevealed}
-        />
+        />*/}
       </Box>
       <Input
         {...confirmPasswordInputProps}
         inputType="password"
+        mt={-8}
         label={passwordConfirmLabelOverride ?? "Passwort bestätigen*"}
         placeholder={"*".repeat(16)}
         title="Passwort bestätigen"
-        onVisibilityChange={toggle}
       />
     </>
   );

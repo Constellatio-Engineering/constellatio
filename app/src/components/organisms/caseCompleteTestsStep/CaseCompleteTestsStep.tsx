@@ -1,8 +1,8 @@
 /* eslint-disable max-lines */
 import { Button } from "@/components/atoms/Button/Button";
-import { CaptionText } from "@/components/atoms/CaptionText/CaptionText";
 import { type IStatusLabel } from "@/components/atoms/statusLabel/StatusLabel";
 import { RichTextHeadingOverwrite } from "@/components/helpers/RichTextHeadingOverwrite";
+import GameComponentWrapper from "@/components/molecules/gameComponentWrapper/GameComponentWrapper";
 import { type GameProgress } from "@/db/schema";
 import useContextAndErrorIfNull from "@/hooks/useContextAndErrorIfNull";
 import { InvalidateQueriesContext } from "@/provider/InvalidateQueriesProvider";
@@ -58,6 +58,7 @@ const CaseCompleteTestsStep: FunctionComponent<ICaseCompleteTestsStepProps> = ({
   // TODO: Go trough the code again and make sure every case is handled
 
   const completedGames = gamesProgress.filter(({ progressState }) => progressState === "completed");
+  const currentGameId = gamesProgress.find(({ progressState }) => progressState === "not-started")?.gameId;
   const areAllGamesCompleted = completedGames.length === games.length;
   const { invalidateCaseProgress } = useContextAndErrorIfNull(InvalidateQueriesContext);
   const { mutate: setProgressState } = api.casesProgress.setProgressState.useMutation({
@@ -124,11 +125,9 @@ const CaseCompleteTestsStep: FunctionComponent<ICaseCompleteTestsStepProps> = ({
             if(node?.attrs?.documentId === component?.id) 
             {
               return (
-                <div
-                  css={styles.gameComponentWrapper}
-                  key={`${component?.__typename}-${index}`}>
+                <GameComponentWrapper key={`${component?.__typename}-${index}`} currentGameId={currentGameId} gameId={component.id}>
                   <SelectionCardGame {...component} caseId={caseId}/>
-                </div>
+                </GameComponentWrapper>
               );
             }
             break;
@@ -136,11 +135,9 @@ const CaseCompleteTestsStep: FunctionComponent<ICaseCompleteTestsStepProps> = ({
             if(node?.attrs?.documentId === component?.id)                                     
             {
               return (
-                <div
-                  css={styles.gameComponentWrapper}
-                  key={`${component?.__typename}-${index}`}>
+                <GameComponentWrapper key={`${component?.__typename}-${index}`} currentGameId={currentGameId} gameId={component.id}>
                   <DragDropGame {...component} caseId={caseId}/>
-                </div>
+                </GameComponentWrapper>
               );
             }
             break;
@@ -148,11 +145,9 @@ const CaseCompleteTestsStep: FunctionComponent<ICaseCompleteTestsStepProps> = ({
             if(node?.attrs?.documentId === component?.id) 
             {
               return (
-                <div
-                  css={styles.gameComponentWrapper}
-                  key={`${component?.__typename}-${index}`}>
+                <GameComponentWrapper key={`${component?.__typename}-${index}`} currentGameId={currentGameId} gameId={component.id}>
                   <FillGapsGame {...component} caseId={caseId}/>
-                </div>
+                </GameComponentWrapper>
               );
             }
             break;
@@ -177,7 +172,7 @@ const CaseCompleteTestsStep: FunctionComponent<ICaseCompleteTestsStepProps> = ({
         return null;
       })
       : null;
-  }, [caseId, fullTextTasks?.connections]);
+  }, [caseId, fullTextTasks?.connections, currentGameId]);
 
   return (
     <Container p={0} maw={1440}>
@@ -231,14 +226,21 @@ const CaseCompleteTestsStep: FunctionComponent<ICaseCompleteTestsStepProps> = ({
                   paragraph: richTextParagraphOverwrite,
                 }}
               />
-              {(areAllGamesCompleted && variant === "case") ? (
-                <SolveCaseGame onGameStartHandler={() => 
-                {
-                  if(progressState === "completing-tests") { setProgressState({ caseId, progressState: "solving-case" }); }
-                  else { overrideCaseStepIndex(1, progressState ?? "not-started"); }
-                }}
+              {(areAllGamesCompleted && variant === "case") && (
+                <SolveCaseGame
+                  onGameStartHandler={() =>
+                  {
+                    if(progressState === "completing-tests")
+                    {
+                      setProgressState({ caseId, progressState: "solving-case" }); 
+                    }
+                    else
+                    {
+                      overrideCaseStepIndex(1, progressState ?? "not-started"); 
+                    }
+                  }}
                 />
-              ) : <CaptionText styleType="caption-01-medium">Beantworte die Frage, um in der Fallbearbeitung weiter zu kommen.</CaptionText>}
+              )}
             </div>
           )}
         </div>
