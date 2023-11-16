@@ -3,6 +3,9 @@ import { type MantineTheme } from "@mantine/styles";
 
 export const modalContentWrapper = css`
   text-align: center;
+  p {
+    margin-bottom: 8px;
+  }
 `;
 export const changeEmailModalTitle = css`
   margin-bottom: 24px;

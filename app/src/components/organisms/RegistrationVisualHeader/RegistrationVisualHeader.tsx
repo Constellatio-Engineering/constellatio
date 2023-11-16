@@ -35,6 +35,7 @@ export const RegistrationVisualHeader: FunctionComponent = () =>
           align="center">
           <Image
             src={visual}
+            priority
             style={{ height: "auto", maxWidth: 460, width: "90%" }}
             alt="Registration-visual"
           />
