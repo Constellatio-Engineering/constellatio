@@ -15,6 +15,7 @@ import FilterTag from "../../molecules/filterTag/FilterTag";
 export interface ICasesOverviewHeaderProps 
 {
   readonly categories?: IArticlesOverviewProps["allMainCategories"];
+  readonly height: number;
   readonly selectedCategorySlug?: string;
   readonly setSelectedCategorySlug?: (slug: string) => Promise<URLSearchParams>;
   readonly title?: Maybe<Scalars["String"]["output"]>;
@@ -23,6 +24,7 @@ export interface ICasesOverviewHeaderProps
 
 const OverviewHeader: FunctionComponent<ICasesOverviewHeaderProps> = ({
   categories,
+  height,
   selectedCategorySlug,
   setSelectedCategorySlug,
   title,
@@ -32,7 +34,7 @@ const OverviewHeader: FunctionComponent<ICasesOverviewHeaderProps> = ({
   const theme = useMantineTheme();
   const [filters, setFilters] = useState<string[]>([]);
   return (
-    <div css={styles.contentHeader({ theme, variant })} className="header">
+    <div css={styles.contentHeader({ height, theme, variant })} className="header">
       <div id="overlay-lines">
         <OverlayLines/>
       </div>

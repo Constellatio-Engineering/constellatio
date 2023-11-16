@@ -51,6 +51,7 @@ const PersonalSpacePageContent: FunctionComponent = () =>
         <OverviewHeader
           title="Persönlicher Bereich"
           variant="red"
+          height={360}
           categories={categories}
           selectedCategorySlug={selectedCategorySlug}
           setSelectedCategorySlug={setSelectedCategorySlug}
