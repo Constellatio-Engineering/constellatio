@@ -102,7 +102,7 @@ const CaseSolveCaseStep: FunctionComponent<Props> = ({
             <RichtextEditorField
               disabled={isDisabled}
               onChange={({ editor }) => setEditorContent(editor.getHTML())}
-              initialContent={submittedCaseSolution?.solution ?? ""}
+              content={submittedCaseSolution?.solution ?? ""}
               buttons={[
                 {
                   action: (editor) => saveSolution({

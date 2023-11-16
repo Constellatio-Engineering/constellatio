@@ -134,8 +134,10 @@ const EditorForm: FunctionComponent<EditorFormProps> = ({ editorState, selectedF
           <>
             <div css={styles.MaterialNoteRichText}>
               <RichtextEditorField
-                initialContent={note.content}
-                onChange={e => updateNoteInEditor({ content: e.editor.getText().trim() === "" ? "" : e.editor.getHTML() })}
+                content={note.content}
+                onChange={e => updateNoteInEditor({
+                  content: e.editor.getText().trim() === "" ? "" : e.editor.getHTML()
+                })}
                 variant="with-legal-quote"
               />
             </div>

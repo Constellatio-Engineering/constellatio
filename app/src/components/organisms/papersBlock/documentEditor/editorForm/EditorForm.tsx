@@ -165,7 +165,7 @@ const EditorForm: FunctionComponent<EditorFormProps> = ({ editorState }) =>
             />
             <RichtextEditorField
               variant="with-legal-quote"
-              initialContent={document.content}
+              content={document.content}
               onChange={(e) => updateEditorDocument({ content: e.editor.getHTML() })}
             />
           </div>
