@@ -5,10 +5,11 @@ import { Input } from "@/components/atoms/Input/Input";
 import { type ResetPasswordModalProgress } from "@/components/organisms/ResetPasswordModal/ResetPasswordModal";
 import { env } from "@/env.mjs";
 import { supabase } from "@/lib/supabase";
+import { resetPasswordFormSchema } from "@/schemas/auth/resetPassword.schema";
 import { paths } from "@/utils/paths";
 
 import { Stack, Title } from "@mantine/core";
-import { useForm } from "@mantine/form";
+import { useForm, zodResolver } from "@mantine/form";
 import React, { type Dispatch, type FunctionComponent, type SetStateAction, useState } from "react";
 
 import * as styles from "./ResetPasswordForm.styles";
@@ -29,7 +30,9 @@ const ResetPasswordForm: FunctionComponent<Props> = ({ setProgress }) =>
   const form = useForm<ResetPasswordFormValues>({
     initialValues: {
       email: ""
-    }
+    },
+    validate: zodResolver(resetPasswordFormSchema),
+    validateInputOnBlur: true,
   });
 
   const handleSubmit = form.onSubmit(async (formValues) =>
