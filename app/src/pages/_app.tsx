@@ -1,5 +1,6 @@
 /* eslint-disable react/jsx-max-props-per-line */
 import { RouterTransition } from "@/components/atoms/RouterTransition/RouterTransition";
+import ComputerRecommendedModal from "@/components/computerRecommendedModal/ComputerRecommendedModal";
 import NewNotificationEarnedWatchdog from "@/components/molecules/newNotificationEarnedWatchdog/NewNotificationEarnedWatchdog";
 import SubscriptionModal from "@/components/organisms/subscriptionModal/SubscriptionModal";
 import { env } from "@/env.mjs";
@@ -23,7 +24,9 @@ import { type AppProps } from "next/app";
 import Head from "next/head";
 import { useRouter } from "next/router";
 import { appWithTranslation } from "next-i18next";
-import React, { useEffect, type FunctionComponent, type ReactElement, type ReactNode } from "react";
+import React, {
+  useEffect, type FunctionComponent, type ReactElement, type ReactNode
+} from "react";
 
 export type NextPageWithLayout<P = object, IP = P> = NextPage<P, IP> & {
   getLayout?: (page: ReactElement) => ReactNode;
@@ -124,6 +127,7 @@ const AppContainer: FunctionComponent<ConstellatioAppProps> = ({ Component, page
                   <Notifications/>
                   <NewNotificationEarnedWatchdog/>
                   <SubscriptionModal/>
+                  <ComputerRecommendedModal/>
                   <Layout Component={Component} pageProps={pageProps}/>
                 </MeilisearchProvider>
               </ModalsProvider>

@@ -88,8 +88,11 @@ export const genderValidation = z.string().nullable().transform((value, context)
   return value as GenderIdentifier;
 });
 
+/* export const passwordSchema = z.string().refine(password => passwordRequirements.every(r => r.re.test(password)), {
+  message: "Passwort erfüllt nicht die Anforderungen",
+});*/
+
 export const semesterValidation = z.string().pipe(z.coerce.number().int().max(maximumAmountOfSemesters));
 export const universityValidation = z.enum(allUniversities);
-export const passwordSchema = z.string().refine(password => passwordRequirements.every(r => r.re.test(password)), {
-  message: "Passwort erfüllt nicht die Anforderungen",
-});
+export const minimumPasswordLength = 8 as const;
+export const passwordSchema = z.string().min(minimumPasswordLength);

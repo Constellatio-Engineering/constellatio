@@ -75,7 +75,7 @@ const ProfileDetailsTab: FunctionComponent<Props> = ({ userDetails }) =>
 
   return (
     <div css={styles.wrapper}>
-      <Title css={styles.profileDetailsTabTitle} order={3}>Einstellungen</Title>
+      <Title css={styles.profileDetailsTabTitle} order={3}>Persönliche Daten</Title>
       {/* {err && <AlertCard onClick={() => setErr(false)} variant="error">Es tut uns leid, deine Eingaben konnten nicht gespeichert werden. Bitte versuche es erneut.</AlertCard>}*/}
       {/* {success && (
         <AlertCard

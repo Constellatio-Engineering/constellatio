@@ -30,7 +30,7 @@ const ProfilePageHeader: FunctionComponent = () =>
           height={200}
         />
       </div>
-      <OverviewHeader variant="red"/>
+      <OverviewHeader variant="red" height={440}/>
     </div>
   );
 };

@@ -1,7 +1,12 @@
 import { css } from "@emotion/react";
 import { type MantineTheme } from "@mantine/styles";
 
-export const contentHeader = ({ theme, variant }: {
+export const contentHeader = ({
+  height,
+  theme,
+  variant
+}: {
+  height: number;
   theme: MantineTheme;
   variant: "case" | "dictionary" | "red";
 }) => css`
@@ -12,8 +17,9 @@ export const contentHeader = ({ theme, variant }: {
 	align-items: center;
 	justify-content: center;
 	gap: 32px;
-	height: 500px;
-	/* max-height: 50vh; */
+  padding-top: ${variant === "red" ? 30 : 0}px;
+  padding-bottom: ${variant === "red" ? 0 : 20}px;
+  height: ${height}px;
 	background: ${variant === "case"
     ? theme.colors["cc-cases"][2]
     : variant === "dictionary"
