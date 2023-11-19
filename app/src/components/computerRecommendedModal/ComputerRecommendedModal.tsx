@@ -25,9 +25,9 @@ const ComputerRecommendedModal: FunctionComponent<IComputerRecommendedModalProps
       unter&nbsp;
       <CustomLink
         styleType="link-primary"
-        href="mailto:webmaster@constellatio.de"
+        href="mailto:gutentag@constellatio.de"
         c="neutrals-01.7">
-        webmaster@constellatio.de
+        gutentag@constellatio.de
       </CustomLink>
     </BodyText>
     {/* <BodyText styleType="body-01-regular" component="p">Bitte wechsle zu deinem Computer oder Tablet, um Constellatio zu nutzen.</BodyText> */}

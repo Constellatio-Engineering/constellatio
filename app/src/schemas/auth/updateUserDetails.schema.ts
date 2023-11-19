@@ -7,7 +7,7 @@ export const updateUserDetailsSchema = z.object({
   email: emailValidation.optional(),
   firstName: nameValidation.optional(),
   lastName: nameValidation.optional(),
-  semester: semesterValidation.optional(),
+  semester: semesterValidation.nullable().optional(),
   university: universityValidation.nullable().optional(),
 });
 

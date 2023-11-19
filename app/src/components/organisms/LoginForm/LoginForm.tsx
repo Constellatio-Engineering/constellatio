@@ -8,7 +8,8 @@ import { colors } from "@/constants/styles/colors";
 import useContextAndErrorIfNull from "@/hooks/useContextAndErrorIfNull";
 import { supabase } from "@/lib/supabase";
 import { InvalidateQueriesContext } from "@/provider/InvalidateQueriesProvider";
-import { type LoginFormSchema, loginFormSchema } from "@/schemas/auth/loginForm.schema";
+import { loginFormSchema, type LoginFormSchema } from "@/schemas/auth/loginForm.schema";
+import useAuthPageStore from "@/stores/authPage.store";
 import { paths } from "@/utils/paths";
 import { queryParams } from "@/utils/query-params";
 
@@ -17,16 +18,12 @@ import { useForm, zodResolver } from "@mantine/form";
 import { useAtom } from "jotai";
 import Link from "next/link";
 import { useRouter } from "next/router"; 
-import { useTranslation } from "next-i18next";
 import { type FunctionComponent, useEffect, useState } from "react";
-import z from "zod";
-import { makeZodI18nMap } from "zod-i18n-map";
 
 import { ResetPasswordModal, resetPasswordModalVisible } from "../ResetPasswordModal/ResetPasswordModal";
 
 export const LoginForm: FunctionComponent = () =>
 {
-  const { t } = useTranslation();
   const router = useRouter();
   const wasPasswordUpdated = router.query[queryParams.passwordResetSuccess] === "true";
   const redirectTo = router.query[queryParams.redirectedFrom];
@@ -34,10 +31,12 @@ export const LoginForm: FunctionComponent = () =>
   const [, setResetPasswordModalOpen] = useAtom(resetPasswordModalVisible);
   const [isLoginInProgress, setIsLoginInProgress] = useState(false);
   const [signInError, setSignInError] = useState<unknown>();
+  const lastEnteredPassword = useAuthPageStore(s => s.lastEnteredPassword);
+  const lastEnteredEmail = useAuthPageStore(s => s.lastEnteredEmail);
   const form = useForm<LoginFormSchema>({
     initialValues: {
-      email: "",
-      password: "",
+      email: lastEnteredEmail,
+      password: lastEnteredPassword,
     },
     validate: zodResolver(loginFormSchema),
     validateInputOnBlur: true,
@@ -45,8 +44,11 @@ export const LoginForm: FunctionComponent = () =>
 
   useEffect(() =>
   {
-    z.setErrorMap(makeZodI18nMap({ t }));
-  }, [t]);
+    useAuthPageStore.setState({
+      lastEnteredEmail: form.values.email,
+      lastEnteredPassword: form.values.password,
+    });
+  }, [form.values.email, form.values.password]);
 
   const openResetPasswordModal = (): void => setResetPasswordModalOpen(true);
 

@@ -2,15 +2,15 @@ import PageHead from "@/components/organisms/pageHead/PageHead";
 import { AuthPage } from "@/components/pages/AuthPage/AuthPage";
 import { getCommonProps } from "@/utils/commonProps";
 
-import { type GetServerSideProps } from "next";
+import { type GetStaticProps } from "next";
 import { type SSRConfig } from "next-i18next";
 import { type FunctionComponent } from "react";
 
 import { defaultLocale } from "../../next.config.mjs";
 
-type ServerSidePropsResult = SSRConfig;
+type StaticPropsResult = SSRConfig;
 
-export const getServerSideProps: GetServerSideProps<ServerSidePropsResult> = async ({ locale = defaultLocale }) =>
+export const getStaticProps: GetStaticProps<StaticPropsResult> = async ({ locale = defaultLocale }) =>
 {
   const commonProps = await getCommonProps({ locale });
 
@@ -19,7 +19,7 @@ export const getServerSideProps: GetServerSideProps<ServerSidePropsResult> = asy
   };
 };
 
-const Login: FunctionComponent<ServerSidePropsResult> = () => (
+const Login: FunctionComponent<StaticPropsResult> = () => (
   <>
     <PageHead pageTitle="Login"/>
     <AuthPage tab="login"/>

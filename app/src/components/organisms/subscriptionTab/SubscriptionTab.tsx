@@ -82,11 +82,10 @@ const SubscriptionTab: FunctionComponent = () =>
     <div css={styles.wrapper}>
       {!isTabletScreen && <Title order={3} css={styles.subscriptionTabTitle}>Vertrag</Title>}
       <BodyText m="32px 0" styleType="body-01-bold" component="p">
-        {isOnPaidSubscription && `Dein Abonnement läuft noch bis zum ${getDate()}`}
-        {isOnTrailSubscription && `Dein Test-Abo endet am ${getDate()}`}
+        {isOnPaidSubscription && `Dein Abonnement läuft noch bis zum ${getDate()}. `}
+        {isOnTrailSubscription && `Dein Test-Abo endet am ${getDate()}. `}
         {(!isOnPaidSubscription) && "Schließe jetzt dein Constellatio Abonnement ab:"}
       </BodyText>
-      {/* <SubscriptionCard/> */}
       <Button<"button">
         styleType="primary"
         style={{ display: "block", width: "100%" }}

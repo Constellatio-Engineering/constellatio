@@ -3,21 +3,24 @@
 import CaisyImg from "@/basic-components/CaisyImg";
 import { BodyText } from "@/components/atoms/BodyText/BodyText";
 import { Button } from "@/components/atoms/Button/Button";
+import { CustomLink } from "@/components/atoms/CustomLink/CustomLink";
 import { Modal } from "@/components/molecules/Modal/Modal";
 import useSubscription from "@/hooks/useSubscription";
+import { AuthStateContext } from "@/provider/AuthStateProvider";
 
 import { Title } from "@mantine/core";
 import { useLocalStorage } from "@mantine/hooks";
 import { useRouter } from "next/router";
-import { useMemo, type FunctionComponent, useState } from "react";
+import { useMemo, type FunctionComponent, useState, useContext } from "react";
 import { z } from "zod";
 
 import ModalFlag from "../../../../public/images/placeholder-flag.png";
 
 const localStorageKey = "daysLeftToSubscriptionEnds";
 
-const SubscriptionModal: FunctionComponent = () => 
+const SubscriptionModal: FunctionComponent = () =>
 {
+  const { isUserLoggedIn } = useContext(AuthStateContext);
   const router = useRouter();
   const { generateStripeSessionUrl, isOnTrailSubscription, subscriptionDetails } = useSubscription();
   const [daysCheckedForSubscriptionEnds, setDaysCheckedForSubscriptionEnds] = useLocalStorage<string[]>({
@@ -46,7 +49,7 @@ const SubscriptionModal: FunctionComponent = () =>
     }
   });
 
-  const diffDays = useMemo((): number | null => 
+  const diffDays = useMemo((): number | null =>
   {
     if(subscriptionDetails == null)
     {
@@ -73,8 +76,13 @@ const SubscriptionModal: FunctionComponent = () =>
 
   const [wasClosed, setWasClosed] = useState(false);
   const todayDateAsString = new Date().toISOString().split("T")[0] as string;
-
-  const isOpened = !wasClosed && !daysCheckedForSubscriptionEnds?.includes(todayDateAsString) && isOnTrailSubscription;
+  const isOpened = (
+    !wasClosed &&
+    !daysCheckedForSubscriptionEnds?.includes(todayDateAsString) &&
+    isOnTrailSubscription &&
+    (diffDays === 3 || diffDays === 1 || diffDays === 0) &&
+    isUserLoggedIn
+  ) ?? false;
   const isModalLocked = diffDays == null || diffDays <= 0;
 
   const redirectToStripeCheckout = async (): Promise<void> => 
@@ -118,14 +126,26 @@ const SubscriptionModal: FunctionComponent = () =>
         {
           diffDays != null && (
             <>
-              {isOnTrailSubscription && `Deine Testphase läuft nur noch ${diffDays} Tage`}
+              {isOnTrailSubscription && `Deine Testphase läuft nur noch ${diffDays} Tag${diffDays === 1 ? "" : "e"}`}
               {diffDays <= 0 && "Deine Testphase ist abgelaufen"}
             </>
           )
         }
         
       </Title>
-      <BodyText ta="center" styleType="body-01-regular" component="p">Jetzt Constellatio abonnieren, um weiterhin alle Vorteile digitalen Lernens zu genießen</BodyText>
+      <BodyText ta="center" styleType="body-01-regular" component="p">
+        Jetzt Constellatio abonnieren, um weiterhin alle Vorteile digitalen Lernens zu genießen.
+        Wenn du dir noch nicht ganz sicher bist, kannst du{" "}
+        <CustomLink
+          href="https://www.constellatio.de/preise"
+          target="_blank"
+          rel="noopener noreferrer"
+          styleType="link-primary"
+          c="neutrals-01.7">
+          hier
+        </CustomLink>
+        {" "}klicken, um dir noch einmal unsere Preise anzuschauen.
+      </BodyText>
       <Button<"button">
         size="large"
         miw="100%"

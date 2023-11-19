@@ -1,13 +1,14 @@
 import { Layout } from "@/components/layouts/Layout";
 import PageHead from "@/components/organisms/pageHead/PageHead";
 import ProfilePageWrapper from "@/components/pages/profilePage/ProfilePage";
+import { type NextPageWithLayout } from "@/pages/_app";
 import { type IGenMainCategory } from "@/services/graphql/__generated/sdk";
 import { getCommonProps } from "@/utils/commonProps";
 import { type Nullable } from "@/utils/types";
 
-import { type GetServerSideProps } from "next";
+import { type GetStaticProps } from "next";
 import { type SSRConfig } from "next-i18next";
-import React, { type FunctionComponent } from "react";
+import React from "react";
 
 import { defaultLocale } from "../../next.config.mjs";
 
@@ -16,9 +17,9 @@ export type IProfilePageProps = {
   readonly data: string;
 };
 
-type ServerSidePropsResult = SSRConfig;
+type StaticPropsResult = SSRConfig;
 
-export const getServerSideProps: GetServerSideProps<ServerSidePropsResult> = async ({ locale = defaultLocale }) =>
+export const getStaticProps: GetStaticProps<StaticPropsResult> = async ({ locale = defaultLocale }) =>
 {
   const commonProps = await getCommonProps({ locale });
 
@@ -27,16 +28,16 @@ export const getServerSideProps: GetServerSideProps<ServerSidePropsResult> = asy
   };
 };
 
-const Page: FunctionComponent<ServerSidePropsResult> = () =>
+const Page: NextPageWithLayout<StaticPropsResult> = () =>
 {
   return (
     <>
       <PageHead pageTitle="Profil"/>
-      <Layout>
-        <ProfilePageWrapper/>
-      </Layout>
+      <ProfilePageWrapper/>
     </>
   );
 };
+
+Page.getLayout = Layout;
 
 export default Page;

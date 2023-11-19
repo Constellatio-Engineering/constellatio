@@ -1,8 +1,6 @@
-
 import DashboardCasesBlock from "@/components/organisms/dashboardCasesBlock/DashboardCasesBlock";
 import DashboardHeader from "@/components/organisms/dashboardHeader/DashboardHeader";
 import DashboardPersonalSpaceBlock from "@/components/organisms/dashboardPersonalSpaceBlock/DashboardPersonalSpaceBlock";
-import SubscriptionModal from "@/components/organisms/subscriptionModal/SubscriptionModal";
 
 import React, { type FunctionComponent } from "react";
 
@@ -15,7 +13,6 @@ const DashboardPage: FunctionComponent = () => (
       <DashboardPersonalSpaceBlock/>
       <DashboardCasesBlock/>
     </div>
-    <SubscriptionModal/>
   </div>
 );
 

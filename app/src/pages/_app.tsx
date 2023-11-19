@@ -2,6 +2,7 @@
 import { RouterTransition } from "@/components/atoms/RouterTransition/RouterTransition";
 import FeedbackButton from "@/components/molecules/feedbackButton/feedbackButton";
 import NewNotificationEarnedWatchdog from "@/components/molecules/newNotificationEarnedWatchdog/NewNotificationEarnedWatchdog";
+import SubscriptionModal from "@/components/organisms/subscriptionModal/SubscriptionModal";
 import { env } from "@/env.mjs";
 import { supabase } from "@/lib/supabase";
 import AuthStateProvider from "@/provider/AuthStateProvider";
@@ -16,14 +17,40 @@ import { paths } from "@/utils/paths";
 import formbricks from "@formbricks/js";
 import { ModalsProvider } from "@mantine/modals";
 import { Notifications } from "@mantine/notifications";
-import { type Session, SessionContextProvider } from "@supabase/auth-helpers-react";
+import {
+  SessionContextProvider
+} from "@supabase/auth-helpers-react";
+import { type NextPage } from "next";
 import { type AppProps } from "next/app";
 import Head from "next/head";
 import { useRouter } from "next/router";
 import { appWithTranslation } from "next-i18next";
-import posthog from "posthog-js";
+import { posthog } from "posthog-js";
 import { PostHogProvider } from "posthog-js/react";
-import React, { useEffect, type FunctionComponent, useState, useRef, useCallback } from "react";
+import React, {
+  useEffect, type FunctionComponent, type ReactElement, type ReactNode, useState, useRef, useCallback
+} from "react";
+
+export type NextPageWithLayout<P = object, IP = P> = NextPage<P, IP> & {
+  getLayout?: (page: ReactElement) => ReactNode;
+};
+
+type LayoutProps = {
+  readonly Component: NextPageWithLayout;
+  readonly pageProps: object;
+};
+
+const Layout: FunctionComponent<LayoutProps> = ({ Component, pageProps }) =>
+{
+  if(Component.getLayout) 
+  {
+    return Component.getLayout(<Component {...pageProps}/>);
+  }
+  else 
+  {
+    return <Component {...pageProps}/>;
+  }
+};
 
 if(typeof window !== "undefined")
 {
@@ -33,7 +60,7 @@ if(typeof window !== "undefined")
     capture_pageview: true,
     disable_cookie: true,
     disable_session_recording: true,
-    loaded: (posthog) => 
+    loaded: (posthog) =>
     {
       if(!isProduction)
       {
@@ -45,16 +72,18 @@ if(typeof window !== "undefined")
     secure_cookie: true,
   });
 
-  formbricks.init({
+  void formbricks.init({
     apiHost: env.NEXT_PUBLIC_FORMBRICKS_HOST,
-    debug: isProduction ? false : true,
+    debug: !isProduction,
     environmentId: isProduction
       ? env.NEXT_PUBLIC_FORMBRICKS_KEY_PRODUCTION
       : env.NEXT_PUBLIC_FORMBRICKS_KEY_TESTINGS,
   });
 }
 
-type ConstellatioAppProps = AppProps<{ initialSession: Session }>;
+type ConstellatioAppProps = AppProps & {
+  readonly Component: NextPageWithLayout;
+};
 
 const AppContainer: FunctionComponent<ConstellatioAppProps> = ({ Component, pageProps }) =>
 {
@@ -66,8 +95,6 @@ const AppContainer: FunctionComponent<ConstellatioAppProps> = ({ Component, page
   const ogImage = env.NEXT_PUBLIC_WEBSITE_URL + "/og_image.jpg";
   const ogImageUrlSplitUp = ogImage.split(".");
   const ogImageFileExtension = ogImageUrlSplitUp[ogImageUrlSplitUp.length - 1];
-  let pageTitle = appTitle;
-  const setSearchValue = useSearchBarStore((s) => s.setSearchValue);
   const { mutate: ping } = api.tracking.ping.useMutation();
   const [isDocumentVisible, setIsDocumentVisible] = useState<null | boolean>(null);
   const [isMouseInWindow, setIsMouseInWindow] = useState<null | boolean>(null);
@@ -75,10 +102,11 @@ const AppContainer: FunctionComponent<ConstellatioAppProps> = ({ Component, page
   const [postHogQueueIsStarted, setPostHogQueueIsStarted] = useState(false);
   const [isFormbricksVerified, setIsFormbricksVerified] = useState<boolean>(false);
   const [isSignedIn, setIsSignedIn] = useState<boolean>(false);
+  let pageTitle = appTitle;
 
-  useEffect(() => 
+  useEffect(() =>
   {
-    supabase.auth.onAuthStateChange((event, session) => 
+    supabase.auth.onAuthStateChange((event, session) =>
     {
       switch (event)
       {
@@ -125,15 +153,15 @@ const AppContainer: FunctionComponent<ConstellatioAppProps> = ({ Component, page
 
             if(!isFormbricksVerified)
             {
-              formbricks.setUserId(id);
-              formbricks.setEmail(email);
+              void formbricks.setUserId(id);
+              void formbricks.setEmail(email);
               setIsFormbricksVerified(true);
             }
           }
           break;
         }
         case "SIGNED_OUT": {
- 
+
           setIsSignedIn(false);
 
           posthog.stopSessionRecording();
@@ -149,7 +177,7 @@ const AppContainer: FunctionComponent<ConstellatioAppProps> = ({ Component, page
 
           if(isFormbricksVerified)
           {
-            formbricks.logout();
+            void formbricks.logout();
           }
           break;
         }
@@ -164,39 +192,36 @@ const AppContainer: FunctionComponent<ConstellatioAppProps> = ({ Component, page
     const handleRouteChange = (): void =>
     {
       posthog.capture("$pageview");
-      // eslint-disable-next-line @typescript-eslint/no-unused-expressions // denke dieser fehler kommt daher dass keine types vorhanden sind
+      // eslint-disable-next-line @typescript-eslint/no-unused-expressions
       formbricks?.registerRouteChange;
     };
     router.events.on("routeChangeComplete", handleRouteChange);
 
-    return () => 
+    return () =>
     {
       router.events.off("routeChangeComplete", handleRouteChange);
     };
   }, []); // TODO:: check ob es mit leerem wie auch mit gefüllten depency array läuft (wenn depency drin ist eventuell gefahr dass zu oft feuert also EVENTS in Posthog checken)
 
-  useEffect(() => 
+  useEffect(() =>
   {
-    const onVisibilityChange = (): void => 
+    const onVisibilityChange = (): void =>
     {
       setIsDocumentVisible(!document.hidden);
     };
     onVisibilityChange();
     document.addEventListener("visibilitychange", onVisibilityChange);
-    return () => 
-    {
-      document.removeEventListener("visibilitychange", onVisibilityChange);
-    };
+    return () => document.removeEventListener("visibilitychange", onVisibilityChange);
   }, []);
 
-  useEffect(() => 
+  useEffect(() =>
   {
-    const onWindowMouseOut = (): void => 
+    const onWindowMouseOut = (): void =>
     {
       setIsMouseInWindow(false);
     };
 
-    const onWindowMouseOver = (): void => 
+    const onWindowMouseOver = (): void =>
     {
       setIsMouseInWindow(true);
     };
@@ -204,14 +229,14 @@ const AppContainer: FunctionComponent<ConstellatioAppProps> = ({ Component, page
     document.addEventListener("mouseleave", onWindowMouseOut);
     document.addEventListener("mouseenter", onWindowMouseOver);
 
-    return () => 
+    return () =>
     {
       document.removeEventListener("mouseleave", onWindowMouseOut);
       document.removeEventListener("mouseenter", onWindowMouseOver);
     };
   }, []);
 
-  const onInterval = useCallback((): void => 
+  const onInterval = useCallback((): void =>
   {
     if(
       !isDocumentVisible ||
@@ -227,7 +252,7 @@ const AppContainer: FunctionComponent<ConstellatioAppProps> = ({ Component, page
     ping({ url: currentPath });
   }, [isDocumentVisible, isMouseInWindow, router.asPath, ping]);
 
-  useEffect(() => 
+  useEffect(() =>
   {
     if(interval.current)
     {
@@ -240,16 +265,13 @@ const AppContainer: FunctionComponent<ConstellatioAppProps> = ({ Component, page
     return () => clearInterval(interval.current);
   }, [onInterval]);
 
-  useEffect(() => 
+  useEffect(() =>
   {
-    if(typeof window !== "undefined")
+    if(!pathname.startsWith(paths.search))
     {
-      if(pathname !== paths.search)
-      {
-        setSearchValue("");
-      }
+      useSearchBarStore.setState({ searchValue: "" });
     }
-  }, [pathname, setSearchValue]);
+  }, [pathname]);
 
   if(!isProduction)
   {
@@ -296,26 +318,26 @@ const AppContainer: FunctionComponent<ConstellatioAppProps> = ({ Component, page
         <meta name="twitter:image" content={ogImage}/>
       </Head>
       <SessionContextProvider supabaseClient={supabase} initialSession={pageProps.initialSession}>
-        <PostHogProvider client={posthog}>
-          <InvalidateQueriesProvider>
-            <AuthStateProvider>
+        <InvalidateQueriesProvider>
+          <AuthStateProvider>
+            <PostHogProvider client={posthog}>
               <CustomThemingProvider>
                 <ModalsProvider>
                   <MeilisearchProvider>
                     <RouterTransition/>
                     <Notifications/>
                     <NewNotificationEarnedWatchdog/>
-                    {
-                      isSignedIn &&
+                    <SubscriptionModal/>
+                    {isSignedIn && (
                       <FeedbackButton/>
-                    }
-                    <Component {...pageProps}/>
+                    )}
+                    <Layout Component={Component} pageProps={pageProps}/>
                   </MeilisearchProvider>
                 </ModalsProvider>
               </CustomThemingProvider>
-            </AuthStateProvider>
-          </InvalidateQueriesProvider>
-        </PostHogProvider>
+            </PostHogProvider>
+          </AuthStateProvider>
+        </InvalidateQueriesProvider>
       </SessionContextProvider>
     </>
   );
