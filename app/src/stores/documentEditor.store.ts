@@ -82,7 +82,7 @@ const useDocumentEditorStore = create(
 
           computedValues = {
             hasUnsavedChanges,
-            title: `${editorState.originalDocument.name} bearbeiten`,
+            title: `'${editorState.originalDocument.name}' bearbeiten`,
           };
 
           break;
