@@ -7,6 +7,7 @@ import { CustomLink } from "@/components/atoms/CustomLink/CustomLink";
 import { Modal } from "@/components/molecules/Modal/Modal";
 import useSubscription from "@/hooks/useSubscription";
 import { AuthStateContext } from "@/provider/AuthStateProvider";
+import { paths } from "@/utils/paths";
 
 import { Title } from "@mantine/core";
 import { useLocalStorage } from "@mantine/hooks";
@@ -81,7 +82,9 @@ const SubscriptionModal: FunctionComponent = () =>
     !daysCheckedForSubscriptionEnds?.includes(todayDateAsString) &&
     isOnTrailSubscription &&
     (diffDays === 3 || diffDays === 1 || diffDays === 0) &&
-    isUserLoggedIn
+    isUserLoggedIn &&
+    !router.pathname.startsWith(paths.login) &&
+    !router.pathname.startsWith(paths.register)
   ) ?? false;
   const isModalLocked = diffDays == null || diffDays <= 0;
 
