@@ -10,13 +10,16 @@ import * as styles from "./ProgressCardSection.styles";
 const ProgressCardSection: FunctionComponent = () =>
 {
   const { allMainCategories } = useMainCategories();
-  const { cases: casesWithProgress } = useAllCasesWithProgress();
+  const { casesWithProgress } = useAllCasesWithProgress();
+
   return (
     <div css={styles.wrapper}>
       {allMainCategories?.map((mainCategory, i) => 
       {
-        const total = casesWithProgress?.filter(x => x?.mainCategoryField?.[0]?.mainCategory === mainCategory?.mainCategory)?.length;
-        const completed = casesWithProgress?.filter(x => x?.mainCategoryField?.[0]?.mainCategory === mainCategory?.mainCategory && x?.progress === "completed")?.length;
+        const allCasesInCategory = casesWithProgress?.filter(legalCase => legalCase?.mainCategoryField?.[0]?.id === mainCategory?.id);
+        const total = allCasesInCategory.length;
+        const completed = allCasesInCategory?.filter(legalCase => legalCase?.progress === "completed")?.length;
+        
         return (
           <ProgressCard
             key={i}
