@@ -104,7 +104,7 @@ export const RegistrationForm: FunctionComponent = () =>
         case "signupComplete":
         {
           await supabase.auth.setSession(result.session);
-          await router.replace("/");
+          await router.replace(paths.dashboard);
           break;
         }
       }

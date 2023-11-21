@@ -56,7 +56,7 @@ const HeaderDefault: FunctionComponent = () =>
       <SHeader>
         <div css={styles.wrapper({ theme, variant: "default" })}>
           <div css={styles.links}>
-            <Link href="/">
+            <Link href={paths.dashboard}>
               <Image css={styles.tabletHeaderLogo} src={ConstellatioLogoIcon} alt="Constellatio"/>
               <Image css={styles.headerLogo} src={ConstellatioFullLogo} alt="Constellatio"/>
             </Link>
