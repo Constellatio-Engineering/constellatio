@@ -1,3 +1,5 @@
+import { paths } from "@/utils/paths";
+
 import { useMantineTheme } from "@mantine/styles";
 import Image from "next/image";
 import Link from "next/link";
@@ -21,7 +23,7 @@ export const Header: FC<HeaderProps> = ({ variant = "default" }) =>
     <SHeader>
       <div css={styles.wrapper({ theme, variant })}>
         <div>
-          <Link href="/">
+          <Link href={paths.dashboard}>
             <Image src={ConstellatioFullLogoPng} alt="Constellatio" width={150}/>
           </Link>
         </div>
@@ -31,7 +33,7 @@ export const Header: FC<HeaderProps> = ({ variant = "default" }) =>
     <HeaderDefault/>
   ) : variant === "relative" && (
     <styles.SHeaderRelative>
-      <Link href="/">
+      <Link href={paths.dashboard}>
         <Image src={ConstellatioFullLogoPng} alt="Constellatio" width={150}/>
       </Link>
     </styles.SHeaderRelative>
