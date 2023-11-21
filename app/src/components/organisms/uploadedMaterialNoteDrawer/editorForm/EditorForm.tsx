@@ -19,15 +19,15 @@ import * as styles from "./EditorForm.styles";
 interface EditorFormProps
 {
   readonly editorState: EditorStateDrawerOpened;
+  readonly onClose: () => void;
   readonly selectedFolderId: string | null;
 }
 
-const EditorForm: FunctionComponent<EditorFormProps> = ({ editorState, selectedFolderId }) =>
+const EditorForm: FunctionComponent<EditorFormProps> = ({ editorState, onClose, selectedFolderId }) =>
 {
   const { invalidateNotes } = useContextAndErrorIfNull(InvalidateQueriesContext);
   const { note, state } = editorState;
   const updateNoteInEditor = useNoteEditorStore(s => s.updateNote);
-  const closeEditor = useNoteEditorStore(s => s.closeEditor);
   const setEditNoteState = useNoteEditorStore(s => s.setEditNoteState);
   const { hasUnsavedChanges } = useNoteEditorStore(s => s.getComputedValues());
   const [shouldShowDeleteNoteWindow, setShouldShowDeleteNoteWindow] = useState<boolean>(false);
@@ -50,27 +50,9 @@ const EditorForm: FunctionComponent<EditorFormProps> = ({ editorState, selectedF
     onSuccess: async () =>
     {
       await _invalidateNotes();
-      closeEditor();
+      onClose();
     }
   });
-
-  const onCancel = (): void =>
-  {
-    if(!hasUnsavedChanges)
-    {
-      closeEditor();
-      return;
-    }
-
-    const shouldDiscardChanges = window.confirm("Are you sure you want to discard your changes?");
-
-    if(!shouldDiscardChanges)
-    {
-      return;
-    }
-
-    closeEditor();
-  };
 
   const onSave = async (): Promise<void> =>
   {
@@ -144,7 +126,7 @@ const EditorForm: FunctionComponent<EditorFormProps> = ({ editorState, selectedF
             <div css={styles.MaterialNotesCallToAction}>
               <Button<"button">
                 styleType="secondarySimple"
-                onClick={onCancel}>
+                onClick={onClose}>
                 Abbrechen
               </Button>
               <Button<"button">

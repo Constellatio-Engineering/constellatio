@@ -28,13 +28,15 @@ const ProgressCard: FunctionComponent<ProgressCardProps> = ({
   return (
     <div css={styles.wrapper}>
       {icon && <div css={styles.icon}>{icon}</div>}
-      {title && <div css={{}}><Title order={3}>{title}</Title></div>}
+      {title && <div><Title order={3}>{title}</Title></div>}
       {total != null && (
-        <div css={{}}>
-          <CountLabel count={completed} total={total} variant="cases"/>
-        </div>
+        <CountLabel count={completed} total={total} variant="cases"/>
       )}
-      <Link href={`${paths.cases}?category=${slugFormatter(title.replaceAll(" ", ""))}`} css={styles.link}>Zur Fallübersicht<ArrowRight/></Link>
+      <Link
+        href={`${paths.cases}?category=${slugFormatter(title.replaceAll(" ", ""))}`}
+        css={styles.link}>
+        Zur Fallübersicht<ArrowRight/>
+      </Link>
     </div>
   );
 };

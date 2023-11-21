@@ -4,31 +4,33 @@ import { Input } from "@/components/atoms/Input/Input";
 import { Edit } from "@/components/Icons/Edit";
 import { Trash } from "@/components/Icons/Trash";
 import { RichtextEditorField } from "@/components/molecules/RichtextEditorField/RichtextEditorField";
+import { useDataLossProtection } from "@/hooks/useDataLossProtection";
 import { useOnDocumentMutation } from "@/hooks/useOnDocumentMutation";
 import { type CreateDocumentSchema } from "@/schemas/documents/createDocument.schema";
 import { type UpdateDocumentSchema } from "@/schemas/documents/updateDocument.schema";
 import useDocumentEditorStore, { type EditorStateDrawerOpened } from "@/stores/documentEditor.store";
 import { api } from "@/utils/api";
 
-import React, { type FunctionComponent } from "react";
+import React, { type FunctionComponent, useCallback, useEffect } from "react";
 
 import * as styles from "./EditorForm.styles";
 
 interface EditorFormProps
 {
   readonly editorState: EditorStateDrawerOpened;
+  readonly onClose: () => void;
 }
 
-const EditorForm: FunctionComponent<EditorFormProps> = ({ editorState }) =>
+const EditorForm: FunctionComponent<EditorFormProps> = ({ editorState, onClose }) =>
 {
-  const { document, state } = editorState;
+  const { document } = editorState;
   const updateEditorDocument = useDocumentEditorStore(s => s.updateEditorDocument);
-  const closeEditor = useDocumentEditorStore(s => s.closeEditor);
   const setEditDocumentState = useDocumentEditorStore(s => s.setEditDocumentState);
   const { hasUnsavedChanges } = useDocumentEditorStore(s => s.getComputedValues());
   const [showConfirmDeleteDocWindow, setShowConfirmDeleteDocWindow] = React.useState<boolean>(false);
   const { onDocumentMutation } = useOnDocumentMutation();
   const invalidateDocuments = async (): Promise<void> => onDocumentMutation({ folderId: document.folderId });
+  useDataLossProtection(hasUnsavedChanges);
 
   const { mutateAsync: createDocument } = api.documents.createDocument.useMutation({
     onError: (error) => console.log("error while creating document", error),
@@ -45,26 +47,22 @@ const EditorForm: FunctionComponent<EditorFormProps> = ({ editorState }) =>
     onSuccess: invalidateDocuments,
   });
 
-  const onCancel = (): void =>
+  useEffect(() =>
   {
-    if(!hasUnsavedChanges)
+    console.log("mounting editor form");
+
+    return () =>
     {
-      closeEditor();
-      return;
-    }
+      console.log("unmounting editor form");
+    };
+  }, []);
 
-    const shouldDiscardChanges = window.confirm("Are you sure you want to discard your changes?");
-
-    if(!shouldDiscardChanges)
-    {
-      return;
-    }
-
-    closeEditor();
-  };
-
-  const onSave = async (): Promise<void> =>
+  const onSave = useCallback(async (): Promise<void> =>
   {
+    const documentEditorState = useDocumentEditorStore.getState();
+    const { setEditDocumentState } = documentEditorState;
+    const { document, state } = documentEditorState.editorState as EditorStateDrawerOpened;
+
     switch (state)
     {
       case "create":
@@ -85,7 +83,7 @@ const EditorForm: FunctionComponent<EditorFormProps> = ({ editorState }) =>
         }
 
         setEditDocumentState(createdDocument);
-        closeEditor();
+        onClose();
         break;
       }
       case "edit":
@@ -112,10 +110,10 @@ const EditorForm: FunctionComponent<EditorFormProps> = ({ editorState }) =>
       }
       default:
       {
-        console.error("Unknown editor state", editorState);
+        console.error("Unknown editor state", state);
       }
     }
-  };
+  }, [onClose, createDocument, updateDocument]);
 
   return (
     <>
@@ -146,7 +144,7 @@ const EditorForm: FunctionComponent<EditorFormProps> = ({ editorState }) =>
                       onClick={() => 
                       {
                         deleteDocument({ id: document?.id });
-                        closeEditor();
+                        onClose();
                       }}>Ja, löschen
                     </Button>
                   </div>
@@ -174,7 +172,7 @@ const EditorForm: FunctionComponent<EditorFormProps> = ({ editorState }) =>
       <div className="call-to-action">
         <Button<"button">
           styleType="secondarySimple"
-          onClick={onCancel}>
+          onClick={onClose}>
           Abbrechen
         </Button>
         <Button<"button">

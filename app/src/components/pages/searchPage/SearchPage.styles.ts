@@ -5,6 +5,15 @@ export const wrapper = css``;
 
 export const headerWrapper = css``;
 
+export const loadingWrapper = css`
+  height: 30vh;
+  height: 30svh;
+  width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+`;
+
 export const header = (theme: MantineTheme) => css`
 	height: 240px;
 	width: 100%;
