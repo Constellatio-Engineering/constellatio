@@ -1,21 +1,28 @@
+import { type CaseProgressState } from "@/db/schema";
 import { type IGenCase } from "@/services/graphql/__generated/sdk";
 
 import useCases from "./useCases";
 import useCasesProgress from "./useCasesProgress";
 
-type UseAllCasesWithProgress = (
-) => { cases: Array<IGenCase & { progress: "completed" | "not-started" | "completing-tests" | "solving-case" | undefined}> };
+type UseAllCasesWithProgress = () => {
+  casesWithProgress: Array<IGenCase & {
+    progress: CaseProgressState;
+  }>;
+};
 
 const useAllCasesWithProgress: UseAllCasesWithProgress = () =>
 {
-  const { casesProgress } = useCasesProgress();
   const { allCases } = useCases();
-  const allCasesProgressFiltered = allCases.filter(x => casesProgress?.some(y => y?.caseId === x?.id));
-  const casesWithProgress = allCasesProgressFiltered?.map(x => ({ ...x, progress: casesProgress?.find(y => y?.caseId === x?.id)?.progressState }));
-  //   const total = casesWithProgress?.filter(x => x?.mainCategoryField?.[0]?.mainCategory === categoryId)?.length;
-  //   const completed = casesWithProgress?.filter(x => x?.mainCategoryField?.[0]?.mainCategory === categoryId && x?.progress === "completed")?.length;
+  const { casesProgress } = useCasesProgress();
+
+  const casesWithProgress = allCases
+    .map(legalCase => ({
+      ...legalCase,
+      progress: casesProgress?.find(caseProgress => caseProgress?.caseId === legalCase?.id)?.progressState ?? "not-started"
+    }));
+
   return {
-    cases: casesWithProgress
+    casesWithProgress,
   };
 };
 

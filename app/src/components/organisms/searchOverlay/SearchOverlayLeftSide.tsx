@@ -74,32 +74,44 @@ const SearchOverlayLeftSide: FunctionComponent<SearchOverlayLeftSideProps> = ({ 
     <div css={styles.suggestionsLeft}>
       {searchResults.cases.length > 0 && (
         <SuggestionSection label="Fälle" labelVariant="case">
-          {searchResults.cases.slice(0, 9).map((result) => (
-            <Link
-              key={result.id}
-              href={`${paths.cases}/${result.id}`}
-              className="suggestion__section__link">
-              <CustomLink styleType="link-content-title" component="p">
-                {result.title}
-              </CustomLink>
-              <Tag>{result.mainCategory?.mainCategory}</Tag>
-            </Link>
-          ))}
+          {searchResults.cases.slice(0, 9).map((legalCase) =>
+          {
+            const mainCategory = legalCase.mainCategory?.mainCategory;
+            return (
+              <Link
+                key={legalCase.id}
+                href={`${paths.cases}/${legalCase.id}`}
+                className="suggestion__section__link">
+                <CustomLink styleType="link-content-title" component="p">
+                  {legalCase.title}
+                </CustomLink>
+                {mainCategory && (
+                  <Tag title={mainCategory}/>
+                )}
+              </Link>
+            );
+          })}
         </SuggestionSection>
       )}
       {searchResults.articles.length > 0 && (
         <SuggestionSection label="LEXIKON" labelVariant="dictionary">
-          {searchResults.articles.slice(0, 9).map((article) => (
-            <Link
-              key={article.id}
-              href={`${paths.dictionary}/${article.id}`}
-              className="suggestion__section__link">
-              <CustomLink styleType="link-content-title" component="p">
-                {article.title}
-              </CustomLink>
-              <Tag>{article.mainCategory?.mainCategory}</Tag>
-            </Link>
-          ))}
+          {searchResults.articles.slice(0, 9).map((article) =>
+          {
+            const mainCategory = article.mainCategory?.mainCategory;
+            return (
+              <Link
+                key={article.id}
+                href={`${paths.dictionary}/${article.id}`}
+                className="suggestion__section__link">
+                <CustomLink styleType="link-content-title" component="p">
+                  {article.title}
+                </CustomLink>
+                {mainCategory && (
+                  <Tag title={mainCategory}/>
+                )}
+              </Link>
+            );
+          })}
         </SuggestionSection>
       )}
     </div>

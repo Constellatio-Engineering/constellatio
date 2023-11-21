@@ -77,12 +77,12 @@ const useDocumentEditorStore = create(
         }
         case "edit":
         {
-          const hasUnsavedChanges = (editorState.document.name.trim() !== editorState.originalDocument.name) || 
-          (editorState.document.content !== editorState.originalDocument.content);
+          const hasUnsavedChanges = (editorState.document.name.trim() !== editorState.originalDocument.name) ||
+            (editorState.document.content !== editorState.originalDocument.content);
 
           computedValues = {
             hasUnsavedChanges,
-            title: `${editorState.originalDocument.name} bearbeiten`,
+            title: `'${editorState.originalDocument.name}' bearbeiten`,
           };
 
           break;
@@ -98,7 +98,7 @@ const useDocumentEditorStore = create(
         case "create":
         {
           computedValues = {
-            hasUnsavedChanges: editorState.document.name.trim() !== "",
+            hasUnsavedChanges: editorState.document.name.trim() !== "" || editorState.document.content.trim() !== "",
             title: "Neues Constellatio Doc erstellen",
           };
           break;

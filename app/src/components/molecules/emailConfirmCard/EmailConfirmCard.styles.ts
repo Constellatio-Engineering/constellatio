@@ -7,3 +7,10 @@ export const wrapper = css`
 export const title = css`
     margin-bottom: 16px;
 `;
+
+export const text = css`
+  align-items: center; 
+  display: flex;
+  font-size: 18px;
+  justify-content: center;
+`;
