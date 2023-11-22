@@ -12,6 +12,7 @@ import { addBadgeForUser } from "@/server/api/services/badges.services";
 import { createTRPCRouter, protectedProcedure } from "@/server/api/trpc";
 import { caisySDK } from "@/services/graphql/getSdk";
 import { getGamesFromCase } from "@/utils/case";
+import { shutdownPosthogServerClient, startPosthogServerClient } from "@/utils/posthog";
 
 import { and, eq, inArray, type SQLWrapper } from "drizzle-orm";
 
@@ -131,10 +132,33 @@ export const caseProgressRouter = createTRPCRouter({
           target: [casesProgress.caseId, casesProgress.userId],
         });
 
-      if(progressState === "completed")
+      const client = startPosthogServerClient();
+
+      if(progressState === "completing-tests") 
+      {
+        client.capture({
+          distinctId: userId,
+          event: "case-solving-started",
+          properties: {
+            case_id: caseId,
+          },
+        });
+      }
+
+      else if(progressState === "completed")
       {
         await addBadgeForUser({ badgeIdentifier: "fall-1", userId });
+        
+        client.capture({
+          distinctId: userId,
+          event: "case-solving-finished",
+          properties: {
+            case_id: caseId, 
+          },
+        });  
       }
+      
+      await shutdownPosthogServerClient(client);
     }),
   submitSolution: protectedProcedure
     .input(submitCaseSolutionSchema)

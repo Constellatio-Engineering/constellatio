@@ -1,0 +1,1 @@
+ALTER TABLE "UserPing" ALTER COLUMN "CreatedAt" SET DATA TYPE timestamp;

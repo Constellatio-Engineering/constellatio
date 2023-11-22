@@ -317,8 +317,8 @@ export const usersToGroupsRelations = relations(usersToBadges, ({ one }) => ({
 export const userPings = pgTable("UserPing", {
   id: serial("Id").primaryKey(),
   userId: uuid("UserId").references(() => users.id, { onDelete: "no action" }),
-  createdAt: timestamp("CreatedAt", { mode: "date", withTimezone: true }).defaultNow().notNull(),
-  updatedAt: timestamp("UpdatedAt").defaultNow().notNull(), // TODO:: { mode: "date", withTimezone: true } also add here? test before
+  createdAt: timestamp("CreatedAt", { mode: "date" }).defaultNow().notNull(),
+  updatedAt: timestamp("UpdatedAt", { mode: "date" }).defaultNow().notNull(),
   url: text("Url").notNull(),
   pingCount: integer("pingCount").default(0).notNull(),
 });

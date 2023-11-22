@@ -12,14 +12,12 @@ import MeilisearchProvider from "@/provider/MeilisearchProvider";
 import useSearchBarStore from "@/stores/searchBar.store";
 import { api } from "@/utils/api";
 import { isProduction } from "@/utils/env";
+import { initFormbricks, logoutFormbricks, registerRouteChangeFormbricks } from "@/utils/formbricks";
 import { paths } from "@/utils/paths";
 
-import formbricks from "@formbricks/js";
 import { ModalsProvider } from "@mantine/modals";
 import { Notifications } from "@mantine/notifications";
-import {
-  SessionContextProvider
-} from "@supabase/auth-helpers-react";
+import { SessionContextProvider } from "@supabase/auth-helpers-react";
 import { type NextPage } from "next";
 import { type AppProps } from "next/app";
 import Head from "next/head";
@@ -27,8 +25,8 @@ import { useRouter } from "next/router";
 import { appWithTranslation } from "next-i18next";
 import { posthog } from "posthog-js";
 import { PostHogProvider } from "posthog-js/react";
-import React, {
-  useEffect, type FunctionComponent, type ReactElement, type ReactNode, useState, useRef, useCallback
+import {
+  useEffect, type FunctionComponent, type ReactElement, type ReactNode, useState, useRef, useCallback 
 } from "react";
 
 export type NextPageWithLayout<P = object, IP = P> = NextPage<P, IP> & {
@@ -71,14 +69,6 @@ if(typeof window !== "undefined")
     opt_out_persistence_by_default: true,
     secure_cookie: true,
   });
-
-  void formbricks.init({
-    apiHost: env.NEXT_PUBLIC_FORMBRICKS_HOST,
-    debug: !isProduction,
-    environmentId: isProduction
-      ? env.NEXT_PUBLIC_FORMBRICKS_KEY_PRODUCTION
-      : env.NEXT_PUBLIC_FORMBRICKS_KEY_TESTINGS,
-  });
 }
 
 type ConstellatioAppProps = AppProps & {
@@ -106,11 +96,16 @@ const AppContainer: FunctionComponent<ConstellatioAppProps> = ({ Component, page
 
   useEffect(() =>
   {
-    supabase.auth.onAuthStateChange((event, session) =>
+    // TODO:: wenn UPDATE SESSION email switch beinhaltet sollte hier nochmal drüber gegangen werden
+    supabase.auth.onAuthStateChange((event, session) =>    
     {
       switch (event)
       {
         case "INITIAL_SESSION": {
+
+          const id = session?.user?.id;
+          const email = session?.user?.email;
+
           if(!isSignedIn)
           {
             if(session)
@@ -118,19 +113,42 @@ const AppContainer: FunctionComponent<ConstellatioAppProps> = ({ Component, page
               setIsSignedIn(true);
             }
           }
+
+          if(!isFormbricksVerified && id && email)
+          {
+            initFormbricks(
+              {
+                apiHost: env.NEXT_PUBLIC_FORMBRICKS_HOST,
+                debug: !isProduction,
+                email,
+                environmentId: isProduction
+                  ? env.NEXT_PUBLIC_FORMBRICKS_KEY_PRODUCTION
+                  : env.NEXT_PUBLIC_FORMBRICKS_KEY_TESTINGS,
+                userId: id
+              }
+            );
+            setIsFormbricksVerified(true);
+          }     
+
           break;
         }
         case "SIGNED_IN": {
+
+          const id = session?.user?.id;
+          const email = session?.user?.email;
+
           if(!isSignedIn)
           {
             setIsSignedIn(true);
           }
+
           if(!posthog.has_opted_in_capturing())
           {
-            const id = session?.user?.id;
-            const email = session?.user?.email;
+            if(id && email)
+            {
+              posthog.identify(id, { email });
+            }
 
-            posthog.identify(id, { email });
             posthog.opt_in_capturing();
 
             if(!postHogQueueIsStarted)
@@ -144,40 +162,52 @@ const AppContainer: FunctionComponent<ConstellatioAppProps> = ({ Component, page
                   disable_cookie: false,
                   disable_persistence: false,
                 });
+
                 if(isProduction)
                 {
                   posthog.startSessionRecording();
                 }
               }
             }
-
-            if(!isFormbricksVerified)
-            {
-              void formbricks.setUserId(id);
-              void formbricks.setEmail(email);
-              setIsFormbricksVerified(true);
-            }
           }
+
+          if(!isFormbricksVerified && id && email)
+          {
+            initFormbricks(
+              {
+                apiHost: env.NEXT_PUBLIC_FORMBRICKS_HOST,
+                debug: !isProduction,
+                email,
+                environmentId: isProduction
+                  ? env.NEXT_PUBLIC_FORMBRICKS_KEY_PRODUCTION
+                  : env.NEXT_PUBLIC_FORMBRICKS_KEY_TESTINGS,
+                userId: id
+              }
+            );
+          }        
           break;
         }
+        
         case "SIGNED_OUT": {
 
           setIsSignedIn(false);
-
           posthog.stopSessionRecording();
+
           if(posthog.has_opted_in_capturing())
           {
             posthog.opt_out_capturing();
           }
+
           posthog.set_config({
             disable_cookie: true,
             disable_persistence: true,
           });
+
           posthog.reset(true);
 
           if(isFormbricksVerified)
           {
-            void formbricks.logout();
+            logoutFormbricks();
           }
           break;
         }
@@ -192,8 +222,7 @@ const AppContainer: FunctionComponent<ConstellatioAppProps> = ({ Component, page
     const handleRouteChange = (): void =>
     {
       posthog.capture("$pageview");
-      // eslint-disable-next-line @typescript-eslint/no-unused-expressions
-      formbricks?.registerRouteChange;
+      registerRouteChangeFormbricks();
     };
     router.events.on("routeChangeComplete", handleRouteChange);
 
@@ -201,7 +230,7 @@ const AppContainer: FunctionComponent<ConstellatioAppProps> = ({ Component, page
     {
       router.events.off("routeChangeComplete", handleRouteChange);
     };
-  }, []); // TODO:: check ob es mit leerem wie auch mit gefüllten depency array läuft (wenn depency drin ist eventuell gefahr dass zu oft feuert also EVENTS in Posthog checken)
+  }, []); 
 
   useEffect(() =>
   {
@@ -259,7 +288,7 @@ const AppContainer: FunctionComponent<ConstellatioAppProps> = ({ Component, page
       clearInterval(interval.current);
     }
 
-    onInterval(); // TODO::check feuert aktuell glaub 2x beim betreten
+    onInterval();
     interval.current = setInterval(onInterval, 5000);
 
     return () => clearInterval(interval.current);

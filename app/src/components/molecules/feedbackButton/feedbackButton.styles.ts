@@ -2,8 +2,8 @@ import { css } from "@emotion/react";
 import { type MantineTheme } from "@mantine/styles";
 
 export const feedbackButtonStyles = (theme: MantineTheme) => css`
-overflow:hidden;
-    min-width: fit-content !important;/* TODO:: kp worans liegt läuft ned. */
+    overflow:hidden;
+    height: auto;
     right: 0;
     white-space: nowrap;
     writing-mode: vertical-lr; 
