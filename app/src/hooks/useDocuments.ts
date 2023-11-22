@@ -2,7 +2,9 @@ import { type Document } from "@/db/schema";
 import { api } from "@/utils/api";
 import { type UseQueryResult } from "@/utils/types";
 
-type UseDocuments = (folderId: string | null) => UseQueryResult<{
+// folderId = null --> get docs in default folder
+// folderId = undefined --> get docs in all folders
+type UseDocuments = (folderId: string | null | undefined) => UseQueryResult<{
   documents: Document[];
   isRefetching: boolean;
 }>;

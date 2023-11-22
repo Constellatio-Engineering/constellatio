@@ -24,8 +24,10 @@ const PersonalSpacePageContent: FunctionComponent = () =>
   const { allArticles = [] } = useArticles(); 
   const { bookmarks } = useBookmarks(undefined);
   const selectedFolderId = useMaterialsStore(s => s.selectedFolderId);
-  const { documents } = useDocuments(selectedFolderId);
-  const { uploadedFiles } = useUploadedFiles(selectedFolderId);
+  const { documents: documentsInAllFolders } = useDocuments(undefined);
+  const documentsInSelectedFolder = documentsInAllFolders.filter(document => document.folderId === selectedFolderId);
+  const { uploadedFiles: uploadedFilesInAllFolders } = useUploadedFiles(undefined);
+  const uploadedFilesInSelectedFolder = uploadedFilesInAllFolders.filter(uploadedFile => uploadedFile.folderId === selectedFolderId);
   const allCasesBookmarks = bookmarks.filter(bookmark => bookmark?.resourceType === "case") ?? [];
   const bookmarkedCases = allCases.filter(caisyCase => allCasesBookmarks.some(bookmark => bookmark.resourceId === caisyCase.id));
   const allArticlesBookmarks = bookmarks.filter(bookmark => bookmark?.resourceType === "article") ?? [];
@@ -41,7 +43,7 @@ const PersonalSpacePageContent: FunctionComponent = () =>
     FileIconSvg,
     MaterialsCategoryId,
     slug: "materials",
-    uploadedFilesLength: (uploadedFiles?.length + documents?.length) ?? 0,
+    uploadedFilesLength: (uploadedFilesInAllFolders?.length + documentsInAllFolders?.length) ?? 0,
   });
   const [selectedCategorySlug, setSelectedCategorySlug] = useQueryState("category", parseAsString.withDefault(categories?.[0]?.slug || ""));
 
