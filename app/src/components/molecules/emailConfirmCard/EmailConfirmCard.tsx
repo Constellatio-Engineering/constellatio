@@ -61,7 +61,8 @@ const EmailConfirmCard: FunctionComponent<EmailConfirmCardProps> = ({ params }) 
       redirectTimeout.current = setTimeout(() =>
       {
         console.log("Redirecting to dashboard now...");
-        void Router.replace(paths.dashboard);
+        window.location.replace(paths.dashboard);
+        // void Router.replace(paths.dashboard);
       }, 5000);
     }
     else 

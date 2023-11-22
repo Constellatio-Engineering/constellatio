@@ -15,7 +15,7 @@ export const middleware: NextMiddleware = async (req) =>
   console.log("--- middleware ---");
 
   console.log("url", req.url);
-  console.log("nextUrl", req.nextUrl);
+  console.log("nextUrl", req.nextUrl.href);
 
   const res = NextResponse.next();
   const supabase = createMiddlewareClient({ req, res });
@@ -26,7 +26,7 @@ export const middleware: NextMiddleware = async (req) =>
   if(!getIsUserLoggedInResult.isUserLoggedIn)
   {
     const redirectUrl = req.nextUrl.clone();
-    redirectUrl.pathname = "/login";
+    redirectUrl.pathname = paths.login;
     redirectUrl.searchParams.set(queryParams.redirectedFrom, req.nextUrl.pathname + req.nextUrl.search);
     console.info("User is not logged in. Redirecting to: ", redirectUrl.toString());
     return NextResponse.redirect(redirectUrl);
