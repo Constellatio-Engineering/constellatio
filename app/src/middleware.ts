@@ -12,24 +12,27 @@ import { type NextMiddleware, NextResponse } from "next/server";
 
 export const middleware: NextMiddleware = async (req) =>
 {
-  const time = new Date().toISOString();
-  console.time("Middleware 1 at " + time);
+  console.log("--- middleware ---");
+
+  console.log("url", req.url);
+  console.log("nextUrl", req.nextUrl);
 
   const res = NextResponse.next();
   const supabase = createMiddlewareClient({ req, res });
   const getIsUserLoggedInResult = await getIsUserLoggedIn(supabase);
+
+  console.log("getIsUserLoggedInResult", getIsUserLoggedInResult.isUserLoggedIn);
 
   if(!getIsUserLoggedInResult.isUserLoggedIn)
   {
     const redirectUrl = req.nextUrl.clone();
     redirectUrl.pathname = "/login";
     redirectUrl.searchParams.set(queryParams.redirectedFrom, req.nextUrl.pathname + req.nextUrl.search);
-    console.log("User is not logged in. Redirecting to: ", redirectUrl.toString());
-    console.timeEnd("Middleware 1 at " + time);
+    console.info("User is not logged in. Redirecting to: ", redirectUrl.toString());
     return NextResponse.redirect(redirectUrl);
   }
 
-  console.time("Middleware 2 at " + time);
+  console.log("User is logged in. Checking subscription status");
 
   let subscriptionStatus: Pick<User, "subscriptionStatus"> | null = null;
 
@@ -38,10 +41,11 @@ export const middleware: NextMiddleware = async (req) =>
     const response = await fetch((isDevelopment ? "http://localhost:3010" : env.NEXT_PUBLIC_WEBSITE_URL) + `/${paths.getSubscriptionStatus}?secret=${env.GET_SUBSCRIPTION_STATUS_SECRET}&userId=${getIsUserLoggedInResult.user.id}`);
     const data = await response.json() as Pick<User, "subscriptionStatus">;
     subscriptionStatus = data;
+    console.log("subscriptionStatus", subscriptionStatus);
   }
   catch (e: unknown)
   {
-    console.log("error while fetching subscription status", e);
+    console.error("error while fetching subscription status", e);
     return NextResponse.json({
       error: "Error while fetching subscription status",
       success: false
@@ -49,30 +53,29 @@ export const middleware: NextMiddleware = async (req) =>
       status: 500
     });
   }
-  finally
-  {
-    console.timeEnd("Middleware 2 at " + time);
-  }
 
   const { isOnPaidSubscription, isOnTrailSubscription } = getHasSubscription(subscriptionStatus);
   const hasSubscription = isOnPaidSubscription || isOnTrailSubscription;
 
   if(!hasSubscription)
   {
+    console.info("User does not have a subscription. Redirecting to subscription tab", subscriptionStatus);
+
     const redirectUrl = req.nextUrl.clone();
 
-    if(redirectUrl.pathname === paths.profile && redirectUrl.searchParams.get("tab") === "subscription")
+    if(redirectUrl.pathname.startsWith(paths.profile) && redirectUrl.searchParams.get("tab") === "subscription")
     {
+      console.log("User is already on subscription tab. Not redirecting.");
       return NextResponse.next();
     }
 
-    console.log("redirecting to subscription tab");
     redirectUrl.pathname = paths.profile;
     redirectUrl.searchParams.set("tab", "subscription");
     return NextResponse.redirect(redirectUrl);
   }
 
-  console.timeEnd("Middleware 1 at " + time);
+  console.log("User has a subscription. Allowing access to page");
+
   return NextResponse.next();
 };
 
