@@ -25,7 +25,6 @@ import { Stack, Title } from "@mantine/core";
 import { useForm, zodResolver } from "@mantine/form";
 import { notifications } from "@mantine/notifications";
 import Link from "next/link";
-import { useRouter } from "next/router";
 import { type FunctionComponent, useEffect, useRef, useState } from "react";
 
 import * as styles from "./RegistrationForm.styles";
@@ -34,7 +33,6 @@ const resendEmailConfirmationTimeout = env.NEXT_PUBLIC_RESEND_EMAIL_CONFIRMATION
 
 export const RegistrationForm: FunctionComponent = () =>
 {
-  const router = useRouter();
   const [shouldShowEmailConfirmationDialog, setShouldShowEmailConfirmationDialog] = useState<boolean>(false);
   const lastConfirmationEmailTimestamp = useRef<number>();
   const lastEnteredPassword = useAuthPageStore(s => s.lastEnteredPassword);
@@ -104,7 +102,7 @@ export const RegistrationForm: FunctionComponent = () =>
         case "signupComplete":
         {
           await supabase.auth.setSession(result.session);
-          await router.replace(paths.dashboard);
+          window.location.replace(paths.dashboard);
           break;
         }
       }

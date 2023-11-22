@@ -3,7 +3,6 @@ import { AuthStateContext } from "@/provider/AuthStateProvider";
 import { paths } from "@/utils/paths";
 
 import { Loader, Title } from "@mantine/core";
-import Router from "next/router";
 import React, {
   type FunctionComponent, useState, useEffect, useRef, useContext 
 } from "react";
@@ -30,6 +29,12 @@ const EmailConfirmCard: FunctionComponent<EmailConfirmCardProps> = ({ params }) 
 
   useEffect(() => 
   {
+    if(isUserLoggedIn == null)
+    {
+      console.log("waiting for auth state to be loaded...");
+      return;
+    }
+
     if(redirectTimeout.current)
     {
       clearTimeout(redirectTimeout.current);
@@ -44,6 +49,8 @@ const EmailConfirmCard: FunctionComponent<EmailConfirmCardProps> = ({ params }) 
     }
     else if(isUserLoggedIn)
     {
+      console.log("User is logged in, redirecting to dashboard in 5 seconds...");
+
       setCard({
         desc: "Du wirst in wenigen Sekunden automatisch weitergeleitet...",
         isLoading: true,
@@ -52,7 +59,9 @@ const EmailConfirmCard: FunctionComponent<EmailConfirmCardProps> = ({ params }) 
 
       redirectTimeout.current = setTimeout(() =>
       {
-        void Router.push(paths.dashboard);
+        console.log("Redirecting to dashboard now...");
+        window.location.replace(paths.dashboard);
+        // void Router.replace(paths.dashboard);
       }, 5000);
     }
     else 

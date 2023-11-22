@@ -12,7 +12,9 @@ import { paths } from "@/utils/paths";
 import { Title } from "@mantine/core";
 import { useLocalStorage } from "@mantine/hooks";
 import { useRouter } from "next/router";
-import { useMemo, type FunctionComponent, useState, useContext } from "react";
+import {
+  useMemo, type FunctionComponent, useState, useContext, useEffect 
+} from "react";
 import { z } from "zod";
 
 import ModalFlag from "../../../../public/images/placeholder-flag.png";
@@ -24,6 +26,12 @@ const SubscriptionModal: FunctionComponent = () =>
   const { isUserLoggedIn } = useContext(AuthStateContext);
   const router = useRouter();
   const { generateStripeSessionUrl, isOnTrailSubscription, subscriptionDetails } = useSubscription();
+
+  useEffect(() =>
+  {
+    console.log("subscriptionDetails", subscriptionDetails);
+  }, [subscriptionDetails]);
+
   const [daysCheckedForSubscriptionEnds, setDaysCheckedForSubscriptionEnds] = useLocalStorage<string[]>({
     defaultValue: [],
     deserialize: (localStorageValue) => 

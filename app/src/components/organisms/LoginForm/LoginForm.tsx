@@ -70,14 +70,11 @@ export const LoginForm: FunctionComponent = () =>
       }
 
       await invalidateEverything();
-      await router.replace(`${redirectTo || paths.dashboard}`);
+      window.location.replace(`${redirectTo || paths.dashboard}`);
     }
     catch (error)
     {
       setSignInError(error);
-    }
-    finally
-    {
       setIsLoginInProgress(false);
     }
   });
