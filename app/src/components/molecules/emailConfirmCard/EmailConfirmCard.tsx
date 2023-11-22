@@ -3,7 +3,6 @@ import { AuthStateContext } from "@/provider/AuthStateProvider";
 import { paths } from "@/utils/paths";
 
 import { Loader, Title } from "@mantine/core";
-import Router from "next/router";
 import React, {
   type FunctionComponent, useState, useEffect, useRef, useContext 
 } from "react";
