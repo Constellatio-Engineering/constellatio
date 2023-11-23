@@ -1,5 +1,3 @@
-
-import useDocuments from "@/hooks/useDocuments";
 import useMaterialsStore from "@/stores/materials.store";
 import uploadsProgressStore from "@/stores/uploadsProgress.store";
 
@@ -13,10 +11,9 @@ import MaterialMenu from "../materialMenu/MaterialMenu";
 import PapersBlock from "../papersBlock/PapersBlock";
 import UploadedMaterialBlock from "../uploadedMaterialBlock/UploadedMaterialBlock";
 
-const PersonalSpaceMaterialsTab: FunctionComponent = () => 
+const PersonalSpaceMaterialsTab: FunctionComponent = () =>
 {
   const selectedFolderId = useMaterialsStore(s => s.selectedFolderId);
-  const { documents } = useDocuments(selectedFolderId);
   const fileInputRef = React.useRef<HTMLInputElement>(null);
   const { setUploadState, uploads } = uploadsProgressStore();
   const { selectedFileIdForPreview } = useMaterialsStore();
@@ -29,7 +26,6 @@ const PersonalSpaceMaterialsTab: FunctionComponent = () =>
         <FoldersMenuTablet/>
         <div style={{ margin: "0", width: "100%" }}>
           <PapersBlock
-            docs={documents}
             selectedFolderId={selectedFolderId}
             isLoading={false}
           />

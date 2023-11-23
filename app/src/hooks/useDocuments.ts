@@ -1,27 +1,32 @@
 import { type Document } from "@/db/schema";
+import useMaterialsStore from "@/stores/materials.store";
 import { api } from "@/utils/api";
 import { type UseQueryResult } from "@/utils/types";
 
-type UseDocuments = (folderId: string | null) => UseQueryResult<{
-  documents: Document[];
+type UseDocuments = () => UseQueryResult<{
+  documentsInAllFolders: Document[];
+  documentsInSelectedFolder: Document[];
   isRefetching: boolean;
 }>;
 
-const useDocuments: UseDocuments = (folderId) =>
+const useDocuments: UseDocuments = () =>
 {
+  const selectedFolderId = useMaterialsStore(s => s.selectedFolderId);
+
   const {
     data: documents = [],
     error,
     isLoading,
     isRefetching
-  } = api.documents.getDocuments.useQuery({ folderId }, {
+  } = api.documents.getDocuments.useQuery({ folderId: undefined }, {
     keepPreviousData: true,
     refetchOnMount: "always",
     staleTime: Infinity
   });
   
   return { 
-    documents: documents ?? [],
+    documentsInAllFolders: documents ?? [],
+    documentsInSelectedFolder: documents.filter((document) => document.folderId === selectedFolderId) ?? [],
     error,
     isLoading,
     isRefetching

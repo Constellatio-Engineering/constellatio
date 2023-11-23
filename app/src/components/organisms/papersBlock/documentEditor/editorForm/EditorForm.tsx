@@ -29,22 +29,21 @@ const EditorForm: FunctionComponent<EditorFormProps> = ({ editorState, onClose }
   const { hasUnsavedChanges } = useDocumentEditorStore(s => s.getComputedValues());
   const [showConfirmDeleteDocWindow, setShowConfirmDeleteDocWindow] = React.useState<boolean>(false);
   const { onDocumentMutation } = useOnDocumentMutation();
-  const invalidateDocuments = async (): Promise<void> => onDocumentMutation({ folderId: document.folderId });
   useDataLossProtection(hasUnsavedChanges);
 
   const { mutateAsync: createDocument } = api.documents.createDocument.useMutation({
     onError: (error) => console.log("error while creating document", error),
-    onSuccess: invalidateDocuments
+    onSuccess: onDocumentMutation
   });
 
   const { mutateAsync: updateDocument } = api.documents.updateDocument.useMutation({
     onError: (error) => console.log("error while updating document", error),
-    onSuccess: invalidateDocuments
+    onSuccess: onDocumentMutation
   });
 
   const { mutate: deleteDocument } = api.documents.deleteDocument.useMutation({
     onMutate: (error) => console.log("deleting document", error),
-    onSuccess: invalidateDocuments,
+    onSuccess: onDocumentMutation,
   });
 
   useEffect(() =>

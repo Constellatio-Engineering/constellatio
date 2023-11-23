@@ -1,30 +1,37 @@
 import { type UploadedFileWithNote } from "@/db/schema";
 import useNotes from "@/hooks/useNotes";
 import useUploadedFiles from "@/hooks/useUploadedFiles";
+import useMaterialsStore from "@/stores/materials.store";
 import { type TrpcClientErrorBase } from "@/utils/types";
 
-type UseUploadedFilesWithNotes = (folderId: string | null) => {
+type UseUploadedFilesWithNotes = () => {
   getFilesError: TrpcClientErrorBase;
   getNotesError: TrpcClientErrorBase;
-  isLoading: boolean;
-  uploadedFilesWithNotes: UploadedFileWithNote[];
+  isGetFilesLoading: boolean;
+  isGetNotesLoading: boolean;
+  uploadedFilesWithNotesInAllFolders: UploadedFileWithNote[];
+  uploadedFilesWithNotesInSelectedFolder: UploadedFileWithNote[];
 };
 
-const useUploadedFilesWithNotes: UseUploadedFilesWithNotes = (folderId) =>
+const useUploadedFilesWithNotes: UseUploadedFilesWithNotes = () =>
 {
-  const { error: getFilesError, isLoading: isGetFilesLoading, uploadedFiles } = useUploadedFiles(folderId);
-  const { error: getNotesError, isLoading: isGetNotesLoading, notes } = useNotes(folderId);
+  const selectedFolderId = useMaterialsStore(s => s.selectedFolderId);
 
-  const filesWithNotes: UploadedFileWithNote[] = uploadedFiles.map((file) => ({
+  const { error: getFilesError, isLoading: isGetFilesLoading, uploadedFilesInAllFolders } = useUploadedFiles();
+  const { error: getNotesError, isLoading: isGetNotesLoading, notesForFilesInAllFolders } = useNotes();
+
+  const filesWithNotes: UploadedFileWithNote[] = uploadedFilesInAllFolders.map((file) => ({
     ...file,
-    note: notes.find((note) => note.fileId === file.id) ?? null
+    note: notesForFilesInAllFolders.find((note) => note.fileId === file.id) ?? null
   }));
 
   return {
     getFilesError,
     getNotesError,
-    isLoading: isGetFilesLoading || isGetNotesLoading,
-    uploadedFilesWithNotes: filesWithNotes ?? []
+    isGetFilesLoading,
+    isGetNotesLoading,
+    uploadedFilesWithNotesInAllFolders: filesWithNotes ?? [],
+    uploadedFilesWithNotesInSelectedFolder: filesWithNotes.filter((file) => file.folderId === selectedFolderId) ?? []
   };
 };
 

@@ -138,10 +138,7 @@ const UploadedMaterialTableBody: FunctionComponent<UploadedMaterialTableBodyProp
               </td>
             )}
             {file && (
-              <MaterialOptionsMenu
-                selectedFolderId={selectedFolderId}
-                file={file}
-              />
+              <MaterialOptionsMenu file={file}/>
             )}
           </tr>
         );

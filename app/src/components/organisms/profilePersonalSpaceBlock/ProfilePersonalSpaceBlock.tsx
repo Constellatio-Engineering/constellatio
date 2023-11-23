@@ -23,7 +23,7 @@ const ProfilePersonalSpaceBlock: FunctionComponent = () =>
 {
   const router = useRouter();
   const [selectedTab, setSelectedTab] = useState<number>(0);
-  const { isLoading: isGetUploadedFilesLoading, uploadedFiles } = useUploadedFiles(null);
+  const { isLoading: isGetUploadedFilesLoading, uploadedFilesInAllFolders } = useUploadedFiles();
 
   const {
     areArticlesLoading,
@@ -35,7 +35,7 @@ const ProfilePersonalSpaceBlock: FunctionComponent = () =>
   } = useAllFavorites();
 
   const favoritesCount = (bookmarkedCases?.length + bookmarkedArticles?.length);
-  const uploadedFilesCount = uploadedFiles?.length;
+  const uploadedFilesCount = uploadedFilesInAllFolders?.length;
 
   const tabs = [
     {
@@ -98,7 +98,7 @@ const ProfilePersonalSpaceBlock: FunctionComponent = () =>
               <div css={styles.uploadedMaterialsTab}>
                 {uploadedFilesCount > 0 ? (
                   <>
-                    {uploadedFiles.slice(0, 6).map((file, index) => (
+                    {uploadedFilesInAllFolders.slice(0, 6).map((file, index) => (
                       <MaterialCard
                         title={file?.originalFilename}
                         fileExtension={file?.fileExtension}

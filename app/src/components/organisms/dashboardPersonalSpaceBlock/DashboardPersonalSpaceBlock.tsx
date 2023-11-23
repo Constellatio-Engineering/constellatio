@@ -21,7 +21,7 @@ const DashboardPersonalSpaceBlock: FunctionComponent = () =>
 {
   const router = useRouter();
   const [switcherValue, setSwitcherValue] = React.useState<"favorites" | "materials">("favorites");
-  const { uploadedFiles } = useUploadedFiles(undefined);
+  const { uploadedFilesInAllFolders } = useUploadedFiles();
   const { favoritesList } = useAllFavorites();
   return (
     <div css={styles.wrapper}>
@@ -68,7 +68,7 @@ const DashboardPersonalSpaceBlock: FunctionComponent = () =>
         )}
         {switcherValue === "materials" && (
           <div css={styles.list}>
-            {uploadedFiles?.length > 0 ? uploadedFiles.slice(0, 6).map((material, i) => (
+            {uploadedFilesInAllFolders?.length > 0 ? uploadedFilesInAllFolders.slice(0, 6).map((material, i) => (
               <MaterialCard
                 key={i}
                 fileExtension={material?.fileExtension}
