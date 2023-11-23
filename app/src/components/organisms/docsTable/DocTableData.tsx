@@ -47,22 +47,15 @@ export const DocsTableData: FunctionComponent<Document> = (doc) =>
   const [showMoveToModal, setShowMoveToModal] = useState(false);
   const { mutate: updateDocument } = api.documents.updateDocument.useMutation({
     onError: (error) => console.log("error while updating document", error),
-    onSuccess: async (_data, variables) =>
+    onSuccess: async (_data) =>
     {
-      const newFolderId = variables.updatedValues.folderId;
-
-      if(newFolderId)
-      {
-        await onDocumentMutation({ folderId: newFolderId });
-      }
-
       setShowMoveToModal(false);
-      await onDocumentMutation({ folderId });
+      await onDocumentMutation();
     },
   });
   const { mutate: deleteDocument } = api.documents.deleteDocument.useMutation({
     onError: (error) => console.error("Error while deleting document:", error),
-    onSuccess: async () => onDocumentMutation({ folderId })
+    onSuccess: onDocumentMutation
   });
 
   const { isLoading: isDownloading, mutate: downloadDocument } = useMutation({

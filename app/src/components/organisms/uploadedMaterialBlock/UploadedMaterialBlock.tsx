@@ -43,7 +43,7 @@ const UploadedMaterialBlock: FunctionComponent<UploadedMaterialBlockProps> = ({
 }) =>
 {
   const [selectedFiles, setSelectedFiles] = useState<SelectedFile[]>([]);
-  const { isLoading: isGetUploadedFilesLoading, uploadedFilesWithNotes: uploadedFiles } = useUploadedFilesWithNotes(selectedFolderId);
+  const { isGetFilesLoading, uploadedFilesWithNotesInAllFolders, uploadedFilesWithNotesInSelectedFolder } = useUploadedFilesWithNotes();
   const { invalidateUploadedFiles } = useContextAndErrorIfNull(InvalidateQueriesContext);
   const { mutateAsync: saveFileToDatabase } = api.uploads.saveFileToDatabase.useMutation();
   const { mutateAsync: createSignedUploadUrl } = api.uploads.createSignedUploadUrl.useMutation();
@@ -188,7 +188,7 @@ const UploadedMaterialBlock: FunctionComponent<UploadedMaterialBlockProps> = ({
         <Title order={4}>
           Hochgeladene Dateien{" "}
           <SubtitleText className="count" component="span" styleType="subtitle-01-medium">
-            ({uploadedFiles.length ?? 0})
+            ({uploadedFilesWithNotesInSelectedFolder.length ?? 0})
           </SubtitleText>
         </Title>
       </div>
@@ -218,11 +218,16 @@ const UploadedMaterialBlock: FunctionComponent<UploadedMaterialBlockProps> = ({
         </form>
       </div>
       <div css={styles.content}>
-        {uploadedFiles?.length > 0 ? (
+        {uploadedFilesWithNotesInSelectedFolder.length > 0 ? (
           <UploadedMaterialTable
-            isGetUploadedFilesLoading={isGetUploadedFilesLoading}
-            uploadedFiles={uploadedFiles}
-            selectedFolderId={selectedFolderId}
+            isGetUploadedFilesLoading={isGetFilesLoading}
+            uploadedFiles={uploadedFilesWithNotesInSelectedFolder}
+          />
+        ) : uploadedFilesWithNotesInAllFolders.length > 0 ? (
+          <EmptyStateCard
+            variant="For-small-areas"
+            title="Keine hochgeladenen Dateien in diesem Ordner"
+            text="Hier kannst du all deine Lernmaterialien wie zum Beispiel Vorlesungsfolien, Screenshots, Scans oder Word-Dateien an einem Ort speichern und verlinken."
           />
         ) : (
           <EmptyStateCard

@@ -1,4 +1,5 @@
 import { UserDropdown } from "@/components/molecules/UserDropdown/UserDropdown";
+import OnboardingModal from "@/components/organisms/onboardingModal/OnboardingModal";
 import useOnboardingResult from "@/hooks/useOnboardingResult";
 import { isDevelopment } from "@/utils/env";
 import { paths } from "@/utils/paths";
@@ -28,6 +29,7 @@ interface IHeaderLink
   slug: string;
   title: string;
 }
+
 const HeaderDefault: FunctionComponent = () => 
 {
   const { pathname } = useRouter();
@@ -53,6 +55,10 @@ const HeaderDefault: FunctionComponent = () =>
   
   return (
     <>
+      <OnboardingModal
+        onboardingStepsIndex={onboardingStepsIndex}
+        setOnboardingStepsIndex={setOnboardingStepsIndex}
+      />
       <SHeader>
         <div css={styles.wrapper({ theme, variant: "default" })}>
           <div css={styles.links}>
@@ -80,20 +86,16 @@ const HeaderDefault: FunctionComponent = () =>
           </div>
           <div css={styles.profileArea}>
             {isDevelopment && <HeaderDefaultRecreateSearch/>}
-            {
-              showOnboarding ? (
-                <OnboardingThirdStep onboardingStepsIndex={onboardingStepsIndex} setOnboardingStepsIndex={setOnboardingStepsIndex}/>
-              ) : (
-                <HeaderItemSearchBar/>
-              )
-            }
-            {
-              showOnboarding ? (
-                <OnboardingSecondStep onboardingStepsIndex={onboardingStepsIndex} pathname={pathname} setOnboardingStepsIndex={setOnboardingStepsIndex}/>
-              ) : (
-                <HeaderItemPersonalSpace pathname={pathname}/>
-              )
-            }
+            {showOnboarding ? (
+              <OnboardingThirdStep onboardingStepsIndex={onboardingStepsIndex} setOnboardingStepsIndex={setOnboardingStepsIndex}/>
+            ) : (
+              <HeaderItemSearchBar/>
+            )}
+            {showOnboarding ? (
+              <OnboardingSecondStep onboardingStepsIndex={onboardingStepsIndex} pathname={pathname} setOnboardingStepsIndex={setOnboardingStepsIndex}/>
+            ) : (
+              <HeaderItemPersonalSpace pathname={pathname}/>
+            )}
             <span className="vertical-line">s</span>
             <div>
               <UserDropdown/>

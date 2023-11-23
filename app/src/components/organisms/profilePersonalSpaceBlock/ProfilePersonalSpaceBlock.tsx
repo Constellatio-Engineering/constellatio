@@ -23,7 +23,7 @@ const ProfilePersonalSpaceBlock: FunctionComponent = () =>
 {
   const router = useRouter();
   const [selectedTab, setSelectedTab] = useState<number>(0);
-  const { isLoading: isGetUploadedFilesLoading, uploadedFiles } = useUploadedFiles(null);
+  const { isLoading: isGetUploadedFilesLoading, uploadedFilesInAllFolders } = useUploadedFiles();
 
   const {
     areArticlesLoading,
@@ -35,7 +35,7 @@ const ProfilePersonalSpaceBlock: FunctionComponent = () =>
   } = useAllFavorites();
 
   const favoritesCount = (bookmarkedCases?.length + bookmarkedArticles?.length);
-  const uploadedFilesCount = uploadedFiles?.length;
+  const uploadedFilesCount = uploadedFilesInAllFolders?.length;
 
   const tabs = [
     {
@@ -77,10 +77,13 @@ const ProfilePersonalSpaceBlock: FunctionComponent = () =>
                       title="Noch keine Favoriten vorhanden"
                       text="Speichere jetzt Fälle oder Lexikonartikel als Favoriten in deinem persönlichen Bereich."
                       variant="For-small-areas"
+                      button={{
+                        content: "Alle Fälle ansehen",
+                        onClick: async () => router.push(paths.cases)
+                      }}
                     />
                   )
             }
-            
           </div>
           {favoritesList && favoritesList?.length > 6 && (
             <Link href={`${paths.personalSpace}?category=favorites`}>
@@ -98,7 +101,7 @@ const ProfilePersonalSpaceBlock: FunctionComponent = () =>
               <div css={styles.uploadedMaterialsTab}>
                 {uploadedFilesCount > 0 ? (
                   <>
-                    {uploadedFiles.slice(0, 6).map((file, index) => (
+                    {uploadedFilesInAllFolders.slice(0, 6).map((file, index) => (
                       <MaterialCard
                         title={file?.originalFilename}
                         fileExtension={file?.fileExtension}
@@ -113,6 +116,13 @@ const ProfilePersonalSpaceBlock: FunctionComponent = () =>
                     title="Du hast noch keine Dateien hochgeladen"
                     text="Du kannst jetzt eigene Dateien hochladen und in deinem persönlichen Bereich ablegen."
                     variant="For-small-areas"
+                    button={{
+                      content: "Zu deinen Dateien",
+                      onClick: async () => router.push(paths.personalSpace, {
+                        pathname: paths.personalSpace,
+                        query: { category: "materials" }
+                      })
+                    }}
                   />
                 )}
               </div>

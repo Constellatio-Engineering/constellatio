@@ -4,6 +4,7 @@ import { Cross } from "@/components/Icons/Cross";
 import { type BadgeWithUserData } from "@/db/schema";
 import useBadges, { disabledForPaths } from "@/hooks/useBadges";
 import useContextAndErrorIfNull from "@/hooks/useContextAndErrorIfNull";
+import useOnboardingResult from "@/hooks/useOnboardingResult";
 import { usePrevious } from "@/hooks/usePrevious";
 import { AuthStateContext } from "@/provider/AuthStateProvider";
 import { InvalidateQueriesContext } from "@/provider/InvalidateQueriesProvider";
@@ -23,6 +24,7 @@ import * as styles from "./NewNotificationEarnedWatchdog.styles";
  */
 const NewNotificationEarnedWatchdog: FunctionComponent = () =>
 {
+  const { onboardingResult } = useOnboardingResult();
   const { isUserLoggedIn } = useContext(AuthStateContext);
   const apiUtils = api.useUtils();
   const router = useRouter();
@@ -121,7 +123,7 @@ const NewNotificationEarnedWatchdog: FunctionComponent = () =>
       <Modal
         withCloseButton={false}
         lockScroll={false}
-        opened={newEarnedBadges.length > 0 && !isDisabledForCurrentPath}
+        opened={newEarnedBadges.length > 0 && !isDisabledForCurrentPath && onboardingResult != null}
         size="lg"
         radius="12px"
         styles={styles.newEarnedModalStyle()}
