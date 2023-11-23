@@ -49,14 +49,12 @@ const formatDate = (date: Date): string => `${String(date?.getDate()).padStart(2
 
 interface UploadedMaterialTableBodyProps
 {
-  readonly selectedFolderId: string | null;
   readonly showingFiles: number;
   readonly uploadedFiles?: UploadedFileWithNote[];
   readonly variant: "personalSpace" | "searchPapers";
 }
 
 const UploadedMaterialTableBody: FunctionComponent<UploadedMaterialTableBodyProps> = ({
-  selectedFolderId,
   showingFiles,
   uploadedFiles,
   variant = "personalSpace",

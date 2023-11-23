@@ -222,7 +222,6 @@ const UploadedMaterialBlock: FunctionComponent<UploadedMaterialBlockProps> = ({
           <UploadedMaterialTable
             isGetUploadedFilesLoading={isGetFilesLoading}
             uploadedFiles={uploadedFilesWithNotesInSelectedFolder}
-            selectedFolderId={selectedFolderId}
           />
         ) : uploadedFilesWithNotesInAllFolders.length > 0 ? (
           <EmptyStateCard

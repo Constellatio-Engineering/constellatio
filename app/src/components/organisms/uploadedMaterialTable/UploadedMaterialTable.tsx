@@ -12,14 +12,12 @@ import UploadedMaterialNoteDrawer from "../uploadedMaterialNoteDrawer/UploadedMa
 interface UploadedMaterialTableProps
 {
   readonly isGetUploadedFilesLoading?: boolean;
-  readonly selectedFolderId: string | null;
   readonly uploadedFiles: UploadedFileWithNote[];
   readonly variant?: "personalSpace" | "searchPapers";
 }
 
 const UploadedMaterialTable: FunctionComponent<UploadedMaterialTableProps> = ({
   isGetUploadedFilesLoading,
-  selectedFolderId,
   uploadedFiles,
   variant = "personalSpace",
 }) =>
@@ -35,7 +33,6 @@ const UploadedMaterialTable: FunctionComponent<UploadedMaterialTableProps> = ({
         </thead>
         <tbody css={styles.tableBody}>
           <UploadedMaterialTableBody
-            selectedFolderId={selectedFolderId}
             showingFiles={showingFiles}
             uploadedFiles={uploadedFiles}
             variant={variant}
