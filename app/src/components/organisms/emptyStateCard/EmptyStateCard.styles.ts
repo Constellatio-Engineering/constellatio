@@ -25,7 +25,7 @@ export const wrapper = css`
 `;
 
 export const emptyStateCard = ({ variant }: IEmptyCardProps) => css`
-  padding: ${variant === "For-small-areas" ? "32px 20px 40px" : "60px 0"};
+  padding: ${variant === "For-small-areas" ? "32px 20px 50px" : "60px 0"};
   display: flex;
   flex-direction: column;
   justify-content: center;
@@ -35,7 +35,7 @@ export const emptyStateCard = ({ variant }: IEmptyCardProps) => css`
 `;
 
 export const emptyStateCardImage = ({ variant }: IEmptyCardProps) => css`
-  margin-bottom: ${variant === "For-small-areas" ? "32px" : "40px"};
+  margin-bottom: ${variant === "For-small-areas" ? "20px" : "30px"};
 `;
 
 export const emptyStateCardTitle = ({ theme, variant }: IEmptyCardProps) => css`
@@ -44,7 +44,7 @@ export const emptyStateCardTitle = ({ theme, variant }: IEmptyCardProps) => css`
 `;
 
 export const emptyStateCardText = ({ theme }: IEmptyCardProps) => css`
-  margin-bottom: 40px;
+  margin-bottom: 24px;
   color: ${theme?.colors["neutrals-01"][7]};
   padding: 0 20px;
 `;

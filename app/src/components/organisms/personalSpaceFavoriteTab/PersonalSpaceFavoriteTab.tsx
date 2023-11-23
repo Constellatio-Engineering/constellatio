@@ -93,11 +93,13 @@ const PersonalSpaceFavoriteTabContent: FunctionComponent = () =>
               <FavoriteCasesList {...favoriteCasesListProps}/>
             ) : (
               <EmptyStateCard
-                button="Alle Fälle ansehen"
+                button={{
+                  content: "Alle Fälle ansehen",
+                  onClick: async () => router.push(paths.cases)
+                }}
                 title="Du hast noch keine Fälle als Favoriten gespeichert"
                 text="Du kannst Fälle, Lexikon-Artikel und sogar einzelne markierte Textpassagen als deine persönlichen Favoriten speichern"
                 variant="For-large-areas"
-                click={async () => router.push(paths.cases)}
               />
             )
           )}
@@ -112,15 +114,16 @@ const PersonalSpaceFavoriteTabContent: FunctionComponent = () =>
                 <FavoriteArticlesList {...favoriteArticlesListProps}/>
               ) : ( 
                 <EmptyStateCard
-                  button="Alle Lexikon-Artikel ansehen"
+                  button={{
+                    content: "Alle Lexikon-Artikel ansehen",
+                    onClick: async () => router.push(paths.dictionary)
+                  }}
                   title="Du hast noch keine Lexikon-Artikel als Favoriten gespeichert"
                   text="Du kannst Fälle, Lexikon-Artikel und sogar einzelne markierte Textpassagen als deine persönlichen Favoriten speichern"
                   variant="For-large-areas"
-                  click={async () => router.push(paths.dictionary)}
                 />
               )
           }
-        
         </>
       )}
     </div>

@@ -22,6 +22,7 @@ const PapersBlock: FunctionComponent<PapersBlockProps> = ({ isLoading, selectedF
 {
   const setCreateDocumentState = useDocumentEditorStore(s => s.setCreateDocumentState);
   const { documentsInAllFolders, documentsInSelectedFolder } = useDocuments();
+  const onCreateDocument = (): void => setCreateDocumentState({ folderId: selectedFolderId });
 
   return (
     <div css={styles.wrapper}>
@@ -32,7 +33,7 @@ const PapersBlock: FunctionComponent<PapersBlockProps> = ({ isLoading, selectedF
         <Button<"button">
           styleType="secondarySimple" 
           leftIcon={<NoteIcon/>}
-          onClick={() => setCreateDocumentState({ folderId: selectedFolderId })}>
+          onClick={onCreateDocument}>
           Erstellen
         </Button>
       </div>
@@ -42,17 +43,16 @@ const PapersBlock: FunctionComponent<PapersBlockProps> = ({ isLoading, selectedF
             <div css={styles.papersBlockTable}>
               <DocsTable docs={documentsInSelectedFolder}/>
             </div>
-          ) : documentsInAllFolders.length > 0 ? (
-            <EmptyStateCard
-              variant="For-small-areas"
-              title="Keine Constellatio Docs in diesem Ordner"
-              text="Klicke hier um eine neues Constellatio Doc zu erstellen."
-            />
           ) : (
             <EmptyStateCard
               variant="For-small-areas"
-              title="Du hast noch keine Constellatio Docs erstellt"
+              title={documentsInAllFolders.length > 0 ? "Keine Constellatio Docs in diesem Ordner" : "Du hast noch keine Constellatio Docs erstellt"}
               text="Constellatio Docs sind deine digitalen Textdateien, in denen du Anmerkungen, Zusammenfassungen und vieles Weitere direkt in der Cloud speichern kannst. Du kannst sie jederzeit als .pdf-Datei exportieren und herunterladen."
+              button={{
+                content: "Doc erstellen",
+                icon: <NoteIcon/>,
+                onClick: onCreateDocument
+              }}
             />
           )}
         </>

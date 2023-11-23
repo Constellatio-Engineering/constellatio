@@ -3,24 +3,26 @@ import { Button } from "@/components/atoms/Button/Button";
 import { SubtitleText } from "@/components/atoms/SubtitleText/SubtitleText";
 import { EmptyStateCardIcon } from "@/components/Icons/EmptyStateCardIcon";
 
-import { Title, useMantineTheme } from "@mantine/core";
-import React, { type ReactNode, type FunctionComponent } from "react";
+import { type ButtonProps, Title, useMantineTheme } from "@mantine/core";
+import React, { type FunctionComponent, type ReactNode } from "react";
 
 import * as styles from "./EmptyStateCard.styles";
 
 export interface IEmptyStateCardProps 
 {
-  readonly button?: ReactNode;
-  readonly click?: () => void;
+  readonly button?: {
+    readonly content: ReactNode;
+    readonly icon?: ButtonProps["leftIcon"];
+    readonly onClick: () => void;
+  };
   readonly hideIcon?: boolean;
   readonly text: string;
   readonly title: string;
-  readonly variant?: "For-small-areas" | "For-large-areas";
+  readonly variant: "For-small-areas" | "For-large-areas";
 }
 
 const EmptyStateCard: FunctionComponent<IEmptyStateCardProps> = ({
   button,
-  click = () => {},
   hideIcon = false,
   text,
   title,
@@ -50,10 +52,14 @@ const EmptyStateCard: FunctionComponent<IEmptyStateCardProps> = ({
             </BodyText>
           ) : <SubtitleText styleType="subtitle-01-medium">{text}</SubtitleText>}
         </div>
-        {button && variant === "For-large-areas" && (
+        {button && (
           <div css={styles.callToAction({ theme })}>
-            <Button<"button"> styleType="primary" onClick={click}>
-              {button}
+            <Button<"button">
+              type="button"
+              styleType="primary"
+              onClick={button.onClick}
+              leftIcon={button.icon}>
+              {button.content}
             </Button>
           </div>
         )}

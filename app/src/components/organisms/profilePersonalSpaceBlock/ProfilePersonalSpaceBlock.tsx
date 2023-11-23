@@ -77,10 +77,13 @@ const ProfilePersonalSpaceBlock: FunctionComponent = () =>
                       title="Noch keine Favoriten vorhanden"
                       text="Speichere jetzt Fälle oder Lexikonartikel als Favoriten in deinem persönlichen Bereich."
                       variant="For-small-areas"
+                      button={{
+                        content: "Alle Fälle ansehen",
+                        onClick: async () => router.push(paths.cases)
+                      }}
                     />
                   )
             }
-            
           </div>
           {favoritesList && favoritesList?.length > 6 && (
             <Link href={`${paths.personalSpace}?category=favorites`}>
@@ -113,6 +116,13 @@ const ProfilePersonalSpaceBlock: FunctionComponent = () =>
                     title="Du hast noch keine Dateien hochgeladen"
                     text="Du kannst jetzt eigene Dateien hochladen und in deinem persönlichen Bereich ablegen."
                     variant="For-small-areas"
+                    button={{
+                      content: "Zu deinen Dateien",
+                      onClick: async () => router.push(paths.personalSpace, {
+                        pathname: paths.personalSpace,
+                        query: { category: "materials" }
+                      })
+                    }}
                   />
                 )}
               </div>
