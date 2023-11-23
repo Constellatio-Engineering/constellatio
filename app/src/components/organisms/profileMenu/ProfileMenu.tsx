@@ -70,7 +70,7 @@ const ProfileMenu: FunctionComponent<IProfileMenu> = ({ activeTabSlug, setTab, t
           ))}
         </div>
         <div css={styles.groupedLinks}>
-          <LinkButton title="Einführung wiederholen" icon={<NoteIcon/>} onClick={() => setOnboardingResult({ result: null })}/>
+          <LinkButton title="Einführung wiederholen" icon={<NoteIcon/>} onClick={async () => setOnboardingResult({ result: null })}/>
           <LinkButton title="Ausloggen" onClick={handleSignOut} icon={<IconLogout/>}/>
         </div>
       </div>
