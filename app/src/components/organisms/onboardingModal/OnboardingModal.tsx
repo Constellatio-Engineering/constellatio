@@ -5,7 +5,9 @@ import { paths } from "@/utils/paths";
 
 import { Modal, Title } from "@mantine/core";
 import { useRouter } from "next/router";
-import { type Dispatch, type FunctionComponent, type SetStateAction } from "react";
+import {
+  type Dispatch, type FunctionComponent, type SetStateAction, useEffect, useRef 
+} from "react";
 
 import * as styles from "./OnboardingModal.styles";
 
@@ -18,17 +20,33 @@ const OnboardingModal: FunctionComponent<Props> = ({ onboardingStepsIndex, setOn
 {
   const router = useRouter();
   const { setOnboardingResult } = useSetOnboardingResult();
+  const timeoutRef = useRef<NodeJS.Timeout>();
 
-  const onClose = (redirectTo?: string): void =>
+  const onClose = async (redirectTo?: string): Promise<void> =>
   {
-    setOnboardingResult({ result: "completed" });
-    setOnboardingStepsIndex(-1);
+    await setOnboardingResult({ result: "completed" });
 
-    if(redirectTo)
+    timeoutRef.current = setTimeout(() =>
     {
-      void router.push(redirectTo);
-    }
+      if(redirectTo)
+      {
+        void router.push(redirectTo);
+      }
+    }, 200);
+
+    setOnboardingStepsIndex(-1);
   };
+
+  useEffect(() =>
+  {
+    return () =>
+    {
+      if(timeoutRef.current)
+      {
+        clearTimeout(timeoutRef.current);
+      }
+    };
+  }, []);
 
   return (
     <Modal
@@ -54,14 +72,14 @@ const OnboardingModal: FunctionComponent<Props> = ({ onboardingStepsIndex, setOn
             size="large"
             miw="100%"
             styleType="secondarySimple"
-            onClick={() => onClose()}>
+            onClick={async () => onClose()}>
             Schließen
           </Button>
           <Button<"button">
             size="large"
             miw="100%"
             styleType="primary"
-            onClick={() => onClose(paths.cases)}>
+            onClick={async () => onClose(paths.cases)}>
             Fall-Übersicht ansehen
           </Button>
         </div>
