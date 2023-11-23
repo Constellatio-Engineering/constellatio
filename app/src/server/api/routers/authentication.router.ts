@@ -87,10 +87,11 @@ export const authenticationRouter = createTRPCRouter({
           lastName: input.lastName,
           semester: input.semester,
           stripeCustomerId,
-          subscribedPlanPriceId: subscriptionData.subscribedPlanPriceId,
           subscriptionEndDate: subscriptionData.subscriptionEndDate,
+          subscriptionId: subscriptionData.subscriptionId,
           subscriptionStartDate: subscriptionData.subscriptionStartDate,
           subscriptionStatus: subscriptionData.subscriptionStatus,
+          trailSubscriptionId: subscriptionData.subscriptionId,
           university: input.university,
         };
 

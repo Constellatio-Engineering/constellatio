@@ -36,6 +36,20 @@
       "when": 1698752337690,
       "tag": "0004_lazy_black_panther",
       "breakpoints": true
+    },
+    {
+      "idx": 5,
+      "version": "5",
+      "when": 1700771609592,
+      "tag": "0005_tiresome_quicksilver",
+      "breakpoints": true
+    },
+    {
+      "idx": 6,
+      "version": "5",
+      "when": 1700771609932,
+      "tag": "0006_fantastic_ravenous",
+      "breakpoints": true
     }
   ]
 }
