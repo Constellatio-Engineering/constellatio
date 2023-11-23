@@ -8,12 +8,7 @@ import React, { type FunctionComponent, useCallback } from "react";
 import EditorForm from "./editorForm/EditorForm";
 import * as styles from "./UploadedMaterialNoteDrawer.styles";
 
-interface UploadedMaterialNoteDrawerProps 
-{
-  readonly selectedFolderId: string | null;
-}
-
-const UploadedMaterialNoteDrawer: FunctionComponent<UploadedMaterialNoteDrawerProps> = ({ selectedFolderId }) =>
+const UploadedMaterialNoteDrawer: FunctionComponent = () =>
 {
   const { editorState } = useNoteEditorStore();
 
@@ -51,7 +46,6 @@ const UploadedMaterialNoteDrawer: FunctionComponent<UploadedMaterialNoteDrawerPr
         <EditorForm
           onClose={onClose}
           editorState={editorState}
-          selectedFolderId={selectedFolderId}
         />
       )}
     </Drawer>

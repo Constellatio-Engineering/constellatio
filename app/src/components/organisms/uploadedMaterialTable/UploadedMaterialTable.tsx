@@ -53,7 +53,7 @@ const UploadedMaterialTable: FunctionComponent<UploadedMaterialTableProps> = ({
           </Button>
         </div>
       )}
-      <UploadedMaterialNoteDrawer selectedFolderId={selectedFolderId}/>
+      <UploadedMaterialNoteDrawer/>
     </div>
   );
 };

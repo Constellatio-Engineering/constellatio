@@ -20,10 +20,9 @@ interface EditorFormProps
 {
   readonly editorState: EditorStateDrawerOpened;
   readonly onClose: () => void;
-  readonly selectedFolderId: string | null;
 }
 
-const EditorForm: FunctionComponent<EditorFormProps> = ({ editorState, onClose, selectedFolderId }) =>
+const EditorForm: FunctionComponent<EditorFormProps> = ({ editorState, onClose }) =>
 {
   const { invalidateNotes } = useContextAndErrorIfNull(InvalidateQueriesContext);
   const { note, state } = editorState;
@@ -31,25 +30,24 @@ const EditorForm: FunctionComponent<EditorFormProps> = ({ editorState, onClose, 
   const setEditNoteState = useNoteEditorStore(s => s.setEditNoteState);
   const { hasUnsavedChanges } = useNoteEditorStore(s => s.getComputedValues());
   const [shouldShowDeleteNoteWindow, setShouldShowDeleteNoteWindow] = useState<boolean>(false);
-  const _invalidateNotes = async (): Promise<void> => invalidateNotes({ folderId: selectedFolderId });
-  const { uploadedFiles } = useUploadedFiles(selectedFolderId);
-  const file = uploadedFiles?.find(file => file.id === note.fileId);
+  const { uploadedFilesInSelectedFolder } = useUploadedFiles();
+  const file = uploadedFilesInSelectedFolder?.find(file => file.id === note.fileId);
 
   const { mutateAsync: createNote } = api.notes.createNote.useMutation({
     onError: (error) => console.log("error while creating note", error),
-    onSuccess: _invalidateNotes
+    onSuccess: invalidateNotes
   });
 
   const { mutateAsync: updateNote } = api.notes.updateNote.useMutation({
     onError: (error) => console.log("error while updating note", error),
-    onSuccess: _invalidateNotes
+    onSuccess: invalidateNotes
   });
 
   const { mutate: deleteNote } = api.notes.deleteNote.useMutation({
     onError: (error) => console.log("error while deleting note", error),
     onSuccess: async () =>
     {
-      await _invalidateNotes();
+      await invalidateNotes();
       onClose();
     }
   });

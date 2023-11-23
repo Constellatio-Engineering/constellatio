@@ -8,7 +8,6 @@ import useCases from "@/hooks/useCases";
 import useDocuments from "@/hooks/useDocuments";
 import useUploadedFiles from "@/hooks/useUploadedFiles";
 import { type IGenArticle } from "@/services/graphql/__generated/sdk";
-import useMaterialsStore from "@/stores/materials.store";
 
 import { parseAsString, useQueryState } from "next-usequerystate";
 import React, { type FunctionComponent, useId } from "react";
@@ -20,14 +19,11 @@ import FileIconSvg from "../../../../public/images/icons/file.svg";
 
 const PersonalSpacePageContent: FunctionComponent = () =>
 {
-  const { allCases = [] } = useCases();
-  const { allArticles = [] } = useArticles(); 
+  const { allCases } = useCases();
+  const { allArticles } = useArticles();
   const { bookmarks } = useBookmarks(undefined);
-  const selectedFolderId = useMaterialsStore(s => s.selectedFolderId);
-  const { documents: documentsInAllFolders } = useDocuments(undefined);
-  const documentsInSelectedFolder = documentsInAllFolders.filter(document => document.folderId === selectedFolderId);
-  const { uploadedFiles: uploadedFilesInAllFolders } = useUploadedFiles(undefined);
-  const uploadedFilesInSelectedFolder = uploadedFilesInAllFolders.filter(uploadedFile => uploadedFile.folderId === selectedFolderId);
+  const { documentsInAllFolders } = useDocuments();
+  const { uploadedFilesInAllFolders } = useUploadedFiles();
   const allCasesBookmarks = bookmarks.filter(bookmark => bookmark?.resourceType === "case") ?? [];
   const bookmarkedCases = allCases.filter(caisyCase => allCasesBookmarks.some(bookmark => bookmark.resourceId === caisyCase.id));
   const allArticlesBookmarks = bookmarks.filter(bookmark => bookmark?.resourceType === "article") ?? [];
@@ -59,8 +55,12 @@ const PersonalSpacePageContent: FunctionComponent = () =>
           setSelectedCategorySlug={setSelectedCategorySlug}
         />
       </div>
-      {selectedCategorySlug === categories?.[0]?.slug && <PersonalSpaceFavoriteTab/>}
-      {selectedCategorySlug === categories?.[1]?.slug && <PersonalSpaceMaterialsTab/>}
+      {selectedCategorySlug === categories?.[0]?.slug && (
+        <PersonalSpaceFavoriteTab/>
+      )}
+      {selectedCategorySlug === categories?.[1]?.slug && (
+        <PersonalSpaceMaterialsTab/>
+      )}
     </div>
   );
 };
