@@ -23,7 +23,12 @@ const SubscriptionModal: FunctionComponent = () =>
 {
   const { isUserLoggedIn } = useContext(AuthStateContext);
   const router = useRouter();
-  const { generateStripeSessionUrl, isOnTrailSubscription, subscriptionDetails } = useSubscription();
+  const {
+    generateStripeSessionUrl,
+    isOnPaidSubscription,
+    isOnTrailSubscription,
+    subscriptionDetails
+  } = useSubscription();
 
   const [daysCheckedForSubscriptionEnds, setDaysCheckedForSubscriptionEnds] = useLocalStorage<string[]>({
     defaultValue: [],
@@ -78,16 +83,21 @@ const SubscriptionModal: FunctionComponent = () =>
 
   const [wasClosed, setWasClosed] = useState(false);
   const todayDateAsString = new Date().toISOString().split("T")[0] as string;
-  const isOpened = (
+  const isOnValidSubscription = isOnPaidSubscription || isOnTrailSubscription;
+  const isAuthenticated = isUserLoggedIn && !router.pathname.startsWith(paths.login) && !router.pathname.startsWith(paths.register);
+
+  // this check is to prevent modal flickering
+  if(!subscriptionDetails) { return null; }
+
+  const isOpened = ((isAuthenticated && !isOnValidSubscription) || (
     !wasClosed &&
     !daysCheckedForSubscriptionEnds?.includes(todayDateAsString) &&
     isOnTrailSubscription &&
-    (diffDays === 3 || diffDays === 1 || (diffDays != null && diffDays <= 0)) &&
-    isUserLoggedIn &&
-    !router.pathname.startsWith(paths.login) &&
-    !router.pathname.startsWith(paths.register)
-  ) ?? false;
-  const isModalLocked = diffDays == null || diffDays <= 0;
+    (diffDays === 3 || diffDays === 1 || (diffDays != null && diffDays <= 0)) && 
+    isAuthenticated
+  )) ?? false;
+
+  const isModalLocked = (diffDays == null || diffDays <= 0) || !isOnValidSubscription;
 
   const redirectToStripeCheckout = async (): Promise<void> => 
   {
