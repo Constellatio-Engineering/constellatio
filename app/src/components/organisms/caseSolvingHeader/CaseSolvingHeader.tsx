@@ -10,6 +10,7 @@ import useCases from "@/hooks/useCases";
 import useRemoveBookmark from "@/hooks/useRemoveBookmark";
 import { type AddOrRemoveBookmarkSchema } from "@/schemas/bookmarks/addOrRemoveBookmark.schema";
 import { type Maybe, type IGenArticle } from "@/services/graphql/__generated/sdk";
+import { isTrackingEnabled } from "@/utils/env";
 
 import { Container, Title, useMantineTheme } from "@mantine/core";
 import Link from "next/link";
@@ -83,7 +84,10 @@ const CaseSolvingHeader: FunctionComponent<ICaseSolvingHeaderProps> = ({
     {
       click: () => 
       {
-        posthog.capture("print_btn", { variant });
+        if(isTrackingEnabled) 
+        {
+          posthog.capture("print_btn", { variant });
+        }
         window.print();
       },
       src: <Print/>,

@@ -14,6 +14,7 @@ import { InvalidateQueriesContext } from "@/provider/InvalidateQueriesProvider";
 import { type IGenCase } from "@/services/graphql/__generated/sdk";
 import useCaseSolvingStore from "@/stores/caseSolving.store";
 import { api } from "@/utils/api";
+import { isTrackingEnabled } from "@/utils/env";
 import { type Nullable } from "@/utils/types";
 
 import { Skeleton, Title } from "@mantine/core";
@@ -152,7 +153,10 @@ const CaseSolveCaseStep: FunctionComponent<Props> = ({
               onClick={() =>
               {
                 setShowStepTwoModal(false);
-                posthog.capture("case_solving_finished");
+                if(isTrackingEnabled) 
+                {
+                  posthog.capture("case_solving_finished");
+                }
                 setProgressState({ caseId: id, progressState: "completed" });
               }}
               fullWidth>

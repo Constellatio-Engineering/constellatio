@@ -196,7 +196,10 @@ const CaseCompleteTestsStep: FunctionComponent<ICaseCompleteTestsStepProps> = ({
             type="button"
             onClick={() => 
             {
-              posthog.capture("case_solving_started");
+              if(isTrackingEnabled) 
+              {
+                posthog.capture("case_solving_started");
+              }
               setProgressState({ caseId, progressState: "completing-tests" });
             }}>
             Geführte Lösung starten

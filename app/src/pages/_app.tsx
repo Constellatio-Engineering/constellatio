@@ -6,13 +6,13 @@ import NewNotificationEarnedWatchdog from "@/components/molecules/newNotificatio
 import SubscriptionModal from "@/components/organisms/subscriptionModal/SubscriptionModal";
 import { env } from "@/env.mjs";
 import { supabase } from "@/lib/supabase";
-import AuthStateProvider, { AuthStateContext } from "@/provider/AuthStateProvider";
+import AuthStateProvider from "@/provider/AuthStateProvider";
 import CustomThemingProvider from "@/provider/CustomThemingProvider";
 import InvalidateQueriesProvider from "@/provider/InvalidateQueriesProvider";
 import MeilisearchProvider from "@/provider/MeilisearchProvider";
 import useSearchBarStore from "@/stores/searchBar.store";
 import { api } from "@/utils/api";
-import { isProduction } from "@/utils/env";
+import { isProduction, isTrackingEnabled } from "@/utils/env";
 import { initFormbricks, logoutFormbricks } from "@/utils/formbricks";
 import { paths } from "@/utils/paths";
 
@@ -53,23 +53,27 @@ const Layout: FunctionComponent<LayoutProps> = ({ Component, pageProps }) =>
 
 if(typeof window !== "undefined")
 {
-  posthog.init(env.NEXT_PUBLIC_POSTHOG_KEY, {
-    api_host: env.NEXT_PUBLIC_POSTHOG_HOST,
-    autocapture: true,
-    capture_pageview: true,
-    disable_cookie: true,
-    disable_session_recording: true,
-    loaded: (posthog) =>
-    {
-      if(!isProduction)
+  if(isTrackingEnabled)
+  {
+    posthog.init(env.NEXT_PUBLIC_POSTHOG_KEY, {
+      api_host: env.NEXT_PUBLIC_POSTHOG_HOST,
+      autocapture: true,
+      capture_pageview: true,
+      disable_cookie: true,
+      disable_session_recording: true,
+      loaded: (posthog) =>
       {
-        posthog.debug(true);
-      }
-    },
-    opt_out_capturing_by_default: true,
-    opt_out_persistence_by_default: true,
-    secure_cookie: true,
-  });
+        if(!isProduction)
+        {
+          posthog.debug(true);
+        }
+      },
+      opt_out_capturing_by_default: true,
+      opt_out_persistence_by_default: true,
+      secure_cookie: true,
+    });
+  }
+  
 }
 
 type ConstellatioAppProps = AppProps & {
@@ -108,27 +112,29 @@ const AppContainer: FunctionComponent<ConstellatioAppProps> = ({ Component, page
           {
             return;
           }
-
-          posthog.set_config({
-            disable_cookie: false,
-            disable_persistence: false,
-          });
-
-          if(!posthog.has_opted_in_capturing())
+          if(isTrackingEnabled)
           {
-            posthog.opt_in_capturing();    
-            posthog.identify(id, { email });
-          
-            if(!postHogQueueIsStartedRef.current)
+            posthog.set_config({
+              disable_cookie: false,
+              disable_persistence: false,
+            });
+  
+            if(!posthog.has_opted_in_capturing())
             {
-              posthog._start_queue_if_opted_in();
-              postHogQueueIsStartedRef.current = true;
-
-              if(posthog.has_opted_in_capturing())
+              posthog.opt_in_capturing();    
+              posthog.identify(id, { email });
+            
+              if(!postHogQueueIsStartedRef.current)
               {
-                if(isProduction)
+                posthog._start_queue_if_opted_in();
+                postHogQueueIsStartedRef.current = true;
+  
+                if(posthog.has_opted_in_capturing())
                 {
-                  posthog.startSessionRecording();
+                  if(isProduction)
+                  {
+                    posthog.startSessionRecording();
+                  }
                 }
               }
             }
@@ -154,19 +160,22 @@ const AppContainer: FunctionComponent<ConstellatioAppProps> = ({ Component, page
           break;
 
         case "SIGNED_OUT": {
-          posthog.stopSessionRecording();
-
-          if(posthog.has_opted_in_capturing())
+          if(isTrackingEnabled)
           {
-            posthog.opt_out_capturing();
+            posthog.stopSessionRecording();
+
+            if(posthog.has_opted_in_capturing())
+            {
+              posthog.opt_out_capturing();
+            }
+
+            posthog.set_config({
+              disable_cookie: true,
+              disable_persistence: true,
+            });
+
+            posthog.reset(true);
           }
-
-          posthog.set_config({
-            disable_cookie: true,
-            disable_persistence: true,
-          });
-
-          posthog.reset(true);
 
           if(isFormbricksVerifiedRef.current)
           {
@@ -181,49 +190,57 @@ const AppContainer: FunctionComponent<ConstellatioAppProps> = ({ Component, page
     });
   }, []);
 
-  useEffect(() =>
+  useEffect(() => 
   {
-    const handleRouteChange = (): void =>
+    if(isTrackingEnabled) 
     {
-      posthog.capture("$pageview");
-    };
-    router.events.on("routeChangeComplete", handleRouteChange);
-
-    return () =>
-    {
-      router.events.off("routeChangeComplete", handleRouteChange);
-    };
-  }, []); 
+      const handleRouteChange = (): void => 
+      {
+        posthog.capture("$pageview");
+      };
+      router.events.on("routeChangeComplete", handleRouteChange);
+  
+      return () => 
+      {
+        router.events.off("routeChangeComplete", handleRouteChange);
+      };
+    }
+    return () => {};
+  }, []);
 
   useEffect(() => 
   {
-    const onVisibilityChange = (): void => 
+    if(isTrackingEnabled) 
     {
-      const visibility = !document.hidden;
-
-      if(isDocumentVisibleRef.current !== visibility) 
+      const onVisibilityChange = (): void => 
       {
-        isDocumentVisibleRef.current = visibility;
+        const visibility = !document.hidden;
 
-        if(visibility) 
+        if(isDocumentVisibleRef.current !== visibility) 
         {
-          posthog.capture("$visibilityOn");
-        } 
-        else 
-        {
-          posthog.capture("$visibilityOff");
+          isDocumentVisibleRef.current = visibility;
+
+          if(visibility) 
+          {
+            posthog.capture("$visibilityOn");
+          } 
+          else 
+          {
+            posthog.capture("$visibilityOff");
+          }
         }
-      }
-    };
+      };
 
-    onVisibilityChange();
+      onVisibilityChange();
 
-    document.addEventListener("visibilitychange", onVisibilityChange);
+      document.addEventListener("visibilitychange", onVisibilityChange);
 
-    return () => 
-    {
-      document.removeEventListener("visibilitychange", onVisibilityChange);
-    };
+      return () => 
+      {
+        document.removeEventListener("visibilitychange", onVisibilityChange);
+      };
+    }
+    return () => {};
   }, []);
 
   useEffect(() =>
