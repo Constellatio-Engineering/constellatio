@@ -120,8 +120,6 @@ const SubscriptionModal: FunctionComponent = () =>
     void router.push(url);
   };
 
-  console.log("isOnValidSubscription", isOnValidSubscription);
-
   return (
     <Modal
       opened={isOpened}
