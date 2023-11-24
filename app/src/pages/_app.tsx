@@ -6,7 +6,7 @@ import NewNotificationEarnedWatchdog from "@/components/molecules/newNotificatio
 import SubscriptionModal from "@/components/organisms/subscriptionModal/SubscriptionModal";
 import { env } from "@/env.mjs";
 import { supabase } from "@/lib/supabase";
-import AuthStateProvider from "@/provider/AuthStateProvider";
+import AuthStateProvider, { AuthStateContext } from "@/provider/AuthStateProvider";
 import CustomThemingProvider from "@/provider/CustomThemingProvider";
 import InvalidateQueriesProvider from "@/provider/InvalidateQueriesProvider";
 import MeilisearchProvider from "@/provider/MeilisearchProvider";
@@ -27,7 +27,7 @@ import { appWithTranslation } from "next-i18next";
 import { posthog } from "posthog-js";
 import { PostHogProvider } from "posthog-js/react";
 import {
-  useEffect, type FunctionComponent, type ReactElement, type ReactNode, useState, useRef
+  useEffect, type FunctionComponent, type ReactElement, type ReactNode, useRef, useContext
 } from "react";
 
 export type NextPageWithLayout<P = object, IP = P> = NextPage<P, IP> & {
@@ -87,9 +87,10 @@ const AppContainer: FunctionComponent<ConstellatioAppProps> = ({ Component, page
   const ogImageUrlSplitUp = ogImage.split(".");
   const ogImageFileExtension = ogImageUrlSplitUp[ogImageUrlSplitUp.length - 1];
   const isDocumentVisibleRef = useRef<boolean | null>(null);
-  const [postHogQueueIsStarted, setPostHogQueueIsStarted] = useState(false);
-  const [isFormbricksVerified, setIsFormbricksVerified] = useState<boolean>(false);
-  const [isSignedIn, setIsSignedIn] = useState<boolean>(false);
+  const { isUserLoggedIn } = useContext(AuthStateContext);
+  const isFormbricksVerifiedRef = useRef(false);
+  const postHogQueueIsStartedRef = useRef(false);
+
   let pageTitle = appTitle;
 
   useEffect(() =>
@@ -119,10 +120,10 @@ const AppContainer: FunctionComponent<ConstellatioAppProps> = ({ Component, page
             posthog.opt_in_capturing();    
             posthog.identify(id, { email });
           
-            if(!postHogQueueIsStarted)
+            if(!postHogQueueIsStartedRef.current)
             {
               posthog._start_queue_if_opted_in();
-              setPostHogQueueIsStarted(true);
+              postHogQueueIsStartedRef.current = true;
 
               if(posthog.has_opted_in_capturing())
               {
@@ -134,7 +135,7 @@ const AppContainer: FunctionComponent<ConstellatioAppProps> = ({ Component, page
             }
           }
 
-          if(!isFormbricksVerified)
+          if(!isFormbricksVerifiedRef.current)
           {
             initFormbricks(
               {
@@ -148,17 +149,12 @@ const AppContainer: FunctionComponent<ConstellatioAppProps> = ({ Component, page
               }
             );
 
-            setIsFormbricksVerified(true);
+            isFormbricksVerifiedRef.current = true;
           }
-          
-          if(!isSignedIn)
-          {
-            setIsSignedIn(true);
-          }
+
           break;
-        
+
         case "SIGNED_OUT": {
-          setIsSignedIn(false);
           posthog.stopSessionRecording();
 
           if(posthog.has_opted_in_capturing())
@@ -173,10 +169,10 @@ const AppContainer: FunctionComponent<ConstellatioAppProps> = ({ Component, page
 
           posthog.reset(true);
 
-          if(isFormbricksVerified)
+          if(isFormbricksVerifiedRef.current)
           {
             logoutFormbricks();
-            setIsFormbricksVerified(false);
+            isFormbricksVerifiedRef.current = false;
           }
           break;
         }
@@ -295,7 +291,7 @@ const AppContainer: FunctionComponent<ConstellatioAppProps> = ({ Component, page
                     <NewNotificationEarnedWatchdog/>
                     <SubscriptionModal/>
                     <ComputerRecommendedModal/>
-                    {isSignedIn && (
+                    {isUserLoggedIn && (
                       <FeedbackButton/>
                     )}
                     <Layout Component={Component} pageProps={pageProps}/>
