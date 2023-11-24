@@ -18,6 +18,7 @@ import { type Nullable } from "@/utils/types";
 
 import { Skeleton, Title } from "@mantine/core";
 import { notifications } from "@mantine/notifications";
+import { usePostHog } from "posthog-js/react";
 import React, { type FunctionComponent, useState } from "react";
 
 import * as styles from "./CaseSolveCaseStep.styles";
@@ -84,6 +85,8 @@ const CaseSolveCaseStep: FunctionComponent<Props> = ({
     }
   });
 
+  const posthog = usePostHog();
+
   return (
     <div css={styles.wrapper} id="solveCaseStepContent">
       {title && (
@@ -149,6 +152,7 @@ const CaseSolveCaseStep: FunctionComponent<Props> = ({
               onClick={() =>
               {
                 setShowStepTwoModal(false);
+                posthog.capture("case_solving_finished");
                 setProgressState({ caseId: id, progressState: "completed" });
               }}
               fullWidth>

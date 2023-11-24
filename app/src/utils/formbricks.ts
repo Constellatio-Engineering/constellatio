@@ -14,10 +14,11 @@ const logoutFormbricks = (): void =>
   void formbricks.logout();
 };
 
-const registerRouteChangeFormbricks = (): void => 
+// TODO:: add it later if necessary currently not in use
+/* const registerRouteChangeFormbricks = (): void => 
 {
   void formbricks?.registerRouteChange();
-};
+}; */
 
 const initFormbricks = (initialData: TInitFormbricks): void => 
 {
@@ -39,4 +40,4 @@ const initFormbricks = (initialData: TInitFormbricks): void =>
   void formbricks.setEmail(email);
 };
 
-export { initFormbricks, logoutFormbricks, registerRouteChangeFormbricks };
+export { initFormbricks, logoutFormbricks /* , registerRouteChangeFormbricks */ };

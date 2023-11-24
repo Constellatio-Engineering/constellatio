@@ -1,11 +1,13 @@
 import { Button } from "@/components/atoms/Button/Button";
 
+import { useRouter } from "next/router";
 import React, { useEffect, useState } from "react";
 
 import * as styles from "./feedbackButton.styles";
 
 const FeedbackButton: React.FC = () => 
 {
+  const router = useRouter();
   const [isVisible, setIsVisible] = useState(false);
 
   useEffect(() => 
@@ -22,7 +24,7 @@ const FeedbackButton: React.FC = () =>
   }, []);
 
   return (
-    isVisible && (
+    isVisible && (router.pathname !== "/login") && (
       <Button<"button">
         id="feedback-btn"
         css={styles.feedbackButtonStyles}

@@ -12,7 +12,7 @@ import MeilisearchProvider from "@/provider/MeilisearchProvider";
 import useSearchBarStore from "@/stores/searchBar.store";
 import { api } from "@/utils/api";
 import { isProduction } from "@/utils/env";
-import { initFormbricks, logoutFormbricks, registerRouteChangeFormbricks } from "@/utils/formbricks";
+import { initFormbricks, logoutFormbricks } from "@/utils/formbricks";
 import { paths } from "@/utils/paths";
 
 import { ModalsProvider } from "@mantine/modals";
@@ -26,7 +26,7 @@ import { appWithTranslation } from "next-i18next";
 import { posthog } from "posthog-js";
 import { PostHogProvider } from "posthog-js/react";
 import {
-  useEffect, type FunctionComponent, type ReactElement, type ReactNode, useState, useRef, useCallback 
+  useEffect, type FunctionComponent, type ReactElement, type ReactNode, useState, useRef
 } from "react";
 
 export type NextPageWithLayout<P = object, IP = P> = NextPage<P, IP> & {
@@ -85,10 +85,7 @@ const AppContainer: FunctionComponent<ConstellatioAppProps> = ({ Component, page
   const ogImage = env.NEXT_PUBLIC_WEBSITE_URL + "/og_image.jpg";
   const ogImageUrlSplitUp = ogImage.split(".");
   const ogImageFileExtension = ogImageUrlSplitUp[ogImageUrlSplitUp.length - 1];
-  const { mutate: ping } = api.tracking.ping.useMutation();
-  const [isDocumentVisible, setIsDocumentVisible] = useState<null | boolean>(null);
-  const [isMouseInWindow, setIsMouseInWindow] = useState<null | boolean>(null);
-  const interval = useRef<NodeJS.Timer>();
+  const isDocumentVisibleRef = useRef<boolean | null>(null);
   const [postHogQueueIsStarted, setPostHogQueueIsStarted] = useState(false);
   const [isFormbricksVerified, setIsFormbricksVerified] = useState<boolean>(false);
   const [isSignedIn, setIsSignedIn] = useState<boolean>(false);
@@ -101,56 +98,26 @@ const AppContainer: FunctionComponent<ConstellatioAppProps> = ({ Component, page
     {
       switch (event)
       {
-        case "INITIAL_SESSION": {
-
+        case "INITIAL_SESSION":
+        case "SIGNED_IN": 
           const id = session?.user?.id;
           const email = session?.user?.email;
 
-          if(!isSignedIn)
+          if(!id || !email) 
           {
-            if(session)
-            {
-              setIsSignedIn(true);
-            }
+            return;
           }
 
-          if(!isFormbricksVerified && id && email)
-          {
-            initFormbricks(
-              {
-                apiHost: env.NEXT_PUBLIC_FORMBRICKS_HOST,
-                debug: !isProduction,
-                email,
-                environmentId: isProduction
-                  ? env.NEXT_PUBLIC_FORMBRICKS_KEY_PRODUCTION
-                  : env.NEXT_PUBLIC_FORMBRICKS_KEY_TESTINGS,
-                userId: id
-              }
-            );
-            setIsFormbricksVerified(true);
-          }     
-
-          break;
-        }
-        case "SIGNED_IN": {
-
-          const id = session?.user?.id;
-          const email = session?.user?.email;
-
-          if(!isSignedIn)
-          {
-            setIsSignedIn(true);
-          }
+          posthog.set_config({
+            disable_cookie: false,
+            disable_persistence: false,
+          });
 
           if(!posthog.has_opted_in_capturing())
           {
-            if(id && email)
-            {
-              posthog.identify(id, { email });
-            }
-
-            posthog.opt_in_capturing();
-
+            posthog.opt_in_capturing();    
+            posthog.identify(id, { email });
+          
             if(!postHogQueueIsStarted)
             {
               posthog._start_queue_if_opted_in();
@@ -158,11 +125,6 @@ const AppContainer: FunctionComponent<ConstellatioAppProps> = ({ Component, page
 
               if(posthog.has_opted_in_capturing())
               {
-                posthog.set_config({
-                  disable_cookie: false,
-                  disable_persistence: false,
-                });
-
                 if(isProduction)
                 {
                   posthog.startSessionRecording();
@@ -171,7 +133,7 @@ const AppContainer: FunctionComponent<ConstellatioAppProps> = ({ Component, page
             }
           }
 
-          if(!isFormbricksVerified && id && email)
+          if(!isFormbricksVerified)
           {
             initFormbricks(
               {
@@ -184,12 +146,17 @@ const AppContainer: FunctionComponent<ConstellatioAppProps> = ({ Component, page
                 userId: id
               }
             );
-          }        
+
+            setIsFormbricksVerified(true);
+          }
+          
+          if(!isSignedIn)
+          {
+            setIsSignedIn(true);
+          }
           break;
-        }
         
         case "SIGNED_OUT": {
-
           setIsSignedIn(false);
           posthog.stopSessionRecording();
 
@@ -208,6 +175,7 @@ const AppContainer: FunctionComponent<ConstellatioAppProps> = ({ Component, page
           if(isFormbricksVerified)
           {
             logoutFormbricks();
+            setIsFormbricksVerified(false);
           }
           break;
         }
@@ -222,7 +190,6 @@ const AppContainer: FunctionComponent<ConstellatioAppProps> = ({ Component, page
     const handleRouteChange = (): void =>
     {
       posthog.capture("$pageview");
-      registerRouteChangeFormbricks();
     };
     router.events.on("routeChangeComplete", handleRouteChange);
 
@@ -232,67 +199,36 @@ const AppContainer: FunctionComponent<ConstellatioAppProps> = ({ Component, page
     };
   }, []); 
 
-  useEffect(() =>
+  useEffect(() => 
   {
-    const onVisibilityChange = (): void =>
+    const onVisibilityChange = (): void => 
     {
-      setIsDocumentVisible(!document.hidden);
+      const visibility = !document.hidden;
+
+      if(isDocumentVisibleRef.current !== visibility) 
+      {
+        isDocumentVisibleRef.current = visibility;
+
+        if(visibility) 
+        {
+          posthog.capture("$visibilityOn");
+        } 
+        else 
+        {
+          posthog.capture("$visibilityOff");
+        }
+      }
     };
+
     onVisibilityChange();
+
     document.addEventListener("visibilitychange", onVisibilityChange);
-    return () => document.removeEventListener("visibilitychange", onVisibilityChange);
-  }, []);
 
-  useEffect(() =>
-  {
-    const onWindowMouseOut = (): void =>
+    return () => 
     {
-      setIsMouseInWindow(false);
-    };
-
-    const onWindowMouseOver = (): void =>
-    {
-      setIsMouseInWindow(true);
-    };
-
-    document.addEventListener("mouseleave", onWindowMouseOut);
-    document.addEventListener("mouseenter", onWindowMouseOver);
-
-    return () =>
-    {
-      document.removeEventListener("mouseleave", onWindowMouseOut);
-      document.removeEventListener("mouseenter", onWindowMouseOver);
+      document.removeEventListener("visibilitychange", onVisibilityChange);
     };
   }, []);
-
-  const onInterval = useCallback((): void =>
-  {
-    if(
-      !isDocumentVisible ||
-      !isMouseInWindow ||
-      !posthog.has_opted_in_capturing() ||
-      posthog.has_opted_out_capturing()
-    )
-    {
-      return;
-    }
-
-    const currentPath = router.asPath;
-    ping({ url: currentPath });
-  }, [isDocumentVisible, isMouseInWindow, router.asPath, ping]);
-
-  useEffect(() =>
-  {
-    if(interval.current)
-    {
-      clearInterval(interval.current);
-    }
-
-    onInterval();
-    interval.current = setInterval(onInterval, 5000);
-
-    return () => clearInterval(interval.current);
-  }, [onInterval]);
 
   useEffect(() =>
   {
