@@ -36,6 +36,20 @@
       "when": 1698752337690,
       "tag": "0004_lazy_black_panther",
       "breakpoints": true
+    },
+    {
+      "idx": 5,
+      "version": "5",
+      "when": 1700844751186,
+      "tag": "0005_windy_sentinel",
+      "breakpoints": true
+    },
+    {
+      "idx": 6,
+      "version": "5",
+      "when": 1700844751759,
+      "tag": "0006_fixed_blue_blade",
+      "breakpoints": true
     }
   ]
 }
