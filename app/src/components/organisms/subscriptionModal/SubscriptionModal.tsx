@@ -3,6 +3,7 @@ import { BodyText } from "@/components/atoms/BodyText/BodyText";
 import { Button } from "@/components/atoms/Button/Button";
 import { CustomLink } from "@/components/atoms/CustomLink/CustomLink";
 import { Modal } from "@/components/molecules/Modal/Modal";
+import { useSignout } from "@/hooks/useSignout";
 import useSubscription from "@/hooks/useSubscription";
 import { AuthStateContext } from "@/provider/AuthStateProvider";
 import { paths } from "@/utils/paths";
@@ -21,6 +22,7 @@ const localStorageKey = "daysLeftToSubscriptionEnds";
 
 const SubscriptionModal: FunctionComponent = () =>
 {
+  const { handleSignOut } = useSignout();
   const { isUserLoggedIn } = useContext(AuthStateContext);
   const router = useRouter();
   const {
@@ -87,7 +89,10 @@ const SubscriptionModal: FunctionComponent = () =>
   const isAuthenticated = isUserLoggedIn && !router.pathname.startsWith(paths.login) && !router.pathname.startsWith(paths.register);
 
   // this check is to prevent modal flickering
-  if(!subscriptionDetails) { return null; }
+  if(!subscriptionDetails)
+  {
+    return null;
+  }
 
   const isOpened = ((isAuthenticated && !isOnValidSubscription) || (
     !wasClosed &&
@@ -155,12 +160,29 @@ const SubscriptionModal: FunctionComponent = () =>
         </CustomLink>
         {" "}klicken, um dir noch einmal unsere Preise anzuschauen.
       </BodyText>
-      <Button<"button">
-        size="large"
-        miw="100%"
-        styleType="primary"
-        onClick={redirectToStripeCheckout}>Jetzt abonnieren
-      </Button>
+      <div style={{
+        alignItems: "center",
+        display: "flex",
+        justifyContent: "space-between",
+        width: "100%"
+      }}>
+        {!isOnValidSubscription && (
+          <Button<"button">
+            size="large"
+            w="48%"
+            styleType="secondarySubtle"
+            onClick={handleSignOut}>
+            Logout
+          </Button>
+        )}
+        <Button<"button">
+          size="large"
+          w={isOnValidSubscription ? "100%" : "48%"}
+          styleType="primary"
+          onClick={redirectToStripeCheckout}>
+          Jetzt abonnieren
+        </Button>
+      </div>
     </Modal>
   );
 };
