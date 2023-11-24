@@ -130,7 +130,7 @@ const NewNotificationEarnedWatchdog: FunctionComponent = () =>
         onClose={onClose}
         centered>
         <div css={styles.customModalHeader}>
-          <Title order={2}>Neue Errungenschaft</Title>
+          <Title order={2}>Neues Badge</Title>
           <span onClick={onClose}><Cross size={32}/></span>
         </div>
         {renderedBadge && (

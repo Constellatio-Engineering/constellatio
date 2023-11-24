@@ -16,13 +16,15 @@ type Props = {
   readonly currentFolderId: string | null;
   readonly isOpened: boolean;
   readonly onSubmit: (folderId: string | null) => void;
+  readonly title: string;
 };
 
 const MoveToModal: FunctionComponent<Props> = ({
   close,
   currentFolderId,
   isOpened,
-  onSubmit
+  onSubmit,
+  title
 }) =>
 {
   const { folders } = useUploadFolders();
@@ -34,7 +36,7 @@ const MoveToModal: FunctionComponent<Props> = ({
       onClose={close}
       opened={isOpened}
       lockScroll={false}
-      title="Datei verschieben nach"
+      title={title}
       radius={12}
       styles={{
         body: {

@@ -29,7 +29,7 @@ const OnboardingSecondStep: FunctionComponent<TOnboardingSecondStep> = ({ onboar
           onNextPressHandler={() => setOnboardingStepsIndex(2)}
           onSkipPressHandler={() => setOnboardingStepsIndex(3)}>
           <OnboardingTutorialStepItem icon={<Bookmark size={20}/>} itemTitle="Favoriten" itemDescription="Füge Constellatio Inhalte mit nur einem Klick deinen Favoriten hinzu."/>
-          <OnboardingTutorialStepItem icon={<DownloadIcon size={20}/>} itemTitle="Deine Dateien" itemDescription="Dein gesamtes Wissen an einem Ort: Lade vorhandene Unterlagen in unsere Constellatio Jura-Cloud."/>
+          <OnboardingTutorialStepItem icon={<DownloadIcon size={20}/>} itemTitle="Deine Dateien" itemDescription="Alles an einem Ort: Uploade deine vorhandenen Unterlagen in die Constellatio Jura-Cloud."/>
         </OnboardingTutorialStep>
       )}
     />

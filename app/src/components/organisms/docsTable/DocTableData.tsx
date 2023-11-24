@@ -181,6 +181,7 @@ export const DocsTableData: FunctionComponent<Document> = (doc) =>
         </div>
       </Modal>
       <MoveToModal
+        title="Constellatio Doc verschieben nach"
         onSubmit={(newFolderId) =>
         {
           updateDocument({
