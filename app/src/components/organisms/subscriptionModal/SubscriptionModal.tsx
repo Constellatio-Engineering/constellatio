@@ -136,14 +136,10 @@ const SubscriptionModal: FunctionComponent = () =>
       title="">
       <CaisyImg src={ModalFlag.src}/>
       <Title order={2} ta="center">
-        {diffDays != null && (
-          <>
-            {diffDays <= 0 ? (
-              "Deine Testphase ist abgelaufen"
-            ) : isOnTrailSubscription && (
-              `Deine Testphase läuft nur noch ${diffDays} Tag${diffDays === 1 ? "" : "e"}`
-            )}
-          </>
+        {!isOnValidSubscription ? (
+          "Deine Testphase ist abgelaufen"
+        ) : isOnTrailSubscription && (
+          `Deine Testphase läuft nur noch ${diffDays} Tag${diffDays === 1 ? "" : "e"}`
         )}
       </Title>
       <BodyText ta="center" styleType="body-01-regular" component="p">
