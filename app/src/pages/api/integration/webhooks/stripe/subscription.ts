@@ -40,8 +40,22 @@ const handler: NextApiHandler = async (req, res) =>
   }
 
   const subscriptionObj = event.data.object as Stripe.Subscription;
-  const { customer, status: subscriptionStatus } = subscriptionObj;
+  const { customer } = subscriptionObj;
   const stripeCustomerId = customer as string;
+  const subscriptionDataFromEventObj = getDataFromStripeSubscription(subscriptionObj);
+
+  const subscriptionDetailsFromDB = await db.query.users.findFirst({
+    columns: { subscriptionStatus: true, trialSubscriptionId: true },
+    where: eq(users.stripeCustomerId, stripeCustomerId) 
+  });
+
+  const currentTrailSubscription = await stripe.subscriptions.list({
+    customer: stripeCustomerId,
+    limit: 1,
+    status: "trialing"
+  });
+
+  const trialSubscriptionIdFromStripDashboard = currentTrailSubscription.data?.[0]?.id ?? "";
   
   try 
   {
@@ -49,28 +63,34 @@ const handler: NextApiHandler = async (req, res) =>
     {
       case "customer.subscription.updated": case "customer.subscription.created":
       {
-        const subscriptionData = getDataFromStripeSubscription(subscriptionObj);
+        if(trialSubscriptionIdFromStripDashboard === subscriptionDetailsFromDB?.trialSubscriptionId && subscriptionDataFromEventObj.subscriptionStatus !== "trialing")
+        { 
+          await stripe.subscriptions.cancel(trialSubscriptionIdFromStripDashboard);
+        }
 
         await db
           .update(users)
           .set({
-            subscribedPlanPriceId: subscriptionData.subscribedPlanPriceId,
-            subscriptionEndDate: subscriptionData.subscriptionEndDate,
-            subscriptionStartDate: subscriptionData.subscriptionStartDate,
-            subscriptionStatus: subscriptionData.subscriptionStatus
+            subscriptionEndDate: subscriptionDataFromEventObj.subscriptionEndDate,
+            subscriptionId: subscriptionDataFromEventObj.subscriptionId,
+            subscriptionStartDate: subscriptionDataFromEventObj.subscriptionStartDate,
+            subscriptionStatus: subscriptionDataFromEventObj.subscriptionStatus
           })
           .where(eq(users.stripeCustomerId, stripeCustomerId));
         break;
       }
       case "customer.subscription.deleted":
       {
+        if(subscriptionObj.id === subscriptionDetailsFromDB?.trialSubscriptionId && (subscriptionDetailsFromDB?.subscriptionStatus === "active" || subscriptionDetailsFromDB?.subscriptionStatus === "incomplete"))
+        {
+          break;
+        }
+
         await db
           .update(users)
           .set({
-            subscribedPlanPriceId: null,
-            subscriptionEndDate: null,
-            subscriptionStartDate: null,
-            subscriptionStatus
+            subscriptionId: subscriptionDataFromEventObj.subscriptionId,
+            subscriptionStatus: subscriptionDataFromEventObj.subscriptionStatus
           })
           .where(eq(users.stripeCustomerId, stripeCustomerId));
         break;
