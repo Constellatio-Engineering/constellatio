@@ -1,5 +1,6 @@
 /* eslint-disable react/jsx-max-props-per-line, max-lines */
 import { RouterTransition } from "@/components/atoms/RouterTransition/RouterTransition";
+import ComputerRecommendedModal from "@/components/computerRecommendedModal/ComputerRecommendedModal";
 import FeedbackButton from "@/components/molecules/feedbackButton/feedbackButton";
 import NewNotificationEarnedWatchdog from "@/components/molecules/newNotificationEarnedWatchdog/NewNotificationEarnedWatchdog";
 import SubscriptionModal from "@/components/organisms/subscriptionModal/SubscriptionModal";
@@ -293,6 +294,7 @@ const AppContainer: FunctionComponent<ConstellatioAppProps> = ({ Component, page
                     <Notifications/>
                     <NewNotificationEarnedWatchdog/>
                     <SubscriptionModal/>
+                    <ComputerRecommendedModal/>
                     {isSignedIn && (
                       <FeedbackButton/>
                     )}
