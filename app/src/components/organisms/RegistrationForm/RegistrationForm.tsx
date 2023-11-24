@@ -232,6 +232,13 @@ export const RegistrationForm: FunctionComponent = () =>
             )}
             title="acceptTOS"
           />
+          <BodyText
+            mt={20}
+            component="p"
+            styleType="body-02-medium"
+            ta="left">
+            Mit der Erstellung des Kontos wird unmittelbar deine kostenlose 10-tägige Testphase gestartet. Dieses Testphase ist völlig risikofrei und endet automatisch.
+          </BodyText>
         </Stack>
         <Button<"button">
           styleType="primary"
@@ -243,10 +250,10 @@ export const RegistrationForm: FunctionComponent = () =>
         </Button>
       </Stack>
       <BodyText
-        mt={40}
+        mt={30}
         component="p"
         styleType="body-02-medium"
-        ta="center"
+        ta="left"
         c="neutrals-01.7">
         Hinweis: Diese Version von Constellatio ist nur für die Verwendung am Computer optimiert.
         Wenn du technische Fragen hast, wende dich bitte an unseren
