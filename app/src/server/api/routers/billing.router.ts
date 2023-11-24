@@ -62,7 +62,7 @@ export const billingRouter = createTRPCRouter({
         subscriptionId: true,
         subscriptionStartDate: true,
         subscriptionStatus: true,
-        trailSubscriptionId: true,
+        trialSubscriptionId: true,
       },
       where: eq(users.id, userId)
     });

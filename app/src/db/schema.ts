@@ -116,7 +116,7 @@ export const users = pgTable("User", {
   subscriptionStatus: subscriptionStatusEnum("SubscriptionStatus"),
   subscriptionStartDate: timestamp("SubscriptionStartDate"),
   subscriptionEndDate: timestamp("SubscriptionEndDate"),
-  trailSubscriptionId: text("TrailSubscriptionId"),
+  trialSubscriptionId: text("TrialSubscriptionId"),
   subscriptionId: text("SubscriptionId"),
 });
 

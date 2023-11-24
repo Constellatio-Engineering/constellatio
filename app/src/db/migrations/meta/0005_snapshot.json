@@ -1,7 +1,7 @@
 {
   "version": "5",
   "dialect": "pg",
-  "id": "1536437e-6723-4b62-be4a-c881165271ff",
+  "id": "1b1f8779-a5cd-4447-aa4b-ca6355c1d1fb",
   "prevId": "5385b13b-249a-4c4b-bde8-5b636542e369",
   "tables": {
     "ArticleView": {
@@ -937,8 +937,8 @@
           "primaryKey": false,
           "notNull": false
         },
-        "TrailSubscriptionId": {
-          "name": "TrailSubscriptionId",
+        "TrialSubscriptionId": {
+          "name": "TrialSubscriptionId",
           "type": "text",
           "primaryKey": false,
           "notNull": false
@@ -1193,8 +1193,6 @@
   "_meta": {
     "schemas": {},
     "tables": {},
-    "columns": {
-      "\"User\".\"SubscribedPlanPriceId\"": "\"User\".\"TrailSubscriptionId\""
-    }
+    "columns": {}
   }
 }

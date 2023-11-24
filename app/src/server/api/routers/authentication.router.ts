@@ -91,7 +91,7 @@ export const authenticationRouter = createTRPCRouter({
           subscriptionId: subscriptionData.subscriptionId,
           subscriptionStartDate: subscriptionData.subscriptionStartDate,
           subscriptionStatus: subscriptionData.subscriptionStatus,
-          trailSubscriptionId: subscriptionData.subscriptionId,
+          trialSubscriptionId: subscriptionData.subscriptionId,
           university: input.university,
         };
 

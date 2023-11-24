@@ -45,7 +45,7 @@ const handler: NextApiHandler = async (req, res) =>
   const subscriptionDataFromEventObj = getDataFromStripeSubscription(subscriptionObj);
 
   const subscriptionDetailsFromDB = await db.query.users.findFirst({
-    columns: { subscriptionStatus: true, trailSubscriptionId: true }, 
+    columns: { subscriptionStatus: true, trialSubscriptionId: true },
     where: eq(users.stripeCustomerId, stripeCustomerId) 
   });
 
@@ -63,7 +63,7 @@ const handler: NextApiHandler = async (req, res) =>
     {
       case "customer.subscription.updated": case "customer.subscription.created":
       {
-        if(trialSubscriptionIdFromStripDashboard === subscriptionDetailsFromDB?.trailSubscriptionId && subscriptionDataFromEventObj.subscriptionStatus !== "trialing") 
+        if(trialSubscriptionIdFromStripDashboard === subscriptionDetailsFromDB?.trialSubscriptionId && subscriptionDataFromEventObj.subscriptionStatus !== "trialing")
         { 
           await stripe.subscriptions.cancel(trialSubscriptionIdFromStripDashboard);
         }
@@ -81,14 +81,15 @@ const handler: NextApiHandler = async (req, res) =>
       }
       case "customer.subscription.deleted":
       {
-        if(subscriptionObj.id === subscriptionDetailsFromDB?.trailSubscriptionId && (subscriptionDetailsFromDB?.subscriptionStatus === "active" || subscriptionDetailsFromDB?.subscriptionStatus === "incomplete")) { break; }
+        if(subscriptionObj.id === subscriptionDetailsFromDB?.trialSubscriptionId && (subscriptionDetailsFromDB?.subscriptionStatus === "active" || subscriptionDetailsFromDB?.subscriptionStatus === "incomplete"))
+        {
+          break;
+        }
 
         await db
           .update(users)
           .set({
-            subscriptionEndDate: null,
             subscriptionId: subscriptionDataFromEventObj.subscriptionId,
-            subscriptionStartDate: null,
             subscriptionStatus: subscriptionDataFromEventObj.subscriptionStatus
           })
           .where(eq(users.stripeCustomerId, stripeCustomerId));

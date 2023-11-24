@@ -1,6 +1,6 @@
 {
-  "id": "1aa72ead-6de8-4773-a1da-366d97690a07",
-  "prevId": "1536437e-6723-4b62-be4a-c881165271ff",
+  "id": "7d316b64-26a5-4f0b-b7b2-a880fe75a07f",
+  "prevId": "1b1f8779-a5cd-4447-aa4b-ca6355c1d1fb",
   "version": "5",
   "dialect": "pg",
   "tables": {
@@ -937,8 +937,8 @@
           "primaryKey": false,
           "notNull": false
         },
-        "TrailSubscriptionId": {
-          "name": "TrailSubscriptionId",
+        "TrialSubscriptionId": {
+          "name": "TrialSubscriptionId",
           "type": "text",
           "primaryKey": false,
           "notNull": false
