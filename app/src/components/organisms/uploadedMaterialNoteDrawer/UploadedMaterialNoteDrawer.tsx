@@ -1,43 +1,51 @@
 import SlidingPanelTitle from "@/components/molecules/slidingPanelTitle/SlidingPanelTitle";
 import useNoteEditorStore from "@/stores/noteEditor.store";
+import { showConfirmChangesDeletionModal } from "@/utils/modals";
 
 import { Drawer } from "@mantine/core";
-import React, { type FunctionComponent } from "react";
+import React, { type FunctionComponent, useCallback } from "react";
 
 import EditorForm from "./editorForm/EditorForm";
 import * as styles from "./UploadedMaterialNoteDrawer.styles";
 
-interface UploadedMaterialNoteDrawerProps 
+const UploadedMaterialNoteDrawer: FunctionComponent = () =>
 {
-  readonly selectedFolderId: string | null;
-}
+  const { editorState } = useNoteEditorStore();
 
-const UploadedMaterialNoteDrawer: FunctionComponent<UploadedMaterialNoteDrawerProps> = ({
-  selectedFolderId
-}) =>
-{
-  const { closeEditor, editorState } = useNoteEditorStore();
+  const onClose = useCallback((): void =>
+  {
+    const { closeEditor, getComputedValues } = useNoteEditorStore.getState();
+    const { hasUnsavedChanges } = getComputedValues();
+
+    if(!hasUnsavedChanges)
+    {
+      closeEditor();
+      return;
+    }
+
+    showConfirmChangesDeletionModal({ onCancel: closeEditor });
+  }, []);
 
   return (
     <Drawer
       lockScroll={false}
       opened={editorState.state !== "closed"}
-      onClose={closeEditor}
+      onClose={onClose}
       withCloseButton={false}
       position="right"
       size="xl"
       styles={styles.drawerStyles()}
       title={(
         <SlidingPanelTitle
-          title="Notes"
+          title="Notizen"
           variant="default"
-          closeButtonAction={closeEditor}
+          closeButtonAction={onClose}
         />
       )}>
       {editorState.state !== "closed" && (
         <EditorForm
+          onClose={onClose}
           editorState={editorState}
-          selectedFolderId={selectedFolderId}
         />
       )}
     </Drawer>

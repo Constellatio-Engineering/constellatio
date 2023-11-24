@@ -1,20 +1,27 @@
 import { type UploadedFile } from "@/db/schema";
+import useMaterialsStore from "@/stores/materials.store";
 import { api } from "@/utils/api";
 import { type UseQueryResult } from "@/utils/types";
 
-type UseUploadedFiles = (folderId: string | null) => UseQueryResult<{ uploadedFiles: UploadedFile[] }>;
+type UseUploadedFiles = () => UseQueryResult<{
+  uploadedFilesInAllFolders: UploadedFile[];
+  uploadedFilesInSelectedFolder: UploadedFile[];
+}>;
 
-const useUploadedFiles: UseUploadedFiles = (folderId) =>
+const useUploadedFiles: UseUploadedFiles = () =>
 {
-  const { data: uploadedFiles = [], error, isLoading } = api.uploads.getUploadedFiles.useQuery({ folderId }, {
+  const selectedFolderId = useMaterialsStore(s => s.selectedFolderId);
+
+  const { data: uploadedFiles = [], error, isLoading } = api.uploads.getUploadedFiles.useQuery({ folderId: undefined }, {
     refetchOnMount: "always",
     staleTime: Infinity
   });
-  
+
   return {
     error,
     isLoading,
-    uploadedFiles: uploadedFiles ?? []
+    uploadedFilesInAllFolders: uploadedFiles ?? [],
+    uploadedFilesInSelectedFolder: uploadedFiles.filter((file) => file.folderId === selectedFolderId) ?? []
   };
 };
 

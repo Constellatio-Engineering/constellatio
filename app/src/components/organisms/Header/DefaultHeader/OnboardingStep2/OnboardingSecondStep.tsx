@@ -3,7 +3,6 @@ import { DownloadIcon } from "@/components/Icons/DownloadIcon";
 import OnboardingTutorialStep from "@/components/molecules/onboardingTutorialStep/OnboardingTutorialStep";
 import OnboardingTutorialStepItem from "@/components/molecules/onboardingTutorialStep/OnboardingTutorialStepItem";
 import OnboardingTutorialPopover from "@/components/organisms/onboardingTutorialPopover/OnboardingTutorialPopover";
-import useSetOnboardingResult from "@/hooks/useSetOnboardingResult";
 
 import { type Dispatch, type FunctionComponent, type SetStateAction } from "react";
 
@@ -16,8 +15,6 @@ type TOnboardingSecondStep = THeaderItemPersonalSpaceProps & {
 
 const OnboardingSecondStep: FunctionComponent<TOnboardingSecondStep> = ({ onboardingStepsIndex, pathname, setOnboardingStepsIndex }) => 
 {
-  const { setOnboardingResult } = useSetOnboardingResult();
-
   return (
     <OnboardingTutorialPopover
       opened={onboardingStepsIndex === 1}
@@ -30,9 +27,9 @@ const OnboardingSecondStep: FunctionComponent<TOnboardingSecondStep> = ({ onboar
           totalSteps={3}
           stepTitle="Persönlicher Bereich"
           onNextPressHandler={() => setOnboardingStepsIndex(2)}
-          onSkipPressHandler={() => setOnboardingResult({ result: "skipped" })}>
-          <OnboardingTutorialStepItem icon={<Bookmark size={20}/>} itemTitle="Favoriten" itemDescription="Speichere deine wichtigsten Inhalte mit nur einem Klick."/>
-          <OnboardingTutorialStepItem icon={<DownloadIcon size={20}/>} itemTitle="Deine Dateien" itemDescription="Dein gesamtes Wissen an einem Ort: Lade vorhandene Unterlagen in die Jura-Cloud."/>
+          onSkipPressHandler={() => setOnboardingStepsIndex(3)}>
+          <OnboardingTutorialStepItem icon={<Bookmark size={20}/>} itemTitle="Favoriten" itemDescription="Füge Constellatio Inhalte mit nur einem Klick deinen Favoriten hinzu."/>
+          <OnboardingTutorialStepItem icon={<DownloadIcon size={20}/>} itemTitle="Deine Dateien" itemDescription="Alles an einem Ort: Uploade deine vorhandenen Unterlagen in die Constellatio Jura-Cloud."/>
         </OnboardingTutorialStep>
       )}
     />

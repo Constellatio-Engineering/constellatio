@@ -19,58 +19,38 @@ import * as styles from "./EditorForm.styles";
 interface EditorFormProps
 {
   readonly editorState: EditorStateDrawerOpened;
-  readonly selectedFolderId: string | null;
+  readonly onClose: () => void;
 }
 
-const EditorForm: FunctionComponent<EditorFormProps> = ({ editorState, selectedFolderId }) =>
+const EditorForm: FunctionComponent<EditorFormProps> = ({ editorState, onClose }) =>
 {
   const { invalidateNotes } = useContextAndErrorIfNull(InvalidateQueriesContext);
   const { note, state } = editorState;
   const updateNoteInEditor = useNoteEditorStore(s => s.updateNote);
-  const closeEditor = useNoteEditorStore(s => s.closeEditor);
   const setEditNoteState = useNoteEditorStore(s => s.setEditNoteState);
   const { hasUnsavedChanges } = useNoteEditorStore(s => s.getComputedValues());
   const [shouldShowDeleteNoteWindow, setShouldShowDeleteNoteWindow] = useState<boolean>(false);
-  const _invalidateNotes = async (): Promise<void> => invalidateNotes({ folderId: selectedFolderId });
-  const { uploadedFiles } = useUploadedFiles(selectedFolderId);
-  const file = uploadedFiles?.find(file => file.id === note.fileId);
+  const { uploadedFilesInSelectedFolder } = useUploadedFiles();
+  const file = uploadedFilesInSelectedFolder?.find(file => file.id === note.fileId);
 
   const { mutateAsync: createNote } = api.notes.createNote.useMutation({
     onError: (error) => console.log("error while creating note", error),
-    onSuccess: _invalidateNotes
+    onSuccess: invalidateNotes
   });
 
   const { mutateAsync: updateNote } = api.notes.updateNote.useMutation({
     onError: (error) => console.log("error while updating note", error),
-    onSuccess: _invalidateNotes
+    onSuccess: invalidateNotes
   });
 
   const { mutate: deleteNote } = api.notes.deleteNote.useMutation({
     onError: (error) => console.log("error while deleting note", error),
     onSuccess: async () =>
     {
-      await _invalidateNotes();
-      closeEditor();
+      await invalidateNotes();
+      onClose();
     }
   });
-
-  const onCancel = (): void =>
-  {
-    if(!hasUnsavedChanges)
-    {
-      closeEditor();
-      return;
-    }
-
-    const shouldDiscardChanges = window.confirm("Are you sure you want to discard your changes?");
-
-    if(!shouldDiscardChanges)
-    {
-      return;
-    }
-
-    closeEditor();
-  };
 
   const onSave = async (): Promise<void> =>
   {
@@ -134,22 +114,24 @@ const EditorForm: FunctionComponent<EditorFormProps> = ({ editorState, selectedF
           <>
             <div css={styles.MaterialNoteRichText}>
               <RichtextEditorField
-                initialContent={note.content}
-                onChange={e => updateNoteInEditor({ content: e.editor.getText().trim() === "" ? "" : e.editor.getHTML() })}
+                content={note.content}
+                onChange={e => updateNoteInEditor({
+                  content: e.editor.getText().trim() === "" ? "" : e.editor.getHTML()
+                })}
                 variant="with-legal-quote"
               />
             </div>
             <div css={styles.MaterialNotesCallToAction}>
               <Button<"button">
                 styleType="secondarySimple"
-                onClick={onCancel}>
-                Cancel
+                onClick={onClose}>
+                Abbrechen
               </Button>
               <Button<"button">
                 styleType="primary"
                 disabled={!hasUnsavedChanges}
                 onClick={onSave}>
-                Save
+                Speichern
               </Button>
             </div>
           </>
@@ -160,28 +142,28 @@ const EditorForm: FunctionComponent<EditorFormProps> = ({ editorState, selectedF
               <Button<"button">
                 styleType="secondarySubtle"
                 onClick={() => setEditNoteState(editorState.note)}>
-                <Edit/>{" "}Edit
+                <Edit/>{" "}Bearbeiten
               </Button>
               <Button<"button">
                 styleType="secondarySubtle"
                 onClick={() => setShouldShowDeleteNoteWindow(true)}>
-                <Trash/>{" "}Delete
+                <Trash/>{" "}Löschen
               </Button>
             </div>
             <div css={styles.richtext} dangerouslySetInnerHTML={{ __html: note.content }}/>
             {shouldShowDeleteNoteWindow && (
               <div className="deleteNoteBlock">
-                <BodyText styleType="body-01-medium">Are you sure you want to delete your notes?</BodyText>
+                <BodyText styleType="body-01-medium">Bist du sicher, dass du deine Notizen löschen möchtest?</BodyText>
                 <div>
                   <Button<"button">
                     styleType="secondarySimple"
                     onClick={() => setShouldShowDeleteNoteWindow(false)}>
-                    No, keep
+                    Nein, behalten
                   </Button>
                   <Button<"button">
                     styleType="primary"
                     onClick={() => deleteNote({ fileId: editorState.note.fileId })}>
-                    Yes, delete
+                    Ja, löschen
                   </Button>
                 </div>
               </div>

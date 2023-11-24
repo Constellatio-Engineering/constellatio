@@ -15,26 +15,28 @@ interface OverviewCardTagsModalProps
   readonly tags: Maybe<Array<Maybe<IGenTags>>> | undefined;
 }
 
-const OverviewCardTagsModal: FunctionComponent<OverviewCardTagsModalProps> = ({ close, opened, tags }) => 
+const OverviewCardTagsModal: FunctionComponent<OverviewCardTagsModalProps> = ({ close, opened, tags }) =>
 {
+  const tagsWithNames = tags?.filter(Boolean).filter(tag => Boolean(tag.tagName)) ?? [];
+
   return (
-    <>
-      <Modal
-        lockScroll={false}
-        opened={opened}
-        onClose={close}
-        centered
-        title="alle Tags"
-        withCloseButton
-        closeOnClickOutside>
-        <div css={styles.tagsModal}>
-          {tags && tags.length > 0 ? tags?.map((tag, tagIndex) => (
-            <Tag key={tagIndex}>{tag?.tagName}</Tag>
-          )) : <><BodyText styleType="body-01-medium">No tags assigned to this document</BodyText></>}
-        </div>
-         
-      </Modal>
-    </>
+    <Modal
+      lockScroll={false}
+      opened={opened}
+      onClose={close}
+      centered
+      size="lg"
+      title="Alle Tags"
+      withCloseButton
+      closeOnClickOutside>
+      <div css={styles.tagsModal}>
+        {tagsWithNames.length > 0 ? tagsWithNames.map(tag => (
+          <Tag key={tag.id} title={tag.tagName!}/>
+        )) : (
+          <BodyText styleType="body-01-medium">Diesem Dokument wurden bisher keine Tags zugewiesen.</BodyText>
+        )}
+      </div>
+    </Modal>
   );
 };
 

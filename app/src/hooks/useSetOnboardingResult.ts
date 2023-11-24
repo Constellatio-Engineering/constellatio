@@ -9,7 +9,7 @@ const useSetOnboardingResult = () =>
 {
   const { invalidateOnboardingResult } = useContextAndErrorIfNull(InvalidateQueriesContext);
 
-  const { mutate: setOnboardingResult } = api.users.setOnboardingResult.useMutation({
+  const { mutateAsync: setOnboardingResult } = api.users.setOnboardingResult.useMutation({
     onError: (error) => console.error("Error while setting onboarding result", error),
     onSuccess: async () => invalidateOnboardingResult()
   });

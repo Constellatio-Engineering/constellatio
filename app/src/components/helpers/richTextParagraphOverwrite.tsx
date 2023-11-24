@@ -24,6 +24,7 @@ export const richTextParagraphOverwrite = (props: any): ReactElement =>
         if(mark.attrs && mark.attrs.href) 
         {
           mark.attrs.href = mark.attrs.href.replace("{{app}}", env.NEXT_PUBLIC_WEBSITE_URL);
+          mark.attrs.target = "_blank";
         }
       });
     }

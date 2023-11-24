@@ -13,6 +13,7 @@ import { Plus } from "@/components/Icons/Plus";
 import { Trash } from "@/components/Icons/Trash";
 import { Modal } from "@/components/molecules/Modal/Modal";
 import useContextAndErrorIfNull from "@/hooks/useContextAndErrorIfNull";
+import useDeleteFolder from "@/hooks/useDeleteFolder";
 import useUploadFolders from "@/hooks/useUploadFolders";
 import { InvalidateQueriesContext } from "@/provider/InvalidateQueriesProvider";
 import useMaterialsStore from "@/stores/materials.store";
@@ -36,6 +37,7 @@ const FoldersMenuTablet: FunctionComponent = () =>
   const [showCreateFolderModal, setShowCreateFolderModal] = React.useState<boolean>(false);
   const [showRenameModal, setShowRenameModal] = React.useState<boolean>(false);
   const [showDeleteModal, setShowDeleteModal] = React.useState<boolean>(false);
+  const { mutate: deleteFolder } = useDeleteFolder();
   const { mutate: createFolder } = api.folders.createFolder.useMutation({
     onError: (error) => 
     {
@@ -58,26 +60,7 @@ const FoldersMenuTablet: FunctionComponent = () =>
     },
     onSuccess: invalidateFolders
   });
-  const { mutate: deleteFolder } = api.folders.deleteFolder.useMutation({
-    onError: (error) => 
-    {
-      console.error("error while deleting folder", error);
-      notifications.show({
-        color: "red",
-        message: "Der Ordner konnte nicht gelöscht werden",
-      });
-    },
-    onSuccess: async () => 
-    {
-      await invalidateFolders();
-      setSelectedFolderId(null);
-      notifications.show({
-        color: "green",
-        message: "Der Ordner wurde erfolgreich gelöscht",
-        title: "Ordner gelöscht"
-      });
-    }
-  });
+
   const currentFolder = selectedFolderId ? folders.find(x => x.id === selectedFolderId) : null;
   const [newFolderName, setNewFolderName] = React.useState<string>("");
   return (
@@ -179,7 +162,7 @@ const FoldersMenuTablet: FunctionComponent = () =>
             <Button<"button">
               styleType={"secondarySimple" as TButton["styleType"]}
               onClick={() => setShowCreateFolderModal(false)}>
-              Cancel
+              Abbrechen
             </Button>
             <Button<"button">
               type="submit"
@@ -190,7 +173,8 @@ const FoldersMenuTablet: FunctionComponent = () =>
                 setNewFolderName("");
                 createFolder({ name: newFolderName });
                 setShowCreateFolderModal(false);
-              }}>Create
+              }}>
+              Erstellen
             </Button>
           </div>
         </form>
@@ -219,7 +203,7 @@ const FoldersMenuTablet: FunctionComponent = () =>
             <Button<"button">
               styleType={"secondarySimple" as TButton["styleType"]}
               onClick={() => setShowRenameModal(false)}>
-              Cancel
+              Abbrechen
             </Button>
             <Button<"button">
               styleType="primary"
@@ -235,7 +219,7 @@ const FoldersMenuTablet: FunctionComponent = () =>
                   renameFolder({ folderId: currentFolder?.id, newName: newFolderName });
                 }
               }}>
-              Save
+              Speichern
             </Button>
           </div>
         </form>

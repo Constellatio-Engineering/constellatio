@@ -24,10 +24,9 @@ import * as styles from "./MaterialsOptionsMenu.styles";
 interface MaterialOptionsMenuProps 
 {
   readonly file: UploadedFile;
-  readonly selectedFolderId: string | null;
 }
 
-const MaterialOptionsMenu: FunctionComponent<MaterialOptionsMenuProps> = ({ file, selectedFolderId }) => 
+const MaterialOptionsMenu: FunctionComponent<MaterialOptionsMenuProps> = ({ file }) =>
 {
   const renameFileModalState = useRenameFileModalStore((s) => s.renameFileModal);
   const openRenameFileModal = useRenameFileModalStore((s) => s.openRenameFileModal);
@@ -43,23 +42,16 @@ const MaterialOptionsMenu: FunctionComponent<MaterialOptionsMenuProps> = ({ file
   });
   const { mutate: updateFile } = api.uploads.updateFile.useMutation({
     onError: (e) => console.log("error while renaming file", e),
-    onSuccess: async (_data, variables) =>
+    onSuccess: async (_data) =>
     {
-      const newFolderId = variables.updatedValues.folderId;
-
-      if(newFolderId)
-      {
-        await onUploadedFileMutation({ folderId: newFolderId });
-      }
-
       closeRenameFileModal();
       setShowMoveToModal(false);
-      await onUploadedFileMutation({ folderId: selectedFolderId });
+      await onUploadedFileMutation();
     },
   });
   const { mutate: deleteFile } = api.uploads.deleteUploadedFiles.useMutation({
     onError: (e) => console.log("error while deleting file", e),
-    onSuccess: async () => onUploadedFileMutation({ folderId: selectedFolderId }),
+    onSuccess: onUploadedFileMutation,
   });
 
   // we need an update material function like updateDocument function inside DocTableData.tsx
@@ -89,7 +81,7 @@ const MaterialOptionsMenu: FunctionComponent<MaterialOptionsMenuProps> = ({ file
           </Menu.Target>
           <Menu.Dropdown>
             <Menu.Item onClick={() => openRenameFileModal(file)}>
-              <DropdownItem icon={<Edit/>} label="Bearbeiten"/>
+              <DropdownItem icon={<Edit/>} label="Umbenennen"/>
             </Menu.Item>
             <Menu.Item onClick={() => setShowMoveToModal(true)}>
               <DropdownItem icon={<FolderIcon/>} label="Verschieben"/>
@@ -201,6 +193,7 @@ const MaterialOptionsMenu: FunctionComponent<MaterialOptionsMenuProps> = ({ file
         )}
       </Modal>
       <MoveToModal
+        title="Datei verschieben nach"
         onSubmit={(newFolderId) => 
         {
           updateFile({

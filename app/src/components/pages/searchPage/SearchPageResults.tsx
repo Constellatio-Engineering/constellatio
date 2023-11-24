@@ -160,7 +160,6 @@ const SearchPageResults: FunctionComponent<Props> = ({ tabQuery }) =>
                         userId: file.userId
                       }))}
                       variant="searchPapers"
-                      selectedFolderId={null}
                     />
                   )}
                   numberOfTableItems={searchResults.userUploads?.length}

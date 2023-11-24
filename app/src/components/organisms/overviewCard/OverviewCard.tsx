@@ -90,6 +90,7 @@ const OverviewCard: FunctionComponent<IOverviewCard> = ({
   const theme = useMantineTheme();
   const initialFilteredTags = tags?.filter((tag) => !tag?.tagName?.startsWith("§"));
   const filteredTags = (initialFilteredTags && initialFilteredTags.length === 0) ? tags : initialFilteredTags;
+  const filteredTagsWithNames = filteredTags?.filter(Boolean).filter(tag => Boolean(tag.tagName)) ?? [];
 
   return (
     <div css={styles.wrapper()}>
@@ -148,7 +149,9 @@ const OverviewCard: FunctionComponent<IOverviewCard> = ({
           </div>
           {/* <ScrollArea> */}
           <div className="row-value tags-values">
-            {filteredTags?.map((tag, tagIndex) => <span key={tagIndex} style={{ pointerEvents: "none" }}><Tag>{tag?.tagName}</Tag></span>)}
+            {filteredTagsWithNames?.map((tag) => (
+              <Tag key={tag.id} title={tag.tagName!}/>
+            ))}
           </div>
           <BodyText
             type="button"

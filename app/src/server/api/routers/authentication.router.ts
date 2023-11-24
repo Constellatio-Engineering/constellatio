@@ -29,6 +29,8 @@ export const authenticationRouter = createTRPCRouter({
         throw new EmailAlreadyTakenError();
       }
 
+      console.log("starting supabase sign up");
+
       const { data: signUpData, error: signUpError } = await supabaseServerClient.auth.signUp({
         email: input.email,
         options: { emailRedirectTo: getConfirmEmailUrl() },
@@ -85,10 +87,11 @@ export const authenticationRouter = createTRPCRouter({
           lastName: input.lastName,
           semester: input.semester,
           stripeCustomerId,
-          subscribedPlanPriceId: subscriptionData.subscribedPlanPriceId,
           subscriptionEndDate: subscriptionData.subscriptionEndDate,
+          subscriptionId: subscriptionData.subscriptionId,
           subscriptionStartDate: subscriptionData.subscriptionStartDate,
           subscriptionStatus: subscriptionData.subscriptionStatus,
+          trialSubscriptionId: subscriptionData.subscriptionId,
           university: input.university,
         };
 

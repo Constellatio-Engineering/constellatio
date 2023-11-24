@@ -1,5 +1,3 @@
-import { Trash } from "@/components/Icons/Trash";
-
 import { type Meta, type StoryObj } from "@storybook/react";
 import { type FunctionComponent } from "react";
 
@@ -27,7 +25,10 @@ type Story = StoryObj<typeof EmptyStateCard>;
 
 export const InLargeArea: Story = {
   args: {
-    button: <><Trash/>Explore Civil law cases</>,
+    button: {
+      content: "Explore Civil law cases",
+      onClick: () => {},
+    },
     text: "Amet minim mollit non deserunt ullamco est sit aliqua dolor do amet sint. Velit officia consequat duis enim velit mollit",
     title: "Title",
     variant: "For-large-areas"

@@ -95,18 +95,18 @@ const ChangePasswordTab: FunctionComponent = () =>
 
   return (
     <div css={styles.wrapper}>
-      <Title css={styles.changePasswordTitle} order={3}>Change password</Title>
+      <Title css={styles.changePasswordTitle} order={3}>Passwort ändern</Title>
       <ErrorCard
         error={error}
         marginBottom={0}
         overwriteErrorMessages={{
           invalidCredentials: "Sorry, das eingegebene Passwort stimmt nicht mit unserer Datenbank überein.",
-          unknownError: "Sorry, we were not able to change password. Please, try again later.",
+          unknownError: "Entschuldigung, wir konnten das Passwort nicht ändern. Bitte versuche es später erneut.",
         }}
       />
       {isSuccess && (
         <AlertCard style={{ display: "flex", justifyContent: "flex-start" }} variant="success">
-          Your password has been changed
+          Dein Passwort wurde erfolgreich geändert
         </AlertCard>
       )}
       <form onSubmit={handleSubmit}>

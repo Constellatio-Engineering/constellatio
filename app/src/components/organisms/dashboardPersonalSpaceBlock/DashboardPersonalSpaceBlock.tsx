@@ -8,6 +8,7 @@ import MaterialCard from "@/components/molecules/materialCard/MaterialCard";
 import { Switcher } from "@/components/molecules/Switcher/Switcher";
 import useAllFavorites from "@/hooks/useAllFavorites";
 import useUploadedFiles from "@/hooks/useUploadedFiles";
+import { paths } from "@/utils/paths";
 
 import { Tabs } from "@mantine/core";
 import { useRouter } from "next/router";
@@ -21,7 +22,7 @@ const DashboardPersonalSpaceBlock: FunctionComponent = () =>
 {
   const router = useRouter();
   const [switcherValue, setSwitcherValue] = React.useState<"favorites" | "materials">("favorites");
-  const { uploadedFiles } = useUploadedFiles(null);
+  const { uploadedFilesInAllFolders } = useUploadedFiles();
   const { favoritesList } = useAllFavorites();
   return (
     <div css={styles.wrapper}>
@@ -60,6 +61,10 @@ const DashboardPersonalSpaceBlock: FunctionComponent = () =>
                       title="Noch keine Favoriten vorhanden"
                       text="Speichere jetzt Fälle oder Lexikonartikel als Favoriten in deinem persönlichen Bereich."
                       variant="For-small-areas"
+                      button={{
+                        content: "Alle Fälle ansehen",
+                        onClick: async () => router.push(paths.cases)
+                      }}
                     />
                   </div>
                 )
@@ -68,24 +73,30 @@ const DashboardPersonalSpaceBlock: FunctionComponent = () =>
         )}
         {switcherValue === "materials" && (
           <div css={styles.list}>
-            {uploadedFiles?.length > 0 ? 
-              uploadedFiles.slice(0, 6).map((material, i) => (
-                <MaterialCard
-                  key={i}
-                  fileExtension={material?.fileExtension}
-                  id={material?.id}
-                  materialType="file"
-                  title={material.originalFilename}
+            {uploadedFilesInAllFolders?.length > 0 ? uploadedFilesInAllFolders.slice(0, 6).map((material, i) => (
+              <MaterialCard
+                key={i}
+                fileExtension={material?.fileExtension}
+                id={material?.id}
+                materialType="file"
+                title={material.originalFilename}
+              />
+            )) : (
+              <div css={styles.emptyCard}>
+                <EmptyStateCard
+                  title="Du hast noch keine Dateien hochgeladen"
+                  text="Du kannst jetzt eigene Dateien hochladen und in deinem persönlichen Bereich ablegen."
+                  variant="For-small-areas"
+                  button={{
+                    content: "Zu deinen Dateien",
+                    onClick: async () => router.push(paths.personalSpace, {
+                      pathname: paths.personalSpace,
+                      query: { category: "materials" }
+                    })
+                  }}
                 />
-              )) : (
-                <div css={styles.emptyCard}>
-                  <EmptyStateCard
-                    title="Du hast noch keine Dateien hochgeladen"
-                    text="Du kannst jetzt jetzt eigene Dateien hochladen und in deinem persönlichen Bereich ablegen."
-                    variant="For-small-areas"
-                  />
-                </div>
-              )}
+              </div>
+            )}
           </div>
         )}
       </div>

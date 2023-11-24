@@ -14,8 +14,9 @@ import UniversityDropdown from "@/components/organisms/RegistrationForm/form/Uni
 import { colors } from "@/constants/styles/colors";
 import { env } from "@/env.mjs";
 import { supabase } from "@/lib/supabase";
-import { type RegistrationFormSchema, registrationFormSchema } from "@/schemas/auth/registrationForm.schema";
+import { registrationFormSchema, type RegistrationFormSchema } from "@/schemas/auth/registrationForm.schema";
 import { allUniversities } from "@/schemas/auth/userData.validation";
+import useAuthPageStore from "@/stores/authPage.store";
 import { api } from "@/utils/api";
 import { isDevelopment, isDevelopmentOrStaging } from "@/utils/env";
 import { getConfirmEmailUrl, paths } from "@/utils/paths";
@@ -24,55 +25,53 @@ import { Stack, Title } from "@mantine/core";
 import { useForm, zodResolver } from "@mantine/form";
 import { notifications } from "@mantine/notifications";
 import Link from "next/link";
-import { useRouter } from "next/router";
-import { useTranslation } from "next-i18next";
 import { type FunctionComponent, useEffect, useRef, useState } from "react";
-import z from "zod";
-import { makeZodI18nMap } from "zod-i18n-map";
 
 import * as styles from "./RegistrationForm.styles";
-
-const initialValues: RegistrationFormSchema = isDevelopmentOrStaging ? {
-  acceptTOS: true,
-  displayName: "Constellatio Test User",
-  email: env.NEXT_PUBLIC_SIGN_UP_DEFAULT_EMAIL || (isDevelopment ? "devUser@constellatio-dummy-mail.de" : ""),
-  firstName: "Test",
-  gender: allGenders[0]!.identifier,
-  lastName: "User",
-  password: "Super-secure-password-123",
-  passwordConfirmation: "Super-secure-password-123",
-  semester: "7",
-  university: allUniversities[20] ?? null,
-} : {
-  acceptTOS: false,
-  displayName: "",
-  email: "",
-  firstName: "",
-  gender: null,
-  lastName: "",
-  password: "",
-  passwordConfirmation: "",
-  semester: null,
-  university: null,
-};
 
 const resendEmailConfirmationTimeout = env.NEXT_PUBLIC_RESEND_EMAIL_CONFIRMATION_TIMEOUT_IN_SECONDS * 1000;
 
 export const RegistrationForm: FunctionComponent = () =>
 {
-  const { t } = useTranslation();
-  const router = useRouter();
+  const [shouldShowEmailConfirmationDialog, setShouldShowEmailConfirmationDialog] = useState<boolean>(false);
+  const lastConfirmationEmailTimestamp = useRef<number>();
+  const lastEnteredPassword = useAuthPageStore(s => s.lastEnteredPassword);
+  const lastEnteredEmail = useAuthPageStore(s => s.lastEnteredEmail);
   const form = useForm<RegistrationFormSchema>({
-    initialValues,
+    initialValues: isDevelopmentOrStaging ? {
+      acceptTOS: true,
+      displayName: "Constellatio Test User",
+      email: lastEnteredEmail || env.NEXT_PUBLIC_SIGN_UP_DEFAULT_EMAIL || (isDevelopment ? "devUser@constellatio-dummy-mail.de" : ""),
+      firstName: "Test",
+      gender: allGenders[0]!.identifier,
+      lastName: "User",
+      password: lastEnteredPassword || "Super-secure-password-123",
+      passwordConfirmation: lastEnteredPassword || "Super-secure-password-123",
+      semester: "7",
+      university: allUniversities[20] ?? null,
+    } : {
+      acceptTOS: false,
+      displayName: "",
+      email: lastEnteredEmail,
+      firstName: "",
+      gender: null,
+      lastName: "",
+      password: lastEnteredPassword,
+      passwordConfirmation: "",
+      semester: null,
+      university: null,
+    },
     validate: zodResolver(registrationFormSchema),
     validateInputOnBlur: true,
   });
-  const [shouldShowEmailConfirmationDialog, setShouldShowEmailConfirmationDialog] = useState<boolean>(false);
-  const lastConfirmationEmailTimestamp = useRef<number>();
+
   useEffect(() =>
   {
-    z.setErrorMap(makeZodI18nMap({ t }));
-  }, [t]);
+    useAuthPageStore.setState({
+      lastEnteredEmail: form.values.email,
+      lastEnteredPassword: form.values.password,
+    });
+  }, [form.values.email, form.values.password]);
 
   const { isLoading: isRegisterLoading, mutate: register } = api.authentication.register.useMutation({
     onError: e =>
@@ -103,7 +102,7 @@ export const RegistrationForm: FunctionComponent = () =>
         case "signupComplete":
         {
           await supabase.auth.setSession(result.session);
-          await router.replace("/");
+          window.location.replace(paths.dashboard);
           break;
         }
       }
@@ -165,6 +164,9 @@ export const RegistrationForm: FunctionComponent = () =>
           <BodyText ta="center" styleType="body-01-regular">
             Wir haben eine E-Mail an {form.values.email ? <strong>{form.values.email}</strong> : "deine E-Mail Adresse"} geschickt.
             Klicke auf den Link, um deinen Account zu aktivieren.
+          </BodyText>
+          <BodyText ta="center" styleType="body-01-regular">
+            <strong>Bitte überprüfe auch deinen Spam-Ordner.</strong>
           </BodyText>
           <BodyText ta="center" styleType="body-01-regular">
             Nach erfolgreicher Bestätigung kannst du dich mit deinem neuen Account einloggen.
@@ -230,6 +232,13 @@ export const RegistrationForm: FunctionComponent = () =>
             )}
             title="acceptTOS"
           />
+          <BodyText
+            mt={20}
+            component="p"
+            styleType="body-02-medium"
+            ta="left">
+            Mit der Erstellung des Kontos wird unmittelbar deine kostenlose 10-tägige Testphase gestartet. Dieses Testphase ist völlig risikofrei und endet automatisch.
+          </BodyText>
         </Stack>
         <Button<"button">
           styleType="primary"
@@ -241,19 +250,19 @@ export const RegistrationForm: FunctionComponent = () =>
         </Button>
       </Stack>
       <BodyText
-        mt={40}
+        mt={30}
         component="p"
         styleType="body-02-medium"
-        ta="center"
+        ta="left"
         c="neutrals-01.7">
         Hinweis: Diese Version von Constellatio ist nur für die Verwendung am Computer optimiert.
         Wenn du technische Fragen hast, wende dich bitte an unseren
         Support unter&nbsp;
         <CustomLink
-          href="mailto:webmaster@constellatio.de"
+          href="mailto:gutentag@constellatio.de"
           styleType="link-secondary"
           c="neutrals-01.7">
-          webmaster@constellatio.de
+          gutentag@constellatio.de
         </CustomLink>
       </BodyText>
     </form>
