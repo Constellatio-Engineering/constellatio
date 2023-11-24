@@ -1,12 +1,14 @@
 import { Button } from "@/components/atoms/Button/Button";
+import { AuthStateContext } from "@/provider/AuthStateProvider";
 
 import { useRouter } from "next/router";
-import React, { useEffect, useState } from "react";
+import React, { useContext, useEffect, useState } from "react";
 
 import * as styles from "./feedbackButton.styles";
 
 const FeedbackButton: React.FC = () => 
 {
+  const { isUserLoggedIn } = useContext(AuthStateContext);
   const router = useRouter();
   const [isVisible, setIsVisible] = useState(false);
 
@@ -22,6 +24,11 @@ const FeedbackButton: React.FC = () =>
       clearTimeout(hideButtonTimeout);
     };
   }, []);
+
+  if(!isUserLoggedIn)
+  {
+    return null;
+  }
 
   return (
     isVisible && (router.pathname !== "/login") && (

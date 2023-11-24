@@ -87,7 +87,6 @@ const AppContainer: FunctionComponent<ConstellatioAppProps> = ({ Component, page
   const ogImageUrlSplitUp = ogImage.split(".");
   const ogImageFileExtension = ogImageUrlSplitUp[ogImageUrlSplitUp.length - 1];
   const isDocumentVisibleRef = useRef<boolean | null>(null);
-  const { isUserLoggedIn } = useContext(AuthStateContext);
   const isFormbricksVerifiedRef = useRef(false);
   const postHogQueueIsStartedRef = useRef(false);
 
@@ -291,9 +290,7 @@ const AppContainer: FunctionComponent<ConstellatioAppProps> = ({ Component, page
                     <NewNotificationEarnedWatchdog/>
                     <SubscriptionModal/>
                     <ComputerRecommendedModal/>
-                    {isUserLoggedIn && (
-                      <FeedbackButton/>
-                    )}
+                    <FeedbackButton/>
                     <Layout Component={Component} pageProps={pageProps}/>
                   </MeilisearchProvider>
                 </ModalsProvider>
