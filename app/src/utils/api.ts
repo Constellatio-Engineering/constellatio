@@ -81,7 +81,7 @@ export const api = createTRPCNext<AppRouter>({
           {
             await supabase.auth.signOut();
 
-            if(!window.location.pathname.startsWith(paths.login))
+            if(!window.location.pathname.startsWith(paths.login) && !window.location.pathname.startsWith(paths.register))
             {
               console.log("Server responded with 'UNAUTHORIZED'. Redirecting to login");
               window.location.replace(paths.login);
