@@ -133,10 +133,10 @@ export const LoginForm: FunctionComponent = () =>
         Wenn du technische Fragen hast, wende dich bitte an unseren
         Support unter&nbsp;
         <CustomLink
-          href="mailto:webmaster@constellatio.de"
+          href="mailto:gutentag@constellatio.de"
           styleType="link-secondary"
           c="neutrals-01.7">
-          webmaster@constellatio.de
+          gutentag@constellatio.de
         </CustomLink>
       </BodyText>
     </>
