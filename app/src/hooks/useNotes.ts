@@ -6,22 +6,23 @@ import { type UseQueryResult } from "@/utils/types";
 import { type inferReactQueryProcedureOptions } from "@trpc/react-query";
 
 type UseNotes = (
-  folderId: string | null,
   options?: inferReactQueryProcedureOptions<AppRouter>["notes"]["getNotes"]
-) => UseQueryResult<{ notes: Note[] }>;
+) => UseQueryResult<{
+  notesForFilesInAllFolders: Note[];
+}>;
 
-const useNotes: UseNotes = (folderId, options) =>
+const useNotes: UseNotes = (options) =>
 {
-  const { data: notes = [], error, isLoading } = api.notes.getNotes.useQuery({ folderId }, {
+  const { data: notes = [], error, isLoading } = api.notes.getNotes.useQuery({ folderId: undefined }, {
     ...options,
     refetchOnMount: "always",
     staleTime: Infinity
   });
-  
+
   return {
     error,
     isLoading,
-    notes: notes ?? []
+    notesForFilesInAllFolders: notes ?? [],
   };
 };
 

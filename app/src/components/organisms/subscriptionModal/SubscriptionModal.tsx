@@ -1,5 +1,3 @@
-
-// import * as styles from "./SubscriptionModal.styles";
 import CaisyImg from "@/basic-components/CaisyImg";
 import { BodyText } from "@/components/atoms/BodyText/BodyText";
 import { Button } from "@/components/atoms/Button/Button";
@@ -7,11 +5,14 @@ import { CustomLink } from "@/components/atoms/CustomLink/CustomLink";
 import { Modal } from "@/components/molecules/Modal/Modal";
 import useSubscription from "@/hooks/useSubscription";
 import { AuthStateContext } from "@/provider/AuthStateProvider";
+import { paths } from "@/utils/paths";
 
 import { Title } from "@mantine/core";
 import { useLocalStorage } from "@mantine/hooks";
 import { useRouter } from "next/router";
-import { useMemo, type FunctionComponent, useState, useContext } from "react";
+import {
+  useMemo, type FunctionComponent, useState, useContext
+} from "react";
 import { z } from "zod";
 
 import ModalFlag from "../../../../public/images/placeholder-flag.png";
@@ -23,6 +24,7 @@ const SubscriptionModal: FunctionComponent = () =>
   const { isUserLoggedIn } = useContext(AuthStateContext);
   const router = useRouter();
   const { generateStripeSessionUrl, isOnTrailSubscription, subscriptionDetails } = useSubscription();
+
   const [daysCheckedForSubscriptionEnds, setDaysCheckedForSubscriptionEnds] = useLocalStorage<string[]>({
     defaultValue: [],
     deserialize: (localStorageValue) => 
@@ -80,8 +82,10 @@ const SubscriptionModal: FunctionComponent = () =>
     !wasClosed &&
     !daysCheckedForSubscriptionEnds?.includes(todayDateAsString) &&
     isOnTrailSubscription &&
-    (diffDays === 3 || diffDays === 1 || diffDays === 0) &&
-    isUserLoggedIn
+    (diffDays === 3 || diffDays === 1 || (diffDays != null && diffDays <= 0)) &&
+    isUserLoggedIn &&
+    !router.pathname.startsWith(paths.login) &&
+    !router.pathname.startsWith(paths.register)
   ) ?? false;
   const isModalLocked = diffDays == null || diffDays <= 0;
 
@@ -104,7 +108,6 @@ const SubscriptionModal: FunctionComponent = () =>
     }
 
     void router.push(url);
-
   };
 
   return (
@@ -123,15 +126,15 @@ const SubscriptionModal: FunctionComponent = () =>
       title="">
       <CaisyImg src={ModalFlag.src}/>
       <Title order={2} ta="center">
-        {
-          diffDays != null && (
-            <>
-              {isOnTrailSubscription && `Deine Testphase läuft nur noch ${diffDays} Tag${diffDays === 1 ? "" : "e"}`}
-              {diffDays <= 0 && "Deine Testphase ist abgelaufen"}
-            </>
-          )
-        }
-        
+        {diffDays != null && (
+          <>
+            {diffDays <= 0 ? (
+              "Deine Testphase ist abgelaufen"
+            ) : isOnTrailSubscription && (
+              `Deine Testphase läuft nur noch ${diffDays} Tag${diffDays === 1 ? "" : "e"}`
+            )}
+          </>
+        )}
       </Title>
       <BodyText ta="center" styleType="body-01-regular" component="p">
         Jetzt Constellatio abonnieren, um weiterhin alle Vorteile digitalen Lernens zu genießen.

@@ -1,6 +1,5 @@
 import { useMantineTheme } from "@mantine/styles";
 import Image from "next/image";
-import Link from "next/link";
 import { type FC } from "react";
 
 import HeaderDefault from "./DefaultHeader/HeaderDefault";
@@ -21,9 +20,7 @@ export const Header: FC<HeaderProps> = ({ variant = "default" }) =>
     <SHeader>
       <div css={styles.wrapper({ theme, variant })}>
         <div>
-          <Link href="/">
-            <Image src={ConstellatioFullLogoPng} alt="Constellatio" width={150}/>
-          </Link>
+          <Image src={ConstellatioFullLogoPng} alt="Constellatio" width={150}/>
         </div>
       </div>
     </SHeader>
@@ -31,9 +28,7 @@ export const Header: FC<HeaderProps> = ({ variant = "default" }) =>
     <HeaderDefault/>
   ) : variant === "relative" && (
     <styles.SHeaderRelative>
-      <Link href="/">
-        <Image src={ConstellatioFullLogoPng} alt="Constellatio" width={150}/>
-      </Link>
+      <Image src={ConstellatioFullLogoPng} alt="Constellatio" width={150}/>
     </styles.SHeaderRelative>
   );
 };

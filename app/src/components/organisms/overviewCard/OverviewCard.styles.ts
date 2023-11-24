@@ -121,7 +121,7 @@ export const row = ({ tableTheme, theme }: IOverviewCardStyles): SerializedStyle
 export const tagsModal = css`
   display: flex;
   flex-wrap: wrap;
-  gap: 8px;
+  gap: 10px;
   margin-top: 12px;
   justify-content: flex-start;
   align-items: center;

@@ -1,6 +1,7 @@
 import { DownloadIcon } from "@/components/Icons/DownloadIcon";
 import { Notepad } from "@/components/Icons/Notepad";
 import { NotepadFilled } from "@/components/Icons/NotepadFilled";
+import { OpenInNew } from "@/components/Icons/OpenInNew";
 import { Pin } from "@/components/Icons/Pin";
 
 import { Button, type ButtonProps, createPolymorphicComponent } from "@mantine/core";
@@ -9,9 +10,11 @@ import React, { type FC } from "react";
 import { floatingButtonStyles } from "./FloatingButton.styles";
 import { BodyText } from "../BodyText/BodyText";
 
+export type FloatingButtonVariation = "icon-big" | "icon-medium" | "pins" | "notes-notes" | "notes-no-notes" | "open-in-new-tab";
+
 type TFloatingButton = ButtonProps & {
   readonly pinsNotificationsAmount?: number;
-  readonly variation: "icon-big" | "icon-medium" | "pins" | "notes-notes" | "notes-no-notes";
+  readonly variation: FloatingButtonVariation;
 };
 
 const _FloatingButton: FC<TFloatingButton> = ({
@@ -29,6 +32,8 @@ const _FloatingButton: FC<TFloatingButton> = ({
       <NotepadFilled/>
     ) : variation === "notes-no-notes" ? (
       <Notepad/>
+    ) : variation === "open-in-new-tab" ? (
+      <OpenInNew/>
     ) : null;
 
   const buttonText =

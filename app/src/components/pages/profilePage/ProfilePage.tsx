@@ -23,10 +23,10 @@ export const subscriptionTabSlug = "subscription";
 
 export const tabs = [
   { slug: "overview", title: "Übersicht" },
-  { slug: "profile-details", title: "Einstellungen" },
+  { slug: "profile-details", title: "Persönliche Daten" },
   { slug: changeEmailTabSlug, title: "E-Mail ändern" },
   { slug: "change-password", title: "Passwort ändern" },
-  { slug: subscriptionTabSlug, title: "Vertrag" },
+  { slug: subscriptionTabSlug, title: "Abonnement" },
   // { slug: "history", title: "Verlauf" },
 ] as const;
 

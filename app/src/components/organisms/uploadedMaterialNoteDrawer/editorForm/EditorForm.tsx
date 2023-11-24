@@ -19,58 +19,38 @@ import * as styles from "./EditorForm.styles";
 interface EditorFormProps
 {
   readonly editorState: EditorStateDrawerOpened;
-  readonly selectedFolderId: string | null;
+  readonly onClose: () => void;
 }
 
-const EditorForm: FunctionComponent<EditorFormProps> = ({ editorState, selectedFolderId }) =>
+const EditorForm: FunctionComponent<EditorFormProps> = ({ editorState, onClose }) =>
 {
   const { invalidateNotes } = useContextAndErrorIfNull(InvalidateQueriesContext);
   const { note, state } = editorState;
   const updateNoteInEditor = useNoteEditorStore(s => s.updateNote);
-  const closeEditor = useNoteEditorStore(s => s.closeEditor);
   const setEditNoteState = useNoteEditorStore(s => s.setEditNoteState);
   const { hasUnsavedChanges } = useNoteEditorStore(s => s.getComputedValues());
   const [shouldShowDeleteNoteWindow, setShouldShowDeleteNoteWindow] = useState<boolean>(false);
-  const _invalidateNotes = async (): Promise<void> => invalidateNotes({ folderId: selectedFolderId });
-  const { uploadedFiles } = useUploadedFiles(selectedFolderId);
-  const file = uploadedFiles?.find(file => file.id === note.fileId);
+  const { uploadedFilesInSelectedFolder } = useUploadedFiles();
+  const file = uploadedFilesInSelectedFolder?.find(file => file.id === note.fileId);
 
   const { mutateAsync: createNote } = api.notes.createNote.useMutation({
     onError: (error) => console.log("error while creating note", error),
-    onSuccess: _invalidateNotes
+    onSuccess: invalidateNotes
   });
 
   const { mutateAsync: updateNote } = api.notes.updateNote.useMutation({
     onError: (error) => console.log("error while updating note", error),
-    onSuccess: _invalidateNotes
+    onSuccess: invalidateNotes
   });
 
   const { mutate: deleteNote } = api.notes.deleteNote.useMutation({
     onError: (error) => console.log("error while deleting note", error),
     onSuccess: async () =>
     {
-      await _invalidateNotes();
-      closeEditor();
+      await invalidateNotes();
+      onClose();
     }
   });
-
-  const onCancel = (): void =>
-  {
-    if(!hasUnsavedChanges)
-    {
-      closeEditor();
-      return;
-    }
-
-    const shouldDiscardChanges = window.confirm("Are you sure you want to discard your changes?");
-
-    if(!shouldDiscardChanges)
-    {
-      return;
-    }
-
-    closeEditor();
-  };
 
   const onSave = async (): Promise<void> =>
   {
@@ -144,7 +124,7 @@ const EditorForm: FunctionComponent<EditorFormProps> = ({ editorState, selectedF
             <div css={styles.MaterialNotesCallToAction}>
               <Button<"button">
                 styleType="secondarySimple"
-                onClick={onCancel}>
+                onClick={onClose}>
                 Abbrechen
               </Button>
               <Button<"button">

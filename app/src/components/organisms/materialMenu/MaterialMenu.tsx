@@ -6,8 +6,8 @@ import MaterialsMenuListItem from "@/components/atoms/materialMenuListItem/Mater
 import { Cross } from "@/components/Icons/Cross";
 import { FolderIcon } from "@/components/Icons/Folder";
 import { Plus } from "@/components/Icons/Plus";
-// import { type UploadFolder } from "@/db/schema";
 import useContextAndErrorIfNull from "@/hooks/useContextAndErrorIfNull";
+import useDeleteFolder from "@/hooks/useDeleteFolder";
 import useUploadFolders from "@/hooks/useUploadFolders";
 import { InvalidateQueriesContext } from "@/provider/InvalidateQueriesProvider";
 import useMaterialsStore from "@/stores/materials.store";
@@ -28,6 +28,7 @@ const MaterialMenu: FunctionComponent = () =>
   const { folders = [] } = useUploadFolders();
   const { invalidateFolders } = useContextAndErrorIfNull(InvalidateQueriesContext);
   const [opened, { close, open }] = useDisclosure(false);
+  const { mutate: deleteFolder } = useDeleteFolder();
   const { mutate: createFolder } = api.folders.createFolder.useMutation({
     onError: (error) => 
     {
@@ -50,26 +51,6 @@ const MaterialMenu: FunctionComponent = () =>
     },
     onSuccess: invalidateFolders
   });
-  const { mutate: deleteFolder } = api.folders.deleteFolder.useMutation({
-    onError: (error) => 
-    {
-      console.error("error while deleting folder", error);
-      notifications.show({
-        color: "red",
-        message: "Der Ordner konnte nicht gelöscht werden",
-      });
-    },
-    onSuccess: async () => 
-    {
-      await invalidateFolders();
-      setSelectedFolderId(null);
-      notifications.show({
-        color: "green",
-        message: "Der Ordner wurde erfolgreich gelöscht",
-        title: "Ordner gelöscht"
-      });
-    }
-  });
   const [newFolderName, setNewFolderName] = React.useState<string>("");
   
   return (
@@ -86,7 +67,7 @@ const MaterialMenu: FunctionComponent = () =>
           icon={<FolderIcon/>}
           hideContextMenu
         />
-        {folders?.map((folder, folderIndex) => (
+        {folders?.map((folder) => (
           <MaterialsMenuListItem
             onClick={() => setSelectedFolderId(folder.id)}
             onDelete={() => deleteFolder({ folderId: folder.id })}
@@ -94,7 +75,7 @@ const MaterialMenu: FunctionComponent = () =>
               folderId: folder.id,
               newName
             })}
-            key={folderIndex}
+            key={folder.id}
             title={folder.name}
             active={folder.id === selectedFolderId}
             icon={<FolderIcon/>}

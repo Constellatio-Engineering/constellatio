@@ -25,7 +25,6 @@ import { Stack, Title } from "@mantine/core";
 import { useForm, zodResolver } from "@mantine/form";
 import { notifications } from "@mantine/notifications";
 import Link from "next/link";
-import { useRouter } from "next/router";
 import { type FunctionComponent, useEffect, useRef, useState } from "react";
 
 import * as styles from "./RegistrationForm.styles";
@@ -34,7 +33,6 @@ const resendEmailConfirmationTimeout = env.NEXT_PUBLIC_RESEND_EMAIL_CONFIRMATION
 
 export const RegistrationForm: FunctionComponent = () =>
 {
-  const router = useRouter();
   const [shouldShowEmailConfirmationDialog, setShouldShowEmailConfirmationDialog] = useState<boolean>(false);
   const lastConfirmationEmailTimestamp = useRef<number>();
   const lastEnteredPassword = useAuthPageStore(s => s.lastEnteredPassword);
@@ -104,7 +102,7 @@ export const RegistrationForm: FunctionComponent = () =>
         case "signupComplete":
         {
           await supabase.auth.setSession(result.session);
-          await router.replace("/");
+          window.location.replace(paths.dashboard);
           break;
         }
       }
@@ -234,6 +232,13 @@ export const RegistrationForm: FunctionComponent = () =>
             )}
             title="acceptTOS"
           />
+          <BodyText
+            mt={20}
+            component="p"
+            styleType="body-02-medium"
+            ta="left">
+            Mit der Erstellung des Kontos wird unmittelbar deine kostenlose 10-tägige Testphase gestartet. Dieses Testphase ist völlig risikofrei und endet automatisch.
+          </BodyText>
         </Stack>
         <Button<"button">
           styleType="primary"
@@ -245,10 +250,10 @@ export const RegistrationForm: FunctionComponent = () =>
         </Button>
       </Stack>
       <BodyText
-        mt={40}
+        mt={30}
         component="p"
         styleType="body-02-medium"
-        ta="center"
+        ta="left"
         c="neutrals-01.7">
         Hinweis: Diese Version von Constellatio ist nur für die Verwendung am Computer optimiert.
         Wenn du technische Fragen hast, wende dich bitte an unseren

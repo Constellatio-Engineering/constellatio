@@ -14,14 +14,13 @@ export interface ICountLabel
 const CountLabel: FunctionComponent<ICountLabel> = ({ count, total, variant }) => 
 {
   const theme = useMantineTheme();
-  return (count !== null || count !== undefined) && (total !== null || total !== undefined) ? (
+
+  return count != null && total != null && (
     <div css={styles.wrapper({ theme, variant })}>
       <CaptionText styleType="caption-01-bold">
         {count > total ? total : count} / {total}
       </CaptionText>
     </div>
-  ) : (
-    <></>
   );
 };
 

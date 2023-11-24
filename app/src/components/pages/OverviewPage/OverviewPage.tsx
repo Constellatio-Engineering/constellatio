@@ -78,12 +78,13 @@ const OverviewPageContent: FunctionComponent<OverviewPageContentProps> = ({ cont
       ? content?.allCases?.filter((x) => x?.mainCategoryField?.[0]?.slug === selectedCategorySlug)?.length <= 0
       : content?.allArticles?.filter((x) => x?.mainCategoryField?.[0]?.slug === selectedCategorySlug)?.length <= 0;
   };
-  const { cases: allCasesWithProgress } = useAllCasesWithProgress();
-  const completeCases = allCasesWithProgress.filter(x => x?.progress === "completed");
+  const { casesWithProgress } = useAllCasesWithProgress();
+  const completeCases = casesWithProgress.filter(x => x?.progress === "completed");
   return (
     <div css={styles.Page}>
       {content?.allMainCategories && (
         <OverviewHeader
+          height={400}
           variant={variant}
           selectedCategorySlug={selectedCategorySlug}
           setSelectedCategorySlug={setSelectedCategorySlug}

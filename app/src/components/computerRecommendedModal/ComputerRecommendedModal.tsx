@@ -1,37 +1,47 @@
+import { paths } from "@/utils/paths";
+
+import { useMediaQuery } from "@mantine/hooks";
+import { useRouter } from "next/router";
 import React, { type FunctionComponent } from "react";
 
 import { BodyText } from "../atoms/BodyText/BodyText";
 import { CustomLink } from "../atoms/CustomLink/CustomLink";
 import { Modal } from "../molecules/Modal/Modal";
 
-interface IComputerRecommendedModalProps 
+const ComputerRecommendedModal: FunctionComponent = () =>
 {
-  readonly close: () => void;
-  readonly opened: boolean;
-}
+  const { pathname } = useRouter();
+  const isSmallScreen = useMediaQuery("(max-width: 768px)");
+  const isOpened = isSmallScreen && !pathname.startsWith(paths.login) && !pathname.startsWith(paths.register);
 
-const ComputerRecommendedModal: FunctionComponent<IComputerRecommendedModalProps> = ({ close, opened }) => (
-  <Modal 
-    ta="left" 
-    centered 
-    size="md" 
-    title="Bitte wechsle zu deinem Computer oder Tablet, um Constellatio zu nutzen." 
-    opened={opened} 
-    onClose={close}>
-    <BodyText
-      component="p"
-      styleType="body-01-regular">
-      Hinweis: Diese Version von Constellatio ist nur für die Verwendung am Computer optimiert. Wenn du technische Fragen hast, wende dich bitte an unseren Support 
-      unter&nbsp;
-      <CustomLink
-        styleType="link-primary"
-        href="mailto:gutentag@constellatio.de"
-        c="neutrals-01.7">
-        gutentag@constellatio.de
-      </CustomLink>
-    </BodyText>
-    {/* <BodyText styleType="body-01-regular" component="p">Bitte wechsle zu deinem Computer oder Tablet, um Constellatio zu nutzen.</BodyText> */}
-  </Modal>
-);
+  return (
+    <Modal
+      ta="left"
+      centered
+      withCloseButton={false}
+      size="md"
+      closeOnClickOutside={false}
+      overlayProps={{
+        blur: 8,
+      }}
+      closeOnEscape={false}
+      title="Bitte wechsle zu deinem Computer oder Tablet, um Constellatio zu nutzen."
+      opened={isOpened}
+      onClose={() => {}}>
+      <BodyText
+        component="p"
+        styleType="body-01-regular">
+        Hinweis: Diese Version von Constellatio ist momentan nur für die Verwendung am Computer optimiert. Wenn du technische Fragen hast, wende dich bitte an unseren Support
+        unter{" "}
+        <CustomLink
+          styleType="link-primary"
+          href="mailto:gutentag@constellatio.de"
+          c="neutrals-01.7">
+          gutentag@constellatio.de
+        </CustomLink>
+      </BodyText>
+    </Modal>
+  );
+};
 
 export default ComputerRecommendedModal;

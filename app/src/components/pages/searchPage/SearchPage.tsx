@@ -2,6 +2,7 @@ import EmptyStateCard from "@/components/organisms/emptyStateCard/EmptyStateCard
 import useSearchResults, { type SearchResultsKey } from "@/hooks/useSearchResults";
 import useSearchBarStore from "@/stores/searchBar.store";
 
+import { Loader } from "@mantine/core";
 import { createParser, useQueryState } from "next-usequerystate";
 import React, { useMemo, type FunctionComponent } from "react";
 
@@ -30,7 +31,7 @@ const tabSchema = createParser({
 
 const SearchPage: FunctionComponent = () => 
 {
-  const { searchResults } = useSearchResults();
+  const { isLoading, searchResults } = useSearchResults();
   const searchValue = useSearchBarStore((s) => s.searchValue);
   const closestTabWithResultsIndex = Object.values(searchResults).findIndex(result => result.length > 0);
   const totalSearchResults = Object.values(searchResults).reduce((acc, curr) => acc + curr.length, 0);
@@ -41,6 +42,15 @@ const SearchPage: FunctionComponent = () =>
   }, [searchResults, closestTabWithResultsIndex]);
 
   const [tabQuery, setTabQuery] = useQueryState<SearchResultsKey>("tab", tabSchema.withDefault(initialTab));
+
+  if(isLoading)
+  {
+    return (
+      <div css={styles.loadingWrapper}>
+        <Loader size="md"/>
+      </div>
+    );
+  }
 
   return (
     <div css={styles.wrapper}>
@@ -58,9 +68,7 @@ const SearchPage: FunctionComponent = () =>
             setTabQuery={setTabQuery}
           />
           <SearchPageFiltering/>
-          <SearchPageResults
-            tabQuery={tabQuery}
-          />
+          <SearchPageResults tabQuery={tabQuery}/>
         </>
       )}
     </div>

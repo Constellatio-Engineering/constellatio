@@ -22,7 +22,7 @@ VALUES
     ('Deliktsrecht Profi', 'lexikon-profi-deliktsrecht', 'Fleißig! Du hast dir alle Lexikon-Artikel im Deliktsrecht angeschaut', 'dictionary-master-of.svg', 'coming-soon'),
     ('Sachenrecht Profi', 'lexikon-profi-sachenrecht', 'Fleißig! Du hast dir alle Lexikon-Artikel im Sachenrecht angeschaut', 'dictionary-master-of.svg', 'coming-soon'),
     ('Bereicherungsrecht Profi', 'lexikon-profi-bereicherungsrecht', 'Fleißig! Du hast dir alle Lexikon-Artikel im Bereicherungsrecht angeschaut', 'dictionary-master-of.svg', 'coming-soon'),
-    ('Favorit', 'favorit', 'Du hast deinen ersten Fall oder Wiki-Artikel als Favorit gespeichert', 'general-favourites-1.svg', 'published'),
+    ('Favorit', 'favorit', 'Du hast deinen ersten Fall oder Lexikon-Artikel als Favorit gespeichert', 'general-favourites-1.svg', 'published'),
     ('Power Nutzer', 'power-user-allgemein', 'Du bist als einer der aktivsten Nutzer auf Constellatio verifiziert', 'general-power-user.svg', 'coming-soon'),
     ('Aktiver Nutzer', 'forum-1', 'Du warst zum ersten Mal im Constellatio-Forum aktiv und hast etwas Neues gelernt oder anderen Nutzern geholfen', 'forum-active-member-1.svg', 'coming-soon'),
     ('Feedback Champion', 'feedback-1', 'Vielen Dank! Du hast uns erstmalig Feedback gegeben, um das Design oder den Content von Constellatio zu verbessern', 'general-feedback-1.svg', 'coming-soon'),

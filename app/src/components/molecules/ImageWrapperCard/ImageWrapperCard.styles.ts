@@ -36,7 +36,10 @@ type IconWrapperStyles = MantineCssObjectStyles;
 export const iconWrapperStyles = (): IconWrapperStyles =>
 {
   const styles: IconWrapperStyles = () => ({
+    alignItems: "center",
     bottom: "20px",
+    display: "flex",
+    gap: "6px",
     position: "absolute",
     right: "20px",
   });

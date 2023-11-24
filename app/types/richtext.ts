@@ -9,7 +9,10 @@ interface TextElement extends TRichTextElements
 {
   content: [];
   marks: Array<{
-    attrs: { href: string }; 
+    attrs: {
+      href: string;
+      target: string;
+    };
   }>;
   text: string; 
   type: "text";

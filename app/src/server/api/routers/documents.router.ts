@@ -80,7 +80,7 @@ export const documentsRouter = createTRPCRouter({
       {
         queryConditions.push(eq(documents.folderId, folderId));
       }
-      else
+      else if(folderId === null)
       {
         queryConditions.push(isNull(documents.folderId));
       }
