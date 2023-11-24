@@ -1,5 +1,6 @@
 /* eslint-disable react/jsx-max-props-per-line, max-lines, @typescript-eslint/naming-convention */
 
+import { env } from "@/env.mjs";
 import {
   createTRPCRouter,
   protectedProcedure,
@@ -10,8 +11,7 @@ import axios from "axios";
 export const internTrackingFromPosthogRouter = createTRPCRouter({
   getCasesSolveTimeAverage: protectedProcedure.query(async () => 
   {
-    const posthogApiKey = "phx_wHkv6h91qiusqsDb29edipj31v9oRxA5sgK99dvvdpw";
-    const apiUrl = `https://eu.posthog.com/api/event/?personal_api_key=${posthogApiKey}`;
+    const apiUrl = `https://eu.posthog.com/api/event/?personal_api_key=${env.POSTHOG_PERSONAL_API_KEY}`;
 
     type TPostHogEvent = {
       distinct_id: string;
@@ -245,11 +245,3 @@ export const internTrackingFromPosthogRouter = createTRPCRouter({
     return absoluteAverageTimeByCases;
   })
 });
-
-/* 
-TODOS:
-
-- add number of users which are included in the average
-- Wichtiger: nur die case_id nicht die ganze url verwenden und eventuell noch die Namen ziehen?
-
-*/

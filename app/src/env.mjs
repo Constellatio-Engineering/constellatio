@@ -39,6 +39,7 @@ export const env = createEnv({
     POSTGRES_MAX_CONNECTIONS: z.string().pipe(z.coerce.number().int().min(1).max(9999)),
     STRIPE_PAYMENT_METHODS_CONFIGURATION_ID: z.string(),
     GET_SUBSCRIPTION_STATUS_SECRET: z.string(),
+    POSTHOG_PERSONAL_API_KEY: z.string()
   },
 
 	/**
@@ -113,6 +114,7 @@ export const env = createEnv({
     NEXT_PUBLIC_FORMBRICKS_HOST: process.env.NEXT_PUBLIC_FORMBRICKS_HOST,
     NEXT_PUBLIC_FORMBRICKS_KEY_TESTINGS: process.env.NEXT_PUBLIC_FORMBRICKS_KEY_TESTINGS,
     NEXT_PUBLIC_FORMBRICKS_KEY_PRODUCTION: process.env.NEXT_PUBLIC_FORMBRICKS_KEY_PRODUCTION,
+    POSTHOG_PERSONAL_API_KEY: process.env.POSTHOG_PERSONAL_API_KEY
   },
   /**
    * Run `build` or `dev` with `SKIP_ENV_VALIDATION` to skip env validation.
