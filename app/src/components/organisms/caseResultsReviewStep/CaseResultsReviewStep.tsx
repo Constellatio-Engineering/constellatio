@@ -22,10 +22,12 @@ import { type AddOrRemoveBookmarkSchema } from "@/schemas/bookmarks/addOrRemoveB
 import { type IGenCase_Resolution, type IGenCase_Facts, type Maybe } from "@/services/graphql/__generated/sdk";
 import { type IHeadingNode } from "types/richtext";
 
-import { Accordion, Container, Group, ScrollArea, Spoiler, Text, Title } from "@mantine/core";
+import {
+  Accordion, Container, Group, ScrollArea, Spoiler, Text, Title 
+} from "@mantine/core";
 import { useDisclosure } from "@mantine/hooks";
-import { usePostHog } from "posthog-js/react";
-import React, { useRef, type FunctionComponent, useEffect, useState} from "react";
+// import { usePostHog } from "posthog-js/react";
+import React, { useRef, type FunctionComponent, useEffect, useState } from "react";
 
 import * as styles from "./CaseResultsReviewStep.styles";
 import { getNestedHeadingIndex } from "../floatingPanel/generateTocHelper";
@@ -60,7 +62,7 @@ const CaseResultsReviewStep: FunctionComponent<ICaseResultsReviewStepProps> = ({
   const isItemBookmarked = bookmarkedCases.some(bookmark => bookmark.title === title) || false;
   const { mutate: addBookmark } = useAddBookmark();
   const { mutate: removeBookmark } = useRemoveBookmark({ shouldUseOptimisticUpdate: true });
-
+  // const posthog = usePostHog();
   const onBookmarkIconClick = (): void =>
   {
     if(!caseId)
@@ -83,8 +85,6 @@ const CaseResultsReviewStep: FunctionComponent<ICaseResultsReviewStepProps> = ({
       removeBookmark(bookmarkData);
     }
   };
-
-  const posthog = usePostHog();
 
   const icons = [
     { click: () => onBookmarkIconClick(), src: isItemBookmarked ? <BookmarkFilledIcon/> : <Bookmark/>, title: "Bookmark" },

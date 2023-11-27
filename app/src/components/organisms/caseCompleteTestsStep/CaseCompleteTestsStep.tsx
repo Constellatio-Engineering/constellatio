@@ -10,6 +10,7 @@ import { type Maybe, type IGenCase_Facts, type IGenCase_FullTextTasks, type IGen
 import useCaseSolvingStore from "@/stores/caseSolving.store";
 import { api } from "@/utils/api";
 import { type Games } from "@/utils/case";
+import { isTrackingEnabled } from "@/utils/env";
 import type { IDocumentLink, IHeadingNode } from "types/richtext";
 
 import { Container, Title } from "@mantine/core";

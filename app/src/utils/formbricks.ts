@@ -9,9 +9,9 @@ interface TInitFormbricks
   readonly userId: string;
 }
 
-const logoutFormbricks = (): void => 
+const resetFormbricks = async (): Promise<void> => 
 {
-  void formbricks.logout();
+  await formbricks.reset();  
 };
 
 // TODO:: add it later if necessary currently not in use
@@ -20,7 +20,7 @@ const logoutFormbricks = (): void =>
   void formbricks?.registerRouteChange();
 }; */
 
-const initFormbricks = (initialData: TInitFormbricks): void => 
+const initFormbricks = async (initialData: TInitFormbricks): Promise<void> => 
 {
   const {
     apiHost,
@@ -30,14 +30,14 @@ const initFormbricks = (initialData: TInitFormbricks): void =>
     userId
   } = initialData;
 
-  void formbricks.init({
+  await formbricks.init({
     apiHost,
     debug,
     environmentId,
     userId,
   });
 
-  void formbricks.setEmail(email);
+  await formbricks.setEmail(email);
 };
 
-export { initFormbricks, logoutFormbricks /* , registerRouteChangeFormbricks */ };
+export { initFormbricks, resetFormbricks /* , registerRouteChangeFormbricks */ };

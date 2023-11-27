@@ -13,7 +13,7 @@ import MeilisearchProvider from "@/provider/MeilisearchProvider";
 import useSearchBarStore from "@/stores/searchBar.store";
 import { api } from "@/utils/api";
 import { isProduction, isTrackingEnabled } from "@/utils/env";
-import { initFormbricks, logoutFormbricks } from "@/utils/formbricks";
+import { initFormbricks, resetFormbricks } from "@/utils/formbricks";
 import { paths } from "@/utils/paths";
 
 import { ModalsProvider } from "@mantine/modals";
@@ -27,7 +27,7 @@ import { appWithTranslation } from "next-i18next";
 import { posthog } from "posthog-js";
 import { PostHogProvider } from "posthog-js/react";
 import {
-  useEffect, type FunctionComponent, type ReactElement, type ReactNode, useRef, useContext
+  useEffect, type FunctionComponent, type ReactElement, type ReactNode, useRef
 } from "react";
 
 export type NextPageWithLayout<P = object, IP = P> = NextPage<P, IP> & {
@@ -73,7 +73,108 @@ if(typeof window !== "undefined")
       secure_cookie: true,
     });
   }
-  
+
+  else 
+  {
+    posthog.init("invalide_token", {
+      api_host: env.NEXT_PUBLIC_POSTHOG_HOST,
+      autocapture: false,
+      capture_pageview: false,
+      disable_cookie: true, 
+      disable_session_recording: true,
+      loaded: (posthog) =>
+      {
+        if(!isProduction)
+        {
+          posthog.opt_out_capturing();
+        }
+      },
+      opt_out_capturing_by_default: true,
+      opt_out_persistence_by_default: true, 
+      secure_cookie: true,
+    });
+  }
+
+  supabase.auth.onAuthStateChange(async (event, session) =>    
+  {
+    switch (event)
+    {
+      case "INITIAL_SESSION":
+      case "SIGNED_IN": 
+        const id = session?.user?.id;
+        const email = session?.user?.email;
+
+        if(!id || !email) 
+        {
+          return;
+        }
+        
+        await initFormbricks(
+          {
+            apiHost: env.NEXT_PUBLIC_FORMBRICKS_HOST,
+            debug: !isProduction,
+            email,
+            environmentId: isProduction
+              ? env.NEXT_PUBLIC_FORMBRICKS_KEY_PRODUCTION
+              : env.NEXT_PUBLIC_FORMBRICKS_KEY_TESTINGS,
+            userId: id
+          }
+        );
+
+        if(isTrackingEnabled)
+        {
+          posthog.set_config({
+            disable_cookie: false,
+            disable_persistence: false,
+          });
+
+          if(!posthog.has_opted_in_capturing())
+          {
+            posthog.opt_in_capturing();    
+            posthog.identify(id, { email });
+            
+            posthog._start_queue_if_opted_in();
+
+            if(posthog.has_opted_in_capturing())
+            {
+              if(isProduction)
+              {
+                posthog.startSessionRecording();
+              }
+            }
+            
+          }
+        }
+
+        break;
+
+      case "SIGNED_OUT": {
+
+        await resetFormbricks();
+
+        if(isTrackingEnabled)
+        {
+          posthog.stopSessionRecording();
+
+          if(posthog.has_opted_in_capturing())
+          {
+            posthog.opt_out_capturing();
+          }
+
+          posthog.set_config({
+            disable_cookie: true,
+            disable_persistence: true,
+          });
+
+          posthog.reset(true);            
+        }
+          
+        break;
+      }
+      default:
+        break;
+    }
+  });
 }
 
 type ConstellatioAppProps = AppProps & {
@@ -81,7 +182,7 @@ type ConstellatioAppProps = AppProps & {
 };
 
 const AppContainer: FunctionComponent<ConstellatioAppProps> = ({ Component, pageProps }) =>
-{
+{  
   const router = useRouter();
   const { asPath, pathname } = router || "";
   const url = env.NEXT_PUBLIC_WEBSITE_URL + asPath;
@@ -91,104 +192,7 @@ const AppContainer: FunctionComponent<ConstellatioAppProps> = ({ Component, page
   const ogImageUrlSplitUp = ogImage.split(".");
   const ogImageFileExtension = ogImageUrlSplitUp[ogImageUrlSplitUp.length - 1];
   const isDocumentVisibleRef = useRef<boolean | null>(null);
-  const isFormbricksVerifiedRef = useRef(false);
-  const postHogQueueIsStartedRef = useRef(false);
-
   let pageTitle = appTitle;
-
-  useEffect(() =>
-  {
-    // TODO:: wenn UPDATE SESSION email switch beinhaltet sollte hier nochmal drüber gegangen werden
-    supabase.auth.onAuthStateChange((event, session) =>    
-    {
-      switch (event)
-      {
-        case "INITIAL_SESSION":
-        case "SIGNED_IN": 
-          const id = session?.user?.id;
-          const email = session?.user?.email;
-
-          if(!id || !email) 
-          {
-            return;
-          }
-          if(isTrackingEnabled)
-          {
-            posthog.set_config({
-              disable_cookie: false,
-              disable_persistence: false,
-            });
-  
-            if(!posthog.has_opted_in_capturing())
-            {
-              posthog.opt_in_capturing();    
-              posthog.identify(id, { email });
-            
-              if(!postHogQueueIsStartedRef.current)
-              {
-                posthog._start_queue_if_opted_in();
-                postHogQueueIsStartedRef.current = true;
-  
-                if(posthog.has_opted_in_capturing())
-                {
-                  if(isProduction)
-                  {
-                    posthog.startSessionRecording();
-                  }
-                }
-              }
-            }
-          }
-
-          if(!isFormbricksVerifiedRef.current)
-          {
-            initFormbricks(
-              {
-                apiHost: env.NEXT_PUBLIC_FORMBRICKS_HOST,
-                debug: !isProduction,
-                email,
-                environmentId: isProduction
-                  ? env.NEXT_PUBLIC_FORMBRICKS_KEY_PRODUCTION
-                  : env.NEXT_PUBLIC_FORMBRICKS_KEY_TESTINGS,
-                userId: id
-              }
-            );
-
-            isFormbricksVerifiedRef.current = true;
-          }
-
-          break;
-
-        case "SIGNED_OUT": {
-          if(isTrackingEnabled)
-          {
-            posthog.stopSessionRecording();
-
-            if(posthog.has_opted_in_capturing())
-            {
-              posthog.opt_out_capturing();
-            }
-
-            posthog.set_config({
-              disable_cookie: true,
-              disable_persistence: true,
-            });
-
-            posthog.reset(true);
-          }
-
-          if(isFormbricksVerifiedRef.current)
-          {
-            logoutFormbricks();
-            isFormbricksVerifiedRef.current = false;
-          }
-          break;
-        }
-        default:
-          break;
-      }
-    });
-  }, []);
 
   useEffect(() => 
   {
@@ -206,7 +210,7 @@ const AppContainer: FunctionComponent<ConstellatioAppProps> = ({ Component, page
       };
     }
     return () => {};
-  }, []);
+  }, [router.events]);
 
   useEffect(() => 
   {
@@ -230,8 +234,6 @@ const AppContainer: FunctionComponent<ConstellatioAppProps> = ({ Component, page
           }
         }
       };
-
-      onVisibilityChange();
 
       document.addEventListener("visibilitychange", onVisibilityChange);
 
