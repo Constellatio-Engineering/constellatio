@@ -58,9 +58,10 @@ export const checkboxStyles = ({
         ? `1px solid ${theme.colors["support-error"][3]} !important`
         : `1px solid ${theme.colors["neutrals-01"][5]}`,
       borderRadius: theme.radius["radius-4"],
+      cursor: "pointer",
       height: "20px",
       transition: "border-color 0.3s ease",
-      width: "20px",
+      width: "20px"
     },
     label: {
       color: disabled ? theme.colors["neutrals-01"][7] : theme.colors["neutrals-02"][1],
