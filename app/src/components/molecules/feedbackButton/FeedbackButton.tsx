@@ -1,15 +1,13 @@
 import { Button } from "@/components/atoms/Button/Button";
 import { AuthStateContext } from "@/provider/AuthStateProvider";
 
-import { useRouter } from "next/router";
-import React, { useContext, useEffect, useState } from "react";
+import React, { type FunctionComponent, useContext, useEffect, useState } from "react";
 
-import * as styles from "./feedbackButton.styles";
+import * as styles from "./FeedbackButton.styles";
 
-const FeedbackButton: React.FC = () => 
+const FeedbackButton: FunctionComponent = () =>
 {
   const { isUserLoggedIn } = useContext(AuthStateContext);
-  const router = useRouter();
   const [isVisible, setIsVisible] = useState(false);
 
   useEffect(() => 
@@ -25,22 +23,20 @@ const FeedbackButton: React.FC = () =>
     };
   }, []);
 
-  if(!isUserLoggedIn)
+  if(!isUserLoggedIn || !isVisible)
   {
     return null;
   }
 
   return (
-    isVisible && (router.pathname !== "/login") && (
-      <Button<"button">
-        id="feedback-btn"
-        css={styles.feedbackButtonStyles}
-        styleType="primary"
-        size="large"
-        type="button">
-        Feedback
-      </Button>
-    )
+    <Button<"button">
+      id="feedback-btn"
+      css={styles.feedbackButtonStyles}
+      styleType="primary"
+      size="large"
+      type="button">
+      Feedback
+    </Button>
   );
 };
 

@@ -65,7 +65,7 @@ export const env = createEnv({
     NEXT_PUBLIC_FORMBRICKS_HOST: z.string(),
     NEXT_PUBLIC_FORMBRICKS_KEY_TESTINGS: z.string(),
     NEXT_PUBLIC_FORMBRICKS_KEY_PRODUCTION: z.string(),
-    NEXT_PUBLIC_IS_TRACKING_ENABLED: z.string()
+    NEXT_PUBLIC_IS_TRACKING_ENABLED: z.enum(["true", "false"])
   },
 
   /**

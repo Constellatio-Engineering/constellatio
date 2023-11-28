@@ -1,10 +1,11 @@
-/* eslint-disable react/jsx-max-props-per-line, max-lines */
+/* eslint-disable react/jsx-max-props-per-line */
 import { RouterTransition } from "@/components/atoms/RouterTransition/RouterTransition";
 import ComputerRecommendedModal from "@/components/computerRecommendedModal/ComputerRecommendedModal";
-import FeedbackButton from "@/components/molecules/feedbackButton/feedbackButton";
+import FeedbackButton from "@/components/molecules/feedbackButton/FeedbackButton";
 import NewNotificationEarnedWatchdog from "@/components/molecules/newNotificationEarnedWatchdog/NewNotificationEarnedWatchdog";
 import SubscriptionModal from "@/components/organisms/subscriptionModal/SubscriptionModal";
 import { env } from "@/env.mjs";
+import { useTracking } from "@/hooks/useTracking";
 import { supabase } from "@/lib/supabase";
 import AuthStateProvider from "@/provider/AuthStateProvider";
 import CustomThemingProvider from "@/provider/CustomThemingProvider";
@@ -12,8 +13,7 @@ import InvalidateQueriesProvider from "@/provider/InvalidateQueriesProvider";
 import MeilisearchProvider from "@/provider/MeilisearchProvider";
 import useSearchBarStore from "@/stores/searchBar.store";
 import { api } from "@/utils/api";
-import { isProduction, isTrackingEnabled } from "@/utils/env";
-import { initFormbricks, resetFormbricks } from "@/utils/formbricks";
+import { isProduction } from "@/utils/env";
 import { paths } from "@/utils/paths";
 
 import { ModalsProvider } from "@mantine/modals";
@@ -27,7 +27,7 @@ import { appWithTranslation } from "next-i18next";
 import { posthog } from "posthog-js";
 import { PostHogProvider } from "posthog-js/react";
 import {
-  useEffect, type FunctionComponent, type ReactElement, type ReactNode, useRef
+  useEffect, type FunctionComponent, type ReactElement, type ReactNode
 } from "react";
 
 export type NextPageWithLayout<P = object, IP = P> = NextPage<P, IP> & {
@@ -51,132 +51,6 @@ const Layout: FunctionComponent<LayoutProps> = ({ Component, pageProps }) =>
   }
 };
 
-if(typeof window !== "undefined")
-{
-  if(isTrackingEnabled)
-  {
-    posthog.init(env.NEXT_PUBLIC_POSTHOG_KEY, {
-      api_host: env.NEXT_PUBLIC_POSTHOG_HOST,
-      autocapture: true,
-      capture_pageview: true,
-      disable_cookie: true,
-      disable_session_recording: true,
-      loaded: (posthog) =>
-      {
-        if(!isProduction)
-        {
-          posthog.debug(true);
-        }
-      },
-      opt_out_capturing_by_default: true,
-      opt_out_persistence_by_default: true,
-      secure_cookie: true,
-    });
-  }
-
-  else 
-  {
-    posthog.init("invalide_token", {
-      api_host: env.NEXT_PUBLIC_POSTHOG_HOST,
-      autocapture: false,
-      capture_pageview: false,
-      disable_cookie: true, 
-      disable_session_recording: true,
-      loaded: (posthog) =>
-      {
-        if(!isProduction)
-        {
-          posthog.opt_out_capturing();
-        }
-      },
-      opt_out_capturing_by_default: true,
-      opt_out_persistence_by_default: true, 
-      secure_cookie: true,
-    });
-  }
-
-  supabase.auth.onAuthStateChange(async (event, session) =>    
-  {
-    switch (event)
-    {
-      case "INITIAL_SESSION":
-      case "SIGNED_IN": 
-        const id = session?.user?.id;
-        const email = session?.user?.email;
-
-        if(!id || !email) 
-        {
-          return;
-        }
-        
-        await initFormbricks(
-          {
-            apiHost: env.NEXT_PUBLIC_FORMBRICKS_HOST,
-            debug: !isProduction,
-            email,
-            environmentId: isProduction
-              ? env.NEXT_PUBLIC_FORMBRICKS_KEY_PRODUCTION
-              : env.NEXT_PUBLIC_FORMBRICKS_KEY_TESTINGS,
-            userId: id
-          }
-        );
-
-        if(isTrackingEnabled)
-        {
-          posthog.set_config({
-            disable_cookie: false,
-            disable_persistence: false,
-          });
-
-          if(!posthog.has_opted_in_capturing())
-          {
-            posthog.opt_in_capturing();    
-            posthog.identify(id, { email });
-            
-            posthog._start_queue_if_opted_in();
-
-            if(posthog.has_opted_in_capturing())
-            {
-              if(isProduction)
-              {
-                posthog.startSessionRecording();
-              }
-            }
-            
-          }
-        }
-
-        break;
-
-      case "SIGNED_OUT": {
-
-        await resetFormbricks();
-
-        if(isTrackingEnabled)
-        {
-          posthog.stopSessionRecording();
-
-          if(posthog.has_opted_in_capturing())
-          {
-            posthog.opt_out_capturing();
-          }
-
-          posthog.set_config({
-            disable_cookie: true,
-            disable_persistence: true,
-          });
-
-          posthog.reset(true);            
-        }
-          
-        break;
-      }
-      default:
-        break;
-    }
-  });
-}
-
 type ConstellatioAppProps = AppProps & {
   readonly Component: NextPageWithLayout;
 };
@@ -191,59 +65,9 @@ const AppContainer: FunctionComponent<ConstellatioAppProps> = ({ Component, page
   const ogImage = env.NEXT_PUBLIC_WEBSITE_URL + "/og_image.jpg";
   const ogImageUrlSplitUp = ogImage.split(".");
   const ogImageFileExtension = ogImageUrlSplitUp[ogImageUrlSplitUp.length - 1];
-  const isDocumentVisibleRef = useRef<boolean | null>(null);
   let pageTitle = appTitle;
 
-  useEffect(() => 
-  {
-    if(isTrackingEnabled) 
-    {
-      const handleRouteChange = (): void => 
-      {
-        posthog.capture("$pageview");
-      };
-      router.events.on("routeChangeComplete", handleRouteChange);
-  
-      return () => 
-      {
-        router.events.off("routeChangeComplete", handleRouteChange);
-      };
-    }
-    return () => {};
-  }, [router.events]);
-
-  useEffect(() => 
-  {
-    if(isTrackingEnabled) 
-    {
-      const onVisibilityChange = (): void => 
-      {
-        const visibility = !document.hidden;
-
-        if(isDocumentVisibleRef.current !== visibility) 
-        {
-          isDocumentVisibleRef.current = visibility;
-
-          if(visibility) 
-          {
-            posthog.capture("$visibilityOn");
-          } 
-          else 
-          {
-            posthog.capture("$visibilityOff");
-          }
-        }
-      };
-
-      document.addEventListener("visibilitychange", onVisibilityChange);
-
-      return () => 
-      {
-        document.removeEventListener("visibilitychange", onVisibilityChange);
-      };
-    }
-    return () => {};
-  }, []);
+  useTracking();
 
   useEffect(() =>
   {
