@@ -3,6 +3,7 @@ import { BodyText } from "@/components/atoms/BodyText/BodyText";
 import { Button } from "@/components/atoms/Button/Button";
 import { CustomLink } from "@/components/atoms/CustomLink/CustomLink";
 import { Modal } from "@/components/molecules/Modal/Modal";
+import { useSignout } from "@/hooks/useSignout";
 import useSubscription from "@/hooks/useSubscription";
 import { AuthStateContext } from "@/provider/AuthStateProvider";
 import { paths } from "@/utils/paths";
@@ -21,9 +22,15 @@ const localStorageKey = "daysLeftToSubscriptionEnds";
 
 const SubscriptionModal: FunctionComponent = () =>
 {
+  const { handleSignOut } = useSignout();
   const { isUserLoggedIn } = useContext(AuthStateContext);
   const router = useRouter();
-  const { generateStripeSessionUrl, isOnTrailSubscription, subscriptionDetails } = useSubscription();
+  const {
+    generateStripeSessionUrl,
+    isOnPaidSubscription,
+    isOnTrailSubscription,
+    subscriptionDetails
+  } = useSubscription();
 
   const [daysCheckedForSubscriptionEnds, setDaysCheckedForSubscriptionEnds] = useLocalStorage<string[]>({
     defaultValue: [],
@@ -78,16 +85,24 @@ const SubscriptionModal: FunctionComponent = () =>
 
   const [wasClosed, setWasClosed] = useState(false);
   const todayDateAsString = new Date().toISOString().split("T")[0] as string;
-  const isOpened = (
+  const isOnValidSubscription = isOnPaidSubscription || isOnTrailSubscription;
+  const isAuthenticated = isUserLoggedIn && !router.pathname.startsWith(paths.login) && !router.pathname.startsWith(paths.register);
+
+  // this check is to prevent modal flickering
+  if(!subscriptionDetails)
+  {
+    return null;
+  }
+
+  const isOpened = ((isAuthenticated && !isOnValidSubscription) || (
     !wasClosed &&
     !daysCheckedForSubscriptionEnds?.includes(todayDateAsString) &&
     isOnTrailSubscription &&
-    (diffDays === 3 || diffDays === 1 || (diffDays != null && diffDays <= 0)) &&
-    isUserLoggedIn &&
-    !router.pathname.startsWith(paths.login) &&
-    !router.pathname.startsWith(paths.register)
-  ) ?? false;
-  const isModalLocked = diffDays == null || diffDays <= 0;
+    (diffDays === 3 || diffDays === 1 || (diffDays != null && diffDays <= 0)) && 
+    isAuthenticated
+  )) ?? false;
+
+  const isModalLocked = (diffDays == null || diffDays <= 0) || !isOnValidSubscription;
 
   const redirectToStripeCheckout = async (): Promise<void> => 
   {
@@ -126,14 +141,10 @@ const SubscriptionModal: FunctionComponent = () =>
       title="">
       <CaisyImg src={ModalFlag.src}/>
       <Title order={2} ta="center">
-        {diffDays != null && (
-          <>
-            {diffDays <= 0 ? (
-              "Deine Testphase ist abgelaufen"
-            ) : isOnTrailSubscription && (
-              `Deine Testphase läuft nur noch ${diffDays} Tag${diffDays === 1 ? "" : "e"}`
-            )}
-          </>
+        {!isOnValidSubscription ? (
+          "Deine Testphase ist abgelaufen"
+        ) : isOnTrailSubscription && (
+          `Deine Testphase läuft nur noch ${diffDays} Tag${diffDays === 1 ? "" : "e"}`
         )}
       </Title>
       <BodyText ta="center" styleType="body-01-regular" component="p">
@@ -149,12 +160,29 @@ const SubscriptionModal: FunctionComponent = () =>
         </CustomLink>
         {" "}klicken, um dir noch einmal unsere Preise anzuschauen.
       </BodyText>
-      <Button<"button">
-        size="large"
-        miw="100%"
-        styleType="primary"
-        onClick={redirectToStripeCheckout}>Jetzt abonnieren
-      </Button>
+      <div style={{
+        alignItems: "center",
+        display: "flex",
+        justifyContent: "space-between",
+        width: "100%"
+      }}>
+        {!isOnValidSubscription && (
+          <Button<"button">
+            size="large"
+            w="48%"
+            styleType="secondarySubtle"
+            onClick={handleSignOut}>
+            Logout
+          </Button>
+        )}
+        <Button<"button">
+          size="large"
+          w={isOnValidSubscription ? "100%" : "48%"}
+          styleType="primary"
+          onClick={redirectToStripeCheckout}>
+          Jetzt abonnieren
+        </Button>
+      </div>
     </Modal>
   );
 };

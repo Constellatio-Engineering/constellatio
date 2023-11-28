@@ -58,10 +58,11 @@ export const billingRouter = createTRPCRouter({
   {
     return db.query.users.findFirst({
       columns: {
-        subscribedPlanPriceId: true,
         subscriptionEndDate: true,
+        subscriptionId: true,
         subscriptionStartDate: true,
-        subscriptionStatus: true
+        subscriptionStatus: true,
+        trialSubscriptionId: true,
       },
       where: eq(users.id, userId)
     });

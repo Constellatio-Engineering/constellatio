@@ -226,19 +226,13 @@ export const RegistrationForm: FunctionComponent = () =>
               <BodyText component="p" styleType="body-01-medium" css={styles.dataLinkWrapper}>
                 Ich akzeptiere die&nbsp;
                 <CustomLink styleType="link-primary" href="https://www.constellatio.de/agb" target="_blank">Allgemeinen Geschäftsbedingungen</CustomLink>
-                &nbsp;und die&nbsp;
-                <CustomLink styleType="link-primary" href="https://www.constellatio.de/datenschutzerklaerung" target="_blank">Datenschutzerklärung</CustomLink>
+                {" "}und die&nbsp;
+                <CustomLink styleType="link-primary" href="https://www.constellatio.de/datenschutzerklaerung" target="_blank">Datenschutzerklärung</CustomLink>.<br/>
+                Mit der Erstellung des Kontos wird unmittelbar deine kostenlose 10-tägige Testphase gestartet. Diese Testphase ist völlig risikofrei und endet automatisch.
               </BodyText>
             )}
             title="acceptTOS"
           />
-          <BodyText
-            mt={20}
-            component="p"
-            styleType="body-02-medium"
-            ta="left">
-            Mit der Erstellung des Kontos wird unmittelbar deine kostenlose 10-tägige Testphase gestartet. Dieses Testphase ist völlig risikofrei und endet automatisch.
-          </BodyText>
         </Stack>
         <Button<"button">
           styleType="primary"
@@ -256,13 +250,12 @@ export const RegistrationForm: FunctionComponent = () =>
         ta="left"
         c="neutrals-01.7">
         Hinweis: Diese Version von Constellatio ist nur für die Verwendung am Computer optimiert.
-        Wenn du technische Fragen hast, wende dich bitte an unseren
-        Support unter&nbsp;
+        Wenn du technische Fragen hast, wende dich bitte an unseren Support unter&nbsp;
         <CustomLink
-          href="mailto:webmaster@constellatio.de"
+          href="mailto:gutentag@constellatio.de"
           styleType="link-secondary"
           c="neutrals-01.7">
-          webmaster@constellatio.de
+          gutentag@constellatio.de
         </CustomLink>
       </BodyText>
     </form>

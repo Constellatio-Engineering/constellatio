@@ -193,6 +193,7 @@ const MaterialOptionsMenu: FunctionComponent<MaterialOptionsMenuProps> = ({ file
         )}
       </Modal>
       <MoveToModal
+        title="Datei verschieben nach"
         onSubmit={(newFolderId) => 
         {
           updateFile({
