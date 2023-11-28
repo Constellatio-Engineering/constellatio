@@ -1,9 +1,11 @@
 /* eslint-disable react/jsx-max-props-per-line */
 import { RouterTransition } from "@/components/atoms/RouterTransition/RouterTransition";
 import ComputerRecommendedModal from "@/components/computerRecommendedModal/ComputerRecommendedModal";
+import FeedbackButton from "@/components/molecules/feedbackButton/FeedbackButton";
 import NewNotificationEarnedWatchdog from "@/components/molecules/newNotificationEarnedWatchdog/NewNotificationEarnedWatchdog";
 import SubscriptionModal from "@/components/organisms/subscriptionModal/SubscriptionModal";
 import { env } from "@/env.mjs";
+import { useTracking } from "@/hooks/useTracking";
 import { supabase } from "@/lib/supabase";
 import AuthStateProvider from "@/provider/AuthStateProvider";
 import CustomThemingProvider from "@/provider/CustomThemingProvider";
@@ -16,15 +18,15 @@ import { paths } from "@/utils/paths";
 
 import { ModalsProvider } from "@mantine/modals";
 import { Notifications } from "@mantine/notifications";
-import {
-  SessionContextProvider
-} from "@supabase/auth-helpers-react";
+import { SessionContextProvider } from "@supabase/auth-helpers-react";
 import { type NextPage } from "next";
 import { type AppProps } from "next/app";
 import Head from "next/head";
 import { useRouter } from "next/router";
 import { appWithTranslation } from "next-i18next";
-import React, {
+import { posthog } from "posthog-js";
+import { PostHogProvider } from "posthog-js/react";
+import {
   useEffect, type FunctionComponent, type ReactElement, type ReactNode
 } from "react";
 
@@ -54,7 +56,7 @@ type ConstellatioAppProps = AppProps & {
 };
 
 const AppContainer: FunctionComponent<ConstellatioAppProps> = ({ Component, pageProps }) =>
-{
+{  
   const router = useRouter();
   const { asPath, pathname } = router || "";
   const url = env.NEXT_PUBLIC_WEBSITE_URL + asPath;
@@ -64,6 +66,8 @@ const AppContainer: FunctionComponent<ConstellatioAppProps> = ({ Component, page
   const ogImageUrlSplitUp = ogImage.split(".");
   const ogImageFileExtension = ogImageUrlSplitUp[ogImageUrlSplitUp.length - 1];
   let pageTitle = appTitle;
+
+  useTracking();
 
   useEffect(() =>
   {
@@ -120,18 +124,21 @@ const AppContainer: FunctionComponent<ConstellatioAppProps> = ({ Component, page
       <SessionContextProvider supabaseClient={supabase} initialSession={pageProps.initialSession}>
         <InvalidateQueriesProvider>
           <AuthStateProvider>
-            <CustomThemingProvider>
-              <ModalsProvider>
-                <MeilisearchProvider>
-                  <RouterTransition/>
-                  <Notifications/>
-                  <NewNotificationEarnedWatchdog/>
-                  <SubscriptionModal/>
-                  <ComputerRecommendedModal/>
-                  <Layout Component={Component} pageProps={pageProps}/>
-                </MeilisearchProvider>
-              </ModalsProvider>
-            </CustomThemingProvider>
+            <PostHogProvider client={posthog}>
+              <CustomThemingProvider>
+                <ModalsProvider>
+                  <MeilisearchProvider>
+                    <RouterTransition/>
+                    <Notifications/>
+                    <NewNotificationEarnedWatchdog/>
+                    <SubscriptionModal/>
+                    <ComputerRecommendedModal/>
+                    <FeedbackButton/>
+                    <Layout Component={Component} pageProps={pageProps}/>
+                  </MeilisearchProvider>
+                </ModalsProvider>
+              </CustomThemingProvider>
+            </PostHogProvider>
           </AuthStateProvider>
         </InvalidateQueriesProvider>
       </SessionContextProvider>
