@@ -9,7 +9,6 @@ import { useCallback, useEffect, useRef } from "react";
 
 if(typeof window !== "undefined")
 {
-  console.log("isTrackingEnabled", isTrackingEnabled);
 
   if(isTrackingEnabled)
   {
