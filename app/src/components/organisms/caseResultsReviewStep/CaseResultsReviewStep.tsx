@@ -23,9 +23,10 @@ import { type IGenCase_Resolution, type IGenCase_Facts, type Maybe } from "@/ser
 import { type IHeadingNode } from "types/richtext";
 
 import {
-  Accordion, Container, Group, ScrollArea, Spoiler, Text, Title
+  Accordion, Container, Group, ScrollArea, Spoiler, Text, Title 
 } from "@mantine/core";
 import { useDisclosure } from "@mantine/hooks";
+// import { usePostHog } from "posthog-js/react";
 import React, { useRef, type FunctionComponent, useEffect, useState } from "react";
 
 import * as styles from "./CaseResultsReviewStep.styles";
@@ -61,7 +62,7 @@ const CaseResultsReviewStep: FunctionComponent<ICaseResultsReviewStepProps> = ({
   const isItemBookmarked = bookmarkedCases.some(bookmark => bookmark.title === title) || false;
   const { mutate: addBookmark } = useAddBookmark();
   const { mutate: removeBookmark } = useRemoveBookmark({ shouldUseOptimisticUpdate: true });
-
+  // const posthog = usePostHog();
   const onBookmarkIconClick = (): void =>
   {
     if(!caseId)
@@ -84,10 +85,19 @@ const CaseResultsReviewStep: FunctionComponent<ICaseResultsReviewStepProps> = ({
       removeBookmark(bookmarkData);
     }
   };
+
   const icons = [
     { click: () => onBookmarkIconClick(), src: isItemBookmarked ? <BookmarkFilledIcon/> : <Bookmark/>, title: "Bookmark" },
     // { src: <Pin/>, title: "Pin" },
-    { click: () => window.print(), src: <Print/>, title: "Print" },
+    {
+      click: () => 
+      {
+        // posthog.capture("print_btn", { variant: variant }); //TODO:: capturing but no variant here?
+        window.print();
+      },
+      src: <Print/>,
+      title: "Print",
+    },
   ];
 
   useEffect(() => 

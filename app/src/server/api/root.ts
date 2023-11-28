@@ -7,6 +7,7 @@ import { caseProgressRouter } from "@/server/api/routers/caseProgress.router";
 import { documentsRouter } from "@/server/api/routers/documents.router";
 import { foldersRouter } from "@/server/api/routers/folders.router";
 import { gamesProgressRouter } from "@/server/api/routers/gamesProgress.router";
+import { internTrackingFromPosthogRouter } from "@/server/api/routers/internTrackingFromPosthog.router";
 import { notesRouter } from "@/server/api/routers/notes.router";
 import { searchRouter } from "@/server/api/routers/search.router";
 import { uploadsRouter } from "@/server/api/routers/uploads.router";
@@ -27,11 +28,12 @@ export const appRouter = createTRPCRouter({
   documents: documentsRouter,
   folders: foldersRouter,
   gamesProgress: gamesProgressRouter,
+  internTrackingFromPosthog: internTrackingFromPosthogRouter,
   notes: notesRouter,
   search: searchRouter,
   uploads: uploadsRouter,
   users: usersRouter,
-  views: viewsRouter,
+  views: viewsRouter
 });
 
 // export type definition of API

@@ -1,3 +1,6 @@
+import { isTrackingEnabled } from "@/utils/env";
+
+import { posthog } from "posthog-js";
 import { create } from "zustand";
 import { immer } from "zustand/middleware/immer";
 
@@ -11,42 +14,45 @@ type SearchStoreProps = {
   setSearchValue: (searchValue: string) => void;
 };
 
-const useSearchBarStore = create(immer<SearchStoreProps>((set) => (
+const useSearchBarStore = create(immer<SearchStoreProps>((set) => ({
+  closeDrawer: () => 
   {
-    closeDrawer: () =>
+    set((state) =>
     {
-      set((state) =>
-      {
-        state.isDrawerOpened = false;
-      });
-    },
-    isDrawerOpened: false,
-    openDrawer: (refetchSearchResults) =>
+      state.isDrawerOpened = false;
+    });
+  },
+  isDrawerOpened: false,
+  openDrawer: (refetchSearchResults) => 
+  {
+    if(isTrackingEnabled) 
     {
-      refetchSearchResults();
+      posthog.capture("search-field-opened");
+    }
+    refetchSearchResults();
 
-      set((state) => 
-      {
-        state.isDrawerOpened = true;
-      });
-    },
-    searchHistory: [],
-    searchValue: "",
-    setSearchHistory: (searchHistory) =>
+    set((state) =>
     {
-      set((state) => 
-      {
-        state.searchHistory = searchHistory;
-      });
-    },
-    setSearchValue: (searchValue) =>
+      state.isDrawerOpened = true;
+    });
+  },
+  searchHistory: [],
+  searchValue: "",
+  setSearchHistory: (searchHistory) =>
+  {
+    set((state) =>
     {
-      set((state) => 
-      {
-        state.searchValue = searchValue;
-      });
-    },
-  }))
+      state.searchHistory = searchHistory;
+    });
+  },
+  setSearchValue: (searchValue) =>
+  {
+    set((state) =>
+    {
+      state.searchValue = searchValue;
+    });
+  },
+}))
 );
 
 export default useSearchBarStore;

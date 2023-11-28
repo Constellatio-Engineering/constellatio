@@ -5,3 +5,4 @@ export const isDevelopmentOrStaging = env.NEXT_PUBLIC_DEPLOYMENT_ENVIRONMENT ===
 export const isDevelopment = env.NEXT_PUBLIC_DEPLOYMENT_ENVIRONMENT === "development";
 export const isStaging = env.NEXT_PUBLIC_DEPLOYMENT_ENVIRONMENT === "staging";
 export const isProduction = env.NEXT_PUBLIC_DEPLOYMENT_ENVIRONMENT === "production";
+export const isTrackingEnabled = env.NEXT_PUBLIC_IS_TRACKING_ENABLED === "true";

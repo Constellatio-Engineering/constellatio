@@ -10,9 +10,11 @@ import { type Maybe, type IGenCase_Facts, type IGenCase_FullTextTasks, type IGen
 import useCaseSolvingStore from "@/stores/caseSolving.store";
 import { api } from "@/utils/api";
 import { type Games } from "@/utils/case";
+import { isTrackingEnabled } from "@/utils/env";
 import type { IDocumentLink, IHeadingNode } from "types/richtext";
 
 import { Container, Title } from "@mantine/core";
+import { usePostHog } from "posthog-js/react";
 import {
   type FunctionComponent, useMemo, useCallback
 } from "react";
@@ -174,6 +176,8 @@ const CaseCompleteTestsStep: FunctionComponent<ICaseCompleteTestsStepProps> = ({
       : null;
   }, [caseId, fullTextTasks?.connections, currentGameId]);
 
+  const posthog = usePostHog();
+
   return (
     <Container p={0} maw={1440}>
       <div css={styles.contentWrapper} id="completeTestsStepContent">
@@ -191,7 +195,14 @@ const CaseCompleteTestsStep: FunctionComponent<ICaseCompleteTestsStepProps> = ({
             styleType="primary"
             size="large"
             type="button"
-            onClick={() => setProgressState({ caseId, progressState: "completing-tests" })}>
+            onClick={() => 
+            {
+              if(isTrackingEnabled) 
+              {
+                posthog.capture("case_solving_started");
+              }
+              setProgressState({ caseId, progressState: "completing-tests" });
+            }}>
             Geführte Lösung starten
           </Button>
         )}
