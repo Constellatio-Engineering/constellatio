@@ -202,7 +202,7 @@ const MaterialOptionsMenu: FunctionComponent<MaterialOptionsMenuProps> = ({ file
           });
         }}
         close={() => setShowMoveToModal(false)}
-        currentFolderId={file.id}
+        currentFolderId={file.folderId}
         isOpened={showMoveToModal}
       />
     </>
