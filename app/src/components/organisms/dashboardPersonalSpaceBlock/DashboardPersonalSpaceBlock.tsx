@@ -7,6 +7,7 @@ import FavoriteCard from "@/components/molecules/favoriteCard/FavoriteCard";
 import MaterialCard from "@/components/molecules/materialCard/MaterialCard";
 import { Switcher } from "@/components/molecules/Switcher/Switcher";
 import useAllFavorites from "@/hooks/useAllFavorites";
+import useDocuments from "@/hooks/useDocuments";
 import useUploadedFiles from "@/hooks/useUploadedFiles";
 import { paths } from "@/utils/paths";
 
@@ -23,7 +24,20 @@ const DashboardPersonalSpaceBlock: FunctionComponent = () =>
   const router = useRouter();
   const [switcherValue, setSwitcherValue] = React.useState<"favorites" | "materials">("favorites");
   const { uploadedFilesInAllFolders } = useUploadedFiles();
+  const { documentsInAllFolders } = useDocuments();
   const { favoritesList } = useAllFavorites();
+
+  const allUserData = [
+    ...uploadedFilesInAllFolders.map((file) => ({ ...file, dataType: "file" }) as const),
+    ...documentsInAllFolders.map((document) => ({ ...document, dataType: "document" }) as const)
+  ]
+    .filter(Boolean)
+    .sort((a, b) =>
+    {
+      return new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime();
+    })
+  ;
+
   return (
     <div css={styles.wrapper}>
       <DashboardPersonalSpaceBlockHeader/>
@@ -73,14 +87,26 @@ const DashboardPersonalSpaceBlock: FunctionComponent = () =>
         )}
         {switcherValue === "materials" && (
           <div css={styles.list}>
-            {uploadedFilesInAllFolders?.length > 0 ? uploadedFilesInAllFolders.slice(0, 6).map((material, i) => (
-              <MaterialCard
-                key={i}
-                fileExtension={material?.fileExtension}
-                id={material?.id}
-                materialType="file"
-                title={material.originalFilename}
-              />
+            {allUserData?.length > 0 ? allUserData.slice(0, 6).map((data) => (
+              <>
+                {data.dataType === "file" ? (
+                  <MaterialCard
+                    key={data.id}
+                    fileExtension={data.fileExtension}
+                    id={data.id}
+                    materialType="file"
+                    title={data.originalFilename}
+                  />
+                ) : (
+                  <MaterialCard
+                    key={data.id}
+                    fileExtension="CONSTELLATIO DOC"
+                    id={data?.id}
+                    materialType="paper"
+                    title={data.name}
+                  />
+                )}
+              </>
             )) : (
               <div css={styles.emptyCard}>
                 <EmptyStateCard

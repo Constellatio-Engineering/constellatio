@@ -33,7 +33,11 @@ const MaterialCard: FunctionComponent<MaterialCardProps> = ({
       <div css={styles.tag}>
         <MaterialsLabel title={`.${fileExtension}`} variant={materialType}/>
       </div>
-      {title && <SubtitleText styleType="subtitle-01-medium">{title.slice(0, 57)}{title?.length > 45 && "..."}</SubtitleText>}
+      {title && (
+        <SubtitleText styleType="subtitle-01-medium" style={{ wordBreak: "break-word" }}>
+          {title.slice(0, 57)}{title?.length > 45 && "..."}
+        </SubtitleText>
+      )}
     </div>
   );
 };
