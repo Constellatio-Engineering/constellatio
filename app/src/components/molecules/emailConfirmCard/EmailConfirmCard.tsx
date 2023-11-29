@@ -1,11 +1,12 @@
 import { BodyText } from "@/components/atoms/BodyText/BodyText";
-import { AuthStateContext } from "@/provider/AuthStateProvider";
 import { paths } from "@/utils/paths";
 
 import { Loader, Title } from "@mantine/core";
 import React, {
-  type FunctionComponent, useState, useEffect, useRef, useContext 
+  type FunctionComponent, useState, useEffect, useRef
 } from "react";
+
+import { type ParsedUrlQuery } from "querystring";
 
 import * as styles from "./EmailConfirmCard.styles";
 
@@ -18,23 +19,16 @@ interface ICardProps
 
 interface EmailConfirmCardProps 
 {
-  readonly params: { [k: string]: string };
+  readonly params: ParsedUrlQuery;
 }
 
 const EmailConfirmCard: FunctionComponent<EmailConfirmCardProps> = ({ params }) =>
 {
-  const { isUserLoggedIn } = useContext(AuthStateContext);
   const [card, setCard] = useState<ICardProps>({ desc: "", title: "" });
   const redirectTimeout = useRef<NodeJS.Timeout>();
 
-  useEffect(() => 
+  useEffect(() =>
   {
-    if(isUserLoggedIn == null)
-    {
-      console.log("waiting for auth state to be loaded...");
-      return;
-    }
-
     if(redirectTimeout.current)
     {
       clearTimeout(redirectTimeout.current);
@@ -43,14 +37,12 @@ const EmailConfirmCard: FunctionComponent<EmailConfirmCardProps> = ({ params }) 
     if(params.error)
     {
       setCard({
-        desc: params.error_description ?? "",
+        desc: params.error_description?.toString() ?? "",
         title: "E-Mail Bestätigung nicht erfolgreich",
       });
     }
-    else if(isUserLoggedIn)
+    else if(params.code)
     {
-      console.log("User is logged in, redirecting to dashboard in 5 seconds...");
-
       setCard({
         desc: "Du wirst in wenigen Sekunden automatisch weitergeleitet...",
         isLoading: true,
@@ -62,11 +54,11 @@ const EmailConfirmCard: FunctionComponent<EmailConfirmCardProps> = ({ params }) 
         console.log("Redirecting to dashboard now...");
         window.location.replace(paths.dashboard);
         // void Router.replace(paths.dashboard);
-      }, 5000);
+      }, 4000);
     }
     else 
     {
-      console.error("Supabase did not return an error, but the user is not logged in. Query params were: ", window.location.search);
+      console.error("Email confirmation failed. Query params did not contain an error or a code. Query params were: ", window.location.search);
 
       setCard({
         desc: "Bitte versuche es erneut oder kontaktiere den Support.",
@@ -75,7 +67,7 @@ const EmailConfirmCard: FunctionComponent<EmailConfirmCardProps> = ({ params }) 
     }
 
     return () => clearTimeout(redirectTimeout.current);
-  }, [isUserLoggedIn, params.error, params.error_description]);
+  }, [params.code, params.error, params.error_description]);
 
   return (
     <div css={styles.wrapper}>
