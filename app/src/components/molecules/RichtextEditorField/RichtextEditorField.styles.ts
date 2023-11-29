@@ -30,7 +30,9 @@ export const richtextEditorFieldStyles = (): RichtextEditorFieldStyles =>
           padding: "20px",
           position: "relative",
         },
-        padding: 0,
+        maxHeight: "60vh",
+        minHeight: "370px",
+        padding: "20px",
         paddingBottom: "32px",
         whiteSpace: "normal",
         wordBreak: "break-word",
@@ -39,7 +41,8 @@ export const richtextEditorFieldStyles = (): RichtextEditorFieldStyles =>
     root: {
       background: `${theme.colors["neutrals-01"][0]}`,
       border: `1px solid ${theme.colors["neutrals-01"][5]}`,
-      borderRadius: "12px"
+      borderRadius: "12px",
+      overflow: "hidden"
     },
     toolbar: {
       "& .control-group-separator": {
@@ -83,11 +86,5 @@ export const richtextEditorFieldStyles = (): RichtextEditorFieldStyles =>
 };
 
 export const ContentWrapper = styled.div`
-  min-height: 370px;
-  display: flex;
-  flex-direction: column;
-  justify-content: space-between;
-  padding: 20px;
-  resize: vertical;
   overflow: auto;
 `;
