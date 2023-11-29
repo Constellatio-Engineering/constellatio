@@ -1,8 +1,8 @@
 /* eslint-disable react/jsx-max-props-per-line */
 import { RouterTransition } from "@/components/atoms/RouterTransition/RouterTransition";
-import ComputerRecommendedModal from "@/components/computerRecommendedModal/ComputerRecommendedModal";
 import FeedbackButton from "@/components/molecules/feedbackButton/FeedbackButton";
 import NewNotificationEarnedWatchdog from "@/components/molecules/newNotificationEarnedWatchdog/NewNotificationEarnedWatchdog";
+import ComputerRecommendedModal from "@/components/organisms/computerRecommendedModal/ComputerRecommendedModal";
 import SubscriptionModal from "@/components/organisms/subscriptionModal/SubscriptionModal";
 import { env } from "@/env.mjs";
 import { useTracking } from "@/hooks/useTracking";

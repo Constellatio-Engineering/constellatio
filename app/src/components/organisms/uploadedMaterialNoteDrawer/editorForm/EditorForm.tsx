@@ -4,6 +4,7 @@ import { Edit } from "@/components/Icons/Edit";
 import { Trash } from "@/components/Icons/Trash";
 import { RichtextEditorField } from "@/components/molecules/RichtextEditorField/RichtextEditorField";
 import SlidingPanelFileTypeRow from "@/components/molecules/slidingPanelFileTypeRow/SlidingPanelFileTypeRow";
+import MantineRichtextRenderer from "@/components/organisms/mantineRichtextRenderer/MantineRichtextRenderer";
 import useContextAndErrorIfNull from "@/hooks/useContextAndErrorIfNull";
 import useUploadedFiles from "@/hooks/useUploadedFiles";
 import { InvalidateQueriesContext } from "@/provider/InvalidateQueriesProvider";
@@ -109,7 +110,7 @@ const EditorForm: FunctionComponent<EditorFormProps> = ({ editorState, onClose }
         fileName={file?.originalFilename || ""}
         fileExtension={file?.fileExtension || ""}
       /> 
-      <div className="form">
+      <div className="form" css={styles.form}>
         {(editorState.state === "create" || editorState.state === "edit") && (
           <>
             <div css={styles.MaterialNoteRichText}>
@@ -150,7 +151,7 @@ const EditorForm: FunctionComponent<EditorFormProps> = ({ editorState, onClose }
                 <Trash/>{" "}Löschen
               </Button>
             </div>
-            <div css={styles.richtext} dangerouslySetInnerHTML={{ __html: note.content }}/>
+            <MantineRichtextRenderer htmlContent={note.content}/>
             {shouldShowDeleteNoteWindow && (
               <div className="deleteNoteBlock">
                 <BodyText styleType="body-01-medium">Bist du sicher, dass du deine Notizen löschen möchtest?</BodyText>

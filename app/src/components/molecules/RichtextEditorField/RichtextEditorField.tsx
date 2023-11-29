@@ -68,12 +68,10 @@ export const RichtextEditorField: FC<RichtextEditorFieldProps> = ({
         <RichTextEditor.ControlsGroup>
           <RichTextEditor.BulletList/>
           <RichTextEditor.OrderedList/>
-        </RichTextEditor.ControlsGroup>
-        {variant === "with-legal-quote" && (
-          <RichTextEditor.ControlsGroup className="blockquote-control">
+          {variant === "with-legal-quote" && (
             <RichTextEditor.Blockquote/>
-          </RichTextEditor.ControlsGroup>
-        )}
+          )}
+        </RichTextEditor.ControlsGroup>
       </RichTextEditor.Toolbar>
       <ContentWrapper>
         <RichTextEditor.Content/>
