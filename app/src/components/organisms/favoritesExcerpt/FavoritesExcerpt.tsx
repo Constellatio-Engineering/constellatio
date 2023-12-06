@@ -1,24 +1,28 @@
 import FavoriteCard from "@/components/molecules/favoriteCard/FavoriteCard";
 import EmptyStateCard from "@/components/organisms/emptyStateCard/EmptyStateCard";
-import useAllFavorites from "@/hooks/useAllFavorites";
+import { type Favorites } from "@/hooks/useAllFavorites";
 import { paths } from "@/utils/paths";
+import { type Nullable } from "@/utils/types";
 
 import { useRouter } from "next/router";
 import React, { type FunctionComponent } from "react";
 
 import * as styles from "./FavoritesExcerpt.styles";
 
-const FavoritesExcerpt: FunctionComponent = () =>
+type Props = {
+  readonly favorites: Nullable<Favorites>;
+};
+
+const FavoritesExcerpt: FunctionComponent<Props> = ({ favorites }) =>
 {
   const router = useRouter();
-  const { favoritesList } = useAllFavorites();
 
-  if(!favoritesList)
+  if(!favorites)
   {
     return null;
   }
 
-  if(favoritesList.length === 0)
+  if(favorites.length === 0)
   {
     return (
       <div css={styles.emptyCard}>
@@ -35,14 +39,17 @@ const FavoritesExcerpt: FunctionComponent = () =>
     ); 
   }
 
-  return favoritesList.slice(0, 6).map((favorite, i) => favorite?.title && (
-    <FavoriteCard
-      key={i}
-      onClick={async () => router.push(`/${favorite?.__typename === "Case" ? "cases" : "dictionary"}/${favorite?.id}`)}
-      title={favorite.title}
-      variant={favorite?.__typename === "Case" ? "case" : "dictionary"}
-    />
-  ));
+  return favorites
+    .sort((a, b) => new Date(b?._meta?.createdAt).getTime() - new Date(a?._meta?.createdAt).getTime())
+    .slice(0, 6)
+    .map((favorite, i) => favorite?.title && (
+      <FavoriteCard
+        key={i}
+        onClick={async () => router.push(`/${favorite?.__typename === "Case" ? "cases" : "dictionary"}/${favorite?.id}`)}
+        title={favorite.title}
+        variant={favorite?.__typename === "Case" ? "case" : "dictionary"}
+      />
+    ));
 };
 
 export default FavoritesExcerpt;

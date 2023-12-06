@@ -6,6 +6,8 @@ import DashboardPersonalSpaceBlockHeader from "@/components/molecules/dashboardP
 import { Switcher } from "@/components/molecules/Switcher/Switcher";
 import FavoritesExcerpt from "@/components/organisms/favoritesExcerpt/FavoritesExcerpt";
 import MaterialsExcerpt from "@/components/organisms/materialsExcerpt/MaterialsExcerpt";
+import useAllFavorites from "@/hooks/useAllFavorites";
+import { useAllUserData } from "@/hooks/useAllUserData";
 
 import { Tabs } from "@mantine/core";
 import React, { type FunctionComponent } from "react";
@@ -15,6 +17,8 @@ import * as styles from "./DashboardPersonalSpaceBlock.styles";
 const DashboardPersonalSpaceBlock: FunctionComponent = () => 
 {
   const [switcherValue, setSwitcherValue] = React.useState<"favorites" | "materials">("favorites");
+  const { favoritesList } = useAllFavorites();
+  const { allUserData } = useAllUserData();
 
   return (
     <div css={styles.wrapper}>
@@ -38,10 +42,10 @@ const DashboardPersonalSpaceBlock: FunctionComponent = () =>
         </div>
         <div css={styles.list}>
           {switcherValue === "favorites" && (
-            <FavoritesExcerpt/>
+            <FavoritesExcerpt favorites={favoritesList}/>
           )}
           {switcherValue === "materials" && (
-            <MaterialsExcerpt/>
+            <MaterialsExcerpt allUserData={allUserData}/>
           )}
         </div>
       </div>

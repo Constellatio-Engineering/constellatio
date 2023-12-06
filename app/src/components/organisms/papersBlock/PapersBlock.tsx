@@ -1,7 +1,6 @@
 import { Button } from "@/components/atoms/Button/Button";
 import { SubtitleText } from "@/components/atoms/SubtitleText/SubtitleText";
 import { NoteIcon } from "@/components/Icons/Note";
-import DocumentEditor from "@/components/organisms/papersBlock/documentEditor/DocumentEditor";
 import useDocuments from "@/hooks/useDocuments";
 import useDocumentEditorStore from "@/stores/documentEditor.store";
 

@@ -5,7 +5,6 @@ import React, { type FunctionComponent } from "react";
 
 import * as styles from "./PersonalSpaceMaterialsTab.styles";
 import FileUploadMenu from "../fileUploadMenu/FileUploadMenu";
-import FileViewer from "../fileViewer/FileViewer";
 import FoldersMenuTablet from "../foldersMenuTablet/FoldersMenuTablet";
 import MaterialMenu from "../materialMenu/MaterialMenu";
 import PapersBlock from "../papersBlock/PapersBlock";
@@ -16,7 +15,6 @@ const PersonalSpaceMaterialsTab: FunctionComponent = () =>
   const selectedFolderId = useMaterialsStore(s => s.selectedFolderId);
   const fileInputRef = React.useRef<HTMLInputElement>(null);
   const { setUploadState, uploads } = uploadsProgressStore();
-  const { selectedFileIdForPreview } = useMaterialsStore();
   const areUploadsInProgress = uploads.some(u => u.state.type === "uploading");
 
   return (

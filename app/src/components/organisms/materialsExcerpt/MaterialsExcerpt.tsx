@@ -1,7 +1,6 @@
 import MaterialCard from "@/components/molecules/materialCard/MaterialCard";
 import EmptyStateCard from "@/components/organisms/emptyStateCard/EmptyStateCard";
-import useDocuments from "@/hooks/useDocuments";
-import useUploadedFiles from "@/hooks/useUploadedFiles";
+import { type AllUserData } from "@/hooks/useAllUserData";
 import { paths } from "@/utils/paths";
 
 import { useRouter } from "next/router";
@@ -9,21 +8,13 @@ import React, { Fragment, type FunctionComponent } from "react";
 
 import * as favoritesExcerptStyles from "../favoritesExcerpt/FavoritesExcerpt.styles";
 
-const MaterialsExcerpt: FunctionComponent = () =>
+type Props = {
+  readonly allUserData: AllUserData;
+};
+
+const MaterialsExcerpt: FunctionComponent<Props> = ({ allUserData }) =>
 {
   const router = useRouter();
-  const { uploadedFilesInAllFolders } = useUploadedFiles();
-  const { documentsInAllFolders } = useDocuments();
-
-  const allUserData = [
-    ...uploadedFilesInAllFolders.map((file) => ({ ...file, dataType: "file" }) as const),
-    ...documentsInAllFolders.map((document) => ({ ...document, dataType: "document" }) as const)
-  ]
-    .filter(Boolean)
-    .sort((a, b) =>
-    {
-      return new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime();
-    });
 
   if(!allUserData)
   {

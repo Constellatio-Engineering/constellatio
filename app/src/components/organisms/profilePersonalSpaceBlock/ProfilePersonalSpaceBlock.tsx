@@ -1,27 +1,22 @@
 import { Button } from "@/components/atoms/Button/Button";
 import { Bookmark } from "@/components/Icons/Bookmark";
 import { FileWhiteIcon } from "@/components/Icons/FileWhite";
-import FavoriteCard from "@/components/molecules/favoriteCard/FavoriteCard";
-import MaterialCard from "@/components/molecules/materialCard/MaterialCard";
 import ProfilePersonalSpaceBlockHead from "@/components/molecules/profilePersonalSpaceBlockHead/ProfilePersonalSpaceBlockHead";
+import FavoritesExcerpt from "@/components/organisms/favoritesExcerpt/FavoritesExcerpt";
+import MaterialsExcerpt from "@/components/organisms/materialsExcerpt/MaterialsExcerpt";
 import useAllFavorites from "@/hooks/useAllFavorites";
+import { useAllUserData } from "@/hooks/useAllUserData";
 import useUploadedFiles from "@/hooks/useUploadedFiles";
-// import useUploadFolders from "@/hooks/useUploadFolders";
-import { type IGenArticle, type IGenCase } from "@/services/graphql/__generated/sdk";
 import { paths } from "@/utils/paths";
 
 import { Loader } from "@mantine/core";
 import Link from "next/link";
-import { useRouter } from "next/router";
 import React, { type FunctionComponent, useState } from "react";
 
 import * as styles from "./ProfilePersonalSpaceBlock.styles";
-import EmptyStateCard from "../emptyStateCard/EmptyStateCard";
-import FileViewer from "../fileViewer/FileViewer";
 
 const ProfilePersonalSpaceBlock: FunctionComponent = () => 
 {
-  const router = useRouter();
   const [selectedTab, setSelectedTab] = useState<number>(0);
   const { isLoading: isGetUploadedFilesLoading, uploadedFilesInAllFolders } = useUploadedFiles();
 
@@ -36,54 +31,34 @@ const ProfilePersonalSpaceBlock: FunctionComponent = () =>
 
   const favoritesCount = (bookmarkedCases?.length + bookmarkedArticles?.length);
   const uploadedFilesCount = uploadedFilesInAllFolders?.length;
+  const { allUserData } = useAllUserData();
 
   const tabs = [
     {
-      icon: { src: <Bookmark/> }, number: favoritesCount, subtitle: favoritesCount > 1 ? "Favoriten" : "Favorit", title: "Favoriten" 
+      icon: { src: <Bookmark/> },
+      number: favoritesCount,
+      subtitle: favoritesCount > 1 ? "Favoriten" : "Favorit",
+      title: "Favoriten"
     }, 
     {
-      icon: { src: <FileWhiteIcon/> }, number: uploadedFilesCount, subtitle: uploadedFilesCount > 1 ? "Dateien" : "Datei", title: "Deine Dateien" 
+      icon: { src: <FileWhiteIcon/> },
+      number: uploadedFilesCount,
+      subtitle: uploadedFilesCount > 1 ? "Dateien" : "Datei",
+      title: "Deine Dateien"
     }
   ];
+
   return (
     <div css={styles.wrapper}>
       <ProfilePersonalSpaceBlockHead selectedTab={selectedTab} setSelectedTab={setSelectedTab} tabs={tabs}/>
       {selectedTab === 0 && (
         <div css={styles.favoritesTab}>
           <div css={styles.casesCard}>
-            {
-              (isUseBookmarksLoading || isUseCasesLoading || areArticlesLoading) ? (<Loader sx={{ margin: "0px" }}/>) :
-                favoritesList && 
-              favoritesList.length > 0 ? (
-                    favoritesList?.sort((a, b) => new Date(b?._meta?.createdAt).getTime() - new Date(a?._meta?.createdAt).getTime())?.slice(0, 6)?.map((bookmarkedItem: IGenCase| IGenArticle, index: number) => (bookmarkedItem?.__typename === "Case") ? (
-                      <React.Fragment key={index}>
-                        <FavoriteCard
-                          onClick={async () => router.push(`/cases/${bookmarkedItem?.id}`)}
-                          title={bookmarkedItem.title ?? ""}
-                          variant="case"
-                        />
-                      </React.Fragment>
-                    ) : (
-                      <React.Fragment key={index}>
-                        <FavoriteCard
-                          onClick={async () => router.push(`/dictionary/${bookmarkedItem?.id}`)}
-                          title={bookmarkedItem.title ?? ""}
-                          variant="dictionary"
-                        />
-                      </React.Fragment>
-                    ))
-                  ) : (
-                    <EmptyStateCard 
-                      title="Noch keine Favoriten vorhanden"
-                      text="Speichere jetzt Fälle oder Lexikonartikel als Favoriten in deinem persönlichen Bereich."
-                      variant="For-small-areas"
-                      button={{
-                        content: "Alle Fälle ansehen",
-                        onClick: async () => router.push(paths.cases)
-                      }}
-                    />
-                  )
-            }
+            {(isUseBookmarksLoading || isUseCasesLoading || areArticlesLoading) ? (
+              <Loader sx={{ margin: "0px" }}/>
+            ) : (
+              <FavoritesExcerpt favorites={favoritesList}/>
+            )}
           </div>
           {favoritesList && favoritesList?.length > 6 && (
             <Link href={`${paths.personalSpace}?category=favorites`}>
@@ -94,48 +69,26 @@ const ProfilePersonalSpaceBlock: FunctionComponent = () =>
           )}
         </div>
       )}
-      {selectedTab === 1 ?
-        isGetUploadedFilesLoading ? (<Loader sx={{ margin: "0px" }}/>) :
-          (
+      {selectedTab === 1 && (
+        <>
+          {isGetUploadedFilesLoading ? (
+            <Loader sx={{ margin: "0px" }}/>
+          ) : (
             <div>
               <div css={styles.uploadedMaterialsTab}>
-                {uploadedFilesCount > 0 ? (
-                  <>
-                    {uploadedFilesInAllFolders.slice(0, 6).map((file, index) => (
-                      <MaterialCard
-                        title={file?.originalFilename}
-                        materialsLabelTitle={file?.fileExtension}
-                        id={file?.id}
-                        materialType="file"
-                        key={index}
-                      />
-                    ))}
-                  </>
-                ) : (
-                  <EmptyStateCard 
-                    title="Du hast noch keine Dateien hochgeladen"
-                    text="Du kannst jetzt eigene Dateien hochladen und in deinem persönlichen Bereich ablegen."
-                    variant="For-small-areas"
-                    button={{
-                      content: "Zu deinen Dateien",
-                      onClick: async () => router.push(paths.personalSpace, {
-                        pathname: paths.personalSpace,
-                        query: { category: "materials" }
-                      })
-                    }}
-                  />
-                )}
+                <MaterialsExcerpt allUserData={allUserData}/>
               </div>
-              {uploadedFilesCount > 6 && (
+              {allUserData.length > 6 && (
                 <Link href={`${paths.personalSpace}?category=materials`}>
                   <Button<"button"> styleType="secondarySimple">
-                    Alle anzeigenl
+                    Alle anzeigen
                   </Button>
                 </Link>
               )}
             </div>
-          )
-        : null}
+          )}
+        </>
+      )}
     </div>
   );
 };
