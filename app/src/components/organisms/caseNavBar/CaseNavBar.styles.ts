@@ -41,13 +41,18 @@ export const tabs = css`
   gap: 16px;
   /* margin-left: 12px; */
 `;
-export const tab = ({ active, completed, theme }: {
+export const tab = ({
+  active,
+  completed,
+  isClickable,
+  theme
+}: {
   active: boolean;
-  completed?: boolean;
+  completed: boolean;
+  isClickable: boolean;
   theme: MantineTheme;
 }): SerializedStyles => css`
   color: ${active ? "blue" : "black"};
-
   display: flex;
   justify-content: center;
   align-items: center;
@@ -70,7 +75,7 @@ export const tab = ({ active, completed, theme }: {
     ? theme.colors["neutrals-01"][0]
     : theme.colors["cc-cases"][4]};
   }
-  cursor: pointer;
+  cursor: ${isClickable ? "pointer" : "not-allowed"};
 `;
 export const callToAction = css`
 margin-right: 12px;

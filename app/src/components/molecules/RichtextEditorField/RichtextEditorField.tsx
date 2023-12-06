@@ -76,7 +76,13 @@ export const RichtextEditorField: FC<RichtextEditorFieldProps> = ({
       <ContentWrapper>
         <RichTextEditor.Content/>
         {buttons && buttons.length > 0 && (
-          <div style={{ alignItems: "center", display: "flex", gap: 8 }}>
+          <div style={{
+            alignItems: "center",
+            display: "flex",
+            gap: 12,
+            justifyContent: "flex-end",
+            padding: 20,
+          }}>
             {buttons.map((button, index) => (
               <Button<"button">
                 key={index}
