@@ -9,8 +9,6 @@ import { useCallback, useEffect, useRef } from "react";
 
 if(typeof window !== "undefined")
 {
-  console.log("isTrackingEnabled", isTrackingEnabled);
-
   if(isTrackingEnabled)
   {
     posthog.init(env.NEXT_PUBLIC_POSTHOG_KEY, {
@@ -70,7 +68,7 @@ if(typeof window !== "undefined")
         await initFormbricks(
           {
             apiHost: env.NEXT_PUBLIC_FORMBRICKS_HOST,
-            debug: !isProduction,
+            debug: false,
             email,
             environmentId: isProduction
               ? env.NEXT_PUBLIC_FORMBRICKS_KEY_PRODUCTION

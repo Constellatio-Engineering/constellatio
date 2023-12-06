@@ -104,9 +104,9 @@ const ProfilePersonalSpaceBlock: FunctionComponent = () =>
                     {uploadedFilesInAllFolders.slice(0, 6).map((file, index) => (
                       <MaterialCard
                         title={file?.originalFilename}
-                        fileExtension={file?.fileExtension}
+                        materialsLabelTitle={file?.fileExtension}
                         id={file?.id}
-                        materialType="paper"
+                        materialType="file"
                         key={index}
                       />
                     ))}
@@ -133,7 +133,6 @@ const ProfilePersonalSpaceBlock: FunctionComponent = () =>
                   </Button>
                 </Link>
               )}
-              <FileViewer/>
             </div>
           )
         : null}

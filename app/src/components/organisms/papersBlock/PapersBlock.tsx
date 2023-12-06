@@ -26,7 +26,6 @@ const PapersBlock: FunctionComponent<PapersBlockProps> = ({ isLoading, selectedF
 
   return (
     <div css={styles.wrapper}>
-      <DocumentEditor/>
       <div css={styles.papersBlockHead}>
         <Title order={4}>Constellatio Docs <SubtitleText className="count" component="span" styleType="subtitle-01-medium">({documentsInSelectedFolder.length ?? 0})</SubtitleText>
         </Title>

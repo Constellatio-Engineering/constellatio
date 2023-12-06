@@ -3,6 +3,8 @@ import { RouterTransition } from "@/components/atoms/RouterTransition/RouterTran
 import FeedbackButton from "@/components/molecules/feedbackButton/FeedbackButton";
 import NewNotificationEarnedWatchdog from "@/components/molecules/newNotificationEarnedWatchdog/NewNotificationEarnedWatchdog";
 import ComputerRecommendedModal from "@/components/organisms/computerRecommendedModal/ComputerRecommendedModal";
+import FileViewer from "@/components/organisms/fileViewer/FileViewer";
+import DocumentEditor from "@/components/organisms/papersBlock/documentEditor/DocumentEditor";
 import SubscriptionModal from "@/components/organisms/subscriptionModal/SubscriptionModal";
 import { env } from "@/env.mjs";
 import { useTracking } from "@/hooks/useTracking";
@@ -26,7 +28,7 @@ import { useRouter } from "next/router";
 import { appWithTranslation } from "next-i18next";
 import { posthog } from "posthog-js";
 import { PostHogProvider } from "posthog-js/react";
-import {
+import React, {
   useEffect, type FunctionComponent, type ReactElement, type ReactNode
 } from "react";
 
@@ -133,6 +135,8 @@ const AppContainer: FunctionComponent<ConstellatioAppProps> = ({ Component, page
                     <NewNotificationEarnedWatchdog/>
                     <SubscriptionModal/>
                     <ComputerRecommendedModal/>
+                    <FileViewer/>
+                    <DocumentEditor/>
                     <FeedbackButton/>
                     <Layout Component={Component} pageProps={pageProps}/>
                   </MeilisearchProvider>

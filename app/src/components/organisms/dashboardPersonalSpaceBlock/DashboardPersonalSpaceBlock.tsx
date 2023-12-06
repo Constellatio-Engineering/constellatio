@@ -13,11 +13,10 @@ import { paths } from "@/utils/paths";
 
 import { Tabs } from "@mantine/core";
 import { useRouter } from "next/router";
-import React, { type FunctionComponent } from "react";
+import React, { Fragment, type FunctionComponent } from "react";
 
 import * as styles from "./DashboardPersonalSpaceBlock.styles";
 import EmptyStateCard from "../emptyStateCard/EmptyStateCard";
-import FileViewer from "../fileViewer/FileViewer";
 
 const DashboardPersonalSpaceBlock: FunctionComponent = () => 
 {
@@ -88,25 +87,23 @@ const DashboardPersonalSpaceBlock: FunctionComponent = () =>
         {switcherValue === "materials" && (
           <div css={styles.list}>
             {allUserData?.length > 0 ? allUserData.slice(0, 6).map((data) => (
-              <>
+              <Fragment key={data.id}>
                 {data.dataType === "file" ? (
                   <MaterialCard
-                    key={data.id}
-                    fileExtension={data.fileExtension}
+                    materialsLabelTitle={`.${data.fileExtension}`}
                     id={data.id}
                     materialType="file"
                     title={data.originalFilename}
                   />
                 ) : (
                   <MaterialCard
-                    key={data.id}
-                    fileExtension="CONSTELLATIO DOC"
-                    id={data?.id}
+                    materialsLabelTitle="CONSTELLATIO DOC"
                     materialType="paper"
                     title={data.name}
+                    doc={data}
                   />
                 )}
-              </>
+              </Fragment>
             )) : (
               <div css={styles.emptyCard}>
                 <EmptyStateCard
@@ -126,7 +123,6 @@ const DashboardPersonalSpaceBlock: FunctionComponent = () =>
           </div>
         )}
       </div>
-      <FileViewer/>
     </div>
   );
 };

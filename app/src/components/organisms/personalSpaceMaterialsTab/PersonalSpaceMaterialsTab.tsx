@@ -36,9 +36,6 @@ const PersonalSpaceMaterialsTab: FunctionComponent = () =>
             selectedFolderId={selectedFolderId}
           />
           <FileUploadMenu uploads={uploads}/>
-          {selectedFileIdForPreview && (
-            <FileViewer/>
-          )}
         </div>
       </div>
     </div>
