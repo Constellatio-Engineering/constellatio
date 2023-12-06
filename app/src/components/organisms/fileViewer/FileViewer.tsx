@@ -1,4 +1,3 @@
-
 import CaisyImg from "@/basic-components/CaisyImg";
 import useSignedGetUrl from "@/hooks/useSignedGetUrl";
 import useMaterialsStore from "@/stores/materials.store";
@@ -10,13 +9,13 @@ import * as styles from "./FileViewer.styles";
 
 const FileViewer: FunctionComponent = () => 
 {
-  // const { selectedFileIdForPreview: fileId, setShowFileViewerModal, showFileViewerModal } = useMaterialsStore();
   const fileId = useMaterialsStore(s => s.selectedFileIdForPreview);
   const setShowFileViewerModal = useMaterialsStore(s => s.setShowFileViewerModal);
   const showFileViewerModal = useMaterialsStore(s => s.showFileViewerModal);
   const { isLoading: isGetUrlLoading, url: fileUrl } = useSignedGetUrl(fileId);
   const [fileType, setFileType] = useState<string | null>(null);
   const [extensionState, setExtensionState] = useState<string | null>(null);
+
   useEffect(() => 
   {
     const getFileType = (url: string): string | null => 
@@ -107,7 +106,13 @@ const FileViewer: FunctionComponent = () =>
       closeOnClickOutside
       closeOnEscape
       styles={styles.modalStyles({ extensionState })}>
-      {!isGetUrlLoading ? <div css={styles.wrapper}>{renderFile()}</div> : "Loading..."}
+      {isGetUrlLoading ? (
+        "Wird geladen..."
+      ) : (
+        <div css={styles.wrapper}>
+          {renderFile()}
+        </div>
+      )}
     </Modal>
   );
 

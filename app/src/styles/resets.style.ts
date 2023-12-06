@@ -90,9 +90,6 @@ export const resetStyles = css`
   body {
     line-height: 1;
   }
-  ol,  ul {
-    list-style: none;
-  }
   table {
     border-collapse: collapse;
     border-spacing: 0;
