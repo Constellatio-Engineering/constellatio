@@ -1,4 +1,3 @@
-
 import CountLabel from "@/components/atoms/countLabel/CountLabel";
 import { ArrowRight } from "@/components/Icons/ArrowRight";
 import { paths } from "@/utils/paths";
@@ -26,18 +25,18 @@ const ProgressCard: FunctionComponent<ProgressCardProps> = ({
 }) => 
 {
   return (
-    <div css={styles.wrapper}>
+    <Link
+      href={`${paths.cases}?category=${slugFormatter(title.replaceAll(" ", ""))}`}
+      css={styles.wrapper}>
       {icon && <div css={styles.icon}>{icon}</div>}
       {title && <div><Title order={3}>{title}</Title></div>}
       {total != null && (
         <CountLabel count={completed} total={total} variant="cases"/>
       )}
-      <Link
-        href={`${paths.cases}?category=${slugFormatter(title.replaceAll(" ", ""))}`}
-        css={styles.link}>
+      <p css={styles.link}>
         Zur Fallübersicht<ArrowRight/>
-      </Link>
-    </div>
+      </p>
+    </Link>
   );
 };
 
