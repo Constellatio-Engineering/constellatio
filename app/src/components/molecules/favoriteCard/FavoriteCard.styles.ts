@@ -1,27 +1,36 @@
-import { css } from "@emotion/react";
-import { type MantineTheme } from "@mantine/styles";
+import { colors } from "@/constants/styles/colors";
 
-export const wrapper = (theme: MantineTheme) => css`
-  background: ${theme.colors["neutrals-01"][0]};
-  padding: 20px;
+import { css } from "@emotion/react";
+
+export const wrapper = css`
+  background: ${colors["neutrals-01"][0]};
   flex: 1;
   min-width: 270px;
   max-width: 314px;
   height: 160px;
   border-radius: 12px;
+  border: 1px solid ${colors["neutrals-01"][4]};
+`;
+
+export const wrapperLoading = css`
+  
+`;
+
+export const wrapperLoaded = css`
+  cursor: pointer;
   display: flex;
+  padding: 20px;
   flex-direction: column;
   justify-content: space-between;
-  cursor: pointer;
   align-items: flex-start;
-  border: 1px solid ${theme.colors["neutrals-01"][4]};
   &:hover {
-    background: ${theme.colors["neutrals-01"][1]};
+    background: ${colors["neutrals-01"][1]};
   }
   &:active {
-    background: ${theme.colors["neutrals-01"][2]};
+    background: ${colors["neutrals-01"][2]};
   }
 `;
+
 export const tags = css`
   display: flex;
   justify-content: space-between;

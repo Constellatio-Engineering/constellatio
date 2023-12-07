@@ -42,7 +42,7 @@ const DashboardPersonalSpaceBlock: FunctionComponent = () =>
         </div>
         <div css={styles.list}>
           {switcherValue === "favorites" && (
-            <FavoritesExcerpt favorites={favoritesList}/>
+            <FavoritesExcerpt favorites={favoritesList} shouldSortByCreatedAt/>
           )}
           {switcherValue === "materials" && (
             <MaterialsExcerpt allUserData={allUserData}/>

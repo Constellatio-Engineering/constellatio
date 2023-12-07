@@ -1,18 +1,20 @@
 import { Button } from "@/components/atoms/Button/Button";
 import DashboardLastEditedBlockHeader from "@/components/molecules/dashboardLastEditedBlockHeader/DashboardLastEditedBlockHeader";
 import FavoritesExcerpt from "@/components/organisms/favoritesExcerpt/FavoritesExcerpt";
-import useAllFavorites from "@/hooks/useAllFavorites";
+import { useLastViewedArticles } from "@/hooks/useLastViewedArticles";
+import { useLastViewedCases } from "@/hooks/useLastViewedCases";
+import { paths } from "@/utils/paths";
 
 import { Title } from "@mantine/core";
+import Link from "next/link";
 import React, { type FunctionComponent } from "react";
 
 import * as styles from "./DashboardLastEditedBlock.styles";
 
 const DashboardLastEditedBlock: FunctionComponent = () =>
 {
-  const { favoritesList } = useAllFavorites();
-  const favoriteCases = favoritesList.filter((favorite) => favorite.__typename === "Case");
-  const favoriteArticles = favoritesList.filter((favorite) => favorite.__typename === "Article");
+  const { isLoading: isLastViewedCasesLoading, lastViewedCases } = useLastViewedCases();
+  const { isLoading: isLastViewedArticlesLoading, lastViewedArticles } = useLastViewedArticles();
 
   return (
     <div css={styles.wrapper}>
@@ -22,36 +24,44 @@ const DashboardLastEditedBlock: FunctionComponent = () =>
           alignItems: "center", display: "flex", gap: 12, justifyContent: "space-between" 
         }}>
           <Title order={3}>Fälle</Title>
-          <Button<"button">
-            styleType="secondarySimple"
-            type="button"
-            size="large">
-            Alle Fälle
-          </Button>
+          <Link href={`${paths.cases}`}>
+            <Button<"button">
+              styleType="secondarySimple"
+              type="button"
+              size="large">
+              Alle Fälle
+            </Button>
+          </Link>
         </div>
         <div css={styles.list}>
-          {favoriteCases.length === 0 ? (
+          {(!isLastViewedCasesLoading && lastViewedCases.length === 0) ? (
             <p>Du hast bisher noch keine Fälle bearbeitet.</p>
           ) : (
-            <FavoritesExcerpt favorites={favoriteCases}/>
+            <FavoritesExcerpt
+              favorites={lastViewedCases}
+              shouldSortByCreatedAt={false}
+              isLoading={isLastViewedCasesLoading}
+            />
           )}
         </div>
         <div style={{
           alignItems: "center", display: "flex", gap: 12, justifyContent: "space-between", marginTop: 40
         }}>
           <Title order={3}>Lexikon</Title>
-          <Button<"button">
-            styleType="secondarySimple"
-            type="button"
-            size="large">
-            Alle Artikel
-          </Button>
+          <Link href={`${paths.dictionary}`}>
+            <Button<"button">
+              styleType="secondarySimple"
+              type="button"
+              size="large">
+              Alle Artikel
+            </Button>
+          </Link>
         </div>
         <div css={styles.list}>
-          {favoriteArticles.length === 0 ? (
+          {(!isLastViewedArticlesLoading && lastViewedArticles.length === 0) ? (
             <p>Du hast bisher noch keine Artikel angesehen.</p>
           ) : (
-            <FavoritesExcerpt favorites={favoriteArticles}/>
+            <FavoritesExcerpt favorites={lastViewedArticles} shouldSortByCreatedAt={false} isLoading={isLastViewedArticlesLoading}/>
           )}
         </div>
       </div>

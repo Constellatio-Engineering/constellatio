@@ -11,11 +11,24 @@ import * as styles from "./FavoritesExcerpt.styles";
 
 type Props = {
   readonly favorites: Nullable<Favorites>;
+  readonly isLoading?: boolean;
+  readonly shouldSortByCreatedAt: boolean;
 };
 
-const FavoritesExcerpt: FunctionComponent<Props> = ({ favorites }) =>
+const FavoritesExcerpt: FunctionComponent<Props> = ({ favorites, isLoading = false, shouldSortByCreatedAt }) =>
 {
   const router = useRouter();
+
+  if(isLoading)
+  {
+    return (
+      <>
+        <FavoriteCard isLoading/>
+        <FavoriteCard isLoading/>
+        <FavoriteCard isLoading/>
+      </>
+    );
+  }
 
   if(!favorites)
   {
@@ -39,12 +52,17 @@ const FavoritesExcerpt: FunctionComponent<Props> = ({ favorites }) =>
     ); 
   }
 
+  if(shouldSortByCreatedAt)
+  {
+    favorites.sort((a, b) => new Date(b?._meta?.createdAt).getTime() - new Date(a?._meta?.createdAt).getTime());
+  }
+
   return favorites
-    .sort((a, b) => new Date(b?._meta?.createdAt).getTime() - new Date(a?._meta?.createdAt).getTime())
     .slice(0, 6)
     .map((favorite, i) => favorite?.title && (
       <FavoriteCard
         key={i}
+        isLoading={false}
         onClick={async () => router.push(`/${favorite?.__typename === "Case" ? "cases" : "dictionary"}/${favorite?.id}`)}
         title={favorite.title}
         variant={favorite?.__typename === "Case" ? "case" : "dictionary"}

@@ -50,6 +50,20 @@
       "when": 1700844751759,
       "tag": "0006_fixed_blue_blade",
       "breakpoints": true
+    },
+    {
+      "idx": 7,
+      "version": "5",
+      "when": 1701984346457,
+      "tag": "0007_needy_jamie_braddock",
+      "breakpoints": true
+    },
+    {
+      "idx": 8,
+      "version": "5",
+      "when": 1701984346968,
+      "tag": "0008_workable_kronos",
+      "breakpoints": true
     }
   ]
 }
