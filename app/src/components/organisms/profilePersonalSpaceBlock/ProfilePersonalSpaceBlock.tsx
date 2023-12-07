@@ -57,7 +57,7 @@ const ProfilePersonalSpaceBlock: FunctionComponent = () =>
             {(isUseBookmarksLoading || isUseCasesLoading || areArticlesLoading) ? (
               <Loader sx={{ margin: "0px" }}/>
             ) : (
-              <FavoritesExcerpt favorites={favoritesList}/>
+              <FavoritesExcerpt favorites={favoritesList} shouldSortByCreatedAt/>
             )}
           </div>
           {favoritesList && favoritesList?.length > 6 && (
