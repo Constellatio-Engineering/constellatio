@@ -12,6 +12,7 @@ export const wrapper = (theme: MantineTheme) => css`
     flex:1;
     min-width: 270px;
     border-right: 1px solid ${theme.colors["neutrals-01"][3]};
+    color: #000000;
     &:hover{
         background-color: ${theme.colors["neutrals-01"][1]};
     };
@@ -19,12 +20,14 @@ export const wrapper = (theme: MantineTheme) => css`
         background-color: ${theme.colors["neutrals-01"][2]};
     };
 `;
+
 export const link = (theme: MantineTheme) => css`
     color: ${theme.colors["neutrals-01"][9]};
     svg{
         vertical-align:middle;
     }
 `;
+
 export const icon = (theme: MantineTheme) => css`
     display:grid;
     place-items: center;

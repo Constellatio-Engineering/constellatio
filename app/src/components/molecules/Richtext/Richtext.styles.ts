@@ -3,6 +3,11 @@ import styled from "@emotion/styled";
 
 export const SRichtext = styled.div<{ stylesOverwrite?: SerializedStyles }>`
   ${({ theme }) => css`
+
+    > *:not(:not(:last-child) ~ *) {
+      padding-top: 0 !important;
+    }
+    
     > p,
     > ul p,
     > ol p {
@@ -96,6 +101,19 @@ export const SRichtext = styled.div<{ stylesOverwrite?: SerializedStyles }>`
       font-weight: 700;
     }
   }
+  
+  > h1, > h2 {
+    padding-top: 50px;
+}
+  
+  > h3 {
+    padding-top: 30px;
+  }
+  
+  > h4 {
+    padding-top: 20px;
+  }
+  
 
   > h2 {
     ${({ theme }) => ({ ...theme.headings.sizes.h2 })}

@@ -5,12 +5,13 @@ import useBookmarks from "./useBookmarks";
 import useCases from "./useCases";
 
 type Favorite = IGenArticle | IGenCase;
+export type Favorites = Favorite[];
 
 type UseAllFavorites = { 
   areArticlesLoading: boolean;
   bookmarkedArticles: IGenArticle[];
   bookmarkedCases: IGenCase[];
-  favoritesList: Favorite[];
+  favoritesList: Favorites;
   isUseBookmarksLoading: boolean;
   isUseCasesLoading: boolean;
 };
@@ -24,13 +25,13 @@ const useAllFavorites = (): UseAllFavorites =>
   const { allArticles = [], isLoading: areArticlesLoading } = useArticles(); 
   const allArticlesBookmarks = bookmarks.filter(bookmark => bookmark?.resourceType === "article") ?? [];
   const bookmarkedArticles = allArticles.filter((caisyArticle: IGenArticle) => allArticlesBookmarks.some(bookmark => bookmark.resourceId === caisyArticle.id));
-  const favoritesList: Favorite[] = [...bookmarkedCases, ...bookmarkedArticles];
-    
+  const favoritesList: Favorites = [...bookmarkedCases, ...bookmarkedArticles];
+
   return {
     areArticlesLoading,
     bookmarkedArticles,
     bookmarkedCases, 
-    favoritesList, 
+    favoritesList,
     isUseBookmarksLoading, 
     isUseCasesLoading
   };

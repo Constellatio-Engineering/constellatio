@@ -5,7 +5,7 @@ export const wrapper = css`
   justify-content: flex-start;
   align-items: stretch;
   gap:140px;
-  
+
   @media screen and (max-width: 1200px) {
     gap:24px;
     flex-direction: column;
@@ -17,8 +17,4 @@ export const list = css`
   display: flex;
   gap: 16px;
   flex-wrap: wrap;
-`;
-
-export const switcher = css`
-  width:min-content;
 `;

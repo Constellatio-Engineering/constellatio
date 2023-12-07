@@ -2,13 +2,10 @@ import { Svg } from "@/basic-components/SVG/Svg";
 import ItemBlock from "@/components/organisms/caseBlock/ItemBlock";
 import DocsTable from "@/components/organisms/docsTable/DocsTable";
 import EmptyStateCard from "@/components/organisms/emptyStateCard/EmptyStateCard";
-import FileViewer from "@/components/organisms/fileViewer/FileViewer";
-import DocumentEditor from "@/components/organisms/papersBlock/documentEditor/DocumentEditor";
 import SearchPapersBlock from "@/components/organisms/searchPapersBlock/SearchPapersBlock";
 import UploadedMaterialTable from "@/components/organisms/uploadedMaterialTable/UploadedMaterialTable";
 import useSearchResults, { type SearchResultsKey, type SearchResults } from "@/hooks/useSearchResults";
 import { type IGenArticleOverviewFragment, type IGenFullCaseFragment } from "@/services/graphql/__generated/sdk";
-import useMaterialsStore from "@/stores/materials.store";
 import { type ArticleSearchIndexItem, type CaseSearchIndexItem } from "@/utils/search";
 import { type CommonKeysInTypes } from "@/utils/types";
 
@@ -26,7 +23,6 @@ const SearchPageResults: FunctionComponent<Props> = ({ tabQuery }) =>
 {
   const { searchResults } = useSearchResults();
   const router = useRouter();
-  const { selectedFileIdForPreview } = useMaterialsStore();
 
   const NoResultsFound = (
     <EmptyStateCard
@@ -119,55 +115,47 @@ const SearchPageResults: FunctionComponent<Props> = ({ tabQuery }) =>
         (searchResults.userUploads?.length > 0 || searchResults.userDocuments?.length > 0) ? (
           <div css={styles.searchPageResults}>
             {searchResults.userDocuments?.length > 0 && (
-              <>
-                <SearchPapersBlock
-                  variant="userDocuments"
-                  table={(
-                    <DocsTable
-                      docs={searchResults.userDocuments.map(doc => ({
-                        content: doc.content,
-                        createdAt: new Date(doc.createdAt),
-                        folderId: doc.folderId,
-                        id: doc.id,
-                        name: doc.name,
-                        updatedAt: new Date(doc.updatedAt),
-                        userId: doc.userId
-                      }))}
-                    />
-                  )}
-                  numberOfTableItems={searchResults.userDocuments?.length}
-                />
-                <DocumentEditor/>
-              </>
+              <SearchPapersBlock
+                variant="userDocuments"
+                table={(
+                  <DocsTable
+                    docs={searchResults.userDocuments.map(doc => ({
+                      content: doc.content,
+                      createdAt: new Date(doc.createdAt),
+                      folderId: doc.folderId,
+                      id: doc.id,
+                      name: doc.name,
+                      updatedAt: new Date(doc.updatedAt),
+                      userId: doc.userId
+                    }))}
+                  />
+                )}
+                numberOfTableItems={searchResults.userDocuments?.length}
+              />
             )}
             {searchResults.userUploads?.length > 0 && (
-              <>
-                <SearchPapersBlock
-                  variant="userUploads"
-                  table={(
-                    <UploadedMaterialTable
-                      uploadedFiles={searchResults.userUploads.map(file => ({
-                        contentType: file.contentType,
-                        createdAt: new Date(file.createdAt),
-                        fileExtension: file.fileExtension,
-                        folderId: file.folderId,
-                        id: file.id,
-                        note: null,
-                        notes: [],
-                        originalFilename: file.originalFilename,
-                        serverFilename: "",
-                        sizeInBytes: 1,
-                        userId: file.userId
-                      }))}
-                      variant="searchPapers"
-                    />
-                  )}
-                  numberOfTableItems={searchResults.userUploads?.length}
-                />
-                {selectedFileIdForPreview && (
-                  <FileViewer/>
+              <SearchPapersBlock
+                variant="userUploads"
+                table={(
+                  <UploadedMaterialTable
+                    uploadedFiles={searchResults.userUploads.map(file => ({
+                      contentType: file.contentType,
+                      createdAt: new Date(file.createdAt),
+                      fileExtension: file.fileExtension,
+                      folderId: file.folderId,
+                      id: file.id,
+                      note: null,
+                      notes: [],
+                      originalFilename: file.originalFilename,
+                      serverFilename: "",
+                      sizeInBytes: 1,
+                      userId: file.userId
+                    }))}
+                    variant="searchPapers"
+                  />
                 )}
-              </>
+                numberOfTableItems={searchResults.userUploads?.length}
+              />
             )}
           </div>
         ) : NoResultsFound

@@ -17,9 +17,9 @@ const MaterialsLabel: FunctionComponent<MaterialsLabelProps> = ({ title, variant
   return (
     <div css={styles.wrapper}>
       {variant === "paper" ? (
-        <MoveDownIcon/>
-      ) : (
         <NoteIcon/>
+      ) : (
+        <MoveDownIcon/>
       )}
       <CaptionText styleType="caption-01-medium">{title}</CaptionText>
     </div>

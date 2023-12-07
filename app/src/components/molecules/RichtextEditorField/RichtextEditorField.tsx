@@ -68,17 +68,21 @@ export const RichtextEditorField: FC<RichtextEditorFieldProps> = ({
         <RichTextEditor.ControlsGroup>
           <RichTextEditor.BulletList/>
           <RichTextEditor.OrderedList/>
-        </RichTextEditor.ControlsGroup>
-        {variant === "with-legal-quote" && (
-          <RichTextEditor.ControlsGroup className="blockquote-control">
+          {variant === "with-legal-quote" && (
             <RichTextEditor.Blockquote/>
-          </RichTextEditor.ControlsGroup>
-        )}
+          )}
+        </RichTextEditor.ControlsGroup>
       </RichTextEditor.Toolbar>
       <ContentWrapper>
         <RichTextEditor.Content/>
         {buttons && buttons.length > 0 && (
-          <div style={{ alignItems: "center", display: "flex", gap: 8 }}>
+          <div style={{
+            alignItems: "center",
+            display: "flex",
+            gap: 12,
+            justifyContent: "flex-end",
+            padding: 20,
+          }}>
             {buttons.map((button, index) => (
               <Button<"button">
                 key={index}

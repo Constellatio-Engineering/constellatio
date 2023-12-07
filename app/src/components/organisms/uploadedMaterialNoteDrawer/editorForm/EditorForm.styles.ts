@@ -2,6 +2,13 @@ import { css } from "@emotion/react";
 import { type MantineTheme } from "@mantine/styles";
 // import { Karla } from "next/font/google";
 
+export const form = css`
+  height: calc(100vh - 148px);
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+`;
+
 export const MaterialNoteRichText = css`
   margin: 24px 32px;
 `;
@@ -17,6 +24,7 @@ export const MaterialNotesCallToAction = (theme: MantineTheme) => css`
   gap: 12px;
   background: ${theme.colors["neutrals-01"][0]};
   border-top: 1px solid ${theme.colors["neutrals-01"][3]};
+
   button {
     flex: 1;
   }
@@ -26,6 +34,7 @@ export const existingNote = (theme: MantineTheme) => css`
   padding: 24px 32px;
   background-color: ${theme.colors["neutrals-01"][0]};
   min-height: 78vh;
+
   .deleteNoteBlock {
     position: absolute;
     top: 0px;
@@ -38,11 +47,10 @@ export const existingNote = (theme: MantineTheme) => css`
     place-items: center;
     align-items: center;
     justify-content: center;
-    background: linear-gradient(
-      to bottom,
-      ${theme.colors["neutrals-01"][0]} 20%,
-      rgba(255, 255, 255, 0.5) 100%
-    );
+    background: linear-gradient(to bottom,
+    ${theme.colors["neutrals-01"][0]} 20%,
+    rgba(255, 255, 255, 0.5) 100%);
+
     button {
       margin-right: 8px;
     }
@@ -51,21 +59,24 @@ export const existingNote = (theme: MantineTheme) => css`
 export const existingNoteActions = (theme: MantineTheme) => css`
   background: ${theme.colors["neutrals-01"][0]};
   margin-bottom: 24px;
+
   button {
     margin-right: 8px;
   }
+
   svg {
     margin-right: 8px;
   }
 `;
 export const richtext = (theme: MantineTheme) => css`
   blockquote {
-    padding:20px;
+    padding: 20px;
     background: ${theme.colors["neutrals-01"][1]};
     border: 1px solid ${theme.colors["neutrals-01"][3]};
     border-radius: 12px;
     margin: 24px 0;
-    &::before{
+
+    &::before {
       background-image: url("/images/icons/quote-icon.svg");
       background-repeat: no-repeat;
       content: "";
@@ -74,12 +85,15 @@ export const richtext = (theme: MantineTheme) => css`
       width: 20px;
     }
   }
-  ul{
+
+  ul {
     list-style: disc;
   }
-  ol{
+
+  ol {
     list-style: decimal;
-    li{
+
+    li {
       /* font-family: Karla; */
     }
   }

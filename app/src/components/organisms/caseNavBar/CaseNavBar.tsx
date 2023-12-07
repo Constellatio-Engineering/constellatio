@@ -2,6 +2,7 @@ import { CaptionText } from "@/components/atoms/CaptionText/CaptionText";
 import { Check } from "@/components/Icons/Check";
 import { type CaseProgressState } from "@/db/schema";
 import useCaseSolvingStore, { type CaseStepIndex } from "@/stores/caseSolving.store";
+import { getCaseProgressStateAsNumber } from "@/utils/case";
 
 import { useMantineTheme } from "@mantine/core";
 import React, { type FunctionComponent } from "react";
@@ -38,15 +39,18 @@ const CaseNavBar: FunctionComponent<ICaseNavBarProps> = ({ caseProgressState, ca
               return null;
             }
 
+            const isClickable = index <= getCaseProgressStateAsNumber(caseProgressState);
+
             return (
               <CaptionText
                 tt="uppercase"
                 component="p"
                 key={index}
-                onClick={() => onStepClick(index)}
+                onClick={isClickable ? () => onStepClick(index) : undefined}
                 css={styles.tab({
                   active: index === caseStepIndex,
                   completed: index < caseStepIndex,
+                  isClickable,
                   theme,
                 })}
                 variant="caseNavBar"
