@@ -1,3 +1,5 @@
+import { headerHeightPx } from "@/components/organisms/Header/Header.styles";
+
 import { type SerializedStyles, css } from "@emotion/react";
 import { type MantineTheme } from "@mantine/styles";
 
@@ -7,15 +9,16 @@ const DictionaryCSS = css`
   max-width: 100%;
 `;
 
-export const componentArea = ({ theme, variant }: {theme: MantineTheme;variant: "case"|"dictionary"}): SerializedStyles => css`
- background-color: ${theme.colors["neutrals-01"][0]};
- border-bottom: 6px solid ${theme.colors["neutrals-01"][4]};
- position: sticky;
-  top: ${variant === "case" ? "0px" : "60px"};
+export const componentArea = ({ theme }: {theme: MantineTheme}): SerializedStyles => css`
+  background-color: ${theme.colors["neutrals-01"][0]};
+  border-bottom: 6px solid ${theme.colors["neutrals-01"][4]};
+  position: sticky;
+  top: ${headerHeightPx}px;
   z-index: 41;
+  border-top: 1px solid #e8e8e8;
   width: 100%;
   padding: 0px 60px;
-  `;
+`;
 
 export const wrapper = ({ variant }: {
   variant: "case" | "dictionary";
@@ -27,7 +30,7 @@ export const wrapper = ({ variant }: {
   max-width: 1440px;
   margin: 0 auto;  
   padding:16px 0px;
-  ${variant === "dictionary" && DictionaryCSS}
+  ${variant === "dictionary" && DictionaryCSS};
 
   @media (max-width: 800px) {
     padding: 16px 0px;

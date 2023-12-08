@@ -29,7 +29,7 @@ const CaseNavBar: FunctionComponent<ICaseNavBarProps> = ({ caseProgressState, ca
 
   // TODO: utilize progress bar
   return variant === "case" ? (
-    <div css={styles.componentArea({ theme, variant })}>
+    <div css={styles.componentArea({ theme })}>
       <div css={styles.wrapper({ variant })}>
         <div css={styles.tabs}>
           {steps.map((stepText, index) =>
@@ -64,7 +64,7 @@ const CaseNavBar: FunctionComponent<ICaseNavBarProps> = ({ caseProgressState, ca
       </div>
     </div>
   ) : (
-    <div css={styles.componentArea({ theme, variant })}>
+    <div css={styles.componentArea({ theme })}>
       <div css={styles.wrapper({ variant })}>
         {caseProgressState === "completing-tests" && <div css={styles.progressBar({ progress: 0, theme, variant })}/>}
       </div>
