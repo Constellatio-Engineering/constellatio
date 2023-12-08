@@ -12,7 +12,8 @@ import { type AddOrRemoveBookmarkSchema } from "@/schemas/bookmarks/addOrRemoveB
 import { type Maybe, type IGenArticle } from "@/services/graphql/__generated/sdk";
 import { isTrackingEnabled } from "@/utils/env";
 
-import { Container, Title, useMantineTheme } from "@mantine/core";
+import { Button, Container, Title, useMantineTheme } from "@mantine/core";
+import { IconArrowBack, IconArrowLeft, IconArrowRight } from "@tabler/icons-react";
 import Link from "next/link";
 import { usePostHog } from "posthog-js/react";
 import React, { type FunctionComponent } from "react";
@@ -118,6 +119,24 @@ const CaseSolvingHeader: FunctionComponent<ICaseSolvingHeaderProps> = ({
           </div>
           <div css={styles.bodyCard}>
             <OverviewCard {...overviewCard}/>
+            {variant === "dictionary" && (
+              <div css={styles.navButtonsWrapper}>
+                <Button
+                  type="button"
+                  css={styles.navButton}
+                  leftIcon={<IconArrowLeft/>}
+                  variant="subtle">
+                  Voriger Artikel
+                </Button>
+                <Button
+                  type="button"
+                  css={styles.navButton}
+                  rightIcon={<IconArrowRight/>}
+                  variant="outline">
+                  Nächster Artikel
+                </Button>
+              </div>
+            )}
           </div>
         </div>
       </Container>

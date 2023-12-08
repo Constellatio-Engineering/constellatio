@@ -78,10 +78,26 @@ export const bodyCard = css`
   width: 45%;
   min-width: 350px;
   max-width: 536px;
+  position: relative;
   @media (max-width: 1100px) {
     width: 100%;
   }
 `;
+
+export const navButtonsWrapper = css`
+  width: 100%;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+`;
+
+export const navButton = css`
+  color: #3b3b3b;
+  border-radius: 8px;
+  border: solid 1px rgba(0, 0, 0, 0.12);
+  background-color: rgba(255, 255, 255, 0.03);
+`;
+
 export const stepsBar = (theme: MantineTheme): SerializedStyles => css`
   position: relative;
   z-index: 2;
