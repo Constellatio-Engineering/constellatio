@@ -1,59 +1,93 @@
 import CaisyImg from "@/basic-components/CaisyImg";
+import { BodyText } from "@/components/atoms/BodyText/BodyText";
+import { Cross } from "@/components/Icons/Cross";
 import useSignedGetUrl from "@/hooks/useSignedGetUrl";
+import useUploadedFiles from "@/hooks/useUploadedFiles";
 import useMaterialsStore from "@/stores/materials.store";
 
-import { Modal, ScrollArea } from "@mantine/core";
-import React, { type FunctionComponent, useEffect, useState } from "react";
+import { Loader, Modal, ScrollArea, Title } from "@mantine/core";
+import Image from "next/image";
+import React, { type FunctionComponent, useMemo, useState } from "react";
 
+import { wrapperLoading } from "./FileViewer.styles";
 import * as styles from "./FileViewer.styles";
+
+export type FileType = "pdf" | "image" | "video" | "document" | false;
+
+const getFileExtension = (url: string | undefined): string | null =>
+{
+  if(!url)
+  {
+    return null;
+  }
+
+  // Extract the path from the URL
+  const path = new URL(url).pathname;
+
+  // Use regular expression to match the file extension
+  const match = path.match(/\.([a-z0-9]+)(?:[?#]|$)/i);
+
+  // Check if a match is found
+  if(match && match[1])
+  {
+    return match[1].toLowerCase();
+  }
+  else
+  {
+    // Return null if no file extension is found
+    return null;
+  }
+};
 
 const FileViewer: FunctionComponent = () => 
 {
+  const { uploadedFilesInAllFolders } = useUploadedFiles();
   const fileId = useMaterialsStore(s => s.selectedFileIdForPreview);
   const setShowFileViewerModal = useMaterialsStore(s => s.setShowFileViewerModal);
   const showFileViewerModal = useMaterialsStore(s => s.showFileViewerModal);
+  const file = uploadedFilesInAllFolders.find(file => file.id === fileId);
+  const [hasLoaded, setHasLoaded] = useState<boolean>(false);
   const { isLoading: isGetUrlLoading, url: fileUrl } = useSignedGetUrl(fileId);
-  const [fileType, setFileType] = useState<string | null>(null);
-  const [extensionState, setExtensionState] = useState<string | null>(null);
-
-  useEffect(() => 
+  const fileExtension = getFileExtension(fileUrl);
+  const fileType: FileType = useMemo(() =>
   {
-    const getFileType = (url: string): string | null => 
+    if(!fileExtension)
     {
-      const extension = url?.split("/")[5]?.split(".")[1]?.split("?")[0] || "";
-      if(extension === "pdf") 
-      {
-        setExtensionState("pdf");
-        return "pdf";
-      }
-      else if(["jpg", "jpeg", "png", "gif"].includes(extension.toLocaleLowerCase())) 
-      {
-        setExtensionState("img");
-        return "image";
-      }
-      else if(["mp4", "webm"].includes(extension.toLocaleLowerCase())) 
-      {
-        setExtensionState("vid");
-        return "video";
-      }
-      else if(["docx", "doc"].includes(extension.toLocaleLowerCase())) 
-      {
-        setExtensionState("doc");
-        return "document";
-      }
-      else 
-      {
-        setExtensionState(null);
-        return null;
-      }
-    };
-    const type = getFileType(fileUrl ?? "");
-    setFileType(type);
-  }, [fileUrl]);
+      return false;
+    }
 
-  const renderFile = (): React.ReactNode => 
+    if(fileExtension === "pdf")
+    {
+      return "pdf";
+    }
+    else if(["jpg", "jpeg", "png", "gif"].includes(fileExtension))
+    {
+      return "image";
+    }
+    else if(["mp4", "webm"].includes(fileExtension))
+    {
+      return "video";
+    }
+    else if(["docx", "doc"].includes(fileExtension))
+    {
+      return "document";
+    }
+    else
+    {
+      return false;
+    }
+  }, [fileExtension]);
+
+  const renderedFile = useMemo(() =>
   {
-    switch (fileType) 
+    if(!file)
+    {
+      return (
+        <p>Die Datei konnte nicht gefunden werden.</p>
+      );
+    }
+
+    switch (fileType)
     {
       case "pdf":
         return (
@@ -67,9 +101,9 @@ const FileViewer: FunctionComponent = () =>
       case "image":
         return (
           <CaisyImg
-            src={fileUrl ?? ""}
-            width="100%"
-            height="100%"
+            onLoad={() => setHasLoaded(true)}
+            src={fileUrl!}
+            alt={file.originalFilename}
           />
         );
       case "video":
@@ -90,30 +124,56 @@ const FileViewer: FunctionComponent = () =>
           </iframe>
         );
       default:
-        return <div>Unsupported file type</div>;
+        return <div>Unsupported file type {fileType}</div>;
     }
+  }, [file, fileType, fileUrl]);
+
+  const onClose = (): void =>
+  {
+    setHasLoaded(false);
+    setShowFileViewerModal(false);
   };
 
+  if(!file)
+  {
+    return null;
+  }
+
   return (
-    <Modal
-      lockScroll={false} 
-      radius={12}
-      centered 
-      opened={showFileViewerModal} 
-      onClose={() => setShowFileViewerModal(false)} 
-      withCloseButton={false}
-      scrollAreaComponent={ScrollArea.Autosize}
-      closeOnClickOutside
-      closeOnEscape
-      styles={styles.modalStyles({ extensionState })}>
-      {isGetUrlLoading ? (
-        "Wird geladen..."
-      ) : (
-        <div css={styles.wrapper}>
-          {renderFile()}
+    <>
+      {showFileViewerModal && (
+        <div css={styles.header}>
+          <BodyText styleType="body-01-medium">{file?.originalFilename}</BodyText>
+          <span style={{ cursor: "pointer" }} onClick={onClose}>
+            <Cross size={30}/>
+          </span>
         </div>
       )}
-    </Modal>
+      <Modal
+        lockScroll={false}
+        radius={12}
+        centered
+        opened={showFileViewerModal}
+        onClose={onClose}
+        withCloseButton={false}
+        scrollAreaComponent={ScrollArea.Autosize}
+        closeOnClickOutside
+        closeOnEscape
+        styles={styles.modalStyles({ fileType })}>
+        {(isGetUrlLoading) ? (
+          <div css={styles.loadingWrapper}>
+            <Loader size="md"/>
+          </div>
+        ) : (
+          <div css={[
+            styles.wrapper,
+            (fileType === "image" && !hasLoaded) && styles.wrapperLoading
+          ]}>
+            {renderedFile}
+          </div>
+        )}
+      </Modal>
+    </>
   );
 
 };
