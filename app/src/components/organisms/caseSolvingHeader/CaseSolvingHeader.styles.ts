@@ -109,6 +109,10 @@ export const navButton = css`
   }
 `;
 
+export const navButtonDisabled = css`
+  background-color: rgba(255, 255, 255, 0.03) !important;
+`;
+
 export const stepsBar = (theme: MantineTheme): SerializedStyles => css`
   position: relative;
   z-index: 2;

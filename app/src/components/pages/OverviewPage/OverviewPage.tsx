@@ -11,6 +11,7 @@ import {
   type IGenArticle,
   type IGenCaseOverviewFragment,
 } from "@/services/graphql/__generated/sdk";
+import { sortArticlesByTopic } from "@/utils/articles";
 
 import { parseAsString, useQueryState } from "next-usequerystate";
 import {
@@ -112,20 +113,7 @@ const OverviewPageContent: FunctionComponent<OverviewPageContentProps> = ({ cont
                 }
                 return a?.title?.localeCompare(b.title ?? "") ?? -1;
               })
-              : getAllArticlesOfLegalArea(item)?.sort((a, b) =>
-              {
-                const sortingA = a?.topic?.[0]?.sorting;
-                const sortingB = b?.topic?.[0]?.sorting;
-                if(sortingA === null || sortingA === undefined)
-                {
-                  return 1;
-                }
-                if(sortingB === null || sortingB === undefined)
-                {
-                  return -1;
-                }
-                return sortingA - sortingB;
-              }) || [];
+              : getAllArticlesOfLegalArea(item)?.sort(sortArticlesByTopic) || [];
 
             const completed = completeCases.filter(x => x?.legalArea?.id === item?.id)?.length;
 

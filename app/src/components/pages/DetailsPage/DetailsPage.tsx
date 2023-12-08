@@ -132,6 +132,8 @@ const DetailsPage: FunctionComponent<IDetailsPageProps> = ({ content, variant })
   const currentGameIndexInFullTextTasksJson = currentGame?.indexInFullTextTasksJson || 0;
   const mainCategorySlug = content?.mainCategoryField?.[0]?.slug;
 
+  console.log("content", content);
+
   return (
     <>
       <CaseSolvingHeader

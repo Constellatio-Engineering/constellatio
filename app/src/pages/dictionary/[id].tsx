@@ -3,6 +3,7 @@ import PageHead from "@/components/organisms/pageHead/PageHead";
 import DetailsPage from "@/components/pages/DetailsPage/DetailsPage";
 import { type NextPageWithLayout } from "@/pages/_app";
 import getAllArticles from "@/services/content/getAllArticles";
+import { getArticleById } from "@/services/content/getArticleById";
 import getArticlesOverviewProps, { type ArticleWithNextAndPreviousArticleId } from "@/services/content/getArticlesOverviewProps";
 
 import { type GetStaticPathsResult, type GetStaticProps, type GetStaticPaths } from "next";
@@ -37,8 +38,9 @@ type GetArticleDetailPagePropsResult = {
 
 export const getStaticProps: GetStaticProps<GetArticleDetailPagePropsResult, Params> = async ({ params }) =>
 {
+  const { article } = await getArticleById({ id: params?.id });
   const { allArticles } = await getArticlesOverviewProps();
-  const article = allArticles.find((article) => article.id === params?.id);
+  const articleFromAllArticle = allArticles.find((article) => article.id === params?.id);
 
   if(!article)
   {
@@ -49,7 +51,13 @@ export const getStaticProps: GetStaticProps<GetArticleDetailPagePropsResult, Par
   }
 
   return {
-    props: { article },
+    props: {
+      article: ({
+        ...article,
+        nextArticleId: articleFromAllArticle?.nextArticleId ?? null,
+        previousArticleId: articleFromAllArticle?.previousArticleId ?? null
+      })
+    },
     revalidate: 10
   };
 };

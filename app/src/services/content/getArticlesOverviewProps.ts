@@ -1,4 +1,6 @@
 /* eslint-disable @typescript-eslint/naming-convention */
+import { sortArticlesByTopic } from "@/utils/articles";
+
 import getAllArticles from "./getAllArticles";
 import {
   type IGenArticle,
@@ -58,6 +60,11 @@ const getArticlesOverviewProps = async (): Promise<IArticlesOverviewProps> =>
 
       articlesGroupedByLegalArea[legalAreaId]!.push(article);
     }
+
+    Object.keys(articlesGroupedByLegalArea).forEach((legalAreaId) =>
+    {
+      articlesGroupedByLegalArea[legalAreaId]!.sort((sortArticlesByTopic));
+    });
 
     const articlesWithNextAndPreviousArticleId = allArticlesRes.map((article) => 
     {
