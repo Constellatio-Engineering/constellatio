@@ -6,10 +6,11 @@ export const wrapper = ({ theme, variant }: {
   variant: "case" | "dictionary";
 }): SerializedStyles => css`
   position: relative;
-  padding :0 60px;
+  padding: 0 60px;
   background: ${variant === "case"
     ? theme.colors["cc-cases"][2]
     : theme.colors["cc-dictionary"][2]};
+
   #overlay-lines {
     position: absolute;
     inset: 0;
@@ -22,7 +23,7 @@ export const wrapper = ({ theme, variant }: {
     ? theme.colors["cc-cases"][2]
     : theme.colors["cc-dictionary"][2]};
   }
-  `;
+`;
 
 export const body = css`
   position: relative;
@@ -43,6 +44,7 @@ export const body = css`
 
 export const bodyText = (theme: MantineTheme): SerializedStyles => css`
   width: 45%;
+
   .icons-bar {
     display: flex;
     justify-content: flex-start;
@@ -50,22 +52,26 @@ export const bodyText = (theme: MantineTheme): SerializedStyles => css`
     flex-wrap: wrap;
     gap: 8px;
   }
+
   .bread-crumb {
     margin: 32px 0 8px 0;
+
     a {
       color: ${theme.colors["transparency-01"][5]};
       text-transform: uppercase;
     }
   }
+
   .title {
     color: ${theme.colors["transparency-02"][1]};
   }
+
   @media (max-width: 1100px) {
     width: 100%;
     .icons-bar {
-    justify-content: center;
-      }
-        }
+      justify-content: center;
+    }
+  }
 `;
 
 export const bodyCard = css`
@@ -85,11 +91,13 @@ export const stepsBar = (theme: MantineTheme): SerializedStyles => css`
   justify-content: space-between;
   align-items: center;
   display: flex;
+
   .steps {
     display: flex;
     gap: 8px;
     justify-content: flex-start;
     align-items: center;
+
     .step {
       outline: 1px solid red;
       display: flex;
@@ -111,5 +119,5 @@ export const stepsBar = (theme: MantineTheme): SerializedStyles => css`
 `;
 
 export const container = css`
-max-width: 1440px;
+  max-width: 1440px;
 `;

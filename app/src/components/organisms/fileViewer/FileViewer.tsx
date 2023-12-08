@@ -5,11 +5,9 @@ import useSignedGetUrl from "@/hooks/useSignedGetUrl";
 import useUploadedFiles from "@/hooks/useUploadedFiles";
 import useMaterialsStore from "@/stores/materials.store";
 
-import { Loader, Modal, ScrollArea, Title } from "@mantine/core";
-import Image from "next/image";
+import { Loader, Modal, ScrollArea } from "@mantine/core";
 import React, { type FunctionComponent, useMemo, useState } from "react";
 
-import { wrapperLoading } from "./FileViewer.styles";
 import * as styles from "./FileViewer.styles";
 
 export type FileType = "pdf" | "image" | "video" | "document" | false;
