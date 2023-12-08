@@ -42,6 +42,10 @@ export const body = css`
   }
 `;
 
+export const bodyArticles = css`
+  padding-bottom: 120px;
+`;
+
 export const bodyText = (theme: MantineTheme): SerializedStyles => css`
   width: 45%;
 
@@ -89,13 +93,20 @@ export const navButtonsWrapper = css`
   display: flex;
   justify-content: space-between;
   align-items: center;
+  position: absolute;
+  bottom: 25px;
+  left: 0;
+  z-index: 3;
 `;
 
 export const navButton = css`
   color: #3b3b3b;
   border-radius: 8px;
-  border: solid 1px rgba(0, 0, 0, 0.12);
+  border: solid 1px rgba(0, 0, 0, 0.10);
   background-color: rgba(255, 255, 255, 0.03);
+  &:hover, &:focus, &:active {
+    background-color: rgba(255, 255, 255, 0.15);
+  }
 `;
 
 export const stepsBar = (theme: MantineTheme): SerializedStyles => css`
@@ -136,4 +147,5 @@ export const stepsBar = (theme: MantineTheme): SerializedStyles => css`
 
 export const container = css`
   max-width: 1440px;
+  position: relative;
 `;

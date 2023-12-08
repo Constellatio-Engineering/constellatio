@@ -50,9 +50,7 @@ const OverviewPageContent: FunctionComponent<OverviewPageContentProps> = ({ cont
     ?.map((legalArea) => legalArea?.node)
     .filter((legalArea) => Boolean(legalArea)) || []) as IGenLegalArea[];
 
-  const getAllCasesOfLegalArea = (
-    item: IGenLegalArea
-  ): IGenCaseOverviewFragment[] =>
+  const getAllCasesOfLegalArea = (item: IGenLegalArea): IGenCaseOverviewFragment[] =>
   {
     if(content?.__typename !== "case")
     {

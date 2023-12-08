@@ -1,5 +1,4 @@
 /* eslint-disable max-lines */
-import { Button } from "@/components/atoms/Button/Button";
 import CaseCompleteTestsStep from "@/components/organisms/caseCompleteTestsStep/CaseCompleteTestsStep";
 import CaseNavBar from "@/components/organisms/caseNavBar/CaseNavBar";
 import CaseResultsReviewStep from "@/components/organisms/caseResultsReviewStep/CaseResultsReviewStep";
@@ -9,7 +8,8 @@ import useCaseProgress from "@/hooks/useCaseProgress";
 import useContextAndErrorIfNull from "@/hooks/useContextAndErrorIfNull";
 import useGamesProgress from "@/hooks/useGamesProgress";
 import { InvalidateQueriesContext } from "@/provider/InvalidateQueriesProvider";
-import { type IGenArticle, type IGenCase } from "@/services/graphql/__generated/sdk";
+import type { ArticleWithNextAndPreviousArticleId } from "@/services/content/getArticlesOverviewProps";
+import { type IGenCase } from "@/services/graphql/__generated/sdk";
 import useCaseSolvingStore, { type CaseStepIndex } from "@/stores/caseSolving.store";
 import { api } from "@/utils/api";
 import { getGamesFromCase } from "@/utils/case";
@@ -21,7 +21,7 @@ import * as styles from "./DetailsPage.styles";
 import ErrorPage from "../errorPage/ErrorPage";
 
 type IDetailsPageProps = {
-  readonly content: IGenCase | IGenArticle | undefined;
+  readonly content: IGenCase | ArticleWithNextAndPreviousArticleId | undefined;
   readonly variant: "case" | "dictionary";
 };
 
@@ -137,6 +137,8 @@ const DetailsPage: FunctionComponent<IDetailsPageProps> = ({ content, variant })
       <CaseSolvingHeader
         title={content?.title ?? ""}
         variant={variant}
+        previousArticleId={content?.__typename === "Article" ? content?.previousArticleId : null}
+        nextArticleId={content?.__typename === "Article" ? content?.nextArticleId : null}
         caseId={content?.id}
         pathSlugs={[
           {

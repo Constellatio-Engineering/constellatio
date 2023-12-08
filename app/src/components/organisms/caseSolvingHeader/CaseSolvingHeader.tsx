@@ -11,9 +11,11 @@ import useRemoveBookmark from "@/hooks/useRemoveBookmark";
 import { type AddOrRemoveBookmarkSchema } from "@/schemas/bookmarks/addOrRemoveBookmark.schema";
 import { type Maybe, type IGenArticle } from "@/services/graphql/__generated/sdk";
 import { isTrackingEnabled } from "@/utils/env";
+import { paths } from "@/utils/paths";
+import { type Nullable } from "@/utils/types";
 
 import { Button, Container, Title, useMantineTheme } from "@mantine/core";
-import { IconArrowBack, IconArrowLeft, IconArrowRight } from "@tabler/icons-react";
+import { IconArrowLeft, IconArrowRight } from "@tabler/icons-react";
 import Link from "next/link";
 import { usePostHog } from "posthog-js/react";
 import React, { type FunctionComponent } from "react";
@@ -29,16 +31,20 @@ interface IBreadcrumbItem
 export interface ICaseSolvingHeaderProps 
 {
   readonly caseId?: Maybe<string> | undefined;
+  readonly nextArticleId: Nullable<string>;
   readonly overviewCard: IOverviewCard;
   readonly pathSlugs?: IBreadcrumbItem[];
+  readonly previousArticleId: Nullable<string>;
   readonly title: string;
   readonly variant: "case" | "dictionary";
 }
 
 const CaseSolvingHeader: FunctionComponent<ICaseSolvingHeaderProps> = ({
   caseId,
+  nextArticleId,
   overviewCard,
   pathSlugs,
+  previousArticleId,
   title,
   variant
 }) => 
@@ -103,7 +109,7 @@ const CaseSolvingHeader: FunctionComponent<ICaseSolvingHeaderProps> = ({
         <div id="overlay-lines">
           <OverlayLines/>
         </div>
-        <div css={styles.body}>
+        <div css={[styles.body, variant === "dictionary" && styles.bodyArticles]}>
           <div css={styles.bodyText}>
             <div className="icons-bar">
               <IconButtonBar icons={icons}/>
@@ -119,26 +125,32 @@ const CaseSolvingHeader: FunctionComponent<ICaseSolvingHeaderProps> = ({
           </div>
           <div css={styles.bodyCard}>
             <OverviewCard {...overviewCard}/>
-            {variant === "dictionary" && (
-              <div css={styles.navButtonsWrapper}>
-                <Button
-                  type="button"
-                  css={styles.navButton}
-                  leftIcon={<IconArrowLeft/>}
-                  variant="subtle">
-                  Voriger Artikel
-                </Button>
-                <Button
-                  type="button"
-                  css={styles.navButton}
-                  rightIcon={<IconArrowRight/>}
-                  variant="outline">
-                  Nächster Artikel
-                </Button>
-              </div>
-            )}
           </div>
         </div>
+        {variant === "dictionary" && (
+          <div css={styles.navButtonsWrapper}>
+            <Button
+              type="button"
+              component={Link}
+              href={`${paths.dictionary}/${previousArticleId}`}
+              css={styles.navButton}
+              disabled={!previousArticleId}
+              leftIcon={<IconArrowLeft/>}
+              variant="outline">
+              Voriger Artikel
+            </Button>
+            <Button
+              type="button"
+              component={Link}
+              href={`${paths.dictionary}/${nextArticleId}`}
+              css={styles.navButton}
+              disabled={!nextArticleId}
+              rightIcon={<IconArrowRight/>}
+              variant="outline">
+              Nächster Artikel
+            </Button>
+          </div>
+        )}
       </Container>
     </div>
   );
