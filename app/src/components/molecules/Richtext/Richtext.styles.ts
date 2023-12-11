@@ -48,6 +48,7 @@ export const SRichtext = styled.div<{ stylesOverwrite?: SerializedStyles }>`
           width: 5px;
           min-width: 5px;
           height: 5px;
+          transform: translateY(-2px);
           min-height: 5px;
           border-radius: 50%;
         }

@@ -1,6 +1,8 @@
 /* eslint-disable max-lines */
 import { Button } from "@/components/atoms/Button/Button";
 import { SubtitleText } from "@/components/atoms/SubtitleText/SubtitleText";
+import { Cross } from "@/components/Icons/Cross";
+import { DownloadIcon } from "@/components/Icons/DownloadIcon";
 import {
   type FileExtension, fileExtensions, type FileMimeType, fileMimeTypes
 } from "@/db/schema";
@@ -47,6 +49,7 @@ const UploadedMaterialBlock: FunctionComponent<UploadedMaterialBlockProps> = ({
   const { invalidateUploadedFiles } = useContextAndErrorIfNull(InvalidateQueriesContext);
   const { mutateAsync: saveFileToDatabase } = api.uploads.saveFileToDatabase.useMutation();
   const { mutateAsync: createSignedUploadUrl } = api.uploads.createSignedUploadUrl.useMutation();
+  const [isUploadFormVisible, setIsUploadFormVisible] = useState<boolean>(false);
 
   const uploadFile = async ({ clientSideUuid, file, fileProps }: SelectedFile): Promise<void> =>
   {
@@ -187,12 +190,24 @@ const UploadedMaterialBlock: FunctionComponent<UploadedMaterialBlockProps> = ({
       <div css={styles.uploadedMaterialBlockHead} id="uploads">
         <Title order={4}>
           Hochgeladene Dateien{" "}
-          <SubtitleText className="count" component="span" styleType="subtitle-01-medium">
+          <SubtitleText
+            css={styles.filesCount}
+            className="count"
+            component="span"
+            styleType="subtitle-01-medium">
             ({uploadedFilesWithNotesInSelectedFolder.length ?? 0})
           </SubtitleText>
         </Title>
+        {uploadedFilesWithNotesInSelectedFolder.length > 0 && (
+          <Button<"button">
+            styleType="secondarySimple"
+            leftIcon={isUploadFormVisible ? <Cross/> : <DownloadIcon/>}
+            onClick={() => setIsUploadFormVisible((isVisible) => !isVisible)}>
+            {isUploadFormVisible ? "Schließen" : "Dateien hochladen"}
+          </Button>
+        )}
       </div>
-      <div css={styles.uploader}>
+      <div css={styles.uploader(uploadedFilesWithNotesInSelectedFolder.length === 0 || isUploadFormVisible)}>
         <form
           onSubmit={onSubmit}
           css={styles.badge}>

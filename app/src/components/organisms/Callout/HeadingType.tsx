@@ -1,8 +1,8 @@
 import { BodyText } from "@/components/atoms/BodyText/BodyText";
 import { AlertStoke } from "@/components/Icons/AlertStroke";
+import { Article } from "@/components/Icons/Article";
 import { Bookmark } from "@/components/Icons/Bookmark";
 import { MedalIcon } from "@/components/Icons/MedalIcon";
-import { PDFIcon } from "@/components/Icons/PDFIcon";
 import { Pen } from "@/components/Icons/Pen";
 import { Quote } from "@/components/Icons/Quote";
 import { StarIcon } from "@/components/Icons/StarIcon";
@@ -49,7 +49,7 @@ export const HeadingType: FunctionComponent<Pick<IGenCallout, "calloutType">> = 
     case "example": 
       return (
         <>
-          <PDFIcon/>
+          <Article/>
           <BodyText component="p" styleType="body-01-bold" tt="capitalize">Beispiel</BodyText>
         </>
       );

@@ -13,11 +13,12 @@ export interface HintsAccordionProps
 export const HintsAccordion: FC<HintsAccordionProps> = ({ items }) =>
 {
   const [value, setValue] = useState<string | null>(null);
+
   return (
     <Accordion onChange={setValue} value={value} styles={hintsAccordionStyles()}>
       <Accordion.Item value="hints">
         <Accordion.Control>
-          <BodyText styleType="body-01-regular" component="p">
+          <BodyText styleType="body-01-medium" component="p">
             {value ? "Antwort ausblenden" : "Antwort einblenden"}
           </BodyText>
         </Accordion.Control>
@@ -26,12 +27,12 @@ export const HintsAccordion: FC<HintsAccordionProps> = ({ items }) =>
             <ul>
               {items.map((item, index) => 
               {
-                const splittedItem = item.split(";");
+                const splitItem = item.split(";");
 
                 return (
                   <ItemWrapper key={index} index={index + 1}>
                     <BodyText styleType="body-01-regular" component="p">
-                      {splittedItem.map((answer) => answer.trim()).join(" oder ")}
+                      {splitItem.map((answer) => answer.trim()).join(" oder ")}
                     </BodyText>
                   </ItemWrapper>
                 );
