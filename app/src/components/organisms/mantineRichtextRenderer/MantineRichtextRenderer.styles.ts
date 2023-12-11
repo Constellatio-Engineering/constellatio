@@ -5,6 +5,9 @@ export const contentWrapper = (theme: MantineTheme) => css`
   background: ${theme.colors["neutrals-01"][0]};
   padding: 30px 0;
   min-height: calc(100vh - 255px);
+  > *:not(:not(:last-child) ~ *) {
+    margin-top: 0 !important;
+  }
   blockquote {
     *:last-child {
       margin-bottom: 0;
