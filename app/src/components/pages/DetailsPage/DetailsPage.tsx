@@ -158,6 +158,7 @@ const DetailsPage: FunctionComponent<IDetailsPageProps> = ({ content, variant })
         ]}
         overviewCard={{
           contentId,
+          contentTitle: content?.title,
           lastUpdated: content?._meta?.updatedAt,
           legalArea: content?.legalArea,
           progressState: caseProgress?.progressState,
