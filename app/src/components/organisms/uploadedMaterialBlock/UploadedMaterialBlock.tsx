@@ -33,7 +33,7 @@ export type SelectedFile = {
 type UploadedMaterialBlockProps = {
   readonly areUploadsInProgress: boolean;
   readonly fileInputRef: React.RefObject<HTMLInputElement>;
-  readonly selectedFolderId: string | null;
+  readonly selectedFolderId: string | null | undefined;
   readonly setUploadState: (newState: UploadState) => void;
 };
 
@@ -53,6 +53,12 @@ const UploadedMaterialBlock: FunctionComponent<UploadedMaterialBlockProps> = ({
 
   const uploadFile = async ({ clientSideUuid, file, fileProps }: SelectedFile): Promise<void> =>
   {
+    if(selectedFolderId === undefined)
+    {
+      console.error("Cannot upload file without selected folder");
+      return;
+    }
+
     if(selectedFiles.length === 0) 
     {
       console.log("no files selected");
@@ -198,14 +204,16 @@ const UploadedMaterialBlock: FunctionComponent<UploadedMaterialBlockProps> = ({
             ({uploadedFilesWithNotesInSelectedFolder.length ?? 0})
           </SubtitleText>
         </Title>
-        {uploadedFilesWithNotesInSelectedFolder.length > 0 && (
-          <Button<"button">
-            styleType="secondarySimple"
-            leftIcon={isUploadFormVisible ? <Cross/> : <DownloadIcon/>}
-            onClick={() => setIsUploadFormVisible((isVisible) => !isVisible)}>
-            {isUploadFormVisible ? "Schließen" : "Dateien hochladen"}
-          </Button>
-        )}
+        <div style={{ height: 40 }}>
+          {(uploadedFilesWithNotesInSelectedFolder.length > 0 && selectedFolderId !== undefined) && (
+            <Button<"button">
+              styleType="secondarySimple"
+              leftIcon={isUploadFormVisible ? <Cross/> : <DownloadIcon/>}
+              onClick={() => setIsUploadFormVisible((isVisible) => !isVisible)}>
+              {isUploadFormVisible ? "Schließen" : "Dateien hochladen"}
+            </Button>
+          )}
+        </div>
       </div>
       <div css={styles.uploader(uploadedFilesWithNotesInSelectedFolder.length === 0 || isUploadFormVisible)}>
         <form

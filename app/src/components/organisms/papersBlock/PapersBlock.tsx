@@ -14,26 +14,39 @@ import EmptyStateCard from "../emptyStateCard/EmptyStateCard";
 interface PapersBlockProps
 {
   readonly isLoading: boolean;
-  readonly selectedFolderId: string | null;
+  readonly selectedFolderId: string | null | undefined;
 }
 
 const PapersBlock: FunctionComponent<PapersBlockProps> = ({ isLoading, selectedFolderId }) =>
 {
   const setCreateDocumentState = useDocumentEditorStore(s => s.setCreateDocumentState);
   const { documentsInAllFolders, documentsInSelectedFolder } = useDocuments();
-  const onCreateDocument = (): void => setCreateDocumentState({ folderId: selectedFolderId });
+  const onCreateDocument = (): void =>
+  {
+    if(selectedFolderId === undefined)
+    {
+      console.error("Cannot create document without selected folder");
+      return;
+    }
+
+    setCreateDocumentState({ folderId: selectedFolderId });
+  };
 
   return (
     <div css={styles.wrapper}>
       <div css={styles.papersBlockHead}>
         <Title order={4}>Constellatio Docs <SubtitleText className="count" component="span" styleType="subtitle-01-medium">({documentsInSelectedFolder.length ?? 0})</SubtitleText>
         </Title>
-        <Button<"button">
-          styleType="secondarySimple" 
-          leftIcon={<NoteIcon/>}
-          onClick={onCreateDocument}>
-          Erstellen
-        </Button>
+        <div style={{ height: 40 }}>
+          {selectedFolderId !== undefined && (
+            <Button<"button">
+              styleType="secondarySimple"
+              leftIcon={<NoteIcon/>}
+              onClick={onCreateDocument}>
+              Erstellen
+            </Button>
+          )}
+        </div>
       </div>
       {!isLoading && (
         <>
