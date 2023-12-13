@@ -16,12 +16,8 @@ interface TRichtextOverwrite
 let RichtextOverwrite: FC<TRichtextOverwrite> = ({ id, path, text }) => 
 {
   const gameState = useFillGapsGameStore((s) => s.getGameState(id))!;
-
   const updateUserAnswer = useFillGapsGameStore((s) => s.updateUserAnswer);
-
-  const updateCorrectAnswers = useFillGapsGameStore(
-    (s) => s.updateCorrectAnswer
-  );
+  const updateCorrectAnswers = useFillGapsGameStore((s) => s.updateCorrectAnswer);
 
   let inputCounter = 0;
 
@@ -46,24 +42,21 @@ let RichtextOverwrite: FC<TRichtextOverwrite> = ({ id, path, text }) =>
 
   // Splitting the text based on {{...}} pattern using regex
   const parts = useMemo(() => text?.split(/({{.*?}})/), [text]);
-  const innerContent = useMemo(
-    () =>
-      parts
-        ?.filter((part) => part.startsWith("{{") && part.endsWith("}}"))
-        .map((part) => part?.slice(2, -2)),
-    [parts]
+  const innerContent = useMemo(() => parts
+    ?.filter((part) => part.startsWith("{{") && part.endsWith("}}"))
+    .map((part) => part?.slice(2, -2)),
+  [parts]
   );
 
-  const createChangeHandler =
-    (index: number) => (e: ChangeEvent<HTMLInputElement>) => 
-    {
-      updateUserAnswer({
-        gameId: id,
-        index,
-        path,
-        value: e.target.value,
-      });
-    };
+  const createChangeHandler = (index: number) => (e: ChangeEvent<HTMLInputElement>) =>
+  {
+    updateUserAnswer({
+      gameId: id,
+      index,
+      path,
+      value: e.target.value,
+    });
+  };
 
   useEffect(() => 
   {
@@ -81,18 +74,14 @@ let RichtextOverwrite: FC<TRichtextOverwrite> = ({ id, path, text }) =>
     <div className="richtextOverwrite">
       {parts?.map((part, index) => 
       {
-        if(part.startsWith("{{") && part.endsWith("}}")) 
+        if(part.startsWith("{{") && part.endsWith("}}"))
         {
           const currentInputIndex = inputCounter;
           inputCounter++;
 
-          const answerValue =
-            userAnswers.find((answer) => answer.path === path)?.answers[currentInputIndex] || "";
-
-          const answerResultValue =
-            answerResult.find((answer) => answer.path === path)?.answersResult[currentInputIndex] || "";
-
-          const answerIndex = correctAnswersArr.findIndex((correctAnswer) => 
+          const answerValue = userAnswers.find((answer) => answer.path === path)?.answers[currentInputIndex] || "";
+          const answerResultValue = answerResult.find((answer) => answer.path === path)?.answersResult[currentInputIndex] || "";
+          const answerIndex = correctAnswersArr.findIndex((correctAnswer) =>
           {
             return (
               correctAnswer.trim() ===
@@ -101,22 +90,37 @@ let RichtextOverwrite: FC<TRichtextOverwrite> = ({ id, path, text }) =>
             );
           });
 
+          const correctAnswer = correctAnswersArr[answerIndex];
+
+          let correctAnswerLength: number | undefined;
+
+          if(correctAnswer?.includes(";"))
+          {
+            correctAnswerLength = correctAnswer.split(";")[0]?.length;
+          }
+          else
+          {
+            correctAnswerLength = correctAnswer?.length;
+          }
+
           return gameStatus === "inprogress" ? (
             <FillGapInput
               value={answerValue}
+              correctAnswerLength={correctAnswerLength}
               key={`${index}${currentInputIndex}}`}
               onChange={createChangeHandler(currentInputIndex)}
               status="default"
-              placeholder="ausfüllen"
+              placeholder=""
             />
           ) : (
             <FillGapInput
               value={answerValue}
+              correctAnswerLength={correctAnswerLength}
               key={`${index}${currentInputIndex}}`}
               onChange={createChangeHandler(currentInputIndex)}
               index={answerIndex + 1}
               status={answerResultValue === "correct" ? "success" : "error"}
-              placeholder="ausfüllen"
+              placeholder=""
             />
           );
         }
