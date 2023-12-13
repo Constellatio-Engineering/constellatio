@@ -55,16 +55,24 @@ const PapersBlock: FunctionComponent<PapersBlockProps> = ({ isLoading, selectedF
               <DocsTable docs={documentsInSelectedFolder}/>
             </div>
           ) : (
-            <EmptyStateCard
-              variant="For-small-areas"
-              title={documentsInAllFolders.length > 0 ? "Keine Constellatio Docs in diesem Ordner" : "Du hast noch keine Constellatio Docs erstellt"}
-              text="Constellatio Docs sind deine digitalen Textdateien, in denen du Anmerkungen, Zusammenfassungen und vieles Weitere direkt in der Cloud speichern kannst. Du kannst sie jederzeit als .pdf-Datei exportieren und herunterladen."
-              button={{
-                content: "Doc erstellen",
-                icon: <NoteIcon/>,
-                onClick: onCreateDocument
-              }}
-            />
+            <>
+              <EmptyStateCard
+                variant="For-small-areas"
+                title={
+                  selectedFolderId === undefined
+                    ? "Wähle einen Ordner aus, um dein erstes Constellatio Doc zu erstellen."
+                    : documentsInAllFolders.length > 0
+                      ? "Keine Constellatio Docs in diesem Ordner"
+                      : "Du hast noch keine Constellatio Docs erstellt"
+                }
+                text="Constellatio Docs sind deine digitalen Textdateien, in denen du Anmerkungen, Zusammenfassungen und vieles Weitere direkt in der Cloud speichern kannst. Du kannst sie jederzeit als .pdf-Datei exportieren und herunterladen."
+                button={selectedFolderId === undefined ? undefined : {
+                  content: "Doc erstellen",
+                  icon: <NoteIcon/>,
+                  onClick: onCreateDocument
+                }}
+              />
+            </>
           )}
         </>
       )}

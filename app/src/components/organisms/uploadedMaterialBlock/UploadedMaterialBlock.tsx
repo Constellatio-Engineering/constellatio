@@ -215,7 +215,7 @@ const UploadedMaterialBlock: FunctionComponent<UploadedMaterialBlockProps> = ({
           )}
         </div>
       </div>
-      <div css={styles.uploader(uploadedFilesWithNotesInSelectedFolder.length === 0 || isUploadFormVisible)}>
+      <div css={styles.uploader((uploadedFilesWithNotesInSelectedFolder.length === 0 || isUploadFormVisible) && selectedFolderId !== undefined)}>
         <form
           onSubmit={onSubmit}
           css={styles.badge}>
@@ -255,7 +255,7 @@ const UploadedMaterialBlock: FunctionComponent<UploadedMaterialBlockProps> = ({
         ) : (
           <EmptyStateCard
             variant="For-small-areas"
-            title="Du hast noch keine Dateien hochgeladen"
+            title={selectedFolderId === undefined ? "Wähle einen Ordner aus, um deine ersten Dateien hochzuladen." : "Du hast noch keine Dateien hochgeladen"}
             text="Hier kannst du all deine Lernmaterialien wie zum Beispiel Vorlesungsfolien, Screenshots, Scans oder Word-Dateien an einem Ort speichern und verlinken."
           />
         )}
