@@ -5,6 +5,7 @@ import FeedbackButton from "@/components/molecules/feedbackButton/FeedbackButton
 import NewNotificationEarnedWatchdog from "@/components/molecules/newNotificationEarnedWatchdog/NewNotificationEarnedWatchdog";
 import SubscriptionModal from "@/components/organisms/subscriptionModal/SubscriptionModal";
 import { env } from "@/env.mjs";
+import { useFeedback } from "@/hooks/useFeedback";
 import { useTracking } from "@/hooks/useTracking";
 import { supabase } from "@/lib/supabase";
 import AuthStateProvider from "@/provider/AuthStateProvider";
@@ -68,6 +69,7 @@ const AppContainer: FunctionComponent<ConstellatioAppProps> = ({ Component, page
   let pageTitle = appTitle;
 
   useTracking();
+  useFeedback();
 
   useEffect(() =>
   {
