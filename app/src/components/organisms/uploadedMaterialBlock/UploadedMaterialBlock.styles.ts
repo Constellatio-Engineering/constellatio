@@ -1,3 +1,5 @@
+import { colors } from "@/constants/styles/colors";
+
 import { css } from "@emotion/react";
 import { type MantineTheme } from "@mantine/styles";
 
@@ -10,14 +12,20 @@ export const wrapper = (theme: MantineTheme) => css`
 
 export const uploadedMaterialBlockHead = (theme: MantineTheme) => css`
   color: ${theme.colors["neutrals-02"][0]};
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
   span {
-    color: ${theme.colors["neutrals-01"][7]};
   }
   h4{
     color: ${theme.colors["neutrals-02"][1]};
   }
   padding: 24px;
   border-bottom: 1px solid ${theme.colors["neutrals-01"][2]};
+`;
+
+export const filesCount = css`
+  color: ${colors["neutrals-01"][7]};
 `;
 
 export const badge = css`
@@ -42,8 +50,9 @@ export const badge = css`
   }
 `;
 
-export const uploader = css`
+export const uploader = (isVisible: boolean) => css`
   padding: 24px;
+  display: ${isVisible ? "block" : "none"};
 `;
 
 export const content = css`

@@ -4,6 +4,7 @@ import { Input } from "@/components/atoms/Input/Input";
 import { Edit } from "@/components/Icons/Edit";
 import { Trash } from "@/components/Icons/Trash";
 import { RichtextEditorField } from "@/components/molecules/RichtextEditorField/RichtextEditorField";
+import MantineRichtextRenderer from "@/components/organisms/mantineRichtextRenderer/MantineRichtextRenderer";
 import { useDataLossProtection } from "@/hooks/useDataLossProtection";
 import { useOnDocumentMutation } from "@/hooks/useOnDocumentMutation";
 import { type CreateDocumentSchema } from "@/schemas/documents/createDocument.schema";
@@ -11,7 +12,7 @@ import { type UpdateDocumentSchema } from "@/schemas/documents/updateDocument.sc
 import useDocumentEditorStore, { type EditorStateDrawerOpened } from "@/stores/documentEditor.store";
 import { api } from "@/utils/api";
 
-import React, { type FunctionComponent, useCallback, useEffect } from "react";
+import React, { type FunctionComponent, useCallback } from "react";
 
 import * as styles from "./EditorForm.styles";
 
@@ -45,16 +46,6 @@ const EditorForm: FunctionComponent<EditorFormProps> = ({ editorState, onClose }
     onMutate: (error) => console.log("deleting document", error),
     onSuccess: onDocumentMutation,
   });
-
-  useEffect(() =>
-  {
-    console.log("mounting editor form");
-
-    return () =>
-    {
-      console.log("unmounting editor form");
-    };
-  }, []);
 
   const onSave = useCallback(async (): Promise<void> =>
   {
@@ -116,7 +107,7 @@ const EditorForm: FunctionComponent<EditorFormProps> = ({ editorState, onClose }
 
   return (
     <>
-      <div className="form">
+      <div className="form" style={{ height: "100%" }}>
         {editorState.state === "view" && (
           <>
             <div css={styles.existingNote}>
@@ -132,7 +123,9 @@ const EditorForm: FunctionComponent<EditorFormProps> = ({ editorState, onClose }
                   <Trash/>{" "}Löschen
                 </Button>
               </div>
-              <div css={styles.docContent} dangerouslySetInnerHTML={{ __html: document.content }}/>
+              <div css={styles.contentWrapper}>
+                <MantineRichtextRenderer htmlContent={document.content}/>
+              </div>
               {showConfirmDeleteDocWindow && (
                 <div css={styles.deleteDocWindow}>
                   <BodyText styleType="body-01-medium">Bist du sicher, dass du dieses Dokument löschen möchtest?</BodyText>
@@ -168,19 +161,21 @@ const EditorForm: FunctionComponent<EditorFormProps> = ({ editorState, onClose }
           </div>
         )}
       </div>
-      <div className="call-to-action">
-        <Button<"button">
-          styleType="secondarySimple"
-          onClick={onClose}>
-          Abbrechen
-        </Button>
-        <Button<"button">
-          styleType="primary"
-          disabled={!hasUnsavedChanges}
-          onClick={onSave}>
-          Speichern
-        </Button>
-      </div>
+      {(editorState.state === "create" || editorState.state === "edit") && (
+        <div className="call-to-action">
+          <Button<"button">
+            styleType="secondarySimple"
+            onClick={onClose}>
+            Abbrechen
+          </Button>
+          <Button<"button">
+            styleType="primary"
+            disabled={!hasUnsavedChanges}
+            onClick={onSave}>
+            Speichern
+          </Button>
+        </div>
+      )}
     </>
   );
 };

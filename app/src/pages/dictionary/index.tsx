@@ -16,7 +16,6 @@ export const getStaticProps: GetStaticProps<GetArticlesOverviewPagePropsResult> 
     props: allArticles,
     revalidate: 10,
   };
-
 };
 
 const NextPage: NextPageWithLayout<GetArticlesOverviewPagePropsResult> = (articlesOverviewProps) => (

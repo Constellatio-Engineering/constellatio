@@ -8,57 +8,77 @@ import { getArticleViewsSchema } from "@/schemas/views/getArticleViews.schema";
 import { getCaseViewsSchema } from "@/schemas/views/getCaseViews.schema";
 import { createTRPCRouter, protectedProcedure } from "@/server/api/trpc";
 
-import { and, eq, sql } from "drizzle-orm";
+import { desc, eq, sql } from "drizzle-orm";
 
 export const viewsRouter = createTRPCRouter({
   addArticleView: protectedProcedure
     .input(addArticleViewSchema)
     .mutation(async ({ ctx: { userId }, input: { articleId } }) =>
     {
-      const existingView = await db.query.articlesViews.findFirst({
-        where: and(
-          eq(articlesViews.userId, userId),
-          eq(articlesViews.articleId, articleId),
-        )
-      });
-
-      if(existingView)
-      {
-        return;
-      }
-
-      await db.insert(articlesViews).values({ articleId, userId });
+      await db
+        .insert(articlesViews)
+        .values({ articleId, userId })
+        .onConflictDoUpdate({
+          set: { updatedAt: new Date() },
+          target: [articlesViews.articleId, articlesViews.userId],
+        });
     }),
   addCaseView: protectedProcedure
     .input(addCaseViewSchema)
     .mutation(async ({ ctx: { userId }, input: { caseId } }) =>
     {
-      const existingView = await db.query.casesViews.findFirst({
-        where: and(
-          eq(casesViews.userId, userId),
-          eq(casesViews.caseId, caseId),
-        )
-      });
-
-      if(existingView)
-      {
-        return;
-      }
-      
-      await db.insert(casesViews).values({ caseId, userId });
+      await db
+        .insert(casesViews)
+        .values({ caseId, userId })
+        .onConflictDoUpdate({
+          set: { updatedAt: new Date() },
+          target: [casesViews.caseId, casesViews.userId],
+        });
     }),
   getArticleViews: protectedProcedure
     .input(getArticleViewsSchema)
     .query(async ({ input: { articleId } }) =>
     {
-      const [result] = await db.select({ count: sql<number>`count(*)` }).from(articlesViews).where(eq(articlesViews.articleId, articleId));
+      const [result] = await db
+        .select({ count: sql<number>`count(*)` })
+        .from(articlesViews)
+        .where(eq(articlesViews.articleId, articleId));
+
       return result?.count ?? 0;
     }),
   getCaseViews: protectedProcedure
     .input(getCaseViewsSchema)
     .query(async ({ input: { caseId } }) =>
     {
-      const [result] = await db.select({ count: sql<number>`count(*)` }).from(casesViews).where(eq(casesViews.caseId, caseId));
+      const [result] = await db
+        .select({ count: sql<number>`count(*)` })
+        .from(casesViews)
+        .where(eq(casesViews.caseId, caseId));
+
       return result?.count ?? 0;
+    }),
+  getLastViewedArticles: protectedProcedure
+    .query(async ({ ctx: { userId } }) =>
+    {
+      const articleViews = await db.query.articlesViews.findMany({
+        columns: { articleId: true },
+        limit: 3,
+        orderBy: [desc(articlesViews.updatedAt)],
+        where: eq(articlesViews.userId, userId)
+      });
+
+      return articleViews.map(({ articleId }) => articleId);
+    }),
+  getLastViewedCases: protectedProcedure
+    .query(async ({ ctx: { userId } }) =>
+    {
+      const caseViews = await db.query.casesViews.findMany({
+        columns: { caseId: true },
+        limit: 3,
+        orderBy: [desc(casesViews.updatedAt)],
+        where: eq(casesViews.userId, userId)
+      });
+
+      return caseViews.map(({ caseId }) => caseId);
     }),
 });

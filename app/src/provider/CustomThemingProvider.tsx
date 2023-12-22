@@ -52,10 +52,10 @@ const CustomThemingProvider: FunctionComponent<Props> = ({ children }) =>
             styles: scrollAreaStyles,
           },
         },
-        fontFamily: karlaFont.style.fontFamily + ", sans-serif",
+        fontFamily: karlaFont.style?.fontFamily + ", sans-serif",
         fontSizes: spacing,
         headings: {
-          fontFamily: libreBaskervilleFont.style.fontFamily + ", serif",
+          fontFamily: libreBaskervilleFont.style?.fontFamily + ", serif",
           sizes: {
             h1: {
               fontSize: "44px",
