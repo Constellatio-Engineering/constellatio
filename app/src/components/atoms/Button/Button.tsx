@@ -85,7 +85,7 @@ const _Button: FC<TButton> = ({
       height: size === "large" ? theme.spacing["spacing-40"] : theme.spacing["spacing-32"],
       lineHeight: theme.spacing["spacing-24"],
       padding: `${theme.spacing["spacing-8"]} ${theme.spacing["spacing-16"]}`,
-      transition: "all 0.3s ease",
+      transition: "all 0.2s ease",
       ...styleOverwrite,
     },
   });

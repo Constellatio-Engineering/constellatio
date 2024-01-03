@@ -26,7 +26,11 @@ const useDocuments: UseDocuments = () =>
   
   return { 
     documentsInAllFolders: documents ?? [],
-    documentsInSelectedFolder: documents.filter((document) => document.folderId === selectedFolderId) ?? [],
+    documentsInSelectedFolder: (
+      selectedFolderId === undefined
+        ? documents
+        : documents.filter((document) => document.folderId === selectedFolderId)
+    ) ?? [],
     error,
     isLoading,
     isRefetching

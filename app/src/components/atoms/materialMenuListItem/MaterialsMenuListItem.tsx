@@ -23,6 +23,7 @@ interface MenuListItemProps
   readonly onDelete?: () => void;
   readonly onRename?: (newName: string) => void;
   readonly title: string;
+  readonly useItalicFont: boolean;
 }
 
 const MaterialsMenuListItem: FunctionComponent<MenuListItemProps & HTMLProps<HTMLButtonElement>> = ({
@@ -33,6 +34,7 @@ const MaterialsMenuListItem: FunctionComponent<MenuListItemProps & HTMLProps<HTM
   onDelete,
   onRename,
   title,
+  useItalicFont,
 }) =>
 {
   const [showRenameModal, setShowRenameModal] = useState<boolean>(false);
@@ -50,7 +52,7 @@ const MaterialsMenuListItem: FunctionComponent<MenuListItemProps & HTMLProps<HTM
             crossAxis: 0,
             mainAxis: 0
           }}>
-          <BodyText styleType="body-01-medium" component="p">
+          <BodyText styleType={active ? "body-01-bold" : "body-01-medium"} component="p" italic={useItalicFont}>
             <span css={styles.label({ active, theme })} title={title}>{icon}{title}</span>
             {!hideContextMenu && (
               <Menu.Target>

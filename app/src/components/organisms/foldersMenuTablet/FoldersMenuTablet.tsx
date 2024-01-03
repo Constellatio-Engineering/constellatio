@@ -18,7 +18,7 @@ import useUploadFolders from "@/hooks/useUploadFolders";
 import { InvalidateQueriesContext } from "@/provider/InvalidateQueriesProvider";
 import useMaterialsStore from "@/stores/materials.store";
 import { api } from "@/utils/api";
-import { defaultFolderName } from "@/utils/translations";
+import { defaultFolderName, everythingFolderName } from "@/utils/translations";
 
 import { Menu, Title } from "@mantine/core";
 // import { useDisclosure } from "@mantine/hooks";
@@ -76,22 +76,37 @@ const FoldersMenuTablet: FunctionComponent = () =>
           <Menu.Target>
             <div css={styles.title}>
               <IconButton icon={<FolderIcon/>} size="big"/>
-              <Title order={3}>{selectedFolderId == null ? defaultFolderName : currentFolder?.name ?? ""}</Title>
+              <Title order={3}>
+                {selectedFolderId === null && defaultFolderName}
+                {selectedFolderId === undefined && "Alles"}
+                {selectedFolderId != null && (currentFolder?.name ?? "")}
+              </Title>
               <ArrowDown size={28}/>
             </div>
           </Menu.Target>
           <Menu.Dropdown>
             <MaterialsMenuListItem
+              key="everything-folder"
+              useItalicFont
+              title={everythingFolderName}
+              onClick={() => setSelectedFolderId(undefined)}
+              active={selectedFolderId === undefined}
+              icon={<FolderIcon/>}
+              hideContextMenu
+            />
+            <MaterialsMenuListItem
               key="default-folder"
               title={defaultFolderName}
+              useItalicFont
               onClick={() => setSelectedFolderId(null)}
-              active={selectedFolderId == null}
+              active={selectedFolderId === null}
               icon={<FolderIcon/>}
               hideContextMenu
             />
             {folders?.map((folder, folderIndex) => (
               <MaterialsMenuListItem
                 onClick={() => setSelectedFolderId(folder.id)}
+                useItalicFont={false}
                 onDelete={() => deleteFolder({ folderId: folder.id })}
                 onRename={(newName) => renameFolder({
                   folderId: folder.id,

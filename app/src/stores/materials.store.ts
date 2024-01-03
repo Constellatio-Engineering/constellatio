@@ -4,9 +4,9 @@ import { immer } from "zustand/middleware/immer";
 interface MaterialsStore
 {
   selectedFileIdForPreview: string;
-  selectedFolderId: string | null;
+  selectedFolderId: string | null | undefined;
   setSelectedFileIdForPreview: (selectedFileIdForPreview: string) => void;
-  setSelectedFolderId: (selectedFolderId: string | null) => void;
+  setSelectedFolderId: (selectedFolderId: string | null | undefined) => void;
   setShowFileViewerModal: (showFileViewerModal: boolean) => void;
   showFileViewerModal: boolean;
 }
