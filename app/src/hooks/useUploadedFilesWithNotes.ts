@@ -31,7 +31,10 @@ const useUploadedFilesWithNotes: UseUploadedFilesWithNotes = () =>
     isGetFilesLoading,
     isGetNotesLoading,
     uploadedFilesWithNotesInAllFolders: filesWithNotes ?? [],
-    uploadedFilesWithNotesInSelectedFolder: filesWithNotes.filter((file) => file.folderId === selectedFolderId) ?? []
+    uploadedFilesWithNotesInSelectedFolder: (selectedFolderId === undefined
+      ? filesWithNotes
+      : filesWithNotes.filter((file) => file.folderId === selectedFolderId)
+    ) ?? []
   };
 };
 

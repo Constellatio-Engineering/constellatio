@@ -158,30 +158,30 @@ const CaseResultsReviewStep: FunctionComponent<ICaseResultsReviewStepProps> = ({
             <div css={styles.solutionWrapper}>
               <div className="solution-header">
                 <Title order={3}><Pen/> Deine Lösung</Title>
-                <div className="edit-but">
-                  <Button<"button"> onClick={() => editButtonClick()} styleType="secondarySimple"><Edit/> Bearbeiten
+                <div className="edit-but" style={{ visibility: "hidden" }}>
+                  <Button<"button"> onClick={() => editButtonClick()} styleType="secondarySimple">
+                    <Edit/>
+                    Bearbeiten
                   </Button>
                 </div>
               </div>
-              {
-                solutionElementHeight > 220 ? (
-                  <Spoiler
-                    hideLabel={ShowLessBtn}
-                    maxHeight={220}
-                    showLabel={ShowAllBtn}
-                    styles={styles.spoilerStyles({ isExpandSolution })}>
-                    <div className="solution-content">
-                      <ScrollArea h={isExpandSolution && solutionElementHeight > 220 ? 500 : undefined} offsetScrollbars>
-                        <div ref={solutionContent} dangerouslySetInnerHTML={{ __html: solution }}/>
-                      </ScrollArea>
-                    </div>
-                  </Spoiler>
-                ) : (
+              {solutionElementHeight > 220 ? (
+                <Spoiler
+                  hideLabel={ShowLessBtn}
+                  maxHeight={220}
+                  showLabel={ShowAllBtn}
+                  styles={styles.spoilerStyles({ isExpandSolution })}>
                   <div className="solution-content">
-                    <div ref={solutionContent} dangerouslySetInnerHTML={{ __html: solution }}/>
+                    <ScrollArea h={isExpandSolution && solutionElementHeight > 220 ? 500 : undefined} offsetScrollbars>
+                      <div ref={solutionContent} dangerouslySetInnerHTML={{ __html: solution }}/>
+                    </ScrollArea>
                   </div>
-                )
-              }
+                </Spoiler>
+              ) : (
+                <div className="solution-content">
+                  <div ref={solutionContent} dangerouslySetInnerHTML={{ __html: solution }}/>
+                </div>
+              )}
             </div>
           </div>
           {resolution?.json && (

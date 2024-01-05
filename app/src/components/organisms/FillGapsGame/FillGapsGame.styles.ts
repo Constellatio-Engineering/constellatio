@@ -73,27 +73,17 @@ export const stylesOverwrite = css`
 export const LegendWrapper = styled.div`
   display: flex;
   align-items: center;
+  justify-content: flex-end;
   gap: 12px;
+  margin-top: -12px;
 
   > p {
     display: flex;
     align-items: center;
     gap: ${({ theme }) => theme.spacing["spacing-4"]};
-
-    &::before {
-      content: "";
-      display: inline-block;
-      width: 11px;
-      height: 11px;
-      border: 1px solid transparent;
-    }
-
-    &:first-of-type::before {
-      border-color: ${({ theme }) => theme.colors["support-success"][4]};
-    }
-
-    &:last-of-type::before {
-      border-color: ${({ theme }) => theme.colors["support-error"][3]};
+    span {
+      display: flex;
+      align-items: center;
     }
   }
 `;

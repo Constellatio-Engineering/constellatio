@@ -6,11 +6,12 @@ type FillGapInputStylesProps =
 {
   index?: number;
   status: "default" | "success" | "error";
+  width?: number;
 };
 
 type FillGapInputStyles = Styles<TextInputStylesNames, UnknownMantineStylesParams>;
 
-export const fillGapInputStyles = ({ index, status }: FillGapInputStylesProps): FillGapInputStyles =>
+export const fillGapInputStyles = ({ index, status, width = 145 }: FillGapInputStylesProps): FillGapInputStyles =>
 {
   const styles: FillGapInputStyles = theme => ({
     input: {
@@ -51,9 +52,7 @@ export const fillGapInputStyles = ({ index, status }: FillGapInputStylesProps): 
       height: "auto",
       lineHeight: "24px",
       minHeight: "auto",
-
       padding: 0,
-
       paddingBottom: theme.spacing["spacing-4"],
     },
     rightSection: {
@@ -65,7 +64,7 @@ export const fillGapInputStyles = ({ index, status }: FillGapInputStylesProps): 
     root: {
       display: "inline-block",
       marginTop: theme.spacing["spacing-2"],
-      maxWidth: "145px",
+      maxWidth: width + "px",
       paddingBottom: status === "error" ? theme.spacing["spacing-4"] : "0",
       paddingLeft: theme.spacing["spacing-2"],
       paddingRight: theme.spacing["spacing-2"],

@@ -2,6 +2,8 @@
 import { BodyText } from "@/components/atoms/BodyText/BodyText";
 import { Button } from "@/components/atoms/Button/Button";
 import { Check } from "@/components/Icons/Check";
+import { CheckFilled } from "@/components/Icons/CheckFilled";
+import { CrossFilled } from "@/components/Icons/CrossFilled";
 import { Gamification } from "@/components/Icons/Gamification";
 import { Reload } from "@/components/Icons/Reload";
 import { HelpNote } from "@/components/molecules/HelpNote/HelpNote";
@@ -9,6 +11,7 @@ import { HintsAccordion } from "@/components/molecules/HintsAccordion/HintsAccor
 import { ResultCard } from "@/components/molecules/ResultCard/ResultCard";
 import { Richtext } from "@/components/molecules/Richtext/Richtext";
 import RichtextOverwrite from "@/components/organisms/FillGapsGame/RichtextOverwrite";
+import { colors } from "@/constants/styles/colors";
 import useContextAndErrorIfNull from "@/hooks/useContextAndErrorIfNull";
 import { InvalidateQueriesContext } from "@/provider/InvalidateQueriesProvider";
 import { type IGenFillInGapsGame } from "@/services/graphql/__generated/sdk";
@@ -16,7 +19,7 @@ import useFillGapsGameStore from "@/stores/fillGapsGame.store";
 import { api } from "@/utils/api";
 
 import { Title } from "@mantine/core";
-import {
+import React, {
   type FC,
   type ReactElement,
   memo,
@@ -177,14 +180,6 @@ let FillGapsGame: FC<TFillGapsGame> = ({
             {question}
           </BodyText>
         )}
-        <LegendWrapper>
-          <BodyText component="p" styleType="body-01-regular">
-            Richtige Antwort
-          </BodyText>
-          <BodyText component="p" styleType="body-01-regular">
-            Falsche Antwort
-          </BodyText>
-        </LegendWrapper>
         <Game>
           <Options>
             {fillGameParagraph?.json && (
@@ -198,6 +193,22 @@ let FillGapsGame: FC<TFillGapsGame> = ({
             )}
           </Options>
         </Game>
+        {gameStatus !== "inprogress" && (
+          <LegendWrapper>
+            <BodyText component="p" styleType="body-01-regular">
+              <span style={{ color: colors["support-success"][4] }}>
+                <CheckFilled size={16}/>
+              </span>{" "}
+              Richtige Antwort
+            </BodyText>
+            <BodyText component="p" styleType="body-01-regular">
+              <span style={{ color: colors["support-error"][3] }}>
+                <CrossFilled size={16}/>
+              </span>{" "}
+              Falsche Antwort
+            </BodyText>
+          </LegendWrapper>
+        )}
         {gameStatus !== "inprogress" && (
           <>
             <HintsAccordion items={correctAnswersArr}/>

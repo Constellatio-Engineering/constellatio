@@ -12,7 +12,7 @@ import useUploadFolders from "@/hooks/useUploadFolders";
 import { InvalidateQueriesContext } from "@/provider/InvalidateQueriesProvider";
 import useMaterialsStore from "@/stores/materials.store";
 import { api } from "@/utils/api";
-import { defaultFolderName } from "@/utils/translations";
+import { defaultFolderName, everythingFolderName } from "@/utils/translations";
 
 import { Title, Modal } from "@mantine/core";
 import { useDisclosure } from "@mantine/hooks";
@@ -60,16 +60,27 @@ const MaterialMenu: FunctionComponent = () =>
       </div>      
       <div css={styles.content}>
         <MaterialsMenuListItem
+          key="everything-folder"
+          title={everythingFolderName}
+          useItalicFont
+          onClick={() => setSelectedFolderId(undefined)}
+          active={selectedFolderId === undefined}
+          icon={<FolderIcon/>}
+          hideContextMenu
+        />
+        <MaterialsMenuListItem
           key="default-folder"
           title={defaultFolderName}
+          useItalicFont
           onClick={() => setSelectedFolderId(null)}
-          active={selectedFolderId == null}
+          active={selectedFolderId === null}
           icon={<FolderIcon/>}
           hideContextMenu
         />
         {folders?.map((folder) => (
           <MaterialsMenuListItem
             onClick={() => setSelectedFolderId(folder.id)}
+            useItalicFont={false}
             onDelete={() => deleteFolder({ folderId: folder.id })}
             onRename={(newName) => renameFolder({
               folderId: folder.id,
