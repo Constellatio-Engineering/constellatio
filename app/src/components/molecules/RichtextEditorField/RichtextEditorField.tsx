@@ -71,6 +71,7 @@ export const RichtextEditorField: FC<RichtextEditorFieldProps> = ({
       styles={richtextEditorFieldStyles()}>
       <RichTextEditor.Toolbar>
         <RichTextEditor.ControlsGroup>
+          <RichTextEditor.Color color="#000000"/>
           <RichTextEditor.Color color="#F03E3E"/>
           <RichTextEditor.Color color="#1098AD"/>
           <RichTextEditor.Color color="#37B24D"/>
@@ -88,7 +89,6 @@ export const RichtextEditorField: FC<RichtextEditorFieldProps> = ({
           <RichTextEditor.H1/>
           <RichTextEditor.H2/>
           <RichTextEditor.H3/>
-          <RichTextEditor.H4/>
         </RichTextEditor.ControlsGroup>
         <RichTextEditor.ControlsGroup>
           <RichTextEditor.AlignLeft/>
