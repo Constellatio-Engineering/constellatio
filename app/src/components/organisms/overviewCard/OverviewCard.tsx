@@ -4,13 +4,14 @@ import { CaptionText } from "@/components/atoms/CaptionText/CaptionText";
 import { LinkButton } from "@/components/atoms/LinkButton/LinkButton";
 import StatusLabel, { type IStatusLabel } from "@/components/atoms/statusLabel/StatusLabel";
 import Tag from "@/components/atoms/tag/Tag";
+import { Restart } from "@/components/Icons/Restart";
 import { Show } from "@/components/Icons/Show";
 import { Timer } from "@/components/Icons/timer";
-import { Trash } from "@/components/Icons/Trash";
+import ResetCaseProgressModal from "@/components/organisms/resetCaseProgressModal/ResetCaseProgressModal";
 import useArticleViews from "@/hooks/useArticleViews";
 import useCaseViews from "@/hooks/useCaseViews";
-import useResetCaseProgress from "@/hooks/useResetCaseProgress";
 import { type IGenLegalArea, type IGenTags } from "@/services/graphql/__generated/sdk";
+import { type Nullable } from "@/utils/types";
 
 import { useMantineTheme } from "@mantine/core";
 import { useDisclosure } from "@mantine/hooks";
@@ -23,6 +24,7 @@ import OverviewCardTagsModal from "../overviewCardTagsModal/OverviewCardTagsModa
 export interface IOverviewCard 
 {
   readonly contentId: string;
+  readonly contentTitle: Nullable<string>;
   readonly lastUpdated: Date;
   readonly legalArea: Maybe<IGenLegalArea> | undefined;
   readonly progressState?: IStatusLabel["progressState"];
@@ -73,6 +75,7 @@ function formatDate(inputDate: string | number | Date): string
 
 const OverviewCard: FunctionComponent<IOverviewCard> = ({
   contentId,
+  contentTitle,
   lastUpdated,
   legalArea,
   progressState,
@@ -82,88 +85,89 @@ const OverviewCard: FunctionComponent<IOverviewCard> = ({
   variant,
 }) => 
 {
-  const resetCaseProgress = useResetCaseProgress();
   const { count: articleViews } = useArticleViews(contentId);
   const { count: caseViews } = useCaseViews(contentId);
   const views = variant === "dictionary" ? articleViews : caseViews;
   const [opened, { close, open }] = useDisclosure(false);
+  const [isResetCaseModalOpened, { close: closeResetCaseModal, open: openResetCaseModal }] = useDisclosure(false);
   const theme = useMantineTheme();
   const initialFilteredTags = tags?.filter((tag) => !tag?.tagName?.startsWith("§"));
   const filteredTags = (initialFilteredTags && initialFilteredTags.length === 0) ? tags : initialFilteredTags;
   const filteredTagsWithNames = filteredTags?.filter(Boolean).filter(tag => Boolean(tag.tagName)) ?? [];
 
   return (
-    <div css={styles.wrapper()}>
-      <div css={styles.topDetails({ theme, variant })}>
-        <div className="left-side">
-          <div className="views">
-            <CaptionText styleType="caption-01-bold" tt="uppercase">
-              <Show/> {views} Aufrufe
-            </CaptionText>
+    <>
+      <div css={styles.wrapper()}>
+        <div css={styles.topDetails({ theme, variant })}>
+          <div className="left-side">
+            <div className="views">
+              <CaptionText styleType="caption-01-bold" tt="uppercase">
+                <Show/> {views} Aufrufe
+              </CaptionText>
+            </div>
+            {variant === "case" && (timeInMinutes !== null && timeInMinutes !== undefined) && (
+              <div className="time">
+                <CaptionText styleType="caption-01-bold">
+                  <Timer/> {timeFormatter(timeInMinutes)}
+                </CaptionText>
+              </div>
+            )}
           </div>
-          {variant === "case" && (timeInMinutes !== null && timeInMinutes !== undefined) && (
-            <div className="time">
+          {lastUpdated && (
+            <div className="right-side">
+              <BodyText styleType="body-02-medium">Zuletzt aktualisiert: </BodyText>
               <CaptionText styleType="caption-01-bold">
-                <Timer/> {timeFormatter(timeInMinutes)}
+                {formatDate(lastUpdated)}
               </CaptionText>
             </div>
           )}
         </div>
-        {lastUpdated && (
-          <div className="right-side">
-            <BodyText styleType="body-02-medium">Zuletzt aktualisiert: </BodyText>
-            <CaptionText styleType="caption-01-bold">
-              {formatDate(lastUpdated)}
-            </CaptionText>
-          </div>
-        )}
-      </div>
-      <div css={styles.cardBody({ theme, variant })}>
-        <table style={{ borderBottom: "1px solid #F0F0F0", textAlign: "left", width: "100%" }}>
-          <thead>
-            <tr>
-              {(legalArea?.__typename === "LegalArea" && legalArea?.legalAreaName) && <th style={{ color: "#949494", padding: "16px 32px 8px 16px" }}><CaptionText styleType="caption-01-medium" tt="uppercase">Rechtsgebiet</CaptionText></th>}
-              {variant === "case" && topic && (<th style={{ color: "#949494", padding: "16px 32px 8px 16px" }}><CaptionText styleType="caption-01-medium" component="p" tt="uppercase">Thema</CaptionText> </th>)}
-            </tr>
-          </thead>
-          <tbody>
-            <tr>
-              {(legalArea?.__typename === "LegalArea" && legalArea?.legalAreaName) && <td style={{ color: "black", padding: "4px 32px 16px 16px" }}><BodyText styleType="body-01-medium">{legalArea?.legalAreaName}</BodyText></td>}
-              {variant === "case" && topic && <td style={{ color: "black", padding: "4px 32px 16px 16px" }}><BodyText styleType="body-01-medium">{topic}</BodyText></td>}
-            </tr>
-          </tbody>
-        </table>
-        {variant === "dictionary" && (
+        <div css={styles.cardBody({ theme, variant })}>
+          <table style={{ borderBottom: "1px solid #F0F0F0", textAlign: "left", width: "100%" }}>
+            <thead>
+              <tr>
+                {(legalArea?.__typename === "LegalArea" && legalArea?.legalAreaName) && <th style={{ color: "#949494", padding: "16px 32px 8px 16px" }}><CaptionText styleType="caption-01-medium" tt="uppercase">Rechtsgebiet</CaptionText></th>}
+                {variant === "case" && topic && (<th style={{ color: "#949494", padding: "16px 32px 8px 16px" }}><CaptionText styleType="caption-01-medium" component="p" tt="uppercase">Thema</CaptionText> </th>)}
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                {(legalArea?.__typename === "LegalArea" && legalArea?.legalAreaName) && <td style={{ color: "black", padding: "4px 32px 16px 16px" }}><BodyText styleType="body-01-medium">{legalArea?.legalAreaName}</BodyText></td>}
+                {variant === "case" && topic && <td style={{ color: "black", padding: "4px 32px 16px 16px" }}><BodyText styleType="body-01-medium">{topic}</BodyText></td>}
+              </tr>
+            </tbody>
+          </table>
+          {variant === "dictionary" && (
+            <div css={styles.row({ theme, variant })}>
+              <div className="row-title">
+                <CaptionText styleType="caption-01-medium" component="p" tt="capitalize">Thema</CaptionText>
+              </div>
+              <div className="row-value">
+                <BodyText styleType="body-01-medium">{topic}</BodyText>
+              </div>
+            </div>
+          )}
           <div css={styles.row({ theme, variant })}>
             <div className="row-title">
-              <CaptionText styleType="caption-01-medium" component="p" tt="capitalize">Thema</CaptionText>
+              <CaptionText styleType="caption-01-medium" component="p">TAGS</CaptionText>
             </div>
-            <div className="row-value">
-              <BodyText styleType="body-01-medium">{topic}</BodyText>
+            {/* <ScrollArea> */}
+            <div className="row-value tags-values">
+              {filteredTagsWithNames?.map((tag) => (
+                <Tag key={tag.id} title={tag.tagName!}/>
+              ))}
             </div>
+            <BodyText
+              type="button"
+              css={styles.seeAllTagsButton}
+              onClick={open}
+              styleType="body-01-regular"
+              component="button">
+              Alle ansehen
+            </BodyText>
+            <OverviewCardTagsModal opened={opened} tags={tags} close={close}/>
           </div>
-        )}
-        <div css={styles.row({ theme, variant })}>
-          <div className="row-title">
-            <CaptionText styleType="caption-01-medium" component="p">TAGS</CaptionText>
-          </div>
-          {/* <ScrollArea> */}
-          <div className="row-value tags-values">
-            {filteredTagsWithNames?.map((tag) => (
-              <Tag key={tag.id} title={tag.tagName!}/>
-            ))}
-          </div>
-          <BodyText
-            type="button"
-            css={styles.seeAllTagsButton}
-            onClick={open}
-            styleType="body-01-regular"
-            component="button">Alle ansehen
-          </BodyText>
-          <OverviewCardTagsModal opened={opened} tags={tags} close={close}/>
-        </div>
-        {
-          variant === "case" && (
+          {variant === "case" && (
             <div css={styles.row({ theme, variant })}>
               <div className="row-title">
                 <CaptionText styleType="caption-01-medium">STATUS</CaptionText>
@@ -174,18 +178,25 @@ const OverviewCard: FunctionComponent<IOverviewCard> = ({
                 )}
                 <div className="reset-button">
                   <LinkButton
-                    onClick={() => resetCaseProgress({ caseId: contentId })}
+                    onClick={openResetCaseModal}
+                    disabled={progressState !== "completed"}
                     size="medium"
                     title="Fall neu starten"
-                    icon={<Trash/>}
+                    icon={<Restart/>}
                   />
                 </div>
               </div>
             </div>
-          )
-        }
+          )}
+        </div>
       </div>
-    </div>
+      <ResetCaseProgressModal
+        caseId={contentId}
+        caseTitle={contentTitle}
+        isOpened={isResetCaseModalOpened}
+        onClose={closeResetCaseModal}
+      />
+    </>
   );
 };
 

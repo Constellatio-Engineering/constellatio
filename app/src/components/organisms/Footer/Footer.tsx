@@ -28,7 +28,7 @@ export const Footer: FC<FooterProps> = ({ variant = "default" }) =>
                 styleType="caption-01-medium"
                 tt="uppercase"
                 c="neutrals-01.9">
-                &reg; Constellatio 2023
+                &reg; Constellatio 2024
               </CaptionText>
             </Group>
           </Group>
@@ -43,7 +43,7 @@ export const Footer: FC<FooterProps> = ({ variant = "default" }) =>
                 styleType="caption-01-medium"
                 tt="uppercase"
                 c="neutrals-01.0">
-                &reg; Constellatio 2023
+                &reg; Constellatio 2024
               </CaptionText>
             </Group>
           </Flex>
@@ -58,7 +58,7 @@ export const Footer: FC<FooterProps> = ({ variant = "default" }) =>
                 styleType="caption-01-medium"
                 tt="uppercase"
                 c="neutrals-01.9">
-                &reg; Constellatio 2023
+                &reg; Constellatio 2024
               </CaptionText>
             </Group>
           </Flex>

@@ -213,6 +213,7 @@ export type Note = InferSelectModel<typeof notes>;
 export const casesViews = pgTable("CaseView", {
   userId: uuid("UserId").references(() => users.id, { onDelete: "no action" }).notNull(),
   caseId: uuid("CaseId").notNull(),
+  updatedAt: timestamp("UpdatedAt").defaultNow(),
 }, table => ({
   caseIdIndex: index("CaseId_Index").on(table.caseId),
   pk: primaryKey(table.userId, table.caseId),
@@ -224,6 +225,7 @@ export type CaseView = InferSelectModel<typeof casesViews>;
 export const articlesViews = pgTable("ArticleView", {
   userId: uuid("UserId").references(() => users.id, { onDelete: "no action" }).notNull(),
   articleId: uuid("ArticleId").notNull(),
+  updatedAt: timestamp("UpdatedAt").defaultNow(),
 }, table => ({
   articleIdIndex: index("ArticleId_Index").on(table.articleId),
   pk: primaryKey(table.userId, table.articleId),

@@ -1,9 +1,12 @@
+import { BodyText } from "@/components/atoms/BodyText/BodyText";
 import { richTextParagraphOverwrite } from "@/components/helpers/richTextParagraphOverwrite";
 import { InfoFilled } from "@/components/Icons/InfoFilled";
 
 import React, { type FC } from "react";
 
-import { IconWrapper, RichTextWrapper, Wrapper } from "./HelpNote.styles";
+import {
+  HeadingWrapper, IconWrapper, RichTextWrapper, Wrapper
+} from "./HelpNote.styles";
 import { Richtext } from "../Richtext/Richtext";
 
 export type HelpNoteProps = {
@@ -15,9 +18,12 @@ export const HelpNote: FC<HelpNoteProps> = ({ data }) =>
 {
   return (
     <Wrapper>
-      <IconWrapper>
-        <InfoFilled/>
-      </IconWrapper>
+      <HeadingWrapper>
+        <IconWrapper>
+          <InfoFilled/>
+        </IconWrapper>
+        <BodyText component="p" styleType="body-01-medium" style={{ fontSize: 18, marginBottom: 4 }}>Hinweis</BodyText>
+      </HeadingWrapper>
       {data?.json && (
         <RichTextWrapper>
           <Richtext data={data} richTextOverwrite={{ paragraph: richTextParagraphOverwrite }}/>

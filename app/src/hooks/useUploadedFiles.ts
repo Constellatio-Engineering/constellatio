@@ -17,11 +17,21 @@ const useUploadedFiles: UseUploadedFiles = () =>
     staleTime: Infinity
   });
 
+  console.log("selectedFolderId", selectedFolderId?.valueOf());
+
+  console.log("uploadedFiles", selectedFolderId === undefined
+    ? uploadedFiles
+    : uploadedFiles.filter((file) => file.folderId === selectedFolderId));
+
   return {
     error,
     isLoading,
     uploadedFilesInAllFolders: uploadedFiles ?? [],
-    uploadedFilesInSelectedFolder: uploadedFiles.filter((file) => file.folderId === selectedFolderId) ?? []
+    uploadedFilesInSelectedFolder: (
+      selectedFolderId === undefined
+        ? uploadedFiles
+        : uploadedFiles.filter((file) => file.folderId === selectedFolderId)
+    ) ?? []
   };
 };
 

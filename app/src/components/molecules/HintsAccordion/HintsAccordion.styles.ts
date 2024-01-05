@@ -35,15 +35,13 @@ export const hintsAccordionStyles = (): HintsAccordionStyles =>
       height: "24px",
       margin: 0,
       svg: {
-        height: "20px !important",
-        width: "20px !important",
+        height: "24px !important",
+        width: "24px !important",
       },
-
       width: "24px",
     },
     content: {
       padding: 0,
-
       ul: {
         display: "flex",
         flexDirection: "column",
@@ -60,8 +58,7 @@ export const hintsAccordionStyles = (): HintsAccordionStyles =>
         borderRadius: "12px 12px 0 0",
       },
       backgroundColor: theme.colors["neutrals-01"][2],
-      border: `1px solid ${theme.colors["neutrals-01"][3]}`,
-
+      border: `1px solid ${"#5b74c7"}`,
       borderRadius: "12px",
     },
     label: {

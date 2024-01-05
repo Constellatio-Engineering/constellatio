@@ -21,7 +21,7 @@ export const RichTextHeadingOverwrite = ({
   const HeadingTag = `h${level}` as ElementType;
   const { entry, ref } = useIntersection();
   const setObservedHeadline = useCaseSolvingStore(s => s.setObservedHeadline); 
-  React.useLayoutEffect(() => 
+  React.useLayoutEffect(() =>
   {
     if(entry?.isIntersecting)
     {

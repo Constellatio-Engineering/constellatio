@@ -1,6 +1,8 @@
 /* eslint-disable max-lines */
 import { Button } from "@/components/atoms/Button/Button";
 import { SubtitleText } from "@/components/atoms/SubtitleText/SubtitleText";
+import { Cross } from "@/components/Icons/Cross";
+import { DownloadIcon } from "@/components/Icons/DownloadIcon";
 import {
   type FileExtension, fileExtensions, type FileMimeType, fileMimeTypes
 } from "@/db/schema";
@@ -31,7 +33,7 @@ export type SelectedFile = {
 type UploadedMaterialBlockProps = {
   readonly areUploadsInProgress: boolean;
   readonly fileInputRef: React.RefObject<HTMLInputElement>;
-  readonly selectedFolderId: string | null;
+  readonly selectedFolderId: string | null | undefined;
   readonly setUploadState: (newState: UploadState) => void;
 };
 
@@ -47,9 +49,16 @@ const UploadedMaterialBlock: FunctionComponent<UploadedMaterialBlockProps> = ({
   const { invalidateUploadedFiles } = useContextAndErrorIfNull(InvalidateQueriesContext);
   const { mutateAsync: saveFileToDatabase } = api.uploads.saveFileToDatabase.useMutation();
   const { mutateAsync: createSignedUploadUrl } = api.uploads.createSignedUploadUrl.useMutation();
+  const [isUploadFormVisible, setIsUploadFormVisible] = useState<boolean>(false);
 
   const uploadFile = async ({ clientSideUuid, file, fileProps }: SelectedFile): Promise<void> =>
   {
+    if(selectedFolderId === undefined)
+    {
+      console.error("Cannot upload file without selected folder");
+      return;
+    }
+
     if(selectedFiles.length === 0) 
     {
       console.log("no files selected");
@@ -187,12 +196,26 @@ const UploadedMaterialBlock: FunctionComponent<UploadedMaterialBlockProps> = ({
       <div css={styles.uploadedMaterialBlockHead} id="uploads">
         <Title order={4}>
           Hochgeladene Dateien{" "}
-          <SubtitleText className="count" component="span" styleType="subtitle-01-medium">
+          <SubtitleText
+            css={styles.filesCount}
+            className="count"
+            component="span"
+            styleType="subtitle-01-medium">
             ({uploadedFilesWithNotesInSelectedFolder.length ?? 0})
           </SubtitleText>
         </Title>
+        <div style={{ height: 40 }}>
+          {(uploadedFilesWithNotesInSelectedFolder.length > 0 && selectedFolderId !== undefined) && (
+            <Button<"button">
+              styleType="secondarySimple"
+              leftIcon={isUploadFormVisible ? <Cross/> : <DownloadIcon/>}
+              onClick={() => setIsUploadFormVisible((isVisible) => !isVisible)}>
+              {isUploadFormVisible ? "Schließen" : "Dateien hochladen"}
+            </Button>
+          )}
+        </div>
       </div>
-      <div css={styles.uploader}>
+      <div css={styles.uploader((uploadedFilesWithNotesInSelectedFolder.length === 0 || isUploadFormVisible) && selectedFolderId !== undefined)}>
         <form
           onSubmit={onSubmit}
           css={styles.badge}>
@@ -232,7 +255,7 @@ const UploadedMaterialBlock: FunctionComponent<UploadedMaterialBlockProps> = ({
         ) : (
           <EmptyStateCard
             variant="For-small-areas"
-            title="Du hast noch keine Dateien hochgeladen"
+            title={selectedFolderId === undefined ? "Wähle einen Ordner aus, um deine ersten Dateien hochzuladen." : "Du hast noch keine Dateien hochgeladen"}
             text="Hier kannst du all deine Lernmaterialien wie zum Beispiel Vorlesungsfolien, Screenshots, Scans oder Word-Dateien an einem Ort speichern und verlinken."
           />
         )}

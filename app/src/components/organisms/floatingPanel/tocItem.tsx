@@ -58,7 +58,7 @@ export const TOCItemComponent: React.FC<ITOCItemComponentProps> = ({
     }
     return false;
   }, [item.children.length, item.level, item.text, observedHeadline.level, observedHeadline.slug]);
-  React.useLayoutEffect(() => 
+  React.useLayoutEffect(() =>
   {
     setShouldBeExpandedState(shouldBeExpanded());
   }, [shouldBeExpanded]);

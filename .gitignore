@@ -6,6 +6,9 @@ node_modules
 # webstorm
 .idea
 
+#vscode
+.vscode
+
 # vercel
 .vercel
 
