@@ -8,7 +8,7 @@ export const feedbackButtonStyles = (theme: MantineTheme) => css`
   white-space: nowrap;
   writing-mode: vertical-lr;
   position: fixed;
-  z-index: 1;
+  z-index: 4;
   border: none;
   opacity: 0;
   cursor: pointer;
