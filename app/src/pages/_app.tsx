@@ -97,7 +97,7 @@ const AppContainer: FunctionComponent<ConstellatioAppProps> = ({ Component, page
         <title>{pageTitle}</title>
         <meta charSet="UTF-8"/>
         <meta name="description" content={appDescription}/>
-        <meta name="viewport" content="width=device-width, initial-scale=1.0, minimum-scale=1, maximum-scale=100.0"/>
+        <meta name="viewport" content="width=device-width, initial-scale=1.0, minimum-scale=1"/>
         <meta name="author" content="Constellatio"/>
         <meta name="robots" content="index, follow"/>
         <meta name="theme-color" content="#ffffff"/>
