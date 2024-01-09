@@ -26,7 +26,7 @@ export const wrapper = ({ theme, variant }: {
   ${variant === "simple" ? SimpleHeader : DefaultHeader}
 `;
 
-export const SHeader = styled.header`
+export const SHeader = styled.header<{ withShadow?: boolean }>`
   background: #fff;
   padding: 0 60px;
   position: fixed;
@@ -34,7 +34,7 @@ export const SHeader = styled.header`
   width: 100%;
   left: 0;
   z-index: 40;
-  box-shadow: 0 2px 6px rgba(0,0,0,0.1);
+  box-shadow: 0 2px 6px rgba(0, 0, 0, ${(props) => (props.withShadow ? "0.1" : "0")});
 `;
 
 export const links = css`
