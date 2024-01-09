@@ -5,11 +5,11 @@
  *
  * We also create a few inference helpers for input and output types.
  */
-import { supabase } from "@/lib/supabase";
+// import { supabase } from "@/lib/supabase";
 import { type AppRouter } from "@/server/api/root";
 import { type ClientError } from "@/utils/clientError";
 import { showErrorNotification } from "@/utils/notifications";
-import { paths } from "@/utils/paths";
+// import { paths } from "@/utils/paths";
 
 import { QueryCache } from "@tanstack/react-query";
 import { httpBatchLink, TRPCClientError } from "@trpc/client";
@@ -25,7 +25,7 @@ const getBaseUrl = (): string =>
     return ""; 
   }
 
-  // SSR should use vercel url
+  // SSR should use Vercel url
   if(process.env.VERCEL_URL)
   {
     return `https://${process.env.VERCEL_URL}`; 
@@ -61,7 +61,7 @@ export const api = createTRPCNext<AppRouter>({
         }
       },
       queryCache: new QueryCache({
-        onError: async (err) =>
+        onError: (err) =>
         {
           if(!(err instanceof TRPCClientError))
           {
@@ -77,18 +77,18 @@ export const api = createTRPCNext<AppRouter>({
             return;
           }
 
-          if(clientError.identifier === "unauthorized")
+          /* if(clientError.identifier === "unauthorized")
           {
             await supabase.auth.signOut();
 
             if(!window.location.pathname.startsWith(paths.login) && !window.location.pathname.startsWith(paths.register))
             {
-              console.log("Server responded with 'UNAUTHORIZED'. Redirecting to login");
+              console.log("Server responded with 'UNAUTHORIZED'. Redirecting to Login");
               window.location.replace(paths.login);
             }
 
             return;
-          }
+          }*/
         },
       }),
     },

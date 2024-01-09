@@ -59,7 +59,7 @@ const HeaderDefault: FunctionComponent = () =>
         onboardingStepsIndex={onboardingStepsIndex}
         setOnboardingStepsIndex={setOnboardingStepsIndex}
       />
-      <SHeader>
+      <SHeader withShadow>
         <div css={styles.wrapper({ theme, variant: "default" })}>
           <div css={styles.links}>
             <Link href={paths.dashboard}>
