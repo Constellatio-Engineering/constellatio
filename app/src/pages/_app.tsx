@@ -103,7 +103,7 @@ const AppContainer: FunctionComponent<ConstellatioAppProps> = ({ Component, page
   const ogImageFileExtension = ogImageUrlSplitUp[ogImageUrlSplitUp.length - 1];
   let pageTitle = appTitle;
 
-  useTracking();
+  // useTracking();
   useFeedback();
 
   useEffect(() =>
