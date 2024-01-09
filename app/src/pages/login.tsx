@@ -1,7 +1,7 @@
 import PageHead from "@/components/organisms/pageHead/PageHead";
 import { AuthPage } from "@/components/pages/AuthPage/AuthPage";
 import { env } from "@/env.mjs";
-import { getIsUserLoggedIn } from "@/utils/auth";
+import { getIsUserLoggedInServer } from "@/utils/auth";
 import { getCommonProps } from "@/utils/commonProps";
 import { paths } from "@/utils/paths";
 
@@ -21,7 +21,7 @@ export const getServerSideProps: GetServerSideProps<ServerSidePropsResult> = asy
     supabaseUrl: env.NEXT_PUBLIC_SUPABASE_URL
   });
 
-  const { isUserLoggedIn } = await getIsUserLoggedIn(supabase);
+  const { isUserLoggedIn } = await getIsUserLoggedInServer(supabase);
 
   if(isUserLoggedIn)
   {

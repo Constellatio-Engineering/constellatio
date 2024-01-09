@@ -1,13 +1,15 @@
 /* eslint-disable max-lines */
 import { env } from "@/env.mjs";
 import { supabase } from "@/lib/supabase";
-import { getIsUserLoggedIn } from "@/utils/auth";
-import { isProduction, isTrackingEnabled } from "@/utils/env";
+import { getIsUserLoggedInClient } from "@/provider/AuthStateProvider";
+import { isTrackingEnabled, isProduction } from "@/utils/env";
 
 import { useRouter } from "next/router";
 import { type PostHogConfig, posthog } from "posthog-js";
 import { type PostHog } from "posthog-js/react";
-import { useCallback, useEffect, useRef } from "react";
+import {
+  type FunctionComponent, useCallback, useEffect, useRef
+} from "react";
 
 type PageleaveProps = {
   pathname: string;
@@ -63,14 +65,13 @@ const configTrackingDisabled: Partial<PostHogConfig> = {
   secure_cookie: true,
 };
 
-const setPosthogConfig = (state: "loggedIn" | "loggedOut"): void => 
+const setPosthogConfig = (state: "loggedIn" | "loggedOut"): void =>
 {
   switch (state)
   {
-    case "loggedIn":  
+    case "loggedIn":
       posthog.set_config(posthogConfigLoggedIn);
       break;
-
     case "loggedOut":
       posthog.set_config(posthogConfigLoggedOut);
       break;
@@ -79,16 +80,14 @@ const setPosthogConfig = (state: "loggedIn" | "loggedOut"): void =>
 
 if(typeof window !== "undefined")
 {
-
   if(isTrackingEnabled)
   {
-    posthog.init(env.NEXT_PUBLIC_POSTHOG_KEY, 
-      {
-        ...configTrackingEnabled,
-        ...posthogConfigLoggedOut
-      });
+    posthog.init(env.NEXT_PUBLIC_POSTHOG_KEY, {
+      ...configTrackingEnabled,
+      ...posthogConfigLoggedOut
+    });
   }
-  else 
+  else
   {
     posthog.init("invalide_token", { ...configTrackingDisabled });
   }
@@ -115,7 +114,7 @@ if(typeof window !== "undefined")
           {
             posthog.opt_in_capturing();
           }
-          
+
           const distinctIdPosthog = posthog.get_distinct_id();
           if(distinctIdPosthog !== id)
           {
@@ -123,7 +122,7 @@ if(typeof window !== "undefined")
           }
 
           posthog._start_queue_if_opted_in();
-         
+
           if(isProduction)
           {
             posthog.startSessionRecording();
@@ -131,7 +130,7 @@ if(typeof window !== "undefined")
         }
         break;
 
-      case "SIGNED_OUT": 
+      case "SIGNED_OUT":
         if(isTrackingEnabled)
         {
           if(posthog.has_opted_in_capturing())
@@ -142,46 +141,49 @@ if(typeof window !== "undefined")
           }
           if(posthog.sessionRecordingStarted())
           {
-            posthog.stopSessionRecording();  
+            posthog.stopSessionRecording();
           }
 
           setPosthogConfig("loggedOut");
           posthog.reset();
         }
         break;
-      
+
       default:
         break;
     }
   });
 }
 
-export const useTracking = (): void =>
+const Tracking: FunctionComponent = () =>
 {
-
   const router = useRouter();
   const firstRendering = useRef<boolean>(true);
-
   const pageleavePropsRef = useRef<PageleaveProps | null>(null);
   const isDocumentVisibleRef = useRef<boolean | null>(null);
 
   const onVisibilityChange = useCallback(async (): Promise<void> =>
   {
-    if(isTrackingEnabled)
-    {
-      const getIsUserLoggedInResult = await getIsUserLoggedIn(supabase);
+    const { data: sessionData, error: getSessionError } = await supabase.auth.getSession();
 
-      if(getIsUserLoggedInResult.isUserLoggedIn)
+    if(getSessionError)
+    {
+      console.warn("Error getting session", getSessionError);
+      return;
+    }
+
+    const getIsUserLoggedInClientResult = getIsUserLoggedInClient(sessionData.session);
+
+    if(getIsUserLoggedInClientResult.isUserLoggedIn)
+    {
+      const distinctIdPosthog = posthog.get_distinct_id();
+      const { email, id } = getIsUserLoggedInClientResult.user;
+
+      if(distinctIdPosthog !== id)
       {
-        const distinctIdPosthog = posthog.get_distinct_id();
-        const { email, id } = getIsUserLoggedInResult.user;
-  
-        if(distinctIdPosthog !== id)
-        {          
-          posthog.identify(id, { email });
-        }
+        posthog.identify(id, { email });
       }
-    } 
+    }
 
     const visibility = !document.hidden;
 
@@ -191,104 +193,77 @@ export const useTracking = (): void =>
     }
 
     isDocumentVisibleRef.current = visibility;
- 
-    posthog.capture(visibility ? "$visibilityOn" : "$visibilityOff", {},
-      { 
-        transport: "sendBeacon" 
-      });
+
+    posthog.capture(
+      visibility ? "$visibilityOn" : "$visibilityOff",
+      {},
+      { transport: "sendBeacon" }
+    );
+  }, []);
+
+  const onRouteChange = useCallback((): void =>
+  {
+    pageleavePropsRef.current = null;
+    posthog.capture("$pageview");
+  }, []);
+
+  const onRouteChangeStart = useCallback((): void =>
+  {
+    const fullUrl = `${window.location.origin}${router.asPath}`;
+
+    if(!pageleavePropsRef.current)
+    {
+      pageleavePropsRef.current = {
+        pathname: router.asPath,
+        url: fullUrl,
+      };
+    }
+  }, [router.asPath]);
+
+  const onBeforeHistoryChange = useCallback((): void =>
+  {
+    if(!firstRendering.current)
+    {
+      posthog.capture("$pageleave",
+        {
+          $current_url: pageleavePropsRef.current?.url,
+          $pathname: pageleavePropsRef.current?.pathname
+        },
+        {
+          transport: "sendBeacon"
+        });
+    }
+    else
+    {
+      firstRendering.current = false;
+    }
   }, []);
 
   useEffect(() =>
   {
-    if(!isTrackingEnabled)
-    {
-      return () => {};
-    }
-
     document.addEventListener("visibilitychange", onVisibilityChange);
     return () => document.removeEventListener("visibilitychange", onVisibilityChange);
   }, [onVisibilityChange]);
 
   useEffect(() =>
   {
-    if(!isTrackingEnabled) 
-    {
-      return () => {};
-    }
-    
-    const onRouteChange = (): void =>
-    {
-      pageleavePropsRef.current = null;
-      posthog.capture("$pageview");
-    };
-
     router.events.on("routeChangeComplete", onRouteChange);
-    return () => 
-    {
-      router.events.off("routeChangeComplete", onRouteChange);
-    };
+    return () => router.events.off("routeChangeComplete", onRouteChange);
+  }, [onRouteChange, router.events]);
 
-  }, [router.events]);
-  
-  useEffect(() => 
+  useEffect(() =>
   {
-    if(!isTrackingEnabled) 
-    {
-      return () => {};
-    }
-
-    const onRouteChangeStart = (): void => 
-    {
-      const fullUrl = `${window.location.origin}${router.asPath}`;
-      
-      if(!pageleavePropsRef.current) 
-      {
-        pageleavePropsRef.current = {
-          pathname: router.asPath,
-          url: fullUrl,
-        };
-      }
-    };
-
     router.events.on("routeChangeStart", onRouteChangeStart);
-  
-    return () => 
-    {
-      router.events.off("routeChangeStart", onRouteChangeStart);
-    };
-  }, [router.asPath, router.events]);
+    return () => router.events.off("routeChangeStart", onRouteChangeStart);
+  }, [onRouteChangeStart, router.events]);
 
-  useEffect(() => 
+  useEffect(() =>
   {
-    if(!isTrackingEnabled) 
-    {
-      return () => {};
-    }
-  
-    const onBeforeHistoryChange = (): void => 
-    {
-      if(!firstRendering.current) 
-      {
-        posthog.capture("$pageleave", 
-          { 
-            $current_url: pageleavePropsRef.current?.url, 
-            $pathname: pageleavePropsRef.current?.pathname 
-          }, 
-          { 
-            transport: "sendBeacon" 
-          });
-      }
-      else 
-      {
-        firstRendering.current = false;
-      }
-    };
-  
     router.events.on("beforeHistoryChange", onBeforeHistoryChange);
-  
-    return () => 
-    {
-      router.events.off("beforeHistoryChange", onBeforeHistoryChange);
-    };
-  }, [router.events, router.pathname]);
+    return () => router.events.off("beforeHistoryChange", onBeforeHistoryChange);
+  }, [onBeforeHistoryChange, router.events]);
+
+  return null;
 };
+
+export default Tracking;

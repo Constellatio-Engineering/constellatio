@@ -1,37 +1,94 @@
 import { Button } from "@/components/atoms/Button/Button";
+import { env } from "@/env.mjs";
+import { supabase } from "@/lib/supabase";
 import { AuthStateContext } from "@/provider/AuthStateProvider";
+import { isProduction } from "@/utils/env";
 
-import React, { type FunctionComponent, useContext, useEffect, useState } from "react";
+import { useTheme } from "@emotion/react";
+import formbricks, { type FormbricksType } from "@formbricks/js";
+import type { AuthChangeEvent, Session, Subscription } from "@supabase/gotrue-js";
+import React, {
+  type FunctionComponent, useCallback, useContext, useEffect, useRef
+} from "react";
 
 import * as styles from "./FeedbackButton.styles";
 
 const FeedbackButton: FunctionComponent = () =>
 {
+  const theme = useTheme();
   const { isUserLoggedIn } = useContext(AuthStateContext);
-  const [isVisible, setIsVisible] = useState(false);
+  const formBricksRef = useRef<FormbricksType | null>(null);
+  const authStateSubscriptionRef = useRef<{data: {subscription: Subscription}}>();
 
-  useEffect(() => 
+  const onAuthStateChange = useCallback(async (event: AuthChangeEvent, session: Session | null): Promise<void> =>
   {
-    const hideButtonTimeout = setTimeout(() => 
+    switch (event)
     {
-      setIsVisible(true);
-    }, 2000); 
+      case "INITIAL_SESSION":
+      case "SIGNED_IN":
+      {
 
-    return () => 
-    {
-      clearTimeout(hideButtonTimeout);
-    };
+        const { email, id } = session?.user || {};
+
+        if(!id || !email || formBricksRef.current)
+        {
+          break;
+        }
+
+        try
+        {
+          await formbricks.init({
+            apiHost: env.NEXT_PUBLIC_FORMBRICKS_HOST,
+            debug: false, // !isProduction,
+            environmentId: isProduction
+              ? env.NEXT_PUBLIC_FORMBRICKS_KEY_PRODUCTION
+              : env.NEXT_PUBLIC_FORMBRICKS_KEY_TESTINGS,
+            userId: id,
+          });
+
+          await formbricks.setEmail(email);
+          formBricksRef.current = formbricks;
+        }
+        catch (error)
+        {
+          console.info("Fehler beim initalisieren von Formbricks");
+          console.error(error);
+        }
+        break;
+      }
+      case "SIGNED_OUT":
+      {
+        if(formBricksRef.current)
+        {
+          formBricksRef.current = null;
+        }
+        break;
+      }
+      default:
+      {
+        break;
+      }
+    }
   }, []);
 
-  if(!isUserLoggedIn || !isVisible)
+  useEffect(() =>
   {
-    return null;
-  }
+    const currentSubscription = authStateSubscriptionRef.current?.data.subscription;
+    currentSubscription?.unsubscribe();
+
+    authStateSubscriptionRef.current = supabase.auth.onAuthStateChange(onAuthStateChange);
+
+    return () =>
+    {
+      formBricksRef.current = null;
+      currentSubscription?.unsubscribe();
+    };
+  }, [onAuthStateChange]);
 
   return (
     <Button<"button">
       id="feedback-btn"
-      css={styles.feedbackButtonStyles}
+      css={styles.feedbackButtonStyles(isUserLoggedIn ?? false, theme)}
       styleType="primary"
       size="large"
       type="button">

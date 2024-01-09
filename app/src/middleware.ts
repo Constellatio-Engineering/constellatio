@@ -1,7 +1,7 @@
 /* eslint-disable import/no-unused-modules */
 import { type User } from "@/db/schema";
 import { env } from "@/env.mjs";
-import { getIsUserLoggedIn } from "@/utils/auth";
+import { getIsUserLoggedInServer } from "@/utils/auth";
 import { isDevelopment } from "@/utils/env";
 import { paths } from "@/utils/paths";
 import { queryParams } from "@/utils/query-params";
@@ -19,7 +19,7 @@ export const middleware: NextMiddleware = async (req) =>
 
   const res = NextResponse.next();
   const supabase = createMiddlewareClient({ req, res });
-  const getIsUserLoggedInResult = await getIsUserLoggedIn(supabase);
+  const getIsUserLoggedInResult = await getIsUserLoggedInServer(supabase);
 
   console.log("getIsUserLoggedInResult", getIsUserLoggedInResult.isUserLoggedIn);
 
