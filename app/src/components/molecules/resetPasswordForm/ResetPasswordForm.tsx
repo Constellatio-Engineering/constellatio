@@ -34,9 +34,12 @@ const ResetPasswordForm: FunctionComponent<Props> = ({ setProgress }) =>
     validate: zodResolver(resetPasswordFormSchema),
     validateInputOnBlur: true,
   });
+  const [isLoading, setIsLoading] = useState<boolean>(false);
 
   const handleSubmit = form.onSubmit(async (formValues) =>
   {
+    setIsLoading(true);
+
     try
     {
       const { error } = await supabase.auth.resetPasswordForEmail(formValues.email, {
@@ -54,6 +57,10 @@ const ResetPasswordForm: FunctionComponent<Props> = ({ setProgress }) =>
       setHasError(true);
       form.setValues({ email: "" });
       return;
+    }
+    finally
+    {
+      setIsLoading(false);
     }
 
     setProgress("success");
@@ -88,6 +95,7 @@ const ResetPasswordForm: FunctionComponent<Props> = ({ setProgress }) =>
           <Button<"button">
             styleType="primary"
             type="submit"
+            loading={isLoading}
             disabled={!form.values.email || form.values.email.length === 0}>
             Zurücksetzen
           </Button>
