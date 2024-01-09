@@ -21,7 +21,8 @@ import { paths } from "@/utils/paths";
 
 import { ModalsProvider } from "@mantine/modals";
 import { Notifications } from "@mantine/notifications";
-import { SessionContextProvider } from "@supabase/auth-helpers-react";
+import { SessionContextProvider, useSession, useUser } from "@supabase/auth-helpers-react";
+import type { Subscription } from "@supabase/gotrue-js/src/lib/types";
 import { type NextPage } from "next";
 import { type AppProps } from "next/app";
 import Head from "next/head";
@@ -30,7 +31,7 @@ import { appWithTranslation } from "next-i18next";
 import { posthog } from "posthog-js";
 import { PostHogProvider } from "posthog-js/react";
 import React, {
-  useEffect, type FunctionComponent, type ReactElement, type ReactNode
+  useEffect, type FunctionComponent, type ReactElement, type ReactNode, useRef
 } from "react";
 
 export type NextPageWithLayout<P = object, IP = P> = NextPage<P, IP> & {
@@ -44,6 +45,38 @@ type LayoutProps = {
 
 const Layout: FunctionComponent<LayoutProps> = ({ Component, pageProps }) =>
 {
+  const session = useSession();
+  const user = useUser();
+
+  useEffect(() =>
+  {
+    console.log("user:", user);
+  }, [user]);
+
+  useEffect(() =>
+  {
+    console.log("session:", session);
+  }, [session]);
+
+  const authStateSubscriptionRef = useRef<{data: {subscription: Subscription}}>();
+
+  useEffect(() =>
+  {
+    const currentSubscription = authStateSubscriptionRef.current?.data.subscription;
+
+    if(currentSubscription)
+    {
+      currentSubscription.unsubscribe();
+    }
+
+    authStateSubscriptionRef.current = supabase.auth.onAuthStateChange((event, session) =>
+    {
+      console.log("auth state changed:", event, session);
+    });
+
+    return () => currentSubscription?.unsubscribe();
+  }, []);
+
   if(Component.getLayout) 
   {
     return Component.getLayout(<Component {...pageProps}/>);
