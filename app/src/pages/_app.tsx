@@ -22,7 +22,7 @@ import { paths } from "@/utils/paths";
 import { ModalsProvider } from "@mantine/modals";
 import { Notifications } from "@mantine/notifications";
 import { SessionContextProvider, useSession, useUser } from "@supabase/auth-helpers-react";
-import type { Subscription } from "@supabase/gotrue-js/src/lib/types";
+import type { Subscription } from "@supabase/gotrue-js";
 import { type NextPage } from "next";
 import { type AppProps } from "next/app";
 import Head from "next/head";
