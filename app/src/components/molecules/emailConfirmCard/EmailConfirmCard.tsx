@@ -1,36 +1,26 @@
 /* eslint-disable max-lines */
 import { BodyText } from "@/components/atoms/BodyText/BodyText";
 import { Button } from "@/components/atoms/Button/Button";
+import { useResendConfirmationEmail } from "@/hooks/useResendConfirmationEmail";
 import { supabase } from "@/lib/supabase";
-import { paths } from "@/utils/paths";
 
-import { Loader, Title } from "@mantine/core";
-import { notifications } from "@mantine/notifications";
-import { AuthError, type AuthOtpResponse, type AuthResponse } from "@supabase/gotrue-js";
+import { Title } from "@mantine/core";
+import { AuthError, type AuthResponse } from "@supabase/gotrue-js";
 import { useMutation } from "@tanstack/react-query";
-import axios from "axios";
-import Link from "next/link";
 import React, {
-  type FunctionComponent, useState, useEffect, useRef, type ReactNode, useMemo
+  type FunctionComponent, useState, useEffect, useMemo
 } from "react";
 
 import { type ParsedUrlQuery } from "querystring";
 
 import * as styles from "./EmailConfirmCard.styles";
 
-interface ICardProps 
-{
-  readonly desc: string;
-  readonly showConfirmationButton: boolean;
-  // readonly isLoading?: boolean;
-  readonly title: string;
-}
-
 type ConfirmationState = "showConfirmationButton" | "invalidLink" | "showError" | "showResendError" | "success" | "linkResentSuccessfully";
 
 type Content = {
   desc: string;
   showConfirmationButton: boolean;
+  showResendButton: boolean;
   title: string;
 };
 
@@ -42,7 +32,6 @@ interface EmailConfirmCardProps
 const EmailConfirmCard: FunctionComponent<EmailConfirmCardProps> = ({ params }) =>
 {
   const [confirmationState, setConfirmationState] = useState<ConfirmationState | null>(null);
-  const redirectTimeout = useRef<NodeJS.Timeout>();
   const { email, token } = params;
 
   const { isLoading: isConfirmationLoading, mutate: confirmEmail } = useMutation({
@@ -80,26 +69,11 @@ const EmailConfirmCard: FunctionComponent<EmailConfirmCardProps> = ({ params }) 
     },
   });
 
-  const { isLoading: isResendLinkLoading, mutate: resendLink } = useMutation({
-    mutationFn: async (): Promise<AuthOtpResponse["data"]> =>
-    {
-      const result = await supabase.auth.resend({
-        email: email as string,
-        type: "signup",
-      });
-
-      if(result.error)
-      {
-        throw result.error;
-      }
-
-      console.log("successfully resent link", result);
-
-      return result.data;
-    },
-    mutationKey: ["resendLink"],
+  const { isLoading: isResendConfirmationEmailLoading, mutate: resendConfirmationEmail } = useResendConfirmationEmail({
+    email: email as string,
     onError: () => setConfirmationState("showResendError"),
     onSuccess: () => setConfirmationState("linkResentSuccessfully"),
+    showNotifications: false
   });
 
   useEffect(() =>
@@ -114,7 +88,12 @@ const EmailConfirmCard: FunctionComponent<EmailConfirmCardProps> = ({ params }) 
     }
   }, [confirmEmail, email, token]);
 
-  const { desc, showConfirmationButton, title }: Content = useMemo(() =>
+  const {
+    desc,
+    showConfirmationButton,
+    showResendButton,
+    title
+  }: Content = useMemo(() =>
   {
     let content: Content;
 
@@ -122,8 +101,9 @@ const EmailConfirmCard: FunctionComponent<EmailConfirmCardProps> = ({ params }) 
     {
       case "showConfirmationButton":
         content = {
-          desc: "Bitte klicke auf den folgenden Link, um deine E-Mail Adresse zu bestätigen und die Registrierung abzuschließen. Du wirst dann automatisch weitergeleitet.",
+          desc: "Bitte klicke auf den folgenden Link, um deine E-Mail Adresse zu bestätigen und die Registrierung abzuschließen.",
           showConfirmationButton: true,
+          showResendButton: false,
           title: "E-Mail Adresse bestätigen",
         };
         break;
@@ -131,6 +111,7 @@ const EmailConfirmCard: FunctionComponent<EmailConfirmCardProps> = ({ params }) 
         content = {
           desc: "Du kannst diesen Tab jetzt schließen.",
           showConfirmationButton: false,
+          showResendButton: false,
           title: "Bestätigung erfolgreich",
         };
         break;
@@ -138,20 +119,23 @@ const EmailConfirmCard: FunctionComponent<EmailConfirmCardProps> = ({ params }) 
         content = {
           desc: "Bitte versuche es erneut oder kontaktiere den Support.",
           showConfirmationButton: false,
+          showResendButton: false,
           title: "Da ist leider etwas schiefgelaufen",
         };
         break;
       case "invalidLink":
         content = {
-          desc: "Der Link ist ungültig oder wurde bereits verwendet.",
+          desc: "Der Link ist ungültig oder wurde bereits verwendet. Solltest du deine E-Mail Adresse bereits bestätigt haben, kannst du diesen Tab schließen und dich anmelden. Andernfalls kannst du einen neuen Link anfordern, indem du auf den folgenden Button klickst.",
           showConfirmationButton: false,
-          title: "E-Mail Bestätigung nicht erfolgreich",
+          showResendButton: true,
+          title: "Bestätigung nicht erfolgreich",
         };
         break;
       case "linkResentSuccessfully":
         content = {
-          desc: "Der Link wurde erfolgreich erneut gesendet. Du kannst diesen Tab nun schließen und den Link in deinem E-Mail Postfach öffnen.",
+          desc: "Der Link wurde erfolgreich erneut gesendet. Du kannst diesen Tab nun schließen und den Link in deinem E-Mail Postfach öffnen. Solltest du keine E-Mail erhalten haben, ist sie möglicherweise im Spam Ordner gelandet oder deine E-Mail Adresse ist bereits bestätigt.",
           showConfirmationButton: false,
+          showResendButton: false,
           title: "Link erneut gesendet",
         };
         break;
@@ -159,6 +143,7 @@ const EmailConfirmCard: FunctionComponent<EmailConfirmCardProps> = ({ params }) 
         content = {
           desc: "Es ist ein Fehler beim erneuten Senden des Links aufgetreten. Bitte versuche es erneut oder kontaktiere den Support.",
           showConfirmationButton: false,
+          showResendButton: false,
           title: "Link konnte nicht erneut gesendet werden",
         };
         break;
@@ -166,6 +151,7 @@ const EmailConfirmCard: FunctionComponent<EmailConfirmCardProps> = ({ params }) 
         content = {
           desc: "",
           showConfirmationButton: false,
+          showResendButton: false,
           title: "",
         };
         break;
@@ -192,6 +178,17 @@ const EmailConfirmCard: FunctionComponent<EmailConfirmCardProps> = ({ params }) 
             onClick={() => confirmEmail()}
             type="button">
             E-Mail Adresse bestätigen
+          </Button>
+        </div>
+      )}
+      {showResendButton && (
+        <div css={styles.buttonWrapper}>
+          <Button<"button">
+            loading={isResendConfirmationEmailLoading}
+            styleType="secondarySimple"
+            onClick={() => resendConfirmationEmail()}
+            type="button">
+            Bestätigungslink erneut senden
           </Button>
         </div>
       )}

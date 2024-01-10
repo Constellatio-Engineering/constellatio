@@ -1,4 +1,5 @@
 /* eslint-disable import/no-unused-modules */
+import { supabase } from "@/lib/supabase";
 /**
  * This is the client-side entrypoint for your tRPC API. It is used to create the `api` object which
  * contains the Next.js App-wrapper, as well as your type-safe React Query hooks.
@@ -9,6 +10,7 @@
 import { type AppRouter } from "@/server/api/root";
 import { type ClientError } from "@/utils/clientError";
 import { showErrorNotification } from "@/utils/notifications";
+import { paths } from "@/utils/paths";
 // import { paths } from "@/utils/paths";
 
 import { QueryCache } from "@tanstack/react-query";
@@ -61,7 +63,7 @@ export const api = createTRPCNext<AppRouter>({
         }
       },
       queryCache: new QueryCache({
-        onError: (err) =>
+        onError: async (err) =>
         {
           if(!(err instanceof TRPCClientError))
           {
@@ -77,7 +79,7 @@ export const api = createTRPCNext<AppRouter>({
             return;
           }
 
-          /* if(clientError.identifier === "unauthorized")
+          if(clientError.identifier === "unauthorized")
           {
             await supabase.auth.signOut();
 
@@ -88,7 +90,7 @@ export const api = createTRPCNext<AppRouter>({
             }
 
             return;
-          }*/
+          }
         },
       }),
     },
