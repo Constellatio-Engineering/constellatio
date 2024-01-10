@@ -1,3 +1,4 @@
+/* eslint-disable max-lines */
 import { BodyText } from "@/components/atoms/BodyText/BodyText";
 import { Button } from "@/components/atoms/Button/Button";
 import { AlertCard } from "@/components/atoms/Card/AlertCard";
@@ -6,6 +7,7 @@ import { Input } from "@/components/atoms/Input/Input";
 import ErrorCard from "@/components/molecules/errorCard/ErrorCard";
 import { colors } from "@/constants/styles/colors";
 import useContextAndErrorIfNull from "@/hooks/useContextAndErrorIfNull";
+import { useResendConfirmationEmail } from "@/hooks/useResendConfirmationEmail";
 import { supabase } from "@/lib/supabase";
 import { InvalidateQueriesContext } from "@/provider/InvalidateQueriesProvider";
 import { loginFormSchema, type LoginFormSchema } from "@/schemas/auth/loginForm.schema";
@@ -18,8 +20,9 @@ import { useForm, zodResolver } from "@mantine/form";
 import { useAtom } from "jotai";
 import Link from "next/link";
 import { useRouter } from "next/router"; 
-import { type FunctionComponent, useEffect, useState } from "react";
+import React, { type FunctionComponent, useEffect, useState } from "react";
 
+import * as styles from "./LoginForm.styles";
 import { ResetPasswordModal, resetPasswordModalVisible } from "../ResetPasswordModal/ResetPasswordModal";
 
 export const LoginForm: FunctionComponent = () =>
@@ -33,6 +36,11 @@ export const LoginForm: FunctionComponent = () =>
   const [signInError, setSignInError] = useState<unknown>();
   const lastEnteredPassword = useAuthPageStore(s => s.lastEnteredPassword);
   const lastEnteredEmail = useAuthPageStore(s => s.lastEnteredEmail);
+  const { isLoading: isResendConfirmationEmailLoading, mutate: resendConfirmationEmail } = useResendConfirmationEmail({
+    email: lastEnteredEmail,
+    onSuccess: () => setSignInError(null),
+    showNotifications: true,
+  });
   const form = useForm<LoginFormSchema>({
     initialValues: {
       email: lastEnteredEmail,
@@ -81,8 +89,28 @@ export const LoginForm: FunctionComponent = () =>
 
   return (
     <>
-      <ErrorCard error={signInError}/>
-      {wasPasswordUpdated && <AlertCard stylesOverwrite={{ marginBottom: "40px" }} variant="success">Dein Passwort wurde erfolgreich geändert. Du kannst dich jetzt mit deinem neuen Passwort anmelden.</AlertCard>}
+      <ErrorCard
+        error={signInError}
+        renderAdditionalContent={{
+          emailNotConfirmed: (
+            <p>
+              Du hast keine E-Mail erhalten oder sie ist abgelaufen? Kein Problem! Klicke{" "}
+              <button
+                type="button"
+                disabled={isResendConfirmationEmailLoading}
+                css={styles.inlineTextButton}
+                onClick={() => resendConfirmationEmail()}>hier
+              </button>,{" "}
+              um eine neue E-Mail zu erhalten.
+            </p>
+          )
+        }}
+      />
+      {wasPasswordUpdated && (
+        <AlertCard stylesOverwrite={{ marginBottom: "40px" }} variant="success">Dein Passwort wurde erfolgreich geändert. Du kannst dich jetzt mit deinem neuen Passwort
+          anmelden.
+        </AlertCard>
+      )}
       <form onSubmit={handleSubmit}>
         <Stack spacing="spacing-24">
           <Stack spacing="spacing-12">

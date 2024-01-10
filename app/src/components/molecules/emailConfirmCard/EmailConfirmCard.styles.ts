@@ -14,3 +14,7 @@ export const text = css`
   font-size: 18px;
   justify-content: center;
 `;
+
+export const buttonWrapper = css`
+  margin-top: 20px;
+`;
