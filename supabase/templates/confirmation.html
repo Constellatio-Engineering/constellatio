@@ -2,12 +2,9 @@
 <body>
   <h2 style="margin-bottom: 20px; font-size: 20px">Bestätige deine Registrierung</h2>
   <p style="margin-bottom: 10px">Bitte klicke auf den folgenden Link, um deine Registrierung zu bestätigen.</p>
-  <a href="{{ .SiteURL }}/confirm?confirmation_url={{ .ConfirmationURL }}" style="margin-bottom: 10px; display: block">
+  <a href="{{ .SiteURL }}/confirm?email={{ .Email }}&token={{ .Token }}" style="margin-bottom: 10px; display: block">
     Registrierung bestätigen
   </a>
-  <a href="{{ .SiteURL }}/confirm?email={{ .Email }}&token={{ .Token }}" style="margin-bottom: 10px; display: block">
-    Registrierung bestätigen 2
-  </a>
-  <p>Sollte der Link nicht funktionieren, kannst du auch den folgenden Code verwenden: {{ .Token }}</p>
+  <!--<p>Sollte der Link nicht funktionieren, kannst du auch den folgenden Code verwenden: {{ .Token }}</p>-->
 </body>
 </html>

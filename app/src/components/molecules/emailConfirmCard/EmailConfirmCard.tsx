@@ -30,9 +30,7 @@ type ConfirmationState = "showConfirmationButton" | "invalidLink" | "showError" 
 
 type Content = {
   desc: string;
-  isRedirecting: boolean;
   showConfirmationButton: boolean;
-  showResendButton: boolean;
   title: string;
 };
 
@@ -75,7 +73,11 @@ const EmailConfirmCard: FunctionComponent<EmailConfirmCardProps> = ({ params }) 
         setConfirmationState("showError");
       }
     },
-    onSuccess: () => setConfirmationState("success"),
+    onSuccess: (data) =>
+    {
+      console.log("success", data);
+      setConfirmationState("success");
+    },
   });
 
   const { isLoading: isResendLinkLoading, mutate: resendLink } = useMutation({
@@ -100,48 +102,6 @@ const EmailConfirmCard: FunctionComponent<EmailConfirmCardProps> = ({ params }) 
     onSuccess: () => setConfirmationState("linkResentSuccessfully"),
   });
 
-  /* useEffect(() =>
-  {
-    if(redirectTimeout.current)
-    {
-      clearTimeout(redirectTimeout.current);
-    }
-
-    if(params.error)
-    {
-      setCard({
-        desc: params.error_description?.toString() ?? "",
-        title: "E-Mail Bestätigung nicht erfolgreich",
-      });
-    }
-    else if(params.code)
-    {
-      setCard({
-        desc: "Du wirst in wenigen Sekunden automatisch weitergeleitet...",
-        isLoading: true,
-        title: "Bestätigung erfolgreich",
-      });
-
-      redirectTimeout.current = setTimeout(() =>
-      {
-        console.log("Redirecting to dashboard now...");
-        window.location.replace(paths.dashboard);
-        // void Router.replace(paths.dashboard);
-      }, 4000);
-    }
-    else 
-    {
-      console.error("Email confirmation failed. Query params did not contain an error or a code. Query params were: ", window.location.search);
-
-      setCard({
-        desc: "Bitte versuche es erneut oder kontaktiere den Support.",
-        title: "Da ist leider etwas schiefgelaufen",
-      });
-    }
-
-    return () => clearTimeout(redirectTimeout.current);
-  }, [params.code, params.error, params.error_description]);*/
-
   useEffect(() =>
   {
     if(typeof email !== "string" || typeof token !== "string")
@@ -154,13 +114,7 @@ const EmailConfirmCard: FunctionComponent<EmailConfirmCardProps> = ({ params }) 
     }
   }, [confirmEmail, email, token]);
 
-  const {
-    desc,
-    isRedirecting,
-    showConfirmationButton,
-    showResendButton,
-    title
-  }: Content = useMemo(() =>
+  const { desc, showConfirmationButton, title }: Content = useMemo(() =>
   {
     let content: Content;
 
@@ -169,63 +123,49 @@ const EmailConfirmCard: FunctionComponent<EmailConfirmCardProps> = ({ params }) 
       case "showConfirmationButton":
         content = {
           desc: "Bitte klicke auf den folgenden Link, um deine E-Mail Adresse zu bestätigen und die Registrierung abzuschließen. Du wirst dann automatisch weitergeleitet.",
-          isRedirecting: false,
           showConfirmationButton: true,
-          showResendButton: false,
           title: "E-Mail Adresse bestätigen",
         };
         break;
       case "success":
         content = {
-          desc: "Du wirst in wenigen Sekunden automatisch weitergeleitet...",
-          isRedirecting: true,
+          desc: "Du kannst diesen Tab jetzt schließen.",
           showConfirmationButton: false,
-          showResendButton: false,
           title: "Bestätigung erfolgreich",
         };
         break;
       case "showError":
         content = {
           desc: "Bitte versuche es erneut oder kontaktiere den Support.",
-          isRedirecting: false,
           showConfirmationButton: false,
-          showResendButton: false,
           title: "Da ist leider etwas schiefgelaufen",
         };
         break;
       case "invalidLink":
         content = {
-          desc: "Der Link ist ungültig oder wurde bereits verwendet. Mit dem folgenden Button kannst du dir einen neuen Link zusenden lassen.",
-          isRedirecting: false,
+          desc: "Der Link ist ungültig oder wurde bereits verwendet.",
           showConfirmationButton: false,
-          showResendButton: true,
           title: "E-Mail Bestätigung nicht erfolgreich",
         };
         break;
       case "linkResentSuccessfully":
         content = {
           desc: "Der Link wurde erfolgreich erneut gesendet. Du kannst diesen Tab nun schließen und den Link in deinem E-Mail Postfach öffnen.",
-          isRedirecting: false,
           showConfirmationButton: false,
-          showResendButton: false,
           title: "Link erneut gesendet",
         };
         break;
       case "showResendError":
         content = {
           desc: "Es ist ein Fehler beim erneuten Senden des Links aufgetreten. Bitte versuche es erneut oder kontaktiere den Support.",
-          isRedirecting: false,
           showConfirmationButton: false,
-          showResendButton: false,
           title: "Link konnte nicht erneut gesendet werden",
         };
         break;
       case null:
         content = {
           desc: "",
-          isRedirecting: false,
           showConfirmationButton: false,
-          showResendButton: false,
           title: "",
         };
         break;
@@ -243,9 +183,6 @@ const EmailConfirmCard: FunctionComponent<EmailConfirmCardProps> = ({ params }) 
         component="p"
         css={styles.text}>
         {desc}
-        {isRedirecting && (
-          <Loader size="sm" ml={8}/>
-        )}
       </BodyText>
       {showConfirmationButton && (
         <div css={styles.buttonWrapper}>
@@ -255,17 +192,6 @@ const EmailConfirmCard: FunctionComponent<EmailConfirmCardProps> = ({ params }) 
             onClick={() => confirmEmail()}
             type="button">
             E-Mail Adresse bestätigen
-          </Button>
-        </div>
-      )}
-      {true && (
-        <div css={styles.buttonWrapper}>
-          <Button<"button">
-            loading={isResendLinkLoading}
-            styleType="secondarySimple"
-            onClick={() => resendLink()}
-            type="button">
-            Bestätigungslink erneut senden
           </Button>
         </div>
       )}
