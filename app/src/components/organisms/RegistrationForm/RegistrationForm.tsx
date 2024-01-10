@@ -21,7 +21,7 @@ import { api } from "@/utils/api";
 import { isDevelopment, isDevelopmentOrStaging } from "@/utils/env";
 import { getConfirmEmailUrl, paths } from "@/utils/paths";
 
-import { Stack, Title } from "@mantine/core";
+import { Loader, Stack, Title } from "@mantine/core";
 import { useForm, zodResolver } from "@mantine/form";
 import { notifications } from "@mantine/notifications";
 import Link from "next/link";
@@ -67,6 +67,19 @@ export const RegistrationForm: FunctionComponent = () =>
 
   useEffect(() =>
   {
+    const currentSubscription = supabase.auth.onAuthStateChange((event, _session) =>
+    {
+      if(event === "SIGNED_IN")
+      {
+        window.location.replace(paths.dashboard);
+      }
+    });
+
+    return () => currentSubscription?.data.subscription.unsubscribe();
+  }, []);
+
+  useEffect(() =>
+  {
     useAuthPageStore.setState({
       lastEnteredEmail: form.values.email,
       lastEnteredPassword: form.values.password,
@@ -97,6 +110,7 @@ export const RegistrationForm: FunctionComponent = () =>
         case "emailConfirmationRequired":
         {
           void setShouldShowEmailConfirmationDialog(true);
+          await supabase.auth.startAutoRefresh();
           break;
         }
         case "signupComplete":
@@ -169,14 +183,16 @@ export const RegistrationForm: FunctionComponent = () =>
             <strong>Bitte überprüfe auch deinen Spam-Ordner.</strong>
           </BodyText>
           <BodyText ta="center" styleType="body-01-regular">
-            Nach erfolgreicher Bestätigung kannst du dich mit deinem neuen Account einloggen.
+            Nach erfolgreicher Bestätigung wirst du hier automatisch eingeloggt.
+          </BodyText>
+          <BodyText
+            ta="center"
+            styleType="body-01-bold"
+            css={styles.waitingForConfirmation}>
+            Warte auf Bestätigung
+            <Loader size={20}/>
           </BodyText>
         </div>
-        <Link href="/login" passHref>
-          <Button<"button"> styleType="primary">
-            Weiter zum Login
-          </Button>
-        </Link>
         <BodyText
           pos="absolute"
           bottom={48}

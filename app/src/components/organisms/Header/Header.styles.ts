@@ -34,7 +34,7 @@ export const SHeader = styled.header<{ withShadow?: boolean }>`
   width: 100%;
   left: 0;
   z-index: 40;
-  box-shadow: 0 2px 6px rgba(0, 0, 0, ${(props) => (props.withShadow ? "0.1" : "0")});
+  box-shadow: 0 2px 6px rgba(0, 0, 0, ${props => (props.withShadow ? "0.1" : "0")});
 `;
 
 export const links = css`
