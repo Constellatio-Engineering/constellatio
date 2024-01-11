@@ -13,7 +13,7 @@
     }
   ],
   "functions": {
-    "api/trpc/[trpc].ts": {
+    "pages/api/trpc/[trpc].ts": {
       "maxDuration": 1
     }
   }
