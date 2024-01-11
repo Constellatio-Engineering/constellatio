@@ -1,19 +1,20 @@
 import { BodyText } from "@/components/atoms/BodyText/BodyText";
 import { Button } from "@/components/atoms/Button/Button";
 import useSetOnboardingResult from "@/hooks/useSetOnboardingResult";
+import { type SearchStoreProps } from "@/stores/onboarding.store";
 import { paths } from "@/utils/paths";
 
 import { Modal, Title } from "@mantine/core";
 import { useRouter } from "next/router";
 import {
-  type Dispatch, type FunctionComponent, type SetStateAction, useEffect, useRef 
+  type FunctionComponent, useEffect, useRef
 } from "react";
 
 import * as styles from "./OnboardingModal.styles";
 
 type Props = {
   readonly onboardingStepsIndex: number;
-  readonly setOnboardingStepsIndex: Dispatch<SetStateAction<number>>;
+  readonly setOnboardingStepsIndex: SearchStoreProps["setOnboardingStepsIndex"];
 };
 
 const OnboardingModal: FunctionComponent<Props> = ({ onboardingStepsIndex, setOnboardingStepsIndex }) =>
@@ -53,13 +54,13 @@ const OnboardingModal: FunctionComponent<Props> = ({ onboardingStepsIndex, setOn
       opened={onboardingStepsIndex === 3}
       centered
       onClose={onClose}
-      closeOnClickOutside
       size="lg"
-      padding={20}
-      closeOnEscape
-      withCloseButton>
+      padding="50px 20px 20px"
+      closeOnClickOutside={false}
+      closeOnEscape={false}
+      withCloseButton={false}>
       <div css={styles.contentWrapper}>
-        <Title order={2} ta="center">Willkommen bei Constellatio!</Title>
+        <Title order={2} ta="center">Aktiv lernen mit Fällen</Title>
         <BodyText
           ta="center"
           styleType="body-01-regular"
@@ -72,15 +73,15 @@ const OnboardingModal: FunctionComponent<Props> = ({ onboardingStepsIndex, setOn
             size="large"
             miw="100%"
             styleType="secondarySimple"
-            onClick={async () => onClose()}>
-            Schließen
+            onClick={async () => onClose(paths.cases)}>
+            Fall-Übersicht ansehen
           </Button>
           <Button<"button">
             size="large"
             miw="100%"
             styleType="primary"
-            onClick={async () => onClose(paths.cases)}>
-            Fall-Übersicht ansehen
+            onClick={async () => onClose(`${paths.cases}/0fcdcecc-c9d4-4326-b12f-55488717c083?id=0fcdcecc-c9d4-4326-b12f-55488717c083`)}>
+            Einführungs-Fall starten
           </Button>
         </div>
       </div>
