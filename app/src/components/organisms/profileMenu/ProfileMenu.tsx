@@ -9,6 +9,8 @@ import useSetOnboardingResult from "@/hooks/useSetOnboardingResult";
 import { useSignout } from "@/hooks/useSignout";
 import useSubscription from "@/hooks/useSubscription";
 import useUserDetails from "@/hooks/useUserDetails";
+import { useWasOnboardingPostponed } from "@/hooks/useWasOnboardingPostponed";
+import { useOnboardingStore } from "@/stores/onboarding.store";
 
 import { IconLogout } from "@tabler/icons-react";
 import React, { type FunctionComponent } from "react";
@@ -28,6 +30,8 @@ const ProfileMenu: FunctionComponent<IProfileMenu> = ({ activeTabSlug, setTab, t
   const { setOnboardingResult } = useSetOnboardingResult();
   const { error, isLoading, userDetails } = useUserDetails();
   const { isOnPaidSubscription, isOnTrailSubscription } = useSubscription();
+  const [, setWasOnboardingPostponed] = useWasOnboardingPostponed();
+  const setOnboardingStepsIndex = useOnboardingStore(s => s.setOnboardingStepsIndex);
 
   if(isLoading)
   {
@@ -70,7 +74,16 @@ const ProfileMenu: FunctionComponent<IProfileMenu> = ({ activeTabSlug, setTab, t
           ))}
         </div>
         <div css={styles.groupedLinks}>
-          <LinkButton title="Einführung wiederholen" icon={<NoteIcon/>} onClick={async () => setOnboardingResult({ result: null })}/>
+          <LinkButton
+            title="Einführung wiederholen"
+            icon={<NoteIcon/>}
+            onClick={async () =>
+            {
+              setOnboardingStepsIndex(0);
+              setWasOnboardingPostponed(false);
+              await setOnboardingResult({ result: null });
+            }}
+          />
           <LinkButton title="Ausloggen" onClick={handleSignOut} icon={<IconLogout/>}/>
         </div>
       </div>

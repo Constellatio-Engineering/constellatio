@@ -3,17 +3,24 @@ import { DownloadIcon } from "@/components/Icons/DownloadIcon";
 import OnboardingTutorialStep from "@/components/molecules/onboardingTutorialStep/OnboardingTutorialStep";
 import OnboardingTutorialStepItem from "@/components/molecules/onboardingTutorialStep/OnboardingTutorialStepItem";
 import OnboardingTutorialPopover from "@/components/organisms/onboardingTutorialPopover/OnboardingTutorialPopover";
+import type { SearchStoreProps } from "@/stores/onboarding.store";
 
-import { type Dispatch, type FunctionComponent, type SetStateAction } from "react";
+import { type FunctionComponent } from "react";
 
 import HeaderItemPersonalSpace, { type THeaderItemPersonalSpaceProps } from "./HeaderItemPersonalSpace";
 
 type TOnboardingSecondStep = THeaderItemPersonalSpaceProps & {
+  readonly onSkipPressHandler: () => void;
   readonly onboardingStepsIndex: number;
-  readonly setOnboardingStepsIndex: Dispatch<SetStateAction<number>>;
+  readonly setOnboardingStepsIndex: SearchStoreProps["setOnboardingStepsIndex"];
 };
 
-const OnboardingSecondStep: FunctionComponent<TOnboardingSecondStep> = ({ onboardingStepsIndex, pathname, setOnboardingStepsIndex }) => 
+const OnboardingSecondStep: FunctionComponent<TOnboardingSecondStep> = ({
+  onboardingStepsIndex,
+  onSkipPressHandler,
+  pathname,
+  setOnboardingStepsIndex
+}) =>
 {
   return (
     <OnboardingTutorialPopover
@@ -27,7 +34,7 @@ const OnboardingSecondStep: FunctionComponent<TOnboardingSecondStep> = ({ onboar
           totalSteps={3}
           stepTitle="Persönlicher Bereich"
           onNextPressHandler={() => setOnboardingStepsIndex(2)}
-          onSkipPressHandler={() => setOnboardingStepsIndex(3)}>
+          onSkipPressHandler={onSkipPressHandler}>
           <OnboardingTutorialStepItem icon={<Bookmark size={20}/>} itemTitle="Favoriten" itemDescription="Füge Constellatio Inhalte mit nur einem Klick deinen Favoriten hinzu."/>
           <OnboardingTutorialStepItem icon={<DownloadIcon size={20}/>} itemTitle="Deine Dateien" itemDescription="Alles an einem Ort: Uploade deine vorhandenen Unterlagen in die Constellatio Jura-Cloud."/>
         </OnboardingTutorialStep>

@@ -2,14 +2,15 @@ import { Search } from "@/components/Icons/Search";
 import OnboardingTutorialStep from "@/components/molecules/onboardingTutorialStep/OnboardingTutorialStep";
 import OnboardingTutorialStepItem from "@/components/molecules/onboardingTutorialStep/OnboardingTutorialStepItem";
 import OnboardingTutorialPopover from "@/components/organisms/onboardingTutorialPopover/OnboardingTutorialPopover";
+import type { SearchStoreProps } from "@/stores/onboarding.store";
 
-import { type Dispatch, type SetStateAction, type FunctionComponent } from "react";
+import { type FunctionComponent } from "react";
 
 import HeaderItemSearchBar from "./HeaderItemSearchBar";
 
 type TOnboardingThirdStepProps = {
   readonly onboardingStepsIndex: number;
-  readonly setOnboardingStepsIndex: Dispatch<SetStateAction<number>>;
+  readonly setOnboardingStepsIndex: SearchStoreProps["setOnboardingStepsIndex"];
 };
 
 const OnboardingThirdStep: FunctionComponent<TOnboardingThirdStepProps> = ({ onboardingStepsIndex, setOnboardingStepsIndex }) => 

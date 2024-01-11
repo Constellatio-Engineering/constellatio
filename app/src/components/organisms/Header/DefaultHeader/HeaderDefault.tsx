@@ -1,15 +1,16 @@
 import { UserDropdown } from "@/components/molecules/UserDropdown/UserDropdown";
 import OnboardingModal from "@/components/organisms/onboardingModal/OnboardingModal";
 import useOnboardingResult from "@/hooks/useOnboardingResult";
+import { useWasOnboardingPostponed } from "@/hooks/useWasOnboardingPostponed";
+import { useOnboardingStore } from "@/stores/onboarding.store";
 import { isDevelopment } from "@/utils/env";
 import { paths } from "@/utils/paths";
 
-// import { useMediaQuery } from "@mantine/hooks";
 import { useMantineTheme } from "@mantine/styles";
 import Image from "next/image";
 import Link from "next/link";
 import { useRouter } from "next/router";
-import { useState, type FunctionComponent, useEffect } from "react";
+import { type FunctionComponent, useEffect } from "react";
 
 import HeaderDefaultRecreateSearch from "./HeaderDefaultRecreateSearch";
 import HeaderItemLink from "./OnboardingStep1/HeaderItemLink";
@@ -30,23 +31,27 @@ interface IHeaderLink
   title: string;
 }
 
+const links: IHeaderLink[] = [
+  { slug: paths.dashboard, title: "Dashboard" },
+  { slug: paths.cases, title: "Fälle" },
+  { slug: paths.dictionary, title: "Lexikon" },
+];
+
 const HeaderDefault: FunctionComponent = () => 
 {
   const { pathname } = useRouter();
   const theme = useMantineTheme();
   const { isLoading: isGetOnboardingResultLoading, onboardingResult } = useOnboardingResult();
-  const showOnboarding = !isGetOnboardingResultLoading && onboardingResult === null;
-
-  const links: IHeaderLink[] = [
-    { slug: paths.dashboard, title: "Dashboard" },
-    { slug: paths.cases, title: "Fälle" },
-    { slug: paths.dictionary, title: "Lexikon" },
-  ];
-
-  const [onboardingStepsIndex, setOnboardingStepsIndex] = useState<number>(0);
+  const [wasOnboardingPostponed, setWasOnboardingPostponed] = useWasOnboardingPostponed();
+  const skipOnboarding = (): void => setWasOnboardingPostponed(true);
+  const showOnboarding = !isGetOnboardingResultLoading && onboardingResult === null && !wasOnboardingPostponed;
+  const onboardingStepsIndex = useOnboardingStore(s => s.onboardingStepsIndex);
+  const setOnboardingStepsIndex = useOnboardingStore(s => s.setOnboardingStepsIndex);
 
   useEffect(() => 
   {
+    const { setOnboardingStepsIndex } = useOnboardingStore.getState();
+
     if(onboardingResult == null) 
     {
       setOnboardingStepsIndex(0);
@@ -73,6 +78,7 @@ const HeaderDefault: FunctionComponent = () =>
                     key={linkIndex}
                     link={link}
                     pathname={pathname}
+                    onSkipPressHandler={skipOnboarding}
                     onboardingStepsIndex={onboardingStepsIndex}
                     setOnboardingStepsIndex={setOnboardingStepsIndex}
                   />
@@ -92,7 +98,12 @@ const HeaderDefault: FunctionComponent = () =>
               <HeaderItemSearchBar/>
             )}
             {showOnboarding ? (
-              <OnboardingSecondStep onboardingStepsIndex={onboardingStepsIndex} pathname={pathname} setOnboardingStepsIndex={setOnboardingStepsIndex}/>
+              <OnboardingSecondStep
+                onboardingStepsIndex={onboardingStepsIndex}
+                pathname={pathname}
+                onSkipPressHandler={skipOnboarding}
+                setOnboardingStepsIndex={setOnboardingStepsIndex}
+              />
             ) : (
               <HeaderItemPersonalSpace pathname={pathname}/>
             )}

@@ -17,7 +17,7 @@ export const registrationFormSchema = z
     displayName: nameValidation,
     email: emailValidation,
     firstName: nameValidation,
-    gender: genderValidation,
+    gender: genderValidation.nullable(),
     lastName: nameValidation,
     password: passwordSchema,
     passwordConfirmation: passwordSchema,
