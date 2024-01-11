@@ -11,10 +11,5 @@
       "path": "/api/cron/update-search-indexes",
       "schedule": "*/1 * * * *"
     }
-  ],
-  "functions": {
-    "pages/api/trpc/[trpc].ts": {
-      "maxDuration": 1
-    }
-  }
+  ]
 }
