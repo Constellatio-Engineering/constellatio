@@ -14,3 +14,9 @@ export const waitingForConfirmation = css`
   gap: 8px;
   justify-content: center;
 `;
+
+export const inlineLink = css`
+  all: unset;
+  text-decoration: underline;
+  cursor: pointer;
+`;
