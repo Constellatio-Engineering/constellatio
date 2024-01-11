@@ -21,7 +21,7 @@ import { api } from "@/utils/api";
 import { isDevelopment, isDevelopmentOrStaging } from "@/utils/env";
 import { getConfirmEmailUrl, paths } from "@/utils/paths";
 
-import { Loader, Stack, Title } from "@mantine/core";
+import { Stack, Title } from "@mantine/core";
 import { useForm, zodResolver } from "@mantine/form";
 import { notifications } from "@mantine/notifications";
 import Link from "next/link";
@@ -183,14 +183,9 @@ export const RegistrationForm: FunctionComponent = () =>
             <strong>Bitte überprüfe auch deinen Spam-Ordner.</strong>
           </BodyText>
           <BodyText ta="center" styleType="body-01-regular">
-            Nach erfolgreicher Bestätigung wirst du hier automatisch eingeloggt.
-          </BodyText>
-          <BodyText
-            ta="center"
-            styleType="body-01-bold"
-            css={styles.waitingForConfirmation}>
-            Warte auf Bestätigung
-            <Loader size={20}/>
+            Sofern du den Link in diesem Browser öffnest, wirst du automatisch eingeloggt.
+            Öffnest du den Link hingegen auf deinem Smartphone, musst du dich nach der Bestätigung manuell einloggen.
+            Klicke <Link href={paths.login} css={styles.inlineLink}>hier</Link>, um dich manuell einzuloggen.
           </BodyText>
         </div>
         <BodyText
