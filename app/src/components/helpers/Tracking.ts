@@ -194,11 +194,7 @@ const Tracking: FunctionComponent = () =>
 
     isDocumentVisibleRef.current = visibility;
 
-    posthog.capture(
-      visibility ? "$visibilityOn" : "$visibilityOff",
-      {},
-      { transport: "sendBeacon" }
-    );
+    posthog.capture(visibility ? "$visibilityOn" : "$visibilityOff");
   }, []);
 
   const onRouteChange = useCallback((): void =>
@@ -228,9 +224,6 @@ const Tracking: FunctionComponent = () =>
         {
           $current_url: pageleavePropsRef.current?.url,
           $pathname: pageleavePropsRef.current?.pathname
-        },
-        {
-          transport: "sendBeacon"
         });
     }
     else
