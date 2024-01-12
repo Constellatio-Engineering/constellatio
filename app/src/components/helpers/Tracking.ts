@@ -2,7 +2,7 @@
 import { env } from "@/env.mjs";
 import { supabase } from "@/lib/supabase";
 import { getIsUserLoggedInClient } from "@/provider/AuthStateProvider";
-import { isTrackingEnabled, isProduction } from "@/utils/env";
+import { isProduction } from "@/utils/env";
 
 import { useRouter } from "next/router";
 import { type PostHogConfig, posthog } from "posthog-js";
@@ -51,20 +51,6 @@ const posthogConfigLoggedOut: Partial<PostHogConfig> = {
   opt_out_persistence_by_default: true,
 };
 
-const configTrackingDisabled: Partial<PostHogConfig> = {
-  ...posthogConfigLoggedOut,
-  api_host: env.NEXT_PUBLIC_POSTHOG_HOST,
-  loaded: (posthog: PostHog) =>
-  {
-    if(!isProduction)
-    {
-      posthog.opt_out_capturing();
-    }
-  },
-  persistence: "memory",
-  secure_cookie: true,
-};
-
 const setPosthogConfig = (state: "loggedIn" | "loggedOut"): void =>
 {
   switch (state)
@@ -78,19 +64,56 @@ const setPosthogConfig = (state: "loggedIn" | "loggedOut"): void =>
   }
 };
 
+const getEmailAndIdFromUser = async (): Promise<{ email: string; id: string } | undefined> => 
+{
+  const { data: sessionData, error: getSessionError } = await supabase.auth.getSession();
+
+  if(getSessionError)
+  {
+    console.warn("Error getting session", getSessionError);
+    return;
+  }
+
+  const getIsUserLoggedInClientResult = getIsUserLoggedInClient(sessionData.session);
+
+  if(getIsUserLoggedInClientResult.isUserLoggedIn)
+  {
+    const { email, id } = getIsUserLoggedInClientResult.user;
+    if(!email || !id) 
+    {
+      return;
+    }
+    return { email, id };
+  }
+  return;
+};
+
+const identifyIfNeccesary = (email: string, id: string): void => 
+{
+  const distinctIdPosthog = posthog.get_distinct_id();
+  if(distinctIdPosthog !== id)
+  {
+    posthog.identify(id, { email });
+  }
+};
+
 if(typeof window !== "undefined")
 {
-  if(isTrackingEnabled)
+  posthog.init(env.NEXT_PUBLIC_POSTHOG_KEY, {
+    ...configTrackingEnabled,
+    ...posthogConfigLoggedOut
+  });
+
+  posthog.onSessionId(async () => 
   {
-    posthog.init(env.NEXT_PUBLIC_POSTHOG_KEY, {
-      ...configTrackingEnabled,
-      ...posthogConfigLoggedOut
-    });
-  }
-  else
-  {
-    posthog.init("invalide_token", { ...configTrackingDisabled });
-  }
+    const getEmailAndIdFromUserResult = await getEmailAndIdFromUser();
+
+    if(getEmailAndIdFromUserResult !== undefined)
+    {
+      const { email, id } = getEmailAndIdFromUserResult;
+      identifyIfNeccesary(email, id);
+    }
+  });
 
   supabase.auth.onAuthStateChange((event, session) =>
   {
@@ -105,48 +128,36 @@ if(typeof window !== "undefined")
         {
           return;
         }
+        
+        setPosthogConfig("loggedIn");
 
-        if(isTrackingEnabled)
+        if(!posthog.has_opted_in_capturing())
         {
-          setPosthogConfig("loggedIn");
-
-          if(!posthog.has_opted_in_capturing())
-          {
-            posthog.opt_in_capturing();
-          }
-
-          const distinctIdPosthog = posthog.get_distinct_id();
-          if(distinctIdPosthog !== id)
-          {
-            posthog.identify(id, { email });
-          }
-
-          posthog._start_queue_if_opted_in();
-
-          if(isProduction)
-          {
-            posthog.startSessionRecording();
-          }
+          posthog.opt_in_capturing();
         }
+
+        identifyIfNeccesary(email, id);
+        posthog._start_queue_if_opted_in();
+        posthog.startSessionRecording();
+        
         break;
 
       case "SIGNED_OUT":
-        if(isTrackingEnabled)
+        
+        if(posthog.has_opted_in_capturing())
         {
-          if(posthog.has_opted_in_capturing())
-          {
-            posthog.opt_out_capturing({
-              clear_persistence: true,
-            });
-          }
-          if(posthog.sessionRecordingStarted())
-          {
-            posthog.stopSessionRecording();
-          }
-
-          setPosthogConfig("loggedOut");
-          posthog.reset();
+          posthog.opt_out_capturing({
+            clear_persistence: true,
+          });
         }
+        if(posthog.sessionRecordingStarted())
+        {
+          posthog.stopSessionRecording();
+        }
+
+        setPosthogConfig("loggedOut");
+        posthog.reset();
+        
         break;
 
       default:
@@ -164,25 +175,12 @@ const Tracking: FunctionComponent = () =>
 
   const onVisibilityChange = useCallback(async (): Promise<void> =>
   {
-    const { data: sessionData, error: getSessionError } = await supabase.auth.getSession();
+    const getEmailAndIdFromUserResult = await getEmailAndIdFromUser();
 
-    if(getSessionError)
+    if(getEmailAndIdFromUserResult !== undefined)
     {
-      console.warn("Error getting session", getSessionError);
-      return;
-    }
-
-    const getIsUserLoggedInClientResult = getIsUserLoggedInClient(sessionData.session);
-
-    if(getIsUserLoggedInClientResult.isUserLoggedIn)
-    {
-      const distinctIdPosthog = posthog.get_distinct_id();
-      const { email, id } = getIsUserLoggedInClientResult.user;
-
-      if(distinctIdPosthog !== id)
-      {
-        posthog.identify(id, { email });
-      }
+      const { email, id } = getEmailAndIdFromUserResult;
+      identifyIfNeccesary(email, id);
     }
 
     const visibility = !document.hidden;
