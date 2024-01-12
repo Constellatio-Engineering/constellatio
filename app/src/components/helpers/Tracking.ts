@@ -37,7 +37,6 @@ const posthogConfigLoggedIn: Partial<PostHogConfig> = {
   disable_session_recording: false,
   opt_out_capturing_by_default: false,
   opt_out_persistence_by_default: false,
-  session_idle_timeout_seconds: 20,
 };
 
 const posthogConfigLoggedOut: Partial<PostHogConfig> = {
