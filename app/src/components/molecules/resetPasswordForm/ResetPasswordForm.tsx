@@ -1,7 +1,7 @@
 import { BodyText } from "@/components/atoms/BodyText/BodyText";
 import { Button } from "@/components/atoms/Button/Button";
-import { AlertCard } from "@/components/atoms/Card/AlertCard";
 import { Input } from "@/components/atoms/Input/Input";
+import ErrorCard from "@/components/molecules/errorCard/ErrorCard";
 import { type ResetPasswordModalProgress } from "@/components/organisms/ResetPasswordModal/ResetPasswordModal";
 import { env } from "@/env.mjs";
 import { supabase } from "@/lib/supabase";
@@ -26,7 +26,7 @@ interface Props
 
 const ResetPasswordForm: FunctionComponent<Props> = ({ setProgress }) =>
 {
-  const [hasError, setHasError] = useState<boolean>(false);
+  const [error, setError] = useState<unknown | null>(null);
   const form = useForm<ResetPasswordFormValues>({
     initialValues: {
       email: ""
@@ -54,7 +54,7 @@ const ResetPasswordForm: FunctionComponent<Props> = ({ setProgress }) =>
     catch (error)
     {
       console.log(error);
-      setHasError(true);
+      setError(error);
       form.setValues({ email: "" });
       return;
     }
@@ -83,15 +83,17 @@ const ResetPasswordForm: FunctionComponent<Props> = ({ setProgress }) =>
             {...emailFormInputProps}
             onChange={e =>
             {
-              setHasError(false);
+              setError(null);
               emailFormInputProps.onChange(e.target.value);
             }}
           />
-          {hasError && (
-            <AlertCard variant="error">
-              Da ist leider etwas schief gelaufen. Das Passwort konnte nicht zurückgesetzt werden. Bitte versuche es später erneut oder wende dich an den Support.
-            </AlertCard>
-          )}
+          <ErrorCard
+            error={error}
+            overwriteErrorMessages={{
+              tooManyRequests: "Bitte warte mindestens 60 Sekunden, bevor du es erneut versuchst.",
+              unknownError: "Da ist leider etwas schief gelaufen. Das Passwort konnte nicht zurückgesetzt werden. Bitte versuche es später erneut oder wende dich an den Support.",
+            }}
+          />
           <Button<"button">
             styleType="primary"
             type="submit"

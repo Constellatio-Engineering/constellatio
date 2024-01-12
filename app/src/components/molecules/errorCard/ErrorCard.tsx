@@ -4,6 +4,7 @@ import { AuthApiError, AuthError } from "@supabase/gotrue-js";
 import React, { type FunctionComponent, type ReactNode, useMemo } from "react";
 
 type HandledError =
+  | "tooManyRequests"
   | "emailNotConfirmed"
   | "invalidCredentials"
   | "passwordsMatch"
@@ -42,6 +43,11 @@ const ErrorCard: FunctionComponent<ErrorCardsProps> = ({
 
     if(error instanceof AuthError || error instanceof AuthApiError)
     {
+      if(error.status === 429)
+      {
+        return "tooManyRequests";
+      }
+
       switch (error.message)
       {
         case "Email not confirmed": { return "emailNotConfirmed"; }
@@ -62,6 +68,11 @@ const ErrorCard: FunctionComponent<ErrorCardsProps> = ({
 
   return (
     <div style={{ marginBottom }}>
+      {renderedError === "tooManyRequests" && (
+        <AlertCard variant="error">
+          {overwriteErrorMessages?.tooManyRequests ?? "Du hast zu viele Anfragen gesendet. Bitte versuche es später erneut."}
+        </AlertCard>
+      )}
       {renderedError === "emailNotConfirmed" && (
         <AlertCard variant="error">
           <p>{overwriteErrorMessages?.emailNotConfirmed ?? "Du musst zuerst deine E-Mail-Adresse bestätigen. Eine Bestätigungsmail wurde dir bereits zugesendet."}</p>
