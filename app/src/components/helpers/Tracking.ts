@@ -4,14 +4,14 @@ import { supabase } from "@/lib/supabase";
 import { getIsUserLoggedInClient } from "@/provider/AuthStateProvider";
 import { isProduction } from "@/utils/env";
 
-import { useRouter } from "next/router";
+import { Router, useRouter } from "next/router";
 import { type PostHogConfig, posthog } from "posthog-js";
 import { type PostHog } from "posthog-js/react";
 import {
   type FunctionComponent, useCallback, useEffect, useRef
 } from "react";
 
-type PageleaveProps = {
+type PageLeaveProps = {
   pathname: string;
   url: string;
 };
@@ -87,7 +87,7 @@ const getEmailAndIdFromUser = async (): Promise<{ email: string; id: string } | 
   return;
 };
 
-const identifyIfNeccesary = (email: string, id: string): void => 
+const identifyIfNecessary = (email: string, id: string): void =>
 {
   const distinctIdPosthog = posthog.get_distinct_id();
   if(distinctIdPosthog !== id)
@@ -103,64 +103,14 @@ if(typeof window !== "undefined")
     ...posthogConfigLoggedOut
   });
 
-  posthog.onSessionId(async () => 
+  posthog.onSessionId(async () =>
   {
     const getEmailAndIdFromUserResult = await getEmailAndIdFromUser();
 
     if(getEmailAndIdFromUserResult !== undefined)
     {
       const { email, id } = getEmailAndIdFromUserResult;
-      identifyIfNeccesary(email, id);
-    }
-  });
-
-  supabase.auth.onAuthStateChange((event, session) =>
-  {
-    switch (event)
-    {
-      case "INITIAL_SESSION":
-      case "SIGNED_IN":
-        const id = session?.user?.id;
-        const email = session?.user?.email;
-
-        if(!id || !email)
-        {
-          return;
-        }
-        
-        setPosthogConfig("loggedIn");
-
-        if(!posthog.has_opted_in_capturing())
-        {
-          posthog.opt_in_capturing();
-        }
-
-        identifyIfNeccesary(email, id);
-        posthog._start_queue_if_opted_in();
-        posthog.startSessionRecording();
-        
-        break;
-
-      case "SIGNED_OUT":
-        
-        if(posthog.has_opted_in_capturing())
-        {
-          posthog.opt_out_capturing({
-            clear_persistence: true,
-          });
-        }
-        if(posthog.sessionRecordingStarted())
-        {
-          posthog.stopSessionRecording();
-        }
-
-        setPosthogConfig("loggedOut");
-        posthog.reset();
-        
-        break;
-
-      default:
-        break;
+      identifyIfNecessary(email, id);
     }
   });
 }
@@ -169,7 +119,7 @@ const Tracking: FunctionComponent = () =>
 {
   const router = useRouter();
   const firstRendering = useRef<boolean>(true);
-  const pageleavePropsRef = useRef<PageleaveProps | null>(null);
+  const pageleavePropsRef = useRef<PageLeaveProps | null>(null);
   const isDocumentVisibleRef = useRef<boolean | null>(null);
 
   const onVisibilityChange = useCallback(async (): Promise<void> =>
@@ -179,7 +129,7 @@ const Tracking: FunctionComponent = () =>
     if(getEmailAndIdFromUserResult !== undefined)
     {
       const { email, id } = getEmailAndIdFromUserResult;
-      identifyIfNeccesary(email, id);
+      identifyIfNecessary(email, id);
     }
 
     const visibility = !document.hidden;
@@ -221,7 +171,8 @@ const Tracking: FunctionComponent = () =>
         {
           $current_url: pageleavePropsRef.current?.url,
           $pathname: pageleavePropsRef.current?.pathname
-        });
+        }
+      );
     }
     else
     {
@@ -237,21 +188,79 @@ const Tracking: FunctionComponent = () =>
 
   useEffect(() =>
   {
-    router.events.on("routeChangeComplete", onRouteChange);
-    return () => router.events.off("routeChangeComplete", onRouteChange);
-  }, [onRouteChange, router.events]);
+    Router.events.on("routeChangeComplete", onRouteChange);
+    return () => Router.events.off("routeChangeComplete", onRouteChange);
+  }, [onRouteChange]);
 
   useEffect(() =>
   {
-    router.events.on("routeChangeStart", onRouteChangeStart);
-    return () => router.events.off("routeChangeStart", onRouteChangeStart);
-  }, [onRouteChangeStart, router.events]);
+    Router.events.on("routeChangeStart", onRouteChangeStart);
+    return () => Router.events.off("routeChangeStart", onRouteChangeStart);
+  }, [onRouteChangeStart]);
 
   useEffect(() =>
   {
-    router.events.on("beforeHistoryChange", onBeforeHistoryChange);
-    return () => router.events.off("beforeHistoryChange", onBeforeHistoryChange);
-  }, [onBeforeHistoryChange, router.events]);
+    Router.events.on("beforeHistoryChange", onBeforeHistoryChange);
+    return () => Router.events.off("beforeHistoryChange", onBeforeHistoryChange);
+  }, [onBeforeHistoryChange]);
+
+  useEffect(() =>
+  {
+    const onAuthStateChangeSubscription = supabase.auth.onAuthStateChange((event, session) =>
+    {
+      switch (event)
+      {
+        case "INITIAL_SESSION":
+        case "SIGNED_IN":
+        {
+          const id = session?.user?.id;
+          const email = session?.user?.email;
+
+          if(!id || !email)
+          {
+            return;
+          }
+
+          setPosthogConfig("loggedIn");
+
+          if(!posthog.has_opted_in_capturing())
+          {
+            posthog.opt_in_capturing();
+          }
+
+          identifyIfNecessary(email, id);
+          posthog._start_queue_if_opted_in();
+          posthog.startSessionRecording();
+
+          break;
+        }
+        case "SIGNED_OUT":
+        {
+          if(posthog.has_opted_in_capturing())
+          {
+            posthog.opt_out_capturing({
+              clear_persistence: true,
+            });
+          }
+          if(posthog.sessionRecordingStarted())
+          {
+            posthog.stopSessionRecording();
+          }
+
+          setPosthogConfig("loggedOut");
+          posthog.reset();
+
+          break;
+        }
+        default:
+        {
+          break;
+        }
+      }
+    });
+
+    return () => onAuthStateChangeSubscription?.data.subscription.unsubscribe();
+  }, []);
 
   return null;
 };
