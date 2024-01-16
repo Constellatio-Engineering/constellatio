@@ -16,8 +16,6 @@ export type ServerSidePropsResult = SSRConfig;
 
 export const getServerSideProps: GetServerSideProps<ServerSidePropsResult> = async (ctx) =>
 {
-  console.log("--- login getServerSideProps ---");
-
   const supabase = createPagesServerClient(ctx, {
     supabaseKey: env.SUPABASE_SERVICE_ROLE_KEY,
     supabaseUrl: env.NEXT_PUBLIC_SUPABASE_URL
@@ -25,12 +23,8 @@ export const getServerSideProps: GetServerSideProps<ServerSidePropsResult> = asy
 
   const { isUserLoggedIn } = await getIsUserLoggedIn(supabase);
 
-  console.log("isUserLoggedIn", isUserLoggedIn);
-
   if(isUserLoggedIn)
   {
-    console.log("redirecting to dashboard");
-
     return {
       redirect: {
         destination: paths.dashboard,
@@ -38,8 +32,6 @@ export const getServerSideProps: GetServerSideProps<ServerSidePropsResult> = asy
       }
     };
   }
-
-  console.log("not logged in, rendering login page");
 
   const commonProps = await getCommonProps({ locale: ctx.locale || defaultLocale });
 

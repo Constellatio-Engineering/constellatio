@@ -59,6 +59,7 @@ export const AuthPage: FC<AuthPageProps> = ({ tab }) =>
           <Switcher
             size="big"
             value={tab}
+            keepMounted={false}
             onTabChange={handleTabChange}
             tabStyleOverwrite={{ width: "49.5%" }}
             panelStyleOverwrite={{ padding: "40px 0" }}>
