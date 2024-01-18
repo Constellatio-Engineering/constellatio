@@ -35,6 +35,7 @@ const links: IHeaderLink[] = [
   { slug: paths.dashboard, title: "Dashboard" },
   { slug: paths.cases, title: "Fälle" },
   { slug: paths.dictionary, title: "Lexikon" },
+  { slug: paths.forum, title: "Forum" },
 ];
 
 const HeaderDefault: FunctionComponent = () => 
