@@ -18,6 +18,7 @@ type PageLeaveProps = {
 
 const configTrackingEnabled: Partial<PostHogConfig> = {
   api_host: env.NEXT_PUBLIC_POSTHOG_HOST,
+  autocapture: true,
   loaded: (posthog: PostHog) =>
   {
     if(!isProduction)
@@ -30,7 +31,6 @@ const configTrackingEnabled: Partial<PostHogConfig> = {
 };
 
 const posthogConfigLoggedIn: Partial<PostHogConfig> = {
-  autocapture: true,
   capture_pageleave: true,
   capture_pageview: true,
   disable_persistence: false,
@@ -40,7 +40,6 @@ const posthogConfigLoggedIn: Partial<PostHogConfig> = {
 };
 
 const posthogConfigLoggedOut: Partial<PostHogConfig> = {
-  autocapture: false,
   capture_pageleave: true,
   capture_pageview: true,
   disable_persistence: true,
