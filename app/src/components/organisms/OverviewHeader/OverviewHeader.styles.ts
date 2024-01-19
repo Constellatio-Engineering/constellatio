@@ -45,10 +45,16 @@ export const contentHeader = ({
 		svg {
 			height: 100%;
 			max-width: 100%;
+      g {
+        g {
+          rect {
+            fill: ${variant === "forum" ? "rgba(0, 0, 0, 0.25)" : "white"} !important;
+          }
+        }
+      }
 		}
 	}
-
-	`;
+`;
 
 export const categoriesButtons = () => 
 {
