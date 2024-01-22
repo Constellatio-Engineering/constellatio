@@ -9,7 +9,7 @@ import CaseBlockBookmarkButton from "@/components/organisms/caseBlock/caseBlockB
 import useBookmarks from "@/hooks/useBookmarks";
 import useCasesProgress from "@/hooks/useCasesProgress";
 import { type IGenArticle, type IGenFullCaseFragment } from "@/services/graphql/__generated/sdk";
-import { paths } from "@/utils/paths";
+import { appPaths } from "@/utils/paths";
 
 import { useMediaQuery } from "@mantine/hooks";
 import Link from "next/link";
@@ -104,7 +104,7 @@ const ItemBlock: FunctionComponent<ICaseBlockProps> = ({
             return item && item.id && (
               <tr key={item?.id}>
                 <td className="primaryCell">
-                  <Link passHref shallow href={`${variant === "case" ? paths.cases : paths.dictionary}/${item?.id}`}>
+                  <Link passHref shallow href={`${variant === "case" ? appPaths.cases : appPaths.dictionary}/${item?.id}`}>
                     <TableCell variant="titleTableCell" clickable>
                       {item?.title}
                     </TableCell>
@@ -113,14 +113,14 @@ const ItemBlock: FunctionComponent<ICaseBlockProps> = ({
                 {variant === "case" && (
                   <td>
                     {/* THIS WILL GET caseId instead of variant */}
-                    <Link passHref shallow href={`${variant === "case" ? paths.cases : paths.dictionary}/${item?.id}`}>
+                    <Link passHref shallow href={`${variant === "case" ? appPaths.cases : appPaths.dictionary}/${item?.id}`}>
                       <StatusTableCell progressState={caseProgress?.progressState || "not-started"}/>
                     </Link>
                   </td>
                 )}
                 {!isSmallScreensOnFavorite && item?.__typename === "Case" && (
                   <td>
-                    <Link passHref shallow href={`${variant === "case" ? paths.cases : paths.dictionary}/${item?.id}`}>
+                    <Link passHref shallow href={`${variant === "case" ? appPaths.cases : appPaths.dictionary}/${item?.id}`}>
                       <TableCell variant="simpleTableCell" icon={<ClockIcon/>}>
                         {timeFormatter(item?.durationToCompleteInMinutes ?? 0)}
                       </TableCell>
@@ -129,7 +129,7 @@ const ItemBlock: FunctionComponent<ICaseBlockProps> = ({
                 )}
                 {tableType === "search" && <td><TableCell variant="simpleTableCell">{item?.legalArea?.legalAreaName}</TableCell></td>}
                 <td css={styles.topicCell} title={topicsCombined}>
-                  <Link passHref shallow href={`${variant === "case" ? paths.cases : paths.dictionary}/${item?.id}`}>
+                  <Link passHref shallow href={`${variant === "case" ? appPaths.cases : appPaths.dictionary}/${item?.id}`}>
                     <TableCell variant="simpleTableCell">{item?.topic?.[0]?.topicName}</TableCell>
                   </Link>
                 </td>

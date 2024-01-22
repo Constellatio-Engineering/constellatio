@@ -3,7 +3,7 @@ import TableCell from "@/components/atoms/tableCell/TableCell";
 import { Bookmark } from "@/components/Icons/Bookmark";
 import { ClockIcon } from "@/components/Icons/ClockIcon";
 import TableIconButton from "@/components/molecules/tableIconButton/TableIconButton";
-import { paths } from "@/utils/paths";
+import { appPaths } from "@/utils/paths";
 
 import { Box } from "@mantine/core";
 import { type Meta, type StoryObj } from "@storybook/react";
@@ -17,7 +17,7 @@ const Template: FunctionComponent<ITableProps> = (args) => (
     <Table {...args}>
       <tr>
         <td>
-          <Link passHref href={paths.dashboard}>
+          <Link passHref href={appPaths.dashboard}>
             <TableCell variant="titleTableCell">
               ArbR 1 | Working with young unicorns
             </TableCell>

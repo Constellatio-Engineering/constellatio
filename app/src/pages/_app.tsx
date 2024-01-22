@@ -16,7 +16,7 @@ import MeilisearchProvider from "@/provider/MeilisearchProvider";
 import useSearchBarStore from "@/stores/searchBar.store";
 import { api } from "@/utils/api";
 import { isProduction, isTrackingEnabled } from "@/utils/env";
-import { paths } from "@/utils/paths";
+import { appPaths } from "@/utils/paths";
 
 import { ModalsProvider } from "@mantine/modals";
 import { Notifications } from "@mantine/notifications";
@@ -71,7 +71,7 @@ const AppContainer: FunctionComponent<ConstellatioAppProps> = ({ Component, page
 
   useEffect(() =>
   {
-    if(!pathname.startsWith(paths.search))
+    if(!pathname.startsWith(appPaths.search))
     {
       useSearchBarStore.setState({ searchValue: "" });
     }

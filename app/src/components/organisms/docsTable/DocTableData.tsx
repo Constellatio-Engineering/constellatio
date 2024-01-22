@@ -12,7 +12,7 @@ import useUploadFolders from "@/hooks/useUploadFolders";
 import useDocumentEditorStore from "@/stores/documentEditor.store";
 import { api } from "@/utils/api";
 import { getFolderName } from "@/utils/folders";
-import { paths } from "@/utils/paths";
+import { apiPaths } from "@/utils/paths";
 import { downloadFileFromUrl } from "@/utils/utils";
 
 import { Menu, Modal, Title } from "@mantine/core";
@@ -61,7 +61,7 @@ export const DocsTableData: FunctionComponent<Document> = (doc) =>
   const { isLoading: isDownloading, mutate: downloadDocument } = useMutation({
     mutationFn: async () =>
     {
-      const response = await axios.post(paths.downloadDocument, { documentId, }, { responseType: "blob" });
+      const response = await axios.post(apiPaths.downloadDocument, { documentId, }, { responseType: "blob" });
       const pdfBlob = new Blob([response.data], { type: "application/pdf" });
       const url = window.URL.createObjectURL(pdfBlob);
       await downloadFileFromUrl(url, `${name}.pdf`);

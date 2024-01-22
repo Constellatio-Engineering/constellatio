@@ -3,7 +3,7 @@ import { type User } from "@/db/schema";
 import { env } from "@/env.mjs";
 import { getIsUserLoggedInServer } from "@/utils/auth";
 import { isDevelopment } from "@/utils/env";
-import { paths } from "@/utils/paths";
+import { apiPaths, appPaths, authPaths } from "@/utils/paths";
 import { queryParams } from "@/utils/query-params";
 import { getHasSubscription } from "@/utils/subscription";
 
@@ -26,7 +26,7 @@ export const middleware: NextMiddleware = async (req) =>
   if(!getIsUserLoggedInResult.isUserLoggedIn)
   {
     const redirectUrl = req.nextUrl.clone();
-    redirectUrl.pathname = paths.login;
+    redirectUrl.pathname = authPaths.login;
     redirectUrl.searchParams.set(queryParams.redirectedFrom, req.nextUrl.pathname + req.nextUrl.search);
     console.info("User is not logged in. Redirecting to: ", redirectUrl.toString());
     return NextResponse.redirect(redirectUrl);
@@ -38,7 +38,7 @@ export const middleware: NextMiddleware = async (req) =>
 
   try
   {
-    const response = await fetch((isDevelopment ? "http://localhost:3010" : env.NEXT_PUBLIC_WEBSITE_URL) + `/${paths.getSubscriptionStatus}?secret=${env.GET_SUBSCRIPTION_STATUS_SECRET}&userId=${getIsUserLoggedInResult.user.id}`);
+    const response = await fetch((isDevelopment ? "http://localhost:3010" : env.NEXT_PUBLIC_WEBSITE_URL) + `/${apiPaths.getSubscriptionStatus}?secret=${env.GET_SUBSCRIPTION_STATUS_SECRET}&userId=${getIsUserLoggedInResult.user.id}`);
     const data = await response.json() as Pick<User, "subscriptionStatus">;
     subscriptionStatus = data;
     console.log("subscriptionStatus", subscriptionStatus);
@@ -63,13 +63,13 @@ export const middleware: NextMiddleware = async (req) =>
 
     const redirectUrl = req.nextUrl.clone();
 
-    if(redirectUrl.pathname.startsWith(paths.profile) && redirectUrl.searchParams.get("tab") === "subscription")
+    if(redirectUrl.pathname.startsWith(appPaths.profile) && redirectUrl.searchParams.get("tab") === "subscription")
     {
       console.log("User is already on subscription tab. Not redirecting.");
       return NextResponse.next();
     }
 
-    redirectUrl.pathname = paths.profile;
+    redirectUrl.pathname = appPaths.profile;
     redirectUrl.searchParams.set("tab", "subscription");
     return NextResponse.redirect(redirectUrl);
   }

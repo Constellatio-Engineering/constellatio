@@ -1,4 +1,4 @@
-import { paths } from "@/utils/paths";
+import { appPaths } from "@/utils/paths";
 
 import Link from "next/link";
 import React, { type FunctionComponent } from "react";
@@ -13,7 +13,7 @@ export interface ITag
 
 const Tag: FunctionComponent<ITag> = ({ title }) => (
   <Link
-    href={`${paths.search}?find=${title}`}
+    href={`${appPaths.search}?find=${title}`}
     css={styles.tag}
     target="_blank"
     onClick={e => e.stopPropagation()}>

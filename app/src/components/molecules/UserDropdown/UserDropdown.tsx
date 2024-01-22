@@ -2,7 +2,7 @@ import { BodyText } from "@/components/atoms/BodyText/BodyText";
 import ProfilePicture from "@/components/molecules/profilePicture/ProfilePicture";
 import { useSignout } from "@/hooks/useSignout";
 import useUserDetails from "@/hooks/useUserDetails";
-import { paths } from "@/utils/paths";
+import { appPaths } from "@/utils/paths";
 
 import { Menu, Title } from "@mantine/core";
 import { IconLogout, IconUser } from "@tabler/icons-react";
@@ -40,7 +40,7 @@ export const UserDropdown: FunctionComponent = () =>
       <Menu.Dropdown>
         <Menu.Item
           component={Link}
-          href={paths.profile}
+          href={appPaths.profile}
           css={styles.menuItem}
           icon={null}>
           <div className="user-info">
@@ -53,7 +53,7 @@ export const UserDropdown: FunctionComponent = () =>
         </Menu.Item>
         <Menu.Item
           component={Link}
-          href={paths.profile}
+          href={appPaths.profile}
           icon={<IconUser size="0.9rem" stroke={1.5}/>}>
           Profil
         </Menu.Item>

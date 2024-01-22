@@ -1,6 +1,6 @@
 import useContextAndErrorIfNull from "@/hooks/useContextAndErrorIfNull";
 import { InvalidateQueriesContext } from "@/provider/InvalidateQueriesProvider";
-import { paths } from "@/utils/paths";
+import { appPaths } from "@/utils/paths";
 
 import { useRouter } from "next/router";
 import { useCallback } from "react";
@@ -18,7 +18,7 @@ export const useOnDocumentMutation: UseOnDocumentMutation = () =>
 
   const onDocumentMutation: OnDocumentMutation = useCallback(async () =>
   {
-    if(pathname.startsWith(paths.search))
+    if(pathname.startsWith(appPaths.search))
     {
       await invalidateSearchResults();
     }

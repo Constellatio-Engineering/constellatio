@@ -19,7 +19,7 @@ import { allUniversities } from "@/schemas/auth/userData.validation";
 import useAuthPageStore from "@/stores/authPage.store";
 import { api } from "@/utils/api";
 import { isDevelopment, isDevelopmentOrStaging } from "@/utils/env";
-import { getConfirmEmailUrl, paths } from "@/utils/paths";
+import { appPaths, authPaths, getConfirmEmailUrl } from "@/utils/paths";
 
 import { Stack, Title } from "@mantine/core";
 import { useForm, zodResolver } from "@mantine/form";
@@ -71,7 +71,7 @@ export const RegistrationForm: FunctionComponent = () =>
     {
       if(event === "SIGNED_IN")
       {
-        window.location.replace(paths.dashboard);
+        window.location.replace(appPaths.dashboard);
       }
     });
 
@@ -116,7 +116,7 @@ export const RegistrationForm: FunctionComponent = () =>
         case "signupComplete":
         {
           await supabase.auth.setSession(result.session);
-          window.location.replace(paths.dashboard);
+          window.location.replace(appPaths.dashboard);
           break;
         }
       }
@@ -185,7 +185,7 @@ export const RegistrationForm: FunctionComponent = () =>
           <BodyText ta="center" styleType="body-01-regular">
             Sofern du den Link in diesem Browser öffnest, wirst du automatisch eingeloggt.
             Öffnest du den Link hingegen auf deinem Smartphone, musst du dich nach der Bestätigung manuell einloggen.
-            Klicke <Link href={paths.login} css={styles.inlineLink}>hier</Link>, um dich manuell einzuloggen.
+            Klicke <Link href={authPaths.login} css={styles.inlineLink}>hier</Link>, um dich manuell einzuloggen.
           </BodyText>
         </div>
         <BodyText
@@ -215,7 +215,7 @@ export const RegistrationForm: FunctionComponent = () =>
           <CustomLink
             styleType="link-secondary"
             component={Link}
-            href={paths.login}
+            href={authPaths.login}
             stylesOverwrite={{ color: colors["neutrals-02"][2], marginBottom: 10, textAlign: "left" }}>
             Du hast schon ein Konto?
           </CustomLink>

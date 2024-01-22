@@ -3,7 +3,7 @@ import DashboardLastEditedBlockHeader from "@/components/molecules/dashboardLast
 import FavoritesExcerpt from "@/components/organisms/favoritesExcerpt/FavoritesExcerpt";
 import { useLastViewedArticles } from "@/hooks/useLastViewedArticles";
 import { useLastViewedCases } from "@/hooks/useLastViewedCases";
-import { paths } from "@/utils/paths";
+import { appPaths } from "@/utils/paths";
 
 import { Title } from "@mantine/core";
 import Link from "next/link";
@@ -24,7 +24,7 @@ const DashboardLastEditedBlock: FunctionComponent = () =>
           alignItems: "center", display: "flex", gap: 12, justifyContent: "space-between" 
         }}>
           <Title order={3}>Fälle</Title>
-          <Link href={`${paths.cases}`}>
+          <Link href={`${appPaths.cases}`}>
             <Button<"button">
               styleType="secondarySimple"
               type="button"
@@ -48,7 +48,7 @@ const DashboardLastEditedBlock: FunctionComponent = () =>
           alignItems: "center", display: "flex", gap: 12, justifyContent: "space-between", marginTop: 40
         }}>
           <Title order={3}>Lexikon</Title>
-          <Link href={`${paths.dictionary}`}>
+          <Link href={`${appPaths.dictionary}`}>
             <Button<"button">
               styleType="secondarySimple"
               type="button"

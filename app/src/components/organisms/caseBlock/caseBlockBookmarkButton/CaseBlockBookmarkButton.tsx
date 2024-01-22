@@ -4,7 +4,7 @@ import TableIconButton from "@/components/molecules/tableIconButton/TableIconBut
 import useAddBookmark from "@/hooks/useAddBookmark";
 import useRemoveBookmark from "@/hooks/useRemoveBookmark";
 import { type AddOrRemoveBookmarkSchema } from "@/schemas/bookmarks/addOrRemoveBookmark.schema";
-import { paths } from "@/utils/paths";
+import { appPaths } from "@/utils/paths";
 import { type Nullable } from "@/utils/types";
 
 import { useRouter } from "next/router";
@@ -29,7 +29,7 @@ const CaseBlockBookmarkButton: FunctionComponent<ICaseBlockBookmarkButtonProps> 
 }) =>
 {
   const router = useRouter();
-  const mustConfirmDeletion = router.pathname.startsWith(paths.personalSpace) || router.pathname.startsWith(paths.dashboard);
+  const mustConfirmDeletion = router.pathname.startsWith(appPaths.personalSpace) || router.pathname.startsWith(appPaths.dashboard);
   const [showDeleteBookmarkModal, setShowDeleteBookmarkModal] = React.useState<boolean>(false);
   const { isLoading: isAddingBookmarkLoading, mutate: addBookmark } = useAddBookmark();
   const {

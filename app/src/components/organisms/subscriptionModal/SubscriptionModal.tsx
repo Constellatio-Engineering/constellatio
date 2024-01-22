@@ -6,7 +6,7 @@ import { Modal } from "@/components/molecules/Modal/Modal";
 import { useSignout } from "@/hooks/useSignout";
 import useSubscription from "@/hooks/useSubscription";
 import { AuthStateContext } from "@/provider/AuthStateProvider";
-import { paths } from "@/utils/paths";
+import { isPathAppPath } from "@/utils/paths";
 
 import { Title } from "@mantine/core";
 import { useLocalStorage } from "@mantine/hooks";
@@ -86,7 +86,7 @@ const SubscriptionModal: FunctionComponent = () =>
   const [wasClosed, setWasClosed] = useState(false);
   const todayDateAsString = new Date().toISOString().split("T")[0] as string;
   const isOnValidSubscription = isOnPaidSubscription || isOnTrailSubscription;
-  const isAuthenticated = isUserLoggedIn && !router.pathname.startsWith(paths.login) && !router.pathname.startsWith(paths.register);
+  const isAuthenticated = isUserLoggedIn && isPathAppPath(router.pathname);
 
   // this check is to prevent modal flickering
   if(!subscriptionDetails)
