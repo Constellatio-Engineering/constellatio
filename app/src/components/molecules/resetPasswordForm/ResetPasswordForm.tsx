@@ -6,7 +6,7 @@ import { type ResetPasswordModalProgress } from "@/components/organisms/ResetPas
 import { env } from "@/env.mjs";
 import { supabase } from "@/lib/supabase";
 import { resetPasswordFormSchema } from "@/schemas/auth/resetPassword.schema";
-import { paths } from "@/utils/paths";
+import { authPaths } from "@/utils/paths";
 
 import { Stack, Title } from "@mantine/core";
 import { useForm, zodResolver } from "@mantine/form";
@@ -43,7 +43,7 @@ const ResetPasswordForm: FunctionComponent<Props> = ({ setProgress }) =>
     try
     {
       const { error } = await supabase.auth.resetPasswordForEmail(formValues.email, {
-        redirectTo: env.NEXT_PUBLIC_WEBSITE_URL + paths.recover,
+        redirectTo: env.NEXT_PUBLIC_WEBSITE_URL + authPaths.recover,
       });
 
       if(error)

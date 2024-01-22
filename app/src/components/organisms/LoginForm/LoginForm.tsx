@@ -12,7 +12,7 @@ import { supabase } from "@/lib/supabase";
 import { InvalidateQueriesContext } from "@/provider/InvalidateQueriesProvider";
 import { loginFormSchema, type LoginFormSchema } from "@/schemas/auth/loginForm.schema";
 import useAuthPageStore from "@/stores/authPage.store";
-import { paths } from "@/utils/paths";
+import { appPaths, authPaths } from "@/utils/paths";
 import { queryParams } from "@/utils/query-params";
 
 import { Stack } from "@mantine/core";
@@ -78,7 +78,7 @@ export const LoginForm: FunctionComponent = () =>
       }
 
       await invalidateEverything();
-      window.location.replace(`${redirectTo || paths.dashboard}`);
+      window.location.replace(`${redirectTo || appPaths.dashboard}`);
     }
     catch (error)
     {
@@ -137,7 +137,7 @@ export const LoginForm: FunctionComponent = () =>
           <CustomLink
             styleType="link-secondary"
             component={Link}
-            href={paths.register}
+            href={authPaths.register}
             stylesOverwrite={{ color: colors["neutrals-02"][2], textAlign: "left" }}>
             Du hast noch kein Konto?
           </CustomLink>

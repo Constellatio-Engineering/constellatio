@@ -5,7 +5,7 @@ import { Search } from "@/components/Icons/Search";
 import UseQueryStateWrapper from "@/components/Wrappers/useQueryStateWrapper/UseQueryStateWrapper";
 import useSearchResults from "@/hooks/useSearchResults";
 import useSearchBarStore from "@/stores/searchBar.store";
-import { paths } from "@/utils/paths";
+import { appPaths } from "@/utils/paths";
 
 import { Input } from "@mantine/core";
 import { useLocalStorage } from "@mantine/hooks";
@@ -78,7 +78,7 @@ const SearchBarContent: FunctionComponent = () =>
       setLocalSearchHistory((prev) => [...prev, searchValue]);
     }
 
-    void router.push({ pathname: `${paths.search}`, query: { find: `${searchQuery}` } });
+    void router.push({ pathname: `${appPaths.search}`, query: { find: `${searchQuery}` } });
   };
 
   return (

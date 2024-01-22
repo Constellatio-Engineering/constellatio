@@ -13,7 +13,7 @@ import { type IGenCase } from "@/services/graphql/__generated/sdk";
 import useCaseSolvingStore, { type CaseStepIndex } from "@/stores/caseSolving.store";
 import { api } from "@/utils/api";
 import { getGamesFromCase } from "@/utils/case";
-import { paths } from "@/utils/paths";
+import { appPaths } from "@/utils/paths";
 
 import React, { useEffect, type FunctionComponent, useRef } from "react";
 
@@ -142,15 +142,15 @@ const DetailsPage: FunctionComponent<IDetailsPageProps> = ({ content, variant })
         caseId={content?.id}
         pathSlugs={[
           {
-            path: variant === "case" ? paths.cases : paths.dictionary,
+            path: variant === "case" ? appPaths.cases : appPaths.dictionary,
             slug: variant === "case" ? "Fälle" : "Lexikon" 
           },
           {
-            path: `${variant === "case" ? paths.cases : paths.dictionary}?category=${mainCategorySlug}`,
+            path: `${variant === "case" ? appPaths.cases : appPaths.dictionary}?category=${mainCategorySlug}`,
             slug: mainCategorySlug ?? ""
           },
           { 
-            path: `${variant === "case" ? paths.cases : paths.dictionary}/${content?.id}`,
+            path: `${variant === "case" ? appPaths.cases : appPaths.dictionary}/${content?.id}`,
             slug: content?.title?.length && content?.title?.length > 40 ? content?.title?.slice(0, 40) + " ..." : content?.title ?? ""
           }
         ]}

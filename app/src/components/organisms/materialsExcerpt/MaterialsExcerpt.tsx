@@ -1,7 +1,7 @@
 import MaterialCard from "@/components/molecules/materialCard/MaterialCard";
 import EmptyStateCard from "@/components/organisms/emptyStateCard/EmptyStateCard";
 import { type AllUserData } from "@/hooks/useAllUserData";
-import { paths } from "@/utils/paths";
+import { appPaths } from "@/utils/paths";
 
 import { useRouter } from "next/router";
 import React, { Fragment, type FunctionComponent } from "react";
@@ -31,8 +31,8 @@ const MaterialsExcerpt: FunctionComponent<Props> = ({ allUserData }) =>
           variant="For-small-areas"
           button={{
             content: "Zu deinen Dateien",
-            onClick: async () => router.push(paths.personalSpace, {
-              pathname: paths.personalSpace,
+            onClick: async () => router.push(appPaths.personalSpace, {
+              pathname: appPaths.personalSpace,
               query: { category: "materials" }
             })
           }}

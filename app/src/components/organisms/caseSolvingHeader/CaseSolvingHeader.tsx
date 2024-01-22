@@ -11,7 +11,7 @@ import useRemoveBookmark from "@/hooks/useRemoveBookmark";
 import { type AddOrRemoveBookmarkSchema } from "@/schemas/bookmarks/addOrRemoveBookmark.schema";
 import { type Maybe, type IGenArticle } from "@/services/graphql/__generated/sdk";
 import { isTrackingEnabled } from "@/utils/env";
-import { paths } from "@/utils/paths";
+import { appPaths } from "@/utils/paths";
 import { type Nullable } from "@/utils/types";
 
 import { Button, Container, Title, useMantineTheme } from "@mantine/core";
@@ -132,7 +132,7 @@ const CaseSolvingHeader: FunctionComponent<ICaseSolvingHeaderProps> = ({
             <Button
               type="button"
               component={Link}
-              href={`${paths.dictionary}/${previousArticleId}`}
+              href={`${appPaths.dictionary}/${previousArticleId}`}
               css={[styles.navButton, !previousArticleId && styles.navButtonDisabled]}
               disabled={!previousArticleId}
               leftIcon={<IconArrowLeft/>}
@@ -142,7 +142,7 @@ const CaseSolvingHeader: FunctionComponent<ICaseSolvingHeaderProps> = ({
             <Button
               type="button"
               component={Link}
-              href={`${paths.dictionary}/${nextArticleId}`}
+              href={`${appPaths.dictionary}/${nextArticleId}`}
               css={[styles.navButton, !nextArticleId && styles.navButtonDisabled]}
               disabled={!nextArticleId}
               rightIcon={<IconArrowRight/>}

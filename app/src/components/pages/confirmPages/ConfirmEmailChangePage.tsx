@@ -3,7 +3,7 @@ import { changeEmailTabSlug, tabQueryKey } from "@/components/pages/profilePage/
 import useContextAndErrorIfNull from "@/hooks/useContextAndErrorIfNull";
 import { InvalidateQueriesContext } from "@/provider/InvalidateQueriesProvider";
 import { api } from "@/utils/api";
-import { paths } from "@/utils/paths";
+import { appPaths } from "@/utils/paths";
 import { queryParams } from "@/utils/query-params";
 
 import { Loader, Title } from "@mantine/core";
@@ -39,7 +39,7 @@ const ConfirmEmailChangePage: FunctionComponent = () =>
       console.log("Successfully updated user details");
       await invalidateUserDetails();
       await router.push({
-        pathname: paths.profile,
+        pathname: appPaths.profile,
         query: {
           [tabQueryKey]: changeEmailTabSlug,
           [queryParams.emailChangeSuccess]: "true",

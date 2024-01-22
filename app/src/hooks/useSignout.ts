@@ -1,5 +1,5 @@
 import { supabase } from "@/lib/supabase";
-import { paths } from "@/utils/paths";
+import { authPaths } from "@/utils/paths";
 import { sleep } from "@/utils/utils";
 
 import { notifications } from "@mantine/notifications";
@@ -17,7 +17,7 @@ export const useSignout: UseSignout = () =>
     {
       await supabase.auth.signOut();
       await sleep(250);
-      await router.replace(paths.login);
+      await router.replace(authPaths.login);
 
       notifications.show({
         message: "Bis bald bei Constellatio!",

@@ -5,7 +5,7 @@ import { PasswordValidationSchema } from "@/components/helpers/PasswordValidatio
 import ErrorCard from "@/components/molecules/errorCard/ErrorCard";
 import { supabase } from "@/lib/supabase";
 import { type UpdatePasswordFormSchema, updatePasswordFormSchema } from "@/schemas/auth/updatePasswordForm.schema";
-import { paths } from "@/utils/paths";
+import { appPaths } from "@/utils/paths";
 
 import { Box, Stack, Title } from "@mantine/core";
 import { useForm, zodResolver } from "@mantine/form";
@@ -65,7 +65,7 @@ export const UpdatePasswordForm: FunctionComponent = () =>
         <div css={styles.buttonWrapper}>
           <Button<"button">
             styleType="primary"
-            onClick={async () => router.replace(paths.dashboard)}
+            onClick={async () => router.replace(appPaths.dashboard)}
             type="button">
             Weiter zur Web-App
           </Button>
