@@ -1,7 +1,7 @@
 import { db } from "@/db/connection";
 import { documents } from "@/db/schema";
 import { downloadDocumentSchema } from "@/schemas/documents/downloadDocument.schema";
-import { getIsUserLoggedIn } from "@/utils/auth";
+import { getIsUserLoggedInServer } from "@/utils/auth";
 import { createPdfBuffer } from "@/utils/pdf";
 
 import { createPagesServerClient } from "@supabase/auth-helpers-nextjs";
@@ -11,7 +11,7 @@ import { type NextApiHandler } from "next";
 const handler: NextApiHandler = async (req, res) =>
 {
   const supabase = createPagesServerClient({ req, res });
-  const getIsUserLoggedInResult = await getIsUserLoggedIn(supabase);
+  const getIsUserLoggedInResult = await getIsUserLoggedInServer(supabase);
 
   if(!getIsUserLoggedInResult.isUserLoggedIn)
   {

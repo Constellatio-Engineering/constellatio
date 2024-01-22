@@ -107,7 +107,7 @@ export const users = pgTable("User", {
   email: text("Email").unique().notNull(),
   displayName: text("DisplayName").notNull(),
   firstName: text("FirstName").notNull(),
-  gender: genderEnum("Gender").notNull(),
+  gender: genderEnum("Gender"),
   lastName: text("LastName").notNull(),
   semester: smallint("Semester"),
   stripeCustomerId: text("StripeCustomerId"),

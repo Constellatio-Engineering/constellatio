@@ -67,6 +67,19 @@ export const RegistrationForm: FunctionComponent = () =>
 
   useEffect(() =>
   {
+    const currentSubscription = supabase.auth.onAuthStateChange((event, _session) =>
+    {
+      if(event === "SIGNED_IN")
+      {
+        window.location.replace(paths.dashboard);
+      }
+    });
+
+    return () => currentSubscription?.data.subscription.unsubscribe();
+  }, []);
+
+  useEffect(() =>
+  {
     useAuthPageStore.setState({
       lastEnteredEmail: form.values.email,
       lastEnteredPassword: form.values.password,
@@ -97,6 +110,7 @@ export const RegistrationForm: FunctionComponent = () =>
         case "emailConfirmationRequired":
         {
           void setShouldShowEmailConfirmationDialog(true);
+          await supabase.auth.startAutoRefresh();
           break;
         }
         case "signupComplete":
@@ -169,14 +183,11 @@ export const RegistrationForm: FunctionComponent = () =>
             <strong>Bitte überprüfe auch deinen Spam-Ordner.</strong>
           </BodyText>
           <BodyText ta="center" styleType="body-01-regular">
-            Nach erfolgreicher Bestätigung kannst du dich mit deinem neuen Account einloggen.
+            Sofern du den Link in diesem Browser öffnest, wirst du automatisch eingeloggt.
+            Öffnest du den Link hingegen auf deinem Smartphone, musst du dich nach der Bestätigung manuell einloggen.
+            Klicke <Link href={paths.login} css={styles.inlineLink}>hier</Link>, um dich manuell einzuloggen.
           </BodyText>
         </div>
-        <Link href="/login" passHref>
-          <Button<"button"> styleType="primary">
-            Weiter zum Login
-          </Button>
-        </Link>
         <BodyText
           pos="absolute"
           bottom={48}

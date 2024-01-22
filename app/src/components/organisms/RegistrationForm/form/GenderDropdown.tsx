@@ -30,9 +30,11 @@ const GenderDropdown: FunctionComponent<Props> = (props) => (
   <Box maw={240}>
     <Dropdown
       {...props}
-      label="Geschlecht*"
+      label="Geschlecht (optional)"
       title="Geschlecht"
       placeholder="Geschlecht auswählen"
+      clearable
+      allowDeselect
       data={allGenders.map(gender => ({ label: gender.label, value: gender.identifier }))}
     />
   </Box>

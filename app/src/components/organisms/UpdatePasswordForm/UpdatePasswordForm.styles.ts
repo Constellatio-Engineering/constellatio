@@ -5,7 +5,7 @@ export const wrapper = css`
 `;
 
 export const title = css`
-    margin-bottom: 16px;
+  margin-bottom: 16px;
 `;
 
 export const text = css`

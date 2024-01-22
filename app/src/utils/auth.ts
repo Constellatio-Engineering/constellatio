@@ -1,6 +1,7 @@
-import { type SupabaseClient, type User, type Session } from "@supabase/auth-helpers-nextjs";
+import { type SupabaseClient, type User } from "@supabase/auth-helpers-nextjs";
+import { type Session } from "@supabase/supabase-js";
 
-const _getIsUserLoggedIn = async (supabaseClientInstance: SupabaseClient): Promise<GetIsUserLoggedInResult> =>
+const _getIsUserLoggedInServer = async (supabaseClientInstance: SupabaseClient): Promise<GetIsUserLoggedInResult> =>
 {
   const { data: { session }, error: getSessionError } = await supabaseClientInstance.auth.getSession();
 
@@ -49,13 +50,13 @@ type GetIsUserLoggedInResult = {
   user: User;
 };
 
-export const getIsUserLoggedIn = async (supabaseClientInstance: SupabaseClient): Promise<GetIsUserLoggedInResult> =>
+export const getIsUserLoggedInServer = async (supabaseClientInstance: SupabaseClient): Promise<GetIsUserLoggedInResult> =>
 {
   let getIsUserLoggedInResult: GetIsUserLoggedInResult;
 
   try
   {
-    getIsUserLoggedInResult = await _getIsUserLoggedIn(supabaseClientInstance);
+    getIsUserLoggedInResult = await _getIsUserLoggedInServer(supabaseClientInstance);
   }
   catch (e: unknown)
   {

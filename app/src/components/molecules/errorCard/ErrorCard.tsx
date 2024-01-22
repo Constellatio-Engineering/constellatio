@@ -1,9 +1,10 @@
 import { AlertCard } from "@/components/atoms/Card/AlertCard";
 
 import { AuthApiError, AuthError } from "@supabase/gotrue-js";
-import React, { type FunctionComponent, useMemo } from "react";
+import React, { type FunctionComponent, type ReactNode, useMemo } from "react";
 
 type HandledError =
+  | "tooManyRequests"
   | "emailNotConfirmed"
   | "invalidCredentials"
   | "passwordsMatch"
@@ -14,14 +15,24 @@ type OverwriteErrorMessages = {
   [key in HandledError]?: string;
 };
 
+type RenderAdditionalContent = {
+  emailNotConfirmed: ReactNode;
+};
+
 interface ErrorCardsProps
 {
   readonly error: unknown;
   readonly marginBottom?: number;
   readonly overwriteErrorMessages?: OverwriteErrorMessages;
+  readonly renderAdditionalContent?: RenderAdditionalContent;
 }
 
-const ErrorCard: FunctionComponent<ErrorCardsProps> = ({ error, marginBottom = 20, overwriteErrorMessages }) =>
+const ErrorCard: FunctionComponent<ErrorCardsProps> = ({
+  error,
+  marginBottom = 20,
+  overwriteErrorMessages,
+  renderAdditionalContent
+}) =>
 {
   const renderedError: HandledError | null = useMemo(() =>
   {
@@ -32,6 +43,11 @@ const ErrorCard: FunctionComponent<ErrorCardsProps> = ({ error, marginBottom = 2
 
     if(error instanceof AuthError || error instanceof AuthApiError)
     {
+      if(error.status === 429)
+      {
+        return "tooManyRequests";
+      }
+
       switch (error.message)
       {
         case "Email not confirmed": { return "emailNotConfirmed"; }
@@ -52,9 +68,15 @@ const ErrorCard: FunctionComponent<ErrorCardsProps> = ({ error, marginBottom = 2
 
   return (
     <div style={{ marginBottom }}>
+      {renderedError === "tooManyRequests" && (
+        <AlertCard variant="error">
+          {overwriteErrorMessages?.tooManyRequests ?? "Du hast zu viele Anfragen gesendet. Bitte versuche es später erneut."}
+        </AlertCard>
+      )}
       {renderedError === "emailNotConfirmed" && (
         <AlertCard variant="error">
-          {overwriteErrorMessages?.emailNotConfirmed ?? "Du musst zuerst deine E-Mail-Adresse bestätigen. Eine Bestätigungsmail wurde dir zugesendet."}
+          <p>{overwriteErrorMessages?.emailNotConfirmed ?? "Du musst zuerst deine E-Mail-Adresse bestätigen. Eine Bestätigungsmail wurde dir bereits zugesendet."}</p>
+          {renderAdditionalContent?.emailNotConfirmed && renderAdditionalContent.emailNotConfirmed}
         </AlertCard>
       )}
       {renderedError === "invalidCredentials" && (

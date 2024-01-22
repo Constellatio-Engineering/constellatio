@@ -1,3 +1,4 @@
+import { BodyText } from "@/components/atoms/BodyText/BodyText";
 import { Button } from "@/components/atoms/Button/Button";
 import { Input } from "@/components/atoms/Input/Input";
 import { PasswordValidationSchema } from "@/components/helpers/PasswordValidationSchema";
@@ -5,14 +6,15 @@ import ErrorCard from "@/components/molecules/errorCard/ErrorCard";
 import { supabase } from "@/lib/supabase";
 import { type UpdatePasswordFormSchema, updatePasswordFormSchema } from "@/schemas/auth/updatePasswordForm.schema";
 import { paths } from "@/utils/paths";
-import { queryParams } from "@/utils/query-params";
 
 import { Box, Stack, Title } from "@mantine/core";
 import { useForm, zodResolver } from "@mantine/form";
 import { useDisclosure } from "@mantine/hooks";
 import { useMutation } from "@tanstack/react-query";
 import { useRouter } from "next/router";
-import { type FunctionComponent } from "react";
+import React, { type FunctionComponent } from "react";
+
+import * as styles from "./UpdatePasswordForm.styles";
 
 const initialValues: UpdatePasswordFormSchema = {
   password: "",
@@ -29,7 +31,12 @@ export const UpdatePasswordForm: FunctionComponent = () =>
     validateInputOnBlur: true,
   });
 
-  const { error, isLoading, mutate: updatePassword } = useMutation({
+  const {
+    error,
+    isLoading,
+    isSuccess: wasPasswordUpdateSuccessful,
+    mutate: updatePassword
+  } = useMutation({
     mutationFn: async (password: string) =>
     {
       const updatePasswordResult = await supabase.auth.updateUser({ password });
@@ -40,8 +47,32 @@ export const UpdatePasswordForm: FunctionComponent = () =>
       }
     },
     onError: (error) => console.log("error updating password:", error),
-    onSuccess: async () => router.replace(`${paths.login}?${queryParams.passwordResetSuccess}=true`),
   });
+
+  if(wasPasswordUpdateSuccessful)
+  {
+    return (
+      <div css={styles.wrapper}>
+        <Title order={2} css={styles.title}>
+          Passwort erfolgreich geändert
+        </Title>
+        <BodyText
+          styleType="body-01-regular"
+          component="p"
+          css={styles.text}>
+          Dein Passwort wurde erfolgreich geändert. Klicke auf den folgenden Button, um zur Web-App weitergeleitet zu werden.
+        </BodyText>
+        <div css={styles.buttonWrapper}>
+          <Button<"button">
+            styleType="primary"
+            onClick={async () => router.replace(paths.dashboard)}
+            type="button">
+            Weiter zur Web-App
+          </Button>
+        </div>
+      </div>
+    );
+  }
 
   return (
     <form onSubmit={form.onSubmit((formValues) => updatePassword(formValues.password))}>

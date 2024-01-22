@@ -64,7 +64,8 @@ const RecoverPage: FunctionComponent = () =>
                   styleType="primary"
                   type="button"
                   size="large"
-                  mt={24}>Back to Login
+                  mt={24}>
+                  Back to Login
                 </Button>
               </Link>
             </>
