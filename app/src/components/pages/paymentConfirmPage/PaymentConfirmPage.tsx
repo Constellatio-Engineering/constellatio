@@ -1,5 +1,5 @@
 import { Button } from "@/components/atoms/Button/Button";
-import { paths } from "@/utils/paths";
+import { appPaths } from "@/utils/paths";
 
 import { Title } from "@mantine/core";
 import { useRouter } from "next/router";
@@ -17,7 +17,7 @@ const PaymentConfirmPage: FunctionComponent = () =>
       </Title>
       <Button<"button">
         styleType="primary"
-        onClick={async () => router.push(`${paths.dashboard}`)}>
+        onClick={async () => router.push(`${appPaths.dashboard}`)}>
         Zur Constellatio Web-App
       </Button>
     </div>

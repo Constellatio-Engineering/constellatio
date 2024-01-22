@@ -1,5 +1,5 @@
 import MenuTab from "@/components/atoms/menuTab/MenuTab";
-import { paths } from "@/utils/paths";
+import { appPaths } from "@/utils/paths";
 
 import { IconFolder } from "@tabler/icons-react";
 import Link from "next/link";
@@ -12,7 +12,7 @@ export type THeaderItemPersonalSpaceProps = {
 const HeaderItemPersonalSpace: ForwardRefRenderFunction<HTMLAnchorElement, THeaderItemPersonalSpaceProps> = ({ pathname }, ref) => 
 {
   return (
-    <Link href={`${paths.personalSpace}`} ref={ref}>
+    <Link href={`${appPaths.personalSpace}`} ref={ref}>
       <MenuTab
         title="Persönlicher Bereich"
         icon={<IconFolder size={20}/>}

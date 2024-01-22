@@ -1,5 +1,5 @@
 import { Button } from "@/components/atoms/Button/Button";
-import { paths } from "@/utils/paths";
+import { appPaths } from "@/utils/paths";
 
 import { Title } from "@mantine/core";
 import { useMediaQuery } from "@mantine/hooks";
@@ -15,7 +15,7 @@ const DashboardPersonalSpaceBlockHeader: FunctionComponent = () =>
   return (
     <div css={styles.wrapper}>
       <Title css={styles.headerTitle} order={2} tt="capitalize">Persönlicher Bereich</Title>
-      <Link href={`${paths.personalSpace}`}>
+      <Link href={`${appPaths.personalSpace}`}>
         <Button<"button"> styleType="secondarySimple" type="button" size={matches ? "large" : "medium"}>Alle ansehen</Button>
       </Link>
     </div>

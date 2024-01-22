@@ -3,7 +3,7 @@ import Tag from "@/components/atoms/tag/Tag";
 import useGetPopularSearch from "@/hooks/useGetPopularSearch";
 import useSearchResults from "@/hooks/useSearchResults";
 import useSearchBarStore from "@/stores/searchBar.store";
-import { paths } from "@/utils/paths";
+import { appPaths } from "@/utils/paths";
 
 import Link from "next/link";
 import { type FunctionComponent } from "react";
@@ -30,7 +30,7 @@ const SearchOverlayLeftSide: FunctionComponent<SearchOverlayLeftSideProps> = ({ 
         <SuggestionSection label="Zuletzt gesucht" labelVariant="neutral">
           {searchHistory.slice(0, 9).map((result, index) => (
             <Link
-              href={`${paths.search}?find=${result}`}
+              href={`${appPaths.search}?find=${result}`}
               key={index}
               className="suggestion__section__link">
               <CustomLink styleType="link-content-title" component="p">
@@ -42,7 +42,7 @@ const SearchOverlayLeftSide: FunctionComponent<SearchOverlayLeftSideProps> = ({ 
         <SuggestionSection label="Häufig gesucht" labelVariant="neutral">
           {popularSearch?.popularSearches?.map((result) => (
             <Link
-              href={`${paths.search}?find=${result?.searchField}`}
+              href={`${appPaths.search}?find=${result?.searchField}`}
               key={result?.id}
               className="suggestion__section__link">
               <CustomLink styleType="link-content-title" component="p">
@@ -80,7 +80,7 @@ const SearchOverlayLeftSide: FunctionComponent<SearchOverlayLeftSideProps> = ({ 
             return (
               <Link
                 key={legalCase.id}
-                href={`${paths.cases}/${legalCase.id}`}
+                href={`${appPaths.cases}/${legalCase.id}`}
                 className="suggestion__section__link">
                 <CustomLink styleType="link-content-title" component="p">
                   {legalCase.title}
@@ -101,7 +101,7 @@ const SearchOverlayLeftSide: FunctionComponent<SearchOverlayLeftSideProps> = ({ 
             return (
               <Link
                 key={article.id}
-                href={`${paths.dictionary}/${article.id}`}
+                href={`${appPaths.dictionary}/${article.id}`}
                 className="suggestion__section__link">
                 <CustomLink styleType="link-content-title" component="p">
                   {article.title}

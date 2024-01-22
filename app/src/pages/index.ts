@@ -1,6 +1,6 @@
 import { env } from "@/env.mjs";
 import { getIsUserLoggedInServer } from "@/utils/auth";
-import { paths } from "@/utils/paths";
+import { appPaths, authPaths } from "@/utils/paths";
 
 import { createPagesServerClient } from "@supabase/auth-helpers-nextjs";
 import { type GetServerSideProps } from "next";
@@ -17,11 +17,11 @@ export const getServerSideProps: GetServerSideProps = async (ctx) =>
   
   const { isUserLoggedIn } = await getIsUserLoggedInServer(supabase);
 
-  console.log("isUserLoggedIn", isUserLoggedIn, "redirecting to", isUserLoggedIn ? paths.dashboard : paths.login);
+  console.log("isUserLoggedIn", isUserLoggedIn, "redirecting to", isUserLoggedIn ? appPaths.dashboard : authPaths.login);
 
   return {
     redirect: {
-      destination: isUserLoggedIn ? paths.dashboard : paths.login,
+      destination: isUserLoggedIn ? appPaths.dashboard : authPaths.login,
       permanent: false,
     }
   };

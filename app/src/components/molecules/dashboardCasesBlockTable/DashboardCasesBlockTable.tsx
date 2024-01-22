@@ -9,7 +9,7 @@ import { extractNumeric } from "@/components/pages/OverviewPage/OverviewPage";
 import useBookmarks from "@/hooks/useBookmarks";
 import useCases from "@/hooks/useCases";
 import useCasesProgress from "@/hooks/useCasesProgress";
-import { paths } from "@/utils/paths";
+import { appPaths } from "@/utils/paths";
 
 import { useMantineTheme } from "@mantine/styles";
 import { useRouter } from "next/router";
@@ -61,7 +61,7 @@ const DashboardCasesBlockTable: FunctionComponent = () =>
     map(item => ({ ...item.case, progress: item.progress?.progressState }));
   const { bookmarks: casesBookmarks, isLoading: isGetCasesBookmarksLoading } = useBookmarks("case", { enabled: true });
   const bookmarks = casesBookmarks;
-  const routeToCase = (id: string | null | undefined): void => void router.push(`${paths.cases}/${id}`);
+  const routeToCase = (id: string | null | undefined): void => void router.push(`${appPaths.cases}/${id}`);
   return (
     <div css={styles.wrapper}>
       {allCases?.length > 0 && (
