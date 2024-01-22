@@ -1,17 +1,48 @@
 import { useSession } from "@supabase/auth-helpers-react";
+import { type Session, type User } from "@supabase/supabase-js";
 import {
   createContext, type FunctionComponent, type ReactNode, useMemo
 } from "react";
 
-type AuthStateContext = {
-  isUserLoggedIn: boolean | null;
+type InitialAuthState = {
+  isUserLoggedIn: null;
 };
 
-const initialContext: AuthStateContext = {
-  isUserLoggedIn: null,
+type UserNotLoggedInState = {
+  isUserLoggedIn: false;
 };
 
-export const AuthStateContext = createContext<AuthStateContext>(initialContext);
+type UserLoggedInState = {
+  isUserLoggedIn: true;
+  session: Session;
+  user: User;
+};
+
+type AuthStateContext = UserNotLoggedInState | UserLoggedInState | InitialAuthState;
+
+const initialAuthState: InitialAuthState = {
+  isUserLoggedIn: null
+};
+
+export const AuthStateContext = createContext<AuthStateContext>(initialAuthState);
+
+export const getIsUserLoggedInClient = (session: Session | null): UserNotLoggedInState | UserLoggedInState =>
+{
+  const isUserLoggedIn = session != null;
+
+  if(!isUserLoggedIn)
+  {
+    return ({
+      isUserLoggedIn: false
+    });
+  }
+
+  return ({
+    isUserLoggedIn: true,
+    session,
+    user: session.user
+  });
+};
 
 type AuthStateProviderProps = {
   readonly children: ReactNode;
@@ -20,12 +51,7 @@ type AuthStateProviderProps = {
 const AuthStateProvider: FunctionComponent<AuthStateProviderProps> = ({ children }) =>
 {
   const session = useSession();
-  const isUserLoggedIn = session != null;
-
-  const memoizedContext: AuthStateContext = useMemo(() =>
-  {
-    return ({ isUserLoggedIn });
-  }, [isUserLoggedIn]);
+  const memoizedContext: AuthStateContext = useMemo(() => getIsUserLoggedInClient(session), [session]);
 
   return (
     <AuthStateContext.Provider value={memoizedContext}>
