@@ -15,14 +15,14 @@ const SearchOverlay: FunctionComponent<SearchOverlayProps> = () =>
 {
   const isDrawerOpened = useSearchBarStore((s) => s.isDrawerOpened);
   const searchValue = useSearchBarStore((s) => s.searchValue);
-  const router = useRouter();
+  const { pathname } = useRouter();
   const closeDrawer = useSearchBarStore((s) => s.closeDrawer);
   const hasInput = searchValue?.length > 0;
 
   useEffect(() =>
   {
-    closeDrawer();
-  }, [router.pathname, closeDrawer, router.query]);
+    useSearchBarStore.getState().closeDrawer();
+  }, [pathname]);
 
   return (
     <Drawer
