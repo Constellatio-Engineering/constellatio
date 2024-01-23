@@ -24,7 +24,7 @@ interface EditorFormProps
 
 const EditorForm: FunctionComponent<EditorFormProps> = ({ editorState, onClose }) =>
 {
-  const { document } = editorState;
+  const { document: openedDocument } = editorState;
   const updateEditorDocument = useDocumentEditorStore(s => s.updateEditorDocument);
   const setEditDocumentState = useDocumentEditorStore(s => s.setEditDocumentState);
   const { hasUnsavedChanges } = useDocumentEditorStore(s => s.getComputedValues());
@@ -124,7 +124,7 @@ const EditorForm: FunctionComponent<EditorFormProps> = ({ editorState, onClose }
                 </Button>
               </div>
               <div css={styles.contentWrapper}>
-                <MantineRichtextRenderer htmlContent={document.content}/>
+                <MantineRichtextRenderer htmlContent={openedDocument.content}/>
               </div>
               {showConfirmDeleteDocWindow && (
                 <div css={styles.deleteDocWindow}>
@@ -135,7 +135,7 @@ const EditorForm: FunctionComponent<EditorFormProps> = ({ editorState, onClose }
                       styleType="primary"
                       onClick={() => 
                       {
-                        deleteDocument({ id: document?.id });
+                        deleteDocument({ id: openedDocument?.id });
                         onClose();
                       }}>Ja, löschen
                     </Button>
@@ -150,12 +150,25 @@ const EditorForm: FunctionComponent<EditorFormProps> = ({ editorState, onClose }
             <Input
               label="Name"
               inputType="text"
-              value={document.name}
+              value={openedDocument.name}
+              onKeyDown={(e) =>
+              {
+                if(e.key === "Tab")
+                {
+                  const richtextEditor = Array.from(document.getElementsByClassName("tiptap ProseMirror"))[0] as HTMLDivElement | undefined;
+
+                  if(richtextEditor)
+                  {
+                    e.preventDefault();
+                    richtextEditor.focus();
+                  }
+                }
+              }}
               onChange={(e) => updateEditorDocument({ name: e.target.value })}
             />
             <RichtextEditorField
               variant="with-legal-quote"
-              content={document.content}
+              content={openedDocument.content}
               onChange={(e) => updateEditorDocument({ content: e.editor.getHTML() })}
             />
           </div>
