@@ -4,7 +4,7 @@ import { AlertCard } from "@/components/atoms/Card/AlertCard";
 import { Footer } from "@/components/organisms/Footer/Footer";
 import { Header } from "@/components/organisms/Header/Header";
 import { UpdatePasswordForm } from "@/components/organisms/UpdatePasswordForm/UpdatePasswordForm";
-import { paths } from "@/utils/paths";
+import { authPaths } from "@/utils/paths";
 
 import { Box, Stack, Title } from "@mantine/core";
 import Link from "next/link";
@@ -58,7 +58,7 @@ const RecoverPage: FunctionComponent = () =>
               <Title order={3} ta="center" mb={24}>{renderedContent === "linkExpired" ? "Link expired" : "Something went wrong"}</Title>
               <AlertCard mb={24} variant="error"> {renderedContent === "linkExpired" ? "Your password reset link has expired or the link has already been used" : "Something went wrong sending the reset password link. Do not worry, you can request it again"}</AlertCard>
               <BodyText styleType="body-01-medium" ta="center" component="p">Please go back to Login and reset your password again</BodyText>
-              <Link href={paths.login}>
+              <Link href={authPaths.login}>
                 <Button<"button">
                   style={{ display: "block", width: "100%" }}
                   styleType="primary"

@@ -4,7 +4,7 @@ import useOnboardingResult from "@/hooks/useOnboardingResult";
 import { useWasOnboardingPostponed } from "@/hooks/useWasOnboardingPostponed";
 import { useOnboardingStore } from "@/stores/onboarding.store";
 import { isDevelopment } from "@/utils/env";
-import { paths } from "@/utils/paths";
+import { appPaths } from "@/utils/paths";
 
 import { useMantineTheme } from "@mantine/styles";
 import Image from "next/image";
@@ -32,10 +32,10 @@ interface IHeaderLink
 }
 
 const links: IHeaderLink[] = [
-  { slug: paths.dashboard, title: "Dashboard" },
-  { slug: paths.cases, title: "Fälle" },
-  { slug: paths.dictionary, title: "Lexikon" },
-  { slug: paths.forum, title: "Forum" },
+  { slug: appPaths.dashboard, title: "Dashboard" },
+  { slug: appPaths.cases, title: "Fälle" },
+  { slug: appPaths.dictionary, title: "Lexikon" },
+  { slug: appPaths.forum, title: "Forum" },
 ];
 
 const HeaderDefault: FunctionComponent = () => 
@@ -68,7 +68,7 @@ const HeaderDefault: FunctionComponent = () =>
       <SHeader withShadow>
         <div css={styles.wrapper({ theme, variant: "default" })}>
           <div css={styles.links}>
-            <Link href={paths.dashboard}>
+            <Link href={appPaths.dashboard}>
               <Image css={styles.tabletHeaderLogo} src={ConstellatioLogoIcon} alt="Constellatio"/>
               <Image css={styles.headerLogo} src={ConstellatioFullLogo} alt="Constellatio"/>
             </Link>

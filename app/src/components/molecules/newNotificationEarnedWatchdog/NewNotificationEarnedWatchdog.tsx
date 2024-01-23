@@ -2,18 +2,19 @@ import BadgeImage from "@/components/atoms/badgeImage/BadgeImage";
 import { BodyText } from "@/components/atoms/BodyText/BodyText";
 import { Cross } from "@/components/Icons/Cross";
 import { type BadgeWithUserData } from "@/db/schema";
-import useBadges, { disabledForPaths } from "@/hooks/useBadges";
+import useBadges from "@/hooks/useBadges";
 import useContextAndErrorIfNull from "@/hooks/useContextAndErrorIfNull";
 import useOnboardingResult from "@/hooks/useOnboardingResult";
 import { usePrevious } from "@/hooks/usePrevious";
 import { AuthStateContext } from "@/provider/AuthStateProvider";
 import { InvalidateQueriesContext } from "@/provider/InvalidateQueriesProvider";
 import { api } from "@/utils/api";
+import { isPathAppPath } from "@/utils/paths";
 
 import { Modal, Title } from "@mantine/core";
 import { useLocalStorage } from "@mantine/hooks";
 import { useRouter } from "next/router";
-import React, { type FunctionComponent, useContext, useMemo } from "react";
+import React, { type FunctionComponent, useContext } from "react";
 import { z } from "zod";
 
 import * as styles from "./NewNotificationEarnedWatchdog.styles";
@@ -27,11 +28,8 @@ const NewNotificationEarnedWatchdog: FunctionComponent = () =>
   const { onboardingResult } = useOnboardingResult();
   const { isUserLoggedIn } = useContext(AuthStateContext);
   const apiUtils = api.useUtils();
-  const router = useRouter();
-  const isDisabledForCurrentPath = useMemo(
-    () => disabledForPaths.some((path) => router.pathname.startsWith(path)),
-    [router.pathname]
-  );
+  const { pathname } = useRouter();
+  const isEnabledForCurrentPath = isPathAppPath(pathname);
   const { invalidateBadges } = useContextAndErrorIfNull(InvalidateQueriesContext);
   const { getBadgesResult: { badges } } = useBadges({ disabled: !isUserLoggedIn });
   const [dismissedBadges, setDismissedBadges] = useLocalStorage<string[]>({
@@ -123,7 +121,7 @@ const NewNotificationEarnedWatchdog: FunctionComponent = () =>
       <Modal
         withCloseButton={false}
         lockScroll={false}
-        opened={newEarnedBadges.length > 0 && !isDisabledForCurrentPath && onboardingResult != null}
+        opened={newEarnedBadges.length > 0 && isEnabledForCurrentPath && onboardingResult != null}
         size="lg"
         radius="12px"
         styles={styles.newEarnedModalStyle()}

@@ -3,7 +3,7 @@ import { users } from "@/db/schema";
 import { env } from "@/env.mjs";
 import { stripe } from "@/lib/stripe";
 import { createTRPCRouter, protectedProcedure } from "@/server/api/trpc";
-import { paths } from "@/utils/paths";
+import { appPaths, authPaths } from "@/utils/paths";
 import { InternalServerError } from "@/utils/serverError";
 
 import { eq } from "drizzle-orm";
@@ -37,19 +37,19 @@ export const billingRouter = createTRPCRouter({
 
     const { url: checkoutSessionUrl } = await stripe.checkout.sessions.create({
       allow_promotion_codes: true,
-      cancel_url: `${env.NEXT_PUBLIC_WEBSITE_URL}${paths.profile}?tab=subscription`,
+      cancel_url: `${env.NEXT_PUBLIC_WEBSITE_URL}${appPaths.profile}?tab=subscription`,
       customer: stripeCustomerId,
       line_items: [{ price: env.STRIPE_PREMIUM_PLAN_PRICE_ID, quantity: 1 }],
       locale: "de",
       mode: "subscription",
       payment_method_configuration: env.STRIPE_PAYMENT_METHODS_CONFIGURATION_ID,
-      success_url: `${env.NEXT_PUBLIC_WEBSITE_URL}${paths.paymentConfirm}`
+      success_url: `${env.NEXT_PUBLIC_WEBSITE_URL}${authPaths.paymentConfirm}`
     });
 
     const { url: billingPortalSessionUrl } = await stripe.billingPortal.sessions.create({
       customer: stripeCustomerId,
       locale: "de",
-      return_url: `${env.NEXT_PUBLIC_WEBSITE_URL}${paths.profile}?tab=subscription`
+      return_url: `${env.NEXT_PUBLIC_WEBSITE_URL}${appPaths.profile}?tab=subscription`
     });
 
     return { billingPortalSessionUrl, checkoutSessionUrl };

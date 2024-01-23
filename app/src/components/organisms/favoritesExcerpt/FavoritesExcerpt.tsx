@@ -1,7 +1,7 @@
 import FavoriteCard from "@/components/molecules/favoriteCard/FavoriteCard";
 import EmptyStateCard from "@/components/organisms/emptyStateCard/EmptyStateCard";
 import { type Favorites } from "@/hooks/useAllFavorites";
-import { paths } from "@/utils/paths";
+import { appPaths } from "@/utils/paths";
 import { type Nullable } from "@/utils/types";
 
 import { useRouter } from "next/router";
@@ -45,7 +45,7 @@ const FavoritesExcerpt: FunctionComponent<Props> = ({ favorites, isLoading = fal
           variant="For-small-areas"
           button={{
             content: "Alle Fälle ansehen",
-            onClick: async () => router.push(paths.cases)
+            onClick: async () => router.push(appPaths.cases)
           }}
         />
       </div>

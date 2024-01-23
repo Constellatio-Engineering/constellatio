@@ -1,5 +1,6 @@
 /* eslint-disable react/jsx-max-props-per-line */
 import { RouterTransition } from "@/components/atoms/RouterTransition/RouterTransition";
+import Tracking from "@/components/helpers/Tracking";
 import FeedbackButton from "@/components/molecules/feedbackButton/FeedbackButton";
 import NewNotificationEarnedWatchdog from "@/components/molecules/newNotificationEarnedWatchdog/NewNotificationEarnedWatchdog";
 import ComputerRecommendedModal from "@/components/organisms/computerRecommendedModal/ComputerRecommendedModal";
@@ -7,8 +8,6 @@ import FileViewer from "@/components/organisms/fileViewer/FileViewer";
 import DocumentEditor from "@/components/organisms/papersBlock/documentEditor/DocumentEditor";
 import SubscriptionModal from "@/components/organisms/subscriptionModal/SubscriptionModal";
 import { env } from "@/env.mjs";
-import { useFeedback } from "@/hooks/useFeedback";
-import { useTracking } from "@/hooks/useTracking";
 import { supabase } from "@/lib/supabase";
 import AuthStateProvider from "@/provider/AuthStateProvider";
 import CustomThemingProvider from "@/provider/CustomThemingProvider";
@@ -16,13 +15,12 @@ import InvalidateQueriesProvider from "@/provider/InvalidateQueriesProvider";
 import MeilisearchProvider from "@/provider/MeilisearchProvider";
 import useSearchBarStore from "@/stores/searchBar.store";
 import { api } from "@/utils/api";
-import { isProduction } from "@/utils/env";
-import { paths } from "@/utils/paths";
+import { isProduction, isTrackingEnabled } from "@/utils/env";
+import { appPaths } from "@/utils/paths";
 
 import { ModalsProvider } from "@mantine/modals";
 import { Notifications } from "@mantine/notifications";
-import { SessionContextProvider, useSession, useUser } from "@supabase/auth-helpers-react";
-import type { Subscription } from "@supabase/gotrue-js";
+import { SessionContextProvider } from "@supabase/auth-helpers-react";
 import { type NextPage } from "next";
 import { type AppProps } from "next/app";
 import Head from "next/head";
@@ -31,7 +29,7 @@ import { appWithTranslation } from "next-i18next";
 import { posthog } from "posthog-js";
 import { PostHogProvider } from "posthog-js/react";
 import React, {
-  useEffect, type FunctionComponent, type ReactElement, type ReactNode, useRef
+  useEffect, type FunctionComponent, type ReactElement, type ReactNode
 } from "react";
 
 export type NextPageWithLayout<P = object, IP = P> = NextPage<P, IP> & {
@@ -45,38 +43,6 @@ type LayoutProps = {
 
 const Layout: FunctionComponent<LayoutProps> = ({ Component, pageProps }) =>
 {
-  const session = useSession();
-  const user = useUser();
-
-  useEffect(() =>
-  {
-    console.log("user:", user);
-  }, [user]);
-
-  useEffect(() =>
-  {
-    console.log("session:", session);
-  }, [session]);
-
-  const authStateSubscriptionRef = useRef<{data: {subscription: Subscription}}>();
-
-  useEffect(() =>
-  {
-    const currentSubscription = authStateSubscriptionRef.current?.data.subscription;
-
-    if(currentSubscription)
-    {
-      currentSubscription.unsubscribe();
-    }
-
-    authStateSubscriptionRef.current = supabase.auth.onAuthStateChange((event, session) =>
-    {
-      console.log("auth state changed:", event, session);
-    });
-
-    return () => currentSubscription?.unsubscribe();
-  }, []);
-
   if(Component.getLayout) 
   {
     return Component.getLayout(<Component {...pageProps}/>);
@@ -103,12 +69,9 @@ const AppContainer: FunctionComponent<ConstellatioAppProps> = ({ Component, page
   const ogImageFileExtension = ogImageUrlSplitUp[ogImageUrlSplitUp.length - 1];
   let pageTitle = appTitle;
 
-  // useTracking();
-  useFeedback();
-
   useEffect(() =>
   {
-    if(!pathname.startsWith(paths.search))
+    if(!pathname.startsWith(appPaths.search))
     {
       useSearchBarStore.setState({ searchValue: "" });
     }
@@ -173,6 +136,7 @@ const AppContainer: FunctionComponent<ConstellatioAppProps> = ({ Component, page
                     <FileViewer/>
                     <DocumentEditor/>
                     <FeedbackButton/>
+                    {isTrackingEnabled && <Tracking/>}
                     <Layout Component={Component} pageProps={pageProps}/>
                   </MeilisearchProvider>
                 </ModalsProvider>

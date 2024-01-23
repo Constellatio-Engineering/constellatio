@@ -6,7 +6,6 @@ import { forwardRef, type ForwardRefRenderFunction } from "react";
 
 const HeaderItemSearchBar: ForwardRefRenderFunction<HTMLDivElement> = (_, ref) => 
 {
-
   const { refetch: refetchSearchResults } = useSearchResults();
   const openDrawer = useSearchBarStore((s) => s.openDrawer);
 

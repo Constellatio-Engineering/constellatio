@@ -3,7 +3,7 @@ import useArticles from "@/hooks/useArticles";
 import useBookmarks from "@/hooks/useBookmarks";
 import useCases from "@/hooks/useCases";
 import { type IGenMainCategory, type IGenFullCaseFragment, type IGenArticleOverviewFragment, type IGenArticle } from "@/services/graphql/__generated/sdk";
-import { paths } from "@/utils/paths";
+import { appPaths } from "@/utils/paths";
 import { type NonEmptyArray, type Nullable } from "@/utils/types";
 
 import { Loader } from "@mantine/core";
@@ -95,7 +95,7 @@ const PersonalSpaceFavoriteTabContent: FunctionComponent = () =>
               <EmptyStateCard
                 button={{
                   content: "Alle Fälle ansehen",
-                  onClick: async () => router.push(paths.cases)
+                  onClick: async () => router.push(appPaths.cases)
                 }}
                 title="Du hast noch keine Fälle als Favoriten gespeichert"
                 text="Du kannst Fälle, Lexikon-Artikel und sogar einzelne markierte Textpassagen als deine persönlichen Favoriten speichern"
@@ -116,7 +116,7 @@ const PersonalSpaceFavoriteTabContent: FunctionComponent = () =>
                 <EmptyStateCard
                   button={{
                     content: "Alle Lexikon-Artikel ansehen",
-                    onClick: async () => router.push(paths.dictionary)
+                    onClick: async () => router.push(appPaths.dictionary)
                   }}
                   title="Du hast noch keine Lexikon-Artikel als Favoriten gespeichert"
                   text="Du kannst Fälle, Lexikon-Artikel und sogar einzelne markierte Textpassagen als deine persönlichen Favoriten speichern"

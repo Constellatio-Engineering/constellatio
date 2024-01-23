@@ -7,7 +7,7 @@ import MaterialsExcerpt from "@/components/organisms/materialsExcerpt/MaterialsE
 import useAllFavorites from "@/hooks/useAllFavorites";
 import { useAllUserData } from "@/hooks/useAllUserData";
 import useUploadedFiles from "@/hooks/useUploadedFiles";
-import { paths } from "@/utils/paths";
+import { appPaths } from "@/utils/paths";
 
 import { Loader } from "@mantine/core";
 import Link from "next/link";
@@ -61,7 +61,7 @@ const ProfilePersonalSpaceBlock: FunctionComponent = () =>
             )}
           </div>
           {favoritesList && favoritesList?.length > 6 && (
-            <Link href={`${paths.personalSpace}?category=favorites`}>
+            <Link href={`${appPaths.personalSpace}?category=favorites`}>
               <Button<"button"> styleType="secondarySimple">
                 Alle anzeigen
               </Button>
@@ -79,7 +79,7 @@ const ProfilePersonalSpaceBlock: FunctionComponent = () =>
                 <MaterialsExcerpt allUserData={allUserData}/>
               </div>
               {allUserData.length > 6 && (
-                <Link href={`${paths.personalSpace}?category=materials`}>
+                <Link href={`${appPaths.personalSpace}?category=materials`}>
                   <Button<"button"> styleType="secondarySimple">
                     Alle anzeigen
                   </Button>

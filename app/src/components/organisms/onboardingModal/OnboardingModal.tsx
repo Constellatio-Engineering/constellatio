@@ -2,7 +2,7 @@ import { BodyText } from "@/components/atoms/BodyText/BodyText";
 import { Button } from "@/components/atoms/Button/Button";
 import useSetOnboardingResult from "@/hooks/useSetOnboardingResult";
 import { type SearchStoreProps } from "@/stores/onboarding.store";
-import { paths } from "@/utils/paths";
+import { appPaths } from "@/utils/paths";
 
 import { Modal, Title } from "@mantine/core";
 import { useRouter } from "next/router";
@@ -73,14 +73,14 @@ const OnboardingModal: FunctionComponent<Props> = ({ onboardingStepsIndex, setOn
             size="large"
             miw="100%"
             styleType="secondarySimple"
-            onClick={async () => onClose(paths.cases)}>
+            onClick={async () => onClose(appPaths.cases)}>
             Fall-Übersicht ansehen
           </Button>
           <Button<"button">
             size="large"
             miw="100%"
             styleType="primary"
-            onClick={async () => onClose(`${paths.cases}/0fcdcecc-c9d4-4326-b12f-55488717c083?id=0fcdcecc-c9d4-4326-b12f-55488717c083`)}>
+            onClick={async () => onClose(`${appPaths.cases}/0fcdcecc-c9d4-4326-b12f-55488717c083?id=0fcdcecc-c9d4-4326-b12f-55488717c083`)}>
             Einführungs-Fall starten
           </Button>
         </div>
