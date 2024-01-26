@@ -25,13 +25,15 @@ interface ErrorCardsProps
   readonly marginBottom?: number;
   readonly overwriteErrorMessages?: OverwriteErrorMessages;
   readonly renderAdditionalContent?: RenderAdditionalContent;
+  readonly shouldUseFullWidth?: boolean;
 }
 
 const ErrorCard: FunctionComponent<ErrorCardsProps> = ({
   error,
   marginBottom = 20,
   overwriteErrorMessages,
-  renderAdditionalContent
+  renderAdditionalContent,
+  shouldUseFullWidth
 }) =>
 {
   const renderedError: HandledError | null = useMemo(() =>
@@ -68,37 +70,29 @@ const ErrorCard: FunctionComponent<ErrorCardsProps> = ({
 
   return (
     <div style={{ marginBottom }}>
-      {renderedError === "tooManyRequests" && (
-        <AlertCard variant="error">
-          {overwriteErrorMessages?.tooManyRequests ?? "Du hast zu viele Anfragen gesendet. Bitte versuche es später erneut."}
-        </AlertCard>
-      )}
-      {renderedError === "emailNotConfirmed" && (
-        <AlertCard variant="error">
-          <p>{overwriteErrorMessages?.emailNotConfirmed ?? "Du musst zuerst deine E-Mail-Adresse bestätigen. Eine Bestätigungsmail wurde dir bereits zugesendet."}</p>
-          {renderAdditionalContent?.emailNotConfirmed && renderAdditionalContent.emailNotConfirmed}
-        </AlertCard>
-      )}
-      {renderedError === "invalidCredentials" && (
-        <AlertCard variant="error">
-          {overwriteErrorMessages?.invalidCredentials ?? "Wir konnten kein Konto mit diesen Anmeldedaten finden. Bitte überprüfe deine Eingaben."}
-        </AlertCard>
-      )}
-      {renderedError === "passwordsMatch" && (
-        <AlertCard variant="error">
-          {overwriteErrorMessages?.passwordsMatch ?? "Das neue Passwort muss sich vom alten Passwort unterscheiden."}
-        </AlertCard>
-      )}
-      {renderedError === "emailAlreadyRegistered" && (
-        <AlertCard variant="error">
-          {overwriteErrorMessages?.emailAlreadyRegistered ?? "Diese E-Mail Adresse wird bereits verwendet."}
-        </AlertCard>
-      )}
-      {renderedError === "unknownError" && (
-        <AlertCard variant="error">
-          {overwriteErrorMessages?.unknownError ?? "Da ist etwas schief gelaufen. Bitte versuche es erneut."}
-        </AlertCard>
-      )}
+      <AlertCard variant="error" shouldUseFullWidth={shouldUseFullWidth}>
+        {renderedError === "tooManyRequests" && (
+          overwriteErrorMessages?.tooManyRequests ?? "Du hast zu viele Anfragen gesendet. Bitte versuche es später erneut."
+        )}
+        {renderedError === "emailNotConfirmed" && (
+          <>
+            <p>{overwriteErrorMessages?.emailNotConfirmed ?? "Du musst zuerst deine E-Mail-Adresse bestätigen. Eine Bestätigungsmail wurde dir bereits zugesendet."}</p>
+            {renderAdditionalContent?.emailNotConfirmed && renderAdditionalContent.emailNotConfirmed}
+          </>
+        )}
+        {renderedError === "invalidCredentials" && (
+          overwriteErrorMessages?.invalidCredentials ?? "Wir konnten kein Konto mit diesen Anmeldedaten finden. Bitte überprüfe deine Eingaben."
+        )}
+        {renderedError === "passwordsMatch" && (
+          overwriteErrorMessages?.passwordsMatch ?? "Das neue Passwort muss sich vom alten Passwort unterscheiden."
+        )}
+        {renderedError === "emailAlreadyRegistered" && (
+          overwriteErrorMessages?.emailAlreadyRegistered ?? "Diese E-Mail Adresse wird bereits verwendet."
+        )}
+        {renderedError === "unknownError" && (
+          overwriteErrorMessages?.unknownError ?? "Da ist etwas schief gelaufen. Bitte versuche es erneut."
+        )}
+      </AlertCard>
     </div>
   );
 };

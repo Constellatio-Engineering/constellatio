@@ -15,6 +15,7 @@ type InvalidateCaseViewsOptions = inferProcedureInput<AppRouter["views"]["getCas
 type InvalidateCaseProgressOptions = inferProcedureInput<AppRouter["casesProgress"]["getCaseProgress"]>;
 type InvalidateGamesProgressOptions = inferProcedureInput<AppRouter["gamesProgress"]["getGamesProgress"]>;
 type InvalidateSubmittedCaseSolutionOptions = inferProcedureInput<AppRouter["casesProgress"]["getSubmittedSolution"]>;
+type InvalidateForumQuestionsOptions = inferProcedureInput<AppRouter["forum"]["getQuestions"]>;
 type InvalidateOnboardingResultOptions = inferProcedureInput<AppRouter["users"]["getOnboardingResult"]>;
 type InvalidateUserDetailsResultOptions = inferProcedureInput<AppRouter["users"]["getUserDetails"]>;
 type InvalidateProfilePictureOptions = inferProcedureInput<AppRouter["users"]["getSignedProfilePictureUrl"]>;
@@ -29,6 +30,7 @@ type InvalidateQueries = {
   invalidateDocuments: (options?: InvalidateDocumentsOptions) => Promise<void>;
   invalidateEverything: () => Promise<void>;
   invalidateFolders: (options?: InvalidateFoldersOptions) => Promise<void>;
+  invalidateForumQuestions: (options?: InvalidateForumQuestionsOptions) => Promise<void>;
   invalidateGamesProgress: (options: InvalidateGamesProgressOptions) => Promise<void>;
   invalidateNotes: () => Promise<void>;
   invalidateOnboardingResult: (options?: InvalidateOnboardingResultOptions) => Promise<void>;
@@ -66,6 +68,7 @@ const InvalidateQueriesProvider: FunctionComponent<InvalidateQueriesProviderProp
     invalidateDocuments: async (options) => apiContext.documents.getDocuments.invalidate(options),
     invalidateEverything: async () => invalidateAll(),
     invalidateFolders: async (options) => apiContext.folders.getFolders.invalidate(options),
+    invalidateForumQuestions: async (options) => apiContext.forum.getQuestions.invalidate(options),
     invalidateGamesProgress: async (options) => apiContext.gamesProgress.getGamesProgress.invalidate(options),
     invalidateNotes: async () => apiContext.notes.getNotes.invalidate(),
     invalidateOnboardingResult: async (options) => apiContext.users.getOnboardingResult.invalidate(options),
@@ -96,6 +99,7 @@ const InvalidateQueriesProvider: FunctionComponent<InvalidateQueriesProviderProp
     apiContext.bookmarks.getAllBookmarks,
     apiContext.badges.getBadges,
     apiContext.notes.getNotes,
+    apiContext.forum.getQuestions,
     apiContext.uploads.getUploadedFiles,
     apiContext.casesProgress.getCaseProgress,
     apiContext.gamesProgress.getGamesProgress,

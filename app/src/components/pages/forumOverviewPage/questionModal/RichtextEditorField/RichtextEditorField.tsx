@@ -10,7 +10,7 @@ import { TextStyle } from "@tiptap/extension-text-style";
 import { Underline } from "@tiptap/extension-underline";
 import { useEditor } from "@tiptap/react";
 import { StarterKit } from "@tiptap/starter-kit";
-import React, { type FunctionComponent } from "react";
+import React, { type FunctionComponent, useEffect } from "react";
 
 import * as styles from "./RichtextEditorField.styles";
 
@@ -30,6 +30,8 @@ export const RichtextEditorField: FunctionComponent<Props> = ({
   value
 }) =>
 {
+  console.log("[RichtextEditorField] error", error);
+
   const editor = useEditor({
     content: value.html,
     extensions: [
