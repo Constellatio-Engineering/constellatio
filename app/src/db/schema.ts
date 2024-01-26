@@ -153,7 +153,7 @@ export const bookmarks = pgTable("Bookmark", {
   createdAt: timestamp("CreatedAt").defaultNow().notNull(),
   resourceId: uuid("ResourceId").notNull()
 }, table => ({
-  unq: unique().on(table.resourceType, table.resourceId, table.userId),
+  bookmark_resourceType_resourceId_userId_unique: unique().on(table.resourceType, table.resourceId, table.userId),
 }));
 
 export type BookmarkInsert = InferInsertModel<typeof bookmarks>;
@@ -215,8 +215,8 @@ export const casesViews = pgTable("CaseView", {
   caseId: uuid("CaseId").notNull(),
   updatedAt: timestamp("UpdatedAt").defaultNow(),
 }, table => ({
-  caseIdIndex: index("CaseId_Index").on(table.caseId),
-  pk: primaryKey({ columns: [table.userId, table.caseId] }),
+  casesViews_caseId_index: index("CaseView_CaseId_Index").on(table.caseId),
+  casesViews_userId_caseId_pk: primaryKey({ columns: [table.userId, table.caseId] }),
 }));
 
 export type CaseViewInsert = InferInsertModel<typeof casesViews>;
@@ -227,8 +227,8 @@ export const articlesViews = pgTable("ArticleView", {
   articleId: uuid("ArticleId").notNull(),
   updatedAt: timestamp("UpdatedAt").defaultNow(),
 }, table => ({
-  articleIdIndex: index("ArticleId_Index").on(table.articleId),
-  pk: primaryKey({ columns: [table.userId, table.articleId] }),
+  articlesViews_articleId_index: index("ArticleView_ArticleId_Index").on(table.articleId),
+  articlesViews_userId_articleId_pk: primaryKey({ columns: [table.userId, table.articleId] }),
 }));
 
 export type ArticleViewInsert = InferInsertModel<typeof articlesViews>;
@@ -239,8 +239,11 @@ export const casesProgress = pgTable("CaseProgress", {
   userId: uuid("UserId").references(() => users.id, { onDelete: "no action" }).notNull(),
   progressState: caseProgressStateEnum("ProgressState").notNull().default("not-started"),
 }, table => ({
-  caseProgress_caseId_userId_Index: index("CaseProgress_CaseId_UserId_Index").on(table.userId, table.caseId),
-  pk: primaryKey({ columns: [table.userId, table.caseId] }),
+  casesProgress_caseId_userId_index: index("CaseProgress_CaseId_UserId_Index").on(table.userId, table.caseId),
+  casesProgress_caseId_userId_pk: primaryKey({
+    columns: [table.userId, table.caseId],
+    name: "CaseProgress_CaseId_UserId_Pk",
+  }),
 }));
 
 export type CaseProgressInsert = InferInsertModel<typeof casesProgress>;
@@ -251,8 +254,11 @@ export const casesSolutions = pgTable("CaseSolution", {
   userId: uuid("UserId").references(() => users.id, { onDelete: "no action" }).notNull(),
   solution: text("Solution").notNull(),
 }, table => ({
-  caseSolution_caseId_userId_Index: index("CaseSolution_CaseId_UserId_Index").on(table.userId, table.caseId),
-  pk: primaryKey({ columns: [table.userId, table.caseId] }),
+  caseSolutions_caseId_userId_index: index("CaseSolution_CaseId_UserId_Index").on(table.userId, table.caseId),
+  caseSolutions_caseId_userId_pk: primaryKey({
+    columns: [table.userId, table.caseId],
+    name: "CaseSolution_CaseId_UserId_Pk",
+  }),
 }));
 
 export type CaseSolutionInsert = InferInsertModel<typeof casesSolutions>;
@@ -263,8 +269,11 @@ export const gamesProgress = pgTable("GameProgress", {
   userId: uuid("UserId").references(() => users.id, { onDelete: "no action" }).notNull(),
   progressState: gameProgressStateEnum("ProgressState").notNull().default("not-started"),
 }, table => ({
-  gameId_userId_Index: index("GameId_UserId_Index").on(table.userId, table.gameId),
-  pk: primaryKey({ columns: [table.userId, table.gameId] }),
+  gamesProgress_userId_gameId_index: index("GameProgress_GameId_UserId_Index").on(table.userId, table.gameId),
+  gamesProgress_userId_gameId_pk: primaryKey({
+    columns: [table.userId, table.gameId],
+    name: "GameProgress_GameId_UserId_Pk",
+  }),
 }));
 
 export type GameProgressInsert = InferInsertModel<typeof gamesProgress>;
@@ -303,7 +312,10 @@ export const usersToBadges = pgTable("User_to_Badge", {
   badgeId: uuid("BadgeId").references(() => badges.id, { onDelete: "no action" }).notNull(),
   userBadgeState: userBadgeStateEnum("UserBadgeState").default("not-seen").notNull(),
 }, (table) => ({
-  pk: primaryKey({ columns: [table.userId, table.badgeId] }),
+  usersToBadges_userId_badgeId_pk: primaryKey({
+    columns: [table.userId, table.badgeId],
+    name: "User_to_Badge_UserId_BadgeId_Pk",
+  }),
 }));
 
 export const usersToGroupsRelations = relations(usersToBadges, ({ one }) => ({
