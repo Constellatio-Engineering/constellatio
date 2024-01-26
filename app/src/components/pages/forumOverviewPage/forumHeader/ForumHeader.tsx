@@ -2,6 +2,7 @@ import { BodyText } from "@/components/atoms/BodyText/BodyText";
 import { Button } from "@/components/atoms/Button/Button";
 import { OverlayLines } from "@/components/Icons/bg-layer";
 import * as overviewHeaderStyles from "@/components/organisms/OverviewHeader/OverviewHeader.styles";
+import { useForumPageStore } from "@/stores/forumPage.store";
 
 import { Title, useMantineTheme } from "@mantine/core";
 import Image from "next/image";
@@ -12,6 +13,7 @@ import * as styles from "./ForumHeader.styles";
 
 const ForumHeader: FunctionComponent = () =>
 {
+  const openAskQuestionModal = useForumPageStore((state) => state.openAskQuestionModal);
   const theme = useMantineTheme();
   const height = 500;
   const variant = "forum";
@@ -39,7 +41,11 @@ const ForumHeader: FunctionComponent = () =>
           Welcome to our community! Join us to engage in insightful discussions, share your thoughts, and seek answers to your
           questions
         </BodyText>
-        <Button<"button"> styleType="primary" css={styles.button} type="button">
+        <Button<"button">
+          styleType="primary"
+          css={styles.button}
+          type="button"
+          onClick={openAskQuestionModal}>
           Ask a question
         </Button>
       </div>

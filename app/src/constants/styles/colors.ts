@@ -1,6 +1,6 @@
 import { type MantineThemeColors } from "@mantine/styles/lib/theme/types/MantineColor";
 
-export const colors: MantineThemeColors = {
+export const colors = {
   "brand-01": [
     "#FBDFDD", // 0
     "#EBAEA9", // 1
@@ -169,4 +169,4 @@ export const colors: MantineThemeColors = {
     "rgba(255, 255, 255, 0.9)", // 8
     "rgba(255, 255, 255, 0.97)", // 9
   ],
-};
+} as const;

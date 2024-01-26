@@ -1,12 +1,14 @@
+import { colors } from "@/constants/styles/colors";
 import { type UnknownMantineStylesParams } from "@/utils/types";
 
+import { css } from "@emotion/react";
 import styled from "@emotion/styled";
 import { type MantineTheme, type Styles } from "@mantine/core";
 import { type RichTextEditorStylesNames } from "@mantine/tiptap";
 
 type RichtextEditorFieldStyles = Styles<RichTextEditorStylesNames, UnknownMantineStylesParams>;
 
-export const richtextEditorFieldStyles = (): RichtextEditorFieldStyles =>
+export const richtextEditorFieldStyles = (hasError: boolean): RichtextEditorFieldStyles =>
 {
   const styles: RichtextEditorFieldStyles = (theme: MantineTheme) => ({
     content: {
@@ -40,6 +42,9 @@ export const richtextEditorFieldStyles = (): RichtextEditorFieldStyles =>
     },
     root: {
       background: `${theme.colors["neutrals-01"][0]}`,
+      ...(hasError && {
+        borderColor: colors["support-error"][3],
+      }),
       borderRadius: "12px",
       overflow: "hidden"
     },
@@ -47,6 +52,27 @@ export const richtextEditorFieldStyles = (): RichtextEditorFieldStyles =>
   return styles;
 };
 
-export const ContentWrapper = styled.div`
+export const contentWrapper = css`
   overflow: auto;
+`;
+
+export const wrapper = css`
+  width: 100%;
+`;
+
+export const label = (hasError: boolean) => css`
+  color: blue;
+  display: block;
+  font-size: 16px;
+  line-height: 24px;
+  font-weight: 400;
+  color: ${hasError ? colors["support-error"][3] : "#212529"};
+  padding-bottom: 4px;
+`;
+
+export const error = css`
+  margin-top: 8px;
+  font-weight: 500;
+  color: ${colors["support-error"][3]};
+  font-size: 14px;
 `;

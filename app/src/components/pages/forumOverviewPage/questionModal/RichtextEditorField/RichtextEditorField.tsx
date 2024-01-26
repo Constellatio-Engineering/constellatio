@@ -1,3 +1,6 @@
+import type { PostQuestionSchema } from "@/schemas/forum/postQuestion.schema";
+
+import { type GetInputProps } from "@mantine/form/lib/types";
 import { RichTextEditor, Link } from "@mantine/tiptap";
 import { Color } from "@tiptap/extension-color";
 import { Highlight } from "@tiptap/extension-highlight";
@@ -5,22 +8,30 @@ import { Placeholder } from "@tiptap/extension-placeholder";
 import { TextAlign } from "@tiptap/extension-text-align";
 import { TextStyle } from "@tiptap/extension-text-style";
 import { Underline } from "@tiptap/extension-underline";
-import { type Content, useEditor, type EditorEvents } from "@tiptap/react";
+import { useEditor } from "@tiptap/react";
 import { StarterKit } from "@tiptap/starter-kit";
-import React, { type FC } from "react";
+import React, { type FunctionComponent } from "react";
 
-import { ContentWrapper, richtextEditorFieldStyles } from "./RichtextEditorField.styles";
+import * as styles from "./RichtextEditorField.styles";
 
-export interface RichtextEditorFieldProps
+interface Props extends ReturnType<GetInputProps<PostQuestionSchema>> 
 {
-  readonly content: Content;
-  readonly onChange: (e: EditorEvents["update"]) => void;
+  readonly label: string;
+  readonly onChange: (value: PostQuestionSchema["question"]) => void;
+  readonly value: PostQuestionSchema["question"];
 }
 
-export const RichtextEditorField: FC<RichtextEditorFieldProps> = ({ content, onChange }) =>
+export const RichtextEditorField: FunctionComponent<Props> = ({
+  error,
+  label,
+  onBlur,
+  onChange,
+  onFocus,
+  value
+}) =>
 {
   const editor = useEditor({
-    content,
+    content: value.html,
     extensions: [
       Link,
       StarterKit,
@@ -33,36 +44,49 @@ export const RichtextEditorField: FC<RichtextEditorFieldProps> = ({ content, onC
         placeholder: "Beginne hier...",
       }),
     ],
-    onUpdate: onChange,
+    onUpdate: (props) => onChange({
+      html: props.editor.getHTML(),
+      text: props.editor.getText().trim(),
+    }),
     parseOptions: {
       preserveWhitespace: true,
     }
   });
 
   return (
-    <RichTextEditor
-      editor={editor}
-      styles={richtextEditorFieldStyles()}>
-      <RichTextEditor.Toolbar>
-        <RichTextEditor.ControlsGroup>
-          <RichTextEditor.Bold/>
-          <RichTextEditor.Italic/>
-          <RichTextEditor.Underline/>
-          <RichTextEditor.Strikethrough/>
-        </RichTextEditor.ControlsGroup>
-        <RichTextEditor.ControlsGroup>
-          <RichTextEditor.Link/>
-          <RichTextEditor.Unlink/>
-        </RichTextEditor.ControlsGroup>
-        <RichTextEditor.ControlsGroup>
-          <RichTextEditor.Blockquote/>
-          <RichTextEditor.BulletList/>
-          <RichTextEditor.OrderedList/>
-        </RichTextEditor.ControlsGroup>
-      </RichTextEditor.Toolbar>
-      <ContentWrapper>
-        <RichTextEditor.Content/>
-      </ContentWrapper>
-    </RichTextEditor>
+    <div css={styles.wrapper}>
+      <p css={styles.label(error != null)}>
+        {label}
+      </p>
+      <RichTextEditor
+        editor={editor}
+        onBlur={onBlur}
+        onFocus={onFocus}
+        styles={styles.richtextEditorFieldStyles(error != null)}>
+        <RichTextEditor.Toolbar>
+          <RichTextEditor.ControlsGroup>
+            <RichTextEditor.Bold/>
+            <RichTextEditor.Italic/>
+            <RichTextEditor.Underline/>
+            <RichTextEditor.Strikethrough/>
+          </RichTextEditor.ControlsGroup>
+          <RichTextEditor.ControlsGroup>
+            <RichTextEditor.Link/>
+            <RichTextEditor.Unlink/>
+          </RichTextEditor.ControlsGroup>
+          <RichTextEditor.ControlsGroup>
+            <RichTextEditor.Blockquote/>
+            <RichTextEditor.BulletList/>
+            <RichTextEditor.OrderedList/>
+          </RichTextEditor.ControlsGroup>
+        </RichTextEditor.Toolbar>
+        <div css={styles.contentWrapper}>
+          <RichTextEditor.Content/>
+        </div>
+      </RichTextEditor>
+      {error && (
+        <p css={styles.error}>{error}</p>
+      )}
+    </div>
   );
 };

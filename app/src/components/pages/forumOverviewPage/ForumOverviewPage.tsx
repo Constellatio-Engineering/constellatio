@@ -8,7 +8,6 @@ import SearchBar from "./searchBar/SearchBar";
 
 const ForumOverviewPage: FunctionComponent = () =>
 {
-
   return (
     <>
       <ForumHeader/>

@@ -103,5 +103,5 @@ export const slugFormatter = (name: string): string =>
 
 export const removeHtmlTagsFromString = (htmlString: string): string =>
 {
-  return htmlString.replace(/<\/?[^>]+(>|$)/g, "");
+  return htmlString.replace(/<\/?[^>]+(>|$)/g, " ");
 };

@@ -1,7 +1,7 @@
 /* eslint-disable sort-keys-fix/sort-keys-fix,@typescript-eslint/naming-convention,@typescript-eslint/no-use-before-define,max-lines */
 import { type InferInsertModel, type InferSelectModel, relations } from "drizzle-orm";
 import {
-  text, pgTable, integer, pgEnum, uuid, smallint, unique, timestamp, primaryKey, index
+  text, pgTable, integer, pgEnum, uuid, smallint, unique, timestamp, primaryKey, index, type AnyPgColumn
 } from "drizzle-orm/pg-core";
 
 export const allGenderIdentifiers = ["male", "female", "diverse"] as const;
@@ -216,7 +216,7 @@ export const casesViews = pgTable("CaseView", {
   updatedAt: timestamp("UpdatedAt").defaultNow(),
 }, table => ({
   caseIdIndex: index("CaseId_Index").on(table.caseId),
-  pk: primaryKey(table.userId, table.caseId),
+  pk: primaryKey({ columns: [table.userId, table.caseId] }),
 }));
 
 export type CaseViewInsert = InferInsertModel<typeof casesViews>;
@@ -228,7 +228,7 @@ export const articlesViews = pgTable("ArticleView", {
   updatedAt: timestamp("UpdatedAt").defaultNow(),
 }, table => ({
   articleIdIndex: index("ArticleId_Index").on(table.articleId),
-  pk: primaryKey(table.userId, table.articleId),
+  pk: primaryKey({ columns: [table.userId, table.articleId] }),
 }));
 
 export type ArticleViewInsert = InferInsertModel<typeof articlesViews>;
@@ -239,8 +239,8 @@ export const casesProgress = pgTable("CaseProgress", {
   userId: uuid("UserId").references(() => users.id, { onDelete: "no action" }).notNull(),
   progressState: caseProgressStateEnum("ProgressState").notNull().default("not-started"),
 }, table => ({
-  caseId_userId_Index: index("CaseId_UserId_Index").on(table.userId, table.caseId),
-  pk: primaryKey(table.userId, table.caseId),
+  caseProgress_caseId_userId_Index: index("CaseProgress_CaseId_UserId_Index").on(table.userId, table.caseId),
+  pk: primaryKey({ columns: [table.userId, table.caseId] }),
 }));
 
 export type CaseProgressInsert = InferInsertModel<typeof casesProgress>;
@@ -251,8 +251,8 @@ export const casesSolutions = pgTable("CaseSolution", {
   userId: uuid("UserId").references(() => users.id, { onDelete: "no action" }).notNull(),
   solution: text("Solution").notNull(),
 }, table => ({
-  caseId_userId_Index: index("CaseId_UserId_Index").on(table.userId, table.caseId),
-  pk: primaryKey(table.userId, table.caseId),
+  caseSolution_caseId_userId_Index: index("CaseSolution_CaseId_UserId_Index").on(table.userId, table.caseId),
+  pk: primaryKey({ columns: [table.userId, table.caseId] }),
 }));
 
 export type CaseSolutionInsert = InferInsertModel<typeof casesSolutions>;
@@ -264,7 +264,7 @@ export const gamesProgress = pgTable("GameProgress", {
   progressState: gameProgressStateEnum("ProgressState").notNull().default("not-started"),
 }, table => ({
   gameId_userId_Index: index("GameId_UserId_Index").on(table.userId, table.gameId),
-  pk: primaryKey(table.userId, table.gameId),
+  pk: primaryKey({ columns: [table.userId, table.gameId] }),
 }));
 
 export type GameProgressInsert = InferInsertModel<typeof gamesProgress>;
@@ -303,7 +303,7 @@ export const usersToBadges = pgTable("User_to_Badge", {
   badgeId: uuid("BadgeId").references(() => badges.id, { onDelete: "no action" }).notNull(),
   userBadgeState: userBadgeStateEnum("UserBadgeState").default("not-seen").notNull(),
 }, (table) => ({
-  pk: primaryKey(table.userId, table.badgeId),
+  pk: primaryKey({ columns: [table.userId, table.badgeId] }),
 }));
 
 export const usersToGroupsRelations = relations(usersToBadges, ({ one }) => ({
@@ -316,3 +316,32 @@ export const usersToGroupsRelations = relations(usersToBadges, ({ one }) => ({
     references: [users.id],
   }),
 }));
+
+export const forumQuestions = pgTable("ForumQuestion", {
+  id: uuid("Id").defaultRandom().unique().notNull().primaryKey(),
+  userId: uuid("UserId").references(() => users.id, { onDelete: "no action" }).notNull(),
+  createdAt: timestamp("CreatedAt").defaultNow().notNull(),
+  updatedAt: timestamp("UpdatedAt").defaultNow().notNull(),
+  title: text("Title").notNull(),
+  questionHtml: text("Question").notNull(),
+  questionText: text("QuestionText").notNull(),
+  legalArea: text("LegalArea").notNull(),
+  legalField: text("LegalField"),
+  legalTopic: text("LegalTopic"),
+});
+
+export type ForumQuestionInsert = InferInsertModel<typeof forumQuestions>;
+export type ForumQuestion = InferSelectModel<typeof forumQuestions>;
+
+export const forumAnswers = pgTable("ForumAnswer", {
+  id: uuid("Id").defaultRandom().unique().notNull().primaryKey(),
+  userId: uuid("UserId").references(() => users.id, { onDelete: "no action" }).notNull(),
+  createdAt: timestamp("CreatedAt").defaultNow().notNull(),
+  updatedAt: timestamp("UpdatedAt").defaultNow().notNull(),
+  answerText: text("AnswerText").notNull(),
+  parentQuestionId: uuid("ParentQuestionId").references(() => forumQuestions.id, { onDelete: "no action" }),
+  parentAnswerId: uuid("ParentAnswerId").references((): AnyPgColumn => forumAnswers.id, { onDelete: "no action" }),
+});
+
+export type ForumAnswerInsert = InferInsertModel<typeof forumAnswers>;
+export type ForumAnswer = InferSelectModel<typeof forumAnswers>;
