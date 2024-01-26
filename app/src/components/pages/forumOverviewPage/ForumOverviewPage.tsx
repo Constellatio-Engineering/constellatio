@@ -19,7 +19,7 @@ const ForumOverviewPage: FunctionComponent = () =>
       {questions?.map((question) => (
         <div key={question.id} style={{ margin: 30 }}>
           <h1>{question.title}</h1>
-          <p>{question.questionText}</p>
+          <p>{question.question}</p>
         </div>
       ))}
     </>

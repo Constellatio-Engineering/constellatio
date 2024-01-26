@@ -25,10 +25,7 @@ const QuestionModal: FunctionComponent = () =>
     legalArea: "",
     legalField: null,
     legalTopic: null,
-    question: {
-      html: "",
-      text: "",
-    },
+    question: "",
     title: "",
   };
 
@@ -42,15 +39,13 @@ const QuestionModal: FunctionComponent = () =>
 
   const resetForm = (): void =>
   {
-    console.log("resetForm");
-
     form.reset();
 
     const richtextEditor = formWrapperRef.current?.getElementsByClassName("tiptap ProseMirror")[0] as HTMLDivElement | undefined;
 
     if(richtextEditor)
     {
-      richtextEditor.innerHTML = initialFormValues.question.html;
+      richtextEditor.innerHTML = initialFormValues.question;
     }
   };
 
@@ -62,8 +57,6 @@ const QuestionModal: FunctionComponent = () =>
       resetForm();
     },
   });
-
-  console.log("errors", form.errors, form.getInputProps("question").error);
 
   return (
     <Modal

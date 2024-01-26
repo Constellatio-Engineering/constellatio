@@ -145,7 +145,7 @@ export const createDocumentSearchIndexItem = ({
 }: DocumentSearchIndexItem): DocumentSearchIndexItem =>
 {
   return ({
-    content: removeHtmlTagsFromString(content),
+    content: removeHtmlTagsFromString(content, true),
     createdAt,
     folderId,
     id,

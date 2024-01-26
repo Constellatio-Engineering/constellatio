@@ -20,8 +20,7 @@ export const forumRouter = createTRPCRouter({
         legalArea: input.legalArea,
         legalField: input.legalField,
         legalTopic: input.legalTopic,
-        questionHtml: input.question.html,
-        questionText: input.question.text,
+        question: input.question,
         title: input.title,
         userId
       };
