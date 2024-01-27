@@ -35,7 +35,7 @@ const QuestionModal: FunctionComponent = () =>
     validateInputOnBlur: true,
   });
 
-  useDataLossProtection(form.isDirty());
+  useDataLossProtection(form.isDirty() && isAskQuestionModalOpen);
 
   const resetForm = (): void =>
   {
