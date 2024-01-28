@@ -10,7 +10,7 @@ export type GenderIdentifier = typeof allGenderIdentifiers[number];
 export const allOnboardingResults = ["skipped", "completed"] as const;
 export type OnboardingResult = typeof allOnboardingResults[number];
 
-export const allBookmarkResourceTypes = ["article", "case"] as const;
+export const allBookmarkResourceTypes = ["article", "case", "forumQuestion"] as const;
 export type BookmarkResourceType = typeof allBookmarkResourceTypes[number];
 
 export const allSearchIndexTypes = ["article", "case"] as const;

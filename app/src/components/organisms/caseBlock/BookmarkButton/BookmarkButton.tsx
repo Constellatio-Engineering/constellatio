@@ -13,18 +13,18 @@ import React, { type FunctionComponent } from "react";
 import DeleteBookmarkModal from "../../deleteBookmarkModal/DeleteBookmarkModal";
 import { type ICaseBlockProps } from "../ItemBlock";
 
-interface ICaseBlockBookmarkButtonProps
+interface Props
 {
   readonly areAllBookmarksLoading: boolean;
-  readonly caseId: Nullable<string>;
   readonly isBookmarked: boolean;
-  readonly variant: ICaseBlockProps["variant"];
+  readonly resourceId: Nullable<string>;
+  readonly variant: ICaseBlockProps["variant"] | "forumQuestion";
 }
 
-const CaseBlockBookmarkButton: FunctionComponent<ICaseBlockBookmarkButtonProps> = ({
+const BookmarkButton: FunctionComponent<Props> = ({
   areAllBookmarksLoading,
-  caseId,
   isBookmarked,
+  resourceId,
   variant
 }) =>
 {
@@ -37,21 +37,33 @@ const CaseBlockBookmarkButton: FunctionComponent<ICaseBlockBookmarkButtonProps> 
     mutate: removeBookmark
   } = useRemoveBookmark({ shouldUseOptimisticUpdate: !mustConfirmDeletion });
 
-  const onBookmarkIconClick = (): void =>
+  const addOrRemoveBookmark = (action: "add" | "remove"): void =>
   {
-    if(!caseId)
+    if(!resourceId)
     {
       return;
     }
 
     const bookmarkData: AddOrRemoveBookmarkSchema = {
-      resourceId: caseId,
-      resourceType: variant === "case" ? "case" : "article"
+      resourceId,
+      resourceType: variant === "case" ? "case" : variant === "dictionary" ? "article" : "forumQuestion"
     };
 
-    if(!isBookmarked)
+    if(action === "add")
     {
       addBookmark(bookmarkData);
+    }
+    else
+    {
+      removeBookmark(bookmarkData);
+    }
+  };
+
+  const onBookmarkIconClick = (): void =>
+  {
+    if(!isBookmarked)
+    {
+      addOrRemoveBookmark("add");
       return;
     }
 
@@ -61,7 +73,7 @@ const CaseBlockBookmarkButton: FunctionComponent<ICaseBlockBookmarkButtonProps> 
     }
     else
     {
-      removeBookmark(bookmarkData);
+      addOrRemoveBookmark("remove");
     }
   };
 
@@ -75,28 +87,16 @@ const CaseBlockBookmarkButton: FunctionComponent<ICaseBlockBookmarkButtonProps> 
         onClickHandler={onBookmarkIconClick}
       />
       <DeleteBookmarkModal
-        onClose={function(): void 
+        onClose={() => setShowDeleteBookmarkModal(false)}
+        opened={showDeleteBookmarkModal}
+        onSubmit={() =>
         {
           setShowDeleteBookmarkModal(false);
+          addOrRemoveBookmark("remove");
         }}
-        opened={showDeleteBookmarkModal}
-        onSubmit={
-          function(): void 
-          {
-            if(caseId)
-            {
-              const bookmarkData: AddOrRemoveBookmarkSchema = {
-                resourceId: caseId,
-                resourceType: variant === "case" ? "case" : "article"
-              };
-              removeBookmark(bookmarkData);
-            }
-            setShowDeleteBookmarkModal(false);
-          }
-        }
       />
     </>
   );
 };
 
-export default CaseBlockBookmarkButton;
+export default BookmarkButton;

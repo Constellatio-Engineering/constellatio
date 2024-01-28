@@ -2,9 +2,11 @@ import ContentWrapper from "@/components/helpers/contentWrapper/ContentWrapper";
 import { Check } from "@/components/Icons/Check";
 import { ClapHands } from "@/components/Icons/ClapHands";
 import { UnstyledButton } from "@/components/molecules/unstyledButton/UnstyledButton";
+import BookmarkButton from "@/components/organisms/caseBlock/BookmarkButton/BookmarkButton";
 import ForumHeader from "@/components/pages/forumOverviewPage/forumHeader/ForumHeader";
 import ForumListItem from "@/components/pages/forumOverviewPage/forumListItem/ForumListItem";
 import QuestionModal from "@/components/pages/forumOverviewPage/questionModal/QuestionModal";
+import useBookmarks from "@/hooks/useBookmarks";
 import { useForumQuestions } from "@/hooks/useForumQuestions";
 
 import { Title } from "@mantine/core";
@@ -16,6 +18,7 @@ import SearchBar from "./searchBar/SearchBar";
 const ForumOverviewPage: FunctionComponent = () =>
 {
   const { data: questions, isLoading } = useForumQuestions();
+  const { bookmarks: questionBookmarks, isLoading: isGetQuestionBookmarksLoading } = useBookmarks("forumQuestion", { enabled: true });
 
   return (
     <>
@@ -43,7 +46,12 @@ const ForumOverviewPage: FunctionComponent = () =>
                       </div>
                     </div>
                     <div css={styles.bookmarkButtonWrapper}>
-                      <button type="button">BB</button>
+                      <BookmarkButton
+                        areAllBookmarksLoading={isGetQuestionBookmarksLoading}
+                        isBookmarked={questionBookmarks.some(bookmark => bookmark?.resourceId === question?.id) || false}
+                        resourceId={question.id}
+                        variant="forumQuestion"
+                      />
                     </div>
                   </div>
                   <p>{question.question}</p>

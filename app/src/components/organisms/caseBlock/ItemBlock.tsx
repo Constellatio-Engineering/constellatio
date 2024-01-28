@@ -4,7 +4,7 @@ import TableCell from "@/components/atoms/tableCell/TableCell";
 import { ArrowDown } from "@/components/Icons/ArrowDown";
 import { ClockIcon } from "@/components/Icons/ClockIcon";
 import CaseBlockHead, { type ICaseBlockHeadProps } from "@/components/molecules/caseBlockHead/CaseBlockHead";
-import CaseBlockBookmarkButton from "@/components/organisms/caseBlock/caseBlockBookmarkButton/CaseBlockBookmarkButton";
+import BookmarkButton from "@/components/organisms/caseBlock/BookmarkButton/BookmarkButton";
 // import useAllCasesWithProgress from "@/hooks/useAllCasesWithProgress";
 import useBookmarks from "@/hooks/useBookmarks";
 import useCasesProgress from "@/hooks/useCasesProgress";
@@ -134,11 +134,11 @@ const ItemBlock: FunctionComponent<ICaseBlockProps> = ({
                   </Link>
                 </td>
                 {tableType === "favorites" && <td><TableCell variant="simpleTableCell">{item?.legalArea?.legalAreaName}</TableCell></td>}
-                <td>
-                  <CaseBlockBookmarkButton
+                <td css={styles.bookmarkButtonCell}>
+                  <BookmarkButton
                     areAllBookmarksLoading={isLoading}
                     isBookmarked={isBookmarked}
-                    caseId={item?.id}
+                    resourceId={item?.id}
                     variant={variant}
                   />
                 </td>
