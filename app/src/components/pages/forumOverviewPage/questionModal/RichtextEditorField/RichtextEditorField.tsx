@@ -44,7 +44,7 @@ export const RichtextEditorField: FunctionComponent<Props> = ({
         placeholder: "Beginne hier...",
       }),
     ],
-    onUpdate: (props) => onChange(props.editor.getHTML()),
+    onUpdate: ({ editor }) => onChange(editor.getHTML()),
     parseOptions: {
       preserveWhitespace: true,
     }

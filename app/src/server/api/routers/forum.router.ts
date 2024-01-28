@@ -5,6 +5,7 @@ import { upvoteQuestionSchema } from "@/schemas/forum/upvoteQuestion.schema";
 import { getQuestions } from "@/server/api/services/forum.services";
 import { createTRPCRouter, protectedProcedure } from "@/server/api/trpc";
 
+import type { inferProcedureOutput } from "@trpc/server";
 import { and, eq } from "drizzle-orm";
 
 export const forumRouter = createTRPCRouter({
@@ -55,3 +56,5 @@ export const forumRouter = createTRPCRouter({
       return question;
     }),
 });
+
+export type getQuestionsResult = inferProcedureOutput<typeof forumRouter.getQuestions>;

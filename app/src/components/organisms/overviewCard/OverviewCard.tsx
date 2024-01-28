@@ -12,6 +12,7 @@ import useArticleViews from "@/hooks/useArticleViews";
 import useCaseViews from "@/hooks/useCaseViews";
 import { type IGenLegalArea, type IGenTags } from "@/services/graphql/__generated/sdk";
 import { type Nullable } from "@/utils/types";
+import { formatDate } from "@/utils/utils";
 
 import { useMantineTheme } from "@mantine/core";
 import { useDisclosure } from "@mantine/hooks";
@@ -45,32 +46,6 @@ export function timeFormatter(minutes: number): string
   {
     return `${minutes} Minute${minutes !== 1 ? "n" : ""}`;
   }
-}
-function formatDate(inputDate: string | number | Date): string 
-{
-  // Ensure the input is treated as a Date object
-  const date = new Date(inputDate);
-
-  // Get day, month, and year
-  const day = date.getDate();
-  const months = [
-    "Januar",
-    "Februar",
-    "März",
-    "April",
-    "Mai",
-    "Juni",
-    "Juli",
-    "August",
-    "September",
-    "Oktober",
-    "November",
-    "Dezember",
-  ];
-  const monthName = months[date.getMonth()];
-  const year = date.getFullYear();
-
-  return `${day} ${monthName}, ${year}`;
 }
 
 const OverviewCard: FunctionComponent<IOverviewCard> = ({

@@ -109,3 +109,29 @@ export const removeHtmlTagsFromString = (htmlString: string, replaceWithBlankCha
 
   return stringWithoutMultipleSpaces;
 };
+
+export const formatDate = (inputDate: Date): string =>
+{
+  const date = new Date(inputDate);
+  const day = date.getDate();
+
+  const months = [
+    "Januar",
+    "Februar",
+    "März",
+    "April",
+    "Mai",
+    "Juni",
+    "Juli",
+    "August",
+    "September",
+    "Oktober",
+    "November",
+    "Dezember",
+  ];
+
+  const monthName = months[date.getMonth()];
+  const year = date.getFullYear();
+
+  return `${day} ${monthName}, ${year}`;
+};

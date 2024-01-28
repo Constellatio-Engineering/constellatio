@@ -1,9 +1,9 @@
 import { db } from "@/db/connection";
-import { forumQuestions, questionUpvotes } from "@/db/schema";
+import { forumQuestions, questionUpvotes, users } from "@/db/schema";
 
 import {
   and,
-  desc, eq, getTableColumns, sql, type SQLWrapper
+  desc, eq, getTableColumns, isNotNull, sql, type SQLWrapper
 } from "drizzle-orm";
 
 type GetUpvotesForQuestion = (questionId: string) => Promise<number>;
@@ -37,15 +37,19 @@ export const getQuestions = async (userId: string, queryConditions: SQLWrapper[]
     .with(userUpvotesSubQuery)
     .select({
       ...getTableColumns(forumQuestions),
+      author: {
+        username: users.displayName
+      },
       isUpvoted: sql<boolean>`case when ${userUpvotesSubQuery.questionId} is null then false else true end`,
-      upvotesCount: sql<number>`cast(count(${questionUpvotes.questionId}) as int)`
+      upvotesCount: sql<number>`cast(count(${questionUpvotes.questionId}) as int)`,
     })
     .from(forumQuestions)
     .where(and(...queryConditions))
     .orderBy(desc(forumQuestions.createdAt))
+    .innerJoin(users, eq(forumQuestions.userId, users.id))
     .leftJoin(userUpvotesSubQuery, eq(forumQuestions.id, userUpvotesSubQuery.questionId))
     .leftJoin(questionUpvotes, eq(forumQuestions.id, questionUpvotes.questionId))
-    .groupBy(forumQuestions.id, userUpvotesSubQuery.questionId);
+    .groupBy(forumQuestions.id, userUpvotesSubQuery.questionId, users.id);
 
   return result;
 };
