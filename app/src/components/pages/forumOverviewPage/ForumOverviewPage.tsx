@@ -6,6 +6,7 @@ import BookmarkButton from "@/components/organisms/caseBlock/BookmarkButton/Book
 import ForumHeader from "@/components/pages/forumOverviewPage/forumHeader/ForumHeader";
 import ForumListItem from "@/components/pages/forumOverviewPage/forumListItem/ForumListItem";
 import QuestionModal from "@/components/pages/forumOverviewPage/questionModal/QuestionModal";
+import QuestionUpvoteButton from "@/components/pages/forumOverviewPage/questionUpvoteButton/QuestionUpvoteButton";
 import useBookmarks from "@/hooks/useBookmarks";
 import { useForumQuestions } from "@/hooks/useForumQuestions";
 
@@ -32,10 +33,11 @@ const ForumOverviewPage: FunctionComponent = () =>
             <ForumListItem key={question.id}>
               <div css={styles.questionContentWrapper}>
                 <div css={styles.upvoteColumn}>
-                  <UnstyledButton onClick={() => console.log("clap")}>
-                    <ClapHands size={24}/>
-                  </UnstyledButton>
-                  <p css={styles.upvotesCounter}>0</p>
+                  <QuestionUpvoteButton
+                    isUpvoted={false}
+                    questionId={question.id}
+                    upvotesCount={0}
+                  />
                 </div>
                 <div css={styles.contentColumn}>
                   <div css={styles.titleWrapper}>

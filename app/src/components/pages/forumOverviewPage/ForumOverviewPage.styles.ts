@@ -21,17 +21,7 @@ export const questionContentWrapper = css`
 export const upvoteColumn = css`
   width: 24px;
   min-width: 24px;
-  display: flex;
-  flex-direction: column;
-  gap: 4px;
-  align-items: center;
   padding-top: 6px;
-`;
-
-export const upvotesCounter = css`
-  font-size: 14px;
-  font-weight: 500;
-  transform: translateX(-1px);
 `;
 
 export const contentColumn = css`

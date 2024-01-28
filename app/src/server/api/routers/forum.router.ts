@@ -1,8 +1,10 @@
 import { db } from "@/db/connection";
-import { type ForumQuestionInsert, forumQuestions } from "@/db/schema";
+import { bookmarks, type ForumQuestionInsert, forumQuestions, questionUpvotes } from "@/db/schema";
 import { postQuestionSchema } from "@/schemas/forum/postQuestion.schema";
+import { upvoteQuestionSchema } from "@/schemas/forum/upvoteQuestion.schema";
 import { createTRPCRouter, protectedProcedure } from "@/server/api/trpc";
-import { sleep } from "@/utils/utils";
+
+import { and, eq } from "drizzle-orm";
 
 export const forumRouter = createTRPCRouter({
   getQuestions: protectedProcedure
@@ -14,8 +16,6 @@ export const forumRouter = createTRPCRouter({
     .input(postQuestionSchema)
     .mutation(async ({ ctx: { userId }, input }) =>
     {
-      await sleep(300);
-
       const questionInsert: ForumQuestionInsert = {
         legalArea: input.legalArea,
         legalField: input.legalField,
@@ -26,5 +26,29 @@ export const forumRouter = createTRPCRouter({
       };
 
       return db.insert(forumQuestions).values(questionInsert).returning();
+    }),
+  removeQuestionUpvote: protectedProcedure
+    .input(upvoteQuestionSchema)
+    .mutation(async ({ ctx: { userId }, input: { questionId } }) =>
+    {
+      const result = await db.delete(questionUpvotes).where(
+        and(
+          eq(questionUpvotes.questionId, questionId),
+          eq(bookmarks.userId, userId)
+        )
+      );
+      
+      console.log("removeQuestionUpvote", result);
+    }),
+  upvoteQuestion: protectedProcedure
+    .input(upvoteQuestionSchema)
+    .mutation(async ({ ctx: { userId }, input: { questionId } }) =>
+    {
+      const result = await db
+        .insert(questionUpvotes)
+        .values({ questionId, userId })
+        .onConflictDoNothing();
+
+      console.log("upvoteQuestion", result);
     }),
 });
