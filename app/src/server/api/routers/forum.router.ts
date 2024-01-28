@@ -4,8 +4,6 @@ import { postQuestionSchema } from "@/schemas/forum/postQuestion.schema";
 import { upvoteQuestionSchema } from "@/schemas/forum/upvoteQuestion.schema";
 import { getQuestions } from "@/server/api/services/forum.services";
 import { createTRPCRouter, protectedProcedure } from "@/server/api/trpc";
-import { InternalServerError } from "@/utils/serverError";
-import { sleep } from "@/utils/utils";
 
 import { and, eq } from "drizzle-orm";
 
@@ -34,8 +32,6 @@ export const forumRouter = createTRPCRouter({
     .input(upvoteQuestionSchema)
     .mutation(async ({ ctx: { userId }, input: { questionId } }) =>
     {
-      await sleep(300);
-
       await db.delete(questionUpvotes).where(
         and(
           eq(questionUpvotes.questionId, questionId),
@@ -50,10 +46,6 @@ export const forumRouter = createTRPCRouter({
     .input(upvoteQuestionSchema)
     .mutation(async ({ ctx: { userId }, input: { questionId } }) =>
     {
-      await sleep(300);
-
-      throw new InternalServerError(new Error("Test"));
-
       await db
         .insert(questionUpvotes)
         .values({ questionId, userId })

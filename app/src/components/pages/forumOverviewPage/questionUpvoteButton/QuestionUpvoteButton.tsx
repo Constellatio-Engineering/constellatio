@@ -61,6 +61,12 @@ const QuestionUpvoteButton: FunctionComponent<Props> = ({ isUpvoted, questionId,
 
   const onUpvoteMutationError = (_err: unknown, _upvotedQuestion: unknown, context: MutationContext | undefined): void =>
   {
+    notifications.show({
+      color: "red",
+      message: "Bitte versuche es später erneut oder kontaktiere unseren Support.",
+      title: "Da ist leider etwas schief gelaufen"
+    });
+
     const previousQuestions = context?.previousQuestions;
 
     if(!previousQuestions)
@@ -106,42 +112,13 @@ const QuestionUpvoteButton: FunctionComponent<Props> = ({ isUpvoted, questionId,
 
   const { isLoading: isUpvoteQuestionLoading, mutate: upvoteQuestion } = api.forum.upvoteQuestion.useMutation({
     onError: onUpvoteMutationError,
-    onMutate: async (votedQuestion) =>
-    {
-      await utils.forum.getQuestions.cancel();
-      const previousQuestions = utils.forum.getQuestions.getData();
-
-      utils.forum.getQuestions.setData(undefined, (oldQuestions = []) =>
-      {
-        const index = oldQuestions.findIndex((question) => question.id === votedQuestion.questionId);
-
-        if(index === -1)
-        {
-          return oldQuestions;
-        }
-
-        const updatedQuestion: inferProcedureOutput<AppRouter["forum"]["getQuestions"]>[0] = {
-          ...oldQuestions[index]!,
-          isUpvoted: true,
-          upvotesCount: oldQuestions[index]!.upvotesCount + 1
-        };
-
-        const updatedQuestions = [
-          ...oldQuestions.slice(0, index),
-          updatedQuestion,
-          ...oldQuestions.slice(index + 1),
-        ];
-
-        return updatedQuestions;
-      });
-
-      return { previousQuestions: previousQuestions ?? [] } satisfies MutationContext;
-    },
+    onMutate: async (votedQuestion) => onVoteMutationStart(votedQuestion, "upvote"),
     onSuccess: onUpvoteMutationSuccess
   });
 
   const { isLoading: isRemoveUpvoteLoading, mutate: removeQuestionUpvote } = api.forum.removeQuestionUpvote.useMutation({
     onError: onUpvoteMutationError,
+    onMutate: async (votedQuestion) => onVoteMutationStart(votedQuestion, "removeUpvote"),
     onSuccess: onUpvoteMutationSuccess
   });
 

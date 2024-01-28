@@ -21,8 +21,6 @@ const ForumOverviewPage: FunctionComponent = () =>
   const { data: questions, isLoading } = useForumQuestions();
   const { bookmarks: questionBookmarks, isLoading: isGetQuestionBookmarksLoading } = useBookmarks("forumQuestion", { enabled: true });
 
-  console.log(questions);
-
   return (
     <>
       <ForumHeader/>
