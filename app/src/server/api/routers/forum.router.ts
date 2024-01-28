@@ -1,5 +1,6 @@
 import { db } from "@/db/connection";
 import { type ForumQuestionInsert, forumQuestions, questionUpvotes } from "@/db/schema";
+import { getQuestionsSchema } from "@/schemas/forum/getQuestions.schema";
 import { postQuestionSchema } from "@/schemas/forum/postQuestion.schema";
 import { upvoteQuestionSchema } from "@/schemas/forum/upvoteQuestion.schema";
 import { getQuestions } from "@/server/api/services/forum.services";
@@ -7,18 +8,13 @@ import { createTRPCRouter, protectedProcedure } from "@/server/api/trpc";
 
 import type { inferProcedureOutput } from "@trpc/server";
 import { and, eq } from "drizzle-orm";
-import { z } from "zod";
 
 export const forumRouter = createTRPCRouter({
   getQuestions: protectedProcedure
-    .input(z.object({
-      cursor: z.number().int(),
-      limit: z.number().min(1).max(100)
-    }))
+    .input(getQuestionsSchema)
     .query(async ({ ctx: { userId }, input: { cursor, limit } }) =>
     {
-      const questions = await getQuestions(userId, cursor, limit);
-
+      const questions = await getQuestions({ cursor, limit, userId });
       const hasNextPage = questions.length > limit;
       let nextCursor: number | null = null;
 
@@ -72,8 +68,10 @@ export const forumRouter = createTRPCRouter({
         )
       );
 
-      const [question] = await getQuestions(userId, 1, 1, [eq(forumQuestions.id, questionId)]);
-      return question;
+      return undefined;
+
+      /* const [question] = await getQuestions(userId, 1, 1, [eq(forumQuestions.id, questionId)]);
+      return question;*/
     }),
   upvoteQuestion: protectedProcedure
     .input(upvoteQuestionSchema)
@@ -84,8 +82,10 @@ export const forumRouter = createTRPCRouter({
         .values({ questionId, userId })
         .onConflictDoNothing();
 
-      const [question] = await getQuestions(userId, 1, 1, [eq(forumQuestions.id, questionId)]);
-      return question;
+      return undefined;
+
+      /* const [question] = await getQuestions(userId, 1, 1, [eq(forumQuestions.id, questionId)]);
+      return question;*/
     }),
 });
 

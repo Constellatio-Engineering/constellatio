@@ -1,9 +1,10 @@
 import { db } from "@/db/connection";
 import { forumQuestions, questionUpvotes, users } from "@/db/schema";
+import { type GetQuestionsSchema } from "@/schemas/forum/getQuestions.schema";
 
 import {
   and, asc,
-  desc, eq, getTableColumns, gt, gte, isNotNull, sql, type SQLWrapper
+  desc, eq, getTableColumns, gt, gte, isNotNull, lte, sql, type SQLWrapper
 } from "drizzle-orm";
 
 type GetUpvotesForQuestion = (questionId: string) => Promise<number>;
@@ -19,19 +20,35 @@ export const getUpvotesForQuestion: GetUpvotesForQuestion = async (questionId) =
   return result?.count ?? 0;
 };
 
-// eslint-disable-next-line @typescript-eslint/explicit-function-return-type
-export const getQuestions = async (userId: string, cursor: number, limit: number, queryConditions: SQLWrapper[] = []) =>
+type GetQuestionsParams = GetQuestionsSchema & {
+  queryConditions?: SQLWrapper[];
+  userId: string;
+};
+
+export const getQuestions = async ({
+  cursor,
+  limit,
+  queryConditions = [],
+  userId
+}: GetQuestionsParams) => // eslint-disable-line @typescript-eslint/explicit-function-return-type
 {
   const userUpvotesSubQuery = db
     .$with("UserUpvotes")
-    .as(
-      db
-        .select({
-          questionId: questionUpvotes.questionId
-        })
-        .from(questionUpvotes)
-        .where(eq(questionUpvotes.userId, userId))
+    .as(db
+      .select({ questionId: questionUpvotes.questionId })
+      .from(questionUpvotes)
+      .where(eq(questionUpvotes.userId, userId))
     );
+
+  switch (cursor.cursorType)
+  {
+    case "newest":
+      queryConditions.push(lte(forumQuestions.index, cursor.cursorValue));
+      break;
+    case "upvotes":
+      queryConditions.push(lte(forumQuestions.index, cursor.cursorValue));
+      break;
+  }
 
   const result = await db
     .with(userUpvotesSubQuery)
@@ -46,8 +63,7 @@ export const getQuestions = async (userId: string, cursor: number, limit: number
     .from(forumQuestions)
     .orderBy(asc(forumQuestions.index))
     .limit(limit + 1)
-    .where(gte(forumQuestions.index, cursor))
-    // .where(and(...queryConditions))
+    .where(and(...queryConditions))
     .innerJoin(users, eq(forumQuestions.userId, users.id))
     .leftJoin(userUpvotesSubQuery, eq(forumQuestions.id, userUpvotesSubQuery.questionId))
     .leftJoin(questionUpvotes, eq(forumQuestions.id, questionUpvotes.questionId))
