@@ -32,13 +32,40 @@ export const getQuestions = async ({
   userId
 }: GetQuestionsParams) => // eslint-disable-line @typescript-eslint/explicit-function-return-type
 {
-  const userUpvotesSubQuery = db
-    .$with("UserUpvotes")
-    .as(db
-      .select({ questionId: questionUpvotes.questionId })
-      .from(questionUpvotes)
-      .where(eq(questionUpvotes.userId, userId))
-    );
+  const subquery = db
+    .select({
+      ...getTableColumns(forumQuestions),
+      upvotesCount: sql<number>`cast(count(${questionUpvotes.questionId}) as int)`.as("upvotesCount"),
+    })
+    .from(forumQuestions)
+    .leftJoin(questionUpvotes, eq(forumQuestions.id, questionUpvotes.questionId))
+    .groupBy(forumQuestions.id)
+    .as("questionUpvotesSq");
+
+  const questionsSortedWithAuthor = await db
+    .with(subquery)
+    .select({
+      author: {
+        username: users.displayName,
+      },
+      createdAt: subquery.createdAt,
+      legalArea: subquery.legalArea,
+      legalField: subquery.legalField,
+      legalTopic: subquery.legalTopic,
+      questionId: subquery.id,
+      questionText: subquery.question,
+      questionTitle: subquery.title,
+      updatedAt: subquery.updatedAt,
+      upvotesCount: subquery.upvotesCount,
+    })
+    .from(subquery)
+    .innerJoin(users, eq(subquery.userId, users.id))
+    .orderBy(desc(subquery.upvotesCount))
+    .limit(3);
+
+  console.log("result", questionsSortedWithAuthor);
+
+  /* console.log("test", test);
 
   switch (cursor.cursorType)
   {
@@ -50,14 +77,22 @@ export const getQuestions = async ({
       break;
   }
 
+  const questionUpvotesSubQuery = db
+    .$with("QuestionUpvotesSubQuery")
+    .as(db
+      .select({
+        questionId: questionUpvotes.questionId,
+      })
+      .from(questionUpvotes)
+    );
+
   const result = await db
-    .with(userUpvotesSubQuery)
+    .with(questionUpvotesSubQuery)
     .select({
       ...getTableColumns(forumQuestions),
       author: {
         username: users.displayName
       },
-      isUpvoted: sql<boolean>`case when ${userUpvotesSubQuery.questionId} is null then false else true end`,
       upvotesCount: sql<number>`cast(count(${questionUpvotes.questionId}) as int)`,
     })
     .from(forumQuestions)
@@ -67,7 +102,7 @@ export const getQuestions = async ({
     .innerJoin(users, eq(forumQuestions.userId, users.id))
     .leftJoin(userUpvotesSubQuery, eq(forumQuestions.id, userUpvotesSubQuery.questionId))
     .leftJoin(questionUpvotes, eq(forumQuestions.id, questionUpvotes.questionId))
-    .groupBy(forumQuestions.id, userUpvotesSubQuery.questionId, users.id);
+    .groupBy(forumQuestions.id, userUpvotesSubQuery.questionId, users.id);*/
 
-  return result;
+  return [];
 };

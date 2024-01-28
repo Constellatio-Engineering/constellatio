@@ -19,24 +19,31 @@ const ForumOverviewPage: FunctionComponent = () =>
     hasNextPage,
     isFetching,
     isFetchingNextPage,
+    refetch,
     status,
   } = api.forum.getQuestions.useInfiniteQuery({
     limit: 2,
   }, {
-    getNextPageParam: (lastPage) => lastPage.nextCursor,
-    initialCursor: 0,
+    // getNextPageParam: (lastPage) => lastPage.nextCursor,
+    getNextPageParam: (lastPage) => 0,
+    initialCursor: {
+      cursorType: "upvotes",
+      cursorValue: 0,
+    },
     refetchOnWindowFocus: "always",
     staleTime: Infinity
   });
 
   console.log(questionsQuery);
 
-  const questions = questionsQuery?.pages.flatMap((page) => page?.questions ?? []) ?? [];
+  // const questions = questionsQuery?.pages.flatMap((page) => page?.questions ?? []) ?? [];
+  const questions = [];
 
   return (
     <>
       <ForumHeader/>
       <SearchBar/>
+      <button type="button" onClick={async () => refetch()}>Refetch</button>
       <QuestionModal/>
       <ContentWrapper stylesOverrides={styles.wrapper}>
         <div css={styles.questionsWrapper}>

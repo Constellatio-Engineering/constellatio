@@ -18,6 +18,8 @@ export const forumRouter = createTRPCRouter({
       const hasNextPage = questions.length > limit;
       let nextCursor: number | null = null;
 
+      return questions;
+
       console.log("before", questions);
 
       if(hasNextPage)
