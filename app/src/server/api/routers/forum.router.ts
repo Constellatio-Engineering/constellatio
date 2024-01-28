@@ -4,13 +4,20 @@ import { postQuestionSchema } from "@/schemas/forum/postQuestion.schema";
 import { upvoteQuestionSchema } from "@/schemas/forum/upvoteQuestion.schema";
 import { createTRPCRouter, protectedProcedure } from "@/server/api/trpc";
 
-import { and, eq } from "drizzle-orm";
+import { and, eq, sql } from "drizzle-orm";
 
 export const forumRouter = createTRPCRouter({
   getQuestions: protectedProcedure
     .query(async () =>
     {
-      return db.select().from(forumQuestions);
+      return db
+        .select({
+          id: forumQuestions.id,
+          upvotesCount: sql<number>`cast(count(${questionUpvotes.questionId}) as int)`
+        })
+        .from(forumQuestions)
+        .leftJoin(questionUpvotes, eq(forumQuestions.id, questionUpvotes.questionId))
+        .groupBy(forumQuestions.id);
     }),
   postQuestion: protectedProcedure
     .input(postQuestionSchema)

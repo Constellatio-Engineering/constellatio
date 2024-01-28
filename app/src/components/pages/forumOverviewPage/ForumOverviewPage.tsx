@@ -36,7 +36,7 @@ const ForumOverviewPage: FunctionComponent = () =>
                   <QuestionUpvoteButton
                     isUpvoted={false}
                     questionId={question.id}
-                    upvotesCount={0}
+                    upvotesCount={question.upvotesCount}
                   />
                 </div>
                 <div css={styles.contentColumn}>
