@@ -44,7 +44,7 @@ const QuestionUpvoteButton: FunctionComponent<Props> = ({ isUpvoted, questionId,
       return;
     }
 
-    utils.forum.getQuestions.setData(undefined, (oldQuestions = []) =>
+    /* utils.forum.getQuestions.setInfiniteData(undefined, (oldQuestions = []) =>
     {
       const updatedQuestions = oldQuestions.map((question) =>
       {
@@ -56,7 +56,7 @@ const QuestionUpvoteButton: FunctionComponent<Props> = ({ isUpvoted, questionId,
       });
 
       return updatedQuestions;
-    });
+    });*/
   };
 
   const onUpvoteMutationError = (_err: unknown, _upvotedQuestion: unknown, context: MutationContext | undefined): void =>
@@ -75,15 +75,15 @@ const QuestionUpvoteButton: FunctionComponent<Props> = ({ isUpvoted, questionId,
       return;
     }
 
-    utils.forum.getQuestions.setData(undefined, previousQuestions);
+    // utils.forum.getQuestions.setData(undefined, previousQuestions);
   };
 
-  const onVoteMutationStart = async (votedQuestion: UpvoteQuestionMutationInput | RemoveQuestionUpvoteMutationInput, action: "upvote" | "removeUpvote"): Promise<MutationContext> =>
+  /* const onVoteMutationStart = async (votedQuestion: UpvoteQuestionMutationInput | RemoveQuestionUpvoteMutationInput, action: "upvote" | "removeUpvote"): Promise<MutationContext> =>
   {
     await utils.forum.getQuestions.cancel();
     const previousQuestions = utils.forum.getQuestions.getData();
 
-    utils.forum.getQuestions.setData(undefined, (oldQuestions = []) =>
+    /!* utils.forum.getQuestions.setData(undefined, (oldQuestions = []) =>
     {
       const index = oldQuestions.findIndex((question) => question.id === votedQuestion.questionId);
 
@@ -105,20 +105,20 @@ const QuestionUpvoteButton: FunctionComponent<Props> = ({ isUpvoted, questionId,
       ];
 
       return updatedQuestions;
-    });
+    });*!/
 
     return { previousQuestions: previousQuestions ?? [] } satisfies MutationContext;
-  };
+  };*/
 
   const { isLoading: isUpvoteQuestionLoading, mutate: upvoteQuestion } = api.forum.upvoteQuestion.useMutation({
     onError: onUpvoteMutationError,
-    onMutate: async (votedQuestion) => onVoteMutationStart(votedQuestion, "upvote"),
+    // onMutate: async (votedQuestion) => onVoteMutationStart(votedQuestion, "upvote"),
     onSuccess: onUpvoteMutationSuccess
   });
 
   const { isLoading: isRemoveUpvoteLoading, mutate: removeQuestionUpvote } = api.forum.removeQuestionUpvote.useMutation({
     onError: onUpvoteMutationError,
-    onMutate: async (votedQuestion) => onVoteMutationStart(votedQuestion, "removeUpvote"),
+    // onMutate: async (votedQuestion) => onVoteMutationStart(votedQuestion, "removeUpvote"),
     onSuccess: onUpvoteMutationSuccess
   });
 

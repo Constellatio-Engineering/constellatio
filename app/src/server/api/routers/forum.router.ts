@@ -7,12 +7,44 @@ import { createTRPCRouter, protectedProcedure } from "@/server/api/trpc";
 
 import type { inferProcedureOutput } from "@trpc/server";
 import { and, eq } from "drizzle-orm";
+import { z } from "zod";
 
 export const forumRouter = createTRPCRouter({
   getQuestions: protectedProcedure
-    .query(async ({ ctx: { userId } }) =>
+    .input(z.object({
+      cursor: z.number().int(),
+      limit: z.number().min(1).max(100)
+    }))
+    .query(async ({ ctx: { userId }, input: { cursor, limit } }) =>
     {
-      return getQuestions(userId);
+      const questions = await getQuestions(userId, cursor, limit);
+
+      const hasNextPage = questions.length > limit;
+      let nextCursor: number | null = null;
+
+      console.log("before", questions);
+
+      if(hasNextPage)
+      {
+        console.log("hasNextPage", hasNextPage);
+
+        // remove the last element since it's only used to determine if there's a next page
+        const lastQuestion = questions.pop();
+        nextCursor = lastQuestion!.index;
+
+        console.log("index of last question", lastQuestion!.index);
+      }
+
+      console.log("after", questions);
+
+      console.log("-----");
+      console.log("questions", questions);
+      console.log("nextCursor", nextCursor);
+
+      return ({
+        nextCursor,
+        questions,
+      });
     }),
   postQuestion: protectedProcedure
     .input(postQuestionSchema)
@@ -40,7 +72,7 @@ export const forumRouter = createTRPCRouter({
         )
       );
 
-      const [question] = await getQuestions(userId, [eq(forumQuestions.id, questionId)]);
+      const [question] = await getQuestions(userId, 1, 1, [eq(forumQuestions.id, questionId)]);
       return question;
     }),
   upvoteQuestion: protectedProcedure
@@ -52,7 +84,7 @@ export const forumRouter = createTRPCRouter({
         .values({ questionId, userId })
         .onConflictDoNothing();
 
-      const [question] = await getQuestions(userId, [eq(forumQuestions.id, questionId)]);
+      const [question] = await getQuestions(userId, 1, 1, [eq(forumQuestions.id, questionId)]);
       return question;
     }),
 });

@@ -3,7 +3,7 @@ import ForumHeader from "@/components/pages/forumOverviewPage/forumHeader/ForumH
 import ForumListItem from "@/components/pages/forumOverviewPage/forumListItem/ForumListItem";
 import QuestionListItem from "@/components/pages/forumOverviewPage/questionListItem/QuestionListItem";
 import QuestionModal from "@/components/pages/forumOverviewPage/questionModal/QuestionModal";
-import { useForumQuestions } from "@/hooks/useForumQuestions";
+import { api } from "@/utils/api";
 
 import React, { type FunctionComponent } from "react";
 
@@ -12,7 +12,26 @@ import SearchBar from "./searchBar/SearchBar";
 
 const ForumOverviewPage: FunctionComponent = () =>
 {
-  const { data: questions, isLoading } = useForumQuestions();
+  const {
+    data: questionsQuery,
+    error,
+    fetchNextPage,
+    hasNextPage,
+    isFetching,
+    isFetchingNextPage,
+    status,
+  } = api.forum.getQuestions.useInfiniteQuery({
+    limit: 2,
+  }, {
+    getNextPageParam: (lastPage) => lastPage.nextCursor,
+    initialCursor: 0,
+    refetchOnWindowFocus: "always",
+    staleTime: Infinity
+  });
+
+  console.log(questionsQuery);
+
+  const questions = questionsQuery?.pages.flatMap((page) => page?.questions ?? []) ?? [];
 
   return (
     <>
@@ -21,12 +40,32 @@ const ForumOverviewPage: FunctionComponent = () =>
       <QuestionModal/>
       <ContentWrapper stylesOverrides={styles.wrapper}>
         <div css={styles.questionsWrapper}>
-          {isLoading && (<p>Loading...</p>)}
-          {questions?.map((question) => (
-            <ForumListItem key={question.id}>
-              <QuestionListItem question={question}/>
-            </ForumListItem>
-          ))}
+          {status === "loading" ? (
+            <p>Loading...</p>
+          ) : status === "error" ? (
+            <p>Error: {error.message}</p>
+          ) : (
+            <>
+              {questions.map((question) => (
+                <ForumListItem key={question.id}>
+                  <QuestionListItem question={question}/>
+                </ForumListItem>
+              ))}
+              <div>
+                <button
+                  type="button"
+                  onClick={async () => fetchNextPage()}
+                  disabled={!hasNextPage || isFetchingNextPage}>
+                  {isFetchingNextPage
+                    ? "Loading more..."
+                    : hasNextPage
+                      ? "Load More"
+                      : "Nothing more to load"}
+                </button>
+              </div>
+              <div>{isFetching && !isFetchingNextPage ? "Fetching..." : null}</div>
+            </>
+          )}
         </div>
       </ContentWrapper>
     </>

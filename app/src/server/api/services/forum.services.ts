@@ -2,8 +2,8 @@ import { db } from "@/db/connection";
 import { forumQuestions, questionUpvotes, users } from "@/db/schema";
 
 import {
-  and,
-  desc, eq, getTableColumns, isNotNull, sql, type SQLWrapper
+  and, asc,
+  desc, eq, getTableColumns, gt, gte, isNotNull, sql, type SQLWrapper
 } from "drizzle-orm";
 
 type GetUpvotesForQuestion = (questionId: string) => Promise<number>;
@@ -20,7 +20,7 @@ export const getUpvotesForQuestion: GetUpvotesForQuestion = async (questionId) =
 };
 
 // eslint-disable-next-line @typescript-eslint/explicit-function-return-type
-export const getQuestions = async (userId: string, queryConditions: SQLWrapper[] = []) =>
+export const getQuestions = async (userId: string, cursor: number, limit: number, queryConditions: SQLWrapper[] = []) =>
 {
   const userUpvotesSubQuery = db
     .$with("UserUpvotes")
@@ -44,8 +44,10 @@ export const getQuestions = async (userId: string, queryConditions: SQLWrapper[]
       upvotesCount: sql<number>`cast(count(${questionUpvotes.questionId}) as int)`,
     })
     .from(forumQuestions)
-    .where(and(...queryConditions))
-    .orderBy(desc(forumQuestions.createdAt))
+    .orderBy(asc(forumQuestions.index))
+    .limit(limit + 1)
+    .where(gte(forumQuestions.index, cursor))
+    // .where(and(...queryConditions))
     .innerJoin(users, eq(forumQuestions.userId, users.id))
     .leftJoin(userUpvotesSubQuery, eq(forumQuestions.id, userUpvotesSubQuery.questionId))
     .leftJoin(questionUpvotes, eq(forumQuestions.id, questionUpvotes.questionId))

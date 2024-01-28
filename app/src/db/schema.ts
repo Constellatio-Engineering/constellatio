@@ -1,7 +1,7 @@
 /* eslint-disable sort-keys-fix/sort-keys-fix,@typescript-eslint/naming-convention,@typescript-eslint/no-use-before-define,max-lines */
 import { type InferInsertModel, type InferSelectModel, relations } from "drizzle-orm";
 import {
-  text, pgTable, integer, pgEnum, uuid, smallint, unique, timestamp, primaryKey, index, type AnyPgColumn
+  text, pgTable, integer, pgEnum, uuid, smallint, unique, timestamp, primaryKey, index, type AnyPgColumn, serial
 } from "drizzle-orm/pg-core";
 
 export const allGenderIdentifiers = ["male", "female", "diverse"] as const;
@@ -319,6 +319,7 @@ export const usersToGroupsRelations = relations(usersToBadges, ({ one }) => ({
 
 export const forumQuestions = pgTable("ForumQuestion", {
   id: uuid("Id").defaultRandom().primaryKey(),
+  index: serial("Index"),
   userId: uuid("UserId").references(() => users.id, { onDelete: "no action" }).notNull(),
   createdAt: timestamp("CreatedAt").defaultNow().notNull(),
   updatedAt: timestamp("UpdatedAt").defaultNow().notNull(),
@@ -334,6 +335,7 @@ export type ForumQuestion = InferSelectModel<typeof forumQuestions>;
 
 export const forumAnswers = pgTable("ForumAnswer", {
   id: uuid("Id").defaultRandom().primaryKey(),
+  index: serial("Index"),
   userId: uuid("UserId").references(() => users.id, { onDelete: "no action" }).notNull(),
   createdAt: timestamp("CreatedAt").defaultNow().notNull(),
   updatedAt: timestamp("UpdatedAt").defaultNow().notNull(),

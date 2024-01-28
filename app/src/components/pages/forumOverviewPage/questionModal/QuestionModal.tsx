@@ -25,8 +25,8 @@ const QuestionModal: FunctionComponent = () =>
     legalArea: "",
     legalField: null,
     legalTopic: null,
-    question: "",
-    title: "",
+    question: "Das ist der Inhalt der Frage",
+    title: "Das ist der Titel der Frage",
   };
 
   const form = useForm<PostQuestionSchema>({

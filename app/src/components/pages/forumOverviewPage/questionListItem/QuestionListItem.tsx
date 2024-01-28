@@ -15,7 +15,7 @@ import * as styles from "./QuestionListItem.styles";
 import genericProfileIcon from "../../../../../public/images/icons/generic-user-icon.svg";
 
 type Props = {
-  readonly question: getQuestionsResult[number];
+  readonly question: getQuestionsResult["questions"][number];
 };
 
 const QuestionListItem: FunctionComponent<Props> = ({ question }) =>
