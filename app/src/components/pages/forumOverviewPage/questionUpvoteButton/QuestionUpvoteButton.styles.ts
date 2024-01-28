@@ -11,4 +11,5 @@ export const counter = css`
   font-size: 14px;
   font-weight: 500;
   transform: translateX(-1px);
+  display: inline-block;
 `;

@@ -1,24 +1,19 @@
 import { db } from "@/db/connection";
-import { bookmarks, type ForumQuestionInsert, forumQuestions, questionUpvotes } from "@/db/schema";
+import { type ForumQuestionInsert, forumQuestions, questionUpvotes } from "@/db/schema";
 import { postQuestionSchema } from "@/schemas/forum/postQuestion.schema";
 import { upvoteQuestionSchema } from "@/schemas/forum/upvoteQuestion.schema";
-import { getUpvotesForQuestion } from "@/server/api/services/forum.services";
+import { getQuestions } from "@/server/api/services/forum.services";
 import { createTRPCRouter, protectedProcedure } from "@/server/api/trpc";
+import { InternalServerError } from "@/utils/serverError";
+import { sleep } from "@/utils/utils";
 
-import { and, eq, getTableColumns, sql } from "drizzle-orm";
+import { and, eq } from "drizzle-orm";
 
 export const forumRouter = createTRPCRouter({
   getQuestions: protectedProcedure
-    .query(async () =>
+    .query(async ({ ctx: { userId } }) =>
     {
-      return db
-        .select({
-          ...getTableColumns(forumQuestions),
-          upvotesCount: sql<number>`cast(count(${questionUpvotes.questionId}) as int)`
-        })
-        .from(forumQuestions)
-        .leftJoin(questionUpvotes, eq(forumQuestions.id, questionUpvotes.questionId))
-        .groupBy(forumQuestions.id);
+      return getQuestions(userId);
     }),
   postQuestion: protectedProcedure
     .input(postQuestionSchema)
@@ -39,24 +34,32 @@ export const forumRouter = createTRPCRouter({
     .input(upvoteQuestionSchema)
     .mutation(async ({ ctx: { userId }, input: { questionId } }) =>
     {
+      await sleep(300);
+
       await db.delete(questionUpvotes).where(
         and(
           eq(questionUpvotes.questionId, questionId),
-          eq(bookmarks.userId, userId)
+          eq(questionUpvotes.userId, userId)
         )
       );
 
-      return getUpvotesForQuestion(questionId);
+      const [question] = await getQuestions(userId, [eq(forumQuestions.id, questionId)]);
+      return question;
     }),
   upvoteQuestion: protectedProcedure
     .input(upvoteQuestionSchema)
     .mutation(async ({ ctx: { userId }, input: { questionId } }) =>
     {
+      await sleep(300);
+
+      throw new InternalServerError(new Error("Test"));
+
       await db
         .insert(questionUpvotes)
         .values({ questionId, userId })
         .onConflictDoNothing();
 
-      return getUpvotesForQuestion(questionId);
+      const [question] = await getQuestions(userId, [eq(forumQuestions.id, questionId)]);
+      return question;
     }),
 });

@@ -21,6 +21,8 @@ const ForumOverviewPage: FunctionComponent = () =>
   const { data: questions, isLoading } = useForumQuestions();
   const { bookmarks: questionBookmarks, isLoading: isGetQuestionBookmarksLoading } = useBookmarks("forumQuestion", { enabled: true });
 
+  console.log(questions);
+
   return (
     <>
       <ForumHeader/>
@@ -34,7 +36,7 @@ const ForumOverviewPage: FunctionComponent = () =>
               <div css={styles.questionContentWrapper}>
                 <div css={styles.upvoteColumn}>
                   <QuestionUpvoteButton
-                    isUpvoted={false}
+                    isUpvoted={question.isUpvoted}
                     questionId={question.id}
                     upvotesCount={question.upvotesCount}
                   />
