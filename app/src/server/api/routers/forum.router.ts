@@ -2,9 +2,10 @@ import { db } from "@/db/connection";
 import { bookmarks, type ForumQuestionInsert, forumQuestions, questionUpvotes } from "@/db/schema";
 import { postQuestionSchema } from "@/schemas/forum/postQuestion.schema";
 import { upvoteQuestionSchema } from "@/schemas/forum/upvoteQuestion.schema";
+import { getUpvotesForQuestion } from "@/server/api/services/forum.services";
 import { createTRPCRouter, protectedProcedure } from "@/server/api/trpc";
 
-import { and, eq, sql } from "drizzle-orm";
+import { and, eq, getTableColumns, sql } from "drizzle-orm";
 
 export const forumRouter = createTRPCRouter({
   getQuestions: protectedProcedure
@@ -12,7 +13,7 @@ export const forumRouter = createTRPCRouter({
     {
       return db
         .select({
-          id: forumQuestions.id,
+          ...getTableColumns(forumQuestions),
           upvotesCount: sql<number>`cast(count(${questionUpvotes.questionId}) as int)`
         })
         .from(forumQuestions)
@@ -38,24 +39,24 @@ export const forumRouter = createTRPCRouter({
     .input(upvoteQuestionSchema)
     .mutation(async ({ ctx: { userId }, input: { questionId } }) =>
     {
-      const result = await db.delete(questionUpvotes).where(
+      await db.delete(questionUpvotes).where(
         and(
           eq(questionUpvotes.questionId, questionId),
           eq(bookmarks.userId, userId)
         )
       );
-      
-      console.log("removeQuestionUpvote", result);
+
+      return getUpvotesForQuestion(questionId);
     }),
   upvoteQuestion: protectedProcedure
     .input(upvoteQuestionSchema)
     .mutation(async ({ ctx: { userId }, input: { questionId } }) =>
     {
-      const result = await db
+      await db
         .insert(questionUpvotes)
         .values({ questionId, userId })
         .onConflictDoNothing();
 
-      console.log("upvoteQuestion", result);
+      return getUpvotesForQuestion(questionId);
     }),
 });

@@ -10,8 +10,6 @@ type Props = {
 
 const ContentWrapper: FunctionComponent<Props> = ({ children, stylesOverrides }) =>
 {
-  console.log("ContentWrapper", stylesOverrides);
-
   return (
     <div css={[styles.wrapper, stylesOverrides]}>
       {children}
