@@ -3,31 +3,22 @@ import ForumHeader from "@/components/pages/forumOverviewPage/forumHeader/ForumH
 import ForumListItem from "@/components/pages/forumOverviewPage/forumListItem/ForumListItem";
 import QuestionListItem from "@/components/pages/forumOverviewPage/questionListItem/QuestionListItem";
 import QuestionModal from "@/components/pages/forumOverviewPage/questionModal/QuestionModal";
-import useContextAndErrorIfNull from "@/hooks/useContextAndErrorIfNull";
-import { InvalidateQueriesContext } from "@/provider/InvalidateQueriesProvider";
-import { type GetQuestionsCursorType, type GetQuestionsSchema } from "@/schemas/forum/getQuestions.schema";
 import { useForumPageStore } from "@/stores/forumPage.store";
 import { api } from "@/utils/api";
 
-import { useQueryClient } from "@tanstack/react-query";
-import React, { Fragment, type FunctionComponent, useState } from "react";
+import React, { Fragment, type FunctionComponent } from "react";
 
 import * as styles from "./ForumOverviewPage.styles";
 import SearchBar from "./searchBar/SearchBar";
 
+const defaultLimit = 2;
+
 const ForumOverviewPage: FunctionComponent = () =>
 {
-  const { invalidateForumQuestions } = useContextAndErrorIfNull(InvalidateQueriesContext);
+  const apiContext = api.useUtils();
+  const { cancel, invalidate, setInfiniteData } = apiContext.forum.getQuestions;
   const cursorType = useForumPageStore(s => s.questionsCursorType);
   const setCursorType = useForumPageStore(s => s.setQuestionsCursorType);
-
-  const apiContext = api.useUtils();
-  const {
-    cancel,
-    invalidate,
-    reset,
-    setInfiniteData
-  } = apiContext.forum.getQuestions;
 
   const {
     data: questionsQuery,
@@ -39,7 +30,7 @@ const ForumOverviewPage: FunctionComponent = () =>
     refetch,
     status,
   } = api.forum.getQuestions.useInfiniteQuery({
-    limit: 3,
+    limit: defaultLimit,
   }, {
     getNextPageParam: (previouslyFetchedPage) =>
     {
@@ -58,35 +49,12 @@ const ForumOverviewPage: FunctionComponent = () =>
       }
 
       // cursor has changed
-
-      let nextCursor: GetQuestionsSchema["cursor"];
-
-      if(currentlySelectedCursor === "newest")
-      {
-        nextCursor = {
-          cursorType: "newest",
-          index: null,
-        };
-      }
-      else
-      {
-        nextCursor = {
-          cursorType: "upvotes",
-          index: null,
-          upvotes: null,
-        };
-      }
-
-      console.log("cursor changed");
-
-      return nextCursor;
+      return { cursorType: currentlySelectedCursor };
     },
     initialCursor: { cursorType: "newest" },
     refetchOnWindowFocus: "always",
     staleTime: Infinity
   });
-
-  // console.log("questionsQuery pageParams:", questionsQuery?.pageParams);
 
   const questions = questionsQuery?.pages.flatMap((page) => page?.questions ?? []) ?? [];
 
@@ -100,8 +68,6 @@ const ForumOverviewPage: FunctionComponent = () =>
         onClick={async () =>
         {
           await cancel();
-
-          // const { questionsCursorType: _currentCursor } = useForumPageStore.getState();
           const { questionsCursorType: _currentCursor } = useForumPageStore.getState();
           const nextCursor = _currentCursor === "newest" ? "upvotes" : "newest";
 
@@ -109,7 +75,7 @@ const ForumOverviewPage: FunctionComponent = () =>
             cursor: {
               cursorType: nextCursor,
             },
-            limit: 3,
+            limit: defaultLimit,
           }, () => ({
             pageParams: [
               {
@@ -120,10 +86,7 @@ const ForumOverviewPage: FunctionComponent = () =>
           }));
 
           setCursorType(nextCursor);
-
-          // await reset();
-
-          void invalidateForumQuestions();
+          await invalidate();
         }}>
         Change cursor
       </button>
@@ -138,12 +101,9 @@ const ForumOverviewPage: FunctionComponent = () =>
           ) : (
             <>
               {questions.map((question) => (
-                <Fragment key={question.id}>
-                  <p>{question.title} - Upvotes: {question.upvotesCount}</p>
-                  {/* <ForumListItem key={question.id}>
+                <ForumListItem key={question.id}>
                   <QuestionListItem question={question}/>
-                </ForumListItem>*/}
-                </Fragment>
+                </ForumListItem>
               ))}
               <div>
                 <button
