@@ -36,7 +36,7 @@ export const LoginForm: FunctionComponent = () =>
   const [signInError, setSignInError] = useState<unknown>();
   const lastEnteredPassword = useAuthPageStore(s => s.lastEnteredPassword);
   const lastEnteredEmail = useAuthPageStore(s => s.lastEnteredEmail);
-  const { isLoading: isResendConfirmationEmailLoading, mutate: resendConfirmationEmail } = useResendConfirmationEmail({
+  const { isPending: isResendConfirmationEmailLoading, mutate: resendConfirmationEmail } = useResendConfirmationEmail({
     email: lastEnteredEmail,
     onSuccess: () => setSignInError(null),
     showNotifications: true,

@@ -15,7 +15,6 @@ const useBookmarks: UseBookmarks = (resourceType, options) =>
 {
   const { data: bookmarks, error, isLoading } = api.bookmarks.getAllBookmarks.useQuery({ resourceType }, {
     ...options,
-    queryKey: ["bookmarks.getAllBookmarks", { resourceType }],
     refetchOnMount: "always",
     staleTime: Infinity
   });

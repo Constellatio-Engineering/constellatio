@@ -49,7 +49,7 @@ const ChangeEmailTab: FunctionComponent<Props> = ({ userDetails }) =>
 
   const {
     error,
-    isLoading,
+    isPending: isLoading,
     isSuccess,
     mutate: updateEmail,
   } = useMutation({

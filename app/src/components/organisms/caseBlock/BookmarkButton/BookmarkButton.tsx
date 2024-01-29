@@ -31,9 +31,9 @@ const BookmarkButton: FunctionComponent<Props> = ({
   const router = useRouter();
   const mustConfirmDeletion = router.pathname.startsWith(appPaths.personalSpace) || router.pathname.startsWith(appPaths.dashboard);
   const [showDeleteBookmarkModal, setShowDeleteBookmarkModal] = React.useState<boolean>(false);
-  const { isLoading: isAddingBookmarkLoading, mutate: addBookmark } = useAddBookmark();
+  const { isPending: isAddingBookmarkLoading, mutate: addBookmark } = useAddBookmark();
   const {
-    isLoading: isRemovingBookmarkLoading,
+    isPending: isRemovingBookmarkLoading,
     mutate: removeBookmark
   } = useRemoveBookmark({ shouldUseOptimisticUpdate: !mustConfirmDeletion });
 

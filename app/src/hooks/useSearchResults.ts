@@ -4,7 +4,7 @@ import {
   type ArticleSearchIndexItem, type CaseSearchIndexItem, type DocumentSearchIndexItem, searchIndices, type UploadSearchIndexItem 
 } from "@/utils/search";
 
-import { useQuery } from "@tanstack/react-query";
+import { keepPreviousData, useQuery } from "@tanstack/react-query";
 import { useContext } from "react";
 
 export type SearchResults = {
@@ -39,7 +39,7 @@ const useSearchResults: UseSearchResults = () =>
 
   const { data: searchResults = initialSearchResults, isLoading, refetch } = useQuery({
     enabled: hasInput && meilisearchInstance != null,
-    keepPreviousData: true,
+    placeholderData: keepPreviousData,
     queryFn: async () =>
     {
       if(!meilisearchInstance)

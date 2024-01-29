@@ -110,13 +110,13 @@ const QuestionUpvoteButton: FunctionComponent<Props> = ({ isUpvoted, questionId,
     return { previousQuestions: previousQuestions ?? [] } satisfies MutationContext;
   };*/
 
-  const { isLoading: isUpvoteQuestionLoading, mutate: upvoteQuestion } = api.forum.upvoteQuestion.useMutation({
+  const { isPending: isUpvoteQuestionLoading, mutate: upvoteQuestion } = api.forum.upvoteQuestion.useMutation({
     onError: onUpvoteMutationError,
     // onMutate: async (votedQuestion) => onVoteMutationStart(votedQuestion, "upvote"),
     onSuccess: onUpvoteMutationSuccess
   });
 
-  const { isLoading: isRemoveUpvoteLoading, mutate: removeQuestionUpvote } = api.forum.removeQuestionUpvote.useMutation({
+  const { isPending: isRemoveUpvoteLoading, mutate: removeQuestionUpvote } = api.forum.removeQuestionUpvote.useMutation({
     onError: onUpvoteMutationError,
     // onMutate: async (votedQuestion) => onVoteMutationStart(votedQuestion, "removeUpvote"),
     onSuccess: onUpvoteMutationSuccess

@@ -86,7 +86,7 @@ export const RegistrationForm: FunctionComponent = () =>
     });
   }, [form.values.email, form.values.password]);
 
-  const { isLoading: isRegisterLoading, mutate: register } = api.authentication.register.useMutation({
+  const { isPending: isRegisterLoading, mutate: register } = api.authentication.register.useMutation({
     onError: e =>
     {
       if(e.data?.clientError.identifier === "email-already-taken")

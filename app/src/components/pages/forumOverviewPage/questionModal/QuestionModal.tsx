@@ -49,7 +49,7 @@ const QuestionModal: FunctionComponent = () =>
     }
   };
 
-  const { error: postQuestionError, isLoading, mutate: postQuestion } = usePostQuestion({
+  const { error: postQuestionError, isPending: isLoading, mutate: postQuestion } = usePostQuestion({
     onSettled: () => form.resetDirty(),
     onSuccess: () =>
     {

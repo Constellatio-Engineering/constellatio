@@ -24,7 +24,7 @@ const ForumOverviewPage: FunctionComponent = () =>
   } = api.forum.getQuestions.useInfiniteQuery({
     limit: 2,
   }, {
-    getNextPageParam: (lastPage, allPages) =>
+    getNextPageParam: (lastPage, allPages, lastPageParam) =>
     {
       console.log(lastPage, allPages);
       return lastPage.nextCursor;
@@ -48,7 +48,7 @@ const ForumOverviewPage: FunctionComponent = () =>
       <QuestionModal/>
       <ContentWrapper stylesOverrides={styles.wrapper}>
         <div css={styles.questionsWrapper}>
-          {status === "loading" ? (
+          {status === "pending" ? (
             <p>Loading...</p>
           ) : status === "error" ? (
             <p>Error: {error.message}</p>
