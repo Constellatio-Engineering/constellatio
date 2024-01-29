@@ -24,11 +24,13 @@ const ForumOverviewPage: FunctionComponent = () =>
   } = api.forum.getQuestions.useInfiniteQuery({
     limit: 2,
   }, {
-    // getNextPageParam: (lastPage) => lastPage.nextCursor,
-    getNextPageParam: (lastPage) => 0,
+    getNextPageParam: (lastPage, allPages) =>
+    {
+      console.log(lastPage, allPages);
+      return lastPage.nextCursor;
+    },
     initialCursor: {
       cursorType: "upvotes",
-      cursorValue: 0,
     },
     refetchOnWindowFocus: "always",
     staleTime: Infinity
@@ -36,8 +38,7 @@ const ForumOverviewPage: FunctionComponent = () =>
 
   console.log(questionsQuery);
 
-  // const questions = questionsQuery?.pages.flatMap((page) => page?.questions ?? []) ?? [];
-  const questions = [];
+  const questions = questionsQuery?.pages.flatMap((page) => page?.questions ?? []) ?? [];
 
   return (
     <>

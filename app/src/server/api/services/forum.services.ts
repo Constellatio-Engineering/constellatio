@@ -3,8 +3,7 @@ import { forumQuestions, questionUpvotes, users } from "@/db/schema";
 import { type GetQuestionsSchema } from "@/schemas/forum/getQuestions.schema";
 
 import {
-  and, asc,
-  desc, eq, getTableColumns, gt, gte, isNotNull, lte, sql, type SQLWrapper
+  and, desc, eq, getTableColumns, lte, type SQL, sql, type SQLWrapper 
 } from "drizzle-orm";
 
 type GetUpvotesForQuestion = (questionId: string) => Promise<number>;
@@ -32,7 +31,7 @@ export const getQuestions = async ({
   userId
 }: GetQuestionsParams) => // eslint-disable-line @typescript-eslint/explicit-function-return-type
 {
-  const subquery = db
+  const countUpvotesSubquery = db
     .select({
       ...getTableColumns(forumQuestions),
       upvotesCount: sql<number>`cast(count(${questionUpvotes.questionId}) as int)`.as("upvotesCount"),
@@ -42,67 +41,59 @@ export const getQuestions = async ({
     .groupBy(forumQuestions.id)
     .as("questionUpvotesSq");
 
-  const questionsSortedWithAuthor = await db
-    .with(subquery)
-    .select({
-      author: {
-        username: users.displayName,
-      },
-      createdAt: subquery.createdAt,
-      legalArea: subquery.legalArea,
-      legalField: subquery.legalField,
-      legalTopic: subquery.legalTopic,
-      questionId: subquery.id,
-      questionText: subquery.question,
-      questionTitle: subquery.title,
-      updatedAt: subquery.updatedAt,
-      upvotesCount: subquery.upvotesCount,
-    })
-    .from(subquery)
-    .innerJoin(users, eq(subquery.userId, users.id))
-    .orderBy(desc(subquery.upvotesCount))
-    .limit(3);
-
-  console.log("result", questionsSortedWithAuthor);
-
-  /* console.log("test", test);
+  let orderBy: SQL | SQL[];
 
   switch (cursor.cursorType)
   {
     case "newest":
-      queryConditions.push(lte(forumQuestions.index, cursor.cursorValue));
+    {
+      if(cursor.index != null)
+      {
+        queryConditions.push(lte(countUpvotesSubquery.index, cursor.index));
+      }
+      orderBy = desc(countUpvotesSubquery.index);
       break;
+    }
     case "upvotes":
-      queryConditions.push(lte(forumQuestions.index, cursor.cursorValue));
+    {
+      if(cursor.upvotes != null)
+      {
+        queryConditions.push(lte(countUpvotesSubquery.upvotesCount, cursor.upvotes));
+      }
+      if(cursor.index != null)
+      {
+        queryConditions.push(lte(countUpvotesSubquery.index, cursor.index));
+      }
+
+      orderBy = [desc(countUpvotesSubquery.upvotesCount), desc(countUpvotesSubquery.index)];
       break;
+    }
   }
 
-  const questionUpvotesSubQuery = db
-    .$with("QuestionUpvotesSubQuery")
-    .as(db
-      .select({
-        questionId: questionUpvotes.questionId,
-      })
-      .from(questionUpvotes)
-    );
-
-  const result = await db
-    .with(questionUpvotesSubQuery)
+  const questionsSortedWithAuthor = await db
+    .with(countUpvotesSubquery)
     .select({
-      ...getTableColumns(forumQuestions),
       author: {
-        username: users.displayName
+        username: users.displayName,
       },
-      upvotesCount: sql<number>`cast(count(${questionUpvotes.questionId}) as int)`,
+      createdAt: countUpvotesSubquery.createdAt,
+      id: countUpvotesSubquery.id,
+      index: countUpvotesSubquery.index,
+      legalArea: countUpvotesSubquery.legalArea,
+      legalField: countUpvotesSubquery.legalField,
+      legalTopic: countUpvotesSubquery.legalTopic,
+      questionText: countUpvotesSubquery.question,
+      title: countUpvotesSubquery.title,
+      updatedAt: countUpvotesSubquery.updatedAt,
+      upvotesCount: countUpvotesSubquery.upvotesCount,
     })
-    .from(forumQuestions)
-    .orderBy(asc(forumQuestions.index))
-    .limit(limit + 1)
+    .from(countUpvotesSubquery)
     .where(and(...queryConditions))
-    .innerJoin(users, eq(forumQuestions.userId, users.id))
-    .leftJoin(userUpvotesSubQuery, eq(forumQuestions.id, userUpvotesSubQuery.questionId))
-    .leftJoin(questionUpvotes, eq(forumQuestions.id, questionUpvotes.questionId))
-    .groupBy(forumQuestions.id, userUpvotesSubQuery.questionId, users.id);*/
+    .innerJoin(users, eq(countUpvotesSubquery.userId, users.id))
+    .orderBy(...(Array.isArray(orderBy) ? orderBy : [orderBy]))
+    .limit(limit + 1);
 
-  return [];
+  console.log("questionsSortedWithAuthor", questionsSortedWithAuthor);
+
+  return questionsSortedWithAuthor;
 };

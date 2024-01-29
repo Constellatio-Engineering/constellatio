@@ -26,7 +26,8 @@ const QuestionListItem: FunctionComponent<Props> = ({ question }) =>
     <div css={styles.questionContentWrapper}>
       <div css={styles.upvoteColumn}>
         <QuestionUpvoteButton
-          isUpvoted={question.isUpvoted}
+          isUpvoted={false}
+          /* isUpvoted={question.isUpvoted}*/
           questionId={question.id}
           upvotesCount={question.upvotesCount}
         />
@@ -71,7 +72,7 @@ const QuestionListItem: FunctionComponent<Props> = ({ question }) =>
             </p>
           </div>
           <p css={styles.excerpt}>
-            {removeHtmlTagsFromString(question.question, true)}
+            {removeHtmlTagsFromString(question.questionText, true)}
           </p>
         </div>
         <div css={styles.bottomWrapper}>

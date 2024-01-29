@@ -1,10 +1,11 @@
 import { db } from "@/db/connection";
 import { type ForumQuestionInsert, forumQuestions, questionUpvotes } from "@/db/schema";
-import { getQuestionsSchema } from "@/schemas/forum/getQuestions.schema";
+import { type GetQuestionsSchema, getQuestionsSchema } from "@/schemas/forum/getQuestions.schema";
 import { postQuestionSchema } from "@/schemas/forum/postQuestion.schema";
 import { upvoteQuestionSchema } from "@/schemas/forum/upvoteQuestion.schema";
 import { getQuestions } from "@/server/api/services/forum.services";
 import { createTRPCRouter, protectedProcedure } from "@/server/api/trpc";
+import { InternalServerError } from "@/utils/serverError";
 
 import type { inferProcedureOutput } from "@trpc/server";
 import { and, eq } from "drizzle-orm";
@@ -16,9 +17,7 @@ export const forumRouter = createTRPCRouter({
     {
       const questions = await getQuestions({ cursor, limit, userId });
       const hasNextPage = questions.length > limit;
-      let nextCursor: number | null = null;
-
-      return questions;
+      let nextCursor: GetQuestionsSchema["cursor"] | null = null;
 
       console.log("before", questions);
 
@@ -27,10 +26,29 @@ export const forumRouter = createTRPCRouter({
         console.log("hasNextPage", hasNextPage);
 
         // remove the last element since it's only used to determine if there's a next page
-        const lastQuestion = questions.pop();
-        nextCursor = lastQuestion!.index;
+        const nextQuestion = questions.pop();
 
-        console.log("index of last question", lastQuestion!.index);
+        if(nextQuestion == null)
+        {
+          throw new InternalServerError(new Error("nextQuestion is null"));
+        }
+
+        switch (cursor.cursorType)
+        {
+          case "newest":
+            nextCursor = {
+              cursorType: "newest",
+              index: nextQuestion.index
+            };
+            break;
+          case "upvotes":
+            nextCursor = {
+              cursorType: "upvotes",
+              index: nextQuestion.index,
+              upvotes: nextQuestion.upvotesCount
+            };
+            break;
+        }
       }
 
       console.log("after", questions);

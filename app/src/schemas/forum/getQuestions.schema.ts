@@ -4,11 +4,12 @@ export const getQuestionsSchema = z.object({
   cursor: z.discriminatedUnion("cursorType", [
     z.object({
       cursorType: z.literal("upvotes"),
-      cursorValue: z.number().int()
+      index: z.number().int().min(0).nullish(),
+      upvotes: z.number().int().nullish()
     }),
     z.object({
       cursorType: z.literal("newest"),
-      cursorValue: z.number().int().min(0)
+      index: z.number().int().min(0).nullish()
     })
   ]),
   limit: z.number().min(1).max(50)
