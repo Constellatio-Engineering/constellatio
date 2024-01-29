@@ -3,7 +3,7 @@ import { forumQuestions, questionUpvotes, users } from "@/db/schema";
 import { type GetQuestionsSchema } from "@/schemas/forum/getQuestions.schema";
 
 import {
-  and, desc, eq, getTableColumns, lte, type SQL, sql, type SQLWrapper 
+  and, count, desc, eq, getTableColumns, lt, lte, or, type SQL, sql
 } from "drizzle-orm";
 
 type GetUpvotesForQuestion = (questionId: string) => Promise<number>;
@@ -12,7 +12,7 @@ type GetUpvotesForQuestion = (questionId: string) => Promise<number>;
 export const getUpvotesForQuestion: GetUpvotesForQuestion = async (questionId) =>
 {
   const [result] = await db
-    .select({ count: sql<number>`count(*)` })
+    .select({ count: sql<number>`cast(count(*) as int)` })
     .from(questionUpvotes)
     .where(eq(questionUpvotes.questionId, questionId));
 
@@ -20,27 +20,28 @@ export const getUpvotesForQuestion: GetUpvotesForQuestion = async (questionId) =
 };
 
 type GetQuestionsParams = GetQuestionsSchema & {
-  queryConditions?: SQLWrapper[];
+  // queryConditions?: SQLWrapper[];
   userId: string;
 };
 
 export const getQuestions = async ({
   cursor,
   limit,
-  queryConditions = [],
+  // queryConditions = [],
   userId
 }: GetQuestionsParams) => // eslint-disable-line @typescript-eslint/explicit-function-return-type
 {
   const countUpvotesSubquery = db
     .select({
       ...getTableColumns(forumQuestions),
-      upvotesCount: sql<number>`cast(count(${questionUpvotes.questionId}) as int)`.as("upvotesCount"),
+      upvotesCount: count(questionUpvotes.questionId).as("upvotesCount"),
     })
     .from(forumQuestions)
     .leftJoin(questionUpvotes, eq(forumQuestions.id, questionUpvotes.questionId))
     .groupBy(forumQuestions.id)
     .as("questionUpvotesSq");
 
+  let queryConditions: SQL<unknown> | undefined;
   let orderBy: SQL | SQL[];
 
   switch (cursor.cursorType)
@@ -49,7 +50,7 @@ export const getQuestions = async ({
     {
       if(cursor.index != null)
       {
-        queryConditions.push(lte(countUpvotesSubquery.index, cursor.index));
+        queryConditions = lte(countUpvotesSubquery.index, cursor.index);
       }
       orderBy = desc(countUpvotesSubquery.index);
       break;
@@ -58,11 +59,21 @@ export const getQuestions = async ({
     {
       if(cursor.upvotes != null)
       {
-        queryConditions.push(lte(countUpvotesSubquery.upvotesCount, cursor.upvotes));
-      }
-      if(cursor.index != null)
-      {
-        queryConditions.push(lte(countUpvotesSubquery.index, cursor.index));
+        if(cursor.index == null)
+        {
+          queryConditions = lte(countUpvotesSubquery.upvotesCount, cursor.upvotes);
+        }
+        else
+        {
+          // If the upvotes count is the same, the newer question ranks higher
+          queryConditions = or(
+            lt(countUpvotesSubquery.upvotesCount, cursor.upvotes),
+            and(
+              eq(countUpvotesSubquery.upvotesCount, cursor.upvotes),
+              lte(countUpvotesSubquery.index, cursor.index)
+            )
+          );
+        }
       }
 
       orderBy = [desc(countUpvotesSubquery.upvotesCount), desc(countUpvotesSubquery.index)];
@@ -86,14 +97,13 @@ export const getQuestions = async ({
       title: countUpvotesSubquery.title,
       updatedAt: countUpvotesSubquery.updatedAt,
       upvotesCount: countUpvotesSubquery.upvotesCount,
+      // upvotesCount2: sql<number>`SUM(${countUpvotesSubquery.upvotesCount} + 10)`,
     })
     .from(countUpvotesSubquery)
-    .where(and(...queryConditions))
+    .where(queryConditions)
     .innerJoin(users, eq(countUpvotesSubquery.userId, users.id))
     .orderBy(...(Array.isArray(orderBy) ? orderBy : [orderBy]))
     .limit(limit + 1);
-
-  console.log("questionsSortedWithAuthor", questionsSortedWithAuthor);
 
   return questionsSortedWithAuthor;
 };

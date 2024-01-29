@@ -40,7 +40,7 @@ export const viewsRouter = createTRPCRouter({
     .query(async ({ input: { articleId } }) =>
     {
       const [result] = await db
-        .select({ count: sql<number>`count(*)` })
+        .select({ count: sql<number>`cast(count(*) as int)` })
         .from(articlesViews)
         .where(eq(articlesViews.articleId, articleId));
 
@@ -51,7 +51,7 @@ export const viewsRouter = createTRPCRouter({
     .query(async ({ input: { caseId } }) =>
     {
       const [result] = await db
-        .select({ count: sql<number>`count(*)` })
+        .select({ count: sql<number>`cast(count(*) as int)` })
         .from(casesViews)
         .where(eq(casesViews.caseId, caseId));
 

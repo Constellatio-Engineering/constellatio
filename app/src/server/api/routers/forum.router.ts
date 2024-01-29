@@ -19,12 +19,8 @@ export const forumRouter = createTRPCRouter({
       const hasNextPage = questions.length > limit;
       let nextCursor: GetQuestionsSchema["cursor"] | null = null;
 
-      console.log("before", questions);
-
       if(hasNextPage)
       {
-        console.log("hasNextPage", hasNextPage);
-
         // remove the last element since it's only used to determine if there's a next page
         const nextQuestion = questions.pop();
 
@@ -51,10 +47,6 @@ export const forumRouter = createTRPCRouter({
         }
       }
 
-      console.log("after", questions);
-
-      console.log("-----");
-      console.log("questions", questions);
       console.log("nextCursor", nextCursor);
 
       return ({
