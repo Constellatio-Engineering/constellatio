@@ -47,12 +47,7 @@ export const forumRouter = createTRPCRouter({
         }
       }
 
-      console.log("nextCursor", nextCursor);
-
-      return ({
-        nextCursor,
-        questions,
-      });
+      return { nextCursor, questions };
     }),
   postQuestion: protectedProcedure
     .input(postQuestionSchema)

@@ -16,3 +16,4 @@ export const getQuestionsSchema = z.object({
 });
 
 export type GetQuestionsSchema = z.input<typeof getQuestionsSchema>;
+export type GetQuestionsCursorType = GetQuestionsSchema["cursor"]["cursorType"];
