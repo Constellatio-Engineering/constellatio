@@ -23,7 +23,7 @@ const QuestionListItem: FunctionComponent<Props> = ({ questionId }) =>
 {
   const apiContext = api.useUtils();
   const { bookmarks: questionBookmarks, isLoading: isGetQuestionBookmarksLoading } = useBookmarks("forumQuestion", { enabled: true });
-  const { data: question, isFetching } = api.forum.getQuestionById.useQuery({ questionId }, {
+  const { data: question, /* isFetching*/ } = api.forum.getQuestionById.useQuery({ questionId }, {
     initialData: () =>
     {
       // There seems to be a bug with the types where cursor is required for getInfiniteData, but it is not (taken from the docs)
@@ -42,7 +42,7 @@ const QuestionListItem: FunctionComponent<Props> = ({ questionId }) =>
   }
 
   return (
-    <div css={styles.questionContentWrapper} style={isFetching ? { backgroundColor: "red" } : {}}>
+    <div css={styles.questionContentWrapper}>
       <div css={styles.upvoteColumn}>
         <QuestionUpvoteButton
           isUpvoted={question.isUpvoted}

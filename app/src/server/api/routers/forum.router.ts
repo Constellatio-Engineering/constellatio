@@ -16,21 +16,11 @@ export const forumRouter = createTRPCRouter({
     .input(getQuestionByIdSchema)
     .query(async ({ ctx: { userId }, input: { questionId } }) =>
     {
-      console.log("getQuestionById", questionId);
-
       const [question] = await getQuestions({
-        cursor: {
-          cursorType: "newest",
-          index: null,
-        },
-        limit: 1,
+        getQuestionsType: "byId",
+        questionId,
         userId
       });
-
-      if(question != null)
-      {
-        question.title = "test";
-      }
 
       return question;
     }),
@@ -38,7 +28,12 @@ export const forumRouter = createTRPCRouter({
     .input(getQuestionsSchema)
     .query(async ({ ctx: { userId }, input: { cursor, limit } }) =>
     {
-      const questions = await getQuestions({ cursor, limit, userId });
+      const questions = await getQuestions({
+        cursor,
+        getQuestionsType: "infinite",
+        limit,
+        userId
+      });
       const hasNextPage = questions.length > limit;
       let nextCursor: GetQuestionsSchema["cursor"] | null = null;
 

@@ -52,46 +52,52 @@ export const getQuestions = async (params: GetQuestionsParams) => // eslint-disa
     .from(forumQuestions)
     .leftJoin(userUpvotesSubQuery, eq(forumQuestions.id, userUpvotesSubQuery.questionId))
     .leftJoin(questionUpvotes, eq(forumQuestions.id, questionUpvotes.questionId))
+    .where(params.getQuestionsType === "byId" ? eq(forumQuestions.id, params.questionId) : undefined)
     .groupBy(forumQuestions.id, userUpvotesSubQuery.questionId)
     .as("questionUpvotesSq");
 
   let queryConditions: SQL<unknown> | undefined;
-  let orderBy: SQL | SQL[];
+  let orderBy: SQL | SQL[] = [];
 
-  switch (cursor.cursorType)
+  if(params.getQuestionsType === "infinite")
   {
-    case "newest":
-    {
-      if(cursor.index != null)
-      {
-        queryConditions = lte(countUpvotesSubquery.index, cursor.index);
-      }
-      orderBy = desc(countUpvotesSubquery.index);
-      break;
-    }
-    case "upvotes":
-    {
-      if(cursor.upvotes != null)
-      {
-        if(cursor.index == null)
-        {
-          queryConditions = lte(countUpvotesSubquery.upvotesCount, cursor.upvotes);
-        }
-        else
-        {
-          // If the upvotes count is the same, the newer question ranks higher
-          queryConditions = or(
-            lt(countUpvotesSubquery.upvotesCount, cursor.upvotes),
-            and(
-              eq(countUpvotesSubquery.upvotesCount, cursor.upvotes),
-              lte(countUpvotesSubquery.index, cursor.index)
-            )
-          );
-        }
-      }
+    const { cursor } = params;
 
-      orderBy = [desc(countUpvotesSubquery.upvotesCount), desc(countUpvotesSubquery.index)];
-      break;
+    switch (cursor.cursorType)
+    {
+      case "newest":
+      {
+        if(cursor.index != null)
+        {
+          queryConditions = lte(countUpvotesSubquery.index, cursor.index);
+        }
+        orderBy = desc(countUpvotesSubquery.index);
+        break;
+      }
+      case "upvotes":
+      {
+        if(cursor.upvotes != null)
+        {
+          if(cursor.index == null)
+          {
+            queryConditions = lte(countUpvotesSubquery.upvotesCount, cursor.upvotes);
+          }
+          else
+          {
+            // If the upvotes count is the same, the newer question ranks higher
+            queryConditions = or(
+              lt(countUpvotesSubquery.upvotesCount, cursor.upvotes),
+              and(
+                eq(countUpvotesSubquery.upvotesCount, cursor.upvotes),
+                lte(countUpvotesSubquery.index, cursor.index)
+              )
+            );
+          }
+        }
+
+        orderBy = [desc(countUpvotesSubquery.upvotesCount), desc(countUpvotesSubquery.index)];
+        break;
+      }
     }
   }
 
@@ -117,7 +123,7 @@ export const getQuestions = async (params: GetQuestionsParams) => // eslint-disa
     .where(queryConditions)
     .innerJoin(users, eq(countUpvotesSubquery.userId, users.id))
     .orderBy(...(Array.isArray(orderBy) ? orderBy : [orderBy]))
-    .limit(limit + 1);
+    .limit(params.getQuestionsType === "byId" ? 1 : params.limit + 1);
 
   return questionsSortedWithAuthor;
 };
