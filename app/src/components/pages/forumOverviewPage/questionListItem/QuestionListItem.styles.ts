@@ -46,9 +46,9 @@ export const title = css`
 `;
 
 export const checkmark = css`
-  width: 22px;
-  height: 22px;
-  min-width: 22px;
+  width: 20px;
+  height: 20px;
+  min-width: 20px;
   min-height: 22px;
   background-color: ${colors["brand-01"][4]};
   display: flex;
@@ -57,7 +57,7 @@ export const checkmark = css`
   border-radius: 50%;
   color: white;
   svg {
-    transform: translateX(-1px) scale(1.1);
+    transform: translateX(-1px);
   }
 `;
 

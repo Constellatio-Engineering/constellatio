@@ -3,6 +3,7 @@ import { type AppRouter } from "@/server/api/root";
 import { api } from "@/utils/api";
 
 import { useQueryClient } from "@tanstack/react-query";
+import { getQueryKey } from "@trpc/react-query";
 import { type inferProcedureInput } from "@trpc/server";
 import { createContext, type FunctionComponent, type ReactNode, useMemo } from "react";
 

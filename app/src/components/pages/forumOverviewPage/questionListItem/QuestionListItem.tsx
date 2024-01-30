@@ -2,9 +2,10 @@ import Tag from "@/components/atoms/tag/Tag";
 import { Chat } from "@/components/Icons/Chat";
 import { Check } from "@/components/Icons/Check";
 import BookmarkButton from "@/components/organisms/caseBlock/BookmarkButton/BookmarkButton";
+import { defaultLimit } from "@/components/pages/forumOverviewPage/ForumOverviewPage";
 import QuestionUpvoteButton from "@/components/pages/forumOverviewPage/questionUpvoteButton/QuestionUpvoteButton";
 import useBookmarks from "@/hooks/useBookmarks";
-import { type getQuestionsResult } from "@/server/api/routers/forum.router";
+import { api } from "@/utils/api";
 import { removeHtmlTagsFromString } from "@/utils/utils";
 
 import { Title } from "@mantine/core";
@@ -15,15 +16,34 @@ import * as styles from "./QuestionListItem.styles";
 import genericProfileIcon from "../../../../../public/images/icons/generic-user-icon.svg";
 
 type Props = {
-  readonly question: getQuestionsResult["questions"][number];
+  readonly questionId: string;
 };
 
-const QuestionListItem: FunctionComponent<Props> = ({ question }) =>
+const QuestionListItem: FunctionComponent<Props> = ({ questionId }) =>
 {
+  const apiContext = api.useUtils();
   const { bookmarks: questionBookmarks, isLoading: isGetQuestionBookmarksLoading } = useBookmarks("forumQuestion", { enabled: true });
+  const { data: question, isFetching } = api.forum.getQuestionById.useQuery({ questionId }, {
+    initialData: () =>
+    {
+      // There seems to be a bug with the types where cursor is required for getInfiniteData, but it is not (taken from the docs)
+      // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+      // @ts-ignore
+      const getQuestionsCacheData = apiContext.forum.getQuestions.getInfiniteData({ limit: defaultLimit });
+      const questionsFromCache = getQuestionsCacheData?.pages.flatMap((page) => page?.questions ?? []) ?? [];
+      return questionsFromCache.find((question) => question.id === questionId);
+    },
+    staleTime: Infinity,
+  });
+
+  if(question == null)
+  {
+    return <p>Question not found</p>;
+  }
 
   return (
-    <div css={styles.questionContentWrapper}>
+    <div css={styles.questionContentWrapper} style={isFetching ? { backgroundColor: "red" } : {}}>
+      <button type="submit" onClick={async () => apiContext.forum.getQuestionById.invalidate({ questionId })}>Invalidate</button>
       <div css={styles.upvoteColumn}>
         <QuestionUpvoteButton
           isUpvoted={false}

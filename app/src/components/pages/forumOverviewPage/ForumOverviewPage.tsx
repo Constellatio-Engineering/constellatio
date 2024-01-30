@@ -11,7 +11,7 @@ import React, { Fragment, type FunctionComponent } from "react";
 import * as styles from "./ForumOverviewPage.styles";
 import SearchBar from "./searchBar/SearchBar";
 
-const defaultLimit = 2;
+export const defaultLimit = 1;
 
 const ForumOverviewPage: FunctionComponent = () =>
 {
@@ -102,7 +102,7 @@ const ForumOverviewPage: FunctionComponent = () =>
             <>
               {questions.map((question) => (
                 <ForumListItem key={question.id}>
-                  <QuestionListItem question={question}/>
+                  <QuestionListItem questionId={question.id}/>
                 </ForumListItem>
               ))}
               <div>

@@ -1,5 +1,6 @@
 import { db } from "@/db/connection";
 import { type ForumQuestionInsert, forumQuestions, questionUpvotes } from "@/db/schema";
+import { getQuestionByIdSchema } from "@/schemas/forum/getQuestionById.schema";
 import { type GetQuestionsSchema, getQuestionsSchema } from "@/schemas/forum/getQuestions.schema";
 import { postQuestionSchema } from "@/schemas/forum/postQuestion.schema";
 import { upvoteQuestionSchema } from "@/schemas/forum/upvoteQuestion.schema";
@@ -11,6 +12,28 @@ import type { inferProcedureOutput } from "@trpc/server";
 import { and, eq } from "drizzle-orm";
 
 export const forumRouter = createTRPCRouter({
+  getQuestionById: protectedProcedure
+    .input(getQuestionByIdSchema)
+    .query(async ({ ctx: { userId }, input: { questionId } }) =>
+    {
+      console.log("getQuestionById", questionId);
+
+      const [question] = await getQuestions({
+        cursor: {
+          cursorType: "newest",
+          index: null,
+        },
+        limit: 1,
+        userId 
+      });
+
+      if(question != null)
+      {
+        question.title = "test";
+      }
+
+      return question;
+    }),
   getQuestions: protectedProcedure
     .input(getQuestionsSchema)
     .query(async ({ ctx: { userId }, input: { cursor, limit } }) =>
