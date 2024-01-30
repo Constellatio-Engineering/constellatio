@@ -24,7 +24,7 @@ export const forumRouter = createTRPCRouter({
           index: null,
         },
         limit: 1,
-        userId 
+        userId
       });
 
       if(question != null)
@@ -72,6 +72,16 @@ export const forumRouter = createTRPCRouter({
 
       return { nextCursor, questions };
     }),
+  /* getQuestionsUpvotes: protectedProcedure
+    .query(async ({ ctx: { userId } }) =>
+    {
+      return db
+        .select({
+          questionId: questionUpvotes.questionId
+        })
+        .from(questionUpvotes)
+        .where(eq(questionUpvotes.userId, userId));
+    }),*/
   postQuestion: protectedProcedure
     .input(postQuestionSchema)
     .mutation(async ({ ctx: { userId }, input }) =>
@@ -97,11 +107,6 @@ export const forumRouter = createTRPCRouter({
           eq(questionUpvotes.userId, userId)
         )
       );
-
-      return undefined;
-
-      /* const [question] = await getQuestions(userId, 1, 1, [eq(forumQuestions.id, questionId)]);
-      return question;*/
     }),
   upvoteQuestion: protectedProcedure
     .input(upvoteQuestionSchema)
@@ -111,11 +116,6 @@ export const forumRouter = createTRPCRouter({
         .insert(questionUpvotes)
         .values({ questionId, userId })
         .onConflictDoNothing();
-
-      return undefined;
-
-      /* const [question] = await getQuestions(userId, 1, 1, [eq(forumQuestions.id, questionId)]);
-      return question;*/
     }),
 });
 

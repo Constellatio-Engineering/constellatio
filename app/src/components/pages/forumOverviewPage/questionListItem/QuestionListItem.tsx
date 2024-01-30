@@ -43,11 +43,9 @@ const QuestionListItem: FunctionComponent<Props> = ({ questionId }) =>
 
   return (
     <div css={styles.questionContentWrapper} style={isFetching ? { backgroundColor: "red" } : {}}>
-      <button type="submit" onClick={async () => apiContext.forum.getQuestionById.invalidate({ questionId })}>Invalidate</button>
       <div css={styles.upvoteColumn}>
         <QuestionUpvoteButton
-          isUpvoted={false}
-          /* isUpvoted={question.isUpvoted}*/
+          isUpvoted={question.isUpvoted}
           questionId={question.id}
           upvotesCount={question.upvotesCount}
         />

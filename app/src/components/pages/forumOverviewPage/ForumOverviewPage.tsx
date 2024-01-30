@@ -11,7 +11,7 @@ import React, { Fragment, type FunctionComponent } from "react";
 import * as styles from "./ForumOverviewPage.styles";
 import SearchBar from "./searchBar/SearchBar";
 
-export const defaultLimit = 1;
+export const defaultLimit = 4;
 
 const ForumOverviewPage: FunctionComponent = () =>
 {
@@ -59,7 +59,7 @@ const ForumOverviewPage: FunctionComponent = () =>
   const questions = questionsQuery?.pages.flatMap((page) => page?.questions ?? []) ?? [];
 
   return (
-    <>
+    <Fragment>
       <ForumHeader/>
       <SearchBar/>
       <button type="button" onClick={async () => refetch()}>Refetch</button>
@@ -122,7 +122,7 @@ const ForumOverviewPage: FunctionComponent = () =>
           )}
         </div>
       </ContentWrapper>
-    </>
+    </Fragment>
   );
 };
 

@@ -16,6 +16,7 @@
     "@typescript-eslint/consistent-type-definitions": "off",
     "@typescript-eslint/no-explicit-any": "error",
     "no-nested-ternary": "off",
+    "react/jsx-fragments": "off",
     "@typescript-eslint/array-type": [
       "error",
       {

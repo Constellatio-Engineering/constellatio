@@ -5,19 +5,13 @@ import { type AppRouter } from "@/server/api/root";
 import { api } from "@/utils/api";
 
 import { notifications } from "@mantine/notifications";
-import { type inferProcedureInput, type inferProcedureOutput } from "@trpc/server";
+import { type inferProcedureOutput } from "@trpc/server";
 import React, { type FunctionComponent } from "react";
 
 import * as styles from "./QuestionUpvoteButton.styles";
 
-type UpvoteQuestionMutationOutput = inferProcedureOutput<AppRouter["forum"]["upvoteQuestion"]>;
-type RemoveQuestionUpvoteMutationOutput = inferProcedureOutput<AppRouter["forum"]["removeQuestionUpvote"]>;
-
-type UpvoteQuestionMutationInput = inferProcedureInput<AppRouter["forum"]["upvoteQuestion"]>;
-type RemoveQuestionUpvoteMutationInput = inferProcedureInput<AppRouter["forum"]["removeQuestionUpvote"]>;
-
 type MutationContext = {
-  readonly previousQuestions: inferProcedureOutput<AppRouter["forum"]["getQuestions"]>;
+  readonly questionBackup: inferProcedureOutput<AppRouter["forum"]["getQuestionById"]>;
 };
 
 type Props = {
@@ -28,35 +22,11 @@ type Props = {
 
 const QuestionUpvoteButton: FunctionComponent<Props> = ({ isUpvoted, questionId, upvotesCount }) =>
 {
-  const utils = api.useUtils();
+  const apiContext = api.useUtils();
 
-  const onUpvoteMutationSuccess = (updatedQuestion: UpvoteQuestionMutationOutput | RemoveQuestionUpvoteMutationOutput): void =>
+  const onUpvoteMutationSuccess = async (): Promise<void> =>
   {
-    if(!updatedQuestion)
-    {
-      console.error("updated question is undefined after upvote mutation");
-      notifications.show({
-        autoClose: false,
-        color: "red",
-        message: "Bitte laden Sie die Seite neu und versuche es erneut.",
-        title: "Da ist etwas schief gelaufen"
-      });
-      return;
-    }
-
-    /* utils.forum.getQuestions.setInfiniteData(undefined, (oldQuestions = []) =>
-    {
-      const updatedQuestions = oldQuestions.map((question) =>
-      {
-        if(question.id !== updatedQuestion.id)
-        {
-          return question;
-        }
-        return { ...question, ...updatedQuestion };
-      });
-
-      return updatedQuestions;
-    });*/
+    return apiContext.forum.getQuestionById.invalidate({ questionId });
   };
 
   const onUpvoteMutationError = (_err: unknown, _upvotedQuestion: unknown, context: MutationContext | undefined): void =>
@@ -67,58 +37,50 @@ const QuestionUpvoteButton: FunctionComponent<Props> = ({ isUpvoted, questionId,
       title: "Da ist leider etwas schief gelaufen"
     });
 
-    const previousQuestions = context?.previousQuestions;
+    const questionBackup = context?.questionBackup;
 
-    if(!previousQuestions)
+    if(!questionBackup)
     {
-      console.error("previous questions are undefined after upvote mutation error");
+      console.error("questionBackup undefined after upvote mutation error");
       return;
     }
 
-    // utils.forum.getQuestions.setData(undefined, previousQuestions);
+    apiContext.forum.getQuestionById.setData({ questionId }, questionBackup);
   };
 
-  /* const onVoteMutationStart = async (votedQuestion: UpvoteQuestionMutationInput | RemoveQuestionUpvoteMutationInput, action: "upvote" | "removeUpvote"): Promise<MutationContext> =>
+  const onVoteMutationStart = async (action: "upvote" | "removeUpvote"): Promise<MutationContext> =>
   {
-    await utils.forum.getQuestions.cancel();
-    const previousQuestions = utils.forum.getQuestions.getData();
+    await apiContext.forum.getQuestionById.cancel({ questionId });
+    const questionBackup = apiContext.forum.getQuestionById.getData({ questionId });
 
-    /!* utils.forum.getQuestions.setData(undefined, (oldQuestions = []) =>
+    apiContext.forum.getQuestionById.setData({ questionId }, (oldQuestion) =>
     {
-      const index = oldQuestions.findIndex((question) => question.id === votedQuestion.questionId);
-
-      if(index === -1)
+      if(!oldQuestion)
       {
-        return oldQuestions;
+        return oldQuestion;
       }
 
-      const updatedQuestion: inferProcedureOutput<AppRouter["forum"]["getQuestions"]>[0] = {
-        ...oldQuestions[index]!,
+      const updatedQuestion: inferProcedureOutput<AppRouter["forum"]["getQuestionById"]> = {
+        ...oldQuestion,
         isUpvoted: action === "upvote",
-        upvotesCount: oldQuestions[index]!.upvotesCount + (action === "upvote" ? 1 : -1)
+        upvotesCount: oldQuestion.upvotesCount + (action === "upvote" ? 1 : -1)
       };
 
-      const updatedQuestions = [
-        ...oldQuestions.slice(0, index),
-        updatedQuestion,
-        ...oldQuestions.slice(index + 1),
-      ];
+      return updatedQuestion;
+    });
 
-      return updatedQuestions;
-    });*!/
-
-    return { previousQuestions: previousQuestions ?? [] } satisfies MutationContext;
-  };*/
+    return { questionBackup };
+  };
 
   const { isPending: isUpvoteQuestionLoading, mutate: upvoteQuestion } = api.forum.upvoteQuestion.useMutation({
     onError: onUpvoteMutationError,
-    // onMutate: async (votedQuestion) => onVoteMutationStart(votedQuestion, "upvote"),
+    onMutate: async () => onVoteMutationStart("upvote"),
     onSuccess: onUpvoteMutationSuccess
   });
 
   const { isPending: isRemoveUpvoteLoading, mutate: removeQuestionUpvote } = api.forum.removeQuestionUpvote.useMutation({
     onError: onUpvoteMutationError,
-    // onMutate: async (votedQuestion) => onVoteMutationStart(votedQuestion, "removeUpvote"),
+    onMutate: async () => onVoteMutationStart("removeUpvote"),
     onSuccess: onUpvoteMutationSuccess
   });
 

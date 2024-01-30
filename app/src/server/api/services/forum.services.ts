@@ -19,26 +19,40 @@ export const getUpvotesForQuestion: GetUpvotesForQuestion = async (questionId) =
   return result?.count ?? 0;
 };
 
-type GetQuestionsParams = GetQuestionsSchema & {
-  // queryConditions?: SQLWrapper[];
+type GetInfiniteQuestionsParams = GetQuestionsSchema & {
+  getQuestionsType: "infinite";
   userId: string;
 };
 
-export const getQuestions = async ({
-  cursor,
-  limit,
-  // queryConditions = [],
-  userId
-}: GetQuestionsParams) => // eslint-disable-line @typescript-eslint/explicit-function-return-type
+type GetQuestionByIdParams = {
+  getQuestionsType: "byId";
+  questionId: string;
+  userId: string;
+};
+
+type GetQuestionsParams = GetInfiniteQuestionsParams | GetQuestionByIdParams;
+
+export const getQuestions = async (params: GetQuestionsParams) => // eslint-disable-line @typescript-eslint/explicit-function-return-type
 {
+  const userUpvotesSubQuery = db
+    .$with("UserUpvotes")
+    .as(db
+      .select({ questionId: questionUpvotes.questionId })
+      .from(questionUpvotes)
+      .where(eq(questionUpvotes.userId, params.userId))
+    );
+
   const countUpvotesSubquery = db
+    .with(userUpvotesSubQuery)
     .select({
       ...getTableColumns(forumQuestions),
+      isUpvoted: sql<boolean>`case when ${userUpvotesSubQuery.questionId} is null then false else true end`.as("isUpvoted"),
       upvotesCount: count(questionUpvotes.questionId).as("upvotesCount"),
     })
     .from(forumQuestions)
+    .leftJoin(userUpvotesSubQuery, eq(forumQuestions.id, userUpvotesSubQuery.questionId))
     .leftJoin(questionUpvotes, eq(forumQuestions.id, questionUpvotes.questionId))
-    .groupBy(forumQuestions.id)
+    .groupBy(forumQuestions.id, userUpvotesSubQuery.questionId)
     .as("questionUpvotesSq");
 
   let queryConditions: SQL<unknown> | undefined;
@@ -90,6 +104,7 @@ export const getQuestions = async ({
       createdAt: countUpvotesSubquery.createdAt,
       id: countUpvotesSubquery.id,
       index: countUpvotesSubquery.index,
+      isUpvoted: countUpvotesSubquery.isUpvoted,
       legalArea: countUpvotesSubquery.legalArea,
       legalField: countUpvotesSubquery.legalField,
       legalTopic: countUpvotesSubquery.legalTopic,
@@ -97,7 +112,6 @@ export const getQuestions = async ({
       title: countUpvotesSubquery.title,
       updatedAt: countUpvotesSubquery.updatedAt,
       upvotesCount: countUpvotesSubquery.upvotesCount,
-      // upvotesCount2: sql<number>`SUM(${countUpvotesSubquery.upvotesCount} + 10)`,
     })
     .from(countUpvotesSubquery)
     .where(queryConditions)
