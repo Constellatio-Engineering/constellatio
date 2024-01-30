@@ -1,6 +1,10 @@
 import { type MantineThemeColors } from "@mantine/styles/lib/theme/types/MantineColor";
 
-export const colors = {
+type MantineThemeColorsReadonly = {
+  [key in keyof MantineThemeColors]: Readonly<[string, string, string, string, string, string, string, string, string, string]>;
+};
+
+export const colors: MantineThemeColorsReadonly = {
   "brand-01": [
     "#FBDFDD", // 0
     "#EBAEA9", // 1

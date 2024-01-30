@@ -6,6 +6,6 @@ export const wrapper = css`
   padding: 24px;
   background-color: ${colors["neutrals-01"][0]};
   border-radius: 12px;
-  border: 1px solid ${colors["neutrals-01"][3]};
+  border: 1px solid ${colors["neutrals-01"][4]};
   overflow: hidden;
 `;

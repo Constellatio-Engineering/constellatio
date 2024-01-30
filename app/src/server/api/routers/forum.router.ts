@@ -8,7 +8,6 @@ import { getQuestions } from "@/server/api/services/forum.services";
 import { createTRPCRouter, protectedProcedure } from "@/server/api/trpc";
 import { InternalServerError } from "@/utils/serverError";
 
-import type { inferProcedureOutput } from "@trpc/server";
 import { and, eq } from "drizzle-orm";
 
 export const forumRouter = createTRPCRouter({
@@ -67,16 +66,6 @@ export const forumRouter = createTRPCRouter({
 
       return { nextCursor, questions };
     }),
-  /* getQuestionsUpvotes: protectedProcedure
-    .query(async ({ ctx: { userId } }) =>
-    {
-      return db
-        .select({
-          questionId: questionUpvotes.questionId
-        })
-        .from(questionUpvotes)
-        .where(eq(questionUpvotes.userId, userId));
-    }),*/
   postQuestion: protectedProcedure
     .input(postQuestionSchema)
     .mutation(async ({ ctx: { userId }, input }) =>
@@ -113,5 +102,3 @@ export const forumRouter = createTRPCRouter({
         .onConflictDoNothing();
     }),
 });
-
-export type getQuestionsResult = inferProcedureOutput<typeof forumRouter.getQuestions>;

@@ -1,6 +1,5 @@
 import { type UnknownMantineStylesParams } from "@/utils/types";
 
-import { css } from "@emotion/react";
 import {
   type InputStylesNames,
   type MantineTheme,
