@@ -38,6 +38,10 @@ export const globalStyles = css`
     font-weight: 700;
   }
 
+  .mantine-Select-dropdown {
+    margin-top: -10px;
+  }
+  
   .mantine-Notification-body {
     > div {
       font-size: 16px;

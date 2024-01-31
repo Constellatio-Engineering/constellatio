@@ -8,7 +8,7 @@ import { getQuestions } from "@/server/api/services/forum.services";
 import { createTRPCRouter, protectedProcedure } from "@/server/api/trpc";
 import { InternalServerError } from "@/utils/serverError";
 
-import { and, eq } from "drizzle-orm";
+import { and, count, eq } from "drizzle-orm";
 
 export const forumRouter = createTRPCRouter({
   getQuestionById: protectedProcedure
@@ -64,7 +64,16 @@ export const forumRouter = createTRPCRouter({
         }
       }
 
-      return { nextCursor, questions };
+      return { nextCursor, questions, };
+    }),
+  getTotalAmountOfQuestions: protectedProcedure
+    .query(async () =>
+    {
+      const [totalAmountQuery] = await db
+        .select({ count: count() })
+        .from(forumQuestions);
+
+      return { count: totalAmountQuery?.count };
     }),
   postQuestion: protectedProcedure
     .input(postQuestionSchema)

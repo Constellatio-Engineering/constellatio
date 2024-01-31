@@ -4,7 +4,7 @@ type MantineThemeColorsReadonly = {
   [key in keyof MantineThemeColors]: Readonly<[string, string, string, string, string, string, string, string, string, string]>;
 };
 
-export const colors: MantineThemeColorsReadonly = {
+export const colors = {
   "brand-01": [
     "#FBDFDD", // 0
     "#EBAEA9", // 1
@@ -173,4 +173,4 @@ export const colors: MantineThemeColorsReadonly = {
     "rgba(255, 255, 255, 0.9)", // 8
     "rgba(255, 255, 255, 0.97)", // 9
   ],
-} as const;
+} as const satisfies MantineThemeColorsReadonly;
