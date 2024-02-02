@@ -79,7 +79,9 @@ const ForumOverviewPage: FunctionComponent = () =>
       return { cursorType: currentlySelectedCursor };
     },
     initialCursor: { cursorType: "newest" },
-    refetchOnWindowFocus: "always",
+    refetchOnMount: true,
+    refetchOnReconnect: false,
+    refetchOnWindowFocus: false,
     staleTime: Infinity
   });
 
