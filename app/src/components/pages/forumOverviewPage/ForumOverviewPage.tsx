@@ -16,7 +16,7 @@ import { useInView } from "react-intersection-observer";
 import * as styles from "./ForumOverviewPage.styles";
 import SearchBar from "./searchBar/SearchBar";
 
-export const defaultLimit = 1;
+export const defaultLimit = 10;
 
 type SortingOptions = {
   [key in GetQuestionsCursorType]: {
@@ -35,9 +35,10 @@ const sortingOptions: SortingOptions = {
 
 const ForumOverviewPage: FunctionComponent = () =>
 {
-  const { inView: isLastQuestionInView, ref: lastQuestionRef } = useInView({
+  const { inView: isEndOfListInView, ref: endOfListLabelRef } = useInView({
     initialInView: false,
-    triggerOnce: true
+    threshold: 0,
+    triggerOnce: false,
   });
   const apiContext = api.useUtils();
   const getQuestionsApi = apiContext.forum.getQuestions;
@@ -109,21 +110,15 @@ const ForumOverviewPage: FunctionComponent = () =>
     await getQuestionsApi.invalidate();
   };
 
-  const loadedQuestions = questions.length;
+  const loadedQuestionsLength = questions.length;
 
   useEffect(() => 
   {
-    console.log("--------");
-    console.log("isLastQuestionInView", isLastQuestionInView);
-    console.log("isFetchingNextPage", isFetchingNextPage);
-    console.log("hasNextPage", hasNextPage);
-    console.log("loadedQuestions", loadedQuestions);
-
-    if(isLastQuestionInView && !isFetchingNextPage && hasNextPage)
+    if(isEndOfListInView)
     {
       void fetchNextPage();
     }
-  }, [fetchNextPage, isLastQuestionInView, isFetchingNextPage, hasNextPage, loadedQuestions]);
+  }, [fetchNextPage, isEndOfListInView, loadedQuestionsLength]);
 
   return (
     <Fragment>
@@ -134,7 +129,7 @@ const ForumOverviewPage: FunctionComponent = () =>
         <div css={styles.head}>
           <div css={styles.totalAmountAndSortingWrapper(totalAmountOfQuestions != null)}>
             {totalAmountOfQuestions != null && (
-              <p css={styles.totalAmount}>{totalAmountOfQuestions} Fragen - Loaded: {questions.length}</p>
+              <p css={styles.totalAmount}>{totalAmountOfQuestions} Fragen</p>
             )}
             <div css={styles.sortWrapper}>
               <p>Sortieren nach:</p>
@@ -160,18 +155,22 @@ const ForumOverviewPage: FunctionComponent = () =>
             <p>Error: {error.message}</p>
           ) : (
             <Fragment>
-              {questions.map((question, index) => (
-                <ForumListItem key={question.id} ref={index === questions.length - 1 ? lastQuestionRef : undefined}>
+              {questions.map((question) => (
+                <ForumListItem key={question.id}>
                   <QuestionListItem questionId={question.id}/>
                 </ForumListItem>
               ))}
               {isFetchingNextPage && (
                 <QuestionsSkeleton/>
               )}
-              <p css={styles.endOfListReached}>Es gibt keine weiteren Fragen</p>
-              {(!hasNextPage && !isFetchingNextPage) && (
-                <p css={styles.endOfListReached}>Es gibt keine weiteren Fragen</p>
-              )}
+              <p
+                ref={endOfListLabelRef}
+                css={[
+                  styles.endOfListReached,
+                  (!hasNextPage && !isFetchingNextPage) && styles.endOfListReachedVisible
+                ]}>
+                Es gibt keine weiteren Fragen
+              </p>
             </Fragment>
           )}
         </div>

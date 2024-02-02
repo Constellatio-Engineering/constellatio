@@ -1,0 +1,22 @@
+INSERT INTO "ForumQuestion" ("UserId", "Title", "Question", "LegalArea", "LegalField", "LegalTopic")
+VALUES
+    (:UserId, 'Landlord-Tenant Dispute', 'Can a landlord increase rent without notice?', 'Real Estate Law', 'Landlord-Tenant', 'Rent Increase'),
+    (:UserId, 'Intellectual Property Rights', 'How do I protect my software idea?', 'Intellectual Property Law', 'Software', 'Protection'),
+    (:UserId, 'Criminal Defense', 'What are the legal consequences for a first-time DUI offense?', 'Criminal Law', 'DUI', 'Legal Consequences'),
+    (:UserId, 'Family Law', 'How is child custody determined during divorce proceedings?', 'Family Law', 'Divorce', 'Child Custody'),
+    (:UserId, 'Employment Discrimination', 'What actions can I take if I face workplace discrimination?', 'Employment Law', 'Discrimination', 'Legal Actions'),
+    (:UserId, 'Contract Law', 'How to interpret ambiguous terms in a contract?', 'Contract Law', NULL, 'Interpretation'),
+    (:UserId, 'Environmental Law', 'What are the legal requirements for waste disposal in commercial establishments?', 'Environmental Law', 'Waste Disposal', 'Legal Requirements'),
+    (:UserId, 'Personal Injury Claim', 'How to determine the value of a personal injury claim?', 'Personal Injury Law', NULL, 'Claim Valuation'),
+    (:UserId, 'Tax Law', 'What are the tax implications of cryptocurrency transactions?', 'Tax Law', 'Cryptocurrency', 'Tax Implications'),
+    (:UserId, 'Immigration Law', 'How long does the immigration process typically take?', 'Immigration Law', NULL, 'Processing Time'),
+    (:UserId, 'Business Formation', 'What legal steps are involved in starting a small business?', 'Business Law', 'Small Business', 'Legal Steps'),
+    (:UserId, 'Medical Malpractice', 'How to pursue a medical malpractice claim?', 'Medical Malpractice', NULL, 'Legal Action'),
+    (:UserId, 'Estate Planning', 'What documents are essential for estate planning?', 'Estate Planning', NULL, 'Essential Documents'),
+    (:UserId, 'Consumer Rights', 'Can a consumer sue for false advertising?', 'Consumer Protection', 'False Advertising', 'Legal Remedies'),
+    (:UserId, 'Insurance Claims', 'What steps should be taken when facing issues with an insurance claim?', 'Insurance Law', NULL, 'Claim Resolution'),
+    (:UserId, 'International Business Law', 'How to navigate legal complexities in international business transactions?', 'International Business Law', NULL, 'Legal Complexities'),
+    (:UserId, 'Civil Rights', 'What are the legal protections for individuals in cases of discrimination?', 'Civil Rights Law', 'Discrimination', 'Legal Protections'),
+    (:UserId, 'Cybersecurity Law', 'What legal measures can be taken to protect against cyber threats?', 'Cybersecurity Law', NULL, 'Legal Measures'),
+    (:UserId, 'Bankruptcy Law', 'How does personal bankruptcy affect credit scores?', 'Bankruptcy Law', NULL, 'Credit Impact'),
+    (:UserId, 'Employment Contracts', 'What are the key terms to negotiate in an employment contract?', 'Employment Law', 'Contract Negotiation', 'Key Terms');

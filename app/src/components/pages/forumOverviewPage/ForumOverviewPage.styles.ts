@@ -54,4 +54,9 @@ export const endOfListReached = css`
   text-align: center;
   font-weight: 500;
   margin-top: 10px;
+  visibility: hidden;
+`;
+
+export const endOfListReachedVisible = css`
+  visibility: visible;
 `;

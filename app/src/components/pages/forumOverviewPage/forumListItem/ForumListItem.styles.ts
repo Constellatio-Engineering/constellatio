@@ -8,5 +8,4 @@ export const wrapper = css`
   border-radius: 12px;
   border: 1px solid ${colors["neutrals-01"][4]};
   overflow: hidden;
-  min-height: 100vh;
 `;
