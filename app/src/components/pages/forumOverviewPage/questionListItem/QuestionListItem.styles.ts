@@ -114,7 +114,7 @@ export const excerpt = css`
 export const bottomWrapper = css`
   display: flex;
   justify-content: space-between;
-  align-items: flex-start;
+  align-items: flex-end;
 `;
 
 export const tagsWrapper = css`

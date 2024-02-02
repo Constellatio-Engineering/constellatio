@@ -96,8 +96,6 @@ const QuestionListItem: FunctionComponent<Props> = ({ questionId }) =>
         <div css={styles.bottomWrapper}>
           <div css={styles.tagsWrapper}>
             <Tag title={question.legalArea}/>
-            <Tag title={question.legalArea}/>
-            <Tag title={question.legalArea}/>
             <Tag title={question.legalField}/>
             <Tag title={question.legalTopic}/>
           </div>
