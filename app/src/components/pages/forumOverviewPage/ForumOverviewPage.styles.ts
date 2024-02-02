@@ -32,10 +32,15 @@ export const totalAmount = css`
 export const sortWrapper = css`
   display: flex;
   align-items: center;
-  gap: 8px;
+  gap: 0px;
 `;
 
 export const selectSorting = css`
+  background-color: transparent;
+  border: none;
+  outline: none;
+  color: inherit;
+  font: inherit;
 `;
 
 export const questionsWrapper = css`

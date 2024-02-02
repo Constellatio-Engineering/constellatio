@@ -7,6 +7,7 @@ import { upvoteQuestionSchema } from "@/schemas/forum/upvoteQuestion.schema";
 import { getQuestions } from "@/server/api/services/forum.services";
 import { createTRPCRouter, protectedProcedure } from "@/server/api/trpc";
 import { InternalServerError } from "@/utils/serverError";
+import { sleep } from "@/utils/utils";
 
 import { and, count, eq } from "drizzle-orm";
 
@@ -27,6 +28,8 @@ export const forumRouter = createTRPCRouter({
     .input(getQuestionsSchema)
     .query(async ({ ctx: { userId }, input: { cursor, limit } }) =>
     {
+      await sleep(3000);
+
       const questions = await getQuestions({
         cursor,
         getQuestionsType: "infinite",
