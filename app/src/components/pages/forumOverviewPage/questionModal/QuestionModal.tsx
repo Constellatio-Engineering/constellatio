@@ -15,10 +15,16 @@ import React, { type FunctionComponent, useRef } from "react";
 import * as styles from "./QuestionModal.styles";
 import { RichtextEditorField } from "./RichtextEditorField/RichtextEditorField";
 
-const QuestionModal: FunctionComponent = () =>
+type Props = {
+  readonly modalType: "create" | "edit";
+};
+
+const QuestionModal: FunctionComponent<Props> = ({ modalType }) =>
 {
-  const isAskQuestionModalOpen = useForumPageStore((state) => state.isAskQuestionModalOpen);
+  const modalState = useForumPageStore((state) => state.modalState);
   const closeAskQuestionModal = useForumPageStore((state) => state.closeAskQuestionModal);
+  // const isModalOpened = useForumPageStore((state) => state.getIsModalOpen());
+  const isModalOpened = (modalType === "create" && modalState.state === "create") || (modalType === "edit" && modalState.state === "edit");
   const formWrapperRef = useRef<HTMLDivElement>(null);
 
   const initialFormValues: PostQuestionSchema = {
@@ -35,7 +41,7 @@ const QuestionModal: FunctionComponent = () =>
     validateInputOnBlur: true,
   });
 
-  useDataLossProtection(form.isDirty() && isAskQuestionModalOpen);
+  useDataLossProtection(form.isDirty() && isModalOpened);
 
   const resetForm = (): void =>
   {
@@ -60,11 +66,11 @@ const QuestionModal: FunctionComponent = () =>
 
   return (
     <Modal
-      opened={isAskQuestionModalOpen}
+      opened={isModalOpened}
       withCloseButton={false}
       closeOnEscape
       closeOnClickOutside
-      keepMounted
+      keepMounted={modalType === "create"}
       size="74rem"
       styles={{
         body: {

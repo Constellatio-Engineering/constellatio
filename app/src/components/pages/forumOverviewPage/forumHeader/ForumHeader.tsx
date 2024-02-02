@@ -13,7 +13,7 @@ import * as styles from "./ForumHeader.styles";
 
 const ForumHeader: FunctionComponent = () =>
 {
-  const openAskQuestionModal = useForumPageStore((state) => state.openAskQuestionModal);
+  const setCreateQuestionState = useForumPageStore((state) => state.setCreateQuestionState);
   const theme = useMantineTheme();
   const height = 500;
   const variant = "forum";
@@ -45,7 +45,7 @@ const ForumHeader: FunctionComponent = () =>
           styleType="primary"
           css={styles.button}
           type="button"
-          onClick={openAskQuestionModal}>
+          onClick={setCreateQuestionState}>
           Ask a question
         </Button>
       </div>

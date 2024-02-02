@@ -9,6 +9,7 @@ import { createTRPCRouter, protectedProcedure } from "@/server/api/trpc";
 import { InternalServerError } from "@/utils/serverError";
 import { sleep } from "@/utils/utils";
 
+import { type inferProcedureOutput } from "@trpc/server";
 import { and, count, eq } from "drizzle-orm";
 
 export const forumRouter = createTRPCRouter({
@@ -67,7 +68,7 @@ export const forumRouter = createTRPCRouter({
         }
       }
 
-      return { nextCursor, questions, };
+      return { nextCursor, questions };
     }),
   getTotalAmountOfQuestions: protectedProcedure
     .query(async () =>
@@ -114,3 +115,5 @@ export const forumRouter = createTRPCRouter({
         .onConflictDoNothing();
     }),
 });
+
+export type Question = NonNullable<inferProcedureOutput<typeof forumRouter.getQuestionById>>;

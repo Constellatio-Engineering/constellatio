@@ -126,7 +126,8 @@ const ForumOverviewPage: FunctionComponent = () =>
     <Fragment>
       <ForumHeader/>
       <SearchBar/>
-      <QuestionModal/>
+      <QuestionModal modalType="create"/>
+      <QuestionModal modalType="edit"/>
       <ContentWrapper stylesOverrides={styles.wrapper}>
         <div css={styles.head}>
           <div css={styles.totalAmountAndSortingWrapper(totalAmountOfQuestions != null)}>
