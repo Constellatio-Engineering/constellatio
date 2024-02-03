@@ -127,7 +127,7 @@ const ForumOverviewPage: FunctionComponent = () =>
     <Fragment>
       <ForumHeader/>
       <SearchBar/>
-      <PostQuestionModal/>
+      {/* <PostQuestionModal/>*/}
       <EditQuestionModal/>
       <ContentWrapper stylesOverrides={styles.wrapper}>
         <div css={styles.head}>

@@ -40,7 +40,6 @@ const PostQuestionModal: FunctionComponent = () =>
       isLoading={isLoading}
       onSubmit={(question) => postQuestion(question)}
       opened={isModalOpened}
-      keepMounted={true}
       onClose={closeAskQuestionModal}
     />
   );

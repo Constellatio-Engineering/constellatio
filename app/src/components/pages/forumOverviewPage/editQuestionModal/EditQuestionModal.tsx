@@ -7,6 +7,7 @@ import { api } from "@/utils/api";
 
 import { useForm, zodResolver } from "@mantine/form";
 import { notifications } from "@mantine/notifications";
+import { isEmptyObject } from "@tiptap/core";
 import React, { type FunctionComponent, useEffect } from "react";
 
 export const emptyFormValues: PostQuestionSchema = {
@@ -21,20 +22,24 @@ const EditQuestionModal: FunctionComponent = () =>
 {
   const apiContext = api.useUtils();
   const modalState = useForumPageStore((state) => state.modalState);
-  const isModalOpened = modalState.state === "edit";
   const questionId = modalState.state === "edit" ? modalState.questionId : undefined;
   const previousQuestionId = usePrevious(questionId);
   const closeAskQuestionModal = useForumPageStore((state) => state.closeAskQuestionModal);
   const getQuestionDataFromCache = apiContext.forum.getQuestionById.getData;
   const form = useForm<PostQuestionSchema>({
-    initialValues: emptyFormValues,
+    initialValues: undefined,
     validate: zodResolver(postQuestionSchema),
     validateInputOnBlur: true,
   });
   const setFormValues = form.setValues;
+  const resetForm = form.reset;
+  const haveFormValuesBeenSet = !isEmptyObject(form.values);
+  const isModalOpened = modalState.state === "edit" && haveFormValuesBeenSet;
 
   useEffect(() =>
   {
+    const _closeModal = useForumPageStore.getState().closeAskQuestionModal;
+
     if(questionId === previousQuestionId)
     {
       return;
@@ -42,8 +47,7 @@ const EditQuestionModal: FunctionComponent = () =>
 
     if(questionId == null)
     {
-      console.log("questionId is null, setting form values to empty");
-      setFormValues(emptyFormValues);
+      resetForm();
       return;
     }
 
@@ -56,13 +60,11 @@ const EditQuestionModal: FunctionComponent = () =>
         message: "Die Frage konnte nicht gefunden werden",
         title: "Da ist leider etwas schiefgelaufen",
       });
-      closeAskQuestionModal();
-      console.log("questionData is null, setting form values to empty");
-      setFormValues(emptyFormValues);
+      _closeModal();
+      resetForm();
       return;
     }
 
-    console.log("setting form values to question ", questionData.title);
     setFormValues({
       legalArea: questionData.legalArea,
       legalField: questionData.legalField,
@@ -70,7 +72,7 @@ const EditQuestionModal: FunctionComponent = () =>
       question: questionData.questionText,
       title: questionData.title,
     });
-  }, [closeAskQuestionModal, getQuestionDataFromCache, previousQuestionId, questionId, setFormValues]);
+  }, [getQuestionDataFromCache, previousQuestionId, questionId, resetForm, setFormValues]);
 
   const { error: postQuestionError, isPending: isLoading, mutate: postQuestion } = usePostQuestion({
     onSettled: () => form.resetDirty(),
@@ -90,7 +92,6 @@ const EditQuestionModal: FunctionComponent = () =>
       isLoading={isLoading}
       onSubmit={(question) => test(question)}
       opened={isModalOpened}
-      keepMounted={false}
       onClose={closeAskQuestionModal}
     />
   );

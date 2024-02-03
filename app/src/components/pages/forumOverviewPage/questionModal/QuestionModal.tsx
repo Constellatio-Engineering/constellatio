@@ -9,7 +9,7 @@ import { useForumPageStore } from "@/stores/forumPage.store";
 
 import { Modal, type ModalProps, Title } from "@mantine/core";
 import { type UseFormReturnType } from "@mantine/form";
-import React, { type FunctionComponent, useEffect, useMemo, useRef } from "react";
+import React, { type FunctionComponent } from "react";
 
 import * as styles from "./QuestionModal.styles";
 import { RichtextEditorField } from "./RichtextEditorField/RichtextEditorField";
@@ -18,7 +18,6 @@ export type QuestionModalProps = Omit<ModalProps, "onSubmit"> & {
   readonly error: ErrorCardsProps["error"];
   readonly form: UseFormReturnType<PostQuestionSchema>;
   readonly isLoading: boolean;
-  readonly keepMounted: boolean;
   readonly onSubmit: (formValues: PostQuestionSchema) => void;
 };
 
@@ -29,6 +28,7 @@ const QuestionModal: FunctionComponent<QuestionModalProps> = ({
   error,
   form,
   isLoading,
+  keepMounted = false,
   onSubmit,
   size = "74rem",
   styles: additionalStyles,
@@ -37,42 +37,14 @@ const QuestionModal: FunctionComponent<QuestionModalProps> = ({
 }) =>
 {
   const closeAskQuestionModal = useForumPageStore((state) => state.closeAskQuestionModal);
-  const formWrapperRef = useRef<HTMLDivElement>(null);
-  const richtextValue = useMemo(() => form.values.question, [form.values.question]);
-
   useDataLossProtection(form.isDirty() && props.opened);
-
-  useEffect(() =>
-  {
-    if(richtextValue !== "")
-    {
-      return;
-    }
-
-    const richtextEditor = formWrapperRef.current?.getElementsByClassName("tiptap ProseMirror")[0] as HTMLDivElement | undefined;
-
-    if(richtextEditor == null)
-    {
-      return;
-    }
-
-    const currentContent = richtextEditor.innerHTML;
-
-    if(richtextValue === currentContent)
-    {
-      return;
-    }
-
-    richtextEditor.innerHTML = "";
-  }, [richtextValue]);
-
-  console.log("QuestionModal form.values.question", form.values.question);
 
   return (
     <Modal
       withCloseButton={withCloseButton}
       closeOnEscape={closeOnEscape}
       closeOnClickOutside={closeOnClickOutside}
+      keepMounted={keepMounted}
       size={size}
       styles={{
         body: {
@@ -83,7 +55,7 @@ const QuestionModal: FunctionComponent<QuestionModalProps> = ({
       centered={centered}
       {...props}>
       <form onSubmit={form.onSubmit((formValues) => onSubmit(formValues))} onReset={() => console.log("form was resetted")}>
-        <div css={styles.wrapper} ref={formWrapperRef}>
+        <div css={styles.wrapper}>
           <button
             type="button"
             css={styles.closeButton}
@@ -103,12 +75,10 @@ const QuestionModal: FunctionComponent<QuestionModalProps> = ({
                 title="Titel deiner Frage"
                 {...form.getInputProps("title")}
               />
-              {form.values.question != null && (
-                <RichtextEditorField
-                  label="Deine Frage"
-                  {...form.getInputProps("question")}
-                />
-              )}
+              <RichtextEditorField
+                label="Deine Frage"
+                {...form.getInputProps("question")}
+              />
             </div>
             <Button<"button">
               styleType="primary"
