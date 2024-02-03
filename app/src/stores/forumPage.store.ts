@@ -10,7 +10,8 @@ type ModalClosed = {
 };
 
 type EditQuestion = {
-  originalQuestion: PostQuestionSchema;
+  questionId: string;
+  // originalQuestion: PostQuestionSchema;
   state: "edit";
 };
 
@@ -26,7 +27,7 @@ type ForumPageStoreProps = {
   modalState: ModalState;
   questionsCursorType: GetQuestionsCursorType;
   setCreateQuestionState: () => void;
-  setEditQuestionState: (question: Question) => void;
+  setEditQuestionState: (questionId: string) => void;
   setQuestionsCursorType: (cursorType: GetQuestionsCursorType) => void;
 };
 
@@ -59,18 +60,19 @@ export const useForumPageStore = create(
         };
       });
     },
-    setEditQuestionState: (question) =>
+    setEditQuestionState: (questionId) =>
     {
       set((state) =>
       {
         state.modalState = {
-          originalQuestion: {
+          questionId,
+          /* originalQuestion: {
             legalArea: question.legalArea,
             legalField: question.legalField,
             legalTopic: question.legalTopic,
             question: question.questionText,
             title: question.title,
-          },
+          },*/
           state: "edit",
         };
       });

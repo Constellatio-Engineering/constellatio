@@ -19,7 +19,7 @@ type RenderAdditionalContent = {
   emailNotConfirmed: ReactNode;
 };
 
-interface ErrorCardsProps
+export interface ErrorCardsProps
 {
   readonly error: unknown;
   readonly marginBottom?: number;

@@ -2,84 +2,95 @@ import { Button } from "@/components/atoms/Button/Button";
 import { Dropdown } from "@/components/atoms/Dropdown/Dropdown";
 import { Input } from "@/components/atoms/Input/Input";
 import { Cross } from "@/components/Icons/Cross";
-import ErrorCard from "@/components/molecules/errorCard/ErrorCard";
+import ErrorCard, { type ErrorCardsProps } from "@/components/molecules/errorCard/ErrorCard";
 import { useDataLossProtection } from "@/hooks/useDataLossProtection";
-import { usePostQuestion } from "@/hooks/usePostQuestion";
-import { postQuestionSchema, type PostQuestionSchema } from "@/schemas/forum/postQuestion.schema";
+import { type PostQuestionSchema } from "@/schemas/forum/postQuestion.schema";
 import { useForumPageStore } from "@/stores/forumPage.store";
 
-import { Modal, Title } from "@mantine/core";
-import { useForm, zodResolver } from "@mantine/form";
-import React, { type FunctionComponent, useRef } from "react";
+import { Modal, type ModalProps, Title } from "@mantine/core";
+import { type UseFormReturnType } from "@mantine/form";
+import React, { type FunctionComponent, useEffect, useMemo, useRef } from "react";
 
 import * as styles from "./QuestionModal.styles";
 import { RichtextEditorField } from "./RichtextEditorField/RichtextEditorField";
 
-type Props = {
-  readonly modalType: "create" | "edit";
+export const emptyFormValues: PostQuestionSchema = {
+  legalArea: "",
+  legalField: null,
+  legalTopic: null,
+  question: null,
+  title: "",
 };
 
-const QuestionModal: FunctionComponent<Props> = ({ modalType }) =>
+export type QuestionModalProps = Omit<ModalProps, "onSubmit"> & {
+  readonly error: ErrorCardsProps["error"];
+  readonly form: UseFormReturnType<PostQuestionSchema>;
+  readonly isLoading: boolean;
+  readonly keepMounted: boolean;
+  readonly onSubmit: (formValues: PostQuestionSchema) => void;
+};
+
+const QuestionModal: FunctionComponent<QuestionModalProps> = ({
+  centered = true,
+  closeOnClickOutside = true,
+  closeOnEscape = true,
+  error,
+  form,
+  isLoading,
+  onSubmit,
+  size = "74rem",
+  styles: additionalStyles,
+  withCloseButton = false,
+  ...props
+}) =>
 {
-  const modalState = useForumPageStore((state) => state.modalState);
   const closeAskQuestionModal = useForumPageStore((state) => state.closeAskQuestionModal);
-  // const isModalOpened = useForumPageStore((state) => state.getIsModalOpen());
-  const isModalOpened = (modalType === "create" && modalState.state === "create") || (modalType === "edit" && modalState.state === "edit");
   const formWrapperRef = useRef<HTMLDivElement>(null);
+  const richtextValue = useMemo(() => form.values.question, [form.values.question]);
 
-  const initialFormValues: PostQuestionSchema = {
-    legalArea: "",
-    legalField: null,
-    legalTopic: null,
-    question: "Das ist der Inhalt der Frage",
-    title: "Das ist der Titel der Frage",
-  };
+  useDataLossProtection(form.isDirty() && props.opened);
 
-  const form = useForm<PostQuestionSchema>({
-    initialValues: initialFormValues,
-    validate: zodResolver(postQuestionSchema),
-    validateInputOnBlur: true,
-  });
-
-  useDataLossProtection(form.isDirty() && isModalOpened);
-
-  const resetForm = (): void =>
+  useEffect(() =>
   {
-    form.reset();
+    if(richtextValue !== "")
+    {
+      return;
+    }
 
     const richtextEditor = formWrapperRef.current?.getElementsByClassName("tiptap ProseMirror")[0] as HTMLDivElement | undefined;
 
-    if(richtextEditor)
+    if(richtextEditor == null)
     {
-      richtextEditor.innerHTML = initialFormValues.question;
+      return;
     }
-  };
 
-  const { error: postQuestionError, isPending: isLoading, mutate: postQuestion } = usePostQuestion({
-    onSettled: () => form.resetDirty(),
-    onSuccess: () =>
+    const currentContent = richtextEditor.innerHTML;
+
+    if(richtextValue === currentContent)
     {
-      closeAskQuestionModal();
-      resetForm();
-    },
-  });
+      return;
+    }
+
+    richtextEditor.innerHTML = "";
+  }, [richtextValue]);
+
+  console.log("QuestionModal form.values.question", form.values.question);
 
   return (
     <Modal
-      opened={isModalOpened}
-      withCloseButton={false}
-      closeOnEscape
-      closeOnClickOutside
-      keepMounted={modalType === "create"}
-      size="74rem"
+      withCloseButton={withCloseButton}
+      closeOnEscape={closeOnEscape}
+      closeOnClickOutside={closeOnClickOutside}
+      size={size}
       styles={{
         body: {
           padding: 0,
         },
+        ...additionalStyles,
       }}
-      centered
-      onClose={closeAskQuestionModal}>
-      <form onSubmit={form.onSubmit((formValues) => postQuestion(formValues))}>
+      centered={centered}
+      {...props}>
+      <form onSubmit={form.onSubmit((formValues) => onSubmit(formValues))} onReset={() => console.log("form was resetted")}>
         <div css={styles.wrapper} ref={formWrapperRef}>
           <button
             type="button"
@@ -91,7 +102,7 @@ const QuestionModal: FunctionComponent<Props> = ({ modalType }) =>
             <Title order={2} css={[styles.title, styles.titleLeftSide]}>
               Stelle deine Frage
             </Title>
-            <ErrorCard error={form.isDirty() ? null : postQuestionError} shouldUseFullWidth/>
+            <ErrorCard error={form.isDirty() ? null : error} shouldUseFullWidth/>
             <div css={styles.inputsWrapper}>
               <Input
                 inputType="text"
@@ -100,10 +111,12 @@ const QuestionModal: FunctionComponent<Props> = ({ modalType }) =>
                 title="Titel deiner Frage"
                 {...form.getInputProps("title")}
               />
-              <RichtextEditorField
-                label="Deine Frage"
-                {...form.getInputProps("question")}
-              />
+              {form.values.question != null && (
+                <RichtextEditorField
+                  label="Deine Frage"
+                  {...form.getInputProps("question")}
+                />
+              )}
             </div>
             <Button<"button">
               styleType="primary"

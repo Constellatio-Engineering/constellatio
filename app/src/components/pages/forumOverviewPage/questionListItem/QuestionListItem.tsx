@@ -5,6 +5,7 @@ import BookmarkButton from "@/components/organisms/caseBlock/BookmarkButton/Book
 import { defaultLimit } from "@/components/pages/forumOverviewPage/ForumOverviewPage";
 import QuestionUpvoteButton from "@/components/pages/forumOverviewPage/questionUpvoteButton/QuestionUpvoteButton";
 import useBookmarks from "@/hooks/useBookmarks";
+import { useForumPageStore } from "@/stores/forumPage.store";
 import { api } from "@/utils/api";
 import { removeHtmlTagsFromString } from "@/utils/utils";
 
@@ -36,13 +37,15 @@ const QuestionListItem: FunctionComponent<Props> = ({ questionId }) =>
     staleTime: Infinity,
   });
 
+  const setEditQuestionState = useForumPageStore((state) => state.setEditQuestionState);
+
   if(question == null)
   {
     return <p>Question not found</p>;
   }
 
   return (
-    <div css={styles.questionContentWrapper}>
+    <div css={styles.questionContentWrapper} style={{ cursor: "pointer" }} onClick={() => setEditQuestionState(questionId)}>
       <div css={styles.upvoteColumn}>
         <QuestionUpvoteButton
           isUpvoted={question.isUpvoted}

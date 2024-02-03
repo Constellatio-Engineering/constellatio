@@ -50,6 +50,35 @@ export const RichtextEditorField: FunctionComponent<Props> = ({
     }
   });
 
+  /* const setEditorContent = editor?.commands.setContent;
+  const getEditorContent = editor?.getHTML;
+
+  useEffect(() =>
+  {
+    if(!getEditorContent || !setEditorContent)
+    {
+      return;
+    }
+
+    let currentContent: string;
+
+    try
+    {
+      currentContent = getEditorContent();
+    }
+    catch (e: unknown)
+    {
+      console.log("Error getting editor content", e);
+      return;
+    }
+
+    if(setEditorContent && currentContent !== value)
+    {
+      console.log("Setting editor content");
+      setEditorContent(value);
+    }
+  }, [getEditorContent, setEditorContent, value]);*/
+
   return (
     <div css={styles.wrapper}>
       <p css={styles.label(error != null)}>

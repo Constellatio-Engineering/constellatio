@@ -1,8 +1,9 @@
 import ContentWrapper from "@/components/helpers/contentWrapper/ContentWrapper";
+import EditQuestionModal from "@/components/pages/forumOverviewPage/editQuestionModal/EditQuestionModal";
 import ForumHeader from "@/components/pages/forumOverviewPage/forumHeader/ForumHeader";
 import ForumListItem from "@/components/pages/forumOverviewPage/forumListItem/ForumListItem";
+import PostQuestionModal from "@/components/pages/forumOverviewPage/postQuestionModal/PostQuestionModal";
 import QuestionListItem from "@/components/pages/forumOverviewPage/questionListItem/QuestionListItem";
-import QuestionModal from "@/components/pages/forumOverviewPage/questionModal/QuestionModal";
 import QuestionsSkeleton from "@/components/pages/forumOverviewPage/questionsSkeleton/QuestionsSkeleton";
 import { type GetQuestionsCursorType } from "@/schemas/forum/getQuestions.schema";
 import { useForumPageStore } from "@/stores/forumPage.store";
@@ -126,8 +127,8 @@ const ForumOverviewPage: FunctionComponent = () =>
     <Fragment>
       <ForumHeader/>
       <SearchBar/>
-      <QuestionModal modalType="create"/>
-      <QuestionModal modalType="edit"/>
+      <PostQuestionModal/>
+      <EditQuestionModal/>
       <ContentWrapper stylesOverrides={styles.wrapper}>
         <div css={styles.head}>
           <div css={styles.totalAmountAndSortingWrapper(totalAmountOfQuestions != null)}>

@@ -83,6 +83,8 @@ export const forumRouter = createTRPCRouter({
     .input(postQuestionSchema)
     .mutation(async ({ ctx: { userId }, input }) =>
     {
+      await sleep(500);
+
       const questionInsert: ForumQuestionInsert = {
         legalArea: input.legalArea,
         legalField: input.legalField,
