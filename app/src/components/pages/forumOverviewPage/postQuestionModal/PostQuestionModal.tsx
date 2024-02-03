@@ -37,7 +37,6 @@ const PostQuestionModal: FunctionComponent = () =>
     <QuestionModal
       error={postQuestionError}
       form={form}
-      onTransitionEnd={(e) => console.log("transition end", e)}
       isLoading={isLoading}
       onSubmit={(question) => postQuestion(question)}
       opened={isModalOpened}

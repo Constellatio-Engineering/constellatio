@@ -1,84 +1,40 @@
 import QuestionModal from "@/components/pages/forumOverviewPage/questionModal/QuestionModal";
 import { usePostQuestion } from "@/hooks/usePostQuestion";
-import { usePrevious } from "@/hooks/usePrevious";
 import { postQuestionSchema, type PostQuestionSchema } from "@/schemas/forum/postQuestion.schema";
+import type { Question } from "@/server/api/routers/forum.router";
 import { useForumPageStore } from "@/stores/forumPage.store";
-import { api } from "@/utils/api";
 
 import { useForm, zodResolver } from "@mantine/form";
-import { notifications } from "@mantine/notifications";
-import React, { type FunctionComponent, useEffect } from "react";
+import React, { type FunctionComponent } from "react";
 
-const emptyFormValues: PostQuestionSchema = {
-  legalArea: "",
-  legalField: null,
-  legalTopic: null,
-  question: null,
-  title: "",
-};
-
-const EditQuestionModal: FunctionComponent = () =>
+const EditQuestionModal: FunctionComponent<Question> = (originalQuestion) =>
 {
-  const apiContext = api.useUtils();
   const modalState = useForumPageStore((state) => state.modalState);
-  const questionId = modalState.state === "edit" ? modalState.questionId : undefined;
-  const previousQuestionId = usePrevious(questionId);
   const closeAskQuestionModal = useForumPageStore((state) => state.closeAskQuestionModal);
-  const getQuestionDataFromCache = apiContext.forum.getQuestionById.getData;
   const form = useForm<PostQuestionSchema>({
-    initialValues: emptyFormValues,
+    initialValues: {
+      legalArea: originalQuestion.legalArea,
+      legalField: originalQuestion.legalField,
+      legalTopic: originalQuestion.legalTopic,
+      question: originalQuestion.questionText,
+      title: originalQuestion.title,
+    },
     validate: zodResolver(postQuestionSchema),
     validateInputOnBlur: true,
   });
-  const setFormValues = form.setValues;
-  const resetForm = form.reset;
-  const haveFormValuesBeenSet = form.values.question != null;
-  const isModalOpened = modalState.state === "edit" && haveFormValuesBeenSet;
+  const isModalOpened = modalState.state === "edit" && modalState.questionId === originalQuestion.id;
 
-  useEffect(() =>
+  const closeModal = (): void =>
   {
-    const _closeModal = useForumPageStore.getState().closeAskQuestionModal;
-
-    if(questionId === previousQuestionId)
-    {
-      return;
-    }
-
-    if(questionId == null)
-    {
-      resetForm();
-      return;
-    }
-
-    const questionData = getQuestionDataFromCache({ questionId });
-
-    if(!questionData)
-    {
-      notifications.show({
-        color: "red",
-        message: "Die Frage konnte nicht gefunden werden",
-        title: "Da ist leider etwas schiefgelaufen",
-      });
-      _closeModal();
-      resetForm();
-      return;
-    }
-
-    setFormValues({
-      legalArea: questionData.legalArea,
-      legalField: questionData.legalField,
-      legalTopic: questionData.legalTopic,
-      question: questionData.questionText,
-      title: questionData.title,
-    });
-  }, [getQuestionDataFromCache, previousQuestionId, questionId, resetForm, setFormValues]);
+    form.reset();
+    closeAskQuestionModal();
+  };
 
   const { error: postQuestionError, isPending: isLoading, mutate: postQuestion } = usePostQuestion({
     onSettled: () => form.resetDirty(),
     onSuccess: () =>
     {
-      closeAskQuestionModal();
-      form.reset();
+      closeModal();
     },
   });
 
@@ -91,7 +47,7 @@ const EditQuestionModal: FunctionComponent = () =>
       isLoading={isLoading}
       onSubmit={(question) => test(question)}
       opened={isModalOpened}
-      onClose={closeAskQuestionModal}
+      onClose={closeModal}
     />
   );
 };

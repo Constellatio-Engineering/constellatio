@@ -2,7 +2,6 @@ import ContentWrapper from "@/components/helpers/contentWrapper/ContentWrapper";
 import EditQuestionModal from "@/components/pages/forumOverviewPage/editQuestionModal/EditQuestionModal";
 import ForumHeader from "@/components/pages/forumOverviewPage/forumHeader/ForumHeader";
 import ForumListItem from "@/components/pages/forumOverviewPage/forumListItem/ForumListItem";
-import PostQuestionModal from "@/components/pages/forumOverviewPage/postQuestionModal/PostQuestionModal";
 import QuestionListItem from "@/components/pages/forumOverviewPage/questionListItem/QuestionListItem";
 import QuestionsSkeleton from "@/components/pages/forumOverviewPage/questionsSkeleton/QuestionsSkeleton";
 import { type GetQuestionsCursorType } from "@/schemas/forum/getQuestions.schema";
@@ -15,9 +14,10 @@ import React, {
 import { useInView } from "react-intersection-observer";
 
 import * as styles from "./ForumOverviewPage.styles";
+import PostQuestionModal from "./postQuestionModal/PostQuestionModal";
 import SearchBar from "./searchBar/SearchBar";
 
-export const defaultLimit = 10;
+export const defaultLimit = 2;
 
 type SortingOptions = {
   [key in GetQuestionsCursorType]: {
@@ -127,8 +127,7 @@ const ForumOverviewPage: FunctionComponent = () =>
     <Fragment>
       <ForumHeader/>
       <SearchBar/>
-      {/* <PostQuestionModal/>*/}
-      <EditQuestionModal/>
+      <PostQuestionModal/>
       <ContentWrapper stylesOverrides={styles.wrapper}>
         <div css={styles.head}>
           <div css={styles.totalAmountAndSortingWrapper(totalAmountOfQuestions != null)}>
