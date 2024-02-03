@@ -7,10 +7,9 @@ import { api } from "@/utils/api";
 
 import { useForm, zodResolver } from "@mantine/form";
 import { notifications } from "@mantine/notifications";
-import { isEmptyObject } from "@tiptap/core";
 import React, { type FunctionComponent, useEffect } from "react";
 
-export const emptyFormValues: PostQuestionSchema = {
+const emptyFormValues: PostQuestionSchema = {
   legalArea: "",
   legalField: null,
   legalTopic: null,
@@ -27,13 +26,13 @@ const EditQuestionModal: FunctionComponent = () =>
   const closeAskQuestionModal = useForumPageStore((state) => state.closeAskQuestionModal);
   const getQuestionDataFromCache = apiContext.forum.getQuestionById.getData;
   const form = useForm<PostQuestionSchema>({
-    initialValues: undefined,
+    initialValues: emptyFormValues,
     validate: zodResolver(postQuestionSchema),
     validateInputOnBlur: true,
   });
   const setFormValues = form.setValues;
   const resetForm = form.reset;
-  const haveFormValuesBeenSet = !isEmptyObject(form.values);
+  const haveFormValuesBeenSet = form.values.question != null;
   const isModalOpened = modalState.state === "edit" && haveFormValuesBeenSet;
 
   useEffect(() =>

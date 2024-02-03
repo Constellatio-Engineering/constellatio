@@ -41,6 +41,7 @@ const QuestionModal: FunctionComponent<QuestionModalProps> = ({
 
   return (
     <Modal
+      onAnimationEnd={(e) => console.log("animation end", e)}
       withCloseButton={withCloseButton}
       closeOnEscape={closeOnEscape}
       closeOnClickOutside={closeOnClickOutside}
