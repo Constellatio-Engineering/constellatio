@@ -114,7 +114,7 @@ export const getQuestions = async (params: GetQuestionsParams) => // eslint-disa
       legalArea: countUpvotesSubquery.legalArea,
       legalField: countUpvotesSubquery.legalField,
       legalTopic: countUpvotesSubquery.legalTopic,
-      questionText: countUpvotesSubquery.question,
+      text: countUpvotesSubquery.text,
       title: countUpvotesSubquery.title,
       updatedAt: countUpvotesSubquery.updatedAt,
       upvotesCount: countUpvotesSubquery.upvotesCount,

@@ -1,53 +1,58 @@
 import QuestionModal from "@/components/pages/forumOverviewPage/questionModal/QuestionModal";
-import { usePostQuestion } from "@/hooks/usePostQuestion";
-import { postQuestionSchema, type PostQuestionSchema } from "@/schemas/forum/postQuestion.schema";
+import { type ForumQuestion } from "@/db/schema";
+import { useUpdateQuestion } from "@/hooks/useUpdateQuestion";
+import { type PostQuestionSchema } from "@/schemas/forum/postQuestion.schema";
+import { questionUpdateSchema } from "@/schemas/forum/updateQuestion.schema";
 import type { Question } from "@/server/api/routers/forum.router";
 import { useForumPageStore } from "@/stores/forumPage.store";
 
 import { useForm, zodResolver } from "@mantine/form";
 import React, { type FunctionComponent } from "react";
 
+const getFormValuesFromQuestion = (
+  question: Pick<ForumQuestion, "text" | "legalArea" | "legalField" | "legalTopic" | "title">
+): PostQuestionSchema => ({
+  legalArea: question.legalArea,
+  legalField: question.legalField,
+  legalTopic: question.legalTopic,
+  text: question.text,
+  title: question.title,
+});
+
 const EditQuestionModal: FunctionComponent<Question> = (originalQuestion) =>
 {
   const modalState = useForumPageStore((state) => state.modalState);
   const closeAskQuestionModal = useForumPageStore((state) => state.closeAskQuestionModal);
   const form = useForm<PostQuestionSchema>({
-    initialValues: {
-      legalArea: originalQuestion.legalArea,
-      legalField: originalQuestion.legalField,
-      legalTopic: originalQuestion.legalTopic,
-      question: originalQuestion.questionText,
-      title: originalQuestion.title,
-    },
-    validate: zodResolver(postQuestionSchema),
+    initialValues: getFormValuesFromQuestion(originalQuestion),
+    validate: zodResolver(questionUpdateSchema),
     validateInputOnBlur: true,
   });
   const isModalOpened = modalState.state === "edit" && modalState.questionId === originalQuestion.id;
 
-  const closeModal = (): void =>
-  {
-    form.reset();
-    closeAskQuestionModal();
-  };
-
-  const { error: postQuestionError, isPending: isLoading, mutate: postQuestion } = usePostQuestion({
+  const { error: postQuestionError, isPending: isLoading, mutate: updateQuestion } = useUpdateQuestion({
     onSettled: () => form.resetDirty(),
-    onSuccess: () =>
+    onSuccess: (updatedQuestion) =>
     {
-      closeModal();
+      if(updatedQuestion)
+      {
+        form.setValues(getFormValuesFromQuestion(updatedQuestion));
+      }
+      closeAskQuestionModal();
     },
   });
-
-  const test = (data: unknown): void => console.log("submit", data);
 
   return (
     <QuestionModal
       error={postQuestionError}
       form={form}
       isLoading={isLoading}
-      onSubmit={(question) => test(question)}
+      onSubmit={(questionUpdate) => updateQuestion({
+        id: originalQuestion.id,
+        updatedValues: questionUpdate,
+      })}
       opened={isModalOpened}
-      onClose={closeModal}
+      onClose={closeAskQuestionModal}
     />
   );
 };

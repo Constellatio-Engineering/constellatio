@@ -102,6 +102,12 @@
   },
   "overrides": [
     {
+      "files": ["src/hooks/**/*"],
+      "rules": {
+        "@typescript-eslint/explicit-function-return-type": "off"
+      }
+    },
+    {
       "files": ["src/schemas/**/*"],
       "rules": {
         "import/no-unused-modules": "off"

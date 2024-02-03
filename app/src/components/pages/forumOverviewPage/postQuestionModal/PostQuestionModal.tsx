@@ -17,7 +17,7 @@ const PostQuestionModal: FunctionComponent = () =>
       legalArea: "",
       legalField: null,
       legalTopic: null,
-      question: "",
+      text: "",
       title: "",
     },
     validate: zodResolver(postQuestionSchema),

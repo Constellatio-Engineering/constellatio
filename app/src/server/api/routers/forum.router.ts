@@ -3,6 +3,7 @@ import { type ForumQuestionInsert, forumQuestions, questionUpvotes } from "@/db/
 import { getQuestionByIdSchema } from "@/schemas/forum/getQuestionById.schema";
 import { type GetQuestionsSchema, getQuestionsSchema } from "@/schemas/forum/getQuestions.schema";
 import { postQuestionSchema } from "@/schemas/forum/postQuestion.schema";
+import { updateQuestionSchema } from "@/schemas/forum/updateQuestion.schema";
 import { upvoteQuestionSchema } from "@/schemas/forum/upvoteQuestion.schema";
 import { getQuestions } from "@/server/api/services/forum.services";
 import { createTRPCRouter, protectedProcedure } from "@/server/api/trpc";
@@ -89,7 +90,7 @@ export const forumRouter = createTRPCRouter({
         legalArea: input.legalArea,
         legalField: input.legalField,
         legalTopic: input.legalTopic,
-        question: input.question,
+        text: input.text,
         title: input.title,
         userId
       };
@@ -106,6 +107,23 @@ export const forumRouter = createTRPCRouter({
           eq(questionUpvotes.userId, userId)
         )
       );
+    }),
+  updateQuestion: protectedProcedure
+    .input(updateQuestionSchema)
+    .mutation(async ({ ctx: { userId }, input: { id: questionId, updatedValues } }) =>
+    {
+      await sleep(500);
+
+      const [updatedQuestion] = await db
+        .update(forumQuestions)
+        .set(updatedValues)
+        .where(and(
+          eq(forumQuestions.id, questionId),
+          eq(forumQuestions.userId, userId)
+        ))
+        .returning();
+
+      return updatedQuestion;
     }),
   upvoteQuestion: protectedProcedure
     .input(upvoteQuestionSchema)

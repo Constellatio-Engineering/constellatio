@@ -55,7 +55,7 @@ const QuestionModal: FunctionComponent<QuestionModalProps> = ({
       }}
       centered={centered}
       {...props}>
-      <form onSubmit={form.onSubmit((formValues) => onSubmit(formValues))} onReset={() => console.log("form was resetted")}>
+      <form onSubmit={form.onSubmit((formValues) => onSubmit(formValues))}>
         <div css={styles.wrapper}>
           <button
             type="button"
@@ -74,11 +74,11 @@ const QuestionModal: FunctionComponent<QuestionModalProps> = ({
                 label="Titel deiner Frage"
                 description="Kurze und prägnante Beschreibung deiner Frage"
                 title="Titel deiner Frage"
-                {...form.getInputProps("title")}
+                {...form.getInputProps("title" satisfies keyof PostQuestionSchema)}
               />
               <RichtextEditorField
                 label="Deine Frage"
-                {...form.getInputProps("question")}
+                {...form.getInputProps("text" satisfies keyof PostQuestionSchema)}
               />
             </div>
             <Button<"button">
@@ -100,21 +100,21 @@ const QuestionModal: FunctionComponent<QuestionModalProps> = ({
                 title="Legal field"
                 placeholder="Option auswählen"
                 data={[{ label: "Option 1", value: "option-1" }]}
-                {...form.getInputProps("legalArea")}
+                {...form.getInputProps("legalArea" satisfies keyof PostQuestionSchema)}
               />
               <Dropdown
                 label="Add legal area (optional)"
                 title="Legal area"
                 placeholder="Option auswählen"
                 data={[{ label: "Option 1", value: "option-1" }]}
-                {...form.getInputProps("legalField")}
+                {...form.getInputProps("legalField" satisfies keyof PostQuestionSchema)}
               />
               <Dropdown
                 label="Thema hinzufügen (optional)"
                 title="Thema"
                 placeholder="Option auswählen"
                 data={[{ label: "Option 1", value: "option-1" }]}
-                {...form.getInputProps("legalTopic")}
+                {...form.getInputProps("legalTopic" satisfies keyof PostQuestionSchema)}
               />
             </div>
           </div>

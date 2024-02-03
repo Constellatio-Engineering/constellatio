@@ -96,7 +96,7 @@ const QuestionListItem: FunctionComponent<Props> = ({ questionId }) =>
               </p>
             </div>
             <p css={styles.excerpt}>
-              {removeHtmlTagsFromString(question.questionText, true)}
+              {removeHtmlTagsFromString(question.text, true)}
             </p>
           </div>
           <div css={styles.bottomWrapper}>

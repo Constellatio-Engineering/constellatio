@@ -324,7 +324,7 @@ export const forumQuestions = pgTable("ForumQuestion", {
   createdAt: timestamp("CreatedAt").defaultNow().notNull(),
   updatedAt: timestamp("UpdatedAt").defaultNow().notNull(),
   title: text("Title").notNull(),
-  question: text("Question").notNull(),
+  text: text("Text").notNull(),
   legalArea: text("LegalArea").notNull(),
   legalField: text("LegalField"),
   legalTopic: text("LegalTopic"),

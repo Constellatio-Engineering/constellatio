@@ -17,8 +17,8 @@ import * as styles from "./RichtextEditorField.styles";
 interface Props extends ReturnType<GetInputProps<PostQuestionSchema>> 
 {
   readonly label: string;
-  readonly onChange: (value: PostQuestionSchema["question"]) => void;
-  readonly value: PostQuestionSchema["question"];
+  readonly onChange: (value: PostQuestionSchema["text"]) => void;
+  readonly value: PostQuestionSchema["text"];
 }
 
 export const RichtextEditorField: FunctionComponent<Props> = ({
