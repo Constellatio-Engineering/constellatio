@@ -1,4 +1,4 @@
-import QuestionModal, { emptyFormValues } from "@/components/pages/forumOverviewPage/questionModal/QuestionModal";
+import QuestionModal from "@/components/pages/forumOverviewPage/questionModal/QuestionModal";
 import { usePostQuestion } from "@/hooks/usePostQuestion";
 import { postQuestionSchema, type PostQuestionSchema } from "@/schemas/forum/postQuestion.schema";
 import { useForumPageStore } from "@/stores/forumPage.store";
@@ -13,7 +13,13 @@ const PostQuestionModal: FunctionComponent = () =>
   const closeAskQuestionModal = useForumPageStore((state) => state.closeAskQuestionModal);
 
   const form = useForm<PostQuestionSchema>({
-    initialValues: emptyFormValues,
+    initialValues: {
+      legalArea: "",
+      legalField: null,
+      legalTopic: null,
+      question: "",
+      title: "",
+    },
     validate: zodResolver(postQuestionSchema),
     validateInputOnBlur: true,
   });

@@ -1,28 +1,50 @@
-import QuestionModal, { emptyFormValues } from "@/components/pages/forumOverviewPage/questionModal/QuestionModal";
+import QuestionModal from "@/components/pages/forumOverviewPage/questionModal/QuestionModal";
 import { usePostQuestion } from "@/hooks/usePostQuestion";
 import { usePrevious } from "@/hooks/usePrevious";
 import { postQuestionSchema, type PostQuestionSchema } from "@/schemas/forum/postQuestion.schema";
-import { Question } from "@/server/api/routers/forum.router";
 import { useForumPageStore } from "@/stores/forumPage.store";
 import { api } from "@/utils/api";
 
 import { useForm, zodResolver } from "@mantine/form";
 import { notifications } from "@mantine/notifications";
-import React, { type FunctionComponent, PropsWithChildren, useEffect, useMemo } from "react";
+import React, { type FunctionComponent, useEffect } from "react";
 
-const DataWrapper: FunctionComponent<PropsWithChildren> = () =>
+export const emptyFormValues: PostQuestionSchema = {
+  legalArea: "",
+  legalField: null,
+  legalTopic: null,
+  question: null,
+  title: "",
+};
+
+const EditQuestionModal: FunctionComponent = () =>
 {
-  const closeAskQuestionModal = useForumPageStore((state) => state.closeAskQuestionModal);
-  const modalState = useForumPageStore((state) => state.modalState);
   const apiContext = api.useUtils();
+  const modalState = useForumPageStore((state) => state.modalState);
+  const isModalOpened = modalState.state === "edit";
   const questionId = modalState.state === "edit" ? modalState.questionId : undefined;
+  const previousQuestionId = usePrevious(questionId);
+  const closeAskQuestionModal = useForumPageStore((state) => state.closeAskQuestionModal);
   const getQuestionDataFromCache = apiContext.forum.getQuestionById.getData;
+  const form = useForm<PostQuestionSchema>({
+    initialValues: emptyFormValues,
+    validate: zodResolver(postQuestionSchema),
+    validateInputOnBlur: true,
+  });
+  const setFormValues = form.setValues;
 
-  const questionData: PostQuestionSchema = useMemo(() =>
+  useEffect(() =>
   {
+    if(questionId === previousQuestionId)
+    {
+      return;
+    }
+
     if(questionId == null)
     {
-      return emptyFormValues;
+      console.log("questionId is null, setting form values to empty");
+      setFormValues(emptyFormValues);
+      return;
     }
 
     const questionData = getQuestionDataFromCache({ questionId });
@@ -35,31 +57,20 @@ const DataWrapper: FunctionComponent<PropsWithChildren> = () =>
         title: "Da ist leider etwas schiefgelaufen",
       });
       closeAskQuestionModal();
-      return emptyFormValues;
+      console.log("questionData is null, setting form values to empty");
+      setFormValues(emptyFormValues);
+      return;
     }
 
-    return ({
+    console.log("setting form values to question ", questionData.title);
+    setFormValues({
       legalArea: questionData.legalArea,
       legalField: questionData.legalField,
       legalTopic: questionData.legalTopic,
       question: questionData.questionText,
       title: questionData.title,
     });
-  }, [closeAskQuestionModal, getQuestionDataFromCache, questionId]);
-
-  return ();
-};
-
-const EditQuestionModal: FunctionComponent<Question> = () =>
-{
-  const modalState = useForumPageStore((state) => state.modalState);
-  const isModalOpened = modalState.state === "edit";
-  const closeAskQuestionModal = useForumPageStore((state) => state.closeAskQuestionModal);
-
-  const form = useForm<PostQuestionSchema>({
-    validate: zodResolver(postQuestionSchema),
-    validateInputOnBlur: true,
-  });
+  }, [closeAskQuestionModal, getQuestionDataFromCache, previousQuestionId, questionId, setFormValues]);
 
   const { error: postQuestionError, isPending: isLoading, mutate: postQuestion } = usePostQuestion({
     onSettled: () => form.resetDirty(),
@@ -79,7 +90,7 @@ const EditQuestionModal: FunctionComponent<Question> = () =>
       isLoading={isLoading}
       onSubmit={(question) => test(question)}
       opened={isModalOpened}
-      keepMounted={true}
+      keepMounted={false}
       onClose={closeAskQuestionModal}
     />
   );

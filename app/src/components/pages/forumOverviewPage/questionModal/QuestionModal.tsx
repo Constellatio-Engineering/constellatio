@@ -14,14 +14,6 @@ import React, { type FunctionComponent, useEffect, useMemo, useRef } from "react
 import * as styles from "./QuestionModal.styles";
 import { RichtextEditorField } from "./RichtextEditorField/RichtextEditorField";
 
-export const emptyFormValues: PostQuestionSchema = {
-  legalArea: "",
-  legalField: null,
-  legalTopic: null,
-  question: null,
-  title: "",
-};
-
 export type QuestionModalProps = Omit<ModalProps, "onSubmit"> & {
   readonly error: ErrorCardsProps["error"];
   readonly form: UseFormReturnType<PostQuestionSchema>;
