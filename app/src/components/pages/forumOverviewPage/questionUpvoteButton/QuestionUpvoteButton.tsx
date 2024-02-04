@@ -84,8 +84,10 @@ const QuestionUpvoteButton: FunctionComponent<Props> = ({ isUpvoted, questionId,
     onSuccess: onUpvoteMutationSuccess
   });
 
-  const onClick = (): void =>
+  const onClick = (e: React.MouseEvent<HTMLButtonElement>): void =>
   {
+    e.stopPropagation();
+
     if(isUpvoted)
     {
       removeQuestionUpvote({ questionId });

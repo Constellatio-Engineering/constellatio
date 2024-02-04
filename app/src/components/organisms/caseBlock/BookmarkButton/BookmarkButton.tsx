@@ -59,8 +59,10 @@ const BookmarkButton: FunctionComponent<Props> = ({
     }
   };
 
-  const onBookmarkIconClick = (): void =>
+  const onBookmarkIconClick = (e: React.MouseEvent<HTMLButtonElement>): void =>
   {
+    e.stopPropagation();
+
     if(!isBookmarked)
     {
       addOrRemoveBookmark("add");
