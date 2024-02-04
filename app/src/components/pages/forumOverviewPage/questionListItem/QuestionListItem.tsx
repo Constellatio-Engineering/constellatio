@@ -4,8 +4,10 @@ import { Check } from "@/components/Icons/Check";
 import BookmarkButton from "@/components/organisms/caseBlock/BookmarkButton/BookmarkButton";
 import EditQuestionModal from "@/components/pages/forumOverviewPage/editQuestionModal/EditQuestionModal";
 import { defaultLimit } from "@/components/pages/forumOverviewPage/ForumOverviewPage";
+import { TagsSkeleton } from "@/components/pages/forumOverviewPage/questionsSkeleton/QuestionsSkeleton";
 import QuestionUpvoteButton from "@/components/pages/forumOverviewPage/questionUpvoteButton/QuestionUpvoteButton";
 import useBookmarks from "@/hooks/useBookmarks";
+import { useLegalFieldsAndTopics } from "@/hooks/useLegalFieldsAndTopics";
 import { useForumPageStore } from "@/stores/forumPage.store";
 import { api } from "@/utils/api";
 import { removeHtmlTagsFromString } from "@/utils/utils";
@@ -38,12 +40,23 @@ const QuestionListItem: FunctionComponent<Props> = ({ questionId }) =>
     staleTime: Infinity,
   });
 
+  const {
+    allLegalFields,
+    allSubfields,
+    allTopics,
+    isLoading: areLegalFieldsAndTopicsLoading
+  } = useLegalFieldsAndTopics();
+
   const setEditQuestionState = useForumPageStore((state) => state.setEditQuestionState);
 
   if(question == null)
   {
     return <p>Question not found</p>;
   }
+
+  const legalField = allLegalFields.find((field) => field.id === question.legalFieldId);
+  const subfield = allSubfields.find((subfield) => subfield.id === question.subfieldId);
+  const topic = allTopics.find((topic) => topic.id === question.topicId);
 
   return (
     <Fragment>
@@ -100,11 +113,15 @@ const QuestionListItem: FunctionComponent<Props> = ({ questionId }) =>
             </p>
           </div>
           <div css={styles.bottomWrapper}>
-            <div css={styles.tagsWrapper}>
-              <Tag title={question.legalArea}/>
-              <Tag title={question.legalField}/>
-              <Tag title={question.legalTopic}/>
-            </div>
+            {areLegalFieldsAndTopicsLoading ? (
+              <TagsSkeleton/>
+            ) : (
+              <div css={styles.tagsWrapper}>
+                {legalField && <Tag title={legalField.mainCategory}/>}
+                {subfield && <Tag title={subfield.legalAreaName}/>}
+                {topic && <Tag title={topic.topicName}/>}
+              </div>
+            )}
             <div css={styles.answersCountWrapper}>
               <Chat size={20}/>
               <p>12</p>

@@ -10,6 +10,14 @@ type Props = {
   readonly numberOfSkeletons?: number;
 };
 
+export const TagsSkeleton: FunctionComponent = () => (
+  <div css={styles.tags}>
+    <Skeleton height={20} width={90}/>
+    <Skeleton height={20} width={90}/>
+    <Skeleton height={20} width={90}/>
+  </div>
+);
+
 const QuestionsSkeleton: FunctionComponent<Props> = ({ numberOfSkeletons = defaultLimit }) =>
 {
   return Array.from({ length: numberOfSkeletons }).map((_, index) => (
@@ -21,11 +29,7 @@ const QuestionsSkeleton: FunctionComponent<Props> = ({ numberOfSkeletons = defau
         <Skeleton height={24} mb={20} width={400}/>
         <Skeleton height={16} mb={20} width={300}/>
         <Skeleton height={100} mb={20} width="100%"/>
-        <div css={styles.tags}>
-          <Skeleton height={20} width={70}/>
-          <Skeleton height={20} width={70}/>
-          <Skeleton height={20} width={70}/>
-        </div>
+        <TagsSkeleton/>
       </div>
     </ForumListItem>
   ));

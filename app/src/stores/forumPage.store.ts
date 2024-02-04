@@ -1,6 +1,4 @@
 import type { GetQuestionsCursorType } from "@/schemas/forum/getQuestions.schema";
-import { type PostQuestionSchema } from "@/schemas/forum/postQuestion.schema";
-import { type Question } from "@/server/api/routers/forum.router";
 
 import { create } from "zustand";
 import { immer } from "zustand/middleware/immer";

@@ -4,12 +4,13 @@ import { Input } from "@/components/atoms/Input/Input";
 import { Cross } from "@/components/Icons/Cross";
 import ErrorCard, { type ErrorCardsProps } from "@/components/molecules/errorCard/ErrorCard";
 import { useDataLossProtection } from "@/hooks/useDataLossProtection";
+import { useLegalFieldsAndTopics } from "@/hooks/useLegalFieldsAndTopics";
 import { type PostQuestionSchema } from "@/schemas/forum/postQuestion.schema";
 import { useForumPageStore } from "@/stores/forumPage.store";
 
-import { Modal, type ModalProps, Title } from "@mantine/core";
+import { Modal, type ModalProps, type SelectItem, Title } from "@mantine/core";
 import { type UseFormReturnType } from "@mantine/form";
-import React, { type FunctionComponent } from "react";
+import React, { type FunctionComponent, useMemo } from "react";
 
 import * as styles from "./QuestionModal.styles";
 import { RichtextEditorField } from "./RichtextEditorField/RichtextEditorField";
@@ -38,6 +39,48 @@ const QuestionModal: FunctionComponent<QuestionModalProps> = ({
 {
   const closeAskQuestionModal = useForumPageStore((state) => state.closeAskQuestionModal);
   useDataLossProtection(form.isDirty() && props.opened);
+  const {
+    allLegalFields,
+    allSubfields,
+    allTopics,
+    isLoading: areLegalFieldsAndTopicsLoading
+  } = useLegalFieldsAndTopics();
+  const legalFieldsOptions: SelectItem[] = useMemo(() => allLegalFields
+    .map((field) =>
+    {
+      if(field.id == null || field.mainCategory == null)
+      {
+        return null;
+      }
+      return { label: field.mainCategory, value: field.id };
+    })
+    .filter(Boolean),
+  [allLegalFields]
+  );
+  const allSubfieldsOptions: SelectItem[] = useMemo(() => allSubfields
+    .map((legalArea) =>
+    {
+      if(legalArea.id == null || legalArea.legalAreaName == null)
+      {
+        return null;
+      }
+      return { label: legalArea.legalAreaName, value: legalArea.id };
+    })
+    .filter(Boolean),
+  [allSubfields]
+  );
+  const topicOptions: SelectItem[] = useMemo(() => allTopics
+    .map((topic) =>
+    {
+      if(topic.id == null || topic.topicName == null)
+      {
+        return null;
+      }
+      return { label: topic.topicName, value: topic.id };
+    })
+    .filter(Boolean),
+  [allTopics]
+  );
 
   return (
     <Modal
@@ -96,25 +139,32 @@ const QuestionModal: FunctionComponent<QuestionModalProps> = ({
             </h3>
             <div css={styles.inputsWrapper}>
               <Dropdown
-                label="Add legal field *"
-                title="Legal field"
-                placeholder="Option auswählen"
-                data={[{ label: "Option 1", value: "option-1" }]}
-                {...form.getInputProps("legalArea" satisfies keyof PostQuestionSchema)}
+                isLoading={areLegalFieldsAndTopicsLoading as boolean}
+                label="Rechtsgbiet *"
+                title="Rechtsgbiet"
+                placeholder="Rechtsgbiet auswählen"
+                data={legalFieldsOptions}
+                {...form.getInputProps("legalFieldId" satisfies keyof PostQuestionSchema)}
               />
               <Dropdown
-                label="Add legal area (optional)"
-                title="Legal area"
-                placeholder="Option auswählen"
-                data={[{ label: "Option 1", value: "option-1" }]}
-                {...form.getInputProps("legalField" satisfies keyof PostQuestionSchema)}
+                isLoading={areLegalFieldsAndTopicsLoading as boolean}
+                label="Teilgebiet (optional)"
+                title="Teilgebiet"
+                placeholder="Teilgebiet auswählen"
+                clearable
+                allowDeselect
+                data={allSubfieldsOptions}
+                {...form.getInputProps("subfieldId" satisfies keyof PostQuestionSchema)}
               />
               <Dropdown
-                label="Thema hinzufügen (optional)"
+                isLoading={areLegalFieldsAndTopicsLoading as boolean}
+                label="Thema (optional)"
                 title="Thema"
-                placeholder="Option auswählen"
-                data={[{ label: "Option 1", value: "option-1" }]}
-                {...form.getInputProps("legalTopic" satisfies keyof PostQuestionSchema)}
+                placeholder="Thema auswählen"
+                clearable
+                allowDeselect
+                data={topicOptions}
+                {...form.getInputProps("topicId" satisfies keyof PostQuestionSchema)}
               />
             </div>
           </div>

@@ -325,9 +325,9 @@ export const forumQuestions = pgTable("ForumQuestion", {
   updatedAt: timestamp("UpdatedAt").defaultNow().notNull(),
   title: text("Title").notNull(),
   text: text("Text").notNull(),
-  legalArea: text("LegalArea").notNull(),
-  legalField: text("LegalField"),
-  legalTopic: text("LegalTopic"),
+  legalFieldId: uuid("LegalFieldId").notNull(),
+  subfieldId: uuid("SubfieldId"),
+  topicId: uuid("TopicId"),
 });
 
 export type ForumQuestionInsert = InferInsertModel<typeof forumQuestions>;

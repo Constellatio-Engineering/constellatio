@@ -10,13 +10,13 @@ import { useForm, zodResolver } from "@mantine/form";
 import React, { type FunctionComponent } from "react";
 
 const getFormValuesFromQuestion = (
-  question: Pick<ForumQuestion, "text" | "legalArea" | "legalField" | "legalTopic" | "title">
+  question: Pick<ForumQuestion, "text" | "legalFieldId" | "subfieldId" | "topicId" | "title">
 ): PostQuestionSchema => ({
-  legalArea: question.legalArea,
-  legalField: question.legalField,
-  legalTopic: question.legalTopic,
+  legalFieldId: question.legalFieldId,
+  subfieldId: question.subfieldId,
   text: question.text,
   title: question.title,
+  topicId: question.topicId,
 });
 
 const EditQuestionModal: FunctionComponent<Question> = (originalQuestion) =>

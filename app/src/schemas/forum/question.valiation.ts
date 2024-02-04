@@ -1,3 +1,4 @@
+import { getIdValidationWithMessage, idValidation } from "@/schemas/common.validation";
 import { removeHtmlTagsFromString } from "@/utils/utils";
 
 import { z } from "zod";
@@ -27,8 +28,7 @@ export const questionTextValidation = z.string().nullable().transform((value, co
   return textTrimmed;
 });
 
-export const legalAreaValidation = z.string().min(1);
-export const legalFieldValidation = z.string().min(1).nullable();
-export const legalTopicValidation = z.string().min(1).nullable();
+export const legalFieldIdValidation = getIdValidationWithMessage("Bitte wähle ein Rechtsgebiet aus");
+export const subfieldIdValidation = idValidation.nullable();
+export const topicIdValidation = idValidation.nullable();
 export const titleValidation = z.string().min(10);
-

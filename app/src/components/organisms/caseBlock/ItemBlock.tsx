@@ -64,7 +64,6 @@ const ItemBlock: FunctionComponent<ICaseBlockProps> = ({
 }) => 
 {
   const { casesProgress } = useCasesProgress();
-
   const { bookmarks: casesBookmarks, isLoading: isGetCasesBookmarksLoading } = useBookmarks("case", {
     enabled: variant === "case"
   });

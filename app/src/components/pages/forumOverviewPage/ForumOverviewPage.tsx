@@ -1,5 +1,4 @@
 import ContentWrapper from "@/components/helpers/contentWrapper/ContentWrapper";
-import EditQuestionModal from "@/components/pages/forumOverviewPage/editQuestionModal/EditQuestionModal";
 import ForumHeader from "@/components/pages/forumOverviewPage/forumHeader/ForumHeader";
 import ForumListItem from "@/components/pages/forumOverviewPage/forumListItem/ForumListItem";
 import QuestionListItem from "@/components/pages/forumOverviewPage/questionListItem/QuestionListItem";

@@ -1,16 +1,16 @@
 import { idValidation } from "@/schemas/common.validation";
 import {
-  legalFieldValidation, legalAreaValidation, legalTopicValidation, questionTextValidation, titleValidation 
+  questionTextValidation, titleValidation, legalFieldIdValidation, subfieldIdValidation, topicIdValidation
 } from "@/schemas/forum/question.valiation";
 
 import { z } from "zod";
 
 export const questionUpdateSchema = z.object({
-  legalArea: legalAreaValidation,
-  legalField: legalFieldValidation,
-  legalTopic: legalTopicValidation,
+  legalFieldId: legalFieldIdValidation,
+  subfieldId: subfieldIdValidation,
   text: questionTextValidation,
   title: titleValidation,
+  topicId: topicIdValidation,
 }).partial();
 
 export type QuestionUpdateSchema = z.input<typeof questionUpdateSchema>;

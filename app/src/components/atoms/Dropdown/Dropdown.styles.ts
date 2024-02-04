@@ -104,7 +104,6 @@ export const dropdownStyles = ({ disabled, error }: { disabled?: boolean; error:
             : `1px solid ${theme.colors["neutrals-01"][6]}`,
         },
       },
-
       display: "flex",
       flexDirection: "column",
     },

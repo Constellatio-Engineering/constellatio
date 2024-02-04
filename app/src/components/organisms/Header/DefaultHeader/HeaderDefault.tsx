@@ -42,14 +42,14 @@ const HeaderDefault: FunctionComponent = () =>
 {
   const { pathname } = useRouter();
   const theme = useMantineTheme();
-  const { isLoading: isGetOnboardingResultLoading, onboardingResult } = useOnboardingResult();
+  const { data: onboardingResult, isPending: isGetOnboardingResultLoading } = useOnboardingResult();
   const [wasOnboardingPostponed, setWasOnboardingPostponed] = useWasOnboardingPostponed();
   const skipOnboarding = (): void => setWasOnboardingPostponed(true);
   const showOnboarding = !isGetOnboardingResultLoading && onboardingResult === null && !wasOnboardingPostponed;
   const onboardingStepsIndex = useOnboardingStore(s => s.onboardingStepsIndex);
   const setOnboardingStepsIndex = useOnboardingStore(s => s.setOnboardingStepsIndex);
 
-  useEffect(() => 
+  useEffect(() =>
   {
     const { setOnboardingStepsIndex } = useOnboardingStore.getState();
 

@@ -87,11 +87,11 @@ export const forumRouter = createTRPCRouter({
       await sleep(500);
 
       const questionInsert: ForumQuestionInsert = {
-        legalArea: input.legalArea,
-        legalField: input.legalField,
-        legalTopic: input.legalTopic,
+        legalFieldId: input.legalFieldId,
+        subfieldId: input.subfieldId,
         text: input.text,
         title: input.title,
+        topicId: input.topicId,
         userId
       };
 
