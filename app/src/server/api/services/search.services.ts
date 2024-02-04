@@ -1,6 +1,6 @@
 import { db } from "@/db/connection";
 import {
-  type Document, searchIndexUpdateQueue, type SearchIndexUpdateQueueInsert, type UploadedFile
+  type Document, type ForumQuestion, searchIndexUpdateQueue, type SearchIndexUpdateQueueInsert, type UploadedFile
 } from "@/db/schema";
 import { meiliSearchAdmin } from "@/lib/meilisearch";
 import { getArticleById } from "@/services/content/getArticleById";
@@ -8,14 +8,14 @@ import { getCaseById } from "@/services/content/getCaseById";
 import {
   type IGenGetAllArticlesByLegalAreaQuery, type IGenGetAllArticlesByMainCategoryQuery, type IGenGetAllArticlesByTagQuery,
   type IGenGetAllArticlesByTopicQuery, type IGenGetAllCasesByLegalAreaQuery, type IGenGetAllCasesByMainCategoryQuery, type IGenGetAllCasesByTagQuery,
-  type IGenGetAllCasesByTopicQuery,
+  type IGenGetAllCasesByTopicQuery, type IGenLegalArea, type IGenMainCategory, type IGenTopic,
 } from "@/services/graphql/__generated/sdk";
 import {
   createArticleSearchIndexItem,
   createCaseSearchIndexItem,
-  createDocumentSearchIndexItem,
+  createDocumentSearchIndexItem, createForumQuestionSearchIndexItem,
   createUploadsSearchIndexItem,
-  documentSearchIndexItemPrimaryKey,
+  documentSearchIndexItemPrimaryKey, type ForumQuestionSearchIndexItem, forumQuestionSearchIndexItemPrimaryKey,
   searchIndices,
   uploadSearchIndexItemPrimaryKey
 } from "@/utils/search";
@@ -135,4 +135,48 @@ export const addUserDocumentsToSearchIndex: AddUserDocumentsToSearchIndex = asyn
   }
 
   return { createDocumentsIndexTaskId };
+};
+
+type AddForumQuestionsToSearchIndex = (params: {
+  allLegalFields: IGenMainCategory[];
+  allSubfields: IGenLegalArea[];
+  allTopics: IGenTopic[];
+  questions: ForumQuestion[];
+}) => Promise<{
+  createQuestionsIndexTaskId: number | undefined;
+}>;
+
+export const addForumQuestionsToSearchIndex: AddForumQuestionsToSearchIndex = async ({
+  allLegalFields,
+  allSubfields,
+  allTopics,
+  questions
+}) =>
+{
+  let createQuestionsIndexTaskId: number | undefined;
+
+  const questionsWithDetails: ForumQuestionSearchIndexItem[] = questions.map(question =>
+  {
+    const subfield = allSubfields.find(legalArea => legalArea.id === question.subfieldId);
+    const legalField = allLegalFields.find(mainCategory => mainCategory.id === question.legalFieldId);
+    const topic = allTopics.find(topic => topic.id === question.topicId);
+
+    return {
+      ...question,
+      legalFieldName: legalField?.mainCategory ?? undefined,
+      subfieldName: subfield?.legalAreaName ?? undefined,
+      topicName: topic?.topicName ?? undefined,
+    };
+  });
+
+  if(questions.length > 0)
+  {
+    const allQuestionsSearchIndexItems = questionsWithDetails.map(createForumQuestionSearchIndexItem);
+    const createForumQuestionsIndexTask = await meiliSearchAdmin.index(searchIndices.forumQuestions).addDocuments(allQuestionsSearchIndexItems, {
+      primaryKey: forumQuestionSearchIndexItemPrimaryKey
+    });
+    createQuestionsIndexTaskId = createForumQuestionsIndexTask.taskUid;
+  }
+
+  return { createQuestionsIndexTaskId };
 };

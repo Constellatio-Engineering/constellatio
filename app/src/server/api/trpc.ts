@@ -86,7 +86,7 @@ export const createTRPCContext = async ({ req, res }: CreateNextContextOptions):
  * ZodErrors so that you get typesafety on the frontend if your procedure fails due to validation
  * errors on the backend.
  */
-const t = initTRPC
+export const t = initTRPC
   .context<typeof createTRPCContext>()
   .create({
     errorFormatter: ({ error, shape }) =>

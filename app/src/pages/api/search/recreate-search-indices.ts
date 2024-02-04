@@ -1,12 +1,14 @@
 import { db } from "@/db/connection";
 import { env } from "@/env.mjs";
 import { meiliSearchAdmin } from "@/lib/meilisearch";
+import { appRouter } from "@/server/api/root";
+import { getAllLegalFields, getAllSubfields, getAllTopics } from "@/server/api/services/caisy.services";
 import {
   addUserUploadsToSearchIndex,
   resetSearchIndex,
   addArticlesToSearchIndex,
   addCasesToSearchIndex,
-  addUserDocumentsToSearchIndex
+  addUserDocumentsToSearchIndex, addForumQuestionsToSearchIndex
 } from "@/server/api/services/search.services";
 import getAllArticles from "@/services/content/getAllArticles";
 import getAllCases from "@/services/content/getAllCases";
@@ -41,6 +43,10 @@ const handler: NextApiHandler = async (req, res) =>
   const allArticles = await getAllArticles();
   const allUserUploads = await db.query.uploadedFiles.findMany();
   const allUsersDocuments = await db.query.documents.findMany();
+  const allForumQuestions = await db.query.forumQuestions.findMany();
+  const allLegalFields = await getAllLegalFields();
+  const allSubfields = await getAllSubfields();
+  const allTopics = await getAllTopics();
 
   const { createArticlesIndexTaskId } = await addArticlesToSearchIndex({
     articleIds: allArticles.map(a => a.id).filter(Boolean),
@@ -52,12 +58,19 @@ const handler: NextApiHandler = async (req, res) =>
 
   const { createUploadsIndexTaskId } = await addUserUploadsToSearchIndex({ uploads: allUserUploads });
   const { createDocumentsIndexTaskId } = await addUserDocumentsToSearchIndex({ documents: allUsersDocuments });
+  const { createQuestionsIndexTaskId } = await addForumQuestionsToSearchIndex({
+    allLegalFields,
+    allSubfields,
+    allTopics,
+    questions: allForumQuestions
+  });
 
   const createIndicesTasks = await meiliSearchAdmin.waitForTasks([
     createCasesIndexTaskId,
     createUploadsIndexTaskId,
     createArticlesIndexTaskId,
     createDocumentsIndexTaskId,
+    createQuestionsIndexTaskId,
   ].filter(Boolean), {
     intervalMs: 1000,
     timeOutMs: 1000 * 60 * 5,

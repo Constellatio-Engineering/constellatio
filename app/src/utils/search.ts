@@ -1,4 +1,4 @@
-import { type UploadedFile, type Document } from "@/db/schema";
+import { type UploadedFile, type Document, type ForumQuestion } from "@/db/schema";
 import {
   type IGenTopic,
   type IGenArticle,
@@ -13,8 +13,9 @@ import { removeHtmlTagsFromString } from "@/utils/utils";
 export const searchIndices = {
   articles: "articles",
   cases: "cases",
+  forumQuestions: "forum-questions",
   userDocuments: "user-documents",
-  userUploads: "user-uploads",
+  userUploads: "user-uploads"
 } as const;
 
 export type SearchIndex = Values<typeof searchIndices>;
@@ -156,3 +157,34 @@ export const createDocumentSearchIndexItem = ({
 };
 
 export const documentSearchIndexItemPrimaryKey: keyof DocumentSearchIndexItem = "id";
+
+export type ForumQuestionSearchIndexItem = Pick<ForumQuestion, "id" | "text" | "title" | "userId"> & {
+  legalFieldName: string | undefined;
+  subfieldName: string | undefined;
+  topicName: string | undefined;
+};
+export type ForumQuestionSearchItemNodes = RemoveUndefined<DotSeparatedKeys<ForumQuestionSearchIndexItem>>;
+export type ForumQuestionSearchItemUpdate = Partial<Omit<ForumQuestionSearchIndexItem, "id" | "userId">> & Pick<ForumQuestionSearchIndexItem, "id">;
+
+export const createForumQuestionSearchIndexItem = ({
+  id,
+  legalFieldName,
+  subfieldName,
+  text,
+  title,
+  topicName,
+  userId
+}: ForumQuestionSearchIndexItem): ForumQuestionSearchIndexItem =>
+{
+  return ({
+    id,
+    legalFieldName,
+    subfieldName,
+    text: removeHtmlTagsFromString(text, true),
+    title,
+    topicName,
+    userId
+  });
+};
+
+export const forumQuestionSearchIndexItemPrimaryKey: keyof ForumQuestionSearchIndexItem = "id";
