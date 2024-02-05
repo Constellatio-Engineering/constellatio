@@ -1,5 +1,6 @@
 import { type UnknownMantineStylesParams } from "@/utils/types";
 
+import { css } from "@emotion/react";
 import {
   type InputStylesNames,
   type MantineTheme,
@@ -37,4 +38,9 @@ export const inputStyles = () =>
 
   return styles;
 };
+
+export const test = css`
+  border: none;
+  border-top: 1px solid #e0e0e0;
+`;
 

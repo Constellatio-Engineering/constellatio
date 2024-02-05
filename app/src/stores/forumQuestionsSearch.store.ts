@@ -7,6 +7,7 @@ type SearchStoreProps = {
   openDrawer: () => void;
   searchValue: string;
   setSearchValue: (searchValue: string) => void;
+  toggleDrawer: (newState?: boolean) => void;
 };
 
 export const useForumQuestionsSearchStore = create(
@@ -32,6 +33,20 @@ export const useForumQuestionsSearchStore = create(
       set((state) =>
       {
         state.searchValue = searchValue;
+      });
+    },
+    toggleDrawer: (newState) =>
+    {
+      set((state) =>
+      {
+        if(newState != null)
+        {
+          state.isDrawerOpened = newState;
+        }
+        else
+        {
+          state.isDrawerOpened = !state.isDrawerOpened;
+        }
       });
     },
   }))
