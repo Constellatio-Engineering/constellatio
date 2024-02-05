@@ -1,21 +1,23 @@
 import { db } from "@/db/connection";
 import { env } from "@/env.mjs";
 import { meiliSearchAdmin } from "@/lib/meilisearch";
-import { appRouter } from "@/server/api/root";
 import { getAllLegalFields, getAllSubfields, getAllTopics } from "@/server/api/services/caisy.services";
 import {
-  addUserUploadsToSearchIndex,
-  resetSearchIndex,
   addArticlesToSearchIndex,
   addCasesToSearchIndex,
-  addUserDocumentsToSearchIndex, addForumQuestionsToSearchIndex
+  addForumQuestionsToSearchIndex,
+  addUserDocumentsToSearchIndex,
+  addUserUploadsToSearchIndex,
+  resetSearchIndex
 } from "@/server/api/services/search.services";
 import getAllArticles from "@/services/content/getAllArticles";
 import getAllCases from "@/services/content/getAllCases";
 import { isDevelopment } from "@/utils/env";
 import {
   type ArticleSearchItemNodes,
-  type CaseSearchItemNodes, type DocumentSearchItemNodes,
+  type CaseSearchItemNodes,
+  type DocumentSearchItemNodes,
+  type ForumQuestionSearchItemNodes,
   searchIndices,
   type UploadSearchItemNodes
 } from "@/utils/search";
@@ -99,6 +101,9 @@ const handler: NextApiHandler = async (req, res) =>
   const documentsSearchableAttributes: DocumentSearchItemNodes[] = ["name", "content"];
   const updateDocumentsRankingRulesTask = await meiliSearchAdmin.index(searchIndices.userDocuments).updateSearchableAttributes(documentsSearchableAttributes);
 
+  const forumQuestionsSearchableAttributes: ForumQuestionSearchItemNodes[] = ["title", "text", "legalFieldName", "subfieldName", "topicName"];
+  const updateForumQuestionsRankingRulesTask = await meiliSearchAdmin.index(searchIndices.forumQuestions).updateSearchableAttributes(forumQuestionsSearchableAttributes);
+
   // Displayed attributes
   const uploadsDisplayedAttributes: UploadSearchItemNodes[] = ["originalFilename", "id", "userId", "createdAt", "folderId", "fileExtension", "contentType"];
   const updateUploadsDisplayedAttributesTask = await meiliSearchAdmin.index(searchIndices.userUploads).updateDisplayedAttributes(uploadsDisplayedAttributes);
@@ -119,10 +124,15 @@ const handler: NextApiHandler = async (req, res) =>
   const documentsFilterableAttributes: DocumentSearchItemNodes[] = ["id", "userId", "folderId"];
   const updateDocumentsFilterableAttributesTask = await meiliSearchAdmin.index(searchIndices.userDocuments).updateFilterableAttributes(documentsFilterableAttributes);
 
+  const forumQuestionsFilterableAttributes: ForumQuestionSearchItemNodes[] = ["id", "userId"];
+  const updateForumQuestionsFilterableAttributesTask = await meiliSearchAdmin.index(searchIndices.forumQuestions).updateFilterableAttributes(forumQuestionsFilterableAttributes);
+
   await meiliSearchAdmin.waitForTasks([
     updateCasesRankingRulesTask.taskUid,
     updateArticlesRankingRulesTask.taskUid,
     updateUploadsRankingRulesTask.taskUid,
+    updateForumQuestionsRankingRulesTask.taskUid,
+    updateForumQuestionsFilterableAttributesTask.taskUid,
     updateUploadsDisplayedAttributesTask.taskUid,
     updateCasesFilterableAttributesTask.taskUid,
     updateArticlesFilterableAttributesTask.taskUid,

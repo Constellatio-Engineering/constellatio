@@ -1,17 +1,18 @@
 import { Search } from "@/components/Icons/Search";
-import UseQueryStateWrapper from "@/components/Wrappers/useQueryStateWrapper/UseQueryStateWrapper";
+import { useForumQuestionsSearchStore } from "@/stores/forumQuestionsSearch.store";
 
 import { Input } from "@mantine/core";
-import React, { type FunctionComponent, useState } from "react";
+import React, { type FunctionComponent } from "react";
 
 import * as styles from "./SearchBar.styles";
 
-const SearchBarContent: FunctionComponent = () =>
+const SearchBar: FunctionComponent = () =>
 {
-  const [searchValue, setSearchValue] = useState<string>("");
+  const searchValue = useForumQuestionsSearchStore((s) => s.searchValue);
+  const setSearchValue = useForumQuestionsSearchStore((s) => s.setSearchValue);
 
   return (
-    <form onSubmit={() => console.log("submit")}>
+    <form>
       <Input
         data-autofocus
         type="search"
@@ -24,15 +25,6 @@ const SearchBarContent: FunctionComponent = () =>
         onChange={(e) => setSearchValue(e.currentTarget.value)}
       />
     </form>
-  );
-};
-
-const SearchBar: FunctionComponent = () =>
-{
-  return (
-    <UseQueryStateWrapper>
-      <SearchBarContent/>
-    </UseQueryStateWrapper>
   );
 };
 

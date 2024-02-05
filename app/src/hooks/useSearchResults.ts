@@ -1,7 +1,7 @@
 import { MeilisearchContext } from "@/provider/MeilisearchProvider";
 import useSearchBarStore from "@/stores/searchBar.store";
 import {
-  type ArticleSearchIndexItem, type CaseSearchIndexItem, type DocumentSearchIndexItem, searchIndices, type UploadSearchIndexItem 
+  type ArticleSearchIndexItem, type CaseSearchIndexItem, type DocumentSearchIndexItem, type ForumQuestionSearchIndexItem, searchIndices, type UploadSearchIndexItem
 } from "@/utils/search";
 
 import { keepPreviousData, useQuery } from "@tanstack/react-query";
@@ -10,6 +10,7 @@ import { useContext } from "react";
 export type SearchResults = {
   articles: ArticleSearchIndexItem[];
   cases: CaseSearchIndexItem[];
+  forumQuestions: ForumQuestionSearchIndexItem[];
   userDocuments: DocumentSearchIndexItem[];
   userUploads: UploadSearchIndexItem[];
 };
@@ -19,6 +20,7 @@ export type SearchResultsKey = keyof Omit<SearchResults, "userDocuments">;
 const initialSearchResults: SearchResults = {
   articles: [],
   cases: [],
+  forumQuestions: [],
   userDocuments: [],
   userUploads: [],
 };
@@ -65,6 +67,10 @@ const useSearchResults: UseSearchResults = () =>
             indexUid: searchIndices.userUploads,
             q: searchValue,
           },
+          {
+            indexUid: searchIndices.forumQuestions,
+            q: searchValue,
+          },
         ]
       });
 
@@ -72,6 +78,7 @@ const useSearchResults: UseSearchResults = () =>
         // Be careful with the order of the results!
         articles: (results?.[0]?.hits as ArticleSearchIndexItem[]) ?? [],
         cases: (results?.[1]?.hits as CaseSearchIndexItem[]) ?? [],
+        forumQuestions: (results?.[4]?.hits as ForumQuestionSearchIndexItem[]) ?? [],
         userDocuments: (results?.[2]?.hits as DocumentSearchIndexItem[]) ?? [],
         userUploads: (results?.[3]?.hits as UploadSearchIndexItem[]) ?? [],
       });
