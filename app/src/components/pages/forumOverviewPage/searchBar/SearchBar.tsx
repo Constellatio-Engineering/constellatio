@@ -1,6 +1,7 @@
 import { CustomLink } from "@/components/atoms/CustomLink/CustomLink";
 import Tag from "@/components/atoms/tag/Tag";
 import { Search } from "@/components/Icons/Search";
+import EmptyStateCard from "@/components/organisms/emptyStateCard/EmptyStateCard";
 import { useForumQuestionsSearchResults } from "@/hooks/useForumQuestionsSearchResults";
 import { useForumQuestionsSearchStore } from "@/stores/forumQuestionsSearch.store";
 import { appPaths } from "@/utils/paths";
@@ -44,6 +45,13 @@ const SearchBar: FunctionComponent = () =>
       </form>
       <Popover.Dropdown css={styles.dropdown}>
         <div css={styles.dropdownContentWrapper}>
+          {searchResults && searchResults.hits.length === 0 && (
+            <EmptyStateCard
+              variant="For-small-areas"
+              title="Keine Ergebnisse"
+              text="Bitte versuche es mit anderen Begriffen oder Tags, um relevante Inhalte zu finden."
+            />
+          )}
           {searchResults?.hits.map((question) => (
             <Link key={question.id} href={`${appPaths.forum}/${question.id}`} css={styles.searchResult}>
               <CustomLink styleType="link-content-title" component="p">

@@ -55,7 +55,7 @@ export const dropdown = css`
 export const dropdownContentWrapper = css`
   max-height: 500px;
   overflow-y: auto;
-  padding: 40px 0 40px 60px;
+  padding: 40px 60px;
 `;
 
 export const dropDownOverflowGradient = css`
