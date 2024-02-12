@@ -14,6 +14,7 @@ import useBookmarks from "@/hooks/useBookmarks";
 import { useForumAnswers } from "@/hooks/useForumAnswers";
 import { useForumQuestionDetails } from "@/hooks/useForumQuestionDetails";
 import { useLegalFieldsAndTopics } from "@/hooks/useLegalFieldsAndTopics";
+import { usePostAnswer } from "@/hooks/usePostAnswer";
 import type { PostQuestionSchema } from "@/schemas/forum/postQuestion.schema";
 import { api } from "@/utils/api";
 import { removeHtmlTagsFromString } from "@/utils/utils";
@@ -48,16 +49,12 @@ export const ForumQuestionDetailPage: FunctionComponent<Props> = ({ questionId }
     isPending
   } = useForumQuestionDetails(questionId);
 
-  const { data: answers, isLoading: areAnswersLoading } = useForumAnswers(questionId);
-
-  const { isPending: isPostingAnswer, mutate: postAnswer } = api.forum.postAnswer.useMutation({
-    onError: (error) => console.error(error),
-    onSuccess: () =>
-    {
-      console.log("Success");
-      void apiContext.forum.getAnswers.invalidate({ questionId });
-    },
+  const { data: answers, isLoading: areAnswersLoading } = useForumAnswers({
+    parentType: "question",
+    questionId
   });
+
+  const { isPending: isPostingAnswer, mutate: postAnswer } = usePostAnswer();
 
   console.log("---------");
   console.log("questionId", questionId);

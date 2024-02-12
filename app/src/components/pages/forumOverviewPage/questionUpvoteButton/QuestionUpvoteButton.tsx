@@ -1,6 +1,4 @@
-import { ClapHands } from "@/components/Icons/ClapHands";
-import { ClapHandsFilled } from "@/components/Icons/ClapHandsFilled";
-import { UnstyledButton } from "@/components/molecules/unstyledButton/UnstyledButton";
+import UpvoteButton from "@/components/pages/forumOverviewPage/upvoteButton/UpvoteButton";
 import { type AppRouter } from "@/server/api/root";
 import { api } from "@/utils/api";
 import { type Nullable } from "@/utils/types";
@@ -9,8 +7,6 @@ import { notifications } from "@mantine/notifications";
 import { type inferProcedureOutput } from "@trpc/server";
 import React, { type FunctionComponent } from "react";
 
-import * as styles from "./QuestionUpvoteButton.styles";
-
 type MutationContext = {
   readonly questionBackup: Nullable<inferProcedureOutput<AppRouter["forum"]["getQuestionById"]>>;
 };
@@ -18,15 +14,29 @@ type MutationContext = {
 type Props = {
   readonly isUpvoted: boolean;
   readonly questionId: string;
+  readonly upvotedItemType: "question" | "answer";
   readonly upvotesCount: number;
 };
 
-const QuestionUpvoteButton: FunctionComponent<Props> = ({ isUpvoted, questionId, upvotesCount }) =>
+const QuestionUpvoteButton: FunctionComponent<Props> = ({
+  isUpvoted,
+  questionId,
+  upvotedItemType,
+  upvotesCount
+}) =>
 {
   const apiContext = api.useUtils();
 
   const onUpvoteMutationSuccess = async (): Promise<void> =>
   {
+    if(upvotedItemType === "question")
+    {
+      return apiContext.forum.getQuestionById.invalidate({ questionId });
+    }
+    else 
+    {
+      return apiContext.forum.getAnswerById.invalidate({ answerId: questionId });
+    }
     return apiContext.forum.getQuestionById.invalidate({ questionId });
   };
 
@@ -100,12 +110,12 @@ const QuestionUpvoteButton: FunctionComponent<Props> = ({ isUpvoted, questionId,
   };
 
   return (
-    <div css={styles.wrapper}>
-      <UnstyledButton onClick={onClick} disabled={isUpvoteQuestionLoading || isRemoveUpvoteLoading}>
-        {isUpvoted ? <ClapHandsFilled size={24}/> : <ClapHands size={24}/>}
-      </UnstyledButton>
-      <p css={styles.counter}>{upvotesCount}</p>
-    </div>
+    <UpvoteButton
+      onClick={onClick}
+      isUpvoted={isUpvoted}
+      upvotesCount={upvotesCount}
+      isLoading={isUpvoteQuestionLoading || isRemoveUpvoteLoading}
+    />
   );
 };
 

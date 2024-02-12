@@ -16,30 +16,32 @@ import { InternalServerError } from "@/utils/serverError";
 import { sleep } from "@/utils/utils";
 
 import { type inferProcedureOutput } from "@trpc/server";
-import { and, asc, count, eq } from "drizzle-orm";
+import {
+  and, asc, count, eq, type SQL 
+} from "drizzle-orm";
 import slugify from "slugify";
 
 export const forumRouter = createTRPCRouter({
-  getAnswerReplies: protectedProcedure
-    .input(getAnswerRepliesSchema)
-    .query(async ({ input: { answerId } }) =>
-    {
-      await sleep(500);
-
-      return db.query.forumAnswers.findMany({
-        orderBy: [asc(forumAnswers.createdAt)],
-        where: eq(forumAnswers.parentAnswerId, answerId)
-      });
-    }),
   getAnswers: protectedProcedure
     .input(getAnswersSchema)
-    .query(async ({ input: { questionId } }) =>
+    .query(async ({ input }) =>
     {
       await sleep(500);
 
+      let queryCondition: SQL;
+
+      if(input.parentType === "question")
+      {
+        queryCondition = eq(forumAnswers.parentQuestionId, input.questionId);
+      }
+      else
+      {
+        queryCondition = eq(forumAnswers.parentAnswerId, input.answerId);
+      }
+
       return db.query.forumAnswers.findMany({
         orderBy: [asc(forumAnswers.createdAt)],
-        where: eq(forumAnswers.parentQuestionId, questionId)
+        where: queryCondition
       });
     }),
   getQuestionById: protectedProcedure
