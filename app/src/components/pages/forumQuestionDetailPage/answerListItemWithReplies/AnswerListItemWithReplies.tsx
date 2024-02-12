@@ -15,7 +15,7 @@ import { TypographyStylesProvider } from "@mantine/core";
 import Image from "next/image";
 import React, { Fragment, type FunctionComponent } from "react";
 
-import * as styles from "./AnswerListItem.styles";
+import * as styles from "./AnswerListItemWithReplies.styles";
 import genericProfileIcon from "../../../../../public/images/icons/generic-user-icon.svg";
 import ForumListItem from "../../forumOverviewPage/forumListItem/ForumListItem";
 
@@ -24,7 +24,7 @@ type Props = {
   readonly parent: GetAnswersSchema["parent"];
 };
 
-const AnswerListItem: FunctionComponent<Props> = ({ answerId, parent }) =>
+const AnswerListItemWithReplies: FunctionComponent<Props> = ({ answerId, parent }) =>
 {
   const expandAnswerReplies = useForumPageStore(s => s.expandAnswerReplies);
   const toggleAnswerReplies = useForumPageStore(s => s.toggleAnswerReplies);
@@ -108,8 +108,15 @@ const AnswerListItem: FunctionComponent<Props> = ({ answerId, parent }) =>
           </div>
         </div>
       </ForumListItem>
+      {areRepliesExpanded && (
+        <div style={{ paddingLeft: 80 }}>
+          {replies?.map((reply) => (
+            <p key={reply.id}>{reply.text}</p>
+          ))}
+        </div>
+      )}
     </Fragment>
   );
 };
 
-export default AnswerListItem;
+export default AnswerListItemWithReplies;
