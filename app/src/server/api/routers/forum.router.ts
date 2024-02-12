@@ -2,6 +2,7 @@ import { db } from "@/db/connection";
 import {
   type ForumAnswerInsert, forumAnswers, type ForumQuestionInsert, forumQuestions, questionUpvotes 
 } from "@/db/schema";
+import { getAnswerRepliesSchema } from "@/schemas/forum/getAnswerReplies.schema";
 import { getAnswersSchema } from "@/schemas/forum/getAnswers.schema";
 import { getQuestionByIdSchema } from "@/schemas/forum/getQuestionById.schema";
 import { type GetQuestionsSchema, getQuestionsSchema } from "@/schemas/forum/getQuestions.schema";
@@ -19,6 +20,17 @@ import { and, asc, count, eq } from "drizzle-orm";
 import slugify from "slugify";
 
 export const forumRouter = createTRPCRouter({
+  getAnswerReplies: protectedProcedure
+    .input(getAnswerRepliesSchema)
+    .query(async ({ input: { answerId } }) =>
+    {
+      await sleep(500);
+
+      return db.query.forumAnswers.findMany({
+        orderBy: [asc(forumAnswers.createdAt)],
+        where: eq(forumAnswers.parentAnswerId, answerId)
+      });
+    }),
   getAnswers: protectedProcedure
     .input(getAnswersSchema)
     .query(async ({ input: { questionId } }) =>

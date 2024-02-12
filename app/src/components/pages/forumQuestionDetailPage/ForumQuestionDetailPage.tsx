@@ -177,9 +177,7 @@ export const ForumQuestionDetailPage: FunctionComponent<Props> = ({ questionId }
             />
           </ForumListItem>
           {answers?.map((answer) => (
-            <ForumListItem key={answer.id}>
-              <AnswerListItem {...answer}/>
-            </ForumListItem>
+            <AnswerListItem key={answer.id} {...answer}/>
           ))}
         </div>
       </ContentWrapper>
