@@ -37,50 +37,17 @@ export const forumRouter = createTRPCRouter({
     }),
   getAnswers: protectedProcedure
     .input(getAnswersSchema)
-    .query(async ({ ctx: { userId }, input: { cursor, limit, parent } }) =>
+    .query(async ({ ctx: { userId }, input }) =>
     {
       await sleep(500);
 
       const answers = await getAnswers({
-        cursor,
-        getAnswersType: "infinite",
-        limit,
-        parent,
+        ...input,
+        getAnswersType: "all",
         userId,
       });
 
-      const hasNextPage = answers.length > limit;
-      let nextCursor: GetAnswersSchema["cursor"] | null = null;
-
-      if(hasNextPage)
-      {
-        // remove the last element since it's only used to determine if there's a next page
-        const nextAnswer = answers.pop();
-
-        if(nextAnswer == null)
-        {
-          throw new InternalServerError(new Error("nextAnswer is null"));
-        }
-
-        switch (cursor.cursorType)
-        {
-          case "newest":
-            nextCursor = {
-              cursorType: "newest",
-              index: nextAnswer.index
-            };
-            break;
-          case "upvotes":
-            nextCursor = {
-              cursorType: "upvotes",
-              index: nextAnswer.index,
-              upvotes: nextAnswer.upvotesCount
-            };
-            break;
-        }
-      }
-
-      return { answers, nextCursor };
+      return answers;
     }),
   getQuestionById: protectedProcedure
     .input(getQuestionByIdSchema)

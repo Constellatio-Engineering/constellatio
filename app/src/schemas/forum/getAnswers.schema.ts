@@ -1,11 +1,8 @@
 import { idValidation } from "@/schemas/common.validation";
-import { cursorValidation, limitValidation } from "@/schemas/forum/cursor.valiation";
 
 import { z } from "zod";
 
 export const getAnswersSchema = z.object({
-  cursor: cursorValidation,
-  limit: limitValidation,
   parent: z.discriminatedUnion("parentType", [
     z.object({
       parentType: z.literal("question"),
@@ -15,7 +12,8 @@ export const getAnswersSchema = z.object({
       answerId: idValidation,
       parentType: z.literal("answer")
     })
-  ])
+  ]),
+  // sortBy: z.union([z.literal("newest"), z.literal("upvotes")])
 });
 
 export type GetAnswersSchema = z.input<typeof getAnswersSchema>;

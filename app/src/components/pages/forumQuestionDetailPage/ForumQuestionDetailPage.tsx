@@ -19,8 +19,7 @@ import React, { Fragment, type FunctionComponent } from "react";
 
 import * as styles from "./ForumQuestionDetailPage.styles";
 import genericProfileIcon from "../../../../public/images/icons/generic-user-icon.svg";
-
-import QuestionUpvoteButton from "@/components/pages/forumOverviewPage/questionUpvoteButton/QuestionUpvoteButton";
+import { QuestionUpvoteButton } from "../forumOverviewPage/upvoteButton/QuestionUpvoteButton";
 
 type Props = {
   readonly questionId: string;
@@ -46,8 +45,10 @@ export const ForumQuestionDetailPage: FunctionComponent<Props> = ({ questionId }
   } = useForumQuestionDetails(questionId);
 
   const { data: answers, isLoading: areAnswersLoading } = useForumAnswers({
-    parentType: "question",
-    questionId
+    parent: {
+      parentType: "question",
+      questionId
+    }
   });
 
   const { isPending: isPostingAnswer, mutate: postAnswer } = usePostAnswer();

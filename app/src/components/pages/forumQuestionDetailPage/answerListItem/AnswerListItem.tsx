@@ -29,11 +29,6 @@ const AnswerListItem: FunctionComponent<Props> = ({
   const { isPending: isPostingAnswer, mutate: postAnswer } = usePostAnswer();
 
   const { data: replies, isLoading: areAnswersLoading } = useForumAnswers({
-    cursor: {
-      cursorType: "newest",
-      index: null
-    },
-    limit: 10,
     parent: {
       answerId,
       parentType: "answer"
@@ -89,7 +84,7 @@ const AnswerListItem: FunctionComponent<Props> = ({
         </div>
       </ForumListItem>
       <div style={{ paddingLeft: 80 }}>
-        {replies?.answers.map((reply) => (
+        {replies?.map((reply) => (
           <p key={reply.id}>{reply.text}</p>
         ))}
       </div>

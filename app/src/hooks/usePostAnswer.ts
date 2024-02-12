@@ -25,15 +25,19 @@ export const usePostAnswer = (params?: Params) =>
       if(parent.parentType === "question")
       {
         await invalidateForumAnswers({
-          parentType: "question",
-          questionId: parent.questionId
+          parent: {
+            parentType: "question",
+            questionId: parent.questionId
+          },
         });
       }
       else
       {
         await invalidateForumAnswers({
-          answerId: parent.answerId,
-          parentType: "answer"
+          parent: {
+            answerId: parent.answerId,
+            parentType: "answer"
+          }
         });
       }
 

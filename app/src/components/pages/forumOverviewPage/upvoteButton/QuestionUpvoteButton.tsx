@@ -17,7 +17,7 @@ type Props = {
   readonly upvotesCount: number;
 };
 
-const QuestionUpvoteButton: FunctionComponent<Props> = ({ isUpvoted, questionId, upvotesCount }) =>
+export const QuestionUpvoteButton: FunctionComponent<Props> = ({ isUpvoted, questionId, upvotesCount }) =>
 {
   const apiContext = api.useUtils();
 
@@ -104,5 +104,3 @@ const QuestionUpvoteButton: FunctionComponent<Props> = ({ isUpvoted, questionId,
     />
   );
 };
-
-export default QuestionUpvoteButton;

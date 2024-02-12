@@ -133,7 +133,7 @@ export const getQuestions = async (params: GetQuestionsParams) => // eslint-disa
 };
 
 type GetInfiniteAnswersParams = GetAnswersSchema & {
-  getAnswersType: "infinite";
+  getAnswersType: "all";
   userId: string;
 };
 
@@ -172,59 +172,34 @@ export const getAnswers = async (params: GetAnswersParams) => // eslint-disable-
   const queryConditions: Array<SQL<unknown> | undefined> = [];
   let orderBy: SQL | SQL[] = [];
 
-  if(params.getAnswersType === "infinite")
+  if(params.getAnswersType === "all")
   {
-    const { cursor, parent } = params;
+    orderBy = desc(countUpvotesSubquery.index);
 
-    switch (cursor.cursorType)
+    /* switch (params.sortBy)
     {
       case "newest":
       {
-        if(cursor.index != null)
-        {
-          queryConditions.push(lte(countUpvotesSubquery.index, cursor.index));
-        }
         orderBy = desc(countUpvotesSubquery.index);
         break;
       }
       case "upvotes":
       {
-        if(cursor.upvotes != null)
-        {
-          if(cursor.index == null)
-          {
-            queryConditions.push(lte(countUpvotesSubquery.upvotesCount, cursor.upvotes));
-          }
-          else
-          {
-            // If the upvotes count is the same, the newer question ranks higher
-            queryConditions.push(
-              or(
-                lt(countUpvotesSubquery.upvotesCount, cursor.upvotes),
-                and(
-                  eq(countUpvotesSubquery.upvotesCount, cursor.upvotes),
-                  lte(countUpvotesSubquery.index, cursor.index)
-                )
-              )
-            );
-          }
-        }
-
         orderBy = [desc(countUpvotesSubquery.upvotesCount), desc(countUpvotesSubquery.index)];
         break;
       }
-    }
+    }*/
 
-    switch (parent.parentType)
+    switch (params.parent.parentType)
     {
       case "question":
       {
-        queryConditions.push(eq(countUpvotesSubquery.parentQuestionId, parent.questionId));
+        queryConditions.push(eq(countUpvotesSubquery.parentQuestionId, params.parent.questionId));
         break;
       }
       case "answer":
       {
-        queryConditions.push(eq(countUpvotesSubquery.parentAnswerId, parent.answerId));
+        queryConditions.push(eq(countUpvotesSubquery.parentAnswerId, params.parent.answerId));
         break;
       }
     }
@@ -247,8 +222,7 @@ export const getAnswers = async (params: GetAnswersParams) => // eslint-disable-
     .from(countUpvotesSubquery)
     .where(and(...queryConditions))
     .innerJoin(users, eq(countUpvotesSubquery.userId, users.id))
-    .orderBy(...(Array.isArray(orderBy) ? orderBy : [orderBy]))
-    .limit(params.getAnswersType === "byId" ? 1 : params.limit + 1);
+    .orderBy(...(Array.isArray(orderBy) ? orderBy : [orderBy]));
 
   return answersSortedWithAuthor;
 };

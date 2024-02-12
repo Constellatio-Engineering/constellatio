@@ -3,14 +3,11 @@ import { Chat } from "@/components/Icons/Chat";
 import { Check } from "@/components/Icons/Check";
 import BookmarkButton from "@/components/organisms/caseBlock/BookmarkButton/BookmarkButton";
 import EditQuestionModal from "@/components/pages/forumOverviewPage/editQuestionModal/EditQuestionModal";
-import { defaultLimit } from "@/components/pages/forumOverviewPage/ForumOverviewPage";
 import { TagsSkeleton } from "@/components/pages/forumOverviewPage/questionsSkeleton/QuestionsSkeleton";
-import QuestionUpvoteButton from "@/components/pages/forumOverviewPage/questionUpvoteButton/QuestionUpvoteButton";
 import useBookmarks from "@/hooks/useBookmarks";
 import { useForumQuestionDetails } from "@/hooks/useForumQuestionDetails";
 import { useLegalFieldsAndTopics } from "@/hooks/useLegalFieldsAndTopics";
 import { useForumPageStore } from "@/stores/forumPage.store";
-import { api } from "@/utils/api";
 import { removeHtmlTagsFromString } from "@/utils/utils";
 
 import { Title } from "@mantine/core";
@@ -19,6 +16,7 @@ import React, { Fragment, type FunctionComponent } from "react";
 
 import * as styles from "./QuestionListItem.styles";
 import genericProfileIcon from "../../../../../public/images/icons/generic-user-icon.svg";
+import { QuestionUpvoteButton } from "../upvoteButton/QuestionUpvoteButton";
 
 type Props = {
   readonly questionId: string;
