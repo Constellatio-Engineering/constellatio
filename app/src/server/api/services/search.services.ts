@@ -47,10 +47,7 @@ export const addArticlesAndCasesToSearchQueue: AddArticlesAndCasesToSearchQueue 
 
 export const resetSearchIndex = async (): Promise<void> =>
 {
-  await meiliSearchAdmin.deleteIndexIfExists(searchIndices.cases);
-  await meiliSearchAdmin.deleteIndexIfExists(searchIndices.userUploads);
-  await meiliSearchAdmin.deleteIndexIfExists(searchIndices.articles);
-  await meiliSearchAdmin.deleteIndexIfExists(searchIndices.userDocuments);
+  await Promise.all(Object.values(searchIndices).map(async index => meiliSearchAdmin.deleteIndexIfExists(index)));
 };
 
 type AddArticlesToSearchIndex = (params: { articleIds: string[] }) => Promise<{

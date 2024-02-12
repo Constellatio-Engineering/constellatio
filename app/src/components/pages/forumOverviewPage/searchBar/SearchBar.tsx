@@ -53,12 +53,14 @@ const SearchBar: FunctionComponent = () =>
             />
           )}
           {searchResults?.hits.map((question) => (
-            <Link key={question.id} href={`${appPaths.forum}/${question.id}`} css={styles.searchResult}>
-              <CustomLink styleType="link-content-title" component="p">
-                {question.title}
-              </CustomLink>
+            <div key={question.id} css={styles.searchResult}>
+              <Link href={`${appPaths.forum}/${question.slug}/${question.id}`}>
+                <CustomLink styleType="link-content-title" component="p">
+                  {question.title}
+                </CustomLink>
+              </Link>
               <Tag title={question.legalFieldName}/>
-            </Link>
+            </div>
           ))}
         </div>
         <div css={styles.dropDownOverflowGradient}/>

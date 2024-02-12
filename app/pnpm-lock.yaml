@@ -251,6 +251,9 @@ dependencies:
   sharp:
     specifier: 0.32.6
     version: 0.32.6
+  slugify:
+    specifier: 1.6.6
+    version: 1.6.6
   stripe:
     specifier: 14.1.0
     version: 14.1.0
@@ -15769,6 +15772,11 @@ packages:
 
   /slick@1.12.2:
     resolution: {integrity: sha512-4qdtOGcBjral6YIBCWJ0ljFSKNLz9KkhbWtuGvUyRowl1kxfuE1x/Z/aJcaiilpb3do9bl5K7/1h9XC5wWpY/A==}
+    dev: false
+
+  /slugify@1.6.6:
+    resolution: {integrity: sha512-h+z7HKHYXj6wJU+AnS/+IH8Uh9fdcX1Lrhg1/VMdf9PwoBQXFcXiAdsy2tSK0P6gKwJLXp02r90ahUCqHk9rrw==}
+    engines: {node: '>=8.0.0'}
     dev: false
 
   /smart-buffer@4.2.0:

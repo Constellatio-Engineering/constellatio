@@ -2,9 +2,34 @@ import { colors } from "@/constants/styles/colors";
 
 import { css } from "@emotion/react";
 
+export const questionWrapper = css`
+  background-color: ${colors["cc-forum"][2]};
+`;
+
+export const contentWrapper = css`
+  max-width: 920px;
+`;
+
+export const forumListItem = css`
+  transform: translateY(100px);
+  position: relative;
+  box-shadow: 0 8px 44px rgba(0, 0, 0, 0.04);
+  padding: 24px;
+`;
+
+export const yellowTopBar = css`
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 8px;
+  background-color: ${colors["cc-forum"][3]};
+`;
+
 export const questionContentWrapper = css`
   display: flex;
   gap: 24px;
+  background-color: white;
 `;
 
 export const upvoteColumn = css`
@@ -18,7 +43,6 @@ export const contentColumn = css`
   min-width: 0;
   display: flex;
   flex-direction: column;
-  gap: 24px;
 `;
 
 export const titleWrapper = css`
@@ -26,39 +50,17 @@ export const titleWrapper = css`
   justify-content: space-between;
   align-items: center;
   overflow: hidden;
-`;
-
-export const titleAndCheckmarkWrapper = css`
-  display: flex;
-  align-items: center;
-  gap: 10px;
-  overflow: hidden;
+  margin-bottom: 12px;
 `;
 
 export const title = css`
   white-space: nowrap;
   word-break: keep-all;
   text-overflow: ellipsis;
-  font-weight: 400;
-  font-size: 24px;
+  font-weight: 700;
+  font-size: 28px;
   min-width: 0;
   overflow: hidden;
-`;
-
-export const checkmark = css`
-  width: 20px;
-  height: 20px;
-  min-width: 20px;
-  min-height: 22px;
-  background-color: ${colors["brand-01"][4]};
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  border-radius: 50%;
-  color: white;
-  svg {
-    transform: translateX(-1px);
-  }
 `;
 
 export const bookmarkButtonWrapper = css`
@@ -71,7 +73,7 @@ export const authorAndDateWrapper = css`
   gap: 12px;
   align-items: center;
   font-size: 14px;
-  margin-bottom: 6px;
+  margin: 40px 0;
 `;
 
 export const authorWrapper = css`
@@ -100,23 +102,6 @@ export const date = css`
   color: ${colors["neutrals-01"][7]};
 `;
 
-export const excerpt = css`
-  overflow: hidden;
-  text-overflow: ellipsis;
-  display: -webkit-box;
-  -webkit-box-orient: vertical;
-  -webkit-line-clamp: 2;
-  line-height: 140%;
-  font-size: 16px;
-  font-weight: 400;
-`;
-
-export const bottomWrapper = css`
-  display: flex;
-  justify-content: space-between;
-  align-items: flex-end;
-`;
-
 export const tagsWrapper = css`
   display: flex;
   gap: 8px;
@@ -138,4 +123,19 @@ export const answersCountWrapper = css`
   svg {
     transform: translateY(1px);
   }
+`;
+
+export const answersWrapper = css`
+  padding-top: 160px;
+  display: flex;
+  flex-direction: column;
+  gap: 24px;
+`;
+
+export const postAnswerFormWrapper = css`
+  padding: 0;
+`;
+
+export const answerWrapper = css`
+  
 `;

@@ -3,6 +3,7 @@ import { ClapHandsFilled } from "@/components/Icons/ClapHandsFilled";
 import { UnstyledButton } from "@/components/molecules/unstyledButton/UnstyledButton";
 import { type AppRouter } from "@/server/api/root";
 import { api } from "@/utils/api";
+import { type Nullable } from "@/utils/types";
 
 import { notifications } from "@mantine/notifications";
 import { type inferProcedureOutput } from "@trpc/server";
@@ -11,7 +12,7 @@ import React, { type FunctionComponent } from "react";
 import * as styles from "./QuestionUpvoteButton.styles";
 
 type MutationContext = {
-  readonly questionBackup: inferProcedureOutput<AppRouter["forum"]["getQuestionById"]>;
+  readonly questionBackup: Nullable<inferProcedureOutput<AppRouter["forum"]["getQuestionById"]>>;
 };
 
 type Props = {

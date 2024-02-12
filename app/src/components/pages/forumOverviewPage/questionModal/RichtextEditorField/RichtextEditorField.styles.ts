@@ -7,7 +7,7 @@ import { type RichTextEditorStylesNames } from "@mantine/tiptap";
 
 type RichtextEditorFieldStyles = Styles<RichTextEditorStylesNames, UnknownMantineStylesParams>;
 
-export const richtextEditorFieldStyles = (hasError: boolean): RichtextEditorFieldStyles =>
+export const richtextEditorFieldStyles = ({ hasError, minHeight }: { hasError: boolean; minHeight: number}): RichtextEditorFieldStyles =>
 {
   const styles: RichtextEditorFieldStyles = (theme: MantineTheme) => ({
     content: {
@@ -32,7 +32,7 @@ export const richtextEditorFieldStyles = (hasError: boolean): RichtextEditorFiel
           position: "relative",
         },
         maxHeight: "60vh",
-        minHeight: "370px",
+        minHeight: `${minHeight}px`,
         padding: "20px",
         paddingBottom: "32px",
         whiteSpace: "normal",

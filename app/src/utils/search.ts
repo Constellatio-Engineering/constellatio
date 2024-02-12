@@ -158,7 +158,7 @@ export const createDocumentSearchIndexItem = ({
 
 export const documentSearchIndexItemPrimaryKey: keyof DocumentSearchIndexItem = "id";
 
-export type ForumQuestionSearchIndexItem = Pick<ForumQuestion, "id" | "text" | "title" | "userId"> & {
+export type ForumQuestionSearchIndexItem = Pick<ForumQuestion, "id" | "text" | "title" | "slug" | "userId"> & {
   legalFieldName: string | undefined;
   subfieldName: string | undefined;
   topicName: string | undefined;
@@ -169,6 +169,7 @@ export type ForumQuestionSearchItemUpdate = Partial<Omit<ForumQuestionSearchInde
 export const createForumQuestionSearchIndexItem = ({
   id,
   legalFieldName,
+  slug,
   subfieldName,
   text,
   title,
@@ -179,6 +180,7 @@ export const createForumQuestionSearchIndexItem = ({
   return ({
     id,
     legalFieldName,
+    slug,
     subfieldName,
     text: removeHtmlTagsFromString(text, true),
     title,

@@ -1,7 +1,7 @@
 /* eslint-disable sort-keys-fix/sort-keys-fix,@typescript-eslint/naming-convention,@typescript-eslint/no-use-before-define,max-lines */
 import { type InferInsertModel, type InferSelectModel, relations } from "drizzle-orm";
 import {
-  text, pgTable, integer, pgEnum, uuid, smallint, unique, timestamp, primaryKey, index, type AnyPgColumn, serial
+  text, pgTable, integer, pgEnum, uuid, smallint, unique, timestamp, primaryKey, index, type AnyPgColumn, serial, uniqueIndex
 } from "drizzle-orm/pg-core";
 
 export const allGenderIdentifiers = ["male", "female", "diverse"] as const;
@@ -320,6 +320,7 @@ export const usersToGroupsRelations = relations(usersToBadges, ({ one }) => ({
 export const forumQuestions = pgTable("ForumQuestion", {
   id: uuid("Id").defaultRandom().primaryKey(),
   index: serial("Index"),
+  slug: text("Slug").notNull(),
   userId: uuid("UserId").references(() => users.id, { onDelete: "no action" }).notNull(),
   createdAt: timestamp("CreatedAt").defaultNow().notNull(),
   updatedAt: timestamp("UpdatedAt").defaultNow().notNull(),
@@ -328,7 +329,9 @@ export const forumQuestions = pgTable("ForumQuestion", {
   legalFieldId: uuid("LegalFieldId").notNull(),
   subfieldId: uuid("SubfieldId"),
   topicId: uuid("TopicId"),
-});
+}, table => ({
+  id_slug_index: uniqueIndex("ForumQuestion_Id_Slug_Index").on(table.id, table.slug),
+}));
 
 export type ForumQuestionInsert = InferInsertModel<typeof forumQuestions>;
 export type ForumQuestion = InferSelectModel<typeof forumQuestions>;
@@ -339,7 +342,7 @@ export const forumAnswers = pgTable("ForumAnswer", {
   userId: uuid("UserId").references(() => users.id, { onDelete: "no action" }).notNull(),
   createdAt: timestamp("CreatedAt").defaultNow().notNull(),
   updatedAt: timestamp("UpdatedAt").defaultNow().notNull(),
-  answerText: text("AnswerText").notNull(),
+  text: text("AnswerText").notNull(),
   parentQuestionId: uuid("ParentQuestionId").references(() => forumQuestions.id, { onDelete: "no action" }),
   parentAnswerId: uuid("ParentAnswerId").references((): AnyPgColumn => forumAnswers.id, { onDelete: "no action" }),
 });

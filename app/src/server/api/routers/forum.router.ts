@@ -1,7 +1,11 @@
 import { db } from "@/db/connection";
-import { type ForumQuestionInsert, forumQuestions, questionUpvotes } from "@/db/schema";
+import {
+  type ForumAnswerInsert, forumAnswers, type ForumQuestionInsert, forumQuestions, questionUpvotes 
+} from "@/db/schema";
+import { getAnswersSchema } from "@/schemas/forum/getAnswers.schema";
 import { getQuestionByIdSchema } from "@/schemas/forum/getQuestionById.schema";
 import { type GetQuestionsSchema, getQuestionsSchema } from "@/schemas/forum/getQuestions.schema";
+import { postAnswerSchema } from "@/schemas/forum/postAnswer.schema";
 import { postQuestionSchema } from "@/schemas/forum/postQuestion.schema";
 import { updateQuestionSchema } from "@/schemas/forum/updateQuestion.schema";
 import { upvoteQuestionSchema } from "@/schemas/forum/upvoteQuestion.schema";
@@ -11,9 +15,21 @@ import { InternalServerError } from "@/utils/serverError";
 import { sleep } from "@/utils/utils";
 
 import { type inferProcedureOutput } from "@trpc/server";
-import { and, count, eq } from "drizzle-orm";
+import { and, asc, count, eq } from "drizzle-orm";
+import slugify from "slugify";
 
 export const forumRouter = createTRPCRouter({
+  getAnswers: protectedProcedure
+    .input(getAnswersSchema)
+    .query(async ({ input: { questionId } }) =>
+    {
+      await sleep(500);
+
+      return db.query.forumAnswers.findMany({
+        orderBy: [asc(forumAnswers.createdAt)],
+        where: eq(forumAnswers.parentQuestionId, questionId)
+      });
+    }),
   getQuestionById: protectedProcedure
     .input(getQuestionByIdSchema)
     .query(async ({ ctx: { userId }, input: { questionId } }) =>
@@ -24,7 +40,7 @@ export const forumRouter = createTRPCRouter({
         userId
       });
 
-      return question;
+      return question ?? null;
     }),
   getQuestions: protectedProcedure
     .input(getQuestionsSchema)
@@ -80,6 +96,21 @@ export const forumRouter = createTRPCRouter({
 
       return { count: totalAmountQuery?.count };
     }),
+  postAnswer: protectedProcedure
+    .input(postAnswerSchema)
+    .mutation(async ({ ctx: { userId }, input }) =>
+    {
+      await sleep(500);
+
+      const answerInsert: ForumAnswerInsert = {
+        parentAnswerId: input.parent.parentType === "answer" ? input.parent.answerId : null,
+        parentQuestionId: input.parent.parentType === "question" ? input.parent.questionId : null,
+        text: input.text,
+        userId
+      };
+
+      return db.insert(forumAnswers).values(answerInsert).returning();
+    }),
   postQuestion: protectedProcedure
     .input(postQuestionSchema)
     .mutation(async ({ ctx: { userId }, input }) =>
@@ -88,6 +119,12 @@ export const forumRouter = createTRPCRouter({
 
       const questionInsert: ForumQuestionInsert = {
         legalFieldId: input.legalFieldId,
+        slug: slugify(input.title, {
+          locale: "de",
+          lower: true,
+          replacement: "-",
+          trim: true,
+        }),
         subfieldId: input.subfieldId,
         text: input.text,
         title: input.title,

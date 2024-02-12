@@ -1,3 +1,4 @@
+import { Button, type TButton } from "@/components/atoms/Button/Button";
 import type { PostQuestionSchema } from "@/schemas/forum/postQuestion.schema";
 
 import { type GetInputProps } from "@mantine/form/lib/types";
@@ -8,22 +9,32 @@ import { Placeholder } from "@tiptap/extension-placeholder";
 import { TextAlign } from "@tiptap/extension-text-align";
 import { TextStyle } from "@tiptap/extension-text-style";
 import { Underline } from "@tiptap/extension-underline";
-import { useEditor } from "@tiptap/react";
+import { type Editor, useEditor } from "@tiptap/react";
 import { StarterKit } from "@tiptap/starter-kit";
 import React, { type FunctionComponent } from "react";
 
 import * as styles from "./RichtextEditorField.styles";
 
+type RichtextEditorButton = {
+  readonly action: (editor: Editor) => void;
+  readonly props: TButton;
+  readonly text: string;
+};
+
 interface Props extends ReturnType<GetInputProps<PostQuestionSchema>> 
 {
-  readonly label: string;
+  readonly buttons?: RichtextEditorButton[];
+  readonly label?: string;
+  readonly minHeight?: number;
   readonly onChange: (value: PostQuestionSchema["text"]) => void;
   readonly value: PostQuestionSchema["text"];
 }
 
 export const RichtextEditorField: FunctionComponent<Props> = ({
+  buttons,
   error,
   label,
+  minHeight = 370,
   onBlur,
   onChange,
   onFocus,
@@ -50,45 +61,18 @@ export const RichtextEditorField: FunctionComponent<Props> = ({
     }
   });
 
-  /* const setEditorContent = editor?.commands.setContent;
-  const getEditorContent = editor?.getHTML;
-
-  useEffect(() =>
-  {
-    if(!getEditorContent || !setEditorContent)
-    {
-      return;
-    }
-
-    let currentContent: string;
-
-    try
-    {
-      currentContent = getEditorContent();
-    }
-    catch (e: unknown)
-    {
-      console.log("Error getting editor content", e);
-      return;
-    }
-
-    if(setEditorContent && currentContent !== value)
-    {
-      console.log("Setting editor content");
-      setEditorContent(value);
-    }
-  }, [getEditorContent, setEditorContent, value]);*/
-
   return (
     <div css={styles.wrapper}>
-      <p css={styles.label(error != null)}>
-        {label}
-      </p>
+      {label && (
+        <p css={styles.label(error != null)}>
+          {label}
+        </p>
+      )}
       <RichTextEditor
         editor={editor}
         onBlur={onBlur}
         onFocus={onFocus}
-        styles={styles.richtextEditorFieldStyles(error != null)}>
+        styles={styles.richtextEditorFieldStyles({ hasError: error != null, minHeight })}>
         <RichTextEditor.Toolbar>
           <RichTextEditor.ControlsGroup>
             <RichTextEditor.Bold/>
@@ -108,6 +92,32 @@ export const RichtextEditorField: FunctionComponent<Props> = ({
         </RichTextEditor.Toolbar>
         <div css={styles.contentWrapper}>
           <RichTextEditor.Content/>
+          {buttons && buttons.length > 0 && (
+            <div style={{
+              alignItems: "center",
+              display: "flex",
+              gap: 12,
+              justifyContent: "flex-start",
+              padding: 20,
+            }}>
+              {buttons.map((button, index) => (
+                <Button<"button">
+                  key={index}
+                  {...button?.props}
+                  type="button"
+                  onClick={() =>
+                  {
+                    if(editor)
+                    {
+                      button?.action(editor);
+                    }
+                  }}
+                  disabled={button.props.disabled || editor?.isEmpty}>
+                  {button?.text}
+                </Button>
+              ))}
+            </div>
+          )}
         </div>
       </RichTextEditor>
       {error && (
