@@ -14,29 +14,15 @@ type MutationContext = {
 type Props = {
   readonly isUpvoted: boolean;
   readonly questionId: string;
-  readonly upvotedItemType: "question" | "answer";
   readonly upvotesCount: number;
 };
 
-const QuestionUpvoteButton: FunctionComponent<Props> = ({
-  isUpvoted,
-  questionId,
-  upvotedItemType,
-  upvotesCount
-}) =>
+const QuestionUpvoteButton: FunctionComponent<Props> = ({ isUpvoted, questionId, upvotesCount }) =>
 {
   const apiContext = api.useUtils();
 
   const onUpvoteMutationSuccess = async (): Promise<void> =>
   {
-    if(upvotedItemType === "question")
-    {
-      return apiContext.forum.getQuestionById.invalidate({ questionId });
-    }
-    else 
-    {
-      return apiContext.forum.getAnswerById.invalidate({ answerId: questionId });
-    }
     return apiContext.forum.getQuestionById.invalidate({ questionId });
   };
 

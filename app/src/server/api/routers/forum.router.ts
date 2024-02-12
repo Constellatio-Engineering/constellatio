@@ -1,48 +1,86 @@
+/* eslint-disable max-lines */
 import { db } from "@/db/connection";
 import {
-  type ForumAnswerInsert, forumAnswers, type ForumQuestionInsert, forumQuestions, questionUpvotes 
+  answerUpvotes,
+  type ForumAnswerInsert, forumAnswers, type ForumQuestionInsert, forumQuestions, questionUpvotes
 } from "@/db/schema";
-import { getAnswerRepliesSchema } from "@/schemas/forum/getAnswerReplies.schema";
-import { getAnswersSchema } from "@/schemas/forum/getAnswers.schema";
+import { getAnswerByIdSchema } from "@/schemas/forum/getAnswerById.schema";
+import { type GetAnswersSchema, getAnswersSchema } from "@/schemas/forum/getAnswers.schema";
 import { getQuestionByIdSchema } from "@/schemas/forum/getQuestionById.schema";
 import { type GetQuestionsSchema, getQuestionsSchema } from "@/schemas/forum/getQuestions.schema";
 import { postAnswerSchema } from "@/schemas/forum/postAnswer.schema";
 import { postQuestionSchema } from "@/schemas/forum/postQuestion.schema";
 import { updateQuestionSchema } from "@/schemas/forum/updateQuestion.schema";
+import { upvoteAnswerSchema } from "@/schemas/forum/upvoteAnswer.schema";
 import { upvoteQuestionSchema } from "@/schemas/forum/upvoteQuestion.schema";
-import { getQuestions } from "@/server/api/services/forum.services";
+import { getAnswers, getQuestions } from "@/server/api/services/forum.services";
 import { createTRPCRouter, protectedProcedure } from "@/server/api/trpc";
 import { InternalServerError } from "@/utils/serverError";
 import { sleep } from "@/utils/utils";
 
 import { type inferProcedureOutput } from "@trpc/server";
-import {
-  and, asc, count, eq, type SQL 
-} from "drizzle-orm";
+import { and, count, eq } from "drizzle-orm";
 import slugify from "slugify";
 
 export const forumRouter = createTRPCRouter({
+  getAnswerById: protectedProcedure
+    .input(getAnswerByIdSchema)
+    .query(async ({ ctx: { userId }, input: { answerId } }) =>
+    {
+      const [answer] = await getAnswers({
+        answerId,
+        getAnswersType: "byId",
+        userId
+      });
+
+      return answer ?? null;
+    }),
   getAnswers: protectedProcedure
     .input(getAnswersSchema)
-    .query(async ({ input }) =>
+    .query(async ({ ctx: { userId }, input: { cursor, limit, parent } }) =>
     {
       await sleep(500);
 
-      let queryCondition: SQL;
-
-      if(input.parentType === "question")
-      {
-        queryCondition = eq(forumAnswers.parentQuestionId, input.questionId);
-      }
-      else
-      {
-        queryCondition = eq(forumAnswers.parentAnswerId, input.answerId);
-      }
-
-      return db.query.forumAnswers.findMany({
-        orderBy: [asc(forumAnswers.createdAt)],
-        where: queryCondition
+      const answers = await getAnswers({
+        cursor,
+        getAnswersType: "infinite",
+        limit,
+        parent,
+        userId,
       });
+
+      const hasNextPage = answers.length > limit;
+      let nextCursor: GetAnswersSchema["cursor"] | null = null;
+
+      if(hasNextPage)
+      {
+        // remove the last element since it's only used to determine if there's a next page
+        const nextAnswer = answers.pop();
+
+        if(nextAnswer == null)
+        {
+          throw new InternalServerError(new Error("nextAnswer is null"));
+        }
+
+        switch (cursor.cursorType)
+        {
+          case "newest":
+            nextCursor = {
+              cursorType: "newest",
+              index: nextAnswer.index
+            };
+            break;
+          case "upvotes":
+            nextCursor = {
+              cursorType: "upvotes",
+              index: nextAnswer.index,
+              upvotes: nextAnswer.upvotesCount
+            };
+            break;
+        }
+      }
+
+      return { answers, nextCursor };
     }),
   getQuestionById: protectedProcedure
     .input(getQuestionByIdSchema)
@@ -148,6 +186,17 @@ export const forumRouter = createTRPCRouter({
 
       return db.insert(forumQuestions).values(questionInsert).returning();
     }),
+  removeAnswerUpvote: protectedProcedure
+    .input(upvoteAnswerSchema)
+    .mutation(async ({ ctx: { userId }, input: { answerId } }) =>
+    {
+      await db.delete(answerUpvotes).where(
+        and(
+          eq(answerUpvotes.answerId, answerId),
+          eq(answerUpvotes.userId, userId)
+        )
+      );
+    }),
   removeQuestionUpvote: protectedProcedure
     .input(upvoteQuestionSchema)
     .mutation(async ({ ctx: { userId }, input: { questionId } }) =>
@@ -176,6 +225,15 @@ export const forumRouter = createTRPCRouter({
 
       return updatedQuestion;
     }),
+  upvoteAnswer: protectedProcedure
+    .input(upvoteAnswerSchema)
+    .mutation(async ({ ctx: { userId }, input: { answerId } }) =>
+    {
+      await db
+        .insert(answerUpvotes)
+        .values({ answerId, userId })
+        .onConflictDoNothing();
+    }),
   upvoteQuestion: protectedProcedure
     .input(upvoteQuestionSchema)
     .mutation(async ({ ctx: { userId }, input: { questionId } }) =>
@@ -188,3 +246,4 @@ export const forumRouter = createTRPCRouter({
 });
 
 export type Question = NonNullable<inferProcedureOutput<typeof forumRouter.getQuestionById>>;
+export type Answer = NonNullable<inferProcedureOutput<typeof forumRouter.getAnswerById>>;

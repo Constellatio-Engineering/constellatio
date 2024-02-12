@@ -1,9 +1,10 @@
-import QuestionUpvoteButton from "@/components/pages/forumOverviewPage/questionUpvoteButton/QuestionUpvoteButton";
+import AnswerUpvoteButton from "@/components/pages/forumOverviewPage/upvoteButton/AnswerUpvoteButton";
 import { type ForumAnswer } from "@/db/schema";
 import useContextAndErrorIfNull from "@/hooks/useContextAndErrorIfNull";
 import { useForumAnswers } from "@/hooks/useForumAnswers";
 import { usePostAnswer } from "@/hooks/usePostAnswer";
 import { InvalidateQueriesContext } from "@/provider/InvalidateQueriesProvider";
+import { type Answer } from "@/server/api/routers/forum.router";
 import { api } from "@/utils/api";
 
 import React, { Fragment, type FunctionComponent } from "react";
@@ -11,13 +12,16 @@ import React, { Fragment, type FunctionComponent } from "react";
 import * as styles from "./AnswerListItem.styles";
 import ForumListItem from "../../forumOverviewPage/forumListItem/ForumListItem";
 
-type Props = ForumAnswer;
+type Props = Answer;
 
 const AnswerListItem: FunctionComponent<Props> = ({
+  author,
   createdAt,
   id: answerId,
+  isUpvoted,
   text,
-  updatedAt
+  updatedAt,
+  upvotesCount
 }) =>
 {
   const { invalidateForumAnswers } = useContextAndErrorIfNull(InvalidateQueriesContext);
@@ -25,8 +29,15 @@ const AnswerListItem: FunctionComponent<Props> = ({
   const { isPending: isPostingAnswer, mutate: postAnswer } = usePostAnswer();
 
   const { data: replies, isLoading: areAnswersLoading } = useForumAnswers({
-    answerId, 
-    parentType: "answer"
+    cursor: {
+      cursorType: "newest",
+      index: null
+    },
+    limit: 10,
+    parent: {
+      answerId,
+      parentType: "answer"
+    }
   });
 
   return (
@@ -46,10 +57,10 @@ const AnswerListItem: FunctionComponent<Props> = ({
             });
           }}>
           <div css={styles.upvoteColumn}>
-            <QuestionUpvoteButton
-              isUpvoted={question.isUpvoted}
-              questionId={question.id}
-              upvotesCount={question.upvotesCount}
+            <AnswerUpvoteButton
+              isUpvoted={isUpvoted}
+              answerId={answerId}
+              upvotesCount={upvotesCount}
             />
           </div>
           {/* <div css={styles.contentColumn}>
@@ -78,7 +89,7 @@ const AnswerListItem: FunctionComponent<Props> = ({
         </div>
       </ForumListItem>
       <div style={{ paddingLeft: 80 }}>
-        {replies?.map((reply) => (
+        {replies?.answers.map((reply) => (
           <p key={reply.id}>{reply.text}</p>
         ))}
       </div>

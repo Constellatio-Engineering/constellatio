@@ -361,3 +361,15 @@ export const questionUpvotes = pgTable("QuestionUpvote", {
 
 export type QuestionUpvoteInsert = InferInsertModel<typeof questionUpvotes>;
 export type QuestionUpvote = InferSelectModel<typeof questionUpvotes>;
+
+export const answerUpvotes = pgTable("AnswerUpvote", {
+  userId: uuid("UserId").references(() => users.id, { onDelete: "no action" }).notNull(),
+  answerId: uuid("AnswerId").references(() => forumAnswers.id, { onDelete: "no action" }).notNull(),
+  createdAt: timestamp("CreatedAt").defaultNow(),
+}, table => ({
+  answerId_index: index("AnswerUpvote_QuestionId_Index").on(table.answerId),
+  pk: primaryKey({ columns: [table.userId, table.answerId] }),
+}));
+
+export type AnswerUpvoteInsert = InferInsertModel<typeof answerUpvotes>;
+export type AnswerUpvote = InferSelectModel<typeof answerUpvotes>;

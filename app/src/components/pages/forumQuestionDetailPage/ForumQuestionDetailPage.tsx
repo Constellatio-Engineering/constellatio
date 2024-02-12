@@ -1,23 +1,17 @@
 import Tag from "@/components/atoms/tag/Tag";
 import ContentWrapper from "@/components/helpers/contentWrapper/ContentWrapper";
-import { Chat } from "@/components/Icons/Chat";
-import { Check } from "@/components/Icons/Check";
 import BookmarkButton from "@/components/organisms/caseBlock/BookmarkButton/BookmarkButton";
-import MantineRichtextRenderer from "@/components/organisms/mantineRichtextRenderer/MantineRichtextRenderer";
 import EditQuestionModal from "@/components/pages/forumOverviewPage/editQuestionModal/EditQuestionModal";
 import ForumListItem from "@/components/pages/forumOverviewPage/forumListItem/ForumListItem";
 import { RichtextEditorField } from "@/components/pages/forumOverviewPage/questionModal/RichtextEditorField/RichtextEditorField";
 import { TagsSkeleton } from "@/components/pages/forumOverviewPage/questionsSkeleton/QuestionsSkeleton";
-import QuestionUpvoteButton from "@/components/pages/forumOverviewPage/questionUpvoteButton/QuestionUpvoteButton";
 import AnswerListItem from "@/components/pages/forumQuestionDetailPage/answerListItem/AnswerListItem";
 import useBookmarks from "@/hooks/useBookmarks";
 import { useForumAnswers } from "@/hooks/useForumAnswers";
 import { useForumQuestionDetails } from "@/hooks/useForumQuestionDetails";
 import { useLegalFieldsAndTopics } from "@/hooks/useLegalFieldsAndTopics";
 import { usePostAnswer } from "@/hooks/usePostAnswer";
-import type { PostQuestionSchema } from "@/schemas/forum/postQuestion.schema";
 import { api } from "@/utils/api";
-import { removeHtmlTagsFromString } from "@/utils/utils";
 
 import { Title, TypographyStylesProvider } from "@mantine/core";
 import Image from "next/image";
@@ -25,6 +19,8 @@ import React, { Fragment, type FunctionComponent } from "react";
 
 import * as styles from "./ForumQuestionDetailPage.styles";
 import genericProfileIcon from "../../../../public/images/icons/generic-user-icon.svg";
+
+import QuestionUpvoteButton from "@/components/pages/forumOverviewPage/questionUpvoteButton/QuestionUpvoteButton";
 
 type Props = {
   readonly questionId: string;
