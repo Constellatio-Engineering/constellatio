@@ -25,7 +25,7 @@ export const questionTextValidation = z.string().nullable().transform((value, co
     return z.NEVER;
   }
 
-  return textTrimmed;
+  return value;
 });
 
 export const legalFieldIdValidation = getIdValidationWithMessage("Bitte wähle ein Rechtsgebiet aus");

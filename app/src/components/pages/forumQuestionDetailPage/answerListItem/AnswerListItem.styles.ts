@@ -11,7 +11,6 @@ export const wrapper = css`
 export const upvoteColumn = css`
   width: 24px;
   min-width: 24px;
-  padding-top: 6px;
 `;
 
 export const contentColumn = css`
@@ -25,8 +24,9 @@ export const authorAndDateWrapper = css`
   display: flex;
   gap: 12px;
   align-items: center;
+  justify-content: space-between;
   font-size: 14px;
-  margin: 40px 0;
+  margin-bottom: 24px;
 `;
 
 export const authorWrapper = css`

@@ -152,6 +152,8 @@ export const ForumQuestionDetailPage: FunctionComponent<Props> = ({ questionId }
                 {
                   action: (editor) =>
                   {
+                    console.log("click", editor?.getHTML());
+
                     postAnswer({
                       parent: {
                         parentType: "question",
@@ -171,7 +173,14 @@ export const ForumQuestionDetailPage: FunctionComponent<Props> = ({ questionId }
             />
           </ForumListItem>
           {answers?.map((answer) => (
-            <AnswerListItem key={answer.id} {...answer}/>
+            <AnswerListItem
+              key={answer.id}
+              answerId={answer.id}
+              parent={{
+                parentType: "question",
+                questionId,
+              }}
+            />
           ))}
         </div>
       </ContentWrapper>
