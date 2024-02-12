@@ -20,17 +20,45 @@ type CreateQuestion = {
 type ModalState = ModalClosed | EditQuestion | CreateQuestion;
 
 type ForumPageStoreProps = {
+  answerIdsWithActiveReplyInput: string[];
+  answersWithExpandedReplies: string[];
+  closeAnswerReplies: (answerId: string) => void;
+  closeAnswerReplyInput: (answerId: string) => void;
   closeAskQuestionModal: () => void;
+  expandAnswerReplies: (answerId: string) => void;
+  getAreRepliesExpanded: (answerId: string) => boolean;
+  getIsAnswerReplyInputOpen: (answerId: string) => boolean;
   getIsModalOpen: () => boolean;
   modalState: ModalState;
+  openAnswerReplyInput: (answerId: string) => void;
   questionsCursorType: GetQuestionsCursorType;
   setCreateQuestionState: () => void;
   setEditQuestionState: (questionId: string) => void;
   setQuestionsCursorType: (cursorType: GetQuestionsCursorType) => void;
+  toggleAnswerReplies: (answerId: string) => void;
+  toggleAnswerReplyInput: (answerId: string) => void;
 };
 
 export const useForumPageStore = create(
   immer<ForumPageStoreProps>((set, get) => ({
+    answerIdsWithActiveReplyInput: [],
+    answersWithExpandedReplies: [],
+    closeAnswerReplies: (answerId) =>
+    {
+      set((state) =>
+      {
+        state.answersWithExpandedReplies = state.answersWithExpandedReplies.filter((id) => id !== answerId);
+      });
+
+      get().closeAnswerReplyInput(answerId);
+    },
+    closeAnswerReplyInput: (answerId) =>
+    {
+      set((state) =>
+      {
+        state.answerIdsWithActiveReplyInput = state.answerIdsWithActiveReplyInput.filter((id) => id !== answerId);
+      });
+    },
     closeAskQuestionModal: () =>
     {
       set((state) =>
@@ -40,6 +68,21 @@ export const useForumPageStore = create(
         };
       });
     },
+    expandAnswerReplies: (answerId) =>
+    {
+      set((state) =>
+      {
+        state.answersWithExpandedReplies = [...new Set([...state.answersWithExpandedReplies, answerId])];
+      });
+    },
+    getAreRepliesExpanded: (answerId) =>
+    {
+      return get().answersWithExpandedReplies.includes(answerId);
+    },
+    getIsAnswerReplyInputOpen: (answerId) =>
+    {
+      return get().answerIdsWithActiveReplyInput.includes(answerId);
+    },
     getIsModalOpen: () =>
     {
       return get().modalState.state !== "closed";
@@ -47,6 +90,13 @@ export const useForumPageStore = create(
     isAskQuestionModalOpen: false,
     modalState: {
       state: "closed",
+    },
+    openAnswerReplyInput: (answerId) =>
+    {
+      set((state) =>
+      {
+        state.answerIdsWithActiveReplyInput = [...new Set([...state.answerIdsWithActiveReplyInput, answerId])];
+      });
     },
     questionsCursorType: "newest",
     setCreateQuestionState: () => 
@@ -81,6 +131,28 @@ export const useForumPageStore = create(
       {
         state.questionsCursorType = cursorType;
       });
+    },
+    toggleAnswerReplies: (answerId) =>
+    {
+      if(get().answersWithExpandedReplies.includes(answerId))
+      {
+        get().closeAnswerReplies(answerId);
+      }
+      else
+      {
+        get().expandAnswerReplies(answerId);
+      }
+    },
+    toggleAnswerReplyInput: (answerId) =>
+    {
+      if(get().answerIdsWithActiveReplyInput.includes(answerId))
+      {
+        get().closeAnswerReplyInput(answerId);
+      }
+      else
+      {
+        get().openAnswerReplyInput(answerId);
+      }
     },
   }))
 );

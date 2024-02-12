@@ -1,3 +1,4 @@
+import { Button } from "@/components/atoms/Button/Button";
 import AnswerUpvoteButton from "@/components/pages/forumOverviewPage/upvoteButton/AnswerUpvoteButton";
 import { type ForumAnswer } from "@/db/schema";
 import useContextAndErrorIfNull from "@/hooks/useContextAndErrorIfNull";
@@ -7,6 +8,7 @@ import { usePostAnswer } from "@/hooks/usePostAnswer";
 import { InvalidateQueriesContext } from "@/provider/InvalidateQueriesProvider";
 import type { GetAnswersSchema } from "@/schemas/forum/getAnswers.schema";
 import { type Answer } from "@/server/api/routers/forum.router";
+import { useForumPageStore } from "@/stores/forumPage.store";
 import { api } from "@/utils/api";
 
 import { TypographyStylesProvider } from "@mantine/core";
@@ -24,6 +26,11 @@ type Props = {
 
 const AnswerListItem: FunctionComponent<Props> = ({ answerId, parent }) =>
 {
+  const expandAnswerReplies = useForumPageStore(s => s.expandAnswerReplies);
+  const toggleAnswerReplies = useForumPageStore(s => s.toggleAnswerReplies);
+  const closeAnswerReplies = useForumPageStore(s => s.closeAnswerReplies);
+  const areRepliesExpanded = useForumPageStore(s => s.getAreRepliesExpanded(answerId));
+
   const { data: answer } = useForumAnswerDetails({ answerId, parent });
   const { isPending: isPostingAnswer, mutate: postAnswer } = usePostAnswer();
   const { data: replies, isLoading: areAnswersLoading } = useForumAnswers({
@@ -85,14 +92,29 @@ const AnswerListItem: FunctionComponent<Props> = ({ answerId, parent }) =>
             <TypographyStylesProvider>
               <div dangerouslySetInnerHTML={{ __html: answer.text }}/>
             </TypographyStylesProvider>
+            <div
+              css={styles.replyWrapper}
+              style={{ cursor: "pointer" }}
+              onClick={(e) =>
+              {
+                e.stopPropagation();
+                toggleAnswerReplies(answerId);
+              }}>
+              <p>{replies?.length ?? 0} Antworten</p>
+              <Button<"button"> styleType={"primary"} size={"medium"}>
+                Antworten
+              </Button>
+            </div>
           </div>
         </div>
       </ForumListItem>
-      <div style={{ paddingLeft: 80 }}>
-        {replies?.map((reply) => (
-          <p key={reply.id}>{reply.text}</p>
-        ))}
-      </div>
+      {areRepliesExpanded && (
+        <div style={{ paddingLeft: 80 }}>
+          {replies?.map((reply) => (
+            <p key={reply.id}>{reply.text}</p>
+          ))}
+        </div>
+      )}
     </Fragment>
   );
 };
