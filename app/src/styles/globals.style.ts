@@ -14,7 +14,7 @@ export const globalStyles = css`
   }
   
   html [id], body [id] {
-    scroll-margin: 50px !important;
+    scroll-margin: 50px;
   }
   
   body {

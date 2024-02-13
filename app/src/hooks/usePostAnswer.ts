@@ -20,8 +20,10 @@ export const usePostAnswer = (params?: Params) =>
   return api.forum.postAnswer.useMutation({
     onError: params?.onError,
     onSettled: params?.onSettled,
-    onSuccess: async (data, { parent }) =>
+    onSuccess: async (data, variables, _context) =>
     {
+      const { parent } = variables;
+
       if(parent.parentType === "question")
       {
         await invalidateForumAnswers({
@@ -37,7 +39,7 @@ export const usePostAnswer = (params?: Params) =>
           parent: {
             answerId: parent.answerId,
             parentType: "answer"
-          }
+          },
         });
       }
 

@@ -7,7 +7,7 @@ import { type GetAnswersSchema } from "@/schemas/forum/getAnswers.schema";
 import { type GetQuestionsSchema } from "@/schemas/forum/getQuestions.schema";
 
 import {
-  and, count, desc, eq, getTableColumns, lt, lte, or, type SQL, sql
+  and, asc, count, desc, eq, getTableColumns, lt, lte, or, type SQL, sql
 } from "drizzle-orm";
 
 type GetUpvotesForQuestion = (questionId: string) => Promise<number>;
@@ -176,19 +176,19 @@ export const getAnswers = async (params: GetAnswersParams) => // eslint-disable-
   {
     orderBy = desc(countUpvotesSubquery.index);
 
-    /* switch (params.sortBy)
+    switch (params.sortBy)
     {
       case "newest":
       {
-        orderBy = desc(countUpvotesSubquery.index);
+        orderBy = asc(countUpvotesSubquery.index);
         break;
       }
       case "upvotes":
       {
-        orderBy = [desc(countUpvotesSubquery.upvotesCount), desc(countUpvotesSubquery.index)];
+        orderBy = [desc(countUpvotesSubquery.upvotesCount), asc(countUpvotesSubquery.index)];
         break;
       }
-    }*/
+    }
 
     switch (params.parent.parentType)
     {

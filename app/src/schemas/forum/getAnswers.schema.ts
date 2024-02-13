@@ -13,7 +13,8 @@ export const getAnswersSchema = z.object({
       parentType: z.literal("answer")
     })
   ]),
-  // sortBy: z.union([z.literal("newest"), z.literal("upvotes")])
+  sortBy: z.union([z.literal("newest"), z.literal("upvotes")])
 });
 
 export type GetAnswersSchema = z.input<typeof getAnswersSchema>;
+export type GetAnswersSortingOptions = GetAnswersSchema["sortBy"];

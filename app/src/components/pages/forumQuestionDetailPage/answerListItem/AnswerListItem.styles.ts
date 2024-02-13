@@ -49,10 +49,6 @@ export const date = css`
   color: ${colors["neutrals-01"][7]};
 `;
 
-export const replyWrapper = css`
-  display: flex;
-  gap: 24px;
-  align-items: center;
-  justify-content: flex-end;
+export const childrenWrapper = css`
   margin-top: 16px;
 `;

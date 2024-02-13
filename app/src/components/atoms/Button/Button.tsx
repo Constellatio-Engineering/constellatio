@@ -66,7 +66,7 @@ const _Button: FC<TButton> = ({
               : "",
       border:
         styleType === "secondarySimple"
-          ? `1px solid ${theme.colors["neutrals-02"][1]}`
+          ? `1px solid ${theme.colors["neutrals-01"][6]}`
           : styleType === "tertiary" || styleType === "secondarySubtle"
             ? `1px solid ${theme.colors["neutrals-01"][3]}`
             : "",

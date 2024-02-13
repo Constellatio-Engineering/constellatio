@@ -39,6 +39,8 @@ export const forumRouter = createTRPCRouter({
     .input(getAnswersSchema)
     .query(async ({ ctx: { userId }, input }) =>
     {
+      console.log("getAnswers", input);
+
       await sleep(500);
 
       const answers = await getAnswers({

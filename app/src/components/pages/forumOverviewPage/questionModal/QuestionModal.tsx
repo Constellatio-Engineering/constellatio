@@ -121,6 +121,7 @@ const QuestionModal: FunctionComponent<QuestionModalProps> = ({
               />
               <RichtextEditorField
                 label="Deine Frage"
+                placeholder="Deine Frage..."
                 {...form.getInputProps("text" satisfies keyof PostQuestionSchema)}
               />
             </div>

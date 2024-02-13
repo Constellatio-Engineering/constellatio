@@ -57,6 +57,7 @@ export const contentWrapper = css`
 
 export const wrapper = css`
   width: 100%;
+  scroll-margin: 20vh !important;
 `;
 
 export const label = (hasError: boolean) => css`

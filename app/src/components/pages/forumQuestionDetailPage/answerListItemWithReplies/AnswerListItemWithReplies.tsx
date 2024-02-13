@@ -1,23 +1,17 @@
 import { Button } from "@/components/atoms/Button/Button";
-import AnswerUpvoteButton from "@/components/pages/forumOverviewPage/upvoteButton/AnswerUpvoteButton";
-import { type ForumAnswer } from "@/db/schema";
-import useContextAndErrorIfNull from "@/hooks/useContextAndErrorIfNull";
+import { ExpandIcon } from "@/components/Icons/Expand";
+import { RichtextEditorField } from "@/components/pages/forumOverviewPage/questionModal/RichtextEditorField/RichtextEditorField";
+import AnswerListItem from "@/components/pages/forumQuestionDetailPage/answerListItem/AnswerListItem";
 import { useForumAnswerDetails } from "@/hooks/useForumAnswerDetails";
 import { useForumAnswers } from "@/hooks/useForumAnswers";
 import { usePostAnswer } from "@/hooks/usePostAnswer";
-import { InvalidateQueriesContext } from "@/provider/InvalidateQueriesProvider";
 import type { GetAnswersSchema } from "@/schemas/forum/getAnswers.schema";
-import { type Answer } from "@/server/api/routers/forum.router";
 import { useForumPageStore } from "@/stores/forumPage.store";
-import { api } from "@/utils/api";
 
-import { TypographyStylesProvider } from "@mantine/core";
-import Image from "next/image";
-import React, { Fragment, type FunctionComponent } from "react";
+import React, { Fragment, type FunctionComponent, useId } from "react";
+import { flushSync } from "react-dom";
 
 import * as styles from "./AnswerListItemWithReplies.styles";
-import genericProfileIcon from "../../../../../public/images/icons/generic-user-icon.svg";
-import ForumListItem from "../../forumOverviewPage/forumListItem/ForumListItem";
 
 type Props = {
   readonly answerId: string;
@@ -26,96 +20,145 @@ type Props = {
 
 const AnswerListItemWithReplies: FunctionComponent<Props> = ({ answerId, parent }) =>
 {
-  const expandAnswerReplies = useForumPageStore(s => s.expandAnswerReplies);
   const toggleAnswerReplies = useForumPageStore(s => s.toggleAnswerReplies);
-  const closeAnswerReplies = useForumPageStore(s => s.closeAnswerReplies);
+  const setRepliesState = useForumPageStore(s => s.setRepliesState);
+  const repliesState = useForumPageStore(s => s.getRepliesState(answerId));
   const areRepliesExpanded = useForumPageStore(s => s.getAreRepliesExpanded(answerId));
+  const addReplyInputId = useId();
 
-  const { data: answer } = useForumAnswerDetails({ answerId, parent });
   const { isPending: isPostingAnswer, mutate: postAnswer } = usePostAnswer();
   const { data: replies, isLoading: areAnswersLoading } = useForumAnswers({
     parent: {
       answerId,
       parentType: "answer"
-    }
+    },
+    sortBy: "newest"
   });
 
-  if(answer == null)
+  const hasReplies = replies?.length != null && replies.length > 0;
+
+  const onAddReplyClick = (): void =>
   {
-    return <p>Answer not found</p>;
-  }
+    flushSync(() =>
+    {
+      // flushSync is used to ensure that the input is rendered before it is scrolled to
+      setRepliesState(answerId, "add");
+    });
+
+    const inputWrapper = document.getElementById(addReplyInputId);
+
+    if(!inputWrapper)
+    {
+      console.error("InputWrapper not found");
+      return;
+    }
+
+    inputWrapper.scrollIntoView({ behavior: "smooth" });
+
+    const input = Array.from(inputWrapper.getElementsByClassName("tiptap ProseMirror"))[0] as HTMLDivElement | undefined;
+
+    if(input == null)
+    {
+      // The input will likely not be rendered yet if the replies were not expanded before
+      return;
+    }
+
+    input?.focus();
+  };
 
   return (
-    <Fragment>
-      <ForumListItem>
-        <div
-          css={styles.wrapper}
-          style={{ cursor: "pointer" }}
-          onClick={() =>
-          {
-            postAnswer({
-              parent: {
-                answerId,
-                parentType: "answer"
-              },
-              text: "This is a test answer " + Math.random()
-            });
-          }}>
-          <div css={styles.upvoteColumn}>
-            <AnswerUpvoteButton
-              isUpvoted={answer.isUpvoted}
-              answerId={answer.id}
-              upvotesCount={answer.upvotesCount}
-            />
-          </div>
-          <div css={styles.contentColumn}>
-            <div css={styles.authorAndDateWrapper}>
-              <div css={styles.authorWrapper}>
-                <Image
-                  css={styles.profilePicture}
-                  src={genericProfileIcon.src}
-                  alt="Avatar"
-                  width={28}
-                  height={28}
-                />
-                <p css={styles.author}>{answer.author.username}</p>
+    <div>
+      <AnswerListItem
+        answerId={answerId}
+        parent={parent}>
+        <div css={styles.replyWrapper}>
+          {hasReplies && (
+            <button
+              type={"button"}
+              css={styles.toggleRepliesButton(areRepliesExpanded)}
+              onClick={() => toggleAnswerReplies(answerId)}>
+              <p>{replies.length} Antworten</p>
+              <ExpandIcon size={22}/>
+            </button>
+          )}
+          <Button<"button">
+            styleType={"primary"}
+            size={"medium"}
+            onClick={onAddReplyClick}>
+            Antworten
+          </Button>
+        </div>
+      </AnswerListItem>
+      <div css={styles.repliesWrapper}>
+        {areRepliesExpanded && (
+          <Fragment>
+            {replies?.map((reply) => (
+              <AnswerListItem
+                key={reply.id}
+                answerId={reply.id}
+                parent={{
+                  answerId,
+                  parentType: "answer"
+                }}
+              />
+            ))}
+            {repliesState === "view" && (
+              <div css={styles.test}>
+                <Button<"button">
+                  styleType={"secondarySimple"}
+                  size={"large"}
+                  onClick={() => setRepliesState(answerId, "add")}>
+                  Antworten verfassen +
+                </Button>
               </div>
-              <p css={styles.date}>
-                {answer.createdAt.toLocaleDateString("de", {
-                  day: "2-digit",
-                  month: "short",
-                  year: "numeric",
-                })}
-                {(answer.createdAt.getTime() !== answer.updatedAt.getTime()) && " (bearbeitet)"}
-              </p>
-            </div>
-            <TypographyStylesProvider>
-              <div dangerouslySetInnerHTML={{ __html: answer.text }}/>
-            </TypographyStylesProvider>
-            <div
-              css={styles.replyWrapper}
-              style={{ cursor: "pointer" }}
-              onClick={(e) =>
-              {
-                e.stopPropagation();
-                toggleAnswerReplies(answerId);
-              }}>
-              <p>{replies?.length ?? 0} Antworten</p>
-              <Button<"button"> styleType={"primary"} size={"medium"}>
-                Antworten
-              </Button>
-            </div>
-          </div>
-        </div>
-      </ForumListItem>
-      {areRepliesExpanded && (
-        <div style={{ paddingLeft: 80 }}>
-          {replies?.map((reply) => (
-            <p key={reply.id}>{reply.text}</p>
-          ))}
-        </div>
-      )}
-    </Fragment>
+            )}
+            {repliesState === "add" && (
+              <RichtextEditorField
+                id={addReplyInputId}
+                value={""}
+                placeholder={"Antwort verfassen..."}
+                minHeight={100}
+                buttons={[
+                  {
+                    action: () => setRepliesState(answerId, "view"),
+                    overwriteDisabled: false,
+                    props: {
+                      disabled: false,
+                      size: "large",
+                      styleType: "secondarySimple"
+                    },
+                    text: "Abbrechen"
+                  },
+                  {
+                    action: (editor) =>
+                    {
+                      postAnswer({
+                        parent: {
+                          answerId,
+                          parentType: "answer"
+                        },
+                        text: editor?.getHTML()
+                      });
+                    },
+                    props: {
+                      disabled: false,
+                      size: "large",
+                      styleType: "primary"
+                    },
+                    text: "Antwort posten"
+                  },
+                ]}
+              />
+            )}
+            {/* <ForumListItem stylesOverrides={styles.listItemAddReplyButtonWrapper}>
+              <button type={"button"} css={styles.listItemAddReplyButton}>
+                Antwort verfassen +
+              </button>
+            </ForumListItem>*/}
+          </Fragment>
+        )}
+      </div>
+    </div>
   );
 };
 

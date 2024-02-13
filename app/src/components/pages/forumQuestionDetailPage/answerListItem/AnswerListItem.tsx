@@ -1,19 +1,10 @@
-import { Button } from "@/components/atoms/Button/Button";
 import AnswerUpvoteButton from "@/components/pages/forumOverviewPage/upvoteButton/AnswerUpvoteButton";
-import { type ForumAnswer } from "@/db/schema";
-import useContextAndErrorIfNull from "@/hooks/useContextAndErrorIfNull";
 import { useForumAnswerDetails } from "@/hooks/useForumAnswerDetails";
-import { useForumAnswers } from "@/hooks/useForumAnswers";
-import { usePostAnswer } from "@/hooks/usePostAnswer";
-import { InvalidateQueriesContext } from "@/provider/InvalidateQueriesProvider";
 import type { GetAnswersSchema } from "@/schemas/forum/getAnswers.schema";
-import { type Answer } from "@/server/api/routers/forum.router";
-import { useForumPageStore } from "@/stores/forumPage.store";
-import { api } from "@/utils/api";
 
 import { TypographyStylesProvider } from "@mantine/core";
 import Image from "next/image";
-import React, { Fragment, type FunctionComponent } from "react";
+import React, { type FunctionComponent, type ReactNode } from "react";
 
 import * as styles from "./AnswerListItem.styles";
 import genericProfileIcon from "../../../../../public/images/icons/generic-user-icon.svg";
@@ -21,24 +12,25 @@ import ForumListItem from "../../forumOverviewPage/forumListItem/ForumListItem";
 
 type Props = {
   readonly answerId: string;
+  readonly children?: ReactNode;
   readonly parent: GetAnswersSchema["parent"];
 };
 
-const AnswerListItem: FunctionComponent<Props> = ({ answerId, parent }) =>
+const AnswerListItem: FunctionComponent<Props> = ({ answerId, children, parent }) =>
 {
-  const expandAnswerReplies = useForumPageStore(s => s.expandAnswerReplies);
-  const toggleAnswerReplies = useForumPageStore(s => s.toggleAnswerReplies);
-  const closeAnswerReplies = useForumPageStore(s => s.closeAnswerReplies);
-  const areRepliesExpanded = useForumPageStore(s => s.getAreRepliesExpanded(answerId));
+  const {
+    data: answer,
+    isFetching,
+    isLoading,
+    isPending
+  } = useForumAnswerDetails({ answerId, parent });
 
-  const { data: answer } = useForumAnswerDetails({ answerId, parent });
-  const { isPending: isPostingAnswer, mutate: postAnswer } = usePostAnswer();
-  const { data: replies, isLoading: areAnswersLoading } = useForumAnswers({
-    parent: {
-      answerId,
-      parentType: "answer"
-    }
-  });
+  console.log("AnswerListItem", { isFetching, isLoading, isPending });
+
+  if(isLoading)
+  {
+    return <p>Loading...</p>;
+  }
 
   if(answer == null)
   {
@@ -46,69 +38,49 @@ const AnswerListItem: FunctionComponent<Props> = ({ answerId, parent }) =>
   }
 
   return (
-    <Fragment>
-      <ForumListItem>
-        <div
-          css={styles.wrapper}
-          style={{ cursor: "pointer" }}
-          onClick={() =>
-          {
-            postAnswer({
-              parent: {
-                answerId,
-                parentType: "answer"
-              },
-              text: "This is a test answer " + Math.random()
-            });
-          }}>
-          <div css={styles.upvoteColumn}>
-            <AnswerUpvoteButton
-              isUpvoted={answer.isUpvoted}
-              answerId={answer.id}
-              upvotesCount={answer.upvotesCount}
-            />
-          </div>
-          <div css={styles.contentColumn}>
-            <div css={styles.authorAndDateWrapper}>
-              <div css={styles.authorWrapper}>
-                <Image
-                  css={styles.profilePicture}
-                  src={genericProfileIcon.src}
-                  alt="Avatar"
-                  width={28}
-                  height={28}
-                />
-                <p css={styles.author}>{answer.author.username}</p>
-              </div>
-              <p css={styles.date}>
-                {answer.createdAt.toLocaleDateString("de", {
-                  day: "2-digit",
-                  month: "short",
-                  year: "numeric",
-                })}
-                {(answer.createdAt.getTime() !== answer.updatedAt.getTime()) && " (bearbeitet)"}
-              </p>
-            </div>
-            <TypographyStylesProvider>
-              <div dangerouslySetInnerHTML={{ __html: answer.text }}/>
-            </TypographyStylesProvider>
-            <div
-              css={styles.replyWrapper}
-              style={{ cursor: "pointer" }}
-              onClick={(e) =>
-              {
-                e.stopPropagation();
-                toggleAnswerReplies(answerId);
-              }}>
-              <p>{replies?.length ?? 0} Antworten</p>
-              <Button<"button"> styleType={"primary"} size={"medium"}>
-                Antworten
-              </Button>
-            </div>
-          </div>
+    <ForumListItem>
+      <div css={styles.wrapper}>
+        <div css={styles.upvoteColumn}>
+          <AnswerUpvoteButton
+            isUpvoted={answer.isUpvoted}
+            answerId={answer.id}
+            upvotesCount={answer.upvotesCount}
+          />
         </div>
-      </ForumListItem>
-    </Fragment>
+        <div css={styles.contentColumn}>
+          <div css={styles.authorAndDateWrapper}>
+            <div css={styles.authorWrapper}>
+              <Image
+                css={styles.profilePicture}
+                src={genericProfileIcon.src}
+                alt="Avatar"
+                width={28}
+                height={28}
+              />
+              <p css={styles.author}>{answer.author.username}</p>
+            </div>
+            <p css={styles.date}>
+              {answer.createdAt.toLocaleDateString("de", {
+                day: "2-digit",
+                hour: "2-digit",
+                minute: "2-digit",
+                month: "short",
+                year: "numeric",
+              })}{" "}Uhr
+              {(answer.createdAt.getTime() !== answer.updatedAt.getTime()) && " (bearbeitet)"}
+            </p>
+          </div>
+          <TypographyStylesProvider>
+            <div dangerouslySetInnerHTML={{ __html: answer.text }}/>
+          </TypographyStylesProvider>
+          {children && (
+            <div css={styles.childrenWrapper}>
+              {children}
+            </div>
+          )}
+        </div>
+      </div>
+    </ForumListItem>
   );
 };
 

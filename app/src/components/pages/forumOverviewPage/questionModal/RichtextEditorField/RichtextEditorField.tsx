@@ -17,27 +17,32 @@ import * as styles from "./RichtextEditorField.styles";
 
 type RichtextEditorButton = {
   readonly action: (editor: Editor) => void;
+  readonly overwriteDisabled?: boolean;
   readonly props: TButton;
   readonly text: string;
 };
 
-interface Props extends ReturnType<GetInputProps<PostQuestionSchema>> 
+interface Props extends Omit<ReturnType<GetInputProps<PostQuestionSchema>>, "onChange">
 {
   readonly buttons?: RichtextEditorButton[];
+  readonly id?: string;
   readonly label?: string;
   readonly minHeight?: number;
-  readonly onChange: (value: PostQuestionSchema["text"]) => void;
+  readonly onChange?: (value: PostQuestionSchema["text"]) => void;
+  readonly placeholder: string;
   readonly value: PostQuestionSchema["text"];
 }
 
 export const RichtextEditorField: FunctionComponent<Props> = ({
   buttons,
   error,
+  id,
   label,
   minHeight = 370,
   onBlur,
   onChange,
   onFocus,
+  placeholder,
   value
 }) =>
 {
@@ -52,17 +57,24 @@ export const RichtextEditorField: FunctionComponent<Props> = ({
       Color,
       TextAlign.configure({ types: ["heading", "paragraph"] }),
       Placeholder.configure({
-        placeholder: "Beginne hier...",
+        placeholder,
       }),
     ],
-    onUpdate: ({ editor }) => onChange(editor.getHTML()),
+    onUpdate: ({ editor }) =>
+    {
+      if(onChange == null)
+      {
+        return;
+      }
+      onChange(editor.getHTML());
+    },
     parseOptions: {
       preserveWhitespace: true,
     }
   });
 
   return (
-    <div css={styles.wrapper}>
+    <div css={styles.wrapper} id={id}>
       {label && (
         <p css={styles.label(error != null)}>
           {label}
@@ -100,22 +112,40 @@ export const RichtextEditorField: FunctionComponent<Props> = ({
               justifyContent: "flex-start",
               padding: 20,
             }}>
-              {buttons.map((button, index) => (
-                <Button<"button">
-                  key={index}
-                  {...button?.props}
-                  type="button"
-                  onClick={() =>
-                  {
-                    if(editor)
+              {buttons.map((button, index) =>
+              {
+                let isDisabled: boolean;
+
+                if(button.overwriteDisabled != null)
+                {
+                  isDisabled = button.overwriteDisabled;
+                }
+                else if(editor == null)
+                {
+                  isDisabled = true;
+                }
+                else
+                {
+                  isDisabled = button.props.disabled || editor.isEmpty;
+                }
+
+                return (
+                  <Button<"button">
+                    key={index}
+                    {...button?.props}
+                    type="button"
+                    onClick={() =>
                     {
-                      button?.action(editor);
-                    }
-                  }}
-                  disabled={button.props.disabled || editor?.isEmpty}>
-                  {button?.text}
-                </Button>
-              ))}
+                      if(editor)
+                      {
+                        button?.action(editor);
+                      }
+                    }}
+                    disabled={isDisabled}>
+                    {button?.text}
+                  </Button>
+                );
+              })}
             </div>
           )}
         </div>

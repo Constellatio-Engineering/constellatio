@@ -1,4 +1,5 @@
 import { type GetAnswersSchema } from "@/schemas/forum/getAnswers.schema";
+import { useForumPageStore } from "@/stores/forumPage.store";
 import { api } from "@/utils/api";
 
 export const useForumAnswerDetails = ({ answerId, parent }: {answerId: string; parent: GetAnswersSchema["parent"]}) =>
@@ -8,7 +9,12 @@ export const useForumAnswerDetails = ({ answerId, parent }: {answerId: string; p
   return api.forum.getAnswerById.useQuery({ answerId }, {
     initialData: () =>
     {
-      return apiContext.forum.getAnswers.getData({ parent })?.find((answer) => answer.id === answerId);
+      const existingAnswersInCache = apiContext.forum.getAnswers.getData({
+        parent,
+        sortBy: useForumPageStore.getState().answersSorting
+      });
+
+      return existingAnswersInCache?.find((answer) => answer.id === answerId);
     },
     staleTime: Infinity,
   });

@@ -6,6 +6,7 @@ import ForumListItem from "@/components/pages/forumOverviewPage/forumListItem/Fo
 import { RichtextEditorField } from "@/components/pages/forumOverviewPage/questionModal/RichtextEditorField/RichtextEditorField";
 import { TagsSkeleton } from "@/components/pages/forumOverviewPage/questionsSkeleton/QuestionsSkeleton";
 import AnswerListItem from "@/components/pages/forumQuestionDetailPage/answerListItem/AnswerListItem";
+import AnswerListItemWithReplies from "@/components/pages/forumQuestionDetailPage/answerListItemWithReplies/AnswerListItemWithReplies";
 import useBookmarks from "@/hooks/useBookmarks";
 import { useForumAnswers } from "@/hooks/useForumAnswers";
 import { useForumQuestionDetails } from "@/hooks/useForumQuestionDetails";
@@ -48,7 +49,8 @@ export const ForumQuestionDetailPage: FunctionComponent<Props> = ({ questionId }
     parent: {
       parentType: "question",
       questionId
-    }
+    },
+    sortBy: "newest"
   });
 
   const { isPending: isPostingAnswer, mutate: postAnswer } = usePostAnswer();
@@ -147,13 +149,12 @@ export const ForumQuestionDetailPage: FunctionComponent<Props> = ({ questionId }
             <RichtextEditorField
               value={""}
               minHeight={100}
+              placeholder={"Antwort verfassen..."}
               onChange={e => console.log(e)}
               buttons={[
                 {
                   action: (editor) =>
                   {
-                    console.log("click", editor?.getHTML());
-
                     postAnswer({
                       parent: {
                         parentType: "question",
@@ -173,7 +174,7 @@ export const ForumQuestionDetailPage: FunctionComponent<Props> = ({ questionId }
             />
           </ForumListItem>
           {answers?.map((answer) => (
-            <AnswerListItem
+            <AnswerListItemWithReplies
               key={answer.id}
               answerId={answer.id}
               parent={{

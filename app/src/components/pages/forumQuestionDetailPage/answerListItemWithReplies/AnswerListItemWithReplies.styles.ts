@@ -2,51 +2,11 @@ import { colors } from "@/constants/styles/colors";
 
 import { css } from "@emotion/react";
 
-export const wrapper = css`
-  display: flex;
-  gap: 24px;
-  background-color: white;
-`;
-
-export const upvoteColumn = css`
-  width: 24px;
-  min-width: 24px;
-`;
-
-export const contentColumn = css`
-  flex: 1;
-  min-width: 0;
-  display: flex;
-  flex-direction: column;
-`;
-
-export const authorAndDateWrapper = css`
-  display: flex;
-  gap: 12px;
-  align-items: center;
-  justify-content: space-between;
-  font-size: 14px;
-  margin-bottom: 24px;
-`;
-
-export const authorWrapper = css`
-  display: flex;
-  gap: 6px;
-  align-items: center;
-`;
-
-export const profilePicture = css`
-  border-radius: 100%;
-  border: 1px solid ${colors["neutrals-01"][4]};
-  padding: 3px;
-`;
-
-export const author = css`
-  font-weight: 600;
-`;
-
-export const date = css`
-  color: ${colors["neutrals-01"][7]};
+export const repliesWrapper = css`
+  padding-left: 80px;
+  > * {
+    margin-top: 12px;
+  }
 `;
 
 export const replyWrapper = css`
@@ -54,5 +14,32 @@ export const replyWrapper = css`
   gap: 24px;
   align-items: center;
   justify-content: flex-end;
-  margin-top: 16px;
+`;
+
+export const listItemAddReplyButtonWrapper = css`
+  padding: 0;
+  border: 1px solid ${colors["neutrals-01"][5]};
+`;
+
+export const toggleRepliesButton = (isExpanded: boolean) => css`
+  all: unset;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  gap: 0px;
+  color: ${colors["neutrals-01"][9]};
+  transition: opacity .2s ease;
+  svg {
+    fill: ${colors["neutrals-01"][9]};
+    transform: rotate(${isExpanded ? 180 : 0}deg) translateY(${isExpanded ? 0 : 1}px);
+  }
+  &:hover, &:active {
+    opacity: .8;
+  }
+`;
+
+export const test = css`
+  display: flex;
+  justify-content: center;
+  align-items: center;
 `;
