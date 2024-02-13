@@ -1,6 +1,7 @@
 /* eslint-disable max-lines */
 import Tag from "@/components/atoms/tag/Tag";
 import ContentWrapper from "@/components/helpers/contentWrapper/ContentWrapper";
+import { ExpandIcon } from "@/components/Icons/Expand";
 import BookmarkButton from "@/components/organisms/caseBlock/BookmarkButton/BookmarkButton";
 import EditQuestionModal from "@/components/pages/forumOverviewPage/editQuestionModal/EditQuestionModal";
 import ForumListItem from "@/components/pages/forumOverviewPage/forumListItem/ForumListItem";
@@ -15,9 +16,11 @@ import { useLegalFieldsAndTopics } from "@/hooks/useLegalFieldsAndTopics";
 import { usePostAnswer } from "@/hooks/usePostAnswer";
 import useUserDetails from "@/hooks/useUserDetails";
 import { api } from "@/utils/api";
+import { appPaths } from "@/utils/paths";
 
 import { Title, TypographyStylesProvider } from "@mantine/core";
 import Image from "next/image";
+import Link from "next/link";
 import React, { Fragment, type FunctionComponent } from "react";
 
 import * as styles from "./ForumQuestionDetailPage.styles";
@@ -83,6 +86,10 @@ export const ForumQuestionDetailPage: FunctionComponent<Props> = ({ questionId }
       <EditQuestionModal {...question}/>
       <div css={styles.questionWrapper}>
         <ContentWrapper stylesOverrides={styles.contentWrapper}>
+          <Link href={appPaths.forum} css={styles.backToForumLink}>
+            <ExpandIcon size={20}/>
+            <span>Zurück zum Forum</span>
+          </Link>
           <ForumListItem stylesOverrides={styles.forumListItem}>
             <div css={styles.yellowTopBar}/>
             <div css={styles.questionContentWrapper}>

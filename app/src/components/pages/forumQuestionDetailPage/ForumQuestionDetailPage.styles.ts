@@ -2,8 +2,24 @@ import { colors } from "@/constants/styles/colors";
 
 import { css } from "@emotion/react";
 
+const questionOffset = 90;
+
 export const questionWrapper = css`
   background-color: ${colors["cc-forum"][2]};
+`;
+
+export const backToForumLink = css`
+  position: relative;
+  top: ${questionOffset - 20}px;
+  display: flex;
+  align-items: center;
+  span {
+    color: black;
+    font-weight: 500;
+  }
+  svg {
+    transform: rotate(90deg);
+  }
 `;
 
 export const contentWrapper = css`
@@ -11,7 +27,7 @@ export const contentWrapper = css`
 `;
 
 export const forumListItem = css`
-  transform: translateY(100px);
+  transform: translateY(${questionOffset}px);
   position: relative;
   box-shadow: 0 8px 44px rgba(0, 0, 0, 0.04);
   padding: 24px;
@@ -111,7 +127,7 @@ export const answersCountWrapper = css`
 `;
 
 export const answersWrapper = css`
-  padding-top: 160px;
+  padding-top: ${questionOffset + 60}px;
   display: flex;
   flex-direction: column;
   gap: 24px;
