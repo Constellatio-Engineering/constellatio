@@ -155,7 +155,7 @@ export const ForumQuestionDetailPage: FunctionComponent<Props> = ({ questionId }
             />
           ))}
           <div css={styles.test}/>
-          <ForumListItem stylesOverrides={styles.postAnswerFormWrapper}>
+          <ForumListItem contentWrapperStylesOverrides={styles.postAnswerFormWrapper}>
             <RichtextEditorField
               value={""}
               toolbarLeftContent={userDetails && (

@@ -14,10 +14,16 @@ import ForumListItem from "../../forumOverviewPage/forumListItem/ForumListItem";
 type Props = {
   readonly answerId: string;
   readonly children?: ReactNode;
+  readonly isMarkedAsCorrect?: boolean;
   readonly parent: GetAnswersSchema["parent"];
 };
 
-const AnswerListItem: FunctionComponent<Props> = ({ answerId, children, parent }) =>
+const AnswerListItem: FunctionComponent<Props> = ({
+  answerId,
+  children,
+  isMarkedAsCorrect,
+  parent
+}) =>
 {
   const {
     data: answer,
@@ -39,7 +45,7 @@ const AnswerListItem: FunctionComponent<Props> = ({ answerId, children, parent }
   }
 
   return (
-    <ForumListItem>
+    <ForumListItem isMarkedAsCorrect={isMarkedAsCorrect}>
       <div css={styles.wrapper}>
         <div css={styles.upvoteColumn}>
           <AnswerUpvoteButton

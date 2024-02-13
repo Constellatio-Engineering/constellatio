@@ -71,6 +71,7 @@ const AnswerListItemWithReplies: FunctionComponent<Props> = ({ answerId, parent 
   return (
     <div>
       <AnswerListItem
+        isMarkedAsCorrect={(replies?.length ?? 0) > 0}
         answerId={answerId}
         parent={parent}>
         <div css={styles.replyWrapper}>

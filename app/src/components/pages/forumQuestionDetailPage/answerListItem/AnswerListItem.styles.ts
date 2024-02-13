@@ -5,7 +5,6 @@ import { css } from "@emotion/react";
 export const wrapper = css`
   display: flex;
   gap: 24px;
-  background-color: white;
 `;
 
 export const upvoteColumn = css`
@@ -47,6 +46,7 @@ export const author = css`
 
 export const date = css`
   color: ${colors["neutrals-01"][7]};
+  font-weight: 500;
 `;
 
 export const childrenWrapper = css`

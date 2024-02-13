@@ -118,7 +118,7 @@ export const answersWrapper = css`
 `;
 
 export const postAnswerFormWrapper = css`
-  padding: 0;
+  padding: 0 !important;
 `;
 
 export const answerWrapper = css`
