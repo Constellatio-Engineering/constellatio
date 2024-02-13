@@ -7,11 +7,13 @@ import { RichtextEditorField } from "@/components/pages/forumOverviewPage/questi
 import { TagsSkeleton } from "@/components/pages/forumOverviewPage/questionsSkeleton/QuestionsSkeleton";
 import AnswerListItem from "@/components/pages/forumQuestionDetailPage/answerListItem/AnswerListItem";
 import AnswerListItemWithReplies from "@/components/pages/forumQuestionDetailPage/answerListItemWithReplies/AnswerListItemWithReplies";
+import ForumItemAuthor from "@/components/pages/forumQuestionDetailPage/forumItemAuthor/ForumItemAuthor";
 import useBookmarks from "@/hooks/useBookmarks";
 import { useForumAnswers } from "@/hooks/useForumAnswers";
 import { useForumQuestionDetails } from "@/hooks/useForumQuestionDetails";
 import { useLegalFieldsAndTopics } from "@/hooks/useLegalFieldsAndTopics";
 import { usePostAnswer } from "@/hooks/usePostAnswer";
+import useUserDetails from "@/hooks/useUserDetails";
 import { api } from "@/utils/api";
 
 import { Title, TypographyStylesProvider } from "@mantine/core";
@@ -30,6 +32,7 @@ export const ForumQuestionDetailPage: FunctionComponent<Props> = ({ questionId }
 {
   const apiContext = api.useUtils();
   const { bookmarks: questionBookmarks, isLoading: isGetQuestionBookmarksLoading } = useBookmarks("forumQuestion", { enabled: true });
+  const { userDetails } = useUserDetails();
 
   const {
     allLegalFields,
@@ -113,16 +116,11 @@ export const ForumQuestionDetailPage: FunctionComponent<Props> = ({ questionId }
                     </div>
                   )}
                   <div css={styles.authorAndDateWrapper}>
-                    <div css={styles.authorWrapper}>
-                      <Image
-                        css={styles.profilePicture}
-                        src={genericProfileIcon.src}
-                        alt="Avatar"
-                        width={28}
-                        height={28}
-                      />
-                      <p css={styles.author}>{question.author.username}</p>
-                    </div>
+                    <ForumItemAuthor
+                      username={question.author.username}
+                      userId={question.author.id}
+                      profilePicture={undefined}
+                    />
                     <div css={styles.authorAndDateSeparator}/>
                     <p css={styles.date}>
                       {question.createdAt.toLocaleDateString("de", {
@@ -145,9 +143,27 @@ export const ForumQuestionDetailPage: FunctionComponent<Props> = ({ questionId }
       <ContentWrapper stylesOverrides={styles.contentWrapper}>
         <div css={styles.answersWrapper}>
           <p>Sortieren nach</p>
+          {answers?.map((answer) => (
+            <AnswerListItemWithReplies
+              key={answer.id}
+              answerId={answer.id}
+              parent={{
+                parentType: "question",
+                questionId,
+              }}
+            />
+          ))}
+          <div css={styles.test}/>
           <ForumListItem stylesOverrides={styles.postAnswerFormWrapper}>
             <RichtextEditorField
               value={""}
+              toolbarLeftContent={userDetails && (
+                <ForumItemAuthor
+                  username={userDetails.displayName}
+                  userId={userDetails.id}
+                  profilePicture={null}
+                />
+              )}
               minHeight={100}
               placeholder={"Antwort verfassen..."}
               onChange={e => console.log(e)}
@@ -173,16 +189,6 @@ export const ForumQuestionDetailPage: FunctionComponent<Props> = ({ questionId }
               ]}
             />
           </ForumListItem>
-          {answers?.map((answer) => (
-            <AnswerListItemWithReplies
-              key={answer.id}
-              answerId={answer.id}
-              parent={{
-                parentType: "question",
-                questionId,
-              }}
-            />
-          ))}
         </div>
       </ContentWrapper>
     </Fragment>

@@ -109,6 +109,7 @@ export const getQuestions = async (params: GetQuestionsParams) => // eslint-disa
     .with(countUpvotesSubquery)
     .select({
       author: {
+        id: users.id,
         username: users.displayName,
       },
       createdAt: countUpvotesSubquery.createdAt,
@@ -209,6 +210,7 @@ export const getAnswers = async (params: GetAnswersParams) => // eslint-disable-
     .with(countUpvotesSubquery)
     .select({
       author: {
+        id: users.id,
         username: users.displayName,
       },
       createdAt: countUpvotesSubquery.createdAt,

@@ -76,22 +76,6 @@ export const authorAndDateWrapper = css`
   margin: 40px 0;
 `;
 
-export const authorWrapper = css`
-  display: flex;
-  gap: 6px;
-  align-items: center;
-`;
-
-export const profilePicture = css`
-  border-radius: 100%;
-  border: 1px solid ${colors["neutrals-01"][4]};
-  padding: 3px;
-`;
-
-export const author = css`
-  font-weight: 600;
-`;
-
 export const authorAndDateSeparator = css`
   height: 20px;
   width: 1px;
@@ -138,4 +122,11 @@ export const postAnswerFormWrapper = css`
 
 export const answerWrapper = css`
   
+`;
+
+export const test = css`
+  width: 80%;
+  background-color: #d1d1d1;
+  height: 1px;
+  margin: 20px auto;
 `;

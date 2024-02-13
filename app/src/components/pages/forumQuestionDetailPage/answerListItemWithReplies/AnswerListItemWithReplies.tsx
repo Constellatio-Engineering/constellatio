@@ -2,9 +2,11 @@ import { Button } from "@/components/atoms/Button/Button";
 import { ExpandIcon } from "@/components/Icons/Expand";
 import { RichtextEditorField } from "@/components/pages/forumOverviewPage/questionModal/RichtextEditorField/RichtextEditorField";
 import AnswerListItem from "@/components/pages/forumQuestionDetailPage/answerListItem/AnswerListItem";
+import ForumItemAuthor from "@/components/pages/forumQuestionDetailPage/forumItemAuthor/ForumItemAuthor";
 import { useForumAnswerDetails } from "@/hooks/useForumAnswerDetails";
 import { useForumAnswers } from "@/hooks/useForumAnswers";
 import { usePostAnswer } from "@/hooks/usePostAnswer";
+import useUserDetails from "@/hooks/useUserDetails";
 import type { GetAnswersSchema } from "@/schemas/forum/getAnswers.schema";
 import { useForumPageStore } from "@/stores/forumPage.store";
 
@@ -25,7 +27,7 @@ const AnswerListItemWithReplies: FunctionComponent<Props> = ({ answerId, parent 
   const repliesState = useForumPageStore(s => s.getRepliesState(answerId));
   const areRepliesExpanded = useForumPageStore(s => s.getAreRepliesExpanded(answerId));
   const addReplyInputId = useId();
-
+  const { userDetails } = useUserDetails();
   const { isPending: isPostingAnswer, mutate: postAnswer } = usePostAnswer();
   const { data: replies, isLoading: areAnswersLoading } = useForumAnswers({
     parent: {
@@ -105,10 +107,10 @@ const AnswerListItemWithReplies: FunctionComponent<Props> = ({ answerId, parent 
             {repliesState === "view" && (
               <div css={styles.test}>
                 <Button<"button">
-                  styleType={"secondarySimple"}
+                  styleType={"primary"}
                   size={"large"}
                   onClick={() => setRepliesState(answerId, "add")}>
-                  Antworten verfassen +
+                  Antworten
                 </Button>
               </div>
             )}
@@ -118,6 +120,13 @@ const AnswerListItemWithReplies: FunctionComponent<Props> = ({ answerId, parent 
                 value={""}
                 placeholder={"Antwort verfassen..."}
                 minHeight={100}
+                toolbarLeftContent={userDetails && (
+                  <ForumItemAuthor
+                    username={userDetails.displayName}
+                    userId={userDetails.id}
+                    profilePicture={null}
+                  />
+                )}
                 buttons={[
                   {
                     action: () => setRepliesState(answerId, "view"),

@@ -30,6 +30,7 @@ interface Props extends Omit<ReturnType<GetInputProps<PostQuestionSchema>>, "onC
   readonly minHeight?: number;
   readonly onChange?: (value: PostQuestionSchema["text"]) => void;
   readonly placeholder: string;
+  readonly toolbarLeftContent?: React.ReactNode;
   readonly value: PostQuestionSchema["text"];
 }
 
@@ -43,6 +44,7 @@ export const RichtextEditorField: FunctionComponent<Props> = ({
   onChange,
   onFocus,
   placeholder,
+  toolbarLeftContent,
   value
 }) =>
 {
@@ -86,21 +88,28 @@ export const RichtextEditorField: FunctionComponent<Props> = ({
         onFocus={onFocus}
         styles={styles.richtextEditorFieldStyles({ hasError: error != null, minHeight })}>
         <RichTextEditor.Toolbar>
-          <RichTextEditor.ControlsGroup>
-            <RichTextEditor.Bold/>
-            <RichTextEditor.Italic/>
-            <RichTextEditor.Underline/>
-            <RichTextEditor.Strikethrough/>
-          </RichTextEditor.ControlsGroup>
-          <RichTextEditor.ControlsGroup>
-            <RichTextEditor.Link/>
-            <RichTextEditor.Unlink/>
-          </RichTextEditor.ControlsGroup>
-          <RichTextEditor.ControlsGroup>
-            <RichTextEditor.Blockquote/>
-            <RichTextEditor.BulletList/>
-            <RichTextEditor.OrderedList/>
-          </RichTextEditor.ControlsGroup>
+          <div style={{ display: "flex", justifyContent: "space-between", width: "100%" }}>
+            <div>
+              {toolbarLeftContent}
+            </div>
+            <div style={{ display: "flex", gap: "1em" }}>
+              <RichTextEditor.ControlsGroup>
+                <RichTextEditor.Bold/>
+                <RichTextEditor.Italic/>
+                <RichTextEditor.Underline/>
+                <RichTextEditor.Strikethrough/>
+              </RichTextEditor.ControlsGroup>
+              <RichTextEditor.ControlsGroup>
+                <RichTextEditor.Link/>
+                <RichTextEditor.Unlink/>
+              </RichTextEditor.ControlsGroup>
+              <RichTextEditor.ControlsGroup>
+                <RichTextEditor.Blockquote/>
+                <RichTextEditor.BulletList/>
+                <RichTextEditor.OrderedList/>
+              </RichTextEditor.ControlsGroup>
+            </div>
+          </div>
         </RichTextEditor.Toolbar>
         <div css={styles.contentWrapper}>
           <RichTextEditor.Content/>

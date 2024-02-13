@@ -1,4 +1,5 @@
 import AnswerUpvoteButton from "@/components/pages/forumOverviewPage/upvoteButton/AnswerUpvoteButton";
+import ForumItemAuthor from "@/components/pages/forumQuestionDetailPage/forumItemAuthor/ForumItemAuthor";
 import { useForumAnswerDetails } from "@/hooks/useForumAnswerDetails";
 import type { GetAnswersSchema } from "@/schemas/forum/getAnswers.schema";
 
@@ -49,16 +50,11 @@ const AnswerListItem: FunctionComponent<Props> = ({ answerId, children, parent }
         </div>
         <div css={styles.contentColumn}>
           <div css={styles.authorAndDateWrapper}>
-            <div css={styles.authorWrapper}>
-              <Image
-                css={styles.profilePicture}
-                src={genericProfileIcon.src}
-                alt="Avatar"
-                width={28}
-                height={28}
-              />
-              <p css={styles.author}>{answer.author.username}</p>
-            </div>
+            <ForumItemAuthor
+              username={answer.author.username}
+              userId={answer.author.id}
+              profilePicture={undefined}
+            />
             <p css={styles.date}>
               {answer.createdAt.toLocaleDateString("de", {
                 day: "2-digit",
