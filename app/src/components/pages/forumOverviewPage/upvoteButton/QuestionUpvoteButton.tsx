@@ -12,12 +12,18 @@ type MutationContext = {
 };
 
 type Props = {
+  readonly authorId: string;
   readonly isUpvoted: boolean;
   readonly questionId: string;
   readonly upvotesCount: number;
 };
 
-export const QuestionUpvoteButton: FunctionComponent<Props> = ({ isUpvoted, questionId, upvotesCount }) =>
+export const QuestionUpvoteButton: FunctionComponent<Props> = ({
+  authorId,
+  isUpvoted,
+  questionId,
+  upvotesCount,
+}) =>
 {
   const apiContext = api.useUtils();
 
@@ -98,6 +104,7 @@ export const QuestionUpvoteButton: FunctionComponent<Props> = ({ isUpvoted, ques
   return (
     <UpvoteButton
       onClick={onClick}
+      authorId={authorId}
       isUpvoted={isUpvoted}
       upvotesCount={upvotesCount}
       isLoading={isUpvoteQuestionLoading || isRemoveUpvoteLoading}

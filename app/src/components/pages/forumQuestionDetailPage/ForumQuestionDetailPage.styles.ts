@@ -15,6 +15,7 @@ export const forumListItem = css`
   position: relative;
   box-shadow: 0 8px 44px rgba(0, 0, 0, 0.04);
   padding: 24px;
+  border: none;
 `;
 
 export const yellowTopBar = css`

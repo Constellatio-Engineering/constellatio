@@ -20,7 +20,7 @@ type CreateQuestion = {
 
 type ModalState = ModalClosed | EditQuestion | CreateQuestion;
 
-type RepliesState = "closed" | "view" | "add";
+type RepliesState = "closed" | "view";
 
 type AnswersWithRepliesState = {
   [answerId: string]: RepliesState;

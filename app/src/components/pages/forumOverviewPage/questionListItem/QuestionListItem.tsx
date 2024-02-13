@@ -51,6 +51,7 @@ const QuestionListItem: FunctionComponent<Props> = ({ questionId }) =>
       <div css={styles.questionContentWrapper} style={{ cursor: "pointer" }} onClick={() => setEditQuestionState(questionId)}>
         <div css={styles.upvoteColumn}>
           <QuestionUpvoteButton
+            authorId={question.author.id}
             isUpvoted={question.isUpvoted}
             questionId={question.id}
             upvotesCount={question.upvotesCount}

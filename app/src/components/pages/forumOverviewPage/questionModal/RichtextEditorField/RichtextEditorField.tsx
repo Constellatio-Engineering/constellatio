@@ -20,7 +20,7 @@ type RichtextEditorButton = {
   readonly overwriteDisabled?: boolean;
   readonly props: TButton;
   readonly text: string;
-};
+} | null;
 
 interface Props extends Omit<ReturnType<GetInputProps<PostQuestionSchema>>, "onChange">
 {
@@ -121,7 +121,7 @@ export const RichtextEditorField: FunctionComponent<Props> = ({
               justifyContent: "flex-start",
               padding: 20,
             }}>
-              {buttons.map((button, index) =>
+              {buttons.filter(Boolean).map((button, index) =>
               {
                 let isDisabled: boolean;
 

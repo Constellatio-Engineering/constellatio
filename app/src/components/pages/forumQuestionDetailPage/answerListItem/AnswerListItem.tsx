@@ -43,6 +43,7 @@ const AnswerListItem: FunctionComponent<Props> = ({ answerId, children, parent }
       <div css={styles.wrapper}>
         <div css={styles.upvoteColumn}>
           <AnswerUpvoteButton
+            authorId={answer.author.id}
             isUpvoted={answer.isUpvoted}
             answerId={answer.id}
             upvotesCount={answer.upvotesCount}

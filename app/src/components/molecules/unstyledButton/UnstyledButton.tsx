@@ -1,20 +1,24 @@
-import React, { type ComponentProps, type FunctionComponent } from "react";
+import React, { type ComponentProps, forwardRef } from "react";
 
 import * as styles from "./UnstyledButton.styles";
 
-interface Props extends ComponentProps<"button"> 
+interface Props extends ComponentProps<"button">
 {
   readonly children: React.ReactNode;
 }
 
-export const UnstyledButton: FunctionComponent<Props> = ({
+export const UnstyledButton = forwardRef<HTMLButtonElement, Props>(({
   children,
   ...props
-}) =>
+}, ref) =>
 {
   return (
-    <button css={styles.wrapper} type="button" {...props}>
+    <button
+      ref={ref}
+      css={styles.wrapper}
+      type="button"
+      {...props}>
       {children}
     </button>
   );
-};
+});

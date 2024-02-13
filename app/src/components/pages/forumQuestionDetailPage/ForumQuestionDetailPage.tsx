@@ -1,3 +1,4 @@
+/* eslint-disable max-lines */
 import Tag from "@/components/atoms/tag/Tag";
 import ContentWrapper from "@/components/helpers/contentWrapper/ContentWrapper";
 import BookmarkButton from "@/components/organisms/caseBlock/BookmarkButton/BookmarkButton";
@@ -5,7 +6,6 @@ import EditQuestionModal from "@/components/pages/forumOverviewPage/editQuestion
 import ForumListItem from "@/components/pages/forumOverviewPage/forumListItem/ForumListItem";
 import { RichtextEditorField } from "@/components/pages/forumOverviewPage/questionModal/RichtextEditorField/RichtextEditorField";
 import { TagsSkeleton } from "@/components/pages/forumOverviewPage/questionsSkeleton/QuestionsSkeleton";
-import AnswerListItem from "@/components/pages/forumQuestionDetailPage/answerListItem/AnswerListItem";
 import AnswerListItemWithReplies from "@/components/pages/forumQuestionDetailPage/answerListItemWithReplies/AnswerListItemWithReplies";
 import ForumItemAuthor from "@/components/pages/forumQuestionDetailPage/forumItemAuthor/ForumItemAuthor";
 import useBookmarks from "@/hooks/useBookmarks";
@@ -56,7 +56,7 @@ export const ForumQuestionDetailPage: FunctionComponent<Props> = ({ questionId }
     sortBy: "newest"
   });
 
-  const { isPending: isPostingAnswer, mutate: postAnswer } = usePostAnswer();
+  const { isPending: isPostingAnswer, mutateAsync: postAnswer } = usePostAnswer();
 
   console.log("---------");
   console.log("questionId", questionId);
@@ -88,6 +88,7 @@ export const ForumQuestionDetailPage: FunctionComponent<Props> = ({ questionId }
             <div css={styles.questionContentWrapper}>
               <div css={styles.upvoteColumn}>
                 <QuestionUpvoteButton
+                  authorId={question.author.id}
                   isUpvoted={question.isUpvoted}
                   questionId={question.id}
                   upvotesCount={question.upvotesCount}
@@ -169,15 +170,24 @@ export const ForumQuestionDetailPage: FunctionComponent<Props> = ({ questionId }
               onChange={e => console.log(e)}
               buttons={[
                 {
-                  action: (editor) =>
+                  action: async (editor) =>
                   {
-                    postAnswer({
-                      parent: {
-                        parentType: "question",
-                        questionId
-                      },
-                      text: editor?.getHTML()
-                    });
+                    try
+                    {
+                      await postAnswer({
+                        parent: {
+                          parentType: "question",
+                          questionId
+                        },
+                        text: editor?.getHTML()
+                      });
+                    }
+                    catch (e: unknown)
+                    {
+                      return;
+                    }
+
+                    editor.commands.clearContent();
                   },
                   props: {
                     disabled: false,

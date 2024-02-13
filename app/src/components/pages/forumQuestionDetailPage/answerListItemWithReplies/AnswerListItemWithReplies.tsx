@@ -28,7 +28,7 @@ const AnswerListItemWithReplies: FunctionComponent<Props> = ({ answerId, parent 
   const areRepliesExpanded = useForumPageStore(s => s.getAreRepliesExpanded(answerId));
   const addReplyInputId = useId();
   const { userDetails } = useUserDetails();
-  const { isPending: isPostingAnswer, mutate: postAnswer } = usePostAnswer();
+  const { isPending: isPostingAnswer, mutateAsync: postAnswer } = usePostAnswer();
   const { data: replies, isLoading: areAnswersLoading } = useForumAnswers({
     parent: {
       answerId,
@@ -44,7 +44,7 @@ const AnswerListItemWithReplies: FunctionComponent<Props> = ({ answerId, parent 
     flushSync(() =>
     {
       // flushSync is used to ensure that the input is rendered before it is scrolled to
-      setRepliesState(answerId, "add");
+      setRepliesState(answerId, "view");
     });
 
     const inputWrapper = document.getElementById(addReplyInputId);
@@ -104,66 +104,58 @@ const AnswerListItemWithReplies: FunctionComponent<Props> = ({ answerId, parent 
                 }}
               />
             ))}
-            {repliesState === "view" && (
-              <div css={styles.test}>
-                <Button<"button">
-                  styleType={"primary"}
-                  size={"large"}
-                  onClick={() => setRepliesState(answerId, "add")}>
-                  Antworten
-                </Button>
-              </div>
-            )}
-            {repliesState === "add" && (
-              <RichtextEditorField
-                id={addReplyInputId}
-                value={""}
-                placeholder={"Antwort verfassen..."}
-                minHeight={100}
-                toolbarLeftContent={userDetails && (
-                  <ForumItemAuthor
-                    username={userDetails.displayName}
-                    userId={userDetails.id}
-                    profilePicture={null}
-                  />
-                )}
-                buttons={[
-                  {
-                    action: () => setRepliesState(answerId, "view"),
-                    overwriteDisabled: false,
-                    props: {
-                      disabled: false,
-                      size: "large",
-                      styleType: "secondarySimple"
-                    },
-                    text: "Abbrechen"
+            <RichtextEditorField
+              id={addReplyInputId}
+              value={""}
+              placeholder={"Antwort verfassen..."}
+              minHeight={100}
+              toolbarLeftContent={userDetails && (
+                <ForumItemAuthor
+                  username={userDetails.displayName}
+                  userId={userDetails.id}
+                  profilePicture={null}
+                />
+              )}
+              buttons={[
+                replies?.length === 0 ? {
+                  action: () => setRepliesState(answerId, "closed"),
+                  overwriteDisabled: false,
+                  props: {
+                    disabled: false,
+                    size: "large",
+                    styleType: "secondarySimple"
                   },
+                  text: "Abbrechen"
+                } : null,
+                {
+                  action: async (editor) =>
                   {
-                    action: (editor) =>
+                    try
                     {
-                      postAnswer({
+                      await postAnswer({
                         parent: {
                           answerId,
                           parentType: "answer"
                         },
                         text: editor?.getHTML()
                       });
-                    },
-                    props: {
-                      disabled: false,
-                      size: "large",
-                      styleType: "primary"
-                    },
-                    text: "Antwort posten"
+                    }
+                    catch (e: unknown)
+                    {
+                      return;
+                    }
+
+                    editor.commands.clearContent();
                   },
-                ]}
-              />
-            )}
-            {/* <ForumListItem stylesOverrides={styles.listItemAddReplyButtonWrapper}>
-              <button type={"button"} css={styles.listItemAddReplyButton}>
-                Antwort verfassen +
-              </button>
-            </ForumListItem>*/}
+                  props: {
+                    disabled: false,
+                    size: "large",
+                    styleType: "primary"
+                  },
+                  text: "Antwort posten"
+                },
+              ]}
+            />
           </Fragment>
         )}
       </div>
