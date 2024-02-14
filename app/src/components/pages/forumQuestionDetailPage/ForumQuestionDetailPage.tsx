@@ -1,13 +1,20 @@
 /* eslint-disable max-lines */
+import { Button } from "@/components/atoms/Button/Button";
+import IconButton from "@/components/atoms/iconButton/IconButton";
 import Tag from "@/components/atoms/tag/Tag";
 import ContentWrapper from "@/components/helpers/contentWrapper/ContentWrapper";
+import { Check } from "@/components/Icons/Check";
+import { Edit } from "@/components/Icons/Edit";
 import { ExpandIcon } from "@/components/Icons/Expand";
+import { Trash } from "@/components/Icons/Trash";
+import IconAndTextButton from "@/components/molecules/iconAndTextButton/IconAndTextButton";
 import BookmarkButton from "@/components/organisms/caseBlock/BookmarkButton/BookmarkButton";
 import EditQuestionModal from "@/components/pages/forumOverviewPage/editQuestionModal/EditQuestionModal";
 import ForumListItem from "@/components/pages/forumOverviewPage/forumListItem/ForumListItem";
 import { RichtextEditorField } from "@/components/pages/forumOverviewPage/questionModal/RichtextEditorField/RichtextEditorField";
 import { TagsSkeleton } from "@/components/pages/forumOverviewPage/questionsSkeleton/QuestionsSkeleton";
 import AnswerListItemWithReplies from "@/components/pages/forumQuestionDetailPage/answerListItemWithReplies/AnswerListItemWithReplies";
+import EditAndDeleteButtons from "@/components/pages/forumQuestionDetailPage/editAndDeleteButtons/EditAndDeleteButtons";
 import ForumItemAuthor from "@/components/pages/forumQuestionDetailPage/forumItemAuthor/ForumItemAuthor";
 import useBookmarks from "@/hooks/useBookmarks";
 import { useForumAnswers } from "@/hooks/useForumAnswers";
@@ -15,10 +22,11 @@ import { useForumQuestionDetails } from "@/hooks/useForumQuestionDetails";
 import { useLegalFieldsAndTopics } from "@/hooks/useLegalFieldsAndTopics";
 import { usePostAnswer } from "@/hooks/usePostAnswer";
 import useUserDetails from "@/hooks/useUserDetails";
+import { useForumPageStore } from "@/stores/forumPage.store";
 import { api } from "@/utils/api";
 import { appPaths } from "@/utils/paths";
 
-import { Title, TypographyStylesProvider } from "@mantine/core";
+import { Title, TypographyStylesProvider, UnstyledButton } from "@mantine/core";
 import Image from "next/image";
 import Link from "next/link";
 import React, { Fragment, type FunctionComponent } from "react";
@@ -36,6 +44,7 @@ export const ForumQuestionDetailPage: FunctionComponent<Props> = ({ questionId }
   const apiContext = api.useUtils();
   const { bookmarks: questionBookmarks, isLoading: isGetQuestionBookmarksLoading } = useBookmarks("forumQuestion", { enabled: true });
   const { userDetails } = useUserDetails();
+  const setEditQuestionState = useForumPageStore((state) => state.setEditQuestionState);
 
   const {
     allLegalFields,
@@ -77,6 +86,7 @@ export const ForumQuestionDetailPage: FunctionComponent<Props> = ({ questionId }
     return <p>Question not found</p>;
   }
 
+  const isCurrentUserAuthor = userDetails?.id === question.author.id;
   const legalField = allLegalFields.find((field) => field.id === question.legalFieldId);
   const subfield = allSubfields.find((subfield) => subfield.id === question.subfieldId);
   const topic = allTopics.find((topic) => topic.id === question.topicId);
@@ -142,6 +152,11 @@ export const ForumQuestionDetailPage: FunctionComponent<Props> = ({ questionId }
                   <TypographyStylesProvider>
                     <div css={styles.contentWrapper} dangerouslySetInnerHTML={{ __html: question.text }}/>
                   </TypographyStylesProvider>
+                  <EditAndDeleteButtons
+                    isCurrentUserAuthor={isCurrentUserAuthor}
+                    onDelete={() => window.alert("Delete")}
+                    onEdit={() => setEditQuestionState(questionId)}
+                  />
                 </div>
               </div>
             </div>

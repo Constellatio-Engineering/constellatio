@@ -61,7 +61,11 @@ const DashboardLastEditedBlock: FunctionComponent = () =>
           {(!isLastViewedArticlesLoading && lastViewedArticles.length === 0) ? (
             <p>Du hast bisher noch keine Artikel angesehen.</p>
           ) : (
-            <FavoritesExcerpt favorites={lastViewedArticles} shouldSortByCreatedAt={false} isLoading={isLastViewedArticlesLoading}/>
+            <FavoritesExcerpt
+              favorites={lastViewedArticles}
+              shouldSortByCreatedAt={false}
+              isLoading={isLastViewedArticlesLoading}
+            />
           )}
         </div>
       </div>

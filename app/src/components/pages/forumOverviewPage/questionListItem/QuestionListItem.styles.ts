@@ -35,6 +35,10 @@ export const titleAndCheckmarkWrapper = css`
   overflow: hidden;
 `;
 
+export const titleLink = css`
+  color: inherit;
+`;
+
 export const title = css`
   white-space: nowrap;
   word-break: keep-all;

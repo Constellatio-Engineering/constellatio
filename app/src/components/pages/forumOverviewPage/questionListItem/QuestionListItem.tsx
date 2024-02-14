@@ -7,11 +7,12 @@ import { TagsSkeleton } from "@/components/pages/forumOverviewPage/questionsSkel
 import useBookmarks from "@/hooks/useBookmarks";
 import { useForumQuestionDetails } from "@/hooks/useForumQuestionDetails";
 import { useLegalFieldsAndTopics } from "@/hooks/useLegalFieldsAndTopics";
-import { useForumPageStore } from "@/stores/forumPage.store";
+import { getForumQuestionUrl } from "@/utils/paths";
 import { removeHtmlTagsFromString } from "@/utils/utils";
 
 import { Title } from "@mantine/core";
 import Image from "next/image";
+import Link from "next/link";
 import React, { Fragment, type FunctionComponent } from "react";
 
 import * as styles from "./QuestionListItem.styles";
@@ -34,8 +35,6 @@ const QuestionListItem: FunctionComponent<Props> = ({ questionId }) =>
     isLoading: areLegalFieldsAndTopicsLoading
   } = useLegalFieldsAndTopics();
 
-  const setEditQuestionState = useForumPageStore((state) => state.setEditQuestionState);
-
   if(question == null)
   {
     return <p>Question not found</p>;
@@ -48,7 +47,7 @@ const QuestionListItem: FunctionComponent<Props> = ({ questionId }) =>
   return (
     <Fragment>
       <EditQuestionModal {...question}/>
-      <div css={styles.questionContentWrapper} style={{ cursor: "pointer" }} onClick={() => setEditQuestionState(questionId)}>
+      <div css={styles.questionContentWrapper}>
         <div css={styles.upvoteColumn}>
           <QuestionUpvoteButton
             authorId={question.author.id}
@@ -60,7 +59,9 @@ const QuestionListItem: FunctionComponent<Props> = ({ questionId }) =>
         <div css={styles.contentColumn}>
           <div css={styles.titleWrapper}>
             <div css={styles.titleAndCheckmarkWrapper}>
-              <Title order={2} css={styles.title}>{question.title}</Title>
+              <Link href={getForumQuestionUrl(question)} css={styles.titleLink}>
+                <Title order={2} css={styles.title}>{question.title}</Title>
+              </Link>
               <div css={styles.checkmark}>
                 <Check/>
               </div>

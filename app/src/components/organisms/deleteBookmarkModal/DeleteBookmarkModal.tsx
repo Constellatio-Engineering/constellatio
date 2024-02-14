@@ -27,14 +27,22 @@ const DeleteBookmarkModal: FunctionComponent<DeleteBookmarkModalProps> = ({ onCl
           size="large"
           style={{ marginRight: "12px" }}
           styleType="secondarySimple"
-          onClick={onClose}>
+          onClick={(e) =>
+          {
+            e.stopPropagation();
+            onClose();
+          }}>
           Nein, behalten
         </Button>
         <Button<"button">
           type="button"
           size="large"
           styleType="primary"
-          onClick={onSubmit}>
+          onClick={(e) =>
+          {
+            e.stopPropagation();
+            onSubmit();
+          }}>
           Ja, entfernen
         </Button>
       </div>

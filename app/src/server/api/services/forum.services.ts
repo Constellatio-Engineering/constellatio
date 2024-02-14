@@ -117,6 +117,7 @@ export const getQuestions = async (params: GetQuestionsParams) => // eslint-disa
       index: countUpvotesSubquery.index,
       isUpvoted: countUpvotesSubquery.isUpvoted,
       legalFieldId: countUpvotesSubquery.legalFieldId,
+      slug: countUpvotesSubquery.slug,
       subfieldId: countUpvotesSubquery.subfieldId,
       text: countUpvotesSubquery.text,
       title: countUpvotesSubquery.title,

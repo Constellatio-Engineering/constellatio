@@ -6,6 +6,8 @@ const questionOffset = 90;
 
 export const questionWrapper = css`
   background-color: ${colors["cc-forum"][2]};
+  position: relative;
+  z-index: 1;
 `;
 
 export const backToForumLink = css`
@@ -30,8 +32,8 @@ export const forumListItem = css`
   transform: translateY(${questionOffset}px);
   position: relative;
   box-shadow: 0 8px 44px rgba(0, 0, 0, 0.04);
-  padding: 24px;
   border: none;
+  z-index: 4;
 `;
 
 export const yellowTopBar = css`
@@ -109,21 +111,6 @@ export const tagsWrapper = css`
   flex-wrap: wrap;
   flex: 1;
   min-width: 0;
-`;
-
-export const answersCountWrapper = css`
-  min-width: max-content;
-  padding-left: 50px;
-  height: 28px;
-  display: flex;
-  gap: 6px;
-  align-items: center;
-  justify-content: flex-end;
-  color: ${colors["neutrals-01"][9]};
-  font-weight: 500;
-  svg {
-    transform: translateY(1px);
-  }
 `;
 
 export const answersWrapper = css`

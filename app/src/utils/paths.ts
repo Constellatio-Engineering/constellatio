@@ -1,5 +1,6 @@
 /* eslint-disable import/no-unused-modules */
 import { env } from "@/env.mjs";
+import { type Question } from "@/server/api/routers/forum.router";
 
 export const appPaths = {
   cases: "/cases",
@@ -53,4 +54,9 @@ export const getConfirmEmailUrl = (): string =>
 export const getConfirmEmailChange = (): string =>
 {
   return env.NEXT_PUBLIC_WEBSITE_URL + authPaths.confirmEmailChange;
+};
+
+export const getForumQuestionUrl = (question: Pick<Question, "id" | "slug">): string =>
+{
+  return appPaths.forum + "/" + question.slug + "/" + question.id;
 };

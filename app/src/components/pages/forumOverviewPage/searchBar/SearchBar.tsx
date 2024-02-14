@@ -4,7 +4,7 @@ import { Search } from "@/components/Icons/Search";
 import EmptyStateCard from "@/components/organisms/emptyStateCard/EmptyStateCard";
 import { useForumQuestionsSearchResults } from "@/hooks/useForumQuestionsSearchResults";
 import { useForumQuestionsSearchStore } from "@/stores/forumQuestionsSearch.store";
-import { appPaths } from "@/utils/paths";
+import { appPaths, getForumQuestionUrl } from "@/utils/paths";
 
 import { Input, Popover } from "@mantine/core";
 import Link from "next/link";
@@ -54,7 +54,7 @@ const SearchBar: FunctionComponent = () =>
           )}
           {searchResults?.hits.map((question) => (
             <div key={question.id} css={styles.searchResult}>
-              <Link href={`${appPaths.forum}/${question.slug}/${question.id}`}>
+              <Link href={getForumQuestionUrl(question)}>
                 <CustomLink styleType="link-content-title" component="p">
                   {question.title}
                 </CustomLink>
