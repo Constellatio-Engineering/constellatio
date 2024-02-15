@@ -15,7 +15,6 @@ import AnswersSkeletonWithSorting from "@/components/pages/forumQuestionDetailPa
 import EditAndDeleteButtons from "@/components/pages/forumQuestionDetailPage/editAndDeleteButtons/EditAndDeleteButtons";
 import ForumItemAuthor from "@/components/pages/forumQuestionDetailPage/forumItemAuthor/ForumItemAuthor";
 import ForumQuestionDetailsPageSkeleton from "@/components/pages/forumQuestionDetailPage/forumQuestionDetailsPageSkeleton/ForumQuestionDetailsPageSkeleton";
-import QuestionDetailSkeleton from "@/components/pages/forumQuestionDetailPage/questionDetailSkeleton/QuestionDetailSkeleton";
 import useBookmarks from "@/hooks/useBookmarks";
 import useContextAndErrorIfNull from "@/hooks/useContextAndErrorIfNull";
 import { useForumAnswers } from "@/hooks/useForumAnswers";
@@ -103,12 +102,6 @@ export const ForumQuestionDetailPage: FunctionComponent<Props> = ({ questionId }
       });
     }
   });
-
-  console.log("---------");
-  console.log("questionId", questionId);
-  console.log("isFetching", isFetching);
-  console.log("isLoading", isLoading);
-  console.log("isPending", isPending);
 
   if(isPending)
   {

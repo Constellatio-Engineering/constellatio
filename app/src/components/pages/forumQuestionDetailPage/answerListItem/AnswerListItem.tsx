@@ -4,6 +4,7 @@ import { Button, type TButton } from "@/components/atoms/Button/Button";
 import { Cross } from "@/components/Icons/Cross";
 import { ExpandIcon } from "@/components/Icons/Expand";
 import AnswerUpvoteButton from "@/components/pages/forumOverviewPage/upvoteButton/AnswerUpvoteButton";
+import AnswersSkeleton from "@/components/pages/forumQuestionDetailPage/answersSkeleton/AnswersSkeleton";
 import EditAndDeleteButtons from "@/components/pages/forumQuestionDetailPage/editAndDeleteButtons/EditAndDeleteButtons";
 import ForumItemAuthor from "@/components/pages/forumQuestionDetailPage/forumItemAuthor/ForumItemAuthor";
 import useContextAndErrorIfNull from "@/hooks/useContextAndErrorIfNull";
@@ -69,8 +70,6 @@ const AnswerListItem: FunctionComponent<Props> = ({
     isPending
   } = useForumAnswerDetails({ answerId, parent });
 
-  console.log("AnswerListItem", { isFetching, isLoading, isPending });
-
   const [showDeleteModal, setShowDeleteModal] = useState<boolean>(false);
   const openDeleteModal = (): void => setShowDeleteModal(true);
   const closeDeleteModal = (): void => setShowDeleteModal(false);
@@ -125,12 +124,16 @@ const AnswerListItem: FunctionComponent<Props> = ({
 
   if(isLoading)
   {
-    return <p>Loading...</p>;
+    return <AnswersSkeleton numberOfSkeletons={1} withReplyButton={true}/>;
   }
 
   if(answer == null)
   {
-    return <p>Answer not found</p>;
+    return (
+      <ForumListItem>
+        <p>Error - Answer not found</p>
+      </ForumListItem>
+    );
   }
 
   return (
@@ -141,6 +144,7 @@ const AnswerListItem: FunctionComponent<Props> = ({
         styles={styles.modalStyles()}
         opened={showDeleteModal}
         closeOnEscape={true}
+        keepMounted={false}
         size={"lg"}
         closeOnClickOutside={true}
         centered

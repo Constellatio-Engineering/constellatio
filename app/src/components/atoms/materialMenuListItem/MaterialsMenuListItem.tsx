@@ -128,6 +128,7 @@ const MaterialsMenuListItem: FunctionComponent<MenuListItemProps & HTMLProps<HTM
       </Modal>
       <Modal
         lockScroll={false}
+        keepMounted={false}
         opened={showDeleteModal}
         withCloseButton={false}
         centered
