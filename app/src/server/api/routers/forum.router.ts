@@ -20,7 +20,9 @@ import { ForbiddenError, InternalServerError, NotFoundError } from "@/utils/serv
 import { sleep } from "@/utils/utils";
 
 import { type inferProcedureOutput } from "@trpc/server";
-import { and, count, eq, inArray } from "drizzle-orm";
+import {
+  and, count, eq, inArray, or 
+} from "drizzle-orm";
 import slugify from "slugify";
 
 export const forumRouter = createTRPCRouter({
@@ -28,6 +30,8 @@ export const forumRouter = createTRPCRouter({
     .input(deleteQuestionSchema)
     .mutation(async ({ ctx: { userId }, input: { questionId } }) =>
     {
+      await sleep(500);
+
       const question = await db.query.forumQuestions.findFirst({
         where: eq(forumQuestions.id, questionId),
       });
@@ -42,29 +46,30 @@ export const forumRouter = createTRPCRouter({
         throw new ForbiddenError();
       }
 
-      const answers = await db.query.forumAnswers.findMany({
-        columns: { id: true },
-        where: eq(forumAnswers.parentQuestionId, questionId),
-      });
-
-      const replies = await db.query.forumAnswers.findMany({
-        columns: { id: true },
-        where: inArray(forumAnswers.parentAnswerId, answers.map(answer => answer.id))
-      });
-
       await db.transaction(async transaction =>
       {
         // upvotes are deleted automatically due to the foreign key constraint (on delete cascade)
-        await transaction.delete(forumAnswers).where(
-          inArray(forumAnswers.id, [
-            ...answers.map(answer => answer.id),
-            ...replies.map(reply => reply.id)
-          ])
-        );
 
-        await transaction.delete(forumQuestions).where(
-          eq(forumQuestions.id, questionId)
-        );
+        await transaction
+          .delete(forumAnswers)
+          .where(
+            or(
+              eq(forumAnswers.parentQuestionId, questionId),
+              inArray(
+                forumAnswers.parentAnswerId,
+                transaction
+                  .select({ id: forumAnswers.id })
+                  .from(forumAnswers)
+                  .where(eq(forumAnswers.parentQuestionId, questionId))
+              )
+            )
+          )
+          .returning();
+
+        await transaction
+          .delete(forumQuestions)
+          .where(eq(forumQuestions.id, questionId))
+          .returning();
       });
     }),
   getAnswerById: protectedProcedure

@@ -19,17 +19,21 @@ import AnswerListItemWithReplies from "@/components/pages/forumQuestionDetailPag
 import EditAndDeleteButtons from "@/components/pages/forumQuestionDetailPage/editAndDeleteButtons/EditAndDeleteButtons";
 import ForumItemAuthor from "@/components/pages/forumQuestionDetailPage/forumItemAuthor/ForumItemAuthor";
 import useBookmarks from "@/hooks/useBookmarks";
+import useContextAndErrorIfNull from "@/hooks/useContextAndErrorIfNull";
 import { useForumAnswers } from "@/hooks/useForumAnswers";
 import { useForumQuestionDetails } from "@/hooks/useForumQuestionDetails";
 import { useLegalFieldsAndTopics } from "@/hooks/useLegalFieldsAndTopics";
 import { usePostAnswer } from "@/hooks/usePostAnswer";
 import useUserDetails from "@/hooks/useUserDetails";
+import { InvalidateQueriesContext } from "@/provider/InvalidateQueriesProvider";
 import { useForumPageStore } from "@/stores/forumPage.store";
 import { api } from "@/utils/api";
 import { appPaths } from "@/utils/paths";
 
 import { Modal, Title, TypographyStylesProvider, UnstyledButton } from "@mantine/core";
+import { notifications } from "@mantine/notifications";
 import Link from "next/link";
+import { useRouter } from "next/router";
 import React, { Fragment, type FunctionComponent, useState } from "react";
 
 import * as styles from "./ForumQuestionDetailPage.styles";
@@ -42,6 +46,8 @@ type Props = {
 
 export const ForumQuestionDetailPage: FunctionComponent<Props> = ({ questionId }) =>
 {
+  const router = useRouter();
+  const { invalidateForumQuestions } = useContextAndErrorIfNull(InvalidateQueriesContext);
   const apiContext = api.useUtils();
   const { bookmarks: questionBookmarks, isLoading: isGetQuestionBookmarksLoading } = useBookmarks("forumQuestion", { enabled: true });
   const { userDetails } = useUserDetails();
@@ -73,6 +79,33 @@ export const ForumQuestionDetailPage: FunctionComponent<Props> = ({ questionId }
   });
 
   const { isPending: isPostingAnswer, mutateAsync: postAnswer } = usePostAnswer();
+
+  const { isPending: isDeletingQuestion, mutate: deleteQuestion } = api.forum.deleteQuestion.useMutation({
+    onError: () =>
+    {
+      notifications.show({
+        autoClose: false,
+        color: "red",
+        message: "Deine Frage konnte nicht gelöscht werden. Bitte versuche es erneut.",
+        title: "Da ist leider etwas schiefgelaufen...",
+      });
+    },
+    onSettled: closeDeleteModal,
+    onSuccess: async () =>
+    {
+      await Promise.all([
+        invalidateForumQuestions(),
+        router.push(appPaths.forum)
+      ]);
+
+      notifications.show({
+        autoClose: false,
+        color: "green",
+        message: "Deine Frage wurde erfolgreich gelöscht",
+        title: "Frage gelöscht",
+      });
+    }
+  });
 
   console.log("---------");
   console.log("questionId", questionId);
@@ -122,15 +155,17 @@ export const ForumQuestionDetailPage: FunctionComponent<Props> = ({ questionId }
         <div className="modal-call-to-action">
           <Button<"button">
             style={{ marginRight: 12 }}
+            disabled={isDeletingQuestion}
             styleType={"secondarySimple" as TButton["styleType"]}
             onClick={closeDeleteModal}>
             Nein, behalten
           </Button>
           <Button<"button">
             styleType="primary"
+            loading={isDeletingQuestion}
             onClick={() =>
             {
-              window.alert("delete");
+              deleteQuestion({ questionId });
               // setShowDeleteModal(false);
               // console.log("delete");
             }}>
