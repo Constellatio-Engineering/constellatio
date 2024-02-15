@@ -63,16 +63,12 @@ const AnswerListItem: FunctionComponent<Props> = ({
   const { userDetails } = useUserDetails();
   const isCurrentUserAuthor = userDetails?.id === authorId;
   const { invalidateForumAnswers } = useContextAndErrorIfNull(InvalidateQueriesContext);
-  const {
-    data: answer,
-    isFetching,
-    isLoading,
-    isPending
-  } = useForumAnswerDetails({ answerId, parent });
+  const { data: answer, isLoading } = useForumAnswerDetails({ answerId, parent });
 
   const [showDeleteModal, setShowDeleteModal] = useState<boolean>(false);
   const openDeleteModal = (): void => setShowDeleteModal(true);
   const closeDeleteModal = (): void => setShowDeleteModal(false);
+  const [isEditing, setIsEditing] = useState<boolean>(true);
 
   const { isPending: isDeletingAnswer, mutate: deleteAnswer } = api.forum.deleteAnswer.useMutation({
     onError: () =>
@@ -213,7 +209,7 @@ const AnswerListItem: FunctionComponent<Props> = ({
                   <EditAndDeleteButtons
                     isCurrentUserAuthor={isCurrentUserAuthor}
                     onDelete={openDeleteModal}
-                    onEdit={() => console.log("edit")}
+                    onEdit={() => setIsEditing(true)}
                   />
                 )}
               </div>

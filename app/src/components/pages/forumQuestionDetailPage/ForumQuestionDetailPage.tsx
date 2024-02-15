@@ -10,6 +10,7 @@ import EditQuestionModal from "@/components/pages/forumOverviewPage/editQuestion
 import ForumListItem from "@/components/pages/forumOverviewPage/forumListItem/ForumListItem";
 import { RichtextEditorField } from "@/components/pages/forumOverviewPage/questionModal/RichtextEditorField/RichtextEditorField";
 import { TagsSkeleton } from "@/components/pages/forumOverviewPage/questionsSkeleton/QuestionsSkeleton";
+import AnswerEditor from "@/components/pages/forumQuestionDetailPage/answerEditor/AnswerEditor";
 import AnswerListItemWithReplies from "@/components/pages/forumQuestionDetailPage/answerListItemWithReplies/AnswerListItemWithReplies";
 import AnswersSkeletonWithSorting from "@/components/pages/forumQuestionDetailPage/answersSkeletonWithSorting/AnswersSkeletonWithSorting";
 import EditAndDeleteButtons from "@/components/pages/forumQuestionDetailPage/editAndDeleteButtons/EditAndDeleteButtons";
@@ -59,12 +60,7 @@ export const ForumQuestionDetailPage: FunctionComponent<Props> = ({ questionId }
     isLoading: areLegalFieldsAndTopicsLoading
   } = useLegalFieldsAndTopics();
 
-  const {
-    data: question,
-    isFetching,
-    isLoading,
-    isPending
-  } = useForumQuestionDetails(questionId);
+  const { data: question, isPending } = useForumQuestionDetails(questionId);
 
   const { data: answers, isLoading: areAnswersLoading } = useForumAnswers({
     parent: {
@@ -73,8 +69,6 @@ export const ForumQuestionDetailPage: FunctionComponent<Props> = ({ questionId }
     },
     sortBy: "newest"
   });
-
-  const { isPending: isPostingAnswer, mutateAsync: postAnswer } = usePostAnswer();
 
   const { isPending: isDeletingQuestion, mutate: deleteQuestion } = api.forum.deleteQuestion.useMutation({
     onError: () =>
@@ -251,51 +245,13 @@ export const ForumQuestionDetailPage: FunctionComponent<Props> = ({ questionId }
                   }}
                 />
               ))}
-              <div css={styles.test}/>
-              <ForumListItem contentWrapperStylesOverrides={styles.postAnswerFormWrapper}>
-                <RichtextEditorField
-                  value={""}
-                  toolbarLeftContent={userDetails && (
-                    <ForumItemAuthor
-                      username={userDetails.displayName}
-                      userId={userDetails.id}
-                      profilePicture={null}
-                    />
-                  )}
-                  minHeight={100}
-                  placeholder={"Antwort verfassen..."}
-                  buttons={[
-                    {
-                      action: async (editor) =>
-                      {
-                        try
-                        {
-                          await postAnswer({
-                            parent: {
-                              parentType: "question",
-                              questionId
-                            },
-                            text: editor?.getHTML()
-                          });
-                        }
-                        catch (e: unknown)
-                        {
-                          return;
-                        }
-
-                        editor.commands.clearContent();
-                      },
-                      props: {
-                        disabled: false,
-                        loading: isPostingAnswer,
-                        size: "large",
-                        styleType: "primary"
-                      },
-                      text: "Antwort posten"
-                    },
-                  ]}
-                />
-              </ForumListItem>
+              <div css={styles.separator}/>
+              <AnswerEditor
+                parent={{
+                  parentType: "question",
+                  questionId
+                }}
+              />
             </Fragment>
           )}
         </div>

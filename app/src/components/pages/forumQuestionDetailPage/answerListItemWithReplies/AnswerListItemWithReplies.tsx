@@ -1,11 +1,8 @@
 /* eslint-disable max-lines */
-import { RichtextEditorField } from "@/components/pages/forumOverviewPage/questionModal/RichtextEditorField/RichtextEditorField";
+import AnswerEditor from "@/components/pages/forumQuestionDetailPage/answerEditor/AnswerEditor";
 import AnswerListItem from "@/components/pages/forumQuestionDetailPage/answerListItem/AnswerListItem";
 import AnswersSkeleton from "@/components/pages/forumQuestionDetailPage/answersSkeleton/AnswersSkeleton";
-import ForumItemAuthor from "@/components/pages/forumQuestionDetailPage/forumItemAuthor/ForumItemAuthor";
 import { useForumAnswers } from "@/hooks/useForumAnswers";
-import { usePostAnswer } from "@/hooks/usePostAnswer";
-import useUserDetails from "@/hooks/useUserDetails";
 import { type GetAnswersQuestionParent } from "@/schemas/forum/getAnswers.schema";
 import { useForumPageStore } from "@/stores/forumPage.store";
 
@@ -25,8 +22,6 @@ const AnswerListItemWithReplies: FunctionComponent<Props> = ({ answerId, authorI
   const setRepliesState = useForumPageStore(s => s.setRepliesState);
   const areRepliesExpanded = useForumPageStore(s => s.getAreRepliesExpanded(answerId));
   const addReplyInputId = useId();
-  const { userDetails } = useUserDetails();
-  const { isPending: isPostingAnswer, mutateAsync: postAnswer } = usePostAnswer();
   const { data: replies, isLoading: areRepliesLoading } = useForumAnswers({
     parent: {
       answerId,
@@ -96,58 +91,13 @@ const AnswerListItemWithReplies: FunctionComponent<Props> = ({ answerId, authorI
                     }}
                   />
                 ))}
-                <RichtextEditorField
+                <AnswerEditor
                   id={addReplyInputId}
-                  value={""}
-                  placeholder={"Antwort verfassen..."}
-                  minHeight={100}
-                  toolbarLeftContent={userDetails && (
-                    <ForumItemAuthor
-                      username={userDetails.displayName}
-                      userId={userDetails.id}
-                      profilePicture={null}
-                    />
-                  )}
-                  buttons={[
-                    replies?.length === 0 ? {
-                      action: () => setRepliesState(answerId, "closed"),
-                      overwriteDisabled: false,
-                      props: {
-                        disabled: false,
-                        size: "large",
-                        styleType: "secondarySimple"
-                      },
-                      text: "Abbrechen"
-                    } : null,
-                    {
-                      action: async (editor) =>
-                      {
-                        try
-                        {
-                          await postAnswer({
-                            parent: {
-                              answerId,
-                              parentType: "answer"
-                            },
-                            text: editor?.getHTML()
-                          });
-                        }
-                        catch (e: unknown)
-                        {
-                          return;
-                        }
-
-                        editor.commands.clearContent();
-                      },
-                      props: {
-                        disabled: false,
-                        loading: isPostingAnswer,
-                        size: "large",
-                        styleType: "primary"
-                      },
-                      text: "Antwort posten"
-                    },
-                  ]}
+                  cancelButtonAction={() => setRepliesState(answerId, "closed")}
+                  parent={{
+                    answerId,
+                    parentType: "answer"
+                  }}
                 />
               </Fragment>
             )}

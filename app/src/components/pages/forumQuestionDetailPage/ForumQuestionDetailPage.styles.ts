@@ -127,15 +127,11 @@ export const answersWrapper = css`
   gap: 24px;
 `;
 
-export const postAnswerFormWrapper = css`
-  padding: 0 !important;
-`;
-
 export const answerWrapper = css`
   
 `;
 
-export const test = css`
+export const separator = css`
   width: 80%;
   background-color: #d1d1d1;
   height: 1px;
