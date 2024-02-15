@@ -61,3 +61,11 @@ export class NotFoundError extends TRPCError
     super({ code: "NOT_FOUND" });
   }
 }
+
+export class ForbiddenError extends TRPCError
+{
+  public constructor()
+  {
+    super({ code: "FORBIDDEN" });
+  }
+}

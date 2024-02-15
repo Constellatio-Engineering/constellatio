@@ -352,7 +352,7 @@ export type ForumAnswer = InferSelectModel<typeof forumAnswers>;
 
 export const questionUpvotes = pgTable("QuestionUpvote", {
   userId: uuid("UserId").references(() => users.id, { onDelete: "no action" }).notNull(),
-  questionId: uuid("QuestionId").references(() => forumQuestions.id, { onDelete: "no action" }).notNull(),
+  questionId: uuid("QuestionId").references(() => forumQuestions.id, { onDelete: "cascade" }).notNull(),
   createdAt: timestamp("CreatedAt").defaultNow(),
 }, table => ({
   questionId_index: index("QuestionUpvote_QuestionId_Index").on(table.questionId),
@@ -364,7 +364,7 @@ export type QuestionUpvote = InferSelectModel<typeof questionUpvotes>;
 
 export const answerUpvotes = pgTable("AnswerUpvote", {
   userId: uuid("UserId").references(() => users.id, { onDelete: "no action" }).notNull(),
-  answerId: uuid("AnswerId").references(() => forumAnswers.id, { onDelete: "no action" }).notNull(),
+  answerId: uuid("AnswerId").references(() => forumAnswers.id, { onDelete: "cascade" }).notNull(),
   createdAt: timestamp("CreatedAt").defaultNow(),
 }, table => ({
   answerId_index: index("AnswerUpvote_QuestionId_Index").on(table.answerId),

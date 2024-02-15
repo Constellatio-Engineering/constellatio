@@ -4,6 +4,7 @@ import {
   answerUpvotes,
   type ForumAnswerInsert, forumAnswers, type ForumQuestionInsert, forumQuestions, questionUpvotes
 } from "@/db/schema";
+import { deleteQuestionSchema } from "@/schemas/forum/deleteQuestion.schema";
 import { getAnswerByIdSchema } from "@/schemas/forum/getAnswerById.schema";
 import { type GetAnswersSchema, getAnswersSchema } from "@/schemas/forum/getAnswers.schema";
 import { getQuestionByIdSchema } from "@/schemas/forum/getQuestionById.schema";
@@ -15,14 +16,57 @@ import { upvoteAnswerSchema } from "@/schemas/forum/upvoteAnswer.schema";
 import { upvoteQuestionSchema } from "@/schemas/forum/upvoteQuestion.schema";
 import { getAnswers, getQuestions } from "@/server/api/services/forum.services";
 import { createTRPCRouter, protectedProcedure } from "@/server/api/trpc";
-import { InternalServerError } from "@/utils/serverError";
+import { ForbiddenError, InternalServerError, NotFoundError } from "@/utils/serverError";
 import { sleep } from "@/utils/utils";
 
 import { type inferProcedureOutput } from "@trpc/server";
-import { and, count, eq } from "drizzle-orm";
+import { and, count, eq, inArray } from "drizzle-orm";
 import slugify from "slugify";
 
 export const forumRouter = createTRPCRouter({
+  deleteQuestion: protectedProcedure
+    .input(deleteQuestionSchema)
+    .mutation(async ({ ctx: { userId }, input: { questionId } }) =>
+    {
+      const question = await db.query.forumQuestions.findFirst({
+        where: eq(forumQuestions.id, questionId),
+      });
+
+      if(!question)
+      {
+        throw new NotFoundError();
+      }
+
+      if(question.userId !== userId)
+      {
+        throw new ForbiddenError();
+      }
+
+      const answers = await db.query.forumAnswers.findMany({
+        columns: { id: true },
+        where: eq(forumAnswers.parentQuestionId, questionId),
+      });
+
+      const replies = await db.query.forumAnswers.findMany({
+        columns: { id: true },
+        where: inArray(forumAnswers.parentAnswerId, answers.map(answer => answer.id))
+      });
+
+      await db.transaction(async transaction =>
+      {
+        // upvotes are deleted automatically due to the foreign key constraint (on delete cascade)
+        await transaction.delete(forumAnswers).where(
+          inArray(forumAnswers.id, [
+            ...answers.map(answer => answer.id),
+            ...replies.map(reply => reply.id)
+          ])
+        );
+
+        await transaction.delete(forumQuestions).where(
+          eq(forumQuestions.id, questionId)
+        );
+      });
+    }),
   getAnswerById: protectedProcedure
     .input(getAnswerByIdSchema)
     .query(async ({ ctx: { userId }, input: { answerId } }) =>

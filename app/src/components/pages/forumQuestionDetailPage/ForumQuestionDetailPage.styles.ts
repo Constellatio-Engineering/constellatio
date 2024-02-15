@@ -1,6 +1,9 @@
 import { colors } from "@/constants/styles/colors";
+import type { UnknownMantineStylesParams } from "@/utils/types";
 
 import { css } from "@emotion/react";
+import type { ModalStylesNames } from "@mantine/core";
+import type { Styles } from "@mantine/styles";
 
 const questionOffset = 90;
 
@@ -134,3 +137,31 @@ export const test = css`
   height: 1px;
   margin: 20px auto;
 `;
+
+type ModalStyles = Styles<ModalStylesNames, UnknownMantineStylesParams>;
+
+export const modalStyles = (): ModalStyles =>
+{
+  const styles: ModalStyles = () => ({
+    body: {
+      padding: "36px",
+    },
+    content: {
+      ".close-btn": {
+        cursor: "pointer",
+        position: "absolute",
+        right: "24px",
+        top: "24px",
+      },
+      borderRadius: "12px",
+      position: "relative",
+    },
+    header: {
+      padding: 0,
+    },
+    root: {
+      minWidth: "520px",
+    },
+  });
+  return styles;
+};

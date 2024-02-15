@@ -1,9 +1,11 @@
 /* eslint-disable max-lines */
-import { Button } from "@/components/atoms/Button/Button";
+import { BodyText } from "@/components/atoms/BodyText/BodyText";
+import { Button, type TButton } from "@/components/atoms/Button/Button";
 import IconButton from "@/components/atoms/iconButton/IconButton";
 import Tag from "@/components/atoms/tag/Tag";
 import ContentWrapper from "@/components/helpers/contentWrapper/ContentWrapper";
 import { Check } from "@/components/Icons/Check";
+import { Cross } from "@/components/Icons/Cross";
 import { Edit } from "@/components/Icons/Edit";
 import { ExpandIcon } from "@/components/Icons/Expand";
 import { Trash } from "@/components/Icons/Trash";
@@ -26,10 +28,9 @@ import { useForumPageStore } from "@/stores/forumPage.store";
 import { api } from "@/utils/api";
 import { appPaths } from "@/utils/paths";
 
-import { Title, TypographyStylesProvider, UnstyledButton } from "@mantine/core";
-import Image from "next/image";
+import { Modal, Title, TypographyStylesProvider, UnstyledButton } from "@mantine/core";
 import Link from "next/link";
-import React, { Fragment, type FunctionComponent } from "react";
+import React, { Fragment, type FunctionComponent, useState } from "react";
 
 import * as styles from "./ForumQuestionDetailPage.styles";
 import genericProfileIcon from "../../../../public/images/icons/generic-user-icon.svg";
@@ -45,6 +46,9 @@ export const ForumQuestionDetailPage: FunctionComponent<Props> = ({ questionId }
   const { bookmarks: questionBookmarks, isLoading: isGetQuestionBookmarksLoading } = useBookmarks("forumQuestion", { enabled: true });
   const { userDetails } = useUserDetails();
   const setEditQuestionState = useForumPageStore((state) => state.setEditQuestionState);
+  const [showDeleteModal, setShowDeleteModal] = useState<boolean>(false);
+  const openDeleteModal = (): void => setShowDeleteModal(true);
+  const closeDeleteModal = (): void => setShowDeleteModal(false);
 
   const {
     allLegalFields,
@@ -94,6 +98,46 @@ export const ForumQuestionDetailPage: FunctionComponent<Props> = ({ questionId }
   return (
     <Fragment>
       <EditQuestionModal {...question}/>
+      <Modal
+        lockScroll={false}
+        withCloseButton={false}
+        styles={styles.modalStyles()}
+        opened={showDeleteModal}
+        closeOnEscape={true}
+        size={"lg"}
+        closeOnClickOutside={true}
+        centered
+        onClose={closeDeleteModal}>
+        <span className="close-btn" onClick={() => setShowDeleteModal(false)}>
+          <Cross size={32}/>
+        </span>
+        <Title order={3} mb={20}>Frage löschen</Title>
+        <BodyText
+          styleType="body-01-regular"
+          component="p"
+          className="delete-folder-text"
+          mb={20}>
+          Bist du sicher, dass du deine Frage &nbsp;&quot;<strong>{question.title}</strong>&quot;&nbsp;löschen mächtest? Das kann nicht rückgängig gemacht werden.
+        </BodyText>
+        <div className="modal-call-to-action">
+          <Button<"button">
+            style={{ marginRight: 12 }}
+            styleType={"secondarySimple" as TButton["styleType"]}
+            onClick={closeDeleteModal}>
+            Nein, behalten
+          </Button>
+          <Button<"button">
+            styleType="primary"
+            onClick={() =>
+            {
+              window.alert("delete");
+              // setShowDeleteModal(false);
+              // console.log("delete");
+            }}>
+            Ja, löschen
+          </Button>
+        </div>
+      </Modal>
       <div css={styles.questionWrapper}>
         <ContentWrapper stylesOverrides={styles.contentWrapper}>
           <Link href={appPaths.forum} css={styles.backToForumLink}>
@@ -154,7 +198,7 @@ export const ForumQuestionDetailPage: FunctionComponent<Props> = ({ questionId }
                   </TypographyStylesProvider>
                   <EditAndDeleteButtons
                     isCurrentUserAuthor={isCurrentUserAuthor}
-                    onDelete={() => window.alert("Delete")}
+                    onDelete={openDeleteModal}
                     onEdit={() => setEditQuestionState(questionId)}
                   />
                 </div>
