@@ -14,7 +14,6 @@ type Props = {
 
 const EditAndDeleteButtons: FunctionComponent<Props> = ({ isCurrentUserAuthor, onDelete, onEdit }) => 
 {
-  
   if(!isCurrentUserAuthor)
   {
     return null;

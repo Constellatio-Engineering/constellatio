@@ -1,6 +1,16 @@
 import { colors } from "@/constants/styles/colors";
+import type { UnknownMantineStylesParams } from "@/utils/types";
 
 import { css } from "@emotion/react";
+import type { ModalStylesNames } from "@mantine/core";
+import type { Styles } from "@mantine/styles";
+
+export const bottomWrapper = css`
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 24px;
+`;
 
 export const repliesWrapper = css`
   padding-left: 80px;
@@ -43,3 +53,31 @@ export const test = css`
   justify-content: center;
   align-items: center;
 `;
+
+type ModalStyles = Styles<ModalStylesNames, UnknownMantineStylesParams>;
+
+export const modalStyles = (): ModalStyles =>
+{
+  const styles: ModalStyles = () => ({
+    body: {
+      padding: "36px",
+    },
+    content: {
+      ".close-btn": {
+        cursor: "pointer",
+        position: "absolute",
+        right: "24px",
+        top: "24px",
+      },
+      borderRadius: "12px",
+      position: "relative",
+    },
+    header: {
+      padding: 0,
+    },
+    root: {
+      minWidth: "520px",
+    },
+  });
+  return styles;
+};

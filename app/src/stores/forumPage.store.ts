@@ -26,9 +26,21 @@ type AnswersWithRepliesState = {
   [answerId: string]: RepliesState;
 };
 
+/* type DeleteAnswerModalClosed = {
+  modalState: "closed";
+};
+
+type DeleteAnswerModalOpen = {
+  modalState: "open";
+  questionId: string;
+};
+
+type DeleteAnswerModalState = DeleteAnswerModalClosed | DeleteAnswerModalOpen;*/
+
 type ForumPageStoreProps = {
   answersSorting: GetAnswersSortingOptions;
   closeAskQuestionModal: () => void;
+  // deleteAnswerModalState: DeleteAnswerModalState;
   getAreRepliesExpanded: (answerId: string) => boolean;
   getIsModalOpen: () => boolean;
   getRepliesState: (answerId: string) => RepliesState;

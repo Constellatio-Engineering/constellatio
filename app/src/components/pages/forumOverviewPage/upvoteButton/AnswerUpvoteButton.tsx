@@ -1,4 +1,6 @@
 import UpvoteButton from "@/components/pages/forumOverviewPage/upvoteButton/UpvoteButton";
+import useContextAndErrorIfNull from "@/hooks/useContextAndErrorIfNull";
+import { InvalidateQueriesContext } from "@/provider/InvalidateQueriesProvider";
 import { type AppRouter } from "@/server/api/root";
 import { api } from "@/utils/api";
 import { type Nullable } from "@/utils/types";
@@ -25,11 +27,12 @@ const AnswerUpvoteButton: FunctionComponent<Props> = ({
   upvotesCount
 }) =>
 {
+  const { invalidateForumAnswer } = useContextAndErrorIfNull(InvalidateQueriesContext);
   const apiContext = api.useUtils();
 
   const onUpvoteMutationSuccess = async (): Promise<void> =>
   {
-    return apiContext.forum.getAnswerById.invalidate({ answerId });
+    await invalidateForumAnswer({ answerId });
   };
 
   const onUpvoteMutationError = (_err: unknown, _upvotedAnswer: unknown, context: MutationContext | undefined): void =>

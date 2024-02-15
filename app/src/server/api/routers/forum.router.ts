@@ -4,6 +4,7 @@ import {
   answerUpvotes,
   type ForumAnswerInsert, forumAnswers, type ForumQuestionInsert, forumQuestions, questionUpvotes
 } from "@/db/schema";
+import { deleteAnswerSchema } from "@/schemas/forum/deleteAnswer.schema";
 import { deleteQuestionSchema } from "@/schemas/forum/deleteQuestion.schema";
 import { getAnswerByIdSchema } from "@/schemas/forum/getAnswerById.schema";
 import { type GetAnswersSchema, getAnswersSchema } from "@/schemas/forum/getAnswers.schema";
@@ -26,6 +27,46 @@ import {
 import slugify from "slugify";
 
 export const forumRouter = createTRPCRouter({
+  deleteAnswer: protectedProcedure
+    .input(deleteAnswerSchema)
+    .mutation(async ({ ctx: { userId }, input: { answerId } }) =>
+    {
+      await sleep(500);
+
+      const answer = await db.query.forumAnswers.findFirst({
+        where: eq(forumAnswers.id, answerId),
+      });
+
+      if(!answer)
+      {
+        throw new NotFoundError();
+      }
+
+      if(answer.userId !== userId)
+      {
+        throw new ForbiddenError();
+      }
+
+      return db
+        .delete(forumAnswers)
+        .where(
+          or(
+            eq(forumAnswers.id, answerId),
+            inArray(
+              forumAnswers.parentAnswerId,
+              db
+                .select({ id: forumAnswers.id })
+                .from(forumAnswers)
+                .where(eq(forumAnswers.id, answerId))
+            )
+          )
+        )
+        .returning({
+          id: forumAnswers.id,
+          parentAnswerId: forumAnswers.parentAnswerId,
+          parentQuestionId: forumAnswers.parentQuestionId
+        });
+    }),
   deleteQuestion: protectedProcedure
     .input(deleteQuestionSchema)
     .mutation(async ({ ctx: { userId }, input: { questionId } }) =>
@@ -63,13 +104,11 @@ export const forumRouter = createTRPCRouter({
                   .where(eq(forumAnswers.parentQuestionId, questionId))
               )
             )
-          )
-          .returning();
+          );
 
         await transaction
           .delete(forumQuestions)
-          .where(eq(forumQuestions.id, questionId))
-          .returning();
+          .where(eq(forumQuestions.id, questionId));
       });
     }),
   getAnswerById: protectedProcedure

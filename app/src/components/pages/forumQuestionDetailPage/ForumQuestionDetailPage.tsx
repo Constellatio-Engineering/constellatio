@@ -148,7 +148,7 @@ export const ForumQuestionDetailPage: FunctionComponent<Props> = ({ questionId }
         <BodyText
           styleType="body-01-regular"
           component="p"
-          className="delete-folder-text"
+          className="delete-question-text"
           mb={20}>
           Bist du sicher, dass du deine Frage &nbsp;&quot;<strong>{question.title}</strong>&quot;&nbsp;löschen mächtest? Das kann nicht rückgängig gemacht werden.
         </BodyText>
@@ -163,12 +163,7 @@ export const ForumQuestionDetailPage: FunctionComponent<Props> = ({ questionId }
           <Button<"button">
             styleType="primary"
             loading={isDeletingQuestion}
-            onClick={() =>
-            {
-              deleteQuestion({ questionId });
-              // setShowDeleteModal(false);
-              // console.log("delete");
-            }}>
+            onClick={() => deleteQuestion({ questionId })}>
             Ja, löschen
           </Button>
         </div>
@@ -231,11 +226,13 @@ export const ForumQuestionDetailPage: FunctionComponent<Props> = ({ questionId }
                   <TypographyStylesProvider>
                     <div css={styles.contentWrapper} dangerouslySetInnerHTML={{ __html: question.text }}/>
                   </TypographyStylesProvider>
-                  <EditAndDeleteButtons
-                    isCurrentUserAuthor={isCurrentUserAuthor}
-                    onDelete={openDeleteModal}
-                    onEdit={() => setEditQuestionState(questionId)}
-                  />
+                  <div css={styles.editAndDeleteButtonsWrapper}>
+                    <EditAndDeleteButtons
+                      isCurrentUserAuthor={isCurrentUserAuthor}
+                      onDelete={openDeleteModal}
+                      onEdit={() => setEditQuestionState(questionId)}
+                    />
+                  </div>
                 </div>
               </div>
             </div>
@@ -248,6 +245,7 @@ export const ForumQuestionDetailPage: FunctionComponent<Props> = ({ questionId }
           {answers?.map((answer) => (
             <AnswerListItemWithReplies
               key={answer.id}
+              authorId={answer.author.id}
               answerId={answer.id}
               parent={{
                 parentType: "question",

@@ -31,6 +31,10 @@ export const contentWrapper = css`
   max-width: 920px;
 `;
 
+export const editAndDeleteButtonsWrapper = css`
+  margin-top: 40px;
+`;
+
 export const forumListItem = css`
   transform: translateY(${questionOffset}px);
   position: relative;
