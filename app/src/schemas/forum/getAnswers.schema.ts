@@ -2,19 +2,25 @@ import { idValidation } from "@/schemas/common.validation";
 
 import { z } from "zod";
 
+const questionParent = z.object({
+  parentType: z.literal("question"),
+  questionId: idValidation
+});
+
+const answerParent = z.object({
+  answerId: idValidation,
+  parentType: z.literal("answer")
+});
+
 export const getAnswersSchema = z.object({
   parent: z.discriminatedUnion("parentType", [
-    z.object({
-      parentType: z.literal("question"),
-      questionId: idValidation
-    }),
-    z.object({
-      answerId: idValidation,
-      parentType: z.literal("answer")
-    })
+    questionParent,
+    answerParent
   ]),
   sortBy: z.union([z.literal("newest"), z.literal("upvotes")])
 });
 
 export type GetAnswersSchema = z.input<typeof getAnswersSchema>;
 export type GetAnswersSortingOptions = GetAnswersSchema["sortBy"];
+export type GetAnswersQuestionParent = z.infer<typeof questionParent>;
+export type GetAnswersAnswerParent = z.infer<typeof answerParent>;

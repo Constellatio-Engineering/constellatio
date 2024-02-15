@@ -16,6 +16,7 @@ import ForumListItem from "@/components/pages/forumOverviewPage/forumListItem/Fo
 import { RichtextEditorField } from "@/components/pages/forumOverviewPage/questionModal/RichtextEditorField/RichtextEditorField";
 import { TagsSkeleton } from "@/components/pages/forumOverviewPage/questionsSkeleton/QuestionsSkeleton";
 import AnswerListItemWithReplies from "@/components/pages/forumQuestionDetailPage/answerListItemWithReplies/AnswerListItemWithReplies";
+import AnswersSkeleton from "@/components/pages/forumQuestionDetailPage/answersSkeleton/AnswersSkeleton";
 import EditAndDeleteButtons from "@/components/pages/forumQuestionDetailPage/editAndDeleteButtons/EditAndDeleteButtons";
 import ForumItemAuthor from "@/components/pages/forumQuestionDetailPage/forumItemAuthor/ForumItemAuthor";
 import useBookmarks from "@/hooks/useBookmarks";
@@ -30,7 +31,9 @@ import { useForumPageStore } from "@/stores/forumPage.store";
 import { api } from "@/utils/api";
 import { appPaths } from "@/utils/paths";
 
-import { Modal, Title, TypographyStylesProvider, UnstyledButton } from "@mantine/core";
+import {
+  Modal, Skeleton, Title, TypographyStylesProvider, UnstyledButton 
+} from "@mantine/core";
 import { notifications } from "@mantine/notifications";
 import Link from "next/link";
 import { useRouter } from "next/router";
@@ -241,63 +244,79 @@ export const ForumQuestionDetailPage: FunctionComponent<Props> = ({ questionId }
       </div>
       <ContentWrapper stylesOverrides={styles.contentWrapper}>
         <div css={styles.answersWrapper}>
-          <p>Sortieren nach</p>
-          {answers?.map((answer) => (
-            <AnswerListItemWithReplies
-              key={answer.id}
-              authorId={answer.author.id}
-              answerId={answer.id}
-              parent={{
-                parentType: "question",
-                questionId,
-              }}
-            />
-          ))}
-          <div css={styles.test}/>
-          <ForumListItem contentWrapperStylesOverrides={styles.postAnswerFormWrapper}>
-            <RichtextEditorField
-              value={""}
-              toolbarLeftContent={userDetails && (
-                <ForumItemAuthor
-                  username={userDetails.displayName}
-                  userId={userDetails.id}
-                  profilePicture={null}
+          {areAnswersLoading ? (
+            <Fragment>
+              <div css={styles.sortingSkeletonWrapper}>
+                <Skeleton height={20} width={120}/>
+                <Skeleton height={20} width={140}/>
+              </div>
+              <AnswersSkeleton
+                numberOfSkeletons={5}
+                withReplyButton={true}
+              />
+            </Fragment>
+          ) : (
+            <Fragment>
+              <p>Sortieren nach</p>
+              {answers?.map((answer) => (
+                <AnswerListItemWithReplies
+                  key={answer.id}
+                  authorId={answer.author.id}
+                  answerId={answer.id}
+                  parent={{
+                    parentType: "question",
+                    questionId,
+                  }}
                 />
-              )}
-              minHeight={100}
-              placeholder={"Antwort verfassen..."}
-              onChange={e => console.log(e)}
-              buttons={[
-                {
-                  action: async (editor) =>
-                  {
-                    try
+              ))}
+              <div css={styles.test}/>
+              <ForumListItem contentWrapperStylesOverrides={styles.postAnswerFormWrapper}>
+                <RichtextEditorField
+                  value={""}
+                  toolbarLeftContent={userDetails && (
+                    <ForumItemAuthor
+                      username={userDetails.displayName}
+                      userId={userDetails.id}
+                      profilePicture={null}
+                    />
+                  )}
+                  minHeight={100}
+                  placeholder={"Antwort verfassen..."}
+                  onChange={e => console.log(e)}
+                  buttons={[
                     {
-                      await postAnswer({
-                        parent: {
-                          parentType: "question",
-                          questionId
-                        },
-                        text: editor?.getHTML()
-                      });
-                    }
-                    catch (e: unknown)
-                    {
-                      return;
-                    }
+                      action: async (editor) =>
+                      {
+                        try
+                        {
+                          await postAnswer({
+                            parent: {
+                              parentType: "question",
+                              questionId
+                            },
+                            text: editor?.getHTML()
+                          });
+                        }
+                        catch (e: unknown)
+                        {
+                          return;
+                        }
 
-                    editor.commands.clearContent();
-                  },
-                  props: {
-                    disabled: false,
-                    size: "large",
-                    styleType: "primary"
-                  },
-                  text: "Antwort posten"
-                },
-              ]}
-            />
-          </ForumListItem>
+                        editor.commands.clearContent();
+                      },
+                      props: {
+                        disabled: false,
+                        loading: isPostingAnswer,
+                        size: "large",
+                        styleType: "primary"
+                      },
+                      text: "Antwort posten"
+                    },
+                  ]}
+                />
+              </ForumListItem>
+            </Fragment>
+          )}
         </div>
       </ContentWrapper>
     </Fragment>

@@ -1,30 +1,67 @@
+/* eslint-disable max-lines */
+import { BodyText } from "@/components/atoms/BodyText/BodyText";
+import { Button, type TButton } from "@/components/atoms/Button/Button";
+import { Cross } from "@/components/Icons/Cross";
+import { ExpandIcon } from "@/components/Icons/Expand";
 import AnswerUpvoteButton from "@/components/pages/forumOverviewPage/upvoteButton/AnswerUpvoteButton";
+import EditAndDeleteButtons from "@/components/pages/forumQuestionDetailPage/editAndDeleteButtons/EditAndDeleteButtons";
 import ForumItemAuthor from "@/components/pages/forumQuestionDetailPage/forumItemAuthor/ForumItemAuthor";
+import useContextAndErrorIfNull from "@/hooks/useContextAndErrorIfNull";
 import { useForumAnswerDetails } from "@/hooks/useForumAnswerDetails";
-import type { GetAnswersSchema } from "@/schemas/forum/getAnswers.schema";
+import useUserDetails from "@/hooks/useUserDetails";
+import { InvalidateQueriesContext } from "@/provider/InvalidateQueriesProvider";
+import { type GetAnswersAnswerParent, type GetAnswersQuestionParent } from "@/schemas/forum/getAnswers.schema";
+import { useForumPageStore } from "@/stores/forumPage.store";
+import { api } from "@/utils/api";
+import { type Prettify } from "@/utils/types";
 
-import { TypographyStylesProvider } from "@mantine/core";
-import Image from "next/image";
-import React, { type FunctionComponent, type ReactNode } from "react";
+import { Modal, Title, TypographyStylesProvider } from "@mantine/core";
+import { notifications } from "@mantine/notifications";
+import React, { type FunctionComponent, useState } from "react";
 
 import * as styles from "./AnswerListItem.styles";
-import genericProfileIcon from "../../../../../public/images/icons/generic-user-icon.svg";
 import ForumListItem from "../../forumOverviewPage/forumListItem/ForumListItem";
 
-type Props = {
+interface CommonProps
+{
   readonly answerId: string;
-  readonly children?: ReactNode;
-  readonly isMarkedAsCorrect?: boolean;
-  readonly parent: GetAnswersSchema["parent"];
-};
+  readonly authorId: string;
+}
+
+export interface AnswerProps extends CommonProps
+{
+  readonly answerType: "answer";
+  readonly isMarkedAsCorrect: boolean;
+  readonly numberOfReplies: number | undefined;
+  readonly onAddReplyClick: () => void;
+  readonly parent: GetAnswersQuestionParent;
+}
+
+export interface ReplyProps extends CommonProps
+{
+  readonly answerType: "reply";
+  readonly isMarkedAsCorrect: undefined;
+  readonly numberOfReplies: undefined;
+  readonly parent: GetAnswersAnswerParent;
+}
+
+type Props = Prettify<AnswerProps | ReplyProps>;
 
 const AnswerListItem: FunctionComponent<Props> = ({
   answerId,
-  children,
-  isMarkedAsCorrect,
-  parent
+  authorId,
+  isMarkedAsCorrect = false,
+  numberOfReplies,
+  parent,
+  ...props
 }) =>
 {
+  const toggleAnswerReplies = useForumPageStore(s => s.toggleAnswerReplies);
+  const areRepliesExpanded = useForumPageStore(s => s.getAreRepliesExpanded(answerId));
+  const hasReplies = numberOfReplies != null && numberOfReplies > 0;
+  const { userDetails } = useUserDetails();
+  const isCurrentUserAuthor = userDetails?.id === authorId;
+  const { invalidateForumAnswers } = useContextAndErrorIfNull(InvalidateQueriesContext);
   const {
     data: answer,
     isFetching,
@@ -33,6 +70,58 @@ const AnswerListItem: FunctionComponent<Props> = ({
   } = useForumAnswerDetails({ answerId, parent });
 
   console.log("AnswerListItem", { isFetching, isLoading, isPending });
+
+  const [showDeleteModal, setShowDeleteModal] = useState<boolean>(false);
+  const openDeleteModal = (): void => setShowDeleteModal(true);
+  const closeDeleteModal = (): void => setShowDeleteModal(false);
+
+  const { isPending: isDeletingAnswer, mutate: deleteAnswer } = api.forum.deleteAnswer.useMutation({
+    onError: () =>
+    {
+      notifications.show({
+        autoClose: false,
+        color: "red",
+        message: "Deine Antwort konnte nicht gelöscht werden. Bitte versuche es erneut.",
+        title: "Da ist leider etwas schiefgelaufen...",
+      });
+    },
+    onSettled: closeDeleteModal,
+    onSuccess: async (deletedQuestions) =>
+    {
+      const parentQuestion = deletedQuestions.find(q => q.parentQuestionId != null);
+      const parentAnswer = deletedQuestions.find(a => a.parentAnswerId != null);
+
+      if(parentQuestion)
+      {
+        // deleted answer was response to a question. invalidate all answers of the parent question
+        await invalidateForumAnswers({
+          parent: {
+            parentType: "question",
+            questionId: parentQuestion.parentQuestionId!
+          },
+          sortBy: "newest"
+        });
+      }
+      else if(parentAnswer)
+      {
+        // deleted answer was response to an answer. invalidate all replies to the parent answer
+        await invalidateForumAnswers({
+          parent: {
+            answerId: parentAnswer.parentAnswerId!,
+            parentType: "answer"
+          },
+          sortBy: "newest"
+        });
+      }
+
+      notifications.show({
+        autoClose: false,
+        color: "green",
+        message: "Deine Antwort wurde erfolgreich gelöscht",
+        title: "Antwort gelöscht",
+      });
+    }
+  });
 
   if(isLoading)
   {
@@ -45,45 +134,111 @@ const AnswerListItem: FunctionComponent<Props> = ({
   }
 
   return (
-    <ForumListItem isMarkedAsCorrect={isMarkedAsCorrect}>
-      <div css={styles.wrapper}>
-        <div css={styles.upvoteColumn}>
-          <AnswerUpvoteButton
-            authorId={answer.author.id}
-            isUpvoted={answer.isUpvoted}
-            answerId={answer.id}
-            upvotesCount={answer.upvotesCount}
-          />
+    <>
+      <Modal
+        lockScroll={false}
+        withCloseButton={false}
+        styles={styles.modalStyles()}
+        opened={showDeleteModal}
+        closeOnEscape={true}
+        size={"lg"}
+        closeOnClickOutside={true}
+        centered
+        onClose={closeDeleteModal}>
+        <span className="close-btn" onClick={() => setShowDeleteModal(false)}>
+          <Cross size={32}/>
+        </span>
+        <Title order={3} mb={20}>Antwort löschen</Title>
+        <BodyText
+          styleType="body-01-regular"
+          component="p"
+          className="delete-answer-text"
+          mb={20}>
+          Bist du sicher, dass du deine Antwort löschen mächtest? Das kann nicht rückgängig gemacht werden.
+        </BodyText>
+        <div className="modal-call-to-action">
+          <Button<"button">
+            style={{ marginRight: 12 }}
+            disabled={isDeletingAnswer}
+            styleType={"secondarySimple" as TButton["styleType"]}
+            onClick={closeDeleteModal}>
+            Nein, behalten
+          </Button>
+          <Button<"button">
+            styleType="primary"
+            loading={isDeletingAnswer}
+            onClick={() => deleteAnswer({ answerId })}>
+            Ja, löschen
+          </Button>
         </div>
-        <div css={styles.contentColumn}>
-          <div css={styles.authorAndDateWrapper}>
-            <ForumItemAuthor
-              username={answer.author.username}
-              userId={answer.author.id}
-              profilePicture={undefined}
+      </Modal>
+      <ForumListItem isMarkedAsCorrect={isMarkedAsCorrect}>
+        <div css={styles.wrapper}>
+          <div css={styles.upvoteColumn}>
+            <AnswerUpvoteButton
+              authorId={answer.author.id}
+              isUpvoted={answer.isUpvoted}
+              answerId={answer.id}
+              upvotesCount={answer.upvotesCount}
             />
-            <p css={styles.date}>
-              {answer.createdAt.toLocaleDateString("de", {
-                day: "2-digit",
-                hour: "2-digit",
-                minute: "2-digit",
-                month: "short",
-                year: "numeric",
-              })}{" "}Uhr
-              {(answer.createdAt.getTime() !== answer.updatedAt.getTime()) && " (bearbeitet)"}
-            </p>
           </div>
-          <TypographyStylesProvider>
-            <div dangerouslySetInnerHTML={{ __html: answer.text }}/>
-          </TypographyStylesProvider>
-          {children && (
-            <div css={styles.childrenWrapper}>
-              {children}
+          <div css={styles.contentColumn}>
+            <div css={styles.authorAndDateWrapper}>
+              <ForumItemAuthor
+                username={answer.author.username}
+                userId={answer.author.id}
+                profilePicture={undefined}
+              />
+              <p css={styles.date}>
+                {answer.createdAt.toLocaleDateString("de", {
+                  day: "2-digit",
+                  hour: "2-digit",
+                  minute: "2-digit",
+                  month: "short",
+                  year: "numeric",
+                })}{" "}Uhr
+                {(answer.createdAt.getTime() !== answer.updatedAt.getTime()) && " (bearbeitet)"}
+              </p>
             </div>
-          )}
+            <TypographyStylesProvider>
+              <div dangerouslySetInnerHTML={{ __html: answer.text }}/>
+            </TypographyStylesProvider>
+            <div css={styles.bottomWrapper}>
+              <div>
+                {isCurrentUserAuthor && (
+                  <EditAndDeleteButtons
+                    isCurrentUserAuthor={isCurrentUserAuthor}
+                    onDelete={openDeleteModal}
+                    onEdit={() => console.log("edit")}
+                  />
+                )}
+              </div>
+              <div css={styles.replyWrapper}>
+                {props.answerType === "answer" && (
+                  <>
+                    {hasReplies && (
+                      <button
+                        type={"button"}
+                        css={styles.toggleRepliesButton(areRepliesExpanded)}
+                        onClick={() => toggleAnswerReplies(answerId)}>
+                        <p>{numberOfReplies} Antworten</p>
+                        <ExpandIcon size={22}/>
+                      </button>
+                    )}
+                    <Button<"button">
+                      styleType={"primary"}
+                      size={"medium"}
+                      onClick={props.onAddReplyClick}>
+                      Antworten
+                    </Button>
+                  </>
+                )}
+              </div>
+            </div>
+          </div>
         </div>
-      </div>
-    </ForumListItem>
+      </ForumListItem>
+    </>
   );
 };
 

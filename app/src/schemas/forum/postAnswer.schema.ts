@@ -1,5 +1,3 @@
-import { questionTextValidation } from "@/schemas/forum/question.valiation";
-
 import { z } from "zod";
 
 export const postAnswerSchema = z.object({
@@ -13,7 +11,7 @@ export const postAnswerSchema = z.object({
       parentType: z.literal("answer"),
     }),
   ]),
-  text: questionTextValidation
+  text: z.string()
 });
 
 export type PostAnswerSchema = z.input<typeof postAnswerSchema>;
