@@ -22,6 +22,7 @@ import React, { type FunctionComponent, useState } from "react";
 
 import * as styles from "./AnswerListItem.styles";
 import ForumListItem from "../../forumOverviewPage/forumListItem/ForumListItem";
+import AnswerEditor from "../answerEditor/AnswerEditor";
 
 interface CommonProps
 {
@@ -68,7 +69,7 @@ const AnswerListItem: FunctionComponent<Props> = ({
   const [showDeleteModal, setShowDeleteModal] = useState<boolean>(false);
   const openDeleteModal = (): void => setShowDeleteModal(true);
   const closeDeleteModal = (): void => setShowDeleteModal(false);
-  const [isEditing, setIsEditing] = useState<boolean>(true);
+  const [isEditing, setIsEditing] = useState<boolean>(false);
 
   const { isPending: isDeletingAnswer, mutate: deleteAnswer } = api.forum.deleteAnswer.useMutation({
     onError: () =>
@@ -132,6 +133,20 @@ const AnswerListItem: FunctionComponent<Props> = ({
     );
   }
 
+  if(isEditing)
+  {
+    return (
+      <AnswerEditor
+        cancelButtonAction={() => setIsEditing(false)}
+        parent={parent}
+        mode={{
+          editorMode: "edit",
+          initialContent: answer.text
+        }}
+      />
+    );
+  }
+  
   return (
     <>
       <Modal

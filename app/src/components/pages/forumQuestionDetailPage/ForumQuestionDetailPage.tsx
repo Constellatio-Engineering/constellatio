@@ -247,6 +247,7 @@ export const ForumQuestionDetailPage: FunctionComponent<Props> = ({ questionId }
               ))}
               <div css={styles.separator}/>
               <AnswerEditor
+                mode={{ editorMode: "create" }}
                 parent={{
                   parentType: "question",
                   questionId

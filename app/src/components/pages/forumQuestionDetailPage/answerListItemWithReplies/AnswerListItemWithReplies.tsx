@@ -93,6 +93,7 @@ const AnswerListItemWithReplies: FunctionComponent<Props> = ({ answerId, authorI
                 ))}
                 <AnswerEditor
                   id={addReplyInputId}
+                  mode={{ editorMode: "create" }}
                   cancelButtonAction={() => setRepliesState(answerId, "closed")}
                   parent={{
                     answerId,

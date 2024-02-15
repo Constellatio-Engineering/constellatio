@@ -1,6 +1,7 @@
 import { Button, type TButton } from "@/components/atoms/Button/Button";
 import type { PostQuestionSchema } from "@/schemas/forum/postQuestion.schema";
 
+import { Skeleton } from "@mantine/core";
 import { type GetInputProps } from "@mantine/form/lib/types";
 import { RichTextEditor, Link } from "@mantine/tiptap";
 import { Color } from "@tiptap/extension-color";
@@ -11,7 +12,7 @@ import { TextStyle } from "@tiptap/extension-text-style";
 import { Underline } from "@tiptap/extension-underline";
 import { type Editor, useEditor } from "@tiptap/react";
 import { StarterKit } from "@tiptap/starter-kit";
-import React, { type FunctionComponent } from "react";
+import React, { type FunctionComponent, useEffect, useState } from "react";
 
 import * as styles from "./RichtextEditorField.styles";
 
@@ -28,9 +29,11 @@ interface Props extends Omit<ReturnType<GetInputProps<PostQuestionSchema>>, "onC
   readonly id?: string;
   readonly label?: string;
   readonly minHeight?: number;
+  readonly noMinHeight?: boolean;
   readonly onChange?: (value: PostQuestionSchema["text"]) => void;
   readonly placeholder: string;
   readonly toolbarLeftContent?: React.ReactNode;
+  readonly useInitialLoadingState?: boolean;
   readonly value: PostQuestionSchema["text"];
 }
 
@@ -40,14 +43,18 @@ export const RichtextEditorField: FunctionComponent<Props> = ({
   id,
   label,
   minHeight = 370,
+  noMinHeight = false,
   onBlur,
   onChange,
   onFocus,
   placeholder,
   toolbarLeftContent,
+  useInitialLoadingState = false,
   value
 }) =>
 {
+  const [isLoading, setIsLoading] = useState<boolean>(useInitialLoadingState);
+
   const editor = useEditor({
     content: value,
     extensions: [
@@ -75,8 +82,39 @@ export const RichtextEditorField: FunctionComponent<Props> = ({
     }
   });
 
+  useEffect(() =>
+  {
+    const timeout = setTimeout(() =>
+    {
+      setIsLoading(false);
+    }, 250);
+
+    return () =>
+    {
+      clearTimeout(timeout);
+    };
+  }, []);
+
   return (
-    <div css={styles.wrapper} id={id}>
+    <div css={[styles.wrapper, isLoading && styles.wrapperLoading]} id={id}>
+      {isLoading && (
+        <div css={styles.loadingState}>
+          <div style={{ alignItems: "center", display: "flex", justifyContent: "space-between" }}>
+            <Skeleton width={150} height={20}/>
+            <Skeleton width={270} height={20}/>
+          </div>
+          <Skeleton
+            mt={40}
+            width={"100%"}
+            height={50}
+            mb={20}
+          />
+          <div style={{ alignItems: "center", display: "flex", gap: 12 }}>
+            <Skeleton width={120} height={44}/>
+            <Skeleton width={150} height={44}/>
+          </div>
+        </div>
+      )}
       {label && (
         <p css={styles.label(error != null)}>
           {label}
@@ -86,7 +124,7 @@ export const RichtextEditorField: FunctionComponent<Props> = ({
         editor={editor}
         onBlur={onBlur}
         onFocus={onFocus}
-        styles={styles.richtextEditorFieldStyles({ hasError: error != null, minHeight })}>
+        styles={styles.richtextEditorFieldStyles({ hasError: error != null, minHeight, noMinHeight })}>
         <RichTextEditor.Toolbar>
           <div style={{ display: "flex", justifyContent: "space-between", width: "100%" }}>
             <div>
@@ -114,13 +152,7 @@ export const RichtextEditorField: FunctionComponent<Props> = ({
         <div css={styles.contentWrapper}>
           <RichTextEditor.Content/>
           {buttons && buttons.length > 0 && (
-            <div style={{
-              alignItems: "center",
-              display: "flex",
-              gap: 12,
-              justifyContent: "flex-start",
-              padding: 20,
-            }}>
+            <div css={styles.buttonsWrapper}>
               {buttons.filter(Boolean).map((button, index) =>
               {
                 let isDisabled: boolean;

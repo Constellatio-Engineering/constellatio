@@ -7,7 +7,11 @@ import { type RichTextEditorStylesNames } from "@mantine/tiptap";
 
 type RichtextEditorFieldStyles = Styles<RichTextEditorStylesNames, UnknownMantineStylesParams>;
 
-export const richtextEditorFieldStyles = ({ hasError, minHeight }: { hasError: boolean; minHeight: number}): RichtextEditorFieldStyles =>
+export const richtextEditorFieldStyles = ({
+  hasError,
+  minHeight,
+  noMinHeight
+}: { hasError: boolean; minHeight: number; noMinHeight: boolean}): RichtextEditorFieldStyles =>
 {
   const styles: RichtextEditorFieldStyles = (theme: MantineTheme) => ({
     content: {
@@ -32,7 +36,7 @@ export const richtextEditorFieldStyles = ({ hasError, minHeight }: { hasError: b
           position: "relative",
         },
         maxHeight: "60vh",
-        minHeight: `${minHeight}px`,
+        minHeight: noMinHeight ? "unset" : `${minHeight}px`,
         padding: "20px",
         paddingBottom: "32px",
         whiteSpace: "normal",
@@ -58,6 +62,19 @@ export const contentWrapper = css`
 export const wrapper = css`
   width: 100%;
   scroll-margin: 20vh !important;
+  position: relative;
+`;
+
+export const wrapperLoading = css`
+  min-height: 207px;
+`;
+
+export const buttonsWrapper = css`
+  align-items: center;
+  display: flex;
+  gap: 12px;
+  justify-content: flex-start;
+  padding: 20px;
 `;
 
 export const label = (hasError: boolean) => css`
@@ -75,4 +92,16 @@ export const error = css`
   font-weight: 500;
   color: ${colors["support-error"][3]};
   font-size: 14px;
+`;
+
+export const loadingState = css`
+  position: absolute;
+  left: 0;
+  top: 0;
+  width: 100%;
+  min-height: 100%;
+  background-color: red;
+  z-index: 1;
+  padding: 14px;
+  background-color: rgba(255, 255, 255, 0.8);
 `;

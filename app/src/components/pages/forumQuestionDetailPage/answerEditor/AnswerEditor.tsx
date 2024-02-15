@@ -12,10 +12,21 @@ import * as styles from "./AnswerEditor.styles";
 type Props = {
   readonly cancelButtonAction?: () => void;
   readonly id?: string;
+  readonly mode: {
+    editorMode: "edit";
+    initialContent: string;
+  } | {
+    editorMode: "create";
+  };
   readonly parent: GetAnswersSchema["parent"];
 };
 
-const AnswerEditor: FunctionComponent<Props> = ({ cancelButtonAction, id, parent }) =>
+const AnswerEditor: FunctionComponent<Props> = ({
+  cancelButtonAction,
+  id,
+  mode,
+  parent
+}) =>
 {
   const { userDetails } = useUserDetails();
   const { isPending: isPostingAnswer, mutateAsync: postAnswer } = usePostAnswer();
@@ -23,7 +34,9 @@ const AnswerEditor: FunctionComponent<Props> = ({ cancelButtonAction, id, parent
   return (
     <ForumListItem contentWrapperStylesOverrides={styles.postAnswerFormWrapper}>
       <RichtextEditorField
-        value={""}
+        noMinHeight={true}
+        useInitialLoadingState={true}
+        value={mode.editorMode === "edit" ? mode.initialContent : ""}
         id={id}
         toolbarLeftContent={userDetails && (
           <ForumItemAuthor
