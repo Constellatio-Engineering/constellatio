@@ -15,6 +15,7 @@ export const useForumQuestionDetails = (questionId: string) =>
       const questionsFromCache = getQuestionsCacheData?.pages.flatMap((page) => page?.questions ?? []) ?? [];
       return questionsFromCache.find((question) => question.id === questionId);
     },
-    staleTime: Infinity,
+    retry: false,
+    staleTime: Infinity
   });
 };

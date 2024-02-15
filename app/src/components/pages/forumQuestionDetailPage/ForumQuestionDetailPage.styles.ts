@@ -169,9 +169,3 @@ export const modalStyles = (): ModalStyles =>
   });
   return styles;
 };
-
-export const sortingSkeletonWrapper = css`
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-`;

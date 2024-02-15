@@ -115,7 +115,7 @@ const AnswerListItem: FunctionComponent<Props> = ({
       }
 
       notifications.show({
-        autoClose: false,
+        autoClose: 10000,
         color: "green",
         message: "Deine Antwort wurde erfolgreich gelöscht",
         title: "Antwort gelöscht",

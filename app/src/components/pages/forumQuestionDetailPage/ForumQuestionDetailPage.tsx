@@ -1,24 +1,21 @@
 /* eslint-disable max-lines */
 import { BodyText } from "@/components/atoms/BodyText/BodyText";
 import { Button, type TButton } from "@/components/atoms/Button/Button";
-import IconButton from "@/components/atoms/iconButton/IconButton";
 import Tag from "@/components/atoms/tag/Tag";
 import ContentWrapper from "@/components/helpers/contentWrapper/ContentWrapper";
-import { Check } from "@/components/Icons/Check";
 import { Cross } from "@/components/Icons/Cross";
-import { Edit } from "@/components/Icons/Edit";
 import { ExpandIcon } from "@/components/Icons/Expand";
-import { Trash } from "@/components/Icons/Trash";
-import IconAndTextButton from "@/components/molecules/iconAndTextButton/IconAndTextButton";
 import BookmarkButton from "@/components/organisms/caseBlock/BookmarkButton/BookmarkButton";
 import EditQuestionModal from "@/components/pages/forumOverviewPage/editQuestionModal/EditQuestionModal";
 import ForumListItem from "@/components/pages/forumOverviewPage/forumListItem/ForumListItem";
 import { RichtextEditorField } from "@/components/pages/forumOverviewPage/questionModal/RichtextEditorField/RichtextEditorField";
 import { TagsSkeleton } from "@/components/pages/forumOverviewPage/questionsSkeleton/QuestionsSkeleton";
 import AnswerListItemWithReplies from "@/components/pages/forumQuestionDetailPage/answerListItemWithReplies/AnswerListItemWithReplies";
-import AnswersSkeleton from "@/components/pages/forumQuestionDetailPage/answersSkeleton/AnswersSkeleton";
+import AnswersSkeletonWithSorting from "@/components/pages/forumQuestionDetailPage/answersSkeletonWithSorting/AnswersSkeletonWithSorting";
 import EditAndDeleteButtons from "@/components/pages/forumQuestionDetailPage/editAndDeleteButtons/EditAndDeleteButtons";
 import ForumItemAuthor from "@/components/pages/forumQuestionDetailPage/forumItemAuthor/ForumItemAuthor";
+import ForumQuestionDetailsPageSkeleton from "@/components/pages/forumQuestionDetailPage/forumQuestionDetailsPageSkeleton/ForumQuestionDetailsPageSkeleton";
+import QuestionDetailSkeleton from "@/components/pages/forumQuestionDetailPage/questionDetailSkeleton/QuestionDetailSkeleton";
 import useBookmarks from "@/hooks/useBookmarks";
 import useContextAndErrorIfNull from "@/hooks/useContextAndErrorIfNull";
 import { useForumAnswers } from "@/hooks/useForumAnswers";
@@ -31,16 +28,14 @@ import { useForumPageStore } from "@/stores/forumPage.store";
 import { api } from "@/utils/api";
 import { appPaths } from "@/utils/paths";
 
-import {
-  Modal, Skeleton, Title, TypographyStylesProvider, UnstyledButton 
-} from "@mantine/core";
+import { Modal, Title, TypographyStylesProvider } from "@mantine/core";
 import { notifications } from "@mantine/notifications";
+import ErrorPage from "next/error";
 import Link from "next/link";
 import { useRouter } from "next/router";
 import React, { Fragment, type FunctionComponent, useState } from "react";
 
 import * as styles from "./ForumQuestionDetailPage.styles";
-import genericProfileIcon from "../../../../public/images/icons/generic-user-icon.svg";
 import { QuestionUpvoteButton } from "../forumOverviewPage/upvoteButton/QuestionUpvoteButton";
 
 type Props = {
@@ -51,7 +46,6 @@ export const ForumQuestionDetailPage: FunctionComponent<Props> = ({ questionId }
 {
   const router = useRouter();
   const { invalidateForumQuestions } = useContextAndErrorIfNull(InvalidateQueriesContext);
-  const apiContext = api.useUtils();
   const { bookmarks: questionBookmarks, isLoading: isGetQuestionBookmarksLoading } = useBookmarks("forumQuestion", { enabled: true });
   const { userDetails } = useUserDetails();
   const setEditQuestionState = useForumPageStore((state) => state.setEditQuestionState);
@@ -102,7 +96,7 @@ export const ForumQuestionDetailPage: FunctionComponent<Props> = ({ questionId }
       ]);
 
       notifications.show({
-        autoClose: false,
+        autoClose: 10000,
         color: "green",
         message: "Deine Frage wurde erfolgreich gelöscht",
         title: "Frage gelöscht",
@@ -118,12 +112,16 @@ export const ForumQuestionDetailPage: FunctionComponent<Props> = ({ questionId }
 
   if(isPending)
   {
-    return <p>Loading...</p>;
+    return (
+      <ForumQuestionDetailsPageSkeleton/>
+    );
   }
 
   if(!question)
   {
-    return <p>Question not found</p>;
+    return (
+      <ErrorPage statusCode={404}/>
+    );
   }
 
   const isCurrentUserAuthor = userDetails?.id === question.author.id;
@@ -245,16 +243,7 @@ export const ForumQuestionDetailPage: FunctionComponent<Props> = ({ questionId }
       <ContentWrapper stylesOverrides={styles.contentWrapper}>
         <div css={styles.answersWrapper}>
           {areAnswersLoading ? (
-            <Fragment>
-              <div css={styles.sortingSkeletonWrapper}>
-                <Skeleton height={20} width={120}/>
-                <Skeleton height={20} width={140}/>
-              </div>
-              <AnswersSkeleton
-                numberOfSkeletons={5}
-                withReplyButton={true}
-              />
-            </Fragment>
+            <AnswersSkeletonWithSorting numberOfSkeletons={5}/>
           ) : (
             <Fragment>
               <p>Sortieren nach</p>
@@ -282,7 +271,6 @@ export const ForumQuestionDetailPage: FunctionComponent<Props> = ({ questionId }
                   )}
                   minHeight={100}
                   placeholder={"Antwort verfassen..."}
-                  onChange={e => console.log(e)}
                   buttons={[
                     {
                       action: async (editor) =>

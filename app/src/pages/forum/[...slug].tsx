@@ -1,14 +1,12 @@
 import { Layout } from "@/components/layouts/Layout";
 import PageHead from "@/components/organisms/pageHead/PageHead";
-import DetailsPage from "@/components/pages/DetailsPage/DetailsPage";
 import { ForumQuestionDetailPage } from "@/components/pages/forumQuestionDetailPage/ForumQuestionDetailPage";
-import { db } from "@/db/connection";
+import ForumQuestionDetailsPageSkeleton from "@/components/pages/forumQuestionDetailPage/forumQuestionDetailsPageSkeleton/ForumQuestionDetailsPageSkeleton";
 import { type NextPageWithLayout } from "@/pages/_app";
-import { type Question } from "@/server/api/routers/forum.router";
-import { getCaseById } from "@/services/content/getCaseById";
-import { type IGenCase } from "@/services/graphql/__generated/sdk";
 
+import ErrorPage from "next/error";
 import { useRouter } from "next/router";
+import React from "react";
 
 /* import type { GetStaticProps, GetStaticPaths, GetStaticPathsResult } from "next";
 
@@ -62,9 +60,16 @@ const Page: NextPageWithLayout = () =>
   const router = useRouter();
   const questionId = router.query?.slug?.[1];
 
+  if(!router.isReady)
+  {
+    return (
+      <ForumQuestionDetailsPageSkeleton/>
+    );
+  }
+
   if(!questionId)
   {
-    return <p>QuestionId missing</p>;
+    return <ErrorPage statusCode={404}/>;
   }
 
   return (
