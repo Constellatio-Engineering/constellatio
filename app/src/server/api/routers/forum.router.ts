@@ -32,8 +32,6 @@ export const forumRouter = createTRPCRouter({
     .input(deleteAnswerSchema)
     .mutation(async ({ ctx: { userId }, input: { answerId } }) =>
     {
-      await sleep(500);
-
       const answer = await db.query.forumAnswers.findFirst({
         where: eq(forumAnswers.id, answerId),
       });
@@ -72,8 +70,6 @@ export const forumRouter = createTRPCRouter({
     .input(deleteQuestionSchema)
     .mutation(async ({ ctx: { userId }, input: { questionId } }) =>
     {
-      await sleep(500);
-
       const question = await db.query.forumQuestions.findFirst({
         where: eq(forumQuestions.id, questionId),
       });
@@ -128,10 +124,6 @@ export const forumRouter = createTRPCRouter({
     .input(getAnswersSchema)
     .query(async ({ ctx: { userId }, input }) =>
     {
-      console.log("getAnswers", input);
-
-      await sleep(500);
-
       const answers = await getAnswers({
         ...input,
         getAnswersType: "all",
@@ -156,8 +148,6 @@ export const forumRouter = createTRPCRouter({
     .input(getQuestionsSchema)
     .query(async ({ ctx: { userId }, input: { cursor, limit } }) =>
     {
-      await sleep(500);
-
       const questions = await getQuestions({
         cursor,
         getQuestionsType: "infinite",
@@ -210,8 +200,6 @@ export const forumRouter = createTRPCRouter({
     .input(postAnswerSchema)
     .mutation(async ({ ctx: { userId }, input }) =>
     {
-      await sleep(500);
-
       const answerInsert: ForumAnswerInsert = {
         parentAnswerId: input.parent.parentType === "answer" ? input.parent.answerId : null,
         parentQuestionId: input.parent.parentType === "question" ? input.parent.questionId : null,
@@ -225,8 +213,6 @@ export const forumRouter = createTRPCRouter({
     .input(postQuestionSchema)
     .mutation(async ({ ctx: { userId }, input }) =>
     {
-      await sleep(500);
-
       const questionInsert: ForumQuestionInsert = {
         legalFieldId: input.legalFieldId,
         slug: slugify(input.title, {
@@ -270,8 +256,6 @@ export const forumRouter = createTRPCRouter({
     .input(updateAnswerSchema)
     .mutation(async ({ ctx: { userId }, input: { answerId, text } }) =>
     {
-      await sleep(500);
-
       const answer = await db
         .query
         .forumAnswers
@@ -301,8 +285,6 @@ export const forumRouter = createTRPCRouter({
     .input(updateQuestionSchema)
     .mutation(async ({ ctx: { userId }, input: { id: questionId, updatedValues } }) =>
     {
-      await sleep(500);
-
       const [updatedQuestion] = await db
         .update(forumQuestions)
         .set(updatedValues)
