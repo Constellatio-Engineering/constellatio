@@ -27,25 +27,10 @@ export const forumListItem = css`
     align-items: center;
     justify-content: center;
     transition: background-color .1s ease;
-
-    &.marked {
-      background-color: ${colors["support-error"][1]};
-      border: 1px solid ${colors["support-error"][2]};
-    }
-
-    &.notMarked {
-      background-color: ${colors["support-success"][1]};
-      border: 1px solid ${colors["support-success"][2]};
-    }
-
+    background-color: ${colors["support-success"][1]};
+    border: 1px solid ${colors["support-success"][2]};
     &:hover, &:active {
-      &.marked {
-        background-color: #e8a9a8;
-      }
-
-      &.notMarked {
-        background-color: #d2ecde;
-      }
+      background-color: #d2ecde;
     }
   }
 `;

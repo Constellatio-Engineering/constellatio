@@ -113,8 +113,6 @@ export const forumRouter = createTRPCRouter({
     .input(getAnswerByIdSchema)
     .query(async ({ ctx: { userId }, input: { answerId } }) =>
     {
-      await sleep(500);
-
       const [answer] = await getAnswers({
         answerId,
         getAnswersType: "byId",
@@ -203,8 +201,6 @@ export const forumRouter = createTRPCRouter({
     .input(markAnswerAsCorrectSchema)
     .mutation(async ({ ctx: { userId }, input: { answerId } }) =>
     {
-      await sleep(500);
-
       const answer = await db.query.forumAnswers.findFirst({
         where: eq(forumAnswers.id, answerId),
       });
@@ -288,8 +284,6 @@ export const forumRouter = createTRPCRouter({
     .input(markAnswerAsCorrectSchema)
     .mutation(async ({ input: { answerId } }) =>
     {
-      await sleep(500);
-
       await db
         .delete(correctAnswers)
         .where(eq(correctAnswers.answerId, answerId));

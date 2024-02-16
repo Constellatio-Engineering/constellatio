@@ -260,12 +260,12 @@ const AnswerListItem: FunctionComponent<Props> = ({
         </div>
       </Modal>
       <ForumListItem isMarkedAsCorrect={isCorrectAnswer} stylesOverrides={styles.forumListItem}>
-        {props.answerType === "answer" && (
+        {(props.answerType === "answer" && userDetails?.isForumModerator) && (
           <>
             {isCorrectAnswer ? (
               <button
                 type={"button"}
-                className={"markAsCorrectButton marked"}
+                className={"markAsCorrectButton"}
                 title={"Korrekt Markierung entfernen"}
                 onClick={onUnmarkAsCorrect}>
                 {isUnmarkingAnswerAsCorrect ? <Loader size={24}/> : <Cross size={24}/>}
@@ -273,7 +273,7 @@ const AnswerListItem: FunctionComponent<Props> = ({
             ) : (
               <button
                 type={"button"}
-                className={"markAsCorrectButton notMarked"}
+                className={"markAsCorrectButton"}
                 title={"Als korrekt markieren"}
                 onClick={onMarkAsCorrect}>
                 {isMarkingAnswerAsCorrect ? <Loader size={24}/> : <Check size={24}/>}
