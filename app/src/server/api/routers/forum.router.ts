@@ -1,7 +1,7 @@
 /* eslint-disable max-lines */
 import { db } from "@/db/connection";
 import {
-  answerUpvotes,
+  answerUpvotes, correctAnswers,
   type ForumAnswerInsert, forumAnswers, type ForumQuestionInsert, forumQuestions, questionUpvotes
 } from "@/db/schema";
 import { deleteAnswerSchema } from "@/schemas/forum/deleteAnswer.schema";
@@ -10,6 +10,7 @@ import { getAnswerByIdSchema } from "@/schemas/forum/getAnswerById.schema";
 import { type GetAnswersSchema, getAnswersSchema } from "@/schemas/forum/getAnswers.schema";
 import { getQuestionByIdSchema } from "@/schemas/forum/getQuestionById.schema";
 import { type GetQuestionsSchema, getQuestionsSchema } from "@/schemas/forum/getQuestions.schema";
+import { markAnswerAsCorrectSchema } from "@/schemas/forum/markAnswerAsCorrect.schema";
 import { postAnswerSchema } from "@/schemas/forum/postAnswer.schema";
 import { postQuestionSchema } from "@/schemas/forum/postQuestion.schema";
 import { updateAnswerSchema } from "@/schemas/forum/updateAnswer.schema";
@@ -17,8 +18,8 @@ import { updateQuestionSchema } from "@/schemas/forum/updateQuestion.schema";
 import { upvoteAnswerSchema } from "@/schemas/forum/upvoteAnswer.schema";
 import { upvoteQuestionSchema } from "@/schemas/forum/upvoteQuestion.schema";
 import { getAnswers, getQuestions } from "@/server/api/services/forum.services";
-import { createTRPCRouter, protectedProcedure } from "@/server/api/trpc";
-import { ForbiddenError, InternalServerError, NotFoundError } from "@/utils/serverError";
+import { createTRPCRouter, protectedProcedure, forumModProcedure } from "@/server/api/trpc";
+import { BadRequestError, ForbiddenError, InternalServerError, NotFoundError } from "@/utils/serverError";
 import { sleep } from "@/utils/utils";
 
 import { type inferProcedureOutput } from "@trpc/server";
@@ -195,6 +196,35 @@ export const forumRouter = createTRPCRouter({
         .from(forumQuestions);
 
       return { count: totalAmountQuery?.count };
+    }),
+  markAnswerAsCorrect: forumModProcedure
+    .input(markAnswerAsCorrectSchema)
+    .mutation(async ({ ctx: { userId }, input: { answerId } }) =>
+    {
+      await sleep(500);
+
+      const answer = await db.query.forumAnswers.findFirst({
+        where: eq(forumAnswers.id, answerId),
+      });
+
+      if(!answer)
+      {
+        throw new NotFoundError();
+      }
+
+      if(!answer.parentQuestionId)
+      {
+        throw new BadRequestError(new Error("Answer is not a child of a question"));
+      }
+
+      await db
+        .insert(correctAnswers)
+        .values({
+          answerId,
+          confirmedByUserId: userId,
+          questionId: answer.parentQuestionId
+        })
+        .onConflictDoNothing();
     }),
   postAnswer: protectedProcedure
     .input(postAnswerSchema)

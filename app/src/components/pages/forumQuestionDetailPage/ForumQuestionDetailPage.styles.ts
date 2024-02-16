@@ -36,6 +36,7 @@ export const editAndDeleteButtonsWrapper = css`
 `;
 
 export const forumListItem = css`
+  overflow: hidden;
   transform: translateY(${questionOffset}px);
   position: relative;
   box-shadow: 0 8px 44px rgba(0, 0, 0, 0.04);

@@ -6,7 +6,7 @@ export const wrapper = css`
   background-color: ${colors["neutrals-01"][0]};
   border-radius: 12px;
   border: 1px solid ${colors["neutrals-01"][4]};
-  overflow: hidden;
+  position: relative;
 `;
 
 export const wrapperCorrectAnswer = css`

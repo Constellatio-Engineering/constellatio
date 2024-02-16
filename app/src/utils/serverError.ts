@@ -4,7 +4,6 @@ import { TRPCError } from "@trpc/server";
 
 export class UnauthorizedError extends TRPCError
 {
-
   public constructor(cause?: Error)
   {
     super({ cause, code: "UNAUTHORIZED" });
@@ -67,5 +66,13 @@ export class ForbiddenError extends TRPCError
   public constructor()
   {
     super({ code: "FORBIDDEN" });
+  }
+}
+
+export class BadRequestError extends TRPCError
+{
+  public constructor(cause: Error)
+  {
+    super({ cause, code: "BAD_REQUEST" });
   }
 }

@@ -90,3 +90,7 @@ INSERT INTO "ForumQuestion" ("UserId", "Title", "Slug", "Text", "LegalFieldId", 
     (:UserId, 'Software Licensing Agreements', 'software-licensing-agreements', 'What terms should be included in software licensing agreements?', 'b139e0e0-eeab-4a1b-bf87-d2c1d9119d79', '5ac93cd4-3eb0-4e5d-8b26-4f111e65a21d', 'f34005d2-1b5a-4f1b-bb30-61ec61155c05'),
     (:UserId, 'Child Custody Disputes', 'child-custody-disputes', 'How is child custody determined in legal disputes, and what factors are considered?', '3f426cc1-dab9-4be3-b32b-de10b1f90ed7', '30d4f6f1-48cc-42a4-bff2-32cb10fa7205', 'f4dfc7b8-d1ed-46f4-836a-1f52bfe88151'),
     (:UserId, 'Employment Non-Discrimination Policies', 'employment-non-discrimination-policies', 'What should be included in employment non-discrimination policies?', '198c5ef9-f544-4f76-973c-a5d05f24de65', '6c9f804c-773e-43bd-9b77-828e144d3448', '550a030e-5fa2-401b-bcaa-7073de48cf27');
+
+INSERT INTO "UserRole" ("Identifier", "Name", "Description") VALUES
+    ('admin', 'Administrator', 'Full access to all features and data'),
+    ('forumMod', 'Forum Moderator', 'User with elevated access to moderate forum content and features');

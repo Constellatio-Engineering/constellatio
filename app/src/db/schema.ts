@@ -43,7 +43,7 @@ export type FileExtension = typeof fileExtensions[number];
 export const fileMimeTypes = [...imageFileMimeTypes, ...documentFileMimeTypes] as const;
 export type FileMimeType = typeof fileMimeTypes[number];
 
-const badgeIdentifiers = [
+export const badgeIdentifiers = [
   "fall-1",
   "forum-power",
   "disziplin",
@@ -83,6 +83,9 @@ export type BadgePublicationState = typeof badgePublicationState[number];
 export const userBadgeStates = ["not-seen", "seen"] as const;
 export type UserBadgeState = typeof userBadgeStates[number];
 
+export const roles = ["forumMod", "admin"] as const;
+export type Role = typeof roles[number];
+
 export const genderEnum = pgEnum("Gender", allGenderIdentifiers);
 export const onboardingResultEnum = pgEnum("OnboardingResult", allOnboardingResults);
 export const resourceTypeEnum = pgEnum("ResourceType", allBookmarkResourceTypes);
@@ -99,6 +102,7 @@ export const fileMimeTypeEnum = pgEnum("FileMimeType", fileMimeTypes);
 export const badgeIdentifierEnum = pgEnum("BadgeIdentifier", badgeIdentifiers);
 export const userBadgeStateEnum = pgEnum("UserBadgeState", userBadgeStates);
 export const badgePublicationStateEnum = pgEnum("BadgePublicationState", badgePublicationState);
+export const roleEnum = pgEnum("Role", roles);
 
 // TODO: Go through all queries and come up with useful indexes
 
@@ -123,6 +127,7 @@ export const users = pgTable("User", {
 export const usersRelations = relations(users, ({ many }) => ({
   profilePictures: many(profilePictures),
   usersToBadges: many(usersToBadges),
+  usersToRoles: many(usersToRoles),
 }));
 
 export type UserInsert = InferInsertModel<typeof users>;
@@ -306,7 +311,7 @@ export const usersToBadges = pgTable("User_to_Badge", {
   pk: primaryKey({ columns: [table.userId, table.badgeId] }),
 }));
 
-export const usersToGroupsRelations = relations(usersToBadges, ({ one }) => ({
+export const usersToBadgesRelations = relations(usersToBadges, ({ one }) => ({
   badge: one(badges, {
     fields: [usersToBadges.badgeId],
     references: [badges.id],
@@ -350,6 +355,17 @@ export const forumAnswers = pgTable("ForumAnswer", {
 export type ForumAnswerInsert = InferInsertModel<typeof forumAnswers>;
 export type ForumAnswer = InferSelectModel<typeof forumAnswers>;
 
+export const correctAnswers = pgTable("CorrectAnswer", {
+  id: uuid("Id").defaultRandom().primaryKey(),
+  confirmedAt: timestamp("ConfirmedAt").defaultNow().notNull(),
+  confirmedByUserId: uuid("ConfirmedByUserId").references(() => users.id, { onDelete: "no action" }).notNull(),
+  questionId: uuid("QuestionId").references(() => forumQuestions.id, { onDelete: "no action" }).notNull(),
+  answerId: uuid("AnswerId").references(() => forumAnswers.id, { onDelete: "no action" }).unique().notNull(),
+});
+
+export type CorrectAnswerInsert = InferInsertModel<typeof correctAnswers>;
+export type CorrectAnswer = InferSelectModel<typeof correctAnswers>;
+
 export const questionUpvotes = pgTable("QuestionUpvote", {
   userId: uuid("UserId").references(() => users.id, { onDelete: "no action" }).notNull(),
   questionId: uuid("QuestionId").references(() => forumQuestions.id, { onDelete: "cascade" }).notNull(),
@@ -373,3 +389,40 @@ export const answerUpvotes = pgTable("AnswerUpvote", {
 
 export type AnswerUpvoteInsert = InferInsertModel<typeof answerUpvotes>;
 export type AnswerUpvote = InferSelectModel<typeof answerUpvotes>;
+
+export const userRoles = pgTable("UserRole", {
+  id: uuid("Id").defaultRandom().primaryKey(),
+  identifier: roleEnum("Identifier").unique().notNull(),
+  name: text("Name").notNull(),
+  description: text("Description").notNull(),
+}, table => ({
+  role_index: index("UserRole_Role_Index").on(table.identifier),
+}));
+
+export const userRolesRelations = relations(userRoles, ({ many }) => ({
+  usersToRoles: many(usersToRoles),
+}));
+
+export type UserRoleInsert = InferInsertModel<typeof userRoles>;
+export type UserRole = InferSelectModel<typeof userRoles>;
+
+export const usersToRoles = pgTable("User_to_Role", {
+  userId: uuid("UserId").references(() => users.id, { onDelete: "no action" }).notNull(),
+  roleId: uuid("RoleId").references(() => userRoles.id, { onDelete: "no action" }).notNull(),
+}, table => ({
+  pk: primaryKey({ columns: [table.userId, table.roleId] }),
+}));
+
+export const usersToRolesRelations = relations(usersToRoles, ({ one }) => ({
+  role: one(userRoles, {
+    fields: [usersToRoles.roleId],
+    references: [userRoles.id],
+  }),
+  user: one(users, {
+    fields: [usersToRoles.userId],
+    references: [users.id],
+  }),
+}));
+
+export type UserToRoleInsert = InferInsertModel<typeof usersToRoles>;
+export type UserToRole = InferSelectModel<typeof usersToRoles>;

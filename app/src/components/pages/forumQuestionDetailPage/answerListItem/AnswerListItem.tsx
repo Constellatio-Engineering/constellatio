@@ -1,6 +1,7 @@
 /* eslint-disable max-lines */
 import { BodyText } from "@/components/atoms/BodyText/BodyText";
 import { Button, type TButton } from "@/components/atoms/Button/Button";
+import { Check } from "@/components/Icons/Check";
 import { Cross } from "@/components/Icons/Cross";
 import { ExpandIcon } from "@/components/Icons/Expand";
 import AnswerUpvoteButton from "@/components/pages/forumOverviewPage/upvoteButton/AnswerUpvoteButton";
@@ -134,6 +135,23 @@ const AnswerListItem: FunctionComponent<Props> = ({
       });
     }
   });
+  const { isPending: isMarkingAnswerAsCorrect, mutate: markAnswerAsCorrect } = api.forum.markAnswerAsCorrect.useMutation({
+    onError: () =>
+    {
+      notifications.show({
+        autoClose: false,
+        color: "red",
+        message: "Die Antwort konnte nicht als korrekt markiert werden. Bitte versuche es erneut.",
+        title: "Da ist leider etwas schiefgelaufen...",
+      });
+    },
+    onMutate: () => console.log("marking as correct"),
+    onSuccess: () =>
+    {
+      console.log("markes as correct successfully");
+      void invalidateForumAnswer({ answerId });
+    }
+  });
 
   if(isLoading)
   {
@@ -214,7 +232,28 @@ const AnswerListItem: FunctionComponent<Props> = ({
           </Button>
         </div>
       </Modal>
-      <ForumListItem isMarkedAsCorrect={isMarkedAsCorrect}>
+      <ForumListItem isMarkedAsCorrect={isMarkedAsCorrect} stylesOverrides={styles.forumListItem}>
+        {props.answerType === "answer" && (
+          <button
+            type={"button"}
+            className={"markAsCorrectWrapper"}
+            title={"Als korrekt markieren"}
+            onClick={() =>
+            {
+              const wasConfirmed = window.confirm("Möchtest du diese Antwort als korrekt markieren?");
+
+              if(!wasConfirmed)
+              {
+                return;
+              }
+
+              markAnswerAsCorrect({ answerId });
+
+              console.log("mark as correct");
+            }}>
+            <Check size={24}/>
+          </button>
+        )}
         <div css={styles.wrapper}>
           <div css={styles.upvoteColumn}>
             <AnswerUpvoteButton
