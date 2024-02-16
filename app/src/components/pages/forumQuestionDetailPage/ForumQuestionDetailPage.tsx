@@ -52,6 +52,7 @@ export const ForumQuestionDetailPage: FunctionComponent<Props> = ({ questionId }
   const [showDeleteModal, setShowDeleteModal] = useState<boolean>(false);
   const openDeleteModal = (): void => setShowDeleteModal(true);
   const closeDeleteModal = (): void => setShowDeleteModal(false);
+  const { isPending: isPostingAnswer, mutateAsync: postAnswer } = usePostAnswer();
 
   const {
     allLegalFields,
@@ -248,9 +249,20 @@ export const ForumQuestionDetailPage: FunctionComponent<Props> = ({ questionId }
               <div css={styles.separator}/>
               <AnswerEditor
                 mode={{ editorMode: "create" }}
-                parent={{
-                  parentType: "question",
-                  questionId
+                saveButton={{
+                  action: async (editor) =>
+                  {
+                    await postAnswer({
+                      parent: {
+                        parentType: "question",
+                        questionId
+                      },
+                      text: editor?.getHTML()
+                    });
+                  },
+                  buttonText: "Antwort posten",
+                  clearAfterAction: true,
+                  isLoading: isPostingAnswer
                 }}
               />
             </Fragment>

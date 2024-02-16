@@ -58,6 +58,7 @@ const AnswerListItem: FunctionComponent<Props> = ({
   ...props
 }) =>
 {
+  const { invalidateForumAnswer } = useContextAndErrorIfNull(InvalidateQueriesContext);
   const toggleAnswerReplies = useForumPageStore(s => s.toggleAnswerReplies);
   const areRepliesExpanded = useForumPageStore(s => s.getAreRepliesExpanded(answerId));
   const hasReplies = numberOfReplies != null && numberOfReplies > 0;
@@ -70,7 +71,22 @@ const AnswerListItem: FunctionComponent<Props> = ({
   const openDeleteModal = (): void => setShowDeleteModal(true);
   const closeDeleteModal = (): void => setShowDeleteModal(false);
   const [isEditing, setIsEditing] = useState<boolean>(false);
-
+  const { isPending: isUpdatingAnswer, mutateAsync: updateAnswer } = api.forum.updateAnswer.useMutation({
+    onError: () =>
+    {
+      notifications.show({
+        autoClose: false,
+        color: "red",
+        message: "Deine Antwort konnte nicht bearbeitet werden. Bitte versuche es erneut.",
+        title: "Da ist leider etwas schiefgelaufen...",
+      });
+    },
+    onSuccess: () =>
+    {
+      void invalidateForumAnswer({ answerId });
+      setIsEditing(false);
+    }
+  });
   const { isPending: isDeletingAnswer, mutate: deleteAnswer } = api.forum.deleteAnswer.useMutation({
     onError: () =>
     {
@@ -138,7 +154,18 @@ const AnswerListItem: FunctionComponent<Props> = ({
     return (
       <AnswerEditor
         cancelButtonAction={() => setIsEditing(false)}
-        parent={parent}
+        saveButton={{
+          action: async (editor) =>
+          {
+            await updateAnswer({
+              answerId,
+              text: editor?.getHTML()
+            });
+          },
+          buttonText: "Antwort posten",
+          clearAfterAction: false,
+          isLoading: isUpdatingAnswer
+        }}
         mode={{
           editorMode: "edit",
           initialContent: answer.text

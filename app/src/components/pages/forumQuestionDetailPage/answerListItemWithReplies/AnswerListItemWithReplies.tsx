@@ -3,6 +3,7 @@ import AnswerEditor from "@/components/pages/forumQuestionDetailPage/answerEdito
 import AnswerListItem from "@/components/pages/forumQuestionDetailPage/answerListItem/AnswerListItem";
 import AnswersSkeleton from "@/components/pages/forumQuestionDetailPage/answersSkeleton/AnswersSkeleton";
 import { useForumAnswers } from "@/hooks/useForumAnswers";
+import { usePostAnswer } from "@/hooks/usePostAnswer";
 import { type GetAnswersQuestionParent } from "@/schemas/forum/getAnswers.schema";
 import { useForumPageStore } from "@/stores/forumPage.store";
 
@@ -22,6 +23,7 @@ const AnswerListItemWithReplies: FunctionComponent<Props> = ({ answerId, authorI
   const setRepliesState = useForumPageStore(s => s.setRepliesState);
   const areRepliesExpanded = useForumPageStore(s => s.getAreRepliesExpanded(answerId));
   const addReplyInputId = useId();
+  const { isPending: isPostingAnswer, mutateAsync: postAnswer } = usePostAnswer();
   const { data: replies, isLoading: areRepliesLoading } = useForumAnswers({
     parent: {
       answerId,
@@ -95,9 +97,20 @@ const AnswerListItemWithReplies: FunctionComponent<Props> = ({ answerId, authorI
                   id={addReplyInputId}
                   mode={{ editorMode: "create" }}
                   cancelButtonAction={() => setRepliesState(answerId, "closed")}
-                  parent={{
-                    answerId,
-                    parentType: "answer"
+                  saveButton={{
+                    action: async (editor) =>
+                    {
+                      await postAnswer({
+                        parent: {
+                          answerId,
+                          parentType: "answer"
+                        },
+                        text: editor?.getHTML()
+                      });
+                    },
+                    buttonText: "Antwort posten",
+                    clearAfterAction: true,
+                    isLoading: isPostingAnswer
                   }}
                 />
               </Fragment>

@@ -3,8 +3,8 @@ import { RichtextEditorField } from "@/components/pages/forumOverviewPage/questi
 import ForumItemAuthor from "@/components/pages/forumQuestionDetailPage/forumItemAuthor/ForumItemAuthor";
 import { usePostAnswer } from "@/hooks/usePostAnswer";
 import useUserDetails from "@/hooks/useUserDetails";
-import { type GetAnswersSchema } from "@/schemas/forum/getAnswers.schema";
 
+import { type Editor } from "@tiptap/react";
 import React, { type FunctionComponent } from "react";
 
 import * as styles from "./AnswerEditor.styles";
@@ -18,18 +18,22 @@ type Props = {
   } | {
     editorMode: "create";
   };
-  readonly parent: GetAnswersSchema["parent"];
+  readonly saveButton: {
+    action: (editor: Editor) => Promise<void>;
+    buttonText: string;
+    clearAfterAction: boolean;
+    isLoading: boolean;
+  };
 };
 
 const AnswerEditor: FunctionComponent<Props> = ({
   cancelButtonAction,
   id,
   mode,
-  parent
+  saveButton
 }) =>
 {
   const { userDetails } = useUserDetails();
-  const { isPending: isPostingAnswer, mutateAsync: postAnswer } = usePostAnswer();
 
   return (
     <ForumListItem contentWrapperStylesOverrides={styles.postAnswerFormWrapper}>
@@ -63,25 +67,25 @@ const AnswerEditor: FunctionComponent<Props> = ({
             {
               try
               {
-                await postAnswer({
-                  parent,
-                  text: editor?.getHTML()
-                });
+                await saveButton.action(editor);
               }
               catch (e: unknown)
               {
                 return;
               }
 
-              editor.commands.clearContent();
+              if(saveButton.clearAfterAction)
+              {
+                editor.commands.clearContent();
+              }
             },
             props: {
               disabled: false,
-              loading: isPostingAnswer,
+              loading: saveButton.isLoading,
               size: "large",
               styleType: "primary"
             },
-            text: "Antwort posten"
+            text: saveButton.buttonText
           },
         ]}
       />

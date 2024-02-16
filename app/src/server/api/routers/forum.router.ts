@@ -12,6 +12,7 @@ import { getQuestionByIdSchema } from "@/schemas/forum/getQuestionById.schema";
 import { type GetQuestionsSchema, getQuestionsSchema } from "@/schemas/forum/getQuestions.schema";
 import { postAnswerSchema } from "@/schemas/forum/postAnswer.schema";
 import { postQuestionSchema } from "@/schemas/forum/postQuestion.schema";
+import { updateAnswerSchema } from "@/schemas/forum/updateAnswer.schema";
 import { updateQuestionSchema } from "@/schemas/forum/updateQuestion.schema";
 import { upvoteAnswerSchema } from "@/schemas/forum/upvoteAnswer.schema";
 import { upvoteQuestionSchema } from "@/schemas/forum/upvoteQuestion.schema";
@@ -264,6 +265,37 @@ export const forumRouter = createTRPCRouter({
           eq(questionUpvotes.userId, userId)
         )
       );
+    }),
+  updateAnswer: protectedProcedure
+    .input(updateAnswerSchema)
+    .mutation(async ({ ctx: { userId }, input: { answerId, text } }) =>
+    {
+      await sleep(500);
+
+      const answer = await db
+        .query
+        .forumAnswers
+        .findFirst({
+          where: eq(forumAnswers.id, answerId),
+        });
+
+      if(!answer)
+      {
+        throw new NotFoundError();
+      }
+
+      if(answer.userId !== userId)
+      {
+        throw new ForbiddenError();
+      }
+
+      const [updatedAnswer] = await db
+        .update(forumAnswers)
+        .set({ text })
+        .where(eq(forumAnswers.id, answerId))
+        .returning();
+
+      return updatedAnswer;
     }),
   updateQuestion: protectedProcedure
     .input(updateQuestionSchema)
