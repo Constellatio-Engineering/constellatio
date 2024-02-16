@@ -17,7 +17,7 @@ import { useForumPageStore } from "@/stores/forumPage.store";
 import { api } from "@/utils/api";
 import { type Prettify } from "@/utils/types";
 
-import { Modal, Title, TypographyStylesProvider } from "@mantine/core";
+import { Loader, Modal, Title, TypographyStylesProvider } from "@mantine/core";
 import { notifications } from "@mantine/notifications";
 import React, { type FunctionComponent, useState } from "react";
 
@@ -28,13 +28,11 @@ import AnswerEditor from "../answerEditor/AnswerEditor";
 interface CommonProps
 {
   readonly answerId: string;
-  readonly authorId: string;
 }
 
 export interface AnswerProps extends CommonProps
 {
   readonly answerType: "answer";
-  readonly isMarkedAsCorrect: boolean;
   readonly numberOfReplies: number | undefined;
   readonly onAddReplyClick: () => void;
   readonly parent: GetAnswersQuestionParent;
@@ -43,7 +41,6 @@ export interface AnswerProps extends CommonProps
 export interface ReplyProps extends CommonProps
 {
   readonly answerType: "reply";
-  readonly isMarkedAsCorrect: undefined;
   readonly numberOfReplies: undefined;
   readonly parent: GetAnswersAnswerParent;
 }
@@ -52,8 +49,6 @@ type Props = Prettify<AnswerProps | ReplyProps>;
 
 const AnswerListItem: FunctionComponent<Props> = ({
   answerId,
-  authorId,
-  isMarkedAsCorrect = false,
   numberOfReplies,
   parent,
   ...props
@@ -64,10 +59,11 @@ const AnswerListItem: FunctionComponent<Props> = ({
   const areRepliesExpanded = useForumPageStore(s => s.getAreRepliesExpanded(answerId));
   const hasReplies = numberOfReplies != null && numberOfReplies > 0;
   const { userDetails } = useUserDetails();
-  const isCurrentUserAuthor = userDetails?.id === authorId;
   const { invalidateForumAnswers } = useContextAndErrorIfNull(InvalidateQueriesContext);
   const { data: answer, isLoading } = useForumAnswerDetails({ answerId, parent });
-
+  const authorId = answer?.author.id;
+  const isCorrectAnswer = answer?.isCorrectAnswer ?? false;
+  const isCurrentUserAuthor = authorId != null && userDetails?.id === authorId;
   const [showDeleteModal, setShowDeleteModal] = useState<boolean>(false);
   const openDeleteModal = (): void => setShowDeleteModal(true);
   const closeDeleteModal = (): void => setShowDeleteModal(false);
@@ -145,13 +141,44 @@ const AnswerListItem: FunctionComponent<Props> = ({
         title: "Da ist leider etwas schiefgelaufen...",
       });
     },
-    onMutate: () => console.log("marking as correct"),
-    onSuccess: () =>
-    {
-      console.log("markes as correct successfully");
-      void invalidateForumAnswer({ answerId });
-    }
+    onSuccess: () => void invalidateForumAnswer({ answerId })
   });
+  const { isPending: isUnmarkingAnswerAsCorrect, mutate: unmarkAnswerAsCorrect } = api.forum.unmarkAnswerAsCorrect.useMutation({
+    onError: () =>
+    {
+      notifications.show({
+        autoClose: false,
+        color: "red",
+        message: "Die Markierung der Antwort als korrekt konnte nicht entfernt werden. Bitte versuche es erneut.",
+        title: "Da ist leider etwas schiefgelaufen...",
+      });
+    },
+    onSuccess: () => void invalidateForumAnswer({ answerId })
+  });
+
+  const onMarkAsCorrect = (): void =>
+  {
+    const wasConfirmed = window.confirm("Möchtest du diese Antwort als korrekt markieren?");
+
+    if(!wasConfirmed)
+    {
+      return;
+    }
+
+    markAnswerAsCorrect({ answerId });
+  };
+
+  const onUnmarkAsCorrect = (): void =>
+  {
+    const wasConfirmed = window.confirm("Möchtest du die Markierung dieser Antwort als korrekt aufheben?");
+
+    if(!wasConfirmed)
+    {
+      return;
+    }
+
+    unmarkAnswerAsCorrect({ answerId });
+  };
 
   if(isLoading)
   {
@@ -232,27 +259,27 @@ const AnswerListItem: FunctionComponent<Props> = ({
           </Button>
         </div>
       </Modal>
-      <ForumListItem isMarkedAsCorrect={isMarkedAsCorrect} stylesOverrides={styles.forumListItem}>
+      <ForumListItem isMarkedAsCorrect={isCorrectAnswer} stylesOverrides={styles.forumListItem}>
         {props.answerType === "answer" && (
-          <button
-            type={"button"}
-            className={"markAsCorrectWrapper"}
-            title={"Als korrekt markieren"}
-            onClick={() =>
-            {
-              const wasConfirmed = window.confirm("Möchtest du diese Antwort als korrekt markieren?");
-
-              if(!wasConfirmed)
-              {
-                return;
-              }
-
-              markAnswerAsCorrect({ answerId });
-
-              console.log("mark as correct");
-            }}>
-            <Check size={24}/>
-          </button>
+          <>
+            {isCorrectAnswer ? (
+              <button
+                type={"button"}
+                className={"markAsCorrectButton marked"}
+                title={"Korrekt Markierung entfernen"}
+                onClick={onUnmarkAsCorrect}>
+                {isUnmarkingAnswerAsCorrect ? <Loader size={24}/> : <Cross size={24}/>}
+              </button>
+            ) : (
+              <button
+                type={"button"}
+                className={"markAsCorrectButton notMarked"}
+                title={"Als korrekt markieren"}
+                onClick={onMarkAsCorrect}>
+                {isMarkingAnswerAsCorrect ? <Loader size={24}/> : <Check size={24}/>}
+              </button>
+            )}
+          </>
         )}
         <div css={styles.wrapper}>
           <div css={styles.upvoteColumn}>

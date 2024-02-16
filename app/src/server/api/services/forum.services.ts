@@ -1,7 +1,7 @@
 /* eslint-disable max-lines */
 import { db } from "@/db/connection";
 import {
-  answerUpvotes, forumAnswers, forumQuestions, questionUpvotes, users 
+  answerUpvotes, correctAnswers, forumAnswers, forumQuestions, questionUpvotes, users
 } from "@/db/schema";
 import { type GetAnswersSchema } from "@/schemas/forum/getAnswers.schema";
 import { type GetQuestionsSchema } from "@/schemas/forum/getQuestions.schema";
@@ -217,6 +217,7 @@ export const getAnswers = async (params: GetAnswersParams) => // eslint-disable-
       createdAt: countUpvotesSubquery.createdAt,
       id: countUpvotesSubquery.id,
       index: countUpvotesSubquery.index,
+      isCorrectAnswer: sql<boolean>`case when ${correctAnswers.answerId} is null then false else true end`.as("isCorrectAnswer"),
       isUpvoted: countUpvotesSubquery.isUpvoted,
       text: countUpvotesSubquery.text,
       updatedAt: countUpvotesSubquery.updatedAt,
@@ -225,6 +226,7 @@ export const getAnswers = async (params: GetAnswersParams) => // eslint-disable-
     .from(countUpvotesSubquery)
     .where(and(...queryConditions))
     .innerJoin(users, eq(countUpvotesSubquery.userId, users.id))
+    .leftJoin(correctAnswers, eq(countUpvotesSubquery.id, correctAnswers.answerId))
     .orderBy(...(Array.isArray(orderBy) ? orderBy : [orderBy]));
 
   return answersSortedWithAuthor;

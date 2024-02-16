@@ -113,6 +113,8 @@ export const forumRouter = createTRPCRouter({
     .input(getAnswerByIdSchema)
     .query(async ({ ctx: { userId }, input: { answerId } }) =>
     {
+      await sleep(500);
+
       const [answer] = await getAnswers({
         answerId,
         getAnswersType: "byId",
@@ -281,6 +283,16 @@ export const forumRouter = createTRPCRouter({
           eq(questionUpvotes.userId, userId)
         )
       );
+    }),
+  unmarkAnswerAsCorrect: forumModProcedure
+    .input(markAnswerAsCorrectSchema)
+    .mutation(async ({ input: { answerId } }) =>
+    {
+      await sleep(500);
+
+      await db
+        .delete(correctAnswers)
+        .where(eq(correctAnswers.answerId, answerId));
     }),
   updateAnswer: protectedProcedure
     .input(updateAnswerSchema)

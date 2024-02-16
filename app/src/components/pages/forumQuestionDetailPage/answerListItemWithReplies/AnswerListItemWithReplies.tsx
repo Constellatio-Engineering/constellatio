@@ -66,8 +66,6 @@ const AnswerListItemWithReplies: FunctionComponent<Props> = ({ answerId, authorI
       <AnswerListItem
         answerId={answerId}
         answerType={"answer"}
-        authorId={authorId}
-        isMarkedAsCorrect={false}
         numberOfReplies={replies?.length}
         onAddReplyClick={onAddReplyClick}
         parent={parent}
@@ -84,9 +82,7 @@ const AnswerListItemWithReplies: FunctionComponent<Props> = ({ answerId, authorI
                     key={reply.id}
                     answerType={"reply"}
                     numberOfReplies={undefined}
-                    authorId={reply.author.id}
                     answerId={reply.id}
-                    isMarkedAsCorrect={undefined}
                     parent={{
                       answerId,
                       parentType: "answer"
