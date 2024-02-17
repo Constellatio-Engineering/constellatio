@@ -83,7 +83,7 @@ export const ForumQuestionDetailPage: FunctionComponent<Props> = ({ questionId }
 
   const { data: question, isPending } = useForumQuestionDetails(questionId);
 
-  const { data: answers, isLoading: areAnswersLoading, isRefetching: areAnswersRefetching } = useForumAnswers({
+  const { data: answers, isLoading: areAnswersLoading, /* isRefetching: areAnswersRefetching*/ } = useForumAnswers({
     parent: {
       parentType: "question",
       questionId
@@ -285,7 +285,7 @@ export const ForumQuestionDetailPage: FunctionComponent<Props> = ({ questionId }
               </div>
             </div>
           </div>
-          {(areAnswersLoading || areAnswersRefetching) ? (
+          {areAnswersLoading ? (
             <AnswersSkeleton
               numberOfSkeletons={5}
               withReplyButton={true}
