@@ -8,7 +8,6 @@ import { ExpandIcon } from "@/components/Icons/Expand";
 import BookmarkButton from "@/components/organisms/caseBlock/BookmarkButton/BookmarkButton";
 import EditQuestionModal from "@/components/pages/forumOverviewPage/editQuestionModal/EditQuestionModal";
 import ForumListItem from "@/components/pages/forumOverviewPage/forumListItem/ForumListItem";
-import { RichtextEditorField } from "@/components/pages/forumOverviewPage/questionModal/RichtextEditorField/RichtextEditorField";
 import { TagsSkeleton } from "@/components/pages/forumOverviewPage/questionsSkeleton/QuestionsSkeleton";
 import AnswerEditor from "@/components/pages/forumQuestionDetailPage/answerEditor/AnswerEditor";
 import AnswerListItemWithReplies from "@/components/pages/forumQuestionDetailPage/answerListItemWithReplies/AnswerListItemWithReplies";
@@ -238,7 +237,6 @@ export const ForumQuestionDetailPage: FunctionComponent<Props> = ({ questionId }
               {answers?.map((answer) => (
                 <AnswerListItemWithReplies
                   key={answer.id}
-                  authorId={answer.author.id}
                   answerId={answer.id}
                   parent={{
                     parentType: "question",

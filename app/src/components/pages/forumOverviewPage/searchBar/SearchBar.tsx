@@ -4,13 +4,14 @@ import { Search } from "@/components/Icons/Search";
 import EmptyStateCard from "@/components/organisms/emptyStateCard/EmptyStateCard";
 import { useForumQuestionsSearchResults } from "@/hooks/useForumQuestionsSearchResults";
 import { useForumQuestionsSearchStore } from "@/stores/forumQuestionsSearch.store";
-import { appPaths, getForumQuestionUrl } from "@/utils/paths";
+import { getForumQuestionUrl } from "@/utils/paths";
 
 import { Input, Popover } from "@mantine/core";
 import Link from "next/link";
 import React, { type FunctionComponent } from "react";
 
 import * as styles from "./SearchBar.styles";
+
 const SearchBar: FunctionComponent = () =>
 {
   const searchValue = useForumQuestionsSearchStore((s) => s.searchValue);

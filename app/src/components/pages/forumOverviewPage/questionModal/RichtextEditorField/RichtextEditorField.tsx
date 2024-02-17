@@ -1,3 +1,4 @@
+/* eslint-disable max-lines */
 import { Button, type TButton } from "@/components/atoms/Button/Button";
 import type { PostQuestionSchema } from "@/schemas/forum/postQuestion.schema";
 

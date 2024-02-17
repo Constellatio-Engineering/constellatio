@@ -15,11 +15,10 @@ import * as styles from "./AnswerListItemWithReplies.styles";
 
 type Props = {
   readonly answerId: string;
-  readonly authorId: string;
   readonly parent: GetAnswersQuestionParent;
 };
 
-const AnswerListItemWithReplies: FunctionComponent<Props> = ({ answerId, authorId, parent }) =>
+const AnswerListItemWithReplies: FunctionComponent<Props> = ({ answerId, parent }) =>
 {
   const setRepliesState = useForumPageStore(s => s.setRepliesState);
   const areRepliesExpanded = useForumPageStore(s => s.getAreRepliesExpanded(answerId));

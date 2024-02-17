@@ -1,9 +1,6 @@
 import { colors } from "@/constants/styles/colors";
-import type { UnknownMantineStylesParams } from "@/utils/types";
 
 import { css } from "@emotion/react";
-import type { ModalStylesNames } from "@mantine/core";
-import type { Styles } from "@mantine/styles";
 
 export const repliesWrapper = css`
   padding-left: 80px;

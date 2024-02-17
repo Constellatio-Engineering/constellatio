@@ -1,13 +1,12 @@
 /* eslint-disable max-lines */
 import { db } from "@/db/connection";
 import {
-  answerUpvotes, correctAnswers,
-  type ForumAnswerInsert, forumAnswers, type ForumQuestionInsert, forumQuestions, questionUpvotes
+  answerUpvotes, correctAnswers, type ForumAnswerInsert, forumAnswers, type ForumQuestionInsert, forumQuestions, questionUpvotes 
 } from "@/db/schema";
 import { deleteAnswerSchema } from "@/schemas/forum/deleteAnswer.schema";
 import { deleteQuestionSchema } from "@/schemas/forum/deleteQuestion.schema";
 import { getAnswerByIdSchema } from "@/schemas/forum/getAnswerById.schema";
-import { type GetAnswersSchema, getAnswersSchema } from "@/schemas/forum/getAnswers.schema";
+import { getAnswersSchema } from "@/schemas/forum/getAnswers.schema";
 import { getQuestionByIdSchema } from "@/schemas/forum/getQuestionById.schema";
 import { type GetQuestionsSchema, getQuestionsSchema } from "@/schemas/forum/getQuestions.schema";
 import { markAnswerAsCorrectSchema } from "@/schemas/forum/markAnswerAsCorrect.schema";
@@ -18,9 +17,8 @@ import { updateQuestionSchema } from "@/schemas/forum/updateQuestion.schema";
 import { upvoteAnswerSchema } from "@/schemas/forum/upvoteAnswer.schema";
 import { upvoteQuestionSchema } from "@/schemas/forum/upvoteQuestion.schema";
 import { getAnswers, getQuestions } from "@/server/api/services/forum.services";
-import { createTRPCRouter, protectedProcedure, forumModProcedure } from "@/server/api/trpc";
+import { createTRPCRouter, forumModProcedure, protectedProcedure } from "@/server/api/trpc";
 import { BadRequestError, ForbiddenError, InternalServerError, NotFoundError } from "@/utils/serverError";
-import { sleep } from "@/utils/utils";
 
 import { type inferProcedureOutput } from "@trpc/server";
 import {
@@ -353,4 +351,3 @@ export const forumRouter = createTRPCRouter({
 });
 
 export type Question = NonNullable<inferProcedureOutput<typeof forumRouter.getQuestionById>>;
-export type Answer = NonNullable<inferProcedureOutput<typeof forumRouter.getAnswerById>>;

@@ -1,10 +1,8 @@
 import { Check } from "@/components/Icons/Check";
-import { CheckCircle } from "@/components/Icons/CheckCircle";
 
 import type { SerializedStyles } from "@emotion/react";
 import React, { type FunctionComponent, type ReactNode } from "react";
 
-import { wrapperCorrectAnswer } from "./ForumListItem.styles";
 import * as styles from "./ForumListItem.styles";
 
 type Props = {

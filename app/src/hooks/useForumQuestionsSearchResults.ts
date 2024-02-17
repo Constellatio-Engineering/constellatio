@@ -5,7 +5,7 @@ import { type ForumQuestionSearchIndexItem, searchIndices } from "@/utils/search
 import { keepPreviousData, useQuery } from "@tanstack/react-query";
 import { useContext } from "react";
 
-export const forumQuestionsSearchResultsQueryKey = "forumQuestionsSearchResults";
+const forumQuestionsSearchResultsQueryKey = "forumQuestionsSearchResults";
 
 export const useForumQuestionsSearchResults = () =>
 {

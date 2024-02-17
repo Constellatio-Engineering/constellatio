@@ -8,7 +8,7 @@
  */
 
 import { db } from "@/db/connection";
-import { userRoles, users } from "@/db/schema";
+import { users } from "@/db/schema";
 import { env } from "@/env.mjs";
 import { type ClientError, clientErrors } from "@/utils/clientError";
 import { EmailAlreadyTakenError, UnauthorizedError } from "@/utils/serverError";
@@ -89,7 +89,7 @@ export const createTRPCContext = async ({ req, res }: CreateNextContextOptions):
  * ZodErrors so that you get typesafety on the frontend if your procedure fails due to validation
  * errors on the backend.
  */
-export const t = initTRPC
+const t = initTRPC
   .context<typeof createTRPCContext>()
   .create({
     errorFormatter: ({ error, shape }) =>

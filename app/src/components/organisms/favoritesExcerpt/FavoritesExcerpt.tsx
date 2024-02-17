@@ -1,7 +1,6 @@
 import FavoriteCard from "@/components/molecules/favoriteCard/FavoriteCard";
 import EmptyStateCard from "@/components/organisms/emptyStateCard/EmptyStateCard";
 import { type Favorites } from "@/hooks/useAllFavorites";
-import useBookmarks from "@/hooks/useBookmarks";
 import { appPaths } from "@/utils/paths";
 import { type Nullable } from "@/utils/types";
 
