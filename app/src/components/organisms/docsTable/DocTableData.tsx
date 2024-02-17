@@ -58,7 +58,7 @@ export const DocsTableData: FunctionComponent<Document> = (doc) =>
     onSuccess: onDocumentMutation
   });
 
-  const { isLoading: isDownloading, mutate: downloadDocument } = useMutation({
+  const { isPending: isDownloading, mutate: downloadDocument } = useMutation({
     mutationFn: async () =>
     {
       const response = await axios.post(apiPaths.downloadDocument, { documentId, }, { responseType: "blob" });

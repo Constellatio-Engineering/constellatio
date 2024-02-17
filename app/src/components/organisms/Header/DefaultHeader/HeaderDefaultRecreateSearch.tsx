@@ -7,7 +7,7 @@ import { type FunctionComponent } from "react";
 
 const HeaderDefaultRecreateSearch: FunctionComponent = () => 
 {
-  const { isLoading: isRecreatingSearchIndices, mutate: recreateSearchIndices } = useMutation({
+  const { isPending: isRecreatingSearchIndices, mutate: recreateSearchIndices } = useMutation({
     mutationFn: async () => axios.post("/api/search/recreate-search-indices"),
     onError: (e: unknown) =>
       console.log(

@@ -55,7 +55,7 @@ const EditProfileImgModal: FunctionComponent<EditProfileImgModalProps> = ({ onCl
     "avatar-01", "avatar-02", "avatar-03", "avatar-04", "avatar-05", "avatar-06", "avatar-07"
   ];
   const theme = useMantineTheme();*/
-  const { isLoading, mutate: uploadFile } = useMutation({
+  const { isPending: isLoading, mutate: uploadFile } = useMutation({
     mutationFn: async (): Promise<void> =>
     {
       if(!selectedFile)

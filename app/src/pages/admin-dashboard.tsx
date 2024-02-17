@@ -6,7 +6,7 @@ import { api } from "@/utils/api";
 
 const AdminDashboard: NextPageWithLayout = () =>
 {
-  const { data: casesAverageObject, error, isLoading } = api.internTrackingFromPosthog.getCasesSolveTimeAverage.useQuery();
+  const { data: casesAverageObject, error, isPending: isLoading } = api.internTrackingFromPosthog.getCasesSolveTimeAverage.useQuery();
 
   /* TODO:: aulagern in component wenn die Zeit dafür da ist */
 

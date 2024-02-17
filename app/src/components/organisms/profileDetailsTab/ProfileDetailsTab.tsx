@@ -47,7 +47,7 @@ const ProfileDetailsTab: FunctionComponent<Props> = ({ userDetails }) =>
     z.setErrorMap(makeZodI18nMap({ t }));
   }, [t]);
 
-  const { isLoading: isUpdateUserDetailsLoading, mutate: updateUserDetails } = api.users.updateUserDetails.useMutation({
+  const { isPending: isUpdateUserDetailsLoading, mutate: updateUserDetails } = api.users.updateUserDetails.useMutation({
     onError: e =>
     {
       console.log("error while updating user data:", e);

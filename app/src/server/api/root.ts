@@ -6,6 +6,7 @@ import { caisyRouter } from "@/server/api/routers/caisy.router";
 import { caseProgressRouter } from "@/server/api/routers/caseProgress.router";
 import { documentsRouter } from "@/server/api/routers/documents.router";
 import { foldersRouter } from "@/server/api/routers/folders.router";
+import { forumRouter } from "@/server/api/routers/forum.router";
 import { gamesProgressRouter } from "@/server/api/routers/gamesProgress.router";
 import { internTrackingFromPosthogRouter } from "@/server/api/routers/internTrackingFromPosthog.router";
 import { notesRouter } from "@/server/api/routers/notes.router";
@@ -27,6 +28,7 @@ export const appRouter = createTRPCRouter({
   casesProgress: caseProgressRouter,
   documents: documentsRouter,
   folders: foldersRouter,
+  forum: forumRouter,
   gamesProgress: gamesProgressRouter,
   internTrackingFromPosthog: internTrackingFromPosthogRouter,
   notes: notesRouter,

@@ -8,8 +8,11 @@ import { Global } from "@emotion/react";
 import {
   MantineProvider, type ScrollAreaStylesNames, type ScrollAreaStylesParams, type Styles
 } from "@mantine/core";
+import { type DeepPartial } from "@mantine/styles/lib/theme/types/DeepPartial";
 import { Karla, Libre_Baskerville } from "next/font/google";
 import React, { type FunctionComponent, type ReactNode } from "react";
+
+import { type ExtendedCustomColors } from "../../types/mantine";
 
 const karlaFont = Karla({
   style: ["normal", "italic"],
@@ -46,7 +49,7 @@ const CustomThemingProvider: FunctionComponent<Props> = ({ children }) =>
       withNormalizeCSS
       theme={{
         colorScheme: "light",
-        colors,
+        colors: colors as unknown as DeepPartial<Record<ExtendedCustomColors, [string, string, string, string, string, string, string, string, string, string]>>,
         components: {
           ScrollArea: {
             styles: scrollAreaStyles,

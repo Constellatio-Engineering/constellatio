@@ -1,7 +1,7 @@
 /* eslint-disable sort-keys-fix/sort-keys-fix,@typescript-eslint/naming-convention,@typescript-eslint/no-use-before-define,max-lines */
 import { type InferInsertModel, type InferSelectModel, relations } from "drizzle-orm";
 import {
-  text, pgTable, integer, pgEnum, uuid, smallint, unique, timestamp, primaryKey, index
+  text, pgTable, integer, pgEnum, uuid, smallint, unique, timestamp, primaryKey, index, type AnyPgColumn, serial, uniqueIndex
 } from "drizzle-orm/pg-core";
 
 export const allGenderIdentifiers = ["male", "female", "diverse"] as const;
@@ -10,7 +10,7 @@ export type GenderIdentifier = typeof allGenderIdentifiers[number];
 export const allOnboardingResults = ["skipped", "completed"] as const;
 export type OnboardingResult = typeof allOnboardingResults[number];
 
-export const allBookmarkResourceTypes = ["article", "case"] as const;
+export const allBookmarkResourceTypes = ["article", "case", "forumQuestion"] as const;
 export type BookmarkResourceType = typeof allBookmarkResourceTypes[number];
 
 export const allSearchIndexTypes = ["article", "case"] as const;
@@ -43,7 +43,7 @@ export type FileExtension = typeof fileExtensions[number];
 export const fileMimeTypes = [...imageFileMimeTypes, ...documentFileMimeTypes] as const;
 export type FileMimeType = typeof fileMimeTypes[number];
 
-const badgeIdentifiers = [
+export const badgeIdentifiers = [
   "fall-1",
   "forum-power",
   "disziplin",
@@ -83,6 +83,9 @@ export type BadgePublicationState = typeof badgePublicationState[number];
 export const userBadgeStates = ["not-seen", "seen"] as const;
 export type UserBadgeState = typeof userBadgeStates[number];
 
+export const roles = ["forumMod", "admin"] as const;
+export type Role = typeof roles[number];
+
 export const genderEnum = pgEnum("Gender", allGenderIdentifiers);
 export const onboardingResultEnum = pgEnum("OnboardingResult", allOnboardingResults);
 export const resourceTypeEnum = pgEnum("ResourceType", allBookmarkResourceTypes);
@@ -99,11 +102,12 @@ export const fileMimeTypeEnum = pgEnum("FileMimeType", fileMimeTypes);
 export const badgeIdentifierEnum = pgEnum("BadgeIdentifier", badgeIdentifiers);
 export const userBadgeStateEnum = pgEnum("UserBadgeState", userBadgeStates);
 export const badgePublicationStateEnum = pgEnum("BadgePublicationState", badgePublicationState);
+export const roleEnum = pgEnum("Role", roles);
 
 // TODO: Go through all queries and come up with useful indexes
 
 export const users = pgTable("User", {
-  id: uuid("Id").unique().notNull().primaryKey(),
+  id: uuid("Id").primaryKey(),
   email: text("Email").unique().notNull(),
   displayName: text("DisplayName").notNull(),
   firstName: text("FirstName").notNull(),
@@ -123,13 +127,14 @@ export const users = pgTable("User", {
 export const usersRelations = relations(users, ({ many }) => ({
   profilePictures: many(profilePictures),
   usersToBadges: many(usersToBadges),
+  usersToRoles: many(usersToRoles),
 }));
 
 export type UserInsert = InferInsertModel<typeof users>;
 export type User = InferSelectModel<typeof users>;
 
 export const profilePictures = pgTable("ProfilePicture", {
-  id: uuid("Id").unique().notNull().primaryKey(),
+  id: uuid("Id").primaryKey(),
   serverFilename: text("ServerFilename").notNull(),
   fileExtension: imageFileExtensionEnum("FileExtension").notNull(),
   contentType: imageFileMimeTypeEnum("ContentType").notNull(),
@@ -147,20 +152,20 @@ export type ProfilePictureInsert = InferInsertModel<typeof profilePictures>;
 export type ProfilePicture = InferSelectModel<typeof profilePictures>;
 
 export const bookmarks = pgTable("Bookmark", {
-  id: uuid("Id").defaultRandom().unique().notNull().primaryKey(),
+  id: uuid("Id").defaultRandom().primaryKey(),
   userId: uuid("UserId").references(() => users.id, { onDelete: "no action" }).notNull(),
   resourceType: resourceTypeEnum("ResourceType").notNull(),
   createdAt: timestamp("CreatedAt").defaultNow().notNull(),
   resourceId: uuid("ResourceId").notNull()
 }, table => ({
-  unq: unique().on(table.resourceType, table.resourceId, table.userId),
+  userId_resourceType_resourceId_unique: unique().on(table.userId, table.resourceType, table.resourceId),
 }));
 
 export type BookmarkInsert = InferInsertModel<typeof bookmarks>;
 export type Bookmark = InferSelectModel<typeof bookmarks>;
 
 export const uploadFolders = pgTable("UploadFolder", {
-  id: uuid("Id").defaultRandom().unique().notNull().primaryKey(),
+  id: uuid("Id").defaultRandom().primaryKey(),
   createdAt: timestamp("CreatedAt").defaultNow().notNull(),
   userId: uuid("UserId").references(() => users.id, { onDelete: "no action" }).notNull(),
   name: text("Name").notNull()
@@ -170,7 +175,7 @@ export type UploadFolderInsert = InferInsertModel<typeof uploadFolders>;
 export type UploadFolder = InferSelectModel<typeof uploadFolders>;
 
 export const uploadedFiles = pgTable("UploadedFile", {
-  id: uuid("Id").defaultRandom().unique().notNull().primaryKey(),
+  id: uuid("Id").defaultRandom().primaryKey(),
   userId: uuid("UserId").references(() => users.id, { onDelete: "no action" }).notNull(),
   createdAt: timestamp("CreatedAt").defaultNow().notNull(),
   folderId: uuid("FolderId").references(() => uploadFolders.id, { onDelete: "no action" }),
@@ -186,7 +191,7 @@ export type UploadedFile = InferSelectModel<typeof uploadedFiles>;
 export type UploadedFileWithNote = UploadedFile & { note: Note | null };
 
 export const documents = pgTable("Document", {
-  id: uuid("Id").defaultRandom().unique().notNull().primaryKey(),
+  id: uuid("Id").defaultRandom().primaryKey(),
   userId: uuid("UserId").references(() => users.id, { onDelete: "no action" }).notNull(),
   createdAt: timestamp("CreatedAt").defaultNow().notNull(),
   updatedAt: timestamp("UpdatedAt").defaultNow().notNull(),
@@ -199,7 +204,7 @@ export type DocumentInsert = InferInsertModel<typeof documents>;
 export type Document = InferSelectModel<typeof documents>;
 
 export const notes = pgTable("Note", {
-  id: uuid("Id").defaultRandom().unique().notNull().primaryKey(),
+  id: uuid("Id").defaultRandom().primaryKey(),
   userId: uuid("UserId").references(() => users.id, { onDelete: "no action" }).notNull(),
   fileId: uuid("FileId").references(() => uploadedFiles.id, { onDelete: "no action" }).notNull(),
   createdAt: timestamp("CreatedAt").defaultNow().notNull(),
@@ -215,8 +220,11 @@ export const casesViews = pgTable("CaseView", {
   caseId: uuid("CaseId").notNull(),
   updatedAt: timestamp("UpdatedAt").defaultNow(),
 }, table => ({
-  caseIdIndex: index("CaseId_Index").on(table.caseId),
-  pk: primaryKey(table.userId, table.caseId),
+  caseId_index: index("CaseView_CaseId_Index").on(table.caseId),
+  pk: primaryKey({
+    columns: [table.userId, table.caseId],
+    name: "CaseView_UserId_CaseId_Pk",
+  }),
 }));
 
 export type CaseViewInsert = InferInsertModel<typeof casesViews>;
@@ -227,51 +235,48 @@ export const articlesViews = pgTable("ArticleView", {
   articleId: uuid("ArticleId").notNull(),
   updatedAt: timestamp("UpdatedAt").defaultNow(),
 }, table => ({
-  articleIdIndex: index("ArticleId_Index").on(table.articleId),
-  pk: primaryKey(table.userId, table.articleId),
+  articleId_index: index("ArticleView_ArticleId_Index").on(table.articleId),
+  pk: primaryKey({ columns: [table.userId, table.articleId] }),
 }));
 
 export type ArticleViewInsert = InferInsertModel<typeof articlesViews>;
 export type ArticleView = InferSelectModel<typeof articlesViews>;
 
 export const casesProgress = pgTable("CaseProgress", {
-  caseId: uuid("CaseId").notNull(),
   userId: uuid("UserId").references(() => users.id, { onDelete: "no action" }).notNull(),
+  caseId: uuid("CaseId").notNull(),
   progressState: caseProgressStateEnum("ProgressState").notNull().default("not-started"),
 }, table => ({
-  caseId_userId_Index: index("CaseId_UserId_Index").on(table.userId, table.caseId),
-  pk: primaryKey(table.userId, table.caseId),
+  pk: primaryKey({ columns: [table.userId, table.caseId] }),
 }));
 
 export type CaseProgressInsert = InferInsertModel<typeof casesProgress>;
 export type CaseProgress = InferSelectModel<typeof casesProgress>;
 
 export const casesSolutions = pgTable("CaseSolution", {
-  caseId: uuid("CaseId").notNull(),
   userId: uuid("UserId").references(() => users.id, { onDelete: "no action" }).notNull(),
+  caseId: uuid("CaseId").notNull(),
   solution: text("Solution").notNull(),
 }, table => ({
-  caseId_userId_Index: index("CaseId_UserId_Index").on(table.userId, table.caseId),
-  pk: primaryKey(table.userId, table.caseId),
+  pk: primaryKey({ columns: [table.userId, table.caseId] }),
 }));
 
 export type CaseSolutionInsert = InferInsertModel<typeof casesSolutions>;
 export type CaseSolution = InferSelectModel<typeof casesSolutions>;
 
 export const gamesProgress = pgTable("GameProgress", {
-  gameId: uuid("GameId").notNull(),
   userId: uuid("UserId").references(() => users.id, { onDelete: "no action" }).notNull(),
+  gameId: uuid("GameId").notNull(),
   progressState: gameProgressStateEnum("ProgressState").notNull().default("not-started"),
 }, table => ({
-  gameId_userId_Index: index("GameId_UserId_Index").on(table.userId, table.gameId),
-  pk: primaryKey(table.userId, table.gameId),
+  pk: primaryKey({ columns: [table.userId, table.gameId] }),
 }));
 
 export type GameProgressInsert = InferInsertModel<typeof gamesProgress>;
 export type GameProgress = InferSelectModel<typeof gamesProgress>;
 
 export const searchIndexUpdateQueue = pgTable("SearchIndexUpdateQueue", {
-  cmsId: uuid("CmsId").unique().notNull().primaryKey(),
+  cmsId: uuid("CmsId").primaryKey(),
   resourceType: searchIndexTypeEnum("ResourceType").notNull(),
 });
 
@@ -279,7 +284,7 @@ export type SearchIndexUpdateQueueInsert = InferInsertModel<typeof searchIndexUp
 export type SearchIndexUpdateQueueItem = InferSelectModel<typeof searchIndexUpdateQueue>;
 
 export const badges = pgTable("Badge", {
-  id: uuid("Id").defaultRandom().unique().notNull().primaryKey(),
+  id: uuid("Id").defaultRandom().primaryKey(),
   identifier: badgeIdentifierEnum("Identifier").notNull().unique(),
   name: text("Name").notNull(),
   description: text("Description").notNull(),
@@ -303,10 +308,10 @@ export const usersToBadges = pgTable("User_to_Badge", {
   badgeId: uuid("BadgeId").references(() => badges.id, { onDelete: "no action" }).notNull(),
   userBadgeState: userBadgeStateEnum("UserBadgeState").default("not-seen").notNull(),
 }, (table) => ({
-  pk: primaryKey(table.userId, table.badgeId),
+  pk: primaryKey({ columns: [table.userId, table.badgeId] }),
 }));
 
-export const usersToGroupsRelations = relations(usersToBadges, ({ one }) => ({
+export const usersToBadgesRelations = relations(usersToBadges, ({ one }) => ({
   badge: one(badges, {
     fields: [usersToBadges.badgeId],
     references: [badges.id],
@@ -316,3 +321,108 @@ export const usersToGroupsRelations = relations(usersToBadges, ({ one }) => ({
     references: [users.id],
   }),
 }));
+
+export const forumQuestions = pgTable("ForumQuestion", {
+  id: uuid("Id").defaultRandom().primaryKey(),
+  index: serial("Index"),
+  slug: text("Slug").notNull(),
+  userId: uuid("UserId").references(() => users.id, { onDelete: "no action" }).notNull(),
+  createdAt: timestamp("CreatedAt").defaultNow().notNull(),
+  updatedAt: timestamp("UpdatedAt").defaultNow().notNull(),
+  title: text("Title").notNull(),
+  text: text("Text").notNull(),
+  legalFieldId: uuid("LegalFieldId").notNull(),
+  subfieldId: uuid("SubfieldId"),
+  topicId: uuid("TopicId"),
+}, table => ({
+  id_slug_index: uniqueIndex("ForumQuestion_Id_Slug_Index").on(table.id, table.slug),
+}));
+
+export type ForumQuestionInsert = InferInsertModel<typeof forumQuestions>;
+export type ForumQuestion = InferSelectModel<typeof forumQuestions>;
+
+export const forumAnswers = pgTable("ForumAnswer", {
+  id: uuid("Id").defaultRandom().primaryKey(),
+  index: serial("Index"),
+  userId: uuid("UserId").references(() => users.id, { onDelete: "no action" }).notNull(),
+  createdAt: timestamp("CreatedAt").defaultNow().notNull(),
+  updatedAt: timestamp("UpdatedAt").defaultNow().notNull(),
+  text: text("AnswerText").notNull(),
+  parentQuestionId: uuid("ParentQuestionId").references(() => forumQuestions.id, { onDelete: "no action" }),
+  parentAnswerId: uuid("ParentAnswerId").references((): AnyPgColumn => forumAnswers.id, { onDelete: "no action" }),
+});
+
+export type ForumAnswerInsert = InferInsertModel<typeof forumAnswers>;
+export type ForumAnswer = InferSelectModel<typeof forumAnswers>;
+
+export const correctAnswers = pgTable("CorrectAnswer", {
+  id: uuid("Id").defaultRandom().primaryKey(),
+  confirmedAt: timestamp("ConfirmedAt").defaultNow().notNull(),
+  confirmedByUserId: uuid("ConfirmedByUserId").references(() => users.id, { onDelete: "no action" }).notNull(),
+  questionId: uuid("QuestionId").references(() => forumQuestions.id, { onDelete: "no action" }).notNull(),
+  answerId: uuid("AnswerId").references(() => forumAnswers.id, { onDelete: "no action" }).unique().notNull(),
+});
+
+export type CorrectAnswerInsert = InferInsertModel<typeof correctAnswers>;
+export type CorrectAnswer = InferSelectModel<typeof correctAnswers>;
+
+export const questionUpvotes = pgTable("QuestionUpvote", {
+  userId: uuid("UserId").references(() => users.id, { onDelete: "no action" }).notNull(),
+  questionId: uuid("QuestionId").references(() => forumQuestions.id, { onDelete: "cascade" }).notNull(),
+  createdAt: timestamp("CreatedAt").defaultNow(),
+}, table => ({
+  questionId_index: index("QuestionUpvote_QuestionId_Index").on(table.questionId),
+  pk: primaryKey({ columns: [table.userId, table.questionId] }),
+}));
+
+export type QuestionUpvoteInsert = InferInsertModel<typeof questionUpvotes>;
+export type QuestionUpvote = InferSelectModel<typeof questionUpvotes>;
+
+export const answerUpvotes = pgTable("AnswerUpvote", {
+  userId: uuid("UserId").references(() => users.id, { onDelete: "no action" }).notNull(),
+  answerId: uuid("AnswerId").references(() => forumAnswers.id, { onDelete: "cascade" }).notNull(),
+  createdAt: timestamp("CreatedAt").defaultNow(),
+}, table => ({
+  answerId_index: index("AnswerUpvote_QuestionId_Index").on(table.answerId),
+  pk: primaryKey({ columns: [table.userId, table.answerId] }),
+}));
+
+export type AnswerUpvoteInsert = InferInsertModel<typeof answerUpvotes>;
+export type AnswerUpvote = InferSelectModel<typeof answerUpvotes>;
+
+export const userRoles = pgTable("UserRole", {
+  id: uuid("Id").defaultRandom().primaryKey(),
+  identifier: roleEnum("Identifier").unique().notNull(),
+  name: text("Name").notNull(),
+  description: text("Description").notNull(),
+}, table => ({
+  role_index: index("UserRole_Role_Index").on(table.identifier),
+}));
+
+export const userRolesRelations = relations(userRoles, ({ many }) => ({
+  usersToRoles: many(usersToRoles),
+}));
+
+export type UserRoleInsert = InferInsertModel<typeof userRoles>;
+export type UserRole = InferSelectModel<typeof userRoles>;
+
+export const usersToRoles = pgTable("User_to_Role", {
+  userId: uuid("UserId").references(() => users.id, { onDelete: "no action" }).notNull(),
+  roleId: uuid("RoleId").references(() => userRoles.id, { onDelete: "no action" }).notNull(),
+}, table => ({
+  pk: primaryKey({ columns: [table.userId, table.roleId] }),
+}));
+
+export const usersToRolesRelations = relations(usersToRoles, ({ one }) => ({
+  role: one(userRoles, {
+    fields: [usersToRoles.roleId],
+    references: [userRoles.id],
+  }),
+  user: one(users, {
+    fields: [usersToRoles.userId],
+    references: [users.id],
+  }),
+}));
+
+export type UserToRoleInsert = InferInsertModel<typeof usersToRoles>;
+export type UserToRole = InferSelectModel<typeof usersToRoles>;

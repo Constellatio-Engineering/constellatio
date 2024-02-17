@@ -114,7 +114,7 @@ export const documentsRouter = createTRPCRouter({
 
       if(updatedContent)
       {
-        documentUpdate.updatedValues.content = removeHtmlTagsFromString(updatedContent);
+        documentUpdate.updatedValues.content = removeHtmlTagsFromString(updatedContent, true);
       }
 
       const searchIndexDocumentUpdate: DocumentSearchItemUpdate = {

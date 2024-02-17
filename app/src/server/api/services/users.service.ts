@@ -10,7 +10,18 @@ export const getUserWithRelations = async (userId: string) =>
   const user = await db.query.users.findFirst({
     where: eq(users.id, userId),
     with: {
-      profilePictures: true
+      profilePictures: true,
+      usersToRoles: {
+        columns: {},
+        with: {
+          role: {
+            columns: {
+              identifier: true,
+              name: true
+            }
+          },
+        }
+      }
     }
   });
 
@@ -19,7 +30,19 @@ export const getUserWithRelations = async (userId: string) =>
     throw new NotFoundError();
   }
 
-  return user;
+  const roles = user.usersToRoles.map(({ role }) => ({
+    identifier: role.identifier,
+    name: role.name
+  }));
+  const isForumModerator = roles.some(({ identifier }) => identifier === "forumMod");
+  const isAdmin = roles.some(({ identifier }) => identifier === "admin");
+
+  return ({
+    ...user,
+    isAdmin,
+    isForumModerator,
+    roles
+  });
 };
 
 export type UserWithRelations = Awaited<ReturnType<typeof getUserWithRelations>>;

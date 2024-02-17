@@ -62,6 +62,7 @@ const FavoritesExcerpt: FunctionComponent<Props> = ({ favorites, isLoading = fal
     .map((favorite, i) => favorite?.title && (
       <FavoriteCard
         key={i}
+        resourceId={favorite.id!}
         isLoading={false}
         onClick={async () => router.push(`/${favorite?.__typename === "Case" ? "cases" : "dictionary"}/${favorite?.id}`)}
         title={favorite.title}

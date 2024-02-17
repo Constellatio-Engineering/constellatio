@@ -68,7 +68,7 @@ export const authenticationRouter = createTRPCRouter({
         const subscription = await stripe.subscriptions.create({
           customer: stripeCustomerId,
           items: [{ plan: env.STRIPE_PREMIUM_PLAN_PRICE_ID, quantity: 1 }],
-          trial_period_days: 10,
+          trial_period_days: 30,
           trial_settings: {
             end_behavior: { missing_payment_method: "cancel" }
           }
@@ -122,7 +122,7 @@ export const authenticationRouter = createTRPCRouter({
         throw new InternalServerError(new Error("Error while creating user: " + e));
       }
 
-      const usersCount = (await db.select({ count: sql<number>`count(*)` }).from(users))?.[0]?.count;
+      const usersCount = (await db.select({ count: sql<number>`cast(count(*) as int)` }).from(users))?.[0]?.count;
 
       if(usersCount && usersCount <= 100)
       {

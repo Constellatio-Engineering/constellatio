@@ -23,11 +23,18 @@ export const UserDropdown: FunctionComponent = () =>
     );
   }
 
-  const { displayName, firstName, lastName } = userDetails;
+  const {
+    displayName,
+    firstName,
+    lastName,
+    roles
+  } = userDetails;
+
+  const rolesJoined = roles.length > 0 && roles.map(r => r.name).join(", ");
 
   return (
     <Menu
-      width={200}
+      width={320}
       position="bottom-end"
       radius={12}
       transitionProps={{ transition: "pop-top-right" }}
@@ -44,10 +51,13 @@ export const UserDropdown: FunctionComponent = () =>
           css={styles.menuItem}
           icon={null}>
           <div className="user-info">
-            <ProfilePicture sizeInPx={60}/>
+            <ProfilePicture sizeInPx={60} disableMarginAuto={true}/>
             <div>
               <Title order={4}>{`${firstName} ${lastName}`}</Title>
               <BodyText styleType="body-02-medium" component="p">@{displayName}</BodyText>
+              {rolesJoined && (
+                <BodyText styleType="body-02-medium" component="p">{rolesJoined}</BodyText>
+              )}
             </div>
           </div>
         </Menu.Item>

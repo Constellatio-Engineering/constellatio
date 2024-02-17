@@ -8,7 +8,7 @@ export const contentHeader = ({
 }: {
   height: number;
   theme: MantineTheme;
-  variant: "case" | "dictionary" | "red";
+  variant: "case" | "dictionary" | "red" | "forum";
 }) => css`
 	position: relative;
 	max-width: 100%;
@@ -24,7 +24,9 @@ export const contentHeader = ({
     ? theme.colors["cc-cases"][2]
     : variant === "dictionary"
       ? theme.colors["cc-dictionary"][2]
-      : variant === "red" && theme.colors["brand-01"][4]};
+      : variant === "forum"
+        ? theme.colors["cc-forum"][2]
+        : variant === "red" && theme.colors["brand-01"][4]};
 	#overlay-lines {
 		position: absolute;
 		inset: 0;
@@ -37,14 +39,22 @@ export const contentHeader = ({
     ? theme.colors["cc-cases"][2]
     : variant === "dictionary"
       ? theme.colors["cc-dictionary"][2]
-      : variant === "red" && theme.colors["brand-01"][4]};
+      : variant === "forum"
+        ? theme.colors["cc-forum"][2]
+        : variant === "red" && theme.colors["brand-01"][4]};
 		svg {
 			height: 100%;
 			max-width: 100%;
+      g {
+        g {
+          rect {
+            fill: ${variant === "forum" ? "rgba(0, 0, 0, 0.25)" : "white"} !important;
+          }
+        }
+      }
 		}
 	}
-
-	`;
+`;
 
 export const categoriesButtons = () => 
 {
@@ -117,7 +127,7 @@ export const selectedFiltersArea = css`
 `;
 export const title = ({ theme, variant }: {
   theme: MantineTheme;
-  variant: "case" | "dictionary" | "red";
+  variant: "case" | "dictionary" | "red" | "forum";
 }) => css`
 	position: relative;
 	z-index: 3;

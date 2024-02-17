@@ -1,7 +1,7 @@
 import { Svg } from "@/basic-components/SVG/Svg";
 import ProgressCard from "@/components/molecules/progressCard/ProgressCard";
 import useAllCasesWithProgress from "@/hooks/useAllCasesWithProgress";
-import useMainCategories from "@/hooks/useMainCategories";
+import { useLegalFields } from "@/hooks/useLegalFields";
 
 import React, { type FunctionComponent } from "react";
 
@@ -9,7 +9,7 @@ import * as styles from "./ProgressCardSection.styles";
 
 const ProgressCardSection: FunctionComponent = () =>
 {
-  const { allMainCategories } = useMainCategories();
+  const { data: allMainCategories = [] } = useLegalFields();
   const { casesWithProgress } = useAllCasesWithProgress();
 
   return (

@@ -7,6 +7,8 @@
  * need to use are documented accordingly near the end.
  */
 
+import { db } from "@/db/connection";
+import { users } from "@/db/schema";
 import { env } from "@/env.mjs";
 import { type ClientError, clientErrors } from "@/utils/clientError";
 import { EmailAlreadyTakenError, UnauthorizedError } from "@/utils/serverError";
@@ -16,6 +18,7 @@ import { createPagesServerClient, type SupabaseClient, type User } from "@supaba
 import { type Session } from "@supabase/auth-helpers-react";
 import { initTRPC } from "@trpc/server";
 import { type CreateNextContextOptions } from "@trpc/server/adapters/next";
+import { eq } from "drizzle-orm";
 import superjson from "superjson";
 
 /**
@@ -65,7 +68,7 @@ export const createTRPCContext = async ({ req, res }: CreateNextContextOptions):
   const { data: { user } } = await supabaseServerClient.auth.getUser();
   const { data: { session } } = await supabaseServerClient.auth.getSession();
 
-  if(env.THROTTLE_REQUESTS_IN_MS && env.NEXT_PUBLIC_DEPLOYMENT_ENVIRONMENT === "development")
+  if(env.THROTTLE_REQUESTS_IN_MS && env.NEXT_PUBLIC_DEPLOYMENT_ENVIRONMENT !== "production")
   {
     // Caution: This is only for testing purposes in development. It will slow down the API response time.
     console.info(`Caution: Requests are throttled for ${env.THROTTLE_REQUESTS_IN_MS}ms due to 'env.THROTTLE_REQUESTS_IN_MS' being set.`);
@@ -172,3 +175,34 @@ const enforceUserIsAuthenticated = t.middleware(async ({ ctx, next }) =>
 });
 
 export const protectedProcedure = t.procedure.use(enforceUserIsAuthenticated);
+
+export const forumModProcedure = protectedProcedure.use(async ({ ctx, next, path }) =>
+{
+  const userData = await db.query.users.findFirst({
+    columns: {},
+    where: eq(users.id, ctx.userId),
+    with: {
+      usersToRoles: {
+        columns: {},
+        with: {
+          role: true,
+        }
+      }
+    }
+  });
+
+  const isMod = userData?.usersToRoles.some(({ role }) => role.identifier === "forumMod");
+
+  if(!isMod)
+  {
+    console.warn(`User '${ctx.userId}' tried to access mod-only procedure '${path}' without being a mod.`);
+    throw new UnauthorizedError();
+  }
+
+  return next({
+    ctx: {
+      session: ctx.session,
+      userId: ctx.session.user.id
+    },
+  });
+});
