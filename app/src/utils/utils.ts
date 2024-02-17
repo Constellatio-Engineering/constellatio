@@ -135,3 +135,9 @@ export const formatDate = (inputDate: Date): string =>
 
   return `${day} ${monthName}, ${year}`;
 };
+
+export const scrollTo = (element: HTMLElement, offset = 100): void =>
+{
+  const y = element.getBoundingClientRect().top + window.scrollY - offset;
+  window.scrollTo({ behavior: "smooth", top: y });
+};

@@ -61,7 +61,7 @@ export const contentWrapper = css`
 
 export const wrapper = css`
   width: 100%;
-  scroll-margin: 20vh !important;
+  scroll-margin-top: 30vh !important;
   position: relative;
 `;
 

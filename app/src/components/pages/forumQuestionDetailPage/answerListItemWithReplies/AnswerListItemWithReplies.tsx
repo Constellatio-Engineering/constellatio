@@ -6,6 +6,7 @@ import { useForumAnswers } from "@/hooks/useForumAnswers";
 import { usePostAnswer } from "@/hooks/usePostAnswer";
 import { type GetAnswersQuestionParent } from "@/schemas/forum/getAnswers.schema";
 import { useForumPageStore } from "@/stores/forumPage.store";
+import { scrollTo } from "@/utils/utils";
 
 import React, { Fragment, type FunctionComponent, useId } from "react";
 import { flushSync } from "react-dom";
@@ -31,6 +32,7 @@ const AnswerListItemWithReplies: FunctionComponent<Props> = ({ answerId, authorI
     },
     sortBy: "newest"
   });
+  const hasReplies = replies != null && replies.length > 0;
 
   const onAddReplyClick = (): void =>
   {
@@ -40,7 +42,7 @@ const AnswerListItemWithReplies: FunctionComponent<Props> = ({ answerId, authorI
       setRepliesState(answerId, "view");
     });
 
-    const inputWrapper = document.getElementById(addReplyInputId);
+    const inputWrapper = document.getElementById(addReplyInputId) as HTMLDivElement | null;
 
     if(!inputWrapper)
     {
@@ -48,7 +50,7 @@ const AnswerListItemWithReplies: FunctionComponent<Props> = ({ answerId, authorI
       return;
     }
 
-    inputWrapper.scrollIntoView({ behavior: "smooth" });
+    scrollTo(inputWrapper, 300);
 
     const input = Array.from(inputWrapper.getElementsByClassName("tiptap ProseMirror"))[0] as HTMLDivElement | undefined;
 
@@ -58,7 +60,10 @@ const AnswerListItemWithReplies: FunctionComponent<Props> = ({ answerId, authorI
       return;
     }
 
-    input?.focus();
+    setTimeout(() =>
+    {
+      input?.focus();
+    }, 1000);
   };
 
   return (
@@ -92,7 +97,7 @@ const AnswerListItemWithReplies: FunctionComponent<Props> = ({ answerId, authorI
                 <AnswerEditor
                   id={addReplyInputId}
                   mode={{ editorMode: "create" }}
-                  cancelButtonAction={() => setRepliesState(answerId, "closed")}
+                  cancelButtonAction={!hasReplies ? () => setRepliesState(answerId, "closed") : undefined}
                   saveButton={{
                     action: async (editor) =>
                     {
