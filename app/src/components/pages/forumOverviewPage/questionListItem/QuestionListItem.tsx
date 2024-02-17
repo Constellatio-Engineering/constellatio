@@ -10,7 +10,7 @@ import { useLegalFieldsAndTopics } from "@/hooks/useLegalFieldsAndTopics";
 import { getForumQuestionUrl } from "@/utils/paths";
 import { removeHtmlTagsFromString } from "@/utils/utils";
 
-import { Title } from "@mantine/core";
+import { Title, Tooltip } from "@mantine/core";
 import Image from "next/image";
 import Link from "next/link";
 import React, { Fragment, type FunctionComponent } from "react";
@@ -62,9 +62,18 @@ const QuestionListItem: FunctionComponent<Props> = ({ questionId }) =>
               <Link href={getForumQuestionUrl(question)} css={styles.titleLink}>
                 <Title order={2} css={styles.title}>{question.title}</Title>
               </Link>
-              <div css={styles.checkmark}>
-                <Check/>
-              </div>
+              {question.hasCorrectAnswer && (
+                <Tooltip
+                  label={"Mindestens eine Antwort wurde als korrekt markiert."}
+                  multiline={true}
+                  width={200}
+                  position={"top"}
+                  withArrow={true}>
+                  <div css={styles.checkmark}>
+                    <Check/>
+                  </div>
+                </Tooltip>
+              )}
             </div>
             <div css={styles.bookmarkButtonWrapper}>
               <BookmarkButton

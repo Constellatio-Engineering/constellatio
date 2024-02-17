@@ -79,7 +79,7 @@ const ForumOverviewPage: FunctionComponent = () =>
       return { cursorType: currentlySelectedCursor };
     },
     initialCursor: { cursorType: "newest" },
-    refetchOnMount: true,
+    refetchOnMount: "always",
     refetchOnReconnect: false,
     refetchOnWindowFocus: false,
     staleTime: Infinity

@@ -113,6 +113,7 @@ export const getQuestions = async (params: GetQuestionsParams) => // eslint-disa
         username: users.displayName,
       },
       createdAt: countUpvotesSubquery.createdAt,
+      hasCorrectAnswer: sql<boolean>`case when ${correctAnswers.questionId} is null then false else true end`.as("hasCorrectAnswer"),
       id: countUpvotesSubquery.id,
       index: countUpvotesSubquery.index,
       isUpvoted: countUpvotesSubquery.isUpvoted,
@@ -128,6 +129,7 @@ export const getQuestions = async (params: GetQuestionsParams) => // eslint-disa
     .from(countUpvotesSubquery)
     .where(queryConditions)
     .innerJoin(users, eq(countUpvotesSubquery.userId, users.id))
+    .leftJoin(correctAnswers, eq(countUpvotesSubquery.id, correctAnswers.questionId))
     .orderBy(...(Array.isArray(orderBy) ? orderBy : [orderBy]))
     .limit(params.getQuestionsType === "byId" ? 1 : params.limit + 1);
 

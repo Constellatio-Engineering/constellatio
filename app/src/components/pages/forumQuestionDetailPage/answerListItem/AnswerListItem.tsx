@@ -54,7 +54,7 @@ const AnswerListItem: FunctionComponent<Props> = ({
   ...props
 }) =>
 {
-  const { invalidateForumAnswer } = useContextAndErrorIfNull(InvalidateQueriesContext);
+  const { invalidateForumAnswer, invalidateForumQuestion } = useContextAndErrorIfNull(InvalidateQueriesContext);
   const toggleAnswerReplies = useForumPageStore(s => s.toggleAnswerReplies);
   const areRepliesExpanded = useForumPageStore(s => s.getAreRepliesExpanded(answerId));
   const hasReplies = numberOfReplies != null && numberOfReplies > 0;
@@ -131,6 +131,17 @@ const AnswerListItem: FunctionComponent<Props> = ({
       });
     }
   });
+
+  const onSuccessfulCorrectMarkingMutation = (): void =>
+  {
+    void invalidateForumAnswer({ answerId });
+
+    if(parent.parentType === "question")
+    {
+      void invalidateForumQuestion({ questionId: parent.questionId });
+    }
+  };
+
   const { isPending: isMarkingAnswerAsCorrect, mutate: markAnswerAsCorrect } = api.forum.markAnswerAsCorrect.useMutation({
     onError: () =>
     {
@@ -141,7 +152,7 @@ const AnswerListItem: FunctionComponent<Props> = ({
         title: "Da ist leider etwas schiefgelaufen...",
       });
     },
-    onSuccess: () => void invalidateForumAnswer({ answerId })
+    onSuccess: onSuccessfulCorrectMarkingMutation
   });
   const { isPending: isUnmarkingAnswerAsCorrect, mutate: unmarkAnswerAsCorrect } = api.forum.unmarkAnswerAsCorrect.useMutation({
     onError: () =>
@@ -153,7 +164,7 @@ const AnswerListItem: FunctionComponent<Props> = ({
         title: "Da ist leider etwas schiefgelaufen...",
       });
     },
-    onSuccess: () => void invalidateForumAnswer({ answerId })
+    onSuccess: onSuccessfulCorrectMarkingMutation
   });
 
   const onMarkAsCorrect = (): void =>
