@@ -108,7 +108,7 @@ const AnswerListItem: FunctionComponent<Props> = ({
             parentType: "question",
             questionId: parentQuestion.parentQuestionId!
           },
-          sortBy: "newest"
+          sortBy: useForumPageStore.getState().answersSorting
         });
       }
       else if(parentAnswer)

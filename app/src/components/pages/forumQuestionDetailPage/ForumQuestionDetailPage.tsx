@@ -11,6 +11,7 @@ import ForumListItem from "@/components/pages/forumOverviewPage/forumListItem/Fo
 import { TagsSkeleton } from "@/components/pages/forumOverviewPage/questionsSkeleton/QuestionsSkeleton";
 import AnswerEditor from "@/components/pages/forumQuestionDetailPage/answerEditor/AnswerEditor";
 import AnswerListItemWithReplies from "@/components/pages/forumQuestionDetailPage/answerListItemWithReplies/AnswerListItemWithReplies";
+import AnswersSkeleton from "@/components/pages/forumQuestionDetailPage/answersSkeleton/AnswersSkeleton";
 import AnswersSkeletonWithSorting from "@/components/pages/forumQuestionDetailPage/answersSkeletonWithSorting/AnswersSkeletonWithSorting";
 import EditAndDeleteButtons from "@/components/pages/forumQuestionDetailPage/editAndDeleteButtons/EditAndDeleteButtons";
 import ForumItemAuthor from "@/components/pages/forumQuestionDetailPage/forumItemAuthor/ForumItemAuthor";
@@ -23,6 +24,7 @@ import { useLegalFieldsAndTopics } from "@/hooks/useLegalFieldsAndTopics";
 import { usePostAnswer } from "@/hooks/usePostAnswer";
 import useUserDetails from "@/hooks/useUserDetails";
 import { InvalidateQueriesContext } from "@/provider/InvalidateQueriesProvider";
+import { type GetAnswersSortingOption } from "@/schemas/forum/getAnswers.schema";
 import { useForumPageStore } from "@/stores/forumPage.store";
 import { api } from "@/utils/api";
 import { appPaths } from "@/utils/paths";
@@ -32,10 +34,27 @@ import { notifications } from "@mantine/notifications";
 import ErrorPage from "next/error";
 import Link from "next/link";
 import { useRouter } from "next/router";
-import React, { Fragment, type FunctionComponent, useState } from "react";
+import React, {
+  Fragment, type FunctionComponent, useEffect, useMemo, useState 
+} from "react";
 
 import * as styles from "./ForumQuestionDetailPage.styles";
 import { QuestionUpvoteButton } from "../forumOverviewPage/upvoteButton/QuestionUpvoteButton";
+
+type SortingOptions = {
+  [key in GetAnswersSortingOption]: {
+    readonly label: string;
+  };
+};
+
+const sortingOptions: SortingOptions = {
+  newest: {
+    label: "Neueste",
+  },
+  upvotes: {
+    label: "Upvotes",
+  },
+} as const;
 
 type Props = {
   readonly questionId: string;
@@ -44,7 +63,7 @@ type Props = {
 export const ForumQuestionDetailPage: FunctionComponent<Props> = ({ questionId }) =>
 {
   const router = useRouter();
-  const { invalidateForumQuestions } = useContextAndErrorIfNull(InvalidateQueriesContext);
+  const { invalidateForumAnswers, invalidateForumQuestions } = useContextAndErrorIfNull(InvalidateQueriesContext);
   const { bookmarks: questionBookmarks, isLoading: isGetQuestionBookmarksLoading } = useBookmarks("forumQuestion", { enabled: true });
   const { userDetails } = useUserDetails();
   const setEditQuestionState = useForumPageStore((state) => state.setEditQuestionState);
@@ -52,6 +71,8 @@ export const ForumQuestionDetailPage: FunctionComponent<Props> = ({ questionId }
   const openDeleteModal = (): void => setShowDeleteModal(true);
   const closeDeleteModal = (): void => setShowDeleteModal(false);
   const { isPending: isPostingAnswer, mutateAsync: postAnswer } = usePostAnswer();
+  const answersSorting = useForumPageStore(s => s.answersSorting);
+  const setAnswersSorting = useForumPageStore(s => s.setAnswersSorting);
 
   const {
     allLegalFields,
@@ -62,12 +83,12 @@ export const ForumQuestionDetailPage: FunctionComponent<Props> = ({ questionId }
 
   const { data: question, isPending } = useForumQuestionDetails(questionId);
 
-  const { data: answers, isLoading: areAnswersLoading } = useForumAnswers({
+  const { data: answers, isLoading: areAnswersLoading, isRefetching: areAnswersRefetching } = useForumAnswers({
     parent: {
       parentType: "question",
       questionId
     },
-    sortBy: "newest"
+    sortBy: answersSorting
   });
 
   const { isPending: isDeletingQuestion, mutate: deleteQuestion } = api.forum.deleteQuestion.useMutation({
@@ -97,6 +118,18 @@ export const ForumQuestionDetailPage: FunctionComponent<Props> = ({ questionId }
     }
   });
 
+  const changeSorting = async (newSorting: GetAnswersSortingOption): Promise<void> =>
+  {
+    setAnswersSorting(newSorting);
+    await invalidateForumAnswers({
+      parent: {
+        parentType: "question",
+        questionId
+      },
+      sortBy: newSorting
+    });
+  };
+
   if(isPending)
   {
     return (
@@ -111,6 +144,7 @@ export const ForumQuestionDetailPage: FunctionComponent<Props> = ({ questionId }
     );
   }
 
+  const amountOfAnswers = answers?.length;
   const isCurrentUserAuthor = userDetails?.id === question.author.id;
   const legalField = allLegalFields.find((field) => field.id === question.legalFieldId);
   const subfield = allSubfields.find((subfield) => subfield.id === question.subfieldId);
@@ -229,11 +263,35 @@ export const ForumQuestionDetailPage: FunctionComponent<Props> = ({ questionId }
       </div>
       <ContentWrapper stylesOverrides={styles.contentWrapper}>
         <div css={styles.answersWrapper}>
-          {areAnswersLoading ? (
-            <AnswersSkeletonWithSorting numberOfSkeletons={5}/>
+          <div css={styles.head}>
+            <div css={styles.totalAmountAndSortingWrapper(amountOfAnswers != null)}>
+              {amountOfAnswers != null && (
+                <p css={styles.totalAmount}>{amountOfAnswers} Fragen</p>
+              )}
+              <div css={styles.sortWrapper}>
+                <p>Sortieren nach:</p>
+                <select
+                  css={styles.selectSorting}
+                  onChange={(event) =>
+                  {
+                    const value = event.target.value as GetAnswersSortingOption;
+                    void changeSorting(value);
+                  }}
+                  value={answersSorting}>
+                  {Object.entries(sortingOptions).map(([key, { label }]) => (
+                    <option key={key} value={key}>{label}</option>
+                  ))}
+                </select>
+              </div>
+            </div>
+          </div>
+          {(areAnswersLoading || areAnswersRefetching) ? (
+            <AnswersSkeleton
+              numberOfSkeletons={5}
+              withReplyButton={true}
+            />
           ) : (
             <Fragment>
-              <p>Sortieren nach</p>
               {answers?.map((answer) => (
                 <AnswerListItemWithReplies
                   key={answer.id}

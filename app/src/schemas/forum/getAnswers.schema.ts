@@ -21,6 +21,6 @@ export const getAnswersSchema = z.object({
 });
 
 export type GetAnswersSchema = z.input<typeof getAnswersSchema>;
-export type GetAnswersSortingOptions = GetAnswersSchema["sortBy"];
+export type GetAnswersSortingOption = GetAnswersSchema["sortBy"];
 export type GetAnswersQuestionParent = z.infer<typeof questionParent>;
 export type GetAnswersAnswerParent = z.infer<typeof answerParent>;

@@ -121,6 +121,41 @@ export const tagsWrapper = css`
   min-width: 0;
 `;
 
+export const head = css`
+  display: flex;
+  justify-content: flex-end;
+  width: 100%;
+  align-items: center;
+`;
+
+export const totalAmountAndSortingWrapper = (fullWidth: boolean) => css`
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  width: ${fullWidth ? "100%" : "auto"};
+  color: ${colors["neutrals-01"][9]};
+`;
+
+export const totalAmount = css`
+  text-transform: uppercase;
+  font-size: 14px;
+  font-weight: 700;
+`;
+
+export const sortWrapper = css`
+  display: flex;
+  align-items: center;
+  gap: 0px;
+`;
+
+export const selectSorting = css`
+  background-color: transparent;
+  border: none;
+  outline: none;
+  color: inherit;
+  font: inherit;
+`;
+
 export const answersWrapper = css`
   padding-top: ${questionOffset + 60}px;
   display: flex;

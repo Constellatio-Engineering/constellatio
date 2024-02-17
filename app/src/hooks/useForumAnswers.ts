@@ -9,6 +9,6 @@ export const useForumAnswers = (params: Params) =>
 {
   return api.forum.getAnswers.useQuery(params, {
     refetchOnMount: "always",
-    staleTime: Infinity,
+    staleTime: Infinity
   });
 };

@@ -1,4 +1,4 @@
-import { type GetAnswersSortingOptions } from "@/schemas/forum/getAnswers.schema";
+import { type GetAnswersSortingOption } from "@/schemas/forum/getAnswers.schema";
 import type { GetQuestionsCursorType } from "@/schemas/forum/getQuestions.schema";
 
 import { create } from "zustand";
@@ -26,28 +26,16 @@ type AnswersWithRepliesState = {
   [answerId: string]: RepliesState;
 };
 
-/* type DeleteAnswerModalClosed = {
-  modalState: "closed";
-};
-
-type DeleteAnswerModalOpen = {
-  modalState: "open";
-  questionId: string;
-};
-
-type DeleteAnswerModalState = DeleteAnswerModalClosed | DeleteAnswerModalOpen;*/
-
 type ForumPageStoreProps = {
-  answersSorting: GetAnswersSortingOptions;
+  answersSorting: GetAnswersSortingOption;
   closeAskQuestionModal: () => void;
-  // deleteAnswerModalState: DeleteAnswerModalState;
   getAreRepliesExpanded: (answerId: string) => boolean;
   getIsModalOpen: () => boolean;
   getRepliesState: (answerId: string) => RepliesState;
   modalState: ModalState;
   questionsCursorType: GetQuestionsCursorType;
   repliesStates: AnswersWithRepliesState;
-  setAnswersSorting: (newSorting: GetAnswersSortingOptions) => void;
+  setAnswersSorting: (newSorting: GetAnswersSortingOption) => void;
   setCreateQuestionState: () => void;
   setEditQuestionState: (questionId: string) => void;
   setQuestionsCursorType: (cursorType: GetQuestionsCursorType) => void;
