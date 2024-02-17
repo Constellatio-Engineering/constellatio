@@ -1,3 +1,10 @@
+DELETE FROM "User_to_Role";
+DELETE FROM "UserRole";
+DELETE FROM "AnswerUpvote";
+DELETE FROM "QuestionUpvote";
+DELETE FROM "CorrectAnswer";
+DELETE FROM "ForumAnswer";
+DELETE FROM "ForumQuestion";
 DELETE FROM "User_to_Badge";
 DELETE FROM "Badge";
 DELETE FROM "SearchIndexUpdateQueue";
