@@ -122,7 +122,7 @@ export const authenticationRouter = createTRPCRouter({
         throw new InternalServerError(new Error("Error while creating user: " + e));
       }
 
-      const usersCount = (await db.select({ count: sql<number>`count(*)` }).from(users))?.[0]?.count;
+      const usersCount = (await db.select({ count: sql<number>`cast(count(*) as int)` }).from(users))?.[0]?.count;
 
       if(usersCount && usersCount <= 100)
       {

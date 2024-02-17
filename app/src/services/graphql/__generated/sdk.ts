@@ -1498,6 +1498,14 @@ export type IGenGetAllMainCategoryQuery = { __typename?: 'Query', allMainCategor
         & IGenMainCategoryFragment
       ) | null } | null> | null } | null };
 
+export type IGenGetAllTopicsQueryVariables = Exact<{ [key: string]: never; }>;
+
+
+export type IGenGetAllTopicsQuery = { __typename?: 'Query', allTopic?: { __typename?: 'Topic_Connection', totalCount?: number | null, edges?: Array<{ __typename?: 'Topic_ConnectionEdge', node?: (
+        { __typename?: 'Topic' }
+        & IGenTopicFragment
+      ) | null } | null> | null } | null };
+
 export type IGenGetArticleByIdQueryVariables = Exact<{
   id: Scalars['ID']['input'];
 }>;
@@ -2007,6 +2015,18 @@ export const GetAllMainCategoryDocument = gql`
 }
     ${MainCategoryFragmentDoc}
 ${AssetFragmentDoc}`;
+export const GetAllTopicsDocument = gql`
+    query getAllTopics {
+  allTopic {
+    totalCount
+    edges {
+      node {
+        ...Topic
+      }
+    }
+  }
+}
+    ${TopicFragmentDoc}`;
 export const GetArticleByIdDocument = gql`
     query getArticleById($id: ID!) {
   Article(id: $id) {
@@ -2127,6 +2147,9 @@ export function getSdk<C, E>(requester: Requester<C, E>) {
     },
     getAllMainCategory(variables?: IGenGetAllMainCategoryQueryVariables, options?: C): Promise<IGenGetAllMainCategoryQuery> {
       return requester<IGenGetAllMainCategoryQuery, IGenGetAllMainCategoryQueryVariables>(GetAllMainCategoryDocument, variables, options) as Promise<IGenGetAllMainCategoryQuery>;
+    },
+    getAllTopics(variables?: IGenGetAllTopicsQueryVariables, options?: C): Promise<IGenGetAllTopicsQuery> {
+      return requester<IGenGetAllTopicsQuery, IGenGetAllTopicsQueryVariables>(GetAllTopicsDocument, variables, options) as Promise<IGenGetAllTopicsQuery>;
     },
     getArticleById(variables: IGenGetArticleByIdQueryVariables, options?: C): Promise<IGenGetArticleByIdQuery> {
       return requester<IGenGetArticleByIdQuery, IGenGetArticleByIdQueryVariables>(GetArticleByIdDocument, variables, options) as Promise<IGenGetArticleByIdQuery>;

@@ -27,7 +27,7 @@ const ConfirmEmailChangePage: FunctionComponent = () =>
 
   const {
     error: updateUserEmailError,
-    isLoading: isUpdatingEmailLoading,
+    isPending: isUpdatingEmailLoading,
     mutate: updateUserDetailsInDb
   } = api.users.updateUserDetails.useMutation({
     onError: (error) =>

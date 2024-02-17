@@ -66,7 +66,7 @@ const _Button: FC<TButton> = ({
               : "",
       border:
         styleType === "secondarySimple"
-          ? `1px solid ${theme.colors["neutrals-02"][1]}`
+          ? `1px solid ${theme.colors["neutrals-01"][6]}`
           : styleType === "tertiary" || styleType === "secondarySubtle"
             ? `1px solid ${theme.colors["neutrals-01"][3]}`
             : "",
@@ -84,7 +84,10 @@ const _Button: FC<TButton> = ({
       fontWeight: 500,
       height: size === "large" ? theme.spacing["spacing-40"] : theme.spacing["spacing-32"],
       lineHeight: theme.spacing["spacing-24"],
-      padding: `${theme.spacing["spacing-8"]} ${theme.spacing["spacing-16"]}`,
+      padding: size === "large"
+        ? `${theme.spacing["spacing-8"]} ${theme.spacing["spacing-16"]}`
+        : `${theme.spacing["spacing-4"]} ${theme.spacing["spacing-10"]}`
+      ,
       transition: "all 0.2s ease",
       ...styleOverwrite,
     },

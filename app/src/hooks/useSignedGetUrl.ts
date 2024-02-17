@@ -10,7 +10,7 @@ const useSignedGetUrl: UseSignedGetUrl = (fileId) =>
   const {
     data: url,
     error,
-    isLoading,
+    isPending,
     mutate: createSignedGetUrl
   } = api.uploads.createSignedGetUrl.useMutation();
 
@@ -24,7 +24,7 @@ const useSignedGetUrl: UseSignedGetUrl = (fileId) =>
 
   return {
     error,
-    isLoading,
+    isLoading: isPending,
     url
   };
 };

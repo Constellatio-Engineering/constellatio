@@ -34,7 +34,7 @@ const EmailConfirmCard: FunctionComponent<EmailConfirmCardProps> = ({ params }) 
   const [confirmationState, setConfirmationState] = useState<ConfirmationState | null>(null);
   const { email, token } = params;
 
-  const { isLoading: isConfirmationLoading, mutate: confirmEmail } = useMutation({
+  const { isPending: isConfirmationLoading, mutate: confirmEmail } = useMutation({
     mutationFn: async (): Promise<AuthResponse["data"]> =>
     {
       const result = await supabase.auth.verifyOtp({
@@ -69,7 +69,7 @@ const EmailConfirmCard: FunctionComponent<EmailConfirmCardProps> = ({ params }) 
     },
   });
 
-  const { isLoading: isResendConfirmationEmailLoading, mutate: resendConfirmationEmail } = useResendConfirmationEmail({
+  const { isPending: isResendConfirmationEmailLoading, mutate: resendConfirmationEmail } = useResendConfirmationEmail({
     email: email as string,
     onError: () => setConfirmationState("showResendError"),
     onSuccess: () => setConfirmationState("linkResentSuccessfully"),

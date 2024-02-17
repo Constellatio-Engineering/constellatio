@@ -4,7 +4,7 @@
 
 import { type CSSObject, type MantineTheme } from "@mantine/core";
 import { type TRPCClientErrorBase } from "@trpc/client";
-import { type DefaultErrorShape } from "@trpc/server";
+import { type DefaultErrorShape } from "@trpc/server/unstable-core-do-not-import";
 import { type ComponentType, type ReactNode } from "react";
 
 export type Values<T> = T[keyof T];

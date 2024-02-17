@@ -7,8 +7,8 @@ export const tag = (theme: MantineTheme) => css`
 	border-radius: 40px;
 	display: inline-block;
 	white-space: nowrap;
-	color: ${theme.colors["neutrals-02"][1]};
+	color: ${theme.colors["neutrals-01"][9]};
   * {
-    font-size: 15px;
+    font-size: 14px;
   }
 `;

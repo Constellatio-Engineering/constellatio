@@ -25,7 +25,7 @@ import * as styles from "./NewNotificationEarnedWatchdog.styles";
  */
 const NewNotificationEarnedWatchdog: FunctionComponent = () =>
 {
-  const { onboardingResult } = useOnboardingResult();
+  const { data: onboardingResult } = useOnboardingResult();
   const { isUserLoggedIn } = useContext(AuthStateContext);
   const apiUtils = api.useUtils();
   const { pathname } = useRouter();

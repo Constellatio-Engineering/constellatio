@@ -4,7 +4,12 @@ import {
 
 type CardStyle = Styles<AlertStylesNames, AlertStylesParams>;
 
-export const cardStyles = ({ stylesOverwrite, variant }: {
+export const cardStyles = ({
+  shouldUseFullWidth,
+  stylesOverwrite,
+  variant
+}: {
+  shouldUseFullWidth?: boolean;
   stylesOverwrite?: CSSObject;
   variant: "error" | "success";
 }): CardStyle =>
@@ -29,8 +34,9 @@ export const cardStyles = ({ stylesOverwrite, variant }: {
     root: {
       backgroundColor: variant === "success" ? theme.colors["support-success"][1] : theme.colors["support-error"][0],
       borderRadius: theme.radius["radius-12"],
-      maxWidth: "440px",
+      maxWidth: shouldUseFullWidth ? "unset" : "440px",
       padding: `${theme.spacing["spacing-16"]} ${theme.spacing["spacing-20"]}`,
+      width: shouldUseFullWidth ? "100%" : "unset",
       ...stylesOverwrite,
     },
     wrapper: {

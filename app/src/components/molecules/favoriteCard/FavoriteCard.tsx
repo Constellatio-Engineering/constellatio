@@ -1,4 +1,6 @@
 import Label from "@/components/atoms/label/Label";
+import BookmarkButton from "@/components/organisms/caseBlock/BookmarkButton/BookmarkButton";
+import useBookmarks from "@/hooks/useBookmarks";
 
 import { Skeleton, Title } from "@mantine/core";
 import React, { type FunctionComponent } from "react";
@@ -12,6 +14,7 @@ type LoadingProps = {
 type LoadedProps = React.HTMLAttributes<HTMLDivElement> & {
   readonly icon?: React.ReactNode;
   readonly isLoading: false;
+  readonly resourceId: string;
   readonly title: string;
   readonly variant: "case" | "dictionary";
 };
@@ -20,6 +23,8 @@ type Props = LoadingProps | LoadedProps;
 
 const FavoriteCard: FunctionComponent<Props> = (props) =>
 {
+  const { bookmarks, isLoading: areAllBookmarksLoading } = useBookmarks(undefined);
+
   // eslint-disable-next-line react/destructuring-assignment
   if(props.isLoading)
   {
@@ -32,6 +37,7 @@ const FavoriteCard: FunctionComponent<Props> = (props) =>
 
   const {
     isLoading,
+    resourceId,
     title,
     variant,
     ...rest
@@ -42,9 +48,18 @@ const FavoriteCard: FunctionComponent<Props> = (props) =>
     <div css={[styles.wrapper, styles.wrapperLoaded]} {...rest}>
       <div css={styles.tags}>
         <Label variant={variant} title={variant === "case" ? "Fälle" : "Lexikon"}/>
-        {/* <IconButton onClick={() => onBookmarkIconClick()} icon={icon ?? <BookmarkFilledIcon/>} size="big"/> */}
+        <BookmarkButton
+          isBookmarked={bookmarks.find(b => b.resourceId === resourceId) != null}
+          areAllBookmarksLoading={areAllBookmarksLoading}
+          resourceId={resourceId}
+          variant={variant}
+        />
       </div>
-      {title && <Title title={title} order={4} css={styles.title}>{title.slice(0, numberOfLetters)}{title?.length > numberOfLetters && "..."}</Title>}
+      {title && (
+        <Title title={title} order={4} css={styles.title}>
+          {title.slice(0, numberOfLetters)}{title?.length > numberOfLetters && "..."}
+        </Title>
+      )}
     </div>
   );
 };
