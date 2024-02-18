@@ -46,24 +46,12 @@ export const getQuestions = async (params: GetQuestionsParams) => // eslint-disa
       .where(eq(questionUpvotes.userId, params.userId))
     );
 
-  const test = await db
-    .select({
-      answersCount: count(forumAnswers.id).as("answersCount"),
-      id: forumQuestions.id,
-      title: forumQuestions.title,
-    })
-    .from(forumQuestions)
-    .leftJoin(forumAnswers, eq(forumQuestions.id, forumAnswers.parentQuestionId))
-    .groupBy(forumQuestions.id);
-
-  const questionsWithAnswers = test.filter((question) => question.answersCount > 0);
-  console.log("questionsWithAnswers", questionsWithAnswers);
-
   const subquery = db
     .with(userUpvotesSubQuery)
     .select({
       ...getTableColumns(forumQuestions),
       answersCount: count(forumAnswers.id).as("answersCount"),
+      hasCorrectAnswer: sql<boolean>`case when ${correctAnswers.questionId} is null then false else true end`.as("hasCorrectAnswer"),
       isUpvoted: sql<boolean>`case when ${userUpvotesSubQuery.questionId} is null then false else true end`.as("isUpvoted"),
       upvotesCount: count(questionUpvotes.questionId).as("upvotesCount"),
     })
@@ -71,8 +59,9 @@ export const getQuestions = async (params: GetQuestionsParams) => // eslint-disa
     .leftJoin(userUpvotesSubQuery, eq(forumQuestions.id, userUpvotesSubQuery.questionId))
     .leftJoin(questionUpvotes, eq(forumQuestions.id, questionUpvotes.questionId))
     .leftJoin(forumAnswers, eq(forumQuestions.id, forumAnswers.parentQuestionId))
+    .leftJoin(correctAnswers, eq(forumQuestions.id, correctAnswers.questionId))
     .where(params.getQuestionsType === "byId" ? eq(forumQuestions.id, params.questionId) : undefined)
-    .groupBy(forumQuestions.id, userUpvotesSubQuery.questionId)
+    .groupBy(forumQuestions.id, userUpvotesSubQuery.questionId, correctAnswers.questionId)
     .as("questionUpvotesSq");
 
   let queryConditions: SQL<unknown> | undefined;
@@ -129,7 +118,7 @@ export const getQuestions = async (params: GetQuestionsParams) => // eslint-disa
         username: users.displayName,
       },
       createdAt: subquery.createdAt,
-      hasCorrectAnswer: sql<boolean>`case when ${correctAnswers.questionId} is null then false else true end`.as("hasCorrectAnswer"),
+      hasCorrectAnswer: subquery.hasCorrectAnswer,
       id: subquery.id,
       index: subquery.index,
       isUpvoted: subquery.isUpvoted,
@@ -145,7 +134,6 @@ export const getQuestions = async (params: GetQuestionsParams) => // eslint-disa
     .from(subquery)
     .where(queryConditions)
     .innerJoin(users, eq(subquery.userId, users.id))
-    .leftJoin(correctAnswers, eq(subquery.id, correctAnswers.questionId))
     .orderBy(...(Array.isArray(orderBy) ? orderBy : [orderBy]))
     .limit(params.getQuestionsType === "byId" ? 1 : params.limit + 1);
 

@@ -63,14 +63,16 @@ type Props = {
 export const ForumQuestionDetailPage: FunctionComponent<Props> = ({ questionId }) =>
 {
   const router = useRouter();
-  const { invalidateForumAnswers, invalidateForumQuestions } = useContextAndErrorIfNull(InvalidateQueriesContext);
+  const { invalidateForumAnswers, invalidateForumQuestion, invalidateForumQuestions } = useContextAndErrorIfNull(InvalidateQueriesContext);
   const { bookmarks: questionBookmarks, isLoading: isGetQuestionBookmarksLoading } = useBookmarks("forumQuestion", { enabled: true });
   const { userDetails } = useUserDetails();
   const setEditQuestionState = useForumPageStore((state) => state.setEditQuestionState);
   const [showDeleteModal, setShowDeleteModal] = useState<boolean>(false);
   const openDeleteModal = (): void => setShowDeleteModal(true);
   const closeDeleteModal = (): void => setShowDeleteModal(false);
-  const { isPending: isPostingAnswer, mutateAsync: postAnswer } = usePostAnswer();
+  const { isPending: isPostingAnswer, mutateAsync: postAnswer } = usePostAnswer({
+    onSuccess: async () => invalidateForumQuestion({ questionId })
+  });
   const answersSorting = useForumPageStore(s => s.answersSorting);
   const setAnswersSorting = useForumPageStore(s => s.setAnswersSorting);
 
@@ -266,7 +268,9 @@ export const ForumQuestionDetailPage: FunctionComponent<Props> = ({ questionId }
           <div css={styles.head}>
             <div css={styles.totalAmountAndSortingWrapper(amountOfAnswers != null)}>
               {amountOfAnswers != null && (
-                <p css={styles.totalAmount}>{amountOfAnswers} Fragen</p>
+                <p css={styles.totalAmount}>
+                  {amountOfAnswers === 1 ? "1 Antwort" : `${amountOfAnswers} Antworten`}
+                </p>
               )}
               <div css={styles.sortWrapper}>
                 <p>Sortieren nach:</p>
