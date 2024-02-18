@@ -46,16 +46,31 @@ export const getQuestions = async (params: GetQuestionsParams) => // eslint-disa
       .where(eq(questionUpvotes.userId, params.userId))
     );
 
-  const countUpvotesSubquery = db
+  const test = await db
+    .select({
+      answersCount: count(forumAnswers.id).as("answersCount"),
+      id: forumQuestions.id,
+      title: forumQuestions.title,
+    })
+    .from(forumQuestions)
+    .leftJoin(forumAnswers, eq(forumQuestions.id, forumAnswers.parentQuestionId))
+    .groupBy(forumQuestions.id);
+
+  const questionsWithAnswers = test.filter((question) => question.answersCount > 0);
+  console.log("questionsWithAnswers", questionsWithAnswers);
+
+  const subquery = db
     .with(userUpvotesSubQuery)
     .select({
       ...getTableColumns(forumQuestions),
+      answersCount: count(forumAnswers.id).as("answersCount"),
       isUpvoted: sql<boolean>`case when ${userUpvotesSubQuery.questionId} is null then false else true end`.as("isUpvoted"),
       upvotesCount: count(questionUpvotes.questionId).as("upvotesCount"),
     })
     .from(forumQuestions)
     .leftJoin(userUpvotesSubQuery, eq(forumQuestions.id, userUpvotesSubQuery.questionId))
     .leftJoin(questionUpvotes, eq(forumQuestions.id, questionUpvotes.questionId))
+    .leftJoin(forumAnswers, eq(forumQuestions.id, forumAnswers.parentQuestionId))
     .where(params.getQuestionsType === "byId" ? eq(forumQuestions.id, params.questionId) : undefined)
     .groupBy(forumQuestions.id, userUpvotesSubQuery.questionId)
     .as("questionUpvotesSq");
@@ -73,9 +88,9 @@ export const getQuestions = async (params: GetQuestionsParams) => // eslint-disa
       {
         if(cursor.index != null)
         {
-          queryConditions = lte(countUpvotesSubquery.index, cursor.index);
+          queryConditions = lte(subquery.index, cursor.index);
         }
-        orderBy = desc(countUpvotesSubquery.index);
+        orderBy = desc(subquery.index);
         break;
       }
       case "upvotes":
@@ -84,52 +99,53 @@ export const getQuestions = async (params: GetQuestionsParams) => // eslint-disa
         {
           if(cursor.index == null)
           {
-            queryConditions = lte(countUpvotesSubquery.upvotesCount, cursor.upvotes);
+            queryConditions = lte(subquery.upvotesCount, cursor.upvotes);
           }
           else
           {
             // If the upvotes count is the same, the newer question ranks higher
             queryConditions = or(
-              lt(countUpvotesSubquery.upvotesCount, cursor.upvotes),
+              lt(subquery.upvotesCount, cursor.upvotes),
               and(
-                eq(countUpvotesSubquery.upvotesCount, cursor.upvotes),
-                lte(countUpvotesSubquery.index, cursor.index)
+                eq(subquery.upvotesCount, cursor.upvotes),
+                lte(subquery.index, cursor.index)
               )
             );
           }
         }
 
-        orderBy = [desc(countUpvotesSubquery.upvotesCount), desc(countUpvotesSubquery.index)];
+        orderBy = [desc(subquery.upvotesCount), desc(subquery.index)];
         break;
       }
     }
   }
 
   const questionsSortedWithAuthor = await db
-    .with(countUpvotesSubquery)
+    .with(subquery)
     .select({
+      answersCount: subquery.answersCount,
       author: {
         id: users.id,
         username: users.displayName,
       },
-      createdAt: countUpvotesSubquery.createdAt,
+      createdAt: subquery.createdAt,
       hasCorrectAnswer: sql<boolean>`case when ${correctAnswers.questionId} is null then false else true end`.as("hasCorrectAnswer"),
-      id: countUpvotesSubquery.id,
-      index: countUpvotesSubquery.index,
-      isUpvoted: countUpvotesSubquery.isUpvoted,
-      legalFieldId: countUpvotesSubquery.legalFieldId,
-      slug: countUpvotesSubquery.slug,
-      subfieldId: countUpvotesSubquery.subfieldId,
-      text: countUpvotesSubquery.text,
-      title: countUpvotesSubquery.title,
-      topicId: countUpvotesSubquery.topicId,
-      updatedAt: countUpvotesSubquery.updatedAt,
-      upvotesCount: countUpvotesSubquery.upvotesCount,
+      id: subquery.id,
+      index: subquery.index,
+      isUpvoted: subquery.isUpvoted,
+      legalFieldId: subquery.legalFieldId,
+      slug: subquery.slug,
+      subfieldId: subquery.subfieldId,
+      text: subquery.text,
+      title: subquery.title,
+      topicId: subquery.topicId,
+      updatedAt: subquery.updatedAt,
+      upvotesCount: subquery.upvotesCount,
     })
-    .from(countUpvotesSubquery)
+    .from(subquery)
     .where(queryConditions)
-    .innerJoin(users, eq(countUpvotesSubquery.userId, users.id))
-    .leftJoin(correctAnswers, eq(countUpvotesSubquery.id, correctAnswers.questionId))
+    .innerJoin(users, eq(subquery.userId, users.id))
+    .leftJoin(correctAnswers, eq(subquery.id, correctAnswers.questionId))
     .orderBy(...(Array.isArray(orderBy) ? orderBy : [orderBy]))
     .limit(params.getQuestionsType === "byId" ? 1 : params.limit + 1);
 

@@ -122,7 +122,7 @@ const QuestionListItem: FunctionComponent<Props> = ({ questionId }) =>
             )}
             <div css={styles.answersCountWrapper}>
               <Chat size={20}/>
-              <p>12</p>
+              <p>{question.answersCount}</p>
             </div>
           </div>
         </div>
