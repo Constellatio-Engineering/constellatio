@@ -9,8 +9,19 @@ if(!connectionString)
   throw new Error("DATABASE_URL environment variable is not set");
 }
 
-const sql = postgres(connectionString, { max: 1 })
-const db = drizzle(sql);
+const client = postgres(connectionString, {
+  max: 1,
+  connect_timeout: 10,
+  connection: {
+    application_name: `CI_Constellatio-Web-App-${process.env.NEXT_PUBLIC_DEPLOYMENT_ENVIRONMENT}`
+  },
+  idle_timeout: 10,
+  max_lifetime: 60 * 10,
+  ...(process.env.NEXT_PUBLIC_DEPLOYMENT_ENVIRONMENT !== "development" && {
+    prepare: false
+  })
+});
+const db = drizzle(client);
 
 try
 {
