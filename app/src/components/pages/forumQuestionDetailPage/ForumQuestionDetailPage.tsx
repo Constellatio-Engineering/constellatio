@@ -206,8 +206,9 @@ export const ForumQuestionDetailPage: FunctionComponent<Props> = ({ questionId }
                 </div>
                 <div>
                   <LegalFieldsAndTopicsTags
+                    canBeMultiline={true}
                     topicsIds={question.topicsIds}
-                    legalFieldsIds={question.legalFieldsIds}
+                    legalFieldId={question.legalFieldId}
                     subfieldsIds={question.subfieldsIds}
                   />
                   <div css={styles.authorAndDateWrapper}>

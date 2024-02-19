@@ -1,11 +1,14 @@
 import { type UnknownMantineStylesParams } from "@/utils/types";
 
-import { type SelectStylesNames, type Styles } from "@mantine/core";
+import { type MultiSelectStylesNames, type Styles } from "@mantine/core";
 import { type ReactNode } from "react";
+import { Simulate } from "react-dom/test-utils";
 
-type DropdownStyles = Styles<SelectStylesNames, UnknownMantineStylesParams>;
+import focus = Simulate.focus;
 
-export const dropdownStyles = ({ disabled, error }: { disabled?: boolean; error: ReactNode }): DropdownStyles =>
+type DropdownStyles = Styles<MultiSelectStylesNames, UnknownMantineStylesParams>;
+
+export const dropdownMultiselectStyles = ({ disabled, error }: { disabled?: boolean; error: ReactNode }): DropdownStyles =>
 {
   const styles: DropdownStyles = theme => ({
     description: {
@@ -29,32 +32,12 @@ export const dropdownStyles = ({ disabled, error }: { disabled?: boolean; error:
       order: 3,
     },
     input: {
-      "&[data-disabled]": {
-        backgroundColor: theme.colors["neutrals-01"][3],
-      },
-      "::placeholder": {
-        color: `${theme.colors["neutrals-01"][7]} !important`,
-        fontSize: theme.fontSizes["spacing-16"],
-        fontWeight: 500,
-        lineHeight: theme.spacing["spacing-24"],
-        transition: "all 0.3s ease",
-      },
-      ":focus": {
+      ":focus-within": {
         border: error
           ? `1px solid ${theme.colors["support-error"][3]} !important`
           : `1px solid ${theme.colors["neutrals-01"][8]} !important`,
       },
-      backgroundColor: theme.colors["neutrals-01"][0],
-      border: error
-        ? `1px solid ${theme.colors["support-error"][3]} !important`
-        : `1px solid ${theme.colors["neutrals-01"][5]}`,
-      borderRadius: theme.radius["radius-8"],
-      color: `${theme.colors["neutrals-02"][1]} !important`,
-      fontSize: theme.fontSizes["spacing-16"],
-      fontWeight: 500,
-      lineHeight: theme.spacing["spacing-24"],
-      padding: `${theme.spacing["spacing-8"]} ${theme.spacing["spacing-16"]}`,
-      transition: "all 0.3s ease",
+      borderRadius: theme.radius["radius-8"]
     },
     label: {
       color: error
@@ -69,6 +52,18 @@ export const dropdownStyles = ({ disabled, error }: { disabled?: boolean; error:
       paddingBottom: theme.spacing["spacing-4"],
       transition: "all 0.3s ease",
     },
+    option: {
+      "&[data-selected]": {
+        color: `${theme.colors["neutrals-01"][0]}`,
+      },
+      "> div": {
+        gap: theme.spacing["spacing-8"],
+      },
+      backgroundColor: theme.colors["neutrals-01"][0],
+      borderBottom: `1px solid ${theme.colors["neutrals-01"][3]}`,
+      color: theme.colors["neutrals-02"][1],
+      padding: `${theme.spacing["spacing-8"]} ${theme.spacing["spacing-16"]}`,
+    },
     rightSection: {
       height: "20px",
       right: "8px",
@@ -78,27 +73,37 @@ export const dropdownStyles = ({ disabled, error }: { disabled?: boolean; error:
     root: {
       ":focus-within": {
         label: {
-          color: error ? theme.colors["support-error"][3] : theme.colors["neutrals-02"][1],
-        },
-      },
-      ":hover": {
-        input: {
-          "::placeholder": {
-            color: `${theme.colors["neutrals-02"][1]} !important`,
-          },
-          border: error
-            ? `1px solid ${theme.colors["support-error"][3]}`
-            : `1px solid ${theme.colors["neutrals-01"][6]}`,
+          color: error ? theme.colors["support-error"][3] : theme.colors["neutrals-02"][1]
         },
       },
       display: "flex",
       flexDirection: "column",
     },
+    searchInput: {
+      "&[data-disabled]": {
+        backgroundColor: theme.colors["neutrals-01"][3],
+      },
+      "::placeholder": {
+        color: `${theme.colors["neutrals-01"][7]} !important`,
+        fontSize: theme.fontSizes["spacing-16"],
+        fontWeight: 500,
+        lineHeight: theme.spacing["spacing-24"],
+        transition: "all 0.3s ease",
+      },
+      backgroundColor: theme.colors["neutrals-01"][0],
+      borderRadius: theme.radius["radius-8"],
+      color: `${theme.colors["neutrals-02"][1]} !important`,
+      fontSize: theme.fontSizes["spacing-16"],
+      fontWeight: 500,
+      lineHeight: theme.spacing["spacing-24"],
+      padding: `${theme.spacing["spacing-8"]} ${theme.spacing["spacing-4"]}`,
+      transition: "all 0.3s ease",
+    },
     wrapper: {
       color: error ? theme.colors["support-error"][3] : theme.colors["neutrals-01"][7],
       margin: 0,
       order: 1,
-      paddingBottom: theme.spacing["spacing-8"],
+      paddingBottom: theme.spacing["spacing-2"],
     },
   });
   return styles;

@@ -1,13 +1,13 @@
 import { idValidation } from "@/schemas/common.validation";
 import {
-  legalFieldsIdsValidation,
+  legalFieldIdValidation,
   questionTextValidation, subfieldsIdsValidation, titleValidation, topicsIdsValidation
 } from "@/schemas/forum/question.valiation";
 
 import { z } from "zod";
 
 export const questionUpdateSchema = z.object({
-  legalFieldsIds: legalFieldsIdsValidation,
+  legalFieldId: legalFieldIdValidation,
   subfieldsIds: subfieldsIdsValidation,
   text: questionTextValidation.optional(),
   title: titleValidation.optional(),

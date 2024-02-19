@@ -1,13 +1,21 @@
 /* eslint-disable max-lines */
 import { db } from "@/db/connection";
 import {
-  answerUpvotes, correctAnswers, forumAnswers, forumQuestions, forumQuestionsToLegalFields, forumQuestionToSubfields, forumQuestionToTopics, questionUpvotes, users
+  answerUpvotes,
+  correctAnswers,
+  forumAnswers,
+  forumQuestions,
+  forumQuestionsToLegalFields,
+  forumQuestionToSubfields,
+  forumQuestionToTopics,
+  questionUpvotes,
+  users
 } from "@/db/schema";
 import { type GetAnswersSchema } from "@/schemas/forum/getAnswers.schema";
 import { type GetQuestionsSchema } from "@/schemas/forum/getQuestions.schema";
 
 import {
-  and, asc, count, desc, eq, getTableColumns, inArray, lt, lte, or, type SQL, sql
+  and, asc, count, desc, eq, getTableColumns, inArray, lt, lte, or, type SQL, sql 
 } from "drizzle-orm";
 
 type GetUpvotesForQuestion = (questionId: string) => Promise<number>;
@@ -157,7 +165,7 @@ export const getQuestions = async (params: GetQuestionsParams) => // eslint-disa
 
   const result = questionsSortedWithAuthor.map(question =>
   {
-    let legalFieldsIds: string[] = [];
+    let legalFieldId: string | undefined;
     let subfieldsIds: string[] = [];
     let topicsIds: string[] = [];
 
@@ -165,14 +173,14 @@ export const getQuestions = async (params: GetQuestionsParams) => // eslint-disa
 
     if(questionData)
     {
-      legalFieldsIds = questionData.forumQuestionToLegalFields.map(lf => lf.legalFieldId);
+      legalFieldId = questionData.forumQuestionToLegalFields.map(lf => lf.legalFieldId)[0];
       subfieldsIds = questionData.forumQuestionToSubfields.map(sf => sf.subfieldId);
       topicsIds = questionData.forumQuestionToTopics.map(t => t.topicId);
     }
 
     return {
       ...question,
-      legalFieldsIds,
+      legalFieldId,
       subfieldsIds,
       topicsIds
     };
@@ -294,13 +302,13 @@ export const resetLegalFieldsAndTopicsForQuestion = async (questionId: string, d
 
 export const insertLegalFieldsAndTopicsForQuestion = async ({
   dbConnection,
-  legalFieldsIds,
+  legalFieldId,
   questionId,
   subfieldsIds,
   topicsIds
 }: {
   dbConnection: typeof db;
-  legalFieldsIds: string[];
+  legalFieldId: string;
   questionId: string;
   subfieldsIds: string[];
   topicsIds: string[];
@@ -308,19 +316,19 @@ export const insertLegalFieldsAndTopicsForQuestion = async ({
 {
   const insertQuestionToLegalFields = dbConnection
     .insert(forumQuestionsToLegalFields)
-    .values(legalFieldsIds.map(legalFieldId => ({
+    .values({
       legalFieldId,
       questionId
-    })));
+    });
 
-  const insertQuestionToSubfields = dbConnection
+  const insertQuestionToSubfields = subfieldsIds.length > 0 && dbConnection
     .insert(forumQuestionToSubfields)
     .values(subfieldsIds.map(subfieldId => ({
       questionId,
       subfieldId
     })));
 
-  const insertQuestionToTopics = dbConnection
+  const insertQuestionToTopics = topicsIds.length > 0 && dbConnection
     .insert(forumQuestionToTopics)
     .values(topicsIds.map(topicId => ({
       questionId,
@@ -331,5 +339,5 @@ export const insertLegalFieldsAndTopicsForQuestion = async ({
     insertQuestionToLegalFields,
     insertQuestionToSubfields,
     insertQuestionToTopics
-  ]);
+  ].filter(Boolean));
 };

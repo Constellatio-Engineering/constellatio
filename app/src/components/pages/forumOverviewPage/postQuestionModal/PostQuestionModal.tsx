@@ -14,7 +14,7 @@ const PostQuestionModal: FunctionComponent = () =>
 
   const form = useForm<PostQuestionSchema>({
     initialValues: {
-      legalFieldsIds: [],
+      legalFieldId: undefined,
       subfieldsIds: [],
       text: "",
       title: "",

@@ -1,5 +1,6 @@
 import { Button } from "@/components/atoms/Button/Button";
 import { Dropdown } from "@/components/atoms/Dropdown/Dropdown";
+import { DropdownMultiselect } from "@/components/atoms/Dropdown/DropdownMultiselect";
 import { Input } from "@/components/atoms/Input/Input";
 import { Cross } from "@/components/Icons/Cross";
 import ErrorCard, { type ErrorCardsProps } from "@/components/molecules/errorCard/ErrorCard";
@@ -146,27 +147,30 @@ const QuestionModal: FunctionComponent<QuestionModalProps> = ({
                 title="Rechtsgebiet"
                 placeholder="Rechtsgebiet auswählen"
                 data={legalFieldsOptions}
-                {...form.getInputProps("legalFieldsIds" satisfies keyof PostQuestionSchema)}
+                {...form.getInputProps("legalFieldId" satisfies keyof PostQuestionSchema)}
               />
-              <Dropdown
+              <DropdownMultiselect
                 isLoading={areLegalFieldsAndTopicsLoading as boolean}
                 label="Teilgebiet (optional)"
                 title="Teilgebiet"
-                placeholder="Teilgebiet auswählen"
-                multiple
+                placeholder="Wähle bis zu 3 Teilgebiete aus"
+                searchable
+                nothingFound="Teilgebiet nicht gefunden"
+                maxSelectedValues={3}
                 clearable
-                allowDeselect
                 data={allSubfieldsOptions}
                 {...form.getInputProps("subfieldsIds" satisfies keyof PostQuestionSchema)}
               />
-              <Dropdown
+              <DropdownMultiselect
                 isLoading={areLegalFieldsAndTopicsLoading as boolean}
                 label="Thema (optional)"
                 title="Thema"
-                placeholder="Thema auswählen"
+                placeholder="Wähle bis zu 3 Themen aus"
+                searchable
+                nothingFound="Thema nicht gefunden"
                 clearable
+                maxSelectedValues={3}
                 multiple
-                allowDeselect
                 data={topicOptions}
                 {...form.getInputProps("topicsIds" satisfies keyof PostQuestionSchema)}
               />

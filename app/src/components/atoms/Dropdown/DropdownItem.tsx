@@ -19,7 +19,7 @@ const DropdownItemComponent = forwardRef<HTMLDivElement, TDropdownItem>(({
   const textStyles: MantineCssObjectStyles = theme => ({
     fontSize: theme.fontSizes["spacing-16"],
     fontWeight: 500,
-    lineHeight: theme.fontSizes["spacing-24"],
+    lineHeight: theme.fontSizes["spacing-20"],
   });
 
   return (

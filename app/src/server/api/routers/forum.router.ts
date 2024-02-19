@@ -41,11 +41,11 @@ const createSlug = (title: string): string =>
 };
 
 const getLegalFieldsAndTopics = async ({
-  legalFieldsIds,
+  legalFieldId,
   subfieldsIds,
   topicsIds
 }: {
-  legalFieldsIds: string[];
+  legalFieldId: string;
   subfieldsIds: string[];
   topicsIds: string[];
 }) => // eslint-disable-line @typescript-eslint/explicit-function-return-type
@@ -54,9 +54,9 @@ const getLegalFieldsAndTopics = async ({
   const allSubfields = await getAllSubfields();
   const allTopics = await getAllTopics();
 
-  const legalFields = allLegalFields
+  const legalField = allLegalFields
     .filter(legalField => legalField.id != null && legalField.mainCategory != null)
-    .filter(legalField => legalFieldsIds.includes(legalField.id!));
+    .find(legalField => legalField.id === legalFieldId);
   const subfields = allSubfields
     .filter(subfield => subfield.id != null && subfield.legalAreaName != null)
     .filter(subfield => subfieldsIds.includes(subfield.id!));
@@ -64,7 +64,7 @@ const getLegalFieldsAndTopics = async ({
     .filter(topic => topic.id != null && topic.topicName != null)
     .filter(topic => topicsIds.includes(topic.id!));
 
-  return ({ legalFields, subfields, topics });
+  return ({ legalField, subfields, topics });
 };
 
 export const forumRouter = createTRPCRouter({
@@ -314,7 +314,7 @@ export const forumRouter = createTRPCRouter({
 
         await insertLegalFieldsAndTopicsForQuestion({
           dbConnection: transaction,
-          legalFieldsIds: input.legalFieldsIds,
+          legalFieldId: input.legalFieldId,
           questionId: insertedQuestion.id,
           subfieldsIds: input.subfieldsIds,
           topicsIds: input.topicsIds
@@ -323,18 +323,18 @@ export const forumRouter = createTRPCRouter({
         return insertedQuestion;
       });
 
-      const { legalFields, subfields, topics } = await getLegalFieldsAndTopics({
-        legalFieldsIds: input.legalFieldsIds,
+      const { legalField, subfields, topics } = await getLegalFieldsAndTopics({
+        legalFieldId: input.legalFieldId,
         subfieldsIds: input.subfieldsIds,
         topicsIds: input.topicsIds
       });
 
       const searchIndexItem = createForumQuestionSearchIndexItem({
         id: insertedQuestion.id,
-        legalFields: legalFields.map(legalField => ({
+        legalFields: legalField ? [{
           id: legalField.id!,
           name: legalField.mainCategory!
-        })),
+        }] : [],
         slug: questionInsert.slug,
         subfields: subfields.map(subfield => ({
           id: subfield.id!,
@@ -453,7 +453,7 @@ export const forumRouter = createTRPCRouter({
         await resetLegalFieldsAndTopicsForQuestion(questionId, transaction);
         await insertLegalFieldsAndTopicsForQuestion({
           dbConnection: transaction,
-          legalFieldsIds: updatedValues.legalFieldsIds,
+          legalFieldId: updatedValues.legalFieldId,
           questionId,
           subfieldsIds: updatedValues.subfieldsIds,
           topicsIds: updatedValues.topicsIds
@@ -467,8 +467,8 @@ export const forumRouter = createTRPCRouter({
         updatedValues.text = removeHtmlTagsFromString(updatedValues.text, true);
       }
 
-      const { legalFields, subfields, topics } = await getLegalFieldsAndTopics({
-        legalFieldsIds: updatedValues.legalFieldsIds,
+      const { legalField, subfields, topics } = await getLegalFieldsAndTopics({
+        legalFieldId: updatedValues.legalFieldId,
         subfieldsIds: updatedValues.subfieldsIds,
         topicsIds: updatedValues.topicsIds
       });
@@ -476,10 +476,10 @@ export const forumRouter = createTRPCRouter({
       const searchIndexQuestionUpdate: ForumQuestionSearchItemUpdate = {
         ...updatedValues,
         id: questionId,
-        legalFields: legalFields.map(legalField => ({
+        legalFields: legalField ? [{
           id: legalField.id!,
           name: legalField.mainCategory!
-        })),
+        }] : [],
         subfields: subfields.map(subfield => ({
           id: subfield.id!,
           name: subfield.legalAreaName!
@@ -500,7 +500,7 @@ export const forumRouter = createTRPCRouter({
 
       return {
         ...updatedQuestion,
-        legalFieldsIds: updatedValues.legalFieldsIds,
+        legalFieldId: updatedValues.legalFieldId,
         subfieldsIds: updatedValues.subfieldsIds,
         topicsIds: updatedValues.topicsIds
       };

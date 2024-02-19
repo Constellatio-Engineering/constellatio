@@ -38,8 +38,7 @@ export const globalStyles = css`
     font-weight: 700;
   }
 
-  .mantine-Select-dropdown {
-    margin-top: -10px;
+  .mantine-Select-dropdown, .mantine-MultiSelect-dropdown {
   }
   
   .mantine-Notification-body {

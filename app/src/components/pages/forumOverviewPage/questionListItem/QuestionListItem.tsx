@@ -102,8 +102,9 @@ const QuestionListItem: FunctionComponent<Props> = ({ questionId }) =>
           </div>
           <div css={styles.bottomWrapper}>
             <LegalFieldsAndTopicsTags
+              canBeMultiline={true}
               topicsIds={question.topicsIds}
-              legalFieldsIds={question.legalFieldsIds}
+              legalFieldId={question.legalFieldId}
               subfieldsIds={question.subfieldsIds}
             />
             <div css={styles.answersCountWrapper}>

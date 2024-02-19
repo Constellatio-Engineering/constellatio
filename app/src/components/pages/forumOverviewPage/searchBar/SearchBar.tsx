@@ -61,14 +61,16 @@ const SearchBar: FunctionComponent = () =>
           )}
           {searchResults?.hits.map((question) => (
             <div key={question.id} css={styles.searchResult}>
+              <div css={styles.overflowOverlay}/>
               <Link href={getForumQuestionUrl(question)}>
                 <CustomLink styleType="link-content-title" component="p">
                   {question.title}
                 </CustomLink>
               </Link>
               <LegalFieldsAndTopicsTags
+                canBeMultiline={false}
                 topicsIds={question.topics.map((topic) => topic.id)}
-                legalFieldsIds={question.legalFields.map((field) => field.id)}
+                legalFieldId={question.legalFields.map((field) => field.id)[0]}
                 subfieldsIds={question.subfields.map((subfield) => subfield.id)}
               />
             </div>

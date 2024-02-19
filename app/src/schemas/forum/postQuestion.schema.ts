@@ -1,11 +1,12 @@
 import {
-  legalFieldsIdsValidation, questionTextValidation, subfieldsIdsValidation, titleValidation, topicsIdsValidation 
+  legalFieldIdValidation,
+  questionTextValidation, subfieldsIdsValidation, titleValidation, topicsIdsValidation
 } from "@/schemas/forum/question.valiation";
 
 import { z } from "zod";
 
 export const postQuestionSchema = z.object({
-  legalFieldsIds: legalFieldsIdsValidation,
+  legalFieldId: legalFieldIdValidation,
   subfieldsIds: subfieldsIdsValidation,
   text: questionTextValidation,
   title: titleValidation,
