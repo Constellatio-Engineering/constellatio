@@ -37,6 +37,7 @@ export const titleAndCheckmarkWrapper = css`
 
 export const titleLink = css`
   color: inherit;
+  cursor: pointer;
 `;
 
 export const title = css`

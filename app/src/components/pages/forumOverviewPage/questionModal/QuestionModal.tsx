@@ -141,9 +141,9 @@ const QuestionModal: FunctionComponent<QuestionModalProps> = ({
             <div css={styles.inputsWrapper}>
               <Dropdown
                 isLoading={areLegalFieldsAndTopicsLoading as boolean}
-                label="Rechtsgbiet *"
-                title="Rechtsgbiet"
-                placeholder="Rechtsgbiet auswählen"
+                label="Rechtsgebiet *"
+                title="Rechtsgebiet"
+                placeholder="Rechtsgebiet auswählen"
                 data={legalFieldsOptions}
                 {...form.getInputProps("legalFieldId" satisfies keyof PostQuestionSchema)}
               />

@@ -15,7 +15,7 @@ export type SearchResults = {
   userUploads: UploadSearchIndexItem[];
 };
 
-export type SearchResultsKey = keyof Omit<SearchResults, "userDocuments" | "forumQuestions">;
+export type SearchResultsKey = keyof Omit<SearchResults, "userDocuments">;
 
 const initialSearchResults: SearchResults = {
   articles: [],

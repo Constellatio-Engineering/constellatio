@@ -18,6 +18,7 @@ const tabSchema = createParser({
     {
       case "userUploads": { return "userUploads"; }
       case "cases": { return "cases"; }
+      case "forumQuestions": { return "forumQuestions"; }
       case "articles": { return "articles"; }
       default:
       {
