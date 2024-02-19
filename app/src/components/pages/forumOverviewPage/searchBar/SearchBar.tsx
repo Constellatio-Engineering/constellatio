@@ -67,6 +67,8 @@ const SearchBar: FunctionComponent = () =>
                 </CustomLink>
               </Link>
               <Tag title={question.legalFieldName}/>
+              <Tag title={question.subfieldName}/>
+              <Tag title={question.topicName}/>
             </div>
           ))}
         </div>
