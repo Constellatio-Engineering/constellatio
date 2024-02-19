@@ -44,6 +44,7 @@ const SearchBarContent: FunctionComponent = () =>
         <Button<"button">
           styleType="primary"
           type="submit"
+          onClick={closeDrawer}
           disabled={Object.values(searchResults).every(result => result.length === 0)}
           name="Alle Ergebnisse"
           title="Alle Ergebnisse">

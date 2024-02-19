@@ -28,7 +28,13 @@ const SearchBar: FunctionComponent = () =>
       zIndex={20}
       width={"100%"}
       offset={0}>
-      <form css={styles.form} onSubmit={e => e.preventDefault()}>
+      <form css={styles.form} onSubmit={e => e.preventDefault()} autoComplete={"off"}>
+        <input
+          autoComplete="false"
+          name="hidden"
+          type="text"
+          style={{ display: "none" }}
+        />
         <Popover.Target>
           <Input
             data-autofocus

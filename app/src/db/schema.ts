@@ -359,8 +359,8 @@ export const correctAnswers = pgTable("CorrectAnswer", {
   id: uuid("Id").defaultRandom().primaryKey(),
   confirmedAt: timestamp("ConfirmedAt").defaultNow().notNull(),
   confirmedByUserId: uuid("ConfirmedByUserId").references(() => users.id, { onDelete: "no action" }).notNull(),
-  questionId: uuid("QuestionId").references(() => forumQuestions.id, { onDelete: "no action" }).notNull(),
-  answerId: uuid("AnswerId").references(() => forumAnswers.id, { onDelete: "no action" }).unique().notNull(),
+  questionId: uuid("QuestionId").references(() => forumQuestions.id, { onDelete: "cascade" }).notNull(),
+  answerId: uuid("AnswerId").references(() => forumAnswers.id, { onDelete: "cascade" }).unique().notNull(),
 });
 
 export type CorrectAnswerInsert = InferInsertModel<typeof correctAnswers>;

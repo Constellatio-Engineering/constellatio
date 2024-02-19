@@ -44,6 +44,7 @@ const EditQuestionModal: FunctionComponent<Question> = (originalQuestion) =>
 
   return (
     <QuestionModal
+      variant={"edit"}
       error={postQuestionError}
       form={form}
       isLoading={isLoading}

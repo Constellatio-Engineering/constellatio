@@ -55,7 +55,7 @@ const SearchOverlayLeftSide: FunctionComponent<SearchOverlayLeftSideProps> = ({ 
     );
   }
 
-  if(searchResults.cases.length === 0 && searchResults.articles.length === 0)
+  if(searchResults.cases.length === 0 && searchResults.articles.length === 0 && searchResults.forumQuestions.length === 0)
   {
     return (
       <div css={styles.suggestionsLeft}>
@@ -74,7 +74,7 @@ const SearchOverlayLeftSide: FunctionComponent<SearchOverlayLeftSideProps> = ({ 
     <div css={styles.suggestionsLeft}>
       {searchResults.cases.length > 0 && (
         <SuggestionSection label="Fälle" labelVariant="case">
-          {searchResults.cases.slice(0, 9).map((legalCase) =>
+          {searchResults.cases.slice(0, 5).map((legalCase) =>
           {
             const mainCategory = legalCase.mainCategory?.mainCategory;
             return (
@@ -95,7 +95,7 @@ const SearchOverlayLeftSide: FunctionComponent<SearchOverlayLeftSideProps> = ({ 
       )}
       {searchResults.articles.length > 0 && (
         <SuggestionSection label="LEXIKON" labelVariant="dictionary">
-          {searchResults.articles.slice(0, 9).map((article) =>
+          {searchResults.articles.slice(0, 5).map((article) =>
           {
             const mainCategory = article.mainCategory?.mainCategory;
             return (
@@ -105,6 +105,27 @@ const SearchOverlayLeftSide: FunctionComponent<SearchOverlayLeftSideProps> = ({ 
                 className="suggestion__section__link">
                 <CustomLink styleType="link-content-title" component="p">
                   {article.title}
+                </CustomLink>
+                {mainCategory && (
+                  <Tag title={mainCategory}/>
+                )}
+              </Link>
+            );
+          })}
+        </SuggestionSection>
+      )}
+      {searchResults.forumQuestions.length > 0 && (
+        <SuggestionSection label="FORUM" labelVariant="forum">
+          {searchResults.forumQuestions.slice(0, 5).map((question) =>
+          {
+            const mainCategory = question.legalFieldName;
+            return (
+              <Link
+                key={question.id}
+                href={`${appPaths.forum}/${question.id}`}
+                className="suggestion__section__link">
+                <CustomLink styleType="link-content-title" component="p">
+                  {question.title}
                 </CustomLink>
                 {mainCategory && (
                   <Tag title={mainCategory}/>

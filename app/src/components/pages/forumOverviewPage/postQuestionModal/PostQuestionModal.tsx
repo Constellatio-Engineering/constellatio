@@ -35,6 +35,7 @@ const PostQuestionModal: FunctionComponent = () =>
 
   return (
     <QuestionModal
+      variant={"add"}
       error={postQuestionError}
       form={form}
       isLoading={isLoading}

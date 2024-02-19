@@ -3,6 +3,7 @@ import { db } from "@/db/connection";
 import {
   answerUpvotes, correctAnswers, type ForumAnswerInsert, forumAnswers, type ForumQuestionInsert, forumQuestions, questionUpvotes 
 } from "@/db/schema";
+import { meiliSearchAdmin } from "@/lib/meilisearch";
 import { deleteAnswerSchema } from "@/schemas/forum/deleteAnswer.schema";
 import { deleteQuestionSchema } from "@/schemas/forum/deleteQuestion.schema";
 import { getAnswerByIdSchema } from "@/schemas/forum/getAnswerById.schema";
@@ -16,15 +17,28 @@ import { updateAnswerSchema } from "@/schemas/forum/updateAnswer.schema";
 import { updateQuestionSchema } from "@/schemas/forum/updateQuestion.schema";
 import { upvoteAnswerSchema } from "@/schemas/forum/upvoteAnswer.schema";
 import { upvoteQuestionSchema } from "@/schemas/forum/upvoteQuestion.schema";
+import { getAllLegalFields, getAllSubfields, getAllTopics } from "@/server/api/services/caisy.services";
 import { getAnswers, getQuestions } from "@/server/api/services/forum.services";
 import { createTRPCRouter, forumModProcedure, protectedProcedure } from "@/server/api/trpc";
+import { createForumQuestionSearchIndexItem, forumQuestionSearchIndexItemPrimaryKey, type ForumQuestionSearchItemUpdate, searchIndices } from "@/utils/search";
 import { BadRequestError, ForbiddenError, InternalServerError, NotFoundError } from "@/utils/serverError";
+import { removeHtmlTagsFromString } from "@/utils/utils";
 
 import { type inferProcedureOutput } from "@trpc/server";
 import {
   and, count, eq, inArray, or 
 } from "drizzle-orm";
 import slugify from "slugify";
+
+const createSlug = (title: string): string =>
+{
+  return slugify(title, {
+    locale: "de",
+    lower: true,
+    replacement: "-",
+    trim: true,
+  });
+};
 
 export const forumRouter = createTRPCRouter({
   deleteAnswer: protectedProcedure
@@ -106,6 +120,19 @@ export const forumRouter = createTRPCRouter({
           .delete(forumQuestions)
           .where(eq(forumQuestions.id, questionId));
       });
+
+      const removeDeletedQuestionFromIndex = await meiliSearchAdmin
+        .index(searchIndices.forumQuestions)
+        .deleteDocuments({
+          filter: `id = ${questionId}`
+        });
+
+      const removeQuestionFromIndexResult = await meiliSearchAdmin.waitForTask(removeDeletedQuestionFromIndex.taskUid);
+
+      if(removeQuestionFromIndexResult.status !== "succeeded")
+      {
+        console.error("failed to remove question from index", removeQuestionFromIndexResult);
+      }
     }),
   getAnswerById: protectedProcedure
     .input(getAnswerByIdSchema)
@@ -242,12 +269,7 @@ export const forumRouter = createTRPCRouter({
     {
       const questionInsert: ForumQuestionInsert = {
         legalFieldId: input.legalFieldId,
-        slug: slugify(input.title, {
-          locale: "de",
-          lower: true,
-          replacement: "-",
-          trim: true,
-        }),
+        slug: createSlug(input.title),
         subfieldId: input.subfieldId,
         text: input.text,
         title: input.title,
@@ -255,7 +277,44 @@ export const forumRouter = createTRPCRouter({
         userId
       };
 
-      return db.insert(forumQuestions).values(questionInsert).returning();
+      const allLegalFields = await getAllLegalFields();
+      const allSubfields = await getAllSubfields();
+      const allTopics = await getAllTopics();
+
+      const subfield = allSubfields.find(legalArea => legalArea.id === questionInsert.subfieldId);
+      const legalField = allLegalFields.find(mainCategory => mainCategory.id === questionInsert.legalFieldId);
+      const topic = allTopics.find(topic => topic.id === questionInsert.topicId);
+
+      const [insertedQuestion] = await db.insert(forumQuestions).values(questionInsert).returning();
+
+      if(!insertedQuestion)
+      {
+        throw new InternalServerError(new Error("Question was null after insertion"));
+      }
+
+      const searchIndexItem = createForumQuestionSearchIndexItem({
+        id: insertedQuestion.id,
+        legalFieldName: legalField?.mainCategory ?? undefined,
+        slug: questionInsert.slug,
+        subfieldName: subfield?.legalAreaName ?? undefined,
+        text: questionInsert.text,
+        title: questionInsert.title,
+        topicName: topic?.topicName ?? undefined,
+        userId,
+      });
+
+      const addQuestionToIndexTask = await meiliSearchAdmin
+        .index(searchIndices.forumQuestions)
+        .addDocuments([searchIndexItem], { primaryKey: forumQuestionSearchIndexItemPrimaryKey });
+
+      const addQuestionToIndexResult = await meiliSearchAdmin.waitForTask(addQuestionToIndexTask.taskUid);
+
+      if(addQuestionToIndexResult.status !== "succeeded")
+      {
+        console.error("failed to add question to index", addQuestionToIndexResult);
+      }
+
+      return insertedQuestion;
     }),
   removeAnswerUpvote: protectedProcedure
     .input(upvoteAnswerSchema)
@@ -320,14 +379,49 @@ export const forumRouter = createTRPCRouter({
     .input(updateQuestionSchema)
     .mutation(async ({ ctx: { userId }, input: { id: questionId, updatedValues } }) =>
     {
+      const _updatedValues: Partial<ForumQuestionInsert> = {
+        ...(updatedValues.title != null && {
+          slug: createSlug(updatedValues.title)
+        } satisfies Partial<ForumQuestionInsert>),
+        legalFieldId: updatedValues.legalFieldId,
+        subfieldId: updatedValues.subfieldId,
+        text: updatedValues.text,
+        title: updatedValues.title,
+        topicId: updatedValues.topicId,
+        updatedAt: new Date(),
+      };
+      
       const [updatedQuestion] = await db
         .update(forumQuestions)
-        .set(updatedValues)
+        .set(_updatedValues)
         .where(and(
           eq(forumQuestions.id, questionId),
           eq(forumQuestions.userId, userId)
         ))
         .returning();
+
+      if(!updatedQuestion)
+      {
+        throw new InternalServerError(new Error("updatedQuestion was null after update"));
+      }
+
+      if(updatedValues.text != null)
+      {
+        updatedValues.text = removeHtmlTagsFromString(updatedValues.text, true);
+      }
+
+      const searchIndexQuestionUpdate: ForumQuestionSearchItemUpdate = {
+        ...updatedValues,
+        id: questionId,
+      };
+
+      const updateQuestionInIndexTask = await meiliSearchAdmin.index(searchIndices.forumQuestions).updateDocuments([searchIndexQuestionUpdate]);
+      const updateQuestionInIndexResult = await meiliSearchAdmin.waitForTask(updateQuestionInIndexTask.taskUid);
+
+      if(updateQuestionInIndexResult.status !== "succeeded")
+      {
+        console.error("failed to update question in index", updateQuestionInIndexResult);
+      }
 
       return updatedQuestion;
     }),

@@ -20,6 +20,7 @@ export type QuestionModalProps = Omit<ModalProps, "onSubmit"> & {
   readonly form: UseFormReturnType<PostQuestionSchema>;
   readonly isLoading: boolean;
   readonly onSubmit: (formValues: PostQuestionSchema) => void;
+  readonly variant: "add" | "edit";
 };
 
 const QuestionModal: FunctionComponent<QuestionModalProps> = ({
@@ -33,6 +34,7 @@ const QuestionModal: FunctionComponent<QuestionModalProps> = ({
   onSubmit,
   size = "74rem",
   styles: additionalStyles,
+  variant,
   withCloseButton = false,
   ...props
 }) =>
@@ -84,7 +86,6 @@ const QuestionModal: FunctionComponent<QuestionModalProps> = ({
 
   return (
     <Modal
-      onAnimationEnd={(e) => console.log("animation end", e)}
       withCloseButton={withCloseButton}
       closeOnEscape={closeOnEscape}
       closeOnClickOutside={closeOnClickOutside}
@@ -131,7 +132,7 @@ const QuestionModal: FunctionComponent<QuestionModalProps> = ({
               loading={isLoading}
               disabled={!form.isDirty()}
               css={styles.submitButton}>
-              Frage veröffentlichen
+              {variant === "add" ? "Frage veröffentlichen" : "Speichern"}
             </Button>
           </div>
           <div css={styles.rightSide}>
