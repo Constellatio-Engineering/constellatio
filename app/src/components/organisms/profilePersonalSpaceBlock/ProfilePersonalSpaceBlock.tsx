@@ -24,7 +24,8 @@ const ProfilePersonalSpaceBlock: FunctionComponent = () =>
     areArticlesLoading,
     bookmarkedArticles,
     bookmarkedCases, 
-    favoritesList, 
+    favoritesList,
+    isLoading,
     isUseBookmarksLoading, 
     isUseCasesLoading
   } = useAllFavorites();
@@ -53,11 +54,15 @@ const ProfilePersonalSpaceBlock: FunctionComponent = () =>
       <ProfilePersonalSpaceBlockHead selectedTab={selectedTab} setSelectedTab={setSelectedTab} tabs={tabs}/>
       {selectedTab === 0 && (
         <div css={styles.favoritesTab}>
-          <div css={styles.casesCard}>
+          <div css={styles.casesCardWrapper}>
             {(isUseBookmarksLoading || isUseCasesLoading || areArticlesLoading) ? (
               <Loader sx={{ margin: "0px" }}/>
             ) : (
-              <FavoritesExcerpt favorites={favoritesList} shouldSortByCreatedAt/>
+              <FavoritesExcerpt
+                isLoading={isLoading}
+                favorites={favoritesList}
+                shouldSortByCreatedAt
+              />
             )}
           </div>
           {favoritesList && favoritesList?.length > 6 && (

@@ -1,5 +1,6 @@
 import Label from "@/components/atoms/label/Label";
 import BookmarkButton from "@/components/organisms/caseBlock/BookmarkButton/BookmarkButton";
+import { type Favorite } from "@/hooks/useAllFavorites";
 import useBookmarks from "@/hooks/useBookmarks";
 
 import { Skeleton, Title } from "@mantine/core";
@@ -11,12 +12,9 @@ type LoadingProps = {
   readonly isLoading: true;
 };
 
-type LoadedProps = React.HTMLAttributes<HTMLDivElement> & {
+type LoadedProps = React.HTMLAttributes<HTMLDivElement> & Omit<Favorite, "createdAt"> & {
   readonly icon?: React.ReactNode;
   readonly isLoading: false;
-  readonly resourceId: string;
-  readonly title: string;
-  readonly variant: "case" | "dictionary";
 };
 
 type Props = LoadingProps | LoadedProps;
@@ -25,7 +23,6 @@ const FavoriteCard: FunctionComponent<Props> = (props) =>
 {
   const { bookmarks, isLoading: areAllBookmarksLoading } = useBookmarks(undefined);
 
-  // eslint-disable-next-line react/destructuring-assignment
   if(props.isLoading)
   {
     return (
@@ -36,23 +33,27 @@ const FavoriteCard: FunctionComponent<Props> = (props) =>
   }
 
   const {
+    favoriteType,
     isLoading,
     resourceId,
     title,
-    variant,
     ...rest
   } = props;
 
   const numberOfLetters: number = 45;
+
   return (
     <div css={[styles.wrapper, styles.wrapperLoaded]} {...rest}>
       <div css={styles.tags}>
-        <Label variant={variant} title={variant === "case" ? "Fälle" : "Lexikon"}/>
+        <Label
+          variant={favoriteType === "case" ? "case" : favoriteType === "question" ? "forum" : "dictionary"}
+          title={favoriteType === "case" ? "Fälle" : favoriteType === "question" ? "Forum" : "Lexikon"}
+        />
         <BookmarkButton
           isBookmarked={bookmarks.find(b => b.resourceId === resourceId) != null}
           areAllBookmarksLoading={areAllBookmarksLoading}
           resourceId={resourceId}
-          variant={variant}
+          variant={favoriteType === "case" ? "case" : favoriteType === "question" ? "forumQuestion" : "dictionary"}
         />
       </div>
       {title && (

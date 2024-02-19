@@ -56,7 +56,7 @@ export const getConfirmEmailChange = (): string =>
   return env.NEXT_PUBLIC_WEBSITE_URL + authPaths.confirmEmailChange;
 };
 
-export const getForumQuestionUrl = (question: Pick<Question, "id" | "slug">): string =>
+export const getForumQuestionUrl = (question: Pick<Question, "id">): string =>
 {
-  return appPaths.forum + "/" + question.slug + "/" + question.id;
+  return appPaths.forum + "/" + question.id;
 };

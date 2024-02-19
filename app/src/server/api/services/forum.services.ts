@@ -7,7 +7,7 @@ import { type GetAnswersSchema } from "@/schemas/forum/getAnswers.schema";
 import { type GetQuestionsSchema } from "@/schemas/forum/getQuestions.schema";
 
 import {
-  and, asc, count, desc, eq, getTableColumns, lt, lte, or, type SQL, sql
+  and, asc, count, desc, eq, getTableColumns, inArray, lt, lte, or, type SQL, sql
 } from "drizzle-orm";
 
 type GetUpvotesForQuestion = (questionId: string) => Promise<number>;
@@ -38,6 +38,11 @@ type GetQuestionsParams = GetInfiniteQuestionsParams | GetQuestionByIdParams;
 
 export const getQuestions = async (params: GetQuestionsParams) => // eslint-disable-line @typescript-eslint/explicit-function-return-type
 {
+  if(params.getQuestionsType === "infinite" && params.questionIds && params.questionIds.length === 0)
+  {
+    return [];
+  }
+
   const userUpvotesSubQuery = db
     .$with("UserUpvotes")
     .as(db
@@ -60,7 +65,12 @@ export const getQuestions = async (params: GetQuestionsParams) => // eslint-disa
     .leftJoin(questionUpvotes, eq(forumQuestions.id, questionUpvotes.questionId))
     .leftJoin(forumAnswers, eq(forumQuestions.id, forumAnswers.parentQuestionId))
     .leftJoin(correctAnswers, eq(forumQuestions.id, correctAnswers.questionId))
-    .where(params.getQuestionsType === "byId" ? eq(forumQuestions.id, params.questionId) : undefined)
+    .where(params.getQuestionsType === "byId"
+      ? eq(forumQuestions.id, params.questionId)
+      : params.questionIds != null
+        ? inArray(forumQuestions.id, params.questionIds)
+        : undefined
+    )
     .groupBy(forumQuestions.id, userUpvotesSubQuery.questionId, correctAnswers.questionId)
     .as("questionUpvotesSq");
 

@@ -145,12 +145,13 @@ export const forumRouter = createTRPCRouter({
     }),
   getQuestions: protectedProcedure
     .input(getQuestionsSchema)
-    .query(async ({ ctx: { userId }, input: { cursor, limit } }) =>
+    .query(async ({ ctx: { userId }, input: { cursor, limit, questionIds } }) =>
     {
       const questions = await getQuestions({
         cursor,
         getQuestionsType: "infinite",
         limit,
+        questionIds,
         userId
       });
       const hasNextPage = questions.length > limit;
