@@ -14,11 +14,11 @@ const PostQuestionModal: FunctionComponent = () =>
 
   const form = useForm<PostQuestionSchema>({
     initialValues: {
-      legalFieldId: "",
-      subfieldId: null,
+      legalFieldsIds: [],
+      subfieldsIds: [],
       text: "",
       title: "",
-      topicId: null,
+      topicsIds: [],
     },
     validate: zodResolver(postQuestionSchema),
     validateInputOnBlur: true,

@@ -1,15 +1,15 @@
 import {
-  questionTextValidation, titleValidation, subfieldIdValidation, topicIdValidation, legalFieldIdValidation
+  legalFieldsIdsValidation, questionTextValidation, subfieldsIdsValidation, titleValidation, topicsIdsValidation 
 } from "@/schemas/forum/question.valiation";
 
 import { z } from "zod";
 
 export const postQuestionSchema = z.object({
-  legalFieldId: legalFieldIdValidation,
-  subfieldId: subfieldIdValidation,
+  legalFieldsIds: legalFieldsIdsValidation,
+  subfieldsIds: subfieldsIdsValidation,
   text: questionTextValidation,
   title: titleValidation,
-  topicId: topicIdValidation,
+  topicsIds: topicsIdsValidation,
 });
 
 export type PostQuestionSchema = z.input<typeof postQuestionSchema>;

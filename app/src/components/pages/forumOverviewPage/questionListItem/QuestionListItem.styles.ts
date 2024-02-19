@@ -122,14 +122,6 @@ export const bottomWrapper = css`
   align-items: flex-end;
 `;
 
-export const tagsWrapper = css`
-  display: flex;
-  gap: 8px;
-  flex-wrap: wrap;
-  flex: 1;
-  min-width: 0;
-`;
-
 export const answersCountWrapper = css`
   min-width: max-content;
   padding-left: 50px;

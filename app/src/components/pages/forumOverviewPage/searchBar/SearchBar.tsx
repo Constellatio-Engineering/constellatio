@@ -1,6 +1,6 @@
 import { CustomLink } from "@/components/atoms/CustomLink/CustomLink";
-import Tag from "@/components/atoms/tag/Tag";
 import { Search } from "@/components/Icons/Search";
+import LegalFieldsAndTopicsTags from "@/components/molecules/legalFieldsAndTopicsTags/LegalFieldsAndTopicsTags";
 import EmptyStateCard from "@/components/organisms/emptyStateCard/EmptyStateCard";
 import { useForumQuestionsSearchResults } from "@/hooks/useForumQuestionsSearchResults";
 import { useForumQuestionsSearchStore } from "@/stores/forumQuestionsSearch.store";
@@ -66,9 +66,11 @@ const SearchBar: FunctionComponent = () =>
                   {question.title}
                 </CustomLink>
               </Link>
-              <Tag title={question.legalFieldName}/>
-              <Tag title={question.subfieldName}/>
-              <Tag title={question.topicName}/>
+              <LegalFieldsAndTopicsTags
+                topicsIds={question.topics.map((topic) => topic.id)}
+                legalFieldsIds={question.legalFields.map((field) => field.id)}
+                subfieldsIds={question.subfields.map((subfield) => subfield.id)}
+              />
             </div>
           ))}
         </div>

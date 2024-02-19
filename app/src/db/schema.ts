@@ -331,15 +331,69 @@ export const forumQuestions = pgTable("ForumQuestion", {
   updatedAt: timestamp("UpdatedAt").defaultNow().notNull(),
   title: text("Title").notNull(),
   text: text("Text").notNull(),
-  legalFieldId: uuid("LegalFieldId").notNull(),
-  subfieldId: uuid("SubfieldId"),
-  topicId: uuid("TopicId"),
 }, table => ({
   id_slug_index: uniqueIndex("ForumQuestion_Id_Slug_Index").on(table.id, table.slug),
 }));
 
+export const forumQuestionsRelations = relations(forumQuestions, ({ many }) => ({
+  forumQuestionToLegalFields: many(forumQuestionsToLegalFields),
+  forumQuestionToSubfields: many(forumQuestionToSubfields),
+  forumQuestionToTopics: many(forumQuestionToTopics),
+}));
+
 export type ForumQuestionInsert = InferInsertModel<typeof forumQuestions>;
 export type ForumQuestion = InferSelectModel<typeof forumQuestions>;
+
+export const forumQuestionsToLegalFields = pgTable("ForumQuestion_to_LegalField", {
+  questionId: uuid("QuestionId").references(() => forumQuestions.id, { onDelete: "cascade" }).notNull(),
+  legalFieldId: uuid("LegalFieldId").notNull(),
+}, table => ({
+  pk: primaryKey({ columns: [table.questionId, table.legalFieldId] }),
+}));
+
+export const forumQuestionsToLegalFieldsRelations = relations(forumQuestionsToLegalFields, ({ one }) => ({
+  question: one(forumQuestions, {
+    fields: [forumQuestionsToLegalFields.questionId],
+    references: [forumQuestions.id],
+  }),
+}));
+
+export type ForumQuestionToLegalFieldInsert = InferInsertModel<typeof forumQuestionsToLegalFields>;
+export type ForumQuestionToLegalField = InferSelectModel<typeof forumQuestionsToLegalFields>;
+
+export const forumQuestionToSubfields = pgTable("ForumQuestion_to_Subfield", {
+  questionId: uuid("QuestionId").references(() => forumQuestions.id, { onDelete: "cascade" }).notNull(),
+  subfieldId: uuid("SubfieldId").notNull(),
+}, table => ({
+  pk: primaryKey({ columns: [table.questionId, table.subfieldId] }),
+}));
+
+export const forumQuestionToSubfieldsRelations = relations(forumQuestionToSubfields, ({ one }) => ({
+  question: one(forumQuestions, {
+    fields: [forumQuestionToSubfields.questionId],
+    references: [forumQuestions.id],
+  }),
+}));
+
+export type ForumQuestionToSubfieldInsert = InferInsertModel<typeof forumQuestionToSubfields>;
+export type ForumQuestionToSubfield = InferSelectModel<typeof forumQuestionToSubfields>;
+
+export const forumQuestionToTopics = pgTable("ForumQuestion_to_Topic", {
+  questionId: uuid("QuestionId").references(() => forumQuestions.id, { onDelete: "cascade" }).notNull(),
+  topicId: uuid("TopicId").notNull(),
+}, table => ({
+  pk: primaryKey({ columns: [table.questionId, table.topicId] }),
+}));
+
+export const forumQuestionToTopicsRelations = relations(forumQuestionToTopics, ({ one }) => ({
+  question: one(forumQuestions, {
+    fields: [forumQuestionToTopics.questionId],
+    references: [forumQuestions.id],
+  }),
+}));
+
+export type ForumQuestionToTopicInsert = InferInsertModel<typeof forumQuestionToTopics>;
+export type ForumQuestionToTopic = InferSelectModel<typeof forumQuestionToTopics>;
 
 export const forumAnswers = pgTable("ForumAnswer", {
   id: uuid("Id").defaultRandom().primaryKey(),

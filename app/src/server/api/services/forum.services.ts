@@ -1,7 +1,7 @@
 /* eslint-disable max-lines */
 import { db } from "@/db/connection";
 import {
-  answerUpvotes, correctAnswers, forumAnswers, forumQuestions, questionUpvotes, users
+  answerUpvotes, correctAnswers, forumAnswers, forumQuestions, forumQuestionsToLegalFields, forumQuestionToSubfields, forumQuestionToTopics, questionUpvotes, users
 } from "@/db/schema";
 import { type GetAnswersSchema } from "@/schemas/forum/getAnswers.schema";
 import { type GetQuestionsSchema } from "@/schemas/forum/getQuestions.schema";
@@ -132,12 +132,9 @@ export const getQuestions = async (params: GetQuestionsParams) => // eslint-disa
       id: subquery.id,
       index: subquery.index,
       isUpvoted: subquery.isUpvoted,
-      legalFieldId: subquery.legalFieldId,
       slug: subquery.slug,
-      subfieldId: subquery.subfieldId,
       text: subquery.text,
       title: subquery.title,
-      topicId: subquery.topicId,
       updatedAt: subquery.updatedAt,
       upvotesCount: subquery.upvotesCount,
     })
@@ -147,7 +144,41 @@ export const getQuestions = async (params: GetQuestionsParams) => // eslint-disa
     .orderBy(...(Array.isArray(orderBy) ? orderBy : [orderBy]))
     .limit(params.getQuestionsType === "byId" ? 1 : params.limit + 1);
 
-  return questionsSortedWithAuthor;
+  const questionIds = questionsSortedWithAuthor.map(question => question.id);
+
+  const questionsWithLegalAreasAndTopics = await db.query.forumQuestions.findMany({
+    where: inArray(forumQuestions.id, questionIds),
+    with: {
+      forumQuestionToLegalFields: true,
+      forumQuestionToSubfields: true,
+      forumQuestionToTopics: true,
+    }
+  });
+
+  const result = questionsSortedWithAuthor.map(question =>
+  {
+    let legalFieldsIds: string[] = [];
+    let subfieldsIds: string[] = [];
+    let topicsIds: string[] = [];
+
+    const questionData = questionsWithLegalAreasAndTopics.find(q => q.id === question.id);
+
+    if(questionData)
+    {
+      legalFieldsIds = questionData.forumQuestionToLegalFields.map(lf => lf.legalFieldId);
+      subfieldsIds = questionData.forumQuestionToSubfields.map(sf => sf.subfieldId);
+      topicsIds = questionData.forumQuestionToTopics.map(t => t.topicId);
+    }
+
+    return {
+      ...question,
+      legalFieldsIds,
+      subfieldsIds,
+      topicsIds
+    };
+  });
+
+  return result;
 };
 
 type GetInfiniteAnswersParams = GetAnswersSchema & {
@@ -246,4 +277,59 @@ export const getAnswers = async (params: GetAnswersParams) => // eslint-disable-
     .orderBy(...(Array.isArray(orderBy) ? orderBy : [orderBy]));
 
   return answersSortedWithAuthor;
+};
+
+export const resetLegalFieldsAndTopicsForQuestion = async (questionId: string, dbConnection: typeof db): Promise<void> =>
+{
+  const deleteQuestionToLegalFields = dbConnection.delete(forumQuestionsToLegalFields).where(eq(forumQuestionsToLegalFields.questionId, questionId));
+  const deleteQuestionToSubfields = dbConnection.delete(forumQuestionToSubfields).where(eq(forumQuestionToSubfields.questionId, questionId));
+  const deleteQuestionToTopics = dbConnection.delete(forumQuestionToTopics).where(eq(forumQuestionToTopics.questionId, questionId));
+
+  await Promise.all([
+    deleteQuestionToLegalFields,
+    deleteQuestionToSubfields,
+    deleteQuestionToTopics
+  ]);
+};
+
+export const insertLegalFieldsAndTopicsForQuestion = async ({
+  dbConnection,
+  legalFieldsIds,
+  questionId,
+  subfieldsIds,
+  topicsIds
+}: {
+  dbConnection: typeof db;
+  legalFieldsIds: string[];
+  questionId: string;
+  subfieldsIds: string[];
+  topicsIds: string[];
+}): Promise<void> =>
+{
+  const insertQuestionToLegalFields = dbConnection
+    .insert(forumQuestionsToLegalFields)
+    .values(legalFieldsIds.map(legalFieldId => ({
+      legalFieldId,
+      questionId
+    })));
+
+  const insertQuestionToSubfields = dbConnection
+    .insert(forumQuestionToSubfields)
+    .values(subfieldsIds.map(subfieldId => ({
+      questionId,
+      subfieldId
+    })));
+
+  const insertQuestionToTopics = dbConnection
+    .insert(forumQuestionToTopics)
+    .values(topicsIds.map(topicId => ({
+      questionId,
+      topicId
+    })));
+
+  await Promise.all([
+    insertQuestionToLegalFields,
+    insertQuestionToSubfields,
+    insertQuestionToTopics
+  ]);
 };

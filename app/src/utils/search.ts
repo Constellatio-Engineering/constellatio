@@ -159,32 +159,41 @@ export const createDocumentSearchIndexItem = ({
 export const documentSearchIndexItemPrimaryKey: keyof DocumentSearchIndexItem = "id";
 
 export type ForumQuestionSearchIndexItem = Pick<ForumQuestion, "id" | "text" | "title" | "slug" | "userId"> & {
-  legalFieldName: string | undefined;
-  subfieldName: string | undefined;
-  topicName: string | undefined;
+  legalFields: Array<{
+    id: string;
+    name: string;
+  }>;
+  subfields: Array<{
+    id: string;
+    name: string;
+  }>;
+  topics: Array<{
+    id: string;
+    name: string;
+  }>;
 };
 export type ForumQuestionSearchItemNodes = RemoveUndefined<DotSeparatedKeys<ForumQuestionSearchIndexItem>>;
 export type ForumQuestionSearchItemUpdate = Partial<Omit<ForumQuestionSearchIndexItem, "id" | "userId">> & Pick<ForumQuestionSearchIndexItem, "id">;
 
 export const createForumQuestionSearchIndexItem = ({
   id,
-  legalFieldName,
+  legalFields,
   slug,
-  subfieldName,
+  subfields,
   text,
   title,
-  topicName,
+  topics,
   userId
 }: ForumQuestionSearchIndexItem): ForumQuestionSearchIndexItem =>
 {
   return ({
     id,
-    legalFieldName,
+    legalFields,
     slug,
-    subfieldName,
+    subfields,
     text: removeHtmlTagsFromString(text, true),
     title,
-    topicName,
+    topics,
     userId
   });
 };

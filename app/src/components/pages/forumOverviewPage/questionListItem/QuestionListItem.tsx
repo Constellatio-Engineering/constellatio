@@ -1,6 +1,7 @@
 import Tag from "@/components/atoms/tag/Tag";
 import { Chat } from "@/components/Icons/Chat";
 import { Check } from "@/components/Icons/Check";
+import LegalFieldsAndTopicsTags from "@/components/molecules/legalFieldsAndTopicsTags/LegalFieldsAndTopicsTags";
 import BookmarkButton from "@/components/organisms/caseBlock/BookmarkButton/BookmarkButton";
 import EditQuestionModal from "@/components/pages/forumOverviewPage/editQuestionModal/EditQuestionModal";
 import { TagsSkeleton } from "@/components/pages/forumOverviewPage/questionsSkeleton/QuestionsSkeleton";
@@ -28,21 +29,10 @@ const QuestionListItem: FunctionComponent<Props> = ({ questionId }) =>
   const { bookmarks: questionBookmarks, isLoading: isGetQuestionBookmarksLoading } = useBookmarks("forumQuestion", { enabled: true });
   const { data: question, /* isFetching*/ } = useForumQuestionDetails(questionId);
 
-  const {
-    allLegalFields,
-    allSubfields,
-    allTopics,
-    isLoading: areLegalFieldsAndTopicsLoading
-  } = useLegalFieldsAndTopics();
-
   if(question == null)
   {
     return <p>Question not found</p>;
   }
-
-  const legalField = allLegalFields.find((field) => field.id === question.legalFieldId);
-  const subfield = allSubfields.find((subfield) => subfield.id === question.subfieldId);
-  const topic = allTopics.find((topic) => topic.id === question.topicId);
 
   return (
     <Fragment>
@@ -111,15 +101,11 @@ const QuestionListItem: FunctionComponent<Props> = ({ questionId }) =>
             </p>
           </div>
           <div css={styles.bottomWrapper}>
-            {areLegalFieldsAndTopicsLoading ? (
-              <TagsSkeleton/>
-            ) : (
-              <div css={styles.tagsWrapper}>
-                {legalField && <Tag title={legalField.mainCategory}/>}
-                {subfield && <Tag title={subfield.legalAreaName}/>}
-                {topic && <Tag title={topic.topicName}/>}
-              </div>
-            )}
+            <LegalFieldsAndTopicsTags
+              topicsIds={question.topicsIds}
+              legalFieldsIds={question.legalFieldsIds}
+              subfieldsIds={question.subfieldsIds}
+            />
             <div css={styles.answersCountWrapper}>
               <Chat size={20}/>
               <p>{question.answersCount}</p>

@@ -116,23 +116,19 @@ const SearchOverlayLeftSide: FunctionComponent<SearchOverlayLeftSideProps> = ({ 
       )}
       {searchResults.forumQuestions.length > 0 && (
         <SuggestionSection label="FORUM" labelVariant="forum">
-          {searchResults.forumQuestions.slice(0, 5).map((question) =>
-          {
-            const mainCategory = question.legalFieldName;
-            return (
-              <Link
-                key={question.id}
-                href={`${appPaths.forum}/${question.id}`}
-                className="suggestion__section__link">
-                <CustomLink styleType="link-content-title" component="p">
-                  {question.title}
-                </CustomLink>
-                {mainCategory && (
-                  <Tag title={mainCategory}/>
-                )}
-              </Link>
-            );
-          })}
+          {searchResults.forumQuestions.slice(0, 5).map((question) => (
+            <Link
+              key={question.id}
+              href={`${appPaths.forum}/${question.id}`}
+              className="suggestion__section__link">
+              <CustomLink styleType="link-content-title" component="p">
+                {question.title}
+              </CustomLink>
+              {question.legalFields?.map((legalField) => (
+                <Tag key={legalField.id} title={legalField.name}/>
+              ))}
+            </Link>
+          ))}
         </SuggestionSection>
       )}
     </div>

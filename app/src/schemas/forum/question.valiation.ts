@@ -1,4 +1,4 @@
-import { getIdValidationWithMessage, idValidation } from "@/schemas/common.validation";
+import { idValidation } from "@/schemas/common.validation";
 import { removeHtmlTagsFromString } from "@/utils/utils";
 
 import { z } from "zod";
@@ -28,7 +28,11 @@ export const questionTextValidation = z.string().nullable().transform((value, co
   return value;
 });
 
-export const legalFieldIdValidation = getIdValidationWithMessage("Bitte wähle ein Rechtsgebiet aus");
-export const subfieldIdValidation = idValidation.nullable();
-export const topicIdValidation = idValidation.nullable();
+export const legalFieldsIdsValidation = z
+  .array(idValidation)
+  .min(1, { message: "Bitte wähle mindestens ein Rechtsgebiet aus" })
+  .max(1, { message: "Du kannst nur ein Rechtsgebiet auswählen" });
+
+export const subfieldsIdsValidation = z.array(idValidation);
+export const topicsIdsValidation = z.array(idValidation);
 export const titleValidation = z.string().min(10);

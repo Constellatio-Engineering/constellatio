@@ -1,6 +1,14 @@
+/* eslint-disable max-lines */
 import { db } from "@/db/connection";
 import {
-  type Document, type ForumQuestion, searchIndexUpdateQueue, type SearchIndexUpdateQueueInsert, type UploadedFile
+  type Document,
+  type ForumQuestion,
+  type ForumQuestionToLegalField,
+  type ForumQuestionToSubfield,
+  type ForumQuestionToTopic,
+  searchIndexUpdateQueue,
+  type SearchIndexUpdateQueueInsert,
+  type UploadedFile
 } from "@/db/schema";
 import { meiliSearchAdmin } from "@/lib/meilisearch";
 import { getArticleById } from "@/services/content/getArticleById";
@@ -138,6 +146,9 @@ type AddForumQuestionsToSearchIndex = (params: {
   allLegalFields: IGenMainCategory[];
   allSubfields: IGenLegalArea[];
   allTopics: IGenTopic[];
+  forumQuestionsToLegalFields: ForumQuestionToLegalField[];
+  forumQuestionsToSubfields: ForumQuestionToSubfield[];
+  forumQuestionsToTopics: ForumQuestionToTopic[];
   questions: ForumQuestion[];
 }) => Promise<{
   createQuestionsIndexTaskId: number | undefined;
@@ -147,6 +158,9 @@ export const addForumQuestionsToSearchIndex: AddForumQuestionsToSearchIndex = as
   allLegalFields,
   allSubfields,
   allTopics,
+  forumQuestionsToLegalFields,
+  forumQuestionsToSubfields,
+  forumQuestionsToTopics,
   questions
 }) =>
 {
@@ -154,15 +168,41 @@ export const addForumQuestionsToSearchIndex: AddForumQuestionsToSearchIndex = as
 
   const questionsWithDetails: ForumQuestionSearchIndexItem[] = questions.map(question =>
   {
-    const subfield = allSubfields.find(legalArea => legalArea.id === question.subfieldId);
-    const legalField = allLegalFields.find(mainCategory => mainCategory.id === question.legalFieldId);
-    const topic = allTopics.find(topic => topic.id === question.topicId);
+    const legalFields = forumQuestionsToLegalFields
+      .filter((lf) => lf.questionId === question.id)
+      .map((lf) => allLegalFields.find((field) => field.id === lf.legalFieldId))
+      .filter(Boolean)
+      .filter(lf => lf?.id && lf?.mainCategory)
+      .map(lf => ({
+        id: lf.id!,
+        name: lf.mainCategory!
+      }));
+
+    const subfields = forumQuestionsToSubfields
+      .filter((f) => f.questionId === question.id)
+      .map((f) => allSubfields.find((subfield) => subfield.id === f.subfieldId))
+      .filter(Boolean)
+      .filter(sf => sf?.id && sf?.legalAreaName)
+      .map(sf => ({
+        id: sf.id!,
+        name: sf.legalAreaName!
+      }));
+
+    const topics = forumQuestionsToTopics
+      .filter((f) => f.questionId === question.id)
+      .map((f) => allTopics.find((topic) => topic.id === f.topicId))
+      .filter(Boolean)
+      .filter(t => t?.id && t?.topicName)
+      .map(t => ({
+        id: t.id!,
+        name: t.topicName!
+      }));
 
     return {
       ...question,
-      legalFieldName: legalField?.mainCategory ?? undefined,
-      subfieldName: subfield?.legalAreaName ?? undefined,
-      topicName: topic?.topicName ?? undefined,
+      legalFields,
+      subfields,
+      topics
     };
   });
 

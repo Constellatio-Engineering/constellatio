@@ -146,17 +146,18 @@ const QuestionModal: FunctionComponent<QuestionModalProps> = ({
                 title="Rechtsgebiet"
                 placeholder="Rechtsgebiet auswählen"
                 data={legalFieldsOptions}
-                {...form.getInputProps("legalFieldId" satisfies keyof PostQuestionSchema)}
+                {...form.getInputProps("legalFieldsIds" satisfies keyof PostQuestionSchema)}
               />
               <Dropdown
                 isLoading={areLegalFieldsAndTopicsLoading as boolean}
                 label="Teilgebiet (optional)"
                 title="Teilgebiet"
                 placeholder="Teilgebiet auswählen"
+                multiple
                 clearable
                 allowDeselect
                 data={allSubfieldsOptions}
-                {...form.getInputProps("subfieldId" satisfies keyof PostQuestionSchema)}
+                {...form.getInputProps("subfieldsIds" satisfies keyof PostQuestionSchema)}
               />
               <Dropdown
                 isLoading={areLegalFieldsAndTopicsLoading as boolean}
@@ -164,9 +165,10 @@ const QuestionModal: FunctionComponent<QuestionModalProps> = ({
                 title="Thema"
                 placeholder="Thema auswählen"
                 clearable
+                multiple
                 allowDeselect
                 data={topicOptions}
-                {...form.getInputProps("topicId" satisfies keyof PostQuestionSchema)}
+                {...form.getInputProps("topicsIds" satisfies keyof PostQuestionSchema)}
               />
             </div>
           </div>

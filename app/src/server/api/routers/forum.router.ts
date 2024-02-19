@@ -18,7 +18,7 @@ import { updateQuestionSchema } from "@/schemas/forum/updateQuestion.schema";
 import { upvoteAnswerSchema } from "@/schemas/forum/upvoteAnswer.schema";
 import { upvoteQuestionSchema } from "@/schemas/forum/upvoteQuestion.schema";
 import { getAllLegalFields, getAllSubfields, getAllTopics } from "@/server/api/services/caisy.services";
-import { getAnswers, getQuestions } from "@/server/api/services/forum.services";
+import { getAnswers, getQuestions, insertLegalFieldsAndTopicsForQuestion, resetLegalFieldsAndTopicsForQuestion } from "@/server/api/services/forum.services";
 import { createTRPCRouter, forumModProcedure, protectedProcedure } from "@/server/api/trpc";
 import { createForumQuestionSearchIndexItem, forumQuestionSearchIndexItemPrimaryKey, type ForumQuestionSearchItemUpdate, searchIndices } from "@/utils/search";
 import { BadRequestError, ForbiddenError, InternalServerError, NotFoundError } from "@/utils/serverError";
@@ -38,6 +38,33 @@ const createSlug = (title: string): string =>
     replacement: "-",
     trim: true,
   });
+};
+
+const getLegalFieldsAndTopics = async ({
+  legalFieldsIds,
+  subfieldsIds,
+  topicsIds
+}: {
+  legalFieldsIds: string[];
+  subfieldsIds: string[];
+  topicsIds: string[];
+}) => // eslint-disable-line @typescript-eslint/explicit-function-return-type
+{
+  const allLegalFields = await getAllLegalFields();
+  const allSubfields = await getAllSubfields();
+  const allTopics = await getAllTopics();
+
+  const legalFields = allLegalFields
+    .filter(legalField => legalField.id != null && legalField.mainCategory != null)
+    .filter(legalField => legalFieldsIds.includes(legalField.id!));
+  const subfields = allSubfields
+    .filter(subfield => subfield.id != null && subfield.legalAreaName != null)
+    .filter(subfield => subfieldsIds.includes(subfield.id!));
+  const topics = allTopics
+    .filter(topic => topic.id != null && topic.topicName != null)
+    .filter(topic => topicsIds.includes(topic.id!));
+
+  return ({ legalFields, subfields, topics });
 };
 
 export const forumRouter = createTRPCRouter({
@@ -115,6 +142,8 @@ export const forumRouter = createTRPCRouter({
               )
             )
           );
+
+        await resetLegalFieldsAndTopicsForQuestion(questionId, transaction);
 
         await transaction
           .delete(forumQuestions)
@@ -268,38 +297,55 @@ export const forumRouter = createTRPCRouter({
     .mutation(async ({ ctx: { userId }, input }) =>
     {
       const questionInsert: ForumQuestionInsert = {
-        legalFieldId: input.legalFieldId,
         slug: createSlug(input.title),
-        subfieldId: input.subfieldId,
         text: input.text,
         title: input.title,
-        topicId: input.topicId,
         userId
       };
 
-      const allLegalFields = await getAllLegalFields();
-      const allSubfields = await getAllSubfields();
-      const allTopics = await getAllTopics();
-
-      const subfield = allSubfields.find(legalArea => legalArea.id === questionInsert.subfieldId);
-      const legalField = allLegalFields.find(mainCategory => mainCategory.id === questionInsert.legalFieldId);
-      const topic = allTopics.find(topic => topic.id === questionInsert.topicId);
-
-      const [insertedQuestion] = await db.insert(forumQuestions).values(questionInsert).returning();
-
-      if(!insertedQuestion)
+      const insertedQuestion = await db.transaction(async transaction =>
       {
-        throw new InternalServerError(new Error("Question was null after insertion"));
-      }
+        const [insertedQuestion] = await transaction.insert(forumQuestions).values(questionInsert).returning();
+
+        if(!insertedQuestion)
+        {
+          throw new InternalServerError(new Error("insertedQuestion was null after insertion"));
+        }
+
+        await insertLegalFieldsAndTopicsForQuestion({
+          dbConnection: transaction,
+          legalFieldsIds: input.legalFieldsIds,
+          questionId: insertedQuestion.id,
+          subfieldsIds: input.subfieldsIds,
+          topicsIds: input.topicsIds
+        });
+
+        return insertedQuestion;
+      });
+
+      const { legalFields, subfields, topics } = await getLegalFieldsAndTopics({
+        legalFieldsIds: input.legalFieldsIds,
+        subfieldsIds: input.subfieldsIds,
+        topicsIds: input.topicsIds
+      });
 
       const searchIndexItem = createForumQuestionSearchIndexItem({
         id: insertedQuestion.id,
-        legalFieldName: legalField?.mainCategory ?? undefined,
+        legalFields: legalFields.map(legalField => ({
+          id: legalField.id!,
+          name: legalField.mainCategory!
+        })),
         slug: questionInsert.slug,
-        subfieldName: subfield?.legalAreaName ?? undefined,
+        subfields: subfields.map(subfield => ({
+          id: subfield.id!,
+          name: subfield.legalAreaName!
+        })),
         text: questionInsert.text,
         title: questionInsert.title,
-        topicName: topic?.topicName ?? undefined,
+        topics: topics.map(topic => ({
+          id: topic.id!,
+          name: topic.topicName!
+        })),
         userId,
       });
 
@@ -383,36 +429,65 @@ export const forumRouter = createTRPCRouter({
         ...(updatedValues.title != null && {
           slug: createSlug(updatedValues.title)
         } satisfies Partial<ForumQuestionInsert>),
-        legalFieldId: updatedValues.legalFieldId,
-        subfieldId: updatedValues.subfieldId,
         text: updatedValues.text,
         title: updatedValues.title,
-        topicId: updatedValues.topicId,
         updatedAt: new Date(),
       };
-      
-      const [updatedQuestion] = await db
-        .update(forumQuestions)
-        .set(_updatedValues)
-        .where(and(
-          eq(forumQuestions.id, questionId),
-          eq(forumQuestions.userId, userId)
-        ))
-        .returning();
 
-      if(!updatedQuestion)
+      const updatedQuestion = await db.transaction(async transaction =>
       {
-        throw new InternalServerError(new Error("updatedQuestion was null after update"));
-      }
+        const [_updatedQuestion] = await transaction
+          .update(forumQuestions)
+          .set(_updatedValues)
+          .where(and(
+            eq(forumQuestions.id, questionId),
+            eq(forumQuestions.userId, userId)
+          ))
+          .returning();
+
+        if(!_updatedQuestion)
+        {
+          throw new InternalServerError(new Error("updatedQuestion was null after update"));
+        }
+
+        await resetLegalFieldsAndTopicsForQuestion(questionId, transaction);
+        await insertLegalFieldsAndTopicsForQuestion({
+          dbConnection: transaction,
+          legalFieldsIds: updatedValues.legalFieldsIds,
+          questionId,
+          subfieldsIds: updatedValues.subfieldsIds,
+          topicsIds: updatedValues.topicsIds
+        });
+
+        return _updatedQuestion;
+      });
 
       if(updatedValues.text != null)
       {
         updatedValues.text = removeHtmlTagsFromString(updatedValues.text, true);
       }
 
+      const { legalFields, subfields, topics } = await getLegalFieldsAndTopics({
+        legalFieldsIds: updatedValues.legalFieldsIds,
+        subfieldsIds: updatedValues.subfieldsIds,
+        topicsIds: updatedValues.topicsIds
+      });
+
       const searchIndexQuestionUpdate: ForumQuestionSearchItemUpdate = {
         ...updatedValues,
         id: questionId,
+        legalFields: legalFields.map(legalField => ({
+          id: legalField.id!,
+          name: legalField.mainCategory!
+        })),
+        subfields: subfields.map(subfield => ({
+          id: subfield.id!,
+          name: subfield.legalAreaName!
+        })),
+        topics: topics.map(topic => ({
+          id: topic.id!,
+          name: topic.topicName!
+        })),
       };
 
       const updateQuestionInIndexTask = await meiliSearchAdmin.index(searchIndices.forumQuestions).updateDocuments([searchIndexQuestionUpdate]);
@@ -423,7 +498,12 @@ export const forumRouter = createTRPCRouter({
         console.error("failed to update question in index", updateQuestionInIndexResult);
       }
 
-      return updatedQuestion;
+      return {
+        ...updatedQuestion,
+        legalFieldsIds: updatedValues.legalFieldsIds,
+        subfieldsIds: updatedValues.subfieldsIds,
+        topicsIds: updatedValues.topicsIds
+      };
     }),
   upvoteAnswer: protectedProcedure
     .input(upvoteAnswerSchema)

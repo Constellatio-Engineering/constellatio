@@ -1,18 +1,16 @@
 /* eslint-disable max-lines */
 import { BodyText } from "@/components/atoms/BodyText/BodyText";
 import { Button, type TButton } from "@/components/atoms/Button/Button";
-import Tag from "@/components/atoms/tag/Tag";
 import ContentWrapper from "@/components/helpers/contentWrapper/ContentWrapper";
 import { Cross } from "@/components/Icons/Cross";
 import { ExpandIcon } from "@/components/Icons/Expand";
+import LegalFieldsAndTopicsTags from "@/components/molecules/legalFieldsAndTopicsTags/LegalFieldsAndTopicsTags";
 import BookmarkButton from "@/components/organisms/caseBlock/BookmarkButton/BookmarkButton";
 import EditQuestionModal from "@/components/pages/forumOverviewPage/editQuestionModal/EditQuestionModal";
 import ForumListItem from "@/components/pages/forumOverviewPage/forumListItem/ForumListItem";
-import { TagsSkeleton } from "@/components/pages/forumOverviewPage/questionsSkeleton/QuestionsSkeleton";
 import AnswerEditor from "@/components/pages/forumQuestionDetailPage/answerEditor/AnswerEditor";
 import AnswerListItemWithReplies from "@/components/pages/forumQuestionDetailPage/answerListItemWithReplies/AnswerListItemWithReplies";
 import AnswersSkeleton from "@/components/pages/forumQuestionDetailPage/answersSkeleton/AnswersSkeleton";
-import AnswersSkeletonWithSorting from "@/components/pages/forumQuestionDetailPage/answersSkeletonWithSorting/AnswersSkeletonWithSorting";
 import EditAndDeleteButtons from "@/components/pages/forumQuestionDetailPage/editAndDeleteButtons/EditAndDeleteButtons";
 import ForumItemAuthor from "@/components/pages/forumQuestionDetailPage/forumItemAuthor/ForumItemAuthor";
 import ForumQuestionDetailsPageSkeleton from "@/components/pages/forumQuestionDetailPage/forumQuestionDetailsPageSkeleton/ForumQuestionDetailsPageSkeleton";
@@ -20,7 +18,6 @@ import useBookmarks from "@/hooks/useBookmarks";
 import useContextAndErrorIfNull from "@/hooks/useContextAndErrorIfNull";
 import { useForumAnswers } from "@/hooks/useForumAnswers";
 import { useForumQuestionDetails } from "@/hooks/useForumQuestionDetails";
-import { useLegalFieldsAndTopics } from "@/hooks/useLegalFieldsAndTopics";
 import { usePostAnswer } from "@/hooks/usePostAnswer";
 import useUserDetails from "@/hooks/useUserDetails";
 import { InvalidateQueriesContext } from "@/provider/InvalidateQueriesProvider";
@@ -34,9 +31,7 @@ import { notifications } from "@mantine/notifications";
 import ErrorPage from "next/error";
 import Link from "next/link";
 import { useRouter } from "next/router";
-import React, {
-  Fragment, type FunctionComponent, useEffect, useMemo, useState 
-} from "react";
+import React, { Fragment, type FunctionComponent, useState } from "react";
 
 import * as styles from "./ForumQuestionDetailPage.styles";
 import { QuestionUpvoteButton } from "../forumOverviewPage/upvoteButton/QuestionUpvoteButton";
@@ -75,16 +70,7 @@ export const ForumQuestionDetailPage: FunctionComponent<Props> = ({ questionId }
   });
   const answersSorting = useForumPageStore(s => s.answersSorting);
   const setAnswersSorting = useForumPageStore(s => s.setAnswersSorting);
-
-  const {
-    allLegalFields,
-    allSubfields,
-    allTopics,
-    isLoading: areLegalFieldsAndTopicsLoading
-  } = useLegalFieldsAndTopics();
-
   const { data: question, isPending } = useForumQuestionDetails(questionId);
-
   const { data: answers, isLoading: areAnswersLoading, /* isRefetching: areAnswersRefetching*/ } = useForumAnswers({
     parent: {
       parentType: "question",
@@ -148,9 +134,6 @@ export const ForumQuestionDetailPage: FunctionComponent<Props> = ({ questionId }
 
   const amountOfAnswers = answers?.length;
   const isCurrentUserAuthor = userDetails?.id === question.author.id;
-  const legalField = allLegalFields.find((field) => field.id === question.legalFieldId);
-  const subfield = allSubfields.find((subfield) => subfield.id === question.subfieldId);
-  const topic = allTopics.find((topic) => topic.id === question.topicId);
 
   return (
     <Fragment>
@@ -222,15 +205,11 @@ export const ForumQuestionDetailPage: FunctionComponent<Props> = ({ questionId }
                   </div>
                 </div>
                 <div>
-                  {areLegalFieldsAndTopicsLoading ? (
-                    <TagsSkeleton/>
-                  ) : (
-                    <div css={styles.tagsWrapper}>
-                      {legalField && <Tag title={legalField.mainCategory}/>}
-                      {subfield && <Tag title={subfield.legalAreaName}/>}
-                      {topic && <Tag title={topic.topicName}/>}
-                    </div>
-                  )}
+                  <LegalFieldsAndTopicsTags
+                    topicsIds={question.topicsIds}
+                    legalFieldsIds={question.legalFieldsIds}
+                    subfieldsIds={question.subfieldsIds}
+                  />
                   <div css={styles.authorAndDateWrapper}>
                     <ForumItemAuthor
                       username={question.author.username}
