@@ -184,6 +184,18 @@ CREATE TABLE IF NOT EXISTS "ForumAnswer" (
 	"ParentAnswerId" uuid
 );
 --> statement-breakpoint
+CREATE TABLE IF NOT EXISTS "ForumQuestion_to_Subfield" (
+	"QuestionId" uuid NOT NULL,
+	"SubfieldId" uuid NOT NULL,
+	CONSTRAINT "ForumQuestion_to_Subfield_QuestionId_SubfieldId_pk" PRIMARY KEY("QuestionId","SubfieldId")
+);
+--> statement-breakpoint
+CREATE TABLE IF NOT EXISTS "ForumQuestion_to_Topic" (
+	"QuestionId" uuid NOT NULL,
+	"TopicId" uuid NOT NULL,
+	CONSTRAINT "ForumQuestion_to_Topic_QuestionId_TopicId_pk" PRIMARY KEY("QuestionId","TopicId")
+);
+--> statement-breakpoint
 CREATE TABLE IF NOT EXISTS "ForumQuestion" (
 	"Id" uuid PRIMARY KEY DEFAULT gen_random_uuid() NOT NULL,
 	"Index" serial NOT NULL,
@@ -192,10 +204,13 @@ CREATE TABLE IF NOT EXISTS "ForumQuestion" (
 	"CreatedAt" timestamp DEFAULT now() NOT NULL,
 	"UpdatedAt" timestamp DEFAULT now() NOT NULL,
 	"Title" text NOT NULL,
-	"Text" text NOT NULL,
+	"Text" text NOT NULL
+);
+--> statement-breakpoint
+CREATE TABLE IF NOT EXISTS "ForumQuestion_to_LegalField" (
+	"QuestionId" uuid NOT NULL,
 	"LegalFieldId" uuid NOT NULL,
-	"SubfieldId" uuid,
-	"TopicId" uuid
+	CONSTRAINT "ForumQuestion_to_LegalField_QuestionId_LegalFieldId_pk" PRIMARY KEY("QuestionId","LegalFieldId")
 );
 --> statement-breakpoint
 CREATE TABLE IF NOT EXISTS "GameProgress" (
@@ -349,13 +364,13 @@ EXCEPTION
 END $$;
 --> statement-breakpoint
 DO $$ BEGIN
- ALTER TABLE "CorrectAnswer" ADD CONSTRAINT "CorrectAnswer_QuestionId_ForumQuestion_Id_fk" FOREIGN KEY ("QuestionId") REFERENCES "ForumQuestion"("Id") ON DELETE no action ON UPDATE no action;
+ ALTER TABLE "CorrectAnswer" ADD CONSTRAINT "CorrectAnswer_QuestionId_ForumQuestion_Id_fk" FOREIGN KEY ("QuestionId") REFERENCES "ForumQuestion"("Id") ON DELETE cascade ON UPDATE no action;
 EXCEPTION
  WHEN duplicate_object THEN null;
 END $$;
 --> statement-breakpoint
 DO $$ BEGIN
- ALTER TABLE "CorrectAnswer" ADD CONSTRAINT "CorrectAnswer_AnswerId_ForumAnswer_Id_fk" FOREIGN KEY ("AnswerId") REFERENCES "ForumAnswer"("Id") ON DELETE no action ON UPDATE no action;
+ ALTER TABLE "CorrectAnswer" ADD CONSTRAINT "CorrectAnswer_AnswerId_ForumAnswer_Id_fk" FOREIGN KEY ("AnswerId") REFERENCES "ForumAnswer"("Id") ON DELETE cascade ON UPDATE no action;
 EXCEPTION
  WHEN duplicate_object THEN null;
 END $$;
@@ -391,7 +406,25 @@ EXCEPTION
 END $$;
 --> statement-breakpoint
 DO $$ BEGIN
+ ALTER TABLE "ForumQuestion_to_Subfield" ADD CONSTRAINT "ForumQuestion_to_Subfield_QuestionId_ForumQuestion_Id_fk" FOREIGN KEY ("QuestionId") REFERENCES "ForumQuestion"("Id") ON DELETE cascade ON UPDATE no action;
+EXCEPTION
+ WHEN duplicate_object THEN null;
+END $$;
+--> statement-breakpoint
+DO $$ BEGIN
+ ALTER TABLE "ForumQuestion_to_Topic" ADD CONSTRAINT "ForumQuestion_to_Topic_QuestionId_ForumQuestion_Id_fk" FOREIGN KEY ("QuestionId") REFERENCES "ForumQuestion"("Id") ON DELETE cascade ON UPDATE no action;
+EXCEPTION
+ WHEN duplicate_object THEN null;
+END $$;
+--> statement-breakpoint
+DO $$ BEGIN
  ALTER TABLE "ForumQuestion" ADD CONSTRAINT "ForumQuestion_UserId_User_Id_fk" FOREIGN KEY ("UserId") REFERENCES "User"("Id") ON DELETE no action ON UPDATE no action;
+EXCEPTION
+ WHEN duplicate_object THEN null;
+END $$;
+--> statement-breakpoint
+DO $$ BEGIN
+ ALTER TABLE "ForumQuestion_to_LegalField" ADD CONSTRAINT "ForumQuestion_to_LegalField_QuestionId_ForumQuestion_Id_fk" FOREIGN KEY ("QuestionId") REFERENCES "ForumQuestion"("Id") ON DELETE cascade ON UPDATE no action;
 EXCEPTION
  WHEN duplicate_object THEN null;
 END $$;
