@@ -9,14 +9,24 @@ import { BodyText } from "../BodyText/BodyText";
 
 export interface ITag 
 {
+  readonly isNotClickable?: boolean;
   readonly title: Nullable<string>;
 }
 
-const Tag: FunctionComponent<ITag> = ({ title }) =>
+const Tag: FunctionComponent<ITag> = ({ isNotClickable, title, }) =>
 {
   if(!title)
   {
     return null;
+  }
+
+  if(isNotClickable)
+  {
+    return (
+      <BodyText styleType="body-02-medium" component="p" css={styles.tag}>
+        {title}
+      </BodyText>
+    );
   }
 
   return (
@@ -25,7 +35,9 @@ const Tag: FunctionComponent<ITag> = ({ title }) =>
       css={styles.tag}
       target="_blank nofollow noopener noreferrer"
       onClick={e => e.stopPropagation()}>
-      <BodyText styleType="body-02-medium" component="p">{title}</BodyText>
+      <BodyText styleType="body-02-medium" component="p">
+        {title}
+      </BodyText>
     </Link>
   );
 };

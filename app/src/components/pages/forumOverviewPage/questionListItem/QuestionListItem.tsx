@@ -1,20 +1,17 @@
-import Tag from "@/components/atoms/tag/Tag";
 import { Chat } from "@/components/Icons/Chat";
 import { Check } from "@/components/Icons/Check";
 import LegalFieldsAndTopicsTags from "@/components/molecules/legalFieldsAndTopicsTags/LegalFieldsAndTopicsTags";
 import BookmarkButton from "@/components/organisms/caseBlock/BookmarkButton/BookmarkButton";
 import EditQuestionModal from "@/components/pages/forumOverviewPage/editQuestionModal/EditQuestionModal";
-import { TagsSkeleton } from "@/components/pages/forumOverviewPage/questionsSkeleton/QuestionsSkeleton";
 import useBookmarks from "@/hooks/useBookmarks";
 import { useForumQuestionDetails } from "@/hooks/useForumQuestionDetails";
-import { useLegalFieldsAndTopics } from "@/hooks/useLegalFieldsAndTopics";
 import { getForumQuestionUrl } from "@/utils/paths";
 import { removeHtmlTagsFromString } from "@/utils/utils";
 
 import { Title, Tooltip } from "@mantine/core";
 import Image from "next/image";
 import Link from "next/link";
-import React, { Fragment, type FunctionComponent } from "react";
+import React, { type FunctionComponent } from "react";
 
 import * as styles from "./QuestionListItem.styles";
 import genericProfileIcon from "../../../../../public/images/icons/generic-user-icon.svg";
@@ -101,6 +98,7 @@ const QuestionListItem: FunctionComponent<Props> = ({ questionId }) =>
           <div css={styles.bottomWrapper}>
             <LegalFieldsAndTopicsTags
               canBeMultiline={true}
+              areTagsClickable={false}
               topicsIds={question.topicsIds}
               legalFieldId={question.legalFieldId}
               subfieldsIds={question.subfieldsIds}

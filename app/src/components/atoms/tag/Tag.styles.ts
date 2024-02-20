@@ -6,9 +6,10 @@ export const tag = (theme: MantineTheme) => css`
 	background: ${theme.colors["neutrals-01"][2]};
 	border-radius: 40px;
 	display: inline-block;
+  font-size: 14px;
 	white-space: nowrap;
 	color: ${theme.colors["neutrals-01"][9]};
   * {
-    font-size: 14px;
+    font-size: inherit;
   }
 `;

@@ -1,4 +1,4 @@
-import Tag from "@/components/atoms/tag/Tag";
+import Tag, { type ITag } from "@/components/atoms/tag/Tag";
 import { TagsSkeleton } from "@/components/pages/forumOverviewPage/questionsSkeleton/QuestionsSkeleton";
 import { useLegalFieldsAndTopics } from "@/hooks/useLegalFieldsAndTopics";
 import { type Nullable } from "@/utils/types";
@@ -8,6 +8,7 @@ import React, { type FunctionComponent } from "react";
 import * as styles from "./LegalFieldsAndTopicsTags.styles";
 
 type Props = {
+  readonly areTagsClickable: ITag["isNotClickable"];
   readonly canBeMultiline: boolean;
   readonly legalFieldId: Nullable<string>;
   readonly subfieldsIds: string[];
@@ -15,6 +16,7 @@ type Props = {
 };
 
 const LegalFieldsAndTopicsTags: FunctionComponent<Props> = ({
+  areTagsClickable,
   canBeMultiline,
   legalFieldId,
   subfieldsIds,
@@ -40,13 +42,13 @@ const LegalFieldsAndTopicsTags: FunctionComponent<Props> = ({
   return (
     <div css={[styles.tagsWrapper, canBeMultiline ? styles.tagsWrapperMultiLine : styles.tagsWrapperSingleLine]}>
       {legalField && (
-        <Tag key={legalField.id} title={legalField.mainCategory}/>
+        <Tag key={legalField.id} title={legalField.mainCategory} isNotClickable={!areTagsClickable}/>
       )}
       {subfields.map((subfield) => (
-        <Tag key={subfield.id} title={subfield.legalAreaName}/>
+        <Tag key={subfield.id} title={subfield.legalAreaName} isNotClickable={!areTagsClickable}/>
       ))}
       {topics.map((topic) => (
-        <Tag key={topic.id} title={topic.topicName}/>
+        <Tag key={topic.id} title={topic.topicName} isNotClickable={!areTagsClickable}/>
       ))}
     </div>
   );
