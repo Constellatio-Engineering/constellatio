@@ -80,7 +80,7 @@ const ProfileMenu: FunctionComponent<IProfileMenu> = ({ activeTabSlug, setTab, t
             onClick={async () =>
             {
               setOnboardingStepsIndex(0);
-              setWasOnboardingPostponed(false);
+              setWasOnboardingPostponed({ wasOnboardingPostponed: false });
               await setOnboardingResult({ result: null });
             }}
           />

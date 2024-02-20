@@ -43,9 +43,12 @@ const HeaderDefault: FunctionComponent = () =>
   const { pathname } = useRouter();
   const theme = useMantineTheme();
   const { data: onboardingResult, isPending: isGetOnboardingResultLoading } = useOnboardingResult();
-  const [wasOnboardingPostponed, setWasOnboardingPostponed] = useWasOnboardingPostponed();
-  const skipOnboarding = (): void => setWasOnboardingPostponed(true);
-  const showOnboarding = !isGetOnboardingResultLoading && onboardingResult === null && !wasOnboardingPostponed;
+  const [onboardingPostponedState, setWasOnboardingPostponed] = useWasOnboardingPostponed();
+  const skipOnboarding = (): void => setWasOnboardingPostponed({
+    dateOfPostponement: new Date(),
+    wasOnboardingPostponed: true
+  });
+  const showOnboarding = !isGetOnboardingResultLoading && onboardingResult === null && !onboardingPostponedState.wasOnboardingPostponed;
   const onboardingStepsIndex = useOnboardingStore(s => s.onboardingStepsIndex);
   const setOnboardingStepsIndex = useOnboardingStore(s => s.setOnboardingStepsIndex);
 
