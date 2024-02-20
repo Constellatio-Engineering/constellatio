@@ -1,0 +1,2 @@
+INSERT INTO public."UserRole" ("Id", "Identifier", "Name", "Description") VALUES ('225ed5e6-a0f0-4c90-8688-582bd6bea5b2', 'admin', 'Administrator', 'Full access to all features and data');
+INSERT INTO public."UserRole" ("Id", "Identifier", "Name", "Description") VALUES ('b66219c1-9a35-4f19-a337-a82bb6fb3afb', 'forumMod', 'Forum Moderator', 'User with elevated access to moderate forum content and features');
