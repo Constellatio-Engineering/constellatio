@@ -78,8 +78,6 @@ const AppContainer: FunctionComponent<ConstellatioAppProps> = ({ Component, page
     }
   }, [pathname]);
 
-  console.log("env.NEXT_PUBLIC_IS_IN_MAINTENANCE_MODE", env.NEXT_PUBLIC_IS_IN_MAINTENANCE_MODE);
-
   if(!isProduction)
   {
     pageTitle += ` - ${env.NEXT_PUBLIC_DEPLOYMENT_ENVIRONMENT}`;

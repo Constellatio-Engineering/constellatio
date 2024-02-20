@@ -100,7 +100,7 @@ const OverviewCard: FunctionComponent<IOverviewCard> = ({
           <table style={{ borderBottom: "1px solid #F0F0F0", textAlign: "left", width: "100%" }}>
             <thead>
               <tr>
-                {(legalArea?.__typename === "LegalArea" && legalArea?.legalAreaName) && <th style={{ color: "#949494", padding: "16px 32px 8px 16px" }}><CaptionText styleType="caption-01-medium" tt="uppercase">Rechtsgebiet</CaptionText></th>}
+                {(legalArea?.__typename === "LegalArea" && legalArea?.legalAreaName) && <th style={{ color: "#949494", padding: "16px 32px 8px 16px" }}><CaptionText styleType="caption-01-medium" tt="uppercase">Teilgebiet</CaptionText></th>}
                 {variant === "case" && topic && (<th style={{ color: "#949494", padding: "16px 32px 8px 16px" }}><CaptionText styleType="caption-01-medium" component="p" tt="uppercase">Thema</CaptionText> </th>)}
               </tr>
             </thead>
