@@ -52,6 +52,7 @@ export const badgeIdentifiers = [
   "perfekte-woche",
   "fall-10",
   "1-100",
+  "1-1000",
   "game-master-25",
   "fall-25",
   "dauerbrenner",
