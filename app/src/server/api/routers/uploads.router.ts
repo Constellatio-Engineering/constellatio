@@ -52,7 +52,7 @@ export const uploadsRouter = createTRPCRouter({
     .input(generateCreateSignedUploadUrlSchema(fileExtensions, fileMimeTypes))
     .mutation(async ({ ctx: { userId }, input: file }) =>
     {
-      return getSignedCloudStorageUploadUrl({ file, userId });
+      return getSignedCloudStorageUploadUrl({ bucketType: "private", file, userId });
     }),
   deleteUploadedFiles: protectedProcedure
     .input(deleteUploadSchema)

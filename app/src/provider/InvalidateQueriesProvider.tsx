@@ -21,7 +21,6 @@ type InvalidateForumAnswersOptions = Partial<inferProcedureInput<AppRouter["foru
 type InvalidateForumAnswerOptions = inferProcedureInput<AppRouter["forum"]["getAnswerById"]>;
 type InvalidateOnboardingResultOptions = inferProcedureInput<AppRouter["users"]["getOnboardingResult"]>;
 type InvalidateUserDetailsResultOptions = inferProcedureInput<AppRouter["users"]["getUserDetails"]>;
-type InvalidateProfilePictureOptions = inferProcedureInput<AppRouter["users"]["getSignedProfilePictureUrl"]>;
 type InvalidateBadgesOptions = inferProcedureInput<AppRouter["badges"]["getBadges"]>;
 
 type InvalidateQueries = {
@@ -40,7 +39,6 @@ type InvalidateQueries = {
   invalidateGamesProgress: (options: InvalidateGamesProgressOptions) => Promise<void>;
   invalidateNotes: () => Promise<void>;
   invalidateOnboardingResult: (options?: InvalidateOnboardingResultOptions) => Promise<void>;
-  invalidateProfilePicture: (options?: InvalidateProfilePictureOptions) => Promise<void>;
   invalidateSearchResults: (value?: string) => Promise<void>;
   invalidateSubmittedCaseSolution: (options: InvalidateSubmittedCaseSolutionOptions) => Promise<void>;
   invalidateUploadedFiles: (options?: InvalidateUploadedFilesOptions) => Promise<void[]>;
@@ -81,7 +79,6 @@ const InvalidateQueriesProvider: FunctionComponent<InvalidateQueriesProviderProp
     invalidateGamesProgress: async (options) => apiContext.gamesProgress.getGamesProgress.invalidate(options),
     invalidateNotes: async () => apiContext.notes.getNotes.invalidate(),
     invalidateOnboardingResult: async (options) => apiContext.users.getOnboardingResult.invalidate(options),
-    invalidateProfilePicture: async (options) => apiContext.users.getSignedProfilePictureUrl.invalidate(options),
     invalidateSearchResults: async (value) =>
     {
       const queryKey = [searchResultsQueryKey];
@@ -117,7 +114,6 @@ const InvalidateQueriesProvider: FunctionComponent<InvalidateQueriesProviderProp
     apiContext.gamesProgress.getGamesProgress,
     apiContext.casesProgress.getSubmittedSolution,
     apiContext.users.getUserDetails,
-    apiContext.users.getSignedProfilePictureUrl,
     apiContext.users.getOnboardingResult,
     queryClient
   ]);

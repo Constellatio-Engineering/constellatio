@@ -22,7 +22,11 @@ export const usersRouter = createTRPCRouter({
     .input(generateCreateSignedUploadUrlSchema(imageFileExtensions, imageFileMimeTypes))
     .mutation(async ({ ctx: { userId }, input: file }) =>
     {
-      return getSignedCloudStorageUploadUrl({ file, userId });
+      return getSignedCloudStorageUploadUrl({
+        bucketType: "public",
+        file,
+        userId
+      });
     }),
   getOnboardingResult: protectedProcedure
     .query(async ({ ctx: { userId } }) =>
@@ -33,30 +37,6 @@ export const usersRouter = createTRPCRouter({
         .where(eq(users.id, userId));
 
       return onboardingResult[0]?.onboardingResult ?? null;
-    }),
-  getSignedProfilePictureUrl: protectedProcedure
-    .input(z.object({
-      fileId: z.string(),
-    }))
-    .query(async ({ ctx: { userId }, input: { fileId } }) =>
-    {
-      const file = await db.query.profilePictures.findFirst({
-        where: and(
-          eq(profilePictures.userId, userId),
-          eq(profilePictures.id, fileId)
-        )
-      });
-
-      if(!file)
-      {
-        throw new NotFoundError();
-      }
-
-      return getClouStorageFileUrl({
-        serverFilename: file.serverFilename,
-        staleTime: env.NEXT_PUBLIC_PROFILE_PICTURE_STALE_TIME_IN_SECONDS * 1000,
-        userId 
-      });
     }),
   getUserDetails: protectedProcedure
     .query(async ({ ctx: { userId } }) =>

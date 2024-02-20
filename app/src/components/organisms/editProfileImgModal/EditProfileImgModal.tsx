@@ -43,7 +43,6 @@ const EditProfileImgModal: FunctionComponent<EditProfileImgModalProps> = ({ onCl
 {
   const { invalidateUserDetails } = useContextAndErrorIfNull(InvalidateQueriesContext);
   const inputRef = React.useRef<HTMLInputElement>(null);
-  // const [selectedTab, setSelectedTab] = React.useState<string>(tabs?.[0]?.title ?? "");
   const [selectedFile, setSelectedFile] = useState<SelectedFile>();
   const selectedTab = tabs?.[0]?.title ?? "";
   const selectedFileUrl = selectedFile?.file && URL.createObjectURL(selectedFile?.file);
@@ -51,10 +50,7 @@ const EditProfileImgModal: FunctionComponent<EditProfileImgModalProps> = ({ onCl
   const { mutateAsync: setProfilePicture } = api.users.setProfilePicture.useMutation();
   const fileInputRef = React.useRef<HTMLInputElement>(null);
   const uploadFileNotificationId = `upload-file-${selectedFile?.clientSideUuid}`;
-  /* const avatarTypes: Array<IProfilePictureAvatars["type"]> = [
-    "avatar-01", "avatar-02", "avatar-03", "avatar-04", "avatar-05", "avatar-06", "avatar-07"
-  ];
-  const theme = useMantineTheme();*/
+
   const { isPending: isLoading, mutate: uploadFile } = useMutation({
     mutationFn: async (): Promise<void> =>
     {
@@ -170,7 +166,7 @@ const EditProfileImgModal: FunctionComponent<EditProfileImgModalProps> = ({ onCl
       opened={opened}
       onClose={() => !isLoading && onClose()}
       lockScroll={false}
-      title="Change profile image"
+      title="Neues Profilbild hochladen"
       centered>
       <div css={styles.profilePictureWrapper}>
         <ProfilePicture
@@ -183,17 +179,6 @@ const EditProfileImgModal: FunctionComponent<EditProfileImgModalProps> = ({ onCl
         size="big"
         defaultValue={selectedTab}
         tabStyleOverwrite={{ flex: "1" }}>
-        {/* <Tabs.List>
-          {tabs && tabs?.map((tab, tabIndex) => (
-            <React.Fragment key={tabIndex}>
-              <SwitcherTab
-                icon={tab?.icon ?? <Trash/>}
-                value={tab.title}
-                onClick={() => { setSelectedTab(tab.title); }}>{tab.title}
-              </SwitcherTab>
-            </React.Fragment>
-          ))}
-        </Tabs.List>*/}
         {selectedTab === tabs[0]?.title && (
           <div css={styles.uploadImgCard} onClick={() => inputRef.current?.click()}>
             <IconButton
@@ -206,7 +191,9 @@ const EditProfileImgModal: FunctionComponent<EditProfileImgModalProps> = ({ onCl
                 inputRef.current?.click(); 
               }}
             />
-            <BodyText styleType="body-01-bold" component="p">Drag & drop image here or click to upload</BodyText>
+            <BodyText styleType="body-01-bold" component="p" align={"center"}>
+              Lege ein Bild mit Drag & Drop ab oder klicke hier, um ein Bild auszuwählen
+            </BodyText>
             <input
               ref={fileInputRef}
               type="file"
@@ -218,19 +205,6 @@ const EditProfileImgModal: FunctionComponent<EditProfileImgModalProps> = ({ onCl
             />
           </div>
         )}
-        {/* {selectedTab === tabs[1]?.title && (
-          <div css={styles.libraryArea}>{
-            avatarTypes.map((_, i) => 
-            {
-              const avatarType = avatarTypes[i];
-              if(!avatarType) { return null; }
-              return (
-                <span css={styles.avatarIcon({ selected: i === 0, theme })} key={i}><ProfileAvatar type={avatarType}/></span>
-              );
-            })
-          }
-          </div>
-        )}*/}
         <Button<"button">
           css={styles.saveButton}
           styleType="primary"
@@ -238,7 +212,7 @@ const EditProfileImgModal: FunctionComponent<EditProfileImgModalProps> = ({ onCl
           loaderPosition="right"
           disabled={isLoading || !selectedFile}
           onClick={() => uploadFile()}>
-          Upload and Save
+          Hochladen und speichern
         </Button>
       </Switcher>
     </Modal>

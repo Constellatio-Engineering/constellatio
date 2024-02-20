@@ -66,6 +66,7 @@ export const getClouStorageFileUrl: GetClouStorageFileUrl = async ({ serverFilen
 };
 
 type GetSignedCloudStorageUploadUrl = (params: {
+  bucketType: "private" | "public";
   file: UploadableFile<FileExtension, FileMimeType>;
   userId: string;
 }) => Promise<{
@@ -73,13 +74,13 @@ type GetSignedCloudStorageUploadUrl = (params: {
   uploadUrl: string;
 }>;
 
-export const getSignedCloudStorageUploadUrl: GetSignedCloudStorageUploadUrl = async ({ file, userId }) =>
+export const getSignedCloudStorageUploadUrl: GetSignedCloudStorageUploadUrl = async ({ bucketType, file, userId }) =>
 {
   const filenameWithoutSpaces = file.filename.replace(/\s/g, "-");
   const filenameWithTimestamp = `${Date.now()}-${filenameWithoutSpaces}`;
 
   const [url] = await cloudStorage
-    .bucket(env.GOOGLE_CLOUD_STORAGE_BUCKET_NAME)
+    .bucket(bucketType === "public" ? env.GOOGLE_CLOUD_STORAGE_PUBLIC_BUCKET_NAME : env.GOOGLE_CLOUD_STORAGE_BUCKET_NAME)
     .file(`${userId}/${filenameWithTimestamp}`)
     .getSignedUrl({
       action: "write",
