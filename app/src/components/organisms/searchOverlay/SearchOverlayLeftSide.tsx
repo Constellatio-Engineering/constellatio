@@ -32,7 +32,6 @@ const SearchOverlayLeftSide: FunctionComponent<SearchOverlayLeftSideProps> = ({ 
             <Link
               href={`${appPaths.search}?find=${result}`}
               key={index}
-              title={result}
               className="suggestion__section__link">
               <CustomLink styleType="link-content-title" component="p">
                 {result}
@@ -45,7 +44,6 @@ const SearchOverlayLeftSide: FunctionComponent<SearchOverlayLeftSideProps> = ({ 
             <Link
               href={`${appPaths.search}?find=${result?.searchField}`}
               key={result?.id}
-              title={result?.searchField || ""}
               className="suggestion__section__link">
               <CustomLink styleType="link-content-title" component="p">
                 {result?.searchField}
@@ -83,6 +81,7 @@ const SearchOverlayLeftSide: FunctionComponent<SearchOverlayLeftSideProps> = ({ 
               <Link
                 key={legalCase.id}
                 href={`${appPaths.cases}/${legalCase.id}`}
+                title={legalCase.title ?? ""}
                 className="suggestion__section__link">
                 <CustomLink styleType="link-content-title" component="p">
                   {legalCase.title}
@@ -104,6 +103,7 @@ const SearchOverlayLeftSide: FunctionComponent<SearchOverlayLeftSideProps> = ({ 
               <Link
                 key={article.id}
                 href={`${appPaths.dictionary}/${article.id}`}
+                title={article.title ?? ""}
                 className="suggestion__section__link">
                 <CustomLink styleType="link-content-title" component="p">
                   {article.title}
@@ -122,6 +122,7 @@ const SearchOverlayLeftSide: FunctionComponent<SearchOverlayLeftSideProps> = ({ 
             <Link
               key={question.id}
               href={`${appPaths.forum}/${question.id}`}
+              title={question.title}
               className="suggestion__section__link">
               <CustomLink styleType="link-content-title" component="p">
                 {question.title}
