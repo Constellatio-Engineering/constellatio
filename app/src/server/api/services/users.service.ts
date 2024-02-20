@@ -1,8 +1,9 @@
 import { db } from "@/db/connection";
-import { users } from "@/db/schema";
+import { profilePictures, users } from "@/db/schema";
+import { env } from "@/env.mjs";
 import { NotFoundError } from "@/utils/serverError";
 
-import { eq } from "drizzle-orm";
+import { eq, sql } from "drizzle-orm";
 
 // eslint-disable-next-line @typescript-eslint/explicit-function-return-type
 export const getUserWithRelations = async (userId: string) =>
@@ -10,7 +11,11 @@ export const getUserWithRelations = async (userId: string) =>
   const user = await db.query.users.findFirst({
     where: eq(users.id, userId),
     with: {
-      profilePictures: true,
+      profilePictures: {
+        columns: {
+          serverFilename: true,
+        },
+      },
       usersToRoles: {
         columns: {},
         with: {
@@ -36,11 +41,15 @@ export const getUserWithRelations = async (userId: string) =>
   }));
   const isForumModerator = roles.some(({ identifier }) => identifier === "forumMod");
   const isAdmin = roles.some(({ identifier }) => identifier === "admin");
+  const _profilePicture = user.profilePictures?.[0];
 
   return ({
     ...user,
     isAdmin,
     isForumModerator,
+    profilePicture: _profilePicture ? {
+      url: `https://storage.googleapis.com/${env.GOOGLE_CLOUD_STORAGE_PUBLIC_BUCKET_NAME}/${user.id}/${_profilePicture.serverFilename}`
+    } : null,
     roles
   });
 };

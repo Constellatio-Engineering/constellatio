@@ -81,6 +81,7 @@ const SearchOverlayLeftSide: FunctionComponent<SearchOverlayLeftSideProps> = ({ 
               <Link
                 key={legalCase.id}
                 href={`${appPaths.cases}/${legalCase.id}`}
+                title={legalCase.title ?? ""}
                 className="suggestion__section__link">
                 <CustomLink styleType="link-content-title" component="p">
                   {legalCase.title}
@@ -102,6 +103,7 @@ const SearchOverlayLeftSide: FunctionComponent<SearchOverlayLeftSideProps> = ({ 
               <Link
                 key={article.id}
                 href={`${appPaths.dictionary}/${article.id}`}
+                title={article.title ?? ""}
                 className="suggestion__section__link">
                 <CustomLink styleType="link-content-title" component="p">
                   {article.title}
@@ -120,6 +122,7 @@ const SearchOverlayLeftSide: FunctionComponent<SearchOverlayLeftSideProps> = ({ 
             <Link
               key={question.id}
               href={`${appPaths.forum}/${question.id}`}
+              title={question.title}
               className="suggestion__section__link">
               <CustomLink styleType="link-content-title" component="p">
                 {question.title}

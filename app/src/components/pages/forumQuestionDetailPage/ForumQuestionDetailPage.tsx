@@ -208,7 +208,8 @@ export const ForumQuestionDetailPage: FunctionComponent<Props> = ({ questionId }
                 </div>
                 <div>
                   <LegalFieldsAndTopicsTags
-                    canBeMultiline={true}
+                    displayMode={"multiLine"}
+                    shouldRenderTagsAsLinks={true}
                     topicsIds={question.topicsIds}
                     legalFieldId={question.legalFieldId}
                     subfieldsIds={question.subfieldsIds}

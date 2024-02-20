@@ -35,6 +35,7 @@
     "copyServiceAccountBase64ToClipboard": "cat google/service-accounts/user-uploads-service-account.json | base64 | pbcopy && pnpm printCopiedToClipboard",
     "setGoogleCloudProject": "gcloud config set project idyllic-psyche-400317",
     "setCloudStorageDevelopmentCors": "gsutil cors set google/cloud-storage-cors/development.cors-config.json gs://constellatio-user-uploads-development",
+    "setPublicCloudStorageDevelopmentCors": "gsutil cors set google/cloud-storage-cors/development.cors-config.json gs://constellatio-public-user-uploads-development",
     "setCloudStorageStagingCors": "gsutil cors set google/cloud-storage-cors/staging.cors-config.json gs://constellatio-user-uploads-staging",
     "setCloudStorageProductionCors": "gsutil cors set google/cloud-storage-cors/production.cors-config.json gs://constellatio-user-uploads-production",
     "separatorOther": "---------------------- OTHER ----------------------",

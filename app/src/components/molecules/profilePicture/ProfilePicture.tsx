@@ -1,5 +1,5 @@
 import { ProfileAvatar, type IProfilePictureAvatars } from "@/components/Icons/ProfileAvatar";
-import useSignedProfilePictureUrl from "@/hooks/useSignedProfilePictureUrl";
+import useUserDetails from "@/hooks/useUserDetails";
 
 import Image from "next/image";
 import React, { type ComponentProps, type FunctionComponent } from "react";
@@ -21,7 +21,7 @@ const ProfilePicture: FunctionComponent<ProfilePictureProps> = ({
   ...props
 }) =>
 {
-  const { url: profilePictureUrl } = useSignedProfilePictureUrl();
+  const { userDetails } = useUserDetails();
   const userChosenAvatar: IProfilePictureAvatars["type"] | false = false;
 
   return (
@@ -29,13 +29,12 @@ const ProfilePicture: FunctionComponent<ProfilePictureProps> = ({
       {userChosenAvatar && (<ProfileAvatar type={userChosenAvatar ?? "avatar-01"}/>)}
       <Image
         css={styles.image}
-        src={overwriteUrl || profilePictureUrl || genericProfileIcon.src}
+        src={overwriteUrl || userDetails?.profilePicture?.url || genericProfileIcon.src}
         alt="Profilbild"
         width={sizeInPx}
         height={sizeInPx}
       />
     </div>
-
   );
 };
 

@@ -11,7 +11,7 @@
     "start:supabase": "supabase start --ignore-health-check",
     "stop:supabase": "supabase stop",
     "restart:supabase": "supabase stop && pnpm start:supabase",
-    "reset:supabase": "supabase stop --no-backup && pnpm start:supabase",
+    "reset:supabase": "supabase db reset",
     "supabase:status": "supabase status",
     "separatorDocker": "---------------------- DOCKER ----------------------",
     "docker:stop-containers": "docker stop $(docker ps -a -q)",

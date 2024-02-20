@@ -124,10 +124,18 @@ export const authenticationRouter = createTRPCRouter({
 
       const usersCount = (await db.select({ count: sql<number>`cast(count(*) as int)` }).from(users))?.[0]?.count;
 
-      if(usersCount && usersCount <= 100)
+      if(usersCount != null)
       {
-        console.log("is one of the first 100 users");
-        await addBadgeForUser({ badgeIdentifier: "1-100", userId });
+        if(usersCount <= 100)
+        {
+          console.log("is one of the first 100 users");
+          await addBadgeForUser({ badgeIdentifier: "1-100", userId });
+        }
+        else if(usersCount > 100 && usersCount <= 1000)
+        {
+          console.log("is one of the first 1000 users");
+          await addBadgeForUser({ badgeIdentifier: "1-1000", userId });
+        }
       }
 
       console.log(`Complete sign up took ${performance.now() - start}ms`);
