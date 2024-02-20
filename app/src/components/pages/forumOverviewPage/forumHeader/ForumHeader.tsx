@@ -38,7 +38,9 @@ const ForumHeader: FunctionComponent = () =>
       <div css={styles.contentWrapper}>
         <Title order={1} css={overviewHeaderStyles.title({ theme, variant })}>Forum</Title>
         <BodyText styleType="body-01-regular" css={styles.text}>
-          Willkommen in unserer Community!
+          Willkommen im Constellatio Forum! Hier hilft dir die Community zu allen Fragen und Unklarheiten weiter.
+          Außerdem kannst du selbst Antworten geben und für dich relevante Fragen upvoten.
+          Erfahrene Volljuristen moderieren das Forum und stellen sicher, dass alle Inhalte korrekt sind.
         </BodyText>
         <Button<"button">
           styleType="primary"
