@@ -6,6 +6,7 @@ import { Cross } from "@/components/Icons/Cross";
 import { ExpandIcon } from "@/components/Icons/Expand";
 import LegalFieldsAndTopicsTags from "@/components/molecules/legalFieldsAndTopicsTags/LegalFieldsAndTopicsTags";
 import BookmarkButton from "@/components/organisms/caseBlock/BookmarkButton/BookmarkButton";
+import EmptyStateCard from "@/components/organisms/emptyStateCard/EmptyStateCard";
 import EditQuestionModal from "@/components/pages/forumOverviewPage/editQuestionModal/EditQuestionModal";
 import ForumListItem from "@/components/pages/forumOverviewPage/forumListItem/ForumListItem";
 import AnswerEditor from "@/components/pages/forumQuestionDetailPage/answerEditor/AnswerEditor";
@@ -133,6 +134,7 @@ export const ForumQuestionDetailPage: FunctionComponent<Props> = ({ questionId }
   }
 
   const amountOfAnswers = answers?.length;
+  const hasNoAnswers = amountOfAnswers != null && amountOfAnswers === 0;
   const isCurrentUserAuthor = userDetails?.id === question.author.id;
 
   return (
@@ -252,7 +254,7 @@ export const ForumQuestionDetailPage: FunctionComponent<Props> = ({ questionId }
                   {amountOfAnswers === 1 ? "1 Antwort" : `${amountOfAnswers} Antworten`}
                 </p>
               )}
-              <div css={styles.sortWrapper}>
+              <div css={[styles.sortWrapper, (answers == null || answers.length === 0) && styles.sortWrapperHidden]}>
                 <p>Sortieren nach:</p>
                 <select
                   css={styles.selectSorting}
@@ -286,7 +288,9 @@ export const ForumQuestionDetailPage: FunctionComponent<Props> = ({ questionId }
                   }}
                 />
               ))}
-              <div css={styles.separator}/>
+              {(answers?.length ?? 0) > 0 && (
+                <div css={styles.separator}/>
+              )}
               <AnswerEditor
                 mode={{ editorMode: "create" }}
                 saveButton={{
@@ -305,6 +309,13 @@ export const ForumQuestionDetailPage: FunctionComponent<Props> = ({ questionId }
                   isLoading: isPostingAnswer
                 }}
               />
+              {hasNoAnswers && (
+                <EmptyStateCard
+                  title="Es gibt noch keine Antworten"
+                  text="Sei der Erste, der diese Frage beantwortet! Nutze dafür einfach das Textfeld oben."
+                  variant="For-large-areas"
+                />
+              )}
             </Fragment>
           )}
         </div>

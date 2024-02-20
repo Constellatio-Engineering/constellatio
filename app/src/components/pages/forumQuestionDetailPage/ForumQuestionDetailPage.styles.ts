@@ -145,7 +145,11 @@ export const totalAmount = css`
 export const sortWrapper = css`
   display: flex;
   align-items: center;
-  gap: 0px;
+  gap: 5px;
+`;
+
+export const sortWrapperHidden = css`
+  visibility: hidden;
 `;
 
 export const selectSorting = css`
