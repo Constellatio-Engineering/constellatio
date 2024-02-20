@@ -23,7 +23,7 @@ const Tag: FunctionComponent<ITag> = ({ isNotClickable, title, }) =>
   if(isNotClickable)
   {
     return (
-      <BodyText styleType="body-02-medium" component="p" css={styles.tag}>
+      <BodyText styleType="body-02-medium" component="span" css={[styles.tag, styles.inlineTag]}>
         {title}
       </BodyText>
     );
@@ -35,7 +35,7 @@ const Tag: FunctionComponent<ITag> = ({ isNotClickable, title, }) =>
       css={styles.tag}
       target="_blank nofollow noopener noreferrer"
       onClick={e => e.stopPropagation()}>
-      <BodyText styleType="body-02-medium" component="p">
+      <BodyText styleType="body-02-medium" component="span">
         {title}
       </BodyText>
     </Link>

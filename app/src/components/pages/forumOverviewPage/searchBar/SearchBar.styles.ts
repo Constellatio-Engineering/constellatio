@@ -72,14 +72,18 @@ export const dropDownOverflowGradient = css`
 `;
 
 export const searchResult = css`
-  display: flex;
-  align-items: center;
-  margin-bottom: 16px;
+  margin-bottom: 12px;
   position: relative;
   gap: 8px;
   :last-of-type {
     margin-bottom: 0;
   }
+`;
+
+export const searchResultLink = css`
+  display: inline-block;
+  color: inherit;
+  line-height: 1.4;
 `;
 
 export const overflowOverlay = css`

@@ -13,3 +13,9 @@ export const tag = (theme: MantineTheme) => css`
     font-size: inherit;
   }
 `;
+
+export const inlineTag = css`
+  margin-right: 5px;
+  margin-bottom: 4px;
+  padding: 2px 10px;
+`;

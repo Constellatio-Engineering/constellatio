@@ -1,7 +1,7 @@
 import { css } from "@emotion/react";
 
 export const tagsWrapper = css`
-  display: flex;
+  display: inline-flex;
   gap: 8px;
   flex: 1;
   min-width: 0;

@@ -97,7 +97,7 @@ const QuestionListItem: FunctionComponent<Props> = ({ questionId }) =>
           </div>
           <div css={styles.bottomWrapper}>
             <LegalFieldsAndTopicsTags
-              canBeMultiline={true}
+              displayMode={"multiLine"}
               areTagsClickable={false}
               topicsIds={question.topicsIds}
               legalFieldId={question.legalFieldId}
