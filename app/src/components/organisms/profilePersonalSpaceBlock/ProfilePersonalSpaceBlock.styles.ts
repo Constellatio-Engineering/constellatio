@@ -33,14 +33,11 @@ export const blockHeadCallToAction = css`
 	flex-basis: 35%;
 	white-space: nowrap;
 `;
-export const casesCard = css`
-	display: flex;
-	justify-content: flex-start;
-	align-content: center;
-	flex-wrap: wrap;
-	gap: 16px;
+
+export const casesCardWrapper = css`
 	margin: 24px 0;
 `;
+
 export const favoritesTab = css``;
 export const uploadedMaterialsTab = css`
 	display: flex;

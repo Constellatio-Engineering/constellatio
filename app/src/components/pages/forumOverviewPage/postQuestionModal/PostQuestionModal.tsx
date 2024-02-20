@@ -14,11 +14,11 @@ const PostQuestionModal: FunctionComponent = () =>
 
   const form = useForm<PostQuestionSchema>({
     initialValues: {
-      legalFieldId: "",
-      subfieldId: null,
+      legalFieldId: undefined,
+      subfieldsIds: [],
       text: "",
       title: "",
-      topicId: null,
+      topicsIds: [],
     },
     validate: zodResolver(postQuestionSchema),
     validateInputOnBlur: true,
@@ -35,6 +35,7 @@ const PostQuestionModal: FunctionComponent = () =>
 
   return (
     <QuestionModal
+      variant={"add"}
       error={postQuestionError}
       form={form}
       isLoading={isLoading}

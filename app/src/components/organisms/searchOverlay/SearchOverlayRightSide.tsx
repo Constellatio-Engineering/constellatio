@@ -41,7 +41,7 @@ const SearchOverlayRightSide: FunctionComponent<SearchOverlayRightSideProps> = (
           </SuggestionSection>
         </>
       )}
-      <SuggestionSection label="Häufige Rechtsgebiete" labelVariant="neutral">
+      <SuggestionSection label="Häufige Rechts- und Teilgebiete" labelVariant="neutral">
         <div className="popularCategories">
           
           {popularSearch?.popularCategories?.map(result => (

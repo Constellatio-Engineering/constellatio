@@ -40,7 +40,7 @@ export const contentWrapper = css`
 
 export const text = css`
   font-size: 18px;
-  max-width: 600px;
+  max-width: 900px;
   margin-top: 20px;
 `;
 

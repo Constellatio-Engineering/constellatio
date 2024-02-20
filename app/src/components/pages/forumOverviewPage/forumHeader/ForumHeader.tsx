@@ -38,15 +38,16 @@ const ForumHeader: FunctionComponent = () =>
       <div css={styles.contentWrapper}>
         <Title order={1} css={overviewHeaderStyles.title({ theme, variant })}>Forum</Title>
         <BodyText styleType="body-01-regular" css={styles.text}>
-          Welcome to our community! Join us to engage in insightful discussions, share your thoughts, and seek answers to your
-          questions
+          Willkommen im Constellatio Forum! Hier hilft dir die Community zu allen Fragen und Unklarheiten weiter.
+          Außerdem kannst du selbst Antworten geben und für dich relevante Fragen upvoten.
+          Erfahrene Volljuristen moderieren das Forum und stellen sicher, dass alle Inhalte korrekt sind.
         </BodyText>
         <Button<"button">
           styleType="primary"
           css={styles.button}
           type="button"
           onClick={setCreateQuestionState}>
-          Ask a question
+          Frage stellen
         </Button>
       </div>
     </div>

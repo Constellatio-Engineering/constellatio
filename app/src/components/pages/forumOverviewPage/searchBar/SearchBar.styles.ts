@@ -75,8 +75,23 @@ export const searchResult = css`
   display: flex;
   align-items: center;
   margin-bottom: 16px;
+  position: relative;
   gap: 8px;
   :last-of-type {
     margin-bottom: 0;
   }
+`;
+
+export const overflowOverlay = css`
+  right: 0;
+  top: 0;
+  position: absolute;
+  bottom: 0;
+  z-index: 100;
+  width: 16px;
+  background: linear-gradient(
+    to right,
+    rgba(255, 255, 255, 0),
+    rgba(255, 255, 255, 1)
+  );
 `;

@@ -1,5 +1,6 @@
 import { Button } from "@/components/atoms/Button/Button";
 import { Dropdown } from "@/components/atoms/Dropdown/Dropdown";
+import { DropdownMultiselect } from "@/components/atoms/Dropdown/DropdownMultiselect";
 import { Input } from "@/components/atoms/Input/Input";
 import { Cross } from "@/components/Icons/Cross";
 import ErrorCard, { type ErrorCardsProps } from "@/components/molecules/errorCard/ErrorCard";
@@ -20,6 +21,7 @@ export type QuestionModalProps = Omit<ModalProps, "onSubmit"> & {
   readonly form: UseFormReturnType<PostQuestionSchema>;
   readonly isLoading: boolean;
   readonly onSubmit: (formValues: PostQuestionSchema) => void;
+  readonly variant: "add" | "edit";
 };
 
 const QuestionModal: FunctionComponent<QuestionModalProps> = ({
@@ -33,6 +35,7 @@ const QuestionModal: FunctionComponent<QuestionModalProps> = ({
   onSubmit,
   size = "74rem",
   styles: additionalStyles,
+  variant,
   withCloseButton = false,
   ...props
 }) =>
@@ -84,7 +87,6 @@ const QuestionModal: FunctionComponent<QuestionModalProps> = ({
 
   return (
     <Modal
-      onAnimationEnd={(e) => console.log("animation end", e)}
       withCloseButton={withCloseButton}
       closeOnEscape={closeOnEscape}
       closeOnClickOutside={closeOnClickOutside}
@@ -131,7 +133,7 @@ const QuestionModal: FunctionComponent<QuestionModalProps> = ({
               loading={isLoading}
               disabled={!form.isDirty()}
               css={styles.submitButton}>
-              Frage veröffentlichen
+              {variant === "add" ? "Frage veröffentlichen" : "Speichern"}
             </Button>
           </div>
           <div css={styles.rightSide}>
@@ -141,31 +143,36 @@ const QuestionModal: FunctionComponent<QuestionModalProps> = ({
             <div css={styles.inputsWrapper}>
               <Dropdown
                 isLoading={areLegalFieldsAndTopicsLoading as boolean}
-                label="Rechtsgbiet *"
-                title="Rechtsgbiet"
-                placeholder="Rechtsgbiet auswählen"
+                label="Rechtsgebiet *"
+                title="Rechtsgebiet"
+                placeholder="Rechtsgebiet auswählen"
                 data={legalFieldsOptions}
                 {...form.getInputProps("legalFieldId" satisfies keyof PostQuestionSchema)}
               />
-              <Dropdown
+              <DropdownMultiselect
                 isLoading={areLegalFieldsAndTopicsLoading as boolean}
                 label="Teilgebiet (optional)"
                 title="Teilgebiet"
-                placeholder="Teilgebiet auswählen"
+                placeholder="Wähle bis zu 3 Teilgebiete aus"
+                searchable
+                nothingFound="Teilgebiet nicht gefunden"
+                maxSelectedValues={3}
                 clearable
-                allowDeselect
                 data={allSubfieldsOptions}
-                {...form.getInputProps("subfieldId" satisfies keyof PostQuestionSchema)}
+                {...form.getInputProps("subfieldsIds" satisfies keyof PostQuestionSchema)}
               />
-              <Dropdown
+              <DropdownMultiselect
                 isLoading={areLegalFieldsAndTopicsLoading as boolean}
                 label="Thema (optional)"
                 title="Thema"
-                placeholder="Thema auswählen"
+                placeholder="Wähle bis zu 3 Themen aus"
+                searchable
+                nothingFound="Thema nicht gefunden"
                 clearable
-                allowDeselect
+                maxSelectedValues={3}
+                multiple
                 data={topicOptions}
-                {...form.getInputProps("topicId" satisfies keyof PostQuestionSchema)}
+                {...form.getInputProps("topicsIds" satisfies keyof PostQuestionSchema)}
               />
             </div>
           </div>

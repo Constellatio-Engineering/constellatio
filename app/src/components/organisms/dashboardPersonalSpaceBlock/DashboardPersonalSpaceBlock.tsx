@@ -17,7 +17,7 @@ import * as styles from "./DashboardPersonalSpaceBlock.styles";
 const DashboardPersonalSpaceBlock: FunctionComponent = () => 
 {
   const [switcherValue, setSwitcherValue] = React.useState<"favorites" | "materials">("favorites");
-  const { favoritesList } = useAllFavorites();
+  const { favoritesList, isLoading } = useAllFavorites();
   const { allUserData } = useAllUserData();
 
   return (
@@ -40,9 +40,13 @@ const DashboardPersonalSpaceBlock: FunctionComponent = () =>
             </Tabs.List>
           </Switcher>
         </div>
-        <div css={styles.list}>
+        <div css={styles.listWrapper}>
           {switcherValue === "favorites" && (
-            <FavoritesExcerpt favorites={favoritesList} shouldSortByCreatedAt/>
+            <FavoritesExcerpt
+              isLoading={isLoading}
+              favorites={favoritesList}
+              shouldSortByCreatedAt
+            />
           )}
           {switcherValue === "materials" && (
             <MaterialsExcerpt allUserData={allUserData}/>

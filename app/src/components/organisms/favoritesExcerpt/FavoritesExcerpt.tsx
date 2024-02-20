@@ -1,8 +1,7 @@
 import FavoriteCard from "@/components/molecules/favoriteCard/FavoriteCard";
 import EmptyStateCard from "@/components/organisms/emptyStateCard/EmptyStateCard";
-import { type Favorites } from "@/hooks/useAllFavorites";
+import { type Favorites, type FavoritesNullable } from "@/hooks/useAllFavorites";
 import { appPaths } from "@/utils/paths";
-import { type Nullable } from "@/utils/types";
 
 import { useRouter } from "next/router";
 import React, { type FunctionComponent } from "react";
@@ -10,8 +9,8 @@ import React, { type FunctionComponent } from "react";
 import * as styles from "./FavoritesExcerpt.styles";
 
 type Props = {
-  readonly favorites: Nullable<Favorites>;
-  readonly isLoading?: boolean;
+  readonly favorites: FavoritesNullable;
+  readonly isLoading: boolean;
   readonly shouldSortByCreatedAt: boolean;
 };
 
@@ -28,11 +27,6 @@ const FavoritesExcerpt: FunctionComponent<Props> = ({ favorites, isLoading = fal
         <FavoriteCard isLoading/>
       </>
     );
-  }
-
-  if(!favorites)
-  {
-    return null;
   }
 
   if(favorites.length === 0)
@@ -52,23 +46,64 @@ const FavoritesExcerpt: FunctionComponent<Props> = ({ favorites, isLoading = fal
     ); 
   }
 
+  // new Date(a?._meta?.createdAt).getTime()
+
+  const favoritesFiltered: Favorites = favorites
+    .filter(favorite => favorite.title != null && favorite.resourceId != null && favorite.favoriteType != null)
+    .map(favorite => ({
+      createdAt: favorite.createdAt!,
+      favoriteType: favorite.favoriteType,
+      resourceId: favorite.resourceId!,
+      title: favorite.title!
+    }));
+
+  const favoritesWithParsedDate = favoritesFiltered.map(favorite =>
+  {
+    return {
+      ...favorite,
+      createdAt: typeof favorite.createdAt === "string" ? new Date(favorite.createdAt) : favorite.createdAt
+    };
+  });
+
   if(shouldSortByCreatedAt)
   {
-    favorites.sort((a, b) => new Date(b?._meta?.createdAt).getTime() - new Date(a?._meta?.createdAt).getTime());
+    favoritesWithParsedDate.sort((a, b) => b.createdAt.getTime() - a.createdAt.getTime());
   }
 
-  return favorites
-    .slice(0, 6)
-    .map((favorite, i) => favorite?.title && (
-      <FavoriteCard
-        key={i}
-        resourceId={favorite.id!}
-        isLoading={false}
-        onClick={async () => router.push(`/${favorite?.__typename === "Case" ? "cases" : "dictionary"}/${favorite?.id}`)}
-        title={favorite.title}
-        variant={favorite?.__typename === "Case" ? "case" : "dictionary"}
-      />
-    ));
+  return (
+    <div css={styles.wrapper}>
+      {favoritesWithParsedDate
+        .slice(0, 6)
+        .map(({ favoriteType, resourceId, title }) =>
+        {
+          let link: string;
+
+          switch (favoriteType)
+          {
+            case "case":
+              link = appPaths.cases;
+              break;
+            case "article":
+              link = appPaths.dictionary;
+              break;
+            case "question":
+              link = appPaths.forum;
+              break;
+          }
+
+          return (
+            <FavoriteCard
+              key={resourceId}
+              resourceId={resourceId}
+              isLoading={false}
+              onClick={async () => router.push(`/${link}/${resourceId}`)}
+              title={title}
+              favoriteType={favoriteType}
+            />
+          );
+        })}
+    </div>
+  );
 };
 
 export default FavoritesExcerpt;

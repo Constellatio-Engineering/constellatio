@@ -34,8 +34,8 @@ const EmptyStateCard: FunctionComponent<IEmptyStateCardProps> = ({
     <div css={styles.wrapper}>
       <div css={styles.emptyStateCard({ theme, variant })}>
         {!hideIcon && (
-          <div css={styles.emptyStateCardImage({ variant })}>
-            <EmptyStateCardIcon/>
+          <div css={styles.emptyStateCardImage}>
+            <EmptyStateCardIcon size={160}/>
           </div>
         )}
         <div css={styles.emptyStateCardTitle({ theme, variant })}>

@@ -127,12 +127,12 @@ const ItemBlock: FunctionComponent<ICaseBlockProps> = ({
                   </td>
                 )}
                 {tableType === "search" && <td><TableCell variant="simpleTableCell">{item?.legalArea?.legalAreaName}</TableCell></td>}
+                {tableType === "favorites" && <td><TableCell variant="simpleTableCell">{item?.legalArea?.legalAreaName}</TableCell></td>}
                 <td css={styles.topicCell} title={topicsCombined}>
                   <Link passHref shallow href={`${variant === "case" ? appPaths.cases : appPaths.dictionary}/${item?.id}`}>
                     <TableCell variant="simpleTableCell">{item?.topic?.[0]?.topicName}</TableCell>
                   </Link>
                 </td>
-                {tableType === "favorites" && <td><TableCell variant="simpleTableCell">{item?.legalArea?.legalAreaName}</TableCell></td>}
                 <td css={styles.bookmarkButtonCell}>
                   <BookmarkButton
                     areAllBookmarksLoading={isLoading}

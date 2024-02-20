@@ -46,6 +46,9 @@ const handler: NextApiHandler = async (req, res) =>
   const allUserUploads = await db.query.uploadedFiles.findMany();
   const allUsersDocuments = await db.query.documents.findMany();
   const allForumQuestions = await db.query.forumQuestions.findMany();
+  const forumQuestionsToLegalFields = await db.query.forumQuestionsToLegalFields.findMany();
+  const forumQuestionsToSubfields = await db.query.forumQuestionToSubfields.findMany();
+  const forumQuestionsToTopics = await db.query.forumQuestionToTopics.findMany();
   const allLegalFields = await getAllLegalFields();
   const allSubfields = await getAllSubfields();
   const allTopics = await getAllTopics();
@@ -64,6 +67,9 @@ const handler: NextApiHandler = async (req, res) =>
     allLegalFields,
     allSubfields,
     allTopics,
+    forumQuestionsToLegalFields,
+    forumQuestionsToSubfields,
+    forumQuestionsToTopics,
     questions: allForumQuestions
   });
 
@@ -101,7 +107,7 @@ const handler: NextApiHandler = async (req, res) =>
   const documentsSearchableAttributes: DocumentSearchItemNodes[] = ["name", "content"];
   const updateDocumentsRankingRulesTask = await meiliSearchAdmin.index(searchIndices.userDocuments).updateSearchableAttributes(documentsSearchableAttributes);
 
-  const forumQuestionsSearchableAttributes: ForumQuestionSearchItemNodes[] = ["title", "text", "legalFieldName", "subfieldName", "topicName"];
+  const forumQuestionsSearchableAttributes: ForumQuestionSearchItemNodes[] = ["title", "text", "legalFields.name", "subfields.name", "topics.name"];
   const updateForumQuestionsRankingRulesTask = await meiliSearchAdmin.index(searchIndices.forumQuestions).updateSearchableAttributes(forumQuestionsSearchableAttributes);
 
   // Displayed attributes

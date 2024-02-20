@@ -1,6 +1,6 @@
 import { CustomLink } from "@/components/atoms/CustomLink/CustomLink";
-import Tag from "@/components/atoms/tag/Tag";
 import { Search } from "@/components/Icons/Search";
+import LegalFieldsAndTopicsTags from "@/components/molecules/legalFieldsAndTopicsTags/LegalFieldsAndTopicsTags";
 import EmptyStateCard from "@/components/organisms/emptyStateCard/EmptyStateCard";
 import { useForumQuestionsSearchResults } from "@/hooks/useForumQuestionsSearchResults";
 import { useForumQuestionsSearchStore } from "@/stores/forumQuestionsSearch.store";
@@ -28,7 +28,13 @@ const SearchBar: FunctionComponent = () =>
       zIndex={20}
       width={"100%"}
       offset={0}>
-      <form css={styles.form} onSubmit={e => e.preventDefault()}>
+      <form css={styles.form} onSubmit={e => e.preventDefault()} autoComplete={"off"}>
+        <input
+          autoComplete="false"
+          name="hidden"
+          type="text"
+          style={{ display: "none" }}
+        />
         <Popover.Target>
           <Input
             data-autofocus
@@ -55,12 +61,18 @@ const SearchBar: FunctionComponent = () =>
           )}
           {searchResults?.hits.map((question) => (
             <div key={question.id} css={styles.searchResult}>
+              <div css={styles.overflowOverlay}/>
               <Link href={getForumQuestionUrl(question)}>
                 <CustomLink styleType="link-content-title" component="p">
                   {question.title}
                 </CustomLink>
               </Link>
-              <Tag title={question.legalFieldName}/>
+              <LegalFieldsAndTopicsTags
+                canBeMultiline={false}
+                topicsIds={question.topics.map((topic) => topic.id)}
+                legalFieldId={question.legalFields.map((field) => field.id)[0]}
+                subfieldsIds={question.subfields.map((subfield) => subfield.id)}
+              />
             </div>
           ))}
         </div>

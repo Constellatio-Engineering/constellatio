@@ -1,5 +1,4 @@
 import QuestionModal from "@/components/pages/forumOverviewPage/questionModal/QuestionModal";
-import { type ForumQuestion } from "@/db/schema";
 import { useUpdateQuestion } from "@/hooks/useUpdateQuestion";
 import { type PostQuestionSchema } from "@/schemas/forum/postQuestion.schema";
 import { questionUpdateSchema } from "@/schemas/forum/updateQuestion.schema";
@@ -10,13 +9,13 @@ import { useForm, zodResolver } from "@mantine/form";
 import React, { type FunctionComponent } from "react";
 
 const getFormValuesFromQuestion = (
-  question: Pick<ForumQuestion, "text" | "legalFieldId" | "subfieldId" | "topicId" | "title">
+  question: Pick<Question, "text" | "legalFieldId" | "subfieldsIds" | "topicsIds" | "title">
 ): PostQuestionSchema => ({
   legalFieldId: question.legalFieldId,
-  subfieldId: question.subfieldId,
+  subfieldsIds: question.subfieldsIds,
   text: question.text,
   title: question.title,
-  topicId: question.topicId,
+  topicsIds: question.topicsIds,
 });
 
 const EditQuestionModal: FunctionComponent<Question> = (originalQuestion) =>
@@ -44,6 +43,7 @@ const EditQuestionModal: FunctionComponent<Question> = (originalQuestion) =>
 
   return (
     <QuestionModal
+      variant={"edit"}
       error={postQuestionError}
       form={form}
       isLoading={isLoading}

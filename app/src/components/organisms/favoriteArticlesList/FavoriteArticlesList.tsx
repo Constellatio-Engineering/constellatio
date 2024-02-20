@@ -1,8 +1,8 @@
 import { Svg } from "@/basic-components/SVG/Svg";
+import * as styles from "@/components/organisms/favoriteCasesList/FavoriteCasesList.styles";
 import { type IGenMainCategory, type IGenArticle } from "@/services/graphql/__generated/sdk";
 import { type Nullable } from "@/utils/types";
 
-import { Container } from "@mantine/core";
 import React, { type FunctionComponent } from "react";
 
 import ItemBlock from "../caseBlock/ItemBlock";
@@ -19,8 +19,8 @@ const FavoriteArticlesList: FunctionComponent<FavoriteArticlesListProps> = ({
 }) => 
 {
   return (
-    <Container maw={1440}>
-      {bookmarkedArticlesMainCategoriesUnique.map((mainCategoryBlock, blockIndex) => 
+    <div css={styles.favoritesListContainer}>
+      {bookmarkedArticlesMainCategoriesUnique.map((mainCategoryBlock, blockIndex) =>
       {
         const items = ArticlesByMainCategory(mainCategoryBlock.id);
 
@@ -45,7 +45,7 @@ const FavoriteArticlesList: FunctionComponent<FavoriteArticlesListProps> = ({
           </React.Fragment>
         );
       })}
-    </Container>
+    </div>
   );
 };
 

@@ -68,7 +68,7 @@ export const tableHeaders = ({
               title: "Bearbeitungszeit",
             },
             {
-              title: "Rechtsgebiet",
+              title: "Teilgebiet",
             },
             {
               title: "Thema",
@@ -90,7 +90,7 @@ export const tableHeaders = ({
               title: "Bearbeitungszeit",
             },
             {
-              title: "Rechtsgebiet",
+              title: "Teilgebiet",
             },
             {
               title: "Thema",
@@ -127,7 +127,7 @@ export const tableHeaders = ({
               title: "Artikel",
             },
             {
-              title: "Rechtsgebiet",
+              title: "Teilgebiet",
             },
             {
               title: "Thema",
@@ -135,9 +135,6 @@ export const tableHeaders = ({
             {
               title: "",
             },
-            // {
-            //   title: "",
-            // },
           ];
 
         case "search":
@@ -146,7 +143,7 @@ export const tableHeaders = ({
               title: "Artikel",
             },
             {
-              title: "Rechtsgebiet",
+              title: "Teilgebiet",
             },
             {
               title: "Thema",

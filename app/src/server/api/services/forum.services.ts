@@ -1,13 +1,21 @@
 /* eslint-disable max-lines */
 import { db } from "@/db/connection";
 import {
-  answerUpvotes, correctAnswers, forumAnswers, forumQuestions, questionUpvotes, users
+  answerUpvotes,
+  correctAnswers,
+  forumAnswers,
+  forumQuestions,
+  forumQuestionsToLegalFields,
+  forumQuestionToSubfields,
+  forumQuestionToTopics,
+  questionUpvotes,
+  users
 } from "@/db/schema";
 import { type GetAnswersSchema } from "@/schemas/forum/getAnswers.schema";
 import { type GetQuestionsSchema } from "@/schemas/forum/getQuestions.schema";
 
 import {
-  and, asc, count, desc, eq, getTableColumns, lt, lte, or, type SQL, sql
+  and, asc, count, desc, eq, getTableColumns, inArray, lt, lte, or, type SQL, sql 
 } from "drizzle-orm";
 
 type GetUpvotesForQuestion = (questionId: string) => Promise<number>;
@@ -38,6 +46,11 @@ type GetQuestionsParams = GetInfiniteQuestionsParams | GetQuestionByIdParams;
 
 export const getQuestions = async (params: GetQuestionsParams) => // eslint-disable-line @typescript-eslint/explicit-function-return-type
 {
+  if(params.getQuestionsType === "infinite" && params.questionIds && params.questionIds.length === 0)
+  {
+    return [];
+  }
+
   const userUpvotesSubQuery = db
     .$with("UserUpvotes")
     .as(db
@@ -46,18 +59,27 @@ export const getQuestions = async (params: GetQuestionsParams) => // eslint-disa
       .where(eq(questionUpvotes.userId, params.userId))
     );
 
-  const countUpvotesSubquery = db
+  const subquery = db
     .with(userUpvotesSubQuery)
     .select({
       ...getTableColumns(forumQuestions),
+      answersCount: count(forumAnswers.id).as("answersCount"),
+      hasCorrectAnswer: sql<boolean>`case when ${correctAnswers.questionId} is null then false else true end`.as("hasCorrectAnswer"),
       isUpvoted: sql<boolean>`case when ${userUpvotesSubQuery.questionId} is null then false else true end`.as("isUpvoted"),
       upvotesCount: count(questionUpvotes.questionId).as("upvotesCount"),
     })
     .from(forumQuestions)
     .leftJoin(userUpvotesSubQuery, eq(forumQuestions.id, userUpvotesSubQuery.questionId))
     .leftJoin(questionUpvotes, eq(forumQuestions.id, questionUpvotes.questionId))
-    .where(params.getQuestionsType === "byId" ? eq(forumQuestions.id, params.questionId) : undefined)
-    .groupBy(forumQuestions.id, userUpvotesSubQuery.questionId)
+    .leftJoin(forumAnswers, eq(forumQuestions.id, forumAnswers.parentQuestionId))
+    .leftJoin(correctAnswers, eq(forumQuestions.id, correctAnswers.questionId))
+    .where(params.getQuestionsType === "byId"
+      ? eq(forumQuestions.id, params.questionId)
+      : params.questionIds != null
+        ? inArray(forumQuestions.id, params.questionIds)
+        : undefined
+    )
+    .groupBy(forumQuestions.id, userUpvotesSubQuery.questionId, correctAnswers.questionId)
     .as("questionUpvotesSq");
 
   let queryConditions: SQL<unknown> | undefined;
@@ -73,9 +95,9 @@ export const getQuestions = async (params: GetQuestionsParams) => // eslint-disa
       {
         if(cursor.index != null)
         {
-          queryConditions = lte(countUpvotesSubquery.index, cursor.index);
+          queryConditions = lte(subquery.index, cursor.index);
         }
-        orderBy = desc(countUpvotesSubquery.index);
+        orderBy = desc(subquery.index);
         break;
       }
       case "upvotes":
@@ -84,56 +106,87 @@ export const getQuestions = async (params: GetQuestionsParams) => // eslint-disa
         {
           if(cursor.index == null)
           {
-            queryConditions = lte(countUpvotesSubquery.upvotesCount, cursor.upvotes);
+            queryConditions = lte(subquery.upvotesCount, cursor.upvotes);
           }
           else
           {
             // If the upvotes count is the same, the newer question ranks higher
             queryConditions = or(
-              lt(countUpvotesSubquery.upvotesCount, cursor.upvotes),
+              lt(subquery.upvotesCount, cursor.upvotes),
               and(
-                eq(countUpvotesSubquery.upvotesCount, cursor.upvotes),
-                lte(countUpvotesSubquery.index, cursor.index)
+                eq(subquery.upvotesCount, cursor.upvotes),
+                lte(subquery.index, cursor.index)
               )
             );
           }
         }
 
-        orderBy = [desc(countUpvotesSubquery.upvotesCount), desc(countUpvotesSubquery.index)];
+        orderBy = [desc(subquery.upvotesCount), desc(subquery.index)];
         break;
       }
     }
   }
 
   const questionsSortedWithAuthor = await db
-    .with(countUpvotesSubquery)
+    .with(subquery)
     .select({
+      answersCount: subquery.answersCount,
       author: {
         id: users.id,
         username: users.displayName,
       },
-      createdAt: countUpvotesSubquery.createdAt,
-      hasCorrectAnswer: sql<boolean>`case when ${correctAnswers.questionId} is null then false else true end`.as("hasCorrectAnswer"),
-      id: countUpvotesSubquery.id,
-      index: countUpvotesSubquery.index,
-      isUpvoted: countUpvotesSubquery.isUpvoted,
-      legalFieldId: countUpvotesSubquery.legalFieldId,
-      slug: countUpvotesSubquery.slug,
-      subfieldId: countUpvotesSubquery.subfieldId,
-      text: countUpvotesSubquery.text,
-      title: countUpvotesSubquery.title,
-      topicId: countUpvotesSubquery.topicId,
-      updatedAt: countUpvotesSubquery.updatedAt,
-      upvotesCount: countUpvotesSubquery.upvotesCount,
+      createdAt: subquery.createdAt,
+      hasCorrectAnswer: subquery.hasCorrectAnswer,
+      id: subquery.id,
+      index: subquery.index,
+      isUpvoted: subquery.isUpvoted,
+      slug: subquery.slug,
+      text: subquery.text,
+      title: subquery.title,
+      updatedAt: subquery.updatedAt,
+      upvotesCount: subquery.upvotesCount,
     })
-    .from(countUpvotesSubquery)
+    .from(subquery)
     .where(queryConditions)
-    .innerJoin(users, eq(countUpvotesSubquery.userId, users.id))
-    .leftJoin(correctAnswers, eq(countUpvotesSubquery.id, correctAnswers.questionId))
+    .innerJoin(users, eq(subquery.userId, users.id))
     .orderBy(...(Array.isArray(orderBy) ? orderBy : [orderBy]))
     .limit(params.getQuestionsType === "byId" ? 1 : params.limit + 1);
 
-  return questionsSortedWithAuthor;
+  const questionIds = questionsSortedWithAuthor.map(question => question.id);
+
+  const questionsWithLegalAreasAndTopics = await db.query.forumQuestions.findMany({
+    where: inArray(forumQuestions.id, questionIds),
+    with: {
+      forumQuestionToLegalFields: true,
+      forumQuestionToSubfields: true,
+      forumQuestionToTopics: true,
+    }
+  });
+
+  const result = questionsSortedWithAuthor.map(question =>
+  {
+    let legalFieldId: string | undefined;
+    let subfieldsIds: string[] = [];
+    let topicsIds: string[] = [];
+
+    const questionData = questionsWithLegalAreasAndTopics.find(q => q.id === question.id);
+
+    if(questionData)
+    {
+      legalFieldId = questionData.forumQuestionToLegalFields.map(lf => lf.legalFieldId)[0];
+      subfieldsIds = questionData.forumQuestionToSubfields.map(sf => sf.subfieldId);
+      topicsIds = questionData.forumQuestionToTopics.map(t => t.topicId);
+    }
+
+    return {
+      ...question,
+      legalFieldId,
+      subfieldsIds,
+      topicsIds
+    };
+  });
+
+  return result;
 };
 
 type GetInfiniteAnswersParams = GetAnswersSchema & {
@@ -232,4 +285,59 @@ export const getAnswers = async (params: GetAnswersParams) => // eslint-disable-
     .orderBy(...(Array.isArray(orderBy) ? orderBy : [orderBy]));
 
   return answersSortedWithAuthor;
+};
+
+export const resetLegalFieldsAndTopicsForQuestion = async (questionId: string, dbConnection: typeof db): Promise<void> =>
+{
+  const deleteQuestionToLegalFields = dbConnection.delete(forumQuestionsToLegalFields).where(eq(forumQuestionsToLegalFields.questionId, questionId));
+  const deleteQuestionToSubfields = dbConnection.delete(forumQuestionToSubfields).where(eq(forumQuestionToSubfields.questionId, questionId));
+  const deleteQuestionToTopics = dbConnection.delete(forumQuestionToTopics).where(eq(forumQuestionToTopics.questionId, questionId));
+
+  await Promise.all([
+    deleteQuestionToLegalFields,
+    deleteQuestionToSubfields,
+    deleteQuestionToTopics
+  ]);
+};
+
+export const insertLegalFieldsAndTopicsForQuestion = async ({
+  dbConnection,
+  legalFieldId,
+  questionId,
+  subfieldsIds,
+  topicsIds
+}: {
+  dbConnection: typeof db;
+  legalFieldId: string;
+  questionId: string;
+  subfieldsIds: string[];
+  topicsIds: string[];
+}): Promise<void> =>
+{
+  const insertQuestionToLegalFields = dbConnection
+    .insert(forumQuestionsToLegalFields)
+    .values({
+      legalFieldId,
+      questionId
+    });
+
+  const insertQuestionToSubfields = subfieldsIds.length > 0 && dbConnection
+    .insert(forumQuestionToSubfields)
+    .values(subfieldsIds.map(subfieldId => ({
+      questionId,
+      subfieldId
+    })));
+
+  const insertQuestionToTopics = topicsIds.length > 0 && dbConnection
+    .insert(forumQuestionToTopics)
+    .values(topicsIds.map(topicId => ({
+      questionId,
+      topicId
+    })));
+
+  await Promise.all([
+    insertQuestionToLegalFields,
+    insertQuestionToSubfields,
+    insertQuestionToTopics
+  ].filter(Boolean));
 };

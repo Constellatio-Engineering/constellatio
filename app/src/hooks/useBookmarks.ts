@@ -9,7 +9,12 @@ import { type inferReactQueryProcedureOptions } from "@trpc/react-query";
 type UseBookmarks = (
   resourceType: BookmarkResourceType | undefined,
   options?: inferReactQueryProcedureOptions<AppRouter>["bookmarks"]["getAllBookmarks"]
-) => UseQueryResult<{ bookmarks: BookmarkFiltered[] }>;
+) => UseQueryResult<{
+  articlesBookmarks: BookmarkFiltered[];
+  bookmarks: BookmarkFiltered[];
+  casesBookmarks: BookmarkFiltered[];
+  questionsBookmarks: BookmarkFiltered[];
+}>;
 
 const useBookmarks: UseBookmarks = (resourceType, options) =>
 {
@@ -20,9 +25,12 @@ const useBookmarks: UseBookmarks = (resourceType, options) =>
   });
 
   return {
+    articlesBookmarks: bookmarks?.filter(bookmark => bookmark?.resourceType === "article") ?? [],
     bookmarks: bookmarks ?? [],
+    casesBookmarks: bookmarks?.filter(bookmark => bookmark?.resourceType === "case") ?? [],
     error,
-    isLoading
+    isLoading,
+    questionsBookmarks: bookmarks?.filter(bookmark => bookmark?.resourceType === "forumQuestion") ?? []
   };
 };
 

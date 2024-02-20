@@ -1,5 +1,5 @@
 {
-  "id": "881357d5-8d07-4adb-87db-02a6aeba33e8",
+  "id": "30ad2213-f269-4d02-9771-2bda114c91e2",
   "prevId": "00000000-0000-0000-0000-000000000000",
   "version": "5",
   "dialect": "pg",
@@ -479,7 +479,7 @@
           "columnsTo": [
             "Id"
           ],
-          "onDelete": "no action",
+          "onDelete": "cascade",
           "onUpdate": "no action"
         },
         "CorrectAnswer_AnswerId_ForumAnswer_Id_fk": {
@@ -492,7 +492,7 @@
           "columnsTo": [
             "Id"
           ],
-          "onDelete": "no action",
+          "onDelete": "cascade",
           "onUpdate": "no action"
         }
       },
@@ -690,6 +690,94 @@
       "compositePrimaryKeys": {},
       "uniqueConstraints": {}
     },
+    "ForumQuestion_to_Subfield": {
+      "name": "ForumQuestion_to_Subfield",
+      "schema": "",
+      "columns": {
+        "QuestionId": {
+          "name": "QuestionId",
+          "type": "uuid",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "SubfieldId": {
+          "name": "SubfieldId",
+          "type": "uuid",
+          "primaryKey": false,
+          "notNull": true
+        }
+      },
+      "indexes": {},
+      "foreignKeys": {
+        "ForumQuestion_to_Subfield_QuestionId_ForumQuestion_Id_fk": {
+          "name": "ForumQuestion_to_Subfield_QuestionId_ForumQuestion_Id_fk",
+          "tableFrom": "ForumQuestion_to_Subfield",
+          "tableTo": "ForumQuestion",
+          "columnsFrom": [
+            "QuestionId"
+          ],
+          "columnsTo": [
+            "Id"
+          ],
+          "onDelete": "cascade",
+          "onUpdate": "no action"
+        }
+      },
+      "compositePrimaryKeys": {
+        "ForumQuestion_to_Subfield_QuestionId_SubfieldId_pk": {
+          "name": "ForumQuestion_to_Subfield_QuestionId_SubfieldId_pk",
+          "columns": [
+            "QuestionId",
+            "SubfieldId"
+          ]
+        }
+      },
+      "uniqueConstraints": {}
+    },
+    "ForumQuestion_to_Topic": {
+      "name": "ForumQuestion_to_Topic",
+      "schema": "",
+      "columns": {
+        "QuestionId": {
+          "name": "QuestionId",
+          "type": "uuid",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "TopicId": {
+          "name": "TopicId",
+          "type": "uuid",
+          "primaryKey": false,
+          "notNull": true
+        }
+      },
+      "indexes": {},
+      "foreignKeys": {
+        "ForumQuestion_to_Topic_QuestionId_ForumQuestion_Id_fk": {
+          "name": "ForumQuestion_to_Topic_QuestionId_ForumQuestion_Id_fk",
+          "tableFrom": "ForumQuestion_to_Topic",
+          "tableTo": "ForumQuestion",
+          "columnsFrom": [
+            "QuestionId"
+          ],
+          "columnsTo": [
+            "Id"
+          ],
+          "onDelete": "cascade",
+          "onUpdate": "no action"
+        }
+      },
+      "compositePrimaryKeys": {
+        "ForumQuestion_to_Topic_QuestionId_TopicId_pk": {
+          "name": "ForumQuestion_to_Topic_QuestionId_TopicId_pk",
+          "columns": [
+            "QuestionId",
+            "TopicId"
+          ]
+        }
+      },
+      "uniqueConstraints": {}
+    },
     "ForumQuestion": {
       "name": "ForumQuestion",
       "schema": "",
@@ -744,24 +832,6 @@
           "type": "text",
           "primaryKey": false,
           "notNull": true
-        },
-        "LegalFieldId": {
-          "name": "LegalFieldId",
-          "type": "uuid",
-          "primaryKey": false,
-          "notNull": true
-        },
-        "SubfieldId": {
-          "name": "SubfieldId",
-          "type": "uuid",
-          "primaryKey": false,
-          "notNull": false
-        },
-        "TopicId": {
-          "name": "TopicId",
-          "type": "uuid",
-          "primaryKey": false,
-          "notNull": false
         }
       },
       "indexes": {
@@ -790,6 +860,50 @@
         }
       },
       "compositePrimaryKeys": {},
+      "uniqueConstraints": {}
+    },
+    "ForumQuestion_to_LegalField": {
+      "name": "ForumQuestion_to_LegalField",
+      "schema": "",
+      "columns": {
+        "QuestionId": {
+          "name": "QuestionId",
+          "type": "uuid",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "LegalFieldId": {
+          "name": "LegalFieldId",
+          "type": "uuid",
+          "primaryKey": false,
+          "notNull": true
+        }
+      },
+      "indexes": {},
+      "foreignKeys": {
+        "ForumQuestion_to_LegalField_QuestionId_ForumQuestion_Id_fk": {
+          "name": "ForumQuestion_to_LegalField_QuestionId_ForumQuestion_Id_fk",
+          "tableFrom": "ForumQuestion_to_LegalField",
+          "tableTo": "ForumQuestion",
+          "columnsFrom": [
+            "QuestionId"
+          ],
+          "columnsTo": [
+            "Id"
+          ],
+          "onDelete": "cascade",
+          "onUpdate": "no action"
+        }
+      },
+      "compositePrimaryKeys": {
+        "ForumQuestion_to_LegalField_QuestionId_LegalFieldId_pk": {
+          "name": "ForumQuestion_to_LegalField_QuestionId_LegalFieldId_pk",
+          "columns": [
+            "QuestionId",
+            "LegalFieldId"
+          ]
+        }
+      },
       "uniqueConstraints": {}
     },
     "GameProgress": {

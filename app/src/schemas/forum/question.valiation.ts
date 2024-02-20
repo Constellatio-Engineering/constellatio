@@ -28,7 +28,25 @@ export const questionTextValidation = z.string().nullable().transform((value, co
   return value;
 });
 
-export const legalFieldIdValidation = getIdValidationWithMessage("Bitte wähle ein Rechtsgebiet aus");
-export const subfieldIdValidation = idValidation.nullable();
-export const topicIdValidation = idValidation.nullable();
-export const titleValidation = z.string().min(10);
+/* export const legalFieldsIdsValidation = z
+  .array(idValidation)
+  .min(1, { message: "Bitte wähle mindestens ein Rechtsgebiet aus" })
+  .max(1, { message: "Du kannst nur ein Rechtsgebiet auswählen" });*/
+
+export const legalFieldIdValidation = z.string().nullish().transform((value, context) =>
+{
+  if(!value)
+  {
+    context.addIssue({
+      code: z.ZodIssueCode.custom,
+      message: "Bitte wähle ein Rechtsgebiet aus",
+    });
+    return z.NEVER;
+  }
+
+  return value;
+});
+
+export const subfieldsIdsValidation = z.array(idValidation);
+export const topicsIdsValidation = z.array(idValidation);
+export const titleValidation = z.string().min(10).max(150);

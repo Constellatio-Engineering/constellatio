@@ -1,6 +1,7 @@
 import Tag from "@/components/atoms/tag/Tag";
 import { Chat } from "@/components/Icons/Chat";
 import { Check } from "@/components/Icons/Check";
+import LegalFieldsAndTopicsTags from "@/components/molecules/legalFieldsAndTopicsTags/LegalFieldsAndTopicsTags";
 import BookmarkButton from "@/components/organisms/caseBlock/BookmarkButton/BookmarkButton";
 import EditQuestionModal from "@/components/pages/forumOverviewPage/editQuestionModal/EditQuestionModal";
 import { TagsSkeleton } from "@/components/pages/forumOverviewPage/questionsSkeleton/QuestionsSkeleton";
@@ -28,24 +29,13 @@ const QuestionListItem: FunctionComponent<Props> = ({ questionId }) =>
   const { bookmarks: questionBookmarks, isLoading: isGetQuestionBookmarksLoading } = useBookmarks("forumQuestion", { enabled: true });
   const { data: question, /* isFetching*/ } = useForumQuestionDetails(questionId);
 
-  const {
-    allLegalFields,
-    allSubfields,
-    allTopics,
-    isLoading: areLegalFieldsAndTopicsLoading
-  } = useLegalFieldsAndTopics();
-
   if(question == null)
   {
     return <p>Question not found</p>;
   }
 
-  const legalField = allLegalFields.find((field) => field.id === question.legalFieldId);
-  const subfield = allSubfields.find((subfield) => subfield.id === question.subfieldId);
-  const topic = allTopics.find((topic) => topic.id === question.topicId);
-
   return (
-    <Fragment>
+    <Link href={getForumQuestionUrl(question)} style={{ color: "inherit" }} title={question.title}>
       <EditQuestionModal {...question}/>
       <div css={styles.questionContentWrapper}>
         <div css={styles.upvoteColumn}>
@@ -59,9 +49,7 @@ const QuestionListItem: FunctionComponent<Props> = ({ questionId }) =>
         <div css={styles.contentColumn}>
           <div css={styles.titleWrapper}>
             <div css={styles.titleAndCheckmarkWrapper}>
-              <Link href={getForumQuestionUrl(question)} css={styles.titleLink}>
-                <Title order={2} css={styles.title}>{question.title}</Title>
-              </Link>
+              <Title order={2} css={styles.title}>{question.title}</Title>
               {question.hasCorrectAnswer && (
                 <Tooltip
                   label={"Mindestens eine Antwort wurde als korrekt markiert."}
@@ -111,23 +99,20 @@ const QuestionListItem: FunctionComponent<Props> = ({ questionId }) =>
             </p>
           </div>
           <div css={styles.bottomWrapper}>
-            {areLegalFieldsAndTopicsLoading ? (
-              <TagsSkeleton/>
-            ) : (
-              <div css={styles.tagsWrapper}>
-                {legalField && <Tag title={legalField.mainCategory}/>}
-                {subfield && <Tag title={subfield.legalAreaName}/>}
-                {topic && <Tag title={topic.topicName}/>}
-              </div>
-            )}
+            <LegalFieldsAndTopicsTags
+              canBeMultiline={true}
+              topicsIds={question.topicsIds}
+              legalFieldId={question.legalFieldId}
+              subfieldsIds={question.subfieldsIds}
+            />
             <div css={styles.answersCountWrapper}>
               <Chat size={20}/>
-              <p>12</p>
+              <p>{question.answersCount}</p>
             </div>
           </div>
         </div>
       </div>
-    </Fragment>
+    </Link>
   );
 };
 

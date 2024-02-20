@@ -12,11 +12,8 @@ export const wrapper = css`
   }
 `;
 
-export const list = css`
+export const listWrapper = css`
   margin-top: 24px;
-  display: flex;
-  gap: 16px;
-  flex-wrap: wrap;
 `;
 
 export const switcher = css`
