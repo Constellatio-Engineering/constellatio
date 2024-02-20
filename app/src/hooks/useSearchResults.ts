@@ -88,6 +88,7 @@ const useSearchResults: UseSearchResults = () =>
     refetchOnReconnect: false,
     refetchOnWindowFocus: false,
     retry: false,
+    staleTime: 0,
   });
 
   return { isLoading, refetch, searchResults };

@@ -1,4 +1,4 @@
-import Tag, { type ITag } from "@/components/atoms/tag/Tag";
+import Tag from "@/components/atoms/tag/Tag";
 import { TagsSkeleton } from "@/components/pages/forumOverviewPage/questionsSkeleton/QuestionsSkeleton";
 import { useLegalFieldsAndTopics } from "@/hooks/useLegalFieldsAndTopics";
 import { type Nullable } from "@/utils/types";
@@ -8,15 +8,15 @@ import React, { type FunctionComponent } from "react";
 import * as styles from "./LegalFieldsAndTopicsTags.styles";
 
 type TagsProps = {
-  readonly areTagsClickable: ITag["isNotClickable"];
   readonly legalFieldId: Nullable<string>;
+  readonly shouldRenderTagsAsLinks?: boolean;
   readonly subfieldsIds: string[];
   readonly topicsIds: string[];
 };
 
 const Tags: FunctionComponent<TagsProps> = ({
-  areTagsClickable,
   legalFieldId,
+  shouldRenderTagsAsLinks = true,
   subfieldsIds,
   topicsIds
 }) =>
@@ -29,13 +29,13 @@ const Tags: FunctionComponent<TagsProps> = ({
   return (
     <>
       {legalField && (
-        <Tag key={legalField.id} title={legalField.mainCategory} isNotClickable={!areTagsClickable}/>
+        <Tag key={legalField.id} title={legalField.mainCategory} shouldRenderAsLink={shouldRenderTagsAsLinks}/>
       )}
       {subfields.map((subfield) => (
-        <Tag key={subfield.id} title={subfield.legalAreaName} isNotClickable={!areTagsClickable}/>
+        <Tag key={subfield.id} title={subfield.legalAreaName} shouldRenderAsLink={shouldRenderTagsAsLinks}/>
       ))}
       {topics.map((topic) => (
-        <Tag key={topic.id} title={topic.topicName} isNotClickable={!areTagsClickable}/>
+        <Tag key={topic.id} title={topic.topicName} shouldRenderAsLink={shouldRenderTagsAsLinks}/>
       ))}
     </>
   );

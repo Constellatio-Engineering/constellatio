@@ -66,12 +66,19 @@ export const suggestionsLeft = (theme: MantineTheme) => css`
 	}
 
 	.suggestion__section {
+    max-width: 100%;
+    overflow: hidden;
 		&__link {
+      max-width: 100%;
+      text-overflow: ellipsis;
+      white-space: nowrap;
+      overflow: hidden;
+      padding-right: 8px;
 			> p {
 				font-size: 18px;
 				font-weight: 400;
 				line-height: 28px;
-				max-width: 580px;
+				max-width: 100%;
 				overflow: hidden;
 				text-overflow: ellipsis;
 				white-space: nowrap;

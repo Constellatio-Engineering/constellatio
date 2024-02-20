@@ -63,12 +63,12 @@ const SearchBar: FunctionComponent = () =>
             <div key={question.id} css={styles.searchResult}>
               <div css={styles.overflowOverlay}/>
               <Link href={getForumQuestionUrl(question)} css={styles.searchResultLink}>
-                <CustomLink styleType="link-content-title" component="span">
+                <CustomLink styleType="link-content-title" component="span" style={{ marginRight: 4 }}>
                   {question.title}
                 </CustomLink>
                 <LegalFieldsAndTopicsTags
                   displayMode={"inline"}
-                  areTagsClickable={false}
+                  shouldRenderTagsAsLinks={false}
                   topicsIds={question.topics.map((topic) => topic.id)}
                   legalFieldId={question.legalFields.map((field) => field.id)[0]}
                   subfieldsIds={question.subfields.map((subfield) => subfield.id)}

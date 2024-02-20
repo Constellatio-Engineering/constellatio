@@ -1,4 +1,4 @@
-import { getIdValidationWithMessage, idValidation } from "@/schemas/common.validation";
+import { idValidation } from "@/schemas/common.validation";
 import { removeHtmlTagsFromString } from "@/utils/utils";
 
 import { z } from "zod";
@@ -49,4 +49,4 @@ export const legalFieldIdValidation = z.string().nullish().transform((value, con
 
 export const subfieldsIdsValidation = z.array(idValidation);
 export const topicsIdsValidation = z.array(idValidation);
-export const titleValidation = z.string().min(10).max(150);
+export const titleValidation = z.string().min(10).max(150).transform(title => title.trim());

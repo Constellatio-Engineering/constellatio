@@ -32,6 +32,7 @@ const SearchOverlayLeftSide: FunctionComponent<SearchOverlayLeftSideProps> = ({ 
             <Link
               href={`${appPaths.search}?find=${result}`}
               key={index}
+              title={result}
               className="suggestion__section__link">
               <CustomLink styleType="link-content-title" component="p">
                 {result}
@@ -44,6 +45,7 @@ const SearchOverlayLeftSide: FunctionComponent<SearchOverlayLeftSideProps> = ({ 
             <Link
               href={`${appPaths.search}?find=${result?.searchField}`}
               key={result?.id}
+              title={result?.searchField || ""}
               className="suggestion__section__link">
               <CustomLink styleType="link-content-title" component="p">
                 {result?.searchField}

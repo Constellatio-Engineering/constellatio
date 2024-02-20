@@ -9,6 +9,10 @@ export const tag = (theme: MantineTheme) => css`
   font-size: 14px;
 	white-space: nowrap;
 	color: ${theme.colors["neutrals-01"][9]};
+  transition: background 0.15s ease;
+  &:hover {
+    background: ${theme.colors["neutrals-01"][4]};
+  }
   * {
     font-size: inherit;
   }
