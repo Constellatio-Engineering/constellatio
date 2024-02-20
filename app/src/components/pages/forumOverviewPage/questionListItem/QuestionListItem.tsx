@@ -35,7 +35,7 @@ const QuestionListItem: FunctionComponent<Props> = ({ questionId }) =>
   }
 
   return (
-    <Fragment>
+    <Link href={getForumQuestionUrl(question)} style={{ color: "inherit" }} title={question.title}>
       <EditQuestionModal {...question}/>
       <div css={styles.questionContentWrapper}>
         <div css={styles.upvoteColumn}>
@@ -49,9 +49,7 @@ const QuestionListItem: FunctionComponent<Props> = ({ questionId }) =>
         <div css={styles.contentColumn}>
           <div css={styles.titleWrapper}>
             <div css={styles.titleAndCheckmarkWrapper}>
-              <Link href={getForumQuestionUrl(question)} css={styles.titleLink}>
-                <Title order={2} css={styles.title}>{question.title}</Title>
-              </Link>
+              <Title order={2} css={styles.title}>{question.title}</Title>
               {question.hasCorrectAnswer && (
                 <Tooltip
                   label={"Mindestens eine Antwort wurde als korrekt markiert."}
@@ -114,7 +112,7 @@ const QuestionListItem: FunctionComponent<Props> = ({ questionId }) =>
           </div>
         </div>
       </div>
-    </Fragment>
+    </Link>
   );
 };
 

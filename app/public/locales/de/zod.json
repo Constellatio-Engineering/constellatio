@@ -59,7 +59,7 @@
       },
       "string": {
         "exact": "Muss genau {{maximum}} Zeichen enthalten",
-        "inclusive": "String darf höchstens {{maximum}} Zeichen enthalten",
+        "inclusive": "Darf höchstens {{maximum}} Zeichen enthalten",
         "not_inclusive": "Muss weniger als {{maximum}} Zeichen enthalten"
       },
       "number": {

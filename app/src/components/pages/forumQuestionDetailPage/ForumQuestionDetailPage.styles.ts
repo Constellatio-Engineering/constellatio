@@ -42,6 +42,7 @@ export const forumListItem = css`
   box-shadow: 0 8px 44px rgba(0, 0, 0, 0.04);
   border: none;
   z-index: 4;
+  padding: 12px 0px 6px;
 `;
 
 export const yellowTopBar = css`
@@ -75,24 +76,21 @@ export const contentColumn = css`
 export const titleWrapper = css`
   display: flex;
   justify-content: space-between;
-  align-items: center;
+  align-items: flex-start;
   overflow: hidden;
   margin-bottom: 12px;
 `;
 
 export const title = css`
-  white-space: nowrap;
-  word-break: keep-all;
-  text-overflow: ellipsis;
   font-weight: 700;
   font-size: 28px;
   min-width: 0;
-  overflow: hidden;
 `;
 
 export const bookmarkButtonWrapper = css`
   min-width: max-content;
   padding-left: 40px;
+  padding-top: 4px;
 `;
 
 export const authorAndDateWrapper = css`

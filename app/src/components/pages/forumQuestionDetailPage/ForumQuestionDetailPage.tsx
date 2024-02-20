@@ -181,7 +181,7 @@ export const ForumQuestionDetailPage: FunctionComponent<Props> = ({ questionId }
         <ContentWrapper stylesOverrides={styles.contentWrapper}>
           <Link href={appPaths.forum} css={styles.backToForumLink}>
             <ExpandIcon size={20}/>
-            <span>Zurück zum Forum</span>
+            <span>Zurück zur Übersicht</span>
           </Link>
           <ForumListItem stylesOverrides={styles.forumListItem}>
             <div css={styles.yellowTopBar}/>

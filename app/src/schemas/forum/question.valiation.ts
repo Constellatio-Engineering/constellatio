@@ -49,4 +49,4 @@ export const legalFieldIdValidation = z.string().nullish().transform((value, con
 
 export const subfieldsIdsValidation = z.array(idValidation);
 export const topicsIdsValidation = z.array(idValidation);
-export const titleValidation = z.string().min(10);
+export const titleValidation = z.string().min(10).max(150);

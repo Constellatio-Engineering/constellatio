@@ -24,7 +24,7 @@ export const contentColumn = css`
 export const titleWrapper = css`
   display: flex;
   justify-content: space-between;
-  align-items: center;
+  align-items: flex-start;
   overflow: hidden;
 `;
 
@@ -35,19 +35,15 @@ export const titleAndCheckmarkWrapper = css`
   overflow: hidden;
 `;
 
-export const titleLink = css`
-  color: inherit;
-  cursor: pointer;
-`;
-
 export const title = css`
-  white-space: nowrap;
-  word-break: keep-all;
   text-overflow: ellipsis;
   font-weight: 400;
   font-size: 24px;
   min-width: 0;
   overflow: hidden;
+  display: -webkit-box;
+  -webkit-box-orient: vertical;
+  -webkit-line-clamp: 2;
 `;
 
 export const checkmark = css`
@@ -69,6 +65,7 @@ export const checkmark = css`
 export const bookmarkButtonWrapper = css`
   min-width: max-content;
   padding-left: 40px;
+  padding-top: 4px;
 `;
 
 export const authorAndDateWrapper = css`
