@@ -62,6 +62,7 @@ const AnswerListItem: FunctionComponent<Props> = ({
   const { invalidateForumAnswers } = useContextAndErrorIfNull(InvalidateQueriesContext);
   const { data: answer, isLoading } = useForumAnswerDetails({ answerId, parent });
   const authorId = answer?.author.id;
+  const authorProfilePictureUrl = answer?.authorProfilePictureUrl;
   const isCorrectAnswer = answer?.isCorrectAnswer ?? false;
   const isCurrentUserAuthor = authorId != null && userDetails?.id === authorId;
   const [showDeleteModal, setShowDeleteModal] = useState<boolean>(false);
@@ -306,7 +307,7 @@ const AnswerListItem: FunctionComponent<Props> = ({
               <ForumItemAuthor
                 username={answer.author.username}
                 userId={answer.author.id}
-                profilePicture={undefined}
+                profilePicture={authorProfilePictureUrl}
               />
               <p css={styles.date}>
                 {answer.createdAt.toLocaleDateString("de", {

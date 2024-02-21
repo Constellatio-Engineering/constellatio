@@ -13,6 +13,7 @@ import {
 } from "@/db/schema";
 import { type GetAnswersSchema } from "@/schemas/forum/getAnswers.schema";
 import { type GetQuestionsSchema } from "@/schemas/forum/getQuestions.schema";
+import { getProfilePictureUrl } from "@/utils/users";
 
 import {
   and, asc, count, desc, eq, getTableColumns, inArray, lt, lte, or, type SQL, sql 
@@ -154,32 +155,50 @@ export const getQuestions = async (params: GetQuestionsParams) => // eslint-disa
 
   const questionIds = questionsSortedWithAuthor.map(question => question.id);
 
-  const questionsWithLegalAreasAndTopics = await db.query.forumQuestions.findMany({
+  const questionsWithAdditionalData = questionIds.length > 0 ? await db.query.forumQuestions.findMany({
     where: inArray(forumQuestions.id, questionIds),
     with: {
       forumQuestionToLegalFields: true,
       forumQuestionToSubfields: true,
       forumQuestionToTopics: true,
+      user: {
+        with: {
+          profilePictures: {
+            columns: {
+              serverFilename: true,
+            },
+          }
+        }
+      }
     }
-  });
+  }) : [];
 
   const result = questionsSortedWithAuthor.map(question =>
   {
     let legalFieldId: string | undefined;
     let subfieldsIds: string[] = [];
     let topicsIds: string[] = [];
+    let authorProfilePictureUrl: string | null = null;
 
-    const questionData = questionsWithLegalAreasAndTopics.find(q => q.id === question.id);
+    const questionData = questionsWithAdditionalData.find(q => q.id === question.id);
 
     if(questionData)
     {
       legalFieldId = questionData.forumQuestionToLegalFields.map(lf => lf.legalFieldId)[0];
       subfieldsIds = questionData.forumQuestionToSubfields.map(sf => sf.subfieldId);
       topicsIds = questionData.forumQuestionToTopics.map(t => t.topicId);
+
+      const _authorProfilePictureUrl = questionData.user?.profilePictures?.[0];
+
+      if(_authorProfilePictureUrl)
+      {
+        authorProfilePictureUrl = getProfilePictureUrl({ serverFilename: _authorProfilePictureUrl.serverFilename, userId: question.author.id });
+      }
     }
 
     return {
       ...question,
+      authorProfilePictureUrl,
       legalFieldId,
       subfieldsIds,
       topicsIds
@@ -284,7 +303,46 @@ export const getAnswers = async (params: GetAnswersParams) => // eslint-disable-
     .leftJoin(correctAnswers, eq(countUpvotesSubquery.id, correctAnswers.answerId))
     .orderBy(...(Array.isArray(orderBy) ? orderBy : [orderBy]));
 
-  return answersSortedWithAuthor;
+  const answerIds = answersSortedWithAuthor.map(answer => answer.id);
+
+  const answersWithAdditionalData = answerIds.length > 0 ? await db.query.forumAnswers.findMany({
+    where: inArray(forumAnswers.id, answerIds),
+    with: {
+      user: {
+        with: {
+          profilePictures: {
+            columns: {
+              serverFilename: true,
+            },
+          }
+        }
+      }
+    }
+  }) : [];
+
+  const result = answersSortedWithAuthor.map(answer =>
+  {
+    let authorProfilePictureUrl: string | null = null;
+
+    const answerData = answersWithAdditionalData.find(a => a.id === answer.id);
+
+    if(answerData)
+    {
+      const _authorProfilePictureUrl = answerData.user?.profilePictures?.[0];
+
+      if(_authorProfilePictureUrl)
+      {
+        authorProfilePictureUrl = getProfilePictureUrl({ serverFilename: _authorProfilePictureUrl.serverFilename, userId: answer.author.id });
+      }
+    }
+
+    return {
+      ...answer,
+      authorProfilePictureUrl,
+    };
+  });
+
+  return result;
 };
 
 export const resetLegalFieldsAndTopicsForQuestion = async (questionId: string, dbConnection: typeof db): Promise<void> =>

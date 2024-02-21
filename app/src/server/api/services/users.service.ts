@@ -1,9 +1,10 @@
 import { db } from "@/db/connection";
-import { profilePictures, users } from "@/db/schema";
+import { users } from "@/db/schema";
 import { env } from "@/env.mjs";
 import { NotFoundError } from "@/utils/serverError";
+import { getProfilePictureUrl } from "@/utils/users";
 
-import { eq, sql } from "drizzle-orm";
+import { eq } from "drizzle-orm";
 
 // eslint-disable-next-line @typescript-eslint/explicit-function-return-type
 export const getUserWithRelations = async (userId: string) =>
@@ -47,9 +48,9 @@ export const getUserWithRelations = async (userId: string) =>
     ...user,
     isAdmin,
     isForumModerator,
-    profilePicture: _profilePicture ? {
-      url: `https://storage.googleapis.com/${env.GOOGLE_CLOUD_STORAGE_PUBLIC_BUCKET_NAME}/${user.id}/${_profilePicture.serverFilename}`
-    } : null,
+    profilePicture: !_profilePicture ? null : {
+      url: getProfilePictureUrl({ serverFilename: _profilePicture.serverFilename, userId }),
+    },
     roles
   });
 };

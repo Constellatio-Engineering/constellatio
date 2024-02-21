@@ -20,7 +20,7 @@ const ForumItemAuthor: FunctionComponent<Props> = ({ profilePicture, userId, use
   return (
     <div css={styles.authorWrapper}>
       <Image
-        css={styles.profilePicture}
+        css={styles.profilePicture(profilePicture != null)}
         src={profilePicture ?? genericProfileIcon.src}
         alt="Avatar"
         width={28}

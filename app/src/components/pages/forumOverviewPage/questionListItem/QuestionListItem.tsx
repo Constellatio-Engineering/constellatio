@@ -73,8 +73,8 @@ const QuestionListItem: FunctionComponent<Props> = ({ questionId }) =>
             <div css={styles.authorAndDateWrapper}>
               <div css={styles.authorWrapper}>
                 <Image
-                  css={styles.profilePicture}
-                  src={genericProfileIcon.src}
+                  css={styles.profilePicture(question.authorProfilePictureUrl != null)}
+                  src={question.authorProfilePictureUrl ?? genericProfileIcon.src}
                   alt="Avatar"
                   width={28}
                   height={28}

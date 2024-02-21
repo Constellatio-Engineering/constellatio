@@ -45,7 +45,7 @@ const AnswerEditor: FunctionComponent<Props> = ({
           <ForumItemAuthor
             username={userDetails.displayName}
             userId={userDetails.id}
-            profilePicture={null}
+            profilePicture={userDetails.profilePicture?.url}
           />
         )}
         minHeight={100}

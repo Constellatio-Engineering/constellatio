@@ -218,7 +218,7 @@ export const ForumQuestionDetailPage: FunctionComponent<Props> = ({ questionId }
                     <ForumItemAuthor
                       username={question.author.username}
                       userId={question.author.id}
-                      profilePicture={undefined}
+                      profilePicture={question.authorProfilePictureUrl}
                     />
                     <div css={styles.authorAndDateSeparator}/>
                     <p css={styles.date}>
