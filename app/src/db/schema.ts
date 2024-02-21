@@ -129,6 +129,8 @@ export const usersRelations = relations(users, ({ many }) => ({
   profilePictures: many(profilePictures),
   usersToBadges: many(usersToBadges),
   usersToRoles: many(usersToRoles),
+  forumQuestions: many(forumQuestions),
+  forumAnswers: many(forumAnswers),
 }));
 
 export type UserInsert = InferInsertModel<typeof users>;
@@ -336,10 +338,15 @@ export const forumQuestions = pgTable("ForumQuestion", {
   id_slug_index: uniqueIndex("ForumQuestion_Id_Slug_Index").on(table.id, table.slug),
 }));
 
-export const forumQuestionsRelations = relations(forumQuestions, ({ many }) => ({
+export const forumQuestionsRelations = relations(forumQuestions, ({ many, one }) => ({
   forumQuestionToLegalFields: many(forumQuestionsToLegalFields),
   forumQuestionToSubfields: many(forumQuestionToSubfields),
   forumQuestionToTopics: many(forumQuestionToTopics),
+  user: one(users, {
+    fields: [forumQuestions.userId],
+    references: [users.id],
+    relationName: "author",
+  }),
 }));
 
 export type ForumQuestionInsert = InferInsertModel<typeof forumQuestions>;
@@ -406,6 +413,14 @@ export const forumAnswers = pgTable("ForumAnswer", {
   parentQuestionId: uuid("ParentQuestionId").references(() => forumQuestions.id, { onDelete: "no action" }),
   parentAnswerId: uuid("ParentAnswerId").references((): AnyPgColumn => forumAnswers.id, { onDelete: "no action" }),
 });
+
+export const forumAnswersRelations = relations(forumAnswers, ({ one }) => ({
+  user: one(users, {
+    fields: [forumAnswers.userId],
+    references: [users.id],
+    relationName: "author",
+  }),
+}));
 
 export type ForumAnswerInsert = InferInsertModel<typeof forumAnswers>;
 export type ForumAnswer = InferSelectModel<typeof forumAnswers>;

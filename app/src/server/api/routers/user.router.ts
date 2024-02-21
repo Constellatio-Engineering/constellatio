@@ -1,21 +1,17 @@
 import { db } from "@/db/connection";
 import {
-  imageFileExtensions, imageFileMimeTypes,
-  type ProfilePictureInsert, profilePictures, users
+  imageFileExtensions, imageFileMimeTypes, type ProfilePictureInsert, profilePictures, users 
 } from "@/db/schema";
-import { env } from "@/env.mjs";
 import { updateUserDetailsSchema } from "@/schemas/auth/updateUserDetails.schema";
 import { generateCreateSignedUploadUrlSchema } from "@/schemas/uploads/createSignedUploadUrl.schema";
 import { setOnboardingResultSchema } from "@/schemas/users/setOnboardingResult.schema";
 import { setProfilePictureSchema } from "@/schemas/users/setProfilePicture.schema";
-import { getClouStorageFileUrl, getSignedCloudStorageUploadUrl } from "@/server/api/services/uploads.services";
+import { getSignedCloudStorageUploadUrl } from "@/server/api/services/uploads.services";
 import { getUserWithRelations } from "@/server/api/services/users.service";
 import { createTRPCRouter, protectedProcedure } from "@/server/api/trpc";
 import { filterUserForClient } from "@/utils/filters";
-import { NotFoundError } from "@/utils/serverError";
 
-import { eq, and } from "drizzle-orm";
-import { z } from "zod";
+import { eq } from "drizzle-orm";
 
 export const usersRouter = createTRPCRouter({
   createSignedProfilePictureUploadUrl: protectedProcedure

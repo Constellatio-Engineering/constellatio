@@ -2,9 +2,6 @@ import { type UnknownMantineStylesParams } from "@/utils/types";
 
 import { type MultiSelectStylesNames, type Styles } from "@mantine/core";
 import { type ReactNode } from "react";
-import { Simulate } from "react-dom/test-utils";
-
-import focus = Simulate.focus;
 
 type DropdownStyles = Styles<MultiSelectStylesNames, UnknownMantineStylesParams>;
 

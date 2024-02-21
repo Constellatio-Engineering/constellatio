@@ -14,7 +14,7 @@ export type Favorite = {
   title: string;
 };
 
-export type FavoriteNullable = Omit<NullableProperties<Favorite>, "favoriteType"> & {
+type FavoriteNullable = Omit<NullableProperties<Favorite>, "favoriteType"> & {
   favoriteType: Favorite["favoriteType"];
 };
 export type Favorites = Favorite[];

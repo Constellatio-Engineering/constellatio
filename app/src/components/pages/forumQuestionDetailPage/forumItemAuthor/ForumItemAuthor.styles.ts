@@ -8,10 +8,11 @@ export const authorWrapper = css`
   align-items: center;
 `;
 
-export const profilePicture = css`
+export const profilePicture = (hasProfilePicture: boolean) => css`
   border-radius: 100%;
   border: 1px solid ${colors["neutrals-01"][4]};
-  padding: 3px;
+  padding: ${hasProfilePicture ? 0 : 3}px;
+  object-fit: cover;
 `;
 
 export const author = css`
