@@ -19,7 +19,8 @@ import HeaderItemPersonalSpace from "./OnboardingStep2/HeaderItemPersonalSpace";
 import OnboardingSecondStep from "./OnboardingStep2/OnboardingSecondStep";
 import HeaderItemSearchBar from "./OnboardingStep3/HeaderItemSearchBar";
 import OnboardingThirdStep from "./OnboardingStep3/OnboardingThirdStep";
-import ConstellatioFullLogo from "../../../../../public/images/icons/constellatio-full-logo.svg";
+import ConstellatioFullLogoAlphaVersion from "../../../../../public/images/icons/constellatio-full-logo-alpha-version.svg";
+// import ConstellatioFullLogo from "../../../../../public/images/icons/constellatio-full-logo.svg";
 import ConstellatioLogoIcon from "../../../../../public/images/icons/constellatio-icon.svg";
 import SearchOverlay from "../../searchOverlay/SearchOverlay";
 import { SHeader } from "../Header.styles";
@@ -35,20 +36,24 @@ const links: IHeaderLink[] = [
   { slug: appPaths.dashboard, title: "Dashboard" },
   { slug: appPaths.cases, title: "Fälle" },
   { slug: appPaths.dictionary, title: "Lexikon" },
+  { slug: appPaths.forum, title: "Forum" },
 ];
 
 const HeaderDefault: FunctionComponent = () => 
 {
   const { pathname } = useRouter();
   const theme = useMantineTheme();
-  const { isLoading: isGetOnboardingResultLoading, onboardingResult } = useOnboardingResult();
-  const [wasOnboardingPostponed, setWasOnboardingPostponed] = useWasOnboardingPostponed();
-  const skipOnboarding = (): void => setWasOnboardingPostponed(true);
-  const showOnboarding = !isGetOnboardingResultLoading && onboardingResult === null && !wasOnboardingPostponed;
+  const { data: onboardingResult, isPending: isGetOnboardingResultLoading } = useOnboardingResult();
+  const [onboardingPostponedState, setWasOnboardingPostponed] = useWasOnboardingPostponed();
+  const skipOnboarding = (): void => setWasOnboardingPostponed({
+    dateOfPostponement: new Date(),
+    wasOnboardingPostponed: true
+  });
+  const showOnboarding = !isGetOnboardingResultLoading && onboardingResult === null && !onboardingPostponedState.wasOnboardingPostponed;
   const onboardingStepsIndex = useOnboardingStore(s => s.onboardingStepsIndex);
   const setOnboardingStepsIndex = useOnboardingStore(s => s.setOnboardingStepsIndex);
 
-  useEffect(() => 
+  useEffect(() =>
   {
     const { setOnboardingStepsIndex } = useOnboardingStore.getState();
 
@@ -69,7 +74,7 @@ const HeaderDefault: FunctionComponent = () =>
           <div css={styles.links}>
             <Link href={appPaths.dashboard}>
               <Image css={styles.tabletHeaderLogo} src={ConstellatioLogoIcon} alt="Constellatio"/>
-              <Image css={styles.headerLogo} src={ConstellatioFullLogo} alt="Constellatio"/>
+              <Image css={styles.headerLogo} src={ConstellatioFullLogoAlphaVersion} alt="Constellatio"/>
             </Link>
             {links.map((link, linkIndex) =>
               linkIndex === 1 ? (

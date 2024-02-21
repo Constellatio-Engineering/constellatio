@@ -10,7 +10,8 @@ export const convertTabsAsSearchResultsKey = (item: TabItemType): SearchResultsK
   switch (item.label)
   {
     case "Fälle": return "cases"; 
-    case "Lexikon": return "articles"; 
+    case "Lexikon": return "articles";
+    case "Forum": return "forumQuestions";
     case "Deine Dateien": return "userUploads"; 
     default:
     {
@@ -24,9 +25,10 @@ export const convertTabQueryAsItemTab = (query: string): string =>
 {
   switch (query)
   {
-    case "cases": return "Fälle"; 
-    case "articles": return "Lexikon"; 
-    case "userUploads": case "userDocuments": return "Deine Dateien"; 
+    case "cases": return "in Fälle";
+    case "articles": return "im Lexikon";
+    case "forumQuestions": return "im Forum";
+    case "userUploads": case "userDocuments": return "in Deine Dateien";
     default:
     {
       console.error(`Unknown tab query at convertTabQueryAsItemTab: ${query}`);

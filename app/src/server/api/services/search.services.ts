@@ -1,6 +1,14 @@
+/* eslint-disable max-lines */
 import { db } from "@/db/connection";
 import {
-  type Document, searchIndexUpdateQueue, type SearchIndexUpdateQueueInsert, type UploadedFile
+  type Document,
+  type ForumQuestion,
+  type ForumQuestionToLegalField,
+  type ForumQuestionToSubfield,
+  type ForumQuestionToTopic,
+  searchIndexUpdateQueue,
+  type SearchIndexUpdateQueueInsert,
+  type UploadedFile
 } from "@/db/schema";
 import { meiliSearchAdmin } from "@/lib/meilisearch";
 import { getArticleById } from "@/services/content/getArticleById";
@@ -8,14 +16,14 @@ import { getCaseById } from "@/services/content/getCaseById";
 import {
   type IGenGetAllArticlesByLegalAreaQuery, type IGenGetAllArticlesByMainCategoryQuery, type IGenGetAllArticlesByTagQuery,
   type IGenGetAllArticlesByTopicQuery, type IGenGetAllCasesByLegalAreaQuery, type IGenGetAllCasesByMainCategoryQuery, type IGenGetAllCasesByTagQuery,
-  type IGenGetAllCasesByTopicQuery,
+  type IGenGetAllCasesByTopicQuery, type IGenLegalArea, type IGenMainCategory, type IGenTopic,
 } from "@/services/graphql/__generated/sdk";
 import {
   createArticleSearchIndexItem,
   createCaseSearchIndexItem,
-  createDocumentSearchIndexItem,
+  createDocumentSearchIndexItem, createForumQuestionSearchIndexItem,
   createUploadsSearchIndexItem,
-  documentSearchIndexItemPrimaryKey,
+  documentSearchIndexItemPrimaryKey, type ForumQuestionSearchIndexItem, forumQuestionSearchIndexItemPrimaryKey,
   searchIndices,
   uploadSearchIndexItemPrimaryKey
 } from "@/utils/search";
@@ -47,10 +55,7 @@ export const addArticlesAndCasesToSearchQueue: AddArticlesAndCasesToSearchQueue 
 
 export const resetSearchIndex = async (): Promise<void> =>
 {
-  await meiliSearchAdmin.deleteIndexIfExists(searchIndices.cases);
-  await meiliSearchAdmin.deleteIndexIfExists(searchIndices.userUploads);
-  await meiliSearchAdmin.deleteIndexIfExists(searchIndices.articles);
-  await meiliSearchAdmin.deleteIndexIfExists(searchIndices.userDocuments);
+  await Promise.all(Object.values(searchIndices).map(async index => meiliSearchAdmin.deleteIndexIfExists(index)));
 };
 
 type AddArticlesToSearchIndex = (params: { articleIds: string[] }) => Promise<{
@@ -135,4 +140,80 @@ export const addUserDocumentsToSearchIndex: AddUserDocumentsToSearchIndex = asyn
   }
 
   return { createDocumentsIndexTaskId };
+};
+
+type AddForumQuestionsToSearchIndex = (params: {
+  allLegalFields: IGenMainCategory[];
+  allSubfields: IGenLegalArea[];
+  allTopics: IGenTopic[];
+  forumQuestionsToLegalFields: ForumQuestionToLegalField[];
+  forumQuestionsToSubfields: ForumQuestionToSubfield[];
+  forumQuestionsToTopics: ForumQuestionToTopic[];
+  questions: ForumQuestion[];
+}) => Promise<{
+  createQuestionsIndexTaskId: number | undefined;
+}>;
+
+export const addForumQuestionsToSearchIndex: AddForumQuestionsToSearchIndex = async ({
+  allLegalFields,
+  allSubfields,
+  allTopics,
+  forumQuestionsToLegalFields,
+  forumQuestionsToSubfields,
+  forumQuestionsToTopics,
+  questions
+}) =>
+{
+  let createQuestionsIndexTaskId: number | undefined;
+
+  const questionsWithDetails: ForumQuestionSearchIndexItem[] = questions.map(question =>
+  {
+    const legalFields = forumQuestionsToLegalFields
+      .filter((lf) => lf.questionId === question.id)
+      .map((lf) => allLegalFields.find((field) => field.id === lf.legalFieldId))
+      .filter(Boolean)
+      .filter(lf => lf?.id && lf?.mainCategory)
+      .map(lf => ({
+        id: lf.id!,
+        name: lf.mainCategory!
+      }));
+
+    const subfields = forumQuestionsToSubfields
+      .filter((f) => f.questionId === question.id)
+      .map((f) => allSubfields.find((subfield) => subfield.id === f.subfieldId))
+      .filter(Boolean)
+      .filter(sf => sf?.id && sf?.legalAreaName)
+      .map(sf => ({
+        id: sf.id!,
+        name: sf.legalAreaName!
+      }));
+
+    const topics = forumQuestionsToTopics
+      .filter((f) => f.questionId === question.id)
+      .map((f) => allTopics.find((topic) => topic.id === f.topicId))
+      .filter(Boolean)
+      .filter(t => t?.id && t?.topicName)
+      .map(t => ({
+        id: t.id!,
+        name: t.topicName!
+      }));
+
+    return {
+      ...question,
+      legalFields,
+      subfields,
+      topics
+    };
+  });
+
+  if(questions.length > 0)
+  {
+    const allQuestionsSearchIndexItems = questionsWithDetails.map(createForumQuestionSearchIndexItem);
+    const createForumQuestionsIndexTask = await meiliSearchAdmin.index(searchIndices.forumQuestions).addDocuments(allQuestionsSearchIndexItems, {
+      primaryKey: forumQuestionSearchIndexItemPrimaryKey
+    });
+    createQuestionsIndexTaskId = createForumQuestionsIndexTask.taskUid;
+  }
+
+  return { createQuestionsIndexTaskId };
 };

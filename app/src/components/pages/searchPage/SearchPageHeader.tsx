@@ -27,6 +27,9 @@ const SearchPageHeader: FunctionComponent<Props> = ({ setTabQuery, tabQuery, tot
     label: "Lexikon",
     resultsCount: searchResults.articles?.length
   }, {
+    label: "Forum",
+    resultsCount: searchResults.forumQuestions?.length
+  }, {
     label: "Deine Dateien",
     resultsCount: searchResults.userUploads?.length + searchResults.userDocuments?.length
   }];

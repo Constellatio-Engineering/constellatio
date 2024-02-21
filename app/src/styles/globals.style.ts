@@ -14,7 +14,7 @@ export const globalStyles = css`
   }
   
   html [id], body [id] {
-    scroll-margin: 50px !important;
+    scroll-margin: 50px;
   }
   
   body {
@@ -38,6 +38,9 @@ export const globalStyles = css`
     font-weight: 700;
   }
 
+  .mantine-Select-dropdown, .mantine-MultiSelect-dropdown {
+  }
+  
   .mantine-Notification-body {
     > div {
       font-size: 16px;

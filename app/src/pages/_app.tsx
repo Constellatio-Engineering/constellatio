@@ -7,6 +7,7 @@ import ComputerRecommendedModal from "@/components/organisms/computerRecommended
 import FileViewer from "@/components/organisms/fileViewer/FileViewer";
 import DocumentEditor from "@/components/organisms/papersBlock/documentEditor/DocumentEditor";
 import SubscriptionModal from "@/components/organisms/subscriptionModal/SubscriptionModal";
+import MaintenancePage from "@/components/pages/maintenancePage/MaintenancePage";
 import { env } from "@/env.mjs";
 import { supabase } from "@/lib/supabase";
 import AuthStateProvider from "@/provider/AuthStateProvider";
@@ -29,7 +30,7 @@ import { appWithTranslation } from "next-i18next";
 import { posthog } from "posthog-js";
 import { PostHogProvider } from "posthog-js/react";
 import React, {
-  useEffect, type FunctionComponent, type ReactElement, type ReactNode
+  useEffect, type FunctionComponent, type ReactElement, type ReactNode, Fragment
 } from "react";
 
 export type NextPageWithLayout<P = object, IP = P> = NextPage<P, IP> & {
@@ -128,16 +129,22 @@ const AppContainer: FunctionComponent<ConstellatioAppProps> = ({ Component, page
               <CustomThemingProvider>
                 <ModalsProvider>
                   <MeilisearchProvider>
-                    <RouterTransition/>
-                    <Notifications/>
-                    <NewNotificationEarnedWatchdog/>
-                    <SubscriptionModal/>
-                    <ComputerRecommendedModal/>
-                    <FileViewer/>
-                    <DocumentEditor/>
-                    <FeedbackButton/>
-                    {isTrackingEnabled && <Tracking/>}
-                    <Layout Component={Component} pageProps={pageProps}/>
+                    {env.NEXT_PUBLIC_IS_IN_MAINTENANCE_MODE ? (
+                      <MaintenancePage/>
+                    ) : (
+                      <Fragment>
+                        <RouterTransition/>
+                        <Notifications/>
+                        <NewNotificationEarnedWatchdog/>
+                        <SubscriptionModal/>
+                        <ComputerRecommendedModal/>
+                        <FileViewer/>
+                        <DocumentEditor/>
+                        <FeedbackButton/>
+                        {isTrackingEnabled && <Tracking/>}
+                        <Layout Component={Component} pageProps={pageProps}/>
+                      </Fragment>
+                    )}
                   </MeilisearchProvider>
                 </ModalsProvider>
               </CustomThemingProvider>

@@ -21,19 +21,17 @@ const PersonalSpacePageContent: FunctionComponent = () =>
 {
   const { allCases } = useCases();
   const { allArticles } = useArticles();
-  const { bookmarks } = useBookmarks(undefined);
+  const { articlesBookmarks, casesBookmarks, questionsBookmarks } = useBookmarks(undefined);
   const { documentsInAllFolders } = useDocuments();
   const { uploadedFilesInAllFolders } = useUploadedFiles();
-  const allCasesBookmarks = bookmarks.filter(bookmark => bookmark?.resourceType === "case") ?? [];
-  const bookmarkedCases = allCases.filter(caisyCase => allCasesBookmarks.some(bookmark => bookmark.resourceId === caisyCase.id));
-  const allArticlesBookmarks = bookmarks.filter(bookmark => bookmark?.resourceType === "article") ?? [];
-  const bookmarkedArticles = allArticles.filter((caisyArticle: IGenArticle) => allArticlesBookmarks.some(bookmark => bookmark.resourceId === caisyArticle.id));
+  const bookmarkedCases = allCases.filter(caisyCase => casesBookmarks.some(bookmark => bookmark.resourceId === caisyCase.id));
+  const bookmarkedArticles = allArticles.filter((caisyArticle: IGenArticle) => articlesBookmarks.some(bookmark => bookmark.resourceId === caisyArticle.id));
   const FavCategoryId = useId();
   const MaterialsCategoryId = useId();
   const categories = categoriesHelper({
     BookmarkIconSvg,
     FavCategoryId,
-    bookmarkedCasesLength: (bookmarkedCases?.length + bookmarkedArticles?.length) ?? 0,
+    bookmarkedCasesLength: (bookmarkedCases?.length + bookmarkedArticles?.length + questionsBookmarks?.length) ?? 0,
     slug: "favorites"
   }, {
     FileIconSvg,

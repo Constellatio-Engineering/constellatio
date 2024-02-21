@@ -1,0 +1,43 @@
+import { Layout } from "@/components/layouts/Layout";
+import PageHead from "@/components/organisms/pageHead/PageHead";
+import ForumOverviewPage from "@/components/pages/forumOverviewPage/ForumOverviewPage";
+import { type NextPageWithLayout } from "@/pages/_app";
+import { getCommonProps } from "@/utils/commonProps";
+
+import type { GetServerSideProps } from "next";
+import { useTranslation } from "next-i18next";
+import React, { useEffect } from "react";
+import z from "zod";
+import { makeZodI18nMap } from "zod-i18n-map";
+
+import { defaultLocale } from "../../../next.config.mjs";
+
+export const getServerSideProps: GetServerSideProps = async (ctx) =>
+{
+  const commonProps = await getCommonProps({ locale: ctx.locale || defaultLocale });
+
+  return {
+    props: commonProps,
+  };
+};
+
+const Page: NextPageWithLayout = () =>
+{
+  const { t } = useTranslation();
+
+  useEffect(() =>
+  {
+    z.setErrorMap(makeZodI18nMap({ t }));
+  }, [t]);
+
+  return (
+    <>
+      <PageHead pageTitle="Forum"/>
+      <ForumOverviewPage/>
+    </>
+  );
+};
+
+Page.getLayout = Layout;
+
+export default Page;

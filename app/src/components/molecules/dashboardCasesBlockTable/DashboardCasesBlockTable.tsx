@@ -2,7 +2,7 @@ import { BodyText } from "@/components/atoms/BodyText/BodyText";
 import { CaptionText } from "@/components/atoms/CaptionText/CaptionText";
 import StatusTableCell from "@/components/atoms/statusTableCell/StatusTableCell";
 import { ClockIcon } from "@/components/Icons/ClockIcon";
-import CaseBlockBookmarkButton from "@/components/organisms/caseBlock/caseBlockBookmarkButton/CaseBlockBookmarkButton";
+import BookmarkButton from "@/components/organisms/caseBlock/BookmarkButton/BookmarkButton";
 import EmptyStateCard from "@/components/organisms/emptyStateCard/EmptyStateCard";
 import { timeFormatter } from "@/components/organisms/overviewCard/OverviewCard";
 import { extractNumeric } from "@/components/pages/OverviewPage/OverviewPage";
@@ -111,10 +111,10 @@ const DashboardCasesBlockTable: FunctionComponent = () =>
                   <BodyText styleType="body-01-medium" color={theme.colors["neutrals-01"][9]} component="p">{item?.legalArea?.legalAreaName}</BodyText>
                 </td>
                 <td>
-                  <CaseBlockBookmarkButton
+                  <BookmarkButton
                     areAllBookmarksLoading={isGetCasesBookmarksLoading}
                     isBookmarked={bookmarks.some(bookmark => bookmark?.resourceId === item?.id) || false}
-                    caseId={item.id}
+                    resourceId={item.id}
                     variant="case"
                   />
                 </td>

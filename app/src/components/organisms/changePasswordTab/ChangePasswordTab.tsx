@@ -42,7 +42,7 @@ const ChangePasswordTab: FunctionComponent = () =>
 
   const {
     error,
-    isLoading,
+    isPending: isLoading,
     isSuccess,
     mutate: changePassword,
   } = useMutation({

@@ -14,45 +14,46 @@ type SearchStoreProps = {
   setSearchValue: (searchValue: string) => void;
 };
 
-const useSearchBarStore = create(immer<SearchStoreProps>((set) => ({
-  closeDrawer: () => 
-  {
-    set((state) =>
+const useSearchBarStore = create(
+  immer<SearchStoreProps>((set) => ({
+    closeDrawer: () => 
     {
-      state.isDrawerOpened = false;
-    });
-  },
-  isDrawerOpened: false,
-  openDrawer: (refetchSearchResults) => 
-  {
-    if(isTrackingEnabled) 
+      set((state) =>
+      {
+        state.isDrawerOpened = false;
+      });
+    },
+    isDrawerOpened: false,
+    openDrawer: (refetchSearchResults) => 
     {
-      posthog.capture("search-field-opened");
-    }
-    refetchSearchResults();
+      if(isTrackingEnabled) 
+      {
+        posthog.capture("search-field-opened");
+      }
+      refetchSearchResults();
 
-    set((state) =>
+      set((state) =>
+      {
+        state.isDrawerOpened = true;
+      });
+    },
+    searchHistory: [],
+    searchValue: "",
+    setSearchHistory: (searchHistory) =>
     {
-      state.isDrawerOpened = true;
-    });
-  },
-  searchHistory: [],
-  searchValue: "",
-  setSearchHistory: (searchHistory) =>
-  {
-    set((state) =>
+      set((state) =>
+      {
+        state.searchHistory = searchHistory;
+      });
+    },
+    setSearchValue: (searchValue) =>
     {
-      state.searchHistory = searchHistory;
-    });
-  },
-  setSearchValue: (searchValue) =>
-  {
-    set((state) =>
-    {
-      state.searchValue = searchValue;
-    });
-  },
-}))
+      set((state) =>
+      {
+        state.searchValue = searchValue;
+      });
+    },
+  }))
 );
 
 export default useSearchBarStore;

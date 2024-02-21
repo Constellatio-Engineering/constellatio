@@ -1,15 +1,16 @@
 import { MeilisearchContext } from "@/provider/MeilisearchProvider";
 import useSearchBarStore from "@/stores/searchBar.store";
 import {
-  type ArticleSearchIndexItem, type CaseSearchIndexItem, type DocumentSearchIndexItem, searchIndices, type UploadSearchIndexItem 
+  type ArticleSearchIndexItem, type CaseSearchIndexItem, type DocumentSearchIndexItem, type ForumQuestionSearchIndexItem, searchIndices, type UploadSearchIndexItem
 } from "@/utils/search";
 
-import { useQuery } from "@tanstack/react-query";
+import { keepPreviousData, useQuery } from "@tanstack/react-query";
 import { useContext } from "react";
 
 export type SearchResults = {
   articles: ArticleSearchIndexItem[];
   cases: CaseSearchIndexItem[];
+  forumQuestions: ForumQuestionSearchIndexItem[];
   userDocuments: DocumentSearchIndexItem[];
   userUploads: UploadSearchIndexItem[];
 };
@@ -19,6 +20,7 @@ export type SearchResultsKey = keyof Omit<SearchResults, "userDocuments">;
 const initialSearchResults: SearchResults = {
   articles: [],
   cases: [],
+  forumQuestions: [],
   userDocuments: [],
   userUploads: [],
 };
@@ -39,7 +41,7 @@ const useSearchResults: UseSearchResults = () =>
 
   const { data: searchResults = initialSearchResults, isLoading, refetch } = useQuery({
     enabled: hasInput && meilisearchInstance != null,
-    keepPreviousData: true,
+    placeholderData: keepPreviousData,
     queryFn: async () =>
     {
       if(!meilisearchInstance)
@@ -65,6 +67,10 @@ const useSearchResults: UseSearchResults = () =>
             indexUid: searchIndices.userUploads,
             q: searchValue,
           },
+          {
+            indexUid: searchIndices.forumQuestions,
+            q: searchValue,
+          },
         ]
       });
 
@@ -72,6 +78,7 @@ const useSearchResults: UseSearchResults = () =>
         // Be careful with the order of the results!
         articles: (results?.[0]?.hits as ArticleSearchIndexItem[]) ?? [],
         cases: (results?.[1]?.hits as CaseSearchIndexItem[]) ?? [],
+        forumQuestions: (results?.[4]?.hits as ForumQuestionSearchIndexItem[]) ?? [],
         userDocuments: (results?.[2]?.hits as DocumentSearchIndexItem[]) ?? [],
         userUploads: (results?.[3]?.hits as UploadSearchIndexItem[]) ?? [],
       });
@@ -81,6 +88,7 @@ const useSearchResults: UseSearchResults = () =>
     refetchOnReconnect: false,
     refetchOnWindowFocus: false,
     retry: false,
+    staleTime: 0,
   });
 
   return { isLoading, refetch, searchResults };

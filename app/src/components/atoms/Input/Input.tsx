@@ -43,8 +43,8 @@ export const Input: FC<InputProps> = ({
       error={error}
       disabled={disabled}
       rightSection={error && <AlertFilled/>}
+      rightSectionWidth={error ? 32 : 0}
       {...props}
     />
-    
   ) : null;
 };

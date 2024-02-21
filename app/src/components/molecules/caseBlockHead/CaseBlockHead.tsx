@@ -15,10 +15,64 @@ export interface ICaseBlockHeadProps
   readonly completedCases?: number;
   readonly icon?: { alt?: string; src: React.ReactNode };
   readonly items?: number;
-  // readonly title: string;
   readonly variant: "case" | "dictionary";
-
 }
+
+const DetailRenderer: FunctionComponent<{
+  readonly blockType: ICaseBlockHeadProps["blockType"];
+  readonly completedCases?: number;
+  readonly items?: number;
+  readonly variant: ICaseBlockHeadProps["variant"];
+}> = ({
+  blockType,
+  completedCases,
+  items,
+  variant
+}) =>
+{
+  switch (blockType)
+  {
+    case "itemsBlock":
+      return (
+        <>
+          {(completedCases !== null || completedCases !== undefined) && items && variant === "case" ? (
+            <div css={styles.detailText}>
+              <CountLabel count={completedCases ?? 0} total={items} variant="cases"/>
+              <CaptionText component="p" styleType="caption-01-bold">ABGESCHLOSSENE FÄLLE</CaptionText>
+            </div>
+          )
+            : <Label variant="dictionary" title={`${items} LEXIKON`}/>}
+        </>
+      );
+    case "favoriteItemsBlock":
+      return (
+        <>
+          {items && variant === "case" ? <Label variant="case">{items} Fälle</Label> : <Label variant="dictionary">{items} Artikel</Label>}
+        </>
+      );
+    case "searchBlock":
+      return (
+        <>
+          {items && variant === "case" ? <Label variant="case">{items} Fälle</Label> : <Label variant="dictionary">{items} Artikel</Label>}
+        </>
+      );
+    case "searchPapersBlock":
+      return (
+        <>
+          {items && <Label variant="neutral">{items} Papers</Label>}
+        </>
+      );
+    case "searchUploadedMaterials":
+      return (
+        <>
+          {items && <Label variant="neutral">{items} FILES</Label>}
+        </>
+      );
+
+    default:
+      return (<>default</>);
+  }
+};
 
 const CaseBlockHead: FunctionComponent<ICaseBlockHeadProps> = ({
   blockType,
@@ -26,62 +80,9 @@ const CaseBlockHead: FunctionComponent<ICaseBlockHeadProps> = ({
   completedCases,
   icon,
   items,
-  // title,
   variant,
-
-}) => 
+}) =>
 {
-  const detailRenderer: FunctionComponent<{blockType: ICaseBlockHeadProps["blockType"]; variant: ICaseBlockHeadProps["variant"]}> = ({
-    blockType,
-    variant
-  }) => 
-  {
-    switch (blockType) 
-    {
-      case "itemsBlock":
-        return (
-          <>
-            {(completedCases !== null || completedCases !== undefined) && items && variant === "case" ? (
-              <div css={styles.detailText}>
-                <CountLabel count={completedCases ?? 0} total={items} variant="cases"/>
-                <CaptionText component="p" styleType="caption-01-bold">ABGESCHLOSSENE FÄLLE</CaptionText>
-              </div>
-            )
-              : <Label variant="dictionary" title={`${items} LEXIKON`}/>}
-          </>
-        );
-      case "favoriteItemsBlock":
-        return (
-          <>
-            {items && variant === "case" ? <Label variant="case">{items} Fälle</Label> : <Label variant="dictionary">{items} Artikel</Label>}
-          </>
-        );
-      case "searchBlock":
-        return (
-
-          <>
-            {items && variant === "case" ? <Label variant="case">{items} Fälle</Label> : <Label variant="dictionary">{items} Artikel</Label>}
-          </>
-        );
-      case "searchPapersBlock":
-        return (
-          <>
-            {items && <Label variant="neutral">{items} Papers</Label>}
-          </>
-        );
-      case "searchUploadedMaterials":
-        return (
-          <>
-
-            {items && <Label variant="neutral">{items} FILES</Label>}
-          </>
-        );
-
-      default:
-        return (<>default</>);
-    }
-  };
-
   return (
     <div css={styles.wrapper}>
       {icon && icon.src && (
@@ -94,7 +95,12 @@ const CaseBlockHead: FunctionComponent<ICaseBlockHeadProps> = ({
         {blockType === "searchPapersBlock" ? <Title order={3}>Papers</Title> : blockType === "searchUploadedMaterials" && <Title order={3}>Hochgeladene Dateien</Title>}
       </div>
       <div className="details">
-        {detailRenderer({ blockType, variant })}
+        <DetailRenderer
+          blockType={blockType}
+          variant={variant}
+          completedCases={completedCases}
+          items={items}
+        />
       </div>
     </div>
   );

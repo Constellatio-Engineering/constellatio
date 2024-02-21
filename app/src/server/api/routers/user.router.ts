@@ -1,28 +1,28 @@
 import { db } from "@/db/connection";
 import {
-  imageFileExtensions, imageFileMimeTypes,
-  type ProfilePictureInsert, profilePictures, users
+  imageFileExtensions, imageFileMimeTypes, type ProfilePictureInsert, profilePictures, users 
 } from "@/db/schema";
-import { env } from "@/env.mjs";
 import { updateUserDetailsSchema } from "@/schemas/auth/updateUserDetails.schema";
 import { generateCreateSignedUploadUrlSchema } from "@/schemas/uploads/createSignedUploadUrl.schema";
 import { setOnboardingResultSchema } from "@/schemas/users/setOnboardingResult.schema";
 import { setProfilePictureSchema } from "@/schemas/users/setProfilePicture.schema";
-import { getClouStorageFileUrl, getSignedCloudStorageUploadUrl } from "@/server/api/services/uploads.services";
+import { getSignedCloudStorageUploadUrl } from "@/server/api/services/uploads.services";
 import { getUserWithRelations } from "@/server/api/services/users.service";
 import { createTRPCRouter, protectedProcedure } from "@/server/api/trpc";
 import { filterUserForClient } from "@/utils/filters";
-import { NotFoundError } from "@/utils/serverError";
 
-import { eq, and } from "drizzle-orm";
-import { z } from "zod";
+import { eq } from "drizzle-orm";
 
 export const usersRouter = createTRPCRouter({
   createSignedProfilePictureUploadUrl: protectedProcedure
     .input(generateCreateSignedUploadUrlSchema(imageFileExtensions, imageFileMimeTypes))
     .mutation(async ({ ctx: { userId }, input: file }) =>
     {
-      return getSignedCloudStorageUploadUrl({ file, userId });
+      return getSignedCloudStorageUploadUrl({
+        bucketType: "public",
+        file,
+        userId
+      });
     }),
   getOnboardingResult: protectedProcedure
     .query(async ({ ctx: { userId } }) =>
@@ -33,30 +33,6 @@ export const usersRouter = createTRPCRouter({
         .where(eq(users.id, userId));
 
       return onboardingResult[0]?.onboardingResult ?? null;
-    }),
-  getSignedProfilePictureUrl: protectedProcedure
-    .input(z.object({
-      fileId: z.string(),
-    }))
-    .query(async ({ ctx: { userId }, input: { fileId } }) =>
-    {
-      const file = await db.query.profilePictures.findFirst({
-        where: and(
-          eq(profilePictures.userId, userId),
-          eq(profilePictures.id, fileId)
-        )
-      });
-
-      if(!file)
-      {
-        throw new NotFoundError();
-      }
-
-      return getClouStorageFileUrl({
-        serverFilename: file.serverFilename,
-        staleTime: env.NEXT_PUBLIC_PROFILE_PICTURE_STALE_TIME_IN_SECONDS * 1000,
-        userId 
-      });
     }),
   getUserDetails: protectedProcedure
     .query(async ({ ctx: { userId } }) =>

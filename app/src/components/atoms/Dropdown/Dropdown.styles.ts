@@ -56,19 +56,6 @@ export const dropdownStyles = ({ disabled, error }: { disabled?: boolean; error:
       padding: `${theme.spacing["spacing-8"]} ${theme.spacing["spacing-16"]}`,
       transition: "all 0.3s ease",
     },
-    item: {
-      "&[data-selected]": {
-        color: `${theme.colors["neutrals-01"][0]}`,
-      },
-      "> div": {
-        gap: theme.spacing["spacing-8"],
-      },
-      backgroundColor: theme.colors["neutrals-01"][0],
-      borderBottom: `1px solid ${theme.colors["neutrals-01"][3]}`,
-      color: theme.colors["neutrals-02"][1],
-      padding: `${theme.spacing["spacing-8"]} ${theme.spacing["spacing-16"]}`,
-    },
-    itemsWrapper: {},
     label: {
       color: error
         ? theme.colors["support-error"][3]
@@ -104,7 +91,6 @@ export const dropdownStyles = ({ disabled, error }: { disabled?: boolean; error:
             : `1px solid ${theme.colors["neutrals-01"][6]}`,
         },
       },
-
       display: "flex",
       flexDirection: "column",
     },

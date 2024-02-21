@@ -1,4 +1,4 @@
-import { type UploadedFile, type Document } from "@/db/schema";
+import { type UploadedFile, type Document, type ForumQuestion } from "@/db/schema";
 import {
   type IGenTopic,
   type IGenArticle,
@@ -13,8 +13,9 @@ import { removeHtmlTagsFromString } from "@/utils/utils";
 export const searchIndices = {
   articles: "articles",
   cases: "cases",
+  forumQuestions: "forum-questions",
   userDocuments: "user-documents",
-  userUploads: "user-uploads",
+  userUploads: "user-uploads"
 } as const;
 
 export type SearchIndex = Values<typeof searchIndices>;
@@ -145,7 +146,7 @@ export const createDocumentSearchIndexItem = ({
 }: DocumentSearchIndexItem): DocumentSearchIndexItem =>
 {
   return ({
-    content: removeHtmlTagsFromString(content),
+    content: removeHtmlTagsFromString(content, true),
     createdAt,
     folderId,
     id,
@@ -156,3 +157,45 @@ export const createDocumentSearchIndexItem = ({
 };
 
 export const documentSearchIndexItemPrimaryKey: keyof DocumentSearchIndexItem = "id";
+
+export type ForumQuestionSearchIndexItem = Pick<ForumQuestion, "id" | "text" | "title" | "slug" | "userId"> & {
+  legalFields: Array<{
+    id: string;
+    name: string;
+  }>;
+  subfields: Array<{
+    id: string;
+    name: string;
+  }>;
+  topics: Array<{
+    id: string;
+    name: string;
+  }>;
+};
+export type ForumQuestionSearchItemNodes = RemoveUndefined<DotSeparatedKeys<ForumQuestionSearchIndexItem>>;
+export type ForumQuestionSearchItemUpdate = Partial<Omit<ForumQuestionSearchIndexItem, "id" | "userId">> & Pick<ForumQuestionSearchIndexItem, "id">;
+
+export const createForumQuestionSearchIndexItem = ({
+  id,
+  legalFields,
+  slug,
+  subfields,
+  text,
+  title,
+  topics,
+  userId
+}: ForumQuestionSearchIndexItem): ForumQuestionSearchIndexItem =>
+{
+  return ({
+    id,
+    legalFields,
+    slug,
+    subfields,
+    text: removeHtmlTagsFromString(text, true),
+    title,
+    topics,
+    userId
+  });
+};
+
+export const forumQuestionSearchIndexItemPrimaryKey: keyof ForumQuestionSearchIndexItem = "id";

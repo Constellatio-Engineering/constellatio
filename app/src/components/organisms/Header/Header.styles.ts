@@ -101,7 +101,10 @@ export const tabletHeaderLogo = css`
   }
 `;
 export const headerLogo = css`
+  width: 140px;
+  height: auto;
   display: block;
+  transform: translateY(4px);
   @media screen and (max-width: 1100px) {
     display: none;
   }

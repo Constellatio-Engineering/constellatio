@@ -6,7 +6,7 @@ import { type IGenCase_Facts } from "@/services/graphql/__generated/sdk";
 
 import { ScrollArea, Tabs, useMantineTheme } from "@mantine/core";
 import { useScrollIntoView } from "@mantine/hooks";
-import { type Maybe } from "@trpc/server";
+import { type Maybe } from "graphql/jsutils/Maybe";
 import React, { useState, type FunctionComponent } from "react";
 
 import * as styles from "./FloatingPanel.styles";

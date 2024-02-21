@@ -11,7 +11,7 @@
     "start:supabase": "supabase start --ignore-health-check",
     "stop:supabase": "supabase stop",
     "restart:supabase": "supabase stop && pnpm start:supabase",
-    "reset:supabase": "supabase stop --no-backup && pnpm start:supabase",
+    "reset:supabase": "supabase db reset",
     "supabase:status": "supabase status",
     "separatorDocker": "---------------------- DOCKER ----------------------",
     "docker:stop-containers": "docker stop $(docker ps -a -q)",
@@ -25,6 +25,6 @@
     "reset:node_modules": "rm pnpm-lock.yaml && find . -name node_modules -type d -prune -exec rm -rf '{}' + && pnpm install"
   },
   "devDependencies": {
-    "supabase": "^1.99.5"
+    "supabase": "1.142.2"
   }
 }

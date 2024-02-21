@@ -1,0 +1,2 @@
+ALTER TYPE "BadgeIdentifier" ADD VALUE '1-1000';
+COMMIT;

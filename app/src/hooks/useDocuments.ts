@@ -3,6 +3,8 @@ import useMaterialsStore from "@/stores/materials.store";
 import { api } from "@/utils/api";
 import { type UseQueryResult } from "@/utils/types";
 
+import { keepPreviousData } from "@tanstack/react-query";
+
 type UseDocuments = () => UseQueryResult<{
   documentsInAllFolders: Document[];
   documentsInSelectedFolder: Document[];
@@ -19,7 +21,7 @@ const useDocuments: UseDocuments = () =>
     isLoading,
     isRefetching
   } = api.documents.getDocuments.useQuery({ folderId: undefined }, {
-    keepPreviousData: true,
+    placeholderData: keepPreviousData,
     refetchOnMount: "always",
     staleTime: Infinity
   });

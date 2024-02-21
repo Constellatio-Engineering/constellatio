@@ -68,7 +68,9 @@ export const textStyles = ({
       fontSize: theme.fontSizes["spacing-16"],
       fontWeight: 500,
       lineHeight: theme.spacing["spacing-24"],
-      padding: `${theme.spacing["spacing-8"]} ${theme.spacing["spacing-16"]}`,
+      paddingBottom: 8,
+      paddingLeft: 16,
+      paddingTop: 8,
       transition: "all 0.3s ease",
       ...inputStyleOverwrite,
     },
@@ -88,9 +90,7 @@ export const textStyles = ({
     },
     rightSection: {
       height: "20px",
-      right: "8px",
       top: "8px",
-      width: "20px",
     },
     root: {
       ":focus-within": {
@@ -105,9 +105,9 @@ export const textStyles = ({
             : `1px solid ${theme.colors["neutrals-01"][6]}`,
         },
       },
-
       display: "flex",
       flexDirection: "column",
+      position: "relative",
     },
     wrapper: {
       color: error ? theme.colors["support-error"][3] : theme.colors["neutrals-01"][7],

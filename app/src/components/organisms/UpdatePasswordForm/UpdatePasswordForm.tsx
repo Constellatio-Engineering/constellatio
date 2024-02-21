@@ -33,7 +33,7 @@ export const UpdatePasswordForm: FunctionComponent = () =>
 
   const {
     error,
-    isLoading,
+    isPending: isLoading,
     isSuccess: wasPasswordUpdateSuccessful,
     mutate: updatePassword
   } = useMutation({

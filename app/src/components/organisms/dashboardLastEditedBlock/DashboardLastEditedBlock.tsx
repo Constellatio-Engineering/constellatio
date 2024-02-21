@@ -33,12 +33,17 @@ const DashboardLastEditedBlock: FunctionComponent = () =>
             </Button>
           </Link>
         </div>
-        <div css={styles.list}>
+        <div css={styles.listWrapper}>
           {(!isLastViewedCasesLoading && lastViewedCases.length === 0) ? (
             <p>Du hast bisher noch keine Fälle bearbeitet.</p>
           ) : (
             <FavoritesExcerpt
-              favorites={lastViewedCases}
+              favorites={lastViewedCases.map(c => ({
+                createdAt: c._meta?.createdAt,
+                favoriteType: "case", 
+                resourceId: c.id,
+                title: c.title
+              }))}
               shouldSortByCreatedAt={false}
               isLoading={isLastViewedCasesLoading}
             />
@@ -57,11 +62,20 @@ const DashboardLastEditedBlock: FunctionComponent = () =>
             </Button>
           </Link>
         </div>
-        <div css={styles.list}>
+        <div css={styles.listWrapper}>
           {(!isLastViewedArticlesLoading && lastViewedArticles.length === 0) ? (
             <p>Du hast bisher noch keine Artikel angesehen.</p>
           ) : (
-            <FavoritesExcerpt favorites={lastViewedArticles} shouldSortByCreatedAt={false} isLoading={isLastViewedArticlesLoading}/>
+            <FavoritesExcerpt
+              favorites={lastViewedArticles.map(c => ({
+                createdAt: c._meta?.createdAt,
+                favoriteType: "article",
+                resourceId: c.id,
+                title: c.title
+              }))}
+              shouldSortByCreatedAt={false}
+              isLoading={isLastViewedArticlesLoading}
+            />
           )}
         </div>
       </div>

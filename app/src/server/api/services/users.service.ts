@@ -1,6 +1,7 @@
 import { db } from "@/db/connection";
 import { users } from "@/db/schema";
 import { NotFoundError } from "@/utils/serverError";
+import { getProfilePictureUrl } from "@/utils/users";
 
 import { eq } from "drizzle-orm";
 
@@ -10,7 +11,22 @@ export const getUserWithRelations = async (userId: string) =>
   const user = await db.query.users.findFirst({
     where: eq(users.id, userId),
     with: {
-      profilePictures: true
+      profilePictures: {
+        columns: {
+          serverFilename: true,
+        },
+      },
+      usersToRoles: {
+        columns: {},
+        with: {
+          role: {
+            columns: {
+              identifier: true,
+              name: true
+            }
+          },
+        }
+      }
     }
   });
 
@@ -19,7 +35,23 @@ export const getUserWithRelations = async (userId: string) =>
     throw new NotFoundError();
   }
 
-  return user;
+  const roles = user.usersToRoles.map(({ role }) => ({
+    identifier: role.identifier,
+    name: role.name
+  }));
+  const isForumModerator = roles.some(({ identifier }) => identifier === "forumMod");
+  const isAdmin = roles.some(({ identifier }) => identifier === "admin");
+  const _profilePicture = user.profilePictures?.[0];
+
+  return ({
+    ...user,
+    isAdmin,
+    isForumModerator,
+    profilePicture: !_profilePicture ? null : {
+      url: getProfilePictureUrl({ serverFilename: _profilePicture.serverFilename, userId }),
+    },
+    roles
+  });
 };
 
 export type UserWithRelations = Awaited<ReturnType<typeof getUserWithRelations>>;

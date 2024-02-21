@@ -24,7 +24,7 @@ export interface RichtextEditorFieldProps
   readonly buttons?: RichtextEditorButton[];
   readonly content: Content;
   readonly disabled?: boolean;
-  readonly onChange?: (e: EditorEvents["update"]) => void;
+  readonly onChange: (e: EditorEvents["update"]) => void;
   readonly variant: "simple" | "with-legal-quote";
 }
 

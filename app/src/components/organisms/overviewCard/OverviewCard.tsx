@@ -10,12 +10,12 @@ import { Timer } from "@/components/Icons/timer";
 import ResetCaseProgressModal from "@/components/organisms/resetCaseProgressModal/ResetCaseProgressModal";
 import useArticleViews from "@/hooks/useArticleViews";
 import useCaseViews from "@/hooks/useCaseViews";
-import { type IGenLegalArea, type IGenTags } from "@/services/graphql/__generated/sdk";
+import { type Maybe, type IGenLegalArea, type IGenTags } from "@/services/graphql/__generated/sdk";
 import { type Nullable } from "@/utils/types";
+import { formatDate } from "@/utils/utils";
 
 import { useMantineTheme } from "@mantine/core";
 import { useDisclosure } from "@mantine/hooks";
-import { type Maybe } from "@trpc/server";
 import React, { type FunctionComponent } from "react";
 
 import * as styles from "./OverviewCard.styles";
@@ -45,32 +45,6 @@ export function timeFormatter(minutes: number): string
   {
     return `${minutes} Minute${minutes !== 1 ? "n" : ""}`;
   }
-}
-function formatDate(inputDate: string | number | Date): string 
-{
-  // Ensure the input is treated as a Date object
-  const date = new Date(inputDate);
-
-  // Get day, month, and year
-  const day = date.getDate();
-  const months = [
-    "Januar",
-    "Februar",
-    "März",
-    "April",
-    "Mai",
-    "Juni",
-    "Juli",
-    "August",
-    "September",
-    "Oktober",
-    "November",
-    "Dezember",
-  ];
-  const monthName = months[date.getMonth()];
-  const year = date.getFullYear();
-
-  return `${day} ${monthName}, ${year}`;
 }
 
 const OverviewCard: FunctionComponent<IOverviewCard> = ({
@@ -126,7 +100,7 @@ const OverviewCard: FunctionComponent<IOverviewCard> = ({
           <table style={{ borderBottom: "1px solid #F0F0F0", textAlign: "left", width: "100%" }}>
             <thead>
               <tr>
-                {(legalArea?.__typename === "LegalArea" && legalArea?.legalAreaName) && <th style={{ color: "#949494", padding: "16px 32px 8px 16px" }}><CaptionText styleType="caption-01-medium" tt="uppercase">Rechtsgebiet</CaptionText></th>}
+                {(legalArea?.__typename === "LegalArea" && legalArea?.legalAreaName) && <th style={{ color: "#949494", padding: "16px 32px 8px 16px" }}><CaptionText styleType="caption-01-medium" tt="uppercase">Teilgebiet</CaptionText></th>}
                 {variant === "case" && topic && (<th style={{ color: "#949494", padding: "16px 32px 8px 16px" }}><CaptionText styleType="caption-01-medium" component="p" tt="uppercase">Thema</CaptionText> </th>)}
               </tr>
             </thead>

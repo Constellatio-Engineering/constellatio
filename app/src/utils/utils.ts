@@ -101,7 +101,43 @@ export const slugFormatter = (name: string): string =>
   return modifiedName;
 };
 
-export const removeHtmlTagsFromString = (htmlString: string): string =>
+export const removeHtmlTagsFromString = (htmlString: string, replaceWithBlankCharacter: boolean): string =>
 {
-  return htmlString.replace(/<\/?[^>]+(>|$)/g, "");
+  const stingWithoutHtmlTags = htmlString.replace(/<\/?[^>]+(>|$)/g, replaceWithBlankCharacter ? " " : "");
+  const stringWithoutEntities = stingWithoutHtmlTags.replace(/&[^\s;]+;/g, replaceWithBlankCharacter ? " " : "");
+  const stringWithoutMultipleSpaces = stringWithoutEntities.replace(/\s\s+/g, " ");
+
+  return stringWithoutMultipleSpaces;
+};
+
+export const formatDate = (inputDate: Date): string =>
+{
+  const date = new Date(inputDate);
+  const day = date.getDate();
+
+  const months = [
+    "Januar",
+    "Februar",
+    "März",
+    "April",
+    "Mai",
+    "Juni",
+    "Juli",
+    "August",
+    "September",
+    "Oktober",
+    "November",
+    "Dezember",
+  ];
+
+  const monthName = months[date.getMonth()];
+  const year = date.getFullYear();
+
+  return `${day} ${monthName}, ${year}`;
+};
+
+export const scrollTo = (element: HTMLElement, offset = 100): void =>
+{
+  const y = element.getBoundingClientRect().top + window.scrollY - offset;
+  window.scrollTo({ behavior: "smooth", top: y });
 };

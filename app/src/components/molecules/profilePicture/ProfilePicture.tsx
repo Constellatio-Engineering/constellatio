@@ -1,5 +1,5 @@
 import { ProfileAvatar, type IProfilePictureAvatars } from "@/components/Icons/ProfileAvatar";
-import useSignedProfilePictureUrl from "@/hooks/useSignedProfilePictureUrl";
+import useUserDetails from "@/hooks/useUserDetails";
 
 import Image from "next/image";
 import React, { type ComponentProps, type FunctionComponent } from "react";
@@ -9,30 +9,32 @@ import genericProfileIcon from "../../../../public/images/icons/generic-user-ico
 
 interface ProfilePictureProps extends ComponentProps<"div">
 {
+  readonly disableMarginAuto?: boolean;
   readonly overwriteUrl?: string;
   readonly sizeInPx?: number;
 }
 
 const ProfilePicture: FunctionComponent<ProfilePictureProps> = ({
+  disableMarginAuto = false,
   overwriteUrl,
   sizeInPx = 50,
   ...props
 }) =>
 {
-  const { url: profilePictureUrl } = useSignedProfilePictureUrl();
-  const userChosenAvatar: IProfilePictureAvatars["type"] | false = false; 
+  const { userDetails } = useUserDetails();
+  const userChosenAvatar: IProfilePictureAvatars["type"] | false = false;
+
   return (
-    <div {...props} css={styles.wrapper(sizeInPx)}>
+    <div {...props} css={styles.wrapper(sizeInPx, disableMarginAuto)}>
       {userChosenAvatar && (<ProfileAvatar type={userChosenAvatar ?? "avatar-01"}/>)}
       <Image
         css={styles.image}
-        src={overwriteUrl || profilePictureUrl || genericProfileIcon.src}
+        src={overwriteUrl || userDetails?.profilePicture?.url || genericProfileIcon.src}
         alt="Profilbild"
         width={sizeInPx}
         height={sizeInPx}
       />
     </div>
-
   );
 };
 

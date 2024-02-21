@@ -14,7 +14,7 @@ export const getServerSideProps: GetServerSideProps = async (ctx) =>
     supabaseKey: env.SUPABASE_SERVICE_ROLE_KEY,
     supabaseUrl: env.NEXT_PUBLIC_SUPABASE_URL
   });
-  
+
   const { isUserLoggedIn } = await getIsUserLoggedInServer(supabase);
 
   console.log("isUserLoggedIn", isUserLoggedIn, "redirecting to", isUserLoggedIn ? appPaths.dashboard : authPaths.login);
