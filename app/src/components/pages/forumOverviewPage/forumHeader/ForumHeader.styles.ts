@@ -8,6 +8,7 @@ export const imagesWrapper = css`
   left: 0;
   top: 0;
   overflow: hidden;
+  opacity: .7;
 `;
 
 export const flag1 = css`
@@ -16,14 +17,31 @@ export const flag1 = css`
   top: 70px;
   width: 230px;
   height: auto;
+  @media screen and (max-width: ${1500}px) {
+    right: 1%;
+    top: 50px;
+  }
+  @media screen and (max-width: ${1300}px) {
+    right: -5%;
+    width: 200px;
+  }
+  @media screen and (max-width: ${1050}px) {
+    right: -4%;
+    top: 10px;
+    width: 180px;
+  }
 `;
 
 export const flag2 = css`
   position: absolute;
   left: 4%;
   bottom: -50px;
-  width: 250px;
+  width: 220px;
   height: auto;
+  @media screen and (max-width: ${1300}px) {
+    left: 2%;
+    bottom: -60px;
+  }
 `;
 
 export const contentWrapper = css`
@@ -32,7 +50,7 @@ export const contentWrapper = css`
   z-index: 3;
   flex-direction: column;
   align-items: center;
-  padding-top: 20px;
+  padding: 20px 20px 0;
   * {
     text-align: center;
   }

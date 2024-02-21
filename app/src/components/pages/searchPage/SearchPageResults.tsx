@@ -1,3 +1,4 @@
+/* eslint-disable max-lines */
 import { Svg } from "@/basic-components/SVG/Svg";
 import ItemBlock from "@/components/organisms/caseBlock/ItemBlock";
 import DocsTable from "@/components/organisms/docsTable/DocsTable";
@@ -8,7 +9,7 @@ import ForumQuestions from "@/components/pages/forumOverviewPage/forumQuestions/
 import useSearchResults, { type SearchResultsKey, type SearchResults } from "@/hooks/useSearchResults";
 import { type IGenArticleOverviewFragment, type IGenFullCaseFragment } from "@/services/graphql/__generated/sdk";
 import { type ArticleSearchIndexItem, type CaseSearchIndexItem } from "@/utils/search";
-import { type CommonKeysInTypes } from "@/utils/types";
+import { type CommonKeysInTypes, type Nullable } from "@/utils/types";
 
 import { useRouter } from "next/router";
 import { Fragment, type FunctionComponent } from "react";
@@ -20,23 +21,35 @@ type Props = {
   readonly tabQuery: SearchResultsKey;
 };
 
+const NoResultsFound: FunctionComponent<{
+  readonly queryString: Nullable<string | string[]>;
+  readonly tabQuery: Props["tabQuery"];
+}> = ({ queryString, tabQuery }) => (
+  <EmptyStateCard
+    title={`Keine Ergebnisse ${queryString && `für “${queryString}”`} ${convertTabQueryAsItemTab(tabQuery) && `${convertTabQueryAsItemTab(tabQuery)}`}`}
+    text="Schaue in anderen Kategorien oder starte eine neue Suche"
+    variant="For-large-areas"
+  />
+);
+
 const SearchPageResults: FunctionComponent<Props> = ({ tabQuery }) =>
 {
   const { searchResults } = useSearchResults();
   const router = useRouter();
 
-  const NoResultsFound = (
-    <EmptyStateCard
-      title={`Keine Ergebnisse ${router.query.find && `für “${router.query.find}”`} ${convertTabQueryAsItemTab(tabQuery) && `in ${convertTabQueryAsItemTab(tabQuery)}`}`}
-      text="Schaue in anderen Kategorien oder starte eine neue Suche"
-      variant="For-large-areas"
-    />
-  );
-
   switch (tabQuery)
   {
     case "forumQuestions":
     {
+      const forumQuestionsSearchResults = searchResults.forumQuestions;
+
+      if(!forumQuestionsSearchResults || forumQuestionsSearchResults.length === 0)
+      {
+        return (
+          <NoResultsFound queryString={router.query.find} tabQuery={tabQuery}/>
+        );
+      }
+
       return (
         <div css={styles.questionsWrapper}>
           <ForumQuestions questionIds={searchResults.forumQuestions.map(q => q.id)}/>
@@ -114,7 +127,7 @@ const SearchPageResults: FunctionComponent<Props> = ({ tabQuery }) =>
             })}
           </div>
         ) : (
-          NoResultsFound
+          <NoResultsFound queryString={router.query.find} tabQuery={tabQuery}/>
         )
       );
     }
@@ -167,7 +180,9 @@ const SearchPageResults: FunctionComponent<Props> = ({ tabQuery }) =>
               />
             )}
           </div>
-        ) : NoResultsFound
+        ) : (
+          <NoResultsFound queryString={router.query.find} tabQuery={tabQuery}/>
+        )
       );
     }
     default:
