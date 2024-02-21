@@ -25,10 +25,10 @@ export const convertTabQueryAsItemTab = (query: string): string =>
 {
   switch (query)
   {
-    case "cases": return "Fälle"; 
-    case "articles": return "Lexikon";
-    case "forumQuestions": return "Forum";
-    case "userUploads": case "userDocuments": return "Deine Dateien"; 
+    case "cases": return "in Fälle";
+    case "articles": return "im Lexikon";
+    case "forumQuestions": return "im Forum";
+    case "userUploads": case "userDocuments": return "in Deine Dateien";
     default:
     {
       console.error(`Unknown tab query at convertTabQueryAsItemTab: ${query}`);

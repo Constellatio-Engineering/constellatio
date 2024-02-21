@@ -93,6 +93,7 @@ export const QuestionUpvoteButton: FunctionComponent<Props> = ({
   const onClick = (e: React.MouseEvent<HTMLButtonElement>): void =>
   {
     e.stopPropagation();
+    e.preventDefault();
 
     if(isUpvoted)
     {

@@ -62,6 +62,7 @@ const BookmarkButton: FunctionComponent<Props> = ({
   const onBookmarkIconClick = (e: React.MouseEvent<HTMLButtonElement>): void =>
   {
     e.stopPropagation();
+    e.preventDefault();
 
     if(!isBookmarked)
     {
