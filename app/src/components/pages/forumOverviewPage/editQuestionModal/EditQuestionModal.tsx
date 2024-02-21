@@ -26,6 +26,7 @@ const EditQuestionModal: FunctionComponent<Question> = (originalQuestion) =>
     initialValues: getFormValuesFromQuestion(originalQuestion),
     validate: zodResolver(questionUpdateSchema),
     validateInputOnBlur: true,
+    validateInputOnChange: ["title"]
   });
   const isModalOpened = modalState.state === "edit" && modalState.questionId === originalQuestion.id;
 

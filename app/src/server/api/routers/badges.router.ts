@@ -28,7 +28,7 @@ export const badgesRouter = createTRPCRouter({
         },
       });
 
-      const badgesWithCompletedState: BadgeWithUserData[] = badgesQueryResult
+      let badgesWithCompletedState: BadgeWithUserData[] = badgesQueryResult
         .map((badge) => ({
           description: badge.description,
           id: badge.id,
@@ -54,6 +54,19 @@ export const badgesRouter = createTRPCRouter({
             return a.name.localeCompare(b.name);
           }
         });
+
+      const hasOneOf100Badge = badgesWithCompletedState.some(badge => badge.identifier === "1-100" && badge.isCompleted);
+
+      if(hasOneOf100Badge)
+      {
+        // if the user has completed the 1-100 badge, remove the 1-1000 badge from the list
+        badgesWithCompletedState = badgesWithCompletedState.filter(badge => badge.identifier !== "1-1000");
+      }
+      else
+      {
+        // if the user has not completed the 1-100 badge, remove the 1-100 badge from the list (the 1-1000 badge is shown instead)
+        badgesWithCompletedState = badgesWithCompletedState.filter(badge => badge.identifier !== "1-100");
+      }
 
       return ({
         badges: badgesWithCompletedState,

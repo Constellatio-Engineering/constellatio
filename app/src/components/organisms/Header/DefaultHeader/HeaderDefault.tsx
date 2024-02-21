@@ -19,7 +19,8 @@ import HeaderItemPersonalSpace from "./OnboardingStep2/HeaderItemPersonalSpace";
 import OnboardingSecondStep from "./OnboardingStep2/OnboardingSecondStep";
 import HeaderItemSearchBar from "./OnboardingStep3/HeaderItemSearchBar";
 import OnboardingThirdStep from "./OnboardingStep3/OnboardingThirdStep";
-import ConstellatioFullLogo from "../../../../../public/images/icons/constellatio-full-logo.svg";
+import ConstellatioFullLogoAlphaVersion from "../../../../../public/images/icons/constellatio-full-logo-alpha-version.svg";
+// import ConstellatioFullLogo from "../../../../../public/images/icons/constellatio-full-logo.svg";
 import ConstellatioLogoIcon from "../../../../../public/images/icons/constellatio-icon.svg";
 import SearchOverlay from "../../searchOverlay/SearchOverlay";
 import { SHeader } from "../Header.styles";
@@ -73,7 +74,7 @@ const HeaderDefault: FunctionComponent = () =>
           <div css={styles.links}>
             <Link href={appPaths.dashboard}>
               <Image css={styles.tabletHeaderLogo} src={ConstellatioLogoIcon} alt="Constellatio"/>
-              <Image css={styles.headerLogo} src={ConstellatioFullLogo} alt="Constellatio"/>
+              <Image css={styles.headerLogo} src={ConstellatioFullLogoAlphaVersion} alt="Constellatio"/>
             </Link>
             {links.map((link, linkIndex) =>
               linkIndex === 1 ? (
