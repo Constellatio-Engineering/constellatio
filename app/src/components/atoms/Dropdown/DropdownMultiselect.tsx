@@ -4,7 +4,7 @@ import { dropdownMultiselectStyles } from "@/components/atoms/Dropdown/DropdownM
 import { MultiSelect, type MultiSelectProps, Skeleton } from "@mantine/core";
 import React, { type FC } from "react";
 
-export type DropdownProps = MultiSelectProps & {
+type DropdownProps = MultiSelectProps & {
   readonly isLoading?: boolean;
 };
 

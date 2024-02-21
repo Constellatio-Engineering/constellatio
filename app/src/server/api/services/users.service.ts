@@ -1,6 +1,5 @@
 import { db } from "@/db/connection";
 import { users } from "@/db/schema";
-import { env } from "@/env.mjs";
 import { NotFoundError } from "@/utils/serverError";
 import { getProfilePictureUrl } from "@/utils/users";
 

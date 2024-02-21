@@ -7,7 +7,7 @@ import { type IGenMainCategory, type IGenFullCaseFragment, type IGenArticleOverv
 import { appPaths } from "@/utils/paths";
 import { type NonEmptyArray, type Nullable } from "@/utils/types";
 
-import { Container, Loader } from "@mantine/core";
+import { Loader } from "@mantine/core";
 import { useRouter } from "next/router";
 import { parseAsString, useQueryState } from "next-usequerystate";
 import React, { type FunctionComponent } from "react";
