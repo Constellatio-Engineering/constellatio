@@ -47,6 +47,7 @@ export const legalFieldIdValidation = z.string().nullish().transform((value, con
   return value;
 });
 
+export const titleMaxLength = 150;
+export const titleValidation = z.string().min(10).max(titleMaxLength).transform(title => title.trim());
 export const subfieldsIdsValidation = z.array(idValidation);
 export const topicsIdsValidation = z.array(idValidation);
-export const titleValidation = z.string().min(10).max(150).transform(title => title.trim());

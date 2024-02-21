@@ -22,6 +22,7 @@ const PostQuestionModal: FunctionComponent = () =>
     },
     validate: zodResolver(postQuestionSchema),
     validateInputOnBlur: true,
+    validateInputOnChange: ["title"]
   });
 
   const { error: postQuestionError, isPending: isLoading, mutate: postQuestion } = usePostQuestion({

@@ -7,6 +7,7 @@ import ErrorCard, { type ErrorCardsProps } from "@/components/molecules/errorCar
 import { useDataLossProtection } from "@/hooks/useDataLossProtection";
 import { useLegalFieldsAndTopics } from "@/hooks/useLegalFieldsAndTopics";
 import { type PostQuestionSchema } from "@/schemas/forum/postQuestion.schema";
+import { titleMaxLength } from "@/schemas/forum/question.valiation";
 import { useForumPageStore } from "@/stores/forumPage.store";
 
 import { Modal, type ModalProps, type SelectItem, Title } from "@mantine/core";
@@ -85,6 +86,9 @@ const QuestionModal: FunctionComponent<QuestionModalProps> = ({
   [allTopics]
   );
 
+  const currentTitleLength = form.values.title.trim().length;
+  const isTitleTooLong = currentTitleLength > titleMaxLength;
+
   return (
     <Modal
       withCloseButton={withCloseButton}
@@ -117,7 +121,12 @@ const QuestionModal: FunctionComponent<QuestionModalProps> = ({
               <Input
                 inputType="text"
                 label="Titel deiner Frage"
-                description="Kurze und prägnante Beschreibung deiner Frage"
+                description={(
+                  <div css={styles.descriptionWithCharCount}>
+                    <span>Kurze und prägnante Beschreibung deiner Frage.</span>
+                    <span css={[isTitleTooLong && styles.characterCountExceeded]}>{currentTitleLength}/{titleMaxLength}</span>
+                  </div>
+                )}
                 title="Titel deiner Frage"
                 {...form.getInputProps("title" satisfies keyof PostQuestionSchema)}
               />

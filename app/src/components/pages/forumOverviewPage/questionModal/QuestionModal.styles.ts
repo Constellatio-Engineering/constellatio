@@ -55,3 +55,14 @@ export const submitButton = css`
   margin-top: 30px;
   width: 100%;
 `;
+
+export const descriptionWithCharCount = css`
+  display: flex;
+  justify-content: space-between; 
+  align-items: center;
+  gap: 12px;
+`;
+
+export const characterCountExceeded = css`
+  color: ${colors["support-error"][3]};
+`;
