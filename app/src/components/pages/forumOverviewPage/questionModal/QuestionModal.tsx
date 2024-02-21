@@ -1,3 +1,4 @@
+/* eslint-disable max-lines */
 import { Button } from "@/components/atoms/Button/Button";
 import { Dropdown } from "@/components/atoms/Dropdown/Dropdown";
 import { DropdownMultiselect } from "@/components/atoms/Dropdown/DropdownMultiselect";
