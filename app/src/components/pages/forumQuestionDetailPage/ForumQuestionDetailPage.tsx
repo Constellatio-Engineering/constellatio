@@ -7,6 +7,7 @@ import { ExpandIcon } from "@/components/Icons/Expand";
 import LegalFieldsAndTopicsTags from "@/components/molecules/legalFieldsAndTopicsTags/LegalFieldsAndTopicsTags";
 import BookmarkButton from "@/components/organisms/caseBlock/BookmarkButton/BookmarkButton";
 import EmptyStateCard from "@/components/organisms/emptyStateCard/EmptyStateCard";
+import PageHead from "@/components/organisms/pageHead/PageHead";
 import EditQuestionModal from "@/components/pages/forumOverviewPage/editQuestionModal/EditQuestionModal";
 import ForumListItem from "@/components/pages/forumOverviewPage/forumListItem/ForumListItem";
 import AnswerEditor from "@/components/pages/forumQuestionDetailPage/answerEditor/AnswerEditor";
@@ -139,6 +140,7 @@ export const ForumQuestionDetailPage: FunctionComponent<Props> = ({ questionId }
 
   return (
     <Fragment>
+      <PageHead pageTitle={question.title || "Frage ohne Titel"}/>
       <EditQuestionModal {...question}/>
       <Modal
         lockScroll={false}

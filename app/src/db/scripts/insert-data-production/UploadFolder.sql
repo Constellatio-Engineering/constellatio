@@ -1,0 +1,15 @@
+INSERT INTO public."UploadFolder" ("Id", "CreatedAt", "UserId", "Name") VALUES ('80ba7ad5-0bac-46c4-ac6a-9764f394ea6d', '2023-11-01 10:46:50.416748', '7db7ca52-0778-4769-bb51-5300704c4521', 'klöl');
+INSERT INTO public."UploadFolder" ("Id", "CreatedAt", "UserId", "Name") VALUES ('06f234ce-2f76-466e-933e-093bd5525d26', '2023-11-01 12:03:45.638123', '1e04be9b-1274-46c4-896d-da05c65efadf', 'Test');
+INSERT INTO public."UploadFolder" ("Id", "CreatedAt", "UserId", "Name") VALUES ('a252c990-d2ad-44e9-93b8-cb64f60dd840', '2023-11-01 12:38:09.261374', '1e04be9b-1274-46c4-896d-da05c65efadf', 'Standard Ordner');
+INSERT INTO public."UploadFolder" ("Id", "CreatedAt", "UserId", "Name") VALUES ('8a267ee1-accf-4bbf-87be-6ee26331659e', '2023-11-01 12:40:36.163210', '1e04be9b-1274-46c4-896d-da05c65efadf', 'Test');
+INSERT INTO public."UploadFolder" ("Id", "CreatedAt", "UserId", "Name") VALUES ('22dad713-4059-48e1-998f-d8127357ebbe', '2023-11-06 15:47:37.113083', '01bb7c4d-8a40-4839-8779-1e0e3737e7cc', 'Test321');
+INSERT INTO public."UploadFolder" ("Id", "CreatedAt", "UserId", "Name") VALUES ('cedbd99d-0999-41ef-9b09-c4ba48bc00ae', '2023-11-07 20:29:13.078857', '86c31dad-b521-466f-ad1b-90563ebc02d1', 'TestXY');
+INSERT INTO public."UploadFolder" ("Id", "CreatedAt", "UserId", "Name") VALUES ('453f7a0d-ae78-4ee6-b90e-4641d7803939', '2023-11-07 21:05:13.572548', '74342249-56dc-4251-b122-fdadb18e4d70', 'SimSalaBim');
+INSERT INTO public."UploadFolder" ("Id", "CreatedAt", "UserId", "Name") VALUES ('27e0ed4d-d5af-495c-82d2-ea24e2cc00d1', '2023-11-08 21:01:59.585498', '5c4833ef-4337-4899-a826-5e3b1c50be4d', 'ZEUGS');
+INSERT INTO public."UploadFolder" ("Id", "CreatedAt", "UserId", "Name") VALUES ('ab8c5c61-cd14-4921-b033-ff81718e5773', '2023-11-09 16:13:59.493609', '9dc722de-de73-4ae0-84b6-e1580eb9c746', 'Semester 6');
+INSERT INTO public."UploadFolder" ("Id", "CreatedAt", "UserId", "Name") VALUES ('402a7d41-a460-4011-97aa-3cd22698357f', '2023-11-09 16:18:44.671988', '9dc722de-de73-4ae0-84b6-e1580eb9c746', 'test');
+INSERT INTO public."UploadFolder" ("Id", "CreatedAt", "UserId", "Name") VALUES ('a7a5379b-bc17-43f0-840d-8384c4d9e35a', '2023-11-17 07:59:08.316022', 'f41538a7-01e4-458f-ae83-50eecc095ff7', 'test 2');
+INSERT INTO public."UploadFolder" ("Id", "CreatedAt", "UserId", "Name") VALUES ('3ab3ed35-4819-49e9-9fdd-3a7574f70591', '2023-11-19 20:36:37.744559', '01681fe6-34fe-42be-a75a-4c99665e4bb8', 'Lisa war hier');
+INSERT INTO public."UploadFolder" ("Id", "CreatedAt", "UserId", "Name") VALUES ('0df195da-3392-439c-8e69-f39bd25c8e5f', '2023-11-24 08:36:41.773971', 'c9f5107f-2fe1-41a8-9d7e-03fe1dbf5eb0', 'dsadasd');
+INSERT INTO public."UploadFolder" ("Id", "CreatedAt", "UserId", "Name") VALUES ('70008675-d529-40b5-8c6f-fb5476915a44', '2023-12-04 15:05:52.555590', '51407ced-1bf5-481a-b10c-64b3dbc051ea', 'Strafrecht Übersichten');
+INSERT INTO public."UploadFolder" ("Id", "CreatedAt", "UserId", "Name") VALUES ('f8a86740-33f6-4429-a05b-17c1f6d09aa9', '2024-01-11 09:32:24.837307', 'b19f9f61-f672-4fa3-9def-929029e446d9', 'Schwerpunkt');
