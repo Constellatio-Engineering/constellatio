@@ -4,7 +4,7 @@ import ForumOverviewPage from "@/components/pages/forumOverviewPage/ForumOvervie
 import { type NextPageWithLayout } from "@/pages/_app";
 import { getCommonProps } from "@/utils/commonProps";
 
-import type { GetServerSideProps } from "next";
+import type { GetStaticProps } from "next";
 import { useTranslation } from "next-i18next";
 import React, { useEffect } from "react";
 import z from "zod";
@@ -12,9 +12,9 @@ import { makeZodI18nMap } from "zod-i18n-map";
 
 import { defaultLocale } from "../../../next.config.mjs";
 
-export const getServerSideProps: GetServerSideProps = async (ctx) =>
+export const getStaticProps: GetStaticProps = async ({ locale = defaultLocale }) =>
 {
-  const commonProps = await getCommonProps({ locale: ctx.locale || defaultLocale });
+  const commonProps = await getCommonProps({ locale });
 
   return {
     props: commonProps,
