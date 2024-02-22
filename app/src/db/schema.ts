@@ -342,6 +342,8 @@ export const forumQuestionsRelations = relations(forumQuestions, ({ many, one })
   forumQuestionToLegalFields: many(forumQuestionsToLegalFields),
   forumQuestionToSubfields: many(forumQuestionToSubfields),
   forumQuestionToTopics: many(forumQuestionToTopics),
+  answers: many(forumAnswers),
+  upvotes: many(questionUpvotes),
   user: one(users, {
     fields: [forumQuestions.userId],
     references: [users.id],
@@ -420,6 +422,10 @@ export const forumAnswersRelations = relations(forumAnswers, ({ one }) => ({
     references: [users.id],
     relationName: "author",
   }),
+  question: one(forumQuestions, {
+    fields: [forumAnswers.parentQuestionId],
+    references: [forumQuestions.id],
+  }),
 }));
 
 export type ForumAnswerInsert = InferInsertModel<typeof forumAnswers>;
@@ -443,6 +449,13 @@ export const questionUpvotes = pgTable("QuestionUpvote", {
 }, table => ({
   questionId_index: index("QuestionUpvote_QuestionId_Index").on(table.questionId),
   pk: primaryKey({ columns: [table.userId, table.questionId] }),
+}));
+
+export const questionUpvotesRelations = relations(questionUpvotes, ({ one }) => ({
+  question: one(forumQuestions, {
+    fields: [questionUpvotes.questionId],
+    references: [forumQuestions.id],
+  }),
 }));
 
 export type QuestionUpvoteInsert = InferInsertModel<typeof questionUpvotes>;

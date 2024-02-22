@@ -64,15 +64,13 @@ export const getQuestions = async (params: GetQuestionsParams) => // eslint-disa
     .with(userUpvotesSubQuery)
     .select({
       ...getTableColumns(forumQuestions),
-      answersCount: count(forumAnswers.id).as("answersCount"),
       hasCorrectAnswer: sql<boolean>`case when ${correctAnswers.questionId} is null then false else true end`.as("hasCorrectAnswer"),
       isUpvoted: sql<boolean>`case when ${userUpvotesSubQuery.questionId} is null then false else true end`.as("isUpvoted"),
-      upvotesCount: count(questionUpvotes.questionId).as("upvotesCount"),
+      upvotesCount: count(questionUpvotes).as("upvotesCount"),
     })
     .from(forumQuestions)
     .leftJoin(userUpvotesSubQuery, eq(forumQuestions.id, userUpvotesSubQuery.questionId))
     .leftJoin(questionUpvotes, eq(forumQuestions.id, questionUpvotes.questionId))
-    .leftJoin(forumAnswers, eq(forumQuestions.id, forumAnswers.parentQuestionId))
     .leftJoin(correctAnswers, eq(forumQuestions.id, correctAnswers.questionId))
     .where(params.getQuestionsType === "byId"
       ? eq(forumQuestions.id, params.questionId)
@@ -131,7 +129,6 @@ export const getQuestions = async (params: GetQuestionsParams) => // eslint-disa
   const questionsSortedWithAuthor = await db
     .with(subquery)
     .select({
-      answersCount: subquery.answersCount,
       author: {
         id: users.id,
         username: users.displayName,
@@ -158,6 +155,11 @@ export const getQuestions = async (params: GetQuestionsParams) => // eslint-disa
   const questionsWithAdditionalData = questionIds.length > 0 ? await db.query.forumQuestions.findMany({
     where: inArray(forumQuestions.id, questionIds),
     with: {
+      answers: {
+        columns: {
+          id: true,
+        },
+      },
       forumQuestionToLegalFields: true,
       forumQuestionToSubfields: true,
       forumQuestionToTopics: true,
@@ -179,6 +181,7 @@ export const getQuestions = async (params: GetQuestionsParams) => // eslint-disa
     let subfieldsIds: string[] = [];
     let topicsIds: string[] = [];
     let authorProfilePictureUrl: string | null = null;
+    let answersCount = 0;
 
     const questionData = questionsWithAdditionalData.find(q => q.id === question.id);
 
@@ -187,6 +190,7 @@ export const getQuestions = async (params: GetQuestionsParams) => // eslint-disa
       legalFieldId = questionData.forumQuestionToLegalFields.map(lf => lf.legalFieldId)[0];
       subfieldsIds = questionData.forumQuestionToSubfields.map(sf => sf.subfieldId);
       topicsIds = questionData.forumQuestionToTopics.map(t => t.topicId);
+      answersCount = questionData.answers.length ?? 0;
 
       const _authorProfilePictureUrl = questionData.user?.profilePictures?.[0];
 
@@ -198,6 +202,7 @@ export const getQuestions = async (params: GetQuestionsParams) => // eslint-disa
 
     return {
       ...question,
+      answersCount,
       authorProfilePictureUrl,
       legalFieldId,
       subfieldsIds,
