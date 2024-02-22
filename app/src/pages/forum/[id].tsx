@@ -1,5 +1,4 @@
 import { Layout } from "@/components/layouts/Layout";
-import PageHead from "@/components/organisms/pageHead/PageHead";
 import { ForumQuestionDetailPage } from "@/components/pages/forumQuestionDetailPage/ForumQuestionDetailPage";
 import ForumQuestionDetailsPageSkeleton from "@/components/pages/forumQuestionDetailPage/forumQuestionDetailsPageSkeleton/ForumQuestionDetailsPageSkeleton";
 import { type NextPageWithLayout } from "@/pages/_app";
@@ -26,10 +25,7 @@ const Page: NextPageWithLayout = () =>
   }
 
   return (
-    <>
-      <PageHead pageTitle={"Frage ohne Titel"}/>
-      <ForumQuestionDetailPage questionId={questionId}/>
-    </>
+    <ForumQuestionDetailPage questionId={questionId}/>
   );
 };
 
