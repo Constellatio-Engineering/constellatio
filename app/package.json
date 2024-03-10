@@ -127,6 +127,7 @@
     "react-chartjs-2": "5.2.0",
     "react-dom": "18.2.0",
     "react-i18next": "14.0.0",
+    "react-idle-timer": "5.7.2",
     "react-intersection-observer": "9.6.0",
     "react-password-strength-bar": "0.4.1",
     "sharp": "0.32.6",
