@@ -87,6 +87,15 @@ export type UserBadgeState = typeof userBadgeStates[number];
 export const roles = ["forumMod", "admin"] as const;
 export type Role = typeof roles[number];
 
+export const notificationTypesIdentifiers = [
+  "forumQuestionPosted",
+  "answerToForumQuestionPosted",
+  "forumQuestionUpvoted",
+  "replyToForumAnswerPosted",
+  "forumAnswerUpvoted",
+  "forumAnswerAccepted",
+] as const;
+
 export const genderEnum = pgEnum("Gender", allGenderIdentifiers);
 export const onboardingResultEnum = pgEnum("OnboardingResult", allOnboardingResults);
 export const resourceTypeEnum = pgEnum("ResourceType", allBookmarkResourceTypes);
@@ -104,6 +113,7 @@ export const badgeIdentifierEnum = pgEnum("BadgeIdentifier", badgeIdentifiers);
 export const userBadgeStateEnum = pgEnum("UserBadgeState", userBadgeStates);
 export const badgePublicationStateEnum = pgEnum("BadgePublicationState", badgePublicationState);
 export const roleEnum = pgEnum("Role", roles);
+export const notificationTypeIdentifierEnum = pgEnum("NotificationTypeIdentifier", notificationTypesIdentifiers);
 
 // TODO: Go through all queries and come up with useful indexes
 
@@ -509,3 +519,45 @@ export const usersToRolesRelations = relations(usersToRoles, ({ one }) => ({
 
 export type UserToRoleInsert = InferInsertModel<typeof usersToRoles>;
 export type UserToRole = InferSelectModel<typeof usersToRoles>;
+
+export const notificationTypes = pgTable("NotificationType", {
+  id: uuid("Id").defaultRandom().primaryKey(),
+  identifier: notificationTypeIdentifierEnum("NotificationTypeIdentifier").notNull().unique(),
+  name: text("Name").notNull(),
+  description: text("Description").notNull(),
+});
+
+export const notificationTypesRelations = relations(notificationTypes, ({ many }) => ({
+  notifications: many(notifications),
+}));
+
+export type NotificationTypeInsert = InferInsertModel<typeof notificationTypes>;
+export type NotificationType = InferSelectModel<typeof notificationTypes>;
+
+export const notifications = pgTable("Notification", {
+  id: uuid("Id").defaultRandom().primaryKey(),
+  recipientId: uuid("RecipientId").references(() => users.id, { onDelete: "no action" }).notNull(),
+  senderId: uuid("SenderId").references(() => users.id, { onDelete: "no action" }).notNull(),
+  resourceId: uuid("ResourceId"),
+  typeId: uuid("TypeId").references(() => notificationTypes.id, { onDelete: "no action" }).notNull(),
+  createdAt: timestamp("CreatedAt").defaultNow().notNull(),
+  readAt: timestamp("ReadAt"),
+});
+
+export const notificationsRelations = relations(notifications, ({ one }) => ({
+  type: one(notificationTypes, {
+    fields: [notifications.typeId],
+    references: [notificationTypes.id],
+  }),
+  recipient: one(users, {
+    fields: [notifications.recipientId],
+    references: [users.id],
+  }),
+  sender: one(users, {
+    fields: [notifications.senderId],
+    references: [users.id],
+  }),
+}));
+
+export type NotificationInsert = InferInsertModel<typeof notifications>;
+export type Notification = InferSelectModel<typeof notifications>;
