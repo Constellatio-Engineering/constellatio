@@ -1,7 +1,7 @@
 /* eslint-disable max-lines */
 import { db } from "@/db/connection";
 import {
-  answerUpvotes, correctAnswers, type ForumAnswerInsert, forumAnswers, type ForumQuestionInsert, forumQuestions, questionUpvotes 
+  answerUpvotes, correctAnswers, type ForumAnswerInsert, forumAnswers, type ForumQuestionInsert, forumQuestions, notifications, questionUpvotes
 } from "@/db/schema";
 import { meiliSearchAdmin } from "@/lib/meilisearch";
 import { deleteAnswerSchema } from "@/schemas/forum/deleteAnswer.schema";
@@ -290,7 +290,46 @@ export const forumRouter = createTRPCRouter({
         userId
       };
 
-      return db.insert(forumAnswers).values(answerInsert).returning();
+      const [insertedAnswer] = await db.insert(forumAnswers).values(answerInsert).returning();
+
+      if(input.parent.parentType === "answer")
+      {
+        const parentAnswer = await db.query.forumAnswers.findFirst({
+          where: eq(forumAnswers.id, input.parent.answerId),
+        });
+
+        if(!parentAnswer)
+        {
+          throw new BadRequestError(new Error("parent answer not found"));
+        }
+
+        await db.insert(notifications).values({
+          recipientId: parentAnswer.userId,
+          resourceId: input.parent.answerId,
+          senderId: userId,
+          typeIdentifier: "replyToForumAnswerPosted",
+        });
+      }
+      else if(input.parent.parentType === "question")
+      {
+        const parentQuestion = await db.query.forumQuestions.findFirst({
+          where: eq(forumQuestions.id, input.parent.questionId),
+        });
+
+        if(!parentQuestion)
+        {
+          throw new BadRequestError(new Error("parent question not found"));
+        }
+
+        await db.insert(notifications).values({
+          recipientId: parentQuestion.userId,
+          resourceId: input.parent.questionId,
+          senderId: userId,
+          typeIdentifier: "answerToForumQuestionPosted",
+        });
+      }
+
+      return insertedAnswer;
     }),
   postQuestion: protectedProcedure
     .input(postQuestionSchema)

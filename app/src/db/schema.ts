@@ -136,6 +136,7 @@ export const users = pgTable("User", {
 });
 
 export const usersRelations = relations(users, ({ many }) => ({
+  notifications: many(notifications),
   profilePictures: many(profilePictures),
   usersToBadges: many(usersToBadges),
   usersToRoles: many(usersToRoles),
@@ -521,8 +522,7 @@ export type UserToRoleInsert = InferInsertModel<typeof usersToRoles>;
 export type UserToRole = InferSelectModel<typeof usersToRoles>;
 
 export const notificationTypes = pgTable("NotificationType", {
-  id: uuid("Id").defaultRandom().primaryKey(),
-  identifier: notificationTypeIdentifierEnum("NotificationTypeIdentifier").notNull().unique(),
+  identifier: notificationTypeIdentifierEnum("NotificationTypeIdentifier").primaryKey(),
   name: text("Name").notNull(),
   description: text("Description").notNull(),
 });
@@ -536,18 +536,19 @@ export type NotificationType = InferSelectModel<typeof notificationTypes>;
 
 export const notifications = pgTable("Notification", {
   id: uuid("Id").defaultRandom().primaryKey(),
+  index: serial("Index"),
   recipientId: uuid("RecipientId").references(() => users.id, { onDelete: "no action" }).notNull(),
   senderId: uuid("SenderId").references(() => users.id, { onDelete: "no action" }).notNull(),
   resourceId: uuid("ResourceId"),
-  typeId: uuid("TypeId").references(() => notificationTypes.id, { onDelete: "no action" }).notNull(),
+  typeIdentifier: notificationTypeIdentifierEnum("NotificationTypeIdentifier").references(() => notificationTypes.identifier, { onDelete: "no action" }).notNull(),
   createdAt: timestamp("CreatedAt").defaultNow().notNull(),
   readAt: timestamp("ReadAt"),
 });
 
 export const notificationsRelations = relations(notifications, ({ one }) => ({
-  type: one(notificationTypes, {
-    fields: [notifications.typeId],
-    references: [notificationTypes.id],
+  notificationType: one(notificationTypes, {
+    fields: [notifications.typeIdentifier],
+    references: [notificationTypes.identifier],
   }),
   recipient: one(users, {
     fields: [notifications.recipientId],

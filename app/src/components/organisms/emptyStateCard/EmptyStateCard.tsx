@@ -16,7 +16,7 @@ export interface IEmptyStateCardProps
     readonly onClick: () => void;
   };
   readonly hideIcon?: boolean;
-  readonly text: string;
+  readonly text?: string;
   readonly title: string;
   readonly variant: "For-small-areas" | "For-large-areas";
 }
@@ -45,13 +45,15 @@ const EmptyStateCard: FunctionComponent<IEmptyStateCardProps> = ({
             </Title>
           ) : <SubtitleText styleType="subtitle-01-medium">{title}</SubtitleText>}
         </div>
-        <div css={styles.emptyStateCardText({ theme })}>
-          {variant === "For-large-areas" ? (
-            <BodyText styleType="body-01-medium">
-              {text}
-            </BodyText>
-          ) : <SubtitleText styleType="subtitle-01-medium">{text}</SubtitleText>}
-        </div>
+        {text && (
+          <div css={styles.emptyStateCardText({ theme })}>
+            {variant === "For-large-areas" ? (
+              <BodyText styleType="body-01-medium">
+                {text}
+              </BodyText>
+            ) : <SubtitleText styleType="subtitle-01-medium">{text}</SubtitleText>}
+          </div>
+        )}
         {button && (
           <div css={styles.callToAction({ theme })}>
             <Button<"button">
