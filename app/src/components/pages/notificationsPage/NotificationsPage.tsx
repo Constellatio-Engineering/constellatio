@@ -1,3 +1,4 @@
+import ContentWrapper from "@/components/helpers/contentWrapper/ContentWrapper";
 import { NotificationsPageHeader } from "@/components/organisms/notificationsPageHeader/NotificationsPageHeader";
 import Notifications from "@/components/pages/notificationsPage/notifications/Notifications";
 
@@ -8,9 +9,11 @@ import * as styles from "./NotificationsPage.styles";
 export const NotificationsPage: FunctionComponent = () =>
 {
   return (
-    <div css={styles.wrapper}>
+    <>
       <NotificationsPageHeader/>
-      <Notifications/>
-    </div>
+      <ContentWrapper stylesOverrides={styles.contentContainer}>
+        <Notifications/>
+      </ContentWrapper>
+    </>
   );
 };

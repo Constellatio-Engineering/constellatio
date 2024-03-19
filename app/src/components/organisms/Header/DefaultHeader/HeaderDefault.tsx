@@ -97,7 +97,6 @@ const HeaderDefault: FunctionComponent = () =>
             )}
           </div>
           <div css={styles.profileArea}>
-            {isDevelopment && <HeaderDefaultRecreateSearch/>}
             {showOnboarding ? (
               <OnboardingThirdStep onboardingStepsIndex={onboardingStepsIndex} setOnboardingStepsIndex={setOnboardingStepsIndex}/>
             ) : (

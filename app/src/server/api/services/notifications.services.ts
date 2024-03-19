@@ -1,6 +1,7 @@
 import { db } from "@/db/connection";
 import { notifications } from "@/db/schema";
 import { type GetNotificationsSchema } from "@/schemas/notifications/getNotifications.schema";
+import { getProfilePictureUrl } from "@/utils/users";
 
 import {
   and, desc, eq, inArray, lte, type SQL 
@@ -57,10 +58,40 @@ export const getNotifications = async (params: GetNotificationsParams) => // esl
       sender: {
         columns: {
           displayName: true,
+          id: true,
+        },
+        with: {
+          profilePictures: {
+            columns: {
+              serverFilename: true,
+            },
+          }
         }
       },
     },
   });
 
-  return notificationsQueryResult;
+  const notificationsWithAdditionalData = notificationsQueryResult.map((notification) =>
+  {
+    const senderProfilePicture = notification.sender.profilePictures[0]?.serverFilename;
+    let senderProfilePictureUrl = null;
+
+    if(senderProfilePicture)
+    {
+      senderProfilePictureUrl = getProfilePictureUrl({
+        serverFilename: senderProfilePicture,
+        userId: notification.sender.id 
+      });
+    }
+
+    return ({
+      ...notification,
+      sender: {
+        ...notification.sender,
+        profilePictureUrl: senderProfilePictureUrl,
+      },
+    });
+  });
+
+  return notificationsWithAdditionalData;
 };

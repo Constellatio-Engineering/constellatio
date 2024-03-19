@@ -1,5 +1,5 @@
 import { db } from "@/db/connection";
-import { forumQuestions, notifications, } from "@/db/schema";
+import { notifications, } from "@/db/schema";
 import { getNotificationByIdSchema } from "@/schemas/notifications/getNotificationById.schema";
 import { type GetNotificationsSchema, getNotificationsSchema } from "@/schemas/notifications/getNotifications.schema";
 import { markNotificationAsSeenSchema } from "@/schemas/notifications/markNotificationAsSeen.schema";
@@ -12,12 +12,15 @@ import { and, count, eq, isNull } from "drizzle-orm";
 
 export const notificationsRouter = createTRPCRouter({
   getAmountOfUnreadNotifications: protectedProcedure
-    .query(async () =>
+    .query(async ({ ctx: { userId } }) =>
     {
       const [amountQuery] = await db
         .select({ count: count() })
         .from(notifications)
-        .where(isNull(notifications.readAt));
+        .where(and(
+          isNull(notifications.readAt),
+          eq(notifications.recipientId, userId)
+        ));
 
       return { count: amountQuery?.count };
     }),

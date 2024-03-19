@@ -1,4 +1,6 @@
 import EmptyStateCard from "@/components/organisms/emptyStateCard/EmptyStateCard";
+import NotificationListItem from "@/components/organisms/notificationListItem/NotificationListItem";
+import { NotificationText } from "@/components/organisms/notificationText/NotificationText";
 import { defaultLimit } from "@/components/pages/forumOverviewPage/ForumOverviewPage";
 import { api } from "@/utils/api";
 
@@ -33,7 +35,6 @@ const Notifications: FunctionComponent = () =>
     hasNextPage,
     isFetchingNextPage,
     isPending,
-    isRefetching,
     status,
   } = api.notifications.getNotifications.useInfiniteQuery({
     limit: defaultLimit,
@@ -51,10 +52,13 @@ const Notifications: FunctionComponent = () =>
       return nextCursor;
     },
     initialCursor: { index: null },
+    refetchInterval: 5 * 1000,
     refetchOnMount: true,
     refetchOnReconnect: true,
     staleTime: Infinity
   });
+
+  console.log(notificationsQuery);
 
   const notifications = useMemo(() =>
   {
@@ -73,16 +77,17 @@ const Notifications: FunctionComponent = () =>
 
   return (
     <div css={styles.notificationsWrapper}>
-      {(isPending || isRefetching) ? (
+      {(isPending) ? (
         <p>Lädt...</p>
       ) : status === "error" ? (
         <p>Error: {error.message}</p>
       ) : notifications.length > 0 ? (
         <Fragment>
           {notifications.map((notification) => (
-            <div key={notification.id}>
-              {notification.typeIdentifier}
-            </div>
+            <NotificationListItem
+              key={notification.id}
+              notificationId={notification.id}
+            />
           ))}
           {isFetchingNextPage && (
             <p>Lädt...</p>

@@ -1,5 +1,38 @@
 import { defaultLimit } from "@/components/pages/forumOverviewPage/ForumOverviewPage";
+import type { NotificationWithRelations } from "@/server/api/routers/notifications.router";
 import { api } from "@/utils/api";
+import { getForumQuestionUrl } from "@/utils/paths";
+
+type NotificationFrontendData = {
+  link: string;
+  text: string;
+  title: string;
+};
+
+const getNotificationFrontendData = (notification: NotificationWithRelations): NotificationFrontendData =>
+{
+  let data: NotificationFrontendData;
+
+  switch (notification.typeIdentifier)
+  {
+    case "answerToForumQuestionPosted":
+    {
+      data = {
+        link: getForumQuestionUrl({ id: notification.resourceId! }),
+        text: `'${notification.sender.displayName}' hat eine Antwort auf deine Frage gepostet.`,
+        title: "Neue Antwort",
+      };
+      break;
+    }
+    case "forumQuestionPosted": { throw new Error("Not implemented yet: \"forumQuestionPosted\" case"); }
+    case "forumQuestionUpvoted": { throw new Error("Not implemented yet: \"forumQuestionUpvoted\" case"); }
+    case "replyToForumAnswerPosted": { throw new Error("Not implemented yet: \"replyToForumAnswerPosted\" case"); }
+    case "forumAnswerUpvoted": { throw new Error("Not implemented yet: \"forumAnswerUpvoted\" case"); }
+    case "forumAnswerAccepted": { throw new Error("Not implemented yet: \"forumAnswerAccepted\" case"); }
+  }
+
+  return data;
+};
 
 export const useNotificationDetails = (notificationId: string) =>
 {
@@ -16,6 +49,20 @@ export const useNotificationDetails = (notificationId: string) =>
       return notificationsFromCache.find((notification) => notification.id === notificationId);
     },
     retry: false,
+    select: (notification) =>
+    {
+      if(!notification)
+      {
+        return null;
+      }
+
+      return ({
+        ...notification,
+        frontendData: getNotificationFrontendData(notification!),
+      });
+    },
     staleTime: Infinity
   });
 };
+
+export type NotificationWithFrontendData = ReturnType<typeof useNotificationDetails>["data"];

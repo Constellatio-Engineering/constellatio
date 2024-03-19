@@ -1,22 +1,6 @@
 import { css } from "@emotion/react";
 
-export const wrapper = css`
-
-`;
-export const contentContainer = css``;
-
-export const sections = css`
-max-width: 1440px;
-margin:0 auto;
-/* when we enable the progress in the header we need to make this padding [top] around 240px */
-/* padding:240px 60px 100px 60px; */
-padding:150px 60px 100px 60px;
-display: flex;
-flex-direction: column;
-gap:100px;
-@media screen and (max-width: 1200px) {
-    padding:180px 60px 60px 60px;
-    gap:60px;
-
-}
+export const contentContainer = css`
+  padding-top: 60px;
+  max-width: 920px;
 `;
