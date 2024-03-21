@@ -1,6 +1,4 @@
-import { Button } from "@/components/atoms/Button/Button";
-
-import { Loader } from "@mantine/core";
+import { Loader, Menu } from "@mantine/core";
 import { useMutation } from "@tanstack/react-query";
 import axios, { AxiosError } from "axios";
 import { type FunctionComponent } from "react";
@@ -18,18 +16,16 @@ const HeaderDefaultRecreateSearch: FunctionComponent = () =>
   });
 
   return (
-    <div style={{ alignItems: "center", display: "flex" }}>
-      <Button<"button">
-        styleType="secondarySubtle"
-        disabled={isRecreatingSearchIndices}
-        type="button"
-        onClick={() => recreateSearchIndices()}
-        style={{ marginRight: 10 }}>
+    <Menu.Item
+      disabled={isRecreatingSearchIndices}
+      closeMenuOnClick={false}
+      onClick={() => recreateSearchIndices()}
+      icon={null}>
+      <div style={{ alignItems: "center", display: "flex" }}>
         Recreate Search Indices
-      </Button>
-      {isRecreatingSearchIndices && <Loader size={22}/>}
-    </div>
-  
+        {isRecreatingSearchIndices && <Loader size={22} ml={6}/>}
+      </div>
+    </Menu.Item>
   );
 };
 

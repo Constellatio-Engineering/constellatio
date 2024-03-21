@@ -1,7 +1,9 @@
 import { BodyText } from "@/components/atoms/BodyText/BodyText";
 import ProfilePicture from "@/components/molecules/profilePicture/ProfilePicture";
+import HeaderDefaultRecreateSearch from "@/components/organisms/Header/DefaultHeader/HeaderDefaultRecreateSearch";
 import { useSignout } from "@/hooks/useSignout";
 import useUserDetails from "@/hooks/useUserDetails";
+import { isDevelopment } from "@/utils/env";
 import { appPaths } from "@/utils/paths";
 
 import { Menu, Title } from "@mantine/core";
@@ -61,6 +63,9 @@ export const UserDropdown: FunctionComponent = () =>
             </div>
           </div>
         </Menu.Item>
+        {isDevelopment && (
+          <HeaderDefaultRecreateSearch/>
+        )}
         <Menu.Item
           component={Link}
           href={appPaths.profile}
