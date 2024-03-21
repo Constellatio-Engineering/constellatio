@@ -1,6 +1,5 @@
 import EmptyStateCard from "@/components/organisms/emptyStateCard/EmptyStateCard";
 import NotificationListItem from "@/components/organisms/notificationListItem/NotificationListItem";
-import { NotificationText } from "@/components/organisms/notificationText/NotificationText";
 import { defaultLimit } from "@/components/pages/forumOverviewPage/ForumOverviewPage";
 import { api } from "@/utils/api";
 
@@ -52,13 +51,10 @@ const Notifications: FunctionComponent = () =>
       return nextCursor;
     },
     initialCursor: { index: null },
-    refetchInterval: 5 * 1000,
     refetchOnMount: true,
     refetchOnReconnect: true,
     staleTime: Infinity
   });
-
-  console.log(notificationsQuery);
 
   const notifications = useMemo(() =>
   {

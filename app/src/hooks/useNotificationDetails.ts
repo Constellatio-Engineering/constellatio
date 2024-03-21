@@ -24,9 +24,17 @@ const getNotificationFrontendData = (notification: NotificationWithRelations): N
       };
       break;
     }
+    case "replyToForumAnswerPosted":
+    {
+      data = {
+        link: getForumQuestionUrl({ id: notification.resourceId! }),
+        text: `'${notification.sender.displayName}' hat auf deine Antwort geantwortet.`,
+        title: "Neue Antwort",
+      };
+      break;
+    }
     case "forumQuestionPosted": { throw new Error("Not implemented yet: \"forumQuestionPosted\" case"); }
     case "forumQuestionUpvoted": { throw new Error("Not implemented yet: \"forumQuestionUpvoted\" case"); }
-    case "replyToForumAnswerPosted": { throw new Error("Not implemented yet: \"replyToForumAnswerPosted\" case"); }
     case "forumAnswerUpvoted": { throw new Error("Not implemented yet: \"forumAnswerUpvoted\" case"); }
     case "forumAnswerAccepted": { throw new Error("Not implemented yet: \"forumAnswerAccepted\" case"); }
   }

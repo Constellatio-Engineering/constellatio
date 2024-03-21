@@ -5,7 +5,7 @@ import { css } from "@emotion/react";
 export const notificationsWrapper = css`
   display: flex;
   flex-direction: column;
-  gap: 12px;
+  gap: 16px;
 `;
 
 export const endOfListReached = css`

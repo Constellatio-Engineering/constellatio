@@ -2,7 +2,7 @@ import { db } from "@/db/connection";
 import { notifications, } from "@/db/schema";
 import { getNotificationByIdSchema } from "@/schemas/notifications/getNotificationById.schema";
 import { type GetNotificationsSchema, getNotificationsSchema } from "@/schemas/notifications/getNotifications.schema";
-import { markNotificationAsSeenSchema } from "@/schemas/notifications/markNotificationAsSeen.schema";
+import { setNotificationReadStatusSchema } from "@/schemas/notifications/setNotificationReadStatus.schema";
 import { getNotifications } from "@/server/api/services/notifications.services";
 import { createTRPCRouter, protectedProcedure } from "@/server/api/trpc";
 import { InternalServerError } from "@/utils/serverError";
@@ -68,14 +68,17 @@ export const notificationsRouter = createTRPCRouter({
 
       return { nextCursor, notifications };
     }),
-  markNotificationAsSeen: protectedProcedure
-    .input(markNotificationAsSeenSchema)
-    .mutation(async ({ ctx: { userId }, input: { notificationId } }) =>
+  setNotificationReadStatus: protectedProcedure
+    .input(setNotificationReadStatusSchema)
+    .mutation(async ({ ctx: { userId }, input: { newStatus, notificationId } }) =>
     {
-      await db.update(notifications).set({ readAt: new Date() }).where(and(
-        eq(notifications.id, notificationId),
-        eq(notifications.recipientId, userId),
-      ));
+      await db
+        .update(notifications)
+        .set({ readAt: newStatus === "read" ? new Date() : null })
+        .where(and(
+          eq(notifications.id, notificationId),
+          eq(notifications.recipientId, userId),
+        ));
     }),
 });
 
