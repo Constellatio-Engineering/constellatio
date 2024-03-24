@@ -15,11 +15,14 @@ const useSubscription = () =>
     retry: false,
   });
 
-  const { isPending: isSessionLoading, mutateAsync: generateStripeSessionUrl } = api.billing.generateStripeCheckoutSession.useMutation();
+  const {
+    isPending: isSessionLoading,
+    mutateAsync: generateStripeBillingPortalSession
+  } = api.billing.generateStripeBillingPortalSession.useMutation();
   const { isOnPaidSubscription, isOnTrailSubscription } = getHasSubscription(subscriptionDetails);
 
   return {
-    generateStripeSessionUrl,
+    generateStripeBillingPortalSession,
     isOnPaidSubscription,
     isOnTrailSubscription,
     isSessionLoading, 

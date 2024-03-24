@@ -26,7 +26,7 @@ const SubscriptionModal: FunctionComponent = () =>
   const { isUserLoggedIn } = useContext(AuthStateContext);
   const router = useRouter();
   const {
-    generateStripeSessionUrl,
+    generateStripeBillingPortalSession,
     isOnPaidSubscription,
     isOnTrailSubscription,
     subscriptionDetails
@@ -106,23 +106,16 @@ const SubscriptionModal: FunctionComponent = () =>
 
   const redirectToStripeCheckout = async (): Promise<void> => 
   {
-    let url: string;
-
     try
     {
-      const { checkoutSessionUrl } = await generateStripeSessionUrl();
-
-      if(!checkoutSessionUrl) { throw new Error("No checkout session url, Please contact your admin"); }
-
-      url = checkoutSessionUrl;
+      const { url } = await generateStripeBillingPortalSession();
+      void router.push(url);
     }
     catch (error)
     {
       console.error("error while getting stripe session url", error);
       return;
     }
-
-    void router.push(url);
   };
 
   return (

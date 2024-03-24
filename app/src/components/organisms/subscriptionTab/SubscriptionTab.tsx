@@ -14,7 +14,7 @@ const SubscriptionTab: FunctionComponent = () =>
 {
   const isTabletScreen = useMediaQuery("(max-width: 1100px)"); 
   const {
-    generateStripeSessionUrl,
+    generateStripeBillingPortalSession,
     isOnPaidSubscription,
     isOnTrailSubscription,
     isSubscriptionDetailsLoading,
@@ -42,18 +42,10 @@ const SubscriptionTab: FunctionComponent = () =>
   {
     setIsLoading(true);
 
-    let url: string;
-
     try
     {
-      const { billingPortalSessionUrl, checkoutSessionUrl } = await generateStripeSessionUrl();
-
-      if(!checkoutSessionUrl || !billingPortalSessionUrl)
-      {
-        throw new Error("No checkout or billing portal session url, Please contact your admin"); 
-      }
-
-      url = isOnPaidSubscription ? billingPortalSessionUrl : checkoutSessionUrl;
+      const { url } = await generateStripeBillingPortalSession();
+      void router.push(url);
     }
     catch (error)
     {
@@ -67,8 +59,6 @@ const SubscriptionTab: FunctionComponent = () =>
       setIsLoading(false);
       return;
     }
-
-    void router.push(url);
   };
 
   if(isSubscriptionDetailsLoading)
