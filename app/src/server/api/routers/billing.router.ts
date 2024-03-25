@@ -33,7 +33,7 @@ export const billingRouter = createTRPCRouter({
 
     return { url };
   }),
-  /* generateStripeCheckoutSession: protectedProcedure.mutation(async ({ ctx: { userId } }) =>
+  generateStripeCheckoutSession: protectedProcedure.mutation(async ({ ctx: { userId } }) =>
   {
     const user = await db.query.users.findFirst({ where: eq(users.id, userId) });
 
@@ -42,37 +42,14 @@ export const billingRouter = createTRPCRouter({
       throw new InternalServerError(new Error("User not found"));
     }
 
-    let { stripeCustomerId } = user;
+    const { stripeCustomerId } = user;
 
     if(!stripeCustomerId)
     {
-      const customer = await stripe.customers.create({
-        email: user.email,
-        metadata: {
-          supabaseUuid: user.id,
-        },
-        name: `${user.firstName} ${user.lastName}`
-      });
-
-      stripeCustomerId = customer.id;
-
-      await db.update(users).set({ stripeCustomerId }).where(eq(users.id, user.id));
+      throw new InternalServerError(new Error("User has no stripe customer id"));
     }
 
-    console.log("before");
-
-    const { url: checkoutSessionUrl } = await stripe.checkout.sessions.create({
-      cancel_url: `${env.NEXT_PUBLIC_WEBSITE_URL}${appPaths.profile}?tab=subscription`,
-      currency: "eur",
-      customer: stripeCustomerId,
-      mode: "setup",
-      payment_method_configuration: env.STRIPE_PAYMENT_METHODS_CONFIGURATION_ID,
-      success_url: `${env.NEXT_PUBLIC_WEBSITE_URL}${authPaths.paymentConfirm}`
-    });
-
-    console.log("after");
-
-    /!* const { url: checkoutSessionUrl } = await stripe.checkout.sessions.create({
+    const { url } = await stripe.checkout.sessions.create({
       allow_promotion_codes: true,
       cancel_url: `${env.NEXT_PUBLIC_WEBSITE_URL}${appPaths.profile}?tab=subscription`,
       customer: stripeCustomerId,
@@ -80,20 +57,16 @@ export const billingRouter = createTRPCRouter({
       locale: "de",
       mode: "subscription",
       payment_method_configuration: env.STRIPE_PAYMENT_METHODS_CONFIGURATION_ID,
-      subscription_data: {
-        trial_period_days: 20,
-      },
       success_url: `${env.NEXT_PUBLIC_WEBSITE_URL}${authPaths.paymentConfirm}`
-    });*!/
-
-    const { url: billingPortalSessionUrl } = await stripe.billingPortal.sessions.create({
-      customer: stripeCustomerId,
-      locale: "de",
-      return_url: `${env.NEXT_PUBLIC_WEBSITE_URL}${appPaths.profile}?tab=subscription`
     });
 
-    return { billingPortalSessionUrl, checkoutSessionUrl };
-  }),*/
+    if(!url)
+    {
+      throw new InternalServerError(new Error("Stripe checkout session url was null"));
+    }
+
+    return { url };
+  }),
   getSubscriptionDetails: protectedProcedure.query(async ({ ctx: { userId } }) =>
   {
     const user = await db.query.users.findFirst({
@@ -112,6 +85,15 @@ export const billingRouter = createTRPCRouter({
       throw new InternalServerError(new Error("User not found"));
     }
 
-    return user;
+    const userSubscriptionId = user.subscriptionId;
+
+    if(!userSubscriptionId)
+    {
+      throw new InternalServerError(new Error("User has no subscription id"));
+    }
+
+    const subscription = await stripe.subscriptions.retrieve(userSubscriptionId);
+
+    return { dbSubscription: user, stripeSubscription: subscription };
   }),
 });

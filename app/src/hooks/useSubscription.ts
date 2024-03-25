@@ -4,7 +4,6 @@ import { getHasSubscription } from "@/utils/subscription";
 
 import { useContext } from "react";
 
-// eslint-disable-next-line @typescript-eslint/explicit-function-return-type
 const useSubscription = () =>
 {
   const { isUserLoggedIn } = useContext(AuthStateContext);
@@ -15,17 +14,15 @@ const useSubscription = () =>
     retry: false,
   });
 
-  const {
-    isPending: isSessionLoading,
-    mutateAsync: generateStripeBillingPortalSession
-  } = api.billing.generateStripeBillingPortalSession.useMutation();
-  const { isOnPaidSubscription, isOnTrailSubscription } = getHasSubscription(subscriptionDetails);
+  const { mutateAsync: generateStripeBillingPortalSession } = api.billing.generateStripeBillingPortalSession.useMutation();
+  const { mutateAsync: generateStripeCheckoutSession } = api.billing.generateStripeCheckoutSession.useMutation();
+  const { isOnPaidSubscription, isOnTrailSubscription } = getHasSubscription(subscriptionDetails?.dbSubscription);
 
   return {
     generateStripeBillingPortalSession,
+    generateStripeCheckoutSession,
     isOnPaidSubscription,
     isOnTrailSubscription,
-    isSessionLoading, 
     isSubscriptionDetailsLoading,
     subscriptionDetails
   };

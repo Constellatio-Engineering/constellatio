@@ -25,8 +25,9 @@ const SubscriptionModal: FunctionComponent = () =>
   const { handleSignOut } = useSignout();
   const { isUserLoggedIn } = useContext(AuthStateContext);
   const router = useRouter();
+  const [isLoading, setIsLoading] = useState<boolean>(false);
   const {
-    generateStripeBillingPortalSession,
+    generateStripeCheckoutSession,
     isOnPaidSubscription,
     isOnTrailSubscription,
     subscriptionDetails
@@ -65,7 +66,7 @@ const SubscriptionModal: FunctionComponent = () =>
       return null; 
     }
 
-    const { subscriptionEndDate } = subscriptionDetails;
+    const { subscriptionEndDate } = subscriptionDetails.dbSubscription;
 
     if(subscriptionEndDate == null)
     {
@@ -106,14 +107,17 @@ const SubscriptionModal: FunctionComponent = () =>
 
   const redirectToStripeCheckout = async (): Promise<void> => 
   {
+    setIsLoading(true);
+
     try
     {
-      const { url } = await generateStripeBillingPortalSession();
+      const { url } = await generateStripeCheckoutSession();
       void router.push(url);
     }
     catch (error)
     {
       console.error("error while getting stripe session url", error);
+      setIsLoading(false);
       return;
     }
   };
@@ -172,6 +176,7 @@ const SubscriptionModal: FunctionComponent = () =>
           size="large"
           w={isOnValidSubscription ? "100%" : "48%"}
           styleType="primary"
+          loading={isLoading}
           onClick={redirectToStripeCheckout}>
           Jetzt abonnieren
         </Button>

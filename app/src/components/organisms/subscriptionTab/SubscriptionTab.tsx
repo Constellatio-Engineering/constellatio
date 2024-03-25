@@ -13,30 +13,11 @@ import * as styles from "./SubscriptionTab.styles";
 const SubscriptionTab: FunctionComponent = () => 
 {
   const isTabletScreen = useMediaQuery("(max-width: 1100px)"); 
-  const {
-    generateStripeBillingPortalSession,
-    isOnPaidSubscription,
-    isOnTrailSubscription,
-    isSubscriptionDetailsLoading,
-    subscriptionDetails
-  } = useSubscription();
+  const { generateStripeBillingPortalSession, isSubscriptionDetailsLoading, subscriptionDetails } = useSubscription();
   const router = useRouter();
   const [isLoading, setIsLoading] = useState<boolean>(false);
 
-  const getDate = (): string | undefined =>
-  {
-    if(subscriptionDetails == null)
-    {
-      return undefined;
-    }
-
-    const rawEndData = subscriptionDetails.subscriptionEndDate;
-    const day = String(rawEndData?.getUTCDate()).padStart(2, "0");  // padStart ensures it's always two digits
-    const month = String((rawEndData?.getUTCMonth() ?? 0) + 1).padStart(2, "0");  // Months are 0-indexed in JS
-    const year = rawEndData?.getUTCFullYear();
-
-    return `${day}/${month}/${year}`;
-  };
+  console.log(subscriptionDetails?.stripeSubscription);
 
   const redirectToStripeSession = async (): Promise<void> =>
   {
@@ -81,20 +62,56 @@ const SubscriptionTab: FunctionComponent = () =>
     );
   }
 
+  const {
+    cancel_at: cancelAt,
+    default_payment_method: defaultPaymentMethod,
+    status,
+    trial_end: trialEnd
+  } = subscriptionDetails.stripeSubscription;
+
+  let text: string;
+
+  if(cancelAt)
+  {
+    text = `Dein Abonnement wurde gekündigt und läuft noch bis ${new Date(cancelAt * 1000).toLocaleDateString("de")}`;
+  }
+  else if(status === "trialing")
+  {
+    if(trialEnd == null)
+    {
+      text = "Da ist leider etwas schief gelaufen. Das Enddatum deiner Testphase konnte nicht abgerufen werden. Bitte kontaktiere den Support.";
+    }
+    else
+    {
+      const trialEndUnixDateString = new Date(trialEnd * 1000).toLocaleDateString("de");
+
+      if(defaultPaymentMethod == null)
+      {
+        text = `Dein Test-Abo endet am ${trialEndUnixDateString}. Bitte hinterlege deine Zahlungsinformationen, um dein Abonnement zu verlängern.`;
+      }
+      else
+      {
+        text = `Dein Test-Abo läuft noch bis zum ${trialEndUnixDateString}. Da deine Zahlungsinformationen hinterlegt sind, wird dein Abonnement automatisch verlängert. Du kannst es jederzeit kündigen.`;
+      }
+    }
+  }
+  else
+  {
+    text = "Vielen Dank, dass du Constellatio abonniert hast! Dein Abonnement verlängert sich automatisch, du kannst es jedoch jederzeit kündigen.";
+  }
+
   return (
     <div css={styles.wrapper}>
       {!isTabletScreen && <Title order={3} css={styles.subscriptionTabTitle}>Abonnement</Title>}
       <BodyText m="32px 0" styleType="body-01-bold" component="p">
-        {isOnPaidSubscription && `Dein Abonnement läuft noch bis zum ${getDate()}. `}
-        {isOnTrailSubscription && `Dein Test-Abo endet am ${getDate()}. `}
-        {(!isOnPaidSubscription) && "Schließe jetzt dein Constellatio Abonnement ab:"}
+        {text}
       </BodyText>
       <Button<"button">
         styleType="primary"
         style={{ display: "block", width: "100%" }}
         onClick={redirectToStripeSession}
         loading={isLoading}>
-        {isOnPaidSubscription ? "Abonnement verwalten" : "Abonnieren"}
+        {"Abonnement verwalten"}
       </Button>
     </div>
   );

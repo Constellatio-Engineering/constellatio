@@ -9,7 +9,6 @@ type SubscriptStatus = {
 
 export const getHasSubscription = (subscriptionDetails: SubscriptionDetails | undefined): SubscriptStatus =>
 {
-
   const { subscriptionStatus } = subscriptionDetails ?? {};
 
   return {
