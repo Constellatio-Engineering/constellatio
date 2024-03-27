@@ -1,3 +1,4 @@
+/* eslint-disable max-lines */
 import CaisyImg from "@/basic-components/CaisyImg";
 import { BodyText } from "@/components/atoms/BodyText/BodyText";
 import { Button } from "@/components/atoms/Button/Button";
@@ -6,7 +7,9 @@ import { Modal } from "@/components/molecules/Modal/Modal";
 import { useSignout } from "@/hooks/useSignout";
 import useSubscription from "@/hooks/useSubscription";
 import { AuthStateContext } from "@/provider/AuthStateProvider";
-import { isPathAppPath } from "@/utils/paths";
+import { type SubscriptionDetails } from "@/server/api/routers/billing.router";
+import { api } from "@/utils/api";
+import { getIsPathAppPath } from "@/utils/paths";
 
 import { Title } from "@mantine/core";
 import { useLocalStorage } from "@mantine/hooks";
@@ -20,18 +23,18 @@ import ModalFlag from "../../../../public/images/placeholder-flag.png";
 
 const localStorageKey = "daysLeftToSubscriptionEnds";
 
-const SubscriptionModal: FunctionComponent = () =>
+type Props = {
+  readonly subscriptionDetails: SubscriptionDetails;
+};
+
+const SubscriptionModalContent: FunctionComponent<Props> = ({ subscriptionDetails }) =>
 {
   const { handleSignOut } = useSignout();
-  const { isUserLoggedIn } = useContext(AuthStateContext);
   const router = useRouter();
+  const [wasClosed, setWasClosed] = useState(false);
   const [isLoading, setIsLoading] = useState<boolean>(false);
-  const {
-    generateStripeCheckoutSession,
-    isOnPaidSubscription,
-    isOnTrailSubscription,
-    subscriptionDetails
-  } = useSubscription();
+  const { mutateAsync: generateStripeCheckoutSession } = api.billing.generateStripeCheckoutSession.useMutation();
+  const { hasSubscription } = subscriptionDetails;
 
   const [daysCheckedForSubscriptionEnds, setDaysCheckedForSubscriptionEnds] = useLocalStorage<string[]>({
     defaultValue: [],
@@ -49,23 +52,16 @@ const SubscriptionModal: FunctionComponent = () =>
         localStorage.setItem(localStorageKey, JSON.stringify([]));
         daysLeftToSubscriptionEnds = [];
       }
+
       return daysLeftToSubscriptionEnds;
     },
     getInitialValueInEffect: false,
     key: localStorageKey,
-    serialize: (value) => 
-    {
-      return JSON.stringify(value);
-    }
+    serialize: (value) => JSON.stringify(value)
   });
 
   const diffDays = useMemo((): number | null =>
   {
-    if(subscriptionDetails == null)
-    {
-      return null; 
-    }
-
     const { subscriptionEndDate } = subscriptionDetails.dbSubscription;
 
     if(subscriptionEndDate == null)
@@ -84,23 +80,15 @@ const SubscriptionModal: FunctionComponent = () =>
     return diffDays;
   }, [subscriptionDetails]);
 
-  const [wasClosed, setWasClosed] = useState(false);
   const todayDateAsString = new Date().toISOString().split("T")[0] as string;
-  const isOnValidSubscription = isOnPaidSubscription || isOnTrailSubscription;
-  const isAuthenticated = isUserLoggedIn && isPathAppPath(router.pathname);
 
-  // this check is to prevent modal flickering
-  if(!subscriptionDetails)
-  {
-    return null;
-  }
-
-  const isOpened = ((isAuthenticated && !isOnValidSubscription) || (
+  const isOpened = ((
+    !hasSubscription
+  ) || (
     !wasClosed &&
     !daysCheckedForSubscriptionEnds?.includes(todayDateAsString) &&
     isOnTrailSubscription &&
-    (diffDays === 3 || diffDays === 1 || (diffDays != null && diffDays <= 0)) && 
-    isAuthenticated
+    (diffDays === 3 || diffDays === 1 || (diffDays != null && diffDays <= 0))
   )) ?? false;
 
   const isModalLocked = (diffDays == null || diffDays <= 0) || !isOnValidSubscription;
@@ -138,11 +126,8 @@ const SubscriptionModal: FunctionComponent = () =>
       title="">
       <CaisyImg src={ModalFlag.src}/>
       <Title order={2} ta="center">
-        {!isOnValidSubscription ? (
-          "Dein Abonnement ist abgelaufen"
-        ) : isOnTrailSubscription && (
-          `Dein Abonnement läuft nur noch ${diffDays} Tag${diffDays === 1 ? "" : "e"}`
-        )}
+        {!hasSubscription && "Dein Abonnement ist abgelaufen"}
+        {(hasSubscription && willSubscriptionEndSoon) && `Dein Abonnement läuft nur noch ${diffDays} Tag${diffDays === 1 ? "" : "e"}`}
       </Title>
       <BodyText ta="center" styleType="body-01-regular" component="p">
         Jetzt Constellatio abonnieren, um weiterhin alle Vorteile digitalen Lernens zu genießen.
@@ -163,7 +148,7 @@ const SubscriptionModal: FunctionComponent = () =>
         justifyContent: "space-between",
         width: "100%"
       }}>
-        {!isOnValidSubscription && (
+        {!hasSubscription && (
           <Button<"button">
             size="large"
             w="48%"
@@ -174,7 +159,7 @@ const SubscriptionModal: FunctionComponent = () =>
         )}
         <Button<"button">
           size="large"
-          w={isOnValidSubscription ? "100%" : "48%"}
+          w={hasSubscription ? "100%" : "48%"}
           styleType="primary"
           loading={isLoading}
           onClick={redirectToStripeCheckout}>
@@ -183,6 +168,31 @@ const SubscriptionModal: FunctionComponent = () =>
       </div>
     </Modal>
   );
+};
+
+const SubscriptionModal: FunctionComponent = () =>
+{
+  const router = useRouter();
+  const { data: subscriptionDetails } = useSubscription();
+  const { isUserLoggedIn } = useContext(AuthStateContext);
+  const isPathAppPath = getIsPathAppPath(router.pathname);
+
+  if(!isUserLoggedIn)
+  {
+    return null;
+  }
+
+  if(!isPathAppPath)
+  {
+    return null;
+  }
+
+  if(!subscriptionDetails)
+  {
+    return null;
+  }
+
+  return <SubscriptionModalContent subscriptionDetails={subscriptionDetails}/>;
 };
 
 export default SubscriptionModal;

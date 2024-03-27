@@ -1,5 +1,5 @@
 
-import { isPathAppPath } from "@/utils/paths";
+import { getIsPathAppPath } from "@/utils/paths";
 
 import { useMediaQuery } from "@mantine/hooks";
 import { useRouter } from "next/router";
@@ -13,7 +13,7 @@ const ComputerRecommendedModal: FunctionComponent = () =>
 {
   const { pathname } = useRouter();
   const isSmallScreen = useMediaQuery("(max-width: 768px)");
-  const isOpened = isSmallScreen && isPathAppPath(pathname);
+  const isOpened = isSmallScreen && getIsPathAppPath(pathname);
 
   return (
     <Modal

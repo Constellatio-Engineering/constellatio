@@ -29,7 +29,7 @@ const ProfileMenu: FunctionComponent<IProfileMenu> = ({ activeTabSlug, setTab, t
   const { handleSignOut } = useSignout();
   const { setOnboardingResult } = useSetOnboardingResult();
   const { error, isLoading, userDetails } = useUserDetails();
-  const { isOnPaidSubscription, isOnTrailSubscription } = useSubscription();
+  const { data: subscriptionDetails } = useSubscription();
   const [, setWasOnboardingPostponed] = useWasOnboardingPostponed();
   const setOnboardingStepsIndex = useOnboardingStore(s => s.setOnboardingStepsIndex);
 
@@ -65,7 +65,7 @@ const ProfileMenu: FunctionComponent<IProfileMenu> = ({ activeTabSlug, setTab, t
               selected={tab.slug === activeTabSlug}
               onClick={() =>
               {
-                if(isOnTrailSubscription || isOnPaidSubscription)
+                if(subscriptionDetails?.hasSubscription)
                 {
                   void setTab(tab.slug);
                 }

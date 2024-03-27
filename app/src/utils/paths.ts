@@ -14,7 +14,7 @@ export const appPaths = {
 } as const;
 
 export const appPathsArray = Object.values(appPaths);
-export const isPathAppPath = (path: string): boolean => appPathsArray.some((appPath) => path.startsWith(appPath));
+export const getIsPathAppPath = (path: string): boolean => appPathsArray.some((appPath) => path.startsWith(appPath));
 
 export const authPaths = {
   confirm: "/confirm",

@@ -2,17 +2,7 @@ import { type User } from "@/db/schema";
 
 type SubscriptionDetails = Pick<User, "subscriptionStatus">;
 
-type SubscriptStatus = {
-  isOnPaidSubscription: boolean;
-  isOnTrailSubscription: boolean;
-};
-
-export const getHasSubscription = (subscriptionDetails: SubscriptionDetails | undefined): SubscriptStatus =>
+export const getHasSubscription = (subscriptionStatus: SubscriptionDetails["subscriptionStatus"] | undefined): boolean =>
 {
-  const { subscriptionStatus } = subscriptionDetails ?? {};
-
-  return {
-    isOnPaidSubscription: subscriptionStatus === "active" || subscriptionStatus === "incomplete", 
-    isOnTrailSubscription: subscriptionStatus === "trialing"
-  };
+  return subscriptionStatus === "active" || subscriptionStatus === "incomplete" || subscriptionStatus === "trialing";
 };

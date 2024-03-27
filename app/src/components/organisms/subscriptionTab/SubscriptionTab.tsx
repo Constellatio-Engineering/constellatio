@@ -1,6 +1,7 @@
 import { BodyText } from "@/components/atoms/BodyText/BodyText";
 import { Button } from "@/components/atoms/Button/Button";
 import useSubscription from "@/hooks/useSubscription";
+import { api } from "@/utils/api";
 import { showErrorNotification } from "@/utils/notifications";
 
 import { Skeleton, Title } from "@mantine/core";
@@ -13,7 +14,8 @@ import * as styles from "./SubscriptionTab.styles";
 const SubscriptionTab: FunctionComponent = () => 
 {
   const isTabletScreen = useMediaQuery("(max-width: 1100px)"); 
-  const { generateStripeBillingPortalSession, isSubscriptionDetailsLoading, subscriptionDetails } = useSubscription();
+  const { data: subscriptionDetails, isPending: isSubscriptionDetailsLoading } = useSubscription();
+  const { mutateAsync: generateStripeBillingPortalSession } = api.billing.generateStripeBillingPortalSession.useMutation();
   const router = useRouter();
   const [isLoading, setIsLoading] = useState<boolean>(false);
 

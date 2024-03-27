@@ -5,7 +5,9 @@ import { stripe } from "@/lib/stripe";
 import { createTRPCRouter, protectedProcedure } from "@/server/api/trpc";
 import { appPaths, authPaths } from "@/utils/paths";
 import { InternalServerError } from "@/utils/serverError";
+import { getHasSubscription } from "@/utils/subscription";
 
+import { type inferProcedureOutput } from "@trpc/server";
 import { eq } from "drizzle-orm";
 
 export const billingRouter = createTRPCRouter({
@@ -91,6 +93,12 @@ export const billingRouter = createTRPCRouter({
 
     const subscription = await stripe.subscriptions.retrieve(userSubscriptionId);
 
-    return { dbSubscription: user, stripeSubscription: subscription };
+    return {
+      dbSubscription: user,
+      hasSubscription: getHasSubscription(user.subscriptionStatus),
+      stripeSubscription: subscription
+    };
   }),
 });
+
+export type SubscriptionDetails = inferProcedureOutput<typeof billingRouter.getSubscriptionDetails>;
