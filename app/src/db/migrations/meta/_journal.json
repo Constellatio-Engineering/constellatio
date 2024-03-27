@@ -50,6 +50,20 @@
       "when": 1711062352842,
       "tag": "0006_powerful_giant_man",
       "breakpoints": true
+    },
+    {
+      "idx": 7,
+      "version": "5",
+      "when": 1711404776207,
+      "tag": "0007_mixed_miracleman",
+      "breakpoints": true
+    },
+    {
+      "idx": 8,
+      "version": "5",
+      "when": 1711404776825,
+      "tag": "0008_rare_toad_men",
+      "breakpoints": true
     }
   ]
 }

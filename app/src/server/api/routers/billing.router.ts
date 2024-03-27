@@ -71,11 +71,8 @@ export const billingRouter = createTRPCRouter({
   {
     const user = await db.query.users.findFirst({
       columns: {
-        subscriptionEndDate: true,
         subscriptionId: true,
-        subscriptionStartDate: true,
         subscriptionStatus: true,
-        trialSubscriptionId: true,
       },
       where: eq(users.id, userId)
     });
