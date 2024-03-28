@@ -11,6 +11,15 @@ import React, { type FunctionComponent, useState } from "react";
 
 import * as styles from "./SubscriptionTab.styles";
 
+const getLocaleDateString = (date: Date): string =>
+{
+  return date.toLocaleDateString("de", {
+    day: "2-digit",
+    month: "long",
+    year: "numeric",
+  });
+};
+
 const SubscriptionTab: FunctionComponent = () => 
 {
   const isTabletScreen = useMediaQuery("(max-width: 1100px)"); 
@@ -19,7 +28,7 @@ const SubscriptionTab: FunctionComponent = () =>
   const router = useRouter();
   const [isLoading, setIsLoading] = useState<boolean>(false);
 
-  console.log(subscriptionDetails?.stripeSubscription);
+  console.log(subscriptionDetails);
 
   const redirectToStripeSession = async (): Promise<void> =>
   {
@@ -27,7 +36,7 @@ const SubscriptionTab: FunctionComponent = () =>
 
     try
     {
-      const { url } = await generateStripeBillingPortalSession();
+      const url = await generateStripeBillingPortalSession();
       void router.push(url);
     }
     catch (error)
@@ -64,42 +73,27 @@ const SubscriptionTab: FunctionComponent = () =>
     );
   }
 
-  const {
-    cancel_at: cancelAt,
-    default_payment_method: defaultPaymentMethod,
-    status,
-    trial_end: trialEnd
-  } = subscriptionDetails.stripeSubscription;
+  const { cancel_at: cancelAt, trial_end: trialEnd } = subscriptionDetails.stripeSubscription;
+  const { futureSubscriptionStatus } = subscriptionDetails;
 
   let text: string;
 
-  if(cancelAt)
+  switch (futureSubscriptionStatus)
   {
-    text = `Dein Abonnement wurde gekündigt und läuft noch bis ${new Date(cancelAt * 1000).toLocaleDateString("de")}`;
-  }
-  else if(status === "trialing")
-  {
-    if(trialEnd == null)
-    {
-      text = "Da ist leider etwas schief gelaufen. Das Enddatum deiner Testphase konnte nicht abgerufen werden. Bitte kontaktiere den Support.";
-    }
-    else
-    {
-      const trialEndUnixDateString = new Date(trialEnd * 1000).toLocaleDateString("de");
-
-      if(defaultPaymentMethod == null)
-      {
-        text = `Dein Test-Abo endet am ${trialEndUnixDateString}. Bitte hinterlege deine Zahlungsinformationen, um dein Abonnement zu verlängern.`;
-      }
-      else
-      {
-        text = `Dein Test-Abo läuft noch bis zum ${trialEndUnixDateString}. Da deine Zahlungsinformationen hinterlegt sind, wird dein Abonnement automatisch verlängert. Du kannst es jederzeit kündigen.`;
-      }
-    }
-  }
-  else
-  {
-    text = "Vielen Dank, dass du Constellatio abonniert hast! Dein Abonnement verlängert sich automatisch, du kannst es jedoch jederzeit kündigen.";
+    case "willBeCanceled":
+      text = `Dein Abonnement wurde gekündigt und läuft noch bis zum ${getLocaleDateString(new Date(cancelAt! * 1000))}.`;
+      break;
+    case "trialWillExpire":
+      text = `Dein Test-Abo endet am ${getLocaleDateString(new Date(trialEnd! * 1000))}. Bitte hinterlege deine Zahlungsinformationen, um dein Abonnement zu verlängern.`;
+      break;
+    case "trialWillBecomeSubscription":
+      text = `Dein Test-Abo läuft noch bis zum ${getLocaleDateString(new Date(trialEnd! * 1000))}. Da deine Zahlungsinformationen hinterlegt sind, wird dein Abonnement automatisch verlängert. Du kannst es jederzeit kündigen.`;
+      break;
+    case "willContinue":
+      text = "Vielen Dank, dass du Constellatio abonniert hast! Dein Abonnement verlängert sich automatisch, du kannst es jedoch jederzeit kündigen.";
+      break;
+    default:
+      text = "Da ist leider etwas schief gelaufen. Bitte kontaktiere den Support.";
   }
 
   return (

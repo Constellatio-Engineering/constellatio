@@ -5,7 +5,7 @@ import { stripe } from "@/lib/stripe";
 import { createTRPCRouter, protectedProcedure } from "@/server/api/trpc";
 import { appPaths, authPaths } from "@/utils/paths";
 import { InternalServerError } from "@/utils/serverError";
-import { getHasSubscription } from "@/utils/subscription";
+import { getFutureSubscriptionStatus, getHasSubscription } from "@/utils/subscription";
 
 import { type inferProcedureOutput } from "@trpc/server";
 import { eq } from "drizzle-orm";
@@ -33,7 +33,7 @@ export const billingRouter = createTRPCRouter({
       return_url: `${env.NEXT_PUBLIC_WEBSITE_URL}${appPaths.profile}?tab=subscription`,
     });
 
-    return { url };
+    return url;
   }),
   generateStripeCheckoutSession: protectedProcedure.mutation(async ({ ctx: { userId } }) =>
   {
@@ -67,7 +67,7 @@ export const billingRouter = createTRPCRouter({
       throw new InternalServerError(new Error("Stripe checkout session url was null"));
     }
 
-    return { url };
+    return url;
   }),
   getSubscriptionDetails: protectedProcedure.query(async ({ ctx: { userId } }) =>
   {
@@ -95,8 +95,10 @@ export const billingRouter = createTRPCRouter({
 
     return {
       dbSubscription: user,
+      futureSubscriptionStatus: getFutureSubscriptionStatus(subscription),
       hasSubscription: getHasSubscription(user.subscriptionStatus),
-      stripeSubscription: subscription
+      isCanceled: subscription.cancel_at != null,
+      stripeSubscription: subscription,
     };
   }),
 });

@@ -71,7 +71,7 @@ export const authenticationRouter = createTRPCRouter({
           payment_settings: {
             save_default_payment_method: "on_subscription"
           },
-          trial_period_days: 30,
+          trial_period_days: env.TRIAL_PERIOD_IN_DAYS,
           trial_settings: {
             end_behavior: { missing_payment_method: "cancel" }
           }

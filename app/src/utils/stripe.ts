@@ -8,14 +8,9 @@ export const getDataFromStripeSubscription = (subscription: Stripe.Subscription)
 {
   const { status: subscriptionStatus } = subscription;
   const subscriptionId = subscription?.id;
-  const { current_period_end: currentPeriodEnd, current_period_start: currentPeriodStart } = subscription;
-  const subscriptionStartDate = new Date(currentPeriodStart * 1000);
-  const subscriptionEndDate = new Date(currentPeriodEnd * 1000);
-  
+
   return {
-    // subscriptionEndDate,
     subscriptionId,
-    // subscriptionStartDate,
     subscriptionStatus
   };
 };
