@@ -82,5 +82,5 @@ export const notificationsRouter = createTRPCRouter({
     }),
 });
 
-export type NotificationsWithRelations = inferProcedureOutput<typeof notificationsRouter.getNotifications>["notifications"];
+type NotificationsWithRelations = inferProcedureOutput<typeof notificationsRouter.getNotifications>["notifications"];
 export type NotificationWithRelations = NotificationsWithRelations[number];

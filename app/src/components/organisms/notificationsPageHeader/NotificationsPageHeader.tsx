@@ -2,7 +2,6 @@ import { Title } from "@mantine/core";
 import React, { type FunctionComponent } from "react";
 
 import * as styles from "./NotificationsPageHeader.styles";
-import BadgesCarouselBlock from "../badgesCarouselBlock/BadgesCarouselBlock";
 import OverviewHeader from "../OverviewHeader/OverviewHeader";
 
 export const NotificationsPageHeader: FunctionComponent = () =>

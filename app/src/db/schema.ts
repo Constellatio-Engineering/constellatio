@@ -129,9 +129,6 @@ export const users = pgTable("User", {
   university: text("University"),
   onboardingResult: onboardingResultEnum("OnboardingResult"),
   subscriptionStatus: subscriptionStatusEnum("SubscriptionStatus"),
-  subscriptionStartDate: timestamp("SubscriptionStartDate"),
-  subscriptionEndDate: timestamp("SubscriptionEndDate"),
-  trialSubscriptionId: text("TrialSubscriptionId"),
   subscriptionId: text("SubscriptionId"),
 });
 

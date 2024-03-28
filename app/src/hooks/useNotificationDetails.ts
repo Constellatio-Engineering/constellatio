@@ -72,5 +72,3 @@ export const useNotificationDetails = (notificationId: string) =>
     staleTime: Infinity
   });
 };
-
-export type NotificationWithFrontendData = ReturnType<typeof useNotificationDetails>["data"];

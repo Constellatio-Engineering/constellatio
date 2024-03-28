@@ -12,16 +12,9 @@ import { type NextMiddleware, NextResponse } from "next/server";
 
 export const middleware: NextMiddleware = async (req) =>
 {
-  console.log("--- middleware ---");
-
-  console.log("url", req.url);
-  console.log("nextUrl", req.nextUrl.href);
-
   const res = NextResponse.next();
   const supabase = createMiddlewareClient({ req, res });
   const getIsUserLoggedInResult = await getIsUserLoggedInServer(supabase);
-
-  console.log("getIsUserLoggedInResult", getIsUserLoggedInResult.isUserLoggedIn);
 
   if(!getIsUserLoggedInResult.isUserLoggedIn)
   {
@@ -34,14 +27,12 @@ export const middleware: NextMiddleware = async (req) =>
 
   console.log("User is logged in. Checking subscription status");
 
-  let subscriptionStatus: Pick<User, "subscriptionStatus"> | null = null;
+  let subscriptionStatus: Pick<User, "subscriptionStatus">["subscriptionStatus"] | null = null;
 
   try
   {
     const response = await fetch((isDevelopment ? "http://localhost:3010" : env.NEXT_PUBLIC_WEBSITE_URL) + `/${apiPaths.getSubscriptionStatus}?secret=${env.GET_SUBSCRIPTION_STATUS_SECRET}&userId=${getIsUserLoggedInResult.user.id}`);
-    const data = await response.json() as Pick<User, "subscriptionStatus">;
-    subscriptionStatus = data;
-    console.log("subscriptionStatus", subscriptionStatus);
+    subscriptionStatus = (await response.json() as Pick<User, "subscriptionStatus">).subscriptionStatus;
   }
   catch (e: unknown)
   {
@@ -54,8 +45,7 @@ export const middleware: NextMiddleware = async (req) =>
     });
   }
 
-  const { isOnPaidSubscription, isOnTrailSubscription } = getHasSubscription(subscriptionStatus);
-  const hasSubscription = isOnPaidSubscription || isOnTrailSubscription;
+  const hasSubscription = getHasSubscription(subscriptionStatus);
 
   if(!hasSubscription)
   {
@@ -73,8 +63,6 @@ export const middleware: NextMiddleware = async (req) =>
     redirectUrl.searchParams.set("tab", "subscription");
     return NextResponse.redirect(redirectUrl);
   }
-
-  console.log("User has a subscription. Allowing access to page");
 
   return NextResponse.next();
 };
