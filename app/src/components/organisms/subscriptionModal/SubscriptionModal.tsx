@@ -65,7 +65,7 @@ const SubscriptionModalContent: FunctionComponent<Props> = ({ subscriptionDetail
   const { diffDays, subscriptionEndDate, today } = useMemo(() =>
   {
     const subscriptionEndDate = subscriptionDetails.stripeSubscription.current_period_end;
-    const today: Date = new Date(2024, 3, 3, 1, 6);
+    const today: Date = new Date();
     const endDate = new Date(subscriptionEndDate * 1000);
     const diffDays = differenceInDays(endDate, today);
     return { diffDays, subscriptionEndDate: endDate, today };
