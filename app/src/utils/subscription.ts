@@ -1,19 +1,54 @@
 import { type User } from "@/db/schema";
 
+import type Stripe from "stripe";
+
 type SubscriptionDetails = Pick<User, "subscriptionStatus">;
 
-type SubscriptStatus = {
-  isOnPaidSubscription: boolean;
-  isOnTrailSubscription: boolean;
-};
-
-export const getHasSubscription = (subscriptionDetails: SubscriptionDetails | undefined): SubscriptStatus =>
+export const getHasSubscription = (subscriptionStatus: SubscriptionDetails["subscriptionStatus"] | undefined): boolean =>
 {
-
-  const { subscriptionStatus } = subscriptionDetails ?? {};
-
-  return {
-    isOnPaidSubscription: subscriptionStatus === "active" || subscriptionStatus === "incomplete", 
-    isOnTrailSubscription: subscriptionStatus === "trialing"
-  };
+  return subscriptionStatus === "active" || subscriptionStatus === "incomplete" || subscriptionStatus === "trialing";
 };
+
+type FutureSubscriptionStatus = "willBeCanceled" | "trialWillExpire" | "trialWillBecomeSubscription" | "willContinue" | null;
+
+export const getFutureSubscriptionStatus = (subscription: Stripe.Subscription): FutureSubscriptionStatus =>
+{
+  const {
+    cancel_at: cancelAt,
+    default_payment_method: defaultPaymentMethod,
+    status,
+    trial_end: trialEnd
+  } = subscription;
+
+  let futureSubscriptionStatus: "willBeCanceled" | "trialWillExpire" | "trialWillBecomeSubscription" | "willContinue" | null;
+
+  if(cancelAt)
+  {
+    futureSubscriptionStatus = "willBeCanceled";
+  }
+  else if(status === "trialing")
+  {
+    if(trialEnd == null)
+    {
+      futureSubscriptionStatus = null;
+    }
+    else
+    {
+      if(defaultPaymentMethod == null)
+      {
+        futureSubscriptionStatus = "trialWillExpire";
+      }
+      else
+      {
+        futureSubscriptionStatus = "trialWillBecomeSubscription";
+      }
+    }
+  }
+  else
+  {
+    futureSubscriptionStatus = "willContinue";
+  }
+
+  return futureSubscriptionStatus;
+};
+

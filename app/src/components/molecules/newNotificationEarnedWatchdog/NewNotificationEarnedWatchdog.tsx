@@ -8,7 +8,7 @@ import { usePrevious } from "@/hooks/usePrevious";
 import { AuthStateContext } from "@/provider/AuthStateProvider";
 import { InvalidateQueriesContext } from "@/provider/InvalidateQueriesProvider";
 import { api } from "@/utils/api";
-import { isPathAppPath } from "@/utils/paths";
+import { getIsPathAppPath } from "@/utils/paths";
 
 import { Modal, Title } from "@mantine/core";
 import { useLocalStorage } from "@mantine/hooks";
@@ -27,7 +27,7 @@ const NewNotificationEarnedWatchdog: FunctionComponent = () =>
   const { isUserLoggedIn } = useContext(AuthStateContext);
   const apiUtils = api.useUtils();
   const { pathname } = useRouter();
-  const isEnabledForCurrentPath = isPathAppPath(pathname);
+  const isEnabledForCurrentPath = getIsPathAppPath(pathname);
   const { invalidateBadges } = useContextAndErrorIfNull(InvalidateQueriesContext);
   const { getBadgesResult: { badges } } = useBadges({ disabled: !isUserLoggedIn });
   const [dismissedBadges, setDismissedBadges] = useLocalStorage<string[]>({

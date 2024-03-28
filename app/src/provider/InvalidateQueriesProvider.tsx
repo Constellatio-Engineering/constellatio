@@ -22,8 +22,11 @@ type InvalidateForumAnswerOptions = inferProcedureInput<AppRouter["forum"]["getA
 type InvalidateOnboardingResultOptions = inferProcedureInput<AppRouter["users"]["getOnboardingResult"]>;
 type InvalidateUserDetailsResultOptions = inferProcedureInput<AppRouter["users"]["getUserDetails"]>;
 type InvalidateBadgesOptions = inferProcedureInput<AppRouter["badges"]["getBadges"]>;
+type InvalidateAmountOfUnreadNotificationsOptions = inferProcedureInput<AppRouter["notifications"]["getAmountOfUnreadNotifications"]>;
+type InvalidateNotificationOptions = inferProcedureInput<AppRouter["notifications"]["getNotificationById"]>;
 
 type InvalidateQueries = {
+  invalidateAmountOfUnreadNotifications: (options?: InvalidateAmountOfUnreadNotificationsOptions) => Promise<void>;
   invalidateArticleViews: (options: InvalidateArticleViewsOptions) => Promise<void>;
   invalidateBadges: (options?: InvalidateBadgesOptions) => Promise<void>;
   invalidateBookmarks: (options?: InvalidateBookmarksOptions) => Promise<void[]>;
@@ -38,6 +41,7 @@ type InvalidateQueries = {
   invalidateForumQuestions: (options?: InvalidateForumQuestionsOptions) => Promise<void>;
   invalidateGamesProgress: (options: InvalidateGamesProgressOptions) => Promise<void>;
   invalidateNotes: () => Promise<void>;
+  invalidateNotification: (options: InvalidateNotificationOptions) => Promise<void>;
   invalidateOnboardingResult: (options?: InvalidateOnboardingResultOptions) => Promise<void>;
   invalidateSearchResults: (value?: string) => Promise<void>;
   invalidateSubmittedCaseSolution: (options: InvalidateSubmittedCaseSolutionOptions) => Promise<void>;
@@ -58,12 +62,13 @@ const InvalidateQueriesProvider: FunctionComponent<InvalidateQueriesProviderProp
   const { invalidate: invalidateAll } = apiContext;
 
   const invalidateQueries: InvalidateQueries = useMemo(() => ({
+    invalidateAmountOfUnreadNotifications: async (options) => apiContext.notifications.getAmountOfUnreadNotifications.invalidate(options),
     invalidateArticleViews: async (options) => apiContext.views.getArticleViews.invalidate(options),
     invalidateBadges: async (options) => apiContext.badges.getBadges.invalidate(options),
     invalidateBookmarks: async (options) => Promise.all([
       apiContext.badges.getBadges.invalidate(),
       apiContext.bookmarks.getAllBookmarks.invalidate(options)
-    ]),
+    ]), 
     invalidateCaseProgress: async (options) => Promise.all([
       apiContext.badges.getBadges.invalidate(),
       apiContext.casesProgress.getCaseProgress.invalidate(options),
@@ -78,6 +83,7 @@ const InvalidateQueriesProvider: FunctionComponent<InvalidateQueriesProviderProp
     invalidateForumQuestions: async (options) => apiContext.forum.getQuestions.invalidate(options),
     invalidateGamesProgress: async (options) => apiContext.gamesProgress.getGamesProgress.invalidate(options),
     invalidateNotes: async () => apiContext.notes.getNotes.invalidate(),
+    invalidateNotification: async (options) => apiContext.notifications.getNotificationById.invalidate(options),
     invalidateOnboardingResult: async (options) => apiContext.users.getOnboardingResult.invalidate(options),
     invalidateSearchResults: async (value) =>
     {
@@ -105,6 +111,8 @@ const InvalidateQueriesProvider: FunctionComponent<InvalidateQueriesProviderProp
     apiContext.bookmarks.getAllBookmarks,
     apiContext.badges.getBadges,
     apiContext.notes.getNotes,
+    apiContext.notifications.getAmountOfUnreadNotifications,
+    apiContext.notifications.getNotificationById,
     apiContext.forum.getQuestions,
     apiContext.forum.getAnswers,
     apiContext.forum.getAnswerById,

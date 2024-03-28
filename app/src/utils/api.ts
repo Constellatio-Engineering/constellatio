@@ -10,7 +10,7 @@ import { supabase } from "@/lib/supabase";
 import { type AppRouter } from "@/server/api/root";
 import { type ClientError } from "@/utils/clientError";
 import { showErrorNotification } from "@/utils/notifications";
-import { authPaths, isPathAppPath } from "@/utils/paths";
+import { authPaths, getIsPathAppPath } from "@/utils/paths";
 
 // 
 
@@ -84,7 +84,7 @@ export const api = createTRPCNext<AppRouter>({
           {
             await supabase.auth.signOut();
 
-            if(isPathAppPath(window.location.pathname))
+            if(getIsPathAppPath(window.location.pathname))
             {
               console.log("Server responded with 'UNAUTHORIZED'. Redirecting to Login");
               window.location.replace(authPaths.login);

@@ -1,6 +1,7 @@
 import { BodyText } from "@/components/atoms/BodyText/BodyText";
 import { Button } from "@/components/atoms/Button/Button";
 import useSubscription from "@/hooks/useSubscription";
+import { api } from "@/utils/api";
 import { showErrorNotification } from "@/utils/notifications";
 
 import { Skeleton, Title } from "@mantine/core";
@@ -10,50 +11,33 @@ import React, { type FunctionComponent, useState } from "react";
 
 import * as styles from "./SubscriptionTab.styles";
 
+const getLocaleDateString = (date: Date): string =>
+{
+  return date.toLocaleDateString("de", {
+    day: "2-digit",
+    month: "long",
+    year: "numeric",
+  });
+};
+
 const SubscriptionTab: FunctionComponent = () => 
 {
   const isTabletScreen = useMediaQuery("(max-width: 1100px)"); 
-  const {
-    generateStripeSessionUrl,
-    isOnPaidSubscription,
-    isOnTrailSubscription,
-    isSubscriptionDetailsLoading,
-    subscriptionDetails
-  } = useSubscription();
+  const { data: subscriptionDetails, isPending: isSubscriptionDetailsLoading } = useSubscription();
+  const { mutateAsync: generateStripeBillingPortalSession } = api.billing.generateStripeBillingPortalSession.useMutation();
   const router = useRouter();
   const [isLoading, setIsLoading] = useState<boolean>(false);
 
-  const getDate = (): string | undefined =>
-  {
-    if(subscriptionDetails == null)
-    {
-      return undefined;
-    }
-
-    const rawEndData = subscriptionDetails.subscriptionEndDate;
-    const day = String(rawEndData?.getUTCDate()).padStart(2, "0");  // padStart ensures it's always two digits
-    const month = String((rawEndData?.getUTCMonth() ?? 0) + 1).padStart(2, "0");  // Months are 0-indexed in JS
-    const year = rawEndData?.getUTCFullYear();
-
-    return `${day}/${month}/${year}`;
-  };
+  console.log(subscriptionDetails);
 
   const redirectToStripeSession = async (): Promise<void> =>
   {
     setIsLoading(true);
 
-    let url: string;
-
     try
     {
-      const { billingPortalSessionUrl, checkoutSessionUrl } = await generateStripeSessionUrl();
-
-      if(!checkoutSessionUrl || !billingPortalSessionUrl)
-      {
-        throw new Error("No checkout or billing portal session url, Please contact your admin"); 
-      }
-
-      url = isOnPaidSubscription ? billingPortalSessionUrl : checkoutSessionUrl;
+      const url = await generateStripeBillingPortalSession();
+      void router.push(url);
     }
     catch (error)
     {
@@ -67,8 +51,6 @@ const SubscriptionTab: FunctionComponent = () =>
       setIsLoading(false);
       return;
     }
-
-    void router.push(url);
   };
 
   if(isSubscriptionDetailsLoading)
@@ -91,20 +73,41 @@ const SubscriptionTab: FunctionComponent = () =>
     );
   }
 
+  const { cancel_at: cancelAt, trial_end: trialEnd } = subscriptionDetails.stripeSubscription;
+  const { futureSubscriptionStatus } = subscriptionDetails;
+
+  let text: string;
+
+  switch (futureSubscriptionStatus)
+  {
+    case "willBeCanceled":
+      text = `Dein Abonnement wurde gekündigt und läuft noch bis zum ${getLocaleDateString(new Date(cancelAt! * 1000))}.`;
+      break;
+    case "trialWillExpire":
+      text = `Dein Test-Abo endet am ${getLocaleDateString(new Date(trialEnd! * 1000))}. Bitte hinterlege deine Zahlungsinformationen, um dein Abonnement zu verlängern.`;
+      break;
+    case "trialWillBecomeSubscription":
+      text = `Dein Test-Abo läuft noch bis zum ${getLocaleDateString(new Date(trialEnd! * 1000))}. Da deine Zahlungsinformationen hinterlegt sind, wird dein Abonnement automatisch verlängert. Du kannst es jederzeit kündigen.`;
+      break;
+    case "willContinue":
+      text = "Vielen Dank, dass du Constellatio abonniert hast! Dein Abonnement verlängert sich automatisch, du kannst es jedoch jederzeit kündigen.";
+      break;
+    default:
+      text = "Da ist leider etwas schief gelaufen. Bitte kontaktiere den Support.";
+  }
+
   return (
     <div css={styles.wrapper}>
       {!isTabletScreen && <Title order={3} css={styles.subscriptionTabTitle}>Abonnement</Title>}
       <BodyText m="32px 0" styleType="body-01-bold" component="p">
-        {isOnPaidSubscription && `Dein Abonnement läuft noch bis zum ${getDate()}. `}
-        {isOnTrailSubscription && `Dein Test-Abo endet am ${getDate()}. `}
-        {(!isOnPaidSubscription) && "Schließe jetzt dein Constellatio Abonnement ab:"}
+        {text}
       </BodyText>
       <Button<"button">
         styleType="primary"
         style={{ display: "block", width: "100%" }}
         onClick={redirectToStripeSession}
         loading={isLoading}>
-        {isOnPaidSubscription ? "Abonnement verwalten" : "Abonnieren"}
+        {"Abonnement verwalten"}
       </Button>
     </div>
   );

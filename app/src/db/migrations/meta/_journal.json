@@ -36,6 +36,34 @@
       "when": 1708454848185,
       "tag": "0004_dear_jackal",
       "breakpoints": true
+    },
+    {
+      "idx": 5,
+      "version": "5",
+      "when": 1711062352332,
+      "tag": "0005_nappy_northstar",
+      "breakpoints": true
+    },
+    {
+      "idx": 6,
+      "version": "5",
+      "when": 1711062352842,
+      "tag": "0006_powerful_giant_man",
+      "breakpoints": true
+    },
+    {
+      "idx": 7,
+      "version": "5",
+      "when": 1711404776207,
+      "tag": "0007_mixed_miracleman",
+      "breakpoints": true
+    },
+    {
+      "idx": 8,
+      "version": "5",
+      "when": 1711404776825,
+      "tag": "0008_rare_toad_men",
+      "breakpoints": true
     }
   ]
 }

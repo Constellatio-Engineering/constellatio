@@ -1,3 +1,4 @@
+/* eslint-disable max-lines */
 import CaisyImg from "@/basic-components/CaisyImg";
 import { BodyText } from "@/components/atoms/BodyText/BodyText";
 import { Button } from "@/components/atoms/Button/Button";
@@ -6,10 +7,14 @@ import { Modal } from "@/components/molecules/Modal/Modal";
 import { useSignout } from "@/hooks/useSignout";
 import useSubscription from "@/hooks/useSubscription";
 import { AuthStateContext } from "@/provider/AuthStateProvider";
-import { isPathAppPath } from "@/utils/paths";
+import { type SubscriptionDetails } from "@/server/api/routers/billing.router";
+import { api } from "@/utils/api";
+import { getIsPathAppPath } from "@/utils/paths";
 
 import { Title } from "@mantine/core";
 import { useLocalStorage } from "@mantine/hooks";
+import { differenceInDays, formatDistance } from "date-fns";
+import { de } from "date-fns/locale";
 import { useRouter } from "next/router";
 import {
   useMemo, type FunctionComponent, useState, useContext
@@ -20,18 +25,19 @@ import ModalFlag from "../../../../public/images/placeholder-flag.png";
 
 const localStorageKey = "daysLeftToSubscriptionEnds";
 
-const SubscriptionModal: FunctionComponent = () =>
+type Props = {
+  readonly subscriptionDetails: SubscriptionDetails;
+};
+
+const SubscriptionModalContent: FunctionComponent<Props> = ({ subscriptionDetails }) =>
 {
   const { handleSignOut } = useSignout();
-  const { isUserLoggedIn } = useContext(AuthStateContext);
   const router = useRouter();
-  const {
-    generateStripeSessionUrl,
-    isOnPaidSubscription,
-    isOnTrailSubscription,
-    subscriptionDetails
-  } = useSubscription();
-
+  const [wasClosed, setWasClosed] = useState(false);
+  const [isLoading, setIsLoading] = useState<boolean>(false);
+  const { mutateAsync: generateStripeCheckoutSession } = api.billing.generateStripeCheckoutSession.useMutation();
+  const { mutateAsync: generateStripeBillingPortalSession } = api.billing.generateStripeBillingPortalSession.useMutation();
+  const { futureSubscriptionStatus, hasSubscription } = subscriptionDetails;
   const [daysCheckedForSubscriptionEnds, setDaysCheckedForSubscriptionEnds] = useLocalStorage<string[]>({
     defaultValue: [],
     deserialize: (localStorageValue) => 
@@ -48,82 +54,82 @@ const SubscriptionModal: FunctionComponent = () =>
         localStorage.setItem(localStorageKey, JSON.stringify([]));
         daysLeftToSubscriptionEnds = [];
       }
+
       return daysLeftToSubscriptionEnds;
     },
     getInitialValueInEffect: false,
     key: localStorageKey,
-    serialize: (value) => 
-    {
-      return JSON.stringify(value);
-    }
+    serialize: (value) => JSON.stringify(value)
   });
 
-  const diffDays = useMemo((): number | null =>
+  const { diffDays, subscriptionEndDate, today } = useMemo(() =>
   {
-    if(subscriptionDetails == null)
-    {
-      return null; 
-    }
-
-    const { subscriptionEndDate } = subscriptionDetails;
-
-    if(subscriptionEndDate == null)
-    {
-      return null; 
-    }
-    
+    const subscriptionEndDate = subscriptionDetails.stripeSubscription.current_period_end;
     const today: Date = new Date();
-    const endDate = new Date(subscriptionEndDate);
-    today.setHours(0, 0, 0, 0);
-    endDate.setHours(0, 0, 0, 0);
+    const endDate = new Date(subscriptionEndDate * 1000);
+    const diffDays = differenceInDays(endDate, today);
+    return { diffDays, subscriptionEndDate: endDate, today };
+  }, [subscriptionDetails.stripeSubscription.current_period_end]);
 
-    const diffTime = endDate?.getTime() - today.getTime();
-    const diffDays = diffTime / (1000 * 60 * 60 * 24);
-
-    return diffDays;
-  }, [subscriptionDetails]);
-
-  const [wasClosed, setWasClosed] = useState(false);
   const todayDateAsString = new Date().toISOString().split("T")[0] as string;
-  const isOnValidSubscription = isOnPaidSubscription || isOnTrailSubscription;
-  const isAuthenticated = isUserLoggedIn && isPathAppPath(router.pathname);
 
-  // this check is to prevent modal flickering
-  if(!subscriptionDetails)
-  {
-    return null;
-  }
-
-  const isOpened = ((isAuthenticated && !isOnValidSubscription) || (
+  const isOpened = ((
+    !hasSubscription
+  ) || (
     !wasClosed &&
     !daysCheckedForSubscriptionEnds?.includes(todayDateAsString) &&
-    isOnTrailSubscription &&
-    (diffDays === 3 || diffDays === 1 || (diffDays != null && diffDays <= 0)) && 
-    isAuthenticated
+    (futureSubscriptionStatus === "trialWillExpire" || futureSubscriptionStatus === "willBeCanceled") &&
+    (diffDays === 3 || diffDays === 1 || (diffDays != null && diffDays <= 0))
   )) ?? false;
 
-  const isModalLocked = (diffDays == null || diffDays <= 0) || !isOnValidSubscription;
+  const isModalLocked = (diffDays == null || diffDays <= 0) || !hasSubscription;
 
-  const redirectToStripeCheckout = async (): Promise<void> => 
+  const redirectToStripe = async (): Promise<void> =>
   {
-    let url: string;
+    setIsLoading(true);
 
     try
     {
-      const { checkoutSessionUrl } = await generateStripeSessionUrl();
+      let url: string;
 
-      if(!checkoutSessionUrl) { throw new Error("No checkout session url, Please contact your admin"); }
+      if(hasSubscription)
+      {
+        url = await generateStripeBillingPortalSession();
+      }
+      else
+      {
+        url = await generateStripeCheckoutSession();
+      }
 
-      url = checkoutSessionUrl;
+      void router.push(url);
     }
     catch (error)
     {
       console.error("error while getting stripe session url", error);
+      setIsLoading(false);
       return;
     }
-
-    void router.push(url);
   };
+
+  let title: string | null = null;
+
+  if(!hasSubscription)
+  {
+    title = "Dein Abonnement ist abgelaufen";
+  }
+  else
+  {
+    const distanceToSubscriptionEnd = formatDistance(subscriptionEndDate, today, { addSuffix: true, locale: de });
+
+    if(futureSubscriptionStatus === "trialWillExpire")
+    {
+      title = `Dein Testzeitraum läuft ${distanceToSubscriptionEnd} ab`;
+    }
+    else if(futureSubscriptionStatus === "willBeCanceled")
+    {
+      title = `Dein Abonnement läuft ${distanceToSubscriptionEnd} ab`;
+    }
+  }
 
   return (
     <Modal
@@ -141,11 +147,7 @@ const SubscriptionModal: FunctionComponent = () =>
       title="">
       <CaisyImg src={ModalFlag.src}/>
       <Title order={2} ta="center">
-        {!isOnValidSubscription ? (
-          "Deine Testphase ist abgelaufen"
-        ) : isOnTrailSubscription && (
-          `Deine Testphase läuft nur noch ${diffDays} Tag${diffDays === 1 ? "" : "e"}`
-        )}
+        {title}
       </Title>
       <BodyText ta="center" styleType="body-01-regular" component="p">
         Jetzt Constellatio abonnieren, um weiterhin alle Vorteile digitalen Lernens zu genießen.
@@ -166,7 +168,7 @@ const SubscriptionModal: FunctionComponent = () =>
         justifyContent: "space-between",
         width: "100%"
       }}>
-        {!isOnValidSubscription && (
+        {!hasSubscription && (
           <Button<"button">
             size="large"
             w="48%"
@@ -177,14 +179,40 @@ const SubscriptionModal: FunctionComponent = () =>
         )}
         <Button<"button">
           size="large"
-          w={isOnValidSubscription ? "100%" : "48%"}
+          w={hasSubscription ? "100%" : "48%"}
           styleType="primary"
-          onClick={redirectToStripeCheckout}>
+          loading={isLoading}
+          onClick={redirectToStripe}>
           Jetzt abonnieren
         </Button>
       </div>
     </Modal>
   );
+};
+
+const SubscriptionModal: FunctionComponent = () =>
+{
+  const router = useRouter();
+  const { data: subscriptionDetails } = useSubscription();
+  const { isUserLoggedIn } = useContext(AuthStateContext);
+  const isPathAppPath = getIsPathAppPath(router.pathname);
+
+  if(!isUserLoggedIn)
+  {
+    return null;
+  }
+
+  if(!isPathAppPath)
+  {
+    return null;
+  }
+
+  if(!subscriptionDetails)
+  {
+    return null;
+  }
+
+  return <SubscriptionModalContent subscriptionDetails={subscriptionDetails}/>;
 };
 
 export default SubscriptionModal;

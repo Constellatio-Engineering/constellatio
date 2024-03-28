@@ -68,15 +68,16 @@ export const authenticationRouter = createTRPCRouter({
         const subscription = await stripe.subscriptions.create({
           customer: stripeCustomerId,
           items: [{ plan: env.STRIPE_PREMIUM_PLAN_PRICE_ID, quantity: 1 }],
-          trial_period_days: 30,
+          payment_settings: {
+            save_default_payment_method: "on_subscription"
+          },
+          trial_period_days: env.TRIAL_PERIOD_IN_DAYS,
           trial_settings: {
             end_behavior: { missing_payment_method: "cancel" }
           }
         });
 
-        subscriptionId = subscription.id;
-
-        const subscriptionData = getDataFromStripeSubscription(subscription);
+        const { subscriptionId, subscriptionStatus } = getDataFromStripeSubscription(subscription);
 
         const userToInsert: UserInsert = {
           displayName: input.displayName,
@@ -87,11 +88,8 @@ export const authenticationRouter = createTRPCRouter({
           lastName: input.lastName,
           semester: input.semester,
           stripeCustomerId,
-          subscriptionEndDate: subscriptionData.subscriptionEndDate,
-          subscriptionId: subscriptionData.subscriptionId,
-          subscriptionStartDate: subscriptionData.subscriptionStartDate,
-          subscriptionStatus: subscriptionData.subscriptionStatus,
-          trialSubscriptionId: subscriptionData.subscriptionId,
+          subscriptionId,
+          subscriptionStatus,
           university: input.university,
         };
 
