@@ -141,7 +141,7 @@ const AppContainer: FunctionComponent<ConstellatioAppProps> = ({ Component, page
                         <FileViewer/>
                         <DocumentEditor/>
                         <FeedbackButton/>
-                        {isTrackingEnabled && <Tracking/>}
+                        {/* {isTrackingEnabled && <Tracking/>}*/}
                         <Layout Component={Component} pageProps={pageProps}/>
                       </Fragment>
                     )}
