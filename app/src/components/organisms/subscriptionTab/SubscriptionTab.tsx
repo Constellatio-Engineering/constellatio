@@ -28,8 +28,6 @@ const SubscriptionTab: FunctionComponent = () =>
   const router = useRouter();
   const [isLoading, setIsLoading] = useState<boolean>(false);
 
-  console.log(subscriptionDetails);
-
   const redirectToStripeSession = async (): Promise<void> =>
   {
     setIsLoading(true);
