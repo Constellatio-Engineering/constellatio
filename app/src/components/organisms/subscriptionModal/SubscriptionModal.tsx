@@ -66,6 +66,7 @@ const SubscriptionModalContent: FunctionComponent<Props> = ({ subscriptionDetail
   {
     const subscriptionEndDate = subscriptionDetails.stripeSubscription.current_period_end;
     const today: Date = new Date();
+    // const today: Date = new Date(2024, 3, 7, 8, 27);
     const endDate = new Date(subscriptionEndDate * 1000);
     const diffDays = differenceInDays(endDate, today);
     return { diffDays, subscriptionEndDate: endDate, today };
@@ -82,7 +83,7 @@ const SubscriptionModalContent: FunctionComponent<Props> = ({ subscriptionDetail
     (diffDays === 3 || diffDays === 1 || (diffDays != null && diffDays <= 0))
   )) ?? false;
 
-  const isModalLocked = (diffDays == null || diffDays <= 0) || !hasSubscription;
+  const isModalLocked = diffDays == null || !hasSubscription;
 
   const redirectToStripe = async (): Promise<void> =>
   {
