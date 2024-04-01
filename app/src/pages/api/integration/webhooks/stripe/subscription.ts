@@ -59,6 +59,12 @@ const handler: NextApiHandler = async (req, res) =>
 
   if(subscriptionDetailsFromDB == null)
   {
+    if(env.NEXT_PUBLIC_DEPLOYMENT_ENVIRONMENT === "staging")
+    {
+      console.info(`customer '${stripeCustomerId}' not found in db, but this is likely because the event was triggered in development`);
+      return res.status(200).send("customer not found in db, but this is likely because the event was triggered in development");
+    }
+
     console.error(`no user found with stripeCustomerId ${stripeCustomerId}`);
     return res.status(400).send("customer not found in db");
   }
