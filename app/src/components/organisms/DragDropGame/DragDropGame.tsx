@@ -26,7 +26,7 @@ import {
   type DropResult
 } from "@hello-pangea/dnd";
 import { Title, LoadingOverlay } from "@mantine/core";
-import React, { type FC, useCallback, useEffect, useMemo } from "react";
+import React, { type FC, useCallback, useMemo } from "react";
 
 import { Column } from "./Column/Column";
 import {
@@ -35,7 +35,6 @@ import {
   Game,
   GameWrapper,
   LegendWrapper,
-  Options,
   TitleWrapper,
 } from "./DragDropGame.styles";
 
@@ -128,6 +127,7 @@ export const DragDropGame: FC<TDragDropGame> = ({
     if(game?.orderRequired) 
     {
       const orderCorrect = checkOrder();
+
       if(winCondition && orderCorrect) 
       {
         updateGameState({
@@ -215,9 +215,21 @@ export const DragDropGame: FC<TDragDropGame> = ({
     });
   };
 
+  const removeItemFromSubmitted = (sourceIndex: number): void =>
+  {
+    const { moveItem } = useDragDropGameStore.getState();
+
+    moveItem({
+      gameId: id,
+      itemSourceIndex: sourceIndex,
+      newPositionIndex: null,
+      to: "optionsItems"
+    });
+  };
+
   let renderedOptionsItems = optionsItems;
 
-  if(renderedOptionsItems.length === 0)
+  if(renderedOptionsItems.length === 0 && droppedItems.length === 0)
   {
     renderedOptionsItems = originalOptions;
   }
@@ -246,76 +258,70 @@ export const DragDropGame: FC<TDragDropGame> = ({
         </LegendWrapper>
         <DragDropContext onDragEnd={onDragEnd}>
           <Game>
-            <Column>
-              <Droppable
-                droppableId={"options"}
-                type={"dndGameColumn"}
-                isDropDisabled={true}
-                isCombineEnabled={false}>
-                {(dropProvided: DroppableProvided, _dropSnapshot: DroppableStateSnapshot) => (
-                  <div {...dropProvided.droppableProps}>
-                    <div ref={dropProvided.innerRef}>
-                      {renderedOptionsItems.map((optionItem, index) => (
-                        <Draggable key={optionItem.id} draggableId={optionItem.id} index={index}>
-                          {(dragProvided: DraggableProvided, dragSnapshot: DraggableStateSnapshot) => (
-                            <DragNDropCard
-                              dropped={false}
-                              status={"default"}
-                              label={optionItem.label}
-                              id={optionItem.id}
-                              index={index}
-                              key={optionItem.id}
-                              isDragging={dragSnapshot.isDragging}
-                              provided={dragProvided}
-                            />
-                          )}
-                        </Draggable>
-                      ))}
-                      {dropProvided.placeholder}
-                    </div>
-                  </div>
-                )}
-              </Droppable>
-            </Column>
-            <Column>
-              <Droppable
-                droppableId={"submitted"}
-                type={"dndGameColumn"}
-                isCombineEnabled={false}>
-                {(dropProvided: DroppableProvided, dropSnapshot: DroppableStateSnapshot) => (
-                  <div
-                    {...dropProvided.droppableProps}
-                    style={{
-                      backgroundColor: dropSnapshot.isDraggingOver ? "rgba(0,0,0,0.05)" : "transparent",
-                      height: "100%",
-                    }}>
-                    <div
-                      ref={dropProvided.innerRef}
-                      style={{
-                        height: "100%",
-                      }}>
-                      {droppedItems.map((optionItem, index) => (
-                        <Draggable key={optionItem.id} draggableId={optionItem.id} index={index}>
-                          {(dragProvided: DraggableProvided, dragSnapshot: DraggableStateSnapshot) => (
-                            <DragNDropCard
-                              dropped={true}
-                              status={"default"}
-                              label={optionItem.label}
-                              id={optionItem.id}
-                              index={index}
-                              key={optionItem.id}
-                              isDragging={dragSnapshot.isDragging}
-                              provided={dragProvided}
-                            />
-                          )}
-                        </Draggable>
-                      ))}
-                      {dropProvided.placeholder}
-                    </div>
-                  </div>
-                )}
-              </Droppable>
-            </Column>
+            <Droppable
+              droppableId={"options"}
+              type={"dndGameColumn"}
+              isDropDisabled={true}
+              isCombineEnabled={false}>
+              {(dropProvided: DroppableProvided, _dropSnapshot: DroppableStateSnapshot) => (
+                <Column
+                  {...dropProvided.droppableProps}
+                  isDraggingOver={false}
+                  dropProvided={dropProvided}
+                  isEmpty={renderedOptionsItems.length === 0}
+                  columType={"options"}>
+                  {renderedOptionsItems.map((optionItem, index) => (
+                    <Draggable key={optionItem.id} draggableId={optionItem.id} index={index}>
+                      {(dragProvided: DraggableProvided, dragSnapshot: DraggableStateSnapshot) => (
+                        <DragNDropCard
+                          dropped={false}
+                          status={"default"}
+                          label={optionItem.label}
+                          id={optionItem.id}
+                          index={index}
+                          key={optionItem.id}
+                          isDragging={dragSnapshot.isDragging}
+                          provided={dragProvided}
+                        />
+                      )}
+                    </Draggable>
+                  ))}
+                  {dropProvided.placeholder}
+                </Column>
+              )}
+            </Droppable>
+            <Droppable
+              droppableId={"submitted"}
+              type={"dndGameColumn"}
+              isCombineEnabled={false}>
+              {(dropProvided: DroppableProvided, dropSnapshot: DroppableStateSnapshot) => (
+                <Column
+                  {...dropProvided.droppableProps}
+                  columType={"dropped"}
+                  isEmpty={droppedItems.length === 0}
+                  isDraggingOver={dropSnapshot.isDraggingOver}
+                  dropProvided={dropProvided}>
+                  {droppedItems.map((optionItem, index) => (
+                    <Draggable key={optionItem.id} draggableId={optionItem.id} index={index}>
+                      {(dragProvided: DraggableProvided, dragSnapshot: DraggableStateSnapshot) => (
+                        <DragNDropCard
+                          dropped={true}
+                          status={"default"}
+                          label={optionItem.label}
+                          id={optionItem.id}
+                          index={index}
+                          onDeleteHandler={() => removeItemFromSubmitted(index)}
+                          key={optionItem.id}
+                          isDragging={dragSnapshot.isDragging}
+                          provided={dragProvided}
+                        />
+                      )}
+                    </Draggable>
+                  ))}
+                  {dropProvided.placeholder}
+                </Column>
+              )}
+            </Droppable>
           </Game>
         </DragDropContext>
         {gameStatus !== "inprogress" && (

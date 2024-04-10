@@ -24,7 +24,8 @@ export const Card = styled.div<{ dropped?: boolean; status: "success" | "error" 
     appearance: none;
     outline: none;
     transition: background-color 0.3s ease, border-color 0.3s ease, color 0.3s ease;
-
+  margin-bottom: 8px;
+  
     > div svg {
         color: ${({ theme }) => theme.colors["neutrals-01"][7]};
     }

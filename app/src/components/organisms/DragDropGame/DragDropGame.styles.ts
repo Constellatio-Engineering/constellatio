@@ -34,10 +34,6 @@ export const Game = styled.div`
   }
 `;
 
-export const Options = styled.div`
-  position: relative;
-`;
-
 export const EmptyPlaceholder = styled.div`
   height: 100%;
   align-self: center;

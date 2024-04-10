@@ -33,7 +33,7 @@ type IDragDropGameStore = {
   moveItem: (params: {
     gameId: string;
     itemSourceIndex: number;
-    newPositionIndex: number;
+    newPositionIndex: number | null;
     to: "droppedItems" | "optionsItems";
   }) => void;
   reorderDroppedItems: (params: {
@@ -121,7 +121,9 @@ const useDragDropGameStore = create(
             return;
           }
 
-          droppedItems.splice(newPositionIndex, 0, movedItem);
+          const _newPositionIndex = newPositionIndex == null ? droppedItems.length : newPositionIndex;
+
+          droppedItems.splice(_newPositionIndex, 0, movedItem);
           optionsItems = optionsItems.filter(item => item.id !== movedItem.id);
         }
         else
@@ -134,7 +136,9 @@ const useDragDropGameStore = create(
             return;
           }
 
-          optionsItems.splice(newPositionIndex, 0, movedItem);
+          const _newPositionIndex = newPositionIndex == null ? droppedItems.length : newPositionIndex;
+
+          optionsItems.splice(_newPositionIndex, 0, movedItem);
           droppedItems = droppedItems.filter(item => item.id !== movedItem.id);
         }
 
