@@ -17,11 +17,20 @@ export const Column = styled.div<{
   background-color: ${({ theme }) => theme.colors["neutrals-01"][2]};
 `;
 
-export const InnerWrapper = css`
-`;
-
 export const InnerWrapperWithBackground = css`
   background-image: url("/images/icons/linedBackground.svg");
   background-size: cover;
   background-position: center center;
+`;
+
+export const EmptyPlaceholder = styled.div`
+  height: 100%;
+  user-select: none;
+  align-self: center;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: ${({ theme }) => theme.spacing["spacing-8"]};
+  color: ${({ theme }) => theme.colors["neutrals-01"][7]};
 `;

@@ -1,6 +1,5 @@
 import { BodyText } from "@/components/atoms/BodyText/BodyText";
 import { DragAndDropGameIcon } from "@/components/Icons/DragAndDropGameIcon";
-import { EmptyPlaceholder } from "@/components/organisms/DragDropGame2/DragDropGame2.styles";
 
 import type { DroppableProvided } from "@hello-pangea/dnd";
 import React, { type FunctionComponent, type ComponentProps } from "react";
@@ -26,14 +25,11 @@ export const Column: FunctionComponent<Props> = ({
   return (
     <styles.Column {...props} isDraggingOver={isDraggingOver}>
       <div
-        css={[
-          styles.InnerWrapper,
-          (columType === "dropped") && styles.InnerWrapperWithBackground
-        ]}
+        css={[(columType === "dropped") && styles.InnerWrapperWithBackground]}
         ref={dropProvided.innerRef}
         style={{ height: "100%" }}>
         {(columType === "dropped" && isEmpty && !isDraggingOver) ? (
-          <EmptyPlaceholder>
+          <styles.EmptyPlaceholder>
             <DragAndDropGameIcon size={140}/>
             <BodyText
               component="p"
@@ -41,7 +37,7 @@ export const Column: FunctionComponent<Props> = ({
               styleType="body-02-medium">
               Ziehe die richtigen Antworten in dieses Feld
             </BodyText>
-          </EmptyPlaceholder>
+          </styles.EmptyPlaceholder>
         ) : children}
       </div>
     </styles.Column>
