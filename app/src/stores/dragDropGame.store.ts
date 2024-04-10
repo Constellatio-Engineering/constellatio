@@ -16,7 +16,7 @@ type DragDropGameState = {
   gameStatus: GameStatus;
   gameSubmitted: boolean;
   optionsItems: TDragAndDropGameOptionType[];
-  resultMessage: string;
+  resultMessage: string | null;
 };
 
 type DragDropGameStateUpdate = Partial<Pick<DragDropGameState, "gameStatus" | "gameSubmitted" | "resultMessage" | "droppedItems" | "optionsItems">>;
@@ -24,10 +24,6 @@ type DragDropGameStateUpdate = Partial<Pick<DragDropGameState, "gameStatus" | "g
 type IDragDropGameStore = {
   games: DragDropGameState[];
   getGameState: (gameId: Nullable<string>) => DragDropGameState | undefined;
-  initializeNewGameState: (params: {
-    caseId: string;
-    gameId: string;
-  }) => void;
   moveItem: (params: {
     gameId: string;
     itemSourceIndex: number;
@@ -78,23 +74,6 @@ const useDragDropGameStore = create(
       const game = games.find(game => game.gameId === gameId);
 
       return game;
-    },
-    initializeNewGameState: ({ caseId, gameId }) =>
-    {
-      const existingGame = get().games.find(game => game.gameId === gameId);
-
-      if(existingGame)
-      {
-        return;
-      }
-
-      set((state) =>
-      {
-        state.games = state.games.concat({
-          ...getDefaultDragDropGameState({ caseId, gameId }),
-          gameId,
-        });
-      });
     },
     moveItem: ({
       gameId,

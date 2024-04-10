@@ -57,17 +57,7 @@ export const DragDropGame: FC<TDragDropGame> = ({
     onSuccess: async () => invalidateGamesProgress({ caseId })
   });
   const gameState = useDragDropGameStore((s) => s.getGameState(id));
-  const allGames = useDragDropGameStore((s) => s.games);
   const updateGameState = useDragDropGameStore((s) => s.updateGameState);
-  const initializeNewGameState = useDragDropGameStore((s) => s.initializeNewGameState);
-
-  useEffect(() =>
-  {
-    if(gameState == null && id != null) 
-    {
-      initializeNewGameState({ caseId, gameId: id });
-    }
-  }, [allGames, caseId, gameState, id, initializeNewGameState]);
 
   const originalOptions: TDragAndDropGameOptionType[] = useMemo(
     () => game?.options ?? [],
@@ -113,22 +103,18 @@ export const DragDropGame: FC<TDragDropGame> = ({
     }
   }, [id]);
 
-  if(!gameState || !id) 
-  {
-    return null;
-  }
-
-  const {
-    droppedItems,
-    gameStatus,
-    gameSubmitted,
-    optionsItems,
-    resultMessage,
-  } = gameState;
+  const droppedItems = gameState?.droppedItems ?? [];
+  const optionsItems = gameState?.optionsItems ?? game.options;
+  const gameSubmitted = gameState?.gameSubmitted ?? false;
+  const gameStatus = gameState?.gameStatus ?? "inprogress";
+  const resultMessage = gameState?.resultMessage ?? null;
 
   const checkWinCondition = (): boolean =>
-    droppedItems.every((item) => item.correctAnswer) &&
-		optionsItems.every((item) => !item.correctAnswer);
+  {
+    const areAllDroppedItemsCorrect = droppedItems.every((item) => item.correctAnswer);
+    const areAllOptionsItemsIncorrect = optionsItems.every((item) => !item.correctAnswer);
+    return areAllDroppedItemsCorrect && areAllOptionsItemsIncorrect;
+  };
 
   const checkOrder = (): boolean => 
   {
