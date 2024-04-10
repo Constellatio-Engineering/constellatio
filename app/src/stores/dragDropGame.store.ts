@@ -1,3 +1,4 @@
+/* eslint-disable max-lines */
 import { type TValue } from "@/components/Wrappers/DndGame/DndGame";
 import { type Nullable } from "@/utils/types";
 
@@ -9,7 +10,6 @@ export type TDragAndDropGameOptionType = TValue["options"][number];
 type GameStatus = "win" | "lose" | "inprogress";
 
 type DragDropGameState = {
-  activeId: string | null;
   caseId: string;
   droppedItems: TDragAndDropGameOptionType[];
   gameId: string;
@@ -19,7 +19,7 @@ type DragDropGameState = {
   resultMessage: string;
 };
 
-type DragDropGameStateUpdate = Partial<Pick<DragDropGameState, "gameStatus" | "gameSubmitted" | "resultMessage" | "droppedItems" | "optionsItems" | "activeId">>;
+type DragDropGameStateUpdate = Partial<Pick<DragDropGameState, "gameStatus" | "gameSubmitted" | "resultMessage" | "droppedItems" | "optionsItems">>;
 
 type IDragDropGameStore = {
   games: DragDropGameState[];
@@ -27,6 +27,17 @@ type IDragDropGameStore = {
   initializeNewGameState: (params: {
     caseId: string;
     gameId: string;
+  }) => void;
+  moveItem: (params: {
+    gameId: string;
+    itemSourceIndex: number;
+    newPositionIndex: number;
+    to: "droppedItems" | "optionsItems";
+  }) => void;
+  reorderDroppedItems: (params: {
+    gameId: string;
+    itemSourceIndex: number;
+    newPositionIndex: number;
   }) => void;
   resetGamesForCase: (caseId: string) => void;
   updateGameState: (params: {
@@ -42,7 +53,6 @@ type GetDefaultDragDropGameState = (params: {
 }) => DragDropGameState;
 
 const getDefaultDragDropGameState: GetDefaultDragDropGameState = ({ caseId, gameId }) => ({
-  activeId: null,
   caseId,
   droppedItems: [],
   gameId,
@@ -55,7 +65,6 @@ const getDefaultDragDropGameState: GetDefaultDragDropGameState = ({ caseId, game
 const useDragDropGameStore = create(
   immer<IDragDropGameStore>((set, get) => ({
     games: [],
-
     getGameState: (gameId) =>
     {
       const { games } = get();
@@ -70,7 +79,6 @@ const useDragDropGameStore = create(
 
       return game;
     },
-
     initializeNewGameState: ({ caseId, gameId }) =>
     {
       const existingGame = get().games.find(game => game.gameId === gameId);
@@ -88,7 +96,90 @@ const useDragDropGameStore = create(
         });
       });
     },
+    moveItem: ({
+      gameId,
+      itemSourceIndex,
+      newPositionIndex,
+      to
+    }) =>
+    {
+      set((state) =>
+      {
+        const gameIndex = state.games.findIndex(game => game.gameId === gameId);
 
+        if(gameIndex === -1)
+        {
+          console.error("game not found");
+          return;
+        }
+
+        const game = state.games[gameIndex]!;
+
+        let { droppedItems, optionsItems } = game;
+
+        if(to === "droppedItems")
+        {
+          const movedItem = optionsItems[itemSourceIndex];
+
+          if(!movedItem)
+          {
+            console.error("Moved item not found");
+            return;
+          }
+
+          droppedItems.splice(newPositionIndex, 0, movedItem);
+          optionsItems = optionsItems.filter(item => item.id !== movedItem.id);
+        }
+        else
+        {
+          const movedItem = droppedItems[itemSourceIndex];
+
+          if(!movedItem)
+          {
+            console.error("Moved item not found");
+            return;
+          }
+
+          optionsItems.splice(newPositionIndex, 0, movedItem);
+          droppedItems = droppedItems.filter(item => item.id !== movedItem.id);
+        }
+
+        const newGame: DragDropGameState = {
+          ...game,
+          droppedItems,
+          optionsItems,
+        };
+
+        state.games[gameIndex] = newGame;
+      });
+    },
+    reorderDroppedItems: ({ gameId, itemSourceIndex, newPositionIndex }) =>
+    {
+      set((state) =>
+      {
+        const gameIndex = state.games.findIndex(game => game.gameId === gameId);
+
+        if(gameIndex === -1)
+        {
+          console.error("game not found");
+          return;
+        }
+
+        const game = state.games[gameIndex]!;
+        const droppedItem = game.droppedItems[itemSourceIndex];
+
+        if(!droppedItem)
+        {
+          console.error("Reordered item not found");
+          return;
+        }
+
+        game.droppedItems.splice(itemSourceIndex, 1);
+        game.droppedItems.splice(newPositionIndex, 0, droppedItem);
+
+        state.games[gameIndex] = game;
+      });
+    },
     resetGamesForCase: (caseId) =>
     {
       set((state) =>
@@ -104,7 +195,6 @@ const useDragDropGameStore = create(
         });
       });
     },
-
     updateGameState: ({ caseId, gameId, update }) =>
     {
       set((state) =>

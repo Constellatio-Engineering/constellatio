@@ -2,13 +2,11 @@
 import { BodyText } from "@/components/atoms/BodyText/BodyText";
 import { Button } from "@/components/atoms/Button/Button";
 import { Check } from "@/components/Icons/Check";
-import { DragAndDropGameIcon } from "@/components/Icons/DragAndDropGameIcon";
 import { Gamification } from "@/components/Icons/Gamification";
 import { Reload } from "@/components/Icons/Reload";
 import { DragNDropCard } from "@/components/molecules/DraggableCard/DragNDropCard";
 import { HelpNote } from "@/components/molecules/HelpNote/HelpNote";
 import { ResultCard } from "@/components/molecules/ResultCard/ResultCard";
-import QuoteItem from "@/components/organisms/DragDropGame/primatives/quote-item";
 import useContextAndErrorIfNull from "@/hooks/useContextAndErrorIfNull";
 import { InvalidateQueriesContext } from "@/provider/InvalidateQueriesProvider";
 import { type IGenDragNDropGame } from "@/services/graphql/__generated/sdk";
@@ -40,7 +38,6 @@ import {
   Options,
   TitleWrapper,
 } from "./DragDropGame.styles";
-import QuoteList, { type Quote } from "./primatives/quote-list";
 
 export type TDragDropGame = Pick<IGenDragNDropGame, "game" | "helpNote" | "question" | "id"> & {
   readonly caseId: string;
@@ -88,27 +85,33 @@ export const DragDropGame: FC<TDragDropGame> = ({
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [originalOptions]);
 
-  const onBeforeCapture = useCallback(() =>
-  {
-    /* ...*/
-  }, []);
-  const onBeforeDragStart = useCallback(() =>
-  {
-    /* ...*/
-  }, []);
-  const onDragStart = useCallback(() =>
-  {
-    /* ...*/
-  }, []);
-  const onDragUpdate = useCallback(() =>
-  {
-    /* ...*/
-  }, []);
   const onDragEnd = useCallback((result: DropResult) =>
   {
-    console.log(result);
-    // the only one that is required
-  }, []);
+    if(!result.destination)
+    {
+      return;
+    }
+
+    const { moveItem, reorderDroppedItems } = useDragDropGameStore.getState();
+
+    if(result.source.droppableId === result.destination.droppableId)
+    {
+      reorderDroppedItems({
+        gameId: id!,
+        itemSourceIndex: result.source.index,
+        newPositionIndex: result.destination.index
+      });
+    }
+    else
+    {
+      moveItem({
+        gameId: id!,
+        itemSourceIndex: result.source.index,
+        newPositionIndex: result.destination.index,
+        to: "droppedItems"
+      });
+    }
+  }, [id]);
 
   if(!gameState || !id) 
   {
@@ -116,52 +119,12 @@ export const DragDropGame: FC<TDragDropGame> = ({
   }
 
   const {
-    activeId,
     droppedItems,
     gameStatus,
     gameSubmitted,
     optionsItems,
     resultMessage,
-  } = gameState ?? {};
-
-  /* const handleDragEnd = (event: DragEndEvent): void =>
-  {
-    const { active, over } = event;
-
-    updateGameState({
-      caseId,
-      gameId: id,
-      update: { activeId: null }
-    });
-
-    if(over && over.id === "droppable")
-    {
-      const activeItem = optionsItems.find((item) => item.id === active.id);
-
-      if(activeItem)
-      {
-        updateGameState({
-          caseId,
-          gameId: id,
-          update: {
-            droppedItems: [...droppedItems, activeItem],
-            optionsItems: optionsItems.filter((item) => item.id !== activeItem.id)
-          }
-        });
-      }
-    }
-  };
-
-  const handleDragStart = (event: DragStartEvent): void => 
-  {
-    updateGameState({
-      caseId,
-      gameId: id,
-      update: {
-        activeId: event.active.id.toString()
-      }
-    });
-  };*/
+  } = gameState;
 
   const checkWinCondition = (): boolean =>
     droppedItems.every((item) => item.correctAnswer) &&
@@ -307,20 +270,20 @@ export const DragDropGame: FC<TDragDropGame> = ({
                 type={"dndGameColumn"}
                 isDropDisabled={true}
                 isCombineEnabled={false}>
-                {(dropProvided: DroppableProvided, dropSnapshot: DroppableStateSnapshot) => (
+                {(dropProvided: DroppableProvided, _dropSnapshot: DroppableStateSnapshot) => (
                   <div {...dropProvided.droppableProps}>
                     <div ref={dropProvided.innerRef}>
                       {optionsItems.map((optionItem, index) => (
                         <Draggable key={optionItem.id} draggableId={optionItem.id} index={index}>
                           {(dragProvided: DraggableProvided, dragSnapshot: DraggableStateSnapshot) => (
-                            <QuoteItem
+                            <DragNDropCard
+                              dropped={false}
+                              status={"default"}
+                              label={optionItem.label}
+                              id={optionItem.id}
+                              index={index}
                               key={optionItem.id}
-                              quote={{
-                                id: optionItem.id,
-                                title: optionItem.label,
-                              }}
                               isDragging={dragSnapshot.isDragging}
-                              isGroupedOver={Boolean(dragSnapshot.combineTargetFor)}
                               provided={dragProvided}
                             />
                           )}
@@ -352,14 +315,14 @@ export const DragDropGame: FC<TDragDropGame> = ({
                       {droppedItems.map((optionItem, index) => (
                         <Draggable key={optionItem.id} draggableId={optionItem.id} index={index}>
                           {(dragProvided: DraggableProvided, dragSnapshot: DraggableStateSnapshot) => (
-                            <QuoteItem
+                            <DragNDropCard
+                              dropped={true}
+                              status={"default"}
+                              label={optionItem.label}
+                              id={optionItem.id}
+                              index={index}
                               key={optionItem.id}
-                              quote={{
-                                id: optionItem.id,
-                                title: optionItem.label,
-                              }}
                               isDragging={dragSnapshot.isDragging}
-                              isGroupedOver={Boolean(dragSnapshot.combineTargetFor)}
                               provided={dragProvided}
                             />
                           )}
