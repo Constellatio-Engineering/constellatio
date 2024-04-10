@@ -1,6 +1,7 @@
 /* eslint-disable max-lines */
 import { type TValue } from "@/components/Wrappers/DndGame/DndGame";
-import { type Nullable } from "@/utils/types";
+import type { IGenDragNDropGame } from "@/services/graphql/__generated/sdk";
+import { type Nullable, Prettify } from "@/utils/types";
 
 import { create } from "zustand";
 import { immer } from "zustand/middleware/immer";
@@ -23,7 +24,12 @@ type DragDropGameStateUpdate = Partial<Pick<DragDropGameState, "gameStatus" | "g
 
 type IDragDropGameStore = {
   games: DragDropGameState[];
-  getGameState: (gameId: Nullable<string>) => DragDropGameState | undefined;
+  getGameState: (params: {
+    caseId: string;
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    gameData: any;
+    gameId: string;
+  }) => DragDropGameState;
   moveItem: (params: {
     gameId: string;
     itemSourceIndex: number;
@@ -48,7 +54,7 @@ type GetDefaultDragDropGameState = (params: {
   gameId: string;
 }) => DragDropGameState;
 
-const getDefaultDragDropGameState: GetDefaultDragDropGameState = ({ caseId, gameId }) => ({
+export const getDefaultDragDropGameState: GetDefaultDragDropGameState = ({ caseId, gameId }) => ({
   caseId,
   droppedItems: [],
   gameId,
@@ -61,19 +67,28 @@ const getDefaultDragDropGameState: GetDefaultDragDropGameState = ({ caseId, game
 const useDragDropGameStore = create(
   immer<IDragDropGameStore>((set, get) => ({
     games: [],
-    getGameState: (gameId) =>
+    getGameState: ({ caseId, gameData, gameId }) =>
     {
       const { games } = get();
-
-      if(gameId == null)
-      {
-        console.warn("game Id is null. cannot get game state");
-        return;
-      }
-
       const game = games.find(game => game.gameId === gameId);
 
-      return game;
+      if(game)
+      {
+        return game;
+      }
+
+      const newGame = getDefaultDragDropGameState({ caseId, gameId });
+
+      newGame.optionsItems = gameData.options;
+
+      set((state) =>
+      {
+        state.games = state.games.concat(newGame);
+      });
+
+      // const createdGame = get().games.find(game => game.gameId === gameId)!;
+
+      return newGame;
     },
     moveItem: ({
       gameId,

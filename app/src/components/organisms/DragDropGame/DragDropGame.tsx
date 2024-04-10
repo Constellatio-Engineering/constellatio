@@ -39,8 +39,9 @@ import {
   TitleWrapper,
 } from "./DragDropGame.styles";
 
-export type TDragDropGame = Pick<IGenDragNDropGame, "game" | "helpNote" | "question" | "id"> & {
+export type TDragDropGame = Pick<IGenDragNDropGame, "game" | "helpNote" | "question"> & {
   readonly caseId: string;
+  readonly id: string;
 };
 
 export const DragDropGame: FC<TDragDropGame> = ({
@@ -56,24 +57,20 @@ export const DragDropGame: FC<TDragDropGame> = ({
     onError: (error) => console.error("Error while setting game progress", error),
     onSuccess: async () => invalidateGamesProgress({ caseId })
   });
-  const gameState = useDragDropGameStore((s) => s.getGameState(id));
+  const {
+    droppedItems,
+    gameStatus,
+    gameSubmitted,
+    optionsItems,
+    resultMessage
+  } = useDragDropGameStore(s => s.getGameState({ caseId, gameData: game, gameId: id }));
   const updateGameState = useDragDropGameStore((s) => s.updateGameState);
+  const gameOptions = game?.options;
 
-  const originalOptions: TDragAndDropGameOptionType[] = useMemo(
-    () => game?.options ?? [],
-    [game?.options]
-  );
-
-  useEffect(() => 
+  const originalOptions: TDragAndDropGameOptionType[] = useMemo(() =>
   {
-    const optionsShuffled = shuffleArray<TDragAndDropGameOptionType>(originalOptions);
-    updateGameState({
-      caseId,
-      gameId: id!,
-      update: { optionsItems: optionsShuffled }
-    });
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [originalOptions]);
+    return gameOptions ?? [];
+  }, [gameOptions]);
 
   const onDragEnd = useCallback((result: DropResult) =>
   {
@@ -87,7 +84,7 @@ export const DragDropGame: FC<TDragDropGame> = ({
     if(result.source.droppableId === result.destination.droppableId)
     {
       reorderDroppedItems({
-        gameId: id!,
+        gameId: id,
         itemSourceIndex: result.source.index,
         newPositionIndex: result.destination.index
       });
@@ -95,19 +92,13 @@ export const DragDropGame: FC<TDragDropGame> = ({
     else
     {
       moveItem({
-        gameId: id!,
+        gameId: id,
         itemSourceIndex: result.source.index,
         newPositionIndex: result.destination.index,
         to: "droppedItems"
       });
     }
   }, [id]);
-
-  const droppedItems = gameState?.droppedItems ?? [];
-  const optionsItems = gameState?.optionsItems ?? game.options;
-  const gameSubmitted = gameState?.gameSubmitted ?? false;
-  const gameStatus = gameState?.gameStatus ?? "inprogress";
-  const resultMessage = gameState?.resultMessage ?? null;
 
   const checkWinCondition = (): boolean =>
   {
@@ -118,9 +109,7 @@ export const DragDropGame: FC<TDragDropGame> = ({
 
   const checkOrder = (): boolean => 
   {
-    const correctAnswersOrder = originalOptions.filter(
-      (item) => item.correctAnswer
-    );
+    const correctAnswersOrder = originalOptions.filter((item) => item.correctAnswer);
 
     for(let i = 0; i < droppedItems.length; i++) 
     {
@@ -226,6 +215,13 @@ export const DragDropGame: FC<TDragDropGame> = ({
     });
   };
 
+  let renderedOptionsItems = optionsItems;
+
+  if(renderedOptionsItems.length === 0)
+  {
+    renderedOptionsItems = originalOptions;
+  }
+
   return (
     <Container>
       <TitleWrapper>
@@ -259,7 +255,7 @@ export const DragDropGame: FC<TDragDropGame> = ({
                 {(dropProvided: DroppableProvided, _dropSnapshot: DroppableStateSnapshot) => (
                   <div {...dropProvided.droppableProps}>
                     <div ref={dropProvided.innerRef}>
-                      {optionsItems.map((optionItem, index) => (
+                      {renderedOptionsItems.map((optionItem, index) => (
                         <Draggable key={optionItem.id} draggableId={optionItem.id} index={index}>
                           {(dragProvided: DraggableProvided, dragSnapshot: DraggableStateSnapshot) => (
                             <DragNDropCard
@@ -334,7 +330,7 @@ export const DragDropGame: FC<TDragDropGame> = ({
 								null
               }
               variant={gameStatus}
-              message={resultMessage}
+              message={resultMessage ?? ""}
             />
             {helpNote?.json && <HelpNote data={helpNote}/>}
           </>
