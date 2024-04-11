@@ -7,8 +7,6 @@ import {
 } from "@hello-pangea/dnd";
 import React, { type FunctionComponent } from "react";
 
-import * as styles from "./DragDropColumn.styles";
-
 type Props = {
   readonly columnType: "options" | "dropped";
   readonly gameId: string;

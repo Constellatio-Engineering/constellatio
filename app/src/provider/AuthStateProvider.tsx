@@ -26,7 +26,7 @@ const initialAuthState: InitialAuthState = {
 
 export const AuthStateContext = createContext<AuthStateContext>(initialAuthState);
 
-export const getIsUserLoggedInClient = (session: Session | null): UserNotLoggedInState | UserLoggedInState =>
+const getIsUserLoggedInClient = (session: Session | null): UserNotLoggedInState | UserLoggedInState =>
 {
   const isUserLoggedIn = session != null;
 

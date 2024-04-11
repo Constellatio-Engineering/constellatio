@@ -25,7 +25,6 @@ import React, { type FC, useCallback, useMemo } from "react";
 
 import {
   Container,
-  EmptyPlaceholder,
   Game,
   GameWrapper,
   LegendWrapper,
