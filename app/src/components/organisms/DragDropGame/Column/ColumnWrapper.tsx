@@ -4,7 +4,7 @@ import { DragAndDropGameIcon } from "@/components/Icons/DragAndDropGameIcon";
 import type { DroppableProvided } from "@hello-pangea/dnd";
 import React, { type FunctionComponent, type ComponentProps } from "react";
 
-import * as styles from "./Column.styles";
+import * as styles from "./ColumnWrapper.styles";
 
 type Props = ComponentProps<"div"> & {
   readonly columType: "options" | "dropped";
@@ -13,7 +13,7 @@ type Props = ComponentProps<"div"> & {
   readonly isEmpty: boolean;
 };
 
-export const Column: FunctionComponent<Props> = ({
+export const ColumnWrapper: FunctionComponent<Props> = ({
   children,
   columType,
   dropProvided,
