@@ -1,6 +1,6 @@
-import { DragNDropCard } from "@/components/molecules/DraggableCard/DragNDropCard";
+import { DragNDropCard, type TDraggableCard } from "@/components/molecules/DraggableCard/DragNDropCard";
 import { ColumnWrapper } from "@/components/organisms/DragDropGame/Column/ColumnWrapper";
-import useDragDropGameStore, { type TDragAndDropGameOptionType } from "@/stores/dragDropGame.store";
+import useDragDropGameStore, { type GameStatus, type TDragAndDropGameOptionType } from "@/stores/dragDropGame.store";
 
 import {
   Draggable, type DraggableProvided, type DraggableStateSnapshot, Droppable, type DroppableProvided, type DroppableStateSnapshot 
@@ -12,6 +12,7 @@ import * as styles from "./DragDropColumn.styles";
 type Props = {
   readonly columnType: "options" | "dropped";
   readonly gameId: string;
+  readonly gameStatus: GameStatus;
   readonly isDraggingOverEnabled: boolean;
   readonly isDropDisabled: boolean;
   readonly items: TDragAndDropGameOptionType[];
@@ -20,6 +21,7 @@ type Props = {
 export const DragDropColumn: FunctionComponent<Props> = ({
   columnType,
   gameId,
+  gameStatus,
   isDraggingOverEnabled,
   isDropDisabled,
   items
@@ -51,20 +53,42 @@ export const DragDropColumn: FunctionComponent<Props> = ({
           isEmpty={items.length === 0}
           columType={columnType}>
           {items.map((optionItem, index) => (
-            <Draggable key={optionItem.id} draggableId={optionItem.id} index={index}>
-              {(dragProvided: DraggableProvided, dragSnapshot: DraggableStateSnapshot) => (
-                <DragNDropCard
-                  dropped={columnType === "dropped"}
-                  status={"default"}
-                  label={optionItem.label}
-                  id={optionItem.id}
-                  index={index}
-                  key={optionItem.id}
-                  onDeleteHandler={columnType === "dropped" ? () => removeItemFromSubmitted(index) : undefined}
-                  isDragging={dragSnapshot.isDragging}
-                  provided={dragProvided}
-                />
-              )}
+            <Draggable
+              key={optionItem.id}
+              draggableId={optionItem.id}
+              index={index}
+              isDragDisabled={gameStatus !== "inprogress"}>
+              {(dragProvided: DraggableProvided, dragSnapshot: DraggableStateSnapshot) =>
+              {
+                let status: TDraggableCard["status"];
+                // let result: TDraggableCard["result"];
+
+                if(gameStatus === "inprogress")
+                {
+                  status = "default";
+                  // result = null;
+                }
+                else
+                {
+                  status = optionItem.correctAnswer ? "success" : "error";
+                  // result = optionItem.correctAnswer ? "Richtig" : "Falsch";
+                }
+
+                return (
+                  <DragNDropCard
+                    dropped={columnType === "dropped"}
+                    status={status}
+                    // result={result}
+                    label={optionItem.label}
+                    id={optionItem.id}
+                    index={index}
+                    key={optionItem.id}
+                    onDeleteHandler={columnType === "dropped" ? () => removeItemFromSubmitted(index) : undefined}
+                    isDragging={dragSnapshot.isDragging}
+                    provided={dragProvided}
+                  />
+                );
+              }}
             </Draggable>
           ))}
           {dropProvided.placeholder}

@@ -233,25 +233,31 @@ export const DragDropGame: FC<TDragDropGame> = ({
         {gameStatus !== "inprogress" && (
           <LegendWrapper>
             <BodyText component="p" styleType="body-01-regular">
-              Richtige Antwort
+              Richtig eingeordnet
             </BodyText>
             <BodyText component="p" styleType="body-01-regular">
-              Falsche Antwort
+              Falsch eingeordnet
             </BodyText>
           </LegendWrapper>
         )}
         <DragDropContext onDragEnd={onDragEnd}>
           <Game>
+            <LoadingOverlay
+              visible={optionsItems?.length < 1 && droppedItems?.length === 0}
+              radius="radius-12"
+            />
             <DragDropColumn
               gameId={id}
+              gameStatus={gameStatus}
               columnType={"options"}
               isDraggingOverEnabled={false}
               isDropDisabled={true}
               items={renderedOptionsItems}
             />
             <DragDropColumn
-              columnType={"dropped"}
               gameId={id}
+              gameStatus={gameStatus}
+              columnType={"dropped"}
               isDraggingOverEnabled={true}
               isDropDisabled={false}
               items={droppedItems}

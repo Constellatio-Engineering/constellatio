@@ -27,6 +27,7 @@ export const GameWrapper = styled.div`
 export const Game = styled.div`
   display: flex;
   gap: ${({ theme }) => theme.spacing["spacing-12"]};
+  position: relative;
   
   @media screen and (max-width: 1100px) {
     flex-direction: column;

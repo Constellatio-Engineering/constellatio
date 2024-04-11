@@ -8,7 +8,7 @@ import { immer } from "zustand/middleware/immer";
 
 export type TDragAndDropGameOptionType = TValue["options"][number];
 
-type GameStatus = "win" | "lose" | "inprogress";
+export type GameStatus = "win" | "lose" | "inprogress";
 
 type DragDropGameState = {
   caseId: string;
