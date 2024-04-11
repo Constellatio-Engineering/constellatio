@@ -1,7 +1,5 @@
 /* eslint-disable max-lines */
 import { type TValue } from "@/components/Wrappers/DndGame/DndGame";
-import type { IGenDragNDropGame } from "@/services/graphql/__generated/sdk";
-import { type Nullable, Prettify } from "@/utils/types";
 
 import { create } from "zustand";
 import { immer } from "zustand/middleware/immer";
@@ -54,7 +52,7 @@ type GetDefaultDragDropGameState = (params: {
   gameId: string;
 }) => DragDropGameState;
 
-export const getDefaultDragDropGameState: GetDefaultDragDropGameState = ({ caseId, gameId }) => ({
+const getDefaultDragDropGameState: GetDefaultDragDropGameState = ({ caseId, gameId }) => ({
   caseId,
   droppedItems: [],
   gameId,
