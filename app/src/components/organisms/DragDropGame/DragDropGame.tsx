@@ -248,14 +248,16 @@ export const DragDropGame: FC<TDragDropGame> = ({
             {question}
           </BodyText>
         )}
-        <LegendWrapper>
-          <BodyText component="p" styleType="body-01-regular">
-            Richtige Antwort
-          </BodyText>
-          <BodyText component="p" styleType="body-01-regular">
-            Falsche Antwort
-          </BodyText>
-        </LegendWrapper>
+        {gameStatus !== "inprogress" && (
+          <LegendWrapper>
+            <BodyText component="p" styleType="body-01-regular">
+              Richtige Antwort
+            </BodyText>
+            <BodyText component="p" styleType="body-01-regular">
+              Falsche Antwort
+            </BodyText>
+          </LegendWrapper>
+        )}
         <DragDropContext onDragEnd={onDragEnd}>
           <Game>
             <Droppable

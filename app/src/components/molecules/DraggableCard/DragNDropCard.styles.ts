@@ -4,6 +4,7 @@ export const Card = styled.div<{ dropped?: boolean; status: "success" | "error" 
     display: flex;
     align-items: center;
     cursor: grab;
+  user-select: none;
     justify-content: space-between;
     padding: ${({ theme }) => theme.spacing["spacing-12"]};
     gap: ${({ theme }) => theme.spacing["spacing-4"]};
