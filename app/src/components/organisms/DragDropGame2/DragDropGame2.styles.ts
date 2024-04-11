@@ -27,7 +27,23 @@ export const GameWrapper = styled.div`
 export const Game = styled.div`
   display: flex;
   gap: ${({ theme }) => theme.spacing["spacing-12"]};
-  position: relative;
+
+  > div {
+    display: flex;
+    flex-direction: column;
+    gap: ${({ theme }) => theme.spacing["spacing-8"]};
+    padding: ${({ theme }) => theme.spacing["spacing-12"]};
+    flex: 1 0 0;
+    border-radius: ${({ theme }) => theme.radius["radius-12"]};
+    border: 1px solid ${({ theme }) => theme.colors["neutrals-01"][3]};
+    background-color: ${({ theme }) => theme.colors["neutrals-01"][2]};
+  }
+
+  .droppable-area {
+    background-image: url("/images/icons/linedBackground.svg");
+    background-size: cover;
+    background-position: center center;
+  }
   
   @media screen and (max-width: 1100px) {
     flex-direction: column;
@@ -35,15 +51,8 @@ export const Game = styled.div`
   }
 `;
 
-export const EmptyPlaceholder = styled.div`
-  height: 100%;
-  align-self: center;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  gap: ${({ theme }) => theme.spacing["spacing-8"]};
-  color: ${({ theme }) => theme.colors["neutrals-01"][7]};
+export const Options = styled.div`
+  position: relative;
 `;
 
 export const LegendWrapper = styled.div`

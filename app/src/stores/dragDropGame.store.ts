@@ -1,32 +1,45 @@
+/* eslint-disable max-lines */
 import { type TValue } from "@/components/Wrappers/DndGame/DndGame";
-import { type Nullable } from "@/utils/types";
+import type { IGenDragNDropGame } from "@/services/graphql/__generated/sdk";
+import { type Nullable, Prettify } from "@/utils/types";
 
 import { create } from "zustand";
 import { immer } from "zustand/middleware/immer";
 
 export type TDragAndDropGameOptionType = TValue["options"][number];
 
-type GameStatus = "win" | "lose" | "inprogress";
+export type GameStatus = "win" | "lose" | "inprogress";
 
 type DragDropGameState = {
-  activeId: string | null;
   caseId: string;
   droppedItems: TDragAndDropGameOptionType[];
   gameId: string;
   gameStatus: GameStatus;
   gameSubmitted: boolean;
   optionsItems: TDragAndDropGameOptionType[];
-  resultMessage: string;
+  resultMessage: string | null;
 };
 
-type DragDropGameStateUpdate = Partial<Pick<DragDropGameState, "gameStatus" | "gameSubmitted" | "resultMessage" | "droppedItems" | "optionsItems" | "activeId">>;
+type DragDropGameStateUpdate = Partial<Pick<DragDropGameState, "gameStatus" | "gameSubmitted" | "resultMessage" | "droppedItems" | "optionsItems">>;
 
 type IDragDropGameStore = {
   games: DragDropGameState[];
-  getGameState: (gameId: Nullable<string>) => DragDropGameState | undefined;
-  initializeNewGameState: (params: {
+  getGameState: (params: {
     caseId: string;
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    gameData: any;
     gameId: string;
+  }) => DragDropGameState;
+  moveItem: (params: {
+    gameId: string;
+    itemSourceIndex: number;
+    newPositionIndex: number | null;
+    to: "droppedItems" | "optionsItems";
+  }) => void;
+  reorderDroppedItems: (params: {
+    gameId: string;
+    itemSourceIndex: number;
+    newPositionIndex: number;
   }) => void;
   resetGamesForCase: (caseId: string) => void;
   updateGameState: (params: {
@@ -41,8 +54,7 @@ type GetDefaultDragDropGameState = (params: {
   gameId: string;
 }) => DragDropGameState;
 
-const getDefaultDragDropGameState: GetDefaultDragDropGameState = ({ caseId, gameId }) => ({
-  activeId: null,
+export const getDefaultDragDropGameState: GetDefaultDragDropGameState = ({ caseId, gameId }) => ({
   caseId,
   droppedItems: [],
   gameId,
@@ -55,40 +67,117 @@ const getDefaultDragDropGameState: GetDefaultDragDropGameState = ({ caseId, game
 const useDragDropGameStore = create(
   immer<IDragDropGameStore>((set, get) => ({
     games: [],
-
-    getGameState: (gameId) =>
+    getGameState: ({ caseId, gameData, gameId }) =>
     {
       const { games } = get();
-
-      if(gameId == null)
-      {
-        console.warn("game Id is null. cannot get game state");
-        return;
-      }
-
       const game = games.find(game => game.gameId === gameId);
 
-      return game;
-    },
-
-    initializeNewGameState: ({ caseId, gameId }) =>
-    {
-      const existingGame = get().games.find(game => game.gameId === gameId);
-
-      if(existingGame)
+      if(game)
       {
-        return;
+        return game;
       }
+
+      const newGame = getDefaultDragDropGameState({ caseId, gameId });
+
+      newGame.optionsItems = gameData.options;
 
       set((state) =>
       {
-        state.games = state.games.concat({
-          ...getDefaultDragDropGameState({ caseId, gameId }),
-          gameId,
-        });
+        state.games = state.games.concat(newGame);
+      });
+
+      // const createdGame = get().games.find(game => game.gameId === gameId)!;
+
+      return newGame;
+    },
+    moveItem: ({
+      gameId,
+      itemSourceIndex,
+      newPositionIndex,
+      to
+    }) =>
+    {
+      set((state) =>
+      {
+        const gameIndex = state.games.findIndex(game => game.gameId === gameId);
+
+        if(gameIndex === -1)
+        {
+          console.error("game not found");
+          return;
+        }
+
+        const game = state.games[gameIndex]!;
+
+        let { droppedItems, optionsItems } = game;
+
+        if(to === "droppedItems")
+        {
+          const movedItem = optionsItems[itemSourceIndex];
+
+          if(!movedItem)
+          {
+            console.error("Moved item not found");
+            return;
+          }
+
+          const _newPositionIndex = newPositionIndex == null ? droppedItems.length : newPositionIndex;
+
+          droppedItems.splice(_newPositionIndex, 0, movedItem);
+          optionsItems = optionsItems.filter(item => item.id !== movedItem.id);
+        }
+        else
+        {
+          const movedItem = droppedItems[itemSourceIndex];
+
+          if(!movedItem)
+          {
+            console.error("Moved item not found");
+            return;
+          }
+
+          const _newPositionIndex = newPositionIndex == null ? droppedItems.length : newPositionIndex;
+
+          optionsItems.splice(_newPositionIndex, 0, movedItem);
+          droppedItems = droppedItems.filter(item => item.id !== movedItem.id);
+        }
+
+        const newGame: DragDropGameState = {
+          ...game,
+          droppedItems,
+          optionsItems,
+        };
+
+        state.games[gameIndex] = newGame;
       });
     },
+    reorderDroppedItems: ({ gameId, itemSourceIndex, newPositionIndex }) =>
+    {
+      set((state) =>
+      {
+        const gameIndex = state.games.findIndex(game => game.gameId === gameId);
 
+        if(gameIndex === -1)
+        {
+          console.error("game not found");
+          return;
+        }
+
+        const game = state.games[gameIndex]!;
+        const droppedItem = game.droppedItems[itemSourceIndex];
+
+        if(!droppedItem)
+        {
+          console.error("Reordered item not found");
+          return;
+        }
+
+        game.droppedItems.splice(itemSourceIndex, 1);
+        game.droppedItems.splice(newPositionIndex, 0, droppedItem);
+
+        state.games[gameIndex] = game;
+      });
+    },
     resetGamesForCase: (caseId) =>
     {
       set((state) =>
@@ -104,7 +193,6 @@ const useDragDropGameStore = create(
         });
       });
     },
-
     updateGameState: ({ caseId, gameId, update }) =>
     {
       set((state) =>

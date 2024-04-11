@@ -5,6 +5,8 @@ import { type NextPageWithLayout } from "@/pages/_app";
 import getAllCases from "@/services/content/getAllCases";
 import { getCaseById } from "@/services/content/getCaseById";
 import { type IGenCase } from "@/services/graphql/__generated/sdk";
+import { type TDragAndDropGameOptionType } from "@/stores/dragDropGame.store";
+import { shuffleArray } from "@/utils/array";
 
 import type { GetStaticProps, GetStaticPaths, GetStaticPathsResult } from "next";
 
@@ -47,6 +49,14 @@ export const getStaticProps: GetStaticProps<GetCaseDetailPagePropsResult, Params
       revalidate: false
     };
   }
+
+  legalCase.fullTextTasks?.connections?.forEach((connection) =>
+  {
+    if(connection?.__typename === "DragNDropGame")
+    {
+      connection.game.options = shuffleArray<TDragAndDropGameOptionType>(connection.game.options);
+    }
+  });
 
   return {
     props: { legalCase },

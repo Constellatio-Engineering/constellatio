@@ -55,6 +55,7 @@
     "@emotion/styled": "11.11.0",
     "@formbricks/js": "1.2.7",
     "@google-cloud/storage": "7.3.1",
+    "@hello-pangea/dnd": "16.6.0",
     "@mantine/carousel": "6.0.19",
     "@mantine/core": "6.0.19",
     "@mantine/dates": "6.0.19",

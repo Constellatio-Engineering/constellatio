@@ -1,16 +1,12 @@
 /* eslint-disable max-lines */
 import { BodyText } from "@/components/atoms/BodyText/BodyText";
 import { Button } from "@/components/atoms/Button/Button";
-import { Draggable } from "@/components/helpers/Draggable";
-import { Droppable } from "@/components/helpers/Droppable";
 import { Check } from "@/components/Icons/Check";
-import { DragAndDropGameIcon } from "@/components/Icons/DragAndDropGameIcon";
 import { Gamification } from "@/components/Icons/Gamification";
 import { Reload } from "@/components/Icons/Reload";
-import { DragNDropCard } from "@/components/molecules/DraggableCard/DragNDropCard";
-import { GhostDropCard } from "@/components/molecules/GhostDropCard/GhostDropCard";
 import { HelpNote } from "@/components/molecules/HelpNote/HelpNote";
 import { ResultCard } from "@/components/molecules/ResultCard/ResultCard";
+import { DragDropColumn } from "@/components/organisms/DragDropGame/DragDropColumn/DragDropColumn";
 import useContextAndErrorIfNull from "@/hooks/useContextAndErrorIfNull";
 import { InvalidateQueriesContext } from "@/provider/InvalidateQueriesProvider";
 import { type IGenDragNDropGame } from "@/services/graphql/__generated/sdk";
@@ -21,13 +17,11 @@ import { api } from "@/utils/api";
 import { shuffleArray } from "@/utils/array";
 
 import {
-  DndContext,
-  type DragEndEvent,
-  DragOverlay,
-  type DragStartEvent,
-} from "@dnd-kit/core";
+  DragDropContext,
+  type DropResult
+} from "@hello-pangea/dnd";
 import { Title, LoadingOverlay } from "@mantine/core";
-import { type FC, useEffect, useMemo } from "react";
+import React, { type FC, useCallback, useMemo } from "react";
 
 import {
   Container,
@@ -35,12 +29,12 @@ import {
   Game,
   GameWrapper,
   LegendWrapper,
-  Options,
   TitleWrapper,
 } from "./DragDropGame.styles";
 
-export type TDragDropGame = Pick<IGenDragNDropGame, "game" | "helpNote" | "question" | "id"> & {
+export type TDragDropGame = Pick<IGenDragNDropGame, "game" | "helpNote" | "question"> & {
   readonly caseId: string;
+  readonly id: string;
 };
 
 export const DragDropGame: FC<TDragDropGame> = ({
@@ -56,97 +50,59 @@ export const DragDropGame: FC<TDragDropGame> = ({
     onError: (error) => console.error("Error while setting game progress", error),
     onSuccess: async () => invalidateGamesProgress({ caseId })
   });
-  const gameState = useDragDropGameStore((s) => s.getGameState(id));
-  const allGames = useDragDropGameStore((s) => s.games);
-  const updateGameState = useDragDropGameStore((s) => s.updateGameState);
-  const initializeNewGameState = useDragDropGameStore((s) => s.initializeNewGameState);
-
-  useEffect(() =>
-  {
-    if(gameState == null && id != null) 
-    {
-      initializeNewGameState({ caseId, gameId: id });
-    }
-  }, [allGames, caseId, gameState, id, initializeNewGameState]);
-
-  const originalOptions: TDragAndDropGameOptionType[] = useMemo(
-    () => game?.options ?? [],
-    [game?.options]
-  );
-
-  useEffect(() => 
-  {
-    const optionsShuffled = shuffleArray<TDragAndDropGameOptionType>(originalOptions);
-    updateGameState({
-      caseId,
-      gameId: id!,
-      update: { optionsItems: optionsShuffled }
-    });
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [originalOptions]);
-
-  if(!gameState || !id) 
-  {
-    return null;
-  }
-
   const {
-    activeId,
     droppedItems,
     gameStatus,
     gameSubmitted,
     optionsItems,
-    resultMessage,
-  } = gameState ?? {};
+    resultMessage
+  } = useDragDropGameStore(s => s.getGameState({ caseId, gameData: game, gameId: id }));
+  const updateGameState = useDragDropGameStore((s) => s.updateGameState);
+  const gameOptions = game?.options;
 
-  const handleDragEnd = (event: DragEndEvent): void => 
+  const originalOptions: TDragAndDropGameOptionType[] = useMemo(() =>
   {
-    const { active, over } = event;
+    return gameOptions ?? [];
+  }, [gameOptions]);
 
-    updateGameState({
-      caseId,
-      gameId: id,
-      update: { activeId: null }
-    });
-
-    if(over && over.id === "droppable")
+  const onDragEnd = useCallback((result: DropResult) =>
+  {
+    if(!result.destination)
     {
-      const activeItem = optionsItems.find((item) => item.id === active.id);
-
-      if(activeItem) 
-      {
-        updateGameState({
-          caseId,
-          gameId: id,
-          update: {
-            droppedItems: [...droppedItems, activeItem],
-            optionsItems: optionsItems.filter((item) => item.id !== activeItem.id)
-          }
-        });
-      }
+      return;
     }
-  };
 
-  const handleDragStart = (event: DragStartEvent): void => 
-  {
-    updateGameState({
-      caseId,
-      gameId: id,
-      update: {
-        activeId: event.active.id.toString()
-      }
-    });
-  };
+    const { moveItem, reorderDroppedItems } = useDragDropGameStore.getState();
+
+    if(result.source.droppableId === result.destination.droppableId)
+    {
+      reorderDroppedItems({
+        gameId: id,
+        itemSourceIndex: result.source.index,
+        newPositionIndex: result.destination.index
+      });
+    }
+    else
+    {
+      moveItem({
+        gameId: id,
+        itemSourceIndex: result.source.index,
+        newPositionIndex: result.destination.index,
+        to: "droppedItems"
+      });
+    }
+  }, [id]);
 
   const checkWinCondition = (): boolean =>
-    droppedItems.every((item) => item.correctAnswer) &&
-		optionsItems.every((item) => !item.correctAnswer);
+  {
+    const areAllDroppedItemsCorrect = droppedItems.every((item) => item.correctAnswer);
+    const areAllOptionsItemsIncorrect = optionsItems.every((item) => !item.correctAnswer);
+    return areAllDroppedItemsCorrect && areAllOptionsItemsIncorrect;
+  };
 
   const checkOrder = (): boolean => 
   {
-    const correctAnswersOrder = originalOptions.filter(
-      (item) => item.correctAnswer
-    );
+    const correctAnswersOrder = originalOptions.filter((item) => item.correctAnswer);
 
     for(let i = 0; i < droppedItems.length; i++) 
     {
@@ -165,6 +121,7 @@ export const DragDropGame: FC<TDragDropGame> = ({
     if(game?.orderRequired) 
     {
       const orderCorrect = checkOrder();
+
       if(winCondition && orderCorrect) 
       {
         updateGameState({
@@ -252,6 +209,13 @@ export const DragDropGame: FC<TDragDropGame> = ({
     });
   };
 
+  let renderedOptionsItems = optionsItems;
+
+  if(renderedOptionsItems.length === 0 && droppedItems.length === 0)
+  {
+    renderedOptionsItems = originalOptions;
+  }
+
   return (
     <Container>
       <TitleWrapper>
@@ -266,103 +230,40 @@ export const DragDropGame: FC<TDragDropGame> = ({
             {question}
           </BodyText>
         )}
-        <LegendWrapper>
-          <BodyText component="p" styleType="body-01-regular">
-            Richtige Antwort
-          </BodyText>
-          <BodyText component="p" styleType="body-01-regular">
-            Falsche Antwort
-          </BodyText>
-        </LegendWrapper>
-        <DndContext onDragEnd={handleDragEnd} onDragStart={handleDragStart}>
+        {gameStatus !== "inprogress" && (
+          <LegendWrapper>
+            <BodyText component="p" styleType="body-01-regular">
+              Richtig eingeordnet
+            </BodyText>
+            <BodyText component="p" styleType="body-01-regular">
+              Falsch eingeordnet
+            </BodyText>
+          </LegendWrapper>
+        )}
+        <DragDropContext onDragEnd={onDragEnd}>
           <Game>
-            <Options>
-              <LoadingOverlay
-                visible={optionsItems?.length < 1 && droppedItems?.length === 0}
-                radius="radius-12"
-              />
-              {optionsItems?.map((option) =>
-                gameStatus === "inprogress" ? (
-                  <Draggable key={option.id} id={option.id}>
-                    <DragNDropCard label={option.label} status="default"/>
-                  </Draggable>
-                ) : (
-                  <DragNDropCard
-                    key={option.id}
-                    label={option.label}
-                    status={option.correctAnswer ? "success" : "error"}
-                    result={option.correctAnswer ? "Richtig" : "Falsch"}
-                  />
-                )
-              )}
-              <DragOverlay
-                className="drag-overlay"
-                style={{
-                  opacity: 0.7,
-                  transform: "translate3d(0, 0, 0)",
-                  zIndex: 1,
-                }}>
-                {activeId && (
-                  <DragNDropCard
-                    label={optionsItems?.find((item) => item.id === activeId)?.label}
-                    id={activeId}
-                    status="default"
-                  />
-                )}
-              </DragOverlay>
-            </Options>
-            <Droppable>
-              {droppedItems?.length < 1 ? (
-                activeId ? (
-                  <GhostDropCard/>
-                ) : (
-                  <EmptyPlaceholder>
-                    <DragAndDropGameIcon size={140}/>
-                    <BodyText
-                      component="p"
-                      align="center"
-                      styleType="body-02-medium">
-                      Ziehe die richtigen Antworten in dieses Feld
-                    </BodyText>
-                  </EmptyPlaceholder>
-                )
-              ) : (
-                droppedItems?.map((item) => 
-                {
-                  return gameStatus === "inprogress" ? (
-                    <DragNDropCard
-                      key={item.id}
-                      label={item.label}
-                      id={item.id}
-                      status="default"
-                      dropped
-                      onDeleteHandler={() => 
-                      {
-                        updateGameState({
-                          caseId,
-                          gameId: id,
-                          update: {
-                            droppedItems: droppedItems.filter((card) => card.id !== item.id),
-                            optionsItems: [...optionsItems, item],
-                          }
-                        });
-                      }}
-                    />
-                  ) : (
-                    <DragNDropCard
-                      key={item.id}
-                      label={item.label}
-                      id={item.id}
-                      dropped
-                      status={item.correctAnswer ? "success" : "error"}
-                      result={item.correctAnswer ? "Richtig" : "Falsch"}
-                    />
-                  );
-                })
-              )}
-            </Droppable>
+            <LoadingOverlay
+              visible={optionsItems?.length < 1 && droppedItems?.length === 0}
+              radius="radius-12"
+            />
+            <DragDropColumn
+              gameId={id}
+              gameStatus={gameStatus}
+              columnType={"options"}
+              isDraggingOverEnabled={false}
+              isDropDisabled={true}
+              items={renderedOptionsItems}
+            />
+            <DragDropColumn
+              gameId={id}
+              gameStatus={gameStatus}
+              columnType={"dropped"}
+              isDraggingOverEnabled={true}
+              isDropDisabled={false}
+              items={droppedItems}
+            />
           </Game>
-        </DndContext>
+        </DragDropContext>
         {gameStatus !== "inprogress" && (
           <>
             <ResultCard
@@ -375,7 +276,7 @@ export const DragDropGame: FC<TDragDropGame> = ({
 								null
               }
               variant={gameStatus}
-              message={resultMessage}
+              message={resultMessage ?? ""}
             />
             {helpNote?.json && <HelpNote data={helpNote}/>}
           </>
