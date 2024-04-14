@@ -1,13 +1,15 @@
-import { CheckFilled } from "@/components/Icons/CheckFilled";
+// import { CheckFilled } from "@/components/Icons/CheckFilled";
 import { Cross } from "@/components/Icons/Cross";
-import { CrossFilled } from "@/components/Icons/CrossFilled";
+// import { CrossFilled } from "@/components/Icons/CrossFilled";
 import { Handle } from "@/components/Icons/Handle";
+import { ReorderIcon } from "@/components/Icons/Reorder";
+import { WarningIcon } from "@/components/Icons/Warning";
 
 import type { DraggableProvided } from "@hello-pangea/dnd";
-import { Flex } from "@mantine/core";
+import { Flex, Tooltip } from "@mantine/core";
 import React, { type ComponentProps, type FC, type ReactNode } from "react";
  
-import { Card, ResultWrapper, StatusWrapper } from "./DragNDropCard.styles";
+import { Card, ResultWrapper, StatusWrapper, WarningWrapper } from "./DragNDropCard.styles";
 import { BodyText } from "../../atoms/BodyText/BodyText";
 
 export type TDraggableCard = ComponentProps<"div"> & {
@@ -15,6 +17,7 @@ export type TDraggableCard = ComponentProps<"div"> & {
   readonly id: string;
   readonly index: number;
   readonly isDragging: boolean;
+  readonly isWrongOrder?: boolean;
   readonly label: ReactNode;
   readonly onDeleteHandler?: React.MouseEventHandler<HTMLDivElement>;
   readonly provided: DraggableProvided;
@@ -27,6 +30,7 @@ export const DragNDropCard: FC<TDraggableCard> = ({
   id,
   index,
   isDragging,
+  isWrongOrder,
   label,
   onDeleteHandler,
   provided,
@@ -63,7 +67,19 @@ export const DragNDropCard: FC<TDraggableCard> = ({
       </StatusWrapper>
       <ResultWrapper status={status}>
         {result && <BodyText styleType="body-01-regular" component="p">{result}</BodyText>}
-        {status === "success" ? <CheckFilled/> : status === "error" ? <CrossFilled/> : null}
+        {isWrongOrder && (
+          <Tooltip
+            label={"Falsche Reihenfolge"}
+            withArrow
+            offset={-4}
+            position={"top"}>
+            <WarningWrapper>
+              <WarningIcon size={18}/>
+              <ReorderIcon size={18}/>
+            </WarningWrapper>
+          </Tooltip>
+        )}
+        {/* {status === "success" ? <CheckFilled/> : status === "error" ? <CrossFilled/> : null}*/}
       </ResultWrapper>
     </Card>
   );

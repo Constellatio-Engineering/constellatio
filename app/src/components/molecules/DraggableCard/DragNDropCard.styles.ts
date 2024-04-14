@@ -3,8 +3,8 @@ import styled from "@emotion/styled";
 export const Card = styled.div<{ dropped?: boolean; status: "success" | "error" | "default" }>`
     display: flex;
     align-items: center;
-    cursor: grab;
-  user-select: none;
+    cursor: ${({ dropped }) => (dropped ? "default" : "grab")}
+    user-select: none;
     justify-content: space-between;
     padding: ${({ theme }) => theme.spacing["spacing-12"]};
     gap: ${({ theme }) => theme.spacing["spacing-4"]};
@@ -62,5 +62,24 @@ export const ResultWrapper = styled.div<{ status: "default" | "success" | "error
   display: ${({ status }) => (status === "default" ? "none" : "flex")};
   color: ${({ theme }) => theme.colors["neutrals-01"][7]};
   align-items: center;
+  position: relative;
   gap: ${({ theme }) => theme.spacing["spacing-8"]};
+`;
+
+export const WarningWrapper = styled.div`
+  background-color: #fff7ec;
+  padding: 6px;
+  position: absolute;
+  cursor: pointer;
+  border-radius: 8px;
+  right: 0;
+  top: 50%;
+  transform: translateY(-50%);
+  display: flex;
+  align-items: center;
+  gap: 2px;
+
+  svg path {
+    fill: #fd8e00;
+  }
 `;
