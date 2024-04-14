@@ -128,7 +128,7 @@ export const DragDropGame: FC<TDragDropGame> = ({
           gameId: id,
           update: {
             gameStatus: "win",
-            resultMessage: "Sehr gut! Du hast die Frage richtig beantwortet.",
+            resultMessage: "Richtige Antwort",
           }
         });
       }
@@ -138,8 +138,8 @@ export const DragDropGame: FC<TDragDropGame> = ({
           caseId,
           gameId: id,
           update: {
-            gameStatus: "lose",
-            resultMessage: "Leider hast du die Antwortmöglichkeiten nicht korrekt angeordnet.",
+            gameStatus: "lose-wrong-order",
+            resultMessage: "Richtige Antwort, falsche Reihenfolge",
           }
         });
       }
@@ -150,7 +150,7 @@ export const DragDropGame: FC<TDragDropGame> = ({
           gameId: id,
           update: {
             gameStatus: "lose",
-            resultMessage: "Deine Antwort war leider nicht korrekt.",
+            resultMessage: "Falsche Antwort",
           }
         });
       }
@@ -164,7 +164,7 @@ export const DragDropGame: FC<TDragDropGame> = ({
           gameId: id,
           update: {
             gameStatus: "win",
-            resultMessage: "Sehr gut! Du hast die Frage richtig beantwortet.",
+            resultMessage: "Richtige Antwort",
           }
         });
       }
@@ -175,7 +175,7 @@ export const DragDropGame: FC<TDragDropGame> = ({
           gameId: id,
           update: {
             gameStatus: "lose",
-            resultMessage: "Deine Antwort war leider nicht korrekt.",
+            resultMessage: "Falsche Antwort",
           }
         });
       }
@@ -266,15 +266,10 @@ export const DragDropGame: FC<TDragDropGame> = ({
         {gameStatus !== "inprogress" && (
           <>
             <ResultCard
-              droppedCorrectCards={
-                droppedItems?.filter((item) => item.correctAnswer).length ??
-								null
-              }
-              totalCorrectCards={
-                originalOptions.filter((item) => item.correctAnswer).length ??
-								null
-              }
-              variant={gameStatus}
+              hideCounter={true}
+              droppedCorrectCards={droppedItems?.filter((item) => item.correctAnswer).length ?? null}
+              totalCorrectCards={originalOptions.filter((item) => item.correctAnswer).length ?? null}
+              variant={gameStatus === "win" ? "win" : "lose"}
               message={resultMessage ?? ""}
             />
             {helpNote?.json && <HelpNote data={helpNote}/>}
