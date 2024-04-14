@@ -3,7 +3,6 @@ import { users } from "@/db/schema";
 import { env } from "@/env.mjs";
 import { stripe } from "@/lib/stripe";
 import { InternalServerError } from "@/utils/serverError";
-import { getDataFromStripeSubscription } from "@/utils/stripe";
 
 import { eq } from "drizzle-orm";
 import { type NextApiHandler } from "next";
@@ -20,7 +19,6 @@ const handler: NextApiHandler = async (req, res) =>
 {
   const signature = req.headers["stripe-signature"];
   const signingSecret = env.STRIPE_SIGNING_SECRET;
-
   let event: Stripe.Event;
 
   try 
@@ -36,78 +34,50 @@ const handler: NextApiHandler = async (req, res) =>
   catch (error) 
   {
     console.error(`webhook signature verification failed. ${error}`);
-    return res.status(400).json({ message: `Invalid request method ${error}` });
+    return res.status(400).send("Invalid");
   }
 
-  const subscriptionObj = event.data.object as Stripe.Subscription;
-  const { customer } = subscriptionObj;
-  const stripeCustomerId = customer as string;
-  const subscriptionDataFromEventObj = getDataFromStripeSubscription(subscriptionObj);
+  if(!event.type.startsWith("customer.subscription"))
+  {
+    return res.status(400).json({ message: "This endpoint only handles 'customer.subscription' events." });
+  }
+
+  // we can now safely assume that event.data.object is a subscription object
+  const subscriptionData = event.data.object as Stripe.Subscription;
+  const stripeCustomerId = subscriptionData.customer;
+
+  if(typeof stripeCustomerId !== "string")
+  {
+    console.error(`expected stripeCustomerId to be a string. got ${typeof stripeCustomerId} instead.`, stripeCustomerId);
+    return res.status(400).send("Invalid");
+  }
 
   const subscriptionDetailsFromDB = await db.query.users.findFirst({
-    columns: { subscriptionStatus: true, trialSubscriptionId: true },
+    columns: { subscriptionId: true, subscriptionStatus: true },
     where: eq(users.stripeCustomerId, stripeCustomerId) 
   });
 
-  const currentTrailSubscription = await stripe.subscriptions.list({
-    customer: stripeCustomerId,
-    limit: 1,
-    status: "trialing"
-  });
-
-  const trialSubscriptionIdFromStripDashboard = currentTrailSubscription.data?.[0]?.id ?? "";
-  
-  try 
+  if(subscriptionDetailsFromDB == null)
   {
-    switch (event.type)
+    if(env.NEXT_PUBLIC_DEPLOYMENT_ENVIRONMENT === "staging")
     {
-      case "customer.subscription.updated": case "customer.subscription.created":
-      {
-        if(trialSubscriptionIdFromStripDashboard === subscriptionDetailsFromDB?.trialSubscriptionId && subscriptionDataFromEventObj.subscriptionStatus !== "trialing")
-        { 
-          await stripe.subscriptions.cancel(trialSubscriptionIdFromStripDashboard);
-        }
-
-        await db
-          .update(users)
-          .set({
-            subscriptionEndDate: subscriptionDataFromEventObj.subscriptionEndDate,
-            subscriptionId: subscriptionDataFromEventObj.subscriptionId,
-            subscriptionStartDate: subscriptionDataFromEventObj.subscriptionStartDate,
-            subscriptionStatus: subscriptionDataFromEventObj.subscriptionStatus
-          })
-          .where(eq(users.stripeCustomerId, stripeCustomerId));
-        break;
-      }
-      case "customer.subscription.deleted":
-      {
-        if(subscriptionObj.id === subscriptionDetailsFromDB?.trialSubscriptionId && (subscriptionDetailsFromDB?.subscriptionStatus === "active" || subscriptionDetailsFromDB?.subscriptionStatus === "incomplete"))
-        {
-          break;
-        }
-
-        await db
-          .update(users)
-          .set({
-            subscriptionId: subscriptionDataFromEventObj.subscriptionId,
-            subscriptionStatus: subscriptionDataFromEventObj.subscriptionStatus
-          })
-          .where(eq(users.stripeCustomerId, stripeCustomerId));
-        break;
-      }
-      default:
-      {
-        console.warn(`Unhandled event type ${event.type}`);
-      }
+      console.info(`customer '${stripeCustomerId}' not found in db, but this is likely because the event was triggered in development`);
+      return res.status(200).send("customer not found in db, but this is likely because the event was triggered in development");
     }
 
-    return res.send({ success: true });
+    console.error(`no user found with stripeCustomerId ${stripeCustomerId}`);
+    return res.status(400).send("customer not found in db");
   }
-  catch (error) 
-  {
-    console.error(`webhook handler failed. ${error}`);
-    return res.send({ success: false });
-  }
+
+  await db
+    .update(users)
+    .set({
+      subscriptionId: subscriptionData.id,
+      subscriptionStatus: subscriptionData.status
+    })
+    .where(eq(users.stripeCustomerId, stripeCustomerId));
+
+  return res.send({ success: true });
 };
 
 export default handler;

@@ -1,6 +1,5 @@
 /* eslint-disable react/jsx-max-props-per-line */
 import { RouterTransition } from "@/components/atoms/RouterTransition/RouterTransition";
-import Tracking from "@/components/helpers/Tracking";
 import FeedbackButton from "@/components/molecules/feedbackButton/FeedbackButton";
 import NewNotificationEarnedWatchdog from "@/components/molecules/newNotificationEarnedWatchdog/NewNotificationEarnedWatchdog";
 import ComputerRecommendedModal from "@/components/organisms/computerRecommendedModal/ComputerRecommendedModal";
@@ -16,7 +15,7 @@ import InvalidateQueriesProvider from "@/provider/InvalidateQueriesProvider";
 import MeilisearchProvider from "@/provider/MeilisearchProvider";
 import useSearchBarStore from "@/stores/searchBar.store";
 import { api } from "@/utils/api";
-import { isProduction, isTrackingEnabled } from "@/utils/env";
+import { isProduction } from "@/utils/env";
 import { appPaths } from "@/utils/paths";
 
 import { ModalsProvider } from "@mantine/modals";
@@ -141,7 +140,7 @@ const AppContainer: FunctionComponent<ConstellatioAppProps> = ({ Component, page
                         <FileViewer/>
                         <DocumentEditor/>
                         <FeedbackButton/>
-                        {isTrackingEnabled && <Tracking/>}
+                        {/* {isTrackingEnabled && <Tracking/>}*/}
                         <Layout Component={Component} pageProps={pageProps}/>
                       </Fragment>
                     )}

@@ -5,10 +5,36 @@ import { stripe } from "@/lib/stripe";
 import { createTRPCRouter, protectedProcedure } from "@/server/api/trpc";
 import { appPaths, authPaths } from "@/utils/paths";
 import { InternalServerError } from "@/utils/serverError";
+import { getFutureSubscriptionStatus, getHasSubscription } from "@/utils/subscription";
 
+import { type inferProcedureOutput } from "@trpc/server";
 import { eq } from "drizzle-orm";
 
 export const billingRouter = createTRPCRouter({
+  generateStripeBillingPortalSession: protectedProcedure.mutation(async ({ ctx: { userId } }) =>
+  {
+    const user = await db.query.users.findFirst({ where: eq(users.id, userId) });
+
+    if(!user)
+    {
+      throw new InternalServerError(new Error("User not found"));
+    }
+
+    const { stripeCustomerId } = user;
+
+    if(!stripeCustomerId)
+    {
+      throw new InternalServerError(new Error("User has no stripe customer id")); 
+    }
+
+    const { url } = await stripe.billingPortal.sessions.create({
+      customer: stripeCustomerId,
+      locale: "de",
+      return_url: `${env.NEXT_PUBLIC_WEBSITE_URL}${appPaths.profile}?tab=subscription`,
+    });
+
+    return url;
+  }),
   generateStripeCheckoutSession: protectedProcedure.mutation(async ({ ctx: { userId } }) =>
   {
     const user = await db.query.users.findFirst({ where: eq(users.id, userId) });
@@ -18,24 +44,14 @@ export const billingRouter = createTRPCRouter({
       throw new InternalServerError(new Error("User not found"));
     }
 
-    let { stripeCustomerId } = user;
+    const { stripeCustomerId } = user;
 
     if(!stripeCustomerId)
     {
-      const customer = await stripe.customers.create({
-        email: user.email,
-        metadata: {
-          supabaseUuid: user.id,
-        },
-        name: `${user.firstName} ${user.lastName}`
-      });
-
-      stripeCustomerId = customer.id;
-
-      await db.update(users).set({ stripeCustomerId }).where(eq(users.id, user.id));
+      throw new InternalServerError(new Error("User has no stripe customer id"));
     }
 
-    const { url: checkoutSessionUrl } = await stripe.checkout.sessions.create({
+    const { url } = await stripe.checkout.sessions.create({
       allow_promotion_codes: true,
       cancel_url: `${env.NEXT_PUBLIC_WEBSITE_URL}${appPaths.profile}?tab=subscription`,
       customer: stripeCustomerId,
@@ -46,25 +62,45 @@ export const billingRouter = createTRPCRouter({
       success_url: `${env.NEXT_PUBLIC_WEBSITE_URL}${authPaths.paymentConfirm}`
     });
 
-    const { url: billingPortalSessionUrl } = await stripe.billingPortal.sessions.create({
-      customer: stripeCustomerId,
-      locale: "de",
-      return_url: `${env.NEXT_PUBLIC_WEBSITE_URL}${appPaths.profile}?tab=subscription`
-    });
+    if(!url)
+    {
+      throw new InternalServerError(new Error("Stripe checkout session url was null"));
+    }
 
-    return { billingPortalSessionUrl, checkoutSessionUrl };
+    return url;
   }),
   getSubscriptionDetails: protectedProcedure.query(async ({ ctx: { userId } }) =>
   {
-    return db.query.users.findFirst({
+    const user = await db.query.users.findFirst({
       columns: {
-        subscriptionEndDate: true,
         subscriptionId: true,
-        subscriptionStartDate: true,
         subscriptionStatus: true,
-        trialSubscriptionId: true,
       },
       where: eq(users.id, userId)
     });
+
+    if(!user)
+    {
+      throw new InternalServerError(new Error("User not found"));
+    }
+
+    const userSubscriptionId = user.subscriptionId;
+
+    if(!userSubscriptionId)
+    {
+      throw new InternalServerError(new Error("User has no subscription id"));
+    }
+
+    const subscription = await stripe.subscriptions.retrieve(userSubscriptionId);
+
+    return {
+      dbSubscription: user,
+      futureSubscriptionStatus: getFutureSubscriptionStatus(subscription),
+      hasSubscription: getHasSubscription(user.subscriptionStatus),
+      isCanceled: subscription.cancel_at != null,
+      stripeSubscription: subscription,
+    };
   }),
 });
+
+export type SubscriptionDetails = inferProcedureOutput<typeof billingRouter.getSubscriptionDetails>;

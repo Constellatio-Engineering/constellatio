@@ -1,9 +1,9 @@
+import NotificationsBell from "@/components/molecules/notificationsBell/NotificationsBell";
 import { UserDropdown } from "@/components/molecules/UserDropdown/UserDropdown";
 import OnboardingModal from "@/components/organisms/onboardingModal/OnboardingModal";
 import useOnboardingResult from "@/hooks/useOnboardingResult";
 import { useWasOnboardingPostponed } from "@/hooks/useWasOnboardingPostponed";
 import { useOnboardingStore } from "@/stores/onboarding.store";
-import { isDevelopment } from "@/utils/env";
 import { appPaths } from "@/utils/paths";
 
 import { useMantineTheme } from "@mantine/styles";
@@ -12,7 +12,6 @@ import Link from "next/link";
 import { useRouter } from "next/router";
 import { type FunctionComponent, useEffect } from "react";
 
-import HeaderDefaultRecreateSearch from "./HeaderDefaultRecreateSearch";
 import HeaderItemLink from "./OnboardingStep1/HeaderItemLink";
 import OnboardingFirstStep from "./OnboardingStep1/OnboardingFirstStep";
 import HeaderItemPersonalSpace from "./OnboardingStep2/HeaderItemPersonalSpace";
@@ -96,7 +95,6 @@ const HeaderDefault: FunctionComponent = () =>
             )}
           </div>
           <div css={styles.profileArea}>
-            {isDevelopment && <HeaderDefaultRecreateSearch/>}
             {showOnboarding ? (
               <OnboardingThirdStep onboardingStepsIndex={onboardingStepsIndex} setOnboardingStepsIndex={setOnboardingStepsIndex}/>
             ) : (
@@ -113,6 +111,7 @@ const HeaderDefault: FunctionComponent = () =>
               <HeaderItemPersonalSpace pathname={pathname}/>
             )}
             <span className="vertical-line">s</span>
+            <NotificationsBell/>
             <div>
               <UserDropdown/>
             </div>

@@ -7,13 +7,14 @@ export const appPaths = {
   dashboard: "/dashboard",
   dictionary: "/dictionary",
   forum: "/forum",
+  notifications: "/notifications",
   personalSpace: "/personal-space",
   profile: "/profile",
   search: "/search",
 } as const;
 
 export const appPathsArray = Object.values(appPaths);
-export const isPathAppPath = (path: string): boolean => appPathsArray.some((appPath) => path.startsWith(appPath));
+export const getIsPathAppPath = (path: string): boolean => appPathsArray.some((appPath) => path.startsWith(appPath));
 
 export const authPaths = {
   confirm: "/confirm",

@@ -39,6 +39,7 @@ export const env = createEnv({
     RECREATE_SEARCH_INDEX_SECRET: z.string(),
     POSTGRES_MAX_CONNECTIONS: z.string().pipe(z.coerce.number().int().min(1).max(9999)),
     STRIPE_PAYMENT_METHODS_CONFIGURATION_ID: z.string(),
+    TRIAL_PERIOD_IN_DAYS: z.string().pipe(z.coerce.number().int().min(1).max(365)),
     GET_SUBSCRIPTION_STATUS_SECRET: z.string(),
     POSTHOG_PERSONAL_API_KEY: z.string()
   },
@@ -118,7 +119,8 @@ export const env = createEnv({
     NEXT_PUBLIC_FORMBRICKS_KEY_TESTINGS: process.env.NEXT_PUBLIC_FORMBRICKS_KEY_TESTINGS,
     NEXT_PUBLIC_FORMBRICKS_KEY_PRODUCTION: process.env.NEXT_PUBLIC_FORMBRICKS_KEY_PRODUCTION,
     POSTHOG_PERSONAL_API_KEY: process.env.POSTHOG_PERSONAL_API_KEY,
-    NEXT_PUBLIC_IS_TRACKING_ENABLED: process.env.NEXT_PUBLIC_IS_TRACKING_ENABLED
+    NEXT_PUBLIC_IS_TRACKING_ENABLED: process.env.NEXT_PUBLIC_IS_TRACKING_ENABLED,
+    TRIAL_PERIOD_IN_DAYS: process.env.TRIAL_PERIOD_IN_DAYS
   },
   /**
    * Run `build` or `dev` with `SKIP_ENV_VALIDATION` to skip env validation.

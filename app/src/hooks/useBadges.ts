@@ -1,5 +1,5 @@
 import { api } from "@/utils/api";
-import { isPathAppPath } from "@/utils/paths";
+import { getIsPathAppPath } from "@/utils/paths";
 
 import { useRouter } from "next/router";
 
@@ -11,7 +11,7 @@ type Options = {
 const useBadges = (options?: Options) =>
 {
   const { pathname } = useRouter();
-  const isEnabledForCurrentPath = isPathAppPath(pathname);
+  const isEnabledForCurrentPath = getIsPathAppPath(pathname);
 
   const { data, error, isLoading } = api.badges.getBadges.useQuery(undefined, {
     enabled: isEnabledForCurrentPath && !options?.disabled,
