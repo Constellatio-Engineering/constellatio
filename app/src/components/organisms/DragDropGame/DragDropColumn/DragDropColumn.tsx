@@ -70,7 +70,7 @@ export const DragDropColumn: FunctionComponent<Props> = ({
                 else
                 {
                   status = optionItem.correctAnswer ? "success" : "error";
-                  isWrongOrder = gameStatus === "lose-wrong-order" && columnType === "dropped" && status === "success";
+                  isWrongOrder = gameStatus === "lose-wrong-order" && columnType === "dropped" && status === "success" && optionItem.originalIndex !== index;
                   // result = optionItem.correctAnswer ? "Richtig" : "Falsch";
                 }
 

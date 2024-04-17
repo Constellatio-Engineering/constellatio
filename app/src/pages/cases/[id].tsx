@@ -54,6 +54,13 @@ export const getStaticProps: GetStaticProps<GetCaseDetailPagePropsResult, Params
   {
     if(connection?.__typename === "DragNDropGame")
     {
+      const options = connection.game.options as Array<Omit<TDragAndDropGameOptionType, "originalIndex">>;
+      const correctAnswers = options.filter((option) => option.correctAnswer);
+
+      connection.game.options = options.map((option) => ({
+        ...option,
+        originalIndex: correctAnswers.findIndex((correctAnswer) => correctAnswer.id === option.id),
+      }) satisfies TDragAndDropGameOptionType);
       connection.game.options = shuffleArray<TDragAndDropGameOptionType>(connection.game.options);
     }
   });
