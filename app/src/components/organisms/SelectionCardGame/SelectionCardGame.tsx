@@ -18,7 +18,7 @@ import { api } from "@/utils/api";
 import { shuffleArray } from "@/utils/array";
 
 import { Title, LoadingOverlay } from "@mantine/core";
-import { type FC, useEffect, useMemo, memo } from "react";
+import React, { type FC, useEffect, useMemo, memo } from "react";
 
 import {
   Container,
@@ -162,14 +162,16 @@ let SelectionCardGame: FC<SelectionCardGameProps> = ({
             {question}
           </BodyText>
         )}
-        <LegendWrapper>
-          <BodyText component="p" styleType="body-01-regular">
-            Richtige Antwort
-          </BodyText>
-          <BodyText component="p" styleType="body-01-regular">
-            Falsche Antwort
-          </BodyText>
-        </LegendWrapper>
+        {gameStatus !== "inprogress" && (
+          <LegendWrapper>
+            <BodyText component="p" styleType="body-01-regular">
+              Richtige Antwort
+            </BodyText>
+            <BodyText component="p" styleType="body-01-regular">
+              Falsche Antwort
+            </BodyText>
+          </LegendWrapper>
+        )}
         <Game>
           <Options>
             <LoadingOverlay
