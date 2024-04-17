@@ -4,7 +4,9 @@ import { type TValue } from "@/components/Wrappers/DndGame/DndGame";
 import { create } from "zustand";
 import { immer } from "zustand/middleware/immer";
 
-export type TDragAndDropGameOptionType = TValue["options"][number];
+export type TDragAndDropGameOptionType = TValue["options"][number] & {
+  originalIndex: number;
+};
 
 export type GameStatus = "win" | "lose" | "lose-wrong-order" | "inprogress";
 
