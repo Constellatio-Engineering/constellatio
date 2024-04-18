@@ -1,7 +1,5 @@
 import { BodyText } from "@/components/atoms/BodyText/BodyText";
 import { Checkbox } from "@/components/atoms/Checkbox/Checkbox";
-import { CheckFilled } from "@/components/Icons/CheckFilled";
-import { CrossFilled } from "@/components/Icons/CrossFilled";
 
 import { useMantineTheme } from "@mantine/core";
 import React, { type FC, type ReactNode, useState } from "react";
