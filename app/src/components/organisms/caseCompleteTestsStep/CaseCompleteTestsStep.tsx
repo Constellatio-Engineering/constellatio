@@ -124,11 +124,11 @@ const CaseCompleteTestsStep: FunctionComponent<ICaseCompleteTestsStepProps> = ({
             }
             break;
           case "CardSelectionGame":
-            if(node?.attrs?.documentId === component?.id) 
+            if(component.id != null && node?.attrs?.documentId === component?.id)
             {
               return (
                 <GameComponentWrapper key={`${component?.__typename}-${index}`} currentGameId={currentGameId} gameId={component.id}>
-                  <SelectionCardGame {...component} caseId={caseId}/>
+                  <SelectionCardGame {...component} caseId={caseId} id={component.id}/>
                 </GameComponentWrapper>
               );
             }

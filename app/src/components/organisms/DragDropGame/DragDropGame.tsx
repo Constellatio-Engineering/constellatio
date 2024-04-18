@@ -124,7 +124,6 @@ export const DragDropGame: FC<TDragDropGame> = ({
       if(winCondition && orderCorrect) 
       {
         updateGameState({
-          caseId,
           gameId: id,
           update: {
             gameStatus: "win",
@@ -135,7 +134,6 @@ export const DragDropGame: FC<TDragDropGame> = ({
       else if(winCondition && !orderCorrect) 
       {
         updateGameState({
-          caseId,
           gameId: id,
           update: {
             gameStatus: "lose-wrong-order",
@@ -146,7 +144,6 @@ export const DragDropGame: FC<TDragDropGame> = ({
       else 
       {
         updateGameState({
-          caseId,
           gameId: id,
           update: {
             gameStatus: "lose",
@@ -160,7 +157,6 @@ export const DragDropGame: FC<TDragDropGame> = ({
       if(winCondition) 
       {
         updateGameState({
-          caseId,
           gameId: id,
           update: {
             gameStatus: "win",
@@ -171,7 +167,6 @@ export const DragDropGame: FC<TDragDropGame> = ({
       else 
       {
         updateGameState({
-          caseId,
           gameId: id,
           update: {
             gameStatus: "lose",
@@ -185,7 +180,6 @@ export const DragDropGame: FC<TDragDropGame> = ({
     {
       // getNextGameIndex();
       updateGameState({
-        caseId,
         gameId: id,
         update: { gameSubmitted: true }
       });
@@ -197,7 +191,6 @@ export const DragDropGame: FC<TDragDropGame> = ({
     const originalOptionsShuffled = shuffleArray<TDragAndDropGameOptionType>(originalOptions);
 
     updateGameState({
-      caseId,
       gameId: id,
       update: {
         droppedItems: [],

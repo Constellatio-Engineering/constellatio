@@ -12,13 +12,11 @@ import { InvalidateQueriesContext } from "@/provider/InvalidateQueriesProvider";
 import { type IGenCardSelectionGame } from "@/services/graphql/__generated/sdk";
 import useSelectionCardGameStore, {
   type TCardGameOption,
-  type TCardGameOptionWithCheck,
 } from "@/stores/selectionCardGame.store";
 import { api } from "@/utils/api";
-import { shuffleArray } from "@/utils/array";
 
 import { Title, LoadingOverlay } from "@mantine/core";
-import { type FC, useEffect, useMemo, memo } from "react";
+import React, { type FC, useMemo, memo } from "react";
 
 import {
   Container,
@@ -29,8 +27,9 @@ import {
   TitleWrapper,
 } from "./SelectionCardGame.styles";
 
-export type SelectionCardGameProps = Pick<IGenCardSelectionGame, "game" | "helpNote" | "question" | "id"> & {
+export type SelectionCardGameProps = Pick<IGenCardSelectionGame, "game" | "helpNote" | "question"> & {
   readonly caseId: string;
+  readonly id: string;
 };
 
 let SelectionCardGame: FC<SelectionCardGameProps> = ({
@@ -46,89 +45,50 @@ let SelectionCardGame: FC<SelectionCardGameProps> = ({
     onError: (error) => console.error("Error while setting game progress", error),
     onSuccess: async () => invalidateGamesProgress({ caseId })
   });
-  const gameState = useSelectionCardGameStore((s) => s.getGameState(id));
-  const allGames = useSelectionCardGameStore((s) => s.games);
-  const updateGameState = useSelectionCardGameStore((s) => s.updateGameState);
-  const initializeNewGameState = useSelectionCardGameStore((s) => s.initializeNewGameState);
-
-  useEffect(() => 
-  {
-    if(gameState == null && id != null) 
-    {
-      initializeNewGameState({ caseId, gameId: id });
-    }
-  }, [allGames, caseId, gameState, id, initializeNewGameState]);
-
-  const optionsWithCheckProp: TCardGameOptionWithCheck[] = useMemo(() =>
-    game?.options?.map((option: TCardGameOption) => ({
-      ...option,
-      checked: false,
-    })), [game?.options]
-  );
-
-  useEffect(() => 
-  {
-    const optionsShuffled = shuffleArray<TCardGameOptionWithCheck>(optionsWithCheckProp);
-
-    updateGameState({
-      caseId,
-      gameId: id!,
-      update: { optionsItems: optionsShuffled }
-    });
-
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [optionsWithCheckProp]);
-
-  if(!gameState || !id) 
-  {
-    return null;
-  }
-
   const {
+    checkedAnswersIds,
     gameStatus,
     gameSubmitted,
-    optionsItems,
     resetCounter,
     resultMessage
-  } = gameState ?? {};
+  } = useSelectionCardGameStore((s) => s.getGameState({ caseId, gameId: id }));
+  const updateGameState = useSelectionCardGameStore((s) => s.updateGameState);
+  const toggleAnswer = useSelectionCardGameStore((s) => s.toggleAnswer);
+  const gameOptions = game?.options;
 
-  const filteredCorrectAnswers = optionsItems?.filter((item) => item.correctAnswer);
+  const originalOptions: TCardGameOption[] = useMemo(() =>
+  {
+    return gameOptions ?? [];
+  }, [gameOptions]);
+
+  const filteredCorrectAnswers = originalOptions?.filter((item) => item.correctAnswer);
 
   const checkWinCondition = (): boolean => 
   {
-    const checkedAnswers = optionsItems.filter((item) => item.checked);
+    const areAllCorrectAnswersChecked = filteredCorrectAnswers.every((item) => checkedAnswersIds.includes(item.id));
+    const isAmountOfCheckedAnswersCorrect = checkedAnswersIds.length === filteredCorrectAnswers.length;
 
-    return (
-      filteredCorrectAnswers.every((item) => item.checked) &&
-			checkedAnswers.length === filteredCorrectAnswers.length
-    );
+    return areAllCorrectAnswersChecked && isAmountOfCheckedAnswersCorrect;
   };
 
   const onGameFinishHandler = (): void => 
   {
     const winCondition = checkWinCondition();
 
-    if(winCondition) 
-    {
-      updateGameState({
-        caseId,
-        gameId: id,
-        update: { gameStatus: "win", resultMessage: "Sehr gut! Du hast die Frage richtig beantwortet." }
-      });
-    }
-    else 
-    {
-      updateGameState({
-        caseId,
-        gameId: id,
-        update: { gameStatus: "lose", resultMessage: "Deine Antwort war leider nicht korrekt." }
-      });
-    }
+    updateGameState({
+      gameId: id,
+      update: winCondition ? {
+        gameStatus: "win",
+        resultMessage: "Richtige Antwort" 
+      } : {
+        gameStatus: "lose",
+        resultMessage: "Falsche Antwort"
+      }
+    });
 
     if(!gameSubmitted)
     {
       updateGameState({
-        caseId,
         gameId: id,
         update: { gameSubmitted: true }
       });
@@ -137,14 +97,11 @@ let SelectionCardGame: FC<SelectionCardGameProps> = ({
 
   const onGameResetHandler = (): void => 
   {
-    const optionsShuffled = shuffleArray<TCardGameOptionWithCheck>(optionsWithCheckProp);
-
     updateGameState({
-      caseId,
       gameId: id,
       update: {
+        checkedAnswersIds: [],
         gameStatus: "inprogress",
-        optionsItems: optionsShuffled,
         resetCounter: resetCounter + 1,
         resultMessage: ""
       }
@@ -162,41 +119,29 @@ let SelectionCardGame: FC<SelectionCardGameProps> = ({
             {question}
           </BodyText>
         )}
-        <LegendWrapper>
-          <BodyText component="p" styleType="body-01-regular">
-            Richtige Antwort
-          </BodyText>
-          <BodyText component="p" styleType="body-01-regular">
-            Falsche Antwort
-          </BodyText>
-        </LegendWrapper>
+        {gameStatus !== "inprogress" && (
+          <LegendWrapper>
+            <BodyText component="p" styleType="body-01-regular">
+              Richtig ausgewählt
+            </BodyText>
+            <BodyText component="p" styleType="body-01-regular">
+              Falsch ausgewählt
+            </BodyText>
+          </LegendWrapper>
+        )}
         <Game>
           <Options>
             <LoadingOverlay
-              visible={optionsItems.length < 1}
+              visible={originalOptions.length === 0}
               radius="radius-12"
             />
-            {optionsItems.map((option) => (
+            {originalOptions.map((option) => (
               <SelectionCard
-                onCheckHandler={(e) => 
-                {
-                  const { checked } = e.target;
-
-                  updateGameState({
-                    caseId,
-                    gameId: id,
-                    update: {
-                      optionsItems: optionsItems.map((item) =>
-                      {
-                        return item.id === option.id ? { ...item, checked } : item;
-                      })
-                    }
-                  });
-                }}
+                onCheckHandler={() => toggleAnswer({ answerId: option.id, gameId: id })}
                 key={`${option.id} - ${resetCounter}`}
                 label={option.label}
                 disabled={gameStatus !== "inprogress"}
-                result={option.correctAnswer ? "Richtig" : "Falsch"}
+                // result={option.correctAnswer ? "Richtig" : "Falsch"}
                 status={
                   gameStatus === "inprogress"
                     ? "default"
@@ -213,8 +158,11 @@ let SelectionCardGame: FC<SelectionCardGameProps> = ({
         {gameStatus !== "inprogress" && (
           <>
             <ResultCard
-              droppedCorrectCards={filteredCorrectAnswers.filter((item) => item.checked).length ?? null}
-              totalCorrectCards={filteredCorrectAnswers.length ?? null}
+              hideCounter={true}
+              // droppedCorrectCards={filteredCorrectAnswers.filter((item) => item.checked).length ?? null}
+              droppedCorrectCards={0}
+              // totalCorrectCards={filteredCorrectAnswers.length ?? null}
+              totalCorrectCards={0}
               variant={gameStatus}
               message={resultMessage}
             />
@@ -242,7 +190,7 @@ let SelectionCardGame: FC<SelectionCardGameProps> = ({
             }}
             disabled={
               gameStatus === "inprogress" &&
-							optionsItems.every((item) => !item.checked)
+              checkedAnswersIds.length === 0
             }>
             {gameStatus === "inprogress" ? "Antwort prüfen" : "Erneut lösen"}
           </Button>
