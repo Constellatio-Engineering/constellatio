@@ -33,7 +33,7 @@ export const ResultCard: FC<ResultCardProps> = ({
           </CaptionText>
         </TextWrapper>
       )}
-      {(totalCorrectCards && !hideCounter) && (
+      {(hideCounter !== true) && (
         <LabelWrapper variant={variant}>
           <CaptionText styleType="caption-01-bold" component="p">
             {droppedCorrectCards} / {totalCorrectCards}

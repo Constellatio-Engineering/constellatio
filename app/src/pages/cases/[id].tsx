@@ -6,6 +6,7 @@ import getAllCases from "@/services/content/getAllCases";
 import { getCaseById } from "@/services/content/getCaseById";
 import { type IGenCase } from "@/services/graphql/__generated/sdk";
 import { type TDragAndDropGameOptionType } from "@/stores/dragDropGame.store";
+import { type TCardGameOption } from "@/stores/selectionCardGame.store";
 import { shuffleArray } from "@/utils/array";
 
 import type { GetStaticProps, GetStaticPaths, GetStaticPathsResult } from "next";
@@ -65,7 +66,7 @@ export const getStaticProps: GetStaticProps<GetCaseDetailPagePropsResult, Params
     }
     else if(connection?.__typename === "CardSelectionGame")
     {
-      // TODO
+      // connection.game.options = shuffleArray<TCardGameOption>(connection.game.options);
     }
   });
 

@@ -49,7 +49,7 @@ export const SelectionCard: FC<SelectionCardProps> = ({
                 {result}
               </BodyText>
             )}
-            {status === "success" ? <CheckFilled/> : status === "error" ? <CrossFilled/> : null}
+            {/* {status === "success" ? <CheckFilled/> : status === "error" ? <CrossFilled/> : null}*/}
           </ResultWrapper>
         </>
       )}
