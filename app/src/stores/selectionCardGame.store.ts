@@ -1,36 +1,37 @@
 import { type TValue } from "@/components/Wrappers/SelectionGame/SelectionGame";
-import { type Nullable } from "@/utils/types";
 
 import { create } from "zustand";
 import { immer } from "zustand/middleware/immer";
 
 export type TCardGameOption = TValue["options"][number];
-export type TCardGameOptionWithCheck = TCardGameOption & { checked: boolean };
+// export type TCardGameOptionWithCheck = TCardGameOption & { checked: boolean };
 
 type GameStatus = "win" | "lose" | "inprogress";
 
 type SelectionCardGameState = {
   caseId: string;
+  checkedAnswersIds: string[];
   gameId: string;
   gameStatus: GameStatus;
   gameSubmitted: boolean;
-  optionsItems: TCardGameOptionWithCheck[];
   resetCounter: number;
   resultMessage: string;
 };
 
-type SelectionCardGameStateUpdate = Partial<Pick<SelectionCardGameState, "gameStatus" | "gameSubmitted" | "resultMessage" | "optionsItems" | "resetCounter">>;
+type SelectionCardGameStateUpdate = Partial<Pick<SelectionCardGameState, "gameStatus" | "gameSubmitted" | "resultMessage" | "checkedAnswersIds" | "resetCounter">>;
 
 type TSelectionCardGameStore = {
   games: SelectionCardGameState[];
-  getGameState: (gameId: Nullable<string>) => SelectionCardGameState | undefined;
-  initializeNewGameState: (params: {
+  getGameState: (params: {
     caseId: string;
     gameId: string;
-  }) => void;
+  }) => SelectionCardGameState;
   resetGamesForCase: (caseId: string) => void;
+  toggleAnswer: (params: {
+    answerId: string;
+    gameId: string;
+  }) => void;
   updateGameState: (params: {
-    caseId: string;
     gameId: string;
     update: SelectionCardGameStateUpdate;
   }) => void;
@@ -43,10 +44,10 @@ type GetDefaultSelectionCardGameState = (params: {
 
 const getDefaultSelectionCardGameState: GetDefaultSelectionCardGameState = ({ caseId, gameId }) => ({
   caseId,
+  checkedAnswersIds: [],
   gameId,
   gameStatus: "inprogress",
   gameSubmitted: false,
-  optionsItems: [],
   resetCounter: 0,
   resultMessage: "",
 });
@@ -54,37 +55,26 @@ const getDefaultSelectionCardGameState: GetDefaultSelectionCardGameState = ({ ca
 const useSelectionCardGameStore = create(immer<TSelectionCardGameStore> ((set, get) => ({
   games: [],
 
-  getGameState: (gameId) =>
+  getGameState: ({ caseId, gameId }) =>
   {
     const { games } = get();
-
-    if(gameId == null)
-    {
-      console.warn("game Id is null. cannot get game state");
-      return;
-    }
-
     const game = games.find(game => game.gameId === gameId);
 
-    return game;
-  },
-
-  initializeNewGameState: ({ caseId, gameId }) =>
-  {
-    const existingGame = get().games.find(game => game.gameId === gameId);
-
-    if(existingGame)
+    if(game)
     {
-      return;
+      return game;
     }
+
+    const newGame = getDefaultSelectionCardGameState({ caseId, gameId });
+
+    newGame.checkedAnswersIds = [];
 
     set((state) =>
     {
-      state.games = state.games.concat({
-        ...getDefaultSelectionCardGameState({ caseId, gameId }),
-        gameId,
-      });
+      state.games = state.games.concat(newGame);
     });
+
+    return newGame;
   },
 
   resetGamesForCase: (caseId) =>
@@ -103,7 +93,7 @@ const useSelectionCardGameStore = create(immer<TSelectionCardGameStore> ((set, g
     });
   },
 
-  updateGameState: ({ caseId, gameId, update }) =>
+  toggleAnswer: ({ answerId, gameId }) =>
   {
     set((state) =>
     {
@@ -111,13 +101,32 @@ const useSelectionCardGameStore = create(immer<TSelectionCardGameStore> ((set, g
 
       if(gameIndex === -1)
       {
-        const newGame: SelectionCardGameState = {
-          ...getDefaultSelectionCardGameState({ caseId, gameId }),
-          ...update,
-        };
+        throw new Error("Game not found");
+      }
 
-        state.games = state.games.concat(newGame);
-        return;
+      const game = state.games[gameIndex]!;
+      const answerIndex = game.checkedAnswersIds.indexOf(answerId);
+
+      if(answerIndex === -1)
+      {
+        game.checkedAnswersIds.push(answerId);
+      }
+      else
+      {
+        game.checkedAnswersIds.splice(answerIndex, 1);
+      }
+    });
+  },
+
+  updateGameState: ({ gameId, update }) =>
+  {
+    set((state) =>
+    {
+      const gameIndex = state.games.findIndex(game => game.gameId === gameId);
+
+      if(gameIndex === -1)
+      {
+        throw new Error("Game not found");
       }
 
       const newGame: SelectionCardGameState = {

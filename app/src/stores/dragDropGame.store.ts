@@ -43,7 +43,6 @@ type IDragDropGameStore = {
   }) => void;
   resetGamesForCase: (caseId: string) => void;
   updateGameState: (params: {
-    caseId: string;
     gameId: string;
     update: DragDropGameStateUpdate;
   }) => void;
@@ -193,7 +192,7 @@ const useDragDropGameStore = create(
         });
       });
     },
-    updateGameState: ({ caseId, gameId, update }) =>
+    updateGameState: ({ gameId, update }) =>
     {
       set((state) =>
       {
@@ -201,13 +200,7 @@ const useDragDropGameStore = create(
 
         if(gameIndex === -1)
         {
-          const newGame: DragDropGameState = {
-            ...getDefaultDragDropGameState({ caseId, gameId }),
-            ...update,
-          };
-
-          state.games = state.games.concat(newGame);
-          return;
+          throw new Error("Game not found");
         }
 
         const newGame: DragDropGameState = {
