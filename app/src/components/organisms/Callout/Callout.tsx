@@ -22,6 +22,7 @@ export const Callout: FC<CalloutProps> = ({ calloutType, expandable, text }) =>
       styleType="tertiary"
       rightIcon={<ArrowDown size={20}/>}
       size="medium"
+      style={{ zIndex: 2 }}
       onClick={() => setIsContentHide(false)}
       component="a">
       Ausklappen
@@ -33,6 +34,7 @@ export const Callout: FC<CalloutProps> = ({ calloutType, expandable, text }) =>
       styleType="tertiary"
       rightIcon={<ArrowUp size={20}/>}
       size="medium"
+      style={{ zIndex: 2 }}
       onClick={() => setIsContentHide(true)}
       component="a">
       Einklappen
