@@ -41,6 +41,11 @@ type LayoutProps = {
   readonly pageProps: object;
 };
 
+if(typeof document === "undefined") 
+{
+  React.useLayoutEffect = React.useEffect;
+}
+
 const Layout: FunctionComponent<LayoutProps> = ({ Component, pageProps }) =>
 {
   if(Component.getLayout) 
