@@ -51,10 +51,18 @@ export const Callout: FC<CalloutProps> = ({ calloutType, expandable, text }) =>
             maxHeight={190}
             showLabel={ShowAllBtn}
             styles={spoilerStyles({ isContentHide })}>
-            <Richtext data={text} stylesOverwrite={RichTextStyles}/>
+            <Richtext
+              data={text}
+              stylesOverwrite={RichTextStyles}
+              richTextOverwrite={{ paragraph: richTextParagraphOverwrite }}
+            />
           </Spoiler>
         ) : (
-          <Richtext data={text} stylesOverwrite={RichTextStyles} richTextOverwrite={{ paragraph: richTextParagraphOverwrite }}/>
+          <Richtext
+            data={text}
+            stylesOverwrite={RichTextStyles}
+            richTextOverwrite={{ paragraph: richTextParagraphOverwrite }}
+          />
         ))}
     </Stack>
   );
