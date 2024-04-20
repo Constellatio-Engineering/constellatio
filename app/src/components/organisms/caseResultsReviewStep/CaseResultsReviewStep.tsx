@@ -173,13 +173,13 @@ const CaseResultsReviewStep: FunctionComponent<ICaseResultsReviewStepProps> = ({
                   styles={styles.spoilerStyles({ isExpandSolution })}>
                   <div className="solution-content">
                     <ScrollArea h={isExpandSolution && solutionElementHeight > 220 ? 500 : undefined} offsetScrollbars>
-                      <div ref={solutionContent} dangerouslySetInnerHTML={{ __html: solution }}/>
+                      <div ref={solutionContent} dangerouslySetInnerHTML={{ __html: solution }} style={{ wordBreak: "break-word" }}/>
                     </ScrollArea>
                   </div>
                 </Spoiler>
               ) : (
                 <div className="solution-content">
-                  <div ref={solutionContent} dangerouslySetInnerHTML={{ __html: solution }}/>
+                  <div ref={solutionContent} dangerouslySetInnerHTML={{ __html: solution }} style={{ wordBreak: "break-word" }}/>
                 </div>
               )}
             </div>
