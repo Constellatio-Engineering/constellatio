@@ -3,19 +3,22 @@ import { type ModalOpened as LightboxModalOpened, useLightboxModalStore } from "
 
 import { Modal } from "@mantine/core";
 import Image from "next/image";
-import React, { type FunctionComponent, useEffect, useRef } from "react";
+import React, { type FunctionComponent, useRef } from "react";
 
 import * as styles from "./Lightbox.styles";
 
-type LightboxContentProps = {
+type ImageWrapperProps = {
   readonly image: LightboxModalOpened["image"];
+};
+
+type LightboxImageProps = ImageWrapperProps & {
   readonly wrapper: {
-    readonly height: number;
-    readonly width: number;
+    height: number;
+    width: number;
   };
 };
 
-const LightboxContent: FunctionComponent<LightboxContentProps> = ({ image, wrapper }) =>
+const LightboxImage: FunctionComponent<LightboxImageProps> = ({ image, wrapper }) =>
 {
   const imageAspectRatio = image.width / image.height;
   const wrapperAspectRatio = wrapper.width / wrapper.height;
@@ -34,12 +37,6 @@ const LightboxContent: FunctionComponent<LightboxContentProps> = ({ image, wrapp
     renderedImageHeight = "auto";
   }
 
-  useEffect(() =>
-  {
-    console.log("mounted");
-    return () => console.log("unmounted");
-  }, []);
-
   return (
     <Image
       width={image.width}
@@ -57,16 +54,27 @@ const LightboxContent: FunctionComponent<LightboxContentProps> = ({ image, wrapp
   );
 };
 
-const Lightbox: FunctionComponent = () =>
+const ImageWrapper: FunctionComponent<ImageWrapperProps> = ({ image }) =>
 {
   const imageWrapperRef = useRef<HTMLDivElement>(null);
-  const { closeModal, modalState, openModal } = useLightboxModalStore();
-  const { height: wrapperHeight, width: wrapperWidth } = useSizeObserver(imageWrapperRef);
-  const currentImage = modalState.isOpened ? modalState.image : modalState.lastImage;
+  const { height, width } = useSizeObserver(imageWrapperRef);
 
-  console.log("imageWrapperRef", imageWrapperRef);
-  console.log("wrapperHeight", wrapperHeight);
-  console.log("wrapperWidth", wrapperWidth);
+  return (
+    <div css={styles.imageWrapper} ref={imageWrapperRef}>
+      {(width && height) && (
+        <LightboxImage
+          image={image}
+          wrapper={{ height, width }}
+        />
+      )}
+    </div>
+  );
+};
+
+const Lightbox: FunctionComponent = () =>
+{
+  const { closeModal, modalState, openModal } = useLightboxModalStore();
+  const currentImage = modalState.isOpened ? modalState.image : modalState.lastImage;
 
   return (
     <>
@@ -85,6 +93,7 @@ const Lightbox: FunctionComponent = () =>
         lockScroll={true}
         keepMounted={true}
         padding={0}
+        transitionProps={{ duration: 300 }}
         opened={modalState.isOpened}
         onClose={closeModal}>
         <Modal.Overlay css={styles.overlay}/>
@@ -92,17 +101,9 @@ const Lightbox: FunctionComponent = () =>
           css={styles.content}
           onClick={closeModal}>
           <Modal.Body css={styles.body}>
-            <div css={styles.imageWrapper} ref={imageWrapperRef}>
-              {(currentImage && wrapperHeight && wrapperWidth) && (
-                <LightboxContent
-                  image={currentImage}
-                  wrapper={{
-                    height: wrapperHeight,
-                    width: wrapperWidth
-                  }}
-                />
-              )}
-            </div>
+            {currentImage && (
+              <ImageWrapper image={currentImage}/>
+            )}
           </Modal.Body>
         </Modal.Content>
       </Modal.Root>
