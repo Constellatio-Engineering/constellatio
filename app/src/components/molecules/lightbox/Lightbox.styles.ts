@@ -26,8 +26,7 @@ export const imageWrapper = css`
 `;
 
 export const image = css`
-  width: 100%;
-  height: 100%;
-  object-fit: contain;
+  max-width: 100%;
+  max-height: 100%;
   filter: drop-shadow(0 0 20px rgba(0, 0, 0, 0.3));
 `;
