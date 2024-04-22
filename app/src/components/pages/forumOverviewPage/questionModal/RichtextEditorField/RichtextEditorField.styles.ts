@@ -37,6 +37,7 @@ export const richtextEditorFieldStyles = ({
         },
         maxHeight: "60vh",
         minHeight: noMinHeight ? "unset" : `${minHeight}px`,
+        overflow: "auto",
         padding: "20px",
         paddingBottom: "32px",
         whiteSpace: "normal",
@@ -56,7 +57,6 @@ export const richtextEditorFieldStyles = ({
 };
 
 export const contentWrapper = css`
-  overflow: auto;
 `;
 
 export const wrapper = css`
