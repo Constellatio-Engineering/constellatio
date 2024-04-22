@@ -11,6 +11,11 @@ const config = {
   images:{
     remotePatterns: [
       {
+        hostname: "images.pexels.com",
+        protocol: "https",
+        port: '',
+      },
+      {
         protocol: "https",
         hostname: "storage.googleapis.com",
         port: '',

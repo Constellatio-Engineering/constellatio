@@ -14,20 +14,29 @@ export const useSizeObserver = (target: RefObject<HTMLElement>): IElementSize =>
 
   const setSize = (domRect: DOMRect): void =>
   {
+    console.log("setSize");
     setHeight(Math.round(domRect.height));
     setWidth(Math.round(domRect.width));
   };
 
   useLayoutEffect(() =>
   {
+    console.log("useLayoutEffect");
+
     if(target.current)
     {
+      console.log("useLayoutEffect target.current");
       setSize(target.current.getBoundingClientRect());
+    }
+    else
+    {
+      console.log("useLayoutEffect !target.current");
     }
   }, [target]);
 
   useResizeObserver(target, (entry) =>
   {
+    console.log("useResizeObserver callback");
     setSize(entry.contentRect);
   });
 
