@@ -70,11 +70,16 @@ export const CaisyImageV2: FunctionComponent<Props> = ({
   return (
     <Image
       {...imageProps}
-      placeholder={"blur"}
-      blurDataURL={getCaisyImageBlurUrl(src)}
+      placeholder={"empty"}
       src={src}
       alt={alt}
       css={[styles.image(dominantColor), hoverStyles, stylesOverwrite]}
+      style={{
+        backgroundImage: `url(${getCaisyImageBlurUrl(src)})`,
+        backgroundPosition: "center",
+        backgroundRepeat: "no-repeat",
+        backgroundSize: "cover"
+      }}
       width={width}
       height={height}
     />
