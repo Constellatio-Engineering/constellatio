@@ -30,4 +30,7 @@ export const iconWrapper = css`
   gap: 6px;
   position: absolute;
   right: 20px;
+  button:first-of-type {
+    transform: rotate(180deg);
+  }
 `;

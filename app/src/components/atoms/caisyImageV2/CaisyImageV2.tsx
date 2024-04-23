@@ -43,9 +43,10 @@ export const CaisyImageV2: FunctionComponent<Props> = ({
   if(withLightbox)
   {
     imageProps.onClick = () => openLightbox({
-      height: height!, // Todo: Fix exclamation mark
+      alt,
+      height,
       url: src,
-      width: width!, // Todo: Fix exclamation mark
+      width,
     });
 
     hoverStyles = styles.withOnClick;

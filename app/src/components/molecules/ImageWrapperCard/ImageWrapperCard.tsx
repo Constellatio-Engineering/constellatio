@@ -1,4 +1,3 @@
-import CaisyImg from "@/basic-components/CaisyImg";
 import { CaisyImageV2 } from "@/components/atoms/caisyImageV2/CaisyImageV2";
 import { FloatingButton } from "@/components/atoms/FloatingButton/FloatingButton";
 import { type IGenAsset } from "@/services/graphql/__generated/sdk";
@@ -22,17 +21,12 @@ export const ImageWrapperCard: FC<ImageWrapperCardProps> = (imageProps) =>
 
   const fileExtension = getFileExtensionLowercase(src);
 
-  const test = {
-    ...imageProps,
-    // width: undefined,
-  };
-
   return (
     <div css={styles.wrapper}>
       <div css={styles.imageWrapper}>
         <CaisyImageV2
           withLightbox={true}
-          caisyAsset={test}
+          caisyAsset={imageProps}
         />
         <div css={styles.iconWrapper}>
           <FloatingButton

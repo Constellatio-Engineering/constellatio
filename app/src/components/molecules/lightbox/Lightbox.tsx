@@ -1,3 +1,4 @@
+import { CloseIcon } from "@/components/Icons/Close";
 import { useSizeObserver } from "@/hooks/useSizeObserver";
 import { type ModalOpened as LightboxModalOpened, useLightboxModalStore } from "@/stores/lightbox.store";
 
@@ -7,19 +8,48 @@ import React, { type FunctionComponent, useRef } from "react";
 
 import * as styles from "./Lightbox.styles";
 
+type Wrapper = {
+  readonly height: number;
+  readonly width: number;
+};
+
 type ImageWrapperProps = {
   readonly image: LightboxModalOpened["image"];
 };
 
 type LightboxImageProps = ImageWrapperProps & {
-  readonly wrapper: {
-    height: number;
-    width: number;
+  readonly wrapper: Wrapper;
+};
+
+type FallbackLightboxImageProps = {
+  readonly image: {
+    alt: string;
+    url: string;
   };
+};
+
+const FallbackLightboxImage: FunctionComponent<FallbackLightboxImageProps> = ({ image }) =>
+{
+  return (
+    <img // eslint-disable-line @next/next/no-img-element
+      onClick={e => e.stopPropagation()}
+      css={styles.fallbackImage}
+      loading={"eager"}
+      src={image.url}
+      alt={image.alt}
+    />
+  );
 };
 
 const LightboxImage: FunctionComponent<LightboxImageProps> = ({ image, wrapper }) =>
 {
+  if(!image.width || !image.height)
+  {
+    return (
+      <FallbackLightboxImage image={image}/>
+    );
+  }
+
   const imageAspectRatio = image.width / image.height;
   const wrapperAspectRatio = wrapper.width / wrapper.height;
 
@@ -49,7 +79,7 @@ const LightboxImage: FunctionComponent<LightboxImageProps> = ({ image, wrapper }
       }}
       priority
       src={image.url}
-      alt="Placeholder"
+      alt={image.alt}
     />
   );
 };
@@ -85,7 +115,11 @@ const Lightbox: FunctionComponent = () =>
       transitionProps={{ duration: 300 }}
       opened={modalState.isOpened}
       onClose={closeModal}>
-      <Modal.Overlay css={styles.overlay}/>
+      <Modal.Overlay css={styles.overlay}>
+        <div css={styles.closeButtonWrapper}>
+          <CloseIcon size={30}/>
+        </div>
+      </Modal.Overlay>
       <Modal.Content
         css={styles.content}
         onClick={closeModal}>

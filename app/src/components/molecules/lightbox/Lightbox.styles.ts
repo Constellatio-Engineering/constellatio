@@ -1,14 +1,29 @@
 import { css } from "@emotion/react";
 
 export const overlay = css`
-  background-color: rgba(0, 0, 0, 0.72);
-  backdrop-filter: blur(3px);
+  background-color: rgba(0, 0, 0, 0.78);
+  backdrop-filter: blur(4px);
+  cursor: pointer;
+`;
+
+export const closeButtonWrapper = css`
+  position: absolute;
+  top: 16px;
+  right: 16px;
+  z-index: 1;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  svg path {
+    fill: rgba(255, 255, 255, 0.85);
+  }
 `;
 
 export const content = css`
   height: 100%;
   background-color: transparent;
   box-shadow: none;
+  cursor: pointer;
 `;
 
 export const body = css`
@@ -30,4 +45,12 @@ export const image = css`
   max-width: 100%;
   max-height: 100%;
   will-change: width, height;
+  cursor: default;
+`;
+
+export const fallbackImage = css`
+  object-fit: contain;
+  width: 100%;
+  height: 100%;
+  cursor: default;
 `;

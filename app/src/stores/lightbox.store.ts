@@ -1,10 +1,13 @@
+import { type Nullable } from "@/utils/types";
+
 import { create } from "zustand";
 import { immer } from "zustand/middleware/immer";
 
 type ModalImage = {
-  height: number;
+  alt: string;
+  height: Nullable<number>;
   url: string;
-  width: number;
+  width: Nullable<number>;
 };
 
 type ModalClosed = {
