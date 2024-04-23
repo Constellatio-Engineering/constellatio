@@ -73,41 +73,29 @@ const ImageWrapper: FunctionComponent<ImageWrapperProps> = ({ image }) =>
 
 const Lightbox: FunctionComponent = () =>
 {
-  const { closeModal, modalState, openModal } = useLightboxModalStore();
+  const { closeModal, modalState } = useLightboxModalStore();
   const currentImage = modalState.isOpened ? modalState.image : modalState.lastImage;
 
   return (
-    <>
-      <button
-        type={"button"}
-        onClick={() => openModal({
-          height: 347,
-          url: "https://images.pexels.com/photos/325185/pexels-photo-325185.jpeg?auto=compress&cs=tinysrgb&w=2260&h=750&dpr=2",
-          width: 520
-        })}
-        style={{ padding: 100 }}>
-        Open Lightbox
-      </button>
-      <Modal.Root
-        size={"100vw"}
-        lockScroll={true}
-        keepMounted={true}
-        padding={0}
-        transitionProps={{ duration: 300 }}
-        opened={modalState.isOpened}
-        onClose={closeModal}>
-        <Modal.Overlay css={styles.overlay}/>
-        <Modal.Content
-          css={styles.content}
-          onClick={closeModal}>
-          <Modal.Body css={styles.body}>
-            {currentImage && (
-              <ImageWrapper image={currentImage}/>
-            )}
-          </Modal.Body>
-        </Modal.Content>
-      </Modal.Root>
-    </>
+    <Modal.Root
+      size={"100vw"}
+      lockScroll={false} // false needed because otherwise zooming is not possible
+      keepMounted={true}
+      padding={0}
+      transitionProps={{ duration: 300 }}
+      opened={modalState.isOpened}
+      onClose={closeModal}>
+      <Modal.Overlay css={styles.overlay}/>
+      <Modal.Content
+        css={styles.content}
+        onClick={closeModal}>
+        <Modal.Body css={styles.body}>
+          {currentImage && (
+            <ImageWrapper image={currentImage}/>
+          )}
+        </Modal.Body>
+      </Modal.Content>
+    </Modal.Root>
   );
 };
 
