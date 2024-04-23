@@ -156,8 +156,6 @@ const CaseCompleteTestsStep: FunctionComponent<ICaseCompleteTestsStepProps> = ({
           case "Asset":
             if(node?.attrs?.documentId === component?.id) 
             {
-              component.src = "https://images.pexels.com/photos/325185/pexels-photo-325185.jpeg";
-
               return (
                 <div
                   css={styles.componentWrapper}

@@ -23,12 +23,6 @@ export const imageWrapper = css`
   position: relative;
 `;
 
-export const image = (backgroundColor: string) => css`
-  background-color: ${backgroundColor};
-  width: 100%;
-  height: auto;
-`;
-
 export const iconWrapper = css`
   align-items: center;
   bottom: 20px;

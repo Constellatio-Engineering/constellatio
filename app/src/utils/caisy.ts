@@ -1,4 +1,4 @@
-export const getCaisyImageBlurUrl = (imageSrc: string) =>
+export const getCaisyImageBlurUrl = (imageSrc: string): string =>
 {
   const imageUrl = new URL(imageSrc);
   const searchParams = new URLSearchParams(imageUrl.search);

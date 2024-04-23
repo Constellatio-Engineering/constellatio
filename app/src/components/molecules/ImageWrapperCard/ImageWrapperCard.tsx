@@ -1,69 +1,31 @@
 import CaisyImg from "@/basic-components/CaisyImg";
+import { CaisyImageV2 } from "@/components/atoms/caisyImageV2/CaisyImageV2";
 import { FloatingButton } from "@/components/atoms/FloatingButton/FloatingButton";
 import { type IGenAsset } from "@/services/graphql/__generated/sdk";
-import { getCaisyImageBlurUrl } from "@/utils/caisy";
 import { getFileExtensionLowercase } from "@/utils/files";
 
 import { saveAs } from "file-saver";
-import Image from "next/image";
 import React, { type FC } from "react";
 
 import * as styles from "./ImageWrapperCard.styles";
 
 export type ImageWrapperCardProps = IGenAsset;
 
-export const ImageWrapperCard: FC<ImageWrapperCardProps> = ({
-  blurHash,
-  description,
-  dominantColor,
-  height,
-  src,
-  title,
-  width
-}) =>
+export const ImageWrapperCard: FC<ImageWrapperCardProps> = (imageProps) =>
 {
+  const { src, title } = imageProps;
+
   if(!src)
   {
     return null;
   }
 
-  if(!width)
-  {
-    return <p>Width missung</p>;
-  }
-
-  if(!height)
-  {
-    return <p>Height missing</p>;
-  }
-
-  if(!blurHash)
-  {
-    return <p>Blurhash missing</p>;
-  }
-
   const fileExtension = getFileExtensionLowercase(src);
-  const imageUrl = new URL(src);
-  const searchParams = new URLSearchParams(imageUrl.search);
-  searchParams.set("w", "32");
 
   return (
     <div css={styles.wrapper}>
-      <img
-        src={getCaisyImageBlurUrl(src)}
-        width={"100%"}
-        height={"auto"}
-      />
       <div css={styles.imageWrapper}>
-        <Image
-          src={src}
-          css={styles.image(dominantColor ?? "#fafafa")}
-          placeholder={"blur"}
-          blurDataURL={getCaisyImageBlurUrl(src)}
-          alt={description ?? title ?? ""}
-          width={width}
-          height={height}
-        />
+        <CaisyImageV2 {...imageProps} withLightbox/>
         <div css={styles.iconWrapper}>
           <FloatingButton
             variation="icon-big"
