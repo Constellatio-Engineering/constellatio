@@ -22,10 +22,18 @@ export const ImageWrapperCard: FC<ImageWrapperCardProps> = (imageProps) =>
 
   const fileExtension = getFileExtensionLowercase(src);
 
+  const test = {
+    ...imageProps,
+    // width: undefined,
+  };
+
   return (
     <div css={styles.wrapper}>
       <div css={styles.imageWrapper}>
-        <CaisyImageV2 {...imageProps} withLightbox/>
+        <CaisyImageV2
+          withLightbox={true}
+          caisyAsset={test}
+        />
         <div css={styles.iconWrapper}>
           <FloatingButton
             variation="icon-big"

@@ -16,11 +16,6 @@ const config = {
         port: '',
       },
       {
-        hostname: "images.pexels.com",
-        protocol: "https",
-        port: '',
-      },
-      {
         protocol: "https",
         hostname: "storage.googleapis.com",
         port: '',

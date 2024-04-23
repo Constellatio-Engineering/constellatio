@@ -1,45 +1,37 @@
 import type { IGenAsset } from "@/services/graphql/__generated/sdk";
 import { useLightboxModalStore } from "@/stores/lightbox.store";
 import { getCaisyImageBlurUrl } from "@/utils/caisy";
-import { type Nullable } from "@/utils/types";
 
 import { type SerializedStyles } from "@emotion/react";
-import { type ImageProps } from "next/dist/shared/lib/get-img-props";
 import Image from "next/image";
-import React, { type ComponentProps, type FunctionComponent } from "react";
+import React, { type FunctionComponent } from "react";
 
 import * as styles from "./CaisyImageV2.styles";
 
-type Props =
-  Omit<ImageProps, "alt" | "src" | "width" | "height" | "id" | "title"> &
-  Pick<IGenAsset, "description" | "dominantColor" | "height" | "src" | "title" | "width"> & {
-    readonly alt?: Nullable<string>;
-    readonly htmlTitle?: string;
-    readonly id?: Nullable<string>;
-    readonly nativeFallbackImageProps?: ComponentProps<"img">;
-    readonly stylesOverwrite?: SerializedStyles;
-    readonly withLightbox?: boolean;
+type Props = {
+  readonly caisyAsset: IGenAsset;
+  readonly imageProps?: Omit<JSX.IntrinsicElements["img"], "src" | "srcSet" | "ref" | "alt" | "width" | "height" | "loading"> & {
+    readonly alt?: string;
   };
+  readonly stylesOverwrite?: SerializedStyles;
+  readonly withLightbox?: boolean;
+};
 
 export const CaisyImageV2: FunctionComponent<Props> = ({
-  alt: providedAlt,
-  description,
-  dominantColor,
-  height,
-  htmlTitle,
-  id,
-  nativeFallbackImageProps,
-  onClick,
-  src,
+  caisyAsset,
+  imageProps = {},
   stylesOverwrite,
-  title,
-  width,
   withLightbox,
-  ...props
-}) => 
+}) =>
 {
   const openLightbox = useLightboxModalStore(s => s.openModal);
-  const alt = providedAlt ?? description ?? title ?? "";
+  const alt = imageProps.alt ?? caisyAsset.description ?? caisyAsset.title ?? "keine Beschreibung vorhanden";
+  const {
+    dominantColor,
+    height,
+    src,
+    width
+  } = caisyAsset;
 
   if(!src)
   {
@@ -50,7 +42,7 @@ export const CaisyImageV2: FunctionComponent<Props> = ({
 
   if(withLightbox)
   {
-    onClick = () => openLightbox({
+    imageProps.onClick = () => openLightbox({
       height: height!, // Todo: Fix exclamation mark
       url: src,
       width: width!, // Todo: Fix exclamation mark
@@ -66,9 +58,8 @@ export const CaisyImageV2: FunctionComponent<Props> = ({
     return (
       <img // eslint-disable-line @next/next/no-img-element
         loading={"lazy"}
-        {...nativeFallbackImageProps}
+        {...imageProps}
         src={src}
-        onClick={onClick}
         alt={alt}
         css={[styles.image(), hoverStyles, stylesOverwrite]}
       />
@@ -77,14 +68,11 @@ export const CaisyImageV2: FunctionComponent<Props> = ({
 
   return (
     <Image
-      {...props}
-      id={id ?? undefined}
-      title={htmlTitle ?? undefined}
+      {...imageProps}
       placeholder={"blur"}
       blurDataURL={getCaisyImageBlurUrl(src)}
       src={src}
       alt={alt}
-      onClick={onClick}
       css={[styles.image(dominantColor), hoverStyles, stylesOverwrite]}
       width={width}
       height={height}

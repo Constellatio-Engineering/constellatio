@@ -1303,7 +1303,7 @@ export type IGenArticleOverviewFragment = { __typename: 'Article', id?: string |
     & IGenMainCategoryFragment
   ) | null> | null };
 
-export type IGenAssetFragment = { __typename?: 'Asset', title?: string | null, src?: string | null, originType?: string | null, width?: number | null, height?: number | null, blurHash?: string | null, keywords?: string | null, id?: string | null, dominantColor?: string | null, description?: string | null, copyright?: string | null, author?: string | null };
+export type IGenAssetFragment = { __typename?: 'Asset', title?: string | null, src?: string | null, originType?: string | null, width?: number | null, height?: number | null, keywords?: string | null, id?: string | null, dominantColor?: string | null, description?: string | null, copyright?: string | null, author?: string | null };
 
 export type IGenCalloutFragment = { __typename: 'Callout', id?: string | null, calloutType?: string | null, expandable?: boolean | null, text?: { __typename?: 'Callout_text', json?: any | null, connections?: Array<{ __typename: 'Caisy_Field_Document_NotFound' } | null> | null } | null };
 
@@ -1597,7 +1597,6 @@ export const AssetFragmentDoc = gql`
   originType
   width
   height
-  blurHash
   keywords
   id
   dominantColor
