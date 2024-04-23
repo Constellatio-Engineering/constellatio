@@ -1,48 +1,39 @@
+import { colors } from "@/constants/styles/colors";
+import { radius } from "@/constants/styles/radius";
 import { spacing } from "@/constants/styles/spacing";
-import { type MantineCssObjectStyles } from "@/utils/types";
 
-import styled from "@emotion/styled";
+import { css } from "@emotion/react";
 
-export const ContainerWrapper = styled.div`
+export const wrapper = css`
   display: flex;
   flex-direction: column;
   gap: ${spacing["spacing-24"]};
 `;
 
-type ImageWrapperStyles = MantineCssObjectStyles;
+export const imageWrapper = css`
+  width: 100%;
+  min-height: 300px;
+  align-items: flex-start;
+  background-color: ${colors["neutrals-01"][0]};
+  border: 1px solid ${colors["neutrals-01"][3]};
+  border-radius: ${radius["radius-12"]};
+  display: flex;
+  gap: ${spacing["spacing-8"]};
+  padding: ${spacing["spacing-8"]};
+  position: relative;
+`;
 
-export const imageWrapperStyles = (): ImageWrapperStyles =>
-{
-  const styles: ImageWrapperStyles = theme => ({
-    alignItems: "flex-start",
-    backgroundColor: theme.colors["neutrals-01"][0],
-    border: `1px solid ${theme.colors["neutrals-01"][3]}`,
-    borderRadius: theme.radius["radius-12"],
-    display: "flex",
-    gap: theme.spacing["spacing-8"],
-    img: {
-      width: "100%",
-    },
-    padding: theme.spacing["spacing-8"],
+export const image = (backgroundColor: string) => css`
+  background-color: ${backgroundColor};
+  width: 100%;
+  height: auto;
+`;
 
-    position: "relative",
-  });
-
-  return styles;
-};
-
-type IconWrapperStyles = MantineCssObjectStyles;
-
-export const iconWrapperStyles = (): IconWrapperStyles =>
-{
-  const styles: IconWrapperStyles = () => ({
-    alignItems: "center",
-    bottom: "20px",
-    display: "flex",
-    gap: "6px",
-    position: "absolute",
-    right: "20px",
-  });
-
-  return styles;
-};
+export const iconWrapper = css`
+  align-items: center;
+  bottom: 20px;
+  display: flex;
+  gap: 6px;
+  position: absolute;
+  right: 20px;
+`;

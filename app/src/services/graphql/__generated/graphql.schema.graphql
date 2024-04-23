@@ -389,6 +389,9 @@ type CaisyDocument_Meta {
   createdAt: DateTime
 
   """"""
+  firstPublishedAt: DateTime
+
+  """"""
   id: ID
 
   """"""

@@ -11,6 +11,11 @@ const config = {
   images:{
     remotePatterns: [
       {
+        hostname: "assets.caisy.io",
+        protocol: "https",
+        port: '',
+      },
+      {
         hostname: "images.pexels.com",
         protocol: "https",
         port: '',

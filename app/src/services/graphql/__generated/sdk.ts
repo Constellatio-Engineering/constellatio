@@ -220,6 +220,7 @@ export type IGenAsset_Where = {
 export type IGenCaisyDocument_Meta = {
   __typename?: 'CaisyDocument_Meta';
   createdAt?: Maybe<Scalars['DateTime']['output']>;
+  firstPublishedAt?: Maybe<Scalars['DateTime']['output']>;
   id?: Maybe<Scalars['ID']['output']>;
   locale?: Maybe<Scalars['String']['output']>;
   locales?: Maybe<Array<Maybe<Scalars['String']['output']>>>;
@@ -1302,7 +1303,7 @@ export type IGenArticleOverviewFragment = { __typename: 'Article', id?: string |
     & IGenMainCategoryFragment
   ) | null> | null };
 
-export type IGenAssetFragment = { __typename?: 'Asset', title?: string | null, src?: string | null, originType?: string | null, keywords?: string | null, id?: string | null, dominantColor?: string | null, description?: string | null, copyright?: string | null, author?: string | null };
+export type IGenAssetFragment = { __typename?: 'Asset', title?: string | null, src?: string | null, originType?: string | null, width?: number | null, height?: number | null, blurHash?: string | null, keywords?: string | null, id?: string | null, dominantColor?: string | null, description?: string | null, copyright?: string | null, author?: string | null };
 
 export type IGenCalloutFragment = { __typename: 'Callout', id?: string | null, calloutType?: string | null, expandable?: boolean | null, text?: { __typename?: 'Callout_text', json?: any | null, connections?: Array<{ __typename: 'Caisy_Field_Document_NotFound' } | null> | null } | null };
 
@@ -1594,6 +1595,9 @@ export const AssetFragmentDoc = gql`
   title
   src
   originType
+  width
+  height
+  blurHash
   keywords
   id
   dominantColor
