@@ -11,6 +11,11 @@ const config = {
   images:{
     remotePatterns: [
       {
+        hostname: "assets.caisy.io",
+        protocol: "https",
+        port: '',
+      },
+      {
         protocol: "https",
         hostname: "storage.googleapis.com",
         port: '',
