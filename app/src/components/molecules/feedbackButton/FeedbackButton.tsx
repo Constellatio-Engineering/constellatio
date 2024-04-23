@@ -39,7 +39,7 @@ const FeedbackButton: FunctionComponent = () =>
         {
           await formbricks.init({
             apiHost: env.NEXT_PUBLIC_FORMBRICKS_HOST,
-            debug: true, // !isProduction,
+            debug: false, // !isProduction,
             environmentId: isProduction
               ? env.NEXT_PUBLIC_FORMBRICKS_KEY_PRODUCTION
               : env.NEXT_PUBLIC_FORMBRICKS_KEY_TESTINGS,

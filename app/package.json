@@ -70,6 +70,7 @@
     "@mantine/spotlight": "6.0.19",
     "@mantine/styles": "6.0.19",
     "@mantine/tiptap": "6.0.19",
+    "@react-hook/resize-observer": "1.2.6",
     "@stripe/stripe-js": "2.1.9",
     "@supabase/auth-helpers-nextjs": "0.8.7",
     "@supabase/auth-helpers-react": "0.4.2",
