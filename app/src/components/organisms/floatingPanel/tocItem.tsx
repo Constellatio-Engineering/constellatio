@@ -1,3 +1,4 @@
+import { ToC } from "@/components/organisms/floatingPanel/ToC";
 import useCaseSolvingStore from "@/stores/caseSolving.store";
 import { slugFormatter } from "@/utils/utils";
 
@@ -5,7 +6,7 @@ import { useMantineTheme } from "@mantine/core";
 import React, { useState } from "react";
 
 import * as styles from "./FloatingPanel.styles";
-import { getNumericalLabel, renderTOC, type TOCItem } from "./generateTocHelper";
+import { getNumericalLabel, type TOCItem } from "./generateTocHelper";
 import { BodyText } from "../../atoms/BodyText/BodyText";
 import { ArrowSolidDown } from "../../Icons/arrow-solid-down";
 import { ArrowSolidRight } from "../../Icons/arrow-solid-right";
@@ -58,6 +59,7 @@ export const TOCItemComponent: React.FC<ITOCItemComponentProps> = ({
     }
     return false;
   }, [item.children.length, item.level, item.text, observedHeadline.level, observedHeadline.slug]);
+
   React.useLayoutEffect(() =>
   {
     setShouldBeExpandedState(shouldBeExpanded());
@@ -74,9 +76,7 @@ export const TOCItemComponent: React.FC<ITOCItemComponentProps> = ({
   return (
     <div
       onClick={(e) => scrollToElement(e, slugFormatter(item.text))}
-      style={{
-        paddingLeft: ((depth === 1 || depth >= 5) ? 0 : depth + 20) + "px", 
-      }}>
+      style={{ paddingLeft: ((depth === 1 || depth >= 5) ? 0 : depth + 20) + "px" }}>
       <span
         key={`listItem-${itemNumber}`}
         onClick={handleToggle}
@@ -84,7 +84,6 @@ export const TOCItemComponent: React.FC<ITOCItemComponentProps> = ({
           highlighted: shouldBeHighlighted, 
           isExpandable: item.children.length > 0, 
           isExpanded: shouldBeExpandedState,
-          // isTopLevel: true, 
           theme
         })}>
         <div style={{ display: "flex", justifyContent: "flex-start", padding: "0 16px" }}>
@@ -98,9 +97,13 @@ export const TOCItemComponent: React.FC<ITOCItemComponentProps> = ({
             {getNumericalLabel(depth, itemNumber - 1)}&nbsp;{item.text}
           </BodyText>
         </div>
-        {depth === 0 && <div style={{}}>{itemNumber}/{total}</div>}
+        {depth === 0 && (
+          <div>{itemNumber}/{total}</div>
+        )}
       </span>
-      {shouldBeExpandedState && item.children.length > 0 && renderTOC(item.children, depth + 1)}
+      {shouldBeExpandedState && item.children.length > 0 && (
+        <ToC toc={item.children}/>
+      )}
     </div>
   );
 };

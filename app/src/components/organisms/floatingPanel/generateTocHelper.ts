@@ -1,9 +1,6 @@
 /* eslint-disable sort-keys-fix/sort-keys-fix */
 import { type IHeadingNode } from "types/richtext";
 
-import * as styles from "./FloatingPanel.styles";
-import { TOCItemComponent } from "./tocItem";
-
 type ContentType = {
   text: string;
   type: string;
@@ -150,21 +147,3 @@ export function getNestedHeadingIndex(item: IHeadingNode, allHeadings: any): num
   }
   return null;
 }
-
-export const renderTOC = (toc: TOCItem[], _: number = 0): JSX.Element => 
-{
-  return (
-    <ul css={styles.renderTOCList}>
-      {toc.map((item, index) => item && item?.text && (
-        <li key={`toc-ul-listItem-${index}`} style={{ listStyleType: "none" }}>
-          <TOCItemComponent
-            depth={item?.level ?? 1}
-            item={item}
-            itemNumber={index + 1}
-            total={toc?.length}
-          />
-        </li>
-      ))}
-    </ul>
-  );
-};

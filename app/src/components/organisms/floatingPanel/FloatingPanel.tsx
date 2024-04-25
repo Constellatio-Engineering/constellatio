@@ -2,15 +2,16 @@ import { BodyText } from "@/components/atoms/BodyText/BodyText";
 import { richTextParagraphOverwrite } from "@/components/helpers/richTextParagraphOverwrite";
 import { BoxIcon } from "@/components/Icons/BoxIcon";
 import { FileIcon } from "@/components/Icons/FileIcon";
+import { ToC } from "@/components/organisms/floatingPanel/ToC";
 import { type IGenCase_Facts } from "@/services/graphql/__generated/sdk";
 
 import { ScrollArea, Tabs, useMantineTheme } from "@mantine/core";
 import { useScrollIntoView } from "@mantine/hooks";
 import { type Maybe } from "graphql/jsutils/Maybe";
-import React, { useState, type FunctionComponent } from "react";
+import React, { useState, type FunctionComponent, useMemo } from "react";
 
 import * as styles from "./FloatingPanel.styles";
-import { type DataType, generateTOC, renderTOC } from "./generateTocHelper";
+import { type DataType, generateTOC } from "./generateTocHelper";
 import { CaptionText } from "../../atoms/CaptionText/CaptionText";
 import IconButton from "../../atoms/iconButton/IconButton";
 import { SwitcherTab } from "../../atoms/Switcher-tab/SwitcherTab";
@@ -48,8 +49,12 @@ const FloatingPanel: FunctionComponent<IFloatingPanelProps> = ({
 {
   const { scrollableRef } = useScrollIntoView<HTMLDivElement, HTMLDivElement>({ axis: "x" });
   const [selectedTabState, setSelectedTabState] = useState<"Gliederung" | "Sachverhalt">(selectedTab);
-  const toc = generateTOC(content);
+  const toc = useMemo(() => generateTOC(content), [content]);
   const theme = useMantineTheme();
+
+  /* console.log("--------------");
+  console.log("content", content);
+  console.log("toc", toc);*/
 
   return content?.length > 0 && (
     <ScrollArea
@@ -90,7 +95,9 @@ const FloatingPanel: FunctionComponent<IFloatingPanelProps> = ({
             </div>
           )}
         </Switcher>
-        {selectedTabState === "Gliederung" && content && renderTOC(toc)}
+        {selectedTabState === "Gliederung" && content && (
+          <ToC toc={toc}/>
+        )}
         {facts && facts.json && selectedTabState === "Sachverhalt" && (
           <div css={styles.facts}>
             <Richtext data={facts} richTextOverwrite={{ paragraph: richTextParagraphOverwrite }}/>
