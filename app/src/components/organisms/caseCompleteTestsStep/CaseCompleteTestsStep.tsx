@@ -1,10 +1,11 @@
 /* eslint-disable max-lines */
 import { Button } from "@/components/atoms/Button/Button";
 import { type IStatusLabel } from "@/components/atoms/statusLabel/StatusLabel";
-import { RichTextHeadingOverwrite } from "@/components/helpers/RichTextHeadingOverwrite";
+import { RichTextHeadingOverwrite, richTextHeadingOverwriteClassName } from "@/components/helpers/RichTextHeadingOverwrite";
 import GameComponentWrapper from "@/components/molecules/gameComponentWrapper/GameComponentWrapper";
 import { type GameProgress } from "@/db/schema";
 import useContextAndErrorIfNull from "@/hooks/useContextAndErrorIfNull";
+import { useWindowDimensions } from "@/hooks/useWindowDimensions";
 import { InvalidateQueriesContext } from "@/provider/InvalidateQueriesProvider";
 import { type Maybe, type IGenCase_Facts, type IGenCase_FullTextTasks, type IGenArticle_FullTextTasks } from "@/services/graphql/__generated/sdk";
 import useCaseSolvingStore from "@/stores/caseSolving.store";
@@ -16,7 +17,7 @@ import type { IDocumentLink, IHeadingNode } from "types/richtext";
 import { Container, Title } from "@mantine/core";
 import { usePostHog } from "posthog-js/react";
 import {
-  type FunctionComponent, useMemo, useCallback
+  type FunctionComponent, useMemo, useCallback, useEffect, useRef
 } from "react";
 
 import * as styles from "./CaseCompleteTestsStep.styles";
@@ -59,6 +60,8 @@ const CaseCompleteTestsStep: FunctionComponent<ICaseCompleteTestsStepProps> = ({
   // TODO: What happens when there is just one game in the case
   // TODO: Go trough the code again and make sure every case is handled
 
+  const windowDimensions = useWindowDimensions();
+  const windowHeight = windowDimensions?.height;
   const completedGames = gamesProgress.filter(({ progressState }) => progressState === "completed");
   const currentGameId = gamesProgress.find(({ progressState }) => progressState === "not-started")?.gameId;
   const areAllGamesCompleted = completedGames.length === games.length;
@@ -68,16 +71,54 @@ const CaseCompleteTestsStep: FunctionComponent<ICaseCompleteTestsStepProps> = ({
     onSuccess: async () => invalidateCaseProgress({ caseId })
   });
   const overrideCaseStepIndex = useCaseSolvingStore(s => s.overrideCaseStepIndex);
+  const contentWrapperRef = useRef<HTMLDivElement>(null);
+
+  const onScroll = useCallback(() =>
+  {
+    if(!contentWrapperRef.current || windowHeight == null)
+    {
+      return;
+    }
+
+    const { setObservedHeadlinePath } = useCaseSolvingStore.getState();
+    const headings = contentWrapperRef.current.getElementsByClassName(richTextHeadingOverwriteClassName);
+
+    for(let i = 0; i < headings.length; i++)
+    {
+      const isLastHeading = i === headings.length - 1;
+      const heading = headings[i] as HTMLHeadingElement;
+      const headingBefore = headings[i - 1] as HTMLHeadingElement | undefined;
+      const { top } = heading.getBoundingClientRect();
+      const path = heading.getAttribute("data-path");
+      const pathBefore = headingBefore?.getAttribute("data-path");
+
+      if(top > (windowHeight * 0.3))
+      {
+        console.log({ path, pathBefore, top });
+
+        const observedHeadingPath = pathBefore ?? path;
+
+        if(observedHeadingPath != null)
+        {
+          setObservedHeadlinePath(observedHeadingPath);
+        }
+
+        break;
+      }
+      else if(isLastHeading && top <= (windowHeight * 0.3) && path)
+      {
+        setObservedHeadlinePath(path);
+      }
+    }
+  }, [windowHeight]);
+
+  useEffect(() =>
+  {
+    window.addEventListener("scroll", onScroll, { passive: true });
+    return () => window.removeEventListener("scroll", onScroll);
+  }, [onScroll]);
 
   let renderedCaseContent: IGenCase_FullTextTasks | IGenArticle_FullTextTasks | null;
-  // const isBigScreen = useMediaQuery("(min-width: 1100px)");
-
-  // console.log("-----------------");
-  // console.log("completedGames", completedGames);
-  // console.log("areAllGamesCompleted", areAllGamesCompleted);
-  // console.log("gamesProgress", gamesProgress);
-  // console.log("games", games);
-  // console.log("currentGameIndexInFullTextTasksJson", currentGameIndexInFullTextTasksJson);
 
   if(fullTextTasks?.json?.content?.length >= 1 && !areAllGamesCompleted)
   {
@@ -180,7 +221,7 @@ const CaseCompleteTestsStep: FunctionComponent<ICaseCompleteTestsStepProps> = ({
 
   return (
     <Container p={0} maw={1440}>
-      <div css={styles.contentWrapper} id="completeTestsStepContent">
+      <div css={styles.contentWrapper} ref={contentWrapperRef} id="completeTestsStepContent">
         {variant === "case" && (
           <div css={styles.facts}>
             <Title order={2}>Sachverhalt</Title>
@@ -216,7 +257,6 @@ const CaseCompleteTestsStep: FunctionComponent<ICaseCompleteTestsStepProps> = ({
               selectedTab="Gliederung"
             />
           </div>
-          {/* FloatingPanelTablet show on tablet views only controlled by: CSS media query  */}
           <FloatingPanelTablet
             hidden={progressState === "not-started"}
             facts={facts}

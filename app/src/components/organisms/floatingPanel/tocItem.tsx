@@ -39,7 +39,12 @@ export const TOCItemComponent: React.FC<ITOCItemComponentProps> = ({
 {
   const theme = useMantineTheme();
   const [isExpanded, setIsExpanded] = useState(false);
-  const observedHeadline = useCaseSolvingStore(s => s.observedHeadline);
+
+  // TODO
+  const observedHeadline = {
+    level: -1,
+    slug: ""
+  };
   const shouldBeHighlighted = slugFormatter(item.text) === observedHeadline.slug;
   const [shouldBeExpandedState, setShouldBeExpandedState] = useState(false);
   const shouldBeExpanded = React.useCallback((): boolean => 
