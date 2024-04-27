@@ -146,5 +146,6 @@ export const facts = css`
 export const tocWrapper = css`
 `;
 
-export const renderTOCList = css`
+export const renderTOCList = (isExpanded: boolean) => css`
+  display: ${isExpanded ? "block" : "none"};
 `;

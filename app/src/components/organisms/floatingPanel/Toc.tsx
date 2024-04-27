@@ -7,24 +7,26 @@ import { type TOCItem } from "./generateTocHelper";
 
 type Toc =
 {
+  readonly isExpanded: boolean;
+  readonly scrollAreaRef: React.RefObject<HTMLDivElement> | null;
   readonly tocItems: TOCItem[];
 };
 
-export const Toc: FunctionComponent<Toc> = ({ tocItems }) =>
+export const Toc: FunctionComponent<Toc> = ({ isExpanded, scrollAreaRef, tocItems }) =>
 {
   const tocFiltered = tocItems.filter(Boolean).filter((item) => item?.text);
 
   return (
-    <ul css={styles.renderTOCList}>
+    <ul css={styles.renderTOCList(isExpanded)}>
       {tocFiltered.map((item, index) => (
-        <li key={`toc-ul-listItem-${index}`} style={{ listStyleType: "none" }}>
-          <TocItem
-            depth={item.level ?? 1}
-            item={item}
-            itemNumber={index + 1}
-            total={tocFiltered.length}
-          />
-        </li>
+        <TocItem
+          scrollAreaRef={scrollAreaRef}
+          key={`toc-ul-listItem-${index}`}
+          depth={item.level ?? 1}
+          item={item}
+          itemNumber={index + 1}
+          total={tocFiltered.length}
+        />
       ))}
     </ul>
   );

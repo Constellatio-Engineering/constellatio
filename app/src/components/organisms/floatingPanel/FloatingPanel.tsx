@@ -5,10 +5,9 @@ import { FileIcon } from "@/components/Icons/FileIcon";
 import { Toc } from "@/components/organisms/floatingPanel/Toc";
 import { type IGenCase_Facts } from "@/services/graphql/__generated/sdk";
 
-import { ScrollArea, Tabs, useMantineTheme } from "@mantine/core";
-import { useScrollIntoView } from "@mantine/hooks";
+import { Tabs, useMantineTheme } from "@mantine/core";
 import { type Maybe } from "graphql/jsutils/Maybe";
-import React, { useState, type FunctionComponent, useMemo } from "react";
+import React, { useState, type FunctionComponent, useMemo, useRef } from "react";
 
 import * as styles from "./FloatingPanel.styles";
 import { type DataType, generateTOC } from "./generateTocHelper";
@@ -50,10 +49,7 @@ const FloatingPanel: FunctionComponent<IFloatingPanelProps> = ({
   const [selectedTabState, setSelectedTabState] = useState<"Gliederung" | "Sachverhalt">(selectedTab);
   const toc = useMemo(() => generateTOC(content), [content]);
   const theme = useMantineTheme();
-
-  /* console.log("--------------");
-  console.log("content", content);
-  console.log("toc", toc);*/
+  const scrollAreaRef = useRef<HTMLDivElement>(null);
 
   return content?.length > 0 && (
     <div css={styles.wrapper({ hidden, theme })}>
@@ -89,12 +85,20 @@ const FloatingPanel: FunctionComponent<IFloatingPanelProps> = ({
           </div>
         )}
       </Switcher>
-      <ScrollArea
-        h={hidden ? 300 : 150}
-        styles={() => ({ scrollbar: { zIndex: 1 } })}>
+      <div
+        style={{
+          height: hidden ? 300 : "auto",
+          maxHeight: hidden ? 300 : "80vh",
+          overflow: "auto",
+        }}
+        ref={scrollAreaRef}>
         {selectedTabState === "Gliederung" && content && (
           <div css={styles.tocWrapper}>
-            <Toc tocItems={toc}/>
+            <Toc
+              tocItems={toc}
+              isExpanded={true}
+              scrollAreaRef={scrollAreaRef}
+            />
           </div>
         )}
         {facts && facts.json && selectedTabState === "Sachverhalt" && (
@@ -102,7 +106,7 @@ const FloatingPanel: FunctionComponent<IFloatingPanelProps> = ({
             <Richtext data={facts} richTextOverwrite={{ paragraph: richTextParagraphOverwrite }}/>
           </div>
         )}
-      </ScrollArea>
+      </div>
     </div>
   );
 };

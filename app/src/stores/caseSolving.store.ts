@@ -6,11 +6,6 @@ import { immer } from "zustand/middleware/immer";
 
 export type CaseStepIndex = 0 | 1 | 2;
 
-export type ObservedHeadline = {
-  id: string;
-  level: number;
-};
-
 interface ICaseSolvingStore 
 {
   caseStepIndex: CaseStepIndex | undefined;
