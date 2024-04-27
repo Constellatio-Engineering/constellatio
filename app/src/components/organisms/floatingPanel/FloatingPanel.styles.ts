@@ -144,6 +144,7 @@ export const facts = css`
 `;
 
 export const tocWrapper = css`
+  padding-right: 22px;
 `;
 
 export const renderTOCList = (isExpanded: boolean) => css`

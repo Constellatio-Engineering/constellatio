@@ -1,4 +1,5 @@
 import { Toc } from "@/components/organisms/floatingPanel/Toc";
+import { usePrevious } from "@/hooks/usePrevious";
 import useCaseSolvingStore from "@/stores/caseSolving.store";
 import { slugFormatter } from "@/utils/utils";
 
@@ -78,17 +79,23 @@ export const TocItem: React.FC<ITOCItemComponentProps> = ({
   });
   const isVisibleInScrollArea = entry?.isIntersecting ?? false;
   const itemRef = useRef<HTMLLIElement>(null);
+  const wasHighlightedBefore = usePrevious(shouldBeHighlighted);
 
   useLayoutEffect(() =>
   {
-    if(!isVisibleInScrollArea && shouldBeHighlighted && itemRef.current && scrollAreaRef?.current)
+    if(!itemRef.current || !scrollAreaRef?.current)
+    {
+      return;
+    }
+
+    if(shouldBeHighlighted && !wasHighlightedBefore && !isVisibleInScrollArea)
     {
       scrollAreaRef.current.scrollTo({
         behavior: "instant",
         top: itemRef.current.offsetTop - 70
       });
     }
-  }, [isVisibleInScrollArea, scrollAreaRef, shouldBeHighlighted]);
+  }, [isVisibleInScrollArea, scrollAreaRef, shouldBeHighlighted, wasHighlightedBefore]);
 
   useLayoutEffect(() =>
   {

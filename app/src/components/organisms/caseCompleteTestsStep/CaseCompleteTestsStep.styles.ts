@@ -43,7 +43,7 @@ export const toc = css`
 `;
 
 export const fullTextAndTasksWrapper = css`
-	max-width: 52.5%;
+	max-width: 58%;
 	/* padding: 0 44px; */
 	padding: 0 ;
 	@media screen and (max-width: 1100px) {

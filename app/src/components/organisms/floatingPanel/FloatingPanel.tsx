@@ -90,6 +90,7 @@ const FloatingPanel: FunctionComponent<IFloatingPanelProps> = ({
           height: hidden ? 300 : "auto",
           maxHeight: hidden ? 300 : "80vh",
           overflow: "auto",
+          paddingBottom: 20
         }}
         ref={scrollAreaRef}>
         {selectedTabState === "Gliederung" && content && (
