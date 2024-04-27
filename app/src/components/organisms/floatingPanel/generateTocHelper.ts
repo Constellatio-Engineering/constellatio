@@ -8,6 +8,7 @@ type ContentType = {
   
 export type DataType = {
   attrs: {
+    id: string;
     level: number;
     textAlign: string;
   };
@@ -17,8 +18,8 @@ export type DataType = {
   
 export type TOCItem = {
   children: TOCItem[];
+  id: string;
   level: number;
-  path: string;
   text: string;
 };
 
@@ -72,7 +73,7 @@ export const generateTOC = (data: DataType[]): TOCItem[] =>
     const level = item?.attrs.level || 1;
     const text = item?.content?.[0]?.text || "";
     const newItem: TOCItem = {
-      children: [], level, text, path: "" 
+      children: [], level, text, id: item.attrs.id
     };
     let lastItem = stack.length > 0 ? stack[stack.length - 1] : undefined;
 

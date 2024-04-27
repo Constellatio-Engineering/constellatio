@@ -59,7 +59,7 @@ export const getStaticProps: GetStaticProps<GetArticleDetailPagePropsResult, Par
     {
       article.fullTextTasks!.json.content[i] = {
         ...content,
-        id: i
+        id: String(i)
       };
     });
   }

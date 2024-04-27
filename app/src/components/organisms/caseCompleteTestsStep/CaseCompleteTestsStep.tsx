@@ -80,7 +80,7 @@ const CaseCompleteTestsStep: FunctionComponent<ICaseCompleteTestsStepProps> = ({
       return;
     }
 
-    const { setObservedHeadlinePath } = useCaseSolvingStore.getState();
+    const { setObservedHeadlineId } = useCaseSolvingStore.getState();
     const headings = contentWrapperRef.current.getElementsByClassName(richTextHeadingOverwriteClassName);
 
     for(let i = 0; i < headings.length; i++)
@@ -89,23 +89,26 @@ const CaseCompleteTestsStep: FunctionComponent<ICaseCompleteTestsStepProps> = ({
       const heading = headings[i] as HTMLHeadingElement;
       const headingBefore = headings[i - 1] as HTMLHeadingElement | undefined;
       const { top } = heading.getBoundingClientRect();
-      const path = heading.getAttribute("data-path");
-      const pathBefore = headingBefore?.getAttribute("data-path");
+      const id = heading.getAttribute("data-id");
+      const idBefore = headingBefore?.getAttribute("data-id");
 
       if(top > (windowHeight * 0.3))
       {
-        const observedHeadingPath = pathBefore ?? path;
+        console.log("if");
 
-        if(observedHeadingPath != null)
+        const observedHeadingId = idBefore ?? id;
+
+        if(observedHeadingId != null)
         {
-          setObservedHeadlinePath(observedHeadingPath);
+          setObservedHeadlineId(observedHeadingId);
         }
 
         break;
       }
-      else if(isLastHeading && top <= (windowHeight * 0.3) && path)
+      else if(isLastHeading && top <= (windowHeight * 0.3) && id)
       {
-        setObservedHeadlinePath(path);
+        console.log("else if");
+        setObservedHeadlineId(id);
       }
     }
   }, [windowHeight]);
@@ -270,10 +273,6 @@ const CaseCompleteTestsStep: FunctionComponent<ICaseCompleteTestsStepProps> = ({
                   documentLink: documentLinkOverwrite,
                   heading: (props) => 
                   {
-                    /* if(props.path === "0")
-                    {
-                      console.log("props", props);
-                    }*/
                     const node = props!.node as unknown as IHeadingNode;
                     return RichTextHeadingOverwrite({ index: getNestedHeadingIndex(node, allHeadings), ...props });
                   },

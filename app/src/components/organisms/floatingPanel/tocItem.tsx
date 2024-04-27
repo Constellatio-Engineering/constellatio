@@ -3,7 +3,7 @@ import useCaseSolvingStore from "@/stores/caseSolving.store";
 import { slugFormatter } from "@/utils/utils";
 
 import { useMantineTheme } from "@mantine/core";
-import React, { useState } from "react";
+import React, { useLayoutEffect, useState } from "react";
 
 import * as styles from "./FloatingPanel.styles";
 import { getNumericalLabel, type TOCItem } from "./generateTocHelper";
@@ -65,7 +65,7 @@ export const TOCItemComponent: React.FC<ITOCItemComponentProps> = ({
     return false;
   }, [item.children.length, item.level, item.text, observedHeadline.level, observedHeadline.slug]);
 
-  React.useLayoutEffect(() =>
+  useLayoutEffect(() =>
   {
     setShouldBeExpandedState(shouldBeExpanded());
   }, [shouldBeExpanded]);

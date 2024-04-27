@@ -17,20 +17,20 @@ export const RichTextHeadingOverwrite = ({
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
 }: any): ReactElement => 
 {
-  const node = props!.node as unknown as IHeadingNode;
+  const node = props.node as unknown as IHeadingNode;
   const level = node.attrs.level as number;
   const HeadingTag = `h${level}` as Extract<keyof JSX.IntrinsicElements, "h1" | "h2" | "h3" | "h4" | "h5" | "h6">;
-  const observedHeadlinePath = useCaseSolvingStore(s => s.observedHeadlinePath);
-  const isObserved = props?.path === observedHeadlinePath;
+  const observedHeadlineId = useCaseSolvingStore(s => s.observedHeadlineId);
+  const isObserved = node.id === observedHeadlineId;
 
   return (
     <HeadingTag
       style={{ backgroundColor: isObserved ? "red" : "blue" }}
-      data-path={props?.path}
+      data-id={node.id}
       className={richTextHeadingOverwriteClassName}
       key={slugFormatter(node?.content?.[0]?.text ?? "")}
       id={slugFormatter(node?.content?.[0]?.text ?? "")}>
-      {getNumericalLabel(level, index)}{" "}{node?.content?.[0]?.text}{" - "}{props?.path} - observedPath: {observedHeadlinePath}
+      {getNumericalLabel(level, index)}{" "}{node?.content?.[0]?.text}{" - ID:"}{node.id} - observedHeadlineId: {observedHeadlineId}
     </HeadingTag>
   );
 };
