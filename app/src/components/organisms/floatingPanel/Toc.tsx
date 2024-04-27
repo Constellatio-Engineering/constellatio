@@ -1,24 +1,24 @@
-import { TOCItemComponent } from "@/components/organisms/floatingPanel/tocItem";
+import { TocItem } from "@/components/organisms/floatingPanel/TocItem";
 
 import React, { type FunctionComponent } from "react";
 
 import * as styles from "./FloatingPanel.styles";
 import { type TOCItem } from "./generateTocHelper";
 
-type ToC =
+type Toc =
 {
-  readonly toc: TOCItem[];
+  readonly tocItems: TOCItem[];
 };
 
-export const ToC: FunctionComponent<ToC> = ({ toc: _toc }) =>
+export const Toc: FunctionComponent<Toc> = ({ tocItems }) =>
 {
-  const tocFiltered = _toc.filter((item) => item?.text);
+  const tocFiltered = tocItems.filter(Boolean).filter((item) => item?.text);
 
   return (
     <ul css={styles.renderTOCList}>
       {tocFiltered.map((item, index) => (
         <li key={`toc-ul-listItem-${index}`} style={{ listStyleType: "none" }}>
-          <TOCItemComponent
+          <TocItem
             depth={item.level ?? 1}
             item={item}
             itemNumber={index + 1}

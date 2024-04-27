@@ -32,7 +32,7 @@ export const content = css`
 
 export const toc = css`
 	position: sticky;
-	top: 104px;
+	top: 150px;
 	order: 1;
 	height: max-content;
 	margin: 24px;

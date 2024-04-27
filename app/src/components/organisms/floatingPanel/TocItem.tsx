@@ -1,9 +1,9 @@
-import { ToC } from "@/components/organisms/floatingPanel/ToC";
+import { Toc } from "@/components/organisms/floatingPanel/Toc";
 import useCaseSolvingStore from "@/stores/caseSolving.store";
 import { slugFormatter } from "@/utils/utils";
 
 import { useMantineTheme } from "@mantine/core";
-import React, { useCallback, useLayoutEffect, useState } from "react";
+import React, { useCallback, useLayoutEffect, useMemo, useState } from "react";
 
 import * as styles from "./FloatingPanel.styles";
 import { getNumericalLabel, type TOCItem } from "./generateTocHelper";
@@ -54,7 +54,7 @@ const hasId = (children: TOCItem[], targetId: string | undefined): boolean =>
   return false;
 };
 
-export const TOCItemComponent: React.FC<ITOCItemComponentProps> = ({
+export const TocItem: React.FC<ITOCItemComponentProps> = ({
   depth,
   item,
   itemNumber,
@@ -64,41 +64,9 @@ export const TOCItemComponent: React.FC<ITOCItemComponentProps> = ({
   const theme = useMantineTheme();
   const [isExpanded, setIsExpanded] = useState(false);
   const observedHeadlineId = useCaseSolvingStore(s => s.observedHeadlineId);
-
-  console.log("item children", item.children);
-
-  const childrenCount = item.children.length;
   const shouldBeHighlighted = item.id === observedHeadlineId;
   const [shouldBeExpandedState, setShouldBeExpandedState] = useState(false);
-
-  const shouldBeExpanded = hasId(item.children, observedHeadlineId);
-
-  const shouldBeExpandedOld = useCallback((): boolean =>
-  {
-
-    if(childrenCount === 0)
-    {
-      return false;
-    }
-
-    return false;
-
-    /* const itemLevel = item.level;
-    const observedHeadlineLevel = observedHeadline?.level;
-
-    if(shouldBeHighlighted && itemLevel === observedHeadlineLevel)
-    {
-      return true;
-    }
-    else if(!shouldBeHighlighted && itemLevel < observedHeadlineLevel)
-    {
-      return true;
-    }
-    else
-    {
-      return false;
-    }*/
-  }, [childrenCount]);
+  const shouldBeExpanded = useMemo(() => hasId(item.children, observedHeadlineId), [item.children, observedHeadlineId]);
 
   useLayoutEffect(() =>
   {
@@ -142,7 +110,7 @@ export const TOCItemComponent: React.FC<ITOCItemComponentProps> = ({
         )}
       </span>
       {shouldBeExpandedState && item.children.length > 0 && (
-        <ToC toc={item.children}/>
+        <Toc tocItems={item.children}/>
       )}
     </div>
   );

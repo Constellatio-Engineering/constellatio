@@ -22,10 +22,11 @@ export const RichTextHeadingOverwrite = ({
   const HeadingTag = `h${level}` as Extract<keyof JSX.IntrinsicElements, "h1" | "h2" | "h3" | "h4" | "h5" | "h6">;
   const observedHeadlineId = useCaseSolvingStore(s => s.observedHeadlineId);
   const isObserved = node.id === observedHeadlineId;
+  const debugObservedHeadline = false;
 
   return (
     <HeadingTag
-      style={{ backgroundColor: isObserved ? "red" : "blue" }}
+      style={debugObservedHeadline ? { backgroundColor: isObserved ? "red" : "blue" } : {}}
       data-id={node.id}
       className={richTextHeadingOverwriteClassName}
       key={slugFormatter(node?.content?.[0]?.text ?? "")}

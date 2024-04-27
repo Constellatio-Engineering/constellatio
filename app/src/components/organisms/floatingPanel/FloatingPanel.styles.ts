@@ -10,8 +10,8 @@ const CSSHiddenCard = css`
   }
 `;
 const CSSHighlighted = (theme: MantineTheme) => css`
-background: ${theme.colors["neutrals-01"][3]};
-outline: 1px solid ${theme.colors["neutrals-01"][1]};
+  background: ${theme.colors["neutrals-01"][3]};
+  outline: 1px solid ${theme.colors["neutrals-01"][1]};
 `;
 
 export const wrapper = ({ hidden, theme }: {
@@ -20,25 +20,23 @@ export const wrapper = ({ hidden, theme }: {
 }) => css`
   position: relative;
   width: 422px;
+  border: 1px solid ${theme.colors["neutrals-01"][4]};
   background-color: ${theme.colors["neutrals-01"][0]};
   padding-top: 0;
   .switcher {
     padding: 16px 24px 16px 24px;
-    position: sticky;
-    top: 0;
-    right:0;
     background-color: ${theme.colors["neutrals-01"][0]};
     z-index: 1;
   }
   .card-header{
-	position:relative;
-	p{
-		display: flex;
-		align-items: center;
-		justify-content: flex-start;
-		gap:4px;	
+	  position:relative;
+    p {
+      display: flex;
+      align-items: center;
+      justify-content: flex-start;
+      gap:4px;	
+      }
     }
-  }
   overflow: visible;
   ${hidden && CSSHiddenCard}
   .hidden-overlay {
@@ -86,7 +84,6 @@ export const wrapper = ({ hidden, theme }: {
   @media screen and (max-width: 1100px) {
     width: 100%;
   }
-  padding-bottom: 24px;
 `;
 
 export const item = ({
@@ -145,5 +142,9 @@ export const item = ({
 export const facts = css`
   padding: 0 24px;
 `;
+
+export const tocWrapper = css`
+`;
+
 export const renderTOCList = css`
 `;
