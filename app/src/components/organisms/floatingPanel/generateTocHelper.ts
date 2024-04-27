@@ -12,11 +12,13 @@ export type DataType = {
     textAlign: string;
   };
   content: ContentType[];
+  id: string;
   type: string;
 };
   
 export type TOCItem = {
   children: TOCItem[];
+  id: string;
   level: number;
   text: string;
 };
@@ -68,7 +70,12 @@ export const generateTOC = (data: DataType[]): TOCItem[] =>
   {
     const level = item?.attrs.level || 1;
     const text = item?.content?.[0]?.text || "";
-    const newItem: TOCItem = { children: [], level, text };
+    const newItem: TOCItem = {
+      children: [],
+      level,
+      text,
+      id: item.id
+    };
     let lastItem = stack.length > 0 ? stack[stack.length - 1] : undefined;
 
     while(lastItem && lastItem.level >= level) 
@@ -120,16 +127,17 @@ export function getNumericalLabel(depth: number, index: number): string
 }
 
 // eslint-disable-next-line import/no-unused-modules, @typescript-eslint/no-explicit-any
-export function getNestedHeadingIndex(item: IHeadingNode, allHeadings: any): number | null 
+export function getNestedHeadingIndex(item: IHeadingNode, allHeadings: any): number
 {
   const level = item.attrs?.level;
+
   if(level === undefined) 
   {
-
-    return null;
+    throw new Error("Level is undefined");
   }
 
   let currentIndex = -1;
+
   for(const currentItem of allHeadings) 
   {
     if(currentItem.attrs?.level === level) 
@@ -145,5 +153,6 @@ export function getNestedHeadingIndex(item: IHeadingNode, allHeadings: any): num
       currentIndex = -1;
     }
   }
-  return null;
+
+  throw new Error("Heading not found");
 }

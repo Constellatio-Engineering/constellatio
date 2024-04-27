@@ -50,6 +50,20 @@ export const getStaticProps: GetStaticProps<GetCaseDetailPagePropsResult, Params
     };
   }
 
+  const fullTextTaskJsonContent = legalCase.fullTextTasks?.json?.content;
+
+  if(fullTextTaskJsonContent != null)
+  {
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    (fullTextTaskJsonContent as any[]).forEach((content, i) =>
+    {
+      legalCase.fullTextTasks!.json.content[i] = {
+        ...content,
+        id: String(i)
+      };
+    });
+  }
+
   legalCase.fullTextTasks?.connections?.forEach((connection) =>
   {
     if(connection?.__typename === "DragNDropGame")
@@ -62,10 +76,6 @@ export const getStaticProps: GetStaticProps<GetCaseDetailPagePropsResult, Params
         originalIndex: correctAnswers.findIndex((correctAnswer) => correctAnswer.id === option.id),
       }) satisfies TDragAndDropGameOptionType);
       connection.game.options = shuffleArray<TDragAndDropGameOptionType>(connection.game.options);
-    }
-    else if(connection?.__typename === "CardSelectionGame")
-    {
-      // connection.game.options = shuffleArray<TCardGameOption>(connection.game.options);
     }
   });
 
