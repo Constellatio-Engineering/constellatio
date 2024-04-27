@@ -87,15 +87,15 @@ export const wrapper = ({ hidden, theme }: {
 `;
 
 export const item = ({
-  highlighted,
-  // isExpandable,
   isExpanded,
+  // isExpandable,
+  isHighlighted,
   // isTopLevel,
   theme
 }: {
-  highlighted?: boolean;
   isExpandable?: boolean;
   isExpanded?: boolean;
+  isHighlighted?: boolean;
   isTopLevel?: boolean;
   theme: MantineTheme;
 }) => css`
@@ -135,8 +135,7 @@ export const item = ({
   }
   vertical-align: baseline;
   cursor: pointer;
-  ${highlighted && CSSHighlighted(theme)}
-  
+  ${isHighlighted && CSSHighlighted(theme)}
 `;
 
 export const facts = css`

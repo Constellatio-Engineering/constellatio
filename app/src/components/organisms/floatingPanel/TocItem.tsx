@@ -68,19 +68,17 @@ export const TocItem: React.FC<ITOCItemComponentProps> = ({
 }) => 
 {
   const theme = useMantineTheme();
-  const [isExpanded, setIsExpanded] = useState(false);
   const observedHeadlineId = useCaseSolvingStore(s => s.observedHeadlineId);
-  const shouldBeHighlighted = item.id === observedHeadlineId;
-  const [shouldBeExpandedState, setShouldBeExpandedState] = useState(false);
+  const isHighlighted = item.id === observedHeadlineId;
   const isOneOfTheChildHeadlinesObserved = useMemo(() => hasId(item.children, observedHeadlineId), [item.children, observedHeadlineId]);
-  const shouldBeExpanded = shouldBeHighlighted || isOneOfTheChildHeadlinesObserved;
+  const isExpanded = isHighlighted || isOneOfTheChildHeadlinesObserved;
   const { entry, ref: useIntersectionRef } = useIntersection<HTMLDivElement>({
     root: scrollAreaRef?.current,
     threshold: 1 
   });
   const isVisibleInScrollArea = entry?.isIntersecting ?? false;
   const itemRef = useRef<HTMLLIElement>(null);
-  const wasHighlightedBefore = usePrevious(shouldBeHighlighted);
+  const wasHighlightedBefore = usePrevious(isHighlighted);
 
   useLayoutEffect(() =>
   {
@@ -89,27 +87,26 @@ export const TocItem: React.FC<ITOCItemComponentProps> = ({
       return;
     }
 
-    if(shouldBeHighlighted && !wasHighlightedBefore && !isVisibleInScrollArea)
+    if(isHighlighted && !wasHighlightedBefore && !isVisibleInScrollArea)
     {
       scrollAreaRef.current.scrollTo({
         behavior: "instant",
         top: itemRef.current.offsetTop - 70
       });
     }
-  }, [isVisibleInScrollArea, scrollAreaRef, shouldBeHighlighted, wasHighlightedBefore]);
-
-  useLayoutEffect(() =>
-  {
-    setShouldBeExpandedState(shouldBeExpanded);
-  }, [shouldBeExpanded]);
+  }, [isVisibleInScrollArea, scrollAreaRef, isHighlighted, wasHighlightedBefore]);
 
   const handleToggle = (): void => 
   {
-    if(item.children.length > 0) 
-    {
-      setIsExpanded(!isExpanded);
-    }
+
   };
+
+  if(item.id === "10")
+  {
+    console.log("----");
+    console.log("isExpanded", isExpanded);
+    console.log("shouldBeExpanded", isExpanded);
+  }
 
   return (
     <li ref={itemRef} style={{ listStyleType: "none" }}>
@@ -121,20 +118,20 @@ export const TocItem: React.FC<ITOCItemComponentProps> = ({
           key={`listItem-${itemNumber}`}
           onClick={handleToggle}
           css={styles.item({
-            highlighted: shouldBeHighlighted, 
-            isExpandable: item.children.length > 0, 
-            isExpanded: shouldBeExpandedState,
+            isExpandable: item.children.length > 0,
+            isExpanded, 
+            isHighlighted,
             theme
           })}>
           <div style={{ display: "flex", justifyContent: "flex-start", padding: "0 16px" }}>
             <BodyText component="p" styleType="body-01-medium">
-              {item.children.length > 0 && (shouldBeExpandedState ? <ArrowSolidDown/> : <ArrowSolidRight/>)}
+              {item.children.length > 0 && (isExpanded ? <ArrowSolidDown/> : <ArrowSolidRight/>)}
             </BodyText>
             <BodyText
               component="p"
               className={slugFormatter(item.text)}
               styleType="body-01-medium">
-              {getNumericalLabel(depth, itemNumber - 1)}&nbsp;{item.text}
+              {getNumericalLabel(depth, itemNumber - 1)}&nbsp;{item.text} - {item.id}
             </BodyText>
           </div>
           {depth === 0 && (
@@ -144,7 +141,7 @@ export const TocItem: React.FC<ITOCItemComponentProps> = ({
         {item.children.length > 0 && (
           <Toc
             tocItems={item.children}
-            isExpanded={shouldBeExpanded}
+            isExpanded={isExpanded}
             scrollAreaRef={scrollAreaRef}
           />
         )}
