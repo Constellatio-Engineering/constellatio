@@ -30,6 +30,30 @@ interface ITOCItemComponentProps
   readonly total: number;
 }
 
+const hasId = (children: TOCItem[], targetId: string | undefined): boolean =>
+{
+  if(!targetId)
+  {
+    return false;
+  }
+
+  for(const child of children)
+  {
+    if(child.id === targetId)
+    {
+      return true;
+    }
+    if(child.children && child.children.length > 0)
+    {
+      if(hasId(child.children, targetId))
+      {
+        return true;
+      }
+    }
+  }
+  return false;
+};
+
 export const TOCItemComponent: React.FC<ITOCItemComponentProps> = ({
   depth,
   item,
@@ -39,21 +63,27 @@ export const TOCItemComponent: React.FC<ITOCItemComponentProps> = ({
 {
   const theme = useMantineTheme();
   const [isExpanded, setIsExpanded] = useState(false);
-  const observedHeadline = useCaseSolvingStore(s => s.observedHeadline);
+  const observedHeadlineId = useCaseSolvingStore(s => s.observedHeadlineId);
 
-  console.log("observedHeadline", observedHeadline);
+  console.log("item children", item.children);
 
   const childrenCount = item.children.length;
-  const shouldBeHighlighted = item.id === observedHeadline?.id;
+  const shouldBeHighlighted = item.id === observedHeadlineId;
   const [shouldBeExpandedState, setShouldBeExpandedState] = useState(false);
-  const shouldBeExpanded = useCallback((): boolean =>
+
+  const shouldBeExpanded = hasId(item.children, observedHeadlineId);
+
+  const shouldBeExpandedOld = useCallback((): boolean =>
   {
-    if(childrenCount === 0 || !observedHeadline)
+
+    if(childrenCount === 0)
     {
       return false;
     }
 
-    const itemLevel = item.level;
+    return false;
+
+    /* const itemLevel = item.level;
     const observedHeadlineLevel = observedHeadline?.level;
 
     if(shouldBeHighlighted && itemLevel === observedHeadlineLevel)
@@ -67,12 +97,12 @@ export const TOCItemComponent: React.FC<ITOCItemComponentProps> = ({
     else
     {
       return false;
-    }
-  }, [childrenCount, item.level, observedHeadline, shouldBeHighlighted]);
+    }*/
+  }, [childrenCount]);
 
   useLayoutEffect(() =>
   {
-    setShouldBeExpandedState(shouldBeExpanded());
+    setShouldBeExpandedState(shouldBeExpanded);
   }, [shouldBeExpanded]);
 
   const handleToggle = (): void => 

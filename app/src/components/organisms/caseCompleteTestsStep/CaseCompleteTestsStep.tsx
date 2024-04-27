@@ -8,7 +8,7 @@ import useContextAndErrorIfNull from "@/hooks/useContextAndErrorIfNull";
 import { useWindowDimensions } from "@/hooks/useWindowDimensions";
 import { InvalidateQueriesContext } from "@/provider/InvalidateQueriesProvider";
 import { type Maybe, type IGenCase_Facts, type IGenCase_FullTextTasks, type IGenArticle_FullTextTasks } from "@/services/graphql/__generated/sdk";
-import useCaseSolvingStore, { type ObservedHeadline } from "@/stores/caseSolving.store";
+import useCaseSolvingStore from "@/stores/caseSolving.store";
 import { api } from "@/utils/api";
 import { type Games } from "@/utils/case";
 import { isTrackingEnabled } from "@/utils/env";
@@ -32,19 +32,6 @@ import { getNestedHeadingIndex } from "../floatingPanel/generateTocHelper";
 import FloatingPanelTablet from "../floatingPanelTablet/FloatingPanelTablet";
 import SelectionCardGame from "../SelectionCardGame/SelectionCardGame";
 import { SolveCaseGame } from "../SolveCaseGame/SolveCaseGame";
-
-const getObservedHeadingData = (headingElement: HTMLHeadingElement): ObservedHeadline =>
-{
-  const id = headingElement.getAttribute("data-id");
-  const level = Number(headingElement.getAttribute("data-level"));
-
-  if(!id || !level)
-  {
-    throw new Error("Heading element is missing data-id or data-level attribute");
-  }
-
-  return { id, level };
-};
 
 interface ICaseCompleteTestsStepProps 
 {
@@ -93,7 +80,7 @@ const CaseCompleteTestsStep: FunctionComponent<ICaseCompleteTestsStepProps> = ({
       return;
     }
 
-    const { setObservedHeadline } = useCaseSolvingStore.getState();
+    const { setObservedHeadlineId } = useCaseSolvingStore.getState();
     const headings = contentWrapperRef.current.getElementsByClassName(richTextHeadingOverwriteClassName);
 
     for(let i = 0; i < headings.length; i++)
@@ -103,17 +90,22 @@ const CaseCompleteTestsStep: FunctionComponent<ICaseCompleteTestsStepProps> = ({
       const headingBefore = headings[i - 1] as HTMLHeadingElement | undefined;
       const { top } = heading.getBoundingClientRect();
 
-      const headingData = getObservedHeadingData(heading);
-      const headingBeforeData = headingBefore && getObservedHeadingData(headingBefore);
+      const headingId = heading.getAttribute("data-id");
+      const headingBeforeId = headingBefore?.getAttribute("data-id");
+
+      if(!headingId)
+      {
+        throw new Error(`Heading ID is missing for '${heading.innerHTML}'`);
+      }
 
       if(top > (windowHeight * 0.3))
       {
-        setObservedHeadline(headingBeforeData ?? headingData);
+        setObservedHeadlineId(headingBeforeId ?? headingId);
         break;
       }
       else if(isLastHeading && top <= (windowHeight * 0.3))
       {
-        setObservedHeadline(headingData);
+        setObservedHeadlineId(headingId);
       }
     }
   }, [windowHeight]);
