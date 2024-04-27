@@ -63,10 +63,6 @@ export const getStaticProps: GetStaticProps<GetCaseDetailPagePropsResult, Params
       }) satisfies TDragAndDropGameOptionType);
       connection.game.options = shuffleArray<TDragAndDropGameOptionType>(connection.game.options);
     }
-    else if(connection?.__typename === "CardSelectionGame")
-    {
-      // connection.game.options = shuffleArray<TCardGameOption>(connection.game.options);
-    }
   });
 
   return {

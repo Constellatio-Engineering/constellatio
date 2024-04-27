@@ -270,10 +270,10 @@ const CaseCompleteTestsStep: FunctionComponent<ICaseCompleteTestsStepProps> = ({
                   documentLink: documentLinkOverwrite,
                   heading: (props) => 
                   {
-                    if(props.path === "0")
+                    /* if(props.path === "0")
                     {
                       console.log("props", props);
-                    }
+                    }*/
                     const node = props!.node as unknown as IHeadingNode;
                     return RichTextHeadingOverwrite({ index: getNestedHeadingIndex(node, allHeadings), ...props });
                   },
