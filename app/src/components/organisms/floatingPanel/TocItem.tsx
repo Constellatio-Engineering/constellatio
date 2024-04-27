@@ -1,3 +1,4 @@
+import { UnstyledButton } from "@/components/molecules/unstyledButton/UnstyledButton";
 import { Toc } from "@/components/organisms/floatingPanel/Toc";
 import { usePrevious } from "@/hooks/usePrevious";
 import useCaseSolvingStore from "@/stores/caseSolving.store";
@@ -71,7 +72,6 @@ export const TocItem: React.FC<ITOCItemComponentProps> = ({
   const observedHeadlineId = useCaseSolvingStore(s => s.observedHeadlineId);
   const isHighlighted = item.id === observedHeadlineId;
   const isOneOfTheChildHeadlinesObserved = useMemo(() => hasId(item.children, observedHeadlineId), [item.children, observedHeadlineId]);
-  const isExpanded = isHighlighted || isOneOfTheChildHeadlinesObserved;
   const { entry, ref: useIntersectionRef } = useIntersection<HTMLDivElement>({
     root: scrollAreaRef?.current,
     threshold: 1 
@@ -79,6 +79,8 @@ export const TocItem: React.FC<ITOCItemComponentProps> = ({
   const isVisibleInScrollArea = entry?.isIntersecting ?? false;
   const itemRef = useRef<HTMLLIElement>(null);
   const wasHighlightedBefore = usePrevious(isHighlighted);
+  const [isExpandedByUser, setIsExpandedByUser] = useState<boolean>(false);
+  const isExpanded = isExpandedByUser || isHighlighted || isOneOfTheChildHeadlinesObserved;
 
   useLayoutEffect(() =>
   {
@@ -96,16 +98,15 @@ export const TocItem: React.FC<ITOCItemComponentProps> = ({
     }
   }, [isVisibleInScrollArea, scrollAreaRef, isHighlighted, wasHighlightedBefore]);
 
-  const handleToggle = (): void => 
+  const handleExpand = (e: React.MouseEvent<HTMLButtonElement>): void =>
   {
-
+    e.stopPropagation();
+    setIsExpandedByUser((prevState) => !prevState);
   };
 
   if(item.id === "10")
   {
-    console.log("----");
-    console.log("isExpanded", isExpanded);
-    console.log("shouldBeExpanded", isExpanded);
+    console.log("isExpandedByUser", isExpandedByUser.toString());
   }
 
   return (
@@ -116,17 +117,20 @@ export const TocItem: React.FC<ITOCItemComponentProps> = ({
         style={{ paddingLeft: ((depth === 1 || depth >= 5) ? 0 : depth + 20) + "px" }}>
         <span
           key={`listItem-${itemNumber}`}
-          onClick={handleToggle}
+          style={{
+          }}
           css={styles.item({
             isExpandable: item.children.length > 0,
             isExpanded, 
             isHighlighted,
             theme
           })}>
-          <div style={{ display: "flex", justifyContent: "flex-start", padding: "0 16px" }}>
-            <BodyText component="p" styleType="body-01-medium">
-              {item.children.length > 0 && (isExpanded ? <ArrowSolidDown/> : <ArrowSolidRight/>)}
-            </BodyText>
+          <div css={styles.itemTextWrapper}>
+            {item.children.length > 0 && (
+              <UnstyledButton styles={styles.expandIconButton} onClick={handleExpand}>
+                {isExpanded ? <ArrowSolidDown/> : <ArrowSolidRight/>}
+              </UnstyledButton>
+            )}
             <BodyText
               component="p"
               className={slugFormatter(item.text)}

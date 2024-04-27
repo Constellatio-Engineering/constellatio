@@ -129,10 +129,6 @@ export const item = ({
     padding-left: 5px;
   }
   position: relative;
-  svg {
-    position: absolute;
-    left: 3px;
-  }
   vertical-align: baseline;
   cursor: pointer;
   ${isHighlighted && CSSHighlighted(theme)}
@@ -148,4 +144,40 @@ export const tocWrapper = css`
 
 export const renderTOCList = (isExpanded: boolean) => css`
   display: ${isExpanded ? "block" : "none"};
+`;
+
+export const itemTextWrapper = css`
+  display: flex;
+  align-items: center;
+  justify-content: flex-start;
+  gap: 4px;
+  padding: 0 16px;
+`;
+
+export const expandIconButton = css`
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 24px;
+  min-height: 24px;
+  width: 24px;
+  height: 24px;
+  position: relative;
+  margin: 0 -6px 0 -12px;
+  cursor: pointer;
+  background-color: rgba(0, 0, 0, 0);
+  border-radius: 50%;
+  transition: background-color 0.15s ease;
+
+  :hover {
+    background-color: rgba(0, 0, 0, 0.08);
+  }
+  
+  :active {
+    background-color: rgba(0, 0, 0, 0.15);
+  }
+  
+  svg {
+    transform: translateY(1px);
+  }
 `;

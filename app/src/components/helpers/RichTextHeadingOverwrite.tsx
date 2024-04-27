@@ -31,7 +31,7 @@ export const RichTextHeadingOverwrite = ({
       className={richTextHeadingOverwriteClassName}
       key={slugFormatter(node?.content?.[0]?.text ?? "")}
       id={slugFormatter(node?.content?.[0]?.text ?? "")}>
-      {getNumericalLabel(level, index)}{" "}{node?.content?.[0]?.text}{" - ID:"}{node.id} - observedHeadlineId: {observedHeadlineId}
+      {getNumericalLabel(level, index)}{" "}{node?.content?.[0]?.text}
     </HeadingTag>
   );
 };
