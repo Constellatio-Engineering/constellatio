@@ -8,7 +8,7 @@ import useContextAndErrorIfNull from "@/hooks/useContextAndErrorIfNull";
 import { useWindowDimensions } from "@/hooks/useWindowDimensions";
 import { InvalidateQueriesContext } from "@/provider/InvalidateQueriesProvider";
 import { type Maybe, type IGenCase_Facts, type IGenCase_FullTextTasks, type IGenArticle_FullTextTasks } from "@/services/graphql/__generated/sdk";
-import useCaseSolvingStore from "@/stores/caseSolving.store";
+import useCaseSolvingStore, { type ObservedHeadline } from "@/stores/caseSolving.store";
 import { api } from "@/utils/api";
 import { type Games } from "@/utils/case";
 import { isTrackingEnabled } from "@/utils/env";
@@ -32,6 +32,19 @@ import { getNestedHeadingIndex } from "../floatingPanel/generateTocHelper";
 import FloatingPanelTablet from "../floatingPanelTablet/FloatingPanelTablet";
 import SelectionCardGame from "../SelectionCardGame/SelectionCardGame";
 import { SolveCaseGame } from "../SolveCaseGame/SolveCaseGame";
+
+const getObservedHeadingData = (headingElement: HTMLHeadingElement): ObservedHeadline =>
+{
+  const id = headingElement.getAttribute("data-id");
+  const level = Number(headingElement.getAttribute("data-level"));
+
+  if(!id || !level)
+  {
+    throw new Error("Heading element is missing data-id or data-level attribute");
+  }
+
+  return { id, level };
+};
 
 interface ICaseCompleteTestsStepProps 
 {
@@ -80,7 +93,7 @@ const CaseCompleteTestsStep: FunctionComponent<ICaseCompleteTestsStepProps> = ({
       return;
     }
 
-    const { setObservedHeadlineId } = useCaseSolvingStore.getState();
+    const { setObservedHeadline } = useCaseSolvingStore.getState();
     const headings = contentWrapperRef.current.getElementsByClassName(richTextHeadingOverwriteClassName);
 
     for(let i = 0; i < headings.length; i++)
@@ -89,26 +102,18 @@ const CaseCompleteTestsStep: FunctionComponent<ICaseCompleteTestsStepProps> = ({
       const heading = headings[i] as HTMLHeadingElement;
       const headingBefore = headings[i - 1] as HTMLHeadingElement | undefined;
       const { top } = heading.getBoundingClientRect();
-      const id = heading.getAttribute("data-id");
-      const idBefore = headingBefore?.getAttribute("data-id");
+
+      const headingData = getObservedHeadingData(heading);
+      const headingBeforeData = headingBefore && getObservedHeadingData(headingBefore);
 
       if(top > (windowHeight * 0.3))
       {
-        console.log("if");
-
-        const observedHeadingId = idBefore ?? id;
-
-        if(observedHeadingId != null)
-        {
-          setObservedHeadlineId(observedHeadingId);
-        }
-
+        setObservedHeadline(headingBeforeData ?? headingData);
         break;
       }
-      else if(isLastHeading && top <= (windowHeight * 0.3) && id)
+      else if(isLastHeading && top <= (windowHeight * 0.3))
       {
-        console.log("else if");
-        setObservedHeadlineId(id);
+        setObservedHeadline(headingData);
       }
     }
   }, [windowHeight]);

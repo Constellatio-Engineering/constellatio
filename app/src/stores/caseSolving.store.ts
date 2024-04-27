@@ -6,13 +6,18 @@ import { immer } from "zustand/middleware/immer";
 
 export type CaseStepIndex = 0 | 1 | 2;
 
+export type ObservedHeadline = {
+  id: string;
+  level: number;
+};
+
 interface ICaseSolvingStore 
 {
   caseStepIndex: CaseStepIndex | undefined;
-  observedHeadlineId: string | undefined;
+  observedHeadline: ObservedHeadline | undefined;
   overrideCaseStepIndex: (caseStepIndex: CaseStepIndex, caseProgressState: CaseProgressState) => void;
   setCaseStepIndex: (caseStepIndex: CaseStepIndex) => void;
-  setObservedHeadlineId: (id: string | undefined) => void;
+  setObservedHeadline: (headline: ObservedHeadline | undefined) => void;
   setShowStepTwoModal: (showStepTwoModal: boolean) => void;
   showStepTwoModal: boolean;
 }
@@ -20,7 +25,7 @@ interface ICaseSolvingStore
 const useCaseSolvingStore = create(
   immer<ICaseSolvingStore>((set) => ({
     caseStepIndex: undefined,
-    observedHeadlineId: undefined,
+    observedHeadline: undefined,
     overrideCaseStepIndex: (caseStepIndex, caseProgressState) =>
     {
       const caseProgressStateAsNumber = getCaseProgressStateAsNumber(caseProgressState);
@@ -42,11 +47,11 @@ const useCaseSolvingStore = create(
         state.caseStepIndex = caseStepIndex;
       });
     },
-    setObservedHeadlineId: (id) =>
+    setObservedHeadline: (headline) =>
     {
       set((state) => 
       {
-        state.observedHeadlineId = id;
+        state.observedHeadline = headline;
       });
     },
     setShowStepTwoModal: (showStepTwoModal) =>

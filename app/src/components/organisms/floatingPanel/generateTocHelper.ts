@@ -8,11 +8,11 @@ type ContentType = {
   
 export type DataType = {
   attrs: {
-    id: string;
     level: number;
     textAlign: string;
   };
   content: ContentType[];
+  id: string;
   type: string;
 };
   
@@ -63,8 +63,6 @@ function decimalToRoman(decimal: number): string
 
 export const generateTOC = (data: DataType[]): TOCItem[] => 
 {
-  console.log("generateTOC", data);
-
   const stack: TOCItem[] = [];
   const toc: TOCItem[] = [];
 
@@ -73,7 +71,10 @@ export const generateTOC = (data: DataType[]): TOCItem[] =>
     const level = item?.attrs.level || 1;
     const text = item?.content?.[0]?.text || "";
     const newItem: TOCItem = {
-      children: [], level, text, id: item.attrs.id
+      children: [],
+      level,
+      text,
+      id: item.id
     };
     let lastItem = stack.length > 0 ? stack[stack.length - 1] : undefined;
 

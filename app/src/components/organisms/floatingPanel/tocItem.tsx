@@ -3,7 +3,7 @@ import useCaseSolvingStore from "@/stores/caseSolving.store";
 import { slugFormatter } from "@/utils/utils";
 
 import { useMantineTheme } from "@mantine/core";
-import React, { useLayoutEffect, useState } from "react";
+import React, { useCallback, useLayoutEffect, useState } from "react";
 
 import * as styles from "./FloatingPanel.styles";
 import { getNumericalLabel, type TOCItem } from "./generateTocHelper";
@@ -39,31 +39,36 @@ export const TOCItemComponent: React.FC<ITOCItemComponentProps> = ({
 {
   const theme = useMantineTheme();
   const [isExpanded, setIsExpanded] = useState(false);
+  const observedHeadline = useCaseSolvingStore(s => s.observedHeadline);
 
-  // TODO
-  const observedHeadline = {
-    level: -1,
-    slug: ""
-  };
-  const shouldBeHighlighted = slugFormatter(item.text) === observedHeadline.slug;
+  console.log("observedHeadline", observedHeadline);
+
+  const childrenCount = item.children.length;
+  const shouldBeHighlighted = item.id === observedHeadline?.id;
   const [shouldBeExpandedState, setShouldBeExpandedState] = useState(false);
-  const shouldBeExpanded = React.useCallback((): boolean => 
+  const shouldBeExpanded = useCallback((): boolean =>
   {
-    if(item.children.length > 0)
+    if(childrenCount === 0 || !observedHeadline)
     {
-      const currentItemSlug = slugFormatter(item.text);
-      const currentItemLevel = item.level;
-      if(currentItemSlug === observedHeadline.slug && currentItemLevel === observedHeadline.level) 
-      {  
-        return true;
-      }
-      if(currentItemSlug !== observedHeadline.slug && currentItemLevel < observedHeadline.level) 
-      {
-        return true;
-      }
+      return false;
     }
-    return false;
-  }, [item.children.length, item.level, item.text, observedHeadline.level, observedHeadline.slug]);
+
+    const itemLevel = item.level;
+    const observedHeadlineLevel = observedHeadline?.level;
+
+    if(shouldBeHighlighted && itemLevel === observedHeadlineLevel)
+    {
+      return true;
+    }
+    else if(!shouldBeHighlighted && itemLevel < observedHeadlineLevel)
+    {
+      return true;
+    }
+    else
+    {
+      return false;
+    }
+  }, [childrenCount, item.level, observedHeadline, shouldBeHighlighted]);
 
   useLayoutEffect(() =>
   {

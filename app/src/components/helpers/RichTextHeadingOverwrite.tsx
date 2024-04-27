@@ -20,17 +20,18 @@ export const RichTextHeadingOverwrite = ({
   const node = props.node as unknown as IHeadingNode;
   const level = node.attrs.level as number;
   const HeadingTag = `h${level}` as Extract<keyof JSX.IntrinsicElements, "h1" | "h2" | "h3" | "h4" | "h5" | "h6">;
-  const observedHeadlineId = useCaseSolvingStore(s => s.observedHeadlineId);
-  const isObserved = node.id === observedHeadlineId;
+  const observedHeadline = useCaseSolvingStore(s => s.observedHeadline);
+  const isObserved = node.id === observedHeadline?.id;
 
   return (
     <HeadingTag
       style={{ backgroundColor: isObserved ? "red" : "blue" }}
       data-id={node.id}
+      data-level={level}
       className={richTextHeadingOverwriteClassName}
       key={slugFormatter(node?.content?.[0]?.text ?? "")}
       id={slugFormatter(node?.content?.[0]?.text ?? "")}>
-      {getNumericalLabel(level, index)}{" "}{node?.content?.[0]?.text}{" - ID:"}{node.id} - observedHeadlineId: {observedHeadlineId}
+      {getNumericalLabel(level, index)}{" "}{node?.content?.[0]?.text}{" - ID:"}{node.id} - observedHeadlineId: {observedHeadline?.id}
     </HeadingTag>
   );
 };
