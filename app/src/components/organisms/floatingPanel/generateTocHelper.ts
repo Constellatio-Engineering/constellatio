@@ -18,6 +18,7 @@ export type DataType = {
 export type TOCItem = {
   children: TOCItem[];
   level: number;
+  path: string;
   text: string;
 };
 
@@ -61,6 +62,8 @@ function decimalToRoman(decimal: number): string
 
 export const generateTOC = (data: DataType[]): TOCItem[] => 
 {
+  console.log("generateTOC", data);
+
   const stack: TOCItem[] = [];
   const toc: TOCItem[] = [];
 
@@ -68,7 +71,9 @@ export const generateTOC = (data: DataType[]): TOCItem[] =>
   {
     const level = item?.attrs.level || 1;
     const text = item?.content?.[0]?.text || "";
-    const newItem: TOCItem = { children: [], level, text };
+    const newItem: TOCItem = {
+      children: [], level, text, path: "" 
+    };
     let lastItem = stack.length > 0 ? stack[stack.length - 1] : undefined;
 
     while(lastItem && lastItem.level >= level) 
