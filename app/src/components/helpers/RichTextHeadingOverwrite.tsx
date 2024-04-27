@@ -2,11 +2,12 @@ import useCaseSolvingStore from "@/stores/caseSolving.store";
 import { slugFormatter } from "@/utils/utils";
 import { type IHeadingNode } from "types/richtext";
 
-// import { RichTextRenderer } from "@caisy/rich-text-react-renderer";
-import { useIntersection } from "@mantine/hooks";
-import React, { type ReactElement, type ElementType } from "react";
+import React, { type ReactElement } from "react";
 
 import { getNumericalLabel } from "../organisms/floatingPanel/generateTocHelper";
+
+export const richTextHeadingOverwriteClassName = "richTextHeadingOverwrite";
+
 /**
  * this function is used to overwrite the heading renderer in the rich text renderer and add the numerical label to the text
  */
@@ -16,25 +17,21 @@ export const RichTextHeadingOverwrite = ({
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
 }: any): ReactElement => 
 {
-  const node = props!.node as unknown as IHeadingNode;
+  const node = props.node as unknown as IHeadingNode;
   const level = node.attrs.level as number;
-  const HeadingTag = `h${level}` as ElementType;
-  const { entry, ref } = useIntersection();
-  const setObservedHeadline = useCaseSolvingStore(s => s.setObservedHeadline); 
-  React.useLayoutEffect(() =>
-  {
-    if(entry?.isIntersecting)
-    {
-      setObservedHeadline({ level, slug: entry.target.id });
-    }
-  }, [entry?.isIntersecting, entry?.target?.id, level, setObservedHeadline]);
+  const HeadingTag = `h${level}` as Extract<keyof JSX.IntrinsicElements, "h1" | "h2" | "h3" | "h4" | "h5" | "h6">;
+  const observedHeadlineId = useCaseSolvingStore(s => s.observedHeadlineId);
+  const isObserved = node.id === observedHeadlineId;
+  const debugObservedHeadline = false;
+
   return (
-    <HeadingTag 
-      ref={ref}
+    <HeadingTag
+      style={debugObservedHeadline ? { backgroundColor: isObserved ? "red" : "blue" } : {}}
+      data-id={node.id}
+      className={richTextHeadingOverwriteClassName}
       key={slugFormatter(node?.content?.[0]?.text ?? "")}
       id={slugFormatter(node?.content?.[0]?.text ?? "")}>
-      {getNumericalLabel(level, index)}
-      {" "}{node?.content?.[0]?.text}
+      {getNumericalLabel(level, index)}{" "}{node?.content?.[0]?.text}
     </HeadingTag>
   );
 };

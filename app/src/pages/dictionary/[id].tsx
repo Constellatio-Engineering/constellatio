@@ -50,6 +50,20 @@ export const getStaticProps: GetStaticProps<GetArticleDetailPagePropsResult, Par
     };
   }
 
+  const fullTextTaskJsonContent = article.fullTextTasks?.json?.content;
+
+  if(fullTextTaskJsonContent != null)
+  {
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    (fullTextTaskJsonContent as any[]).forEach((content, i) =>
+    {
+      article.fullTextTasks!.json.content[i] = {
+        ...content,
+        id: String(i)
+      };
+    });
+  }
+
   return {
     props: {
       article: ({

@@ -10,8 +10,8 @@ const CSSHiddenCard = css`
   }
 `;
 const CSSHighlighted = (theme: MantineTheme) => css`
-background: ${theme.colors["neutrals-01"][3]};
-outline: 1px solid ${theme.colors["neutrals-01"][1]};
+  background: ${theme.colors["neutrals-01"][3]};
+  outline: 1px solid ${theme.colors["neutrals-01"][1]};
 `;
 
 export const wrapper = ({ hidden, theme }: {
@@ -20,25 +20,23 @@ export const wrapper = ({ hidden, theme }: {
 }) => css`
   position: relative;
   width: 422px;
+  border: 1px solid ${theme.colors["neutrals-01"][4]};
   background-color: ${theme.colors["neutrals-01"][0]};
   padding-top: 0;
   .switcher {
     padding: 16px 24px 16px 24px;
-    position: sticky;
-    top: 0;
-    right:0;
     background-color: ${theme.colors["neutrals-01"][0]};
     z-index: 1;
   }
   .card-header{
-	position:relative;
-	p{
-		display: flex;
-		align-items: center;
-		justify-content: flex-start;
-		gap:4px;	
+	  position:relative;
+    p {
+      display: flex;
+      align-items: center;
+      justify-content: flex-start;
+      gap:4px;	
+      }
     }
-  }
   overflow: visible;
   ${hidden && CSSHiddenCard}
   .hidden-overlay {
@@ -86,19 +84,18 @@ export const wrapper = ({ hidden, theme }: {
   @media screen and (max-width: 1100px) {
     width: 100%;
   }
-  padding-bottom: 24px;
 `;
 
 export const item = ({
-  highlighted,
-  // isExpandable,
   isExpanded,
+  // isExpandable,
+  isHighlighted,
   // isTopLevel,
   theme
 }: {
-  highlighted?: boolean;
   isExpandable?: boolean;
   isExpanded?: boolean;
+  isHighlighted?: boolean;
   isTopLevel?: boolean;
   theme: MantineTheme;
 }) => css`
@@ -132,18 +129,55 @@ export const item = ({
     padding-left: 5px;
   }
   position: relative;
-  svg {
-    position: absolute;
-    left: 3px;
-  }
   vertical-align: baseline;
   cursor: pointer;
-  ${highlighted && CSSHighlighted(theme)}
-  
+  ${isHighlighted && CSSHighlighted(theme)}
 `;
 
 export const facts = css`
   padding: 0 24px;
 `;
-export const renderTOCList = css`
+
+export const tocWrapper = css`
+  padding-right: 22px;
+`;
+
+export const renderTOCList = (isExpanded: boolean) => css`
+  display: ${isExpanded ? "block" : "none"};
+`;
+
+export const itemTextWrapper = css`
+  display: flex;
+  align-items: center;
+  justify-content: flex-start;
+  gap: 4px;
+  padding: 0 16px;
+`;
+
+export const expandIconButton = css`
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 24px;
+  min-height: 24px;
+  width: 24px;
+  height: 24px;
+  position: relative;
+  margin: 0 -6px 0 -12px;
+  cursor: pointer;
+  background-color: rgba(0, 0, 0, 0);
+  border-radius: 50%;
+  transition: background-color 0.15s ease;
+
+  :hover {
+    background-color: rgba(0, 0, 0, 0.08);
+  }
+  
+  :active {
+    background-color: rgba(0, 0, 0, 0.15);
+  }
+  
+  svg {
+    transform: translateY(1px);
+  }
 `;
