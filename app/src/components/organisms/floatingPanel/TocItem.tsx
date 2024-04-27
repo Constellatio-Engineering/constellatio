@@ -72,7 +72,8 @@ export const TocItem: React.FC<ITOCItemComponentProps> = ({
   const observedHeadlineId = useCaseSolvingStore(s => s.observedHeadlineId);
   const shouldBeHighlighted = item.id === observedHeadlineId;
   const [shouldBeExpandedState, setShouldBeExpandedState] = useState(false);
-  const shouldBeExpanded = useMemo(() => hasId(item.children, observedHeadlineId), [item.children, observedHeadlineId]);
+  const isOneOfTheChildHeadlinesObserved = useMemo(() => hasId(item.children, observedHeadlineId), [item.children, observedHeadlineId]);
+  const shouldBeExpanded = shouldBeHighlighted || isOneOfTheChildHeadlinesObserved;
   const { entry, ref: useIntersectionRef } = useIntersection<HTMLDivElement>({
     root: scrollAreaRef?.current,
     threshold: 1 
