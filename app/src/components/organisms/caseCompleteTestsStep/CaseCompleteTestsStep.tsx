@@ -33,6 +33,8 @@ import FloatingPanelTablet from "../floatingPanelTablet/FloatingPanelTablet";
 import SelectionCardGame from "../SelectionCardGame/SelectionCardGame";
 import { SolveCaseGame } from "../SolveCaseGame/SolveCaseGame";
 
+export const headingObservedThreshold = 0.23;
+
 interface ICaseCompleteTestsStepProps 
 {
   readonly caseId: string;
@@ -98,12 +100,12 @@ const CaseCompleteTestsStep: FunctionComponent<ICaseCompleteTestsStepProps> = ({
         throw new Error(`Heading ID is missing for '${heading.innerHTML}'`);
       }
 
-      if(top > (windowHeight * 0.3))
+      if(top > (windowHeight * headingObservedThreshold))
       {
         setObservedHeadlineId(headingBeforeId ?? headingId);
         break;
       }
-      else if(isLastHeading && top <= (windowHeight * 0.3))
+      else if(isLastHeading && top <= (windowHeight * headingObservedThreshold))
       {
         setObservedHeadlineId(headingId);
       }
