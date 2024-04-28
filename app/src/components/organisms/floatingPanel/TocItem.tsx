@@ -1,4 +1,5 @@
 import { UnstyledButton } from "@/components/molecules/unstyledButton/UnstyledButton";
+import { headingObservedThreshold } from "@/components/organisms/caseCompleteTestsStep/CaseCompleteTestsStep";
 import { Toc } from "@/components/organisms/floatingPanel/Toc";
 import { usePrevious } from "@/hooks/usePrevious";
 import useCaseSolvingStore from "@/stores/caseSolving.store";
@@ -7,6 +8,7 @@ import { slugFormatter } from "@/utils/utils";
 import { useMantineTheme } from "@mantine/core";
 import { useIntersection } from "@mantine/hooks";
 import React, {
+  useEffect,
   useLayoutEffect, useMemo, useRef, useState
 } from "react";
 
@@ -22,7 +24,7 @@ const scrollToElement = (e: React.MouseEvent<HTMLDivElement>, targetId: string):
   const targetElement = document.getElementById(targetId);
   if(targetElement) 
   {
-    const targetOffset = targetElement.getBoundingClientRect().top + window.scrollY - 100;
+    const targetOffset = targetElement.getBoundingClientRect().top + window.scrollY - (window.innerHeight * headingObservedThreshold - 50);
     window.scrollTo({ behavior: "instant", top: targetOffset });
   }
 };
@@ -70,6 +72,7 @@ export const TocItem: React.FC<ITOCItemComponentProps> = ({
 {
   const theme = useMantineTheme();
   const observedHeadlineId = useCaseSolvingStore(s => s.observedHeadlineId);
+  const observedHeadlineIdBefore = usePrevious(observedHeadlineId);
   const isHighlighted = item.id === observedHeadlineId;
   const isOneOfTheChildHeadlinesObserved = useMemo(() => hasId(item.children, observedHeadlineId), [item.children, observedHeadlineId]);
   const { entry, ref: useIntersectionRef } = useIntersection<HTMLDivElement>({
@@ -79,8 +82,21 @@ export const TocItem: React.FC<ITOCItemComponentProps> = ({
   const isVisibleInScrollArea = entry?.isIntersecting ?? false;
   const itemRef = useRef<HTMLLIElement>(null);
   const wasHighlightedBefore = usePrevious(isHighlighted);
-  const [isExpandedByUser, setIsExpandedByUser] = useState<boolean>(false);
-  const isExpanded = isExpandedByUser || isHighlighted || isOneOfTheChildHeadlinesObserved;
+  const [toggleState, setToggleState] = useState<"expanded" | "collapsed" | undefined>(undefined);
+  const isExpanded = (toggleState === "expanded" || isHighlighted || isOneOfTheChildHeadlinesObserved) && toggleState !== "collapsed";
+
+  useEffect(() =>
+  {
+    if(toggleState === undefined)
+    {
+      return;
+    }
+
+    if(observedHeadlineIdBefore !== observedHeadlineId && (isHighlighted || isOneOfTheChildHeadlinesObserved))
+    {
+      setToggleState(undefined);
+    }
+  }, [isHighlighted, isOneOfTheChildHeadlinesObserved, observedHeadlineId, observedHeadlineIdBefore, toggleState]);
 
   useLayoutEffect(() =>
   {
@@ -101,13 +117,8 @@ export const TocItem: React.FC<ITOCItemComponentProps> = ({
   const handleExpand = (e: React.MouseEvent<HTMLButtonElement>): void =>
   {
     e.stopPropagation();
-    setIsExpandedByUser((prevState) => !prevState);
+    setToggleState(isExpanded ? "collapsed" : "expanded");
   };
-
-  if(item.id === "10")
-  {
-    console.log("isExpandedByUser", isExpandedByUser.toString());
-  }
 
   return (
     <li ref={itemRef} style={{ listStyleType: "none" }}>
@@ -135,7 +146,7 @@ export const TocItem: React.FC<ITOCItemComponentProps> = ({
               component="p"
               className={slugFormatter(item.text)}
               styleType="body-01-medium">
-              {getNumericalLabel(depth, itemNumber - 1)}&nbsp;{item.text} - {item.id}
+              {getNumericalLabel(depth, itemNumber - 1)}&nbsp;{item.text}
             </BodyText>
           </div>
           {depth === 0 && (
