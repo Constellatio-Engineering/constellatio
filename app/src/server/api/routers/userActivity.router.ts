@@ -1,4 +1,7 @@
+import { db } from "@/db/connection";
+import { pings } from "@/db/schema";
 import { env } from "@/env.mjs";
+import { pingSchema } from "@/schemas/userActivity/ping.schema";
 import { createTRPCRouter, protectedProcedure } from "@/server/api/trpc";
 import { RateLimitError } from "@/utils/serverError";
 
@@ -12,7 +15,8 @@ const rateLimit = new Ratelimit({
 
 export const userActivityRouter = createTRPCRouter({
   ping: protectedProcedure
-    .mutation(async ({ ctx: { userId } }) =>
+    .input(pingSchema)
+    .mutation(async ({ ctx: { userId }, input: { href: _href, path, search } }) =>
     {
       const rateLimitResult = await rateLimit.limit(userId);
 
@@ -22,9 +26,13 @@ export const userActivityRouter = createTRPCRouter({
         throw new RateLimitError();
       }
 
-      console.log({
-        remaining: rateLimitResult.remaining,
-        success: rateLimitResult.success,
+      console.log(`PING from user '${userId}' on ${path}${search != null ? search : ""}`);
+
+      await db.insert(pings).values({
+        path,
+        pingInterval: env.NEXT_PUBLIC_USER_ACTIVITY_PING_INTERVAL_SECONDS,
+        search,
+        userId,
       });
 
       return "PONG";
