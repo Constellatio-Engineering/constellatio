@@ -1,7 +1,9 @@
+import { env } from "@/env.mjs";
 import { api } from "@/utils/api";
 
 import { type FunctionComponent, useEffect, useRef } from "react";
 import { useIdleTimer } from "react-idle-timer";
+
 const ActivityWatchdog: FunctionComponent = () =>
 {
   const intervalRef = useRef<NodeJS.Timeout>();
@@ -9,7 +11,10 @@ const ActivityWatchdog: FunctionComponent = () =>
     timeout: 30_000
   });
 
-  const { mutate: ping } = api.userActivity.ping.useMutation();
+  const { mutate: ping } = api.userActivity.ping.useMutation({
+    onError: (error) => console.error("error while pinging", error),
+    onSuccess: () => console.log("pinged successfully"),
+  });
 
   useEffect(() =>
   {
@@ -34,7 +39,7 @@ const ActivityWatchdog: FunctionComponent = () =>
       }
 
       ping();
-    }, 10_000);
+    }, env.NEXT_PUBLIC_USER_ACTIVITY_PING_INTERVAL_SECONDS * 1000);
 
     return () =>
     {

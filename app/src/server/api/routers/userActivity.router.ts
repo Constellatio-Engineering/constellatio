@@ -1,25 +1,31 @@
+import { env } from "@/env.mjs";
 import { createTRPCRouter, protectedProcedure } from "@/server/api/trpc";
+import { RateLimitError } from "@/utils/serverError";
 
-let count = 0;
-let lastPing = Date.now();
+import { Ratelimit } from "@upstash/ratelimit";
+import { kv } from "@vercel/kv";
+
+const rateLimit = new Ratelimit({
+  limiter: Ratelimit.fixedWindow(1, `${env.NEXT_PUBLIC_USER_ACTIVITY_PING_INTERVAL_SECONDS - 1} s`), // allow 1 request for every ping interval
+  redis: kv,
+});
 
 export const userActivityRouter = createTRPCRouter({
   ping: protectedProcedure
-    /* .input(z.object({
-      isIdle: z.boolean(),
-      isTabActive: z.boolean(),
-      tab: z.string(),
-    }))*/
-    .mutation(({ ctx: { userId }, /* input: { isIdle, isTabActive, tab }*/ }) =>
+    .mutation(async ({ ctx: { userId } }) =>
     {
-      const timeSinceLastPing = Date.now() - lastPing;
+      const rateLimitResult = await rateLimit.limit(userId);
 
-      // eslint-disable-next-line sort-keys-fix/sort-keys-fix
-      console.log(`PING ${userId} - #${count} - ${timeSinceLastPing}ms since last ping`);
+      if(!rateLimitResult.success)
+      {
+        console.warn("Rate limit exceeded for ping event. This should not happen since the client should not emit pings faster than the rate limit allows.");
+        throw new RateLimitError();
+      }
 
-      count += 1;
-
-      lastPing = Date.now();
+      console.log({
+        remaining: rateLimitResult.remaining,
+        success: rateLimitResult.success,
+      });
 
       return "PONG";
     }),
