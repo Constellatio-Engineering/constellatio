@@ -1,7 +1,6 @@
 /* eslint-disable react/jsx-max-props-per-line */
 import { RouterTransition } from "@/components/atoms/RouterTransition/RouterTransition";
 import ActivityWatchdog from "@/components/helpers/activityWatchdog/ActivityWatchdog";
-import Tracking from "@/components/helpers/Tracking";
 import FeedbackButton from "@/components/molecules/feedbackButton/FeedbackButton";
 import Lightbox from "@/components/molecules/lightbox/Lightbox";
 import NewNotificationEarnedWatchdog from "@/components/molecules/newNotificationEarnedWatchdog/NewNotificationEarnedWatchdog";
@@ -150,7 +149,6 @@ const AppContainer: FunctionComponent<ConstellatioAppProps> = ({ Component, page
                         <FileViewer/>
                         <DocumentEditor/>
                         <FeedbackButton/>
-                        {/* {isTrackingEnabled && <Tracking/>}*/}
                         <Layout Component={Component} pageProps={pageProps}/>
                       </Fragment>
                     )}
