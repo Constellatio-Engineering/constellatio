@@ -1,35 +1,15 @@
+import { api } from "@/utils/api";
+
 import { type FunctionComponent, useEffect, useRef } from "react";
 import { useIdleTimer } from "react-idle-timer";
-
-// eslint-disable-next-line @typescript-eslint/naming-convention
-const IDLE_TIMEOUT = 10_000;
-
 const ActivityWatchdog: FunctionComponent = () =>
 {
   const intervalRef = useRef<NodeJS.Timeout>();
-
   const { isIdle: getIsIdle } = useIdleTimer({
-    /* onAction: (event) =>
-    {
-      console.log(event?.type);
-    },*/
-    timeout: IDLE_TIMEOUT
+    timeout: 30_000
   });
 
-  /* useEffect(() =>
-  {
-    const interval = setInterval(() =>
-    {
-      const isIdle = getIsIdle();
-      const isActive = !isIdle;
-      console.log("is active: " + isActive.toString());
-    }, 100);
-
-    return () =>
-    {
-      clearInterval(interval);
-    };
-  }, [getIsIdle]);*/
+  const { mutate: ping } = api.userActivity.ping.useMutation();
 
   useEffect(() =>
   {
@@ -41,24 +21,26 @@ const ActivityWatchdog: FunctionComponent = () =>
     intervalRef.current = setInterval(() =>
     {
       const isUserIdle = getIsIdle();
+      const isTabActive = document.hasFocus();
 
       if(isUserIdle)
       {
-        console.log("User is inactive");
         return;
       }
 
-      console.log("PING");
-    }, IDLE_TIMEOUT);
+      if(!isTabActive)
+      {
+        return;
+      }
+
+      ping();
+    }, 10_000);
 
     return () =>
     {
-      if(intervalRef.current)
-      {
-        clearInterval(intervalRef.current);
-      }
+      clearInterval(intervalRef.current);
     };
-  }, [getIsIdle]);
+  }, [getIsIdle, ping]);
 
   return null;
 };
