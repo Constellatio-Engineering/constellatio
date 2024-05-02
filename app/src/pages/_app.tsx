@@ -1,6 +1,7 @@
 /* eslint-disable react/jsx-max-props-per-line */
 import { RouterTransition } from "@/components/atoms/RouterTransition/RouterTransition";
-import ActivityWatchdog from "@/components/helpers/activityWatchdog/ActivityWatchdog";
+import { ActivityWatchdog } from "@/components/helpers/activityWatchdog/ActivityWatchdog";
+import { AuthenticationRequiredProtection } from "@/components/helpers/authenticationRequiredProtection/AuthenticationRequiredProtection";
 import FeedbackButton from "@/components/molecules/feedbackButton/FeedbackButton";
 import Lightbox from "@/components/molecules/lightbox/Lightbox";
 import NewNotificationEarnedWatchdog from "@/components/molecules/newNotificationEarnedWatchdog/NewNotificationEarnedWatchdog";
@@ -140,7 +141,9 @@ const AppContainer: FunctionComponent<ConstellatioAppProps> = ({ Component, page
                     ) : (
                       <Fragment>
                         <Lightbox/>
-                        <ActivityWatchdog/>
+                        <AuthenticationRequiredProtection>
+                          <ActivityWatchdog/>
+                        </AuthenticationRequiredProtection>
                         <RouterTransition/>
                         <Notifications/>
                         <NewNotificationEarnedWatchdog/>

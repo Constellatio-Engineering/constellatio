@@ -4,7 +4,7 @@ import { api } from "@/utils/api";
 import { type FunctionComponent, useCallback, useEffect, useRef } from "react";
 import { useIdleTimer } from "react-idle-timer";
 
-const ActivityWatchdog: FunctionComponent = () =>
+export const ActivityWatchdog: FunctionComponent = () =>
 {
   const intervalRef = useRef<NodeJS.Timeout>();
   const { mutate: ping } = api.userActivity.ping.useMutation();
@@ -46,4 +46,3 @@ const ActivityWatchdog: FunctionComponent = () =>
   return null;
 };
 
-export default ActivityWatchdog;
