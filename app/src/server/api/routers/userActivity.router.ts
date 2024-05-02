@@ -7,7 +7,9 @@ import { RateLimitError } from "@/utils/serverError";
 
 import { Ratelimit } from "@upstash/ratelimit";
 import { kv } from "@vercel/kv";
-import { and, eq, sql, sum } from "drizzle-orm";
+import {
+  and, asc, eq, sql, sum 
+} from "drizzle-orm";
 
 const rateLimit = new Ratelimit({
   limiter: Ratelimit.fixedWindow(1, `${env.NEXT_PUBLIC_USER_ACTIVITY_PING_INTERVAL_SECONDS - 1} s`), // allow 1 request for every ping interval
@@ -48,7 +50,13 @@ export const userActivityRouter = createTRPCRouter({
           totalUsage: sql<number>`COALESCE(${dailyUsageSubquery.totalUsage}, 0)`
         })
         .from(daysSeriesSubquery)
-        .leftJoin(dailyUsageSubquery, eq(dailyUsageSubquery.date, daysSeriesSubquery.dateFromSeries));
+        .leftJoin(dailyUsageSubquery, and(
+          eq(dailyUsageSubquery.date, daysSeriesSubquery.dateFromSeries),
+          eq(dailyUsageSubquery.userId, userId)
+        ))
+        .orderBy(asc(daysSeriesSubquery.dateFromSeries));
+
+      console.log(pingsQuery.toSQL());
 
       const pings2 = await pingsQuery;
 
