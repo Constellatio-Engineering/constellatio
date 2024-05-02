@@ -18,20 +18,11 @@ export const userActivityRouter = createTRPCRouter({
   getUsageTime: protectedProcedure
     .query(async ({ ctx: { userId } }) =>
     {
-      /* const pings = await db
-        .select({
-          createdAt: pingsTable.createdAt,
-          pingInterval: pingsTable.pingInterval,
-        })
-        .from(pingsTable)
-        .where(
-          eq(pingsTable.userId, userId),
-        );*/
 
-      const test = await db
+      const subquery = db
         .select({
-          date: sql`date_trunc('day', ${pingsTable.createdAt}) AS Date`,
-          totalUsage: sql<number>`SUM(${pingsTable.pingInterval}) AS TotalUsage`,
+          date: sql`date_trunc('day', ${pingsTable.createdAt})`.as("date"),
+          totalUsage: sql<number>`SUM(${pingsTable.pingInterval})`.as("totalUsage"),
           userId: pingsTable.userId,
         })
         .from(pingsTable)
@@ -43,43 +34,21 @@ export const userActivityRouter = createTRPCRouter({
           )
         )
         .groupBy(sql`Date`, pingsTable.userId)
-        // .as("DailyUsage")
-      ;
+        .as("DailyUsage");
 
-      console.log(test);
-
-      /* const subquery = db
+      const pingsQuery = db
         .select({
-          date: sql`date_trunc('day', ${pingsTable.createdAt}) AS Date`,
-          totalUsage: sql<number>`SUM(${pingsTable.pingInterval}) AS TotalUsage`,
-          userId: pingsTable.userId,
+          date: sql<Date>`d.DateFromSeries`,
+          totalUsage: sql<number>`COALESCE("totalUsage", 0)`
         })
-        .from(pingsTable)
-        .where(
-          and(
-            eq(pingsTable.userId, userId),
-            sql`${pingsTable.createdAt} >= current_date - interval '7 days'`,
-            sql`${pingsTable.createdAt} <= current_date + interval '1 day'`
-          )
-        )
-        .groupBy(sql`Date`, pingsTable.userId)
-        .as("DailyUsage")
-      ;
+        .from(sql`generate_series(current_date - interval '7 days', current_date, '1 day') as d(DateFromSeries)`)
+        .leftJoin(subquery, eq(subquery.date, sql`d.DateFromSeries`));
 
-      const pings2 = await db
-        .select({
-          date: sql`d.Date`,
-          totalUsage: sql<number>`COALESCE("TotalUsage", 0)`
-        })
-        .from(sql`generate_series(current_date - interval '7 days', current_date, '1 day') as d(Date)`)
-        .leftJoin(subquery, eq(subquery.date, sql`d.Date`))
-      ;
+      const pings2 = await pingsQuery;
 
       console.log(pings2);
 
-      return pings2;*/
-
-      return null;
+      return pings2;
     }),
   ping: protectedProcedure
     .input(pingSchema)
@@ -93,7 +62,7 @@ export const userActivityRouter = createTRPCRouter({
         throw new RateLimitError();
       }
 
-      console.trace(`PING from user '${userId}' on ${path}${search != null ? search : ""}`);
+      console.log(`PING from user '${userId}' on ${path}${search != null ? search : ""}`);
 
       await db.insert(pingsTable).values({
         path,
