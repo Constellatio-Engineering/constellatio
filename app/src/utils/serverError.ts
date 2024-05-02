@@ -76,3 +76,11 @@ export class BadRequestError extends TRPCError
     super({ cause, code: "BAD_REQUEST" });
   }
 }
+
+export class RateLimitError extends TRPCError
+{
+  public constructor()
+  {
+    super({ code: "TOO_MANY_REQUESTS" });
+  }
+}
