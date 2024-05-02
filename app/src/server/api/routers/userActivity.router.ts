@@ -26,7 +26,7 @@ export const userActivityRouter = createTRPCRouter({
         throw new RateLimitError();
       }
 
-      console.log(`PING from user '${userId}' on ${path}${search != null ? search : ""}`);
+      console.trace(`PING from user '${userId}' on ${path}${search != null ? search : ""}`);
 
       await db.insert(pings).values({
         path,

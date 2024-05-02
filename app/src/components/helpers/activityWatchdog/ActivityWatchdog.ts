@@ -7,7 +7,9 @@ import { useIdleTimer } from "react-idle-timer";
 export const ActivityWatchdog: FunctionComponent = () =>
 {
   const intervalRef = useRef<NodeJS.Timeout>();
-  const { mutate: ping } = api.userActivity.ping.useMutation();
+  const { mutate: ping } = api.userActivity.ping.useMutation({
+    onError: (error) => console.warn("Error while sending ping", error),
+  });
   const { isIdle: getIsIdle } = useIdleTimer({
     timeout: 30_000
   });
