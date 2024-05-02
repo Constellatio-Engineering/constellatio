@@ -35,13 +35,20 @@ export const userActivityRouter = createTRPCRouter({
         .groupBy(sql`Date`, pingsTable.userId)
         .as("DailyUsage");
 
+      const daysSeriesSubquery = db
+        .select({
+          dateFromSeries: sql<Date>`d.date`.as("dateFromSeries"),
+        })
+        .from(sql`generate_series(current_date - interval '7 days', current_date, '1 day') as d(date)`)
+        .as("DaysSeries");
+
       const pingsQuery = db
         .select({
-          date: sql<Date>`d.DateFromSeries`,
+          date: daysSeriesSubquery.dateFromSeries,
           totalUsage: sql<number>`COALESCE(${dailyUsageSubquery.totalUsage}, 0)`
         })
-        .from(sql`generate_series(current_date - interval '7 days', current_date, '1 day') as d(DateFromSeries)`)
-        .leftJoin(dailyUsageSubquery, eq(dailyUsageSubquery.date, sql`d.DateFromSeries`));
+        .from(daysSeriesSubquery)
+        .leftJoin(dailyUsageSubquery, eq(dailyUsageSubquery.date, daysSeriesSubquery.dateFromSeries));
 
       const pings2 = await pingsQuery;
 

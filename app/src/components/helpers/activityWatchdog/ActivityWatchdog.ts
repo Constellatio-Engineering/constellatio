@@ -4,6 +4,8 @@ import { api } from "@/utils/api";
 import { type FunctionComponent, useCallback, useEffect, useRef } from "react";
 import { useIdleTimer } from "react-idle-timer";
 
+// TODO instead of directly checking if document.hasFocus() is false, check if the document had focus in the last 30 seconds or so
+
 export const ActivityWatchdog: FunctionComponent = () =>
 {
   const intervalRef = useRef<NodeJS.Timeout>();
