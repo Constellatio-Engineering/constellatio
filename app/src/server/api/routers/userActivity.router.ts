@@ -7,7 +7,7 @@ import { RateLimitError } from "@/utils/serverError";
 
 import { Ratelimit } from "@upstash/ratelimit";
 import { kv } from "@vercel/kv";
-import { and, eq, sql } from "drizzle-orm";
+import { and, eq, sql, sum } from "drizzle-orm";
 
 const rateLimit = new Ratelimit({
   limiter: Ratelimit.fixedWindow(1, `${env.NEXT_PUBLIC_USER_ACTIVITY_PING_INTERVAL_SECONDS - 1} s`), // allow 1 request for every ping interval
@@ -18,11 +18,10 @@ export const userActivityRouter = createTRPCRouter({
   getUsageTime: protectedProcedure
     .query(async ({ ctx: { userId } }) =>
     {
-
-      const subquery = db
+      const dailyUsageSubquery = db
         .select({
-          date: sql`date_trunc('day', ${pingsTable.createdAt})`.as("date"),
-          totalUsage: sql<number>`SUM(${pingsTable.pingInterval})`.as("totalUsage"),
+          date: sql<Date>`date_trunc('day', ${pingsTable.createdAt})`.as("date"),
+          totalUsage: sum(pingsTable.pingInterval).as("totalUsage"),
           userId: pingsTable.userId,
         })
         .from(pingsTable)
@@ -39,10 +38,10 @@ export const userActivityRouter = createTRPCRouter({
       const pingsQuery = db
         .select({
           date: sql<Date>`d.DateFromSeries`,
-          totalUsage: sql<number>`COALESCE("totalUsage", 0)`
+          totalUsage: sql<number>`COALESCE(${dailyUsageSubquery.totalUsage}, 0)`
         })
         .from(sql`generate_series(current_date - interval '7 days', current_date, '1 day') as d(DateFromSeries)`)
-        .leftJoin(subquery, eq(subquery.date, sql`d.DateFromSeries`));
+        .leftJoin(dailyUsageSubquery, eq(dailyUsageSubquery.date, sql`d.DateFromSeries`));
 
       const pings2 = await pingsQuery;
 
