@@ -11,7 +11,7 @@ import { db } from "@/db/connection";
 import { users } from "@/db/schema";
 import { env } from "@/env.mjs";
 import { type ClientError, clientErrors } from "@/utils/clientError";
-import { EmailAlreadyTakenError, UnauthorizedError } from "@/utils/serverError";
+import { EmailAlreadyTakenError, RateLimitError, UnauthorizedError } from "@/utils/serverError";
 import { sleep } from "@/utils/utils";
 
 import { createPagesServerClient, type SupabaseClient, type User } from "@supabase/auth-helpers-nextjs";
@@ -104,14 +104,18 @@ const t = initTRPC
       {
         errorData = clientErrors.unauthorized;
       }
+      else if(error instanceof RateLimitError)
+      {
+        errorData = clientErrors["too-many-requests"];
+      }
       else
       {
-        console.warn("Unhandled Server Error. Please check tRPC error formatter in your 'trpc.ts' file. Error was:", error);
+        console.warn("Unhandled Server Error. Please check tRPC error formatter in your 'trpc.ts' file. Error was:", error, shape);
         errorData = clientErrors["internal-server-error"];
       }
 
       return {
-        ...shape, // TODO: Dont return shape, at least nor for internal server errors
+        ...shape, // TODO Dont return shape, at least not for internal server errors
         data: {
           clientError: errorData,
           code: error.code,

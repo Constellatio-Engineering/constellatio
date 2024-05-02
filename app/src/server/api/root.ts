@@ -8,12 +8,12 @@ import { documentsRouter } from "@/server/api/routers/documents.router";
 import { foldersRouter } from "@/server/api/routers/folders.router";
 import { forumRouter } from "@/server/api/routers/forum.router";
 import { gamesProgressRouter } from "@/server/api/routers/gamesProgress.router";
-import { internTrackingFromPosthogRouter } from "@/server/api/routers/internTrackingFromPosthog.router";
 import { notesRouter } from "@/server/api/routers/notes.router";
 import { notificationsRouter } from "@/server/api/routers/notifications.router";
 import { searchRouter } from "@/server/api/routers/search.router";
 import { uploadsRouter } from "@/server/api/routers/uploads.router";
 import { usersRouter } from "@/server/api/routers/user.router";
+import { userActivityRouter } from "@/server/api/routers/userActivity.router";
 import { viewsRouter } from "@/server/api/routers/views.router";
 import { createTRPCRouter } from "@/server/api/trpc";
 
@@ -31,11 +31,11 @@ export const appRouter = createTRPCRouter({
   folders: foldersRouter,
   forum: forumRouter,
   gamesProgress: gamesProgressRouter,
-  internTrackingFromPosthog: internTrackingFromPosthogRouter,
   notes: notesRouter,
   notifications: notificationsRouter,
   search: searchRouter,
   uploads: uploadsRouter,
+  userActivity: userActivityRouter,
   users: usersRouter,
   views: viewsRouter
 });

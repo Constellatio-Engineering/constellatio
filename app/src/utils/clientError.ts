@@ -1,4 +1,4 @@
-type ClientErrorIdentifiers = "email-already-taken" | "internal-server-error" | "unauthorized";
+type ClientErrorIdentifiers = "email-already-taken" | "internal-server-error" | "unauthorized" | "too-many-requests";
 
 interface ClientErrorShape
 {
@@ -18,6 +18,10 @@ export const clientErrors: ClientErrors = {
   "internal-server-error": {
     details: { message: "Es ist etwas schief gelaufen" },
     identifier: "internal-server-error"
+  },
+  "too-many-requests": {
+    details: { message: "Zu viele Anfragen" },
+    identifier: "too-many-requests"
   },
   unauthorized: {
     details: { message: "Du bist nicht angemeldet" },
