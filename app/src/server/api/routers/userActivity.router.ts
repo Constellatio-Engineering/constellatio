@@ -1,6 +1,7 @@
 import { db } from "@/db/connection";
-import { pings as pingsTable } from "@/db/schema";
+import { pings } from "@/db/schema";
 import { env } from "@/env.mjs";
+import { getUsageTimeSchema } from "@/schemas/userActivity/getUsageTime.schema";
 import { pingSchema } from "@/schemas/userActivity/ping.schema";
 import { createTRPCRouter, protectedProcedure } from "@/server/api/trpc";
 import { RateLimitError } from "@/utils/serverError";
@@ -18,52 +19,48 @@ const rateLimit = new Ratelimit({
 
 export const userActivityRouter = createTRPCRouter({
   getUsageTime: protectedProcedure
-    .query(async ({ ctx: { userId } }) =>
+    .input(getUsageTimeSchema)
+    .query(async ({ ctx: { userId }, input: { end, interval, start } }) =>
     {
-      const start = new Date(2024, 3, 28);
-      const end = new Date(2024, 4, 4);
-
       const dailyUsageSubquery = db
         .select({
-          date: sql<Date>`date_trunc('day', ${pingsTable.createdAt})`.as("date"),
-          totalUsage: sum(pingsTable.pingInterval).as("totalUsage"),
-          userId: pingsTable.userId,
+          date: sql<Date>`date_trunc(${interval}, ${pings.createdAt})`.as("date"),
+          totalUsage: sum(pings.pingInterval).as("totalUsage"),
+          userId: pings.userId,
         })
-        .from(pingsTable)
+        .from(pings)
         .where(
           and(
-            eq(pingsTable.userId, userId),
-            gte(pingsTable.createdAt, start),
-            lte(pingsTable.createdAt, end)
+            eq(pings.userId, userId),
+            gte(pings.createdAt, start),
+            lte(pings.createdAt, end)
           )
         )
-        .groupBy(sql<Date>`date`, pingsTable.userId)
+        .groupBy(sql<Date>`date`, pings.userId)
         .as("DailyUsage");
 
-      const daysSeriesSubquery = db
+      const dateSeriesSubquery = db
         .select({
           dateFromSeries: sql<Date>`d.date`.as("dateFromSeries"),
         })
-        .from(sql`generate_series(date_trunc('day', ${start}), date_trunc('day', ${end}), '1 day') as d(date)`)
+        .from(sql`generate_series(date_trunc(${interval}, ${start}), date_trunc(${interval}, ${end}), ${`1 ${interval}`}) as d(date)`)
         .as("DaysSeries");
 
-      const pingsQuery = db
+      const usageTimeQuery = db
         .select({
-          date: daysSeriesSubquery.dateFromSeries,
+          date: dateSeriesSubquery.dateFromSeries,
           totalUsage: sql<number>`COALESCE(${dailyUsageSubquery.totalUsage}, 0)`
         })
-        .from(daysSeriesSubquery)
+        .from(dateSeriesSubquery)
         .leftJoin(dailyUsageSubquery, and(
-          eq(dailyUsageSubquery.date, daysSeriesSubquery.dateFromSeries),
+          eq(dailyUsageSubquery.date, dateSeriesSubquery.dateFromSeries),
           eq(dailyUsageSubquery.userId, userId)
         ))
-        .orderBy(asc(daysSeriesSubquery.dateFromSeries));
+        .orderBy(asc(dateSeriesSubquery.dateFromSeries));
 
-      const pings2 = await pingsQuery;
-
-      console.log(pings2);
-
-      return pings2;
+      const usageTimePerInterval = await usageTimeQuery;
+      console.log(usageTimePerInterval);
+      return usageTimePerInterval;
     }),
   ping: protectedProcedure
     .input(pingSchema)
@@ -79,7 +76,7 @@ export const userActivityRouter = createTRPCRouter({
 
       console.log(`PING from user '${userId}' on ${path}${search != null ? search : ""}`);
 
-      await db.insert(pingsTable).values({
+      await db.insert(pings).values({
         path,
         pingInterval: env.NEXT_PUBLIC_USER_ACTIVITY_PING_INTERVAL_SECONDS,
         search,
