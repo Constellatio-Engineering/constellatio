@@ -16,7 +16,7 @@ export const ActivityWatchdog: FunctionComponent = () =>
     timeout: 30_000
   });
 
-  const { data: submittedPings } = api.userActivity.getUsageTime.useQuery(undefined, { refetchInterval: 3000 });
+  const { data: submittedPings } = api.userActivity.getUsageTime.useQuery(undefined, { refetchInterval: 1000 });
 
   useEffect(() =>
   {

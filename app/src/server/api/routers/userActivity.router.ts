@@ -8,7 +8,7 @@ import { RateLimitError } from "@/utils/serverError";
 import { Ratelimit } from "@upstash/ratelimit";
 import { kv } from "@vercel/kv";
 import {
-  and, asc, eq, sql, sum 
+  and, asc, eq, gte, lte, sql, sum
 } from "drizzle-orm";
 
 const rateLimit = new Ratelimit({
@@ -20,6 +20,9 @@ export const userActivityRouter = createTRPCRouter({
   getUsageTime: protectedProcedure
     .query(async ({ ctx: { userId } }) =>
     {
+      const start = new Date(2024, 3, 28);
+      const end = new Date(2024, 4, 4);
+
       const dailyUsageSubquery = db
         .select({
           date: sql<Date>`date_trunc('day', ${pingsTable.createdAt})`.as("date"),
@@ -30,18 +33,18 @@ export const userActivityRouter = createTRPCRouter({
         .where(
           and(
             eq(pingsTable.userId, userId),
-            sql`${pingsTable.createdAt} >= current_date - interval '7 days'`,
-            sql`${pingsTable.createdAt} <= current_date + interval '1 day'`
+            gte(pingsTable.createdAt, start),
+            lte(pingsTable.createdAt, end)
           )
         )
-        .groupBy(sql`Date`, pingsTable.userId)
+        .groupBy(sql<Date>`date`, pingsTable.userId)
         .as("DailyUsage");
 
       const daysSeriesSubquery = db
         .select({
           dateFromSeries: sql<Date>`d.date`.as("dateFromSeries"),
         })
-        .from(sql`generate_series(current_date - interval '7 days', current_date, '1 day') as d(date)`)
+        .from(sql`generate_series(date_trunc('day', ${start}), date_trunc('day', ${end}), '1 day') as d(date)`)
         .as("DaysSeries");
 
       const pingsQuery = db
@@ -55,8 +58,6 @@ export const userActivityRouter = createTRPCRouter({
           eq(dailyUsageSubquery.userId, userId)
         ))
         .orderBy(asc(daysSeriesSubquery.dateFromSeries));
-
-      console.log(pingsQuery.toSQL());
 
       const pings2 = await pingsQuery;
 
