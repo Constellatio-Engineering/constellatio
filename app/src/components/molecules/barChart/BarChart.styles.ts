@@ -29,7 +29,6 @@ export const barChartContainer = (theme: MantineTheme) => css`
   display: flex;
   align-items: flex-end;
   justify-content: space-between;
-  min-height: 160px;
   position: relative;
   padding-left: 20px;
   width: 100%;

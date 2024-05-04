@@ -1,5 +1,5 @@
-import BarChart from "@/components/molecules/barChart/BarChart";
 import ProfileLearningTimeBlockHeader from "@/components/molecules/profileLearningTimeBlockHeader/ProfileLearningTimeBlockHeader";
+import { Chart } from "@/components/organisms/learninTimeCard/Chart";
 
 import React, { type FunctionComponent } from "react";
 
@@ -8,7 +8,8 @@ import * as styles from "./LearninTimeCard.styles";
 const LearninTimeCard: FunctionComponent = () => (
   <div css={styles.wrapper}>
     <ProfileLearningTimeBlockHeader selectedTab={0} tabs={[]}/>
-    <BarChart chartType="days"/>
+    {/* <BarChart chartType="days"/>*/}
+    <Chart/>
   </div>
 );
 

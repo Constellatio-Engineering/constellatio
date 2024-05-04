@@ -16,19 +16,6 @@ export const ActivityWatchdog: FunctionComponent = () =>
     timeout: 30_000
   });
 
-  const { data: submittedPings } = api.userActivity.getUsageTime.useQuery({
-    end: new Date(2024, 4, 6),
-    interval: "day",
-    start: new Date(2024, 3, 28)
-  }, {
-    refetchInterval: 1000
-  });
-
-  useEffect(() =>
-  {
-    console.log(submittedPings);
-  }, [submittedPings]);
-
   const sendPing = useCallback((): void =>
   {
     const isUserIdle = getIsIdle();

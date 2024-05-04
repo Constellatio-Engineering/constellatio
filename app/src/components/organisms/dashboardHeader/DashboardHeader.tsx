@@ -5,9 +5,9 @@ import React, { type FunctionComponent } from "react";
 
 import * as styles from "./DashboardHeader.styles";
 import BadgesCarouselBlock from "../badgesCarouselBlock/BadgesCarouselBlock";
+import LearninTimeCard from "../learninTimeCard/LearninTimeCard";
 import OverviewHeader from "../OverviewHeader/OverviewHeader";
 // import DashboardheaderProgressBar from "../dashboardheaderProgressBar/DashboardheaderProgressBar";
-// import LearninTimeCard from "../learninTimeCard/LearninTimeCard";
 
 const DashboardHeader: FunctionComponent = () => 
 {
@@ -20,7 +20,7 @@ const DashboardHeader: FunctionComponent = () =>
         <Title css={styles.headerTitle} order={1}>Willkommen{userDetails?.firstName && `, ${userDetails?.firstName}!`}</Title>
         {/* <DashboardheaderProgressBar/> */}
         <div css={styles.headerCardsArea}>
-          {/* <LearninTimeCard/> */}
+          <LearninTimeCard/>
           <BadgesCarouselBlock/>
         </div>
       </div>
