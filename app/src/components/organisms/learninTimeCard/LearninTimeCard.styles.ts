@@ -2,7 +2,7 @@ import { css } from "@emotion/react";
 import { type MantineTheme } from "@mantine/styles";
 
 // export const widthPercentage = 25;
-export const widthPercentage = 68;
+export const widthPercentage = 30;
 
 export const wrapper = (theme: MantineTheme) => css`
   background-color: ${theme.colors["neutrals-01"][0]};

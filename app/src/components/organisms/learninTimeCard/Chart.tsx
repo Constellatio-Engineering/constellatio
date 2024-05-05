@@ -2,10 +2,11 @@ import type { AppRouter } from "@/server/api/root";
 import { api } from "@/utils/api";
 
 import type { inferProcedureOutput } from "@trpc/server";
-import { type FunctionComponent, useEffect } from "react";
+import { type FunctionComponent, PureComponent, type ReactNode, useEffect } from "react";
 import {
   Bar, BarChart, CartesianGrid, Legend, Rectangle, ResponsiveContainer, Tooltip, XAxis, YAxis
 } from "recharts";
+import { type TickItem } from "recharts/types/util/types";
 
 const data = [
   {
@@ -52,6 +53,41 @@ const data = [
   },
 ];
 
+const Tick: FunctionComponent = () =>
+{
+  return <span>T</span>;
+};
+
+// eslint-disable-next-line react/prefer-stateless-function
+class CustomizedAxisTick extends PureComponent<any>
+{
+  public render(): ReactNode
+  {
+    console.log("render", this.props);
+
+    const {
+      payload,
+      stroke,
+      x,
+      y
+    } = this.props;
+
+    return (
+      <g transform={`translate(${x},${y})`}>
+        <text
+          x={0}
+          y={0}
+          dy={16}
+          textAnchor="end"
+          fill="#666"
+          transform="rotate(-35)">
+          {payload.value}
+        </text>
+      </g>
+    );
+  }
+}
+
 export const Chart: FunctionComponent = () =>
 {
   const { data: usageTime } = api.userActivity.getUsageTime.useQuery({
@@ -96,16 +132,8 @@ export const Chart: FunctionComponent = () =>
     return <p>Invalid date range</p>;
   }
 
-  const firstDay = data[0]!.date;
-  const lastDay = data[data.length - 1]!.date;
-  const dayBefore = new Date(firstDay.getTime());
-  dayBefore.setDate(firstDay.getDate() - 1);
-
-  console.log("firstDay", firstDay.toLocaleDateString());
-  console.log("dayBefore", dayBefore.toLocaleDateString());
-
   const processedData = data.map(dataPoint => ({
-    date: dataPoint.date.valueOf(),
+    date: dataPoint.date.toLocaleDateString("de", { weekday: "short" }),
     totalUsage: dataPoint.totalUsage
   }));
 
@@ -113,23 +141,21 @@ export const Chart: FunctionComponent = () =>
 
   return (
     <ResponsiveContainer width="100%" height={350}>
-      <BarChart data={processedData}>
-        <CartesianGrid strokeDasharray="3 3"/>
+      <BarChart data={processedData} barSize={"7%"} margin={{ left: -20 }}>
+        <CartesianGrid strokeDasharray="4" vertical={false} opacity={1}/>
         <XAxis
           dataKey={"date" satisfies keyof DataPoint}
-          domain={[processedData[0]!.date, processedData[processedData.length - 1]!.date]}
-          scale={"time"}
-          type={"number"}
-          tickFormatter={dataPoint =>
-          {
-            return new Date(dataPoint).toLocaleDateString("de", { weekday: "short" });
-          }}
+          tick={<CustomizedAxisTick/>}
         />
-        <YAxis/>
+        <YAxis
+          axisLine={false}
+          tickCount={5}
+          tickSize={0}
+          tickMargin={8}
+        />
         <Bar
           dataKey={"totalUsage" satisfies keyof DataPoint}
-          fill="#8884d8"
-          activeBar={<Rectangle fill="pink" stroke="blue"/>}
+          fill="#FF9150"
         />
       </BarChart>
     </ResponsiveContainer>
