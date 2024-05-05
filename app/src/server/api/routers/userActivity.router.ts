@@ -22,6 +22,8 @@ export const userActivityRouter = createTRPCRouter({
     .input(getUsageTimeSchema)
     .query(async ({ ctx: { userId }, input: { end, interval, start } }) =>
     {
+      console.log(`Getting usage time between ${start.toLocaleDateString("de")} and ${end.toLocaleDateString("de")} with interval ${interval}`);
+
       const dailyUsageSubquery = db
         .select({
           date: sql<Date>`date_trunc(${interval}, ${pings.createdAt})`.as("date"),
