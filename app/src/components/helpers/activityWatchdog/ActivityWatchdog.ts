@@ -13,7 +13,7 @@ export const ActivityWatchdog: FunctionComponent = () =>
     onError: (error) => console.warn("Error while sending ping", error),
   });
   const { isIdle: getIsIdle } = useIdleTimer({
-    timeout: 30_000
+    timeout: 60_000
   });
 
   const sendPing = useCallback((): void =>
