@@ -24,6 +24,9 @@ export const userActivityRouter = createTRPCRouter({
     {
       console.log(`Getting usage time between ${start.toLocaleDateString("de")} and ${end.toLocaleDateString("de")} with interval ${interval}`);
 
+      console.log("start", start, start.getTimezoneOffset());
+      console.log("end", end);
+
       const dailyUsageSubquery = db
         .select({
           date: sql<Date>`date_trunc(${interval}, ${pings.createdAt})`.as("date"),
@@ -51,7 +54,7 @@ export const userActivityRouter = createTRPCRouter({
       const usageTimeQuery = db
         .select({
           date: dateSeriesSubquery.dateFromSeries,
-          totalUsage: sql<number>`COALESCE(${dailyUsageSubquery.totalUsage}, 0)`
+          totalUsage: sql<number>`COALESCE(${dailyUsageSubquery.totalUsage}, 0)`.mapWith(Number)
         })
         .from(dateSeriesSubquery)
         .leftJoin(dailyUsageSubquery, and(
@@ -61,7 +64,7 @@ export const userActivityRouter = createTRPCRouter({
         .orderBy(asc(dateSeriesSubquery.dateFromSeries));
 
       const usageTimePerInterval = await usageTimeQuery;
-      console.log(usageTimePerInterval);
+      // console.log(usageTimePerInterval);
       return usageTimePerInterval;
     }),
   ping: protectedProcedure
