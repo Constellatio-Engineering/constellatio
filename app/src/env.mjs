@@ -73,6 +73,7 @@ export const env = createEnv({
     NEXT_PUBLIC_FORMBRICKS_KEY_PRODUCTION: z.string(),
     NEXT_PUBLIC_IS_TRACKING_ENABLED: z.enum(["true", "false"]),
     NEXT_PUBLIC_USER_ACTIVITY_PING_INTERVAL_SECONDS: z.string().pipe(z.coerce.number().int().min(1).max(3600)),
+    NEXT_PUBLIC_IS_USAGE_TIME_CHART_ENABLED: z.enum(["true", "false"]).transform((value) => value === "true"),
   },
 
   /**
@@ -131,6 +132,7 @@ export const env = createEnv({
     KV_REST_API_URL: process.env.KV_REST_API_URL,
     KV_REST_API_TOKEN: process.env.KV_REST_API_TOKEN,
     KV_REST_API_READ_ONLY_TOKEN: process.env.KV_REST_API_READ_ONLY_TOKEN,
+    NEXT_PUBLIC_IS_USAGE_TIME_CHART_ENABLED: process.env.NEXT_PUBLIC_IS_USAGE_TIME_CHART_ENABLED,
   },
   /**
    * Run `build` or `dev` with `SKIP_ENV_VALIDATION` to skip env validation.

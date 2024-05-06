@@ -3,7 +3,7 @@ import { colors } from "@/constants/styles/colors";
 import { css } from "@emotion/react";
 import { type MantineTheme } from "@mantine/styles";
 
-export const smallBadgeCardWidth = 200;
+export const smallBadgeCardWidth = 180;
 export const smallBadgeCardHeight = 180;
 
 export const wrapper = css`
@@ -101,6 +101,9 @@ export const imageWrapper = css`
   width: 100%;
   height: 100px;
   position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
 `;
 
 export const badgeImage = css`
@@ -109,10 +112,20 @@ export const badgeImage = css`
   object-fit: contain;
 `;
 
+export const badgeImageSmall = css`
+  width: 90%;
+  height: 90%;
+`;
+
 export const badgeTitle = (theme: MantineTheme) => css`
   color: ${theme.colors["neutrals-02"][1]};
   text-align: center;
-  `;
+  font-size: 17px;
+`;
+
+export const badgeTitleSmall = css`
+  font-size: 15px;
+`;
 
 export const badgeDescriptionArea = () => css`
   background-color: ${colors["neutrals-01"][0]};
@@ -124,7 +137,10 @@ export const badgeDescriptionArea = () => css`
   border: solid 1px ${colors["neutrals-01"][3]};
 `;
 
-export const badgeDescriptionText = css``;
+export const badgeDescriptionText = css`
+  font-size: 15px;
+`;
+
 export const checkCircle = css`
     position: absolute;
     top: 12px;

@@ -565,7 +565,7 @@ export const pings = pgTable("Ping", {
   userId: uuid("UserId").references(() => users.id, { onDelete: "cascade" }).notNull(),
   path: text("Path").notNull(),
   search: text("Search"),
-  createdAt: timestamp("CreatedAt").defaultNow().notNull(),
+  createdAt: timestamp("CreatedAt", { withTimezone: true }).defaultNow().notNull(),
   pingInterval: smallint("PingInterval").notNull(),
 }, table => ({
   path_index: index("Ping_Path_Index").on(table.path),
