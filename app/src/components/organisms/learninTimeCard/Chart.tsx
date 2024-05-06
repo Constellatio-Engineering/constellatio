@@ -2,7 +2,7 @@ import type { AppRouter } from "@/server/api/root";
 import { api } from "@/utils/api";
 
 import type { inferProcedureOutput } from "@trpc/server";
-import { type FunctionComponent, PureComponent, type ReactNode, useEffect } from "react";
+import { type FunctionComponent, PureComponent, type ReactNode, useMemo } from "react";
 import {
   Bar, BarChart, CartesianGrid, ResponsiveContainer, XAxis, YAxis 
 } from "recharts";
@@ -94,27 +94,15 @@ class CustomizedAxisTick extends PureComponent<any>
 
 export const Chart: FunctionComponent = () =>
 {
-  const today = new Date();
-  const intervalEnd = new Date(today.getFullYear(), today.getMonth(), today.getDate());
-  const intervalStart = new Date(intervalEnd);
-  intervalStart.setDate(intervalEnd.getDate() - 6);
-
-  console.log("----------");
-  console.log("intervalStart", intervalStart, intervalStart.toLocaleDateString("de"));
-  console.log("intervalEnd", intervalEnd, intervalEnd.toLocaleDateString("de"));
-  console.log("end", {
-    getTime: intervalEnd.getTime(),
-    getTimezoneOffset: intervalEnd.getTimezoneOffset(),
-    localDateString: intervalEnd.toLocaleDateString("de"),
-    plain: intervalEnd,
-    toDateString: intervalEnd.toDateString(),
-    toISOString: intervalEnd.toISOString(),
-    toString: intervalEnd.toString(),
-    toTimeString: intervalEnd.toTimeString(),
-    toUTCString: intervalEnd.toUTCString()
-  });
-
-  const initialUsageTime = getInitialUsageTime(intervalStart, intervalEnd);
+  // new Date() needs to be called inside useMemo to avoid infinite re-rendering due to the fact that new Date() is a new object every time
+  const intervalEnd = useMemo(() => new Date(), []);
+  const intervalStart = useMemo(() =>
+  {
+    const intervalStart = new Date(intervalEnd);
+    intervalStart.setDate(intervalEnd.getDate() - 6);
+    return intervalStart;
+  }, [intervalEnd]);
+  const initialUsageTime = useMemo(() => getInitialUsageTime(intervalStart, intervalEnd), [intervalStart, intervalEnd]);
   const { data: usageTime } = api.userActivity.getUsageTime.useQuery({
     end: intervalEnd,
     interval: "day",
@@ -128,15 +116,6 @@ export const Chart: FunctionComponent = () =>
     date: dataPoint.date.toLocaleDateString("de", { weekday: "short" }),
     totalUsage: dataPoint.totalUsage
   }));
-
-  /* useEffect(() =>
-  {
-    console.log("---");
-    data.forEach(dataPoint =>
-    {
-      console.log(`Date: ${dataPoint.date.toLocaleDateString("de")} - Total Usage: ${dataPoint.totalUsage}`, typeof dataPoint.totalUsage);
-    });
-  }, [data]);*/
 
   if(processedData.length <= 2)
   {

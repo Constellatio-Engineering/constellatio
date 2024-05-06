@@ -31,15 +31,12 @@ export const userActivityRouter = createTRPCRouter({
       } 
     }) =>
     {
-      console.log(`Getting usage time between ${start.toLocaleDateString("de")} and ${end.toLocaleDateString("de")} with interval ${interval}`);
-
-      const startInUsersLocalTimezone = getDateInLocalTimezone(start, timeZoneOffset);
-      const endInUsersLocalTimezone = getDateInLocalTimezone(end, timeZoneOffset);
+      const startWithoutTime = new Date(start.getFullYear(), start.getMonth(), start.getDate());
+      const endWithoutTime = new Date(end.getFullYear(), end.getMonth(), end.getDate());
+      const startInUsersLocalTimezone = getDateInLocalTimezone(startWithoutTime, timeZoneOffset);
+      const endInUsersLocalTimezone = getDateInLocalTimezone(endWithoutTime, timeZoneOffset);
       endInUsersLocalTimezone.setDate(endInUsersLocalTimezone.getDate() + 1);
       endInUsersLocalTimezone.setMilliseconds(endInUsersLocalTimezone.getMilliseconds() - 1);
-
-      console.log("startInUsersLocalTimezone", startInUsersLocalTimezone);
-      console.log("endInUsersLocalTimezone", endInUsersLocalTimezone);
 
       const dailyUsageSubquery = db
         .select({
