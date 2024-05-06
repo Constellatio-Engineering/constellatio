@@ -35,17 +35,11 @@ export const userActivityRouter = createTRPCRouter({
 
       const startInUsersLocalTimezone = getDateInLocalTimezone(start, timeZoneOffset);
       const endInUsersLocalTimezone = getDateInLocalTimezone(end, timeZoneOffset);
-      const test2 = new Date(endInUsersLocalTimezone);
-      test2.setHours(23, 59);
-
-      const test3 = new Date(endInUsersLocalTimezone);
-      test3.setDate(test3.getDate() + 1);
-      test3.setMilliseconds(test3.getMilliseconds() - 1);
+      endInUsersLocalTimezone.setDate(endInUsersLocalTimezone.getDate() + 1);
+      endInUsersLocalTimezone.setMilliseconds(endInUsersLocalTimezone.getMilliseconds() - 1);
 
       console.log("startInUsersLocalTimezone", startInUsersLocalTimezone);
       console.log("endInUsersLocalTimezone", endInUsersLocalTimezone);
-      console.log("test2", test2);
-      console.log("test3", test3);
 
       const dailyUsageSubquery = db
         .select({
@@ -71,23 +65,6 @@ export const userActivityRouter = createTRPCRouter({
         .from(sql`generate_series(date_trunc(${interval}, ${startInUsersLocalTimezone}), date_trunc(${interval}, ${endInUsersLocalTimezone}), ${`1 ${interval}`}) as d(date)`)
         .as("DaysSeries");
 
-      const test = await db
-        .select({
-          dateFromSeries: sql<Date>`d.date`.as("dateFromSeries"),
-        })
-        .from(sql`generate_series(date_trunc(${interval}, ${startInUsersLocalTimezone}), date_trunc(${interval}, ${endInUsersLocalTimezone}), ${`1 ${interval}`}) as d(date)`);
-
-      console.log(
-        db
-          .select({
-            dateFromSeries: sql<Date>`d.date`.as("dateFromSeries"),
-          })
-          .from(sql`generate_series(date_trunc(${interval}, ${startInUsersLocalTimezone}), date_trunc(${interval}, ${endInUsersLocalTimezone}), ${`1 ${interval}`}) as d(date)`)
-          .toSQL()
-      );
-
-      console.log(test);
-
       const usageTimeQuery = db
         .select({
           date: dateSeriesSubquery.dateFromSeries,
@@ -101,7 +78,6 @@ export const userActivityRouter = createTRPCRouter({
         .orderBy(asc(dateSeriesSubquery.dateFromSeries));
 
       const usageTimePerInterval = await usageTimeQuery;
-      // console.log(usageTimePerInterval);
       return usageTimePerInterval;
     }),
   ping: protectedProcedure
