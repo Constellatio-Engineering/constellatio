@@ -102,6 +102,17 @@ export const Chart: FunctionComponent = () =>
   console.log("----------");
   console.log("intervalStart", intervalStart, intervalStart.toLocaleDateString("de"));
   console.log("intervalEnd", intervalEnd, intervalEnd.toLocaleDateString("de"));
+  console.log("end", {
+    getTime: intervalEnd.getTime(),
+    getTimezoneOffset: intervalEnd.getTimezoneOffset(),
+    localDateString: intervalEnd.toLocaleDateString("de"),
+    plain: intervalEnd,
+    toDateString: intervalEnd.toDateString(),
+    toISOString: intervalEnd.toISOString(),
+    toString: intervalEnd.toString(),
+    toTimeString: intervalEnd.toTimeString(),
+    toUTCString: intervalEnd.toUTCString()
+  });
 
   const initialUsageTime = getInitialUsageTime(intervalStart, intervalEnd);
   const { data: usageTime } = api.userActivity.getUsageTime.useQuery({
@@ -117,14 +128,14 @@ export const Chart: FunctionComponent = () =>
     totalUsage: dataPoint.totalUsage
   }));
 
-  useEffect(() =>
+  /* useEffect(() =>
   {
     console.log("---");
     data.forEach(dataPoint =>
     {
       console.log(`Date: ${dataPoint.date.toLocaleDateString("de")} - Total Usage: ${dataPoint.totalUsage}`, typeof dataPoint.totalUsage);
     });
-  }, [data]);
+  }, [data]);*/
 
   if(processedData.length <= 2)
   {

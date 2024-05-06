@@ -1,0 +1,1 @@
+ALTER TABLE "Ping" ALTER COLUMN "CreatedAt" SET DATA TYPE timestamp with time zone;

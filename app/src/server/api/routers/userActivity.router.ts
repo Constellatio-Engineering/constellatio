@@ -24,9 +24,6 @@ export const userActivityRouter = createTRPCRouter({
     {
       console.log(`Getting usage time between ${start.toLocaleDateString("de")} and ${end.toLocaleDateString("de")} with interval ${interval}`);
 
-      console.log("start", start, start.getTimezoneOffset());
-      console.log("end", end);
-
       const dailyUsageSubquery = db
         .select({
           date: sql<Date>`date_trunc(${interval}, ${pings.createdAt})`.as("date"),
@@ -50,6 +47,23 @@ export const userActivityRouter = createTRPCRouter({
         })
         .from(sql`generate_series(date_trunc(${interval}, ${start}), date_trunc(${interval}, ${end}), ${`1 ${interval}`}) as d(date)`)
         .as("DaysSeries");
+
+      const test = await db
+        .select({
+          dateFromSeries: sql<Date>`d.date`.as("dateFromSeries"),
+        })
+        .from(sql`generate_series(date_trunc(${interval}, ${start}), date_trunc(${interval}, ${end}), ${`1 ${interval}`}) as d(date)`);
+
+      console.log(
+        db
+          .select({
+            dateFromSeries: sql<Date>`d.date`.as("dateFromSeries"),
+          })
+          .from(sql`generate_series(date_trunc(${interval}, ${start}), date_trunc(${interval}, ${end}), ${`1 ${interval}`}) as d(date)`)
+          .toSQL()
+      );
+
+      console.log(test);
 
       const usageTimeQuery = db
         .select({
