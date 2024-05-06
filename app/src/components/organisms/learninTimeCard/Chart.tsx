@@ -1,67 +1,10 @@
-import type { AppRouter } from "@/server/api/root";
-import { api } from "@/utils/api";
+import { type UsageTimeData } from "@/components/organisms/learninTimeCard/LearningTimeCard";
+import { convertSecondsToDuration } from "@/utils/dates";
 
-import type { inferProcedureOutput } from "@trpc/server";
-import { type FunctionComponent, PureComponent, type ReactNode, useMemo } from "react";
+import { type FunctionComponent, PureComponent, type ReactNode } from "react";
 import {
   Bar, BarChart, CartesianGrid, ResponsiveContainer, XAxis, YAxis 
 } from "recharts";
-
-type UsageTimeData = inferProcedureOutput<AppRouter["userActivity"]["getUsageTime"]>;
-
-type ConvertSecondsToDuration = (seconds: number) => { hours: number; minutes: number; seconds: number };
-
-const convertSecondsToDuration: ConvertSecondsToDuration = (seconds) =>
-{
-  const hours = Math.floor(seconds / 3600);
-  const minutes = Math.floor((seconds % 3600) / 60);
-  const remainingSeconds = seconds % 60;
-  return { hours, minutes, seconds: remainingSeconds };
-};
-
-const getInitialUsageTime = (startDate: Date, endDate: Date): UsageTimeData =>
-{
-  const usageTimeData: UsageTimeData = [];
-  const currentDate = new Date(startDate);
-
-  while(currentDate <= endDate)
-  {
-    usageTimeData.push({
-      date: new Date(currentDate),
-      totalUsage: 0
-    });
-    currentDate.setDate(currentDate.getDate() + 1);
-  }
-  
-  return usageTimeData;
-
-  /* return [
-    {
-      date: new Date(2024, 3, 28),
-      totalUsage: 400
-    },
-    {
-      date: new Date(2024, 3, 29),
-      totalUsage: 1100
-    },
-    {
-      date: new Date(2024, 3, 30),
-      totalUsage: 800
-    },
-    {
-      date: new Date(2024, 4, 1),
-      totalUsage: 140
-    },
-    {
-      date: new Date(2024, 4, 2),
-      totalUsage: 0
-    },
-    {
-      date: new Date(2024, 4, 3),
-      totalUsage: 10
-    },
-  ];*/
-};
 
 // eslint-disable-next-line react/prefer-stateless-function,@typescript-eslint/no-explicit-any
 class CustomizedAxisTick extends PureComponent<any>
@@ -92,26 +35,8 @@ class CustomizedAxisTick extends PureComponent<any>
   }
 }
 
-export const Chart: FunctionComponent = () =>
+export const Chart: FunctionComponent<{ readonly data: UsageTimeData }> = ({ data }) =>
 {
-  // new Date() needs to be called inside useMemo to avoid infinite re-rendering due to the fact that new Date() is a new object every time
-  const intervalEnd = useMemo(() => new Date(), []);
-  const intervalStart = useMemo(() =>
-  {
-    const intervalStart = new Date(intervalEnd);
-    intervalStart.setDate(intervalEnd.getDate() - 6);
-    return intervalStart;
-  }, [intervalEnd]);
-  const initialUsageTime = useMemo(() => getInitialUsageTime(intervalStart, intervalEnd), [intervalStart, intervalEnd]);
-  const { data: usageTime } = api.userActivity.getUsageTime.useQuery({
-    end: intervalEnd,
-    interval: "day",
-    start: intervalStart,
-    timeZoneOffset: new Date().getTimezoneOffset(),
-  }, {
-    refetchInterval: 3000
-  });
-  const data = usageTime ?? initialUsageTime;
   const processedData = data.map(dataPoint => ({
     date: dataPoint.date.toLocaleDateString("de", { weekday: "short" }),
     totalUsage: dataPoint.totalUsage
