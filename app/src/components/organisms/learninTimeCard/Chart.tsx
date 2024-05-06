@@ -148,13 +148,9 @@ export const Chart: FunctionComponent = () =>
             {
               return `${minutes}m`;
             }
-            else if(seconds === 0)
-            {
-              return "0";
-            }
             else
             {
-              return `${seconds}s`;
+              return seconds === 0 ? "0" : `${seconds}s`;
             }
           }}
           allowDecimals={false}
