@@ -14,7 +14,7 @@ import {
 } from "drizzle-orm";
 
 const rateLimit = new Ratelimit({
-  limiter: Ratelimit.fixedWindow(1, `${env.NEXT_PUBLIC_USER_ACTIVITY_PING_INTERVAL_SECONDS - 1} s`), // allow 1 request for every ping interval
+  limiter: Ratelimit.fixedWindow(1, `${env.NEXT_PUBLIC_USER_ACTIVITY_PING_INTERVAL_SECONDS} s`), // allow 1 request for every ping interval
   redis: kv,
 });
 
