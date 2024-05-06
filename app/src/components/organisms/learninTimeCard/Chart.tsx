@@ -118,7 +118,8 @@ export const Chart: FunctionComponent = () =>
   const { data: usageTime } = api.userActivity.getUsageTime.useQuery({
     end: intervalEnd,
     interval: "day",
-    start: intervalStart
+    start: intervalStart,
+    timeZoneOffset: new Date().getTimezoneOffset(),
   }, {
     refetchInterval: 3000
   });

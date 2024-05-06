@@ -1,3 +1,5 @@
+import { timeZoneOffsetValidation } from "@/schemas/common.validation";
+
 import { z } from "zod";
 
 export const getUsageTimeSchema = z
@@ -5,6 +7,7 @@ export const getUsageTimeSchema = z
     end: z.date(),
     interval: z.enum(["day", "week", "month", "year"]),
     start: z.date(),
+    timeZoneOffset: timeZoneOffsetValidation,
   })
   .refine(({ end, start }) => start < end, {
     message: "start must be before end",

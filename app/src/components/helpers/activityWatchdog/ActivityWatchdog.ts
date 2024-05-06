@@ -37,6 +37,7 @@ export const ActivityWatchdog: FunctionComponent = () =>
       href,
       path: pathname,
       search: search === "" ? undefined : search,
+      timeZoneOffset: new Date().getTimezoneOffset(),
     });
   }, [getIsIdle, ping]);
 
