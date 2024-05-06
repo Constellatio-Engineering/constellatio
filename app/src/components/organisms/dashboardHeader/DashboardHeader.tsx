@@ -1,3 +1,4 @@
+import { env } from "@/env.mjs";
 import useUserDetails from "@/hooks/useUserDetails";
 
 import { Title } from "@mantine/core";
@@ -20,7 +21,9 @@ const DashboardHeader: FunctionComponent = () =>
         <Title css={styles.headerTitle} order={1}>Willkommen{userDetails?.firstName && `, ${userDetails?.firstName}!`}</Title>
         {/* <DashboardheaderProgressBar/> */}
         <div css={styles.headerCardsArea}>
-          <LearningTimeCard/>
+          {env.NEXT_PUBLIC_IS_USAGE_TIME_CHART_ENABLED && (
+            <LearningTimeCard/>
+          )}
           <BadgesCarouselBlock/>
         </div>
       </div>

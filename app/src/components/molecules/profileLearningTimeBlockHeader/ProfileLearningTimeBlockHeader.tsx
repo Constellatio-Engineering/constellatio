@@ -3,18 +3,20 @@ import IconButton from "@/components/atoms/iconButton/IconButton";
 import { SubtitleText } from "@/components/atoms/SubtitleText/SubtitleText";
 import { ClockIcon } from "@/components/Icons/ClockIcon";
 
+import { Skeleton } from "@mantine/core";
 import React, { type FunctionComponent } from "react";
 
 import * as styles from "./ProfileLearningTimeBlockHeader.styles";
 
 type Props = {
+  readonly isPending: boolean;
   readonly todaysLearningTime: {
     hours: number;
     minutes: number;
   };
 };
 
-const ProfileLearningTimeBlockHeader: FunctionComponent<Props> = ({ todaysLearningTime }) =>
+const ProfileLearningTimeBlockHeader: FunctionComponent<Props> = ({ isPending, todaysLearningTime }) =>
 {
   return (
     <div css={styles.blockHead}>
@@ -31,9 +33,13 @@ const ProfileLearningTimeBlockHeader: FunctionComponent<Props> = ({ todaysLearni
             </CaptionText>
           </div>
           <div css={styles.blockHeadTitle}>
-            <SubtitleText styleType="subtitle-01-medium" component="p">
-              {todaysLearningTime.hours}h {todaysLearningTime.minutes}m
-            </SubtitleText>
+            {isPending ? (
+              <Skeleton width={70} height={20} mt={4}/>
+            ) : (
+              <SubtitleText styleType="subtitle-01-medium" component="p">
+                {todaysLearningTime.hours}h {todaysLearningTime.minutes}m
+              </SubtitleText>
+            )}
           </div>
         </div>
       </div>

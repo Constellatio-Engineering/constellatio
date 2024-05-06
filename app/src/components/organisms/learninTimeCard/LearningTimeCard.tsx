@@ -66,18 +66,23 @@ export const LearningTimeCard: FunctionComponent = () =>
     return intervalStart;
   }, [intervalEnd]);
   const initialUsageTime = useMemo(() => getInitialUsageTime(intervalStart, intervalEnd), [intervalStart, intervalEnd]);
-  const { data: usageTime } = api.userActivity.getUsageTime.useQuery({
+  const { data: usageTime, isPending } = api.userActivity.getUsageTime.useQuery({
     end: intervalEnd,
     interval: "day",
     start: intervalStart,
     timeZoneOffset: new Date().getTimezoneOffset(),
+  }, {
+    refetchInterval: 10 * 60 * 1000 // refetch every 10 minutes
   });
   const data = usageTime ?? initialUsageTime;
   const todaysUsage = data[data.length - 1]!.totalUsage;
 
   return (
     <div css={styles.wrapper}>
-      <ProfileLearningTimeBlockHeader todaysLearningTime={convertSecondsToDuration(todaysUsage)}/>
+      <ProfileLearningTimeBlockHeader
+        todaysLearningTime={convertSecondsToDuration(todaysUsage)}
+        isPending={isPending}
+      />
       <Chart data={data}/>
     </div>
   );

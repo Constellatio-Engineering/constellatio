@@ -93,13 +93,7 @@ export const userActivityRouter = createTRPCRouter({
 
       if(!rateLimitResult.success)
       {
-        console.warn("Rate limit exceeded for ping event. This should not happen since the client should not emit pings faster than the rate limit allows.");
         throw new RateLimitError();
-      }
-
-      if(env.NEXT_PUBLIC_DEPLOYMENT_ENVIRONMENT !== "production")
-      {
-        console.log(`PING from user '${userId}' on ${path}${search != null ? search : ""}`);
       }
 
       const userLocalTimestamp = getCurrentDateInLocalTimezone(timeZoneOffset);

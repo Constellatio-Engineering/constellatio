@@ -1,3 +1,5 @@
+import { env } from "@/env.mjs";
+
 import { css } from "@emotion/react";
 import { type MantineTheme } from "@mantine/styles";
 
@@ -10,6 +12,6 @@ export const wrapper = (theme: MantineTheme) => css`
   display: flex;
   flex-direction: column;
   justify-content: space-between;   
-  width: ${widthPercentage}%;
+  width: ${env.NEXT_PUBLIC_IS_USAGE_TIME_CHART_ENABLED ? widthPercentage : 100}%;
   min-height: 300px;
 `;

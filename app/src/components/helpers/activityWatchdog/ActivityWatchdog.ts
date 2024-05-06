@@ -6,7 +6,6 @@ import { useIdleTimer } from "react-idle-timer";
 
 export const ActivityWatchdog: FunctionComponent = () =>
 {
-  const documentLastVisibleTimestamp = useRef<number>();
   const intervalRef = useRef<NodeJS.Timeout>();
   const { mutate: ping } = api.userActivity.ping.useMutation({
     onError: (error) => console.warn("Error while sending ping", error),
@@ -17,34 +16,20 @@ export const ActivityWatchdog: FunctionComponent = () =>
 
   const sendPing = useCallback((): void =>
   {
-    console.log("--- sendPing ---");
-
-    const now = Date.now();
     const isUserIdle = getIsIdle();
     const isDocumentVisible = document.visibilityState === "visible";
 
-    if(isDocumentVisible)
-    {
-      documentLastVisibleTimestamp.current = now;
-    }
-
-    const wasDocumentVisibleInTheLast60Seconds = documentLastVisibleTimestamp.current && (now - documentLastVisibleTimestamp.current < 60_000);
-
     if(isUserIdle)
     {
-      console.log("User is idle - not sending ping");
       return;
     }
 
-    if(!wasDocumentVisibleInTheLast60Seconds)
+    if(!isDocumentVisible)
     {
-      console.log("document was not visible in the last 60 seconds - not sending ping");
       return;
     }
 
     const { href, pathname, search } = window.location;
-
-    console.log("Sending ping");
 
     ping({
       href,
