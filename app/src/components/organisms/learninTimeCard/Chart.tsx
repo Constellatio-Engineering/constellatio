@@ -1,7 +1,7 @@
 import { type UsageTimeData } from "@/components/organisms/learninTimeCard/LearningTimeCard";
 import { convertSecondsToDuration } from "@/utils/dates";
 
-import { type FunctionComponent, PureComponent, type ReactNode } from "react";
+import { type FunctionComponent, memo, PureComponent, type ReactNode } from "react";
 import {
   Bar, BarChart, CartesianGrid, ResponsiveContainer, XAxis, YAxis 
 } from "recharts";
@@ -35,10 +35,10 @@ class CustomizedAxisTick extends PureComponent<any>
   }
 }
 
-export const Chart: FunctionComponent<{ readonly data: UsageTimeData }> = ({ data }) =>
+let Chart: FunctionComponent<{ readonly data: UsageTimeData }> = ({ data }) =>
 {
   const processedData = data.map(dataPoint => ({
-    date: dataPoint.date.toLocaleDateString("de", { weekday: "short" }),
+    date: dataPoint.date.toLocaleDateString("de", { weekday: "short" }).toUpperCase(),
     totalUsage: dataPoint.totalUsage
   }));
 
@@ -50,11 +50,11 @@ export const Chart: FunctionComponent<{ readonly data: UsageTimeData }> = ({ dat
   type DataPoint = typeof processedData[number];
 
   return (
-    <ResponsiveContainer width="100%" height={200}>
+    <ResponsiveContainer width="100%" height={180} style={{ fontSize: 14 }}>
       <BarChart
         data={processedData}
         barSize={"7%"}
-        margin={{ left: -15, right: 5 }}>
+        margin={{ left: -25, right: 4 }}>
         <CartesianGrid strokeDasharray="4" vertical={false} opacity={1}/>
         <XAxis
           dataKey={"date" satisfies keyof DataPoint}
@@ -92,3 +92,7 @@ export const Chart: FunctionComponent<{ readonly data: UsageTimeData }> = ({ dat
     </ResponsiveContainer>
   );
 };
+
+Chart = memo(Chart);
+
+export { Chart };

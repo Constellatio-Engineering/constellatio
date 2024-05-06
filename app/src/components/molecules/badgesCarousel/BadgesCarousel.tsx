@@ -1,5 +1,6 @@
 import { ArrowLeftWithLine } from "@/components/Icons/ArrowLeftWithLine";
 import { ArrowRightWithLine } from "@/components/Icons/ArrowRightWithLine";
+import { smallBadgeCardWidth } from "@/components/molecules/profileBadgeCard/ProfileBadgeCard.styles";
 import BadgesDrawer from "@/components/organisms/badgesDrawer/BadgesDrawer";
 import useBadges from "@/hooks/useBadges";
 
@@ -17,7 +18,7 @@ const BadgesCarousel: FunctionComponent = () =>
 
   return (
     <Carousel
-      slideSize="160px"
+      slideSize={`${smallBadgeCardWidth}px`}
       controlsOffset={0}
       controlSize={32}
       sx={{
@@ -40,8 +41,8 @@ const BadgesCarousel: FunctionComponent = () =>
           "[data-inactive]": {
             opacity: 0,
           },
-          left: "-3%",
-          width: "106%",
+          left: "-40px",
+          width: "calc(100% + 80px)",
         },
         position: "relative"
       }}

@@ -34,4 +34,7 @@ export const headerCardsArea = css`
   margin-top: 100px;
   gap: ${100 - learningTimeCardWidth - badgesCarouselWidth}%;
   width: 100%;
+  > div {
+    box-shadow: 0px 2px 20px rgba(0, 0, 0, 0.05);
+  }
 `;
