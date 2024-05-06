@@ -10,7 +10,7 @@ const ProfileLearningTimeBlock: FunctionComponent = () =>
   const [selectedTabIndex, setSelectedTabIndex] = React.useState(0);*/
   return (
     <div css={styles.wrapper}>
-      <ProfileLearningTimeBlockHeader todaysLearningTime={{ hours: 0, minutes: 0 }}/>
+      <ProfileLearningTimeBlockHeader todaysLearningTime={{ hours: 0, minutes: 0 }} isPending={false}/>
     </div>
   );
 };
