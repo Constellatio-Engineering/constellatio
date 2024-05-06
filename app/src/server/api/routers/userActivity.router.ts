@@ -82,6 +82,7 @@ export const userActivityRouter = createTRPCRouter({
     .mutation(async ({
       ctx: { userId },
       input: {
+        data,
         href: _href,
         path,
         search,
@@ -89,15 +90,19 @@ export const userActivityRouter = createTRPCRouter({
       } 
     }) =>
     {
-      const rateLimitResult = await rateLimit.limit(userId);
+      /* const rateLimitResult = await rateLimit.limit(userId);
 
       if(!rateLimitResult.success)
       {
         console.warn("Rate limit exceeded for ping event. This should not happen since the client should not emit pings faster than the rate limit allows.");
         throw new RateLimitError();
-      }
+      }*/
 
-      console.log(`PING from user '${userId}' on ${path}${search != null ? search : ""}`);
+      if(env.NEXT_PUBLIC_DEPLOYMENT_ENVIRONMENT !== "production")
+      {
+        // console.log(`PING from user '${userId}' on ${path}${search != null ? search : ""}`);
+        console.log(new Date().getSeconds(), data);
+      }
 
       const userLocalTimestamp = getCurrentDateInLocalTimezone(timeZoneOffset);
 
