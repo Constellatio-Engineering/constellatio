@@ -3,7 +3,6 @@ import { timeZoneOffsetValidation } from "@/schemas/common.validation";
 import { z } from "zod";
 
 export const pingSchema = z.object({
-  data: z.any(),
   href: z.string().url(),
   path: z.string(),
   search: z.string().optional(),
