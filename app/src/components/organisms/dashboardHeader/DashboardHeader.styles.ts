@@ -17,6 +17,10 @@ export const contentContainer = css`
   padding: 0 60px;
   width: 100%;
   max-width: 1440px;
+  h1 {
+    position: relative;
+    top: 10px
+  }
   @media screen and (max-width: 1300px) {
     padding: 0 20px;
     min-width: auto;
