@@ -32,14 +32,14 @@ export const userActivityRouter = createTRPCRouter({
       start.setUTCHours(0, 0, 0, 0);
       end.setUTCHours(23, 59, 59, 999);
 
-      console.log({
+      /* console.log({
         "input.start": input.start,
         "input.end": input.end, // eslint-disable-line sort-keys-fix/sort-keys-fix
         _startInUsersLocalTimezone, // eslint-disable-line sort-keys-fix/sort-keys-fix
         _endInUsersLocalTimezone, // eslint-disable-line sort-keys-fix/sort-keys-fix
         start, // eslint-disable-line sort-keys-fix/sort-keys-fix
         end, // eslint-disable-line sort-keys-fix/sort-keys-fix
-      });
+      });*/
 
       const dailyUsageSubquery = db
         .select({
