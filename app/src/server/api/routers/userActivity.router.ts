@@ -21,26 +21,27 @@ const rateLimit = new Ratelimit({
 export const userActivityRouter = createTRPCRouter({
   getUsageTime: protectedProcedure
     .input(getUsageTimeSchema)
-    .query(async ({
-      ctx: { userId },
-      input: {
-        end,
-        interval,
-        start,
-        timeZoneOffset
-      } 
-    }) =>
+    .query(async ({ ctx: { userId }, input }) =>
     {
-      const startWithoutTime = new Date(start.getFullYear(), start.getMonth(), start.getDate());
-      const endWithoutTime = new Date(end.getFullYear(), end.getMonth(), end.getDate());
-      const startInUsersLocalTimezone = getDateInLocalTimezone(startWithoutTime, timeZoneOffset);
-      const endInUsersLocalTimezone = getDateInLocalTimezone(endWithoutTime, timeZoneOffset);
-      endInUsersLocalTimezone.setDate(endInUsersLocalTimezone.getDate() + 1);
-      endInUsersLocalTimezone.setMilliseconds(endInUsersLocalTimezone.getMilliseconds() - 1);
+      const _startInUsersLocalTimezone = getDateInLocalTimezone(input.start, input.timeZoneOffset);
+      const _endInUsersLocalTimezone = getDateInLocalTimezone(input.end, input.timeZoneOffset);
+      const start = new Date(_startInUsersLocalTimezone.getFullYear(), _startInUsersLocalTimezone.getMonth(), _startInUsersLocalTimezone.getDate());
+      const end = new Date(_endInUsersLocalTimezone.getFullYear(), _endInUsersLocalTimezone.getMonth(), _endInUsersLocalTimezone.getDate());
+      end.setDate(end.getDate() + 1);
+      end.setMilliseconds(end.getMilliseconds() - 1);
+
+      console.log({
+        "input.start": input.start,
+        "input.end": input.end, // eslint-disable-line sort-keys-fix/sort-keys-fix
+        _startInUsersLocalTimezone, // eslint-disable-line sort-keys-fix/sort-keys-fix
+        _endInUsersLocalTimezone, // eslint-disable-line sort-keys-fix/sort-keys-fix
+        start, // eslint-disable-line sort-keys-fix/sort-keys-fix
+        end, // eslint-disable-line sort-keys-fix/sort-keys-fix
+      });
 
       const dailyUsageSubquery = db
         .select({
-          date: sql<Date>`date_trunc(${interval}, ${pings.createdAt})`.as("date"),
+          date: sql<Date>`date_trunc(${input.interval}, ${pings.createdAt})`.as("date"),
           totalUsage: sum(pings.pingInterval).as("totalUsage"),
           userId: pings.userId,
         })
@@ -48,8 +49,8 @@ export const userActivityRouter = createTRPCRouter({
         .where(
           and(
             eq(pings.userId, userId),
-            gte(pings.createdAt, startInUsersLocalTimezone),
-            lte(pings.createdAt, endInUsersLocalTimezone)
+            gte(pings.createdAt, start),
+            lte(pings.createdAt, end)
           )
         )
         .groupBy(sql<Date>`date`, pings.userId)
@@ -59,7 +60,7 @@ export const userActivityRouter = createTRPCRouter({
         .select({
           dateFromSeries: sql<Date>`d.date`.as("dateFromSeries"),
         })
-        .from(sql`generate_series(date_trunc(${interval}, ${startInUsersLocalTimezone}), date_trunc(${interval}, ${endInUsersLocalTimezone}), ${`1 ${interval}`}) as d(date)`)
+        .from(sql`generate_series(date_trunc(${input.interval}, ${start}), date_trunc(${input.interval}, ${end}), ${`1 ${input.interval}`}) as d(date)`)
         .as("DaysSeries");
 
       const usageTimeQuery = db
