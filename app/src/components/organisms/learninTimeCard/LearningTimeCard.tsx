@@ -77,11 +77,6 @@ export const LearningTimeCard: FunctionComponent = () =>
   const data = usageTime ?? initialUsageTime;
   const todaysUsage = data[data.length - 1]!.totalUsage;
 
-  console.log("-------------");
-  console.log("intervalStart", intervalStart);
-  console.log("intervalEnd", intervalEnd);
-  console.log("data", data);
-
   return (
     <div css={styles.wrapper}>
       <ProfileLearningTimeBlockHeader
