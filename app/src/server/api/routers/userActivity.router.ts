@@ -25,10 +25,12 @@ export const userActivityRouter = createTRPCRouter({
     {
       const _startInUsersLocalTimezone = getDateInLocalTimezone(input.start, input.timeZoneOffset);
       const _endInUsersLocalTimezone = getDateInLocalTimezone(input.end, input.timeZoneOffset);
-      const start = new Date(_startInUsersLocalTimezone.getFullYear(), _startInUsersLocalTimezone.getMonth(), _startInUsersLocalTimezone.getDate());
-      const end = new Date(_endInUsersLocalTimezone.getFullYear(), _endInUsersLocalTimezone.getMonth(), _endInUsersLocalTimezone.getDate());
-      end.setDate(end.getDate() + 1);
-      end.setMilliseconds(end.getMilliseconds() - 1);
+
+      const start = new Date(_startInUsersLocalTimezone.toISOString());
+      const end = new Date(_endInUsersLocalTimezone.toISOString());
+
+      start.setUTCHours(0, 0, 0, 0);
+      end.setUTCHours(23, 59, 59, 999);
 
       console.log({
         "input.start": input.start,
