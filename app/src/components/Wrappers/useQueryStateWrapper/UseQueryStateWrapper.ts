@@ -1,12 +1,8 @@
 import { useIsRouterReady } from "@/hooks/useIsRouterReady";
 
-import { type FunctionComponent, type ReactNode } from "react";
+import { type FunctionComponent, type PropsWithChildren } from "react";
 
-type Props = {
-  readonly children: ReactNode;
-};
-
-const UseQueryStateWrapper: FunctionComponent<Props> = ({ children }) =>
+const UseQueryStateWrapper: FunctionComponent<PropsWithChildren> = ({ children }) =>
 {
   const isRouterReady = useIsRouterReady();
 
