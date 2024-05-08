@@ -32,7 +32,7 @@ export const content = css`
 
 export const toc = css`
 	position: sticky;
-	top: 104px;
+	top: 150px;
 	order: 1;
 	height: max-content;
 	margin: 24px;
@@ -43,7 +43,7 @@ export const toc = css`
 `;
 
 export const fullTextAndTasksWrapper = css`
-	max-width: 52.5%;
+	max-width: 58%;
 	/* padding: 0 44px; */
 	padding: 0 ;
 	@media screen and (max-width: 1100px) {

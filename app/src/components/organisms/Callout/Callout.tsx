@@ -22,6 +22,7 @@ export const Callout: FC<CalloutProps> = ({ calloutType, expandable, text }) =>
       styleType="tertiary"
       rightIcon={<ArrowDown size={20}/>}
       size="medium"
+      style={{ zIndex: 2 }}
       onClick={() => setIsContentHide(false)}
       component="a">
       Ausklappen
@@ -33,6 +34,7 @@ export const Callout: FC<CalloutProps> = ({ calloutType, expandable, text }) =>
       styleType="tertiary"
       rightIcon={<ArrowUp size={20}/>}
       size="medium"
+      style={{ zIndex: 2 }}
       onClick={() => setIsContentHide(true)}
       component="a">
       Einklappen
@@ -51,10 +53,18 @@ export const Callout: FC<CalloutProps> = ({ calloutType, expandable, text }) =>
             maxHeight={190}
             showLabel={ShowAllBtn}
             styles={spoilerStyles({ isContentHide })}>
-            <Richtext data={text} stylesOverwrite={RichTextStyles}/>
+            <Richtext
+              data={text}
+              stylesOverwrite={RichTextStyles}
+              richTextOverwrite={{ paragraph: richTextParagraphOverwrite }}
+            />
           </Spoiler>
         ) : (
-          <Richtext data={text} stylesOverwrite={RichTextStyles} richTextOverwrite={{ paragraph: richTextParagraphOverwrite }}/>
+          <Richtext
+            data={text}
+            stylesOverwrite={RichTextStyles}
+            richTextOverwrite={{ paragraph: richTextParagraphOverwrite }}
+          />
         ))}
     </Stack>
   );

@@ -40,9 +40,10 @@ export const spoilerStyles = ({ isContentHide }: { isContentHide: boolean }): Sp
         bottom: 0,
         content: "''",
         display: isContentHide ? "block" : "none",
-        height: "100px",
+        height: "90px",
         position: "absolute",
         width: "100%",
+        zIndex: 1,
       },
     }
   });

@@ -37,8 +37,7 @@ export const config: CodegenConfig = {
   overwrite: true,
   schema: [
     {
-      [`https://cloud.caisy.io/api/v3/e/${process.env.CAISY_PROJECT_ID}/graphql` ||
-      ""]: {
+      [`https://cloud.caisy.io/api/v3/e/${process.env.CAISY_PROJECT_ID}/graphql` || ""]: {
         headers: {
           "x-caisy-apikey": `${process.env.CAISY_API_KEY}`,
         },

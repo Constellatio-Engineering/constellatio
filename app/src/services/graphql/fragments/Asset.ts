@@ -5,6 +5,8 @@ export const f_Asset = gql`
     title
     src
     originType
+    width
+    height
     keywords
     id
     dominantColor

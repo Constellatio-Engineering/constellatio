@@ -9,6 +9,7 @@ import { CaptionText } from "../../atoms/CaptionText/CaptionText";
 export interface ResultCardProps
 {
   readonly droppedCorrectCards: number;
+  readonly hideCounter?: boolean;
   readonly message: string;
   readonly totalCorrectCards: number;
   readonly variant: "win" | "lose";
@@ -16,6 +17,7 @@ export interface ResultCardProps
 
 export const ResultCard: FC<ResultCardProps> = ({
   droppedCorrectCards,
+  hideCounter,
   message,
   totalCorrectCards,
   variant
@@ -31,7 +33,7 @@ export const ResultCard: FC<ResultCardProps> = ({
           </CaptionText>
         </TextWrapper>
       )}
-      {totalCorrectCards && (
+      {(hideCounter !== true) && (
         <LabelWrapper variant={variant}>
           <CaptionText styleType="caption-01-bold" component="p">
             {droppedCorrectCards} / {totalCorrectCards}

@@ -32,6 +32,7 @@ export const richtextEditorFieldStyles = (): RichtextEditorFieldStyles =>
         },
         maxHeight: "60vh",
         minHeight: "370px",
+        overflow: "auto",
         padding: "20px",
         paddingBottom: "32px",
         whiteSpace: "normal",
@@ -48,5 +49,4 @@ export const richtextEditorFieldStyles = (): RichtextEditorFieldStyles =>
 };
 
 export const ContentWrapper = styled.div`
-  overflow: auto;
 `;

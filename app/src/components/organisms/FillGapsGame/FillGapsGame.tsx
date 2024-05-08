@@ -91,6 +91,7 @@ let FillGapsGame: FC<TFillGapsGame> = ({
       []
     );
   }, [gameState?.userAnswers]);
+
   const richtextOverwrite = useCallback(
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
     (props: any): ReactElement => 
@@ -246,8 +247,8 @@ let FillGapsGame: FC<TFillGapsGame> = ({
               }
             }}
             disabled={
-              gameStatus === "inprogress" &&
-							userEntriesArr.length !== correctAnswersArr.length
+              (gameStatus === "inprogress") &&
+              (userEntriesArr.filter(Boolean).length !== correctAnswersArr.length)
             }>
             {gameStatus === "inprogress" ? "Antwort prüfen" : "Erneut lösen"}
           </Button>

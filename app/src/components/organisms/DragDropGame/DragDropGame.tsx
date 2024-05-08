@@ -124,33 +124,30 @@ export const DragDropGame: FC<TDragDropGame> = ({
       if(winCondition && orderCorrect) 
       {
         updateGameState({
-          caseId,
           gameId: id,
           update: {
             gameStatus: "win",
-            resultMessage: "Sehr gut! Du hast die Frage richtig beantwortet.",
+            resultMessage: "Richtige Antwort",
           }
         });
       }
       else if(winCondition && !orderCorrect) 
       {
         updateGameState({
-          caseId,
           gameId: id,
           update: {
-            gameStatus: "lose",
-            resultMessage: "Leider hast du die Antwortmöglichkeiten nicht korrekt angeordnet.",
+            gameStatus: "lose-wrong-order",
+            resultMessage: "Richtige Antwort, falsche Reihenfolge",
           }
         });
       }
       else 
       {
         updateGameState({
-          caseId,
           gameId: id,
           update: {
             gameStatus: "lose",
-            resultMessage: "Deine Antwort war leider nicht korrekt.",
+            resultMessage: "Falsche Antwort",
           }
         });
       }
@@ -160,22 +157,20 @@ export const DragDropGame: FC<TDragDropGame> = ({
       if(winCondition) 
       {
         updateGameState({
-          caseId,
           gameId: id,
           update: {
             gameStatus: "win",
-            resultMessage: "Sehr gut! Du hast die Frage richtig beantwortet.",
+            resultMessage: "Richtige Antwort",
           }
         });
       }
       else 
       {
         updateGameState({
-          caseId,
           gameId: id,
           update: {
             gameStatus: "lose",
-            resultMessage: "Deine Antwort war leider nicht korrekt.",
+            resultMessage: "Falsche Antwort",
           }
         });
       }
@@ -185,7 +180,6 @@ export const DragDropGame: FC<TDragDropGame> = ({
     {
       // getNextGameIndex();
       updateGameState({
-        caseId,
         gameId: id,
         update: { gameSubmitted: true }
       });
@@ -197,7 +191,6 @@ export const DragDropGame: FC<TDragDropGame> = ({
     const originalOptionsShuffled = shuffleArray<TDragAndDropGameOptionType>(originalOptions);
 
     updateGameState({
-      caseId,
       gameId: id,
       update: {
         droppedItems: [],
@@ -266,15 +259,10 @@ export const DragDropGame: FC<TDragDropGame> = ({
         {gameStatus !== "inprogress" && (
           <>
             <ResultCard
-              droppedCorrectCards={
-                droppedItems?.filter((item) => item.correctAnswer).length ??
-								null
-              }
-              totalCorrectCards={
-                originalOptions.filter((item) => item.correctAnswer).length ??
-								null
-              }
-              variant={gameStatus}
+              hideCounter={true}
+              droppedCorrectCards={droppedItems?.filter((item) => item.correctAnswer).length ?? null}
+              totalCorrectCards={originalOptions.filter((item) => item.correctAnswer).length ?? null}
+              variant={gameStatus === "win" ? "win" : "lose"}
               message={resultMessage ?? ""}
             />
             {helpNote?.json && <HelpNote data={helpNote}/>}

@@ -13,8 +13,10 @@ export const wrapper = css`
 	max-width: 1440px;
 	margin: 0 auto;
 `;
+
 export const textAreaWrapper = css`
 	/* padding: 0 44px; */
+  flex: 1;
 	h2 {
 		margin-bottom: 24px;
 	}
@@ -22,8 +24,10 @@ export const textAreaWrapper = css`
 		margin-bottom: 48px;
 	}
 `;
+
 export const factsWrapper = css`
-	max-width: 50%;
+	max-width: 42%;
+  min-width: 42%;
 	/* padding: 8px 24px 16px 24px; */
 	h2 {
 		margin-bottom: 24px;

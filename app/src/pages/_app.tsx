@@ -1,6 +1,9 @@
 /* eslint-disable react/jsx-max-props-per-line */
 import { RouterTransition } from "@/components/atoms/RouterTransition/RouterTransition";
+import { ActivityWatchdog } from "@/components/helpers/activityWatchdog/ActivityWatchdog";
+import { AuthenticationRequiredProtection } from "@/components/helpers/authenticationRequiredProtection/AuthenticationRequiredProtection";
 import FeedbackButton from "@/components/molecules/feedbackButton/FeedbackButton";
+import Lightbox from "@/components/molecules/lightbox/Lightbox";
 import NewNotificationEarnedWatchdog from "@/components/molecules/newNotificationEarnedWatchdog/NewNotificationEarnedWatchdog";
 import ComputerRecommendedModal from "@/components/organisms/computerRecommendedModal/ComputerRecommendedModal";
 import FileViewer from "@/components/organisms/fileViewer/FileViewer";
@@ -40,6 +43,11 @@ type LayoutProps = {
   readonly Component: NextPageWithLayout;
   readonly pageProps: object;
 };
+
+if(typeof document === "undefined") 
+{
+  React.useLayoutEffect = React.useEffect;
+}
 
 const Layout: FunctionComponent<LayoutProps> = ({ Component, pageProps }) =>
 {
@@ -132,6 +140,10 @@ const AppContainer: FunctionComponent<ConstellatioAppProps> = ({ Component, page
                       <MaintenancePage/>
                     ) : (
                       <Fragment>
+                        <Lightbox/>
+                        <AuthenticationRequiredProtection>
+                          <ActivityWatchdog/>
+                        </AuthenticationRequiredProtection>
                         <RouterTransition/>
                         <Notifications/>
                         <NewNotificationEarnedWatchdog/>
@@ -140,7 +152,6 @@ const AppContainer: FunctionComponent<ConstellatioAppProps> = ({ Component, page
                         <FileViewer/>
                         <DocumentEditor/>
                         <FeedbackButton/>
-                        {/* {isTrackingEnabled && <Tracking/>}*/}
                         <Layout Component={Component} pageProps={pageProps}/>
                       </Fragment>
                     )}

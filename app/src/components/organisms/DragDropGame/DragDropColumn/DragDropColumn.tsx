@@ -59,6 +59,7 @@ export const DragDropColumn: FunctionComponent<Props> = ({
               {(dragProvided: DraggableProvided, dragSnapshot: DraggableStateSnapshot) =>
               {
                 let status: TDraggableCard["status"];
+                let isWrongOrder: boolean = false;
                 // let result: TDraggableCard["result"];
 
                 if(gameStatus === "inprogress")
@@ -69,6 +70,7 @@ export const DragDropColumn: FunctionComponent<Props> = ({
                 else
                 {
                   status = optionItem.correctAnswer ? "success" : "error";
+                  isWrongOrder = gameStatus === "lose-wrong-order" && columnType === "dropped" && status === "success" && optionItem.originalIndex !== index;
                   // result = optionItem.correctAnswer ? "Richtig" : "Falsch";
                 }
 
@@ -79,6 +81,7 @@ export const DragDropColumn: FunctionComponent<Props> = ({
                     // result={result}
                     label={optionItem.label}
                     id={optionItem.id}
+                    isWrongOrder={isWrongOrder}
                     index={index}
                     key={optionItem.id}
                     onDeleteHandler={columnType === "dropped" ? () => removeItemFromSubmitted(index) : undefined}
