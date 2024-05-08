@@ -72,7 +72,9 @@ export const LearningTimeCard: FunctionComponent = () =>
     start: intervalStart,
     timeZoneOffset: new Date().getTimezoneOffset(),
   }, {
-    refetchInterval: 10 * 60 * 1000 // refetch every 10 minutes
+    refetchInterval: 10 * 60 * 1000, // refetch every 10 minutes
+    refetchOnMount: false,
+    refetchOnWindowFocus: false,
   });
   const data = usageTime ?? initialUsageTime;
   const todaysUsage = data[data.length - 1]!.totalUsage;
