@@ -53,6 +53,10 @@ const AuthStateProvider: FunctionComponent<AuthStateProviderProps> = ({ children
   const session = useSession();
   const memoizedContext: AuthStateContext = useMemo(() => getIsUserLoggedInClient(session), [session]);
 
+  console.log("--- AuthStateProvider ---", {
+    isUserLoggedIn: memoizedContext.isUserLoggedIn
+  });
+
   return (
     <AuthStateContext.Provider value={memoizedContext}>
       {children}
