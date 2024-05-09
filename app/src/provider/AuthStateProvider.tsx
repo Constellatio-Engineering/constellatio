@@ -52,22 +52,6 @@ const AuthStateProvider: FunctionComponent<AuthStateProviderProps> = ({ children
 {
   const session = useSession();
   const memoizedContext: AuthStateContext = useMemo(() => getIsUserLoggedInClient(session), [session]);
-  const { isUserLoggedIn } = memoizedContext;
-
-  useEffect(() =>
-  {
-    console.log("AuthStateProvider mounted");
-
-    return () =>
-    {
-      console.log("AuthStateProvider unmounted");
-    };
-  }, []);
-
-  useEffect(() =>
-  {
-    console.log("isUserLoggedIn changed to", isUserLoggedIn);
-  }, [isUserLoggedIn]);
 
   return (
     <AuthStateContext.Provider value={memoizedContext}>

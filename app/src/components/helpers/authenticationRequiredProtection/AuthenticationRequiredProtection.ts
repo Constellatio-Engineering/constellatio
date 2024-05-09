@@ -8,7 +8,6 @@ export const AuthenticationRequiredProtection: FunctionComponent<PropsWithChildr
 
   if(!isUserLoggedIn)
   {
-    console.log("User is not logged in. Do not render children.");
     return null;
   }
 

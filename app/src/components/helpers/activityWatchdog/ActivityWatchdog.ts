@@ -41,14 +41,9 @@ export const ActivityWatchdog: FunctionComponent = () =>
 
   useEffect(() =>
   {
-    console.log("ActivityWatchdog useEffect, clear interval if exists and set new interval.");
     clearInterval(intervalRef.current);
     intervalRef.current = setInterval(sendPing, env.NEXT_PUBLIC_USER_ACTIVITY_PING_INTERVAL_SECONDS * 1000);
-    return () =>
-    {
-      console.log("ActivityWatchdog useEffect cleanup, clear interval.");
-      clearInterval(intervalRef.current);
-    };
+    return () => clearInterval(intervalRef.current);
   }, [sendPing]);
 
   return null;
