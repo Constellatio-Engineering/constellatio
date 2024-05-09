@@ -81,16 +81,6 @@ const AppContainer: FunctionComponent<ConstellatioAppProps> = ({ Component, page
 
   useEffect(() =>
   {
-    console.log("_app mounted");
-
-    return () =>
-    {
-      console.log("_app unmounted");
-    };
-  }, []);
-
-  useEffect(() =>
-  {
     if(!pathname.startsWith(appPaths.search))
     {
       useSearchBarStore.setState({ searchValue: "" });

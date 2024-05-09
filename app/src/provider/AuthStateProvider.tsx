@@ -1,7 +1,7 @@
 import { useSession } from "@supabase/auth-helpers-react";
 import { type Session, type User } from "@supabase/supabase-js";
 import {
-  createContext, type FunctionComponent, type ReactNode, useEffect, useMemo
+  createContext, type FunctionComponent, type ReactNode, useMemo
 } from "react";
 
 type InitialAuthState = {
