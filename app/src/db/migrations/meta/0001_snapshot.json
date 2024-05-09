@@ -1,10 +1,8 @@
 {
-  "id": "14f691c2-b756-49c5-9cb4-7b651844a43e",
-  "prevId": "30ad2213-f269-4d02-9771-2bda114c91e2",
-  "version": "5",
-  "dialect": "pg",
+  "version": "6",
+  "dialect": "postgresql",
   "tables": {
-    "AnswerUpvote": {
+    "public.AnswerUpvote": {
       "name": "AnswerUpvote",
       "schema": "",
       "columns": {
@@ -76,7 +74,7 @@
       },
       "uniqueConstraints": {}
     },
-    "ArticleView": {
+    "public.ArticleView": {
       "name": "ArticleView",
       "schema": "",
       "columns": {
@@ -135,7 +133,7 @@
       },
       "uniqueConstraints": {}
     },
-    "Badge": {
+    "public.Badge": {
       "name": "Badge",
       "schema": "",
       "columns": {
@@ -191,7 +189,7 @@
         }
       }
     },
-    "Bookmark": {
+    "public.Bookmark": {
       "name": "Bookmark",
       "schema": "",
       "columns": {
@@ -257,7 +255,7 @@
         }
       }
     },
-    "CaseProgress": {
+    "public.CaseProgress": {
       "name": "CaseProgress",
       "schema": "",
       "columns": {
@@ -308,7 +306,7 @@
       },
       "uniqueConstraints": {}
     },
-    "CaseSolution": {
+    "public.CaseSolution": {
       "name": "CaseSolution",
       "schema": "",
       "columns": {
@@ -358,7 +356,7 @@
       },
       "uniqueConstraints": {}
     },
-    "CaseView": {
+    "public.CaseView": {
       "name": "CaseView",
       "schema": "",
       "columns": {
@@ -417,7 +415,7 @@
       },
       "uniqueConstraints": {}
     },
-    "CorrectAnswer": {
+    "public.CorrectAnswer": {
       "name": "CorrectAnswer",
       "schema": "",
       "columns": {
@@ -507,7 +505,7 @@
         }
       }
     },
-    "Document": {
+    "public.Document": {
       "name": "Document",
       "schema": "",
       "columns": {
@@ -589,7 +587,7 @@
       "compositePrimaryKeys": {},
       "uniqueConstraints": {}
     },
-    "ForumAnswer": {
+    "public.ForumAnswer": {
       "name": "ForumAnswer",
       "schema": "",
       "columns": {
@@ -690,7 +688,7 @@
       "compositePrimaryKeys": {},
       "uniqueConstraints": {}
     },
-    "ForumQuestion_to_Subfield": {
+    "public.ForumQuestion_to_Subfield": {
       "name": "ForumQuestion_to_Subfield",
       "schema": "",
       "columns": {
@@ -734,7 +732,7 @@
       },
       "uniqueConstraints": {}
     },
-    "ForumQuestion_to_Topic": {
+    "public.ForumQuestion_to_Topic": {
       "name": "ForumQuestion_to_Topic",
       "schema": "",
       "columns": {
@@ -778,7 +776,7 @@
       },
       "uniqueConstraints": {}
     },
-    "ForumQuestion": {
+    "public.ForumQuestion": {
       "name": "ForumQuestion",
       "schema": "",
       "columns": {
@@ -862,7 +860,7 @@
       "compositePrimaryKeys": {},
       "uniqueConstraints": {}
     },
-    "ForumQuestion_to_LegalField": {
+    "public.ForumQuestion_to_LegalField": {
       "name": "ForumQuestion_to_LegalField",
       "schema": "",
       "columns": {
@@ -906,7 +904,7 @@
       },
       "uniqueConstraints": {}
     },
-    "GameProgress": {
+    "public.GameProgress": {
       "name": "GameProgress",
       "schema": "",
       "columns": {
@@ -957,7 +955,7 @@
       },
       "uniqueConstraints": {}
     },
-    "Note": {
+    "public.Note": {
       "name": "Note",
       "schema": "",
       "columns": {
@@ -1033,7 +1031,7 @@
       "compositePrimaryKeys": {},
       "uniqueConstraints": {}
     },
-    "ProfilePicture": {
+    "public.ProfilePicture": {
       "name": "ProfilePicture",
       "schema": "",
       "columns": {
@@ -1095,7 +1093,7 @@
         }
       }
     },
-    "QuestionUpvote": {
+    "public.QuestionUpvote": {
       "name": "QuestionUpvote",
       "schema": "",
       "columns": {
@@ -1167,7 +1165,7 @@
       },
       "uniqueConstraints": {}
     },
-    "SearchIndexUpdateQueue": {
+    "public.SearchIndexUpdateQueue": {
       "name": "SearchIndexUpdateQueue",
       "schema": "",
       "columns": {
@@ -1189,7 +1187,7 @@
       "compositePrimaryKeys": {},
       "uniqueConstraints": {}
     },
-    "UploadFolder": {
+    "public.UploadFolder": {
       "name": "UploadFolder",
       "schema": "",
       "columns": {
@@ -1239,7 +1237,7 @@
       "compositePrimaryKeys": {},
       "uniqueConstraints": {}
     },
-    "UploadedFile": {
+    "public.UploadedFile": {
       "name": "UploadedFile",
       "schema": "",
       "columns": {
@@ -1332,7 +1330,7 @@
       "compositePrimaryKeys": {},
       "uniqueConstraints": {}
     },
-    "UserRole": {
+    "public.UserRole": {
       "name": "UserRole",
       "schema": "",
       "columns": {
@@ -1383,7 +1381,7 @@
         }
       }
     },
-    "User": {
+    "public.User": {
       "name": "User",
       "schema": "",
       "columns": {
@@ -1491,7 +1489,7 @@
         }
       }
     },
-    "User_to_Badge": {
+    "public.User_to_Badge": {
       "name": "User_to_Badge",
       "schema": "",
       "columns": {
@@ -1555,7 +1553,7 @@
       },
       "uniqueConstraints": {}
     },
-    "User_to_Role": {
+    "public.User_to_Role": {
       "name": "User_to_Role",
       "schema": "",
       "columns": {
@@ -1614,171 +1612,190 @@
     }
   },
   "enums": {
-    "BadgeIdentifier": {
+    "public.BadgeIdentifier": {
       "name": "BadgeIdentifier",
-      "values": {
-        "fall-1": "fall-1",
-        "forum-power": "forum-power",
-        "disziplin": "disziplin",
-        "fall-profi-bgb-at": "fall-profi-bgb-at",
-        "forum-profi": "forum-profi",
-        "perfekte-woche": "perfekte-woche",
-        "fall-10": "fall-10",
-        "1-100": "1-100",
-        "game-master-25": "game-master-25",
-        "fall-25": "fall-25",
-        "dauerbrenner": "dauerbrenner",
-        "game-master-3": "game-master-3",
-        "fall-5": "fall-5",
-        "entschlossenheit": "entschlossenheit",
-        "game-master-50": "game-master-50",
-        "lexikon-profi-bgb-at": "lexikon-profi-bgb-at",
-        "lexikon-profi-deliktsrecht": "lexikon-profi-deliktsrecht",
-        "lexikon-profi-sachenrecht": "lexikon-profi-sachenrecht",
-        "lexikon-profi-bereicherungsrecht": "lexikon-profi-bereicherungsrecht",
-        "favorit": "favorit",
-        "power-user-allgemein": "power-user-allgemein",
-        "forum-1": "forum-1",
-        "feedback-1": "feedback-1",
-        "ugc-1": "ugc-1",
-        "forum-10": "forum-10",
-        "feedback-10": "feedback-10",
-        "ugc-10": "ugc-10",
-        "forum-5": "forum-5",
-        "feedback-5": "feedback-5",
-        "ugc-5": "ugc-5"
-      }
+      "schema": "public",
+      "values": [
+        "fall-1",
+        "forum-power",
+        "disziplin",
+        "fall-profi-bgb-at",
+        "forum-profi",
+        "perfekte-woche",
+        "fall-10",
+        "1-100",
+        "game-master-25",
+        "fall-25",
+        "dauerbrenner",
+        "game-master-3",
+        "fall-5",
+        "entschlossenheit",
+        "game-master-50",
+        "lexikon-profi-bgb-at",
+        "lexikon-profi-deliktsrecht",
+        "lexikon-profi-sachenrecht",
+        "lexikon-profi-bereicherungsrecht",
+        "favorit",
+        "power-user-allgemein",
+        "forum-1",
+        "feedback-1",
+        "ugc-1",
+        "forum-10",
+        "feedback-10",
+        "ugc-10",
+        "forum-5",
+        "feedback-5",
+        "ugc-5"
+      ]
     },
-    "BadgePublicationState": {
+    "public.BadgePublicationState": {
       "name": "BadgePublicationState",
-      "values": {
-        "not-listed": "not-listed",
-        "coming-soon": "coming-soon",
-        "published": "published"
-      }
+      "schema": "public",
+      "values": [
+        "not-listed",
+        "coming-soon",
+        "published"
+      ]
     },
-    "CaseProgressState": {
+    "public.CaseProgressState": {
       "name": "CaseProgressState",
-      "values": {
-        "not-started": "not-started",
-        "completing-tests": "completing-tests",
-        "solving-case": "solving-case",
-        "completed": "completed"
-      }
+      "schema": "public",
+      "values": [
+        "not-started",
+        "completing-tests",
+        "solving-case",
+        "completed"
+      ]
     },
-    "DocumentFileExtension": {
+    "public.DocumentFileExtension": {
       "name": "DocumentFileExtension",
-      "values": {
-        "pdf": "pdf"
-      }
+      "schema": "public",
+      "values": [
+        "pdf"
+      ]
     },
-    "DocumentFileMimeType": {
+    "public.DocumentFileMimeType": {
       "name": "DocumentFileMimeType",
-      "values": {
-        "application/pdf": "application/pdf"
-      }
+      "schema": "public",
+      "values": [
+        "application/pdf"
+      ]
     },
-    "FileExtension": {
+    "public.FileExtension": {
       "name": "FileExtension",
-      "values": {
-        "jpg": "jpg",
-        "jpeg": "jpeg",
-        "png": "png",
-        "pdf": "pdf"
-      }
+      "schema": "public",
+      "values": [
+        "jpg",
+        "jpeg",
+        "png",
+        "pdf"
+      ]
     },
-    "FileMimeType": {
+    "public.FileMimeType": {
       "name": "FileMimeType",
-      "values": {
-        "image/jpeg": "image/jpeg",
-        "image/png": "image/png",
-        "application/pdf": "application/pdf"
-      }
+      "schema": "public",
+      "values": [
+        "image/jpeg",
+        "image/png",
+        "application/pdf"
+      ]
     },
-    "GameProgressState": {
+    "public.GameProgressState": {
       "name": "GameProgressState",
-      "values": {
-        "not-started": "not-started",
-        "completed": "completed"
-      }
+      "schema": "public",
+      "values": [
+        "not-started",
+        "completed"
+      ]
     },
-    "Gender": {
+    "public.Gender": {
       "name": "Gender",
-      "values": {
-        "male": "male",
-        "female": "female",
-        "diverse": "diverse"
-      }
+      "schema": "public",
+      "values": [
+        "male",
+        "female",
+        "diverse"
+      ]
     },
-    "ImageFileExtension": {
+    "public.ImageFileExtension": {
       "name": "ImageFileExtension",
-      "values": {
-        "jpg": "jpg",
-        "jpeg": "jpeg",
-        "png": "png"
-      }
+      "schema": "public",
+      "values": [
+        "jpg",
+        "jpeg",
+        "png"
+      ]
     },
-    "ImageFileMimeType": {
+    "public.ImageFileMimeType": {
       "name": "ImageFileMimeType",
-      "values": {
-        "image/jpeg": "image/jpeg",
-        "image/png": "image/png"
-      }
+      "schema": "public",
+      "values": [
+        "image/jpeg",
+        "image/png"
+      ]
     },
-    "OnboardingResult": {
+    "public.OnboardingResult": {
       "name": "OnboardingResult",
-      "values": {
-        "skipped": "skipped",
-        "completed": "completed"
-      }
+      "schema": "public",
+      "values": [
+        "skipped",
+        "completed"
+      ]
     },
-    "ResourceType": {
+    "public.ResourceType": {
       "name": "ResourceType",
-      "values": {
-        "article": "article",
-        "case": "case",
-        "forumQuestion": "forumQuestion"
-      }
+      "schema": "public",
+      "values": [
+        "article",
+        "case",
+        "forumQuestion"
+      ]
     },
-    "Role": {
+    "public.Role": {
       "name": "Role",
-      "values": {
-        "forumMod": "forumMod",
-        "admin": "admin"
-      }
+      "schema": "public",
+      "values": [
+        "forumMod",
+        "admin"
+      ]
     },
-    "SearchIndexType": {
+    "public.SearchIndexType": {
       "name": "SearchIndexType",
-      "values": {
-        "article": "article",
-        "case": "case"
-      }
+      "schema": "public",
+      "values": [
+        "article",
+        "case"
+      ]
     },
-    "SubscriptionStatus": {
+    "public.SubscriptionStatus": {
       "name": "SubscriptionStatus",
-      "values": {
-        "active": "active",
-        "canceled": "canceled",
-        "incomplete": "incomplete",
-        "incomplete_expired": "incomplete_expired",
-        "past_due": "past_due",
-        "trialing": "trialing",
-        "unpaid": "unpaid",
-        "paused": "paused"
-      }
+      "schema": "public",
+      "values": [
+        "active",
+        "canceled",
+        "incomplete",
+        "incomplete_expired",
+        "past_due",
+        "trialing",
+        "unpaid",
+        "paused"
+      ]
     },
-    "UserBadgeState": {
+    "public.UserBadgeState": {
       "name": "UserBadgeState",
-      "values": {
-        "not-seen": "not-seen",
-        "seen": "seen"
-      }
+      "schema": "public",
+      "values": [
+        "not-seen",
+        "seen"
+      ]
     }
   },
   "schemas": {},
   "_meta": {
-    "columns": {},
     "schemas": {},
-    "tables": {}
-  }
+    "tables": {},
+    "columns": {}
+  },
+  "id": "14f691c2-b756-49c5-9cb4-7b651844a43e",
+  "prevId": "30ad2213-f269-4d02-9771-2bda114c91e2"
 }
