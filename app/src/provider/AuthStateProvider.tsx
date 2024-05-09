@@ -1,7 +1,7 @@
 import { useSession } from "@supabase/auth-helpers-react";
 import { type Session, type User } from "@supabase/supabase-js";
 import {
-  createContext, type FunctionComponent, type ReactNode, useMemo
+  createContext, type FunctionComponent, type ReactNode, useEffect, useMemo
 } from "react";
 
 type InitialAuthState = {
@@ -52,10 +52,22 @@ const AuthStateProvider: FunctionComponent<AuthStateProviderProps> = ({ children
 {
   const session = useSession();
   const memoizedContext: AuthStateContext = useMemo(() => getIsUserLoggedInClient(session), [session]);
+  const { isUserLoggedIn } = memoizedContext;
 
-  console.log("--- AuthStateProvider ---", {
-    isUserLoggedIn: memoizedContext.isUserLoggedIn
-  });
+  useEffect(() =>
+  {
+    console.log("AuthStateProvider mounted");
+
+    return () =>
+    {
+      console.log("AuthStateProvider unmounted");
+    };
+  }, []);
+
+  useEffect(() =>
+  {
+    console.log("isUserLoggedIn changed to", isUserLoggedIn);
+  }, [isUserLoggedIn]);
 
   return (
     <AuthStateContext.Provider value={memoizedContext}>
