@@ -28,12 +28,14 @@ import { type NextPage } from "next";
 import { type AppProps } from "next/app";
 import Head from "next/head";
 import { useRouter } from "next/router";
-import { appWithTranslation } from "next-i18next";
+import { appWithTranslation, type UserConfig } from "next-i18next";
 import { posthog } from "posthog-js";
 import { PostHogProvider } from "posthog-js/react";
 import React, {
   useEffect, type FunctionComponent, type ReactElement, type ReactNode, Fragment
 } from "react";
+
+import nextI18NextConfig from "../../next-i18next.config.js";
 
 export type NextPageWithLayout<P = object, IP = P> = NextPage<P, IP> & {
   getLayout?: (page: ReactElement) => ReactNode;
@@ -166,4 +168,11 @@ const AppContainer: FunctionComponent<ConstellatioAppProps> = ({ Component, page
   );
 };
 
-export default api.withTRPC(appWithTranslation(AppContainer));
+const emptyInitialI18NextConfig: UserConfig = {
+  i18n: {
+    defaultLocale: nextI18NextConfig.i18n.defaultLocale,
+    locales: nextI18NextConfig.i18n.locales,
+  },
+};
+
+export default api.withTRPC(appWithTranslation(AppContainer, emptyInitialI18NextConfig));
