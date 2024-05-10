@@ -141,6 +141,7 @@ let SelectionCardGame: FC<SelectionCardGameProps> = ({
                 key={`${option.id} - ${resetCounter}`}
                 label={option.label}
                 disabled={gameStatus !== "inprogress"}
+                isChecked={checkedAnswersIds.includes(option.id)}
                 // result={option.correctAnswer ? "Richtig" : "Falsch"}
                 status={
                   gameStatus === "inprogress"
