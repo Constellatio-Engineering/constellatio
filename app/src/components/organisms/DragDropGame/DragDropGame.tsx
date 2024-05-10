@@ -208,12 +208,23 @@ export const DragDropGame: FC<TDragDropGame> = ({
     renderedOptionsItems = originalOptions;
   }
 
+  if(id === "9f4a76fc-7503-4da7-acfe-1a16510000c5")
+  {
+    console.log({
+      droppedItems,
+      droppedItemsLength: droppedItems?.length,
+      loadingOverlayVisible: optionsItems?.length === 0 && droppedItems?.length === 0,
+      optionsItems,
+      optionsItemsLength: optionsItems?.length
+    });
+  }
+
   return (
     <Container>
       <TitleWrapper>
         <Gamification/>
         <Title order={4}>
-          Drag & Drop
+          Drag & Drop {id}
         </Title>
       </TitleWrapper>
       <GameWrapper>
@@ -235,7 +246,7 @@ export const DragDropGame: FC<TDragDropGame> = ({
         <DragDropContext onDragEnd={onDragEnd}>
           <Game>
             <LoadingOverlay
-              visible={optionsItems?.length < 1 && droppedItems?.length === 0}
+              visible={optionsItems?.length === 0 && droppedItems?.length === 0}
               radius="radius-12"
             />
             <DragDropColumn
