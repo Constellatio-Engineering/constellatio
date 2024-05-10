@@ -52,13 +52,7 @@ export const userActivityRouter = createTRPCRouter({
       const dateSeriesSubquery = db
         .select({
           dateFromSeries: sql`d.date`
-            .mapWith(value =>
-            {
-              const asDate = new Date(value);
-              const test = getDateInLocalTimezone(asDate, input.timeZoneOffset);
-              console.log("decoder", asDate, test);
-              return getDateInLocalTimezone(asDate, input.timeZoneOffset);
-            })
+            .mapWith(value => getDateInLocalTimezone(new Date(value), input.timeZoneOffset))
             .as("dateFromSeries"),
         })
         .from(sql`generate_series(date_trunc(${input.interval}, ${start.toISOString()}::timestamp), date_trunc(${input.interval}, ${end.toISOString()}::timestamp), ${`1 ${input.interval}`}) as d(date)`)
@@ -76,12 +70,7 @@ export const userActivityRouter = createTRPCRouter({
         ))
         .orderBy(asc(dateSeriesSubquery.dateFromSeries));
 
-      console.log(usageTimeQuery.toSQL());
-
       const usageTimePerInterval = await usageTimeQuery;
-
-      console.log(JSON.stringify(usageTimePerInterval, null, 2));
-
       return usageTimePerInterval;
     }),
   ping: protectedProcedure
