@@ -2,13 +2,14 @@ import { BodyText } from "@/components/atoms/BodyText/BodyText";
 import { Checkbox } from "@/components/atoms/Checkbox/Checkbox";
 
 import { useMantineTheme } from "@mantine/core";
-import React, { type FC, type ReactNode, useState } from "react";
+import React, { type FC, type ReactNode } from "react";
 
 import { ResultWrapper } from "./SelectionCard.styles";
 
 export interface SelectionCardProps
 {
   readonly disabled?: boolean;
+  readonly isChecked: boolean;
   readonly label: ReactNode | null;
   readonly onCheckHandler: React.ChangeEventHandler<HTMLInputElement>;
   readonly result?: ReactNode;
@@ -17,24 +18,20 @@ export interface SelectionCardProps
 
 export const SelectionCard: FC<SelectionCardProps> = ({
   disabled,
+  isChecked,
   label,
   onCheckHandler,
   result,
   status
 }) => 
 {
-  const [checked, setChecked] = useState(false);
   const theme = useMantineTheme();
 
   return (
     <Checkbox
       fullWidth
-      checked={checked}
-      onChange={(e) => 
-      {
-        setChecked(e.target.checked);
-        onCheckHandler(e);
-      }}
+      checked={isChecked}
+      onChange={onCheckHandler}
       disabled={disabled}
       label={(
         <>
@@ -59,12 +56,12 @@ export const SelectionCard: FC<SelectionCardProps> = ({
         ".mantine-Checkbox-inner": {
           input: {
             "&:hover": {
-              borderColor: !checked && status === "default" ? theme.colors["neutrals-01"][5] : "",
+              borderColor: !isChecked && status === "default" ? theme.colors["neutrals-01"][5] : "",
             },
 
             backgroundColor: `${theme.colors["neutrals-01"][0]} !important`,
 
-            borderColor: checked
+            borderColor: isChecked
               ? status === "default"
                 ? theme.colors["neutrals-02"][1]
                 : status === "success"
@@ -77,7 +74,7 @@ export const SelectionCard: FC<SelectionCardProps> = ({
                 : theme.colors["neutrals-01"][5],
           },
           svg: {
-            color: checked
+            color: isChecked
               ? status === "default"
                 ? `${theme.colors["neutrals-02"][1]} !important`
                 : status === "success"
@@ -91,7 +88,7 @@ export const SelectionCard: FC<SelectionCardProps> = ({
         alignItems: "center",
         backgroundColor: theme.colors["neutrals-01"][0],
         border: `1px solid ${
-          checked
+          isChecked
             ? status === "default"
               ? theme.colors["neutrals-02"][1]
               : status === "success"

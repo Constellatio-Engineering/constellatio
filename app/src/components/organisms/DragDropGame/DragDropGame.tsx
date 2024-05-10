@@ -101,7 +101,9 @@ export const DragDropGame: FC<TDragDropGame> = ({
 
   const checkOrder = (): boolean => 
   {
-    const correctAnswersOrder = originalOptions.filter((item) => item.correctAnswer);
+    const correctAnswersOrder = originalOptions
+      .filter((item) => item.correctAnswer)
+      .sort((a, b) => a.originalIndex - b.originalIndex);
 
     for(let i = 0; i < droppedItems.length; i++) 
     {
@@ -121,7 +123,7 @@ export const DragDropGame: FC<TDragDropGame> = ({
     {
       const orderCorrect = checkOrder();
 
-      if(winCondition && orderCorrect) 
+      if(winCondition && orderCorrect)
       {
         updateGameState({
           gameId: id,
@@ -213,7 +215,7 @@ export const DragDropGame: FC<TDragDropGame> = ({
       <TitleWrapper>
         <Gamification/>
         <Title order={4}>
-          Drag & Drop
+          Drag & Drop {id}
         </Title>
       </TitleWrapper>
       <GameWrapper>
@@ -235,7 +237,7 @@ export const DragDropGame: FC<TDragDropGame> = ({
         <DragDropContext onDragEnd={onDragEnd}>
           <Game>
             <LoadingOverlay
-              visible={optionsItems?.length < 1 && droppedItems?.length === 0}
+              visible={optionsItems?.length === 0 && droppedItems?.length === 0}
               radius="radius-12"
             />
             <DragDropColumn

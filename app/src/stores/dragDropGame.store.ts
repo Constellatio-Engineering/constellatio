@@ -17,6 +17,7 @@ type DragDropGameState = {
   gameStatus: GameStatus;
   gameSubmitted: boolean;
   optionsItems: TDragAndDropGameOptionType[];
+  originalOptionsItems: TDragAndDropGameOptionType[];
   resultMessage: string | null;
 };
 
@@ -26,8 +27,7 @@ type IDragDropGameStore = {
   games: DragDropGameState[];
   getGameState: (params: {
     caseId: string;
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    gameData: any;
+    gameData: any; // eslint-disable-line @typescript-eslint/no-explicit-any
     gameId: string;
   }) => DragDropGameState;
   moveItem: (params: {
@@ -51,15 +51,17 @@ type IDragDropGameStore = {
 type GetDefaultDragDropGameState = (params: {
   caseId: string;
   gameId: string;
+  optionsItems: TDragAndDropGameOptionType[];
 }) => DragDropGameState;
 
-const getDefaultDragDropGameState: GetDefaultDragDropGameState = ({ caseId, gameId }) => ({
+const getDefaultDragDropGameState: GetDefaultDragDropGameState = ({ caseId, gameId, optionsItems }) => ({
   caseId,
   droppedItems: [],
   gameId,
   gameStatus: "inprogress",
   gameSubmitted: false,
-  optionsItems: [],
+  optionsItems,
+  originalOptionsItems: optionsItems,
   resultMessage: "",
 });
 
@@ -76,9 +78,11 @@ const useDragDropGameStore = create(
         return game;
       }
 
-      const newGame = getDefaultDragDropGameState({ caseId, gameId });
-
-      newGame.optionsItems = gameData.options;
+      const newGame = getDefaultDragDropGameState({
+        caseId,
+        gameId,
+        optionsItems: gameData.options 
+      });
 
       set((state) =>
       {
@@ -185,7 +189,11 @@ const useDragDropGameStore = create(
         {
           if(game.caseId === caseId)
           {
-            return getDefaultDragDropGameState({ caseId, gameId: game.gameId });
+            return getDefaultDragDropGameState({
+              caseId,
+              gameId: game.gameId,
+              optionsItems: game.originalOptionsItems
+            });
           }
 
           return game;

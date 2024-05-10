@@ -65,7 +65,6 @@ const CaseSolveCaseStep: FunctionComponent<Props> = ({
     },
     onSuccess: async () =>
     {
-      console.log("solution submitted");
       await invalidateSubmittedCaseSolution({ caseId: id });
       setShowStepTwoModal(true);
     }
