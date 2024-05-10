@@ -31,6 +31,11 @@ const config = {
   compiler: {
     emotion: true,
   },
+  logging: {
+    fetches: {
+      fullUrl: false
+    }
+  },
   productionBrowserSourceMaps: true,
   eslint: {
     ignoreDuringBuilds: true,

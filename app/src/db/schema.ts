@@ -340,6 +340,7 @@ export const forumQuestions = pgTable("ForumQuestion", {
   userId: uuid("UserId").references(() => users.id, { onDelete: "no action" }).notNull(),
   createdAt: timestamp("CreatedAt").defaultNow().notNull(),
   updatedAt: timestamp("UpdatedAt").defaultNow().notNull(),
+  // updatedAt2: timestamp("UpdatedAt2").notNull().$onUpdate(() => new Date()),
   title: text("Title").notNull(),
   text: text("Text").notNull(),
 }, table => ({
