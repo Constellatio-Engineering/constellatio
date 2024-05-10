@@ -80,7 +80,7 @@ export const userActivityRouter = createTRPCRouter({
 
       const usageTimePerInterval = await usageTimeQuery;
 
-      console.log(usageTimePerInterval);
+      console.log(JSON.stringify(usageTimePerInterval, null, 2));
 
       return usageTimePerInterval;
     }),
