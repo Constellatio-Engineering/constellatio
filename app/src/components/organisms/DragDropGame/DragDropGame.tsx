@@ -215,7 +215,7 @@ export const DragDropGame: FC<TDragDropGame> = ({
       <TitleWrapper>
         <Gamification/>
         <Title order={4}>
-          Drag & Drop {id}
+          Drag & Drop
         </Title>
       </TitleWrapper>
       <GameWrapper>
