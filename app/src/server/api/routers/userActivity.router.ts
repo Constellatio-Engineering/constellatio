@@ -23,8 +23,6 @@ export const userActivityRouter = createTRPCRouter({
     .input(getUsageTimeSchema)
     .query(async ({ ctx: { userId }, input }) =>
     {
-      console.log("");
-      console.log(" --- getUsageTime --- ");
       const _startInUsersLocalTimezone = getDateInLocalTimezone(input.start, input.timeZoneOffset);
       const _endInUsersLocalTimezone = getDateInLocalTimezone(input.end, input.timeZoneOffset);
 
@@ -33,25 +31,6 @@ export const userActivityRouter = createTRPCRouter({
 
       start.setUTCHours(0, 0, 0, 0);
       end.setUTCHours(23, 59, 59, 999);
-
-      console.log("1");
-      const test1 = await db
-        .select({
-          date: sql<Date>`date_trunc(${input.interval}, ${pings.createdAt})`.as("date"),
-          totalUsage: sum(pings.pingInterval).as("totalUsage"),
-          userId: pings.userId,
-        })
-        .from(pings)
-        .where(
-          and(
-            eq(pings.userId, userId),
-            gte(pings.createdAt, start),
-            lte(pings.createdAt, end)
-          )
-        )
-        .groupBy(sql<Date>`date`, pings.userId);
-
-      console.log(test1);
 
       const dailyUsageSubquery = db
         .select({
@@ -70,50 +49,20 @@ export const userActivityRouter = createTRPCRouter({
         .groupBy(sql<Date>`date`, pings.userId)
         .as("DailyUsage");
 
-      console.log("2");
-
-      const query = db
+      const dateSeriesSubquery = db
         .select({
-          dateFromSeries: sql<Date>`d.date`.as("dateFromSeries"),
+          dateFromSeries: sql`d.date`
+            .mapWith(value =>
+            {
+              const asDate = new Date(value);
+              const test = getDateInLocalTimezone(asDate, input.timeZoneOffset);
+              console.log("decoder", asDate, test);
+              return getDateInLocalTimezone(asDate, input.timeZoneOffset);
+            })
+            .as("dateFromSeries"),
         })
-        .from(sql`generate_series(date_trunc(${input.interval}, ${start}), date_trunc(${input.interval}, ${end}), ${`1 ${input.interval}`}) as d(date)`);
-
-      console.log(query.toSQL());
-
-      try
-      {
-        const test2 = await query;
-        console.log(test2);
-      }
-      catch (e: unknown)
-      {
-        console.log("failed", e);
-      }
-
-      const dateSeriesSubquery = query.as("DaysSeries");
-
-      return [{
-        date: new Date(),
-        totalUsage: 0,
-      }];
-
-      console.log("3");
-
-      const test3 = await db
-        .select({
-          date: dateSeriesSubquery.dateFromSeries,
-          totalUsage: sql<number>`COALESCE(${dailyUsageSubquery.totalUsage}, 0)`.mapWith(Number)
-        })
-        .from(dateSeriesSubquery)
-        .leftJoin(dailyUsageSubquery, and(
-          eq(dailyUsageSubquery.date, dateSeriesSubquery.dateFromSeries),
-          eq(dailyUsageSubquery.userId, userId)
-        ))
-        .orderBy(asc(dateSeriesSubquery.dateFromSeries));
-
-      console.log(test3);
-
-      console.log("4");
+        .from(sql`generate_series(date_trunc(${input.interval}, ${start.toISOString()}::timestamp), date_trunc(${input.interval}, ${end.toISOString()}::timestamp), ${`1 ${input.interval}`}) as d(date)`)
+        .as("DaysSeries");
 
       const usageTimeQuery = db
         .select({
@@ -127,9 +76,12 @@ export const userActivityRouter = createTRPCRouter({
         ))
         .orderBy(asc(dateSeriesSubquery.dateFromSeries));
 
-      console.log("5");
+      console.log(usageTimeQuery.toSQL());
 
       const usageTimePerInterval = await usageTimeQuery;
+
+      console.log(usageTimePerInterval);
+
       return usageTimePerInterval;
     }),
   ping: protectedProcedure
