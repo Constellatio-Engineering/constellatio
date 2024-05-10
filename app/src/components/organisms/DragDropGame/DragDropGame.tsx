@@ -101,7 +101,9 @@ export const DragDropGame: FC<TDragDropGame> = ({
 
   const checkOrder = (): boolean => 
   {
-    const correctAnswersOrder = originalOptions.filter((item) => item.correctAnswer);
+    const correctAnswersOrder = originalOptions
+      .filter((item) => item.correctAnswer)
+      .sort((a, b) => a.originalIndex - b.originalIndex);
 
     for(let i = 0; i < droppedItems.length; i++) 
     {
@@ -121,7 +123,7 @@ export const DragDropGame: FC<TDragDropGame> = ({
     {
       const orderCorrect = checkOrder();
 
-      if(winCondition && orderCorrect) 
+      if(winCondition && orderCorrect)
       {
         updateGameState({
           gameId: id,
@@ -206,17 +208,6 @@ export const DragDropGame: FC<TDragDropGame> = ({
   if(renderedOptionsItems.length === 0 && droppedItems.length === 0)
   {
     renderedOptionsItems = originalOptions;
-  }
-
-  if(id === "9f4a76fc-7503-4da7-acfe-1a16510000c5")
-  {
-    console.log({
-      droppedItems,
-      droppedItemsLength: droppedItems?.length,
-      loadingOverlayVisible: optionsItems?.length === 0 && droppedItems?.length === 0,
-      optionsItems,
-      optionsItemsLength: optionsItems?.length
-    });
   }
 
   return (
