@@ -20,7 +20,7 @@ const ConfirmEmailChangePage: FunctionComponent = () =>
   const urlSearchParams = new URLSearchParams(router.asPath.split("#")[1]);
   const params = Object.fromEntries(urlSearchParams.entries());
   const { code } = router.query;
-  const redirectIntervalRef = useRef<NodeJS.Timer>();
+  const redirectIntervalRef = useRef<NodeJS.Timeout>();
   const [secondsUntilRedirect, setSecondsUntilRedirect] = useState<number>(4);
   const user = useUser();
   const userEmail = user?.email;
