@@ -2,6 +2,7 @@
 import { RouterTransition } from "@/components/atoms/RouterTransition/RouterTransition";
 import { ActivityWatchdog } from "@/components/helpers/activityWatchdog/ActivityWatchdog";
 import { AuthenticationRequiredProtection } from "@/components/helpers/authenticationRequiredProtection/AuthenticationRequiredProtection";
+import Tracking from "@/components/helpers/Tracking";
 import FeedbackButton from "@/components/molecules/feedbackButton/FeedbackButton";
 import Lightbox from "@/components/molecules/lightbox/Lightbox";
 import NewNotificationEarnedWatchdog from "@/components/molecules/newNotificationEarnedWatchdog/NewNotificationEarnedWatchdog";
@@ -18,7 +19,7 @@ import InvalidateQueriesProvider from "@/provider/InvalidateQueriesProvider";
 import MeilisearchProvider from "@/provider/MeilisearchProvider";
 import useSearchBarStore from "@/stores/searchBar.store";
 import { api } from "@/utils/api";
-import { isProduction } from "@/utils/env";
+import { isProduction, isTrackingEnabled } from "@/utils/env";
 import { appPaths } from "@/utils/paths";
 
 import { ModalsProvider } from "@mantine/modals";
@@ -143,6 +144,7 @@ const AppContainer: FunctionComponent<ConstellatioAppProps> = ({ Component, page
                     ) : (
                       <Fragment>
                         <Lightbox/>
+                        {isTrackingEnabled && <Tracking/>}
                         <AuthenticationRequiredProtection>
                           <ActivityWatchdog/>
                         </AuthenticationRequiredProtection>
