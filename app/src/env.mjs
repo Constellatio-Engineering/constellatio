@@ -71,7 +71,7 @@ export const env = createEnv({
     NEXT_PUBLIC_FORMBRICKS_HOST: z.string(),
     NEXT_PUBLIC_FORMBRICKS_KEY_TESTINGS: z.string(),
     NEXT_PUBLIC_FORMBRICKS_KEY_PRODUCTION: z.string(),
-    NEXT_PUBLIC_IS_TRACKING_ENABLED: z.enum(["true", "false"]),
+    NEXT_PUBLIC_IS_TRACKING_ENABLED: z.enum(["true", "false"]).transform((value) => value === "true"),
     NEXT_PUBLIC_USER_ACTIVITY_PING_INTERVAL_SECONDS: z.string().pipe(z.coerce.number().int().min(1).max(3600)),
     NEXT_PUBLIC_IS_USAGE_TIME_CHART_ENABLED: z.enum(["true", "false"]).transform((value) => value === "true"),
     NEXT_PUBLIC_IS_REQUEST_BATCHING_DISABLED: z.enum(["true", "false"]).transform((value) => value === "true"),
