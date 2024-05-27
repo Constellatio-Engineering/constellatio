@@ -6,10 +6,12 @@ import { DownloadIcon } from "@/components/Icons/DownloadIcon";
 import { Edit } from "@/components/Icons/Edit";
 import { FolderIcon } from "@/components/Icons/Folder";
 import { Trash } from "@/components/Icons/Trash";
+import { UnstyledButton } from "@/components/molecules/unstyledButton/UnstyledButton";
 import { type Document } from "@/db/schema";
 import { useOnDocumentMutation } from "@/hooks/useOnDocumentMutation";
 import useUploadFolders from "@/hooks/useUploadFolders";
 import useDocumentEditorStore from "@/stores/documentEditor.store";
+import { useTagsEditorStore } from "@/stores/tagsEditor.store";
 import { api } from "@/utils/api";
 import { getFolderName } from "@/utils/folders";
 import { apiPaths } from "@/utils/paths";
@@ -38,6 +40,7 @@ export const DocsTableData: FunctionComponent<Document> = (doc) =>
     updatedAt
   } = doc;
 
+  const openTagsDrawer = useTagsEditorStore(s => s.openEditor);
   const { onDocumentMutation } = useOnDocumentMutation();
   const downloadDocumentNotificationId = `downloading-document${documentId}`;
   const { setEditDocumentState, setViewDocumentState } = useDocumentEditorStore(s => s);
@@ -112,8 +115,14 @@ export const DocsTableData: FunctionComponent<Document> = (doc) =>
         onClick={() => setViewDocumentState(doc)}>
         <BodyText styleType="body-01-medium" component="p">{name}</BodyText>
       </td>
-      <td css={styles.docDate}><BodyText styleType="body-01-medium" component="p">{formatDate(updatedAt)}</BodyText></td>
-      {/* <td css={styles.docTags}><BodyText styleType="body-02-medium" component="p"/></td> */}
+      <td css={styles.docDate}>
+        <BodyText styleType="body-01-medium" component="p">{formatDate(updatedAt)}</BodyText>
+      </td>
+      <td css={styles.docTags}>
+        <UnstyledButton onClick={() => openTagsDrawer(doc)}>
+          <BodyText styleType="body-02-medium" component="p">Tags (0)</BodyText>
+        </UnstyledButton>
+      </td>
       <td css={styles.cellFolder}>
         <BodyText
           styleType="body-02-medium"
