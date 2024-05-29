@@ -25,5 +25,5 @@ export default defineConfig({
   schema: "./src/db/schema.ts",
   schemaFilter: ["public"],
   strict: false,
-  verbose: false,
+  verbose: true,
 });

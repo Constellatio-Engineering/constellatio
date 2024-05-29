@@ -1,5 +1,5 @@
 DO $$ BEGIN
- CREATE TYPE "BadgeIdentifier" AS ENUM('fall-1', 'forum-power', 'disziplin', 'fall-profi-bgb-at', 'forum-profi', 'perfekte-woche', 'fall-10', '1-100', 'game-master-25', 'fall-25', 'dauerbrenner', 'game-master-3', 'fall-5', 'entschlossenheit', 'game-master-50', 'lexikon-profi-bgb-at', 'lexikon-profi-deliktsrecht', 'lexikon-profi-sachenrecht', 'lexikon-profi-bereicherungsrecht', 'favorit', 'power-user-allgemein', 'forum-1', 'feedback-1', 'ugc-1', 'forum-10', 'feedback-10', 'ugc-10', 'forum-5', 'feedback-5', 'ugc-5');
+ CREATE TYPE "BadgeIdentifier" AS ENUM('fall-1', 'forum-power', 'disziplin', 'fall-profi-bgb-at', 'forum-profi', 'perfekte-woche', 'fall-10', '1-100', '1-1000', 'game-master-25', 'fall-25', 'dauerbrenner', 'game-master-3', 'fall-5', 'entschlossenheit', 'game-master-50', 'lexikon-profi-bgb-at', 'lexikon-profi-deliktsrecht', 'lexikon-profi-sachenrecht', 'lexikon-profi-bereicherungsrecht', 'favorit', 'power-user-allgemein', 'forum-1', 'feedback-1', 'ugc-1', 'forum-10', 'feedback-10', 'ugc-10', 'forum-5', 'feedback-5', 'ugc-5');
 EXCEPTION
  WHEN duplicate_object THEN null;
 END $$;

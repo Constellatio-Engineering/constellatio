@@ -113,7 +113,7 @@ export const badgeIdentifierEnum = pgEnum("BadgeIdentifier", badgeIdentifiers);
 export const userBadgeStateEnum = pgEnum("UserBadgeState", userBadgeStates);
 export const badgePublicationStateEnum = pgEnum("BadgePublicationState", badgePublicationState);
 export const roleEnum = pgEnum("Role", roles);
-export const notificationTypeIdentifierEnum = pgEnum("NotificationTypeIdentifier", notificationTypesIdentifiers);
+export const notificationTypeIdentifierEnum = pgEnum("NotificationType", notificationTypesIdentifiers);
 
 // TODO: Go through all queries and come up with useful indexes
 
@@ -524,7 +524,7 @@ export type UserToRoleInsert = InferInsertModel<typeof usersToRoles>;
 export type UserToRole = InferSelectModel<typeof usersToRoles>;
 
 export const notificationTypes = pgTable("NotificationType", {
-  identifier: notificationTypeIdentifierEnum("NotificationTypeIdentifier").primaryKey(),
+  identifier: notificationTypeIdentifierEnum("NotificationType").primaryKey(),
   name: text("Name").notNull(),
   description: text("Description").notNull(),
 });
@@ -542,7 +542,7 @@ export const notifications = pgTable("Notification", {
   recipientId: uuid("RecipientId").references(() => users.id, { onDelete: "no action" }).notNull(),
   senderId: uuid("SenderId").references(() => users.id, { onDelete: "no action" }).notNull(),
   resourceId: uuid("ResourceId"),
-  typeIdentifier: notificationTypeIdentifierEnum("NotificationTypeIdentifier").references(() => notificationTypes.identifier, { onDelete: "no action" }).notNull(),
+  typeIdentifier: notificationTypeIdentifierEnum("Type").references(() => notificationTypes.identifier, { onDelete: "no action" }).notNull(),
   createdAt: timestamp("CreatedAt").defaultNow().notNull(),
   readAt: timestamp("ReadAt"),
 });
