@@ -57,7 +57,6 @@ export const MaterialTagsDrawer: FunctionComponent = () =>
       title={(
         <SlidingPanelTitle
           title="Tags"
-          variant="default"
           closeButtonAction={onClose}
         />
       )}>
@@ -65,9 +64,12 @@ export const MaterialTagsDrawer: FunctionComponent = () =>
         <>
           <SlidingPanelFileTypeRow
             variant="constellatioDocs"
-            title={editorState.originalDoc.name}
+            title={editorState.document.name}
           />
-          <TagsSelector docId={editorState.originalDoc.id}/>
+          <TagsSelector
+            docId={editorState.document.id}
+            editorState={editorState}
+          />
         </>
       )}
     </Drawer>

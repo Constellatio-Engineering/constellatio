@@ -86,6 +86,23 @@ export const documentsRouter = createTRPCRouter({
         queryConditions.push(isNull(documents.folderId));
       }
 
+      /* const documentsWithRelations = await db.query.documents.findMany({
+        orderBy: [desc(documents.updatedAt)],
+        where: and(...queryConditions),
+        with: {
+          tags: {
+            columns: {
+              tagId: true,
+            }
+          }
+        }
+      });
+
+      return documentsWithRelations.map((document) => ({
+        ...document,
+        tags: document.tags.map(({ tagId }) => tagId)
+      }));*/
+
       return db.query.documents.findMany({
         orderBy: [desc(documents.updatedAt)],
         where: and(...queryConditions),

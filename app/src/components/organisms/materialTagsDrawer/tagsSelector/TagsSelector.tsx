@@ -1,11 +1,12 @@
+import { UnstyledButton } from "@/components/molecules/unstyledButton/UnstyledButton";
 import { tags } from "@/components/organisms/materialTagsDrawer/MaterialTagsDrawer";
 import { colors } from "@/constants/styles/colors";
+import { type EditorOpened, useTagsEditorStore } from "@/stores/tagsEditor.store";
 import { api } from "@/utils/api";
-import { getRandomUuid } from "@/utils/utils";
 
 import { ActionIcon, Badge, Input, rem } from "@mantine/core";
 import { IconX, IconSearch } from "@tabler/icons-react";
-import React, { type FunctionComponent, useEffect } from "react";
+import React, { type FunctionComponent } from "react";
 
 import * as styles from "./TagsSelector.styles";
 
@@ -63,10 +64,15 @@ const CustomBadge: FunctionComponent<CustomBadgeProps> = ({
 
 type Props = {
   readonly docId: string;
+  readonly editorState: EditorOpened;
 };
 
-const TagsSelector: FunctionComponent<Props> = ({ docId }) =>
+const TagsSelector: FunctionComponent<Props> = ({ docId, editorState }) =>
 {
+  const selectTag = useTagsEditorStore(s => s.selectTag);
+  const deselectTag = useTagsEditorStore(s => s.deselectTag);
+  const { hasUnsavedChanges } = useTagsEditorStore(s => s.getComputedValues());
+
   const { mutate: setTags } = api.tags.setTagsForConstellatioDoc.useMutation({
     onError: () => console.log("error"),
     onSuccess: () => console.log("success")
@@ -84,7 +90,7 @@ const TagsSelector: FunctionComponent<Props> = ({ docId }) =>
             <CustomBadge
               key={tag.id}
               title={tag.name}
-              deleteButtonAction={() => console.log("delete")}
+              deleteButtonAction={() => deselectTag(tag.id)}
             />
           ))}
         </div>
@@ -112,20 +118,42 @@ const TagsSelector: FunctionComponent<Props> = ({ docId }) =>
           radius="md"
         />
         <div css={styles.selectableBadgesWrapper}>
-          {tags.map((tag, index) => (
-            <CustomBadge
-              key={tag.id}
-              title={tag.name}
-              isSelected={false}
-              selectAction={() =>
-              {
-                const allTagIdsUpToCurrentIndex = tags.slice(0, index + 1).map(tag => tag.id);
-                setTags({ docId, tagIds: allTagIdsUpToCurrentIndex });
-              }}
-            />
-          ))}
+          {tags.map((tag) =>
+          {
+            const isSelected = editorState.editedTags.some((tagId) => tagId === tag.id);
+
+            return (
+              <CustomBadge
+                key={tag.id}
+                title={tag.name}
+                isSelected={isSelected}
+                selectAction={() =>
+                {
+                  if(isSelected)
+                  {
+                    deselectTag(tag.id);
+                  }
+                  else
+                  {
+                    selectTag(tag.id);
+                  }
+                }}
+              />
+            );
+          })}
         </div>
       </div>
+      {hasUnsavedChanges && (
+        <UnstyledButton onClick={() =>
+        {
+          setTags({
+            docId,
+            tagIds: editorState.editedTags,
+          });
+        }}>
+          <p>Speichern</p>
+        </UnstyledButton>
+      )}
     </>
   );
 };

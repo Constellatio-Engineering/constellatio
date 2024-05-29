@@ -1,6 +1,5 @@
-import { LinkButton } from "@/components/atoms/LinkButton/LinkButton";
 import { Cross } from "@/components/Icons/Cross";
-import { DownloadIcon } from "@/components/Icons/DownloadIcon";
+import { UnstyledButton } from "@/components/molecules/unstyledButton/UnstyledButton";
 
 import { Title } from "@mantine/core";
 import React, { type FunctionComponent } from "react";
@@ -10,43 +9,19 @@ import * as styles from "./SlidingPanelTitle.styles";
 interface SlidingPanelTitleProps
 {
   readonly closeButtonAction: () => void;
-  readonly link?: {
-    readonly text: string;
-  };
-  readonly number?: number;
   readonly title: string;
-  readonly variant?: "default" | "rich";
 }
 
-const SlidingPanelTitle: FunctionComponent<SlidingPanelTitleProps> = ({
-  closeButtonAction,
-  link,
-  number,
-  title,
-  variant
-}) => 
+const SlidingPanelTitle: FunctionComponent<SlidingPanelTitleProps> = ({ closeButtonAction, title }) => 
 {
-  return variant === "default" ? (
+  return (
     <div css={styles.wrapper}>
-      {title && <Title order={3}>{title}</Title>}
-      <span onClick={closeButtonAction}>
+      <Title css={styles.title} order={3}>{title}</Title>
+      <UnstyledButton onClick={closeButtonAction} styles={styles.closeButtonWrapper}>
         <Cross size={32}/>
-      </span>
-    </div>
-  ) : (
-    <div css={styles.wrapper}>
-      {title && (
-        <div className="header">
-          <Title order={3}>{title} <span className="count">({number ?? 0})</span></Title>
-          {link?.text && <LinkButton title={link?.text} icon={<DownloadIcon/>}/>}
-        </div>
-      )}
-      <span onClick={closeButtonAction}>
-        <Cross size={32}/>
-      </span>
+      </UnstyledButton>
     </div>
   );
-  
 };
 
 export default SlidingPanelTitle;
