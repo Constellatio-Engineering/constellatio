@@ -211,6 +211,10 @@ export const documents = pgTable("Document", {
   content: text("Content").notNull(),
 });
 
+export const documentsRelations = relations(documents, ({ many }) => ({
+  tags: many(documentsToTags),
+}));
+
 export type DocumentInsert = InferInsertModel<typeof documents>;
 export type Document = InferSelectModel<typeof documents>;
 
@@ -574,3 +578,20 @@ export const pings = pgTable("Ping", {
 
 export type PingInsert = InferInsertModel<typeof pings>;
 export type Ping = InferSelectModel<typeof pings>;
+
+export const documentsToTags = pgTable("Document_to_Tag", {
+  documentId: uuid("DocumentId").references(() => documents.id, { onDelete: "cascade" }).notNull(),
+  tagId: uuid("TagId").notNull(),
+}, table => ({
+  pk: primaryKey({ columns: [table.documentId, table.tagId] }),
+}));
+
+export const documentsToTagsRelations = relations(documentsToTags, ({ one }) => ({
+  document: one(documents, {
+    fields: [documentsToTags.documentId],
+    references: [documents.id],
+  }),
+}));
+
+export type DocumentToTagInsert = InferInsertModel<typeof documentsToTags>;
+export type DocumentToTag = InferSelectModel<typeof documentsToTags>;
