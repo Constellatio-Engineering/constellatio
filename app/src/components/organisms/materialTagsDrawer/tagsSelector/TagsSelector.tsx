@@ -1,8 +1,8 @@
-import { UnstyledButton } from "@/components/molecules/unstyledButton/UnstyledButton";
 import { tags } from "@/components/organisms/materialTagsDrawer/MaterialTagsDrawer";
 import { colors } from "@/constants/styles/colors";
+import type { GetDocumentsResult } from "@/server/api/routers/documents.router";
 import { type EditorOpened, useTagsEditorStore } from "@/stores/tagsEditor.store";
-import { api } from "@/utils/api";
+import { type Nullable } from "@/utils/types";
 
 import { ActionIcon, Badge, Input, rem } from "@mantine/core";
 import { IconX, IconSearch } from "@tabler/icons-react";
@@ -63,36 +63,40 @@ const CustomBadge: FunctionComponent<CustomBadgeProps> = ({
 );
 
 type Props = {
-  readonly docId: string;
+  readonly currentDocument: Nullable<GetDocumentsResult[number]>;
   readonly editorState: EditorOpened;
 };
 
-const TagsSelector: FunctionComponent<Props> = ({ docId, editorState }) =>
+const TagsSelector: FunctionComponent<Props> = ({ currentDocument, editorState }) =>
 {
   const selectTag = useTagsEditorStore(s => s.selectTag);
   const deselectTag = useTagsEditorStore(s => s.deselectTag);
-  const { hasUnsavedChanges } = useTagsEditorStore(s => s.getComputedValues());
-
-  const { mutate: setTags } = api.tags.setTagsForConstellatioDoc.useMutation({
-    onError: () => console.log("error"),
-    onSuccess: () => console.log("success")
-  });
 
   return (
     <>
       <div css={styles.selectedTagsWrapper}>
         <div css={styles.headWrapper}>
-          <p css={styles.appliedTags}>5 Tags zugewiesen</p>
+          <p css={styles.appliedTags}>{editorState.editedTags.length} Tags zugewiesen</p>
           <p css={styles.amountOfApplieableTags}>Du kannst bis zu 10 Tags zuweisen</p>
         </div>
         <div css={styles.badgesWrapper}>
-          {tags.map((tag) => (
-            <CustomBadge
-              key={tag.id}
-              title={tag.name}
-              deleteButtonAction={() => deselectTag(tag.id)}
-            />
-          ))}
+          {editorState.editedTags.map(tagId =>
+          {
+            const tag = tags.find(({ id }) => id === tagId);
+
+            if(tag == null)
+            {
+              return null;
+            }
+
+            return (
+              <CustomBadge
+                key={tag.id}
+                title={tag.name}
+                deleteButtonAction={() => deselectTag(tag.id)}
+              />
+            );
+          })}
         </div>
       </div>
       <div css={styles.selectionAreaWrapper}>
@@ -143,17 +147,6 @@ const TagsSelector: FunctionComponent<Props> = ({ docId, editorState }) =>
           })}
         </div>
       </div>
-      {hasUnsavedChanges && (
-        <UnstyledButton onClick={() =>
-        {
-          setTags({
-            docId,
-            tagIds: editorState.editedTags,
-          });
-        }}>
-          <p>Speichern</p>
-        </UnstyledButton>
-      )}
     </>
   );
 };

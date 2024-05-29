@@ -26,7 +26,6 @@ export const badgesWrapper = css`
   flex-wrap: wrap;
   gap: 8px;
   padding: 0 32px 20px;
-  margin-top: 10px;
   border-bottom: 1px solid #F0F0F0;
 `;
 

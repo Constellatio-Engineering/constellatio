@@ -1,3 +1,4 @@
+import { colors } from "@/constants/styles/colors";
 import { type UnknownMantineStylesParams } from "@/utils/types";
 
 import { css } from "@emotion/react";
@@ -13,10 +14,14 @@ export const drawerStyles = () =>
       ".form": {
         position: "relative"
       },
-
-      minHeight: "90vh",
-      padding: "0px"
-
+      alignItems: "flex-start",
+      display: "flex",
+      flexDirection: "column",
+      height: "calc(100vh - 77px)",
+      justifyContent: "space-between",
+      // marginTop: "24px",
+      padding: "24px 0 0 0",
+      width: "100%",
     },
     content: {
       background: theme.colors["neutrals-01"][1],
@@ -30,3 +35,22 @@ export const drawerStyles = () =>
   });
   return styles;
 };
+
+export const contentWrapper = css`
+  width: 100%;
+`;
+
+export const ctaWrapper = css`
+  align-items: flex-start;
+  background: ${colors["neutrals-01"][0]};
+  button {
+    flex: 1;
+  }
+  display: flex;
+  gap: 12px;
+  justify-content: space-between;
+  padding: 24px;
+  text-align: center;
+  width: 100%;
+  border-top: 1px solid #F0F0F0;
+`;

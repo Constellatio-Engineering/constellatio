@@ -21,7 +21,7 @@ const DocsTable: FunctionComponent<DocsTableProps> = ({ docs }) =>
 
   return (
     <>
-      <MaterialTagsDrawer/>
+      <MaterialTagsDrawer docs={docs}/>
       <div css={styles.wrapper}>
         <table css={styles.tableWrapper}>
           <thead>

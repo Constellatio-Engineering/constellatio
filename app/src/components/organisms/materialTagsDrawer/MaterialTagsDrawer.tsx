@@ -1,7 +1,13 @@
+import { Button } from "@/components/atoms/Button/Button";
 import SlidingPanelFileTypeRow from "@/components/molecules/slidingPanelFileTypeRow/SlidingPanelFileTypeRow";
 import SlidingPanelTitle from "@/components/molecules/slidingPanelTitle/SlidingPanelTitle";
 import TagsSelector from "@/components/organisms/materialTagsDrawer/tagsSelector/TagsSelector";
+import useContextAndErrorIfNull from "@/hooks/useContextAndErrorIfNull";
+import { useOnDocumentMutation } from "@/hooks/useOnDocumentMutation";
+import { InvalidateQueriesContext } from "@/provider/InvalidateQueriesProvider";
+import type { GetDocumentsResult } from "@/server/api/routers/documents.router";
 import { useTagsEditorStore } from "@/stores/tagsEditor.store";
+import { api } from "@/utils/api";
 import { showConfirmChangesDeletionModal } from "@/utils/modals";
 
 import { Drawer } from "@mantine/core";
@@ -24,9 +30,25 @@ export const tags = [
   },
 ] as const;
 
-export const MaterialTagsDrawer: FunctionComponent = () =>
+interface Props
 {
+  readonly docs: GetDocumentsResult;
+}
+
+export const MaterialTagsDrawer: FunctionComponent<Props> = ({ docs }) =>
+{
+  const { onDocumentMutation } = useOnDocumentMutation();
   const { editorState } = useTagsEditorStore();
+  const { hasUnsavedChanges } = useTagsEditorStore(s => s.getComputedValues());
+  const { mutate: setTags } = api.tags.setTagsForConstellatioDoc.useMutation({
+    onError: () => console.log("error"),
+    onSuccess: async () =>
+    {
+      useTagsEditorStore.getState().onSuccessfulMutation();
+      await onDocumentMutation();
+    }
+  });
+  const currentDocument = editorState.state === "opened" ? docs.find(doc => doc.id === editorState.document.id) : null;
 
   const onClose = useCallback((): void =>
   {
@@ -62,14 +84,30 @@ export const MaterialTagsDrawer: FunctionComponent = () =>
       )}>
       {editorState.state === "opened" && (
         <>
-          <SlidingPanelFileTypeRow
-            variant="constellatioDocs"
-            title={editorState.document.name}
-          />
-          <TagsSelector
-            docId={editorState.document.id}
-            editorState={editorState}
-          />
+          <div css={styles.contentWrapper}>
+            <SlidingPanelFileTypeRow
+              variant="constellatioDocs"
+              title={editorState.document.name}
+            />
+            <TagsSelector
+              editorState={editorState}
+              currentDocument={currentDocument}
+            />
+          </div>
+          <div css={styles.ctaWrapper}>
+            <Button<"button">
+              styleType="primary"
+              disabled={!hasUnsavedChanges}
+              onClick={() =>
+              {
+                setTags({
+                  docId: editorState.document.id,
+                  tagIds: editorState.editedTags,
+                });
+              }}>
+              Speichern
+            </Button>
+          </div>
         </>
       )}
     </Drawer>

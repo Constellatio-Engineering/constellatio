@@ -1,3 +1,4 @@
+import { tags } from "@/components/organisms/materialTagsDrawer/MaterialTagsDrawer";
 import { type GetDocumentResult } from "@/server/api/routers/documents.router";
 import { areArraysEqualSets } from "@/utils/array";
 
@@ -26,6 +27,7 @@ type TagsEditorStoreProps = {
   deselectTag: (tagId: string) => void;
   editorState: EditorState;
   getComputedValues: () => ComputedEditorValues;
+  onSuccessfulMutation: () => void;
   openEditor: (doc: GetDocumentResult) => void;
   selectTag: (tagId: string) => void;
 };
@@ -73,9 +75,13 @@ export const useTagsEditorStore = create(
             hasUnsavedChanges: !areArraysEqualSets(editorState.editedTags, editorState.originalTags),
           };
 
+          const edited = tags.filter(({ id }) => editorState.editedTags.includes(id));
+          const original = tags.filter(({ id }) => editorState.originalTags.includes(id));
+
           console.log("------------");
-          console.log("editorState.editedDoc.tags", editorState.editedTags);
-          console.log("editorState.originalDoc.tags", editorState.originalTags);
+          console.log("document", editorState.document.name);
+          console.log("editedTags", edited.map(({ name }) => name));
+          console.log("originalTags", original.map(({ name }) => name));
           console.log("hasUnsavedChanges", computedValues.hasUnsavedChanges);
 
           break;
@@ -83,6 +89,16 @@ export const useTagsEditorStore = create(
       }
 
       return computedValues;
+    },
+    onSuccessfulMutation: () =>
+    {
+      set((state) =>
+      {
+        if(state.editorState.state === "opened")
+        {
+          state.editorState.originalTags = state.editorState.editedTags;
+        }
+      });
     },
     openEditor: (doc) =>
     {
