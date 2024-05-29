@@ -2,13 +2,9 @@ import { Button } from "@/components/atoms/Button/Button";
 import SlidingPanelFileTypeRow from "@/components/molecules/slidingPanelFileTypeRow/SlidingPanelFileTypeRow";
 import SlidingPanelTitle from "@/components/molecules/slidingPanelTitle/SlidingPanelTitle";
 import TagsSelector from "@/components/organisms/materialTagsDrawer/tagsSelector/TagsSelector";
-import useContextAndErrorIfNull from "@/hooks/useContextAndErrorIfNull";
 import { useOnDocumentMutation } from "@/hooks/useOnDocumentMutation";
-import { InvalidateQueriesContext } from "@/provider/InvalidateQueriesProvider";
-import type { GetDocumentsResult } from "@/server/api/routers/documents.router";
 import { useTagsEditorStore } from "@/stores/tagsEditor.store";
 import { api } from "@/utils/api";
-import { showConfirmChangesDeletionModal } from "@/utils/modals";
 
 import { Drawer } from "@mantine/core";
 import React, { type FunctionComponent, useCallback } from "react";
@@ -30,12 +26,7 @@ export const tags = [
   },
 ] as const;
 
-interface Props
-{
-  readonly docs: GetDocumentsResult;
-}
-
-export const MaterialTagsDrawer: FunctionComponent<Props> = ({ docs }) =>
+export const MaterialTagsDrawer: FunctionComponent = () =>
 {
   const { onDocumentMutation } = useOnDocumentMutation();
   const { editorState } = useTagsEditorStore();
@@ -48,7 +39,6 @@ export const MaterialTagsDrawer: FunctionComponent<Props> = ({ docs }) =>
       await onDocumentMutation();
     }
   });
-  const currentDocument = editorState.state === "opened" ? docs.find(doc => doc.id === editorState.document.id) : null;
 
   const onClose = useCallback((): void =>
   {
@@ -91,7 +81,6 @@ export const MaterialTagsDrawer: FunctionComponent<Props> = ({ docs }) =>
             />
             <TagsSelector
               editorState={editorState}
-              currentDocument={currentDocument}
             />
           </div>
           <div css={styles.ctaWrapper}>

@@ -7,7 +7,6 @@ import { Edit } from "@/components/Icons/Edit";
 import { FolderIcon } from "@/components/Icons/Folder";
 import { Trash } from "@/components/Icons/Trash";
 import { UnstyledButton } from "@/components/molecules/unstyledButton/UnstyledButton";
-import { type Document } from "@/db/schema";
 import { useOnDocumentMutation } from "@/hooks/useOnDocumentMutation";
 import useUploadFolders from "@/hooks/useUploadFolders";
 import { type GetDocumentResult } from "@/server/api/routers/documents.router";

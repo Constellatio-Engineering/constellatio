@@ -1,11 +1,9 @@
 import { tags } from "@/components/organisms/materialTagsDrawer/MaterialTagsDrawer";
 import { colors } from "@/constants/styles/colors";
-import type { GetDocumentsResult } from "@/server/api/routers/documents.router";
 import { type EditorOpened, useTagsEditorStore } from "@/stores/tagsEditor.store";
-import { type Nullable } from "@/utils/types";
 
 import { ActionIcon, Badge, Input, rem } from "@mantine/core";
-import { IconX, IconSearch } from "@tabler/icons-react";
+import { IconSearch, IconX } from "@tabler/icons-react";
 import React, { type FunctionComponent } from "react";
 
 import * as styles from "./TagsSelector.styles";
@@ -63,11 +61,10 @@ const CustomBadge: FunctionComponent<CustomBadgeProps> = ({
 );
 
 type Props = {
-  readonly currentDocument: Nullable<GetDocumentsResult[number]>;
   readonly editorState: EditorOpened;
 };
 
-const TagsSelector: FunctionComponent<Props> = ({ currentDocument, editorState }) =>
+const TagsSelector: FunctionComponent<Props> = ({ editorState }) =>
 {
   const selectTag = useTagsEditorStore(s => s.selectTag);
   const deselectTag = useTagsEditorStore(s => s.deselectTag);
