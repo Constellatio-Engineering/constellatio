@@ -39,7 +39,7 @@ INSERT INTO "UserRole" ("Identifier", "Name", "Description") VALUES
     ('admin', 'Administrator', 'Full access to all features and data'),
     ('forumMod', 'Forum Moderator', 'User with elevated access to moderate forum content and features');
 
-INSERT INTO "NotificationType" ("NotificationTypeIdentifier", "Name", "Description") VALUES
+INSERT INTO "NotificationType" ("NotificationType", "Name", "Description") VALUES
      ('answerToForumQuestionPosted', 'Answer to Forum Question Posted', 'Notification for user when an answer to a forum question is posted'),
      ('forumAnswerAccepted', 'Forum Answer Accepted', 'Notification for user when their answer to a forum question is accepted'),
      ('replyToForumAnswerPosted', 'Reply to Forum Answer Posted', 'Notification for user when a reply to their answer is posted')

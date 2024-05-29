@@ -87,7 +87,10 @@ export const documentsRouter = createTRPCRouter({
 
       return db.query.documents.findMany({
         orderBy: [desc(documents.updatedAt)],
-        where: and(...queryConditions)
+        where: and(...queryConditions),
+        with: {
+          tags: true
+        }
       });
     }),
   updateDocument: protectedProcedure

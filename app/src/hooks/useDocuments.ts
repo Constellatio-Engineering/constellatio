@@ -4,6 +4,7 @@ import { api } from "@/utils/api";
 import { type UseQueryResult } from "@/utils/types";
 
 import { keepPreviousData } from "@tanstack/react-query";
+import { useEffect } from "react";
 
 type UseDocuments = () => UseQueryResult<{
   documentsInAllFolders: Document[];
@@ -25,7 +26,12 @@ const useDocuments: UseDocuments = () =>
     refetchOnMount: "always",
     staleTime: Infinity
   });
-  
+
+  useEffect(() =>
+  {
+    console.log("useDocuments", documents);
+  }, [documents]);
+
   return { 
     documentsInAllFolders: documents ?? [],
     documentsInSelectedFolder: (

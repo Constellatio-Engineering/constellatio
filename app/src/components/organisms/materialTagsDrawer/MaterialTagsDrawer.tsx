@@ -11,44 +11,16 @@ import * as styles from "./MaterialTagsDrawer.styles";
 
 export const tags = [
   {
-    id: "1",
+    id: "eecce24e-e6ea-4518-8129-f1882bb5b289",
     name: "Tag 1",
   },
   {
-    id: "2",
+    id: "39a4a944-ece7-45d3-923a-e6b91ca04479",
     name: "Tag 2",
   },
   {
-    id: "3",
+    id: "7778a9b2-99eb-49a5-affd-2d9a724ee091",
     name: "Tag 3",
-  },
-  {
-    id: "4",
-    name: "Tag 4",
-  },
-  {
-    id: "5",
-    name: "Tag 5",
-  },
-  {
-    id: "6",
-    name: "Tag 6",
-  },
-  {
-    id: "7",
-    name: "Tag 7",
-  },
-  {
-    id: "8",
-    name: "Tag 8",
-  },
-  {
-    id: "9",
-    name: "Tag 9",
-  },
-  {
-    id: "10",
-    name: "Tag 10",
   },
 ] as const;
 
@@ -73,8 +45,6 @@ export const MaterialTagsDrawer: FunctionComponent = () =>
     showConfirmChangesDeletionModal({ onCancel: closeEditor });*/
   }, []);
 
-  console.log(editorState);
-
   return (
     <Drawer
       lockScroll={false}
@@ -97,7 +67,7 @@ export const MaterialTagsDrawer: FunctionComponent = () =>
             variant="constellatioDocs"
             title={editorState.originalDoc.name}
           />
-          <TagsSelector/>
+          <TagsSelector docId={editorState.originalDoc.id}/>
         </>
       )}
     </Drawer>

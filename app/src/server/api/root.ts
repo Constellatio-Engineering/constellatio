@@ -11,6 +11,7 @@ import { gamesProgressRouter } from "@/server/api/routers/gamesProgress.router";
 import { notesRouter } from "@/server/api/routers/notes.router";
 import { notificationsRouter } from "@/server/api/routers/notifications.router";
 import { searchRouter } from "@/server/api/routers/search.router";
+import { tagsRouter } from "@/server/api/routers/tags.router";
 import { uploadsRouter } from "@/server/api/routers/uploads.router";
 import { usersRouter } from "@/server/api/routers/user.router";
 import { userActivityRouter } from "@/server/api/routers/userActivity.router";
@@ -34,6 +35,7 @@ export const appRouter = createTRPCRouter({
   notes: notesRouter,
   notifications: notificationsRouter,
   search: searchRouter,
+  tags: tagsRouter,
   uploads: uploadsRouter,
   userActivity: userActivityRouter,
   users: usersRouter,
