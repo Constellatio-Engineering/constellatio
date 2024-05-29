@@ -1,4 +1,4 @@
-import { type Document } from "@/db/schema";
+import { type GetDocumentsResult } from "@/server/api/routers/documents.router";
 import useMaterialsStore from "@/stores/materials.store";
 import { api } from "@/utils/api";
 import { type UseQueryResult } from "@/utils/types";
@@ -7,8 +7,8 @@ import { keepPreviousData } from "@tanstack/react-query";
 import { useEffect } from "react";
 
 type UseDocuments = () => UseQueryResult<{
-  documentsInAllFolders: Document[];
-  documentsInSelectedFolder: Document[];
+  documentsInAllFolders: GetDocumentsResult;
+  documentsInSelectedFolder: GetDocumentsResult;
   isRefetching: boolean;
 }>;
 

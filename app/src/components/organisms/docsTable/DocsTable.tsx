@@ -1,5 +1,5 @@
 import { MaterialTagsDrawer } from "@/components/organisms/materialTagsDrawer/MaterialTagsDrawer";
-import { type Document } from "@/db/schema";
+import { type GetDocumentsResult } from "@/server/api/routers/documents.router";
 
 import React, { useState, type FunctionComponent } from "react";
 
@@ -11,7 +11,7 @@ import { ArrowDown } from "../../Icons/ArrowDown";
 
 interface DocsTableProps 
 {
-  readonly docs: Document[];
+  readonly docs: GetDocumentsResult;
 }
 
 const DocsTable: FunctionComponent<DocsTableProps> = ({ docs }) =>

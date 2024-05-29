@@ -10,6 +10,7 @@ import { UnstyledButton } from "@/components/molecules/unstyledButton/UnstyledBu
 import { type Document } from "@/db/schema";
 import { useOnDocumentMutation } from "@/hooks/useOnDocumentMutation";
 import useUploadFolders from "@/hooks/useUploadFolders";
+import { type GetDocumentResult } from "@/server/api/routers/documents.router";
 import useDocumentEditorStore from "@/stores/documentEditor.store";
 import { useTagsEditorStore } from "@/stores/tagsEditor.store";
 import { api } from "@/utils/api";
@@ -31,12 +32,13 @@ import MoveToModal from "../moveToModal/MoveToModal";
 
 const formatDate = (date: Date): string => `${String(date.getDate()).padStart(2, "0")}.${String(date.getMonth() + 1).padStart(2, "0")}.${date.getFullYear()}`;
 
-export const DocsTableData: FunctionComponent<Document> = (doc) =>
+export const DocsTableData: FunctionComponent<GetDocumentResult> = (doc) =>
 {
   const {
     folderId,
     id: documentId,
     name,
+    tags,
     updatedAt
   } = doc;
 
@@ -120,7 +122,7 @@ export const DocsTableData: FunctionComponent<Document> = (doc) =>
       </td>
       <td css={styles.docTags}>
         <UnstyledButton onClick={() => openTagsDrawer(doc)}>
-          <BodyText styleType="body-02-medium" component="p">Tags (0)</BodyText>
+          <BodyText styleType="body-02-medium" component="p">Tags ({tags.length ?? 0})</BodyText>
         </UnstyledButton>
       </td>
       <td css={styles.cellFolder}>

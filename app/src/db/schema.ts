@@ -217,6 +217,7 @@ export const documentsRelations = relations(documents, ({ many }) => ({
 
 export type DocumentInsert = InferInsertModel<typeof documents>;
 export type Document = InferSelectModel<typeof documents>;
+// export type DocumentWithTags = Document & { tags: Array<{tagId: string}> };
 
 export const notes = pgTable("Note", {
   id: uuid("Id").defaultRandom().primaryKey(),

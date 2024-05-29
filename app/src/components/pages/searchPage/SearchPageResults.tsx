@@ -147,6 +147,7 @@ const SearchPageResults: FunctionComponent<Props> = ({ tabQuery }) =>
                       folderId: doc.folderId,
                       id: doc.id,
                       name: doc.name,
+                      tags: [], // TODO
                       updatedAt: new Date(doc.updatedAt),
                       userId: doc.userId
                     }))}

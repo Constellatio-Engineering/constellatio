@@ -23,21 +23,7 @@ export const tagsRouter = createTRPCRouter({
         throw new NotFoundError();
       }
 
-      const before = await db.query.documentsToTags.findMany({
-        where: eq(documentsToTags.documentId, docId),
-      });
-
-      console.log("before", before);
-
       await db.delete(documentsToTags).where(notInArray(documentsToTags.tagId, tagIds));
       await db.insert(documentsToTags).values(tagIds.map(tagId => ({ documentId: docId, tagId }))).onConflictDoNothing();
-
-      const after = await db.query.documentsToTags.findMany({
-        where: eq(documentsToTags.documentId, docId),
-      });
-
-      console.log("after", after);
-
-      return "success";
     }),
 });

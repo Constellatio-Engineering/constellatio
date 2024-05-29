@@ -11,6 +11,7 @@ import {
 } from "@/utils/search";
 import { removeHtmlTagsFromString } from "@/utils/utils";
 
+import { type inferProcedureOutput } from "@trpc/server";
 import {
   and, desc, eq, isNull, type SQLWrapper 
 } from "drizzle-orm";
@@ -89,7 +90,11 @@ export const documentsRouter = createTRPCRouter({
         orderBy: [desc(documents.updatedAt)],
         where: and(...queryConditions),
         with: {
-          tags: true
+          tags: {
+            columns: {
+              tagId: true,
+            }
+          }
         }
       });
     }),
@@ -136,3 +141,6 @@ export const documentsRouter = createTRPCRouter({
       return updatedDocument;
     })
 });
+
+export type GetDocumentsResult = inferProcedureOutput<typeof documentsRouter.getDocuments>;
+export type GetDocumentResult = GetDocumentsResult[number];
