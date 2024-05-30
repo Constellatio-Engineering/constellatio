@@ -1,5 +1,5 @@
 import { db } from "@/db/connection";
-import { type DocumentInsert, documents, uploadedFiles } from "@/db/schema";
+import { type DocumentInsert, documents } from "@/db/schema";
 import { meiliSearchAdmin } from "@/lib/meilisearch";
 import { createDocumentSchema } from "@/schemas/documents/createDocument.schema";
 import { deleteDocumentSchema } from "@/schemas/documents/deleteDocument.schema";
@@ -75,7 +75,7 @@ export const documentsRouter = createTRPCRouter({
     .input(getDocumentsSchema)
     .query(async ({ ctx: { userId }, input: { folderId } }) =>
     {
-      const queryConditions: SQLWrapper[] = [eq(uploadedFiles.userId, userId)];
+      const queryConditions: SQLWrapper[] = [eq(documents.userId, userId)];
 
       if(folderId)
       {

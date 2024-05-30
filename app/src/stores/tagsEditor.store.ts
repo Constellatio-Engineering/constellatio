@@ -1,5 +1,6 @@
 import { tags } from "@/components/organisms/materialTagsDrawer/MaterialTagsDrawer";
 import { type GetDocumentResult } from "@/server/api/routers/documents.router";
+import { GetUploadedFileResult } from "@/server/api/routers/uploads.router";
 import { areArraysEqualSets } from "@/utils/array";
 
 import { create } from "zustand";
@@ -10,6 +11,13 @@ type EditorClosed = {
 };
 
 export type EditorOpened = {
+  /* entity: {
+    entityType: "document";
+    data: GetDocumentResult;
+  } | {
+    entityType: "file";
+    data: GetUploadedFileResult;
+  }*/
   document: GetDocumentResult;
   editedTags: string[];
   originalTags: string[];

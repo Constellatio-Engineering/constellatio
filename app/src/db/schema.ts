@@ -197,9 +197,12 @@ export const uploadedFiles = pgTable("UploadedFile", {
   contentType: fileMimeTypeEnum("ContentType").notNull(),
 });
 
+export const uploadedFilesRelations = relations(uploadedFiles, ({ many }) => ({
+  tags: many(uploadedFilesToTags),
+}));
+
 export type UploadedFileInsert = InferInsertModel<typeof uploadedFiles>;
 export type UploadedFile = InferSelectModel<typeof uploadedFiles>;
-export type UploadedFileWithNote = UploadedFile & { note: Note | null };
 
 export const documents = pgTable("Document", {
   id: uuid("Id").defaultRandom().primaryKey(),
@@ -596,3 +599,20 @@ export const documentsToTagsRelations = relations(documentsToTags, ({ one }) => 
 
 export type DocumentToTagInsert = InferInsertModel<typeof documentsToTags>;
 export type DocumentToTag = InferSelectModel<typeof documentsToTags>;
+
+export const uploadedFilesToTags = pgTable("UploadedFile_to_Tag", {
+  fileId: uuid("FileId").references(() => uploadedFiles.id, { onDelete: "cascade" }).notNull(),
+  tagId: uuid("TagId").notNull(),
+}, table => ({
+  pk: primaryKey({ columns: [table.fileId, table.tagId] }),
+}));
+
+export const uploadedFilesToTagsRelations = relations(uploadedFilesToTags, ({ one }) => ({
+  file: one(uploadedFiles, {
+    fields: [uploadedFilesToTags.fileId],
+    references: [uploadedFiles.id],
+  }),
+}));
+
+export type UploadedFileToTagInsert = InferInsertModel<typeof uploadedFilesToTags>;
+export type UploadedFileToTag = InferSelectModel<typeof uploadedFilesToTags>;

@@ -17,6 +17,7 @@ import {
 } from "@/utils/search";
 import { NotFoundError } from "@/utils/serverError";
 
+import type { inferProcedureOutput } from "@trpc/server";
 import {
   and, desc, eq, inArray, isNull
 } from "drizzle-orm";
@@ -93,10 +94,16 @@ export const uploadsRouter = createTRPCRouter({
         queryConditions.push(isNull(uploadedFiles.folderId));
       }
 
-      return db.query.uploadedFiles.findMany({
+      const files = await db.query.uploadedFiles.findMany({
         orderBy: [desc(uploadedFiles.createdAt)],
         where: and(...queryConditions),
+        with: { tags: true },
       });
+
+      return files.map((file) => ({
+        ...file,
+        tags: file.tags.map(({ tagId }) => tagId)
+      }));
     }),
   saveFileToDatabase: protectedProcedure
     .input(addUploadSchema)
@@ -180,3 +187,6 @@ export const uploadsRouter = createTRPCRouter({
       return updatedFile;
     })
 });
+
+export type GetUploadedFilesResult = inferProcedureOutput<typeof uploadsRouter.getUploadedFiles>;
+export type GetUploadedFileResult = GetUploadedFilesResult[number];
