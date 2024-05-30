@@ -3,8 +3,10 @@ import SlidingPanelFileTypeRow from "@/components/molecules/slidingPanelFileType
 import SlidingPanelTitle from "@/components/molecules/slidingPanelTitle/SlidingPanelTitle";
 import TagsSelector from "@/components/organisms/materialTagsDrawer/tagsSelector/TagsSelector";
 import { useOnDocumentMutation } from "@/hooks/useOnDocumentMutation";
+import { useOnUploadedFileMutation } from "@/hooks/useOnUploadedFileMutation";
 import { useTagsEditorStore } from "@/stores/tagsEditor.store";
 import { api } from "@/utils/api";
+import { showConfirmChangesDeletionModal } from "@/utils/modals";
 
 import { Drawer } from "@mantine/core";
 import React, { type FunctionComponent, useCallback } from "react";
@@ -29,24 +31,31 @@ export const tags = [
 export const MaterialTagsDrawer: FunctionComponent = () =>
 {
   const { onDocumentMutation } = useOnDocumentMutation();
+  const { onUploadedFileMutation } = useOnUploadedFileMutation();
   const { editorState } = useTagsEditorStore();
   const { hasUnsavedChanges } = useTagsEditorStore(s => s.getComputedValues());
-  const { mutate: setTags } = api.tags.setTagsForConstellatioDoc.useMutation({
+  const { mutate: setTags } = api.tags.setTagsForEntity.useMutation({
     onError: () => console.log("error"),
-    onSuccess: async () =>
+    onSuccess: async (_data, variables) =>
     {
+      if(variables.entityType === "document")
+      {
+        await onDocumentMutation();
+      }
+      else
+      {
+        await onUploadedFileMutation();
+      }
+
       useTagsEditorStore.getState().onSuccessfulMutation();
-      await onDocumentMutation();
     }
   });
 
   const onClose = useCallback((): void =>
   {
-    const { closeEditor } = useTagsEditorStore.getState();
+    const { closeEditor, getComputedValues } = useTagsEditorStore.getState();
 
-    closeEditor();
-
-    /* const { hasUnsavedChanges } = getComputedValues();
+    const { hasUnsavedChanges } = getComputedValues();
 
     if(!hasUnsavedChanges)
     {
@@ -54,7 +63,7 @@ export const MaterialTagsDrawer: FunctionComponent = () =>
       return;
     }
 
-    showConfirmChangesDeletionModal({ onCancel: closeEditor });*/
+    showConfirmChangesDeletionModal({ onCancel: closeEditor });
   }, []);
 
   return (
@@ -75,10 +84,19 @@ export const MaterialTagsDrawer: FunctionComponent = () =>
       {editorState.state === "opened" && (
         <>
           <div css={styles.contentWrapper}>
-            <SlidingPanelFileTypeRow
-              variant="constellatioDocs"
-              title={editorState.document.name}
-            />
+            {editorState.entity.entityType === "document" && (
+              <SlidingPanelFileTypeRow
+                variant="constellatioDocs"
+                title={editorState.entity.data.name}
+              />
+            )}
+            {editorState.entity.entityType === "file" && (
+              <SlidingPanelFileTypeRow
+                variant="file"
+                fileName={editorState.entity.data.originalFilename}
+                fileExtension={editorState.entity.data.fileExtension}
+              />
+            )}
             <TagsSelector
               editorState={editorState}
             />
@@ -87,13 +105,11 @@ export const MaterialTagsDrawer: FunctionComponent = () =>
             <Button<"button">
               styleType="primary"
               disabled={!hasUnsavedChanges}
-              onClick={() =>
-              {
-                setTags({
-                  docId: editorState.document.id,
-                  tagIds: editorState.editedTags,
-                });
-              }}>
+              onClick={() => setTags({
+                entityId: editorState.entity.data.id,
+                entityType: editorState.entity.entityType,
+                tagIds: editorState.editedTags,
+              })}>
               Speichern
             </Button>
           </div>

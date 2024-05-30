@@ -1,6 +1,5 @@
-import { tags } from "@/components/organisms/materialTagsDrawer/MaterialTagsDrawer";
 import { type GetDocumentResult } from "@/server/api/routers/documents.router";
-import { GetUploadedFileResult } from "@/server/api/routers/uploads.router";
+import { type GetUploadedFileResult } from "@/server/api/routers/uploads.router";
 import { areArraysEqualSets } from "@/utils/array";
 
 import { create } from "zustand";
@@ -10,16 +9,21 @@ type EditorClosed = {
   state: "closed";
 };
 
+type GetDocumentResultEntity = {
+  data: GetDocumentResult;
+  entityType: "document";
+};
+
+type GetUploadedFileResultEntity = {
+  data: GetUploadedFileResult;
+  entityType: "file";
+};
+
+type TagsEditorEntity = GetDocumentResultEntity | GetUploadedFileResultEntity;
+
 export type EditorOpened = {
-  /* entity: {
-    entityType: "document";
-    data: GetDocumentResult;
-  } | {
-    entityType: "file";
-    data: GetUploadedFileResult;
-  }*/
-  document: GetDocumentResult;
   editedTags: string[];
+  entity: TagsEditorEntity;
   originalTags: string[];
   state: "opened";
 };
@@ -36,7 +40,7 @@ type TagsEditorStoreProps = {
   editorState: EditorState;
   getComputedValues: () => ComputedEditorValues;
   onSuccessfulMutation: () => void;
-  openEditor: (doc: GetDocumentResult) => void;
+  openEditor: (entity: TagsEditorEntity) => void;
   selectTag: (tagId: string) => void;
 };
 
@@ -66,37 +70,9 @@ export const useTagsEditorStore = create(
     {
       const { editorState } = get();
 
-      let computedValues: ComputedEditorValues;
-
-      switch (editorState.state)
-      {
-        case "closed":
-        {
-          computedValues = {
-            hasUnsavedChanges: false,
-          };
-          break;
-        }
-        case "opened":
-        {
-          computedValues = {
-            hasUnsavedChanges: !areArraysEqualSets(editorState.editedTags, editorState.originalTags),
-          };
-
-          const edited = tags.filter(({ id }) => editorState.editedTags.includes(id));
-          const original = tags.filter(({ id }) => editorState.originalTags.includes(id));
-
-          console.log("------------");
-          console.log("document", editorState.document.name);
-          console.log("editedTags", edited.map(({ name }) => name));
-          console.log("originalTags", original.map(({ name }) => name));
-          console.log("hasUnsavedChanges", computedValues.hasUnsavedChanges);
-
-          break;
-        }
-      }
-
-      return computedValues;
+      return {
+        hasUnsavedChanges: editorState.state === "closed" ? false : !areArraysEqualSets(editorState.editedTags, editorState.originalTags),
+      } satisfies ComputedEditorValues;
     },
     onSuccessfulMutation: () =>
     {
@@ -108,15 +84,15 @@ export const useTagsEditorStore = create(
         }
       });
     },
-    openEditor: (doc) =>
+    openEditor: (entity) =>
     {
       set((state) =>
       {
-        const tagIds = doc.tags.map(({ tagId }) => tagId);
+        const tagIds = entity.data.tags.map(({ tagId }) => tagId);
 
         state.editorState = {
-          document: doc,
           editedTags: tagIds,
+          entity,
           originalTags: tagIds,
           state: "opened",
         };

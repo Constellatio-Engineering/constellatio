@@ -27,12 +27,7 @@ const useDocuments: UseDocuments = () =>
     staleTime: Infinity
   });
 
-  useEffect(() =>
-  {
-    console.log("useDocuments", documents);
-  }, [documents]);
-
-  return { 
+  return {
     documentsInAllFolders: documents ?? [],
     documentsInSelectedFolder: (
       selectedFolderId === undefined

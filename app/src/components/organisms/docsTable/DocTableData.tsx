@@ -120,7 +120,10 @@ export const DocsTableData: FunctionComponent<GetDocumentResult> = (doc) =>
         <BodyText styleType="body-01-medium" component="p">{formatDate(updatedAt)}</BodyText>
       </td>
       <td css={styles.docTags}>
-        <UnstyledButton onClick={() => openTagsDrawer(doc)}>
+        <UnstyledButton onClick={() => openTagsDrawer({
+          data: doc,
+          entityType: "document"
+        })}>
           <BodyText styleType="body-02-medium" component="p">Tags ({tags.length ?? 0})</BodyText>
         </UnstyledButton>
       </td>

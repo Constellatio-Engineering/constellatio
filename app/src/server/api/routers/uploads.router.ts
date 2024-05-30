@@ -94,16 +94,17 @@ export const uploadsRouter = createTRPCRouter({
         queryConditions.push(isNull(uploadedFiles.folderId));
       }
 
-      const files = await db.query.uploadedFiles.findMany({
+      return db.query.uploadedFiles.findMany({
         orderBy: [desc(uploadedFiles.createdAt)],
         where: and(...queryConditions),
-        with: { tags: true },
+        with: {
+          tags: {
+            columns: {
+              tagId: true
+            }
+          }
+        },
       });
-
-      return files.map((file) => ({
-        ...file,
-        tags: file.tags.map(({ tagId }) => tagId)
-      }));
     }),
   saveFileToDatabase: protectedProcedure
     .input(addUploadSchema)

@@ -166,12 +166,13 @@ const SearchPageResults: FunctionComponent<Props> = ({ tabQuery }) =>
                       createdAt: new Date(file.createdAt),
                       fileExtension: file.fileExtension,
                       folderId: file.folderId,
-                      id: file.id,
+                      id: file.id, 
                       note: null,
                       notes: [],
                       originalFilename: file.originalFilename,
                       serverFilename: "",
                       sizeInBytes: 1,
+                      tags: [], // TODO
                       userId: file.userId
                     }))}
                     variant="searchPapers"

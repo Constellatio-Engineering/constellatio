@@ -100,7 +100,10 @@ const UploadedMaterialTableBody: FunctionComponent<UploadedMaterialTableBodyProp
               </BodyText>
             </td>
             <td css={styles.docTags}>
-              <UnstyledButton onClick={() => openTagsDrawer(file)}>
+              <UnstyledButton onClick={() => openTagsDrawer({
+                data: file,
+                entityType: "file"
+              })}>
                 <BodyText styleType="body-02-medium" component="p">Tags ({file.tags.length})</BodyText>
               </UnstyledButton>
             </td>
