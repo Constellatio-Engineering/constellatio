@@ -16,15 +16,15 @@ import { getCaseById } from "@/services/content/getCaseById";
 import {
   type IGenGetAllArticlesByLegalAreaQuery, type IGenGetAllArticlesByMainCategoryQuery, type IGenGetAllArticlesByTagQuery,
   type IGenGetAllArticlesByTopicQuery, type IGenGetAllCasesByLegalAreaQuery, type IGenGetAllCasesByMainCategoryQuery, type IGenGetAllCasesByTagQuery,
-  type IGenGetAllCasesByTopicQuery, type IGenLegalArea, type IGenMainCategory, type IGenTopic,
+  type IGenGetAllCasesByTopicQuery, type IGenLegalArea, type IGenMainCategory, type IGenTags, type IGenTopic,
 } from "@/services/graphql/__generated/sdk";
 import {
   createArticleSearchIndexItem,
   createCaseSearchIndexItem,
-  createDocumentSearchIndexItem, createForumQuestionSearchIndexItem,
+  createDocumentSearchIndexItem, createForumQuestionSearchIndexItem, createTagSearchIndexItem,
   createUploadsSearchIndexItem,
   documentSearchIndexItemPrimaryKey, type ForumQuestionSearchIndexItem, forumQuestionSearchIndexItemPrimaryKey,
-  searchIndices,
+  searchIndices, tagSearchIndexItemPrimaryKey,
   uploadSearchIndexItemPrimaryKey
 } from "@/utils/search";
 
@@ -76,6 +76,26 @@ export const addArticlesToSearchIndex: AddArticlesToSearchIndex = async ({ artic
   }
 
   return { createArticlesIndexTaskId };
+};
+
+type AddTagsToSearchIndex = (params: { tags: IGenTags[] }) => Promise<{
+  createTagsIndexTaskId: number | undefined;
+}>;
+
+export const addTagsToSearchIndex: AddTagsToSearchIndex = async ({ tags }) =>
+{
+  let createTagsIndexTaskId: number | undefined;
+
+  if(tags.length > 0)
+  {
+    const allTagsSearchIndexItems = tags.map(createTagSearchIndexItem);
+    const createTagsIndexTask = await meiliSearchAdmin.index(searchIndices.tags).addDocuments(allTagsSearchIndexItems, {
+      primaryKey: tagSearchIndexItemPrimaryKey
+    });
+    createTagsIndexTaskId = createTagsIndexTask.taskUid;
+  }
+
+  return { createTagsIndexTaskId };
 };
 
 type AddCasesToSearchIndex = (params: { caseIds: string[] }) => Promise<{

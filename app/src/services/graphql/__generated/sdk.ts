@@ -1309,7 +1309,7 @@ export type IGenCalloutFragment = { __typename: 'Callout', id?: string | null, c
 
 export type IGenCardSelectionGameFragment = { __typename?: 'CardSelectionGame', id?: string | null, game?: any | null, question?: string | null, helpNote?: { __typename?: 'CardSelectionGame_helpNote', json?: any | null, connections?: Array<{ __typename: 'Caisy_Field_Document_NotFound' } | null> | null } | null };
 
-export type IGenCaseFullTextTasksFragment = { __typename: 'Case_fullTextTasks', json?: any | null, connections?: Array<(
+export type IGenCaseFullTextTasksFragment = { __typename: 'Case_fullTextTasks', connections?: Array<(
     { __typename: 'Asset' }
     & IGenAssetFragment
   ) | (
@@ -1497,6 +1497,16 @@ export type IGenGetAllMainCategoryQueryVariables = Exact<{ [key: string]: never;
 export type IGenGetAllMainCategoryQuery = { __typename?: 'Query', allMainCategory?: { __typename?: 'MainCategory_Connection', totalCount?: number | null, edges?: Array<{ __typename?: 'MainCategory_ConnectionEdge', node?: (
         { __typename?: 'MainCategory' }
         & IGenMainCategoryFragment
+      ) | null } | null> | null } | null };
+
+export type IGenGetAllTagsQueryVariables = Exact<{
+  after?: InputMaybe<Scalars['String']['input']>;
+}>;
+
+
+export type IGenGetAllTagsQuery = { __typename?: 'Query', allTags?: { __typename?: 'Tags_Connection', totalCount?: number | null, pageInfo?: { __typename?: 'PageInfo', endCursor?: string | null, hasNextPage?: boolean | null } | null, edges?: Array<{ __typename?: 'Tags_ConnectionEdge', node?: (
+        { __typename?: 'Tags' }
+        & IGenTagsFragment
       ) | null } | null> | null } | null };
 
 export type IGenGetAllTopicsQueryVariables = Exact<{ [key: string]: never; }>;
@@ -1761,7 +1771,6 @@ export const FullArticleFragmentDoc = gql`
 export const CaseFullTextTasksFragmentDoc = gql`
     fragment CaseFullTextTasks on Case_fullTextTasks {
   __typename
-  json
   connections {
     __typename
     ...FillInGapsGame
@@ -2018,6 +2027,22 @@ export const GetAllMainCategoryDocument = gql`
 }
     ${MainCategoryFragmentDoc}
 ${AssetFragmentDoc}`;
+export const GetAllTagsDocument = gql`
+    query getAllTags($after: String) {
+  allTags(first: 100, after: $after) {
+    totalCount
+    pageInfo {
+      endCursor
+      hasNextPage
+    }
+    edges {
+      node {
+        ...Tags
+      }
+    }
+  }
+}
+    ${TagsFragmentDoc}`;
 export const GetAllTopicsDocument = gql`
     query getAllTopics {
   allTopic {
@@ -2150,6 +2175,9 @@ export function getSdk<C, E>(requester: Requester<C, E>) {
     },
     getAllMainCategory(variables?: IGenGetAllMainCategoryQueryVariables, options?: C): Promise<IGenGetAllMainCategoryQuery> {
       return requester<IGenGetAllMainCategoryQuery, IGenGetAllMainCategoryQueryVariables>(GetAllMainCategoryDocument, variables, options) as Promise<IGenGetAllMainCategoryQuery>;
+    },
+    getAllTags(variables?: IGenGetAllTagsQueryVariables, options?: C): Promise<IGenGetAllTagsQuery> {
+      return requester<IGenGetAllTagsQuery, IGenGetAllTagsQueryVariables>(GetAllTagsDocument, variables, options) as Promise<IGenGetAllTagsQuery>;
     },
     getAllTopics(variables?: IGenGetAllTopicsQueryVariables, options?: C): Promise<IGenGetAllTopicsQuery> {
       return requester<IGenGetAllTopicsQuery, IGenGetAllTopicsQueryVariables>(GetAllTopicsDocument, variables, options) as Promise<IGenGetAllTopicsQuery>;

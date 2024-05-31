@@ -1,4 +1,4 @@
-import type { IGenLegalArea, IGenMainCategory, IGenTopic } from "@/services/graphql/__generated/sdk";
+import type { IGenLegalArea, IGenMainCategory, IGenTags, IGenTopic } from "@/services/graphql/__generated/sdk";
 import { caisySDK } from "@/services/graphql/getSdk";
 
 export const getAllLegalFields = async (): Promise<IGenMainCategory[]> =>

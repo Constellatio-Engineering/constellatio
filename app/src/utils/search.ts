@@ -6,7 +6,7 @@ import {
 } from "@/services/graphql/__generated/sdk";
 import {
   type DotSeparatedKeys,
-  type NullableProperties, type RemoveUndefined, type Values
+  type NullableProperties, type Prettify, type RemoveUndefined, type Values
 } from "@/utils/types";
 import { removeHtmlTagsFromString } from "@/utils/utils";
 
@@ -14,8 +14,9 @@ export const searchIndices = {
   articles: "articles",
   cases: "cases",
   forumQuestions: "forum-questions",
+  tags: "tags",
   userDocuments: "user-documents",
-  userUploads: "user-uploads"
+  userUploads: "user-uploads",
 } as const;
 
 export type SearchIndex = Values<typeof searchIndices>;
@@ -158,6 +159,23 @@ export const createDocumentSearchIndexItem = ({
 
 export const documentSearchIndexItemPrimaryKey: keyof DocumentSearchIndexItem = "id";
 
+export type TagSearchIndexItem = NullableProperties<{
+  id: string;
+  tagName: string;
+}>;
+export type TagSearchItemNodes = RemoveUndefined<DotSeparatedKeys<TagSearchIndexItem>>;
+export type TagSearchItemUpdate = TagSearchIndexItem;
+
+export const createTagSearchIndexItem = ({ id, tagName }: IGenTags): TagSearchIndexItem =>
+{
+  return ({
+    id,
+    tagName
+  });
+};
+
+export const tagSearchIndexItemPrimaryKey: keyof TagSearchIndexItem = "id";
+
 export type ForumQuestionSearchIndexItem = Pick<ForumQuestion, "id" | "text" | "title" | "slug" | "userId"> & {
   legalFields: Array<{
     id: string;
@@ -173,7 +191,7 @@ export type ForumQuestionSearchIndexItem = Pick<ForumQuestion, "id" | "text" | "
   }>;
 };
 export type ForumQuestionSearchItemNodes = RemoveUndefined<DotSeparatedKeys<ForumQuestionSearchIndexItem>>;
-export type ForumQuestionSearchItemUpdate = Partial<Omit<ForumQuestionSearchIndexItem, "id" | "userId">> & Pick<ForumQuestionSearchIndexItem, "id">;
+export type ForumQuestionSearchItemUpdate = Prettify<Partial<Omit<ForumQuestionSearchIndexItem, "id" | "userId">> & Pick<ForumQuestionSearchIndexItem, "id">>;
 
 export const createForumQuestionSearchIndexItem = ({
   id,
