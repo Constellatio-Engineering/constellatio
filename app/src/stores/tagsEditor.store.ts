@@ -1,6 +1,8 @@
 import { type GetDocumentResult } from "@/server/api/routers/documents.router";
 import { type GetUploadedFileResult } from "@/server/api/routers/uploads.router";
+import { type IGenTags } from "@/services/graphql/__generated/sdk";
 import { areArraysEqualSets } from "@/utils/array";
+import { type TagSearchIndexItem } from "@/utils/search";
 
 import { create } from "zustand";
 import { immer } from "zustand/middleware/immer";
@@ -20,11 +22,12 @@ type GetUploadedFileResultEntity = {
 };
 
 type TagsEditorEntity = GetDocumentResultEntity | GetUploadedFileResultEntity;
+type Tag = IGenTags | TagSearchIndexItem;
 
 export type EditorOpened = {
-  editedTags: string[];
+  editedTags: Tag[];
   entity: TagsEditorEntity;
-  originalTags: string[];
+  originalTags: Tag[];
   state: "opened";
 };
 
@@ -59,7 +62,7 @@ export const useTagsEditorStore = create(
       {
         if(state.editorState.state === "opened")
         {
-          state.editorState.editedTags = state.editorState.editedTags.filter((_tagId) => _tagId !== tagId);
+          state.editorState.editedTags = state.editorState.editedTags.filter(({ id }) => id !== tagId);
         }
       });
     },
@@ -70,9 +73,25 @@ export const useTagsEditorStore = create(
     {
       const { editorState } = get();
 
-      return {
-        hasUnsavedChanges: editorState.state === "closed" ? false : !areArraysEqualSets(editorState.editedTags, editorState.originalTags),
-      } satisfies ComputedEditorValues;
+      let computedValues: ComputedEditorValues;
+
+      if(editorState.state === "closed")
+      {
+        computedValues = {
+          hasUnsavedChanges: false
+        };
+      }
+      else
+      {
+        const editedTagsIds = editorState.editedTags.map(({ id }) => id);
+        const originalTagsIds = editorState.originalTags.map(({ id }) => id);
+
+        computedValues = {
+          hasUnsavedChanges: !areArraysEqualSets(editedTagsIds, originalTagsIds)
+        };
+      }
+
+      return computedValues;
     },
     onSuccessfulMutation: () =>
     {
@@ -88,12 +107,14 @@ export const useTagsEditorStore = create(
     {
       set((state) =>
       {
-        const tagIds = entity.data.tags.map(({ tagId }) => tagId);
+        const { tags } = entity.data;
+
+        const tagsPlaceholder = tags.map((tag) => ({ tagId: tag.tagId, tagName: "dummy" }));
 
         state.editorState = {
-          editedTags: tagIds,
+          editedTags: tagsPlaceholder,
           entity,
-          originalTags: tagIds,
+          originalTags: tagsPlaceholder,
           state: "opened",
         };
       });
@@ -104,7 +125,7 @@ export const useTagsEditorStore = create(
       {
         if(state.editorState.state === "opened")
         {
-          state.editorState.editedTags = state.editorState.editedTags.concat(tagId);
+          state.editorState.editedTags = state.editorState.editedTags.concat({ id: tagId, tagName: "dummy" });
         }
       });
     }

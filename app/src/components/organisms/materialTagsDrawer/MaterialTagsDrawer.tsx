@@ -13,20 +13,20 @@ import React, { type FunctionComponent, useCallback } from "react";
 
 import * as styles from "./MaterialTagsDrawer.styles";
 
-export const tags = [
+export const dummyTags: Array<{ id: string; tagName: string}> = [
   {
     id: "eecce24e-e6ea-4518-8129-f1882bb5b289",
-    name: "Tag 1",
+    tagName: "Tag 1",
   },
   {
     id: "39a4a944-ece7-45d3-923a-e6b91ca04479",
-    name: "Tag 2",
+    tagName: "Tag 2",
   },
   {
     id: "7778a9b2-99eb-49a5-affd-2d9a724ee091",
-    name: "Tag 3",
+    tagName: "Tag 3",
   },
-] as const;
+];
 
 export const MaterialTagsDrawer: FunctionComponent = () =>
 {
@@ -108,7 +108,7 @@ export const MaterialTagsDrawer: FunctionComponent = () =>
               onClick={() => setTags({
                 entityId: editorState.entity.data.id,
                 entityType: editorState.entity.entityType,
-                tagIds: editorState.editedTags,
+                tagIds: editorState.editedTags.map(({ id }) => id!),
               })}>
               Speichern
             </Button>

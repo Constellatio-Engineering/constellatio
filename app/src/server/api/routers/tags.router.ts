@@ -2,6 +2,7 @@ import { db } from "@/db/connection";
 import {
   type Document, documents, documentsToTags, type UploadedFile, uploadedFiles, uploadedFilesToTags, 
 } from "@/db/schema";
+import { getTagsDetailsSchema } from "@/schemas/tags/getTagsDetails.schema";
 import { setTagsForEntitySchema } from "@/schemas/tags/setTagsForEntity.schema";
 import { createTRPCRouter, protectedProcedure } from "@/server/api/trpc";
 import { NotFoundError } from "@/utils/serverError";
@@ -10,6 +11,12 @@ import { type Nullable } from "@/utils/types";
 import { and, eq, notInArray } from "drizzle-orm";
 
 export const tagsRouter = createTRPCRouter({
+  getTagsDetails: protectedProcedure
+    .input(getTagsDetailsSchema)
+    .query(async ({ ctx: { userId }, input: { tagIds } }) =>
+    {
+
+    }),
   setTagsForEntity: protectedProcedure
     .input(setTagsForEntitySchema)
     .mutation(async ({ ctx: { userId }, input: { entityId, entityType, tagIds } }) =>

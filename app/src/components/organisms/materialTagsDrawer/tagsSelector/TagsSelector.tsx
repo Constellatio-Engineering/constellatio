@@ -1,6 +1,10 @@
-import { tags } from "@/components/organisms/materialTagsDrawer/MaterialTagsDrawer";
+import { dummyTags } from "@/components/organisms/materialTagsDrawer/MaterialTagsDrawer";
 import { colors } from "@/constants/styles/colors";
+import { useTagsSearchResults } from "@/hooks/useTagsSearchResults";
+import { type IGenTags } from "@/services/graphql/__generated/sdk";
 import { type EditorOpened, useTagsEditorStore } from "@/stores/tagsEditor.store";
+import { useTagsSearchBarStore } from "@/stores/tagsSearchBar.store";
+import { type TagSearchIndexItem } from "@/utils/search";
 
 import { ActionIcon, Badge, Input, rem } from "@mantine/core";
 import { IconSearch, IconX } from "@tabler/icons-react";
@@ -66,8 +70,28 @@ type Props = {
 
 const TagsSelector: FunctionComponent<Props> = ({ editorState }) =>
 {
+  const { searchValue, setSearchValue } = useTagsSearchBarStore();
+  const { tagsSearchResults } = useTagsSearchResults(searchValue);
   const selectTag = useTagsEditorStore(s => s.selectTag);
   const deselectTag = useTagsEditorStore(s => s.deselectTag);
+
+  let displayedTags: Array<TagSearchIndexItem | IGenTags> | "noResults";
+
+  if(searchValue.length === 0)
+  {
+    displayedTags = dummyTags;
+  }
+  else
+  {
+    if(tagsSearchResults.length === 0)
+    {
+      displayedTags = "noResults";
+    }
+    else
+    {
+      displayedTags = tagsSearchResults;
+    }
+  }
 
   return (
     <>
@@ -79,7 +103,7 @@ const TagsSelector: FunctionComponent<Props> = ({ editorState }) =>
         <div css={styles.badgesWrapper}>
           {editorState.editedTags.map(tagId =>
           {
-            const tag = tags.find(({ id }) => id === tagId);
+            const tag = dummyTags.find(({ id }) => id === tagId);
 
             if(tag == null)
             {
@@ -89,7 +113,7 @@ const TagsSelector: FunctionComponent<Props> = ({ editorState }) =>
             return (
               <CustomBadge
                 key={tag.id}
-                title={tag.name}
+                title={tag.tagName}
                 deleteButtonAction={() => deselectTag(tag.id)}
               />
             );
@@ -115,28 +139,41 @@ const TagsSelector: FunctionComponent<Props> = ({ editorState }) =>
             },
             wrapper: {}
           }}
+          value={searchValue}
+          onChange={(event) => setSearchValue(event.currentTarget.value)}
           size={"md"}
           radius="md"
         />
         <div css={styles.selectableBadgesWrapper}>
-          {tags.map((tag) =>
+          {displayedTags === "noResults" ? (
+            <p>Keine Tags gefunden</p>
+          ) : displayedTags.map((tag) =>
           {
-            const isSelected = editorState.editedTags.some((tagId) => tagId === tag.id);
+            const { id, tagName } = tag;
+
+            if(!id || !tagName)
+            {
+              return null;
+            }
+
+            const isSelected = editorState.editedTags.some(({ id: tagId }) => tagId === id);
 
             return (
               <CustomBadge
-                key={tag.id}
-                title={tag.name}
+                key={id}
+                title={tagName}
                 isSelected={isSelected}
                 selectAction={() =>
                 {
                   if(isSelected)
                   {
-                    deselectTag(tag.id);
+                    console.log("deselecting tag", id);
+                    deselectTag(id);
                   }
                   else
                   {
-                    selectTag(tag.id);
+                    console.log("selecting tag", id);
+                    selectTag(id);
                   }
                 }}
               />

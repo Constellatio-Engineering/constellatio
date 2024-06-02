@@ -30,6 +30,9 @@ export const searchRouter = createTRPCRouter({
         "forum-questions": {
           filter: undefined,
         },
+        tags: {
+          filter: undefined,
+        },
         "user-documents": {
           filter: `userId = ${userId}`,
         },
