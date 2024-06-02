@@ -44,7 +44,7 @@ type TagsEditorStoreProps = {
   getComputedValues: () => ComputedEditorValues;
   onSuccessfulMutation: () => void;
   openEditor: (entity: TagsEditorEntity) => void;
-  selectTag: (tagId: string) => void;
+  selectTag: (tag: Tag) => void;
 };
 
 export const useTagsEditorStore = create(
@@ -109,23 +109,21 @@ export const useTagsEditorStore = create(
       {
         const { tags } = entity.data;
 
-        const tagsPlaceholder = tags.map((tag) => ({ tagId: tag.tagId, tagName: "dummy" }));
-
         state.editorState = {
-          editedTags: tagsPlaceholder,
+          editedTags: tags,
           entity,
-          originalTags: tagsPlaceholder,
+          originalTags: tags,
           state: "opened",
         };
       });
     },
-    selectTag: (tagId) =>
+    selectTag: (tag) =>
     {
       set((state) =>
       {
         if(state.editorState.state === "opened")
         {
-          state.editorState.editedTags = state.editorState.editedTags.concat({ id: tagId, tagName: "dummy" });
+          state.editorState.editedTags = state.editorState.editedTags.concat(tag);
         }
       });
     }

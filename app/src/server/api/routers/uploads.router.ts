@@ -10,6 +10,7 @@ import { deleteUploadSchema } from "@/schemas/uploads/deleteUpload.schema";
 import { getUploadedFilesSchema } from "@/schemas/uploads/getUploadedFiles.schema";
 import { updateUploadedFileSchema } from "@/schemas/uploads/updateUploadedFile.schema";
 import { addBadgeForUser } from "@/server/api/services/badges.services";
+import { addTags } from "@/server/api/services/tags.services";
 import { deleteFiles, getClouStorageFileUrl, getSignedCloudStorageUploadUrl } from "@/server/api/services/uploads.services";
 import { createTRPCRouter, protectedProcedure } from "@/server/api/trpc";
 import {
@@ -94,17 +95,14 @@ export const uploadsRouter = createTRPCRouter({
         queryConditions.push(isNull(uploadedFiles.folderId));
       }
 
-      return db.query.uploadedFiles.findMany({
+      const uploadedFilesFromDb = await db.query.uploadedFiles.findMany({
         orderBy: [desc(uploadedFiles.createdAt)],
         where: and(...queryConditions),
-        with: {
-          tags: {
-            columns: {
-              tagId: true
-            }
-          }
-        },
+        with: { tags: true },
       });
+
+      const uploadedFilesWithTags = await addTags(uploadedFilesFromDb);
+      return uploadedFilesWithTags;
     }),
   saveFileToDatabase: protectedProcedure
     .input(addUploadSchema)

@@ -101,20 +101,20 @@ const TagsSelector: FunctionComponent<Props> = ({ editorState }) =>
           <p css={styles.amountOfApplieableTags}>Du kannst bis zu 10 Tags zuweisen</p>
         </div>
         <div css={styles.badgesWrapper}>
-          {editorState.editedTags.map(tagId =>
+          {editorState.editedTags.map(tag =>
           {
-            const tag = dummyTags.find(({ id }) => id === tagId);
+            const { id, tagName } = tag;
 
-            if(tag == null)
+            if(!id || !tagName)
             {
               return null;
             }
 
             return (
               <CustomBadge
-                key={tag.id}
-                title={tag.tagName}
-                deleteButtonAction={() => deselectTag(tag.id)}
+                key={id}
+                title={tagName}
+                deleteButtonAction={() => deselectTag(id)}
               />
             );
           })}
@@ -173,7 +173,7 @@ const TagsSelector: FunctionComponent<Props> = ({ editorState }) =>
                   else
                   {
                     console.log("selecting tag", id);
-                    selectTag(id);
+                    selectTag(tag);
                   }
                 }}
               />

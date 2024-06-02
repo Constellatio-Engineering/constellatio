@@ -5,35 +5,15 @@ import { createDocumentSchema } from "@/schemas/documents/createDocument.schema"
 import { deleteDocumentSchema } from "@/schemas/documents/deleteDocument.schema";
 import { getDocumentsSchema } from "@/schemas/documents/getDocuments.schema";
 import { updateDocumentSchema } from "@/schemas/documents/updateDocument.schema";
+import { addTags } from "@/server/api/services/tags.services";
 import { createTRPCRouter, protectedProcedure } from "@/server/api/trpc";
-import {
-  createDocumentSearchIndexItem, documentSearchIndexItemPrimaryKey, type DocumentSearchItemUpdate, searchIndices, type TagSearchIndexItem
-} from "@/utils/search";
+import { createDocumentSearchIndexItem, documentSearchIndexItemPrimaryKey, type DocumentSearchItemUpdate, searchIndices } from "@/utils/search";
 import { removeHtmlTagsFromString } from "@/utils/utils";
 
 import { type inferProcedureOutput } from "@trpc/server";
 import {
   and, desc, eq, isNull, type SQLWrapper 
 } from "drizzle-orm";
-
-const addTags = async (objects: Array<{ tags: Array<{ tagId: string }> }>) =>
-{
-  const tagIds = objects.flatMap(({ tags }) => tags.map(({ tagId }) => tagId));
-  const filter = `id IN [${tagIds.join(", ")}]`;
-  const { results } = await meiliSearchAdmin.index(searchIndices.tags).getDocuments<TagSearchIndexItem>({ filter, limit: tagIds.length });
-
-  if(results.length !== tagIds.length)
-  {
-    console.warn("not all tags found in meilisearch", results.length, tagIds.length, tagIds);
-  }
-
-  return objects.map((object) => ({
-    ...object,
-    tags: object.tags
-      .map(({ tagId }) => results.find(({ id }) => id === tagId))
-      .filter(Boolean)
-  }));
-};
 
 export const documentsRouter = createTRPCRouter({
   createDocument: protectedProcedure
@@ -105,28 +85,13 @@ export const documentsRouter = createTRPCRouter({
         queryConditions.push(isNull(documents.folderId));
       }
 
-      const _documents = await db.query.documents.findMany({
+      const documentsFromDb = await db.query.documents.findMany({
         orderBy: [desc(documents.updatedAt)],
         where: and(...queryConditions),
         with: { tags: true }
       });
 
-      const tagIds = _documents.flatMap(({ tags }) => tags.map(({ tagId }) => tagId));
-      const filter = `id IN [${tagIds.join(", ")}]`;
-      const { results } = await meiliSearchAdmin.index(searchIndices.tags).getDocuments<TagSearchIndexItem>({ filter, limit: tagIds.length });
-
-      if(results.length !== tagIds.length)
-      {
-        console.warn("not all tags found in meilisearch", results.length, tagIds.length, tagIds);
-      }
-
-      const documentsWithTags = _documents.map((document) => ({
-        ...document,
-        tags: document.tags
-          .map(({ tagId }) => results.find(({ id }) => id === tagId))
-          .filter(Boolean)
-      }));
-
+      const documentsWithTags = await addTags(documentsFromDb);
       return documentsWithTags;
     }),
   updateDocument: protectedProcedure
