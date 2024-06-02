@@ -1,5 +1,5 @@
-import { dummyTags } from "@/components/organisms/materialTagsDrawer/MaterialTagsDrawer";
 import { colors } from "@/constants/styles/colors";
+import { useInitialTags } from "@/hooks/useInitialTags";
 import { useTagsSearchResults } from "@/hooks/useTagsSearchResults";
 import { type IGenTags } from "@/services/graphql/__generated/sdk";
 import { type EditorOpened, useTagsEditorStore } from "@/stores/tagsEditor.store";
@@ -72,6 +72,7 @@ const TagsSelector: FunctionComponent<Props> = ({ editorState }) =>
 {
   const { searchValue, setSearchValue } = useTagsSearchBarStore();
   const { tagsSearchResults } = useTagsSearchResults(searchValue);
+  const { data: initialTags = [] } = useInitialTags();
   const selectTag = useTagsEditorStore(s => s.selectTag);
   const deselectTag = useTagsEditorStore(s => s.deselectTag);
 
@@ -79,7 +80,7 @@ const TagsSelector: FunctionComponent<Props> = ({ editorState }) =>
 
   if(searchValue.length === 0)
   {
-    displayedTags = dummyTags;
+    displayedTags = initialTags;
   }
   else
   {
@@ -167,12 +168,10 @@ const TagsSelector: FunctionComponent<Props> = ({ editorState }) =>
                 {
                   if(isSelected)
                   {
-                    console.log("deselecting tag", id);
                     deselectTag(id);
                   }
                   else
                   {
-                    console.log("selecting tag", id);
                     selectTag(tag);
                   }
                 }}

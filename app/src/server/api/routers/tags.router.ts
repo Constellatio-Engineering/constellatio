@@ -5,6 +5,7 @@ import {
 import { getTagsDetailsSchema } from "@/schemas/tags/getTagsDetails.schema";
 import { setTagsForEntitySchema } from "@/schemas/tags/setTagsForEntity.schema";
 import { createTRPCRouter, protectedProcedure } from "@/server/api/trpc";
+import { caisySDK } from "@/services/graphql/getSdk";
 import { NotFoundError } from "@/utils/serverError";
 import { type Nullable } from "@/utils/types";
 

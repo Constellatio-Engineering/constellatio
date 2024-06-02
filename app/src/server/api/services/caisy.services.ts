@@ -36,3 +36,15 @@ export const getAllTopics = async (): Promise<IGenTopic[]> =>
     ?? [];
   return topics;
 };
+
+export const getInitialTags = async (): Promise<IGenTags[]> =>
+{
+  const initialTagsRes = await caisySDK.getInitialTags();
+  const tags: IGenTags[] = initialTagsRes
+    ?.allTags
+    ?.edges
+    ?.map((edge) => edge?.node)
+    ?.filter(Boolean)
+    ?? [];
+  return tags;
+};

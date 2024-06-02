@@ -13,21 +13,6 @@ import React, { type FunctionComponent, useCallback } from "react";
 
 import * as styles from "./MaterialTagsDrawer.styles";
 
-export const dummyTags: Array<{ id: string; tagName: string}> = [
-  {
-    id: "eecce24e-e6ea-4518-8129-f1882bb5b289",
-    tagName: "Tag 1",
-  },
-  {
-    id: "39a4a944-ece7-45d3-923a-e6b91ca04479",
-    tagName: "Tag 2",
-  },
-  {
-    id: "7778a9b2-99eb-49a5-affd-2d9a724ee091",
-    tagName: "Tag 3",
-  },
-];
-
 export const MaterialTagsDrawer: FunctionComponent = () =>
 {
   const { onDocumentMutation } = useOnDocumentMutation();

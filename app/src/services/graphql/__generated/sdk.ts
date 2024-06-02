@@ -1195,6 +1195,7 @@ export type IGenTags = {
   __typename?: 'Tags';
   _meta?: Maybe<IGenCaisyDocument_Meta>;
   id?: Maybe<Scalars['ID']['output']>;
+  isShownInitiallyBeforeSearch?: Maybe<Scalars['Boolean']['output']>;
   tagName?: Maybe<Scalars['String']['output']>;
 };
 
@@ -1214,12 +1215,14 @@ export type IGenTags_ConnectionEdge = {
 export type IGenTags_Nested_Where = {
   AND?: InputMaybe<Array<InputMaybe<IGenTags_Nested_Where>>>;
   OR?: InputMaybe<Array<InputMaybe<IGenTags_Nested_Where>>>;
+  isShownInitiallyBeforeSearch?: InputMaybe<Scalars['Boolean']['input']>;
   tagName?: InputMaybe<IGenCaisyField_String_Where>;
 };
 
 export type IGenTags_Sort = {
   createdAt?: InputMaybe<IGenOrder>;
   id?: InputMaybe<IGenOrder>;
+  isShownInitiallyBeforeSearch?: InputMaybe<IGenOrder>;
   publishedAt?: InputMaybe<IGenOrder>;
   tagName?: InputMaybe<IGenOrder>;
   updatedAt?: InputMaybe<IGenOrder>;
@@ -1228,6 +1231,7 @@ export type IGenTags_Sort = {
 export type IGenTags_Where = {
   AND?: InputMaybe<Array<InputMaybe<IGenTags_Where>>>;
   OR?: InputMaybe<Array<InputMaybe<IGenTags_Where>>>;
+  isShownInitiallyBeforeSearch?: InputMaybe<Scalars['Boolean']['input']>;
   tagName?: InputMaybe<IGenCaisyField_String_Where>;
 };
 
@@ -1384,7 +1388,7 @@ export type IGenMainCategoryFragment = { __typename: 'MainCategory', id?: string
 
 export type IGenSearchEntryFragment = { __typename: 'SearchEntry', id?: string | null, searchField?: string | null };
 
-export type IGenTagsFragment = { __typename: 'Tags', id?: string | null, tagName?: string | null };
+export type IGenTagsFragment = { __typename: 'Tags', id?: string | null, tagName?: string | null, isShownInitiallyBeforeSearch?: boolean | null };
 
 export type IGenTopicFragment = { __typename: 'Topic', id?: string | null, topicName?: string | null, sorting?: number | null };
 
@@ -1481,6 +1485,14 @@ export type IGenGetAllArticleOverviewQueryVariables = Exact<{
 export type IGenGetAllArticleOverviewQuery = { __typename?: 'Query', allArticle?: { __typename?: 'Article_Connection', totalCount?: number | null, pageInfo?: { __typename?: 'PageInfo', endCursor?: string | null, hasNextPage?: boolean | null } | null, edges?: Array<{ __typename?: 'Article_ConnectionEdge', node?: (
         { __typename?: 'Article' }
         & IGenArticleOverviewFragment
+      ) | null } | null> | null } | null };
+
+export type IGenGetInitialTagsQueryVariables = Exact<{ [key: string]: never; }>;
+
+
+export type IGenGetInitialTagsQuery = { __typename?: 'Query', allTags?: { __typename?: 'Tags_Connection', edges?: Array<{ __typename?: 'Tags_ConnectionEdge', node?: (
+        { __typename?: 'Tags' }
+        & IGenTagsFragment
       ) | null } | null> | null } | null };
 
 export type IGenGetAllLegalAreaQueryVariables = Exact<{ [key: string]: never; }>;
@@ -1744,6 +1756,7 @@ export const TagsFragmentDoc = gql`
   __typename
   id
   tagName
+  isShownInitiallyBeforeSearch
 }
     `;
 export const FullArticleFragmentDoc = gql`
@@ -2002,6 +2015,17 @@ ${LegalAreaFragmentDoc}
 ${TopicFragmentDoc}
 ${MainCategoryFragmentDoc}
 ${AssetFragmentDoc}`;
+export const GetInitialTagsDocument = gql`
+    query getInitialTags {
+  allTags(where: {isShownInitiallyBeforeSearch: true}) {
+    edges {
+      node {
+        ...Tags
+      }
+    }
+  }
+}
+    ${TagsFragmentDoc}`;
 export const GetAllLegalAreaDocument = gql`
     query getAllLegalArea {
   allLegalArea {
@@ -2091,7 +2115,7 @@ ${TagsFragmentDoc}
 ${TopicFragmentDoc}`;
 export const GetAllCasesByIdDocument = gql`
     query getAllCasesById($ids: [ID!]!) {
-  allCase(where: {}) {
+  allCase(where: {tags: {}}) {
     totalCount
     edges {
       node {
@@ -2169,6 +2193,9 @@ export function getSdk<C, E>(requester: Requester<C, E>) {
     },
     getAllArticleOverview(variables?: IGenGetAllArticleOverviewQueryVariables, options?: C): Promise<IGenGetAllArticleOverviewQuery> {
       return requester<IGenGetAllArticleOverviewQuery, IGenGetAllArticleOverviewQueryVariables>(GetAllArticleOverviewDocument, variables, options) as Promise<IGenGetAllArticleOverviewQuery>;
+    },
+    getInitialTags(variables?: IGenGetInitialTagsQueryVariables, options?: C): Promise<IGenGetInitialTagsQuery> {
+      return requester<IGenGetInitialTagsQuery, IGenGetInitialTagsQueryVariables>(GetInitialTagsDocument, variables, options) as Promise<IGenGetInitialTagsQuery>;
     },
     getAllLegalArea(variables?: IGenGetAllLegalAreaQueryVariables, options?: C): Promise<IGenGetAllLegalAreaQuery> {
       return requester<IGenGetAllLegalAreaQuery, IGenGetAllLegalAreaQueryVariables>(GetAllLegalAreaDocument, variables, options) as Promise<IGenGetAllLegalAreaQuery>;
