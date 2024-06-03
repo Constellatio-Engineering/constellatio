@@ -12,7 +12,7 @@ type UseSearchResults = (query: string) => {
   tagsSearchResults: TagSearchIndexItem[];
 };
 
-export const tagsSearchResultsQueryKey = "tagsSearchResults";
+const tagsSearchResultsQueryKey = "tagsSearchResults";
 
 export const useTagsSearchResults: UseSearchResults = (query) =>
 {
@@ -30,9 +30,6 @@ export const useTagsSearchResults: UseSearchResults = (query) =>
       }
 
       const searchResult = await meilisearchInstance.index(searchIndices.tags).search<TagSearchIndexItem>(query);
-
-      console.log("searchResult", searchResult);
-
       return searchResult.hits;
     },
     queryKey: [tagsSearchResultsQueryKey, query],
