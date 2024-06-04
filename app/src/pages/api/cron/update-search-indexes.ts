@@ -16,6 +16,8 @@ import {
   type IGenArticle, type IGenCase, type IGenLegalArea, type IGenMainCategory, type IGenSubCategory, type IGenTags, type IGenTopic 
 } from "@/services/graphql/__generated/sdk";
 import { caisySDK } from "@/services/graphql/getSdk";
+import { type ArticleSearchIndexItem, createArticleSearchIndexItem } from "@/utils/search/caisy/article";
+import { type CaseSearchIndexItem } from "@/utils/search/caisy/case";
 import { searchIndices } from "@/utils/search/search";
 
 import { eq, inArray } from "drizzle-orm";
@@ -119,6 +121,46 @@ const updateCases: UpdateCases = async () =>
   });
 };
 
+// type CaisyEntityToSearchIndexItem = (params: CaseIdToSearchIndexItem | ArticleIdToSearchIndexItem) => Promise<{ meilisearchTaskId: string | null }>;
+
+/* type CaseIdToSearchIndexItem = {
+  fetchItem: (id: string) => Promise<IGenCase | null>;
+  id: string;
+  itemToSearchIndexItem: (item: IGenCase) => Promise<CaseSearchIndexItem>;
+};
+
+type ArticleIdToSearchIndexItem = {
+  fetchItem: (id: string) => Promise<IGenArticle | null>;
+  id: string;
+  itemToSearchIndexItem: (item: IGenArticle) => Promise<ArticleSearchIndexItem>;
+};*/
+
+type CaisyEntity = IGenArticle | IGenCase | IGenLegalArea | IGenMainCategory | IGenSubCategory | IGenTags | IGenTopic;
+type SearchIndexItem = ArticleSearchIndexItem | CaseSearchIndexItem;
+
+type EntityIdToSearchIndexItem<CaisyItemType, SearchIndexItemType> = {
+  fetchItem: (params: { id: string }) => Promise<CaisyItemType | null>;
+  id: string;
+  itemToSearchIndexItem: (item: CaisyItemType) => SearchIndexItemType;
+  searchIndexType: SearchIndexType;
+};
+
+const caisyEntityToSearchIndexItem = async <T extends CaisyEntity, U extends SearchIndexItem>({
+  fetchItem,
+  id,
+  itemToSearchIndexItem
+}: EntityIdToSearchIndexItem<T, U>): Promise<void> =>
+{
+  const item = await fetchItem({ id });
+
+  if(!item) 
+  {
+    return;
+  }
+
+  const searchIndexItem = await itemToSearchIndexItem(item);
+};
+
 const handler: NextApiHandler = async (req, res): Promise<void> =>
 {
   if(req.headers.authorization !== `Bearer ${env.CRON_SECRET}`)
@@ -151,7 +193,75 @@ const handler: NextApiHandler = async (req, res): Promise<void> =>
 
   const updateItemsInIndexTasksPromises = createdOrUpdatedItems.map(async (itemToUpdate) =>
   {
+    const commonProps: Pick<EntityIdToSearchIndexItem<CaisyEntity, SearchIndexItem>, "id" | "searchIndexType"> = {
+      id: itemToUpdate.cmsId,
+      searchIndexType: itemToUpdate.searchIndexType
+    } as const;
 
+    const id = itemToUpdate.cmsId;
+
+    switch (itemToUpdate.searchIndexType)
+    {
+      case "articles":
+      {
+        await caisyEntityToSearchIndexItem({
+          ...commonProps,
+          fetchItem: getArticleOverviewById,
+          itemToSearchIndexItem: createArticleSearchIndexItem,
+        });
+
+        itemData = await getArticleOverviewById({ id });
+        break;
+      }
+      case "cases":
+      {
+        itemData = await getCaseOverviewById({ id });
+        break;
+      }
+      case "forum-questions":
+      {
+        // TODO: Implement forum questions
+        console.log("Forum questions are not supported yet");
+        break;
+      }
+      case "legal-areas":
+      {
+        itemData = await getLegalAreaById({ id });
+        break;
+      }
+      case "main-categories":
+      {
+        itemData = await getMainCategoryById({ id });
+        break;
+      }
+      case "sub-categories":
+      {
+        itemData = await getSubCategoryById({ id });
+        break;
+      }
+      case "tags":
+      {
+        itemData = await getTagById({ id });
+        break;
+      }
+      case "topics":
+      {
+        itemData = await getTopicById({ id });
+        break;
+      }
+      case "user-documents":
+      {
+        // TODO: Implement user documents
+        console.log("User documents are not supported yet");
+        break;
+      }
+      case "user-uploads":
+      {
+        // TODO: Implement user uploads
+        console.log("User uploads are not supported yet");
+        break;
+      }
+    }
   });
 
   for(const itemToUpdate of createdOrUpdatedItems)
