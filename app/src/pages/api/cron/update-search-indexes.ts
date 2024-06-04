@@ -9,7 +9,7 @@ import { getArticleOverviewById } from "@/services/content/getArticleOverviewByI
 import { getCaseOverviewById } from "@/services/content/getCaseOverviewById";
 import { getLegalAreaById } from "@/services/content/getLegalAreaById";
 import { getMainCategoryById } from "@/services/content/getMainCategoryById";
-import { getSubCategoryById } from "@/services/content/getSubCategoryById";
+import { getSubCategoryById } from "@/services/content/getSubCategoryById"; 
 import { getTagById } from "@/services/content/getTagById";
 import { getTopicById } from "@/services/content/getTopicById";
 import {
@@ -17,126 +17,19 @@ import {
 } from "@/services/graphql/__generated/sdk";
 import { caisySDK } from "@/services/graphql/getSdk";
 import { type ArticleSearchIndexItem, createArticleSearchIndexItem } from "@/utils/search/caisy/article";
-import { type CaseSearchIndexItem } from "@/utils/search/caisy/case";
+import { type CaseSearchIndexItem, createCaseSearchIndexItem } from "@/utils/search/caisy/case";
+import { createLegalAreaSearchIndexItem, type LegalAreaSearchIndexItem } from "@/utils/search/caisy/legalArea";
+import { createMainCategorySearchIndexItem, type MainCategorySearchIndexItem } from "@/utils/search/caisy/mainCategory";
+import { createSubCategorySearchIndexItem, type SubCategorySearchIndexItem } from "@/utils/search/caisy/subCategory";
+import { createTagSearchIndexItem, type TagSearchIndexItem } from "@/utils/search/caisy/tag";
+import { createTopicSearchIndexItem, type TopicSearchIndexItem } from "@/utils/search/caisy/topic";
 import { searchIndices } from "@/utils/search/search";
 
 import { eq, inArray } from "drizzle-orm";
 import { type NextApiHandler } from "next";
 
-type UpdateArticles = () => Promise<{
-  createArticlesIndexTaskId: number | undefined;
-  idsOfArticlesToUpdate: string[];
-  removeDeletedArticlesTaskId: number | undefined;
-}>;
-
-const updateArticles: UpdateArticles = async () =>
-{
-  const articlesToUpdate = await db.select().from(searchIndexUpdateQueue).where(eq(searchIndexUpdateQueue.resourceType, "article"));
-  const idsOfArticlesToUpdate = articlesToUpdate.map(article => article.cmsId);
-
-  if(articlesToUpdate.length === 0)
-  {
-    console.log("No articles to update");
-
-    return ({
-      createArticlesIndexTaskId: undefined,
-      idsOfArticlesToUpdate,
-      removeDeletedArticlesTaskId: undefined,
-    });
-  }
-
-  const allArticles = await getAllArticles();
-  const deletedArticles = articlesToUpdate.filter((article) => !allArticles.some((a) => a.id === article.cmsId));
-
-  console.log(`Found ${articlesToUpdate.length} articles to update`);
-  console.log(`Found ${deletedArticles.length} articles to delete`);
-
-  let removeDeletedArticlesTaskId: number | undefined;
-
-  if(deletedArticles.length > 0)
-  {
-    const removeDeletedArticles = await meiliSearchAdmin.index(searchIndices.articles).deleteDocuments({
-      filter: `id IN [${deletedArticles.map((c) => c.cmsId).join(", ")}]`
-    });
-    removeDeletedArticlesTaskId = removeDeletedArticles.taskUid;
-  }
-
-  const { createArticlesIndexTaskId } = await addArticlesToSearchIndex({
-    articleIds: articlesToUpdate.map(article => article.cmsId),
-  });
-
-  return ({
-    createArticlesIndexTaskId,
-    idsOfArticlesToUpdate,
-    removeDeletedArticlesTaskId
-  });
-};
-
-type UpdateCases = () => Promise<{
-  createCasesIndexTaskId: number | undefined;
-  idsOfCasesToUpdate: string[];
-  removeDeletedCasesTaskId: number | undefined;
-}>;
-
-const updateCases: UpdateCases = async () =>
-{
-  const casesToUpdate = await db.select().from(searchIndexUpdateQueue).where(eq(searchIndexUpdateQueue.resourceType, "case"));
-  const idsOfCasesToUpdate = casesToUpdate.map(legalCase => legalCase.cmsId);
-
-  if(casesToUpdate.length === 0)
-  {
-    console.log("No cases to update");
-
-    return ({
-      createCasesIndexTaskId: undefined,
-      idsOfCasesToUpdate,
-      removeDeletedCasesTaskId: undefined,
-    });
-  }
-
-  const allCases = await getAllCases();
-  const deletedCases = casesToUpdate.filter((legalCase) => !allCases.some((c) => c.id === legalCase.cmsId));
-
-  console.log(`Found ${(casesToUpdate.length - deletedCases.length)} cases to update`);
-  console.log(`Found ${deletedCases.length} cases to delete`);
-
-  let removeDeletedCasesTaskId: number | undefined;
-
-  if(deletedCases.length > 0)
-  {
-    const removeDeletedCasesFromIndex = await meiliSearchAdmin.index(searchIndices.cases).deleteDocuments({
-      filter: `id IN [${deletedCases.map((a) => a.cmsId).join(", ")}]`
-    });
-    removeDeletedCasesTaskId = removeDeletedCasesFromIndex.taskUid;
-  }
-
-  const { createCasesIndexTaskId } = await addCasesToSearchIndex({
-    caseIds: casesToUpdate.map(legalCase => legalCase.cmsId),
-  });
-
-  return ({
-    createCasesIndexTaskId,
-    idsOfCasesToUpdate,
-    removeDeletedCasesTaskId,
-  });
-};
-
-// type CaisyEntityToSearchIndexItem = (params: CaseIdToSearchIndexItem | ArticleIdToSearchIndexItem) => Promise<{ meilisearchTaskId: string | null }>;
-
-/* type CaseIdToSearchIndexItem = {
-  fetchItem: (id: string) => Promise<IGenCase | null>;
-  id: string;
-  itemToSearchIndexItem: (item: IGenCase) => Promise<CaseSearchIndexItem>;
-};
-
-type ArticleIdToSearchIndexItem = {
-  fetchItem: (id: string) => Promise<IGenArticle | null>;
-  id: string;
-  itemToSearchIndexItem: (item: IGenArticle) => Promise<ArticleSearchIndexItem>;
-};*/
-
 type CaisyEntity = IGenArticle | IGenCase | IGenLegalArea | IGenMainCategory | IGenSubCategory | IGenTags | IGenTopic;
-type SearchIndexItem = ArticleSearchIndexItem | CaseSearchIndexItem;
+type SearchIndexItem = ArticleSearchIndexItem | CaseSearchIndexItem | LegalAreaSearchIndexItem | MainCategorySearchIndexItem | SubCategorySearchIndexItem | TagSearchIndexItem | TopicSearchIndexItem;
 
 type EntityIdToSearchIndexItem<CaisyItemType, SearchIndexItemType> = {
   fetchItem: (params: { id: string }) => Promise<CaisyItemType | null>;
@@ -148,17 +41,31 @@ type EntityIdToSearchIndexItem<CaisyItemType, SearchIndexItemType> = {
 const caisyEntityToSearchIndexItem = async <T extends CaisyEntity, U extends SearchIndexItem>({
   fetchItem,
   id,
-  itemToSearchIndexItem
-}: EntityIdToSearchIndexItem<T, U>): Promise<void> =>
+  itemToSearchIndexItem,
+  searchIndexType
+}: EntityIdToSearchIndexItem<T, U>): Promise<number | null> =>
 {
+  console.log("--- caisyEntityToSearchIndexItem ---", { id, searchIndexType });
+
   const item = await fetchItem({ id });
 
-  if(!item) 
+  if(!item)
   {
-    return;
+    console.log(`Item with id ${id} not found`);
+    return null;
   }
 
-  const searchIndexItem = await itemToSearchIndexItem(item);
+  console.log("Item found", item.__typename, item.id);
+
+  const searchIndexItem = itemToSearchIndexItem(item);
+
+  console.log("Search index item created", searchIndexItem);
+
+  const { taskUid } = await meiliSearchAdmin.index(searchIndexType).addDocuments([searchIndexItem]);
+
+  console.log("Task UID", taskUid);
+
+  return taskUid;
 };
 
 const handler: NextApiHandler = async (req, res): Promise<void> =>
@@ -198,68 +105,81 @@ const handler: NextApiHandler = async (req, res): Promise<void> =>
       searchIndexType: itemToUpdate.searchIndexType
     } as const;
 
-    const id = itemToUpdate.cmsId;
-
     switch (itemToUpdate.searchIndexType)
     {
       case "articles":
       {
-        await caisyEntityToSearchIndexItem({
+        return caisyEntityToSearchIndexItem({
           ...commonProps,
           fetchItem: getArticleOverviewById,
           itemToSearchIndexItem: createArticleSearchIndexItem,
         });
-
-        itemData = await getArticleOverviewById({ id });
-        break;
       }
       case "cases":
       {
-        itemData = await getCaseOverviewById({ id });
-        break;
+        return caisyEntityToSearchIndexItem({
+          ...commonProps,
+          fetchItem: getCaseOverviewById,
+          itemToSearchIndexItem: createCaseSearchIndexItem,
+        });
       }
       case "forum-questions":
       {
         // TODO: Implement forum questions
         console.log("Forum questions are not supported yet");
-        break;
+        return null;
       }
       case "legal-areas":
       {
-        itemData = await getLegalAreaById({ id });
-        break;
+        return caisyEntityToSearchIndexItem({
+          ...commonProps,
+          fetchItem: getLegalAreaById,
+          itemToSearchIndexItem: createLegalAreaSearchIndexItem,
+        });
       }
       case "main-categories":
       {
-        itemData = await getMainCategoryById({ id });
-        break;
+        return caisyEntityToSearchIndexItem({
+          ...commonProps,
+          fetchItem: getMainCategoryById,
+          itemToSearchIndexItem: createMainCategorySearchIndexItem,
+        });
       }
       case "sub-categories":
       {
-        itemData = await getSubCategoryById({ id });
-        break;
+        return caisyEntityToSearchIndexItem({
+          ...commonProps,
+          fetchItem: getSubCategoryById,
+          itemToSearchIndexItem: createSubCategorySearchIndexItem,
+        });
       }
       case "tags":
       {
-        itemData = await getTagById({ id });
-        break;
+        return caisyEntityToSearchIndexItem({
+          ...commonProps,
+          fetchItem: getTagById,
+          itemToSearchIndexItem: createTagSearchIndexItem
+        });
       }
       case "topics":
       {
-        itemData = await getTopicById({ id });
-        break;
+        return caisyEntityToSearchIndexItem({
+          ...commonProps,
+          fetchItem: getTopicById,
+          itemToSearchIndexItem: createTopicSearchIndexItem
+        });
       }
       case "user-documents":
       {
         // TODO: Implement user documents
         console.log("User documents are not supported yet");
-        break;
+        return null;
       }
       case "user-uploads":
       {
         // TODO: Implement user uploads
         console.log("User uploads are not supported yet");
-        break;
+        return null;
       }
     }
   });
