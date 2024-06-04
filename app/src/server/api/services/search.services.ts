@@ -1,4 +1,5 @@
-/* eslint-disable max-lines */
+/* eslint-disable max-lines,@typescript-eslint/explicit-function-return-type */
+
 import { db } from "@/db/connection";
 import {
   type Document,
@@ -11,22 +12,21 @@ import {
   type UploadedFile
 } from "@/db/schema";
 import { meiliSearchAdmin } from "@/lib/meilisearch";
-import { getArticleById } from "@/services/content/getArticleById";
 import { getCaseById } from "@/services/content/getCaseById";
 import {
+  type IGenArticle, type IGenCase,
   type IGenGetAllArticlesByLegalAreaQuery, type IGenGetAllArticlesByMainCategoryQuery, type IGenGetAllArticlesByTagQuery,
   type IGenGetAllArticlesByTopicQuery, type IGenGetAllCasesByLegalAreaQuery, type IGenGetAllCasesByMainCategoryQuery, type IGenGetAllCasesByTagQuery,
-  type IGenGetAllCasesByTopicQuery, type IGenLegalArea, type IGenMainCategory, type IGenTags, type IGenTopic,
+  type IGenGetAllCasesByTopicQuery, type IGenLegalArea, type IGenMainCategory, type IGenSubCategory, type IGenTags, type IGenTopic,
 } from "@/services/graphql/__generated/sdk";
-import {
-  createArticleSearchIndexItem,
-  createCaseSearchIndexItem,
-  createDocumentSearchIndexItem, createForumQuestionSearchIndexItem, createTagSearchIndexItem,
-  createUploadsSearchIndexItem,
-  documentSearchIndexItemPrimaryKey, type ForumQuestionSearchIndexItem, forumQuestionSearchIndexItemPrimaryKey,
-  searchIndices, tagSearchIndexItemPrimaryKey,
-  uploadSearchIndexItemPrimaryKey
-} from "@/utils/search";
+import { type ArticleSearchIndexItem, createArticleSearchIndexItem } from "@/utils/search/caisy/article";
+import { type CaseSearchIndexItem, createCaseSearchIndexItem } from "@/utils/search/caisy/case";
+import { createLegalAreaSearchIndexItem, type LegalAreaSearchIndexItem } from "@/utils/search/caisy/legalArea";
+import { createMainCategorySearchIndexItem, type MainCategorySearchIndexItem } from "@/utils/search/caisy/mainCategory";
+import { createSubCategorySearchIndexItem, type SubCategorySearchIndexItem } from "@/utils/search/caisy/subCategory";
+import { createTagSearchIndexItem, type TagSearchIndexItem } from "@/utils/search/caisy/tag";
+import { createTopicSearchIndexItem, type TopicSearchIndexItem } from "@/utils/search/caisy/topic";
+import { searchIndices } from "@/utils/search/search";
 
 export const addContentToSearchQueue = async (items: SearchIndexUpdateQueueInsert | SearchIndexUpdateQueueInsert[]): Promise<void> =>
 {
@@ -39,86 +39,110 @@ export const addContentToSearchQueue = async (items: SearchIndexUpdateQueueInser
   await db.insert(searchIndexUpdateQueue).values(itemsArray).onConflictDoNothing();
 };
 
-type AddArticlesAndCasesToSearchQueue = (params: {
-  articles: IGenGetAllArticlesByTopicQuery | IGenGetAllArticlesByLegalAreaQuery | IGenGetAllArticlesByMainCategoryQuery | IGenGetAllArticlesByTagQuery;
-  cases: IGenGetAllCasesByTopicQuery | IGenGetAllCasesByLegalAreaQuery | IGenGetAllCasesByMainCategoryQuery | IGenGetAllCasesByTagQuery;
-}) => Promise<void>;
-
-export const addArticlesAndCasesToSearchQueue: AddArticlesAndCasesToSearchQueue = async ({ articles, cases }) =>
-{
-  const articleIds: string[] = articles?.allArticle?.edges?.map(e => e?.node?.id).filter(Boolean) || [];
-  const caseIds: string[] = cases?.allCase?.edges?.map(e => e?.node?.id).filter(Boolean) || [];
-
-  await addContentToSearchQueue(articleIds.map(id => ({ cmsId: id, resourceType: "article" })));
-  await addContentToSearchQueue(caseIds.map(id => ({ cmsId: id, resourceType: "case" })));
-};
-
 export const resetSearchIndex = async (): Promise<void> =>
 {
   await Promise.all(Object.values(searchIndices).map(async index => meiliSearchAdmin.deleteIndexIfExists(index)));
 };
 
-type AddArticlesToSearchIndex = (params: { articleIds: string[] }) => Promise<{
-  createArticlesIndexTaskId: number | undefined;
-}>;
-
-export const addArticlesToSearchIndex: AddArticlesToSearchIndex = async ({ articleIds }) =>
+export const addArticlesToSearchIndex = async (articles: IGenArticle[]) =>
 {
   let createArticlesIndexTaskId: number | undefined;
 
-  if(articleIds.length > 0)
+  if(articles.length > 0)
   {
-    const fetchAllArticlesDetailsPromises = articleIds.map(async id => (await getArticleById({ id })).article);
-    const allArticlesWithDetails = await Promise.all(fetchAllArticlesDetailsPromises);
-    const allArticlesSearchIndexItems = allArticlesWithDetails.filter(Boolean).map(createArticleSearchIndexItem);
-    const createArticlesIndexTask = await meiliSearchAdmin.index(searchIndices.articles).addDocuments(allArticlesSearchIndexItems);
+    const allArticlesSearchIndexItems = articles.map(createArticleSearchIndexItem);
+    const createArticlesIndexTask = await meiliSearchAdmin.index<ArticleSearchIndexItem>(searchIndices.articles).addDocuments(allArticlesSearchIndexItems);
     createArticlesIndexTaskId = createArticlesIndexTask.taskUid;
   }
 
   return { createArticlesIndexTaskId };
 };
 
-type AddTagsToSearchIndex = (params: { tags: IGenTags[] }) => Promise<{
-  createTagsIndexTaskId: number | undefined;
-}>;
-
-export const addTagsToSearchIndex: AddTagsToSearchIndex = async ({ tags }) =>
+export const addTagsToSearchIndex = async (tags: IGenTags[]) =>
 {
   let createTagsIndexTaskId: number | undefined;
 
   if(tags.length > 0)
   {
     const allTagsSearchIndexItems = tags.map(createTagSearchIndexItem);
-    const createTagsIndexTask = await meiliSearchAdmin.index(searchIndices.tags).addDocuments(allTagsSearchIndexItems, {
-      primaryKey: tagSearchIndexItemPrimaryKey
-    });
+    const createTagsIndexTask = await meiliSearchAdmin.index<TagSearchIndexItem>(searchIndices.tags).addDocuments(allTagsSearchIndexItems);
     createTagsIndexTaskId = createTagsIndexTask.taskUid;
   }
 
   return { createTagsIndexTaskId };
 };
 
-type AddCasesToSearchIndex = (params: { caseIds: string[] }) => Promise<{
-  createCasesIndexTaskId: number | undefined;
-}>;
-
-export const addCasesToSearchIndex: AddCasesToSearchIndex = async ({ caseIds }) =>
+export const addCasesToSearchIndex = async (cases: IGenCase[]) =>
 {
   let createCasesIndexTaskId: number | undefined;
 
-  if(caseIds.length > 0)
+  if(cases.length > 0)
   {
-    const fetchAllCasesDetailsPromises = caseIds.map(async id => (await getCaseById({ id })).legalCase);
-    const allCasesWithDetails = await Promise.all(fetchAllCasesDetailsPromises);
-    const allCasesSearchIndexItems = allCasesWithDetails.filter(Boolean).map(createCaseSearchIndexItem);
-    const createCasesIndexTask = await meiliSearchAdmin.index(searchIndices.cases).addDocuments(allCasesSearchIndexItems);
+    const allCasesSearchIndexItems = cases.map(createCaseSearchIndexItem);
+    const createCasesIndexTask = await meiliSearchAdmin.index<CaseSearchIndexItem>(searchIndices.cases).addDocuments(allCasesSearchIndexItems);
     createCasesIndexTaskId = createCasesIndexTask.taskUid;
   }
 
   return { createCasesIndexTaskId };
 };
 
-type AddUserUploadsToSearchIndex = (params: {
+export const addLegalAreasToSearchIndex = async (legalAreas: IGenLegalArea[]) =>
+{
+  let createLegalAreasIndexTaskId: number | undefined;
+
+  if(legalAreas.length > 0)
+  {
+    const allLegalAreasSearchIndexItems = legalAreas.map(createLegalAreaSearchIndexItem);
+    const createLegalAreasIndexTask = await meiliSearchAdmin.index<LegalAreaSearchIndexItem>(searchIndices.legalAreas).addDocuments(allLegalAreasSearchIndexItems);
+    createLegalAreasIndexTaskId = createLegalAreasIndexTask.taskUid;
+  }
+
+  return { createLegalAreasIndexTaskId };
+};
+
+export const addMainCategoriesToSearchIndex = async (mainCategories: IGenMainCategory[]) =>
+{
+  let createMainCategoriesIndexTaskId: number | undefined;
+
+  if(mainCategories.length > 0)
+  {
+    const allMainCategoriesSearchIndexItems = mainCategories.map(createMainCategorySearchIndexItem);
+    const createMainCategoriesIndexTask = await meiliSearchAdmin.index<MainCategorySearchIndexItem>(searchIndices.mainCategories).addDocuments(allMainCategoriesSearchIndexItems);
+    createMainCategoriesIndexTaskId = createMainCategoriesIndexTask.taskUid;
+  }
+
+  return { createMainCategoriesIndexTaskId };
+};
+
+export const addSubCategoriesToSearchIndex = async (subCategories: IGenSubCategory[]) =>
+{
+  let createSubCategoriesIndexTaskId: number | undefined;
+
+  if(subCategories.length > 0)
+  {
+    const allSubCategoriesSearchIndexItems = subCategories.map(createSubCategorySearchIndexItem);
+    const createSubCategoriesIndexTask = await meiliSearchAdmin.index<SubCategorySearchIndexItem>(searchIndices.subCategories).addDocuments(allSubCategoriesSearchIndexItems);
+    createSubCategoriesIndexTaskId = createSubCategoriesIndexTask.taskUid;
+  }
+
+  return { createSubCategoriesIndexTaskId };
+};
+
+export const addTopicsToSearchIndex = async (topics: IGenTopic[]) =>
+{
+  let createTopicsIndexTaskId: number | undefined;
+
+  if(topics.length > 0)
+  {
+    const allTopicsSearchIndexItems = topics.map(createTopicSearchIndexItem);
+    const createTopicsIndexTask = await meiliSearchAdmin.index<TopicSearchIndexItem>(searchIndices.topics).addDocuments(allTopicsSearchIndexItems);
+    createTopicsIndexTaskId = createTopicsIndexTask.taskUid;
+  }
+
+  return { createTopicsIndexTaskId };
+};
+
+/* type AddUserUploadsToSearchIndex = (params: {
   uploads: UploadedFile[];
 }) => Promise<{
   createUploadsIndexTaskId: number | undefined;
@@ -138,9 +162,9 @@ export const addUserUploadsToSearchIndex: AddUserUploadsToSearchIndex = async ({
   }
 
   return { createUploadsIndexTaskId };
-};
+};*/
 
-type AddUserDocumentsToSearchIndex = (params: {
+/* type AddUserDocumentsToSearchIndex = (params: {
   documents: Document[];
 }) => Promise<{
   createDocumentsIndexTaskId: number | undefined;
@@ -160,9 +184,9 @@ export const addUserDocumentsToSearchIndex: AddUserDocumentsToSearchIndex = asyn
   }
 
   return { createDocumentsIndexTaskId };
-};
+};*/
 
-type AddForumQuestionsToSearchIndex = (params: {
+/* type AddForumQuestionsToSearchIndex = (params: {
   allLegalFields: IGenMainCategory[];
   allSubfields: IGenLegalArea[];
   allTopics: IGenTopic[];
@@ -236,4 +260,4 @@ export const addForumQuestionsToSearchIndex: AddForumQuestionsToSearchIndex = as
   }
 
   return { createQuestionsIndexTaskId };
-};
+};*/

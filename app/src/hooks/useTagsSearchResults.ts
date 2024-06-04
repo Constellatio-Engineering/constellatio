@@ -1,5 +1,5 @@
 import { MeilisearchContext } from "@/provider/MeilisearchProvider";
-import { searchIndices, type TagSearchIndexItem } from "@/utils/search";
+import { searchIndices, type TagSearchIndexItem } from "@/utils/search/search";
 
 import { keepPreviousData, useQuery } from "@tanstack/react-query";
 import { useContext } from "react";

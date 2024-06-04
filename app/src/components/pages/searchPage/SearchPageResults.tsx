@@ -8,7 +8,7 @@ import UploadedMaterialTable from "@/components/organisms/uploadedMaterialTable/
 import ForumQuestions from "@/components/pages/forumOverviewPage/forumQuestions/ForumQuestions";
 import useSearchResults, { type SearchResultsKey, type SearchResults } from "@/hooks/useSearchResults";
 import { type IGenArticleOverviewFragment, type IGenFullCaseFragment } from "@/services/graphql/__generated/sdk";
-import { type ArticleSearchIndexItem, type CaseSearchIndexItem } from "@/utils/search";
+import { type ArticleSearchIndexItem, type CaseSearchIndexItem } from "@/utils/search/search";
 import { type CommonKeysInTypes, type Nullable } from "@/utils/types";
 
 import { useRouter } from "next/router";

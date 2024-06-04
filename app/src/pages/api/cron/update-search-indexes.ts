@@ -5,7 +5,7 @@ import { meiliSearchAdmin } from "@/lib/meilisearch";
 import { addArticlesToSearchIndex, addCasesToSearchIndex } from "@/server/api/services/search.services";
 import getAllArticles from "@/services/content/getAllArticles";
 import getAllCases from "@/services/content/getAllCases";
-import { searchIndices } from "@/utils/search";
+import { searchIndices } from "@/utils/search/search";
 
 import { eq, inArray } from "drizzle-orm";
 import { type NextApiHandler } from "next";

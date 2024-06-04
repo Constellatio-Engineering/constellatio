@@ -2,7 +2,7 @@ import { env } from "@/env.mjs";
 import { getDefaultSearchApiKey, meiliSearchAdmin } from "@/lib/meilisearch";
 import { createTRPCRouter, protectedProcedure } from "@/server/api/trpc";
 import getPopularSearches from "@/services/content/getPopularSearches";
-import { type SearchIndex } from "@/utils/search";
+import { type SearchIndex } from "@/utils/search/search";
 
 type SearchRules = {
   [key in SearchIndex]: {

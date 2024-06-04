@@ -2,7 +2,7 @@ import { type GetDocumentResult } from "@/server/api/routers/documents.router";
 import { type GetUploadedFileResult } from "@/server/api/routers/uploads.router";
 import { type IGenTags } from "@/services/graphql/__generated/sdk";
 import { areArraysEqualSets } from "@/utils/array";
-import { type TagSearchIndexItem } from "@/utils/search";
+import { type TagSearchIndexItem } from "@/utils/search/search";
 
 import { create } from "zustand";
 import { immer } from "zustand/middleware/immer";

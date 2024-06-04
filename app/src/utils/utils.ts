@@ -1,4 +1,6 @@
 /* eslint-disable import/no-unused-modules */
+import { type Nullable } from "@/utils/types";
+
 import { v4 as uuidV4 } from "uuid";
 
 export const sleep = async (ms: number): Promise<void> => new Promise(resolve => setTimeout(resolve, ms));
@@ -140,4 +142,9 @@ export const scrollTo = (element: HTMLElement, offset = 100): void =>
 {
   const y = element.getBoundingClientRect().top + window.scrollY - offset;
   window.scrollTo({ behavior: "smooth", top: y });
+}; 
+
+export const getIdsFromObjects = <T extends { id?: Nullable<string> }>(objects: Nullable<Array<Nullable<T>>>): string[] =>
+{
+  return objects?.map(object => object?.id).filter(Boolean) || [];
 };

@@ -13,8 +13,19 @@ export type OnboardingResult = typeof allOnboardingResults[number];
 export const allBookmarkResourceTypes = ["article", "case", "forumQuestion"] as const;
 export type BookmarkResourceType = typeof allBookmarkResourceTypes[number];
 
-export const allSearchIndexTypes = ["article", "case"] as const;
+export const allSearchIndexTypes = [
+  "article",
+  "case",
+  "legalArea",
+  "mainCategory",
+  "subCategory",
+  "tag",
+  "topic",
+] as const;
 export type SearchIndexType = typeof allSearchIndexTypes[number];
+
+export const allCaisyWebhookEventTypes = ["create", "update", "delete"] as const;
+export type CaisyWebhookEventType = typeof allCaisyWebhookEventTypes[number];
 
 export const allCaseProgressStates = ["not-started", "completing-tests", "solving-case", "completed"] as const;
 export type CaseProgressState = typeof allCaseProgressStates[number];
@@ -100,6 +111,7 @@ export const genderEnum = pgEnum("Gender", allGenderIdentifiers);
 export const onboardingResultEnum = pgEnum("OnboardingResult", allOnboardingResults);
 export const resourceTypeEnum = pgEnum("ResourceType", allBookmarkResourceTypes);
 export const searchIndexTypeEnum = pgEnum("SearchIndexType", allSearchIndexTypes);
+export const caisyWebhookEventTypeEnum = pgEnum("CaisyWebhookEventType", allCaisyWebhookEventTypes);
 export const caseProgressStateEnum = pgEnum("CaseProgressState", allCaseProgressStates);
 export const gameProgressStateEnum = pgEnum("GameProgressState", allGameProgressStates);
 export const subscriptionStatusEnum = pgEnum("SubscriptionStatus", allSubscriptionStatuses);
@@ -295,8 +307,10 @@ export type GameProgressInsert = InferInsertModel<typeof gamesProgress>;
 export type GameProgress = InferSelectModel<typeof gamesProgress>;
 
 export const searchIndexUpdateQueue = pgTable("SearchIndexUpdateQueue", {
-  cmsId: uuid("CmsId").primaryKey(),
+  id: uuid("Id").defaultRandom().primaryKey(),
+  cmsId: uuid("CmsId").notNull(),
   resourceType: searchIndexTypeEnum("ResourceType").notNull(),
+  eventType: caisyWebhookEventTypeEnum("EventType").notNull(),
 });
 
 export type SearchIndexUpdateQueueInsert = InferInsertModel<typeof searchIndexUpdateQueue>;

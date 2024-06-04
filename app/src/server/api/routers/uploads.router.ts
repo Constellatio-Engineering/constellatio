@@ -15,7 +15,7 @@ import { deleteFiles, getClouStorageFileUrl, getSignedCloudStorageUploadUrl } fr
 import { createTRPCRouter, protectedProcedure } from "@/server/api/trpc";
 import {
   createUploadsSearchIndexItem, searchIndices, uploadSearchIndexItemPrimaryKey, type UploadSearchItemUpdate
-} from "@/utils/search";
+} from "@/utils/search/search";
 import { NotFoundError } from "@/utils/serverError";
 
 import type { inferProcedureOutput } from "@trpc/server";

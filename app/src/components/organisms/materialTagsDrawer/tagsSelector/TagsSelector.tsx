@@ -4,7 +4,7 @@ import { useTagsSearchResults } from "@/hooks/useTagsSearchResults";
 import { type IGenTags } from "@/services/graphql/__generated/sdk";
 import { type EditorOpened, useTagsEditorStore } from "@/stores/tagsEditor.store";
 import { useTagsSearchBarStore } from "@/stores/tagsSearchBar.store";
-import { type TagSearchIndexItem } from "@/utils/search";
+import { type TagSearchIndexItem } from "@/utils/search/search";
 
 import { ActionIcon, Badge, Input, rem } from "@mantine/core";
 import { IconSearch, IconX } from "@tabler/icons-react";

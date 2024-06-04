@@ -1,5 +1,6 @@
 import { meiliSearchAdmin } from "@/lib/meilisearch";
-import { searchIndices, type TagSearchIndexItem } from "@/utils/search";
+import { type TagSearchIndexItem } from "@/utils/search/caisy/tag";
+import { searchIndices } from "@/utils/search/search";
 import { type NullableProperties } from "@/utils/types";
 
 type AddTags = <T>(

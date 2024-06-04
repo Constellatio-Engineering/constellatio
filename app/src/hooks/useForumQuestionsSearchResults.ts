@@ -1,6 +1,6 @@
 import { MeilisearchContext } from "@/provider/MeilisearchProvider";
 import { useForumQuestionsSearchStore } from "@/stores/forumQuestionsSearch.store";
-import { type ForumQuestionSearchIndexItem, searchIndices } from "@/utils/search";
+import { type ForumQuestionSearchIndexItem, searchIndices } from "@/utils/search/search";
 
 import { keepPreviousData, useQuery } from "@tanstack/react-query";
 import { useContext } from "react";

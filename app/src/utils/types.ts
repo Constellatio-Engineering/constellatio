@@ -23,19 +23,27 @@ export type RemoveUndefined<T> = T extends undefined ? never : T;
 
 export type RemoveSymbol<T> = T extends symbol ? never : T;
 
-export type DotSeparatedKeys<T, Prefix extends string = ""> = {
-  [K in keyof T]: T[K] extends object
-    ? T[K] extends unknown[]
-      ? T[K][0] extends Date
-        ? `${Prefix}${K & string}`
-        : `${Prefix}${K & string}.${Exclude<RemoveSymbol<keyof T[K][0]>, keyof unknown[]>}` | DotSeparatedKeys<T[K][0], `${Prefix}${K & string}.`>
-      : T[K] extends Date
-        ? `${Prefix}${K & string}`
-        : DotSeparatedKeys<T[K], `${Prefix}${K & string}.`>
-    : T[K] extends Date
-      ? `${Prefix}${K & string}`
-      : `${Prefix}${K & string}`;
-}[keyof T];
+// export type DotSeparatedKeys<T, Prefix extends string = ""> = {
+//   [K in keyof T]: T[K] extends object
+//     ? T[K] extends unknown[]
+//       ? T[K][0] extends Date
+//         ? `${Prefix}${K & string}`
+//         : `${Prefix}${K & string}.${Exclude<RemoveSymbol<keyof T[K][0]>, keyof unknown[]>}` | DotSeparatedKeys<T[K][0], `${Prefix}${K & string}.`>
+//       : T[K] extends Date
+//         ? `${Prefix}${K & string}`
+//         : DotSeparatedKeys<T[K], `${Prefix}${K & string}.`>
+//     : T[K] extends Date
+//       ? `${Prefix}${K & string}`
+//       : `${Prefix}${K & string}`;
+// }[keyof T];
+
+// export type DotSeparatedKeys<T, Prefix extends string = ""> = {
+//   [K in keyof T]: T[K] extends Array<infer U>
+//     ? U extends object
+//       ? `${Prefix}${K & string}.${DotSeparatedKeys<U>}`
+//       : `${Prefix}${K & string}`
+//     : `${Prefix}${K & string}`;
+// }[keyof T];
 
 export type MantineCssObjectStyles = (theme: MantineTheme) => CSSObject;
 

@@ -20,7 +20,7 @@ import { upvoteQuestionSchema } from "@/schemas/forum/upvoteQuestion.schema";
 import { getAllLegalFields, getAllSubfields, getAllTopics } from "@/server/api/services/caisy.services";
 import { getAnswers, getQuestions, insertLegalFieldsAndTopicsForQuestion, resetLegalFieldsAndTopicsForQuestion } from "@/server/api/services/forum.services";
 import { createTRPCRouter, forumModProcedure, protectedProcedure } from "@/server/api/trpc";
-import { createForumQuestionSearchIndexItem, forumQuestionSearchIndexItemPrimaryKey, type ForumQuestionSearchItemUpdate, searchIndices } from "@/utils/search";
+import { createForumQuestionSearchIndexItem, forumQuestionSearchIndexItemPrimaryKey, type ForumQuestionSearchItemUpdate, searchIndices } from "@/utils/search/search";
 import { BadRequestError, ForbiddenError, InternalServerError, NotFoundError } from "@/utils/serverError";
 import { removeHtmlTagsFromString } from "@/utils/utils";
 

@@ -6,7 +6,7 @@ import { deleteFolderSchema } from "@/schemas/folders/deleteFolder.schema";
 import { renameFolderSchema } from "@/schemas/folders/renameFolder.schema";
 import { deleteFiles } from "@/server/api/services/uploads.services";
 import { createTRPCRouter, protectedProcedure } from "@/server/api/trpc";
-import { type DocumentSearchItemNodes, searchIndices, type UploadSearchItemNodes } from "@/utils/search";
+import { type DocumentSearchItemNodes, searchIndices, type UploadSearchItemNodes } from "@/utils/search/search";
 
 import {
   and, asc, eq
