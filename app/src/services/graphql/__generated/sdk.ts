@@ -1549,6 +1549,16 @@ export type IGenGetArticleByIdQuery = { __typename?: 'Query', Article?: (
     & IGenFullArticleFragment
   ) | null };
 
+export type IGenGetArticleOverviewByIdQueryVariables = Exact<{
+  id: Scalars['ID']['input'];
+}>;
+
+
+export type IGenGetArticleOverviewByIdQuery = { __typename?: 'Query', Article?: (
+    { __typename?: 'Article' }
+    & IGenArticleOverviewFragment
+  ) | null };
+
 export type IGenGetCaseByIdQueryVariables = Exact<{
   id: Scalars['ID']['input'];
 }>;
@@ -1559,12 +1569,15 @@ export type IGenGetCaseByIdQuery = { __typename?: 'Query', Case?: (
     & IGenFullCaseFragment
   ) | null };
 
-export type IGenGetAllCasesByIdQueryVariables = Exact<{
-  ids: Array<Scalars['ID']['input']> | Scalars['ID']['input'];
+export type IGenGetCaseOverviewByIdQueryVariables = Exact<{
+  id: Scalars['ID']['input'];
 }>;
 
 
-export type IGenGetAllCasesByIdQuery = { __typename?: 'Query', allCase?: { __typename?: 'Case_Connection', totalCount?: number | null, edges?: Array<{ __typename?: 'Case_ConnectionEdge', node?: { __typename?: 'Case', title?: string | null, id?: string | null } | null } | null> | null } | null };
+export type IGenGetCaseOverviewByIdQuery = { __typename?: 'Query', Case?: (
+    { __typename?: 'Case' }
+    & IGenCaseOverviewFragment
+  ) | null };
 
 export type IGenGetLegalAreaByIdQueryVariables = Exact<{
   id: Scalars['ID']['input'];
@@ -1584,6 +1597,16 @@ export type IGenGetMainCategoryByIdQueryVariables = Exact<{
 export type IGenGetMainCategoryByIdQuery = { __typename?: 'Query', MainCategory?: (
     { __typename?: 'MainCategory' }
     & IGenMainCategoryFragment
+  ) | null };
+
+export type IGenGetSubCategoryByIdQueryVariables = Exact<{
+  id: Scalars['ID']['input'];
+}>;
+
+
+export type IGenGetSubCategoryByIdQuery = { __typename?: 'Query', SubCategory?: (
+    { __typename?: 'SubCategory' }
+    & IGenSubCategoryFragment
   ) | null };
 
 export type IGenGetTagsByIdQueryVariables = Exact<{
@@ -2125,6 +2148,17 @@ ${LegalAreaFragmentDoc}
 ${MainCategoryFragmentDoc}
 ${TagsFragmentDoc}
 ${TopicFragmentDoc}`;
+export const GetArticleOverviewByIdDocument = gql`
+    query getArticleOverviewById($id: ID!) {
+  Article(id: $id) {
+    ...ArticleOverview
+  }
+}
+    ${ArticleOverviewFragmentDoc}
+${LegalAreaFragmentDoc}
+${TopicFragmentDoc}
+${MainCategoryFragmentDoc}
+${AssetFragmentDoc}`;
 export const GetCaseByIdDocument = gql`
     query getCaseById($id: ID!) {
   Case(id: $id) {
@@ -2142,19 +2176,17 @@ ${LegalAreaFragmentDoc}
 ${MainCategoryFragmentDoc}
 ${TagsFragmentDoc}
 ${TopicFragmentDoc}`;
-export const GetAllCasesByIdDocument = gql`
-    query getAllCasesById($ids: [ID!]!) {
-  allCase(where: {tags: {}}) {
-    totalCount
-    edges {
-      node {
-        title
-        id
-      }
-    }
+export const GetCaseOverviewByIdDocument = gql`
+    query getCaseOverviewById($id: ID!) {
+  Case(id: $id) {
+    ...CaseOverview
   }
 }
-    `;
+    ${CaseOverviewFragmentDoc}
+${LegalAreaFragmentDoc}
+${TopicFragmentDoc}
+${MainCategoryFragmentDoc}
+${AssetFragmentDoc}`;
 export const GetLegalAreaByIdDocument = gql`
     query getLegalAreaById($id: ID!) {
   LegalArea(id: $id) {
@@ -2170,6 +2202,13 @@ export const GetMainCategoryByIdDocument = gql`
 }
     ${MainCategoryFragmentDoc}
 ${AssetFragmentDoc}`;
+export const GetSubCategoryByIdDocument = gql`
+    query getSubCategoryById($id: ID!) {
+  SubCategory(id: $id) {
+    ...SubCategory
+  }
+}
+    ${SubCategoryFragmentDoc}`;
 export const GetTagsByIdDocument = gql`
     query getTagsById($id: ID!) {
   Tags(id: $id) {
@@ -2244,17 +2283,23 @@ export function getSdk<C, E>(requester: Requester<C, E>) {
     getArticleById(variables: IGenGetArticleByIdQueryVariables, options?: C): Promise<IGenGetArticleByIdQuery> {
       return requester<IGenGetArticleByIdQuery, IGenGetArticleByIdQueryVariables>(GetArticleByIdDocument, variables, options) as Promise<IGenGetArticleByIdQuery>;
     },
+    getArticleOverviewById(variables: IGenGetArticleOverviewByIdQueryVariables, options?: C): Promise<IGenGetArticleOverviewByIdQuery> {
+      return requester<IGenGetArticleOverviewByIdQuery, IGenGetArticleOverviewByIdQueryVariables>(GetArticleOverviewByIdDocument, variables, options) as Promise<IGenGetArticleOverviewByIdQuery>;
+    },
     getCaseById(variables: IGenGetCaseByIdQueryVariables, options?: C): Promise<IGenGetCaseByIdQuery> {
       return requester<IGenGetCaseByIdQuery, IGenGetCaseByIdQueryVariables>(GetCaseByIdDocument, variables, options) as Promise<IGenGetCaseByIdQuery>;
     },
-    getAllCasesById(variables: IGenGetAllCasesByIdQueryVariables, options?: C): Promise<IGenGetAllCasesByIdQuery> {
-      return requester<IGenGetAllCasesByIdQuery, IGenGetAllCasesByIdQueryVariables>(GetAllCasesByIdDocument, variables, options) as Promise<IGenGetAllCasesByIdQuery>;
+    getCaseOverviewById(variables: IGenGetCaseOverviewByIdQueryVariables, options?: C): Promise<IGenGetCaseOverviewByIdQuery> {
+      return requester<IGenGetCaseOverviewByIdQuery, IGenGetCaseOverviewByIdQueryVariables>(GetCaseOverviewByIdDocument, variables, options) as Promise<IGenGetCaseOverviewByIdQuery>;
     },
     getLegalAreaById(variables: IGenGetLegalAreaByIdQueryVariables, options?: C): Promise<IGenGetLegalAreaByIdQuery> {
       return requester<IGenGetLegalAreaByIdQuery, IGenGetLegalAreaByIdQueryVariables>(GetLegalAreaByIdDocument, variables, options) as Promise<IGenGetLegalAreaByIdQuery>;
     },
     getMainCategoryById(variables: IGenGetMainCategoryByIdQueryVariables, options?: C): Promise<IGenGetMainCategoryByIdQuery> {
       return requester<IGenGetMainCategoryByIdQuery, IGenGetMainCategoryByIdQueryVariables>(GetMainCategoryByIdDocument, variables, options) as Promise<IGenGetMainCategoryByIdQuery>;
+    },
+    getSubCategoryById(variables: IGenGetSubCategoryByIdQueryVariables, options?: C): Promise<IGenGetSubCategoryByIdQuery> {
+      return requester<IGenGetSubCategoryByIdQuery, IGenGetSubCategoryByIdQueryVariables>(GetSubCategoryByIdDocument, variables, options) as Promise<IGenGetSubCategoryByIdQuery>;
     },
     getTagsById(variables: IGenGetTagsByIdQueryVariables, options?: C): Promise<IGenGetTagsByIdQuery> {
       return requester<IGenGetTagsByIdQuery, IGenGetTagsByIdQueryVariables>(GetTagsByIdDocument, variables, options) as Promise<IGenGetTagsByIdQuery>;

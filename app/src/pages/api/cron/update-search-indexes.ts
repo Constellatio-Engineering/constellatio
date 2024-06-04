@@ -5,6 +5,17 @@ import { meiliSearchAdmin } from "@/lib/meilisearch";
 import { addArticlesToSearchIndex, addCasesToSearchIndex } from "@/server/api/services/search.services";
 import getAllArticles from "@/services/content/getAllArticles";
 import getAllCases from "@/services/content/getAllCases";
+import { getArticleOverviewById } from "@/services/content/getArticleOverviewById";
+import { getCaseOverviewById } from "@/services/content/getCaseOverviewById";
+import { getLegalAreaById } from "@/services/content/getLegalAreaById";
+import { getMainCategoryById } from "@/services/content/getMainCategoryById";
+import { getSubCategoryById } from "@/services/content/getSubCategoryById";
+import { getTagById } from "@/services/content/getTagById";
+import { getTopicById } from "@/services/content/getTopicById";
+import {
+  type IGenArticle, type IGenCase, type IGenLegalArea, type IGenMainCategory, type IGenSubCategory, type IGenTags, type IGenTopic 
+} from "@/services/graphql/__generated/sdk";
+import { caisySDK } from "@/services/graphql/getSdk";
 import { searchIndices } from "@/utils/search/search";
 
 import { eq, inArray } from "drizzle-orm";
@@ -127,7 +138,7 @@ const handler: NextApiHandler = async (req, res): Promise<void> =>
 
   const deleteItemsFromIndexTasksPromises = allSearchIndexTypes.map(async (searchIndex) =>
   {
-    const deletedItemsForCurrentIndex = deletedItems.filter((item) => item.resourceType === searchIndex);
+    const deletedItemsForCurrentIndex = deletedItems.filter((item) => item.searchIndexType === searchIndex);
     return meiliSearchAdmin.index(searchIndex).deleteDocuments({
       filter: `id IN [${deletedItemsForCurrentIndex.map((a) => a.cmsId).join(", ")}]`
     });
@@ -138,9 +149,72 @@ const handler: NextApiHandler = async (req, res): Promise<void> =>
 
   // TODO: Note for later: If a document cannot be found in caisy or the database, it should be removed from the search index
 
-  for(const itemToUpdate of itemsFromUpdateQueue)
+  const updateItemsInIndexTasksPromises = createdOrUpdatedItems.map(async (itemToUpdate) =>
   {
 
+  });
+
+  for(const itemToUpdate of createdOrUpdatedItems)
+  {
+    const id = itemToUpdate.cmsId;
+    let itemData: IGenCase | IGenArticle | IGenLegalArea | IGenMainCategory | IGenSubCategory | IGenTags | IGenTopic | null;
+
+    switch (itemToUpdate.searchIndexType)
+    {
+      case "articles":
+      {
+        itemData = await getArticleOverviewById({ id });
+        break;
+      }
+      case "cases":
+      {
+        itemData = await getCaseOverviewById({ id });
+        break;
+      }
+      case "forum-questions":
+      {
+        // TODO: Implement forum questions
+        console.log("Forum questions are not supported yet");
+        break;
+      }
+      case "legal-areas":
+      {
+        itemData = await getLegalAreaById({ id });
+        break;
+      }
+      case "main-categories":
+      {
+        itemData = await getMainCategoryById({ id });
+        break;
+      }
+      case "sub-categories":
+      {
+        itemData = await getSubCategoryById({ id });
+        break;
+      }
+      case "tags":
+      {
+        itemData = await getTagById({ id });
+        break;
+      }
+      case "topics":
+      {
+        itemData = await getTopicById({ id });
+        break;
+      }
+      case "user-documents":
+      {
+        // TODO: Implement user documents
+        console.log("User documents are not supported yet");
+        break;
+      }
+      case "user-uploads":
+      {
+        // TODO: Implement user uploads
+        console.log("User uploads are not supported yet");
+        break;
+      }
+    }
   }
 
   const { createArticlesIndexTaskId, idsOfArticlesToUpdate, removeDeletedArticlesTaskId } = await updateArticles();
