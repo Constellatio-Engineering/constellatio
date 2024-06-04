@@ -1,5 +1,5 @@
 import { db } from "@/db/connection";
-import { searchIndexUpdateQueue } from "@/db/schema";
+import { allSearchIndexTypes, type SearchIndexType, searchIndexUpdateQueue } from "@/db/schema";
 import { env } from "@/env.mjs";
 import { meiliSearchAdmin } from "@/lib/meilisearch";
 import { addArticlesToSearchIndex, addCasesToSearchIndex } from "@/server/api/services/search.services";
@@ -116,6 +116,32 @@ const handler: NextApiHandler = async (req, res): Promise<void> =>
   }
 
   console.log("----- [Cronjob] Update Search Indexes -----");
+
+  const itemsFromUpdateQueue = await db.select().from(searchIndexUpdateQueue);
+  const deletedItems = itemsFromUpdateQueue.filter((item) => item.eventType === "delete");
+
+  // If an item is present in both the create/update and delete queue, it must be removed from the create/update queue
+  const createdOrUpdatedItems = itemsFromUpdateQueue
+    .filter((item) => item.eventType === "create" || item.eventType === "update")
+    .filter((item) => !deletedItems.some((deletedItem) => deletedItem.cmsId === item.cmsId));
+
+  const deleteItemsFromIndexTasksPromises = allSearchIndexTypes.map(async (searchIndex) =>
+  {
+    const deletedItemsForCurrentIndex = deletedItems.filter((item) => item.resourceType === searchIndex);
+    return meiliSearchAdmin.index(searchIndex).deleteDocuments({
+      filter: `id IN [${deletedItemsForCurrentIndex.map((a) => a.cmsId).join(", ")}]`
+    });
+  });
+
+  const deleteItemsFromIndexTasks = await Promise.all(deleteItemsFromIndexTasksPromises);
+  const deleteItemsFromIndexTaskIds = deleteItemsFromIndexTasks.map((task) => task.taskUid);
+
+  // TODO: Note for later: If a document cannot be found in caisy or the database, it should be removed from the search index
+
+  for(const itemToUpdate of itemsFromUpdateQueue)
+  {
+
+  }
 
   const { createArticlesIndexTaskId, idsOfArticlesToUpdate, removeDeletedArticlesTaskId } = await updateArticles();
   const { createCasesIndexTaskId, idsOfCasesToUpdate, removeDeletedCasesTaskId } = await updateCases();

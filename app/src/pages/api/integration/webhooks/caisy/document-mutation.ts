@@ -64,7 +64,7 @@ const handler: NextApiHandler = async (req, res): Promise<void> =>
 
   const { document_id: documentId } = webhookRequestBody.metadata;
 
-  let resourceType: SearchIndexType;
+  let searchIndexType: SearchIndexType;
   let eventType: CaisyWebhookEventType;
 
   switch (webhookRequestBody.webhook.trigger)
@@ -96,43 +96,43 @@ const handler: NextApiHandler = async (req, res): Promise<void> =>
     case env.CAISY_CASE_BLUEPRINT_ID:
     {
       console.log(`Case '${documentId}' changed. Adding it to the search index update queue...`);
-      resourceType = "case";
+      searchIndexType = "cases";
       break;
     }
     case env.CAISY_ARTICLE_BLUEPRINT_ID:
     {
       console.log(`Article '${documentId}' changed. Adding it to the search index update queue...`);
-      resourceType = "article";
+      searchIndexType = "articles";
       break;
     }
     case env.CAISY_TAG_BLUEPRINT_ID:
     {
       console.log(`Tag '${documentId}' changed. Updating all content with this tag.`);
-      resourceType = "tag";
+      searchIndexType = "tags";
       break;
     }
     case env.CAISY_TOPIC_BLUEPRINT_ID:
     {
       console.log(`Topic '${documentId}' changed. Updating all content with this topic.`);
-      resourceType = "topic";
+      searchIndexType = "topics";
       break;
     }
     case env.CAISY_LEGAL_AREA_BLUEPRINT_ID:
     {
       console.log(`Legal area '${documentId}' changed. Updating all content with this legal area.`);
-      resourceType = "legalArea";
+      searchIndexType = "legal-areas";
       break;
     }
     case env.CAISY_MAIN_CATEGORY_BLUEPRINT_ID:
     {
       console.log(`Main category '${documentId}' changed. Updating all content with this main category.`);
-      resourceType = "mainCategory";
+      searchIndexType = "main-categories";
       break;
     }
     case env.CAISY_SUB_CATEGORY_BLUEPRINT_ID:
     {
       console.log(`Sub category '${documentId}' changed. Updating all content with this sub category.`);
-      resourceType = "subCategory";
+      searchIndexType = "main-categories";
       break;
     }
     default:
@@ -145,7 +145,7 @@ const handler: NextApiHandler = async (req, res): Promise<void> =>
   await addContentToSearchQueue({
     cmsId: documentId,
     eventType,
-    resourceType 
+    searchIndexType
   });
 
   return res.status(200).json({ message: "Success" });

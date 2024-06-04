@@ -1,4 +1,6 @@
 /* eslint-disable sort-keys-fix/sort-keys-fix,@typescript-eslint/naming-convention,@typescript-eslint/no-use-before-define,max-lines */
+import { type SearchIndex, searchIndices } from "@/utils/search/search";
+
 import { type InferInsertModel, type InferSelectModel, relations } from "drizzle-orm";
 import {
   text, pgTable, integer, pgEnum, uuid, smallint, unique, timestamp, primaryKey, index, type AnyPgColumn, serial, uniqueIndex
@@ -13,16 +15,8 @@ export type OnboardingResult = typeof allOnboardingResults[number];
 export const allBookmarkResourceTypes = ["article", "case", "forumQuestion"] as const;
 export type BookmarkResourceType = typeof allBookmarkResourceTypes[number];
 
-export const allSearchIndexTypes = [
-  "article",
-  "case",
-  "legalArea",
-  "mainCategory",
-  "subCategory",
-  "tag",
-  "topic",
-] as const;
-export type SearchIndexType = typeof allSearchIndexTypes[number];
+export const allSearchIndexTypes = Object.values(searchIndices) as [SearchIndex, ...SearchIndex[]];
+export type SearchIndexType = SearchIndex;
 
 export const allCaisyWebhookEventTypes = ["create", "update", "delete"] as const;
 export type CaisyWebhookEventType = typeof allCaisyWebhookEventTypes[number];
@@ -307,11 +301,12 @@ export type GameProgressInsert = InferInsertModel<typeof gamesProgress>;
 export type GameProgress = InferSelectModel<typeof gamesProgress>;
 
 export const searchIndexUpdateQueue = pgTable("SearchIndexUpdateQueue", {
-  id: uuid("Id").defaultRandom().primaryKey(),
   cmsId: uuid("CmsId").notNull(),
-  resourceType: searchIndexTypeEnum("ResourceType").notNull(),
+  searchIndexType: searchIndexTypeEnum("SearchIndexType").notNull(),
   eventType: caisyWebhookEventTypeEnum("EventType").notNull(),
-});
+}, table => ({
+  pk: primaryKey({ columns: [table.cmsId, table.searchIndexType, table.eventType] }),
+}));
 
 export type SearchIndexUpdateQueueInsert = InferInsertModel<typeof searchIndexUpdateQueue>;
 export type SearchIndexUpdateQueueItem = InferSelectModel<typeof searchIndexUpdateQueue>;

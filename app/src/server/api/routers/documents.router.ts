@@ -7,7 +7,8 @@ import { getDocumentsSchema } from "@/schemas/documents/getDocuments.schema";
 import { updateDocumentSchema } from "@/schemas/documents/updateDocument.schema";
 import { addTags } from "@/server/api/services/tags.services";
 import { createTRPCRouter, protectedProcedure } from "@/server/api/trpc";
-import { createDocumentSearchIndexItem, documentSearchIndexItemPrimaryKey, type DocumentSearchItemUpdate, searchIndices } from "@/utils/search/search";
+import { searchIndices } from "@/utils/search/search";
+import { createDocumentSearchIndexItem, documentSearchIndexItemPrimaryKey, type DocumentSearchItemUpdate } from "@/utils/search/supabase/document";
 import { removeHtmlTagsFromString } from "@/utils/utils";
 
 import { type inferProcedureOutput } from "@trpc/server";
