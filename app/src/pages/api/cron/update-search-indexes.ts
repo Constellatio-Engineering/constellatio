@@ -188,35 +188,30 @@ const handler: NextApiHandler = async (req, res): Promise<void> =>
   const searchIndexItems = (await Promise.all(getSearchIndexItemsPromises)).filter(Boolean);
 
   type GroupedItems = {
-    [searchIndexType in SearchIndexType]: SearchIndexItem[];
+    [searchIndexType in SearchIndexType]?: SearchIndexItem[];
   };
 
-  const initialGroupedItems: GroupedItems = {
-    articles: [],
-    cases: [],
-    "forum-questions": [],
-    "legal-areas": [],
-    "main-categories": [],
-    "sub-categories": [],
-    tags: [],
-    topics: [],
-    "user-documents": [],
-    "user-uploads": []
-  };
-
-  const groupedItems = searchIndexItems.reduce<GroupedItems>((acc, curr) =>
+  const groupedSearchIndexItems = searchIndexItems.reduce<GroupedItems>((acc, curr) =>
   {
     const { item, searchIndexType } = curr;
-    acc[searchIndexType].push(item);
+
+    if(!acc[searchIndexType])
+    {
+      acc[searchIndexType] = [];
+    }
+
+    acc[searchIndexType]!.push(item);
+
     return acc;
-  }, initialGroupedItems);
+  }, {});
 
-  type SearchIndexItems = Prettify<typeof searchIndexItems>;
-
-  const updateDocumentsInIndexPromises = searchIndexItems.map(async ({ item, searchIndexType }) =>
+  const updateItemsInIndexTasksPromises = Object.entries(groupedSearchIndexItems).map(async ([searchIndexType, items]) =>
   {
-    return meiliSearchAdmin.index(searchIndexType).updateDocuments([item]);
+    return meiliSearchAdmin.index(searchIndexType).addDocuments(items);
   });
+
+  const updateItemsInIndexTasks = await Promise.all(updateItemsInIndexTasksPromises);
+  const updateItemsInIndexTaskIds = updateItemsInIndexTasks.map((task) => task.taskUid);
 
   const { createArticlesIndexTaskId, idsOfArticlesToUpdate, removeDeletedArticlesTaskId } = await updateArticles();
   const { createCasesIndexTaskId, idsOfCasesToUpdate, removeDeletedCasesTaskId } = await updateCases();
