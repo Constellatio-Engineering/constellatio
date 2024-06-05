@@ -1,3 +1,4 @@
+/* eslint-disable max-lines */
 import { db } from "@/db/connection";
 import { allSearchIndexTypes, type SearchIndexType, searchIndexUpdateQueue } from "@/db/schema";
 import { env } from "@/env.mjs";
@@ -24,6 +25,7 @@ import { createSubCategorySearchIndexItem, type SubCategorySearchIndexItem } fro
 import { createTagSearchIndexItem, type TagSearchIndexItem } from "@/utils/search/caisy/tag";
 import { createTopicSearchIndexItem, type TopicSearchIndexItem } from "@/utils/search/caisy/topic";
 import { searchIndices } from "@/utils/search/search";
+import { type Prettify } from "@/utils/types";
 
 import { eq, inArray } from "drizzle-orm";
 import { type NextApiHandler } from "next";
@@ -42,10 +44,10 @@ const caisyEntityToSearchIndexItem = async <T extends CaisyEntity, U extends Sea
   fetchItem,
   id,
   itemToSearchIndexItem,
-  searchIndexType
-}: EntityIdToSearchIndexItem<T, U>): Promise<number | null> =>
+  searchIndexType,
+}: EntityIdToSearchIndexItem<T, U>): Promise<{ item: U; searchIndexType: SearchIndexType } | null> =>
 {
-  console.log("--- caisyEntityToSearchIndexItem ---", { id, searchIndexType });
+  console.log("--- caisyEntityToSearchIndexItem ---", { id });
 
   const item = await fetchItem({ id });
 
@@ -61,11 +63,10 @@ const caisyEntityToSearchIndexItem = async <T extends CaisyEntity, U extends Sea
 
   console.log("Search index item created", searchIndexItem);
 
-  const { taskUid } = await meiliSearchAdmin.index(searchIndexType).addDocuments([searchIndexItem]);
-
-  console.log("Task UID", taskUid);
-
-  return taskUid;
+  return {
+    item: searchIndexItem,
+    searchIndexType,
+  };
 };
 
 const handler: NextApiHandler = async (req, res): Promise<void> =>
@@ -98,11 +99,11 @@ const handler: NextApiHandler = async (req, res): Promise<void> =>
 
   // TODO: Note for later: If a document cannot be found in caisy or the database, it should be removed from the search index
 
-  const updateItemsInIndexTasksPromises = createdOrUpdatedItems.map(async (itemToUpdate) =>
+  const getSearchIndexItemsPromises = createdOrUpdatedItems.map(async (itemToUpdate) =>
   {
     const commonProps: Pick<EntityIdToSearchIndexItem<CaisyEntity, SearchIndexItem>, "id" | "searchIndexType"> = {
       id: itemToUpdate.cmsId,
-      searchIndexType: itemToUpdate.searchIndexType
+      searchIndexType: itemToUpdate.searchIndexType,
     } as const;
 
     switch (itemToUpdate.searchIndexType)
@@ -184,68 +185,38 @@ const handler: NextApiHandler = async (req, res): Promise<void> =>
     }
   });
 
-  for(const itemToUpdate of createdOrUpdatedItems)
-  {
-    const id = itemToUpdate.cmsId;
-    let itemData: IGenCase | IGenArticle | IGenLegalArea | IGenMainCategory | IGenSubCategory | IGenTags | IGenTopic | null;
+  const searchIndexItems = (await Promise.all(getSearchIndexItemsPromises)).filter(Boolean);
 
-    switch (itemToUpdate.searchIndexType)
-    {
-      case "articles":
-      {
-        itemData = await getArticleOverviewById({ id });
-        break;
-      }
-      case "cases":
-      {
-        itemData = await getCaseOverviewById({ id });
-        break;
-      }
-      case "forum-questions":
-      {
-        // TODO: Implement forum questions
-        console.log("Forum questions are not supported yet");
-        break;
-      }
-      case "legal-areas":
-      {
-        itemData = await getLegalAreaById({ id });
-        break;
-      }
-      case "main-categories":
-      {
-        itemData = await getMainCategoryById({ id });
-        break;
-      }
-      case "sub-categories":
-      {
-        itemData = await getSubCategoryById({ id });
-        break;
-      }
-      case "tags":
-      {
-        itemData = await getTagById({ id });
-        break;
-      }
-      case "topics":
-      {
-        itemData = await getTopicById({ id });
-        break;
-      }
-      case "user-documents":
-      {
-        // TODO: Implement user documents
-        console.log("User documents are not supported yet");
-        break;
-      }
-      case "user-uploads":
-      {
-        // TODO: Implement user uploads
-        console.log("User uploads are not supported yet");
-        break;
-      }
-    }
-  }
+  type GroupedItems = {
+    [searchIndexType in SearchIndexType]: SearchIndexItem[];
+  };
+
+  const initialGroupedItems: GroupedItems = {
+    articles: [],
+    cases: [],
+    "forum-questions": [],
+    "legal-areas": [],
+    "main-categories": [],
+    "sub-categories": [],
+    tags: [],
+    topics: [],
+    "user-documents": [],
+    "user-uploads": []
+  };
+
+  const groupedItems = searchIndexItems.reduce<GroupedItems>((acc, curr) =>
+  {
+    const { item, searchIndexType } = curr;
+    acc[searchIndexType].push(item);
+    return acc;
+  }, initialGroupedItems);
+
+  type SearchIndexItems = Prettify<typeof searchIndexItems>;
+
+  const updateDocumentsInIndexPromises = searchIndexItems.map(async ({ item, searchIndexType }) =>
+  {
+    return meiliSearchAdmin.index(searchIndexType).updateDocuments([item]);
+  });
 
   const { createArticlesIndexTaskId, idsOfArticlesToUpdate, removeDeletedArticlesTaskId } = await updateArticles();
   const { createCasesIndexTaskId, idsOfCasesToUpdate, removeDeletedCasesTaskId } = await updateCases();
