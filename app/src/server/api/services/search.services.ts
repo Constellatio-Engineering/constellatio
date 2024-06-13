@@ -19,13 +19,13 @@ import {
   type IGenGetAllArticlesByTopicQuery, type IGenGetAllCasesByLegalAreaQuery, type IGenGetAllCasesByMainCategoryQuery, type IGenGetAllCasesByTagQuery,
   type IGenGetAllCasesByTopicQuery, type IGenLegalArea, type IGenMainCategory, type IGenSubCategory, type IGenTags, type IGenTopic,
 } from "@/services/graphql/__generated/sdk";
-import { type ArticleSearchIndexItem, createArticleSearchIndexItem } from "@/utils/search/caisy/article";
-import { type CaseSearchIndexItem, createCaseSearchIndexItem } from "@/utils/search/caisy/case";
-import { createLegalAreaSearchIndexItem, type LegalAreaSearchIndexItem } from "@/utils/search/caisy/legalArea";
-import { createMainCategorySearchIndexItem, type MainCategorySearchIndexItem } from "@/utils/search/caisy/mainCategory";
-import { createSubCategorySearchIndexItem, type SubCategorySearchIndexItem } from "@/utils/search/caisy/subCategory";
-import { createTagSearchIndexItem, type TagSearchIndexItem } from "@/utils/search/caisy/tag";
-import { createTopicSearchIndexItem, type TopicSearchIndexItem } from "@/utils/search/caisy/topic";
+import { type ArticleSearchIndexItem, articleSearchIndexItemPrimaryKey, createArticleSearchIndexItem } from "@/utils/search/caisy/article";
+import { type CaseSearchIndexItem, caseSearchIndexItemPrimaryKey, createCaseSearchIndexItem } from "@/utils/search/caisy/case";
+import { createLegalAreaSearchIndexItem, type LegalAreaSearchIndexItem, legalAreaSearchIndexItemPrimaryKey } from "@/utils/search/caisy/legalArea";
+import { createMainCategorySearchIndexItem, type MainCategorySearchIndexItem, mainCategorySearchIndexItemPrimaryKey } from "@/utils/search/caisy/mainCategory";
+import { createSubCategorySearchIndexItem, type SubCategorySearchIndexItem, subCategorySearchIndexItemPrimaryKey } from "@/utils/search/caisy/subCategory";
+import { createTagSearchIndexItem, type TagSearchIndexItem, tagSearchIndexItemPrimaryKey } from "@/utils/search/caisy/tag";
+import { createTopicSearchIndexItem, type TopicSearchIndexItem, topicSearchIndexItemPrimaryKey } from "@/utils/search/caisy/topic";
 import { searchIndices } from "@/utils/search/search";
 
 export const addContentToSearchQueue = async (items: SearchIndexUpdateQueueInsert | SearchIndexUpdateQueueInsert[]): Promise<void> =>
@@ -51,7 +51,9 @@ export const addArticlesToSearchIndex = async (articles: IGenArticle[]) =>
   if(articles.length > 0)
   {
     const allArticlesSearchIndexItems = articles.map(createArticleSearchIndexItem);
-    const createArticlesIndexTask = await meiliSearchAdmin.index<ArticleSearchIndexItem>(searchIndices.articles).addDocuments(allArticlesSearchIndexItems);
+    const createArticlesIndexTask = await meiliSearchAdmin.index<ArticleSearchIndexItem>(searchIndices.articles).addDocuments(allArticlesSearchIndexItems, {
+      primaryKey: articleSearchIndexItemPrimaryKey
+    });
     createArticlesIndexTaskId = createArticlesIndexTask.taskUid;
   }
 
@@ -65,7 +67,9 @@ export const addTagsToSearchIndex = async (tags: IGenTags[]) =>
   if(tags.length > 0)
   {
     const allTagsSearchIndexItems = tags.map(createTagSearchIndexItem);
-    const createTagsIndexTask = await meiliSearchAdmin.index<TagSearchIndexItem>(searchIndices.tags).addDocuments(allTagsSearchIndexItems);
+    const createTagsIndexTask = await meiliSearchAdmin.index<TagSearchIndexItem>(searchIndices.tags).addDocuments(allTagsSearchIndexItems, {
+      primaryKey: tagSearchIndexItemPrimaryKey
+    });
     createTagsIndexTaskId = createTagsIndexTask.taskUid;
   }
 
@@ -79,7 +83,9 @@ export const addCasesToSearchIndex = async (cases: IGenCase[]) =>
   if(cases.length > 0)
   {
     const allCasesSearchIndexItems = cases.map(createCaseSearchIndexItem);
-    const createCasesIndexTask = await meiliSearchAdmin.index<CaseSearchIndexItem>(searchIndices.cases).addDocuments(allCasesSearchIndexItems);
+    const createCasesIndexTask = await meiliSearchAdmin.index<CaseSearchIndexItem>(searchIndices.cases).addDocuments(allCasesSearchIndexItems, {
+      primaryKey: caseSearchIndexItemPrimaryKey
+    });
     createCasesIndexTaskId = createCasesIndexTask.taskUid;
   }
 
@@ -93,7 +99,9 @@ export const addLegalAreasToSearchIndex = async (legalAreas: IGenLegalArea[]) =>
   if(legalAreas.length > 0)
   {
     const allLegalAreasSearchIndexItems = legalAreas.map(createLegalAreaSearchIndexItem);
-    const createLegalAreasIndexTask = await meiliSearchAdmin.index<LegalAreaSearchIndexItem>(searchIndices.legalAreas).addDocuments(allLegalAreasSearchIndexItems);
+    const createLegalAreasIndexTask = await meiliSearchAdmin.index<LegalAreaSearchIndexItem>(searchIndices.legalAreas).addDocuments(allLegalAreasSearchIndexItems, {
+      primaryKey: legalAreaSearchIndexItemPrimaryKey
+    });
     createLegalAreasIndexTaskId = createLegalAreasIndexTask.taskUid;
   }
 
@@ -107,7 +115,9 @@ export const addMainCategoriesToSearchIndex = async (mainCategories: IGenMainCat
   if(mainCategories.length > 0)
   {
     const allMainCategoriesSearchIndexItems = mainCategories.map(createMainCategorySearchIndexItem);
-    const createMainCategoriesIndexTask = await meiliSearchAdmin.index<MainCategorySearchIndexItem>(searchIndices.mainCategories).addDocuments(allMainCategoriesSearchIndexItems);
+    const createMainCategoriesIndexTask = await meiliSearchAdmin.index<MainCategorySearchIndexItem>(searchIndices.mainCategories).addDocuments(allMainCategoriesSearchIndexItems, {
+      primaryKey: mainCategorySearchIndexItemPrimaryKey
+    });
     createMainCategoriesIndexTaskId = createMainCategoriesIndexTask.taskUid;
   }
 
@@ -121,7 +131,9 @@ export const addSubCategoriesToSearchIndex = async (subCategories: IGenSubCatego
   if(subCategories.length > 0)
   {
     const allSubCategoriesSearchIndexItems = subCategories.map(createSubCategorySearchIndexItem);
-    const createSubCategoriesIndexTask = await meiliSearchAdmin.index<SubCategorySearchIndexItem>(searchIndices.subCategories).addDocuments(allSubCategoriesSearchIndexItems);
+    const createSubCategoriesIndexTask = await meiliSearchAdmin.index<SubCategorySearchIndexItem>(searchIndices.subCategories).addDocuments(allSubCategoriesSearchIndexItems, {
+      primaryKey: subCategorySearchIndexItemPrimaryKey
+    });
     createSubCategoriesIndexTaskId = createSubCategoriesIndexTask.taskUid;
   }
 
@@ -135,7 +147,9 @@ export const addTopicsToSearchIndex = async (topics: IGenTopic[]) =>
   if(topics.length > 0)
   {
     const allTopicsSearchIndexItems = topics.map(createTopicSearchIndexItem);
-    const createTopicsIndexTask = await meiliSearchAdmin.index<TopicSearchIndexItem>(searchIndices.topics).addDocuments(allTopicsSearchIndexItems);
+    const createTopicsIndexTask = await meiliSearchAdmin.index<TopicSearchIndexItem>(searchIndices.topics).addDocuments(allTopicsSearchIndexItems, {
+      primaryKey: topicSearchIndexItemPrimaryKey
+    });
     createTopicsIndexTaskId = createTopicsIndexTask.taskUid;
   }
 

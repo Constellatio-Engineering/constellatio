@@ -26,3 +26,5 @@ export const createArticleSearchIndexItem = (fullArticle: IGenArticle): ArticleS
 
   return articleSearchIndexItem;
 };
+
+export const articleSearchIndexItemPrimaryKey: ArticleSearchItemNodes = "id";

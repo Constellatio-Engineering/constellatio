@@ -1,22 +1,24 @@
-/* eslint-disable max-lines */
+/* eslint-disable max-lines,max-len */
 import { db } from "@/db/connection";
 import { allSearchIndexTypes, type SearchIndexType, searchIndexUpdateQueue } from "@/db/schema";
 import { env } from "@/env.mjs";
 import { meiliSearchAdmin } from "@/lib/meilisearch";
-import { addArticlesToSearchIndex, addCasesToSearchIndex } from "@/server/api/services/search.services";
-import getAllArticles from "@/services/content/getAllArticles";
-import getAllCases from "@/services/content/getAllCases";
 import { getArticleOverviewById } from "@/services/content/getArticleOverviewById";
 import { getCaseOverviewById } from "@/services/content/getCaseOverviewById";
 import { getLegalAreaById } from "@/services/content/getLegalAreaById";
 import { getMainCategoryById } from "@/services/content/getMainCategoryById";
-import { getSubCategoryById } from "@/services/content/getSubCategoryById"; 
+import { getSubCategoryById } from "@/services/content/getSubCategoryById";
 import { getTagById } from "@/services/content/getTagById";
 import { getTopicById } from "@/services/content/getTopicById";
 import {
-  type IGenArticle, type IGenCase, type IGenLegalArea, type IGenMainCategory, type IGenSubCategory, type IGenTags, type IGenTopic 
+  type IGenArticle,
+  type IGenCase,
+  type IGenLegalArea,
+  type IGenMainCategory,
+  type IGenSubCategory,
+  type IGenTags,
+  type IGenTopic
 } from "@/services/graphql/__generated/sdk";
-import { caisySDK } from "@/services/graphql/getSdk";
 import { type ArticleSearchIndexItem, createArticleSearchIndexItem } from "@/utils/search/caisy/article";
 import { type CaseSearchIndexItem, createCaseSearchIndexItem } from "@/utils/search/caisy/case";
 import { createLegalAreaSearchIndexItem, type LegalAreaSearchIndexItem } from "@/utils/search/caisy/legalArea";
@@ -24,10 +26,8 @@ import { createMainCategorySearchIndexItem, type MainCategorySearchIndexItem } f
 import { createSubCategorySearchIndexItem, type SubCategorySearchIndexItem } from "@/utils/search/caisy/subCategory";
 import { createTagSearchIndexItem, type TagSearchIndexItem } from "@/utils/search/caisy/tag";
 import { createTopicSearchIndexItem, type TopicSearchIndexItem } from "@/utils/search/caisy/topic";
-import { searchIndices } from "@/utils/search/search";
-import { type Prettify } from "@/utils/types";
 
-import { eq, inArray } from "drizzle-orm";
+import { inArray } from "drizzle-orm";
 import { type NextApiHandler } from "next";
 
 type CaisyEntity = IGenArticle | IGenCase | IGenLegalArea | IGenMainCategory | IGenSubCategory | IGenTags | IGenTopic;
@@ -79,6 +79,14 @@ const handler: NextApiHandler = async (req, res): Promise<void> =>
   console.log("----- [Cronjob] Update Search Indexes -----");
 
   const itemsFromUpdateQueue = await db.select().from(searchIndexUpdateQueue);
+
+  if(itemsFromUpdateQueue.length === 0)
+  {
+    console.log("No items in the search index update queue");
+    return res.status(200).json({ message: "No items in the search index update queue" });
+  }
+
+  const updatedAndDeletedItemsIds = itemsFromUpdateQueue.map((item) => item.cmsId);
   const deletedItems = itemsFromUpdateQueue.filter((item) => item.eventType === "delete");
 
   // If an item is present in both the create/update and delete queue, it must be removed from the create/update queue
@@ -89,13 +97,17 @@ const handler: NextApiHandler = async (req, res): Promise<void> =>
   const deleteItemsFromIndexTasksPromises = allSearchIndexTypes.map(async (searchIndex) =>
   {
     const deletedItemsForCurrentIndex = deletedItems.filter((item) => item.searchIndexType === searchIndex);
-    return meiliSearchAdmin.index(searchIndex).deleteDocuments({
-      filter: `id IN [${deletedItemsForCurrentIndex.map((a) => a.cmsId).join(", ")}]`
-    });
+
+    if(deletedItemsForCurrentIndex.length === 0)
+    {
+      return null;
+    }
+
+    return meiliSearchAdmin.index(searchIndex).deleteDocuments(deletedItemsForCurrentIndex.map((item) => item.cmsId));
   });
 
   const deleteItemsFromIndexTasks = await Promise.all(deleteItemsFromIndexTasksPromises);
-  const deleteItemsFromIndexTaskIds = deleteItemsFromIndexTasks.map((task) => task.taskUid);
+  const deleteItemsFromIndexTaskIds = deleteItemsFromIndexTasks.filter(Boolean).map((task) => task.taskUid);
 
   // TODO: Note for later: If a document cannot be found in caisy or the database, it should be removed from the search index
 
@@ -213,21 +225,9 @@ const handler: NextApiHandler = async (req, res): Promise<void> =>
   const updateItemsInIndexTasks = await Promise.all(updateItemsInIndexTasksPromises);
   const updateItemsInIndexTaskIds = updateItemsInIndexTasks.map((task) => task.taskUid);
 
-  const { createArticlesIndexTaskId, idsOfArticlesToUpdate, removeDeletedArticlesTaskId } = await updateArticles();
-  const { createCasesIndexTaskId, idsOfCasesToUpdate, removeDeletedCasesTaskId } = await updateCases();
-
-  const updatedCaseAndArticleIds = [...idsOfArticlesToUpdate, ...idsOfCasesToUpdate,];
-
-  if(updatedCaseAndArticleIds.length === 0)
-  {
-    return res.status(200).json({ message: "No cases or articles to update" });
-  }
-
   const indexTasks = await meiliSearchAdmin.waitForTasks([
-    removeDeletedArticlesTaskId,
-    removeDeletedCasesTaskId,
-    createCasesIndexTaskId,
-    createArticlesIndexTaskId,
+    ...deleteItemsFromIndexTaskIds,
+    ...updateItemsInIndexTaskIds,
   ].filter(Boolean), {
     intervalMs: 1000,
     timeOutMs: 1000 * 60 * 5,
@@ -242,7 +242,7 @@ const handler: NextApiHandler = async (req, res): Promise<void> =>
   }
 
   await db.delete(searchIndexUpdateQueue).where(
-    inArray(searchIndexUpdateQueue.cmsId, updatedCaseAndArticleIds)
+    inArray(searchIndexUpdateQueue.cmsId, updatedAndDeletedItemsIds)
   );
 
   console.log("Search indexes updated successfully for cases and articles");

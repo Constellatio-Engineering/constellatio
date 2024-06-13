@@ -14,7 +14,7 @@ const caisyWebhookSchema = z.object({
     project_id: z.string(),
   }),
   webhook: z.object({
-    trigger: z.enum(["document_create", "document_update", "document_delete"])
+    trigger: z.enum(["document_update", "document_delete"])
   }),
 });
 
@@ -44,7 +44,7 @@ const handler: NextApiHandler = async (req, res): Promise<void> =>
   {
     if(e instanceof ZodError)
     {
-      console.error("Caisy Webhook did not match expected schema. Search index will not be updated.", e.issues);
+      console.error("Caisy Webhook did not match expected schema. Search index will not be updated.", { issues: e.issues, webhookData: req.body });
       return res.status(400).json({ issues: e.issues, message: "Invalid request body" });
     }
     else
@@ -69,11 +69,6 @@ const handler: NextApiHandler = async (req, res): Promise<void> =>
 
   switch (webhookRequestBody.webhook.trigger)
   {
-    case "document_create":
-    {
-      eventType = "create";
-      break;
-    }
     case "document_update":
     {
       eventType = "update";
@@ -132,7 +127,7 @@ const handler: NextApiHandler = async (req, res): Promise<void> =>
     case env.CAISY_SUB_CATEGORY_BLUEPRINT_ID:
     {
       console.log(`Sub category '${documentId}' changed. Updating all content with this sub category.`);
-      searchIndexType = "main-categories";
+      searchIndexType = "sub-categories";
       break;
     }
     default:

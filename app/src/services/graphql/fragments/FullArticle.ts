@@ -12,7 +12,7 @@ export const f_FullArticle = gql`
 	${f_Tags}
 	${f_Topic}
 	${f_ArticleFullTextTasks}
-	fragment FullArticle on Article {
+	fragment FullArticle on blueprint {
 		__typename
 		id
 		title

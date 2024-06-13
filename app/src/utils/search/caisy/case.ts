@@ -26,3 +26,5 @@ export const createCaseSearchIndexItem = (fullCase: IGenCase): CaseSearchIndexIt
 
   return caseSearchIndexItem;
 };
+
+export const caseSearchIndexItemPrimaryKey: CaseSearchItemNodes = "id";

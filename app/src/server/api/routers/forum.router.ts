@@ -20,7 +20,8 @@ import { upvoteQuestionSchema } from "@/schemas/forum/upvoteQuestion.schema";
 import { getAllLegalFields, getAllSubfields, getAllTopics } from "@/server/api/services/caisy.services";
 import { getAnswers, getQuestions, insertLegalFieldsAndTopicsForQuestion, resetLegalFieldsAndTopicsForQuestion } from "@/server/api/services/forum.services";
 import { createTRPCRouter, forumModProcedure, protectedProcedure } from "@/server/api/trpc";
-import { createForumQuestionSearchIndexItem, forumQuestionSearchIndexItemPrimaryKey, type ForumQuestionSearchItemUpdate, searchIndices } from "@/utils/search/search";
+import { searchIndices } from "@/utils/search/search";
+import { createForumQuestionSearchIndexItem, forumQuestionSearchIndexItemPrimaryKey, type ForumQuestionSearchItemUpdate } from "@/utils/search/supabase/forumQuestion";
 import { BadRequestError, ForbiddenError, InternalServerError, NotFoundError } from "@/utils/serverError";
 import { removeHtmlTagsFromString } from "@/utils/utils";
 
@@ -150,12 +151,7 @@ export const forumRouter = createTRPCRouter({
           .where(eq(forumQuestions.id, questionId));
       });
 
-      const removeDeletedQuestionFromIndex = await meiliSearchAdmin
-        .index(searchIndices.forumQuestions)
-        .deleteDocuments({
-          filter: `id = ${questionId}`
-        });
-
+      const removeDeletedQuestionFromIndex = await meiliSearchAdmin.index(searchIndices.forumQuestions).deleteDocument(questionId);
       const removeQuestionFromIndexResult = await meiliSearchAdmin.waitForTask(removeDeletedQuestionFromIndex.taskUid);
 
       if(removeQuestionFromIndexResult.status !== "succeeded")

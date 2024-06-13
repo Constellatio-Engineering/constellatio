@@ -13,9 +13,8 @@ import { addBadgeForUser } from "@/server/api/services/badges.services";
 import { addTags } from "@/server/api/services/tags.services";
 import { deleteFiles, getClouStorageFileUrl, getSignedCloudStorageUploadUrl } from "@/server/api/services/uploads.services";
 import { createTRPCRouter, protectedProcedure } from "@/server/api/trpc";
-import {
-  createUploadsSearchIndexItem, searchIndices, uploadSearchIndexItemPrimaryKey, type UploadSearchItemUpdate
-} from "@/utils/search/search";
+import { searchIndices } from "@/utils/search/search";
+import { createUploadsSearchIndexItem, uploadSearchIndexItemPrimaryKey, type UploadSearchItemUpdate } from "@/utils/search/supabase/upload";
 import { NotFoundError } from "@/utils/serverError";
 
 import type { inferProcedureOutput } from "@trpc/server";
@@ -69,10 +68,7 @@ export const uploadsRouter = createTRPCRouter({
 
       await deleteFiles({ files, userId });
 
-      const removeDeletedFilesFromIndex = await meiliSearchAdmin.index(searchIndices.userUploads).deleteDocuments({
-        filter: `id IN [${fileIds.join(", ")}]`
-      });
-
+      const removeDeletedFilesFromIndex = await meiliSearchAdmin.index(searchIndices.userUploads).deleteDocuments(fileIds);
       const removeFileFromIndexResult = await meiliSearchAdmin.waitForTask(removeDeletedFilesFromIndex.taskUid);
 
       if(removeFileFromIndexResult.status !== "succeeded")
