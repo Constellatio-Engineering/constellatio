@@ -91,7 +91,7 @@ const handler: NextApiHandler = async (req, res): Promise<void> =>
 
   // If an item is present in both the create/update and delete queue, it must be removed from the create/update queue
   const createdOrUpdatedItems = itemsFromUpdateQueue
-    .filter((item) => item.eventType === "create" || item.eventType === "update")
+    .filter((item) => item.eventType === "upsert")
     .filter((item) => !deletedItems.some((deletedItem) => deletedItem.cmsId === item.cmsId));
 
   const deleteItemsFromIndexTasksPromises = allSearchIndexTypes.map(async (searchIndex) =>

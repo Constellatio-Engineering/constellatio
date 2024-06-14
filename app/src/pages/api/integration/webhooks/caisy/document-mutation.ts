@@ -71,7 +71,7 @@ const handler: NextApiHandler = async (req, res): Promise<void> =>
   {
     case "document_update":
     {
-      eventType = "update";
+      eventType = "upsert";
       break;
     }
     case "document_delete":
@@ -90,43 +90,43 @@ const handler: NextApiHandler = async (req, res): Promise<void> =>
   {
     case env.CAISY_CASE_BLUEPRINT_ID:
     {
-      console.log(`Case '${documentId}' changed. Adding it to the search index update queue...`);
+      console.log(`Case '${documentId}' changed.`);
       searchIndexType = "cases";
       break;
     }
     case env.CAISY_ARTICLE_BLUEPRINT_ID:
     {
-      console.log(`Article '${documentId}' changed. Adding it to the search index update queue...`);
+      console.log(`Article '${documentId}' changed.`);
       searchIndexType = "articles";
       break;
     }
     case env.CAISY_TAG_BLUEPRINT_ID:
     {
-      console.log(`Tag '${documentId}' changed. Updating all content with this tag.`);
+      console.log(`Tag '${documentId}' changed.`);
       searchIndexType = "tags";
       break;
     }
     case env.CAISY_TOPIC_BLUEPRINT_ID:
     {
-      console.log(`Topic '${documentId}' changed. Updating all content with this topic.`);
+      console.log(`Topic '${documentId}' changed.`);
       searchIndexType = "topics";
       break;
     }
     case env.CAISY_LEGAL_AREA_BLUEPRINT_ID:
     {
-      console.log(`Legal area '${documentId}' changed. Updating all content with this legal area.`);
+      console.log(`Legal area '${documentId}' changed.`);
       searchIndexType = "legal-areas";
       break;
     }
     case env.CAISY_MAIN_CATEGORY_BLUEPRINT_ID:
     {
-      console.log(`Main category '${documentId}' changed. Updating all content with this main category.`);
+      console.log(`Main category '${documentId}' changed.`);
       searchIndexType = "main-categories";
       break;
     }
     case env.CAISY_SUB_CATEGORY_BLUEPRINT_ID:
     {
-      console.log(`Sub category '${documentId}' changed. Updating all content with this sub category.`);
+      console.log(`Sub category '${documentId}' changed.`);
       searchIndexType = "sub-categories";
       break;
     }
