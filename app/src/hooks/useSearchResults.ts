@@ -1,5 +1,10 @@
 import { MeilisearchContext } from "@/provider/MeilisearchProvider";
 import useSearchBarStore from "@/stores/searchBar.store";
+import { type LegalAreaSearchIndexItem } from "@/utils/search/caisy/legalArea";
+import { type MainCategorySearchIndexItem } from "@/utils/search/caisy/mainCategory";
+import { type SubCategorySearchIndexItem } from "@/utils/search/caisy/subCategory";
+import { type TagSearchIndexItem } from "@/utils/search/caisy/tag";
+import { type TopicSearchIndexItem } from "@/utils/search/caisy/topic";
 import {
   type ArticleSearchIndexItem, type CaseSearchIndexItem, type DocumentSearchIndexItem, type ForumQuestionSearchIndexItem, searchIndices, type UploadSearchIndexItem
 } from "@/utils/search/search";
@@ -49,17 +54,49 @@ const useSearchResults: UseSearchResults = () =>
         return initialSearchResults;
       }
 
+      const { results: metadataResults } = await meilisearchInstance.multiSearch({
+        queries: [
+          {
+            indexUid: searchIndices.legalAreas,
+            q: searchValue,
+          },
+          {
+            indexUid: searchIndices.subCategories,
+            q: searchValue,
+          },
+          {
+            indexUid: searchIndices.mainCategories,
+            q: searchValue,
+          },
+          {
+            indexUid: searchIndices.tags,
+            q: searchValue,
+          },
+          {
+            indexUid: searchIndices.topics,
+            q: searchValue,
+          },
+        ]
+      });
+
+      const legalAreas = metadataResults[0]!.hits as LegalAreaSearchIndexItem[];
+      const subCategories = metadataResults[1]!.hits as SubCategorySearchIndexItem[];
+      const mainCategories = metadataResults[2]!.hits as MainCategorySearchIndexItem[];
+      const tags = metadataResults[3]!.hits as TagSearchIndexItem[];
+      const topics = metadataResults[4]!.hits as TopicSearchIndexItem[];
+
       const { results } = await meilisearchInstance.multiSearch({
         queries: [
           {
+            filter: "id = 1",
             indexUid: searchIndices.articles,
-            q: searchValue,
+            q: searchValue
           },
           {
             indexUid: searchIndices.cases,
             q: searchValue,
           },
-          {
+          /* {
             indexUid: searchIndices.userDocuments,
             q: searchValue,
           },
@@ -70,17 +107,22 @@ const useSearchResults: UseSearchResults = () =>
           {
             indexUid: searchIndices.forumQuestions,
             q: searchValue,
-          },
+          },*/
         ]
       });
+
+      console.log("articles results", results[0]!.hits);
 
       return ({
         // Be careful with the order of the results!
         articles: (results?.[0]?.hits as ArticleSearchIndexItem[]) ?? [],
         cases: (results?.[1]?.hits as CaseSearchIndexItem[]) ?? [],
-        forumQuestions: (results?.[4]?.hits as ForumQuestionSearchIndexItem[]) ?? [],
+        forumQuestions: [],
+        userDocuments: [],
+        userUploads: [],
+        /* forumQuestions: (results?.[4]?.hits as ForumQuestionSearchIndexItem[]) ?? [],
         userDocuments: (results?.[2]?.hits as DocumentSearchIndexItem[]) ?? [],
-        userUploads: (results?.[3]?.hits as UploadSearchIndexItem[]) ?? [],
+        userUploads: (results?.[3]?.hits as UploadSearchIndexItem[]) ?? [],*/
       });
     },
     queryKey: [searchResultsQueryKey, searchValue],

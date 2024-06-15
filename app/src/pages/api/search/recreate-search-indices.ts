@@ -66,6 +66,11 @@ const handler: NextApiHandler = async (req, res) =>
   const { createSubCategoriesIndexTaskId } = await addSubCategoriesToSearchIndex(allSubCategories);
   const { createLegalAreasIndexTaskId } = await addLegalAreasToSearchIndex(allSubfields);
 
+  // TODO: Remove
+  await meiliSearchAdmin.createIndex(searchIndices.userUploads);
+  await meiliSearchAdmin.createIndex(searchIndices.userDocuments);
+  await meiliSearchAdmin.createIndex(searchIndices.forumQuestions);
+
   // const { createUploadsIndexTaskId } = await addUserUploadsToSearchIndex({ uploads: allUserUploads });
   // const { createDocumentsIndexTaskId } = await addUserDocumentsToSearchIndex({ documents: allUsersDocuments });
   // const { createQuestionsIndexTaskId } = await addForumQuestionsToSearchIndex({

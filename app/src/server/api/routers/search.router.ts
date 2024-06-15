@@ -30,8 +30,20 @@ export const searchRouter = createTRPCRouter({
         "forum-questions": {
           filter: undefined,
         },
+        "legal-areas": {
+          filter: undefined
+        },
+        "main-categories": {
+          filter: undefined
+        },
+        "sub-categories": {
+          filter: undefined
+        },
         tags: {
           filter: undefined,
+        },
+        topics: {
+          filter: undefined
         },
         "user-documents": {
           filter: `userId = ${userId}`,
@@ -43,6 +55,8 @@ export const searchRouter = createTRPCRouter({
 
       const expiresAt = new Date(Date.now() + env.NEXT_PUBLIC_MEILISEARCH_TENANT_TOKEN_EXPIRATION_TIME_MS);
       const defaultSearchApiKey = await getDefaultSearchApiKey();
+
+      console.log("defaultSearchApiKey", defaultSearchApiKey);
 
       const token = meiliSearchAdmin.generateTenantToken(defaultSearchApiKey.uid, searchRules, {
         apiKey: defaultSearchApiKey.key,
