@@ -1,11 +1,11 @@
-import { Button } from "@/components/atoms/Button/Button";
+import { UnstyledButton } from "@/components/molecules/unstyledButton/UnstyledButton";
 import { env } from "@/env.mjs";
 import { supabase } from "@/lib/supabase";
 import { AuthStateContext } from "@/provider/AuthStateProvider";
 import { isProduction } from "@/utils/env";
 
 import { useTheme } from "@emotion/react";
-import formbricks, { type FormbricksType } from "@formbricks/js";
+import formbricks from "@formbricks/js/app";
 import type { AuthChangeEvent, Session, Subscription } from "@supabase/gotrue-js";
 import React, {
   type FunctionComponent, useCallback, useContext, useEffect, useRef
@@ -17,8 +17,8 @@ const FeedbackButton: FunctionComponent = () =>
 {
   const theme = useTheme();
   const { isUserLoggedIn } = useContext(AuthStateContext);
-  const formBricksRef = useRef<FormbricksType | null>(null);
   const authStateSubscriptionRef = useRef<{data: {subscription: Subscription}}>();
+  const hasFormbricksInitialized = useRef(false);
 
   const onAuthStateChange = useCallback(async (event: AuthChangeEvent, session: Session | null): Promise<void> =>
   {
@@ -27,10 +27,9 @@ const FeedbackButton: FunctionComponent = () =>
       case "INITIAL_SESSION":
       case "SIGNED_IN":
       {
-
         const { email, id } = session?.user || {};
 
-        if(!id || !email || formBricksRef.current)
+        if(!id || !email || hasFormbricksInitialized.current)
         {
           break;
         }
@@ -39,7 +38,7 @@ const FeedbackButton: FunctionComponent = () =>
         {
           await formbricks.init({
             apiHost: env.NEXT_PUBLIC_FORMBRICKS_HOST,
-            debug: false, // !isProduction,
+            debug: !isProduction,
             environmentId: isProduction
               ? env.NEXT_PUBLIC_FORMBRICKS_KEY_PRODUCTION
               : env.NEXT_PUBLIC_FORMBRICKS_KEY_TESTINGS,
@@ -47,21 +46,18 @@ const FeedbackButton: FunctionComponent = () =>
           });
 
           await formbricks.setEmail(email);
-          formBricksRef.current = formbricks;
+          hasFormbricksInitialized.current = true;
         }
         catch (error)
         {
-          console.info("Fehler beim initalisieren von Formbricks");
-          console.error(error);
+          console.log("Fehler beim initialisieren von Formbricks", error);
         }
         break;
       }
       case "SIGNED_OUT":
       {
-        if(formBricksRef.current)
-        {
-          formBricksRef.current = null;
-        }
+        await formbricks.logout();
+        hasFormbricksInitialized.current = false;
         break;
       }
       default:
@@ -80,20 +76,17 @@ const FeedbackButton: FunctionComponent = () =>
 
     return () =>
     {
-      formBricksRef.current = null;
+      hasFormbricksInitialized.current = false;
       currentSubscription?.unsubscribe();
     };
   }, [onAuthStateChange]);
 
   return (
-    <Button<"button">
-      id="feedback-btn"
-      css={styles.feedbackButtonStyles(isUserLoggedIn ?? false, theme)}
-      styleType="primary"
-      size="large"
-      type="button">
+    <UnstyledButton
+      styles={styles.feedbackButtonStyles(isUserLoggedIn ?? false, theme)}
+      onClick={() => formbricks.track("feedback_button_clicked")}>
       Feedback
-    </Button>
+    </UnstyledButton>
   );
 };
 

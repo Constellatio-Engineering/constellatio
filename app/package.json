@@ -53,7 +53,7 @@
     "@emotion/react": "11.11.4",
     "@emotion/server": "11.11.0",
     "@emotion/styled": "11.11.5",
-    "@formbricks/js": "1.2.7",
+    "@formbricks/js": "2.1.0",
     "@google-cloud/storage": "7.11.0",
     "@hello-pangea/dnd": "16.6.0",
     "@mantine/carousel": "6.0.21",
