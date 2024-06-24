@@ -32,15 +32,6 @@ export const userActivityRouter = createTRPCRouter({
       start.setUTCHours(0, 0, 0, 0);
       end.setUTCHours(23, 59, 59, 999);
 
-      /* console.log({
-        "input.start": input.start,
-        "input.end": input.end, // eslint-disable-line sort-keys-fix/sort-keys-fix
-        _startInUsersLocalTimezone, // eslint-disable-line sort-keys-fix/sort-keys-fix
-        _endInUsersLocalTimezone, // eslint-disable-line sort-keys-fix/sort-keys-fix
-        start, // eslint-disable-line sort-keys-fix/sort-keys-fix
-        end, // eslint-disable-line sort-keys-fix/sort-keys-fix
-      });*/
-
       const dailyUsageSubquery = db
         .select({
           date: sql<Date>`date_trunc(${input.interval}, ${pings.createdAt})`.as("date"),
@@ -60,9 +51,11 @@ export const userActivityRouter = createTRPCRouter({
 
       const dateSeriesSubquery = db
         .select({
-          dateFromSeries: sql<Date>`d.date`.as("dateFromSeries"),
+          dateFromSeries: sql`d.date`
+            .mapWith(value => getDateInLocalTimezone(new Date(value), input.timeZoneOffset))
+            .as("dateFromSeries"),
         })
-        .from(sql`generate_series(date_trunc(${input.interval}, ${start}), date_trunc(${input.interval}, ${end}), ${`1 ${input.interval}`}) as d(date)`)
+        .from(sql`generate_series(date_trunc(${input.interval}, ${start.toISOString()}::timestamp), date_trunc(${input.interval}, ${end.toISOString()}::timestamp), ${`1 ${input.interval}`}) as d(date)`)
         .as("DaysSeries");
 
       const usageTimeQuery = db
