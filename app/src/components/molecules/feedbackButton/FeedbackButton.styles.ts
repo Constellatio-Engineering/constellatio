@@ -10,11 +10,17 @@ export const feedbackButtonStyles = (isUserLoggedIn: boolean, theme: MantineThem
   position: fixed;
   z-index: 4;
   border: none;
+  outline: none;
   opacity: ${isUserLoggedIn ? 1 : 0};
-  transition: opacity 0.3s ease-in-out 2s;
+  transition: opacity 0.3s ease-in-out 2s, background-color 0.1s ease;
   cursor: pointer;
-  bottom: 1rem;
-  color: ${theme.white};
-  padding: 16px 6px;
+  bottom: 5rem;
+  color: #ffffff;
+  padding: 16px 8px;
   border-radius: ${theme.radius["radius-8"]} 0 0 ${theme.radius["radius-8"]};
+  background-color: #151515;
+
+  &:hover {
+    background-color: #2f2f2f;
+  }
 `;
