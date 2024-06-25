@@ -1586,6 +1586,16 @@ export type IGenGetMainCategoryByIdQuery = { __typename?: 'Query', MainCategory?
     & IGenMainCategoryFragment
   ) | null };
 
+export type IGenGetSubCategoryByIdQueryVariables = Exact<{
+  id: Scalars['ID']['input'];
+}>;
+
+
+export type IGenGetSubCategoryByIdQuery = { __typename?: 'Query', SubCategory?: (
+    { __typename?: 'SubCategory' }
+    & IGenSubCategoryFragment
+  ) | null };
+
 export type IGenGetTagsByIdQueryVariables = Exact<{
   id: Scalars['ID']['input'];
 }>;
@@ -2170,6 +2180,13 @@ export const GetMainCategoryByIdDocument = gql`
 }
     ${MainCategoryFragmentDoc}
 ${AssetFragmentDoc}`;
+export const GetSubCategoryByIdDocument = gql`
+    query getSubCategoryById($id: ID!) {
+  SubCategory(id: $id) {
+    ...SubCategory
+  }
+}
+    ${SubCategoryFragmentDoc}`;
 export const GetTagsByIdDocument = gql`
     query getTagsById($id: ID!) {
   Tags(id: $id) {
@@ -2255,6 +2272,9 @@ export function getSdk<C, E>(requester: Requester<C, E>) {
     },
     getMainCategoryById(variables: IGenGetMainCategoryByIdQueryVariables, options?: C): Promise<IGenGetMainCategoryByIdQuery> {
       return requester<IGenGetMainCategoryByIdQuery, IGenGetMainCategoryByIdQueryVariables>(GetMainCategoryByIdDocument, variables, options) as Promise<IGenGetMainCategoryByIdQuery>;
+    },
+    getSubCategoryById(variables: IGenGetSubCategoryByIdQueryVariables, options?: C): Promise<IGenGetSubCategoryByIdQuery> {
+      return requester<IGenGetSubCategoryByIdQuery, IGenGetSubCategoryByIdQueryVariables>(GetSubCategoryByIdDocument, variables, options) as Promise<IGenGetSubCategoryByIdQuery>;
     },
     getTagsById(variables: IGenGetTagsByIdQueryVariables, options?: C): Promise<IGenGetTagsByIdQuery> {
       return requester<IGenGetTagsByIdQuery, IGenGetTagsByIdQueryVariables>(GetTagsByIdDocument, variables, options) as Promise<IGenGetTagsByIdQuery>;

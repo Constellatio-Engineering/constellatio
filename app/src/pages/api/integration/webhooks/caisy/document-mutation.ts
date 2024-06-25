@@ -1,4 +1,5 @@
-import { type CaisyWebhookEventType, type SearchIndexType } from "@/db/schema";
+/* eslint-disable max-lines */
+import { type CaisyWebhookEventType } from "@/db/schema";
 import { env } from "@/env.mjs";
 import { addArticlesAndCasesToSearchQueue, addContentToSearchQueue } from "@/server/api/services/search.services";
 import { caisySDK } from "@/services/graphql/getSdk";
@@ -120,6 +121,7 @@ const handler: NextApiHandler = async (req, res): Promise<void> =>
       console.log(`Found ${casesWithTag?.allCase?.totalCount} cases with tag ${tagName}. Adding them to the search index update queue...`);
 
       await addArticlesAndCasesToSearchQueue({ articles: articlesWithTag, cases: casesWithTag });
+      await addContentToSearchQueue({ cmsId: documentId, eventType, searchIndexType: "tags" });
 
       break;
     }
@@ -194,10 +196,7 @@ const handler: NextApiHandler = async (req, res): Promise<void> =>
     }
     case env.CAISY_SUB_CATEGORY_BLUEPRINT_ID:
     {
-      console.log(`Sub category '${documentId}' changed. Updating all content with this sub category.`);
-
-      // TODO
-
+      // Sub categories are currently not linked to articles or cases so there is nothing to update
       break;
     }
     default:
