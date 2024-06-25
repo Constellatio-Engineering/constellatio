@@ -1,4 +1,6 @@
-import type { IGenLegalArea, IGenMainCategory, IGenTags, IGenTopic } from "@/services/graphql/__generated/sdk";
+import type {
+  IGenLegalArea, IGenMainCategory, IGenSubCategory, IGenTags, IGenTopic
+} from "@/services/graphql/__generated/sdk";
 import { caisySDK } from "@/services/graphql/getSdk";
 
 export const getAllLegalFields = async (): Promise<IGenMainCategory[]> =>
@@ -35,6 +37,18 @@ export const getAllTopics = async (): Promise<IGenTopic[]> =>
     ?.filter(Boolean)
     ?? [];
   return topics;
+};
+
+export const getAllSubCategories = async (): Promise<IGenSubCategory[]> =>
+{
+  const allSubCategoriesRes = await caisySDK.getAllSubCategory();
+  const subCategories: IGenSubCategory[] = allSubCategoriesRes
+    ?.allSubCategory
+    ?.edges
+    ?.map((edge) => edge?.node)
+    ?.filter(Boolean)
+    ?? [];
+  return subCategories;
 };
 
 export const getInitialTags = async (): Promise<IGenTags[]> =>

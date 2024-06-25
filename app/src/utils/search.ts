@@ -1,3 +1,4 @@
+/* eslint-disable max-lines */
 import { type UploadedFile, type Document, type ForumQuestion } from "@/db/schema";
 import {
   type IGenTopic,
@@ -11,12 +12,12 @@ import {
 import { removeHtmlTagsFromString } from "@/utils/utils";
 
 export const searchIndices = {
-  articles: "articles",
-  cases: "cases",
-  forumQuestions: "forum-questions",
-  tags: "tags",
-  userDocuments: "user-documents",
-  userUploads: "user-uploads",
+  article: "article",
+  case: "case",
+  forumQuestion: "forum-question",
+  tag: "tag",
+  userDocument: "user-document",
+  userUpload: "user-upload",
 } as const;
 
 export type SearchIndex = Values<typeof searchIndices>;

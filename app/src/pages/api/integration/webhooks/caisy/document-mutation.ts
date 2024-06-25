@@ -1,3 +1,4 @@
+import { type CaisyWebhookEventType, type SearchIndexType } from "@/db/schema";
 import { env } from "@/env.mjs";
 import { addArticlesAndCasesToSearchQueue, addContentToSearchQueue } from "@/server/api/services/search.services";
 import { caisySDK } from "@/services/graphql/getSdk";
@@ -12,6 +13,9 @@ const caisyWebhookSchema = z.object({
   }),
   scope: z.object({
     project_id: z.string(),
+  }),
+  webhook: z.object({
+    trigger: z.enum(["document_update", "document_delete"])
   }),
 });
 
@@ -31,11 +35,11 @@ const handler: NextApiHandler = async (req, res): Promise<void> =>
     return res.status(400).json({ message: "Invalid request method" });
   }
 
-  let webhook: CaisyWebhook;
+  let webhookRequestBody: CaisyWebhook;
 
   try
   {
-    webhook = await caisyWebhookSchema.parseAsync(req.body);
+    webhookRequestBody = await caisyWebhookSchema.parseAsync(req.body);
   }
   catch (e: unknown)
   {
@@ -51,26 +55,49 @@ const handler: NextApiHandler = async (req, res): Promise<void> =>
     }
   }
 
-  if(webhook.scope.project_id !== env.CAISY_PROJECT_ID)
+  if(webhookRequestBody.scope.project_id !== env.CAISY_PROJECT_ID)
   {
     console.log("Invalid project id");
     return res.status(400).json({ message: "Invalid project id" });
   }
 
-  const { document_id: documentId } = webhook.metadata;
+  console.log("Caisy Webhook received:", webhookRequestBody);
 
-  switch (webhook.metadata.blueprint_id)
+  const { document_id: documentId } = webhookRequestBody.metadata;
+
+  let eventType: CaisyWebhookEventType;
+
+  switch (webhookRequestBody.webhook.trigger)
+  {
+    case "document_update":
+    {
+      eventType = "update";
+      break;
+    }
+    case "document_delete":
+    {
+      eventType = "delete";
+      break;
+    }
+    default:
+    {
+      console.log(`Invalid webhook trigger '${webhookRequestBody.webhook.trigger}'`);
+      return res.status(400).json({ message: `Invalid webhook trigger '${webhookRequestBody.webhook.trigger}'` });
+    }
+  }
+
+  switch (webhookRequestBody.metadata.blueprint_id)
   {
     case env.CAISY_CASE_BLUEPRINT_ID:
     {
       console.log(`Case '${documentId}' changed. Adding it to the search index update queue...`);
-      await addContentToSearchQueue({ cmsId: documentId, resourceType: "case" });
+      await addContentToSearchQueue({ cmsId: documentId, eventType, searchIndexType: "case" });
       break;
     }
     case env.CAISY_ARTICLE_BLUEPRINT_ID:
     {
       console.log(`Article '${documentId}' changed. Adding it to the search index update queue...`);
-      await addContentToSearchQueue({ cmsId: documentId, resourceType: "article" });
+      await addContentToSearchQueue({ cmsId: documentId, eventType, searchIndexType: "article" });
       break;
     }
     case env.CAISY_TAG_BLUEPRINT_ID:
@@ -165,10 +192,18 @@ const handler: NextApiHandler = async (req, res): Promise<void> =>
 
       break;
     }
+    case env.CAISY_SUB_CATEGORY_BLUEPRINT_ID:
+    {
+      console.log(`Sub category '${documentId}' changed. Updating all content with this sub category.`);
+
+      // TODO
+
+      break;
+    }
     default:
     {
-      console.log(`blueprint_id '${webhook.metadata.blueprint_id}' has no corresponding search index`);
-      return res.status(200).json({ message: `blueprint_id '${webhook.metadata.blueprint_id}' has no corresponding search index` });
+      console.log(`blueprint_id '${webhookRequestBody.metadata.blueprint_id}' has no corresponding search index`);
+      return res.status(200).json({ message: `blueprint_id '${webhookRequestBody.metadata.blueprint_id}' has no corresponding search index` });
     }
   }
 

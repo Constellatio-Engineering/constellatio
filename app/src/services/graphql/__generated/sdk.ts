@@ -1388,6 +1388,8 @@ export type IGenMainCategoryFragment = { __typename: 'MainCategory', id?: string
 
 export type IGenSearchEntryFragment = { __typename: 'SearchEntry', id?: string | null, searchField?: string | null };
 
+export type IGenSubCategoryFragment = { __typename: 'SubCategory', id?: string | null, subCategory?: string | null };
+
 export type IGenTagsFragment = { __typename: 'Tags', id?: string | null, tagName?: string | null, isShownInitiallyBeforeSearch?: boolean | null };
 
 export type IGenTopicFragment = { __typename: 'Topic', id?: string | null, topicName?: string | null, sorting?: number | null };
@@ -1509,6 +1511,14 @@ export type IGenGetAllMainCategoryQueryVariables = Exact<{ [key: string]: never;
 export type IGenGetAllMainCategoryQuery = { __typename?: 'Query', allMainCategory?: { __typename?: 'MainCategory_Connection', totalCount?: number | null, edges?: Array<{ __typename?: 'MainCategory_ConnectionEdge', node?: (
         { __typename?: 'MainCategory' }
         & IGenMainCategoryFragment
+      ) | null } | null> | null } | null };
+
+export type IGenGetAllSubCategoryQueryVariables = Exact<{ [key: string]: never; }>;
+
+
+export type IGenGetAllSubCategoryQuery = { __typename?: 'Query', allSubCategory?: { __typename?: 'SubCategory_Connection', totalCount?: number | null, edges?: Array<{ __typename?: 'SubCategory_ConnectionEdge', node?: (
+        { __typename?: 'SubCategory' }
+        & IGenSubCategoryFragment
       ) | null } | null> | null } | null };
 
 export type IGenGetAllTagsQueryVariables = Exact<{
@@ -1839,6 +1849,13 @@ export const SearchEntryFragmentDoc = gql`
   searchField
 }
     `;
+export const SubCategoryFragmentDoc = gql`
+    fragment SubCategory on SubCategory {
+  __typename
+  id
+  subCategory
+}
+    `;
 export const GetPopularSearchesDocument = gql`
     query getPopularSearches {
   Search {
@@ -2051,6 +2068,18 @@ export const GetAllMainCategoryDocument = gql`
 }
     ${MainCategoryFragmentDoc}
 ${AssetFragmentDoc}`;
+export const GetAllSubCategoryDocument = gql`
+    query getAllSubCategory {
+  allSubCategory {
+    totalCount
+    edges {
+      node {
+        ...SubCategory
+      }
+    }
+  }
+}
+    ${SubCategoryFragmentDoc}`;
 export const GetAllTagsDocument = gql`
     query getAllTags($after: String) {
   allTags(first: 100, after: $after) {
@@ -2202,6 +2231,9 @@ export function getSdk<C, E>(requester: Requester<C, E>) {
     },
     getAllMainCategory(variables?: IGenGetAllMainCategoryQueryVariables, options?: C): Promise<IGenGetAllMainCategoryQuery> {
       return requester<IGenGetAllMainCategoryQuery, IGenGetAllMainCategoryQueryVariables>(GetAllMainCategoryDocument, variables, options) as Promise<IGenGetAllMainCategoryQuery>;
+    },
+    getAllSubCategory(variables?: IGenGetAllSubCategoryQueryVariables, options?: C): Promise<IGenGetAllSubCategoryQuery> {
+      return requester<IGenGetAllSubCategoryQuery, IGenGetAllSubCategoryQueryVariables>(GetAllSubCategoryDocument, variables, options) as Promise<IGenGetAllSubCategoryQuery>;
     },
     getAllTags(variables?: IGenGetAllTagsQueryVariables, options?: C): Promise<IGenGetAllTagsQuery> {
       return requester<IGenGetAllTagsQuery, IGenGetAllTagsQueryVariables>(GetAllTagsDocument, variables, options) as Promise<IGenGetAllTagsQuery>;

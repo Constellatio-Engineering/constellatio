@@ -1,4 +1,6 @@
 /* eslint-disable sort-keys-fix/sort-keys-fix,@typescript-eslint/naming-convention,@typescript-eslint/no-use-before-define,max-lines */
+import { type SearchIndex, searchIndices } from "@/utils/search";
+
 import { type InferInsertModel, type InferSelectModel, relations } from "drizzle-orm";
 import {
   text, pgTable, integer, pgEnum, uuid, smallint, unique, timestamp, primaryKey, index, type AnyPgColumn, serial, uniqueIndex
@@ -13,8 +15,11 @@ export type OnboardingResult = typeof allOnboardingResults[number];
 export const allBookmarkResourceTypes = ["article", "case", "forumQuestion"] as const;
 export type BookmarkResourceType = typeof allBookmarkResourceTypes[number];
 
-export const allSearchIndexTypes = ["article", "case"] as const;
-export type SearchIndexType = typeof allSearchIndexTypes[number];
+export const allSearchIndexTypes = Object.values(searchIndices) as [SearchIndex, ...SearchIndex[]];
+export type SearchIndexType = SearchIndex;
+
+export const allCaisyWebhookEventTypes = ["update", "delete"] as const;
+export type CaisyWebhookEventType = typeof allCaisyWebhookEventTypes[number];
 
 export const allCaseProgressStates = ["not-started", "completing-tests", "solving-case", "completed"] as const;
 export type CaseProgressState = typeof allCaseProgressStates[number];
@@ -100,6 +105,7 @@ export const genderEnum = pgEnum("Gender", allGenderIdentifiers);
 export const onboardingResultEnum = pgEnum("OnboardingResult", allOnboardingResults);
 export const resourceTypeEnum = pgEnum("ResourceType", allBookmarkResourceTypes);
 export const searchIndexTypeEnum = pgEnum("SearchIndexType", allSearchIndexTypes);
+export const caisyWebhookEventTypeEnum = pgEnum("CaisyWebhookEventType", allCaisyWebhookEventTypes);
 export const caseProgressStateEnum = pgEnum("CaseProgressState", allCaseProgressStates);
 export const gameProgressStateEnum = pgEnum("GameProgressState", allGameProgressStates);
 export const subscriptionStatusEnum = pgEnum("SubscriptionStatus", allSubscriptionStatuses);
@@ -295,9 +301,12 @@ export type GameProgressInsert = InferInsertModel<typeof gamesProgress>;
 export type GameProgress = InferSelectModel<typeof gamesProgress>;
 
 export const searchIndexUpdateQueue = pgTable("SearchIndexUpdateQueue", {
-  cmsId: uuid("CmsId").primaryKey(),
-  resourceType: searchIndexTypeEnum("ResourceType").notNull(),
-});
+  cmsId: uuid("CmsId").notNull(),
+  searchIndexType: searchIndexTypeEnum("SearchIndexType").notNull(),
+  eventType: caisyWebhookEventTypeEnum("EventType").notNull(),
+}, table => ({
+  pk: primaryKey({ columns: [table.cmsId, table.searchIndexType, table.eventType] }),
+}));
 
 export type SearchIndexUpdateQueueInsert = InferInsertModel<typeof searchIndexUpdateQueue>;
 export type SearchIndexUpdateQueueItem = InferSelectModel<typeof searchIndexUpdateQueue>;
