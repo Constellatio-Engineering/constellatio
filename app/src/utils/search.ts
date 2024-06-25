@@ -12,12 +12,12 @@ import {
 import { removeHtmlTagsFromString } from "@/utils/utils";
 
 export const searchIndices = {
-  article: "article",
-  case: "case",
-  forumQuestion: "forum-question",
-  tag: "tag",
-  userDocument: "user-document",
-  userUpload: "user-upload",
+  articles: "articles",
+  cases: "cases",
+  forumQuestions: "forum-questions",
+  tags: "tags",
+  userDocuments: "user-documents",
+  userUploads: "user-uploads",
 } as const;
 
 export type SearchIndex = Values<typeof searchIndices>;
@@ -65,6 +65,8 @@ export const createCaseSearchIndexItem = (fullCase: IGenCase): CaseSearchIndexIt
   return caseSearchIndexItem;
 };
 
+export const caseSearchIndexItemPrimaryKey: keyof CaseSearchIndexItem = "id";
+
 type ArticleSearchIndexItemContent = {
   id: string;
   legalArea: Pick<IGenLegalArea, "legalAreaName" | "id">;
@@ -105,6 +107,8 @@ export const createArticleSearchIndexItem = (fullArticle: IGenArticle): ArticleS
 
   return articleSearchIndexItem;
 };
+
+export const articleSearchIndexItemPrimaryKey: keyof ArticleSearchIndexItem = "id";
 
 export type UploadSearchIndexItem = Pick<UploadedFile, "id" | "originalFilename" | "userId" | "folderId" | "createdAt" | "fileExtension" | "contentType">;
 export type UploadSearchItemNodes = RemoveUndefined<DotSeparatedKeys<UploadSearchIndexItem>>;

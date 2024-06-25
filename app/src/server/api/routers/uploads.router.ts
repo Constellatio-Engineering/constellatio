@@ -69,10 +69,7 @@ export const uploadsRouter = createTRPCRouter({
 
       await deleteFiles({ files, userId });
 
-      const removeDeletedFilesFromIndex = await meiliSearchAdmin.index(searchIndices.userUploads).deleteDocuments({
-        filter: `id IN [${fileIds.join(", ")}]`
-      });
-
+      const removeDeletedFilesFromIndex = await meiliSearchAdmin.index(searchIndices.userUploads).deleteDocuments(fileIds);
       const removeFileFromIndexResult = await meiliSearchAdmin.waitForTask(removeDeletedFilesFromIndex.taskUid);
 
       if(removeFileFromIndexResult.status !== "succeeded")

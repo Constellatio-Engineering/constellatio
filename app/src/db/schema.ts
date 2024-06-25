@@ -18,7 +18,7 @@ export type BookmarkResourceType = typeof allBookmarkResourceTypes[number];
 export const allSearchIndexTypes = Object.values(searchIndices) as [SearchIndex, ...SearchIndex[]];
 export type SearchIndexType = SearchIndex;
 
-export const allCaisyWebhookEventTypes = ["update", "delete"] as const;
+export const allCaisyWebhookEventTypes = ["upsert", "delete"] as const;
 export type CaisyWebhookEventType = typeof allCaisyWebhookEventTypes[number];
 
 export const allCaseProgressStates = ["not-started", "completing-tests", "solving-case", "completed"] as const;

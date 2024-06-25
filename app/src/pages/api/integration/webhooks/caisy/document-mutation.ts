@@ -71,7 +71,7 @@ const handler: NextApiHandler = async (req, res): Promise<void> =>
   {
     case "document_update":
     {
-      eventType = "update";
+      eventType = "upsert";
       break;
     }
     case "document_delete":
@@ -91,13 +91,13 @@ const handler: NextApiHandler = async (req, res): Promise<void> =>
     case env.CAISY_CASE_BLUEPRINT_ID:
     {
       console.log(`Case '${documentId}' changed. Adding it to the search index update queue...`);
-      await addContentToSearchQueue({ cmsId: documentId, eventType, searchIndexType: "case" });
+      await addContentToSearchQueue({ cmsId: documentId, eventType, searchIndexType: "cases" });
       break;
     }
     case env.CAISY_ARTICLE_BLUEPRINT_ID:
     {
       console.log(`Article '${documentId}' changed. Adding it to the search index update queue...`);
-      await addContentToSearchQueue({ cmsId: documentId, eventType, searchIndexType: "article" });
+      await addContentToSearchQueue({ cmsId: documentId, eventType, searchIndexType: "articles" });
       break;
     }
     case env.CAISY_TAG_BLUEPRINT_ID:

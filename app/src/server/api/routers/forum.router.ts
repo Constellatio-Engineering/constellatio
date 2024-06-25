@@ -150,12 +150,7 @@ export const forumRouter = createTRPCRouter({
           .where(eq(forumQuestions.id, questionId));
       });
 
-      const removeDeletedQuestionFromIndex = await meiliSearchAdmin
-        .index(searchIndices.forumQuestions)
-        .deleteDocuments({
-          filter: `id = ${questionId}`
-        });
-
+      const removeDeletedQuestionFromIndex = await meiliSearchAdmin.index(searchIndices.forumQuestions).deleteDocument(questionId);
       const removeQuestionFromIndexResult = await meiliSearchAdmin.waitForTask(removeDeletedQuestionFromIndex.taskUid);
 
       if(removeQuestionFromIndexResult.status !== "succeeded")
