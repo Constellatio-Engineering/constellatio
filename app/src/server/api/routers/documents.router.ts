@@ -1,5 +1,5 @@
 import { db } from "@/db/connection";
-import { type DocumentInsert, documents } from "@/db/schema";
+import { type DocumentInsert, documents, documentsToTags } from "@/db/schema";
 import { meiliSearchAdmin } from "@/lib/meilisearch";
 import { createDocumentSchema } from "@/schemas/documents/createDocument.schema";
 import { deleteDocumentSchema } from "@/schemas/documents/deleteDocument.schema";
@@ -7,7 +7,9 @@ import { getDocumentsSchema } from "@/schemas/documents/getDocuments.schema";
 import { updateDocumentSchema } from "@/schemas/documents/updateDocument.schema";
 import { addTags } from "@/server/api/services/tags.services";
 import { createTRPCRouter, protectedProcedure } from "@/server/api/trpc";
-import { createDocumentSearchIndexItem, documentSearchIndexItemPrimaryKey, type DocumentSearchItemUpdate, searchIndices } from "@/utils/search";
+import {
+  createDocumentSearchIndexItem, documentSearchIndexItemPrimaryKey, type DocumentSearchItemUpdate, searchIndices, type TagSearchIndexItem 
+} from "@/utils/search";
 import { removeHtmlTagsFromString } from "@/utils/utils";
 
 import { type inferProcedureOutput } from "@trpc/server";
@@ -26,12 +28,20 @@ export const documentsRouter = createTRPCRouter({
       };
 
       const insertedDocument = await db.insert(documents).values(documentInsert).returning();
+      const linkedTags = await db.query.documentsToTags.findMany({
+        where: eq(documentsToTags.documentId, insertedDocument[0]!.id),
+      });
+
+      const linkedTagsWithDetails = await meiliSearchAdmin.index(searchIndices.tags).getDocuments<TagSearchIndexItem>({
+        filter: `id IN [${linkedTags.map(t => t.tagId).join(", ")}]`
+      });
 
       const searchIndexItem = createDocumentSearchIndexItem({
         ...documentInsert,
         createdAt: insertedDocument[0]!.createdAt,
         folderId: documentInsert.folderId || null,
         id: insertedDocument[0]!.id,
+        tags: linkedTagsWithDetails.results,
         updatedAt: insertedDocument[0]!.updatedAt,
       });
 

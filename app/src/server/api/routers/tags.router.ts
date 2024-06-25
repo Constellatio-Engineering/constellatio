@@ -1,10 +1,12 @@
 import { db } from "@/db/connection";
 import {
-  type Document, documents, documentsToTags, type UploadedFile, uploadedFiles, uploadedFilesToTags, 
+  type Document, documents, documentsToTags, type SearchIndexType, type UploadedFile, uploadedFiles, uploadedFilesToTags,
 } from "@/db/schema";
+import { meiliSearchAdmin } from "@/lib/meilisearch";
 import { getTagsDetailsSchema } from "@/schemas/tags/getTagsDetails.schema";
 import { setTagsForEntitySchema } from "@/schemas/tags/setTagsForEntity.schema";
 import { createTRPCRouter, protectedProcedure } from "@/server/api/trpc";
+import { type DocumentSearchIndexItem, searchIndices, type UploadSearchIndexItem } from "@/utils/search";
 import { NotFoundError } from "@/utils/serverError";
 import { type Nullable } from "@/utils/types";
 
@@ -21,6 +23,29 @@ export const tagsRouter = createTRPCRouter({
     .input(setTagsForEntitySchema)
     .mutation(async ({ ctx: { userId }, input: { entityId, entityType, tagIds } }) =>
     {
+      let searchIndexType: SearchIndexType;
+
+      switch (entityType)
+      {
+        case "document":
+        {
+          searchIndexType = searchIndices.userDocuments;
+          break;
+        }
+        case "file":
+        {
+          searchIndexType = searchIndices.userUploads;
+          break;
+        }
+      }
+
+      await meiliSearchAdmin.index<DocumentSearchIndexItem | UploadSearchIndexItem>(searchIndexType).updateDocuments([
+        {
+          id: entityId,
+          tags: tagIds
+        }
+      ]);
+
       let entityFromDb: Nullable<Document | UploadedFile>;
 
       if(entityType === "document")

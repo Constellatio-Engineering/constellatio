@@ -134,7 +134,8 @@ export const uploadsRouter = createTRPCRouter({
         ...uploadInsert,
         createdAt: insertResult[0]!.createdAt,
         folderId: uploadInsert.folderId || null,
-        id: insertResult[0]!.id
+        id: insertResult[0]!.id,
+        tags: []
       });
 
       const addUploadToIndexTask = await meiliSearchAdmin
