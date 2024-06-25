@@ -72,7 +72,7 @@ const getEmailAndIdFromUser = async (): Promise<{ email: string; id: string } | 
     return;
   }
 
-  const getIsUserLoggedInClientResult = getIsUserLoggedInClient(sessionData.session);
+  const getIsUserLoggedInClientResult = getIsUserLoggedInClient(sessionData.session, false);
 
   if(getIsUserLoggedInClientResult.isUserLoggedIn)
   {
