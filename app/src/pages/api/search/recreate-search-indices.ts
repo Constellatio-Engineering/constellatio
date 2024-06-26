@@ -105,10 +105,10 @@ const handler: NextApiHandler = async (req, res) =>
   const articleSearchableAttributes: ArticleSearchItemNodes[] = ["title", "legalArea.legalAreaName", "mainCategory.mainCategory", "tags.tagName"];
   const updateArticlesRankingRulesTask = await meiliSearchAdmin.index(searchIndices.articles).updateSearchableAttributes(articleSearchableAttributes);
 
-  const uploadsSearchableAttributes: UploadSearchItemNodes[] = ["originalFilename"];
+  const uploadsSearchableAttributes: UploadSearchItemNodes[] = ["originalFilename", "tags.tagName"];
   const updateUploadsRankingRulesTask = await meiliSearchAdmin.index(searchIndices.userUploads).updateSearchableAttributes(uploadsSearchableAttributes);
 
-  const documentsSearchableAttributes: DocumentSearchItemNodes[] = ["name", "content"];
+  const documentsSearchableAttributes: DocumentSearchItemNodes[] = ["name", "content", "tags.tagName"];
   const updateDocumentsRankingRulesTask = await meiliSearchAdmin.index(searchIndices.userDocuments).updateSearchableAttributes(documentsSearchableAttributes);
 
   const forumQuestionsSearchableAttributes: ForumQuestionSearchItemNodes[] = ["title", "text", "legalFields.name", "subfields.name", "topics.name"];
@@ -118,10 +118,10 @@ const handler: NextApiHandler = async (req, res) =>
   const updateTagsRankingRulesTask = await meiliSearchAdmin.index(searchIndices.tags).updateSearchableAttributes(tagsSearchableAttributes);
 
   // Displayed attributes
-  const uploadsDisplayedAttributes: UploadSearchItemNodes[] = ["originalFilename", "id", "userId", "createdAt", "folderId", "fileExtension", "contentType"];
+  const uploadsDisplayedAttributes: UploadSearchItemNodes[] = ["originalFilename", "id", "userId", "createdAt", "folderId", "fileExtension", "contentType", "tags.tagName", "tags.id"];
   const updateUploadsDisplayedAttributesTask = await meiliSearchAdmin.index(searchIndices.userUploads).updateDisplayedAttributes(uploadsDisplayedAttributes);
 
-  const documentsDisplayedAttributes: DocumentSearchItemNodes[] = ["name", "content", "id", "userId", "updatedAt", "createdAt", "folderId"];
+  const documentsDisplayedAttributes: DocumentSearchItemNodes[] = ["name", "content", "id", "userId", "updatedAt", "createdAt", "folderId", "tags.tagName", "tags.id"];
   const updateDocumentsDisplayedAttributesTask = await meiliSearchAdmin.index(searchIndices.userDocuments).updateDisplayedAttributes(documentsDisplayedAttributes);
 
   // Filterable attributes
@@ -131,10 +131,10 @@ const handler: NextApiHandler = async (req, res) =>
   const articlesFilterableAttributes: ArticleSearchItemNodes[] = ["id"];
   const updateArticlesFilterableAttributesTask = await meiliSearchAdmin.index(searchIndices.articles).updateFilterableAttributes(articlesFilterableAttributes);
 
-  const uploadsFilterableAttributes: UploadSearchItemNodes[] = ["id", "userId", "folderId"];
+  const uploadsFilterableAttributes: UploadSearchItemNodes[] = ["id", "userId", "folderId", "tags.id"];
   const updateUploadsFilterableAttributesTask = await meiliSearchAdmin.index(searchIndices.userUploads).updateFilterableAttributes(uploadsFilterableAttributes);
 
-  const documentsFilterableAttributes: DocumentSearchItemNodes[] = ["id", "userId", "folderId"];
+  const documentsFilterableAttributes: DocumentSearchItemNodes[] = ["id", "userId", "folderId", "tags.id"];
   const updateDocumentsFilterableAttributesTask = await meiliSearchAdmin.index(searchIndices.userDocuments).updateFilterableAttributes(documentsFilterableAttributes);
 
   const forumQuestionsFilterableAttributes: ForumQuestionSearchItemNodes[] = ["id", "userId"];
