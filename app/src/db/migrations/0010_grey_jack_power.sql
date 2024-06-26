@@ -27,24 +27,10 @@ ALTER TABLE "Notification" RENAME COLUMN "NotificationTypeIdentifier" TO "Type";
 ALTER TABLE "SearchIndexUpdateQueue" RENAME COLUMN "ResourceType" TO "SearchIndexType";--> statement-breakpoint
 ALTER TABLE "Notification" DROP CONSTRAINT "Notification_NotificationTypeIdentifier_NotificationType_NotificationTypeIdentifier_fk";
 --> statement-breakpoint
-/* 
-    Unfortunately in current drizzle-kit version we can't automatically get name for primary key.
-    We are working on making it available!
 
-    Meanwhile you can:
-        1. Check pk name in your database, by running
-            SELECT constraint_name FROM information_schema.table_constraints
-            WHERE table_schema = 'public'
-                AND table_name = 'SearchIndexUpdateQueue'
-                AND constraint_type = 'PRIMARY KEY';
-        2. Uncomment code below and paste pk name manually
-        
-    Hope to release this update as soon as possible
-*/
-
--- ALTER TABLE "SearchIndexUpdateQueue" DROP CONSTRAINT "<constraint_name>";--> statement-breakpoint
-ALTER TABLE "SearchIndexUpdateQueue" ADD CONSTRAINT "SearchIndexUpdateQueue_CmsId_SearchIndexType_EventType_pk" PRIMARY KEY("CmsId","SearchIndexType","EventType");--> statement-breakpoint
+ALTER TABLE "SearchIndexUpdateQueue" DROP CONSTRAINT IF EXISTS "SearchIndexUpdateQueue_pkey";--> statement-breakpoint
 ALTER TABLE "SearchIndexUpdateQueue" ADD COLUMN "EventType" "CaisyWebhookEventType" NOT NULL;--> statement-breakpoint
+ALTER TABLE "SearchIndexUpdateQueue" ADD CONSTRAINT "SearchIndexUpdateQueue_CmsId_SearchIndexType_EventType_pk" PRIMARY KEY("CmsId","SearchIndexType","EventType");--> statement-breakpoint
 DO $$ BEGIN
  ALTER TABLE "Document_to_Tag" ADD CONSTRAINT "Document_to_Tag_DocumentId_Document_Id_fk" FOREIGN KEY ("DocumentId") REFERENCES "public"."Document"("Id") ON DELETE cascade ON UPDATE no action;
 EXCEPTION
