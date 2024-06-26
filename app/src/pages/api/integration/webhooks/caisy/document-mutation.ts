@@ -1,7 +1,11 @@
+/* eslint-disable max-lines */
+import { db } from "@/db/connection";
+import { type CaisyWebhookEventType, documentsToTags, uploadedFilesToTags } from "@/db/schema";
 import { env } from "@/env.mjs";
 import { addArticlesAndCasesToSearchQueue, addContentToSearchQueue } from "@/server/api/services/search.services";
 import { caisySDK } from "@/services/graphql/getSdk";
 
+import { eq } from "drizzle-orm";
 import { type NextApiHandler } from "next";
 import { z, ZodError } from "zod";
 
@@ -12,6 +16,9 @@ const caisyWebhookSchema = z.object({
   }),
   scope: z.object({
     project_id: z.string(),
+  }),
+  webhook: z.object({
+    trigger: z.enum(["document_update", "document_delete"])
   }),
 });
 
@@ -31,11 +38,11 @@ const handler: NextApiHandler = async (req, res): Promise<void> =>
     return res.status(400).json({ message: "Invalid request method" });
   }
 
-  let webhook: CaisyWebhook;
+  let webhookRequestBody: CaisyWebhook;
 
   try
   {
-    webhook = await caisyWebhookSchema.parseAsync(req.body);
+    webhookRequestBody = await caisyWebhookSchema.parseAsync(req.body);
   }
   catch (e: unknown)
   {
@@ -51,32 +58,56 @@ const handler: NextApiHandler = async (req, res): Promise<void> =>
     }
   }
 
-  if(webhook.scope.project_id !== env.CAISY_PROJECT_ID)
+  if(webhookRequestBody.scope.project_id !== env.CAISY_PROJECT_ID)
   {
     console.log("Invalid project id");
     return res.status(400).json({ message: "Invalid project id" });
   }
 
-  const { document_id: documentId } = webhook.metadata;
+  console.log("Caisy Webhook received:", webhookRequestBody);
 
-  switch (webhook.metadata.blueprint_id)
+  const { document_id: documentId } = webhookRequestBody.metadata;
+
+  let eventType: CaisyWebhookEventType;
+
+  switch (webhookRequestBody.webhook.trigger)
+  {
+    case "document_update":
+    {
+      eventType = "upsert";
+      break;
+    }
+    case "document_delete":
+    {
+      eventType = "delete";
+      break;
+    }
+    default:
+    {
+      console.log(`Invalid webhook trigger '${webhookRequestBody.webhook.trigger}'`);
+      return res.status(400).json({ message: `Invalid webhook trigger '${webhookRequestBody.webhook.trigger}'` });
+    }
+  }
+
+  switch (webhookRequestBody.metadata.blueprint_id)
   {
     case env.CAISY_CASE_BLUEPRINT_ID:
     {
       console.log(`Case '${documentId}' changed. Adding it to the search index update queue...`);
-      await addContentToSearchQueue({ cmsId: documentId, resourceType: "case" });
+      await addContentToSearchQueue({ cmsId: documentId, eventType, searchIndexType: "cases" });
       break;
     }
     case env.CAISY_ARTICLE_BLUEPRINT_ID:
     {
       console.log(`Article '${documentId}' changed. Adding it to the search index update queue...`);
-      await addContentToSearchQueue({ cmsId: documentId, resourceType: "article" });
+      await addContentToSearchQueue({ cmsId: documentId, eventType, searchIndexType: "articles" });
       break;
     }
     case env.CAISY_TAG_BLUEPRINT_ID:
     {
       const { Tags: Tag } = await caisySDK.getTagsById({ id: documentId });
       const tagName = Tag?.tagName;
+      const tagId = documentId;
 
       if(!tagName)
       {
@@ -88,11 +119,30 @@ const handler: NextApiHandler = async (req, res): Promise<void> =>
 
       const articlesWithTag = await caisySDK.getAllArticlesByTag({ tagName });
       const casesWithTag = await caisySDK.getAllCasesByTag({ tagName });
+      const documentsWithTag = await db.query.documentsToTags.findMany({
+        where: eq(documentsToTags.tagId, tagId)
+      });
+      const uploadsWithTag = await db.query.uploadedFilesToTags.findMany({
+        where: eq(uploadedFilesToTags.tagId, tagId)
+      });
 
       console.log(`Found ${articlesWithTag?.allArticle?.totalCount} articles with tag ${tagName}. Adding them to the search index update queue...`);
       console.log(`Found ${casesWithTag?.allCase?.totalCount} cases with tag ${tagName}. Adding them to the search index update queue...`);
+      console.log(`Found ${documentsWithTag.length} documents with tag ${tagName}. Adding them to the search index update queue...`);
+      console.log(`Found ${uploadsWithTag.length} uploads with tag ${tagName}. Adding them to the search index update queue...`);
 
-      await addArticlesAndCasesToSearchQueue({ articles: articlesWithTag, cases: casesWithTag });
+      await addArticlesAndCasesToSearchQueue({ articles: articlesWithTag, cases: casesWithTag, eventType: "upsert" });
+      await addContentToSearchQueue({ cmsId: documentId, eventType, searchIndexType: "tags" });
+      await addContentToSearchQueue(documentsWithTag.map(({ documentId }) => ({
+        cmsId: documentId,
+        eventType: "upsert",
+        searchIndexType: "user-documents"
+      })));
+      await addContentToSearchQueue(uploadsWithTag.map(({ fileId }) => ({
+        cmsId: fileId,
+        eventType: "upsert",
+        searchIndexType: "user-uploads"
+      })));
 
       break;
     }
@@ -115,7 +165,7 @@ const handler: NextApiHandler = async (req, res): Promise<void> =>
       console.log(`Found ${articlesInTopic?.allArticle?.totalCount} articles in topic ${topicName}. Adding them to the search index update queue...`);
       console.log(`Found ${casesInTopic?.allCase?.totalCount} cases in topic ${topicName}. Adding them to the search index update queue...`);
 
-      await addArticlesAndCasesToSearchQueue({ articles: articlesInTopic, cases: casesInTopic });
+      await addArticlesAndCasesToSearchQueue({ articles: articlesInTopic, cases: casesInTopic, eventType: "upsert" });
 
       break;
     }
@@ -138,7 +188,7 @@ const handler: NextApiHandler = async (req, res): Promise<void> =>
       console.log(`Found ${articlesInLegalArea?.allArticle?.totalCount} articles in legal area ${legalAreaName}. Adding them to the search index update queue...`);
       console.log(`Found ${casesInLegalArea?.allCase?.totalCount} cases in legal area ${legalAreaName}. Adding them to the search index update queue...`);
 
-      await addArticlesAndCasesToSearchQueue({ articles: articlesInLegalArea, cases: casesInLegalArea });
+      await addArticlesAndCasesToSearchQueue({ articles: articlesInLegalArea, cases: casesInLegalArea, eventType: "upsert" });
 
       break;
     }
@@ -161,14 +211,19 @@ const handler: NextApiHandler = async (req, res): Promise<void> =>
       console.log(`Found ${articlesInMainCategory?.allArticle?.totalCount} articles in main category ${mainCategoryName}. Adding them to the search index update queue...`);
       console.log(`Found ${casesInMainCategory?.allCase?.totalCount} cases in main category ${mainCategoryName}. Adding them to the search index update queue...`);
 
-      await addArticlesAndCasesToSearchQueue({ articles: articlesInMainCategory, cases: casesInMainCategory });
+      await addArticlesAndCasesToSearchQueue({ articles: articlesInMainCategory, cases: casesInMainCategory, eventType: "upsert" });
 
+      break;
+    }
+    case env.CAISY_SUB_CATEGORY_BLUEPRINT_ID:
+    {
+      // Sub categories are currently not linked to articles or cases so there is nothing to update
       break;
     }
     default:
     {
-      console.log(`blueprint_id '${webhook.metadata.blueprint_id}' has no corresponding search index`);
-      return res.status(200).json({ message: `blueprint_id '${webhook.metadata.blueprint_id}' has no corresponding search index` });
+      console.log(`blueprint_id '${webhookRequestBody.metadata.blueprint_id}' has no corresponding search index`);
+      return res.status(200).json({ message: `blueprint_id '${webhookRequestBody.metadata.blueprint_id}' has no corresponding search index` });
     }
   }
 

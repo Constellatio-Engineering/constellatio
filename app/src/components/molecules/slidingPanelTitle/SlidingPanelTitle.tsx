@@ -23,8 +23,8 @@ const SlidingPanelTitle: FunctionComponent<SlidingPanelTitleProps> = ({
   link,
   number,
   title,
-  variant
-}) => 
+  variant = "default"
+}) =>
 {
   return variant === "default" ? (
     <div css={styles.wrapper}>
@@ -46,7 +46,7 @@ const SlidingPanelTitle: FunctionComponent<SlidingPanelTitleProps> = ({
       </span>
     </div>
   );
-  
+
 };
 
 export default SlidingPanelTitle;

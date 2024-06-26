@@ -13,9 +13,9 @@ export const wrapper = (theme: MantineTheme) => css`
   .count {
     color: ${theme.colors["neutrals-01"][7]};
   }
-svg{
+  svg{
     cursor: pointer;
-}
+  }
   &::after {
     position: absolute;
     content: "";

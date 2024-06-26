@@ -1740,6 +1740,9 @@ type Tags {
   id: ID
 
   """"""
+  isShownInitiallyBeforeSearch: Boolean
+
+  """"""
   tagName: String
 }
 
@@ -1773,6 +1776,9 @@ input Tags_Nested_Where {
   OR: [Tags_Nested_Where]
 
   """"""
+  isShownInitiallyBeforeSearch: Boolean
+
+  """"""
   tagName: CaisyField_String_Where
 }
 
@@ -1783,6 +1789,9 @@ input Tags_Sort {
 
   """"""
   id: Order
+
+  """"""
+  isShownInitiallyBeforeSearch: Order
 
   """"""
   publishedAt: Order
@@ -1801,6 +1810,9 @@ input Tags_Where {
 
   """"""
   OR: [Tags_Where]
+
+  """"""
+  isShownInitiallyBeforeSearch: Boolean
 
   """"""
   tagName: CaisyField_String_Where

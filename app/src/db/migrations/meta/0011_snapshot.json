@@ -1,4 +1,6 @@
 {
+  "id": "35e716b6-1070-467e-ab58-be418bb97de6",
+  "prevId": "977b95d7-3685-43f5-881c-5e182e3e3461",
   "version": "6",
   "dialect": "postgresql",
   "tables": {
@@ -147,6 +149,7 @@
         "Identifier": {
           "name": "Identifier",
           "type": "BadgeIdentifier",
+          "typeSchema": "public",
           "primaryKey": false,
           "notNull": true
         },
@@ -171,6 +174,7 @@
         "PublicationState": {
           "name": "PublicationState",
           "type": "BadgePublicationState",
+          "typeSchema": "public",
           "primaryKey": false,
           "notNull": true,
           "default": "'not-listed'"
@@ -209,6 +213,7 @@
         "ResourceType": {
           "name": "ResourceType",
           "type": "ResourceType",
+          "typeSchema": "public",
           "primaryKey": false,
           "notNull": true
         },
@@ -274,6 +279,7 @@
         "ProgressState": {
           "name": "ProgressState",
           "type": "CaseProgressState",
+          "typeSchema": "public",
           "primaryKey": false,
           "notNull": true,
           "default": "'not-started'"
@@ -585,6 +591,50 @@
         }
       },
       "compositePrimaryKeys": {},
+      "uniqueConstraints": {}
+    },
+    "public.Document_to_Tag": {
+      "name": "Document_to_Tag",
+      "schema": "",
+      "columns": {
+        "DocumentId": {
+          "name": "DocumentId",
+          "type": "uuid",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "TagId": {
+          "name": "TagId",
+          "type": "uuid",
+          "primaryKey": false,
+          "notNull": true
+        }
+      },
+      "indexes": {},
+      "foreignKeys": {
+        "Document_to_Tag_DocumentId_Document_Id_fk": {
+          "name": "Document_to_Tag_DocumentId_Document_Id_fk",
+          "tableFrom": "Document_to_Tag",
+          "columnsFrom": [
+            "DocumentId"
+          ],
+          "tableTo": "Document",
+          "columnsTo": [
+            "Id"
+          ],
+          "onUpdate": "no action",
+          "onDelete": "cascade"
+        }
+      },
+      "compositePrimaryKeys": {
+        "Document_to_Tag_DocumentId_TagId_pk": {
+          "name": "Document_to_Tag_DocumentId_TagId_pk",
+          "columns": [
+            "DocumentId",
+            "TagId"
+          ]
+        }
+      },
       "uniqueConstraints": {}
     },
     "public.ForumAnswer": {
@@ -923,6 +973,7 @@
         "ProgressState": {
           "name": "ProgressState",
           "type": "GameProgressState",
+          "typeSchema": "public",
           "primaryKey": false,
           "notNull": true,
           "default": "'not-started'"
@@ -1035,9 +1086,10 @@
       "name": "NotificationType",
       "schema": "",
       "columns": {
-        "NotificationTypeIdentifier": {
-          "name": "NotificationTypeIdentifier",
-          "type": "NotificationTypeIdentifier",
+        "NotificationType": {
+          "name": "NotificationType",
+          "type": "NotificationType",
+          "typeSchema": "public",
           "primaryKey": true,
           "notNull": true
         },
@@ -1094,9 +1146,10 @@
           "primaryKey": false,
           "notNull": false
         },
-        "NotificationTypeIdentifier": {
-          "name": "NotificationTypeIdentifier",
-          "type": "NotificationTypeIdentifier",
+        "Type": {
+          "name": "Type",
+          "type": "NotificationType",
+          "typeSchema": "public",
           "primaryKey": false,
           "notNull": true
         },
@@ -1142,18 +1195,87 @@
           "onUpdate": "no action",
           "onDelete": "no action"
         },
-        "Notification_NotificationTypeIdentifier_NotificationType_NotificationTypeIdentifier_fk": {
-          "name": "Notification_NotificationTypeIdentifier_NotificationType_NotificationTypeIdentifier_fk",
+        "Notification_Type_NotificationType_NotificationType_fk": {
+          "name": "Notification_Type_NotificationType_NotificationType_fk",
           "tableFrom": "Notification",
           "columnsFrom": [
-            "NotificationTypeIdentifier"
+            "Type"
           ],
           "tableTo": "NotificationType",
           "columnsTo": [
-            "NotificationTypeIdentifier"
+            "NotificationType"
           ],
           "onUpdate": "no action",
           "onDelete": "no action"
+        }
+      },
+      "compositePrimaryKeys": {},
+      "uniqueConstraints": {}
+    },
+    "public.Ping": {
+      "name": "Ping",
+      "schema": "",
+      "columns": {
+        "Index": {
+          "name": "Index",
+          "type": "serial",
+          "primaryKey": true,
+          "notNull": true
+        },
+        "UserId": {
+          "name": "UserId",
+          "type": "uuid",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "Path": {
+          "name": "Path",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "Search": {
+          "name": "Search",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "CreatedAt": {
+          "name": "CreatedAt",
+          "type": "timestamp",
+          "primaryKey": false,
+          "notNull": true,
+          "default": "now()"
+        },
+        "PingInterval": {
+          "name": "PingInterval",
+          "type": "smallint",
+          "primaryKey": false,
+          "notNull": true
+        }
+      },
+      "indexes": {
+        "Ping_Path_Index": {
+          "name": "Ping_Path_Index",
+          "columns": [
+            "Path"
+          ],
+          "isUnique": false
+        }
+      },
+      "foreignKeys": {
+        "Ping_UserId_User_Id_fk": {
+          "name": "Ping_UserId_User_Id_fk",
+          "tableFrom": "Ping",
+          "columnsFrom": [
+            "UserId"
+          ],
+          "tableTo": "User",
+          "columnsTo": [
+            "Id"
+          ],
+          "onUpdate": "no action",
+          "onDelete": "cascade"
         }
       },
       "compositePrimaryKeys": {},
@@ -1178,12 +1300,14 @@
         "FileExtension": {
           "name": "FileExtension",
           "type": "ImageFileExtension",
+          "typeSchema": "public",
           "primaryKey": false,
           "notNull": true
         },
         "ContentType": {
           "name": "ContentType",
           "type": "ImageFileMimeType",
+          "typeSchema": "public",
           "primaryKey": false,
           "notNull": true
         },
@@ -1300,19 +1424,36 @@
         "CmsId": {
           "name": "CmsId",
           "type": "uuid",
-          "primaryKey": true,
+          "primaryKey": false,
           "notNull": true
         },
-        "ResourceType": {
-          "name": "ResourceType",
+        "SearchIndexType": {
+          "name": "SearchIndexType",
           "type": "SearchIndexType",
+          "typeSchema": "public",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "EventType": {
+          "name": "EventType",
+          "type": "CaisyWebhookEventType",
+          "typeSchema": "public",
           "primaryKey": false,
           "notNull": true
         }
       },
       "indexes": {},
       "foreignKeys": {},
-      "compositePrimaryKeys": {},
+      "compositePrimaryKeys": {
+        "SearchIndexUpdateQueue_CmsId_SearchIndexType_EventType_pk": {
+          "name": "SearchIndexUpdateQueue_CmsId_SearchIndexType_EventType_pk",
+          "columns": [
+            "CmsId",
+            "SearchIndexType",
+            "EventType"
+          ]
+        }
+      },
       "uniqueConstraints": {}
     },
     "public.UploadFolder": {
@@ -1416,12 +1557,14 @@
         "FileExtension": {
           "name": "FileExtension",
           "type": "FileExtension",
+          "typeSchema": "public",
           "primaryKey": false,
           "notNull": true
         },
         "ContentType": {
           "name": "ContentType",
           "type": "FileMimeType",
+          "typeSchema": "public",
           "primaryKey": false,
           "notNull": true
         }
@@ -1458,6 +1601,50 @@
       "compositePrimaryKeys": {},
       "uniqueConstraints": {}
     },
+    "public.UploadedFile_to_Tag": {
+      "name": "UploadedFile_to_Tag",
+      "schema": "",
+      "columns": {
+        "FileId": {
+          "name": "FileId",
+          "type": "uuid",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "TagId": {
+          "name": "TagId",
+          "type": "uuid",
+          "primaryKey": false,
+          "notNull": true
+        }
+      },
+      "indexes": {},
+      "foreignKeys": {
+        "UploadedFile_to_Tag_FileId_UploadedFile_Id_fk": {
+          "name": "UploadedFile_to_Tag_FileId_UploadedFile_Id_fk",
+          "tableFrom": "UploadedFile_to_Tag",
+          "columnsFrom": [
+            "FileId"
+          ],
+          "tableTo": "UploadedFile",
+          "columnsTo": [
+            "Id"
+          ],
+          "onUpdate": "no action",
+          "onDelete": "cascade"
+        }
+      },
+      "compositePrimaryKeys": {
+        "UploadedFile_to_Tag_FileId_TagId_pk": {
+          "name": "UploadedFile_to_Tag_FileId_TagId_pk",
+          "columns": [
+            "FileId",
+            "TagId"
+          ]
+        }
+      },
+      "uniqueConstraints": {}
+    },
     "public.UserRole": {
       "name": "UserRole",
       "schema": "",
@@ -1472,6 +1659,7 @@
         "Identifier": {
           "name": "Identifier",
           "type": "Role",
+          "typeSchema": "public",
           "primaryKey": false,
           "notNull": true
         },
@@ -1540,6 +1728,7 @@
         "Gender": {
           "name": "Gender",
           "type": "Gender",
+          "typeSchema": "public",
           "primaryKey": false,
           "notNull": false
         },
@@ -1570,30 +1759,14 @@
         "OnboardingResult": {
           "name": "OnboardingResult",
           "type": "OnboardingResult",
+          "typeSchema": "public",
           "primaryKey": false,
           "notNull": false
         },
         "SubscriptionStatus": {
           "name": "SubscriptionStatus",
           "type": "SubscriptionStatus",
-          "primaryKey": false,
-          "notNull": false
-        },
-        "SubscriptionStartDate": {
-          "name": "SubscriptionStartDate",
-          "type": "timestamp",
-          "primaryKey": false,
-          "notNull": false
-        },
-        "SubscriptionEndDate": {
-          "name": "SubscriptionEndDate",
-          "type": "timestamp",
-          "primaryKey": false,
-          "notNull": false
-        },
-        "TrialSubscriptionId": {
-          "name": "TrialSubscriptionId",
-          "type": "text",
+          "typeSchema": "public",
           "primaryKey": false,
           "notNull": false
         },
@@ -1636,6 +1809,7 @@
         "UserBadgeState": {
           "name": "UserBadgeState",
           "type": "UserBadgeState",
+          "typeSchema": "public",
           "primaryKey": false,
           "notNull": true,
           "default": "'not-seen'"
@@ -1786,6 +1960,14 @@
         "published"
       ]
     },
+    "public.CaisyWebhookEventType": {
+      "name": "CaisyWebhookEventType",
+      "schema": "public",
+      "values": [
+        "upsert",
+        "delete"
+      ]
+    },
     "public.CaseProgressState": {
       "name": "CaseProgressState",
       "schema": "public",
@@ -1863,8 +2045,8 @@
         "image/png"
       ]
     },
-    "public.NotificationTypeIdentifier": {
-      "name": "NotificationTypeIdentifier",
+    "public.NotificationType": {
+      "name": "NotificationType",
       "schema": "public",
       "values": [
         "forumQuestionPosted",
@@ -1904,8 +2086,12 @@
       "name": "SearchIndexType",
       "schema": "public",
       "values": [
-        "article",
-        "case"
+        "articles",
+        "cases",
+        "forum-questions",
+        "tags",
+        "user-documents",
+        "user-uploads"
       ]
     },
     "public.SubscriptionStatus": {
@@ -1933,10 +2119,8 @@
   },
   "schemas": {},
   "_meta": {
+    "columns": {},
     "schemas": {},
-    "tables": {},
-    "columns": {}
-  },
-  "id": "ff9259d1-6bd5-42d8-be00-1916434768cf",
-  "prevId": "cfa0d5d5-c337-4579-be40-ee407f5cc141"
+    "tables": {}
+  }
 }

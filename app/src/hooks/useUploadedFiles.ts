@@ -1,5 +1,5 @@
-import { type UploadedFile } from "@/db/schema";
 import { AuthStateContext } from "@/provider/AuthStateProvider";
+import { type GetUploadedFilesResult } from "@/server/api/routers/uploads.router";
 import useMaterialsStore from "@/stores/materials.store";
 import { api } from "@/utils/api";
 import { type UseQueryResult } from "@/utils/types";
@@ -7,8 +7,8 @@ import { type UseQueryResult } from "@/utils/types";
 import { useContext } from "react";
 
 type UseUploadedFiles = () => UseQueryResult<{
-  uploadedFilesInAllFolders: UploadedFile[];
-  uploadedFilesInSelectedFolder: UploadedFile[];
+  uploadedFilesInAllFolders: GetUploadedFilesResult;
+  uploadedFilesInSelectedFolder: GetUploadedFilesResult;
 }>;
 
 const useUploadedFiles: UseUploadedFiles = () =>

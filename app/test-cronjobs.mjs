@@ -13,7 +13,7 @@ const updateSearchIndexes = async () =>
   }
   catch (e)
   {
-    console.log("error from 'update-search-indexes' cronjob. Status: " + e.response.status);
+    console.log("error from 'update-search-indexes' cronjob. Status: ", e);
   }
 }
 

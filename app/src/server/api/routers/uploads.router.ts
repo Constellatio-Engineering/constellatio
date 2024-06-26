@@ -10,6 +10,7 @@ import { deleteUploadSchema } from "@/schemas/uploads/deleteUpload.schema";
 import { getUploadedFilesSchema } from "@/schemas/uploads/getUploadedFiles.schema";
 import { updateUploadedFileSchema } from "@/schemas/uploads/updateUploadedFile.schema";
 import { addBadgeForUser } from "@/server/api/services/badges.services";
+import { addTags } from "@/server/api/services/tags.services";
 import { deleteFiles, getClouStorageFileUrl, getSignedCloudStorageUploadUrl } from "@/server/api/services/uploads.services";
 import { createTRPCRouter, protectedProcedure } from "@/server/api/trpc";
 import {
@@ -17,6 +18,7 @@ import {
 } from "@/utils/search";
 import { NotFoundError } from "@/utils/serverError";
 
+import type { inferProcedureOutput } from "@trpc/server";
 import {
   and, desc, eq, inArray, isNull
 } from "drizzle-orm";
@@ -67,10 +69,7 @@ export const uploadsRouter = createTRPCRouter({
 
       await deleteFiles({ files, userId });
 
-      const removeDeletedFilesFromIndex = await meiliSearchAdmin.index(searchIndices.userUploads).deleteDocuments({
-        filter: `id IN [${fileIds.join(", ")}]`
-      });
-
+      const removeDeletedFilesFromIndex = await meiliSearchAdmin.index(searchIndices.userUploads).deleteDocuments(fileIds);
       const removeFileFromIndexResult = await meiliSearchAdmin.waitForTask(removeDeletedFilesFromIndex.taskUid);
 
       if(removeFileFromIndexResult.status !== "succeeded")
@@ -93,10 +92,14 @@ export const uploadsRouter = createTRPCRouter({
         queryConditions.push(isNull(uploadedFiles.folderId));
       }
 
-      return db.query.uploadedFiles.findMany({
+      const uploadedFilesFromDb = await db.query.uploadedFiles.findMany({
         orderBy: [desc(uploadedFiles.createdAt)],
         where: and(...queryConditions),
+        with: { tags: true },
       });
+
+      const uploadedFilesWithTags = await addTags(uploadedFilesFromDb);
+      return uploadedFilesWithTags;
     }),
   saveFileToDatabase: protectedProcedure
     .input(addUploadSchema)
@@ -131,7 +134,8 @@ export const uploadsRouter = createTRPCRouter({
         ...uploadInsert,
         createdAt: insertResult[0]!.createdAt,
         folderId: uploadInsert.folderId || null,
-        id: insertResult[0]!.id
+        id: insertResult[0]!.id,
+        tags: []
       });
 
       const addUploadToIndexTask = await meiliSearchAdmin
@@ -180,3 +184,6 @@ export const uploadsRouter = createTRPCRouter({
       return updatedFile;
     })
 });
+
+export type GetUploadedFilesResult = inferProcedureOutput<typeof uploadsRouter.getUploadedFiles>;
+export type GetUploadedFileResult = GetUploadedFilesResult[number];

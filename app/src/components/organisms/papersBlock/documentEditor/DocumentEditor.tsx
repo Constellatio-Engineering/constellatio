@@ -34,7 +34,7 @@ const DocumentEditor: FunctionComponent<DocumentEditorProps> = () =>
       lockScroll={false}
       opened={editorState.state !== "closed"}
       onClose={onClose}
-      title={<SlidingPanelTitle title={title} variant="default" closeButtonAction={onClose}/>}
+      title={<SlidingPanelTitle title={title} closeButtonAction={onClose}/>}
       position="right"
       withCloseButton={false}
       size="xl"

@@ -5,20 +5,21 @@ import { getAllLegalFields, getAllSubfields, getAllTopics } from "@/server/api/s
 import {
   addArticlesToSearchIndex,
   addCasesToSearchIndex,
-  addForumQuestionsToSearchIndex,
+  addForumQuestionsToSearchIndex, addTagsToSearchIndex,
   addUserDocumentsToSearchIndex,
   addUserUploadsToSearchIndex,
   resetSearchIndex
 } from "@/server/api/services/search.services";
 import getAllArticles from "@/services/content/getAllArticles";
 import getAllCases from "@/services/content/getAllCases";
+import { getAllTags } from "@/services/content/getAllTags";
 import { isDevelopment } from "@/utils/env";
 import {
   type ArticleSearchItemNodes,
   type CaseSearchItemNodes,
   type DocumentSearchItemNodes,
   type ForumQuestionSearchItemNodes,
-  searchIndices,
+  searchIndices, type TagSearchItemNodes,
   type UploadSearchItemNodes
 } from "@/utils/search";
 
@@ -43,8 +44,8 @@ const handler: NextApiHandler = async (req, res) =>
 
   const allCases = await getAllCases();
   const allArticles = await getAllArticles();
-  const allUserUploads = await db.query.uploadedFiles.findMany();
-  const allUsersDocuments = await db.query.documents.findMany();
+  const allUserUploads = await db.query.uploadedFiles.findMany({ with: { tags: true } });
+  const allUsersDocuments = await db.query.documents.findMany({ with: { tags: true } });
   const allForumQuestions = await db.query.forumQuestions.findMany();
   const forumQuestionsToLegalFields = await db.query.forumQuestionsToLegalFields.findMany();
   const forumQuestionsToSubfields = await db.query.forumQuestionToSubfields.findMany();
@@ -52,17 +53,16 @@ const handler: NextApiHandler = async (req, res) =>
   const allLegalFields = await getAllLegalFields();
   const allSubfields = await getAllSubfields();
   const allTopics = await getAllTopics();
+  const allTags = await getAllTags();
 
   const { createArticlesIndexTaskId } = await addArticlesToSearchIndex({
     articleIds: allArticles.map(a => a.id).filter(Boolean),
   });
-
   const { createCasesIndexTaskId } = await addCasesToSearchIndex({
     caseIds: allCases.map(c => c.id).filter(Boolean),
   });
-
-  const { createUploadsIndexTaskId } = await addUserUploadsToSearchIndex({ uploads: allUserUploads });
-  const { createDocumentsIndexTaskId } = await addUserDocumentsToSearchIndex({ documents: allUsersDocuments });
+  const { createUploadsIndexTaskId } = await addUserUploadsToSearchIndex({ allTags, uploads: allUserUploads });
+  const { createDocumentsIndexTaskId } = await addUserDocumentsToSearchIndex({ allTags, documents: allUsersDocuments });
   const { createQuestionsIndexTaskId } = await addForumQuestionsToSearchIndex({
     allLegalFields,
     allSubfields,
@@ -72,6 +72,9 @@ const handler: NextApiHandler = async (req, res) =>
     forumQuestionsToTopics,
     questions: allForumQuestions
   });
+  const { createTagsIndexTaskId } = await addTagsToSearchIndex({
+    tags: allTags.filter(tag => tag.id != null).filter(Boolean)
+  });
 
   const createIndicesTasks = await meiliSearchAdmin.waitForTasks([
     createCasesIndexTaskId,
@@ -79,6 +82,7 @@ const handler: NextApiHandler = async (req, res) =>
     createArticlesIndexTaskId,
     createDocumentsIndexTaskId,
     createQuestionsIndexTaskId,
+    createTagsIndexTaskId
   ].filter(Boolean), {
     intervalMs: 1000,
     timeOutMs: 1000 * 60 * 5,
@@ -110,6 +114,9 @@ const handler: NextApiHandler = async (req, res) =>
   const forumQuestionsSearchableAttributes: ForumQuestionSearchItemNodes[] = ["title", "text", "legalFields.name", "subfields.name", "topics.name"];
   const updateForumQuestionsRankingRulesTask = await meiliSearchAdmin.index(searchIndices.forumQuestions).updateSearchableAttributes(forumQuestionsSearchableAttributes);
 
+  const tagsSearchableAttributes: TagSearchItemNodes[] = ["tagName"];
+  const updateTagsRankingRulesTask = await meiliSearchAdmin.index(searchIndices.tags).updateSearchableAttributes(tagsSearchableAttributes);
+
   // Displayed attributes
   const uploadsDisplayedAttributes: UploadSearchItemNodes[] = ["originalFilename", "id", "userId", "createdAt", "folderId", "fileExtension", "contentType"];
   const updateUploadsDisplayedAttributesTask = await meiliSearchAdmin.index(searchIndices.userUploads).updateDisplayedAttributes(uploadsDisplayedAttributes);
@@ -133,6 +140,9 @@ const handler: NextApiHandler = async (req, res) =>
   const forumQuestionsFilterableAttributes: ForumQuestionSearchItemNodes[] = ["id", "userId"];
   const updateForumQuestionsFilterableAttributesTask = await meiliSearchAdmin.index(searchIndices.forumQuestions).updateFilterableAttributes(forumQuestionsFilterableAttributes);
 
+  const tagsFilterableAttributes: TagSearchItemNodes[] = ["id"];
+  const updateTagsFilterableAttributesTask = await meiliSearchAdmin.index(searchIndices.tags).updateFilterableAttributes(tagsFilterableAttributes);
+
   await meiliSearchAdmin.waitForTasks([
     updateCasesRankingRulesTask.taskUid,
     updateArticlesRankingRulesTask.taskUid,
@@ -146,6 +156,8 @@ const handler: NextApiHandler = async (req, res) =>
     updateDocumentsRankingRulesTask.taskUid,
     updateDocumentsDisplayedAttributesTask.taskUid,
     updateDocumentsFilterableAttributesTask.taskUid,
+    updateTagsRankingRulesTask.taskUid,
+    updateTagsFilterableAttributesTask.taskUid
   ], {
     intervalMs: 1000,
     timeOutMs: 1000 * 60 * 5,
