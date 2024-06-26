@@ -103,6 +103,8 @@ const handler: NextApiHandler = async (req, res): Promise<void> =>
     }
     case env.CAISY_TAG_BLUEPRINT_ID:
     {
+      // TODO: Update docs and uploads with this tag, they also need to be added to the search index update queue
+
       const { Tags: Tag } = await caisySDK.getTagsById({ id: documentId });
       const tagName = Tag?.tagName;
 
@@ -120,7 +122,7 @@ const handler: NextApiHandler = async (req, res): Promise<void> =>
       console.log(`Found ${articlesWithTag?.allArticle?.totalCount} articles with tag ${tagName}. Adding them to the search index update queue...`);
       console.log(`Found ${casesWithTag?.allCase?.totalCount} cases with tag ${tagName}. Adding them to the search index update queue...`);
 
-      await addArticlesAndCasesToSearchQueue({ articles: articlesWithTag, cases: casesWithTag });
+      await addArticlesAndCasesToSearchQueue({ articles: articlesWithTag, cases: casesWithTag, eventType: "upsert" });
       await addContentToSearchQueue({ cmsId: documentId, eventType, searchIndexType: "tags" });
 
       break;
@@ -144,7 +146,7 @@ const handler: NextApiHandler = async (req, res): Promise<void> =>
       console.log(`Found ${articlesInTopic?.allArticle?.totalCount} articles in topic ${topicName}. Adding them to the search index update queue...`);
       console.log(`Found ${casesInTopic?.allCase?.totalCount} cases in topic ${topicName}. Adding them to the search index update queue...`);
 
-      await addArticlesAndCasesToSearchQueue({ articles: articlesInTopic, cases: casesInTopic });
+      await addArticlesAndCasesToSearchQueue({ articles: articlesInTopic, cases: casesInTopic, eventType: "upsert" });
 
       break;
     }
@@ -167,7 +169,7 @@ const handler: NextApiHandler = async (req, res): Promise<void> =>
       console.log(`Found ${articlesInLegalArea?.allArticle?.totalCount} articles in legal area ${legalAreaName}. Adding them to the search index update queue...`);
       console.log(`Found ${casesInLegalArea?.allCase?.totalCount} cases in legal area ${legalAreaName}. Adding them to the search index update queue...`);
 
-      await addArticlesAndCasesToSearchQueue({ articles: articlesInLegalArea, cases: casesInLegalArea });
+      await addArticlesAndCasesToSearchQueue({ articles: articlesInLegalArea, cases: casesInLegalArea, eventType: "upsert" });
 
       break;
     }
@@ -190,7 +192,7 @@ const handler: NextApiHandler = async (req, res): Promise<void> =>
       console.log(`Found ${articlesInMainCategory?.allArticle?.totalCount} articles in main category ${mainCategoryName}. Adding them to the search index update queue...`);
       console.log(`Found ${casesInMainCategory?.allCase?.totalCount} cases in main category ${mainCategoryName}. Adding them to the search index update queue...`);
 
-      await addArticlesAndCasesToSearchQueue({ articles: articlesInMainCategory, cases: casesInMainCategory });
+      await addArticlesAndCasesToSearchQueue({ articles: articlesInMainCategory, cases: casesInMainCategory, eventType: "upsert" });
 
       break;
     }

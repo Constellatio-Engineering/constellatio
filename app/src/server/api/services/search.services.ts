@@ -1,31 +1,50 @@
 /* eslint-disable max-lines */
 import { db } from "@/db/connection";
 import {
-  type Document,
+  type CaisyWebhookEventType,
+  type DocumentWithTags,
   type ForumQuestion,
   type ForumQuestionToLegalField,
   type ForumQuestionToSubfield,
   type ForumQuestionToTopic,
   searchIndexUpdateQueue,
   type SearchIndexUpdateQueueInsert,
-  type UploadedFile
+  type UploadedFileWithTags
 } from "@/db/schema";
 import { meiliSearchAdmin } from "@/lib/meilisearch";
+import { addTags } from "@/server/api/services/tags.services";
+import { type AllTags } from "@/services/content/getAllTags";
 import { getArticleById } from "@/services/content/getArticleById";
 import { getCaseById } from "@/services/content/getCaseById";
 import {
-  type IGenGetAllArticlesByLegalAreaQuery, type IGenGetAllArticlesByMainCategoryQuery, type IGenGetAllArticlesByTagQuery,
-  type IGenGetAllArticlesByTopicQuery, type IGenGetAllCasesByLegalAreaQuery, type IGenGetAllCasesByMainCategoryQuery, type IGenGetAllCasesByTagQuery,
-  type IGenGetAllCasesByTopicQuery, type IGenLegalArea, type IGenMainCategory, type IGenTags, type IGenTopic,
+  type IGenGetAllArticlesByLegalAreaQuery,
+  type IGenGetAllArticlesByMainCategoryQuery,
+  type IGenGetAllArticlesByTagQuery,
+  type IGenGetAllArticlesByTopicQuery,
+  type IGenGetAllCasesByLegalAreaQuery,
+  type IGenGetAllCasesByMainCategoryQuery,
+  type IGenGetAllCasesByTagQuery,
+  type IGenGetAllCasesByTopicQuery,
+  type IGenLegalArea,
+  type IGenMainCategory,
+  type IGenTags,
+  type IGenTopic,
 } from "@/services/graphql/__generated/sdk";
 import {
-  type ArticleSearchIndexItem, articleSearchIndexItemPrimaryKey, caseSearchIndexItemPrimaryKey,
+  type ArticleSearchIndexItem,
+  articleSearchIndexItemPrimaryKey,
+  caseSearchIndexItemPrimaryKey,
   createArticleSearchIndexItem,
   createCaseSearchIndexItem,
-  createDocumentSearchIndexItem, createForumQuestionSearchIndexItem, createTagSearchIndexItem,
+  createDocumentSearchIndexItem,
+  createForumQuestionSearchIndexItem,
+  createTagSearchIndexItem,
   createUploadsSearchIndexItem,
-  documentSearchIndexItemPrimaryKey, type ForumQuestionSearchIndexItem, forumQuestionSearchIndexItemPrimaryKey,
-  searchIndices, tagSearchIndexItemPrimaryKey,
+  documentSearchIndexItemPrimaryKey,
+  type ForumQuestionSearchIndexItem,
+  forumQuestionSearchIndexItemPrimaryKey,
+  searchIndices,
+  tagSearchIndexItemPrimaryKey,
   uploadSearchIndexItemPrimaryKey
 } from "@/utils/search";
 
@@ -43,15 +62,16 @@ export const addContentToSearchQueue = async (items: SearchIndexUpdateQueueInser
 type AddArticlesAndCasesToSearchQueue = (params: {
   articles: IGenGetAllArticlesByTopicQuery | IGenGetAllArticlesByLegalAreaQuery | IGenGetAllArticlesByMainCategoryQuery | IGenGetAllArticlesByTagQuery;
   cases: IGenGetAllCasesByTopicQuery | IGenGetAllCasesByLegalAreaQuery | IGenGetAllCasesByMainCategoryQuery | IGenGetAllCasesByTagQuery;
+  eventType: CaisyWebhookEventType;
 }) => Promise<void>;
 
-export const addArticlesAndCasesToSearchQueue: AddArticlesAndCasesToSearchQueue = async ({ articles, cases }) =>
+export const addArticlesAndCasesToSearchQueue: AddArticlesAndCasesToSearchQueue = async ({ articles, cases, eventType }) =>
 {
   const articleIds: string[] = articles?.allArticle?.edges?.map(e => e?.node?.id).filter(Boolean) || [];
   const caseIds: string[] = cases?.allCase?.edges?.map(e => e?.node?.id).filter(Boolean) || [];
 
-  await addContentToSearchQueue(articleIds.map(id => ({ cmsId: id, resourceType: "article" })));
-  await addContentToSearchQueue(caseIds.map(id => ({ cmsId: id, resourceType: "case" })));
+  await addContentToSearchQueue(articleIds.map(id => ({ cmsId: id, eventType, searchIndexType: "articles" })));
+  await addContentToSearchQueue(caseIds.map(id => ({ cmsId: id, eventType, searchIndexType: "cases" })));
 };
 
 export const resetSearchIndex = async (): Promise<void> =>
@@ -124,18 +144,20 @@ export const addCasesToSearchIndex: AddCasesToSearchIndex = async ({ caseIds }) 
 };
 
 type AddUserUploadsToSearchIndex = (params: {
-  uploads: UploadedFile[];
+  allTags: AllTags;
+  uploads: UploadedFileWithTags[];
 }) => Promise<{
   createUploadsIndexTaskId: number | undefined;
 }>;
 
-export const addUserUploadsToSearchIndex: AddUserUploadsToSearchIndex = async ({ uploads }) =>
+export const addUserUploadsToSearchIndex: AddUserUploadsToSearchIndex = async ({ allTags, uploads }) =>
 {
+  const uploadsWithTags = await addTags(uploads, allTags);
   let createUploadsIndexTaskId: number | undefined;
 
   if(uploads.length > 0)
   {
-    const allUserUploadsSearchIndexItems = uploads.map(createUploadsSearchIndexItem);
+    const allUserUploadsSearchIndexItems = uploadsWithTags.map(createUploadsSearchIndexItem);
     const createUploadsIndexTask = await meiliSearchAdmin.index(searchIndices.userUploads).addDocuments(allUserUploadsSearchIndexItems, {
       primaryKey: uploadSearchIndexItemPrimaryKey
     });
@@ -146,18 +168,20 @@ export const addUserUploadsToSearchIndex: AddUserUploadsToSearchIndex = async ({
 };
 
 type AddUserDocumentsToSearchIndex = (params: {
-  documents: Document[];
+  allTags: AllTags;
+  documents: DocumentWithTags[];
 }) => Promise<{
   createDocumentsIndexTaskId: number | undefined;
 }>;
 
-export const addUserDocumentsToSearchIndex: AddUserDocumentsToSearchIndex = async ({ documents }) =>
+export const addUserDocumentsToSearchIndex: AddUserDocumentsToSearchIndex = async ({ allTags, documents }) =>
 {
+  const documentsWithTags = await addTags(documents, allTags);
   let createDocumentsIndexTaskId: number | undefined;
 
   if(documents.length > 0)
   {
-    const allUserDocumentsSearchIndexItems = documents.map(createDocumentSearchIndexItem);
+    const allUserDocumentsSearchIndexItems = documentsWithTags.map(createDocumentSearchIndexItem);
     const createDocumentsIndexTask = await meiliSearchAdmin.index(searchIndices.userDocuments).addDocuments(allUserDocumentsSearchIndexItems, {
       primaryKey: documentSearchIndexItemPrimaryKey
     });

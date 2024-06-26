@@ -18,7 +18,7 @@ type UpdateArticles = () => Promise<{
 
 const updateArticles: UpdateArticles = async () =>
 {
-  const articlesToUpdate = await db.select().from(searchIndexUpdateQueue).where(eq(searchIndexUpdateQueue.resourceType, "article"));
+  const articlesToUpdate = await db.select().from(searchIndexUpdateQueue).where(eq(searchIndexUpdateQueue.searchIndexType, "articles"));
   const idsOfArticlesToUpdate = articlesToUpdate.map(article => article.cmsId);
 
   if(articlesToUpdate.length === 0)
@@ -67,7 +67,7 @@ type UpdateCases = () => Promise<{
 
 const updateCases: UpdateCases = async () =>
 {
-  const casesToUpdate = await db.select().from(searchIndexUpdateQueue).where(eq(searchIndexUpdateQueue.resourceType, "case"));
+  const casesToUpdate = await db.select().from(searchIndexUpdateQueue).where(eq(searchIndexUpdateQueue.searchIndexType, "cases"));
   const idsOfCasesToUpdate = casesToUpdate.map(legalCase => legalCase.cmsId);
 
   if(casesToUpdate.length === 0)
@@ -116,6 +116,8 @@ const handler: NextApiHandler = async (req, res): Promise<void> =>
   }
 
   console.log("----- [Cronjob] Update Search Indexes -----");
+
+  // TODO: Implement update uploaded docs and uploaded file
 
   const { createArticlesIndexTaskId, idsOfArticlesToUpdate, removeDeletedArticlesTaskId } = await updateArticles();
   const { createCasesIndexTaskId, idsOfCasesToUpdate, removeDeletedCasesTaskId } = await updateCases();

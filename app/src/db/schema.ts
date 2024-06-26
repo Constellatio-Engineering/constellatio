@@ -209,6 +209,7 @@ export const uploadedFilesRelations = relations(uploadedFiles, ({ many }) => ({
 
 export type UploadedFileInsert = InferInsertModel<typeof uploadedFiles>;
 export type UploadedFile = InferSelectModel<typeof uploadedFiles>;
+export type UploadedFileWithTags = UploadedFile & { tags: Array<{ tagId: string }> };
 
 export const documents = pgTable("Document", {
   id: uuid("Id").defaultRandom().primaryKey(),
@@ -226,7 +227,7 @@ export const documentsRelations = relations(documents, ({ many }) => ({
 
 export type DocumentInsert = InferInsertModel<typeof documents>;
 export type Document = InferSelectModel<typeof documents>;
-// export type DocumentWithTags = Document & { tags: Array<{tagId: string}> };
+export type DocumentWithTags = Document & { tags: Array<{tagId: string}> };
 
 export const notes = pgTable("Note", {
   id: uuid("Id").defaultRandom().primaryKey(),

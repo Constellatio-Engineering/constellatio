@@ -23,7 +23,7 @@ export const MaterialTagsDrawer: FunctionComponent = () =>
     onError: () => console.log("error"),
     onSuccess: async (_data, variables) =>
     {
-      if(variables.entityType === "document")
+      if(variables.entityType === "user-documents")
       {
         await onDocumentMutation();
       }
@@ -69,13 +69,13 @@ export const MaterialTagsDrawer: FunctionComponent = () =>
       {editorState.state === "opened" && (
         <>
           <div css={styles.contentWrapper}>
-            {editorState.entity.entityType === "document" && (
+            {editorState.entity.entityType === "user-documents" && (
               <SlidingPanelFileTypeRow
                 variant="constellatioDocs"
                 title={editorState.entity.data.name}
               />
             )}
-            {editorState.entity.entityType === "file" && (
+            {editorState.entity.entityType === "user-uploads" && (
               <SlidingPanelFileTypeRow
                 variant="file"
                 fileName={editorState.entity.data.originalFilename}

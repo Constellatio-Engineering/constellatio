@@ -44,8 +44,8 @@ const handler: NextApiHandler = async (req, res) =>
 
   const allCases = await getAllCases();
   const allArticles = await getAllArticles();
-  const allUserUploads = await db.query.uploadedFiles.findMany();
-  const allUsersDocuments = await db.query.documents.findMany();
+  const allUserUploads = await db.query.uploadedFiles.findMany({ with: { tags: true } });
+  const allUsersDocuments = await db.query.documents.findMany({ with: { tags: true } });
   const allForumQuestions = await db.query.forumQuestions.findMany();
   const forumQuestionsToLegalFields = await db.query.forumQuestionsToLegalFields.findMany();
   const forumQuestionsToSubfields = await db.query.forumQuestionToSubfields.findMany();
@@ -61,8 +61,8 @@ const handler: NextApiHandler = async (req, res) =>
   const { createCasesIndexTaskId } = await addCasesToSearchIndex({
     caseIds: allCases.map(c => c.id).filter(Boolean),
   });
-  const { createUploadsIndexTaskId } = await addUserUploadsToSearchIndex({ uploads: allUserUploads });
-  const { createDocumentsIndexTaskId } = await addUserDocumentsToSearchIndex({ documents: allUsersDocuments });
+  const { createUploadsIndexTaskId } = await addUserUploadsToSearchIndex({ allTags, uploads: allUserUploads });
+  const { createDocumentsIndexTaskId } = await addUserDocumentsToSearchIndex({ allTags, documents: allUsersDocuments });
   const { createQuestionsIndexTaskId } = await addForumQuestionsToSearchIndex({
     allLegalFields,
     allSubfields,

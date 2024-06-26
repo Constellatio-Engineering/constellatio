@@ -13,12 +13,12 @@ type EditorClosed = {
 
 type GetDocumentResultEntity = {
   data: GetDocumentResult;
-  entityType: "document";
+  entityType: "user-documents";
 };
 
 type GetUploadedFileResultEntity = {
   data: GetUploadedFileResult;
-  entityType: "file";
+  entityType: "user-uploads";
 };
 
 type TagsEditorEntity = GetDocumentResultEntity | GetUploadedFileResultEntity;
