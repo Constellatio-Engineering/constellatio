@@ -5,5 +5,6 @@ export const f_Tags = gql`
 		__typename
 		id
 		tagName
+		isShownInitiallyBeforeSearch
 	}
 `;

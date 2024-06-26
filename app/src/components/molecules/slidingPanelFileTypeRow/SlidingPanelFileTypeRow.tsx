@@ -14,6 +14,12 @@ interface FileVariantProps
   variant: "file";
 }
 
+interface ConstellatioDocsProps
+{
+  title: string;
+  variant: "constellatioDocs";
+}
+
 interface DefaultVariantProps
 {
   label: string;
@@ -21,25 +27,37 @@ interface DefaultVariantProps
   variant: ILabelProps["variant"];
 }
 
-type Props = FileVariantProps | DefaultVariantProps;
+type Props = FileVariantProps | DefaultVariantProps | ConstellatioDocsProps;
 
 const SlidingPanelFileTypeRow: FunctionComponent<Props> = (props) =>
 {
-  return (
-    <div css={styles.wrapper}>
-      {props.variant === "file" ? (
-        <>
-          <MaterialsLabel variant="file" title={props.fileExtension}/>
-          <SubtitleText styleType="subtitle-01-medium">{props.fileName}</SubtitleText>
-        </>
-      ) : (
-        <>
-          <Label variant={props.variant} title={props.label}/>
-          <SubtitleText styleType="subtitle-01-medium">{props.title}</SubtitleText>
-        </>
-      )}
-    </div>
-  );
+  if(props.variant === "constellatioDocs")
+  {
+    return (
+      <div css={styles.wrapper}>
+        <MaterialsLabel variant="paper" title={"Constellatio Doc"}/>
+        <SubtitleText styleType="subtitle-01-medium">{props.title}</SubtitleText>
+      </div>
+    );
+  }
+  else if(props.variant === "file")
+  {
+    return (
+      <div css={styles.wrapper}>
+        <MaterialsLabel variant="file" title={props.fileExtension}/>
+        <SubtitleText styleType="subtitle-01-medium">{props.fileName}</SubtitleText>
+      </div>
+    );
+  }
+  else
+  {
+    return (
+      <div css={styles.wrapper}>
+        <Label variant={props.variant} title={props.label}/>
+        <SubtitleText styleType="subtitle-01-medium">{props.title}</SubtitleText>
+      </div>
+    );
+  }
 };
 
 export default SlidingPanelFileTypeRow;

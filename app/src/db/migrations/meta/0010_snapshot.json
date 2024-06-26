@@ -1,4 +1,6 @@
 {
+  "id": "977b95d7-3685-43f5-881c-5e182e3e3461",
+  "prevId": "5503d2a0-4850-4eae-ace2-d90659458508",
   "version": "6",
   "dialect": "postgresql",
   "tables": {
@@ -39,28 +41,28 @@
         "AnswerUpvote_UserId_User_Id_fk": {
           "name": "AnswerUpvote_UserId_User_Id_fk",
           "tableFrom": "AnswerUpvote",
+          "tableTo": "User",
           "columnsFrom": [
             "UserId"
           ],
-          "tableTo": "User",
           "columnsTo": [
             "Id"
           ],
-          "onUpdate": "no action",
-          "onDelete": "no action"
+          "onDelete": "no action",
+          "onUpdate": "no action"
         },
         "AnswerUpvote_AnswerId_ForumAnswer_Id_fk": {
           "name": "AnswerUpvote_AnswerId_ForumAnswer_Id_fk",
           "tableFrom": "AnswerUpvote",
+          "tableTo": "ForumAnswer",
           "columnsFrom": [
             "AnswerId"
           ],
-          "tableTo": "ForumAnswer",
           "columnsTo": [
             "Id"
           ],
-          "onUpdate": "no action",
-          "onDelete": "cascade"
+          "onDelete": "cascade",
+          "onUpdate": "no action"
         }
       },
       "compositePrimaryKeys": {
@@ -111,15 +113,15 @@
         "ArticleView_UserId_User_Id_fk": {
           "name": "ArticleView_UserId_User_Id_fk",
           "tableFrom": "ArticleView",
+          "tableTo": "User",
           "columnsFrom": [
             "UserId"
           ],
-          "tableTo": "User",
           "columnsTo": [
             "Id"
           ],
-          "onUpdate": "no action",
-          "onDelete": "no action"
+          "onDelete": "no action",
+          "onUpdate": "no action"
         }
       },
       "compositePrimaryKeys": {
@@ -147,6 +149,7 @@
         "Identifier": {
           "name": "Identifier",
           "type": "BadgeIdentifier",
+          "typeSchema": "public",
           "primaryKey": false,
           "notNull": true
         },
@@ -171,6 +174,7 @@
         "PublicationState": {
           "name": "PublicationState",
           "type": "BadgePublicationState",
+          "typeSchema": "public",
           "primaryKey": false,
           "notNull": true,
           "default": "'not-listed'"
@@ -182,10 +186,10 @@
       "uniqueConstraints": {
         "Badge_Identifier_unique": {
           "name": "Badge_Identifier_unique",
+          "nullsNotDistinct": false,
           "columns": [
             "Identifier"
-          ],
-          "nullsNotDistinct": false
+          ]
         }
       }
     },
@@ -209,6 +213,7 @@
         "ResourceType": {
           "name": "ResourceType",
           "type": "ResourceType",
+          "typeSchema": "public",
           "primaryKey": false,
           "notNull": true
         },
@@ -231,27 +236,27 @@
         "Bookmark_UserId_User_Id_fk": {
           "name": "Bookmark_UserId_User_Id_fk",
           "tableFrom": "Bookmark",
+          "tableTo": "User",
           "columnsFrom": [
             "UserId"
           ],
-          "tableTo": "User",
           "columnsTo": [
             "Id"
           ],
-          "onUpdate": "no action",
-          "onDelete": "no action"
+          "onDelete": "no action",
+          "onUpdate": "no action"
         }
       },
       "compositePrimaryKeys": {},
       "uniqueConstraints": {
         "Bookmark_UserId_ResourceType_ResourceId_unique": {
           "name": "Bookmark_UserId_ResourceType_ResourceId_unique",
+          "nullsNotDistinct": false,
           "columns": [
             "UserId",
             "ResourceType",
             "ResourceId"
-          ],
-          "nullsNotDistinct": false
+          ]
         }
       }
     },
@@ -274,6 +279,7 @@
         "ProgressState": {
           "name": "ProgressState",
           "type": "CaseProgressState",
+          "typeSchema": "public",
           "primaryKey": false,
           "notNull": true,
           "default": "'not-started'"
@@ -284,15 +290,15 @@
         "CaseProgress_UserId_User_Id_fk": {
           "name": "CaseProgress_UserId_User_Id_fk",
           "tableFrom": "CaseProgress",
+          "tableTo": "User",
           "columnsFrom": [
             "UserId"
           ],
-          "tableTo": "User",
           "columnsTo": [
             "Id"
           ],
-          "onUpdate": "no action",
-          "onDelete": "no action"
+          "onDelete": "no action",
+          "onUpdate": "no action"
         }
       },
       "compositePrimaryKeys": {
@@ -334,15 +340,15 @@
         "CaseSolution_UserId_User_Id_fk": {
           "name": "CaseSolution_UserId_User_Id_fk",
           "tableFrom": "CaseSolution",
+          "tableTo": "User",
           "columnsFrom": [
             "UserId"
           ],
-          "tableTo": "User",
           "columnsTo": [
             "Id"
           ],
-          "onUpdate": "no action",
-          "onDelete": "no action"
+          "onDelete": "no action",
+          "onUpdate": "no action"
         }
       },
       "compositePrimaryKeys": {
@@ -393,15 +399,15 @@
         "CaseView_UserId_User_Id_fk": {
           "name": "CaseView_UserId_User_Id_fk",
           "tableFrom": "CaseView",
+          "tableTo": "User",
           "columnsFrom": [
             "UserId"
           ],
-          "tableTo": "User",
           "columnsTo": [
             "Id"
           ],
-          "onUpdate": "no action",
-          "onDelete": "no action"
+          "onDelete": "no action",
+          "onUpdate": "no action"
         }
       },
       "compositePrimaryKeys": {
@@ -457,51 +463,51 @@
         "CorrectAnswer_ConfirmedByUserId_User_Id_fk": {
           "name": "CorrectAnswer_ConfirmedByUserId_User_Id_fk",
           "tableFrom": "CorrectAnswer",
+          "tableTo": "User",
           "columnsFrom": [
             "ConfirmedByUserId"
           ],
-          "tableTo": "User",
           "columnsTo": [
             "Id"
           ],
-          "onUpdate": "no action",
-          "onDelete": "no action"
+          "onDelete": "no action",
+          "onUpdate": "no action"
         },
         "CorrectAnswer_QuestionId_ForumQuestion_Id_fk": {
           "name": "CorrectAnswer_QuestionId_ForumQuestion_Id_fk",
           "tableFrom": "CorrectAnswer",
+          "tableTo": "ForumQuestion",
           "columnsFrom": [
             "QuestionId"
           ],
-          "tableTo": "ForumQuestion",
           "columnsTo": [
             "Id"
           ],
-          "onUpdate": "no action",
-          "onDelete": "cascade"
+          "onDelete": "cascade",
+          "onUpdate": "no action"
         },
         "CorrectAnswer_AnswerId_ForumAnswer_Id_fk": {
           "name": "CorrectAnswer_AnswerId_ForumAnswer_Id_fk",
           "tableFrom": "CorrectAnswer",
+          "tableTo": "ForumAnswer",
           "columnsFrom": [
             "AnswerId"
           ],
-          "tableTo": "ForumAnswer",
           "columnsTo": [
             "Id"
           ],
-          "onUpdate": "no action",
-          "onDelete": "cascade"
+          "onDelete": "cascade",
+          "onUpdate": "no action"
         }
       },
       "compositePrimaryKeys": {},
       "uniqueConstraints": {
         "CorrectAnswer_AnswerId_unique": {
           "name": "CorrectAnswer_AnswerId_unique",
+          "nullsNotDistinct": false,
           "columns": [
             "AnswerId"
-          ],
-          "nullsNotDistinct": false
+          ]
         }
       }
     },
@@ -560,31 +566,75 @@
         "Document_UserId_User_Id_fk": {
           "name": "Document_UserId_User_Id_fk",
           "tableFrom": "Document",
+          "tableTo": "User",
           "columnsFrom": [
             "UserId"
           ],
-          "tableTo": "User",
           "columnsTo": [
             "Id"
           ],
-          "onUpdate": "no action",
-          "onDelete": "no action"
+          "onDelete": "no action",
+          "onUpdate": "no action"
         },
         "Document_FolderId_UploadFolder_Id_fk": {
           "name": "Document_FolderId_UploadFolder_Id_fk",
           "tableFrom": "Document",
+          "tableTo": "UploadFolder",
           "columnsFrom": [
             "FolderId"
           ],
-          "tableTo": "UploadFolder",
           "columnsTo": [
             "Id"
           ],
-          "onUpdate": "no action",
-          "onDelete": "no action"
+          "onDelete": "no action",
+          "onUpdate": "no action"
         }
       },
       "compositePrimaryKeys": {},
+      "uniqueConstraints": {}
+    },
+    "public.Document_to_Tag": {
+      "name": "Document_to_Tag",
+      "schema": "",
+      "columns": {
+        "DocumentId": {
+          "name": "DocumentId",
+          "type": "uuid",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "TagId": {
+          "name": "TagId",
+          "type": "uuid",
+          "primaryKey": false,
+          "notNull": true
+        }
+      },
+      "indexes": {},
+      "foreignKeys": {
+        "Document_to_Tag_DocumentId_Document_Id_fk": {
+          "name": "Document_to_Tag_DocumentId_Document_Id_fk",
+          "tableFrom": "Document_to_Tag",
+          "tableTo": "Document",
+          "columnsFrom": [
+            "DocumentId"
+          ],
+          "columnsTo": [
+            "Id"
+          ],
+          "onDelete": "cascade",
+          "onUpdate": "no action"
+        }
+      },
+      "compositePrimaryKeys": {
+        "Document_to_Tag_DocumentId_TagId_pk": {
+          "name": "Document_to_Tag_DocumentId_TagId_pk",
+          "columns": [
+            "DocumentId",
+            "TagId"
+          ]
+        }
+      },
       "uniqueConstraints": {}
     },
     "public.ForumAnswer": {
@@ -648,41 +698,41 @@
         "ForumAnswer_UserId_User_Id_fk": {
           "name": "ForumAnswer_UserId_User_Id_fk",
           "tableFrom": "ForumAnswer",
+          "tableTo": "User",
           "columnsFrom": [
             "UserId"
           ],
-          "tableTo": "User",
           "columnsTo": [
             "Id"
           ],
-          "onUpdate": "no action",
-          "onDelete": "no action"
+          "onDelete": "no action",
+          "onUpdate": "no action"
         },
         "ForumAnswer_ParentQuestionId_ForumQuestion_Id_fk": {
           "name": "ForumAnswer_ParentQuestionId_ForumQuestion_Id_fk",
           "tableFrom": "ForumAnswer",
+          "tableTo": "ForumQuestion",
           "columnsFrom": [
             "ParentQuestionId"
           ],
-          "tableTo": "ForumQuestion",
           "columnsTo": [
             "Id"
           ],
-          "onUpdate": "no action",
-          "onDelete": "no action"
+          "onDelete": "no action",
+          "onUpdate": "no action"
         },
         "ForumAnswer_ParentAnswerId_ForumAnswer_Id_fk": {
           "name": "ForumAnswer_ParentAnswerId_ForumAnswer_Id_fk",
           "tableFrom": "ForumAnswer",
+          "tableTo": "ForumAnswer",
           "columnsFrom": [
             "ParentAnswerId"
           ],
-          "tableTo": "ForumAnswer",
           "columnsTo": [
             "Id"
           ],
-          "onUpdate": "no action",
-          "onDelete": "no action"
+          "onDelete": "no action",
+          "onUpdate": "no action"
         }
       },
       "compositePrimaryKeys": {},
@@ -710,15 +760,15 @@
         "ForumQuestion_to_Subfield_QuestionId_ForumQuestion_Id_fk": {
           "name": "ForumQuestion_to_Subfield_QuestionId_ForumQuestion_Id_fk",
           "tableFrom": "ForumQuestion_to_Subfield",
+          "tableTo": "ForumQuestion",
           "columnsFrom": [
             "QuestionId"
           ],
-          "tableTo": "ForumQuestion",
           "columnsTo": [
             "Id"
           ],
-          "onUpdate": "no action",
-          "onDelete": "cascade"
+          "onDelete": "cascade",
+          "onUpdate": "no action"
         }
       },
       "compositePrimaryKeys": {
@@ -754,15 +804,15 @@
         "ForumQuestion_to_Topic_QuestionId_ForumQuestion_Id_fk": {
           "name": "ForumQuestion_to_Topic_QuestionId_ForumQuestion_Id_fk",
           "tableFrom": "ForumQuestion_to_Topic",
+          "tableTo": "ForumQuestion",
           "columnsFrom": [
             "QuestionId"
           ],
-          "tableTo": "ForumQuestion",
           "columnsTo": [
             "Id"
           ],
-          "onUpdate": "no action",
-          "onDelete": "cascade"
+          "onDelete": "cascade",
+          "onUpdate": "no action"
         }
       },
       "compositePrimaryKeys": {
@@ -846,15 +896,15 @@
         "ForumQuestion_UserId_User_Id_fk": {
           "name": "ForumQuestion_UserId_User_Id_fk",
           "tableFrom": "ForumQuestion",
+          "tableTo": "User",
           "columnsFrom": [
             "UserId"
           ],
-          "tableTo": "User",
           "columnsTo": [
             "Id"
           ],
-          "onUpdate": "no action",
-          "onDelete": "no action"
+          "onDelete": "no action",
+          "onUpdate": "no action"
         }
       },
       "compositePrimaryKeys": {},
@@ -882,15 +932,15 @@
         "ForumQuestion_to_LegalField_QuestionId_ForumQuestion_Id_fk": {
           "name": "ForumQuestion_to_LegalField_QuestionId_ForumQuestion_Id_fk",
           "tableFrom": "ForumQuestion_to_LegalField",
+          "tableTo": "ForumQuestion",
           "columnsFrom": [
             "QuestionId"
           ],
-          "tableTo": "ForumQuestion",
           "columnsTo": [
             "Id"
           ],
-          "onUpdate": "no action",
-          "onDelete": "cascade"
+          "onDelete": "cascade",
+          "onUpdate": "no action"
         }
       },
       "compositePrimaryKeys": {
@@ -923,6 +973,7 @@
         "ProgressState": {
           "name": "ProgressState",
           "type": "GameProgressState",
+          "typeSchema": "public",
           "primaryKey": false,
           "notNull": true,
           "default": "'not-started'"
@@ -933,15 +984,15 @@
         "GameProgress_UserId_User_Id_fk": {
           "name": "GameProgress_UserId_User_Id_fk",
           "tableFrom": "GameProgress",
+          "tableTo": "User",
           "columnsFrom": [
             "UserId"
           ],
-          "tableTo": "User",
           "columnsTo": [
             "Id"
           ],
-          "onUpdate": "no action",
-          "onDelete": "no action"
+          "onDelete": "no action",
+          "onUpdate": "no action"
         }
       },
       "compositePrimaryKeys": {
@@ -1004,28 +1055,28 @@
         "Note_UserId_User_Id_fk": {
           "name": "Note_UserId_User_Id_fk",
           "tableFrom": "Note",
+          "tableTo": "User",
           "columnsFrom": [
             "UserId"
           ],
-          "tableTo": "User",
           "columnsTo": [
             "Id"
           ],
-          "onUpdate": "no action",
-          "onDelete": "no action"
+          "onDelete": "no action",
+          "onUpdate": "no action"
         },
         "Note_FileId_UploadedFile_Id_fk": {
           "name": "Note_FileId_UploadedFile_Id_fk",
           "tableFrom": "Note",
+          "tableTo": "UploadedFile",
           "columnsFrom": [
             "FileId"
           ],
-          "tableTo": "UploadedFile",
           "columnsTo": [
             "Id"
           ],
-          "onUpdate": "no action",
-          "onDelete": "no action"
+          "onDelete": "no action",
+          "onUpdate": "no action"
         }
       },
       "compositePrimaryKeys": {},
@@ -1035,9 +1086,10 @@
       "name": "NotificationType",
       "schema": "",
       "columns": {
-        "NotificationTypeIdentifier": {
-          "name": "NotificationTypeIdentifier",
-          "type": "NotificationTypeIdentifier",
+        "NotificationType": {
+          "name": "NotificationType",
+          "type": "NotificationType",
+          "typeSchema": "public",
           "primaryKey": true,
           "notNull": true
         },
@@ -1094,9 +1146,10 @@
           "primaryKey": false,
           "notNull": false
         },
-        "NotificationTypeIdentifier": {
-          "name": "NotificationTypeIdentifier",
-          "type": "NotificationTypeIdentifier",
+        "Type": {
+          "name": "Type",
+          "type": "NotificationType",
+          "typeSchema": "public",
           "primaryKey": false,
           "notNull": true
         },
@@ -1119,41 +1172,41 @@
         "Notification_RecipientId_User_Id_fk": {
           "name": "Notification_RecipientId_User_Id_fk",
           "tableFrom": "Notification",
+          "tableTo": "User",
           "columnsFrom": [
             "RecipientId"
           ],
-          "tableTo": "User",
           "columnsTo": [
             "Id"
           ],
-          "onUpdate": "no action",
-          "onDelete": "no action"
+          "onDelete": "no action",
+          "onUpdate": "no action"
         },
         "Notification_SenderId_User_Id_fk": {
           "name": "Notification_SenderId_User_Id_fk",
           "tableFrom": "Notification",
+          "tableTo": "User",
           "columnsFrom": [
             "SenderId"
           ],
-          "tableTo": "User",
           "columnsTo": [
             "Id"
           ],
-          "onUpdate": "no action",
-          "onDelete": "no action"
+          "onDelete": "no action",
+          "onUpdate": "no action"
         },
-        "Notification_NotificationTypeIdentifier_NotificationType_NotificationTypeIdentifier_fk": {
-          "name": "Notification_NotificationTypeIdentifier_NotificationType_NotificationTypeIdentifier_fk",
+        "Notification_Type_NotificationType_NotificationType_fk": {
+          "name": "Notification_Type_NotificationType_NotificationType_fk",
           "tableFrom": "Notification",
-          "columnsFrom": [
-            "NotificationTypeIdentifier"
-          ],
           "tableTo": "NotificationType",
-          "columnsTo": [
-            "NotificationTypeIdentifier"
+          "columnsFrom": [
+            "Type"
           ],
-          "onUpdate": "no action",
-          "onDelete": "no action"
+          "columnsTo": [
+            "NotificationType"
+          ],
+          "onDelete": "no action",
+          "onUpdate": "no action"
         }
       },
       "compositePrimaryKeys": {},
@@ -1214,15 +1267,15 @@
         "Ping_UserId_User_Id_fk": {
           "name": "Ping_UserId_User_Id_fk",
           "tableFrom": "Ping",
+          "tableTo": "User",
           "columnsFrom": [
             "UserId"
           ],
-          "tableTo": "User",
           "columnsTo": [
             "Id"
           ],
-          "onUpdate": "no action",
-          "onDelete": "cascade"
+          "onDelete": "cascade",
+          "onUpdate": "no action"
         }
       },
       "compositePrimaryKeys": {},
@@ -1247,12 +1300,14 @@
         "FileExtension": {
           "name": "FileExtension",
           "type": "ImageFileExtension",
+          "typeSchema": "public",
           "primaryKey": false,
           "notNull": true
         },
         "ContentType": {
           "name": "ContentType",
           "type": "ImageFileMimeType",
+          "typeSchema": "public",
           "primaryKey": false,
           "notNull": true
         },
@@ -1268,25 +1323,25 @@
         "ProfilePicture_UserId_User_Id_fk": {
           "name": "ProfilePicture_UserId_User_Id_fk",
           "tableFrom": "ProfilePicture",
+          "tableTo": "User",
           "columnsFrom": [
             "UserId"
           ],
-          "tableTo": "User",
           "columnsTo": [
             "Id"
           ],
-          "onUpdate": "no action",
-          "onDelete": "no action"
+          "onDelete": "no action",
+          "onUpdate": "no action"
         }
       },
       "compositePrimaryKeys": {},
       "uniqueConstraints": {
         "ProfilePicture_UserId_unique": {
           "name": "ProfilePicture_UserId_unique",
+          "nullsNotDistinct": false,
           "columns": [
             "UserId"
-          ],
-          "nullsNotDistinct": false
+          ]
         }
       }
     },
@@ -1327,28 +1382,28 @@
         "QuestionUpvote_UserId_User_Id_fk": {
           "name": "QuestionUpvote_UserId_User_Id_fk",
           "tableFrom": "QuestionUpvote",
+          "tableTo": "User",
           "columnsFrom": [
             "UserId"
           ],
-          "tableTo": "User",
           "columnsTo": [
             "Id"
           ],
-          "onUpdate": "no action",
-          "onDelete": "no action"
+          "onDelete": "no action",
+          "onUpdate": "no action"
         },
         "QuestionUpvote_QuestionId_ForumQuestion_Id_fk": {
           "name": "QuestionUpvote_QuestionId_ForumQuestion_Id_fk",
           "tableFrom": "QuestionUpvote",
+          "tableTo": "ForumQuestion",
           "columnsFrom": [
             "QuestionId"
           ],
-          "tableTo": "ForumQuestion",
           "columnsTo": [
             "Id"
           ],
-          "onUpdate": "no action",
-          "onDelete": "cascade"
+          "onDelete": "cascade",
+          "onUpdate": "no action"
         }
       },
       "compositePrimaryKeys": {
@@ -1369,19 +1424,36 @@
         "CmsId": {
           "name": "CmsId",
           "type": "uuid",
-          "primaryKey": true,
+          "primaryKey": false,
           "notNull": true
         },
-        "ResourceType": {
-          "name": "ResourceType",
+        "SearchIndexType": {
+          "name": "SearchIndexType",
           "type": "SearchIndexType",
+          "typeSchema": "public",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "EventType": {
+          "name": "EventType",
+          "type": "CaisyWebhookEventType",
+          "typeSchema": "public",
           "primaryKey": false,
           "notNull": true
         }
       },
       "indexes": {},
       "foreignKeys": {},
-      "compositePrimaryKeys": {},
+      "compositePrimaryKeys": {
+        "SearchIndexUpdateQueue_CmsId_SearchIndexType_EventType_pk": {
+          "name": "SearchIndexUpdateQueue_CmsId_SearchIndexType_EventType_pk",
+          "columns": [
+            "CmsId",
+            "SearchIndexType",
+            "EventType"
+          ]
+        }
+      },
       "uniqueConstraints": {}
     },
     "public.UploadFolder": {
@@ -1420,15 +1492,15 @@
         "UploadFolder_UserId_User_Id_fk": {
           "name": "UploadFolder_UserId_User_Id_fk",
           "tableFrom": "UploadFolder",
+          "tableTo": "User",
           "columnsFrom": [
             "UserId"
           ],
-          "tableTo": "User",
           "columnsTo": [
             "Id"
           ],
-          "onUpdate": "no action",
-          "onDelete": "no action"
+          "onDelete": "no action",
+          "onUpdate": "no action"
         }
       },
       "compositePrimaryKeys": {},
@@ -1485,12 +1557,14 @@
         "FileExtension": {
           "name": "FileExtension",
           "type": "FileExtension",
+          "typeSchema": "public",
           "primaryKey": false,
           "notNull": true
         },
         "ContentType": {
           "name": "ContentType",
           "type": "FileMimeType",
+          "typeSchema": "public",
           "primaryKey": false,
           "notNull": true
         }
@@ -1500,31 +1574,75 @@
         "UploadedFile_UserId_User_Id_fk": {
           "name": "UploadedFile_UserId_User_Id_fk",
           "tableFrom": "UploadedFile",
+          "tableTo": "User",
           "columnsFrom": [
             "UserId"
           ],
-          "tableTo": "User",
           "columnsTo": [
             "Id"
           ],
-          "onUpdate": "no action",
-          "onDelete": "no action"
+          "onDelete": "no action",
+          "onUpdate": "no action"
         },
         "UploadedFile_FolderId_UploadFolder_Id_fk": {
           "name": "UploadedFile_FolderId_UploadFolder_Id_fk",
           "tableFrom": "UploadedFile",
+          "tableTo": "UploadFolder",
           "columnsFrom": [
             "FolderId"
           ],
-          "tableTo": "UploadFolder",
           "columnsTo": [
             "Id"
           ],
-          "onUpdate": "no action",
-          "onDelete": "no action"
+          "onDelete": "no action",
+          "onUpdate": "no action"
         }
       },
       "compositePrimaryKeys": {},
+      "uniqueConstraints": {}
+    },
+    "public.UploadedFile_to_Tag": {
+      "name": "UploadedFile_to_Tag",
+      "schema": "",
+      "columns": {
+        "FileId": {
+          "name": "FileId",
+          "type": "uuid",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "TagId": {
+          "name": "TagId",
+          "type": "uuid",
+          "primaryKey": false,
+          "notNull": true
+        }
+      },
+      "indexes": {},
+      "foreignKeys": {
+        "UploadedFile_to_Tag_FileId_UploadedFile_Id_fk": {
+          "name": "UploadedFile_to_Tag_FileId_UploadedFile_Id_fk",
+          "tableFrom": "UploadedFile_to_Tag",
+          "tableTo": "UploadedFile",
+          "columnsFrom": [
+            "FileId"
+          ],
+          "columnsTo": [
+            "Id"
+          ],
+          "onDelete": "cascade",
+          "onUpdate": "no action"
+        }
+      },
+      "compositePrimaryKeys": {
+        "UploadedFile_to_Tag_FileId_TagId_pk": {
+          "name": "UploadedFile_to_Tag_FileId_TagId_pk",
+          "columns": [
+            "FileId",
+            "TagId"
+          ]
+        }
+      },
       "uniqueConstraints": {}
     },
     "public.UserRole": {
@@ -1541,6 +1659,7 @@
         "Identifier": {
           "name": "Identifier",
           "type": "Role",
+          "typeSchema": "public",
           "primaryKey": false,
           "notNull": true
         },
@@ -1571,10 +1690,10 @@
       "uniqueConstraints": {
         "UserRole_Identifier_unique": {
           "name": "UserRole_Identifier_unique",
+          "nullsNotDistinct": false,
           "columns": [
             "Identifier"
-          ],
-          "nullsNotDistinct": false
+          ]
         }
       }
     },
@@ -1609,6 +1728,7 @@
         "Gender": {
           "name": "Gender",
           "type": "Gender",
+          "typeSchema": "public",
           "primaryKey": false,
           "notNull": false
         },
@@ -1639,12 +1759,14 @@
         "OnboardingResult": {
           "name": "OnboardingResult",
           "type": "OnboardingResult",
+          "typeSchema": "public",
           "primaryKey": false,
           "notNull": false
         },
         "SubscriptionStatus": {
           "name": "SubscriptionStatus",
           "type": "SubscriptionStatus",
+          "typeSchema": "public",
           "primaryKey": false,
           "notNull": false
         },
@@ -1661,10 +1783,10 @@
       "uniqueConstraints": {
         "User_Email_unique": {
           "name": "User_Email_unique",
+          "nullsNotDistinct": false,
           "columns": [
             "Email"
-          ],
-          "nullsNotDistinct": false
+          ]
         }
       }
     },
@@ -1687,6 +1809,7 @@
         "UserBadgeState": {
           "name": "UserBadgeState",
           "type": "UserBadgeState",
+          "typeSchema": "public",
           "primaryKey": false,
           "notNull": true,
           "default": "'not-seen'"
@@ -1697,28 +1820,28 @@
         "User_to_Badge_UserId_User_Id_fk": {
           "name": "User_to_Badge_UserId_User_Id_fk",
           "tableFrom": "User_to_Badge",
+          "tableTo": "User",
           "columnsFrom": [
             "UserId"
           ],
-          "tableTo": "User",
           "columnsTo": [
             "Id"
           ],
-          "onUpdate": "no action",
-          "onDelete": "no action"
+          "onDelete": "no action",
+          "onUpdate": "no action"
         },
         "User_to_Badge_BadgeId_Badge_Id_fk": {
           "name": "User_to_Badge_BadgeId_Badge_Id_fk",
           "tableFrom": "User_to_Badge",
+          "tableTo": "Badge",
           "columnsFrom": [
             "BadgeId"
           ],
-          "tableTo": "Badge",
           "columnsTo": [
             "Id"
           ],
-          "onUpdate": "no action",
-          "onDelete": "no action"
+          "onDelete": "no action",
+          "onUpdate": "no action"
         }
       },
       "compositePrimaryKeys": {
@@ -1754,28 +1877,28 @@
         "User_to_Role_UserId_User_Id_fk": {
           "name": "User_to_Role_UserId_User_Id_fk",
           "tableFrom": "User_to_Role",
+          "tableTo": "User",
           "columnsFrom": [
             "UserId"
           ],
-          "tableTo": "User",
           "columnsTo": [
             "Id"
           ],
-          "onUpdate": "no action",
-          "onDelete": "no action"
+          "onDelete": "no action",
+          "onUpdate": "no action"
         },
         "User_to_Role_RoleId_UserRole_Id_fk": {
           "name": "User_to_Role_RoleId_UserRole_Id_fk",
           "tableFrom": "User_to_Role",
+          "tableTo": "UserRole",
           "columnsFrom": [
             "RoleId"
           ],
-          "tableTo": "UserRole",
           "columnsTo": [
             "Id"
           ],
-          "onUpdate": "no action",
-          "onDelete": "no action"
+          "onDelete": "no action",
+          "onUpdate": "no action"
         }
       },
       "compositePrimaryKeys": {
@@ -1835,6 +1958,14 @@
         "not-listed",
         "coming-soon",
         "published"
+      ]
+    },
+    "public.CaisyWebhookEventType": {
+      "name": "CaisyWebhookEventType",
+      "schema": "public",
+      "values": [
+        "upsert",
+        "delete"
       ]
     },
     "public.CaseProgressState": {
@@ -1914,8 +2045,8 @@
         "image/png"
       ]
     },
-    "public.NotificationTypeIdentifier": {
-      "name": "NotificationTypeIdentifier",
+    "public.NotificationType": {
+      "name": "NotificationType",
       "schema": "public",
       "values": [
         "forumQuestionPosted",
@@ -1955,8 +2086,12 @@
       "name": "SearchIndexType",
       "schema": "public",
       "values": [
-        "article",
-        "case"
+        "articles",
+        "cases",
+        "forum-questions",
+        "tags",
+        "user-documents",
+        "user-uploads"
       ]
     },
     "public.SubscriptionStatus": {
@@ -1984,10 +2119,8 @@
   },
   "schemas": {},
   "_meta": {
+    "columns": {},
     "schemas": {},
-    "tables": {},
-    "columns": {}
-  },
-  "id": "86cb6b24-5a1e-47d4-89df-bc6a5a64d53a",
-  "prevId": "5503d2a0-4850-4eae-ace2-d90659458508"
+    "tables": {}
+  }
 }

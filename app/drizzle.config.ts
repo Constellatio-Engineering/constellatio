@@ -1,7 +1,7 @@
 /* eslint-disable import/no-unused-modules */
 
 // import dotenv from "dotenv";
-import type { Config } from "drizzle-kit";
+import { defineConfig } from "drizzle-kit";
 
 import * as process from "process";
 
@@ -16,14 +16,14 @@ if(!connectionString)
 
 console.log("drizzle.config.ts: connectionString", connectionString);
 
-const config: Config = {
+export default defineConfig({
   dbCredentials: {
     url: connectionString,
   },
   dialect: "postgresql",
   out: "./src/db/migrations",
   schema: "./src/db/schema.ts",
-  strict: true,
-};
-
-export default config;
+  schemaFilter: ["public"],
+  strict: false,
+  verbose: true,
+});

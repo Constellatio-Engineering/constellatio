@@ -6,10 +6,13 @@ import { ImageIcon } from "@/components/Icons/image";
 import { Notepad } from "@/components/Icons/Notepad";
 import { NotepadFilled } from "@/components/Icons/NotepadFilled";
 import { VideoIcon } from "@/components/Icons/Video";
-import { type UploadedFile, type UploadedFileWithNote } from "@/db/schema";
+import { UnstyledButton } from "@/components/molecules/unstyledButton/UnstyledButton";
+import { type UploadedFile } from "@/db/schema";
+import { type UploadedFileWithNote } from "@/hooks/useUploadedFilesWithNotes";
 import useUploadFolders from "@/hooks/useUploadFolders";
 import useMaterialsStore from "@/stores/materials.store";
 import useNoteEditorStore from "@/stores/noteEditor.store";
+import { useTagsEditorStore } from "@/stores/tagsEditor.store";
 import { getFolderName } from "@/utils/folders";
 
 import {
@@ -60,6 +63,7 @@ const UploadedMaterialTableBody: FunctionComponent<UploadedMaterialTableBodyProp
   variant = "personalSpace",
 }) => 
 {
+  const openTagsDrawer = useTagsEditorStore(s => s.openEditor);
   const theme = useMantineTheme();
   const { setSelectedFileIdForPreview, setShowFileViewerModal } = useMaterialsStore();
   const setViewNoteState = useNoteEditorStore(s => s.setViewNoteState);
@@ -90,8 +94,19 @@ const UploadedMaterialTableBody: FunctionComponent<UploadedMaterialTableBodyProp
                 {file.fileExtension && fileNameIcon(file)}{file?.originalFilename}
               </BodyText>
             </td>
-            <td css={styles.docDate}><BodyText styleType="body-01-medium" component="p">{file && file.createdAt && formatDate(file.createdAt)}</BodyText></td>
-            {/* <td css={styles.docTags}><BodyText styleType="body-02-medium" component="p"/></td> */}
+            <td css={styles.docDate}>
+              <BodyText styleType="body-01-medium" component="p">
+                {file && file.createdAt && formatDate(file.createdAt)}
+              </BodyText>
+            </td>
+            <td css={styles.docTags}>
+              <UnstyledButton onClick={() => openTagsDrawer({
+                data: file,
+                entityType: "user-uploads"
+              })}>
+                <BodyText styleType="body-02-medium" component="p">Tags ({file.tags.length})</BodyText>
+              </UnstyledButton>
+            </td>
             {variant === "personalSpace" && (
               <td
                 css={styles.cellNote}

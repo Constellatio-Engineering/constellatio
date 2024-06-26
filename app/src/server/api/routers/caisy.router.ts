@@ -1,4 +1,4 @@
-import { getAllLegalFields, getAllSubfields, getAllTopics } from "@/server/api/services/caisy.services";
+import { getAllLegalFields, getAllSubfields, getAllTopics, getInitialTags } from "@/server/api/services/caisy.services";
 import { createTRPCRouter, protectedProcedure } from "@/server/api/trpc";
 import getAllArticles from "@/services/content/getAllArticles";
 import getAllCases from "@/services/content/getAllCases";
@@ -9,4 +9,5 @@ export const caisyRouter = createTRPCRouter({
   getAllLegalFields: protectedProcedure.query(getAllLegalFields),
   getAllSubfields: protectedProcedure.query(getAllSubfields),
   getAllTopics: protectedProcedure.query(getAllTopics),
+  getInitialTags: protectedProcedure.query(getInitialTags),
 });

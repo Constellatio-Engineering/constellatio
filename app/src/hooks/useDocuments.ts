@@ -1,4 +1,4 @@
-import { type Document } from "@/db/schema";
+import { type GetDocumentsResult } from "@/server/api/routers/documents.router";
 import useMaterialsStore from "@/stores/materials.store";
 import { api } from "@/utils/api";
 import { type UseQueryResult } from "@/utils/types";
@@ -6,8 +6,8 @@ import { type UseQueryResult } from "@/utils/types";
 import { keepPreviousData } from "@tanstack/react-query";
 
 type UseDocuments = () => UseQueryResult<{
-  documentsInAllFolders: Document[];
-  documentsInSelectedFolder: Document[];
+  documentsInAllFolders: GetDocumentsResult;
+  documentsInSelectedFolder: GetDocumentsResult;
   isRefetching: boolean;
 }>;
 
@@ -22,11 +22,13 @@ const useDocuments: UseDocuments = () =>
     isRefetching
   } = api.documents.getDocuments.useQuery({ folderId: undefined }, {
     placeholderData: keepPreviousData,
+    refetchInterval: 3000,
     refetchOnMount: "always",
-    staleTime: Infinity
+    // staleTime: Infinity,
+    staleTime: 0,
   });
-  
-  return { 
+
+  return {
     documentsInAllFolders: documents ?? [],
     documentsInSelectedFolder: (
       selectedFolderId === undefined

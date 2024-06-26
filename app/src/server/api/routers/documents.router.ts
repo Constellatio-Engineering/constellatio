@@ -1,16 +1,18 @@
 import { db } from "@/db/connection";
-import { type DocumentInsert, documents, uploadedFiles } from "@/db/schema";
+import { type DocumentInsert, documents } from "@/db/schema";
 import { meiliSearchAdmin } from "@/lib/meilisearch";
 import { createDocumentSchema } from "@/schemas/documents/createDocument.schema";
 import { deleteDocumentSchema } from "@/schemas/documents/deleteDocument.schema";
 import { getDocumentsSchema } from "@/schemas/documents/getDocuments.schema";
 import { updateDocumentSchema } from "@/schemas/documents/updateDocument.schema";
+import { addTags } from "@/server/api/services/tags.services";
 import { createTRPCRouter, protectedProcedure } from "@/server/api/trpc";
 import {
   createDocumentSearchIndexItem, documentSearchIndexItemPrimaryKey, type DocumentSearchItemUpdate, searchIndices
 } from "@/utils/search";
 import { removeHtmlTagsFromString } from "@/utils/utils";
 
+import { type inferProcedureOutput } from "@trpc/server";
 import {
   and, desc, eq, isNull, type SQLWrapper 
 } from "drizzle-orm";
@@ -32,6 +34,7 @@ export const documentsRouter = createTRPCRouter({
         createdAt: insertedDocument[0]!.createdAt,
         folderId: documentInsert.folderId || null,
         id: insertedDocument[0]!.id,
+        tags: [],
         updatedAt: insertedDocument[0]!.updatedAt,
       });
 
@@ -74,7 +77,7 @@ export const documentsRouter = createTRPCRouter({
     .input(getDocumentsSchema)
     .query(async ({ ctx: { userId }, input: { folderId } }) =>
     {
-      const queryConditions: SQLWrapper[] = [eq(uploadedFiles.userId, userId)];
+      const queryConditions: SQLWrapper[] = [eq(documents.userId, userId)];
 
       if(folderId)
       {
@@ -85,10 +88,14 @@ export const documentsRouter = createTRPCRouter({
         queryConditions.push(isNull(documents.folderId));
       }
 
-      return db.query.documents.findMany({
+      const documentsFromDb = await db.query.documents.findMany({
         orderBy: [desc(documents.updatedAt)],
-        where: and(...queryConditions)
+        where: and(...queryConditions),
+        with: { tags: true }
       });
+
+      const documentsWithTags = await addTags(documentsFromDb);
+      return documentsWithTags;
     }),
   updateDocument: protectedProcedure
     .input(updateDocumentSchema)
@@ -133,3 +140,6 @@ export const documentsRouter = createTRPCRouter({
       return updatedDocument;
     })
 });
+
+export type GetDocumentsResult = inferProcedureOutput<typeof documentsRouter.getDocuments>;
+export type GetDocumentResult = GetDocumentsResult[number];

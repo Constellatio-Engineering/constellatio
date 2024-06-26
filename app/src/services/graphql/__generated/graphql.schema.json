@@ -8751,6 +8751,18 @@
             "deprecationReason": null
           },
           {
+            "name": "isShownInitiallyBeforeSearch",
+            "description": "",
+            "args": [],
+            "type": {
+              "kind": "SCALAR",
+              "name": "Boolean",
+              "ofType": null
+            },
+            "isDeprecated": false,
+            "deprecationReason": null
+          },
+          {
             "name": "tagName",
             "description": "",
             "args": [],
@@ -8893,6 +8905,18 @@
             "deprecationReason": null
           },
           {
+            "name": "isShownInitiallyBeforeSearch",
+            "description": "",
+            "type": {
+              "kind": "SCALAR",
+              "name": "Boolean",
+              "ofType": null
+            },
+            "defaultValue": null,
+            "isDeprecated": false,
+            "deprecationReason": null
+          },
+          {
             "name": "tagName",
             "description": "",
             "type": {
@@ -8929,6 +8953,18 @@
           },
           {
             "name": "id",
+            "description": "",
+            "type": {
+              "kind": "ENUM",
+              "name": "Order",
+              "ofType": null
+            },
+            "defaultValue": null,
+            "isDeprecated": false,
+            "deprecationReason": null
+          },
+          {
+            "name": "isShownInitiallyBeforeSearch",
             "description": "",
             "type": {
               "kind": "ENUM",
@@ -9013,6 +9049,18 @@
                 "name": "Tags_Where",
                 "ofType": null
               }
+            },
+            "defaultValue": null,
+            "isDeprecated": false,
+            "deprecationReason": null
+          },
+          {
+            "name": "isShownInitiallyBeforeSearch",
+            "description": "",
+            "type": {
+              "kind": "SCALAR",
+              "name": "Boolean",
+              "ofType": null
             },
             "defaultValue": null,
             "isDeprecated": false,

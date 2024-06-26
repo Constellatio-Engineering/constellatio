@@ -4,7 +4,9 @@ export const getAllCasesById = gql`
   query getAllCasesById($ids: [ID!]!) {
     allCase(
       where: {
-        
+        tags: {
+          
+        }
       }
     ) {
       totalCount

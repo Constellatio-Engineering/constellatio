@@ -6,10 +6,12 @@ import { DownloadIcon } from "@/components/Icons/DownloadIcon";
 import { Edit } from "@/components/Icons/Edit";
 import { FolderIcon } from "@/components/Icons/Folder";
 import { Trash } from "@/components/Icons/Trash";
-import { type Document } from "@/db/schema";
+import { UnstyledButton } from "@/components/molecules/unstyledButton/UnstyledButton";
 import { useOnDocumentMutation } from "@/hooks/useOnDocumentMutation";
 import useUploadFolders from "@/hooks/useUploadFolders";
+import { type GetDocumentResult } from "@/server/api/routers/documents.router";
 import useDocumentEditorStore from "@/stores/documentEditor.store";
+import { useTagsEditorStore } from "@/stores/tagsEditor.store";
 import { api } from "@/utils/api";
 import { getFolderName } from "@/utils/folders";
 import { apiPaths } from "@/utils/paths";
@@ -29,15 +31,17 @@ import MoveToModal from "../moveToModal/MoveToModal";
 
 const formatDate = (date: Date): string => `${String(date.getDate()).padStart(2, "0")}.${String(date.getMonth() + 1).padStart(2, "0")}.${date.getFullYear()}`;
 
-export const DocsTableData: FunctionComponent<Document> = (doc) =>
+export const DocsTableData: FunctionComponent<GetDocumentResult> = (doc) =>
 {
   const {
     folderId,
     id: documentId,
     name,
+    tags,
     updatedAt
   } = doc;
 
+  const openTagsDrawer = useTagsEditorStore(s => s.openEditor);
   const { onDocumentMutation } = useOnDocumentMutation();
   const downloadDocumentNotificationId = `downloading-document${documentId}`;
   const { setEditDocumentState, setViewDocumentState } = useDocumentEditorStore(s => s);
@@ -112,8 +116,17 @@ export const DocsTableData: FunctionComponent<Document> = (doc) =>
         onClick={() => setViewDocumentState(doc)}>
         <BodyText styleType="body-01-medium" component="p">{name}</BodyText>
       </td>
-      <td css={styles.docDate}><BodyText styleType="body-01-medium" component="p">{formatDate(updatedAt)}</BodyText></td>
-      {/* <td css={styles.docTags}><BodyText styleType="body-02-medium" component="p"/></td> */}
+      <td css={styles.docDate}>
+        <BodyText styleType="body-01-medium" component="p">{formatDate(updatedAt)}</BodyText>
+      </td>
+      <td css={styles.docTags}>
+        <UnstyledButton onClick={() => openTagsDrawer({
+          data: doc,
+          entityType: "user-documents"
+        })}>
+          <BodyText styleType="body-02-medium" component="p">Tags ({tags.length ?? 0})</BodyText>
+        </UnstyledButton>
+      </td>
       <td css={styles.cellFolder}>
         <BodyText
           styleType="body-02-medium"
