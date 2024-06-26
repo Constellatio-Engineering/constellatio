@@ -4,7 +4,6 @@ import { api } from "@/utils/api";
 import { type UseQueryResult } from "@/utils/types";
 
 import { keepPreviousData } from "@tanstack/react-query";
-import { useEffect } from "react";
 
 type UseDocuments = () => UseQueryResult<{
   documentsInAllFolders: GetDocumentsResult;

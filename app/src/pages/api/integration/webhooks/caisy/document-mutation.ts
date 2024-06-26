@@ -1,9 +1,11 @@
 /* eslint-disable max-lines */
-import { type CaisyWebhookEventType } from "@/db/schema";
+import { db } from "@/db/connection";
+import { type CaisyWebhookEventType, documentsToTags, uploadedFilesToTags } from "@/db/schema";
 import { env } from "@/env.mjs";
 import { addArticlesAndCasesToSearchQueue, addContentToSearchQueue } from "@/server/api/services/search.services";
 import { caisySDK } from "@/services/graphql/getSdk";
 
+import { eq } from "drizzle-orm";
 import { type NextApiHandler } from "next";
 import { z, ZodError } from "zod";
 
@@ -103,10 +105,9 @@ const handler: NextApiHandler = async (req, res): Promise<void> =>
     }
     case env.CAISY_TAG_BLUEPRINT_ID:
     {
-      // TODO: Update docs and uploads with this tag, they also need to be added to the search index update queue
-
       const { Tags: Tag } = await caisySDK.getTagsById({ id: documentId });
       const tagName = Tag?.tagName;
+      const tagId = documentId;
 
       if(!tagName)
       {
@@ -118,12 +119,30 @@ const handler: NextApiHandler = async (req, res): Promise<void> =>
 
       const articlesWithTag = await caisySDK.getAllArticlesByTag({ tagName });
       const casesWithTag = await caisySDK.getAllCasesByTag({ tagName });
+      const documentsWithTag = await db.query.documentsToTags.findMany({
+        where: eq(documentsToTags.tagId, tagId)
+      });
+      const uploadsWithTag = await db.query.uploadedFilesToTags.findMany({
+        where: eq(uploadedFilesToTags.tagId, tagId)
+      });
 
       console.log(`Found ${articlesWithTag?.allArticle?.totalCount} articles with tag ${tagName}. Adding them to the search index update queue...`);
       console.log(`Found ${casesWithTag?.allCase?.totalCount} cases with tag ${tagName}. Adding them to the search index update queue...`);
+      console.log(`Found ${documentsWithTag.length} documents with tag ${tagName}. Adding them to the search index update queue...`);
+      console.log(`Found ${uploadsWithTag.length} uploads with tag ${tagName}. Adding them to the search index update queue...`);
 
       await addArticlesAndCasesToSearchQueue({ articles: articlesWithTag, cases: casesWithTag, eventType: "upsert" });
       await addContentToSearchQueue({ cmsId: documentId, eventType, searchIndexType: "tags" });
+      await addContentToSearchQueue(documentsWithTag.map(({ documentId }) => ({
+        cmsId: documentId,
+        eventType: "upsert",
+        searchIndexType: "user-documents"
+      })));
+      await addContentToSearchQueue(uploadsWithTag.map(({ fileId }) => ({
+        cmsId: fileId,
+        eventType: "upsert",
+        searchIndexType: "user-uploads"
+      })));
 
       break;
     }

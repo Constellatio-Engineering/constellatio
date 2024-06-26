@@ -39,6 +39,7 @@ export const getAllTopics = async (): Promise<IGenTopic[]> =>
   return topics;
 };
 
+// eslint-disable-next-line import/no-unused-modules
 export const getAllSubCategories = async (): Promise<IGenSubCategory[]> =>
 {
   const allSubCategoriesRes = await caisySDK.getAllSubCategory();

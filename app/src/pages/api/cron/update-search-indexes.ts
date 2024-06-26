@@ -1,10 +1,12 @@
+/* eslint-disable max-lines */
 import { db } from "@/db/connection";
-import { searchIndexUpdateQueue } from "@/db/schema";
+import { documents, searchIndexUpdateQueue, uploadedFiles } from "@/db/schema";
 import { env } from "@/env.mjs";
 import { meiliSearchAdmin } from "@/lib/meilisearch";
-import { addArticlesToSearchIndex, addCasesToSearchIndex } from "@/server/api/services/search.services";
+import { addArticlesToSearchIndex, addCasesToSearchIndex, addUserDocumentsToSearchIndex, addUserUploadsToSearchIndex } from "@/server/api/services/search.services";
 import getAllArticles from "@/services/content/getAllArticles";
 import getAllCases from "@/services/content/getAllCases";
+import { type AllTags, getAllTags } from "@/services/content/getAllTags";
 import { searchIndices } from "@/utils/search";
 
 import { eq, inArray } from "drizzle-orm";
@@ -108,6 +110,112 @@ const updateCases: UpdateCases = async () =>
   });
 };
 
+type UpdateUploadedFiles = (allTags: AllTags) => Promise<{
+  createUploadedFilesIndexTaskId: number | undefined;
+  idsOfUploadedFilesToUpdate: string[];
+  removeDeletedUploadedFilesTaskId: number | undefined;
+}>;
+
+const updateUploadedFiles: UpdateUploadedFiles = async (allTags) =>
+{
+  const filesToUpdate = await db.select().from(searchIndexUpdateQueue).where(eq(searchIndexUpdateQueue.searchIndexType, "user-uploads"));
+  const idsOfUploadedFilesToUpdate = filesToUpdate.map(file => file.cmsId);
+
+  if(idsOfUploadedFilesToUpdate.length === 0)
+  {
+    console.log("No uploaded files to update");
+
+    return ({
+      createUploadedFilesIndexTaskId: undefined,
+      idsOfUploadedFilesToUpdate,
+      removeDeletedUploadedFilesTaskId: undefined,
+    });
+  }
+
+  const deletedFiles = filesToUpdate.filter(file => file.eventType === "delete");
+  const upsertedFiles = filesToUpdate.filter(file => file.eventType === "upsert");
+
+  console.log(`Found ${(upsertedFiles.length)} files to upsert`);
+  console.log(`Found ${deletedFiles.length} files to delete`);
+
+  let removeDeletedUploadedFilesTaskId: number | undefined;
+
+  if(deletedFiles.length > 0)
+  {
+    const removeDeletedFilesFromIndex = await meiliSearchAdmin.index(searchIndices.userUploads).deleteDocuments(deletedFiles.map((f) => f.cmsId));
+    removeDeletedUploadedFilesTaskId = removeDeletedFilesFromIndex.taskUid;
+  }
+
+  const upsertedFilesWithTagsIds = await db.query.uploadedFiles.findMany({
+    where: inArray(uploadedFiles.id, upsertedFiles.map(file => file.cmsId)),
+    with: { tags: true },
+  });
+
+  const { createUploadsIndexTaskId } = await addUserUploadsToSearchIndex({
+    allTags,
+    uploads: upsertedFilesWithTagsIds
+  });
+
+  return ({
+    createUploadedFilesIndexTaskId: createUploadsIndexTaskId,
+    idsOfUploadedFilesToUpdate,
+    removeDeletedUploadedFilesTaskId,
+  });
+};
+
+type UpdateUserDocs = (allTags: AllTags) => Promise<{
+  createUserDocsIndexTaskId: number | undefined;
+  idsOfUserDocsToUpdate: string[];
+  removeDeletedUserDocsTaskId: number | undefined;
+}>;
+
+const updateUserDocs: UpdateUserDocs = async (allTags) =>
+{
+  const docsToUpdate = await db.select().from(searchIndexUpdateQueue).where(eq(searchIndexUpdateQueue.searchIndexType, "user-documents"));
+  const idsOfUserDocsToUpdate = docsToUpdate.map(doc => doc.cmsId);
+
+  if(idsOfUserDocsToUpdate.length === 0)
+  {
+    console.log("No user docs to update");
+
+    return ({
+      createUserDocsIndexTaskId: undefined,
+      idsOfUserDocsToUpdate,
+      removeDeletedUserDocsTaskId: undefined,
+    });
+  }
+
+  const deletedDocs = docsToUpdate.filter(doc => doc.eventType === "delete");
+  const upsertedDocs = docsToUpdate.filter(doc => doc.eventType === "upsert");
+
+  console.log(`Found ${(upsertedDocs.length)} user docs to upsert`);
+  console.log(`Found ${deletedDocs.length} user docs to delete`);
+
+  let removeDeletedUserDocsTaskId: number | undefined;
+
+  if(deletedDocs.length > 0)
+  {
+    const removeDeletedDocsFromIndex = await meiliSearchAdmin.index(searchIndices.userDocuments).deleteDocuments(deletedDocs.map((d) => d.cmsId));
+    removeDeletedUserDocsTaskId = removeDeletedDocsFromIndex.taskUid;
+  }
+
+  const upsertedDocsWithTagsIds = await db.query.documents.findMany({
+    where: inArray(documents.id, upsertedDocs.map(doc => doc.cmsId)),
+    with: { tags: true },
+  });
+
+  const { createDocumentsIndexTaskId } = await addUserDocumentsToSearchIndex({
+    allTags,
+    documents: upsertedDocsWithTagsIds
+  });
+
+  return ({
+    createUserDocsIndexTaskId: createDocumentsIndexTaskId,
+    idsOfUserDocsToUpdate,
+    removeDeletedUserDocsTaskId,
+  });
+};
+
 const handler: NextApiHandler = async (req, res): Promise<void> =>
 {
   if(req.headers.authorization !== `Bearer ${env.CRON_SECRET}`)
@@ -117,23 +225,29 @@ const handler: NextApiHandler = async (req, res): Promise<void> =>
 
   console.log("----- [Cronjob] Update Search Indexes -----");
 
-  // TODO: Implement update uploaded docs and uploaded file
+  const allTags = await getAllTags();
 
   const { createArticlesIndexTaskId, idsOfArticlesToUpdate, removeDeletedArticlesTaskId } = await updateArticles();
   const { createCasesIndexTaskId, idsOfCasesToUpdate, removeDeletedCasesTaskId } = await updateCases();
+  const { createUploadedFilesIndexTaskId, idsOfUploadedFilesToUpdate, removeDeletedUploadedFilesTaskId } = await updateUploadedFiles(allTags);
+  const { createUserDocsIndexTaskId, idsOfUserDocsToUpdate, removeDeletedUserDocsTaskId } = await updateUserDocs(allTags);
 
-  const updatedCaseAndArticleIds = [...idsOfArticlesToUpdate, ...idsOfCasesToUpdate,];
+  const updatedEntitiesIds = [...idsOfArticlesToUpdate, ...idsOfCasesToUpdate, ...idsOfUploadedFilesToUpdate, ...idsOfUserDocsToUpdate];
 
-  if(updatedCaseAndArticleIds.length === 0)
+  if(updatedEntitiesIds.length === 0)
   {
-    return res.status(200).json({ message: "No cases or articles to update" });
+    return res.status(200).json({ message: "No entities to update" });
   }
 
   const indexTasks = await meiliSearchAdmin.waitForTasks([
     removeDeletedArticlesTaskId,
     removeDeletedCasesTaskId,
+    removeDeletedUploadedFilesTaskId,
+    removeDeletedUserDocsTaskId,
     createCasesIndexTaskId,
     createArticlesIndexTaskId,
+    createUploadedFilesIndexTaskId,
+    createUserDocsIndexTaskId,
   ].filter(Boolean), {
     intervalMs: 1000,
     timeOutMs: 1000 * 60 * 5,
@@ -148,10 +262,10 @@ const handler: NextApiHandler = async (req, res): Promise<void> =>
   }
 
   await db.delete(searchIndexUpdateQueue).where(
-    inArray(searchIndexUpdateQueue.cmsId, updatedCaseAndArticleIds)
+    inArray(searchIndexUpdateQueue.cmsId, updatedEntitiesIds)
   );
 
-  console.log("Search indexes updated successfully for cases and articles");
+  console.log("Search indexes updated successfully");
 
   return res.status(200).json({ message: "Search indexes updated" });
 };

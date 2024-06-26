@@ -183,7 +183,7 @@ export type TagSearchIndexItem = NullableProperties<{
   tagName: string;
 }>;
 export type TagSearchItemNodes = RemoveUndefined<DotSeparatedKeys<TagSearchIndexItem>>;
-export type TagSearchItemUpdate = TagSearchIndexItem;
+// export type TagSearchItemUpdate = TagSearchIndexItem;
 
 export const createTagSearchIndexItem = ({ id, tagName }: IGenTags): TagSearchIndexItem =>
 {
