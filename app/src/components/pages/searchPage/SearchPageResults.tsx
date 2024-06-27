@@ -147,7 +147,7 @@ const SearchPageResults: FunctionComponent<Props> = ({ tabQuery }) =>
                       folderId: doc.folderId,
                       id: doc.id,
                       name: doc.name,
-                      tags: [], // TODO
+                      tags: doc.tags,
                       updatedAt: new Date(doc.updatedAt),
                       userId: doc.userId
                     }))}
@@ -172,7 +172,7 @@ const SearchPageResults: FunctionComponent<Props> = ({ tabQuery }) =>
                       originalFilename: file.originalFilename,
                       serverFilename: "",
                       sizeInBytes: 1,
-                      tags: [], // TODO
+                      tags: file.tags,
                       userId: file.userId
                     }))}
                     variant="searchPapers"
