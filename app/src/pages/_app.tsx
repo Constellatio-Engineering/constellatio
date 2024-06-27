@@ -17,10 +17,8 @@ import AuthStateProvider from "@/provider/AuthStateProvider";
 import CustomThemingProvider from "@/provider/CustomThemingProvider";
 import InvalidateQueriesProvider from "@/provider/InvalidateQueriesProvider";
 import MeilisearchProvider from "@/provider/MeilisearchProvider";
-import useSearchBarStore from "@/stores/searchBar.store";
 import { api } from "@/utils/api";
 import { isProduction, isTrackingEnabled } from "@/utils/env";
-import { appPaths } from "@/utils/paths";
 
 import { ModalsProvider } from "@mantine/modals";
 import { Notifications } from "@mantine/notifications";
@@ -32,9 +30,7 @@ import { useRouter } from "next/router";
 import { appWithTranslation, type UserConfig } from "next-i18next";
 import { posthog } from "posthog-js";
 import { PostHogProvider } from "posthog-js/react";
-import React, {
-  useEffect, type FunctionComponent, type ReactElement, type ReactNode, Fragment
-} from "react";
+import React, { Fragment, type FunctionComponent, type ReactElement, type ReactNode } from "react";
 
 import nextI18NextConfig from "../../next-i18next.config.js";
 
@@ -71,7 +67,7 @@ type ConstellatioAppProps = AppProps & {
 const AppContainer: FunctionComponent<ConstellatioAppProps> = ({ Component, pageProps }) =>
 {  
   const router = useRouter();
-  const { asPath, pathname } = router || "";
+  const { asPath } = router || "";
   const url = env.NEXT_PUBLIC_WEBSITE_URL + asPath;
   const appTitle = env.NEXT_PUBLIC_APP_NAME;
   const appDescription = "Constellatio App";
@@ -79,14 +75,6 @@ const AppContainer: FunctionComponent<ConstellatioAppProps> = ({ Component, page
   const ogImageUrlSplitUp = ogImage.split(".");
   const ogImageFileExtension = ogImageUrlSplitUp[ogImageUrlSplitUp.length - 1];
   let pageTitle = appTitle;
-
-  useEffect(() =>
-  {
-    if(!pathname.startsWith(appPaths.search))
-    {
-      useSearchBarStore.setState({ searchValue: "" });
-    }
-  }, [pathname]);
 
   if(!isProduction)
   {

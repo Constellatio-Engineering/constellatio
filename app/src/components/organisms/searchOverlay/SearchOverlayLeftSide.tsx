@@ -6,7 +6,6 @@ import useSearchResults from "@/hooks/useSearchResults";
 import useSearchBarStore from "@/stores/searchBar.store";
 import { appPaths } from "@/utils/paths";
 
-import Link from "next/link";
 import { type FunctionComponent } from "react";
 
 import * as styles from "./SearchOverlay.styles";
