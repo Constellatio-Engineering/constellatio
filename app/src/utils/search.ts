@@ -111,7 +111,10 @@ export const createArticleSearchIndexItem = (fullArticle: IGenArticle): ArticleS
 export const articleSearchIndexItemPrimaryKey: keyof ArticleSearchIndexItem = "id";
 
 export type UploadSearchIndexItem = Pick<UploadedFile, "id" | "originalFilename" | "userId" | "folderId" | "createdAt" | "fileExtension" | "contentType"> & {
-  tags: Array<Pick<IGenTags, "id" | "tagName">>;
+  tags: Array<{
+    id: IGenTags["id"];
+    tagName: IGenTags["tagName"];
+  }>;
 };
 export type UploadSearchItemNodes = RemoveUndefined<DotSeparatedKeys<UploadSearchIndexItem>>;
 export type UploadSearchItemUpdate = Partial<Omit<UploadSearchIndexItem, "id" | "userId">> & Pick<UploadSearchIndexItem, "id">;
@@ -145,7 +148,10 @@ export const createUploadsSearchIndexItem = ({
 export const uploadSearchIndexItemPrimaryKey: keyof UploadSearchIndexItem = "id";
 
 export type DocumentSearchIndexItem = Pick<Document, "id" | "name" | "content" | "userId" | "folderId" | "updatedAt" | "createdAt"> & {
-  tags: Array<Pick<IGenTags, "id" | "tagName">>;
+  tags: Array<{
+    id: IGenTags["id"];
+    tagName: IGenTags["tagName"];
+  }>;
 };
 export type DocumentSearchItemNodes = RemoveUndefined<DotSeparatedKeys<DocumentSearchIndexItem>>;
 export type DocumentSearchItemUpdate = Partial<Omit<DocumentSearchIndexItem, "id" | "userId">> & Pick<DocumentSearchIndexItem, "id">;
