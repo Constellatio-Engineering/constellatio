@@ -29,13 +29,17 @@ const SearchOverlay: FunctionComponent<SearchOverlayProps> = () =>
       padding={0}
       withCloseButton={false}
       returnFocus={false}
+      closeOnClickOutside={true}
+      closeOnEscape={true}
       opened={isDrawerOpened}
       onClose={closeDrawer}
       position="top"
       title={<SearchBar/>}
       styles={styles.drawerStyles()}>
-      <SearchOverlayLeftSide hasInput={hasInput}/>
-      <SearchOverlayRightSide hasInput={hasInput}/>
+      <div css={styles.contentWrapper}>
+        <SearchOverlayLeftSide hasInput={hasInput}/>
+        <SearchOverlayRightSide hasInput={hasInput}/>
+      </div>
     </Drawer>
   );
 };

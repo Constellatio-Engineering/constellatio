@@ -1,5 +1,6 @@
 import { CustomLink } from "@/components/atoms/CustomLink/CustomLink";
 import CategoryButton from "@/components/molecules/categoryButton/CategoryButton";
+import { SearchOverlayLink } from "@/components/organisms/searchOverlay/SearchOverlayLink";
 import useGetPopularSearch from "@/hooks/useGetPopularSearch";
 import useSearchResults from "@/hooks/useSearchResults";
 import { appPaths } from "@/utils/paths";
@@ -25,29 +26,28 @@ const SearchOverlayRightSide: FunctionComponent<SearchOverlayRightSideProps> = (
         <>
           <SuggestionSection label="Deine Dateien" labelVariant="neutral">
             {searchResults.userUploads.slice(0, 9).map((result) => (
-              <Link href={{ pathname: appPaths.search, query: { find: result.originalFilename, tab: "userUploads" } }} key={result.id} className="suggestion__section__link">
+              <SearchOverlayLink href={{ pathname: appPaths.search, query: { find: result.originalFilename, tab: "userUploads" } }} key={result.id} className="suggestion__section__link">
                 <CustomLink styleType="link-content" component="p">
                   Hochgeladene Dateien / {result.originalFilename}
                 </CustomLink>
-              </Link>
+              </SearchOverlayLink>
             ))}
             {searchResults.userDocuments.slice(0, 9).map((result) => (
-              <Link href={{ pathname: appPaths.search, query: { fine: result.name, tab: "userUploads" } }} key={result.id} className="suggestion__section__link">
+              <SearchOverlayLink href={{ pathname: appPaths.search, query: { find: result.name, tab: "userUploads" } }} key={result.id} className="suggestion__section__link">
                 <CustomLink styleType="link-content" component="p">
                   Constellatio Docs / {result.name}
                 </CustomLink>
-              </Link>
+              </SearchOverlayLink>
             ))}
           </SuggestionSection>
         </>
       )}
       <SuggestionSection label="Häufige Rechts- und Teilgebiete" labelVariant="neutral">
         <div className="popularCategories">
-          
           {popularSearch?.popularCategories?.map(result => (
-            <Link href={`${appPaths.search}?find=${result?.searchField}`} className="suggestion__section__link" key={result?.id}>
+            <SearchOverlayLink href={{ pathname: appPaths.search, query: { find: result?.searchField } }} className="suggestion__section__link" key={result?.id}>
               <CategoryButton>{result?.searchField}</CategoryButton>
-            </Link>
+            </SearchOverlayLink>
           ))}
         </div>
       </SuggestionSection>
