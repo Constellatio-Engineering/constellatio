@@ -58,6 +58,7 @@ export const authenticationRouter = createTRPCRouter({
       try
       {
         const createCustomerResult = await stripe.customers.create({
+          address: { country: "DE" },
           email: input.email,
           metadata: { supabaseUuid: userId, },
           name: `${input.firstName} ${input.lastName}`
@@ -66,6 +67,7 @@ export const authenticationRouter = createTRPCRouter({
         stripeCustomerId = createCustomerResult.id;
 
         const subscription = await stripe.subscriptions.create({
+          automatic_tax: { enabled: true },
           customer: stripeCustomerId,
           items: [{ plan: env.STRIPE_PREMIUM_PLAN_PRICE_ID, quantity: 1 }],
           payment_settings: {

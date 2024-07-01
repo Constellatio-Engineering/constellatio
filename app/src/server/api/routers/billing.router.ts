@@ -53,6 +53,7 @@ export const billingRouter = createTRPCRouter({
 
     const { url } = await stripe.checkout.sessions.create({
       allow_promotion_codes: true,
+      automatic_tax: { enabled: true },
       cancel_url: `${env.NEXT_PUBLIC_WEBSITE_URL}${appPaths.profile}?tab=subscription`,
       customer: stripeCustomerId,
       line_items: [{ price: env.STRIPE_PREMIUM_PLAN_PRICE_ID, quantity: 1 }],
