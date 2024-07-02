@@ -27,11 +27,14 @@ const UploadedMaterialTableHead: FunctionComponent<UploadedMaterialTableHeadProp
           Hochgeladen am
         </CaptionText>
       </th>
-      {/* <th>
-        <CaptionText tt="uppercase" styleType="caption-01-medium" component="p">
+      <th>
+        <CaptionText
+          tt="uppercase"
+          styleType="caption-01-medium"
+          component="p">
           TAGS
         </CaptionText>
-      </th> */}
+      </th>
       {variant === "searchPapers" && (
         <th>
           <CaptionText

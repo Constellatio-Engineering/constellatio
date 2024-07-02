@@ -1,4 +1,6 @@
 /* eslint-disable sort-keys-fix/sort-keys-fix,@typescript-eslint/naming-convention,@typescript-eslint/no-use-before-define,max-lines */
+import { type SearchIndex, searchIndices } from "@/utils/search";
+
 import { type InferInsertModel, type InferSelectModel, relations } from "drizzle-orm";
 import {
   text, pgTable, integer, pgEnum, uuid, smallint, unique, timestamp, primaryKey, index, type AnyPgColumn, serial, uniqueIndex
@@ -13,8 +15,11 @@ export type OnboardingResult = typeof allOnboardingResults[number];
 export const allBookmarkResourceTypes = ["article", "case", "forumQuestion"] as const;
 export type BookmarkResourceType = typeof allBookmarkResourceTypes[number];
 
-export const allSearchIndexTypes = ["article", "case"] as const;
-export type SearchIndexType = typeof allSearchIndexTypes[number];
+export const allSearchIndexTypes = Object.values(searchIndices) as [SearchIndex, ...SearchIndex[]];
+export type SearchIndexType = SearchIndex;
+
+export const allCaisyWebhookEventTypes = ["upsert", "delete"] as const;
+export type CaisyWebhookEventType = typeof allCaisyWebhookEventTypes[number];
 
 export const allCaseProgressStates = ["not-started", "completing-tests", "solving-case", "completed"] as const;
 export type CaseProgressState = typeof allCaseProgressStates[number];
@@ -100,6 +105,7 @@ export const genderEnum = pgEnum("Gender", allGenderIdentifiers);
 export const onboardingResultEnum = pgEnum("OnboardingResult", allOnboardingResults);
 export const resourceTypeEnum = pgEnum("ResourceType", allBookmarkResourceTypes);
 export const searchIndexTypeEnum = pgEnum("SearchIndexType", allSearchIndexTypes);
+export const caisyWebhookEventTypeEnum = pgEnum("CaisyWebhookEventType", allCaisyWebhookEventTypes);
 export const caseProgressStateEnum = pgEnum("CaseProgressState", allCaseProgressStates);
 export const gameProgressStateEnum = pgEnum("GameProgressState", allGameProgressStates);
 export const subscriptionStatusEnum = pgEnum("SubscriptionStatus", allSubscriptionStatuses);
@@ -113,7 +119,7 @@ export const badgeIdentifierEnum = pgEnum("BadgeIdentifier", badgeIdentifiers);
 export const userBadgeStateEnum = pgEnum("UserBadgeState", userBadgeStates);
 export const badgePublicationStateEnum = pgEnum("BadgePublicationState", badgePublicationState);
 export const roleEnum = pgEnum("Role", roles);
-export const notificationTypeIdentifierEnum = pgEnum("NotificationTypeIdentifier", notificationTypesIdentifiers);
+export const notificationTypeIdentifierEnum = pgEnum("NotificationType", notificationTypesIdentifiers);
 
 // TODO: Go through all queries and come up with useful indexes
 
@@ -197,9 +203,13 @@ export const uploadedFiles = pgTable("UploadedFile", {
   contentType: fileMimeTypeEnum("ContentType").notNull(),
 });
 
+export const uploadedFilesRelations = relations(uploadedFiles, ({ many }) => ({
+  tags: many(uploadedFilesToTags),
+}));
+
 export type UploadedFileInsert = InferInsertModel<typeof uploadedFiles>;
 export type UploadedFile = InferSelectModel<typeof uploadedFiles>;
-export type UploadedFileWithNote = UploadedFile & { note: Note | null };
+export type UploadedFileWithTags = UploadedFile & { tags: Array<{ tagId: string }> };
 
 export const documents = pgTable("Document", {
   id: uuid("Id").defaultRandom().primaryKey(),
@@ -211,8 +221,13 @@ export const documents = pgTable("Document", {
   content: text("Content").notNull(),
 });
 
+export const documentsRelations = relations(documents, ({ many }) => ({
+  tags: many(documentsToTags),
+}));
+
 export type DocumentInsert = InferInsertModel<typeof documents>;
 export type Document = InferSelectModel<typeof documents>;
+export type DocumentWithTags = Document & { tags: Array<{tagId: string}> };
 
 export const notes = pgTable("Note", {
   id: uuid("Id").defaultRandom().primaryKey(),
@@ -287,9 +302,12 @@ export type GameProgressInsert = InferInsertModel<typeof gamesProgress>;
 export type GameProgress = InferSelectModel<typeof gamesProgress>;
 
 export const searchIndexUpdateQueue = pgTable("SearchIndexUpdateQueue", {
-  cmsId: uuid("CmsId").primaryKey(),
-  resourceType: searchIndexTypeEnum("ResourceType").notNull(),
-});
+  cmsId: uuid("CmsId").notNull(),
+  searchIndexType: searchIndexTypeEnum("SearchIndexType").notNull(),
+  eventType: caisyWebhookEventTypeEnum("EventType").notNull(),
+}, table => ({
+  pk: primaryKey({ columns: [table.cmsId, table.searchIndexType, table.eventType] }),
+}));
 
 export type SearchIndexUpdateQueueInsert = InferInsertModel<typeof searchIndexUpdateQueue>;
 export type SearchIndexUpdateQueueItem = InferSelectModel<typeof searchIndexUpdateQueue>;
@@ -520,7 +538,7 @@ export type UserToRoleInsert = InferInsertModel<typeof usersToRoles>;
 export type UserToRole = InferSelectModel<typeof usersToRoles>;
 
 export const notificationTypes = pgTable("NotificationType", {
-  identifier: notificationTypeIdentifierEnum("NotificationTypeIdentifier").primaryKey(),
+  identifier: notificationTypeIdentifierEnum("NotificationType").primaryKey(),
   name: text("Name").notNull(),
   description: text("Description").notNull(),
 });
@@ -538,7 +556,7 @@ export const notifications = pgTable("Notification", {
   recipientId: uuid("RecipientId").references(() => users.id, { onDelete: "no action" }).notNull(),
   senderId: uuid("SenderId").references(() => users.id, { onDelete: "no action" }).notNull(),
   resourceId: uuid("ResourceId"),
-  typeIdentifier: notificationTypeIdentifierEnum("NotificationTypeIdentifier").references(() => notificationTypes.identifier, { onDelete: "no action" }).notNull(),
+  typeIdentifier: notificationTypeIdentifierEnum("Type").references(() => notificationTypes.identifier, { onDelete: "no action" }).notNull(),
   createdAt: timestamp("CreatedAt").defaultNow().notNull(),
   readAt: timestamp("ReadAt"),
 });
@@ -574,3 +592,37 @@ export const pings = pgTable("Ping", {
 
 export type PingInsert = InferInsertModel<typeof pings>;
 export type Ping = InferSelectModel<typeof pings>;
+
+export const documentsToTags = pgTable("Document_to_Tag", {
+  documentId: uuid("DocumentId").references(() => documents.id, { onDelete: "cascade" }).notNull(),
+  tagId: uuid("TagId").notNull(),
+}, table => ({
+  pk: primaryKey({ columns: [table.documentId, table.tagId] }),
+}));
+
+export const documentsToTagsRelations = relations(documentsToTags, ({ one }) => ({
+  document: one(documents, {
+    fields: [documentsToTags.documentId],
+    references: [documents.id],
+  }),
+}));
+
+export type DocumentToTagInsert = InferInsertModel<typeof documentsToTags>;
+export type DocumentToTag = InferSelectModel<typeof documentsToTags>;
+
+export const uploadedFilesToTags = pgTable("UploadedFile_to_Tag", {
+  fileId: uuid("FileId").references(() => uploadedFiles.id, { onDelete: "cascade" }).notNull(),
+  tagId: uuid("TagId").notNull(),
+}, table => ({
+  pk: primaryKey({ columns: [table.fileId, table.tagId] }),
+}));
+
+export const uploadedFilesToTagsRelations = relations(uploadedFilesToTags, ({ one }) => ({
+  file: one(uploadedFiles, {
+    fields: [uploadedFilesToTags.fileId],
+    references: [uploadedFiles.id],
+  }),
+}));
+
+export type UploadedFileToTagInsert = InferInsertModel<typeof uploadedFilesToTags>;
+export type UploadedFileToTag = InferSelectModel<typeof uploadedFilesToTags>;

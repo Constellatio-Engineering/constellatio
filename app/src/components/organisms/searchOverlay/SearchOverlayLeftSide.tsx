@@ -1,11 +1,11 @@
 import { CustomLink } from "@/components/atoms/CustomLink/CustomLink";
 import Tag from "@/components/atoms/tag/Tag";
+import { SearchOverlayLink } from "@/components/organisms/searchOverlay/SearchOverlayLink";
 import useGetPopularSearch from "@/hooks/useGetPopularSearch";
 import useSearchResults from "@/hooks/useSearchResults";
 import useSearchBarStore from "@/stores/searchBar.store";
 import { appPaths } from "@/utils/paths";
 
-import Link from "next/link";
 import { type FunctionComponent } from "react";
 
 import * as styles from "./SearchOverlay.styles";
@@ -29,26 +29,26 @@ const SearchOverlayLeftSide: FunctionComponent<SearchOverlayLeftSideProps> = ({ 
       <div css={styles.suggestionsLeft}>
         <SuggestionSection label="Zuletzt gesucht" labelVariant="neutral">
           {searchHistory.slice(0, 9).map((result, index) => (
-            <Link
+            <SearchOverlayLink
               href={`${appPaths.search}?find=${result}`}
               key={index}
               className="suggestion__section__link">
               <CustomLink styleType="link-content-title" component="p">
                 {result}
               </CustomLink>
-            </Link>
+            </SearchOverlayLink>
           ))}
         </SuggestionSection>
         <SuggestionSection label="Häufig gesucht" labelVariant="neutral">
           {popularSearch?.popularSearches?.map((result) => (
-            <Link
+            <SearchOverlayLink
               href={`${appPaths.search}?find=${result?.searchField}`}
               key={result?.id}
               className="suggestion__section__link">
               <CustomLink styleType="link-content-title" component="p">
                 {result?.searchField}
               </CustomLink>
-            </Link>
+            </SearchOverlayLink>
           ))}
         </SuggestionSection>
       </div>
@@ -78,7 +78,7 @@ const SearchOverlayLeftSide: FunctionComponent<SearchOverlayLeftSideProps> = ({ 
           {
             const mainCategory = legalCase.mainCategory?.mainCategory;
             return (
-              <Link
+              <SearchOverlayLink
                 key={legalCase.id}
                 href={`${appPaths.cases}/${legalCase.id}`}
                 title={legalCase.title ?? ""}
@@ -89,7 +89,7 @@ const SearchOverlayLeftSide: FunctionComponent<SearchOverlayLeftSideProps> = ({ 
                 {mainCategory && (
                   <Tag title={mainCategory}/>
                 )}
-              </Link>
+              </SearchOverlayLink>
             );
           })}
         </SuggestionSection>
@@ -100,7 +100,7 @@ const SearchOverlayLeftSide: FunctionComponent<SearchOverlayLeftSideProps> = ({ 
           {
             const mainCategory = article.mainCategory?.mainCategory;
             return (
-              <Link
+              <SearchOverlayLink
                 key={article.id}
                 href={`${appPaths.dictionary}/${article.id}`}
                 title={article.title ?? ""}
@@ -111,7 +111,7 @@ const SearchOverlayLeftSide: FunctionComponent<SearchOverlayLeftSideProps> = ({ 
                 {mainCategory && (
                   <Tag title={mainCategory}/>
                 )}
-              </Link>
+              </SearchOverlayLink>
             );
           })}
         </SuggestionSection>
@@ -119,7 +119,7 @@ const SearchOverlayLeftSide: FunctionComponent<SearchOverlayLeftSideProps> = ({ 
       {searchResults.forumQuestions.length > 0 && (
         <SuggestionSection label="FORUM" labelVariant="forum">
           {searchResults.forumQuestions.slice(0, 5).map((question) => (
-            <Link
+            <SearchOverlayLink
               key={question.id}
               href={`${appPaths.forum}/${question.id}`}
               title={question.title}
@@ -130,7 +130,7 @@ const SearchOverlayLeftSide: FunctionComponent<SearchOverlayLeftSideProps> = ({ 
               {question.legalFields?.map((legalField) => (
                 <Tag key={legalField.id} title={legalField.name}/>
               ))}
-            </Link>
+            </SearchOverlayLink>
           ))}
         </SuggestionSection>
       )}

@@ -9,10 +9,6 @@ type DrawerStylesProps = Styles<DrawerStylesNames, UnknownMantineStylesParams>;
 export const drawerStyles = () => 
 {
   const styles: DrawerStylesProps = (theme: MantineTheme) => ({
-    body: {
-      display: "flex",
-    },
-
     content: {
       ".suggestion__section": {
         "&__link": {
@@ -41,6 +37,10 @@ export const drawerStyles = () =>
 
   return styles;
 };
+
+export const contentWrapper = css`
+  display: flex;
+`;
 
 export const suggestionsLeft = (theme: MantineTheme) => css`
 	width: 61%;

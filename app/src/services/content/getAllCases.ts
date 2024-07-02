@@ -37,7 +37,6 @@ const getAllCases = async (props?: GetAllCasesProps): Promise<AllCases> =>
     }
     return allCases;
   }
-
   catch (error) 
   {
     console.error("error at getting all Cases", error);

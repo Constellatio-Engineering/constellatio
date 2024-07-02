@@ -1,5 +1,6 @@
 import SearchBar from "@/components/molecules/searchBar/SearchBar";
 import useSearchBarStore from "@/stores/searchBar.store";
+import { appPaths } from "@/utils/paths";
 
 import { Drawer } from "@mantine/core";
 import { useRouter } from "next/router";
@@ -21,6 +22,11 @@ const SearchOverlay: FunctionComponent<SearchOverlayProps> = () =>
 
   useEffect(() =>
   {
+    if(!pathname.startsWith(appPaths.search))
+    {
+      useSearchBarStore.setState({ searchValue: "" });
+    }
+
     useSearchBarStore.getState().closeDrawer();
   }, [pathname]);
 
@@ -29,13 +35,17 @@ const SearchOverlay: FunctionComponent<SearchOverlayProps> = () =>
       padding={0}
       withCloseButton={false}
       returnFocus={false}
+      closeOnClickOutside={true}
+      closeOnEscape={true}
       opened={isDrawerOpened}
       onClose={closeDrawer}
       position="top"
       title={<SearchBar/>}
       styles={styles.drawerStyles()}>
-      <SearchOverlayLeftSide hasInput={hasInput}/>
-      <SearchOverlayRightSide hasInput={hasInput}/>
+      <div css={styles.contentWrapper}>
+        <SearchOverlayLeftSide hasInput={hasInput}/>
+        <SearchOverlayRightSide hasInput={hasInput}/>
+      </div>
     </Drawer>
   );
 };
