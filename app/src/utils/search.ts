@@ -1,9 +1,10 @@
 /* eslint-disable max-lines */
 import { type UploadedFile, type Document, type ForumQuestion } from "@/db/schema";
+import { type FullLegalCase } from "@/services/content/getCaseById";
 import {
   type IGenTopic,
   type IGenArticle,
-  type IGenCase, type IGenLegalArea, type IGenMainCategory, type IGenTags
+  type IGenLegalArea, type IGenMainCategory, type IGenTags
 } from "@/services/graphql/__generated/sdk";
 import {
   type DotSeparatedKeys,
@@ -35,7 +36,7 @@ type CaseSearchIndexItemContent = {
 export type CaseSearchIndexItem = NullableProperties<CaseSearchIndexItemContent>;
 export type CaseSearchItemNodes = RemoveUndefined<DotSeparatedKeys<CaseSearchIndexItemContent>>;
 
-export const createCaseSearchIndexItem = (fullCase: IGenCase): CaseSearchIndexItem =>
+export const createCaseSearchIndexItem = (fullCase: FullLegalCase): CaseSearchIndexItem =>
 {
   const legalAreaName = fullCase.legalArea?.legalAreaName;
 

@@ -3,8 +3,7 @@ import PageHead from "@/components/organisms/pageHead/PageHead";
 import DetailsPage from "@/components/pages/DetailsPage/DetailsPage";
 import { type NextPageWithLayout } from "@/pages/_app";
 import getAllCases from "@/services/content/getAllCases";
-import { getCaseById } from "@/services/content/getCaseById";
-import { type IGenCase } from "@/services/graphql/__generated/sdk";
+import { getCaseById, type FullLegalCase } from "@/services/content/getCaseById";
 import { type TDragAndDropGameOptionType } from "@/stores/dragDropGame.store";
 import { shuffleArray } from "@/utils/array";
 
@@ -35,7 +34,7 @@ export const getStaticPaths: GetStaticPaths<Params> = async () =>
 };
 
 type GetCaseDetailPagePropsResult = {
-  readonly legalCase: IGenCase;
+  readonly legalCase: FullLegalCase;
 };
 
 export const getStaticProps: GetStaticProps<GetCaseDetailPagePropsResult, Params> = async ({ params }) =>

@@ -1,5 +1,6 @@
 import { type CaseProgressState } from "@/db/schema";
-import { type IGenCardSelectionGame, type IGenCase, type IGenDragNDropGame, type IGenFillInGapsGame } from "@/services/graphql/__generated/sdk";
+import { type FullLegalCase } from "@/services/content/getCaseById";
+import { type IGenCardSelectionGame, type IGenDragNDropGame, type IGenFillInGapsGame } from "@/services/graphql/__generated/sdk";
 import { type Nullable } from "@/utils/types";
 
 type Game = (IGenCardSelectionGame | IGenDragNDropGame | IGenFillInGapsGame) & {
@@ -7,7 +8,7 @@ type Game = (IGenCardSelectionGame | IGenDragNDropGame | IGenFillInGapsGame) & {
 };
 export type Games = Game[];
 
-export const getGamesFromCase = (legalCase: Nullable<IGenCase>): Games =>
+export const getGamesFromCase = (legalCase: Nullable<FullLegalCase>): Games =>
 {
   const fullTextTasks = legalCase?.fullTextTasks;
   const connections = fullTextTasks?.connections;
