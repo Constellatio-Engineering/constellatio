@@ -9,7 +9,7 @@ import useContextAndErrorIfNull from "@/hooks/useContextAndErrorIfNull";
 import useGamesProgress from "@/hooks/useGamesProgress";
 import { InvalidateQueriesContext } from "@/provider/InvalidateQueriesProvider";
 import type { ArticleWithNextAndPreviousArticleId } from "@/services/content/getArticlesOverviewProps";
-import { type IGenCase } from "@/services/graphql/__generated/sdk";
+import { type FullLegalCase } from "@/services/content/getCaseById";
 import useCaseSolvingStore, { type CaseStepIndex } from "@/stores/caseSolving.store";
 import { api } from "@/utils/api";
 import { getGamesFromCase } from "@/utils/case";
@@ -21,7 +21,7 @@ import * as styles from "./DetailsPage.styles";
 import ErrorPage from "../errorPage/ErrorPage";
 
 type IDetailsPageProps = {
-  readonly content: IGenCase | ArticleWithNextAndPreviousArticleId | undefined;
+  readonly content: FullLegalCase | ArticleWithNextAndPreviousArticleId | undefined;
   readonly variant: "case" | "dictionary";
 };
 
