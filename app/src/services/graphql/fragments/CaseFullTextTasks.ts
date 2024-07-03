@@ -14,6 +14,7 @@ export const f_CaseFullTextTasks = gql`
 	${f_Asset}
 	fragment CaseFullTextTasks on Case_fullTextTasks {
 		__typename
+		json
 		connections {
 			__typename
 			...FillInGapsGame

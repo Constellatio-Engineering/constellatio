@@ -21,6 +21,8 @@ export type Prettify<T> = {
 
 export type RemoveUndefined<T> = T extends undefined ? never : T;
 
+export type RemoveNull<T> = T extends null ? never : T;
+
 export type RemoveSymbol<T> = T extends symbol ? never : T;
 
 export type DotSeparatedKeys<T, Prefix extends string = ""> = {

@@ -1313,7 +1313,7 @@ export type IGenCalloutFragment = { __typename: 'Callout', id?: string | null, c
 
 export type IGenCardSelectionGameFragment = { __typename?: 'CardSelectionGame', id?: string | null, game?: any | null, question?: string | null, helpNote?: { __typename?: 'CardSelectionGame_helpNote', json?: any | null, connections?: Array<{ __typename: 'Caisy_Field_Document_NotFound' } | null> | null } | null };
 
-export type IGenCaseFullTextTasksFragment = { __typename: 'Case_fullTextTasks', connections?: Array<(
+export type IGenCaseFullTextTasksFragment = { __typename: 'Case_fullTextTasks', json?: any | null, connections?: Array<(
     { __typename: 'Asset' }
     & IGenAssetFragment
   ) | (
@@ -1804,6 +1804,7 @@ export const FullArticleFragmentDoc = gql`
 export const CaseFullTextTasksFragmentDoc = gql`
     fragment CaseFullTextTasks on Case_fullTextTasks {
   __typename
+  json
   connections {
     __typename
     ...FillInGapsGame
