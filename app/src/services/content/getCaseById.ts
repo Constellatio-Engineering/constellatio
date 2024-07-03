@@ -1,12 +1,9 @@
-import { type IGenCase } from "../graphql/__generated/sdk";
+import { type RemoveNull } from "@/utils/types";
+
 import { caisySDK } from "../graphql/getSdk";
 
-interface getCaseByIdProps
-{
-  legalCase: IGenCase | null;
-}
-
-export const getCaseById = async ({ id }: {id: string | undefined}): Promise<getCaseByIdProps> =>
+// eslint-disable-next-line @typescript-eslint/explicit-function-return-type
+export const getCaseById = async ({ id }: {id: string | undefined}) =>
 {
   if(id == null)
   {
@@ -21,3 +18,5 @@ export const getCaseById = async ({ id }: {id: string | undefined}): Promise<get
     legalCase: Case || null,
   };
 };
+
+export type FullLegalCase = RemoveNull<Awaited<ReturnType<typeof getCaseById>>["legalCase"]>;
