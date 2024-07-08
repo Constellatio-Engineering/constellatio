@@ -102,6 +102,12 @@
   },
   "overrides": [
     {
+      "files": ["src/lib/**/*"],
+      "rules": {
+        "@typescript-eslint/naming-convention": "off"
+      }
+    },
+    {
       "files": ["src/hooks/**/*"],
       "rules": {
         "@typescript-eslint/explicit-function-return-type": "off"

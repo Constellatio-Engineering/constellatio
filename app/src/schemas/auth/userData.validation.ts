@@ -10,6 +10,175 @@ export const passwordRequirements = [
   { label: "Mindestens 1 Sonderzeichen: ? ! $ & @ #", re: /[!#$&()*+,-.=/?@{}[\]^_~]/ },
 ];
 
+export const allUniversities2 = [
+  {
+    clickupId: "123456",
+    name: "Albert-Ludwigs-Universität Freiburg",
+  },
+  {
+    clickupId: "1234567",
+    name: "Bucerius Law School",
+  },
+  {
+    clickupId: "12345678",
+    name: "Christian-Albrechts-Universität zu Kiel",
+  },
+  {
+    clickupId: "123456789",
+    name: "EBS Universität für Wirtschaft und Recht",
+  },
+  {
+    clickupId: "1234567890",
+    name: "Eberhard Karls Universität Tübingen",
+  },
+  {
+    clickupId: "12345678901",
+    name: "Europa-Universität Viadrina Frankfurt (Oder)",
+  },
+  {
+    clickupId: "123456789012",
+    name: "Fernuniversität in Hagen",
+  },
+  {
+    clickupId: "1234567890123",
+    name: "Freie Universität Berlin",
+  },
+  {
+    clickupId: "12345678901234",
+    name: "Friedrich-Alexander-Universität Erlangen-Nürnberg",
+  },
+  {
+    clickupId: "123456789012345",
+    name: "Friedrich-Schiller-Universität Jena",
+  },
+  {
+    clickupId: "1234567890123456",
+    name: "Georg-August-Universität Göttingen",
+  },
+  {
+    clickupId: "12345678901234567",
+    name: "Gottfried Wilhelm Leibniz Universität Hannover",
+  },
+  {
+    clickupId: "123456789012345678",
+    name: "Heinrich-Heine-Universität Düsseldorf",
+  },
+  {
+    clickupId: "1234567890123456789",
+    name: "Humboldt-Universität zu Berlin",
+  },
+  {
+    clickupId: "12345678901234567890",
+    name: "Johann-Wolfgang-Goethe-Universität Frankfurt am Main",
+  },
+  {
+    clickupId: "123456789012345678901",
+    name: "Johannes Gutenberg-Universität Mainz",
+  },
+  {
+    clickupId: "1234567890123456789012",
+    name: "Julius-Maximilians-Universität Würzburg",
+  },
+  {
+    clickupId: "12345678901234567890123",
+    name: "Justus-Liebig-Universität Gießen",
+  },
+  {
+    clickupId: "123456789012345678901234",
+    name: "Ludwig-Maximilians-Universität München",
+  },
+  {
+    clickupId: "1234567890123456789012345",
+    name: "Martin-Luther-Universität Halle-Wittenberg",
+  },
+  {
+    clickupId: "12345678901234567890123456",
+    name: "Philipps-Universität Marburg",
+  },
+  {
+    clickupId: "123456789012345678901234567",
+    name: "Rheinische Friedrich-Wilhelms-Universität Bonn",
+  },
+  {
+    clickupId: "1234567890123456789012345678",
+    name: "Ruhr-Universität Bochum",
+  },
+  {
+    clickupId: "12345678901234567890123456789",
+    name: "Ruprecht-Karls-Universität Heidelberg",
+  },
+  {
+    clickupId: "123456789012345678901234567890",
+    name: "Universität Augsburg",
+  },
+  {
+    clickupId: "1234567890123456789012345678901",
+    name: "Universität Bayreuth",
+  },
+  {
+    clickupId: "12345678901234567890123456789012",
+    name: "Universität Bielefeld",
+  },
+  {
+    clickupId: "123456789012345678901234567890123",
+    name: "Universität Bremen",
+  },
+  {
+    clickupId: "1234567890123456789012345678901234",
+    name: "Universität Greifswald",
+  },
+  {
+    clickupId: "12345678901234567890123456789012345",
+    name: "Universität Hamburg",
+  },
+  {
+    clickupId: "123456789012345678901234567890123456",
+    name: "Universität Konstanz",
+  },
+  {
+    clickupId: "1234567890123456789012345678901234567",
+    name: "Universität Leipzig",
+  },
+  {
+    clickupId: "12345678901234567890123456789012345678",
+    name: "Universität Mannheim",
+  },
+  {
+    clickupId: "123456789012345678901234567890123456789",
+    name: "Universität Osnabrück",
+  },
+  {
+    clickupId: "1234567890123456789012345678901234567890",
+    name: "Universität Passau",
+  },
+  {
+    clickupId: "12345678901234567890123456789012345678901",
+    name: "Universität Potsdam",
+  },
+  {
+    clickupId: "123456789012345678901234567890123456789012",
+    name: "Universität Regensburg",
+  },
+  {
+    clickupId: "1234567890123456789012345678901234567890123",
+    name: "Universität Trier",
+  },
+  {
+    clickupId: "12345678901234567890123456789012345678901234",
+    name: "Universität des Saarlandes",
+  },
+  {
+    clickupId: "123456789012345678901234567890123456789012345",
+    name: "Universität zu Köln",
+  },
+  {
+    clickupId: "1234567890123456789012345678901234567890123456",
+    name: "Westfälische Wilhelms-Universität Münster",
+  }
+] as const;
+
+export type University2 = typeof allUniversities2[number]["name"];
+
 export const allUniversities = [
   "Albert-Ludwigs-Universität Freiburg",
   "Bucerius Law School",
