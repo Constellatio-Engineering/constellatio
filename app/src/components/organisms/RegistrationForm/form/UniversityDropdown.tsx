@@ -1,5 +1,5 @@
 import { Dropdown, type DropdownProps } from "@/components/atoms/Dropdown/Dropdown";
-import { allUniversities } from "@/schemas/auth/userData.validation";
+import { allUniversityNames } from "@/schemas/auth/userData.validation";
 
 import React, { type FunctionComponent } from "react";
 
@@ -13,7 +13,7 @@ const UniversityDropdown: FunctionComponent<Props> = (props) => (
     placeholder="Universität auswählen"
     clearable
     allowDeselect
-    data={allUniversities}
+    data={allUniversityNames}
     nothingFound="Keine Universität gefunden..."
     searchable
   />
