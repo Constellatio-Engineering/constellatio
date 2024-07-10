@@ -17,6 +17,6 @@ sudo mkcert -install
 mkdir -p ${CERTS_DIR}
 
 echo "-- Creating and installing local SSL certificates for domains: ${CONSTELLATIO_DOMAIN} + *.${CONSTELLATIO_DOMAIN} ..."
-mkcert -cert-file ${CONSTELLATIO_CERT_PEM_FILE} -key-file ${CONSTELLATIO_KEY_PEM_FILE} "${CONSTELLATIO_DOMAIN}" "*.${CONSTELLATIO_DOMAIN}"
+sudo mkcert -cert-file ${CONSTELLATIO_CERT_PEM_FILE} -key-file ${CONSTELLATIO_KEY_PEM_FILE} "${CONSTELLATIO_DOMAIN}" "*.${CONSTELLATIO_DOMAIN}"
 
 echo "Done"
