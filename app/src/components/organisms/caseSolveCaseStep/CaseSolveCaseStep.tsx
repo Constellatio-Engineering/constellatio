@@ -14,12 +14,10 @@ import { InvalidateQueriesContext } from "@/provider/InvalidateQueriesProvider";
 import { type FullLegalCase } from "@/services/content/getCaseById";
 import useCaseSolvingStore from "@/stores/caseSolving.store";
 import { api } from "@/utils/api";
-import { isTrackingEnabled } from "@/utils/env";
 import { type Nullable } from "@/utils/types";
 
 import { Skeleton, Title } from "@mantine/core";
 import { notifications } from "@mantine/notifications";
-import { usePostHog } from "posthog-js/react";
 import React, { type FunctionComponent, useState } from "react";
 
 import * as styles from "./CaseSolveCaseStep.styles";
@@ -84,8 +82,6 @@ const CaseSolveCaseStep: FunctionComponent<Props> = ({
       await invalidateSubmittedCaseSolution({ caseId: id });
     }
   });
-
-  const posthog = usePostHog();
 
   return (
     <div css={styles.wrapper} id="solveCaseStepContent">
@@ -152,10 +148,6 @@ const CaseSolveCaseStep: FunctionComponent<Props> = ({
               onClick={() =>
               {
                 setShowStepTwoModal(false);
-                if(isTrackingEnabled) 
-                {
-                  posthog.capture("case_solving_finished");
-                }
                 setProgressState({ caseId: id, progressState: "completed" });
               }}
               fullWidth>

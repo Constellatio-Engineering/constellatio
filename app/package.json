@@ -119,8 +119,6 @@
     "next-i18next": "15.3.0",
     "next-usequerystate": "1.17.2",
     "postgres": "3.4.4",
-    "posthog-js": "1.131.3",
-    "posthog-node": "4.0.1",
     "puppeteer": "21.4.0",
     "raw-body": "2.5.2",
     "react": "18.2.0",

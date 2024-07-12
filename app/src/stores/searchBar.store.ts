@@ -1,6 +1,3 @@
-import { isTrackingEnabled } from "@/utils/env";
-
-import { posthog } from "posthog-js";
 import { create } from "zustand";
 import { immer } from "zustand/middleware/immer";
 
@@ -26,10 +23,6 @@ const useSearchBarStore = create(
     isDrawerOpened: false,
     openDrawer: (refetchSearchResults) => 
     {
-      if(isTrackingEnabled) 
-      {
-        posthog.capture("search-field-opened");
-      }
       refetchSearchResults();
 
       set((state) =>
