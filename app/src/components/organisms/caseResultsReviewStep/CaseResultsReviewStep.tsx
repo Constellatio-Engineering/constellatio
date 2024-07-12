@@ -25,7 +25,6 @@ import {
   Accordion, Container, ScrollArea, Spoiler, Title
 } from "@mantine/core";
 import { useDisclosure } from "@mantine/hooks";
-// import { usePostHog } from "posthog-js/react";
 import React, { useRef, type FunctionComponent, useEffect, useState } from "react";
 
 import * as styles from "./CaseResultsReviewStep.styles";
@@ -60,7 +59,6 @@ const CaseResultsReviewStep: FunctionComponent<ICaseResultsReviewStepProps> = ({
   const isItemBookmarked = bookmarkedCases.some(bookmark => bookmark.title === title) || false;
   const { mutate: addBookmark } = useAddBookmark();
   const { mutate: removeBookmark } = useRemoveBookmark({ shouldUseOptimisticUpdate: true });
-  // const posthog = usePostHog();
   const onBookmarkIconClick = (): void =>
   {
     if(!caseId)
@@ -90,7 +88,6 @@ const CaseResultsReviewStep: FunctionComponent<ICaseResultsReviewStepProps> = ({
     {
       click: () => 
       {
-        // posthog.capture("print_btn", { variant: variant }); //TODO:: capturing but no variant here?
         window.print();
       },
       src: <Print/>,
