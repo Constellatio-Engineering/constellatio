@@ -1,6 +1,11 @@
 {
-	"eslint.workingDirectories": [{ "mode": "auto" }],
-	"editor.codeActionsOnSave": {
-		"source.fixAll": true
-	}
+  "eslint.workingDirectories": [{ 
+    "directory": "app", 
+    "changeProcessCWD": true
+}],
+  "editor.codeActionsOnSave": {
+    "source.fixAll": "always"
+  },
+  "eslint.validate": ["javascript"],
+  "eslint.format.enable": true,
 }

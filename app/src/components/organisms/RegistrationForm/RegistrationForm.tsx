@@ -25,6 +25,7 @@ import { Stack, Title } from "@mantine/core";
 import { useForm, zodResolver } from "@mantine/form";
 import { notifications } from "@mantine/notifications";
 import Link from "next/link";
+import { useRouter } from "next/router";
 import { type FunctionComponent, useEffect, useRef, useState } from "react";
 
 import * as styles from "./RegistrationForm.styles";
@@ -33,6 +34,13 @@ const resendEmailConfirmationTimeout = env.NEXT_PUBLIC_RESEND_EMAIL_CONFIRMATION
 
 export const RegistrationForm: FunctionComponent = () =>
 {
+  const router = useRouter();
+  const { ref_code: inputRefCode } = router.query;
+  let refCode = null;
+  if(inputRefCode && typeof inputRefCode === "string") 
+  { 
+    refCode = inputRefCode;
+  }
   const [shouldShowEmailConfirmationDialog, setShouldShowEmailConfirmationDialog] = useState<boolean>(false);
   const lastConfirmationEmailTimestamp = useRef<number>();
   const lastEnteredPassword = useAuthPageStore(s => s.lastEnteredPassword);
@@ -47,6 +55,7 @@ export const RegistrationForm: FunctionComponent = () =>
       lastName: "User",
       password: lastEnteredPassword || "Super-secure-password-123",
       passwordConfirmation: lastEnteredPassword || "Super-secure-password-123",
+      refCode: refCode ?? null,
       semester: "7",
       university: allUniversities[20] ?? null,
     } : {
@@ -58,12 +67,32 @@ export const RegistrationForm: FunctionComponent = () =>
       lastName: "",
       password: lastEnteredPassword,
       passwordConfirmation: "",
+      refCode: refCode ?? null,
       semester: null,
       university: null,
     },
     validate: zodResolver(registrationFormSchema),
     validateInputOnBlur: true,
   });
+
+  let referringUserName = null;
+  if(refCode && typeof refCode === "string") 
+  { 
+    const {
+      data: referringUserNameResult,
+      error: referringUserNameError,
+      isLoading: isLoadingReferringUserName
+    } = api.referral.getReffererByCode.useQuery({
+      code: refCode
+    }, {
+      refetchOnMount: false,
+      staleTime: Infinity
+    });
+    if(referringUserNameResult) 
+    {
+      referringUserName = referringUserNameResult?.displayName;
+    }
+  }
 
   useEffect(() =>
   {
@@ -219,6 +248,11 @@ export const RegistrationForm: FunctionComponent = () =>
             stylesOverwrite={{ color: colors["neutrals-02"][2], marginBottom: 10, textAlign: "left" }}>
             Du hast schon ein Konto?
           </CustomLink>
+          {referringUserName && (
+            <BodyText styleType="body-01-regular" component="p">
+              Du wurdest von {referringUserName} eingeladen.
+            </BodyText>
+          )}
           <FirstNameInput {...form.getInputProps("firstName")}/>
           <LastNameInput {...form.getInputProps("lastName")}/>
           <DisplayNameInput {...form.getInputProps("displayName")}/>
