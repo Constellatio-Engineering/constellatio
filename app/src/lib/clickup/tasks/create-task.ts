@@ -4,11 +4,9 @@
 import { type User } from "@/db/schema";
 import { env } from "@/env.mjs";
 import { allUniversities } from "@/schemas/auth/userData.validation";
-import { getFutureSubscriptionStatus, getHasSubscription } from "@/utils/subscription";
 import { type Nullable } from "@/utils/types";
 
 import { type User as SupabaseUser } from "@supabase/auth-helpers-nextjs";
-import { type UserResponse } from "@supabase/gotrue-js";
 import axios from "axios";
 import type Stripe from "stripe";
 
@@ -31,6 +29,8 @@ type DropDownCustomFieldConfig = CustomFieldBaseProperties & {
   value?: Nullable<string>;
 };
 
+type DropDownCustomFieldInsertProps = Pick<DropDownCustomFieldConfig, "id" | "value">;
+
 type CurrencyCustomFieldConfig = CustomFieldBaseProperties & {
   type: "currency";
   type_config: {
@@ -40,6 +40,8 @@ type CurrencyCustomFieldConfig = CustomFieldBaseProperties & {
   value?: Nullable<number>;
 };
 
+type CurrencyCustomFieldInsertProps = Pick<CurrencyCustomFieldConfig, "id" | "value">;
+
 type EmojiCustomFieldConfig = CustomFieldBaseProperties & {
   type: "emoji";
   type_config: {
@@ -48,6 +50,8 @@ type EmojiCustomFieldConfig = CustomFieldBaseProperties & {
   };
   value?: Nullable<number>;
 };
+
+type EmojiCustomFieldInsertProps = Pick<EmojiCustomFieldConfig, "id" | "value">;
 
 type LabelCustomFieldConfig = CustomFieldBaseProperties & {
   type: "labels";
@@ -60,6 +64,8 @@ type LabelCustomFieldConfig = CustomFieldBaseProperties & {
   };
   value?: Nullable<string[]>;
 };
+
+type LabelCustomFieldInsertProps = Pick<LabelCustomFieldConfig, "id" | "value">;
 
 type AutomaticProgressCustomFieldConfig = CustomFieldBaseProperties & {
   type: "progress";
@@ -74,6 +80,8 @@ type AutomaticProgressCustomFieldConfig = CustomFieldBaseProperties & {
   value?: Nullable<number>;
 };
 
+type AutomaticProgressCustomFieldInsertProps = Pick<AutomaticProgressCustomFieldConfig, "id" | "value">;
+
 type ManualProgressCustomFieldConfig = CustomFieldBaseProperties & {
   type: "progress";
   type_config: {
@@ -86,20 +94,28 @@ type ManualProgressCustomFieldConfig = CustomFieldBaseProperties & {
   }>;
 };
 
+type ManualProgressCustomFieldInsertProps = Pick<ManualProgressCustomFieldConfig, "id" | "value">;
+
 type UrlCustomFieldConfig = CustomFieldBaseProperties & {
   type: "url";
   value?: Nullable<string>;
 };
+
+type UrlCustomFieldInsertProps = Pick<UrlCustomFieldConfig, "id" | "value">;
 
 type EmailCustomFieldConfig = CustomFieldBaseProperties & {
   type: "email";
   value?: Nullable<string>;
 };
 
+type EmailCustomFieldInsertProps = Pick<EmailCustomFieldConfig, "id" | "value">;
+
 type PhoneNumberCustomFieldConfig = CustomFieldBaseProperties & {
   type: "phone";
   value?: Nullable<string>;
 };
+
+type PhoneNumberCustomFieldInsertProps = Pick<PhoneNumberCustomFieldConfig, "id" | "value">;
 
 type DateCustomFieldConfig = CustomFieldBaseProperties & {
   type: "date";
@@ -109,25 +125,35 @@ type DateCustomFieldConfig = CustomFieldBaseProperties & {
   };
 };
 
+type DateCustomFieldInsertProps = Pick<DateCustomFieldConfig, "id" | "value" | "value_options">;
+
 type ShortTextCustomFieldConfig = CustomFieldBaseProperties & {
   type: "short_text";
   value?: Nullable<string>;
 };
+
+type ShortTextCustomFieldInsertProps = Pick<ShortTextCustomFieldConfig, "id" | "value">;
 
 type TextCustomFieldConfig = CustomFieldBaseProperties & {
   type: "text";
   value?: Nullable<string>;
 };
 
+type TextCustomFieldInsertProps = Pick<TextCustomFieldConfig, "id" | "value">;
+
 type CheckBoxCustomFieldConfig = CustomFieldBaseProperties & {
   type: "checkbox";
   value?: Nullable<boolean>;
 };
 
+type CheckBoxCustomFieldInsertProps = Pick<CheckBoxCustomFieldConfig, "id" | "value">;
+
 type NumberCustomFieldConfig = CustomFieldBaseProperties & {
   type: "number";
   value?: Nullable<number>;
 };
+
+type NumberCustomFieldInsertProps = Pick<NumberCustomFieldConfig, "id" | "value">;
 
 type LocationCustomFieldConfig = CustomFieldBaseProperties & {
   type: "location";
@@ -140,7 +166,9 @@ type LocationCustomFieldConfig = CustomFieldBaseProperties & {
   }>;
 };
 
-type CustomField =
+type LocationCustomFieldInsertProps = Pick<LocationCustomFieldConfig, "id" | "value">;
+
+/* type CustomField =
   | DropDownCustomFieldConfig
   | CurrencyCustomFieldConfig
   | EmojiCustomFieldConfig
@@ -155,7 +183,24 @@ type CustomField =
   | TextCustomFieldConfig
   | CheckBoxCustomFieldConfig
   | NumberCustomFieldConfig
-  | LocationCustomFieldConfig;
+  | LocationCustomFieldConfig;*/
+
+type CustomFieldInsert =
+  | DropDownCustomFieldInsertProps
+  | CurrencyCustomFieldInsertProps
+  | EmojiCustomFieldInsertProps
+  | LabelCustomFieldInsertProps
+  | AutomaticProgressCustomFieldInsertProps
+  | ManualProgressCustomFieldInsertProps
+  | UrlCustomFieldInsertProps
+  | EmailCustomFieldInsertProps
+  | PhoneNumberCustomFieldInsertProps
+  | DateCustomFieldInsertProps
+  | ShortTextCustomFieldInsertProps
+  | TextCustomFieldInsertProps
+  | CheckBoxCustomFieldInsertProps
+  | NumberCustomFieldInsertProps
+  | LocationCustomFieldInsertProps;
 
 const clickupCrmCustomField = {
   aboStatus: {
@@ -185,6 +230,14 @@ const clickupCrmCustomField = {
       unpaid: {
         fieldId: "841e35b8-03f0-4a42-aa7d-8b6a9847a439"
       }
+    }
+  },
+  category: {
+    fieldId: "adebe618-2be5-4ae2-8437-0673b1f44321",
+    options: {
+      student: {
+        fieldId: "846b2da8-2848-4ee0-96ea-18b722eb12bb"
+      },
     }
   },
   email: {
@@ -290,7 +343,7 @@ type CreateTaskBody = {
   archived?: boolean;
   assignees?: number[];
   check_required_custom_fields?: boolean;
-  custom_fields?: Array<Pick<CustomField, "id" | "value">>;
+  custom_fields?: CustomFieldInsert[];
   custom_item_id?: number;
   description?: string;
   due_date?: number;
@@ -318,21 +371,19 @@ const createTask = async (body: CreateTaskBody): Promise<void> =>
     }
   });
 
-  console.log(result.data);
-
   return result.data;
 };
 
-type CustomFieldInsertProps<T extends CustomField> = Pick<T, "id" | "value">;
-
-type createClickupCrmUserProps = {
+type GetUserCrmData = (props: {
   subscriptionData: Stripe.Response<Stripe.Subscription> | null;
   supabaseUserData: SupabaseUser;
   user: User;
+}) => {
+  custom_fields: CustomFieldInsert[];
+  name: string; 
 };
 
-// eslint-disable-next-line @typescript-eslint/explicit-function-return-type
-export const createClickupCrmUser = async ({ subscriptionData, supabaseUserData, user }: createClickupCrmUserProps) =>
+export const getUserCrmData: GetUserCrmData = ({ subscriptionData, supabaseUserData, user }) =>
 {
   let stripeSubscriptionStatusCustomFieldId: string | undefined;
 
@@ -369,43 +420,51 @@ export const createClickupCrmUser = async ({ subscriptionData, supabaseUserData,
 
   const subscriptionFuture = subscriptionData ? calculateSubscriptionFuture(subscriptionData) : null;
 
-  const universityCustomFieldData: CustomFieldInsertProps<DropDownCustomFieldConfig> = {
+  const universityCustomFieldData: DropDownCustomFieldInsertProps = {
     id: clickupCrmCustomField.university.fieldId,
     value: allUniversities.find(u => u.name === user.university)?.clickupId
   };
 
-  const semesterCustomFieldData: CustomFieldInsertProps<NumberCustomFieldConfig> = {
+  const semesterCustomFieldData: NumberCustomFieldInsertProps = {
     id: clickupCrmCustomField.semester.fieldId,
     value: user.semester
   };
 
-  const emailCustomFieldData: CustomFieldInsertProps<EmailCustomFieldConfig> = {
+  const emailCustomFieldData: EmailCustomFieldInsertProps = {
     id: clickupCrmCustomField.email.fieldId,
     value: user.email
   };
 
-  const signedUpDateCustomFieldData: CustomFieldInsertProps<DateCustomFieldConfig> = {
+  const signedUpDateCustomFieldData: DateCustomFieldInsertProps = {
     id: clickupCrmCustomField.signedUpDate.fieldId,
-    value: new Date(supabaseUserData!.created_at).getTime()
+    value: new Date(supabaseUserData!.created_at).getTime(),
+    value_options: { time: true }
   };
 
-  const aboStatusCustomFieldData: CustomFieldInsertProps<DropDownCustomFieldConfig> = {
+  const categoryCustomFieldData: DropDownCustomFieldInsertProps = {
+    id: clickupCrmCustomField.category.fieldId,
+    value: (user.university || user.semester) ? clickupCrmCustomField.category.options.student.fieldId : undefined
+  };
+
+  const aboStatusCustomFieldData: DropDownCustomFieldInsertProps = {
     id: clickupCrmCustomField.aboStatus.fieldId,
     value: stripeSubscriptionStatusCustomFieldId
   };
 
-  const memberUntilCustomFieldData: CustomFieldInsertProps<DateCustomFieldConfig> = {
+  const memberUntilCustomFieldData: DateCustomFieldInsertProps = {
     id: clickupCrmCustomField.memberUntil.fieldId,
-    value: subscriptionFuture?.isCanceled ? subscriptionFuture.subscriptionEndDate.getTime() : undefined
+    value: subscriptionFuture?.isCanceled ? subscriptionFuture.subscriptionEndDate.getTime() : undefined,
+    value_options: { time: true }
   };
 
-  const willSubscriptionContinueCustomFieldData: CustomFieldInsertProps<DropDownCustomFieldConfig> = {
+  const willSubscriptionContinueCustomFieldData: DropDownCustomFieldInsertProps = {
     id: clickupCrmCustomField.willSubscriptionContinue.fieldId,
     value: subscriptionFuture?.isCanceled ? clickupCrmCustomField.willSubscriptionContinue.options.no.fieldId : clickupCrmCustomField.willSubscriptionContinue.options.yes.fieldId
   };
 
-  return createTask({
+  return ({
     custom_fields: [
+      categoryCustomFieldData,
       emailCustomFieldData,
       universityCustomFieldData,
       semesterCustomFieldData,
@@ -414,6 +473,6 @@ export const createClickupCrmUser = async ({ subscriptionData, supabaseUserData,
       aboStatusCustomFieldData,
       willSubscriptionContinueCustomFieldData,
     ],
-    name: user.firstName + " " + user.lastName,
+    name: user.firstName + " " + user.lastName
   });
 };

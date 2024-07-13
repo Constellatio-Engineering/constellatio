@@ -1,7 +1,7 @@
 import { db } from "@/db/connection";
 import { users } from "@/db/schema";
 import { env } from "@/env.mjs";
-import { createClickupCrmUser } from "@/lib/clickup/tasks/create-task";
+import { getUserCrmData } from "@/lib/clickup/tasks/create-task";
 import { stripe } from "@/lib/stripe";
 import { supabase } from "@/lib/supabase";
 
@@ -24,9 +24,6 @@ const handler: NextApiHandler = async (req, res): Promise<void> =>
     supabaseUrl: env.NEXT_PUBLIC_SUPABASE_URL
   });
 
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  let responseData: any = null;
-
   const customFields = await axios.get(`${env.CLICKUP_API_ENDPOINT}/list/${env.CLICKUP_CRM_LIST_ID}/field`, {
     headers: {
       Authorization: env.CLICKUP_API_TOKEN,
@@ -34,13 +31,7 @@ const handler: NextApiHandler = async (req, res): Promise<void> =>
     }
   });
 
-  const listData = await axios.get(`${env.CLICKUP_API_ENDPOINT}/list/${env.CLICKUP_CRM_LIST_ID}`, {
-    headers: {
-      Authorization: env.CLICKUP_API_TOKEN,
-    }
-  });
-
-  // console.log(listData.data);
+  console.log("customFields", customFields.data);
 
   const allUsers = await db.query.users.findMany();
   const testUser = await db.query.users.findFirst({
@@ -55,13 +46,7 @@ const handler: NextApiHandler = async (req, res): Promise<void> =>
   if(testUserSubscriptionId != null)
   {
     subscriptionData = await stripe.subscriptions.retrieve(testUserSubscriptionId);
-    console.log("subscriptionData", subscriptionData);
   }
-
-  const allSubscriptions = await stripe.subscriptions.list({ customer: testUser!.stripeCustomerId! });
-  responseData = allSubscriptions;
-
-  responseData = customFields.data;
 
   const { data: { user: supabaseUserData } } = await supabaseServerClient.auth.admin.getUserById(testUser!.id);
 
@@ -82,7 +67,7 @@ const handler: NextApiHandler = async (req, res): Promise<void> =>
     }
   });
 
-  return res.status(200).json({ data: responseData, message: "Success" });
+  return res.status(200).json({ data: customFields.data, message: "Success" });
 };
 
 export default handler;
