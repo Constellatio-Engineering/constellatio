@@ -34,8 +34,6 @@ const handler: NextApiHandler = async (req, res): Promise<void> =>
     }
   });
 
-  // console.log(customFields.data);
-
   const listData = await axios.get(`${env.CLICKUP_API_ENDPOINT}/list/${env.CLICKUP_CRM_LIST_ID}`, {
     headers: {
       Authorization: env.CLICKUP_API_TOKEN,
@@ -46,7 +44,7 @@ const handler: NextApiHandler = async (req, res): Promise<void> =>
 
   const allUsers = await db.query.users.findMany();
   const testUser = await db.query.users.findFirst({
-    where: and(isNotNull(users.subscriptionId), eq(users.email, "kotti97+10000@web.de"))
+    where: and(isNotNull(users.subscriptionId), eq(users.email, "kotti97+10004@web.de"))
   });
   const testUserSubscriptionId = testUser?.subscriptionId;
 
@@ -61,9 +59,9 @@ const handler: NextApiHandler = async (req, res): Promise<void> =>
   }
 
   const allSubscriptions = await stripe.subscriptions.list({ customer: testUser!.stripeCustomerId! });
-  console.log("allSubscriptions", allSubscriptions);
-
   responseData = allSubscriptions;
+
+  responseData = customFields.data;
 
   const { data: { user: supabaseUserData } } = await supabaseServerClient.auth.admin.getUserById(testUser!.id);
 
@@ -77,8 +75,6 @@ const handler: NextApiHandler = async (req, res): Promise<void> =>
     supabaseUserData,
     user: testUser!
   });
-
-  console.log("createUserResult", result);
 
   const crmUsers = await axios.get(`${env.CLICKUP_API_ENDPOINT}/list/${env.CLICKUP_CRM_LIST_ID}/task`, {
     headers: {

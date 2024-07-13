@@ -167,16 +167,28 @@ const clickupCrmCustomField = {
       canceled: {
         fieldId: "be0a0a52-5136-4dbf-bed7-de3cd4cdb26e"
       },
+      incomplete: {
+        fieldId: "540bf2c4-96d2-40b5-870b-c98bcc067442"
+      },
+      incompleteExpired: {
+        fieldId: "1d4c6c0d-10ce-4250-8f28-ab9240dfd410"
+      },
+      overdue: {
+        fieldId: "aa52ca6b-e88f-4f2f-90bc-f086a474ecb1"
+      },
+      paused: {
+        fieldId: "8faca5c5-ef14-4ae4-a90b-1a445c3f513a"
+      },
       trialing: {
         fieldId: "1e861e9f-7d9d-4bc5-80f8-fe3f5efdbfa8"
+      },
+      unpaid: {
+        fieldId: "841e35b8-03f0-4a42-aa7d-8b6a9847a439"
       }
     }
   },
   email: {
     fieldId: "99d92dc5-7c51-4a8f-ade7-e0b7d64c4576"
-  },
-  memberSince: {
-    fieldId: "02410e16-49aa-4a00-ab45-e07bfb7caf85"
   },
   memberUntil: {
     fieldId: "5a3ada95-dbf3-4e63-aceb-595a9a27afda"
@@ -184,22 +196,95 @@ const clickupCrmCustomField = {
   semester: {
     fieldId: "37863c7b-36db-44e8-9215-e0e108b91db6"
   },
+  signedUpDate: {
+    fieldId: "02410e16-49aa-4a00-ab45-e07bfb7caf85"
+  },
   university: {
     fieldId: "b8e29f58-cb77-4519-8f12-dfc8117f90e8",
+  },
+  willSubscriptionContinue: {
+    fieldId: "ac9f2943-408f-44a5-9688-b2ae5d3cbc4d",
+    options: {
+      no: {
+        fieldId: "4fe173c9-3ecf-4e35-b267-0771674ae363"
+      },
+      yes: {
+        fieldId: "ae86c637-c0a9-45d1-9924-7bbb270ca732"
+      }
+    }
   }
 } as const;
 
-const clickupCrmStatuses = {
-  activeUser: {
-    statusId: "subcat901506039191_sc901500143981_BDqEZUPw"
-  },
-  didNotSubscribeAfterTrial: {
-    statusId: "subcat901506039191_sc901500143981_JSQqQk6V"
-  },
-  trialing: {
-    statusId: "subcat901506039191_sc901500143981_rfkBdkuf"
-  },
-} as const;
+type CalculateMembershipEndDateProps = (subscriptionData: Stripe.Response<Stripe.Subscription>) => {
+  isCanceled: true;
+  subscriptionEndDate: Date;
+} | {
+  isCanceled: false;
+};
+
+const calculateSubscriptionFuture: CalculateMembershipEndDateProps = (subscriptionData) =>
+{
+  const {
+    cancel_at,
+    cancel_at_period_end,
+    current_period_end,
+    default_payment_method,
+    ended_at,
+    status,
+    trial_end
+  } = subscriptionData;
+
+  switch (status)
+  {
+    case "active":
+      if(cancel_at_period_end)
+      {
+        return ({
+          isCanceled: true,
+          subscriptionEndDate: new Date(cancel_at! * 1000)
+        });
+      }
+      else
+      {
+        return { isCanceled: false };
+      }
+    case "canceled":
+      return ({
+        isCanceled: true,
+        subscriptionEndDate: new Date((ended_at || cancel_at)! * 1000)
+      });
+    case "trialing":
+      if(cancel_at)
+      {
+        return ({
+          isCanceled: true,
+          subscriptionEndDate: new Date(cancel_at * 1000)
+        });
+      }
+      else if(!default_payment_method)
+      {
+        return ({
+          isCanceled: true,
+          subscriptionEndDate: new Date(trial_end! * 1000)
+        });
+      }
+      else
+      {
+        return { isCanceled: false };
+      }
+    case "incomplete":
+    case "incomplete_expired":
+    case "unpaid":
+    case "past_due":
+      return ({
+        isCanceled: true,
+        subscriptionEndDate: new Date(current_period_end! * 1000)
+      });
+    case "paused":
+    default:
+      return { isCanceled: false };
+  }
+};
 
 type CreateTaskBody = {
   archived?: boolean;
@@ -249,6 +334,41 @@ type createClickupCrmUserProps = {
 // eslint-disable-next-line @typescript-eslint/explicit-function-return-type
 export const createClickupCrmUser = async ({ subscriptionData, supabaseUserData, user }: createClickupCrmUserProps) =>
 {
+  let stripeSubscriptionStatusCustomFieldId: string | undefined;
+
+  if(subscriptionData?.status != null)
+  {
+    switch (subscriptionData.status)
+    {
+      case "active":
+        stripeSubscriptionStatusCustomFieldId = clickupCrmCustomField.aboStatus.options.active.fieldId;
+        break;
+      case "past_due":
+        stripeSubscriptionStatusCustomFieldId = clickupCrmCustomField.aboStatus.options.overdue.fieldId;
+        break;
+      case "incomplete":
+        stripeSubscriptionStatusCustomFieldId = clickupCrmCustomField.aboStatus.options.incomplete.fieldId;
+        break;
+      case "trialing":
+        stripeSubscriptionStatusCustomFieldId = clickupCrmCustomField.aboStatus.options.trialing.fieldId;
+        break;
+      case "canceled":
+        stripeSubscriptionStatusCustomFieldId = clickupCrmCustomField.aboStatus.options.canceled.fieldId;
+        break;
+      case "incomplete_expired":
+        stripeSubscriptionStatusCustomFieldId = clickupCrmCustomField.aboStatus.options.incompleteExpired.fieldId;
+        break;
+      case "paused":
+        stripeSubscriptionStatusCustomFieldId = clickupCrmCustomField.aboStatus.options.paused.fieldId;
+        break;
+      case "unpaid":
+        stripeSubscriptionStatusCustomFieldId = clickupCrmCustomField.aboStatus.options.unpaid.fieldId;
+        break;
+    }
+  }
+
+  const subscriptionFuture = subscriptionData ? calculateSubscriptionFuture(subscriptionData) : null;
+
   const universityCustomFieldData: CustomFieldInsertProps<DropDownCustomFieldConfig> = {
     id: clickupCrmCustomField.university.fieldId,
     value: allUniversities.find(u => u.name === user.university)?.clickupId
@@ -264,87 +384,35 @@ export const createClickupCrmUser = async ({ subscriptionData, supabaseUserData,
     value: user.email
   };
 
-  const memberSinceCustomFieldData: CustomFieldInsertProps<DateCustomFieldConfig> = {
-    id: clickupCrmCustomField.memberSince.fieldId,
+  const signedUpDateCustomFieldData: CustomFieldInsertProps<DateCustomFieldConfig> = {
+    id: clickupCrmCustomField.signedUpDate.fieldId,
     value: new Date(supabaseUserData!.created_at).getTime()
   };
-
-  let stripeSubscriptionStatusCustomFieldId: string = clickupCrmCustomField.aboStatus.options.canceled.fieldId;
-  // let subscriptionStatus: "trialing" | "active" | "canceled" = "canceled";
-
-  if(subscriptionData?.status != null)
-  {
-    switch (subscriptionData.status)
-    {
-      case "active":
-      case "past_due":
-      case "incomplete":
-        stripeSubscriptionStatusCustomFieldId = clickupCrmCustomField.aboStatus.options.active.fieldId;
-        break;
-      case "trialing":
-        stripeSubscriptionStatusCustomFieldId = clickupCrmCustomField.aboStatus.options.trialing.fieldId;
-        break;
-      case "canceled":
-      case "incomplete_expired":
-      case "paused":
-      case "unpaid":
-        stripeSubscriptionStatusCustomFieldId = clickupCrmCustomField.aboStatus.options.canceled.fieldId;
-        break;
-    }
-  }
 
   const aboStatusCustomFieldData: CustomFieldInsertProps<DropDownCustomFieldConfig> = {
     id: clickupCrmCustomField.aboStatus.fieldId,
     value: stripeSubscriptionStatusCustomFieldId
   };
 
-  let subscriptionEndDate: Date | null = null;
-
-  if(subscriptionData != null)
-  {
-    const futureSubscriptionStatus = getFutureSubscriptionStatus(subscriptionData);
-    const { cancel_at: cancelAt, trial_end: trialEnd } = subscriptionData;
-    let stripeSubscriptionEnd: Nullable<number> = null;
-
-    switch (futureSubscriptionStatus)
-    {
-      case "willBeCanceled":
-      {
-        stripeSubscriptionEnd = cancelAt;
-        break;
-      }
-      case "trialWillExpire":
-      {
-        stripeSubscriptionEnd = trialEnd;
-        break;
-      }
-      case "trialWillBecomeSubscription":
-      case "willContinue":
-      case null:
-      {
-        stripeSubscriptionEnd = null;
-      }
-    }
-
-    subscriptionEndDate = stripeSubscriptionEnd != null ? new Date(stripeSubscriptionEnd * 1000) : null;
-  }
-
-  console.log("subscriptionEndDate", subscriptionEndDate);
-
   const memberUntilCustomFieldData: CustomFieldInsertProps<DateCustomFieldConfig> = {
     id: clickupCrmCustomField.memberUntil.fieldId,
-    value: subscriptionEndDate ? subscriptionEndDate.getTime() : undefined
+    value: subscriptionFuture?.isCanceled ? subscriptionFuture.subscriptionEndDate.getTime() : undefined
   };
 
-  return;
+  const willSubscriptionContinueCustomFieldData: CustomFieldInsertProps<DropDownCustomFieldConfig> = {
+    id: clickupCrmCustomField.willSubscriptionContinue.fieldId,
+    value: subscriptionFuture?.isCanceled ? clickupCrmCustomField.willSubscriptionContinue.options.no.fieldId : clickupCrmCustomField.willSubscriptionContinue.options.yes.fieldId
+  };
 
   return createTask({
     custom_fields: [
       emailCustomFieldData,
       universityCustomFieldData,
       semesterCustomFieldData,
-      memberSinceCustomFieldData,
-      memberUntilCustomFieldData
+      signedUpDateCustomFieldData,
+      memberUntilCustomFieldData,
+      aboStatusCustomFieldData,
+      willSubscriptionContinueCustomFieldData,
     ],
     name: user.firstName + " " + user.lastName,
   });
