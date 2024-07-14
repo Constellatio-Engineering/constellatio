@@ -104,17 +104,6 @@ const calculateSubscriptionFuture: CalculateMembershipEndDateProps = (subscripti
   switch (status)
   {
     case "active":
-
-      console.log({
-        cancel_at,
-        cancel_at_period_end,
-        current_period_end,
-        default_payment_method,
-        ended_at,
-        status,
-        trial_end
-      });
-
       if(cancel_at_period_end)
       {
         return ({

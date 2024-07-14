@@ -1,6 +1,5 @@
 /* eslint-disable max-lines */
 import { db } from "@/db/connection";
-import { users } from "@/db/schema";
 import { env } from "@/env.mjs";
 import { createClickupTask } from "@/lib/clickup/tasks/create-task";
 import { deleteClickupCustomFieldValue } from "@/lib/clickup/tasks/delete-custom-field-value";
@@ -12,9 +11,37 @@ import { stripe } from "@/lib/stripe";
 
 import { createPagesServerClient } from "@supabase/auth-helpers-nextjs";
 import axios, { AxiosError, type AxiosResponse } from "axios";
-import { eq } from "drizzle-orm";
 import type { NextApiHandler } from "next";
 import type Stripe from "stripe";
+
+const printAllSettledPromisesSummary = (settledPromises: Array<PromiseSettledResult<unknown>>, actionName: string): void =>
+{
+  const failedPromises = settledPromises.filter((result): result is PromiseRejectedResult => result.status === "rejected");
+  const successfulPromises = settledPromises.filter((result): result is PromiseFulfilledResult<AxiosResponse> => result.status === "fulfilled");
+
+  const errors = failedPromises.map((failedPromise) =>
+  {
+    const error = failedPromise.reason;
+
+    if(error instanceof AxiosError)
+    {
+      console.error(`Error while task'${actionName}' - ${error.response?.status} (${error.response?.statusText}). Response:`, error.response?.data);
+      return error.response;
+    }
+    else
+    {
+      console.error(`Error while task '${actionName}':`, error);
+      return error;
+    }
+  });
+
+  console.info(`Task '${actionName}' finished. Results: ${successfulPromises.length} successful promises, ${failedPromises.length} failed promises`);
+
+  if(failedPromises.length > 0)
+  {
+    console.error(`At least task of action '${actionName}' failed`, errors);
+  }
+};
 
 const handler: NextApiHandler = async (req, res): Promise<void> =>
 {
@@ -23,12 +50,20 @@ const handler: NextApiHandler = async (req, res): Promise<void> =>
     return res.status(401).json({ message: "Unauthorized" });
   }
 
+  if(env.NEXT_PUBLIC_DEPLOYMENT_ENVIRONMENT !== "production")
+  {
+    console.log("Skipping cronjob in non-production environment");
+    return res.status(200).json({ message: "Skipped in non-production environment" });
+  }
+
+  console.log("----- [Cronjob] Sync Users to Clickup -----");
+
   const supabaseServerClient = createPagesServerClient({ req, res }, {
     supabaseKey: env.SUPABASE_SERVICE_ROLE_KEY,
     supabaseUrl: env.NEXT_PUBLIC_SUPABASE_URL
   });
 
-  const allUsers = await db.query.users.findMany({ where: eq(users.email, "kotti97+10006@web.de") });
+  const allUsers = await db.query.users.findMany();
   const existingCrmUsers = await axios.get(`${env.CLICKUP_API_ENDPOINT}/list/${env.CLICKUP_CRM_LIST_ID}/task`, clickupRequestConfig);
 
   const getCrmDataForAllUsersPromises = allUsers
@@ -90,7 +125,9 @@ const handler: NextApiHandler = async (req, res): Promise<void> =>
     }
   });
 
-  await Promise.all(newUsers.map(async ({ crmData }) => createClickupTask(crmData)));
+  const createNewUsersResults = await Promise.allSettled(newUsers.map(async ({ crmData }) => createClickupTask(crmData)));
+
+  printAllSettledPromisesSummary(createNewUsersResults, "create new users");
 
   const updateUsersPromises: Array<Promise<AxiosResponse>> = [];
 
@@ -180,34 +217,10 @@ const handler: NextApiHandler = async (req, res): Promise<void> =>
   });
 
   const results = await Promise.allSettled(updateUsersPromises);
-  const failedUpdates = results.filter((result): result is PromiseRejectedResult => result.status === "rejected");
-  const successfulUpdates = results.filter((result): result is PromiseFulfilledResult<AxiosResponse> => result.status === "fulfilled");
 
-  const errors = failedUpdates.map((failedUpdate) =>
-  {
-    const error = failedUpdate.reason;
+  printAllSettledPromisesSummary(results, "update users");
 
-    if(error instanceof AxiosError)
-    {
-      console.error(`Error while updating a CRM field - ${error.response?.status} (${error.response?.statusText}). Response:`, error.response?.data);
-      return error.response;
-    }
-    else
-    {
-      console.error("Error while updating a CRM field", error);
-      return error;
-    }
-  });
-
-  console.info(`Updating CRM fields finished. Results: ${successfulUpdates.length} successful updates, ${failedUpdates.length} failed updates`);
-
-  if(failedUpdates.length > 0)
-  {
-    console.error("At least one CRM field update failed", errors);
-    return res.status(500).json({ failedUpdates: errors, message: "Failed to update CRM fields" });
-  }
-
-  return res.status(200).json({ message: "Success" });
+  return res.status(200).json({ message: "Finished" });
 };
 
 export default handler;
