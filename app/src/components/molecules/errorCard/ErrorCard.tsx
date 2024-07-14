@@ -1,6 +1,6 @@
 import { AlertCard } from "@/components/atoms/Card/AlertCard";
 
-import { AuthError, AuthApiError, isAuthApiError, isAuthError } from "@supabase/auth-js";
+import { isAuthApiError, isAuthError } from "@supabase/auth-js";
 import React, { type FunctionComponent, type ReactNode, useMemo } from "react";
 
 type HandledError =

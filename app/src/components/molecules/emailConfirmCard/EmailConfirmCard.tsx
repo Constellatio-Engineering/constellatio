@@ -6,7 +6,7 @@ import { supabase } from "@/lib/supabase";
 
 import { Title } from "@mantine/core";
 import { isAuthError } from "@supabase/auth-js";
-import { AuthError, type AuthResponse } from "@supabase/gotrue-js";
+import { type AuthResponse } from "@supabase/gotrue-js";
 import { useMutation } from "@tanstack/react-query";
 import React, {
   type FunctionComponent, useState, useEffect, useMemo
