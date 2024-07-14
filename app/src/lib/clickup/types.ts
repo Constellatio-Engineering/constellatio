@@ -1,3 +1,4 @@
+/* eslint-disable max-lines */
 import type { Nullable } from "@/utils/types";
 
 // Note: All types in this file are not necessarily exhaustive or correct. For an accurate list of types, please refer to the ClickUp API documentation.
@@ -18,10 +19,12 @@ type DropDownCustomFieldConfig = CustomFieldBaseProperties & {
       name: string;
     }>;
   };
-  value?: Nullable<string>;
+  value?: Nullable<number>;
 };
 
-export type DropDownCustomFieldInsertProps = Pick<DropDownCustomFieldConfig, "id" | "value">;
+export type DropDownCustomFieldInsertProps = Pick<DropDownCustomFieldConfig, "id"> & {
+  value?: Nullable<string>;
+};
 
 type CurrencyCustomFieldConfig = CustomFieldBaseProperties & {
   type: "currency";
@@ -160,41 +163,43 @@ type LocationCustomFieldConfig = CustomFieldBaseProperties & {
 
 export type LocationCustomFieldInsertProps = Pick<LocationCustomFieldConfig, "id" | "value">;
 
-/* type CustomField =
+type CustomField =
   | DropDownCustomFieldConfig
-  | CurrencyCustomFieldConfig
-  | EmojiCustomFieldConfig
-  | LabelCustomFieldConfig
-  | AutomaticProgressCustomFieldConfig
-  | ManualProgressCustomFieldConfig
-  | UrlCustomFieldConfig
   | EmailCustomFieldConfig
-  | PhoneNumberCustomFieldConfig
   | DateCustomFieldConfig
-  | ShortTextCustomFieldConfig
-  | TextCustomFieldConfig
-  | CheckBoxCustomFieldConfig
   | NumberCustomFieldConfig
-  | LocationCustomFieldConfig;*/
+  // | CurrencyCustomFieldConfig
+  // | EmojiCustomFieldConfig
+  // | LabelCustomFieldConfig
+  // | AutomaticProgressCustomFieldConfig
+  // | ManualProgressCustomFieldConfig
+  // | UrlCustomFieldConfig
+  // | PhoneNumberCustomFieldConfig
+  // | ShortTextCustomFieldConfig
+  // | TextCustomFieldConfig
+  // | CheckBoxCustomFieldConfig
+  // | LocationCustomFieldConfig
+;
 
 export type CustomFieldInsert =
   | DropDownCustomFieldInsertProps
-  | CurrencyCustomFieldInsertProps
-  | EmojiCustomFieldInsertProps
-  | LabelCustomFieldInsertProps
-  | AutomaticProgressCustomFieldInsertProps
-  | ManualProgressCustomFieldInsertProps
-  | UrlCustomFieldInsertProps
   | EmailCustomFieldInsertProps
-  | PhoneNumberCustomFieldInsertProps
   | DateCustomFieldInsertProps
-  | ShortTextCustomFieldInsertProps
-  | TextCustomFieldInsertProps
-  | CheckBoxCustomFieldInsertProps
   | NumberCustomFieldInsertProps
-  | LocationCustomFieldInsertProps;
+  // | CurrencyCustomFieldInsertProps
+  // | EmojiCustomFieldInsertProps
+  // | LabelCustomFieldInsertProps
+  // | AutomaticProgressCustomFieldInsertProps
+  // | ManualProgressCustomFieldInsertProps
+  // | UrlCustomFieldInsertProps
+  // | PhoneNumberCustomFieldInsertProps
+  // | ShortTextCustomFieldInsertProps
+  // | TextCustomFieldInsertProps
+  // | CheckBoxCustomFieldInsertProps
+  // | LocationCustomFieldInsertProps
+;
 
-export type ClickupTask = {
+export type ClickupTaskCreate = {
   archived?: boolean;
   assignees?: number[];
   check_required_custom_fields?: boolean;
@@ -204,7 +209,6 @@ export type ClickupTask = {
   due_date?: number;
   due_date_time?: boolean;
   group_assignees?: number[];
-  id?: string;
   links_to?: string | null;
   name: string;
   notify_all?: boolean;
@@ -217,3 +221,9 @@ export type ClickupTask = {
   tags?: string[];
   time_estimate?: number;
 };
+
+export type ClickupTask = Omit<ClickupTaskCreate, "custom_fields"> & {
+  custom_fields?: CustomField[];
+  id: string;
+};
+

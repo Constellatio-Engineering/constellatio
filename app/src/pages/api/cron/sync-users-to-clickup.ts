@@ -9,7 +9,7 @@ import { clickupCrmCustomField, clickupRequestConfig, getUserCrmData } from "@/l
 import { stripe } from "@/lib/stripe";
 
 import { createPagesServerClient } from "@supabase/auth-helpers-nextjs";
-import axios, { AxiosError, type AxiosResponse } from "axios";
+import axios, { type AxiosError, type AxiosResponse } from "axios";
 import { eq } from "drizzle-orm";
 import type { NextApiHandler } from "next";
 import type Stripe from "stripe";
@@ -90,8 +90,8 @@ const handler: NextApiHandler = async (req, res): Promise<void> =>
     }
   });
 
-  console.log("newUsers", newUsers);
-  console.log("existingUsers", existingUsers);
+  /* console.log("newUsers", newUsers);
+  console.log("existingUsers", existingUsers);*/
 
   const customFields = await axios.get(`${env.CLICKUP_API_ENDPOINT}/list/${env.CLICKUP_CRM_LIST_ID}/field`, {
     headers: {
@@ -123,20 +123,78 @@ const handler: NextApiHandler = async (req, res): Promise<void> =>
       }
 
       const existingCrmField = existingCrmUser.custom_fields?.find((existingField) => existingField.id === field.id);
-      const currentCrmValue = existingCrmField?.value;
 
-      if(currentCrmValue !== field.value)
+      if(!existingCrmField)
       {
-        console.log("-------------- mismatch --------------");
-        console.log("existingCrmField", existingCrmField);
-        console.log("field", field);
-
-        // console.log("Updating user from", currentCrmValue, "to", field.value);
-
-        /* updateUsersPromises.push(updateClickupCustomField({
-          taskId: existingCrmUser.id!,
+        console.log("Field does not exist yet", field);
+        updateUsersPromises.push(updateClickupCustomField({
+          taskId: existingCrmUser.id,
           updatedCustomField: field
-        }));*/
+        }));
+        return;
+      }
+
+      switch (existingCrmField.type)
+      {
+        case "drop_down":
+        {
+          const currentlySelectedOption = existingCrmField.value != null ? existingCrmField.type_config.options[existingCrmField.value] : null;
+          const currentlySelectedOptionId = currentlySelectedOption?.id;
+
+          if(currentlySelectedOptionId !== field.value)
+          {
+            console.log("-------------- mismatch for field " + existingCrmField.name + " --------------");
+            console.log("currentlySelectedOption", currentlySelectedOption);
+            console.log("new value", field);
+
+            updateUsersPromises.push(updateClickupCustomField({
+              taskId: existingCrmUser.id,
+              updatedCustomField: field
+            }));
+          }
+          else
+          {
+            console.log("value for " + currentlySelectedOption?.name + " is the same");
+          }
+
+          break;
+        }
+        case "number":
+        case "date":
+        {
+          if(Number(existingCrmField.value) !== field.value)
+          {
+            console.log("Updating " + existingCrmField.type + " from", existingCrmField.value, "to", field.value + " for field", existingCrmField.name);
+
+            updateUsersPromises.push(updateClickupCustomField({
+              taskId: existingCrmUser.id!,
+              updatedCustomField: field
+            }));
+          }
+          else
+          {
+            console.log(existingCrmField.type + " is the same");
+          }
+          break;
+        }
+        case "email":
+        {
+          if(existingCrmField.value !== field.value)
+          {
+            console.log("Updating email from", existingCrmField.value, "to", field.value);
+
+            updateUsersPromises.push(updateClickupCustomField({
+              taskId: existingCrmUser.id!,
+              updatedCustomField: field
+            }));
+          }
+          else
+          {
+            console.log("Email is the same");
+          }
+
+          break;
+        }
       }
     });
   });
@@ -147,9 +205,9 @@ const handler: NextApiHandler = async (req, res): Promise<void> =>
 
   const failedUpdates = results.filter((result) => result.status === "rejected");
 
-  failedUpdates.forEach((failedUpdate) =>
+  failedUpdates.forEach((failedUpdate: PromiseSettledResult<AxiosError>) =>
   {
-    console.log("failed", failedUpdate, failedUpdate.toString());
+    console.log("failed", (failedUpdate.reason));
   });
 
   return res.status(200).json({ message: "Success", ...customFields.data });
