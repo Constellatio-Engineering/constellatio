@@ -1,16 +1,9 @@
-const axios = require('axios');
+const numbers = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10];
 
-const test = async () =>
-{
-  try
-  {
-    const response = await axios.get("http://localhost:3010/api/cron/sync-users-to-clickup");
-    console.log(response);
+numbers.forEach(number => {
+  if (number % 2 === 0) {
+    return; // Skip even numbers
   }
-  catch (e)
-  {
-    console.log(e.message);
-  }
-}
 
-test();
+  console.log(number); // This will only log odd numbers
+});

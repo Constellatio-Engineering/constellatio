@@ -1,18 +1,18 @@
 import { db } from "@/db/connection";
+import { users } from "@/db/schema";
 import { env } from "@/env.mjs";
-import { clickupCrmCustomField, type ClickupTask, createClickupTask, getUserCrmData } from "@/lib/clickup/tasks/create-task";
+import { createClickupTask } from "@/lib/clickup/tasks/create-task";
+import { updateClickupCustomField } from "@/lib/clickup/tasks/update-custom-field";
+import { updateClickupTask } from "@/lib/clickup/tasks/update-task";
+import { type ClickupTask } from "@/lib/clickup/types";
+import { clickupCrmCustomField, clickupRequestConfig, getUserCrmData } from "@/lib/clickup/utils";
 import { stripe } from "@/lib/stripe";
 
 import { createPagesServerClient } from "@supabase/auth-helpers-nextjs";
-import axios, { type AxiosRequestConfig } from "axios";
+import axios, { AxiosError, type AxiosResponse } from "axios";
+import { eq } from "drizzle-orm";
 import type { NextApiHandler } from "next";
 import type Stripe from "stripe";
-
-const clickupRequestConfig: AxiosRequestConfig = {
-  headers: {
-    Authorization: env.CLICKUP_API_TOKEN
-  }
-};
 
 const handler: NextApiHandler = async (req, res): Promise<void> =>
 {
@@ -27,14 +27,7 @@ const handler: NextApiHandler = async (req, res): Promise<void> =>
     supabaseUrl: env.NEXT_PUBLIC_SUPABASE_URL
   });
 
-  /* const customFields = await axios.get(`${env.CLICKUP_API_ENDPOINT}/list/${env.CLICKUP_CRM_LIST_ID}/field`, {
-    headers: {
-      Authorization: env.CLICKUP_API_TOKEN,
-      "Content-Type": "application/json",
-    }
-  });*/
-
-  const allUsers = await db.query.users.findMany();
+  const allUsers = await db.query.users.findMany({ where: eq(users.email, "kotti97+10004@web.de") });
   const existingCrmUsers = await axios.get(`${env.CLICKUP_API_ENDPOINT}/list/${env.CLICKUP_CRM_LIST_ID}/task`, clickupRequestConfig);
 
   const getCrmDataForAllUsersPromises = allUsers
@@ -69,8 +62,12 @@ const handler: NextApiHandler = async (req, res): Promise<void> =>
     .filter(Boolean);
 
   const allUsersWithCrmData = (await Promise.all(getCrmDataForAllUsersPromises)).filter(Boolean);
+
   const newUsers: typeof allUsersWithCrmData = [];
-  const existingUsers: typeof allUsersWithCrmData = [];
+  const existingUsers: Array<{
+    existingCrmUser: ClickupTask;
+    userWithCrmData: typeof allUsersWithCrmData[number];
+  }> = [];
 
   allUsersWithCrmData.forEach(user =>
   {
@@ -82,7 +79,10 @@ const handler: NextApiHandler = async (req, res): Promise<void> =>
 
     if(matchingCrmUser)
     {
-      existingUsers.push(user);
+      existingUsers.push({
+        existingCrmUser: matchingCrmUser,
+        userWithCrmData: user
+      });
     }
     else
     {
@@ -93,12 +93,66 @@ const handler: NextApiHandler = async (req, res): Promise<void> =>
   console.log("newUsers", newUsers);
   console.log("existingUsers", existingUsers);
 
+  const customFields = await axios.get(`${env.CLICKUP_API_ENDPOINT}/list/${env.CLICKUP_CRM_LIST_ID}/field`, {
+    headers: {
+      Authorization: env.CLICKUP_API_TOKEN,
+      "Content-Type": "application/json",
+    }
+  });
+
   await Promise.all(newUsers.map(async ({ crmData }) => createClickupTask(crmData)));
 
-  console.log("end createTasksForNewUsers");
-  console.log("-----------");
+  const updateUsersPromises: Array<Promise<AxiosResponse>> = [];
 
-  return res.status(200).json({ message: "Success" });
+  existingUsers.forEach(({ existingCrmUser, userWithCrmData }) =>
+  {
+    const { crmData, userData } = userWithCrmData;
+
+    if(existingCrmUser.name !== (userData.firstName + " " + userData.lastName))
+    {
+      console.log("Updating user name from", existingCrmUser.name, "to", userData.firstName + " " + userData.lastName);
+      updateUsersPromises.push(updateClickupTask(existingCrmUser.id!, { name: userData.firstName + " " + userData.lastName }));
+    }
+
+    crmData.custom_fields.forEach((field) =>
+    {
+      if(field.id === clickupCrmCustomField.category.fieldId)
+      {
+        // Skip category field because it's not supposed to be updated automatically after creation
+        return;
+      }
+
+      const existingCrmField = existingCrmUser.custom_fields?.find((existingField) => existingField.id === field.id);
+      const currentCrmValue = existingCrmField?.value;
+
+      if(currentCrmValue !== field.value)
+      {
+        console.log("-------------- mismatch --------------");
+        console.log("existingCrmField", existingCrmField);
+        console.log("field", field);
+
+        // console.log("Updating user from", currentCrmValue, "to", field.value);
+
+        /* updateUsersPromises.push(updateClickupCustomField({
+          taskId: existingCrmUser.id!,
+          updatedCustomField: field
+        }));*/
+      }
+    });
+  });
+
+  console.log(updateUsersPromises.length + " updates to be made...");
+
+  const results = await Promise.allSettled(updateUsersPromises);
+
+  const failedUpdates = results.filter((result) => result.status === "rejected");
+
+  failedUpdates.forEach((failedUpdate) =>
+  {
+    console.log("failed", failedUpdate, failedUpdate.toString());
+  });
+
+  return res.status(200).json({ message: "Success", ...customFields.data });
 };
 
 export default handler;
