@@ -17,4 +17,9 @@ export const text = css`
 
 export const buttonWrapper = css`
   margin-top: 20px;
+  display: flex;
+  justify-content: center;
+  flex-direction: column;
+  gap: 20px;
+  align-items: center;
 `;

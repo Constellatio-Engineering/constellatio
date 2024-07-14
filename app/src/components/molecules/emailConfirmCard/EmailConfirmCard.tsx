@@ -3,10 +3,12 @@ import { BodyText } from "@/components/atoms/BodyText/BodyText";
 import { Button } from "@/components/atoms/Button/Button";
 import { useResendConfirmationEmail } from "@/hooks/useResendConfirmationEmail";
 import { supabase } from "@/lib/supabase";
+import { appPaths } from "@/utils/paths";
 
 import { Title } from "@mantine/core";
 import { type AuthResponse } from "@supabase/gotrue-js";
 import { useMutation } from "@tanstack/react-query";
+import { useRouter } from "next/router";
 import React, {
   type FunctionComponent, useState, useEffect, useMemo
 } from "react";
@@ -31,6 +33,8 @@ interface EmailConfirmCardProps
 
 const EmailConfirmCard: FunctionComponent<EmailConfirmCardProps> = ({ params }) =>
 {
+  const router = useRouter();
+
   const [confirmationState, setConfirmationState] = useState<ConfirmationState | null>(null);
   const { email, token } = params;
 
@@ -189,6 +193,12 @@ const EmailConfirmCard: FunctionComponent<EmailConfirmCardProps> = ({ params }) 
             onClick={() => resendConfirmationEmail()}
             type="button">
             Bestätigungslink erneut senden
+          </Button>
+          <Button<"button">
+            styleType="secondarySimple"
+            onClick={async () => router.push(appPaths.dashboard)}
+            type="button">
+            Zum Dashboard
           </Button>
         </div>
       )}
