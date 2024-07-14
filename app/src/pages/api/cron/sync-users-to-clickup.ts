@@ -20,7 +20,6 @@ const handler: NextApiHandler = async (req, res): Promise<void> =>
 {
   if(req.headers.authorization !== `Bearer ${env.CRON_SECRET}`)
   {
-    console.log("req.headers.Authorization", req.headers.authorization);
     return res.status(401).json({ message: "Unauthorized" });
   }
 
@@ -29,7 +28,7 @@ const handler: NextApiHandler = async (req, res): Promise<void> =>
     supabaseUrl: env.NEXT_PUBLIC_SUPABASE_URL
   });
 
-  const allUsers = await db.query.users.findMany({ where: eq(users.email, "kotti97+10004@web.de") });
+  const allUsers = await db.query.users.findMany({ where: eq(users.email, "kotti97+10006@web.de") });
   const existingCrmUsers = await axios.get(`${env.CLICKUP_API_ENDPOINT}/list/${env.CLICKUP_CRM_LIST_ID}/task`, clickupRequestConfig);
 
   const getCrmDataForAllUsersPromises = allUsers
@@ -132,8 +131,6 @@ const handler: NextApiHandler = async (req, res): Promise<void> =>
 
           if(field.value == null && currentlySelectedOptionId != null)
           {
-            console.log("Delete field value for", currentlySelectedOption);
-
             updateUsersPromises.push(deleteClickupCustomFieldValue({
               fieldId: field.id,
               taskId: existingCrmUser.id
@@ -141,8 +138,6 @@ const handler: NextApiHandler = async (req, res): Promise<void> =>
           }
           else if(currentlySelectedOptionId !== field.value)
           {
-            console.log("Update field value for", currentlySelectedOption, field.value);
-
             updateUsersPromises.push(updateClickupCustomField({
               taskId: existingCrmUser.id,
               updatedCustomField: field
