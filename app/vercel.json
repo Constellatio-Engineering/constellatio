@@ -10,6 +10,10 @@
     {
       "path": "/api/cron/update-search-indexes",
       "schedule": "*/1 * * * *"
+    },
+    {
+      "path": "/api/cron/sync-users-to-clickup",
+      "schedule": "*/1 * * * *"
     }
   ]
 }

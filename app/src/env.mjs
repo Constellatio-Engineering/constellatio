@@ -46,6 +46,9 @@ export const env = createEnv({
     KV_REST_API_URL: z.string().url(),
     KV_REST_API_TOKEN: z.string(),
     KV_REST_API_READ_ONLY_TOKEN: z.string(),
+    CLICKUP_API_TOKEN: z.string(),
+    CLICKUP_CRM_LIST_ID: z.string(),
+    CLICKUP_API_ENDPOINT: urlValidation,
   },
 
 	/**
@@ -127,6 +130,9 @@ export const env = createEnv({
     KV_REST_API_READ_ONLY_TOKEN: process.env.KV_REST_API_READ_ONLY_TOKEN,
     NEXT_PUBLIC_IS_USAGE_TIME_CHART_ENABLED: process.env.NEXT_PUBLIC_IS_USAGE_TIME_CHART_ENABLED,
     NEXT_PUBLIC_IS_REQUEST_BATCHING_DISABLED: process.env.NEXT_PUBLIC_IS_REQUEST_BATCHING_DISABLED,
+    CLICKUP_API_TOKEN: process.env.CLICKUP_API_TOKEN,
+    CLICKUP_CRM_LIST_ID: process.env.CLICKUP_CRM_LIST_ID,
+    CLICKUP_API_ENDPOINT: process.env.CLICKUP_API_ENDPOINT,
   },
   /**
    * Run `build` or `dev` with `SKIP_ENV_VALIDATION` to skip env validation.
