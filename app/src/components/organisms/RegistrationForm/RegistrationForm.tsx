@@ -48,7 +48,7 @@ export const RegistrationForm: FunctionComponent = () =>
       password: lastEnteredPassword || "Super-secure-password-123",
       passwordConfirmation: lastEnteredPassword || "Super-secure-password-123",
       semester: "7",
-      university: allUniversities[20] ?? null,
+      university: allUniversities[20]!.name ?? null,
     } : {
       acceptTOS: false,
       displayName: "",

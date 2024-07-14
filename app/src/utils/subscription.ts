@@ -20,7 +20,7 @@ export const getFutureSubscriptionStatus = (subscription: Stripe.Subscription): 
     trial_end: trialEnd
   } = subscription;
 
-  let futureSubscriptionStatus: "willBeCanceled" | "trialWillExpire" | "trialWillBecomeSubscription" | "willContinue" | null;
+  let futureSubscriptionStatus: FutureSubscriptionStatus;
 
   if(cancelAt)
   {

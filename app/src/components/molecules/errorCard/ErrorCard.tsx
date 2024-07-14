@@ -1,6 +1,6 @@
 import { AlertCard } from "@/components/atoms/Card/AlertCard";
 
-import { AuthApiError, AuthError } from "@supabase/gotrue-js";
+import { isAuthApiError, isAuthError } from "@supabase/auth-js";
 import React, { type FunctionComponent, type ReactNode, useMemo } from "react";
 
 type HandledError =
@@ -43,7 +43,7 @@ const ErrorCard: FunctionComponent<ErrorCardsProps> = ({
       return null;
     }
 
-    if(error instanceof AuthError || error instanceof AuthApiError)
+    if(isAuthError(error) || isAuthApiError(error))
     {
       if(error.status === 429)
       {
