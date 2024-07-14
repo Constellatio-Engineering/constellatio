@@ -202,7 +202,7 @@ type CustomFieldInsert =
   | NumberCustomFieldInsertProps
   | LocationCustomFieldInsertProps;
 
-const clickupCrmCustomField = {
+export const clickupCrmCustomField = {
   aboStatus: {
     fieldId: "c5b525cc-e7d9-46e7-af4f-46681d072a4a",
     options: {
@@ -339,7 +339,7 @@ const calculateSubscriptionFuture: CalculateMembershipEndDateProps = (subscripti
   }
 };
 
-type CreateTaskBody = {
+export type ClickupTask = {
   archived?: boolean;
   assignees?: number[];
   check_required_custom_fields?: boolean;
@@ -362,16 +362,15 @@ type CreateTaskBody = {
   time_estimate?: number;
 };
 
-const createTask = async (body: CreateTaskBody): Promise<void> =>
+// eslint-disable-next-line @typescript-eslint/explicit-function-return-type
+export const createClickupTask = async (body: ClickupTask) =>
 {
-  const result = await axios.post(`${env.CLICKUP_API_ENDPOINT}/list/${env.CLICKUP_CRM_LIST_ID}/task`, body, {
+  return axios.post(`${env.CLICKUP_API_ENDPOINT}/list/${env.CLICKUP_CRM_LIST_ID}/task`, body, {
     headers: {
       Authorization: env.CLICKUP_API_TOKEN,
       "Content-Type": "application/json"
     }
   });
-
-  return result.data;
 };
 
 type GetUserCrmData = (props: {
@@ -380,7 +379,7 @@ type GetUserCrmData = (props: {
   user: User;
 }) => {
   custom_fields: CustomFieldInsert[];
-  name: string; 
+  name: string;
 };
 
 export const getUserCrmData: GetUserCrmData = ({ subscriptionData, supabaseUserData, user }) =>
@@ -473,6 +472,6 @@ export const getUserCrmData: GetUserCrmData = ({ subscriptionData, supabaseUserD
       aboStatusCustomFieldData,
       willSubscriptionContinueCustomFieldData,
     ],
-    name: user.firstName + " " + user.lastName
+    name: user.firstName + " " + user.lastName,
   });
 };
