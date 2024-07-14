@@ -1,7 +1,9 @@
+/* eslint-disable max-lines */
 import { db } from "@/db/connection";
 import { users } from "@/db/schema";
 import { env } from "@/env.mjs";
 import { createClickupTask } from "@/lib/clickup/tasks/create-task";
+import { deleteClickupCustomFieldValue } from "@/lib/clickup/tasks/delete-custom-field-value";
 import { updateClickupCustomField } from "@/lib/clickup/tasks/update-custom-field";
 import { updateClickupTask } from "@/lib/clickup/tasks/update-task";
 import { type ClickupTask } from "@/lib/clickup/types";
@@ -9,7 +11,7 @@ import { clickupCrmCustomField, clickupRequestConfig, getUserCrmData } from "@/l
 import { stripe } from "@/lib/stripe";
 
 import { createPagesServerClient } from "@supabase/auth-helpers-nextjs";
-import axios, { type AxiosError, type AxiosResponse } from "axios";
+import axios, { AxiosError, type AxiosResponse } from "axios";
 import { eq } from "drizzle-orm";
 import type { NextApiHandler } from "next";
 import type Stripe from "stripe";
@@ -62,7 +64,6 @@ const handler: NextApiHandler = async (req, res): Promise<void> =>
     .filter(Boolean);
 
   const allUsersWithCrmData = (await Promise.all(getCrmDataForAllUsersPromises)).filter(Boolean);
-
   const newUsers: typeof allUsersWithCrmData = [];
   const existingUsers: Array<{
     existingCrmUser: ClickupTask;
@@ -90,16 +91,6 @@ const handler: NextApiHandler = async (req, res): Promise<void> =>
     }
   });
 
-  /* console.log("newUsers", newUsers);
-  console.log("existingUsers", existingUsers);*/
-
-  const customFields = await axios.get(`${env.CLICKUP_API_ENDPOINT}/list/${env.CLICKUP_CRM_LIST_ID}/field`, {
-    headers: {
-      Authorization: env.CLICKUP_API_TOKEN,
-      "Content-Type": "application/json",
-    }
-  });
-
   await Promise.all(newUsers.map(async ({ crmData }) => createClickupTask(crmData)));
 
   const updateUsersPromises: Array<Promise<AxiosResponse>> = [];
@@ -110,7 +101,6 @@ const handler: NextApiHandler = async (req, res): Promise<void> =>
 
     if(existingCrmUser.name !== (userData.firstName + " " + userData.lastName))
     {
-      console.log("Updating user name from", existingCrmUser.name, "to", userData.firstName + " " + userData.lastName);
       updateUsersPromises.push(updateClickupTask(existingCrmUser.id!, { name: userData.firstName + " " + userData.lastName }));
     }
 
@@ -126,7 +116,6 @@ const handler: NextApiHandler = async (req, res): Promise<void> =>
 
       if(!existingCrmField)
       {
-        console.log("Field does not exist yet", field);
         updateUsersPromises.push(updateClickupCustomField({
           taskId: existingCrmUser.id,
           updatedCustomField: field
@@ -141,39 +130,42 @@ const handler: NextApiHandler = async (req, res): Promise<void> =>
           const currentlySelectedOption = existingCrmField.value != null ? existingCrmField.type_config.options[existingCrmField.value] : null;
           const currentlySelectedOptionId = currentlySelectedOption?.id;
 
-          if(currentlySelectedOptionId !== field.value)
+          if(field.value == null && currentlySelectedOptionId != null)
           {
-            console.log("-------------- mismatch for field " + existingCrmField.name + " --------------");
-            console.log("currentlySelectedOption", currentlySelectedOption);
-            console.log("new value", field);
+            console.log("Delete field value for", currentlySelectedOption);
+
+            updateUsersPromises.push(deleteClickupCustomFieldValue({
+              fieldId: field.id,
+              taskId: existingCrmUser.id
+            }));
+          }
+          else if(currentlySelectedOptionId !== field.value)
+          {
+            console.log("Update field value for", currentlySelectedOption, field.value);
 
             updateUsersPromises.push(updateClickupCustomField({
               taskId: existingCrmUser.id,
               updatedCustomField: field
             }));
           }
-          else
-          {
-            console.log("value for " + currentlySelectedOption?.name + " is the same");
-          }
-
           break;
         }
         case "number":
         case "date":
         {
-          if(Number(existingCrmField.value) !== field.value)
+          if(field.value == null && existingCrmField.value != null)
           {
-            console.log("Updating " + existingCrmField.type + " from", existingCrmField.value, "to", field.value + " for field", existingCrmField.name);
-
-            updateUsersPromises.push(updateClickupCustomField({
-              taskId: existingCrmUser.id!,
-              updatedCustomField: field
+            updateUsersPromises.push(deleteClickupCustomFieldValue({
+              fieldId: field.id,
+              taskId: existingCrmUser.id
             }));
           }
-          else
+          else if(field.value != null && Number(existingCrmField.value) !== field.value)
           {
-            console.log(existingCrmField.type + " is the same");
+            updateUsersPromises.push(updateClickupCustomField({
+              taskId: existingCrmUser.id,
+              updatedCustomField: field
+            }));
           }
           break;
         }
@@ -181,36 +173,46 @@ const handler: NextApiHandler = async (req, res): Promise<void> =>
         {
           if(existingCrmField.value !== field.value)
           {
-            console.log("Updating email from", existingCrmField.value, "to", field.value);
-
             updateUsersPromises.push(updateClickupCustomField({
-              taskId: existingCrmUser.id!,
+              taskId: existingCrmUser.id,
               updatedCustomField: field
             }));
           }
-          else
-          {
-            console.log("Email is the same");
-          }
-
           break;
         }
       }
     });
   });
 
-  console.log(updateUsersPromises.length + " updates to be made...");
-
   const results = await Promise.allSettled(updateUsersPromises);
+  const failedUpdates = results.filter((result): result is PromiseRejectedResult => result.status === "rejected");
+  const successfulUpdates = results.filter((result): result is PromiseFulfilledResult<AxiosResponse> => result.status === "fulfilled");
 
-  const failedUpdates = results.filter((result) => result.status === "rejected");
-
-  failedUpdates.forEach((failedUpdate: PromiseSettledResult<AxiosError>) =>
+  const errors = failedUpdates.map((failedUpdate) =>
   {
-    console.log("failed", (failedUpdate.reason));
+    const error = failedUpdate.reason;
+
+    if(error instanceof AxiosError)
+    {
+      console.error(`Error while updating a CRM field - ${error.response?.status} (${error.response?.statusText}). Response:`, error.response?.data);
+      return error.response;
+    }
+    else
+    {
+      console.error("Error while updating a CRM field", error);
+      return error;
+    }
   });
 
-  return res.status(200).json({ message: "Success", ...customFields.data });
+  console.info(`Updating CRM fields finished. Results: ${successfulUpdates.length} successful updates, ${failedUpdates.length} failed updates`);
+
+  if(failedUpdates.length > 0)
+  {
+    console.error("At least one CRM field update failed", errors);
+    return res.status(500).json({ failedUpdates: errors, message: "Failed to update CRM fields" });
+  }
+
+  return res.status(200).json({ message: "Success" });
 };
 
 export default handler;
