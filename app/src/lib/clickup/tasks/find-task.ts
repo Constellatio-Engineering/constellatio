@@ -14,12 +14,14 @@ export const findClickupTask = async (listId: string, params: ClickUpFindTaskPar
   {
     const typedKey = key as keyof ClickUpFindTaskParams;
 
-    if(params[typedKey] === undefined || params[typedKey] === null) { return ""; }
+    const values = params[typedKey];
+
+    if(values === undefined || values === null) { return ""; }
 
     if(["assignees", "statuses", "tags", "watchers"].includes(key)) 
     {
       const localParams = [];
-      for(const value of params[typedKey] as string[]) 
+      for(const value of values as string[]) 
       {
         localParams.push(`${key}[]=${value}`);
       }
@@ -29,7 +31,7 @@ export const findClickupTask = async (listId: string, params: ClickUpFindTaskPar
     {
       return `${key}=${JSON.stringify(params[key])}`;
     }
-    return `${key}=${params[typedKey].toString()}`;
+    return `${key}=${values.toString()}`;
   });
 
   let finalParams = "";
