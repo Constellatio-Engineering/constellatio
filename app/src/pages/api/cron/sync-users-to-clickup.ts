@@ -66,7 +66,7 @@ const handler: NextApiHandler = async (req, res): Promise<void> =>
     supabaseUrl: env.NEXT_PUBLIC_SUPABASE_URL
   });
 
-  const allUsers = await db.query.users.findMany({ limit: 3 });
+  const allUsers = await db.query.users.findMany();
   const existingCrmUsers = await axios.get(`${env.CLICKUP_API_ENDPOINT}/list/${env.CLICKUP_CRM_LIST_ID}/task`, clickupRequestConfig);
 
   const getCrmDataForAllUsersPromises = allUsers
