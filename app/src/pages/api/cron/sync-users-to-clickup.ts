@@ -12,7 +12,10 @@ import { stripe } from "@/lib/stripe";
 import { createPagesServerClient } from "@supabase/auth-helpers-nextjs";
 import axios, { AxiosError, type AxiosResponse } from "axios";
 import type { NextApiHandler } from "next";
+import pLimit from "p-limit";
 import type Stripe from "stripe";
+
+const stripeConcurrencyLimit = pLimit(env.STRIPE_SDK_CONCURRENCY_LIMIT);
 
 const printAllSettledPromisesSummary = (settledPromises: Array<PromiseSettledResult<unknown>>, actionName: string): void =>
 {
@@ -50,10 +53,10 @@ const handler: NextApiHandler = async (req, res): Promise<void> =>
     return res.status(401).json({ message: "Unauthorized" });
   }
 
-  if(env.NEXT_PUBLIC_DEPLOYMENT_ENVIRONMENT !== "production")
+  if(env.NEXT_PUBLIC_DEPLOYMENT_ENVIRONMENT !== "production" && env.NEXT_PUBLIC_DEPLOYMENT_ENVIRONMENT !== "development")
   {
-    console.log("Skipping cronjob in non-production environment");
-    return res.status(200).json({ message: "Skipped in non-production environment" });
+    console.log("Skipping cronjob in non-production or non-development environment");
+    return res.status(200).json({ message: "Skipped in non-production or non-development environment" });
   }
 
   console.log("----- [Cronjob] Sync Users to Clickup -----");
@@ -63,11 +66,11 @@ const handler: NextApiHandler = async (req, res): Promise<void> =>
     supabaseUrl: env.NEXT_PUBLIC_SUPABASE_URL
   });
 
-  const allUsers = await db.query.users.findMany();
+  const allUsers = await db.query.users.findMany({ limit: 3 });
   const existingCrmUsers = await axios.get(`${env.CLICKUP_API_ENDPOINT}/list/${env.CLICKUP_CRM_LIST_ID}/task`, clickupRequestConfig);
 
   const getCrmDataForAllUsersPromises = allUsers
-    .map(async (user) =>
+    .map(async user => stripeConcurrencyLimit(async () => 
     {
       const { data: { user: supabaseUserData } } = await supabaseServerClient.auth.admin.getUserById(user.id);
 
@@ -81,6 +84,7 @@ const handler: NextApiHandler = async (req, res): Promise<void> =>
 
       if(userSubscriptionId != null)
       {
+        console.log(`Fetching subscription data for user ${user.id}...`);
         subscriptionData = await stripe.subscriptions.retrieve(userSubscriptionId);
       }
 
@@ -94,7 +98,7 @@ const handler: NextApiHandler = async (req, res): Promise<void> =>
         crmData,
         userData: user
       });
-    })
+    }))
     .filter(Boolean);
 
   const allUsersWithCrmData = (await Promise.all(getCrmDataForAllUsersPromises)).filter(Boolean);
