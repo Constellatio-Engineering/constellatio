@@ -3,6 +3,7 @@ import { BodyText } from "@/components/atoms/BodyText/BodyText";
 import { Button } from "@/components/atoms/Button/Button";
 import { Checkbox } from "@/components/atoms/Checkbox/Checkbox";
 import { CustomLink } from "@/components/atoms/CustomLink/CustomLink";
+import MaterialsLabel from "@/components/atoms/materialsLabel/MaterialsLabel";
 import DisplayNameInput from "@/components/organisms/RegistrationForm/form/DisplayNameInput";
 import EmailInput from "@/components/organisms/RegistrationForm/form/EmailInput";
 import FirstNameInput from "@/components/organisms/RegistrationForm/form/FirstNameInput";
@@ -249,9 +250,9 @@ export const RegistrationForm: FunctionComponent = () =>
             Du hast schon ein Konto?
           </CustomLink>
           {referringUserName && (
-            <BodyText styleType="body-01-regular" component="p">
-              Du wurdest von {referringUserName} eingeladen.
-            </BodyText>
+            <div>
+              <MaterialsLabel title={`Eingeladen von: ${referringUserName}`} variant="heart"/>
+            </div>
           )}
           <FirstNameInput {...form.getInputProps("firstName")}/>
           <LastNameInput {...form.getInputProps("lastName")}/>
