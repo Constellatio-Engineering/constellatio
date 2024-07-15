@@ -6,6 +6,12 @@
   "framework": "nextjs",
   "regions": ["fra1"],
   "public": false,
+  "functions": {
+    "api/cron/**/*": {
+      "maxDuration": 300,
+      "memory": 2000
+    }
+  },
   "crons": [
     {
       "path": "/api/cron/update-search-indexes",
