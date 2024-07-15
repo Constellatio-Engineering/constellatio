@@ -49,6 +49,7 @@ export const env = createEnv({
     CLICKUP_API_TOKEN: z.string(),
     CLICKUP_CRM_LIST_ID: z.string(),
     CLICKUP_API_ENDPOINT: urlValidation,
+    STRIPE_SDK_CONCURRENCY_LIMIT: z.string().pipe(z.coerce.number().int().min(1).max(999)),
   },
 
 	/**
@@ -133,6 +134,7 @@ export const env = createEnv({
     CLICKUP_API_TOKEN: process.env.CLICKUP_API_TOKEN,
     CLICKUP_CRM_LIST_ID: process.env.CLICKUP_CRM_LIST_ID,
     CLICKUP_API_ENDPOINT: process.env.CLICKUP_API_ENDPOINT,
+    STRIPE_SDK_CONCURRENCY_LIMIT: process.env.STRIPE_SDK_CONCURRENCY_LIMIT,
   },
   /**
    * Run `build` or `dev` with `SKIP_ENV_VALIDATION` to skip env validation.
