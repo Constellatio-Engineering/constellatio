@@ -129,7 +129,7 @@ const handler: NextApiHandler = async (req, res): Promise<void> =>
     }
   });
 
-  const createNewUsersResults = await Promise.allSettled(newUsers.map(async ({ crmData }) => createClickupTask(crmData)));
+  const createNewUsersResults = await Promise.allSettled(newUsers.map(async ({ crmData }) => createClickupTask(env.CLICKUP_CRM_LIST_ID, crmData)));
 
   printAllSettledPromisesSummary(createNewUsersResults, "create new users");
 
