@@ -7,7 +7,7 @@
   "regions": ["fra1"],
   "public": false,
   "functions": {
-    "api/cron/**/*": {
+    "src/pages/api/cron/**/*": {
       "maxDuration": 300,
       "memory": 2000
     }
