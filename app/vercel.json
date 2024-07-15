@@ -6,10 +6,20 @@
   "framework": "nextjs",
   "regions": ["fra1"],
   "public": false,
+  "functions": {
+    "src/pages/api/cron/**/*": {
+      "maxDuration": 300,
+      "memory": 2000
+    }
+  },
   "crons": [
     {
       "path": "/api/cron/update-search-indexes",
       "schedule": "*/1 * * * *"
+    },
+    {
+      "path": "/api/cron/sync-users-to-clickup",
+      "schedule": "0 */8 * * *"
     }
   ]
 }

@@ -2,7 +2,6 @@
 import { RouterTransition } from "@/components/atoms/RouterTransition/RouterTransition";
 import { ActivityWatchdog } from "@/components/helpers/activityWatchdog/ActivityWatchdog";
 import { AuthenticationRequiredProtection } from "@/components/helpers/authenticationRequiredProtection/AuthenticationRequiredProtection";
-import Tracking from "@/components/helpers/Tracking";
 import FeedbackButton from "@/components/molecules/feedbackButton/FeedbackButton";
 import Lightbox from "@/components/molecules/lightbox/Lightbox";
 import NewNotificationEarnedWatchdog from "@/components/molecules/newNotificationEarnedWatchdog/NewNotificationEarnedWatchdog";
@@ -18,7 +17,7 @@ import CustomThemingProvider from "@/provider/CustomThemingProvider";
 import InvalidateQueriesProvider from "@/provider/InvalidateQueriesProvider";
 import MeilisearchProvider from "@/provider/MeilisearchProvider";
 import { api } from "@/utils/api";
-import { isProduction, isTrackingEnabled } from "@/utils/env";
+import { isProduction } from "@/utils/env";
 
 import { ModalsProvider } from "@mantine/modals";
 import { Notifications } from "@mantine/notifications";
@@ -28,8 +27,6 @@ import { type AppProps } from "next/app";
 import Head from "next/head";
 import { useRouter } from "next/router";
 import { appWithTranslation, type UserConfig } from "next-i18next";
-import { posthog } from "posthog-js";
-import { PostHogProvider } from "posthog-js/react";
 import React, { Fragment, type FunctionComponent, type ReactElement, type ReactNode } from "react";
 
 import nextI18NextConfig from "../../next-i18next.config.js";
@@ -123,34 +120,31 @@ const AppContainer: FunctionComponent<ConstellatioAppProps> = ({ Component, page
       <SessionContextProvider supabaseClient={supabase} initialSession={pageProps.initialSession}>
         <InvalidateQueriesProvider>
           <AuthStateProvider>
-            <PostHogProvider client={posthog}>
-              <CustomThemingProvider>
-                <ModalsProvider>
-                  <MeilisearchProvider>
-                    {env.NEXT_PUBLIC_IS_IN_MAINTENANCE_MODE ? (
-                      <MaintenancePage/>
-                    ) : (
-                      <Fragment>
-                        <Lightbox/>
-                        {isTrackingEnabled && <Tracking/>}
-                        <AuthenticationRequiredProtection>
-                          <ActivityWatchdog/>
-                        </AuthenticationRequiredProtection>
-                        <RouterTransition/>
-                        <Notifications/>
-                        <NewNotificationEarnedWatchdog/>
-                        <SubscriptionModal/>
-                        <ComputerRecommendedModal/>
-                        <FileViewer/>
-                        <DocumentEditor/>
-                        <FeedbackButton/>
-                        <Layout Component={Component} pageProps={pageProps}/>
-                      </Fragment>
-                    )}
-                  </MeilisearchProvider>
-                </ModalsProvider>
-              </CustomThemingProvider>
-            </PostHogProvider>
+            <CustomThemingProvider>
+              <ModalsProvider>
+                <MeilisearchProvider>
+                  {env.NEXT_PUBLIC_IS_IN_MAINTENANCE_MODE ? (
+                    <MaintenancePage/>
+                  ) : (
+                    <Fragment>
+                      <Lightbox/>
+                      <AuthenticationRequiredProtection>
+                        <ActivityWatchdog/>
+                      </AuthenticationRequiredProtection>
+                      <RouterTransition/>
+                      <Notifications/>
+                      <NewNotificationEarnedWatchdog/>
+                      <SubscriptionModal/>
+                      <ComputerRecommendedModal/>
+                      <FileViewer/>
+                      <DocumentEditor/>
+                      <FeedbackButton/>
+                      <Layout Component={Component} pageProps={pageProps}/>
+                    </Fragment>
+                  )}
+                </MeilisearchProvider>
+              </ModalsProvider>
+            </CustomThemingProvider>
           </AuthStateProvider>
         </InvalidateQueriesProvider>
       </SessionContextProvider>

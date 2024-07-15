@@ -10,14 +10,12 @@ import useCases from "@/hooks/useCases";
 import useRemoveBookmark from "@/hooks/useRemoveBookmark";
 import { type AddOrRemoveBookmarkSchema } from "@/schemas/bookmarks/addOrRemoveBookmark.schema";
 import { type Maybe, type IGenArticle } from "@/services/graphql/__generated/sdk";
-import { isTrackingEnabled } from "@/utils/env";
 import { appPaths } from "@/utils/paths";
 import { type Nullable } from "@/utils/types";
 
 import { Button, Container, Title, useMantineTheme } from "@mantine/core";
 import { IconArrowLeft, IconArrowRight } from "@tabler/icons-react";
 import Link from "next/link";
-import { usePostHog } from "posthog-js/react";
 import React, { type FunctionComponent } from "react";
 
 import * as styles from "./CaseSolvingHeader.styles";
@@ -83,18 +81,12 @@ const CaseSolvingHeader: FunctionComponent<ICaseSolvingHeaderProps> = ({
     }
   };
 
-  const posthog = usePostHog();
-
   const icons = [
     { click: () => onBookmarkIconClick(), src: isItemBookmarked ? <BookmarkFilledIcon/> : <Bookmark/>, title: "Bookmark" },
     // { src: <Pin/>, title: "Pin" },
     {
       click: () => 
       {
-        if(isTrackingEnabled) 
-        {
-          posthog.capture("print_btn", { variant });
-        }
         window.print();
       },
       src: <Print/>,

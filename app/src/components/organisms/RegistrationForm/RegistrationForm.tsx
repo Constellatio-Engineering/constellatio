@@ -57,7 +57,7 @@ export const RegistrationForm: FunctionComponent = () =>
       passwordConfirmation: lastEnteredPassword || "Super-secure-password-123",
       refCode: refCode ?? null,
       semester: "7",
-      university: allUniversities[20] ?? null,
+      university: allUniversities[20]!.name ?? null,
     } : {
       acceptTOS: false,
       displayName: "",
