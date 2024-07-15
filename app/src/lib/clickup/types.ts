@@ -227,3 +227,33 @@ export type ClickupTask = Omit<ClickupTaskCreate, "custom_fields"> & {
   id: string;
 };
 
+export type ClickUpFindTaskParams = {
+  archived?: boolean;
+  assignees?: string[];
+  custom_field?: CustomFilterField;
+  custom_fields?: CustomFilterField[];
+  custom_items?: "0";
+  date_created_gt?: string;
+  date_created_lt?: string;
+  date_done_gt?: string;
+  date_done_lt?: string;
+  date_updated_gt?: string;
+  date_updated_lt?: string;
+  due_date_gt?: string;
+  due_date_lt?: string;
+  include_closed?: boolean;
+  include_markdown_description?: boolean;
+  order_by?: string;
+  page?: number;
+  reverse?: boolean;
+  statuses?: string[];
+  subtasks?: boolean;
+  tags?: string[];
+  watchers?: string[];
+};
+
+type CustomFilterField = {
+  field_id: string;
+  operator: "=" | "!=" | ">" | "<" | ">=" | "<=" | "IS NULL" | "IS NOT NULL" | "RANGE" | "ANY" | "ALL" | "NOT ANY" | "NOT ALL";
+  value: string;
+};

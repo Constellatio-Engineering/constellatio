@@ -1,6 +1,10 @@
 import { db } from "@/db/connection";
 import { referralBalances, referrals, users } from "@/db/schema";
 import { env } from "@/env.mjs";
+import { createClickupTask } from "@/lib/clickup/tasks/create-task";
+import { findClickupTask } from "@/lib/clickup/tasks/find-task";
+import { type ClickupTask } from "@/lib/clickup/types";
+import { clickupCrmCustomField, clickupUserIds } from "@/lib/clickup/utils";
 import { stripe } from "@/lib/stripe";
 import { InternalServerError } from "@/utils/serverError";
 
@@ -27,7 +31,7 @@ async function addBalanceToUser(userId: string, amaount: number): Promise<void>
   ).where(eq(referralBalances.userId, userId));
 }
 
-async function handleReferral(dbUserId: string, event: Stripe.Event): Promise<void>
+async function handleReferral(dbUserId: string): Promise<void>
 {
   const referral = await db
     .query.referrals.findFirst({
@@ -46,7 +50,7 @@ async function handleReferral(dbUserId: string, event: Stripe.Event): Promise<vo
   
   const referringUser = await db
     .query.users.findFirst({
-      columns: { id: true },
+      columns: { email: true, id: true },
       where: eq(users.id, referral.referringUserId),
     });
   if(!referringUser) 
@@ -57,6 +61,28 @@ async function handleReferral(dbUserId: string, event: Stripe.Event): Promise<vo
 
   await addBalanceToUser(referringUser.id, ReferralBonusAmount);
 
+  const crmTask = await findClickupTask(env.CLICKUP_CRM_LIST_ID, {
+    custom_field: {
+      field_id: clickupCrmCustomField.userId.fieldId,
+      operator: "=",
+      value: "2b8039c8-e811-40c3-8d97-e933a756ef58",
+    },
+  });
+
+  let crmRefferingUserTask: ClickupTask | null = null;
+
+  if(crmTask.data?.tasks.length > 0) 
+  {
+    crmRefferingUserTask = crmTask.data.tasks[0];
+  }
+
+  await createClickupTask(env.CLICKUP_REFERRAL_PAYOUT_LIST_ID, {
+    assignees: [clickupUserIds.sven],
+    description: `Der Nutzer mit der Email Adresse: ${referringUser.email} (${referringUser.id}) hat eine Referral-Bonus von ${ReferralBonusAmount}€ erhalten.`,
+    links_to: crmRefferingUserTask ? crmRefferingUserTask.id : null,
+    name: `Referral Bonus für ${referringUser.email} (${referringUser.id})`,
+  });
+
   const referralCount = await db
     .select({ count: count() })
     .from(referrals)
@@ -64,6 +90,12 @@ async function handleReferral(dbUserId: string, event: Stripe.Event): Promise<vo
   if(referralCount[0]!.count === ReferralExtraBonusReferralsNeeded) 
   {
     await addBalanceToUser(referringUser.id, ReferralExtraBonusAmount);
+    await createClickupTask(env.CLICKUP_REFERRAL_PAYOUT_LIST_ID, {
+      assignees: [clickupUserIds.sven],
+      description: `Der Nutzer mit der Email Adresse: ${referringUser.email} (${referringUser.id}) hat eine Referral-Bonus von ${ReferralExtraBonusAmount}€ erhalten.`,
+      links_to: crmRefferingUserTask ? crmRefferingUserTask.id : null,
+      name: `Referral Extra Bonus für ${referringUser.email} (${referringUser.id})`,
+    });
   }
 }
 
@@ -127,7 +159,7 @@ const handler: NextApiHandler = async (req, res) =>
       // If amaount is 0 it is the test subscription and we can skip 
       return res.send({ success: true });
     }
-    await handleReferral(subscriptionDetailsFromDB.id, event);
+    await handleReferral(subscriptionDetailsFromDB.id);
   }
 
   return res.send({ success: true });
