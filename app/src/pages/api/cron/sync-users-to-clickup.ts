@@ -46,6 +46,10 @@ const printAllSettledPromisesSummary = (settledPromises: Array<PromiseSettledRes
   }
 };
 
+export const config = {
+  maxDuration: env.NEXT_PUBLIC_DEPLOYMENT_ENVIRONMENT === "production" ? 300 : 60,
+};
+
 const handler: NextApiHandler = async (req, res): Promise<void> =>
 {
   if(req.headers.authorization !== `Bearer ${env.CRON_SECRET}`)
