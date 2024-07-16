@@ -67,7 +67,22 @@ const handler: NextApiHandler = async (req, res): Promise<void> =>
   });
 
   const allUsers = await db.query.users.findMany();
+
+  // TODO: This does not fetch all tasks/customers since the ClickUp API only returns a maximum of 100 tasks per request. Pagination is not implemented yet.
   const existingCrmUsers = await axios.get(`${env.CLICKUP_API_ENDPOINT}/list/${env.CLICKUP_CRM_LIST_ID}/task`, clickupRequestConfig);
+
+  // Comment this in if you want to delete all users in the CRM list
+  /* const deleteUsersPromises = existingCrmUsers.data.tasks
+    .map(async (task: ClickupTask) => stripeConcurrencyLimit(async () =>
+    {
+      console.log(`Deleting user ${task.id}...`);
+      return axios.delete(`${env.CLICKUP_API_ENDPOINT}/task/${task.id}`, clickupRequestConfig);
+    }))
+    .filter(Boolean);
+
+  await Promise.allSettled(deleteUsersPromises);
+
+  return res.status(200).json({ message: "Finished", ...existingCrmUsers.data });*/
 
   const getCrmDataForAllUsersPromises = allUsers
     .map(async user => stripeConcurrencyLimit(async () => 
