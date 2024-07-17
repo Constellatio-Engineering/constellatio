@@ -30,6 +30,7 @@ const initialAuthState: InitialAuthState = {
 
 export const AuthStateContext = createContext<AuthStateContext>(initialAuthState);
 
+// eslint-disable-next-line import/no-unused-modules
 export const getIsUserLoggedInClient = (session: Session | null, isLoading: boolean): UserNotLoggedInState | UserLoggedInState =>
 {
   const isUserLoggedIn = session != null;

@@ -6,6 +6,7 @@ import { supabase } from "@/lib/supabase";
 import { appPaths } from "@/utils/paths";
 
 import { Loader, Title } from "@mantine/core";
+import { isAuthError } from "@supabase/auth-js";
 import { type AuthResponse } from "@supabase/gotrue-js";
 import { useMutation } from "@tanstack/react-query";
 import { useRouter } from "next/router";
@@ -57,7 +58,7 @@ const EmailConfirmCard: FunctionComponent<EmailConfirmCardProps> = ({ params }) 
     mutationKey: ["confirmEmail"],
     onError: (error) =>
     {
-      if(error.name === "AuthApiError" && error.message === "Token has expired or is invalid")
+      if(isAuthError(error) && error.message === "Token has expired or is invalid")
       {
         setConfirmationState("invalidLink");
       }
