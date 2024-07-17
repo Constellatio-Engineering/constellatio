@@ -18,6 +18,8 @@ import { userActivityRouter } from "@/server/api/routers/userActivity.router";
 import { viewsRouter } from "@/server/api/routers/views.router";
 import { createTRPCRouter } from "@/server/api/trpc";
 
+import { referralRouter } from "./routers/referral.router";
+
 /**
  * All routers added in /api/routers should be manually added here.
  */
@@ -34,6 +36,7 @@ export const appRouter = createTRPCRouter({
   gamesProgress: gamesProgressRouter,
   notes: notesRouter,
   notifications: notificationsRouter,
+  referral: referralRouter,
   search: searchRouter,
   tags: tagsRouter,
   uploads: uploadsRouter,

@@ -189,6 +189,7 @@ export const genderValidationOld = z.enum(allGenderIdentifiers, {
     message: (data == null || data.length === 0) ? "Ein Geschlecht ist erforderlich" : "Ungültiges Geschlecht"
   })
 });
+export const refCodeValidation = z.string().length(8);
 
 export const genderValidation = z.string().nullable().transform((value, context) =>
 {

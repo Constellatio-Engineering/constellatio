@@ -3,7 +3,8 @@ import { type SearchIndex, searchIndices } from "@/utils/search";
 
 import { type InferInsertModel, type InferSelectModel, relations } from "drizzle-orm";
 import {
-  text, pgTable, integer, pgEnum, uuid, smallint, unique, timestamp, primaryKey, index, type AnyPgColumn, serial, uniqueIndex
+  text, pgTable, integer, pgEnum, uuid, smallint, unique, timestamp, primaryKey, index, type AnyPgColumn, serial, uniqueIndex,
+  boolean
 } from "drizzle-orm/pg-core";
 
 export const allGenderIdentifiers = ["male", "female", "diverse"] as const;
@@ -626,3 +627,35 @@ export const uploadedFilesToTagsRelations = relations(uploadedFilesToTags, ({ on
 
 export type UploadedFileToTagInsert = InferInsertModel<typeof uploadedFilesToTags>;
 export type UploadedFileToTag = InferSelectModel<typeof uploadedFilesToTags>;
+
+export const referralCodes = pgTable("ReferralCode", {
+  code: text("Code").primaryKey(),
+  createdAt: timestamp("CreatedAt").defaultNow().notNull(),
+  userId: uuid("UserId").references(() => users.id, { onDelete: "cascade" })
+});
+
+export type ReferralCodeInsert = InferInsertModel<typeof referralCodes>;
+export type ReferralCode = InferSelectModel<typeof referralCodes>;
+
+export const referrals = pgTable("Referral", {
+  index: serial("Index").primaryKey(),
+  code: text("Code").notNull(),
+  createdAt: timestamp("CreatedAt").defaultNow().notNull(),
+  referredUserId: uuid("ReferredUserId").references(() => users.id, { onDelete: "no action" }).notNull(),
+  referringUserId: uuid("ReferringUserId").references(() => users.id, { onDelete: "no action" }).notNull(),
+  paid: boolean("Paid").default(false).notNull(),
+});
+
+export type ReferralInsert = InferInsertModel<typeof referrals>;
+export type Referral = InferSelectModel<typeof referrals>;
+
+export const referralBalances = pgTable("ReferralBalance", {
+  index: serial("Index").primaryKey(),
+  totalRefferalBonus: integer("TotalRefferalBonus").default(0).notNull(),
+  paidOutRefferalBonus: integer("PaidOutRefferalBonus").default(0).notNull(),
+  createdAt: timestamp("CreatedAt").defaultNow().notNull(),
+  userId: uuid("UserId").references(() => users.id, { onDelete: "cascade" }).notNull(),
+});
+
+export type ReferralBalanceInsert = InferInsertModel<typeof referralBalances>;
+export type ReferralBalance = InferSelectModel<typeof referralBalances>;

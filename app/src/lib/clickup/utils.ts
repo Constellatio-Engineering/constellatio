@@ -16,6 +16,15 @@ export const clickupRequestConfig: AxiosRequestConfig = {
   }
 };
 
+export const clickupUserIds = {
+  antonia: 82653125,
+  kotti: 82573596,
+  philipp: 36440925,
+  simon: 36495813,
+  sophie: 82743954,
+  sven: 36495811
+};
+
 export const clickupCrmCustomField = {
   aboStatus: {
     fieldId: "c5b525cc-e7d9-46e7-af4f-46681d072a4a",
@@ -68,6 +77,9 @@ export const clickupCrmCustomField = {
   },
   university: {
     fieldId: "b8e29f58-cb77-4519-8f12-dfc8117f90e8",
+  },
+  userId: {
+    fieldId: "86a0d9a3-718a-4c4c-82ae-4f61ddc09977",
   },
   willSubscriptionContinue: {
     fieldId: "ac9f2943-408f-44a5-9688-b2ae5d3cbc4d",

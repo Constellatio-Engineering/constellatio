@@ -1,5 +1,5 @@
 import { db } from "@/db/connection";
-import { type UserInsert, users } from "@/db/schema";
+import { referrals, type UserInsert, users } from "@/db/schema";
 import { env } from "@/env.mjs";
 import { stripe } from "@/lib/stripe";
 import { registrationFormSchema } from "@/schemas/auth/registrationForm.schema";
@@ -17,7 +17,6 @@ export const authenticationRouter = createTRPCRouter({
     .mutation(async ({ ctx: { supabaseServerClient }, input }) =>
     {
       console.log("--- Registering user ---");
-
       const start = performance.now();
 
       const existingUser = await db.query.users.findFirst({
@@ -95,7 +94,25 @@ export const authenticationRouter = createTRPCRouter({
           university: input.university,
         };
 
-        await db.insert(users).values(userToInsert);
+        const user = await db.insert(users).values(userToInsert).returning();
+
+        if(input.refCode) 
+        {
+          const referral = await db.query.referralCodes.findFirst({
+            where: eq(referrals.code, input.refCode)
+          });
+          if(referral && referral.userId) 
+          {
+            await db.insert(referrals).values({
+              code: input.refCode,
+              paid: false,
+              referredUserId: user[0]!.id,
+              referringUserId: referral!.userId,
+            });
+
+            // TODO: Here can a emediate discount be applied
+          }
+        }
       }
       catch (e: unknown)
       {
