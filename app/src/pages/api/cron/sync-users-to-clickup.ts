@@ -1,5 +1,6 @@
 /* eslint-disable max-lines */
 import { db } from "@/db/connection";
+import { type User } from "@/db/schema";
 import { env } from "@/env.mjs";
 import { createClickupTask } from "@/lib/clickup/tasks/create-task";
 import { deleteClickupCustomFieldValue } from "@/lib/clickup/tasks/delete-custom-field-value";
@@ -9,7 +10,7 @@ import { type ClickupTask } from "@/lib/clickup/types";
 import { clickupCrmCustomField, clickupRequestConfig, getUserCrmData } from "@/lib/clickup/utils";
 import { stripe } from "@/lib/stripe";
 
-import { createPagesServerClient } from "@supabase/auth-helpers-nextjs";
+import { createPagesServerClient, type SupabaseClient } from "@supabase/auth-helpers-nextjs";
 import axios, { AxiosError, type AxiosResponse } from "axios";
 import type { NextApiHandler } from "next";
 import pLimit from "p-limit";
@@ -44,6 +45,132 @@ const printAllSettledPromisesSummary = (settledPromises: Array<PromiseSettledRes
   {
     console.error(`At least task of action '${actionName}' failed`, errors);
   }
+};
+
+// eslint-disable-next-line @typescript-eslint/explicit-function-return-type
+export const getCrmDataForUser = async (user: User, supabaseServerClient: SupabaseClient<never, "public", never>) =>
+{
+  const { data: { user: supabaseUserData } } = await supabaseServerClient.auth.admin.getUserById(user.id);
+
+  if(!supabaseUserData)
+  {
+    return null;
+  }
+
+  const userSubscriptionId = user.subscriptionId;
+  let subscriptionData: Stripe.Response<Stripe.Subscription> | null = null;
+
+  if(userSubscriptionId != null)
+  {
+    console.log(`Fetching subscription data for user ${user.id}...`);
+    subscriptionData = await stripe.subscriptions.retrieve(userSubscriptionId);
+  }
+
+  const crmData = getUserCrmData({
+    subscriptionData,
+    supabaseUserData,
+    user
+  });
+
+  return ({
+    crmData,
+    userData: user
+  });
+};
+
+export const getUpdateUsersCrmDataPromises = ({
+  existingCrmUser,
+  userWithCrmData
+}: {
+  existingCrmUser: ClickupTask;
+  userWithCrmData: NonNullable<Awaited<ReturnType<typeof getCrmDataForUser>>>;
+}) => // eslint-disable-line @typescript-eslint/explicit-function-return-type
+{
+  const updateUsersPromises: Array<Promise<AxiosResponse>> = [];
+
+  const { crmData, userData } = userWithCrmData;
+
+  if(existingCrmUser.name !== (userData.firstName + " " + userData.lastName))
+  {
+    updateUsersPromises.push(updateClickupTask(existingCrmUser.id!, { name: userData.firstName + " " + userData.lastName }));
+  }
+
+  crmData.custom_fields.forEach((field) =>
+  {
+    if(field.id === clickupCrmCustomField.category.fieldId)
+    {
+      // Skip category field because it's not supposed to be updated automatically after creation
+      return;
+    }
+
+    const existingCrmField = existingCrmUser.custom_fields?.find((existingField) => existingField.id === field.id);
+
+    if(!existingCrmField)
+    {
+      updateUsersPromises.push(updateClickupCustomField({
+        taskId: existingCrmUser.id,
+        updatedCustomField: field
+      }));
+      return;
+    }
+
+    switch (existingCrmField.type)
+    {
+      case "drop_down":
+      {
+        const currentlySelectedOption = existingCrmField.value != null ? existingCrmField.type_config.options[existingCrmField.value] : null;
+        const currentlySelectedOptionId = currentlySelectedOption?.id;
+
+        if(field.value == null && currentlySelectedOptionId != null)
+        {
+          updateUsersPromises.push(deleteClickupCustomFieldValue({
+            fieldId: field.id,
+            taskId: existingCrmUser.id
+          }));
+        }
+        else if(currentlySelectedOptionId !== field.value)
+        {
+          updateUsersPromises.push(updateClickupCustomField({
+            taskId: existingCrmUser.id,
+            updatedCustomField: field
+          }));
+        }
+        break;
+      }
+      case "number":
+      case "date":
+      {
+        if(field.value == null && existingCrmField.value != null)
+        {
+          updateUsersPromises.push(deleteClickupCustomFieldValue({
+            fieldId: field.id,
+            taskId: existingCrmUser.id
+          }));
+        }
+        else if(field.value != null && Number(existingCrmField.value) !== field.value)
+        {
+          updateUsersPromises.push(updateClickupCustomField({
+            taskId: existingCrmUser.id,
+            updatedCustomField: field
+          }));
+        }
+        break;
+      }
+      case "email":
+      {
+        if(existingCrmField.value !== field.value)
+        {
+          updateUsersPromises.push(updateClickupCustomField({
+            taskId: existingCrmUser.id,
+            updatedCustomField: field
+          }));
+        }
+        break;
+      }
+    }
+  });
+
+  return updateUsersPromises;
 };
 
 const handler: NextApiHandler = async (req, res): Promise<void> =>
@@ -85,35 +212,7 @@ const handler: NextApiHandler = async (req, res): Promise<void> =>
   return res.status(200).json({ message: "Finished", ...existingCrmUsers.data });*/
 
   const getCrmDataForAllUsersPromises = allUsers
-    .map(async user => stripeConcurrencyLimit(async () => 
-    {
-      const { data: { user: supabaseUserData } } = await supabaseServerClient.auth.admin.getUserById(user.id);
-
-      if(!supabaseUserData)
-      {
-        return null;
-      }
-
-      const userSubscriptionId = user.subscriptionId;
-      let subscriptionData: Stripe.Response<Stripe.Subscription> | null = null;
-
-      if(userSubscriptionId != null)
-      {
-        console.log(`Fetching subscription data for user ${user.id}...`);
-        subscriptionData = await stripe.subscriptions.retrieve(userSubscriptionId);
-      }
-
-      const crmData = getUserCrmData({
-        subscriptionData,
-        supabaseUserData,
-        user
-      });
-
-      return ({
-        crmData,
-        userData: user
-      });
-    }))
+    .map(async user => stripeConcurrencyLimit(async () => getCrmDataForUser(user, supabaseServerClient)))
     .filter(Boolean);
 
   const allUsersWithCrmData = (await Promise.all(getCrmDataForAllUsersPromises)).filter(Boolean);
@@ -127,8 +226,8 @@ const handler: NextApiHandler = async (req, res): Promise<void> =>
   {
     const matchingCrmUser = existingCrmUsers.data.tasks.find((task: ClickupTask) =>
     {
-      const emailCustomField = task.custom_fields?.find((field) => field.id === clickupCrmCustomField.email.fieldId);
-      return emailCustomField?.value === user.userData.email;
+      const userIdCustomField = task.custom_fields?.find((field) => field.id === clickupCrmCustomField.userId.fieldId);
+      return userIdCustomField?.value === user.userData.id;
     });
 
     if(matchingCrmUser)
@@ -152,87 +251,7 @@ const handler: NextApiHandler = async (req, res): Promise<void> =>
 
   existingUsers.forEach(({ existingCrmUser, userWithCrmData }) =>
   {
-    const { crmData, userData } = userWithCrmData;
-
-    if(existingCrmUser.name !== (userData.firstName + " " + userData.lastName))
-    {
-      updateUsersPromises.push(updateClickupTask(existingCrmUser.id!, { name: userData.firstName + " " + userData.lastName }));
-    }
-
-    crmData.custom_fields.forEach((field) =>
-    {
-      if(field.id === clickupCrmCustomField.category.fieldId)
-      {
-        // Skip category field because it's not supposed to be updated automatically after creation
-        return;
-      }
-
-      const existingCrmField = existingCrmUser.custom_fields?.find((existingField) => existingField.id === field.id);
-
-      if(!existingCrmField)
-      {
-        updateUsersPromises.push(updateClickupCustomField({
-          taskId: existingCrmUser.id,
-          updatedCustomField: field
-        }));
-        return;
-      }
-
-      switch (existingCrmField.type)
-      {
-        case "drop_down":
-        {
-          const currentlySelectedOption = existingCrmField.value != null ? existingCrmField.type_config.options[existingCrmField.value] : null;
-          const currentlySelectedOptionId = currentlySelectedOption?.id;
-
-          if(field.value == null && currentlySelectedOptionId != null)
-          {
-            updateUsersPromises.push(deleteClickupCustomFieldValue({
-              fieldId: field.id,
-              taskId: existingCrmUser.id
-            }));
-          }
-          else if(currentlySelectedOptionId !== field.value)
-          {
-            updateUsersPromises.push(updateClickupCustomField({
-              taskId: existingCrmUser.id,
-              updatedCustomField: field
-            }));
-          }
-          break;
-        }
-        case "number":
-        case "date":
-        {
-          if(field.value == null && existingCrmField.value != null)
-          {
-            updateUsersPromises.push(deleteClickupCustomFieldValue({
-              fieldId: field.id,
-              taskId: existingCrmUser.id
-            }));
-          }
-          else if(field.value != null && Number(existingCrmField.value) !== field.value)
-          {
-            updateUsersPromises.push(updateClickupCustomField({
-              taskId: existingCrmUser.id,
-              updatedCustomField: field
-            }));
-          }
-          break;
-        }
-        case "email":
-        {
-          if(existingCrmField.value !== field.value)
-          {
-            updateUsersPromises.push(updateClickupCustomField({
-              taskId: existingCrmUser.id,
-              updatedCustomField: field
-            }));
-          }
-          break;
-        }
-      }
-    });
+    updateUsersPromises.push(...getUpdateUsersCrmDataPromises({ existingCrmUser, userWithCrmData }));
   });
 
   const results = await Promise.allSettled(updateUsersPromises);

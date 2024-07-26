@@ -2,7 +2,12 @@
 import type { User } from "@/db/schema";
 import { env } from "@/env.mjs";
 import {
-  type CustomFieldInsert, type DateCustomFieldInsertProps, type DropDownCustomFieldInsertProps, type EmailCustomFieldInsertProps, type NumberCustomFieldInsertProps 
+  type CustomFieldInsert,
+  type DateCustomFieldInsertProps,
+  type DropDownCustomFieldInsertProps,
+  type EmailCustomFieldInsertProps,
+  type NumberCustomFieldInsertProps, type ShortTextCustomFieldInsertProps,
+  TextCustomFieldInsertProps
 } from "@/lib/clickup/types";
 import { allUniversities } from "@/schemas/auth/userData.validation";
 
@@ -210,6 +215,11 @@ export const getUserCrmData: GetUserCrmData = ({ subscriptionData, supabaseUserD
 
   const subscriptionFuture = subscriptionData ? calculateSubscriptionFuture(subscriptionData) : null;
 
+  const userIdCustomFieldData: ShortTextCustomFieldInsertProps = {
+    id: clickupCrmCustomField.userId.fieldId,
+    value: user.id
+  };
+
   const universityCustomFieldData: DropDownCustomFieldInsertProps = {
     id: clickupCrmCustomField.university.fieldId,
     value: allUniversities.find(u => u.name === user.university)?.clickupId
@@ -254,6 +264,7 @@ export const getUserCrmData: GetUserCrmData = ({ subscriptionData, supabaseUserD
 
   return ({
     custom_fields: [
+      userIdCustomFieldData,
       categoryCustomFieldData,
       emailCustomFieldData,
       universityCustomFieldData,

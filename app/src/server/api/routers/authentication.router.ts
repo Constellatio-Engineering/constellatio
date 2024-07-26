@@ -1,7 +1,9 @@
 import { db } from "@/db/connection";
 import { referrals, type UserInsert, users } from "@/db/schema";
 import { env } from "@/env.mjs";
+import { createClickupTask } from "@/lib/clickup/tasks/create-task";
 import { stripe } from "@/lib/stripe";
+import { getCrmDataForUser } from "@/pages/api/cron/sync-users-to-clickup";
 import { registrationFormSchema } from "@/schemas/auth/registrationForm.schema";
 import { addBadgeForUser } from "@/server/api/services/badges.services";
 import { createTRPCRouter, publicProcedure } from "@/server/api/trpc";
@@ -94,7 +96,15 @@ export const authenticationRouter = createTRPCRouter({
           university: input.university,
         };
 
-        const user = await db.insert(users).values(userToInsert).returning();
+        const [user] = await db.insert(users).values(userToInsert).returning();
+
+        if(!user)
+        {
+          throw new InternalServerError(new Error("User was null after insertion. This should not happen and must be investigated."));
+        }
+
+        const userCrmData = await getCrmDataForUser(user, supabaseServerClient);
+        await createClickupTask(env.CLICKUP_CRM_LIST_ID, userCrmData!.crmData);
 
         if(input.refCode) 
         {
@@ -106,7 +116,7 @@ export const authenticationRouter = createTRPCRouter({
             await db.insert(referrals).values({
               code: input.refCode,
               paid: false,
-              referredUserId: user[0]!.id,
+              referredUserId: user.id,
               referringUserId: referral!.userId,
             });
 
