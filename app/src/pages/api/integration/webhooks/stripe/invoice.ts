@@ -65,7 +65,7 @@ async function handleReferral(dbUserId: string): Promise<void>
     custom_field: {
       field_id: clickupCrmCustomField.userId.fieldId,
       operator: "=",
-      value: "2b8039c8-e811-40c3-8d97-e933a756ef58",
+      value: referringUser.id,
     },
   });
 
