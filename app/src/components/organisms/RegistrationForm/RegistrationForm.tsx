@@ -81,8 +81,6 @@ export const RegistrationForm: FunctionComponent = () =>
   { 
     const {
       data: referringUserNameResult,
-      error: referringUserNameError,
-      isLoading: isLoadingReferringUserName
     } = api.referral.getReffererByCode.useQuery({
       code: refCode
     }, {

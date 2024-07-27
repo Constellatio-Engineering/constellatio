@@ -16,9 +16,6 @@ export const authenticationRouter = createTRPCRouter({
     .input(registrationFormSchema)
     .mutation(async ({ ctx: { supabaseServerClient }, input }) =>
     {
-      console.log("--- Registering user ---");
-      const start = performance.now();
-
       const existingUser = await db.query.users.findFirst({
         where: eq(users.email, input.email)
       });
@@ -28,15 +25,11 @@ export const authenticationRouter = createTRPCRouter({
         throw new EmailAlreadyTakenError();
       }
 
-      console.log("starting supabase sign up");
-
       const { data: signUpData, error: signUpError } = await supabaseServerClient.auth.signUp({
         email: input.email,
         options: { emailRedirectTo: getConfirmEmailUrl() },
         password: input.password
       });
-
-      console.log(`supabase sign up took ${performance.now() - start}ms`);
 
       if(signUpError)
       {
@@ -94,7 +87,21 @@ export const authenticationRouter = createTRPCRouter({
           university: input.university,
         };
 
-        const user = await db.insert(users).values(userToInsert).returning();
+        const [user] = await db.insert(users).values(userToInsert).returning();
+
+        if(!user)
+        {
+          throw new InternalServerError(new Error("User was null after insertion. This should not happen and must be investigated."));
+        }
+
+        /* await syncUserToCrm({
+          eventType: "userCreated",
+          supabase: {
+            isServerClientInitialized: true,
+            supabaseServerClient,
+          },
+          user
+        });*/
 
         if(input.refCode) 
         {
@@ -106,7 +113,7 @@ export const authenticationRouter = createTRPCRouter({
             await db.insert(referrals).values({
               code: input.refCode,
               paid: false,
-              referredUserId: user[0]!.id,
+              referredUserId: user.id,
               referringUserId: referral!.userId,
             });
 
@@ -154,8 +161,6 @@ export const authenticationRouter = createTRPCRouter({
           await addBadgeForUser({ badgeIdentifier: "1-1000", userId });
         }
       }
-
-      console.log(`Complete sign up took ${performance.now() - start}ms`);
 
       if(!signUpData.session)
       {
