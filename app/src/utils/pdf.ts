@@ -1,8 +1,12 @@
-import puppeteer from "puppeteer";
+// import puppeteer from "puppeteer";
 
-export const createPdfBuffer = async (htmlContent: string): Promise<Buffer> =>
+// eslint-disable-next-line @typescript-eslint/explicit-function-return-type,import/no-unused-modules
+export const createPdfBuffer = (/* htmlContent: string*/) =>
 {
-  const browser = await puppeteer.launch({
+  console.error("currently not implemented");
+  return;
+
+  /* const browser = await puppeteer.launch({
     args: ["--no-sandbox", "--disable-setuid-sandbox"],
     headless: "new",
     ignoreHTTPSErrors: true,
@@ -22,5 +26,5 @@ export const createPdfBuffer = async (htmlContent: string): Promise<Buffer> =>
 
   await browser.close();
 
-  return pdfBuffer;
+  return pdfBuffer;*/
 };

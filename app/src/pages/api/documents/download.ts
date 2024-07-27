@@ -1,16 +1,18 @@
-import { db } from "@/db/connection";
+/* import { db } from "@/db/connection";
 import { documents } from "@/db/schema";
 import { downloadDocumentSchema } from "@/schemas/documents/downloadDocument.schema";
 import { getIsUserLoggedInServer } from "@/utils/auth";
 import { createPdfBuffer } from "@/utils/pdf";
 
 import { createPagesServerClient } from "@supabase/auth-helpers-nextjs";
-import { and, eq } from "drizzle-orm";
+import { and, eq } from "drizzle-orm";*/
 import { type NextApiHandler } from "next";
 
-const handler: NextApiHandler = async (req, res) =>
+const handler: NextApiHandler = (req, res) =>
 {
-  const supabase = createPagesServerClient({ req, res });
+  return res.status(501).json({ error: "Not implemented" });
+
+  /* const supabase = createPagesServerClient({ req, res });
   const getIsUserLoggedInResult = await getIsUserLoggedInServer(supabase);
 
   if(!getIsUserLoggedInResult.isUserLoggedIn)
@@ -66,7 +68,7 @@ const handler: NextApiHandler = async (req, res) =>
   res.setHeader("Content-Type", "application/pdf");
   res.setHeader("Content-Length", pdfBuffer.length);
 
-  return res.status(200).end(pdfBuffer);
+  return res.status(200).end(pdfBuffer);*/
 };
 
 export default handler;

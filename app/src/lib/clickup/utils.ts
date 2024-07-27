@@ -13,7 +13,6 @@ import {
 } from "@/lib/clickup/types";
 import { getCrmDataForUser, getUpdateUsersCrmDataPromises } from "@/pages/api/cron/sync-users-to-clickup";
 import { allUniversities } from "@/schemas/auth/userData.validation";
-import { isProduction } from "@/utils/env";
 import { InternalServerError } from "@/utils/serverError";
 
 import { createPagesServerClient, type SupabaseClient, type User as SupabaseUser } from "@supabase/auth-helpers-nextjs";
