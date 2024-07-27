@@ -1,6 +1,7 @@
 import { db } from "@/db/connection";
 import { users } from "@/db/schema";
 import { env } from "@/env.mjs";
+import { syncUserToCrm } from "@/lib/clickup/utils";
 import { stripe } from "@/lib/stripe";
 import { InternalServerError } from "@/utils/serverError";
 
@@ -52,12 +53,11 @@ const handler: NextApiHandler = async (req, res) =>
     return res.status(400).send("Invalid");
   }
 
-  const subscriptionDetailsFromDB = await db.query.users.findFirst({
-    columns: { subscriptionId: true, subscriptionStatus: true },
-    where: eq(users.stripeCustomerId, stripeCustomerId) 
+  const user = await db.query.users.findFirst({
+    where: eq(users.stripeCustomerId, stripeCustomerId)
   });
 
-  if(subscriptionDetailsFromDB == null)
+  if(user == null)
   {
     if(env.NEXT_PUBLIC_DEPLOYMENT_ENVIRONMENT === "staging")
     {
@@ -76,6 +76,16 @@ const handler: NextApiHandler = async (req, res) =>
       subscriptionStatus: subscriptionData.status
     })
     .where(eq(users.stripeCustomerId, stripeCustomerId));
+
+  await syncUserToCrm({
+    eventType: "userUpdated",
+    supabase: {
+      isServerClientInitialized: false,
+      req,
+      res
+    },
+    user 
+  });
 
   return res.send({ success: true });
 };

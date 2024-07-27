@@ -1,9 +1,7 @@
 import { db } from "@/db/connection";
 import { referrals, type UserInsert, users } from "@/db/schema";
 import { env } from "@/env.mjs";
-import { createClickupTask } from "@/lib/clickup/tasks/create-task";
 import { stripe } from "@/lib/stripe";
-import { getCrmDataForUser } from "@/pages/api/cron/sync-users-to-clickup";
 import { registrationFormSchema } from "@/schemas/auth/registrationForm.schema";
 import { addBadgeForUser } from "@/server/api/services/badges.services";
 import { createTRPCRouter, publicProcedure } from "@/server/api/trpc";
@@ -18,9 +16,6 @@ export const authenticationRouter = createTRPCRouter({
     .input(registrationFormSchema)
     .mutation(async ({ ctx: { supabaseServerClient }, input }) =>
     {
-      console.log("--- Registering user ---");
-      const start = performance.now();
-
       const existingUser = await db.query.users.findFirst({
         where: eq(users.email, input.email)
       });
@@ -30,15 +25,11 @@ export const authenticationRouter = createTRPCRouter({
         throw new EmailAlreadyTakenError();
       }
 
-      console.log("starting supabase sign up");
-
       const { data: signUpData, error: signUpError } = await supabaseServerClient.auth.signUp({
         email: input.email,
         options: { emailRedirectTo: getConfirmEmailUrl() },
         password: input.password
       });
-
-      console.log(`supabase sign up took ${performance.now() - start}ms`);
 
       if(signUpError)
       {
@@ -103,8 +94,14 @@ export const authenticationRouter = createTRPCRouter({
           throw new InternalServerError(new Error("User was null after insertion. This should not happen and must be investigated."));
         }
 
-        const userCrmData = await getCrmDataForUser(user, supabaseServerClient);
-        await createClickupTask(env.CLICKUP_CRM_LIST_ID, userCrmData!.crmData);
+        /* await syncUserToCrm({
+          eventType: "userCreated",
+          supabase: {
+            isServerClientInitialized: true,
+            supabaseServerClient,
+          },
+          user
+        });*/
 
         if(input.refCode) 
         {
@@ -164,8 +161,6 @@ export const authenticationRouter = createTRPCRouter({
           await addBadgeForUser({ badgeIdentifier: "1-1000", userId });
         }
       }
-
-      console.log(`Complete sign up took ${performance.now() - start}ms`);
 
       if(!signUpData.session)
       {
