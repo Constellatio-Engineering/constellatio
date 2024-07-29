@@ -50,6 +50,20 @@
       "when": 1719445398575,
       "tag": "0011_loose_pyro",
       "breakpoints": true
+    },
+    {
+      "idx": 12,
+      "version": "6",
+      "when": 1722244386434,
+      "tag": "0012_melted_red_skull",
+      "breakpoints": true
+    },
+    {
+      "idx": 13,
+      "version": "6",
+      "when": 1722244386977,
+      "tag": "0013_blushing_grandmaster",
+      "breakpoints": true
     }
   ]
 }
