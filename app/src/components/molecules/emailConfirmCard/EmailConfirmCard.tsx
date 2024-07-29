@@ -38,10 +38,12 @@ const EmailConfirmCard: FunctionComponent<EmailConfirmCardProps> = ({ params }) 
 
   const [confirmationState, setConfirmationState] = useState<ConfirmationState | null>(null);
   const { email, token } = params;
+  let confirmInvoked = false;
 
   const { isPending: isConfirmationLoading, mutate: confirmEmail } = useMutation({
     mutationFn: async (): Promise<AuthResponse["data"]> =>
     {
+      confirmInvoked = true;
       const result = await supabase.auth.verifyOtp({
         email: email as string,
         token: token as string,
@@ -83,12 +85,20 @@ const EmailConfirmCard: FunctionComponent<EmailConfirmCardProps> = ({ params }) 
 
   useEffect(() =>
   {
-    confirmEmail();
-    if(typeof email !== "string" || typeof token !== "string")
+    if(router.isReady) 
     {
-      return setConfirmationState("showError");
+      if(typeof email !== "string" || typeof token !== "string")
+      {
+        console.error("Email or token is not a string");
+        return setConfirmationState("showError");
+      }
+      else if(!confirmInvoked) 
+      {
+        confirmEmail();
+      }
     }
-  }, [confirmEmail, email, token]);
+    
+  }, [confirmEmail, router.isReady, email, token, confirmInvoked]);
 
   const {
     desc,
