@@ -9,7 +9,6 @@ import { updateClickupTask } from "@/lib/clickup/tasks/update-task";
 import { type ClickupTask } from "@/lib/clickup/types";
 import { clickupCrmCustomField, clickupRequestConfig, getUserCrmData } from "@/lib/clickup/utils";
 import { stripe } from "@/lib/stripe";
-import { type Nullable } from "@/utils/types";
 import { sleep } from "@/utils/utils";
 
 import { createPagesServerClient, type SupabaseClient } from "@supabase/auth-helpers-nextjs";
@@ -272,7 +271,19 @@ const handler: NextApiHandler = async (req, res): Promise<void> =>
     }
   }
 
-  console.log("Finished creating new users");
+  for(let i = 0; i < newUsers.length; i++)
+  {
+    const user = newUsers[i]!;
+    await createClickupTask(env.CLICKUP_CRM_LIST_ID, user.crmData);
+
+    if(i % 50 === 0)
+    {
+      console.log(`Created ${i} new users - Pause`);
+      await sleep(61000);
+    }
+  }
+
+  const createNewUsersResults = await Promise.allSettled(newUsers.map(async ({ crmData }) => createClickupTask(env.CLICKUP_CRM_LIST_ID, crmData)));
 
   return res.status(200).json({ message: "Finished" });
 };
