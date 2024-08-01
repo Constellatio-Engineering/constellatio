@@ -4,6 +4,16 @@ version: '3.9'
 
 services:
 
+  stripe-webhook-listener:
+    image: stripe/stripe-cli
+    command: "listen --api-key ${STRIPE_API_KEY} --device-name ${STRIPE_DEVICE_NAME} --forward-to http://host.docker.internal:3010/api/integration/webhooks/stripe/subscription"
+    env_file:
+      - stripe/.env.local
+    container_name: stripe-webhook-listener
+    restart: always
+    extra_hosts:
+      - "host.docker.internal:host-gateway"
+
   meilisearch:
     image: getmeili/meilisearch:v1.9.0
     container_name: meilisearch
