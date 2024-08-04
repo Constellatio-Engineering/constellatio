@@ -30,13 +30,9 @@ const ConfirmEmailChangePage: FunctionComponent = () =>
     isPending: isUpdatingEmailLoading,
     mutate: updateUserDetailsInDb
   } = api.users.updateUserDetails.useMutation({
-    onError: (error) =>
-    {
-      console.error("Could not update user details", error);
-    },
+    onError: (error) => console.error("Could not update user details", error),
     onSuccess: async () =>
     {
-      console.log("Successfully updated user details");
       await invalidateUserDetails();
       await router.push({
         pathname: appPaths.profile,
