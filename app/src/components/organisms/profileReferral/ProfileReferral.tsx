@@ -8,7 +8,7 @@ const ProfileOverview: FunctionComponent = () =>
 {
   return (
     <div css={styles.wrapper}>
-      <Title order={3} css={styles.title}>Referral</Title>
+      <Title order={3} css={styles.title}>Freunde einladen</Title>
       <ProfileReferralBlock/>
     </div>
   );

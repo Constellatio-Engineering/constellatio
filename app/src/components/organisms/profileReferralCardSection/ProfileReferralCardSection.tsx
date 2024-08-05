@@ -24,18 +24,18 @@ const ProfileReferralCardSection: FunctionComponent = () =>
     <div css={styles.wrapper}>
       <ProfileReferralCard
         icon={<Heart/>}
-        title={"Reffered"}
+        title={"Einladungen"}
         subText={referralCount?.totalCount ?? 0}
       />
       <ProfileReferralCard
         icon={<Check/>}
-        title={"Referred (Bestätigt)"}
+        title={"Bestätigte Einladungen"}
         subText={referralCount?.paidCount ?? 0}
       />
       <ProfileReferralCard
         icon={<ClapHands/>}
-        title={"Referred von"}
-        subText={referrer?.displayName ?? "nicht reffered"}
+        title={"Eingeladen von"}
+        subText={referrer?.displayName ?? "nicht eingeladen"}
       />
     </div>
   );

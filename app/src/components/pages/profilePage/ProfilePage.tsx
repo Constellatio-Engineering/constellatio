@@ -28,7 +28,7 @@ export const tabs = [
   { slug: changeEmailTabSlug, title: "E-Mail ändern" },
   { slug: "change-password", title: "Passwort ändern" },
   { slug: subscriptionTabSlug, title: "Abonnement" },
-  { slug: "referral", title: "Referral" },
+  { slug: "referral", title: "Freunde einladen" },
   // { slug: "history", title: "Verlauf" },
 ] as const;
 
