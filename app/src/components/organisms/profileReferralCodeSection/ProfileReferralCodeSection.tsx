@@ -45,7 +45,7 @@ const ProfileReferralCodeSection: FunctionComponent = () =>
           ) : (
             <div css={styles.noReferralCode}>
               <BodyText styleType="body-01-regular" component="p">
-                Dir wurde noch kein Referral Link zugewiesen.
+                Dir wurde noch kein Einladungslink zugewiesen.
               </BodyText>
               <Button<"button"> 
                 styleType="secondarySimple"
