@@ -61,7 +61,6 @@ const ChangeEmailTab: FunctionComponent<Props> = ({ userDetails }) =>
 
       if(changeEmailResult.error)
       {
-        console.log(changeEmailResult.error);
         throw changeEmailResult.error;
       }
 
@@ -70,10 +69,7 @@ const ChangeEmailTab: FunctionComponent<Props> = ({ userDetails }) =>
         newEmail: "",
       });
     },
-    onError: (error) =>
-    {
-      console.error("error occurred while changing password", error);
-    },
+    onError: (error) => console.error("error occurred while changing email", error),
     onSuccess: () => setIsConfirmationModalOpen(true)
   });
 

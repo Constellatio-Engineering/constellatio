@@ -3,6 +3,7 @@ import {
   imageFileExtensions, imageFileMimeTypes, type ProfilePictureInsert, profilePictures, users 
 } from "@/db/schema";
 import { syncUserToCrm } from "@/lib/clickup/utils";
+import { stripe } from "@/lib/stripe";
 import { updateUserDetailsSchema } from "@/schemas/auth/updateUserDetails.schema";
 import { generateCreateSignedUploadUrlSchema } from "@/schemas/uploads/createSignedUploadUrl.schema";
 import { setOnboardingResultSchema } from "@/schemas/users/setOnboardingResult.schema";
@@ -74,6 +75,12 @@ export const usersRouter = createTRPCRouter({
     .mutation(async ({ ctx: { supabaseServerClient, userId }, input }) =>
     {
       const [updatedUser] = await db.update(users).set(input).where(eq(users.id, userId)).returning();
+
+      if(input.email != null && updatedUser?.stripeCustomerId != null)
+      {
+        await stripe.customers.update(updatedUser.stripeCustomerId, { email: input.email });
+      }
+
       await syncUserToCrm({
         eventType: "userUpdated",
         supabase: {

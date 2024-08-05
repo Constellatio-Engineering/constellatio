@@ -94,7 +94,7 @@ const CaseSolvingHeader: FunctionComponent<ICaseSolvingHeaderProps> = ({
     },
   ];
   const theme = useMantineTheme();
-  
+
   return (
     <div css={styles.wrapper({ theme, variant })}>
       <Container p={0} css={styles.container}>
@@ -111,9 +111,7 @@ const CaseSolvingHeader: FunctionComponent<ICaseSolvingHeaderProps> = ({
                 <Link key={index} href={path}>{slug}{index + 1 < pathSlugs.length ? " / " : ""}</Link>
               ))}
             </div>
-            <div className="headline">
-              <Title order={1}>{title}</Title>
-            </div>
+            <Title title={title} order={1}>{title}</Title>
           </div>
           <div css={styles.bodyCard}>
             <OverviewCard {...overviewCard}/>
