@@ -1,5 +1,4 @@
-import { Bookmark } from "@/components/Icons/Bookmark";
-import { DownloadIcon } from "@/components/Icons/DownloadIcon";
+import { BookmarkBook } from "@/components/Icons/BookmarkBook";
 import OnboardingTutorialStep from "@/components/molecules/onboardingTutorialStep/OnboardingTutorialStep";
 import OnboardingTutorialStepItem from "@/components/molecules/onboardingTutorialStep/OnboardingTutorialStepItem";
 import OnboardingTutorialPopover from "@/components/organisms/onboardingTutorialPopover/OnboardingTutorialPopover";
@@ -7,40 +6,38 @@ import type { SearchStoreProps } from "@/stores/onboarding.store";
 
 import { type FunctionComponent } from "react";
 
-import HeaderItemPersonalSpace, { type THeaderItemPersonalSpaceProps } from "./HeaderItemPersonalSpace";
+import HeaderItemLink, { type THeaderItemLinkProps } from "../HeaderItemLink";
 
-type TOnboardingSecondStep = THeaderItemPersonalSpaceProps & {
+type OnboardingArticlesStepProps = THeaderItemLinkProps & {
   readonly onSkipPressHandler: () => void;
   readonly onboardingStepsIndex: number;
   readonly setOnboardingStepsIndex: SearchStoreProps["setOnboardingStepsIndex"];
 };
 
-const OnboardingSecondStep: FunctionComponent<TOnboardingSecondStep> = ({
+export const OnboardingArticlesStep: FunctionComponent<OnboardingArticlesStepProps> = ({
+  link,
   onboardingStepsIndex,
   onSkipPressHandler,
   pathname,
   setOnboardingStepsIndex
-}) =>
+}) => 
 {
   return (
     <OnboardingTutorialPopover
       opened={onboardingStepsIndex === 1}
-      popoverTarget={(
-        <HeaderItemPersonalSpace pathname={pathname}/>
-      )}
       popoverMenu={(
         <OnboardingTutorialStep
           currentStep={2}
-          totalSteps={3}
-          stepTitle="Persönlicher Bereich"
+          totalSteps={5}
+          stepTitle="Lexikon"
           onNextPressHandler={() => setOnboardingStepsIndex(2)}
           onSkipPressHandler={onSkipPressHandler}>
-          <OnboardingTutorialStepItem icon={<Bookmark size={20}/>} itemTitle="Favoriten" itemDescription="Füge Constellatio Inhalte mit nur einem Klick deinen Favoriten hinzu."/>
-          <OnboardingTutorialStepItem icon={<DownloadIcon size={20}/>} itemTitle="Deine Dateien" itemDescription="Alles an einem Ort: Uploade deine vorhandenen Unterlagen in die Constellatio Jura-Cloud."/>
+          <OnboardingTutorialStepItem icon={<BookmarkBook size={20}/>} itemTitle="Lexikon" itemDescription="Detaillierte und abstrakte Darstellungen findest du in den verlinkten Lexikon-Artikeln."/>
         </OnboardingTutorialStep>
+      )}
+      popoverTarget={(
+        <HeaderItemLink link={link} pathname={pathname}/>
       )}
     />
   );
 };
-
-export default OnboardingSecondStep;

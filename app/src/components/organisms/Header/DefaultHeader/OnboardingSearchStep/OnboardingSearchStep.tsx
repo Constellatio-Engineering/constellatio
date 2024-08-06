@@ -8,23 +8,23 @@ import { type FunctionComponent } from "react";
 
 import HeaderItemSearchBar from "./HeaderItemSearchBar";
 
-type TOnboardingThirdStepProps = {
+type TOnboardingSearchStepProps = {
   readonly onboardingStepsIndex: number;
   readonly setOnboardingStepsIndex: SearchStoreProps["setOnboardingStepsIndex"];
 };
 
-const OnboardingThirdStep: FunctionComponent<TOnboardingThirdStepProps> = ({ onboardingStepsIndex, setOnboardingStepsIndex }) => 
+export const OnboardingSearchStep: FunctionComponent<TOnboardingSearchStepProps> = ({ onboardingStepsIndex, setOnboardingStepsIndex }) =>
 {
   return (
     <OnboardingTutorialPopover
-      opened={onboardingStepsIndex === 2}
+      opened={onboardingStepsIndex === 4}
       popoverMenu={(
         <OnboardingTutorialStep
           isLastStep
-          currentStep={3}
-          totalSteps={3}
+          currentStep={5}
+          totalSteps={5}
           stepTitle="Suche"
-          onNextPressHandler={() => setOnboardingStepsIndex(3)}>
+          onNextPressHandler={() => setOnboardingStepsIndex(5)}>
           <OnboardingTutorialStepItem
             icon={<Search size={20}/>}
             itemTitle="Umfassende, blitzschnelle Suche"
@@ -36,5 +36,3 @@ const OnboardingThirdStep: FunctionComponent<TOnboardingThirdStepProps> = ({ onb
     />
   );
 };
-
-export default OnboardingThirdStep;
