@@ -1,40 +1,43 @@
-import { Search } from "@/components/Icons/Search";
+import { Forum } from "@/components/Icons/Forum";
 import OnboardingTutorialStep from "@/components/molecules/onboardingTutorialStep/OnboardingTutorialStep";
 import OnboardingTutorialStepItem from "@/components/molecules/onboardingTutorialStep/OnboardingTutorialStepItem";
+import HeaderItemLink, { type THeaderItemLinkProps } from "@/components/organisms/Header/DefaultHeader/HeaderItemLink";
 import OnboardingTutorialPopover from "@/components/organisms/onboardingTutorialPopover/OnboardingTutorialPopover";
 import type { SearchStoreProps } from "@/stores/onboarding.store";
 
 import { type FunctionComponent } from "react";
 
-import HeaderItemSearchBar from "./HeaderItemSearchBar";
-
-type TOnboardingThirdStepProps = {
+type OnboardingCasesStepProps = THeaderItemLinkProps & {
   readonly onboardingStepsIndex: number;
   readonly setOnboardingStepsIndex: SearchStoreProps["setOnboardingStepsIndex"];
 };
 
-const OnboardingThirdStep: FunctionComponent<TOnboardingThirdStepProps> = ({ onboardingStepsIndex, setOnboardingStepsIndex }) => 
+export const OnboardingForumStep: FunctionComponent<OnboardingCasesStepProps> = ({
+  link,
+  onboardingStepsIndex,
+  pathname,
+  setOnboardingStepsIndex
+}) => 
 {
   return (
     <OnboardingTutorialPopover
       opened={onboardingStepsIndex === 2}
       popoverMenu={(
         <OnboardingTutorialStep
-          isLastStep
           currentStep={3}
-          totalSteps={3}
-          stepTitle="Suche"
+          totalSteps={5}
+          stepTitle="Forum"
           onNextPressHandler={() => setOnboardingStepsIndex(3)}>
           <OnboardingTutorialStepItem
-            icon={<Search size={20}/>}
-            itemTitle="Umfassende, blitzschnelle Suche"
-            itemDescription="Dank ausgeklügelter Filtermöglichkeiten und neuester Technik findest du immer sofort deine benötigten Inhalte."
+            icon={<Forum size={20}/>}
+            itemTitle="Forum"
+            itemDescription="Tausche dich mit anderen Studierenden aus und erhalte Antworten auf deine Fragen."
           />
         </OnboardingTutorialStep>
       )}
-      popoverTarget={(<HeaderItemSearchBar/>)}
+      popoverTarget={(
+        <HeaderItemLink link={link} pathname={pathname}/>
+      )}
     />
   );
 };
-
-export default OnboardingThirdStep;

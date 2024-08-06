@@ -22,10 +22,7 @@ const useDocuments: UseDocuments = () =>
     isRefetching
   } = api.documents.getDocuments.useQuery({ folderId: undefined }, {
     placeholderData: keepPreviousData,
-    refetchInterval: 3000,
-    refetchOnMount: "always",
-    // staleTime: Infinity,
-    staleTime: 0,
+    staleTime: Infinity,
   });
 
   return {

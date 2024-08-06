@@ -9,32 +9,29 @@ import { type FunctionComponent } from "react";
 
 import HeaderItemPersonalSpace, { type THeaderItemPersonalSpaceProps } from "./HeaderItemPersonalSpace";
 
-type TOnboardingSecondStep = THeaderItemPersonalSpaceProps & {
-  readonly onSkipPressHandler: () => void;
+type TOnboardingPersonalSpaceStep = THeaderItemPersonalSpaceProps & {
   readonly onboardingStepsIndex: number;
   readonly setOnboardingStepsIndex: SearchStoreProps["setOnboardingStepsIndex"];
 };
 
-const OnboardingSecondStep: FunctionComponent<TOnboardingSecondStep> = ({
+export const OnboardingPersonalSpaceStep: FunctionComponent<TOnboardingPersonalSpaceStep> = ({
   onboardingStepsIndex,
-  onSkipPressHandler,
   pathname,
   setOnboardingStepsIndex
 }) =>
 {
   return (
     <OnboardingTutorialPopover
-      opened={onboardingStepsIndex === 1}
+      opened={onboardingStepsIndex === 3}
       popoverTarget={(
         <HeaderItemPersonalSpace pathname={pathname}/>
       )}
       popoverMenu={(
         <OnboardingTutorialStep
-          currentStep={2}
-          totalSteps={3}
+          currentStep={4}
+          totalSteps={5}
           stepTitle="Persönlicher Bereich"
-          onNextPressHandler={() => setOnboardingStepsIndex(2)}
-          onSkipPressHandler={onSkipPressHandler}>
+          onNextPressHandler={() => setOnboardingStepsIndex(4)}>
           <OnboardingTutorialStepItem icon={<Bookmark size={20}/>} itemTitle="Favoriten" itemDescription="Füge Constellatio Inhalte mit nur einem Klick deinen Favoriten hinzu."/>
           <OnboardingTutorialStepItem icon={<DownloadIcon size={20}/>} itemTitle="Deine Dateien" itemDescription="Alles an einem Ort: Uploade deine vorhandenen Unterlagen in die Constellatio Jura-Cloud."/>
         </OnboardingTutorialStep>
@@ -42,5 +39,3 @@ const OnboardingSecondStep: FunctionComponent<TOnboardingSecondStep> = ({
     />
   );
 };
-
-export default OnboardingSecondStep;

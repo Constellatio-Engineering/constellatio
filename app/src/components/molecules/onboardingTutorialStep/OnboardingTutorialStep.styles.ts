@@ -70,8 +70,8 @@ gap: 2px;
 `;
 
 export const buttonsWrapper = css`
-display: flex;
-align-items: center;
-padding: 0 24px;
-gap: 8px;
+  display: flex;
+  align-items: center;
+  padding: 0 24px;
+  gap: 8px;
 `;
