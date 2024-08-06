@@ -8,7 +8,6 @@ import type { SearchStoreProps } from "@/stores/onboarding.store";
 import { type FunctionComponent } from "react";
 
 type OnboardingCasesStepProps = THeaderItemLinkProps & {
-  readonly onSkipPressHandler: () => void;
   readonly onboardingStepsIndex: number;
   readonly setOnboardingStepsIndex: SearchStoreProps["setOnboardingStepsIndex"];
 };
@@ -16,7 +15,6 @@ type OnboardingCasesStepProps = THeaderItemLinkProps & {
 export const OnboardingForumStep: FunctionComponent<OnboardingCasesStepProps> = ({
   link,
   onboardingStepsIndex,
-  onSkipPressHandler,
   pathname,
   setOnboardingStepsIndex
 }) => 
@@ -29,8 +27,7 @@ export const OnboardingForumStep: FunctionComponent<OnboardingCasesStepProps> = 
           currentStep={3}
           totalSteps={5}
           stepTitle="Forum"
-          onNextPressHandler={() => setOnboardingStepsIndex(3)}
-          onSkipPressHandler={onSkipPressHandler}>
+          onNextPressHandler={() => setOnboardingStepsIndex(3)}>
           <OnboardingTutorialStepItem
             icon={<Forum size={20}/>}
             itemTitle="Forum"

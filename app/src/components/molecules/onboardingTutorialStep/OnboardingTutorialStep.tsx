@@ -13,7 +13,6 @@ interface OnboardingTutorialStepProps
   readonly currentStep: number;
   readonly isLastStep?: boolean;
   readonly onNextPressHandler?: () => void;
-  readonly onSkipPressHandler?: () => void;
   readonly stepTitle: string;
   readonly totalSteps: number;
 }
@@ -23,7 +22,6 @@ const OnboardingTutorialStep: FunctionComponent<OnboardingTutorialStepProps> = (
   currentStep,
   isLastStep,
   onNextPressHandler,
-  onSkipPressHandler: _onSkipPressHandler,
   stepTitle,
   totalSteps
 }) => 
@@ -47,14 +45,6 @@ const OnboardingTutorialStep: FunctionComponent<OnboardingTutorialStepProps> = (
       <div css={styles.stepBody}>
         <div css={styles.itemsContainer}>{children}</div>
         <div css={styles.buttonsWrapper}>
-          {/* {!isLastStep && (
-            <Button<"button">
-              styleType="secondarySimple"
-              size="large"
-              onClick={onSkipPressHandler}
-              fullWidth>Später ansehen
-            </Button>
-          )}*/}
           <Button<"button">
             styleType="primary"
             size="large"

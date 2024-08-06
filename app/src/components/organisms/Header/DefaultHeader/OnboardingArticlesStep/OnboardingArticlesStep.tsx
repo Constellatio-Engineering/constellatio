@@ -9,7 +9,6 @@ import { type FunctionComponent } from "react";
 import HeaderItemLink, { type THeaderItemLinkProps } from "../HeaderItemLink";
 
 type OnboardingArticlesStepProps = THeaderItemLinkProps & {
-  readonly onSkipPressHandler: () => void;
   readonly onboardingStepsIndex: number;
   readonly setOnboardingStepsIndex: SearchStoreProps["setOnboardingStepsIndex"];
 };
@@ -17,7 +16,6 @@ type OnboardingArticlesStepProps = THeaderItemLinkProps & {
 export const OnboardingArticlesStep: FunctionComponent<OnboardingArticlesStepProps> = ({
   link,
   onboardingStepsIndex,
-  onSkipPressHandler,
   pathname,
   setOnboardingStepsIndex
 }) => 
@@ -30,8 +28,7 @@ export const OnboardingArticlesStep: FunctionComponent<OnboardingArticlesStepPro
           currentStep={2}
           totalSteps={5}
           stepTitle="Lexikon"
-          onNextPressHandler={() => setOnboardingStepsIndex(2)}
-          onSkipPressHandler={onSkipPressHandler}>
+          onNextPressHandler={() => setOnboardingStepsIndex(2)}>
           <OnboardingTutorialStepItem icon={<BookmarkBook size={20}/>} itemTitle="Lexikon" itemDescription="Detaillierte und abstrakte Darstellungen findest du in den verlinkten Lexikon-Artikeln."/>
         </OnboardingTutorialStep>
       )}

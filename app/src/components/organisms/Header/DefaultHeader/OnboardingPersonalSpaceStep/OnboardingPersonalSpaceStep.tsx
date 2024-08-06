@@ -10,14 +10,12 @@ import { type FunctionComponent } from "react";
 import HeaderItemPersonalSpace, { type THeaderItemPersonalSpaceProps } from "./HeaderItemPersonalSpace";
 
 type TOnboardingPersonalSpaceStep = THeaderItemPersonalSpaceProps & {
-  readonly onSkipPressHandler: () => void;
   readonly onboardingStepsIndex: number;
   readonly setOnboardingStepsIndex: SearchStoreProps["setOnboardingStepsIndex"];
 };
 
 export const OnboardingPersonalSpaceStep: FunctionComponent<TOnboardingPersonalSpaceStep> = ({
   onboardingStepsIndex,
-  onSkipPressHandler,
   pathname,
   setOnboardingStepsIndex
 }) =>
@@ -33,8 +31,7 @@ export const OnboardingPersonalSpaceStep: FunctionComponent<TOnboardingPersonalS
           currentStep={4}
           totalSteps={5}
           stepTitle="Persönlicher Bereich"
-          onNextPressHandler={() => setOnboardingStepsIndex(4)}
-          onSkipPressHandler={onSkipPressHandler}>
+          onNextPressHandler={() => setOnboardingStepsIndex(4)}>
           <OnboardingTutorialStepItem icon={<Bookmark size={20}/>} itemTitle="Favoriten" itemDescription="Füge Constellatio Inhalte mit nur einem Klick deinen Favoriten hinzu."/>
           <OnboardingTutorialStepItem icon={<DownloadIcon size={20}/>} itemTitle="Deine Dateien" itemDescription="Alles an einem Ort: Uploade deine vorhandenen Unterlagen in die Constellatio Jura-Cloud."/>
         </OnboardingTutorialStep>

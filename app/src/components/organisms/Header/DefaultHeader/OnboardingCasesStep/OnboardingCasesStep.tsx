@@ -8,7 +8,6 @@ import type { SearchStoreProps } from "@/stores/onboarding.store";
 import { type FunctionComponent } from "react";
 
 type OnboardingCasesStepProps = THeaderItemLinkProps & {
-  readonly onSkipPressHandler: () => void;
   readonly onboardingStepsIndex: number;
   readonly setOnboardingStepsIndex: SearchStoreProps["setOnboardingStepsIndex"];
 };
@@ -16,7 +15,6 @@ type OnboardingCasesStepProps = THeaderItemLinkProps & {
 export const OnboardingCasesStep: FunctionComponent<OnboardingCasesStepProps> = ({
   link,
   onboardingStepsIndex,
-  onSkipPressHandler,
   pathname,
   setOnboardingStepsIndex
 }) => 
@@ -29,8 +27,7 @@ export const OnboardingCasesStep: FunctionComponent<OnboardingCasesStepProps> = 
           currentStep={1}
           totalSteps={5}
           stepTitle="Willkommen bei Constellatio!"
-          onNextPressHandler={() => setOnboardingStepsIndex(1)}
-          onSkipPressHandler={onSkipPressHandler}>
+          onNextPressHandler={() => setOnboardingStepsIndex(1)}>
           <OnboardingTutorialStepItem icon={<CasesIcon size={20}/>} itemTitle="Fälle" itemDescription="Die Wissensvermittlung findet anhand interaktiver Fälle statt."/>
         </OnboardingTutorialStep>
       )}

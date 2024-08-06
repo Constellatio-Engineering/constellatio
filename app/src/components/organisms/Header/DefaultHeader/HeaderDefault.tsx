@@ -10,7 +10,6 @@ import HeaderItemSearchBar from "@/components/organisms/Header/DefaultHeader/Onb
 import { OnboardingSearchStep } from "@/components/organisms/Header/DefaultHeader/OnboardingSearchStep/OnboardingSearchStep";
 import OnboardingModal from "@/components/organisms/onboardingModal/OnboardingModal";
 import useOnboardingResult from "@/hooks/useOnboardingResult";
-import { useWasOnboardingPostponed } from "@/hooks/useWasOnboardingPostponed";
 import { useOnboardingStore } from "@/stores/onboarding.store";
 import { appPaths } from "@/utils/paths";
 
@@ -45,12 +44,7 @@ const HeaderDefault: FunctionComponent = () =>
   const { pathname } = useRouter();
   const theme = useMantineTheme();
   const { data: onboardingResult, isPending: isGetOnboardingResultLoading } = useOnboardingResult();
-  const [onboardingPostponedState, setWasOnboardingPostponed] = useWasOnboardingPostponed();
-  const skipOnboarding = (): void => setWasOnboardingPostponed({
-    dateOfPostponement: new Date(),
-    wasOnboardingPostponed: true
-  });
-  const showOnboarding = !isGetOnboardingResultLoading && onboardingResult === null && !onboardingPostponedState.wasOnboardingPostponed;
+  const showOnboarding = !isGetOnboardingResultLoading && onboardingResult === null;
   const onboardingStepsIndex = useOnboardingStore(s => s.onboardingStepsIndex);
   const setOnboardingStepsIndex = useOnboardingStore(s => s.setOnboardingStepsIndex);
 
@@ -91,7 +85,6 @@ const HeaderDefault: FunctionComponent = () =>
                     key={linkIndex}
                     link={link}
                     pathname={pathname}
-                    onSkipPressHandler={skipOnboarding}
                     onboardingStepsIndex={onboardingStepsIndex}
                     setOnboardingStepsIndex={setOnboardingStepsIndex}
                   />
@@ -105,7 +98,6 @@ const HeaderDefault: FunctionComponent = () =>
                     key={linkIndex}
                     link={link}
                     pathname={pathname}
-                    onSkipPressHandler={skipOnboarding}
                     onboardingStepsIndex={onboardingStepsIndex}
                     setOnboardingStepsIndex={setOnboardingStepsIndex}
                   />
@@ -119,7 +111,6 @@ const HeaderDefault: FunctionComponent = () =>
                     key={linkIndex}
                     link={link}
                     pathname={pathname}
-                    onSkipPressHandler={skipOnboarding}
                     onboardingStepsIndex={onboardingStepsIndex}
                     setOnboardingStepsIndex={setOnboardingStepsIndex}
                   />
@@ -139,7 +130,6 @@ const HeaderDefault: FunctionComponent = () =>
               <OnboardingPersonalSpaceStep
                 onboardingStepsIndex={onboardingStepsIndex}
                 pathname={pathname}
-                onSkipPressHandler={skipOnboarding}
                 setOnboardingStepsIndex={setOnboardingStepsIndex}
               />
             ) : (
