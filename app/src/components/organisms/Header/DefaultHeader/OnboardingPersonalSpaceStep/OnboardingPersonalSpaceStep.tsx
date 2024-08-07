@@ -29,11 +29,19 @@ export const OnboardingPersonalSpaceStep: FunctionComponent<TOnboardingPersonalS
       popoverMenu={(
         <OnboardingTutorialStep
           currentStep={4}
-          totalSteps={5}
-          stepTitle="Persönlicher Bereich"
+          totalSteps={4}
+          stepTitle="Alles an einem Ort"
           onNextPressHandler={() => setOnboardingStepsIndex(4)}>
-          <OnboardingTutorialStepItem icon={<Bookmark size={20}/>} itemTitle="Favoriten" itemDescription="Füge Constellatio Inhalte mit nur einem Klick deinen Favoriten hinzu."/>
-          <OnboardingTutorialStepItem icon={<DownloadIcon size={20}/>} itemTitle="Deine Dateien" itemDescription="Alles an einem Ort: Uploade deine vorhandenen Unterlagen in die Constellatio Jura-Cloud."/>
+          <OnboardingTutorialStepItem
+            icon={<Bookmark size={20}/>}
+            itemTitle="Favoriten"
+            itemDescription="Füge Constellatio-Inhalte mit nur einem Klick deinen Favoriten hinzu"
+          />
+          <OnboardingTutorialStepItem
+            icon={<DownloadIcon size={20}/>}
+            itemTitle="Deine Dateien"
+            itemDescription="Uploade deine vorhandenen Unterlagen in die Constellatio Jura-Cloud"
+          />
         </OnboardingTutorialStep>
       )}
     />

@@ -52,7 +52,7 @@ const OnboardingModal: FunctionComponent<Props> = ({ onboardingStepsIndex, setOn
 
   return (
     <Modal
-      opened={onboardingStepsIndex === 5}
+      opened={onboardingStepsIndex === 4}
       centered
       onClose={onClose}
       size="lg"
