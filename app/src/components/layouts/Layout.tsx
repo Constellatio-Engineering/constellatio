@@ -17,7 +17,7 @@ export const Layout: FunctionComponent<ReactElement> = (page) =>
     <div css={styles.wrapper}>
       <Header variant="default"/>
       <main css={styles.main}>
-        {(showOnboarding && onboardingStepsIndex !== 5) && <div css={styles.onboardingOverlay}/>}
+        {(showOnboarding && onboardingStepsIndex !== 4) && <div css={styles.onboardingOverlay}/>}
         {page}
       </main>
       <Footer/>

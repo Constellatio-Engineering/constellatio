@@ -7,7 +7,6 @@ import { OnboardingForumStep } from "@/components/organisms/Header/DefaultHeader
 import HeaderItemPersonalSpace from "@/components/organisms/Header/DefaultHeader/OnboardingPersonalSpaceStep/HeaderItemPersonalSpace";
 import { OnboardingPersonalSpaceStep } from "@/components/organisms/Header/DefaultHeader/OnboardingPersonalSpaceStep/OnboardingPersonalSpaceStep";
 import HeaderItemSearchBar from "@/components/organisms/Header/DefaultHeader/OnboardingSearchStep/HeaderItemSearchBar";
-import { OnboardingSearchStep } from "@/components/organisms/Header/DefaultHeader/OnboardingSearchStep/OnboardingSearchStep";
 import OnboardingModal from "@/components/organisms/onboardingModal/OnboardingModal";
 import useOnboardingResult from "@/hooks/useOnboardingResult";
 import { useOnboardingStore } from "@/stores/onboarding.store";
@@ -121,11 +120,7 @@ const HeaderDefault: FunctionComponent = () =>
             })}
           </div>
           <div css={styles.profileArea}>
-            {showOnboarding ? (
-              <OnboardingSearchStep onboardingStepsIndex={onboardingStepsIndex} setOnboardingStepsIndex={setOnboardingStepsIndex}/>
-            ) : (
-              <HeaderItemSearchBar/>
-            )}
+            <HeaderItemSearchBar/>
             {showOnboarding ? (
               <OnboardingPersonalSpaceStep
                 onboardingStepsIndex={onboardingStepsIndex}
