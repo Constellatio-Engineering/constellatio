@@ -25,10 +25,14 @@ export const OnboardingCasesStep: FunctionComponent<OnboardingCasesStepProps> = 
       popoverMenu={(
         <OnboardingTutorialStep
           currentStep={1}
-          totalSteps={5}
+          totalSteps={4}
           stepTitle="Willkommen bei Constellatio!"
           onNextPressHandler={() => setOnboardingStepsIndex(1)}>
-          <OnboardingTutorialStepItem icon={<CasesIcon size={20}/>} itemTitle="Fälle" itemDescription="Die Wissensvermittlung findet anhand interaktiver Fälle statt."/>
+          <OnboardingTutorialStepItem
+            icon={<CasesIcon size={20}/>}
+            itemTitle="Interaktive Fälle"
+            itemDescription="Mit unseren geführten Lösungen erarbeitest du dir die Schwerpunkte der Fälle"
+          />
         </OnboardingTutorialStep>
       )}
       popoverTarget={(

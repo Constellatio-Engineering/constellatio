@@ -26,10 +26,14 @@ export const OnboardingArticlesStep: FunctionComponent<OnboardingArticlesStepPro
       popoverMenu={(
         <OnboardingTutorialStep
           currentStep={2}
-          totalSteps={5}
-          stepTitle="Lexikon"
+          totalSteps={4}
+          stepTitle="Vertiefendes Lexikon"
           onNextPressHandler={() => setOnboardingStepsIndex(2)}>
-          <OnboardingTutorialStepItem icon={<BookmarkBook size={20}/>} itemTitle="Lexikon" itemDescription="Detaillierte und abstrakte Darstellungen findest du in den verlinkten Lexikon-Artikeln."/>
+          <OnboardingTutorialStepItem
+            icon={<BookmarkBook size={20}/>}
+            itemTitle="Vernetztes Wissen"
+            itemDescription="Schnelleres Verständnis dank unserer detaillierten Artikel und Visualisierungen"
+          />
         </OnboardingTutorialStep>
       )}
       popoverTarget={(

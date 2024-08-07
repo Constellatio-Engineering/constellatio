@@ -1,4 +1,5 @@
 import { Forum } from "@/components/Icons/Forum";
+import { Verified } from "@/components/Icons/Verified";
 import OnboardingTutorialStep from "@/components/molecules/onboardingTutorialStep/OnboardingTutorialStep";
 import OnboardingTutorialStepItem from "@/components/molecules/onboardingTutorialStep/OnboardingTutorialStepItem";
 import HeaderItemLink, { type THeaderItemLinkProps } from "@/components/organisms/Header/DefaultHeader/HeaderItemLink";
@@ -25,13 +26,18 @@ export const OnboardingForumStep: FunctionComponent<OnboardingCasesStepProps> = 
       popoverMenu={(
         <OnboardingTutorialStep
           currentStep={3}
-          totalSteps={5}
-          stepTitle="Forum"
+          totalSteps={4}
+          stepTitle="Kuratiertes Forum"
           onNextPressHandler={() => setOnboardingStepsIndex(3)}>
           <OnboardingTutorialStepItem
             icon={<Forum size={20}/>}
-            itemTitle="Forum"
-            itemDescription="Tausche dich mit anderen Studierenden aus und erhalte Antworten auf deine Fragen."
+            itemTitle="Schwarmintelligenz"
+            itemDescription="Diskutiere mit der Community über die hilfreichste Antwort und stimme ab"
+          />
+          <OnboardingTutorialStepItem
+            icon={<Verified size={20}/>}
+            itemTitle="Verfifizierte Antworten"
+            itemDescription="Volljuristen stellen sicher, dass du rechtlich korrekte Antworten siehst"
           />
         </OnboardingTutorialStep>
       )}
