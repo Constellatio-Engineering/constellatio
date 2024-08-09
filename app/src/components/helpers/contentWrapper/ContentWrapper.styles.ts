@@ -7,6 +7,5 @@ export const wrapper = css`
   max-width: 1440px;
   position: relative;
   left: 50%;
-  background-color: rgba(102, 51, 153, 0.16);
   transform: translateX(-50%);
 `;
