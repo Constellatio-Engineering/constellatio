@@ -8,7 +8,7 @@ export const NotificationsPageHeader: FunctionComponent = () =>
 {
   return (
     <div css={styles.wrapper}>
-      <OverviewHeader variant="red" height={300}/>
+      <OverviewHeader variant="red"/>
       <div css={styles.contentContainer}>
         <Title css={styles.headerTitle} order={1}>
           Benachrichtigungen

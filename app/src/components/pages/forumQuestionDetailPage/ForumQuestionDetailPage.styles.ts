@@ -5,12 +5,13 @@ import { css } from "@emotion/react";
 import type { ModalStylesNames } from "@mantine/core";
 import type { Styles } from "@mantine/styles";
 
-const questionOffset = 90;
+const questionOffset = 120;
 
 export const questionWrapper = css`
   background-color: ${colors["cc-forum"][2]};
   position: relative;
   z-index: 1;
+  min-height: 400px;
 `;
 
 export const backToForumLink = css`

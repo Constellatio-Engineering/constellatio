@@ -83,7 +83,6 @@ const OverviewPageContent: FunctionComponent<OverviewPageContentProps> = ({ cont
     <div css={styles.Page}>
       {content?.allMainCategories && (
         <OverviewHeader
-          height={400}
           variant={variant}
           selectedCategorySlug={selectedCategorySlug}
           setSelectedCategorySlug={setSelectedCategorySlug}

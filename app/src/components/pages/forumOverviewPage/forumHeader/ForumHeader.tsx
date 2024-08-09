@@ -15,7 +15,7 @@ const ForumHeader: FunctionComponent = () =>
 {
   const setCreateQuestionState = useForumPageStore((state) => state.setCreateQuestionState);
   const theme = useMantineTheme();
-  const height = 500;
+  const height = 400;
   const variant = "forum";
 
   return (

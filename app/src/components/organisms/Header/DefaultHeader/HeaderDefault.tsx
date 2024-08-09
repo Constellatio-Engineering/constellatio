@@ -8,6 +8,7 @@ import HeaderItemPersonalSpace from "@/components/organisms/Header/DefaultHeader
 import { OnboardingPersonalSpaceStep } from "@/components/organisms/Header/DefaultHeader/OnboardingPersonalSpaceStep/OnboardingPersonalSpaceStep";
 import HeaderItemSearchBar from "@/components/organisms/Header/DefaultHeader/OnboardingSearchStep/HeaderItemSearchBar";
 import OnboardingModal from "@/components/organisms/onboardingModal/OnboardingModal";
+import { env } from "@/env.mjs";
 import useOnboardingResult from "@/hooks/useOnboardingResult";
 import { useOnboardingStore } from "@/stores/onboarding.store";
 import { appPaths } from "@/utils/paths";
@@ -44,6 +45,19 @@ const HeaderDefault: FunctionComponent = () =>
   const theme = useMantineTheme();
   const { data: onboardingResult, isPending: isGetOnboardingResultLoading } = useOnboardingResult();
   const showOnboarding = !isGetOnboardingResultLoading && onboardingResult === null;
+
+  // TODO: Remove this
+  if(env.NEXT_PUBLIC_DEPLOYMENT_ENVIRONMENT === "staging")
+  {
+    console.info("This will only be logged on staging");
+    console.log({
+      isGetOnboardingResultLoading,
+      isOnboardingResultEqualToNull: onboardingResult === null,
+      onboardingResult,
+      showOnboarding,
+    });
+  }
+
   const onboardingStepsIndex = useOnboardingStore(s => s.onboardingStepsIndex);
   const setOnboardingStepsIndex = useOnboardingStore(s => s.setOnboardingStepsIndex);
 

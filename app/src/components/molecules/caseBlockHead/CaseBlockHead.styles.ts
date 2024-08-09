@@ -2,14 +2,14 @@ import { type SerializedStyles, css } from "@emotion/react";
 import { type MantineTheme } from "@mantine/styles";
 
 export const wrapper = css`
-  width: 240px;
+  min-width: 230px;
 
   @media screen and (max-width: 1200px) {
     display: flex;
     width: 100%;
     justify-content: space-between;
     align-items: center;
-    p{
+    p {
       white-space: nowrap;
     }
   }

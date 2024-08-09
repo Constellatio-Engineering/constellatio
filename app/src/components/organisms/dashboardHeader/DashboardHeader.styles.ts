@@ -14,8 +14,8 @@ export const contentContainer = css`
   left: 50%;
   transform: translateX(-50%);
   z-index: 2;
-  padding: 0 60px;
-  width: 100%;
+  padding: 0;
+  width: 95%;
   max-width: 1440px;
   h1 {
     position: relative;

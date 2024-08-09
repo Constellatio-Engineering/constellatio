@@ -15,7 +15,7 @@ export const loadingWrapper = css`
 `;
 
 export const header = (theme: MantineTheme) => css`
-	height: 240px;
+	height: 400px;
 	width: 100%;
 	display: flex;
 	align-items: center;
