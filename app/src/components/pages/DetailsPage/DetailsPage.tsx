@@ -177,7 +177,7 @@ const DetailsPage: FunctionComponent<IDetailsPageProps> = ({ content, variant })
         )
       }
       <div css={styles.mainContainer}>
-        <ContentWrapper>
+        <ContentWrapper shouldUseMarginAutoInsteadOfTransform>
           {content?.fullTextTasks && (variant === "case" ? caseStepIndex === 0 : true) && (
             <CaseCompleteTestsStep
               currentGameIndexInFullTextTasksJson={currentGameIndexInFullTextTasksJson}

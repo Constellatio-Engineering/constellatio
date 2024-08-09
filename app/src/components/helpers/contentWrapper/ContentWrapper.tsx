@@ -5,13 +5,14 @@ import * as styles from "./ContentWrapper.styles";
 
 type Props = {
   readonly children: React.ReactNode;
+  readonly shouldUseMarginAutoInsteadOfTransform?: boolean;
   readonly stylesOverrides?: SerializedStyles;
 };
 
-const ContentWrapper: FunctionComponent<Props> = ({ children, stylesOverrides }) =>
+const ContentWrapper: FunctionComponent<Props> = ({ children, shouldUseMarginAutoInsteadOfTransform = false, stylesOverrides }) =>
 {
   return (
-    <div css={[styles.wrapper, stylesOverrides]}>
+    <div css={[styles.wrapper, shouldUseMarginAutoInsteadOfTransform ? styles.marginAuto : styles.positionLeftAndTransform, stylesOverrides]}>
       {children}
     </div>
   );
