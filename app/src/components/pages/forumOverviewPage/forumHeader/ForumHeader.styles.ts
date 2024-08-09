@@ -50,7 +50,7 @@ export const contentWrapper = css`
   z-index: 3;
   flex-direction: column;
   align-items: center;
-  padding: 20px 20px 0;
+  padding-top: 20px;
   * {
     text-align: center;
   }

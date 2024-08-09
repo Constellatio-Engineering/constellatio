@@ -11,16 +11,12 @@ export const contentContainer = css`
   left: 50%;
   transform: translate(-50%, -50%);
   z-index: 2;
-  padding: 0 60px;
-  width: 100%;
-  max-width: 1440px;
   @media screen and (max-width: 1300px) {
-    padding: 0 20px;
     min-width: auto;
   }
 `;
 
 export const headerTitle = (theme: MantineTheme) => css`
-    color: ${theme.colors["neutrals-01"][0]};
-    text-align: center;
+  color: ${theme.colors["neutrals-01"][0]};
+  text-align: center;
 `;

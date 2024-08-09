@@ -22,6 +22,7 @@ export const menuTabStyles = ({ active, disabled, theme }: {
   color: ${theme.colors["neutrals-02"][1]};
   white-space: nowrap;
   cursor: pointer;
+  transition: opacity 0.2s;
   p {
     display: flex;
     align-items: center;
@@ -37,9 +38,13 @@ export const menuTabStyles = ({ active, disabled, theme }: {
     content: "";
     bottom: 0px;
     left: 0;
+    transition: background-color .2s;
+  }
+  :hover {
+    opacity: .8;
   }
   &:hover::after {
-    background-color:${theme.colors["neutrals-01"][3]};
+    background-color: ${theme.colors["neutrals-01"][7]};
   }
   ${disabled && CSSDisabledStyles(theme)};
 `;

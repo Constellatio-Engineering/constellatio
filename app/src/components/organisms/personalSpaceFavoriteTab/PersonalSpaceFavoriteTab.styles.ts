@@ -1,7 +1,6 @@
 import { css } from "@emotion/react";
 
 export const questionsWrapper = css`
-  width: 95%;
   position: relative;
   left: 50%;
   transform: translateX(-50%);

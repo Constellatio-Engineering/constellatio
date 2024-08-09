@@ -17,7 +17,6 @@ export const componentArea = ({ theme }: {theme: MantineTheme}): SerializedStyle
   z-index: 41;
   border-top: 1px solid #e8e8e8;
   width: 100%;
-  padding: 0px 60px;
 `;
 
 export const wrapper = ({ variant }: {
@@ -27,7 +26,6 @@ export const wrapper = ({ variant }: {
   justify-content: space-between;
   align-items: center;
   flex-wrap: wrap;
-  max-width: 1440px;
   margin: 0 auto;  
   padding:16px 0px;
   ${variant === "dictionary" && DictionaryCSS};

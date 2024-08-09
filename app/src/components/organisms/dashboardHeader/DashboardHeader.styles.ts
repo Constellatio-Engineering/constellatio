@@ -11,12 +11,8 @@ export const wrapper = css`
 export const contentContainer = css`
   position: absolute;
   top: 100px;
-  left: 50%;
-  transform: translateX(-50%);
   z-index: 2;
-  padding: 0 60px;
-  width: 100%;
-  max-width: 1440px;
+  padding: 0;
   h1 {
     position: relative;
     top: 10px

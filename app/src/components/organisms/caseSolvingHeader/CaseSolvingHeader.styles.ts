@@ -6,7 +6,6 @@ export const wrapper = ({ theme, variant }: {
   variant: "case" | "dictionary";
 }): SerializedStyles => css`
   position: relative;
-  padding: 0 60px;
   background: ${variant === "case"
     ? theme.colors["cc-cases"][2]
     : theme.colors["cc-dictionary"][2]};
@@ -33,7 +32,7 @@ export const body = css`
   align-items: center;
   flex-wrap: wrap;
   min-width: 100%;
-  padding: 100px 0px 100px 0;
+  padding: 70px 0px;
   @media (max-width: 1100px) {
     padding: 60px 0;
     justify-content: center;
@@ -162,9 +161,4 @@ export const stepsBar = (theme: MantineTheme): SerializedStyles => css`
       }
     }
   }
-`;
-
-export const container = css`
-  max-width: 1440px;
-  position: relative;
 `;

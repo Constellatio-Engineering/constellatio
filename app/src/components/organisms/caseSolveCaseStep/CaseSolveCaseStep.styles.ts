@@ -5,13 +5,9 @@ export const wrapper = css`
 	justify-content: space-between;
 	align-items: flex-start;
 	gap: 50px;
-	
 	@media screen and (max-width: 1100px) {
 		flex-direction: column;
 	}
-
-	max-width: 1440px;
-	margin: 0 auto;
 `;
 
 export const textAreaWrapper = css`

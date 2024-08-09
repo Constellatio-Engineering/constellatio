@@ -1,3 +1,4 @@
+import ContentWrapper from "@/components/helpers/contentWrapper/ContentWrapper";
 import NotificationsBell from "@/components/molecules/notificationsBell/NotificationsBell";
 import { UserDropdown } from "@/components/molecules/UserDropdown/UserDropdown";
 import HeaderItemLink from "@/components/organisms/Header/DefaultHeader/HeaderItemLink";
@@ -8,6 +9,7 @@ import HeaderItemPersonalSpace from "@/components/organisms/Header/DefaultHeader
 import { OnboardingPersonalSpaceStep } from "@/components/organisms/Header/DefaultHeader/OnboardingPersonalSpaceStep/OnboardingPersonalSpaceStep";
 import HeaderItemSearchBar from "@/components/organisms/Header/DefaultHeader/OnboardingSearchStep/HeaderItemSearchBar";
 import OnboardingModal from "@/components/organisms/onboardingModal/OnboardingModal";
+import { env } from "@/env.mjs";
 import useOnboardingResult from "@/hooks/useOnboardingResult";
 import { useOnboardingStore } from "@/stores/onboarding.store";
 import { appPaths } from "@/utils/paths";
@@ -44,6 +46,19 @@ const HeaderDefault: FunctionComponent = () =>
   const theme = useMantineTheme();
   const { data: onboardingResult, isPending: isGetOnboardingResultLoading } = useOnboardingResult();
   const showOnboarding = !isGetOnboardingResultLoading && onboardingResult === null;
+
+  // TODO: Remove this
+  if(env.NEXT_PUBLIC_DEPLOYMENT_ENVIRONMENT === "staging")
+  {
+    console.info("This will only be logged on staging");
+    console.log({
+      isGetOnboardingResultLoading,
+      isOnboardingResultEqualToNull: onboardingResult === null,
+      onboardingResult,
+      showOnboarding,
+    });
+  }
+
   const onboardingStepsIndex = useOnboardingStore(s => s.onboardingStepsIndex);
   const setOnboardingStepsIndex = useOnboardingStore(s => s.setOnboardingStepsIndex);
 
@@ -64,7 +79,7 @@ const HeaderDefault: FunctionComponent = () =>
         setOnboardingStepsIndex={setOnboardingStepsIndex}
       />
       <SHeader withShadow>
-        <div css={styles.wrapper({ theme, variant: "default" })}>
+        <ContentWrapper stylesOverrides={styles.wrapper({ theme, variant: "default" })}>
           <div css={styles.links}>
             <Link href={appPaths.dashboard}>
               <Image css={styles.tabletHeaderLogo} src={ConstellatioLogoIcon} alt="Constellatio"/>
@@ -136,7 +151,7 @@ const HeaderDefault: FunctionComponent = () =>
               <UserDropdown/>
             </div>
           </div>
-        </div>
+        </ContentWrapper>
       </SHeader>
       <SearchOverlay/>
     </>
