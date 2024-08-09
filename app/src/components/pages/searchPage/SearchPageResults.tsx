@@ -1,5 +1,6 @@
 /* eslint-disable max-lines */
 import { Svg } from "@/basic-components/SVG/Svg";
+import ContentWrapper from "@/components/helpers/contentWrapper/ContentWrapper";
 import ItemBlock from "@/components/organisms/caseBlock/ItemBlock";
 import DocsTable from "@/components/organisms/docsTable/DocsTable";
 import EmptyStateCard from "@/components/organisms/emptyStateCard/EmptyStateCard";
@@ -25,11 +26,13 @@ const NoResultsFound: FunctionComponent<{
   readonly queryString: Nullable<string | string[]>;
   readonly tabQuery: Props["tabQuery"];
 }> = ({ queryString, tabQuery }) => (
-  <EmptyStateCard
-    title={`Keine Ergebnisse ${queryString && `für “${queryString}”`} ${convertTabQueryAsItemTab(tabQuery) && `${convertTabQueryAsItemTab(tabQuery)}`}`}
-    text="Schaue in anderen Kategorien oder starte eine neue Suche"
-    variant="For-large-areas"
-  />
+  <ContentWrapper>
+    <EmptyStateCard
+      title={`Keine Ergebnisse ${queryString && `für “${queryString}”`} ${convertTabQueryAsItemTab(tabQuery) && `${convertTabQueryAsItemTab(tabQuery)}`}`}
+      text="Schaue in anderen Kategorien oder starte eine neue Suche"
+      variant="For-large-areas"
+    />
+  </ContentWrapper>
 );
 
 const SearchPageResults: FunctionComponent<Props> = ({ tabQuery }) =>
@@ -51,9 +54,9 @@ const SearchPageResults: FunctionComponent<Props> = ({ tabQuery }) =>
       }
 
       return (
-        <div css={styles.questionsWrapper}>
+        <ContentWrapper stylesOverrides={styles.questionsWrapper}>
           <ForumQuestions questionIds={searchResults.forumQuestions.map(q => q.id)}/>
-        </div>
+        </ContentWrapper>
       );
     }
     case "articles":
@@ -91,7 +94,7 @@ const SearchPageResults: FunctionComponent<Props> = ({ tabQuery }) =>
 
       return (
         searchResults[tabQuery]?.length > 0 ? (
-          <div css={styles.searchPageResults}>
+          <ContentWrapper stylesOverrides={styles.searchPageResults}>
             {groupedResultsByCategory?.map((categoryGroup, index) =>
             {
               const caseItems = categoryGroup.items as SearchResults["cases"];
@@ -125,7 +128,7 @@ const SearchPageResults: FunctionComponent<Props> = ({ tabQuery }) =>
                 </Fragment>
               );
             })}
-          </div>
+          </ContentWrapper>
         ) : (
           <NoResultsFound queryString={router.query.find} tabQuery={tabQuery}/>
         )
@@ -135,7 +138,7 @@ const SearchPageResults: FunctionComponent<Props> = ({ tabQuery }) =>
     {
       return (
         (searchResults.userUploads?.length > 0 || searchResults.userDocuments?.length > 0) ? (
-          <div css={styles.searchPageResults}>
+          <ContentWrapper stylesOverrides={styles.searchPageResults}>
             {searchResults.userDocuments?.length > 0 && (
               <SearchPapersBlock
                 variant="userDocuments"
@@ -181,7 +184,7 @@ const SearchPageResults: FunctionComponent<Props> = ({ tabQuery }) =>
                 numberOfTableItems={searchResults.userUploads?.length}
               />
             )}
-          </div>
+          </ContentWrapper>
         ) : (
           <NoResultsFound queryString={router.query.find} tabQuery={tabQuery}/>
         )

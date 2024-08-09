@@ -1,3 +1,4 @@
+import ContentWrapper from "@/components/helpers/contentWrapper/ContentWrapper";
 import useMaterialsStore from "@/stores/materials.store";
 import uploadsProgressStore from "@/stores/uploadsProgress.store";
 
@@ -18,7 +19,7 @@ const PersonalSpaceMaterialsTab: FunctionComponent = () =>
   const areUploadsInProgress = uploads.some(u => u.state.type === "uploading");
 
   return (
-    <div css={styles.container}>
+    <ContentWrapper>
       <div css={styles.materialTabContainerContent}>
         <MaterialMenu/>        
         <FoldersMenuTablet/>
@@ -36,7 +37,7 @@ const PersonalSpaceMaterialsTab: FunctionComponent = () =>
           <FileUploadMenu uploads={uploads}/>
         </div>
       </div>
-    </div>
+    </ContentWrapper>
   );
 };
 

@@ -2,11 +2,11 @@ import { css } from "@emotion/react";
 import { type MantineTheme } from "@mantine/styles";
 
 export const wrapper = css`
-width:254px;
-display: flex;
-justify-content: space-between;
-align-items: flex-start;
-flex-direction: column;
+  min-width: 220px;
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  flex-direction: column;
 @media screen and (max-width: 1200px) {
     width: 100%;
     flex-direction: row;

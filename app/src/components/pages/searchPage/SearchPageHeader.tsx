@@ -1,4 +1,5 @@
 import MenuTab from "@/components/atoms/menuTab/MenuTab";
+import ContentWrapper from "@/components/helpers/contentWrapper/ContentWrapper";
 import useSearchResults, { type SearchResultsKey } from "@/hooks/useSearchResults";
 
 import { Title } from "@mantine/core";
@@ -37,24 +38,28 @@ const SearchPageHeader: FunctionComponent<Props> = ({ setTabQuery, tabQuery, tot
   return (
     <div css={styles.headerWrapper}>
       <div css={styles.header}>
-        <Title order={2}>{totalSearchResults} {totalSearchResults > 1 ? "Ergebnisse" : "Ergebnis"} für “{query.find}”</Title>
         <span css={styles.headerBg}>
           <SearchPageHeaderBgLayer/>
         </span>
+        <ContentWrapper stylesOverrides={styles.headerContentWrapper}>
+          <Title order={2}>{totalSearchResults} {totalSearchResults > 1 ? "Ergebnisse" : "Ergebnis"} für “{query.find}”</Title>
+        </ContentWrapper>
       </div>
-      <div css={styles.navBar}>                                        
-        {tabItems.map((item, index) => 
-        {
-          return (
-            <MenuTab
-              key={index}
-              title={item.label}
-              number={item.resultsCount}
-              active={tabQuery === convertTabsAsSearchResultsKey(item)}
-              onClick={() => void setTabQuery(convertTabsAsSearchResultsKey(item))}
-            />
-          );
-        })}
+      <div css={styles.navBar}>
+        <ContentWrapper stylesOverrides={styles.navBarContentWrapper}>
+          {tabItems.map((item, index) =>
+          {
+            return (
+              <MenuTab
+                key={index}
+                title={item.label}
+                number={item.resultsCount}
+                active={tabQuery === convertTabsAsSearchResultsKey(item)}
+                onClick={() => void setTabQuery(convertTabsAsSearchResultsKey(item))}
+              />
+            );
+          })}
+        </ContentWrapper>
       </div>
     </div>
   );

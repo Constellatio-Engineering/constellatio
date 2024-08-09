@@ -1,3 +1,4 @@
+import ContentWrapper from "@/components/helpers/contentWrapper/ContentWrapper";
 import ForumQuestions from "@/components/pages/forumOverviewPage/forumQuestions/ForumQuestions";
 import UseQueryStateWrapper from "@/components/Wrappers/useQueryStateWrapper/UseQueryStateWrapper";
 import useArticles from "@/hooks/useArticles";
@@ -91,62 +92,64 @@ const PersonalSpaceFavoriteTabContent: FunctionComponent = () =>
         selectedTabSlug={selectedTabSlug}
         tabs={favoriteCategoryNavTabs}
       />
-      <div style={{ display: "flex", flexDirection: "column", width: "100%" }}>
-        {(selectedTabSlug === favoriteCategoryNavTabs[0]!.slug) && (
-          <> 
-            {(areBookmarksLoading || areCasesLoading) ? (
-              <Loader sx={{ margin: "50px" }}/>
-            ) : (
-              bookmarkedCases?.length > 0 ? (
-                <FavoriteCasesList {...favoriteCasesListProps}/>
-              ) : (
-                <EmptyStateCard
-                  button={{
-                    content: "Alle Fälle ansehen",
-                    onClick: async () => router.push(appPaths.cases)
-                  }}
-                  title="Du hast noch keine Fälle als Favoriten gespeichert"
-                  text="Du kannst Fälle, Lexikon-Artikel und sogar einzelne markierte Textpassagen als deine persönlichen Favoriten speichern"
-                  variant="For-large-areas"
-                />
-              )
-            )}
-          </>
-        )}
-        {selectedTabSlug === favoriteCategoryNavTabs[1]!.slug && (
-          <>
-            {
-              (areBookmarksLoading || areArticlesLoading) ? (
+      <ContentWrapper>
+        <div style={{ display: "flex", flexDirection: "column", width: "100%" }}>
+          {(selectedTabSlug === favoriteCategoryNavTabs[0]!.slug) && (
+            <> 
+              {(areBookmarksLoading || areCasesLoading) ? (
                 <Loader sx={{ margin: "50px" }}/>
-              ) :  
-                bookmarkedArticles?.length > 0 ? (
-                  <FavoriteArticlesList {...favoriteArticlesListProps}/>
-                ) : ( 
+              ) : (
+                bookmarkedCases?.length > 0 ? (
+                  <FavoriteCasesList {...favoriteCasesListProps}/>
+                ) : (
                   <EmptyStateCard
                     button={{
-                      content: "Alle Lexikon-Artikel ansehen",
-                      onClick: async () => router.push(appPaths.dictionary)
+                      content: "Alle Fälle ansehen",
+                      onClick: async () => router.push(appPaths.cases)
                     }}
-                    title="Du hast noch keine Lexikon-Artikel als Favoriten gespeichert"
+                    title="Du hast noch keine Fälle als Favoriten gespeichert"
                     text="Du kannst Fälle, Lexikon-Artikel und sogar einzelne markierte Textpassagen als deine persönlichen Favoriten speichern"
                     variant="For-large-areas"
                   />
                 )
-            }
-          </>
-        )}
-        {selectedTabSlug === favoriteCategoryNavTabs[2]!.slug && (
-          <>
-            {areBookmarksLoading ? (
-              <Loader sx={{ margin: "50px auto" }}/>
-            ) : (
-              <div css={styles.questionsWrapper}>
-                <ForumQuestions questionIds={questionsBookmarks.map(b => b.resourceId)}/>
-              </div>
-            )}
-          </>
-        )}
-      </div>
+              )}
+            </>
+          )}
+          {selectedTabSlug === favoriteCategoryNavTabs[1]!.slug && (
+            <>
+              {
+                (areBookmarksLoading || areArticlesLoading) ? (
+                  <Loader sx={{ margin: "50px" }}/>
+                ) :  
+                  bookmarkedArticles?.length > 0 ? (
+                    <FavoriteArticlesList {...favoriteArticlesListProps}/>
+                  ) : ( 
+                    <EmptyStateCard
+                      button={{
+                        content: "Alle Lexikon-Artikel ansehen",
+                        onClick: async () => router.push(appPaths.dictionary)
+                      }}
+                      title="Du hast noch keine Lexikon-Artikel als Favoriten gespeichert"
+                      text="Du kannst Fälle, Lexikon-Artikel und sogar einzelne markierte Textpassagen als deine persönlichen Favoriten speichern"
+                      variant="For-large-areas"
+                    />
+                  )
+              }
+            </>
+          )}
+          {selectedTabSlug === favoriteCategoryNavTabs[2]!.slug && (
+            <>
+              {areBookmarksLoading ? (
+                <Loader sx={{ margin: "50px auto" }}/>
+              ) : (
+                <div css={styles.questionsWrapper}>
+                  <ForumQuestions questionIds={questionsBookmarks.map(b => b.resourceId)}/>
+                </div>
+              )}
+            </>
+          )}
+        </div>
+      </ContentWrapper>
     </div>
   );
 };

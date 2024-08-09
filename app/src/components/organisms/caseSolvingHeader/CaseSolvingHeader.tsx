@@ -1,3 +1,4 @@
+import ContentWrapper from "@/components/helpers/contentWrapper/ContentWrapper";
 import { OverlayLines } from "@/components/Icons/bg-layer";
 import { Bookmark } from "@/components/Icons/Bookmark";
 import { BookmarkFilledIcon } from "@/components/Icons/BookmarkFilledIcon";
@@ -13,7 +14,7 @@ import { type Maybe, type IGenArticle } from "@/services/graphql/__generated/sdk
 import { appPaths } from "@/utils/paths";
 import { type Nullable } from "@/utils/types";
 
-import { Button, Container, Title, useMantineTheme } from "@mantine/core";
+import { Button, Title, useMantineTheme } from "@mantine/core";
 import { IconArrowLeft, IconArrowRight } from "@tabler/icons-react";
 import Link from "next/link";
 import React, { type FunctionComponent } from "react";
@@ -97,7 +98,7 @@ const CaseSolvingHeader: FunctionComponent<ICaseSolvingHeaderProps> = ({
 
   return (
     <div css={styles.wrapper({ theme, variant })}>
-      <Container p={0} css={styles.container}>
+      <ContentWrapper>
         <div id="overlay-lines">
           <OverlayLines/>
         </div>
@@ -141,7 +142,7 @@ const CaseSolvingHeader: FunctionComponent<ICaseSolvingHeaderProps> = ({
             </Button>
           </div>
         )}
-      </Container>
+      </ContentWrapper>
     </div>
   );
 };

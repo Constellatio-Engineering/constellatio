@@ -6,7 +6,6 @@ export const wrapper = ({ theme, variant }: {
   variant: "case" | "dictionary";
 }): SerializedStyles => css`
   position: relative;
-  padding: 0 60px;
   background: ${variant === "case"
     ? theme.colors["cc-cases"][2]
     : theme.colors["cc-dictionary"][2]};
@@ -162,9 +161,4 @@ export const stepsBar = (theme: MantineTheme): SerializedStyles => css`
       }
     }
   }
-`;
-
-export const container = css`
-  max-width: 1440px;
-  position: relative;
 `;

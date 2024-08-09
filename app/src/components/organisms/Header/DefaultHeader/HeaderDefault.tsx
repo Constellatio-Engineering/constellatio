@@ -1,3 +1,4 @@
+import ContentWrapper from "@/components/helpers/contentWrapper/ContentWrapper";
 import NotificationsBell from "@/components/molecules/notificationsBell/NotificationsBell";
 import { UserDropdown } from "@/components/molecules/UserDropdown/UserDropdown";
 import HeaderItemLink from "@/components/organisms/Header/DefaultHeader/HeaderItemLink";
@@ -78,7 +79,7 @@ const HeaderDefault: FunctionComponent = () =>
         setOnboardingStepsIndex={setOnboardingStepsIndex}
       />
       <SHeader withShadow>
-        <div css={styles.wrapper({ theme, variant: "default" })}>
+        <ContentWrapper stylesOverrides={styles.wrapper({ theme, variant: "default" })}>
           <div css={styles.links}>
             <Link href={appPaths.dashboard}>
               <Image css={styles.tabletHeaderLogo} src={ConstellatioLogoIcon} alt="Constellatio"/>
@@ -150,7 +151,7 @@ const HeaderDefault: FunctionComponent = () =>
               <UserDropdown/>
             </div>
           </div>
-        </div>
+        </ContentWrapper>
       </SHeader>
       <SearchOverlay/>
     </>

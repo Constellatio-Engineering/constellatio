@@ -1,4 +1,5 @@
 /* eslint-disable max-lines */
+import ContentWrapper from "@/components/helpers/contentWrapper/ContentWrapper";
 import CaseCompleteTestsStep from "@/components/organisms/caseCompleteTestsStep/CaseCompleteTestsStep";
 import CaseNavBar from "@/components/organisms/caseNavBar/CaseNavBar";
 import CaseResultsReviewStep from "@/components/organisms/caseResultsReviewStep/CaseResultsReviewStep";
@@ -176,34 +177,36 @@ const DetailsPage: FunctionComponent<IDetailsPageProps> = ({ content, variant })
         )
       }
       <div css={styles.mainContainer}>
-        {content?.fullTextTasks && (variant === "case" ? caseStepIndex === 0 : true) && (
-          <CaseCompleteTestsStep
-            currentGameIndexInFullTextTasksJson={currentGameIndexInFullTextTasksJson}
-            games={games}
-            gamesProgress={gamesProgress ?? []}
-            caseId={contentId}
-            facts={content?.__typename === "Case" ? content?.facts : undefined}
-            fullTextTasks={content?.fullTextTasks}
-            progressState={caseProgress?.progressState}
-            variant={variant}
-          />
-        )}
-        {content?.__typename === "Case" && caseStepIndex === 1 && (
-          <CaseSolveCaseStep
-            id={contentId}
-            progressState={caseProgress?.progressState}
-            facts={content?.facts}
-            title={content?.title}
-          />
-        )}
-        {content?.__typename === "Case" && content?.facts && content?.resolution && content?.title && caseStepIndex === 2 && (
-          <CaseResultsReviewStep
-            caseId={contentId}
-            facts={content?.facts}
-            resolution={content?.resolution}
-            title={content?.title}
-          />
-        )}
+        <ContentWrapper>
+          {content?.fullTextTasks && (variant === "case" ? caseStepIndex === 0 : true) && (
+            <CaseCompleteTestsStep
+              currentGameIndexInFullTextTasksJson={currentGameIndexInFullTextTasksJson}
+              games={games}
+              gamesProgress={gamesProgress ?? []}
+              caseId={contentId}
+              facts={content?.__typename === "Case" ? content?.facts : undefined}
+              fullTextTasks={content?.fullTextTasks}
+              progressState={caseProgress?.progressState}
+              variant={variant}
+            />
+          )}
+          {content?.__typename === "Case" && caseStepIndex === 1 && (
+            <CaseSolveCaseStep
+              id={contentId}
+              progressState={caseProgress?.progressState}
+              facts={content?.facts}
+              title={content?.title}
+            />
+          )}
+          {content?.__typename === "Case" && content?.facts && content?.resolution && content?.title && caseStepIndex === 2 && (
+            <CaseResultsReviewStep
+              caseId={contentId}
+              facts={content?.facts}
+              resolution={content?.resolution}
+              title={content?.title}
+            />
+          )}
+        </ContentWrapper>
       </div>
     </>
   );

@@ -1,3 +1,4 @@
+import ContentWrapper from "@/components/helpers/contentWrapper/ContentWrapper";
 import { OverlayLines } from "@/components/Icons/bg-layer";
 import { Trash } from "@/components/Icons/Trash";
 import { type IArticlesOverviewProps } from "@/services/content/getArticlesOverviewProps";
@@ -38,46 +39,48 @@ const OverviewHeader: FunctionComponent<ICasesOverviewHeaderProps> = ({
       <div id="overlay-lines">
         <OverlayLines/>
       </div>
-      <Title order={1} css={styles.title({ theme, variant })}>{title}</Title>
-      <div css={styles.categoriesButtons}>
-        {categories?.filter(Boolean).map((category) => category?.slug && setSelectedCategorySlug && (
-          <div
-            key={category.id}
-            onClick={async () => 
-            {
-              if(!category.slug)
+      <ContentWrapper stylesOverrides={styles.headerContentWrapper}>
+        <Title order={1} css={styles.title({ theme, variant })}>{title}</Title>
+        <div css={styles.categoriesButtons}>
+          {categories?.filter(Boolean).map((category) => category?.slug && setSelectedCategorySlug && (
+            <div
+              key={category.id}
+              onClick={async () =>
               {
-                console.error("Category slug is undefined");
-                return;
-              }
+                if(!category.slug)
+                {
+                  console.error("Category slug is undefined");
+                  return;
+                }
 
-              await setSelectedCategorySlug(category.slug);
-            }}>
-            <CategoryTab
-              {...category}
-              itemsNumber={category?.casesPerCategory}
-              selected={selectedCategorySlug === category.slug}
-              variant={variant}
-            />
-          </div>
-        ))}
-      </div>
-      {/* this can be a helper or a provider with global state passed to the cases list for filters */}
-      <div css={styles.filtersArea}>
-        {filters.length > 0 && <FiltersButton title="Filters"/>}
-        {filters.length > 0 && (
-          <>
-            <div css={styles.selectedFiltersArea}>
-              {filters?.map((filter: string, index: number) => (
-                <div key={index} onClick={() => setFilters(filters.filter(x => x !== filter))}>
-                  <FilterTag title={filter}/>
-                </div>
-              ))}
+                await setSelectedCategorySlug(category.slug);
+              }}>
+              <CategoryTab
+                {...category}
+                itemsNumber={category?.casesPerCategory}
+                selected={selectedCategorySlug === category.slug}
+                variant={variant}
+              />
             </div>
-            <LinkButton title="Clear all filters" icon={<Trash/>}/>
-          </>
-        )}
-      </div>
+          ))}
+        </div>
+        {/* this can be a helper or a provider with global state passed to the cases list for filters */}
+        <div css={styles.filtersArea}>
+          {filters.length > 0 && <FiltersButton title="Filters"/>}
+          {filters.length > 0 && (
+            <>
+              <div css={styles.selectedFiltersArea}>
+                {filters?.map((filter: string, index: number) => (
+                  <div key={index} onClick={() => setFilters(filters.filter(x => x !== filter))}>
+                    <FilterTag title={filter}/>
+                  </div>
+                ))}
+              </div>
+              <LinkButton title="Clear all filters" icon={<Trash/>}/>
+            </>
+          )}
+        </div>
+      </ContentWrapper>
     </div>
   );
 };
