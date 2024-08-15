@@ -28,6 +28,7 @@ export const OnboardingArticlesStep: FunctionComponent<OnboardingArticlesStepPro
           currentStep={2}
           totalSteps={4}
           stepTitle="Vertiefendes Lexikon"
+          onBackPressHandler={() => setOnboardingStepsIndex(0)}
           onNextPressHandler={() => setOnboardingStepsIndex(2)}>
           <OnboardingTutorialStepItem
             icon={<BookmarkBook size={20}/>}

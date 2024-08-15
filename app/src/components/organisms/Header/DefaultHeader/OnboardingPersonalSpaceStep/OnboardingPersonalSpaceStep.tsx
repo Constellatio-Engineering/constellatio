@@ -31,6 +31,7 @@ export const OnboardingPersonalSpaceStep: FunctionComponent<TOnboardingPersonalS
           currentStep={4}
           totalSteps={4}
           stepTitle="Alles an einem Ort"
+          onBackPressHandler={() => setOnboardingStepsIndex(2)}
           onNextPressHandler={() => setOnboardingStepsIndex(4)}>
           <OnboardingTutorialStepItem
             icon={<Bookmark size={20}/>}

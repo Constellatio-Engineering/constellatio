@@ -28,6 +28,7 @@ export const OnboardingForumStep: FunctionComponent<OnboardingCasesStepProps> = 
           currentStep={3}
           totalSteps={4}
           stepTitle="Kuratiertes Forum"
+          onBackPressHandler={() => setOnboardingStepsIndex(1)}
           onNextPressHandler={() => setOnboardingStepsIndex(3)}>
           <OnboardingTutorialStepItem
             icon={<Forum size={20}/>}
