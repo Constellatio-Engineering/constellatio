@@ -124,7 +124,10 @@ export const DocsTableData: FunctionComponent<GetDocumentResult> = (doc) =>
           data: doc,
           entityType: "user-documents"
         })}>
-          <BodyText styleType="body-02-medium" component="p">Tags ({tags.length ?? 0})</BodyText>
+          <BodyText styleType="body-02-medium" component="p">
+            {tags.length === 0 && "Hinzufügen"}
+            {tags.length > 0 && `Tags (${tags.length})`}
+          </BodyText>
         </UnstyledButton>
       </td>
       <td css={styles.cellFolder}>

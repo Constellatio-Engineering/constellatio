@@ -1,4 +1,5 @@
 import { CaptionText } from "@/components/atoms/CaptionText/CaptionText";
+import ContentWrapper from "@/components/helpers/contentWrapper/ContentWrapper";
 
 import { Flex, Group } from "@mantine/core";
 import Image from "next/image";
@@ -19,19 +20,21 @@ export const Footer: FC<FooterProps> = ({ variant = "default" }) =>
     <>
       {variant === "default" ? (
         <SFooter variant={variant}>
-          <Group position="apart">
-            <span/>
-            <Group spacing="spacing-8">
-              <Image src={ConstellatioLogoIcon} alt="Constellatio"/>{" "}
-              <CaptionText
-                component="p"
-                styleType="caption-01-medium"
-                tt="uppercase"
-                c="neutrals-01.9">
-                &reg; Constellatio 2024
-              </CaptionText>
+          <ContentWrapper>
+            <Group position="apart">
+              <span/>
+              <Group spacing="spacing-8">
+                <Image src={ConstellatioLogoIcon} alt="Constellatio"/>{" "}
+                <CaptionText
+                  component="p"
+                  styleType="caption-01-medium"
+                  tt="uppercase"
+                  c="neutrals-01.9">
+                  &reg; Constellatio 2024
+                </CaptionText>
+              </Group>
             </Group>
-          </Group>
+          </ContentWrapper>
         </SFooter>
       ) : variant === "simpleColoredBg" ? (
         <SFooter variant={variant}>

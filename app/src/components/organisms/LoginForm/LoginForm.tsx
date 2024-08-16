@@ -127,20 +127,23 @@ export const LoginForm: FunctionComponent = () =>
               {...form.getInputProps("password")}
             />
           </Stack>
-          <CustomLink
-            styleType="link-secondary"
-            component="button"
-            onClick={openResetPasswordModal}
-            stylesOverwrite={{ color: colors["neutrals-02"][2], textAlign: "left" }}>
-            Passwort vergessen?
-          </CustomLink>
-          <CustomLink
-            styleType="link-secondary"
-            component={Link}
-            href={authPaths.register}
-            stylesOverwrite={{ color: colors["neutrals-02"][2], textAlign: "left" }}>
-            Du hast noch kein Konto?
-          </CustomLink>
+          <div css={styles.textButtonsWrapper}>
+            <CustomLink
+              styleType="link-secondary"
+              component="button"
+              style={{ display: "inline-block" }}
+              onClick={openResetPasswordModal}
+              stylesOverwrite={{ color: colors["neutrals-02"][2], textAlign: "left" }}>
+              Passwort vergessen?
+            </CustomLink>
+            <CustomLink
+              styleType="link-secondary"
+              component={Link}
+              href={authPaths.register}
+              stylesOverwrite={{ color: colors["neutrals-02"][2], textAlign: "left" }}>
+              Du hast noch kein Konto?
+            </CustomLink>
+          </div>
           <Button<"button">
             styleType="primary"
             type="submit"

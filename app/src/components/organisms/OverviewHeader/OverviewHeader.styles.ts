@@ -12,14 +12,12 @@ export const contentHeader = ({
 }) => css`
 	position: relative;
 	max-width: 100%;
-	display: flex;
-	flex-direction: column;
-	align-items: center;
-	justify-content: center;
-	gap: 32px;
   padding-top: ${variant === "red" ? 30 : 0}px;
   padding-bottom: ${variant === "red" ? 0 : 20}px;
   height: ${height}px;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
 	background: ${variant === "case"
     ? theme.colors["cc-cases"][2]
     : variant === "dictionary"
@@ -56,6 +54,16 @@ export const contentHeader = ({
 	}
 `;
 
+export const headerContentWrapper = css`
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 32px;
+  height: 100%;
+  z-index: 3;
+`;
+
 export const categoriesButtons = () => 
 {
   return css`
@@ -89,8 +97,6 @@ export const filtersArea = () =>
 		display: flex;
 		justify-content: space-between;
 		align-items: center;
-		width: 90%;
-		max-width: 1440px;
 		position: relative;
 		z-index: 3;
 	`;

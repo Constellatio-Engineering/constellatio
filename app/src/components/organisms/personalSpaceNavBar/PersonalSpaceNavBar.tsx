@@ -1,4 +1,5 @@
 import MenuTab from "@/components/atoms/menuTab/MenuTab";
+import ContentWrapper from "@/components/helpers/contentWrapper/ContentWrapper";
 import { type FavoriteCategoryNavTab } from "@/components/organisms/personalSpaceFavoriteTab/PersonalSpaceFavoriteTab";
 import { type NonEmptyArray } from "@/utils/types";
 
@@ -17,18 +18,20 @@ const PersonalSpaceNavBar: FunctionComponent<PersonalSpaceNavBarProps> = ({ sele
 {
   return (
     <div css={styles.wrapper}>
-      {tabs.map((tab, index) => (
-        <MenuTab
-          key={index}
-          number={tab.itemsPerTab}
-          onClick={() => 
-          {
-            void setSelectedTabSlug(tab.slug);
-          }}
-          title={`${tab.title}`}
-          active={selectedTabSlug === tab.slug}
-        />
-      ))}
+      <ContentWrapper stylesOverrides={styles.contentWrapper}>
+        {tabs.map((tab, index) => (
+          <MenuTab
+            key={index}
+            number={tab.itemsPerTab}
+            onClick={() => 
+            {
+              void setSelectedTabSlug(tab.slug);
+            }}
+            title={`${tab.title}`}
+            active={selectedTabSlug === tab.slug}
+          />
+        ))}
+      </ContentWrapper>
     </div>
   );
 };

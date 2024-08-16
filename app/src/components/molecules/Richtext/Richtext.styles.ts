@@ -27,7 +27,7 @@ export const SRichtext = styled.div<{ stylesOverwrite?: SerializedStyles }>`
         font-weight: inherit;
         font-family: inherit;
         line-height: ${theme.spacing["spacing-24"]};
-        transition: color 0.3 ease;
+        transition: color .15s ease;
 
         &:hover {
           color: ${theme.colors["neutrals-02"][1]};
@@ -36,7 +36,6 @@ export const SRichtext = styled.div<{ stylesOverwrite?: SerializedStyles }>`
     }
 
     ul {
-      padding-bottom: 24px;
       li {
         display: flex;
         align-items: baseline;
@@ -64,6 +63,7 @@ export const SRichtext = styled.div<{ stylesOverwrite?: SerializedStyles }>`
 
     ul,
     ol {
+      padding-bottom: 24px;
       li {
         p {
           padding-bottom: 0;

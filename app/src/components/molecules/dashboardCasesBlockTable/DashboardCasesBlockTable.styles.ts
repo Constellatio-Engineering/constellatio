@@ -2,13 +2,13 @@ import { css } from "@emotion/react";
 import { type MantineTheme } from "@mantine/styles";
 
 export const wrapper = css`
-  width: 100%;
+  flex: 1;
 `;
+
 export const casesTable = (theme: MantineTheme) => css`
   min-width: 100%;
   text-align: left;
   border-radius: 12px;
-  overflow: hidden;
   thead {
     background: ${theme.colors["neutrals-01"][2]};
   }

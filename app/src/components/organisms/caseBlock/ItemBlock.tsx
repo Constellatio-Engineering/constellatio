@@ -13,7 +13,7 @@ import { appPaths } from "@/utils/paths";
 
 import { useMediaQuery } from "@mantine/hooks";
 import Link from "next/link";
-import React, { type FunctionComponent } from "react";
+import React, { type FunctionComponent, useState } from "react";
 
 import * as styles from "./ItemBlock.styles";
 import { timeFormatter } from "../overviewCard/OverviewCard";
@@ -87,15 +87,27 @@ const ItemBlock: FunctionComponent<ICaseBlockProps> = ({
   };
   const isTablet = useMediaQuery("(max-width: 1100px)");
   const isSmallScreensOnFavorite = isTablet && tableType === "favorites";
+  const [shouldShowAll, setShouldShowAll] = useState(false);
 
-  const [numberOfShowingItems, setNumberOfShowingItems] = React.useState<number>(5);
+  let renderedItems: typeof items;
+
+  if(shouldShowAll)
+  {
+    renderedItems = items;
+  }
+  else
+  {
+    renderedItems = items?.slice(0, 5);
+  }
+
+  const amountOfHiddenItems = (items?.length - renderedItems.length) ?? 0;
 
   return items && items?.length > 0 ? (
     <div css={styles.wrapper}>
       <CaseBlockHead {...blockHead}/>
       <span style={{ width: "100%" }}>
         <Table tableType={tableTypePicker()} isTablet={isTablet}>
-          {items?.slice(0, numberOfShowingItems)?.map((item) =>
+          {(shouldShowAll ? items : items?.slice(0, 5))?.map((item) =>
           {
             const caseProgress = casesProgress?.find((caseProgress) => caseProgress?.caseId === item?.id);
             const isBookmarked = bookmarks.some(bookmark => bookmark?.resourceId === item?.id) || false;
@@ -150,12 +162,12 @@ const ItemBlock: FunctionComponent<ICaseBlockProps> = ({
             );
           })}
         </Table>
-        {items?.length > numberOfShowingItems && (
+        {amountOfHiddenItems > 0 && (
           <div css={styles.expandTableButtonArea}>
             <>
               <span className="linearGredient"/>
-              <Button<"button"> css={styles.expandTableButton} styleType="tertiary" onClick={() => setNumberOfShowingItems(prev => prev + 10)}>
-                {items?.length - numberOfShowingItems > 10 ? 10 : items?.length - numberOfShowingItems} Weitere anzeigen <ArrowDown/>
+              <Button<"button"> css={styles.expandTableButton} styleType="tertiary" onClick={() => setShouldShowAll(true)}>
+                {amountOfHiddenItems} Weitere{amountOfHiddenItems === 1 ? "n" : ""} anzeigen <ArrowDown/>
               </Button>
             </>
           </div>

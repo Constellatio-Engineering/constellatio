@@ -1,3 +1,5 @@
+import ContentWrapper from "@/components/helpers/contentWrapper/ContentWrapper";
+
 import React, { type FunctionComponent } from "react";
 
 import * as styles from "./ProfileNavMenuTablet.styles";
@@ -14,14 +16,16 @@ const ProfileNavMenuTablet: FunctionComponent<IProfileNavMenuTabletProps> = ({ a
 {
   return (
     <div css={styles.wrapper}>
-      {tabs.map((tab, index) => (
-        <MenuTab
-          key={index}
-          onClick={() => void setTab(tab.slug)}
-          title={`${tab.title}`}
-          active={activeTabSlug === tab.slug}
-        />
-      ))}
+      <ContentWrapper stylesOverrides={styles.contentWrapper}>
+        {tabs.map((tab, index) => (
+          <MenuTab
+            key={index}
+            onClick={() => void setTab(tab.slug)}
+            title={`${tab.title}`}
+            active={activeTabSlug === tab.slug}
+          />
+        ))}
+      </ContentWrapper>
     </div>
   );
 };

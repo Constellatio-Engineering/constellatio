@@ -9,3 +9,10 @@ export const inlineTextButton = css`
     text-decoration: none;
   }
 `;
+
+export const textButtonsWrapper = css`
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 16px;
+`;

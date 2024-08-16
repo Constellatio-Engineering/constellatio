@@ -28,6 +28,7 @@ export const OnboardingForumStep: FunctionComponent<OnboardingCasesStepProps> = 
           currentStep={3}
           totalSteps={4}
           stepTitle="Kuratiertes Forum"
+          onBackPressHandler={() => setOnboardingStepsIndex(1)}
           onNextPressHandler={() => setOnboardingStepsIndex(3)}>
           <OnboardingTutorialStepItem
             icon={<Forum size={20}/>}
@@ -36,7 +37,7 @@ export const OnboardingForumStep: FunctionComponent<OnboardingCasesStepProps> = 
           />
           <OnboardingTutorialStepItem
             icon={<Verified size={20}/>}
-            itemTitle="Verfifizierte Antworten"
+            itemTitle="Verifizierte Antworten"
             itemDescription="Volljuristen stellen sicher, dass du rechtlich korrekte Antworten siehst"
           />
         </OnboardingTutorialStep>

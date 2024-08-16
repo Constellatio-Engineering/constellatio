@@ -12,23 +12,18 @@ const DefaultHeader = css`
 
 export const headerHeightPx = 60;
 
-export const wrapper = ({ theme, variant }: {
+export const wrapper = ({ variant }: {
   theme: MantineTheme;
   variant: "default" | "simple" | "relative";
 }) => css`
   height: ${headerHeightPx}px;
-  width: 100%;
-  max-width: 1440px;
-  margin: 0 auto;
   display: flex;
   align-items: center;
-  /* padding: 0 ${theme.spacing["spacing-12"]}; */
   ${variant === "simple" ? SimpleHeader : DefaultHeader}
 `;
 
 export const SHeader = styled.header<{ withShadow?: boolean }>`
   background: #fff;
-  padding: 0 60px;
   position: fixed;
   top: 0;
   width: 100%;

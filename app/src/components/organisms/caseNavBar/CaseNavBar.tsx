@@ -1,4 +1,5 @@
 import { CaptionText } from "@/components/atoms/CaptionText/CaptionText";
+import ContentWrapper from "@/components/helpers/contentWrapper/ContentWrapper";
 import { Check } from "@/components/Icons/Check";
 import { type CaseProgressState } from "@/db/schema";
 import useCaseSolvingStore, { type CaseStepIndex } from "@/stores/caseSolving.store";
@@ -30,44 +31,48 @@ const CaseNavBar: FunctionComponent<ICaseNavBarProps> = ({ caseProgressState, ca
   // TODO: utilize progress bar
   return variant === "case" ? (
     <div css={styles.componentArea({ theme })}>
-      <div css={styles.wrapper({ variant })}>
-        <div css={styles.tabs}>
-          {steps.map((stepText, index) =>
-          {
-            if(caseStepIndex == null || index > steps.length - 1)
+      <ContentWrapper>
+        <div css={styles.wrapper({ variant })}>
+          <div css={styles.tabs}>
+            {steps.map((stepText, index) =>
             {
-              return null;
-            }
+              if(caseStepIndex == null || index > steps.length - 1)
+              {
+                return null;
+              }
 
-            const isClickable = index <= getCaseProgressStateAsNumber(caseProgressState);
+              const isClickable = index <= getCaseProgressStateAsNumber(caseProgressState);
 
-            return (
-              <CaptionText
-                tt="uppercase"
-                component="p"
-                key={index}
-                onClick={isClickable ? () => onStepClick(index) : undefined}
-                css={styles.tab({
-                  active: index === caseStepIndex,
-                  completed: index < caseStepIndex,
-                  isClickable,
-                  theme,
-                })}
-                variant="caseNavBar"
-                styleType="caption-01-bold">
-                <span>{index < caseStepIndex ? <Check/> : index + 1}</span>
-                {stepText}
-              </CaptionText>
-            );
-          })}
+              return (
+                <CaptionText
+                  tt="uppercase"
+                  component="p"
+                  key={index}
+                  onClick={isClickable ? () => onStepClick(index) : undefined}
+                  css={styles.tab({
+                    active: index === caseStepIndex,
+                    completed: index < caseStepIndex,
+                    isClickable,
+                    theme,
+                  })}
+                  variant="caseNavBar"
+                  styleType="caption-01-bold">
+                  <span>{index < caseStepIndex ? <Check/> : index + 1}</span>
+                  {stepText}
+                </CaptionText>
+              );
+            })}
+          </div>
         </div>
-      </div>
+      </ContentWrapper>
     </div>
   ) : (
     <div css={styles.componentArea({ theme })}>
-      <div css={styles.wrapper({ variant })}>
-        {caseProgressState === "completing-tests" && <div css={styles.progressBar({ progress: 0, theme, variant })}/>}
-      </div>
+      <ContentWrapper>
+        <div css={styles.wrapper({ variant })}>
+          {caseProgressState === "completing-tests" && <div css={styles.progressBar({ progress: 0, theme, variant })}/>}
+        </div>
+      </ContentWrapper>
     </div>
   );
 };

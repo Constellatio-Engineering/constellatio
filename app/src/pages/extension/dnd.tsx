@@ -5,9 +5,7 @@ import React, { type FunctionComponent } from "react";
 const NextPage: FunctionComponent = () =>
 {
   return (
-    <>
-      <DndWrapper/>
-    </>
+    <DndWrapper/>
   );
 };
 

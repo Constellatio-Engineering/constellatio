@@ -79,13 +79,6 @@ const OverviewCard: FunctionComponent<IOverviewCard> = ({
                 <Show/> {views} Aufrufe
               </CaptionText>
             </div>
-            {variant === "case" && (timeInMinutes !== null && timeInMinutes !== undefined) && (
-              <div className="time">
-                <CaptionText styleType="caption-01-bold">
-                  <Timer/> {timeFormatter(timeInMinutes)}
-                </CaptionText>
-              </div>
-            )}
           </div>
           {lastUpdated && (
             <div className="right-side">
@@ -142,25 +135,39 @@ const OverviewCard: FunctionComponent<IOverviewCard> = ({
             <OverviewCardTagsModal opened={opened} tags={tags} close={close}/>
           </div>
           {variant === "case" && (
-            <div css={styles.row({ theme, variant })}>
-              <div className="row-title">
-                <CaptionText styleType="caption-01-medium">STATUS</CaptionText>
-              </div>
-              <div className="row-value">
-                {progressState && (
-                  <StatusLabel progressState={progressState}/>
-                )}
-                <div className="reset-button">
-                  <LinkButton
-                    onClick={openResetCaseModal}
-                    disabled={progressState !== "completed"}
-                    size="medium"
-                    title="Fall neu starten"
-                    icon={<Restart/>}
-                  />
+            <>
+              {timeInMinutes != null && (
+                <div css={styles.row({ theme, variant })}>
+                  <div className="row-title">
+                    <CaptionText styleType="caption-01-medium">BEARBEITUNGSZEIT</CaptionText>
+                  </div>
+                  <div className="row-value">
+                    <BodyText styleType="body-01-medium" style={{ alignItems: "center", display: "flex", gap: 4 }}>
+                      <Timer color={"#000000"}/> {timeFormatter(timeInMinutes)}
+                    </BodyText>
+                  </div>
+                </div>
+              )}
+              <div css={styles.row({ theme, variant })}>
+                <div className="row-title">
+                  <CaptionText styleType="caption-01-medium">STATUS</CaptionText>
+                </div>
+                <div className="row-value">
+                  {progressState && (
+                    <StatusLabel progressState={progressState}/>
+                  )}
+                  <div className="reset-button">
+                    <LinkButton
+                      onClick={openResetCaseModal}
+                      disabled={progressState !== "completed"}
+                      size="medium"
+                      title="Fall neu starten"
+                      icon={<Restart/>}
+                    />
+                  </div>
                 </div>
               </div>
-            </div>
+            </>
           )}
         </div>
       </div>

@@ -272,7 +272,8 @@ export const RegistrationForm: FunctionComponent = () =>
                 <CustomLink styleType="link-primary" href="https://www.constellatio.de/agb" target="_blank">Allgemeinen Geschäftsbedingungen</CustomLink>
                 {" "}und die&nbsp;
                 <CustomLink styleType="link-primary" href="https://www.constellatio.de/datenschutzerklaerung" target="_blank">Datenschutzerklärung</CustomLink>.<br/>
-                Mit der Erstellung des Kontos wird unmittelbar deine kostenlose 30-tägige Testphase gestartet. Diese Testphase ist völlig risikofrei und endet automatisch.
+                Mit der Erstellung des Kontos wird unmittelbar deine kostenlose {env.NEXT_PUBLIC_TRIAL_PERIOD_IN_DAYS}-tägige Testphase gestartet.
+                Diese Testphase ist völlig risikofrei und endet automatisch.
               </BodyText>
             )}
             title="acceptTOS"
