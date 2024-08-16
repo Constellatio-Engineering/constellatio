@@ -48,8 +48,10 @@ export const env = createEnv({
     KV_REST_API_READ_ONLY_TOKEN: z.string(),
     CLICKUP_API_TOKEN: z.string(),
     CLICKUP_CRM_LIST_ID: z.string(),
+    CLICKUP_REFERRAL_PAYOUT_LIST_ID: z.string(),
     CLICKUP_API_ENDPOINT: urlValidation,
     STRIPE_SDK_CONCURRENCY_LIMIT: z.string().pipe(z.coerce.number().int().min(1).max(999)),
+    SYNC_USERS_TO_CRM: z.enum(["true", "false"]).transform((value) => value === "true"),
   },
 
 	/**
@@ -133,8 +135,10 @@ export const env = createEnv({
     NEXT_PUBLIC_IS_REQUEST_BATCHING_DISABLED: process.env.NEXT_PUBLIC_IS_REQUEST_BATCHING_DISABLED,
     CLICKUP_API_TOKEN: process.env.CLICKUP_API_TOKEN,
     CLICKUP_CRM_LIST_ID: process.env.CLICKUP_CRM_LIST_ID,
+    CLICKUP_REFERRAL_PAYOUT_LIST_ID: process.env.CLICKUP_REFERRAL_PAYOUT_LIST_ID,
     CLICKUP_API_ENDPOINT: process.env.CLICKUP_API_ENDPOINT,
     STRIPE_SDK_CONCURRENCY_LIMIT: process.env.STRIPE_SDK_CONCURRENCY_LIMIT,
+    SYNC_USERS_TO_CRM: process.env.SYNC_USERS_TO_CRM,
   },
   /**
    * Run `build` or `dev` with `SKIP_ENV_VALIDATION` to skip env validation.

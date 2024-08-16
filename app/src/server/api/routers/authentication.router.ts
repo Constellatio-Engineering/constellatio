@@ -1,5 +1,5 @@
 import { db } from "@/db/connection";
-import { type UserInsert, users } from "@/db/schema";
+import { referrals, type UserInsert, users } from "@/db/schema";
 import { env } from "@/env.mjs";
 import { stripe } from "@/lib/stripe";
 import { registrationFormSchema } from "@/schemas/auth/registrationForm.schema";
@@ -16,10 +16,6 @@ export const authenticationRouter = createTRPCRouter({
     .input(registrationFormSchema)
     .mutation(async ({ ctx: { supabaseServerClient }, input }) =>
     {
-      console.log("--- Registering user ---");
-
-      const start = performance.now();
-
       const existingUser = await db.query.users.findFirst({
         where: eq(users.email, input.email)
       });
@@ -29,15 +25,11 @@ export const authenticationRouter = createTRPCRouter({
         throw new EmailAlreadyTakenError();
       }
 
-      console.log("starting supabase sign up");
-
       const { data: signUpData, error: signUpError } = await supabaseServerClient.auth.signUp({
         email: input.email,
         options: { emailRedirectTo: getConfirmEmailUrl() },
         password: input.password
       });
-
-      console.log(`supabase sign up took ${performance.now() - start}ms`);
 
       if(signUpError)
       {
@@ -95,7 +87,39 @@ export const authenticationRouter = createTRPCRouter({
           university: input.university,
         };
 
-        await db.insert(users).values(userToInsert);
+        const [user] = await db.insert(users).values(userToInsert).returning();
+
+        if(!user)
+        {
+          throw new InternalServerError(new Error("User was null after insertion. This should not happen and must be investigated."));
+        }
+
+        /* await syncUserToCrm({
+          eventType: "userCreated",
+          supabase: {
+            isServerClientInitialized: true,
+            supabaseServerClient,
+          },
+          user
+        });*/
+
+        if(input.refCode) 
+        {
+          const referral = await db.query.referralCodes.findFirst({
+            where: eq(referrals.code, input.refCode)
+          });
+          if(referral && referral.userId) 
+          {
+            await db.insert(referrals).values({
+              code: input.refCode,
+              paid: false,
+              referredUserId: user.id,
+              referringUserId: referral!.userId,
+            });
+
+            // TODO: Here can a emediate discount be applied
+          }
+        }
       }
       catch (e: unknown)
       {
@@ -137,8 +161,6 @@ export const authenticationRouter = createTRPCRouter({
           await addBadgeForUser({ badgeIdentifier: "1-1000", userId });
         }
       }
-
-      console.log(`Complete sign up took ${performance.now() - start}ms`);
 
       if(!signUpData.session)
       {

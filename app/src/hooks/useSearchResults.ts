@@ -39,7 +39,7 @@ const useSearchResults: UseSearchResults = () =>
   const searchValue = useSearchBarStore((s) => s.searchValue);
   const hasInput = searchValue?.length > 0;
 
-  const { data: searchResults = initialSearchResults, isLoading, refetch } = useQuery({
+  const { data: searchResults = initialSearchResults, isPending: isLoading, refetch } = useQuery({
     enabled: hasInput && meilisearchInstance != null,
     placeholderData: keepPreviousData,
     queryFn: async () =>

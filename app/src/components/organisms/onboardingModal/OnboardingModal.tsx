@@ -1,5 +1,6 @@
 import { BodyText } from "@/components/atoms/BodyText/BodyText";
 import { Button } from "@/components/atoms/Button/Button";
+import { env } from "@/env.mjs";
 import useSetOnboardingResult from "@/hooks/useSetOnboardingResult";
 import { type SearchStoreProps } from "@/stores/onboarding.store";
 import { appPaths } from "@/utils/paths";
@@ -51,12 +52,12 @@ const OnboardingModal: FunctionComponent<Props> = ({ onboardingStepsIndex, setOn
 
   return (
     <Modal
-      opened={onboardingStepsIndex === 3}
+      opened={onboardingStepsIndex === 4}
       centered
       onClose={onClose}
       size="lg"
       padding="50px 20px 20px"
-      closeOnClickOutside={false}
+      closeOnClickOutside={env.NEXT_PUBLIC_DEPLOYMENT_ENVIRONMENT === "development"}
       closeOnEscape={false}
       withCloseButton={false}>
       <div css={styles.contentWrapper}>

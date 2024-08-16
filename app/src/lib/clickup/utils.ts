@@ -1,19 +1,38 @@
 /* eslint-disable max-lines */
 import type { User } from "@/db/schema";
 import { env } from "@/env.mjs";
+import { createClickupTask } from "@/lib/clickup/tasks/create-task";
+import { findClickupTask } from "@/lib/clickup/tasks/find-task";
 import {
-  type CustomFieldInsert, type DateCustomFieldInsertProps, type DropDownCustomFieldInsertProps, type EmailCustomFieldInsertProps, type NumberCustomFieldInsertProps 
+  type ClickupTask,
+  type CustomFieldInsert,
+  type DateCustomFieldInsertProps,
+  type DropDownCustomFieldInsertProps,
+  type EmailCustomFieldInsertProps,
+  type NumberCustomFieldInsertProps, type ShortTextCustomFieldInsertProps,
 } from "@/lib/clickup/types";
+import { getCrmDataForUser, getUpdateUsersCrmDataPromises } from "@/pages/api/cron/sync-users-to-clickup";
 import { allUniversities } from "@/schemas/auth/userData.validation";
+import { InternalServerError } from "@/utils/serverError";
 
-import type { User as SupabaseUser } from "@supabase/auth-helpers-nextjs";
+import { createPagesServerClient, type SupabaseClient, type User as SupabaseUser } from "@supabase/auth-helpers-nextjs";
 import { type AxiosRequestConfig } from "axios";
+import { type NextApiRequest, type NextApiResponse } from "next";
 import type Stripe from "stripe";
 
 export const clickupRequestConfig: AxiosRequestConfig = {
   headers: {
     Authorization: env.CLICKUP_API_TOKEN
   }
+};
+
+export const clickupUserIds = {
+  antonia: 82653125,
+  kotti: 82573596,
+  philipp: 36440925,
+  simon: 36495813,
+  sophie: 82743954,
+  sven: 36495811
 };
 
 export const clickupCrmCustomField = {
@@ -68,6 +87,9 @@ export const clickupCrmCustomField = {
   },
   university: {
     fieldId: "b8e29f58-cb77-4519-8f12-dfc8117f90e8",
+  },
+  userId: {
+    fieldId: "86a0d9a3-718a-4c4c-82ae-4f61ddc09977",
   },
   willSubscriptionContinue: {
     fieldId: "ac9f2943-408f-44a5-9688-b2ae5d3cbc4d",
@@ -198,6 +220,11 @@ export const getUserCrmData: GetUserCrmData = ({ subscriptionData, supabaseUserD
 
   const subscriptionFuture = subscriptionData ? calculateSubscriptionFuture(subscriptionData) : null;
 
+  const userIdCustomFieldData: ShortTextCustomFieldInsertProps = {
+    id: clickupCrmCustomField.userId.fieldId,
+    value: user.id
+  };
+
   const universityCustomFieldData: DropDownCustomFieldInsertProps = {
     id: clickupCrmCustomField.university.fieldId,
     value: allUniversities.find(u => u.name === user.university)?.clickupId
@@ -242,6 +269,7 @@ export const getUserCrmData: GetUserCrmData = ({ subscriptionData, supabaseUserD
 
   return ({
     custom_fields: [
+      userIdCustomFieldData,
       categoryCustomFieldData,
       emailCustomFieldData,
       universityCustomFieldData,
@@ -253,4 +281,104 @@ export const getUserCrmData: GetUserCrmData = ({ subscriptionData, supabaseUserD
     ],
     name: user.firstName + " " + user.lastName,
   });
+};
+
+// eslint-disable-next-line @typescript-eslint/explicit-function-return-type
+const updateUserCrmData = async (user: User | undefined, supabaseServerClient: SupabaseClient) =>
+{
+  if(!user)
+  {
+    throw new InternalServerError(new Error("user was null when trying to update his crm data. This should not happen and must be investigated."));
+  }
+
+  const userWithCrmData = await getCrmDataForUser(user, supabaseServerClient);
+
+  if(!userWithCrmData)
+  {
+    throw new InternalServerError(new Error("userWithCrmData was null after getCrmDataForUser. This should not happen and must be investigated."));
+  }
+
+  const findCrmUserResult = await findClickupTask(env.CLICKUP_CRM_LIST_ID, {
+    custom_field: {
+      field_id: clickupCrmCustomField.userId.fieldId,
+      operator: "=",
+      value: user.id,
+    },
+  });
+
+  const existingCrmUser = findCrmUserResult.data?.tasks[0] as ClickupTask | undefined;
+
+  if(!existingCrmUser)
+  {
+    await createClickupTask(env.CLICKUP_CRM_LIST_ID, userWithCrmData.crmData);
+    return;
+  }
+
+  await Promise.allSettled(getUpdateUsersCrmDataPromises({ existingCrmUser, userWithCrmData }));
+};
+
+type SyncUserToCrm = (params: {
+  eventType: "userCreated" | "userUpdated";
+  supabase: {
+    isServerClientInitialized: true;
+    supabaseServerClient: SupabaseClient;
+  } | {
+    isServerClientInitialized: false;
+    req: NextApiRequest;
+    res: NextApiResponse;
+  };
+  user: User | undefined;
+}) => Promise<void>;
+
+export const syncUserToCrm: SyncUserToCrm = async ({ eventType, supabase, user }) =>
+{
+  if(!env.SYNC_USERS_TO_CRM)
+  {
+    return;
+  }
+
+  if(!user)
+  {
+    console.error("user was null when trying to sync user to crm. This should not happen and must be investigated.");
+    return;
+  }
+
+  let supabaseServerClient: SupabaseClient;
+
+  if(supabase.isServerClientInitialized)
+  {
+    supabaseServerClient = supabase.supabaseServerClient;
+  }
+  else
+  {
+    supabaseServerClient = createPagesServerClient({ req: supabase.req, res: supabase.res }, {
+      supabaseKey: env.SUPABASE_SERVICE_ROLE_KEY,
+      supabaseUrl: env.NEXT_PUBLIC_SUPABASE_URL
+    });
+  }
+
+  try
+  {
+    const userCrmData = await getCrmDataForUser(user, supabaseServerClient);
+
+    if(!userCrmData)
+    {
+      console.error("userCrmData was null after getCrmDataForUser. This should not happen and must be investigated.");
+      return;
+    }
+
+    switch (eventType)
+    {
+      case "userCreated":
+        await createClickupTask(env.CLICKUP_CRM_LIST_ID, userCrmData.crmData);
+        break;
+      case "userUpdated":
+        await updateUserCrmData(user, supabaseServerClient);
+        break;
+    }
+  }
+  catch (e: unknown)
+  {
+    console.log("Something went wrong while syncing user to crm", e);
+  }
 };

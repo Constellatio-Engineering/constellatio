@@ -18,3 +18,7 @@ export const text = css`
 export const buttonWrapper = css`
   margin-top: 20px;
 `;
+
+export const button = css`
+  margin: 0px 5px 10px 5px;
+`;

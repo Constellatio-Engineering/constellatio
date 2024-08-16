@@ -1,3 +1,5 @@
+import { useOnboardingStore } from "@/stores/onboarding.store";
+
 import { Popover } from "@mantine/core";
 import { type FloatingPosition } from "@mantine/core/lib/Floating";
 import { type ReactNode, type FunctionComponent } from "react";
@@ -17,12 +19,15 @@ const OnboardingTutorialPopover: FunctionComponent<OnboardingTutorialPopoverProp
   popoverTarget
 }) => 
 {
+  const onboardingStepsIndex = useOnboardingStore(s => s.onboardingStepsIndex);
+
   return (
     <Popover
       width={430}
       defaultOpened
       withArrow
       position={floatingPosition ?? "bottom"}
+      offset={onboardingStepsIndex === 4 ? 5 : -10}
       closeOnClickOutside={false}
       closeOnEscape={false}
       opened={opened}
@@ -30,6 +35,7 @@ const OnboardingTutorialPopover: FunctionComponent<OnboardingTutorialPopoverProp
         arrow: {
           backgroundColor: theme.colors["neutrals-02"][1],
           border: `1px solid ${theme.colors["neutrals-02"][1]}`,
+          transform: "rotate(45deg) scale(2) !important",
         },
       })}>
       <Popover.Target>{popoverTarget}</Popover.Target>

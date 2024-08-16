@@ -47,8 +47,20 @@ export const bodyArticles = css`
 `;
 
 export const bodyText = (theme: MantineTheme): SerializedStyles => css`
-  width: 45%;
+  width: 48%;
 
+  h1 {
+    word-break: break-word;
+    hyphens: auto;
+    line-height: 1.2;
+    white-space: wrap;
+    text-overflow: ellipsis;
+    overflow: hidden;
+    display: -webkit-box;
+    -webkit-box-orient: vertical;
+    -webkit-line-clamp: 3;
+  }
+  
   .icons-bar {
     display: flex;
     justify-content: flex-start;
@@ -71,6 +83,9 @@ export const bodyText = (theme: MantineTheme): SerializedStyles => css`
   }
 
   @media (max-width: 1100px) {
+    h1 {
+      -webkit-line-clamp: none;
+    }
     width: 100%;
     .icons-bar {
       justify-content: center;

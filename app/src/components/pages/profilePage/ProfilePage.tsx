@@ -7,6 +7,7 @@ import RenderedTabSkeleton from "@/components/organisms/profileMenu/renderedTabS
 import ProfileNavMenuTablet from "@/components/organisms/profileNavMenuTablet/ProfileNavMenuTablet";
 import ProfileOverview from "@/components/organisms/profileOverview/ProfileOverview";
 import ProfilePageHeader from "@/components/organisms/profilePageHeader/ProfilePageHeader";
+import ProfileReferral from "@/components/organisms/profileReferral/ProfileReferral";
 import SubscriptionTab from "@/components/organisms/subscriptionTab/SubscriptionTab";
 import UseQueryStateWrapper from "@/components/Wrappers/useQueryStateWrapper/UseQueryStateWrapper";
 import useUserDetails from "@/hooks/useUserDetails";
@@ -27,6 +28,7 @@ export const tabs = [
   { slug: changeEmailTabSlug, title: "E-Mail ändern" },
   { slug: "change-password", title: "Passwort ändern" },
   { slug: subscriptionTabSlug, title: "Abonnement" },
+  { slug: "referral", title: "Freunde einladen" },
   // { slug: "history", title: "Verlauf" },
 ] as const;
 
@@ -66,6 +68,8 @@ const ProfilePageContent: FunctionComponent = () =>
       //   return <ProfileHistoryTab/>;
       case "subscription":
         return <SubscriptionTab/>;
+      case "referral":
+        return <ProfileReferral/>;
       default:
         return <>{`Unknown tab. Create tab type case in ProfilePage component: ${JSON.stringify(activeTab, null, 2)}`}</>;
       /* case "Notifications":

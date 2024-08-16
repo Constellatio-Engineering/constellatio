@@ -1,24 +1,20 @@
-import { BookmarkBook } from "@/components/Icons/BookmarkBook";
 import { CasesIcon } from "@/components/Icons/CasesIcon";
 import OnboardingTutorialStep from "@/components/molecules/onboardingTutorialStep/OnboardingTutorialStep";
 import OnboardingTutorialStepItem from "@/components/molecules/onboardingTutorialStep/OnboardingTutorialStepItem";
+import HeaderItemLink, { type THeaderItemLinkProps } from "@/components/organisms/Header/DefaultHeader/HeaderItemLink";
 import OnboardingTutorialPopover from "@/components/organisms/onboardingTutorialPopover/OnboardingTutorialPopover";
 import type { SearchStoreProps } from "@/stores/onboarding.store";
 
 import { type FunctionComponent } from "react";
 
-import HeaderItemLink, { type THeaderItemLinkProps } from "./HeaderItemLink";
-
-type OnboardingFirstStepProps = THeaderItemLinkProps & { 
-  readonly onSkipPressHandler: () => void;
+type OnboardingCasesStepProps = THeaderItemLinkProps & {
   readonly onboardingStepsIndex: number;
   readonly setOnboardingStepsIndex: SearchStoreProps["setOnboardingStepsIndex"];
 };
 
-const OnboardingFirstStep: FunctionComponent<OnboardingFirstStepProps> = ({
+export const OnboardingCasesStep: FunctionComponent<OnboardingCasesStepProps> = ({
   link,
   onboardingStepsIndex,
-  onSkipPressHandler,
   pathname,
   setOnboardingStepsIndex
 }) => 
@@ -29,12 +25,14 @@ const OnboardingFirstStep: FunctionComponent<OnboardingFirstStepProps> = ({
       popoverMenu={(
         <OnboardingTutorialStep
           currentStep={1}
-          totalSteps={3}
+          totalSteps={4}
           stepTitle="Willkommen bei Constellatio!"
-          onNextPressHandler={() => setOnboardingStepsIndex(1)}
-          onSkipPressHandler={onSkipPressHandler}>
-          <OnboardingTutorialStepItem icon={<CasesIcon size={20}/>} itemTitle="Fälle" itemDescription="Die Wissensvermittlung findet anhand interaktiver Fälle statt."/>
-          <OnboardingTutorialStepItem icon={<BookmarkBook size={20}/>} itemTitle="Lexikon" itemDescription="Detaillierte und abstrakte Darstellungen findest du in den verlinkten Lexikon-Artikeln."/>
+          onNextPressHandler={() => setOnboardingStepsIndex(1)}>
+          <OnboardingTutorialStepItem
+            icon={<CasesIcon size={20}/>}
+            itemTitle="Interaktive Fälle"
+            itemDescription="Mit unseren geführten Lösungen erarbeitest du dir die Schwerpunkte der Fälle"
+          />
         </OnboardingTutorialStep>
       )}
       popoverTarget={(
@@ -43,5 +41,3 @@ const OnboardingFirstStep: FunctionComponent<OnboardingFirstStepProps> = ({
     />
   );
 };
-
-export default OnboardingFirstStep;

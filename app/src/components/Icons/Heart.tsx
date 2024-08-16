@@ -1,6 +1,10 @@
 import { type FunctionComponent } from "react";
 
-export const Heart: FunctionComponent = ({ size = 20 }: { readonly size?: number | undefined }) => (
+type Props = {
+  readonly size?: number;
+};
+
+export const Heart: FunctionComponent<Props> = ({ size = 20 }) => (
   <svg
     width={size}
     height={size}
