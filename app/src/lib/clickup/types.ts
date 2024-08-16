@@ -230,7 +230,6 @@ export type ClickupTask = Omit<ClickupTaskCreate, "custom_fields"> & {
 export type ClickUpFindTaskParams = {
   archived?: boolean;
   assignees?: string[];
-  custom_field?: CustomFilterField;
   custom_fields?: CustomFilterField[];
   custom_items?: "0";
   date_created_gt?: string;
@@ -241,7 +240,7 @@ export type ClickUpFindTaskParams = {
   date_updated_lt?: string;
   due_date_gt?: string;
   due_date_lt?: string;
-  include_closed?: boolean;
+  include_closed: boolean;
   include_markdown_description?: boolean;
   order_by?: string;
   page?: number;

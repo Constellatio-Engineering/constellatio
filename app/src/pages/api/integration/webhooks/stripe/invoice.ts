@@ -2,9 +2,8 @@ import { db } from "@/db/connection";
 import { referralBalances, referrals, users } from "@/db/schema";
 import { env } from "@/env.mjs";
 import { createClickupTask } from "@/lib/clickup/tasks/create-task";
-import { findClickupTask } from "@/lib/clickup/tasks/find-task";
 import { type ClickupTask } from "@/lib/clickup/types";
-import { clickupCrmCustomField, clickupUserIds } from "@/lib/clickup/utils";
+import { clickupUserIds, getClickupCrmUserByUserId } from "@/lib/clickup/utils";
 import { stripe } from "@/lib/stripe";
 import { InternalServerError } from "@/utils/serverError";
 
@@ -61,13 +60,7 @@ async function handleReferral(dbUserId: string): Promise<void>
 
   await addBalanceToUser(referringUser.id, ReferralBonusAmount);
 
-  const crmTask = await findClickupTask(env.CLICKUP_CRM_LIST_ID, {
-    custom_field: {
-      field_id: clickupCrmCustomField.userId.fieldId,
-      operator: "=",
-      value: referringUser.id,
-    },
-  });
+  const crmTask = await getClickupCrmUserByUserId(referringUser.id);
 
   let crmRefferingUserTask: ClickupTask | null = null;
 

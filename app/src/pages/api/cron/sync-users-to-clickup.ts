@@ -9,6 +9,8 @@ import { updateClickupTask } from "@/lib/clickup/tasks/update-task";
 import { type ClickupTask } from "@/lib/clickup/types";
 import { clickupCrmCustomField, clickupRequestConfig, getUserCrmData } from "@/lib/clickup/utils";
 import { stripe } from "@/lib/stripe";
+import { type Nullable } from "@/utils/types";
+import { sleep } from "@/utils/utils";
 
 import { createPagesServerClient, type SupabaseClient } from "@supabase/auth-helpers-nextjs";
 import axios, { AxiosError, type AxiosResponse } from "axios";
@@ -18,6 +20,7 @@ import type Stripe from "stripe";
 
 const stripeConcurrencyLimit = pLimit(env.STRIPE_SDK_CONCURRENCY_LIMIT);
 
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
 const printAllSettledPromisesSummary = (settledPromises: Array<PromiseSettledResult<unknown>>, actionName: string): void =>
 {
   const failedPromises = settledPromises.filter((result): result is PromiseRejectedResult => result.status === "rejected");
@@ -175,6 +178,8 @@ export const getUpdateUsersCrmDataPromises = ({
 
 const handler: NextApiHandler = async (req, res): Promise<void> =>
 {
+  // TODO: This is not used anymore, remove it later if it's not needed
+
   if(req.headers.authorization !== `Bearer ${env.CRON_SECRET}`)
   {
     return res.status(401).json({ message: "Unauthorized" });
@@ -186,6 +191,8 @@ const handler: NextApiHandler = async (req, res): Promise<void> =>
     return res.status(200).json({ message: "Skipped in non-production or non-development environment" });
   }
 
+  return res.status(400).json({ message: "Not implemented" });
+
   console.log("----- [Cronjob] Sync Users to Clickup -----");
 
   const supabaseServerClient = createPagesServerClient({ req, res }, {
@@ -193,70 +200,79 @@ const handler: NextApiHandler = async (req, res): Promise<void> =>
     supabaseUrl: env.NEXT_PUBLIC_SUPABASE_URL
   });
 
+  const allExistingCrmUsers: Array<{
+    email: Nullable<unknown>;
+    name: string;
+    userId: Nullable<unknown>;
+  }> = [];
+
+  let hasMore: boolean;
+  let page = 0;
+
+  do
+  {
+    console.log(`Fetching CRM users page ${page}...`);
+    const getUsersResult = await axios.get(`${env.CLICKUP_API_ENDPOINT}/list/${env.CLICKUP_CRM_LIST_ID}/task?page=${page}`, clickupRequestConfig);
+    const fetchedUsers = getUsersResult.data.tasks as ClickupTask[];
+    console.log("getUsersResult", getUsersResult.data, getUsersResult.data.last_page, fetchedUsers.length);
+    allExistingCrmUsers.push(...fetchedUsers.map(task => ({
+      email: task.custom_fields?.find(field => field.id === clickupCrmCustomField.email.fieldId)?.value,
+      name: task.name,
+      userId: task.custom_fields?.find(field => field.id === clickupCrmCustomField.userId.fieldId)?.value
+    })));
+    hasMore = !getUsersResult.data.last_page;
+
+    if(hasMore)
+    {
+      page++;
+    }
+  }
+  while(hasMore);
+
+  console.log("fetched " + allExistingCrmUsers.length + " customers");
+
+  return res.status(200).json(allExistingCrmUsers);
+
   const allUsers = await db.query.users.findMany();
 
-  // TODO: This does not fetch all tasks/customers since the ClickUp API only returns a maximum of 100 tasks per request. Pagination is not implemented yet.
-  const existingCrmUsers = await axios.get(`${env.CLICKUP_API_ENDPOINT}/list/${env.CLICKUP_CRM_LIST_ID}/task`, clickupRequestConfig);
-
   // Comment this in if you want to delete all users in the CRM list
-  /* const deleteUsersPromises = existingCrmUsers.data.tasks
-    .map(async (task: ClickupTask) => stripeConcurrencyLimit(async () =>
-    {
-      console.log(`Deleting user ${task.id}...`);
-      return axios.delete(`${env.CLICKUP_API_ENDPOINT}/task/${task.id}`, clickupRequestConfig);
-    }))
-    .filter(Boolean);
 
-  await Promise.allSettled(deleteUsersPromises);
-
-  return res.status(200).json({ message: "Finished", ...existingCrmUsers.data });*/
+  // This does not fetch all tasks/customers since the ClickUp API only returns a maximum of 100 tasks per request. Pagination is not implemented yet.
+  // const existingCrmUsers = await axios.get(`${env.CLICKUP_API_ENDPOINT}/list/${env.CLICKUP_CRM_LIST_ID}/task`, clickupRequestConfig);
+  // const deleteUsersPromises = existingCrmUsers.data.tasks
+  //   .map(async (task: ClickupTask) => stripeConcurrencyLimit(async () =>
+  //   {
+  //     console.log(`Deleting user ${task.id}...`);
+  //     return axios.delete(`${env.CLICKUP_API_ENDPOINT}/task/${task.id}`, clickupRequestConfig);
+  //   }))
+  //   .filter(Boolean);
+  //
+  // await Promise.allSettled(deleteUsersPromises);
+  //
+  // return res.status(200).json({ message: "Finished", ...existingCrmUsers.data });
 
   const getCrmDataForAllUsersPromises = allUsers
     .map(async user => stripeConcurrencyLimit(async () => getCrmDataForUser(user, supabaseServerClient)))
     .filter(Boolean);
+  const newUsers = (await Promise.all(getCrmDataForAllUsersPromises)).filter(Boolean);
 
-  const allUsersWithCrmData = (await Promise.all(getCrmDataForAllUsersPromises)).filter(Boolean);
-  const newUsers: typeof allUsersWithCrmData = [];
-  const existingUsers: Array<{
-    existingCrmUser: ClickupTask;
-    userWithCrmData: typeof allUsersWithCrmData[number];
-  }> = [];
+  console.log(`Fetched ${newUsers.length} new users`);
 
-  allUsersWithCrmData.forEach(user =>
+  for(let i = 0; i < newUsers.length; i++)
   {
-    const matchingCrmUser = existingCrmUsers.data.tasks.find((task: ClickupTask) =>
-    {
-      const userIdCustomField = task.custom_fields?.find((field) => field.id === clickupCrmCustomField.userId.fieldId);
-      return userIdCustomField?.value === user.userData.id;
-    });
+    const user = newUsers[i]!;
+    await createClickupTask(env.CLICKUP_CRM_LIST_ID, user.crmData);
 
-    if(matchingCrmUser)
+    console.log(`Created new user ${i + 1} - ${user.crmData.name}`);
+
+    if(i % 90 === 0 && i !== 0)
     {
-      existingUsers.push({
-        existingCrmUser: matchingCrmUser,
-        userWithCrmData: user
-      });
+      console.log(`Created ${i} new users - Pause`);
+      await sleep(61000);
     }
-    else
-    {
-      newUsers.push(user);
-    }
-  });
+  }
 
-  const createNewUsersResults = await Promise.allSettled(newUsers.map(async ({ crmData }) => createClickupTask(env.CLICKUP_CRM_LIST_ID, crmData)));
-
-  printAllSettledPromisesSummary(createNewUsersResults, "create new users");
-
-  const updateUsersPromises: Array<Promise<AxiosResponse>> = [];
-
-  existingUsers.forEach(({ existingCrmUser, userWithCrmData }) =>
-  {
-    updateUsersPromises.push(...getUpdateUsersCrmDataPromises({ existingCrmUser, userWithCrmData }));
-  });
-
-  const results = await Promise.allSettled(updateUsersPromises);
-
-  printAllSettledPromisesSummary(results, "update users");
+  console.log("Finished creating new users");
 
   return res.status(200).json({ message: "Finished" });
 };
