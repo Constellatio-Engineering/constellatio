@@ -7,6 +7,7 @@ import Lightbox from "@/components/molecules/lightbox/Lightbox";
 import NewNotificationEarnedWatchdog from "@/components/molecules/newNotificationEarnedWatchdog/NewNotificationEarnedWatchdog";
 import ComputerRecommendedModal from "@/components/organisms/computerRecommendedModal/ComputerRecommendedModal";
 import FileViewer from "@/components/organisms/fileViewer/FileViewer";
+import { MaterialTagsDrawer } from "@/components/organisms/materialTagsDrawer/MaterialTagsDrawer";
 import DocumentEditor from "@/components/organisms/papersBlock/documentEditor/DocumentEditor";
 import SubscriptionModal from "@/components/organisms/subscriptionModal/SubscriptionModal";
 import MaintenancePage from "@/components/pages/maintenancePage/MaintenancePage";
@@ -138,6 +139,7 @@ const AppContainer: FunctionComponent<ConstellatioAppProps> = ({ Component, page
                       <ComputerRecommendedModal/>
                       <FileViewer/>
                       <DocumentEditor/>
+                      <MaterialTagsDrawer/>
                       <FeedbackButton/>
                       <Layout Component={Component} pageProps={pageProps}/>
                     </Fragment>

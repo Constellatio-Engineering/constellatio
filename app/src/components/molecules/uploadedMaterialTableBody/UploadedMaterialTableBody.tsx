@@ -104,7 +104,10 @@ const UploadedMaterialTableBody: FunctionComponent<UploadedMaterialTableBodyProp
                 data: file,
                 entityType: "user-uploads"
               })}>
-                <BodyText styleType="body-02-medium" component="p">Tags ({file.tags.length})</BodyText>
+                <BodyText styleType="body-02-medium" component="p">
+                  {file.tags.length === 0 && "Hinzufügen"}
+                  {file.tags.length > 0 && `Tags (${file.tags.length})`}
+                </BodyText>
               </UnstyledButton>
             </td>
             {variant === "personalSpace" && (

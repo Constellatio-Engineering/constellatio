@@ -19,7 +19,7 @@ const PersonalSpaceMaterialsTab: FunctionComponent = () =>
   const areUploadsInProgress = uploads.some(u => u.state.type === "uploading");
 
   return (
-    <ContentWrapper>
+    <ContentWrapper shouldUseMarginAutoInsteadOfTransform={true}>
       <div css={styles.materialTabContainerContent}>
         <MaterialMenu/>        
         <FoldersMenuTablet/>
