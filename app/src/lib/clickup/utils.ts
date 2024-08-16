@@ -183,6 +183,19 @@ type GetUserCrmData = (props: {
   name: string;
 };
 
+// eslint-disable-next-line @typescript-eslint/explicit-function-return-type
+export const getClickupCrmUserByUserId = async (userId: string) =>
+{
+  return findClickupTask(env.CLICKUP_CRM_LIST_ID, {
+    custom_fields: [{
+      field_id: clickupCrmCustomField.userId.fieldId,
+      operator: "=",
+      value: userId,
+    }],
+    include_closed: true,
+  });
+};
+
 export const getUserCrmData: GetUserCrmData = ({ subscriptionData, supabaseUserData, user }) =>
 {
   let stripeSubscriptionStatusCustomFieldId: string | undefined;
@@ -298,13 +311,12 @@ const updateUserCrmData = async (user: User | undefined, supabaseServerClient: S
     throw new InternalServerError(new Error("userWithCrmData was null after getCrmDataForUser. This should not happen and must be investigated."));
   }
 
-  const findCrmUserResult = await findClickupTask(env.CLICKUP_CRM_LIST_ID, {
-    custom_field: {
-      field_id: clickupCrmCustomField.userId.fieldId,
-      operator: "=",
-      value: user.id,
-    },
-  });
+  const findCrmUserResult = await getClickupCrmUserByUserId(user.id);
+
+  if(findCrmUserResult.data?.tasks.length > 1)
+  {
+    throw new InternalServerError(new Error("found more than one task in CRM list with the same user id. This should not happen and must be investigated."));
+  }
 
   const existingCrmUser = findCrmUserResult.data?.tasks[0] as ClickupTask | undefined;
 
@@ -359,22 +371,26 @@ export const syncUserToCrm: SyncUserToCrm = async ({ eventType, supabase, user }
 
   try
   {
-    const userCrmData = await getCrmDataForUser(user, supabaseServerClient);
-
-    if(!userCrmData)
-    {
-      console.error("userCrmData was null after getCrmDataForUser. This should not happen and must be investigated.");
-      return;
-    }
-
     switch (eventType)
     {
       case "userCreated":
+      {
+        const userCrmData = await getCrmDataForUser(user, supabaseServerClient);
+
+        if(!userCrmData)
+        {
+          console.error("userCrmData was null after getCrmDataForUser. This should not happen and must be investigated.");
+          return;
+        }
+
         await createClickupTask(env.CLICKUP_CRM_LIST_ID, userCrmData.crmData);
         break;
+      }
       case "userUpdated":
+      {
         await updateUserCrmData(user, supabaseServerClient);
         break;
+      }
     }
   }
   catch (e: unknown)
