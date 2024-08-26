@@ -1,6 +1,7 @@
 import { db } from "@/db/connection";
 import { referrals, type UserInsert, users } from "@/db/schema";
 import { env } from "@/env.mjs";
+import { syncUserToCrm } from "@/lib/clickup/utils";
 import { stripe } from "@/lib/stripe";
 import { registrationFormSchema } from "@/schemas/auth/registrationForm.schema";
 import { addBadgeForUser } from "@/server/api/services/badges.services";
@@ -94,14 +95,14 @@ export const authenticationRouter = createTRPCRouter({
           throw new InternalServerError(new Error("User was null after insertion. This should not happen and must be investigated."));
         }
 
-        /* await syncUserToCrm({
+        await syncUserToCrm({
           eventType: "userCreated",
           supabase: {
             isServerClientInitialized: true,
             supabaseServerClient,
           },
           user
-        });*/
+        });
 
         if(input.refCode) 
         {
