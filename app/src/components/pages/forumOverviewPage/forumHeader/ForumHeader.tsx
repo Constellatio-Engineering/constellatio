@@ -1,5 +1,6 @@
 import { BodyText } from "@/components/atoms/BodyText/BodyText";
 import { Button } from "@/components/atoms/Button/Button";
+import ContentWrapper from "@/components/helpers/contentWrapper/ContentWrapper";
 import { OverlayLines } from "@/components/Icons/bg-layer";
 import * as overviewHeaderStyles from "@/components/organisms/OverviewHeader/OverviewHeader.styles";
 import { useForumPageStore } from "@/stores/forumPage.store";
@@ -15,7 +16,7 @@ const ForumHeader: FunctionComponent = () =>
 {
   const setCreateQuestionState = useForumPageStore((state) => state.setCreateQuestionState);
   const theme = useMantineTheme();
-  const height = 500;
+  const height = 400;
   const variant = "forum";
 
   return (
@@ -35,7 +36,7 @@ const ForumHeader: FunctionComponent = () =>
           alt="Flaggen Icon"
         />
       </div>
-      <div css={styles.contentWrapper}>
+      <ContentWrapper stylesOverrides={styles.contentWrapper}>
         <Title order={1} css={overviewHeaderStyles.title({ theme, variant })}>Forum</Title>
         <BodyText styleType="body-01-regular" css={styles.text}>
           Willkommen im Constellatio Forum! Hier hilft dir die Community zu allen Fragen und Unklarheiten weiter.
@@ -49,7 +50,7 @@ const ForumHeader: FunctionComponent = () =>
           onClick={setCreateQuestionState}>
           Frage stellen
         </Button>
-      </div>
+      </ContentWrapper>
     </div>
   );
 };

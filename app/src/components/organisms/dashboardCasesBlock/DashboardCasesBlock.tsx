@@ -7,8 +7,10 @@ import * as styles from "./DashboardCasesBlock.styles";
 
 const DashboardCasesBlock: FunctionComponent = () => (
   <div css={styles.wrapper}>
-    <DashboardCasesBlockHeader/>
-    <DashboardCasesBlockTable/>
+    <div css={styles.innerWrapper}>
+      <DashboardCasesBlockHeader/>
+      <DashboardCasesBlockTable/>
+    </div>
   </div>
 );
 

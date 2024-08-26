@@ -1,4 +1,5 @@
 /* eslint-disable max-lines */
+import ContentWrapper from "@/components/helpers/contentWrapper/ContentWrapper";
 import ItemBlock from "@/components/organisms/caseBlock/ItemBlock";
 import EmptyStateCard from "@/components/organisms/emptyStateCard/EmptyStateCard";
 import OverviewHeader from "@/components/organisms/OverviewHeader/OverviewHeader";
@@ -83,7 +84,6 @@ const OverviewPageContent: FunctionComponent<OverviewPageContentProps> = ({ cont
     <div css={styles.Page}>
       {content?.allMainCategories && (
         <OverviewHeader
-          height={400}
           variant={variant}
           selectedCategorySlug={selectedCategorySlug}
           setSelectedCategorySlug={setSelectedCategorySlug}
@@ -92,50 +92,52 @@ const OverviewPageContent: FunctionComponent<OverviewPageContentProps> = ({ cont
         />
       )}
       <div css={styles.ListWrapper}>
-        {filteredLegalAreas
-          .sort((a, b) =>
-          {
-            if(a.sorting === null) { return 1; }
-            if(b.sorting === null) { return -1; }
-            return a.sorting! - b.sorting!;
-          })
-          .map((item, itemIndex) =>
-          {
-            const items = variant === "case"
-              ? getAllCasesOfLegalArea(item)?.sort((a, b) =>
-              {
-                const numA = extractNumeric(a.title ?? "");
-                const numB = extractNumeric(b.title ?? "");
-
-                if(numA !== null && numB !== null)
+        <ContentWrapper>
+          {filteredLegalAreas
+            .sort((a, b) =>
+            {
+              if(a.sorting === null) { return 1; }
+              if(b.sorting === null) { return -1; }
+              return a.sorting! - b.sorting!;
+            })
+            .map((item, itemIndex) =>
+            {
+              const items = variant === "case"
+                ? getAllCasesOfLegalArea(item)?.sort((a, b) =>
                 {
-                  return numA - numB;
-                }
-                return a?.title?.localeCompare(b.title ?? "") ?? -1;
-              })
-              : getAllArticlesOfLegalArea(item)?.sort(sortArticlesByTopic) || [];
+                  const numA = extractNumeric(a.title ?? "");
+                  const numB = extractNumeric(b.title ?? "");
 
-            const completed = completeCases.filter(x => x?.legalArea?.id === item?.id)?.length;
+                  if(numA !== null && numB !== null)
+                  {
+                    return numA - numB;
+                  }
+                  return a?.title?.localeCompare(b.title ?? "") ?? -1;
+                })
+                : getAllArticlesOfLegalArea(item)?.sort(sortArticlesByTopic) || [];
 
-            return (
-              item.legalAreaName && (
-                <Fragment key={itemIndex}>
-                  <ItemBlock
-                    variant={variant}
-                    blockHead={{
-                      blockType: "itemsBlock",
-                      categoryName: item.legalAreaName,
-                      completedCases: completed,
-                      items: items.length,
-                      variant,
-                    }}
-                    tableType="cases"
-                    items={items}
-                  />
-                </Fragment>
-              )
-            );
-          })}
+              const completed = completeCases.filter(x => x?.legalArea?.id === item?.id)?.length;
+
+              return (
+                item.legalAreaName && (
+                  <Fragment key={itemIndex}>
+                    <ItemBlock
+                      variant={variant}
+                      blockHead={{
+                        blockType: "itemsBlock",
+                        categoryName: item.legalAreaName,
+                        completedCases: completed,
+                        items: items.length,
+                        variant,
+                      }}
+                      tableType="cases"
+                      items={items}
+                    />
+                  </Fragment>
+                )
+              );
+            })}
+        </ContentWrapper>
       </div>
       {getIsCategoryEmpty() && (
         <EmptyStateCard

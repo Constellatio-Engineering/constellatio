@@ -15,7 +15,7 @@ export const loadingWrapper = css`
 `;
 
 export const header = (theme: MantineTheme) => css`
-	height: 240px;
+	height: 400px;
 	width: 100%;
 	display: flex;
 	align-items: center;
@@ -24,7 +24,8 @@ export const header = (theme: MantineTheme) => css`
 	background-size: 100%;
 	position: relative;
 
-	> h2 {
+	h2 {
+    text-align: center;
 		z-index: 1;
 		color: ${theme.colors["neutrals-01"][0]};
 	}
@@ -35,27 +36,34 @@ export const headerBg = css`
 	inset: 0;
 	width: 100%;
 	height: 100%;
-
 	svg {
 		height: 100%;
 		width: 100%;
 	}
 `;
 
+export const headerContentWrapper = css`
+  left: 0;
+  transform: none;
+`;
+
 export const navBar = (theme: MantineTheme) => css`
 	width: 100%;
-	display: flex;
-	align-items: center;
-	justify-content: center;
-	gap: 16px;
 	background-color: ${theme.colors["neutrals-01"][0]};
+`;
+
+export const navBarContentWrapper = css`
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 16px;
 `;
 
 export const filtersArea = css`
 	display: flex;
 	justify-content: space-between;
 	align-items: center;
-  padding: 32px 60px;
+  padding: 32px 0px;
 `;
 
 export const selectedFiltersArea = css`
@@ -68,17 +76,10 @@ export const selectedFiltersArea = css`
 `;
 
 export const searchPageResults = css`
-	/* border: 4px solid red; */
-	max-width: 1440px;
-	margin: 0 auto;
-	padding: 32px 60px;
+	padding: 32px 0px;
 `;
 
 export const questionsWrapper = css`
-  width: 95%;
-  position: relative;
-  left: 50%;
-  transform: translateX(-50%);
   max-width: 920px;
   padding-top: 64px;
 `;

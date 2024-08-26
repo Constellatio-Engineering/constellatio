@@ -1,3 +1,4 @@
+import ContentWrapper from "@/components/helpers/contentWrapper/ContentWrapper";
 import EmptyStateCard from "@/components/organisms/emptyStateCard/EmptyStateCard";
 import useSearchResults, { type SearchResultsKey } from "@/hooks/useSearchResults";
 import useSearchBarStore from "@/stores/searchBar.store";
@@ -47,20 +48,24 @@ const SearchPage: FunctionComponent = () =>
   if(isLoading)
   {
     return (
-      <div css={styles.loadingWrapper}>
-        <Loader size="md"/>
-      </div>
+      <ContentWrapper>
+        <div css={styles.loadingWrapper}>
+          <Loader size="md"/>
+        </div>
+      </ContentWrapper>
     );
   }
 
   return (
     <div css={styles.wrapper}>
       {Object.values(searchResults).every((result) => result.length === 0) ? (
-        <EmptyStateCard
-          variant="For-large-areas"
-          title={`Keine Ergebnisse ${searchValue && `für “${searchValue}”`}`}
-          text="Bitte versuche es mit anderen Begriffen oder Tags, um relevante Inhalte zu finden."
-        />
+        <ContentWrapper>
+          <EmptyStateCard
+            variant="For-large-areas"
+            title={`Keine Ergebnisse ${searchValue && `für “${searchValue}”`}`}
+            text="Bitte versuche es mit anderen Begriffen oder Tags, um relevante Inhalte zu finden."
+          />
+        </ContentWrapper>
       ) : (
         <>
           <SearchPageHeader

@@ -1,3 +1,5 @@
+import ContentWrapper from "@/components/helpers/contentWrapper/ContentWrapper";
+
 import { Title } from "@mantine/core";
 import React, { type FunctionComponent } from "react";
 
@@ -8,12 +10,12 @@ export const NotificationsPageHeader: FunctionComponent = () =>
 {
   return (
     <div css={styles.wrapper}>
-      <OverviewHeader variant="red" height={300}/>
-      <div css={styles.contentContainer}>
+      <OverviewHeader variant="red"/>
+      <ContentWrapper stylesOverrides={styles.contentContainer}>
         <Title css={styles.headerTitle} order={1}>
           Benachrichtigungen
         </Title>
-      </div>
+      </ContentWrapper>
     </div>
   );
 };

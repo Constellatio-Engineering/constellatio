@@ -12,6 +12,7 @@ interface OnboardingTutorialStepProps
   readonly children: ReactNode;
   readonly currentStep: number;
   readonly isLastStep?: boolean;
+  readonly onBackPressHandler?: () => void;
   readonly onNextPressHandler?: () => void;
   readonly stepTitle: string;
   readonly totalSteps: number;
@@ -20,7 +21,8 @@ interface OnboardingTutorialStepProps
 const OnboardingTutorialStep: FunctionComponent<OnboardingTutorialStepProps> = ({
   children,
   currentStep,
-  isLastStep,
+  isLastStep = false,
+  onBackPressHandler,
   onNextPressHandler,
   stepTitle,
   totalSteps
@@ -46,10 +48,19 @@ const OnboardingTutorialStep: FunctionComponent<OnboardingTutorialStepProps> = (
         <div css={styles.itemsContainer}>{children}</div>
         <div css={styles.buttonsWrapper}>
           <Button<"button">
+            styleType="secondarySimple"
+            size="large"
+            disabled={onBackPressHandler == null}
+            onClick={onBackPressHandler}
+            fullWidth>
+            Zurück
+          </Button>
+          <Button<"button">
             styleType="primary"
             size="large"
             onClick={onNextPressHandler}
-            fullWidth>{isLastStep ? "Tour beenden" : "Weiter"}
+            fullWidth>
+            {isLastStep ? "Tour beenden" : "Weiter"}
           </Button>
         </div>
       </div>

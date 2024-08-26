@@ -1,3 +1,4 @@
+import ContentWrapper from "@/components/helpers/contentWrapper/ContentWrapper";
 import ChangeEmailTab from "@/components/organisms/changeEmailTab/ChangeEmailTab";
 import ChangePasswordTab from "@/components/organisms/changePasswordTab/ChangePasswordTab";
 import ProfileDetailsTab from "@/components/organisms/profileDetailsTab/ProfileDetailsTab";
@@ -89,17 +90,16 @@ const ProfilePageContent: FunctionComponent = () =>
         p={0}
         maw="100%"
         css={styles.outerContainer}>
-        <Container
-          p={0}
-          maw={1440}
-          css={styles.innerContainer}>
-          <ProfileMenu
-            tabs={tabs}
-            setTab={setTab}
-            activeTabSlug={activeTab?.slug}
-          />
-          {renderedTab}
-        </Container>
+        <ContentWrapper>
+          <div css={styles.innerContainer}>
+            <ProfileMenu
+              tabs={tabs}
+              setTab={setTab}
+              activeTabSlug={activeTab?.slug}
+            />
+            {renderedTab}
+          </div>
+        </ContentWrapper>
       </Container>
     </div>
   );

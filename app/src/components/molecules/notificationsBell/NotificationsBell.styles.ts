@@ -11,7 +11,7 @@ export const wrapper = css`
     transform: translateY(2px);
   }
   :hover, :active {
-    opacity: .8;
+    opacity: .6;
   }
 `;
 

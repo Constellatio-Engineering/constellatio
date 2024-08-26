@@ -40,7 +40,6 @@ export const env = createEnv({
     RECREATE_SEARCH_INDEX_SECRET: z.string(),
     POSTGRES_MAX_CONNECTIONS: z.string().pipe(z.coerce.number().int().min(1).max(9999)),
     STRIPE_PAYMENT_METHODS_CONFIGURATION_ID: z.string(),
-    TRIAL_PERIOD_IN_DAYS: z.string().pipe(z.coerce.number().int().min(1).max(365)),
     GET_SUBSCRIPTION_STATUS_SECRET: z.string(),
     KV_URL: z.string().url(),
     KV_REST_API_URL: z.string().url(),
@@ -77,6 +76,7 @@ export const env = createEnv({
     NEXT_PUBLIC_USER_ACTIVITY_PING_INTERVAL_SECONDS: z.string().pipe(z.coerce.number().int().min(1).max(3600)),
     NEXT_PUBLIC_IS_USAGE_TIME_CHART_ENABLED: z.enum(["true", "false"]).transform((value) => value === "true"),
     NEXT_PUBLIC_IS_REQUEST_BATCHING_DISABLED: z.enum(["true", "false"]).transform((value) => value === "true"),
+    NEXT_PUBLIC_TRIAL_PERIOD_IN_DAYS: z.string().pipe(z.coerce.number().int().min(1).max(730)),
   },
 
   /**
@@ -125,7 +125,7 @@ export const env = createEnv({
     GET_SUBSCRIPTION_STATUS_SECRET: process.env.GET_SUBSCRIPTION_STATUS_SECRET,
     NEXT_PUBLIC_FORMBRICKS_HOST: process.env.NEXT_PUBLIC_FORMBRICKS_HOST,
     NEXT_PUBLIC_FORMBRICKS_ENVIRONMENT_ID: process.env.NEXT_PUBLIC_FORMBRICKS_ENVIRONMENT_ID,
-    TRIAL_PERIOD_IN_DAYS: process.env.TRIAL_PERIOD_IN_DAYS,
+    NEXT_PUBLIC_TRIAL_PERIOD_IN_DAYS: process.env.NEXT_PUBLIC_TRIAL_PERIOD_IN_DAYS,
     NEXT_PUBLIC_USER_ACTIVITY_PING_INTERVAL_SECONDS: process.env.NEXT_PUBLIC_USER_ACTIVITY_PING_INTERVAL_SECONDS,
     KV_URL: process.env.KV_URL,
     KV_REST_API_URL: process.env.KV_REST_API_URL,

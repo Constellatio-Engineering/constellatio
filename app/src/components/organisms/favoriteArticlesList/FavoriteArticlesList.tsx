@@ -1,5 +1,4 @@
 import { Svg } from "@/basic-components/SVG/Svg";
-import * as styles from "@/components/organisms/favoriteCasesList/FavoriteCasesList.styles";
 import { type IGenMainCategory, type IGenArticle } from "@/services/graphql/__generated/sdk";
 import { type Nullable } from "@/utils/types";
 
@@ -18,35 +17,31 @@ const FavoriteArticlesList: FunctionComponent<FavoriteArticlesListProps> = ({
   bookmarkedArticlesMainCategoriesUnique
 }) => 
 {
-  return (
-    <div css={styles.favoritesListContainer}>
-      {bookmarkedArticlesMainCategoriesUnique.map((mainCategoryBlock, blockIndex) =>
-      {
-        const items = ArticlesByMainCategory(mainCategoryBlock.id);
+  return bookmarkedArticlesMainCategoriesUnique.map((mainCategoryBlock, blockIndex) =>
+  {
+    const items = ArticlesByMainCategory(mainCategoryBlock.id);
 
-        return (
-          <React.Fragment key={blockIndex}>
-            <ItemBlock
-              variant="dictionary"
-              tableType="favorites"
-              blockHead={{
-                blockType: "favoriteItemsBlock",
-                categoryName: mainCategoryBlock.mainCategory ?? "",
-                completedCases: 0,
-                icon: {
-                  alt: mainCategoryBlock.icon?.title ?? "",
-                  src: <Svg src={mainCategoryBlock.icon?.src}/>
-                },
-                items: items.length ?? 0,
-                variant: "dictionary"
-              }}
-              items={items}
-            />
-          </React.Fragment>
-        );
-      })}
-    </div>
-  );
+    return (
+      <React.Fragment key={blockIndex}>
+        <ItemBlock
+          variant="dictionary"
+          tableType="favorites"
+          blockHead={{
+            blockType: "favoriteItemsBlock",
+            categoryName: mainCategoryBlock.mainCategory ?? "",
+            completedCases: 0,
+            icon: {
+              alt: mainCategoryBlock.icon?.title ?? "",
+              src: <Svg src={mainCategoryBlock.icon?.src}/>
+            },
+            items: items.length ?? 0,
+            variant: "dictionary"
+          }}
+          items={items}
+        />
+      </React.Fragment>
+    );
+  });
 };
 
 export default FavoriteArticlesList;

@@ -17,8 +17,8 @@ export const wrapper = (theme: MantineTheme) => css`
     text-align: center;
     position: absolute;
     left: 50%;
-    transform: translate(-50%,-500px);
-}
+    transform: translate(-50%, -450px);
+  }
 `;
 
 export const profileInfo = css`
