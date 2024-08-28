@@ -45,6 +45,9 @@ const handler: NextApiHandler = async (req, res): Promise<void> =>
       const createTaskResponse = await createClickupTask(env.CLICKUP_CONTENT_TASKS_LIST_ID, contentCrmData);
       const createdTask = createTaskResponse.data as ClickupTask;
 
+      // here we created the checklist and checklist items step by step with multiple requests. Instead, we should have used the task template feature of clickup:
+      // https://clickup.com/api/clickupreference/operation/CreateTaskFromTemplate/
+
       if(createdTask != null)
       {
         console.log("created task. Now Creating checklist...");
