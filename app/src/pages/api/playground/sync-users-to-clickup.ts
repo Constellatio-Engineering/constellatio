@@ -9,6 +9,7 @@ import { updateClickupTask } from "@/lib/clickup/tasks/update-task";
 import { type ClickupTask } from "@/lib/clickup/types";
 import { clickupCrmCustomField, clickupRequestConfig, getUserCrmData } from "@/lib/clickup/utils";
 import { stripe } from "@/lib/stripe";
+import { type Nullable } from "@/utils/types";
 import { sleep } from "@/utils/utils";
 
 import { createPagesServerClient, type SupabaseClient } from "@supabase/auth-helpers-nextjs";
@@ -177,22 +178,10 @@ export const getUpdateUsersCrmDataPromises = ({
 
 const handler: NextApiHandler = async (req, res): Promise<void> =>
 {
-  // TODO: This is not used anymore, remove it later if it's not needed
-
-  if(req.headers.authorization !== `Bearer ${env.CRON_SECRET}`)
+  if(env.NEXT_PUBLIC_DEPLOYMENT_ENVIRONMENT !== "development")
   {
     return res.status(401).json({ message: "Unauthorized" });
   }
-
-  if(env.NEXT_PUBLIC_DEPLOYMENT_ENVIRONMENT !== "production" && env.NEXT_PUBLIC_DEPLOYMENT_ENVIRONMENT !== "development")
-  {
-    console.log("Skipping cronjob in non-production or non-development environment");
-    return res.status(200).json({ message: "Skipped in non-production or non-development environment" });
-  }
-
-  return res.status(400).json({ message: "Not implemented" });
-
-  console.log("----- [Cronjob] Sync Users to Clickup -----");
 
   const supabaseServerClient = createPagesServerClient({ req, res }, {
     supabaseKey: env.SUPABASE_SERVICE_ROLE_KEY,
@@ -229,8 +218,6 @@ const handler: NextApiHandler = async (req, res): Promise<void> =>
   while(hasMore);
 
   console.log("fetched " + allExistingCrmUsers.length + " customers");
-
-  return res.status(200).json(allExistingCrmUsers);
 
   const allUsers = await db.query.users.findMany();
 
@@ -270,20 +257,6 @@ const handler: NextApiHandler = async (req, res): Promise<void> =>
       await sleep(61000);
     }
   }
-
-  for(let i = 0; i < newUsers.length; i++)
-  {
-    const user = newUsers[i]!;
-    await createClickupTask(env.CLICKUP_CRM_LIST_ID, user.crmData);
-
-    if(i % 50 === 0)
-    {
-      console.log(`Created ${i} new users - Pause`);
-      await sleep(61000);
-    }
-  }
-
-  const createNewUsersResults = await Promise.allSettled(newUsers.map(async ({ crmData }) => createClickupTask(env.CLICKUP_CRM_LIST_ID, crmData)));
 
   return res.status(200).json({ message: "Finished" });
 };
