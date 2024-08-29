@@ -40,16 +40,52 @@ type OverviewPageContentProps = OverviewPageProps & {
   readonly initialCategorySlug: string;
 };
 
+type Topic = {
+  readonly id: string;
+  readonly title: string;
+};
+
+const selectedTopics = ["49a18a66-183d-4b62-a12c-81e433d9f004", "38721058-c456-4f24-80ed-e407160399eb"];
+
 const OverviewPageContent: FunctionComponent<OverviewPageContentProps> = ({
   allLegalAreas,
   allMainCategories,
   initialCategorySlug,
-  items,
+  items: _items,
   variant
 }) =>
 {
   const [selectedCategorySlug, setSelectedCategorySlug] = useQueryState("category", parseAsString.withDefault(initialCategorySlug));
-  const allItemsOfSelectedCategory = items.filter((item) => item.mainCategoryField?.[0]?.slug === selectedCategorySlug);
+
+  const filteredItems = _items.filter((item) =>
+  {
+    return item.topic?.some((t) => t?.id != null && selectedTopics.includes(t.id));
+  });
+
+  console.log(filteredItems);
+
+  const uniqueTopics = Array
+    .from(_items
+      .flatMap((item) => (item.topic ?? [])
+        .map(t =>
+        {
+          if(t?.id == null || t?.topicName == null)
+          {
+            return null;
+          }
+
+          return ({
+            id: t.id,
+            title: t.topicName,
+          }) satisfies Topic;
+        }))
+      .filter(Boolean)
+      .reduce((map, topic) => map.set(topic.id, topic), new Map<string, Topic>()) // Use a Map to ensure uniqueness by topic id
+      .values()
+    )
+    .sort((a, b) => a.title.localeCompare(b.title));
+
+  const allItemsOfSelectedCategory = filteredItems.filter((item) => item.mainCategoryField?.[0]?.slug === selectedCategorySlug);
   const isCategoryEmpty = allItemsOfSelectedCategory.length <= 0;
   const { casesProgress } = useCasesProgress();
 
@@ -75,7 +111,7 @@ const OverviewPageContent: FunctionComponent<OverviewPageContentProps> = ({
             })
             .map((legalArea, itemIndex) =>
             {
-              const allItemsOfLegalArea = items
+              const allItemsOfLegalArea = filteredItems
                 .filter(Boolean)
                 .filter((item) => item.legalArea?.id === legalArea.id)
                 .map((item) => ({
