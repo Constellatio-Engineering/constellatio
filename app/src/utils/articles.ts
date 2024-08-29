@@ -1,23 +1,6 @@
 import { type allArticles } from "@/services/content/getAllArticles";
 import { type IGenArticle } from "@/services/graphql/__generated/sdk";
-
-export const sortArticlesByTopic = (a: IGenArticle, b: IGenArticle): number =>
-{
-  const sortingA = a?.topic?.[0]?.sorting;
-  const sortingB = b?.topic?.[0]?.sorting;
-
-  if(sortingA == null)
-  {
-    return 1;
-  }
-
-  if(sortingB == null)
-  {
-    return -1;
-  }
-
-  return sortingA - sortingB;
-};
+import { sortByTopic } from "@/utils/caisy";
 
 export type ArticleWithNextAndPreviousArticleId = IGenArticle & {
   nextArticleId: string | null;
@@ -50,7 +33,7 @@ export const getArticlesWithNextAndPreviousArticleId = (allArticles: allArticles
 
   Object.keys(articlesGroupedByLegalArea).forEach((legalAreaId) =>
   {
-    articlesGroupedByLegalArea[legalAreaId]!.sort((sortArticlesByTopic));
+    articlesGroupedByLegalArea[legalAreaId]!.sort((sortByTopic));
   });
 
   const articlesWithNextAndPreviousArticleId: ArticleWithNextAndPreviousArticleId[] = allArticles.map((article) =>

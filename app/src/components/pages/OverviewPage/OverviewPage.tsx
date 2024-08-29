@@ -8,8 +8,9 @@ import useCasesProgress from "@/hooks/useCasesProgress";
 import { type GetCasesOverviewPagePropsResult } from "@/pages/cases";
 import { type GetArticlesOverviewPagePropsResult } from "@/pages/dictionary";
 import { type AllCases } from "@/services/content/getAllCases";
-import { type IGenLegalArea, } from "@/services/graphql/__generated/sdk";
-import { type ArticleWithNextAndPreviousArticleId, sortArticlesByTopic } from "@/utils/articles";
+import { type ArticleWithNextAndPreviousArticleId } from "@/utils/articles";
+import { sortByTopic } from "@/utils/caisy";
+import { type Nullable } from "@/utils/types";
 
 import { parseAsString, useQueryState } from "next-usequerystate";
 import React, { Fragment, type FunctionComponent } from "react";
@@ -17,8 +18,13 @@ import React, { Fragment, type FunctionComponent } from "react";
 import * as styles from "./OverviewPage.styles";
 import ErrorPage from "../errorPage/ErrorPage";
 
-export function extractNumeric(title: string): number | null
+export function extractNumeric(title: Nullable<string>): number | null
 {
+  if(!title)
+  {
+    return null;
+  }
+
   const match = title.match(/\d+/);
   return match ? parseInt(match[0], 10) : null;
 }
@@ -44,17 +50,7 @@ const OverviewPageContent: FunctionComponent<OverviewPageContentProps> = ({
 {
   const [selectedCategorySlug, setSelectedCategorySlug] = useQueryState("category", parseAsString.withDefault(initialCategorySlug));
   const allItemsOfSelectedCategory = items.filter((item) => item.mainCategoryField?.[0]?.slug === selectedCategorySlug);
-
-  const getAllItemsOfLegalArea = (legalArea: IGenLegalArea) =>
-  {
-    return items.filter((item) => item.legalArea?.id === legalArea.id);
-  };
-
-  const getIsCategoryEmpty = (): boolean =>
-  {
-    return items.filter((item) => item.mainCategoryField?.[0]?.slug === selectedCategorySlug).length <= 0;
-  };
-
+  const isCategoryEmpty = allItemsOfSelectedCategory.length <= 0;
   const { casesProgress } = useCasesProgress();
 
   return (
@@ -79,30 +75,35 @@ const OverviewPageContent: FunctionComponent<OverviewPageContentProps> = ({
             })
             .map((legalArea, itemIndex) =>
             {
-              const allItemsOfLegalArea = getAllItemsOfLegalArea(legalArea);
+              const allItemsOfLegalArea = items
+                .filter(Boolean)
+                .filter((item) => item.legalArea?.id === legalArea.id)
+                .map((item) => ({
+                  ...item,
+                  isCompleted: casesProgress?.some((caseProgress) => caseProgress?.caseId === item.id && caseProgress.progressState === "completed"),
+                }));
 
-              let allItemsSorted: typeof allItemsOfLegalArea;
-
-              if(variant === "case")
+              const allItemsSorted = allItemsOfLegalArea.sort((a, b) =>
               {
-                allItemsSorted = allItemsOfLegalArea.sort((a, b) =>
+                if(variant === "dictionary")
                 {
-                  const numA = extractNumeric(a.title ?? "");
-                  const numB = extractNumeric(b.title ?? "");
+                  return sortByTopic(a, b);
+                }
+                else
+                {
+                  const numA = extractNumeric(a.title);
+                  const numB = extractNumeric(b.title);
 
                   if(numA !== null && numB !== null)
                   {
                     return numA - numB;
                   }
-                  return a?.title?.localeCompare(b.title ?? "") ?? -1;
-                });
-              }
-              else
-              {
-                allItemsSorted = allItemsOfLegalArea.sort(article => sortArticlesByTopic(article));
-              }
 
-              const completed = completeCases.filter(x => x?.legalArea?.id === legalArea?.id)?.length;
+                  return a?.title?.localeCompare(b.title ?? "") ?? -1;
+                }
+              });
+
+              const completed = allItemsOfLegalArea.filter((item) => item.isCompleted).length;
 
               return (
                 legalArea.legalAreaName && (
@@ -113,11 +114,11 @@ const OverviewPageContent: FunctionComponent<OverviewPageContentProps> = ({
                         blockType: "itemsBlock",
                         categoryName: legalArea.legalAreaName,
                         completedCases: completed,
-                        items: items.length,
+                        items: allItemsSorted.length,
                         variant,
                       }}
                       tableType="cases"
-                      items={items}
+                      items={allItemsSorted}
                     />
                   </Fragment>
                 )
@@ -125,7 +126,7 @@ const OverviewPageContent: FunctionComponent<OverviewPageContentProps> = ({
             })}
         </ContentWrapper>
       </div>
-      {getIsCategoryEmpty() && (
+      {isCategoryEmpty && (
         <EmptyStateCard
           title={`Das Angebot von Constellatio wird ständig erweitert. In Kürze findest du hier ${
             variant === "case"

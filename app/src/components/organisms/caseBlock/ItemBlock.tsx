@@ -8,7 +8,7 @@ import BookmarkButton from "@/components/organisms/caseBlock/BookmarkButton/Book
 // import useAllCasesWithProgress from "@/hooks/useAllCasesWithProgress";
 import useBookmarks from "@/hooks/useBookmarks";
 import useCasesProgress from "@/hooks/useCasesProgress";
-import { type IGenArticle, type IGenFullCaseFragment } from "@/services/graphql/__generated/sdk";
+import { type IGenArticle, type IGenCase } from "@/services/graphql/__generated/sdk";
 import { appPaths } from "@/utils/paths";
 
 import { useMediaQuery } from "@mantine/hooks";
@@ -51,7 +51,7 @@ const SearchTableDictionary: DictionaryTableProps = {
 export interface ICaseBlockProps 
 {
   readonly blockHead: ICaseBlockHeadProps;
-  readonly items: IGenFullCaseFragment[] | IGenArticle[];
+  readonly items: Array<IGenCase | IGenArticle>;
   readonly tableType?: "all-cases" | "cases" | "favorites" | "search" | "dictionary";
   readonly variant: "case" | "dictionary";
 }
