@@ -4,7 +4,7 @@ import DetailsPage from "@/components/pages/DetailsPage/DetailsPage";
 import { type NextPageWithLayout } from "@/pages/_app";
 import getAllArticles from "@/services/content/getAllArticles";
 import { getArticleById } from "@/services/content/getArticleById";
-import getArticlesOverviewProps, { type ArticleWithNextAndPreviousArticleId } from "@/services/content/getArticlesOverviewProps";
+import { type ArticleWithNextAndPreviousArticleId, getArticlesWithNextAndPreviousArticleId } from "@/utils/articles";
 
 import { type GetStaticPathsResult, type GetStaticProps, type GetStaticPaths } from "next";
 
@@ -39,8 +39,9 @@ type GetArticleDetailPagePropsResult = {
 export const getStaticProps: GetStaticProps<GetArticleDetailPagePropsResult, Params> = async ({ params }) =>
 {
   const { article } = await getArticleById({ id: params?.id });
-  const { allArticles } = await getArticlesOverviewProps();
-  const articleFromAllArticle = allArticles.find((article) => article.id === params?.id);
+  const allArticles = await getAllArticles();
+  const articlesWithNextAndPreviousArticleId = getArticlesWithNextAndPreviousArticleId(allArticles);
+  const articleFromAllArticle = articlesWithNextAndPreviousArticleId.find((article) => article.id === params?.id);
 
   if(!article)
   {

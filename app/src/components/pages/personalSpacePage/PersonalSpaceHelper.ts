@@ -1,4 +1,4 @@
-import { type ICasesOverviewProps } from "@/services/content/getCasesOverviewProps";
+import type { GetOverviewPagePropsResult } from "@/services/content/getOverviewPageProps";
 import { type IGenAsset } from "@/services/graphql/__generated/sdk";
 
 export const categoriesHelper = (favCategoryData: {
@@ -11,28 +11,29 @@ export const categoriesHelper = (favCategoryData: {
   MaterialsCategoryId: string;
   slug: string;
   uploadedFilesLength: number;
-}): ICasesOverviewProps["allMainCategories"] => 
+}): GetOverviewPagePropsResult["allMainCategories"] =>
 {
   return [
     {
       __typename: "MainCategory",
-      //   casesPerCategory: favCategoryData?.bookmarkedCases?.length ?? 0,
-      casesPerCategory: favCategoryData?.bookmarkedCasesLength ?? 0,
       icon: {
         src: favCategoryData?.BookmarkIconSvg.src,
         title: "bookmark-icon"
       },
+      
       id: favCategoryData?.FavCategoryId,
+      //   casesPerCategory: favCategoryData?.bookmarkedCases?.length ?? 0,
+      itemsPerCategory: favCategoryData?.bookmarkedCasesLength ?? 0,
       mainCategory: "Favoriten",
       slug: favCategoryData.slug
     }, {
       __typename: "MainCategory",
-      casesPerCategory: materialsCategoryData?.uploadedFilesLength ?? 0,
       icon: {
         src: materialsCategoryData?.FileIconSvg.src,
         title: "file-category-icon"
       },
       id: materialsCategoryData?.MaterialsCategoryId,
+      itemsPerCategory: materialsCategoryData?.uploadedFilesLength ?? 0,
       mainCategory: "Deine Dateien",
       slug: materialsCategoryData.slug
     }
