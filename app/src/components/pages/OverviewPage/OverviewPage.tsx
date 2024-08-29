@@ -4,11 +4,12 @@ import ItemBlock from "@/components/organisms/caseBlock/ItemBlock";
 import EmptyStateCard from "@/components/organisms/emptyStateCard/EmptyStateCard";
 import OverviewHeader from "@/components/organisms/OverviewHeader/OverviewHeader";
 import UseQueryStateWrapper from "@/components/Wrappers/useQueryStateWrapper/UseQueryStateWrapper";
-import useAllCasesWithProgress from "@/hooks/useAllCasesWithProgress";
 import useCasesProgress from "@/hooks/useCasesProgress";
-import { type GetOverviewPagePropsResult } from "@/services/content/getOverviewPageProps";
-import { type IGenArticle, type IGenCaseOverviewFragment, type IGenLegalArea, } from "@/services/graphql/__generated/sdk";
-import { sortArticlesByTopic } from "@/utils/articles";
+import { type GetCasesOverviewPagePropsResult } from "@/pages/cases";
+import { type GetArticlesOverviewPagePropsResult } from "@/pages/dictionary";
+import { type AllCases } from "@/services/content/getAllCases";
+import { type IGenLegalArea, } from "@/services/graphql/__generated/sdk";
+import { type ArticleWithNextAndPreviousArticleId, sortArticlesByTopic } from "@/utils/articles";
 
 import { parseAsString, useQueryState } from "next-usequerystate";
 import React, { Fragment, type FunctionComponent } from "react";
@@ -22,41 +23,36 @@ export function extractNumeric(title: string): number | null
   return match ? parseInt(match[0], 10) : null;
 }
 
-/* type ArticlesOverviewProps = {
-  readonly items: ArticleWithNextAndPreviousArticleId[];
-  readonly variant: "dictionary";
+type OverviewPageProps = (GetArticlesOverviewPagePropsResult | GetCasesOverviewPagePropsResult) & {
+  // This is a workaround.
+  // The correct type would be AllCases | ArticleWithNextAndPreviousArticleId[], as inferred by (GetArticlesOverviewPagePropsResult | GetCasesOverviewPagePropsResult),
+  // but TypeScript is not smart enough to infer this with th array.filter method
+  readonly items: Array<AllCases[number] | ArticleWithNextAndPreviousArticleId>;
 };
 
-type CasesOverviewProps = {
-  readonly items: AllCases;
-  readonly variant: "case";
-};*/
-
-type OverviewPageProps = GetOverviewPagePropsResult;
-
-type OverviewPageContentProps = GetOverviewPagePropsResult & {
+type OverviewPageContentProps = OverviewPageProps & {
   readonly initialCategorySlug: string;
 };
 
 const OverviewPageContent: FunctionComponent<OverviewPageContentProps> = ({
-  allItems,
   allLegalAreas,
   allMainCategories,
   initialCategorySlug,
+  items,
   variant
 }) =>
 {
   const [selectedCategorySlug, setSelectedCategorySlug] = useQueryState("category", parseAsString.withDefault(initialCategorySlug));
-  const allItemsOfSelectedCategory = allItems.filter((item) => item.mainCategoryField?.[0]?.slug === selectedCategorySlug);
+  const allItemsOfSelectedCategory = items.filter((item) => item.mainCategoryField?.[0]?.slug === selectedCategorySlug);
 
   const getAllItemsOfLegalArea = (legalArea: IGenLegalArea) =>
   {
-    return allItems.filter((item) => item.legalArea?.id === legalArea.id);
+    return items.filter((item) => item.legalArea?.id === legalArea.id);
   };
 
   const getIsCategoryEmpty = (): boolean =>
   {
-    return allItems.filter((item) => item.mainCategoryField?.[0]?.slug === selectedCategorySlug).length <= 0;
+    return items.filter((item) => item.mainCategoryField?.[0]?.slug === selectedCategorySlug).length <= 0;
   };
 
   const { casesProgress } = useCasesProgress();
@@ -103,7 +99,7 @@ const OverviewPageContent: FunctionComponent<OverviewPageContentProps> = ({
               }
               else
               {
-                allItemsSorted = allItemsOfLegalArea.sort(sortArticlesByTopic);
+                allItemsSorted = allItemsOfLegalArea.sort(article => sortArticlesByTopic(article));
               }
 
               const completed = completeCases.filter(x => x?.legalArea?.id === legalArea?.id)?.length;

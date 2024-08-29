@@ -2,18 +2,29 @@ import { Layout } from "@/components/layouts/Layout";
 import PageHead from "@/components/organisms/pageHead/PageHead";
 import OverviewPage from "@/components/pages/OverviewPage/OverviewPage";
 import { type NextPageWithLayout } from "@/pages/_app";
+import getAllArticles from "@/services/content/getAllArticles";
 import { getOverviewPageProps, type GetOverviewPagePropsResult } from "@/services/content/getOverviewPageProps";
+import { type ArticleWithNextAndPreviousArticleId, getArticlesWithNextAndPreviousArticleId } from "@/utils/articles";
 
 import { type GetStaticProps } from "next";
 
-type GetArticlesOverviewPagePropsResult = GetOverviewPagePropsResult;
+export type GetArticlesOverviewPagePropsResult = GetOverviewPagePropsResult & {
+  items: ArticleWithNextAndPreviousArticleId[];
+  variant: "dictionary";
+};
 
 export const getStaticProps: GetStaticProps<GetArticlesOverviewPagePropsResult> = async () =>
 {
-  const articlesOverviewProps = await getOverviewPageProps("dictionary");
+  const allArticles = await getAllArticles();
+  const articlesWithNextAndPreviousArticleId = getArticlesWithNextAndPreviousArticleId(allArticles);
+  const overviewPageProps = await getOverviewPageProps(articlesWithNextAndPreviousArticleId);
 
   return {
-    props: articlesOverviewProps,
+    props: {
+      ...overviewPageProps,
+      items: articlesWithNextAndPreviousArticleId,
+      variant: "dictionary"
+    },
     revalidate: 10,
   };
 };
