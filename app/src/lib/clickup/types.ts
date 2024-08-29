@@ -57,7 +57,7 @@ type LabelCustomFieldConfig = CustomFieldBaseProperties & {
       name: string;
     }>;
   };
-  value?: Nullable<string[]>;
+  value?: Nullable<Array<Nullable<string>>>;
 };
 
 export type LabelCustomFieldInsertProps = Pick<LabelCustomFieldConfig, "id" | "value">;
@@ -168,9 +168,9 @@ type CustomField =
   | EmailCustomFieldConfig
   | DateCustomFieldConfig
   | NumberCustomFieldConfig
+  | LabelCustomFieldConfig
   // | CurrencyCustomFieldConfig
   // | EmojiCustomFieldConfig
-  // | LabelCustomFieldConfig
   // | AutomaticProgressCustomFieldConfig
   // | ManualProgressCustomFieldConfig
   // | UrlCustomFieldConfig
@@ -186,9 +186,9 @@ export type CustomFieldInsert =
   | EmailCustomFieldInsertProps
   | DateCustomFieldInsertProps
   | NumberCustomFieldInsertProps
+  | LabelCustomFieldInsertProps
   // | CurrencyCustomFieldInsertProps
   // | EmojiCustomFieldInsertProps
-  // | LabelCustomFieldInsertProps
   // | AutomaticProgressCustomFieldInsertProps
   // | ManualProgressCustomFieldInsertProps
   // | UrlCustomFieldInsertProps
@@ -225,6 +225,18 @@ export type ClickupTaskCreate = {
 export type ClickupTask = Omit<ClickupTaskCreate, "custom_fields"> & {
   custom_fields?: CustomField[];
   id: string;
+};
+
+export type ClickupCreateChecklistResponse = {
+  checklist: {
+    id: string;
+    items: unknown[];
+    name: string;
+    orderindex: number;
+    resolved: number;
+    task_id: string;
+    unresolved: number;
+  };
 };
 
 export type ClickUpFindTaskParams = {

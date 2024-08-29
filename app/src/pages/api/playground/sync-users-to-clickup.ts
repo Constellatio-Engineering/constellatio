@@ -178,22 +178,10 @@ export const getUpdateUsersCrmDataPromises = ({
 
 const handler: NextApiHandler = async (req, res): Promise<void> =>
 {
-  // TODO: This is not used anymore, remove it later if it's not needed
-
-  if(req.headers.authorization !== `Bearer ${env.CRON_SECRET}`)
+  if(env.NEXT_PUBLIC_DEPLOYMENT_ENVIRONMENT !== "development")
   {
     return res.status(401).json({ message: "Unauthorized" });
   }
-
-  if(env.NEXT_PUBLIC_DEPLOYMENT_ENVIRONMENT !== "production" && env.NEXT_PUBLIC_DEPLOYMENT_ENVIRONMENT !== "development")
-  {
-    console.log("Skipping cronjob in non-production or non-development environment");
-    return res.status(200).json({ message: "Skipped in non-production or non-development environment" });
-  }
-
-  return res.status(400).json({ message: "Not implemented" });
-
-  console.log("----- [Cronjob] Sync Users to Clickup -----");
 
   const supabaseServerClient = createPagesServerClient({ req, res }, {
     supabaseKey: env.SUPABASE_SERVICE_ROLE_KEY,
@@ -230,8 +218,6 @@ const handler: NextApiHandler = async (req, res): Promise<void> =>
   while(hasMore);
 
   console.log("fetched " + allExistingCrmUsers.length + " customers");
-
-  return res.status(200).json(allExistingCrmUsers);
 
   const allUsers = await db.query.users.findMany();
 
@@ -271,8 +257,6 @@ const handler: NextApiHandler = async (req, res): Promise<void> =>
       await sleep(61000);
     }
   }
-
-  console.log("Finished creating new users");
 
   return res.status(200).json({ message: "Finished" });
 };

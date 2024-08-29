@@ -8,11 +8,13 @@ import {
   type CustomFieldInsert,
   type DateCustomFieldInsertProps,
   type DropDownCustomFieldInsertProps,
-  type EmailCustomFieldInsertProps,
+  type EmailCustomFieldInsertProps, type LabelCustomFieldInsertProps,
   type NumberCustomFieldInsertProps, type ShortTextCustomFieldInsertProps,
 } from "@/lib/clickup/types";
-import { getCrmDataForUser, getUpdateUsersCrmDataPromises } from "@/pages/api/cron/sync-users-to-clickup";
+import { getCrmDataForUser, getUpdateUsersCrmDataPromises } from "@/pages/api/playground/sync-users-to-clickup";
 import { allUniversities } from "@/schemas/auth/userData.validation";
+import { type allArticles } from "@/services/content/getAllArticles";
+import { type AllCases } from "@/services/content/getAllCases";
 import { InternalServerError } from "@/utils/serverError";
 
 import { createPagesServerClient, type SupabaseClient, type User as SupabaseUser } from "@supabase/auth-helpers-nextjs";
@@ -33,6 +35,116 @@ export const clickupUserIds = {
   simon: 36495813,
   sophie: 82743954,
   sven: 36495811
+};
+
+export const clickupContentTaskCustomField = {
+  caisyId: {
+    fieldId: "910257b5-05f5-4d4e-b173-8a7016b331c2",
+  },
+  legalArea: {
+    fieldId: "909a5da9-8873-4684-a00f-4c48ca8cf191",
+    options: {
+      arbeitsrecht: {
+        caisyId: "583cea61-204c-414c-8ac6-da93940c6551",
+        fieldId: "15f66635-e4f9-481e-b805-1bdb06a48bed"
+      },
+      bereicherungsrecht: {
+        caisyId: "b86096da-665a-4f17-89ab-e55c89a81b69",
+        fieldId: "a4d1987e-920b-4877-9216-6dfb26022188"
+      },
+      bgbAt: {
+        caisyId: "0dc9368e-06f3-4ca8-b1ef-f9c3e4de5843",
+        fieldId: "42715149-f6f6-43ad-a1a3-9c84dcd493e0"
+      },
+      deliktsrecht: {
+        caisyId: "fad05f12-a290-40fd-b2c7-5647dd6089d6",
+        fieldId: "f2e9505e-5f64-48ae-8d53-46d6a2707854"
+      },
+      demofall: {
+        caisyId: "421268fa-b5cf-481c-b5e3-b073b9d4c8cb",
+        fieldId: "d6915e48-6b82-45bb-aba2-560615929ba2"
+      },
+      ebv: {
+        caisyId: "c290de11-367d-4bc2-ad39-397a4e9c3efd",
+        fieldId: "0bb0f783-d53b-4aab-a465-dc8e889f44c9"
+      },
+      einfuehrungsfall: {
+        caisyId: "198c5ef9-f544-4f76-973c-a5d05f24de65",
+        fieldId: "df61ff5f-c10c-47d1-aca8-9bee81d438fe"
+      },
+      erbrecht: {
+        caisyId: "f3fd94a7-fc42-4e87-ab0b-10ae173e1045",
+        fieldId: "1fa3dd63-476b-4d9b-957a-f04f0c38e4cb"
+      },
+      examensklausur: {
+        caisyId: "d4818d37-36f7-4371-b444-f777e7d74148",
+        fieldId: "fa131fb3-1d3e-42e8-98c4-d5b5d4dcc3ec"
+      },
+      familienrecht: {
+        caisyId: "7f005e78-7460-4199-a6ca-f951dda5cdfd",
+        fieldId: "642a5be7-4157-48dc-a78a-24b655f7f725"
+      },
+      geschaeftsfuehrungOhneAuftrag: {
+        caisyId: "5fb48211-4c07-4f1f-9425-de49177d292b",
+        fieldId: "2f81252e-bcee-4b77-bc70-d408eb88a818"
+      },
+      gesellschaftsrecht: {
+        caisyId: "971e7857-67db-4369-a80c-64e167554143",
+        fieldId: "2bdac5e1-887e-4049-9587-6229525d6fba"
+      },
+      handelsrecht: {
+        caisyId: "83f5305b-1836-4080-9960-f648b8258132",
+        fieldId: "329f0809-3c94-4dcd-baa7-d01e098d0c50"
+      },
+      immobiliarsachenrecht: {
+        caisyId: "bbec813c-2982-4143-8633-7791f0b932b3",
+        fieldId: "1e7931c1-0d92-473f-a170-7b47ee9f240d"
+      },
+      kaufrecht: {
+        caisyId: "d387e999-a5fb-4ceb-b2e8-4a9a0d056742",
+        fieldId: "35a92a9c-acff-4ffd-af2d-215bdadf3b4a"
+      },
+      klagearten: {
+        caisyId: "9fcfbdba-9f91-47df-bd6f-b4b02004a019",
+        fieldId: "94af72c7-671d-4702-beaf-7ca92a525c83"
+      },
+      kreditsicherungsrecht: {
+        caisyId: "6232301b-609f-42b8-8a3e-dc64e9ba3e1b",
+        fieldId: "5a43bdc4-8a2c-49d5-95a2-a73b3fcac5fe"
+      },
+      mobiliarsachenrecht: {
+        caisyId: "078936e7-cf00-46a5-ac01-29a0c9510fde",
+        fieldId: "ad65c3a5-77fa-4ba4-8325-bc18a2811ee8"
+      },
+      rechtsschutz: {
+        caisyId: "241587a8-cc09-483d-bda4-6eb1139858a0",
+        fieldId: "5058c426-e175-461b-ab91-c9124823a13c"
+      },
+      schadensrecht: {
+        caisyId: "b10b2189-e857-49b3-9d32-2c95ad8e22e0",
+        fieldId: "3834cc3f-207f-4fb9-9917-3bfd93d57727"
+      },
+      schuldrechtAt: {
+        caisyId: "bf906e5d-0596-4cc0-8f61-61c67c8b0393",
+        fieldId: "9962157b-7385-4f54-bfa7-d341b72314c2"
+      },
+      zpo: {
+        caisyId: "1d6af5ed-e936-4d32-9f64-d63bb4003535",
+        fieldId: "6048361d-953f-4c0f-8d57-deb1a90ddd4d"
+      }
+    }
+  },
+  type: {
+    fieldId: "8761ad79-1901-4de2-8630-6b52f7f0dc5e",
+    options: {
+      article: {
+        fieldId: "9839f575-b48d-4627-bc9d-8b1dbf987c19"
+      },
+      legalCase: {
+        fieldId: "29d1821c-bd97-4e9a-ac6a-129c307ab599"
+      },
+    }
+  }
 };
 
 export const clickupCrmCustomField = {
@@ -174,14 +286,6 @@ const calculateSubscriptionFuture: CalculateMembershipEndDateProps = (subscripti
       return { isCanceled: false };
   }
 };
-type GetUserCrmData = (props: {
-  subscriptionData: Stripe.Response<Stripe.Subscription> | null;
-  supabaseUserData: SupabaseUser;
-  user: User;
-}) => {
-  custom_fields: CustomFieldInsert[];
-  name: string;
-};
 
 // eslint-disable-next-line @typescript-eslint/explicit-function-return-type
 export const getClickupCrmUserByUserId = async (userId: string) =>
@@ -194,6 +298,68 @@ export const getClickupCrmUserByUserId = async (userId: string) =>
     }],
     include_closed: true,
   });
+};
+
+type GetContentTaskCrmData = (content: AllCases[number] | allArticles[number]) => {
+  custom_fields: CustomFieldInsert[];
+  name: string;
+};
+
+export const getContentTaskCrmData: GetContentTaskCrmData = (content) =>
+{
+  const caisyIdCustomFieldData: ShortTextCustomFieldInsertProps = {
+    id: clickupContentTaskCustomField.caisyId.fieldId,
+    value: content.id
+  };
+
+  const typeCustomFieldData: DropDownCustomFieldInsertProps = {
+    id: clickupContentTaskCustomField.type.fieldId,
+    value: content.__typename === "Case" ? clickupContentTaskCustomField.type.options.legalCase.fieldId : clickupContentTaskCustomField.type.options.article.fieldId
+  };
+
+  /* const legalAreaIndex = Object
+    .entries(clickupContentTaskCustomField.legalArea.options)
+    .findIndex(([key, value]) =>
+    {
+      console.log(`checking legal area '${key}'. caisyId: ${value.caisyId}, fieldId: ${value.fieldId}`);
+
+      if(value.caisyId === content.legalArea?.id)
+      {
+        console.log(`found legal area '${key}' with id '${value.caisyId}'`);
+      }
+
+      return value.caisyId === content.legalArea?.id;
+    });
+
+  const legalAreaCustomFieldData: LabelCustomFieldInsertProps = {
+    id: clickupContentTaskCustomField.legalArea.fieldId,
+    value: [Object.values(clickupContentTaskCustomField.legalArea.options)[legalAreaIndex]?.fieldId]
+  };*/
+
+  const legalAreaId = Object.values(clickupContentTaskCustomField.legalArea.options).find((legalArea) => legalArea.caisyId === content.legalArea?.id)?.fieldId;
+
+  const legalAreaCustomFieldData: LabelCustomFieldInsertProps = {
+    id: clickupContentTaskCustomField.legalArea.fieldId,
+    value: legalAreaId == null ? [] : [legalAreaId]
+  };
+
+  return ({
+    custom_fields: [
+      caisyIdCustomFieldData,
+      typeCustomFieldData,
+      legalAreaCustomFieldData
+    ],
+    name: content.title ?? "Error: No title"
+  });
+};
+
+type GetUserCrmData = (props: {
+  subscriptionData: Stripe.Response<Stripe.Subscription> | null;
+  supabaseUserData: SupabaseUser;
+  user: User;
+}) => {
+  custom_fields: CustomFieldInsert[];
+  name: string;
 };
 
 export const getUserCrmData: GetUserCrmData = ({ subscriptionData, supabaseUserData, user }) =>
