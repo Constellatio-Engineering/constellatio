@@ -2,18 +2,18 @@ import { Layout } from "@/components/layouts/Layout";
 import PageHead from "@/components/organisms/pageHead/PageHead";
 import OverviewPage from "@/components/pages/OverviewPage/OverviewPage";
 import { type NextPageWithLayout } from "@/pages/_app";
-import getArticlesOverviewProps, { type IArticlesOverviewProps } from "@/services/content/getArticlesOverviewProps";
+import { getOverviewPageProps, type GetOverviewPagePropsResult } from "@/services/content/getOverviewPageProps";
 
 import { type GetStaticProps } from "next";
 
-type GetArticlesOverviewPagePropsResult = IArticlesOverviewProps;
+type GetArticlesOverviewPagePropsResult = GetOverviewPagePropsResult;
 
 export const getStaticProps: GetStaticProps<GetArticlesOverviewPagePropsResult> = async () =>
 {
-  const allArticles = await getArticlesOverviewProps();
+  const articlesOverviewProps = await getOverviewPageProps("dictionary");
 
   return {
-    props: allArticles,
+    props: articlesOverviewProps,
     revalidate: 10,
   };
 };
@@ -21,7 +21,7 @@ export const getStaticProps: GetStaticProps<GetArticlesOverviewPagePropsResult> 
 const NextPage: NextPageWithLayout<GetArticlesOverviewPagePropsResult> = (articlesOverviewProps) => (
   <>
     <PageHead pageTitle="Lexikon"/>
-    <OverviewPage content={articlesOverviewProps} variant="dictionary"/>
+    <OverviewPage {...articlesOverviewProps}/>
   </>
 );
 

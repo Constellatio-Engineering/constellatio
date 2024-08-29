@@ -2,15 +2,15 @@ import { Layout } from "@/components/layouts/Layout";
 import PageHead from "@/components/organisms/pageHead/PageHead";
 import OverviewPage from "@/components/pages/OverviewPage/OverviewPage";
 import { type NextPageWithLayout } from "@/pages/_app";
-import getCasesOverviewProps, { type ICasesOverviewProps } from "@/services/content/getCasesOverviewProps";
+import { getOverviewPageProps, type GetOverviewPagePropsResult } from "@/services/content/getOverviewPageProps";
 
 import { type GetStaticProps } from "next";
 
-type GetCasesOverviewPagePropsResult = ICasesOverviewProps;
+type GetCasesOverviewPagePropsResult = GetOverviewPagePropsResult;
 
 export const getStaticProps: GetStaticProps<GetCasesOverviewPagePropsResult> = async () =>
 {
-  const casesOverviewProps = await getCasesOverviewProps();
+  const casesOverviewProps = await getOverviewPageProps("case");
 
   return {
     props: casesOverviewProps,
@@ -18,10 +18,10 @@ export const getStaticProps: GetStaticProps<GetCasesOverviewPagePropsResult> = a
   };
 };
 
-const Page: NextPageWithLayout<GetCasesOverviewPagePropsResult> = (casesOverviewProps) => (
+const Page: NextPageWithLayout<GetCasesOverviewPagePropsResult> = (props) => (
   <>
     <PageHead pageTitle="Fälle"/>
-    <OverviewPage variant="case" content={casesOverviewProps}/>
+    <OverviewPage {...props}/>
   </>
 );
 

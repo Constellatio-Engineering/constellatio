@@ -1,7 +1,7 @@
 import ContentWrapper from "@/components/helpers/contentWrapper/ContentWrapper";
 import { OverlayLines } from "@/components/Icons/bg-layer";
 import { Trash } from "@/components/Icons/Trash";
-import { type IArticlesOverviewProps } from "@/services/content/getArticlesOverviewProps";
+import { type GetOverviewPagePropsResult } from "@/services/content/getOverviewPageProps";
 import type { Maybe, Scalars } from "@/services/graphql/__generated/sdk";
 
 import { Title, useMantineTheme } from "@mantine/core";
@@ -15,7 +15,7 @@ import FilterTag from "../../molecules/filterTag/FilterTag";
 
 export interface ICasesOverviewHeaderProps 
 {
-  readonly categories?: IArticlesOverviewProps["allMainCategories"];
+  readonly categories?: GetOverviewPagePropsResult["allMainCategories"];
   readonly height?: number;
   readonly selectedCategorySlug?: string;
   readonly setSelectedCategorySlug?: (slug: string) => Promise<URLSearchParams>;
@@ -57,7 +57,7 @@ const OverviewHeader: FunctionComponent<ICasesOverviewHeaderProps> = ({
               }}>
               <CategoryTab
                 {...category}
-                itemsNumber={category?.casesPerCategory}
+                itemsNumber={category?.itemsPerCategory}
                 selected={selectedCategorySlug === category.slug}
                 variant={variant}
               />
