@@ -2,8 +2,8 @@ import { db } from "@/db/connection";
 import {
   imageFileExtensions, imageFileMimeTypes, type ProfilePictureInsert, profilePictures, users 
 } from "@/db/schema";
-import { addUserToCrmUpdateQueue, syncUserToCrm } from "@/lib/clickup/utils";
-import { stripe } from "@/lib/stripe";
+import { addUserToCrmUpdateQueue } from "@/lib/clickup/utils";
+import { stripe } from "@/lib/stripe/stripe";
 import { updateUserDetailsSchema } from "@/schemas/auth/updateUserDetails.schema";
 import { generateCreateSignedUploadUrlSchema } from "@/schemas/uploads/createSignedUploadUrl.schema";
 import { setOnboardingResultSchema } from "@/schemas/users/setOnboardingResult.schema";

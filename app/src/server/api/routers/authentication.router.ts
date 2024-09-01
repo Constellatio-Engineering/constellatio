@@ -2,7 +2,7 @@ import { db } from "@/db/connection";
 import { referrals, type UserInsert, users } from "@/db/schema";
 import { env } from "@/env.mjs";
 import { addUserToCrmUpdateQueue } from "@/lib/clickup/utils";
-import { stripe } from "@/lib/stripe";
+import { stripe } from "@/lib/stripe/stripe";
 import { registrationFormSchema } from "@/schemas/auth/registrationForm.schema";
 import { addBadgeForUser } from "@/server/api/services/badges.services";
 import { createTRPCRouter, publicProcedure } from "@/server/api/trpc";

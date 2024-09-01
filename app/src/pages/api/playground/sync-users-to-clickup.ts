@@ -1,7 +1,7 @@
 /* eslint-disable max-lines */
 import { db } from "@/db/connection";
 import {
-  articlesViews, badges, casesProgress, casesSolutions, casesViews, documents, uploadedFiles, type User, users, usersToBadges
+  articlesViews, casesProgress, casesViews, documents, uploadedFiles, users, usersToBadges 
 } from "@/db/schema";
 import { env } from "@/env.mjs";
 import { createClickupTask } from "@/lib/clickup/tasks/create-task";
@@ -9,52 +9,19 @@ import { deleteClickupCustomFieldValue } from "@/lib/clickup/tasks/delete-custom
 import { updateClickupCustomField } from "@/lib/clickup/tasks/update-custom-field";
 import { updateClickupTask } from "@/lib/clickup/tasks/update-task";
 import { type ClickupTask } from "@/lib/clickup/types";
-import { clickupCrmCustomField, clickupRequestConfig, getUserCrmData } from "@/lib/clickup/utils";
-import { stripe } from "@/lib/stripe";
-import { type Nullable } from "@/utils/types";
-import { sleep } from "@/utils/utils";
+import { clickupCrmCustomField, getUserCrmData } from "@/lib/clickup/utils";
+import { stripe } from "@/lib/stripe/stripe";
 
 import { createPagesServerClient, type SupabaseClient } from "@supabase/auth-helpers-nextjs";
-import axios, { AxiosError, type AxiosResponse } from "axios";
+import { type AxiosResponse } from "axios";
 import {
-  and,
-  count, countDistinct, eq, getTableColumns, type SQL, sql
+  and, countDistinct, eq, getTableColumns, type SQL 
 } from "drizzle-orm";
 import type { NextApiHandler } from "next";
 import pLimit from "p-limit";
 import type Stripe from "stripe";
 
 const stripeConcurrencyLimit = pLimit(env.STRIPE_SDK_CONCURRENCY_LIMIT);
-
-// eslint-disable-next-line @typescript-eslint/no-unused-vars
-const printAllSettledPromisesSummary = (settledPromises: Array<PromiseSettledResult<unknown>>, actionName: string): void =>
-{
-  const failedPromises = settledPromises.filter((result): result is PromiseRejectedResult => result.status === "rejected");
-  const successfulPromises = settledPromises.filter((result): result is PromiseFulfilledResult<AxiosResponse> => result.status === "fulfilled");
-
-  const errors = failedPromises.map((failedPromise) =>
-  {
-    const error = failedPromise.reason;
-
-    if(error instanceof AxiosError)
-    {
-      console.error(`Error while task'${actionName}' - ${error.response?.status} (${error.response?.statusText}). Response:`, error.response?.data);
-      return error.response;
-    }
-    else
-    {
-      console.error(`Error while task '${actionName}':`, error);
-      return error;
-    }
-  });
-
-  console.info(`Task '${actionName}' finished. Results: ${successfulPromises.length} successful promises, ${failedPromises.length} failed promises`);
-
-  if(failedPromises.length > 0)
-  {
-    console.error(`At least task of action '${actionName}' failed`, errors);
-  }
-};
 
 export const getUsersWithActivityStats = async (query?: SQL) =>
 {
@@ -120,9 +87,41 @@ export const getCrmDataForUser = async (userIdOrData: string | UserWithActivityS
   let subscriptionData: Stripe.Response<Stripe.Subscription> | null = null;
   let defaultPaymentMethod: Stripe.PaymentMethod | null = null;
 
+  if(userSubscriptionId != null)
+  {
+    subscriptionData = await stripe.subscriptions.retrieve(userSubscriptionId);
+
+    const defaultPaymentMethodIdOrObject = subscriptionData.default_payment_method;
+
+    if(defaultPaymentMethodIdOrObject != null)
+    {
+      if(typeof defaultPaymentMethodIdOrObject === "string")
+      {
+        defaultPaymentMethod = await stripe.paymentMethods.retrieve(defaultPaymentMethodIdOrObject);
+      }
+      else
+      {
+        defaultPaymentMethod = defaultPaymentMethodIdOrObject;
+      }
+    }
+  }
+
   if(userStripeCustomerId != null)
   {
-    console.log(`Fetching invoices for user ${user.id}...`);
+    if(defaultPaymentMethod == null)
+    {
+      const customerData = await stripe.customers.retrieve(userStripeCustomerId);
+
+      if(!customerData.deleted)
+      {
+        const defaultPaymentMethodIdOrObject = customerData.invoice_settings.default_payment_method;
+
+        if(defaultPaymentMethodIdOrObject != null)
+        {
+          defaultPaymentMethod = typeof defaultPaymentMethodIdOrObject === "string" ? await stripe.paymentMethods.retrieve(defaultPaymentMethodIdOrObject) : defaultPaymentMethodIdOrObject;
+        }
+      }
+    }
 
     let hasMore = true;
     let lastInvoiceId: string | undefined;
@@ -147,25 +146,6 @@ export const getCrmDataForUser = async (userIdOrData: string | UserWithActivityS
       if(hasMore)
       {
         lastInvoiceId = _invoices.data[_invoices.data.length - 1]?.id;
-      }
-    }
-  }
-
-  if(userSubscriptionId != null)
-  {
-    console.log(`Fetching subscription data for user ${user.id}...`);
-    subscriptionData = await stripe.subscriptions.retrieve(userSubscriptionId);
-    const defaultPaymentMethodIdOrObject = subscriptionData.default_payment_method;
-
-    if(defaultPaymentMethodIdOrObject != null)
-    {
-      if(typeof defaultPaymentMethodIdOrObject === "string")
-      {
-        defaultPaymentMethod = await stripe.paymentMethods.retrieve(defaultPaymentMethodIdOrObject);
-      }
-      else
-      {
-        defaultPaymentMethod = defaultPaymentMethodIdOrObject;
       }
     }
   }
@@ -287,29 +267,6 @@ export const getUpdateUsersCrmDataPromises = ({
 
 const handler: NextApiHandler = async (req, res): Promise<void> =>
 {
-  /* const test = await getUsersWithActivityStats(eq(users.email, "kotti97+10018@web.de"));
-
-  return res.status(200).json(test);*/
-
-  /* const allUsersQuery = await db
-    .select({
-      ...getTableColumns(users),
-      articleIds: sql`array_agg(DISTINCT ${articlesViews.articleId})`,
-      caseIds: sql`array_agg(DISTINCT ${casesViews.caseId})`,
-      viewedArticles: count(articlesViews.articleId),
-      viewedArticlesDistinct: countDistinct(articlesViews.articleId),
-      viewedCases: count(casesViews.caseId),
-      viewedCasesDistinct: countDistinct(casesViews.caseId)
-      // viewedArticles: countDistinct(articlesViews.articleId),
-      // viewedCases: countDistinct(casesViews.caseId)
-    })
-    .from(users)
-    .where(eq(users.email, "kotti97+10018@web.de"))
-    .leftJoin(casesViews, eq(users.id, casesViews.userId))
-    .leftJoin(articlesViews, eq(users.id, articlesViews.userId))
-    .groupBy(users.id)
-  ;*/
-
   if(env.NEXT_PUBLIC_DEPLOYMENT_ENVIRONMENT !== "development")
   {
     return res.status(401).json({ message: "Unauthorized" });

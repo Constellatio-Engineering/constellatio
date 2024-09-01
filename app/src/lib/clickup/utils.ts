@@ -20,6 +20,7 @@ import { allUniversities } from "@/schemas/auth/userData.validation";
 import { type allArticles } from "@/services/content/getAllArticles";
 import { type AllCases } from "@/services/content/getAllCases";
 import { InternalServerError } from "@/utils/serverError";
+import { type Nullable } from "@/utils/types";
 
 import { createPagesServerClient, type SupabaseClient, type User as SupabaseUser } from "@supabase/auth-helpers-nextjs";
 import { type AxiosRequestConfig } from "axios";
@@ -41,7 +42,7 @@ export const clickupUserIds = {
   sven: 36495811
 };
 
-export const clickupContentTaskCustomField = {
+const clickupContentTaskCustomField = {
   caisyId: {
     fieldId: "910257b5-05f5-4d4e-b173-8a7016b331c2",
   },
@@ -704,7 +705,16 @@ export const syncUserToCrm: SyncUserToCrm = async ({ eventType, supabase, userId
   }
 };
 
-export const addUserToCrmUpdateQueue = async (userId: string) =>
+export const addUserToCrmUpdateQueue = async (userId: Nullable<string>) =>
 {
+  if(userId == null)
+  {
+    return;
+  }
+
+  // TODO
+  // It would be better to pass the custom field that needs to be updated instead of the whole user.
+  // ALso, manually calling this function is not a good idea. It should be called automatically, e.g. with a webhook.
+
   await db.insert(updateUserInCrmQueue).values({ userId }).onConflictDoNothing();
 };
