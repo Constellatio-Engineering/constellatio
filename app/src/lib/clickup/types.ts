@@ -37,16 +37,16 @@ type CurrencyCustomFieldConfig = CustomFieldBaseProperties & {
 
 export type CurrencyCustomFieldInsertProps = Pick<CurrencyCustomFieldConfig, "id" | "value">;
 
-type EmojiCustomFieldConfig = CustomFieldBaseProperties & {
-  type: "emoji";
-  type_config: {
-    code_point: string;
-    count: number;
-  };
-  value?: Nullable<number>;
-};
-
-export type EmojiCustomFieldInsertProps = Pick<EmojiCustomFieldConfig, "id" | "value">;
+// type EmojiCustomFieldConfig = CustomFieldBaseProperties & {
+//   type: "emoji";
+//   type_config: {
+//     code_point: string;
+//     count: number;
+//   };
+//   value?: Nullable<number>;
+// };
+//
+// export type EmojiCustomFieldInsertProps = Pick<EmojiCustomFieldConfig, "id" | "value">;
 
 type LabelCustomFieldConfig = CustomFieldBaseProperties & {
   type: "labels";
@@ -57,46 +57,46 @@ type LabelCustomFieldConfig = CustomFieldBaseProperties & {
       name: string;
     }>;
   };
-  value?: Nullable<string[]>;
+  value?: Nullable<Array<Nullable<string>>>;
 };
 
 export type LabelCustomFieldInsertProps = Pick<LabelCustomFieldConfig, "id" | "value">;
 
-type AutomaticProgressCustomFieldConfig = CustomFieldBaseProperties & {
-  type: "progress";
-  type_config: {
-    method: "automatic";
-    tracking: {
-      assigned_comments: boolean;
-      checklists: boolean;
-      subtasks: boolean;
-    };
-  };
-  value?: Nullable<number>;
-};
+// type AutomaticProgressCustomFieldConfig = CustomFieldBaseProperties & {
+//   type: "progress";
+//   type_config: {
+//     method: "automatic";
+//     tracking: {
+//       assigned_comments: boolean;
+//       checklists: boolean;
+//       subtasks: boolean;
+//     };
+//   };
+//   value?: Nullable<number>;
+// };
+//
+// export type AutomaticProgressCustomFieldInsertProps = Pick<AutomaticProgressCustomFieldConfig, "id" | "value">;
 
-export type AutomaticProgressCustomFieldInsertProps = Pick<AutomaticProgressCustomFieldConfig, "id" | "value">;
+// type ManualProgressCustomFieldConfig = CustomFieldBaseProperties & {
+//   type: "progress";
+//   type_config: {
+//     end: number;
+//     method: "manual";
+//     start: number;
+//   };
+//   value?: Nullable<{
+//     current: number;
+//   }>;
+// };
+//
+// export type ManualProgressCustomFieldInsertProps = Pick<ManualProgressCustomFieldConfig, "id" | "value">;
 
-type ManualProgressCustomFieldConfig = CustomFieldBaseProperties & {
-  type: "progress";
-  type_config: {
-    end: number;
-    method: "manual";
-    start: number;
-  };
-  value?: Nullable<{
-    current: number;
-  }>;
-};
-
-export type ManualProgressCustomFieldInsertProps = Pick<ManualProgressCustomFieldConfig, "id" | "value">;
-
-type UrlCustomFieldConfig = CustomFieldBaseProperties & {
-  type: "url";
-  value?: Nullable<string>;
-};
-
-export type UrlCustomFieldInsertProps = Pick<UrlCustomFieldConfig, "id" | "value">;
+// type UrlCustomFieldConfig = CustomFieldBaseProperties & {
+//   type: "url";
+//   value?: Nullable<string>;
+// };
+//
+// export type UrlCustomFieldInsertProps = Pick<UrlCustomFieldConfig, "id" | "value">;
 
 type EmailCustomFieldConfig = CustomFieldBaseProperties & {
   type: "email";
@@ -105,12 +105,12 @@ type EmailCustomFieldConfig = CustomFieldBaseProperties & {
 
 export type EmailCustomFieldInsertProps = Pick<EmailCustomFieldConfig, "id" | "value">;
 
-type PhoneNumberCustomFieldConfig = CustomFieldBaseProperties & {
-  type: "phone";
-  value?: Nullable<string>;
-};
-
-export type PhoneNumberCustomFieldInsertProps = Pick<PhoneNumberCustomFieldConfig, "id" | "value">;
+// type PhoneNumberCustomFieldConfig = CustomFieldBaseProperties & {
+//   type: "phone";
+//   value?: Nullable<string>;
+// };
+//
+// export type PhoneNumberCustomFieldInsertProps = Pick<PhoneNumberCustomFieldConfig, "id" | "value">;
 
 type DateCustomFieldConfig = CustomFieldBaseProperties & {
   type: "date";
@@ -129,19 +129,19 @@ type ShortTextCustomFieldConfig = CustomFieldBaseProperties & {
 
 export type ShortTextCustomFieldInsertProps = Pick<ShortTextCustomFieldConfig, "id" | "value">;
 
-type TextCustomFieldConfig = CustomFieldBaseProperties & {
-  type: "text";
-  value?: Nullable<string>;
-};
+// type TextCustomFieldConfig = CustomFieldBaseProperties & {
+//   type: "text";
+//   value?: Nullable<string>;
+// };
+//
+// export type TextCustomFieldInsertProps = Pick<TextCustomFieldConfig, "id" | "value">;
 
-export type TextCustomFieldInsertProps = Pick<TextCustomFieldConfig, "id" | "value">;
-
-type CheckBoxCustomFieldConfig = CustomFieldBaseProperties & {
-  type: "checkbox";
-  value?: Nullable<boolean>;
-};
-
-export type CheckBoxCustomFieldInsertProps = Pick<CheckBoxCustomFieldConfig, "id" | "value">;
+// type CheckBoxCustomFieldConfig = CustomFieldBaseProperties & {
+//   type: "checkbox";
+//   value?: Nullable<boolean>;
+// };
+//
+// export type CheckBoxCustomFieldInsertProps = Pick<CheckBoxCustomFieldConfig, "id" | "value">;
 
 type NumberCustomFieldConfig = CustomFieldBaseProperties & {
   type: "number";
@@ -150,32 +150,32 @@ type NumberCustomFieldConfig = CustomFieldBaseProperties & {
 
 export type NumberCustomFieldInsertProps = Pick<NumberCustomFieldConfig, "id" | "value">;
 
-type LocationCustomFieldConfig = CustomFieldBaseProperties & {
-  type: "location";
-  value?: Nullable<{
-    formatted_address: string;
-    location: {
-      lat: number;
-      lng: number;
-    };
-  }>;
-};
-
-export type LocationCustomFieldInsertProps = Pick<LocationCustomFieldConfig, "id" | "value">;
+// type LocationCustomFieldConfig = CustomFieldBaseProperties & {
+//   type: "location";
+//   value?: Nullable<{
+//     formatted_address: string;
+//     location: {
+//       lat: number;
+//       lng: number;
+//     };
+//   }>;
+// };
+//
+// export type LocationCustomFieldInsertProps = Pick<LocationCustomFieldConfig, "id" | "value">;
 
 type CustomField =
   | DropDownCustomFieldConfig
   | EmailCustomFieldConfig
   | DateCustomFieldConfig
   | NumberCustomFieldConfig
-  // | CurrencyCustomFieldConfig
+  | LabelCustomFieldConfig
+  | CurrencyCustomFieldConfig
+  | ShortTextCustomFieldConfig
   // | EmojiCustomFieldConfig
-  // | LabelCustomFieldConfig
   // | AutomaticProgressCustomFieldConfig
   // | ManualProgressCustomFieldConfig
   // | UrlCustomFieldConfig
   // | PhoneNumberCustomFieldConfig
-  // | ShortTextCustomFieldConfig
   // | TextCustomFieldConfig
   // | CheckBoxCustomFieldConfig
   // | LocationCustomFieldConfig
@@ -186,14 +186,14 @@ export type CustomFieldInsert =
   | EmailCustomFieldInsertProps
   | DateCustomFieldInsertProps
   | NumberCustomFieldInsertProps
-  // | CurrencyCustomFieldInsertProps
+  | LabelCustomFieldInsertProps
+  | CurrencyCustomFieldInsertProps
+  | ShortTextCustomFieldInsertProps
   // | EmojiCustomFieldInsertProps
-  // | LabelCustomFieldInsertProps
   // | AutomaticProgressCustomFieldInsertProps
   // | ManualProgressCustomFieldInsertProps
   // | UrlCustomFieldInsertProps
   // | PhoneNumberCustomFieldInsertProps
-  // | ShortTextCustomFieldInsertProps
   // | TextCustomFieldInsertProps
   // | CheckBoxCustomFieldInsertProps
   // | LocationCustomFieldInsertProps
@@ -225,6 +225,18 @@ export type ClickupTaskCreate = {
 export type ClickupTask = Omit<ClickupTaskCreate, "custom_fields"> & {
   custom_fields?: CustomField[];
   id: string;
+};
+
+export type ClickupCreateChecklistResponse = {
+  checklist: {
+    id: string;
+    items: unknown[];
+    name: string;
+    orderindex: number;
+    resolved: number;
+    task_id: string;
+    unresolved: number;
+  };
 };
 
 export type ClickUpFindTaskParams = {

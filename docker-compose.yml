@@ -5,8 +5,8 @@ version: '3.9'
 services:
 
   stripe-webhook-listener:
-    image: stripe/stripe-cli
-    command: "listen --api-key ${STRIPE_API_KEY} --device-name ${STRIPE_DEVICE_NAME} --forward-to http://host.docker.internal:3010/api/integration/webhooks/stripe/subscription"
+    image: stripe/stripe-cli:v1.21.3
+    command: "listen --api-key ${STRIPE_API_KEY} --device-name ${STRIPE_DEVICE_NAME} --forward-to http://host.docker.internal:3010/api/integration/webhooks/stripe"
     env_file:
       - stripe/.env.local
     container_name: stripe-webhook-listener

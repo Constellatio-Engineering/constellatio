@@ -64,6 +64,20 @@
       "when": 1722244386977,
       "tag": "0013_blushing_grandmaster",
       "breakpoints": true
+    },
+    {
+      "idx": 14,
+      "version": "6",
+      "when": 1725229823922,
+      "tag": "0014_common_proudstar",
+      "breakpoints": true
+    },
+    {
+      "idx": 15,
+      "version": "6",
+      "when": 1725229824462,
+      "tag": "0015_sharp_leo",
+      "breakpoints": true
     }
   ]
 }

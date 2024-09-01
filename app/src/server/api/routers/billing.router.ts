@@ -1,7 +1,7 @@
 import { db } from "@/db/connection";
 import { users } from "@/db/schema";
 import { env } from "@/env.mjs";
-import { stripe } from "@/lib/stripe";
+import { stripe } from "@/lib/stripe/stripe";
 import { createTRPCRouter, protectedProcedure } from "@/server/api/trpc";
 import { appPaths, authPaths } from "@/utils/paths";
 import { InternalServerError } from "@/utils/serverError";

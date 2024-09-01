@@ -1,58 +1,79 @@
 /* eslint-disable max-lines */
 import { db } from "@/db/connection";
-import { type User } from "@/db/schema";
+import {
+  articlesViews, casesProgress, casesViews, documents, uploadedFiles, users, usersToBadges 
+} from "@/db/schema";
 import { env } from "@/env.mjs";
 import { createClickupTask } from "@/lib/clickup/tasks/create-task";
 import { deleteClickupCustomFieldValue } from "@/lib/clickup/tasks/delete-custom-field-value";
 import { updateClickupCustomField } from "@/lib/clickup/tasks/update-custom-field";
 import { updateClickupTask } from "@/lib/clickup/tasks/update-task";
 import { type ClickupTask } from "@/lib/clickup/types";
-import { clickupCrmCustomField, clickupRequestConfig, getUserCrmData } from "@/lib/clickup/utils";
-import { stripe } from "@/lib/stripe";
-import { type Nullable } from "@/utils/types";
-import { sleep } from "@/utils/utils";
+import { clickupCrmCustomField, getUserCrmData } from "@/lib/clickup/utils";
+import { stripe } from "@/lib/stripe/stripe";
 
 import { createPagesServerClient, type SupabaseClient } from "@supabase/auth-helpers-nextjs";
-import axios, { AxiosError, type AxiosResponse } from "axios";
+import { type AxiosResponse } from "axios";
+import {
+  and, countDistinct, eq, getTableColumns, type SQL 
+} from "drizzle-orm";
 import type { NextApiHandler } from "next";
 import pLimit from "p-limit";
 import type Stripe from "stripe";
 
 const stripeConcurrencyLimit = pLimit(env.STRIPE_SDK_CONCURRENCY_LIMIT);
 
-// eslint-disable-next-line @typescript-eslint/no-unused-vars
-const printAllSettledPromisesSummary = (settledPromises: Array<PromiseSettledResult<unknown>>, actionName: string): void =>
+export const getUsersWithActivityStats = async (query?: SQL) =>
 {
-  const failedPromises = settledPromises.filter((result): result is PromiseRejectedResult => result.status === "rejected");
-  const successfulPromises = settledPromises.filter((result): result is PromiseFulfilledResult<AxiosResponse> => result.status === "fulfilled");
-
-  const errors = failedPromises.map((failedPromise) =>
-  {
-    const error = failedPromise.reason;
-
-    if(error instanceof AxiosError)
-    {
-      console.error(`Error while task'${actionName}' - ${error.response?.status} (${error.response?.statusText}). Response:`, error.response?.data);
-      return error.response;
-    }
-    else
-    {
-      console.error(`Error while task '${actionName}':`, error);
-      return error;
-    }
-  });
-
-  console.info(`Task '${actionName}' finished. Results: ${successfulPromises.length} successful promises, ${failedPromises.length} failed promises`);
-
-  if(failedPromises.length > 0)
-  {
-    console.error(`At least task of action '${actionName}' failed`, errors);
-  }
+  return db
+    .select({
+      ...getTableColumns(users),
+      completedBadges: countDistinct(usersToBadges.badgeId),
+      completedCases: countDistinct(casesProgress.caseId),
+      createdDocuments: countDistinct(documents.id),
+      uploadedFiles: countDistinct(uploadedFiles.id),
+      viewedArticles: countDistinct(articlesViews.articleId),
+      viewedCases: countDistinct(casesViews.caseId)
+    })
+    .from(users)
+    .where(query)
+    .leftJoin(casesViews, eq(users.id, casesViews.userId))
+    .leftJoin(articlesViews, eq(users.id, articlesViews.userId))
+    .leftJoin(documents, eq(users.id, documents.userId))
+    .leftJoin(uploadedFiles, eq(users.id, uploadedFiles.userId))
+    .leftJoin(usersToBadges, eq(users.id, usersToBadges.userId))
+    .leftJoin(casesProgress,
+      and(
+        eq(casesProgress.progressState, "completed"),
+        eq(users.id, casesProgress.userId)
+      )
+    )
+    .groupBy(users.id);
 };
 
+export type UserWithActivityStats = Awaited<ReturnType<typeof getUsersWithActivityStats>>[number];
+
 // eslint-disable-next-line @typescript-eslint/explicit-function-return-type
-export const getCrmDataForUser = async (user: User, supabaseServerClient: SupabaseClient<never, "public", never>) =>
+export const getCrmDataForUser = async (userIdOrData: string | UserWithActivityStats, supabaseServerClient: SupabaseClient<never, "public", never>) =>
 {
+  let user: UserWithActivityStats;
+
+  if(typeof userIdOrData === "string")
+  {
+    const [getUserDataResult] = await getUsersWithActivityStats(eq(users.id, userIdOrData));
+
+    if(getUserDataResult == null)
+    {
+      return null;
+    }
+
+    user = getUserDataResult;
+  }
+  else
+  {
+    user = userIdOrData;
+  }
+
   const { data: { user: supabaseUserData } } = await supabaseServerClient.auth.admin.getUserById(user.id);
 
   if(!supabaseUserData)
@@ -61,15 +82,77 @@ export const getCrmDataForUser = async (user: User, supabaseServerClient: Supaba
   }
 
   const userSubscriptionId = user.subscriptionId;
+  const userStripeCustomerId = user.stripeCustomerId;
+  const allInvoices: Stripe.Invoice[] = [];
   let subscriptionData: Stripe.Response<Stripe.Subscription> | null = null;
+  let defaultPaymentMethod: Stripe.PaymentMethod | null = null;
 
   if(userSubscriptionId != null)
   {
-    console.log(`Fetching subscription data for user ${user.id}...`);
     subscriptionData = await stripe.subscriptions.retrieve(userSubscriptionId);
+
+    const defaultPaymentMethodIdOrObject = subscriptionData.default_payment_method;
+
+    if(defaultPaymentMethodIdOrObject != null)
+    {
+      if(typeof defaultPaymentMethodIdOrObject === "string")
+      {
+        defaultPaymentMethod = await stripe.paymentMethods.retrieve(defaultPaymentMethodIdOrObject);
+      }
+      else
+      {
+        defaultPaymentMethod = defaultPaymentMethodIdOrObject;
+      }
+    }
+  }
+
+  if(userStripeCustomerId != null)
+  {
+    if(defaultPaymentMethod == null)
+    {
+      const customerData = await stripe.customers.retrieve(userStripeCustomerId);
+
+      if(!customerData.deleted)
+      {
+        const defaultPaymentMethodIdOrObject = customerData.invoice_settings.default_payment_method;
+
+        if(defaultPaymentMethodIdOrObject != null)
+        {
+          defaultPaymentMethod = typeof defaultPaymentMethodIdOrObject === "string" ? await stripe.paymentMethods.retrieve(defaultPaymentMethodIdOrObject) : defaultPaymentMethodIdOrObject;
+        }
+      }
+    }
+
+    let hasMore = true;
+    let lastInvoiceId: string | undefined;
+
+    while(hasMore) 
+    {
+      const _invoices = await stripe.invoices.list({
+        customer: userStripeCustomerId,
+        limit: 100,
+        starting_after: lastInvoiceId,
+        status: "paid"
+      });
+
+      if(_invoices == null)
+      {
+        break;
+      }
+
+      allInvoices.push(..._invoices.data);
+      hasMore = _invoices.has_more;
+
+      if(hasMore)
+      {
+        lastInvoiceId = _invoices.data[_invoices.data.length - 1]?.id;
+      }
+    }
   }
 
   const crmData = getUserCrmData({
+    allInvoices,
+    defaultPaymentMethod,
     subscriptionData,
     supabaseUserData,
     user
@@ -87,7 +170,7 @@ export const getUpdateUsersCrmDataPromises = ({
 }: {
   existingCrmUser: ClickupTask;
   userWithCrmData: NonNullable<Awaited<ReturnType<typeof getCrmDataForUser>>>;
-}) => // eslint-disable-line @typescript-eslint/explicit-function-return-type
+}) =>
 {
   const updateUsersPromises: Array<Promise<AxiosResponse>> = [];
 
@@ -140,8 +223,13 @@ export const getUpdateUsersCrmDataPromises = ({
         }
         break;
       }
+      case "labels":
+      {
+        throw new Error("Updating labels is not supported yet");
+      }
       case "number":
       case "date":
+      case "currency":
       {
         if(field.value == null && existingCrmField.value != null)
         {
@@ -160,6 +248,7 @@ export const getUpdateUsersCrmDataPromises = ({
         break;
       }
       case "email":
+      case "short_text":
       {
         if(existingCrmField.value !== field.value)
         {
@@ -178,29 +267,17 @@ export const getUpdateUsersCrmDataPromises = ({
 
 const handler: NextApiHandler = async (req, res): Promise<void> =>
 {
-  // TODO: This is not used anymore, remove it later if it's not needed
-
-  if(req.headers.authorization !== `Bearer ${env.CRON_SECRET}`)
+  if(env.NEXT_PUBLIC_DEPLOYMENT_ENVIRONMENT !== "development")
   {
     return res.status(401).json({ message: "Unauthorized" });
   }
-
-  if(env.NEXT_PUBLIC_DEPLOYMENT_ENVIRONMENT !== "production" && env.NEXT_PUBLIC_DEPLOYMENT_ENVIRONMENT !== "development")
-  {
-    console.log("Skipping cronjob in non-production or non-development environment");
-    return res.status(200).json({ message: "Skipped in non-production or non-development environment" });
-  }
-
-  return res.status(400).json({ message: "Not implemented" });
-
-  console.log("----- [Cronjob] Sync Users to Clickup -----");
 
   const supabaseServerClient = createPagesServerClient({ req, res }, {
     supabaseKey: env.SUPABASE_SERVICE_ROLE_KEY,
     supabaseUrl: env.NEXT_PUBLIC_SUPABASE_URL
   });
 
-  const allExistingCrmUsers: Array<{
+  /* const allExistingCrmUsers: Array<{
     email: Nullable<unknown>;
     name: string;
     userId: Nullable<unknown>;
@@ -214,7 +291,6 @@ const handler: NextApiHandler = async (req, res): Promise<void> =>
     console.log(`Fetching CRM users page ${page}...`);
     const getUsersResult = await axios.get(`${env.CLICKUP_API_ENDPOINT}/list/${env.CLICKUP_CRM_LIST_ID}/task?page=${page}`, clickupRequestConfig);
     const fetchedUsers = getUsersResult.data.tasks as ClickupTask[];
-    console.log("getUsersResult", getUsersResult.data, getUsersResult.data.last_page, fetchedUsers.length);
     allExistingCrmUsers.push(...fetchedUsers.map(task => ({
       email: task.custom_fields?.find(field => field.id === clickupCrmCustomField.email.fieldId)?.value,
       name: task.name,
@@ -224,41 +300,29 @@ const handler: NextApiHandler = async (req, res): Promise<void> =>
 
     if(hasMore)
     {
+      console.log("Fetching next page...");
       page++;
     }
   }
   while(hasMore);
 
-  console.log("fetched " + allExistingCrmUsers.length + " customers");
+  console.log("finished. fetched " + allExistingCrmUsers.length + " customers");*/
 
-  return res.status(200).json(allExistingCrmUsers);
-
-  const allUsers = await db.query.users.findMany();
-
-  // Comment this in if you want to delete all users in the CRM list
-
-  // This does not fetch all tasks/customers since the ClickUp API only returns a maximum of 100 tasks per request. Pagination is not implemented yet.
-  // const existingCrmUsers = await axios.get(`${env.CLICKUP_API_ENDPOINT}/list/${env.CLICKUP_CRM_LIST_ID}/task`, clickupRequestConfig);
-  // const deleteUsersPromises = existingCrmUsers.data.tasks
-  //   .map(async (task: ClickupTask) => stripeConcurrencyLimit(async () =>
-  //   {
-  //     console.log(`Deleting user ${task.id}...`);
-  //     return axios.delete(`${env.CLICKUP_API_ENDPOINT}/task/${task.id}`, clickupRequestConfig);
-  //   }))
-  //   .filter(Boolean);
-  //
-  // await Promise.allSettled(deleteUsersPromises);
-  //
-  // return res.status(200).json({ message: "Finished", ...existingCrmUsers.data });
+  // const allUsers = await db.query.users.findMany();
+  const allUsers = await getUsersWithActivityStats(eq(users.email, "kotti97+310824@web.de"));
 
   const getCrmDataForAllUsersPromises = allUsers
     .map(async user => stripeConcurrencyLimit(async () => getCrmDataForUser(user, supabaseServerClient)))
     .filter(Boolean);
-  const newUsers = (await Promise.all(getCrmDataForAllUsersPromises)).filter(Boolean);
+  const usersWithCrmData = (await Promise.all(getCrmDataForAllUsersPromises)).filter(Boolean);
 
-  console.log(`Fetched ${newUsers.length} new users`);
+  const createTaskResult = await createClickupTask(env.CLICKUP_CRM_LIST_ID, usersWithCrmData[0]!.crmData);
 
-  for(let i = 0; i < newUsers.length; i++)
+  // console.log(`Fetched ${usersWithCrmData.length} users`);
+
+  console.log("created task", createTaskResult);
+
+  /* for(let i = 0; i < newUsers.length; i++)
   {
     const user = newUsers[i]!;
     await createClickupTask(env.CLICKUP_CRM_LIST_ID, user.crmData);
@@ -270,11 +334,11 @@ const handler: NextApiHandler = async (req, res): Promise<void> =>
       console.log(`Created ${i} new users - Pause`);
       await sleep(61000);
     }
-  }
+  }*/
 
-  console.log("Finished creating new users");
+  // return res.status(200).json({ message: "Finished" });
 
-  return res.status(200).json({ message: "Finished" });
+  return res.status(200).json(usersWithCrmData);
 };
 
 export default handler;
