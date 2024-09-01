@@ -24,8 +24,6 @@ const crmRelevantEvents: Array<Stripe.Event["type"]> = [
   "customer.subscription.paused",
   "customer.subscription.updated",
   "customer.subscription.deleted",
-  "customer.subscription.pending_update_expired",
-  "customer.subscription.pending_update_applied",
   "invoice.paid",
   "customer.updated",
   "payment_method.updated",
