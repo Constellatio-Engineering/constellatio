@@ -1,4 +1,6 @@
 /* eslint-disable max-lines */
+import { db } from "@/db/connection";
+import { updateUserInCrmQueue } from "@/db/schema";
 import { env } from "@/env.mjs";
 import { createClickupTask } from "@/lib/clickup/tasks/create-task";
 import { findClickupTask } from "@/lib/clickup/tasks/find-task";
@@ -630,6 +632,7 @@ const updateUserCrmData = async (userId: string, supabaseServerClient: SupabaseC
 
   if(!existingCrmUser)
   {
+    console.log(`User ${userId} not found in CRM. Creating new task...`);
     await createClickupTask(env.CLICKUP_CRM_LIST_ID, userWithCrmData.crmData);
     return;
   }
@@ -699,4 +702,9 @@ export const syncUserToCrm: SyncUserToCrm = async ({ eventType, supabase, userId
   {
     console.log("Something went wrong while syncing user to crm", e);
   }
+};
+
+export const addUserToCrmUpdateQueue = async (userId: string) =>
+{
+  await db.insert(updateUserInCrmQueue).values({ userId }).onConflictDoNothing();
 };

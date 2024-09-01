@@ -2,7 +2,7 @@ import { db } from "@/db/connection";
 import {
   imageFileExtensions, imageFileMimeTypes, type ProfilePictureInsert, profilePictures, users 
 } from "@/db/schema";
-import { syncUserToCrm } from "@/lib/clickup/utils";
+import { addUserToCrmUpdateQueue, syncUserToCrm } from "@/lib/clickup/utils";
 import { stripe } from "@/lib/stripe";
 import { updateUserDetailsSchema } from "@/schemas/auth/updateUserDetails.schema";
 import { generateCreateSignedUploadUrlSchema } from "@/schemas/uploads/createSignedUploadUrl.schema";
@@ -72,7 +72,7 @@ export const usersRouter = createTRPCRouter({
     }),
   updateUserDetails: protectedProcedure
     .input(updateUserDetailsSchema)
-    .mutation(async ({ ctx: { supabaseServerClient, userId }, input }) =>
+    .mutation(async ({ ctx: { userId }, input }) =>
     {
       const [updatedUser] = await db.update(users).set(input).where(eq(users.id, userId)).returning();
 
@@ -81,13 +81,6 @@ export const usersRouter = createTRPCRouter({
         await stripe.customers.update(updatedUser.stripeCustomerId, { email: input.email });
       }
 
-      await syncUserToCrm({
-        eventType: "userUpdated",
-        supabase: {
-          isServerClientInitialized: true,
-          supabaseServerClient,
-        },
-        userId
-      });
+      await addUserToCrmUpdateQueue(userId);
     })
 });

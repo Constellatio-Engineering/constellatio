@@ -93,7 +93,7 @@ export const getCrmDataForUser = async (userIdOrData: string | UserWithActivityS
 
   if(typeof userIdOrData === "string")
   {
-    const [getUserDataResult] = await getUsersWithActivityStats(eq(users.email, userIdOrData));
+    const [getUserDataResult] = await getUsersWithActivityStats(eq(users.id, userIdOrData));
 
     if(getUserDataResult == null)
     {

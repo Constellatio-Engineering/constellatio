@@ -1,7 +1,7 @@
 import { db } from "@/db/connection";
-import { referrals, updateUserInCrmQueue, type UserInsert, users } from "@/db/schema";
+import { referrals, type UserInsert, users } from "@/db/schema";
 import { env } from "@/env.mjs";
-import { syncUserToCrm } from "@/lib/clickup/utils";
+import { addUserToCrmUpdateQueue } from "@/lib/clickup/utils";
 import { stripe } from "@/lib/stripe";
 import { registrationFormSchema } from "@/schemas/auth/registrationForm.schema";
 import { addBadgeForUser } from "@/server/api/services/badges.services";
@@ -89,16 +89,7 @@ export const authenticationRouter = createTRPCRouter({
         };
 
         await db.insert(users).values(userToInsert);
-        // await db.insert(updateUserInCrmQueue).values({ userId });
-
-        await syncUserToCrm({
-          eventType: "userCreated",
-          supabase: {
-            isServerClientInitialized: true,
-            supabaseServerClient,
-          },
-          userId
-        });
+        await addUserToCrmUpdateQueue(userId);
 
         if(input.refCode) 
         {

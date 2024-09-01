@@ -659,3 +659,11 @@ export const referralBalances = pgTable("ReferralBalance", {
 
 export type ReferralBalanceInsert = InferInsertModel<typeof referralBalances>;
 export type ReferralBalance = InferSelectModel<typeof referralBalances>;
+
+export const updateUserInCrmQueue = pgTable("UpdateUserInCrmQueue", {
+  userId: uuid("UserId").references(() => users.id, { onDelete: "cascade" }).notNull().unique(),
+  createdAt: timestamp("CreatedAt").defaultNow().notNull(),
+});
+
+export type UpdateUserInCrmQueueInsert = InferInsertModel<typeof updateUserInCrmQueue>;
+export type UpdateUserInCrmQueue = InferSelectModel<typeof updateUserInCrmQueue>;

@@ -1,7 +1,7 @@
 import { db } from "@/db/connection";
 import { users } from "@/db/schema";
 import { env } from "@/env.mjs";
-import { syncUserToCrm } from "@/lib/clickup/utils";
+import { addUserToCrmUpdateQueue } from "@/lib/clickup/utils";
 import { stripe } from "@/lib/stripe";
 import { InternalServerError } from "@/utils/serverError";
 
@@ -77,15 +77,7 @@ const handler: NextApiHandler = async (req, res) =>
     })
     .where(eq(users.stripeCustomerId, stripeCustomerId));
 
-  await syncUserToCrm({
-    eventType: "userUpdated",
-    supabase: {
-      isServerClientInitialized: false,
-      req,
-      res
-    },
-    userId: user.id
-  });
+  await addUserToCrmUpdateQueue(user.id);
 
   return res.send({ success: true });
 };
