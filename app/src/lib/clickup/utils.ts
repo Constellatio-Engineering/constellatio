@@ -707,6 +707,11 @@ export const syncUserToCrm: SyncUserToCrm = async ({ eventType, supabase, userId
 
 export const addUserToCrmUpdateQueue = async (userId: Nullable<string>) =>
 {
+  if(!env.SYNC_USERS_TO_CRM)
+  {
+    return;
+  }
+
   if(userId == null)
   {
     return;
