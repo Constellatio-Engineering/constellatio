@@ -14,6 +14,11 @@ const handler: NextApiHandler = async (req, res): Promise<void> =>
     return res.status(401).json({ message: "Unauthorized" });
   }
 
+  if(!env.SYNC_USERS_TO_CRM)
+  {
+    return res.status(200).json({ message: "Syncing users to CRM is disabled in this environment" });
+  }
+
   console.log("----- [Cronjob] Update Search Indexes -----");
 
   const usersToUpdate = await db.query.updateUserInCrmQueue.findMany();
