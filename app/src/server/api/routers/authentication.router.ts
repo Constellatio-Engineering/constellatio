@@ -1,5 +1,5 @@
 import { db } from "@/db/connection";
-import { referrals, type UserInsert, users } from "@/db/schema";
+import { referrals, updateUserInCrmQueue, type UserInsert, users } from "@/db/schema";
 import { env } from "@/env.mjs";
 import { syncUserToCrm } from "@/lib/clickup/utils";
 import { stripe } from "@/lib/stripe";
@@ -88,12 +88,8 @@ export const authenticationRouter = createTRPCRouter({
           university: input.university,
         };
 
-        const [user] = await db.insert(users).values(userToInsert).returning();
-
-        if(!user)
-        {
-          throw new InternalServerError(new Error("User was null after insertion. This should not happen and must be investigated."));
-        }
+        await db.insert(users).values(userToInsert);
+        // await db.insert(updateUserInCrmQueue).values({ userId });
 
         await syncUserToCrm({
           eventType: "userCreated",
@@ -101,7 +97,7 @@ export const authenticationRouter = createTRPCRouter({
             isServerClientInitialized: true,
             supabaseServerClient,
           },
-          user
+          userId
         });
 
         if(input.refCode) 
@@ -109,16 +105,17 @@ export const authenticationRouter = createTRPCRouter({
           const referral = await db.query.referralCodes.findFirst({
             where: eq(referrals.code, input.refCode)
           });
-          if(referral && referral.userId) 
+
+          if(referral?.userId)
           {
             await db.insert(referrals).values({
               code: input.refCode,
               paid: false,
-              referredUserId: user.id,
-              referringUserId: referral!.userId,
+              referredUserId: userId,
+              referringUserId: referral.userId,
             });
 
-            // TODO: Here can a emediate discount be applied
+            // TODO: An immediate discount can be applied here
           }
         }
       }

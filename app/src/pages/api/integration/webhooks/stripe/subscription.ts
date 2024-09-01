@@ -84,7 +84,7 @@ const handler: NextApiHandler = async (req, res) =>
       req,
       res
     },
-    user 
+    userId: user.id
   });
 
   return res.send({ success: true });

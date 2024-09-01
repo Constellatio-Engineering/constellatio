@@ -610,21 +610,16 @@ export const getUserCrmData: GetUserCrmData = ({
   });
 };
 
-const updateUserCrmData = async (user: UserWithActivityStats | undefined, supabaseServerClient: SupabaseClient) =>
+const updateUserCrmData = async (userId: string, supabaseServerClient: SupabaseClient) =>
 {
-  if(!user)
-  {
-    throw new InternalServerError(new Error("user was null when trying to update his crm data. This should not happen and must be investigated."));
-  }
-
-  const userWithCrmData = await getCrmDataForUser(user, supabaseServerClient);
+  const userWithCrmData = await getCrmDataForUser(userId, supabaseServerClient);
 
   if(!userWithCrmData)
   {
     throw new InternalServerError(new Error("userWithCrmData was null after getCrmDataForUser. This should not happen and must be investigated."));
   }
 
-  const findCrmUserResult = await getClickupCrmUserByUserId(user.id);
+  const findCrmUserResult = await getClickupCrmUserByUserId(userId);
 
   if(findCrmUserResult.data?.tasks.length > 1)
   {
@@ -652,19 +647,13 @@ type SyncUserToCrm = (params: {
     req: NextApiRequest;
     res: NextApiResponse;
   };
-  user: UserWithActivityStats | undefined;
+  userId: string;
 }) => Promise<void>;
 
-export const syncUserToCrm: SyncUserToCrm = async ({ eventType, supabase, user }) =>
+export const syncUserToCrm: SyncUserToCrm = async ({ eventType, supabase, userId }) =>
 {
   if(!env.SYNC_USERS_TO_CRM)
   {
-    return;
-  }
-
-  if(!user)
-  {
-    console.error("user was null when trying to sync user to crm. This should not happen and must be investigated.");
     return;
   }
 
@@ -688,7 +677,7 @@ export const syncUserToCrm: SyncUserToCrm = async ({ eventType, supabase, user }
     {
       case "userCreated":
       {
-        const userCrmData = await getCrmDataForUser(user, supabaseServerClient);
+        const userCrmData = await getCrmDataForUser(userId, supabaseServerClient);
 
         if(!userCrmData)
         {
@@ -701,7 +690,7 @@ export const syncUserToCrm: SyncUserToCrm = async ({ eventType, supabase, user }
       }
       case "userUpdated":
       {
-        await updateUserCrmData(user, supabaseServerClient);
+        await updateUserCrmData(userId, supabaseServerClient);
         break;
       }
     }

@@ -87,7 +87,7 @@ export const usersRouter = createTRPCRouter({
           isServerClientInitialized: true,
           supabaseServerClient,
         },
-        user: updatedUser 
+        userId
       });
     })
 });

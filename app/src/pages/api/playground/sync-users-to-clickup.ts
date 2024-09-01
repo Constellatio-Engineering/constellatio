@@ -87,8 +87,26 @@ export const getUsersWithActivityStats = async (query?: SQL) =>
 export type UserWithActivityStats = Awaited<ReturnType<typeof getUsersWithActivityStats>>[number];
 
 // eslint-disable-next-line @typescript-eslint/explicit-function-return-type
-export const getCrmDataForUser = async (user: UserWithActivityStats, supabaseServerClient: SupabaseClient<never, "public", never>) =>
+export const getCrmDataForUser = async (userIdOrData: string | UserWithActivityStats, supabaseServerClient: SupabaseClient<never, "public", never>) =>
 {
+  let user: UserWithActivityStats;
+
+  if(typeof userIdOrData === "string")
+  {
+    const [getUserDataResult] = await getUsersWithActivityStats(eq(users.email, userIdOrData));
+
+    if(getUserDataResult == null)
+    {
+      return null;
+    }
+
+    user = getUserDataResult;
+  }
+  else
+  {
+    user = userIdOrData;
+  }
+
   const { data: { user: supabaseUserData } } = await supabaseServerClient.auth.admin.getUserById(user.id);
 
   if(!supabaseUserData)
@@ -172,7 +190,7 @@ export const getUpdateUsersCrmDataPromises = ({
 }: {
   existingCrmUser: ClickupTask;
   userWithCrmData: NonNullable<Awaited<ReturnType<typeof getCrmDataForUser>>>;
-}) => // eslint-disable-line @typescript-eslint/explicit-function-return-type
+}) =>
 {
   const updateUsersPromises: Array<Promise<AxiosResponse>> = [];
 
@@ -225,8 +243,13 @@ export const getUpdateUsersCrmDataPromises = ({
         }
         break;
       }
+      case "labels":
+      {
+        throw new Error("Updating labels is not supported yet");
+      }
       case "number":
       case "date":
+      case "currency":
       {
         if(field.value == null && existingCrmField.value != null)
         {
@@ -245,6 +268,7 @@ export const getUpdateUsersCrmDataPromises = ({
         break;
       }
       case "email":
+      case "short_text":
       {
         if(existingCrmField.value !== field.value)
         {
