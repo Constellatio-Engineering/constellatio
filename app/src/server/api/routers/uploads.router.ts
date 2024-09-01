@@ -3,6 +3,7 @@ import { db } from "@/db/connection";
 import {
   fileExtensions, fileMimeTypes, type UploadedFileInsert, uploadedFiles
 } from "@/db/schema";
+import { addUserToCrmUpdateQueue } from "@/lib/clickup/utils";
 import { meiliSearchAdmin } from "@/lib/meilisearch";
 import { addUploadSchema } from "@/schemas/uploads/addUpload.schema";
 import { generateCreateSignedUploadUrlSchema } from "@/schemas/uploads/createSignedUploadUrl.schema";
@@ -127,6 +128,7 @@ export const uploadsRouter = createTRPCRouter({
       };
 
       const insertResult = await db.insert(uploadedFiles).values(uploadInsert).returning();
+      await addUserToCrmUpdateQueue(userId);
 
       await addBadgeForUser({ badgeIdentifier: "ugc-1", userId });
 

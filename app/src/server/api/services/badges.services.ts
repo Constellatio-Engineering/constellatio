@@ -1,5 +1,6 @@
 import { db } from "@/db/connection";
 import { type BadgeIdentifier, badges, usersToBadges } from "@/db/schema";
+import { addUserToCrmUpdateQueue } from "@/lib/clickup/utils";
 import { InternalServerError } from "@/utils/serverError";
 
 import { eq } from "drizzle-orm";
@@ -21,4 +22,5 @@ export const addBadgeForUser: AddBadgeForUser = async ({ badgeIdentifier, userId
   }
 
   await db.insert(usersToBadges).values({ badgeId: badge.id, userId, }).onConflictDoNothing();
+  await addUserToCrmUpdateQueue(userId);
 };

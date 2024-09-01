@@ -1,5 +1,5 @@
 import { env } from "@/env.mjs";
-import { stripe } from "@/lib/stripe";
+import { stripe } from "@/lib/stripe/stripe";
 import { sleep } from "@/utils/utils";
 
 import type { NextApiHandler } from "next";
