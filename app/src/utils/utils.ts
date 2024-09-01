@@ -1,4 +1,5 @@
 /* eslint-disable import/no-unused-modules */
+import { AxiosError, type AxiosResponse } from "axios";
 import { v4 as uuidV4 } from "uuid";
 
 export const sleep = async (ms: number): Promise<void> => new Promise(resolve => setTimeout(resolve, ms));
@@ -140,4 +141,34 @@ export const scrollTo = (element: HTMLElement, offset = 100): void =>
 {
   const y = element.getBoundingClientRect().top + window.scrollY - offset;
   window.scrollTo({ behavior: "smooth", top: y });
+};
+
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
+const printAllSettledPromisesSummary = (settledPromises: Array<PromiseSettledResult<unknown>>, actionName: string): void =>
+{
+  const failedPromises = settledPromises.filter((result): result is PromiseRejectedResult => result.status === "rejected");
+  const successfulPromises = settledPromises.filter((result): result is PromiseFulfilledResult<AxiosResponse> => result.status === "fulfilled");
+
+  const errors = failedPromises.map((failedPromise) =>
+  {
+    const error = failedPromise.reason;
+
+    if(error instanceof AxiosError)
+    {
+      console.error(`Error while task'${actionName}' - ${error.response?.status} (${error.response?.statusText}). Response:`, error.response?.data);
+      return error.response;
+    }
+    else
+    {
+      console.error(`Error while task '${actionName}':`, error);
+      return error;
+    }
+  });
+
+  console.info(`Task '${actionName}' finished. Results: ${successfulPromises.length} successful promises, ${failedPromises.length} failed promises`);
+
+  if(failedPromises.length > 0)
+  {
+    console.error(`At least task of action '${actionName}' failed`, errors);
+  }
 };

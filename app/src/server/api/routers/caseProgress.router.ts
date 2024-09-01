@@ -2,6 +2,7 @@ import { db } from "@/db/connection";
 import {
   type CaseProgress, casesProgress, casesSolutions, gamesProgress
 } from "@/db/schema";
+import { addUserToCrmUpdateQueue } from "@/lib/clickup/utils";
 import { getCaseProgressSchema } from "@/schemas/caseProgress/getCaseProgress.schema";
 import { getCasesProgressSchema } from "@/schemas/caseProgress/getCasesProgress.schema";
 import { getSubmittedCaseSolutionSchema } from "@/schemas/caseProgress/getSubmittedCaseSolution.schema";
@@ -117,6 +118,8 @@ export const caseProgressRouter = createTRPCRouter({
         )
       );
 
+      await addUserToCrmUpdateQueue(userId);
+
       return caseId;
     }),
   setProgressState: protectedProcedure
@@ -133,11 +136,9 @@ export const caseProgressRouter = createTRPCRouter({
      
       if(progressState === "completed")
       {
-       
+        await addUserToCrmUpdateQueue(userId);
         await addBadgeForUser({ badgeIdentifier: "fall-1", userId });
-       
       }
-      
     }),
   submitSolution: protectedProcedure
     .input(submitCaseSolutionSchema)
