@@ -1,31 +1,27 @@
 /* eslint-disable max-lines */
 import { db } from "@/db/connection";
 import {
-  articlesViews, casesProgress, casesViews, documents, updateUserInCrmQueue, uploadedFiles, users, usersToBadges
+  articlesViews, casesProgress, casesViews, documents, uploadedFiles, users, usersToBadges 
 } from "@/db/schema";
 import { env } from "@/env.mjs";
-import { createClickupTask } from "@/lib/clickup/tasks/create-task";
 import { deleteClickupCustomFieldValue } from "@/lib/clickup/tasks/delete-custom-field-value";
 import { updateClickupCustomField } from "@/lib/clickup/tasks/update-custom-field";
 import { updateClickupTask } from "@/lib/clickup/tasks/update-task";
 import { type ClickupTask } from "@/lib/clickup/types";
-import { clickupCrmCustomField, clickupRequestConfig, getUserCrmData, updateUserCrmData } from "@/lib/clickup/utils";
+import { clickupCrmCustomField, getUserCrmData } from "@/lib/clickup/utils";
 import { stripe } from "@/lib/stripe/stripe";
-import { type Nullable } from "@/utils/types";
 import { sleep } from "@/utils/utils";
 
-import { createPagesServerClient, type SupabaseClient } from "@supabase/auth-helpers-nextjs";
-import axios, { type AxiosResponse } from "axios";
+import { type SupabaseClient } from "@supabase/auth-helpers-nextjs";
+import { type AxiosResponse } from "axios";
 import {
-  and, asc, countDistinct, eq, getTableColumns, gt, type SQL
+  and, countDistinct, eq, getTableColumns, type SQL 
 } from "drizzle-orm";
 import type { NextApiHandler } from "next";
 import pLimit from "p-limit";
 import type Stripe from "stripe";
 
-import * as fs from "node:fs";
-import * as path from "node:path";
-
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
 const stripeConcurrencyLimit = pLimit(env.STRIPE_SDK_CONCURRENCY_LIMIT);
 
 export const getUsersWithActivityStats = async (query?: SQL) =>
@@ -69,6 +65,7 @@ export const getCrmDataForUser = async (userIdOrData: string | UserWithActivityS
 
     if(getUserDataResult == null)
     {
+      console.warn("User not found in database:", userIdOrData);
       return null;
     }
 
@@ -83,6 +80,7 @@ export const getCrmDataForUser = async (userIdOrData: string | UserWithActivityS
 
   if(!supabaseUserData)
   {
+    console.warn("User not found in Supabase Auth:", user.id);
     return null;
   }
 

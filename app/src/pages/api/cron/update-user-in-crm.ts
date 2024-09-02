@@ -46,6 +46,8 @@ const handler: NextApiHandler = async (req, res): Promise<void> =>
     {
       console.error(`Failed to update user ${record.userId}:`);
 
+      // TODO: Implement a failed trys counter for every failed user update and notify the admin if the counter reaches a certain number
+
       if(error instanceof AxiosError)
       {
         if(error.response?.status === 429)

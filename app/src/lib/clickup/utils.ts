@@ -613,7 +613,7 @@ export const getUserCrmData: GetUserCrmData = ({
   });
 };
 
-export const updateUserCrmData = async (userId: string, supabaseServerClient: SupabaseClient) =>
+const updateUserCrmData = async (userId: string, supabaseServerClient: SupabaseClient) =>
 {
   const userWithCrmData = await getCrmDataForUser(userId, supabaseServerClient);
 
