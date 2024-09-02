@@ -1,7 +1,7 @@
 /* eslint-disable max-lines */
 import { db } from "@/db/connection";
 import {
-  articlesViews, casesProgress, casesViews, documents, uploadedFiles, users, usersToBadges 
+  articlesViews, casesProgress, casesViews, documents, updateUserInCrmQueue, uploadedFiles, users, usersToBadges
 } from "@/db/schema";
 import { env } from "@/env.mjs";
 import { createClickupTask } from "@/lib/clickup/tasks/create-task";
@@ -9,17 +9,22 @@ import { deleteClickupCustomFieldValue } from "@/lib/clickup/tasks/delete-custom
 import { updateClickupCustomField } from "@/lib/clickup/tasks/update-custom-field";
 import { updateClickupTask } from "@/lib/clickup/tasks/update-task";
 import { type ClickupTask } from "@/lib/clickup/types";
-import { clickupCrmCustomField, getUserCrmData } from "@/lib/clickup/utils";
+import { clickupCrmCustomField, clickupRequestConfig, getUserCrmData, updateUserCrmData } from "@/lib/clickup/utils";
 import { stripe } from "@/lib/stripe/stripe";
+import { type Nullable } from "@/utils/types";
+import { sleep } from "@/utils/utils";
 
 import { createPagesServerClient, type SupabaseClient } from "@supabase/auth-helpers-nextjs";
-import { type AxiosResponse } from "axios";
+import axios, { type AxiosResponse } from "axios";
 import {
-  and, countDistinct, eq, getTableColumns, type SQL 
+  and, asc, countDistinct, eq, getTableColumns, gt, type SQL
 } from "drizzle-orm";
 import type { NextApiHandler } from "next";
 import pLimit from "p-limit";
 import type Stripe from "stripe";
+
+import * as fs from "node:fs";
+import * as path from "node:path";
 
 const stripeConcurrencyLimit = pLimit(env.STRIPE_SDK_CONCURRENCY_LIMIT);
 
@@ -272,73 +277,124 @@ const handler: NextApiHandler = async (req, res): Promise<void> =>
     return res.status(401).json({ message: "Unauthorized" });
   }
 
-  const supabaseServerClient = createPagesServerClient({ req, res }, {
-    supabaseKey: env.SUPABASE_SERVICE_ROLE_KEY,
-    supabaseUrl: env.NEXT_PUBLIC_SUPABASE_URL
-  });
+  console.warn("------- CAUTION: Make sure to use the production environment variables when running this script! -------");
 
-  /* const allExistingCrmUsers: Array<{
-    email: Nullable<unknown>;
-    name: string;
-    userId: Nullable<unknown>;
-  }> = [];
+  await sleep(1000);
 
-  let hasMore: boolean;
-  let page = 0;
+  // const allUsers = await db.query.users.findMany({
+  //   columns: {
+  //     email: true,
+  //     id: true,
+  //   },
+  //   orderBy: asc(users.id),
+  //   // where: gt(users.id, "0215b17b-592c-4f6a-b99f-bacd6ba273a2")
+  // });
+  //
+  // await db
+  //   .insert(updateUserInCrmQueue)
+  //   .values(allUsers.map(user => ({ userId: user.id })))
+  //   .onConflictDoNothing();
 
-  do
-  {
-    console.log(`Fetching CRM users page ${page}...`);
-    const getUsersResult = await axios.get(`${env.CLICKUP_API_ENDPOINT}/list/${env.CLICKUP_CRM_LIST_ID}/task?page=${page}`, clickupRequestConfig);
-    const fetchedUsers = getUsersResult.data.tasks as ClickupTask[];
-    allExistingCrmUsers.push(...fetchedUsers.map(task => ({
-      email: task.custom_fields?.find(field => field.id === clickupCrmCustomField.email.fieldId)?.value,
-      name: task.name,
-      userId: task.custom_fields?.find(field => field.id === clickupCrmCustomField.userId.fieldId)?.value
-    })));
-    hasMore = !getUsersResult.data.last_page;
+  return res.status(200).json({ message: "Success" });
 
-    if(hasMore)
-    {
-      console.log("Fetching next page...");
-      page++;
-    }
-  }
-  while(hasMore);
+  // const supabaseServerClient = createPagesServerClient({ req, res }, {
+  //   supabaseKey: env.SUPABASE_SERVICE_ROLE_KEY,
+  //   supabaseUrl: env.NEXT_PUBLIC_SUPABASE_URL
+  // });
+  //
+  // const successfulUpdates: typeof allUsers = [];
+  // const failedUpdates: typeof allUsers = [];
+  //
+  // for(let i = 0; i < allUsers.length; i++)
+  // {
+  //   const user = allUsers[i]!;
+  //
+  //   try
+  //   {
+  //     await updateUserCrmData(user.id, supabaseServerClient);
+  //     console.log(`Updated user ${i + 1} - ${user.email}`);
+  //     successfulUpdates.push(user);
+  //   }
+  //   catch (e: unknown)
+  //   {
+  //     console.log("Failed to update user " + user.email, e);
+  //     failedUpdates.push(user);
+  //   }
+  //
+  //   if(i % 8 === 0 && i !== 0)
+  //   {
+  //     console.log(`Pause at user ${i + 1}. Successful: ${successfulUpdates.length} - Failed: ${failedUpdates.length}`);
+  //     await sleep(61000);
+  //   }
+  // }
+  //
+  // return res.status(200).json({ failedUpdates, successfulUpdates });
 
-  console.log("finished. fetched " + allExistingCrmUsers.length + " customers");*/
-
-  // const allUsers = await db.query.users.findMany();
-  const allUsers = await getUsersWithActivityStats(eq(users.email, "kotti97+310824@web.de"));
-
-  const getCrmDataForAllUsersPromises = allUsers
-    .map(async user => stripeConcurrencyLimit(async () => getCrmDataForUser(user, supabaseServerClient)))
-    .filter(Boolean);
-  const usersWithCrmData = (await Promise.all(getCrmDataForAllUsersPromises)).filter(Boolean);
-
-  const createTaskResult = await createClickupTask(env.CLICKUP_CRM_LIST_ID, usersWithCrmData[0]!.crmData);
-
-  // console.log(`Fetched ${usersWithCrmData.length} users`);
-
-  console.log("created task", createTaskResult);
-
-  /* for(let i = 0; i < newUsers.length; i++)
-  {
-    const user = newUsers[i]!;
-    await createClickupTask(env.CLICKUP_CRM_LIST_ID, user.crmData);
-
-    console.log(`Created new user ${i + 1} - ${user.crmData.name}`);
-
-    if(i % 90 === 0 && i !== 0)
-    {
-      console.log(`Created ${i} new users - Pause`);
-      await sleep(61000);
-    }
-  }*/
+  // const supabaseServerClient = createPagesServerClient({ req, res }, {
+  //   supabaseKey: env.SUPABASE_SERVICE_ROLE_KEY,
+  //   supabaseUrl: env.NEXT_PUBLIC_SUPABASE_URL
+  // });
+  //
+  // const allExistingCrmUsers: Array<{
+  //   email: Nullable<unknown>;
+  //   name: string;
+  //   userId: Nullable<unknown>;
+  // }> = [];
+  //
+  // let hasMore: boolean;
+  // let page = 0;
+  //
+  // do
+  // {
+  //   console.log(`Fetching CRM users page ${page}...`);
+  //   const getUsersResult = await axios.get(`${env.CLICKUP_API_ENDPOINT}/list/${env.CLICKUP_CRM_LIST_ID}/task?page=${page}`, clickupRequestConfig);
+  //   const fetchedUsers = getUsersResult.data.tasks as ClickupTask[];
+  //   allExistingCrmUsers.push(...fetchedUsers.map(task => ({
+  //     email: task.custom_fields?.find(field => field.id === clickupCrmCustomField.email.fieldId)?.value,
+  //     name: task.name,
+  //     userId: task.custom_fields?.find(field => field.id === clickupCrmCustomField.userId.fieldId)?.value
+  //   })));
+  //   hasMore = !getUsersResult.data.last_page;
+  //
+  //   if(hasMore)
+  //   {
+  //     page++;
+  //   }
+  // }
+  // while(hasMore);
+  //
+  // console.log("finished. fetched " + allExistingCrmUsers.length + " existing CRM users");
+  //
+  // const allUsers = await getUsersWithActivityStats();
+  //
+  // console.log("fetched " + allUsers.length + " users from the database");
+  //
+  // const getCrmDataForAllUsersPromises = allUsers
+  //   .map(async user => stripeConcurrencyLimit(async () => getCrmDataForUser(user, supabaseServerClient)))
+  //   .filter(Boolean);
+  //
+  // const usersWithCrmData = (await Promise.all(getCrmDataForAllUsersPromises)).filter(Boolean);
+  //
+  // console.log("fetched crm data for all users");
+  //
+  // for(let i = 0; i < usersWithCrmData.length; i++)
+  // {
+  //   const user = usersWithCrmData[i]!;
+  //
+  //   await createClickupTask(env.CLICKUP_CRM_LIST_ID, user.crmData);
+  //
+  //   console.log(`Created new user ${i + 1} - ${user.crmData.name}`);
+  //
+  //   if(i % 90 === 0 && i !== 0)
+  //   {
+  //     console.log(`Created ${i} new users - Pause`);
+  //     await sleep(61000);
+  //   }
+  // }
 
   // return res.status(200).json({ message: "Finished" });
 
-  return res.status(200).json(usersWithCrmData);
+  // return res.status(200).json(usersWithCrmData);
 };
 
 export default handler;
