@@ -613,7 +613,7 @@ export const getUserCrmData: GetUserCrmData = ({
   });
 };
 
-const updateUserCrmData = async (userId: string, supabaseServerClient: SupabaseClient) =>
+export const updateUserCrmData = async (userId: string, supabaseServerClient: SupabaseClient) =>
 {
   const userWithCrmData = await getCrmDataForUser(userId, supabaseServerClient);
 
@@ -638,7 +638,7 @@ const updateUserCrmData = async (userId: string, supabaseServerClient: SupabaseC
     return;
   }
 
-  await Promise.allSettled(getUpdateUsersCrmDataPromises({ existingCrmUser, userWithCrmData }));
+  await Promise.all(getUpdateUsersCrmDataPromises({ existingCrmUser, userWithCrmData }));
 };
 
 type SyncUserToCrm = (params: {
@@ -675,33 +675,26 @@ export const syncUserToCrm: SyncUserToCrm = async ({ eventType, supabase, userId
     });
   }
 
-  try
+  switch (eventType)
   {
-    switch (eventType)
+    case "userCreated":
     {
-      case "userCreated":
-      {
-        const userCrmData = await getCrmDataForUser(userId, supabaseServerClient);
+      const userCrmData = await getCrmDataForUser(userId, supabaseServerClient);
 
-        if(!userCrmData)
-        {
-          console.error("userCrmData was null after getCrmDataForUser. This should not happen and must be investigated.");
-          return;
-        }
-
-        await createClickupTask(env.CLICKUP_CRM_LIST_ID, userCrmData.crmData);
-        break;
-      }
-      case "userUpdated":
+      if(!userCrmData)
       {
-        await updateUserCrmData(userId, supabaseServerClient);
-        break;
+        console.error("userCrmData was null after getCrmDataForUser. This should not happen and must be investigated.");
+        return;
       }
+
+      await createClickupTask(env.CLICKUP_CRM_LIST_ID, userCrmData.crmData);
+      break;
     }
-  }
-  catch (e: unknown)
-  {
-    console.log("Something went wrong while syncing user to crm", e);
+    case "userUpdated":
+    {
+      await updateUserCrmData(userId, supabaseServerClient);
+      break;
+    }
   }
 };
 
