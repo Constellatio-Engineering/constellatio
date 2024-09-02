@@ -4,6 +4,7 @@ import { updateUserInCrmQueue } from "@/db/schema";
 import { env } from "@/env.mjs";
 import { syncUserToCrm } from "@/lib/clickup/utils";
 
+import { AxiosError } from "axios";
 import { eq } from "drizzle-orm";
 import { type NextApiHandler } from "next";
 
@@ -19,11 +20,9 @@ const handler: NextApiHandler = async (req, res): Promise<void> =>
     return res.status(200).json({ message: "Syncing users to CRM is disabled in this environment" });
   }
 
-  console.log("----- [Cronjob] Update Search Indexes -----");
-
   const usersToUpdate = await db.query.updateUserInCrmQueue.findMany();
 
-  console.log(`Found ${usersToUpdate.length} users to update in CRM:`, usersToUpdate.map((user) => user.userId));
+  console.log(`CRM Update Cronjob - Found ${usersToUpdate.length} users to update in CRM`);
 
   for(const record of usersToUpdate)
   {
@@ -39,11 +38,28 @@ const handler: NextApiHandler = async (req, res): Promise<void> =>
         userId: record.userId
       });
 
+      console.log(`Successfully updated user ${record.userId} in CRM`);
+
       await db.delete(updateUserInCrmQueue).where(eq(updateUserInCrmQueue.userId, record.userId));
     }
     catch (error) 
     {
-      console.error(`Failed to update user ${record.userId}:`, error);
+      console.error(`Failed to update user ${record.userId}:`);
+
+      if(error instanceof AxiosError)
+      {
+        if(error.response?.status === 429)
+        {
+          console.info("Rate limit reached.");
+          break;
+        }
+
+        console.log("AxiosError", error.response?.data);
+      }
+      else
+      {
+        console.log("Error is not AxiosError", error);
+      }
     }
   }
 
