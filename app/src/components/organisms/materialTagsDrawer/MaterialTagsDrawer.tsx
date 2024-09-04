@@ -82,11 +82,7 @@ export const MaterialTagsDrawer: FunctionComponent = () =>
                 fileExtension={editorState.entity.data.fileExtension}
               />
             )}
-            <TagsSelector
-              editorState={editorState}
-              setIsSelectionAreaExpanded={setIsSelectionAreaExpanded}
-              isSelectionAreaExpanded={isSelectionAreaExpanded}
-            />
+            <TagsSelector editorState={editorState}/>
           </div>
           <div css={styles.ctaWrapper}>
             <Button<"button">

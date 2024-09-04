@@ -16,7 +16,7 @@ import React, { type FunctionComponent, type MouseEvent } from "react";
 import * as styles from "./TagsSelector.styles";
 
 type CustomBadgeProps = {
-  readonly deleteButtonAction?: () => void;
+  readonly deleteButtonAction?: (e: MouseEvent) => void;
   readonly isSelected?: boolean;
   readonly selectAction?: (e: MouseEvent) => void;
   readonly title: string;
@@ -54,7 +54,11 @@ const CustomBadge: FunctionComponent<CustomBadgeProps> = ({
     rightSection={deleteButtonAction != null && (
       <ActionIcon
         size="xs"
-        onClick={deleteButtonAction}
+        onClick={(e) =>
+        {
+          e.stopPropagation();
+          deleteButtonAction(e);
+        }}
         sx={{
           color: colors["neutrals-01"][7],
         }}
@@ -69,11 +73,9 @@ const CustomBadge: FunctionComponent<CustomBadgeProps> = ({
 
 type Props = {
   readonly editorState: EditorOpened;
-  readonly isSelectionAreaExpanded: boolean;
-  readonly setIsSelectionAreaExpanded: (isExpanded: boolean) => void;
 };
 
-const TagsSelector: FunctionComponent<Props> = ({ editorState, isSelectionAreaExpanded, setIsSelectionAreaExpanded }) =>
+const TagsSelector: FunctionComponent<Props> = ({ editorState }) =>
 {
   const { searchValue, setSearchValue } = useTagsSearchBarStore();
   const { tagsSearchResults } = useTagsSearchResults(searchValue);
@@ -103,8 +105,13 @@ const TagsSelector: FunctionComponent<Props> = ({ editorState, isSelectionAreaEx
     <>
       <div css={styles.selectedTagsWrapper}>
         <div css={styles.headWrapper}>
-          <p css={styles.appliedTags}>{editorState.editedTags.length} Tags zugewiesen</p>
-          <p css={styles.amountOfApplieableTags}>Du kannst bis zu 10 Tags zuweisen</p>
+          <div css={styles.amountOfTagsWrapper}>
+            <p css={styles.heading}>{editorState.editedTags.length} Tag{editorState.editedTags.length === 1 ? "" : "s"} zugewiesen</p>
+            <p css={styles.amountOfApplieableTags}>Du kannst bis zu 10 Tags zuweisen</p>
+          </div>
+          {editorState.editedTags.length === 0 && (
+            <p css={styles.noTagsApplied}>Nutze die Suche, um Tags zu finden und zuzuweisen</p>
+          )}
         </div>
         <div css={styles.badgesWrapper}>
           {editorState.editedTags.map(tag =>
@@ -120,11 +127,7 @@ const TagsSelector: FunctionComponent<Props> = ({ editorState, isSelectionAreaEx
               <CustomBadge
                 key={id}
                 title={tagName}
-                selectAction={(e) =>
-                {
-                  e.stopPropagation();
-                  window.open(`${appPaths.search}?find=${tagName}`, "_blank");
-                }}
+                selectAction={(_e) => window.open(`${appPaths.search}?find=${tagName}`, "_blank")}
                 deleteButtonAction={() => deselectTag(id)}
               />
             );
@@ -132,72 +135,69 @@ const TagsSelector: FunctionComponent<Props> = ({ editorState, isSelectionAreaEx
         </div>
       </div>
       <div css={styles.selectionAreaWrapper}>
-        {isSelectionAreaExpanded ? (
-          <>
-            <p>Weitere Tags hinzufügen</p>
-            <Input
-              icon={<IconSearch size={20}/>}
-              placeholder="Suche nach Tags"
-              styles={{
-                icon: {
-                  color: colors["neutrals-01"][7],
-                },
-                input: {
-                  "&::placeholder": {
-                    color: colors["neutrals-01"][7],
-                  },
-                  "&:focus-within": {
-                    borderColor: colors["neutrals-01"][7],
-                  },
-                  border: "1px solid ##D6D6D6",
-                },
-                wrapper: {}
-              }}
-              value={searchValue}
-              onChange={(event) => setSearchValue(event.currentTarget.value)}
-              size={"md"}
-              radius="md"
-            />
-            <div css={styles.selectableBadgesWrapper}>
-              {displayedTags === "noResults" ? (
-                <p>Keine Tags gefunden</p>
-              ) : displayedTags.map((tag) =>
-              {
-                const { id, tagName } = tag;
-
-                if(!id || !tagName)
-                {
-                  return null;
-                }
-
-                const isSelected = editorState.editedTags.some(({ id: tagId }) => tagId === id);
-
-                return (
-                  <CustomBadge
-                    key={id}
-                    title={tagName}
-                    isSelected={isSelected}
-                    selectAction={() =>
-                    {
-                      if(isSelected)
-                      {
-                        deselectTag(id);
-                      }
-                      else
-                      {
-                        selectTag(tag);
-                      }
-                    }}
-                  />
-                );
-              })}
-            </div>
-          </>
-        ) : (
-          <Button<"button"> styleType={"primary"} onClick={() => setIsSelectionAreaExpanded(true)}>
-            Tags auswählen
-          </Button>
+        <p css={styles.heading}>Weitere Tags hinzufügen</p>
+        <Input
+          icon={<IconSearch size={20}/>}
+          placeholder="Suche nach Tags"
+          styles={{
+            icon: {
+              color: colors["neutrals-01"][7],
+            },
+            input: {
+              "&::placeholder": {
+                color: colors["neutrals-01"][7],
+              },
+              "&:focus-within": {
+                borderColor: colors["neutrals-01"][7],
+              },
+              border: "1px solid ##D6D6D6",
+            },
+            wrapper: {}
+          }}
+          value={searchValue}
+          onChange={(event) => setSearchValue(event.currentTarget.value)}
+          size={"md"}
+          radius="md"
+          mt={12}
+          mb={20}
+        />
+        {searchValue.length === 0 && (
+          <p css={styles.examples}>Beispiele</p>
         )}
+        <div css={styles.selectableBadgesWrapper}>
+          {displayedTags === "noResults" ? (
+            <p css={styles.noResults}>Keine Tags gefunden</p>
+          ) : displayedTags.map((tag) =>
+          {
+            const { id, tagName } = tag;
+
+            if(!id || !tagName)
+            {
+              return null;
+            }
+
+            const isSelected = editorState.editedTags.some(({ id: tagId }) => tagId === id);
+
+            return (
+              <CustomBadge
+                key={id}
+                title={tagName}
+                isSelected={isSelected}
+                selectAction={() =>
+                {
+                  if(isSelected)
+                  {
+                    deselectTag(id);
+                  }
+                  else
+                  {
+                    selectTag(tag);
+                  }
+                }}
+              />
+            );
+          })}
+        </div>
       </div>
     </>
   );
