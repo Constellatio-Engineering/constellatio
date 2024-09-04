@@ -28,17 +28,20 @@ const PersonalSpacePageContent: FunctionComponent = () =>
   const bookmarkedArticles = allArticles.filter((caisyArticle: IGenArticle) => articlesBookmarks.some(bookmark => bookmark.resourceId === caisyArticle.id));
   const FavCategoryId = useId();
   const MaterialsCategoryId = useId();
-  const categories = categoriesHelper({
-    BookmarkIconSvg,
-    FavCategoryId,
-    bookmarkedCasesLength: (bookmarkedCases?.length + bookmarkedArticles?.length + questionsBookmarks?.length) ?? 0,
-    slug: "favorites"
-  }, {
-    FileIconSvg,
-    MaterialsCategoryId,
-    slug: "materials",
-    uploadedFilesLength: (uploadedFilesInAllFolders?.length + documentsInAllFolders?.length) ?? 0,
-  });
+  const categories = categoriesHelper(
+    {
+      FileIconSvg,
+      MaterialsCategoryId,
+      slug: "materials",
+      uploadedFilesLength: (uploadedFilesInAllFolders?.length + documentsInAllFolders?.length) ?? 0,
+    },
+    {
+      BookmarkIconSvg,
+      FavCategoryId,
+      bookmarkedCasesLength: (bookmarkedCases?.length + bookmarkedArticles?.length + questionsBookmarks?.length) ?? 0,
+      slug: "favorites"
+    }
+  );
   const [selectedCategorySlug, setSelectedCategorySlug] = useQueryState("category", parseAsString.withDefault(categories?.[0]?.slug || ""));
 
   return (
@@ -53,10 +56,10 @@ const PersonalSpacePageContent: FunctionComponent = () =>
         />
       </div>
       {selectedCategorySlug === categories?.[0]?.slug && (
-        <PersonalSpaceFavoriteTab/>
+        <PersonalSpaceMaterialsTab/>
       )}
       {selectedCategorySlug === categories?.[1]?.slug && (
-        <PersonalSpaceMaterialsTab/>
+        <PersonalSpaceFavoriteTab/>
       )}
     </div>
   );

@@ -3,7 +3,7 @@ import { type MantineTheme } from "@mantine/styles";
 
 export const wrapper = (theme: MantineTheme) => css`
     width:100%;
-    min-height: 300px;
+    min-height: 200px;
     /* display: flex;
     flex-direction: column;
     align-items: center;
@@ -15,7 +15,7 @@ export const wrapper = (theme: MantineTheme) => css`
     gap:8px;
     text-align: center;
     button{
-        margin:32px auto 8px auto;
+        margin: 6px auto 8px auto;
     }
     .text{
         color: ${theme.colors["neutrals-01"][7]};

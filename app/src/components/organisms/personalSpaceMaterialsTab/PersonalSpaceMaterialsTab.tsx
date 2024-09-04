@@ -23,16 +23,16 @@ const PersonalSpaceMaterialsTab: FunctionComponent = () =>
       <div css={styles.materialTabContainerContent}>
         <MaterialMenu/>        
         <FoldersMenuTablet/>
-        <div style={{ margin: "0", width: "100%" }}>
-          <PapersBlock
-            selectedFolderId={selectedFolderId}
-            isLoading={false}
-          />
+        <div css={styles.contentWrapper}>
           <UploadedMaterialBlock
             areUploadsInProgress={areUploadsInProgress}
             fileInputRef={fileInputRef}
             setUploadState={setUploadState}
             selectedFolderId={selectedFolderId}
+          />
+          <PapersBlock
+            selectedFolderId={selectedFolderId}
+            isLoading={false}
           />
           <FileUploadMenu uploads={uploads}/>
         </div>

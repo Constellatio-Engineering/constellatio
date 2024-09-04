@@ -30,7 +30,7 @@ export const filesCount = css`
 
 export const badge = css`
   width: 100%;
-  height: 300px;
+  height: 200px;
   position: relative;
   cursor: pointer;
   overflow: auto;
@@ -40,18 +40,18 @@ export const badge = css`
     left: 0;
     opacity: 0;
     width: 100%;
-    height: 300px;  cursor: pointer;
+    height: 200px;  cursor: pointer;
   }
   .uploadBtn {
     position: absolute;
-    top: 55px;
+    top: 31px;
     left: 50%;
     transform: translateX(-50%);
   }
 `;
 
 export const uploader = (isVisible: boolean) => css`
-  padding: 24px;
+  padding: 24px 24px 0;
   display: ${isVisible ? "block" : "none"};
 `;
 
