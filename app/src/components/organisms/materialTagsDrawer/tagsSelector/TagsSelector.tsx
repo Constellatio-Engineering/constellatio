@@ -1,3 +1,5 @@
+/* eslint-disable max-lines */
+import { Button } from "@/components/atoms/Button/Button";
 import { colors } from "@/constants/styles/colors";
 import { useInitialTags } from "@/hooks/useInitialTags";
 import { useTagsSearchResults } from "@/hooks/useTagsSearchResults";
@@ -67,9 +69,11 @@ const CustomBadge: FunctionComponent<CustomBadgeProps> = ({
 
 type Props = {
   readonly editorState: EditorOpened;
+  readonly isSelectionAreaExpanded: boolean;
+  readonly setIsSelectionAreaExpanded: (isExpanded: boolean) => void;
 };
 
-const TagsSelector: FunctionComponent<Props> = ({ editorState }) =>
+const TagsSelector: FunctionComponent<Props> = ({ editorState, isSelectionAreaExpanded, setIsSelectionAreaExpanded }) =>
 {
   const { searchValue, setSearchValue } = useTagsSearchBarStore();
   const { tagsSearchResults } = useTagsSearchResults(searchValue);
@@ -128,63 +132,72 @@ const TagsSelector: FunctionComponent<Props> = ({ editorState }) =>
         </div>
       </div>
       <div css={styles.selectionAreaWrapper}>
-        <Input
-          icon={<IconSearch size={20}/>}
-          placeholder="Suche nach Tags"
-          styles={{
-            icon: {
-              color: colors["neutrals-01"][7],
-            },
-            input: {
-              "&::placeholder": {
-                color: colors["neutrals-01"][7],
-              },
-              "&:focus-within": {
-                borderColor: colors["neutrals-01"][7],
-              },
-              border: "1px solid ##D6D6D6",
-            },
-            wrapper: {}
-          }}
-          value={searchValue}
-          onChange={(event) => setSearchValue(event.currentTarget.value)}
-          size={"md"}
-          radius="md"
-        />
-        <div css={styles.selectableBadgesWrapper}>
-          {displayedTags === "noResults" ? (
-            <p>Keine Tags gefunden</p>
-          ) : displayedTags.map((tag) =>
-          {
-            const { id, tagName } = tag;
+        {isSelectionAreaExpanded ? (
+          <>
+            <p>Weitere Tags hinzufügen</p>
+            <Input
+              icon={<IconSearch size={20}/>}
+              placeholder="Suche nach Tags"
+              styles={{
+                icon: {
+                  color: colors["neutrals-01"][7],
+                },
+                input: {
+                  "&::placeholder": {
+                    color: colors["neutrals-01"][7],
+                  },
+                  "&:focus-within": {
+                    borderColor: colors["neutrals-01"][7],
+                  },
+                  border: "1px solid ##D6D6D6",
+                },
+                wrapper: {}
+              }}
+              value={searchValue}
+              onChange={(event) => setSearchValue(event.currentTarget.value)}
+              size={"md"}
+              radius="md"
+            />
+            <div css={styles.selectableBadgesWrapper}>
+              {displayedTags === "noResults" ? (
+                <p>Keine Tags gefunden</p>
+              ) : displayedTags.map((tag) =>
+              {
+                const { id, tagName } = tag;
 
-            if(!id || !tagName)
-            {
-              return null;
-            }
-
-            const isSelected = editorState.editedTags.some(({ id: tagId }) => tagId === id);
-
-            return (
-              <CustomBadge
-                key={id}
-                title={tagName}
-                isSelected={isSelected}
-                selectAction={() =>
+                if(!id || !tagName)
                 {
-                  if(isSelected)
-                  {
-                    deselectTag(id);
-                  }
-                  else
-                  {
-                    selectTag(tag);
-                  }
-                }}
-              />
-            );
-          })}
-        </div>
+                  return null;
+                }
+
+                const isSelected = editorState.editedTags.some(({ id: tagId }) => tagId === id);
+
+                return (
+                  <CustomBadge
+                    key={id}
+                    title={tagName}
+                    isSelected={isSelected}
+                    selectAction={() =>
+                    {
+                      if(isSelected)
+                      {
+                        deselectTag(id);
+                      }
+                      else
+                      {
+                        selectTag(tag);
+                      }
+                    }}
+                  />
+                );
+              })}
+            </div>
+          </>
+        ) : (
+          <Button<"button"> styleType={"primary"} onClick={() => setIsSelectionAreaExpanded(true)}>
+            Tags auswählen
+          </Button>
+        )}
       </div>
     </>
   );
