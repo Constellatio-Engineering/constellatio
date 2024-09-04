@@ -29,20 +29,20 @@ interface IBreadcrumbItem
 }
 export interface ICaseSolvingHeaderProps 
 {
+  readonly breadcrumbs?: IBreadcrumbItem[];
   readonly caseId?: Maybe<string> | undefined;
   readonly nextArticleId: Nullable<string>;
   readonly overviewCard: IOverviewCard;
-  readonly pathSlugs?: IBreadcrumbItem[];
   readonly previousArticleId: Nullable<string>;
   readonly title: string;
   readonly variant: "case" | "dictionary";
 }
 
 const CaseSolvingHeader: FunctionComponent<ICaseSolvingHeaderProps> = ({
+  breadcrumbs,
   caseId,
   nextArticleId,
   overviewCard,
-  pathSlugs,
   previousArticleId,
   title,
   variant
@@ -108,8 +108,8 @@ const CaseSolvingHeader: FunctionComponent<ICaseSolvingHeaderProps> = ({
               <IconButtonBar icons={icons}/>
             </div>
             <div className="bread-crumb">
-              {pathSlugs?.map(({ path, slug }, index) => (
-                <Link key={index} href={path}>{slug}{index + 1 < pathSlugs.length ? " / " : ""}</Link>
+              {breadcrumbs?.map(({ path, slug }, index) => (
+                <Link key={index} href={path}>{slug}{index + 1 < breadcrumbs.length ? " / " : ""}</Link>
               ))}
             </div>
             <Title title={title} order={1}>{title}</Title>

@@ -248,13 +248,13 @@ const UploadedMaterialBlock: FunctionComponent<UploadedMaterialBlockProps> = ({
           />
         ) : uploadedFilesWithNotesInAllFolders.length > 0 ? (
           <EmptyStateCard
-            variant="For-small-areas"
+            variant="For-tiny-areas"
             title="Keine hochgeladenen Dateien in diesem Ordner"
             text="Hier kannst du all deine Lernmaterialien wie zum Beispiel Vorlesungsfolien, Screenshots, Scans oder Word-Dateien an einem Ort speichern und verlinken."
           />
         ) : (
           <EmptyStateCard
-            variant="For-small-areas"
+            variant="For-tiny-areas"
             title={selectedFolderId === undefined ? "Wähle einen Ordner aus, um deine ersten Dateien hochzuladen." : "Du hast noch keine Dateien hochgeladen"}
             text="Hier kannst du all deine Lernmaterialien wie zum Beispiel Vorlesungsfolien, Screenshots, Scans oder Word-Dateien an einem Ort speichern und verlinken."
           />

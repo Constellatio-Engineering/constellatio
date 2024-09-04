@@ -11,7 +11,7 @@ export const wrapper = css`
 export const contentContainer = css`
   position: absolute;
   top: 100px;
-  z-index: 2;
+  z-index: 4;
   padding: 0;
   h1 {
     position: relative;

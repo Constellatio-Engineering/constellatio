@@ -4,18 +4,19 @@ import { useTagsSearchResults } from "@/hooks/useTagsSearchResults";
 import { type IGenTags } from "@/services/graphql/__generated/sdk";
 import { type EditorOpened, useTagsEditorStore } from "@/stores/tagsEditor.store";
 import { useTagsSearchBarStore } from "@/stores/tagsSearchBar.store";
+import { appPaths } from "@/utils/paths";
 import { type TagSearchIndexItem } from "@/utils/search";
 
 import { ActionIcon, Badge, Input, rem } from "@mantine/core";
 import { IconSearch, IconX } from "@tabler/icons-react";
-import React, { type FunctionComponent } from "react";
+import React, { type FunctionComponent, type MouseEvent } from "react";
 
 import * as styles from "./TagsSelector.styles";
 
 type CustomBadgeProps = {
   readonly deleteButtonAction?: () => void;
   readonly isSelected?: boolean;
-  readonly selectAction?: () => void;
+  readonly selectAction?: (e: MouseEvent) => void;
   readonly title: string;
 };
 
@@ -115,6 +116,11 @@ const TagsSelector: FunctionComponent<Props> = ({ editorState }) =>
               <CustomBadge
                 key={id}
                 title={tagName}
+                selectAction={(e) =>
+                {
+                  e.stopPropagation();
+                  window.open(`${appPaths.search}?find=${tagName}`, "_blank");
+                }}
                 deleteButtonAction={() => deselectTag(id)}
               />
             );
