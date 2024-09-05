@@ -4,7 +4,8 @@ import { css } from "@emotion/react";
 
 export const selectedTagsWrapper = css`
   background-color: white;
-  min-height: 135px;
+  min-height: 220px;
+  border-bottom: 1px solid #F0F0F0;
 `;
 
 export const headWrapper = css`
@@ -38,7 +39,6 @@ export const badgesWrapper = css`
   flex-wrap: wrap;
   gap: 8px;
   padding: 0 32px 40px;
-  border-bottom: 1px solid #F0F0F0;
 `;
 
 export const selectionAreaWrapper = css`
