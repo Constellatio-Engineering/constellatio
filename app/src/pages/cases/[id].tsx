@@ -45,7 +45,7 @@ export const getStaticProps: GetStaticProps<GetCaseDetailPagePropsResult, Params
   {
     return {
       notFound: true,
-      revalidate: false
+      revalidate: 5
     };
   }
 
