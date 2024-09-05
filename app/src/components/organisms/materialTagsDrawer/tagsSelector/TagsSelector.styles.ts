@@ -46,7 +46,7 @@ export const selectionAreaWrapper = css`
 `;
 
 export const examples = css`
-  color: ${colors["neutrals-01"][7]};
+  font-weight: 500;
 `;
 
 export const noResults = css`
