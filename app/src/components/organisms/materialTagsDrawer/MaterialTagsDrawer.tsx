@@ -39,7 +39,6 @@ export const MaterialTagsDrawer: FunctionComponent = () =>
   const onClose = useCallback((): void =>
   {
     const { closeEditor, getComputedValues } = useTagsEditorStore.getState();
-
     const { hasUnsavedChanges } = getComputedValues();
 
     if(!hasUnsavedChanges)
@@ -82,9 +81,7 @@ export const MaterialTagsDrawer: FunctionComponent = () =>
                 fileExtension={editorState.entity.data.fileExtension}
               />
             )}
-            <TagsSelector
-              editorState={editorState}
-            />
+            <TagsSelector editorState={editorState}/>
           </div>
           <div css={styles.ctaWrapper}>
             <Button<"button">

@@ -21,9 +21,9 @@ export const getUserIdFromStripeEventData = async (eventData: Stripe.Invoice | S
 
   if(user == null)
   {
-    if(env.NEXT_PUBLIC_DEPLOYMENT_ENVIRONMENT === "staging")
+    if(env.NEXT_PUBLIC_DEPLOYMENT_ENVIRONMENT !== "production")
     {
-      console.info(`customer '${stripeCustomerId}' not found in db, but this is likely because the event was triggered in development`);
+      console.info(`customer '${stripeCustomerId}' not found in db, but this is likely because the event was triggered in development or staging`);
       return;
     }
 
