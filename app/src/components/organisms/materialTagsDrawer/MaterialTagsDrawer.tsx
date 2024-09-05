@@ -9,7 +9,7 @@ import { api } from "@/utils/api";
 import { showConfirmChangesDeletionModal } from "@/utils/modals";
 
 import { Drawer } from "@mantine/core";
-import React, { type FunctionComponent, useCallback, useState } from "react";
+import React, { type FunctionComponent, useCallback } from "react";
 
 import * as styles from "./MaterialTagsDrawer.styles";
 
@@ -35,7 +35,6 @@ export const MaterialTagsDrawer: FunctionComponent = () =>
       useTagsEditorStore.getState().onSuccessfulMutation();
     }
   });
-  const [isSelectionAreaExpanded, setIsSelectionAreaExpanded] = useState(false);
 
   const onClose = useCallback((): void =>
   {

@@ -1,5 +1,4 @@
 /* eslint-disable max-lines */
-import { Button } from "@/components/atoms/Button/Button";
 import { colors } from "@/constants/styles/colors";
 import { useInitialTags } from "@/hooks/useInitialTags";
 import { useTagsSearchResults } from "@/hooks/useTagsSearchResults";
