@@ -1,7 +1,9 @@
 import { db } from "@/db/connection";
 import {
-  type ForumQuestionSql, pings, streak, type PingSql, type ForumAnswerSql, type CaseProgressSql 
+  type ForumQuestionSql, pings, streak, type PingSql, type ForumAnswerSql, type CaseProgressSql, 
+  type StreakSql
 } from "@/db/schema";
+import { addBadgeForUser } from "@/server/api/services/badges.services";
 import { createStreakActivity } from "@/server/api/services/streak.services";
 
 import { and, eq, gte, sql } from "drizzle-orm";
@@ -75,4 +77,37 @@ export const streakHandlerCaseProgressUpdate = async (record: CaseProgressSql["c
   {
     await createStreakActivity("solvedCase", UserId);
   }
+};
+
+const handleBadges = async (SatisfiedDays: number | null, userId: string) =>
+{
+  if(!SatisfiedDays)
+  {
+    return;
+  }
+
+  if(SatisfiedDays >= 5)
+  {
+    await addBadgeForUser({ badgeIdentifier: "streak-14", userId });
+  } 
+  if(SatisfiedDays >= 42)
+  {
+    await addBadgeForUser({ badgeIdentifier: "streak-42", userId });
+  } 
+  if(SatisfiedDays >= 84)
+  {
+    await addBadgeForUser({ badgeIdentifier: "streak-84", userId });
+  }
+};
+
+export const streakHandlerStreakInsert = async (record: StreakSql["columns"]): Promise<void> =>
+{
+  const { SatisfiedDays, UserId } = record;
+  await handleBadges(SatisfiedDays, UserId); 
+};
+
+export const streakHandlerStreakUpdate = async (record: StreakSql["columns"]): Promise<void> =>
+{
+  const { SatisfiedDays, UserId } = record;
+  await handleBadges(SatisfiedDays, UserId);
 };

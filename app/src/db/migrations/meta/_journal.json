@@ -113,6 +113,27 @@
       "when": 1725614160446,
       "tag": "0020_closed_avengers",
       "breakpoints": true
+    },
+    {
+      "idx": 21,
+      "version": "6",
+      "when": 1725620820291,
+      "tag": "0021_square_malice",
+      "breakpoints": true
+    },
+    {
+      "idx": 22,
+      "version": "6",
+      "when": 1725626295195,
+      "tag": "0022_spotty_venus",
+      "breakpoints": true
+    },
+    {
+      "idx": 23,
+      "version": "6",
+      "when": 1725626295759,
+      "tag": "0023_sweet_marvel_apes",
+      "breakpoints": true
     }
   ]
 }

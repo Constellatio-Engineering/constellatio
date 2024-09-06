@@ -101,7 +101,10 @@ export const badgeIdentifiers = [
   "ugc-10",
   "forum-5",
   "feedback-5",
-  "ugc-5"
+  "ugc-5",
+  "streak-14",
+  "streak-42",
+  "streak-84"
 ] as const;
 export type BadgeIdentifier = typeof badgeIdentifiers[number];
 
@@ -734,6 +737,7 @@ export const streak = pgTable("Streak", {
 
 export type StreakInsert = InferInsertModel<typeof streak>;
 export type Streak = InferSelectModel<typeof streak>;
+export type StreakSql = InferPgSelectModel<typeof streak>;
 
 export const streakActivities = pgTable("StreakActivities", {
   id: serial("id").primaryKey(),
@@ -744,3 +748,4 @@ export const streakActivities = pgTable("StreakActivities", {
 
 export type StreakActivityInsert = InferInsertModel<typeof streakActivities>;
 export type StreakActivity = InferSelectModel<typeof streakActivities>;
+export type StreakActivitySql = InferPgSelectModel<typeof streakActivities>;

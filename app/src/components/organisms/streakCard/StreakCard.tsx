@@ -43,10 +43,6 @@ const StreakCard: FunctionComponent = () =>
     refetchOnWindowFocus: false,
   });
 
-  console.log("weekStreak", weekStreak);
-  console.log("streak", streak);
-  console.log("diff", 7 - (streak?.numStreakDays ?? 0));
-
   return (
     <div css={styles.wrapper}>
       <div css={styles.headerWrapper}>

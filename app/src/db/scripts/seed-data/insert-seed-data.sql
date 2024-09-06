@@ -28,7 +28,10 @@ INSERT INTO "Badge" ("Name", "Identifier", "Description", "ImageFilename", "Publ
    ('Profi Organisator', 'ugc-10', 'Top organisiert! Du hast bereits 10 Dateien in Constellatio hochgeladen, um alles an einem Ort zu sammeln', 'ugc-upload-10.svg', 'coming-soon'),
    ('Aktiver Nutzer', 'forum-5', 'Du warst schon 5x im Constellatio-Forum aktiv und hast etwas Neues gelernt oder anderen Nutzern geholfen', 'forum-active-member-5.svg', 'coming-soon'),
    ('Feedback Champion', 'feedback-5', 'Vielen Dank! Du hast uns 5x Feedback gegeben, um das Design oder den Content von Constellatio zu verbessern', 'general-feedback-5.svg', 'coming-soon'),
-   ('Organisator', 'ugc-5', 'Top organisiert! Du hast bereits 5 Dateien in Constellatio hochgeladen, um alles an einem Ort zu sammeln', 'ugc-upload-5.svg', 'coming-soon')
+   ('Organisator', 'ugc-5', 'Top organisiert! Du hast bereits 5 Dateien in Constellatio hochgeladen, um alles an einem Ort zu sammeln', 'ugc-upload-5.svg', 'coming-soon'),
+   ('14 Tage Lernstreak', 'streak-14', 'Super! Du hast mindestens an 10 von 14 Tagen aktiv mit Constellatio gelernt', 'general-perfect-week.svg', 'published'),
+   ('6 Wochen Lernstreak', 'streak-42', 'Super! Du hast mindestens an 21 von 28 Tagen aktiv mit Constellatio gelernt', 'general-perfect-week.svg', 'published'),
+   ('12 Wochen Lernstreak', 'streak-84', 'Super! Du hast mindestens an 42 von 56 Tagen aktiv mit Constellatio gelernt', 'general-perfect-week.svg', 'published')
 ON CONFLICT DO NOTHING;
 
 INSERT INTO "UserRole" ("Identifier", "Name", "Description") VALUES

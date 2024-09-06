@@ -1,10 +1,17 @@
 /* eslint-disable @typescript-eslint/naming-convention,no-multiple-empty-lines */
 
 import type {
-  CaseProgressSql, ForumAnswerSql, ForumQuestionSql, PingSql, ProfilePictureSql, UserSql 
+  CaseProgressSql, ForumAnswerSql, ForumQuestionSql, PingSql, ProfilePictureSql, StreakSql, UserSql 
 } from "@/db/schema";
 
-type Tables = UserSql | ProfilePictureSql | PingSql | ForumAnswerSql | ForumQuestionSql | CaseProgressSql;
+type Tables =
+  | UserSql
+  | ProfilePictureSql
+  | PingSql
+  | ForumAnswerSql
+  | ForumQuestionSql
+  | CaseProgressSql
+  | StreakSql;
 
 // ============ COMMON ============
 type InsertPayload = {
@@ -125,6 +132,23 @@ interface UpdateCaseProgressPayload extends UpdatePayload
 type CaseProgressPayload = InsertCaseProgressPayload | UpdateCaseProgressPayload;
 
 
+// ============ STREAK ============
+interface InsertStreakPayload extends InsertPayload
+{
+  record: StreakSql["columns"];
+  table: StreakSql["table"];
+}
+
+interface UpdateStreakPayload extends UpdatePayload
+{
+  old_record: StreakSql["columns"];
+  record: StreakSql["columns"];
+  table: StreakSql["table"];
+}
+
+type StreakPayload = InsertStreakPayload | UpdateStreakPayload;
+
+
 // ============ ALL ============
 export type WebhookPayload =
   | UserPayload
@@ -132,4 +156,5 @@ export type WebhookPayload =
   | PingPayload
   | ForumAnswerPayload
   | ForumQuestionPayload
-  | CaseProgressPayload;
+  | CaseProgressPayload
+  | StreakPayload;

@@ -3,7 +3,11 @@ import { type WebhookPayload } from "@/pages/api/integration/webhooks/supabase/t
 
 import { type NextApiHandler } from "next";
 
-import { streakHandlerForumAnswerInsert, streakHandlerForumQuestionInsert, streakHandlerPingInsert } from "./handlers/streak.handler";
+import {
+  streakHandlerCaseProgressInsert,
+  streakHandlerCaseProgressUpdate,
+  streakHandlerForumAnswerInsert, streakHandlerForumQuestionInsert, streakHandlerPingInsert, streakHandlerStreakInsert, streakHandlerStreakUpdate 
+} from "./handlers/streak.handler";
 
 const handler: NextApiHandler = async (req, res) =>
 {
@@ -18,40 +22,6 @@ const handler: NextApiHandler = async (req, res) =>
 
   switch (payload.table)
   {
-    case "User":
-      switch (payload.type)
-      {
-        case "INSERT":
-          // TODO: Implement user insert webhook
-          console.log("User inserted:", payload.record);
-          break;
-        case "UPDATE":
-          // TODO: Implement user update webhook
-          console.log("User updated:", payload.old_record, payload.record);
-          break;
-        case "DELETE":
-          // TODO: Implement user delete webhook
-          console.log("User deleted:", payload.old_record);
-          break;
-      }
-      break;
-    case "ProfilePicture":
-      switch (payload.type)
-      {
-        case "INSERT":
-          // TODO: Implement profile picture insert webhook
-          console.log("ProfilePicture inserted:", payload.record);
-          break;
-        case "UPDATE":
-          // TODO: Implement profile picture update webhook
-          console.log("ProfilePicture updated:", payload.old_record, payload.record);
-          break;
-        case "DELETE":
-          // TODO: Implement profile picture delete webhook
-          console.log("ProfilePicture deleted:", payload.old_record);
-          break;
-      }
-      break;
     case "Ping":
       switch (payload.type)
       {
@@ -80,10 +50,21 @@ const handler: NextApiHandler = async (req, res) =>
       switch (payload.type)
       {
         case "INSERT":
-          console.log("CaseProgress inserted:", payload.record);
+          await streakHandlerCaseProgressInsert(payload.record);
           break;
         case "UPDATE":
-          console.log("CaseProgress updated:", payload.old_record, payload.record);
+          await streakHandlerCaseProgressUpdate(payload.record);
+          break;
+      }
+      break;
+    case "Streak":
+      switch (payload.type)
+      {
+        case "INSERT":
+          await streakHandlerStreakInsert(payload.record);
+          break;
+        case "UPDATE":
+          await streakHandlerStreakUpdate(payload.record);
           break;
       }
       break;
