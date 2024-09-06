@@ -39,6 +39,7 @@ type FillGapsGameStore = {
   checkAnswers: (params: { gameId: string }) => boolean;
   games: FillGapsGameState[];
   getGameState: (id: Nullable<string>) => FillGapsGameState | undefined;
+  getUserAnswers: (id: Nullable<string>) => UserAnswersPerParagraph[] | undefined;
   initializeNewGameState: (params: {
     caseId: string;
     id: string;
@@ -165,6 +166,20 @@ const useFillGapsGameStore = create(
       const game = games.find(game => game.id === id);
 
       return game;
+    },
+
+    getUserAnswers: (id) => 
+    {
+      const { games } = get();
+      const game = games.find(game => game.id === id);
+
+      if(game == null)
+      {
+        console.warn("game not found. cannot get user answers");
+        return [];
+      }
+
+      return game.userAnswers;
     },
 
     initializeNewGameState: ({ caseId, id }) =>

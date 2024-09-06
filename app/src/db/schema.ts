@@ -1,4 +1,5 @@
 /* eslint-disable sort-keys-fix/sort-keys-fix,@typescript-eslint/naming-convention,@typescript-eslint/no-use-before-define,max-lines */
+import { type GameResultSchemaType } from "@/schemas/gamesProgress/setGameProgressState.schema";
 import { type SearchIndex, searchIndices } from "@/utils/search";
 
 import { type InferInsertModel, type InferSelectModel, relations } from "drizzle-orm";
@@ -7,7 +8,8 @@ import {
   boolean,
   type PgTable,
   type PgColumn,
-  date
+  date,
+  jsonb
 } from "drizzle-orm/pg-core";
 
 // type InferPgSelectModel1<T extends PgTable> = {
@@ -328,9 +330,12 @@ export type CaseSolution = InferSelectModel<typeof casesSolutions>;
 export type CaseSolutionSql = InferPgSelectModel<typeof casesSolutions>;
 
 export const gamesProgress = pgTable("GameProgress", {
+  id: serial("Id").primaryKey(),
   userId: uuid("UserId").references(() => users.id, { onDelete: "no action" }).notNull(),
   gameId: uuid("GameId").notNull(),
   progressState: gameProgressStateEnum("ProgressState").notNull().default("not-started"),
+  date: timestamp("Date").defaultNow().notNull(),
+  gameResult: jsonb("GameResult").$type<GameResultSchemaType>(),
 }, table => ({
   pk: primaryKey({ columns: [table.userId, table.gameId] }),
 }));
