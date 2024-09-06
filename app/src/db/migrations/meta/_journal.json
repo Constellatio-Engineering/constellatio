@@ -106,6 +106,13 @@
       "when": 1725612131870,
       "tag": "0019_rich_namora",
       "breakpoints": true
+    },
+    {
+      "idx": 20,
+      "version": "6",
+      "when": 1725614160446,
+      "tag": "0020_closed_avengers",
+      "breakpoints": true
     }
   ]
 }
