@@ -23,7 +23,7 @@ const SearchOverlayRightSide: FunctionComponent<SearchOverlayRightSideProps> = (
     <div css={styles.suggestionsRight}>
       {hasInput && (searchResults.userDocuments.length > 0 || searchResults.userUploads.length > 0) && (
         <>
-          <SuggestionSection label="Deine Dateien" labelVariant="neutral">
+          <SuggestionSection label="Dateien & Docs" labelVariant="neutral">
             {searchResults.userUploads.slice(0, 9).map((result) => (
               <SearchOverlayLink href={{ pathname: appPaths.search, query: { find: result.originalFilename, tab: "userUploads" } }} key={result.id} className="suggestion__section__link">
                 <CustomLink styleType="link-content" component="p">
