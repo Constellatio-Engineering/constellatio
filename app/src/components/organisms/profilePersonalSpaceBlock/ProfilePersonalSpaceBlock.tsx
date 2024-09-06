@@ -45,7 +45,7 @@ const ProfilePersonalSpaceBlock: FunctionComponent = () =>
       icon: { src: <FileWhiteIcon/> },
       number: uploadedFilesCount,
       subtitle: uploadedFilesCount > 1 ? "Dateien" : "Datei",
-      title: "Deine Dateien"
+      title: "Dateien & Docs"
     }
   ];
 
