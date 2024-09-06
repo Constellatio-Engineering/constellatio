@@ -92,6 +92,20 @@
       "when": 1725584953410,
       "tag": "0017_medical_rictor",
       "breakpoints": true
+    },
+    {
+      "idx": 18,
+      "version": "6",
+      "when": 1725612131320,
+      "tag": "0018_thankful_blonde_phantom",
+      "breakpoints": true
+    },
+    {
+      "idx": 19,
+      "version": "6",
+      "when": 1725612131870,
+      "tag": "0019_rich_namora",
+      "breakpoints": true
     }
   ]
 }
