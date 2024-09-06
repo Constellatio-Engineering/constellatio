@@ -35,7 +35,7 @@ const DashboardPersonalSpaceBlock: FunctionComponent = () =>
                 <BodyText styleType="body-01-medium" component="p">Favoriten</BodyText>
               </SwitcherTab>
               <SwitcherTab value="materials" onClick={() => setSwitcherValue("materials")} icon={<FileWhiteIcon/>}>
-                <BodyText styleType="body-01-medium" component="p">Deine Dateien</BodyText>
+                <BodyText styleType="body-01-medium" component="p">Dateien & Docs</BodyText>
               </SwitcherTab>
             </Tabs.List>
           </Switcher>
