@@ -17,6 +17,7 @@ const HeaderDefaultRecreateSearch: FunctionComponent = () =>
 
   return (
     <Menu.Item
+      sx={{ fontSize: 15 }}
       disabled={isRecreatingSearchIndices}
       closeMenuOnClick={false}
       onClick={() => recreateSearchIndices()}

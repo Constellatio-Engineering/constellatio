@@ -8,6 +8,13 @@
     "src/lib/database.types.ts"
   ],
   "rules": {
+    "@typescript-eslint/switch-exhaustiveness-check": [
+      "error",
+      {
+        "allowDefaultCaseForExhaustiveSwitch": true,
+        "requireDefaultForNonUnion": true
+      }
+    ],
     "@typescript-eslint/explicit-function-return-type": "off",
     "react/jsx-handler-names": "off",
     "react/prop-types": "off",

@@ -2,6 +2,7 @@ import { db } from "@/db/connection";
 import { users } from "@/db/schema";
 import { env } from "@/env.mjs";
 import { addUserToCrmUpdateQueue } from "@/lib/clickup/utils";
+import { handleInvoicePaid } from "@/lib/stripe/invoice-paid";
 import { stripe } from "@/lib/stripe/stripe";
 import { handleSubscriptionEvent } from "@/lib/stripe/subscription";
 import { InternalServerError } from "@/utils/serverError";
@@ -50,8 +51,7 @@ const handler: NextApiHandler = async (req, res) =>
   }
   else if(event.type === "invoice.paid")
   {
-    // TODO: This is currently disabled
-    // await handleInvoicePaid(event.data.object);
+    await handleInvoicePaid(event.data.object);
   }
 
   if(crmRelevantEvents.includes(event.type))

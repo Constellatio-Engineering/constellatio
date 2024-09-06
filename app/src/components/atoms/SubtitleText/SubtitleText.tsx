@@ -2,12 +2,14 @@ import { type CSSObject, Text, type TextProps, createPolymorphicComponent } from
 import React, { type FC } from "react";
 
 type TSubtitleText = TextProps & {
+  readonly size?: number;
   readonly styleOverwrite?: CSSObject;
   readonly styleType: "subtitle-01-bold" | "subtitle-01-medium";
 };
 
 const _SubtitleText: FC<TSubtitleText> = ({
   children,
+  size,
   styleOverwrite,
   styleType,
   ...props
@@ -16,7 +18,7 @@ const _SubtitleText: FC<TSubtitleText> = ({
   return (
     <Text
       sx={(theme) => ({
-        fontSize: theme.fontSizes["spacing-18"],
+        fontSize: size ?? theme.fontSizes["spacing-18"],
         fontWeight: styleType === "subtitle-01-bold" ? 700 : 500,
         lineHeight: theme.spacing["spacing-24"],
         ...styleOverwrite,

@@ -1,21 +1,23 @@
+/* eslint-disable max-lines */
 import { colors } from "@/constants/styles/colors";
 import { useInitialTags } from "@/hooks/useInitialTags";
 import { useTagsSearchResults } from "@/hooks/useTagsSearchResults";
 import { type IGenTags } from "@/services/graphql/__generated/sdk";
 import { type EditorOpened, useTagsEditorStore } from "@/stores/tagsEditor.store";
 import { useTagsSearchBarStore } from "@/stores/tagsSearchBar.store";
+import { appPaths } from "@/utils/paths";
 import { type TagSearchIndexItem } from "@/utils/search";
 
 import { ActionIcon, Badge, Input, rem } from "@mantine/core";
 import { IconSearch, IconX } from "@tabler/icons-react";
-import React, { type FunctionComponent } from "react";
+import React, { type FunctionComponent, type MouseEvent } from "react";
 
 import * as styles from "./TagsSelector.styles";
 
 type CustomBadgeProps = {
-  readonly deleteButtonAction?: () => void;
+  readonly deleteButtonAction?: (e: MouseEvent) => void;
   readonly isSelected?: boolean;
-  readonly selectAction?: () => void;
+  readonly selectAction?: (e: MouseEvent) => void;
   readonly title: string;
 };
 
@@ -51,7 +53,11 @@ const CustomBadge: FunctionComponent<CustomBadgeProps> = ({
     rightSection={deleteButtonAction != null && (
       <ActionIcon
         size="xs"
-        onClick={deleteButtonAction}
+        onClick={(e) =>
+        {
+          e.stopPropagation();
+          deleteButtonAction(e);
+        }}
         sx={{
           color: colors["neutrals-01"][7],
         }}
@@ -98,8 +104,13 @@ const TagsSelector: FunctionComponent<Props> = ({ editorState }) =>
     <>
       <div css={styles.selectedTagsWrapper}>
         <div css={styles.headWrapper}>
-          <p css={styles.appliedTags}>{editorState.editedTags.length} Tags zugewiesen</p>
-          <p css={styles.amountOfApplieableTags}>Du kannst bis zu 10 Tags zuweisen</p>
+          <div css={styles.amountOfTagsWrapper}>
+            <p css={styles.heading}>{editorState.editedTags.length} Tag{editorState.editedTags.length === 1 ? "" : "s"} zugewiesen</p>
+            <p css={styles.amountOfApplieableTags}>Du kannst bis zu 10 Tags zuweisen</p>
+          </div>
+          {editorState.editedTags.length === 0 && (
+            <p css={styles.noTagsApplied}>Nutze die Suche, um Tags zu finden und zuzuweisen</p>
+          )}
         </div>
         <div css={styles.badgesWrapper}>
           {editorState.editedTags.map(tag =>
@@ -115,6 +126,7 @@ const TagsSelector: FunctionComponent<Props> = ({ editorState }) =>
               <CustomBadge
                 key={id}
                 title={tagName}
+                selectAction={(_e) => window.open(`${appPaths.search}?find=${tagName}`, "_blank")}
                 deleteButtonAction={() => deselectTag(id)}
               />
             );
@@ -122,6 +134,7 @@ const TagsSelector: FunctionComponent<Props> = ({ editorState }) =>
         </div>
       </div>
       <div css={styles.selectionAreaWrapper}>
+        <p css={styles.heading}>Weitere Tags hinzufügen</p>
         <Input
           icon={<IconSearch size={20}/>}
           placeholder="Suche nach Tags"
@@ -144,10 +157,15 @@ const TagsSelector: FunctionComponent<Props> = ({ editorState }) =>
           onChange={(event) => setSearchValue(event.currentTarget.value)}
           size={"md"}
           radius="md"
+          mt={12}
+          mb={20}
         />
+        {searchValue.length === 0 && (
+          <p css={styles.examples}>Beispiele</p>
+        )}
         <div css={styles.selectableBadgesWrapper}>
           {displayedTags === "noResults" ? (
-            <p>Keine Tags gefunden</p>
+            <p css={styles.noResults}>Keine Tags gefunden</p>
           ) : displayedTags.map((tag) =>
           {
             const { id, tagName } = tag;
