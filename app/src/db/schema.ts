@@ -4,7 +4,10 @@ import { type SearchIndex, searchIndices } from "@/utils/search";
 import { type InferInsertModel, type InferSelectModel, relations } from "drizzle-orm";
 import {
   text, pgTable, integer, pgEnum, uuid, smallint, unique, timestamp, primaryKey, index, type AnyPgColumn, serial, uniqueIndex,
-  boolean, type PgTable, type PgColumn
+  boolean,
+  type PgTable,
+  type PgColumn,
+  date
 } from "drizzle-orm/pg-core";
 
 // type InferPgSelectModel1<T extends PgTable> = {
@@ -64,6 +67,9 @@ export type FileExtension = typeof fileExtensions[number];
 export const fileMimeTypes = [...imageFileMimeTypes, ...documentFileMimeTypes] as const;
 export type FileMimeType = typeof fileMimeTypes[number];
 
+export const streakActivityTypes = ["time", "solvedCase", "forumActivity"] as const;
+export type StreakActivityType = typeof streakActivityTypes[number]; 
+
 export const badgeIdentifiers = [
   "fall-1",
   "forum-power",
@@ -95,7 +101,10 @@ export const badgeIdentifiers = [
   "ugc-10",
   "forum-5",
   "feedback-5",
-  "ugc-5"
+  "ugc-5",
+  "streak-14",
+  "streak-42",
+  "streak-84"
 ] as const;
 export type BadgeIdentifier = typeof badgeIdentifiers[number];
 
@@ -136,6 +145,7 @@ export const userBadgeStateEnum = pgEnum("UserBadgeState", userBadgeStates);
 export const badgePublicationStateEnum = pgEnum("BadgePublicationState", badgePublicationState);
 export const roleEnum = pgEnum("Role", roles);
 export const notificationTypeIdentifierEnum = pgEnum("NotificationType", notificationTypesIdentifiers);
+export const streakActivityTypeEnum = pgEnum("StreakActivityType", streakActivityTypes);
 
 // TODO: Go through all queries and come up with useful indexes
 
@@ -714,3 +724,28 @@ export const updateUserInCrmQueue = pgTable("UpdateUserInCrmQueue", {
 
 export type UpdateUserInCrmQueueInsert = InferInsertModel<typeof updateUserInCrmQueue>;
 export type UpdateUserInCrmQueue = InferSelectModel<typeof updateUserInCrmQueue>;
+
+export const streak = pgTable("Streak", {
+  id: serial("id").primaryKey(),
+  userId: uuid("UserId").references(() => users.id, { onDelete: "no action" }).notNull(),
+  startDate: date("StartDate", { mode: "date" }).defaultNow().notNull(),
+  lastSatisfiedDate: date("LastSatisfiedDate", { mode: "date" }).defaultNow().notNull(),
+  satisfiedDays: integer("SatisfiedDays").default(1),
+  streakAlive: boolean("StreakAlive").default(true),
+  lastCheckDate: date("LastCheckDate", { mode: "date" }).defaultNow().notNull(),
+});
+
+export type StreakInsert = InferInsertModel<typeof streak>;
+export type Streak = InferSelectModel<typeof streak>;
+export type StreakSql = InferPgSelectModel<typeof streak>;
+
+export const streakActivities = pgTable("StreakActivities", {
+  id: serial("id").primaryKey(),
+  userId: uuid("UserId").references(() => users.id, { onDelete: "cascade" }).notNull(),
+  activityType: streakActivityTypeEnum("ActivityType").notNull(),
+  createdAt: date("CreatedAt", { mode: "date" }).defaultNow().notNull(),
+});
+
+export type StreakActivityInsert = InferInsertModel<typeof streakActivities>;
+export type StreakActivity = InferSelectModel<typeof streakActivities>;
+export type StreakActivitySql = InferPgSelectModel<typeof streakActivities>;

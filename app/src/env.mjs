@@ -79,6 +79,7 @@ export const env = createEnv({
     NEXT_PUBLIC_IS_USAGE_TIME_CHART_ENABLED: z.enum(["true", "false"]).transform((value) => value === "true"),
     NEXT_PUBLIC_IS_REQUEST_BATCHING_DISABLED: z.enum(["true", "false"]).transform((value) => value === "true"),
     NEXT_PUBLIC_TRIAL_PERIOD_IN_DAYS: z.string().pipe(z.coerce.number().int().min(1).max(730)),
+    NEXT_PUBLIC_STREAK_DAILY_TIME_ACTIVITY_THRESHOLD_SECONDS: z.string().pipe(z.coerce.number().int().min(1).max(86400)),
   },
 
   /**
@@ -143,6 +144,7 @@ export const env = createEnv({
     STRIPE_SDK_CONCURRENCY_LIMIT: process.env.STRIPE_SDK_CONCURRENCY_LIMIT,
     SYNC_USERS_TO_CRM: process.env.SYNC_USERS_TO_CRM,
     SUPABASE_WEBHOOK_SECRET: process.env.SUPABASE_WEBHOOK_SECRET,
+    NEXT_PUBLIC_STREAK_DAILY_TIME_ACTIVITY_THRESHOLD_SECONDS: process.env.NEXT_PUBLIC_STREAK_DAILY_TIME_ACTIVITY_THRESHOLD_SECONDS,
   },
   /**
    * Run `build` or `dev` with `SKIP_ENV_VALIDATION` to skip env validation.

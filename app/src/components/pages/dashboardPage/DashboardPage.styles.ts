@@ -1,7 +1,7 @@
 import { css } from "@emotion/react";
 
 export const sections = css`
-  margin: 150px 0 100px;
+  margin: 250px 0 100px;
   display: flex;
   flex-direction: column;
   gap:100px;

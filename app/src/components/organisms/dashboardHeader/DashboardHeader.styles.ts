@@ -31,10 +31,19 @@ export const headerTitle = (theme: MantineTheme) => css`
 export const headerCardsArea = css`
   display: flex;
   align-items: stretch;
-  margin-top: 100px;
+  margin-top: 50px;
   gap: ${100 - learningTimeCardWidth - badgesCarouselWidth}%;
   width: 100%;
   > div {
     box-shadow: 0px 2px 20px rgba(0, 0, 0, 0.05);
   }
+`;
+
+export const streakCardContainer = css`
+  padding-top: 50px;
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
 `;

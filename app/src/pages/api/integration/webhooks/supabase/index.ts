@@ -3,7 +3,13 @@ import { type WebhookPayload } from "@/pages/api/integration/webhooks/supabase/t
 
 import { type NextApiHandler } from "next";
 
-const handler: NextApiHandler = (req, res) =>
+import {
+  streakHandlerCaseProgressInsert,
+  streakHandlerCaseProgressUpdate,
+  streakHandlerForumAnswerInsert, streakHandlerForumQuestionInsert, streakHandlerPingInsert, streakHandlerStreakInsert, streakHandlerStreakUpdate 
+} from "./handlers/streak.handler";
+
+const handler: NextApiHandler = async (req, res) =>
 {
   if(req.headers.authorization !== `Bearer ${env.SUPABASE_WEBHOOK_SECRET}`)
   {
@@ -12,41 +18,64 @@ const handler: NextApiHandler = (req, res) =>
   }
 
   const payload = req.body as WebhookPayload;
-  console.log("Supabase Webhook received:", payload);
+  // console.log("Supabase Webhook received:", payload);
 
   switch (payload.table)
   {
+    case "Ping":
+      switch (payload.type)
+      {
+        case "INSERT":
+          await streakHandlerPingInsert(payload.record);
+          break;
+      }
+      break;
+    case "ForumAnswer":
+      switch (payload.type)
+      {
+        case "INSERT":
+          await streakHandlerForumAnswerInsert(payload.record);
+          break;
+      }
+      break;
+    case "ForumQuestion":
+      switch (payload.type)
+      {
+        case "INSERT":
+          await streakHandlerForumQuestionInsert(payload.record);
+          break;
+      }
+      break;
+    case "CaseProgress":
+      switch (payload.type)
+      {
+        case "INSERT":
+          await streakHandlerCaseProgressInsert(payload.record);
+          break;
+        case "UPDATE":
+          await streakHandlerCaseProgressUpdate(payload.record);
+          break;
+      }
+      break;
+    case "Streak":
+      switch (payload.type)
+      {
+        case "INSERT":
+          await streakHandlerStreakInsert(payload.record);
+          break;
+        case "UPDATE":
+          await streakHandlerStreakUpdate(payload.record);
+          break;
+      }
+      break;
     case "User":
-      switch (payload.type)
-      {
-        case "INSERT":
-          console.log("User inserted:", payload.record);
-          break;
-        case "UPDATE":
-          console.log("User updated:", payload.old_record, payload.record);
-          break;
-        case "DELETE":
-          console.log("User deleted:", payload.old_record);
-          break;
-      }
-      break;
+    {
+      throw new Error("Case 'User' is not implemented yet");
+    }
     case "ProfilePicture":
-      switch (payload.type)
-      {
-        case "INSERT":
-          console.log("ProfilePicture inserted:", payload.record);
-          break;
-        case "UPDATE":
-          console.log("ProfilePicture updated:", payload.old_record, payload.record);
-          break;
-        case "DELETE":
-          console.log("ProfilePicture deleted:", payload.old_record);
-          break;
-      }
-      break;
-    default:
-      console.error("Unknown table type in payload:", payload);
-      return res.status(500).json({ message: "Unknown table type" });
+    {
+      throw new Error("Case 'ProfilePicture' is not implemented yet");
+    }
   }
 
   return res.status(200).json({ message: "Success" });
