@@ -11,7 +11,6 @@ import { createTRPCRouter, protectedProcedure } from "../trpc";
 export const streakRouter = createTRPCRouter({
   getStreak: protectedProcedure.query(async ({ ctx: { userId } }) =>
   {
-    console.log("get Streak");
     const today = new Date();
     today.setHours(0, 0, 0, 0); 
 
@@ -23,6 +22,7 @@ export const streakRouter = createTRPCRouter({
       .limit(1);
 
     const latestStreak = latestStreakQuery[0];
+
     if(!latestStreak) 
     {
       return null;
@@ -37,10 +37,8 @@ export const streakRouter = createTRPCRouter({
     // cast to number due to default value of satisfiedDays
     const totalDays = (latestStreak.satisfiedDays as number) + numPauseDays;
 
-    console.log("totalDays", totalDays);
     if(totalDays < daysSinceStartInclToday) 
     {
-      console.log("streak is dead");
       await db.update(streak)
         .set({ 
           lastCheckDate: new Date(),

@@ -3,10 +3,13 @@ import {
   type ForumQuestionSql, pings, streak, type PingSql, type ForumAnswerSql, type CaseProgressSql, 
   type StreakSql
 } from "@/db/schema";
+import { env } from "@/env.mjs";
 import { addBadgeForUser } from "@/server/api/services/badges.services";
 import { createStreakActivity } from "@/server/api/services/streak.services";
 
-import { and, eq, gte, sql } from "drizzle-orm";
+import {
+  and, eq, gte, sum
+} from "drizzle-orm";
 
 export const streakHandlerPingInsert = async (record: PingSql["columns"]): Promise<void> =>
 {
@@ -25,8 +28,8 @@ export const streakHandlerPingInsert = async (record: PingSql["columns"]): Promi
   const today = new Date();
   today.setHours(0, 0, 0, 0);
 
-  const result = await db.select({
-    totalPingInterval: sql<number>`Cast(SUM(${pings.pingInterval}) as int)`,
+  const [result] = await db.select({
+    totalPingInterval: sum(pings.pingInterval).mapWith(Number),
   })
     .from(pings)
     .where(
@@ -36,11 +39,9 @@ export const streakHandlerPingInsert = async (record: PingSql["columns"]): Promi
       )
     );
 
-  const totalPingInterval = result[0]?.totalPingInterval ?? 0;
-  console.log(`Total pingInterval for user ${UserId} today: ${totalPingInterval}`);
+  const totalPingInterval = result?.totalPingInterval ?? 0;
 
-  // 1 hour
-  if(totalPingInterval >= 3600)
+  if(totalPingInterval >= env.NEXT_PUBLIC_STREAK_DAILY_TIME_ACTIVITY_THRESHOLD_SECONDS)
   {
     console.log(`Creating streak activity for user ${UserId} with activity type "time"`);
     await createStreakActivity("time", UserId);
@@ -79,22 +80,22 @@ export const streakHandlerCaseProgressUpdate = async (record: CaseProgressSql["c
   }
 };
 
-const handleBadges = async (SatisfiedDays: number | null, userId: string) =>
+const handleBadges = async (satisfiedDays: number | null, userId: string) =>
 {
-  if(!SatisfiedDays)
+  if(!satisfiedDays)
   {
     return;
   }
 
-  if(SatisfiedDays >= 5)
+  if(satisfiedDays >= 5)
   {
     await addBadgeForUser({ badgeIdentifier: "streak-14", userId });
   } 
-  if(SatisfiedDays >= 42)
+  if(satisfiedDays >= 42)
   {
     await addBadgeForUser({ badgeIdentifier: "streak-42", userId });
   } 
-  if(SatisfiedDays >= 84)
+  if(satisfiedDays >= 84)
   {
     await addBadgeForUser({ badgeIdentifier: "streak-84", userId });
   }

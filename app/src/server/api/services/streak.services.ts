@@ -8,8 +8,6 @@ export const createStreakActivity = async (
   userId: string,
 ) =>
 {
-  console.log("createStreakActivity", activityType, userId);
-
   const existingEntry = await db
     .select()
     .from(streakActivities)
@@ -21,12 +19,11 @@ export const createStreakActivity = async (
     )
     .limit(1);
   
-  console.log("existingEntry", existingEntry); 
-
-  if(existingEntry.length > 0) 
+  if(existingEntry.length > 0)
   {
     return;
   }
+
   await db.insert(streakActivities).values({ activityType, userId });
 
   // check if a streak is alive
