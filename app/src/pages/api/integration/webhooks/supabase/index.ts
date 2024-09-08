@@ -68,9 +68,14 @@ const handler: NextApiHandler = async (req, res) =>
           break;
       }
       break;
-    default:
-      console.error("Unknown table type in payload:", payload);
-      return res.status(500).json({ message: "Unknown table type" });
+    case "User":
+    {
+      throw new Error("Case 'User' is not implemented yet");
+    }
+    case "ProfilePicture":
+    {
+      throw new Error("Case 'ProfilePicture' is not implemented yet");
+    }
   }
 
   return res.status(200).json({ message: "Success" });

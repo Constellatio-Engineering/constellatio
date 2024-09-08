@@ -4,7 +4,7 @@
   "private": true,
   "scripts": {
     "separatorDev": "---------------------- DEVELOPMENT ----------------------",
-    "dev-without-migrations": "next dev -p 3010 --turbo",
+    "dev-without-migrations": "next dev -p 3010",
     "dev": "pnpm apply-migrations && pnpm dev-without-migrations",
     "sepatatorLint": "---------------------- LINT ----------------------",
     "check-types": "tsc --noEmit",
