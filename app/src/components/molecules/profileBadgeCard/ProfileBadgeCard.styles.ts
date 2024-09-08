@@ -3,7 +3,7 @@ import { colors } from "@/constants/styles/colors";
 import { css } from "@emotion/react";
 import { type MantineTheme } from "@mantine/styles";
 
-export const smallBadgeCardWidth = 180;
+export const smallBadgeCardWidth = 160;
 export const smallBadgeCardHeight = 180;
 
 export const wrapper = css`
@@ -33,7 +33,7 @@ export const wrapperSmall = css`
   cursor: pointer;
   transition: background-color 0.1s ease-in-out;
   :hover, :active, :focus {
-    background-color: ${colors["neutrals-01"][2]};
+    background-color: ${colors["neutrals-01"][3]};
   }
 `;
 

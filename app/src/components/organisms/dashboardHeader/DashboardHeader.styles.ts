@@ -1,6 +1,3 @@
-import { widthPercentage as badgesCarouselWidth } from "@/components/organisms/badgesCarouselBlock/BadgesCarouselBlock.styles";
-import { widthPercentage as learningTimeCardWidth } from "@/components/organisms/learninTimeCard/LearninTimeCard.styles";
-
 import { css } from "@emotion/react";
 import { type MantineTheme } from "@mantine/styles";
 
@@ -18,8 +15,8 @@ export const contentContainer = css`
     top: 10px
   }
   @media screen and (max-width: 1300px) {
-    padding: 0 20px;
     min-width: auto;
+    width: 94%;
   }
 `;
 
@@ -31,9 +28,9 @@ export const headerTitle = (theme: MantineTheme) => css`
 export const headerCardsArea = css`
   display: flex;
   align-items: stretch;
-  margin-top: 50px;
-  gap: ${100 - learningTimeCardWidth - badgesCarouselWidth}%;
+  margin-top: 100px;
   width: 100%;
+  justify-content: space-between;
   > div {
     box-shadow: 0px 2px 20px rgba(0, 0, 0, 0.05);
   }
