@@ -17,7 +17,7 @@ const DashboardHeader: FunctionComponent = () =>
 
   return (
     <div css={styles.wrapper}>
-      <OverviewHeader variant="red" height={500}/>
+      <OverviewHeader variant="red" height={490}/>
       <ContentWrapper stylesOverrides={styles.contentContainer}>
         <Title css={styles.headerTitle} order={1}>Willkommen{userDetails?.firstName && `, ${userDetails?.firstName}!`}</Title>
         {/* <DashboardheaderProgressBar/> */}

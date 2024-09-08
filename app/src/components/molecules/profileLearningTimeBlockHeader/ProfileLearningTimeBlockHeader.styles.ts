@@ -14,7 +14,7 @@ export const blockHead = css`
     justify-content: space-between;
     align-items: center;
     gap: 8px;
-    margin-bottom: 14px;
+    margin-bottom: 26px;
 `;
 export const blockHeadText = css`
     display: flex;

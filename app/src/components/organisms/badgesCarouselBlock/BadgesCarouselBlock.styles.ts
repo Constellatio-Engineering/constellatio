@@ -18,7 +18,7 @@ export const wrapper = (theme: MantineTheme) => css`
   display: flex;
   flex-direction: column;
   justify-content: space-between;   
-  min-height: 300px;
+  min-height: 290px;
   width: calc(100% - ${learningTimeCardWidth + streakCardWidth}px - 3%);
   @media screen and (max-width: ${cardsSmallerBreakpoint}px) {
     width: calc(100% - ${learningTimeCardWidthSmall + streakCardWidthSmall}px - 3%);
