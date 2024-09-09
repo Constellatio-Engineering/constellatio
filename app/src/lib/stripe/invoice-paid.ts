@@ -34,9 +34,7 @@ async function handleReferral(dbUserId: string): Promise<void>
   
   await db
     .update(referrals)
-    .set({
-      paid: true,
-    })
+    .set({ paid: true })
     .where(eq(referrals.index, referral.index));
 
   const referringUser = await db.query.users.findFirst({
