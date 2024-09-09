@@ -19,6 +19,7 @@ import { viewsRouter } from "@/server/api/routers/views.router";
 import { createTRPCRouter } from "@/server/api/trpc";
 
 import { referralRouter } from "./routers/referral.router";
+import { streakRouter } from "./routers/streak.router";
 
 /**
  * All routers added in /api/routers should be manually added here.
@@ -38,11 +39,12 @@ export const appRouter = createTRPCRouter({
   notifications: notificationsRouter,
   referral: referralRouter,
   search: searchRouter,
+  streak: streakRouter,
   tags: tagsRouter,
   uploads: uploadsRouter,
   userActivity: userActivityRouter,
   users: usersRouter,
-  views: viewsRouter
+  views: viewsRouter,
 });
 
 // export type definition of API

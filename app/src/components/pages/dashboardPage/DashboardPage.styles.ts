@@ -6,7 +6,7 @@ export const sections = css`
   flex-direction: column;
   gap:100px;
   @media screen and (max-width: 1200px) {
-    margin: 180px 0 60px;
+    margin: 130px 0 60px;
     gap: 60px;
   }
 `;

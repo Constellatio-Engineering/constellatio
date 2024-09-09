@@ -14,7 +14,7 @@ export const blockHead = css`
     justify-content: space-between;
     align-items: center;
     gap: 8px;
-    margin-bottom: 32px;
+    margin-bottom: 26px;
 `;
 export const blockHeadText = css`
     display: flex;
@@ -47,3 +47,15 @@ export const uploadedMaterialsTab = css`
     gap: 16px;
     margin: 24px 0;
 `;
+
+export const streak = css`
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 8px;
+  margin-bottom: 32px;
+  padding: 4px 8px;
+  border-radius: 8px;
+  font-size: 14px;
+  font-weight: 500;
+  `;
