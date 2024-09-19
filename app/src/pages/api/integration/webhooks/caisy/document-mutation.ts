@@ -2,6 +2,7 @@
 import { db } from "@/db/connection";
 import { type CaisyWebhookEventType, documentsToTags, uploadedFilesToTags } from "@/db/schema";
 import { env } from "@/env.mjs";
+import { createContentTaskIfNotExists } from "@/lib/clickup/utils";
 import { addArticlesAndCasesToSearchQueue, addContentToSearchQueue } from "@/server/api/services/search.services";
 import { caisySDK } from "@/services/graphql/getSdk";
 
@@ -95,12 +96,14 @@ const handler: NextApiHandler = async (req, res): Promise<void> =>
     {
       console.log(`Case '${documentId}' changed. Adding it to the search index update queue...`);
       await addContentToSearchQueue({ cmsId: documentId, eventType, searchIndexType: "cases" });
+      await createContentTaskIfNotExists(documentId, "case");
       break;
     }
     case env.CAISY_ARTICLE_BLUEPRINT_ID:
     {
       console.log(`Article '${documentId}' changed. Adding it to the search index update queue...`);
       await addContentToSearchQueue({ cmsId: documentId, eventType, searchIndexType: "articles" });
+      await createContentTaskIfNotExists(documentId, "article");
       break;
     }
     case env.CAISY_TAG_BLUEPRINT_ID:
