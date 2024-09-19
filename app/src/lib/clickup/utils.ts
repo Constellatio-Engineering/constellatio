@@ -5,7 +5,7 @@ import { env } from "@/env.mjs";
 import { createClickupTask } from "@/lib/clickup/tasks/create-task";
 import { findClickupTask } from "@/lib/clickup/tasks/find-task";
 import {
-  type ClickupTask,
+  type ClickupTask, type ClickupTaskCreate,
   type CurrencyCustomFieldInsertProps,
   type CustomFieldInsert,
   type DateCustomFieldInsertProps,
@@ -351,10 +351,7 @@ export const getClickupCrmUserByUserId = async (userId: string) =>
   });
 };
 
-type GetContentTaskCrmData = (content: AllCases[number] | allArticles[number]) => {
-  custom_fields: CustomFieldInsert[];
-  name: string;
-};
+type GetContentTaskCrmData = (content: AllCases[number] | allArticles[number]) => Required<Pick<ClickupTaskCreate, "name" | "due_date" | "custom_fields">>;
 
 export const getContentTaskCrmData: GetContentTaskCrmData = (content) =>
 {
@@ -367,25 +364,6 @@ export const getContentTaskCrmData: GetContentTaskCrmData = (content) =>
     id: clickupContentTaskCustomField.type.fieldId,
     value: content.__typename === "Case" ? clickupContentTaskCustomField.type.options.legalCase.fieldId : clickupContentTaskCustomField.type.options.article.fieldId
   };
-
-  /* const legalAreaIndex = Object
-    .entries(clickupContentTaskCustomField.legalArea.options)
-    .findIndex(([key, value]) =>
-    {
-      console.log(`checking legal area '${key}'. caisyId: ${value.caisyId}, fieldId: ${value.fieldId}`);
-
-      if(value.caisyId === content.legalArea?.id)
-      {
-        console.log(`found legal area '${key}' with id '${value.caisyId}'`);
-      }
-
-      return value.caisyId === content.legalArea?.id;
-    });
-
-  const legalAreaCustomFieldData: LabelCustomFieldInsertProps = {
-    id: clickupContentTaskCustomField.legalArea.fieldId,
-    value: [Object.values(clickupContentTaskCustomField.legalArea.options)[legalAreaIndex]?.fieldId]
-  };*/
 
   const legalAreaId = Object.values(clickupContentTaskCustomField.legalArea.options).find((legalArea) => legalArea.caisyId === content.legalArea?.id)?.fieldId;
 
@@ -400,7 +378,8 @@ export const getContentTaskCrmData: GetContentTaskCrmData = (content) =>
       typeCustomFieldData,
       legalAreaCustomFieldData
     ],
-    name: content.title ?? "Error: No title"
+    due_date: new Date(Date.now() + 30 * 24 * 60 * 60 * 1000).getTime(),
+    name: content.title ?? "Error: No title",
   });
 };
 
@@ -421,7 +400,7 @@ export const getUserCrmData: GetUserCrmData = ({
   subscriptionData,
   supabaseUserData,
   user
-}) =>
+}): Required<Pick<ClickupTaskCreate, "name" | "custom_fields">> =>
 {
   let stripeSubscriptionStatusCustomFieldId: string | undefined;
 
@@ -721,6 +700,11 @@ export const addUserToCrmUpdateQueue = async (userId: Nullable<string>) =>
 
 export const createContentTaskIfNotExists = async (documentId: string, documentType: "case" | "article"): Promise<void> =>
 {
+  if(env.NEXT_PUBLIC_DEPLOYMENT_ENVIRONMENT !== "production")
+  {
+    return;
+  }
+
   if(!documentId)
   {
     console.error("[createContentTaskIfNotExists] document id is null");
