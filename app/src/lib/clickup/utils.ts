@@ -19,6 +19,8 @@ import { getCrmDataForUser, getUpdateUsersCrmDataPromises, type UserWithActivity
 import { allUniversities } from "@/schemas/auth/userData.validation";
 import { type allArticles } from "@/services/content/getAllArticles";
 import { type AllCases } from "@/services/content/getAllCases";
+import type { IGenFullArticleFragment, IGenFullCaseFragment } from "@/services/graphql/__generated/sdk";
+import { caisySDK } from "@/services/graphql/getSdk";
 import { InternalServerError } from "@/utils/serverError";
 import { type Nullable } from "@/utils/types";
 
@@ -715,4 +717,55 @@ export const addUserToCrmUpdateQueue = async (userId: Nullable<string>) =>
   // ALso, manually calling this function is not a good idea. It should be called automatically, e.g. with a webhook.
 
   await db.insert(updateUserInCrmQueue).values({ userId }).onConflictDoNothing();
+};
+
+export const createContentTaskIfNotExists = async (documentId: string, documentType: "case" | "article"): Promise<void> =>
+{
+  if(!documentId)
+  {
+    console.error("[createContentTaskIfNotExists] document id is null");
+    return;
+  }
+
+  const existingContentTask = await findClickupTask(env.CLICKUP_CONTENT_TASKS_LIST_ID, {
+    custom_fields: [{
+      field_id: clickupContentTaskCustomField.caisyId.fieldId,
+      operator: "=",
+      value: documentId
+    }],
+    include_closed: true,
+  });
+
+  if(existingContentTask.data?.tasks.length > 0)
+  {
+    return;
+  }
+
+  let document: Nullable<IGenFullArticleFragment | IGenFullCaseFragment>;
+
+  if(documentType === "article")
+  {
+    const { Article } = await caisySDK.getArticleById({ id: documentId });
+    document = Article;
+  }
+  else if(documentType === "case")
+  {
+    const { Case } = await caisySDK.getCaseById({ id: documentId });
+    document = Case;
+  }
+  else
+  {
+    console.error("invalid document type", documentType);
+    return;
+  }
+
+  if(!document)
+  {
+    console.error(`no document found for document id ${documentId}`);
+    return;
+  }
+
+  await createClickupTask(env.CLICKUP_CONTENT_TASKS_LIST_ID, getContentTaskCrmData(document));
+
+  console.log(`created content task for document id ${documentId}`);
 };
