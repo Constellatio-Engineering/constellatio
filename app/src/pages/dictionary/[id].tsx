@@ -47,7 +47,7 @@ export const getStaticProps: GetStaticProps<GetArticleDetailPagePropsResult, Par
   {
     return {
       notFound: true,
-      revalidate: false
+      revalidate: 5
     };
   }
 

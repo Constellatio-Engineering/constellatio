@@ -131,7 +131,10 @@ const DetailsPage: FunctionComponent<IDetailsPageProps> = ({ content, variant })
   });
   const currentGame = games[currentGameIndex];
   const currentGameIndexInFullTextTasksJson = currentGame?.indexInFullTextTasksJson || 0;
-  const mainCategorySlug = content?.mainCategoryField?.[0]?.slug;
+  // const mainCategorySlug = content?.mainCategoryField?.[0]?.slug;
+  const mainCategoryName = content?.mainCategoryField?.[0]?.mainCategory;
+  const legalAreaName = content?.legalArea?.legalAreaName;
+  const topicName = content?.topic?.[0]?.topicName;
 
   return (
     <>
@@ -141,20 +144,28 @@ const DetailsPage: FunctionComponent<IDetailsPageProps> = ({ content, variant })
         previousArticleId={content?.__typename === "Article" ? content?.previousArticleId : null}
         nextArticleId={content?.__typename === "Article" ? content?.nextArticleId : null}
         caseId={content?.id}
-        pathSlugs={[
+        breadcrumbs={[
           {
             path: variant === "case" ? appPaths.cases : appPaths.dictionary,
             slug: variant === "case" ? "Fälle" : "Lexikon" 
           },
-          {
+          /* mainCategorySlug && {
             path: `${variant === "case" ? appPaths.cases : appPaths.dictionary}?category=${mainCategorySlug}`,
-            slug: mainCategorySlug ?? ""
+            slug: mainCategorySlug
+          },*/
+          mainCategoryName && {
+            path: `${appPaths.search}?find=${mainCategoryName}`,
+            slug: mainCategoryName
           },
-          { 
-            path: `${variant === "case" ? appPaths.cases : appPaths.dictionary}/${content?.id}`,
-            slug: content?.title?.length && content?.title?.length > 40 ? content?.title?.slice(0, 40) + " ..." : content?.title ?? ""
-          }
-        ]}
+          legalAreaName && {
+            path: `${appPaths.search}?find=${legalAreaName}`,
+            slug: legalAreaName
+          },
+          topicName && {
+            path: `${appPaths.search}?find=${topicName}`,
+            slug: topicName
+          },
+        ].filter(Boolean)}
         overviewCard={{
           contentId,
           contentTitle: content?.title,

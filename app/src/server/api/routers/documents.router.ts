@@ -1,5 +1,6 @@
 import { db } from "@/db/connection";
 import { type DocumentInsert, documents } from "@/db/schema";
+import { addUserToCrmUpdateQueue } from "@/lib/clickup/utils";
 import { meiliSearchAdmin } from "@/lib/meilisearch";
 import { createDocumentSchema } from "@/schemas/documents/createDocument.schema";
 import { deleteDocumentSchema } from "@/schemas/documents/deleteDocument.schema";
@@ -28,6 +29,7 @@ export const documentsRouter = createTRPCRouter({
       };
 
       const insertedDocument = await db.insert(documents).values(documentInsert).returning();
+      await addUserToCrmUpdateQueue(userId);
 
       const searchIndexItem = createDocumentSearchIndexItem({
         ...documentInsert,
@@ -59,6 +61,8 @@ export const documentsRouter = createTRPCRouter({
         eq(documents.id, id),
         eq(documents.userId, userId)
       ));
+
+      await addUserToCrmUpdateQueue(userId);
 
       const removeDeletedDocumentFromIndex = await meiliSearchAdmin
         .index(searchIndices.userDocuments)

@@ -19,6 +19,9 @@ export const wrapper = (theme: MantineTheme) => css`
     &:active{
         background-color: ${theme.colors["neutrals-01"][2]};
     };
+    * {
+        text-align: center;
+    }
 `;
 
 export const icon = (theme: MantineTheme) => css`

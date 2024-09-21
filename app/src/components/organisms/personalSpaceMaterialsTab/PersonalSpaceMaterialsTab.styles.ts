@@ -11,3 +11,11 @@ export const materialTabContainerContent = css`
     flex-direction: row;
   }
 `;
+
+export const contentWrapper = css`
+  display: flex;
+  flex-direction: column;
+  gap: 40px;
+  width: 100%;
+  margin: 0;
+`;

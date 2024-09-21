@@ -31,7 +31,7 @@ const SearchPageHeader: FunctionComponent<Props> = ({ setTabQuery, tabQuery, tot
     label: "Forum",
     resultsCount: searchResults.forumQuestions?.length
   }, {
-    label: "Deine Dateien",
+    label: "Dateien & Docs",
     resultsCount: searchResults.userUploads?.length + searchResults.userDocuments?.length
   }];
 

@@ -1,21 +1,28 @@
 /* eslint-disable max-lines */
-import type { User } from "@/db/schema";
+import { db } from "@/db/connection";
+import { updateUserInCrmQueue } from "@/db/schema";
 import { env } from "@/env.mjs";
 import { createClickupTask } from "@/lib/clickup/tasks/create-task";
 import { findClickupTask } from "@/lib/clickup/tasks/find-task";
 import {
-  type ClickupTask,
+  type ClickupTask, type ClickupTaskCreate,
+  type CurrencyCustomFieldInsertProps,
   type CustomFieldInsert,
   type DateCustomFieldInsertProps,
   type DropDownCustomFieldInsertProps,
-  type EmailCustomFieldInsertProps, type LabelCustomFieldInsertProps,
-  type NumberCustomFieldInsertProps, type ShortTextCustomFieldInsertProps,
+  type EmailCustomFieldInsertProps,
+  type LabelCustomFieldInsertProps,
+  type NumberCustomFieldInsertProps,
+  type ShortTextCustomFieldInsertProps,
 } from "@/lib/clickup/types";
-import { getCrmDataForUser, getUpdateUsersCrmDataPromises } from "@/pages/api/playground/sync-users-to-clickup";
+import { getCrmDataForUser, getUpdateUsersCrmDataPromises, type UserWithActivityStats } from "@/pages/api/playground/sync-users-to-clickup";
 import { allUniversities } from "@/schemas/auth/userData.validation";
 import { type allArticles } from "@/services/content/getAllArticles";
 import { type AllCases } from "@/services/content/getAllCases";
+import type { IGenFullArticleFragment, IGenFullCaseFragment } from "@/services/graphql/__generated/sdk";
+import { caisySDK } from "@/services/graphql/getSdk";
 import { InternalServerError } from "@/utils/serverError";
+import { type Nullable } from "@/utils/types";
 
 import { createPagesServerClient, type SupabaseClient, type User as SupabaseUser } from "@supabase/auth-helpers-nextjs";
 import { type AxiosRequestConfig } from "axios";
@@ -37,7 +44,7 @@ export const clickupUserIds = {
   sven: 36495811
 };
 
-export const clickupContentTaskCustomField = {
+const clickupContentTaskCustomField = {
   caisyId: {
     fieldId: "910257b5-05f5-4d4e-b173-8a7016b331c2",
   },
@@ -177,6 +184,27 @@ export const clickupCrmCustomField = {
       }
     }
   },
+  amountOfBades: {
+    fieldId: "07baeb31-6f79-4612-8d67-ad92d86c8323"
+  },
+  amountOfCreatedDocs: {
+    fieldId: "2ecde5fd-abee-4838-adaa-41b943bc65eb"
+  },
+  amountOfPayments: {
+    fieldId: "00d77223-cfe7-4247-a5b1-460345531511"
+  },
+  amountOfSolvedCases: {
+    fieldId: "a097b040-35d9-45f9-bb3f-ac42c8cd8a52"
+  },
+  amountOfUploadedFiles: {
+    fieldId: "1fb36ff5-d881-41fe-ad38-7f7a6b196845"
+  },
+  amountOfViewedArticles: {
+    fieldId: "8dae3e42-35f8-4167-9956-a34caccbd246"
+  },
+  amountOfViewedCases: {
+    fieldId: "f2ca99c2-7302-4a35-830a-9a2cda31ba68"
+  },
   category: {
     fieldId: "adebe618-2be5-4ae2-8437-0673b1f44321",
     options: {
@@ -191,11 +219,34 @@ export const clickupCrmCustomField = {
   memberUntil: {
     fieldId: "5a3ada95-dbf3-4e63-aceb-595a9a27afda"
   },
+  paymentInterval: {
+    fieldId: "03e3c6fd-fcd0-4219-a410-d04b5db45b76",
+    options: {
+      daily: {
+        fieldId: "328fdb97-4e35-4eb6-b0a2-8aa43425965e"
+      },
+      monthly: {
+        fieldId: "4acd073f-7527-4aa0-a7c7-c2ddd76e788c"
+      },
+      weekly: {
+        fieldId: "a2d1107a-755e-4594-b191-7825021f075c"
+      },
+      yearly: {
+        fieldId: "ac8889a3-acab-4c3a-89cd-400c551f4d03"
+      }
+    }
+  },
+  paymentMethod: {
+    fieldId: "6667ace2-e8e3-414a-8272-de6b84e20d60"
+  },
   semester: {
     fieldId: "37863c7b-36db-44e8-9215-e0e108b91db6"
   },
   signedUpDate: {
     fieldId: "02410e16-49aa-4a00-ab45-e07bfb7caf85"
+  },
+  totalMoneySpent: {
+    fieldId: "dbdbc7f5-3f9f-4e7b-b593-bfc77cba9964"
   },
   university: {
     fieldId: "b8e29f58-cb77-4519-8f12-dfc8117f90e8",
@@ -300,10 +351,7 @@ export const getClickupCrmUserByUserId = async (userId: string) =>
   });
 };
 
-type GetContentTaskCrmData = (content: AllCases[number] | allArticles[number]) => {
-  custom_fields: CustomFieldInsert[];
-  name: string;
-};
+type GetContentTaskCrmData = (content: AllCases[number] | allArticles[number]) => Required<Pick<ClickupTaskCreate, "name" | "due_date" | "custom_fields">>;
 
 export const getContentTaskCrmData: GetContentTaskCrmData = (content) =>
 {
@@ -316,25 +364,6 @@ export const getContentTaskCrmData: GetContentTaskCrmData = (content) =>
     id: clickupContentTaskCustomField.type.fieldId,
     value: content.__typename === "Case" ? clickupContentTaskCustomField.type.options.legalCase.fieldId : clickupContentTaskCustomField.type.options.article.fieldId
   };
-
-  /* const legalAreaIndex = Object
-    .entries(clickupContentTaskCustomField.legalArea.options)
-    .findIndex(([key, value]) =>
-    {
-      console.log(`checking legal area '${key}'. caisyId: ${value.caisyId}, fieldId: ${value.fieldId}`);
-
-      if(value.caisyId === content.legalArea?.id)
-      {
-        console.log(`found legal area '${key}' with id '${value.caisyId}'`);
-      }
-
-      return value.caisyId === content.legalArea?.id;
-    });
-
-  const legalAreaCustomFieldData: LabelCustomFieldInsertProps = {
-    id: clickupContentTaskCustomField.legalArea.fieldId,
-    value: [Object.values(clickupContentTaskCustomField.legalArea.options)[legalAreaIndex]?.fieldId]
-  };*/
 
   const legalAreaId = Object.values(clickupContentTaskCustomField.legalArea.options).find((legalArea) => legalArea.caisyId === content.legalArea?.id)?.fieldId;
 
@@ -349,20 +378,29 @@ export const getContentTaskCrmData: GetContentTaskCrmData = (content) =>
       typeCustomFieldData,
       legalAreaCustomFieldData
     ],
-    name: content.title ?? "Error: No title"
+    due_date: new Date(Date.now() + 30 * 24 * 60 * 60 * 1000).getTime(),
+    name: content.title ?? "Error: No title",
   });
 };
 
 type GetUserCrmData = (props: {
+  allInvoices: Stripe.Invoice[];
+  defaultPaymentMethod: Stripe.PaymentMethod | null;
   subscriptionData: Stripe.Response<Stripe.Subscription> | null;
   supabaseUserData: SupabaseUser;
-  user: User;
+  user: UserWithActivityStats;
 }) => {
   custom_fields: CustomFieldInsert[];
   name: string;
 };
 
-export const getUserCrmData: GetUserCrmData = ({ subscriptionData, supabaseUserData, user }) =>
+export const getUserCrmData: GetUserCrmData = ({
+  allInvoices,
+  defaultPaymentMethod,
+  subscriptionData,
+  supabaseUserData,
+  user
+}): Required<Pick<ClickupTaskCreate, "name" | "custom_fields">> =>
 {
   let stripeSubscriptionStatusCustomFieldId: string | undefined;
 
@@ -446,6 +484,90 @@ export const getUserCrmData: GetUserCrmData = ({ subscriptionData, supabaseUserD
     value: subscriptionFuture?.isCanceled ? clickupCrmCustomField.willSubscriptionContinue.options.no.fieldId : clickupCrmCustomField.willSubscriptionContinue.options.yes.fieldId
   };
 
+  const subscriptionItems = subscriptionData?.items.data;
+  const plan = subscriptionItems?.[0]?.plan;
+
+  if(subscriptionItems && subscriptionItems.length > 1)
+  {
+    console.error(`User ${user.id} has more than one subscription item. This is not supported and must be investigated.`);
+  }
+
+  const paymentIntervalOptions = clickupCrmCustomField.paymentInterval.options;
+
+  let paymentIntervalFieldValue: typeof paymentIntervalOptions[keyof typeof paymentIntervalOptions]["fieldId"] | undefined;
+
+  if(plan?.interval != null)
+  {
+    switch (plan.interval)
+    {
+      case "day":
+        paymentIntervalFieldValue = paymentIntervalOptions.daily.fieldId;
+        break;
+      case "month":
+        paymentIntervalFieldValue = paymentIntervalOptions.monthly.fieldId;
+        break;
+      case "week":
+        paymentIntervalFieldValue = paymentIntervalOptions.weekly.fieldId;
+        break;
+      case "year":
+        paymentIntervalFieldValue = paymentIntervalOptions.yearly.fieldId;
+        break;
+    }
+  }
+
+  const paymentIntervalCustomFieldData: DropDownCustomFieldInsertProps = {
+    id: clickupCrmCustomField.paymentInterval.fieldId,
+    value: paymentIntervalFieldValue
+  };
+
+  const allInvoicesWithMoneySpent = allInvoices.filter(invoice => invoice.total > 0);
+  const totalMoneySpent = allInvoicesWithMoneySpent.reduce((acc, invoice) => acc + invoice.total, 0) / 100;
+
+  const totalMoneySpentCustomFieldData: CurrencyCustomFieldInsertProps = {
+    id: clickupCrmCustomField.totalMoneySpent.fieldId,
+    value: totalMoneySpent
+  };
+
+  const amountOfPaymentsCustomFieldData: NumberCustomFieldInsertProps = {
+    id: clickupCrmCustomField.amountOfPayments.fieldId,
+    value: allInvoicesWithMoneySpent.length
+  };
+
+  const amountOfUploadedFilesCustomFieldData: NumberCustomFieldInsertProps = {
+    id: clickupCrmCustomField.amountOfUploadedFiles.fieldId,
+    value: user.uploadedFiles
+  };
+
+  const amountOfViewedArticlesCustomFieldData: NumberCustomFieldInsertProps = {
+    id: clickupCrmCustomField.amountOfViewedArticles.fieldId,
+    value: user.viewedArticles
+  };
+
+  const amountOfViewedCasesCustomFieldData: NumberCustomFieldInsertProps = {
+    id: clickupCrmCustomField.amountOfViewedCases.fieldId,
+    value: user.viewedCases
+  };
+
+  const amountOfCreatedDocsCustomFieldData: NumberCustomFieldInsertProps = {
+    id: clickupCrmCustomField.amountOfCreatedDocs.fieldId,
+    value: user.createdDocuments
+  };
+
+  const amountOfSolvedCasesCustomFieldData: NumberCustomFieldInsertProps = {
+    id: clickupCrmCustomField.amountOfSolvedCases.fieldId,
+    value: user.completedCases
+  };
+
+  const amountOfBadesCustomFieldData: NumberCustomFieldInsertProps = {
+    id: clickupCrmCustomField.amountOfBades.fieldId,
+    value: user.completedBadges
+  };
+
+  const defaultPaymentMethodCustomFieldData: ShortTextCustomFieldInsertProps = {
+    id: clickupCrmCustomField.paymentMethod.fieldId,
+    value: defaultPaymentMethod?.type
+  };
+
   return ({
     custom_fields: [
       userIdCustomFieldData,
@@ -457,27 +579,31 @@ export const getUserCrmData: GetUserCrmData = ({ subscriptionData, supabaseUserD
       memberUntilCustomFieldData,
       aboStatusCustomFieldData,
       willSubscriptionContinueCustomFieldData,
+      paymentIntervalCustomFieldData,
+      totalMoneySpentCustomFieldData,
+      amountOfPaymentsCustomFieldData,
+      amountOfUploadedFilesCustomFieldData,
+      amountOfViewedArticlesCustomFieldData,
+      amountOfViewedCasesCustomFieldData,
+      amountOfCreatedDocsCustomFieldData,
+      amountOfSolvedCasesCustomFieldData,
+      amountOfBadesCustomFieldData,
+      defaultPaymentMethodCustomFieldData
     ],
     name: user.firstName + " " + user.lastName,
   });
 };
 
-// eslint-disable-next-line @typescript-eslint/explicit-function-return-type
-const updateUserCrmData = async (user: User | undefined, supabaseServerClient: SupabaseClient) =>
+const updateUserCrmData = async (userId: string, supabaseServerClient: SupabaseClient) =>
 {
-  if(!user)
-  {
-    throw new InternalServerError(new Error("user was null when trying to update his crm data. This should not happen and must be investigated."));
-  }
-
-  const userWithCrmData = await getCrmDataForUser(user, supabaseServerClient);
+  const userWithCrmData = await getCrmDataForUser(userId, supabaseServerClient);
 
   if(!userWithCrmData)
   {
     throw new InternalServerError(new Error("userWithCrmData was null after getCrmDataForUser. This should not happen and must be investigated."));
   }
 
-  const findCrmUserResult = await getClickupCrmUserByUserId(user.id);
+  const findCrmUserResult = await getClickupCrmUserByUserId(userId);
 
   if(findCrmUserResult.data?.tasks.length > 1)
   {
@@ -488,11 +614,12 @@ const updateUserCrmData = async (user: User | undefined, supabaseServerClient: S
 
   if(!existingCrmUser)
   {
+    console.log(`User ${userId} not found in CRM. Creating new task...`);
     await createClickupTask(env.CLICKUP_CRM_LIST_ID, userWithCrmData.crmData);
     return;
   }
 
-  await Promise.allSettled(getUpdateUsersCrmDataPromises({ existingCrmUser, userWithCrmData }));
+  await Promise.all(getUpdateUsersCrmDataPromises({ existingCrmUser, userWithCrmData }));
 };
 
 type SyncUserToCrm = (params: {
@@ -505,19 +632,13 @@ type SyncUserToCrm = (params: {
     req: NextApiRequest;
     res: NextApiResponse;
   };
-  user: User | undefined;
+  userId: string;
 }) => Promise<void>;
 
-export const syncUserToCrm: SyncUserToCrm = async ({ eventType, supabase, user }) =>
+export const syncUserToCrm: SyncUserToCrm = async ({ eventType, supabase, userId }) =>
 {
   if(!env.SYNC_USERS_TO_CRM)
   {
-    return;
-  }
-
-  if(!user)
-  {
-    console.error("user was null when trying to sync user to crm. This should not happen and must be investigated.");
     return;
   }
 
@@ -535,32 +656,100 @@ export const syncUserToCrm: SyncUserToCrm = async ({ eventType, supabase, user }
     });
   }
 
-  try
+  switch (eventType)
   {
-    switch (eventType)
+    case "userCreated":
     {
-      case "userCreated":
-      {
-        const userCrmData = await getCrmDataForUser(user, supabaseServerClient);
+      const userCrmData = await getCrmDataForUser(userId, supabaseServerClient);
 
-        if(!userCrmData)
-        {
-          console.error("userCrmData was null after getCrmDataForUser. This should not happen and must be investigated.");
-          return;
-        }
-
-        await createClickupTask(env.CLICKUP_CRM_LIST_ID, userCrmData.crmData);
-        break;
-      }
-      case "userUpdated":
+      if(!userCrmData)
       {
-        await updateUserCrmData(user, supabaseServerClient);
-        break;
+        console.error("userCrmData was null after getCrmDataForUser. This should not happen and must be investigated.");
+        return;
       }
+
+      await createClickupTask(env.CLICKUP_CRM_LIST_ID, userCrmData.crmData);
+      break;
+    }
+    case "userUpdated":
+    {
+      await updateUserCrmData(userId, supabaseServerClient);
+      break;
     }
   }
-  catch (e: unknown)
+};
+
+export const addUserToCrmUpdateQueue = async (userId: Nullable<string>) =>
+{
+  if(!env.SYNC_USERS_TO_CRM)
   {
-    console.log("Something went wrong while syncing user to crm", e);
+    return;
   }
+
+  if(userId == null)
+  {
+    return;
+  }
+
+  // TODO
+  // It would be better to pass the custom field that needs to be updated instead of the whole user.
+  // ALso, manually calling this function is not a good idea. It should be called automatically, e.g. with a webhook.
+
+  await db.insert(updateUserInCrmQueue).values({ userId }).onConflictDoNothing();
+};
+
+export const createContentTaskIfNotExists = async (documentId: string, documentType: "case" | "article"): Promise<void> =>
+{
+  if(env.NEXT_PUBLIC_DEPLOYMENT_ENVIRONMENT !== "production")
+  {
+    return;
+  }
+
+  if(!documentId)
+  {
+    console.error("[createContentTaskIfNotExists] document id is null");
+    return;
+  }
+
+  const existingContentTask = await findClickupTask(env.CLICKUP_CONTENT_TASKS_LIST_ID, {
+    custom_fields: [{
+      field_id: clickupContentTaskCustomField.caisyId.fieldId,
+      operator: "=",
+      value: documentId
+    }],
+    include_closed: true,
+  });
+
+  if(existingContentTask.data?.tasks.length > 0)
+  {
+    return;
+  }
+
+  let document: Nullable<IGenFullArticleFragment | IGenFullCaseFragment>;
+
+  if(documentType === "article")
+  {
+    const { Article } = await caisySDK.getArticleById({ id: documentId });
+    document = Article;
+  }
+  else if(documentType === "case")
+  {
+    const { Case } = await caisySDK.getCaseById({ id: documentId });
+    document = Case;
+  }
+  else
+  {
+    console.error("invalid document type", documentType);
+    return;
+  }
+
+  if(!document)
+  {
+    console.error(`no document found for document id ${documentId}`);
+    return;
+  }
+
+  await createClickupTask(env.CLICKUP_CONTENT_TASKS_LIST_ID, getContentTaskCrmData(document));
+
+  console.log(`created content task for document id ${documentId}`);
 };

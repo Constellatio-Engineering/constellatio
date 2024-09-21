@@ -67,14 +67,16 @@ export const UserDropdown: FunctionComponent = () =>
           <HeaderDefaultRecreateSearch/>
         )}
         <Menu.Item
+          sx={{ fontSize: 15 }}
           component={Link}
           href={appPaths.profile}
-          icon={<IconUser size="0.9rem" stroke={1.5}/>}>
+          icon={<IconUser size="1rem" stroke={1.5}/>}>
           Profil
         </Menu.Item>
         <Menu.Item
+          sx={{ fontSize: 15 }}
           onClick={handleSignOut}
-          icon={<IconLogout size="0.9rem" stroke={1.5}/>}>
+          icon={<IconLogout size="1rem" stroke={1.5}/>}>
           Ausloggen
         </Menu.Item>
       </Menu.Dropdown>

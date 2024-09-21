@@ -1,5 +1,4 @@
 import ContentWrapper from "@/components/helpers/contentWrapper/ContentWrapper";
-import { env } from "@/env.mjs";
 import useUserDetails from "@/hooks/useUserDetails";
 
 import { Title } from "@mantine/core";
@@ -9,6 +8,7 @@ import * as styles from "./DashboardHeader.styles";
 import BadgesCarouselBlock from "../badgesCarouselBlock/BadgesCarouselBlock";
 import { LearningTimeCard } from "../learninTimeCard/LearningTimeCard";
 import OverviewHeader from "../OverviewHeader/OverviewHeader";
+import StreakCard from "../streakCard/StreakCard";
 // import DashboardheaderProgressBar from "../dashboardheaderProgressBar/DashboardheaderProgressBar";
 
 const DashboardHeader: FunctionComponent = () => 
@@ -17,14 +17,13 @@ const DashboardHeader: FunctionComponent = () =>
 
   return (
     <div css={styles.wrapper}>
-      <OverviewHeader variant="red" height={500}/>
+      <OverviewHeader variant="red" height={490}/>
       <ContentWrapper stylesOverrides={styles.contentContainer}>
         <Title css={styles.headerTitle} order={1}>Willkommen{userDetails?.firstName && `, ${userDetails?.firstName}!`}</Title>
         {/* <DashboardheaderProgressBar/> */}
         <div css={styles.headerCardsArea}>
-          {env.NEXT_PUBLIC_IS_USAGE_TIME_CHART_ENABLED && (
-            <LearningTimeCard/>
-          )}
+          <LearningTimeCard/>
+          <StreakCard/>
           <BadgesCarouselBlock/>
         </div>
       </ContentWrapper>

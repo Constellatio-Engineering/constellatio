@@ -18,7 +18,7 @@ export interface IEmptyStateCardProps
   readonly hideIcon?: boolean;
   readonly text?: string;
   readonly title: string;
-  readonly variant: "For-small-areas" | "For-large-areas";
+  readonly variant: "For-small-areas" | "For-large-areas" | "For-tiny-areas";
 }
 
 const EmptyStateCard: FunctionComponent<IEmptyStateCardProps> = ({
@@ -30,12 +30,13 @@ const EmptyStateCard: FunctionComponent<IEmptyStateCardProps> = ({
 }) => 
 {
   const theme = useMantineTheme();
+
   return (
     <div css={styles.wrapper}>
       <div css={styles.emptyStateCard({ theme, variant })}>
         {!hideIcon && (
-          <div css={styles.emptyStateCardImage}>
-            <EmptyStateCardIcon size={160}/>
+          <div css={styles.emptyStateCardImage({ theme, variant })}>
+            <EmptyStateCardIcon size={variant === "For-tiny-areas" ? 140 : 160}/>
           </div>
         )}
         <div css={styles.emptyStateCardTitle({ theme, variant })}>
@@ -43,15 +44,23 @@ const EmptyStateCard: FunctionComponent<IEmptyStateCardProps> = ({
             <Title order={3}>
               {title}
             </Title>
-          ) : <SubtitleText styleType="subtitle-01-medium">{title}</SubtitleText>}
+          ) : (
+            <SubtitleText styleType="subtitle-01-medium">
+              {title}
+            </SubtitleText>
+          )}
         </div>
         {text && (
-          <div css={styles.emptyStateCardText({ theme })}>
+          <div css={styles.emptyStateCardText({ theme, variant })}>
             {variant === "For-large-areas" ? (
               <BodyText styleType="body-01-medium">
                 {text}
               </BodyText>
-            ) : <SubtitleText styleType="subtitle-01-medium">{text}</SubtitleText>}
+            ) : (
+              <SubtitleText styleType="subtitle-01-medium" size={variant === "For-tiny-areas" ? 16 : 18}>
+                {text}
+              </SubtitleText>
+            )}
           </div>
         )}
         {button && (

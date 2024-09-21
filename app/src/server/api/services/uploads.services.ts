@@ -1,6 +1,7 @@
 import { db } from "@/db/connection";
 import { type FileExtension, type FileMimeType, notes, uploadedFiles } from "@/db/schema";
 import { env } from "@/env.mjs";
+import { addUserToCrmUpdateQueue } from "@/lib/clickup/utils";
 import { cloudStorage } from "@/lib/cloud-storage";
 import { type UploadableFile } from "@/schemas/uploads/createSignedUploadUrl.schema";
 
@@ -43,6 +44,8 @@ export const deleteFiles: DeleteFiles = async ({ files, userId }) =>
     eq(uploadedFiles.userId, userId),
     inArray(uploadedFiles.id, fileIds)
   ));
+
+  await addUserToCrmUpdateQueue(userId);
 };
 
 type GetClouStorageFileUrl = (params: {
