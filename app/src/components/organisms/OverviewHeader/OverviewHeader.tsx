@@ -4,6 +4,7 @@ import { Trash } from "@/components/Icons/Trash";
 import { type GetOverviewPagePropsResult } from "@/services/content/getOverviewPageProps";
 import type { Maybe, Scalars } from "@/services/graphql/__generated/sdk";
 
+import { type SerializedStyles } from "@emotion/react";
 import { Title, useMantineTheme } from "@mantine/core";
 import React, { type FunctionComponent, useState } from "react";
 
@@ -16,6 +17,7 @@ import FilterTag from "../../molecules/filterTag/FilterTag";
 export interface ICasesOverviewHeaderProps 
 {
   readonly categories?: GetOverviewPagePropsResult["allMainCategories"];
+  readonly contentWrapperStylesOverrides?: SerializedStyles;
   readonly height?: number;
   readonly selectedCategorySlug?: string;
   readonly setSelectedCategorySlug?: (slug: string) => Promise<URLSearchParams>;
@@ -25,6 +27,7 @@ export interface ICasesOverviewHeaderProps
 
 const OverviewHeader: FunctionComponent<ICasesOverviewHeaderProps> = ({
   categories,
+  contentWrapperStylesOverrides,
   height = 400,
   selectedCategorySlug,
   setSelectedCategorySlug,
@@ -39,7 +42,7 @@ const OverviewHeader: FunctionComponent<ICasesOverviewHeaderProps> = ({
       <div id="overlay-lines">
         <OverlayLines/>
       </div>
-      <ContentWrapper stylesOverrides={styles.headerContentWrapper}>
+      <ContentWrapper stylesOverrides={[styles.headerContentWrapper, contentWrapperStylesOverrides]}>
         <Title order={1} css={styles.title({ theme, variant })}>{title}</Title>
         <div css={styles.categoriesButtons}>
           {categories?.filter(Boolean).map((category) => category?.slug && setSelectedCategorySlug && (

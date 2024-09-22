@@ -5,9 +5,7 @@ import { type UseQueryResult } from "@/utils/types";
 
 import { type inferProcedureInput } from "@trpc/server";
 
-type UseCasesProgress = (options?: inferProcedureInput<AppRouter["casesProgress"]["getCasesProgress"]>) => UseQueryResult<{ casesProgress: GetCasesProgressResult | undefined }>;
-
-const useCasesProgress: UseCasesProgress = (options) =>
+const useCasesProgress = (options?: inferProcedureInput<AppRouter["casesProgress"]["getCasesProgress"]>) =>
 {
   const { data: casesProgress, error, isLoading } = api.casesProgress.getCasesProgress.useQuery(options);
 
