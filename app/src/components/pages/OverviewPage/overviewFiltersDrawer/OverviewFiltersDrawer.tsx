@@ -1,5 +1,5 @@
-import { Checkbox } from "@/components/atoms/Checkbox/Checkbox";
 import SlidingPanelTitle from "@/components/molecules/slidingPanelTitle/SlidingPanelTitle";
+import { FilterCategory } from "@/components/pages/OverviewPage/overviewFiltersDrawer/filterCategory/FilterCategory";
 import { type OverviewPageProps } from "@/components/pages/OverviewPage/OverviewPage";
 import { allCaseProgressStates } from "@/db/schema";
 import { useOverviewFiltersStore } from "@/stores/overviewFilters.store";
@@ -20,13 +20,14 @@ type Props = {
 
 export const OverviewFiltersDrawer: FunctionComponent<Props> = ({ items }) =>
 {
-  const closeDrawer = useOverviewFiltersStore(s => s.closeDrawer);
-  const isDrawerOpened = useOverviewFiltersStore(s => s.isDrawerOpened);
-  const filteredStatuses = useOverviewFiltersStore(s => s.filteredStatuses);
-  const toggleStatus = useOverviewFiltersStore(s => s.toggleStatus);
-  const filteredTopics = useOverviewFiltersStore(s => s.filteredTopics);
-  const toggleTopic = useOverviewFiltersStore(s => s.toggleTopic);
-
+  const {
+    closeDrawer,
+    filteredStatuses,
+    filteredTopics,
+    isDrawerOpened,
+    toggleStatus,
+    toggleTopic
+  } = useOverviewFiltersStore();
   const statuses = allCaseProgressStates;
 
   const uniqueTopics = Array
@@ -66,24 +67,24 @@ export const OverviewFiltersDrawer: FunctionComponent<Props> = ({ items }) =>
           closeButtonAction={closeDrawer}
         />
       )}>
-      <h2>Status</h2>
-      {statuses.map(status => (
-        <Checkbox
-          key={status}
-          checked={filteredStatuses.includes(status)}
-          onChange={(_event) => toggleStatus(status)}
-          label={status}
-        />
-      ))}
-      <h2>Thema</h2>
-      {uniqueTopics.map(topic => (
-        <Checkbox
-          key={topic.id}
-          checked={filteredTopics.includes(topic.id)}
-          onChange={(_event) => toggleTopic(topic.id)}
-          label={topic.title}
-        />
-      ))}
+      <FilterCategory
+        items={statuses.map(status => ({
+          id: status,
+          isChecked: filteredStatuses.includes(status),
+          label: status,
+          toggle: () => toggleStatus(status)
+        }))}
+        title="Status"
+      />
+      <FilterCategory
+        items={uniqueTopics.map(topic => ({
+          id: topic.id,
+          isChecked: filteredTopics.includes(topic.id),
+          label: topic.title,
+          toggle: () => toggleTopic(topic.id)
+        }))}
+        title="Thema"
+      />
     </Drawer>
   );
 };

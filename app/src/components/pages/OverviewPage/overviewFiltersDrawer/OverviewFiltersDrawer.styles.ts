@@ -1,6 +1,5 @@
 import type { UnknownMantineStylesParams } from "@/utils/types";
 
-import { css } from "@emotion/react";
 import type { DrawerStylesNames } from "@mantine/core";
 import type { MantineTheme, Styles } from "@mantine/styles";
 
@@ -10,16 +9,12 @@ export const drawerStyles = () =>
 {
   const styles: DrawerStylesProps = (theme: MantineTheme) => ({
     body: {
-      ".form": {
-        position: "relative"
-      },
-
-      minHeight: "90vh",
-      padding: "0px"
-
+      overflowY: "auto",
+      padding: "0px",
+      paddingBottom: 40
     },
     content: {
-      background: theme.colors["neutrals-01"][1],
+      background: theme.colors["neutrals-01"][0],
     },
     header: {
       padding: "0px",

@@ -5,7 +5,7 @@ import { immer } from "zustand/middleware/immer";
 
 type CaseProgressState = CaseProgress["progressState"];
 
-export type OverviewFiltersStoreProps = {
+type OverviewFiltersStoreProps = {
   closeDrawer: () => void;
   filteredStatuses: CaseProgressState[];
   filteredTopics: string[];
