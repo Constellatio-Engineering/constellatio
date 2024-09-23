@@ -1,56 +1,98 @@
 import SlidingPanelTitle from "@/components/molecules/slidingPanelTitle/SlidingPanelTitle";
 import { FilterCategory } from "@/components/pages/OverviewPage/overviewFiltersDrawer/filterCategory/FilterCategory";
 import { type OverviewPageProps } from "@/components/pages/OverviewPage/OverviewPage";
-import { allCaseProgressStates } from "@/db/schema";
 import { statusesFilterOptions, useOverviewFiltersStore } from "@/stores/overviewFilters.store";
+import { type NullableProperties } from "@/utils/types";
 
 import { Drawer } from "@mantine/core";
-import React, { type FunctionComponent } from "react";
+import React, { type FunctionComponent, useMemo } from "react";
 
 import * as styles from "./OverviewFiltersDrawer.styles";
-
-type Topic = {
-  readonly id: string;
-  readonly title: string;
-};
 
 type Props = {
   readonly items: OverviewPageProps["items"];
 };
 
-export const OverviewFiltersDrawer: FunctionComponent<Props> = ({ items }) =>
+type FilterOption = {
+  readonly id: string;
+  readonly title: string;
+};
+
+const getUniqueFilterOptions = <T extends NullableProperties<FilterOption>>(items: T[]): FilterOption[] =>
 {
-  const {
-    clearFilteredStatuses,
-    clearFilteredTopics,
-    closeDrawer,
-    filteredStatuses,
-    filteredTopics,
-    isDrawerOpened,
-    toggleStatus,
-    toggleTopic
-  } = useOverviewFiltersStore();
-
-  const uniqueTopics = Array
+  return Array
     .from(items
-      .flatMap((item) => (item.topic ?? [])
-        .map(t =>
+      .map(item =>
+      {
+        if(item?.id == null || item?.title == null)
         {
-          if(t?.id == null || t?.topicName == null)
-          {
-            return null;
-          }
+          return null;
+        }
 
-          return ({
-            id: t.id,
-            title: t.topicName,
-          }) satisfies Topic;
-        }))
+        return ({
+          id: item.id,
+          title: item.title,
+        }) satisfies FilterOption;
+      })
       .filter(Boolean)
-      .reduce((map, topic) => map.set(topic.id, topic), new Map<string, Topic>()) // Use a Map to ensure uniqueness by topic id
+      .reduce((map, item) => map.set(item.id, item), new Map<string, FilterOption>()) // Use a Map to ensure uniqueness by topic id
       .values()
     )
     .sort((a, b) => a.title.localeCompare(b.title));
+};
+
+export const OverviewFiltersDrawer: FunctionComponent<Props> = ({ items }) =>
+{
+  const {
+    clearFilteredLegalAreas,
+    clearFilteredStatuses,
+    clearFilteredTags,
+    clearFilteredTopics,
+    closeDrawer,
+    filteredLegalAreas,
+    filteredStatuses,
+    filteredTags,
+    filteredTopics,
+    isDrawerOpened,
+    toggleLegalArea,
+    toggleStatus,
+    toggleTag,
+    toggleTopic
+  } = useOverviewFiltersStore();
+
+  const uniqueLegalAreas = useMemo(() =>
+  {
+    const allLegalAreas = items
+      .map(item => item.legalArea)
+      .map(t => ({
+        id: t?.id,
+        title: t?.legalAreaName,
+      }));
+
+    return getUniqueFilterOptions(allLegalAreas);
+  }, [items]);
+
+  const uniqueTopics = useMemo(() =>
+  {
+    const allTopics = items.flatMap((item) => (item.topic ?? [])
+      .map(t => ({
+        id: t?.id,
+        title: t?.topicName,
+      })));
+
+    return getUniqueFilterOptions(allTopics);
+  }, [items]);
+
+  const uniqueTags = useMemo(() =>
+  {
+    const allTags = items.flatMap((item) => (item.tags ?? [])
+      .map(t => ({
+        id: t?.id,
+        title: t?.tagName,
+      })));
+
+    return getUniqueFilterOptions(allTags);
+  }, [items]);
 
   return (
     <Drawer
@@ -80,6 +122,19 @@ export const OverviewFiltersDrawer: FunctionComponent<Props> = ({ items }) =>
         title="Status"
       />
       <FilterCategory
+        search={{ searchesFor: "Rechtsgebieten" }}
+        activeFiltersCount={filteredLegalAreas.length}
+        clearFilters={clearFilteredLegalAreas}
+        items={uniqueLegalAreas.map(legalArea => ({
+          id: legalArea.id,
+          isChecked: filteredLegalAreas.includes(legalArea.id),
+          label: legalArea.title,
+          toggle: () => toggleLegalArea(legalArea.id)
+        }))}
+        title="Rechtsgebiet"
+      />
+      <FilterCategory
+        search={{ searchesFor: "Themen" }}
         activeFiltersCount={filteredTopics.length}
         clearFilters={clearFilteredTopics}
         items={uniqueTopics.map(topic => ({
@@ -89,6 +144,18 @@ export const OverviewFiltersDrawer: FunctionComponent<Props> = ({ items }) =>
           toggle: () => toggleTopic(topic.id)
         }))}
         title="Thema"
+      />
+      <FilterCategory
+        search={{ searchesFor: "Tags" }}
+        activeFiltersCount={filteredTags.length}
+        clearFilters={clearFilteredTags}
+        items={uniqueTags.map(tag => ({
+          id: tag.id,
+          isChecked: filteredTags.includes(tag.id),
+          label: tag.title,
+          toggle: () => toggleTag(tag.id)
+        }))}
+        title="Tags"
       />
     </Drawer>
   );

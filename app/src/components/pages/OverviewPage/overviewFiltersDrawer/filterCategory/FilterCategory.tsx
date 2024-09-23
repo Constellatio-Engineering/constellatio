@@ -3,8 +3,12 @@ import { Checkbox } from "@/components/atoms/Checkbox/Checkbox";
 import IconButton from "@/components/atoms/iconButton/IconButton";
 import { ArrowDown } from "@/components/Icons/ArrowDown";
 import { UnstyledButton } from "@/components/molecules/unstyledButton/UnstyledButton";
+import { colors } from "@/constants/styles/colors";
 
-import React, { type FunctionComponent } from "react";
+import { Input } from "@mantine/core";
+import { IconSearch } from "@tabler/icons-react";
+import fuzzysort from "fuzzysort";
+import React, { type FunctionComponent, useMemo } from "react";
 
 import * as styles from "./FilterCategory.styles";
 
@@ -17,18 +21,33 @@ type Props = {
     readonly label: string;
     readonly toggle: () => void;
   }>;
+  readonly search?: {
+    readonly searchesFor: string;
+  };
   readonly title: string;
 };
 
 export const FilterCategory: FunctionComponent<Props> = ({
   activeFiltersCount,
   clearFilters,
-  items,
+  items: _items,
+  search,
   title
 }) =>
 {
-  const [isOpen, setIsOpen] = React.useState<boolean>(false);
+  const [searchValue, setSearchValue] = React.useState<string>("");
+  const [isOpen, setIsOpen] = React.useState<boolean>(true);
   const hasActiveFilters = activeFiltersCount > 0;
+
+  const itemsFiltered = useMemo(() =>
+  {
+    return searchValue.length === 0 ? _items : fuzzysort
+      .go(searchValue, _items, {
+        key: "label" satisfies keyof typeof _items[number],
+        threshold: 0.5,
+      })
+      .map(result => result.obj);
+  }, [_items, searchValue]);
 
   return (
     <div css={styles.wrapper}>
@@ -69,7 +88,34 @@ export const FilterCategory: FunctionComponent<Props> = ({
         </div>
       </UnstyledButton>
       <div css={[styles.itemsWrapper, !isOpen && styles.itemWrapperCollapsed]}>
-        {items.map((item) => (
+        {search && (
+          <div css={styles.searchInputWrapper}>
+            <Input
+              icon={<IconSearch size={20}/>}
+              placeholder={`Suche nach ${search.searchesFor}`}
+              styles={{
+                icon: {
+                  color: colors["neutrals-01"][7],
+                },
+                input: {
+                  "&::placeholder": {
+                    color: colors["neutrals-01"][7],
+                  },
+                  "&:focus-within": {
+                    borderColor: colors["neutrals-01"][7],
+                  },
+                  border: "1px solid ##D6D6D6",
+                },
+                wrapper: {}
+              }}
+              value={searchValue}
+              onChange={(event) => setSearchValue(event.currentTarget.value)}
+              size={"md"}
+              radius="md"
+            />
+          </div>
+        )}
+        {itemsFiltered.map((item) => (
           <div css={styles.itemWrapper} key={item.id}>
             <Checkbox
               checked={item.isChecked}

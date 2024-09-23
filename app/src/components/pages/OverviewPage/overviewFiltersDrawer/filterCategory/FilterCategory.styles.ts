@@ -52,6 +52,10 @@ export const itemWrapperCollapsed = css`
   display: none;
 `;
 
+export const searchInputWrapper = css`
+  padding: 12px 32px;
+`;
+
 export const itemWrapper = css`
   display: flex;
   align-items: center;

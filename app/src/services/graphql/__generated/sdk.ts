@@ -1333,7 +1333,10 @@ export type IGenCaseFullTextTasksFragment = { __typename: 'Case_fullTextTasks', 
 export type IGenCaseOverviewFragment = { __typename: 'Case', id?: string | null, title?: string | null, durationToCompleteInMinutes?: number | null, _meta?: { __typename?: 'CaisyDocument_Meta', createdAt?: any | null } | null, legalArea?: (
     { __typename?: 'LegalArea' }
     & IGenLegalAreaFragment
-  ) | null, topic?: Array<(
+  ) | null, tags?: Array<(
+    { __typename?: 'Tags' }
+    & IGenTagsFragment
+  ) | null> | null, topic?: Array<(
     { __typename?: 'Topic' }
     & IGenTopicFragment
   ) | null> | null, mainCategoryField?: Array<(
@@ -1677,6 +1680,14 @@ export const ArticleOverviewFragmentDoc = gql`
   }
 }
     `;
+export const TagsFragmentDoc = gql`
+    fragment Tags on Tags {
+  __typename
+  id
+  tagName
+  isShownInitiallyBeforeSearch
+}
+    `;
 export const CaseOverviewFragmentDoc = gql`
     fragment CaseOverview on Case {
   __typename
@@ -1688,6 +1699,9 @@ export const CaseOverviewFragmentDoc = gql`
   durationToCompleteInMinutes
   legalArea {
     ...LegalArea
+  }
+  tags {
+    ...Tags
   }
   topic {
     ...Topic
@@ -1769,14 +1783,6 @@ export const ArticleFullTextTasksFragmentDoc = gql`
     ...Callout
     ...Asset
   }
-}
-    `;
-export const TagsFragmentDoc = gql`
-    fragment Tags on Tags {
-  __typename
-  id
-  tagName
-  isShownInitiallyBeforeSearch
 }
     `;
 export const FullArticleFragmentDoc = gql`
@@ -2006,6 +2012,7 @@ export const GetAllCaseOverviewDocument = gql`
 }
     ${CaseOverviewFragmentDoc}
 ${LegalAreaFragmentDoc}
+${TagsFragmentDoc}
 ${TopicFragmentDoc}
 ${MainCategoryFragmentDoc}
 ${AssetFragmentDoc}`;

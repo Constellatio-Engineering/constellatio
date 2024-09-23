@@ -20,28 +20,54 @@ export const statusesFilterOptions = [
 type StatusFilterOption = typeof statusesFilterOptions[number]["id"];
 
 type OverviewFiltersStoreProps = {
+  clearFilteredLegalAreas: () => void;
   clearFilteredStatuses: () => void;
+  clearFilteredTags: () => void;
   clearFilteredTopics: () => void;
   closeDrawer: () => void;
+  filteredLegalAreas: string[];
   filteredStatuses: StatusFilterOption[];
+  filteredTags: string[];
   filteredTopics: string[];
   isDrawerOpened: boolean;
   openDrawer: () => void;
   setIsDrawerOpened: (isDrawerOpened: boolean) => void;
+  toggleLegalArea: (legalAreaId: string) => void;
   toggleStatus: (status: StatusFilterOption) => void;
+  toggleTag: (tagId: string) => void;
   toggleTopic: (topicId: string) => void;
 };
 
 export const useOverviewFiltersStore = create(
   immer<OverviewFiltersStoreProps>((set) => ({
+    clearFilteredLegalAreas: () => set({ filteredLegalAreas: [] }),
     clearFilteredStatuses: () => set({ filteredStatuses: [] }),
+    clearFilteredTags: () => set({ filteredTags: [] }),
     clearFilteredTopics: () => set({ filteredTopics: [] }),
     closeDrawer: () => set({ isDrawerOpened: false }),
+    filteredLegalAreas: [],
     filteredStatuses: [],
+    filteredTags: [],
     filteredTopics: [],
     isDrawerOpened: true,
     openDrawer: () => set({ isDrawerOpened: true }),
     setIsDrawerOpened: (isDrawerOpened) => set({ isDrawerOpened }),
+    toggleLegalArea: (legalAreaId) =>
+    {
+      set((state) =>
+      {
+        const index = state.filteredLegalAreas.indexOf(legalAreaId);
+
+        if(index === -1)
+        {
+          state.filteredLegalAreas = state.filteredLegalAreas.concat(legalAreaId);
+        }
+        else
+        {
+          state.filteredLegalAreas = state.filteredLegalAreas.filter((_, i) => i !== index);
+        }
+      });
+    },
     toggleStatus: (status) =>
     {
       set((state) =>
@@ -55,6 +81,22 @@ export const useOverviewFiltersStore = create(
         else
         {
           state.filteredStatuses = state.filteredStatuses.filter((_, i) => i !== index);
+        }
+      });
+    },
+    toggleTag: (tagId) =>
+    {
+      set((state) =>
+      {
+        const index = state.filteredTags.indexOf(tagId);
+
+        if(index === -1)
+        {
+          state.filteredTags = state.filteredTags.concat(tagId);
+        }
+        else
+        {
+          state.filteredTags = state.filteredTags.filter((_, i) => i !== index);
         }
       });
     },
