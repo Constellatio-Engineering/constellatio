@@ -2,7 +2,7 @@ import SlidingPanelTitle from "@/components/molecules/slidingPanelTitle/SlidingP
 import { FilterCategory } from "@/components/pages/OverviewPage/overviewFiltersDrawer/filterCategory/FilterCategory";
 import { type OverviewPageProps } from "@/components/pages/OverviewPage/OverviewPage";
 import { allCaseProgressStates } from "@/db/schema";
-import { useOverviewFiltersStore } from "@/stores/overviewFilters.store";
+import { statusesFilterOptions, useOverviewFiltersStore } from "@/stores/overviewFilters.store";
 
 import { Drawer } from "@mantine/core";
 import React, { type FunctionComponent } from "react";
@@ -21,6 +21,8 @@ type Props = {
 export const OverviewFiltersDrawer: FunctionComponent<Props> = ({ items }) =>
 {
   const {
+    clearFilteredStatuses,
+    clearFilteredTopics,
     closeDrawer,
     filteredStatuses,
     filteredTopics,
@@ -28,7 +30,6 @@ export const OverviewFiltersDrawer: FunctionComponent<Props> = ({ items }) =>
     toggleStatus,
     toggleTopic
   } = useOverviewFiltersStore();
-  const statuses = allCaseProgressStates;
 
   const uniqueTopics = Array
     .from(items
@@ -68,15 +69,19 @@ export const OverviewFiltersDrawer: FunctionComponent<Props> = ({ items }) =>
         />
       )}>
       <FilterCategory
-        items={statuses.map(status => ({
-          id: status,
-          isChecked: filteredStatuses.includes(status),
-          label: status,
-          toggle: () => toggleStatus(status)
+        items={statusesFilterOptions.map(({ id, label }) => ({
+          id,
+          isChecked: filteredStatuses.includes(id),
+          label,
+          toggle: () => toggleStatus(id)
         }))}
+        clearFilters={clearFilteredStatuses}
+        activeFiltersCount={filteredStatuses.length}
         title="Status"
       />
       <FilterCategory
+        activeFiltersCount={filteredTopics.length}
+        clearFilters={clearFilteredTopics}
         items={uniqueTopics.map(topic => ({
           id: topic.id,
           isChecked: filteredTopics.includes(topic.id),

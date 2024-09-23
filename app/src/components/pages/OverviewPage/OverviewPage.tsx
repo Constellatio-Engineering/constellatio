@@ -66,7 +66,11 @@ const OverviewPageContent: FunctionComponent<OverviewPageContentProps> = ({
 
     if(item.__typename === "Case")
     {
-      return item.progressState && filteredStatuses.includes(item.progressState);
+      return item.progressState && (
+        (filteredStatuses.includes("completed") && item.progressState === "completed") ||
+        (filteredStatuses.includes("in-progress") && ["solving-case", "completing-tests"].includes(item.progressState)) ||
+        (filteredStatuses.includes("open") && item.progressState === "not-started")
+      );
     }
 
     return true;
