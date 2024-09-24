@@ -1,8 +1,5 @@
-import type { UnknownMantineStylesParams } from "@/utils/types";
-
-import { type SerializedStyles, css } from "@emotion/react";
-import type { DrawerStylesNames } from "@mantine/core";
-import { type MantineTheme, type Styles } from "@mantine/styles";
+import { css, type SerializedStyles } from "@emotion/react";
+import { type MantineTheme } from "@mantine/styles";
 
 export const ListWrapper = css`
   transform: translateY(-140px);

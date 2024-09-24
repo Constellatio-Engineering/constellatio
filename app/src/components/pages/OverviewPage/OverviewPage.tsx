@@ -10,7 +10,6 @@ import UseQueryStateWrapper from "@/components/Wrappers/useQueryStateWrapper/Use
 import useCasesProgress from "@/hooks/useCasesProgress";
 import { type CaseOverviewPageProps } from "@/pages/cases";
 import { type GetArticlesOverviewPagePropsResult } from "@/pages/dictionary";
-import { type AllCases } from "@/services/content/getAllCases";
 import { useOverviewFiltersStore } from "@/stores/overviewFilters.store";
 import { type ArticleWithNextAndPreviousArticleId } from "@/utils/articles";
 import { sortByTopic } from "@/utils/caisy";
@@ -84,40 +83,19 @@ const OverviewPageContent: FunctionComponent<OverviewPageContentProps> = ({
     return true;
   }), [allItemsOfSelectedCategory, filteredStatuses]);
 
-  const itemsFilteredByLegalArea = useMemo(() => itemsFilteredByStatus.filter((item) =>
+  const _filteredItems = useMemo(() => itemsFilteredByStatus.filter((item) =>
   {
-    if(filteredLegalAreas.length === 0)
+    if(filteredLegalAreas.length === 0 && filteredTopics.length === 0 && filteredTags.length === 0)
     {
       return true;
     }
 
-    return item.legalArea?.id != null && filteredLegalAreas.includes(item.legalArea.id);
-  }), [filteredLegalAreas, itemsFilteredByStatus]);
+    const matchesLegalArea = item.legalArea?.id != null && filteredLegalAreas.includes(item.legalArea.id);
+    const matchesTopic = item.topic?.some((t) => t?.id != null && filteredTopics.includes(t.id));
+    const matchesTag = item.tags?.some((t) => t?.id != null && filteredTags.includes(t.id));
 
-  const itemsFilteredByTopic = useMemo(() => itemsFilteredByStatus.filter((item) =>
-  {
-    if(filteredTopics.length === 0)
-    {
-      return true;
-    }
-
-    return item.topic?.some((t) => t?.id != null && filteredTopics.includes(t.id));
-  }), [filteredTopics, itemsFilteredByStatus]);
-
-  const itemsFilteredByTag = useMemo(() => itemsFilteredByStatus.filter((item) =>
-  {
-    if(filteredTags.length === 0)
-    {
-      return true;
-    }
-
-    return item.tags?.some((t) => t?.id != null && filteredTags.includes(t.id));
-  }), [filteredTags, itemsFilteredByStatus]);
-
-  const _filteredItems = useMemo(() =>
-  {
-    return [...itemsFilteredByTopic, ...itemsFilteredByTag, ...itemsFilteredByLegalArea];
-  }, [itemsFilteredByLegalArea, itemsFilteredByTag, itemsFilteredByTopic]);
+    return matchesLegalArea || matchesTopic || matchesTag;
+  }), [filteredLegalAreas, filteredTopics, filteredTags, itemsFilteredByStatus]);
 
   const filteredItems = useDeferredValue(_filteredItems);
 
