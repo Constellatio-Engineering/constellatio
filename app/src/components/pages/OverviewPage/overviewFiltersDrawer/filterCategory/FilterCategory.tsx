@@ -9,6 +9,8 @@ import { Input } from "@mantine/core";
 import { IconSearch } from "@tabler/icons-react";
 import fuzzysort from "fuzzysort";
 import React, { type FunctionComponent, useDeferredValue, useMemo } from "react";
+import AutoSizer from "react-virtualized-auto-sizer";
+import { FixedSizeList } from "react-window";
 
 import * as styles from "./FilterCategory.styles";
 
@@ -117,15 +119,26 @@ export const FilterCategory: FunctionComponent<Props> = ({
             />
           </div>
         )}
-        {itemsFiltered.map((item) => (
-          <div css={styles.itemWrapper} key={item.id}>
-            <Checkbox
-              checked={item.isChecked}
-              onChange={(_event) => item.toggle()}
-              label={item.label}
-            />
-          </div>
-        ))}
+        <FixedSizeList
+          className="List"
+          height={Math.min(itemsFiltered.length * 40, 500)}
+          itemCount={itemsFiltered.length}
+          itemSize={40}>
+          {/* @ts-expect-error props are not typed */}
+          {({ index, style }) =>
+          {
+            const item = itemsFiltered[index]!;
+            return (
+              <div css={styles.itemWrapper} style={style} key={item.id}>
+                <Checkbox
+                  checked={item.isChecked}
+                  onChange={(_event) => item.toggle()}
+                  label={item.label}
+                />
+              </div>
+            );
+          }}
+        </FixedSizeList>
       </div>
     </div>
   );
