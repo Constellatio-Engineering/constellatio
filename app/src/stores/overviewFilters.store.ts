@@ -24,6 +24,11 @@ export interface CommonFiltersSlice
   clearFilteredLegalAreas: () => void;
   clearFilteredTags: () => void;
   clearFilteredTopics: () => void;
+  clearInvalidFilters: (args: {
+    uniqueLegalAreas: string[];
+    uniqueTags: string[];
+    uniqueTopics: string[];
+  }) => void;
   closeDrawer: () => void;
   filteredLegalAreas: string[];
   filteredTags: string[];
@@ -45,6 +50,15 @@ CommonFiltersSlice
   clearFilteredLegalAreas: () => set({ filteredLegalAreas: [] }),
   clearFilteredTags: () => set({ filteredTags: [] }),
   clearFilteredTopics: () => set({ filteredTopics: [] }),
+  clearInvalidFilters: ({ uniqueLegalAreas, uniqueTags, uniqueTopics }) =>
+  {
+    set((state) =>
+    {
+      state.filteredLegalAreas = state.filteredLegalAreas.filter(legalAreaId => uniqueLegalAreas.includes(legalAreaId));
+      state.filteredTags = state.filteredTags.filter(tagId => uniqueTags.includes(tagId));
+      state.filteredTopics = state.filteredTopics.filter(topicId => uniqueTopics.includes(topicId));
+    });
+  },
   closeDrawer: () => set({ isDrawerOpened: false }),
   filteredLegalAreas: [],
   filteredTags: [],

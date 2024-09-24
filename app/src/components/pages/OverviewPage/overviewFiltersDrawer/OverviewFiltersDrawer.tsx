@@ -13,7 +13,7 @@ import {
 import { type NullableProperties } from "@/utils/types";
 
 import { Drawer } from "@mantine/core";
-import React, { type FunctionComponent, useMemo } from "react";
+import React, { type FunctionComponent, useEffect, useMemo } from "react";
 
 import * as styles from "./OverviewFiltersDrawer.styles";
 
@@ -95,6 +95,7 @@ const OverviewFiltersDrawerContent: FunctionComponent<OverviewFiltersDrawerConte
     clearFilteredLegalAreas,
     clearFilteredTags,
     clearFilteredTopics,
+    clearInvalidFilters,
     closeDrawer,
     filteredLegalAreas,
     filteredTags,
@@ -138,6 +139,16 @@ const OverviewFiltersDrawerContent: FunctionComponent<OverviewFiltersDrawerConte
 
     return getUniqueFilterOptions(allTags);
   }, [items]);
+
+  useEffect(() =>
+  {
+    // when the filter options change, we need to clear the filters that are not valid anymore
+    clearInvalidFilters({
+      uniqueLegalAreas: uniqueLegalAreas.map(l => l.id),
+      uniqueTags: uniqueTags.map(t => t.id),
+      uniqueTopics: uniqueTopics.map(t => t.id),
+    });
+  }, [uniqueLegalAreas, uniqueTopics, uniqueTags, clearInvalidFilters]);
 
   return (
     <Drawer
