@@ -36,6 +36,9 @@ const NextPage: NextPageWithLayout<GetArticlesOverviewPagePropsResult> = (articl
   const filteredTags = useArticlesOverviewFiltersStore(s => s.filteredTags);
   const filteredTopics = useArticlesOverviewFiltersStore(s => s.filteredTopics);
   const openDrawer = useArticlesOverviewFiltersStore(s => s.openDrawer);
+  const toggleLegalArea = useArticlesOverviewFiltersStore(s => s.toggleLegalArea);
+  const toggleTag = useArticlesOverviewFiltersStore(s => s.toggleTag);
+  const toggleTopic = useArticlesOverviewFiltersStore(s => s.toggleTopic);
 
   return (
     <>
@@ -47,7 +50,10 @@ const NextPage: NextPageWithLayout<GetArticlesOverviewPagePropsResult> = (articl
           filteredLegalAreas,
           filteredTags,
           filteredTopics,
-          openDrawer
+          openDrawer,
+          toggleLegalArea,
+          toggleTag,
+          toggleTopic
         }}
       />
     </>

@@ -1,7 +1,10 @@
 /* eslint-disable max-lines */
 import { Button } from "@/components/atoms/Button/Button";
+import { LinkButton } from "@/components/atoms/LinkButton/LinkButton";
 import ContentWrapper from "@/components/helpers/contentWrapper/ContentWrapper";
 import { FiltersList } from "@/components/Icons/FiltersList";
+import { Trash } from "@/components/Icons/Trash";
+import FilterTag from "@/components/molecules/filterTag/FilterTag";
 import ItemBlock from "@/components/organisms/caseBlock/ItemBlock";
 import EmptyStateCard from "@/components/organisms/emptyStateCard/EmptyStateCard";
 import OverviewHeader from "@/components/organisms/OverviewHeader/OverviewHeader";
@@ -10,7 +13,7 @@ import UseQueryStateWrapper from "@/components/Wrappers/useQueryStateWrapper/Use
 import useCasesProgress from "@/hooks/useCasesProgress";
 import { type CaseOverviewPageProps } from "@/pages/cases";
 import { type GetArticlesOverviewPagePropsResult } from "@/pages/dictionary";
-import { type ArticlesOverviewFiltersStore, type CasesOverviewFiltersStore, } from "@/stores/overviewFilters.store";
+import { type CasesOverviewFiltersStore, type CommonFiltersSlice, } from "@/stores/overviewFilters.store";
 import { type ArticleWithNextAndPreviousArticleId } from "@/utils/articles";
 import { sortByTopic } from "@/utils/caisy";
 import { type Nullable } from "@/utils/types";
@@ -32,12 +35,14 @@ export function extractNumeric(title: Nullable<string>): number | null
   return match ? parseInt(match[0], 10) : null;
 }
 
+type CommonFiltersStoreProps = Pick<CommonFiltersSlice, "filteredLegalAreas" | "filteredTags" | "filteredTopics" | "openDrawer" | "toggleLegalArea" | "toggleTag" | "toggleTopic">;
+
 type ArticlesPageProps = GetArticlesOverviewPagePropsResult & {
-  readonly filter: Pick<ArticlesOverviewFiltersStore, "filteredLegalAreas" | "filteredTags" | "filteredTopics" | "openDrawer">;
+  readonly filter: CommonFiltersStoreProps;
 };
 
 type CasesPageProps = CaseOverviewPageProps & {
-  readonly filter: Pick<CasesOverviewFiltersStore, "filteredLegalAreas" | "filteredStatuses" | "filteredTags" | "filteredTopics" | "openDrawer">;
+  readonly filter: CommonFiltersStoreProps & Pick<CasesOverviewFiltersStore, "toggleStatus" | "filteredStatuses">;
 };
 
 export type OverviewPageProps = (ArticlesPageProps | CasesPageProps) & {
@@ -65,7 +70,10 @@ const OverviewPageContent: FunctionComponent<OverviewPageContentProps> = ({
     filteredLegalAreas,
     filteredTags,
     filteredTopics,
-    openDrawer
+    openDrawer,
+    toggleLegalArea,
+    toggleTag,
+    toggleTopic
   } = filter;
 
   const [selectedCategorySlug, setSelectedCategorySlug] = useQueryState("category", parseAsString.withDefault(initialCategorySlug));
@@ -84,7 +92,7 @@ const OverviewPageContent: FunctionComponent<OverviewPageContentProps> = ({
       return true;
     }
 
-    const { filteredStatuses } = filter; 
+    const { filteredStatuses } = filter;
 
     if(filteredStatuses.length === 0)
     {
@@ -154,6 +162,29 @@ const OverviewPageContent: FunctionComponent<OverviewPageContentProps> = ({
                   leftIcon={<FiltersList/>}>
                   Filter
                 </Button>
+              </div>
+              <div css={styles.activeFiltersChips}>
+                {variant === "case" && (
+                  <>
+                    {filter.filteredStatuses?.map((status) => (
+                      <FilterTag
+                        key={status}
+                        onClick={() => filter.toggleStatus(status)}
+                        title={status}
+                      />
+                    ))}
+                  </>
+                )}
+                {filteredLegalAreas?.map((filter) => (
+                  <FilterTag
+                    key={filter}
+                    onClick={() => toggleLegalArea(filter)}
+                    title={filter}
+                  />
+                ))}
+              </div>
+              <div css={styles.clearFiltersButtonWrapper}>
+                <LinkButton title="Alle Filter löschen" icon={<Trash/>}/>
               </div>
             </div>
             {allLegalAreas

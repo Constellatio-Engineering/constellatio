@@ -21,6 +21,7 @@ type StatusFilterOption = typeof statusesFilterOptions[number]["id"];
 
 export interface CommonFiltersSlice
 {
+  clearAllFilters: () => void;
   clearFilteredLegalAreas: () => void;
   clearFilteredTags: () => void;
   clearFilteredTopics: () => void;
@@ -47,6 +48,7 @@ CommonFiltersSlice,
 [],
 CommonFiltersSlice
 > = (set) => ({
+  clearAllFilters: () => set({ filteredLegalAreas: [], filteredTags: [], filteredTopics: [] }),
   clearFilteredLegalAreas: () => set({ filteredLegalAreas: [] }),
   clearFilteredTags: () => set({ filteredTags: [] }),
   clearFilteredTopics: () => set({ filteredTopics: [] }),
@@ -113,7 +115,7 @@ CommonFiltersSlice
   },
 });
 
-export interface StatusFiltersSlice
+interface StatusFiltersSlice
 {
   clearFilteredStatuses: () => void;
   filteredStatuses: StatusFilterOption[];

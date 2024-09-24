@@ -23,10 +23,13 @@ export const filtersWrapper = css`
   justify-content: space-between;
   align-items: center;
   margin-bottom: 36px;
+  gap: 30px;
 `;
 
 export const filtersButtonWrapper = css`
+  min-width: max-content;
   button {
+    min-width: max-content;
     border: none;
     :hover {
       border: none;
@@ -34,3 +37,20 @@ export const filtersButtonWrapper = css`
   }
 `;
 
+export const activeFiltersChips = css`
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  justify-content: center;
+  align-items: center;
+  h1 {
+    display: inline-block;
+  }
+`;
+
+export const clearFiltersButtonWrapper = css`
+  min-width: max-content;
+  button {
+    min-width: max-content;
+  }
+`;
