@@ -34,8 +34,8 @@ export function extractNumeric(title: Nullable<string>): number | null
 
 export type OverviewPageProps = (GetArticlesOverviewPagePropsResult | CaseOverviewPageProps) & {
   // This is a workaround.
-  // The correct type would be AllCases | ArticleWithNextAndPreviousArticleId[], as inferred by (GetArticlesOverviewPagePropsResult | GetCasesOverviewPagePropsResult),
-  // but TypeScript is not smart enough to infer this with th array.filter method
+  // The correct type would be Array<CaseOverviewPageProps["items"][number] | ArticleWithNextAndPreviousArticleId[],
+  // but TypeScript is not smart enough to infer this with the array.filter method
   readonly items: Array<CaseOverviewPageProps["items"][number] | ArticleWithNextAndPreviousArticleId>;
 };
 
