@@ -38,7 +38,23 @@ const getUniqueFilterOptions = <T extends NullableProperties<FilterOption>>(item
       .reduce((map, item) => map.set(item.id, item), new Map<string, FilterOption>()) // Use a Map to ensure uniqueness by topic id
       .values()
     )
-    .sort((a, b) => a.title.localeCompare(b.title));
+    .sort((a, b) =>
+    {
+      const aStartsWithParagraph = a.title.startsWith("§");
+      const bStartsWithParagraph = b.title.startsWith("§");
+
+      if(!aStartsWithParagraph && bStartsWithParagraph)
+      {
+        return -1;
+      }
+
+      if(aStartsWithParagraph && !bStartsWithParagraph)
+      {
+        return 1;
+      }
+
+      return a.title.localeCompare(b.title);
+    });
 };
 
 export const OverviewFiltersDrawer: FunctionComponent<Props> = ({ items }) =>

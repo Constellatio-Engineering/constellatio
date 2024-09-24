@@ -17,7 +17,7 @@ import { sortByTopic } from "@/utils/caisy";
 import { type Nullable } from "@/utils/types";
 
 import { parseAsString, useQueryState } from "next-usequerystate";
-import React, { Fragment, type FunctionComponent, useMemo } from "react";
+import React, { Fragment, type FunctionComponent, useDeferredValue, useMemo } from "react";
 
 import * as styles from "./OverviewPage.styles";
 import ErrorPage from "../errorPage/ErrorPage";
@@ -91,7 +91,8 @@ const OverviewPageContent: FunctionComponent<OverviewPageContentProps> = ({
     return [...itemsFilteredByStatus, ...itemsFilteredByTopic];
   }, [itemsFilteredByStatus, itemsFilteredByTopic]);*/
 
-  const filteredItems = itemsFilteredByTopic;
+  const _filteredItems = itemsFilteredByTopic;
+  const filteredItems = useDeferredValue(_filteredItems);
 
   const allItemsOfSelectedCategory = filteredItems.filter((item) => item.mainCategoryField?.[0]?.slug === selectedCategorySlug);
   const isCategoryEmpty = allItemsOfSelectedCategory.length <= 0;

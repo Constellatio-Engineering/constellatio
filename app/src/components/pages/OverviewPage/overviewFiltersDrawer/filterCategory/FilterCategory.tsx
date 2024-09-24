@@ -8,7 +8,7 @@ import { colors } from "@/constants/styles/colors";
 import { Input } from "@mantine/core";
 import { IconSearch } from "@tabler/icons-react";
 import fuzzysort from "fuzzysort";
-import React, { type FunctionComponent, useMemo } from "react";
+import React, { type FunctionComponent, useDeferredValue, useMemo } from "react";
 
 import * as styles from "./FilterCategory.styles";
 
@@ -35,11 +35,11 @@ export const FilterCategory: FunctionComponent<Props> = ({
   title
 }) =>
 {
-  const [searchValue, setSearchValue] = React.useState<string>("");
   const [isOpen, setIsOpen] = React.useState<boolean>(true);
   const hasActiveFilters = activeFiltersCount > 0;
+  const [searchValue, setSearchValue] = React.useState<string>("");
 
-  const itemsFiltered = useMemo(() =>
+  const _itemsFiltered = useMemo(() =>
   {
     return searchValue.length === 0 ? _items : fuzzysort
       .go(searchValue, _items, {
@@ -48,6 +48,8 @@ export const FilterCategory: FunctionComponent<Props> = ({
       })
       .map(result => result.obj);
   }, [_items, searchValue]);
+
+  const itemsFiltered = useDeferredValue(_itemsFiltered);
 
   return (
     <div css={styles.wrapper}>
