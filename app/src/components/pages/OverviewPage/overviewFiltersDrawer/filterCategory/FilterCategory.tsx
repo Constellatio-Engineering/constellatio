@@ -1,8 +1,8 @@
 import { BodyText } from "@/components/atoms/BodyText/BodyText";
-import { Checkbox } from "@/components/atoms/Checkbox/Checkbox";
 import IconButton from "@/components/atoms/iconButton/IconButton";
 import { ArrowDown } from "@/components/Icons/ArrowDown";
 import { UnstyledButton } from "@/components/molecules/unstyledButton/UnstyledButton";
+import FilterItem from "@/components/pages/OverviewPage/overviewFiltersDrawer/filterCategory/filterItem/FilterItem";
 import { colors } from "@/constants/styles/colors";
 
 import { Input } from "@mantine/core";
@@ -12,7 +12,7 @@ import React, { type FunctionComponent, useDeferredValue, useMemo } from "react"
 
 import * as styles from "./FilterCategory.styles";
 
-type Props = {
+export type FilterCategoryProps = {
   readonly activeFiltersCount: number;
   readonly clearFilters: () => void;
   readonly items: Array<{
@@ -27,7 +27,7 @@ type Props = {
   readonly title: string;
 };
 
-export const FilterCategory: FunctionComponent<Props> = ({
+export const FilterCategory: FunctionComponent<FilterCategoryProps> = ({
   activeFiltersCount,
   clearFilters,
   items: _items,
@@ -35,7 +35,7 @@ export const FilterCategory: FunctionComponent<Props> = ({
   title
 }) =>
 {
-  const [isOpen, setIsOpen] = React.useState<boolean>(true);
+  const [isOpen, setIsOpen] = React.useState<boolean>(false);
   const hasActiveFilters = activeFiltersCount > 0;
   const [searchValue, setSearchValue] = React.useState<string>("");
 
@@ -108,7 +108,6 @@ export const FilterCategory: FunctionComponent<Props> = ({
                   },
                   border: "1px solid ##D6D6D6",
                 },
-                wrapper: {}
               }}
               value={searchValue}
               onChange={(event) => setSearchValue(event.currentTarget.value)}
@@ -118,13 +117,7 @@ export const FilterCategory: FunctionComponent<Props> = ({
           </div>
         )}
         {itemsFiltered.map((item) => (
-          <div css={styles.itemWrapper} key={item.id}>
-            <Checkbox
-              checked={item.isChecked}
-              onChange={(_event) => item.toggle()}
-              label={item.label}
-            />
-          </div>
+          <FilterItem key={item.id} {...item}/>
         ))}
       </div>
     </div>
