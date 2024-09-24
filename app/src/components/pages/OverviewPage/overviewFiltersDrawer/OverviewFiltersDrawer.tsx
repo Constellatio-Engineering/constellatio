@@ -1,7 +1,15 @@
+/* eslint-disable max-lines,@typescript-eslint/no-use-before-define */
 import SlidingPanelTitle from "@/components/molecules/slidingPanelTitle/SlidingPanelTitle";
 import { FilterCategory } from "@/components/pages/OverviewPage/overviewFiltersDrawer/filterCategory/FilterCategory";
-import { type OverviewPageProps } from "@/components/pages/OverviewPage/OverviewPage";
-import { statusesFilterOptions, useOverviewFiltersStore } from "@/stores/overviewFilters.store";
+import type { CaseOverviewPageProps } from "@/pages/cases";
+import type { GetArticlesOverviewPagePropsResult } from "@/pages/dictionary";
+import {
+  type ArticlesOverviewFiltersStore,
+  type CasesOverviewFiltersStore,
+  statusesFilterOptions,
+  useArticlesOverviewFiltersStore,
+  useCasesOverviewFiltersStore
+} from "@/stores/overviewFilters.store";
 import { type NullableProperties } from "@/utils/types";
 
 import { Drawer } from "@mantine/core";
@@ -9,8 +17,26 @@ import React, { type FunctionComponent, useMemo } from "react";
 
 import * as styles from "./OverviewFiltersDrawer.styles";
 
-type Props = {
-  readonly items: OverviewPageProps["items"];
+type CasesOverviewFiltersDrawerProps = Pick<CaseOverviewPageProps, "items" | "variant">;
+
+export const CasesOverviewFiltersDrawer: FunctionComponent<CasesOverviewFiltersDrawerProps> = (props) =>
+{
+  const casesOverviewFiltersStore = useCasesOverviewFiltersStore();
+
+  return (
+    <OverviewFiltersDrawerContent {...props} filtersStore={casesOverviewFiltersStore}/>
+  );
+};
+
+type ArticlesOverviewFiltersDrawerProps = Pick<GetArticlesOverviewPagePropsResult, "items" | "variant">;
+
+export const ArticlesOverviewFiltersDrawer: FunctionComponent<ArticlesOverviewFiltersDrawerProps> = (props) =>
+{
+  const articlesOverviewFiltersStore = useArticlesOverviewFiltersStore();
+
+  return (
+    <OverviewFiltersDrawerContent {...props} filtersStore={articlesOverviewFiltersStore}/>
+  );
 };
 
 type FilterOption = {
@@ -57,24 +83,27 @@ const getUniqueFilterOptions = <T extends NullableProperties<FilterOption>>(item
     });
 };
 
-export const OverviewFiltersDrawer: FunctionComponent<Props> = ({ items }) =>
+type OverviewFiltersDrawerContentProps = (CasesOverviewFiltersDrawerProps & {
+  readonly filtersStore: CasesOverviewFiltersStore;
+}) | (ArticlesOverviewFiltersDrawerProps & {
+  readonly filtersStore: ArticlesOverviewFiltersStore;
+});
+
+const OverviewFiltersDrawerContent: FunctionComponent<OverviewFiltersDrawerContentProps> = ({ filtersStore, items, variant }) =>
 {
   const {
     clearFilteredLegalAreas,
-    clearFilteredStatuses,
     clearFilteredTags,
     clearFilteredTopics,
     closeDrawer,
     filteredLegalAreas,
-    filteredStatuses,
     filteredTags,
     filteredTopics,
     isDrawerOpened,
     toggleLegalArea,
-    toggleStatus,
     toggleTag,
     toggleTopic
-  } = useOverviewFiltersStore();
+  } = filtersStore;
 
   const uniqueLegalAreas = useMemo(() =>
   {
@@ -127,17 +156,19 @@ export const OverviewFiltersDrawer: FunctionComponent<Props> = ({ items }) =>
           closeButtonAction={closeDrawer}
         />
       )}>
-      <FilterCategory
-        items={statusesFilterOptions.map(({ id, label }) => ({
-          id,
-          isChecked: filteredStatuses.includes(id),
-          label,
-          toggle: () => toggleStatus(id)
-        }))}
-        clearFilters={clearFilteredStatuses}
-        activeFiltersCount={filteredStatuses.length}
-        title="Status"
-      />
+      {variant === "case" && (
+        <FilterCategory
+          items={statusesFilterOptions.map(({ id, label }) => ({
+            id,
+            isChecked: filtersStore.filteredStatuses.includes(id),
+            label,
+            toggle: () => filtersStore.toggleStatus(id)
+          }))}
+          clearFilters={filtersStore.clearFilteredStatuses}
+          activeFiltersCount={filtersStore.filteredStatuses.length}
+          title="Status"
+        />
+      )}
       <FilterCategory
         search={{ searchesFor: "Rechtsgebieten" }}
         activeFiltersCount={filteredLegalAreas.length}

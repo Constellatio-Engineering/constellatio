@@ -1,4 +1,4 @@
-import { create } from "zustand";
+import { create, type StateCreator } from "zustand";
 import { immer } from "zustand/middleware/immer";
 
 // we cannot reuse the CaseProgressState type here because it does differentiate "in-progress" in two sub-states
@@ -19,102 +19,132 @@ export const statusesFilterOptions = [
 
 type StatusFilterOption = typeof statusesFilterOptions[number]["id"];
 
-type OverviewFiltersStoreProps = {
+export interface CommonFiltersSlice
+{
   clearFilteredLegalAreas: () => void;
-  clearFilteredStatuses: () => void;
   clearFilteredTags: () => void;
   clearFilteredTopics: () => void;
   closeDrawer: () => void;
   filteredLegalAreas: string[];
-  filteredStatuses: StatusFilterOption[];
   filteredTags: string[];
   filteredTopics: string[];
   isDrawerOpened: boolean;
   openDrawer: () => void;
   setIsDrawerOpened: (isDrawerOpened: boolean) => void;
   toggleLegalArea: (legalAreaId: string) => void;
-  toggleStatus: (status: StatusFilterOption) => void;
   toggleTag: (tagId: string) => void;
   toggleTopic: (topicId: string) => void;
-};
+}
 
-export const useOverviewFiltersStore = create(
-  immer<OverviewFiltersStoreProps>((set) => ({
-    clearFilteredLegalAreas: () => set({ filteredLegalAreas: [] }),
-    clearFilteredStatuses: () => set({ filteredStatuses: [] }),
-    clearFilteredTags: () => set({ filteredTags: [] }),
-    clearFilteredTopics: () => set({ filteredTopics: [] }),
-    closeDrawer: () => set({ isDrawerOpened: false }),
-    filteredLegalAreas: [],
-    filteredStatuses: [],
-    filteredTags: [],
-    filteredTopics: [],
-    isDrawerOpened: true,
-    openDrawer: () => set({ isDrawerOpened: true }),
-    setIsDrawerOpened: (isDrawerOpened) => set({ isDrawerOpened }),
-    toggleLegalArea: (legalAreaId) =>
+const createCommonFiltersSlice: StateCreator<
+CommonFiltersSlice,
+[["zustand/immer", never]],
+[],
+CommonFiltersSlice
+> = (set) => ({
+  clearFilteredLegalAreas: () => set({ filteredLegalAreas: [] }),
+  clearFilteredTags: () => set({ filteredTags: [] }),
+  clearFilteredTopics: () => set({ filteredTopics: [] }),
+  closeDrawer: () => set({ isDrawerOpened: false }),
+  filteredLegalAreas: [],
+  filteredTags: [],
+  filteredTopics: [],
+  isDrawerOpened: true,
+  openDrawer: () => set({ isDrawerOpened: true }),
+  setIsDrawerOpened: (isDrawerOpened) => set({ isDrawerOpened }),
+  toggleLegalArea: (legalAreaId) =>
+  {
+    set((state) => 
     {
-      set((state) =>
+      const index = state.filteredLegalAreas.indexOf(legalAreaId);
+      if(index === -1) 
       {
-        const index = state.filteredLegalAreas.indexOf(legalAreaId);
-
-        if(index === -1)
-        {
-          state.filteredLegalAreas = state.filteredLegalAreas.concat(legalAreaId);
-        }
-        else
-        {
-          state.filteredLegalAreas = state.filteredLegalAreas.filter((_, i) => i !== index);
-        }
-      });
-    },
-    toggleStatus: (status) =>
+        state.filteredLegalAreas.push(legalAreaId);
+      }
+      else 
+      {
+        state.filteredLegalAreas.splice(index, 1);
+      }
+    });
+  },
+  toggleTag: (tagId) => 
+  {
+    set((state) => 
     {
-      set((state) =>
+      const index = state.filteredTags.indexOf(tagId);
+      if(index === -1) 
       {
-        const index = state.filteredStatuses.indexOf(status);
-
-        if(index === -1)
-        {
-          state.filteredStatuses = state.filteredStatuses.concat(status);
-        }
-        else
-        {
-          state.filteredStatuses = state.filteredStatuses.filter((_, i) => i !== index);
-        }
-      });
-    },
-    toggleTag: (tagId) =>
+        state.filteredTags.push(tagId);
+      }
+      else 
+      {
+        state.filteredTags.splice(index, 1);
+      }
+    });
+  },
+  toggleTopic: (topicId) => 
+  {
+    set((state) => 
     {
-      set((state) =>
+      const index = state.filteredTopics.indexOf(topicId);
+      if(index === -1) 
       {
-        const index = state.filteredTags.indexOf(tagId);
+        state.filteredTopics.push(topicId);
+      }
+      else 
+      {
+        state.filteredTopics.splice(index, 1);
+      }
+    });
+  },
+});
 
-        if(index === -1)
-        {
-          state.filteredTags = state.filteredTags.concat(tagId);
-        }
-        else
-        {
-          state.filteredTags = state.filteredTags.filter((_, i) => i !== index);
-        }
-      });
-    },
-    toggleTopic: (topicId) =>
+export interface StatusFiltersSlice
+{
+  clearFilteredStatuses: () => void;
+  filteredStatuses: StatusFilterOption[];
+  toggleStatus: (status: StatusFilterOption) => void;
+}
+
+const createStatusFiltersSlice: StateCreator<
+StatusFiltersSlice & CommonFiltersSlice,
+[["zustand/immer", never]],
+[],
+StatusFiltersSlice
+> = (set) => ({
+  clearFilteredStatuses: () => set({ filteredStatuses: [] }),
+  filteredStatuses: [],
+  toggleStatus: (status) => 
+  {
+    set((state) => 
     {
-      set((state) =>
+      const index = state.filteredStatuses.indexOf(status);
+      if(index === -1) 
       {
-        const index = state.filteredTopics.indexOf(topicId);
+        state.filteredStatuses.push(status);
+      }
+      else 
+      {
+        state.filteredStatuses.splice(index, 1);
+      }
+    });
+  },
+});
 
-        if(index === -1)
-        {
-          state.filteredTopics = state.filteredTopics.concat(topicId);
-        }
-        else
-        {
-          state.filteredTopics = state.filteredTopics.filter((_, i) => i !== index);
-        }
-      });
-    },
+export type CasesOverviewFiltersStore = CommonFiltersSlice & StatusFiltersSlice;
+
+export const useCasesOverviewFiltersStore = create<CasesOverviewFiltersStore>()(
+  immer((...a) => ({
+    ...createCommonFiltersSlice(...a),
+    ...createStatusFiltersSlice(...a),
   }))
 );
+
+export type ArticlesOverviewFiltersStore = CommonFiltersSlice;
+
+export const useArticlesOverviewFiltersStore = create<CommonFiltersSlice>()(
+  immer((...a) => ({
+    ...createCommonFiltersSlice(...a),
+  }))
+);
+

@@ -4,6 +4,7 @@ import OverviewPage from "@/components/pages/OverviewPage/OverviewPage";
 import { type NextPageWithLayout } from "@/pages/_app";
 import getAllArticles from "@/services/content/getAllArticles";
 import { getOverviewPageProps, type GetOverviewPagePropsResult } from "@/services/content/getOverviewPageProps";
+import { useArticlesOverviewFiltersStore } from "@/stores/overviewFilters.store";
 import { type ArticleWithNextAndPreviousArticleId, getArticlesWithNextAndPreviousArticleId } from "@/utils/articles";
 
 import { type GetStaticProps } from "next";
@@ -29,12 +30,29 @@ export const getStaticProps: GetStaticProps<GetArticlesOverviewPagePropsResult> 
   };
 };
 
-const NextPage: NextPageWithLayout<GetArticlesOverviewPagePropsResult> = (articlesOverviewProps) => (
-  <>
-    <PageHead pageTitle="Lexikon"/>
-    <OverviewPage {...articlesOverviewProps}/>
-  </>
-);
+const NextPage: NextPageWithLayout<GetArticlesOverviewPagePropsResult> = (articlesOverviewProps) =>
+{
+  const filteredLegalAreas = useArticlesOverviewFiltersStore(s => s.filteredLegalAreas);
+  const filteredTags = useArticlesOverviewFiltersStore(s => s.filteredTags);
+  const filteredTopics = useArticlesOverviewFiltersStore(s => s.filteredTopics);
+  const openDrawer = useArticlesOverviewFiltersStore(s => s.openDrawer);
+
+  return (
+    <>
+      <PageHead pageTitle="Lexikon"/>
+      <OverviewPage
+        {...articlesOverviewProps}
+        variant={"dictionary"}
+        filter={{
+          filteredLegalAreas,
+          filteredTags,
+          filteredTopics,
+          openDrawer
+        }}
+      />
+    </>
+  );
+};
 
 NextPage.getLayout = Layout;
 

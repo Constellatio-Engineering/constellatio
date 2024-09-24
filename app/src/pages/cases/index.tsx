@@ -6,6 +6,7 @@ import useCasesProgress from "@/hooks/useCasesProgress";
 import { type NextPageWithLayout } from "@/pages/_app";
 import getAllCases, { type AllCases } from "@/services/content/getAllCases";
 import { getOverviewPageProps, type GetOverviewPagePropsResult } from "@/services/content/getOverviewPageProps";
+import { useCasesOverviewFiltersStore } from "@/stores/overviewFilters.store";
 
 import { type GetStaticProps } from "next";
 import { useMemo } from "react";
@@ -50,11 +51,27 @@ const Page: NextPageWithLayout<GetCasesOverviewPagePropsResult> = ({
 {
   const { casesProgress } = useCasesProgress();
   const casesWithProgress = useMemo(() => getCasesWithProgress(items, casesProgress), [items, casesProgress]);
+  const filteredLegalAreas = useCasesOverviewFiltersStore(s => s.filteredLegalAreas);
+  const filteredStatuses = useCasesOverviewFiltersStore(s => s.filteredStatuses);
+  const filteredTags = useCasesOverviewFiltersStore(s => s.filteredTags);
+  const filteredTopics = useCasesOverviewFiltersStore(s => s.filteredTopics);
+  const openDrawer = useCasesOverviewFiltersStore(s => s.openDrawer);
 
   return (
     <>
       <PageHead pageTitle="Fälle"/>
-      <OverviewPage {...props} items={casesWithProgress}/>
+      <OverviewPage
+        {...props}
+        items={casesWithProgress}
+        variant={"case"}
+        filter={{
+          filteredLegalAreas,
+          filteredStatuses,
+          filteredTags, 
+          filteredTopics,
+          openDrawer
+        }}
+      />
     </>
   );
 };

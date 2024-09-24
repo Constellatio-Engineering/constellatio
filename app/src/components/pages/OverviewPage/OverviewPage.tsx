@@ -5,12 +5,12 @@ import { FiltersList } from "@/components/Icons/FiltersList";
 import ItemBlock from "@/components/organisms/caseBlock/ItemBlock";
 import EmptyStateCard from "@/components/organisms/emptyStateCard/EmptyStateCard";
 import OverviewHeader from "@/components/organisms/OverviewHeader/OverviewHeader";
-import { OverviewFiltersDrawer } from "@/components/pages/OverviewPage/overviewFiltersDrawer/OverviewFiltersDrawer";
+import { ArticlesOverviewFiltersDrawer, CasesOverviewFiltersDrawer } from "@/components/pages/OverviewPage/overviewFiltersDrawer/OverviewFiltersDrawer";
 import UseQueryStateWrapper from "@/components/Wrappers/useQueryStateWrapper/UseQueryStateWrapper";
 import useCasesProgress from "@/hooks/useCasesProgress";
 import { type CaseOverviewPageProps } from "@/pages/cases";
 import { type GetArticlesOverviewPagePropsResult } from "@/pages/dictionary";
-import { useOverviewFiltersStore } from "@/stores/overviewFilters.store";
+import { type ArticlesOverviewFiltersStore, type CasesOverviewFiltersStore, } from "@/stores/overviewFilters.store";
 import { type ArticleWithNextAndPreviousArticleId } from "@/utils/articles";
 import { sortByTopic } from "@/utils/caisy";
 import { type Nullable } from "@/utils/types";
@@ -32,10 +32,19 @@ export function extractNumeric(title: Nullable<string>): number | null
   return match ? parseInt(match[0], 10) : null;
 }
 
-export type OverviewPageProps = (GetArticlesOverviewPagePropsResult | CaseOverviewPageProps) & {
+type ArticlesPageProps = GetArticlesOverviewPagePropsResult & {
+  readonly filter: Pick<ArticlesOverviewFiltersStore, "filteredLegalAreas" | "filteredTags" | "filteredTopics" | "openDrawer">;
+};
+
+type CasesPageProps = CaseOverviewPageProps & {
+  readonly filter: Pick<CasesOverviewFiltersStore, "filteredLegalAreas" | "filteredStatuses" | "filteredTags" | "filteredTopics" | "openDrawer">;
+};
+
+export type OverviewPageProps = (ArticlesPageProps | CasesPageProps) & {
   // This is a workaround.
   // The correct type would be Array<CaseOverviewPageProps["items"][number] | ArticleWithNextAndPreviousArticleId[],
   // but TypeScript is not smart enough to infer this with the array.filter method
+  // eslint-disable-next-line react/no-unused-prop-types
   readonly items: Array<CaseOverviewPageProps["items"][number] | ArticleWithNextAndPreviousArticleId>;
 };
 
@@ -46,26 +55,37 @@ type OverviewPageContentProps = OverviewPageProps & {
 const OverviewPageContent: FunctionComponent<OverviewPageContentProps> = ({
   allLegalAreas,
   allMainCategories,
+  filter,
   initialCategorySlug,
   items: _items,
   variant
 }) =>
 {
-  const openDrawer = useOverviewFiltersStore(s => s.openDrawer);
-  const filteredStatuses = useOverviewFiltersStore(s => s.filteredStatuses);
-  const filteredTopics = useOverviewFiltersStore(s => s.filteredTopics);
-  const filteredLegalAreas = useOverviewFiltersStore(s => s.filteredLegalAreas);
-  const filteredTags = useOverviewFiltersStore(s => s.filteredTags);
+  const {
+    filteredLegalAreas,
+    filteredTags,
+    filteredTopics,
+    openDrawer
+  } = filter;
+
   const [selectedCategorySlug, setSelectedCategorySlug] = useQueryState("category", parseAsString.withDefault(initialCategorySlug));
   const { casesProgress } = useCasesProgress();
   const allItemsOfSelectedCategory = useMemo(() =>
   {
     return _items.filter((item) => item.mainCategoryField?.[0]?.slug === selectedCategorySlug);
   }, [_items, selectedCategorySlug]);
+
   const isCategoryEmpty = allItemsOfSelectedCategory.length <= 0;
 
   const itemsFilteredByStatus = useMemo(() => allItemsOfSelectedCategory.filter((item) =>
   {
+    if(variant === "dictionary")
+    {
+      return true;
+    }
+
+    const { filteredStatuses } = filter; 
+
     if(filteredStatuses.length === 0)
     {
       return true;
@@ -81,7 +101,7 @@ const OverviewPageContent: FunctionComponent<OverviewPageContentProps> = ({
     }
 
     return true;
-  }), [allItemsOfSelectedCategory, filteredStatuses]);
+  }), [allItemsOfSelectedCategory, filter, variant]);
 
   const _filteredItems = useMemo(() => itemsFilteredByStatus.filter((item) =>
   {
@@ -101,7 +121,17 @@ const OverviewPageContent: FunctionComponent<OverviewPageContentProps> = ({
 
   return (
     <>
-      <OverviewFiltersDrawer items={_items}/>
+      {variant === "case" ? (
+        <CasesOverviewFiltersDrawer
+          variant={variant}
+          items={_items}
+        />
+      ) : (
+        <ArticlesOverviewFiltersDrawer
+          variant={variant}
+          items={_items}
+        />
+      )}
       <div css={styles.Page}>
         {allMainCategories && (
           <OverviewHeader
