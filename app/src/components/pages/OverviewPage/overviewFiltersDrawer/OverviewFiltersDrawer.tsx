@@ -117,6 +117,7 @@ export const OverviewFiltersDrawer: FunctionComponent<Props> = ({ items }) =>
       onClose={closeDrawer}
       withCloseButton={false}
       position="right"
+      keepMounted={true}
       size="xl"
       styles={styles.drawerStyles()}
       title={(

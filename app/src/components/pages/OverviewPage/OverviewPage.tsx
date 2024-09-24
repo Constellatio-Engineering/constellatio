@@ -55,9 +55,17 @@ const OverviewPageContent: FunctionComponent<OverviewPageContentProps> = ({
   const openDrawer = useOverviewFiltersStore(s => s.openDrawer);
   const filteredStatuses = useOverviewFiltersStore(s => s.filteredStatuses);
   const filteredTopics = useOverviewFiltersStore(s => s.filteredTopics);
+  const filteredLegalAreas = useOverviewFiltersStore(s => s.filteredLegalAreas);
+  const filteredTags = useOverviewFiltersStore(s => s.filteredTags);
   const [selectedCategorySlug, setSelectedCategorySlug] = useQueryState("category", parseAsString.withDefault(initialCategorySlug));
+  const { casesProgress } = useCasesProgress();
+  const allItemsOfSelectedCategory = useMemo(() =>
+  {
+    return _items.filter((item) => item.mainCategoryField?.[0]?.slug === selectedCategorySlug);
+  }, [_items, selectedCategorySlug]);
+  const isCategoryEmpty = allItemsOfSelectedCategory.length <= 0;
 
-  const itemsFilteredByStatus = useMemo(() => _items.filter((item) =>
+  const itemsFilteredByStatus = useMemo(() => allItemsOfSelectedCategory.filter((item) =>
   {
     if(filteredStatuses.length === 0)
     {
@@ -74,7 +82,17 @@ const OverviewPageContent: FunctionComponent<OverviewPageContentProps> = ({
     }
 
     return true;
-  }), [_items, filteredStatuses]);
+  }), [allItemsOfSelectedCategory, filteredStatuses]);
+
+  const itemsFilteredByLegalArea = useMemo(() => itemsFilteredByStatus.filter((item) =>
+  {
+    if(filteredLegalAreas.length === 0)
+    {
+      return true;
+    }
+
+    return item.legalArea?.id != null && filteredLegalAreas.includes(item.legalArea.id);
+  }), [filteredLegalAreas, itemsFilteredByStatus]);
 
   const itemsFilteredByTopic = useMemo(() => itemsFilteredByStatus.filter((item) =>
   {
@@ -86,17 +104,22 @@ const OverviewPageContent: FunctionComponent<OverviewPageContentProps> = ({
     return item.topic?.some((t) => t?.id != null && filteredTopics.includes(t.id));
   }), [filteredTopics, itemsFilteredByStatus]);
 
-  /* const filteredItems = useMemo(() =>
+  const itemsFilteredByTag = useMemo(() => itemsFilteredByStatus.filter((item) =>
   {
-    return [...itemsFilteredByStatus, ...itemsFilteredByTopic];
-  }, [itemsFilteredByStatus, itemsFilteredByTopic]);*/
+    if(filteredTags.length === 0)
+    {
+      return true;
+    }
 
-  const _filteredItems = itemsFilteredByTopic;
+    return item.tags?.some((t) => t?.id != null && filteredTags.includes(t.id));
+  }), [filteredTags, itemsFilteredByStatus]);
+
+  const _filteredItems = useMemo(() =>
+  {
+    return [...itemsFilteredByTopic, ...itemsFilteredByTag, ...itemsFilteredByLegalArea];
+  }, [itemsFilteredByLegalArea, itemsFilteredByTag, itemsFilteredByTopic]);
+
   const filteredItems = useDeferredValue(_filteredItems);
-
-  const allItemsOfSelectedCategory = filteredItems.filter((item) => item.mainCategoryField?.[0]?.slug === selectedCategorySlug);
-  const isCategoryEmpty = allItemsOfSelectedCategory.length <= 0;
-  const { casesProgress } = useCasesProgress();
 
   return (
     <>
@@ -121,7 +144,7 @@ const OverviewPageContent: FunctionComponent<OverviewPageContentProps> = ({
                   styleType={"secondarySimple"}
                   onClick={openDrawer}
                   leftIcon={<FiltersList/>}>
-                  Filters
+                  Filter
                 </Button>
               </div>
             </div>
