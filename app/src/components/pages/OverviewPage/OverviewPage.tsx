@@ -123,16 +123,11 @@ const OverviewPageContent: FunctionComponent<OverviewPageContentProps> = ({
 
   const _filteredItems = useMemo(() => itemsFilteredByStatus.filter((item) =>
   {
-    if(filteredLegalAreas.length === 0 && filteredTopics.length === 0 && filteredTags.length === 0)
-    {
-      return true;
-    }
+    const matchesLegalArea = filteredLegalAreas.length === 0 || (item.legalArea?.id != null && filteredLegalAreas.some(legalArea => legalArea.id === item.legalArea?.id));
+    const matchesTopic = filteredTopics.length === 0 || (item.topic?.some((t) => t?.id != null && filteredTopics.some(topic => topic.id === t.id)));
+    const matchesTag = filteredTags.length === 0 || (item.tags?.some((t) => t?.id != null && filteredTags.some(tag => tag.id === t.id)));
 
-    const matchesLegalArea = item.legalArea?.id != null && filteredLegalAreas.some(legalArea => legalArea.id === item.legalArea?.id);
-    const matchesTopic = item.topic?.some((t) => t?.id != null && filteredTopics.some(topic => topic.id === t.id));
-    const matchesTag = item.tags?.some((t) => t?.id != null && filteredTags.some(tag => tag.id === t.id));
-
-    return matchesLegalArea || matchesTopic || matchesTag;
+    return matchesLegalArea && matchesTopic && matchesTag;
   }), [filteredLegalAreas, filteredTopics, filteredTags, itemsFilteredByStatus]);
 
   const filteredItems = useDeferredValue(_filteredItems);
