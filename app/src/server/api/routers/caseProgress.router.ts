@@ -17,7 +17,7 @@ import { getGamesFromCase } from "@/utils/case";
 import { and, eq, inArray, type SQLWrapper } from "drizzle-orm";
 
 export type GetCaseProgressResult = Pick<CaseProgress, "progressState" | "caseId">;
-export type GetCasesProgressResult = GetCaseProgressResult[];
+type GetCasesProgressResult = GetCaseProgressResult[];
 
 export const caseProgressRouter = createTRPCRouter({
   getCaseProgress: protectedProcedure

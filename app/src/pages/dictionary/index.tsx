@@ -2,28 +2,67 @@ import { Layout } from "@/components/layouts/Layout";
 import PageHead from "@/components/organisms/pageHead/PageHead";
 import OverviewPage from "@/components/pages/OverviewPage/OverviewPage";
 import { type NextPageWithLayout } from "@/pages/_app";
-import getArticlesOverviewProps, { type IArticlesOverviewProps } from "@/services/content/getArticlesOverviewProps";
+import getAllArticles from "@/services/content/getAllArticles";
+import { getOverviewPageProps, type GetOverviewPagePropsResult } from "@/services/content/getOverviewPageProps";
+import { useArticlesOverviewFiltersStore } from "@/stores/overviewFilters.store";
+import { type ArticleWithNextAndPreviousArticleId, getArticlesWithNextAndPreviousArticleId } from "@/utils/articles";
 
 import { type GetStaticProps } from "next";
 
-type GetArticlesOverviewPagePropsResult = IArticlesOverviewProps;
+export type GetArticlesOverviewPagePropsResult = GetOverviewPagePropsResult & {
+  items: ArticleWithNextAndPreviousArticleId[];
+  variant: "dictionary";
+};
 
 export const getStaticProps: GetStaticProps<GetArticlesOverviewPagePropsResult> = async () =>
 {
-  const allArticles = await getArticlesOverviewProps();
+  const allArticles = await getAllArticles();
+  const articlesWithNextAndPreviousArticleId = getArticlesWithNextAndPreviousArticleId(allArticles);
+  const overviewPageProps = await getOverviewPageProps(articlesWithNextAndPreviousArticleId);
 
   return {
-    props: allArticles,
+    props: {
+      ...overviewPageProps,
+      items: articlesWithNextAndPreviousArticleId,
+      variant: "dictionary"
+    },
     revalidate: 10,
   };
 };
 
-const NextPage: NextPageWithLayout<GetArticlesOverviewPagePropsResult> = (articlesOverviewProps) => (
-  <>
-    <PageHead pageTitle="Lexikon"/>
-    <OverviewPage content={articlesOverviewProps} variant="dictionary"/>
-  </>
-);
+const NextPage: NextPageWithLayout<GetArticlesOverviewPagePropsResult> = (articlesOverviewProps) =>
+{
+  const filteredLegalAreas = useArticlesOverviewFiltersStore(s => s.filteredLegalAreas);
+  const filteredTags = useArticlesOverviewFiltersStore(s => s.filteredTags);
+  const filteredTopics = useArticlesOverviewFiltersStore(s => s.filteredTopics);
+  const openDrawer = useArticlesOverviewFiltersStore(s => s.openDrawer);
+  const toggleLegalArea = useArticlesOverviewFiltersStore(s => s.toggleLegalArea);
+  const toggleTag = useArticlesOverviewFiltersStore(s => s.toggleTag);
+  const toggleTopic = useArticlesOverviewFiltersStore(s => s.toggleTopic);
+  const clearAllFilters = useArticlesOverviewFiltersStore(s => s.clearAllFilters);
+  const totalFiltersCount = useArticlesOverviewFiltersStore(s => s.getTotalFiltersCount());
+
+  return (
+    <>
+      <PageHead pageTitle="Lexikon"/>
+      <OverviewPage
+        {...articlesOverviewProps}
+        variant={"dictionary"}
+        filter={{
+          clearAllFilters,
+          filteredLegalAreas,
+          filteredTags,
+          filteredTopics,
+          openDrawer,
+          toggleLegalArea,
+          toggleTag,
+          toggleTopic,
+          totalFiltersCount
+        }}
+      />
+    </>
+  );
+};
 
 NextPage.getLayout = Layout;
 

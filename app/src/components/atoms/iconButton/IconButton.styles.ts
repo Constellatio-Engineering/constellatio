@@ -27,11 +27,6 @@ export const wrapper = ({ size, theme }: {
 		background-color: ${theme.colors["neutrals-01"][2]};
 	}
 
-  &:focus {
-    border-color: ${theme.colors["neutrals-01"][5]};
-    background-color: ${theme.colors["neutrals-01"][3]};
-  }
-
   &:disabled {
     color: initial;
   }

@@ -35,7 +35,7 @@ const DetailRenderer: FunctionComponent<{
     case "itemsBlock":
       return (
         <>
-          {(completedCases !== null || completedCases !== undefined) && items && variant === "case" ? (
+          {completedCases != null && items && variant === "case" ? (
             <div css={styles.detailText}>
               <CountLabel count={completedCases ?? 0} total={items} variant="cases"/>
               <CaptionText component="p" styleType="caption-01-bold">ABGESCHLOSSENE FÄLLE</CaptionText>
@@ -91,7 +91,7 @@ const CaseBlockHead: FunctionComponent<ICaseBlockHeadProps> = ({
         </div>
       )}
       <div css={styles.title} lang="de">
-        {categoryName && (blockType === "itemsBlock" || blockType === "favoriteItemsBlock" || blockType === "searchBlock") && <Title order={3}>{categoryName}</Title>}
+        {categoryName && (blockType === "itemsBlock" || blockType === "favoriteItemsBlock" || blockType === "searchBlock") && <Title order={3} size={23}>{categoryName}</Title>}
         {blockType === "searchPapersBlock" ? <Title order={3}>Papers</Title> : blockType === "searchUploadedMaterials" && <Title order={3}>Hochgeladene Dateien</Title>}
       </div>
       <div className="details">

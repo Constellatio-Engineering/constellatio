@@ -2,7 +2,7 @@ import { css } from "@emotion/react";
 import { type MantineTheme } from "@mantine/styles";
 
 export const filterTag = (theme: MantineTheme) => css`
-  div{
+  div {
     background-color:${theme.colors["neutrals-01"][0]};
     display: flex;
     gap:4px;

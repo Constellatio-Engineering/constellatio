@@ -1,3 +1,4 @@
+import { type SerializedStyles } from "@emotion/react";
 import { useMantineTheme } from "@mantine/styles";
 import {
   type ButtonHTMLAttributes,
@@ -13,6 +14,7 @@ export interface IIconButtonProps extends ButtonHTMLAttributes<HTMLButtonElement
   readonly dontUseDisabledStyles?: boolean;
   readonly icon: ReactNode;
   readonly size: "big" | "medium";
+  readonly stylesOverrides?: SerializedStyles;
 }
 
 const _IconButton: ForwardRefRenderFunction<
@@ -22,6 +24,7 @@ IIconButtonProps
   dontUseDisabledStyles = false,
   icon,
   size,
+  stylesOverrides,
   ...props
 }, ref) => 
 {
@@ -33,7 +36,8 @@ IIconButtonProps
       type="button"
       css={[
         styles.wrapper({ size, theme }),
-        !dontUseDisabledStyles && styles.disabledStyles
+        !dontUseDisabledStyles && styles.disabledStyles,
+        stylesOverrides
       ]}
       {...props}>
       {icon && <span css={styles.icon({ size })}>{icon}</span>}

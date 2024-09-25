@@ -3,6 +3,7 @@ import { type MantineTheme } from "@mantine/styles";
 
 export const wrapper = css`
   min-width: 230px;
+  width: min-content;
 
   @media screen and (max-width: 1200px) {
     display: flex;
@@ -50,6 +51,5 @@ export const title = css`
   hyphens: auto;
   @media screen and (max-width: 1200px) {
     margin: 0 12px;
-
   }
 `;

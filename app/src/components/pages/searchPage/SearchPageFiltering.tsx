@@ -24,7 +24,7 @@ const SearchPageFiltering: FunctionComponent = () =>
               </div>
             ))}
           </div>
-          <LinkButton title="Clear all filters" icon={<Trash/>}/>
+          <LinkButton title="Alle Filter zurücksetzen" icon={<Trash/>}/>
         </div>
       )}
     </>
