@@ -39,6 +39,8 @@ const NextPage: NextPageWithLayout<GetArticlesOverviewPagePropsResult> = (articl
   const toggleLegalArea = useArticlesOverviewFiltersStore(s => s.toggleLegalArea);
   const toggleTag = useArticlesOverviewFiltersStore(s => s.toggleTag);
   const toggleTopic = useArticlesOverviewFiltersStore(s => s.toggleTopic);
+  const clearAllFilters = useArticlesOverviewFiltersStore(s => s.clearAllFilters);
+  const totalFiltersCount = useArticlesOverviewFiltersStore(s => s.getTotalFiltersCount());
 
   return (
     <>
@@ -47,13 +49,15 @@ const NextPage: NextPageWithLayout<GetArticlesOverviewPagePropsResult> = (articl
         {...articlesOverviewProps}
         variant={"dictionary"}
         filter={{
+          clearAllFilters,
           filteredLegalAreas,
           filteredTags,
           filteredTopics,
           openDrawer,
           toggleLegalArea,
           toggleTag,
-          toggleTopic
+          toggleTopic,
+          totalFiltersCount
         }}
       />
     </>

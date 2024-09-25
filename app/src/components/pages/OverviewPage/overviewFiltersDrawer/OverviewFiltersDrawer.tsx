@@ -1,11 +1,12 @@
 /* eslint-disable max-lines,@typescript-eslint/no-use-before-define */
+import { Trash } from "@/components/Icons/Trash";
 import SlidingPanelTitle from "@/components/molecules/slidingPanelTitle/SlidingPanelTitle";
 import { FilterCategory } from "@/components/pages/OverviewPage/overviewFiltersDrawer/filterCategory/FilterCategory";
 import type { CaseOverviewPageProps } from "@/pages/cases";
 import type { GetArticlesOverviewPagePropsResult } from "@/pages/dictionary";
 import {
   type ArticlesOverviewFiltersStore,
-  type CasesOverviewFiltersStore,
+  type CasesOverviewFiltersStore, type FilterOption,
   statusesFilterOptions,
   useArticlesOverviewFiltersStore,
   useCasesOverviewFiltersStore
@@ -37,11 +38,6 @@ export const ArticlesOverviewFiltersDrawer: FunctionComponent<ArticlesOverviewFi
   return (
     <OverviewFiltersDrawerContent {...props} filtersStore={articlesOverviewFiltersStore}/>
   );
-};
-
-type FilterOption = {
-  readonly id: string;
-  readonly title: string;
 };
 
 const getUniqueFilterOptions = <T extends NullableProperties<FilterOption>>(items: T[]): FilterOption[] =>
@@ -92,6 +88,7 @@ type OverviewFiltersDrawerContentProps = (CasesOverviewFiltersDrawerProps & {
 const OverviewFiltersDrawerContent: FunctionComponent<OverviewFiltersDrawerContentProps> = ({ filtersStore, items, variant }) =>
 {
   const {
+    clearAllFilters,
     clearFilteredLegalAreas,
     clearFilteredTags,
     clearFilteredTopics,
@@ -100,11 +97,14 @@ const OverviewFiltersDrawerContent: FunctionComponent<OverviewFiltersDrawerConte
     filteredLegalAreas,
     filteredTags,
     filteredTopics,
+    getTotalFiltersCount,
     isDrawerOpened,
     toggleLegalArea,
     toggleTag,
     toggleTopic
   } = filtersStore;
+
+  const totalFiltersCount = getTotalFiltersCount();
 
   const uniqueLegalAreas = useMemo(() =>
   {
@@ -163,17 +163,24 @@ const OverviewFiltersDrawerContent: FunctionComponent<OverviewFiltersDrawerConte
       title={(
         <SlidingPanelTitle
           title="Filter"
-          variant="default"
+          number={totalFiltersCount}
+          variant="rich"
           closeButtonAction={closeDrawer}
+          actionButton={{
+            disabled: totalFiltersCount === 0,
+            icon: <Trash/>,
+            onClick: clearAllFilters,
+            title: "Alle zurücksetzen"
+          }}
         />
       )}>
       {variant === "case" && (
         <FilterCategory
-          items={statusesFilterOptions.map(({ id, label }) => ({
-            id,
-            isChecked: filtersStore.filteredStatuses.includes(id),
-            label,
-            toggle: () => filtersStore.toggleStatus(id)
+          items={statusesFilterOptions.map((status) => ({
+            id: status.id,
+            isChecked: filtersStore.filteredStatuses.some(s => s.id === status.id),
+            label: status.title,
+            toggle: () => filtersStore.toggleStatus(status)
           }))}
           clearFilters={filtersStore.clearFilteredStatuses}
           activeFiltersCount={filtersStore.filteredStatuses.length}
@@ -186,9 +193,9 @@ const OverviewFiltersDrawerContent: FunctionComponent<OverviewFiltersDrawerConte
         clearFilters={clearFilteredLegalAreas}
         items={uniqueLegalAreas.map(legalArea => ({
           id: legalArea.id,
-          isChecked: filteredLegalAreas.includes(legalArea.id),
+          isChecked: filteredLegalAreas.some(l => l.id === legalArea.id),
           label: legalArea.title,
-          toggle: () => toggleLegalArea(legalArea.id)
+          toggle: () => toggleLegalArea(legalArea)
         }))}
         title="Rechtsgebiet"
       />
@@ -198,9 +205,9 @@ const OverviewFiltersDrawerContent: FunctionComponent<OverviewFiltersDrawerConte
         clearFilters={clearFilteredTopics}
         items={uniqueTopics.map(topic => ({
           id: topic.id,
-          isChecked: filteredTopics.includes(topic.id),
+          isChecked: filteredTopics.some(t => t.id === topic.id),
           label: topic.title,
-          toggle: () => toggleTopic(topic.id)
+          toggle: () => toggleTopic(topic)
         }))}
         title="Thema"
       />
@@ -210,9 +217,9 @@ const OverviewFiltersDrawerContent: FunctionComponent<OverviewFiltersDrawerConte
         clearFilters={clearFilteredTags}
         items={uniqueTags.map(tag => ({
           id: tag.id,
-          isChecked: filteredTags.includes(tag.id),
+          isChecked: filteredTags.some(t => t.id === tag.id),
           label: tag.title,
-          toggle: () => toggleTag(tag.id)
+          toggle: () => toggleTag(tag)
         }))}
         title="Tags"
       />

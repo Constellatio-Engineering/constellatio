@@ -1,4 +1,5 @@
 /* eslint-disable max-lines */
+import { BodyText } from "@/components/atoms/BodyText/BodyText";
 import { Button } from "@/components/atoms/Button/Button";
 import { LinkButton } from "@/components/atoms/LinkButton/LinkButton";
 import ContentWrapper from "@/components/helpers/contentWrapper/ContentWrapper";
@@ -18,6 +19,7 @@ import { type ArticleWithNextAndPreviousArticleId } from "@/utils/articles";
 import { sortByTopic } from "@/utils/caisy";
 import { type Nullable } from "@/utils/types";
 
+import { Title } from "@mantine/core";
 import { parseAsString, useQueryState } from "next-usequerystate";
 import React, { Fragment, type FunctionComponent, useDeferredValue, useMemo } from "react";
 
@@ -35,7 +37,9 @@ export function extractNumeric(title: Nullable<string>): number | null
   return match ? parseInt(match[0], 10) : null;
 }
 
-type CommonFiltersStoreProps = Pick<CommonFiltersSlice, "filteredLegalAreas" | "filteredTags" | "filteredTopics" | "openDrawer" | "toggleLegalArea" | "toggleTag" | "toggleTopic">;
+type CommonFiltersStoreProps = Pick<CommonFiltersSlice, "clearAllFilters" | "filteredLegalAreas" | "filteredTags" | "filteredTopics" | "openDrawer" | "toggleLegalArea" | "toggleTag" | "toggleTopic"> & {
+  readonly totalFiltersCount: number;
+};
 
 type ArticlesPageProps = GetArticlesOverviewPagePropsResult & {
   readonly filter: CommonFiltersStoreProps;
@@ -67,13 +71,15 @@ const OverviewPageContent: FunctionComponent<OverviewPageContentProps> = ({
 }) =>
 {
   const {
+    clearAllFilters,
     filteredLegalAreas,
     filteredTags,
     filteredTopics,
     openDrawer,
     toggleLegalArea,
     toggleTag,
-    toggleTopic
+    toggleTopic,
+    totalFiltersCount
   } = filter;
 
   const [selectedCategorySlug, setSelectedCategorySlug] = useQueryState("category", parseAsString.withDefault(initialCategorySlug));
@@ -101,10 +107,14 @@ const OverviewPageContent: FunctionComponent<OverviewPageContentProps> = ({
 
     if(item.__typename === "Case")
     {
+      const isFilteringCompletedCases = filteredStatuses.some(status => status.id === "completed");
+      const isFilteringInProgressCases = filteredStatuses.some(status => status.id === "in-progress");
+      const isFilteringOpenCases = filteredStatuses.some(status => status.id === "open");
+
       return item.progressState && (
-        (filteredStatuses.includes("completed") && item.progressState === "completed") ||
-        (filteredStatuses.includes("in-progress") && ["solving-case", "completing-tests"].includes(item.progressState)) ||
-        (filteredStatuses.includes("open") && item.progressState === "not-started")
+        (isFilteringCompletedCases && item.progressState === "completed") ||
+        (isFilteringInProgressCases && (item.progressState === "completing-tests" || item.progressState === "solving-case")) ||
+        (isFilteringOpenCases && item.progressState === "not-started")
       );
     }
 
@@ -118,9 +128,9 @@ const OverviewPageContent: FunctionComponent<OverviewPageContentProps> = ({
       return true;
     }
 
-    const matchesLegalArea = item.legalArea?.id != null && filteredLegalAreas.includes(item.legalArea.id);
-    const matchesTopic = item.topic?.some((t) => t?.id != null && filteredTopics.includes(t.id));
-    const matchesTag = item.tags?.some((t) => t?.id != null && filteredTags.includes(t.id));
+    const matchesLegalArea = item.legalArea?.id != null && filteredLegalAreas.some(legalArea => legalArea.id === item.legalArea?.id);
+    const matchesTopic = item.topic?.some((t) => t?.id != null && filteredTopics.some(topic => topic.id === t.id));
+    const matchesTag = item.tags?.some((t) => t?.id != null && filteredTags.some(tag => tag.id === t.id));
 
     return matchesLegalArea || matchesTopic || matchesTag;
   }), [filteredLegalAreas, filteredTopics, filteredTags, itemsFilteredByStatus]);
@@ -161,30 +171,52 @@ const OverviewPageContent: FunctionComponent<OverviewPageContentProps> = ({
                   onClick={openDrawer}
                   leftIcon={<FiltersList/>}>
                   Filter
+                  {totalFiltersCount > 0 && (
+                    <span css={styles.filtersCount}>({totalFiltersCount})</span>
+                  )}
                 </Button>
               </div>
               <div css={styles.activeFiltersChips}>
                 {variant === "case" && (
                   <>
-                    {filter.filteredStatuses?.map((status) => (
+                    {filter.filteredStatuses.map((status) => (
                       <FilterTag
-                        key={status}
+                        key={status.id}
                         onClick={() => filter.toggleStatus(status)}
-                        title={status}
+                        title={status.title}
                       />
                     ))}
                   </>
                 )}
-                {filteredLegalAreas?.map((filter) => (
+                {filteredLegalAreas?.map((legalArea) => (
                   <FilterTag
-                    key={filter}
-                    onClick={() => toggleLegalArea(filter)}
-                    title={filter}
+                    key={legalArea.id}
+                    onClick={() => toggleLegalArea(legalArea)}
+                    title={legalArea.title}
+                  />
+                ))}
+                {filteredTopics?.map((topic) => (
+                  <FilterTag
+                    key={topic.id}
+                    onClick={() => toggleTopic(topic)}
+                    title={topic.title}
+                  />
+                ))}
+                {filteredTags?.map((tag) => (
+                  <FilterTag
+                    key={tag.id}
+                    onClick={() => toggleTag(tag)}
+                    title={tag.title}
                   />
                 ))}
               </div>
               <div css={styles.clearFiltersButtonWrapper}>
-                <LinkButton title="Alle Filter löschen" icon={<Trash/>}/>
+                <LinkButton
+                  disabled={totalFiltersCount === 0}
+                  title="Alle zurücksetzen"
+                  icon={<Trash/>}
+                  onClick={clearAllFilters}
+                />
               </div>
             </div>
             {allLegalAreas
@@ -253,17 +285,31 @@ const OverviewPageContent: FunctionComponent<OverviewPageContentProps> = ({
               })}
           </ContentWrapper>
         </div>
-        {isCategoryEmpty && (
-          <EmptyStateCard
-            title={`Das Angebot von Constellatio wird ständig erweitert. In Kürze findest du hier ${
-              variant === "case"
-                ? "interaktive Fälle"
-                : "verlinkte Lexikon-Artikel mit eingängigen Visualisierungen"
-            }`}
-            text=""
-            variant="For-large-areas"
-          />
-        )}
+        <ContentWrapper>
+          {totalFiltersCount > 0 && filteredItems.length === 0 && (
+            <div css={styles.noResultsWrapper}>
+              <Title order={3}>Keine Ergebnisse</Title>
+              <BodyText styleType="body-01-regular">
+                Für deine Filter wurden leider keine Ergebnisse gefunden.
+                Bitte ändere deine Filter.
+              </BodyText>
+              <Button<"button"> styleType={"primary"} onClick={clearAllFilters}>
+                Filter zurücksetzen
+              </Button>
+            </div>
+          )}
+          {isCategoryEmpty && (
+            <EmptyStateCard
+              title={`Das Angebot von Constellatio wird ständig erweitert. In Kürze findest du hier ${
+                variant === "case"
+                  ? "interaktive Fälle"
+                  : "verlinkte Lexikon-Artikel mit eingängigen Visualisierungen"
+              }`}
+              text=""
+              variant="For-large-areas"
+            />
+          )}
+        </ContentWrapper>
       </div>
     </>
   );

@@ -60,6 +60,8 @@ const Page: NextPageWithLayout<GetCasesOverviewPagePropsResult> = ({
   const toggleLegalArea = useCasesOverviewFiltersStore(s => s.toggleLegalArea);
   const toggleTag = useCasesOverviewFiltersStore(s => s.toggleTag);
   const toggleTopic = useCasesOverviewFiltersStore(s => s.toggleTopic);
+  const clearAllFilters = useCasesOverviewFiltersStore(s => s.clearAllFilters);
+  const totalFiltersCount = useCasesOverviewFiltersStore(s => s.getTotalFiltersCount());
 
   return (
     <>
@@ -69,15 +71,17 @@ const Page: NextPageWithLayout<GetCasesOverviewPagePropsResult> = ({
         items={casesWithProgress}
         variant={"case"}
         filter={{
-          filteredLegalAreas, 
-          filteredStatuses,
+          clearAllFilters,
+          filteredLegalAreas,
+          filteredStatuses, 
           filteredTags,
           filteredTopics,
           openDrawer,
           toggleLegalArea,
-          toggleStatus, 
-          toggleTag,
-          toggleTopic
+          toggleStatus,
+          toggleTag, 
+          toggleTopic,
+          totalFiltersCount
         }}
       />
     </>

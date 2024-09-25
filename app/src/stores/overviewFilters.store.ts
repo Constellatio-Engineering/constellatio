@@ -1,23 +1,29 @@
+/* eslint-disable max-lines */
 import { create, type StateCreator } from "zustand";
 import { immer } from "zustand/middleware/immer";
+
+export type FilterOption = {
+  readonly id: string;
+  readonly title: string;
+};
 
 // we cannot reuse the CaseProgressState type here because it does differentiate "in-progress" in two sub-states
 export const statusesFilterOptions = [
   {
     id: "open",
-    label: "Offen"
+    title: "Offen"
   },
   {
     id: "in-progress",
-    label: "In Bearbeitung"
+    title: "In Bearbeitung"
   },
   {
     id: "completed",
-    label: "Abgeschlossen"
+    title: "Abgeschlossen"
   },
 ] as const;
 
-type StatusFilterOption = typeof statusesFilterOptions[number]["id"];
+type StatusFilterOption = typeof statusesFilterOptions[number];
 
 export interface CommonFiltersSlice
 {
@@ -31,15 +37,16 @@ export interface CommonFiltersSlice
     uniqueTopics: string[];
   }) => void;
   closeDrawer: () => void;
-  filteredLegalAreas: string[];
-  filteredTags: string[];
-  filteredTopics: string[];
+  filteredLegalAreas: FilterOption[];
+  filteredTags: FilterOption[];
+  filteredTopics: FilterOption[];
+  getTotalFiltersCount: () => number;
   isDrawerOpened: boolean;
   openDrawer: () => void;
   setIsDrawerOpened: (isDrawerOpened: boolean) => void;
-  toggleLegalArea: (legalAreaId: string) => void;
-  toggleTag: (tagId: string) => void;
-  toggleTopic: (topicId: string) => void;
+  toggleLegalArea: (legalArea: FilterOption) => void;
+  toggleTag: (tag: FilterOption) => void;
+  toggleTopic: (topic: FilterOption) => void;
 }
 
 const createCommonFiltersSlice: StateCreator<
@@ -47,8 +54,12 @@ CommonFiltersSlice,
 [["zustand/immer", never]],
 [],
 CommonFiltersSlice
-> = (set) => ({
-  clearAllFilters: () => set({ filteredLegalAreas: [], filteredTags: [], filteredTopics: [] }),
+> = (set, get) => ({
+  clearAllFilters: () => set({
+    filteredLegalAreas: [],
+    filteredTags: [],
+    filteredTopics: [] 
+  }),
   clearFilteredLegalAreas: () => set({ filteredLegalAreas: [] }),
   clearFilteredTags: () => set({ filteredTags: [] }),
   clearFilteredTopics: () => set({ filteredTopics: [] }),
@@ -56,26 +67,32 @@ CommonFiltersSlice
   {
     set((state) =>
     {
-      state.filteredLegalAreas = state.filteredLegalAreas.filter(legalAreaId => uniqueLegalAreas.includes(legalAreaId));
-      state.filteredTags = state.filteredTags.filter(tagId => uniqueTags.includes(tagId));
-      state.filteredTopics = state.filteredTopics.filter(topicId => uniqueTopics.includes(topicId));
+      state.filteredLegalAreas = state.filteredLegalAreas.filter(legalArea => uniqueLegalAreas.find(legalAreaId => legalAreaId === legalArea.id));
+      state.filteredTags = state.filteredTags.filter(tag => uniqueTags.find(tagId => tagId === tag.id));
+      state.filteredTopics = state.filteredTopics.filter(topic => uniqueTopics.find(topicId => topicId === topic.id));
     });
   },
   closeDrawer: () => set({ isDrawerOpened: false }),
   filteredLegalAreas: [],
   filteredTags: [],
   filteredTopics: [],
-  isDrawerOpened: true,
-  openDrawer: () => set({ isDrawerOpened: true }),
+  getTotalFiltersCount: () =>
+  {
+    const { filteredLegalAreas, filteredTags, filteredTopics } = get();
+    return filteredLegalAreas.length + filteredTags.length + filteredTopics.length;
+  },
+  isDrawerOpened: false,
+  openDrawer: () => set({ isDrawerOpened: true }), 
   setIsDrawerOpened: (isDrawerOpened) => set({ isDrawerOpened }),
-  toggleLegalArea: (legalAreaId) =>
+  toggleLegalArea: (legalArea) =>
   {
     set((state) => 
     {
-      const index = state.filteredLegalAreas.indexOf(legalAreaId);
+      const index = state.filteredLegalAreas.findIndex(l => l.id === legalArea.id);
+
       if(index === -1) 
       {
-        state.filteredLegalAreas.push(legalAreaId);
+        state.filteredLegalAreas.push(legalArea);
       }
       else 
       {
@@ -83,14 +100,15 @@ CommonFiltersSlice
       }
     });
   },
-  toggleTag: (tagId) => 
+  toggleTag: (tag) =>
   {
     set((state) => 
     {
-      const index = state.filteredTags.indexOf(tagId);
+      const index = state.filteredTags.findIndex(t => t.id === tag.id);
+
       if(index === -1) 
       {
-        state.filteredTags.push(tagId);
+        state.filteredTags.push(tag);
       }
       else 
       {
@@ -98,14 +116,15 @@ CommonFiltersSlice
       }
     });
   },
-  toggleTopic: (topicId) => 
+  toggleTopic: (topic) =>
   {
     set((state) => 
     {
-      const index = state.filteredTopics.indexOf(topicId);
+      const index = state.filteredTopics.findIndex(t => t.id === topic.id);
+
       if(index === -1) 
       {
-        state.filteredTopics.push(topicId);
+        state.filteredTopics.push(topic);
       }
       else 
       {
@@ -117,8 +136,10 @@ CommonFiltersSlice
 
 interface StatusFiltersSlice
 {
+  clearAllFilters: () => void;
   clearFilteredStatuses: () => void;
   filteredStatuses: StatusFilterOption[];
+  getTotalFiltersCount: () => number;
   toggleStatus: (status: StatusFilterOption) => void;
 }
 
@@ -127,14 +148,31 @@ StatusFiltersSlice & CommonFiltersSlice,
 [["zustand/immer", never]],
 [],
 StatusFiltersSlice
-> = (set) => ({
+> = (set, get) => ({
+  clearAllFilters: () => set({
+    filteredLegalAreas: [],
+    filteredStatuses: [],
+    filteredTags: [],
+    filteredTopics: []
+  }),
   clearFilteredStatuses: () => set({ filteredStatuses: [] }),
   filteredStatuses: [],
+  getTotalFiltersCount: () =>
+  {
+    const {
+      filteredLegalAreas,
+      filteredStatuses,
+      filteredTags,
+      filteredTopics
+    } = get();
+    return filteredLegalAreas.length + filteredTags.length + filteredTopics.length + filteredStatuses.length;
+  },
   toggleStatus: (status) => 
   {
     set((state) => 
     {
-      const index = state.filteredStatuses.indexOf(status);
+      const index = state.filteredStatuses.findIndex(s => s.id === status.id);
+
       if(index === -1) 
       {
         state.filteredStatuses.push(status);
