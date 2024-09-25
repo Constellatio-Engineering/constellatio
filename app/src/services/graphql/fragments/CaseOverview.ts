@@ -1,3 +1,5 @@
+import { f_Tags } from "@/services/graphql/fragments/Tags";
+
 import { gql } from "graphql-request";
 
 import { f_LegalArea } from "./LegalArea";
@@ -7,6 +9,7 @@ import { f_Topic } from "./Topic";
 export const f_CaseOverview = gql`
 	${f_LegalArea}
 	${f_Topic}
+	${f_Tags}
 	${f_MainCategory}
 	fragment CaseOverview on Case {
 		__typename
@@ -18,6 +21,9 @@ export const f_CaseOverview = gql`
 		durationToCompleteInMinutes
 		legalArea{
 			...LegalArea
+		}
+		tags {
+			...Tags
 		}
 		topic {
 			...Topic

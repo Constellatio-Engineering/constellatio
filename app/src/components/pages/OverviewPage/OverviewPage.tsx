@@ -1,170 +1,330 @@
 /* eslint-disable max-lines */
+import { BodyText } from "@/components/atoms/BodyText/BodyText";
+import { Button } from "@/components/atoms/Button/Button";
+import { LinkButton } from "@/components/atoms/LinkButton/LinkButton";
 import ContentWrapper from "@/components/helpers/contentWrapper/ContentWrapper";
+import { FiltersList } from "@/components/Icons/FiltersList";
+import { Trash } from "@/components/Icons/Trash";
+import FilterTag from "@/components/molecules/filterTag/FilterTag";
 import ItemBlock from "@/components/organisms/caseBlock/ItemBlock";
 import EmptyStateCard from "@/components/organisms/emptyStateCard/EmptyStateCard";
 import OverviewHeader from "@/components/organisms/OverviewHeader/OverviewHeader";
+import { ArticlesOverviewFiltersDrawer, CasesOverviewFiltersDrawer } from "@/components/pages/OverviewPage/overviewFiltersDrawer/OverviewFiltersDrawer";
 import UseQueryStateWrapper from "@/components/Wrappers/useQueryStateWrapper/UseQueryStateWrapper";
-import useAllCasesWithProgress from "@/hooks/useAllCasesWithProgress";
-import { type IArticlesOverviewProps } from "@/services/content/getArticlesOverviewProps";
-import { type ICasesOverviewProps } from "@/services/content/getCasesOverviewProps";
-import {
-  type IGenLegalArea,
-  type IGenArticle,
-  type IGenCaseOverviewFragment,
-} from "@/services/graphql/__generated/sdk";
-import { sortArticlesByTopic } from "@/utils/articles";
+import useCasesProgress from "@/hooks/useCasesProgress";
+import { type CaseOverviewPageProps } from "@/pages/cases";
+import { type GetArticlesOverviewPagePropsResult } from "@/pages/dictionary";
+import { type CasesOverviewFiltersStore, type CommonFiltersSlice, } from "@/stores/overviewFilters.store";
+import { type ArticleWithNextAndPreviousArticleId } from "@/utils/articles";
+import { sortByTopic } from "@/utils/caisy";
+import { type Nullable } from "@/utils/types";
 
+import { Title } from "@mantine/core";
 import { parseAsString, useQueryState } from "next-usequerystate";
-import {
-  type FunctionComponent, Fragment
-} from "react";
-import React from "react";
+import React, { Fragment, type FunctionComponent, useDeferredValue, useMemo } from "react";
 
 import * as styles from "./OverviewPage.styles";
 import ErrorPage from "../errorPage/ErrorPage";
 
-export function extractNumeric(title: string): number | null
+export function extractNumeric(title: Nullable<string>): number | null
 {
+  if(!title)
+  {
+    return null;
+  }
+
   const match = title.match(/\d+/);
   return match ? parseInt(match[0], 10) : null;
 }
 
-type CasesOverviewPageProps = {
-  content: ICasesOverviewProps;
-  variant: "case";
+type CommonFiltersStoreProps = Pick<CommonFiltersSlice, "clearAllFilters" | "filteredLegalAreas" | "filteredTags" | "filteredTopics" | "openDrawer" | "toggleLegalArea" | "toggleTag" | "toggleTopic"> & {
+  readonly totalFiltersCount: number;
 };
 
-type ArticlesOverviewPageProps = {
-  content: IArticlesOverviewProps;
-  variant: "dictionary";
+type ArticlesPageProps = GetArticlesOverviewPagePropsResult & {
+  readonly filter: CommonFiltersStoreProps;
 };
 
-type OverviewPageProps = CasesOverviewPageProps | ArticlesOverviewPageProps;
+type CasesPageProps = CaseOverviewPageProps & {
+  readonly filter: CommonFiltersStoreProps & Pick<CasesOverviewFiltersStore, "toggleStatus" | "filteredStatuses">;
+};
+
+export type OverviewPageProps = (ArticlesPageProps | CasesPageProps) & {
+  // This is a workaround.
+  // The correct type would be Array<CaseOverviewPageProps["items"][number] | ArticleWithNextAndPreviousArticleId[],
+  // but TypeScript is not smart enough to infer this with the array.filter method
+  // eslint-disable-next-line react/no-unused-prop-types
+  readonly items: Array<CaseOverviewPageProps["items"][number] | ArticleWithNextAndPreviousArticleId>;
+};
+
 type OverviewPageContentProps = OverviewPageProps & {
   readonly initialCategorySlug: string;
 };
 
-const OverviewPageContent: FunctionComponent<OverviewPageContentProps> = ({ content, initialCategorySlug, variant }) =>
+const OverviewPageContent: FunctionComponent<OverviewPageContentProps> = ({
+  allLegalAreas,
+  allMainCategories,
+  filter,
+  initialCategorySlug,
+  items: _items,
+  variant
+}) =>
 {
+  const {
+    clearAllFilters,
+    filteredLegalAreas,
+    filteredTags,
+    filteredTopics,
+    openDrawer,
+    toggleLegalArea,
+    toggleTag,
+    toggleTopic,
+    totalFiltersCount
+  } = filter;
+
   const [selectedCategorySlug, setSelectedCategorySlug] = useQueryState("category", parseAsString.withDefault(initialCategorySlug));
-
-  const filteredLegalAreas = (content.allLegalAreaRes.allLegalArea?.edges
-    ?.map((legalArea) => legalArea?.node)
-    .filter((legalArea) => Boolean(legalArea)) || []) as IGenLegalArea[];
-
-  const getAllCasesOfLegalArea = (item: IGenLegalArea): IGenCaseOverviewFragment[] =>
+  const { casesProgress } = useCasesProgress();
+  const allItemsOfSelectedCategory = useMemo(() =>
   {
-    if(content?.__typename !== "case")
+    return _items.filter((item) => item.mainCategoryField?.[0]?.slug === selectedCategorySlug);
+  }, [_items, selectedCategorySlug]);
+
+  const isCategoryEmpty = allItemsOfSelectedCategory.length <= 0;
+
+  const itemsFilteredByStatus = useMemo(() => allItemsOfSelectedCategory.filter((item) =>
+  {
+    if(variant === "dictionary")
     {
-      return [];
+      return true;
     }
-    return content?.allCases.filter((x) =>
-      x.legalArea?.id === item?.id && x.mainCategoryField?.[0]?.slug === selectedCategorySlug
-    );
-  };
 
-  const getAllArticlesOfLegalArea = (item: IGenLegalArea): IGenArticle[] =>
-  {
-    if(content?.__typename !== "dictionary")
+    const { filteredStatuses } = filter;
+
+    if(filteredStatuses.length === 0)
     {
-      return [];
+      return true;
     }
-    return content?.allArticles.filter((x) => x.legalArea?.id === item?.id && x.mainCategoryField?.[0]?.slug === selectedCategorySlug);
-  };
 
-  const getIsCategoryEmpty = (): boolean =>
+    if(item.__typename === "Case")
+    {
+      const isFilteringCompletedCases = filteredStatuses.some(status => status.id === "completed");
+      const isFilteringInProgressCases = filteredStatuses.some(status => status.id === "in-progress");
+      const isFilteringOpenCases = filteredStatuses.some(status => status.id === "open");
+
+      return item.progressState && (
+        (isFilteringCompletedCases && item.progressState === "completed") ||
+        (isFilteringInProgressCases && (item.progressState === "completing-tests" || item.progressState === "solving-case")) ||
+        (isFilteringOpenCases && item.progressState === "not-started")
+      );
+    }
+
+    return true;
+  }), [allItemsOfSelectedCategory, filter, variant]);
+
+  const _filteredItems = useMemo(() => itemsFilteredByStatus.filter((item) =>
   {
-    return content?.__typename === "case"
-      ? content?.allCases?.filter((x) => x?.mainCategoryField?.[0]?.slug === selectedCategorySlug)?.length <= 0
-      : content?.allArticles?.filter((x) => x?.mainCategoryField?.[0]?.slug === selectedCategorySlug)?.length <= 0;
-  };
-  const { casesWithProgress } = useAllCasesWithProgress();
-  const completeCases = casesWithProgress.filter(x => x?.progress === "completed");
+    if(filteredLegalAreas.length === 0 && filteredTopics.length === 0 && filteredTags.length === 0)
+    {
+      return true;
+    }
+
+    const matchesLegalArea = item.legalArea?.id != null && filteredLegalAreas.some(legalArea => legalArea.id === item.legalArea?.id);
+    const matchesTopic = item.topic?.some((t) => t?.id != null && filteredTopics.some(topic => topic.id === t.id));
+    const matchesTag = item.tags?.some((t) => t?.id != null && filteredTags.some(tag => tag.id === t.id));
+
+    return matchesLegalArea || matchesTopic || matchesTag;
+  }), [filteredLegalAreas, filteredTopics, filteredTags, itemsFilteredByStatus]);
+
+  const filteredItems = useDeferredValue(_filteredItems);
+
   return (
-    <div css={styles.Page}>
-      {content?.allMainCategories && (
-        <OverviewHeader
+    <>
+      {variant === "case" ? (
+        <CasesOverviewFiltersDrawer
           variant={variant}
-          selectedCategorySlug={selectedCategorySlug}
-          setSelectedCategorySlug={setSelectedCategorySlug}
-          categories={content?.allMainCategories}
-          title={variant === "case" ? "Fälle" : "Lexikon"}
+          items={allItemsOfSelectedCategory as CasesPageProps["items"]}
+        />
+      ) : (
+        <ArticlesOverviewFiltersDrawer
+          variant={variant}
+          items={allItemsOfSelectedCategory as ArticlesPageProps["items"]}
         />
       )}
-      <div css={styles.ListWrapper}>
-        <ContentWrapper>
-          {filteredLegalAreas
-            .sort((a, b) =>
-            {
-              if(a.sorting === null) { return 1; }
-              if(b.sorting === null) { return -1; }
-              return a.sorting! - b.sorting!;
-            })
-            .map((item, itemIndex) =>
-            {
-              const items = variant === "case"
-                ? getAllCasesOfLegalArea(item)?.sort((a, b) =>
+      <div css={styles.Page}>
+        {allMainCategories && (
+          <OverviewHeader
+            variant={variant}
+            selectedCategorySlug={selectedCategorySlug}
+            setSelectedCategorySlug={setSelectedCategorySlug}
+            height={480}
+            contentWrapperStylesOverrides={styles.headerContent}
+            categories={allMainCategories}
+            title={variant === "case" ? "Fälle" : "Lexikon"}
+          />
+        )}
+        <div css={styles.ListWrapper}>
+          <ContentWrapper>
+            <div css={styles.filtersWrapper}>
+              <div css={styles.filtersButtonWrapper}>
+                <Button<"button">
+                  styleType={"secondarySimple"}
+                  onClick={openDrawer}
+                  leftIcon={<FiltersList/>}>
+                  Filter
+                  {totalFiltersCount > 0 && (
+                    <span css={styles.filtersCount}>({totalFiltersCount})</span>
+                  )}
+                </Button>
+              </div>
+              <div css={styles.activeFiltersChips}>
+                {variant === "case" && (
+                  <>
+                    {filter.filteredStatuses.map((status) => (
+                      <FilterTag
+                        key={status.id}
+                        onClick={() => filter.toggleStatus(status)}
+                        title={status.title}
+                      />
+                    ))}
+                  </>
+                )}
+                {filteredLegalAreas?.map((legalArea) => (
+                  <FilterTag
+                    key={legalArea.id}
+                    onClick={() => toggleLegalArea(legalArea)}
+                    title={legalArea.title}
+                  />
+                ))}
+                {filteredTopics?.map((topic) => (
+                  <FilterTag
+                    key={topic.id}
+                    onClick={() => toggleTopic(topic)}
+                    title={topic.title}
+                  />
+                ))}
+                {filteredTags?.map((tag) => (
+                  <FilterTag
+                    key={tag.id}
+                    onClick={() => toggleTag(tag)}
+                    title={tag.title}
+                  />
+                ))}
+              </div>
+              <div css={styles.clearFiltersButtonWrapper}>
+                <LinkButton
+                  disabled={totalFiltersCount === 0}
+                  title="Alle zurücksetzen"
+                  icon={<Trash/>}
+                  onClick={clearAllFilters}
+                />
+              </div>
+            </div>
+            {allLegalAreas
+              .sort((a, b) =>
+              {
+                if(a.sorting === null)
                 {
-                  const numA = extractNumeric(a.title ?? "");
-                  const numB = extractNumeric(b.title ?? "");
+                  return 1;
+                }
+                if(b.sorting === null)
+                {
+                  return -1;
+                }
+                return a.sorting! - b.sorting!;
+              })
+              .map((legalArea, itemIndex) =>
+              {
+                const allItemsOfLegalArea = filteredItems
+                  .filter(Boolean)
+                  .filter((item) => item.legalArea?.id === legalArea.id)
+                  .map((item) => ({
+                    ...item,
+                    isCompleted: casesProgress?.some((caseProgress) => caseProgress?.caseId === item.id && caseProgress.progressState === "completed"),
+                  }));
 
-                  if(numA !== null && numB !== null)
+                const allItemsSorted = allItemsOfLegalArea.sort((a, b) =>
+                {
+                  if(variant === "dictionary")
                   {
-                    return numA - numB;
+                    return sortByTopic(a, b);
                   }
-                  return a?.title?.localeCompare(b.title ?? "") ?? -1;
-                })
-                : getAllArticlesOfLegalArea(item)?.sort(sortArticlesByTopic) || [];
+                  else
+                  {
+                    const numA = extractNumeric(a.title);
+                    const numB = extractNumeric(b.title);
 
-              const completed = completeCases.filter(x => x?.legalArea?.id === item?.id)?.length;
+                    if(numA !== null && numB !== null)
+                    {
+                      return numA - numB;
+                    }
 
-              return (
-                item.legalAreaName && (
-                  <Fragment key={itemIndex}>
-                    <ItemBlock
-                      variant={variant}
-                      blockHead={{
-                        blockType: "itemsBlock",
-                        categoryName: item.legalAreaName,
-                        completedCases: completed,
-                        items: items.length,
-                        variant,
-                      }}
-                      tableType="cases"
-                      items={items}
-                    />
-                  </Fragment>
-                )
-              );
-            })}
+                    return a?.title?.localeCompare(b.title ?? "") ?? -1;
+                  }
+                });
+
+                const completed = allItemsOfLegalArea.filter((item) => item.isCompleted).length;
+
+                return (
+                  legalArea.legalAreaName && (
+                    <Fragment key={itemIndex}>
+                      <ItemBlock
+                        variant={variant}
+                        blockHead={{
+                          blockType: "itemsBlock",
+                          categoryName: legalArea.legalAreaName,
+                          completedCases: completed,
+                          items: allItemsSorted.length,
+                          variant,
+                        }}
+                        tableType="cases"
+                        items={allItemsSorted}
+                      />
+                    </Fragment>
+                  )
+                );
+              })}
+          </ContentWrapper>
+        </div>
+        <ContentWrapper>
+          {totalFiltersCount > 0 && filteredItems.length === 0 && (
+            <div css={styles.noResultsWrapper}>
+              <Title order={3}>Keine Ergebnisse</Title>
+              <BodyText styleType="body-01-regular">
+                Für deine Filter wurden leider keine Ergebnisse gefunden.
+                Bitte ändere deine Filter.
+              </BodyText>
+              <Button<"button"> styleType={"primary"} onClick={clearAllFilters}>
+                Filter zurücksetzen
+              </Button>
+            </div>
+          )}
+          {isCategoryEmpty && (
+            <EmptyStateCard
+              title={`Das Angebot von Constellatio wird ständig erweitert. In Kürze findest du hier ${
+                variant === "case"
+                  ? "interaktive Fälle"
+                  : "verlinkte Lexikon-Artikel mit eingängigen Visualisierungen"
+              }`}
+              text=""
+              variant="For-large-areas"
+            />
+          )}
         </ContentWrapper>
       </div>
-      {getIsCategoryEmpty() && (
-        <EmptyStateCard
-          title={`Das Angebot von Constellatio wird ständig erweitert. In Kürze findest du hier ${
-            variant === "case"
-              ? "interaktive Fälle"
-              : "verlinkte Lexikon-Artikel mit eingängigen Visualisierungen"
-          }`}
-          text=""
-          variant="For-large-areas"
-        />
-      )}
-    </div>
+    </>
   );
 };
 
 const OverviewPage: FunctionComponent<OverviewPageProps> = (props) =>
 {
-  const { content } = props;
-  const categories = content?.allMainCategories;
+  const { allMainCategories } = props;
 
-  if(!categories || categories.length === 0)
+  if(!allMainCategories || allMainCategories.length === 0)
   {
     return <ErrorPage error="Categories not found"/>;
   }
 
-  const initialCategorySlug = categories[0]!.slug;
+  const initialCategorySlug = allMainCategories[0]!.slug;
 
   if(!initialCategorySlug)
   {

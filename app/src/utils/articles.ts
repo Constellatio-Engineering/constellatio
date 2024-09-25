@@ -1,19 +1,71 @@
+import { type allArticles } from "@/services/content/getAllArticles";
 import { type IGenArticle } from "@/services/graphql/__generated/sdk";
+import { sortByTopic } from "@/utils/caisy";
 
-export const sortArticlesByTopic = (a: IGenArticle, b: IGenArticle): number =>
+export type ArticleWithNextAndPreviousArticleId = IGenArticle & {
+  nextArticleId: string | null;
+  previousArticleId: string | null;
+};
+
+// eslint-disable-next-line @typescript-eslint/explicit-function-return-type
+export const getArticlesWithNextAndPreviousArticleId = (allArticles: allArticles): ArticleWithNextAndPreviousArticleId[] =>
 {
-  const sortingA = a?.topic?.[0]?.sorting;
-  const sortingB = b?.topic?.[0]?.sorting;
+  const articlesGroupedByLegalArea: {
+    [legalAreaId: string]: IGenArticle[];
+  } = {};
 
-  if(sortingA == null)
+  for(const article of allArticles)
   {
-    return 1;
+    const legalAreaId = article.legalArea?.id;
+
+    if(legalAreaId == null)
+    {
+      continue;
+    }
+
+    if(!articlesGroupedByLegalArea[legalAreaId])
+    {
+      articlesGroupedByLegalArea[legalAreaId] = [];
+    }
+
+    articlesGroupedByLegalArea[legalAreaId]!.push(article);
   }
 
-  if(sortingB == null)
+  Object.keys(articlesGroupedByLegalArea).forEach((legalAreaId) =>
   {
-    return -1;
-  }
+    articlesGroupedByLegalArea[legalAreaId]!.sort((sortByTopic));
+  });
 
-  return sortingA - sortingB;
+  const articlesWithNextAndPreviousArticleId: ArticleWithNextAndPreviousArticleId[] = allArticles.map((article) =>
+  {
+    const legalAreaId = article.legalArea?.id;
+
+    if(!legalAreaId)
+    {
+      return ({
+        ...article,
+        nextArticleId: null,
+        previousArticleId: null,
+      });
+    }
+
+    const articlesInLegalArea = articlesGroupedByLegalArea[legalAreaId]!;
+    const articleIndex = articlesInLegalArea.findIndex((a) => a.id === article.id);
+
+    const nextArticleId = articleIndex < articlesInLegalArea.length - 1
+      ? articlesInLegalArea[articleIndex + 1]!.id
+      : null;
+
+    const previousArticleId = articleIndex > 0
+      ? articlesInLegalArea[articleIndex - 1]!.id
+      : null;
+
+    return ({
+      ...article,
+      nextArticleId: nextArticleId ?? null,
+      previousArticleId: previousArticleId ?? null,
+    });
+  });
+
+  return articlesWithNextAndPreviousArticleId;
 };
