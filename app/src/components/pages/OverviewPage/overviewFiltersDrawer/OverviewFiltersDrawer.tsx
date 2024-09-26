@@ -86,41 +86,76 @@ const getUniqueFilterOptions2 = (
   currentFilterKey: keyof AllCases[number]
 ) =>
 {
-  return Array
-    .from(items
-      .map(item =>
+  const filteredSets = [];
+
+  for(const filter of filters)
+  {
+    if(filter.key === currentFilterKey)
+    {
+      continue;
+    }
+    
+    const filteredValues = items.map(item => 
+    {
+      const values = item[filter.key as keyof typeof item];
+
+      if(values == null)
       {
-        if(item?.id == null || item?.title == null)
+        return null;
+      }
+
+      if(Array.isArray(values)) 
+      {
+        if(values.length === 0) 
+        {
+          return null;
+        } 
+        if(values?.some((t) => t?.id != null && filter.filteredOptions.some(filterOption => filterOption.id === t.id))) 
+        {
+          return values;
+        }
+      }
+      if(typeof values === "object" && "id" in values && values?.id != null && filter.filteredOptions.some(filterOption => filterOption.id === values?.id)) 
+      {
+        return values;
+      }
+      return null;
+    }).filter(Boolean);
+
+    if(filteredValues.length === 0) 
+    {
+      continue;
+    }
+
+    if(Array.isArray(filteredValues[0])) 
+    {
+      filteredSets.push(new Set(filteredValues.flatMap(item => {
+        if(item == null)
         {
           return null;
         }
-
-        return ({
-          id: item.id,
-          title: item.title,
-        }) satisfies FilterOption;
-      })
-      .filter(Boolean)
-      .reduce((map, item) => map.set(item.id, item), new Map<string, FilterOption>()) // Use a Map to ensure uniqueness by topic id
-      .values()
-    )
-    .sort((a, b) =>
+        return item;
+      }).filter(Boolean)));
+    }
+    else 
     {
-      const aStartsWithParagraph = a.title.startsWith("§");
-      const bStartsWithParagraph = b.title.startsWith("§");
+      filteredSets.push(new Set(filteredValues));
+    }
+  }
 
-      if(!aStartsWithParagraph && bStartsWithParagraph)
-      {
-        return -1;
-      }
+  if(filteredSets.length === 0) 
+  {
+    return Array.from(new Set(items.map(item => item[currentFilterKey as keyof typeof item]).filter(Boolean)));
+  }
 
-      if(aStartsWithParagraph && !bStartsWithParagraph)
-      {
-        return 1;
-      }
+  let finalSet = filteredSets[0]!;
 
-      return a.title.localeCompare(b.title);
-    });
+  for(let i = 1; i < filteredSets.length; i++) 
+  {
+    finalSet = finalSet.intersection(filteredSets[i]!);
+  }
+
+  return Array.from(finalSet);
 };
 
 type OverviewFiltersDrawerContentProps = (CasesOverviewFiltersDrawerProps & {
@@ -138,9 +173,7 @@ const OverviewFiltersDrawerContent: FunctionComponent<OverviewFiltersDrawerConte
     clearFilteredTopics,
     clearInvalidFilters,
     closeDrawer,
-    filteredLegalAreas,
-    filteredTags,
-    filteredTopics,
+    filters,
     getTotalFiltersCount,
     isDrawerOpened,
     toggleLegalArea,
@@ -150,23 +183,11 @@ const OverviewFiltersDrawerContent: FunctionComponent<OverviewFiltersDrawerConte
 
   const totalFiltersCount = getTotalFiltersCount();
 
-  const uniqueLegalAreas = useMemo(() => getUniqueFilterOptions(items.map(item => item.legalArea)
-    .map(t => ({
-      id: t?.id,
-      title: t?.legalAreaName,
-    }))), [items]);
+  const uniqueLegalAreas = useMemo(() => getUniqueFilterOptions2(items, filters, "legalArea"), [items, filters]);
 
-  const uniqueTopics = useMemo(() => getUniqueFilterOptions(items.flatMap((item) => (item.topic ?? [])
-    .map(t => ({
-      id: t?.id,
-      title: t?.topicName,
-    })))), [items]);
+  const uniqueTopics = useMemo(() => getUniqueFilterOptions2(items, filters, "topic"), [items, filters]);
 
-  const uniqueTags = useMemo(() => getUniqueFilterOptions(items.flatMap((item) => (item.tags ?? [])
-    .map(t => ({
-      id: t?.id,
-      title: t?.tagName,
-    })))), [items]);
+  const uniqueTags = useMemo(() => getUniqueFilterOptions2(items, filters, "tags"), [items, filters]);
 
   useEffect(() =>
   {
