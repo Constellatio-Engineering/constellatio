@@ -43,7 +43,8 @@ const config = {
       fullUrl: false
     }
   },
-  productionBrowserSourceMaps: process.env.NEXT_PUBLIC_DEPLOYMENT_ENVIRONMENT !== "production",
+  // productionBrowserSourceMaps: process.env.NEXT_PUBLIC_DEPLOYMENT_ENVIRONMENT !== "production",
+  productionBrowserSourceMaps: false,
   eslint: {
     ignoreDuringBuilds: true,
   },

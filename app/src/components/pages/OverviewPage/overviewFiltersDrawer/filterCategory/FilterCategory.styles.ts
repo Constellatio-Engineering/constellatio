@@ -39,9 +39,8 @@ export const resetButton = css`
   font-size: 16px;
 `;
 
-export const expandButton = css`
-  border: none;
-  margin-left: -12px;
+export const expandIconWrapper = css`
+  margin-right: 8px;
 `;
 
 export const itemsWrapper = css`

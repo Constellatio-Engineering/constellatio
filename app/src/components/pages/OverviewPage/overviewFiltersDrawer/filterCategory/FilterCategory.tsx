@@ -77,16 +77,9 @@ export const FilterCategory: FunctionComponent<FilterCategoryProps> = ({
               <div css={styles.divider}/>
             </>
           )}
-          <IconButton
-            stylesOverrides={styles.expandButton}
-            icon={<ArrowDown/>}
-            size={"big"}
-            onClick={(e) =>
-            {
-              e.stopPropagation();
-              setIsOpen((isOpen) => !isOpen);
-            }}
-          />
+          <div css={styles.expandIconWrapper}>
+            <ArrowDown size={22}/>
+          </div>
         </div>
       </UnstyledButton>
       <div css={[styles.itemsWrapper, !isOpen && styles.itemWrapperCollapsed]}>

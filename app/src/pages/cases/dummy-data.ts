@@ -10,7 +10,7 @@ export const dummyCases: AllCases = [
       createdAt: "2023-09-26T11:43:23.841422Z"
     },
     durationToCompleteInMinutes: 90,
-    id: "0e540f96-dc9f-478a-9f89-6b0998dbd837",
+    id: "1",
     legalArea: {
       __typename: "LegalArea",
       id: "d4818d37-36f7-4371-b444-f777e7d74148",
@@ -71,7 +71,7 @@ export const dummyCases: AllCases = [
       createdAt: "2024-09-08T13:53:56.447992Z"
     },
     durationToCompleteInMinutes: 120,
-    id: "6fa166ff-ff8c-4c86-b8b8-6c50e3f47c22",
+    id: "2",
     legalArea: {
       __typename: "LegalArea",
       id: "dec5a487-4624-4646-84e8-3689a03feb4d",
@@ -127,7 +127,7 @@ export const dummyCases: AllCases = [
       createdAt: "2023-10-24T12:41:11.654276Z"
     },
     durationToCompleteInMinutes: 30,
-    id: "2f734c83-bdd9-451c-be04-48f42f51b6d4",
+    id: "3",
     legalArea: {
       __typename: "LegalArea",
       id: "0dc9368e-06f3-4ca8-b1ef-f9c3e4de5843",
@@ -189,7 +189,7 @@ export const dummyCases: AllCases = [
       createdAt: "2023-10-24T12:41:11.654276Z"
     },
     durationToCompleteInMinutes: 30,
-    id: "2f734c83-bdd9-451c-be04-48f42f51b6d4",
+    id: "4",
     legalArea: {
       __typename: "LegalArea",
       id: "0dc9368e-06f3-4ca8-b1ef-f9c3e4de5843",
@@ -238,7 +238,7 @@ export const dummyCases: AllCases = [
       createdAt: "2023-10-24T12:41:11.654276Z"
     },
     durationToCompleteInMinutes: 30,
-    id: "2f734c83-bdd9-451c-be04-48f42f51b6d4",
+    id: "5",
     legalArea: {
       __typename: "LegalArea",
       id: "0dc9368e-06f3-4ca8-b1ef-f9c3e4de5843",

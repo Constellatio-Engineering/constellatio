@@ -5,14 +5,16 @@ import { FilterCategory } from "@/components/pages/OverviewPage/overviewFiltersD
 import type { CaseOverviewPageProps } from "@/pages/cases";
 import type { GetArticlesOverviewPagePropsResult } from "@/pages/dictionary";
 import type { AllCases } from "@/services/content/getAllCases";
+import { IGenLegalArea, IGenTags, IGenTopic } from "@/services/graphql/__generated/sdk";
 import {
   type ArticlesOverviewFiltersStore,
-  type CasesOverviewFiltersStore, type CommonFiltersSlice, type FilterOption,
+  type CasesOverviewFiltersStore, type CommonFiltersSlice, type FilterableArticleAttributes, type FilterOption,
   statusesFilterOptions,
   useArticlesOverviewFiltersStore,
   useCasesOverviewFiltersStore
 } from "@/stores/overviewFilters.store";
-import { type NullableProperties } from "@/utils/types";
+import { type NullableProperties, RemoveUndefined } from "@/utils/types";
+import { objectKeys } from "@/utils/utils";
 
 import { Drawer } from "@mantine/core";
 import React, { type FunctionComponent, useEffect, useMemo } from "react";
@@ -58,7 +60,7 @@ const getUniqueFilterOptionsOld = <T extends NullableProperties<FilterOption>>(i
         }) satisfies FilterOption;
       })
       .filter(Boolean)
-      .reduce((map, item) => map.set(item.id, item), new Map<string, FilterOption>()) // Use a Map to ensure uniqueness by topic id
+      .reduce((map, item) => map.set(item.id, item), new Map<string, FilterOption>()) // Use a Map to ensure uniqueness by id
       .values()
     )
     .sort((a, b) =>
@@ -83,55 +85,120 @@ const getUniqueFilterOptionsOld = <T extends NullableProperties<FilterOption>>(i
 const getUniqueFilterOptions = (
   items: OverviewFiltersDrawerContentProps["items"],
   filters: CommonFiltersSlice["filters"],
-  currentFilterKey: keyof AllCases[number]
-) =>
+  currentFilterKey: FilterableArticleAttributes
+): FilterOption[] =>
 {
-  const filteredSets: Array<Set<{
+  console.log("----------------------------- getUniqueFilterOptions -----------------------------");
+  console.log(`getUniqueFilterOptions for '${currentFilterKey}'`);
 
-  }>> = [];
+  // type LegalArea = NonNullable<typeof items[number]["legalArea"]>;
+  // type Topic = NonNullable<typeof items[number]["topic"]>[number];
+  // type Tag = NonNullable<typeof items[number]["tags"]>[number];
+  // const filteredSetsOld: Array<Set<LegalArea | Topic | Tag>> = [];
+ 
+  const filteredSets: FilterOption[][] = [];
 
-  for(const filter of filters)
+  for(const filterKey of objectKeys(filters))
   {
-    if(filter.key === currentFilterKey)
+    if(filterKey === currentFilterKey)
     {
+      // we filter out items by all filters except the current filter key, so if the current filter key is legalArea, we filter out by all filters but legalArea
       continue;
     }
-    
-    const filteredValues = items.map(item => 
-    {
-      const values = item[filter.key as keyof typeof item];
 
-      if(values == null)
+    // these are for example all topics we currently filter by
+    const currentFilterOptions = filters[filterKey];
+
+    // filteredOptions is an array of either tags, topics or legalAreas, depending on the current filter key
+    const filteredOptions: FilterOption[] = items
+      .map(item =>
       {
+        // get the values from the current filter key, for example: legalArea, tags or topics
+        const itemValuesFromCurrentFilter = item[filterKey];
+
+        // for example tags or topics are arrays (items can have multiple), so we check if the current item matches any of the filtered tags or topics
+        if(Array.isArray(itemValuesFromCurrentFilter))
+        {
+          if(itemValuesFromCurrentFilter.length === 0)
+          {
+            return null;
+          }
+
+          if(currentFilterOptions?.length === 0 || itemValuesFromCurrentFilter.some((value) => currentFilterOptions.some(filterOption => filterOption.id === value?.id)))
+          {
+            // if the current item matches any of the filtered tags or topics, we return the tags or topics of the current item
+            return itemValuesFromCurrentFilter;
+          }
+        }
+        // for example legalArea is an object (item can only have one), so we check if the current item matches the filtered legalAreas
+        else if(currentFilterOptions?.length === 0 || currentFilterOptions.some(filterOption => filterOption.id === itemValuesFromCurrentFilter?.id))
+        {
+          // if the current item matches the filtered legalAreas, we return the legalArea of the current item
+          return itemValuesFromCurrentFilter;
+        }
+
         return null;
-      }
-
-      if(Array.isArray(values)) 
+      })
+      .flat()
+      .map(item =>
       {
-        if(values.length === 0) 
+        let filterOption: NullableProperties<FilterOption> | null = null;
+
+        switch (item?.__typename)
+        {
+          case "LegalArea":
+          {
+            filterOption = {
+              id: item.id,
+              title: item.legalAreaName
+            };
+            break;
+          }
+          case "Topic":
+          {
+            filterOption = {
+              id: item.id,
+              title: item.topicName
+            };
+            break;
+          }
+          case "Tags":
+          {
+            filterOption = {
+              id: item.id,
+              title: item.tagName
+            };
+            break;
+          }
+          case undefined:
+          {
+            filterOption = null;
+            break;
+          }
+        }
+
+        if(filterOption == null || filterOption.id == null || filterOption.title == null)
         {
           return null;
-        } 
-        if(values?.some((t) => t?.id != null && filter.filteredOptions.some(filterOption => filterOption.id === t.id))) 
-        {
-          return values;
         }
-      }
-      if(typeof values === "object" && "id" in values && values?.id != null && filter.filteredOptions.some(filterOption => filterOption.id === values?.id)) 
-      {
-        return values;
-      }
-      return null;
-    }).filter(Boolean);
 
-    if(filteredValues.length === 0) 
+        return ({
+          id: filterOption.id,
+          title: filterOption.title,
+        });
+      })
+      .filter(Boolean);
+
+    if(filteredOptions.length === 0)
     {
       continue;
     }
 
-    if(Array.isArray(filteredValues[0])) 
+    filteredSets.push(Array.from(new Map(filteredOptions.map(item => [item.id, item])).values()));
+
+    /* if(Array.isArray(filteredOptions[0]))
     {
-      filteredSets.push(new Set(filteredValues.flatMap(item => 
+      filteredSets.push(new Set(filteredOptions.flatMap(item =>
       {
         if(item == null)
         {
@@ -142,23 +209,36 @@ const getUniqueFilterOptions = (
     }
     else 
     {
-      filteredSets.push(new Set(filteredValues));
-    }
+      filteredSets.push(new Set(filteredOptions));
+    }*/
   }
 
-  if(filteredSets.length === 0) 
+  console.log(filteredSets);
+
+  if(filteredSets.length === 0)
   {
-    return Array.from(new Set(items.map(item => item[currentFilterKey as keyof typeof item]).filter(Boolean)));
+    return [];
   }
 
-  let finalSet = filteredSets[0]!;
+  return Array.from(filteredSets[0]!);
+
+  // if(filteredSets.length === 0)
+  // {
+  //   return Array.from(new Set(items.map(item => item[currentFilterKey]).filter(Boolean)));
+  // }
+  //
+  // console.log("filteredSets", filteredSets);
+  //
+  // return [];
+
+  /* let finalSet = filteredSets[0]!;
 
   for(let i = 1; i < filteredSets.length; i++) 
   {
     finalSet = finalSet.intersection(filteredSets[i]!);
   }
 
-  return Array.from(finalSet);
+  return Array.from(finalSet);*/
 };
 
 type OverviewFiltersDrawerContentProps = (CasesOverviewFiltersDrawerProps & {
@@ -186,6 +266,8 @@ const OverviewFiltersDrawerContent: FunctionComponent<OverviewFiltersDrawerConte
     uniqueLegalAreas: getUniqueFilterOptions(items, filters, "legalArea"),
     uniqueTags: getUniqueFilterOptions(items, filters, "tags"),
     uniqueTopics: getUniqueFilterOptions(items, filters, "topic")
+    // uniqueTags: [],
+    // uniqueTopics: []
   }), [items, filters]);
 
   /* useEffect(() =>
@@ -243,7 +325,7 @@ const OverviewFiltersDrawerContent: FunctionComponent<OverviewFiltersDrawerConte
           id: legalArea.id,
           isChecked: filters.legalArea.some(l => l.id === legalArea.id),
           label: legalArea.title,
-          toggle: () => toggleLegalArea(legalArea)
+          toggle: () => toggleFilter("legalArea", legalArea)
         }))}
         title="Rechtsgebiet"
       />
@@ -255,7 +337,7 @@ const OverviewFiltersDrawerContent: FunctionComponent<OverviewFiltersDrawerConte
           id: topic.id,
           isChecked: filters.topic.some(t => t.id === topic.id),
           label: topic.title,
-          toggle: () => toggleTopic(topic)
+          toggle: () => toggleFilter("topic", topic)
         }))}
         title="Thema"
       />
@@ -267,7 +349,7 @@ const OverviewFiltersDrawerContent: FunctionComponent<OverviewFiltersDrawerConte
           id: tag.id,
           isChecked: filters.tags.some(t => t.id === tag.id),
           label: tag.title,
-          toggle: () => toggleTag(tag)
+          toggle: () => toggleFilter("tags", tag)
         }))}
         title="Tags"
       />
