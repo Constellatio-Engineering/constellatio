@@ -4,9 +4,10 @@ import SlidingPanelTitle from "@/components/molecules/slidingPanelTitle/SlidingP
 import { FilterCategory } from "@/components/pages/OverviewPage/overviewFiltersDrawer/filterCategory/FilterCategory";
 import type { CaseOverviewPageProps } from "@/pages/cases";
 import type { GetArticlesOverviewPagePropsResult } from "@/pages/dictionary";
+import type { AllCases } from "@/services/content/getAllCases";
 import {
   type ArticlesOverviewFiltersStore,
-  type CasesOverviewFiltersStore, type FilterOption,
+  type CasesOverviewFiltersStore, type CommonFiltersSlice, type FilterOption,
   statusesFilterOptions,
   useArticlesOverviewFiltersStore,
   useCasesOverviewFiltersStore
@@ -41,6 +42,49 @@ export const ArticlesOverviewFiltersDrawer: FunctionComponent<ArticlesOverviewFi
 };
 
 const getUniqueFilterOptions = <T extends NullableProperties<FilterOption>>(items: T[]): FilterOption[] =>
+{
+  return Array
+    .from(items
+      .map(item =>
+      {
+        if(item?.id == null || item?.title == null)
+        {
+          return null;
+        }
+
+        return ({
+          id: item.id,
+          title: item.title,
+        }) satisfies FilterOption;
+      })
+      .filter(Boolean)
+      .reduce((map, item) => map.set(item.id, item), new Map<string, FilterOption>()) // Use a Map to ensure uniqueness by topic id
+      .values()
+    )
+    .sort((a, b) =>
+    {
+      const aStartsWithParagraph = a.title.startsWith("§");
+      const bStartsWithParagraph = b.title.startsWith("§");
+
+      if(!aStartsWithParagraph && bStartsWithParagraph)
+      {
+        return -1;
+      }
+
+      if(aStartsWithParagraph && !bStartsWithParagraph)
+      {
+        return 1;
+      }
+
+      return a.title.localeCompare(b.title);
+    });
+};
+
+const getUniqueFilterOptions2 = (
+  items: OverviewFiltersDrawerContentProps["items"],
+  filters: CommonFiltersSlice["filters"],
+  currentFilterKey: keyof AllCases[number]
+) =>
 {
   return Array
     .from(items

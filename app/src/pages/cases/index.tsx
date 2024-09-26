@@ -4,6 +4,7 @@ import OverviewPage from "@/components/pages/OverviewPage/OverviewPage";
 import { type CaseProgressState } from "@/db/schema";
 import useCasesProgress from "@/hooks/useCasesProgress";
 import { type NextPageWithLayout } from "@/pages/_app";
+import { dummyCases } from "@/pages/cases/dummy-data";
 import getAllCases, { type AllCases } from "@/services/content/getAllCases";
 import { getOverviewPageProps, type GetOverviewPagePropsResult } from "@/services/content/getOverviewPageProps";
 import { useCasesOverviewFiltersStore } from "@/stores/overviewFilters.store";
@@ -18,7 +19,8 @@ type GetCasesOverviewPagePropsResult = GetOverviewPagePropsResult & {
 
 export const getStaticProps: GetStaticProps<GetCasesOverviewPagePropsResult> = async () =>
 {
-  const allCases = await getAllCases();
+  // const allCases = await getAllCases();
+  const allCases = dummyCases;
   const overviewPageProps = await getOverviewPageProps(allCases);
 
   return {

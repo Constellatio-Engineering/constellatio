@@ -1,4 +1,6 @@
 /* eslint-disable max-lines */
+import type { AllCases } from "@/services/content/getAllCases";
+
 import { create, type StateCreator } from "zustand";
 import { immer } from "zustand/middleware/immer";
 
@@ -25,6 +27,11 @@ export const statusesFilterOptions = [
 
 type StatusFilterOption = typeof statusesFilterOptions[number];
 
+type Filter = {
+  filteredOptions: FilterOption[];
+  key: keyof AllCases[number];
+};
+
 export interface CommonFiltersSlice
 {
   clearAllFilters: () => void;
@@ -37,9 +44,7 @@ export interface CommonFiltersSlice
     uniqueTopics: string[];
   }) => void;
   closeDrawer: () => void;
-  filteredLegalAreas: FilterOption[];
-  filteredTags: FilterOption[];
-  filteredTopics: FilterOption[];
+  filters: Filter[];
   getTotalFiltersCount: () => number;
   isDrawerOpened: boolean;
   openDrawer: () => void;
@@ -81,7 +86,7 @@ CommonFiltersSlice
     const { filteredLegalAreas, filteredTags, filteredTopics } = get();
     return filteredLegalAreas.length + filteredTags.length + filteredTopics.length;
   },
-  isDrawerOpened: false,
+  isDrawerOpened: true,
   openDrawer: () => set({ isDrawerOpened: true }), 
   setIsDrawerOpened: (isDrawerOpened) => set({ isDrawerOpened }),
   toggleLegalArea: (legalArea) =>

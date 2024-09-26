@@ -35,7 +35,7 @@ export const FilterCategory: FunctionComponent<FilterCategoryProps> = ({
   title
 }) =>
 {
-  const [isOpen, setIsOpen] = React.useState<boolean>(false);
+  const [isOpen, setIsOpen] = React.useState<boolean>(true);
   const hasActiveFilters = activeFiltersCount > 0;
   const [searchValue, setSearchValue] = React.useState<string>("");
 
