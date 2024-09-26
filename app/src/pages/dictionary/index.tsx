@@ -32,13 +32,9 @@ export const getStaticProps: GetStaticProps<GetArticlesOverviewPagePropsResult> 
 
 const NextPage: NextPageWithLayout<GetArticlesOverviewPagePropsResult> = (articlesOverviewProps) =>
 {
-  const filteredLegalAreas = useArticlesOverviewFiltersStore(s => s.filteredLegalAreas);
-  const filteredTags = useArticlesOverviewFiltersStore(s => s.filteredTags);
-  const filteredTopics = useArticlesOverviewFiltersStore(s => s.filteredTopics);
+  const filters = useArticlesOverviewFiltersStore(s => s.filters);
+  const toggleFilter = useArticlesOverviewFiltersStore(s => s.toggleFilter);
   const openDrawer = useArticlesOverviewFiltersStore(s => s.openDrawer);
-  const toggleLegalArea = useArticlesOverviewFiltersStore(s => s.toggleLegalArea);
-  const toggleTag = useArticlesOverviewFiltersStore(s => s.toggleTag);
-  const toggleTopic = useArticlesOverviewFiltersStore(s => s.toggleTopic);
   const clearAllFilters = useArticlesOverviewFiltersStore(s => s.clearAllFilters);
   const totalFiltersCount = useArticlesOverviewFiltersStore(s => s.getTotalFiltersCount());
 
@@ -50,13 +46,9 @@ const NextPage: NextPageWithLayout<GetArticlesOverviewPagePropsResult> = (articl
         variant={"dictionary"}
         filter={{
           clearAllFilters,
-          filteredLegalAreas,
-          filteredTags,
-          filteredTopics,
+          filters,
           openDrawer,
-          toggleLegalArea,
-          toggleTag,
-          toggleTopic,
+          toggleFilter,
           totalFiltersCount
         }}
       />

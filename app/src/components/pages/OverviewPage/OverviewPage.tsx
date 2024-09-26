@@ -37,7 +37,7 @@ export function extractNumeric(title: Nullable<string>): number | null
   return match ? parseInt(match[0], 10) : null;
 }
 
-type CommonFiltersStoreProps = Pick<CommonFiltersSlice, "clearAllFilters" | "filteredLegalAreas" | "filteredTags" | "filteredTopics" | "openDrawer" | "toggleLegalArea" | "toggleTag" | "toggleTopic"> & {
+type CommonFiltersStoreProps = Pick<CommonFiltersSlice, "clearAllFilters" | "filters" | "openDrawer" | "toggleFilter"> & {
   readonly totalFiltersCount: number;
 };
 
@@ -46,7 +46,7 @@ type ArticlesPageProps = GetArticlesOverviewPagePropsResult & {
 };
 
 type CasesPageProps = CaseOverviewPageProps & {
-  readonly filter: CommonFiltersStoreProps & Pick<CasesOverviewFiltersStore, "toggleStatus" | "filteredStatuses">;
+  readonly filter: CommonFiltersStoreProps;
 };
 
 export type OverviewPageProps = (ArticlesPageProps | CasesPageProps) & {
@@ -72,13 +72,9 @@ const OverviewPageContent: FunctionComponent<OverviewPageContentProps> = ({
 {
   const {
     clearAllFilters,
-    filteredLegalAreas,
-    filteredTags,
-    filteredTopics,
+    filters,
     openDrawer,
-    toggleLegalArea,
-    toggleTag,
-    toggleTopic,
+    toggleFilter,
     totalFiltersCount
   } = filter;
 
@@ -91,7 +87,7 @@ const OverviewPageContent: FunctionComponent<OverviewPageContentProps> = ({
 
   const isCategoryEmpty = allItemsOfSelectedCategory.length <= 0;
 
-  const itemsFilteredByStatus = useMemo(() => allItemsOfSelectedCategory.filter((item) =>
+  /* const itemsFilteredByStatus = useMemo(() => allItemsOfSelectedCategory.filter((item) =>
   {
     if(variant === "dictionary")
     {
@@ -119,16 +115,32 @@ const OverviewPageContent: FunctionComponent<OverviewPageContentProps> = ({
     }
 
     return true;
-  }), [allItemsOfSelectedCategory, filter, variant]);
+  }), [allItemsOfSelectedCategory, filter, variant]);*/
 
-  const _filteredItems = useMemo(() => itemsFilteredByStatus.filter((item) =>
+  const itemsFilteredByStatus = useMemo(() => allItemsOfSelectedCategory.filter(() =>
+  {
+    return true;
+  }), [allItemsOfSelectedCategory]);
+
+  /* const _filteredItems = useMemo(() => itemsFilteredByStatus.filter((item) =>
   {
     const matchesLegalArea = filteredLegalAreas.length === 0 || (item.legalArea?.id != null && filteredLegalAreas.some(legalArea => legalArea.id === item.legalArea?.id));
     const matchesTopic = filteredTopics.length === 0 || (item.topic?.some((t) => t?.id != null && filteredTopics.some(topic => topic.id === t.id)));
     const matchesTag = filteredTags.length === 0 || (item.tags?.some((t) => t?.id != null && filteredTags.some(tag => tag.id === t.id)));
 
     return matchesLegalArea && matchesTopic && matchesTag;
-  }), [filteredLegalAreas, filteredTopics, filteredTags, itemsFilteredByStatus]);
+  }), [filters, itemsFilteredByStatus]);*/
+
+  const _filteredItems = useMemo(() => itemsFilteredByStatus.filter((item) =>
+  {
+    return true;
+
+    // const matchesLegalArea = filteredLegalAreas.length === 0 || (item.legalArea?.id != null && filteredLegalAreas.some(legalArea => legalArea.id === item.legalArea?.id));
+    // const matchesTopic = filteredTopics.length === 0 || (item.topic?.some((t) => t?.id != null && filteredTopics.some(topic => topic.id === t.id)));
+    // const matchesTag = filteredTags.length === 0 || (item.tags?.some((t) => t?.id != null && filteredTags.some(tag => tag.id === t.id)));
+    //
+    // return matchesLegalArea && matchesTopic && matchesTag;
+  }), [itemsFilteredByStatus]);
 
   const filteredItems = useDeferredValue(_filteredItems);
 
@@ -137,12 +149,12 @@ const OverviewPageContent: FunctionComponent<OverviewPageContentProps> = ({
       {variant === "case" ? (
         <CasesOverviewFiltersDrawer
           variant={variant}
-          items={filteredItems as CasesPageProps["items"]}
+          items={allItemsOfSelectedCategory as CasesPageProps["items"]}
         />
       ) : (
         <ArticlesOverviewFiltersDrawer
           variant={variant}
-          items={filteredItems as ArticlesPageProps["items"]}
+          items={allItemsOfSelectedCategory as ArticlesPageProps["items"]}
         />
       )}
       <div css={styles.Page}>
@@ -172,7 +184,7 @@ const OverviewPageContent: FunctionComponent<OverviewPageContentProps> = ({
                 </Button>
               </div>
               <div css={styles.activeFiltersChips}>
-                {variant === "case" && (
+                {/* {variant === "case" && (
                   <>
                     {filter.filteredStatuses.map((status) => (
                       <FilterTag
@@ -182,8 +194,8 @@ const OverviewPageContent: FunctionComponent<OverviewPageContentProps> = ({
                       />
                     ))}
                   </>
-                )}
-                {filteredLegalAreas?.map((legalArea) => (
+                )}*/}
+                {/* {filteredLegalAreas?.map((legalArea) => (
                   <FilterTag
                     key={legalArea.id}
                     onClick={() => toggleLegalArea(legalArea)}
@@ -203,7 +215,7 @@ const OverviewPageContent: FunctionComponent<OverviewPageContentProps> = ({
                     onClick={() => toggleTag(tag)}
                     title={tag.title}
                   />
-                ))}
+                ))}*/}
               </div>
               <div css={styles.clearFiltersButtonWrapper}>
                 <LinkButton

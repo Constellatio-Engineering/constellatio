@@ -1,5 +1,8 @@
 /* eslint-disable max-lines */
-import type { AllCases } from "@/services/content/getAllCases";
+import { type OverviewPageProps } from "@/components/pages/OverviewPage/OverviewPage";
+import type { CaseOverviewPageProps } from "@/pages/cases";
+import type { GetArticlesOverviewPagePropsResult } from "@/pages/dictionary";
+import { type Prettify } from "@/utils/types";
 
 import { create, type StateCreator } from "zustand";
 import { immer } from "zustand/middleware/immer";
@@ -27,31 +30,27 @@ export const statusesFilterOptions = [
 
 type StatusFilterOption = typeof statusesFilterOptions[number];
 
-type Filter = {
-  filteredOptions: FilterOption[];
-  key: keyof AllCases[number];
-};
+type FilterableArticleAttributes = keyof Pick<GetArticlesOverviewPagePropsResult["items"][number], "legalArea" | "tags" | "topic">;
+type FilterableCaseAttributes = keyof Pick<CaseOverviewPageProps["items"][number], "legalArea" | "tags" | "topic" | "progressState">;
 
 export interface CommonFiltersSlice
 {
   clearAllFilters: () => void;
-  clearFilteredLegalAreas: () => void;
-  clearFilteredTags: () => void;
-  clearFilteredTopics: () => void;
+  clearFilters: (key: keyof this["filters"]) => void;
   clearInvalidFilters: (args: {
     uniqueLegalAreas: string[];
     uniqueTags: string[];
     uniqueTopics: string[];
   }) => void;
   closeDrawer: () => void;
-  filters: Filter[];
+  filters: {
+    [K in FilterableArticleAttributes]: FilterOption[];
+  };
   getTotalFiltersCount: () => number;
   isDrawerOpened: boolean;
   openDrawer: () => void;
   setIsDrawerOpened: (isDrawerOpened: boolean) => void;
-  toggleLegalArea: (legalArea: FilterOption) => void;
-  toggleTag: (tag: FilterOption) => void;
-  toggleTopic: (topic: FilterOption) => void;
+  toggleFilter: (key: keyof this["filters"], filter: FilterOption) => void;
 }
 
 const createCommonFiltersSlice: StateCreator<
@@ -60,80 +59,60 @@ CommonFiltersSlice,
 [],
 CommonFiltersSlice
 > = (set, get) => ({
-  clearAllFilters: () => set({
-    filteredLegalAreas: [],
-    filteredTags: [],
-    filteredTopics: [] 
+  /* clearAllFilters: () => set({
+    filters: {
+      legalArea: [],
+      tags: [],
+      topic: [],
+    },
+  }),*/
+  clearAllFilters: () => set(state =>
+  {
+    /* for(const key in state.filters)
+    {
+      if(Object.prototype.hasOwnProperty.call(state.filters, key))
+      {
+        // @ts-expect-error Typescript is not smart enough to know that the key is a key of state.filters
+        state.filters[key] = [];
+      }
+    }*/
+
+    Object.keys(state.filters).forEach(key => state.filters[key as keyof CommonFiltersSlice["filters"]] = []);
   }),
-  clearFilteredLegalAreas: () => set({ filteredLegalAreas: [] }),
-  clearFilteredTags: () => set({ filteredTags: [] }),
-  clearFilteredTopics: () => set({ filteredTopics: [] }),
+  clearFilters: (key) => set(state => state.filters[key] = []),
   clearInvalidFilters: ({ uniqueLegalAreas, uniqueTags, uniqueTopics }) =>
   {
     set((state) =>
     {
-      state.filteredLegalAreas = state.filteredLegalAreas.filter(legalArea => uniqueLegalAreas.find(legalAreaId => legalAreaId === legalArea.id));
-      state.filteredTags = state.filteredTags.filter(tag => uniqueTags.find(tagId => tagId === tag.id));
-      state.filteredTopics = state.filteredTopics.filter(topic => uniqueTopics.find(topicId => topicId === topic.id));
+      state.filters.legalArea = state.filters.legalArea.filter(legalArea => uniqueLegalAreas.find(legalAreaId => legalAreaId === legalArea.id));
+      state.filters.tags = state.filters.tags.filter(tag => uniqueTags.find(tagId => tagId === tag.id));
+      state.filters.topic = state.filters.topic.filter(topic => uniqueTopics.find(topicId => topicId === topic.id));
     });
   },
   closeDrawer: () => set({ isDrawerOpened: false }),
-  filteredLegalAreas: [],
-  filteredTags: [],
-  filteredTopics: [],
-  getTotalFiltersCount: () =>
-  {
-    const { filteredLegalAreas, filteredTags, filteredTopics } = get();
-    return filteredLegalAreas.length + filteredTags.length + filteredTopics.length;
+  filters: {
+    legalArea: [],
+    tags: [],
+    topic: [],
   },
+  getTotalFiltersCount: () => Object.values(get().filters).reduce((acc, curr) => acc + curr.length, 0),
   isDrawerOpened: true,
   openDrawer: () => set({ isDrawerOpened: true }), 
   setIsDrawerOpened: (isDrawerOpened) => set({ isDrawerOpened }),
-  toggleLegalArea: (legalArea) =>
+  toggleFilter: (key, filter) =>
   {
-    set((state) => 
+    set((state) =>
     {
-      const index = state.filteredLegalAreas.findIndex(l => l.id === legalArea.id);
+      const { filters } = state; 
+      const filterIndex = filters[key].findIndex(f => f.id === filter.id);
 
-      if(index === -1) 
+      if(filterIndex === -1)
       {
-        state.filteredLegalAreas.push(legalArea);
+        filters[key].push(filter);
       }
-      else 
+      else
       {
-        state.filteredLegalAreas.splice(index, 1);
-      }
-    });
-  },
-  toggleTag: (tag) =>
-  {
-    set((state) => 
-    {
-      const index = state.filteredTags.findIndex(t => t.id === tag.id);
-
-      if(index === -1) 
-      {
-        state.filteredTags.push(tag);
-      }
-      else 
-      {
-        state.filteredTags.splice(index, 1);
-      }
-    });
-  },
-  toggleTopic: (topic) =>
-  {
-    set((state) => 
-    {
-      const index = state.filteredTopics.findIndex(t => t.id === topic.id);
-
-      if(index === -1) 
-      {
-        state.filteredTopics.push(topic);
-      }
-      else 
-      {
-        state.filteredTopics.splice(index, 1);
+        filters[key].splice(filterIndex, 1);
       }
     });
   },
@@ -141,11 +120,12 @@ CommonFiltersSlice
 
 interface StatusFiltersSlice
 {
-  clearAllFilters: () => void;
+  clearAllFilters: () => void;                             
   clearFilteredStatuses: () => void;
-  filteredStatuses: StatusFilterOption[];
-  getTotalFiltersCount: () => number;
-  toggleStatus: (status: StatusFilterOption) => void;
+  filters: {
+    [K in FilterableCaseAttributes]: FilterOption[];
+  };
+  // toggleFilter: (key: FilterableCaseAttributes, filter: FilterOption) => void;
 }
 
 const createStatusFiltersSlice: StateCreator<
@@ -153,55 +133,54 @@ StatusFiltersSlice & CommonFiltersSlice,
 [["zustand/immer", never]],
 [],
 StatusFiltersSlice
-> = (set, get) => ({
+> = (set) => ({
   clearAllFilters: () => set({
-    filteredLegalAreas: [],
-    filteredStatuses: [],
-    filteredTags: [],
-    filteredTopics: []
+    filters: {
+      legalArea: [],
+      progressState: [], 
+      tags: [],
+      topic: [],
+    },
   }),
-  clearFilteredStatuses: () => set({ filteredStatuses: [] }),
-  filteredStatuses: [],
-  getTotalFiltersCount: () =>
-  {
-    const {
-      filteredLegalAreas,
-      filteredStatuses,
-      filteredTags,
-      filteredTopics
-    } = get();
-    return filteredLegalAreas.length + filteredTags.length + filteredTopics.length + filteredStatuses.length;
+  clearFilteredStatuses: () => set(state => state.filters.progressState = []),
+  filters: {
+    legalArea: [],
+    progressState: [],
+    tags: [],
+    topic: [],
   },
-  toggleStatus: (status) => 
+  /* toggleFilter: (key, filter) =>
   {
-    set((state) => 
+    set((state) =>
     {
-      const index = state.filteredStatuses.findIndex(s => s.id === status.id);
+      const { filters } = state;
+      const filterIndex = filters[key].findIndex(f => f.id === filter.id);
 
-      if(index === -1) 
+      if(filterIndex === -1)
       {
-        state.filteredStatuses.push(status);
+        filters[key].push(filter);
       }
-      else 
+      else
       {
-        state.filteredStatuses.splice(index, 1);
+        filters[key].splice(filterIndex, 1);
       }
     });
-  },
+  },*/
 });
 
-export type CasesOverviewFiltersStore = CommonFiltersSlice & StatusFiltersSlice;
+export type CasesOverviewFiltersStore = CommonFiltersSlice;
+// export type CasesOverviewFiltersStore = CommonFiltersSlice & StatusFiltersSlice;
 
 export const useCasesOverviewFiltersStore = create<CasesOverviewFiltersStore>()(
   immer((...a) => ({
     ...createCommonFiltersSlice(...a),
-    ...createStatusFiltersSlice(...a),
+    // ...createStatusFiltersSlice(...a),
   }))
 );
 
 export type ArticlesOverviewFiltersStore = CommonFiltersSlice;
 
-export const useArticlesOverviewFiltersStore = create<CommonFiltersSlice>()(
+export const useArticlesOverviewFiltersStore = create<ArticlesOverviewFiltersStore>()(
   immer((...a) => ({
     ...createCommonFiltersSlice(...a),
   }))

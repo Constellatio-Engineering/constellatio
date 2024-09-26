@@ -53,15 +53,9 @@ const Page: NextPageWithLayout<GetCasesOverviewPagePropsResult> = ({
 {
   const { casesProgress } = useCasesProgress();
   const casesWithProgress = useMemo(() => getCasesWithProgress(items, casesProgress), [items, casesProgress]);
-  const filteredLegalAreas = useCasesOverviewFiltersStore(s => s.filteredLegalAreas);
-  const filteredStatuses = useCasesOverviewFiltersStore(s => s.filteredStatuses);
-  const filteredTags = useCasesOverviewFiltersStore(s => s.filteredTags);
-  const filteredTopics = useCasesOverviewFiltersStore(s => s.filteredTopics);
+  const filters = useCasesOverviewFiltersStore(s => s.filters);
   const openDrawer = useCasesOverviewFiltersStore(s => s.openDrawer);
-  const toggleStatus = useCasesOverviewFiltersStore(s => s.toggleStatus);
-  const toggleLegalArea = useCasesOverviewFiltersStore(s => s.toggleLegalArea);
-  const toggleTag = useCasesOverviewFiltersStore(s => s.toggleTag);
-  const toggleTopic = useCasesOverviewFiltersStore(s => s.toggleTopic);
+  const toggleFilter = useCasesOverviewFiltersStore(s => s.toggleFilter);
   const clearAllFilters = useCasesOverviewFiltersStore(s => s.clearAllFilters);
   const totalFiltersCount = useCasesOverviewFiltersStore(s => s.getTotalFiltersCount());
 
@@ -74,15 +68,9 @@ const Page: NextPageWithLayout<GetCasesOverviewPagePropsResult> = ({
         variant={"case"}
         filter={{
           clearAllFilters,
-          filteredLegalAreas,
-          filteredStatuses, 
-          filteredTags,
-          filteredTopics,
+          filters,
           openDrawer,
-          toggleLegalArea,
-          toggleStatus,
-          toggleTag, 
-          toggleTopic,
+          toggleFilter,
           totalFiltersCount
         }}
       />

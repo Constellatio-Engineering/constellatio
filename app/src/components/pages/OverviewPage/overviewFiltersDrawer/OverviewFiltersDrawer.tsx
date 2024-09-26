@@ -41,7 +41,7 @@ export const ArticlesOverviewFiltersDrawer: FunctionComponent<ArticlesOverviewFi
   );
 };
 
-const getUniqueFilterOptions = <T extends NullableProperties<FilterOption>>(items: T[]): FilterOption[] =>
+const getUniqueFilterOptionsOld = <T extends NullableProperties<FilterOption>>(items: T[]): FilterOption[] =>
 {
   return Array
     .from(items
@@ -80,13 +80,15 @@ const getUniqueFilterOptions = <T extends NullableProperties<FilterOption>>(item
     });
 };
 
-const getUniqueFilterOptions2 = (
+const getUniqueFilterOptions = (
   items: OverviewFiltersDrawerContentProps["items"],
   filters: CommonFiltersSlice["filters"],
   currentFilterKey: keyof AllCases[number]
 ) =>
 {
-  const filteredSets = [];
+  const filteredSets: Array<Set<{
+
+  }>> = [];
 
   for(const filter of filters)
   {
@@ -129,7 +131,8 @@ const getUniqueFilterOptions2 = (
 
     if(Array.isArray(filteredValues[0])) 
     {
-      filteredSets.push(new Set(filteredValues.flatMap(item => {
+      filteredSets.push(new Set(filteredValues.flatMap(item => 
+      {
         if(item == null)
         {
           return null;
@@ -168,28 +171,24 @@ const OverviewFiltersDrawerContent: FunctionComponent<OverviewFiltersDrawerConte
 {
   const {
     clearAllFilters,
-    clearFilteredLegalAreas,
-    clearFilteredTags,
-    clearFilteredTopics,
+    clearFilters,
     clearInvalidFilters,
     closeDrawer,
     filters,
     getTotalFiltersCount,
     isDrawerOpened,
-    toggleLegalArea,
-    toggleTag,
-    toggleTopic
+    toggleFilter,
   } = filtersStore;
 
   const totalFiltersCount = getTotalFiltersCount();
 
-  const uniqueLegalAreas = useMemo(() => getUniqueFilterOptions2(items, filters, "legalArea"), [items, filters]);
+  const { uniqueLegalAreas, uniqueTags, uniqueTopics } = useMemo(() => ({
+    uniqueLegalAreas: getUniqueFilterOptions(items, filters, "legalArea"),
+    uniqueTags: getUniqueFilterOptions(items, filters, "tags"),
+    uniqueTopics: getUniqueFilterOptions(items, filters, "topic")
+  }), [items, filters]);
 
-  const uniqueTopics = useMemo(() => getUniqueFilterOptions2(items, filters, "topic"), [items, filters]);
-
-  const uniqueTags = useMemo(() => getUniqueFilterOptions2(items, filters, "tags"), [items, filters]);
-
-  useEffect(() =>
+  /* useEffect(() =>
   {
     // when the filter options change, we need to clear the filters that are not valid anymore
     clearInvalidFilters({
@@ -197,7 +196,7 @@ const OverviewFiltersDrawerContent: FunctionComponent<OverviewFiltersDrawerConte
       uniqueTags: uniqueTags.map(t => t.id),
       uniqueTopics: uniqueTopics.map(t => t.id),
     });
-  }, [uniqueLegalAreas, uniqueTopics, uniqueTags, clearInvalidFilters]);
+  }, [uniqueLegalAreas, uniqueTopics, uniqueTags, clearInvalidFilters]);*/
 
   return (
     <Drawer
@@ -223,7 +222,7 @@ const OverviewFiltersDrawerContent: FunctionComponent<OverviewFiltersDrawerConte
           }}
         />
       )}>
-      {variant === "case" && (
+      {/* {variant === "case" && (
         <FilterCategory
           items={statusesFilterOptions.map((status) => ({
             id: status.id,
@@ -235,14 +234,14 @@ const OverviewFiltersDrawerContent: FunctionComponent<OverviewFiltersDrawerConte
           activeFiltersCount={filtersStore.filteredStatuses.length}
           title="Status"
         />
-      )}
+      )}*/}
       <FilterCategory
         search={{ searchesFor: "Rechtsgebieten" }}
-        activeFiltersCount={filteredLegalAreas.length}
-        clearFilters={clearFilteredLegalAreas}
+        activeFiltersCount={filters.legalArea.length}
+        clearFilters={() => clearFilters("legalArea")}
         items={uniqueLegalAreas.map(legalArea => ({
           id: legalArea.id,
-          isChecked: filteredLegalAreas.some(l => l.id === legalArea.id),
+          isChecked: filters.legalArea.some(l => l.id === legalArea.id),
           label: legalArea.title,
           toggle: () => toggleLegalArea(legalArea)
         }))}
@@ -250,11 +249,11 @@ const OverviewFiltersDrawerContent: FunctionComponent<OverviewFiltersDrawerConte
       />
       <FilterCategory
         search={{ searchesFor: "Themen" }}
-        activeFiltersCount={filteredTopics.length}
-        clearFilters={clearFilteredTopics}
+        activeFiltersCount={filters.topic.length}
+        clearFilters={() => clearFilters("topic")}
         items={uniqueTopics.map(topic => ({
           id: topic.id,
-          isChecked: filteredTopics.some(t => t.id === topic.id),
+          isChecked: filters.topic.some(t => t.id === topic.id),
           label: topic.title,
           toggle: () => toggleTopic(topic)
         }))}
@@ -262,11 +261,11 @@ const OverviewFiltersDrawerContent: FunctionComponent<OverviewFiltersDrawerConte
       />
       <FilterCategory
         search={{ searchesFor: "Tags" }}
-        activeFiltersCount={filteredTags.length}
-        clearFilters={clearFilteredTags}
+        activeFiltersCount={filters.tags.length}
+        clearFilters={() => clearFilters("tags")}
         items={uniqueTags.map(tag => ({
           id: tag.id,
-          isChecked: filteredTags.some(t => t.id === tag.id),
+          isChecked: filters.tags.some(t => t.id === tag.id),
           label: tag.title,
           toggle: () => toggleTag(tag)
         }))}
