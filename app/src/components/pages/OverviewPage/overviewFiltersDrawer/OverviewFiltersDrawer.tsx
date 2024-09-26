@@ -106,39 +106,23 @@ const OverviewFiltersDrawerContent: FunctionComponent<OverviewFiltersDrawerConte
 
   const totalFiltersCount = getTotalFiltersCount();
 
-  const uniqueLegalAreas = useMemo(() =>
-  {
-    const allLegalAreas = items
-      .map(item => item.legalArea)
-      .map(t => ({
-        id: t?.id,
-        title: t?.legalAreaName,
-      }));
+  const uniqueLegalAreas = useMemo(() => getUniqueFilterOptions(items.map(item => item.legalArea)
+    .map(t => ({
+      id: t?.id,
+      title: t?.legalAreaName,
+    }))), [items]);
 
-    return getUniqueFilterOptions(allLegalAreas);
-  }, [items]);
+  const uniqueTopics = useMemo(() => getUniqueFilterOptions(items.flatMap((item) => (item.topic ?? [])
+    .map(t => ({
+      id: t?.id,
+      title: t?.topicName,
+    })))), [items]);
 
-  const uniqueTopics = useMemo(() =>
-  {
-    const allTopics = items.flatMap((item) => (item.topic ?? [])
-      .map(t => ({
-        id: t?.id,
-        title: t?.topicName,
-      })));
-
-    return getUniqueFilterOptions(allTopics);
-  }, [items]);
-
-  const uniqueTags = useMemo(() =>
-  {
-    const allTags = items.flatMap((item) => (item.tags ?? [])
-      .map(t => ({
-        id: t?.id,
-        title: t?.tagName,
-      })));
-
-    return getUniqueFilterOptions(allTags);
-  }, [items]);
+  const uniqueTags = useMemo(() => getUniqueFilterOptions(items.flatMap((item) => (item.tags ?? [])
+    .map(t => ({
+      id: t?.id,
+      title: t?.tagName,
+    })))), [items]);
 
   useEffect(() =>
   {

@@ -137,12 +137,12 @@ const OverviewPageContent: FunctionComponent<OverviewPageContentProps> = ({
       {variant === "case" ? (
         <CasesOverviewFiltersDrawer
           variant={variant}
-          items={allItemsOfSelectedCategory as CasesPageProps["items"]}
+          items={filteredItems as CasesPageProps["items"]}
         />
       ) : (
         <ArticlesOverviewFiltersDrawer
           variant={variant}
-          items={allItemsOfSelectedCategory as ArticlesPageProps["items"]}
+          items={filteredItems as ArticlesPageProps["items"]}
         />
       )}
       <div css={styles.Page}>
