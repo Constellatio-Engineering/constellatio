@@ -1,5 +1,6 @@
 import { type OverviewFiltersDrawerContentProps } from "@/components/pages/OverviewPage/overviewFiltersDrawer/OverviewFiltersDrawer";
 import { type CommonFiltersSlice, type FilterableArticleAttributes, type FilterOption } from "@/stores/overviewFilters.store";
+import { findIntersection } from "@/utils/array";
 import { type NullableProperties } from "@/utils/types";
 import { objectKeys } from "@/utils/utils";
 
@@ -51,6 +52,7 @@ export const getUniqueFilterOptions = (
         // for example tags or topics are arrays (items can have multiple), so we check if the current item matches any of the filtered tags or topics
         if(Array.isArray(itemValuesFromCurrentFilter))
         {
+          // TODO: Check if this is correct/necessary and also check if we can return early by checking currentFilterOptions.length === 0
           if(itemValuesFromCurrentFilter.length === 0)
           {
             return null;
@@ -129,43 +131,5 @@ export const getUniqueFilterOptions = (
     filteredSets.push(Array.from(new Map(filteredOptions.map(item => [item.id, item])).values()));
   }
 
-  const resultMap: Map<string, {
-    count: number;
-    filterOption: FilterOption;
-  }> = new Map();
-
-  for(const filteredSet of filteredSets)
-  {
-    for(const filterOption of filteredSet)
-    {
-      if(resultMap.has(filterOption.id))
-      {
-        const count = resultMap.get(filterOption.id)?.count;
-
-        resultMap.set(filterOption.id, {
-          count: (count ?? 0) + 1,
-          filterOption
-        });
-      }
-      else
-      {
-        resultMap.set(filterOption.id, {
-          count: 1,
-          filterOption
-        });
-      }
-    }
-  }
-
-  const resultArray: FilterOption[] = [];
-
-  resultMap.forEach((value, _id) =>
-  {
-    if(value.count === filteredSets.length)
-    {
-      resultArray.push(value.filterOption);
-    }
-  });
-
-  return resultArray;
+  return findIntersection(filteredSets);
 };

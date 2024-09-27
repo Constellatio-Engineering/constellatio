@@ -9,15 +9,20 @@ import FilterTag from "@/components/molecules/filterTag/FilterTag";
 import ItemBlock from "@/components/organisms/caseBlock/ItemBlock";
 import EmptyStateCard from "@/components/organisms/emptyStateCard/EmptyStateCard";
 import OverviewHeader from "@/components/organisms/OverviewHeader/OverviewHeader";
-import { ArticlesOverviewFiltersDrawer, CasesOverviewFiltersDrawer } from "@/components/pages/OverviewPage/overviewFiltersDrawer/OverviewFiltersDrawer";
+import {
+  ArticlesOverviewFiltersDrawer,
+  CasesOverviewFiltersDrawer,
+  type OverviewFiltersDrawerContentProps
+} from "@/components/pages/OverviewPage/overviewFiltersDrawer/OverviewFiltersDrawer";
 import UseQueryStateWrapper from "@/components/Wrappers/useQueryStateWrapper/UseQueryStateWrapper";
 import useCasesProgress from "@/hooks/useCasesProgress";
 import { type CaseOverviewPageProps } from "@/pages/cases";
 import { type GetArticlesOverviewPagePropsResult } from "@/pages/dictionary";
-import { type CasesOverviewFiltersStore, type CommonFiltersSlice, } from "@/stores/overviewFilters.store";
+import { type CasesOverviewFiltersStore, type CommonFiltersSlice, type FilterableArticleAttributes, } from "@/stores/overviewFilters.store";
 import { type ArticleWithNextAndPreviousArticleId } from "@/utils/articles";
 import { sortByTopic } from "@/utils/caisy";
 import { type Nullable } from "@/utils/types";
+import { objectKeys } from "@/utils/utils";
 
 import { Title } from "@mantine/core";
 import { parseAsString, useQueryState } from "next-usequerystate";
@@ -60,6 +65,42 @@ export type OverviewPageProps = (ArticlesPageProps | CasesPageProps) & {
 type OverviewPageContentProps = OverviewPageProps & {
   readonly initialCategorySlug: string;
 };
+
+function getItemsMatchingTheFilters<T extends Pick<OverviewPageContentProps["items"][number], FilterableArticleAttributes>>(
+  items: T[],
+  filters: CommonFiltersSlice["filters"],
+) 
+{
+  return items.filter(item =>
+  {
+    const filterResults = objectKeys(filters).map(filterKey =>
+    {
+      const currentFilterOptions = filters[filterKey];
+      const itemValuesFromCurrentFilter = item[filterKey];
+
+      if(currentFilterOptions?.length === 0)
+      {
+        return true;
+      }
+
+      if(Array.isArray(itemValuesFromCurrentFilter))
+      {
+        if(itemValuesFromCurrentFilter.some((value) => currentFilterOptions.some(filterOption => filterOption.id === value?.id)))
+        {
+          return true;
+        }
+      }
+      else if(currentFilterOptions.some(filterOption => filterOption.id === itemValuesFromCurrentFilter?.id))
+      {
+        return true;
+      }
+
+      return false;
+    });
+
+    return filterResults.every(Boolean);
+  });
+}
 
 const OverviewPageContent: FunctionComponent<OverviewPageContentProps> = ({
   allLegalAreas,
@@ -122,25 +163,10 @@ const OverviewPageContent: FunctionComponent<OverviewPageContentProps> = ({
     return true;
   }), [allItemsOfSelectedCategory]);
 
-  /* const _filteredItems = useMemo(() => itemsFilteredByStatus.filter((item) =>
+  const _filteredItems = useMemo(() =>
   {
-    const matchesLegalArea = filteredLegalAreas.length === 0 || (item.legalArea?.id != null && filteredLegalAreas.some(legalArea => legalArea.id === item.legalArea?.id));
-    const matchesTopic = filteredTopics.length === 0 || (item.topic?.some((t) => t?.id != null && filteredTopics.some(topic => topic.id === t.id)));
-    const matchesTag = filteredTags.length === 0 || (item.tags?.some((t) => t?.id != null && filteredTags.some(tag => tag.id === t.id)));
-
-    return matchesLegalArea && matchesTopic && matchesTag;
-  }), [filters, itemsFilteredByStatus]);*/
-
-  const _filteredItems = useMemo(() => itemsFilteredByStatus.filter((item) =>
-  {
-    return true;
-
-    // const matchesLegalArea = filteredLegalAreas.length === 0 || (item.legalArea?.id != null && filteredLegalAreas.some(legalArea => legalArea.id === item.legalArea?.id));
-    // const matchesTopic = filteredTopics.length === 0 || (item.topic?.some((t) => t?.id != null && filteredTopics.some(topic => topic.id === t.id)));
-    // const matchesTag = filteredTags.length === 0 || (item.tags?.some((t) => t?.id != null && filteredTags.some(tag => tag.id === t.id)));
-    //
-    // return matchesLegalArea && matchesTopic && matchesTag;
-  }), [itemsFilteredByStatus]);
+    return getItemsMatchingTheFilters(itemsFilteredByStatus, filters);
+  }, [filters, itemsFilteredByStatus]);
 
   const filteredItems = useDeferredValue(_filteredItems);
 
