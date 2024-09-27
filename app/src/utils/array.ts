@@ -50,3 +50,75 @@ export const areArraysEqualSets = <T extends string | number | boolean | null | 
 
   return true;
 };
+
+type Identifiable ={
+  id: string;
+};
+
+function findIntersection<T extends Identifiable>(sets: T[][]): T[] 
+{
+  const resultMap = new Map<string, { count: number; item: T }>();
+
+  for(const set of sets) 
+  {
+    for(const item of set) 
+    {
+      if(resultMap.has(item.id)) 
+      {
+        const existingEntry = resultMap.get(item.id)!;
+        resultMap.set(item.id, {
+          count: existingEntry.count + 1,
+          item
+        });
+      }
+      else 
+      {
+        resultMap.set(item.id, {
+          count: 1,
+          item
+        });
+      }
+    }
+  }
+
+  const resultArray: T[] = [];
+
+  resultMap.forEach((value) => 
+  {
+    if(value.count === sets.length) 
+    {
+      resultArray.push(value.item);
+    }
+  });
+
+  return resultArray;
+}
+
+function findIntersection2<T extends Identifiable>(sets: T[][]): T[] 
+{
+  if(sets.length === 0)
+  {
+    return [];
+  }
+
+  if(sets.length === 1)
+  {
+    return sets[0]!;
+  }
+
+  // Sort sets by length, ascending
+  sets.sort((a, b) => a.length - b.length);
+
+  const shortestSet = new Set(sets[0]!.map(item => item.id));
+  const result: T[] = [];
+
+  for(const item of sets[0]!) 
+  {
+    if(sets.every((set, index) => index === 0 || set.some(element => shortestSet.has(element.id))))
+    {
+      result.push(item);
+    }
+  }
+
+  return result;
+}

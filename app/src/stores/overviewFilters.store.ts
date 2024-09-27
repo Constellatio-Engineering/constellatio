@@ -66,20 +66,29 @@ CommonFiltersSlice
       topic: [],
     },
   }),*/
-  clearAllFilters: () => set(state =>
+  clearAllFilters: () =>
   {
-    /* for(const key in state.filters)
+    set(state =>
     {
-      if(Object.prototype.hasOwnProperty.call(state.filters, key))
+      /* for(const key in state.filters)
       {
-        // @ts-expect-error Typescript is not smart enough to know that the key is a key of state.filters
-        state.filters[key] = [];
-      }
-    }*/
+        if(Object.prototype.hasOwnProperty.call(state.filters, key))
+        {
+          // @ts-expect-error Typescript is not smart enough to know that the key is a key of state.filters
+          state.filters[key] = [];
+        }
+      }*/
 
-    Object.keys(state.filters).forEach(key => state.filters[key as keyof CommonFiltersSlice["filters"]] = []);
-  }),
-  clearFilters: (key) => set(state => state.filters[key] = []),
+      Object.keys(state.filters).forEach(key => state.filters[key as keyof CommonFiltersSlice["filters"]] = []);
+    });
+  },
+  clearFilters: (key) =>
+  {
+    set(state =>
+    {
+      state.filters[key] = [];
+    });
+  },
   clearInvalidFilters: ({ uniqueLegalAreas, uniqueTags, uniqueTopics }) =>
   {
     set((state) =>
