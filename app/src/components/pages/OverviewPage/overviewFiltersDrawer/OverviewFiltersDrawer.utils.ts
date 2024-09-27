@@ -1,5 +1,17 @@
-import { type OverviewFiltersDrawerContentProps } from "@/components/pages/OverviewPage/overviewFiltersDrawer/OverviewFiltersDrawer";
-import { type CommonFiltersSlice, type FilterableArticleAttributes, type FilterOption } from "@/stores/overviewFilters.store";
+import {
+  type ArticlesOverviewFiltersDrawerProps,
+  type CasesOverviewFiltersDrawerProps,
+  type OverviewFiltersDrawerContentProps
+} from "@/components/pages/OverviewPage/overviewFiltersDrawer/OverviewFiltersDrawer";
+import {
+  type ArticlesOverviewFiltersStore,
+  type CasesOverviewFiltersStore,
+  type CommonFiltersSlice,
+  type CommonOverviewFiltersStore,
+  type FilterableArticleAttributes,
+  type FilterableCaseAttributes,
+  type FilterOption
+} from "@/stores/overviewFilters.store";
 import { findIntersection } from "@/utils/array";
 import { type NullableProperties } from "@/utils/types";
 import { objectKeys } from "@/utils/utils";
@@ -22,11 +34,19 @@ export const sortFilterOptions = (a: FilterOption, b: FilterOption): number =>
   return a.title.localeCompare(b.title);
 };
 
-export const getUniqueFilterOptions = (
-  items: OverviewFiltersDrawerContentProps["items"],
-  filters: CommonFiltersSlice["filters"],
-  inputFilterKey: FilterableArticleAttributes
-): FilterOption[] =>
+type GetUniqueFilterOptions = (props: {
+  filters: CasesOverviewFiltersStore["filters"];
+  inputFilterKey: FilterableCaseAttributes;
+  items: CasesOverviewFiltersDrawerProps["items"];
+  variant: CasesOverviewFiltersDrawerProps["variant"];
+} | {
+  filters: ArticlesOverviewFiltersStore["filters"];
+  inputFilterKey: FilterableArticleAttributes;
+  items: ArticlesOverviewFiltersDrawerProps["items"];
+  variant: ArticlesOverviewFiltersDrawerProps["variant"];
+}) => FilterOption[];
+
+export const getUniqueFilterOptions: GetUniqueFilterOptions = ({ filters, inputFilterKey, items }) =>
 {
   // filteredSets is an array of a filter options arrays
   const filteredSets: FilterOption[][] = [];

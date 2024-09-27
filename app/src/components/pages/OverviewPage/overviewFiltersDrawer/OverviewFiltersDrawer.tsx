@@ -9,25 +9,26 @@ import { type ArticlesOverviewFiltersStore, type CasesOverviewFiltersStore, useA
 
 import { Drawer } from "@mantine/core";
 import React, { type FunctionComponent, useMemo } from "react";
+import { useStore } from "zustand";
 
 import * as styles from "./OverviewFiltersDrawer.styles";
 
-type CasesOverviewFiltersDrawerProps = Pick<CaseOverviewPageProps, "items" | "variant">;
+export type CasesOverviewFiltersDrawerProps = Pick<CaseOverviewPageProps, "items" | "variant">;
 
 export const CasesOverviewFiltersDrawer: FunctionComponent<CasesOverviewFiltersDrawerProps> = (props) =>
 {
-  const casesOverviewFiltersStore = useCasesOverviewFiltersStore();
+  const casesOverviewFiltersStore = useStore(useCasesOverviewFiltersStore);
 
   return (
     <OverviewFiltersDrawerContent {...props} filtersStore={casesOverviewFiltersStore}/>
   );
 };
 
-type ArticlesOverviewFiltersDrawerProps = Pick<GetArticlesOverviewPagePropsResult, "items" | "variant">;
+export type ArticlesOverviewFiltersDrawerProps = Pick<GetArticlesOverviewPagePropsResult, "items" | "variant">;
 
 export const ArticlesOverviewFiltersDrawer: FunctionComponent<ArticlesOverviewFiltersDrawerProps> = (props) =>
 {
-  const articlesOverviewFiltersStore = useArticlesOverviewFiltersStore();
+  const articlesOverviewFiltersStore = useStore(useArticlesOverviewFiltersStore);
 
   return (
     <OverviewFiltersDrawerContent {...props} filtersStore={articlesOverviewFiltersStore}/>
@@ -45,13 +46,18 @@ const OverviewFiltersDrawerContent: FunctionComponent<OverviewFiltersDrawerConte
   const {
     clearAllFilters,
     clearFilters,
-    clearInvalidFilters,
     closeDrawer,
     filters,
     getTotalFiltersCount,
     isDrawerOpened,
     toggleFilter,
   } = filtersStore;
+
+  // TODO
+  const clearInvalidFilters = () =>
+  {
+    console.log("clearInvalidFilters");
+  };
 
   const totalFiltersCount = getTotalFiltersCount();
 
@@ -60,6 +66,15 @@ const OverviewFiltersDrawerContent: FunctionComponent<OverviewFiltersDrawerConte
     uniqueTags: getUniqueFilterOptions(items, filters, "tags").sort(sortFilterOptions),
     uniqueTopics: getUniqueFilterOptions(items, filters, "topic").sort(sortFilterOptions)
   }), [items, filters]);
+
+  const filteredStatuses = useMemo(() =>
+  {
+    if(variant !== "case")
+    {
+      return [];
+    }
+    return getUniqueFilterOptions(items, filters, "tags").sort(sortFilterOptions);
+  }, [filters, items, variant]);
 
   /* useEffect(() =>
   {

@@ -18,7 +18,13 @@ import UseQueryStateWrapper from "@/components/Wrappers/useQueryStateWrapper/Use
 import useCasesProgress from "@/hooks/useCasesProgress";
 import { type CaseOverviewPageProps } from "@/pages/cases";
 import { type GetArticlesOverviewPagePropsResult } from "@/pages/dictionary";
-import { type CasesOverviewFiltersStore, type CommonFiltersSlice, type FilterableArticleAttributes, } from "@/stores/overviewFilters.store";
+import {
+  ArticlesOverviewFiltersStore,
+  type CasesOverviewFiltersStore,
+  type CommonFiltersSlice,
+  type CommonOverviewFiltersStore,
+  type FilterableArticleAttributes,
+} from "@/stores/overviewFilters.store";
 import { type ArticleWithNextAndPreviousArticleId } from "@/utils/articles";
 import { sortByTopic } from "@/utils/caisy";
 import { type Nullable } from "@/utils/types";
@@ -42,7 +48,7 @@ export function extractNumeric(title: Nullable<string>): number | null
   return match ? parseInt(match[0], 10) : null;
 }
 
-type CommonFiltersStoreProps = Pick<CommonFiltersSlice, "clearAllFilters" | "filters" | "openDrawer" | "toggleFilter"> & {
+type CommonFiltersStoreProps = Pick<CommonOverviewFiltersStore, "clearAllFilters" | "filters" | "openDrawer" | "toggleFilter"> & {
   readonly totalFiltersCount: number;
 };
 
@@ -68,7 +74,7 @@ type OverviewPageContentProps = OverviewPageProps & {
 
 function getItemsMatchingTheFilters<T extends Pick<OverviewPageContentProps["items"][number], FilterableArticleAttributes>>(
   items: T[],
-  filters: CommonFiltersSlice["filters"],
+  filters: CommonOverviewFiltersStore["filters"],
 ) 
 {
   return items.filter(item =>

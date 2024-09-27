@@ -11,6 +11,7 @@ import { useCasesOverviewFiltersStore } from "@/stores/overviewFilters.store";
 
 import { type GetStaticProps } from "next";
 import { useMemo } from "react";
+import { useStore } from "zustand";
 
 type GetCasesOverviewPagePropsResult = GetOverviewPagePropsResult & {
   items: AllCases;
@@ -53,11 +54,11 @@ const Page: NextPageWithLayout<GetCasesOverviewPagePropsResult> = ({
 {
   const { casesProgress } = useCasesProgress();
   const casesWithProgress = useMemo(() => getCasesWithProgress(items, casesProgress), [items, casesProgress]);
-  const filters = useCasesOverviewFiltersStore(s => s.filters);
-  const openDrawer = useCasesOverviewFiltersStore(s => s.openDrawer);
-  const toggleFilter = useCasesOverviewFiltersStore(s => s.toggleFilter);
-  const clearAllFilters = useCasesOverviewFiltersStore(s => s.clearAllFilters);
-  const totalFiltersCount = useCasesOverviewFiltersStore(s => s.getTotalFiltersCount());
+  const filters = useStore(useCasesOverviewFiltersStore, s => s.filters);
+  const openDrawer = useStore(useCasesOverviewFiltersStore, s => s.openDrawer);
+  const toggleFilter = useStore(useCasesOverviewFiltersStore, s => s.toggleFilter);
+  const clearAllFilters = useStore(useCasesOverviewFiltersStore, s => s.clearAllFilters);
+  const totalFiltersCount = useStore(useCasesOverviewFiltersStore, s => s.getTotalFiltersCount());
 
   return (
     <>
