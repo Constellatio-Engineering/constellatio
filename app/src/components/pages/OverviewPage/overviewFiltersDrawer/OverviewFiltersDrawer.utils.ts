@@ -131,5 +131,5 @@ export const getUniqueFilterOptions = (
     filteredSets.push(Array.from(new Map(filteredOptions.map(item => [item.id, item])).values()));
   }
 
-  return findIntersection(filteredSets);
+  return findIntersection(filteredSets, "id");
 };

@@ -55,7 +55,17 @@ type Identifiable ={
   id: string | number;
 };
 
-export function findIntersection<T extends Identifiable>(sets: T[][]): T[]
+/**
+ * This function takes an array of arrays and returns an array that contains all elements that are present in all arrays.
+ * It uses the identifierKey to identify the elements, this could for example be the id of an object.
+ * @param sets - An array of arrays
+ * @param identifierKey - The key of the object that should be used to identify the elements
+ * @returns An array that contains all elements that are present in all arrays
+ */
+export function findIntersection<T extends object>(
+  sets: T[][],
+  identifierKey: keyof T & (string | number)
+): T[]
 {
   if(sets.length === 0)
   {
@@ -70,12 +80,12 @@ export function findIntersection<T extends Identifiable>(sets: T[][]): T[]
   // Sort sets by length, so we can get the shortest set first
   sets.sort((a, b) => a.length - b.length);
 
-  const shortestSet = new Set(sets[0]!.map(item => item.id));
+  const shortestSet = new Set(sets[0]!.map(item => item[identifierKey]));
   const result: T[] = [];
 
   for(const item of sets[0]!) 
   {
-    if(sets.every((set, index) => index === 0 || set.some(element => shortestSet.has(element.id))))
+    if(sets.every((set, index) => index === 0 || set.some(element => shortestSet.has(element[identifierKey]))))
     {
       result.push(item);
     }
