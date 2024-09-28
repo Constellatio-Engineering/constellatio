@@ -2,7 +2,7 @@
 import { Trash } from "@/components/Icons/Trash";
 import SlidingPanelTitle from "@/components/molecules/slidingPanelTitle/SlidingPanelTitle";
 import { FilterCategory } from "@/components/pages/OverviewPage/overviewFiltersDrawer/filterCategory/FilterCategory";
-import { getUniqueFilterOptions, sortFilterOptions } from "@/components/pages/OverviewPage/overviewFiltersDrawer/OverviewFiltersDrawer.utils";
+import { getFilterOptions, sortFilterOptions } from "@/components/pages/OverviewPage/overviewFiltersDrawer/OverviewFiltersDrawer.utils";
 import type { CaseOverviewPageProps } from "@/pages/cases";
 import type { GetArticlesOverviewPagePropsResult } from "@/pages/dictionary";
 import { type ArticlesOverviewFiltersStore, type CasesOverviewFiltersStore, useArticlesOverviewFiltersStore, useCasesOverviewFiltersStore } from "@/stores/overviewFilters.store";
@@ -61,20 +61,18 @@ const OverviewFiltersDrawerContent: FunctionComponent<OverviewFiltersDrawerConte
 
   const totalFiltersCount = getTotalFiltersCount();
 
-  const { uniqueLegalAreas, uniqueTags, uniqueTopics } = useMemo(() => ({
-    uniqueLegalAreas: getUniqueFilterOptions(items, filters, "legalArea").sort(sortFilterOptions),
-    uniqueTags: getUniqueFilterOptions(items, filters, "tags").sort(sortFilterOptions),
-    uniqueTopics: getUniqueFilterOptions(items, filters, "topic").sort(sortFilterOptions)
-  }), [items, filters]);
+  const test = getFilterOptions(filters, "legalArea", items);
 
-  const filteredStatuses = useMemo(() =>
-  {
-    if(variant !== "case")
-    {
-      return [];
-    }
-    return getUniqueFilterOptions(items, filters, "tags").sort(sortFilterOptions);
-  }, [filters, items, variant]);
+  console.log("test", test);
+
+  const { uniqueLegalAreas, uniqueTags, uniqueTopics } = useMemo(() => ({
+    // uniqueLegalAreas: getUniqueFilterOptions(items, filters, "legalArea").sort(sortFilterOptions),
+    // uniqueTags: getUniqueFilterOptions(items, filters, "tags").sort(sortFilterOptions),
+    // uniqueTopics: getUniqueFilterOptions(items, filters, "topic").sort(sortFilterOptions)
+    uniqueLegalAreas: [],
+    uniqueTags: [],
+    uniqueTopics: [],
+  }), [items, filters]);
 
   /* useEffect(() =>
   {
