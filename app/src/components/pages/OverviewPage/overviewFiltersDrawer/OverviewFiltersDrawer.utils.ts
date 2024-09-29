@@ -1,9 +1,9 @@
 /* eslint-disable max-lines */
 
 import type { CaseOverviewPageItems } from "@/pages/cases";
-import { type FilterOption, statusesFilterOptions } from "@/stores/overviewFilters.store";
+import { type FilterOption } from "@/stores/overviewFilters.store";
 import { type NullableProperties } from "@/utils/types";
-import { getIsObjectWithId, getIsPrimitive } from "@/utils/utils";
+import { getIsObjectWithId, getIsObjectWithValue, getIsPrimitive } from "@/utils/utils";
 
 export const sortFilterOptions = (a: FilterOption, b: FilterOption): number =>
 {
@@ -90,6 +90,10 @@ export function getFilterOptions<
               {
                 return currentFilterOptions.some(filterOption => filterOption.value === value.id);
               }
+              else if(getIsObjectWithValue(value))
+              {
+                return currentFilterOptions.some(filterOption => filterOption.value === value.value);
+              }
               else if(getIsPrimitive(value))
               {
                 return currentFilterOptions.some(filterOption => filterOption.value === value);
@@ -110,6 +114,13 @@ export function getFilterOptions<
               return item[inputFilterKeyValidated];
             }
           }
+          else if(getIsObjectWithValue(itemValueFromCurrentFilter))
+          {
+            if(currentFilterOptions.some(filterOption => filterOption.value === itemValueFromCurrentFilter.value))
+            {
+              return item[inputFilterKeyValidated];
+            }
+          }
           else if(getIsPrimitive(itemValueFromCurrentFilter))
           {
             if(currentFilterOptions.some(filterOption => filterOption.value === itemValueFromCurrentFilter))
@@ -124,17 +135,18 @@ export function getFilterOptions<
         .filter(Boolean);
 
       return filteredOptions;
-    });
+    })
+    .filter(Boolean);
 
-  return filteredSets as Array<(Value extends Array<infer U> ? Array<NonNullable<U>> : Array<NonNullable<Value>>) | null>;
+  return filteredSets as Array<Array<Value extends Array<infer U> ? NonNullable<U> : NonNullable<Value>>>;
 }
 
 export function itemValuesToFilterOptions(
   values: Array<
   Partial<CaseOverviewPageItems["legalArea"]> |
   NonNullable<CaseOverviewPageItems["topic"]>[number] |
-  NonNullable<CaseOverviewPageItems["tags"]>[number] |
-  NonNullable<CaseOverviewPageItems["progressState"]>
+  NonNullable<CaseOverviewPageItems["tags"]>[number] /* |
+  NonNullable<CaseOverviewPageItems["progressStateFilterable"]>*/
   >
 ): FilterOption[]
 {
@@ -144,26 +156,6 @@ export function itemValuesToFilterOptions(
       if(value == null)
       {
         return null;
-      }
-
-      if(typeof value === "string")
-      {
-        switch (value)
-        {
-          case "not-started":
-          {
-            return statusesFilterOptions.find(status => status.value === "open")!;
-          }
-          case "completing-tests":
-          case "solving-case":
-          {
-            return statusesFilterOptions.find(status => status.value === "in-progress")!;
-          }
-          case "completed":
-          {
-            return statusesFilterOptions.find(status => status.value === "completed")!;
-          }
-        }
       }
 
       let filterOption: NullableProperties<FilterOption> | null = null;

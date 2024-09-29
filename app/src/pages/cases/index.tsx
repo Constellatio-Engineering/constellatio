@@ -5,9 +5,9 @@ import { type CaseProgressState } from "@/db/schema";
 import useCasesProgress from "@/hooks/useCasesProgress";
 import { type NextPageWithLayout } from "@/pages/_app";
 import { dummyCases } from "@/pages/cases/dummy-data";
-import getAllCases, { type AllCases } from "@/services/content/getAllCases";
+import { type AllCases } from "@/services/content/getAllCases";
 import { getOverviewPageProps, type GetOverviewPagePropsResult } from "@/services/content/getOverviewPageProps";
-import { useCasesOverviewFiltersStore } from "@/stores/overviewFilters.store";
+import { statusesFilterOptions, type StatusFilterOption, useCasesOverviewFiltersStore } from "@/stores/overviewFilters.store";
 
 import { type GetStaticProps } from "next";
 import { useMemo } from "react";
@@ -36,10 +36,38 @@ export const getStaticProps: GetStaticProps<GetCasesOverviewPagePropsResult> = a
 
 const getCasesWithProgress = (cases: GetCasesOverviewPagePropsResult["items"], casesProgress: ReturnType<typeof useCasesProgress>["casesProgress"]) =>
 {
-  return cases.map(legalCase => ({
-    ...legalCase,
-    progressState: (casesProgress?.find(progress => progress?.caseId === legalCase.id)?.progressState ?? "not-started") satisfies CaseProgressState
-  }));
+  return cases.map(legalCase =>
+  {
+    const progress = (casesProgress?.find(progress => progress?.caseId === legalCase.id)?.progressState ?? "not-started") satisfies CaseProgressState;
+
+    let progressStateFilterable: StatusFilterOption;
+
+    switch (progress)
+    {
+      case "not-started":
+      {
+        progressStateFilterable = statusesFilterOptions.find(status => status.value === "open")!;
+        break;
+      }
+      case "completing-tests":
+      case "solving-case":
+      {
+        progressStateFilterable = statusesFilterOptions.find(status => status.value === "in-progress")!;
+        break;
+      }
+      case "completed":
+      {
+        progressStateFilterable = statusesFilterOptions.find(status => status.value === "completed")!;
+        break;
+      }
+    }
+
+    return ({
+      ...legalCase,
+      progressStateBackend: progress,
+      progressStateFilterable
+    });
+  });
 };
 
 export type CasesWithProgress = ReturnType<typeof getCasesWithProgress>;

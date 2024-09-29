@@ -2,9 +2,7 @@
 import type { CaseOverviewPageProps } from "@/pages/cases";
 import type { GetArticlesOverviewPagePropsResult } from "@/pages/dictionary";
 
-import { produce } from "immer";
 import { createStore } from "zustand";
-import { immer } from "zustand/middleware/immer";
 
 export type FilterOption = {
   readonly label: string;
@@ -27,10 +25,10 @@ export const statusesFilterOptions = [
   },
 ] as const satisfies readonly FilterOption[];
 
-type StatusFilterOption = typeof statusesFilterOptions[number];
+export type StatusFilterOption = typeof statusesFilterOptions[number];
 
 export type FilterableArticleAttributes = keyof Pick<GetArticlesOverviewPagePropsResult["items"][number], "legalArea" | "tags" | "topic">;
-export type FilterableCaseAttributes = keyof Pick<CaseOverviewPageProps["items"][number], "legalArea" | "tags" | "topic" | "progressState">;
+export type FilterableCaseAttributes = keyof Pick<CaseOverviewPageProps["items"][number], "legalArea" | "tags" | "topic" | "progressStateFilterable">;
 
 export interface CommonFiltersSlice<FilterKey extends string>
 {
@@ -157,7 +155,7 @@ function createOverviewFiltersStore<FilterKey extends FilterableArticleAttribute
 
 export const useCasesOverviewFiltersStore = createOverviewFiltersStore({
   legalArea: [],
-  progressState: [],
+  progressStateFilterable: [],
   tags: [],
   topic: [],
 });

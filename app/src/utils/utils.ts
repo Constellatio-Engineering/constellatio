@@ -189,13 +189,19 @@ export function getIsObjectWithId(value: unknown): value is { id: unknown }
   return value != null && typeof value === "object" && "id" in value;
 }
 
-export function getDistinctItemsById<T extends Nullable<{ id?: Nullable<string | number> }>>(items: T[]): T[]
+export function getIsObjectWithValue(value: unknown): value is { value: unknown }
+{
+  return value != null && typeof value === "object" && "value" in value;
+}
+
+export function getDistinctItemsByKey<T>(items: Array<Nullable<T>>, key: keyof T): T[] 
 {
   return [
-    ...new Map(items
-      .filter(Boolean)
-      .filter(item => item.id != null)
-      .map(item => [item.id, item])
+    ...new Map(
+      items
+        .filter(Boolean)
+        .filter(item => item[key] != null)
+        .map(item => [item[key], item])
     ).values()
   ];
 }

@@ -28,7 +28,7 @@ import {
 import { type ArticleWithNextAndPreviousArticleId } from "@/utils/articles";
 import { sortByTopic } from "@/utils/caisy";
 import { type Nullable } from "@/utils/types";
-import { getIsObjectWithId, getIsPrimitive, objectKeys } from "@/utils/utils";
+import { getIsObjectWithId, getIsObjectWithValue, getIsPrimitive, objectKeys } from "@/utils/utils";
 
 import { Title } from "@mantine/core";
 import { parseAsString, useQueryState } from "next-usequerystate";
@@ -113,6 +113,13 @@ function getItemsMatchingTheFilters<T extends OverviewPageContentProps["items"][
       else if(getIsObjectWithId(itemValueFromCurrentFilter))
       {
         if(currentFilterOptions.some(filterOption => filterOption.value === itemValueFromCurrentFilter.id))
+        {
+          return true;
+        }
+      }
+      else if(getIsObjectWithValue(itemValueFromCurrentFilter))
+      {
+        if(currentFilterOptions.some(filterOption => filterOption.value === itemValueFromCurrentFilter.value))
         {
           return true;
         }

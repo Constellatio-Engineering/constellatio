@@ -15,7 +15,7 @@ import {
 } from "@/stores/overviewFilters.store";
 import { findIntersection, getDoesAnyItemMatch } from "@/utils/array";
 import { type NullableProperties } from "@/utils/types";
-import { getDistinctItemsById } from "@/utils/utils";
+import { getDistinctItemsByKey } from "@/utils/utils";
 
 import { Drawer } from "@mantine/core";
 import React, { type FunctionComponent, useMemo } from "react";
@@ -77,17 +77,17 @@ const OverviewFiltersDrawerContent: FunctionComponent<OverviewFiltersDrawerConte
   {
     const allLegalAreas = getFilterOptions(filters, "legalArea", items);
     const intersectionLegalAreas = findIntersection(allLegalAreas, "id");
-    const distinctLegalAreas = getDistinctItemsById(intersectionLegalAreas);
+    const distinctLegalAreas = getDistinctItemsByKey(intersectionLegalAreas, "id");
     const legalAreasFilterOptions = itemValuesToFilterOptions(distinctLegalAreas);
 
     const allTags = getFilterOptions(filters, "tags", items);
     const intersectionTags = findIntersection(allTags, "id");
-    const distinctTags = getDistinctItemsById(intersectionTags);
+    const distinctTags = getDistinctItemsByKey(intersectionTags, "id");
     const tagsFilterOptions = itemValuesToFilterOptions(distinctTags);
 
     const allTopics = getFilterOptions(filters, "topic", items);
     const intersectionTopics = findIntersection(allTopics, "id");
-    const distinctTopics = getDistinctItemsById(intersectionTopics);
+    const distinctTopics = getDistinctItemsByKey(intersectionTopics, "id");
     const topicsFilterOptions = itemValuesToFilterOptions(distinctTopics);
 
     return ({
@@ -104,12 +104,11 @@ const OverviewFiltersDrawerContent: FunctionComponent<OverviewFiltersDrawerConte
       return [];
     }
 
-    const allProgressStates = getFilterOptions(filters, "progressState", items);
-    const intersectionProgressStates = findIntersection(allProgressStates, null);
-    const distinctProgressStates = Array.from(new Set(intersectionProgressStates));
-    const progressStateFilterOptions = itemValuesToFilterOptions(distinctProgressStates);
+    const allProgressStates = getFilterOptions(filters, "progressStateFilterable", items);
+    const intersectionProgressStates = findIntersection(allProgressStates, "value");
+    const distinctProgressStates = getDistinctItemsByKey(intersectionProgressStates, "value");
 
-    return progressStateFilterOptions;
+    return distinctProgressStates;
   }, [filters, items, variant]);
 
   /* useEffect(() =>
@@ -150,11 +149,11 @@ const OverviewFiltersDrawerContent: FunctionComponent<OverviewFiltersDrawerConte
         <FilterCategory
           items={progressStateFilterOptions.map((progressState) => ({
             ...progressState,
-            isChecked: filtersStore.filters.progressState.some(s => s.value === progressState.value),
-            toggle: () => filtersStore.toggleFilter("progressState", progressState),
+            isChecked: filtersStore.filters.progressStateFilterable.some(s => s.value === progressState.value),
+            toggle: () => filtersStore.toggleFilter("progressStateFilterable", progressState),
           }))}
-          clearFilters={() => filtersStore.clearFilters("progressState")}
-          activeFiltersCount={filtersStore.filters.progressState.length}
+          clearFilters={() => filtersStore.clearFilters("progressStateFilterable")}
+          activeFiltersCount={filtersStore.filters.progressStateFilterable.length}
           title="Status"
         />
       )}
