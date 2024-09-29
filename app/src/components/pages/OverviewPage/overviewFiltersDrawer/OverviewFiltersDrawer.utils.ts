@@ -138,7 +138,22 @@ export function itemValuesToFilterOptions(
 
       if(typeof value === "string")
       {
-        return statusesFilterOptions.find(status => status.value === value);
+        switch (value)
+        {
+          case "not-started":
+          {
+            return statusesFilterOptions.find(status => status.value === "open")!;
+          }
+          case "completing-tests":
+          case "solving-case":
+          {
+            return statusesFilterOptions.find(status => status.value === "in-progress")!;
+          }
+          case "completed":
+          {
+            return statusesFilterOptions.find(status => status.value === "completed")!;
+          }
+        }
       }
 
       let filterOption: NullableProperties<FilterOption> | null = null;

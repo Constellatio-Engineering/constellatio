@@ -1,4 +1,6 @@
 // function that shuffles an array with the Fisher-Yates algorithm
+import { type Primitive } from "@/utils/types";
+
 export const shuffleArray = <T>(array: T[]): T[] =>
 {
   if(!Array.isArray(array) || array.length === 0)
@@ -51,20 +53,21 @@ export const areArraysEqualSets = <T extends string | number | boolean | null | 
   return true;
 };
 
-type Identifiable ={
-  id: string | number;
-};
+export function getDoesAnyItemMatch<T extends Record<string, unknown>>(values: T[], key: keyof T, value: NonNullable<T[keyof T]>): boolean
+{
+  return values.some(v => v[key] === value);
+}
 
 /**
  * This function takes an array of arrays and returns an array that contains all elements that are present in all arrays.
- * It uses the identifierKey to identify the elements, this could for example be the id of an object.
+ * It uses the identifierKey to identify the elements, this could for example be the id of an object. If the element is a primitive, the identifierKey should be null.
  * @param sets - An array of arrays
- * @param identifierKey - The key of the object that should be used to identify the elements
+ * @param identifierKey - The key of the object that should be used to identify the elements.
  * @returns An array that contains all elements that are present in all arrays
  */
-export function findIntersection<T extends object>(
+export function findIntersection<T extends object | Primitive>(
   sets: Array<T[] | null>,
-  identifierKey: keyof T & (string | number)
+  identifierKey: T extends object ? (keyof T) : null
 ): T[]
 {
   const filteredSets = sets.filter(Boolean) as T[][];
@@ -82,12 +85,24 @@ export function findIntersection<T extends object>(
   // Sort sets by length, so we can get the shortest set first
   filteredSets.sort((a, b) => a.length - b.length);
 
-  const shortestSet = new Set(filteredSets[0]!.map(item => item[identifierKey]));
+  const shortestSet = new Set(filteredSets[0]!.map(element =>
+  {
+    return typeof element === "object" ? element[identifierKey as keyof typeof element] : element;
+  }));
+
   const result: T[] = [];
 
   for(const item of filteredSets[0]!)
   {
-    if(filteredSets.every((set, index) => index === 0 || set.some(element => shortestSet.has(element[identifierKey]))))
+    if(filteredSets.every((set, index) => index === 0 || set.some(element =>
+    {
+      if(typeof element === "object")
+      {
+        return shortestSet.has(element[identifierKey as keyof typeof element]);
+      }
+
+      return shortestSet.has(element);
+    })))
     {
       result.push(item);
     }

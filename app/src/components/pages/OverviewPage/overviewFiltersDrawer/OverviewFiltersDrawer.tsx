@@ -13,7 +13,7 @@ import {
   useArticlesOverviewFiltersStore,
   useCasesOverviewFiltersStore
 } from "@/stores/overviewFilters.store";
-import { findIntersection } from "@/utils/array";
+import { findIntersection, getDoesAnyItemMatch } from "@/utils/array";
 import { type NullableProperties } from "@/utils/types";
 import { getDistinctItemsById } from "@/utils/utils";
 
@@ -105,12 +105,12 @@ const OverviewFiltersDrawerContent: FunctionComponent<OverviewFiltersDrawerConte
     }
 
     const allProgressStates = getFilterOptions(filters, "progressState", items);
-    const intersectionProgressStates = findIntersection(allProgressStates, "id");
-    const distinctProgressStates = getDistinctItemsById(intersectionProgressStates);
+    const intersectionProgressStates = findIntersection(allProgressStates, null);
+    const distinctProgressStates = Array.from(new Set(intersectionProgressStates));
     const progressStateFilterOptions = itemValuesToFilterOptions(distinctProgressStates);
 
     return progressStateFilterOptions;
-  }, [items, filters]);
+  }, [filters, items, variant]);
 
   /* useEffect(() =>
   {
@@ -146,19 +146,18 @@ const OverviewFiltersDrawerContent: FunctionComponent<OverviewFiltersDrawerConte
           }}
         />
       )}>
-      {/* {variant === "case" && (
+      {variant === "case" && (
         <FilterCategory
-          items={statusesFilterOptions.map((status) => ({
-            id: status.id,
-            isChecked: filtersStore.filteredStatuses.some(s => s.id === status.id),
-            label: status.title,
-            toggle: () => filtersStore.toggleStatus(status)
+          items={progressStateFilterOptions.map((progressState) => ({
+            ...progressState,
+            isChecked: filtersStore.filters.progressState.some(s => s.value === progressState.value),
+            toggle: () => filtersStore.toggleFilter("progressState", progressState),
           }))}
-          clearFilters={filtersStore.clearFilteredStatuses}
-          activeFiltersCount={filtersStore.filteredStatuses.length}
+          clearFilters={() => filtersStore.clearFilters("progressState")}
+          activeFiltersCount={filtersStore.filters.progressState.length}
           title="Status"
         />
-      )}*/}
+      )}
       <FilterCategory
         search={{ searchesFor: "Rechtsgebieten" }}
         activeFiltersCount={filters.legalArea.length}

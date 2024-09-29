@@ -19,7 +19,7 @@ import useCasesProgress from "@/hooks/useCasesProgress";
 import { type CaseOverviewPageProps } from "@/pages/cases";
 import { type GetArticlesOverviewPagePropsResult } from "@/pages/dictionary";
 import {
-  ArticlesOverviewFiltersStore,
+  type ArticlesOverviewFiltersStore,
   type CasesOverviewFiltersStore,
   type CommonFiltersSlice,
   type CommonOverviewFiltersStore,
@@ -74,7 +74,7 @@ type OverviewPageContentProps = OverviewPageProps & {
 
 function getItemsMatchingTheFilters<T extends Pick<OverviewPageContentProps["items"][number], FilterableArticleAttributes>>(
   items: T[],
-  filters: CommonOverviewFiltersStore["filters"],
+  filters: CasesOverviewFiltersStore["filters"] | ArticlesOverviewFiltersStore["filters"],
 ) 
 {
   return items.filter(item =>
