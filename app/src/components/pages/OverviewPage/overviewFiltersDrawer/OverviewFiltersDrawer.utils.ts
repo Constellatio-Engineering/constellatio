@@ -51,15 +51,15 @@ type GetUniqueFilterOptionsFromArticlesProps = {
 type GetUniqueFilterOptions = (props: GetUniqueFilterOptionsFromCasesProps | GetUniqueFilterOptionsFromArticlesProps) => FilterOption[];
 
 export function getFilterOptions<
-  Item extends (CasesOverviewFiltersDrawerProps["items"][number] | ArticlesOverviewFiltersDrawerProps["items"][number]),
-  InputFilterKey extends keyof Item
+  Items extends Array<Record<string, unknown>>,
+  InputFilterKey extends keyof Items[number]
 >(
   filters: {
-    [K in keyof (typeof items)[number]]: FilterOption[];
+    [K in keyof Items[number]]?: FilterOption[];
   },
   inputFilterKey: InputFilterKey,
-  items: CasesOverviewFiltersDrawerProps["items"] | ArticlesOverviewFiltersDrawerProps["items"]
-): Array<Item[InputFilterKey]>
+  items: Items
+): Array<Items[number][InputFilterKey]>
 {
   const filteredSets = Object
     .keys(filters)

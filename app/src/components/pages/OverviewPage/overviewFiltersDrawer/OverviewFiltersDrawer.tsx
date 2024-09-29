@@ -127,7 +127,7 @@ const OverviewFiltersDrawerContent: FunctionComponent<OverviewFiltersDrawerConte
         clearFilters={() => clearFilters("legalArea")}
         items={uniqueLegalAreas.map(legalArea => ({
           id: legalArea.id,
-          isChecked: filters.legalArea.some(l => l.id === legalArea.id),
+          isChecked: filters.legalArea.some(l => l.value === legalArea.id),
           label: legalArea.title,
           toggle: () => toggleFilter("legalArea", legalArea)
         }))}
@@ -139,7 +139,7 @@ const OverviewFiltersDrawerContent: FunctionComponent<OverviewFiltersDrawerConte
         clearFilters={() => clearFilters("topic")}
         items={uniqueTopics.map(topic => ({
           id: topic.id,
-          isChecked: filters.topic.some(t => t.id === topic.id),
+          isChecked: filters.topic.some(t => t.value === topic.id),
           label: topic.title,
           toggle: () => toggleFilter("topic", topic)
         }))}
@@ -151,7 +151,7 @@ const OverviewFiltersDrawerContent: FunctionComponent<OverviewFiltersDrawerConte
         clearFilters={() => clearFilters("tags")}
         items={uniqueTags.map(tag => ({
           id: tag.id,
-          isChecked: filters.tags.some(t => t.id === tag.id),
+          isChecked: filters.tags.some(t => t.value === tag.id),
           label: tag.title,
           toggle: () => toggleFilter("tags", tag)
         }))}

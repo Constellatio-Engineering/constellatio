@@ -2,29 +2,30 @@
 import type { CaseOverviewPageProps } from "@/pages/cases";
 import type { GetArticlesOverviewPagePropsResult } from "@/pages/dictionary";
 
+import { produce } from "immer";
 import { createStore } from "zustand";
 import { immer } from "zustand/middleware/immer";
 
 export type FilterOption = {
-  readonly id: string;
   readonly title: string;
+  readonly value: string | number | boolean;
 };
 
 // we cannot reuse the CaseProgressState type here because it does differentiate "in-progress" in two sub-states
 export const statusesFilterOptions = [
   {
-    id: "open",
-    title: "Offen"
+    title: "Offen",
+    value: "open"
   },
   {
-    id: "in-progress",
-    title: "In Bearbeitung"
+    title: "In Bearbeitung",
+    value: "in-progress"
   },
   {
-    id: "completed",
-    title: "Abgeschlossen"
+    title: "Abgeschlossen",
+    value: "completed"
   },
-] as const;
+] as const satisfies readonly FilterOption[];
 
 type StatusFilterOption = typeof statusesFilterOptions[number];
 
@@ -46,65 +47,107 @@ export interface CommonFiltersSlice<FilterKey extends string>
   toggleFilter: (key: FilterKey, filter: FilterOption) => void;
 }
 
+// Caution: Because of the complex filters type, we cannot use immer for this store
+
 function createOverviewFiltersStore<FilterKey extends FilterableArticleAttributes | FilterableCaseAttributes>(filters: {
-  [K in FilterKey]-?: FilterOption[]; 
+  [K in FilterKey]-?: FilterOption[];
 })
 {
-  return createStore<CommonFiltersSlice<FilterKey>>()(
-    immer((set, get) =>
-    {
-      return ({
-        clearAllFilters: () =>
+  return createStore<CommonFiltersSlice<FilterKey>>()((set, get) =>
+  {
+    return ({
+      clearAllFilters: () =>
+      {
+        set((state) => ({
+          filters: Object.keys(state.filters).reduce((acc, key) => ({
+            ...acc,
+            [key]: []
+          }), {} as typeof state.filters)
+        }));
+      },
+      clearFilters: (key) =>
+      {
+        set((state) => ({
+          filters: {
+            ...state.filters,
+            [key]: []
+          }
+        }));
+      },
+      closeDrawer: () => set({ isDrawerOpened: false }),
+      filters,
+      getTotalFiltersCount: () =>
+      {
+        const { filters } = get();
+        let count = 0;
+
+        for(const key in filters)
         {
-          set(state =>
+          if(Object.hasOwn(filters, key))
           {
-            Object.keys(state.filters).forEach(key => state.filters[key] = []);
-          });
-        },
-        clearFilters: (key) =>
+            count += filters[key].length;
+          }
+        }
+
+        return count;
+      },
+      isDrawerOpened: true,
+      openDrawer: () => set({ isDrawerOpened: true }),
+      setIsDrawerOpened: (isDrawerOpened) => set({ isDrawerOpened }),
+      toggleFilter: (key, filter) =>
+      {
+        set((state) =>
         {
-          set(state =>
+          const { filters } = state;
+
+          const currentFilter = filters[key];
+
+          if(currentFilter == null)
           {
-            state.filters[key] = [];
-          });
-        },
-        closeDrawer: () => set({ isDrawerOpened: false }),
-        filters,
-        getTotalFiltersCount: () =>
-        {
-          return 0;
-          // return Object.values(get().filters).reduce((acc, curr) => acc + curr.length, 0);
-        },
-        isDrawerOpened: true,
-        openDrawer: () => set({ isDrawerOpened: true }),
-        setIsDrawerOpened: (isDrawerOpened) => set({ isDrawerOpened }),
-        toggleFilter: (key, filter) =>
-        {
-          set((state) =>
+            return state;
+          }
+
+          const filterIndex = currentFilter.findIndex(f => f.value === filter.value);
+          const isFilterAlreadyAdded = filterIndex !== -1;
+
+          const newFilter = { ...currentFilter };
+
+          if(isFilterAlreadyAdded)
           {
-            const { filters } = state;
+            newFilter.splice(filterIndex, 1);
+          }
+          else
+          {
+            newFilter.push(filter);
+          }
 
-            const currentFilter = filters[key];
-
-            if(currentFilter == null)
-            {
-              return;
-            }
-
-            const filterIndex = currentFilter.findIndex(f => f.id === filter.id);
-
-            if(filterIndex === -1)
-            {
-              currentFilter.push(filter);
-            }
-            else
-            {
-              currentFilter.splice(filterIndex, 1);
+          return ({
+            filters: {
+              ...state.filters,
+              [key]: newFilter
             }
           });
-        },
-      });
-    }));
+
+          /* return ({
+            filters: {
+              ...state.filters,
+              [key]: produce(currentFilter, draft =>
+              {
+                if(filterIndex === -1)
+                {
+                  draft.push(filter);
+                }
+                else
+                {
+                  draft.splice(filterIndex, 1);
+                }
+              })
+            }
+          });*/
+        });
+      },
+    });
+  });
 }
 
 export const useCasesOverviewFiltersStore = createOverviewFiltersStore({

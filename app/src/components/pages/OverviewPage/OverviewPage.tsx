@@ -91,12 +91,12 @@ function getItemsMatchingTheFilters<T extends Pick<OverviewPageContentProps["ite
 
       if(Array.isArray(itemValuesFromCurrentFilter))
       {
-        if(itemValuesFromCurrentFilter.some((value) => currentFilterOptions.some(filterOption => filterOption.id === value?.id)))
+        if(itemValuesFromCurrentFilter.some((value) => currentFilterOptions.some(filterOption => filterOption.value === value?.id)))
         {
           return true;
         }
       }
-      else if(currentFilterOptions.some(filterOption => filterOption.id === itemValuesFromCurrentFilter?.id))
+      else if(currentFilterOptions.some(filterOption => filterOption.value === itemValuesFromCurrentFilter?.id))
       {
         return true;
       }
