@@ -7,22 +7,22 @@ import { createStore } from "zustand";
 import { immer } from "zustand/middleware/immer";
 
 export type FilterOption = {
-  readonly title: string;
+  readonly lable: string;
   readonly value: string | number | boolean;
 };
 
 // we cannot reuse the CaseProgressState type here because it does differentiate "in-progress" in two sub-states
 export const statusesFilterOptions = [
   {
-    title: "Offen",
+    lable: "Offen",
     value: "open"
   },
   {
-    title: "In Bearbeitung",
+    lable: "In Bearbeitung",
     value: "in-progress"
   },
   {
-    title: "Abgeschlossen",
+    lable: "Abgeschlossen",
     value: "completed"
   },
 ] as const satisfies readonly FilterOption[];
@@ -36,6 +36,7 @@ export interface CommonFiltersSlice<FilterKey extends string>
 {
   clearAllFilters: () => void;
   clearFilters: (key: FilterKey) => void;
+  clearInvalidFilters: () => void;
   closeDrawer: () => void;
   filters: {
     [K in FilterKey]-?: FilterOption[];
@@ -47,7 +48,7 @@ export interface CommonFiltersSlice<FilterKey extends string>
   toggleFilter: (key: FilterKey, filter: FilterOption) => void;
 }
 
-// Caution: Because of the complex filters type, we cannot use immer for this store
+// Caution: Because of the complex type of 'filters', we cannot use immer for this store because the type inference breaks
 
 function createOverviewFiltersStore<FilterKey extends FilterableArticleAttributes | FilterableCaseAttributes>(filters: {
   [K in FilterKey]-?: FilterOption[];
@@ -73,6 +74,11 @@ function createOverviewFiltersStore<FilterKey extends FilterableArticleAttribute
             [key]: []
           }
         }));
+      },
+      clearInvalidFilters: () =>
+      {
+        // TODO
+        window.alert("clearInvalidFilters is not implemented yet");
       },
       closeDrawer: () => set({ isDrawerOpened: false }),
       filters,

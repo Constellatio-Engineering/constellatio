@@ -20,7 +20,10 @@ export const CasesOverviewFiltersDrawer: FunctionComponent<CasesOverviewFiltersD
   const casesOverviewFiltersStore = useStore(useCasesOverviewFiltersStore);
 
   return (
-    <OverviewFiltersDrawerContent {...props} filtersStore={casesOverviewFiltersStore}/>
+    <OverviewFiltersDrawerContent
+      {...props}
+      filtersStore={casesOverviewFiltersStore}
+    />
   );
 };
 
@@ -31,7 +34,10 @@ export const ArticlesOverviewFiltersDrawer: FunctionComponent<ArticlesOverviewFi
   const articlesOverviewFiltersStore = useStore(useArticlesOverviewFiltersStore);
 
   return (
-    <OverviewFiltersDrawerContent {...props} filtersStore={articlesOverviewFiltersStore}/>
+    <OverviewFiltersDrawerContent
+      {...props}
+      filtersStore={articlesOverviewFiltersStore}
+    />
   );
 };
 
@@ -46,18 +52,13 @@ const OverviewFiltersDrawerContent: FunctionComponent<OverviewFiltersDrawerConte
   const {
     clearAllFilters,
     clearFilters,
+    clearInvalidFilters, 
     closeDrawer,
     filters,
     getTotalFiltersCount,
     isDrawerOpened,
     toggleFilter,
   } = filtersStore;
-
-  // TODO
-  const clearInvalidFilters = () =>
-  {
-    console.log("clearInvalidFilters");
-  };
 
   const totalFiltersCount = getTotalFiltersCount();
 

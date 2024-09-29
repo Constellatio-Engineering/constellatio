@@ -18,8 +18,8 @@ import { objectKeys } from "@/utils/utils";
 
 export const sortFilterOptions = (a: FilterOption, b: FilterOption): number =>
 {
-  const aStartsWithParagraph = a.title.startsWith("§");
-  const bStartsWithParagraph = b.title.startsWith("§");
+  const aStartsWithParagraph = a.lable.startsWith("§");
+  const bStartsWithParagraph = b.lable.startsWith("§");
 
   if(!aStartsWithParagraph && bStartsWithParagraph)
   {
@@ -31,7 +31,7 @@ export const sortFilterOptions = (a: FilterOption, b: FilterOption): number =>
     return 1;
   }
 
-  return a.title.localeCompare(b.title);
+  return a.lable.localeCompare(b.lable);
 };
 
 type GetUniqueFilterOptionsFromCasesProps = {
@@ -67,7 +67,7 @@ export function getFilterOptions<
     {
       if(filterKey === inputFilterKey)
       {
-      // we filter out items by all filters except the current filter key, so if the current filter key is legalArea, we filter out by all filters but legalArea
+        // we filter out items by all filters except the current filter key, so if the current filter key is legalArea, we filter out by all filters but legalArea
         return null;
       }
 
