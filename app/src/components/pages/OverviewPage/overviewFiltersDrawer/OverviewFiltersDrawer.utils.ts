@@ -14,7 +14,7 @@ import {
 } from "@/stores/overviewFilters.store";
 import { findIntersection } from "@/utils/array";
 import { type NullableProperties } from "@/utils/types";
-import { objectKeys } from "@/utils/utils";
+import { getIsObjectWithId, getIsPrimitive, objectKeys } from "@/utils/utils";
 
 export const sortFilterOptions = (a: FilterOption, b: FilterOption): number =>
 {
@@ -52,14 +52,15 @@ type GetUniqueFilterOptions = (props: GetUniqueFilterOptionsFromCasesProps | Get
 
 export function getFilterOptions<
   Items extends Array<Record<string, unknown>>,
+  Item extends Items[number],
   InputFilterKey extends keyof Items[number]
 >(
   filters: {
-    [K in keyof Items[number]]?: FilterOption[];
+    [K in keyof Item]?: FilterOption[];
   },
   inputFilterKey: InputFilterKey,
   items: Items
-): Array<Items[number][InputFilterKey]>
+): Array<Item[InputFilterKey]>
 {
   const filteredSets = Object
     .keys(filters)
@@ -67,48 +68,70 @@ export function getFilterOptions<
     {
       if(filterKey === inputFilterKey)
       {
-        // we filter out items by all filters except the current filter key, so if the current filter key is legalArea, we filter out by all filters but legalArea
         return null;
       }
 
-      // these are for example all topics we currently filter by
-      const currentFilterOptions = filters[filterKey as keyof typeof filters]!;
+      const currentFilterOptions = filters[filterKey as keyof typeof filters];
 
-      // filteredOptions is an array of either tags, topics or legalAreas, depending on the current filter key
       const filteredOptions = items
         .map(item =>
         {
-        // get the values from the current filter key, for example: legalArea, tags or topics
-          const itemValuesFromCurrentFilter = item[filterKey as keyof (typeof items)[number]];
-
-          // for example tags or topics are arrays (items can have multiple), so we check if the current item matches any of the filtered tags or topics
-          if(Array.isArray(itemValuesFromCurrentFilter))
+          if(!currentFilterOptions || currentFilterOptions.length === 0)
           {
-          // TODO: Check if this is correct/necessary and also check if we can return early by checking currentFilterOptions.length === 0
-            if(itemValuesFromCurrentFilter.length === 0)
+            return item[inputFilterKey as keyof typeof item];
+          }
+
+          const itemValueFromCurrentFilter = item[filterKey as keyof typeof item];
+
+          if(itemValueFromCurrentFilter == null)
+          {
+            return null;
+          }
+
+          if(Array.isArray(itemValueFromCurrentFilter))
+          {
+            if(itemValueFromCurrentFilter.length === 0)
             {
               return null;
             }
 
-            if(currentFilterOptions?.length === 0 || itemValuesFromCurrentFilter.some((value) => currentFilterOptions.some(filterOption => filterOption.id === value?.id)))
+            const doesItemMatchFilter = itemValueFromCurrentFilter.some((value) =>
             {
-            // if the current item matches any of the filtered tags or topics, we return the tags or topics of the current item
+              if(value == null)
+              {
+                return false;
+              }
+
+              if(getIsObjectWithId(value))
+              {
+                return currentFilterOptions.some(filterOption => filterOption.value === value.id);
+              }
+              else if(getIsPrimitive(value))
+              {
+                return currentFilterOptions.some(filterOption => filterOption.value === value);
+              }
+
+              return false;
+            });
+
+            if(doesItemMatchFilter)
+            {
               return item[inputFilterKey as keyof typeof item];
             }
           }
-          // for example legalArea is an object (item can only have one), so we check if the current item matches the filtered legalAreas
-          else if(
-            currentFilterOptions?.length === 0 ||
-          (
-            itemValuesFromCurrentFilter != null &&
-            typeof itemValuesFromCurrentFilter === "object" &&
-            "id" in itemValuesFromCurrentFilter &&
-            currentFilterOptions.some(filterOption => filterOption.id === itemValuesFromCurrentFilter?.id)
-          )
-          )
+          else if(getIsObjectWithId(itemValueFromCurrentFilter))
           {
-          // if the current item matches the filtered legalAreas, we return the legalArea of the current item
-            return item[inputFilterKey as keyof typeof item];
+            if(currentFilterOptions.some(filterOption => filterOption.value === itemValueFromCurrentFilter.id))
+            {
+              return item[inputFilterKey as keyof typeof item];
+            }
+          }
+          else if(getIsPrimitive(itemValueFromCurrentFilter))
+          {
+            if(currentFilterOptions.some(filterOption => filterOption.value === itemValueFromCurrentFilter))
+            {
+              return item[inputFilterKey as keyof typeof item];
+            }
           }
 
           return null;

@@ -176,3 +176,13 @@ const printAllSettledPromisesSummary = (settledPromises: Array<PromiseSettledRes
 export type ObjectKeys<T extends object> = `${Exclude<keyof T, symbol>}`;
 
 export const objectKeys = Object.keys as <Type extends object>(value: Type) => Array<ObjectKeys<Type>>;
+
+export function getIsPrimitive(value: unknown): value is string | number | boolean
+{
+  return typeof value === "string" || typeof value === "number" || typeof value === "boolean";
+}
+
+export function getIsObjectWithId(value: unknown): value is { id: unknown } 
+{
+  return value != null && typeof value === "object" && "id" in value;
+}
