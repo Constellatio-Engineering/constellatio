@@ -63,29 +63,31 @@ type Identifiable ={
  * @returns An array that contains all elements that are present in all arrays
  */
 export function findIntersection<T extends object>(
-  sets: T[][],
+  sets: Array<T[] | null>,
   identifierKey: keyof T & (string | number)
 ): T[]
 {
-  if(sets.length === 0)
+  const filteredSets = sets.filter(Boolean) as T[][];
+
+  if(filteredSets.length === 0)
   {
     return [];
   }
 
-  if(sets.length === 1)
+  if(filteredSets.length === 1)
   {
-    return sets[0]!;
+    return filteredSets[0]!;
   }
 
   // Sort sets by length, so we can get the shortest set first
-  sets.sort((a, b) => a.length - b.length);
+  filteredSets.sort((a, b) => a.length - b.length);
 
-  const shortestSet = new Set(sets[0]!.map(item => item[identifierKey]));
+  const shortestSet = new Set(filteredSets[0]!.map(item => item[identifierKey]));
   const result: T[] = [];
 
-  for(const item of sets[0]!) 
+  for(const item of filteredSets[0]!)
   {
-    if(sets.every((set, index) => index === 0 || set.some(element => shortestSet.has(element[identifierKey]))))
+    if(filteredSets.every((set, index) => index === 0 || set.some(element => shortestSet.has(element[identifierKey]))))
     {
       result.push(item);
     }

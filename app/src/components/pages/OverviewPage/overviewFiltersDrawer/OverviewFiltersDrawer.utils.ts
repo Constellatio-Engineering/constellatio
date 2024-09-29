@@ -1,23 +1,9 @@
 /* eslint-disable max-lines */
 
-import {
-  type ArticlesOverviewFiltersDrawerProps,
-  type CasesOverviewFiltersDrawerProps,
-  type OverviewFiltersDrawerContentProps
-} from "@/components/pages/OverviewPage/overviewFiltersDrawer/OverviewFiltersDrawer";
 import type { CaseOverviewPageItems } from "@/pages/cases";
-import {
-  type ArticlesOverviewFiltersStore,
-  type CasesOverviewFiltersStore,
-  type CommonFiltersSlice,
-  type CommonOverviewFiltersStore,
-  type FilterableArticleAttributes,
-  type FilterableCaseAttributes,
-  type FilterOption, statusesFilterOptions
-} from "@/stores/overviewFilters.store";
-import { findIntersection } from "@/utils/array";
+import { type FilterOption, statusesFilterOptions } from "@/stores/overviewFilters.store";
 import { type NullableProperties } from "@/utils/types";
-import { getIsObjectWithId, getIsPrimitive, objectKeys } from "@/utils/utils";
+import { getIsObjectWithId, getIsPrimitive } from "@/utils/utils";
 
 export const sortFilterOptions = (a: FilterOption, b: FilterOption): number =>
 {
@@ -128,11 +114,9 @@ export function getFilterOptions<
         .filter(Boolean);
 
       return filteredOptions;
-    })
-    .flat()
-    .filter(Boolean);
+    });
 
-  return filteredSets as Value extends Array<infer U> ? Array<NonNullable<U>> : Array<NonNullable<Value>>;
+  return filteredSets as Array<(Value extends Array<infer U> ? Array<NonNullable<U>> : Array<NonNullable<Value>>) | null>;
 }
 
 export function itemValuesToFilterOptions(
@@ -202,7 +186,8 @@ export function itemValuesToFilterOptions(
         value: filterOption.value,
       });
     })
-    .filter(Boolean);
+    .filter(Boolean)
+    .sort(sortFilterOptions);
 
   return filterOptions;
 }

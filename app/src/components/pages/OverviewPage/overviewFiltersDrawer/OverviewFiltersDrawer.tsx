@@ -13,6 +13,7 @@ import {
   useArticlesOverviewFiltersStore,
   useCasesOverviewFiltersStore
 } from "@/stores/overviewFilters.store";
+import { findIntersection } from "@/utils/array";
 import { type NullableProperties } from "@/utils/types";
 import { getDistinctItemsById } from "@/utils/utils";
 
@@ -74,16 +75,19 @@ const OverviewFiltersDrawerContent: FunctionComponent<OverviewFiltersDrawerConte
 
   const { legalAreasFilterOptions, tagsFilterOptions, topicsFilterOptions } = useMemo(() =>
   {
-    const legalAreas = getFilterOptions(filters, "legalArea", items);
-    const distinctLegalAreas = getDistinctItemsById(legalAreas);
+    const allLegalAreas = getFilterOptions(filters, "legalArea", items);
+    const intersectionLegalAreas = findIntersection(allLegalAreas, "id");
+    const distinctLegalAreas = getDistinctItemsById(intersectionLegalAreas);
     const legalAreasFilterOptions = itemValuesToFilterOptions(distinctLegalAreas);
 
-    const tags = getFilterOptions(filters, "tags", items);
-    const distinctTags = getDistinctItemsById(tags);
+    const allTags = getFilterOptions(filters, "tags", items);
+    const intersectionTags = findIntersection(allTags, "id");
+    const distinctTags = getDistinctItemsById(intersectionTags);
     const tagsFilterOptions = itemValuesToFilterOptions(distinctTags);
 
-    const topics = getFilterOptions(filters, "topic", items);
-    const distinctTopics = getDistinctItemsById(topics);
+    const allTopics = getFilterOptions(filters, "topic", items);
+    const intersectionTopics = findIntersection(allTopics, "id");
+    const distinctTopics = getDistinctItemsById(intersectionTopics);
     const topicsFilterOptions = itemValuesToFilterOptions(distinctTopics);
 
     return ({
@@ -91,6 +95,21 @@ const OverviewFiltersDrawerContent: FunctionComponent<OverviewFiltersDrawerConte
       tagsFilterOptions,
       topicsFilterOptions,
     });
+  }, [items, filters]);
+
+  const progressStateFilterOptions = useMemo(() =>
+  {
+    if(variant !== "case")
+    {
+      return [];
+    }
+
+    const allProgressStates = getFilterOptions(filters, "progressState", items);
+    const intersectionProgressStates = findIntersection(allProgressStates, "id");
+    const distinctProgressStates = getDistinctItemsById(intersectionProgressStates);
+    const progressStateFilterOptions = itemValuesToFilterOptions(distinctProgressStates);
+
+    return progressStateFilterOptions;
   }, [items, filters]);
 
   /* useEffect(() =>
