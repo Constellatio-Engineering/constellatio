@@ -8,14 +8,14 @@ import * as styles from "./FilterItem.styles";
 type Props = FilterCategoryProps["items"][number];
 
 let FilterItem: FunctionComponent<Props> = ({
-  id,
   isChecked,
   label,
-  toggle
+  toggle,
+  value
 }) => 
 {
   return (
-    <div css={styles.itemWrapper} key={id}>
+    <div css={styles.itemWrapper} key={value}>
       <Checkbox
         checked={isChecked}
         onChange={(_event) => toggle()}

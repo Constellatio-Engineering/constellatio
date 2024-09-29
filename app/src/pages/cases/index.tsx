@@ -46,6 +46,7 @@ export type CasesWithProgress = ReturnType<typeof getCasesWithProgress>;
 export type CaseOverviewPageProps = Omit<GetCasesOverviewPagePropsResult, "items"> & {
   items: CasesWithProgress;
 };
+export type CaseOverviewPageItems = CaseOverviewPageProps["items"][number];
 
 const Page: NextPageWithLayout<GetCasesOverviewPagePropsResult> = ({
   items,

@@ -14,12 +14,12 @@ import * as styles from "./FilterCategory.styles";
 
 export type FilterCategoryProps = {
   readonly activeFiltersCount: number;
-  readonly clearFilters: () => void;
+  readonly clearFilters: () => void; 
   readonly items: Array<{
-    readonly id: string;
     readonly isChecked: boolean;
     readonly label: string;
     readonly toggle: () => void;
+    readonly value: string | number;
   }>;
   readonly search?: {
     readonly searchesFor: string;
@@ -70,7 +70,6 @@ export const FilterCategory: FunctionComponent<FilterCategoryProps> = ({
                 {
                   e.stopPropagation();
                   clearFilters();
-                  setIsOpen(false);
                 }}>
                 zurücksetzen
               </UnstyledButton>
@@ -110,7 +109,7 @@ export const FilterCategory: FunctionComponent<FilterCategoryProps> = ({
           </div>
         )}
         {itemsFiltered.map((item) => (
-          <FilterItem key={item.id} {...item}/>
+          <FilterItem key={item.value} {...item}/>
         ))}
       </div>
     </div>

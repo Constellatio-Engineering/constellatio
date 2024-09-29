@@ -1,8 +1,11 @@
+/* eslint-disable max-lines */
+
 import {
   type ArticlesOverviewFiltersDrawerProps,
   type CasesOverviewFiltersDrawerProps,
   type OverviewFiltersDrawerContentProps
 } from "@/components/pages/OverviewPage/overviewFiltersDrawer/OverviewFiltersDrawer";
+import type { CaseOverviewPageItems } from "@/pages/cases";
 import {
   type ArticlesOverviewFiltersStore,
   type CasesOverviewFiltersStore,
@@ -10,7 +13,7 @@ import {
   type CommonOverviewFiltersStore,
   type FilterableArticleAttributes,
   type FilterableCaseAttributes,
-  type FilterOption
+  type FilterOption, statusesFilterOptions
 } from "@/stores/overviewFilters.store";
 import { findIntersection } from "@/utils/array";
 import { type NullableProperties } from "@/utils/types";
@@ -37,14 +40,15 @@ export const sortFilterOptions = (a: FilterOption, b: FilterOption): number =>
 export function getFilterOptions<
   Items extends Array<Record<string, unknown>>,
   Item extends Items[number],
-  InputFilterKey extends keyof Items[number]
+  InputFilterKey extends keyof Items[number],
+  Value extends NonNullable<Item[InputFilterKey]>
 >(
   filters: {
     [K in keyof Item]?: FilterOption[];
   },
   inputFilterKey: InputFilterKey,
   items: Items
-): Array<NonNullable<Item[InputFilterKey]>>
+)
 {
   const filteredSets = Object
     .keys(filters)
@@ -128,7 +132,79 @@ export function getFilterOptions<
     .flat()
     .filter(Boolean);
 
-  return filteredSets as Array<NonNullable<Item[InputFilterKey]>>;
+  return filteredSets as Value extends Array<infer U> ? Array<NonNullable<U>> : Array<NonNullable<Value>>;
+}
+
+export function itemValuesToFilterOptions(
+  values: Array<
+  Partial<CaseOverviewPageItems["legalArea"]> |
+  NonNullable<CaseOverviewPageItems["topic"]>[number] |
+  NonNullable<CaseOverviewPageItems["tags"]>[number] |
+  NonNullable<CaseOverviewPageItems["progressState"]>
+  >
+): FilterOption[]
+{
+  const filterOptions: FilterOption[] = values
+    .map(value =>
+    {
+      if(value == null)
+      {
+        return null;
+      }
+
+      if(typeof value === "string")
+      {
+        return statusesFilterOptions.find(status => status.value === value);
+      }
+
+      let filterOption: NullableProperties<FilterOption> | null = null;
+
+      switch (value.__typename)
+      {
+        case "LegalArea":
+        {
+          filterOption = {
+            label: value.legalAreaName,
+            value: value.id
+          };
+          break;
+        }
+        case "Topic":
+        {
+          filterOption = {
+            label: value.topicName,
+            value: value.id
+          };
+          break;
+        }
+        case "Tags":
+        {
+          filterOption = {
+            label: value.tagName,
+            value: value.id
+          };
+          break;
+        }
+        case undefined:
+        {
+          filterOption = null;
+          break;
+        }
+      }
+
+      if(filterOption == null || filterOption.label == null || filterOption.value == null)
+      {
+        return null;
+      }
+
+      return ({
+        label: filterOption.label,
+        value: filterOption.value,
+      });
+    })
+    .filter(Boolean);
+
+  return filterOptions;
 }
 
 // export function getUniqueFilterOptions<

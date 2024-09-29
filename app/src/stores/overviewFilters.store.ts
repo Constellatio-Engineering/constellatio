@@ -8,7 +8,7 @@ import { immer } from "zustand/middleware/immer";
 
 export type FilterOption = {
   readonly label: string;
-  readonly value: string | number | boolean;
+  readonly value: string | number;
 };
 
 // we cannot reuse the CaseProgressState type here because it does differentiate "in-progress" in two sub-states
@@ -115,8 +115,7 @@ function createOverviewFiltersStore<FilterKey extends FilterableArticleAttribute
 
           const filterIndex = currentFilter.findIndex(f => f.value === filter.value);
           const isFilterAlreadyAdded = filterIndex !== -1;
-
-          const newFilter = { ...currentFilter };
+          const newFilter = [...currentFilter];
 
           if(isFilterAlreadyAdded)
           {

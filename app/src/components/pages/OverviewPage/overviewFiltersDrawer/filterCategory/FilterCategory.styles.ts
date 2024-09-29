@@ -33,6 +33,7 @@ export const divider = css`
 `;
 
 export const resetButton = css`
+  padding: 8px;
   text-decoration: underline;
   font-weight: 500;
   color: ${colors["neutrals-01"][8]};
