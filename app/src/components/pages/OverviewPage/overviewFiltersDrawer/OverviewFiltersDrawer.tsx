@@ -5,10 +5,19 @@ import { FilterCategory } from "@/components/pages/OverviewPage/overviewFiltersD
 import { getFilterOptions, sortFilterOptions } from "@/components/pages/OverviewPage/overviewFiltersDrawer/OverviewFiltersDrawer.utils";
 import type { CaseOverviewPageProps } from "@/pages/cases";
 import type { GetArticlesOverviewPagePropsResult } from "@/pages/dictionary";
-import { type ArticlesOverviewFiltersStore, type CasesOverviewFiltersStore, useArticlesOverviewFiltersStore, useCasesOverviewFiltersStore } from "@/stores/overviewFilters.store";
+import {
+  type ArticlesOverviewFiltersStore,
+  type CasesOverviewFiltersStore, type FilterableCaseAttributes,
+  type FilterOption, statusesFilterOptions,
+  useArticlesOverviewFiltersStore,
+  useCasesOverviewFiltersStore
+} from "@/stores/overviewFilters.store";
+import { type NullableProperties } from "@/utils/types";
+import { getDistinctItemsById } from "@/utils/utils";
 
 import { Drawer } from "@mantine/core";
 import React, { type FunctionComponent, useMemo } from "react";
+import { infer } from "zod";
 import { useStore } from "zustand";
 
 import * as styles from "./OverviewFiltersDrawer.styles";
@@ -41,6 +50,78 @@ export const ArticlesOverviewFiltersDrawer: FunctionComponent<ArticlesOverviewFi
   );
 };
 
+function itemValuesToFilterOptions<Value extends CasesOverviewFiltersDrawerProps["items"][number][FilterableCaseAttributes]>(
+  values: Array<Value extends Array<infer U> ? U : Value>,
+): FilterOption[]
+{
+  const filterOptions: FilterOption[] = values
+    .map(value =>
+    {
+      if(value == null)
+      {
+        return null;
+      }
+
+      if(typeof value === "string")
+      {
+        return statusesFilterOptions.find(status => status.value === value);
+      }
+
+      let filterOption: NullableProperties<FilterOption> | null = null;
+
+      if(typeof value !== "object")
+      {
+        return null;
+      }
+
+      switch (value.__typename)
+      {
+        case "LegalArea":
+        {
+          filterOption = {
+            label: value.legalAreaName,
+            value: value.id
+          };
+          break;
+        }
+        case "Topic":
+        {
+          filterOption = {
+            label: value.topicName,
+            value: value.id 
+          };
+          break;
+        }
+        case "Tags":
+        {
+          filterOption = {
+            label: value.tagName,
+            value: value.id
+          };
+          break;
+        }
+        case undefined:
+        {
+          filterOption = null;
+          break;
+        }
+      }
+
+      if(filterOption == null || filterOption.label == null || filterOption.value == null)
+      {
+        return null;
+      }
+
+      return ({
+        label: filterOption.label, 
+        value: filterOption.value,
+      });
+    })
+    .filter(Boolean);
+
+  return filterOptions;
+}
+
 export type OverviewFiltersDrawerContentProps = (CasesOverviewFiltersDrawerProps & {
   readonly filtersStore: CasesOverviewFiltersStore;
 }) | (ArticlesOverviewFiltersDrawerProps & {
@@ -62,18 +143,24 @@ const OverviewFiltersDrawerContent: FunctionComponent<OverviewFiltersDrawerConte
 
   const totalFiltersCount = getTotalFiltersCount();
 
-  const test = getFilterOptions(filters, "legalArea", items);
+  const { uniqueLegalAreas, uniqueTags, uniqueTopics } = useMemo(() =>
+  {
+    const legalAreas = getFilterOptions(filters, "legalArea", items);
+    const distinctLegalAreas = getDistinctItemsById(legalAreas);
+    const legalAreasFilterOptions = distinctLegalAreas.map(legalArea => ({
+      label: legalArea.legalAreaName,
+      value: legalArea.id
+    } satisfies FilterOption));
 
-  console.log("test", test);
-
-  const { uniqueLegalAreas, uniqueTags, uniqueTopics } = useMemo(() => ({
-    // uniqueLegalAreas: getUniqueFilterOptions(items, filters, "legalArea").sort(sortFilterOptions),
-    // uniqueTags: getUniqueFilterOptions(items, filters, "tags").sort(sortFilterOptions),
-    // uniqueTopics: getUniqueFilterOptions(items, filters, "topic").sort(sortFilterOptions)
-    uniqueLegalAreas: [],
-    uniqueTags: [],
-    uniqueTopics: [],
-  }), [items, filters]);
+    return ({
+      // uniqueLegalAreas: getUniqueFilterOptions(items, filters, "legalArea").sort(sortFilterOptions),
+      // uniqueTags: getUniqueFilterOptions(items, filters, "tags").sort(sortFilterOptions),
+      // uniqueTopics: getUniqueFilterOptions(items, filters, "topic").sort(sortFilterOptions)
+      uniqueLegalAreas: [],
+      uniqueTags: [],
+      uniqueTopics: [],
+    });
+  }, [items, filters]);
 
   /* useEffect(() =>
   {

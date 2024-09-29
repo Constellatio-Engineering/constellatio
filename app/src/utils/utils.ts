@@ -1,4 +1,6 @@
 /* eslint-disable import/no-unused-modules */
+import { type Nullable } from "@/utils/types";
+
 import { AxiosError, type AxiosResponse } from "axios";
 import { v4 as uuidV4 } from "uuid";
 
@@ -185,4 +187,9 @@ export function getIsPrimitive(value: unknown): value is string | number | boole
 export function getIsObjectWithId(value: unknown): value is { id: unknown } 
 {
   return value != null && typeof value === "object" && "id" in value;
+}
+
+export function getDistinctItemsById<T extends { id?: Nullable<string | number> }>(items: T[]): T[]
+{
+  return [...new Map(items.filter(item => item.id != null).map(item => [item.id, item])).values()];
 }

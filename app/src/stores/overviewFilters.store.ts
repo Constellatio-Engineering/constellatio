@@ -7,22 +7,22 @@ import { createStore } from "zustand";
 import { immer } from "zustand/middleware/immer";
 
 export type FilterOption = {
-  readonly lable: string;
+  readonly label: string;
   readonly value: string | number | boolean;
 };
 
 // we cannot reuse the CaseProgressState type here because it does differentiate "in-progress" in two sub-states
 export const statusesFilterOptions = [
   {
-    lable: "Offen",
+    label: "Offen",
     value: "open"
   },
   {
-    lable: "In Bearbeitung",
+    label: "In Bearbeitung",
     value: "in-progress"
   },
   {
-    lable: "Abgeschlossen",
+    label: "Abgeschlossen",
     value: "completed"
   },
 ] as const satisfies readonly FilterOption[];

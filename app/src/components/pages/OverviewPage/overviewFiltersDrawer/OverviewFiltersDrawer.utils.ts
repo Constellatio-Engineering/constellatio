@@ -18,8 +18,8 @@ import { getIsObjectWithId, getIsPrimitive, objectKeys } from "@/utils/utils";
 
 export const sortFilterOptions = (a: FilterOption, b: FilterOption): number =>
 {
-  const aStartsWithParagraph = a.lable.startsWith("§");
-  const bStartsWithParagraph = b.lable.startsWith("§");
+  const aStartsWithParagraph = a.label.startsWith("§");
+  const bStartsWithParagraph = b.label.startsWith("§");
 
   if(!aStartsWithParagraph && bStartsWithParagraph)
   {
@@ -31,24 +31,8 @@ export const sortFilterOptions = (a: FilterOption, b: FilterOption): number =>
     return 1;
   }
 
-  return a.lable.localeCompare(b.lable);
+  return a.label.localeCompare(b.label);
 };
-
-type GetUniqueFilterOptionsFromCasesProps = {
-  filters: CasesOverviewFiltersStore["filters"];
-  inputFilterKey: FilterableCaseAttributes;
-  items: CasesOverviewFiltersDrawerProps["items"];
-  variant: CasesOverviewFiltersDrawerProps["variant"];
-};
-
-type GetUniqueFilterOptionsFromArticlesProps = {
-  filters: ArticlesOverviewFiltersStore["filters"];
-  inputFilterKey: FilterableArticleAttributes;
-  items: ArticlesOverviewFiltersDrawerProps["items"];
-  variant: ArticlesOverviewFiltersDrawerProps["variant"];
-};
-
-type GetUniqueFilterOptions = (props: GetUniqueFilterOptionsFromCasesProps | GetUniqueFilterOptionsFromArticlesProps) => FilterOption[];
 
 export function getFilterOptions<
   Items extends Array<Record<string, unknown>>,
@@ -60,7 +44,7 @@ export function getFilterOptions<
   },
   inputFilterKey: InputFilterKey,
   items: Items
-): Array<Item[InputFilterKey]>
+): Array<NonNullable<Item[InputFilterKey]>>
 {
   const filteredSets = Object
     .keys(filters)
@@ -144,9 +128,7 @@ export function getFilterOptions<
     .flat()
     .filter(Boolean);
 
-  console.log("filteredSets", filteredSets);
-
-  return filteredSets;
+  return filteredSets as Array<NonNullable<Item[InputFilterKey]>>;
 }
 
 // export function getUniqueFilterOptions<
