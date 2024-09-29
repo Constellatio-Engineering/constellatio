@@ -28,7 +28,7 @@ import {
 import { type ArticleWithNextAndPreviousArticleId } from "@/utils/articles";
 import { sortByTopic } from "@/utils/caisy";
 import { type Nullable } from "@/utils/types";
-import { objectKeys } from "@/utils/utils";
+import { getIsObjectWithId, getIsPrimitive, objectKeys } from "@/utils/utils";
 
 import { Title } from "@mantine/core";
 import { parseAsString, useQueryState } from "next-usequerystate";
@@ -72,33 +72,57 @@ type OverviewPageContentProps = OverviewPageProps & {
   readonly initialCategorySlug: string;
 };
 
-function getItemsMatchingTheFilters<T extends Pick<OverviewPageContentProps["items"][number], FilterableArticleAttributes>>(
+function getItemsMatchingTheFilters<T extends OverviewPageContentProps["items"][number]>(
   items: T[],
-  filters: CasesOverviewFiltersStore["filters"] | ArticlesOverviewFiltersStore["filters"],
-) 
+  filters: CommonOverviewFiltersStore["filters"],
+): T[]
 {
   return items.filter(item =>
   {
     const filterResults = objectKeys(filters).map(filterKey =>
     {
       const currentFilterOptions = filters[filterKey];
-      const itemValuesFromCurrentFilter = item[filterKey];
+      const itemValueFromCurrentFilter = item[filterKey];
 
       if(currentFilterOptions?.length === 0)
       {
         return true;
       }
 
-      if(Array.isArray(itemValuesFromCurrentFilter))
+      if(Array.isArray(itemValueFromCurrentFilter))
       {
-        if(itemValuesFromCurrentFilter.some((value) => currentFilterOptions.some(filterOption => filterOption.value === value?.id)))
+        return itemValueFromCurrentFilter.some((value) =>
+        {
+          if(value == null)
+          {
+            return false;
+          }
+
+          if(getIsObjectWithId(value))
+          {
+            return currentFilterOptions.some(filterOption => filterOption.value === value.id);
+          }
+          else if(getIsPrimitive(value))
+          {
+            return currentFilterOptions.some(filterOption => filterOption.value === value);
+          }
+
+          return false;
+        });
+      }
+      else if(getIsObjectWithId(itemValueFromCurrentFilter))
+      {
+        if(currentFilterOptions.some(filterOption => filterOption.value === itemValueFromCurrentFilter.id))
         {
           return true;
         }
       }
-      else if(currentFilterOptions.some(filterOption => filterOption.value === itemValuesFromCurrentFilter?.id))
+      else if(getIsPrimitive(itemValueFromCurrentFilter))
       {
-        return true;
+        if(currentFilterOptions.some(filterOption => filterOption.value === itemValueFromCurrentFilter))
+        {
+          return true;
+        }
       }
 
       return false;

@@ -36,8 +36,9 @@ export function getFilterOptions<
   items: Items
 )
 {
-  const filteredSets = Object
-    .keys(filters)
+  const filterKeys = Object.keys(filters) as Array<keyof typeof filters>;
+
+  const filteredSets = filterKeys
     .map((filterKey) =>
     {
       if(filterKey === inputFilterKey)
@@ -45,17 +46,31 @@ export function getFilterOptions<
         return null;
       }
 
-      const currentFilterOptions = filters[filterKey as keyof typeof filters];
+      const currentFilterOptions = filters[filterKey];
 
       const filteredOptions = items
         .map(item =>
         {
-          if(!currentFilterOptions || currentFilterOptions.length === 0)
+          if(!(inputFilterKey in item))
           {
-            return item[inputFilterKey as keyof typeof item];
+            return null;
           }
 
-          const itemValueFromCurrentFilter = item[filterKey as keyof typeof item];
+          if(!(filterKey in item))
+          {
+            return null;
+          }
+
+          // this should not be necessary, but typescript is not smart enough to infer the type of filterKey and inputFilterKey after the check above
+          const filterKeyValidated = filterKey as keyof typeof item;
+          const inputFilterKeyValidated = inputFilterKey as keyof typeof item;
+
+          if(!currentFilterOptions || currentFilterOptions.length === 0)
+          {
+            return item[inputFilterKeyValidated];
+          }
+
+          const itemValueFromCurrentFilter = item[filterKeyValidated];
 
           if(itemValueFromCurrentFilter == null)
           {
@@ -64,11 +79,6 @@ export function getFilterOptions<
 
           if(Array.isArray(itemValueFromCurrentFilter))
           {
-            if(itemValueFromCurrentFilter.length === 0)
-            {
-              return null;
-            }
-
             const doesItemMatchFilter = itemValueFromCurrentFilter.some((value) =>
             {
               if(value == null)
@@ -90,21 +100,21 @@ export function getFilterOptions<
 
             if(doesItemMatchFilter)
             {
-              return item[inputFilterKey as keyof typeof item];
+              return item[inputFilterKeyValidated];
             }
           }
           else if(getIsObjectWithId(itemValueFromCurrentFilter))
           {
             if(currentFilterOptions.some(filterOption => filterOption.value === itemValueFromCurrentFilter.id))
             {
-              return item[inputFilterKey as keyof typeof item];
+              return item[inputFilterKeyValidated];
             }
           }
           else if(getIsPrimitive(itemValueFromCurrentFilter))
           {
             if(currentFilterOptions.some(filterOption => filterOption.value === itemValueFromCurrentFilter))
             {
-              return item[inputFilterKey as keyof typeof item];
+              return item[inputFilterKeyValidated];
             }
           }
 
