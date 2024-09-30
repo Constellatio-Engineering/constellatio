@@ -23,6 +23,7 @@ export const viewsRouter = createTRPCRouter({
           set: { updatedAt: new Date() },
           target: [articlesViews.articleId, articlesViews.userId],
         });
+
       await addUserToCrmUpdateQueue(userId);
     }),
   addCaseView: protectedProcedure

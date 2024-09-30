@@ -205,3 +205,6 @@ export function getDistinctItemsByKey<T>(items: Array<Nullable<T>>, key: keyof T
     ).values()
   ];
 }
+
+export const getCurrentDate = () => new Date();
+

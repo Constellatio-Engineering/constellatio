@@ -464,8 +464,7 @@ export const forumRouter = createTRPCRouter({
           slug: createSlug(updatedValues.title)
         } satisfies Partial<ForumQuestionInsert>),
         text: updatedValues.text,
-        title: updatedValues.title,
-        updatedAt: new Date(),
+        title: updatedValues.title
       };
 
       const updatedQuestion = await db.transaction(async transaction =>
