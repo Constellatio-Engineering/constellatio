@@ -1,6 +1,9 @@
 /* eslint-disable no-multiple-empty-lines,max-lines */
 import { type AllCases } from "@/services/content/getAllCases";
 
+// This is currently not used, its main purpose was to test the filtering on the overview page
+
+// eslint-disable-next-line import/no-unused-modules
 export const dummyCases: AllCases = [
 
 

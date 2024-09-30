@@ -39,6 +39,18 @@ export const viewsRouter = createTRPCRouter({
 
       await addUserToCrmUpdateQueue(userId);
     }),
+  getAllSeenArticles: protectedProcedure
+    .query(async ({ ctx: { userId } }) =>
+    {
+      const seenArticles = await db
+        .select({
+          articleId: articlesViews.articleId,
+        })
+        .from(articlesViews)
+        .where(eq(articlesViews.userId, userId));
+
+      return seenArticles.map(seenArticle => seenArticle.articleId);
+    }),
   getArticleViews: protectedProcedure
     .input(getArticleViewsSchema)
     .query(async ({ input: { articleId } }) =>
