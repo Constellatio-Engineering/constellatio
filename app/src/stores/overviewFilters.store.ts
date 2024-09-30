@@ -4,7 +4,7 @@ import type { GetArticlesOverviewPagePropsResult } from "@/pages/dictionary";
 import { appPaths } from "@/utils/paths";
 
 import { createStore } from "zustand";
-import { querystring } from "zustand-querystring";
+import { querystring, type QueryStringOptions } from "zustand-querystring";
 
 export type FilterOption = {
   readonly label: string;
@@ -52,12 +52,14 @@ interface CommonFiltersSlice<FilterKey extends string>
 
 // Caution: Because of the complex type of 'filters', we cannot use immer for this store because the type inference breaks
 
-function createOverviewFiltersStore<FilterKey extends FilterableArticleAttributes | FilterableCaseAttributes>(filters: {
-  [K in FilterKey]-?: FilterOption[];
-})
+function createOverviewFiltersStore<FilterKey extends FilterableArticleAttributes | FilterableCaseAttributes>(
+  filters: {
+    [K in FilterKey]-?: FilterOption[];
+  },
+  querystringOptions: QueryStringOptions<CommonFiltersSlice<FilterKey>>
+)
 {
   return createStore<CommonFiltersSlice<FilterKey>>()(
-
     querystring(
       (set, get) => ({
         clearAllFilters: () =>
@@ -163,16 +165,8 @@ function createOverviewFiltersStore<FilterKey extends FilterableArticleAttribute
             });
           });
         },
-      }), {
-        select(pathname)
-        {
-          // only sync filters to query params if we are on the cases overview page
-          return {
-            filters: pathname === appPaths.cases,
-            key: "filters",
-          };
-        }
-      }
+      }),
+      querystringOptions
     )
   );
 }
@@ -182,12 +176,24 @@ export const useCasesOverviewFiltersStore = createOverviewFiltersStore({
   progressStateFilterable: [],
   tags: [],
   topic: [],
+}, {
+  key: "cases-filters",
+  select: (pathname) => ({
+    // only sync filters to query params if we are on the cases overview page
+    filters: pathname === appPaths.cases,
+  })
 });
 
 export const useArticlesOverviewFiltersStore = createOverviewFiltersStore({
   legalArea: [],
   tags: [],
   topic: [],
+}, {
+  key: "articles-filters",
+  select: (pathname) => ({
+    // only sync filters to query params if we are on the articles overview page
+    filters: pathname === appPaths.dictionary,
+  })
 });
 
 export type CasesOverviewFiltersStore = CommonFiltersSlice<FilterableCaseAttributes>;
