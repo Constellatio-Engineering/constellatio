@@ -6,6 +6,7 @@ import getAllCases from "@/services/content/getAllCases";
 import { getCaseById, type FullLegalCase } from "@/services/content/getCaseById";
 import { type TDragAndDropGameOptionType } from "@/stores/dragDropGame.store";
 import { shuffleArray } from "@/utils/array";
+// import { dummyCases } from "@/utils/dummy-data";
 
 import type { GetStaticProps, GetStaticPaths, GetStaticPathsResult } from "next";
 
