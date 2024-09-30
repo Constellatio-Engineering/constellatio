@@ -1,8 +1,10 @@
 /* eslint-disable max-lines */
 import type { CaseOverviewPageProps } from "@/pages/cases";
 import type { GetArticlesOverviewPagePropsResult } from "@/pages/dictionary";
+import { appPaths } from "@/utils/paths";
 
 import { createStore } from "zustand";
+import { querystring } from "zustand-querystring";
 
 export type FilterOption = {
   readonly label: string;
@@ -54,155 +56,125 @@ function createOverviewFiltersStore<FilterKey extends FilterableArticleAttribute
   [K in FilterKey]-?: FilterOption[];
 })
 {
-  return createStore<CommonFiltersSlice<FilterKey>>()((set, get) =>
-  {
-    return ({
-      clearAllFilters: () =>
-      {
-        set((state) => ({
-          filters: Object.keys(state.filters).reduce((acc, key) => ({
-            ...acc,
-            [key]: []
-          }), {} as typeof state.filters)
-        }));
-      },
-      clearFilters: (key) =>
-      {
-        set((state) => ({
-          filters: {
-            ...state.filters,
-            [key]: []
-          }
-        }));
-      },
-      clearInvalidFilters: (currentlyValidFilterOptions) => 
-      {
-        set((state) => 
+  return createStore<CommonFiltersSlice<FilterKey>>()(
+
+    querystring(
+      (set, get) => ({
+        clearAllFilters: () =>
         {
-          const filterKeys = Object.keys(state.filters) as Array<keyof typeof state.filters>;
-
-          let hasChanges = false;
-
-          const updatedFilters = filterKeys.reduce((acc, filterKey) => 
-          {
-            const validFilters = state.filters[filterKey].filter(filterOption =>
-              currentlyValidFilterOptions[filterKey]?.some(validFilterOption =>
-                validFilterOption.value === filterOption.value
-              )
-            );
-
-            if(validFilters.length !== state.filters[filterKey].length) 
-            {
-              hasChanges = true;
-            }
-
-            return {
+          set((state) => ({
+            filters: Object.keys(state.filters).reduce((acc, key) => ({
               ...acc,
-              [filterKey]: validFilters
-            };
-          }, {} as typeof state.filters);
-
-          // Only update state if there are actual changes
-          return hasChanges ? { filters: updatedFilters } : state;
-        });
-      },
-      // clearInvalidFilters: (currentlyValidFilterOptions) =>
-      // {
-      //   set((state) =>
-      //   {
-      //     const filterKeys = Object.keys(state.filters) as Array<keyof typeof state.filters>;
-      //
-      //     const newFilters = filterKeys.reduce((acc, filterKey) => ({
-      //       ...acc,
-      //       [filterKey]: state.filters[filterKey].filter(filterOption =>
-      //       {
-      //         if(!currentlyValidFilterOptions[filterKey]?.some(validFilterOption => validFilterOption.value === filterOption.value))
-      //         {
-      //           console.log("Filter option is not valid anymore:", filterOption.label);
-      //         }
-      //
-      //         return !currentlyValidFilterOptions[filterKey]?.some(validFilterOption => validFilterOption.value === filterOption.value);
-      //       })
-      //     }), {} as typeof state.filters);
-      //
-      //     return {
-      //       filters: newFilters
-      //     };
-      //   });
-      // },
-      closeDrawer: () => set({ isDrawerOpened: false }),
-      filters,
-      getTotalFiltersCount: () =>
-      {
-        const { filters } = get();
-        let count = 0;
-
-        for(const key in filters)
+              [key]: []
+            }), {} as typeof state.filters)
+          }));
+        },
+        clearFilters: (key) =>
         {
-          if(Object.hasOwn(filters, key))
-          {
-            count += filters[key].length;
-          }
-        }
-
-        return count;
-      },
-      isDrawerOpened: false,
-      openDrawer: () => set({ isDrawerOpened: true }),
-      setIsDrawerOpened: (isDrawerOpened) => set({ isDrawerOpened }),
-      toggleFilter: (key, filter) =>
-      {
-        set((state) =>
-        {
-          const { filters } = state;
-
-          const currentFilter = filters[key];
-
-          if(currentFilter == null)
-          {
-            return state;
-          }
-
-          const filterIndex = currentFilter.findIndex(f => f.value === filter.value);
-          const isFilterAlreadyAdded = filterIndex !== -1;
-          const newFilter = [...currentFilter];
-
-          if(isFilterAlreadyAdded)
-          {
-            newFilter.splice(filterIndex, 1);
-          }
-          else
-          {
-            newFilter.push(filter);
-          }
-
-          return ({
+          set((state) => ({
             filters: {
               ...state.filters,
-              [key]: newFilter
+              [key]: []
             }
-          });
+          }));
+        },
+        clearInvalidFilters: (currentlyValidFilterOptions) =>
+        {
+          set((state) =>
+          {
+            const filterKeys = Object.keys(state.filters) as Array<keyof typeof state.filters>;
 
-          /* return ({
-            filters: {
-              ...state.filters,
-              [key]: produce(currentFilter, draft =>
+            let hasChanges = false;
+
+            const updatedFilters = filterKeys.reduce((acc, filterKey) =>
+            {
+              const validFilters = state.filters[filterKey].filter(filterOption =>
+                currentlyValidFilterOptions[filterKey]?.some(validFilterOption =>
+                  validFilterOption.value === filterOption.value
+                )
+              );
+
+              if(validFilters.length !== state.filters[filterKey].length)
               {
-                if(filterIndex === -1)
-                {
-                  draft.push(filter);
-                }
-                else
-                {
-                  draft.splice(filterIndex, 1);
-                }
-              })
+                hasChanges = true;
+              }
+
+              return {
+                ...acc,
+                [filterKey]: validFilters
+              };
+            }, {} as typeof state.filters);
+
+            // Only update state if there are actual changes
+            return hasChanges ? { filters: updatedFilters } : state;
+          });
+        },
+        closeDrawer: () => set({ isDrawerOpened: false }),
+        filters,
+        getTotalFiltersCount: () =>
+        {
+          const { filters } = get();
+          let count = 0;
+
+          for(const key in filters)
+          {
+            if(Object.hasOwn(filters, key))
+            {
+              count += filters[key].length;
             }
-          });*/
-        });
-      },
-    });
-  });
+          }
+
+          return count;
+        },
+        isDrawerOpened: false,
+        openDrawer: () => set({ isDrawerOpened: true }),
+        setIsDrawerOpened: (isDrawerOpened) => set({ isDrawerOpened }),
+        toggleFilter: (key, filter) =>
+        {
+          set((state) =>
+          {
+            const { filters } = state;
+
+            const currentFilter = filters[key];
+
+            if(currentFilter == null)
+            {
+              return state;
+            }
+
+            const filterIndex = currentFilter.findIndex(f => f.value === filter.value);
+            const isFilterAlreadyAdded = filterIndex !== -1;
+            const newFilter = [...currentFilter];
+
+            if(isFilterAlreadyAdded)
+            {
+              newFilter.splice(filterIndex, 1);
+            }
+            else
+            {
+              newFilter.push(filter);
+            }
+
+            return ({
+              filters: {
+                ...state.filters,
+                [key]: newFilter
+              }
+            });
+          });
+        },
+      }), {
+        select(pathname)
+        {
+          // only sync filters to query params if we are on the cases overview page
+          return {
+            filters: pathname === appPaths.cases,
+            key: "filters",
+          };
+        }
+      }
+    )
+  );
 }
 
 export const useCasesOverviewFiltersStore = createOverviewFiltersStore({
