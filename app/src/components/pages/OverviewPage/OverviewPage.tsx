@@ -48,16 +48,16 @@ export function extractNumeric(title: Nullable<string>): number | null
   return match ? parseInt(match[0], 10) : null;
 }
 
-type CommonFiltersStoreProps = Pick<CommonOverviewFiltersStore, "clearAllFilters" | "filters" | "openDrawer" | "toggleFilter"> & {
+type CommonFiltersStoreProps = Pick<CommonOverviewFiltersStore, "clearAllFilters" | "openDrawer"> & {
   readonly totalFiltersCount: number;
 };
 
 type ArticlesPageProps = GetArticlesOverviewPagePropsResult & {
-  readonly filter: CommonFiltersStoreProps;
+  readonly filter: CommonFiltersStoreProps & Pick<ArticlesOverviewFiltersStore, "filters" | "toggleFilter">;
 };
 
 type CasesPageProps = CaseOverviewPageProps & {
-  readonly filter: CommonFiltersStoreProps;
+  readonly filter: CommonFiltersStoreProps & Pick<CasesOverviewFiltersStore, "filters" | "toggleFilter">;
 };
 
 export type OverviewPageProps = (ArticlesPageProps | CasesPageProps) & {
@@ -165,45 +165,10 @@ const OverviewPageContent: FunctionComponent<OverviewPageContentProps> = ({
 
   const isCategoryEmpty = allItemsOfSelectedCategory.length <= 0;
 
-  /* const itemsFilteredByStatus = useMemo(() => allItemsOfSelectedCategory.filter((item) =>
-  {
-    if(variant === "dictionary")
-    {
-      return true;
-    }
-
-    const { filteredStatuses } = filter;
-
-    if(filteredStatuses.length === 0)
-    {
-      return true;
-    }
-
-    if(item.__typename === "Case")
-    {
-      const isFilteringCompletedCases = filteredStatuses.some(status => status.id === "completed");
-      const isFilteringInProgressCases = filteredStatuses.some(status => status.id === "in-progress");
-      const isFilteringOpenCases = filteredStatuses.some(status => status.id === "open");
-
-      return item.progressState && (
-        (isFilteringCompletedCases && item.progressState === "completed") ||
-        (isFilteringInProgressCases && (item.progressState === "completing-tests" || item.progressState === "solving-case")) ||
-        (isFilteringOpenCases && item.progressState === "not-started")
-      );
-    }
-
-    return true;
-  }), [allItemsOfSelectedCategory, filter, variant]);*/
-
-  const itemsFilteredByStatus = useMemo(() => allItemsOfSelectedCategory.filter(() =>
-  {
-    return true;
-  }), [allItemsOfSelectedCategory]);
-
   const _filteredItems = useMemo(() =>
   {
-    return getItemsMatchingTheFilters(itemsFilteredByStatus, filters);
-  }, [filters, itemsFilteredByStatus]);
+    return getItemsMatchingTheFilters(allItemsOfSelectedCategory, filters);
+  }, [filters, allItemsOfSelectedCategory]);
 
   const filteredItems = useDeferredValue(_filteredItems);
 
@@ -247,38 +212,38 @@ const OverviewPageContent: FunctionComponent<OverviewPageContentProps> = ({
                 </Button>
               </div>
               <div css={styles.activeFiltersChips}>
-                {/* {variant === "case" && (
+                {variant === "case" && (
                   <>
-                    {filter.filteredStatuses.map((status) => (
+                    {filter.filters.progressStateFilterable.map((progressState) => (
                       <FilterTag
-                        key={status.id}
-                        onClick={() => filter.toggleStatus(status)}
-                        title={status.title}
+                        key={progressState.value}
+                        onClick={() => filter.toggleFilter("progressStateFilterable", progressState)}
+                        title={progressState.label}
                       />
                     ))}
                   </>
-                )}*/}
-                {/* {filteredLegalAreas?.map((legalArea) => (
+                )}
+                {filters.legalArea.map((legalArea) => (
                   <FilterTag
-                    key={legalArea.id}
-                    onClick={() => toggleLegalArea(legalArea)}
-                    title={legalArea.title}
+                    key={legalArea.value}
+                    onClick={() => toggleFilter("legalArea", legalArea)}
+                    title={legalArea.label}
                   />
                 ))}
-                {filteredTopics?.map((topic) => (
+                {filters.topic.map((topic) => (
                   <FilterTag
-                    key={topic.id}
-                    onClick={() => toggleTopic(topic)}
-                    title={topic.title}
+                    key={topic.value}
+                    onClick={() => toggleFilter("topic", topic)}
+                    title={topic.label}
                   />
                 ))}
-                {filteredTags?.map((tag) => (
+                {filters.tags.map((tag) => (
                   <FilterTag
-                    key={tag.id}
-                    onClick={() => toggleTag(tag)}
-                    title={tag.title}
+                    key={tag.value}
+                    onClick={() => toggleFilter("tags", tag)}
+                    title={tag.label}
                   />
-                ))}*/}
+                ))}
               </div>
               <div css={styles.clearFiltersButtonWrapper}>
                 <LinkButton

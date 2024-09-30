@@ -2,24 +2,15 @@
 import { Trash } from "@/components/Icons/Trash";
 import SlidingPanelTitle from "@/components/molecules/slidingPanelTitle/SlidingPanelTitle";
 import { FilterCategory } from "@/components/pages/OverviewPage/overviewFiltersDrawer/filterCategory/FilterCategory";
-import { getFilterOptions, itemValuesToFilterOptions, sortFilterOptions } from "@/components/pages/OverviewPage/overviewFiltersDrawer/OverviewFiltersDrawer.utils";
-import { type CaseOverviewPageItems, type CaseOverviewPageProps } from "@/pages/cases";
+import { getFilterOptions, itemValuesToFilterOptions } from "@/components/pages/OverviewPage/overviewFiltersDrawer/OverviewFiltersDrawer.utils";
+import { type CaseOverviewPageProps } from "@/pages/cases";
 import type { GetArticlesOverviewPagePropsResult } from "@/pages/dictionary";
-import { type IGenLegalArea, type IGenTags, type IGenTopic } from "@/services/graphql/__generated/sdk";
-import {
-  type ArticlesOverviewFiltersStore,
-  type CasesOverviewFiltersStore, type FilterableCaseAttributes,
-  type FilterOption, statusesFilterOptions,
-  useArticlesOverviewFiltersStore,
-  useCasesOverviewFiltersStore
-} from "@/stores/overviewFilters.store";
-import { findIntersection, getDoesAnyItemMatch } from "@/utils/array";
-import { type NullableProperties } from "@/utils/types";
+import { type ArticlesOverviewFiltersStore, type CasesOverviewFiltersStore, useArticlesOverviewFiltersStore, useCasesOverviewFiltersStore } from "@/stores/overviewFilters.store";
+import { findIntersection } from "@/utils/array";
 import { getDistinctItemsByKey } from "@/utils/utils";
 
 import { Drawer } from "@mantine/core";
 import React, { type FunctionComponent, useEffect, useMemo } from "react";
-import { infer } from "zod";
 import { useStore } from "zustand";
 
 import * as styles from "./OverviewFiltersDrawer.styles";
@@ -96,11 +87,6 @@ const OverviewFiltersDrawerContent: FunctionComponent<OverviewFiltersDrawerConte
       topicsFilterOptions,
     });
   }, [items, filters]);
-
-  useEffect(() =>
-  {
-    console.log("filters changed", filters);
-  }, [filters]);
 
   const progressStateFilterOptions = useMemo(() =>
   {

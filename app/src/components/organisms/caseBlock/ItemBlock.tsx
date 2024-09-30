@@ -112,6 +112,7 @@ const ItemBlock: FunctionComponent<ICaseBlockProps> = ({
             const caseProgress = casesProgress?.find((caseProgress) => caseProgress?.caseId === item?.id);
             const isBookmarked = bookmarks.some(bookmark => bookmark?.resourceId === item?.id) || false;
             const topicsCombined = item?.topic?.map((item) => item?.topicName).join(", ") || "";
+
             return item && item.id && (
               <tr key={item?.id}>
                 <td className="primaryCell">
