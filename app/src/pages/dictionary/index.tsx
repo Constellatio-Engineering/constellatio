@@ -2,15 +2,19 @@ import { Layout } from "@/components/layouts/Layout";
 import PageHead from "@/components/organisms/pageHead/PageHead";
 import OverviewPage from "@/components/pages/OverviewPage/OverviewPage";
 import { type NextPageWithLayout } from "@/pages/_app";
+import type { AppRouter } from "@/server/api/root";
 import getAllArticles from "@/services/content/getAllArticles";
 import { getOverviewPageProps, type GetOverviewPagePropsResult } from "@/services/content/getOverviewPageProps";
-import { useArticlesOverviewFiltersStore } from "@/stores/overviewFilters.store";
+import { useArticlesOverviewFiltersStore, type WasSeenFilterOption, wasSeenFilterOptions } from "@/stores/overviewFilters.store";
+import { api } from "@/utils/api";
 import { type ArticleWithNextAndPreviousArticleId, getArticlesWithNextAndPreviousArticleId } from "@/utils/articles";
 
+import { type inferProcedureOutput } from "@trpc/server";
 import { type GetStaticProps } from "next";
+import { useMemo } from "react";
 import { useStore } from "zustand";
 
-export type GetArticlesOverviewPagePropsResult = GetOverviewPagePropsResult & {
+type GetArticlesOverviewPagePropsResult = GetOverviewPagePropsResult & {
   items: ArticleWithNextAndPreviousArticleId[];
   variant: "dictionary";
 };
@@ -31,8 +35,49 @@ export const getStaticProps: GetStaticProps<GetArticlesOverviewPagePropsResult> 
   };
 };
 
-const NextPage: NextPageWithLayout<GetArticlesOverviewPagePropsResult> = (articlesOverviewProps) =>
+const getArticlesWithSeenStatus = (articles: GetArticlesOverviewPagePropsResult["items"], seenArticles?: inferProcedureOutput<AppRouter["views"]["getAllSeenArticles"]>) =>
 {
+  return articles.map(article =>
+  {
+    const wasSeen = seenArticles?.some(articleId => articleId === article.id) ?? false;
+
+    let wasSeenFilterable: WasSeenFilterOption;
+
+    switch (wasSeen)
+    {
+      case true:
+      {
+        wasSeenFilterable = wasSeenFilterOptions.find(option => option.value === "seen")!;
+        break;
+      }
+      case false:
+      {
+        wasSeenFilterable = wasSeenFilterOptions.find(option => option.value === "not-seen")!;
+        break;
+      }
+    }
+
+    return ({
+      ...article,
+      wasSeen,
+      wasSeenFilterable
+    });
+  });
+};
+
+export type ArticlesWithSeenStatus = ReturnType<typeof getArticlesWithSeenStatus>;
+export type ArticleOverviewPageProps = Omit<GetArticlesOverviewPagePropsResult, "items"> & {
+  items: ArticlesWithSeenStatus;
+};
+export type ArticleOverviewPageItems = ArticleOverviewPageProps["items"][number];
+
+const NextPage: NextPageWithLayout<GetArticlesOverviewPagePropsResult> = ({
+  items,
+  ...props
+}) =>
+{
+  const { data: seenArticles } = api.views.getAllSeenArticles.useQuery(undefined);
+  const articlesWithSeenStatus = useMemo(() => getArticlesWithSeenStatus(items, seenArticles), [items, seenArticles]);
   const filters = useStore(useArticlesOverviewFiltersStore, s => s.filters);
   const toggleFilter = useStore(useArticlesOverviewFiltersStore, s => s.toggleFilter);
   const openDrawer = useStore(useArticlesOverviewFiltersStore, s => s.openDrawer);
@@ -43,7 +88,8 @@ const NextPage: NextPageWithLayout<GetArticlesOverviewPagePropsResult> = (articl
     <>
       <PageHead pageTitle="Lexikon"/>
       <OverviewPage
-        {...articlesOverviewProps}
+        {...props}
+        items={articlesWithSeenStatus}
         variant={"dictionary"}
         filter={{
           clearAllFilters,

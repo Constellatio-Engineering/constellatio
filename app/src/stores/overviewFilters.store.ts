@@ -1,6 +1,6 @@
 /* eslint-disable max-lines */
 import type { CaseOverviewPageProps } from "@/pages/cases";
-import type { GetArticlesOverviewPagePropsResult } from "@/pages/dictionary";
+import type { ArticleOverviewPageProps } from "@/pages/dictionary";
 import { appPaths } from "@/utils/paths";
 
 import { createStore } from "zustand";
@@ -29,7 +29,20 @@ export const statusesFilterOptions = [
 
 export type StatusFilterOption = typeof statusesFilterOptions[number];
 
-type FilterableArticleAttributes = keyof Pick<GetArticlesOverviewPagePropsResult["items"][number], "legalArea" | "tags" | "topic">;
+export const wasSeenFilterOptions = [
+  {
+    label: "Nicht gesehen",
+    value: "not-seen"
+  },
+  {
+    label: "Gesehen",
+    value: "seen"
+  },
+] as const satisfies readonly FilterOption[];
+
+export type WasSeenFilterOption = typeof wasSeenFilterOptions[number];
+
+type FilterableArticleAttributes = keyof Pick<ArticleOverviewPageProps["items"][number], "legalArea" | "tags" | "topic" | "wasSeenFilterable">;
 type FilterableCaseAttributes = keyof Pick<CaseOverviewPageProps["items"][number], "legalArea" | "tags" | "topic" | "progressStateFilterable">;
 
 interface CommonFiltersSlice<FilterKey extends string>
@@ -188,6 +201,7 @@ export const useArticlesOverviewFiltersStore = createOverviewFiltersStore({
   legalArea: [],
   tags: [],
   topic: [],
+  wasSeenFilterable: [],
 }, {
   key: "articles-filters",
   select: (pathname) => ({
