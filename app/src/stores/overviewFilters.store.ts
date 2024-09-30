@@ -75,11 +75,61 @@ function createOverviewFiltersStore<FilterKey extends FilterableArticleAttribute
           }
         }));
       },
-      clearInvalidFilters: (currentlyValidFilterOptions) =>
+      clearInvalidFilters: (currentlyValidFilterOptions) => 
       {
-        set((state) => ({
-        }));
+        set((state) => 
+        {
+          const filterKeys = Object.keys(state.filters) as Array<keyof typeof state.filters>;
+
+          let hasChanges = false;
+
+          const updatedFilters = filterKeys.reduce((acc, filterKey) => 
+          {
+            const validFilters = state.filters[filterKey].filter(filterOption =>
+              currentlyValidFilterOptions[filterKey]?.some(validFilterOption =>
+                validFilterOption.value === filterOption.value
+              )
+            );
+
+            if(validFilters.length !== state.filters[filterKey].length) 
+            {
+              hasChanges = true;
+            }
+
+            return {
+              ...acc,
+              [filterKey]: validFilters
+            };
+          }, {} as typeof state.filters);
+
+          // Only update state if there are actual changes
+          return hasChanges ? { filters: updatedFilters } : state;
+        });
       },
+      // clearInvalidFilters: (currentlyValidFilterOptions) =>
+      // {
+      //   set((state) =>
+      //   {
+      //     const filterKeys = Object.keys(state.filters) as Array<keyof typeof state.filters>;
+      //
+      //     const newFilters = filterKeys.reduce((acc, filterKey) => ({
+      //       ...acc,
+      //       [filterKey]: state.filters[filterKey].filter(filterOption =>
+      //       {
+      //         if(!currentlyValidFilterOptions[filterKey]?.some(validFilterOption => validFilterOption.value === filterOption.value))
+      //         {
+      //           console.log("Filter option is not valid anymore:", filterOption.label);
+      //         }
+      //
+      //         return !currentlyValidFilterOptions[filterKey]?.some(validFilterOption => validFilterOption.value === filterOption.value);
+      //       })
+      //     }), {} as typeof state.filters);
+      //
+      //     return {
+      //       filters: newFilters
+      //     };
+      //   });
+      // },
       closeDrawer: () => set({ isDrawerOpened: false }),
       filters,
       getTotalFiltersCount: () =>

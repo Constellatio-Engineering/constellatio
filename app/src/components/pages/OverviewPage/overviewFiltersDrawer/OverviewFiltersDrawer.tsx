@@ -97,6 +97,11 @@ const OverviewFiltersDrawerContent: FunctionComponent<OverviewFiltersDrawerConte
     });
   }, [items, filters]);
 
+  useEffect(() =>
+  {
+    console.log("filters changed", filters);
+  }, [filters]);
+
   const progressStateFilterOptions = useMemo(() =>
   {
     if(variant !== "case")
