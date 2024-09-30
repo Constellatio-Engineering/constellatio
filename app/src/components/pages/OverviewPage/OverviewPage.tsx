@@ -13,13 +13,12 @@ import { ArticlesOverviewFiltersDrawer, CasesOverviewFiltersDrawer } from "@/com
 import UseQueryStateWrapper from "@/components/Wrappers/useQueryStateWrapper/UseQueryStateWrapper";
 import useCasesProgress from "@/hooks/useCasesProgress";
 import { type CaseOverviewPageProps } from "@/pages/cases";
-import { type GetArticlesOverviewPagePropsResult } from "@/pages/dictionary";
+import { type ArticleOverviewPageProps } from "@/pages/dictionary";
 import {
   type ArticlesOverviewFiltersStore,
   type CasesOverviewFiltersStore,
   type CommonOverviewFiltersStore,
 } from "@/stores/overviewFilters.store";
-import { type ArticleWithNextAndPreviousArticleId } from "@/utils/articles";
 import { sortByTopic } from "@/utils/caisy";
 import { type Nullable } from "@/utils/types";
 import { getIsObjectWithId, getIsObjectWithValue, getIsPrimitive, objectKeys } from "@/utils/utils";
@@ -46,7 +45,7 @@ type CommonFiltersStoreProps = Pick<CommonOverviewFiltersStore, "clearAllFilters
   readonly totalFiltersCount: number;
 };
 
-type ArticlesPageProps = GetArticlesOverviewPagePropsResult & {
+type ArticlesPageProps = ArticleOverviewPageProps & {
   readonly filter: CommonFiltersStoreProps & Pick<ArticlesOverviewFiltersStore, "filters" | "toggleFilter">;
 };
 
@@ -59,7 +58,7 @@ export type OverviewPageProps = (ArticlesPageProps | CasesPageProps) & {
   // The correct type would be Array<CaseOverviewPageProps["items"][number] | ArticleWithNextAndPreviousArticleId[],
   // but TypeScript is not smart enough to infer this with the array.filter method
   // eslint-disable-next-line react/no-unused-prop-types
-  readonly items: Array<CaseOverviewPageProps["items"][number] | ArticleWithNextAndPreviousArticleId>;
+  readonly items: Array<CaseOverviewPageProps["items"][number] | ArticleOverviewPageProps["items"][number]>;
 };
 
 type OverviewPageContentProps = OverviewPageProps & {

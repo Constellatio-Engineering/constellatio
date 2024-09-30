@@ -4,7 +4,7 @@ import SlidingPanelTitle from "@/components/molecules/slidingPanelTitle/SlidingP
 import { FilterCategory } from "@/components/pages/OverviewPage/overviewFiltersDrawer/filterCategory/FilterCategory";
 import { getFilterOptions, itemValuesToFilterOptions } from "@/components/pages/OverviewPage/overviewFiltersDrawer/OverviewFiltersDrawer.utils";
 import { type CaseOverviewPageProps } from "@/pages/cases";
-import type { GetArticlesOverviewPagePropsResult } from "@/pages/dictionary";
+import { type ArticleOverviewPageProps } from "@/pages/dictionary";
 import { type ArticlesOverviewFiltersStore, type CasesOverviewFiltersStore, useArticlesOverviewFiltersStore, useCasesOverviewFiltersStore } from "@/stores/overviewFilters.store";
 import { findIntersection } from "@/utils/array";
 import { getDistinctItemsByKey } from "@/utils/utils";
@@ -29,7 +29,7 @@ export const CasesOverviewFiltersDrawer: FunctionComponent<CasesOverviewFiltersD
   );
 };
 
-export type ArticlesOverviewFiltersDrawerProps = Pick<GetArticlesOverviewPagePropsResult, "items" | "variant">;
+export type ArticlesOverviewFiltersDrawerProps = Pick<ArticleOverviewPageProps, "items" | "variant">;
 
 export const ArticlesOverviewFiltersDrawer: FunctionComponent<ArticlesOverviewFiltersDrawerProps> = (props) =>
 {
@@ -102,6 +102,20 @@ const OverviewFiltersDrawerContent: FunctionComponent<OverviewFiltersDrawerConte
     return distinctProgressStates;
   }, [filters, items, variant]);
 
+  const seenStatusFilterOptions = useMemo(() =>
+  {
+    if(variant !== "dictionary")
+    {
+      return [];
+    }
+
+    const allSeenStatuses = getFilterOptions(filters, "wasSeenFilterable", items);
+    const intersectionSeenStatuses = findIntersection(allSeenStatuses, "value");
+    const distinctSeenStatuses = getDistinctItemsByKey(intersectionSeenStatuses, "value");
+
+    return distinctSeenStatuses;
+  }, [filters, items, variant]);
+
   useEffect(() =>
   {
     // when the filter options change, we need to clear the filters that are not valid anymore
@@ -110,8 +124,9 @@ const OverviewFiltersDrawerContent: FunctionComponent<OverviewFiltersDrawerConte
       progressStateFilterable: progressStateFilterOptions,
       tags: tagsFilterOptions,
       topic: topicsFilterOptions,
+      wasSeenFilterable: seenStatusFilterOptions,
     });
-  }, [clearInvalidFilters, legalAreasFilterOptions, progressStateFilterOptions, tagsFilterOptions, topicsFilterOptions]);
+  }, [clearInvalidFilters, legalAreasFilterOptions, progressStateFilterOptions, tagsFilterOptions, topicsFilterOptions, seenStatusFilterOptions]);
 
   return (
     <Drawer
@@ -146,7 +161,19 @@ const OverviewFiltersDrawerContent: FunctionComponent<OverviewFiltersDrawerConte
           }))}
           clearFilters={() => filtersStore.clearFilters("progressStateFilterable")}
           activeFiltersCount={filtersStore.filters.progressStateFilterable.length}
-          title="Status"
+          title="Bearbeitungsstatus"
+        />
+      )}
+      {variant === "dictionary" && (
+        <FilterCategory
+          clearFilters={() => filtersStore.clearFilters("wasSeenFilterable")}
+          activeFiltersCount={filtersStore.filters.wasSeenFilterable.length}
+          items={seenStatusFilterOptions.map(wasSeenFilterOption => ({
+            ...wasSeenFilterOption,
+            isChecked: filtersStore.filters.wasSeenFilterable.some(s => s.value === wasSeenFilterOption.value),
+            toggle: () => filtersStore.toggleFilter("wasSeenFilterable", wasSeenFilterOption),
+          }))}
+          title="Bearbeitungsstatus"
         />
       )}
       <FilterCategory
