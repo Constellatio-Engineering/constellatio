@@ -34,7 +34,9 @@ export interface CommonFiltersSlice<FilterKey extends string>
 {
   clearAllFilters: () => void;
   clearFilters: (key: FilterKey) => void;
-  clearInvalidFilters: () => void;
+  clearInvalidFilters: (currentlyValidFilterOptions: {
+    [K in FilterKey]-?: FilterOption[];
+  }) => void;
   closeDrawer: () => void;
   filters: {
     [K in FilterKey]-?: FilterOption[];
@@ -73,10 +75,10 @@ function createOverviewFiltersStore<FilterKey extends FilterableArticleAttribute
           }
         }));
       },
-      clearInvalidFilters: () =>
+      clearInvalidFilters: (currentlyValidFilterOptions) =>
       {
-        // TODO
-        window.alert("clearInvalidFilters is not implemented yet");
+        set((state) => ({
+        }));
       },
       closeDrawer: () => set({ isDrawerOpened: false }),
       filters,

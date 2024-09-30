@@ -18,7 +18,7 @@ import { type NullableProperties } from "@/utils/types";
 import { getDistinctItemsByKey } from "@/utils/utils";
 
 import { Drawer } from "@mantine/core";
-import React, { type FunctionComponent, useMemo } from "react";
+import React, { type FunctionComponent, useEffect, useMemo } from "react";
 import { infer } from "zod";
 import { useStore } from "zustand";
 
@@ -111,15 +111,16 @@ const OverviewFiltersDrawerContent: FunctionComponent<OverviewFiltersDrawerConte
     return distinctProgressStates;
   }, [filters, items, variant]);
 
-  /* useEffect(() =>
+  useEffect(() =>
   {
     // when the filter options change, we need to clear the filters that are not valid anymore
     clearInvalidFilters({
-      uniqueLegalAreas: uniqueLegalAreas.map(l => l.id),
-      uniqueTags: uniqueTags.map(t => t.id),
-      uniqueTopics: uniqueTopics.map(t => t.id),
+      legalArea: legalAreasFilterOptions,
+      progressStateFilterable: progressStateFilterOptions,
+      tags: tagsFilterOptions,
+      topic: topicsFilterOptions,
     });
-  }, [uniqueLegalAreas, uniqueTopics, uniqueTags, clearInvalidFilters]);*/
+  }, [clearInvalidFilters, legalAreasFilterOptions, progressStateFilterOptions, tagsFilterOptions, topicsFilterOptions]);
 
   return (
     <Drawer

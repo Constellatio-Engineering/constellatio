@@ -145,8 +145,7 @@ export function itemValuesToFilterOptions(
   values: Array<
   Partial<CaseOverviewPageItems["legalArea"]> |
   NonNullable<CaseOverviewPageItems["topic"]>[number] |
-  NonNullable<CaseOverviewPageItems["tags"]>[number] /* |
-  NonNullable<CaseOverviewPageItems["progressStateFilterable"]>*/
+  NonNullable<CaseOverviewPageItems["tags"]>[number]
   >
 ): FilterOption[]
 {
