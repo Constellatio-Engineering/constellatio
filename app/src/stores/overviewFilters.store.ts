@@ -27,10 +27,10 @@ export const statusesFilterOptions = [
 
 export type StatusFilterOption = typeof statusesFilterOptions[number];
 
-export type FilterableArticleAttributes = keyof Pick<GetArticlesOverviewPagePropsResult["items"][number], "legalArea" | "tags" | "topic">;
-export type FilterableCaseAttributes = keyof Pick<CaseOverviewPageProps["items"][number], "legalArea" | "tags" | "topic" | "progressStateFilterable">;
+type FilterableArticleAttributes = keyof Pick<GetArticlesOverviewPagePropsResult["items"][number], "legalArea" | "tags" | "topic">;
+type FilterableCaseAttributes = keyof Pick<CaseOverviewPageProps["items"][number], "legalArea" | "tags" | "topic" | "progressStateFilterable">;
 
-export interface CommonFiltersSlice<FilterKey extends string>
+interface CommonFiltersSlice<FilterKey extends string>
 {
   clearAllFilters: () => void;
   clearFilters: (key: FilterKey) => void;
@@ -147,7 +147,7 @@ function createOverviewFiltersStore<FilterKey extends FilterableArticleAttribute
 
         return count;
       },
-      isDrawerOpened: true,
+      isDrawerOpened: false,
       openDrawer: () => set({ isDrawerOpened: true }),
       setIsDrawerOpened: (isDrawerOpened) => set({ isDrawerOpened }),
       toggleFilter: (key, filter) =>

@@ -1,5 +1,4 @@
 import { BodyText } from "@/components/atoms/BodyText/BodyText";
-import IconButton from "@/components/atoms/iconButton/IconButton";
 import { ArrowDown } from "@/components/Icons/ArrowDown";
 import { UnstyledButton } from "@/components/molecules/unstyledButton/UnstyledButton";
 import FilterItem from "@/components/pages/OverviewPage/overviewFiltersDrawer/filterCategory/filterItem/FilterItem";
@@ -35,7 +34,7 @@ export const FilterCategory: FunctionComponent<FilterCategoryProps> = ({
   title
 }) =>
 {
-  const [isOpen, setIsOpen] = React.useState<boolean>(true);
+  const [isOpen, setIsOpen] = React.useState<boolean>(false);
   const hasActiveFilters = activeFiltersCount > 0;
   const [searchValue, setSearchValue] = React.useState<string>("");
 

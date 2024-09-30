@@ -1,3 +1,4 @@
+/* eslint-disable import/no-unused-modules */
 // function that shuffles an array with the Fisher-Yates algorithm
 import { getDistinctItemsByKey } from "@/utils/utils";
 

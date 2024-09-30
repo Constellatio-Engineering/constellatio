@@ -1,4 +1,4 @@
-/* eslint-disable no-multiple-empty-lines */
+/* eslint-disable no-multiple-empty-lines,max-lines */
 import { type AllCases } from "@/services/content/getAllCases";
 
 export const dummyCases: AllCases = [

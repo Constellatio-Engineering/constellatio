@@ -9,11 +9,7 @@ import FilterTag from "@/components/molecules/filterTag/FilterTag";
 import ItemBlock from "@/components/organisms/caseBlock/ItemBlock";
 import EmptyStateCard from "@/components/organisms/emptyStateCard/EmptyStateCard";
 import OverviewHeader from "@/components/organisms/OverviewHeader/OverviewHeader";
-import {
-  ArticlesOverviewFiltersDrawer,
-  CasesOverviewFiltersDrawer,
-  type OverviewFiltersDrawerContentProps
-} from "@/components/pages/OverviewPage/overviewFiltersDrawer/OverviewFiltersDrawer";
+import { ArticlesOverviewFiltersDrawer, CasesOverviewFiltersDrawer } from "@/components/pages/OverviewPage/overviewFiltersDrawer/OverviewFiltersDrawer";
 import UseQueryStateWrapper from "@/components/Wrappers/useQueryStateWrapper/UseQueryStateWrapper";
 import useCasesProgress from "@/hooks/useCasesProgress";
 import { type CaseOverviewPageProps } from "@/pages/cases";
@@ -21,9 +17,7 @@ import { type GetArticlesOverviewPagePropsResult } from "@/pages/dictionary";
 import {
   type ArticlesOverviewFiltersStore,
   type CasesOverviewFiltersStore,
-  type CommonFiltersSlice,
   type CommonOverviewFiltersStore,
-  type FilterableArticleAttributes,
 } from "@/stores/overviewFilters.store";
 import { type ArticleWithNextAndPreviousArticleId } from "@/utils/articles";
 import { sortByTopic } from "@/utils/caisy";
