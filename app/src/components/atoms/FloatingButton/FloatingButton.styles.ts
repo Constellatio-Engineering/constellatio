@@ -1,4 +1,5 @@
 import { type FloatingButtonVariation } from "@/components/atoms/FloatingButton/FloatingButton";
+import { colooors } from "@/constants/styles/colors";
 
 import { type ButtonStylesNames, type ButtonStylesParams, type MantineTheme, type Styles } from "@mantine/core";
 
@@ -16,10 +17,10 @@ export const floatingButtonStyles = ({
     icon: {
       "::after": {
         alignItems: "center",
-        backgroundColor: theme.colors["neutrals-01"][0],
-        border: `2px solid ${theme.colors["neutrals-01"][3]}`,
+        backgroundColor: colooors["neutrals-01"][0],
+        border: `2px solid ${colooors["neutrals-01"][3]}`,
         borderRadius: "50%",
-        color: theme.colors["neutrals-02"][1],
+        color: colooors["neutrals-02"][1],
         content: variation === "pins" ? `"${pinsNotificationsAmount}"` : "\"\"",
         display: variation === "pins" && pinsNotificationsAmount ? "flex" : "none",
         fontSize: theme.spacing["spacing-14"],
@@ -34,8 +35,8 @@ export const floatingButtonStyles = ({
         width: "19px",
       },
       alignItems: "center",
-      backgroundColor: variation === "pins" ? theme.colors["brand-01"][4] : theme.colors["neutrals-01"][0],
-      border: variation !== "pins" ? `1px solid ${theme.colors["neutrals-01"][3]}` : "none",
+      backgroundColor: variation === "pins" ? colooors["brand-01"][4] : colooors["neutrals-01"][0],
+      border: variation !== "pins" ? `1px solid ${colooors["neutrals-01"][3]}` : "none",
       borderRadius: "50%",
       display: "flex",
       height: variation === "icon-medium" ? "32px" : "40px",
@@ -60,15 +61,15 @@ export const floatingButtonStyles = ({
       "&:active": {
         "> div .mantine-Button-icon": {
           backgroundColor:
-            variation === "icon-big" || variation === "icon-medium" ? theme.colors["neutrals-01"][3] : "",
-          border: variation === "pins" ? `1px solid ${theme.colors["neutrals-01"][5]}` : "",
+            variation === "icon-big" || variation === "icon-medium" ? colooors["neutrals-01"][3] : "",
+          border: variation === "pins" ? `1px solid ${colooors["neutrals-01"][5]}` : "",
         },
       },
       "&:disabled": {
         "> div .mantine-Button-icon": {
           backgroundColor:
-            variation === "icon-big" || variation === "icon-medium" ? theme.colors["neutrals-01"][4] : "",
-          border: variation === "pins" ? `1px solid ${theme.colors["neutrals-01"][4]}` : "",
+            variation === "icon-big" || variation === "icon-medium" ? colooors["neutrals-01"][4] : "",
+          border: variation === "pins" ? `1px solid ${colooors["neutrals-01"][4]}` : "",
         },
         cursor: "default",
       },
@@ -76,8 +77,8 @@ export const floatingButtonStyles = ({
         "> div": {
           ".mantine-Button-icon": {
             backgroundColor:
-              variation === "icon-big" || variation === "icon-medium" ? theme.colors["neutrals-01"][2] : "",
-            border: variation === "pins" ? `1px solid ${theme.colors["neutrals-01"][5]}` : "",
+              variation === "icon-big" || variation === "icon-medium" ? colooors["neutrals-01"][2] : "",
+            border: variation === "pins" ? `1px solid ${colooors["neutrals-01"][5]}` : "",
           },
 
           ".mantine-Button-label": {
@@ -88,7 +89,7 @@ export const floatingButtonStyles = ({
         },
         backgroundColor:
           variation === "pins" || variation === "notes-notes" || variation === "notes-no-notes"
-            ? theme.colors["neutrals-01"][1]
+            ? colooors["neutrals-01"][1]
             : "transparent",
 
         padding:
@@ -107,7 +108,7 @@ export const floatingButtonStyles = ({
       border: "none",
       borderRadius: theme.radius.full,
       boxShadow: theme.shadows["elevation-medium"],
-      color: theme.colors["neutrals-02"][1],
+      color: colooors["neutrals-02"][1],
       cursor: "pointer",
       display: "flex",
       justifyContent: "center",

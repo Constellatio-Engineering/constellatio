@@ -1,4 +1,4 @@
-import { colors } from "@/constants/styles/colors";
+import { colooors } from "@/constants/styles/colors";
 
 import { css } from "@emotion/react";
 import { type MantineTheme } from "@mantine/styles";
@@ -9,8 +9,8 @@ export const smallBadgeCardHeight = 180;
 export const wrapper = css`
   position: relative;
   border-radius: 12px;
-  background-color: ${colors["neutrals-01"][1]};
-  border: solid 1px ${colors["neutrals-01"][3]};
+  background-color: ${colooors["neutrals-01"][1]};
+  border: solid 1px ${colooors["neutrals-01"][3]};
 `;
 
 export const wrapperDisabled = css`
@@ -33,7 +33,7 @@ export const wrapperSmall = css`
   cursor: pointer;
   transition: background-color 0.1s ease-in-out;
   :hover, :active, :focus {
-    background-color: ${colors["neutrals-01"][3]};
+    background-color: ${colooors["neutrals-01"][3]};
   }
 `;
 
@@ -68,7 +68,7 @@ export const comingSoonOverlay = css`
 `;
 
 export const badgeWrapper = css`
-  border: 1px solid ${colors["neutrals-01"][3]};
+  border: 1px solid ${colooors["neutrals-01"][3]};
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -89,7 +89,7 @@ export const badgeWrapperLarge = css`
 `;
 
 export const badgeWrapperSelected = css`
-  border: 1px solid ${colors["neutrals-01"][7]};
+  border: 1px solid ${colooors["neutrals-01"][7]};
 `;
 
 export const contentComingSoon = css`
@@ -118,7 +118,7 @@ export const badgeImageSmall = css`
 `;
 
 export const badgeTitle = (theme: MantineTheme) => css`
-  color: ${theme.colors["neutrals-02"][1]};
+  color: ${colooors["neutrals-02"][1]};
   text-align: center;
   font-size: 17px;
 `;
@@ -128,13 +128,13 @@ export const badgeTitleSmall = css`
 `;
 
 export const badgeDescriptionArea = () => css`
-  background-color: ${colors["neutrals-01"][0]};
+  background-color: ${colooors["neutrals-01"][0]};
   text-align: center;
   flex: 1;
-  color: ${colors["neutrals-01"][7]};
+  color: ${colooors["neutrals-01"][7]};
   padding: 16px;
   border-radius: 0 0 12px 12px;
-  border: solid 1px ${colors["neutrals-01"][3]};
+  border: solid 1px ${colooors["neutrals-01"][3]};
 `;
 
 export const badgeDescriptionText = css`

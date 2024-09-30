@@ -8,12 +8,12 @@ export const wrapper = css`
 `;
 
 export const copyTextWrapper = (theme: MantineTheme) => css`
-    border: 1px solid ${theme.colors["neutrals-01"][3]};
+    border: 1px solid ${colooors["neutrals-01"][3]};
     border-radius: 12px;
     padding: 8px 16px;
     display: flex;
     align-items: center;
     gap: 8px;
-    background-color: ${theme.colors["neutrals-01"][0]};
-    color: ${theme.colors["neutrals-02"][1]};
+    background-color: ${colooors["neutrals-01"][0]};
+    color: ${colooors["neutrals-02"][1]};
 `;

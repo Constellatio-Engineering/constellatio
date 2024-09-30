@@ -14,18 +14,18 @@ export const SButton = styled.button<{ size?: "big" | "medium" }>`
   }
 
   ${({ size, theme }) => css`
-    color: ${theme.colors["neutrals-01"][9]};
+    color: ${colooors["neutrals-01"][9]};
     font-size: ${size === "big" ? theme.fontSizes["spacing-16"] : theme.fontSizes["spacing-14"]};
     font-weight: 500;
     line-height: ${size === "big" ? theme.spacing["spacing-24"] : theme.spacing["spacing-20"]};
     transition: all 0.3s ease;
 
     :hover {
-      color: ${theme.colors["neutrals-02"][1]};
+      color: ${colooors["neutrals-02"][1]};
     }
 
     :disabled {
-      color: ${theme.colors["neutrals-01"][7]};
+      color: ${colooors["neutrals-01"][7]};
     }
 
     svg {

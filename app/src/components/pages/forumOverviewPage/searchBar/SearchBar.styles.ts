@@ -18,15 +18,15 @@ export const inputStyles = () =>
 {
   const styles: InputStylesProps = (theme: MantineTheme) => ({
     icon: {
-      color: theme.colors["neutrals-01"][7],
+      color: colooors["neutrals-01"][7],
       left: "62px",
       width: "24px",
     },
     input: {
       "&::placeholder": {
-        color: theme.colors["neutrals-01"][7],
+        color: colooors["neutrals-01"][7],
       },
-      backgroundColor: theme.colors["neutrals-01"][0],
+      backgroundColor: colooors["neutrals-01"][0],
       border: "none",
       borderRadius: "0px",
       fontFamily: `${theme.headings.fontFamily}`,
@@ -37,7 +37,7 @@ export const inputStyles = () =>
       padding: "0 0 0 100px !important"
     },
     wrapper: {
-      borderBottom: `1px solid ${theme.colors["neutrals-01"][4]}`,
+      borderBottom: `1px solid ${colooors["neutrals-01"][4]}`,
     },
   });
 

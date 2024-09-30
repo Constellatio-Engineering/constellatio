@@ -15,9 +15,7 @@ import useNoteEditorStore from "@/stores/noteEditor.store";
 import { useTagsEditorStore } from "@/stores/tagsEditor.store";
 import { getFolderName } from "@/utils/folders";
 
-import {
-  useMantineTheme 
-} from "@mantine/core";
+import { useMantineTheme } from "@mantine/core";
 import React, { type FunctionComponent } from "react";
 
 import * as styles from "./UploadedMaterialTableBody.styles";

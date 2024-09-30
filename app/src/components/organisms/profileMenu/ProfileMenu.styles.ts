@@ -1,10 +1,12 @@
+import { colooors } from "@/constants/styles/colors";
+
 import { css } from "@emotion/react";
 import { type MantineTheme } from "@mantine/styles";
 
 export const wrapper = (theme: MantineTheme) => css`
   width: 320px;
   min-width: 320px;
-  background-color: ${theme.colors["neutrals-01"][0]};
+  background-color: ${colooors["neutrals-01"][0]};
   border-radius: 12px;
   box-shadow: 0px 8px 44px 0px rgba(0, 0, 0, 0.04);
   margin-top: -220px;
@@ -75,7 +77,7 @@ export const profileImageWrapper = (width: number) => css`
   }
 `;
 export const profileNameHandler = (theme: MantineTheme) => css`
-  color: ${theme.colors["neutrals-01"][7]};
+  color: ${colooors["neutrals-01"][7]};
 `;
 export const profileImage = css`
   width: 90px;
@@ -89,7 +91,7 @@ export const profileName = css`
   width: 100%;
 `;
 export const profileNameText = (theme: MantineTheme) => css`
-  color: ${theme.colors["neutrals-02"][1]};
+  color: ${colooors["neutrals-02"][1]};
 `;
 
 export const tabsListWrapper = css`

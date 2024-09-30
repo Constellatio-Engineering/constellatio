@@ -20,7 +20,7 @@ export const detailText = (theme: MantineTheme): SerializedStyles => css`
   p {
     margin-top: 10px;
   }
-  color: ${theme.colors["neutrals-01"][7]};
+  color: ${colooors["neutrals-01"][7]};
   @media screen and (max-width: 1200px) {
     display: flex;
     justify-content: center;

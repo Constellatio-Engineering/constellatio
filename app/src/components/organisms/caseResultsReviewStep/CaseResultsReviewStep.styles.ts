@@ -30,7 +30,7 @@ export const factsWrapper = (theme: MantineTheme) => css`
   margin-bottom: 24px;
   .mantine-Accordion-item {
     border-radius: 12px;
-    background-color: ${theme.colors["neutrals-01"][0]};
+    background-color: ${colooors["neutrals-01"][0]};
     outline: 0;
     border: 0;
   }
@@ -38,7 +38,7 @@ export const factsWrapper = (theme: MantineTheme) => css`
 `;
 
 export const solutionWrapper = (theme: MantineTheme) => css`
-  background-color: ${theme.colors["neutrals-01"][0]};
+  background-color: ${colooors["neutrals-01"][0]};
   border-radius: 12px;
   width: 100%;
   transition: height 0.5s ease-in-out;

@@ -3,7 +3,7 @@ import { type MantineTheme } from "@mantine/styles";
 
 export const wrapper = (theme: MantineTheme) => css`
     padding: 24px;
-    background-color: ${theme.colors["neutrals-01"][0]};
+    background-color: ${colooors["neutrals-01"][0]};
     border-radius: 12px;
     margin-top: 32px;
     width: 100%;
@@ -20,10 +20,10 @@ export const badgesBlockHeader = css`
     margin-bottom: 24px;
 `;
 export const title = (theme: MantineTheme) => css`
-color: ${theme.colors["neutrals-01"][7]};
+color: ${colooors["neutrals-01"][7]};
 `;
 export const counter = (theme: MantineTheme) => css`
-color: ${theme.colors["neutrals-02"][1]};
+color: ${colooors["neutrals-02"][1]};
 `;
 export const headerLayout = css`
    align-items: center;

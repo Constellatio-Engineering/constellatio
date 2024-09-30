@@ -1,4 +1,4 @@
-import { colors } from "@/constants/styles/colors";
+import { colooors } from "@/constants/styles/colors";
 import { radius } from "@/constants/styles/radius";
 import { spacing } from "@/constants/styles/spacing";
 
@@ -14,8 +14,8 @@ export const imageWrapper = css`
   width: 100%;
   min-height: 300px;
   align-items: flex-start;
-  background-color: ${colors["neutrals-01"][0]};
-  border: 1px solid ${colors["neutrals-01"][3]};
+  background-color: ${colooors["neutrals-01"][0]};
+  border: 1px solid ${colooors["neutrals-01"][3]};
   border-radius: ${radius["radius-12"]};
   display: flex;
   gap: ${spacing["spacing-8"]};

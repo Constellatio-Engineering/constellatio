@@ -5,7 +5,8 @@ import { env } from "@/env.mjs";
 import { createClickupTask } from "@/lib/clickup/tasks/create-task";
 import { findClickupTask } from "@/lib/clickup/tasks/find-task";
 import {
-  type ClickupTask, type ClickupTaskCreate,
+  type ClickupTask,
+  type ClickupTaskCreate,
   type CurrencyCustomFieldInsertProps,
   type CustomFieldInsert,
   type DateCustomFieldInsertProps,

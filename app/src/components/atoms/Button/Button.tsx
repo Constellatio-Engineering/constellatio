@@ -31,52 +31,52 @@ const _Button: FC<TButton> = ({
     },
     root: {
       ":active": {
-        backgroundColor: styleType === "primary" ? theme.colors["neutrals-02"][2] : theme.colors["neutrals-01"][3],
+        backgroundColor: styleType === "primary" ? colooors["neutrals-02"][2] : colooors["neutrals-01"][3],
         border:
           styleType === "secondarySimple"
-            ? `1px solid ${theme.colors["neutrals-02"][2]}`
+            ? `1px solid ${colooors["neutrals-02"][2]}`
             : styleType === "tertiary" || styleType === "secondarySubtle"
-              ? `1px solid ${theme.colors["neutrals-01"][5]}`
+              ? `1px solid ${colooors["neutrals-01"][5]}`
               : "",
       },
       ":disabled": {
         backgroundColor:
           styleType === "secondarySimple" || styleType === "secondarySubtle"
-            ? theme.colors["neutrals-01"][0]
-            : theme.colors["neutrals-01"][3],
-        border: styleType !== "primary" ? `1px solid ${theme.colors["neutrals-01"][3]}` : "",
-        color: theme.colors["neutrals-01"][7],
+            ? colooors["neutrals-01"][0]
+            : colooors["neutrals-01"][3],
+        border: styleType !== "primary" ? `1px solid ${colooors["neutrals-01"][3]}` : "",
+        color: colooors["neutrals-01"][7],
       },
       ":hover": {
-        backgroundColor: styleType === "primary" ? theme.colors["neutrals-01"][9] : theme.colors["neutrals-01"][2],
+        backgroundColor: styleType === "primary" ? colooors["neutrals-01"][9] : colooors["neutrals-01"][2],
         border:
           styleType === "secondarySimple"
-            ? `1px solid ${theme.colors["neutrals-01"][9]}`
+            ? `1px solid ${colooors["neutrals-01"][9]}`
             : styleType === "tertiary" || styleType === "secondarySubtle"
-              ? `1px solid ${theme.colors["neutrals-01"][5]}`
+              ? `1px solid ${colooors["neutrals-01"][5]}`
               : "",
       },
       backgroundColor:
         styleType === "primary"
-          ? theme.colors["neutrals-02"][1]
+          ? colooors["neutrals-02"][1]
           : styleType === "secondarySimple" || styleType === "secondarySubtle"
-            ? theme.colors["neutrals-01"][0]
+            ? colooors["neutrals-01"][0]
             : styleType === "tertiary"
-              ? theme.colors["neutrals-01"][2]
+              ? colooors["neutrals-01"][2]
               : "",
       border:
         styleType === "secondarySimple"
-          ? `1px solid ${theme.colors["neutrals-01"][6]}`
+          ? `1px solid ${colooors["neutrals-01"][6]}`
           : styleType === "tertiary" || styleType === "secondarySubtle"
-            ? `1px solid ${theme.colors["neutrals-01"][3]}`
+            ? `1px solid ${colooors["neutrals-01"][3]}`
             : "",
       color:
         styleType === "primary"
-          ? theme.colors["neutrals-01"][0]
+          ? colooors["neutrals-01"][0]
           : styleType === "secondarySimple" || styleType === "secondarySubtle"
-            ? theme.colors["neutrals-02"][1]
+            ? colooors["neutrals-02"][1]
             : styleType === "tertiary"
-              ? theme.colors["neutrals-01"][9]
+              ? colooors["neutrals-01"][9]
               : "",
       fontFamily: "inherit",
       fontSize: theme.fontSizes["spacing-16"],

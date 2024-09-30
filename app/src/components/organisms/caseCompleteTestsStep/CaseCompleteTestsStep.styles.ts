@@ -11,7 +11,7 @@ export const facts = (theme: MantineTheme) => css`
 	flex-direction: column;
 	gap: 24px;
 	margin-bottom: 32px;
-	border-bottom: 1px solid ${theme.colors["neutrals-01"][5]};
+	border-bottom: 1px solid ${colooors["neutrals-01"][5]};
 	> button {
 		align-self: flex-start;
 	}

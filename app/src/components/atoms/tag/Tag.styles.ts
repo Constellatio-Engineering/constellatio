@@ -3,15 +3,15 @@ import { type MantineTheme } from "@mantine/styles";
 
 export const tag = (theme: MantineTheme) => css`
 	padding: 4px 12px;
-	background: ${theme.colors["neutrals-01"][2]};
+	background: ${colooors["neutrals-01"][2]};
 	border-radius: 40px;
 	display: inline-block;
   font-size: 14px;
 	white-space: nowrap;
-	color: ${theme.colors["neutrals-01"][9]};
+	color: ${colooors["neutrals-01"][9]};
   transition: background 0.15s ease;
   &:hover {
-    background: ${theme.colors["neutrals-01"][4]};
+    background: ${colooors["neutrals-01"][4]};
   }
   * {
     font-size: inherit;

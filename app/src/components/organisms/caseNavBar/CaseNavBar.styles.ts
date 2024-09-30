@@ -10,8 +10,8 @@ const DictionaryCSS = css`
 `;
 
 export const componentArea = ({ theme }: {theme: MantineTheme}): SerializedStyles => css`
-  background-color: ${theme.colors["neutrals-01"][0]};
-  border-bottom: 6px solid ${theme.colors["neutrals-01"][4]};
+  background-color: ${colooors["neutrals-01"][0]};
+  border-bottom: 6px solid ${colooors["neutrals-01"][4]};
   position: sticky;
   top: ${headerHeightPx}px;
   z-index: 41;
@@ -59,12 +59,12 @@ export const tab = ({
   align-items: center;
   gap: 8px;
   color: ${active || completed
-    ? theme.colors["neutrals-02"][1]
-    : theme.colors["cc-cases"][4]};
+    ? colooors["neutrals-02"][1]
+    : colooors["cc-cases"][4]};
   span {
     background-color: ${active || completed
-    ? theme.colors["cc-cases"][4]
-    : theme.colors["cc-cases"][1]};
+    ? colooors["cc-cases"][4]
+    : colooors["cc-cases"][1]};
     width: 24px;
     height: 24px;
     color: white;
@@ -73,8 +73,8 @@ export const tab = ({
     align-items: center;
     border-radius: 50%;
     color: ${active || completed
-    ? theme.colors["neutrals-01"][0]
-    : theme.colors["cc-cases"][4]};
+    ? colooors["neutrals-01"][0]
+    : colooors["cc-cases"][4]};
   }
   cursor: ${isClickable ? "pointer" : "not-allowed"};
 `;
@@ -94,8 +94,8 @@ export const progressBar = ({
   height: 6px;
   width: ${`${progress}%`};
   background-color: ${variant === "case"
-    ? theme.colors["cc-cases"][4]
-    : theme.colors["cc-dictionary"][4]};
+    ? colooors["cc-cases"][4]
+    : colooors["cc-dictionary"][4]};
   position: absolute;
   bottom: -6px;
   transition: width 0.3s ease-in-out;

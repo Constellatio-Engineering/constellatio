@@ -1,3 +1,4 @@
+import { colooors } from "@/constants/styles/colors";
 import { type UnknownMantineStylesParams } from "@/utils/types";
 
 import { type SelectStylesNames, type Styles } from "@mantine/core";
@@ -9,20 +10,20 @@ export const dropdownStyles = ({ disabled, error }: { disabled?: boolean; error:
 {
   const styles: DropdownStyles = theme => ({
     description: {
-      color: theme.colors["neutrals-01"][7],
+      color: colooors["neutrals-01"][7],
       fontSize: "14px",
       fontWeight: 500,
       lineHeight: theme.spacing["spacing-20"],
       order: 2,
     },
     dropdown: {
-      backgroundColor: theme.colors["neutrals-01"][0],
-      border: `1px solid ${theme.colors["neutrals-01"][3]}`,
+      backgroundColor: colooors["neutrals-01"][0],
+      border: `1px solid ${colooors["neutrals-01"][3]}`,
       borderRadius: theme.radius["radius-12"],
       boxShadow: "0px 8px 44px 0px rgba(0, 0, 0, 0.04)",
     },
     error: {
-      color: theme.colors["support-error"][3],
+      color: colooors["support-error"][3],
       fontSize: "14px",
       fontWeight: 500,
       lineHeight: theme.spacing["spacing-20"],
@@ -30,10 +31,10 @@ export const dropdownStyles = ({ disabled, error }: { disabled?: boolean; error:
     },
     input: {
       "&[data-disabled]": {
-        backgroundColor: theme.colors["neutrals-01"][3],
+        backgroundColor: colooors["neutrals-01"][3],
       },
       "::placeholder": {
-        color: `${theme.colors["neutrals-01"][7]} !important`,
+        color: `${colooors["neutrals-01"][7]} !important`,
         fontSize: theme.fontSizes["spacing-16"],
         fontWeight: 500,
         lineHeight: theme.spacing["spacing-24"],
@@ -41,15 +42,15 @@ export const dropdownStyles = ({ disabled, error }: { disabled?: boolean; error:
       },
       ":focus": {
         border: error
-          ? `1px solid ${theme.colors["support-error"][3]} !important`
-          : `1px solid ${theme.colors["neutrals-01"][8]} !important`,
+          ? `1px solid ${colooors["support-error"][3]} !important`
+          : `1px solid ${colooors["neutrals-01"][8]} !important`,
       },
-      backgroundColor: theme.colors["neutrals-01"][0],
+      backgroundColor: colooors["neutrals-01"][0],
       border: error
-        ? `1px solid ${theme.colors["support-error"][3]} !important`
-        : `1px solid ${theme.colors["neutrals-01"][5]}`,
+        ? `1px solid ${colooors["support-error"][3]} !important`
+        : `1px solid ${colooors["neutrals-01"][5]}`,
       borderRadius: theme.radius["radius-8"],
-      color: `${theme.colors["neutrals-02"][1]} !important`,
+      color: `${colooors["neutrals-02"][1]} !important`,
       fontSize: theme.fontSizes["spacing-16"],
       fontWeight: 500,
       lineHeight: theme.spacing["spacing-24"],
@@ -58,10 +59,10 @@ export const dropdownStyles = ({ disabled, error }: { disabled?: boolean; error:
     },
     label: {
       color: error
-        ? theme.colors["support-error"][3]
+        ? colooors["support-error"][3]
         : disabled
-          ? theme.colors["neutrals-01"][7]
-          : theme.colors["neutrals-01"][9],
+          ? colooors["neutrals-01"][7]
+          : colooors["neutrals-01"][9],
       fontSize: theme.fontSizes["spacing-16"],
       fontWeight: 400,
       lineHeight: theme.spacing["spacing-24"],
@@ -78,24 +79,24 @@ export const dropdownStyles = ({ disabled, error }: { disabled?: boolean; error:
     root: {
       ":focus-within": {
         label: {
-          color: error ? theme.colors["support-error"][3] : theme.colors["neutrals-02"][1],
+          color: error ? colooors["support-error"][3] : colooors["neutrals-02"][1],
         },
       },
       ":hover": {
         input: {
           "::placeholder": {
-            color: `${theme.colors["neutrals-02"][1]} !important`,
+            color: `${colooors["neutrals-02"][1]} !important`,
           },
           border: error
-            ? `1px solid ${theme.colors["support-error"][3]}`
-            : `1px solid ${theme.colors["neutrals-01"][6]}`,
+            ? `1px solid ${colooors["support-error"][3]}`
+            : `1px solid ${colooors["neutrals-01"][6]}`,
         },
       },
       display: "flex",
       flexDirection: "column",
     },
     wrapper: {
-      color: error ? theme.colors["support-error"][3] : theme.colors["neutrals-01"][7],
+      color: error ? colooors["support-error"][3] : colooors["neutrals-01"][7],
       margin: 0,
       order: 1,
       paddingBottom: theme.spacing["spacing-8"],

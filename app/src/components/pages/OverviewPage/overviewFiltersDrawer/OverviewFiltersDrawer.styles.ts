@@ -14,7 +14,7 @@ export const drawerStyles = () =>
       paddingBottom: 40
     },
     content: {
-      background: theme.colors["neutrals-01"][0],
+      background: colooors["neutrals-01"][0],
     },
     header: {
       padding: "0px",

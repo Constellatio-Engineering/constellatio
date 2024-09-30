@@ -1,7 +1,7 @@
 import { BodyText } from "@/components/atoms/BodyText/BodyText";
 import { FireIcon } from "@/components/Icons/Fire";
 import { InfoFilled } from "@/components/Icons/InfoFilled";
-import { colors } from "@/constants/styles/colors";
+import { colooors } from "@/constants/styles/colors";
 import { api } from "@/utils/api";
 
 import { Tooltip } from "@mantine/core";

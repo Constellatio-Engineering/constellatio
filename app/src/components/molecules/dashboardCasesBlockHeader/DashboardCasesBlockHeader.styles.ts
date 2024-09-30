@@ -15,7 +15,7 @@ export const wrapper = css`
 `;
 
 export const casesHeaderTitle = (theme: MantineTheme) => css`
-    color: ${theme.colors["neutrals-02"][1]};
+    color: ${colooors["neutrals-02"][1]};
     margin :24px 0;
     
 `;

@@ -6,7 +6,7 @@ export const wrapper = (theme: MantineTheme) => css`
    border-radius: 12px;
     overflow: hidden;
     /* padding: 12px 24px; */
-    background-color: ${theme.colors["neutrals-01"][0]};
+    background-color: ${colooors["neutrals-01"][0]};
     box-shadow: 0px 8px 24px 0px rgba(0, 0, 0, 0.06);
     position: fixed;
    bottom: 20px;
@@ -22,7 +22,7 @@ export const wrapper = (theme: MantineTheme) => css`
 export const buttonsGroup = (theme: MantineTheme) => css`
 display: flex;
 button{
-    color: ${theme.colors["neutrals-01"][9]};
+    color: ${colooors["neutrals-01"][9]};
        svg{
         vertical-align: text-bottom;
         margin-right: 8px;
@@ -34,7 +34,7 @@ button{
          position: absolute;
          width: 1px;
          height: 50%;
-         background-color: ${theme.colors["neutrals-01"][3]};
+         background-color: ${colooors["neutrals-01"][3]};
          right: 0;
          top: 0;
          bottom: 0;

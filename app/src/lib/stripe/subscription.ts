@@ -2,7 +2,7 @@ import { db } from "@/db/connection";
 import { users } from "@/db/schema";
 import { addUserToCrmUpdateQueue } from "@/lib/clickup/utils";
 import { getUserIdFromStripeEventData } from "@/lib/stripe/utils";
- 
+
 import { eq } from "drizzle-orm";
 import type Stripe from "stripe";
 

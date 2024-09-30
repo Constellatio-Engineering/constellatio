@@ -33,8 +33,8 @@ const OnboardingTutorialPopover: FunctionComponent<OnboardingTutorialPopoverProp
       opened={opened}
       styles={(theme) => ({
         arrow: {
-          backgroundColor: theme.colors["neutrals-02"][1],
-          border: `1px solid ${theme.colors["neutrals-02"][1]}`,
+          backgroundColor: colooors["neutrals-02"][1],
+          border: `1px solid ${colooors["neutrals-02"][1]}`,
           transform: "rotate(45deg) scale(2) !important",
         },
       })}>

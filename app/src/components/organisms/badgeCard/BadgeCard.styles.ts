@@ -9,16 +9,16 @@ export const wrapper = (theme: MantineTheme) => css`
     align-items: center;
     justify-content: center; */
     padding:24px;
-    background: ${theme.colors["neutrals-01"][1]};
+    background: ${colooors["neutrals-01"][1]};
     border-radius: 12px;
-    border:1px solid ${theme.colors["neutrals-01"][2]};
+    border:1px solid ${colooors["neutrals-01"][2]};
     gap:8px;
     text-align: center;
     button{
         margin: 6px auto 8px auto;
     }
     .text{
-        color: ${theme.colors["neutrals-01"][7]};
+        color: ${colooors["neutrals-01"][7]};
         p{
             margin:8px auto;
             text-align: left;

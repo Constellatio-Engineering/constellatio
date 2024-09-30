@@ -25,7 +25,7 @@ export const wrapper = (theme: MantineTheme) => css`
       align-items: center;
 
       span {
-        color: ${theme.colors["neutrals-01"][7]};
+        color: ${colooors["neutrals-01"][7]};
       }
     }
   }

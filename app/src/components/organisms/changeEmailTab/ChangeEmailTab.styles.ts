@@ -12,7 +12,7 @@ export const changeEmailModalTitle = css`
 `;
 export const changeEmailModalCaption = (theme: MantineTheme) => css`
   margin-bottom: 8px;
-  color: ${theme.colors["neutrals-01"][9]};
+  color: ${colooors["neutrals-01"][9]};
 `;
 export const changeEmailButton = css`
 margin-top:24px;

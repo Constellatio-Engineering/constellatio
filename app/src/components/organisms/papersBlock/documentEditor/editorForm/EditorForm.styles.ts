@@ -17,7 +17,7 @@ export const existingNote = () => css`
 `;
 
 export const existingNoteActions = (theme: MantineTheme) => css`
-   background: ${theme.colors["neutrals-01"][0]};
+   background: ${colooors["neutrals-01"][0]};
    width: 100%;
   margin-bottom: 24px;
    button{

@@ -14,19 +14,19 @@ const Template: FunctionComponent<ExtractProps<typeof SwitcherTab>> = args => (
       root: {},
       tab: {
         ":active": {
-          backgroundColor: theme.colors["neutrals-01"][2],
+          backgroundColor: colooors["neutrals-01"][2],
         },
         ":focus": {
-          backgroundColor: theme.colors["neutrals-01"][1],
+          backgroundColor: colooors["neutrals-01"][1],
         },
         ":hover": {
-          backgroundColor: theme.colors["neutrals-01"][1],
+          backgroundColor: colooors["neutrals-01"][1],
         },
         alignItems: "center",
         backgroundColor: "transparent",
         border: "none",
         borderRadius: theme.radius["radius-20"],
-        color: theme.colors["neutrals-02"][1],
+        color: colooors["neutrals-02"][1],
         cursor: "pointer",
         display: "flex",
         fontFamily: "inherit",

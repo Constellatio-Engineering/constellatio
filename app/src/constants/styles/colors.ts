@@ -4,7 +4,7 @@ type MantineThemeColorsReadonly = {
   [key in keyof MantineThemeColors]: Readonly<[string, string, string, string, string, string, string, string, string, string]>;
 };
 
-export const colors = {
+export const colooors = {
   "brand-01": [
     "#FBDFDD", // 0
     "#EBAEA9", // 1

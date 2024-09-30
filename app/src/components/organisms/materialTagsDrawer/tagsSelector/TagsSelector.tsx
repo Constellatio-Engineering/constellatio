@@ -1,5 +1,5 @@
 /* eslint-disable max-lines */
-import { colors } from "@/constants/styles/colors";
+import { colooors } from "@/constants/styles/colors";
 import { useInitialTags } from "@/hooks/useInitialTags";
 import { useTagsSearchResults } from "@/hooks/useTagsSearchResults";
 import { type IGenTags } from "@/services/graphql/__generated/sdk";

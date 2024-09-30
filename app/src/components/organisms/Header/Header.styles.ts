@@ -81,8 +81,8 @@ export const profileArea = (theme: MantineTheme) => css`
   position: relative;
 
   .vertical-line {
-    background-color: ${theme.colors["neutrals-01"][3]};
-    color: ${theme.colors["neutrals-01"][3]};
+    background-color: ${colooors["neutrals-01"][3]};
+    color: ${colooors["neutrals-01"][3]};
     height: 100%;
     position: relative;
     width: 2px;

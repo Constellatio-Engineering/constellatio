@@ -25,7 +25,7 @@ export const table = css`
 `;
 
 export const tableHeader = (theme: MantineTheme) => css`
-  border: 1px solid ${theme.colors["neutrals-01"][3]};
+  border: 1px solid ${colooors["neutrals-01"][3]};
 
   > * {
     &,
@@ -36,7 +36,7 @@ export const tableHeader = (theme: MantineTheme) => css`
 `;
 
 export const tableBody = (theme: MantineTheme) => css`
-border-inline: 2px solid ${theme.colors["neutrals-01"][3]};
+border-inline: 2px solid ${colooors["neutrals-01"][3]};
   border-radius: 0 0 12px 12px ;
   > * {
     &,

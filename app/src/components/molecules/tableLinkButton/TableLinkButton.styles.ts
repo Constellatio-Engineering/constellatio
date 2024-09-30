@@ -9,22 +9,22 @@ export const wrapper = (theme: MantineTheme): SerializedStyles => css`
 	padding: 0 16px;
 	gap: 8px;
 
-	border-bottom: 1px solid ${theme.colors["neutrals-01"][3]};
-	background-color: ${theme.colors["neutrals-01"][0]};
+	border-bottom: 1px solid ${colooors["neutrals-01"][3]};
+	background-color: ${colooors["neutrals-01"][0]};
 	transition: border-color 0.3s ease-in, background-color 0.3s ease-in;
 
 	&:hover {
-		border-color: ${theme.colors["neutrals-01"][4]};
-		background-color: ${theme.colors["neutrals-01"][1]};
+		border-color: ${colooors["neutrals-01"][4]};
+		background-color: ${colooors["neutrals-01"][1]};
 	}
 
 	&:active {
-		border-color: ${theme.colors["neutrals-01"][3]};
-		background-color: ${theme.colors["neutrals-01"][2]};
+		border-color: ${colooors["neutrals-01"][3]};
+		background-color: ${colooors["neutrals-01"][2]};
 	}
 
   &:focus-within{
-    border-color: ${theme.colors["neutrals-01"][4]};
-    background-color: ${theme.colors["neutrals-01"][1]};
+    border-color: ${colooors["neutrals-01"][4]};
+    background-color: ${colooors["neutrals-01"][1]};
   }
 `;

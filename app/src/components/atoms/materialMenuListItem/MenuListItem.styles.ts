@@ -1,3 +1,4 @@
+import { colooors } from "@/constants/styles/colors";
 import { type UnknownMantineStylesParams } from "@/utils/types";
 
 import { css } from "@emotion/react";
@@ -5,11 +6,11 @@ import { type ModalStylesNames } from "@mantine/core";
 import { type Styles, type MantineTheme } from "@mantine/styles";
 
 const CSSActiveStyles = ({ active, theme }: {active?: boolean; theme: MantineTheme}) => css`
-  background-color: ${theme.colors["neutrals-01"][3]};
-  border-left: 3px solid ${theme.colors["neutrals-02"][1]};
+  background-color: ${colooors["neutrals-01"][3]};
+  border-left: 3px solid ${colooors["neutrals-02"][1]};
   p {
     svg {
-      color: ${active ? theme.colors["neutrals-02"][1] : theme.colors["neutrals-01"][7]};
+      color: ${active ? colooors["neutrals-02"][1] : colooors["neutrals-01"][7]};
     }
   }
 `;
@@ -22,13 +23,13 @@ export const wrapper = ({ active, theme }: {
   outline: 0;
   padding: 12px 16px;
   cursor: pointer;
-  border-bottom: 1px solid ${theme.colors["neutrals-01"][3]};
+  border-bottom: 1px solid ${colooors["neutrals-01"][3]};
   width: 100%;
   text-align: left;
 
-  background-color: ${theme.colors["neutrals-01"][0]};
+  background-color: ${colooors["neutrals-01"][0]};
   &:hover {
-    background-color: ${theme.colors["neutrals-01"][2]};
+    background-color: ${colooors["neutrals-01"][2]};
   }
   p {
     display: flex;
@@ -40,12 +41,12 @@ export const wrapper = ({ active, theme }: {
     svg {
       min-width: 24px;
       min-height: 24px;
-      color: ${theme.colors["neutrals-01"][9]};
+      color: ${colooors["neutrals-01"][9]};
     }
   }
   .mantine-Menu-item{
     /* padding:0; */
-    border-bottom: 1px solid ${theme.colors["neutrals-01"][3]};
+    border-bottom: 1px solid ${colooors["neutrals-01"][3]};
     
   }
   .mantine-Menu-dropdown {
@@ -113,11 +114,11 @@ export const label = ({ active, theme }: {active?: boolean;theme: MantineTheme})
   white-space: nowrap;
   width: 100%;
   text-overflow: ellipsis;
-  color:${active ? theme.colors["neutrals-02"][1] : theme.colors["neutrals-01"][9]};
+  color:${active ? colooors["neutrals-02"][1] : colooors["neutrals-01"][9]};
   svg {
     margin-right: 8px;
     vertical-align: bottom;
-    color:${active ? theme.colors["neutrals-02"][1] : theme.colors["neutrals-01"][7]};
+    color:${active ? colooors["neutrals-02"][1] : colooors["neutrals-01"][7]};
   }
 `;
 

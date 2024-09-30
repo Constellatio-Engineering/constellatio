@@ -19,7 +19,7 @@ export const wrapper = ({ searchValue, size, theme }: SearchFieldSmallStylesProp
 		&-icon {
 			${searchValue &&
 			css`
-				color: ${theme.colors["neutrals-02"][2]};
+				color: ${colooors["neutrals-02"][2]};
 			`}
 
 			${size === "small" &&
@@ -50,7 +50,7 @@ export const wrapper = ({ searchValue, size, theme }: SearchFieldSmallStylesProp
 			visibility: ${searchValue ? "visible" : "hidden"};
 			top: ${size === "small" ? "10px" : "16px"};
 			right: ${size === "small" ? "10px" : "16px"};
-			background-color: ${theme.colors["neutrals-01"][0]};
+			background-color: ${colooors["neutrals-01"][0]};
       cursor: pointer;
 		}
 	}

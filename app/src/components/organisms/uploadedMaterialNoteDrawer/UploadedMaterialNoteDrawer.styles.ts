@@ -19,7 +19,7 @@ export const drawerStyles = () =>
       
     },
     content: {
-      background: theme.colors["neutrals-01"][1],
+      background: colooors["neutrals-01"][1],
     },
     header: {
       padding: "0px",
@@ -33,7 +33,7 @@ export const drawerStyles = () =>
 
 export const existingNote = (theme: MantineTheme) => css`
 padding:24px 32px;
-background-color: ${theme.colors["neutrals-01"][0]};
+background-color: ${colooors["neutrals-01"][0]};
 
 .deleteNoteBlock{
       position: absolute;
@@ -54,7 +54,7 @@ background-color: ${theme.colors["neutrals-01"][0]};
     }
 `;
 export const existingNoteActions = (theme: MantineTheme) => css`
-   background: ${theme.colors["neutrals-01"][0]};
+   background: ${colooors["neutrals-01"][0]};
    margin-bottom: 24px;
    button{
         margin-right: 8px;

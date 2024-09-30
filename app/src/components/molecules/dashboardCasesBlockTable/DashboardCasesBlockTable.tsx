@@ -105,10 +105,10 @@ const DashboardCasesBlockTable: FunctionComponent = () =>
                   <BodyText styleType="body-01-medium" css={styles.durationCell} component="p"><ClockIcon/>{timeFormatter(item?.durationToCompleteInMinutes ?? 0)}</BodyText>
                 </td>
                 <td onClick={() => routeToCase(item?.id)}>
-                  <BodyText styleType="body-01-medium" color={theme.colors["neutrals-01"][9]} component="p">{item?.mainCategoryField?.[0]?.mainCategory}</BodyText>
+                  <BodyText styleType="body-01-medium" color={colooors["neutrals-01"][9]} component="p">{item?.mainCategoryField?.[0]?.mainCategory}</BodyText>
                 </td>
                 <td onClick={() => routeToCase(item?.id)}>
-                  <BodyText styleType="body-01-medium" color={theme.colors["neutrals-01"][9]} component="p">{item?.legalArea?.legalAreaName}</BodyText>
+                  <BodyText styleType="body-01-medium" color={colooors["neutrals-01"][9]} component="p">{item?.legalArea?.legalAreaName}</BodyText>
                 </td>
                 <td>
                   <BookmarkButton

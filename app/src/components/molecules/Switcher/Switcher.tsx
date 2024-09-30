@@ -27,22 +27,22 @@ export const Switcher: FC<SwitcherProps> = ({
     tab: {
       ...theme.fn.focusStyles(),
       "&:active": {
-        backgroundColor: theme.colors["neutrals-01"][2],
+        backgroundColor: colooors["neutrals-01"][2],
       },
       "&:focus": {
-        backgroundColor: theme.colors["neutrals-01"][1],
+        backgroundColor: colooors["neutrals-01"][1],
       },
       "&:hover": {
-        backgroundColor: theme.colors["neutrals-01"][1],
+        backgroundColor: colooors["neutrals-01"][1],
       },
       "&[data-active]": {
-        backgroundColor: theme.colors["neutrals-01"][1],
+        backgroundColor: colooors["neutrals-01"][1],
       },
       alignItems: "center",
       backgroundColor: "transparent",
       border: "none",
       borderRadius: theme.radius["radius-20"],
-      color: theme.colors["neutrals-02"][1],
+      color: colooors["neutrals-02"][1],
       cursor: "pointer",
       display: "flex",
       fontFamily: "inherit",
@@ -75,7 +75,7 @@ export const Switcher: FC<SwitcherProps> = ({
 
     tabsList: {
       alignItems: "center",
-      backgroundColor: theme.colors["neutrals-01"][4],
+      backgroundColor: colooors["neutrals-01"][4],
       borderRadius: theme.radius.full,
       display: "flex",
       justifyContent: "space-between",

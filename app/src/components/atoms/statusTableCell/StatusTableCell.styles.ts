@@ -11,7 +11,7 @@ export const wrapper = (theme: MantineTheme): SerializedStyles => css`
 	gap: 8px;
 
 	border: none;
-	border-bottom: 1px solid ${theme.colors["neutrals-01"][3]};
-	background-color: ${theme.colors["neutrals-01"][0]};
+	border-bottom: 1px solid ${colooors["neutrals-01"][3]};
+	background-color: ${colooors["neutrals-01"][0]};
 	transition: border-color 0.3s ease-in, background-color 0.3s ease-in;
 `;

@@ -1,3 +1,6 @@
+import { colooors } from "@/constants/styles/colors";
+import { spaciiing } from "@/constants/styles/spacing";
+
 import styled from "@emotion/styled";
 import { type MantineTheme, type Styles, type SwitchStylesNames, type SwitchStylesParams } from "@mantine/core";
 
@@ -37,26 +40,26 @@ export const OutputWrapper = styled.div`
   width: 50%;
   display: flex;
   flex-direction: column;
-  gap: ${({ theme }) => theme.spacing["spacing-8"]};
-  padding: ${({ theme }) => theme.spacing["spacing-12"]};
+  gap: ${spaciiing["spacing-8"]};
+  padding: ${spaciiing["spacing-12"]};
   flex: 1 0 0;
   border-radius: ${({ theme }) => theme.radius["radius-12"]};
-  border: 1px solid ${({ theme }) => theme.colors["neutrals-01"][3]};
-  background-color: ${({ theme }) => theme.colors["neutrals-01"][2]};
+  border: 1px solid ${colooors["neutrals-01"][3]};
+  background-color: ${colooors["neutrals-01"][2]};
 `;
 
 export const CardItemWrapper = styled.div`
   display: flex;
   align-items: center;
   justify-content: space-between;
-  gap: ${({ theme }) => theme.spacing["spacing-32"]};
+  gap: ${spaciiing["spacing-32"]};
 
   > span {
     min-width: 26px;
     height: 26px;
     border-radius: 50%;
-    background-color: ${({ theme }) => theme.colors["neutrals-01"][8]};
-    color: ${({ theme }) => theme.colors["neutrals-01"][0]};
+    background-color: ${colooors["neutrals-01"][8]};
+    color: ${colooors["neutrals-01"][0]};
     display: flex;
     align-items: center;
     justify-content: center;
@@ -64,8 +67,8 @@ export const CardItemWrapper = styled.div`
     transition: all 0.3s ease;
 
     &:hover {
-      background-color: ${({ theme }) => theme.colors["neutrals-02"][1]};
-      color: ${({ theme }) => theme.colors["neutrals-01"][3]};
+      background-color: ${colooors["neutrals-02"][1]};
+      color: ${colooors["neutrals-01"][3]};
     }
   }
 `;
@@ -73,16 +76,16 @@ export const CardItemWrapper = styled.div`
 export const CardItem = styled.div`
   display: flex;
   align-items: center;
-  gap: ${({ theme }) => theme.spacing["spacing-8"]};
-  padding: ${({ theme }) => theme.spacing["spacing-12"]};
+  gap: ${spaciiing["spacing-8"]};
+  padding: ${spaciiing["spacing-12"]};
   justify-content: space-between;
   border-radius: ${({ theme }) => theme.radius["radius-12"]};
-  border: 1px solid ${({ theme }) => theme.colors["neutrals-01"][4]};
-  background-color: ${({ theme }) => theme.colors["neutrals-01"][0]};
+  border: 1px solid ${colooors["neutrals-01"][4]};
+  background-color: ${colooors["neutrals-01"][0]};
   transition: background-color 0.3s ease;
 
   &:active{
-    background-color: ${({ theme }) => theme.colors["neutrals-01"][1]};
+    background-color: ${colooors["neutrals-01"][1]};
   }
 `;
 
@@ -97,17 +100,17 @@ export const switchStyle = ({ checked }: { checked: boolean }): SwitchStyles =>
 
       svg: {
         color: checked
-          ? `${theme.colors["support-success"][2]} !important`
-          : `${theme.colors["support-error"][2]} !important`,
+          ? `${colooors["support-success"][2]} !important`
+          : `${colooors["support-error"][2]} !important`,
       },
     },
     track: {
       backgroundColor: checked
-        ? `${theme.colors["support-success"][3]} !important`
-        : `${theme.colors["support-error"][3]} !important`,
+        ? `${colooors["support-success"][3]} !important`
+        : `${colooors["support-error"][3]} !important`,
       borderColor: checked
-        ? ` ${theme.colors["support-success"][1]} !important`
-        : ` ${theme.colors["support-error"][1]} !important`,
+        ? ` ${colooors["support-success"][1]} !important`
+        : ` ${colooors["support-error"][1]} !important`,
       cursor: "pointer",
     },
   });

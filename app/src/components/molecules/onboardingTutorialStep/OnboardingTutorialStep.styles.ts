@@ -1,3 +1,4 @@
+import { colooors } from "@/constants/styles/colors";
 import { type MantineCssObjectStyles } from "@/utils/types";
 
 import { css } from "@emotion/react";
@@ -6,7 +7,7 @@ import { type MantineTheme } from "@mantine/styles";
 export const popoverDropdownStyles = () => 
 {
   const styles: MantineCssObjectStyles = (theme) => ({
-    backgroundColor: theme.colors["neutrals-02"][1],
+    backgroundColor: colooors["neutrals-02"][1],
     border: "none",
     borderRadius: "12px 12px 14px 14px",
     boxShadow: "0px 8px 24px 0px rgba(0, 0, 0, 0.16)",
@@ -27,12 +28,12 @@ export const stepHeader = css`
 
 export const countLabel = (theme: MantineTheme) => css`
 	> div {
-		background-color: ${theme.colors["neutrals-02"][2]};
+		background-color: ${colooors["neutrals-02"][2]};
 	}
 `;
 
 export const stepBody = (theme: MantineTheme) => css`
-	background-color: ${theme.colors["neutrals-01"][0]};
+	background-color: ${colooors["neutrals-01"][0]};
   display: flex;
   flex-direction: column;
   padding-bottom: 24px;
@@ -49,7 +50,7 @@ export const stepItem = (theme: MantineTheme) => css`
 display: flex;
 padding: 20px 24px;
 gap: 12px;
-border-bottom: 1px solid ${theme.colors["neutrals-01"][3]};
+border-bottom: 1px solid ${colooors["neutrals-01"][3]};
 `;
 
 export const iconBox = (theme: MantineTheme) => css`
@@ -60,7 +61,7 @@ border-radius: 50%;
 display: flex;
 align-items: center;
 justify-content: center;
-border: 1px solid ${theme.colors["neutrals-01"][3]};
+border: 1px solid ${colooors["neutrals-01"][3]};
 `;
 
 export const itemContent = css`

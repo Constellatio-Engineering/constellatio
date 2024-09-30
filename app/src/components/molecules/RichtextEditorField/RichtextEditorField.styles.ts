@@ -20,8 +20,8 @@ export const richtextEditorFieldStyles = (): RichtextEditorFieldStyles =>
             height: "20px",
             width: "20px",
           },
-          backgroundColor: theme.colors["neutrals-01"][1],
-          border: `1px solid ${theme.colors["neutrals-01"][3]}`,
+          backgroundColor: colooors["neutrals-01"][1],
+          border: `1px solid ${colooors["neutrals-01"][3]}`,
           borderRadius: "12px",
           display: "flex",
           flexDirection: "column",
@@ -40,7 +40,7 @@ export const richtextEditorFieldStyles = (): RichtextEditorFieldStyles =>
       },
     },
     root: {
-      background: `${theme.colors["neutrals-01"][0]}`,
+      background: `${colooors["neutrals-01"][0]}`,
       borderRadius: "12px",
       overflow: "hidden"
     },

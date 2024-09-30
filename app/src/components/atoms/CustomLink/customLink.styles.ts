@@ -6,20 +6,20 @@ export const customLinkStyles = ({ stylesOverwrite, styleType }: TLink) =>
 {
   const styles: Sx = (theme) => ({
     ":disabled": {
-      color: theme.colors["neutrals-01"][7],
+      color: colooors["neutrals-01"][7],
     },
     ":hover": {
-      color: theme.colors["neutrals-02"][1],
+      color: colooors["neutrals-02"][1],
       textDecoration: "underline",
     },
     color:
       styleType === "link-primary"
-        ? theme.colors["neutrals-02"][2]
+        ? colooors["neutrals-02"][2]
         : styleType === "link-primary-ts"
-          ? theme.colors["transparency-01"][4]
+          ? colooors["transparency-01"][4]
           : styleType === "link-secondary"
-            ? theme.colors["neutrals-01"][8]
-            : theme.colors["neutrals-02"][1],
+            ? colooors["neutrals-01"][8]
+            : colooors["neutrals-02"][1],
     fontFamily:
       styleType === "link-content" || styleType === "link-content-title"
         ? `${theme.headings.fontFamily}, serif}`

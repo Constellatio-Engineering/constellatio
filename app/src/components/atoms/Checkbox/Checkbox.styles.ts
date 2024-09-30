@@ -27,7 +27,7 @@ export const checkboxStyles = ({
       ...checkboxBodyOverride,
     },
     error: {
-      color: theme.colors["support-error"][3],
+      color: colooors["support-error"][3],
       fontSize: "14px",
       fontWeight: 500,
       lineHeight: theme.spacing["spacing-20"],
@@ -35,7 +35,7 @@ export const checkboxStyles = ({
       paddingLeft: theme.spacing["spacing-8"],
     },
     icon: {
-      color: disabled ? `${theme.colors["neutrals-01"][7]} !important` : `${theme.colors["neutrals-02"][1]} !important`,
+      color: disabled ? `${colooors["neutrals-01"][7]} !important` : `${colooors["neutrals-02"][1]} !important`,
       height: "10.5px",
       width: "10.5px",
     },
@@ -47,16 +47,16 @@ export const checkboxStyles = ({
     },
     input: {
       ":checked": {
-        backgroundColor: disabled ? theme.colors["neutrals-01"][3] : theme.colors["neutrals-01"][0],
-        borderColor: !disabled ? theme.colors["neutrals-02"][1] : "",
+        backgroundColor: disabled ? colooors["neutrals-01"][3] : colooors["neutrals-01"][0],
+        borderColor: !disabled ? colooors["neutrals-02"][1] : "",
       },
       ":hover": {
-        borderColor: !disabled ? theme.colors["neutrals-02"][1] : "",
+        borderColor: !disabled ? colooors["neutrals-02"][1] : "",
       },
-      backgroundColor: theme.colors["neutrals-01"][0],
+      backgroundColor: colooors["neutrals-01"][0],
       border: error
-        ? `1px solid ${theme.colors["support-error"][3]} !important`
-        : `1px solid ${theme.colors["neutrals-01"][5]}`,
+        ? `1px solid ${colooors["support-error"][3]} !important`
+        : `1px solid ${colooors["neutrals-01"][5]}`,
       borderRadius: theme.radius["radius-4"],
       cursor: "pointer",
       height: "20px",
@@ -64,7 +64,7 @@ export const checkboxStyles = ({
       width: "20px"
     },
     label: {
-      color: disabled ? theme.colors["neutrals-01"][7] : theme.colors["neutrals-02"][1],
+      color: disabled ? colooors["neutrals-01"][7] : colooors["neutrals-02"][1],
       fontSize: theme.fontSizes["spacing-16"],
       fontWeight: 500,
       lineHeight: theme.spacing["spacing-24"],

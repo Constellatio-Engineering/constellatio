@@ -1,4 +1,4 @@
-import { colors } from "@/constants/styles/colors";
+import { colooors } from "@/constants/styles/colors";
 import { type UnknownMantineStylesParams } from "@/utils/types";
 
 import { css } from "@emotion/react";
@@ -25,8 +25,8 @@ export const richtextEditorFieldStyles = ({
             height: "20px",
             width: "20px",
           },
-          backgroundColor: theme.colors["neutrals-01"][1],
-          border: `1px solid ${theme.colors["neutrals-01"][3]}`,
+          backgroundColor: colooors["neutrals-01"][1],
+          border: `1px solid ${colooors["neutrals-01"][3]}`,
           borderRadius: "12px",
           display: "flex",
           flexDirection: "column",
@@ -45,7 +45,7 @@ export const richtextEditorFieldStyles = ({
       },
     },
     root: {
-      background: `${theme.colors["neutrals-01"][0]}`,
+      background: `${colooors["neutrals-01"][0]}`,
       ...(hasError && {
         borderColor: colors["support-error"][3],
       }),
@@ -90,7 +90,7 @@ export const label = (hasError: boolean) => css`
 export const error = css`
   margin-top: 8px;
   font-weight: 500;
-  color: ${colors["support-error"][3]};
+  color: ${colooors["support-error"][3]};
   font-size: 14px;
 `;
 

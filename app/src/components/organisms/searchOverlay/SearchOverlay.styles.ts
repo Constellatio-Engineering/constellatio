@@ -24,7 +24,7 @@ export const drawerStyles = () =>
         gap: "16px",
       },
 
-      backgroundColor: theme.colors["neutrals-01"][0],
+      backgroundColor: colooors["neutrals-01"][0],
       boxShadow: "0px 4px 20px 0px rgba(0, 0, 0, 0.05)",
       height: "auto !important",
       minHeight: "450px",
@@ -49,7 +49,7 @@ export const suggestionsLeft = (theme: MantineTheme) => css`
 	flex-direction: column;
 	padding: 40px 0 60px 60px;
 	gap: 40px;
-	border-right: 1px solid ${theme.colors["neutrals-01"][3]};
+	border-right: 1px solid ${colooors["neutrals-01"][3]};
 
 	.emptyStateCard {
 		display: flex;

@@ -11,7 +11,7 @@ import { HintsAccordion } from "@/components/molecules/HintsAccordion/HintsAccor
 import { ResultCard } from "@/components/molecules/ResultCard/ResultCard";
 import { Richtext } from "@/components/molecules/Richtext/Richtext";
 import RichtextOverwrite from "@/components/organisms/FillGapsGame/RichtextOverwrite";
-import { colors } from "@/constants/styles/colors";
+import { colooors } from "@/constants/styles/colors";
 import useContextAndErrorIfNull from "@/hooks/useContextAndErrorIfNull";
 import { InvalidateQueriesContext } from "@/provider/InvalidateQueriesProvider";
 import { type IGenFillInGapsGame } from "@/services/graphql/__generated/sdk";
@@ -19,6 +19,7 @@ import useFillGapsGameStore from "@/stores/fillGapsGame.store";
 import { api } from "@/utils/api";
 
 import { Title } from "@mantine/core";
+import { colors } from "@storybook/node-logger";
 import React, {
   type FC,
   type ReactElement,

@@ -3,17 +3,17 @@ import { type MantineTheme } from "@mantine/styles";
 
 const CSSClickableEffect = (theme: MantineTheme) => css`
   &:hover {
-	border-color: ${theme.colors["neutrals-01"][4]};
-		background-color: ${theme.colors["neutrals-01"][1]};
+	border-color: ${colooors["neutrals-01"][4]};
+		background-color: ${colooors["neutrals-01"][1]};
   }
   &:active {
-		border-color: ${theme.colors["neutrals-01"][3]};
-		background-color: ${theme.colors["neutrals-01"][2]};
+		border-color: ${colooors["neutrals-01"][3]};
+		background-color: ${colooors["neutrals-01"][2]};
 	}
 
 	&:focus {
-		border-color: ${theme.colors["neutrals-01"][4]};
-		background-color: ${theme.colors["neutrals-01"][1]};
+		border-color: ${colooors["neutrals-01"][4]};
+		background-color: ${colooors["neutrals-01"][1]};
 	}
 	`;
 
@@ -35,11 +35,11 @@ export const wrapper = ({
 	padding: 0 16px;
 	align-items: center;
 	gap: 8px;
-	border-bottom: 1px solid ${theme.colors["neutrals-01"][3]};
-	background-color: ${theme.colors["neutrals-01"][0]};
+	border-bottom: 1px solid ${colooors["neutrals-01"][3]};
+	background-color: ${colooors["neutrals-01"][0]};
 	color: ${variant === "titleTableCell"
-    ? theme.colors["neutrals-02"][2]
-    : theme.colors["neutrals-01"][9]};
+    ? colooors["neutrals-02"][2]
+    : colooors["neutrals-01"][9]};
 	transition: border-color 0.3s ease-in, background-color 0.3s ease-in;
 
 	${clickable && CSSClickableEffect(theme)}

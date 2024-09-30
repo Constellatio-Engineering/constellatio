@@ -1,4 +1,4 @@
-import { colors } from "@/constants/styles/colors";
+import { colooors } from "@/constants/styles/colors";
 
 import { css } from "@emotion/react";
 
@@ -11,7 +11,7 @@ export const repliesWrapper = css`
 
 export const listItemAddReplyButtonWrapper = css`
   padding: 0;
-  border: 1px solid ${colors["neutrals-01"][5]};
+  border: 1px solid ${colooors["neutrals-01"][5]};
 `;
 
 export const test = css`

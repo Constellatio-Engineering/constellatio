@@ -20,14 +20,14 @@ export const header = (theme: MantineTheme) => css`
 	display: flex;
 	align-items: center;
 	justify-content: center;
-	background-color: ${theme.colors["brand-01"][4]};
+	background-color: ${colooors["brand-01"][4]};
 	background-size: 100%;
 	position: relative;
 
 	h2 {
     text-align: center;
 		z-index: 1;
-		color: ${theme.colors["neutrals-01"][0]};
+		color: ${colooors["neutrals-01"][0]};
 	}
 `;
 
@@ -49,7 +49,7 @@ export const headerContentWrapper = css`
 
 export const navBar = (theme: MantineTheme) => css`
 	width: 100%;
-	background-color: ${theme.colors["neutrals-01"][0]};
+	background-color: ${colooors["neutrals-01"][0]};
 `;
 
 export const navBarContentWrapper = css`

@@ -45,7 +45,7 @@ export const AuthPage: FC<AuthPageProps> = ({ tab }) =>
         pt={20}
         css={styles.wrapper}
         sx={(theme) => ({
-          backgroundColor: theme.colors["neutrals-01"][0],
+          backgroundColor: colooors["neutrals-01"][0],
           marginRight: 0,
           overflowY: "auto",
           paddingTop: "0px !important",

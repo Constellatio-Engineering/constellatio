@@ -42,7 +42,7 @@ export const newEarnedModalStyle = (): ModalStyles =>
 
 export const customModalHeader = (theme: MantineTheme) => css`
   text-align: center;
-  color: ${theme.colors["neutrals-02"][1]};
+  color: ${colooors["neutrals-02"][1]};
   padding: 24px 0;
   svg {
     position: absolute;

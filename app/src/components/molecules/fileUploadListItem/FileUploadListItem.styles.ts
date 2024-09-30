@@ -3,7 +3,7 @@ import { type MantineTheme } from "@mantine/styles";
 
 export const wrapper = (theme: MantineTheme) => css`
 padding: 16px;
-border-bottom:1px solid ${theme.colors["neutrals-01"][2]};
+border-bottom:1px solid ${colooors["neutrals-01"][2]};
 
 display:flex;
 justify-content:space-between;
@@ -22,7 +22,7 @@ text-overflow: ellipsis;
     svg{
         vertical-align: text-bottom;
     }
-    color:${theme.colors["support-error"][3]};
+    color:${colooors["support-error"][3]};
 
 }
 `;

@@ -1,4 +1,4 @@
-import { colors } from "@/constants/styles/colors";
+import { colooors } from "@/constants/styles/colors";
 
 import { css } from "@emotion/react";
 
@@ -14,11 +14,11 @@ export const categoryTitleWrapper = css`
   width: 100%;
   height: 60px;
   box-sizing: border-box;
-  border-bottom: 1px solid ${colors["neutrals-01"][3]};
+  border-bottom: 1px solid ${colooors["neutrals-01"][3]};
 `;
 
 export const activeFiltersCount = css`
-  color: ${colors["neutrals-01"][7]};
+  color: ${colooors["neutrals-01"][7]};
 `;
 
 export const categoryActionsWrapper = css`
@@ -28,7 +28,7 @@ export const categoryActionsWrapper = css`
 `;
 
 export const divider = css`
-  border-right: 1px solid ${colors["neutrals-01"][3]};
+  border-right: 1px solid ${colooors["neutrals-01"][3]};
   height: 24px;
 `;
 
@@ -36,7 +36,7 @@ export const resetButton = css`
   padding: 8px;
   text-decoration: underline;
   font-weight: 500;
-  color: ${colors["neutrals-01"][8]};
+  color: ${colooors["neutrals-01"][8]};
   font-size: 16px;
 `;
 
@@ -45,7 +45,7 @@ export const expandIconWrapper = css`
 `;
 
 export const itemsWrapper = css`
-  background-color: ${colors["neutrals-01"][1]};
+  background-color: ${colooors["neutrals-01"][1]};
 `;
 
 export const itemWrapperCollapsed = css`

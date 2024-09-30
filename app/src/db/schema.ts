@@ -4,11 +4,23 @@ import { getCurrentDate } from "@/utils/utils";
 
 import { type InferInsertModel, type InferSelectModel, relations } from "drizzle-orm";
 import {
-  text, pgTable, integer, pgEnum, uuid, smallint, unique, timestamp, primaryKey, index, type AnyPgColumn, serial, uniqueIndex,
+  type AnyPgColumn,
   boolean,
-  type PgTable,
+  date,
+  index,
+  integer,
   type PgColumn,
-  date
+  pgEnum,
+  pgTable,
+  type PgTable,
+  primaryKey,
+  serial,
+  smallint,
+  text,
+  timestamp,
+  unique,
+  uniqueIndex,
+  uuid
 } from "drizzle-orm/pg-core";
 
 // type InferPgSelectModel1<T extends PgTable> = {

@@ -1,4 +1,4 @@
-import { colors } from "@/constants/styles/colors";
+import { colooors } from "@/constants/styles/colors";
 import { radius } from "@/constants/styles/radius";
 import { spacing } from "@/constants/styles/spacing";
 import { globalStyles } from "@/styles/globals.style";
@@ -35,10 +35,10 @@ const CustomThemingProvider: FunctionComponent<Props> = ({ children }) =>
 {
   const scrollAreaStyles: Styles<ScrollAreaStylesNames, ScrollAreaStylesParams> = theme => ({
     scrollbar: {
-      backgroundColor: theme.colors["neutrals-01"][0],
+      backgroundColor: colooors["neutrals-01"][0],
     },
     thumb: {
-      backgroundColor: theme.colors["neutrals-01"][4],
+      backgroundColor: colooors["neutrals-01"][4],
       borderRadius: theme.radius.full,
     },
   });

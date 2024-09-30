@@ -44,5 +44,5 @@ export const text = css`
 }
 `;
 export const semesterText = (theme: MantineTheme) => css`
-    color: ${theme.colors["neutrals-01"][7]};
+    color: ${colooors["neutrals-01"][7]};
 `;

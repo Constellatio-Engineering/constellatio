@@ -1,4 +1,4 @@
-import { colors } from "@/constants/styles/colors";
+import { colooors } from "@/constants/styles/colors";
 import { spacing } from "@/constants/styles/spacing";
 import { type MantineCssObjectStyles } from "@/utils/types";
 
@@ -8,7 +8,7 @@ import {
 } from "@mantine/core";
 
 export const RichTextStyles = css`
-  color: ${colors["neutrals-01"][9]};
+  color: ${colooors["neutrals-01"][9]};
 
   h1,
   h2,
@@ -56,9 +56,9 @@ type CalloutStyles = MantineCssObjectStyles;
 export const calloutStyles = (): CalloutStyles =>
 {
   const styles = (theme: MantineTheme): CSSObject => ({
-    backgroundColor: theme.colors["neutrals-01"][0],
+    backgroundColor: colooors["neutrals-01"][0],
     borderRadius: theme.radius["radius-12"],
-    borderTop: `8px solid ${theme.colors["support-warning"][2]}`,
+    borderTop: `8px solid ${colooors["support-warning"][2]}`,
     padding: theme.spacing["spacing-24"],
   });
   return styles;

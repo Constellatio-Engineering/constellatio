@@ -1,4 +1,4 @@
-import { colors } from "@/constants/styles/colors";
+import { colooors } from "@/constants/styles/colors";
 import { type UnknownMantineStylesParams } from "@/utils/types";
 
 import { css } from "@emotion/react";
@@ -24,7 +24,7 @@ export const drawerStyles = () =>
       width: "100%",
     },
     content: {
-      background: theme.colors["neutrals-01"][1],
+      background: colooors["neutrals-01"][1],
     },
     header: {
       padding: "0px",
@@ -42,7 +42,7 @@ export const contentWrapper = css`
 
 export const ctaWrapper = css`
   align-items: flex-start;
-  background: ${colors["neutrals-01"][0]};
+  background: ${colooors["neutrals-01"][0]};
   button {
     flex: 1;
   }

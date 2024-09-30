@@ -18,7 +18,7 @@ export const modalStyles = (): ModalStyles =>
     close: {
       height: "32px",
       svg: {
-        color: theme.colors["neutrals-02"][1],
+        color: colooors["neutrals-02"][1],
         height: "26px !important",
         width: "26px !important",
       },
@@ -34,7 +34,7 @@ export const modalStyles = (): ModalStyles =>
       padding: `0 0 ${theme.spacing["spacing-16"]} 0`,
     },
     overlay: {
-      backgroundColor: theme.colors["transparency-01"][5],
+      backgroundColor: colooors["transparency-01"][5],
     },
     title: {
       fontFamily: `${theme.fontFamily}`,

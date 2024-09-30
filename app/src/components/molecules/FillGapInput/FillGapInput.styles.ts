@@ -1,3 +1,4 @@
+import { colooors } from "@/constants/styles/colors";
 import { type UnknownMantineStylesParams } from "@/utils/types";
 
 import { type Styles, type TextInputStylesNames } from "@mantine/core";
@@ -22,10 +23,10 @@ export const fillGapInputStyles = ({ index, status, width = 145 }: FillGapInputS
         backgroundColor: "transparent",
         color:
           status === "default"
-            ? theme.colors["neutrals-02"][1]
+            ? colooors["neutrals-02"][1]
             : status === "success"
-              ? theme.colors["support-success"][4]
-              : theme.colors["support-error"][3],
+              ? colooors["support-success"][4]
+              : colooors["support-error"][3],
         opacity: 1,
       },
       alignItems: "flex-start",
@@ -33,18 +34,18 @@ export const fillGapInputStyles = ({ index, status, width = 145 }: FillGapInputS
       border: "none",
       borderBottom: `1px solid ${
         status === "default"
-          ? theme.colors["neutrals-01"][8]
+          ? colooors["neutrals-01"][8]
           : status === "success"
-            ? theme.colors["support-success"][4]
-            : theme.colors["support-error"][3]
+            ? colooors["support-success"][4]
+            : colooors["support-error"][3]
       }`,
       borderRadius: 0,
       color:
         status === "default"
-          ? theme.colors["neutrals-02"][1]
+          ? colooors["neutrals-02"][1]
           : status === "success"
-            ? theme.colors["support-success"][4]
-            : theme.colors["support-error"][3],
+            ? colooors["support-success"][4]
+            : colooors["support-error"][3],
       display: "flex",
       fontSize: theme.fontSizes["spacing-16"],
       fontWeight: 500,
@@ -56,7 +57,7 @@ export const fillGapInputStyles = ({ index, status, width = 145 }: FillGapInputS
       paddingBottom: theme.spacing["spacing-4"],
     },
     rightSection: {
-      color: status === "success" ? theme.colors["support-success"][4] : theme.colors["support-error"][3],
+      color: status === "success" ? colooors["support-success"][4] : colooors["support-error"][3],
       height: 16,
       top: "5px",
       width: 16,
@@ -73,7 +74,7 @@ export const fillGapInputStyles = ({ index, status, width = 145 }: FillGapInputS
     wrapper: {
       "&::before": {
         alignItems: "center",
-        border: `1px solid ${theme.colors["neutrals-02"][1]}`,
+        border: `1px solid ${colooors["neutrals-02"][1]}`,
         borderRadius: "50%",
         content: index ? `"${index}"` : "''",
         display: status === "default" ? "none" : "flex",

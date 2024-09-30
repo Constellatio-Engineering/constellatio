@@ -10,39 +10,39 @@ export const casesTable = (theme: MantineTheme) => css`
   text-align: left;
   border-radius: 12px;
   thead {
-    background: ${theme.colors["neutrals-01"][2]};
+    background: ${colooors["neutrals-01"][2]};
   }
   tbody {
     tr {
       transition: all 300ms ease-in-out;
       &:hover {
         transition: all 300ms ease-in-out;
-        background: ${theme.colors["neutrals-01"][2]};
+        background: ${colooors["neutrals-01"][2]};
         > td > button {
-          background: ${theme.colors["neutrals-01"][2]};
+          background: ${colooors["neutrals-01"][2]};
         }
         > td > div {
-          background: ${theme.colors["neutrals-01"][2]};
+          background: ${colooors["neutrals-01"][2]};
         }
       }
     }
   }
   td,
   th {
-    border-block: 1px solid ${theme.colors["neutrals-01"][3]};
+    border-block: 1px solid ${colooors["neutrals-01"][3]};
     width: max-content;
     padding: 0 16px;
     white-space: nowrap;
     &:first-of-type {
-      border-left: 1px solid ${theme.colors["neutrals-01"][3]};
+      border-left: 1px solid ${colooors["neutrals-01"][3]};
     }
     &:last-of-type {
-      border-right: 1px solid ${theme.colors["neutrals-01"][3]};
+      border-right: 1px solid ${colooors["neutrals-01"][3]};
     }
   }
   th {
     padding: 8px 16px;
-    color: ${theme.colors["neutrals-01"][7]};
+    color: ${colooors["neutrals-01"][7]};
     text-transform: uppercase;
   }
   td {
@@ -53,7 +53,7 @@ export const casesTable = (theme: MantineTheme) => css`
 
   td.primaryCell {
     &:hover {
-      background-color: ${theme.colors["neutrals-01"][1]};
+      background-color: ${colooors["neutrals-01"][1]};
       cursor: pointer;
     }
   }
@@ -73,7 +73,7 @@ export const casesTable = (theme: MantineTheme) => css`
   }
 `;
 export const durationCell = (theme: MantineTheme) => css`
-  color: ${theme.colors["neutrals-01"][9]};
+  color: ${colooors["neutrals-01"][9]};
   overflow: hidden;
   text-overflow: ellipsis;
   svg {

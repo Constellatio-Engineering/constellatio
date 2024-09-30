@@ -1,4 +1,4 @@
-import { colors } from "@/constants/styles/colors";
+import { colooors } from "@/constants/styles/colors";
 
 import { type SerializedStyles, css } from "@emotion/react";
 import { type MantineTheme } from "@mantine/styles";
@@ -18,13 +18,13 @@ export const wrapper = ({ size, theme }: {
 	width: ${size === "big" ? 40 : 32}px;
 	height: ${size === "big" ? 40 : 32}px;
 	border-radius: 50%;
-	border: 1px solid ${theme.colors["neutrals-01"][3]};
-	background-color: ${theme.colors["neutrals-01"][0]};
+	border: 1px solid ${colooors["neutrals-01"][3]};
+	background-color: ${colooors["neutrals-01"][0]};
 	transition: border-color 0.3s ease-in, background-color 0.3s ease-in;
 
 	&:hover {
-		border-color: ${theme.colors["neutrals-01"][5]};
-		background-color: ${theme.colors["neutrals-01"][2]};
+		border-color: ${colooors["neutrals-01"][5]};
+		background-color: ${colooors["neutrals-01"][2]};
 	}
 
   &:disabled {
@@ -36,8 +36,8 @@ export const disabledStyles = css`
   &:disabled {
     color: #9e9e9e;
     cursor: default;
-    border-color: ${colors["neutrals-01"][4]};
-    background-color: ${colors["neutrals-01"][2]};
+    border-color: ${colooors["neutrals-01"][4]};
+    background-color: ${colooors["neutrals-01"][2]};
   }
 `;
 

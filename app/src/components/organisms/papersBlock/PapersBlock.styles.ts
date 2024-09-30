@@ -1,3 +1,4 @@
+import { colooors } from "@/constants/styles/colors";
 import { type UnknownMantineStylesParams } from "@/utils/types";
 
 import { css } from "@emotion/react";
@@ -5,28 +6,28 @@ import { type DrawerStylesNames } from "@mantine/core";
 import { type Styles, type MantineTheme } from "@mantine/styles";
 
 export const wrapper = (theme: MantineTheme) => css`
-        background: ${theme.colors["neutrals-01"][0]};
+        background: ${colooors["neutrals-01"][0]};
         border-radius:12px;
         margin-bottom: 40px;
-        border:1px solid ${theme.colors["neutrals-01"][2]};
+        border:1px solid ${colooors["neutrals-01"][2]};
         .test{
             background:red;
         }
         box-shadow: 0px 8px 44px 0px rgba(0, 0, 0, 0.04);
 `;
 export const papersBlockHead = (theme: MantineTheme) => css`
-    color: ${theme.colors["neutrals-02"][0]};
+    color: ${colooors["neutrals-02"][0]};
     display: flex;
     justify-content: space-between;
     align-items: center;
     .count{
-        color: ${theme.colors["neutrals-01"][7]};
+        color: ${colooors["neutrals-01"][7]};
     }
     h4{
-      color: ${theme.colors["neutrals-02"][1]};
+      color: ${colooors["neutrals-02"][1]};
     }
         padding:24px;
-    border-bottom: 1px solid ${theme.colors["neutrals-01"][2]};
+    border-bottom: 1px solid ${colooors["neutrals-01"][2]};
 `;
 export const papersBlockTable = css`
 padding:24px;
@@ -40,7 +41,7 @@ export const drawerStyles = () =>
     body: {
       ".call-to-action": {
         alignItems: "flex-start",
-        background: theme.colors["neutrals-01"][0],
+        background: colooors["neutrals-01"][0],
         button: {
           flex: 1
         },
@@ -67,7 +68,7 @@ export const drawerStyles = () =>
       width: "100%",
     },
     content: {
-      backgroundColor: theme.colors["neutrals-01"][1],
+      backgroundColor: colooors["neutrals-01"][1],
     },
     header: {
       padding: 0,

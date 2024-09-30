@@ -1,3 +1,4 @@
+import { colooors } from "@/constants/styles/colors";
 import { type UnknownMantineStylesParams } from "@/utils/types";
 
 import { css } from "@emotion/react";
@@ -55,9 +56,9 @@ export const closeButton = css`
 export const uploadImgCard = (theme: MantineTheme) => css`
   margin-top: 20px;
   margin-bottom: 24px;
-  background-color: ${theme.colors["neutrals-01"][2]};
+  background-color: ${colooors["neutrals-01"][2]};
   border-radius: 12px;
-  border: 1px solid ${theme.colors["neutrals-01"][3]};
+  border: 1px solid ${colooors["neutrals-01"][3]};
   padding: 60px;
   display: grid;
   place-items: center;
@@ -80,7 +81,7 @@ export const uploadImgInput = (theme: MantineTheme) => css`
   background-color: red;
   border-radius: 12px;
   cursor:   pointer;
-  border: 1px solid ${theme.colors["neutrals-01"][3]};
+  border: 1px solid ${colooors["neutrals-01"][3]};
   padding: 60px;
   grid-gap: 8px;
   z-index: 3;
@@ -96,15 +97,15 @@ export const libraryArea = (theme: MantineTheme) => css`
     object-fit:contain;
     border-radius:50%;
     cursor: pointer;
-    background-color: ${theme.colors["neutrals-01"][2]};
-    outline: 1px solid ${theme.colors["neutrals-01"][3]};
+    background-color: ${colooors["neutrals-01"][2]};
+    outline: 1px solid ${colooors["neutrals-01"][3]};
     padding: 12px;
     position: relative;
-   border: 3px solid ${theme.colors["neutrals-01"][0]};
-   outline: 1px solid ${theme.colors["neutrals-01"][3]};
+   border: 3px solid ${colooors["neutrals-01"][0]};
+   outline: 1px solid ${colooors["neutrals-01"][3]};
   }
   svg{
-    background-color: ${theme.colors["neutrals-01"][2]};
+    background-color: ${colooors["neutrals-01"][2]};
     border-radius: 50%;
     width: 90px;
     height: 90px;
@@ -114,7 +115,7 @@ export const libraryArea = (theme: MantineTheme) => css`
 `;
 export const avatarIcon = ({ selected, theme }: {selected?: boolean; theme: MantineTheme}) => css`
 svg{
-  border: 3px solid ${selected ? theme.colors["neutrals-01"][0] : theme.colors["neutrals-01"][0]};
-  outline: 1px solid ${selected ? theme.colors["neutrals-02"][1] : theme.colors["neutrals-01"][3]};
+  border: 3px solid ${selected ? colooors["neutrals-01"][0] : colooors["neutrals-01"][0]};
+  outline: 1px solid ${selected ? colooors["neutrals-02"][1] : colooors["neutrals-01"][3]};
 }
 `;

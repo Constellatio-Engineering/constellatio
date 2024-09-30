@@ -4,7 +4,7 @@ import { type MantineTheme } from "@mantine/styles";
 export const wrapper = (theme: MantineTheme) => css`
   padding: 32px;
   border-radius: 8px;
-  background-color: ${theme.colors["neutrals-01"][0]};
+  background-color: ${colooors["neutrals-01"][0]};
   display: flex;
   justify-content: stretch;
   align-items: flex-start;
@@ -22,7 +22,7 @@ export const wrapper = (theme: MantineTheme) => css`
       div button,
       td button {
         cursor: pointer;
-        background-color: ${theme.colors["neutrals-01"][2]};
+        background-color: ${colooors["neutrals-01"][2]};
       }
     }
   }
@@ -42,13 +42,13 @@ const CSSCommonExpandButtonStyles = (
   content: "";
   position: absolute;
   width: 38%;
-  background: ${theme.colors["neutrals-01"][3]};
+  background: ${colooors["neutrals-01"][3]};
   height: 2px;
   top: 50%;
 `;
 
 export const expandTableButtonArea = (theme: MantineTheme) => css`
-  background-color: ${theme.colors["neutrals-01"][0]};
+  background-color: ${colooors["neutrals-01"][0]};
   position: relative;
   .linearGredient {
     content: "";
@@ -57,7 +57,7 @@ export const expandTableButtonArea = (theme: MantineTheme) => css`
     background: linear-gradient(
       to bottom,
       transparent 0%,
-      ${theme.colors["neutrals-01"][0]} 100%
+      ${colooors["neutrals-01"][0]} 100%
     );
     height: 350%;
     top: -350%;

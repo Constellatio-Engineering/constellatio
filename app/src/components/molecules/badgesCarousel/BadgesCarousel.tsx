@@ -23,7 +23,7 @@ const BadgesCarousel: FunctionComponent = () =>
       controlSize={32}
       sx={{
         "&::after": {
-          background: `linear-gradient(to left, ${theme.colors["neutrals-01"][0]} 0%, rgba(255,255,255,0) 10%)`,
+          background: `linear-gradient(to left, ${colooors["neutrals-01"][0]} 0%, rgba(255,255,255,0) 10%)`,
           content: "''",
           height: "100%",
           left: "0px",
@@ -35,7 +35,7 @@ const BadgesCarousel: FunctionComponent = () =>
         },
         ".mantine-Carousel-controls": {
           ".mantine-Carousel-control": {
-            backgroundColor: theme.colors["neutrals-01"][0],
+            backgroundColor: colooors["neutrals-01"][0],
             opacity: 1,
           },
           "[data-inactive]": {

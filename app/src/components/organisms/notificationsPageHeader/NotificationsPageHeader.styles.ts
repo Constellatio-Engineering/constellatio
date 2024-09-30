@@ -17,6 +17,6 @@ export const contentContainer = css`
 `;
 
 export const headerTitle = (theme: MantineTheme) => css`
-  color: ${theme.colors["neutrals-01"][0]};
+  color: ${colooors["neutrals-01"][0]};
   text-align: center;
 `;

@@ -2,7 +2,7 @@ import { BodyText } from "@/components/atoms/BodyText/BodyText";
 import { ArrowDown } from "@/components/Icons/ArrowDown";
 import { UnstyledButton } from "@/components/molecules/unstyledButton/UnstyledButton";
 import FilterItem from "@/components/pages/OverviewPage/overviewFiltersDrawer/filterCategory/filterItem/FilterItem";
-import { colors } from "@/constants/styles/colors";
+import { colooors } from "@/constants/styles/colors";
 
 import { Input } from "@mantine/core";
 import { IconSearch } from "@tabler/icons-react";

@@ -17,21 +17,21 @@ const SharedCSS = css`
 
 export const notStarted = (theme: MantineTheme): SerializedStyles => css`
   ${SharedCSS};
-  background-color: ${theme.colors["neutrals-01"][2]} !important;
-  border-color: ${theme.colors["neutrals-01"][3]};
-  color: ${theme.colors["neutrals-01"][7]};
+  background-color: ${colooors["neutrals-01"][2]} !important;
+  border-color: ${colooors["neutrals-01"][3]};
+  color: ${colooors["neutrals-01"][7]};
 `;
 
 export const inProgress = (theme: MantineTheme): SerializedStyles => css`
   ${SharedCSS};
-  background-color: ${theme.colors["support-notice"][0]} !important;
-  border-color: ${theme.colors["support-notice"][1]};
-  color: ${theme.colors["support-notice"][4]};
+  background-color: ${colooors["support-notice"][0]} !important;
+  border-color: ${colooors["support-notice"][1]};
+  color: ${colooors["support-notice"][4]};
 `;
 
 export const completed = (theme: MantineTheme): SerializedStyles => css`
   ${SharedCSS};
-  background-color: ${theme.colors["support-success"][0]} !important;
-  border-color: ${theme.colors["support-success"][1]};
-  color: ${theme.colors["support-success"][4]};
+  background-color: ${colooors["support-success"][0]} !important;
+  border-color: ${colooors["support-success"][1]};
+  color: ${colooors["support-success"][4]};
 `;

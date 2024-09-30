@@ -9,13 +9,13 @@ export const wrapper = css`
 export const track = (theme: MantineTheme) => css`
   background: repeating-linear-gradient(
     -45deg,
-    ${theme.colors["transparency-02"][0]},
-    ${theme.colors["transparency-02"][0]} 2px,
-    ${theme.colors["transparency-01"][1]} 2px,
-    ${theme.colors["transparency-01"][1]} 16px
+    ${colooors["transparency-02"][0]},
+    ${colooors["transparency-02"][0]} 2px,
+    ${colooors["transparency-01"][1]} 2px,
+    ${colooors["transparency-01"][1]} 16px
     );
     width: 100%;
-    border: 1px solid ${theme.colors["transparency-03"][1]};
+    border: 1px solid ${colooors["transparency-03"][1]};
   height: 50px;
   border-radius: 12px;
   position: relative;
@@ -27,18 +27,18 @@ export const progress = ({ progress, theme }: {progress: number; theme: MantineT
   width: ${progress}%;
   height: 100%;
   border-radius: 12px;
-  border: 2px solid ${theme.colors["transparency-02"][3]};
+  border: 2px solid ${colooors["transparency-02"][3]};
   background: var(
     --gradients-chart-gradient-01,
     linear-gradient(
       90deg,
-      ${theme.colors["brand-02"][4]} 51.84%,
+      ${colooors["brand-02"][4]} 51.84%,
       transparent 133.19%
     )
   );
 `;
 export const progresDescription = (theme: MantineTheme) => css`
-  color: ${theme.colors["neutrals-01"][0]};
+  color: ${colooors["neutrals-01"][0]};
   position: relative;
   z-index: 3;
   margin-left: 12px;
@@ -46,7 +46,7 @@ export const progresDescription = (theme: MantineTheme) => css`
     display: inline-block;
     vertical-align: middle;
     margin-right: 8px;
-    background-color: ${theme.colors["brand-02"][5]} ;
+    background-color: ${colooors["brand-02"][5]} ;
     padding: 8px;
     box-sizing: content-box;
     border-radius: 50%;
@@ -60,13 +60,13 @@ export const checkPoints = (theme: MantineTheme) => css`
     height: 100%;
     span{
         width: 100px;
-        /* background-color: ${theme.colors["transparency-02"][2]}; */
-        color: ${theme.colors["transparency-02"][7]};
+        /* background-color: ${colooors["transparency-02"][2]}; */
+        color: ${colooors["transparency-02"][7]};
         height: 100%;
         position:absolute;
         vertical-align: bottom;
         transform: translateX(-100%);
-        border-right: 2px solid ${theme.colors["transparency-02"][2]};
+        border-right: 2px solid ${colooors["transparency-02"][2]};
         p{
             position: absolute;
             bottom: 0;

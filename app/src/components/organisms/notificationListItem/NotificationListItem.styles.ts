@@ -1,9 +1,9 @@
-import { colors } from "@/constants/styles/colors";
+import { colooors } from "@/constants/styles/colors";
 
 import { css } from "@emotion/react";
 
 export const notificationWrapper = css`
-  border: solid 1px ${colors["neutrals-01"][3]};
+  border: solid 1px ${colooors["neutrals-01"][3]};
   background-color: white;
   padding: 20px 27px;
   border-radius: 8px;
@@ -22,7 +22,7 @@ export const unreadLeftBar = css`
   position: absolute;
   top: 0;
   left: 0;
-  background-color: ${colors["brand-01"][4]};
+  background-color: ${colooors["brand-01"][4]};
 `;
 
 export const header = css`
@@ -51,7 +51,7 @@ export const dateAndMarkReadWrapper = css`
 `;
 
 export const date = css`
-  color: ${colors["neutrals-01"][7]};
+  color: ${colooors["neutrals-01"][7]};
   font-size: 14px;
 `;
 
@@ -63,7 +63,7 @@ export const markRead = css`
   align-items: center;
   border-radius: 50%;
   background-color: white;
-  border: solid 1px ${colors["neutrals-01"][4]};
+  border: solid 1px ${colooors["neutrals-01"][4]};
   transition: background-color 0.1s, transform 0.1s;
 
   svg {
@@ -73,7 +73,7 @@ export const markRead = css`
   
   :hover, :active {
     transform: scale(1.05);
-    background-color: ${colors["neutrals-01"][1]};
+    background-color: ${colooors["neutrals-01"][1]};
     
     svg {
       fill: #000000;

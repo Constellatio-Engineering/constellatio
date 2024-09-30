@@ -29,7 +29,7 @@ export const menuStyles = (): MenuStyles =>
       padding: "0px 0px !important",
     },
     item: {
-      borderBottom: `1px solid ${theme.colors["neutrals-01"][3]}`,
+      borderBottom: `1px solid ${colooors["neutrals-01"][3]}`,
       borderRadius: 0,
       padding: "12px 16px",
     },
@@ -47,7 +47,7 @@ export const menuItem = (theme: MantineTheme) => css`
       border-radius: 50%;
     }
     p {
-      color: ${theme.colors["neutrals-01"][7]};
+      color: ${colooors["neutrals-01"][7]};
     }
   }
 `;
@@ -56,6 +56,6 @@ export const target = (theme: MantineTheme) => css`
   width: 36px;
   height: 36px;
   border-radius: 50%;
-  border: 3px solid ${theme.colors["neutrals-01"][0]};
-  outline: 1px solid ${theme.colors["neutrals-01"][3]};
+  border: 3px solid ${colooors["neutrals-01"][0]};
+  outline: 1px solid ${colooors["neutrals-01"][3]};
 `;

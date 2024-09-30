@@ -39,8 +39,8 @@ const Template: FunctionComponent<PropsOf<typeof OnboardingTutorialStep>> = () =
           position="bottom"
           styles={(theme) => ({
             arrow: {
-              backgroundColor: theme.colors["neutrals-02"][1],
-              border: `1px solid ${theme.colors["neutrals-02"][1]}`,
+              backgroundColor: colooors["neutrals-02"][1],
+              border: `1px solid ${colooors["neutrals-02"][1]}`,
             }
           })}>
           <Popover.Target><span>Item 1</span></Popover.Target>

@@ -22,8 +22,8 @@ export const MaterialNotesCallToAction = (theme: MantineTheme) => css`
   align-items: center;
   padding: 32px;
   gap: 12px;
-  background: ${theme.colors["neutrals-01"][0]};
-  border-top: 1px solid ${theme.colors["neutrals-01"][3]};
+  background: ${colooors["neutrals-01"][0]};
+  border-top: 1px solid ${colooors["neutrals-01"][3]};
 
   button {
     flex: 1;
@@ -32,7 +32,7 @@ export const MaterialNotesCallToAction = (theme: MantineTheme) => css`
 export const wrapper = css``;
 export const existingNote = (theme: MantineTheme) => css`
   padding: 24px 32px;
-  background-color: ${theme.colors["neutrals-01"][0]};
+  background-color: ${colooors["neutrals-01"][0]};
   min-height: 78vh;
 
   .deleteNoteBlock {
@@ -48,7 +48,7 @@ export const existingNote = (theme: MantineTheme) => css`
     align-items: center;
     justify-content: center;
     background: linear-gradient(to bottom,
-    ${theme.colors["neutrals-01"][0]} 20%,
+    ${colooors["neutrals-01"][0]} 20%,
     rgba(255, 255, 255, 0.5) 100%);
 
     button {
@@ -57,7 +57,7 @@ export const existingNote = (theme: MantineTheme) => css`
   }
 `;
 export const existingNoteActions = (theme: MantineTheme) => css`
-  background: ${theme.colors["neutrals-01"][0]};
+  background: ${colooors["neutrals-01"][0]};
   margin-bottom: 24px;
 
   button {
@@ -71,8 +71,8 @@ export const existingNoteActions = (theme: MantineTheme) => css`
 export const richtext = (theme: MantineTheme) => css`
   blockquote {
     padding: 20px;
-    background: ${theme.colors["neutrals-01"][1]};
-    border: 1px solid ${theme.colors["neutrals-01"][3]};
+    background: ${colooors["neutrals-01"][1]};
+    border: 1px solid ${colooors["neutrals-01"][3]};
     border-radius: 12px;
     margin: 24px 0;
 

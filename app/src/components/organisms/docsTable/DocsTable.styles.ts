@@ -13,7 +13,7 @@ export const wrapper = css`
 
 const CSSClickableEffect = (theme: MantineTheme) => css`
  &:hover{
-   background-color: ${theme.colors["neutrals-01"][1]};        
+   background-color: ${colooors["neutrals-01"][1]};        
   }
   `;
 
@@ -21,17 +21,17 @@ export const tableWrapper = (theme: MantineTheme) => css`
   text-align: left;
   border-radius: 12px;
   border-collapse: collapse;
-  outline: 1px solid ${theme.colors["neutrals-01"][3]};
+  outline: 1px solid ${colooors["neutrals-01"][3]};
   width: 100%;
   thead{
-    background: ${theme.colors["neutrals-01"][2]};
+    background: ${colooors["neutrals-01"][2]};
   }
   td {
     padding: 16px;
   }
   th {
     padding: 8px 16px;
-    color: ${theme.colors["neutrals-01"][7]};
+    color: ${colooors["neutrals-01"][7]};
     &:first-of-type{
       border-collapse: collapse;
       border-radius: 12px 0px 0 0;
@@ -72,9 +72,9 @@ export const tableBody = (theme: MantineTheme) => css`
     &:hover {
       td {
         transition: all 300ms ease-in-out;
-        background-color: ${theme.colors["neutrals-01"][2]};
+        background-color: ${colooors["neutrals-01"][2]};
        > button{
-          background-color: ${theme.colors["neutrals-01"][2]};
+          background-color: ${colooors["neutrals-01"][2]};
           transition: all 300ms ease-in-out;
         }
       }
@@ -107,13 +107,13 @@ min-height: 55px;
   padding: 0;
 }
 .mantine-Menu-item {
-  border-bottom: 1px solid ${theme.colors["neutrals-01"][3]};
+  border-bottom: 1px solid ${colooors["neutrals-01"][3]};
   border-radius:0px;
 }
 `;
 
 export const cellFolder = (theme: MantineTheme) => css`
-	color: ${theme.colors["neutrals-01"][9]};
+	color: ${colooors["neutrals-01"][9]};
 	svg {
 		vertical-align: text-bottom;
 		margin-right: 8px;
@@ -121,14 +121,14 @@ export const cellFolder = (theme: MantineTheme) => css`
 `;
 
 export const docName = (theme: MantineTheme) => css`
-  color: ${theme.colors["neutrals-02"][1]};
+  color: ${colooors["neutrals-02"][1]};
   ${CSSClickableEffect(theme)};
 `;
 export const docDate = (theme: MantineTheme) => css`
-  color: ${theme.colors["neutrals-01"][7]};
+  color: ${colooors["neutrals-01"][7]};
 `;
 export const docTags = (theme: MantineTheme) => css`
-  color: ${theme.colors["neutrals-01"][9]};
+  color: ${colooors["neutrals-01"][9]};
   
 `;
 
@@ -144,7 +144,7 @@ export const showMoreButton = (theme: MantineTheme) => css`
   background: linear-gradient(
     to bottom,
     transparent,
-    ${theme.colors["neutrals-01"][0]}
+    ${colooors["neutrals-01"][0]}
   );
 `;
 
