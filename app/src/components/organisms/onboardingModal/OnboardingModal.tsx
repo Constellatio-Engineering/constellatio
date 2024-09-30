@@ -7,9 +7,7 @@ import { appPaths } from "@/utils/paths";
 
 import { Modal, Title } from "@mantine/core";
 import { useRouter } from "next/router";
-import {
-  type FunctionComponent, useEffect, useRef
-} from "react";
+import { type FunctionComponent, useEffect, useRef } from "react";
 
 import * as styles from "./OnboardingModal.styles";
 

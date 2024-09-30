@@ -1,13 +1,13 @@
+import { colooors } from "@/constants/styles/colors";
+
 import { css } from "@emotion/react";
-import { type MantineTheme } from "@mantine/styles";
 
 type SearchFieldSmallStylesProps = {
   searchValue?: string;
   size?: "small" | "normal";
-  theme: MantineTheme;
 };
 
-export const wrapper = ({ searchValue, size, theme }: SearchFieldSmallStylesProps) => css`
+export const wrapper = ({ searchValue, size }: SearchFieldSmallStylesProps) => css`
 	.mantine-TextInput {
 		&-root {
 		}

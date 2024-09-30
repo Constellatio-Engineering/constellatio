@@ -1,9 +1,8 @@
 import { colooors } from "@/constants/styles/colors";
 
 import { css } from "@emotion/react";
-import { type MantineTheme } from "@mantine/styles";
 
-export const wrapper = (theme: MantineTheme) => css`
+export const wrapper = () => css`
     background: ${colooors["neutrals-01"][0]};
     padding:32px 24px;
     height: 280px;
@@ -23,14 +22,14 @@ export const wrapper = (theme: MantineTheme) => css`
     };
 `;
 
-export const link = (theme: MantineTheme) => css`
+export const link = () => css`
     color: ${colooors["neutrals-01"][9]};
     svg{
         vertical-align:middle;
     }
 `;
 
-export const icon = (theme: MantineTheme) => css`
+export const icon = () => css`
     display:grid;
     place-items: center;
     svg{

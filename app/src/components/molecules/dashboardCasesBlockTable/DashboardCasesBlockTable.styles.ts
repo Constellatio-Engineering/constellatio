@@ -1,11 +1,12 @@
+import { colooors } from "@/constants/styles/colors";
+
 import { css } from "@emotion/react";
-import { type MantineTheme } from "@mantine/styles";
 
 export const wrapper = css`
   flex: 1;
 `;
 
-export const casesTable = (theme: MantineTheme) => css`
+export const casesTable = () => css`
   min-width: 100%;
   text-align: left;
   border-radius: 12px;
@@ -72,7 +73,7 @@ export const casesTable = (theme: MantineTheme) => css`
     }
   }
 `;
-export const durationCell = (theme: MantineTheme) => css`
+export const durationCell = () => css`
   color: ${colooors["neutrals-01"][9]};
   overflow: hidden;
   text-overflow: ellipsis;

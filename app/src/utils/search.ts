@@ -1,14 +1,11 @@
 /* eslint-disable max-lines */
-import { type UploadedFile, type Document, type ForumQuestion } from "@/db/schema";
+import { type Document, type ForumQuestion, type UploadedFile } from "@/db/schema";
 import { type FullLegalCase } from "@/services/content/getCaseById";
 import {
-  type IGenTopic,
-  type IGenArticle,
-  type IGenLegalArea, type IGenMainCategory, type IGenTags
+  type IGenArticle, type IGenLegalArea, type IGenMainCategory, type IGenTags, type IGenTopic 
 } from "@/services/graphql/__generated/sdk";
 import {
-  type DotSeparatedKeys,
-  type NullableProperties, type Prettify, type RemoveUndefined, type Values
+  type DotSeparatedKeys, type NullableProperties, type Prettify, type RemoveUndefined, type Values 
 } from "@/utils/types";
 import { removeHtmlTagsFromString } from "@/utils/utils";
 

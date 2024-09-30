@@ -1,11 +1,5 @@
 import {
-  emailValidation,
-  genderValidation,
-  nameValidation,
-  passwordSchema,
-  refCodeValidation,
-  semesterValidation,
-  universityValidation
+  emailValidation, genderValidation, nameValidation, passwordSchema, refCodeValidation, semesterValidation, universityValidation 
 } from "@/schemas/auth/userData.validation";
 
 import { z } from "zod";

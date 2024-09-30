@@ -3,7 +3,7 @@ import { BodyText } from "@/components/atoms/BodyText/BodyText";
 import { Accordion } from "@mantine/core";
 import React, { type FC, useState } from "react";
 
-import { ItemWrapper, hintsAccordionStyles } from "./HintsAccordion.styles";
+import { hintsAccordionStyles, ItemWrapper } from "./HintsAccordion.styles";
 
 export interface HintsAccordionProps
 {

@@ -33,12 +33,12 @@ const PersonalSpacePageContent: FunctionComponent = () =>
       FileIconSvg,
       MaterialsCategoryId,
       slug: "materials",
-      uploadedFilesLength: (uploadedFilesInAllFolders?.length + documentsInAllFolders?.length) ?? 0,
+      uploadedFilesLength: uploadedFilesInAllFolders.length + documentsInAllFolders.length,
     },
     {
       BookmarkIconSvg,
       FavCategoryId,
-      bookmarkedCasesLength: (bookmarkedCases?.length + bookmarkedArticles?.length + questionsBookmarks?.length) ?? 0,
+      bookmarkedCasesLength: bookmarkedCases.length + bookmarkedArticles.length + questionsBookmarks.length,
       slug: "favorites"
     }
   );

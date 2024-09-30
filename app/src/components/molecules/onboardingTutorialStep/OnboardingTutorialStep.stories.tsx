@@ -1,4 +1,5 @@
 import { Puzzle } from "@/components/Icons/Puzzle";
+import { colooors } from "@/constants/styles/colors";
 
 import { type PropsOf } from "@emotion/react";
 import { Box, Popover } from "@mantine/core";
@@ -37,7 +38,7 @@ const Template: FunctionComponent<PropsOf<typeof OnboardingTutorialStep>> = () =
           defaultOpened
           withArrow
           position="bottom"
-          styles={(theme) => ({
+          styles={() => ({
             arrow: {
               backgroundColor: colooors["neutrals-02"][1],
               border: `1px solid ${colooors["neutrals-02"][1]}`,

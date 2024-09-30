@@ -1,5 +1,6 @@
 import { type FloatingButtonVariation } from "@/components/atoms/FloatingButton/FloatingButton";
 import { colooors } from "@/constants/styles/colors";
+import { spaciiing } from "@/constants/styles/spacing";
 
 import { type ButtonStylesNames, type ButtonStylesParams, type MantineTheme, type Styles } from "@mantine/core";
 
@@ -7,13 +8,15 @@ type FloatingButtonStyles = Styles<ButtonStylesNames, ButtonStylesParams>;
 
 export const floatingButtonStyles = ({
   pinsNotificationsAmount,
-  variation,
+  theme,
+  variation
 }: {
   pinsNotificationsAmount?: number;
+  theme: MantineTheme;
   variation: FloatingButtonVariation;
 }): FloatingButtonStyles =>
 {
-  const styles: FloatingButtonStyles = (theme: MantineTheme) => ({
+  const styles: FloatingButtonStyles = () => ({
     icon: {
       "::after": {
         alignItems: "center",
@@ -23,11 +26,11 @@ export const floatingButtonStyles = ({
         color: colooors["neutrals-02"][1],
         content: variation === "pins" ? `"${pinsNotificationsAmount}"` : "\"\"",
         display: variation === "pins" && pinsNotificationsAmount ? "flex" : "none",
-        fontSize: theme.spacing["spacing-14"],
+        fontSize: spaciiing["spacing-14"],
         fontWeight: 700,
         height: "19px",
         justifyContent: "center",
-        lineHeight: theme.spacing["spacing-20"],
+        lineHeight: spaciiing["spacing-20"],
         position: "absolute",
         right: "-4px",
         textTransform: "uppercase",
@@ -52,7 +55,7 @@ export const floatingButtonStyles = ({
     inner: {
       alignItems: "center",
       display: "flex",
-      gap: theme.spacing["spacing-8"],
+      gap: spaciiing["spacing-8"],
     },
     label: {
       transition: "all 0.3s ease",
@@ -94,7 +97,7 @@ export const floatingButtonStyles = ({
 
         padding:
           variation === "pins" || variation === "notes-notes" || variation === "notes-no-notes"
-            ? `${theme.spacing["spacing-4"]} ${theme.spacing["spacing-4"]} ${theme.spacing["spacing-4"]} ${theme.spacing["spacing-12"]}`
+            ? `${spaciiing["spacing-4"]} ${spaciiing["spacing-4"]} ${spaciiing["spacing-4"]} ${spaciiing["spacing-12"]}`
             : 0,
       },
       "> div": {

@@ -3,9 +3,9 @@ import { type UnknownMantineStylesParams } from "@/utils/types";
 
 import { css } from "@emotion/react";
 import { type DrawerStylesNames } from "@mantine/core";
-import { type Styles, type MantineTheme } from "@mantine/styles";
+import { type Styles } from "@mantine/styles";
 
-export const wrapper = (theme: MantineTheme) => css`
+export const wrapper = () => css`
         background: ${colooors["neutrals-01"][0]};
         border-radius:12px;
         margin-bottom: 40px;
@@ -15,7 +15,7 @@ export const wrapper = (theme: MantineTheme) => css`
         }
         box-shadow: 0px 8px 44px 0px rgba(0, 0, 0, 0.04);
 `;
-export const papersBlockHead = (theme: MantineTheme) => css`
+export const papersBlockHead = () => css`
     color: ${colooors["neutrals-02"][0]};
     display: flex;
     justify-content: space-between;
@@ -37,7 +37,7 @@ type DrawerStylesProps = Styles<DrawerStylesNames, UnknownMantineStylesParams>;
 
 export const drawerStyles = () => 
 {
-  const styles: DrawerStylesProps = (theme: MantineTheme) => ({
+  const styles: DrawerStylesProps = () => ({
     body: {
       ".call-to-action": {
         alignItems: "flex-start",

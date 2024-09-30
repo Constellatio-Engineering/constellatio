@@ -10,11 +10,10 @@ import { Timer } from "@/components/Icons/timer";
 import ResetCaseProgressModal from "@/components/organisms/resetCaseProgressModal/ResetCaseProgressModal";
 import useArticleViews from "@/hooks/useArticleViews";
 import useCaseViews from "@/hooks/useCaseViews";
-import { type Maybe, type IGenLegalArea, type IGenTags } from "@/services/graphql/__generated/sdk";
+import { type IGenLegalArea, type IGenTags, type Maybe } from "@/services/graphql/__generated/sdk";
 import { type Nullable } from "@/utils/types";
 import { formatDate } from "@/utils/utils";
 
-import { useMantineTheme } from "@mantine/core";
 import { useDisclosure } from "@mantine/hooks";
 import React, { type FunctionComponent } from "react";
 
@@ -64,7 +63,6 @@ const OverviewCard: FunctionComponent<IOverviewCard> = ({
   const views = variant === "dictionary" ? articleViews : caseViews;
   const [opened, { close, open }] = useDisclosure(false);
   const [isResetCaseModalOpened, { close: closeResetCaseModal, open: openResetCaseModal }] = useDisclosure(false);
-  const theme = useMantineTheme();
   const initialFilteredTags = tags?.filter((tag) => !tag?.tagName?.startsWith("§"));
   const filteredTags = (initialFilteredTags && initialFilteredTags.length === 0) ? tags : initialFilteredTags;
   const filteredTagsWithNames = filteredTags?.filter(Boolean).filter(tag => Boolean(tag.tagName)) ?? [];
@@ -72,7 +70,7 @@ const OverviewCard: FunctionComponent<IOverviewCard> = ({
   return (
     <>
       <div css={styles.wrapper()}>
-        <div css={styles.topDetails({ theme, variant })}>
+        <div css={styles.topDetails({ variant })}>
           <div className="left-side">
             <div className="views">
               <CaptionText styleType="caption-01-bold" tt="uppercase">
@@ -89,7 +87,7 @@ const OverviewCard: FunctionComponent<IOverviewCard> = ({
             </div>
           )}
         </div>
-        <div css={styles.cardBody({ theme, variant })}>
+        <div css={styles.cardBody()}>
           <table style={{ borderBottom: "1px solid #F0F0F0", textAlign: "left", width: "100%" }}>
             <thead>
               <tr>
@@ -105,7 +103,7 @@ const OverviewCard: FunctionComponent<IOverviewCard> = ({
             </tbody>
           </table>
           {variant === "dictionary" && (
-            <div css={styles.row({ theme, variant })}>
+            <div css={styles.row({ variant })}>
               <div className="row-title">
                 <CaptionText styleType="caption-01-medium" component="p" tt="capitalize">Thema</CaptionText>
               </div>
@@ -114,7 +112,7 @@ const OverviewCard: FunctionComponent<IOverviewCard> = ({
               </div>
             </div>
           )}
-          <div css={styles.row({ theme, variant })}>
+          <div css={styles.row({ variant })}>
             <div className="row-title">
               <CaptionText styleType="caption-01-medium" component="p">TAGS</CaptionText>
             </div>
@@ -137,7 +135,7 @@ const OverviewCard: FunctionComponent<IOverviewCard> = ({
           {variant === "case" && (
             <>
               {timeInMinutes != null && (
-                <div css={styles.row({ theme, variant })}>
+                <div css={styles.row({ variant })}>
                   <div className="row-title">
                     <CaptionText styleType="caption-01-medium">BEARBEITUNGSZEIT</CaptionText>
                   </div>
@@ -148,7 +146,7 @@ const OverviewCard: FunctionComponent<IOverviewCard> = ({
                   </div>
                 </div>
               )}
-              <div css={styles.row({ theme, variant })}>
+              <div css={styles.row({ variant })}>
                 <div className="row-title">
                   <CaptionText styleType="caption-01-medium">STATUS</CaptionText>
                 </div>

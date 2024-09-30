@@ -1,7 +1,5 @@
 import { db } from "@/db/connection";
-import {
-  type CaseProgress, casesProgress, casesSolutions, gamesProgress
-} from "@/db/schema";
+import { type CaseProgress, casesProgress, casesSolutions, gamesProgress } from "@/db/schema";
 import { addUserToCrmUpdateQueue } from "@/lib/clickup/utils";
 import { getCaseProgressSchema } from "@/schemas/caseProgress/getCaseProgress.schema";
 import { getCasesProgressSchema } from "@/schemas/caseProgress/getCasesProgress.schema";

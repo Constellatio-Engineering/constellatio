@@ -1,12 +1,12 @@
+import { colooors } from "@/constants/styles/colors";
+
 import { css } from "@emotion/react";
-import { type MantineTheme } from "@mantine/styles";
 
 export const wrapper = css`
-  /* border: 1px solid yellow; */
   position:relative;
   height: 100px;
 `;
-export const track = (theme: MantineTheme) => css`
+export const track = () => css`
   background: repeating-linear-gradient(
     -45deg,
     ${colooors["transparency-02"][0]},
@@ -22,14 +22,13 @@ export const track = (theme: MantineTheme) => css`
   display: flex;
   align-items: center;
 `;
-export const progress = ({ progress, theme }: {progress: number; theme: MantineTheme}) => css`
+export const progress = ({ progress }: {progress: number}) => css`
   position: absolute;
   width: ${progress}%;
   height: 100%;
   border-radius: 12px;
   border: 2px solid ${colooors["transparency-02"][3]};
   background: var(
-    --gradients-chart-gradient-01,
     linear-gradient(
       90deg,
       ${colooors["brand-02"][4]} 51.84%,
@@ -37,7 +36,7 @@ export const progress = ({ progress, theme }: {progress: number; theme: MantineT
     )
   );
 `;
-export const progresDescription = (theme: MantineTheme) => css`
+export const progresDescription = () => css`
   color: ${colooors["neutrals-01"][0]};
   position: relative;
   z-index: 3;
@@ -52,7 +51,7 @@ export const progresDescription = (theme: MantineTheme) => css`
     border-radius: 50%;
   }
 `;
-export const checkPoints = (theme: MantineTheme) => css`
+export const checkPoints = () => css`
     position: absolute;
     top: 0;
     left: 0;

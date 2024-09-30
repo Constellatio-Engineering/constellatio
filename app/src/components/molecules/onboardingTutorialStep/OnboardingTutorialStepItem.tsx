@@ -1,7 +1,7 @@
 import { BodyText } from "@/components/atoms/BodyText/BodyText";
 import { SubtitleText } from "@/components/atoms/SubtitleText/SubtitleText";
 
-import React, { type ReactNode, type FunctionComponent } from "react";
+import React, { type FunctionComponent, type ReactNode } from "react";
 
 import * as styles from "./OnboardingTutorialStep.styles";
 

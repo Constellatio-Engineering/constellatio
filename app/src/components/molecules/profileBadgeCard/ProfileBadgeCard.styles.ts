@@ -1,7 +1,6 @@
 import { colooors } from "@/constants/styles/colors";
 
 import { css } from "@emotion/react";
-import { type MantineTheme } from "@mantine/styles";
 
 export const smallBadgeCardWidth = 160;
 export const smallBadgeCardHeight = 180;
@@ -45,7 +44,7 @@ export const wrapperSmallFullWidth = css`
 export const wrapperLarge = (isHighlighted: boolean) => css`
   flex: 1;
   transition: outline-color 0.3s ease-in-out .3s;
-  outline: 1px solid ${isHighlighted ? colors["neutrals-01"][9] : "transparent"};
+  outline: 1px solid ${isHighlighted ? colooors["neutrals-01"][9] : "transparent"};
   scroll-margin: 100px !important;
   display: flex;
   flex-direction: column;
@@ -117,7 +116,7 @@ export const badgeImageSmall = css`
   height: 90%;
 `;
 
-export const badgeTitle = (theme: MantineTheme) => css`
+export const badgeTitle = () => css`
   color: ${colooors["neutrals-02"][1]};
   text-align: center;
   font-size: 17px;

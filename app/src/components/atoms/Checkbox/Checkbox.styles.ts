@@ -1,6 +1,7 @@
-import {
-  type CSSObject, type CheckboxStylesNames, type Styles, type CheckboxStylesParams
-} from "@mantine/core";
+import { colooors } from "@/constants/styles/colors";
+import { spaciiing } from "@/constants/styles/spacing";
+
+import { type CheckboxStylesNames, type CheckboxStylesParams, type CSSObject, type Styles } from "@mantine/core";
 import { type ReactNode } from "react";
 
 type CheckboxStylesProps = {
@@ -30,9 +31,9 @@ export const checkboxStyles = ({
       color: colooors["support-error"][3],
       fontSize: "14px",
       fontWeight: 500,
-      lineHeight: theme.spacing["spacing-20"],
+      lineHeight: spaciiing["spacing-20"],
       marginTop: 0,
-      paddingLeft: theme.spacing["spacing-8"],
+      paddingLeft: spaciiing["spacing-8"],
     },
     icon: {
       color: disabled ? `${colooors["neutrals-01"][7]} !important` : `${colooors["neutrals-02"][1]} !important`,
@@ -43,7 +44,7 @@ export const checkboxStyles = ({
       alignItems: "center",
       display: "flex",
       justifyContent: "center",
-      marginTop: theme.spacing["spacing-2"],
+      marginTop: spaciiing["spacing-2"],
     },
     input: {
       ":checked": {
@@ -67,8 +68,8 @@ export const checkboxStyles = ({
       color: disabled ? colooors["neutrals-01"][7] : colooors["neutrals-02"][1],
       fontSize: theme.fontSizes["spacing-16"],
       fontWeight: 500,
-      lineHeight: theme.spacing["spacing-24"],
-      paddingLeft: theme.spacing["spacing-8"],
+      lineHeight: spaciiing["spacing-24"],
+      paddingLeft: spaciiing["spacing-8"],
       ...checkboxLabelOverride,
     },
     labelWrapper: {

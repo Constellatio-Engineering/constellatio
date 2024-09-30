@@ -1,4 +1,5 @@
 import { colooors } from "@/constants/styles/colors";
+import { spaciiing } from "@/constants/styles/spacing";
 import { type UnknownMantineStylesParams } from "@/utils/types";
 
 import { type MultiSelectStylesNames, type Styles } from "@mantine/core";
@@ -13,7 +14,7 @@ export const dropdownMultiselectStyles = ({ disabled, error }: { disabled?: bool
       color: colooors["neutrals-01"][7],
       fontSize: "14px",
       fontWeight: 500,
-      lineHeight: theme.spacing["spacing-20"],
+      lineHeight: spaciiing["spacing-20"],
       order: 2,
     },
     dropdown: {
@@ -26,7 +27,7 @@ export const dropdownMultiselectStyles = ({ disabled, error }: { disabled?: bool
       color: colooors["support-error"][3],
       fontSize: "14px",
       fontWeight: 500,
-      lineHeight: theme.spacing["spacing-20"],
+      lineHeight: spaciiing["spacing-20"],
       order: 3,
     },
     input: {
@@ -45,9 +46,9 @@ export const dropdownMultiselectStyles = ({ disabled, error }: { disabled?: bool
           : colooors["neutrals-01"][9],
       fontSize: theme.fontSizes["spacing-16"],
       fontWeight: 400,
-      lineHeight: theme.spacing["spacing-24"],
+      lineHeight: spaciiing["spacing-24"],
       order: 0,
-      paddingBottom: theme.spacing["spacing-4"],
+      paddingBottom: spaciiing["spacing-4"],
       transition: "all 0.3s ease",
     },
     option: {
@@ -55,12 +56,12 @@ export const dropdownMultiselectStyles = ({ disabled, error }: { disabled?: bool
         color: `${colooors["neutrals-01"][0]}`,
       },
       "> div": {
-        gap: theme.spacing["spacing-8"],
+        gap: spaciiing["spacing-8"],
       },
       backgroundColor: colooors["neutrals-01"][0],
       borderBottom: `1px solid ${colooors["neutrals-01"][3]}`,
       color: colooors["neutrals-02"][1],
-      padding: `${theme.spacing["spacing-8"]} ${theme.spacing["spacing-16"]}`,
+      padding: `${spaciiing["spacing-8"]} ${spaciiing["spacing-16"]}`,
     },
     rightSection: {
       height: "20px",
@@ -85,7 +86,7 @@ export const dropdownMultiselectStyles = ({ disabled, error }: { disabled?: bool
         color: `${colooors["neutrals-01"][7]} !important`,
         fontSize: theme.fontSizes["spacing-16"],
         fontWeight: 500,
-        lineHeight: theme.spacing["spacing-24"],
+        lineHeight: spaciiing["spacing-24"],
         transition: "all 0.3s ease",
       },
       backgroundColor: colooors["neutrals-01"][0],
@@ -93,15 +94,15 @@ export const dropdownMultiselectStyles = ({ disabled, error }: { disabled?: bool
       color: `${colooors["neutrals-02"][1]} !important`,
       fontSize: theme.fontSizes["spacing-16"],
       fontWeight: 500,
-      lineHeight: theme.spacing["spacing-24"],
-      padding: `${theme.spacing["spacing-8"]} ${theme.spacing["spacing-4"]}`,
+      lineHeight: spaciiing["spacing-24"],
+      padding: `${spaciiing["spacing-8"]} ${spaciiing["spacing-4"]}`,
       transition: "all 0.3s ease",
     },
     wrapper: {
       color: error ? colooors["support-error"][3] : colooors["neutrals-01"][7],
       margin: 0,
       order: 1,
-      paddingBottom: theme.spacing["spacing-2"],
+      paddingBottom: spaciiing["spacing-2"],
     },
   });
   return styles;

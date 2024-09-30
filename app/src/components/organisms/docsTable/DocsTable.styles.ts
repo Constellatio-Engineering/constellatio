@@ -1,9 +1,10 @@
 /* eslint-disable max-lines */
+import { colooors } from "@/constants/styles/colors";
 import { type UnknownMantineStylesParams } from "@/utils/types";
 
 import { css } from "@emotion/react";
 import { type ModalStylesNames } from "@mantine/core";
-import { type Styles, type MantineTheme } from "@mantine/styles";
+import { type Styles } from "@mantine/styles";
 
 export const wrapper = css`
   display: flex;
@@ -11,13 +12,13 @@ export const wrapper = css`
   position: relative;
   `;
 
-const CSSClickableEffect = (theme: MantineTheme) => css`
+const CSSClickableEffect = () => css`
  &:hover{
    background-color: ${colooors["neutrals-01"][1]};        
   }
   `;
 
-export const tableWrapper = (theme: MantineTheme) => css`
+export const tableWrapper = () => css`
   text-align: left;
   border-radius: 12px;
   border-collapse: collapse;
@@ -60,7 +61,7 @@ export const tableWrapper = (theme: MantineTheme) => css`
   }
 `;
 
-export const tableBody = (theme: MantineTheme) => css`
+export const tableBody = () => css`
 
   tr{
     td{
@@ -82,7 +83,7 @@ export const tableBody = (theme: MantineTheme) => css`
   }
 `;
 
-export const callToActionCell = (theme: MantineTheme) => css`
+export const callToActionCell = () => css`
 background-color: transparent;
 border:0;
 outline:0;
@@ -100,7 +101,7 @@ min-height: 55px;
   background: transparent;
   border: 0;
   outline: 0;
-  ${CSSClickableEffect(theme)};
+  ${CSSClickableEffect()};
 
 }
 .mantine-Menu-dropdown {
@@ -112,7 +113,7 @@ min-height: 55px;
 }
 `;
 
-export const cellFolder = (theme: MantineTheme) => css`
+export const cellFolder = () => css`
 	color: ${colooors["neutrals-01"][9]};
 	svg {
 		vertical-align: text-bottom;
@@ -120,19 +121,19 @@ export const cellFolder = (theme: MantineTheme) => css`
 	}
 `;
 
-export const docName = (theme: MantineTheme) => css`
+export const docName = () => css`
   color: ${colooors["neutrals-02"][1]};
-  ${CSSClickableEffect(theme)};
+  ${CSSClickableEffect()};
 `;
-export const docDate = (theme: MantineTheme) => css`
+export const docDate = () => css`
   color: ${colooors["neutrals-01"][7]};
 `;
-export const docTags = (theme: MantineTheme) => css`
+export const docTags = () => css`
   color: ${colooors["neutrals-01"][9]};
   
 `;
 
-export const showMoreButton = (theme: MantineTheme) => css`
+export const showMoreButton = () => css`
   position: absolute;
   background: red;
   display: grid;

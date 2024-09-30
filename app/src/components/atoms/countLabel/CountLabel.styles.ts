@@ -1,10 +1,10 @@
+import { colooors } from "@/constants/styles/colors";
+
 import { css } from "@emotion/react";
-import { type MantineTheme } from "@mantine/styles";
 
 import { type ICountLabel } from "./CountLabel";
 
-export const wrapper = ({ theme, variant }: {
-  theme: MantineTheme;
+export const wrapper = ({ variant }: {
   variant: ICountLabel["variant"];
 }) => 
 {

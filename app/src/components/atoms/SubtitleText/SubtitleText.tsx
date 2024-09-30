@@ -1,4 +1,6 @@
-import { type CSSObject, Text, type TextProps, createPolymorphicComponent } from "@mantine/core";
+import { spaciiing } from "@/constants/styles/spacing";
+
+import { createPolymorphicComponent, type CSSObject, Text, type TextProps } from "@mantine/core";
 import React, { type FC } from "react";
 
 type TSubtitleText = TextProps & {
@@ -20,7 +22,7 @@ const _SubtitleText: FC<TSubtitleText> = ({
       sx={(theme) => ({
         fontSize: size ?? theme.fontSizes["spacing-18"],
         fontWeight: styleType === "subtitle-01-bold" ? 700 : 500,
-        lineHeight: theme.spacing["spacing-24"],
+        lineHeight: spaciiing["spacing-24"],
         ...styleOverwrite,
       })}
       {...props}>

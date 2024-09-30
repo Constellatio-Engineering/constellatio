@@ -10,25 +10,16 @@ import { DragDropColumn } from "@/components/organisms/DragDropGame/DragDropColu
 import useContextAndErrorIfNull from "@/hooks/useContextAndErrorIfNull";
 import { InvalidateQueriesContext } from "@/provider/InvalidateQueriesProvider";
 import { type IGenDragNDropGame } from "@/services/graphql/__generated/sdk";
-import useDragDropGameStore, {
-  type TDragAndDropGameOptionType,
-} from "@/stores/dragDropGame.store";
+import useDragDropGameStore, { type TDragAndDropGameOptionType, } from "@/stores/dragDropGame.store";
 import { api } from "@/utils/api";
 import { shuffleArray } from "@/utils/array";
 
-import {
-  DragDropContext,
-  type DropResult
-} from "@hello-pangea/dnd";
-import { Title, LoadingOverlay } from "@mantine/core";
+import { DragDropContext, type DropResult } from "@hello-pangea/dnd";
+import { LoadingOverlay, Title } from "@mantine/core";
 import React, { type FC, useCallback, useMemo } from "react";
 
 import {
-  Container,
-  Game,
-  GameWrapper,
-  LegendWrapper,
-  TitleWrapper,
+  Container, Game, GameWrapper, LegendWrapper, TitleWrapper, 
 } from "./DragDropGame.styles";
 
 export type TDragDropGame = Pick<IGenDragNDropGame, "game" | "helpNote" | "question"> & {

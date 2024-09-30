@@ -1,7 +1,7 @@
 import { colooors } from "@/constants/styles/colors";
 
 import { css } from "@emotion/react";
-import { type MantineTheme } from "@mantine/styles";
+import { type MantineTheme } from "@mantine/core";
 
 import { type IEmptyStateCardProps } from "./EmptyStateCard";
 
@@ -52,18 +52,18 @@ export const emptyStateCardImage = ({ variant }: IEmptyCardProps) => css`
   margin-top: ${variant === "For-tiny-areas" ? -10 : 0}px;
 `;
 
-export const emptyStateCardTitle = ({ theme, variant }: IEmptyCardProps) => css`
+export const emptyStateCardTitle = ({ variant }: IEmptyCardProps) => css`
   margin-bottom: ${variant === "For-tiny-areas" ? 8 : 16}px;
   color: ${variant === "For-large-areas" ? colooors["neutrals-02"][1] : colooors["neutrals-01"][9]};
 `;
 
-export const emptyStateCardText = ({ theme, variant }: IEmptyCardProps) => css`
+export const emptyStateCardText = ({ variant }: IEmptyCardProps) => css`
   margin-bottom: ${variant === "For-tiny-areas" ? 8 : 24}px;
   color: ${colooors["neutrals-01"][7]};
   padding: 0 20px;
 `;
 
-export const callToAction = ({ theme }: IEmptyCardProps) => css`
+export const callToAction = () => css`
     color: ${colooors["neutrals-01"][0]};
   & * {
     color: ${colooors["neutrals-01"][0]};

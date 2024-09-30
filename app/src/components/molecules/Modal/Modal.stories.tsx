@@ -1,8 +1,6 @@
 import { Button } from "@/components/atoms/Button/Button";
 
-import {
-  Group, Text
-} from "@mantine/core";
+import { Group, Text } from "@mantine/core";
 import { useDisclosure } from "@mantine/hooks";
 import { type Meta, type StoryObj } from "@storybook/react";
 import { type FunctionComponent } from "react";

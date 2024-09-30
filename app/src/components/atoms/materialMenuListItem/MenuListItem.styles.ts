@@ -3,9 +3,9 @@ import { type UnknownMantineStylesParams } from "@/utils/types";
 
 import { css } from "@emotion/react";
 import { type ModalStylesNames } from "@mantine/core";
-import { type Styles, type MantineTheme } from "@mantine/styles";
+import { type Styles } from "@mantine/styles";
 
-const CSSActiveStyles = ({ active, theme }: {active?: boolean; theme: MantineTheme}) => css`
+const CSSActiveStyles = ({ active }: {active?: boolean }) => css`
   background-color: ${colooors["neutrals-01"][3]};
   border-left: 3px solid ${colooors["neutrals-02"][1]};
   p {
@@ -15,9 +15,8 @@ const CSSActiveStyles = ({ active, theme }: {active?: boolean; theme: MantineThe
   }
 `;
 
-export const wrapper = ({ active, theme }: {
+export const wrapper = ({ active }: {
   active?: boolean;
-  theme: MantineTheme;
 }) => css`
   border: 0;
   outline: 0;
@@ -57,7 +56,7 @@ export const wrapper = ({ active, theme }: {
     /* padding:0;
     margin:0; */
   }
-  ${active && CSSActiveStyles({ active, theme })}
+  ${active && CSSActiveStyles({ active })}
 `;
 
 type ModalStyles = Styles<ModalStylesNames, UnknownMantineStylesParams>;
@@ -108,7 +107,7 @@ export const modalStyles = (): ModalStyles =>
   return styles;
 };
 
-export const label = ({ active, theme }: {active?: boolean;theme: MantineTheme}) => css`
+export const label = ({ active }: {active?: boolean}) => css`
   display: inline-block;
   overflow: hidden;
   white-space: nowrap;
@@ -122,7 +121,7 @@ export const label = ({ active, theme }: {active?: boolean;theme: MantineTheme})
   }
 `;
 
-export const dropDownLabel = (theme: MantineTheme) => css`
-${label({ theme })};
+export const dropDownLabel = () => css`
+${label({ active: false })};
 padding:12px 16px;
 `;

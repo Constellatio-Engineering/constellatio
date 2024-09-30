@@ -1,17 +1,19 @@
+import { colooors } from "@/constants/styles/colors";
+import { spaciiing } from "@/constants/styles/spacing";
 import { type UnknownMantineStylesParams } from "@/utils/types";
 
 import { type MantineTheme, type ModalStylesNames, type Styles } from "@mantine/core";
 
 type ModalStyles = Styles<ModalStylesNames, UnknownMantineStylesParams>;
 
-export const modalStyles = (): ModalStyles =>
+export const modalStyles = (theme: MantineTheme): ModalStyles =>
 {
-  const styles: ModalStyles = (theme: MantineTheme) => ({
+  const styles: ModalStyles = () => ({
     body: {
       alignItems: "center",
       display: "flex",
       flexDirection: "column",
-      gap: theme.spacing["spacing-24"],
+      gap: spaciiing["spacing-24"],
       justifyContent: "center",
       padding: 0,
     },
@@ -27,11 +29,11 @@ export const modalStyles = (): ModalStyles =>
     content: {
       borderRadius: theme.radius["radius-12"],
       boxShadow: theme.shadows["elevation-big"],
-      padding: theme.spacing["spacing-36"],
+      padding: spaciiing["spacing-36"],
     },
     header: {
       alignItems: "self-start",
-      padding: `0 0 ${theme.spacing["spacing-16"]} 0`,
+      padding: `0 0 ${spaciiing["spacing-16"]} 0`,
     },
     overlay: {
       backgroundColor: colooors["transparency-01"][5],
@@ -40,7 +42,7 @@ export const modalStyles = (): ModalStyles =>
       fontFamily: `${theme.fontFamily}`,
       fontSize: theme.fontSizes["spacing-24"],
       fontWeight: 400,
-      lineHeight: theme.spacing["spacing-36"],
+      lineHeight: spaciiing["spacing-36"],
     },
   });
   return styles;

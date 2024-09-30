@@ -2,7 +2,7 @@ import { colooors } from "@/constants/styles/colors";
 import { type UnknownMantineStylesParams } from "@/utils/types";
 
 import { css } from "@emotion/react";
-import { type MantineTheme, type Styles } from "@mantine/core";
+import { type Styles } from "@mantine/core";
 import { type RichTextEditorStylesNames } from "@mantine/tiptap";
 
 type RichtextEditorFieldStyles = Styles<RichTextEditorStylesNames, UnknownMantineStylesParams>;
@@ -13,7 +13,7 @@ export const richtextEditorFieldStyles = ({
   noMinHeight
 }: { hasError: boolean; minHeight: number; noMinHeight: boolean}): RichtextEditorFieldStyles =>
 {
-  const styles: RichtextEditorFieldStyles = (theme: MantineTheme) => ({
+  const styles: RichtextEditorFieldStyles = () => ({
     content: {
       "& .ProseMirror": {
         "& blockquote": {
@@ -47,7 +47,7 @@ export const richtextEditorFieldStyles = ({
     root: {
       background: `${colooors["neutrals-01"][0]}`,
       ...(hasError && {
-        borderColor: colors["support-error"][3],
+        borderColor: colooors["support-error"][3],
       }),
       borderRadius: "12px",
       overflow: "hidden"
@@ -83,7 +83,7 @@ export const label = (hasError: boolean) => css`
   font-size: 16px;
   line-height: 24px;
   font-weight: 400;
-  color: ${hasError ? colors["support-error"][3] : "#212529"};
+  color: ${hasError ? colooors["support-error"][3] : "#212529"};
   padding-bottom: 4px;
 `;
 

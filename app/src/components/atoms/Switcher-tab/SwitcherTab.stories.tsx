@@ -1,4 +1,6 @@
 import { Puzzle } from "@/components/Icons/Puzzle";
+import { colooors } from "@/constants/styles/colors";
+import { spaciiing } from "@/constants/styles/spacing";
 import { type ExtractProps } from "@/utils/types";
 
 import { Tabs } from "@mantine/core";
@@ -32,10 +34,10 @@ const Template: FunctionComponent<ExtractProps<typeof SwitcherTab>> = args => (
         fontFamily: "inherit",
         fontSize: "16px",
         fontWeight: 500,
-        gap: theme.spacing["spacing-4"],
+        gap: spaciiing["spacing-4"],
         lineHeight: "24px",
         outline: "none",
-        padding: `${theme.spacing["spacing-8"]} ${theme.spacing["spacing-16"]}`,
+        padding: `${spaciiing["spacing-8"]} ${spaciiing["spacing-16"]}`,
         transition: "all 0.3s ease",
       },
       tabIcon: {

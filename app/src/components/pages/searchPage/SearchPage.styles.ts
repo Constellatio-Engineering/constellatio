@@ -1,5 +1,6 @@
+import { colooors } from "@/constants/styles/colors";
+
 import { css } from "@emotion/react";
-import { type MantineTheme } from "@mantine/styles";
 
 export const wrapper = css``;
 
@@ -14,7 +15,7 @@ export const loadingWrapper = css`
   justify-content: center;
 `;
 
-export const header = (theme: MantineTheme) => css`
+export const header = () => css`
 	height: 400px;
 	width: 100%;
 	display: flex;
@@ -47,7 +48,7 @@ export const headerContentWrapper = css`
   transform: none;
 `;
 
-export const navBar = (theme: MantineTheme) => css`
+export const navBar = () => css`
 	width: 100%;
 	background-color: ${colooors["neutrals-01"][0]};
 `;

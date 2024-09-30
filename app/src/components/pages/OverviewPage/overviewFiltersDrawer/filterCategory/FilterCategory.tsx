@@ -88,14 +88,14 @@ export const FilterCategory: FunctionComponent<FilterCategoryProps> = ({
               placeholder={`Suche nach ${search.searchesFor}`}
               styles={{
                 icon: {
-                  color: colors["neutrals-01"][7],
+                  color: colooors["neutrals-01"][7],
                 },
                 input: {
                   "&::placeholder": {
-                    color: colors["neutrals-01"][7],
+                    color: colooors["neutrals-01"][7],
                   },
                   "&:focus-within": {
-                    borderColor: colors["neutrals-01"][7],
+                    borderColor: colooors["neutrals-01"][7],
                   },
                   border: "1px solid ##D6D6D6",
                 },

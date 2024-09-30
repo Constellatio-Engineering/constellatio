@@ -1,17 +1,12 @@
+import { colooors } from "@/constants/styles/colors";
+
 import { css } from "@emotion/react";
-import { type MantineTheme } from "@mantine/styles";
 
-type ICategoryTabStyleProps = {
-  theme: MantineTheme;
-  variant?: "case" | "dictionary" | "red";
-};
-
-export const wrapper = ({ theme }: ICategoryTabStyleProps) => css`
+export const wrapper = () => css`
   outline: 0;
   border: 0;
   background-color: ${colooors["neutrals-01"][2]};
   color: ${colooors["neutrals-02"][1]};
-  /* progressive/body/body-01@medium */
   display: flex;
   justify-content: space-between;
   align-items: center;

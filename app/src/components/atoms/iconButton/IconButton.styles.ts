@@ -1,13 +1,11 @@
 import { colooors } from "@/constants/styles/colors";
 
-import { type SerializedStyles, css } from "@emotion/react";
-import { type MantineTheme } from "@mantine/styles";
+import { css, type SerializedStyles } from "@emotion/react";
 
 import { type IIconButtonProps } from "./IconButton";
 
-export const wrapper = ({ size, theme }: {
+export const wrapper = ({ size }: {
   size: IIconButtonProps["size"];
-  theme: MantineTheme;
 }): SerializedStyles => css`
   cursor: pointer;
 	display: flex;

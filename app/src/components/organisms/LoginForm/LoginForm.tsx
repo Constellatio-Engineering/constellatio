@@ -19,7 +19,7 @@ import { Stack } from "@mantine/core";
 import { useForm, zodResolver } from "@mantine/form";
 import { useAtom } from "jotai";
 import Link from "next/link";
-import { useRouter } from "next/router"; 
+import { useRouter } from "next/router";
 import React, { type FunctionComponent, useEffect, useState } from "react";
 
 import * as styles from "./LoginForm.styles";
@@ -133,14 +133,14 @@ export const LoginForm: FunctionComponent = () =>
               component="button"
               style={{ display: "inline-block" }}
               onClick={openResetPasswordModal}
-              stylesOverwrite={{ color: colors["neutrals-02"][2], textAlign: "left" }}>
+              stylesOverwrite={{ color: colooors["neutrals-02"][2], textAlign: "left" }}>
               Passwort vergessen?
             </CustomLink>
             <CustomLink
               styleType="link-secondary"
               component={Link}
               href={authPaths.register}
-              stylesOverwrite={{ color: colors["neutrals-02"][2], textAlign: "left" }}>
+              stylesOverwrite={{ color: colooors["neutrals-02"][2], textAlign: "left" }}>
               Du hast noch kein Konto?
             </CustomLink>
           </div>

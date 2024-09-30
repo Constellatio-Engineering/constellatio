@@ -1,14 +1,14 @@
-import { css } from "@emotion/react";
-import { type MantineTheme } from "@mantine/styles";
+import { colooors } from "@/constants/styles/colors";
 
-const CSSActiveStyles = (theme: MantineTheme) => css`
+import { css } from "@emotion/react";
+
+const CSSActiveStyles = () => css`
   background: ${colooors["neutrals-01"][2]};
   border-left: 3px solid ${colooors["neutrals-02"][1]};
 `;
 
-export const wrapper = ({ selected, theme }: {
+export const wrapper = ({ selected }: {
   selected?: boolean;
-  theme: MantineTheme;
 }) => css`
   outline: 0;
   border: 0;
@@ -24,5 +24,5 @@ export const wrapper = ({ selected, theme }: {
     vertical-align: text-bottom;
     margin-right: 8px;
   }
-  ${selected && CSSActiveStyles(theme)}
+  ${selected && CSSActiveStyles()}
 `;

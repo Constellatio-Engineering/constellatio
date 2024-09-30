@@ -1,5 +1,7 @@
+import { colooors } from "@/constants/styles/colors";
+
 import styled from "@emotion/styled";
-import { type AccordionStylesNames, type AccordionStylesParams, type MantineTheme, type Styles } from "@mantine/core";
+import { type AccordionStylesNames, type AccordionStylesParams, type Styles } from "@mantine/core";
 
 export const ItemWrapper = styled.li<{ index: number }>`
   > p {
@@ -30,7 +32,7 @@ type HintsAccordionStyles = Styles<AccordionStylesNames, AccordionStylesParams>;
 
 export const hintsAccordionStyles = (): HintsAccordionStyles =>
 {
-  const styles: HintsAccordionStyles = (theme: MantineTheme) => ({
+  const styles: HintsAccordionStyles = () => ({
     chevron: {
       height: "24px",
       margin: 0,

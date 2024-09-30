@@ -1,9 +1,8 @@
 import { colooors } from "@/constants/styles/colors";
 
 import { css } from "@emotion/react";
-import { type MantineTheme } from "@mantine/styles";
 
-export const button = (theme: MantineTheme) => css`
+export const button = () => css`
   padding: 8px 16px;
   background-color: ${colooors["neutrals-01"][0]};
   border-radius: 100px;
@@ -36,9 +35,8 @@ export const button = (theme: MantineTheme) => css`
   }
 `;
 
-export const icon = ({ disabled, theme }: {
+export const icon = ({ disabled }: {
   disabled: boolean | undefined;
-  theme: MantineTheme;
 }) => css`
   color: ${disabled
     ? colooors["neutrals-01"][7]

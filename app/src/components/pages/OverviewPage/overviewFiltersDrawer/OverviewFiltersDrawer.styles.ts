@@ -1,13 +1,14 @@
+import { colooors } from "@/constants/styles/colors";
 import type { UnknownMantineStylesParams } from "@/utils/types";
 
 import type { DrawerStylesNames } from "@mantine/core";
-import type { MantineTheme, Styles } from "@mantine/styles";
+import type { Styles } from "@mantine/styles";
 
 type DrawerStylesProps = Styles<DrawerStylesNames, UnknownMantineStylesParams>;
 
 export const drawerStyles = () =>
 {
-  const styles: DrawerStylesProps = (theme: MantineTheme) => ({
+  const styles: DrawerStylesProps = () => ({
     body: {
       overflowY: "auto",
       padding: "0px",

@@ -1,10 +1,14 @@
+import { colooors } from "@/constants/styles/colors";
+import { spaciiing } from "@/constants/styles/spacing";
+
 import {
   Button as MantineButton,
   type ButtonProps,
-  type Styles,
   type ButtonStylesNames,
+  type ButtonStylesParams,
+  createPolymorphicComponent,
   type CSSObject,
-  createPolymorphicComponent, type ButtonStylesParams,
+  type Styles,
 } from "@mantine/core";
 import React, { type ButtonHTMLAttributes, type FC } from "react";
 
@@ -24,10 +28,10 @@ const _Button: FC<TButton> = ({
 {
   const styles: Styles<ButtonStylesNames, ButtonStylesParams> = theme => ({
     leftIcon: {
-      marginRight: theme.spacing["spacing-4"],
+      marginRight: spaciiing["spacing-4"],
     },
     rightIcon: {
-      marginLeft: theme.spacing["spacing-4"],
+      marginLeft: spaciiing["spacing-4"],
     },
     root: {
       ":active": {
@@ -82,11 +86,11 @@ const _Button: FC<TButton> = ({
       fontSize: theme.fontSizes["spacing-16"],
       fontStyle: "normal",
       fontWeight: 500,
-      height: size === "large" ? theme.spacing["spacing-40"] : theme.spacing["spacing-32"],
-      lineHeight: theme.spacing["spacing-24"],
+      height: size === "large" ? spaciiing["spacing-40"] : spaciiing["spacing-32"],
+      lineHeight: spaciiing["spacing-24"],
       padding: size === "large"
-        ? `${theme.spacing["spacing-8"]} ${theme.spacing["spacing-16"]}`
-        : `${theme.spacing["spacing-4"]} ${theme.spacing["spacing-10"]}`
+        ? `${spaciiing["spacing-8"]} ${spaciiing["spacing-16"]}`
+        : `${spaciiing["spacing-4"]} ${spaciiing["spacing-10"]}`
       ,
       transition: "all 0.2s ease",
       ...styleOverwrite,

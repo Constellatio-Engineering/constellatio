@@ -1,3 +1,6 @@
+import { colooors } from "@/constants/styles/colors";
+import { spaciiing } from "@/constants/styles/spacing";
+
 import { css, type SerializedStyles } from "@emotion/react";
 import styled from "@emotion/styled";
 
@@ -13,8 +16,8 @@ export const SRichtext = styled.div<{ stylesOverwrite?: SerializedStyles }>`
     > ol p {
       font-size: ${theme.fontSizes["spacing-16"]};
       font-weight: 400;
-      line-height: ${theme.spacing["spacing-24"]};
-      padding-bottom: ${theme.spacing["spacing-24"]};
+      line-height: ${spaciiing["spacing-24"]};
+      padding-bottom: ${spaciiing["spacing-24"]};
 
       strong {
         font-weight: 700;
@@ -26,7 +29,7 @@ export const SRichtext = styled.div<{ stylesOverwrite?: SerializedStyles }>`
         font-size: ${theme.fontSizes["spacing-16"]};
         font-weight: inherit;
         font-family: inherit;
-        line-height: ${theme.spacing["spacing-24"]};
+        line-height: ${spaciiing["spacing-24"]};
         transition: color .15s ease;
 
         &:hover {
@@ -39,7 +42,7 @@ export const SRichtext = styled.div<{ stylesOverwrite?: SerializedStyles }>`
       li {
         display: flex;
         align-items: baseline;
-        gap: ${theme.spacing["spacing-8"]};
+        gap: ${spaciiing["spacing-8"]};
 
         &::before {
           content: "";
@@ -74,8 +77,8 @@ export const SRichtext = styled.div<{ stylesOverwrite?: SerializedStyles }>`
     > h5 {
       font-size: ${theme.fontSizes["spacing-18"]};
       font-weight: 500;
-      line-height: ${theme.spacing["spacing-24"]};
-      padding-bottom: ${theme.spacing["spacing-24"]};
+      line-height: ${spaciiing["spacing-24"]};
+      padding-bottom: ${spaciiing["spacing-24"]};
 
       strong {
         font-weight: 700;
@@ -85,8 +88,8 @@ export const SRichtext = styled.div<{ stylesOverwrite?: SerializedStyles }>`
     > h6 {
       font-size: ${theme.fontSizes["spacing-16"]};
       font-weight: 500;
-      line-height: ${theme.spacing["spacing-24"]};
-      padding-bottom: ${theme.spacing["spacing-24"]};
+      line-height: ${spaciiing["spacing-24"]};
+      padding-bottom: ${spaciiing["spacing-24"]};
 
       strong {
         font-weight: 700;

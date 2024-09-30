@@ -1,5 +1,5 @@
 import { Svg } from "@/basic-components/SVG/Svg";
-import { type IGenMainCategory, type IGenArticle } from "@/services/graphql/__generated/sdk";
+import { type IGenArticle, type IGenMainCategory } from "@/services/graphql/__generated/sdk";
 import { type Nullable } from "@/utils/types";
 
 import React, { type FunctionComponent } from "react";

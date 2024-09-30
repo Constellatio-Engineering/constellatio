@@ -1,14 +1,15 @@
+import { colooors } from "@/constants/styles/colors";
 import { type UnknownMantineStylesParams } from "@/utils/types";
 
 import { css } from "@emotion/react";
-import { type DrawerStylesNames } from "@mantine/core";
-import { type MantineTheme, type Styles } from "@mantine/styles";
+import { type DrawerStylesNames, type MantineTheme } from "@mantine/core";
+import { type Styles } from "@mantine/styles";
 
 type DrawerStylesProps = Styles<DrawerStylesNames, UnknownMantineStylesParams>;
 
 export const drawerStyles = () => 
 {
-  const styles: DrawerStylesProps = (theme: MantineTheme) => ({
+  const styles: DrawerStylesProps = () => ({
     content: {
       ".suggestion__section": {
         "&__link": {
@@ -42,7 +43,7 @@ export const contentWrapper = css`
   display: flex;
 `;
 
-export const suggestionsLeft = (theme: MantineTheme) => css`
+export const suggestionsLeft = () => css`
 	width: 61%;
 	min-height: 100%;
 	display: flex;

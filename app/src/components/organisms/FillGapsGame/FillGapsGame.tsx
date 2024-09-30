@@ -19,24 +19,12 @@ import useFillGapsGameStore from "@/stores/fillGapsGame.store";
 import { api } from "@/utils/api";
 
 import { Title } from "@mantine/core";
-import { colors } from "@storybook/node-logger";
 import React, {
-  type FC,
-  type ReactElement,
-  memo,
-  useEffect,
-  useCallback,
-  useMemo,
+  type FC, memo, type ReactElement, useCallback, useEffect, useMemo, 
 } from "react";
 
 import {
-  Container,
-  Game,
-  GameWrapper,
-  LegendWrapper,
-  Options,
-  TitleWrapper,
-  stylesOverwrite,
+  Container, Game, GameWrapper, LegendWrapper, Options, stylesOverwrite, TitleWrapper, 
 } from "./FillGapsGame.styles";
 
 export type TFillGapsGame = Pick<IGenFillInGapsGame, "fillGameParagraph" | "helpNote" | "question" | "id"> & {
@@ -198,13 +186,13 @@ let FillGapsGame: FC<TFillGapsGame> = ({
         {gameStatus !== "inprogress" && (
           <LegendWrapper>
             <BodyText component="p" styleType="body-01-regular">
-              <span style={{ color: colors["support-success"][4] }}>
+              <span style={{ color: colooors["support-success"][4] }}>
                 <CheckFilled size={16}/>
               </span>{" "}
               Richtige Antwort
             </BodyText>
             <BodyText component="p" styleType="body-01-regular">
-              <span style={{ color: colors["support-error"][3] }}>
+              <span style={{ color: colooors["support-error"][3] }}>
                 <CrossFilled size={16}/>
               </span>{" "}
               Falsche Antwort

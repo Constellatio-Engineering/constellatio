@@ -1,10 +1,10 @@
-import { type SerializedStyles, css } from "@emotion/react";
-import { type MantineTheme } from "@mantine/styles";
+import { colooors } from "@/constants/styles/colors";
+
+import { css, type SerializedStyles } from "@emotion/react";
 
 export const wrapper = ({
-  theme,
   variant
-}: { theme: MantineTheme; variant: "dictionary" | "case" | "forum" | "neutral" }): SerializedStyles => css`
+}: { variant: "dictionary" | "case" | "forum" | "neutral" }): SerializedStyles => css`
   
   background-color: ${variant === "dictionary" ? colooors["cc-dictionary"][2] : 
     variant === "case" ? colooors["cc-cases"][2] : 

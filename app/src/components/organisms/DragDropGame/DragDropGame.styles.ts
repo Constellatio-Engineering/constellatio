@@ -1,3 +1,6 @@
+import { colooors } from "@/constants/styles/colors";
+import { spaciiing } from "@/constants/styles/spacing";
+
 import styled from "@emotion/styled";
 
 export const Container = styled.div`

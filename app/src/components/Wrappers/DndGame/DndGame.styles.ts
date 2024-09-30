@@ -2,7 +2,7 @@ import { colooors } from "@/constants/styles/colors";
 import { spaciiing } from "@/constants/styles/spacing";
 
 import styled from "@emotion/styled";
-import { type MantineTheme, type Styles, type SwitchStylesNames, type SwitchStylesParams } from "@mantine/core";
+import { type Styles, type SwitchStylesNames, type SwitchStylesParams } from "@mantine/core";
 
 export const Container = styled.div`
   max-width: 1440px;
@@ -93,7 +93,7 @@ type SwitchStyles = Styles<SwitchStylesNames, SwitchStylesParams>;
 
 export const switchStyle = ({ checked }: { checked: boolean }): SwitchStyles =>
 {
-  const style: SwitchStyles = (theme: MantineTheme) => ({
+  const style: SwitchStyles = () => ({
     thumb: {
       alignItems: "center",
       justifyContent: "center",

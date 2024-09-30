@@ -1,3 +1,6 @@
+import { colooors } from "@/constants/styles/colors";
+import { spaciiing } from "@/constants/styles/spacing";
+
 import { css } from "@emotion/react";
 import styled from "@emotion/styled";
 
@@ -13,7 +16,7 @@ export const Column = styled.div<{
   padding-bottom: 4px;
   flex: 1 0 0;
   border-radius: ${({ theme }) => theme.radius["radius-12"]};
-  border: 1px solid ${({ isDraggingOver, theme }) => isDraggingOver ? colooors["neutrals-01"][5] : colooors["neutrals-01"][3]};
+  border: 1px solid ${({ isDraggingOver }) => isDraggingOver ? colooors["neutrals-01"][5] : colooors["neutrals-01"][3]};
   background-color: ${colooors["neutrals-01"][2]};
 `;
 

@@ -1,8 +1,8 @@
-import { type SerializedStyles, css } from "@emotion/react";
-import type { MantineTheme } from "@mantine/styles";
+import { colooors } from "@/constants/styles/colors";
 
-export const wrapper = ({ theme, variant }: {
-  theme: MantineTheme;
+import { css, type SerializedStyles } from "@emotion/react";
+
+export const wrapper = ({ variant }: {
   variant: "case" | "dictionary";
 }): SerializedStyles => css`
   position: relative;
@@ -45,7 +45,7 @@ export const bodyArticles = css`
   padding-bottom: 120px;
 `;
 
-export const bodyText = (theme: MantineTheme): SerializedStyles => css`
+export const bodyText = (): SerializedStyles => css`
   width: 48%;
 
   h1 {
@@ -127,7 +127,7 @@ export const navButtonDisabled = css`
   background-color: rgba(255, 255, 255, 0.03) !important;
 `;
 
-export const stepsBar = (theme: MantineTheme): SerializedStyles => css`
+export const stepsBar = (): SerializedStyles => css`
   position: relative;
   z-index: 2;
   background-color: ${colooors["neutrals-01"][0]};

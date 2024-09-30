@@ -1,5 +1,7 @@
 import { BodyText } from "@/components/atoms/BodyText/BodyText";
 import { Checkbox } from "@/components/atoms/Checkbox/Checkbox";
+import { colooors } from "@/constants/styles/colors";
+import { spaciiing } from "@/constants/styles/spacing";
 
 import { useMantineTheme } from "@mantine/core";
 import React, { type FC, type ReactNode } from "react";
@@ -101,9 +103,9 @@ export const SelectionCard: FC<SelectionCardProps> = ({
               : colooors["neutrals-01"][3]
         }`,
         borderRadius: theme.radius["radius-8"],
-        gap: theme.spacing["spacing-8"],
+        gap: spaciiing["spacing-8"],
 
-        padding: `0 ${theme.spacing["spacing-12"]}`,
+        padding: `0 ${spaciiing["spacing-12"]}`,
 
         transition: "all 0.3s ease",
       }}
@@ -113,7 +115,7 @@ export const SelectionCard: FC<SelectionCardProps> = ({
         cursor: status === "default" ? "pointer" : "default",
         display: "flex",
         justifyContent: "space-between",
-        padding: `${theme.spacing["spacing-12"]} 0`,
+        padding: `${spaciiing["spacing-12"]} 0`,
       }}
     />
   );

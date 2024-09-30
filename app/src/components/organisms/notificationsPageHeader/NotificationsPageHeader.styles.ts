@@ -1,5 +1,6 @@
+import { colooors } from "@/constants/styles/colors";
+
 import { css } from "@emotion/react";
-import { type MantineTheme } from "@mantine/styles";
 
 export const wrapper = css`
   position: relative;
@@ -16,7 +17,7 @@ export const contentContainer = css`
   }
 `;
 
-export const headerTitle = (theme: MantineTheme) => css`
+export const headerTitle = () => css`
   color: ${colooors["neutrals-01"][0]};
   text-align: center;
 `;

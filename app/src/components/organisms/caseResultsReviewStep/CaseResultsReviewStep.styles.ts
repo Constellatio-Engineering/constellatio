@@ -1,6 +1,8 @@
+import { colooors } from "@/constants/styles/colors";
+
 import { css } from "@emotion/react";
 import { type SpoilerStylesNames, type SpoilerStylesParams } from "@mantine/core";
-import { type Styles, type MantineTheme } from "@mantine/styles";
+import { type Styles } from "@mantine/styles";
 
 export const wrapper = css``;
 
@@ -25,7 +27,7 @@ export const content = css`
   }
 `;
 
-export const factsWrapper = (theme: MantineTheme) => css`
+export const factsWrapper = () => css`
   min-width: 100%;
   margin-bottom: 24px;
   .mantine-Accordion-item {
@@ -37,7 +39,7 @@ export const factsWrapper = (theme: MantineTheme) => css`
   overflow: auto;
 `;
 
-export const solutionWrapper = (theme: MantineTheme) => css`
+export const solutionWrapper = () => css`
   background-color: ${colooors["neutrals-01"][0]};
   border-radius: 12px;
   width: 100%;

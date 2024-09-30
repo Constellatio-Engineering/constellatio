@@ -1,7 +1,6 @@
 import { colooors } from "@/constants/styles/colors";
 
 import { css } from "@emotion/react";
-import { type MantineTheme } from "@mantine/styles";
 
 const CSSHiddenCard = css`
   height: 217px;
@@ -11,14 +10,13 @@ const CSSHiddenCard = css`
     filter: blur(3px);
   }
 `;
-const CSSHighlighted = (theme: MantineTheme) => css`
+const CSSHighlighted = () => css`
   background: ${colooors["neutrals-01"][3]};
   outline: 1px solid ${colooors["neutrals-01"][1]};
 `;
 
-export const wrapper = ({ hidden, theme }: {
+export const wrapper = ({ hidden }: {
   hidden?: boolean;
-  theme: MantineTheme;
 }) => css`
   position: relative;
   width: 422px;
@@ -90,16 +88,12 @@ export const wrapper = ({ hidden, theme }: {
 
 export const item = ({
   isExpanded,
-  // isExpandable,
   isHighlighted,
-  // isTopLevel,
-  theme
 }: {
   isExpandable?: boolean;
   isExpanded?: boolean;
   isHighlighted?: boolean;
   isTopLevel?: boolean;
-  theme: MantineTheme;
 }) => css`
   display: flex;
   align-items: baseline;
@@ -133,7 +127,7 @@ export const item = ({
   position: relative;
   vertical-align: baseline;
   cursor: pointer;
-  ${isHighlighted && CSSHighlighted(theme)}
+  ${isHighlighted && CSSHighlighted()}
 `;
 
 export const facts = css`

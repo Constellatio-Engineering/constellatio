@@ -1,7 +1,8 @@
-import { type SerializedStyles, css } from "@emotion/react";
-import { type MantineTheme } from "@mantine/styles";
+import { colooors } from "@/constants/styles/colors";
 
-const CSSClickableEffect = (theme: MantineTheme) => css`
+import { css, type SerializedStyles } from "@emotion/react";
+
+const CSSClickableEffect = () => css`
   &:hover {
 	border-color: ${colooors["neutrals-01"][4]};
 		background-color: ${colooors["neutrals-01"][1]};
@@ -19,11 +20,9 @@ const CSSClickableEffect = (theme: MantineTheme) => css`
 
 export const wrapper = ({
   clickable,
-  theme,
   variant
 }: {
   clickable?: boolean;
-  theme: MantineTheme;
   variant: "titleTableCell" | "simpleTableCell";
 }): SerializedStyles => css`
 	cursor: ${variant === "titleTableCell" ? "pointer" : "default"};
@@ -42,7 +41,7 @@ export const wrapper = ({
     : colooors["neutrals-01"][9]};
 	transition: border-color 0.3s ease-in, background-color 0.3s ease-in;
 
-	${clickable && CSSClickableEffect(theme)}
+	${clickable && CSSClickableEffect()}
 
 	
 `;

@@ -2,8 +2,8 @@ import { Box } from "@mantine/core";
 import { type Meta, type StoryObj } from "@storybook/react";
 import { type FunctionComponent } from "react";
 
-import CountLabel from "./CountLabel";
 import type { ICountLabel } from "./CountLabel";
+import CountLabel from "./CountLabel";
 
 const Template: FunctionComponent<ICountLabel> = (args) => (
   <Box w={350}>

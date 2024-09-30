@@ -1,7 +1,8 @@
-import { type SerializedStyles, css } from "@emotion/react";
-import { type MantineTheme } from "@mantine/styles";
+import { colooors } from "@/constants/styles/colors";
 
-export const wrapper = (theme: MantineTheme) => css`
+import { css, type SerializedStyles } from "@emotion/react";
+
+export const wrapper = () => css`
   padding: 32px;
   border-radius: 8px;
   background-color: ${colooors["neutrals-01"][0]};
@@ -36,9 +37,7 @@ export const expandTableButton = css`
   margin: 0 auto;
   display: block;
 `;
-const CSSCommonExpandButtonStyles = (
-  theme: MantineTheme
-): SerializedStyles => css`
+const CSSCommonExpandButtonStyles = (): SerializedStyles => css`
   content: "";
   position: absolute;
   width: 38%;
@@ -47,7 +46,7 @@ const CSSCommonExpandButtonStyles = (
   top: 50%;
 `;
 
-export const expandTableButtonArea = (theme: MantineTheme) => css`
+export const expandTableButtonArea = () => css`
   background-color: ${colooors["neutrals-01"][0]};
   position: relative;
   .linearGredient {
@@ -65,10 +64,10 @@ export const expandTableButtonArea = (theme: MantineTheme) => css`
     left: 0;
   }
   &::after {
-    ${CSSCommonExpandButtonStyles(theme)}
+    ${CSSCommonExpandButtonStyles()}
   }
   &::before {
     right: 0;
-    ${CSSCommonExpandButtonStyles(theme)}
+    ${CSSCommonExpandButtonStyles()}
   }
 `;

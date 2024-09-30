@@ -1,7 +1,8 @@
-import { css } from "@emotion/react";
-import { type MantineTheme } from "@mantine/styles";
+import { colooors } from "@/constants/styles/colors";
 
-export const tag = (theme: MantineTheme) => css`
+import { css } from "@emotion/react";
+
+export const tag = () => css`
 	padding: 4px 12px;
 	background: ${colooors["neutrals-01"][2]};
 	border-radius: 40px;

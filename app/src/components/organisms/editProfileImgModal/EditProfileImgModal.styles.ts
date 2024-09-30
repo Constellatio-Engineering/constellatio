@@ -2,11 +2,7 @@ import { colooors } from "@/constants/styles/colors";
 import { type UnknownMantineStylesParams } from "@/utils/types";
 
 import { css } from "@emotion/react";
-import {
-  type MantineTheme,
-  type ModalStylesNames,
-  type Styles,
-} from "@mantine/core";
+import { type ModalStylesNames, type Styles, } from "@mantine/core";
 
 type ModalStyles = Styles<ModalStylesNames, UnknownMantineStylesParams>;
 
@@ -53,7 +49,7 @@ export const closeButton = css`
   }
 `;
 
-export const uploadImgCard = (theme: MantineTheme) => css`
+export const uploadImgCard = () => css`
   margin-top: 20px;
   margin-bottom: 24px;
   background-color: ${colooors["neutrals-01"][2]};
@@ -72,7 +68,7 @@ export const saveButton = css`
   display: block;
   width: 100%;
 `;
-export const uploadImgInput = (theme: MantineTheme) => css`
+export const uploadImgInput = () => css`
   opacity: 0;
   /* input style debugger opacity: 0.3; */
   position: absolute;
@@ -86,7 +82,7 @@ export const uploadImgInput = (theme: MantineTheme) => css`
   grid-gap: 8px;
   z-index: 3;
 `;
-export const libraryArea = (theme: MantineTheme) => css`
+export const libraryArea = () => css`
   margin: 24px 0;
   display: flex;
   justify-content: flex-start;
@@ -113,7 +109,7 @@ export const libraryArea = (theme: MantineTheme) => css`
    margin-bottom: 10px;
   }
 `;
-export const avatarIcon = ({ selected, theme }: {selected?: boolean; theme: MantineTheme}) => css`
+export const avatarIcon = ({ selected }: {selected?: boolean }) => css`
 svg{
   border: 3px solid ${selected ? colooors["neutrals-01"][0] : colooors["neutrals-01"][0]};
   outline: 1px solid ${selected ? colooors["neutrals-02"][1] : colooors["neutrals-01"][3]};

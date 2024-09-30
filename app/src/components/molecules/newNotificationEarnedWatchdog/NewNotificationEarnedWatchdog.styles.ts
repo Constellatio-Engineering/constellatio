@@ -1,7 +1,8 @@
+import { colooors } from "@/constants/styles/colors";
 import { type UnknownMantineStylesParams } from "@/utils/types";
 
 import { css } from "@emotion/react";
-import { type Styles, type ModalStylesNames, type MantineTheme } from "@mantine/core";
+import { type ModalStylesNames, type Styles } from "@mantine/core";
 
 const imageSize = 180;
 
@@ -40,7 +41,7 @@ export const newEarnedModalStyle = (): ModalStyles =>
   return styles;
 };
 
-export const customModalHeader = (theme: MantineTheme) => css`
+export const customModalHeader = () => css`
   text-align: center;
   color: ${colooors["neutrals-02"][1]};
   padding: 24px 0;

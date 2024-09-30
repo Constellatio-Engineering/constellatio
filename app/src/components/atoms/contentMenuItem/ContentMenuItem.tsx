@@ -1,6 +1,5 @@
 import { ArrowSolidRight } from "@/components/Icons/arrow-solid-right";
 
-import { useMantineTheme } from "@mantine/core";
 import React, { type FunctionComponent } from "react";
 
 import * as styles from "./ContentMenuItem.styles";
@@ -23,10 +22,9 @@ const ContentMenuItem: FunctionComponent<IContentMenuItemProps> = ({
   totalItems
 }) => 
 {
-  const theme = useMantineTheme();
   return (
-    <div css={styles.wrapper({ opened, theme })}>
-      <div css={styles.text({ opened, theme })}>
+    <div css={styles.wrapper({ opened })}>
+      <div css={styles.text({ opened })}>
         {opened ? <ArrowSolidRight/> : <ArrowSolidRight/>}
         <span css={styles.title}>
           <BodyText component="p" styleType="body-01-medium">{title}</BodyText>

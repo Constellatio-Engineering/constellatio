@@ -14,7 +14,7 @@ import useMaterialsStore from "@/stores/materials.store";
 import { api } from "@/utils/api";
 import { defaultFolderName, everythingFolderName } from "@/utils/translations";
 
-import { Title, Modal } from "@mantine/core";
+import { Modal, Title } from "@mantine/core";
 import { useDisclosure } from "@mantine/hooks";
 import { notifications } from "@mantine/notifications";
 import React, { type FunctionComponent } from "react";

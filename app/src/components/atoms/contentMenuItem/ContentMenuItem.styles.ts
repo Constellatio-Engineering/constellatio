@@ -1,9 +1,9 @@
-import { css } from "@emotion/react";
-import { type MantineTheme } from "@mantine/styles";
+import { colooors } from "@/constants/styles/colors";
 
-export const wrapper = ({ opened, theme }: {
+import { css } from "@emotion/react";
+
+export const wrapper = ({ opened }: {
   opened?: boolean;
-  theme: MantineTheme;
 }) => css`
 	background-color: ${colooors["neutrals-01"][0]};
 	padding: 12px 24px;
@@ -21,9 +21,8 @@ export const wrapper = ({ opened, theme }: {
 export const title = css`
 	/* outline: 1px solid red; */
 `;
-export const text = ({ opened, theme }: {
+export const text = ({ opened }: {
   opened?: boolean;
-  theme: MantineTheme;
 }) => css`
 	display: flex;
 	justify-content: center;
@@ -36,6 +35,6 @@ export const text = ({ opened, theme }: {
 		${opened && "transform:rotate(90deg);"}
 	}
 `;
-export const counter = (theme: MantineTheme) => css`
+export const counter = () => css`
 	color: ${colooors["neutrals-01"][7]};
 `;

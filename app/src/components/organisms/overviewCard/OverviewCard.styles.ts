@@ -1,14 +1,12 @@
 import { colooors } from "@/constants/styles/colors";
 
-import { type SerializedStyles, css } from "@emotion/react";
-import { type MantineTheme } from "@mantine/styles";
+import { css, type SerializedStyles } from "@emotion/react";
 
 import { type IOverviewCard } from "./OverviewCard";
 
 interface IOverviewCardStyles 
 {
   tableTheme?: boolean;
-  theme: MantineTheme;
   variant: IOverviewCard["variant"];
 }
 
@@ -16,7 +14,7 @@ export const wrapper = (): SerializedStyles => css`
   /* max-width: 486px; */
 `;
 
-export const topDetails = ({ theme, variant }: IOverviewCardStyles): SerializedStyles => css`
+export const topDetails = ({ variant }: IOverviewCardStyles): SerializedStyles => css`
   background-color: ${variant === "case"
     ? colooors["support-notice"][4]
     : colooors["cc-dictionary"][4]};
@@ -52,15 +50,13 @@ export const topDetails = ({ theme, variant }: IOverviewCardStyles): SerializedS
   }
 `;
 
-export const cardBody = ({
-  theme,
-}: IOverviewCardStyles): SerializedStyles => css`
+export const cardBody = () => css`
   border-radius: 12px;
   background-color: ${colooors["neutrals-01"][0]};
   transform: translateY(-16px);
 `;
 
-export const row = ({ tableTheme, theme }: IOverviewCardStyles): SerializedStyles => css`
+export const row = ({ tableTheme }: IOverviewCardStyles): SerializedStyles => css`
   padding: 16px;
   border-bottom: 1px solid ${colooors["neutrals-01"][2]};
   .row-title {
@@ -129,7 +125,7 @@ export const tagsModal = css`
   align-items: center;
 `;
 
-export const seeAllTagsButton = (theme: MantineTheme) => css`
+export const seeAllTagsButton = () => css`
 margin-left: auto;
 display: block;
 margin-top: 8px;

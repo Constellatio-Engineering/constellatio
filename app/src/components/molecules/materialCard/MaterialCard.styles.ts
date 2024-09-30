@@ -1,9 +1,8 @@
 import { colooors } from "@/constants/styles/colors";
 
 import { css } from "@emotion/react";
-import { type MantineTheme } from "@mantine/styles";
 
-export const wrapper = (theme: MantineTheme) => css`
+export const wrapper = () => css`
     flex: 1;
     min-width: 270px;
     max-width: 314px;

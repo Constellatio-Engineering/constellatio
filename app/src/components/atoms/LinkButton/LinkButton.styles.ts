@@ -1,3 +1,6 @@
+import { colooors } from "@/constants/styles/colors";
+import { spaciiing } from "@/constants/styles/spacing";
+
 import { css } from "@emotion/react";
 import styled from "@emotion/styled";
 
@@ -17,7 +20,7 @@ export const SButton = styled.button<{ size?: "big" | "medium" }>`
     color: ${colooors["neutrals-01"][9]};
     font-size: ${size === "big" ? theme.fontSizes["spacing-16"] : theme.fontSizes["spacing-14"]};
     font-weight: 500;
-    line-height: ${size === "big" ? theme.spacing["spacing-24"] : theme.spacing["spacing-20"]};
+    line-height: ${size === "big" ? spaciiing["spacing-24"] : spaciiing["spacing-20"]};
     transition: all 0.3s ease;
 
     :hover {
@@ -29,8 +32,8 @@ export const SButton = styled.button<{ size?: "big" | "medium" }>`
     }
 
     svg {
-      width: ${size === "big" ? theme.spacing["spacing-20"] : theme.spacing["spacing-16"]};
-      height: ${size === "big" ? theme.spacing["spacing-20"] : theme.spacing["spacing-16"]};
+      width: ${size === "big" ? spaciiing["spacing-20"] : spaciiing["spacing-16"]};
+      height: ${size === "big" ? spaciiing["spacing-20"] : spaciiing["spacing-16"]};
     }
   `}
 `;

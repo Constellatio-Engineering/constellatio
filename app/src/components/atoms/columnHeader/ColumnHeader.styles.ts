@@ -1,16 +1,15 @@
-import { type SerializedStyles, css } from "@emotion/react";
-import { type MantineTheme } from "@mantine/styles";
+import { colooors } from "@/constants/styles/colors";
+
+import { css, type SerializedStyles } from "@emotion/react";
 
 import { type IColumnHeaderProps } from "./ColumnHeader";
 
 export const wrapper = ({
   dataSorted,
   doesSort,
-  theme,
 }: {
   dataSorted: boolean;
   doesSort: IColumnHeaderProps["doesSort"];
-  theme: MantineTheme;
 }): SerializedStyles => css`
 	width: 100%;
 	height: 32px;

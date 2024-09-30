@@ -1,11 +1,8 @@
+import { colooors } from "@/constants/styles/colors";
 import { type UnknownMantineStylesParams } from "@/utils/types";
 
 import { css } from "@emotion/react";
-import {
-  type MenuStylesNames,
-  type MantineTheme,
-  type Styles,
-} from "@mantine/core";
+import { type MenuStylesNames, type Styles, } from "@mantine/core";
 
 type MenuStyles = Styles<MenuStylesNames, UnknownMantineStylesParams>;
 
@@ -19,7 +16,7 @@ export const placeholder = css`
 
 export const menuStyles = (): MenuStyles => 
 {
-  const styles: MenuStyles = (theme: MantineTheme) => ({
+  const styles: MenuStyles = () => ({
     ".target": {
       outline: "1px solid red",
     },
@@ -37,7 +34,7 @@ export const menuStyles = (): MenuStyles =>
   return styles;
 };
 
-export const menuItem = (theme: MantineTheme) => css`
+export const menuItem = () => css`
   .user-info {
     display: flex;
     align-items: center;
@@ -51,7 +48,7 @@ export const menuItem = (theme: MantineTheme) => css`
     }
   }
 `;
-export const target = (theme: MantineTheme) => css`
+export const target = () => css`
   cursor: pointer;
   width: 36px;
   height: 36px;

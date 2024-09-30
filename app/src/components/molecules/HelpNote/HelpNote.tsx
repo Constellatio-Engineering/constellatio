@@ -4,9 +4,7 @@ import { InfoFilled } from "@/components/Icons/InfoFilled";
 
 import React, { type FC } from "react";
 
-import {
-  HeadingWrapper, IconWrapper, RichTextWrapper, Wrapper
-} from "./HelpNote.styles";
+import { HeadingWrapper, IconWrapper, RichTextWrapper, Wrapper } from "./HelpNote.styles";
 import { Richtext } from "../Richtext/Richtext";
 
 export type HelpNoteProps = {

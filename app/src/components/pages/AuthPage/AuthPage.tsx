@@ -4,6 +4,7 @@ import { Header } from "@/components/organisms/Header/Header";
 import { LoginForm } from "@/components/organisms/LoginForm/LoginForm";
 import { RegistrationForm } from "@/components/organisms/RegistrationForm/RegistrationForm";
 import { RegistrationVisualHeader } from "@/components/organisms/RegistrationVisualHeader/RegistrationVisualHeader";
+import { colooors } from "@/constants/styles/colors";
 
 import { Container, Flex, Tabs } from "@mantine/core";
 import { useMediaQuery } from "@mantine/hooks";
@@ -44,7 +45,7 @@ export const AuthPage: FC<AuthPageProps> = ({ tab }) =>
         w="100%"
         pt={20}
         css={styles.wrapper}
-        sx={(theme) => ({
+        sx={() => ({
           backgroundColor: colooors["neutrals-01"][0],
           marginRight: 0,
           overflowY: "auto",

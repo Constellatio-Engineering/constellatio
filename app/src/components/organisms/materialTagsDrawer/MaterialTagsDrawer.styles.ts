@@ -3,13 +3,13 @@ import { type UnknownMantineStylesParams } from "@/utils/types";
 
 import { css } from "@emotion/react";
 import { type DrawerStylesNames } from "@mantine/core";
-import { type MantineTheme, type Styles } from "@mantine/styles";
+import { type Styles } from "@mantine/styles";
 
 type DrawerStylesProps = Styles<DrawerStylesNames, UnknownMantineStylesParams>;
 
 export const drawerStyles = () =>
 {
-  const styles: DrawerStylesProps = (theme: MantineTheme) => ({
+  const styles: DrawerStylesProps = () => ({
     body: {
       ".form": {
         position: "relative"

@@ -1,7 +1,7 @@
 import { headerHeightPx } from "@/components/organisms/Header/Header.styles";
+import { colooors } from "@/constants/styles/colors";
 
-import { type SerializedStyles, css } from "@emotion/react";
-import { type MantineTheme } from "@mantine/styles";
+import { css, type SerializedStyles } from "@emotion/react";
 
 const DictionaryCSS = css`
   height: 0px;
@@ -9,7 +9,7 @@ const DictionaryCSS = css`
   max-width: 100%;
 `;
 
-export const componentArea = ({ theme }: {theme: MantineTheme}): SerializedStyles => css`
+export const componentArea = (): SerializedStyles => css`
   background-color: ${colooors["neutrals-01"][0]};
   border-bottom: 6px solid ${colooors["neutrals-01"][4]};
   position: sticky;
@@ -46,12 +46,10 @@ export const tab = ({
   active,
   completed,
   isClickable,
-  theme
 }: {
   active: boolean;
   completed: boolean;
   isClickable: boolean;
-  theme: MantineTheme;
 }): SerializedStyles => css`
   color: ${active ? "blue" : "black"};
   display: flex;
@@ -82,13 +80,8 @@ export const callToAction = css`
 margin-right: 12px;
 
 `;
-export const progressBar = ({
-  progress,
-  theme,
-  variant,
-}: {
+export const progressBar = ({ progress, variant }: {
   progress: number;
-  theme: MantineTheme;
   variant: "case" | "dictionary";
 }): SerializedStyles => css`
   height: 6px;

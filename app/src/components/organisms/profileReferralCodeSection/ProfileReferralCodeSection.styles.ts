@@ -1,7 +1,8 @@
-import { css } from "@emotion/react";
-import { type MantineTheme } from "@mantine/styles";
+import { colooors } from "@/constants/styles/colors";
 
-export const title = (theme: MantineTheme) => css`
+import { css } from "@emotion/react";
+
+export const title = () => css`
 color: ${colooors["neutrals-02"][1]};
 margin-bottom:32px;
 @media screen and (max-width: 1100px) {
@@ -9,7 +10,7 @@ margin-bottom:32px;
 }
 `;
 
-export const wrapper = (theme: MantineTheme) => css`
+export const wrapper = () => css`
     background: ${colooors["neutrals-01"][0]};
     padding: 24px;
     border-radius: 12px;

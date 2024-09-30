@@ -1,17 +1,14 @@
+import { colooors } from "@/constants/styles/colors";
 import { type UnknownMantineStylesParams } from "@/utils/types";
 
 import { css } from "@emotion/react";
-import {
-  type InputStylesNames,
-  type MantineTheme,
-  type Styles,
-} from "@mantine/core";
+import { type InputStylesNames, type MantineTheme, type Styles, } from "@mantine/core";
 
 type InputStylesProps = Styles<InputStylesNames, UnknownMantineStylesParams>;
 
-export const inputStyles = () => 
+export const inputStyles = (theme: MantineTheme) =>
 {
-  const styles: InputStylesProps = (theme: MantineTheme) => ({
+  const styles: InputStylesProps = () => ({
     icon: {
       color: colooors["neutrals-01"][7],
       left: "62px",

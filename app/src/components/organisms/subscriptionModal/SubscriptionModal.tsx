@@ -16,9 +16,7 @@ import { useLocalStorage } from "@mantine/hooks";
 import { differenceInDays, formatDistance } from "date-fns";
 import { de } from "date-fns/locale";
 import { useRouter } from "next/router";
-import {
-  useMemo, type FunctionComponent, useState, useContext
-} from "react";
+import { type FunctionComponent, useContext, useMemo, useState } from "react";
 import { z } from "zod";
 
 import ModalFlag from "../../../../public/images/placeholder-flag.png";

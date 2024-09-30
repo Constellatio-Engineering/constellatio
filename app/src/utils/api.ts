@@ -14,8 +14,8 @@ import { showErrorNotification } from "@/utils/notifications";
 import { authPaths, getIsPathAppPath } from "@/utils/paths";
 
 import { QueryCache } from "@tanstack/react-query";
-import { httpBatchLink, httpLink, loggerLink, TRPCClientError } from "@trpc/client";
 import type { TRPCLink } from "@trpc/client";
+import { httpBatchLink, httpLink, loggerLink, TRPCClientError } from "@trpc/client";
 import { createTRPCNext } from "@trpc/next";
 import { type inferRouterInputs, type inferRouterOutputs } from "@trpc/server";
 import superjson from "superjson";

@@ -1,9 +1,8 @@
 import { colooors } from "@/constants/styles/colors";
 
 import { css } from "@emotion/react";
-import { type MantineTheme } from "@mantine/styles";
 
-export const wrapper = (theme: MantineTheme) => css`
+export const wrapper = () => css`
   width: 320px;
   min-width: 320px;
   background-color: ${colooors["neutrals-01"][0]};
@@ -76,7 +75,7 @@ export const profileImageWrapper = (width: number) => css`
     }
   }
 `;
-export const profileNameHandler = (theme: MantineTheme) => css`
+export const profileNameHandler = () => css`
   color: ${colooors["neutrals-01"][7]};
 `;
 export const profileImage = css`
@@ -90,7 +89,7 @@ export const profileName = css`
   margin-top: 8px;
   width: 100%;
 `;
-export const profileNameText = (theme: MantineTheme) => css`
+export const profileNameText = () => css`
   color: ${colooors["neutrals-02"][1]};
 `;
 

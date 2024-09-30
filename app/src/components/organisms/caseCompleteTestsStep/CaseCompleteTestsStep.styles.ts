@@ -1,10 +1,11 @@
+import { colooors } from "@/constants/styles/colors";
+
 import { css } from "@emotion/react";
-import { type MantineTheme } from "@mantine/styles";
 
 export const contentWrapper = css`
 `;
 
-export const facts = (theme: MantineTheme) => css`
+export const facts = () => css`
 	max-width: 52.5%;
 	padding-bottom: 12px;
 	display: flex;

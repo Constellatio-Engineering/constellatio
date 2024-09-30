@@ -244,7 +244,7 @@ export const RegistrationForm: FunctionComponent = () =>
             styleType="link-secondary"
             component={Link}
             href={authPaths.login}
-            stylesOverwrite={{ color: colors["neutrals-02"][2], marginBottom: 10, textAlign: "left" }}>
+            stylesOverwrite={{ color: colooors["neutrals-02"][2], marginBottom: 10, textAlign: "left" }}>
             Du hast schon ein Konto?
           </CustomLink>
           {referringUserName && (

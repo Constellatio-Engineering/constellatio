@@ -1,5 +1,5 @@
 import { type Question } from "@/server/api/routers/forum.router";
-import { type IGenCase, type IGenArticle } from "@/services/graphql/__generated/sdk";
+import { type IGenArticle, type IGenCase } from "@/services/graphql/__generated/sdk";
 import { api } from "@/utils/api";
 import { type NullableProperties } from "@/utils/types";
 

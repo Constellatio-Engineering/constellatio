@@ -1,3 +1,6 @@
+import { colooors } from "@/constants/styles/colors";
+import { spaciiing } from "@/constants/styles/spacing";
+
 import { type Sx } from "@mantine/styles";
 
 import { type TLink } from "./CustomLink";
@@ -36,10 +39,10 @@ export const customLinkStyles = ({ stylesOverwrite, styleType }: TLink) =>
         : 500,
     lineHeight:
       styleType === "link-content-title"
-        ? theme.spacing["spacing-28"]
+        ? spaciiing["spacing-28"]
         : styleType === "link-secondary"
-          ? theme.spacing["spacing-20"]
-          : theme.spacing["spacing-24"],
+          ? spaciiing["spacing-20"]
+          : spaciiing["spacing-24"],
     textDecoration:
       styleType === "link-content" || styleType === "link-content-title"
         ? "none"

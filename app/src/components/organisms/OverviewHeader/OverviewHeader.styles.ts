@@ -1,13 +1,9 @@
-import { css } from "@emotion/react";
-import { type MantineTheme } from "@mantine/styles";
+import { colooors } from "@/constants/styles/colors";
 
-export const contentHeader = ({
-  height,
-  theme,
-  variant
-}: {
+import { css } from "@emotion/react";
+
+export const contentHeader = ({ height, variant }: {
   height: number;
-  theme: MantineTheme;
   variant: "case" | "dictionary" | "red" | "forum";
 }) => css`
 	position: relative;
@@ -131,8 +127,7 @@ export const selectedFiltersArea = css`
 	position: relative;
 	z-index: 3;
 `;
-export const title = ({ theme, variant }: {
-  theme: MantineTheme;
+export const title = ({ variant }: {
   variant: "case" | "dictionary" | "red" | "forum";
 }) => css`
 	position: relative;

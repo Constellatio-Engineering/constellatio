@@ -1,4 +1,5 @@
 import { Modal as MantineModal, type ModalProps as MantineModalProps } from "@mantine/core";
+import { useMantineTheme } from "@mantine/styles";
 import React, { type FC } from "react";
 
 import { modalStyles } from "./Modal.styles";
@@ -12,12 +13,14 @@ export const Modal: FC<ModalProps> = ({
   ...props
 }) => 
 {
+  const theme = useMantineTheme();
+
   return (
     <MantineModal
       opened={opened}
       onClose={onClose}
       size="520px"
-      styles={modalStyles()}
+      styles={modalStyles(theme)}
       {...props}>
       {children}
     </MantineModal>

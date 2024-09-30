@@ -10,11 +10,11 @@ import useBookmarks from "@/hooks/useBookmarks";
 import useCases from "@/hooks/useCases";
 import useRemoveBookmark from "@/hooks/useRemoveBookmark";
 import { type AddOrRemoveBookmarkSchema } from "@/schemas/bookmarks/addOrRemoveBookmark.schema";
-import { type Maybe, type IGenArticle } from "@/services/graphql/__generated/sdk";
+import { type IGenArticle, type Maybe } from "@/services/graphql/__generated/sdk";
 import { appPaths } from "@/utils/paths";
 import { type Nullable } from "@/utils/types";
 
-import { Button, Title, useMantineTheme } from "@mantine/core";
+import { Button, Title } from "@mantine/core";
 import { IconArrowLeft, IconArrowRight } from "@tabler/icons-react";
 import Link from "next/link";
 import React, { type FunctionComponent } from "react";
@@ -94,10 +94,9 @@ const CaseSolvingHeader: FunctionComponent<ICaseSolvingHeaderProps> = ({
       title: "Print",
     },
   ];
-  const theme = useMantineTheme();
 
   return (
-    <div css={styles.wrapper({ theme, variant })}>
+    <div css={styles.wrapper({ variant })}>
       <ContentWrapper>
         <div id="overlay-lines">
           <OverlayLines/>

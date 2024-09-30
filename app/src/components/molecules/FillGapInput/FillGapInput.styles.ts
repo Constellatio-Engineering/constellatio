@@ -1,4 +1,5 @@
 import { colooors } from "@/constants/styles/colors";
+import { spaciiing } from "@/constants/styles/spacing";
 import { type UnknownMantineStylesParams } from "@/utils/types";
 
 import { type Styles, type TextInputStylesNames } from "@mantine/core";
@@ -49,12 +50,12 @@ export const fillGapInputStyles = ({ index, status, width = 145 }: FillGapInputS
       display: "flex",
       fontSize: theme.fontSizes["spacing-16"],
       fontWeight: 500,
-      gap: theme.spacing["spacing-4"],
+      gap: spaciiing["spacing-4"],
       height: "auto",
       lineHeight: "24px",
       minHeight: "auto",
       padding: 0,
-      paddingBottom: theme.spacing["spacing-4"],
+      paddingBottom: spaciiing["spacing-4"],
     },
     rightSection: {
       color: status === "success" ? colooors["support-success"][4] : colooors["support-error"][3],
@@ -64,11 +65,11 @@ export const fillGapInputStyles = ({ index, status, width = 145 }: FillGapInputS
     },
     root: {
       display: "inline-block",
-      marginTop: theme.spacing["spacing-2"],
+      marginTop: spaciiing["spacing-2"],
       maxWidth: width + "px",
-      paddingBottom: status === "error" ? theme.spacing["spacing-4"] : "0",
-      paddingLeft: theme.spacing["spacing-2"],
-      paddingRight: theme.spacing["spacing-2"],
+      paddingBottom: status === "error" ? spaciiing["spacing-4"] : "0",
+      paddingLeft: spaciiing["spacing-2"],
+      paddingRight: spaciiing["spacing-2"],
       position: "relative",
     },
     wrapper: {

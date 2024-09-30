@@ -1,8 +1,7 @@
 import { ArrowDown } from "@/components/Icons/ArrowDown";
 import { ArrowUp } from "@/components/Icons/ArrowUp";
 
-import { useMantineTheme } from "@mantine/styles";
-import React, { useState, type FunctionComponent, useEffect } from "react";
+import React, { type FunctionComponent, useEffect, useState } from "react";
 
 import * as styles from "./ColumnHeader.styles";
 import { CaptionText } from "../CaptionText/CaptionText";
@@ -19,7 +18,6 @@ const ColumnHeader: FunctionComponent<IColumnHeaderProps> = ({ doesSort, title }
     null
   );
   const [dataSorted, setDataSorted] = useState<boolean>(false);
-  const theme = useMantineTheme();
 
   useEffect(() => 
   {
@@ -35,7 +33,7 @@ const ColumnHeader: FunctionComponent<IColumnHeaderProps> = ({ doesSort, title }
   return (
     <button
       type="button"
-      css={styles.wrapper({ dataSorted, doesSort, theme })}
+      css={styles.wrapper({ dataSorted, doesSort })}
       onClick={() =>
         doesSort && setSortDirection(() => (sortDirection === "asc" ? "desc" : "asc"))}>
       {title && (

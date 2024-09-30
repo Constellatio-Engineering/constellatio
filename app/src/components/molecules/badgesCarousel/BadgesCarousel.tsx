@@ -2,10 +2,10 @@ import { ArrowLeftWithLine } from "@/components/Icons/ArrowLeftWithLine";
 import { ArrowRightWithLine } from "@/components/Icons/ArrowRightWithLine";
 import { smallBadgeCardWidth } from "@/components/molecules/profileBadgeCard/ProfileBadgeCard.styles";
 import BadgesDrawer from "@/components/organisms/badgesDrawer/BadgesDrawer";
+import { colooors } from "@/constants/styles/colors";
 import useBadges from "@/hooks/useBadges";
 
 import { Carousel } from "@mantine/carousel";
-import { useMantineTheme } from "@mantine/styles";
 import React, { type FunctionComponent } from "react";
 
 import SkeletonSlide from "./skeletonSlide/SkeletonSlide";
@@ -14,7 +14,6 @@ import ProfileBadgeCard from "../profileBadgeCard/ProfileBadgeCard";
 const BadgesCarousel: FunctionComponent = () => 
 {
   const { getBadgesResult: { badges }, isLoading } = useBadges();
-  const theme = useMantineTheme();
 
   return (
     <Carousel

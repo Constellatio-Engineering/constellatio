@@ -1,4 +1,3 @@
-import { useMantineTheme } from "@mantine/core";
 import React, { type FunctionComponent } from "react";
 
 import * as styles from "./CutomAlertCard.styles";
@@ -14,9 +13,8 @@ export interface CutomAlertCardProps
 
 const CutomAlertCard: FunctionComponent<CutomAlertCardProps> = ({ message, variant }) => 
 {
-  const theme = useMantineTheme();
   return (
-    <div css={styles.wrapper({ theme, variant })}>
+    <div css={styles.wrapper({ variant })}>
       <BodyText styleType="body-01-medium" component="p">
         {variant === "error" ? <AlertStoke/> : <CheckCircle/>}
         {message}

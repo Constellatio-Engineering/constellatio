@@ -8,6 +8,7 @@ import * as styles from "./BadgeCard.styles";
 import { BodyText } from "../../atoms/BodyText/BodyText";
 import IconButton from "../../atoms/iconButton/IconButton";
 import { DownloadIcon } from "../../Icons/DownloadIcon";
+
 interface BadgeCardProps
 {
   readonly selectedFiles: SelectedFile[];

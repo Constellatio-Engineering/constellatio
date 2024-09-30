@@ -2,11 +2,10 @@ import { colooors } from "@/constants/styles/colors";
 import { type MantineCssObjectStyles } from "@/utils/types";
 
 import { css } from "@emotion/react";
-import { type MantineTheme } from "@mantine/styles";
 
 export const popoverDropdownStyles = () => 
 {
-  const styles: MantineCssObjectStyles = (theme) => ({
+  const styles: MantineCssObjectStyles = () => ({
     backgroundColor: colooors["neutrals-02"][1],
     border: "none",
     borderRadius: "12px 12px 14px 14px",
@@ -26,13 +25,13 @@ export const stepHeader = css`
 	padding: 20px 24px;
 `;
 
-export const countLabel = (theme: MantineTheme) => css`
+export const countLabel = () => css`
 	> div {
 		background-color: ${colooors["neutrals-02"][2]};
 	}
 `;
 
-export const stepBody = (theme: MantineTheme) => css`
+export const stepBody = () => css`
 	background-color: ${colooors["neutrals-01"][0]};
   display: flex;
   flex-direction: column;
@@ -46,14 +45,14 @@ display: flex;
 flex-direction: column;
 `;
 
-export const stepItem = (theme: MantineTheme) => css`
+export const stepItem = () => css`
 display: flex;
 padding: 20px 24px;
 gap: 12px;
 border-bottom: 1px solid ${colooors["neutrals-01"][3]};
 `;
 
-export const iconBox = (theme: MantineTheme) => css`
+export const iconBox = () => css`
 width: 40px;
 min-width: 40px;
 height: 40px;

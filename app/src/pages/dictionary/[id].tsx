@@ -6,7 +6,7 @@ import getAllArticles from "@/services/content/getAllArticles";
 import { getArticleById } from "@/services/content/getArticleById";
 import { type ArticleWithNextAndPreviousArticleId, getArticlesWithNextAndPreviousArticleId } from "@/utils/articles";
 
-import { type GetStaticPathsResult, type GetStaticProps, type GetStaticPaths } from "next";
+import { type GetStaticPaths, type GetStaticPathsResult, type GetStaticProps } from "next";
 
 import { type ParsedUrlQuery } from "querystring";
 

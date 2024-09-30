@@ -1,8 +1,4 @@
-import { type MantineThemeColors } from "@mantine/styles/lib/theme/types/MantineColor";
-
-type MantineThemeColorsReadonly = {
-  [key in keyof MantineThemeColors]: Readonly<[string, string, string, string, string, string, string, string, string, string]>;
-};
+type MantineThemeColorsReadonly = Record<string, Readonly<[string, string, string, string, string, string, string, string, string, string]>>;
 
 export const colooors = {
   "brand-01": [

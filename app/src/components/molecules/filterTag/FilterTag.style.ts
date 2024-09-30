@@ -1,9 +1,8 @@
 import { colooors } from "@/constants/styles/colors";
 
 import { css } from "@emotion/react";
-import { type MantineTheme } from "@mantine/styles";
 
-export const filterTag = (theme: MantineTheme) => css`
+export const filterTag = () => css`
   div {
     background-color:${colooors["neutrals-01"][0]};
     display: flex;

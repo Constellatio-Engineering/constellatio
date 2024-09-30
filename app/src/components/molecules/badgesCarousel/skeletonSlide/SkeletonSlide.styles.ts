@@ -2,6 +2,7 @@ import { smallBadgeCardHeight, smallBadgeCardWidth } from "@/components/molecule
 import { colooors } from "@/constants/styles/colors";
 
 import { css } from "@emotion/react";
+
 export const skeletonCard = css`
   width: ${smallBadgeCardWidth}px;
   min-width: ${smallBadgeCardWidth}px;

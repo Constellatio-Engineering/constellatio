@@ -1,3 +1,6 @@
+import { colooors } from "@/constants/styles/colors";
+import { spaciiing } from "@/constants/styles/spacing";
+
 import styled from "@emotion/styled";
 
 export const Card = styled.div<{ dropped?: boolean; status: "success" | "error" | "default" }>`
@@ -9,7 +12,7 @@ export const Card = styled.div<{ dropped?: boolean; status: "success" | "error" 
     padding: ${spaciiing["spacing-12"]};
     gap: ${spaciiing["spacing-4"]};
     border-radius: ${({ theme }) => theme.radius["radius-8"]};
-    border: 1px solid ${({ dropped, status, theme }) =>
+    border: 1px solid ${({ dropped, status }) =>
     dropped
       ? status === "success"
         ? colooors["support-success"][4]
@@ -32,11 +35,11 @@ export const Card = styled.div<{ dropped?: boolean; status: "success" | "error" 
     }
 
     &:hover {
-        border-color: ${({ status, theme }) => status === "default" && colooors["neutrals-01"][4]};
-        background-color: ${({ status, theme }) => status === "default" && colooors["neutrals-01"][1]};
+        border-color: ${({ status }) => status === "default" && colooors["neutrals-01"][4]};
+        background-color: ${({ status }) => status === "default" && colooors["neutrals-01"][1]};
 
         svg {
-            color: ${({ status, theme }) => status === "default" && colooors["neutrals-02"][1]};
+            color: ${({ status }) => status === "default" && colooors["neutrals-02"][1]};
         }
     }
 

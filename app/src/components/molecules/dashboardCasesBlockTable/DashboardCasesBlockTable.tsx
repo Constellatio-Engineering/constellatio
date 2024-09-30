@@ -6,12 +6,12 @@ import BookmarkButton from "@/components/organisms/caseBlock/BookmarkButton/Book
 import EmptyStateCard from "@/components/organisms/emptyStateCard/EmptyStateCard";
 import { timeFormatter } from "@/components/organisms/overviewCard/OverviewCard";
 import { extractNumeric } from "@/components/pages/OverviewPage/OverviewPage";
+import { colooors } from "@/constants/styles/colors";
 import useBookmarks from "@/hooks/useBookmarks";
 import useCases from "@/hooks/useCases";
 import useCasesProgress from "@/hooks/useCasesProgress";
 import { appPaths } from "@/utils/paths";
 
-import { useMantineTheme } from "@mantine/styles";
 import { useRouter } from "next/router";
 import React, { type FunctionComponent } from "react";
 
@@ -39,8 +39,7 @@ const DashboardCasesBlockTable: FunctionComponent = () =>
   const router = useRouter();
   const { allCases } = useCases();
   const { casesProgress } = useCasesProgress();
-  const theme = useMantineTheme();
-  const casesWithProgress = allCases.map(caseItem => 
+  const casesWithProgress = allCases.map(caseItem =>
   {
     return {
       case: caseItem,

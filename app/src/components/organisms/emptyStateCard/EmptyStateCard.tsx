@@ -3,7 +3,7 @@ import { Button } from "@/components/atoms/Button/Button";
 import { SubtitleText } from "@/components/atoms/SubtitleText/SubtitleText";
 import { EmptyStateCardIcon } from "@/components/Icons/EmptyStateCardIcon";
 
-import { type ButtonProps, Title, useMantineTheme } from "@mantine/core";
+import { type ButtonProps, Title } from "@mantine/core";
 import React, { type FunctionComponent, type ReactNode } from "react";
 
 import * as styles from "./EmptyStateCard.styles";
@@ -29,17 +29,15 @@ const EmptyStateCard: FunctionComponent<IEmptyStateCardProps> = ({
   variant = "For-large-areas"
 }) => 
 {
-  const theme = useMantineTheme();
-
   return (
     <div css={styles.wrapper}>
-      <div css={styles.emptyStateCard({ theme, variant })}>
+      <div css={styles.emptyStateCard({ variant })}>
         {!hideIcon && (
-          <div css={styles.emptyStateCardImage({ theme, variant })}>
+          <div css={styles.emptyStateCardImage({ variant })}>
             <EmptyStateCardIcon size={variant === "For-tiny-areas" ? 140 : 160}/>
           </div>
         )}
-        <div css={styles.emptyStateCardTitle({ theme, variant })}>
+        <div css={styles.emptyStateCardTitle({ variant })}>
           {variant === "For-large-areas" ? (
             <Title order={3}>
               {title}
@@ -51,7 +49,7 @@ const EmptyStateCard: FunctionComponent<IEmptyStateCardProps> = ({
           )}
         </div>
         {text && (
-          <div css={styles.emptyStateCardText({ theme, variant })}>
+          <div css={styles.emptyStateCardText({ variant })}>
             {variant === "For-large-areas" ? (
               <BodyText styleType="body-01-medium">
                 {text}
@@ -64,7 +62,7 @@ const EmptyStateCard: FunctionComponent<IEmptyStateCardProps> = ({
           </div>
         )}
         {button && (
-          <div css={styles.callToAction({ theme })}>
+          <div css={styles.callToAction()}>
             <Button<"button">
               type="button"
               styleType="primary"

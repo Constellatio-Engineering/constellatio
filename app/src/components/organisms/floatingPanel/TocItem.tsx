@@ -5,11 +5,9 @@ import { usePrevious } from "@/hooks/usePrevious";
 import useCaseSolvingStore from "@/stores/caseSolving.store";
 import { slugFormatter } from "@/utils/utils";
 
-import { useMantineTheme } from "@mantine/core";
 import { useIntersection } from "@mantine/hooks";
 import React, {
-  useEffect,
-  useLayoutEffect, useMemo, useRef, useState
+  useEffect, useLayoutEffect, useMemo, useRef, useState 
 } from "react";
 
 import * as styles from "./FloatingPanel.styles";
@@ -70,7 +68,6 @@ export const TocItem: React.FC<ITOCItemComponentProps> = ({
   total
 }) => 
 {
-  const theme = useMantineTheme();
   const observedHeadlineId = useCaseSolvingStore(s => s.observedHeadlineId);
   const observedHeadlineIdBefore = usePrevious(observedHeadlineId);
   const isHighlighted = item.id === observedHeadlineId;
@@ -134,7 +131,6 @@ export const TocItem: React.FC<ITOCItemComponentProps> = ({
             isExpandable: item.children.length > 0,
             isExpanded, 
             isHighlighted,
-            theme
           })}>
           <div css={styles.itemTextWrapper}>
             {item.children.length > 0 && (

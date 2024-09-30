@@ -1,6 +1,7 @@
+import { colooors } from "@/constants/styles/colors";
+
 import { css } from "@emotion/react";
 import styled from "@emotion/styled";
-import { type MantineTheme } from "@mantine/styles";
 
 const SimpleHeader = css`
   justify-content: center;
@@ -13,7 +14,6 @@ const DefaultHeader = css`
 export const headerHeightPx = 60;
 
 export const wrapper = ({ variant }: {
-  theme: MantineTheme;
   variant: "default" | "simple" | "relative";
 }) => css`
   height: ${headerHeightPx}px;
@@ -73,7 +73,7 @@ export const linksRelative = css`
   }
 `;
 
-export const profileArea = (theme: MantineTheme) => css`
+export const profileArea = () => css`
   display: flex;
   justify-content: flex-end;
   align-items: center;

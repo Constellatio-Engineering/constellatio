@@ -1,5 +1,7 @@
+import { colooors } from "@/constants/styles/colors";
+
 import { css } from "@emotion/react";
-import { type MantineTheme } from "@mantine/styles";
+
 // import { Karla } from "next/font/google";
 
 export const form = css`
@@ -12,7 +14,7 @@ export const form = css`
 export const MaterialNoteRichText = css`
   margin: 24px 32px;
 `;
-export const MaterialNotesCallToAction = (theme: MantineTheme) => css`
+export const MaterialNotesCallToAction = () => css`
   position: sticky;
   bottom: 0px;
   left: 0;
@@ -30,7 +32,7 @@ export const MaterialNotesCallToAction = (theme: MantineTheme) => css`
   }
 `;
 export const wrapper = css``;
-export const existingNote = (theme: MantineTheme) => css`
+export const existingNote = () => css`
   padding: 24px 32px;
   background-color: ${colooors["neutrals-01"][0]};
   min-height: 78vh;
@@ -56,7 +58,7 @@ export const existingNote = (theme: MantineTheme) => css`
     }
   }
 `;
-export const existingNoteActions = (theme: MantineTheme) => css`
+export const existingNoteActions = () => css`
   background: ${colooors["neutrals-01"][0]};
   margin-bottom: 24px;
 
@@ -68,7 +70,7 @@ export const existingNoteActions = (theme: MantineTheme) => css`
     margin-right: 8px;
   }
 `;
-export const richtext = (theme: MantineTheme) => css`
+export const richtext = () => css`
   blockquote {
     padding: 20px;
     background: ${colooors["neutrals-01"][1]};

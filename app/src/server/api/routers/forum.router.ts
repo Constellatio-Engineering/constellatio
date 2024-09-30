@@ -1,7 +1,7 @@
 /* eslint-disable max-lines */
 import { db } from "@/db/connection";
 import {
-  answerUpvotes, correctAnswers, type ForumAnswerInsert, forumAnswers, type ForumQuestionInsert, forumQuestions, notifications, questionUpvotes
+  answerUpvotes, correctAnswers, type ForumAnswerInsert, forumAnswers, type ForumQuestionInsert, forumQuestions, notifications, questionUpvotes 
 } from "@/db/schema";
 import { meiliSearchAdmin } from "@/lib/meilisearch";
 import { deleteAnswerSchema } from "@/schemas/forum/deleteAnswer.schema";

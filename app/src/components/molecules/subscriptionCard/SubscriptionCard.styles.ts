@@ -1,7 +1,8 @@
-import { css } from "@emotion/react";
-import { type MantineTheme } from "@mantine/styles";
+import { colooors } from "@/constants/styles/colors";
 
-export const wrapper = (theme: MantineTheme) => css`
+import { css } from "@emotion/react";
+
+export const wrapper = () => css`
     background: ${colooors["neutrals-01"][0]};
     padding: 24px;
  margin: 32px 0;
@@ -9,7 +10,7 @@ export const wrapper = (theme: MantineTheme) => css`
  border: 1px solid ${colooors["neutrals-01"][3]};
 
 `;
-export const discountBadge = (theme: MantineTheme) => css`
+export const discountBadge = () => css`
     padding: 4px 8px;
     background: ${colooors["brand-02"][4]};
     color: ${colooors["neutrals-02"][1]};
@@ -17,7 +18,7 @@ export const discountBadge = (theme: MantineTheme) => css`
     display: inline-block;
     border-radius: 12px;
 `;
-export const price = (theme: MantineTheme) => css`
+export const price = () => css`
     color: ${colooors["neutrals-02"][1]};
 `;
 export const totalPrice = css`
@@ -28,7 +29,7 @@ font-weight: 500;
 line-height: 68px; /* 154.545% */
 margin-right: 16px;
 `;
-export const undiscountedPrice = (theme: MantineTheme) => css`
+export const undiscountedPrice = () => css`
     color: ${colooors["neutrals-01"][7]};
     text-decoration: line-through;
     margin-right: 8px;

@@ -1,7 +1,8 @@
-import { css } from "@emotion/react";
-import { type MantineTheme } from "@mantine/styles";
+import { colooors } from "@/constants/styles/colors";
 
-export const wrapper = (theme: MantineTheme) => css`
+import { css } from "@emotion/react";
+
+export const wrapper = () => css`
    width: max-content;
    border-radius: 12px;
     overflow: hidden;
@@ -19,7 +20,7 @@ export const wrapper = (theme: MantineTheme) => css`
    }
    
 `;
-export const buttonsGroup = (theme: MantineTheme) => css`
+export const buttonsGroup = () => css`
 display: flex;
 button{
     color: ${colooors["neutrals-01"][9]};

@@ -1,16 +1,15 @@
 import { colooors } from "@/constants/styles/colors";
 
 import { css } from "@emotion/react";
-import { type MantineTheme } from "@mantine/styles";
 
-export const wrapper = (theme: MantineTheme) => css`
+export const wrapper = () => css`
   background-color: ${colooors["neutrals-01"][0]};
   max-width: 100%;
   border-radius: 12px;
   box-shadow: 0px 8px 44px 0px rgba(0, 0, 0, 0.04);
 `;
 
-export const uploadedMaterialBlockHead = (theme: MantineTheme) => css`
+export const uploadedMaterialBlockHead = () => css`
   color: ${colooors["neutrals-02"][0]};
   display: flex;
   justify-content: space-between;

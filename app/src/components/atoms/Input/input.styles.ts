@@ -1,5 +1,6 @@
 /* eslint-disable max-lines */
 import { colooors } from "@/constants/styles/colors";
+import { spaciiing } from "@/constants/styles/spacing";
 import { type UnknownMantineStylesParams } from "@/utils/types";
 
 import {
@@ -13,6 +14,7 @@ interface TProps
   error: ReactNode;
   inputStyleOverwrite: CSSObject | undefined;
   labelStyleOverwrite: CSSObject | undefined;
+  theme: MantineTheme;
 }
 
 type TextStyles = Styles<TextInputStylesNames, UnknownMantineStylesParams>;
@@ -21,22 +23,23 @@ export const textStyles = ({
   disabled,
   error,
   inputStyleOverwrite,
-  labelStyleOverwrite
+  labelStyleOverwrite,
+  theme
 }: TProps): TextStyles =>
 {
-  const styles: TextStyles = (theme: MantineTheme) => ({
+  const styles: TextStyles = () => ({
     description: {
       color: colooors["neutrals-01"][7],
       fontSize: "14px",
       fontWeight: 500,
-      lineHeight: theme.spacing["spacing-20"],
+      lineHeight: spaciiing["spacing-20"],
       order: 2,
     },
     error: {
       color: colooors["support-error"][3],
       fontSize: "14px",
       fontWeight: 500,
-      lineHeight: theme.spacing["spacing-20"],
+      lineHeight: spaciiing["spacing-20"],
       order: 3,
     },
     icon: {
@@ -53,7 +56,7 @@ export const textStyles = ({
         color: `${colooors["neutrals-01"][7]} !important`,
         fontSize: theme.fontSizes["spacing-16"],
         fontWeight: 500,
-        lineHeight: theme.spacing["spacing-24"],
+        lineHeight: spaciiing["spacing-24"],
       },
       ":focus": {
         border: error
@@ -68,7 +71,7 @@ export const textStyles = ({
       color: `${colooors["neutrals-02"][1]} !important`,
       fontSize: theme.fontSizes["spacing-16"],
       fontWeight: 500,
-      lineHeight: theme.spacing["spacing-24"],
+      lineHeight: spaciiing["spacing-24"],
       paddingBottom: 8,
       paddingLeft: 16,
       paddingTop: 8,
@@ -83,9 +86,9 @@ export const textStyles = ({
           : colooors["neutrals-01"][9],
       fontSize: theme.fontSizes["spacing-16"],
       fontWeight: 400,
-      lineHeight: theme.spacing["spacing-24"],
+      lineHeight: spaciiing["spacing-24"],
       order: 0,
-      paddingBottom: theme.spacing["spacing-4"],
+      paddingBottom: spaciiing["spacing-4"],
       transition: "all 0.3s ease",
       ...labelStyleOverwrite,
     },
@@ -114,7 +117,7 @@ export const textStyles = ({
       color: error ? colooors["support-error"][3] : colooors["neutrals-01"][7],
       margin: 0,
       order: 1,
-      paddingBottom: theme.spacing["spacing-8"],
+      paddingBottom: spaciiing["spacing-8"],
     },
   });
 
@@ -127,22 +130,23 @@ export const passwordStyles = ({
   disabled,
   error,
   inputStyleOverwrite,
-  labelStyleOverwrite
+  labelStyleOverwrite,
+  theme
 }: TProps): PasswordStyles =>
 {
-  const styles: PasswordStyles = (theme: MantineTheme) => ({
+  const styles: PasswordStyles = () => ({
     description: {
       color: colooors["neutrals-01"][7],
       fontSize: "14px",
       fontWeight: 500,
-      lineHeight: theme.spacing["spacing-20"],
+      lineHeight: spaciiing["spacing-20"],
       order: 2,
     },
     error: {
       color: colooors["support-error"][3],
       fontSize: "14px",
       fontWeight: 500,
-      lineHeight: theme.spacing["spacing-20"],
+      lineHeight: spaciiing["spacing-20"],
       order: 3,
     },
     innerInput: {
@@ -153,12 +157,12 @@ export const passwordStyles = ({
         color: `${colooors["neutrals-01"][7]} !important`,
         fontSize: theme.fontSizes["spacing-16"],
         fontWeight: 500,
-        lineHeight: theme.spacing["spacing-24"],
+        lineHeight: spaciiing["spacing-24"],
       },
       color: `${colooors["neutrals-02"][1]} !important`,
       fontSize: theme.fontSizes["spacing-16"],
       fontWeight: 500,
-      lineHeight: theme.spacing["spacing-24"],
+      lineHeight: spaciiing["spacing-24"],
 
       transition: "all 0.3s ease",
     },
@@ -173,7 +177,7 @@ export const passwordStyles = ({
         ? `1px solid ${colooors["support-error"][3]} !important`
         : `1px solid ${colooors["neutrals-01"][5]}`,
       borderRadius: theme.radius["radius-8"],
-      padding: `${theme.spacing["spacing-8"]} ${theme.spacing["spacing-16"]}`,
+      padding: `${spaciiing["spacing-8"]} ${spaciiing["spacing-16"]}`,
       transition: "all 0.3s ease",
       ...inputStyleOverwrite,
     },
@@ -185,9 +189,9 @@ export const passwordStyles = ({
           : colooors["neutrals-01"][9],
       fontSize: theme.fontSizes["spacing-16"],
       fontWeight: 400,
-      lineHeight: theme.spacing["spacing-24"],
+      lineHeight: spaciiing["spacing-24"],
       order: 0,
-      paddingBottom: theme.spacing["spacing-4"],
+      paddingBottom: spaciiing["spacing-4"],
       transition: "all 0.3s ease",
       ...labelStyleOverwrite,
     },
@@ -214,7 +218,7 @@ export const passwordStyles = ({
       color: error ? colooors["support-error"][3] : colooors["neutrals-01"][7],
       margin: 0,
       order: 1,
-      paddingBottom: theme.spacing["spacing-8"],
+      paddingBottom: spaciiing["spacing-8"],
       transition: "all 0.3s ease",
     },
   });

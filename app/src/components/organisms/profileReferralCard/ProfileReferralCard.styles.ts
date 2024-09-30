@@ -1,9 +1,8 @@
 import { colooors } from "@/constants/styles/colors";
 
 import { css } from "@emotion/react";
-import { type MantineTheme } from "@mantine/styles";
 
-export const wrapper = (theme: MantineTheme) => css`
+export const wrapper = () => css`
     background: ${colooors["neutrals-01"][0]};
     padding:32px 24px;
     height: 230px;
@@ -26,7 +25,7 @@ export const wrapper = (theme: MantineTheme) => css`
     }
 `;
 
-export const icon = (theme: MantineTheme) => css`
+export const icon = () => css`
     display:grid;
     place-items: center;
     svg{
@@ -40,7 +39,7 @@ export const icon = (theme: MantineTheme) => css`
     height: 40px;
 `;
 
-export const labelWrapper = (theme: MantineTheme) => css`
+export const labelWrapper = () => css`
       padding: 4px 8px;
       background-color: ${colooors["cc-cases"][2]};
       color: ${colooors["neutrals-02"][1]};

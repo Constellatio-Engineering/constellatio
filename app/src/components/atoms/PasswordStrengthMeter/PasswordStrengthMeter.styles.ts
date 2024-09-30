@@ -1,6 +1,7 @@
 import { colooors } from "@/constants/styles/colors";
 import { type MantineCssObjectStyles } from "@/utils/types";
 
+import { type MantineTheme } from "@mantine/core";
 import { type ReactNode } from "react";
 
 type PasswordStrengthMeterStylesProps = {
@@ -8,6 +9,7 @@ type PasswordStrengthMeterStylesProps = {
   error: ReactNode;
   isPasswordRevealed: boolean;
   meets: boolean;
+  theme: MantineTheme;
 };
 
 export const styles = ({
@@ -15,7 +17,8 @@ export const styles = ({
   error,
   isPasswordRevealed,
   meets,
-}: PasswordStrengthMeterStylesProps): MantineCssObjectStyles => theme => ({
+  theme,
+}: PasswordStrengthMeterStylesProps): MantineCssObjectStyles => () => ({
   alignItems: "start",
   color: meets
     ? colooors["neutrals-01"][9]
