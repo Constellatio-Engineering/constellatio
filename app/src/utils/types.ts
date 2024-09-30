@@ -70,3 +70,5 @@ export type WithChildren<T> = T & {
 };
 
 export type NonEmptyArray<T> = [T, ...T[]] | [...T[], T] | [T, ...T[], T];
+
+export type Primitive = string | number | boolean;

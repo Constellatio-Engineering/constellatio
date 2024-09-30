@@ -8,6 +8,7 @@ import { useArticlesOverviewFiltersStore } from "@/stores/overviewFilters.store"
 import { type ArticleWithNextAndPreviousArticleId, getArticlesWithNextAndPreviousArticleId } from "@/utils/articles";
 
 import { type GetStaticProps } from "next";
+import { useStore } from "zustand";
 
 export type GetArticlesOverviewPagePropsResult = GetOverviewPagePropsResult & {
   items: ArticleWithNextAndPreviousArticleId[];
@@ -32,15 +33,11 @@ export const getStaticProps: GetStaticProps<GetArticlesOverviewPagePropsResult> 
 
 const NextPage: NextPageWithLayout<GetArticlesOverviewPagePropsResult> = (articlesOverviewProps) =>
 {
-  const filteredLegalAreas = useArticlesOverviewFiltersStore(s => s.filteredLegalAreas);
-  const filteredTags = useArticlesOverviewFiltersStore(s => s.filteredTags);
-  const filteredTopics = useArticlesOverviewFiltersStore(s => s.filteredTopics);
-  const openDrawer = useArticlesOverviewFiltersStore(s => s.openDrawer);
-  const toggleLegalArea = useArticlesOverviewFiltersStore(s => s.toggleLegalArea);
-  const toggleTag = useArticlesOverviewFiltersStore(s => s.toggleTag);
-  const toggleTopic = useArticlesOverviewFiltersStore(s => s.toggleTopic);
-  const clearAllFilters = useArticlesOverviewFiltersStore(s => s.clearAllFilters);
-  const totalFiltersCount = useArticlesOverviewFiltersStore(s => s.getTotalFiltersCount());
+  const filters = useStore(useArticlesOverviewFiltersStore, s => s.filters);
+  const toggleFilter = useStore(useArticlesOverviewFiltersStore, s => s.toggleFilter);
+  const openDrawer = useStore(useArticlesOverviewFiltersStore, s => s.openDrawer);
+  const clearAllFilters = useStore(useArticlesOverviewFiltersStore, s => s.clearAllFilters);
+  const totalFiltersCount = useStore(useArticlesOverviewFiltersStore, s => s.getTotalFiltersCount());
 
   return (
     <>
@@ -50,13 +47,9 @@ const NextPage: NextPageWithLayout<GetArticlesOverviewPagePropsResult> = (articl
         variant={"dictionary"}
         filter={{
           clearAllFilters,
-          filteredLegalAreas,
-          filteredTags,
-          filteredTopics,
+          filters,
           openDrawer,
-          toggleLegalArea,
-          toggleTag,
-          toggleTopic,
+          toggleFilter,
           totalFiltersCount
         }}
       />

@@ -1,5 +1,4 @@
 import { BodyText } from "@/components/atoms/BodyText/BodyText";
-import IconButton from "@/components/atoms/iconButton/IconButton";
 import { ArrowDown } from "@/components/Icons/ArrowDown";
 import { UnstyledButton } from "@/components/molecules/unstyledButton/UnstyledButton";
 import FilterItem from "@/components/pages/OverviewPage/overviewFiltersDrawer/filterCategory/filterItem/FilterItem";
@@ -14,12 +13,12 @@ import * as styles from "./FilterCategory.styles";
 
 export type FilterCategoryProps = {
   readonly activeFiltersCount: number;
-  readonly clearFilters: () => void;
+  readonly clearFilters: () => void; 
   readonly items: Array<{
-    readonly id: string;
     readonly isChecked: boolean;
     readonly label: string;
     readonly toggle: () => void;
+    readonly value: string | number;
   }>;
   readonly search?: {
     readonly searchesFor: string;
@@ -70,23 +69,15 @@ export const FilterCategory: FunctionComponent<FilterCategoryProps> = ({
                 {
                   e.stopPropagation();
                   clearFilters();
-                  setIsOpen(false);
                 }}>
                 zurücksetzen
               </UnstyledButton>
               <div css={styles.divider}/>
             </>
           )}
-          <IconButton
-            stylesOverrides={styles.expandButton}
-            icon={<ArrowDown/>}
-            size={"big"}
-            onClick={(e) =>
-            {
-              e.stopPropagation();
-              setIsOpen((isOpen) => !isOpen);
-            }}
-          />
+          <div css={styles.expandIconWrapper}>
+            <ArrowDown size={22}/>
+          </div>
         </div>
       </UnstyledButton>
       <div css={[styles.itemsWrapper, !isOpen && styles.itemWrapperCollapsed]}>
@@ -117,7 +108,7 @@ export const FilterCategory: FunctionComponent<FilterCategoryProps> = ({
           </div>
         )}
         {itemsFiltered.map((item) => (
-          <FilterItem key={item.id} {...item}/>
+          <FilterItem key={item.value} {...item}/>
         ))}
       </div>
     </div>

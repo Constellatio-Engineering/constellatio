@@ -2,84 +2,48 @@
 import { Trash } from "@/components/Icons/Trash";
 import SlidingPanelTitle from "@/components/molecules/slidingPanelTitle/SlidingPanelTitle";
 import { FilterCategory } from "@/components/pages/OverviewPage/overviewFiltersDrawer/filterCategory/FilterCategory";
-import type { CaseOverviewPageProps } from "@/pages/cases";
+import { getFilterOptions, itemValuesToFilterOptions } from "@/components/pages/OverviewPage/overviewFiltersDrawer/OverviewFiltersDrawer.utils";
+import { type CaseOverviewPageProps } from "@/pages/cases";
 import type { GetArticlesOverviewPagePropsResult } from "@/pages/dictionary";
-import {
-  type ArticlesOverviewFiltersStore,
-  type CasesOverviewFiltersStore, type FilterOption,
-  statusesFilterOptions,
-  useArticlesOverviewFiltersStore,
-  useCasesOverviewFiltersStore
-} from "@/stores/overviewFilters.store";
-import { type NullableProperties } from "@/utils/types";
+import { type ArticlesOverviewFiltersStore, type CasesOverviewFiltersStore, useArticlesOverviewFiltersStore, useCasesOverviewFiltersStore } from "@/stores/overviewFilters.store";
+import { findIntersection } from "@/utils/array";
+import { getDistinctItemsByKey } from "@/utils/utils";
 
 import { Drawer } from "@mantine/core";
 import React, { type FunctionComponent, useEffect, useMemo } from "react";
+import { useStore } from "zustand";
 
 import * as styles from "./OverviewFiltersDrawer.styles";
 
-type CasesOverviewFiltersDrawerProps = Pick<CaseOverviewPageProps, "items" | "variant">;
+export type CasesOverviewFiltersDrawerProps = Pick<CaseOverviewPageProps, "items" | "variant">;
 
 export const CasesOverviewFiltersDrawer: FunctionComponent<CasesOverviewFiltersDrawerProps> = (props) =>
 {
-  const casesOverviewFiltersStore = useCasesOverviewFiltersStore();
+  const casesOverviewFiltersStore = useStore(useCasesOverviewFiltersStore);
 
   return (
-    <OverviewFiltersDrawerContent {...props} filtersStore={casesOverviewFiltersStore}/>
+    <OverviewFiltersDrawerContent
+      {...props}
+      filtersStore={casesOverviewFiltersStore}
+    />
   );
 };
 
-type ArticlesOverviewFiltersDrawerProps = Pick<GetArticlesOverviewPagePropsResult, "items" | "variant">;
+export type ArticlesOverviewFiltersDrawerProps = Pick<GetArticlesOverviewPagePropsResult, "items" | "variant">;
 
 export const ArticlesOverviewFiltersDrawer: FunctionComponent<ArticlesOverviewFiltersDrawerProps> = (props) =>
 {
-  const articlesOverviewFiltersStore = useArticlesOverviewFiltersStore();
+  const articlesOverviewFiltersStore = useStore(useArticlesOverviewFiltersStore);
 
   return (
-    <OverviewFiltersDrawerContent {...props} filtersStore={articlesOverviewFiltersStore}/>
+    <OverviewFiltersDrawerContent
+      {...props}
+      filtersStore={articlesOverviewFiltersStore}
+    />
   );
 };
 
-const getUniqueFilterOptions = <T extends NullableProperties<FilterOption>>(items: T[]): FilterOption[] =>
-{
-  return Array
-    .from(items
-      .map(item =>
-      {
-        if(item?.id == null || item?.title == null)
-        {
-          return null;
-        }
-
-        return ({
-          id: item.id,
-          title: item.title,
-        }) satisfies FilterOption;
-      })
-      .filter(Boolean)
-      .reduce((map, item) => map.set(item.id, item), new Map<string, FilterOption>()) // Use a Map to ensure uniqueness by topic id
-      .values()
-    )
-    .sort((a, b) =>
-    {
-      const aStartsWithParagraph = a.title.startsWith("§");
-      const bStartsWithParagraph = b.title.startsWith("§");
-
-      if(!aStartsWithParagraph && bStartsWithParagraph)
-      {
-        return -1;
-      }
-
-      if(aStartsWithParagraph && !bStartsWithParagraph)
-      {
-        return 1;
-      }
-
-      return a.title.localeCompare(b.title);
-    });
-};
-
-type OverviewFiltersDrawerContentProps = (CasesOverviewFiltersDrawerProps & {
+export type OverviewFiltersDrawerContentProps = (CasesOverviewFiltersDrawerProps & {
   readonly filtersStore: CasesOverviewFiltersStore;
 }) | (ArticlesOverviewFiltersDrawerProps & {
   readonly filtersStore: ArticlesOverviewFiltersStore;
@@ -89,66 +53,65 @@ const OverviewFiltersDrawerContent: FunctionComponent<OverviewFiltersDrawerConte
 {
   const {
     clearAllFilters,
-    clearFilteredLegalAreas,
-    clearFilteredTags,
-    clearFilteredTopics,
-    clearInvalidFilters,
+    clearFilters,
+    clearInvalidFilters, 
     closeDrawer,
-    filteredLegalAreas,
-    filteredTags,
-    filteredTopics,
+    filters,
     getTotalFiltersCount,
     isDrawerOpened,
-    toggleLegalArea,
-    toggleTag,
-    toggleTopic
+    toggleFilter,
   } = filtersStore;
 
   const totalFiltersCount = getTotalFiltersCount();
 
-  const uniqueLegalAreas = useMemo(() =>
+  const { legalAreasFilterOptions, tagsFilterOptions, topicsFilterOptions } = useMemo(() =>
   {
-    const allLegalAreas = items
-      .map(item => item.legalArea)
-      .map(t => ({
-        id: t?.id,
-        title: t?.legalAreaName,
-      }));
+    const allLegalAreas = getFilterOptions(filters, "legalArea", items);
+    const intersectionLegalAreas = findIntersection(allLegalAreas, "id");
+    const distinctLegalAreas = getDistinctItemsByKey(intersectionLegalAreas, "id");
+    const legalAreasFilterOptions = itemValuesToFilterOptions(distinctLegalAreas);
 
-    return getUniqueFilterOptions(allLegalAreas);
-  }, [items]);
+    const allTags = getFilterOptions(filters, "tags", items);
+    const intersectionTags = findIntersection(allTags, "id");
+    const distinctTags = getDistinctItemsByKey(intersectionTags, "id");
+    const tagsFilterOptions = itemValuesToFilterOptions(distinctTags);
 
-  const uniqueTopics = useMemo(() =>
+    const allTopics = getFilterOptions(filters, "topic", items);
+    const intersectionTopics = findIntersection(allTopics, "id");
+    const distinctTopics = getDistinctItemsByKey(intersectionTopics, "id");
+    const topicsFilterOptions = itemValuesToFilterOptions(distinctTopics);
+
+    return ({
+      legalAreasFilterOptions,
+      tagsFilterOptions,
+      topicsFilterOptions,
+    });
+  }, [items, filters]);
+
+  const progressStateFilterOptions = useMemo(() =>
   {
-    const allTopics = items.flatMap((item) => (item.topic ?? [])
-      .map(t => ({
-        id: t?.id,
-        title: t?.topicName,
-      })));
+    if(variant !== "case")
+    {
+      return [];
+    }
 
-    return getUniqueFilterOptions(allTopics);
-  }, [items]);
+    const allProgressStates = getFilterOptions(filters, "progressStateFilterable", items);
+    const intersectionProgressStates = findIntersection(allProgressStates, "value");
+    const distinctProgressStates = getDistinctItemsByKey(intersectionProgressStates, "value");
 
-  const uniqueTags = useMemo(() =>
-  {
-    const allTags = items.flatMap((item) => (item.tags ?? [])
-      .map(t => ({
-        id: t?.id,
-        title: t?.tagName,
-      })));
-
-    return getUniqueFilterOptions(allTags);
-  }, [items]);
+    return distinctProgressStates;
+  }, [filters, items, variant]);
 
   useEffect(() =>
   {
     // when the filter options change, we need to clear the filters that are not valid anymore
     clearInvalidFilters({
-      uniqueLegalAreas: uniqueLegalAreas.map(l => l.id),
-      uniqueTags: uniqueTags.map(t => t.id),
-      uniqueTopics: uniqueTopics.map(t => t.id),
+      legalArea: legalAreasFilterOptions,
+      progressStateFilterable: progressStateFilterOptions,
+      tags: tagsFilterOptions,
+      topic: topicsFilterOptions,
     });
-  }, [uniqueLegalAreas, uniqueTopics, uniqueTags, clearInvalidFilters]);
+  }, [clearInvalidFilters, legalAreasFilterOptions, progressStateFilterOptions, tagsFilterOptions, topicsFilterOptions]);
 
   return (
     <Drawer
@@ -176,50 +139,46 @@ const OverviewFiltersDrawerContent: FunctionComponent<OverviewFiltersDrawerConte
       )}>
       {variant === "case" && (
         <FilterCategory
-          items={statusesFilterOptions.map((status) => ({
-            id: status.id,
-            isChecked: filtersStore.filteredStatuses.some(s => s.id === status.id),
-            label: status.title,
-            toggle: () => filtersStore.toggleStatus(status)
+          items={progressStateFilterOptions.map((progressState) => ({
+            ...progressState,
+            isChecked: filtersStore.filters.progressStateFilterable.some(s => s.value === progressState.value),
+            toggle: () => filtersStore.toggleFilter("progressStateFilterable", progressState),
           }))}
-          clearFilters={filtersStore.clearFilteredStatuses}
-          activeFiltersCount={filtersStore.filteredStatuses.length}
+          clearFilters={() => filtersStore.clearFilters("progressStateFilterable")}
+          activeFiltersCount={filtersStore.filters.progressStateFilterable.length}
           title="Status"
         />
       )}
       <FilterCategory
         search={{ searchesFor: "Rechtsgebieten" }}
-        activeFiltersCount={filteredLegalAreas.length}
-        clearFilters={clearFilteredLegalAreas}
-        items={uniqueLegalAreas.map(legalArea => ({
-          id: legalArea.id,
-          isChecked: filteredLegalAreas.some(l => l.id === legalArea.id),
-          label: legalArea.title,
-          toggle: () => toggleLegalArea(legalArea)
+        activeFiltersCount={filters.legalArea.length}
+        clearFilters={() => clearFilters("legalArea")}
+        items={legalAreasFilterOptions.map(legalArea => ({
+          ...legalArea,
+          isChecked: filters.legalArea.some(l => l.value === legalArea.value),
+          toggle: () => toggleFilter("legalArea", legalArea),
         }))}
         title="Rechtsgebiet"
       />
       <FilterCategory
         search={{ searchesFor: "Themen" }}
-        activeFiltersCount={filteredTopics.length}
-        clearFilters={clearFilteredTopics}
-        items={uniqueTopics.map(topic => ({
-          id: topic.id,
-          isChecked: filteredTopics.some(t => t.id === topic.id),
-          label: topic.title,
-          toggle: () => toggleTopic(topic)
+        activeFiltersCount={filters.topic.length}
+        clearFilters={() => clearFilters("topic")}
+        items={topicsFilterOptions.map(topic => ({
+          ...topic,
+          isChecked: filters.topic.some(t => t.value === topic.value),
+          toggle: () => toggleFilter("topic", topic),
         }))}
         title="Thema"
       />
       <FilterCategory
         search={{ searchesFor: "Tags" }}
-        activeFiltersCount={filteredTags.length}
-        clearFilters={clearFilteredTags}
-        items={uniqueTags.map(tag => ({
-          id: tag.id,
-          isChecked: filteredTags.some(t => t.id === tag.id),
-          label: tag.title,
-          toggle: () => toggleTag(tag)
+        activeFiltersCount={filters.tags.length}
+        clearFilters={() => clearFilters("tags")}
+        items={tagsFilterOptions.map(tag => ({
+          ...tag,
+          isChecked: filters.tags.some(t => t.value === tag.value),
+          toggle: () => toggleFilter("tags", tag),
         }))}
         title="Tags"
       />
