@@ -14,10 +14,15 @@ import UseQueryStateWrapper from "@/components/Wrappers/useQueryStateWrapper/Use
 import useCasesProgress from "@/hooks/useCasesProgress";
 import { type CaseOverviewPageProps } from "@/pages/cases";
 import { type GetArticlesOverviewPagePropsResult } from "@/pages/dictionary";
-import { type CasesOverviewFiltersStore, type CommonFiltersSlice, } from "@/stores/overviewFilters.store";
+import {
+  type ArticlesOverviewFiltersStore,
+  type CasesOverviewFiltersStore,
+  type CommonOverviewFiltersStore,
+} from "@/stores/overviewFilters.store";
 import { type ArticleWithNextAndPreviousArticleId } from "@/utils/articles";
 import { sortByTopic } from "@/utils/caisy";
 import { type Nullable } from "@/utils/types";
+import { getIsObjectWithId, getIsObjectWithValue, getIsPrimitive, objectKeys } from "@/utils/utils";
 
 import { Title } from "@mantine/core";
 import { parseAsString, useQueryState } from "next-usequerystate";
@@ -37,16 +42,16 @@ export function extractNumeric(title: Nullable<string>): number | null
   return match ? parseInt(match[0], 10) : null;
 }
 
-type CommonFiltersStoreProps = Pick<CommonFiltersSlice, "clearAllFilters" | "filteredLegalAreas" | "filteredTags" | "filteredTopics" | "openDrawer" | "toggleLegalArea" | "toggleTag" | "toggleTopic"> & {
+type CommonFiltersStoreProps = Pick<CommonOverviewFiltersStore, "clearAllFilters" | "openDrawer"> & {
   readonly totalFiltersCount: number;
 };
 
 type ArticlesPageProps = GetArticlesOverviewPagePropsResult & {
-  readonly filter: CommonFiltersStoreProps;
+  readonly filter: CommonFiltersStoreProps & Pick<ArticlesOverviewFiltersStore, "filters" | "toggleFilter">;
 };
 
 type CasesPageProps = CaseOverviewPageProps & {
-  readonly filter: CommonFiltersStoreProps & Pick<CasesOverviewFiltersStore, "toggleStatus" | "filteredStatuses">;
+  readonly filter: CommonFiltersStoreProps & Pick<CasesOverviewFiltersStore, "filters" | "toggleFilter">;
 };
 
 export type OverviewPageProps = (ArticlesPageProps | CasesPageProps) & {
@@ -61,6 +66,73 @@ type OverviewPageContentProps = OverviewPageProps & {
   readonly initialCategorySlug: string;
 };
 
+function getItemsMatchingTheFilters<T extends OverviewPageContentProps["items"][number]>(
+  items: T[],
+  filters: CommonOverviewFiltersStore["filters"],
+): T[]
+{
+  return items.filter(item =>
+  {
+    const filterResults = objectKeys(filters).map(filterKey =>
+    {
+      const currentFilterOptions = filters[filterKey];
+      const itemValueFromCurrentFilter = item[filterKey];
+
+      if(currentFilterOptions?.length === 0)
+      {
+        return true;
+      }
+
+      if(Array.isArray(itemValueFromCurrentFilter))
+      {
+        return itemValueFromCurrentFilter.some((value) =>
+        {
+          if(value == null)
+          {
+            return false;
+          }
+
+          if(getIsObjectWithId(value))
+          {
+            return currentFilterOptions.some(filterOption => filterOption.value === value.id);
+          }
+          else if(getIsPrimitive(value))
+          {
+            return currentFilterOptions.some(filterOption => filterOption.value === value);
+          }
+
+          return false;
+        });
+      }
+      else if(getIsObjectWithId(itemValueFromCurrentFilter))
+      {
+        if(currentFilterOptions.some(filterOption => filterOption.value === itemValueFromCurrentFilter.id))
+        {
+          return true;
+        }
+      }
+      else if(getIsObjectWithValue(itemValueFromCurrentFilter))
+      {
+        if(currentFilterOptions.some(filterOption => filterOption.value === itemValueFromCurrentFilter.value))
+        {
+          return true;
+        }
+      }
+      else if(getIsPrimitive(itemValueFromCurrentFilter))
+      {
+        if(currentFilterOptions.some(filterOption => filterOption.value === itemValueFromCurrentFilter))
+        {
+          return true;
+        }
+      }
+
+      return false;
+    });
+
+    return filterResults.every(Boolean);
+  });
+}
+
 const OverviewPageContent: FunctionComponent<OverviewPageContentProps> = ({
   allLegalAreas,
   allMainCategories,
@@ -72,13 +144,9 @@ const OverviewPageContent: FunctionComponent<OverviewPageContentProps> = ({
 {
   const {
     clearAllFilters,
-    filteredLegalAreas,
-    filteredTags,
-    filteredTopics,
+    filters,
     openDrawer,
-    toggleLegalArea,
-    toggleTag,
-    toggleTopic,
+    toggleFilter,
     totalFiltersCount
   } = filter;
 
@@ -91,49 +159,10 @@ const OverviewPageContent: FunctionComponent<OverviewPageContentProps> = ({
 
   const isCategoryEmpty = allItemsOfSelectedCategory.length <= 0;
 
-  const itemsFilteredByStatus = useMemo(() => allItemsOfSelectedCategory.filter((item) =>
+  const _filteredItems = useMemo(() =>
   {
-    if(variant === "dictionary")
-    {
-      return true;
-    }
-
-    const { filteredStatuses } = filter;
-
-    if(filteredStatuses.length === 0)
-    {
-      return true;
-    }
-
-    if(item.__typename === "Case")
-    {
-      const isFilteringCompletedCases = filteredStatuses.some(status => status.id === "completed");
-      const isFilteringInProgressCases = filteredStatuses.some(status => status.id === "in-progress");
-      const isFilteringOpenCases = filteredStatuses.some(status => status.id === "open");
-
-      return item.progressState && (
-        (isFilteringCompletedCases && item.progressState === "completed") ||
-        (isFilteringInProgressCases && (item.progressState === "completing-tests" || item.progressState === "solving-case")) ||
-        (isFilteringOpenCases && item.progressState === "not-started")
-      );
-    }
-
-    return true;
-  }), [allItemsOfSelectedCategory, filter, variant]);
-
-  const _filteredItems = useMemo(() => itemsFilteredByStatus.filter((item) =>
-  {
-    if(filteredLegalAreas.length === 0 && filteredTopics.length === 0 && filteredTags.length === 0)
-    {
-      return true;
-    }
-
-    const matchesLegalArea = item.legalArea?.id != null && filteredLegalAreas.some(legalArea => legalArea.id === item.legalArea?.id);
-    const matchesTopic = item.topic?.some((t) => t?.id != null && filteredTopics.some(topic => topic.id === t.id));
-    const matchesTag = item.tags?.some((t) => t?.id != null && filteredTags.some(tag => tag.id === t.id));
-
-    return matchesLegalArea || matchesTopic || matchesTag;
-  }), [filteredLegalAreas, filteredTopics, filteredTags, itemsFilteredByStatus]);
+    return getItemsMatchingTheFilters(allItemsOfSelectedCategory, filters);
+  }, [filters, allItemsOfSelectedCategory]);
 
   const filteredItems = useDeferredValue(_filteredItems);
 
@@ -179,34 +208,34 @@ const OverviewPageContent: FunctionComponent<OverviewPageContentProps> = ({
               <div css={styles.activeFiltersChips}>
                 {variant === "case" && (
                   <>
-                    {filter.filteredStatuses.map((status) => (
+                    {filter.filters.progressStateFilterable.map((progressState) => (
                       <FilterTag
-                        key={status.id}
-                        onClick={() => filter.toggleStatus(status)}
-                        title={status.title}
+                        key={progressState.value}
+                        onClick={() => filter.toggleFilter("progressStateFilterable", progressState)}
+                        title={progressState.label}
                       />
                     ))}
                   </>
                 )}
-                {filteredLegalAreas?.map((legalArea) => (
+                {filters.legalArea.map((legalArea) => (
                   <FilterTag
-                    key={legalArea.id}
-                    onClick={() => toggleLegalArea(legalArea)}
-                    title={legalArea.title}
+                    key={legalArea.value}
+                    onClick={() => toggleFilter("legalArea", legalArea)}
+                    title={legalArea.label}
                   />
                 ))}
-                {filteredTopics?.map((topic) => (
+                {filters.topic.map((topic) => (
                   <FilterTag
-                    key={topic.id}
-                    onClick={() => toggleTopic(topic)}
-                    title={topic.title}
+                    key={topic.value}
+                    onClick={() => toggleFilter("topic", topic)}
+                    title={topic.label}
                   />
                 ))}
-                {filteredTags?.map((tag) => (
+                {filters.tags.map((tag) => (
                   <FilterTag
-                    key={tag.id}
-                    onClick={() => toggleTag(tag)}
-                    title={tag.title}
+                    key={tag.value}
+                    onClick={() => toggleFilter("tags", tag)}
+                    title={tag.label}
                   />
                 ))}
               </div>

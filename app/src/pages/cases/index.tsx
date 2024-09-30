@@ -4,12 +4,14 @@ import OverviewPage from "@/components/pages/OverviewPage/OverviewPage";
 import { type CaseProgressState } from "@/db/schema";
 import useCasesProgress from "@/hooks/useCasesProgress";
 import { type NextPageWithLayout } from "@/pages/_app";
+// import { dummyCases } from "@/pages/cases/dummy-data";
 import getAllCases, { type AllCases } from "@/services/content/getAllCases";
 import { getOverviewPageProps, type GetOverviewPagePropsResult } from "@/services/content/getOverviewPageProps";
-import { useCasesOverviewFiltersStore } from "@/stores/overviewFilters.store";
+import { statusesFilterOptions, type StatusFilterOption, useCasesOverviewFiltersStore } from "@/stores/overviewFilters.store";
 
 import { type GetStaticProps } from "next";
 import { useMemo } from "react";
+import { useStore } from "zustand";
 
 type GetCasesOverviewPagePropsResult = GetOverviewPagePropsResult & {
   items: AllCases;
@@ -19,6 +21,7 @@ type GetCasesOverviewPagePropsResult = GetOverviewPagePropsResult & {
 export const getStaticProps: GetStaticProps<GetCasesOverviewPagePropsResult> = async () =>
 {
   const allCases = await getAllCases();
+  // const allCases = dummyCases;
   const overviewPageProps = await getOverviewPageProps(allCases);
 
   return {
@@ -33,16 +36,45 @@ export const getStaticProps: GetStaticProps<GetCasesOverviewPagePropsResult> = a
 
 const getCasesWithProgress = (cases: GetCasesOverviewPagePropsResult["items"], casesProgress: ReturnType<typeof useCasesProgress>["casesProgress"]) =>
 {
-  return cases.map(legalCase => ({
-    ...legalCase,
-    progressState: (casesProgress?.find(progress => progress?.caseId === legalCase.id)?.progressState ?? "not-started") satisfies CaseProgressState
-  }));
+  return cases.map(legalCase =>
+  {
+    const progress = (casesProgress?.find(progress => progress?.caseId === legalCase.id)?.progressState ?? "not-started") satisfies CaseProgressState;
+
+    let progressStateFilterable: StatusFilterOption;
+
+    switch (progress)
+    {
+      case "not-started":
+      {
+        progressStateFilterable = statusesFilterOptions.find(status => status.value === "open")!;
+        break;
+      }
+      case "completing-tests":
+      case "solving-case":
+      {
+        progressStateFilterable = statusesFilterOptions.find(status => status.value === "in-progress")!;
+        break;
+      }
+      case "completed":
+      {
+        progressStateFilterable = statusesFilterOptions.find(status => status.value === "completed")!;
+        break;
+      }
+    }
+
+    return ({
+      ...legalCase,
+      progressStateBackend: progress,
+      progressStateFilterable
+    });
+  });
 };
 
 export type CasesWithProgress = ReturnType<typeof getCasesWithProgress>;
 export type CaseOverviewPageProps = Omit<GetCasesOverviewPagePropsResult, "items"> & {
   items: CasesWithProgress;
 };
+export type CaseOverviewPageItems = CaseOverviewPageProps["items"][number];
 
 const Page: NextPageWithLayout<GetCasesOverviewPagePropsResult> = ({
   items,
@@ -51,17 +83,11 @@ const Page: NextPageWithLayout<GetCasesOverviewPagePropsResult> = ({
 {
   const { casesProgress } = useCasesProgress();
   const casesWithProgress = useMemo(() => getCasesWithProgress(items, casesProgress), [items, casesProgress]);
-  const filteredLegalAreas = useCasesOverviewFiltersStore(s => s.filteredLegalAreas);
-  const filteredStatuses = useCasesOverviewFiltersStore(s => s.filteredStatuses);
-  const filteredTags = useCasesOverviewFiltersStore(s => s.filteredTags);
-  const filteredTopics = useCasesOverviewFiltersStore(s => s.filteredTopics);
-  const openDrawer = useCasesOverviewFiltersStore(s => s.openDrawer);
-  const toggleStatus = useCasesOverviewFiltersStore(s => s.toggleStatus);
-  const toggleLegalArea = useCasesOverviewFiltersStore(s => s.toggleLegalArea);
-  const toggleTag = useCasesOverviewFiltersStore(s => s.toggleTag);
-  const toggleTopic = useCasesOverviewFiltersStore(s => s.toggleTopic);
-  const clearAllFilters = useCasesOverviewFiltersStore(s => s.clearAllFilters);
-  const totalFiltersCount = useCasesOverviewFiltersStore(s => s.getTotalFiltersCount());
+  const filters = useStore(useCasesOverviewFiltersStore, s => s.filters);
+  const openDrawer = useStore(useCasesOverviewFiltersStore, s => s.openDrawer);
+  const toggleFilter = useStore(useCasesOverviewFiltersStore, s => s.toggleFilter);
+  const clearAllFilters = useStore(useCasesOverviewFiltersStore, s => s.clearAllFilters);
+  const totalFiltersCount = useStore(useCasesOverviewFiltersStore, s => s.getTotalFiltersCount());
 
   return (
     <>
@@ -72,15 +98,9 @@ const Page: NextPageWithLayout<GetCasesOverviewPagePropsResult> = ({
         variant={"case"}
         filter={{
           clearAllFilters,
-          filteredLegalAreas,
-          filteredStatuses, 
-          filteredTags,
-          filteredTopics,
+          filters,
           openDrawer,
-          toggleLegalArea,
-          toggleStatus,
-          toggleTag, 
-          toggleTopic,
+          toggleFilter,
           totalFiltersCount
         }}
       />

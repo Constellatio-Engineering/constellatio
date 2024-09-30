@@ -33,15 +33,15 @@ export const divider = css`
 `;
 
 export const resetButton = css`
+  padding: 8px;
   text-decoration: underline;
   font-weight: 500;
   color: ${colors["neutrals-01"][8]};
   font-size: 16px;
 `;
 
-export const expandButton = css`
-  border: none;
-  margin-left: -12px;
+export const expandIconWrapper = css`
+  margin-right: 8px;
 `;
 
 export const itemsWrapper = css`

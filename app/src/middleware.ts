@@ -25,8 +25,6 @@ export const middleware: NextMiddleware = async (req) =>
     return NextResponse.redirect(redirectUrl);
   }
 
-  console.log("User is logged in. Checking subscription status");
-
   let subscriptionStatus: Pick<User, "subscriptionStatus">["subscriptionStatus"] | null = null;
 
   try
