@@ -15,7 +15,7 @@ import { useForm, zodResolver } from "@mantine/form";
 import { notifications } from "@mantine/notifications";
 import { useTranslation } from "next-i18next";
 import React, { type FunctionComponent, useEffect } from "react";
-import z from "zod";
+import { z } from "zod";
 import { makeZodI18nMap } from "zod-i18n-map";
 
 import * as styles from "./ProfileDetailsTab.styles";

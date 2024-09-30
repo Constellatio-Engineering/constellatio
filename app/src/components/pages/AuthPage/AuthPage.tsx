@@ -11,7 +11,7 @@ import { useMediaQuery } from "@mantine/hooks";
 import { useRouter } from "next/router";
 import { useTranslation } from "next-i18next";
 import { type FC, useEffect } from "react";
-import z from "zod";
+import { z } from "zod";
 import { makeZodI18nMap } from "zod-i18n-map";
 
 import * as styles from "./AuthPage.styles";

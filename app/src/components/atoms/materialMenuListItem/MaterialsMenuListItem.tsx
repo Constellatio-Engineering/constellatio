@@ -6,11 +6,11 @@ import { Trash } from "@/components/Icons/Trash";
 import { Menu, Modal, Title } from "@mantine/core";
 import React, { type FunctionComponent, type HTMLProps, type ReactNode, useState } from "react";
 
-import * as styles from "./../materialMenuListItem/MenuListItem.styles";
 import { BodyText } from "../BodyText/BodyText";
 import { Button, type TButton } from "../Button/Button";
 import { DropdownItem } from "../Dropdown/DropdownItem";
 import { Input } from "../Input/Input";
+import * as styles from "./../materialMenuListItem/MenuListItem.styles";
 
 interface MenuListItemProps
 {
