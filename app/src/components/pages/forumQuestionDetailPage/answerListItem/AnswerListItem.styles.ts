@@ -1,4 +1,4 @@
-import { colors } from "@/constants/styles/colors";
+import { colooors } from "@/constants/styles/colors";
 import type { UnknownMantineStylesParams } from "@/utils/types";
 
 import { css } from "@emotion/react";
@@ -21,14 +21,14 @@ export const forumListItem = css`
     width: 40px;
     height: 40px;
     border-radius: 100%;
-    background-color: ${colors["support-success"][1]};
+    background-color: ${colooors["support-success"][1]};
     box-shadow: 1px 1px 4px rgba(0, 0, 0, 0.15);
     display: none;
     align-items: center;
     justify-content: center;
     transition: background-color .1s ease;
-    background-color: ${colors["support-success"][1]};
-    border: 1px solid ${colors["support-success"][2]};
+    background-color: ${colooors["support-success"][1]};
+    border: 1px solid ${colooors["support-success"][2]};
     &:hover, &:active {
       background-color: #d2ecde;
     }
@@ -69,7 +69,7 @@ export const authorWrapper = css`
 
 export const profilePicture = css`
   border-radius: 100%;
-  border: 1px solid ${colors["neutrals-01"][4]};
+  border: 1px solid ${colooors["neutrals-01"][4]};
   padding: 3px;
 `;
 
@@ -78,7 +78,7 @@ export const author = css`
 `;
 
 export const date = css`
-  color: ${colors["neutrals-01"][7]};
+  color: ${colooors["neutrals-01"][7]};
   font-weight: 500;
 `;
 
@@ -124,10 +124,10 @@ export const toggleRepliesButton = (isExpanded: boolean) => css`
   display: flex;
   align-items: center;
   gap: 0px;
-  color: ${colors["neutrals-01"][9]};
+  color: ${colooors["neutrals-01"][9]};
   transition: opacity .2s ease;
   svg {
-    fill: ${colors["neutrals-01"][9]};
+    fill: ${colooors["neutrals-01"][9]};
     transform: rotate(${isExpanded ? 180 : 0}deg) translateY(${isExpanded ? 0 : 1}px);
   }
   &:hover, &:active {

@@ -16,7 +16,7 @@ import { useMutation } from "@tanstack/react-query";
 import { useRouter } from "next/router";
 import { useTranslation } from "next-i18next";
 import React, { type FunctionComponent, useEffect, useState } from "react";
-import z from "zod";
+import { z } from "zod";
 import { makeZodI18nMap } from "zod-i18n-map";
 
 import * as styles from "./ChangeEmailTab.styles";

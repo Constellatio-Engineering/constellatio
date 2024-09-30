@@ -1,11 +1,12 @@
+import { colooors } from "@/constants/styles/colors";
 import { type UnknownMantineStylesParams } from "@/utils/types";
 
 import { css } from "@emotion/react";
 import { type ModalStylesNames } from "@mantine/core";
-import { type Styles, type MantineTheme } from "@mantine/styles";
+import { type Styles } from "@mantine/styles";
 
-export const wrapper = (theme: MantineTheme) => css`
-    background-color: ${theme.colors["neutrals-01"][0]};
+export const wrapper = () => css`
+    background-color: ${colooors["neutrals-01"][0]};
     border-radius: 12px;
     box-shadow: 0px 8px 44px 0px rgba(0, 0, 0, 0.04);
     width: 312px;
@@ -19,14 +20,14 @@ export const wrapper = (theme: MantineTheme) => css`
   }
 
 `;
-export const header = (theme: MantineTheme) => css`
-    color:${theme.colors["neutrals-02"][1]};
+export const header = () => css`
+    color:${colooors["neutrals-02"][1]};
     padding:24px  24px 24px 16px;
 `;
 export const content = css``;
-export const callToAction = (theme: MantineTheme) => css`
+export const callToAction = () => css`
     padding:16px;
-    background: ${theme.colors["neutrals-01"][0]};
+    background: ${colooors["neutrals-01"][0]};
     border-radius: 0 0 12px 12px;
 `;
 

@@ -1,4 +1,3 @@
-
 import { CaptionText } from "@/components/atoms/CaptionText/CaptionText";
 import IconButton from "@/components/atoms/iconButton/IconButton";
 import { SubtitleText } from "@/components/atoms/SubtitleText/SubtitleText";
@@ -42,7 +41,6 @@ const ProfilePersonalSpaceBlockHead: FunctionComponent<ProfilePersonalSpaceBlock
           size="medium"
           defaultValue={tabs[selectedTab]?.title}
           tabStyleOverwrite={{ flex: "1" }}>
-
           <Tabs.List>
             {tabs && tabs?.map((tab, tabIndex) => (
               <React.Fragment key={tabIndex}>

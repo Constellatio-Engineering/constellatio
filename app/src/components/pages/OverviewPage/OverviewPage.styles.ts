@@ -1,7 +1,6 @@
-import { colors } from "@/constants/styles/colors";
+import { colooors } from "@/constants/styles/colors";
 
 import { css, type SerializedStyles } from "@emotion/react";
-import { type MantineTheme } from "@mantine/styles";
 
 export const ListWrapper = css`
   transform: translateY(-140px);
@@ -10,8 +9,8 @@ export const ListWrapper = css`
   z-index: 3;
 `;
 
-export const Page = (theme: MantineTheme): SerializedStyles => css`
-    background-color: ${theme.colors["neutrals-01"][2]};
+export const Page = (): SerializedStyles => css`
+    background-color: ${colooors["neutrals-01"][2]};
   min-height: 100vh;
     position: relative;
 `;
@@ -40,7 +39,7 @@ export const filtersButtonWrapper = css`
 `;
 
 export const filtersCount = css`
-  color: ${colors["neutrals-01"][7]};
+  color: ${colooors["neutrals-01"][7]};
   margin-left: 4px;
 `;
 

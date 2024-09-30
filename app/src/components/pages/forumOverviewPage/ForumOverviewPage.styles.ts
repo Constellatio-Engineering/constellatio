@@ -1,4 +1,4 @@
-import { colors } from "@/constants/styles/colors";
+import { colooors } from "@/constants/styles/colors";
 
 import { css } from "@emotion/react";
 
@@ -20,7 +20,7 @@ export const totalAmountAndSortingWrapper = (fullWidth: boolean) => css`
   justify-content: space-between;
   align-items: center;
   width: ${fullWidth ? "100%" : "auto"};
-  color: ${colors["neutrals-01"][9]};
+  color: ${colooors["neutrals-01"][9]};
 `;
 
 export const totalAmount = css`

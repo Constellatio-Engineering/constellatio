@@ -1,13 +1,9 @@
-import { css } from "@emotion/react";
-import { type MantineTheme } from "@mantine/styles";
+import { colooors } from "@/constants/styles/colors";
 
-export const contentHeader = ({
-  height,
-  theme,
-  variant
-}: {
+import { css } from "@emotion/react";
+
+export const contentHeader = ({ height, variant }: {
   height: number;
-  theme: MantineTheme;
   variant: "case" | "dictionary" | "red" | "forum";
 }) => css`
 	position: relative;
@@ -19,12 +15,12 @@ export const contentHeader = ({
   flex-direction: column;
   justify-content: center;
 	background: ${variant === "case"
-    ? theme.colors["cc-cases"][2]
+    ? colooors["cc-cases"][2]
     : variant === "dictionary"
-      ? theme.colors["cc-dictionary"][2]
+      ? colooors["cc-dictionary"][2]
       : variant === "forum"
-        ? theme.colors["cc-forum"][2]
-        : variant === "red" && theme.colors["brand-01"][4]};
+        ? colooors["cc-forum"][2]
+        : variant === "red" && colooors["brand-01"][4]};
 	#overlay-lines {
 		position: absolute;
 		inset: 0;
@@ -34,12 +30,12 @@ export const contentHeader = ({
 		place-items: center;
 		z-index: 2;
 		color: ${variant === "case"
-    ? theme.colors["cc-cases"][2]
+    ? colooors["cc-cases"][2]
     : variant === "dictionary"
-      ? theme.colors["cc-dictionary"][2]
+      ? colooors["cc-dictionary"][2]
       : variant === "forum"
-        ? theme.colors["cc-forum"][2]
-        : variant === "red" && theme.colors["brand-01"][4]};
+        ? colooors["cc-forum"][2]
+        : variant === "red" && colooors["brand-01"][4]};
 		svg {
 			height: 100%;
 			max-width: 100%;
@@ -131,13 +127,12 @@ export const selectedFiltersArea = css`
 	position: relative;
 	z-index: 3;
 `;
-export const title = ({ theme, variant }: {
-  theme: MantineTheme;
+export const title = ({ variant }: {
   variant: "case" | "dictionary" | "red" | "forum";
 }) => css`
 	position: relative;
 	z-index: 3;
 	color: ${variant === "red"
-    ? theme.colors["neutrals-01"][0]
-    : theme.colors["neutrals-02"][1]};
+    ? colooors["neutrals-01"][0]
+    : colooors["neutrals-02"][1]};
 `;

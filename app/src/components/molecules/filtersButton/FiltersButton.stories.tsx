@@ -2,8 +2,8 @@ import { Box } from "@mantine/core";
 import type { Meta, StoryObj } from "@storybook/react";
 import React, { type FunctionComponent } from "react";
 
-import FiltersButton from "./FiltersButton";
 import type { IFiltersButton } from "./FiltersButton";
+import FiltersButton from "./FiltersButton";
 
 const Template: FunctionComponent<IFiltersButton> = (args) => (
   <Box w={350}>

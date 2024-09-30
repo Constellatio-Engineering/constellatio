@@ -1,4 +1,4 @@
-import { colors } from "@/constants/styles/colors";
+import { colooors } from "@/constants/styles/colors";
 
 import { css } from "@emotion/react";
 
@@ -7,5 +7,5 @@ export const actionButton = css`
   align-items: center;
   gap: 4px;
   font-weight: 500;
-  color: ${colors["neutrals-01"][9]};
+  color: ${colooors["neutrals-01"][9]};
 `;

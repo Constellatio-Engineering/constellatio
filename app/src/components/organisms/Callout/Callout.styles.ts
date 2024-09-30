@@ -1,14 +1,14 @@
-import { colors } from "@/constants/styles/colors";
-import { spacing } from "@/constants/styles/spacing";
+import { colooors } from "@/constants/styles/colors";
+import { spaciiing } from "@/constants/styles/spacing";
 import { type MantineCssObjectStyles } from "@/utils/types";
 
 import { css } from "@emotion/react";
 import {
-  type CSSObject, type MantineTheme, type SpoilerStylesNames, type SpoilerStylesParams, type Styles 
+  type CSSObject, type MantineTheme, type SpoilerStylesNames, type SpoilerStylesParams, type Styles
 } from "@mantine/core";
 
 export const RichTextStyles = css`
-  color: ${colors["neutrals-01"][9]};
+  color: ${colooors["neutrals-01"][9]};
 
   h1,
   h2,
@@ -16,11 +16,11 @@ export const RichTextStyles = css`
   h4,
   h5,
   h6 {
-    padding-bottom: ${spacing["spacing-8"]};
+    padding-bottom: ${spaciiing["spacing-8"]};
   }
 
   p {
-    padding-bottom: ${spacing["spacing-4"]};
+    padding-bottom: ${spaciiing["spacing-4"]};
   }
 `;
 
@@ -28,9 +28,9 @@ type SpoilerStyles = Styles<SpoilerStylesNames, SpoilerStylesParams>;
 
 export const spoilerStyles = ({ isContentHide }: { isContentHide: boolean }): SpoilerStyles =>
 {
-  const styles: SpoilerStyles = (theme: MantineTheme) => ({
+  const styles: SpoilerStyles = () => ({
     control: {
-      marginTop: isContentHide ? -4 : theme.spacing["spacing-22"],
+      marginTop: isContentHide ? -4 : spaciiing["spacing-22"],
     },
     root: {
       ":before": {
@@ -53,13 +53,13 @@ export const spoilerStyles = ({ isContentHide }: { isContentHide: boolean }): Sp
 
 type CalloutStyles = MantineCssObjectStyles;
 
-export const calloutStyles = (): CalloutStyles =>
+export const calloutStyles = (theme: MantineTheme): CalloutStyles =>
 {
-  const styles = (theme: MantineTheme): CSSObject => ({
-    backgroundColor: theme.colors["neutrals-01"][0],
+  const styles = (): CSSObject => ({
+    backgroundColor: colooors["neutrals-01"][0],
     borderRadius: theme.radius["radius-12"],
-    borderTop: `8px solid ${theme.colors["support-warning"][2]}`,
-    padding: theme.spacing["spacing-24"],
+    borderTop: `8px solid ${colooors["support-warning"][2]}`,
+    padding: spaciiing["spacing-24"],
   });
   return styles;
 };

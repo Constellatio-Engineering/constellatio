@@ -7,7 +7,7 @@ import { type GameProgress } from "@/db/schema";
 import useContextAndErrorIfNull from "@/hooks/useContextAndErrorIfNull";
 import { useWindowDimensions } from "@/hooks/useWindowDimensions";
 import { InvalidateQueriesContext } from "@/provider/InvalidateQueriesProvider";
-import { type Maybe, type IGenCase_Facts, type IGenCase_FullTextTasks, type IGenArticle_FullTextTasks } from "@/services/graphql/__generated/sdk";
+import { type IGenArticle_FullTextTasks, type IGenCase_Facts, type IGenCase_FullTextTasks, type Maybe } from "@/services/graphql/__generated/sdk";
 import useCaseSolvingStore from "@/stores/caseSolving.store";
 import { api } from "@/utils/api";
 import { type Games } from "@/utils/case";
@@ -15,7 +15,7 @@ import type { IDocumentLink, IHeadingNode } from "types/richtext";
 
 import { Container, Title } from "@mantine/core";
 import {
-  type FunctionComponent, useMemo, useCallback, useEffect, useRef
+  type FunctionComponent, useCallback, useEffect, useMemo, useRef 
 } from "react";
 
 import * as styles from "./CaseCompleteTestsStep.styles";

@@ -1,4 +1,3 @@
-
 import { SubtitleText } from "@/components/atoms/SubtitleText/SubtitleText";
 import { Cross } from "@/components/Icons/Cross";
 import { FileIcon } from "@/components/Icons/FileIcon";
@@ -6,7 +5,7 @@ import FileUploadListItem from "@/components/molecules/fileUploadListItem/FileUp
 import { type UploadState } from "@/stores/uploadsProgress.store";
 
 import { ScrollArea } from "@mantine/core";
-import React, { useEffect, type FunctionComponent } from "react";
+import React, { type FunctionComponent, useEffect } from "react";
 
 import * as styles from "./FileUploadMenu.styles";
 

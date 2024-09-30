@@ -1,10 +1,11 @@
-import { type SerializedStyles, css } from "@emotion/react";
-import { type MantineTheme } from "@mantine/styles";
+import { colooors } from "@/constants/styles/colors";
 
-export const wrapper = (theme: MantineTheme) => css`
+import { css, type SerializedStyles } from "@emotion/react";
+
+export const wrapper = () => css`
   padding: 32px;
   border-radius: 8px;
-  background-color: ${theme.colors["neutrals-01"][0]};
+  background-color: ${colooors["neutrals-01"][0]};
   display: flex;
   justify-content: stretch;
   align-items: flex-start;
@@ -22,7 +23,7 @@ export const wrapper = (theme: MantineTheme) => css`
       div button,
       td button {
         cursor: pointer;
-        background-color: ${theme.colors["neutrals-01"][2]};
+        background-color: ${colooors["neutrals-01"][2]};
       }
     }
   }
@@ -36,19 +37,17 @@ export const expandTableButton = css`
   margin: 0 auto;
   display: block;
 `;
-const CSSCommonExpandButtonStyles = (
-  theme: MantineTheme
-): SerializedStyles => css`
+const CSSCommonExpandButtonStyles = (): SerializedStyles => css`
   content: "";
   position: absolute;
   width: 38%;
-  background: ${theme.colors["neutrals-01"][3]};
+  background: ${colooors["neutrals-01"][3]};
   height: 2px;
   top: 50%;
 `;
 
-export const expandTableButtonArea = (theme: MantineTheme) => css`
-  background-color: ${theme.colors["neutrals-01"][0]};
+export const expandTableButtonArea = () => css`
+  background-color: ${colooors["neutrals-01"][0]};
   position: relative;
   .linearGredient {
     content: "";
@@ -57,7 +56,7 @@ export const expandTableButtonArea = (theme: MantineTheme) => css`
     background: linear-gradient(
       to bottom,
       transparent 0%,
-      ${theme.colors["neutrals-01"][0]} 100%
+      ${colooors["neutrals-01"][0]} 100%
     );
     height: 350%;
     top: -350%;
@@ -65,10 +64,10 @@ export const expandTableButtonArea = (theme: MantineTheme) => css`
     left: 0;
   }
   &::after {
-    ${CSSCommonExpandButtonStyles(theme)}
+    ${CSSCommonExpandButtonStyles()}
   }
   &::before {
     right: 0;
-    ${CSSCommonExpandButtonStyles(theme)}
+    ${CSSCommonExpandButtonStyles()}
   }
 `;

@@ -1,8 +1,6 @@
 /* eslint-disable max-lines */
 import { db } from "@/db/connection";
-import {
-  fileExtensions, fileMimeTypes, type UploadedFileInsert, uploadedFiles
-} from "@/db/schema";
+import { fileExtensions, fileMimeTypes, type UploadedFileInsert, uploadedFiles } from "@/db/schema";
 import { addUserToCrmUpdateQueue } from "@/lib/clickup/utils";
 import { meiliSearchAdmin } from "@/lib/meilisearch";
 import { addUploadSchema } from "@/schemas/uploads/addUpload.schema";
@@ -14,16 +12,13 @@ import { addBadgeForUser } from "@/server/api/services/badges.services";
 import { addTags } from "@/server/api/services/tags.services";
 import { deleteFiles, getClouStorageFileUrl, getSignedCloudStorageUploadUrl } from "@/server/api/services/uploads.services";
 import { createTRPCRouter, protectedProcedure } from "@/server/api/trpc";
-import {
-  createUploadsSearchIndexItem, searchIndices, uploadSearchIndexItemPrimaryKey, type UploadSearchItemUpdate
-} from "@/utils/search";
+import { createUploadsSearchIndexItem, searchIndices, uploadSearchIndexItemPrimaryKey, type UploadSearchItemUpdate } from "@/utils/search";
 import { NotFoundError } from "@/utils/serverError";
 
 import type { inferProcedureOutput } from "@trpc/server";
 import {
-  and, desc, eq, inArray, isNull
+  and, desc, eq, inArray, isNull, type SQLWrapper 
 } from "drizzle-orm";
-import { type SQLWrapper } from "drizzle-orm";
 import { z } from "zod";
 
 export const uploadsRouter = createTRPCRouter({

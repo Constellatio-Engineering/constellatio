@@ -5,7 +5,7 @@ import { type GetOverviewPagePropsResult } from "@/services/content/getOverviewP
 import type { Maybe, Scalars } from "@/services/graphql/__generated/sdk";
 
 import { type SerializedStyles } from "@emotion/react";
-import { Title, useMantineTheme } from "@mantine/core";
+import { Title } from "@mantine/core";
 import React, { type FunctionComponent, useState } from "react";
 
 import * as styles from "./OverviewHeader.styles";
@@ -35,15 +35,14 @@ const OverviewHeader: FunctionComponent<ICasesOverviewHeaderProps> = ({
   variant
 }) => 
 {
-  const theme = useMantineTheme();
   const [filters, setFilters] = useState<string[]>([]);
   return (
-    <div css={styles.contentHeader({ height, theme, variant })} className="header">
+    <div css={styles.contentHeader({ height, variant })} className="header">
       <div id="overlay-lines">
         <OverlayLines/>
       </div>
       <ContentWrapper stylesOverrides={[styles.headerContentWrapper, contentWrapperStylesOverrides]}>
-        <Title order={1} css={styles.title({ theme, variant })}>{title}</Title>
+        <Title order={1} css={styles.title({ variant })}>{title}</Title>
         <div css={styles.categoriesButtons}>
           {categories?.filter(Boolean).map((category) => category?.slug && setSelectedCategorySlug && (
             <div
@@ -62,7 +61,6 @@ const OverviewHeader: FunctionComponent<ICasesOverviewHeaderProps> = ({
                 {...category}
                 itemsNumber={category?.itemsPerCategory}
                 selected={selectedCategorySlug === category.slug}
-                variant={variant}
               />
             </div>
           ))}

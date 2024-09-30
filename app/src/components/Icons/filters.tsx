@@ -1,5 +1,5 @@
-import React
-, { type FunctionComponent } from "react";
+import React, { type FunctionComponent } from "react";
+
 export const FiltersIcon: FunctionComponent = () => (
   <svg
     width="20"

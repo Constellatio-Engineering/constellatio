@@ -16,7 +16,7 @@ import { type ArticleWithNextAndPreviousArticleId } from "@/utils/articles";
 import { getGamesFromCase } from "@/utils/case";
 import { appPaths } from "@/utils/paths";
 
-import React, { useEffect, type FunctionComponent, useRef } from "react";
+import React, { type FunctionComponent, useEffect, useRef } from "react";
 
 import * as styles from "./DetailsPage.styles";
 import ErrorPage from "../errorPage/ErrorPage";

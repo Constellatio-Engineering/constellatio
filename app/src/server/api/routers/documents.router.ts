@@ -8,9 +8,7 @@ import { getDocumentsSchema } from "@/schemas/documents/getDocuments.schema";
 import { updateDocumentSchema } from "@/schemas/documents/updateDocument.schema";
 import { addTags } from "@/server/api/services/tags.services";
 import { createTRPCRouter, protectedProcedure } from "@/server/api/trpc";
-import {
-  createDocumentSearchIndexItem, documentSearchIndexItemPrimaryKey, type DocumentSearchItemUpdate, searchIndices
-} from "@/utils/search";
+import { createDocumentSearchIndexItem, documentSearchIndexItemPrimaryKey, type DocumentSearchItemUpdate, searchIndices } from "@/utils/search";
 import { removeHtmlTagsFromString } from "@/utils/utils";
 
 import { type inferProcedureOutput } from "@trpc/server";
@@ -111,8 +109,7 @@ export const documentsRouter = createTRPCRouter({
       const _updatedValues: Partial<DocumentInsert> = {
         content: updatedValues.content,
         folderId: updatedValues.folderId,
-        name: updatedValues.name,
-        updatedAt: new Date()
+        name: updatedValues.name
       };
 
       const updatedDocument = await db.update(documents)

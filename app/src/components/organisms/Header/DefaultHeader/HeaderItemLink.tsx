@@ -1,7 +1,7 @@
 import MenuTab from "@/components/atoms/menuTab/MenuTab";
 
 import Link from "next/link";
-import { type ForwardRefRenderFunction, forwardRef } from "react";
+import { forwardRef, type ForwardRefRenderFunction } from "react";
 
 export type THeaderItemLinkProps = {
   readonly link: {

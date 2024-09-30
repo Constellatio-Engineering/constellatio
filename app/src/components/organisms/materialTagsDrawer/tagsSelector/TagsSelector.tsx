@@ -1,5 +1,5 @@
 /* eslint-disable max-lines */
-import { colors } from "@/constants/styles/colors";
+import { colooors } from "@/constants/styles/colors";
 import { useInitialTags } from "@/hooks/useInitialTags";
 import { useTagsSearchResults } from "@/hooks/useTagsSearchResults";
 import { type IGenTags } from "@/services/graphql/__generated/sdk";
@@ -59,7 +59,7 @@ const CustomBadge: FunctionComponent<CustomBadgeProps> = ({
           deleteButtonAction(e);
         }}
         sx={{
-          color: colors["neutrals-01"][7],
+          color: colooors["neutrals-01"][7],
         }}
         radius="xl"
         variant="transparent">
@@ -140,14 +140,14 @@ const TagsSelector: FunctionComponent<Props> = ({ editorState }) =>
           placeholder="Suche nach Tags"
           styles={{
             icon: {
-              color: colors["neutrals-01"][7],
+              color: colooors["neutrals-01"][7],
             },
             input: {
               "&::placeholder": {
-                color: colors["neutrals-01"][7],
+                color: colooors["neutrals-01"][7],
               },
               "&:focus-within": {
-                borderColor: colors["neutrals-01"][7],
+                borderColor: colooors["neutrals-01"][7],
               },
               border: "1px solid ##D6D6D6",
             },

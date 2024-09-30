@@ -1,11 +1,12 @@
+import { colooors } from "@/constants/styles/colors";
+
 import { css } from "@emotion/react";
-import { type MantineTheme } from "@mantine/styles";
 
 import { type CutomAlertCardProps } from "./CutomAlertCard";
 
-export const wrapper = ({ theme, variant }: {theme: MantineTheme; variant: CutomAlertCardProps["variant"]}) => css`
-    color: ${variant === "error" ? theme.colors["support-error"][3] : theme.colors["support-success"][3]};
-    background-color: ${variant === "error" ? theme.colors["support-error"][0] : theme.colors["support-success"][0]};
+export const wrapper = ({ variant }: { variant: CutomAlertCardProps["variant"]}) => css`
+    color: ${variant === "error" ? colooors["support-error"][3] : colooors["support-success"][3]};
+    background-color: ${variant === "error" ? colooors["support-error"][0] : colooors["support-success"][0]};
     border-radius: 12px;
     padding: 16px 20px;
     p {

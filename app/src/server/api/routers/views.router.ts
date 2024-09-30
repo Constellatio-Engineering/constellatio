@@ -1,7 +1,5 @@
 import { db } from "@/db/connection";
-import {
-  articlesViews, casesViews
-} from "@/db/schema";
+import { articlesViews, casesViews } from "@/db/schema";
 import { addUserToCrmUpdateQueue } from "@/lib/clickup/utils";
 import { addArticleViewSchema } from "@/schemas/views/addArticleView.schema";
 import { addCaseViewSchema } from "@/schemas/views/addCaseView.schema";
@@ -23,6 +21,7 @@ export const viewsRouter = createTRPCRouter({
           set: { updatedAt: new Date() },
           target: [articlesViews.articleId, articlesViews.userId],
         });
+
       await addUserToCrmUpdateQueue(userId);
     }),
   addCaseView: protectedProcedure

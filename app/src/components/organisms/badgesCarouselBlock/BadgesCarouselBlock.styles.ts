@@ -1,18 +1,11 @@
-import {
-  width as learningTimeCardWidth,
-  widthSmall as learningTimeCardWidthSmall,
-} from "@/components/organisms/learninTimeCard/LearninTimeCard.styles";
-import {
-  cardsSmallerBreakpoint,
-  width as streakCardWidth,
-  widthSmall as streakCardWidthSmall,
-} from "@/components/organisms/streakCard/StreakCard.styles";
+import { width as learningTimeCardWidth, widthSmall as learningTimeCardWidthSmall, } from "@/components/organisms/learninTimeCard/LearninTimeCard.styles";
+import { cardsSmallerBreakpoint, width as streakCardWidth, widthSmall as streakCardWidthSmall, } from "@/components/organisms/streakCard/StreakCard.styles";
+import { colooors } from "@/constants/styles/colors";
 
 import { css } from "@emotion/react";
-import { type MantineTheme } from "@mantine/styles";
 
-export const wrapper = (theme: MantineTheme) => css`
-  background-color: ${theme.colors["neutrals-01"][0]};
+export const wrapper = () => css`
+  background-color: ${colooors["neutrals-01"][0]};
   border-radius: 12px;
   padding: 18px;
   display: flex;

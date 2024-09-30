@@ -1,17 +1,18 @@
+import { colooors } from "@/constants/styles/colors";
+
 import { css } from "@emotion/react";
-import { type MantineTheme } from "@mantine/styles";
 
 export const contentWrapper = css`
 `;
 
-export const facts = (theme: MantineTheme) => css`
+export const facts = () => css`
 	max-width: 52.5%;
 	padding-bottom: 12px;
 	display: flex;
 	flex-direction: column;
 	gap: 24px;
 	margin-bottom: 32px;
-	border-bottom: 1px solid ${theme.colors["neutrals-01"][5]};
+	border-bottom: 1px solid ${colooors["neutrals-01"][5]};
 	> button {
 		align-self: flex-start;
 	}

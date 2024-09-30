@@ -1,5 +1,6 @@
-import { type SerializedStyles, css } from "@emotion/react";
-import { type MantineTheme } from "@mantine/styles";
+import { colooors } from "@/constants/styles/colors";
+
+import { css, type SerializedStyles } from "@emotion/react";
 
 export const wrapper = css`
   min-width: 230px;
@@ -16,11 +17,11 @@ export const wrapper = css`
   }
 `;
 
-export const detailText = (theme: MantineTheme): SerializedStyles => css`
+export const detailText = (): SerializedStyles => css`
   p {
     margin-top: 10px;
   }
-  color: ${theme.colors["neutrals-01"][7]};
+  color: ${colooors["neutrals-01"][7]};
   @media screen and (max-width: 1200px) {
     display: flex;
     justify-content: center;

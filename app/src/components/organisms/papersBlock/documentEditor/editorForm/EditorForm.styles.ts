@@ -1,6 +1,7 @@
+import { colooors } from "@/constants/styles/colors";
 
 import { css } from "@emotion/react";
-import { type MantineTheme } from "@mantine/styles";
+
 export const wrapper = css`
 .mantine-Drawer-body {
     /* padding:0; */
@@ -16,8 +17,8 @@ export const existingNote = () => css`
   height: 100%;
 `;
 
-export const existingNoteActions = (theme: MantineTheme) => css`
-   background: ${theme.colors["neutrals-01"][0]};
+export const existingNoteActions = () => css`
+   background: ${colooors["neutrals-01"][0]};
    width: 100%;
   margin-bottom: 24px;
    button{

@@ -1,17 +1,12 @@
+import { colooors } from "@/constants/styles/colors";
+
 import { css } from "@emotion/react";
-import { type MantineTheme } from "@mantine/styles";
 
-type ICategoryTabStyleProps = {
-  theme: MantineTheme;
-  variant?: "case" | "dictionary" | "red";
-};
-
-export const wrapper = ({ theme }: ICategoryTabStyleProps) => css`
+export const wrapper = () => css`
   outline: 0;
   border: 0;
-  background-color: ${theme.colors["neutrals-01"][2]};
-  color: ${theme.colors["neutrals-02"][1]};
-  /* progressive/body/body-01@medium */
+  background-color: ${colooors["neutrals-01"][2]};
+  color: ${colooors["neutrals-02"][1]};
   display: flex;
   justify-content: space-between;
   align-items: center;
@@ -22,29 +17,29 @@ export const wrapper = ({ theme }: ICategoryTabStyleProps) => css`
     margin-right: 16px;
     width: 40px;
     height: 40px;
-    background-color: ${theme.colors["neutrals-02"][1]};
+    background-color: ${colooors["neutrals-02"][1]};
     color: white;
     display: grid;
     place-items: center;
     border-radius: 50%;
   }
   .counter {
-    color: ${theme.colors["neutrals-01"][7]};
+    color: ${colooors["neutrals-01"][7]};
   }
   &:hover {
-    background-color: ${theme.colors["neutrals-01"][2]};
+    background-color: ${colooors["neutrals-01"][2]};
     border-radius: 12px;
-    color: ${theme.colors["neutrals-02"][1]};
+    color: ${colooors["neutrals-02"][1]};
     .icon {
-      background-color: ${theme.colors["neutrals-02"][1]};
+      background-color: ${colooors["neutrals-02"][1]};
     }
   }
   &:active {
-    background-color: ${theme.colors["neutrals-01"][3]};
+    background-color: ${colooors["neutrals-01"][3]};
   }
   &.selected {
     position: relative;
-    background-color: ${theme.colors["neutrals-01"][0]};
+    background-color: ${colooors["neutrals-01"][0]};
     &::after {
       position: absolute;
       content: "";

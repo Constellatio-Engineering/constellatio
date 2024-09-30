@@ -4,7 +4,7 @@ import UseQueryStateWrapper from "@/components/Wrappers/useQueryStateWrapper/Use
 import useArticles from "@/hooks/useArticles";
 import useBookmarks from "@/hooks/useBookmarks";
 import useCases from "@/hooks/useCases";
-import { type IGenMainCategory, type IGenFullCaseFragment, type IGenArticleOverviewFragment, type IGenArticle } from "@/services/graphql/__generated/sdk";
+import { type IGenArticle, type IGenArticleOverviewFragment, type IGenFullCaseFragment, type IGenMainCategory } from "@/services/graphql/__generated/sdk";
 import { appPaths } from "@/utils/paths";
 import { type NonEmptyArray, type Nullable } from "@/utils/types";
 

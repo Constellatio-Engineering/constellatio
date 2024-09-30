@@ -7,6 +7,7 @@ import { useForumQuestionsSearchStore } from "@/stores/forumQuestionsSearch.stor
 import { getForumQuestionUrl } from "@/utils/paths";
 
 import { Input, Popover } from "@mantine/core";
+import { useMantineTheme } from "@mantine/styles";
 import Link from "next/link";
 import React, { type FunctionComponent } from "react";
 
@@ -20,6 +21,7 @@ const SearchBar: FunctionComponent = () =>
   const toggleDrawer = useForumQuestionsSearchStore((s) => s.toggleDrawer);
   const openDrawer = useForumQuestionsSearchStore((s) => s.openDrawer);
   const { data: searchResults } = useForumQuestionsSearchResults();
+  const theme = useMantineTheme();
 
   return (
     <Popover
@@ -42,7 +44,7 @@ const SearchBar: FunctionComponent = () =>
             name="Durchsuchen"
             title="Durchsuchen"
             placeholder="Durchsuchen"
-            styles={styles.inputStyles()}
+            styles={styles.inputStyles(theme)}
             icon={<Search size={24}/>}
             value={searchValue}
             onClick={() => openDrawer()}

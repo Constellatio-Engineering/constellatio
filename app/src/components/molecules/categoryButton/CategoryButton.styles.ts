@@ -1,7 +1,8 @@
-import { css } from "@emotion/react";
-import { type MantineTheme } from "@mantine/styles";
+import { colooors } from "@/constants/styles/colors";
 
-export const wrapper = (theme: MantineTheme) => css`
+import { css } from "@emotion/react";
+
+export const wrapper = () => css`
   cursor: pointer;
   width: 100%;
   display: flex;
@@ -10,10 +11,10 @@ export const wrapper = (theme: MantineTheme) => css`
   align-items: center;
 
   border-radius: 12px;
-  border: 1px solid ${theme.colors["neutrals-01"][3]};
-  background-color: ${theme.colors["neutrals-01"][0]};
+  border: 1px solid ${colooors["neutrals-01"][3]};
+  background-color: ${colooors["neutrals-01"][0]};
   transition: border-color 0.3s ease-in-out;
-  color: ${theme.colors["neutrals-02"][1]};
+  color: ${colooors["neutrals-02"][1]};
 
   > p {
     overflow: hidden;
@@ -22,6 +23,6 @@ export const wrapper = (theme: MantineTheme) => css`
   }
 
   &:hover {
-    border-color: ${theme.colors["neutrals-01"][5]};
+    border-color: ${colooors["neutrals-01"][5]};
   }
 `;

@@ -2,7 +2,6 @@ import { Button } from "@/components/atoms/Button/Button";
 import { ArrowDown } from "@/components/Icons/ArrowDown";
 import CaseBlockHead, { type ICaseBlockHeadProps } from "@/components/molecules/caseBlockHead/CaseBlockHead";
 import ItemRow from "@/components/organisms/caseBlock/itemRow/ItemRow";
-// import useAllCasesWithProgress from "@/hooks/useAllCasesWithProgress";
 import { type IGenArticle, type IGenCase } from "@/services/graphql/__generated/sdk";
 
 import { useMediaQuery } from "@mantine/hooks";
@@ -83,7 +82,7 @@ const ItemBlock: FunctionComponent<ICaseBlockProps> = ({
     renderedItems = items?.slice(0, 5);
   }
 
-  const amountOfHiddenItems = (items?.length - renderedItems.length) ?? 0;
+  const amountOfHiddenItems = items.length - renderedItems.length;
 
   return items && items?.length > 0 ? (
     <div css={styles.wrapper}>

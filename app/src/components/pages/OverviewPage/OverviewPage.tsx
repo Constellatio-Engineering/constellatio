@@ -14,11 +14,7 @@ import UseQueryStateWrapper from "@/components/Wrappers/useQueryStateWrapper/Use
 import useCasesProgress from "@/hooks/useCasesProgress";
 import { type CaseOverviewPageProps } from "@/pages/cases";
 import { type ArticleOverviewPageProps } from "@/pages/dictionary";
-import {
-  type ArticlesOverviewFiltersStore,
-  type CasesOverviewFiltersStore,
-  type CommonOverviewFiltersStore,
-} from "@/stores/overviewFilters.store";
+import { type ArticlesOverviewFiltersStore, type CasesOverviewFiltersStore, type CommonOverviewFiltersStore, } from "@/stores/overviewFilters.store";
 import { sortByTopic } from "@/utils/caisy";
 import { type Nullable } from "@/utils/types";
 import { getIsObjectWithId, getIsObjectWithValue, getIsPrimitive, objectKeys } from "@/utils/utils";

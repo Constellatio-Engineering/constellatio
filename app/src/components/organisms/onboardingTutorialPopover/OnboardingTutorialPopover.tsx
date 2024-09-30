@@ -1,8 +1,9 @@
+import { colooors } from "@/constants/styles/colors";
 import { useOnboardingStore } from "@/stores/onboarding.store";
 
 import { Popover } from "@mantine/core";
 import { type FloatingPosition } from "@mantine/core/lib/Floating";
-import { type ReactNode, type FunctionComponent } from "react";
+import { type FunctionComponent, type ReactNode } from "react";
 
 interface OnboardingTutorialPopoverProps 
 {
@@ -31,10 +32,10 @@ const OnboardingTutorialPopover: FunctionComponent<OnboardingTutorialPopoverProp
       closeOnClickOutside={false}
       closeOnEscape={false}
       opened={opened}
-      styles={(theme) => ({
+      styles={() => ({
         arrow: {
-          backgroundColor: theme.colors["neutrals-02"][1],
-          border: `1px solid ${theme.colors["neutrals-02"][1]}`,
+          backgroundColor: colooors["neutrals-02"][1],
+          border: `1px solid ${colooors["neutrals-02"][1]}`,
           transform: "rotate(45deg) scale(2) !important",
         },
       })}>

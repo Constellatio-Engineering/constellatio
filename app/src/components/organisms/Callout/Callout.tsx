@@ -6,15 +6,17 @@ import { Richtext } from "@/components/molecules/Richtext/Richtext";
 import { type IGenCallout } from "@/services/graphql/__generated/sdk";
 
 import { Group, Spoiler, Stack } from "@mantine/core";
+import { useMantineTheme } from "@mantine/styles";
 import React, { type FC } from "react";
 
-import { RichTextStyles, calloutStyles, spoilerStyles } from "./Callout.styles";
+import { calloutStyles, RichTextStyles, spoilerStyles } from "./Callout.styles";
 import { HeadingType } from "./HeadingType";
 
 export type CalloutProps = IGenCallout;
 
 export const Callout: FC<CalloutProps> = ({ calloutType, expandable, text }) => 
 {
+  const theme = useMantineTheme();
   const [isContentHide, setIsContentHide] = React.useState<boolean>(true);
 
   const ShowAllBtn = (
@@ -42,7 +44,7 @@ export const Callout: FC<CalloutProps> = ({ calloutType, expandable, text }) =>
   );
 
   return (
-    <Stack spacing="spacing-4" sx={calloutStyles()}>
+    <Stack spacing="spacing-4" sx={calloutStyles(theme)}>
       <Group spacing="spacing-8">
         <HeadingType calloutType={calloutType}/>
       </Group>

@@ -1,22 +1,22 @@
-import { colors } from "@/constants/styles/colors";
+import { colooors } from "@/constants/styles/colors";
 
 import { css } from "@emotion/react";
 
 export const wrapper = css`
-  background-color: ${colors["neutrals-01"][0]};
+  background-color: ${colooors["neutrals-01"][0]};
   border-radius: 12px;
-  border: 1px solid ${colors["neutrals-01"][4]};
+  border: 1px solid ${colooors["neutrals-01"][4]};
   position: relative;
   overflow: hidden;
 `;
 
 export const wrapperCorrectAnswer = css`
-  background-color: ${colors["support-success"][4]};
-  border-color: ${colors["support-success"][4]};
+  background-color: ${colooors["support-success"][4]};
+  border-color: ${colooors["support-success"][4]};
 `;
 
 export const correctAnswerBanner = css`
-  background-color: ${colors["support-success"][4]};
+  background-color: ${colooors["support-success"][4]};
   width: 100%;
   padding: 12px 24px;
   display: flex;
@@ -40,7 +40,7 @@ export const checkIconWrapper = css`
   border-radius: 50%;
   padding: 2px;
   svg path {
-    fill: ${colors["support-success"][4]};
+    fill: ${colooors["support-success"][4]};
     width: 100%;
     height: auto;
   }
@@ -51,6 +51,6 @@ export const contentWrapper = css`
 `;
 
 export const contentWrapperCorrectAnswer = css`
-  background-color: ${colors["support-success"][0]};
+  background-color: ${colooors["support-success"][0]};
   border-radius: 12px 12px 0 0;
 `;

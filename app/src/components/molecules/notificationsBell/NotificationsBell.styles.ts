@@ -1,4 +1,4 @@
-import { colors } from "@/constants/styles/colors";
+import { colooors } from "@/constants/styles/colors";
 
 import { css } from "@emotion/react";
 
@@ -27,7 +27,7 @@ export const count = css`
   width: ${countSize}px;
   height: ${countSize}px;
   border-radius: 50%;
-  background-color: ${colors["support-error"][3]};
+  background-color: ${colooors["support-error"][3]};
   color: white;
   font-size: 10px;
   font-weight: bold;

@@ -1,8 +1,9 @@
-import { css } from "@emotion/react";
-import { type MantineTheme } from "@mantine/styles";
+import { colooors } from "@/constants/styles/colors";
 
-export const wrapper = (theme: MantineTheme) => css`
-    background: ${theme.colors["neutrals-01"][0]};
+import { css } from "@emotion/react";
+
+export const wrapper = () => css`
+    background: ${colooors["neutrals-01"][0]};
     border-radius: 12px;
     min-height: 300px;
     min-width: 100%;
@@ -22,8 +23,8 @@ export const blockHeadText = css`
     align-items: center;
     gap: 8px;
 `;
-export const blockHeadDescription = (theme: MantineTheme) => css`
-    color: ${theme.colors["neutrals-01"][7]};
+export const blockHeadDescription = () => css`
+    color: ${colooors["neutrals-01"][7]};
 `;
 export const blockHeadTitle = css``;
 export const blockHeadIcon = css`

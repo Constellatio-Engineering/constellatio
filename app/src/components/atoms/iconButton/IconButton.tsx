@@ -1,11 +1,5 @@
 import { type SerializedStyles } from "@emotion/react";
-import { useMantineTheme } from "@mantine/styles";
-import {
-  type ButtonHTMLAttributes,
-  type ForwardRefRenderFunction,
-  type ReactNode,
-  forwardRef,
-} from "react";
+import { type ButtonHTMLAttributes, forwardRef, type ForwardRefRenderFunction, type ReactNode, } from "react";
 
 import * as styles from "./IconButton.styles";
 
@@ -28,14 +22,12 @@ IIconButtonProps
   ...props
 }, ref) => 
 {
-  const theme = useMantineTheme();
-
   return (
     <button
       ref={ref}
       type="button"
       css={[
-        styles.wrapper({ size, theme }),
+        styles.wrapper({ size }),
         !dontUseDisabledStyles && styles.disabledStyles,
         stylesOverrides
       ]}

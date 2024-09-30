@@ -1,4 +1,4 @@
-import { colors } from "@/constants/styles/colors";
+import { colooors } from "@/constants/styles/colors";
 
 import { css } from "@emotion/react";
 
@@ -17,7 +17,7 @@ export const closeButton = css`
   top: 20px;
   cursor: pointer;
   path {
-    fill: ${colors["neutrals-01"][9]};
+    fill: ${colooors["neutrals-01"][9]};
   }
 `;
 
@@ -64,5 +64,5 @@ export const descriptionWithCharCount = css`
 `;
 
 export const characterCountExceeded = css`
-  color: ${colors["support-error"][3]};
+  color: ${colooors["support-error"][3]};
 `;
