@@ -7,10 +7,7 @@ import { caisySDK } from "../graphql/getSdk";
 // eslint-disable-next-line @typescript-eslint/explicit-function-return-type
 export const getOverviewPageProps = async (items: Array<AllCases[number] | ArticleWithNextAndPreviousArticleId>) =>
 {
-  const [allMainCategoriesRes, allLegalAreaRes] = await Promise.all([
-    caisySDK.getAllMainCategory(),
-    caisySDK.getAllLegalArea()
-  ]);
+  const allMainCategoriesRes = await caisySDK.getAllMainCategory();
 
   const allMainCategories = allMainCategoriesRes?.allMainCategory?.edges
     ?.map((category) => ({
@@ -22,13 +19,7 @@ export const getOverviewPageProps = async (items: Array<AllCases[number] | Artic
     .filter(Boolean)
    || [];
 
-  const allLegalAreas = allLegalAreaRes?.allLegalArea?.edges
-    ?.map((legalArea) => legalArea?.node)
-    .filter(Boolean)
-    || [];
-
   return {
-    allLegalAreas,
     allMainCategories,
   };
 };

@@ -128,6 +128,8 @@
     "react-idle-timer": "5.7.2",
     "react-intersection-observer": "9.10.2",
     "react-password-strength-bar": "0.4.1",
+    "react-virtualized-auto-sizer": "1.0.24",
+    "react-window": "1.8.10",
     "recharts": "2.12.7",
     "sharp": "0.33.3",
     "slugify": "1.6.6",
