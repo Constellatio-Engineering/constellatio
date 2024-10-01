@@ -94,7 +94,7 @@ const ItemBlock: FunctionComponent<ICaseBlockProps> = ({
               key={item.id!}
               tableType={tableType}
               variant={variant}
-              durationToCompleteInMinutes={0}
+              durationToCompleteInMinutes={item.__typename === "Case" ? (item.durationToCompleteInMinutes ?? 0) : 0}
               itemId={item.id!}
               legalAreaName={item.legalArea?.legalAreaName}
               title={item.title}
