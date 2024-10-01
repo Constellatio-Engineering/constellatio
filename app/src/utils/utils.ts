@@ -208,3 +208,13 @@ export function getDistinctItemsByKey<T>(items: Array<Nullable<T>>, key: keyof T
 
 export const getCurrentDate = () => new Date();
 
+export function extractNumeric(title: Nullable<string>): number | null
+{
+  if(!title)
+  {
+    return null;
+  }
+
+  const match = title.match(/\d+/);
+  return match ? parseInt(match[0], 10) : null;
+}

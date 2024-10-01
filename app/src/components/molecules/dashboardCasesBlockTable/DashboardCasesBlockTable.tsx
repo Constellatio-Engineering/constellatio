@@ -5,12 +5,12 @@ import { ClockIcon } from "@/components/Icons/ClockIcon";
 import BookmarkButton from "@/components/organisms/caseBlock/BookmarkButton/BookmarkButton";
 import EmptyStateCard from "@/components/organisms/emptyStateCard/EmptyStateCard";
 import { timeFormatter } from "@/components/organisms/overviewCard/OverviewCard";
-import { extractNumeric } from "@/components/pages/OverviewPage/OverviewPage";
 import { colooors } from "@/constants/styles/colors";
 import useBookmarks from "@/hooks/useBookmarks";
 import useCases from "@/hooks/useCases";
 import useCasesProgress from "@/hooks/useCasesProgress";
 import { appPaths } from "@/utils/paths";
+import { extractNumeric } from "@/utils/utils";
 
 import { useRouter } from "next/router";
 import React, { type FunctionComponent } from "react";
