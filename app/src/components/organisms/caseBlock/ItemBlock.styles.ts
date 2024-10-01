@@ -36,7 +36,10 @@ export const wrapper = () => css`
 export const expandTableButton = css`
   margin: 0 auto;
   display: block;
+  position: relative;
+  z-index: 1;
 `;
+
 const CSSCommonExpandButtonStyles = (): SerializedStyles => css`
   content: "";
   position: absolute;
