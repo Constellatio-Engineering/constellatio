@@ -136,7 +136,7 @@ const OverviewFiltersDrawerContent: FunctionComponent<OverviewFiltersDrawerConte
       withCloseButton={false}
       position="right"
       keepMounted={true}
-      size="xl"
+      size="550px"
       styles={styles.drawerStyles()}
       title={(
         <SlidingPanelTitle
