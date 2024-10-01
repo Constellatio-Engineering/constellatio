@@ -6,46 +6,32 @@ import ContentWrapper from "@/components/helpers/contentWrapper/ContentWrapper";
 import { FiltersList } from "@/components/Icons/FiltersList";
 import { Trash } from "@/components/Icons/Trash";
 import FilterTag from "@/components/molecules/filterTag/FilterTag";
-import ItemBlock from "@/components/organisms/caseBlock/ItemBlock";
 import EmptyStateCard from "@/components/organisms/emptyStateCard/EmptyStateCard";
 import OverviewHeader from "@/components/organisms/OverviewHeader/OverviewHeader";
+import { LegalAreaBlock } from "@/components/pages/OverviewPage/legalAreaBlock/LegalAreaBlock";
 import { ArticlesOverviewFiltersDrawer, CasesOverviewFiltersDrawer } from "@/components/pages/OverviewPage/overviewFiltersDrawer/OverviewFiltersDrawer";
+import { getItemsMatchingTheFilters, getLegalAreasWithItems } from "@/components/pages/OverviewPage/OverviewPage.utils";
 import UseQueryStateWrapper from "@/components/Wrappers/useQueryStateWrapper/UseQueryStateWrapper";
-import useCasesProgress from "@/hooks/useCasesProgress";
 import { type CaseOverviewPageProps } from "@/pages/cases";
 import { type ArticleOverviewPageProps } from "@/pages/dictionary";
 import { type ArticlesOverviewFiltersStore, type CasesOverviewFiltersStore, type CommonOverviewFiltersStore, } from "@/stores/overviewFilters.store";
-import { sortByTopic } from "@/utils/caisy";
-import { type Nullable } from "@/utils/types";
-import { getIsObjectWithId, getIsObjectWithValue, getIsPrimitive, objectKeys } from "@/utils/utils";
 
 import { Title } from "@mantine/core";
 import { parseAsString, useQueryState } from "next-usequerystate";
-import React, { Fragment, type FunctionComponent, useDeferredValue, useMemo } from "react";
+import React, { type FunctionComponent, useDeferredValue, useMemo } from "react";
 
 import * as styles from "./OverviewPage.styles";
 import ErrorPage from "../errorPage/ErrorPage";
-
-export function extractNumeric(title: Nullable<string>): number | null
-{
-  if(!title)
-  {
-    return null;
-  }
-
-  const match = title.match(/\d+/);
-  return match ? parseInt(match[0], 10) : null;
-}
 
 type CommonFiltersStoreProps = Pick<CommonOverviewFiltersStore, "clearAllFilters" | "openDrawer"> & {
   readonly totalFiltersCount: number;
 };
 
-type ArticlesPageProps = ArticleOverviewPageProps & {
+export type ArticlesPageProps = ArticleOverviewPageProps & {
   readonly filter: CommonFiltersStoreProps & Pick<ArticlesOverviewFiltersStore, "filters" | "toggleFilter">;
 };
 
-type CasesPageProps = CaseOverviewPageProps & {
+export type CasesPageProps = CaseOverviewPageProps & {
   readonly filter: CommonFiltersStoreProps & Pick<CasesOverviewFiltersStore, "filters" | "toggleFilter">;
 };
 
@@ -61,75 +47,7 @@ type OverviewPageContentProps = OverviewPageProps & {
   readonly initialCategorySlug: string;
 };
 
-function getItemsMatchingTheFilters<T extends OverviewPageContentProps["items"][number]>(
-  items: T[],
-  filters: CommonOverviewFiltersStore["filters"],
-): T[]
-{
-  return items.filter(item =>
-  {
-    const filterResults = objectKeys(filters).map(filterKey =>
-    {
-      const currentFilterOptions = filters[filterKey];
-      const itemValueFromCurrentFilter = item[filterKey];
-
-      if(currentFilterOptions?.length === 0)
-      {
-        return true;
-      }
-
-      if(Array.isArray(itemValueFromCurrentFilter))
-      {
-        return itemValueFromCurrentFilter.some((value) =>
-        {
-          if(value == null)
-          {
-            return false;
-          }
-
-          if(getIsObjectWithId(value))
-          {
-            return currentFilterOptions.some(filterOption => filterOption.value === value.id);
-          }
-          else if(getIsPrimitive(value))
-          {
-            return currentFilterOptions.some(filterOption => filterOption.value === value);
-          }
-
-          return false;
-        });
-      }
-      else if(getIsObjectWithId(itemValueFromCurrentFilter))
-      {
-        if(currentFilterOptions.some(filterOption => filterOption.value === itemValueFromCurrentFilter.id))
-        {
-          return true;
-        }
-      }
-      else if(getIsObjectWithValue(itemValueFromCurrentFilter))
-      {
-        if(currentFilterOptions.some(filterOption => filterOption.value === itemValueFromCurrentFilter.value))
-        {
-          return true;
-        }
-      }
-      else if(getIsPrimitive(itemValueFromCurrentFilter))
-      {
-        if(currentFilterOptions.some(filterOption => filterOption.value === itemValueFromCurrentFilter))
-        {
-          return true;
-        }
-      }
-
-      return false;
-    });
-
-    return filterResults.every(Boolean);
-  });
-}
-
 const OverviewPageContent: FunctionComponent<OverviewPageContentProps> = ({
-  allLegalAreas,
   allMainCategories,
   filter,
   initialCategorySlug,
@@ -146,20 +64,21 @@ const OverviewPageContent: FunctionComponent<OverviewPageContentProps> = ({
   } = filter;
 
   const [selectedCategorySlug, setSelectedCategorySlug] = useQueryState("category", parseAsString.withDefault(initialCategorySlug));
-  const { casesProgress } = useCasesProgress();
-  const allItemsOfSelectedCategory = useMemo(() =>
-  {
-    return _items.filter((item) => item.mainCategoryField?.[0]?.slug === selectedCategorySlug);
-  }, [_items, selectedCategorySlug]);
-
+  const allItemsOfSelectedCategory = useMemo(
+    () => _items.filter((item) => item.mainCategoryField?.[0]?.slug === selectedCategorySlug),
+    [_items, selectedCategorySlug]
+  );
+  const _filteredItems = useMemo(
+    () => getItemsMatchingTheFilters(allItemsOfSelectedCategory, filters),
+    [filters, allItemsOfSelectedCategory]
+  );
+  const filteredItems = useDeferredValue(_filteredItems);
   const isCategoryEmpty = allItemsOfSelectedCategory.length <= 0;
 
-  const _filteredItems = useMemo(() =>
-  {
-    return getItemsMatchingTheFilters(allItemsOfSelectedCategory, filters);
-  }, [filters, allItemsOfSelectedCategory]);
-
-  const filteredItems = useDeferredValue(_filteredItems);
+  const legalAreasWithItems = useMemo(
+    () => getLegalAreasWithItems(filteredItems),
+    [filteredItems]
+  );
 
   return (
     <>
@@ -212,6 +131,17 @@ const OverviewPageContent: FunctionComponent<OverviewPageContentProps> = ({
                     ))}
                   </>
                 )}
+                {variant === "dictionary" && (
+                  <>
+                    {filter.filters.wasSeenFilterable.map(wasSeen => (
+                      <FilterTag
+                        key={wasSeen.value}
+                        onClick={() => filter.toggleFilter("wasSeenFilterable", wasSeen)}
+                        title={wasSeen.label}
+                      />
+                    ))}
+                  </>
+                )}
                 {filters.legalArea.map((legalArea) => (
                   <FilterTag
                     key={legalArea.value}
@@ -243,70 +173,14 @@ const OverviewPageContent: FunctionComponent<OverviewPageContentProps> = ({
                 />
               </div>
             </div>
-            {allLegalAreas
-              .sort((a, b) =>
-              {
-                if(a.sorting === null)
-                {
-                  return 1;
-                }
-                if(b.sorting === null)
-                {
-                  return -1;
-                }
-                return a.sorting! - b.sorting!;
-              })
-              .map((legalArea, itemIndex) =>
-              {
-                const allItemsOfLegalArea = filteredItems
-                  .filter(Boolean)
-                  .filter((item) => item.legalArea?.id === legalArea.id)
-                  .map((item) => ({
-                    ...item,
-                    isCompleted: casesProgress?.some((caseProgress) => caseProgress?.caseId === item.id && caseProgress.progressState === "completed"),
-                  }));
-
-                const allItemsSorted = allItemsOfLegalArea.sort((a, b) =>
-                {
-                  if(variant === "dictionary")
-                  {
-                    return sortByTopic(a, b);
-                  }
-                  else
-                  {
-                    const numA = extractNumeric(a.title);
-                    const numB = extractNumeric(b.title);
-
-                    if(numA !== null && numB !== null)
-                    {
-                      return numA - numB;
-                    }
-
-                    return a?.title?.localeCompare(b.title ?? "") ?? -1;
-                  }
-                });
-
-                const completed = allItemsOfLegalArea.filter((item) => item.isCompleted).length;
-
-                return (
-                  legalArea.legalAreaName && (
-                    <Fragment key={itemIndex}>
-                      <ItemBlock
-                        variant={variant}
-                        blockHead={{
-                          blockType: "itemsBlock",
-                          categoryName: legalArea.legalAreaName,
-                          completedCases: completed,
-                          items: allItemsSorted.length,
-                          variant,
-                        }}
-                        tableType="cases"
-                        items={allItemsSorted}
-                      />
-                    </Fragment>
-                  )
-                );
-              })}
+            {legalAreasWithItems.map(({ items, legalArea }) => (
+              <LegalAreaBlock
+                key={legalArea.id}
+                legalArea={legalArea}
+                items={items}
+                variant={variant}
+              />
+            ))}
           </ContentWrapper>
         </div>
         <ContentWrapper>
