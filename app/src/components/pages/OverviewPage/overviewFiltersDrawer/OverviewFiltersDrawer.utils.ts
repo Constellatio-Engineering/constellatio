@@ -29,9 +29,12 @@ export function getFilterOptions<
   InputFilterKey extends keyof Items[number],
   Value extends NonNullable<Item[InputFilterKey]>
 >(
-  filters: {
+  /* filters: {
     [K in keyof Item]?: FilterOption[];
-  },
+  },*/
+  filters: Map<keyof Item, {
+    filterOptions: FilterOption[];
+  }>,
   inputFilterKey: InputFilterKey,
   items: Items
 )

@@ -66,7 +66,7 @@ const OverviewFiltersDrawerContent: FunctionComponent<OverviewFiltersDrawerConte
 
   const { legalAreasFilterOptions, tagsFilterOptions, topicsFilterOptions } = useMemo(() =>
   {
-    const allLegalAreas = getFilterOptions(filters, "legalArea", items);
+    const allLegalAreas = getFilterOptions(Object.fromEntries(filters.entries()), "legalArea", items);
     const intersectionLegalAreas = findIntersection(allLegalAreas, "id");
     const distinctLegalAreas = getDistinctItemsByKey(intersectionLegalAreas, "id");
     const legalAreasFilterOptions = itemValuesToFilterOptions(distinctLegalAreas);
@@ -95,7 +95,10 @@ const OverviewFiltersDrawerContent: FunctionComponent<OverviewFiltersDrawerConte
       return [];
     }
 
-    const allProgressStates = getFilterOptions(filters, "progressStateFilterable", items);
+    const entries = filters.entries();
+    const filters1 = Object.fromEntries(filters.entries());
+
+    const allProgressStates = getFilterOptions(filters1, "progressStateFilterable", items);
     const intersectionProgressStates = findIntersection(allProgressStates, "value");
     const distinctProgressStates = getDistinctItemsByKey(intersectionProgressStates, "value");
 

@@ -120,48 +120,16 @@ const OverviewPageContent: FunctionComponent<OverviewPageContentProps> = ({
                 </Button>
               </div>
               <div css={styles.activeFiltersChips}>
-                {variant === "case" && (
+                {filter.filters.values().map((f) => (
                   <>
-                    {filter.filters.progressStateFilterable.map((progressState) => (
+                    {f.filterOptions.map((filterOption) => (
                       <FilterTag
-                        key={progressState.value}
-                        onClick={() => filter.toggleFilter("progressStateFilterable", progressState)}
-                        title={progressState.label}
+                        key={filterOption.value}
+                        onClick={() => f.toggleFilter(filterOption)}
+                        title={filterOption.label}
                       />
                     ))}
                   </>
-                )}
-                {variant === "dictionary" && (
-                  <>
-                    {filter.filters.wasSeenFilterable.map(wasSeen => (
-                      <FilterTag
-                        key={wasSeen.value}
-                        onClick={() => filter.toggleFilter("wasSeenFilterable", wasSeen)}
-                        title={wasSeen.label}
-                      />
-                    ))}
-                  </>
-                )}
-                {filters.legalArea.map((legalArea) => (
-                  <FilterTag
-                    key={legalArea.value}
-                    onClick={() => toggleFilter("legalArea", legalArea)}
-                    title={legalArea.label}
-                  />
-                ))}
-                {filters.topic.map((topic) => (
-                  <FilterTag
-                    key={topic.value}
-                    onClick={() => toggleFilter("topic", topic)}
-                    title={topic.label}
-                  />
-                ))}
-                {filters.tags.map((tag) => (
-                  <FilterTag
-                    key={tag.value}
-                    onClick={() => toggleFilter("tags", tag)}
-                    title={tag.label}
-                  />
                 ))}
               </div>
               <div css={styles.clearFiltersButtonWrapper}>
