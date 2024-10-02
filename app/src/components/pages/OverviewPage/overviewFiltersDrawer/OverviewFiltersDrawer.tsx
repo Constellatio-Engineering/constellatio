@@ -49,6 +49,15 @@ export type OverviewFiltersDrawerContentProps = (CasesOverviewFiltersDrawerProps
   readonly filtersStore: ArticlesOverviewFiltersStore;
 });
 
+function mapToObject<Key extends string, Value>(map: Map<Key, Value>): {
+  [K in Key]: Value;
+}
+{
+  const entries = map.entries();
+  const object = Object.fromEntries(entries) as { [K in Key]: Value; };
+  return object;
+}
+
 const OverviewFiltersDrawerContent: FunctionComponent<OverviewFiltersDrawerContentProps> = ({ filtersStore, items, variant }) =>
 {
   const {
@@ -66,17 +75,19 @@ const OverviewFiltersDrawerContent: FunctionComponent<OverviewFiltersDrawerConte
 
   const { legalAreasFilterOptions, tagsFilterOptions, topicsFilterOptions } = useMemo(() =>
   {
-    const allLegalAreas = getFilterOptions(Object.fromEntries(filters.entries()), "legalArea", items);
+    const filtersObject = mapToObject(filters);
+
+    const allLegalAreas = getFilterOptions(filtersObject, "legalArea", items);
     const intersectionLegalAreas = findIntersection(allLegalAreas, "id");
     const distinctLegalAreas = getDistinctItemsByKey(intersectionLegalAreas, "id");
     const legalAreasFilterOptions = itemValuesToFilterOptions(distinctLegalAreas);
 
-    const allTags = getFilterOptions(filters, "tags", items);
+    const allTags = getFilterOptions(filtersObject, "tags", items);
     const intersectionTags = findIntersection(allTags, "id");
     const distinctTags = getDistinctItemsByKey(intersectionTags, "id");
     const tagsFilterOptions = itemValuesToFilterOptions(distinctTags);
 
-    const allTopics = getFilterOptions(filters, "topic", items);
+    const allTopics = getFilterOptions(filtersObject, "topic", items);
     const intersectionTopics = findIntersection(allTopics, "id");
     const distinctTopics = getDistinctItemsByKey(intersectionTopics, "id");
     const topicsFilterOptions = itemValuesToFilterOptions(distinctTopics);
@@ -95,10 +106,9 @@ const OverviewFiltersDrawerContent: FunctionComponent<OverviewFiltersDrawerConte
       return [];
     }
 
-    const entries = filters.entries();
-    const filters1 = Object.fromEntries(filters.entries());
+    const filtersObject = mapToObject(filters);
 
-    const allProgressStates = getFilterOptions(filters1, "progressStateFilterable", items);
+    const allProgressStates = getFilterOptions(filtersObject, "progressStateFilterable", items);
     const intersectionProgressStates = findIntersection(allProgressStates, "value");
     const distinctProgressStates = getDistinctItemsByKey(intersectionProgressStates, "value");
 
@@ -112,7 +122,9 @@ const OverviewFiltersDrawerContent: FunctionComponent<OverviewFiltersDrawerConte
       return [];
     }
 
-    const allSeenStatuses = getFilterOptions(filters, "wasSeenFilterable", items);
+    const filtersObject = mapToObject(filters);
+
+    const allSeenStatuses = getFilterOptions(filtersObject, "wasSeenFilterable", items);
     const intersectionSeenStatuses = findIntersection(allSeenStatuses, "value");
     const distinctSeenStatuses = getDistinctItemsByKey(intersectionSeenStatuses, "value");
 

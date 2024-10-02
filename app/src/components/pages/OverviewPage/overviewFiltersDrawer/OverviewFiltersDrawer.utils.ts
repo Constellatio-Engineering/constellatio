@@ -3,7 +3,7 @@
 import type { CaseOverviewPageItems } from "@/pages/cases";
 import { type FilterOption } from "@/stores/overviewFilters.store";
 import { type NullableProperties } from "@/utils/types";
-import { getIsObjectWithId, getIsObjectWithValue, getIsPrimitive } from "@/utils/utils";
+import { getIsObjectWithId, getIsObjectWithValue, getIsPrimitive, objectKeys } from "@/utils/utils";
 
 export const sortFilterOptions = (a: FilterOption, b: FilterOption): number =>
 {
@@ -29,17 +29,17 @@ export function getFilterOptions<
   InputFilterKey extends keyof Items[number],
   Value extends NonNullable<Item[InputFilterKey]>
 >(
-  /* filters: {
-    [K in keyof Item]?: FilterOption[];
-  },*/
-  filters: Map<keyof Item, {
-    filterOptions: FilterOption[];
-  }>,
+  filters: {
+    [K in keyof Item]?: {
+      filterOptions: FilterOption[];
+    }
+  },
   inputFilterKey: InputFilterKey,
   items: Items
 )
 {
-  const filterKeys = Object.keys(filters) as Array<keyof typeof filters>;
+  // const filterKeys = Object.keys(filters) as Array<keyof typeof filters>;
+  const filterKeys = objectKeys(filters);
 
   const filteredSets = filterKeys
     .map((filterKey) =>
@@ -49,7 +49,13 @@ export function getFilterOptions<
         return null;
       }
 
-      const currentFilterOptions = filters[filterKey];
+      if(!Object.hasOwn(filters, filterKey))
+      {
+        console.error(`Filter ${filterKey} not found in filters object`);
+        return null;
+      }
+
+      const currentFilterOptions = filters[filterKey]!.filterOptions;
 
       const filteredOptions = items
         .map(item =>
