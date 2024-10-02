@@ -3,7 +3,10 @@ import type { CaseOverviewPageProps } from "@/pages/cases";
 import type { ArticleOverviewPageProps } from "@/pages/dictionary";
 import { appPaths } from "@/utils/paths";
 
-import { state } from "@lit/reactive-element/decorators.js";
+import { boolean } from "drizzle-orm/pg-core";
+import {
+  castDraft, castImmutable, createDraft, type Immutable, produce, enableMapSet
+} from "immer";
 import { createStore } from "zustand";
 import { querystring, type QueryStringOptions } from "zustand-querystring";
 
@@ -11,6 +14,8 @@ export type FilterOption = {
   readonly label: string;
   readonly value: string | number;
 };
+
+enableMapSet();
 
 // we cannot reuse the CaseProgressState type here because it does differentiate "in-progress" in two sub-states
 export const statusesFilterOptions = [
@@ -54,13 +59,11 @@ interface CommonFiltersSlice<FilterKey extends string>
     [K in FilterKey]-?: FilterOption[];
   }) => void;
   closeDrawer: () => void;
-  filters: {
-    [K in FilterKey]-?: {
-      clearFilters: () => void;
-      filterOptions: FilterOption[];
-      toggleFilter: (filter: FilterOption) => void;
-    }
-  };
+  filters: Map<FilterKey, {
+    clearFilters: () => void;
+    filterOptions: FilterOption[];
+    toggleFilter: (filter: FilterOption) => void;
+  }>;
   getTotalFiltersCount: () => number;
   isDrawerOpened: boolean;
   openDrawer: () => void;
@@ -102,12 +105,21 @@ function createOverviewFiltersStore<FilterKey extends FilterableArticleAttribute
         },
         clearFilters: (key) =>
         {
-          set((state) => ({
-            filters: {
-              ...state.filters,
-              [key]: 123
+          const state = get();
+
+          const newState = produce(state, (draft: Store) =>
+          {
+            const filter = draft.filters.get(key);
+
+            if(filter == null)
+            {
+              return;
             }
-          }));
+
+            draft.filters.get(key)!.filterOptions = [];
+          });
+
+          set(newState);
         },
         clearInvalidFilters: (currentlyValidFilterOptions) =>
         {
