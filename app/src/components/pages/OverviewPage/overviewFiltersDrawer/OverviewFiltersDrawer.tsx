@@ -5,10 +5,16 @@ import { FilterCategory } from "@/components/pages/OverviewPage/overviewFiltersD
 import { getFilterOptions, itemValuesToFilterOptions } from "@/components/pages/OverviewPage/overviewFiltersDrawer/OverviewFiltersDrawer.utils";
 import { type CaseOverviewPageProps } from "@/pages/cases";
 import { type ArticleOverviewPageProps } from "@/pages/dictionary";
-import { type ArticlesOverviewFiltersStore, type CasesOverviewFiltersStore, useArticlesOverviewFiltersStore, useCasesOverviewFiltersStore } from "@/stores/overviewFilters.store";
+import {
+  type ArticlesOverviewFiltersStore,
+  type CasesOverviewFiltersStore,
+  type FilterOption,
+  useArticlesOverviewFiltersStore,
+  useCasesOverviewFiltersStore
+} from "@/stores/overviewFilters.store";
 import { findIntersection } from "@/utils/array";
-import { mapToObject } from "@/utils/object";
-import { getDistinctItemsByKey } from "@/utils/utils";
+import { getIsValidKey, mapToObject } from "@/utils/object";
+import { getDistinctItemsByKey, objectKeys } from "@/utils/utils";
 
 import { Drawer } from "@mantine/core";
 import React, { type FunctionComponent, useEffect, useMemo } from "react";
@@ -54,21 +60,19 @@ const OverviewFiltersDrawerContent: FunctionComponent<OverviewFiltersDrawerConte
 {
   const {
     clearAllFilters,
-    clearFilters,
-    clearInvalidFilters, 
+    clearInvalidFilters,
     closeDrawer,
-    filters,
+    filters: filtersMap,
     getTotalFiltersCount,
     isDrawerOpened,
-    toggleFilter,
   } = filtersStore;
 
+  const filtersObject = useMemo(() => mapToObject(filtersMap), [filtersMap]);
+  const filterKeys = objectKeys(filtersObject);
   const totalFiltersCount = getTotalFiltersCount();
 
   const { legalAreasFilterOptions, tagsFilterOptions, topicsFilterOptions } = useMemo(() =>
   {
-    const filtersObject = mapToObject(filters);
-
     const allLegalAreas = getFilterOptions(filtersObject, "legalArea", items);
     const intersectionLegalAreas = findIntersection(allLegalAreas, "id");
     const distinctLegalAreas = getDistinctItemsByKey(intersectionLegalAreas, "id");
@@ -89,7 +93,7 @@ const OverviewFiltersDrawerContent: FunctionComponent<OverviewFiltersDrawerConte
       tagsFilterOptions,
       topicsFilterOptions,
     });
-  }, [items, filters]);
+  }, [items, filtersObject]);
 
   const progressStateFilterOptions = useMemo(() =>
   {
@@ -98,13 +102,12 @@ const OverviewFiltersDrawerContent: FunctionComponent<OverviewFiltersDrawerConte
       return [];
     }
 
-    const filtersObject = mapToObject(filters);
     const allProgressStates = getFilterOptions(filtersObject, "progressStateFilterable", items);
     const intersectionProgressStates = findIntersection(allProgressStates, "value");
     const distinctProgressStates = getDistinctItemsByKey(intersectionProgressStates, "value");
 
     return distinctProgressStates;
-  }, [filters, items, variant]);
+  }, [filtersObject, items, variant]);
 
   const seenStatusFilterOptions = useMemo(() =>
   {
@@ -113,13 +116,12 @@ const OverviewFiltersDrawerContent: FunctionComponent<OverviewFiltersDrawerConte
       return [];
     }
 
-    const filtersObject = mapToObject(filters);
     const allSeenStatuses = getFilterOptions(filtersObject, "wasSeenFilterable", items);
     const intersectionSeenStatuses = findIntersection(allSeenStatuses, "value");
     const distinctSeenStatuses = getDistinctItemsByKey(intersectionSeenStatuses, "value");
 
     return distinctSeenStatuses;
-  }, [filters, items, variant]);
+  }, [filtersObject, items, variant]);
 
   useEffect(() =>
   {
@@ -157,7 +159,61 @@ const OverviewFiltersDrawerContent: FunctionComponent<OverviewFiltersDrawerConte
           }}
         />
       )}>
-      {variant === "case" && (
+      {filterKeys.map(filterKey =>
+      {
+        if(!getIsValidKey(filtersObject, filterKey))
+        {
+          return null;
+        }
+
+        const filter = filtersObject[filterKey];
+
+        let availableFilterOptions: FilterOption[];
+
+        switch (filterKey)
+        {
+          case "legalArea":
+          {
+            availableFilterOptions = legalAreasFilterOptions;
+            break;
+          }
+          case "topic":
+          {
+            availableFilterOptions = topicsFilterOptions;
+            break;
+          }
+          case "tags":
+          {
+            availableFilterOptions = tagsFilterOptions;
+            break;
+          }
+          case "progressStateFilterable":
+          {
+            availableFilterOptions = progressStateFilterOptions;
+            break;
+          }
+          case "wasSeenFilterable":
+          {
+            availableFilterOptions = seenStatusFilterOptions;
+            break;
+          }
+        }
+
+        return (
+          <FilterCategory
+            key={filterKey}
+            items={availableFilterOptions.map(filterOption => ({
+              ...filterOption,
+              isChecked: filter.filterOptions.some(s => s.value === filterOption.value) ?? false,
+              toggle: () => filter.toggleFilter(filterOption),
+            }))}
+            clearFilters={() => filter.clearFilters()}
+            activeFiltersCount={filter.filterOptions.length}
+            title={filterKey}
+          />
+        );
+      })}
+      {/* {variant === "case" && (
         <FilterCategory
           items={progressStateFilterOptions.map((progressState) => ({
             ...progressState,
@@ -183,37 +239,37 @@ const OverviewFiltersDrawerContent: FunctionComponent<OverviewFiltersDrawerConte
       )}
       <FilterCategory
         search={{ searchesFor: "Rechtsgebieten" }}
-        activeFiltersCount={filters.get("legalArea")?.filterOptions.length ?? 0}
+        activeFiltersCount={filtersMap.get("legalArea")?.filterOptions.length ?? 0}
         clearFilters={() => clearFilters("legalArea")}
         items={legalAreasFilterOptions.map(legalArea => ({
           ...legalArea,
-          isChecked: filters.get("legalArea")?.filterOptions.some(l => l.value === legalArea.value) ?? false,
+          isChecked: filtersMap.get("legalArea")?.filterOptions.some(l => l.value === legalArea.value) ?? false,
           toggle: () => toggleFilter("legalArea", legalArea),
         }))}
         title="Rechtsgebiet"
       />
       <FilterCategory
         search={{ searchesFor: "Themen" }}
-        activeFiltersCount={filters.get("topic")?.filterOptions.length ?? 0}
+        activeFiltersCount={filtersMap.get("topic")?.filterOptions.length ?? 0}
         clearFilters={() => clearFilters("topic")}
         items={topicsFilterOptions.map(topic => ({
           ...topic,
-          isChecked: filters.get("topic")?.filterOptions.some(t => t.value === topic.value) ?? false,
+          isChecked: filtersMap.get("topic")?.filterOptions.some(t => t.value === topic.value) ?? false,
           toggle: () => toggleFilter("topic", topic),
         }))}
         title="Thema"
       />
       <FilterCategory
         search={{ searchesFor: "Tags" }}
-        activeFiltersCount={filters.get("tags")?.filterOptions.length ?? 0}
+        activeFiltersCount={filtersMap.get("tags")?.filterOptions.length ?? 0}
         clearFilters={() => clearFilters("tags")}
         items={tagsFilterOptions.map(tag => ({
           ...tag,
-          isChecked: filters.get("tags")?.filterOptions.some(t => t.value === tag.value) ?? false,
+          isChecked: filtersMap.get("tags")?.filterOptions.some(t => t.value === tag.value) ?? false,
           toggle: () => toggleFilter("tags", tag),
         }))}
         title="Tags"
-      />
+      />*/}
     </Drawer>
   );
 };
