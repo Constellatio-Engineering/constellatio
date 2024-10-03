@@ -1,14 +1,16 @@
 import { env } from "@/env.mjs";
-import { type ClickUpFindTaskParams } from "@/lib/clickup/types";
+import { type ClickUpFindTaskParams, type ClickupTask } from "@/lib/clickup/types";
 import { clickupRequestConfig } from "@/lib/clickup/utils";
 
 import axios from "axios";
 
+type GetClickupTaskResponse = { last_page: boolean; tasks: ClickupTask[] };
+type FindClickupTaskResponse = GetClickupTaskResponse["tasks"];
+
 // clickup docs:
 // https://clickup.com/api/clickupreference/operation/GetTasks/
 // https://clickup.com/api/developer-portal/filtertasks/
-// eslint-disable-next-line @typescript-eslint/explicit-function-return-type
-export const findClickupTask = async (listId: string, params: ClickUpFindTaskParams) =>
+export const findClickupTask = async (listId: string, params: ClickUpFindTaskParams): Promise<FindClickupTaskResponse> =>
 {  
   const paramStrings = Object.keys(params).map((key) => 
   {
@@ -41,5 +43,6 @@ export const findClickupTask = async (listId: string, params: ClickUpFindTaskPar
     finalParams = "?" + paramStrings.join("&");
   }
 
-  return axios.get(`${env.CLICKUP_API_ENDPOINT}/list/${listId}/task${finalParams}`, clickupRequestConfig);
+  const result = await axios.get<GetClickupTaskResponse>(`${env.CLICKUP_API_ENDPOINT}/list/${listId}/task${finalParams}`, clickupRequestConfig);
+  return result.data.tasks;
 };
