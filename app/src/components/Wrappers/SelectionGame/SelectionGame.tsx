@@ -4,19 +4,13 @@ import { Input } from "@/components/atoms/Input/Input";
 import { Cross } from "@/components/Icons/Cross";
 
 import { useCaisyField } from "@caisy/ui-extension-react";
-import { Box, Title, Switch } from "@mantine/core";
+import { Box, Switch, Title } from "@mantine/core";
 import { useForm } from "@mantine/form";
 import { randomId } from "@mantine/hooks";
 import { type FunctionComponent, useState } from "react";
 
 import {
-  CardItem,
-  CardItemWrapper,
-  Container,
-  GameWrapper,
-  OptionWrapper,
-  OutputWrapper,
-  switchStyle,
+  CardItem, CardItemWrapper, Container, GameWrapper, OptionWrapper, OutputWrapper, switchStyle, 
 } from "./SelectionGame.styles";
 import { Check } from "../../Icons/Check";
 

@@ -1,8 +1,9 @@
-import { css } from "@emotion/react";
-import { type MantineTheme } from "@mantine/styles";
+import { colooors } from "@/constants/styles/colors";
 
-export const outerContainer = (theme: MantineTheme) => css`
-  background: ${theme.colors["neutrals-01"][2]};
+import { css } from "@emotion/react";
+
+export const outerContainer = () => css`
+  background: ${colooors["neutrals-01"][2]};
   padding-top: 54px;
   position: relative;
   z-index: 4;

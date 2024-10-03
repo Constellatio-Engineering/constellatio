@@ -1,4 +1,4 @@
-import { colors } from "@/constants/styles/colors";
+import { colooors } from "@/constants/styles/colors";
 
 import { css } from "@emotion/react";
 
@@ -18,7 +18,7 @@ export const amountOfTagsWrapper = css`
 `;
 
 export const noTagsApplied = css`
-  color: ${colors["neutrals-01"][7]};
+  color: ${colooors["neutrals-01"][7]};
   font-style: italic;
   margin-top: 12px;
 `;
@@ -29,7 +29,7 @@ export const heading = css`
 `;
 
 export const amountOfApplieableTags = css`
-  color: ${colors["neutrals-01"][7]};
+  color: ${colooors["neutrals-01"][7]};
   font-size: 15px;
   font-weight: 500;
 `;
@@ -50,7 +50,7 @@ export const examples = css`
 `;
 
 export const noResults = css`
-  color: ${colors["neutrals-01"][7]};
+  color: ${colooors["neutrals-01"][7]};
 `;
 
 export const selectableBadgesWrapper = css`

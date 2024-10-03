@@ -1,14 +1,15 @@
+import { colooors } from "@/constants/styles/colors";
 import { type UnknownMantineStylesParams } from "@/utils/types";
 
 import { css } from "@emotion/react";
-import { type DrawerStylesNames } from "@mantine/core";
-import { type MantineTheme, type Styles } from "@mantine/styles";
+import { type DrawerStylesNames, type MantineTheme } from "@mantine/core";
+import { type Styles } from "@mantine/styles";
 
 type DrawerStylesProps = Styles<DrawerStylesNames, UnknownMantineStylesParams>;
 
 export const drawerStyles = () => 
 {
-  const styles: DrawerStylesProps = (theme: MantineTheme) => ({
+  const styles: DrawerStylesProps = () => ({
     content: {
       ".suggestion__section": {
         "&__link": {
@@ -24,7 +25,7 @@ export const drawerStyles = () =>
         gap: "16px",
       },
 
-      backgroundColor: theme.colors["neutrals-01"][0],
+      backgroundColor: colooors["neutrals-01"][0],
       boxShadow: "0px 4px 20px 0px rgba(0, 0, 0, 0.05)",
       height: "auto !important",
       minHeight: "450px",
@@ -42,14 +43,14 @@ export const contentWrapper = css`
   display: flex;
 `;
 
-export const suggestionsLeft = (theme: MantineTheme) => css`
+export const suggestionsLeft = () => css`
 	width: 61%;
 	min-height: 100%;
 	display: flex;
 	flex-direction: column;
 	padding: 40px 0 60px 60px;
 	gap: 40px;
-	border-right: 1px solid ${theme.colors["neutrals-01"][3]};
+	border-right: 1px solid ${colooors["neutrals-01"][3]};
 
 	.emptyStateCard {
 		display: flex;

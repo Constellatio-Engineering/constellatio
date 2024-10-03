@@ -1,8 +1,9 @@
-import { css } from "@emotion/react";
-import { type MantineTheme } from "@mantine/styles";
+import { colooors } from "@/constants/styles/colors";
 
-export const contentWrapper = (theme: MantineTheme) => css`
-  background: ${theme.colors["neutrals-01"][0]};
+import { css } from "@emotion/react";
+
+export const contentWrapper = () => css`
+  background: ${colooors["neutrals-01"][0]};
   padding: 30px 0;
   min-height: calc(100vh - 255px);
   > *:not(:not(:last-child) ~ *) {

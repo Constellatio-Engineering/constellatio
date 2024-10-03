@@ -1,7 +1,8 @@
-import { css } from "@emotion/react";
-import { type MantineTheme } from "@mantine/styles";
+import { colooors } from "@/constants/styles/colors";
 
-export const wrapper = (theme: MantineTheme) => css`
+import { css } from "@emotion/react";
+
+export const wrapper = () => css`
     max-width: 520px;
-    background: ${theme.colors["neutrals-01"][0]};
+    background: ${colooors["neutrals-01"][0]};
 `;

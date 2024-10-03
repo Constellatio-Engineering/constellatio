@@ -8,7 +8,7 @@ import { WarningIcon } from "@/components/Icons/Warning";
 import type { DraggableProvided } from "@hello-pangea/dnd";
 import { Flex, Tooltip } from "@mantine/core";
 import React, { type ComponentProps, type FC, type ReactNode } from "react";
- 
+
 import { Card, ResultWrapper, StatusWrapper, WarningWrapper } from "./DragNDropCard.styles";
 import { BodyText } from "../../atoms/BodyText/BodyText";
 

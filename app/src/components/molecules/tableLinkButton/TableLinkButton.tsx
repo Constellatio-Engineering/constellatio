@@ -1,11 +1,7 @@
 import { LinkButton } from "@/components/atoms/LinkButton/LinkButton";
 
 import { Loader } from "@mantine/core";
-import {
-  type FunctionComponent,
-  type MouseEventHandler,
-  type ReactNode,
-} from "react";
+import { type FunctionComponent, type MouseEventHandler, type ReactNode, } from "react";
 
 import * as styles from "./TableLinkButton.styles";
 

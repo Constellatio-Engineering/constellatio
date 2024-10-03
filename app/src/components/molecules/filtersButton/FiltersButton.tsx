@@ -1,5 +1,4 @@
 import { type Interpolation, type Theme } from "@emotion/react";
-import { useMantineTheme } from "@mantine/core";
 import React, { type FunctionComponent } from "react";
 
 import * as styles from "./FiltersButton.style";
@@ -17,11 +16,10 @@ const FiltersButton: FunctionComponent<IFiltersButton> = ({
   ...props
 }) => 
 {
-  const theme = useMantineTheme();
   const { disabled, title } = props;
   return (
     <button type="button" css={styles.button} {...props}>
-      <span css={styles.icon({ disabled, theme })}><FiltersIcon/></span>
+      <span css={styles.icon({ disabled })}><FiltersIcon/></span>
       <BodyText styleType="body-01-medium">{title ?? children}</BodyText>
     </button>
   );

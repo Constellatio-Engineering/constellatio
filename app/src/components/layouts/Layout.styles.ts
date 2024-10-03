@@ -1,9 +1,10 @@
-import { type SerializedStyles, css } from "@emotion/react";
-import { type MantineTheme } from "@mantine/styles";
+import { colooors } from "@/constants/styles/colors";
 
-export const wrapper = (theme: MantineTheme): SerializedStyles => css`
+import { css, type SerializedStyles } from "@emotion/react";
+
+export const wrapper = (): SerializedStyles => css`
   margin: 0 auto;
-  background-color: ${theme.colors["neutrals-01"][2]};
+  background-color: ${colooors["neutrals-01"][2]};
 `;
 
 export const main = css`

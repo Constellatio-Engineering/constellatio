@@ -1,3 +1,6 @@
+import { colooors } from "@/constants/styles/colors";
+import { spaciiing } from "@/constants/styles/spacing";
+
 import styled from "@emotion/styled";
 
 export const Card = styled.div<{ dropped?: boolean; status: "success" | "error" | "default" }>`
@@ -6,21 +9,21 @@ export const Card = styled.div<{ dropped?: boolean; status: "success" | "error" 
     cursor: ${({ dropped }) => (dropped ? "default" : "grab")}
     user-select: none;
     justify-content: space-between;
-    padding: ${({ theme }) => theme.spacing["spacing-12"]};
-    gap: ${({ theme }) => theme.spacing["spacing-4"]};
+    padding: ${spaciiing["spacing-12"]};
+    gap: ${spaciiing["spacing-4"]};
     border-radius: ${({ theme }) => theme.radius["radius-8"]};
-    border: 1px solid ${({ dropped, status, theme }) =>
+    border: 1px solid ${({ dropped, status }) =>
     dropped
       ? status === "success"
-        ? theme.colors["support-success"][4]
+        ? colooors["support-success"][4]
         : status === "error"
-          ? theme.colors["support-error"][3]
-          : theme.colors["neutrals-01"][3]
+          ? colooors["support-error"][3]
+          : colooors["neutrals-01"][3]
       : status === "success"
-        ? theme.colors["support-error"][3]
-        : theme.colors["neutrals-01"][3]};
+        ? colooors["support-error"][3]
+        : colooors["neutrals-01"][3]};
 
-    background-color: ${({ theme }) => theme.colors["neutrals-01"][0]};
+    background-color: ${colooors["neutrals-01"][0]};
     width: 100%;
     appearance: none;
     outline: none;
@@ -28,21 +31,21 @@ export const Card = styled.div<{ dropped?: boolean; status: "success" | "error" 
   margin-bottom: 8px;
   
     > div svg {
-        color: ${({ theme }) => theme.colors["neutrals-01"][7]};
+        color: ${colooors["neutrals-01"][7]};
     }
 
     &:hover {
-        border-color: ${({ status, theme }) => status === "default" && theme.colors["neutrals-01"][4]};
-        background-color: ${({ status, theme }) => status === "default" && theme.colors["neutrals-01"][1]};
+        border-color: ${({ status }) => status === "default" && colooors["neutrals-01"][4]};
+        background-color: ${({ status }) => status === "default" && colooors["neutrals-01"][1]};
 
         svg {
-            color: ${({ status, theme }) => status === "default" && theme.colors["neutrals-02"][1]};
+            color: ${({ status }) => status === "default" && colooors["neutrals-02"][1]};
         }
     }
 
     &:active {
         border-color: #d4d4d4;
-        background-color: ${({ theme }) => theme.colors["neutrals-01"][1]};
+        background-color: ${colooors["neutrals-01"][1]};
     }
 `;
 
@@ -60,10 +63,10 @@ export const StatusWrapper = styled.div<{ dropped?: boolean; status: "default" |
 
 export const ResultWrapper = styled.div<{ status: "default" | "success" | "error" }>`
   display: ${({ status }) => (status === "default" ? "none" : "flex")};
-  color: ${({ theme }) => theme.colors["neutrals-01"][7]};
+  color: ${colooors["neutrals-01"][7]};
   align-items: center;
   position: relative;
-  gap: ${({ theme }) => theme.spacing["spacing-8"]};
+  gap: ${spaciiing["spacing-8"]};
 `;
 
 export const WarningWrapper = styled.div`

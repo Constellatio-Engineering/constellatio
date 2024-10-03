@@ -3,16 +3,14 @@ import { DotsIcon } from "@/components/Icons/dots";
 import { Edit } from "@/components/Icons/Edit";
 import { Trash } from "@/components/Icons/Trash";
 
-import {
-  Menu, Modal, Title, useMantineTheme 
-} from "@mantine/core";
-import React, { type HTMLProps, type ReactNode, useState, type FunctionComponent } from "react";
+import { Menu, Modal, Title } from "@mantine/core";
+import React, { type FunctionComponent, type HTMLProps, type ReactNode, useState } from "react";
 
-import * as styles from "./../materialMenuListItem/MenuListItem.styles";
 import { BodyText } from "../BodyText/BodyText";
 import { Button, type TButton } from "../Button/Button";
 import { DropdownItem } from "../Dropdown/DropdownItem";
 import { Input } from "../Input/Input";
+import * as styles from "./../materialMenuListItem/MenuListItem.styles";
 
 interface MenuListItemProps
 {
@@ -40,11 +38,10 @@ const MaterialsMenuListItem: FunctionComponent<MenuListItemProps & HTMLProps<HTM
   const [showRenameModal, setShowRenameModal] = useState<boolean>(false);
   const [showDeleteModal, setShowDeleteModal] = useState<boolean>(false);
   const [newFolderName, setNewFolderName] = useState<string>("");
-  const theme = useMantineTheme();
 
   return (
     <>
-      <div onClick={onClick} css={styles.wrapper({ active, theme })}>
+      <div onClick={onClick} css={styles.wrapper({ active })}>
         <Menu
           width={200}
           position="bottom-end"
@@ -53,7 +50,7 @@ const MaterialsMenuListItem: FunctionComponent<MenuListItemProps & HTMLProps<HTM
             mainAxis: 0
           }}>
           <BodyText styleType={active ? "body-01-bold" : "body-01-medium"} component="p" italic={useItalicFont}>
-            <span css={styles.label({ active, theme })} title={title}>{icon}{title}</span>
+            <span css={styles.label({ active })} title={title}>{icon}{title}</span>
             {!hideContextMenu && (
               <Menu.Target>
                 <span className="dots" onClick={e => e.stopPropagation()}><DotsIcon/></span>

@@ -3,11 +3,12 @@ import PageHead from "@/components/organisms/pageHead/PageHead";
 import DetailsPage from "@/components/pages/DetailsPage/DetailsPage";
 import { type NextPageWithLayout } from "@/pages/_app";
 import getAllCases from "@/services/content/getAllCases";
-import { getCaseById, type FullLegalCase } from "@/services/content/getCaseById";
+import { type FullLegalCase, getCaseById } from "@/services/content/getCaseById";
 import { type TDragAndDropGameOptionType } from "@/stores/dragDropGame.store";
 import { shuffleArray } from "@/utils/array";
 
-import type { GetStaticProps, GetStaticPaths, GetStaticPathsResult } from "next";
+// import { dummyCases } from "@/utils/dummy-data";
+import type { GetStaticPaths, GetStaticPathsResult, GetStaticProps } from "next";
 
 import { type ParsedUrlQuery } from "querystring";
 

@@ -1,4 +1,4 @@
-import { ProfileAvatar, type IProfilePictureAvatars } from "@/components/Icons/ProfileAvatar";
+import { type IProfilePictureAvatars, ProfileAvatar } from "@/components/Icons/ProfileAvatar";
 import useUserDetails from "@/hooks/useUserDetails";
 
 import Image from "next/image";

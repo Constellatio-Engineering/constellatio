@@ -1,4 +1,3 @@
-
 import { Puzzle } from "@/components/Icons/Puzzle";
 
 import { type Meta, type StoryObj } from "@storybook/react";

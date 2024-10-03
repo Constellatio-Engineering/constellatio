@@ -1,4 +1,3 @@
-
 import React, { type FunctionComponent } from "react";
 
 type Props = {

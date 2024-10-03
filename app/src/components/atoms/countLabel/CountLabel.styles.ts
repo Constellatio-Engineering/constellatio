@@ -1,27 +1,27 @@
+import { colooors } from "@/constants/styles/colors";
+
 import { css } from "@emotion/react";
-import { type MantineTheme } from "@mantine/styles";
 
 import { type ICountLabel } from "./CountLabel";
 
-export const wrapper = ({ theme, variant }: {
-  theme: MantineTheme;
+export const wrapper = ({ variant }: {
   variant: ICountLabel["variant"];
 }) => 
 {
   const color =
     variant === "success" || variant === "error"
-      ? theme?.colors["neutrals-01"][0]
-      : theme?.colors["neutrals-02"][1];
+      ? colooors["neutrals-01"][0]
+      : colooors["neutrals-02"][1];
   const bg =
     variant === "success"
-      ? theme?.colors["support-success"][3]
+      ? colooors["support-success"][3]
       : variant === "error"
-        ? theme?.colors["support-error"][3]
+        ? colooors["support-error"][3]
         : variant === "cases"
-          ? theme?.colors["cc-cases"][2]
+          ? colooors["cc-cases"][2]
           : variant === "dictionary"
-            ? theme?.colors["cc-dictionary"][2]
-            : variant === "neutral" && theme?.colors["neutrals-01"][2];
+            ? colooors["cc-dictionary"][2]
+            : variant === "neutral" && colooors["neutrals-01"][2];
 
   return css`
     padding: 4px 8px;

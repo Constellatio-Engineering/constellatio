@@ -1,7 +1,5 @@
 /* eslint-disable @typescript-eslint/explicit-function-return-type */
-import {
-  type FileExtension, type FileMimeType
-} from "@/db/schema";
+import { type FileExtension, type FileMimeType } from "@/db/schema";
 import { env } from "@/env.mjs";
 import { filenameValidation, generateContentTypeValidation } from "@/schemas/uploads/uploadedFile.validation";
 import { getFileExtensionLowercase } from "@/utils/files";

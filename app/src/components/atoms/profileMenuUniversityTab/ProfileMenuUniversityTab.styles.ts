@@ -1,5 +1,6 @@
+import { colooors } from "@/constants/styles/colors";
+
 import { css } from "@emotion/react";
-import { type MantineTheme } from "@mantine/styles";
 
 export const wrapper = css`
     padding: 12px 16px;
@@ -43,6 +44,6 @@ export const text = css`
     text-overflow: ellipsis;
 }
 `;
-export const semesterText = (theme: MantineTheme) => css`
-    color: ${theme.colors["neutrals-01"][7]};
+export const semesterText = () => css`
+    color: ${colooors["neutrals-01"][7]};
 `;

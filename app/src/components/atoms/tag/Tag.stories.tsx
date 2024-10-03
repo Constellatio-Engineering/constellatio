@@ -2,8 +2,9 @@ import { Box } from "@mantine/core";
 import type { Meta, StoryObj } from "@storybook/react";
 import React, { type FunctionComponent } from "react";
 
-import Tag from "./Tag";
 import type { ITag } from "./Tag";
+import Tag from "./Tag";
+
 const Template: FunctionComponent<ITag> = (args) => (
   <Box w={350}>
     <Tag {...args}/>

@@ -1,9 +1,8 @@
 import { type MantineCssObjectStyles } from "@/utils/types";
 
-import {
-  Group, Text
-} from "@mantine/core";
-import React, { type ComponentPropsWithoutRef, type ReactNode, forwardRef } from "react";
+import { Group, Text } from "@mantine/core";
+import { useMantineTheme } from "@mantine/styles";
+import React, { type ComponentPropsWithoutRef, forwardRef, type ReactNode } from "react";
 
 type TDropdownItem = ComponentPropsWithoutRef<"div"> & {
   readonly icon: ReactNode;
@@ -16,7 +15,9 @@ const DropdownItemComponent = forwardRef<HTMLDivElement, TDropdownItem>(({
   ...props
 }, ref) => 
 {
-  const textStyles: MantineCssObjectStyles = theme => ({
+  const theme = useMantineTheme();
+
+  const textStyles: MantineCssObjectStyles = () => ({
     fontSize: theme.fontSizes["spacing-16"],
     fontWeight: 500,
     lineHeight: theme.fontSizes["spacing-20"],

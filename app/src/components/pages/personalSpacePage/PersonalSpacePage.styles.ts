@@ -1,8 +1,9 @@
-import { css } from "@emotion/react";
-import { type MantineTheme } from "@mantine/styles";
+import { colooors } from "@/constants/styles/colors";
 
-export const wrapper = (theme: MantineTheme) => css`
-background-color: ${theme.colors["neutrals-01"][2]};
+import { css } from "@emotion/react";
+
+export const wrapper = () => css`
+background-color: ${colooors["neutrals-01"][2]};
 `;
 
 export const header = css``;

@@ -5,7 +5,7 @@ import { AlertCard } from "@/components/atoms/Card/AlertCard";
 import { CustomLink } from "@/components/atoms/CustomLink/CustomLink";
 import { Input } from "@/components/atoms/Input/Input";
 import ErrorCard from "@/components/molecules/errorCard/ErrorCard";
-import { colors } from "@/constants/styles/colors";
+import { colooors } from "@/constants/styles/colors";
 import useContextAndErrorIfNull from "@/hooks/useContextAndErrorIfNull";
 import { useResendConfirmationEmail } from "@/hooks/useResendConfirmationEmail";
 import { supabase } from "@/lib/supabase";
@@ -19,7 +19,7 @@ import { Stack } from "@mantine/core";
 import { useForm, zodResolver } from "@mantine/form";
 import { useAtom } from "jotai";
 import Link from "next/link";
-import { useRouter } from "next/router"; 
+import { useRouter } from "next/router";
 import React, { type FunctionComponent, useEffect, useState } from "react";
 
 import * as styles from "./LoginForm.styles";
@@ -133,14 +133,14 @@ export const LoginForm: FunctionComponent = () =>
               component="button"
               style={{ display: "inline-block" }}
               onClick={openResetPasswordModal}
-              stylesOverwrite={{ color: colors["neutrals-02"][2], textAlign: "left" }}>
+              stylesOverwrite={{ color: colooors["neutrals-02"][2], textAlign: "left" }}>
               Passwort vergessen?
             </CustomLink>
             <CustomLink
               styleType="link-secondary"
               component={Link}
               href={authPaths.register}
-              stylesOverwrite={{ color: colors["neutrals-02"][2], textAlign: "left" }}>
+              stylesOverwrite={{ color: colooors["neutrals-02"][2], textAlign: "left" }}>
               Du hast noch kein Konto?
             </CustomLink>
           </div>

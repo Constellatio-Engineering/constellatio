@@ -78,6 +78,62 @@
       "when": 1725229824462,
       "tag": "0015_sharp_leo",
       "breakpoints": true
+    },
+    {
+      "idx": 16,
+      "version": "6",
+      "when": 1725584932340,
+      "tag": "0016_slippery_runaways",
+      "breakpoints": true
+    },
+    {
+      "idx": 17,
+      "version": "6",
+      "when": 1725584953410,
+      "tag": "0017_medical_rictor",
+      "breakpoints": true
+    },
+    {
+      "idx": 18,
+      "version": "6",
+      "when": 1725612131320,
+      "tag": "0018_thankful_blonde_phantom",
+      "breakpoints": true
+    },
+    {
+      "idx": 19,
+      "version": "6",
+      "when": 1725612131870,
+      "tag": "0019_rich_namora",
+      "breakpoints": true
+    },
+    {
+      "idx": 20,
+      "version": "6",
+      "when": 1725614160446,
+      "tag": "0020_closed_avengers",
+      "breakpoints": true
+    },
+    {
+      "idx": 21,
+      "version": "6",
+      "when": 1725620820291,
+      "tag": "0021_square_malice",
+      "breakpoints": true
+    },
+    {
+      "idx": 22,
+      "version": "6",
+      "when": 1725626295195,
+      "tag": "0022_spotty_venus",
+      "breakpoints": true
+    },
+    {
+      "idx": 23,
+      "version": "6",
+      "when": 1725626295759,
+      "tag": "0023_sweet_marvel_apes",
+      "breakpoints": true
     }
   ]
 }

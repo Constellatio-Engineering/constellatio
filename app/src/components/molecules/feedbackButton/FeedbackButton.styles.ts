@@ -1,5 +1,5 @@
 import { css } from "@emotion/react";
-import { type MantineTheme } from "@mantine/styles";
+import { type MantineTheme } from "@mantine/core";
 
 export const feedbackButtonStyles = (isUserLoggedIn: boolean, theme: MantineTheme) => css`
   overflow: hidden;

@@ -2,7 +2,6 @@ import { db } from "@/db/connection";
 import { referralBalances, referrals, users } from "@/db/schema";
 import { env } from "@/env.mjs";
 import { createClickupTask } from "@/lib/clickup/tasks/create-task";
-import { type ClickupTask } from "@/lib/clickup/types";
 import { clickupUserIds, getClickupCrmUserByUserId } from "@/lib/clickup/utils";
 import { getUserIdFromStripeEventData } from "@/lib/stripe/utils";
 
@@ -34,9 +33,7 @@ async function handleReferral(dbUserId: string): Promise<void>
   
   await db
     .update(referrals)
-    .set({
-      paid: true,
-    })
+    .set({ paid: true })
     .where(eq(referrals.index, referral.index));
 
   const referringUser = await db.query.users.findFirst({
@@ -46,25 +43,18 @@ async function handleReferral(dbUserId: string): Promise<void>
 
   if(!referringUser)
   {
-    console.error("referring user not found or there was no user (case fleyer)");
+    console.error("referring user not found or there was no user");
     return;
   }
 
   await addBalanceToUser(referringUser.id, ReferralBonusAmount);
 
-  const crmTask = await getClickupCrmUserByUserId(referringUser.id);
-
-  let crmReferringUserTask: ClickupTask | null = null;
-
-  if(crmTask.data?.tasks.length > 0)
-  {
-    crmReferringUserTask = crmTask.data.tasks[0];
-  }
+  const [crmReferringUserTask] = await getClickupCrmUserByUserId(referringUser.id);
 
   await createClickupTask(env.CLICKUP_REFERRAL_PAYOUT_LIST_ID, {
     assignees: [clickupUserIds.sven],
-    description: `Der Nutzer mit der Email Adresse: ${referringUser.email} (${referringUser.id}) hat eine Referral-Bonus von ${ReferralBonusAmount}€ erhalten.`,
-    links_to: crmReferringUserTask ? crmReferringUserTask.id : null,
+    description: `Der Nutzer mit der E-Mail-Adresse: ${referringUser.email} (${referringUser.id}) hat einen Referral-Bonus von ${ReferralBonusAmount}€ erhalten.`,
+    links_to: crmReferringUserTask?.id ?? null,
     name: `Referral Bonus für ${referringUser.email} (${referringUser.id})`,
   });
 
@@ -78,8 +68,8 @@ async function handleReferral(dbUserId: string): Promise<void>
     await addBalanceToUser(referringUser.id, ReferralExtraBonusAmount);
     await createClickupTask(env.CLICKUP_REFERRAL_PAYOUT_LIST_ID, {
       assignees: [clickupUserIds.sven],
-      description: `Der Nutzer mit der Email Adresse: ${referringUser.email} (${referringUser.id}) hat eine Referral-Bonus von ${ReferralExtraBonusAmount}€ erhalten.`,
-      links_to: crmReferringUserTask ? crmReferringUserTask.id : null,
+      description: `Der Nutzer mit der E-Mail-Adresse: ${referringUser.email} (${referringUser.id}) hat einen Referral-Bonus von ${ReferralExtraBonusAmount}€ erhalten.`,
+      links_to: crmReferringUserTask?.id ?? null,
       name: `Referral Extra Bonus für ${referringUser.email} (${referringUser.id})`,
     });
   }

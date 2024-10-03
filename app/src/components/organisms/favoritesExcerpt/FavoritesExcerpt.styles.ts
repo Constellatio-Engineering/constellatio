@@ -1,5 +1,6 @@
+import { colooors } from "@/constants/styles/colors";
+
 import { css } from "@emotion/react";
-import { type MantineTheme } from "@mantine/styles"; 
 
 export const wrapper = css`
   display: flex;
@@ -7,8 +8,8 @@ export const wrapper = css`
   gap: 16px;
 `;
 
-export const emptyCard = (theme: MantineTheme) => css`
-  background-color: ${theme.colors["neutrals-01"][0]};
+export const emptyCard = () => css`
+  background-color: ${colooors["neutrals-01"][0]};
   width: 100%;
   border-radius: 12px;
 `;

@@ -1,6 +1,6 @@
 import { db } from "@/db/connection";
 import {
-  type Document, documents, documentsToTags, type UploadedFile, uploadedFiles, uploadedFilesToTags,
+  type Document, documents, documentsToTags, type UploadedFile, uploadedFiles, uploadedFilesToTags, 
 } from "@/db/schema";
 import { meiliSearchAdmin } from "@/lib/meilisearch";
 import { setTagsForEntitySchema } from "@/schemas/tags/setTagsForEntity.schema";

@@ -7,7 +7,7 @@ import { updateNoteSchema } from "@/schemas/notes/updateNote.schema";
 import { createTRPCRouter, protectedProcedure } from "@/server/api/trpc";
 
 import {
-  and, eq, inArray, isNull, type SQLWrapper,
+  and, eq, inArray, isNull, type SQLWrapper, 
 } from "drizzle-orm";
 
 export const notesRouter = createTRPCRouter({

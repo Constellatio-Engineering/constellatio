@@ -1,11 +1,12 @@
 /* eslint-disable max-lines */
 import { db } from "@/db/connection";
-import { updateUserInCrmQueue } from "@/db/schema";
+import { updateUserInCrmQueue, type User } from "@/db/schema";
 import { env } from "@/env.mjs";
 import { createClickupTask } from "@/lib/clickup/tasks/create-task";
 import { findClickupTask } from "@/lib/clickup/tasks/find-task";
 import {
-  type ClickupTask, type ClickupTaskCreate,
+  type ClickupTask,
+  type ClickupTaskCreate,
   type CurrencyCustomFieldInsertProps,
   type CustomFieldInsert,
   type DateCustomFieldInsertProps,
@@ -13,8 +14,9 @@ import {
   type EmailCustomFieldInsertProps,
   type LabelCustomFieldInsertProps,
   type NumberCustomFieldInsertProps,
-  type ShortTextCustomFieldInsertProps,
+  type ShortTextCustomFieldInsertProps, type TextCustomFieldInsertProps,
 } from "@/lib/clickup/types";
+import { type FormbricksFeedbackWebhook } from "@/pages/api/integration/webhooks/formbricks/feedback-received";
 import { getCrmDataForUser, getUpdateUsersCrmDataPromises, type UserWithActivityStats } from "@/pages/api/playground/sync-users-to-clickup";
 import { allUniversities } from "@/schemas/auth/userData.validation";
 import { type allArticles } from "@/services/content/getAllArticles";
@@ -43,6 +45,58 @@ export const clickupUserIds = {
   sophie: 82743954,
   sven: 36495811
 };
+
+const clickupUserFeedbackTaskCustomField = {
+  doesUserWantToGetFeedback: {
+    fieldId: "9582bfb5-e5a7-460a-bf44-90d4ce4e690c",
+    formbricksId: "a6c76m5oocw6xp9agf3d2tam",
+    options: {
+      no: {
+        fieldId: "9750dcb2-e229-4c4f-9d5b-48d382ad8c46",
+      },
+      yes: {
+        fieldId: "4c2b0780-a25b-47c9-80f8-a519c86ebaa5",
+        formbricksValueIncludes: "clicked"
+      }
+    }
+  },
+  relatedCrmUser: {
+    fieldId: "d31855ee-0712-4ed2-83ff-88d2b2f0f2a2",
+  },
+  type: {
+    fieldId: "1c2f6661-b94d-4f29-b49c-a806f59dde24",
+    formbricksId: "y8ajg0abd6xz26ylnb0j5wph",
+    options: {
+      bug: {
+        fieldId: "bf9fa0f9-4be3-4fa4-a11f-d42bd0d415ca",
+        formbricksValueIncludes: "bug",
+      },
+      inhaltlicherFehler: {
+        fieldId: "d9b6e603-32b2-4786-b417-47ed89ea07c7",
+        formbricksValueIncludes: "inhaltlich",
+      },
+      internalErrorCouldNotBeResolved: {
+        fieldId: "94b94240-0c1e-4b4f-ae94-2061b2739dd2",
+      },
+      verbesserungsvorschlag: {
+        fieldId: "40d68baa-8e5f-480a-a311-c21f67f88fba",
+        formbricksValueIncludes: "verbesserung"
+      }
+    }
+  },
+  url: {
+    fieldId: "8949b727-f65a-454c-aaca-e0bc71feb5a0",
+  },
+  userAgent: {
+    fieldId: "638fd05e-b47c-489b-9dfb-146063624aee",
+  },
+  userId: {
+    fieldId: "86a0d9a3-718a-4c4c-82ae-4f61ddc09977",
+  },
+  webhookData: {
+    fieldId: "c6427d9d-7ea1-42d8-b26e-29eda21896cb",
+  }
+} as const;
 
 const clickupContentTaskCustomField = {
   caisyId: {
@@ -152,7 +206,7 @@ const clickupContentTaskCustomField = {
       },
     }
   }
-};
+} as const;
 
 export const clickupCrmCustomField = {
   aboStatus: {
@@ -339,8 +393,13 @@ const calculateSubscriptionFuture: CalculateMembershipEndDateProps = (subscripti
 };
 
 // eslint-disable-next-line @typescript-eslint/explicit-function-return-type
-export const getClickupCrmUserByUserId = async (userId: string) =>
+export const getClickupCrmUserByUserId = async (userId: Nullable<string>): Promise<ClickupTask[]> =>
 {
+  if(!userId)
+  {
+    return [];
+  }
+
   return findClickupTask(env.CLICKUP_CRM_LIST_ID, {
     custom_fields: [{
       field_id: clickupCrmCustomField.userId.fieldId,
@@ -348,6 +407,98 @@ export const getClickupCrmUserByUserId = async (userId: string) =>
       value: userId,
     }],
     include_closed: true,
+  });
+};
+
+type GetUserFeedbackTaskCrmData = (
+  webhookBody: FormbricksFeedbackWebhook["data"],
+  user: Nullable<User>,
+  linksToTaskId: Nullable<string>
+) => Required<Pick<ClickupTaskCreate, "name" | "due_date" | "custom_fields" | "links_to" | "description">>;
+
+export const getUserFeedbackTaskCrmData: GetUserFeedbackTaskCrmData = (webhookBody, user, linksToTaskId) =>
+{
+  const feedbackType = webhookBody.data[clickupUserFeedbackTaskCustomField.type.formbricksId]?.toLocaleLowerCase();
+
+  let typeCustomFieldValue: string;
+
+  if(feedbackType?.includes(clickupUserFeedbackTaskCustomField.type.options.bug.formbricksValueIncludes))
+  {
+    typeCustomFieldValue = clickupUserFeedbackTaskCustomField.type.options.bug.fieldId;
+  }
+  else if(feedbackType?.includes(clickupUserFeedbackTaskCustomField.type.options.inhaltlicherFehler.formbricksValueIncludes))
+  {
+    typeCustomFieldValue = clickupUserFeedbackTaskCustomField.type.options.inhaltlicherFehler.fieldId;
+  }
+  else if(feedbackType?.includes(clickupUserFeedbackTaskCustomField.type.options.verbesserungsvorschlag.formbricksValueIncludes))
+  {
+    typeCustomFieldValue = clickupUserFeedbackTaskCustomField.type.options.verbesserungsvorschlag.fieldId;
+  }
+  else
+  {
+    console.error("Unknown feedback type", feedbackType, webhookBody);
+    typeCustomFieldValue = clickupUserFeedbackTaskCustomField.type.options.internalErrorCouldNotBeResolved.fieldId;
+  }
+
+  const typeCustomFieldData: DropDownCustomFieldInsertProps = {
+    id: clickupUserFeedbackTaskCustomField.type.fieldId,
+    value: typeCustomFieldValue
+  };
+
+  const doesUserWantFeedbackResponse = webhookBody.data[clickupUserFeedbackTaskCustomField.doesUserWantToGetFeedback.formbricksId]?.toLocaleLowerCase();
+
+  const doesUserWantFeedbackCustomFieldData: DropDownCustomFieldInsertProps = {
+    id: clickupUserFeedbackTaskCustomField.doesUserWantToGetFeedback.fieldId,
+    value: doesUserWantFeedbackResponse?.includes(clickupUserFeedbackTaskCustomField.doesUserWantToGetFeedback.options.yes.formbricksValueIncludes) ?
+      clickupUserFeedbackTaskCustomField.doesUserWantToGetFeedback.options.yes.fieldId :
+      clickupUserFeedbackTaskCustomField.doesUserWantToGetFeedback.options.no.fieldId
+  };
+
+  const userIdCustomFieldData: ShortTextCustomFieldInsertProps = {
+    id: clickupUserFeedbackTaskCustomField.userId.fieldId,
+    value: webhookBody.person.userId
+  };
+
+  const userAgentCustomFieldData: TextCustomFieldInsertProps = {
+    id: clickupUserFeedbackTaskCustomField.userAgent.fieldId,
+    value: Object.entries(webhookBody.meta.userAgent).map(([key, value]) => `${key}: ${value}`).join("\n")
+  };
+
+  const urlCustomFieldData: ShortTextCustomFieldInsertProps = {
+    id: clickupUserFeedbackTaskCustomField.url.fieldId,
+    value: webhookBody.meta.url
+  };
+
+  const webhookDataCustomFieldData: TextCustomFieldInsertProps = {
+    id: clickupUserFeedbackTaskCustomField.webhookData.fieldId,
+    value: `JSON: ${JSON.stringify(webhookBody, null, 2)}`
+  };
+
+  const userName = user ? `${user.firstName} ${user.lastName}` : "unbekannter User";
+
+  const feedback = Object.entries(webhookBody.data)
+    .filter(Boolean)
+    .filter(([_key, value]) => value !== "")
+    .filter(([key]) => key !== clickupUserFeedbackTaskCustomField.doesUserWantToGetFeedback.formbricksId)
+    .filter(([key]) => key !== clickupUserFeedbackTaskCustomField.type.formbricksId)
+    .map(([_key, value]) => `- ${value}`)
+    .join("\n");
+
+  return ({
+    // We don't need to assign a user here since this can be done via clickup automations
+    // assignees: [clickupUserIds.sven],
+    custom_fields: [
+      doesUserWantFeedbackCustomFieldData,
+      userIdCustomFieldData,
+      urlCustomFieldData,
+      userAgentCustomFieldData,
+      typeCustomFieldData,
+      webhookDataCustomFieldData
+    ],
+    description: `${userName} hat folgendes Feedback gegeben:\n${feedback}`,
+    due_date: new Date(Date.now() + 1 * 24 * 60 * 60 * 1000).getTime(),
+    links_to: linksToTaskId ?? null,
+    name: `Feedback von ${userName}`,
   });
 };
 
@@ -605,12 +756,12 @@ const updateUserCrmData = async (userId: string, supabaseServerClient: SupabaseC
 
   const findCrmUserResult = await getClickupCrmUserByUserId(userId);
 
-  if(findCrmUserResult.data?.tasks.length > 1)
+  if(findCrmUserResult.length > 1)
   {
     throw new InternalServerError(new Error("found more than one task in CRM list with the same user id. This should not happen and must be investigated."));
   }
 
-  const existingCrmUser = findCrmUserResult.data?.tasks[0] as ClickupTask | undefined;
+  const existingCrmUser = findCrmUserResult[0];
 
   if(!existingCrmUser)
   {
@@ -711,7 +862,7 @@ export const createContentTaskIfNotExists = async (documentId: string, documentT
     return;
   }
 
-  const existingContentTask = await findClickupTask(env.CLICKUP_CONTENT_TASKS_LIST_ID, {
+  const [existingContentTask] = await findClickupTask(env.CLICKUP_CONTENT_TASKS_LIST_ID, {
     custom_fields: [{
       field_id: clickupContentTaskCustomField.caisyId.fieldId,
       operator: "=",
@@ -720,7 +871,7 @@ export const createContentTaskIfNotExists = async (documentId: string, documentT
     include_closed: true,
   });
 
-  if(existingContentTask.data?.tasks.length > 0)
+  if(existingContentTask)
   {
     return;
   }

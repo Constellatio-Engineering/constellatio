@@ -1,8 +1,8 @@
-import { colors } from "@/constants/styles/colors";
+import { colooors } from "@/constants/styles/colors";
 import { type UnknownMantineStylesParams } from "@/utils/types";
 
 import { css } from "@emotion/react";
-import { type MantineTheme, type Styles } from "@mantine/core";
+import { type Styles } from "@mantine/core";
 import { type RichTextEditorStylesNames } from "@mantine/tiptap";
 
 type RichtextEditorFieldStyles = Styles<RichTextEditorStylesNames, UnknownMantineStylesParams>;
@@ -13,7 +13,7 @@ export const richtextEditorFieldStyles = ({
   noMinHeight
 }: { hasError: boolean; minHeight: number; noMinHeight: boolean}): RichtextEditorFieldStyles =>
 {
-  const styles: RichtextEditorFieldStyles = (theme: MantineTheme) => ({
+  const styles: RichtextEditorFieldStyles = () => ({
     content: {
       "& .ProseMirror": {
         "& blockquote": {
@@ -25,8 +25,8 @@ export const richtextEditorFieldStyles = ({
             height: "20px",
             width: "20px",
           },
-          backgroundColor: theme.colors["neutrals-01"][1],
-          border: `1px solid ${theme.colors["neutrals-01"][3]}`,
+          backgroundColor: colooors["neutrals-01"][1],
+          border: `1px solid ${colooors["neutrals-01"][3]}`,
           borderRadius: "12px",
           display: "flex",
           flexDirection: "column",
@@ -45,9 +45,9 @@ export const richtextEditorFieldStyles = ({
       },
     },
     root: {
-      background: `${theme.colors["neutrals-01"][0]}`,
+      background: `${colooors["neutrals-01"][0]}`,
       ...(hasError && {
-        borderColor: colors["support-error"][3],
+        borderColor: colooors["support-error"][3],
       }),
       borderRadius: "12px",
       overflow: "hidden"
@@ -83,14 +83,14 @@ export const label = (hasError: boolean) => css`
   font-size: 16px;
   line-height: 24px;
   font-weight: 400;
-  color: ${hasError ? colors["support-error"][3] : "#212529"};
+  color: ${hasError ? colooors["support-error"][3] : "#212529"};
   padding-bottom: 4px;
 `;
 
 export const error = css`
   margin-top: 8px;
   font-weight: 500;
-  color: ${colors["support-error"][3]};
+  color: ${colooors["support-error"][3]};
   font-size: 14px;
 `;
 

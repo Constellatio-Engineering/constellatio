@@ -5,7 +5,7 @@ import { OverlayLines } from "@/components/Icons/bg-layer";
 import * as overviewHeaderStyles from "@/components/organisms/OverviewHeader/OverviewHeader.styles";
 import { useForumPageStore } from "@/stores/forumPage.store";
 
-import { Title, useMantineTheme } from "@mantine/core";
+import { Title } from "@mantine/core";
 import Image from "next/image";
 import React, { type FunctionComponent } from "react";
 
@@ -15,12 +15,11 @@ import * as styles from "./ForumHeader.styles";
 const ForumHeader: FunctionComponent = () =>
 {
   const setCreateQuestionState = useForumPageStore((state) => state.setCreateQuestionState);
-  const theme = useMantineTheme();
   const height = 400;
   const variant = "forum";
 
   return (
-    <div css={overviewHeaderStyles.contentHeader({ height, theme, variant })} className="header">
+    <div css={overviewHeaderStyles.contentHeader({ height, variant })} className="header">
       <div id="overlay-lines">
         <OverlayLines/>
       </div>
@@ -37,7 +36,7 @@ const ForumHeader: FunctionComponent = () =>
         />
       </div>
       <ContentWrapper stylesOverrides={styles.contentWrapper}>
-        <Title order={1} css={overviewHeaderStyles.title({ theme, variant })}>Forum</Title>
+        <Title order={1} css={overviewHeaderStyles.title({ variant })}>Forum</Title>
         <BodyText styleType="body-01-regular" css={styles.text}>
           Willkommen im Constellatio Forum! Hier hilft dir die Community zu allen Fragen und Unklarheiten weiter.
           Außerdem kannst du selbst Antworten geben und für dich relevante Fragen upvoten.

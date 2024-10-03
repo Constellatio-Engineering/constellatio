@@ -1,6 +1,6 @@
 import { type GetDocumentsResult } from "@/server/api/routers/documents.router";
 
-import React, { useState, type FunctionComponent } from "react";
+import React, { type FunctionComponent, useState } from "react";
 
 import * as styles from "./DocsTable.styles";
 import { DocsTableData } from "./DocTableData";

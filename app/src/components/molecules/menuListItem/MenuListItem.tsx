@@ -1,6 +1,5 @@
 import { BodyText } from "@/components/atoms/BodyText/BodyText";
 
-import { useMantineTheme } from "@mantine/styles";
 import React, { type FunctionComponent } from "react";
 
 import * as styles from "./MenuListItem.styles";
@@ -20,9 +19,8 @@ const MenuListItem: FunctionComponent<MenuListItemProps> = ({
   ...props
 }) => 
 {
-  const theme = useMantineTheme();
   return (
-    <button type="button" {...props} css={styles.wrapper({ selected, theme })}>
+    <button type="button" {...props} css={styles.wrapper({ selected })}>
       {icon && icon}
       <BodyText styleType="body-01-medium" component="span">{title}</BodyText>
     </button>

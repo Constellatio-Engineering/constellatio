@@ -1,4 +1,3 @@
-import { useMantineTheme } from "@mantine/core";
 import React, { type FunctionComponent } from "react";
 
 import * as styles from "./CountLabel.styles";
@@ -13,10 +12,8 @@ export interface ICountLabel
 
 const CountLabel: FunctionComponent<ICountLabel> = ({ count, total, variant }) => 
 {
-  const theme = useMantineTheme();
-
   return count != null && total != null && (
-    <div css={styles.wrapper({ theme, variant })}>
+    <div css={styles.wrapper({ variant })}>
       <CaptionText styleType="caption-01-bold">
         {count > total ? total : count} / {total}
       </CaptionText>

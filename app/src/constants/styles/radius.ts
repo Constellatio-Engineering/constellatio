@@ -1,4 +1,4 @@
-export const radius = {
+export const radiuuus = {
   full: "9999px",
   "radius-4": "4px",
   "radius-8": "8px",

@@ -8,6 +8,13 @@ await import("./src/env.mjs");
 
 /** @type {import("next").NextConfig} */
 const config = {
+  experimental: {
+    optimizePackageImports: [
+      "@mantine/*",
+      "@tabler/icons-react",
+      "@tiptap/*"
+    ],
+  },
   images:{
     remotePatterns: [
       {
@@ -36,7 +43,7 @@ const config = {
       fullUrl: false
     }
   },
-  productionBrowserSourceMaps: true,
+  productionBrowserSourceMaps: process.env.NEXT_PUBLIC_DEPLOYMENT_ENVIRONMENT !== "production",
   eslint: {
     ignoreDuringBuilds: true,
   },

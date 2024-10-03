@@ -1,5 +1,6 @@
+import { colooors } from "@/constants/styles/colors";
+
 import { css } from "@emotion/react";
-import { type MantineTheme } from "@mantine/styles";
 
 export const wrapper = ({ isShowMenu }: {isShowMenu?: boolean}) => css`
   width: 400px;
@@ -15,18 +16,18 @@ export const wrapper = ({ isShowMenu }: {isShowMenu?: boolean}) => css`
     }
     transition: transform 0.5s cubic-bezier(0.68, -0.55, 0.27, 1.55);
 `;
-export const menuHeader = (theme: MantineTheme) => css`
-  background-color: ${theme.colors["neutrals-02"][1]};
+export const menuHeader = () => css`
+  background-color: ${colooors["neutrals-02"][1]};
   padding: 16px 24px 24px 24px;
-  color: ${theme.colors["neutrals-01"][0]};
+  color: ${colooors["neutrals-01"][0]};
   border-radius: 12px 12px 0 0;
   min-height: 100%;
   display:flex;
   justify-content:space-between;
     align-items:center;
 `;
-export const menuList = (theme: MantineTheme) => css`
-background-color:${theme.colors["neutrals-01"][0]};
+export const menuList = () => css`
+background-color:${colooors["neutrals-01"][0]};
 position:relative;
 border-radius: 12px;
 transform: translateY(-8px);

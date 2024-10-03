@@ -18,14 +18,14 @@ import useCases from "@/hooks/useCases";
 import useRemoveBookmark from "@/hooks/useRemoveBookmark";
 import useSubmittedCaseSolution from "@/hooks/useSubmittedCaseSolution";
 import { type AddOrRemoveBookmarkSchema } from "@/schemas/bookmarks/addOrRemoveBookmark.schema";
-import { type IGenCase_Resolution, type IGenCase_Facts, type Maybe } from "@/services/graphql/__generated/sdk";
+import { type IGenCase_Facts, type IGenCase_Resolution, type Maybe } from "@/services/graphql/__generated/sdk";
 import { type IHeadingNode } from "types/richtext";
 
 import {
-  Accordion, Container, ScrollArea, Spoiler, Title
+  Accordion, Container, ScrollArea, Spoiler, Title 
 } from "@mantine/core";
 import { useDisclosure } from "@mantine/hooks";
-import React, { useRef, type FunctionComponent, useEffect, useState } from "react";
+import React, { type FunctionComponent, useEffect, useRef, useState } from "react";
 
 import * as styles from "./CaseResultsReviewStep.styles";
 import { getNestedHeadingIndex } from "../floatingPanel/generateTocHelper";

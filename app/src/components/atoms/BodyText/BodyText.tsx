@@ -1,4 +1,6 @@
-import { type CSSObject, Text, type TextProps, createPolymorphicComponent } from "@mantine/core";
+import { spaciiing } from "@/constants/styles/spacing";
+
+import { createPolymorphicComponent, type CSSObject, Text, type TextProps } from "@mantine/core";
 import React, { type FC } from "react";
 
 type TBodyText = TextProps & {
@@ -18,7 +20,7 @@ const _BodyText: FC<TBodyText> = ({
       sx={(theme) => ({
         fontSize: styleType === "body-02-medium" ? theme.fontSizes["spacing-14"] : theme.fontSizes["spacing-16"],
         fontWeight: styleType.includes("bold") ? 700 : styleType.includes("medium") ? 500 : 400,
-        lineHeight: styleType === "body-02-medium" ? theme.spacing["spacing-20"] : theme.spacing["spacing-24"],
+        lineHeight: styleType === "body-02-medium" ? spaciiing["spacing-20"] : spaciiing["spacing-24"],
         ...styleOverwrite,
       })}
       {...props}>

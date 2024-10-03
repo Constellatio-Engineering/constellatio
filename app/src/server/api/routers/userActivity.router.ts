@@ -10,7 +10,7 @@ import { RateLimitError } from "@/utils/serverError";
 import { Ratelimit } from "@upstash/ratelimit";
 import { kv } from "@vercel/kv";
 import {
-  and, asc, eq, gte, lte, sql, sum
+  and, asc, eq, gte, lte, sql, sum 
 } from "drizzle-orm";
 
 const rateLimit = new Ratelimit({

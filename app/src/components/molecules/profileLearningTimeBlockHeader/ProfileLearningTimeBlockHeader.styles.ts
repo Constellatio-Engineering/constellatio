@@ -1,8 +1,9 @@
-import { css } from "@emotion/react";
-import { type MantineTheme } from "@mantine/styles";
+import { colooors } from "@/constants/styles/colors";
 
-export const wrapper = (theme: MantineTheme) => css`
-    background: ${theme.colors["neutrals-01"][0]};
+import { css } from "@emotion/react";
+
+export const wrapper = () => css`
+    background: ${colooors["neutrals-01"][0]};
     border-radius: 12px;
     min-height: 300px;
     min-width: 100%;
@@ -14,7 +15,7 @@ export const blockHead = css`
     justify-content: space-between;
     align-items: center;
     gap: 8px;
-    margin-bottom: 32px;
+    margin-bottom: 26px;
 `;
 export const blockHeadText = css`
     display: flex;
@@ -22,8 +23,8 @@ export const blockHeadText = css`
     align-items: center;
     gap: 8px;
 `;
-export const blockHeadDescription = (theme: MantineTheme) => css`
-    color: ${theme.colors["neutrals-01"][7]};
+export const blockHeadDescription = () => css`
+    color: ${colooors["neutrals-01"][7]};
 `;
 export const blockHeadTitle = css``;
 export const blockHeadIcon = css`
@@ -47,3 +48,15 @@ export const uploadedMaterialsTab = css`
     gap: 16px;
     margin: 24px 0;
 `;
+
+export const streak = css`
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 8px;
+  margin-bottom: 32px;
+  padding: 4px 8px;
+  border-radius: 8px;
+  font-size: 14px;
+  font-weight: 500;
+  `;

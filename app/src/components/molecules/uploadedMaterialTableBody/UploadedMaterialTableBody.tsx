@@ -15,9 +15,6 @@ import useNoteEditorStore from "@/stores/noteEditor.store";
 import { useTagsEditorStore } from "@/stores/tagsEditor.store";
 import { getFolderName } from "@/utils/folders";
 
-import {
-  useMantineTheme 
-} from "@mantine/core";
 import React, { type FunctionComponent } from "react";
 
 import * as styles from "./UploadedMaterialTableBody.styles";
@@ -64,7 +61,6 @@ const UploadedMaterialTableBody: FunctionComponent<UploadedMaterialTableBodyProp
 }) => 
 {
   const openTagsDrawer = useTagsEditorStore(s => s.openEditor);
-  const theme = useMantineTheme();
   const { setSelectedFileIdForPreview, setShowFileViewerModal } = useMaterialsStore();
   const setViewNoteState = useNoteEditorStore(s => s.setViewNoteState);
   const setCreateNoteState = useNoteEditorStore(s => s.setCreateNoteState);
@@ -83,7 +79,7 @@ const UploadedMaterialTableBody: FunctionComponent<UploadedMaterialTableBodyProp
             // <td><Checkbox/></td>
             <></>}
             <td
-              css={styles.docName({ clickable: true, theme })}
+              css={styles.docName({ clickable: true })}
               className="primaryCell"
               onClick={() =>
               {

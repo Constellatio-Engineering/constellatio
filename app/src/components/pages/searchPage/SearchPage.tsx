@@ -5,7 +5,7 @@ import useSearchBarStore from "@/stores/searchBar.store";
 
 import { Loader } from "@mantine/core";
 import { createParser, useQueryState } from "next-usequerystate";
-import React, { useMemo, type FunctionComponent } from "react";
+import React, { type FunctionComponent, useMemo } from "react";
 
 import * as styles from "./SearchPage.styles";
 import SearchPageFiltering from "./SearchPageFiltering";

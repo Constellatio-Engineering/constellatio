@@ -7,27 +7,16 @@ import { Cross } from "@/components/Icons/Cross";
 
 import { useCaisyField } from "@caisy/ui-extension-react";
 import {
-  DndContext, type DragEndEvent, KeyboardSensor, PointerSensor, closestCenter, useSensor, useSensors 
+  closestCenter, DndContext, type DragEndEvent, KeyboardSensor, PointerSensor, useSensor, useSensors 
 } from "@dnd-kit/core";
-import {
-  SortableContext,
-  arrayMove,
-  sortableKeyboardCoordinates,
-  verticalListSortingStrategy,
-} from "@dnd-kit/sortable";
-import { Box, Title, Switch } from "@mantine/core";
+import { arrayMove, SortableContext, sortableKeyboardCoordinates, verticalListSortingStrategy, } from "@dnd-kit/sortable";
+import { Box, Switch, Title } from "@mantine/core";
 import { useForm } from "@mantine/form";
 import { randomId } from "@mantine/hooks";
 import React, { type FC, useState } from "react";
 
 import {
-  CardItem,
-  CardItemWrapper,
-  Container,
-  GameWrapper,
-  OptionWrapper,
-  OutputWrapper,
-  switchStyle,
+  CardItem, CardItemWrapper, Container, GameWrapper, OptionWrapper, OutputWrapper, switchStyle, 
 } from "./DndGame.styles";
 import { Checkbox } from "../../atoms/Checkbox/Checkbox";
 import { Check } from "../../Icons/Check";

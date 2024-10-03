@@ -1,11 +1,42 @@
 /* eslint-disable sort-keys-fix/sort-keys-fix,@typescript-eslint/naming-convention,@typescript-eslint/no-use-before-define,max-lines */
 import { type SearchIndex, searchIndices } from "@/utils/search";
+import { getCurrentDate } from "@/utils/utils";
 
 import { type InferInsertModel, type InferSelectModel, relations } from "drizzle-orm";
 import {
-  text, pgTable, integer, pgEnum, uuid, smallint, unique, timestamp, primaryKey, index, type AnyPgColumn, serial, uniqueIndex,
-  boolean
+  type AnyPgColumn,
+  boolean,
+  date,
+  index,
+  integer,
+  type PgColumn,
+  pgEnum,
+  pgTable,
+  type PgTable,
+  primaryKey,
+  serial,
+  smallint,
+  text,
+  timestamp,
+  unique,
+  uniqueIndex,
+  uuid
 } from "drizzle-orm/pg-core";
+
+// type InferPgSelectModel1<T extends PgTable> = {
+//   [K in keyof T as T[K] extends PgColumn ? T[K]["_"]["name"] : never]: T[K] extends PgColumn
+//     ? T[K]["_"]["data"] | (T[K]["_"]["notNull"] extends true ? never : null)
+//     : never;
+// };
+
+type InferPgSelectModel<T extends PgTable> = {
+  columns: {
+    [K in keyof T as T[K] extends PgColumn ? T[K]["_"]["name"] : never]: T[K] extends PgColumn
+      ? T[K]["_"]["data"] | (T[K]["_"]["notNull"] extends true ? never : null)
+      : never;
+  };
+  table: T["_"]["name"];
+};
 
 export const allGenderIdentifiers = ["male", "female", "diverse"] as const;
 export type GenderIdentifier = typeof allGenderIdentifiers[number];
@@ -49,6 +80,9 @@ export type FileExtension = typeof fileExtensions[number];
 export const fileMimeTypes = [...imageFileMimeTypes, ...documentFileMimeTypes] as const;
 export type FileMimeType = typeof fileMimeTypes[number];
 
+export const streakActivityTypes = ["time", "solvedCase", "forumActivity"] as const;
+export type StreakActivityType = typeof streakActivityTypes[number]; 
+
 export const badgeIdentifiers = [
   "fall-1",
   "forum-power",
@@ -80,7 +114,10 @@ export const badgeIdentifiers = [
   "ugc-10",
   "forum-5",
   "feedback-5",
-  "ugc-5"
+  "ugc-5",
+  "streak-14",
+  "streak-42",
+  "streak-84"
 ] as const;
 export type BadgeIdentifier = typeof badgeIdentifiers[number];
 
@@ -121,6 +158,7 @@ export const userBadgeStateEnum = pgEnum("UserBadgeState", userBadgeStates);
 export const badgePublicationStateEnum = pgEnum("BadgePublicationState", badgePublicationState);
 export const roleEnum = pgEnum("Role", roles);
 export const notificationTypeIdentifierEnum = pgEnum("NotificationType", notificationTypesIdentifiers);
+export const streakActivityTypeEnum = pgEnum("StreakActivityType", streakActivityTypes);
 
 // TODO: Go through all queries and come up with useful indexes
 
@@ -150,6 +188,7 @@ export const usersRelations = relations(users, ({ many }) => ({
 
 export type UserInsert = InferInsertModel<typeof users>;
 export type User = InferSelectModel<typeof users>;
+export type UserSql = InferPgSelectModel<typeof users>;
 
 export const profilePictures = pgTable("ProfilePicture", {
   id: uuid("Id").primaryKey(),
@@ -168,6 +207,7 @@ export const profilePicturesRelations = relations(profilePictures, ({ one }) => 
 
 export type ProfilePictureInsert = InferInsertModel<typeof profilePictures>;
 export type ProfilePicture = InferSelectModel<typeof profilePictures>;
+export type ProfilePictureSql = InferPgSelectModel<typeof profilePictures>;
 
 export const bookmarks = pgTable("Bookmark", {
   id: uuid("Id").defaultRandom().primaryKey(),
@@ -181,6 +221,7 @@ export const bookmarks = pgTable("Bookmark", {
 
 export type BookmarkInsert = InferInsertModel<typeof bookmarks>;
 export type Bookmark = InferSelectModel<typeof bookmarks>;
+export type BookmarkSql = InferPgSelectModel<typeof bookmarks>;
 
 export const uploadFolders = pgTable("UploadFolder", {
   id: uuid("Id").defaultRandom().primaryKey(),
@@ -191,6 +232,7 @@ export const uploadFolders = pgTable("UploadFolder", {
 
 export type UploadFolderInsert = InferInsertModel<typeof uploadFolders>;
 export type UploadFolder = InferSelectModel<typeof uploadFolders>;
+export type UploadFolderSql = InferPgSelectModel<typeof uploadFolders>;
 
 export const uploadedFiles = pgTable("UploadedFile", {
   id: uuid("Id").defaultRandom().primaryKey(),
@@ -210,13 +252,14 @@ export const uploadedFilesRelations = relations(uploadedFiles, ({ many }) => ({
 
 export type UploadedFileInsert = InferInsertModel<typeof uploadedFiles>;
 export type UploadedFile = InferSelectModel<typeof uploadedFiles>;
+export type UploadedFileSql = InferPgSelectModel<typeof uploadedFiles>;
 export type UploadedFileWithTags = UploadedFile & { tags: Array<{ tagId: string }> };
 
 export const documents = pgTable("Document", {
   id: uuid("Id").defaultRandom().primaryKey(),
   userId: uuid("UserId").references(() => users.id, { onDelete: "no action" }).notNull(),
   createdAt: timestamp("CreatedAt").defaultNow().notNull(),
-  updatedAt: timestamp("UpdatedAt").defaultNow().notNull(),
+  updatedAt: timestamp("UpdatedAt").defaultNow().notNull().$onUpdate(getCurrentDate),
   folderId: uuid("FolderId").references(() => uploadFolders.id, { onDelete: "no action" }),
   name: text("Name").notNull(),
   content: text("Content").notNull(),
@@ -228,6 +271,7 @@ export const documentsRelations = relations(documents, ({ many }) => ({
 
 export type DocumentInsert = InferInsertModel<typeof documents>;
 export type Document = InferSelectModel<typeof documents>;
+export type DocumentSql = InferPgSelectModel<typeof documents>;
 export type DocumentWithTags = Document & { tags: Array<{tagId: string}> };
 
 export const notes = pgTable("Note", {
@@ -235,17 +279,18 @@ export const notes = pgTable("Note", {
   userId: uuid("UserId").references(() => users.id, { onDelete: "no action" }).notNull(),
   fileId: uuid("FileId").references(() => uploadedFiles.id, { onDelete: "no action" }).notNull(),
   createdAt: timestamp("CreatedAt").defaultNow().notNull(),
-  updatedAt: timestamp("UpdatedAt").defaultNow().notNull(),
+  updatedAt: timestamp("UpdatedAt").defaultNow().notNull().$onUpdate(getCurrentDate),
   content: text("Content").notNull(),
 });
 
 export type NoteInsert = InferInsertModel<typeof notes>;
 export type Note = InferSelectModel<typeof notes>;
+export type NoteSql = InferPgSelectModel<typeof notes>;
 
 export const casesViews = pgTable("CaseView", {
   userId: uuid("UserId").references(() => users.id, { onDelete: "no action" }).notNull(),
   caseId: uuid("CaseId").notNull(),
-  updatedAt: timestamp("UpdatedAt").defaultNow(),
+  updatedAt: timestamp("UpdatedAt").defaultNow().notNull().$onUpdate(getCurrentDate),
 }, table => ({
   caseId_index: index("CaseView_CaseId_Index").on(table.caseId),
   pk: primaryKey({
@@ -256,11 +301,12 @@ export const casesViews = pgTable("CaseView", {
 
 export type CaseViewInsert = InferInsertModel<typeof casesViews>;
 export type CaseView = InferSelectModel<typeof casesViews>;
+export type CaseViewSql = InferPgSelectModel<typeof casesViews>;
 
 export const articlesViews = pgTable("ArticleView", {
   userId: uuid("UserId").references(() => users.id, { onDelete: "no action" }).notNull(),
   articleId: uuid("ArticleId").notNull(),
-  updatedAt: timestamp("UpdatedAt").defaultNow(),
+  updatedAt: timestamp("UpdatedAt").defaultNow().notNull().$onUpdate(getCurrentDate),
 }, table => ({
   articleId_index: index("ArticleView_ArticleId_Index").on(table.articleId),
   pk: primaryKey({ columns: [table.userId, table.articleId] }),
@@ -268,6 +314,7 @@ export const articlesViews = pgTable("ArticleView", {
 
 export type ArticleViewInsert = InferInsertModel<typeof articlesViews>;
 export type ArticleView = InferSelectModel<typeof articlesViews>;
+export type ArticleViewSql = InferPgSelectModel<typeof articlesViews>;
 
 export const casesProgress = pgTable("CaseProgress", {
   userId: uuid("UserId").references(() => users.id, { onDelete: "no action" }).notNull(),
@@ -279,6 +326,7 @@ export const casesProgress = pgTable("CaseProgress", {
 
 export type CaseProgressInsert = InferInsertModel<typeof casesProgress>;
 export type CaseProgress = InferSelectModel<typeof casesProgress>;
+export type CaseProgressSql = InferPgSelectModel<typeof casesProgress>;
 
 export const casesSolutions = pgTable("CaseSolution", {
   userId: uuid("UserId").references(() => users.id, { onDelete: "no action" }).notNull(),
@@ -290,6 +338,7 @@ export const casesSolutions = pgTable("CaseSolution", {
 
 export type CaseSolutionInsert = InferInsertModel<typeof casesSolutions>;
 export type CaseSolution = InferSelectModel<typeof casesSolutions>;
+export type CaseSolutionSql = InferPgSelectModel<typeof casesSolutions>;
 
 export const gamesProgress = pgTable("GameProgress", {
   userId: uuid("UserId").references(() => users.id, { onDelete: "no action" }).notNull(),
@@ -301,6 +350,7 @@ export const gamesProgress = pgTable("GameProgress", {
 
 export type GameProgressInsert = InferInsertModel<typeof gamesProgress>;
 export type GameProgress = InferSelectModel<typeof gamesProgress>;
+export type GameProgressSql = InferPgSelectModel<typeof gamesProgress>;
 
 export const searchIndexUpdateQueue = pgTable("SearchIndexUpdateQueue", {
   cmsId: uuid("CmsId").notNull(),
@@ -312,6 +362,7 @@ export const searchIndexUpdateQueue = pgTable("SearchIndexUpdateQueue", {
 
 export type SearchIndexUpdateQueueInsert = InferInsertModel<typeof searchIndexUpdateQueue>;
 export type SearchIndexUpdateQueueItem = InferSelectModel<typeof searchIndexUpdateQueue>;
+export type SearchIndexUpdateQueueItemSql = InferPgSelectModel<typeof searchIndexUpdateQueue>;
 
 export const badges = pgTable("Badge", {
   id: uuid("Id").defaultRandom().primaryKey(),
@@ -328,6 +379,7 @@ export const badgesRelations = relations(badges, ({ many }) => ({
 
 export type BadgeInsert = InferInsertModel<typeof badges>;
 export type Badge = InferSelectModel<typeof badges>;
+export type BadgeSql = InferPgSelectModel<typeof badges>;
 export type BadgeWithUserData = Badge & {
   isCompleted: boolean;
   wasSeen: boolean;
@@ -358,8 +410,7 @@ export const forumQuestions = pgTable("ForumQuestion", {
   slug: text("Slug").notNull(),
   userId: uuid("UserId").references(() => users.id, { onDelete: "no action" }).notNull(),
   createdAt: timestamp("CreatedAt").defaultNow().notNull(),
-  updatedAt: timestamp("UpdatedAt").defaultNow().notNull(),
-  // updatedAt2: timestamp("UpdatedAt2").notNull().$onUpdate(() => new Date()),
+  updatedAt: timestamp("UpdatedAt").defaultNow().notNull().$onUpdate(getCurrentDate),
   title: text("Title").notNull(),
   text: text("Text").notNull(),
 }, table => ({
@@ -381,6 +432,7 @@ export const forumQuestionsRelations = relations(forumQuestions, ({ many, one })
 
 export type ForumQuestionInsert = InferInsertModel<typeof forumQuestions>;
 export type ForumQuestion = InferSelectModel<typeof forumQuestions>;
+export type ForumQuestionSql = InferPgSelectModel<typeof forumQuestions>;
 
 export const forumQuestionsToLegalFields = pgTable("ForumQuestion_to_LegalField", {
   questionId: uuid("QuestionId").references(() => forumQuestions.id, { onDelete: "cascade" }).notNull(),
@@ -398,6 +450,7 @@ export const forumQuestionsToLegalFieldsRelations = relations(forumQuestionsToLe
 
 export type ForumQuestionToLegalFieldInsert = InferInsertModel<typeof forumQuestionsToLegalFields>;
 export type ForumQuestionToLegalField = InferSelectModel<typeof forumQuestionsToLegalFields>;
+export type ForumQuestionToLegalFieldSql = InferPgSelectModel<typeof forumQuestionsToLegalFields>;
 
 export const forumQuestionToSubfields = pgTable("ForumQuestion_to_Subfield", {
   questionId: uuid("QuestionId").references(() => forumQuestions.id, { onDelete: "cascade" }).notNull(),
@@ -415,6 +468,7 @@ export const forumQuestionToSubfieldsRelations = relations(forumQuestionToSubfie
 
 export type ForumQuestionToSubfieldInsert = InferInsertModel<typeof forumQuestionToSubfields>;
 export type ForumQuestionToSubfield = InferSelectModel<typeof forumQuestionToSubfields>;
+export type ForumQuestionToSubfieldSql = InferPgSelectModel<typeof forumQuestionToSubfields>;
 
 export const forumQuestionToTopics = pgTable("ForumQuestion_to_Topic", {
   questionId: uuid("QuestionId").references(() => forumQuestions.id, { onDelete: "cascade" }).notNull(),
@@ -432,13 +486,14 @@ export const forumQuestionToTopicsRelations = relations(forumQuestionToTopics, (
 
 export type ForumQuestionToTopicInsert = InferInsertModel<typeof forumQuestionToTopics>;
 export type ForumQuestionToTopic = InferSelectModel<typeof forumQuestionToTopics>;
+export type ForumQuestionToTopicSql = InferPgSelectModel<typeof forumQuestionToTopics>;
 
 export const forumAnswers = pgTable("ForumAnswer", {
   id: uuid("Id").defaultRandom().primaryKey(),
   index: serial("Index"),
   userId: uuid("UserId").references(() => users.id, { onDelete: "no action" }).notNull(),
   createdAt: timestamp("CreatedAt").defaultNow().notNull(),
-  updatedAt: timestamp("UpdatedAt").defaultNow().notNull(),
+  updatedAt: timestamp("UpdatedAt").defaultNow().notNull().$onUpdate(getCurrentDate),
   text: text("AnswerText").notNull(),
   parentQuestionId: uuid("ParentQuestionId").references(() => forumQuestions.id, { onDelete: "no action" }),
   parentAnswerId: uuid("ParentAnswerId").references((): AnyPgColumn => forumAnswers.id, { onDelete: "no action" }),
@@ -458,6 +513,7 @@ export const forumAnswersRelations = relations(forumAnswers, ({ one }) => ({
 
 export type ForumAnswerInsert = InferInsertModel<typeof forumAnswers>;
 export type ForumAnswer = InferSelectModel<typeof forumAnswers>;
+export type ForumAnswerSql = InferPgSelectModel<typeof forumAnswers>;
 
 export const correctAnswers = pgTable("CorrectAnswer", {
   id: uuid("Id").defaultRandom().primaryKey(),
@@ -469,6 +525,7 @@ export const correctAnswers = pgTable("CorrectAnswer", {
 
 export type CorrectAnswerInsert = InferInsertModel<typeof correctAnswers>;
 export type CorrectAnswer = InferSelectModel<typeof correctAnswers>;
+export type CorrectAnswerSql = InferPgSelectModel<typeof correctAnswers>;
 
 export const questionUpvotes = pgTable("QuestionUpvote", {
   userId: uuid("UserId").references(() => users.id, { onDelete: "no action" }).notNull(),
@@ -488,6 +545,7 @@ export const questionUpvotesRelations = relations(questionUpvotes, ({ one }) => 
 
 export type QuestionUpvoteInsert = InferInsertModel<typeof questionUpvotes>;
 export type QuestionUpvote = InferSelectModel<typeof questionUpvotes>;
+export type QuestionUpvoteSql = InferPgSelectModel<typeof questionUpvotes>;
 
 export const answerUpvotes = pgTable("AnswerUpvote", {
   userId: uuid("UserId").references(() => users.id, { onDelete: "no action" }).notNull(),
@@ -500,6 +558,7 @@ export const answerUpvotes = pgTable("AnswerUpvote", {
 
 export type AnswerUpvoteInsert = InferInsertModel<typeof answerUpvotes>;
 export type AnswerUpvote = InferSelectModel<typeof answerUpvotes>;
+export type AnswerUpvoteSql = InferPgSelectModel<typeof answerUpvotes>;
 
 export const userRoles = pgTable("UserRole", {
   id: uuid("Id").defaultRandom().primaryKey(),
@@ -516,6 +575,7 @@ export const userRolesRelations = relations(userRoles, ({ many }) => ({
 
 export type UserRoleInsert = InferInsertModel<typeof userRoles>;
 export type UserRole = InferSelectModel<typeof userRoles>;
+export type UserRoleSql = InferPgSelectModel<typeof userRoles>;
 
 export const usersToRoles = pgTable("User_to_Role", {
   userId: uuid("UserId").references(() => users.id, { onDelete: "no action" }).notNull(),
@@ -537,6 +597,7 @@ export const usersToRolesRelations = relations(usersToRoles, ({ one }) => ({
 
 export type UserToRoleInsert = InferInsertModel<typeof usersToRoles>;
 export type UserToRole = InferSelectModel<typeof usersToRoles>;
+export type UserToRoleSql = InferPgSelectModel<typeof usersToRoles>;
 
 export const notificationTypes = pgTable("NotificationType", {
   identifier: notificationTypeIdentifierEnum("NotificationType").primaryKey(),
@@ -550,6 +611,7 @@ export const notificationTypesRelations = relations(notificationTypes, ({ many }
 
 export type NotificationTypeInsert = InferInsertModel<typeof notificationTypes>;
 export type NotificationType = InferSelectModel<typeof notificationTypes>;
+export type NotificationTypeSql = InferPgSelectModel<typeof notificationTypes>;
 
 export const notifications = pgTable("Notification", {
   id: uuid("Id").defaultRandom().primaryKey(),
@@ -579,6 +641,7 @@ export const notificationsRelations = relations(notifications, ({ one }) => ({
 
 export type NotificationInsert = InferInsertModel<typeof notifications>;
 export type Notification = InferSelectModel<typeof notifications>;
+export type NotificationSql = InferPgSelectModel<typeof notifications>;
 
 export const pings = pgTable("Ping", {
   index: serial("Index").primaryKey(),
@@ -593,6 +656,7 @@ export const pings = pgTable("Ping", {
 
 export type PingInsert = InferInsertModel<typeof pings>;
 export type Ping = InferSelectModel<typeof pings>;
+export type PingSql = InferPgSelectModel<typeof pings>;
 
 export const documentsToTags = pgTable("Document_to_Tag", {
   documentId: uuid("DocumentId").references(() => documents.id, { onDelete: "cascade" }).notNull(),
@@ -610,6 +674,7 @@ export const documentsToTagsRelations = relations(documentsToTags, ({ one }) => 
 
 export type DocumentToTagInsert = InferInsertModel<typeof documentsToTags>;
 export type DocumentToTag = InferSelectModel<typeof documentsToTags>;
+export type DocumentToTagSql = InferPgSelectModel<typeof documentsToTags>;
 
 export const uploadedFilesToTags = pgTable("UploadedFile_to_Tag", {
   fileId: uuid("FileId").references(() => uploadedFiles.id, { onDelete: "cascade" }).notNull(),
@@ -627,6 +692,7 @@ export const uploadedFilesToTagsRelations = relations(uploadedFilesToTags, ({ on
 
 export type UploadedFileToTagInsert = InferInsertModel<typeof uploadedFilesToTags>;
 export type UploadedFileToTag = InferSelectModel<typeof uploadedFilesToTags>;
+export type UploadedFileToTagSql = InferPgSelectModel<typeof uploadedFilesToTags>;
 
 export const referralCodes = pgTable("ReferralCode", {
   code: text("Code").primaryKey(),
@@ -636,6 +702,7 @@ export const referralCodes = pgTable("ReferralCode", {
 
 export type ReferralCodeInsert = InferInsertModel<typeof referralCodes>;
 export type ReferralCode = InferSelectModel<typeof referralCodes>;
+export type ReferralCodeSql = InferPgSelectModel<typeof referralCodes>;
 
 export const referrals = pgTable("Referral", {
   index: serial("Index").primaryKey(),
@@ -648,6 +715,7 @@ export const referrals = pgTable("Referral", {
 
 export type ReferralInsert = InferInsertModel<typeof referrals>;
 export type Referral = InferSelectModel<typeof referrals>;
+export type ReferralSql = InferPgSelectModel<typeof referrals>;
 
 export const referralBalances = pgTable("ReferralBalance", {
   index: serial("Index").primaryKey(),
@@ -659,6 +727,7 @@ export const referralBalances = pgTable("ReferralBalance", {
 
 export type ReferralBalanceInsert = InferInsertModel<typeof referralBalances>;
 export type ReferralBalance = InferSelectModel<typeof referralBalances>;
+export type ReferralBalanceSql = InferPgSelectModel<typeof referralBalances>;
 
 export const updateUserInCrmQueue = pgTable("UpdateUserInCrmQueue", {
   userId: uuid("UserId").references(() => users.id, { onDelete: "cascade" }).notNull().unique(),
@@ -667,3 +736,28 @@ export const updateUserInCrmQueue = pgTable("UpdateUserInCrmQueue", {
 
 export type UpdateUserInCrmQueueInsert = InferInsertModel<typeof updateUserInCrmQueue>;
 export type UpdateUserInCrmQueue = InferSelectModel<typeof updateUserInCrmQueue>;
+
+export const streak = pgTable("Streak", {
+  id: serial("id").primaryKey(),
+  userId: uuid("UserId").references(() => users.id, { onDelete: "no action" }).notNull(),
+  startDate: date("StartDate", { mode: "date" }).defaultNow().notNull(),
+  lastSatisfiedDate: date("LastSatisfiedDate", { mode: "date" }).defaultNow().notNull(),
+  satisfiedDays: integer("SatisfiedDays").default(1),
+  streakAlive: boolean("StreakAlive").default(true),
+  lastCheckDate: date("LastCheckDate", { mode: "date" }).defaultNow().notNull(),
+});
+
+export type StreakInsert = InferInsertModel<typeof streak>;
+export type Streak = InferSelectModel<typeof streak>;
+export type StreakSql = InferPgSelectModel<typeof streak>;
+
+export const streakActivities = pgTable("StreakActivities", {
+  id: serial("id").primaryKey(),
+  userId: uuid("UserId").references(() => users.id, { onDelete: "cascade" }).notNull(),
+  activityType: streakActivityTypeEnum("ActivityType").notNull(),
+  createdAt: date("CreatedAt", { mode: "date" }).defaultNow().notNull(),
+});
+
+export type StreakActivityInsert = InferInsertModel<typeof streakActivities>;
+export type StreakActivity = InferSelectModel<typeof streakActivities>;
+export type StreakActivitySql = InferPgSelectModel<typeof streakActivities>;

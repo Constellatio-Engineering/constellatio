@@ -1,7 +1,8 @@
+import { colooors } from "@/constants/styles/colors";
 import { type UnknownMantineStylesParams } from "@/utils/types";
 
 import { css } from "@emotion/react";
-import { type MantineTheme, type ModalStylesNames, type Styles } from "@mantine/core";
+import { type ModalStylesNames, type Styles } from "@mantine/core";
 
 type ModalStyles = Styles<ModalStylesNames, UnknownMantineStylesParams>;
 
@@ -13,8 +14,8 @@ export const modal = (): ModalStyles =>
   return styles;
 };
 
-export const item = ({ selected, theme }: {selected?: boolean; theme: MantineTheme}) => css`
-  border-block: 1px solid ${theme.colors["neutrals-01"][3]};
+export const item = ({ selected }: {selected?: boolean}) => css`
+  border-block: 1px solid ${colooors["neutrals-01"][3]};
   cursor: pointer;
   width: 100%;
   display: flex;
@@ -24,12 +25,12 @@ export const item = ({ selected, theme }: {selected?: boolean; theme: MantineThe
   height: 60px;
   gap:16px;
   &:hover {
-      background-color: ${theme.colors["neutrals-01"][1]};
+      background-color: ${colooors["neutrals-01"][1]};
   }
   label{
       cursor: pointer;
   }
-  ${selected && `background: ${theme.colors["neutrals-01"][1]};`}
+  ${selected && `background: ${colooors["neutrals-01"][1]};`}
 `;
 
 export const callToAction = css`

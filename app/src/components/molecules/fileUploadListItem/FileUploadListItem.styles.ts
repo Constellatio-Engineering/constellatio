@@ -1,9 +1,10 @@
-import { css } from "@emotion/react";
-import { type MantineTheme } from "@mantine/styles";
+import { colooors } from "@/constants/styles/colors";
 
-export const wrapper = (theme: MantineTheme) => css`
+import { css } from "@emotion/react";
+
+export const wrapper = () => css`
 padding: 16px;
-border-bottom:1px solid ${theme.colors["neutrals-01"][2]};
+border-bottom:1px solid ${colooors["neutrals-01"][2]};
 
 display:flex;
 justify-content:space-between;
@@ -22,7 +23,7 @@ text-overflow: ellipsis;
     svg{
         vertical-align: text-bottom;
     }
-    color:${theme.colors["support-error"][3]};
+    color:${colooors["support-error"][3]};
 
 }
 `;

@@ -1,13 +1,37 @@
 {
+  "root": true,
   "parserOptions": {
     "project": "./tsconfig.json"
   },
-  "extends": ["@dualmeta/eslint-config-next", "plugin:storybook/recommended"],
+  "extends": [
+    "@dualmeta/eslint-config-next",
+    "plugin:storybook/recommended",
+    "plugin:drizzle/recommended"
+  ],
   "ignorePatterns": [
     "src/services/graphql/__generated/*",
     "src/lib/database.types.ts"
   ],
   "rules": {
+    "drizzle/enforce-delete-with-where": [
+      "error",
+      {
+        "drizzleObjectName": "db"
+      }
+    ],
+    "drizzle/enforce-update-with-where": [
+      "error",
+      {
+        "drizzleObjectName": "db"
+      }
+    ],
+    "@typescript-eslint/switch-exhaustiveness-check": [
+      "error",
+      {
+        "allowDefaultCaseForExhaustiveSwitch": true,
+        "requireDefaultForNonUnion": true
+      }
+    ],
     "@typescript-eslint/explicit-function-return-type": "off",
     "react/jsx-handler-names": "off",
     "react/prop-types": "off",

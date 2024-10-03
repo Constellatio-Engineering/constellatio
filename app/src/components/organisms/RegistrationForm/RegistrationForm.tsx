@@ -12,7 +12,7 @@ import LastNameInput from "@/components/organisms/RegistrationForm/form/LastName
 import PasswordInput from "@/components/organisms/RegistrationForm/form/PasswordInput";
 import SemesterDropdown from "@/components/organisms/RegistrationForm/form/SemesterDropdown";
 import UniversityDropdown from "@/components/organisms/RegistrationForm/form/UniversityDropdown";
-import { colors } from "@/constants/styles/colors";
+import { colooors } from "@/constants/styles/colors";
 import { env } from "@/env.mjs";
 import { supabase } from "@/lib/supabase";
 import { registrationFormSchema, type RegistrationFormSchema } from "@/schemas/auth/registrationForm.schema";
@@ -244,7 +244,7 @@ export const RegistrationForm: FunctionComponent = () =>
             styleType="link-secondary"
             component={Link}
             href={authPaths.login}
-            stylesOverwrite={{ color: colors["neutrals-02"][2], marginBottom: 10, textAlign: "left" }}>
+            stylesOverwrite={{ color: colooors["neutrals-02"][2], marginBottom: 10, textAlign: "left" }}>
             Du hast schon ein Konto?
           </CustomLink>
           {referringUserName && (

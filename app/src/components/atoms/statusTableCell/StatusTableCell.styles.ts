@@ -1,7 +1,8 @@
-import { type SerializedStyles, css } from "@emotion/react";
-import { type MantineTheme } from "@mantine/styles";
+import { colooors } from "@/constants/styles/colors";
 
-export const wrapper = (theme: MantineTheme): SerializedStyles => css`
+import { css, type SerializedStyles } from "@emotion/react";
+
+export const wrapper = (): SerializedStyles => css`
 	cursor: default;
 	display: flex;
 	align-items: center;
@@ -11,7 +12,7 @@ export const wrapper = (theme: MantineTheme): SerializedStyles => css`
 	gap: 8px;
 
 	border: none;
-	border-bottom: 1px solid ${theme.colors["neutrals-01"][3]};
-	background-color: ${theme.colors["neutrals-01"][0]};
+	border-bottom: 1px solid ${colooors["neutrals-01"][3]};
+	background-color: ${colooors["neutrals-01"][0]};
 	transition: border-color 0.3s ease-in, background-color 0.3s ease-in;
 `;

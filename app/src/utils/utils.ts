@@ -1,4 +1,6 @@
 /* eslint-disable import/no-unused-modules */
+import { type Nullable } from "@/utils/types";
+
 import { AxiosError, type AxiosResponse } from "axios";
 import { v4 as uuidV4 } from "uuid";
 
@@ -172,3 +174,47 @@ const printAllSettledPromisesSummary = (settledPromises: Array<PromiseSettledRes
     console.error(`At least task of action '${actionName}' failed`, errors);
   }
 };
+
+export type ObjectKeys<T extends object> = `${Exclude<keyof T, symbol>}`;
+
+export const objectKeys = Object.keys as <Type extends object>(value: Type) => Array<ObjectKeys<Type>>;
+
+export function getIsPrimitive(value: unknown): value is string | number | boolean
+{
+  return typeof value === "string" || typeof value === "number" || typeof value === "boolean";
+}
+
+export function getIsObjectWithId(value: unknown): value is { id: unknown } 
+{
+  return value != null && typeof value === "object" && "id" in value;
+}
+
+export function getIsObjectWithValue(value: unknown): value is { value: unknown }
+{
+  return value != null && typeof value === "object" && "value" in value;
+}
+
+export function getDistinctItemsByKey<T>(items: Array<Nullable<T>>, key: keyof T): T[] 
+{
+  return [
+    ...new Map(
+      items
+        .filter(Boolean)
+        .filter(item => item[key] != null)
+        .map(item => [item[key], item])
+    ).values()
+  ];
+}
+
+export const getCurrentDate = () => new Date();
+
+export function extractNumeric(title: Nullable<string>): number | null
+{
+  if(!title)
+  {
+    return null;
+  }
+
+  const match = title.match(/\d+/);
+  return match ? parseInt(match[0], 10) : null;
+}

@@ -1,5 +1,5 @@
 import { db } from "@/db/connection";
-import { uploadFolders, uploadedFiles, documents } from "@/db/schema";
+import { documents, uploadedFiles, uploadFolders } from "@/db/schema";
 import { meiliSearchAdmin } from "@/lib/meilisearch";
 import { createFolderSchema } from "@/schemas/folders/createFolder.schema";
 import { deleteFolderSchema } from "@/schemas/folders/deleteFolder.schema";
@@ -8,9 +8,7 @@ import { deleteFiles } from "@/server/api/services/uploads.services";
 import { createTRPCRouter, protectedProcedure } from "@/server/api/trpc";
 import { type DocumentSearchItemNodes, searchIndices, type UploadSearchItemNodes } from "@/utils/search";
 
-import {
-  and, asc, eq
-} from "drizzle-orm";
+import { and, asc, eq } from "drizzle-orm";
 
 export const foldersRouter = createTRPCRouter({
   createFolder: protectedProcedure

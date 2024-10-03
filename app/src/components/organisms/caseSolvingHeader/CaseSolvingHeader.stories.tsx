@@ -1,9 +1,7 @@
 import { type Meta, type StoryObj } from "@storybook/react";
 import { type FunctionComponent } from "react";
 
-import CaseSolvingHeader, {
-  type ICaseSolvingHeaderProps,
-} from "./CaseSolvingHeader";
+import CaseSolvingHeader, { type ICaseSolvingHeaderProps, } from "./CaseSolvingHeader";
 
 const Template: FunctionComponent<ICaseSolvingHeaderProps> = (args) => (
   <CaseSolvingHeader {...args}/>

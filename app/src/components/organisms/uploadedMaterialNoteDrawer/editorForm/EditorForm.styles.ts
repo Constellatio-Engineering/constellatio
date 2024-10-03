@@ -1,5 +1,7 @@
+import { colooors } from "@/constants/styles/colors";
+
 import { css } from "@emotion/react";
-import { type MantineTheme } from "@mantine/styles";
+
 // import { Karla } from "next/font/google";
 
 export const form = css`
@@ -12,7 +14,7 @@ export const form = css`
 export const MaterialNoteRichText = css`
   margin: 24px 32px;
 `;
-export const MaterialNotesCallToAction = (theme: MantineTheme) => css`
+export const MaterialNotesCallToAction = () => css`
   position: sticky;
   bottom: 0px;
   left: 0;
@@ -22,17 +24,17 @@ export const MaterialNotesCallToAction = (theme: MantineTheme) => css`
   align-items: center;
   padding: 32px;
   gap: 12px;
-  background: ${theme.colors["neutrals-01"][0]};
-  border-top: 1px solid ${theme.colors["neutrals-01"][3]};
+  background: ${colooors["neutrals-01"][0]};
+  border-top: 1px solid ${colooors["neutrals-01"][3]};
 
   button {
     flex: 1;
   }
 `;
 export const wrapper = css``;
-export const existingNote = (theme: MantineTheme) => css`
+export const existingNote = () => css`
   padding: 24px 32px;
-  background-color: ${theme.colors["neutrals-01"][0]};
+  background-color: ${colooors["neutrals-01"][0]};
   min-height: 78vh;
 
   .deleteNoteBlock {
@@ -48,7 +50,7 @@ export const existingNote = (theme: MantineTheme) => css`
     align-items: center;
     justify-content: center;
     background: linear-gradient(to bottom,
-    ${theme.colors["neutrals-01"][0]} 20%,
+    ${colooors["neutrals-01"][0]} 20%,
     rgba(255, 255, 255, 0.5) 100%);
 
     button {
@@ -56,8 +58,8 @@ export const existingNote = (theme: MantineTheme) => css`
     }
   }
 `;
-export const existingNoteActions = (theme: MantineTheme) => css`
-  background: ${theme.colors["neutrals-01"][0]};
+export const existingNoteActions = () => css`
+  background: ${colooors["neutrals-01"][0]};
   margin-bottom: 24px;
 
   button {
@@ -68,11 +70,11 @@ export const existingNoteActions = (theme: MantineTheme) => css`
     margin-right: 8px;
   }
 `;
-export const richtext = (theme: MantineTheme) => css`
+export const richtext = () => css`
   blockquote {
     padding: 20px;
-    background: ${theme.colors["neutrals-01"][1]};
-    border: 1px solid ${theme.colors["neutrals-01"][3]};
+    background: ${colooors["neutrals-01"][1]};
+    border: 1px solid ${colooors["neutrals-01"][3]};
     border-radius: 12px;
     margin: 24px 0;
 

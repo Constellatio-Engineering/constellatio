@@ -1,5 +1,4 @@
-import { useMantineTheme } from "@mantine/styles";
-import React, { type ReactNode, type FunctionComponent } from "react";
+import React, { type FunctionComponent, type ReactNode } from "react";
 
 import * as styles from "./TableCell.style";
 import { BodyText } from "../BodyText/BodyText";
@@ -19,11 +18,9 @@ const TableCell: FunctionComponent<ITableCellProps> = ({
   variant
 }) => 
 {
-  const theme = useMantineTheme();
-
   return (
     <div>
-      <button css={styles.wrapper({ clickable, theme, variant })} type="button">
+      <button css={styles.wrapper({ clickable, variant })} type="button">
         {icon && <div css={styles.iconWrapper({ variant })}>{icon}</div>}
         <BodyText styleType={variant === "titleTableCell" ? "body-01-medium" : "body-02-medium"} component="p" title={JSON.stringify(children)}>
           {children}

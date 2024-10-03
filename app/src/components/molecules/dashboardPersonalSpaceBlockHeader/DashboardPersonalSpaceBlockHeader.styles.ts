@@ -1,5 +1,6 @@
+import { colooors } from "@/constants/styles/colors";
+
 import { css } from "@emotion/react";
-import { type MantineTheme } from "@mantine/styles";
 
 export const wrapper = css`
     width: 204px;
@@ -10,8 +11,8 @@ export const wrapper = css`
         align-items: center;
     }
 `;
-export const headerTitle = (theme: MantineTheme) => css`
-    color: ${theme.colors["neutrals-02"][1]};
+export const headerTitle = () => css`
+    color: ${colooors["neutrals-02"][1]};
     margin-bottom: 32px;
     @media screen and (max-width: 1200px) {
         margin-bottom: 0;

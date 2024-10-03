@@ -5,7 +5,8 @@ import { getAllLegalFields, getAllSubfields, getAllTopics } from "@/server/api/s
 import {
   addArticlesToSearchIndex,
   addCasesToSearchIndex,
-  addForumQuestionsToSearchIndex, addTagsToSearchIndex,
+  addForumQuestionsToSearchIndex,
+  addTagsToSearchIndex,
   addUserDocumentsToSearchIndex,
   addUserUploadsToSearchIndex,
   resetSearchIndex
@@ -19,7 +20,8 @@ import {
   type CaseSearchItemNodes,
   type DocumentSearchItemNodes,
   type ForumQuestionSearchItemNodes,
-  searchIndices, type TagSearchItemNodes,
+  searchIndices,
+  type TagSearchItemNodes,
   type UploadSearchItemNodes
 } from "@/utils/search";
 

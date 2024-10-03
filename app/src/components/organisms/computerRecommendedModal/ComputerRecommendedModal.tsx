@@ -1,4 +1,3 @@
-
 import { getIsPathAppPath } from "@/utils/paths";
 
 import { useMediaQuery } from "@mantine/hooks";

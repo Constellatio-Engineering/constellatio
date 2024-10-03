@@ -1,9 +1,10 @@
 /* eslint-disable max-lines */
+import { colooors } from "@/constants/styles/colors";
 import { type UnknownMantineStylesParams } from "@/utils/types";
 
 import { css } from "@emotion/react";
 import { type ModalStylesNames } from "@mantine/core";
-import { type Styles, type MantineTheme } from "@mantine/styles";
+import { type Styles } from "@mantine/styles";
 
 export const wrapper = css`
   display: flex;
@@ -11,27 +12,27 @@ export const wrapper = css`
   position: relative;
   `;
 
-const CSSClickableEffect = (theme: MantineTheme) => css`
+const CSSClickableEffect = () => css`
  &:hover{
-   background-color: ${theme.colors["neutrals-01"][1]};        
+   background-color: ${colooors["neutrals-01"][1]};        
   }
   `;
 
-export const tableWrapper = (theme: MantineTheme) => css`
+export const tableWrapper = () => css`
   text-align: left;
   border-radius: 12px;
   border-collapse: collapse;
-  outline: 1px solid ${theme.colors["neutrals-01"][3]};
+  outline: 1px solid ${colooors["neutrals-01"][3]};
   width: 100%;
   thead{
-    background: ${theme.colors["neutrals-01"][2]};
+    background: ${colooors["neutrals-01"][2]};
   }
   td {
     padding: 16px;
   }
   th {
     padding: 8px 16px;
-    color: ${theme.colors["neutrals-01"][7]};
+    color: ${colooors["neutrals-01"][7]};
     &:first-of-type{
       border-collapse: collapse;
       border-radius: 12px 0px 0 0;
@@ -60,7 +61,7 @@ export const tableWrapper = (theme: MantineTheme) => css`
   }
 `;
 
-export const tableBody = (theme: MantineTheme) => css`
+export const tableBody = () => css`
 
   tr{
     td{
@@ -72,9 +73,9 @@ export const tableBody = (theme: MantineTheme) => css`
     &:hover {
       td {
         transition: all 300ms ease-in-out;
-        background-color: ${theme.colors["neutrals-01"][2]};
+        background-color: ${colooors["neutrals-01"][2]};
        > button{
-          background-color: ${theme.colors["neutrals-01"][2]};
+          background-color: ${colooors["neutrals-01"][2]};
           transition: all 300ms ease-in-out;
         }
       }
@@ -82,7 +83,7 @@ export const tableBody = (theme: MantineTheme) => css`
   }
 `;
 
-export const callToActionCell = (theme: MantineTheme) => css`
+export const callToActionCell = () => css`
 background-color: transparent;
 border:0;
 outline:0;
@@ -100,39 +101,39 @@ min-height: 55px;
   background: transparent;
   border: 0;
   outline: 0;
-  ${CSSClickableEffect(theme)};
+  ${CSSClickableEffect()};
 
 }
 .mantine-Menu-dropdown {
   padding: 0;
 }
 .mantine-Menu-item {
-  border-bottom: 1px solid ${theme.colors["neutrals-01"][3]};
+  border-bottom: 1px solid ${colooors["neutrals-01"][3]};
   border-radius:0px;
 }
 `;
 
-export const cellFolder = (theme: MantineTheme) => css`
-	color: ${theme.colors["neutrals-01"][9]};
+export const cellFolder = () => css`
+	color: ${colooors["neutrals-01"][9]};
 	svg {
 		vertical-align: text-bottom;
 		margin-right: 8px;
 	}
 `;
 
-export const docName = (theme: MantineTheme) => css`
-  color: ${theme.colors["neutrals-02"][1]};
-  ${CSSClickableEffect(theme)};
+export const docName = () => css`
+  color: ${colooors["neutrals-02"][1]};
+  ${CSSClickableEffect()};
 `;
-export const docDate = (theme: MantineTheme) => css`
-  color: ${theme.colors["neutrals-01"][7]};
+export const docDate = () => css`
+  color: ${colooors["neutrals-01"][7]};
 `;
-export const docTags = (theme: MantineTheme) => css`
-  color: ${theme.colors["neutrals-01"][9]};
+export const docTags = () => css`
+  color: ${colooors["neutrals-01"][9]};
   
 `;
 
-export const showMoreButton = (theme: MantineTheme) => css`
+export const showMoreButton = () => css`
   position: absolute;
   background: red;
   display: grid;
@@ -144,7 +145,7 @@ export const showMoreButton = (theme: MantineTheme) => css`
   background: linear-gradient(
     to bottom,
     transparent,
-    ${theme.colors["neutrals-01"][0]}
+    ${colooors["neutrals-01"][0]}
   );
 `;
 

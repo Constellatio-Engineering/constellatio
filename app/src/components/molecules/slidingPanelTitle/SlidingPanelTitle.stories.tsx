@@ -26,9 +26,6 @@ type Story = StoryObj<typeof SlidingPanelTitle>;
 
 export const Default: Story = {
   args: {
-    link: {
-      text: "Link Button"
-    },
     number: 0,
     title: "Title",
     variant: "default"
