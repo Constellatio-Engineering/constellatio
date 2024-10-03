@@ -7,6 +7,7 @@ import { type CaseOverviewPageProps } from "@/pages/cases";
 import { type ArticleOverviewPageProps } from "@/pages/dictionary";
 import { type ArticlesOverviewFiltersStore, type CasesOverviewFiltersStore, useArticlesOverviewFiltersStore, useCasesOverviewFiltersStore } from "@/stores/overviewFilters.store";
 import { findIntersection } from "@/utils/array";
+import { mapToObject } from "@/utils/object";
 import { getDistinctItemsByKey } from "@/utils/utils";
 
 import { Drawer } from "@mantine/core";
@@ -48,15 +49,6 @@ export type OverviewFiltersDrawerContentProps = (CasesOverviewFiltersDrawerProps
 }) | (ArticlesOverviewFiltersDrawerProps & {
   readonly filtersStore: ArticlesOverviewFiltersStore;
 });
-
-function mapToObject<Key extends string, Value>(map: Map<Key, Value>): {
-  [K in Key]: Value;
-}
-{
-  const entries = map.entries();
-  const object = Object.fromEntries(entries) as { [K in Key]: Value; };
-  return object;
-}
 
 const OverviewFiltersDrawerContent: FunctionComponent<OverviewFiltersDrawerContentProps> = ({ filtersStore, items, variant }) =>
 {
@@ -107,7 +99,6 @@ const OverviewFiltersDrawerContent: FunctionComponent<OverviewFiltersDrawerConte
     }
 
     const filtersObject = mapToObject(filters);
-
     const allProgressStates = getFilterOptions(filtersObject, "progressStateFilterable", items);
     const intersectionProgressStates = findIntersection(allProgressStates, "value");
     const distinctProgressStates = getDistinctItemsByKey(intersectionProgressStates, "value");
@@ -123,7 +114,6 @@ const OverviewFiltersDrawerContent: FunctionComponent<OverviewFiltersDrawerConte
     }
 
     const filtersObject = mapToObject(filters);
-
     const allSeenStatuses = getFilterOptions(filtersObject, "wasSeenFilterable", items);
     const intersectionSeenStatuses = findIntersection(allSeenStatuses, "value");
     const distinctSeenStatuses = getDistinctItemsByKey(intersectionSeenStatuses, "value");

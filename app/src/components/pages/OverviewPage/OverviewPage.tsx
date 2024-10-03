@@ -28,11 +28,11 @@ type CommonFiltersStoreProps = Pick<CommonOverviewFiltersStore, "clearAllFilters
 };
 
 export type ArticlesPageProps = ArticleOverviewPageProps & {
-  readonly filter: CommonFiltersStoreProps & Pick<ArticlesOverviewFiltersStore, "filters" | "toggleFilter">;
+  readonly filter: CommonFiltersStoreProps & Pick<ArticlesOverviewFiltersStore, "filters">;
 };
 
 export type CasesPageProps = CaseOverviewPageProps & {
-  readonly filter: CommonFiltersStoreProps & Pick<CasesOverviewFiltersStore, "filters" | "toggleFilter">;
+  readonly filter: CommonFiltersStoreProps & Pick<CasesOverviewFiltersStore, "filters">;
 };
 
 export type OverviewPageProps = (ArticlesPageProps | CasesPageProps) & {
@@ -59,7 +59,6 @@ const OverviewPageContent: FunctionComponent<OverviewPageContentProps> = ({
     clearAllFilters,
     filters,
     openDrawer,
-    toggleFilter,
     totalFiltersCount
   } = filter;
 
@@ -120,7 +119,7 @@ const OverviewPageContent: FunctionComponent<OverviewPageContentProps> = ({
                 </Button>
               </div>
               <div css={styles.activeFiltersChips}>
-                {filter.filters.values().map((f) => (
+                {Array.from(filter.filters.values()).map((f) => (
                   <>
                     {f.filterOptions.map((filterOption) => (
                       <FilterTag

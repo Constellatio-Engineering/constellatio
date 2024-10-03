@@ -79,7 +79,6 @@ const NextPage: NextPageWithLayout<GetArticlesOverviewPagePropsResult> = ({
   const { data: seenArticles } = api.views.getAllSeenArticles.useQuery(undefined);
   const articlesWithSeenStatus = useMemo(() => getArticlesWithSeenStatus(items, seenArticles), [items, seenArticles]);
   const filters = useStore(useArticlesOverviewFiltersStore, s => s.filters);
-  const toggleFilter = useStore(useArticlesOverviewFiltersStore, s => s.toggleFilter);
   const openDrawer = useStore(useArticlesOverviewFiltersStore, s => s.openDrawer);
   const clearAllFilters = useStore(useArticlesOverviewFiltersStore, s => s.clearAllFilters);
   const totalFiltersCount = useStore(useArticlesOverviewFiltersStore, s => s.getTotalFiltersCount());
@@ -95,7 +94,6 @@ const NextPage: NextPageWithLayout<GetArticlesOverviewPagePropsResult> = ({
           clearAllFilters,
           filters,
           openDrawer,
-          toggleFilter,
           totalFiltersCount
         }}
       />
