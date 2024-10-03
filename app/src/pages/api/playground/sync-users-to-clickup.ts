@@ -251,6 +251,7 @@ export const getUpdateUsersCrmDataPromises = ({
         break;
       }
       case "email":
+      case "text":
       case "short_text":
       {
         if(existingCrmField.value !== field.value)
