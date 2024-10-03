@@ -1,7 +1,7 @@
 /* eslint-disable max-lines */
 
 import type { CaseOverviewPageItems } from "@/pages/cases";
-import { type FilterOption } from "@/stores/overviewFilters.store";
+import { type FilterableAttributes, type FilterOption } from "@/stores/overviewFilters.store";
 import { getIsValidKey } from "@/utils/object";
 import { type NullableProperties } from "@/utils/types";
 import { getIsObjectWithId, getIsObjectWithValue, getIsPrimitive, objectKeys } from "@/utils/utils";
@@ -216,6 +216,58 @@ export function itemValuesToFilterOptions(
     .sort(sortFilterOptions);
 
   return filterOptions;
+}
+
+type FilterLabels = { searchesFor: string | null; title: string };
+
+export function getFilterLabels(filterKey: FilterableAttributes): FilterLabels
+{ 
+  let label: FilterLabels;
+
+  switch (filterKey)
+  {
+    case "legalArea":
+    {
+      label = {
+        searchesFor: "Rechtsgebieten",
+        title: "Rechtsgebiet"
+      };
+      break;
+    }
+    case "topic":
+    {
+      label = {
+        searchesFor: "Themen",
+        title: "Thema"
+      };
+      break;
+    }
+    case "tags":
+    {
+      label = {
+        searchesFor: "Tags",
+        title: "Tags"
+      };
+      break;
+    }
+    case "progressStateFilterable":
+    {
+      label = {
+        searchesFor: null,
+        title: "Bearbeitungsstatus"
+      };
+      break;
+    }
+    case "wasSeenFilterable":
+    {
+      label = {
+        searchesFor: null,
+        title: "Bearbeitungsstatus"
+      };
+      break;
+    }
+  }
+  return label;
 }
 
 // export function getUniqueFilterOptions<

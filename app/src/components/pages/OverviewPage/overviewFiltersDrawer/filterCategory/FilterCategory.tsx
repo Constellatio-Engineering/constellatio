@@ -3,6 +3,7 @@ import { ArrowDown } from "@/components/Icons/ArrowDown";
 import { UnstyledButton } from "@/components/molecules/unstyledButton/UnstyledButton";
 import FilterItem from "@/components/pages/OverviewPage/overviewFiltersDrawer/filterCategory/filterItem/FilterItem";
 import { colooors } from "@/constants/styles/colors";
+import { type Nullable } from "@/utils/types";
 
 import { Input } from "@mantine/core";
 import { IconSearch } from "@tabler/icons-react";
@@ -20,9 +21,7 @@ export type FilterCategoryProps = {
     readonly toggle: () => void;
     readonly value: string | number;
   }>;
-  readonly search?: {
-    readonly searchesFor: string;
-  };
+  readonly searchesFor: Nullable<string>;
   readonly title: string;
 };
 
@@ -30,7 +29,7 @@ export const FilterCategory: FunctionComponent<FilterCategoryProps> = ({
   activeFiltersCount,
   clearFilters,
   items: _items,
-  search,
+  searchesFor,
   title
 }) =>
 {
@@ -81,11 +80,11 @@ export const FilterCategory: FunctionComponent<FilterCategoryProps> = ({
         </div>
       </UnstyledButton>
       <div css={[styles.itemsWrapper, !isOpen && styles.itemWrapperCollapsed]}>
-        {search && (
+        {(searchesFor != null) && (
           <div css={styles.searchInputWrapper}>
             <Input
               icon={<IconSearch size={20}/>}
-              placeholder={`Suche nach ${search.searchesFor}`}
+              placeholder={`Suche nach ${searchesFor}`}
               styles={{
                 icon: {
                   color: colooors["neutrals-01"][7],

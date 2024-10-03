@@ -1,12 +1,11 @@
 /* eslint-disable max-lines */
 import type { CaseOverviewPageProps } from "@/pages/cases";
 import type { ArticleOverviewPageProps } from "@/pages/dictionary";
+import { areArraysEqualByKey } from "@/utils/array";
+import { getIsValidKey } from "@/utils/object";
 import { appPaths } from "@/utils/paths";
 
-import { boolean } from "drizzle-orm/pg-core";
-import {
-  castDraft, castImmutable, createDraft, type Immutable, produce, enableMapSet
-} from "immer";
+import { castDraft, enableMapSet } from "immer";
 import { createStore } from "zustand";
 import { immer } from "zustand/middleware/immer";
 import { querystring, type QueryStringOptions } from "zustand-querystring";
@@ -51,6 +50,7 @@ export type WasSeenFilterOption = typeof wasSeenFilterOptions[number];
 
 type FilterableArticleAttributes = keyof Pick<ArticleOverviewPageProps["items"][number], "legalArea" | "tags" | "topic" | "wasSeenFilterable">;
 type FilterableCaseAttributes = keyof Pick<CaseOverviewPageProps["items"][number], "legalArea" | "tags" | "topic" | "progressStateFilterable">;
+export type FilterableAttributes = FilterableArticleAttributes | FilterableCaseAttributes;
 
 interface CommonFiltersSlice<FilterKey extends string>
 {
@@ -72,142 +72,118 @@ interface CommonFiltersSlice<FilterKey extends string>
   toggleFilter: (key: FilterKey, filter: FilterOption) => void;
 }
 
-function createOverviewFiltersStore<FilterKey extends FilterableArticleAttributes | FilterableCaseAttributes>(
+function createOverviewFiltersStore<FilterKey extends FilterableAttributes>(
   initialFilters: { [K in FilterKey]-?: FilterOption[] },
   querystringOptions: QueryStringOptions<CommonFiltersSlice<FilterKey>>
 )
 {
   type Store = CommonFiltersSlice<FilterKey>;
+  const filterKeys = Object.keys(initialFilters) as Array<keyof typeof initialFilters>;
 
   return createStore<Store>()(
     querystring(
       immer(
-        (set, get) =>
-        {
-          const filters: Store["filters"] = new Map();
-
-          const filterKeys = Object.keys(initialFilters) as Array<keyof typeof initialFilters>;
-
-          filterKeys.forEach(key =>
+        (set, get) => ({
+          clearAllFilters: () =>
           {
-            filters.set(key, {
-              clearFilters: () =>
+            set((state) =>
+            {
+              for(const key of state.filters.keys())
               {
-                get().clearFilters(key);
-              },
-              filterOptions: initialFilters[key],
-              toggleFilter: (filter) =>
-              {
-                get().toggleFilter(key, filter);
-              },
+                state.filters.get(key)!.filterOptions = [];
+              }
             });
-          });
-
-          return ({
-            clearAllFilters: () =>
+          },
+          clearFilters: (key) =>
+          {
+            set((state) =>
             {
-              set((state) =>
+              state.filters.get(castDraft(key))!.filterOptions = [];
+            });
+          },
+          clearInvalidFilters: (currentlyValidFilterOptions) =>
+          {
+            set((state) =>
+            {
+              for(const key of state.filters.keys())
               {
-                for(const key of state.filters.keys())
+                const activeFilterOptions = state.filters.get(key)!.filterOptions;
+                const validFilterOptions = activeFilterOptions.filter(filterOption =>
                 {
-                  state.filters.get(key)!.filterOptions = [];
-                }
-              });
-            },
-            clearFilters: (key) =>
-            {
-              set((state) =>
-              {
-                state.filters.get(castDraft(key))!.filterOptions = [];
-              });
-            },
-            clearInvalidFilters: (currentlyValidFilterOptions) =>
-            {
-              console.warn("clearInvalidFilters is not implemented yet");
-
-              /* set((state) =>
-              {
-                const filterKeys = Object.keys(state.filters) as Array<keyof typeof state.filters>;
-
-                let hasChanges = false;
-
-                const updatedFilters = filterKeys.reduce((acc, filterKey) =>
-                {
-                  const validFilters = state.filters[filterKey].filterOptions.filter(filterOption =>
-                    currentlyValidFilterOptions[filterKey]?.some(validFilterOption =>
-                      validFilterOption.value === filterOption.value
-                    )
-                  );
-
-                  if(validFilters.length !== state.filters[filterKey].filterOptions.length)
+                  if(!getIsValidKey(currentlyValidFilterOptions, key))
                   {
-                    hasChanges = true;
+                    return false;
                   }
 
-                  const test: Partial<typeof state.filters> = {
-                    ...acc,
-                    [filterKey]: {
-                      ...acc[filterKey],
-                      filterOptions: 2,
-                    }
-                  };
+                  return currentlyValidFilterOptions[key]?.some(validFilterOption => validFilterOption.value === filterOption.value);
+                });
 
-                  return test;
-                }, {} as Partial<typeof state.filters>);
+                if(areArraysEqualByKey(activeFilterOptions, validFilterOptions, "value"))
+                {
+                  continue;
+                }
 
-                const result = updatedFilters as Store["filters"];
-
-                // Only update state if there are actual changes
-                return hasChanges ? { filters: result } : state;
-              });*/
-            },
-            closeDrawer: () => set({ isDrawerOpened: false }),
-            filters,
-            getTotalFiltersCount: () => Array
-              .from(get().filters.values())
-              .reduce((count, f) => count + f.filterOptions.length, 0),
-            isDrawerOpened: false,
-            openDrawer: () => set({ isDrawerOpened: true }),
-            setIsDrawerOpened: (isDrawerOpened) => set({ isDrawerOpened }),
-            toggleFilter: (key, filter) =>
-            {
-              set((state) =>
+                state.filters.get(key)!.filterOptions = validFilterOptions;
+              }
+            });
+          },
+          closeDrawer: () => set({ isDrawerOpened: false }),
+          filters: new Map(
+            filterKeys.map(key => [
+              key,
               {
-                const { filters } = state;
+                clearFilters: () => get().clearFilters(key),
+                filterOptions: initialFilters[key],
+                toggleFilter: (filter) => get().toggleFilter(key, filter),
+              }
+            ])
+          ),
+          getTotalFiltersCount: () => Array
+            .from(get().filters.values())
+            .reduce((count, f) => count + f.filterOptions.length, 0),
+          isDrawerOpened: false,
+          openDrawer: () => set({ isDrawerOpened: true }),
+          setIsDrawerOpened: (isDrawerOpened) => set({ isDrawerOpened }),
+          toggleFilter: (key, filter) =>
+          {
+            set((state) =>
+            {
+              const { filters } = state;
 
-                const currentFilter = filters.get(castDraft(key));
+              const currentFilter = filters.get(castDraft(key));
 
-                if(currentFilter == null)
-                {
-                  return;
-                }
+              if(currentFilter == null)
+              {
+                return;
+              }
 
-                const filterIndex = currentFilter.filterOptions.findIndex(f => f.value === filter.value);
-                const isFilterAlreadyAdded = filterIndex !== -1;
+              const filterIndex = currentFilter.filterOptions.findIndex(f => f.value === filter.value);
+              const isFilterAlreadyAdded = filterIndex !== -1;
 
-                if(isFilterAlreadyAdded)
-                {
-                  currentFilter.filterOptions.splice(filterIndex, 1);
-                }
-                else
-                {
-                  currentFilter.filterOptions.push(filter);
-                }
-              });
-            },
-          });
-        }
+              if(isFilterAlreadyAdded)
+              {
+                currentFilter.filterOptions.splice(filterIndex, 1);
+              }
+              else
+              {
+                currentFilter.filterOptions.push(filter);
+              }
+            });
+          },
+        })
       ),
       querystringOptions
     )
   );
 }
 
+// disable the sorting rule because we want to keep the order of the filters as this is the order in which they are displayed in the drawer
+/* eslint-disable sort-keys-fix/sort-keys-fix */
 export const useCasesOverviewFiltersStore = createOverviewFiltersStore({
-  legalArea: [],
   progressStateFilterable: [],
-  tags: [],
+  legalArea: [],
   topic: [],
+  tags: [],
 }, {
   key: "cases-filters",
   select: (pathname) => ({
@@ -228,6 +204,7 @@ export const useArticlesOverviewFiltersStore = createOverviewFiltersStore({
     filters: pathname === appPaths.dictionary,
   })
 });
+/* eslint-enable sort-keys-fix/sort-keys-fix */
 
 export type CasesOverviewFiltersStore = CommonFiltersSlice<FilterableCaseAttributes>;
 export type ArticlesOverviewFiltersStore = CommonFiltersSlice<FilterableArticleAttributes>;
