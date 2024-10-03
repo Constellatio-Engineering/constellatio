@@ -45,8 +45,7 @@
     "setCloudStorageProductionCors": "gsutil cors set google/cloud-storage-cors/production.cors-config.json gs://constellatio-user-uploads-production",
     "setPublicCloudStorageProductionCors": "gsutil cors set google/cloud-storage-cors/production.cors-config.json gs://constellatio-public-user-uploads-production",
     "separatorOther": "---------------------- OTHER ----------------------",
-    "printCopiedToClipboard": "echo 'Copied to clipboard'",
-    "localtunnel": "lt --subdomain constelaltio-app-development --port 3010"
+    "printCopiedToClipboard": "echo 'Copied to clipboard'"
   },
   "dependencies": {
     "@caisy/rich-text-react-renderer": "0.7.3",
@@ -191,7 +190,7 @@
     "storybook": "7.4.5",
     "supabase": "1.165.0",
     "tslib": "2.6.2",
-    "typescript": "5.6.2"
+    "typescript": "5.5.4"
   },
   "ct3aMetadata": {
     "initVersion": "7.18.0"
