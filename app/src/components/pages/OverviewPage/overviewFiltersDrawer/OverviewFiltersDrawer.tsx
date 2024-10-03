@@ -161,21 +161,21 @@ const OverviewFiltersDrawerContent: FunctionComponent<OverviewFiltersDrawerConte
         <FilterCategory
           items={progressStateFilterOptions.map((progressState) => ({
             ...progressState,
-            isChecked: filtersStore.filters.progressStateFilterable.some(s => s.value === progressState.value),
+            isChecked: filtersStore.filters.get("progressStateFilterable")?.filterOptions.some(s => s.value === progressState.value) ?? false,
             toggle: () => filtersStore.toggleFilter("progressStateFilterable", progressState),
           }))}
           clearFilters={() => filtersStore.clearFilters("progressStateFilterable")}
-          activeFiltersCount={filtersStore.filters.progressStateFilterable.length}
+          activeFiltersCount={filtersStore.filters.get("progressStateFilterable")?.filterOptions.length ?? 0}
           title="Bearbeitungsstatus"
         />
       )}
       {variant === "dictionary" && (
         <FilterCategory
           clearFilters={() => filtersStore.clearFilters("wasSeenFilterable")}
-          activeFiltersCount={filtersStore.filters.wasSeenFilterable.length}
+          activeFiltersCount={filtersStore.filters.get("wasSeenFilterable")?.filterOptions.length ?? 0}
           items={seenStatusFilterOptions.map(wasSeenFilterOption => ({
             ...wasSeenFilterOption,
-            isChecked: filtersStore.filters.wasSeenFilterable.some(s => s.value === wasSeenFilterOption.value),
+            isChecked: filtersStore.filters.get("wasSeenFilterable")?.filterOptions.some(s => s.value === wasSeenFilterOption.value) ?? false,
             toggle: () => filtersStore.toggleFilter("wasSeenFilterable", wasSeenFilterOption),
           }))}
           title="Bearbeitungsstatus"
@@ -183,33 +183,33 @@ const OverviewFiltersDrawerContent: FunctionComponent<OverviewFiltersDrawerConte
       )}
       <FilterCategory
         search={{ searchesFor: "Rechtsgebieten" }}
-        activeFiltersCount={filters.legalArea.length}
+        activeFiltersCount={filters.get("legalArea")?.filterOptions.length ?? 0}
         clearFilters={() => clearFilters("legalArea")}
         items={legalAreasFilterOptions.map(legalArea => ({
           ...legalArea,
-          isChecked: filters.legalArea.some(l => l.value === legalArea.value),
+          isChecked: filters.get("legalArea")?.filterOptions.some(l => l.value === legalArea.value) ?? false,
           toggle: () => toggleFilter("legalArea", legalArea),
         }))}
         title="Rechtsgebiet"
       />
       <FilterCategory
         search={{ searchesFor: "Themen" }}
-        activeFiltersCount={filters.topic.length}
+        activeFiltersCount={filters.get("topic")?.filterOptions.length ?? 0}
         clearFilters={() => clearFilters("topic")}
         items={topicsFilterOptions.map(topic => ({
           ...topic,
-          isChecked: filters.topic.some(t => t.value === topic.value),
+          isChecked: filters.get("topic")?.filterOptions.some(t => t.value === topic.value) ?? false,
           toggle: () => toggleFilter("topic", topic),
         }))}
         title="Thema"
       />
       <FilterCategory
         search={{ searchesFor: "Tags" }}
-        activeFiltersCount={filters.tags.length}
+        activeFiltersCount={filters.get("tags")?.filterOptions.length ?? 0}
         clearFilters={() => clearFilters("tags")}
         items={tagsFilterOptions.map(tag => ({
           ...tag,
-          isChecked: filters.tags.some(t => t.value === tag.value),
+          isChecked: filters.get("tags")?.filterOptions.some(t => t.value === tag.value) ?? false,
           toggle: () => toggleFilter("tags", tag),
         }))}
         title="Tags"

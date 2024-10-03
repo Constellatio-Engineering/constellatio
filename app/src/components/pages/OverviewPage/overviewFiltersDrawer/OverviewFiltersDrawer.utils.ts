@@ -2,6 +2,7 @@
 
 import type { CaseOverviewPageItems } from "@/pages/cases";
 import { type FilterOption } from "@/stores/overviewFilters.store";
+import { getIsValidKey } from "@/utils/object";
 import { type NullableProperties } from "@/utils/types";
 import { getIsObjectWithId, getIsObjectWithValue, getIsPrimitive, objectKeys } from "@/utils/utils";
 
@@ -49,9 +50,9 @@ export function getFilterOptions<
         return null;
       }
 
-      if(!Object.hasOwn(filters, filterKey))
+      if(!getIsValidKey(filters, filterKey))
       {
-        console.error(`Filter ${filterKey} not found in filters object`);
+        console.error(`Filter ${filterKey} not found in filters object`, filters);
         return null;
       }
 
