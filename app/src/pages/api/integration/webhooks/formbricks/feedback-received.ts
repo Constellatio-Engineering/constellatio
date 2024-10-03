@@ -41,6 +41,12 @@ const handler: NextApiHandler = async (req, res): Promise<void> =>
 {
   console.log(`----- ${(new Date()).toLocaleTimeString("de")} Formbricks Webhook received for received feedback -----`);
 
+  if(env.NEXT_PUBLIC_DEPLOYMENT_ENVIRONMENT !== "production")
+  {
+    console.info("Automatic creation of clickup tasks is only enabled in production");
+    return res.status(200).json({ message: "Automatic creation of clickup tasks is only enabled in production" });
+  }
+  
   let webhookRequestBody: FormbricksWebhook;
 
   try
