@@ -1,5 +1,4 @@
 import { type UsageTimeData } from "@/components/organisms/learninTimeCard/LearningTimeCard";
-import { convertSecondsToDuration } from "@/utils/dates";
 
 import { type FunctionComponent, memo, PureComponent, type ReactNode } from "react";
 import {
@@ -39,12 +38,29 @@ let Chart: FunctionComponent<{ readonly data: UsageTimeData }> = ({ data }) =>
 {
   const processedData = data.map(dataPoint => ({
     date: dataPoint.date.toLocaleDateString("de", { weekday: "short" }).toUpperCase(),
-    totalUsage: dataPoint.totalUsage
+    totalUsage: Math.floor(dataPoint.totalUsage / 60) * 60, // round to the nearest minute
   }));
 
   if(processedData.length <= 2)
   {
     return <p>Invalid date range</p>;
+  }
+
+  const biggestUsage = Math.max(...processedData.map(dataPoint => dataPoint.totalUsage));
+
+  let ticksCount: number;
+
+  if(biggestUsage >= 180)
+  {
+    ticksCount = 4;
+  }
+  else if(biggestUsage >= 120)
+  {
+    ticksCount = 3;
+  }
+  else
+  {
+    ticksCount = 2;
   }
 
   type DataPoint = typeof processedData[number];
@@ -53,36 +69,30 @@ let Chart: FunctionComponent<{ readonly data: UsageTimeData }> = ({ data }) =>
     <ResponsiveContainer width="100%" height={180} style={{ fontSize: 14 }}>
       <BarChart
         data={processedData}
-        barSize={"7%"}
-        margin={{ left: -25, right: 4 }}>
-        <CartesianGrid strokeDasharray="4" vertical={false} opacity={1}/>
+        barSize={"8%"}
+        margin={{ left: -18, right: 0 }}>
+        <CartesianGrid
+          strokeDasharray="4"
+          vertical={false}
+          opacity={1}
+        />
         <XAxis
           dataKey={"date" satisfies keyof DataPoint}
           tick={<CustomizedAxisTick/>}
         />
         <YAxis
-          tickFormatter={valueInSeconds =>
+          scale={"auto"}
+          tickFormatter={(seconds) =>
           {
-            const { hours, minutes, seconds } = convertSecondsToDuration(valueInSeconds);
-
-            if(hours > 0)
-            {
-              return `${hours}h`;
-            }
-            else if(minutes > 0)
-            {
-              return `${minutes}m`;
-            }
-            else
-            {
-              return seconds === 0 ? "0" : `${seconds}s`;
-            }
+            const hours = Math.floor(seconds / 3600);
+            const minutes = Math.floor((seconds % 3600) / 60);
+            return `${hours}:${minutes.toString().padStart(2, "0")}h`;
           }}
           allowDecimals={false}
           axisLine={false}
-          tickCount={4}
           tickSize={0}
-          tickMargin={8}
+          tickCount={ticksCount}
+          tickMargin={4}
         />
         <Bar
           dataKey={"totalUsage" satisfies keyof DataPoint}
