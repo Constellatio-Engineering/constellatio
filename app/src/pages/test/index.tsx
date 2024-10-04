@@ -1,5 +1,6 @@
 import { Layout } from "@/components/layouts/Layout";
 import PageHead from "@/components/organisms/pageHead/PageHead";
+import UseQueryStateWrapper from "@/components/Wrappers/useQueryStateWrapper/UseQueryStateWrapper";
 import { type NextPageWithLayout } from "@/pages/_app";
 import { todo1, todo2, todo3, useTodosStore } from "@/stores/todos.store";
 
@@ -10,7 +11,7 @@ const Page: NextPageWithLayout = () =>
   console.log("todos", todos);
 
   return (
-    <>
+    <UseQueryStateWrapper>
       <PageHead pageTitle="Test"/>
       <div style={{ padding: 100 }}>
         <h1>Todos</h1>
@@ -26,7 +27,7 @@ const Page: NextPageWithLayout = () =>
           </div>
         ))}
       </div>
-    </>
+    </UseQueryStateWrapper>
   );
 };
 

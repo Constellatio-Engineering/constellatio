@@ -1,0 +1,53 @@
+{
+  "name": "zustand-querystring",
+  "version": "0.1.0",
+  "license": "MIT",
+  "main": "dist/index.js",
+  "module": "dist/index.mjs",
+  "types": "dist/index.d.ts",
+  "keywords": [
+    "zustand",
+    "querystring"
+  ],
+  "repository": {
+    "type": "github",
+    "url": "https://github.com/nitedani/zustand-querystring"
+  },
+  "scripts": {
+    "build": "tsup src --dts",
+    "dev": "tsup src --dts --watch"
+  },
+  "exports": {
+    ".": {
+      "types": "./dist/index.d.ts",
+      "import": "./dist/index.mjs",
+      "require": "./dist/index.js"
+    },
+    "./package.json": "./package.json"
+  },
+  "tsup": {
+    "clean": true,
+    "target": "es2019",
+    "format": [
+      "cjs",
+      "esm"
+    ]
+  },
+  "files": [
+    "/dist"
+  ],
+  "dependencies": {
+    "lodash-es": "^4.17.21"
+  },
+  "prettier": {
+    "singleQuote": true,
+    "arrowParens": "avoid"
+  },
+  "devDependencies": {
+    "@types/lodash-es": "^4.17.12",
+    "rimraf": "^3.0.2",
+    "tsup": "^6.7.0",
+    "typescript": "^4.9.5",
+    "zustand": "^4.5.4"
+  }
+}
