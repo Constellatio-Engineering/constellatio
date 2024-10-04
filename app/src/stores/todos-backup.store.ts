@@ -3,8 +3,6 @@ import { create } from "zustand";
 import { persist, createJSONStorage, type StateStorage } from "zustand/middleware";
 import { immer } from "zustand/middleware/immer";
 
-import { querystring } from "./zustand-querystring/src/index";
-
 enableMapSet();
 
 type Todo = {
@@ -43,59 +41,35 @@ interface TodosStore
 
 type PersistentStoreProps = Pick<TodosStore, "todos">;
 
-const getPersistentStorageItem = (key: string): string | null =>
-{
-  console.log("getting item", key);
-
-  if(typeof window === "undefined")
-  {
-    return null;
-  }
-
-  let storedValue: string | null;
-
-  if(getUrlSearch())
-  {
-    const searchParams = new URLSearchParams(getUrlSearch());
-    storedValue = searchParams.get(key);
-  }
-  else
-  {
-    storedValue = localStorage?.getItem(key);
-  }
-
-  if(storedValue == null)
-  {
-    return null;
-  }
-
-  return JSON.parse(storedValue) as string;
-};
-
-const getInitialStoredValue = (key: string): string | null =>
-{
-  if(typeof window === "undefined")
-  {
-    return null;
-  }
-
-  let storedValue: string | null;
-
-  if(getUrlSearch())
-  {
-    const searchParams = new URLSearchParams(getUrlSearch());
-    storedValue = searchParams.get(key);
-  }
-  else
-  {
-    storedValue = localStorage?.getItem(key);
-  }
-
-  return storedValue;
-};
-
 const persistentStorage: StateStorage = {
-  getItem: getPersistentStorageItem,
+  getItem: (key) =>
+  {
+    console.log("getting item", key);
+
+    if(typeof window === "undefined")
+    {
+      return null;
+    }
+
+    let storedValue: string | null;
+
+    if(getUrlSearch())
+    {
+      const searchParams = new URLSearchParams(getUrlSearch());
+      storedValue = searchParams.get(key);
+    }
+    else
+    {
+      storedValue = localStorage?.getItem(key);
+    }
+
+    if(storedValue == null)
+    {
+      return null;
+    }
+
+    return JSON.parse(storedValue) as string;
+  },
   removeItem: (key) =>
   {
     const searchParams = new URLSearchParams(getUrlSearch());
@@ -124,36 +98,6 @@ export const useTodosStore = create(
   persist(
     immer<TodosStore>((set) =>
     {
-      // let initialTodos: PersistentStoreProps["todos"] = [];
-      //
-      // const persistedValue = getInitialStoredValue(storeName);
-      //
-      // if(persistedValue != null)
-      // {
-      //   try
-      //   {
-      //     const parsedPersistedValue = JSON.parse(JSON.parse(persistedValue));
-      //
-      //     console.log("parsed persisted value", typeof parsedPersistedValue, parsedPersistedValue, parsedPersistedValue.state);
-      //
-      //     initialTodos = parsedPersistedValue.state.todos as Todo[];
-      //
-      //     /* if(parsedPersistedValue != null && typeof parsedPersistedValue === "object" && "state" in parsedPersistedValue)
-      //     {
-      //       if(parsedPersistedValue.state != null && typeof parsedPersistedValue.state === "object" && "todos" in parsedPersistedValue.state)
-      //       {
-      //         initialTodos = parsedPersistedValue.state.todos as Todo[];
-      //       }
-      //     }*/
-      //   }
-      //   catch (e: unknown)
-      //   {
-      //     console.log(e);
-      //   }
-      // }
-      //
-      // console.log("initial todos", initialTodos);
-
       return ({
         todos: [],
         toggleTodo: (todo) => set((state) =>
