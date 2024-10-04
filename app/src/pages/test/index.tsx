@@ -2,7 +2,7 @@ import { Layout } from "@/components/layouts/Layout";
 import PageHead from "@/components/organisms/pageHead/PageHead";
 import UseQueryStateWrapper from "@/components/Wrappers/useQueryStateWrapper/UseQueryStateWrapper";
 import { type NextPageWithLayout } from "@/pages/_app";
-import { todo1, todo2, todo3, useTodosStore } from "@/stores/todos-backup.store";
+import { todo1, todo2, todo3, useTodosStore } from "@/stores/todos.store";
 import { mapToObject } from "@/utils/object";
 import { objectKeys } from "@/utils/utils";
 
