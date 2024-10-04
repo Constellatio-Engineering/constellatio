@@ -89,5 +89,5 @@ export const headerText = css`
 `;
 
 export const fireEmoji = css`
-  font-size: 26px;
+  font-size: 24px;
 `;
