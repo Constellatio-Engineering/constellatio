@@ -2,20 +2,28 @@
 import type { CaseOverviewPageProps } from "@/pages/cases";
 import type { ArticleOverviewPageProps } from "@/pages/dictionary";
 import { areArraysEqualByKey } from "@/utils/array";
-import { getIsValidKey } from "@/utils/object";
-import { appPaths } from "@/utils/paths";
+import { getIsValidKey, mapToObject, objectToMap } from "@/utils/object";
+import { type AppPath, appPaths } from "@/utils/paths";
+import { getUrlSearchParams } from "@/utils/utils";
 
 import { castDraft, enableMapSet } from "immer";
+import { z } from "zod";
 import { createStore } from "zustand";
+import { persist, type StorageValue } from "zustand/middleware";
 import { immer } from "zustand/middleware/immer";
-import { querystring, type QueryStringOptions } from "zustand-querystring";
+
+enableMapSet();
 
 export type FilterOption = {
   readonly label: string;
   readonly value: string | number;
 };
 
-enableMapSet();
+type Filter = {
+  clearFilters: () => void;
+  filterOptions: FilterOption[];
+  toggleFilter: (filter: FilterOption) => void;
+};
 
 // we cannot reuse the CaseProgressState type here because it does differentiate "in-progress" in two sub-states
 export const statusesFilterOptions = [
@@ -60,11 +68,7 @@ interface CommonFiltersSlice<FilterKey extends string>
     [K in FilterKey]-?: FilterOption[];
   }) => void;
   closeDrawer: () => void;
-  filters: Map<FilterKey, {
-    clearFilters: () => void;
-    filterOptions: FilterOption[];
-    toggleFilter: (filter: FilterOption) => void;
-  }>;
+  filters: Map<FilterKey, Filter>;
   getTotalFiltersCount: () => number;
   isDrawerOpened: boolean;
   openDrawer: () => void;
@@ -72,16 +76,37 @@ interface CommonFiltersSlice<FilterKey extends string>
   toggleFilter: (key: FilterKey, filter: FilterOption) => void;
 }
 
+const todoSchema = z.object({
+  id: z.string(),
+  title: z.string(),
+});
+
+const filtersStoreStorageSchema = z.object({
+  state: z.object({
+    filters: z.record(
+      z.string(),
+      z.object({
+        filterOptions: z.array(z.object({
+          label: z.string(),
+          value: z.union([z.string(), z.number()]),
+        })),
+      })
+    )
+  }),
+  // version: z.number().optional(),
+});
+
 function createOverviewFiltersStore<FilterKey extends FilterableAttributes>(
   initialFilters: { [K in FilterKey]-?: FilterOption[] },
-  querystringOptions: QueryStringOptions<CommonFiltersSlice<FilterKey>>
+  storeName: string,
+  activeOnPage: AppPath
 )
 {
   type Store = CommonFiltersSlice<FilterKey>;
   const filterKeys = Object.keys(initialFilters) as Array<keyof typeof initialFilters>;
 
   return createStore<Store>()(
-    querystring(
+    persist(
       immer(
         (set, get) => ({
           clearAllFilters: () =>
@@ -172,38 +197,118 @@ function createOverviewFiltersStore<FilterKey extends FilterableAttributes>(
           },
         })
       ),
-      querystringOptions
+      {
+        name: storeName,
+        storage: {
+          getItem: (key) =>
+          {
+            let storedValue: string | null;
+
+            console.log("getUrlSearchParams:", getUrlSearchParams());
+
+            if(getUrlSearchParams())
+            {
+              const searchParams = new URLSearchParams(getUrlSearchParams());
+              storedValue = searchParams.get(key);
+            }
+            else
+            {
+              storedValue = localStorage.getItem(key);
+            }
+
+            if(storedValue == null)
+            {
+              return null;
+            }
+
+            let restoredState: z.infer<typeof filtersStoreStorageSchema>;
+
+            try
+            {
+              const itemParsed = JSON.parse(storedValue);
+              restoredState = filtersStoreStorageSchema.parse(itemParsed);
+            }
+            catch (e: unknown)
+            {
+              console.error("filters store could not be restored", e);
+              return null;
+            }
+
+            const filterKeys = Object.keys(restoredState.state.filters) as FilterKey[];
+
+            return {
+              ...restoredState,
+              state: {
+                filters: new Map(
+                  filterKeys.map(key => [
+                    key,
+                    {
+                      filterOptions: restoredState.state.filters[key]!.filterOptions,
+                    }
+                  ])
+                ),
+              }
+            } satisfies StorageValue<Pick<Pick<Store, "filters">, "filters">>;
+          },
+          removeItem: (key) =>
+          {
+            const searchParams = new URLSearchParams(getUrlSearchParams());
+            searchParams.delete(key);
+            window.location.search = searchParams.toString();
+          },
+          setItem: (key, item) =>
+          {
+            const filtersObject = mapToObject(item.state.filters);
+
+            const itemParsed: z.infer<typeof filtersStoreStorageSchema> = {
+              ...item,
+              state: {
+                filters: Array.from(item.state.filters.keys()).reduce((acc, key) =>
+                {
+                  acc[key] = {
+                    filterOptions: item.state.filters.get(key)!.filterOptions
+                  };
+                  return acc;
+                }, {} as typeof itemParsed.state.filters)
+              }
+            };
+
+            const itemStringified = JSON.stringify(itemParsed);
+            const searchParams = new URLSearchParams(getUrlSearchParams());
+
+            searchParams.set(key, itemStringified);
+            window.history.replaceState(null, "", `?${searchParams.toString()}`);
+            localStorage.setItem(key, itemStringified);
+          },
+        }
+      }
     )
   );
 }
 
 // disable the sorting rule because we want to keep the order of the filters as this is the order in which they are displayed in the drawer
 /* eslint-disable sort-keys-fix/sort-keys-fix */
-export const useCasesOverviewFiltersStore = createOverviewFiltersStore({
-  progressStateFilterable: [],
-  legalArea: [],
-  topic: [],
-  tags: [],
-}, {
-  key: "cases-filters",
-  select: (pathname) => ({
-    // only sync filters to query params if we are on the cases overview page
-    filters: pathname === appPaths.cases,
-  })
-});
+export const useCasesOverviewFiltersStore = createOverviewFiltersStore(
+  {
+    progressStateFilterable: [],
+    legalArea: [],
+    topic: [],
+    tags: [],
+  },
+  "cases-filters",
+  appPaths.cases
+);
 
-export const useArticlesOverviewFiltersStore = createOverviewFiltersStore({
-  legalArea: [],
-  tags: [],
-  topic: [],
-  wasSeenFilterable: [],
-}, {
-  key: "articles-filters",
-  select: (pathname) => ({
-    // only sync filters to query params if we are on the articles overview page
-    filters: pathname === appPaths.dictionary,
-  })
-});
+export const useArticlesOverviewFiltersStore = createOverviewFiltersStore(
+  {
+    legalArea: [],
+    tags: [],
+    topic: [],
+    wasSeenFilterable: [],
+  }, 
+  "articles-filters",
+  appPaths.dictionary
+);
 /* eslint-enable sort-keys-fix/sort-keys-fix */
 
 export type CasesOverviewFiltersStore = CommonFiltersSlice<FilterableCaseAttributes>;

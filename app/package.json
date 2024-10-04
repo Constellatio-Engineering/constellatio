@@ -141,8 +141,7 @@
     "uuid": "9.0.1",
     "zod": "3.23.8",
     "zod-i18n-map": "2.27.0",
-    "zustand": "4.5.2",
-    "zustand-querystring": "0.1.0"
+    "zustand": "4.5.2"
   },
   "devDependencies": {
     "@dualmeta/eslint-config-base": "1.0.18",
