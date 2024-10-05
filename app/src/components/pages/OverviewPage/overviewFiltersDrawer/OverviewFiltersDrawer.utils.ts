@@ -39,7 +39,6 @@ export function getFilterOptions<
   items: Items
 )
 {
-  // const filterKeys = Object.keys(filters) as Array<keyof typeof filters>;
   const filterKeys = objectKeys(filters);
 
   const filteredSets = filterKeys
