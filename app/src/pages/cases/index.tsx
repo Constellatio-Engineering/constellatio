@@ -85,7 +85,6 @@ const Page: NextPageWithLayout<GetCasesOverviewPagePropsResult> = ({
   const casesWithProgress = useMemo(() => getCasesWithProgress(items, casesProgress), [items, casesProgress]);
   const filters = useStore(useCasesOverviewFiltersStore, s => s.filters);
   const openDrawer = useStore(useCasesOverviewFiltersStore, s => s.openDrawer);
-  const toggleFilter = useStore(useCasesOverviewFiltersStore, s => s.toggleFilter);
   const clearAllFilters = useStore(useCasesOverviewFiltersStore, s => s.clearAllFilters);
   const totalFiltersCount = useStore(useCasesOverviewFiltersStore, s => s.getTotalFiltersCount());
 
@@ -100,7 +99,6 @@ const Page: NextPageWithLayout<GetCasesOverviewPagePropsResult> = ({
           clearAllFilters,
           filters,
           openDrawer,
-          toggleFilter,
           totalFiltersCount
         }}
       />

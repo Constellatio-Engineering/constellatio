@@ -15,10 +15,12 @@ import UseQueryStateWrapper from "@/components/Wrappers/useQueryStateWrapper/Use
 import { type CaseOverviewPageProps } from "@/pages/cases";
 import { type ArticleOverviewPageProps } from "@/pages/dictionary";
 import { type ArticlesOverviewFiltersStore, type CasesOverviewFiltersStore, type CommonOverviewFiltersStore, } from "@/stores/overviewFilters.store";
+import { mapToObject } from "@/utils/object";
+import { objectKeys } from "@/utils/utils";
 
 import { Title } from "@mantine/core";
 import { parseAsString, useQueryState } from "next-usequerystate";
-import React, { type FunctionComponent, useDeferredValue, useMemo } from "react";
+import React, { Fragment, type FunctionComponent, useDeferredValue, useMemo } from "react";
 
 import * as styles from "./OverviewPage.styles";
 import ErrorPage from "../errorPage/ErrorPage";
@@ -28,11 +30,11 @@ type CommonFiltersStoreProps = Pick<CommonOverviewFiltersStore, "clearAllFilters
 };
 
 export type ArticlesPageProps = ArticleOverviewPageProps & {
-  readonly filter: CommonFiltersStoreProps & Pick<ArticlesOverviewFiltersStore, "filters" | "toggleFilter">;
+  readonly filter: CommonFiltersStoreProps & Pick<ArticlesOverviewFiltersStore, "filters">;
 };
 
 export type CasesPageProps = CaseOverviewPageProps & {
-  readonly filter: CommonFiltersStoreProps & Pick<CasesOverviewFiltersStore, "filters" | "toggleFilter">;
+  readonly filter: CommonFiltersStoreProps & Pick<CasesOverviewFiltersStore, "filters">;
 };
 
 export type OverviewPageProps = (ArticlesPageProps | CasesPageProps) & {
@@ -59,7 +61,6 @@ const OverviewPageContent: FunctionComponent<OverviewPageContentProps> = ({
     clearAllFilters,
     filters,
     openDrawer,
-    toggleFilter,
     totalFiltersCount
   } = filter;
 
@@ -79,6 +80,9 @@ const OverviewPageContent: FunctionComponent<OverviewPageContentProps> = ({
     () => getLegalAreasWithItems(filteredItems),
     [filteredItems]
   );
+
+  const filtersObject = useMemo(() => mapToObject(filter.filters), [filter.filters]);
+  const filtersKeys = useMemo(() => objectKeys(filtersObject), [filtersObject]);
 
   return (
     <>
@@ -120,49 +124,22 @@ const OverviewPageContent: FunctionComponent<OverviewPageContentProps> = ({
                 </Button>
               </div>
               <div css={styles.activeFiltersChips}>
-                {variant === "case" && (
-                  <>
-                    {filter.filters.progressStateFilterable.map((progressState) => (
-                      <FilterTag
-                        key={progressState.value}
-                        onClick={() => filter.toggleFilter("progressStateFilterable", progressState)}
-                        title={progressState.label}
-                      />
-                    ))}
-                  </>
-                )}
-                {variant === "dictionary" && (
-                  <>
-                    {filter.filters.wasSeenFilterable.map(wasSeen => (
-                      <FilterTag
-                        key={wasSeen.value}
-                        onClick={() => filter.toggleFilter("wasSeenFilterable", wasSeen)}
-                        title={wasSeen.label}
-                      />
-                    ))}
-                  </>
-                )}
-                {filters.legalArea.map((legalArea) => (
-                  <FilterTag
-                    key={legalArea.value}
-                    onClick={() => toggleFilter("legalArea", legalArea)}
-                    title={legalArea.label}
-                  />
-                ))}
-                {filters.topic.map((topic) => (
-                  <FilterTag
-                    key={topic.value}
-                    onClick={() => toggleFilter("topic", topic)}
-                    title={topic.label}
-                  />
-                ))}
-                {filters.tags.map((tag) => (
-                  <FilterTag
-                    key={tag.value}
-                    onClick={() => toggleFilter("tags", tag)}
-                    title={tag.label}
-                  />
-                ))}
+                {filtersKeys.map((filterKey) =>
+                {
+                  const { filterOptions, toggleFilter } = filtersObject[filterKey];
+                   
+                  return (
+                    <Fragment key={filterKey}>
+                      {filterOptions.map((filterOption) => (
+                        <FilterTag
+                          key={filterOption.value}
+                          onClick={() => toggleFilter(filterOption)}
+                          title={filterOption.label}
+                        />
+                      ))}
+                    </Fragment>
+                  );
+                })}
               </div>
               <div css={styles.clearFiltersButtonWrapper}>
                 <LinkButton

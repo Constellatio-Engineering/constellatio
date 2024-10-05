@@ -1,14 +1,27 @@
 /* eslint-disable max-lines */
 import type { CaseOverviewPageProps } from "@/pages/cases";
 import type { ArticleOverviewPageProps } from "@/pages/dictionary";
-import { appPaths } from "@/utils/paths";
+import { areArraysEqualByKey } from "@/utils/array";
+import { getIsValidKey } from "@/utils/object";
+import { getUrlSearchParams } from "@/utils/utils";
 
+import { castDraft, enableMapSet } from "immer";
+import { z } from "zod";
 import { createStore } from "zustand";
-import { querystring, type QueryStringOptions } from "zustand-querystring";
+import { persist } from "zustand/middleware";
+import { immer } from "zustand/middleware/immer";
+
+enableMapSet();
 
 export type FilterOption = {
   readonly label: string;
   readonly value: string | number;
+};
+
+type Filter = {
+  clearFilters: () => void;
+  filterOptions: FilterOption[];
+  toggleFilter: (filter: FilterOption) => void;
 };
 
 // we cannot reuse the CaseProgressState type here because it does differentiate "in-progress" in two sub-states
@@ -44,6 +57,7 @@ export type WasSeenFilterOption = typeof wasSeenFilterOptions[number];
 
 type FilterableArticleAttributes = keyof Pick<ArticleOverviewPageProps["items"][number], "legalArea" | "tags" | "topic" | "wasSeenFilterable">;
 type FilterableCaseAttributes = keyof Pick<CaseOverviewPageProps["items"][number], "legalArea" | "tags" | "topic" | "progressStateFilterable">;
+export type FilterableAttributes = FilterableArticleAttributes | FilterableCaseAttributes;
 
 interface CommonFiltersSlice<FilterKey extends string>
 {
@@ -53,9 +67,7 @@ interface CommonFiltersSlice<FilterKey extends string>
     [K in FilterKey]-?: FilterOption[];
   }) => void;
   closeDrawer: () => void;
-  filters: {
-    [K in FilterKey]-?: FilterOption[];
-  };
+  filters: Map<FilterKey, Filter>;
   getTotalFiltersCount: () => number;
   isDrawerOpened: boolean;
   openDrawer: () => void;
@@ -63,152 +75,231 @@ interface CommonFiltersSlice<FilterKey extends string>
   toggleFilter: (key: FilterKey, filter: FilterOption) => void;
 }
 
-// Caution: Because of the complex type of 'filters', we cannot use immer for this store because the type inference breaks
+const filtersStoreStorageSchema = z.object({
+  state: z.array(
+    z.object({
+      filterOptions: z.array(z.object({
+        label: z.string(),
+        value: z.union([z.string(), z.number()]),
+      })),
+      key: z.string(),
+    })
+  ),
+  version: z.number().optional(),
+});
 
-function createOverviewFiltersStore<FilterKey extends FilterableArticleAttributes | FilterableCaseAttributes>(
-  filters: {
-    [K in FilterKey]-?: FilterOption[];
-  },
-  querystringOptions: QueryStringOptions<CommonFiltersSlice<FilterKey>>
+type FiltersStorageSchema = z.infer<typeof filtersStoreStorageSchema>;
+
+function createOverviewFiltersStore<FilterKey extends FilterableAttributes>(
+  initialFilters: { [K in FilterKey]-?: FilterOption[] },
+  storeName: string,
+  /* activeOnPage: AppPath*/
 )
 {
-  return createStore<CommonFiltersSlice<FilterKey>>()(
-    querystring(
-      (set, get) => ({
-        clearAllFilters: () =>
-        {
-          set((state) => ({
-            filters: Object.keys(state.filters).reduce((acc, key) => ({
-              ...acc,
-              [key]: []
-            }), {} as typeof state.filters)
-          }));
-        },
-        clearFilters: (key) =>
-        {
-          set((state) => ({
-            filters: {
-              ...state.filters,
-              [key]: []
-            }
-          }));
-        },
-        clearInvalidFilters: (currentlyValidFilterOptions) =>
-        {
-          set((state) =>
+  type Store = CommonFiltersSlice<FilterKey>;
+  const filterKeys = Object.keys(initialFilters) as Array<keyof typeof initialFilters>;
+
+  return createStore<Store>()(
+    persist(
+      immer(
+        (set, get) => ({
+          clearAllFilters: () =>
           {
-            const filterKeys = Object.keys(state.filters) as Array<keyof typeof state.filters>;
-
-            let hasChanges = false;
-
-            const updatedFilters = filterKeys.reduce((acc, filterKey) =>
+            set((state) =>
             {
-              const validFilters = state.filters[filterKey].filter(filterOption =>
-                currentlyValidFilterOptions[filterKey]?.some(validFilterOption =>
-                  validFilterOption.value === filterOption.value
-                )
-              );
-
-              if(validFilters.length !== state.filters[filterKey].length)
+              for(const key of state.filters.keys())
               {
-                hasChanges = true;
+                state.filters.get(key)!.filterOptions = [];
+              }
+            });
+          },
+          clearFilters: (key) =>
+          {
+            set((state) =>
+            {
+              state.filters.get(castDraft(key))!.filterOptions = [];
+            });
+          },
+          clearInvalidFilters: (currentlyValidFilterOptions) =>
+          {
+            set((state) =>
+            {
+              for(const key of state.filters.keys())
+              {
+                const activeFilterOptions = state.filters.get(key)!.filterOptions;
+                const validFilterOptions = activeFilterOptions.filter(filterOption =>
+                {
+                  if(!getIsValidKey(currentlyValidFilterOptions, key))
+                  {
+                    return false;
+                  }
+
+                  return currentlyValidFilterOptions[key]?.some(validFilterOption => validFilterOption.value === filterOption.value);
+                });
+
+                if(areArraysEqualByKey(activeFilterOptions, validFilterOptions, "value"))
+                {
+                  continue;
+                }
+
+                state.filters.get(key)!.filterOptions = validFilterOptions;
+              }
+            });
+          },
+          closeDrawer: () => set({ isDrawerOpened: false }),
+          filters: new Map(
+            filterKeys.map(key => [
+              key,
+              {
+                clearFilters: () => get().clearFilters(key),
+                filterOptions: initialFilters[key],
+                toggleFilter: (filter) => get().toggleFilter(key, filter),
+              }
+            ])
+          ),
+          getTotalFiltersCount: () => Array
+            .from(get().filters.values())
+            .reduce((count, f) => count + f.filterOptions.length, 0),
+          isDrawerOpened: false,
+          openDrawer: () => set({ isDrawerOpened: true }),
+          setIsDrawerOpened: (isDrawerOpened) => set({ isDrawerOpened }),
+          toggleFilter: (key, filter) =>
+          {
+            set((state) =>
+            {
+              const { filters } = state;
+
+              const currentFilter = filters.get(castDraft(key));
+
+              if(currentFilter == null)
+              {
+                return;
               }
 
-              return {
-                ...acc,
-                [filterKey]: validFilters
-              };
-            }, {} as typeof state.filters);
+              const filterIndex = currentFilter.filterOptions.findIndex(f => f.value === filter.value);
+              const isFilterAlreadyAdded = filterIndex !== -1;
 
-            // Only update state if there are actual changes
-            return hasChanges ? { filters: updatedFilters } : state;
+              if(isFilterAlreadyAdded)
+              {
+                currentFilter.filterOptions.splice(filterIndex, 1);
+              }
+              else
+              {
+                currentFilter.filterOptions.push(filter);
+              }
+            });
+          },
+        })
+      ),
+      {
+        merge: (persistedStateUnknown, currentState) =>
+        {
+          // This is a bit ugly but for some reason the persistedState is of type unknown, although the return type of getItem is correct.
+          // Validating/parsing it with zod again here does not make sense als we already have to parse it in the getItem method
+          const persistedFilters = persistedStateUnknown as FiltersStorageSchema["state"];
+
+          persistedFilters.forEach(({ filterOptions, key }) =>
+          {
+            const currentFilter = currentState.filters.get(key as FilterKey);
+
+            if(!currentFilter)
+            {
+              return;
+            }
+
+            currentFilter.filterOptions = filterOptions;
           });
+
+          return currentState;
         },
-        closeDrawer: () => set({ isDrawerOpened: false }),
-        filters,
-        getTotalFiltersCount: () =>
+        name: storeName,
+        partialize: (state) =>
         {
-          const { filters } = get();
-          let count = 0;
+          const statePartialized: FiltersStorageSchema["state"] = Array.from(state.filters.keys()).map(key => ({
+            filterOptions: state.filters.get(key)!.filterOptions,
+            key
+          }));
 
-          for(const key in filters)
-          {
-            if(Object.hasOwn(filters, key))
-            {
-              count += filters[key].length;
-            }
-          }
-
-          return count;
+          return statePartialized;
         },
-        isDrawerOpened: false,
-        openDrawer: () => set({ isDrawerOpened: true }),
-        setIsDrawerOpened: (isDrawerOpened) => set({ isDrawerOpened }),
-        toggleFilter: (key, filter) =>
-        {
-          set((state) =>
+        storage: {
+          getItem: (key) =>
           {
-            const { filters } = state;
+            let storedValue: string | null;
 
-            const currentFilter = filters[key];
-
-            if(currentFilter == null)
+            if(getUrlSearchParams())
             {
-              return state;
-            }
-
-            const filterIndex = currentFilter.findIndex(f => f.value === filter.value);
-            const isFilterAlreadyAdded = filterIndex !== -1;
-            const newFilter = [...currentFilter];
-
-            if(isFilterAlreadyAdded)
-            {
-              newFilter.splice(filterIndex, 1);
+              const searchParams = new URLSearchParams(getUrlSearchParams());
+              storedValue = searchParams.get(key);
             }
             else
             {
-              newFilter.push(filter);
+              storedValue = localStorage.getItem(key);
             }
 
-            return ({
-              filters: {
-                ...state.filters,
-                [key]: newFilter
-              }
-            });
-          });
-        },
-      }),
-      querystringOptions
+            if(storedValue == null)
+            {
+              return null;
+            }
+
+            let restoredState: z.infer<typeof filtersStoreStorageSchema>;
+
+            try
+            {
+              const itemParsed = JSON.parse(storedValue);
+              restoredState = filtersStoreStorageSchema.parse(itemParsed);
+            }
+            catch (e: unknown)
+            {
+              console.error("filters store could not be restored", e);
+              return null;
+            }
+
+            return restoredState;
+          },
+          removeItem: (key) =>
+          {
+            const searchParams = new URLSearchParams(getUrlSearchParams());
+            searchParams.delete(key);
+            window.location.search = searchParams.toString();
+          },
+          setItem: (key, item) =>
+          {
+            const itemStringified = JSON.stringify(item);
+            const searchParams = new URLSearchParams(getUrlSearchParams());
+
+            searchParams.set(key, itemStringified);
+            window.history.replaceState(null, "", `?${searchParams.toString()}`);
+            localStorage.setItem(key, itemStringified);
+          },
+        }
+      }
     )
   );
 }
 
-export const useCasesOverviewFiltersStore = createOverviewFiltersStore({
-  legalArea: [],
-  progressStateFilterable: [],
-  tags: [],
-  topic: [],
-}, {
-  key: "cases-filters",
-  select: (pathname) => ({
-    // only sync filters to query params if we are on the cases overview page
-    filters: pathname === appPaths.cases,
-  })
-});
+// disable the sorting rule because we want to keep the order of the filters as this is the order in which they are displayed in the drawer
+/* eslint-disable sort-keys-fix/sort-keys-fix */
+export const useCasesOverviewFiltersStore = createOverviewFiltersStore(
+  {
+    progressStateFilterable: [],
+    legalArea: [],
+    topic: [],
+    tags: [],
+  },
+  "cases-filters",
+);
 
-export const useArticlesOverviewFiltersStore = createOverviewFiltersStore({
-  legalArea: [],
-  tags: [],
-  topic: [],
-  wasSeenFilterable: [],
-}, {
-  key: "articles-filters",
-  select: (pathname) => ({
-    // only sync filters to query params if we are on the articles overview page
-    filters: pathname === appPaths.dictionary,
-  })
-});
+export const useArticlesOverviewFiltersStore = createOverviewFiltersStore(
+  {
+    legalArea: [],
+    tags: [],
+    topic: [],
+    wasSeenFilterable: [],
+  }, 
+  "articles-filters",
+);
+/* eslint-enable sort-keys-fix/sort-keys-fix */
 
 export type CasesOverviewFiltersStore = CommonFiltersSlice<FilterableCaseAttributes>;
 export type ArticlesOverviewFiltersStore = CommonFiltersSlice<FilterableArticleAttributes>;

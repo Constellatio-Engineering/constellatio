@@ -1,9 +1,10 @@
 /* eslint-disable max-lines */
 
 import type { CaseOverviewPageItems } from "@/pages/cases";
-import { type FilterOption } from "@/stores/overviewFilters.store";
+import { type FilterableAttributes, type FilterOption } from "@/stores/overviewFilters.store";
+import { getIsValidKey } from "@/utils/object";
 import { type NullableProperties } from "@/utils/types";
-import { getIsObjectWithId, getIsObjectWithValue, getIsPrimitive } from "@/utils/utils";
+import { getIsObjectWithId, getIsObjectWithValue, getIsPrimitive, objectKeys } from "@/utils/utils";
 
 export const sortFilterOptions = (a: FilterOption, b: FilterOption): number =>
 {
@@ -30,13 +31,16 @@ export function getFilterOptions<
   Value extends NonNullable<Item[InputFilterKey]>
 >(
   filters: {
-    [K in keyof Item]?: FilterOption[];
+    [K in keyof Item]?: {
+      filterOptions: FilterOption[];
+    }
   },
   inputFilterKey: InputFilterKey,
   items: Items
 )
 {
-  const filterKeys = Object.keys(filters) as Array<keyof typeof filters>;
+  // const filterKeys = Object.keys(filters) as Array<keyof typeof filters>;
+  const filterKeys = objectKeys(filters);
 
   const filteredSets = filterKeys
     .map((filterKey) =>
@@ -46,7 +50,13 @@ export function getFilterOptions<
         return null;
       }
 
-      const currentFilterOptions = filters[filterKey];
+      if(!getIsValidKey(filters, filterKey))
+      {
+        console.error(`Filter ${filterKey} not found in filters object`, filters);
+        return null;
+      }
+
+      const currentFilterOptions = filters[filterKey]!.filterOptions;
 
       const filteredOptions = items
         .map(item =>
@@ -206,6 +216,58 @@ export function itemValuesToFilterOptions(
     .sort(sortFilterOptions);
 
   return filterOptions;
+}
+
+type FilterLabels = { searchesFor: string | null; title: string };
+
+export function getFilterLabels(filterKey: FilterableAttributes): FilterLabels
+{ 
+  let label: FilterLabels;
+
+  switch (filterKey)
+  {
+    case "legalArea":
+    {
+      label = {
+        searchesFor: "Rechtsgebieten",
+        title: "Rechtsgebiet"
+      };
+      break;
+    }
+    case "topic":
+    {
+      label = {
+        searchesFor: "Themen",
+        title: "Thema"
+      };
+      break;
+    }
+    case "tags":
+    {
+      label = {
+        searchesFor: "Tags",
+        title: "Tags"
+      };
+      break;
+    }
+    case "progressStateFilterable":
+    {
+      label = {
+        searchesFor: null,
+        title: "Bearbeitungsstatus"
+      };
+      break;
+    }
+    case "wasSeenFilterable":
+    {
+      label = {
+        searchesFor: null,
+        title: "Bearbeitungsstatus"
+      };
+      break;
+    }
+  }
+  return label;
 }
 
 // export function getUniqueFilterOptions<
