@@ -1,5 +1,5 @@
 /* eslint-disable import/no-unused-modules */
-import { type FilterOption } from "@/stores/overviewFilters.store";
+
 // function that shuffles an array with the Fisher-Yates algorithm
 import { getDistinctItemsByKey } from "@/utils/utils";
 

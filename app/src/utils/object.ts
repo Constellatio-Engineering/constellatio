@@ -1,3 +1,5 @@
+/* eslint-disable import/no-unused-modules */
+
 export function mapToObject<Key extends string, Value>(map: Map<Key, Value>): {
   [K in Key]: Value;
 }
