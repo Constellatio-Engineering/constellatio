@@ -66,8 +66,17 @@ const HeaderDefault: FunctionComponent = () =>
         <ContentWrapper stylesOverrides={styles.wrapper({ variant: "default" })}>
           <div css={styles.links}>
             <Link href={appPaths.dashboard}>
-              <Image css={styles.tabletHeaderLogo} src={ConstellatioLogoIcon} alt="Constellatio"/>
-              <Image css={styles.headerLogo} src={ConstellatioFullLogoAlphaVersion} alt="Constellatio"/>
+              <Image
+                css={styles.tabletHeaderLogo}
+                src={ConstellatioLogoIcon}
+                alt="Constellatio"
+              />
+              <Image
+                css={styles.headerLogo}
+                src={ConstellatioFullLogoAlphaVersion}
+                alt="Constellatio"
+                priority={true}
+              />
             </Link>
             {links.map((link, linkIndex) =>
             {

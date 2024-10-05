@@ -5,7 +5,7 @@ import { type TRPCClientErrorBase } from "@trpc/client";
 import { type DefaultErrorShape } from "@trpc/server/unstable-core-do-not-import";
 import { type ComponentType, type ReactNode } from "react";
 
-export type Values<T> = T[keyof T];
+export type Values<T extends object> = T[keyof T];
 
 export type Nullable<T> = T | null | undefined;
 
