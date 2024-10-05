@@ -51,7 +51,7 @@ export const FilterCategory: FunctionComponent<FilterCategoryProps> = ({
 
   return (
     <div css={styles.wrapper}>
-      <UnstyledButton css={styles.categoryTitleWrapper} onClick={() => setIsOpen((isOpen) => !isOpen)}>
+      <div css={styles.categoryTitleWrapper} onClick={() => setIsOpen((isOpen) => !isOpen)}>
         <BodyText component="p" styleType="body-01-bold" sx={{ fontSize: 18, fontWeight: 500 }}>
           {title}
           {" "}
@@ -74,11 +74,11 @@ export const FilterCategory: FunctionComponent<FilterCategoryProps> = ({
               <div css={styles.divider}/>
             </>
           )}
-          <div css={styles.expandIconWrapper}>
+          <UnstyledButton css={styles.expandIconWrapper}>
             <ArrowDown size={22}/>
-          </div>
+          </UnstyledButton>
         </div>
-      </UnstyledButton>
+      </div>
       <div css={[styles.itemsWrapper, !isOpen && styles.itemWrapperCollapsed]}>
         {(searchesFor != null) && (
           <div css={styles.searchInputWrapper}>

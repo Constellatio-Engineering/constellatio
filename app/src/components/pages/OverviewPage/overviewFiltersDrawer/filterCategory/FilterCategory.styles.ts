@@ -14,6 +14,7 @@ export const categoryTitleWrapper = css`
   width: 100%;
   height: 60px;
   box-sizing: border-box;
+  cursor: pointer;
   border-bottom: 1px solid ${colooors["neutrals-01"][3]};
 `;
 

@@ -2,14 +2,13 @@
 import type { CaseOverviewPageProps } from "@/pages/cases";
 import type { ArticleOverviewPageProps } from "@/pages/dictionary";
 import { areArraysEqualByKey } from "@/utils/array";
-import { getIsValidKey, mapToObject, objectToMap } from "@/utils/object";
-import { type AppPath, appPaths } from "@/utils/paths";
+import { getIsValidKey } from "@/utils/object";
 import { getUrlSearchParams } from "@/utils/utils";
 
 import { castDraft, enableMapSet } from "immer";
 import { z } from "zod";
 import { createStore } from "zustand";
-import { persist, type StorageValue } from "zustand/middleware";
+import { persist } from "zustand/middleware";
 import { immer } from "zustand/middleware/immer";
 
 enableMapSet();
@@ -76,30 +75,25 @@ interface CommonFiltersSlice<FilterKey extends string>
   toggleFilter: (key: FilterKey, filter: FilterOption) => void;
 }
 
-const todoSchema = z.object({
-  id: z.string(),
-  title: z.string(),
+const filtersStoreStorageSchema = z.object({
+  state: z.array(
+    z.object({
+      filterOptions: z.array(z.object({
+        label: z.string(),
+        value: z.union([z.string(), z.number()]),
+      })),
+      key: z.string(),
+    })
+  ),
+  version: z.number().optional(),
 });
 
-const filtersStoreStorageSchema = z.object({
-  state: z.object({
-    filters: z.record(
-      z.string(),
-      z.object({
-        filterOptions: z.array(z.object({
-          label: z.string(),
-          value: z.union([z.string(), z.number()]),
-        })),
-      })
-    )
-  }),
-  // version: z.number().optional(),
-});
+type FiltersStorageSchema = z.infer<typeof filtersStoreStorageSchema>;
 
 function createOverviewFiltersStore<FilterKey extends FilterableAttributes>(
   initialFilters: { [K in FilterKey]-?: FilterOption[] },
   storeName: string,
-  activeOnPage: AppPath
+  /* activeOnPage: AppPath*/
 )
 {
   type Store = CommonFiltersSlice<FilterKey>;
@@ -198,13 +192,40 @@ function createOverviewFiltersStore<FilterKey extends FilterableAttributes>(
         })
       ),
       {
+        merge: (persistedStateUnknown, currentState) =>
+        {
+          // This is a bit ugly but for some reason the persistedState is of type unknown, although the return type of getItem is correct.
+          // Validating/parsing it with zod again here does not make sense als we already have to parse it in the getItem method
+          const persistedFilters = persistedStateUnknown as FiltersStorageSchema["state"];
+
+          persistedFilters.forEach(({ filterOptions, key }) =>
+          {
+            const currentFilter = currentState.filters.get(key as FilterKey);
+
+            if(!currentFilter)
+            {
+              return;
+            }
+
+            currentFilter.filterOptions = filterOptions;
+          });
+
+          return currentState;
+        },
         name: storeName,
+        partialize: (state) =>
+        {
+          const statePartialized: FiltersStorageSchema["state"] = Array.from(state.filters.keys()).map(key => ({
+            filterOptions: state.filters.get(key)!.filterOptions,
+            key
+          }));
+
+          return statePartialized;
+        },
         storage: {
           getItem: (key) =>
           {
             let storedValue: string | null;
-
-            console.log("getUrlSearchParams:", getUrlSearchParams());
 
             if(getUrlSearchParams())
             {
@@ -234,21 +255,7 @@ function createOverviewFiltersStore<FilterKey extends FilterableAttributes>(
               return null;
             }
 
-            const filterKeys = Object.keys(restoredState.state.filters) as FilterKey[];
-
-            return {
-              ...restoredState,
-              state: {
-                filters: new Map(
-                  filterKeys.map(key => [
-                    key,
-                    {
-                      filterOptions: restoredState.state.filters[key]!.filterOptions,
-                    }
-                  ])
-                ),
-              }
-            } satisfies StorageValue<Pick<Pick<Store, "filters">, "filters">>;
+            return restoredState;
           },
           removeItem: (key) =>
           {
@@ -258,22 +265,7 @@ function createOverviewFiltersStore<FilterKey extends FilterableAttributes>(
           },
           setItem: (key, item) =>
           {
-            const filtersObject = mapToObject(item.state.filters);
-
-            const itemParsed: z.infer<typeof filtersStoreStorageSchema> = {
-              ...item,
-              state: {
-                filters: Array.from(item.state.filters.keys()).reduce((acc, key) =>
-                {
-                  acc[key] = {
-                    filterOptions: item.state.filters.get(key)!.filterOptions
-                  };
-                  return acc;
-                }, {} as typeof itemParsed.state.filters)
-              }
-            };
-
-            const itemStringified = JSON.stringify(itemParsed);
+            const itemStringified = JSON.stringify(item);
             const searchParams = new URLSearchParams(getUrlSearchParams());
 
             searchParams.set(key, itemStringified);
@@ -296,7 +288,6 @@ export const useCasesOverviewFiltersStore = createOverviewFiltersStore(
     tags: [],
   },
   "cases-filters",
-  appPaths.cases
 );
 
 export const useArticlesOverviewFiltersStore = createOverviewFiltersStore(
@@ -307,7 +298,6 @@ export const useArticlesOverviewFiltersStore = createOverviewFiltersStore(
     wasSeenFilterable: [],
   }, 
   "articles-filters",
-  appPaths.dictionary
 );
 /* eslint-enable sort-keys-fix/sort-keys-fix */
 
