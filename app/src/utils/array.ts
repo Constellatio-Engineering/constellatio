@@ -1,4 +1,5 @@
 /* eslint-disable import/no-unused-modules */
+
 // function that shuffles an array with the Fisher-Yates algorithm
 import { getDistinctItemsByKey } from "@/utils/utils";
 
@@ -54,6 +55,38 @@ export const areArraysEqualSets = <T extends string | number | boolean | null | 
   return true;
 };
 
+/**
+ * Generically compares two arrays of objects based on a specified identifierKey.
+ *
+ * @param arr1 The first array to compare
+ * @param arr2 The second array to compare
+ * @param identifierKey The key to use for comparison
+ * @returns boolean indicating whether the arrays are equal based on the specified identifierKey
+ */
+export function areArraysEqualByKey<T>(arr1: T[], arr2: T[], identifierKey: keyof T): boolean
+{
+  if(arr1.length !== arr2.length) { return false; }
+
+  const countMap = new Map<T[keyof T], number>();
+
+  for(const item of arr1) 
+  {
+    const value = item[identifierKey];
+    countMap.set(value, (countMap.get(value) || 0) + 1);
+  }
+
+  for(const item of arr2) 
+  {
+    const value = item[identifierKey];
+    const count = countMap.get(value);
+    if(count === undefined) { return false; }
+    if(count === 1) { countMap.delete(value); }
+    else { countMap.set(value, count - 1); }
+  }
+
+  return countMap.size === 0;
+}
+
 export function getDoesAnyItemMatch<T extends Record<string, unknown>>(values: T[], key: keyof T, value: NonNullable<T[keyof T]>): boolean
 {
   return values.some(v => v[key] === value);
@@ -62,6 +95,7 @@ export function getDoesAnyItemMatch<T extends Record<string, unknown>>(values: T
 /**
  * This function takes an array of arrays and returns an array that contains all elements that are present in all arrays.
  * It uses the identifierKey to identify the elements, this could for example be the id of an object.
+ *
  * @param sets - An array of arrays
  * @param identifierKey - The key of the object that should be used to identify the elements.
  * @returns An array that contains all elements that are present in all arrays

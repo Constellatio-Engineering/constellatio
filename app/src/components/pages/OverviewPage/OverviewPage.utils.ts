@@ -1,18 +1,33 @@
 import { type ArticlesPageProps, type CasesPageProps, type OverviewPageProps } from "@/components/pages/OverviewPage/OverviewPage";
 import type { IGenLegalArea } from "@/services/graphql/__generated/sdk";
 import type { CommonOverviewFiltersStore } from "@/stores/overviewFilters.store";
-import { getIsObjectWithId, getIsObjectWithValue, getIsPrimitive, objectKeys } from "@/utils/utils";
+import { getIsValidKey, mapToObject } from "@/utils/object";
+import { getIsObjectWithId, getIsObjectWithValue, getIsPrimitive } from "@/utils/utils";
 
-export function getItemsMatchingTheFilters<T extends OverviewPageProps["items"][number]>(
-  items: T[],
-  filters: CommonOverviewFiltersStore["filters"],
-): T[]
+export function getItemsMatchingTheFilters<Item extends OverviewPageProps["items"][number]>(
+  items: Item[],
+  filtersMap: CommonOverviewFiltersStore["filters"],
+): Item[]
 {
+  const filters = mapToObject(filtersMap);
+
   return items.filter(item =>
   {
-    const filterResults = objectKeys(filters).map(filterKey =>
+    const filterResults = Object.keys(filters).map(filterKey =>
     {
-      const currentFilterOptions = filters[filterKey];
+      if(!getIsValidKey(filters, filterKey))
+      {
+        console.error(`Filter ${filterKey} not found in filters object`, filters);
+        return false;
+      }
+
+      if(!getIsValidKey(item, filterKey))
+      {
+        console.error(`Filter ${filterKey} not found in item`, item);
+        return false;
+      }
+
+      const currentFilterOptions = filters[filterKey].filterOptions;
       const itemValueFromCurrentFilter = item[filterKey];
 
       if(currentFilterOptions?.length === 0)

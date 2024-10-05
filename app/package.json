@@ -12,7 +12,7 @@
     "eslint:fix": "eslint --fix --ext .js,.jsx,.ts,.tsx src",
     "lint": "pnpm check-types && pnpm eslint",
     "separatorTunnel": "---------------------- TUNNEL ----------------------",
-    "ngrok-auth":"ngrok authtoken $NGROK_AUTHTOKEN",
+    "ngrok-auth": "ngrok authtoken $NGROK_AUTHTOKEN",
     "tunnel": "ngrok start --config=ngrok.yml constellatio-web-app",
     "separatorBuild": "---------------------- BUILD ----------------------",
     "build": "next build",
@@ -45,8 +45,7 @@
     "setCloudStorageProductionCors": "gsutil cors set google/cloud-storage-cors/production.cors-config.json gs://constellatio-user-uploads-production",
     "setPublicCloudStorageProductionCors": "gsutil cors set google/cloud-storage-cors/production.cors-config.json gs://constellatio-public-user-uploads-production",
     "separatorOther": "---------------------- OTHER ----------------------",
-    "printCopiedToClipboard": "echo 'Copied to clipboard'",
-    "localtunnel": "lt --subdomain constelaltio-app-development --port 3010"
+    "printCopiedToClipboard": "echo 'Copied to clipboard'"
   },
   "dependencies": {
     "@caisy/rich-text-react-renderer": "0.7.3",
@@ -141,8 +140,7 @@
     "uuid": "9.0.1",
     "zod": "3.23.8",
     "zod-i18n-map": "2.27.0",
-    "zustand": "4.5.2",
-    "zustand-querystring": "0.1.0"
+    "zustand": "4.5.2"
   },
   "devDependencies": {
     "@dualmeta/eslint-config-base": "1.0.18",
@@ -191,7 +189,7 @@
     "storybook": "7.4.5",
     "supabase": "1.165.0",
     "tslib": "2.6.2",
-    "typescript": "5.6.2"
+    "typescript": "5.5.4"
   },
   "ct3aMetadata": {
     "initVersion": "7.18.0"

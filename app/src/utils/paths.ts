@@ -1,6 +1,7 @@
 /* eslint-disable import/no-unused-modules */
 import { env } from "@/env.mjs";
 import { type Question } from "@/server/api/routers/forum.router";
+import { type Values } from "@/utils/types";
 
 export const appPaths = {
   cases: "/cases",
@@ -12,6 +13,8 @@ export const appPaths = {
   profile: "/profile",
   search: "/search",
 } as const;
+
+export type AppPath = Values<typeof appPaths>;
 
 export const appPathsArray = Object.values(appPaths);
 export const getIsPathAppPath = (path: string): boolean => appPathsArray.some((appPath) => path.startsWith(appPath));
