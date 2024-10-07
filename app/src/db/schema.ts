@@ -349,7 +349,7 @@ export const gamesProgress = pgTable("GameProgress", {
   date: timestamp("Date").defaultNow().notNull(),
   gameResult: jsonb("GameResult").$type<GameResultSchemaType>(),
 }, table => ({
-  pk: primaryKey({ columns: [table.userId, table.gameId] }),
+  unique: unique().on(table.userId, table.gameId),
 }));
 
 export type GameProgressInsert = InferInsertModel<typeof gamesProgress>;

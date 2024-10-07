@@ -1,5 +1,5 @@
 {
-  "version": "6",
+  "version": "7",
   "dialect": "postgresql",
   "tables": {
     "public.AnswerUpvote": {
@@ -28,11 +28,19 @@
       },
       "indexes": {
         "AnswerUpvote_QuestionId_Index": {
-          "name": "AnswerUpvote_QuestionId_Index",
           "columns": [
-            "AnswerId"
+            {
+              "expression": "AnswerId",
+              "isExpression": false,
+              "asc": true,
+              "nulls": "last"
+            }
           ],
-          "isUnique": false
+          "with": {},
+          "name": "AnswerUpvote_QuestionId_Index",
+          "isUnique": false,
+          "method": "btree",
+          "concurrently": false
         }
       },
       "foreignKeys": {
@@ -100,11 +108,19 @@
       },
       "indexes": {
         "ArticleView_ArticleId_Index": {
-          "name": "ArticleView_ArticleId_Index",
           "columns": [
-            "ArticleId"
+            {
+              "expression": "ArticleId",
+              "isExpression": false,
+              "asc": true,
+              "nulls": "last"
+            }
           ],
-          "isUnique": false
+          "with": {},
+          "name": "ArticleView_ArticleId_Index",
+          "isUnique": false,
+          "method": "btree",
+          "concurrently": false
         }
       },
       "foreignKeys": {
@@ -382,11 +398,19 @@
       },
       "indexes": {
         "CaseView_CaseId_Index": {
-          "name": "CaseView_CaseId_Index",
           "columns": [
-            "CaseId"
+            {
+              "expression": "CaseId",
+              "isExpression": false,
+              "asc": true,
+              "nulls": "last"
+            }
           ],
-          "isUnique": false
+          "with": {},
+          "name": "CaseView_CaseId_Index",
+          "isUnique": false,
+          "method": "btree",
+          "concurrently": false
         }
       },
       "foreignKeys": {
@@ -834,12 +858,25 @@
       },
       "indexes": {
         "ForumQuestion_Id_Slug_Index": {
-          "name": "ForumQuestion_Id_Slug_Index",
           "columns": [
-            "Id",
-            "Slug"
+            {
+              "expression": "Id",
+              "isExpression": false,
+              "asc": true,
+              "nulls": "last"
+            },
+            {
+              "expression": "Slug",
+              "isExpression": false,
+              "asc": true,
+              "nulls": "last"
+            }
           ],
-          "isUnique": true
+          "with": {},
+          "name": "ForumQuestion_Id_Slug_Index",
+          "isUnique": true,
+          "method": "btree",
+          "concurrently": false
         }
       },
       "foreignKeys": {
@@ -1119,11 +1156,19 @@
       },
       "indexes": {
         "QuestionUpvote_QuestionId_Index": {
-          "name": "QuestionUpvote_QuestionId_Index",
           "columns": [
-            "QuestionId"
+            {
+              "expression": "QuestionId",
+              "isExpression": false,
+              "asc": true,
+              "nulls": "last"
+            }
           ],
-          "isUnique": false
+          "with": {},
+          "name": "QuestionUpvote_QuestionId_Index",
+          "isUnique": false,
+          "method": "btree",
+          "concurrently": false
         }
       },
       "foreignKeys": {
@@ -1362,11 +1407,19 @@
       },
       "indexes": {
         "UserRole_Role_Index": {
-          "name": "UserRole_Role_Index",
           "columns": [
-            "Identifier"
+            {
+              "expression": "Identifier",
+              "isExpression": false,
+              "asc": true,
+              "nulls": "last"
+            }
           ],
-          "isUnique": false
+          "with": {},
+          "name": "UserRole_Role_Index",
+          "isUnique": false,
+          "method": "btree",
+          "concurrently": false
         }
       },
       "foreignKeys": {},
@@ -1798,5 +1851,6 @@
     "columns": {}
   },
   "id": "47056695-1d87-4fd0-8870-04709b130dd0",
-  "prevId": "d0a4003b-03a1-4618-a6d5-eab34692fd55"
+  "prevId": "d0a4003b-03a1-4618-a6d5-eab34692fd55",
+  "sequences": {}
 }
