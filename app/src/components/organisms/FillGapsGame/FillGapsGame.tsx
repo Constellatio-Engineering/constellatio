@@ -31,12 +31,6 @@ export type TFillGapsGame = Pick<IGenFillInGapsGame, "fillGameParagraph" | "help
   readonly caseId: string;
 };
 
-export type TFillGapsGameResult = {
-  correct: boolean;
-  correctAnswers: string[];
-  userAnswers: string[];
-};
-
 let FillGapsGame: FC<TFillGapsGame> = ({
   caseId,
   fillGameParagraph,
