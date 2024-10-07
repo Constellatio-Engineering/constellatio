@@ -1,7 +1,5 @@
 {
-  "id": "2f4a4524-e9a1-4a4f-9feb-dc4f1d0b3ec4",
-  "prevId": "b8de2df0-ff9f-40d6-95f8-68abfcd696be",
-  "version": "6",
+  "version": "7",
   "dialect": "postgresql",
   "tables": {
     "public.AnswerUpvote": {
@@ -30,11 +28,19 @@
       },
       "indexes": {
         "AnswerUpvote_QuestionId_Index": {
-          "name": "AnswerUpvote_QuestionId_Index",
           "columns": [
-            "AnswerId"
+            {
+              "expression": "AnswerId",
+              "isExpression": false,
+              "asc": true,
+              "nulls": "last"
+            }
           ],
-          "isUnique": false
+          "with": {},
+          "name": "AnswerUpvote_QuestionId_Index",
+          "isUnique": false,
+          "method": "btree",
+          "concurrently": false
         }
       },
       "foreignKeys": {
@@ -102,11 +108,19 @@
       },
       "indexes": {
         "ArticleView_ArticleId_Index": {
-          "name": "ArticleView_ArticleId_Index",
           "columns": [
-            "ArticleId"
+            {
+              "expression": "ArticleId",
+              "isExpression": false,
+              "asc": true,
+              "nulls": "last"
+            }
           ],
-          "isUnique": false
+          "with": {},
+          "name": "ArticleView_ArticleId_Index",
+          "isUnique": false,
+          "method": "btree",
+          "concurrently": false
         }
       },
       "foreignKeys": {
@@ -388,11 +402,19 @@
       },
       "indexes": {
         "CaseView_CaseId_Index": {
-          "name": "CaseView_CaseId_Index",
           "columns": [
-            "CaseId"
+            {
+              "expression": "CaseId",
+              "isExpression": false,
+              "asc": true,
+              "nulls": "last"
+            }
           ],
-          "isUnique": false
+          "with": {},
+          "name": "CaseView_CaseId_Index",
+          "isUnique": false,
+          "method": "btree",
+          "concurrently": false
         }
       },
       "foreignKeys": {
@@ -884,12 +906,25 @@
       },
       "indexes": {
         "ForumQuestion_Id_Slug_Index": {
-          "name": "ForumQuestion_Id_Slug_Index",
           "columns": [
-            "Id",
-            "Slug"
+            {
+              "expression": "Id",
+              "isExpression": false,
+              "asc": true,
+              "nulls": "last"
+            },
+            {
+              "expression": "Slug",
+              "isExpression": false,
+              "asc": true,
+              "nulls": "last"
+            }
           ],
-          "isUnique": true
+          "with": {},
+          "name": "ForumQuestion_Id_Slug_Index",
+          "isUnique": true,
+          "method": "btree",
+          "concurrently": false
         }
       },
       "foreignKeys": {
@@ -1256,11 +1291,19 @@
       },
       "indexes": {
         "Ping_Path_Index": {
-          "name": "Ping_Path_Index",
           "columns": [
-            "Path"
+            {
+              "expression": "Path",
+              "isExpression": false,
+              "asc": true,
+              "nulls": "last"
+            }
           ],
-          "isUnique": false
+          "with": {},
+          "name": "Ping_Path_Index",
+          "isUnique": false,
+          "method": "btree",
+          "concurrently": false
         }
       },
       "foreignKeys": {
@@ -1371,11 +1414,19 @@
       },
       "indexes": {
         "QuestionUpvote_QuestionId_Index": {
-          "name": "QuestionUpvote_QuestionId_Index",
           "columns": [
-            "QuestionId"
+            {
+              "expression": "QuestionId",
+              "isExpression": false,
+              "asc": true,
+              "nulls": "last"
+            }
           ],
-          "isUnique": false
+          "with": {},
+          "name": "QuestionUpvote_QuestionId_Index",
+          "isUnique": false,
+          "method": "btree",
+          "concurrently": false
         }
       },
       "foreignKeys": {
@@ -2019,11 +2070,19 @@
       },
       "indexes": {
         "UserRole_Role_Index": {
-          "name": "UserRole_Role_Index",
           "columns": [
-            "Identifier"
+            {
+              "expression": "Identifier",
+              "isExpression": false,
+              "asc": true,
+              "nulls": "last"
+            }
           ],
-          "isUnique": false
+          "with": {},
+          "name": "UserRole_Role_Index",
+          "isUnique": false,
+          "method": "btree",
+          "concurrently": false
         }
       },
       "foreignKeys": {},
@@ -2469,8 +2528,11 @@
   },
   "schemas": {},
   "_meta": {
-    "columns": {},
     "schemas": {},
-    "tables": {}
-  }
+    "tables": {},
+    "columns": {}
+  },
+  "id": "2f4a4524-e9a1-4a4f-9feb-dc4f1d0b3ec4",
+  "prevId": "b8de2df0-ff9f-40d6-95f8-68abfcd696be",
+  "sequences": {}
 }

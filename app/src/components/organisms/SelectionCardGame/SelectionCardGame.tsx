@@ -86,6 +86,18 @@ let SelectionCardGame: FC<SelectionCardGameProps> = ({
         update: { gameSubmitted: true }
       });
     }
+
+    setGameProgress({
+      gameId: id,
+      gameResult: {
+        correct: winCondition,
+        correctAnswers: filteredCorrectAnswers.map((item) => item.id),
+        gameType: "SelectionCardGame",
+        originalOptions,
+        userAnswers: checkedAnswersIds
+      },
+      progressState: "completed" 
+    });
   };
 
   const onGameResetHandler = (): void => 
@@ -174,7 +186,6 @@ let SelectionCardGame: FC<SelectionCardGameProps> = ({
             {
               if(gameStatus === "inprogress")
               {
-                setGameProgress({ gameId: id, progressState: "completed" });
                 onGameFinishHandler();
               }
               else
