@@ -9,7 +9,7 @@ import {
   boolean,
   date,
   index,
-  integer,
+  integer, jsonb,
   type PgColumn,
   pgEnum,
   pgTable,
