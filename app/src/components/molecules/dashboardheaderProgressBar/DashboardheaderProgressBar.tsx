@@ -1,18 +1,16 @@
 import { CaptionText } from "@/components/atoms/CaptionText/CaptionText";
 import { PlanePaperIcon } from "@/components/Icons/PlanePaper";
 
-import { useMantineTheme } from "@mantine/styles";
 import React, { type FunctionComponent } from "react";
 
 import * as styles from "./DashboardheaderProgressBar.styles";
 
 const DashboardheaderProgressBar: FunctionComponent = () => 
 {
-  const theme = useMantineTheme();
   return (
     <div css={styles.wrapper}>
       <div css={styles.track}>
-        <div css={styles.progress({ progress: 11, theme })}/>
+        <div css={styles.progress({ progress: 11 })}/>
         <div css={styles.progresDescription}>
           <CaptionText styleType="caption-01-bold" component="p"><PlanePaperIcon size={18}/>GUTER ANFANG!</CaptionText>
         </div>

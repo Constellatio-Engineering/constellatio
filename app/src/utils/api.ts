@@ -14,8 +14,8 @@ import { showErrorNotification } from "@/utils/notifications";
 import { authPaths, getIsPathAppPath } from "@/utils/paths";
 
 import { QueryCache } from "@tanstack/react-query";
-import { httpBatchLink, httpLink, TRPCClientError } from "@trpc/client";
 import type { TRPCLink } from "@trpc/client";
+import { httpBatchLink, httpLink, loggerLink, TRPCClientError } from "@trpc/client";
 import { createTRPCNext } from "@trpc/next";
 import { type inferRouterInputs, type inferRouterOutputs } from "@trpc/server";
 import superjson from "superjson";
@@ -49,19 +49,21 @@ export const api = createTRPCNext<AppRouter>({
       console.warn("Warning: Request batching is disabled. This is only intended for development. Set NEXT_PUBLIC_IS_REQUEST_BATCHING_DISABLED to 'false' to enable it.");
 
       links.push(httpLink({
+        transformer: superjson,
         url: `${getBaseUrl()}/api/trpc`,
       }));
     }
     else
     {
       links.push(httpBatchLink({
+        transformer: superjson,
         url: `${getBaseUrl()}/api/trpc`,
       }));
     }
 
-    /* links.push(loggerLink({
+    links.push(loggerLink({
       enabled: (opts) => env.NEXT_PUBLIC_DEPLOYMENT_ENVIRONMENT === "development" || (opts.direction === "down" && opts.result instanceof Error),
-    }))*/
+    }));
 
     return ({
       links,
@@ -74,7 +76,7 @@ export const api = createTRPCNext<AppRouter>({
 
               showErrorNotification({
                 message: "Bitte versuche es später erneut oder wende dich an den Support.",
-                title: "Da ist leider etwas schief gelaufen.",
+                title: "Da ist leider etwas schiefgelaufen.",
               });
             }
           }
@@ -111,10 +113,10 @@ export const api = createTRPCNext<AppRouter>({
           },
         }),
       },
-      transformer: superjson,
     });
   },
   ssr: false,
+  transformer: superjson,
 });
 
 /**

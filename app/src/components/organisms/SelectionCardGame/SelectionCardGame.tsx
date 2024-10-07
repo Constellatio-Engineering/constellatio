@@ -10,21 +10,14 @@ import { SelectionCard } from "@/components/molecules/SelectionCard/SelectionCar
 import useContextAndErrorIfNull from "@/hooks/useContextAndErrorIfNull";
 import { InvalidateQueriesContext } from "@/provider/InvalidateQueriesProvider";
 import { type IGenCardSelectionGame } from "@/services/graphql/__generated/sdk";
-import useSelectionCardGameStore, {
-  type TCardGameOption,
-} from "@/stores/selectionCardGame.store";
+import useSelectionCardGameStore, { type TCardGameOption, } from "@/stores/selectionCardGame.store";
 import { api } from "@/utils/api";
 
-import { Title, LoadingOverlay } from "@mantine/core";
-import React, { type FC, useMemo, memo } from "react";
+import { LoadingOverlay, Title } from "@mantine/core";
+import React, { type FC, memo, useMemo } from "react";
 
 import {
-  Container,
-  Game,
-  GameWrapper,
-  LegendWrapper,
-  Options,
-  TitleWrapper,
+  Container, Game, GameWrapper, LegendWrapper, Options, TitleWrapper, 
 } from "./SelectionCardGame.styles";
 
 export type SelectionCardGameProps = Pick<IGenCardSelectionGame, "game" | "helpNote" | "question"> & {

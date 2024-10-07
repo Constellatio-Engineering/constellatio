@@ -1,10 +1,11 @@
-import { css } from "@emotion/react";
-import { type MantineTheme } from "@mantine/styles";
+import { colooors } from "@/constants/styles/colors";
 
-export const wrapper = (theme: MantineTheme) => css`
+import { css } from "@emotion/react";
+
+export const wrapper = () => css`
     padding: 20px 32px;
-    background: ${theme.colors["neutrals-01"][0]};
-    border-bottom: 1px solid ${theme.colors["neutrals-01"][3]};
+    background: ${colooors["neutrals-01"][0]};
+    border-bottom: 1px solid ${colooors["neutrals-01"][3]};
     display: flex;
     align-items: center;
     justify-content: flex-start;

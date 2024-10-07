@@ -3,8 +3,9 @@ import { Hide } from "@/components/Icons/Hide";
 import { Show } from "@/components/Icons/Show";
 
 import {
-  type PasswordInputProps, TextInput, type TextInputProps, PasswordInput, type CSSObject 
+  type CSSObject, PasswordInput, type PasswordInputProps, TextInput, type TextInputProps 
 } from "@mantine/core";
+import { useMantineTheme } from "@mantine/styles";
 import React, { type FC } from "react";
 
 import { passwordStyles, textStyles } from "./input.styles";
@@ -24,10 +25,12 @@ export const Input: FC<InputProps> = ({
   ...props
 }) => 
 {
+  const theme = useMantineTheme();
+
   return inputType === "password" ? (
     <PasswordInput
       styles={passwordStyles({
-        disabled, error, inputStyleOverwrite, labelStyleOverwrite 
+        disabled, error, inputStyleOverwrite, labelStyleOverwrite, theme
       })}
       error={error}
       disabled={disabled}
@@ -38,7 +41,7 @@ export const Input: FC<InputProps> = ({
   ) : inputType === "text" ? (
     <TextInput
       styles={textStyles({
-        disabled, error, inputStyleOverwrite, labelStyleOverwrite 
+        disabled, error, inputStyleOverwrite, labelStyleOverwrite, theme
       })}
       error={error}
       disabled={disabled}

@@ -1,8 +1,9 @@
-import { type SerializedStyles, css } from "@emotion/react";
-import { type MantineTheme } from "@mantine/styles";
+import { colooors } from "@/constants/styles/colors";
 
-const CSSDisabledStyles = (theme: MantineTheme): SerializedStyles => css`
-  color: ${theme.colors["neutrals-01"][7]};
+import { css, type SerializedStyles } from "@emotion/react";
+
+const CSSDisabledStyles = (): SerializedStyles => css`
+  color: ${colooors["neutrals-01"][7]};
   border: 0;
   cursor: default;
   &:hover::after {
@@ -11,15 +12,14 @@ const CSSDisabledStyles = (theme: MantineTheme): SerializedStyles => css`
 `;
 
 // eslint-disable-next-line import/no-unused-modules
-export const menuTabStyles = ({ active, disabled, theme }: {
+export const menuTabStyles = ({ active, disabled }: {
   active?: boolean;
   disabled?: boolean;
-  theme: MantineTheme;
 }) => css`
   padding: 20px 0;
   display: inline-block;
   text-transform: uppercase;
-  color: ${theme.colors["neutrals-02"][1]};
+  color: ${colooors["neutrals-02"][1]};
   white-space: nowrap;
   cursor: pointer;
   transition: opacity 0.2s;
@@ -34,7 +34,7 @@ export const menuTabStyles = ({ active, disabled, theme }: {
     position: absolute;
     width: 100%;
     height: 3px;
-    background-color: ${!active ? "transparent" : theme.colors["neutrals-02"][1]};
+    background-color: ${!active ? "transparent" : colooors["neutrals-02"][1]};
     content: "";
     bottom: 0px;
     left: 0;
@@ -44,11 +44,11 @@ export const menuTabStyles = ({ active, disabled, theme }: {
     opacity: .8;
   }
   &:hover::after {
-    background-color: ${theme.colors["neutrals-01"][7]};
+    background-color: ${colooors["neutrals-01"][7]};
   }
-  ${disabled && CSSDisabledStyles(theme)};
+  ${disabled && CSSDisabledStyles()};
 `;
 
-export const number = (theme: MantineTheme) => css`
-color:${theme.colors["neutrals-01"][7]};
+export const number = () => css`
+color:${colooors["neutrals-01"][7]};
 `;

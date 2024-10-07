@@ -11,7 +11,7 @@ import { HintsAccordion } from "@/components/molecules/HintsAccordion/HintsAccor
 import { ResultCard } from "@/components/molecules/ResultCard/ResultCard";
 import { Richtext } from "@/components/molecules/Richtext/Richtext";
 import RichtextOverwrite from "@/components/organisms/FillGapsGame/RichtextOverwrite";
-import { colors } from "@/constants/styles/colors";
+import { colooors } from "@/constants/styles/colors";
 import useContextAndErrorIfNull from "@/hooks/useContextAndErrorIfNull";
 import { InvalidateQueriesContext } from "@/provider/InvalidateQueriesProvider";
 import { type IGenFillInGapsGame } from "@/services/graphql/__generated/sdk";
@@ -20,22 +20,11 @@ import { api } from "@/utils/api";
 
 import { Title } from "@mantine/core";
 import React, {
-  type FC,
-  type ReactElement,
-  memo,
-  useEffect,
-  useCallback,
-  useMemo,
+  type FC, memo, type ReactElement, useCallback, useEffect, useMemo, 
 } from "react";
 
 import {
-  Container,
-  Game,
-  GameWrapper,
-  LegendWrapper,
-  Options,
-  TitleWrapper,
-  stylesOverwrite,
+  Container, Game, GameWrapper, LegendWrapper, Options, stylesOverwrite, TitleWrapper, 
 } from "./FillGapsGame.styles";
 
 export type TFillGapsGame = Pick<IGenFillInGapsGame, "fillGameParagraph" | "helpNote" | "question" | "id"> & {
@@ -218,13 +207,13 @@ let FillGapsGame: FC<TFillGapsGame> = ({
         {gameStatus !== "inprogress" && (
           <LegendWrapper>
             <BodyText component="p" styleType="body-01-regular">
-              <span style={{ color: colors["support-success"][4] }}>
+              <span style={{ color: colooors["support-success"][4] }}>
                 <CheckFilled size={16}/>
               </span>{" "}
               Richtige Antwort
             </BodyText>
             <BodyText component="p" styleType="body-01-regular">
-              <span style={{ color: colors["support-error"][3] }}>
+              <span style={{ color: colooors["support-error"][3] }}>
                 <CrossFilled size={16}/>
               </span>{" "}
               Falsche Antwort

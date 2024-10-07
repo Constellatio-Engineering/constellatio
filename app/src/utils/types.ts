@@ -1,13 +1,11 @@
 /* eslint-disable @typescript-eslint/ban-types, import/no-unused-modules */
 
-// import { Bookmark } from "@/db/schema";
-
-import { type CSSObject, type MantineTheme } from "@mantine/core";
+import { type CSSObject } from "@mantine/core";
 import { type TRPCClientErrorBase } from "@trpc/client";
 import { type DefaultErrorShape } from "@trpc/server/unstable-core-do-not-import";
 import { type ComponentType, type ReactNode } from "react";
 
-export type Values<T> = T[keyof T];
+export type Values<T extends object> = T[keyof T];
 
 export type Nullable<T> = T | null | undefined;
 
@@ -39,7 +37,7 @@ export type DotSeparatedKeys<T, Prefix extends string = ""> = {
       : `${Prefix}${K & string}`;
 }[keyof T];
 
-export type MantineCssObjectStyles = (theme: MantineTheme) => CSSObject;
+export type MantineCssObjectStyles = () => CSSObject;
 
 export type UnknownMantineStylesParams = Record<string, unknown>;
 
@@ -70,3 +68,5 @@ export type WithChildren<T> = T & {
 };
 
 export type NonEmptyArray<T> = [T, ...T[]] | [...T[], T] | [T, ...T[], T];
+
+export type Primitive = string | number | boolean;

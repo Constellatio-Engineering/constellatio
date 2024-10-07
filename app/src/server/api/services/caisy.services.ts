@@ -1,5 +1,5 @@
 import type {
-  IGenLegalArea, IGenMainCategory, IGenSubCategory, IGenTags, IGenTopic
+  IGenLegalArea, IGenMainCategory, IGenSubCategory, IGenTags, IGenTopic 
 } from "@/services/graphql/__generated/sdk";
 import { caisySDK } from "@/services/graphql/getSdk";
 

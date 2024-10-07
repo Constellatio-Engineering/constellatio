@@ -1,11 +1,8 @@
+import { colooors } from "@/constants/styles/colors";
 import { type UnknownMantineStylesParams } from "@/utils/types";
 
 import { css } from "@emotion/react";
-import {
-  type InputStylesNames,
-  type MantineTheme,
-  type Styles,
-} from "@mantine/core";
+import { type InputStylesNames, type MantineTheme, type Styles, } from "@mantine/core";
 
 type InputStylesProps = Styles<InputStylesNames, UnknownMantineStylesParams>;
 
@@ -14,19 +11,19 @@ export const form = css`
   z-index: 21;
 `;
 
-export const inputStyles = () =>
+export const inputStyles = (theme: MantineTheme) =>
 {
-  const styles: InputStylesProps = (theme: MantineTheme) => ({
+  const styles: InputStylesProps = () => ({
     icon: {
-      color: theme.colors["neutrals-01"][7],
+      color: colooors["neutrals-01"][7],
       left: "62px",
       width: "24px",
     },
     input: {
       "&::placeholder": {
-        color: theme.colors["neutrals-01"][7],
+        color: colooors["neutrals-01"][7],
       },
-      backgroundColor: theme.colors["neutrals-01"][0],
+      backgroundColor: colooors["neutrals-01"][0],
       border: "none",
       borderRadius: "0px",
       fontFamily: `${theme.headings.fontFamily}`,
@@ -37,7 +34,7 @@ export const inputStyles = () =>
       padding: "0 0 0 100px !important"
     },
     wrapper: {
-      borderBottom: `1px solid ${theme.colors["neutrals-01"][4]}`,
+      borderBottom: `1px solid ${colooors["neutrals-01"][4]}`,
     },
   });
 

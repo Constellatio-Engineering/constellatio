@@ -5,13 +5,13 @@ import { ClockIcon } from "@/components/Icons/ClockIcon";
 import BookmarkButton from "@/components/organisms/caseBlock/BookmarkButton/BookmarkButton";
 import EmptyStateCard from "@/components/organisms/emptyStateCard/EmptyStateCard";
 import { timeFormatter } from "@/components/organisms/overviewCard/OverviewCard";
-import { extractNumeric } from "@/components/pages/OverviewPage/OverviewPage";
+import { colooors } from "@/constants/styles/colors";
 import useBookmarks from "@/hooks/useBookmarks";
 import useCases from "@/hooks/useCases";
 import useCasesProgress from "@/hooks/useCasesProgress";
 import { appPaths } from "@/utils/paths";
+import { extractNumeric } from "@/utils/utils";
 
-import { useMantineTheme } from "@mantine/styles";
 import { useRouter } from "next/router";
 import React, { type FunctionComponent } from "react";
 
@@ -39,8 +39,7 @@ const DashboardCasesBlockTable: FunctionComponent = () =>
   const router = useRouter();
   const { allCases } = useCases();
   const { casesProgress } = useCasesProgress();
-  const theme = useMantineTheme();
-  const casesWithProgress = allCases.map(caseItem => 
+  const casesWithProgress = allCases.map(caseItem =>
   {
     return {
       case: caseItem,
@@ -105,10 +104,10 @@ const DashboardCasesBlockTable: FunctionComponent = () =>
                   <BodyText styleType="body-01-medium" css={styles.durationCell} component="p"><ClockIcon/>{timeFormatter(item?.durationToCompleteInMinutes ?? 0)}</BodyText>
                 </td>
                 <td onClick={() => routeToCase(item?.id)}>
-                  <BodyText styleType="body-01-medium" color={theme.colors["neutrals-01"][9]} component="p">{item?.mainCategoryField?.[0]?.mainCategory}</BodyText>
+                  <BodyText styleType="body-01-medium" color={colooors["neutrals-01"][9]} component="p">{item?.mainCategoryField?.[0]?.mainCategory}</BodyText>
                 </td>
                 <td onClick={() => routeToCase(item?.id)}>
-                  <BodyText styleType="body-01-medium" color={theme.colors["neutrals-01"][9]} component="p">{item?.legalArea?.legalAreaName}</BodyText>
+                  <BodyText styleType="body-01-medium" color={colooors["neutrals-01"][9]} component="p">{item?.legalArea?.legalAreaName}</BodyText>
                 </td>
                 <td>
                   <BookmarkButton

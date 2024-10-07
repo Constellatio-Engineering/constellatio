@@ -129,12 +129,12 @@ type ShortTextCustomFieldConfig = CustomFieldBaseProperties & {
 
 export type ShortTextCustomFieldInsertProps = Pick<ShortTextCustomFieldConfig, "id" | "value">;
 
-// type TextCustomFieldConfig = CustomFieldBaseProperties & {
-//   type: "text";
-//   value?: Nullable<string>;
-// };
-//
-// export type TextCustomFieldInsertProps = Pick<TextCustomFieldConfig, "id" | "value">;
+type TextCustomFieldConfig = CustomFieldBaseProperties & {
+  type: "text";
+  value?: Nullable<string>;
+};
+
+export type TextCustomFieldInsertProps = Pick<TextCustomFieldConfig, "id" | "value">;
 
 // type CheckBoxCustomFieldConfig = CustomFieldBaseProperties & {
 //   type: "checkbox";
@@ -171,12 +171,12 @@ type CustomField =
   | LabelCustomFieldConfig
   | CurrencyCustomFieldConfig
   | ShortTextCustomFieldConfig
+  | TextCustomFieldConfig
   // | EmojiCustomFieldConfig
   // | AutomaticProgressCustomFieldConfig
   // | ManualProgressCustomFieldConfig
   // | UrlCustomFieldConfig
   // | PhoneNumberCustomFieldConfig
-  // | TextCustomFieldConfig
   // | CheckBoxCustomFieldConfig
   // | LocationCustomFieldConfig
 ;
@@ -189,12 +189,12 @@ export type CustomFieldInsert =
   | LabelCustomFieldInsertProps
   | CurrencyCustomFieldInsertProps
   | ShortTextCustomFieldInsertProps
+  | TextCustomFieldInsertProps
   // | EmojiCustomFieldInsertProps
   // | AutomaticProgressCustomFieldInsertProps
   // | ManualProgressCustomFieldInsertProps
   // | UrlCustomFieldInsertProps
   // | PhoneNumberCustomFieldInsertProps
-  // | TextCustomFieldInsertProps
   // | CheckBoxCustomFieldInsertProps
   // | LocationCustomFieldInsertProps
 ;

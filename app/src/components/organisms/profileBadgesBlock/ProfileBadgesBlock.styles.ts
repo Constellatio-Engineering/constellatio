@@ -1,9 +1,10 @@
-import { css } from "@emotion/react";
-import { type MantineTheme } from "@mantine/styles";
+import { colooors } from "@/constants/styles/colors";
 
-export const wrapper = (theme: MantineTheme) => css`
+import { css } from "@emotion/react";
+
+export const wrapper = () => css`
     padding: 24px;
-    background-color: ${theme.colors["neutrals-01"][0]};
+    background-color: ${colooors["neutrals-01"][0]};
     border-radius: 12px;
     margin-top: 32px;
     width: 100%;
@@ -19,11 +20,11 @@ export const badgesBlockHeader = css`
     gap: 8px;
     margin-bottom: 24px;
 `;
-export const title = (theme: MantineTheme) => css`
-color: ${theme.colors["neutrals-01"][7]};
+export const title = () => css`
+color: ${colooors["neutrals-01"][7]};
 `;
-export const counter = (theme: MantineTheme) => css`
-color: ${theme.colors["neutrals-02"][1]};
+export const counter = () => css`
+color: ${colooors["neutrals-02"][1]};
 `;
 export const headerLayout = css`
    align-items: center;

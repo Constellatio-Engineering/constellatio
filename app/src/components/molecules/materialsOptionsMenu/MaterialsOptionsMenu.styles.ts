@@ -1,22 +1,23 @@
 /* eslint-disable max-lines */
+import { colooors } from "@/constants/styles/colors";
 import { type UnknownMantineStylesParams } from "@/utils/types";
 
 import { css } from "@emotion/react";
 import { type ModalStylesNames } from "@mantine/core";
-import { type Styles, type MantineTheme } from "@mantine/styles";
+import { type Styles } from "@mantine/styles";
 
-const CSSClickableEffect = (theme: MantineTheme) => css`
+const CSSClickableEffect = () => css`
 	&:hover {
-		background: ${theme.colors["neutrals-01"][1]};
+		background: ${colooors["neutrals-01"][1]};
 		cursor: pointer;
 	}
 `;
 
-export const tableWrapper = (theme: MantineTheme) => css`
+export const tableWrapper = () => css`
 	text-align: left;
 	border-radius: 12px;
 	overflow: hidden;
-	outline: 1px solid ${theme.colors["neutrals-01"][1]};
+	outline: 1px solid ${colooors["neutrals-01"][1]};
 	td {
 		padding: 16px;
 	}
@@ -30,7 +31,7 @@ export const tableWrapper = (theme: MantineTheme) => css`
 		white-space: nowrap;
 	}
 	tr {
-		border: 1px solid ${theme.colors["neutrals-01"][2]};
+		border: 1px solid ${colooors["neutrals-01"][2]};
 	}
 	.primaryCell {
 		width: 100%;
@@ -52,21 +53,21 @@ export const tableWrapper = (theme: MantineTheme) => css`
 		border-radius: 12px;
 	}
 	.mantine-Menu-item {
-		border-bottom: 1px solid ${theme.colors["neutrals-01"][3]};
+		border-bottom: 1px solid ${colooors["neutrals-01"][3]};
 		border-radius: 0px;
 	}
 `;
 
-export const tableHead = (theme: MantineTheme) => css`
+export const tableHead = () => css`
 	background-color: #f6f6f5;
-	color: ${theme.colors["neutrals-01"][7]};
+	color: ${colooors["neutrals-01"][7]};
 `;
 
-export const tableBody = (theme: MantineTheme) => css`
-	background: ${theme.colors["neutrals-01"][0]};
+export const tableBody = () => css`
+	background: ${colooors["neutrals-01"][0]};
 `;
 
-export const callToActionCell = (theme: MantineTheme) => css`
+export const callToActionCell = () => css`
 	width: 100%;
 	height: 100%;
 	position: absolute;
@@ -76,7 +77,7 @@ export const callToActionCell = (theme: MantineTheme) => css`
 	outline: 0;
 	display: grid;
 	place-items: center;
-	background: ${theme.colors["neutrals-01"][0]};
+	background: ${colooors["neutrals-01"][0]};
 	position: relative;
 
 	svg {
@@ -85,30 +86,29 @@ export const callToActionCell = (theme: MantineTheme) => css`
 	}
 `;
 
-export const docName = ({ clickable, theme }: {
+export const docName = ({ clickable }: {
   clickable?: boolean;
-  theme: MantineTheme;
 }) => css`
-	color: ${theme.colors["neutrals-02"][1]};
-	${clickable && CSSClickableEffect(theme)}
+	color: ${colooors["neutrals-02"][1]};
+	${clickable && CSSClickableEffect()}
 `;
-export const docDate = (theme: MantineTheme) => css`
-	color: ${theme.colors["neutrals-01"][7]};
+export const docDate = () => css`
+	color: ${colooors["neutrals-01"][7]};
 `;
-export const docTags = (theme: MantineTheme) => css`
-	color: ${theme.colors["neutrals-01"][9]};
+export const docTags = () => css`
+	color: ${colooors["neutrals-01"][9]};
 `;
-export const cellNote = (theme: MantineTheme) => css`
-	color: ${theme.colors["neutrals-01"][9]};
+export const cellNote = () => css`
+	color: ${colooors["neutrals-01"][9]};
 	cursor: pointer;
 	svg {
 		vertical-align: text-bottom;
 		margin-right: 8px;
 	}
-	${CSSClickableEffect(theme)}
+	${CSSClickableEffect()}
 `;
 
-export const showMoreButton = (theme: MantineTheme) => css`
+export const showMoreButton = () => css`
 	position: relative;
 	background: red;
 	display: grid;
@@ -119,7 +119,7 @@ export const showMoreButton = (theme: MantineTheme) => css`
 	padding: 10px;
 	background: linear-gradient(
 		to top,
-		${theme.colors["neutrals-01"][0]} 40%,
+		${colooors["neutrals-01"][0]} 40%,
 		transparent 100%
 	);
 `;
@@ -128,12 +128,12 @@ export const showMoreButton = (theme: MantineTheme) => css`
 
 // export const drawerStyles = () =>
 // {
-//   const styles: DrawerStylesProps = (theme: MantineTheme) => ({
+//   const styles: DrawerStylesProps = () => ({
 //     body: {
 //       padding: "0px",
 //     },
 //     content: {
-//       background: theme.colors["neutrals-01"][1],
+//       background: colooors["neutrals-01"][1],
 //     },
 //     header: {
 //       padding: "0px",
@@ -149,7 +149,7 @@ export const MaterialNoteRichText = css`
 	margin: 24px 32px;
 `;
 
-export const MaterialNotesCallToAction = (theme: MantineTheme) => css`
+export const MaterialNotesCallToAction = () => css`
 	position: absolute;
 	bottom: 0;
 	left: 0;
@@ -159,8 +159,8 @@ export const MaterialNotesCallToAction = (theme: MantineTheme) => css`
 	align-items: center;
 	padding: 32px;
 	gap: 12px;
-	background: ${theme.colors["neutrals-01"][0]};
-	border-top: 1px solid ${theme.colors["neutrals-01"][3]};
+	background: ${colooors["neutrals-01"][0]};
+	border-top: 1px solid ${colooors["neutrals-01"][3]};
 	button {
 		flex: 1;
 	}
@@ -214,7 +214,7 @@ export const modalStyles = (): ModalStyles =>
   return styles;
 };
 
-export const label = (theme: MantineTheme) => css`
+export const label = () => css`
 	display: inline-block;
 	overflow: hidden;
 	white-space: nowrap;
@@ -223,23 +223,23 @@ export const label = (theme: MantineTheme) => css`
 	svg {
 		margin-right: 8px;
 		vertical-align: bottom;
-		color: ${theme.colors["neutrals-01"][7]};
+		color: ${colooors["neutrals-01"][7]};
 	}
 `;
 
-export const dropDownLabel = (theme: MantineTheme) => css`
-	${label(theme)};
+export const dropDownLabel = () => css`
+	${label()};
 	padding: 12px 16px;
 `;
 
-export const optionsCell = (theme: MantineTheme) => css`
+export const optionsCell = () => css`
 	cursor: pointer;
 	transition: background 0.3s ease;
 &:hover {
-	background: ${theme.colors["neutrals-01"][1]};
+	background: ${colooors["neutrals-01"][1]};
 	
 	> button {
-		background: ${theme.colors["neutrals-01"][1]}; 
+		background: ${colooors["neutrals-01"][1]}; 
 	}
 }
 `;

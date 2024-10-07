@@ -1,6 +1,10 @@
+import { colooors } from "@/constants/styles/colors";
+import { spaciiing } from "@/constants/styles/spacing";
+
 import {
-  type CSSObject, type MantineTheme, type Styles, Tabs, type TabsProps, type TabsStylesNames, type TabsStylesParams 
+  type CSSObject, type Styles, Tabs, type TabsProps, type TabsStylesNames, type TabsStylesParams
 } from "@mantine/core";
+import { useMantineTheme } from "@mantine/styles";
 import React, { type FC } from "react";
 
 export type SwitcherProps = TabsProps & {
@@ -17,7 +21,9 @@ export const Switcher: FC<SwitcherProps> = ({
   ...props
 }) => 
 {
-  const styles: Styles<TabsStylesNames, TabsStylesParams> = (theme: MantineTheme) => ({
+  const theme = useMantineTheme();
+
+  const styles: Styles<TabsStylesNames, TabsStylesParams> = () => ({
     panel: {
       fontFamily: "inherit",
       ...panelStyleOverwrite,
@@ -27,28 +33,28 @@ export const Switcher: FC<SwitcherProps> = ({
     tab: {
       ...theme.fn.focusStyles(),
       "&:active": {
-        backgroundColor: theme.colors["neutrals-01"][2],
+        backgroundColor: colooors["neutrals-01"][2],
       },
       "&:focus": {
-        backgroundColor: theme.colors["neutrals-01"][1],
+        backgroundColor: colooors["neutrals-01"][1],
       },
       "&:hover": {
-        backgroundColor: theme.colors["neutrals-01"][1],
+        backgroundColor: colooors["neutrals-01"][1],
       },
       "&[data-active]": {
-        backgroundColor: theme.colors["neutrals-01"][1],
+        backgroundColor: colooors["neutrals-01"][1],
       },
       alignItems: "center",
       backgroundColor: "transparent",
       border: "none",
       borderRadius: theme.radius["radius-20"],
-      color: theme.colors["neutrals-02"][1],
+      color: colooors["neutrals-02"][1],
       cursor: "pointer",
       display: "flex",
       fontFamily: "inherit",
       fontSize: "16px",
       fontWeight: 500,
-      gap: theme.spacing["spacing-4"],
+      gap: spaciiing["spacing-4"],
       justifyContent: "center",
 
       lineHeight: "24px",
@@ -57,8 +63,8 @@ export const Switcher: FC<SwitcherProps> = ({
 
       padding:
         size === "big"
-          ? `${theme.spacing["spacing-8"]} ${theme.spacing["spacing-16"]}`
-          : `${theme.spacing["spacing-4"]} ${theme.spacing["spacing-12"]}`,
+          ? `${spaciiing["spacing-8"]} ${spaciiing["spacing-16"]}`
+          : `${spaciiing["spacing-4"]} ${spaciiing["spacing-12"]}`,
 
       transition: "all 0.3s ease",
 
@@ -75,11 +81,11 @@ export const Switcher: FC<SwitcherProps> = ({
 
     tabsList: {
       alignItems: "center",
-      backgroundColor: theme.colors["neutrals-01"][4],
+      backgroundColor: colooors["neutrals-01"][4],
       borderRadius: theme.radius.full,
       display: "flex",
       justifyContent: "space-between",
-      padding: theme.spacing["spacing-4"],
+      padding: spaciiing["spacing-4"],
     },
   });
 

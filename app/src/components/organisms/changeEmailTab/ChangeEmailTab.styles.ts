@@ -1,5 +1,6 @@
+import { colooors } from "@/constants/styles/colors";
+
 import { css } from "@emotion/react";
-import { type MantineTheme } from "@mantine/styles";
 
 export const modalContentWrapper = css`
   text-align: center;
@@ -10,9 +11,9 @@ export const modalContentWrapper = css`
 export const changeEmailModalTitle = css`
   margin-bottom: 24px;
 `;
-export const changeEmailModalCaption = (theme: MantineTheme) => css`
+export const changeEmailModalCaption = () => css`
   margin-bottom: 8px;
-  color: ${theme.colors["neutrals-01"][9]};
+  color: ${colooors["neutrals-01"][9]};
 `;
 export const changeEmailButton = css`
 margin-top:24px;

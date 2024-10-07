@@ -5,6 +5,7 @@ import { OpenInNew } from "@/components/Icons/OpenInNew";
 import { Pin } from "@/components/Icons/Pin";
 
 import { Button, type ButtonProps, createPolymorphicComponent } from "@mantine/core";
+import { useMantineTheme } from "@mantine/styles";
 import React, { type FC } from "react";
 
 import { floatingButtonStyles } from "./FloatingButton.styles";
@@ -23,6 +24,8 @@ const _FloatingButton: FC<TFloatingButton> = ({
   ...props
 }) => 
 {
+  const theme = useMantineTheme();
+
   const ButtonIcons =
     variation === "icon-big" || variation === "icon-medium" ? (
       <DownloadIcon/>
@@ -48,7 +51,7 @@ const _FloatingButton: FC<TFloatingButton> = ({
   return (
     <Button<"button">
       unstyled
-      styles={floatingButtonStyles({ pinsNotificationsAmount, variation })}
+      styles={floatingButtonStyles({ pinsNotificationsAmount, theme, variation })}
       rightIcon={ButtonIcons}
       {...props}>
       {buttonText && <BodyText component="p" styleType="body-01-medium">{buttonText}</BodyText>}

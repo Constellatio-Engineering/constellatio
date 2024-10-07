@@ -1,4 +1,4 @@
-import { colors } from "@/constants/styles/colors";
+import { colooors } from "@/constants/styles/colors";
 
 import { css } from "@emotion/react";
 
@@ -51,7 +51,7 @@ export const checkmark = css`
   height: 20px;
   min-width: 20px;
   min-height: 22px;
-  background-color: ${colors["brand-01"][4]};
+  background-color: ${colooors["brand-01"][4]};
   display: flex;
   justify-content: center;
   align-items: center;
@@ -89,11 +89,11 @@ export const author = css`
 export const authorAndDateSeparator = css`
   height: 20px;
   width: 1px;
-  background-color: ${colors["neutrals-01"][5]};
+  background-color: ${colooors["neutrals-01"][5]};
 `;
 
 export const date = css`
-  color: ${colors["neutrals-01"][7]};
+  color: ${colooors["neutrals-01"][7]};
 `;
 
 export const excerpt = css`
@@ -121,7 +121,7 @@ export const answersCountWrapper = css`
   gap: 6px;
   align-items: center;
   justify-content: flex-end;
-  color: ${colors["neutrals-01"][9]};
+  color: ${colooors["neutrals-01"][9]};
   font-weight: 500;
   svg {
     transform: translateY(1px);

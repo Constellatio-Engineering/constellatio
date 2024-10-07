@@ -5,9 +5,9 @@ import { FileIcon } from "@/components/Icons/FileIcon";
 import { Toc } from "@/components/organisms/floatingPanel/Toc";
 import { type IGenCase_Facts } from "@/services/graphql/__generated/sdk";
 
-import { Tabs, useMantineTheme } from "@mantine/core";
+import { Tabs } from "@mantine/core";
 import { type Maybe } from "graphql/jsutils/Maybe";
-import React, { useState, type FunctionComponent, useMemo, useRef } from "react";
+import React, { type FunctionComponent, useMemo, useRef, useState } from "react";
 
 import * as styles from "./FloatingPanel.styles";
 import { type DataType, generateTOC } from "./generateTocHelper";
@@ -48,11 +48,10 @@ const FloatingPanel: FunctionComponent<IFloatingPanelProps> = ({
 {
   const [selectedTabState, setSelectedTabState] = useState<"Gliederung" | "Sachverhalt">(selectedTab);
   const toc = useMemo(() => generateTOC(content), [content]);
-  const theme = useMantineTheme();
   const scrollAreaRef = useRef<HTMLDivElement>(null);
 
   return content?.length > 0 && (
-    <div css={styles.wrapper({ hidden, theme })}>
+    <div css={styles.wrapper({ hidden })}>
       {hidden && (
         <div className="hidden-overlay">
           <div>

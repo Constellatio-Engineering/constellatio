@@ -9,9 +9,10 @@ import { appPaths } from "@/utils/paths";
 
 import { Input } from "@mantine/core";
 import { useLocalStorage } from "@mantine/hooks";
+import { useMantineTheme } from "@mantine/styles";
 import { useRouter } from "next/router";
 import { useQueryState } from "next-usequerystate";
-import React, { useEffect, type FunctionComponent, type FormEventHandler } from "react";
+import React, { type FormEventHandler, type FunctionComponent, useEffect } from "react";
 
 import * as styles from "./SearchBar.styles";
 
@@ -24,6 +25,7 @@ const SearchBarContent: FunctionComponent = () =>
   const router = useRouter();
   const { searchResults } = useSearchResults();
   const setGlobalSearchHistory = useSearchBarStore((s) => s.setSearchHistory);
+  const theme = useMantineTheme();
 
   const [localSearchHistory, setLocalSearchHistory] = useLocalStorage({
     defaultValue: [] as string[],
@@ -90,7 +92,7 @@ const SearchBarContent: FunctionComponent = () =>
         name="Durchsuchen"
         title="Durchsuchen"
         placeholder="Durchsuchen"
-        styles={styles.inputStyles()}
+        styles={styles.inputStyles(theme)}
         icon={<Search size={24}/>}
         value={searchValue}
         onChange={(e) => setSearchValue(e.currentTarget.value)}

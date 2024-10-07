@@ -1,10 +1,9 @@
-import { useMantineTheme } from "@mantine/styles";
 import Image from "next/image";
 import { type FC } from "react";
 
 import HeaderDefault from "./DefaultHeader/HeaderDefault";
-import { SHeader } from "./Header.styles";
 import * as styles from "./Header.styles";
+import { SHeader } from "./Header.styles";
 import ConstellatioFullLogoPng from "../../../../public/images/full-logo.png";
 
 export interface HeaderProps 
@@ -14,11 +13,10 @@ export interface HeaderProps
 
 export const Header: FC<HeaderProps> = ({ variant = "default" }) => 
 {
-  const theme = useMantineTheme();
   // const isTabletScreen = useMediaQuery("(max-width: 1100px)");
   return variant === "simple" ? (
     <SHeader>
-      <div css={styles.wrapper({ theme, variant })}>
+      <div css={styles.wrapper({ variant })}>
         <div>
           <Image src={ConstellatioFullLogoPng} alt="Constellatio" width={150}/>
         </div>

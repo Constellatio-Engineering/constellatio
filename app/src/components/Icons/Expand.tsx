@@ -1,4 +1,3 @@
-
 import { type FunctionComponent } from "react";
 
 export const ExpandIcon: FunctionComponent<{readonly size?: number}> = ({ size = 24 }) => (

@@ -3,7 +3,7 @@ import { FillGapInput } from "@/components/molecules/FillGapInput/FillGapInput";
 import useFillGapsGameStore from "@/stores/fillGapsGame.store";
 
 import {
-  type FC, memo, type ChangeEvent, useEffect, useMemo 
+  type ChangeEvent, type FC, memo, useEffect, useMemo 
 } from "react";
 
 interface TRichtextOverwrite 

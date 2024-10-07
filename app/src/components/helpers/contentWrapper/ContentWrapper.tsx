@@ -6,7 +6,7 @@ import * as styles from "./ContentWrapper.styles";
 type Props = {
   readonly children: React.ReactNode;
   readonly shouldUseMarginAutoInsteadOfTransform?: boolean;
-  readonly stylesOverrides?: SerializedStyles;
+  readonly stylesOverrides?: SerializedStyles | Array<SerializedStyles | undefined>;
 };
 
 const ContentWrapper: FunctionComponent<Props> = ({ children, shouldUseMarginAutoInsteadOfTransform = false, stylesOverrides }) =>

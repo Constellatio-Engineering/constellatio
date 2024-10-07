@@ -1,15 +1,27 @@
 /* eslint-disable sort-keys-fix/sort-keys-fix,@typescript-eslint/naming-convention,@typescript-eslint/no-use-before-define,max-lines */
 import { type GameResultSchemaType } from "@/schemas/gamesProgress/setGameProgressState.schema";
 import { type SearchIndex, searchIndices } from "@/utils/search";
+import { getCurrentDate } from "@/utils/utils";
 
 import { type InferInsertModel, type InferSelectModel, relations } from "drizzle-orm";
 import {
-  text, pgTable, integer, pgEnum, uuid, smallint, unique, timestamp, primaryKey, index, type AnyPgColumn, serial, uniqueIndex,
+  type AnyPgColumn,
   boolean,
-  type PgTable,
-  type PgColumn,
   date,
-  jsonb
+  index,
+  integer,
+  type PgColumn,
+  pgEnum,
+  pgTable,
+  type PgTable,
+  primaryKey,
+  serial,
+  smallint,
+  text,
+  timestamp,
+  unique,
+  uniqueIndex,
+  uuid
 } from "drizzle-orm/pg-core";
 
 // type InferPgSelectModel1<T extends PgTable> = {
@@ -248,7 +260,7 @@ export const documents = pgTable("Document", {
   id: uuid("Id").defaultRandom().primaryKey(),
   userId: uuid("UserId").references(() => users.id, { onDelete: "no action" }).notNull(),
   createdAt: timestamp("CreatedAt").defaultNow().notNull(),
-  updatedAt: timestamp("UpdatedAt").defaultNow().notNull(),
+  updatedAt: timestamp("UpdatedAt").defaultNow().notNull().$onUpdate(getCurrentDate),
   folderId: uuid("FolderId").references(() => uploadFolders.id, { onDelete: "no action" }),
   name: text("Name").notNull(),
   content: text("Content").notNull(),
@@ -268,7 +280,7 @@ export const notes = pgTable("Note", {
   userId: uuid("UserId").references(() => users.id, { onDelete: "no action" }).notNull(),
   fileId: uuid("FileId").references(() => uploadedFiles.id, { onDelete: "no action" }).notNull(),
   createdAt: timestamp("CreatedAt").defaultNow().notNull(),
-  updatedAt: timestamp("UpdatedAt").defaultNow().notNull(),
+  updatedAt: timestamp("UpdatedAt").defaultNow().notNull().$onUpdate(getCurrentDate),
   content: text("Content").notNull(),
 });
 
@@ -279,7 +291,7 @@ export type NoteSql = InferPgSelectModel<typeof notes>;
 export const casesViews = pgTable("CaseView", {
   userId: uuid("UserId").references(() => users.id, { onDelete: "no action" }).notNull(),
   caseId: uuid("CaseId").notNull(),
-  updatedAt: timestamp("UpdatedAt").defaultNow(),
+  updatedAt: timestamp("UpdatedAt").defaultNow().notNull().$onUpdate(getCurrentDate),
 }, table => ({
   caseId_index: index("CaseView_CaseId_Index").on(table.caseId),
   pk: primaryKey({
@@ -295,7 +307,7 @@ export type CaseViewSql = InferPgSelectModel<typeof casesViews>;
 export const articlesViews = pgTable("ArticleView", {
   userId: uuid("UserId").references(() => users.id, { onDelete: "no action" }).notNull(),
   articleId: uuid("ArticleId").notNull(),
-  updatedAt: timestamp("UpdatedAt").defaultNow(),
+  updatedAt: timestamp("UpdatedAt").defaultNow().notNull().$onUpdate(getCurrentDate),
 }, table => ({
   articleId_index: index("ArticleView_ArticleId_Index").on(table.articleId),
   pk: primaryKey({ columns: [table.userId, table.articleId] }),
@@ -402,8 +414,7 @@ export const forumQuestions = pgTable("ForumQuestion", {
   slug: text("Slug").notNull(),
   userId: uuid("UserId").references(() => users.id, { onDelete: "no action" }).notNull(),
   createdAt: timestamp("CreatedAt").defaultNow().notNull(),
-  updatedAt: timestamp("UpdatedAt").defaultNow().notNull(),
-  // updatedAt2: timestamp("UpdatedAt2").notNull().$onUpdate(() => new Date()),
+  updatedAt: timestamp("UpdatedAt").defaultNow().notNull().$onUpdate(getCurrentDate),
   title: text("Title").notNull(),
   text: text("Text").notNull(),
 }, table => ({
@@ -486,7 +497,7 @@ export const forumAnswers = pgTable("ForumAnswer", {
   index: serial("Index"),
   userId: uuid("UserId").references(() => users.id, { onDelete: "no action" }).notNull(),
   createdAt: timestamp("CreatedAt").defaultNow().notNull(),
-  updatedAt: timestamp("UpdatedAt").defaultNow().notNull(),
+  updatedAt: timestamp("UpdatedAt").defaultNow().notNull().$onUpdate(getCurrentDate),
   text: text("AnswerText").notNull(),
   parentQuestionId: uuid("ParentQuestionId").references(() => forumQuestions.id, { onDelete: "no action" }),
   parentAnswerId: uuid("ParentAnswerId").references((): AnyPgColumn => forumAnswers.id, { onDelete: "no action" }),

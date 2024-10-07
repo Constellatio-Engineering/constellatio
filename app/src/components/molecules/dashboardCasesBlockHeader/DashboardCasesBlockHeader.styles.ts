@@ -1,5 +1,6 @@
+import { colooors } from "@/constants/styles/colors";
+
 import { css } from "@emotion/react";
-import { type MantineTheme } from "@mantine/styles";
 
 export const wrapper = css`
   min-width: 220px;
@@ -14,8 +15,8 @@ export const wrapper = css`
 }
 `;
 
-export const casesHeaderTitle = (theme: MantineTheme) => css`
-    color: ${theme.colors["neutrals-02"][1]};
+export const casesHeaderTitle = () => css`
+    color: ${colooors["neutrals-02"][1]};
     margin :24px 0;
     
 `;

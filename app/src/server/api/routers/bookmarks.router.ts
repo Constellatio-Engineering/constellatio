@@ -6,7 +6,7 @@ import { createTRPCRouter, protectedProcedure } from "@/server/api/trpc";
 import { filterBookmarkForClient } from "@/utils/filters";
 
 import { and, eq, type SQLWrapper } from "drizzle-orm";
-import z from "zod";
+import { z } from "zod";
 
 export const bookmarksRouter = createTRPCRouter({
   addBookmark: protectedProcedure

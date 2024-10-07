@@ -1,4 +1,6 @@
 /* eslint-disable max-lines */
+import { colooors } from "@/constants/styles/colors";
+import { spaciiing } from "@/constants/styles/spacing";
 import { type UnknownMantineStylesParams } from "@/utils/types";
 
 import {
@@ -12,6 +14,7 @@ interface TProps
   error: ReactNode;
   inputStyleOverwrite: CSSObject | undefined;
   labelStyleOverwrite: CSSObject | undefined;
+  theme: MantineTheme;
 }
 
 type TextStyles = Styles<TextInputStylesNames, UnknownMantineStylesParams>;
@@ -20,22 +23,23 @@ export const textStyles = ({
   disabled,
   error,
   inputStyleOverwrite,
-  labelStyleOverwrite
+  labelStyleOverwrite,
+  theme
 }: TProps): TextStyles =>
 {
-  const styles: TextStyles = (theme: MantineTheme) => ({
+  const styles: TextStyles = () => ({
     description: {
-      color: theme.colors["neutrals-01"][7],
+      color: colooors["neutrals-01"][7],
       fontSize: "14px",
       fontWeight: 500,
-      lineHeight: theme.spacing["spacing-20"],
+      lineHeight: spaciiing["spacing-20"],
       order: 2,
     },
     error: {
-      color: theme.colors["support-error"][3],
+      color: colooors["support-error"][3],
       fontSize: "14px",
       fontWeight: 500,
-      lineHeight: theme.spacing["spacing-20"],
+      lineHeight: spaciiing["spacing-20"],
       order: 3,
     },
     icon: {
@@ -46,28 +50,28 @@ export const textStyles = ({
     },
     input: {
       "&[data-disabled]": {
-        backgroundColor: theme.colors["neutrals-01"][3],
+        backgroundColor: colooors["neutrals-01"][3],
       },
       "::placeholder": {
-        color: `${theme.colors["neutrals-01"][7]} !important`,
+        color: `${colooors["neutrals-01"][7]} !important`,
         fontSize: theme.fontSizes["spacing-16"],
         fontWeight: 500,
-        lineHeight: theme.spacing["spacing-24"],
+        lineHeight: spaciiing["spacing-24"],
       },
       ":focus": {
         border: error
-          ? `1px solid ${theme.colors["support-error"][3]} !important`
-          : `1px solid ${theme.colors["neutrals-01"][8]} !important`,
+          ? `1px solid ${colooors["support-error"][3]} !important`
+          : `1px solid ${colooors["neutrals-01"][8]} !important`,
       },
-      backgroundColor: theme.colors["neutrals-01"][0],
+      backgroundColor: colooors["neutrals-01"][0],
       border: error
-        ? `1px solid ${theme.colors["support-error"][3]} !important`
-        : `1px solid ${theme.colors["neutrals-01"][5]}`,
+        ? `1px solid ${colooors["support-error"][3]} !important`
+        : `1px solid ${colooors["neutrals-01"][5]}`,
       borderRadius: theme.radius["radius-8"],
-      color: `${theme.colors["neutrals-02"][1]} !important`,
+      color: `${colooors["neutrals-02"][1]} !important`,
       fontSize: theme.fontSizes["spacing-16"],
       fontWeight: 500,
-      lineHeight: theme.spacing["spacing-24"],
+      lineHeight: spaciiing["spacing-24"],
       paddingBottom: 8,
       paddingLeft: 16,
       paddingTop: 8,
@@ -76,15 +80,15 @@ export const textStyles = ({
     },
     label: {
       color: error
-        ? theme.colors["support-error"][3]
+        ? colooors["support-error"][3]
         : disabled
-          ? theme.colors["neutrals-01"][7]
-          : theme.colors["neutrals-01"][9],
+          ? colooors["neutrals-01"][7]
+          : colooors["neutrals-01"][9],
       fontSize: theme.fontSizes["spacing-16"],
       fontWeight: 400,
-      lineHeight: theme.spacing["spacing-24"],
+      lineHeight: spaciiing["spacing-24"],
       order: 0,
-      paddingBottom: theme.spacing["spacing-4"],
+      paddingBottom: spaciiing["spacing-4"],
       transition: "all 0.3s ease",
       ...labelStyleOverwrite,
     },
@@ -95,14 +99,14 @@ export const textStyles = ({
     root: {
       ":focus-within": {
         label: {
-          color: error ? theme.colors["support-error"][3] : theme.colors["neutrals-02"][1],
+          color: error ? colooors["support-error"][3] : colooors["neutrals-02"][1],
         },
       },
       ":hover": {
         input: {
           border: error
-            ? `1px solid ${theme.colors["support-error"][3]}`
-            : `1px solid ${theme.colors["neutrals-01"][6]}`,
+            ? `1px solid ${colooors["support-error"][3]}`
+            : `1px solid ${colooors["neutrals-01"][6]}`,
         },
       },
       display: "flex",
@@ -110,10 +114,10 @@ export const textStyles = ({
       position: "relative",
     },
     wrapper: {
-      color: error ? theme.colors["support-error"][3] : theme.colors["neutrals-01"][7],
+      color: error ? colooors["support-error"][3] : colooors["neutrals-01"][7],
       margin: 0,
       order: 1,
-      paddingBottom: theme.spacing["spacing-8"],
+      paddingBottom: spaciiing["spacing-8"],
     },
   });
 
@@ -126,67 +130,68 @@ export const passwordStyles = ({
   disabled,
   error,
   inputStyleOverwrite,
-  labelStyleOverwrite
+  labelStyleOverwrite,
+  theme
 }: TProps): PasswordStyles =>
 {
-  const styles: PasswordStyles = (theme: MantineTheme) => ({
+  const styles: PasswordStyles = () => ({
     description: {
-      color: theme.colors["neutrals-01"][7],
+      color: colooors["neutrals-01"][7],
       fontSize: "14px",
       fontWeight: 500,
-      lineHeight: theme.spacing["spacing-20"],
+      lineHeight: spaciiing["spacing-20"],
       order: 2,
     },
     error: {
-      color: theme.colors["support-error"][3],
+      color: colooors["support-error"][3],
       fontSize: "14px",
       fontWeight: 500,
-      lineHeight: theme.spacing["spacing-20"],
+      lineHeight: spaciiing["spacing-20"],
       order: 3,
     },
     innerInput: {
       "&[data-disabled]": {
-        backgroundColor: theme.colors["neutrals-01"][3],
+        backgroundColor: colooors["neutrals-01"][3],
       },
       "::placeholder": {
-        color: `${theme.colors["neutrals-01"][7]} !important`,
+        color: `${colooors["neutrals-01"][7]} !important`,
         fontSize: theme.fontSizes["spacing-16"],
         fontWeight: 500,
-        lineHeight: theme.spacing["spacing-24"],
+        lineHeight: spaciiing["spacing-24"],
       },
-      color: `${theme.colors["neutrals-02"][1]} !important`,
+      color: `${colooors["neutrals-02"][1]} !important`,
       fontSize: theme.fontSizes["spacing-16"],
       fontWeight: 500,
-      lineHeight: theme.spacing["spacing-24"],
+      lineHeight: spaciiing["spacing-24"],
 
       transition: "all 0.3s ease",
     },
     input: {
       ":focus, :focus-within": {
         border: error
-          ? `1px solid ${theme.colors["support-error"][3]} !important`
-          : `1px solid ${theme.colors["neutrals-01"][8]} !important`,
+          ? `1px solid ${colooors["support-error"][3]} !important`
+          : `1px solid ${colooors["neutrals-01"][8]} !important`,
       },
-      backgroundColor: theme.colors["neutrals-01"][0],
+      backgroundColor: colooors["neutrals-01"][0],
       border: error
-        ? `1px solid ${theme.colors["support-error"][3]} !important`
-        : `1px solid ${theme.colors["neutrals-01"][5]}`,
+        ? `1px solid ${colooors["support-error"][3]} !important`
+        : `1px solid ${colooors["neutrals-01"][5]}`,
       borderRadius: theme.radius["radius-8"],
-      padding: `${theme.spacing["spacing-8"]} ${theme.spacing["spacing-16"]}`,
+      padding: `${spaciiing["spacing-8"]} ${spaciiing["spacing-16"]}`,
       transition: "all 0.3s ease",
       ...inputStyleOverwrite,
     },
     label: {
       color: error
-        ? theme.colors["support-error"][3]
+        ? colooors["support-error"][3]
         : disabled
-          ? theme.colors["neutrals-01"][7]
-          : theme.colors["neutrals-01"][9],
+          ? colooors["neutrals-01"][7]
+          : colooors["neutrals-01"][9],
       fontSize: theme.fontSizes["spacing-16"],
       fontWeight: 400,
-      lineHeight: theme.spacing["spacing-24"],
+      lineHeight: spaciiing["spacing-24"],
       order: 0,
-      paddingBottom: theme.spacing["spacing-4"],
+      paddingBottom: spaciiing["spacing-4"],
       transition: "all 0.3s ease",
       ...labelStyleOverwrite,
     },
@@ -199,21 +204,21 @@ export const passwordStyles = ({
     root: {
       ":focus-within": {
         label: {
-          color: error ? theme.colors["support-error"][3] : theme.colors["neutrals-02"][1],
+          color: error ? colooors["support-error"][3] : colooors["neutrals-02"][1],
         },
       },
       ":hover .mantine-PasswordInput-input": {
-        border: error ? `1px solid ${theme.colors["support-error"][3]}` : `1px solid ${theme.colors["neutrals-01"][6]}`,
+        border: error ? `1px solid ${colooors["support-error"][3]}` : `1px solid ${colooors["neutrals-01"][6]}`,
       },
 
       display: "flex",
       flexDirection: "column",
     },
     wrapper: {
-      color: error ? theme.colors["support-error"][3] : theme.colors["neutrals-01"][7],
+      color: error ? colooors["support-error"][3] : colooors["neutrals-01"][7],
       margin: 0,
       order: 1,
-      paddingBottom: theme.spacing["spacing-8"],
+      paddingBottom: spaciiing["spacing-8"],
       transition: "all 0.3s ease",
     },
   });

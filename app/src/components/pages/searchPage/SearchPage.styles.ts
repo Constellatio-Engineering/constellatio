@@ -1,5 +1,6 @@
+import { colooors } from "@/constants/styles/colors";
+
 import { css } from "@emotion/react";
-import { type MantineTheme } from "@mantine/styles";
 
 export const wrapper = css``;
 
@@ -14,20 +15,20 @@ export const loadingWrapper = css`
   justify-content: center;
 `;
 
-export const header = (theme: MantineTheme) => css`
+export const header = () => css`
 	height: 400px;
 	width: 100%;
 	display: flex;
 	align-items: center;
 	justify-content: center;
-	background-color: ${theme.colors["brand-01"][4]};
+	background-color: ${colooors["brand-01"][4]};
 	background-size: 100%;
 	position: relative;
 
 	h2 {
     text-align: center;
 		z-index: 1;
-		color: ${theme.colors["neutrals-01"][0]};
+		color: ${colooors["neutrals-01"][0]};
 	}
 `;
 
@@ -47,9 +48,9 @@ export const headerContentWrapper = css`
   transform: none;
 `;
 
-export const navBar = (theme: MantineTheme) => css`
+export const navBar = () => css`
 	width: 100%;
-	background-color: ${theme.colors["neutrals-01"][0]};
+	background-color: ${colooors["neutrals-01"][0]};
 `;
 
 export const navBarContentWrapper = css`

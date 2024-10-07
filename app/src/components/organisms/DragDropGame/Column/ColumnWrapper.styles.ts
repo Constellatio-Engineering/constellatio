@@ -1,3 +1,6 @@
+import { colooors } from "@/constants/styles/colors";
+import { spaciiing } from "@/constants/styles/spacing";
+
 import { css } from "@emotion/react";
 import styled from "@emotion/styled";
 
@@ -8,13 +11,13 @@ export const Column = styled.div<{
   position: relative;
   display: flex;
   flex-direction: column;
-  gap: ${({ theme }) => theme.spacing["spacing-8"]};
-  padding: ${({ theme }) => theme.spacing["spacing-12"]};
+  gap: ${spaciiing["spacing-8"]};
+  padding: ${spaciiing["spacing-12"]};
   padding-bottom: 4px;
   flex: 1 0 0;
   border-radius: ${({ theme }) => theme.radius["radius-12"]};
-  border: 1px solid ${({ isDraggingOver, theme }) => isDraggingOver ? theme.colors["neutrals-01"][5] : theme.colors["neutrals-01"][3]};
-  background-color: ${({ theme }) => theme.colors["neutrals-01"][2]};
+  border: 1px solid ${({ isDraggingOver }) => isDraggingOver ? colooors["neutrals-01"][5] : colooors["neutrals-01"][3]};
+  background-color: ${colooors["neutrals-01"][2]};
 `;
 
 export const InnerWrapperWithBackground = css`
@@ -31,6 +34,6 @@ export const EmptyPlaceholder = styled.div`
   flex-direction: column;
   align-items: center;
   justify-content: center;
-  gap: ${({ theme }) => theme.spacing["spacing-8"]};
-  color: ${({ theme }) => theme.colors["neutrals-01"][7]};
+  gap: ${spaciiing["spacing-8"]};
+  color: ${colooors["neutrals-01"][7]};
 `;

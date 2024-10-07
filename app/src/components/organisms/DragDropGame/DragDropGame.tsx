@@ -17,19 +17,12 @@ import useDragDropGameStore, {
 import { api } from "@/utils/api";
 import { shuffleArray } from "@/utils/array";
 
-import {
-  DragDropContext,
-  type DropResult
-} from "@hello-pangea/dnd";
-import { Title, LoadingOverlay } from "@mantine/core";
+import { DragDropContext, type DropResult } from "@hello-pangea/dnd";
+import { LoadingOverlay, Title } from "@mantine/core";
 import React, { type FC, useCallback, useMemo } from "react";
 
 import {
-  Container,
-  Game,
-  GameWrapper,
-  LegendWrapper,
-  TitleWrapper,
+  Container, Game, GameWrapper, LegendWrapper, TitleWrapper, 
 } from "./DragDropGame.styles";
 
 export type TDragDropGame = Pick<IGenDragNDropGame, "game" | "helpNote" | "question"> & {

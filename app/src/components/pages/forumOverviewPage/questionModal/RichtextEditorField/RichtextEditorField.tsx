@@ -4,7 +4,7 @@ import type { PostQuestionSchema } from "@/schemas/forum/postQuestion.schema";
 
 import { Skeleton } from "@mantine/core";
 import { type GetInputProps } from "@mantine/form/lib/types";
-import { RichTextEditor, Link } from "@mantine/tiptap";
+import { Link, RichTextEditor } from "@mantine/tiptap";
 import { Color } from "@tiptap/extension-color";
 import { Highlight } from "@tiptap/extension-highlight";
 import { Placeholder } from "@tiptap/extension-placeholder";

@@ -1,7 +1,5 @@
 import { db } from "@/db/connection";
-import {
-  type CaseProgress, casesProgress, casesSolutions, gamesProgress
-} from "@/db/schema";
+import { type CaseProgress, casesProgress, casesSolutions, gamesProgress } from "@/db/schema";
 import { addUserToCrmUpdateQueue } from "@/lib/clickup/utils";
 import { getCaseProgressSchema } from "@/schemas/caseProgress/getCaseProgress.schema";
 import { getCasesProgressSchema } from "@/schemas/caseProgress/getCasesProgress.schema";
@@ -17,7 +15,7 @@ import { getGamesFromCase } from "@/utils/case";
 import { and, eq, inArray, type SQLWrapper } from "drizzle-orm";
 
 export type GetCaseProgressResult = Pick<CaseProgress, "progressState" | "caseId">;
-export type GetCasesProgressResult = GetCaseProgressResult[];
+type GetCasesProgressResult = GetCaseProgressResult[];
 
 export const caseProgressRouter = createTRPCRouter({
   getCaseProgress: protectedProcedure

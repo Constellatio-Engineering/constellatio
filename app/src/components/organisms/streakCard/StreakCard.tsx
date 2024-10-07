@@ -1,15 +1,15 @@
 import { BodyText } from "@/components/atoms/BodyText/BodyText";
 import { FireIcon } from "@/components/Icons/Fire";
 import { InfoFilled } from "@/components/Icons/InfoFilled";
-import { colors } from "@/constants/styles/colors";
+import { colooors } from "@/constants/styles/colors";
 import { api } from "@/utils/api";
 
 import { Tooltip } from "@mantine/core";
 import { useMediaQuery } from "@mantine/hooks";
 import { type FunctionComponent } from "react";
 
-import { cardsSmallerBreakpoint } from "./StreakCard.styles";
 import * as styles from "./StreakCard.styles";
+import { cardsSmallerBreakpoint } from "./StreakCard.styles";
 
 const StreakCard: FunctionComponent = () =>
 {
@@ -100,7 +100,7 @@ const StreakCard: FunctionComponent = () =>
         <div css={styles.feuerWrapper}>
           {finalWeekStreak.map((satisfactionObj, index) => (
             <div key={index} css={styles.dayFireWrapper}>
-              <FireIcon size={20} color={satisfactionObj.isSatisfied ? colors["brand-01"][4] : "#D3D3D3"}/>
+              <FireIcon size={20} color={satisfactionObj.isSatisfied ? colooors["brand-01"][4] : "#D3D3D3"}/>
               {(() =>
               {
                 const isGreyText = !isStreakPending && (streak?.numStreakDays ?? 0) < 7 && index < (7 - (streak?.numStreakDays ?? 0));

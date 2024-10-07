@@ -1,10 +1,14 @@
+import { colooors } from "@/constants/styles/colors";
+import { spaciiing } from "@/constants/styles/spacing";
+
 import {
   Button as MantineButton,
   type ButtonProps,
-  type Styles,
   type ButtonStylesNames,
+  type ButtonStylesParams,
+  createPolymorphicComponent,
   type CSSObject,
-  createPolymorphicComponent, type ButtonStylesParams,
+  type Styles,
 } from "@mantine/core";
 import React, { type ButtonHTMLAttributes, type FC } from "react";
 
@@ -24,69 +28,69 @@ const _Button: FC<TButton> = ({
 {
   const styles: Styles<ButtonStylesNames, ButtonStylesParams> = theme => ({
     leftIcon: {
-      marginRight: theme.spacing["spacing-4"],
+      marginRight: spaciiing["spacing-4"],
     },
     rightIcon: {
-      marginLeft: theme.spacing["spacing-4"],
+      marginLeft: spaciiing["spacing-4"],
     },
     root: {
       ":active": {
-        backgroundColor: styleType === "primary" ? theme.colors["neutrals-02"][2] : theme.colors["neutrals-01"][3],
+        backgroundColor: styleType === "primary" ? colooors["neutrals-02"][2] : colooors["neutrals-01"][3],
         border:
           styleType === "secondarySimple"
-            ? `1px solid ${theme.colors["neutrals-02"][2]}`
+            ? `1px solid ${colooors["neutrals-02"][2]}`
             : styleType === "tertiary" || styleType === "secondarySubtle"
-              ? `1px solid ${theme.colors["neutrals-01"][5]}`
+              ? `1px solid ${colooors["neutrals-01"][5]}`
               : "",
       },
       ":disabled": {
         backgroundColor:
           styleType === "secondarySimple" || styleType === "secondarySubtle"
-            ? theme.colors["neutrals-01"][0]
-            : theme.colors["neutrals-01"][3],
-        border: styleType !== "primary" ? `1px solid ${theme.colors["neutrals-01"][3]}` : "",
-        color: theme.colors["neutrals-01"][7],
+            ? colooors["neutrals-01"][0]
+            : colooors["neutrals-01"][3],
+        border: styleType !== "primary" ? `1px solid ${colooors["neutrals-01"][3]}` : "",
+        color: colooors["neutrals-01"][7],
       },
       ":hover": {
-        backgroundColor: styleType === "primary" ? theme.colors["neutrals-01"][9] : theme.colors["neutrals-01"][2],
+        backgroundColor: styleType === "primary" ? colooors["neutrals-01"][9] : colooors["neutrals-01"][2],
         border:
           styleType === "secondarySimple"
-            ? `1px solid ${theme.colors["neutrals-01"][9]}`
+            ? `1px solid ${colooors["neutrals-01"][9]}`
             : styleType === "tertiary" || styleType === "secondarySubtle"
-              ? `1px solid ${theme.colors["neutrals-01"][5]}`
+              ? `1px solid ${colooors["neutrals-01"][5]}`
               : "",
       },
       backgroundColor:
         styleType === "primary"
-          ? theme.colors["neutrals-02"][1]
+          ? colooors["neutrals-02"][1]
           : styleType === "secondarySimple" || styleType === "secondarySubtle"
-            ? theme.colors["neutrals-01"][0]
+            ? colooors["neutrals-01"][0]
             : styleType === "tertiary"
-              ? theme.colors["neutrals-01"][2]
+              ? colooors["neutrals-01"][2]
               : "",
       border:
         styleType === "secondarySimple"
-          ? `1px solid ${theme.colors["neutrals-01"][6]}`
+          ? `1px solid ${colooors["neutrals-01"][6]}`
           : styleType === "tertiary" || styleType === "secondarySubtle"
-            ? `1px solid ${theme.colors["neutrals-01"][3]}`
+            ? `1px solid ${colooors["neutrals-01"][3]}`
             : "",
       color:
         styleType === "primary"
-          ? theme.colors["neutrals-01"][0]
+          ? colooors["neutrals-01"][0]
           : styleType === "secondarySimple" || styleType === "secondarySubtle"
-            ? theme.colors["neutrals-02"][1]
+            ? colooors["neutrals-02"][1]
             : styleType === "tertiary"
-              ? theme.colors["neutrals-01"][9]
+              ? colooors["neutrals-01"][9]
               : "",
       fontFamily: "inherit",
       fontSize: theme.fontSizes["spacing-16"],
       fontStyle: "normal",
       fontWeight: 500,
-      height: size === "large" ? theme.spacing["spacing-40"] : theme.spacing["spacing-32"],
-      lineHeight: theme.spacing["spacing-24"],
+      height: size === "large" ? spaciiing["spacing-40"] : spaciiing["spacing-32"],
+      lineHeight: spaciiing["spacing-24"],
       padding: size === "large"
-        ? `${theme.spacing["spacing-8"]} ${theme.spacing["spacing-16"]}`
-        : `${theme.spacing["spacing-4"]} ${theme.spacing["spacing-10"]}`
+        ? `${spaciiing["spacing-8"]} ${spaciiing["spacing-16"]}`
+        : `${spaciiing["spacing-4"]} ${spaciiing["spacing-10"]}`
       ,
       transition: "all 0.2s ease",
       ...styleOverwrite,

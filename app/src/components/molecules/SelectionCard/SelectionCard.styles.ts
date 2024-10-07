@@ -1,8 +1,11 @@
+import { colooors } from "@/constants/styles/colors";
+import { spaciiing } from "@/constants/styles/spacing";
+
 import styled from "@emotion/styled";
 
 export const ResultWrapper = styled.div<{ status: "default" | "success" | "error" }>`
 display: ${({ status }) => (status === "default" ? "none" : "flex")};
-color: ${({ theme }) => theme.colors["neutrals-01"][7]};
+color: ${colooors["neutrals-01"][7]};
 align-items: center;
-gap: ${({ theme }) => theme.spacing["spacing-8"]};
+gap: ${spaciiing["spacing-8"]};
 `;

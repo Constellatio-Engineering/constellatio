@@ -9,14 +9,14 @@ import useCaseProgress from "@/hooks/useCaseProgress";
 import useContextAndErrorIfNull from "@/hooks/useContextAndErrorIfNull";
 import useGamesProgress from "@/hooks/useGamesProgress";
 import { InvalidateQueriesContext } from "@/provider/InvalidateQueriesProvider";
-import type { ArticleWithNextAndPreviousArticleId } from "@/services/content/getArticlesOverviewProps";
 import { type FullLegalCase } from "@/services/content/getCaseById";
 import useCaseSolvingStore, { type CaseStepIndex } from "@/stores/caseSolving.store";
 import { api } from "@/utils/api";
+import { type ArticleWithNextAndPreviousArticleId } from "@/utils/articles";
 import { getGamesFromCase } from "@/utils/case";
 import { appPaths } from "@/utils/paths";
 
-import React, { useEffect, type FunctionComponent, useRef } from "react";
+import React, { type FunctionComponent, useEffect, useRef } from "react";
 
 import * as styles from "./DetailsPage.styles";
 import ErrorPage from "../errorPage/ErrorPage";

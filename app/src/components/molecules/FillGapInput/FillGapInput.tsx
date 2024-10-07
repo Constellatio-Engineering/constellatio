@@ -2,7 +2,7 @@ import { CheckFilled } from "@/components/Icons/CheckFilled";
 import { CrossFilled } from "@/components/Icons/CrossFilled";
 
 import { TextInput, type TextInputProps } from "@mantine/core";
-import React, { type ForwardRefRenderFunction, forwardRef } from "react";
+import React, { forwardRef, type ForwardRefRenderFunction } from "react";
 
 import { fillGapInputStyles } from "./FillGapInput.styles";
 

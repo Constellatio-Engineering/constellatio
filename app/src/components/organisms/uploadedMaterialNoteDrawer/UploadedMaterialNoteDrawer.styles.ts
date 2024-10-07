@@ -1,14 +1,15 @@
+import { colooors } from "@/constants/styles/colors";
 import { type UnknownMantineStylesParams } from "@/utils/types";
 
 import { css } from "@emotion/react";
 import { type DrawerStylesNames } from "@mantine/core";
-import { type MantineTheme, type Styles } from "@mantine/styles";
+import { type Styles } from "@mantine/styles";
 
 type DrawerStylesProps = Styles<DrawerStylesNames, UnknownMantineStylesParams>;
 
 export const drawerStyles = () => 
 {
-  const styles: DrawerStylesProps = (theme: MantineTheme) => ({
+  const styles: DrawerStylesProps = () => ({
     body: {
       ".form": {
         position: "relative"
@@ -19,7 +20,7 @@ export const drawerStyles = () =>
       
     },
     content: {
-      background: theme.colors["neutrals-01"][1],
+      background: colooors["neutrals-01"][1],
     },
     header: {
       padding: "0px",
@@ -31,9 +32,9 @@ export const drawerStyles = () =>
   return styles;
 };
 
-export const existingNote = (theme: MantineTheme) => css`
+export const existingNote = () => css`
 padding:24px 32px;
-background-color: ${theme.colors["neutrals-01"][0]};
+background-color: ${colooors["neutrals-01"][0]};
 
 .deleteNoteBlock{
       position: absolute;
@@ -53,8 +54,8 @@ background-color: ${theme.colors["neutrals-01"][0]};
       }
     }
 `;
-export const existingNoteActions = (theme: MantineTheme) => css`
-   background: ${theme.colors["neutrals-01"][0]};
+export const existingNoteActions = () => css`
+   background: ${colooors["neutrals-01"][0]};
    margin-bottom: 24px;
    button{
         margin-right: 8px;

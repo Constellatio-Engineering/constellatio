@@ -1,6 +1,6 @@
 import { type Document, type UploadedFile } from "@/db/schema";
 import useDocuments from "@/hooks/useDocuments";
-import useUploadedFiles from "@/hooks/useUploadedFiles"; 
+import useUploadedFiles from "@/hooks/useUploadedFiles";
 
 export type AllUserData = Array<
 (UploadedFile & { dataType: "file" }) |

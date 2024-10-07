@@ -1,0 +1,12 @@
+version: "3"
+
+agent:
+  console_ui_color: transparent
+  console_ui: true
+
+endpoints:
+  - name: constellatio-web-app
+    url: primary-finch-awfully.ngrok-free.app
+    inspect: true
+    upstream:
+      url: 3010

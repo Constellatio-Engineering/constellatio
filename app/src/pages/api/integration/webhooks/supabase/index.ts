@@ -6,7 +6,11 @@ import { type NextApiHandler } from "next";
 import {
   streakHandlerCaseProgressInsert,
   streakHandlerCaseProgressUpdate,
-  streakHandlerForumAnswerInsert, streakHandlerForumQuestionInsert, streakHandlerPingInsert, streakHandlerStreakInsert, streakHandlerStreakUpdate 
+  streakHandlerForumAnswerInsert,
+  streakHandlerForumQuestionInsert,
+  streakHandlerPingInsert,
+  streakHandlerStreakInsert,
+  streakHandlerStreakUpdate
 } from "./handlers/streak.handler";
 
 const handler: NextApiHandler = async (req, res) =>

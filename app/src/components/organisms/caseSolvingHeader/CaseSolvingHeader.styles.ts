@@ -1,14 +1,14 @@
-import { type SerializedStyles, css } from "@emotion/react";
-import type { MantineTheme } from "@mantine/styles";
+import { colooors } from "@/constants/styles/colors";
 
-export const wrapper = ({ theme, variant }: {
-  theme: MantineTheme;
+import { css, type SerializedStyles } from "@emotion/react";
+
+export const wrapper = ({ variant }: {
   variant: "case" | "dictionary";
 }): SerializedStyles => css`
   position: relative;
   background: ${variant === "case"
-    ? theme.colors["cc-cases"][2]
-    : theme.colors["cc-dictionary"][2]};
+    ? colooors["cc-cases"][2]
+    : colooors["cc-dictionary"][2]};
 
   #overlay-lines {
     position: absolute;
@@ -19,8 +19,8 @@ export const wrapper = ({ theme, variant }: {
     place-items: center;
     z-index: 2;
     color: ${variant === "case"
-    ? theme.colors["cc-cases"][2]
-    : theme.colors["cc-dictionary"][2]};
+    ? colooors["cc-cases"][2]
+    : colooors["cc-dictionary"][2]};
   }
 `;
 
@@ -45,7 +45,7 @@ export const bodyArticles = css`
   padding-bottom: 120px;
 `;
 
-export const bodyText = (theme: MantineTheme): SerializedStyles => css`
+export const bodyText = (): SerializedStyles => css`
   width: 48%;
 
   h1 {
@@ -72,13 +72,13 @@ export const bodyText = (theme: MantineTheme): SerializedStyles => css`
     margin: 32px 0 8px 0;
 
     a {
-      color: ${theme.colors["transparency-01"][5]};
+      color: ${colooors["transparency-01"][5]};
       text-transform: uppercase;
     }
   }
 
   .title {
-    color: ${theme.colors["transparency-02"][1]};
+    color: ${colooors["transparency-02"][1]};
   }
 
   @media (max-width: 1100px) {
@@ -127,10 +127,10 @@ export const navButtonDisabled = css`
   background-color: rgba(255, 255, 255, 0.03) !important;
 `;
 
-export const stepsBar = (theme: MantineTheme): SerializedStyles => css`
+export const stepsBar = (): SerializedStyles => css`
   position: relative;
   z-index: 2;
-  background-color: ${theme.colors["neutrals-01"][0]};
+  background-color: ${colooors["neutrals-01"][0]};
   padding: 16px 32px;
   width: 100%;
   justify-content: space-between;
@@ -151,8 +151,8 @@ export const stepsBar = (theme: MantineTheme): SerializedStyles => css`
       align-items: center;
 
       span {
-        background-color: ${theme.colors["support-notice"][5]};
-        color: ${theme.colors["neutrals-01"][0]};
+        background-color: ${colooors["support-notice"][5]};
+        color: ${colooors["neutrals-01"][0]};
         width: 24px;
         height: 24px;
         display: grid;

@@ -1,4 +1,4 @@
-import { colors } from "@/constants/styles/colors";
+import { colooors } from "@/constants/styles/colors";
 import type { UnknownMantineStylesParams } from "@/utils/types";
 
 import { css } from "@emotion/react";
@@ -8,7 +8,7 @@ import type { Styles } from "@mantine/styles";
 const questionOffset = 120;
 
 export const questionWrapper = css`
-  background-color: ${colors["cc-forum"][2]};
+  background-color: ${colooors["cc-forum"][2]};
   position: relative;
   z-index: 1;
   min-height: 400px;
@@ -52,7 +52,7 @@ export const yellowTopBar = css`
   left: 0;
   width: 100%;
   height: 8px;
-  background-color: ${colors["cc-forum"][3]};
+  background-color: ${colooors["cc-forum"][3]};
 `;
 
 export const questionContentWrapper = css`
@@ -105,11 +105,11 @@ export const authorAndDateWrapper = css`
 export const authorAndDateSeparator = css`
   height: 20px;
   width: 1px;
-  background-color: ${colors["neutrals-01"][5]};
+  background-color: ${colooors["neutrals-01"][5]};
 `;
 
 export const date = css`
-  color: ${colors["neutrals-01"][7]};
+  color: ${colooors["neutrals-01"][7]};
 `;
 
 export const tagsWrapper = css`
@@ -132,7 +132,7 @@ export const totalAmountAndSortingWrapper = (fullWidth: boolean) => css`
   justify-content: space-between;
   align-items: center;
   width: ${fullWidth ? "100%" : "auto"};
-  color: ${colors["neutrals-01"][9]};
+  color: ${colooors["neutrals-01"][9]};
 `;
 
 export const totalAmount = css`

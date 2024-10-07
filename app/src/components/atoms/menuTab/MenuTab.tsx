@@ -1,4 +1,3 @@
-import { useMantineTheme } from "@mantine/core";
 import React, { type FunctionComponent } from "react";
 
 import * as styles from "./MenuTab.styles";
@@ -22,9 +21,8 @@ const MenuTab: FunctionComponent<IMenuTabProps> = ({
   ...props
 }) => 
 {
-  const theme = useMantineTheme();
   return title || icon ? (
-    <div {...props} css={styles.menuTabStyles({ active, disabled, theme })}>
+    <div {...props} css={styles.menuTabStyles({ active, disabled })}>
       <CaptionText styleType="caption-01-bold" component="p" tt="uppercase">
         {icon && icon}
         {title}{" "}

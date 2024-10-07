@@ -1,7 +1,8 @@
-import { css } from "@emotion/react";
-import { type MantineTheme } from "@mantine/styles";
+import { colooors } from "@/constants/styles/colors";
 
-export const wrapper = (theme: MantineTheme) => css`
+import { css } from "@emotion/react";
+
+export const wrapper = () => css`
   width: 440px;
 
   .mantine-InputWrapper-root {
@@ -25,7 +26,7 @@ export const wrapper = (theme: MantineTheme) => css`
       align-items: center;
 
       span {
-        color: ${theme.colors["neutrals-01"][7]};
+        color: ${colooors["neutrals-01"][7]};
       }
     }
   }

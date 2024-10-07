@@ -1,9 +1,10 @@
-import { css } from "@emotion/react";
-import { type MantineTheme } from "@mantine/styles";
+import { colooors } from "@/constants/styles/colors";
 
-export const button = (theme: MantineTheme) => css`
+import { css } from "@emotion/react";
+
+export const button = () => css`
   padding: 8px 16px;
-  background-color: ${theme.colors["neutrals-01"][0]};
+  background-color: ${colooors["neutrals-01"][0]};
   border-radius: 100px;
   display: flex;
   justify-content: center;
@@ -12,7 +13,7 @@ export const button = (theme: MantineTheme) => css`
   cursor: pointer;
   outline: 0;
   border: 0;
-  border: 1px solid ${theme.colors["neutrals-01"][3]};
+  border: 1px solid ${colooors["neutrals-01"][3]};
   svg {
     display: flex;
     justify-content: center;
@@ -20,12 +21,12 @@ export const button = (theme: MantineTheme) => css`
   }
 
   &:hover {
-    background-color: ${theme.colors["neutrals-01"][1]};
-    border: 1px solid ${theme.colors["neutrals-01"][5]};
+    background-color: ${colooors["neutrals-01"][1]};
+    border: 1px solid ${colooors["neutrals-01"][5]};
   }
   &:active {
-    background-color: ${theme.colors["neutrals-01"][3]};
-    border: 1px solid ${theme.colors["neutrals-01"][5]};
+    background-color: ${colooors["neutrals-01"][3]};
+    border: 1px solid ${colooors["neutrals-01"][5]};
   }
   &:disabled {
     cursor: default;
@@ -34,11 +35,10 @@ export const button = (theme: MantineTheme) => css`
   }
 `;
 
-export const icon = ({ disabled, theme }: {
+export const icon = ({ disabled }: {
   disabled: boolean | undefined;
-  theme: MantineTheme;
 }) => css`
   color: ${disabled
-    ? theme.colors["neutrals-01"][7]
-    : theme.colors["neutrals-02"][1]};
+    ? colooors["neutrals-01"][7]
+    : colooors["neutrals-02"][1]};
 `;

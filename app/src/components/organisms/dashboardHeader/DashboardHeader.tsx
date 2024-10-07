@@ -9,6 +9,7 @@ import BadgesCarouselBlock from "../badgesCarouselBlock/BadgesCarouselBlock";
 import { LearningTimeCard } from "../learninTimeCard/LearningTimeCard";
 import OverviewHeader from "../OverviewHeader/OverviewHeader";
 import StreakCard from "../streakCard/StreakCard";
+
 // import DashboardheaderProgressBar from "../dashboardheaderProgressBar/DashboardheaderProgressBar";
 
 const DashboardHeader: FunctionComponent = () => 

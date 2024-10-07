@@ -5,7 +5,6 @@ import { type CaseProgressState } from "@/db/schema";
 import useCaseSolvingStore, { type CaseStepIndex } from "@/stores/caseSolving.store";
 import { getCaseProgressStateAsNumber } from "@/utils/case";
 
-import { useMantineTheme } from "@mantine/core";
 import React, { type FunctionComponent } from "react";
 
 import * as styles from "./CaseNavBar.styles";
@@ -19,7 +18,6 @@ export interface ICaseNavBarProps
 
 const CaseNavBar: FunctionComponent<ICaseNavBarProps> = ({ caseProgressState, caseStepIndex, variant }) =>
 {
-  const theme = useMantineTheme();
   const steps = ["Fall bearbeiten", "Lösung abgeben", "Musterlösung"];
   const overrideCaseStepIndex = useCaseSolvingStore(s => s.overrideCaseStepIndex);
 
@@ -30,7 +28,7 @@ const CaseNavBar: FunctionComponent<ICaseNavBarProps> = ({ caseProgressState, ca
 
   // TODO: utilize progress bar
   return variant === "case" ? (
-    <div css={styles.componentArea({ theme })}>
+    <div css={styles.componentArea()}>
       <ContentWrapper>
         <div css={styles.wrapper({ variant })}>
           <div css={styles.tabs}>
@@ -53,7 +51,6 @@ const CaseNavBar: FunctionComponent<ICaseNavBarProps> = ({ caseProgressState, ca
                     active: index === caseStepIndex,
                     completed: index < caseStepIndex,
                     isClickable,
-                    theme,
                   })}
                   variant="caseNavBar"
                   styleType="caption-01-bold">
@@ -67,10 +64,10 @@ const CaseNavBar: FunctionComponent<ICaseNavBarProps> = ({ caseProgressState, ca
       </ContentWrapper>
     </div>
   ) : (
-    <div css={styles.componentArea({ theme })}>
+    <div css={styles.componentArea()}>
       <ContentWrapper>
         <div css={styles.wrapper({ variant })}>
-          {caseProgressState === "completing-tests" && <div css={styles.progressBar({ progress: 0, theme, variant })}/>}
+          {caseProgressState === "completing-tests" && <div css={styles.progressBar({ progress: 0, variant })}/>}
         </div>
       </ContentWrapper>
     </div>

@@ -1,6 +1,5 @@
 import {
-  legalFieldIdValidation,
-  questionTextValidation, subfieldsIdsValidation, titleValidation, topicsIdsValidation
+  legalFieldIdValidation, questionTextValidation, subfieldsIdsValidation, titleValidation, topicsIdsValidation 
 } from "@/schemas/forum/question.valiation";
 
 import { z } from "zod";

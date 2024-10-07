@@ -1,5 +1,6 @@
+import { colooors } from "@/constants/styles/colors";
+
 import { css } from "@emotion/react";
-import { type MantineTheme } from "@mantine/styles";
 
 const CSSHiddenCard = css`
   height: 217px;
@@ -9,23 +10,22 @@ const CSSHiddenCard = css`
     filter: blur(3px);
   }
 `;
-const CSSHighlighted = (theme: MantineTheme) => css`
-  background: ${theme.colors["neutrals-01"][3]};
-  outline: 1px solid ${theme.colors["neutrals-01"][1]};
+const CSSHighlighted = () => css`
+  background: ${colooors["neutrals-01"][3]};
+  outline: 1px solid ${colooors["neutrals-01"][1]};
 `;
 
-export const wrapper = ({ hidden, theme }: {
+export const wrapper = ({ hidden }: {
   hidden?: boolean;
-  theme: MantineTheme;
 }) => css`
   position: relative;
   width: 422px;
-  border: 1px solid ${theme.colors["neutrals-01"][4]};
-  background-color: ${theme.colors["neutrals-01"][0]};
+  border: 1px solid ${colooors["neutrals-01"][4]};
+  background-color: ${colooors["neutrals-01"][0]};
   padding-top: 0;
   .switcher {
     padding: 16px 24px 16px 24px;
-    background-color: ${theme.colors["neutrals-01"][0]};
+    background-color: ${colooors["neutrals-01"][0]};
     z-index: 1;
   }
   .card-header{
@@ -45,7 +45,7 @@ export const wrapper = ({ hidden, theme }: {
     height: auto;
     width: 100%;
     background: white;
-    color: ${theme.colors["neutrals-01"][7]};
+    color: ${colooors["neutrals-01"][7]};
     svg {
       display: inline-block;
     }
@@ -55,8 +55,8 @@ export const wrapper = ({ hidden, theme }: {
       justify-content: center;
       gap: 12px;
       padding: 20px;
-      background-color: ${theme.colors["neutrals-01"][0]};
-      border-top: 2px solid ${theme.colors["neutrals-01"][4]};
+      background-color: ${colooors["neutrals-01"][0]};
+      border-top: 2px solid ${colooors["neutrals-01"][4]};
       position: relative;
       z-index: 1;
       &::before {
@@ -71,7 +71,7 @@ export const wrapper = ({ hidden, theme }: {
         background: linear-gradient(
           180deg,
           rgba(255, 255, 255, 0.5) 0%,
-          ${theme.colors["neutrals-01"][0]} 97%
+          ${colooors["neutrals-01"][0]} 97%
         );
         backdrop-filter: blur(1px);
       }
@@ -88,38 +88,34 @@ export const wrapper = ({ hidden, theme }: {
 
 export const item = ({
   isExpanded,
-  // isExpandable,
   isHighlighted,
-  // isTopLevel,
-  theme
 }: {
   isExpandable?: boolean;
   isExpanded?: boolean;
   isHighlighted?: boolean;
   isTopLevel?: boolean;
-  theme: MantineTheme;
 }) => css`
   display: flex;
   align-items: baseline;
   justify-content: space-between;
   color: ${isExpanded
-    ? theme?.colors["neutrals-02"][1]
-    : theme?.colors?.["neutrals-01"]?.[9]};
+    ? colooors["neutrals-02"][1]
+    : colooors["neutrals-01"]?.[9]};
   a {
     color: ${isExpanded
-    ? theme?.colors["neutrals-02"][1]
-    : theme?.colors?.["neutrals-01"]?.[9]};
+    ? colooors["neutrals-02"][1]
+    : colooors["neutrals-01"][9]};
   }
   background: ${isExpanded
-    ? theme?.colors["neutrals-01"][1]
-    : theme?.colors?.["neutrals-01"]?.[0]};
-  border-bottom: 1px solid ${theme.colors["neutrals-01"][4]};
+    ? colooors["neutrals-01"][1]
+    : colooors["neutrals-01"][0]};
+  border-bottom: 1px solid ${colooors["neutrals-01"][4]};
   border-left: 3px solid
     ${isExpanded
-    ? theme.colors["neutrals-02"][1]
+    ? colooors["neutrals-02"][1]
     : "transparent"};
   &:hover {
-    background: ${theme.colors["neutrals-01"][1]};
+    background: ${colooors["neutrals-01"][1]};
   }
   padding: 12px 0 12px 0;
   p {
@@ -131,7 +127,7 @@ export const item = ({
   position: relative;
   vertical-align: baseline;
   cursor: pointer;
-  ${isHighlighted && CSSHighlighted(theme)}
+  ${isHighlighted && CSSHighlighted()}
 `;
 
 export const facts = css`

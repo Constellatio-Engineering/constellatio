@@ -1,5 +1,7 @@
+import { colooors } from "@/constants/styles/colors";
+
 import styled from "@emotion/styled";
-import { type AccordionStylesNames, type AccordionStylesParams, type MantineTheme, type Styles } from "@mantine/core";
+import { type AccordionStylesNames, type AccordionStylesParams, type Styles } from "@mantine/core";
 
 export const ItemWrapper = styled.li<{ index: number }>`
   > p {
@@ -12,7 +14,7 @@ export const ItemWrapper = styled.li<{ index: number }>`
       width: 18px;
       height: 18px;
       border-radius: 50%;
-      border: 1px solid ${({ theme }) => theme.colors["neutrals-02"][1]};
+      border: 1px solid ${colooors["neutrals-02"][1]};
       display: flex;
       flex-direction: column;
       align-items: center;
@@ -30,7 +32,7 @@ type HintsAccordionStyles = Styles<AccordionStylesNames, AccordionStylesParams>;
 
 export const hintsAccordionStyles = (): HintsAccordionStyles =>
 {
-  const styles: HintsAccordionStyles = (theme: MantineTheme) => ({
+  const styles: HintsAccordionStyles = () => ({
     chevron: {
       height: "24px",
       margin: 0,
@@ -54,10 +56,10 @@ export const hintsAccordionStyles = (): HintsAccordionStyles =>
     },
     item: {
       "&[data-active] .mantine-Accordion-control": {
-        borderBottom: `1px solid ${theme.colors["neutrals-01"][3]}`,
+        borderBottom: `1px solid ${colooors["neutrals-01"][3]}`,
         borderRadius: "12px 12px 0 0",
       },
-      backgroundColor: theme.colors["neutrals-01"][2],
+      backgroundColor: colooors["neutrals-01"][2],
       border: `1px solid ${"#5b74c7"}`,
       borderRadius: "12px",
     },

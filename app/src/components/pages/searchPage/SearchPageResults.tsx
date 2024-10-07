@@ -7,7 +7,7 @@ import EmptyStateCard from "@/components/organisms/emptyStateCard/EmptyStateCard
 import SearchPapersBlock from "@/components/organisms/searchPapersBlock/SearchPapersBlock";
 import UploadedMaterialTable from "@/components/organisms/uploadedMaterialTable/UploadedMaterialTable";
 import ForumQuestions from "@/components/pages/forumOverviewPage/forumQuestions/ForumQuestions";
-import useSearchResults, { type SearchResultsKey, type SearchResults } from "@/hooks/useSearchResults";
+import useSearchResults, { type SearchResults, type SearchResultsKey } from "@/hooks/useSearchResults";
 import { type IGenArticleOverviewFragment, type IGenFullCaseFragment } from "@/services/graphql/__generated/sdk";
 import { type ArticleSearchIndexItem, type CaseSearchIndexItem } from "@/utils/search";
 import { type CommonKeysInTypes, type Nullable } from "@/utils/types";

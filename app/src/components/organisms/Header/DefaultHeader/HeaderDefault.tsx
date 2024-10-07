@@ -9,12 +9,10 @@ import HeaderItemPersonalSpace from "@/components/organisms/Header/DefaultHeader
 import { OnboardingPersonalSpaceStep } from "@/components/organisms/Header/DefaultHeader/OnboardingPersonalSpaceStep/OnboardingPersonalSpaceStep";
 import HeaderItemSearchBar from "@/components/organisms/Header/DefaultHeader/OnboardingSearchStep/HeaderItemSearchBar";
 import OnboardingModal from "@/components/organisms/onboardingModal/OnboardingModal";
-import { env } from "@/env.mjs";
 import useOnboardingResult from "@/hooks/useOnboardingResult";
 import { useOnboardingStore } from "@/stores/onboarding.store";
 import { appPaths } from "@/utils/paths";
 
-import { useMantineTheme } from "@mantine/styles";
 import Image from "next/image";
 import Link from "next/link";
 import { useRouter } from "next/router";
@@ -24,8 +22,8 @@ import ConstellatioFullLogoAlphaVersion from "../../../../../public/images/icons
 // import ConstellatioFullLogo from "../../../../../public/images/icons/constellatio-full-logo.svg";
 import ConstellatioLogoIcon from "../../../../../public/images/icons/constellatio-icon.svg";
 import SearchOverlay from "../../searchOverlay/SearchOverlay";
-import { SHeader } from "../Header.styles";
 import * as styles from "../Header.styles";
+import { SHeader } from "../Header.styles";
 
 interface IHeaderLink
 {
@@ -43,22 +41,8 @@ const links: IHeaderLink[] = [
 const HeaderDefault: FunctionComponent = () => 
 {
   const { pathname } = useRouter();
-  const theme = useMantineTheme();
   const { data: onboardingResult, isPending: isGetOnboardingResultLoading } = useOnboardingResult();
   const showOnboarding = !isGetOnboardingResultLoading && onboardingResult === null;
-
-  // TODO: Remove this
-  if(env.NEXT_PUBLIC_DEPLOYMENT_ENVIRONMENT === "staging")
-  {
-    console.info("This will only be logged on staging");
-    console.log({
-      isGetOnboardingResultLoading,
-      isOnboardingResultEqualToNull: onboardingResult === null,
-      onboardingResult,
-      showOnboarding,
-    });
-  }
-
   const onboardingStepsIndex = useOnboardingStore(s => s.onboardingStepsIndex);
   const setOnboardingStepsIndex = useOnboardingStore(s => s.setOnboardingStepsIndex);
 
@@ -79,11 +63,20 @@ const HeaderDefault: FunctionComponent = () =>
         setOnboardingStepsIndex={setOnboardingStepsIndex}
       />
       <SHeader withShadow>
-        <ContentWrapper stylesOverrides={styles.wrapper({ theme, variant: "default" })}>
+        <ContentWrapper stylesOverrides={styles.wrapper({ variant: "default" })}>
           <div css={styles.links}>
             <Link href={appPaths.dashboard}>
-              <Image css={styles.tabletHeaderLogo} src={ConstellatioLogoIcon} alt="Constellatio"/>
-              <Image css={styles.headerLogo} src={ConstellatioFullLogoAlphaVersion} alt="Constellatio"/>
+              <Image
+                css={styles.tabletHeaderLogo}
+                src={ConstellatioLogoIcon}
+                alt="Constellatio"
+              />
+              <Image
+                css={styles.headerLogo}
+                src={ConstellatioFullLogoAlphaVersion}
+                alt="Constellatio"
+                priority={true}
+              />
             </Link>
             {links.map((link, linkIndex) =>
             {

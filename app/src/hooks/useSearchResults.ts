@@ -1,7 +1,12 @@
 import { MeilisearchContext } from "@/provider/MeilisearchProvider";
 import useSearchBarStore from "@/stores/searchBar.store";
 import {
-  type ArticleSearchIndexItem, type CaseSearchIndexItem, type DocumentSearchIndexItem, type ForumQuestionSearchIndexItem, searchIndices, type UploadSearchIndexItem
+  type ArticleSearchIndexItem,
+  type CaseSearchIndexItem,
+  type DocumentSearchIndexItem,
+  type ForumQuestionSearchIndexItem,
+  searchIndices,
+  type UploadSearchIndexItem
 } from "@/utils/search";
 
 import { keepPreviousData, useQuery } from "@tanstack/react-query";

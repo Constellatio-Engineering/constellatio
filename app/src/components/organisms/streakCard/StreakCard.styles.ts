@@ -1,4 +1,4 @@
-import { colors } from "@/constants/styles/colors";
+import { colooors } from "@/constants/styles/colors";
 
 import { css } from "@emotion/react";
 
@@ -10,7 +10,7 @@ export const wrapper = css`
   display: flex;
   flex-direction: column;
   gap: 16px;
-  background-color: ${colors["neutrals-01"][0]};
+  background-color: ${colooors["neutrals-01"][0]};
   width: ${width}px;
   border-radius: 12px;
   padding: 18px;
@@ -25,7 +25,7 @@ export const infoIconWrapper = css`
   justify-content: center;
   cursor: pointer;
   svg path {
-    fill: ${colors["neutrals-01"][7]};
+    fill: ${colooors["neutrals-01"][7]};
   }
 `;
 
@@ -80,7 +80,7 @@ export const streakTextSub = css`
 `;
 
 export const dayTextGrey = css`
-  color: ${colors["neutrals-01"][5]};
+  color: ${colooors["neutrals-01"][5]};
 `;
 
 export const headerText = css`
@@ -89,5 +89,5 @@ export const headerText = css`
 `;
 
 export const fireEmoji = css`
-  font-size: 26px;
+  font-size: 24px;
 `;

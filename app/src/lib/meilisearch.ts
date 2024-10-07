@@ -1,7 +1,6 @@
 import { env } from "@/env.mjs";
 
-import { type Key } from "meilisearch";
-import { MeiliSearch } from "meilisearch";
+import { type Key, MeiliSearch } from "meilisearch";
 
 export const meiliSearchAdmin = new MeiliSearch({
   apiKey: env.MEILISEARCH_MASTER_API_KEY,

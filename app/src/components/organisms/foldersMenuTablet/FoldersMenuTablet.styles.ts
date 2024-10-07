@@ -1,8 +1,9 @@
+import { colooors } from "@/constants/styles/colors";
 import { type UnknownMantineStylesParams } from "@/utils/types";
 
 import { css } from "@emotion/react";
 import { type ModalStylesNames } from "@mantine/core";
-import { type Styles, type MantineTheme } from "@mantine/styles";
+import { type Styles } from "@mantine/styles";
 
 export const wrapper = css`
     width: 100%;
@@ -41,14 +42,14 @@ gap: 8px;
 cursor: pointer;
 
 `;
-export const foldersItem = (theme: MantineTheme) => css`
+export const foldersItem = () => css`
 padding: 12px 16px;
-border-bottom: 1px solid ${theme.colors["neutrals-01"][3]};
+border-bottom: 1px solid ${colooors["neutrals-01"][3]};
 &:last-of-type{
     border:0;
 }
 &:hover{
-    background-color: ${theme.colors["neutrals-01"][1]};
+    background-color: ${colooors["neutrals-01"][1]};
     cursor: pointer;
 }
 `;
