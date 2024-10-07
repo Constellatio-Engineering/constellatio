@@ -31,6 +31,12 @@ export type TFillGapsGame = Pick<IGenFillInGapsGame, "fillGameParagraph" | "help
   readonly caseId: string;
 };
 
+export type TFillGapsGameResult = {
+  correct: boolean;
+  correctAnswers: string[];
+  userAnswers: string[];
+};
+
 let FillGapsGame: FC<TFillGapsGame> = ({
   caseId,
   fillGameParagraph,
@@ -49,6 +55,7 @@ let FillGapsGame: FC<TFillGapsGame> = ({
   const updateGameState = useFillGapsGameStore((s) => s.updateGameState);
   const initializeNewGameState = useFillGapsGameStore((s) => s.initializeNewGameState);
   const checkAnswers = useFillGapsGameStore((s) => s.checkAnswers);
+  const getUserAnswers = useFillGapsGameStore((s) => s.getUserAnswers);
   useEffect(() => 
   {
     if(gameState == null && id != null) 
@@ -142,6 +149,20 @@ let FillGapsGame: FC<TFillGapsGame> = ({
         resultMessage: allCorrect ? "Sehr gut! Du hast die Frage richtig beantwortet." : "Deine Antwort war leider nicht korrekt.",
       },
     });
+
+    const userAnswersPerParagraph = getUserAnswers(id);
+    const userAnswers = userAnswersPerParagraph?.map(paragraph => paragraph.answers).flat();
+
+    setGameProgress({
+      gameId: id,
+      gameResult: {
+        correct: allCorrect,
+        correctAnswers: correctAnswersArr,
+        gameType: "FillGapsGame",
+        userAnswers: userAnswers ?? [],
+      },
+      progressState: "completed" 
+    });
   };
 
   const handleResetGame = (): void => 
@@ -227,7 +248,6 @@ let FillGapsGame: FC<TFillGapsGame> = ({
             {
               if(gameStatus === "inprogress")
               {
-                setGameProgress({ gameId: id, progressState: "completed" });
                 handleCheckAnswers();
               }
               else
