@@ -346,7 +346,8 @@ export const gamesProgress = pgTable("GameProgress", {
   userId: uuid("UserId").references(() => users.id, { onDelete: "no action" }).notNull(),
   gameId: uuid("GameId").notNull(),
   progressState: gameProgressStateEnum("ProgressState").notNull().default("not-started"),
-  date: timestamp("Date").defaultNow().notNull(),
+  createdAt: timestamp("CreatedAt").defaultNow().notNull(),
+  updatedAt: timestamp("UpdatedAt").defaultNow().notNull().$onUpdate(getCurrentDate),
   gameResult: jsonb("GameResult").$type<GameResultSchemaType>(),
 }, table => ({
   unique: unique().on(table.userId, table.gameId),
