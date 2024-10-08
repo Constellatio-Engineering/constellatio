@@ -37,6 +37,7 @@ export const floatingButtonStyles = ({
         top: "-4px",
         width: "19px",
       },
+      transform: (variation === "icon-big" || variation === "icon-medium") ? "rotate(180deg)" : "inherit",
       alignItems: "center",
       backgroundColor: variation === "pins" ? colooors["brand-01"][4] : colooors["neutrals-01"][0],
       border: variation !== "pins" ? `1px solid ${colooors["neutrals-01"][3]}` : "none",
