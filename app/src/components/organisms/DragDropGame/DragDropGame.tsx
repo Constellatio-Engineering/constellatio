@@ -10,7 +10,10 @@ import { DragDropColumn } from "@/components/organisms/DragDropGame/DragDropColu
 import useContextAndErrorIfNull from "@/hooks/useContextAndErrorIfNull";
 import { InvalidateQueriesContext } from "@/provider/InvalidateQueriesProvider";
 import { type IGenDragNDropGame } from "@/services/graphql/__generated/sdk";
-import useDragDropGameStore, { type TDragAndDropGameOptionType, } from "@/stores/dragDropGame.store";
+import useDragDropGameStore, {
+  type GameStatus,
+  type TDragAndDropGameOptionType,
+} from "@/stores/dragDropGame.store";
 import { api } from "@/utils/api";
 import { shuffleArray } from "@/utils/array";
 
@@ -90,12 +93,12 @@ export const DragDropGame: FC<TDragDropGame> = ({
     return areAllDroppedItemsCorrect && areAllOptionsItemsIncorrect;
   };
 
+  const correctAnswersOrder = originalOptions
+    .filter((item) => item.correctAnswer)
+    .sort((a, b) => a.originalIndex - b.originalIndex);
+
   const checkOrder = (): boolean => 
   {
-    const correctAnswersOrder = originalOptions
-      .filter((item) => item.correctAnswer)
-      .sort((a, b) => a.originalIndex - b.originalIndex);
-
     for(let i = 0; i < droppedItems.length; i++) 
     {
       if(droppedItems[i]?.id !== correctAnswersOrder[i]?.id) 
@@ -109,6 +112,7 @@ export const DragDropGame: FC<TDragDropGame> = ({
   const onGameFinishHandler = (): void => 
   {
     const winCondition = checkWinCondition();
+    let gameStatus: GameStatus = "lose";
 
     if(game?.orderRequired) 
     {
@@ -116,6 +120,7 @@ export const DragDropGame: FC<TDragDropGame> = ({
 
       if(winCondition && orderCorrect)
       {
+        gameStatus = "win";
         updateGameState({
           gameId: id,
           update: {
@@ -126,6 +131,7 @@ export const DragDropGame: FC<TDragDropGame> = ({
       }
       else if(winCondition && !orderCorrect) 
       {
+        gameStatus = "lose-wrong-order";
         updateGameState({
           gameId: id,
           update: {
@@ -136,6 +142,7 @@ export const DragDropGame: FC<TDragDropGame> = ({
       }
       else 
       {
+        gameStatus = "lose";
         updateGameState({
           gameId: id,
           update: {
@@ -149,6 +156,7 @@ export const DragDropGame: FC<TDragDropGame> = ({
     {
       if(winCondition) 
       {
+        gameStatus = "win";
         updateGameState({
           gameId: id,
           update: {
@@ -159,6 +167,7 @@ export const DragDropGame: FC<TDragDropGame> = ({
       }
       else 
       {
+        gameStatus = "lose";
         updateGameState({
           gameId: id,
           update: {
@@ -177,6 +186,17 @@ export const DragDropGame: FC<TDragDropGame> = ({
         update: { gameSubmitted: true }
       });
     }
+
+    setGameProgress({
+      gameId: id,
+      gameResult: {
+        correctAnswers: correctAnswersOrder,
+        gameStatus,
+        gameType: "DragDropGame",
+        userAnswers: droppedItems
+      },
+      progressState: "completed"
+    });
   };
 
   const onGameResetHandler = (): void => 
@@ -270,7 +290,6 @@ export const DragDropGame: FC<TDragDropGame> = ({
             {
               if(gameStatus === "inprogress")
               {
-                setGameProgress({ gameId: id, progressState: "completed" });
                 onGameFinishHandler();
               }
               else

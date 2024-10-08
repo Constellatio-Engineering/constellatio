@@ -36,9 +36,13 @@ export const gamesProgressRouter = createTRPCRouter({
 
         if(!gameProgress)
         {
-          return ({
+          return ({ 
+            createdAt: new Date(),
             gameId,
+            gameResult: null,
+            id: 0,
             progressState: "not-started",
+            updatedAt: new Date(),
             userId
           });
         }
@@ -52,35 +56,18 @@ export const gamesProgressRouter = createTRPCRouter({
     }),
   setGameProgress: protectedProcedure
     .input(setGameProgressStateSchema)
-    .mutation(async ({ ctx: { userId }, input: { gameId, progressState } }) =>
+    .mutation(async ({ ctx: { userId }, input: { gameId, gameResult, progressState } }) =>
     {
-      const existingGameProgress = await db.query.gamesProgress.findFirst({
-        where: and(
-          eq(gamesProgress.userId, userId),
-          eq(gamesProgress.gameId, gameId)
-        )
-      });
-
-      if(existingGameProgress)
-      {
-        console.log("gameProgress exists, updating...");
-        await db.update(gamesProgress).set({ progressState }).where(
-          and(
-            eq(gamesProgress.userId, userId),
-            eq(gamesProgress.gameId, gameId)
-          )
-        );
-        return;
-      }
-      else
-      {
-        console.log("gameProgress does not exist, inserting...");
-        await db.insert(gamesProgress).values({
+      await db.insert(gamesProgress)
+        .values({
           gameId,
+          gameResult,
           progressState,
           userId,
+        })
+        .onConflictDoUpdate({
+          set: { gameResult },
+          target: [gamesProgress.gameId, gamesProgress.userId],
         });
-        return;
-      }
     })
 });

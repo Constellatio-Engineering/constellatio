@@ -1,4 +1,6 @@
 {
+  "id": "23d7e6bf-c7fb-4817-815f-c7b1eb9b5755",
+  "prevId": "ca68dc2c-3074-4e21-8d97-6312e6e99d4b",
   "version": "7",
   "dialect": "postgresql",
   "tables": {
@@ -28,6 +30,7 @@
       },
       "indexes": {
         "AnswerUpvote_QuestionId_Index": {
+          "name": "AnswerUpvote_QuestionId_Index",
           "columns": [
             {
               "expression": "AnswerId",
@@ -36,9 +39,8 @@
               "nulls": "last"
             }
           ],
-          "with": {},
-          "name": "AnswerUpvote_QuestionId_Index",
           "isUnique": false,
+          "with": {},
           "method": "btree",
           "concurrently": false
         }
@@ -102,12 +104,13 @@
           "name": "UpdatedAt",
           "type": "timestamp",
           "primaryKey": false,
-          "notNull": false,
+          "notNull": true,
           "default": "now()"
         }
       },
       "indexes": {
         "ArticleView_ArticleId_Index": {
+          "name": "ArticleView_ArticleId_Index",
           "columns": [
             {
               "expression": "ArticleId",
@@ -116,9 +119,8 @@
               "nulls": "last"
             }
           ],
-          "with": {},
-          "name": "ArticleView_ArticleId_Index",
           "isUnique": false,
+          "with": {},
           "method": "btree",
           "concurrently": false
         }
@@ -396,12 +398,13 @@
           "name": "UpdatedAt",
           "type": "timestamp",
           "primaryKey": false,
-          "notNull": false,
+          "notNull": true,
           "default": "now()"
         }
       },
       "indexes": {
         "CaseView_CaseId_Index": {
+          "name": "CaseView_CaseId_Index",
           "columns": [
             {
               "expression": "CaseId",
@@ -410,9 +413,8 @@
               "nulls": "last"
             }
           ],
-          "with": {},
-          "name": "CaseView_CaseId_Index",
           "isUnique": false,
+          "with": {},
           "method": "btree",
           "concurrently": false
         }
@@ -906,6 +908,7 @@
       },
       "indexes": {
         "ForumQuestion_Id_Slug_Index": {
+          "name": "ForumQuestion_Id_Slug_Index",
           "columns": [
             {
               "expression": "Id",
@@ -920,9 +923,8 @@
               "nulls": "last"
             }
           ],
-          "with": {},
-          "name": "ForumQuestion_Id_Slug_Index",
           "isUnique": true,
+          "with": {},
           "method": "btree",
           "concurrently": false
         }
@@ -993,6 +995,12 @@
       "name": "GameProgress",
       "schema": "",
       "columns": {
+        "Id": {
+          "name": "Id",
+          "type": "serial",
+          "primaryKey": true,
+          "notNull": true
+        },
         "UserId": {
           "name": "UserId",
           "type": "uuid",
@@ -1012,6 +1020,26 @@
           "primaryKey": false,
           "notNull": true,
           "default": "'not-started'"
+        },
+        "CreatedAt": {
+          "name": "CreatedAt",
+          "type": "timestamp",
+          "primaryKey": false,
+          "notNull": true,
+          "default": "now()"
+        },
+        "UpdatedAt": {
+          "name": "UpdatedAt",
+          "type": "timestamp",
+          "primaryKey": false,
+          "notNull": true,
+          "default": "now()"
+        },
+        "GameResult": {
+          "name": "GameResult",
+          "type": "jsonb",
+          "primaryKey": false,
+          "notNull": false
         }
       },
       "indexes": {},
@@ -1030,16 +1058,17 @@
           "onDelete": "no action"
         }
       },
-      "compositePrimaryKeys": {
-        "GameProgress_UserId_GameId_pk": {
-          "name": "GameProgress_UserId_GameId_pk",
+      "compositePrimaryKeys": {},
+      "uniqueConstraints": {
+        "GameProgress_UserId_GameId_unique": {
+          "name": "GameProgress_UserId_GameId_unique",
           "columns": [
             "UserId",
             "GameId"
-          ]
+          ],
+          "nullsNotDistinct": false
         }
-      },
-      "uniqueConstraints": {}
+      }
     },
     "public.Note": {
       "name": "Note",
@@ -1291,6 +1320,7 @@
       },
       "indexes": {
         "Ping_Path_Index": {
+          "name": "Ping_Path_Index",
           "columns": [
             {
               "expression": "Path",
@@ -1299,9 +1329,8 @@
               "nulls": "last"
             }
           ],
-          "with": {},
-          "name": "Ping_Path_Index",
           "isUnique": false,
+          "with": {},
           "method": "btree",
           "concurrently": false
         }
@@ -1414,6 +1443,7 @@
       },
       "indexes": {
         "QuestionUpvote_QuestionId_Index": {
+          "name": "QuestionUpvote_QuestionId_Index",
           "columns": [
             {
               "expression": "QuestionId",
@@ -1422,9 +1452,8 @@
               "nulls": "last"
             }
           ],
-          "with": {},
-          "name": "QuestionUpvote_QuestionId_Index",
           "isUnique": false,
+          "with": {},
           "method": "btree",
           "concurrently": false
         }
@@ -2070,6 +2099,7 @@
       },
       "indexes": {
         "UserRole_Role_Index": {
+          "name": "UserRole_Role_Index",
           "columns": [
             {
               "expression": "Identifier",
@@ -2078,9 +2108,8 @@
               "nulls": "last"
             }
           ],
-          "with": {},
-          "name": "UserRole_Role_Index",
           "isUnique": false,
+          "with": {},
           "method": "btree",
           "concurrently": false
         }
@@ -2348,7 +2377,10 @@
         "ugc-10",
         "forum-5",
         "feedback-5",
-        "ugc-5"
+        "ugc-5",
+        "streak-14",
+        "streak-42",
+        "streak-84"
       ]
     },
     "public.BadgePublicationState": {
@@ -2527,12 +2559,10 @@
     }
   },
   "schemas": {},
+  "sequences": {},
   "_meta": {
+    "columns": {},
     "schemas": {},
-    "tables": {},
-    "columns": {}
-  },
-  "id": "b8de2df0-ff9f-40d6-95f8-68abfcd696be",
-  "prevId": "b0f6fdad-7c96-4022-9ce3-c53cc60b15b7",
-  "sequences": {}
+    "tables": {}
+  }
 }
