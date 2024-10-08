@@ -39,35 +39,18 @@ export const SRichtext = styled.div<{ stylesOverwrite?: SerializedStyles }>`
     }
 
     ul {
-      li {
-        display: flex;
-        align-items: baseline;
-        gap: ${spaciiing["spacing-8"]};
-
-        &::before {
-          content: "";
-          background-color: ${colooors["neutrals-02"][1]};
-          width: 5px;
-          min-width: 5px;
-          height: 5px;
-          transform: translateY(-2px);
-          min-height: 5px;
-          border-radius: 50%;
-        }
-      }
+      list-style-type: disc;
     }
 
     ol {
       list-style-type: decimal;
-      li {
-        transform: translateX(15px);
-      }
     }
 
     ul,
     ol {
       padding-bottom: 24px;
       li {
+        transform: translateX(15px);
         p {
           padding-bottom: 0;
         }
