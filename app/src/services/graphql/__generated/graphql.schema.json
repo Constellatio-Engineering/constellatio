@@ -2562,6 +2562,18 @@
             },
             "isDeprecated": false,
             "deprecationReason": null
+          },
+          {
+            "name": "questionType",
+            "description": "",
+            "args": [],
+            "type": {
+              "kind": "SCALAR",
+              "name": "String",
+              "ofType": null
+            },
+            "isDeprecated": false,
+            "deprecationReason": null
           }
         ],
         "inputFields": null,
@@ -2656,6 +2668,52 @@
         "possibleTypes": null
       },
       {
+        "kind": "ENUM",
+        "name": "CardSelectionGame_QuestionType",
+        "description": "",
+        "fields": null,
+        "inputFields": null,
+        "interfaces": null,
+        "enumValues": [
+          {
+            "name": "multi_punch_question",
+            "description": "",
+            "isDeprecated": false,
+            "deprecationReason": null
+          },
+          {
+            "name": "single_punch_question",
+            "description": "",
+            "isDeprecated": false,
+            "deprecationReason": null
+          }
+        ],
+        "possibleTypes": null
+      },
+      {
+        "kind": "INPUT_OBJECT",
+        "name": "CardSelectionGame_QuestionType_Where",
+        "description": "",
+        "fields": null,
+        "inputFields": [
+          {
+            "name": "eq",
+            "description": "",
+            "type": {
+              "kind": "ENUM",
+              "name": "CardSelectionGame_QuestionType",
+              "ofType": null
+            },
+            "defaultValue": null,
+            "isDeprecated": false,
+            "deprecationReason": null
+          }
+        ],
+        "interfaces": null,
+        "enumValues": null,
+        "possibleTypes": null
+      },
+      {
         "kind": "INPUT_OBJECT",
         "name": "CardSelectionGame_Sort",
         "description": "",
@@ -2699,6 +2757,18 @@
           },
           {
             "name": "question",
+            "description": "",
+            "type": {
+              "kind": "ENUM",
+              "name": "Order",
+              "ofType": null
+            },
+            "defaultValue": null,
+            "isDeprecated": false,
+            "deprecationReason": null
+          },
+          {
+            "name": "questionType",
             "description": "",
             "type": {
               "kind": "ENUM",
@@ -2782,6 +2852,18 @@
             "type": {
               "kind": "INPUT_OBJECT",
               "name": "CaisyField_String_Where",
+              "ofType": null
+            },
+            "defaultValue": null,
+            "isDeprecated": false,
+            "deprecationReason": null
+          },
+          {
+            "name": "questionType",
+            "description": "",
+            "type": {
+              "kind": "INPUT_OBJECT",
+              "name": "CardSelectionGame_QuestionType_Where",
               "ofType": null
             },
             "defaultValue": null,

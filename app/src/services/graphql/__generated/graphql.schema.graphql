@@ -629,6 +629,9 @@ type CardSelectionGame {
 
   """"""
   question: String
+
+  """"""
+  questionType: String
 }
 
 """"""
@@ -653,6 +656,21 @@ type CardSelectionGame_ConnectionEdge {
 }
 
 """"""
+enum CardSelectionGame_QuestionType {
+  """"""
+  multi_punch_question
+
+  """"""
+  single_punch_question
+}
+
+""""""
+input CardSelectionGame_QuestionType_Where {
+  """"""
+  eq: CardSelectionGame_QuestionType
+}
+
+""""""
 input CardSelectionGame_Sort {
   """"""
   createdAt: Order
@@ -665,6 +683,9 @@ input CardSelectionGame_Sort {
 
   """"""
   question: Order
+
+  """"""
+  questionType: Order
 
   """"""
   updatedAt: Order
@@ -683,6 +704,9 @@ input CardSelectionGame_Where {
 
   """"""
   question: CaisyField_String_Where
+
+  """"""
+  questionType: CardSelectionGame_QuestionType_Where
 }
 
 """"""
