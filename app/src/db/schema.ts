@@ -289,15 +289,12 @@ export type Note = InferSelectModel<typeof notes>;
 export type NoteSql = InferPgSelectModel<typeof notes>;
 
 export const casesViews = pgTable("CaseView", {
+  id: serial().primaryKey(),
   userId: uuid("UserId").references(() => users.id, { onDelete: "no action" }).notNull(),
   caseId: uuid("CaseId").notNull(),
-  updatedAt: timestamp("UpdatedAt").defaultNow().notNull().$onUpdate(getCurrentDate),
+  createdAt: timestamp("CreatedAt").defaultNow().notNull(),
 }, table => ({
   caseId_index: index("CaseView_CaseId_Index").on(table.caseId),
-  pk: primaryKey({
-    columns: [table.userId, table.caseId],
-    name: "CaseView_UserId_CaseId_Pk",
-  }),
 }));
 
 export type CaseViewInsert = InferInsertModel<typeof casesViews>;
@@ -305,12 +302,12 @@ export type CaseView = InferSelectModel<typeof casesViews>;
 export type CaseViewSql = InferPgSelectModel<typeof casesViews>;
 
 export const articlesViews = pgTable("ArticleView", {
+  id: serial().primaryKey(),
   userId: uuid("UserId").references(() => users.id, { onDelete: "no action" }).notNull(),
   articleId: uuid("ArticleId").notNull(),
-  updatedAt: timestamp("UpdatedAt").defaultNow().notNull().$onUpdate(getCurrentDate),
+  createdAt: timestamp("CreatedAt").defaultNow().notNull(),
 }, table => ({
   articleId_index: index("ArticleView_ArticleId_Index").on(table.articleId),
-  pk: primaryKey({ columns: [table.userId, table.articleId] }),
 }));
 
 export type ArticleViewInsert = InferInsertModel<typeof articlesViews>;
@@ -492,6 +489,19 @@ export const forumQuestionToTopicsRelations = relations(forumQuestionToTopics, (
 export type ForumQuestionToTopicInsert = InferInsertModel<typeof forumQuestionToTopics>;
 export type ForumQuestionToTopic = InferSelectModel<typeof forumQuestionToTopics>;
 export type ForumQuestionToTopicSql = InferPgSelectModel<typeof forumQuestionToTopics>;
+
+export const forumQuestionViews = pgTable("ForumQuestionView", {
+  id: serial().primaryKey(),
+  userId: uuid("UserId").references(() => users.id, { onDelete: "no action" }).notNull(),
+  questionIdId: uuid("QuestionId").notNull(),
+  createdAt: timestamp("CreatedAt").defaultNow().notNull(),
+}, table => ({
+  questionId_index: index("ForumQuestionView_QuestionId_Index").on(table.questionIdId),
+}));
+
+export type ForumQuestionViewInsert = InferInsertModel<typeof forumQuestionViews>;
+export type ForumQuestionView = InferSelectModel<typeof forumQuestionViews>;
+export type ForumQuestionViewSql = InferPgSelectModel<typeof forumQuestionViews>;
 
 export const forumAnswers = pgTable("ForumAnswer", {
   id: uuid("Id").defaultRandom().primaryKey(),

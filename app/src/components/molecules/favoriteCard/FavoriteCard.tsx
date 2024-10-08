@@ -4,6 +4,7 @@ import { type Favorite } from "@/hooks/useAllFavorites";
 import useBookmarks from "@/hooks/useBookmarks";
 
 import { Skeleton, Title } from "@mantine/core";
+import Link from "next/link";
 import React, { type FunctionComponent } from "react";
 
 import * as styles from "./FavoriteCard.styles";
@@ -12,7 +13,8 @@ type LoadingProps = {
   readonly isLoading: true;
 };
 
-type LoadedProps = React.HTMLAttributes<HTMLDivElement> & Omit<Favorite, "createdAt"> & {
+type LoadedProps = React.HTMLAttributes<HTMLAnchorElement> & Omit<Favorite, "createdAt"> & {
+  readonly href: string;
   readonly icon?: React.ReactNode;
   readonly isLoading: false;
 };
@@ -34,6 +36,7 @@ const FavoriteCard: FunctionComponent<Props> = (props) =>
 
   const {
     favoriteType,
+    href,
     isLoading,
     resourceId,
     title,
@@ -43,7 +46,7 @@ const FavoriteCard: FunctionComponent<Props> = (props) =>
   const numberOfLetters: number = 45;
 
   return (
-    <div css={[styles.wrapper, styles.wrapperLoaded]} {...rest}>
+    <Link href={href} css={[styles.wrapper, styles.wrapperLoaded]} {...rest}>
       <div css={styles.tags}>
         <Label
           variant={favoriteType === "case" ? "case" : favoriteType === "question" ? "forum" : "dictionary"}
@@ -61,7 +64,7 @@ const FavoriteCard: FunctionComponent<Props> = (props) =>
           {title.slice(0, numberOfLetters)}{title?.length > numberOfLetters && "..."}
         </Title>
       )}
-    </div>
+    </Link>
   );
 };
 

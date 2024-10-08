@@ -9,33 +9,42 @@ import { createTRPCRouter, protectedProcedure } from "@/server/api/trpc";
 
 import { desc, eq, sql } from "drizzle-orm";
 
+/* async function getLastViewedItems<Table extends (typeof articlesViews | typeof casesViews)>(table: Table, idColumn: any, userId: string)
+{
+  const distinctViewsSubquery = db
+    .select({
+      createdAt: sql`MAX(${table.createdAt})`.as("maxCreatedAt"),
+      itemId: table[idColumn],
+    })
+    .from(table)
+    .where(eq(table.userId, userId))
+    .groupBy(table[idColumn])
+    .as("distinct_views");
+
+  const views = await db
+    .select({
+      itemId: distinctViewsSubquery.itemId,
+    })
+    .from(distinctViewsSubquery)
+    .orderBy(desc(distinctViewsSubquery.createdAt))
+    .limit(3);
+
+  return views;
+}*/
+
 export const viewsRouter = createTRPCRouter({
   addArticleView: protectedProcedure
     .input(addArticleViewSchema)
     .mutation(async ({ ctx: { userId }, input: { articleId } }) =>
     {
-      await db
-        .insert(articlesViews)
-        .values({ articleId, userId })
-        .onConflictDoUpdate({
-          set: { updatedAt: new Date() },
-          target: [articlesViews.articleId, articlesViews.userId],
-        });
-
+      await db.insert(articlesViews).values({ articleId, userId });
       await addUserToCrmUpdateQueue(userId);
     }),
   addCaseView: protectedProcedure
     .input(addCaseViewSchema)
     .mutation(async ({ ctx: { userId }, input: { caseId } }) =>
     {
-      await db
-        .insert(casesViews)
-        .values({ caseId, userId })
-        .onConflictDoUpdate({
-          set: { updatedAt: new Date() },
-          target: [casesViews.caseId, casesViews.userId],
-        });
-
+      await db.insert(casesViews).values({ caseId, userId });
       await addUserToCrmUpdateQueue(userId);
     }),
   getAllSeenArticles: protectedProcedure
@@ -75,25 +84,49 @@ export const viewsRouter = createTRPCRouter({
   getLastViewedArticles: protectedProcedure
     .query(async ({ ctx: { userId } }) =>
     {
-      const articleViews = await db.query.articlesViews.findMany({
-        columns: { articleId: true },
-        limit: 3,
-        orderBy: [desc(articlesViews.updatedAt)],
-        where: eq(articlesViews.userId, userId)
-      });
+      const distinctArticleViewsSubquery = db
+        .select({
+          articleId: articlesViews.articleId,
+          createdAt: sql<Date>`MAX(${articlesViews.createdAt})`.as("maxCreatedAt"),
+        })
+        .from(articlesViews)
+        .where(eq(articlesViews.userId, userId))
+        .groupBy(articlesViews.articleId)
+        .as("distinct_views");
 
-      return articleViews.map(({ articleId }) => articleId);
+      const articleViews = await db
+        .select({
+          articleId: distinctArticleViewsSubquery.articleId,
+          viewedDate: distinctArticleViewsSubquery.createdAt,
+        })
+        .from(distinctArticleViewsSubquery)
+        .orderBy(desc(distinctArticleViewsSubquery.createdAt))
+        .limit(3);
+
+      return articleViews;
     }),
   getLastViewedCases: protectedProcedure
     .query(async ({ ctx: { userId } }) =>
     {
-      const caseViews = await db.query.casesViews.findMany({
-        columns: { caseId: true },
-        limit: 3,
-        orderBy: [desc(casesViews.updatedAt)],
-        where: eq(casesViews.userId, userId)
-      });
+      const distinctCaseViewsSubquery = db
+        .select({
+          caseId: casesViews.caseId,
+          createdAt: sql<Date>`MAX(${casesViews.createdAt})`.as("maxCreatedAt"),
+        })
+        .from(casesViews)
+        .where(eq(casesViews.userId, userId))
+        .groupBy(casesViews.caseId)
+        .as("distinct_views");
 
-      return caseViews.map(({ caseId }) => caseId);
+      const caseViews = await db
+        .select({
+          caseId: distinctCaseViewsSubquery.caseId,
+          viewedDate: distinctCaseViewsSubquery.createdAt,
+        })
+        .from(distinctCaseViewsSubquery)
+        .orderBy(desc(distinctCaseViewsSubquery.createdAt))
+        .limit(3);
+
+      return caseViews;
     }),
 });
