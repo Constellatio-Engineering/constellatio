@@ -1,6 +1,5 @@
-import { DocumentNode } from "graphql";
-import gql from "graphql-tag";
-
+import { DocumentNode } from 'graphql';
+import gql from 'graphql-tag';
 export type Maybe<T> = T | null;
 export type InputMaybe<T> = Maybe<T>;
 export type Exact<T extends { [key: string]: unknown }> = { [K in keyof T]: T[K] };
@@ -345,6 +344,7 @@ export type IGenCardSelectionGame = {
   helpNote?: Maybe<IGenCardSelectionGame_HelpNote>;
   id?: Maybe<Scalars['ID']['output']>;
   question?: Maybe<Scalars['String']['output']>;
+  questionType?: Maybe<Scalars['String']['output']>;
 };
 
 
@@ -365,11 +365,21 @@ export type IGenCardSelectionGame_ConnectionEdge = {
   node?: Maybe<IGenCardSelectionGame>;
 };
 
+export enum IGenCardSelectionGame_QuestionType {
+  MultiPunchQuestion = 'multi_punch_question',
+  SinglePunchQuestion = 'single_punch_question'
+}
+
+export type IGenCardSelectionGame_QuestionType_Where = {
+  eq?: InputMaybe<IGenCardSelectionGame_QuestionType>;
+};
+
 export type IGenCardSelectionGame_Sort = {
   createdAt?: InputMaybe<IGenOrder>;
   id?: InputMaybe<IGenOrder>;
   publishedAt?: InputMaybe<IGenOrder>;
   question?: InputMaybe<IGenOrder>;
+  questionType?: InputMaybe<IGenOrder>;
   updatedAt?: InputMaybe<IGenOrder>;
 };
 
@@ -378,6 +388,7 @@ export type IGenCardSelectionGame_Where = {
   OR?: InputMaybe<Array<InputMaybe<IGenCardSelectionGame_Where>>>;
   helpNote?: InputMaybe<IGenCaisyField_Richtext_Where>;
   question?: InputMaybe<IGenCaisyField_String_Where>;
+  questionType?: InputMaybe<IGenCardSelectionGame_QuestionType_Where>;
 };
 
 export type IGenCardSelectionGame_HelpNote = {
@@ -1315,7 +1326,7 @@ export type IGenAssetFragment = { __typename?: 'Asset', title?: string | null, s
 
 export type IGenCalloutFragment = { __typename: 'Callout', id?: string | null, calloutType?: string | null, expandable?: boolean | null, text?: { __typename?: 'Callout_text', json?: any | null, connections?: Array<{ __typename: 'Caisy_Field_Document_NotFound' } | null> | null } | null };
 
-export type IGenCardSelectionGameFragment = { __typename?: 'CardSelectionGame', id?: string | null, game?: any | null, question?: string | null, helpNote?: { __typename?: 'CardSelectionGame_helpNote', json?: any | null, connections?: Array<{ __typename: 'Caisy_Field_Document_NotFound' } | null> | null } | null };
+export type IGenCardSelectionGameFragment = { __typename?: 'CardSelectionGame', id?: string | null, game?: any | null, questionType?: string | null, question?: string | null, helpNote?: { __typename?: 'CardSelectionGame_helpNote', json?: any | null, connections?: Array<{ __typename: 'Caisy_Field_Document_NotFound' } | null> | null } | null };
 
 export type IGenCaseFullTextTasksFragment = { __typename: 'Case_fullTextTasks', json?: any | null, connections?: Array<(
     { __typename: 'Asset' }
@@ -1741,6 +1752,7 @@ export const CardSelectionGameFragmentDoc = gql`
     fragment CardSelectionGame on CardSelectionGame {
   id
   game
+  questionType
   question
   helpNote {
     connections {
