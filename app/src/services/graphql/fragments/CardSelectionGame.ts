@@ -4,6 +4,7 @@ export const f_CardSelectionGame = gql`
 	fragment CardSelectionGame on CardSelectionGame {
 		id
 		game
+		questionType,
 		question
 		helpNote {
 				connections {

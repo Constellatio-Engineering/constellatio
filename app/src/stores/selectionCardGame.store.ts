@@ -8,12 +8,15 @@ export type TCardGameOption = TValue["options"][number];
 
 type GameStatus = "win" | "lose" | "inprogress";
 
+export type QuestionType = "singlePunch" | "multiPunch";
+
 type SelectionCardGameState = {
   caseId: string;
   checkedAnswersIds: string[];
   gameId: string;
   gameStatus: GameStatus;
   gameSubmitted: boolean;
+  questionType: QuestionType;
   resetCounter: number;
   resultMessage: string;
 };
@@ -25,6 +28,7 @@ type TSelectionCardGameStore = {
   getGameState: (params: {
     caseId: string;
     gameId: string;
+    questionType: QuestionType;
   }) => SelectionCardGameState;
   resetGamesForCase: (caseId: string) => void;
   toggleAnswer: (params: {
@@ -40,14 +44,16 @@ type TSelectionCardGameStore = {
 type GetDefaultSelectionCardGameState = (params: {
   caseId: string;
   gameId: string;
+  questionType: QuestionType;
 }) => SelectionCardGameState;
 
-const getDefaultSelectionCardGameState: GetDefaultSelectionCardGameState = ({ caseId, gameId }) => ({
+const getDefaultSelectionCardGameState: GetDefaultSelectionCardGameState = ({ caseId, gameId, questionType }) => ({
   caseId,
   checkedAnswersIds: [],
   gameId,
   gameStatus: "inprogress",
   gameSubmitted: false,
+  questionType,
   resetCounter: 0,
   resultMessage: "",
 });
@@ -55,7 +61,7 @@ const getDefaultSelectionCardGameState: GetDefaultSelectionCardGameState = ({ ca
 const useSelectionCardGameStore = create(immer<TSelectionCardGameStore> ((set, get) => ({
   games: [],
 
-  getGameState: ({ caseId, gameId }) =>
+  getGameState: ({ caseId, gameId, questionType }) =>
   {
     const { games } = get();
     const game = games.find(game => game.gameId === gameId);
@@ -65,7 +71,7 @@ const useSelectionCardGameStore = create(immer<TSelectionCardGameStore> ((set, g
       return game;
     }
 
-    const newGame = getDefaultSelectionCardGameState({ caseId, gameId });
+    const newGame = getDefaultSelectionCardGameState({ caseId, gameId, questionType });
 
     newGame.checkedAnswersIds = [];
 
@@ -85,7 +91,7 @@ const useSelectionCardGameStore = create(immer<TSelectionCardGameStore> ((set, g
       {
         if(game.caseId === caseId)
         {
-          return getDefaultSelectionCardGameState({ caseId, gameId: game.gameId });
+          return getDefaultSelectionCardGameState({ caseId, gameId: game.gameId, questionType: game.questionType });
         }
 
         return game;
@@ -109,7 +115,14 @@ const useSelectionCardGameStore = create(immer<TSelectionCardGameStore> ((set, g
 
       if(answerIndex === -1)
       {
-        game.checkedAnswersIds.push(answerId);
+        if(game.questionType === "singlePunch")
+        {
+          game.checkedAnswersIds = [answerId];
+        }
+        else
+        {
+          game.checkedAnswersIds.push(answerId);
+        }
       }
       else
       {
