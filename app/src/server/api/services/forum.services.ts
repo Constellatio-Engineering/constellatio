@@ -1,5 +1,5 @@
 /* eslint-disable max-lines */
-import { db } from "@/db/connection";
+import { db, type DbConnection } from "@/db/connection";
 import {
   answerUpvotes,
   correctAnswers,
@@ -350,7 +350,7 @@ export const getAnswers = async (params: GetAnswersParams) => // eslint-disable-
   return result;
 };
 
-export const resetLegalFieldsAndTopicsForQuestion = async (questionId: string, dbConnection: typeof db): Promise<void> =>
+export const resetLegalFieldsAndTopicsForQuestion = async (questionId: string, dbConnection: DbConnection): Promise<void> =>
 {
   const deleteQuestionToLegalFields = dbConnection.delete(forumQuestionsToLegalFields).where(eq(forumQuestionsToLegalFields.questionId, questionId));
   const deleteQuestionToSubfields = dbConnection.delete(forumQuestionToSubfields).where(eq(forumQuestionToSubfields.questionId, questionId));
@@ -370,7 +370,7 @@ export const insertLegalFieldsAndTopicsForQuestion = async ({
   subfieldsIds,
   topicsIds
 }: {
-  dbConnection: typeof db;
+  dbConnection: DbConnection;
   legalFieldId: string;
   questionId: string;
   subfieldsIds: string[];

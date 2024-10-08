@@ -993,6 +993,12 @@
       "name": "GameProgress",
       "schema": "",
       "columns": {
+        "Id": {
+          "name": "Id",
+          "type": "serial",
+          "primaryKey": false,
+          "notNull": true
+        },
         "UserId": {
           "name": "UserId",
           "type": "uuid",
@@ -1012,6 +1018,19 @@
           "primaryKey": false,
           "notNull": true,
           "default": "'not-started'"
+        },
+        "Date": {
+          "name": "Date",
+          "type": "timestamp",
+          "primaryKey": false,
+          "notNull": true,
+          "default": "now()"
+        },
+        "GameResult": {
+          "name": "GameResult",
+          "type": "jsonb",
+          "primaryKey": false,
+          "notNull": false
         }
       },
       "indexes": {},
@@ -2348,7 +2367,10 @@
         "ugc-10",
         "forum-5",
         "feedback-5",
-        "ugc-5"
+        "ugc-5",
+        "streak-14",
+        "streak-42",
+        "streak-84"
       ]
     },
     "public.BadgePublicationState": {
@@ -2532,7 +2554,7 @@
     "tables": {},
     "columns": {}
   },
-  "id": "b8de2df0-ff9f-40d6-95f8-68abfcd696be",
-  "prevId": "b0f6fdad-7c96-4022-9ce3-c53cc60b15b7",
+  "id": "1268fe45-2447-432f-bafb-bbe7c35a69c8",
+  "prevId": "a3443505-2456-4c89-b84c-a922a00fd2f1",
   "sequences": {}
 }
