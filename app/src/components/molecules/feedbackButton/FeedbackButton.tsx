@@ -19,7 +19,7 @@ const FeedbackButton: FunctionComponent = () =>
 
   useEffect(() =>
   {
-    if(isLoading)
+    if(isLoading || !user)
     {
       return;
     }
@@ -28,9 +28,9 @@ const FeedbackButton: FunctionComponent = () =>
     {
       await formbricks.init({
         apiHost: env.NEXT_PUBLIC_FORMBRICKS_HOST,
-        debug: true, // !isProduction,
         environmentId: env.NEXT_PUBLIC_FORMBRICKS_ENVIRONMENT_ID,
-        userId: user?.id,
+        userId: user.id,
+        // debug is not available anymore, instead now you have to append ?formbricksDebug=true to the URL
       });
 
       hasFormbricksInitialized.current = true;
@@ -39,7 +39,8 @@ const FeedbackButton: FunctionComponent = () =>
     const setUserAttributes = async (): Promise<void> =>
     {
       const email = user?.email;
-      if(email) 
+
+      if(email)
       {
         await formbricks.setEmail(email);
       }
@@ -80,7 +81,10 @@ const FeedbackButton: FunctionComponent = () =>
   return (
     <UnstyledButton
       styles={styles.feedbackButtonStyles(isUserLoggedIn, theme)}
-      onClick={() => formbricks.track("feedback_button_clicked")}>
+      onClick={async () =>
+      {
+        await formbricks.track("feedback_button_clicked");
+      }}>
       Feedback
     </UnstyledButton>
   );

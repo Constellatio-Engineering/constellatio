@@ -33,8 +33,8 @@ importers:
         specifier: 11.11.5
         version: 11.11.5(@emotion/react@11.11.4(@types/react@18.2.31)(react@18.2.0))(@types/react@18.2.31)(react@18.2.0)
       '@formbricks/js':
-        specifier: 2.1.0
-        version: 2.1.0
+        specifier: 2.2.0
+        version: 2.2.0(zod@3.23.8)
       '@google-cloud/storage':
         specifier: 7.11.0
         version: 7.11.0
@@ -1646,8 +1646,10 @@ packages:
   '@floating-ui/utils@0.2.8':
     resolution: {integrity: sha512-kym7SodPp8/wloecOpcmSnWJsK7M0E5Wg8UcFA+uO4B9s5d0ywXOEro/8HM9x0rW+TljRzul/14UYz3TleT3ig==}
 
-  '@formbricks/js@2.1.0':
-    resolution: {integrity: sha512-UZyp5IA8cIf8A3cgzwoLa1mxbZaE8Wfh1n71JD/KlI8vABQx3P8sF5NLq9tulEhJ70zd5EesXmZaTylTsaOD0w==}
+  '@formbricks/js@2.2.0':
+    resolution: {integrity: sha512-sKduJRgMZInOY141tIQN6RSsA4Wah6liqzCDDdGgv9t2FgTaNjSYGNrLlBEdQN62lRbVm5dk0+ZzMWyYrNhZWw==}
+    peerDependencies:
+      zod: 3.x
 
   '@google-cloud/paginator@5.0.2':
     resolution: {integrity: sha512-DJS3s0OVH4zFDB1PzjxAsHqJT6sKVbRwwML0ZBP9PbU7Yebtu/7SWMRzvO2J3nUi9pRNITCfu4LJeooM2w4pjg==}
@@ -10644,7 +10646,9 @@ snapshots:
 
   '@floating-ui/utils@0.2.8': {}
 
-  '@formbricks/js@2.1.0': {}
+  '@formbricks/js@2.2.0(zod@3.23.8)':
+    dependencies:
+      zod: 3.23.8
 
   '@google-cloud/paginator@5.0.2':
     dependencies:
