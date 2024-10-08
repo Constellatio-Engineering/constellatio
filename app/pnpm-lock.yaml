@@ -216,8 +216,8 @@ importers:
         specifier: 2.0.2
         version: 2.0.2
       meilisearch:
-        specifier: 0.39.0
-        version: 0.39.0
+        specifier: 0.44.1
+        version: 0.44.1
       next:
         specifier: 14.2.12
         version: 14.2.12(@babel/core@7.25.2)(react-dom@18.2.0(react@18.2.0))(react@18.2.0)
@@ -6950,8 +6950,8 @@ packages:
   mediaquery-text@1.2.0:
     resolution: {integrity: sha512-cJyRqgYQi+hsYhRkyd5le0s4LsEPvOB7r+6X3jdEELNqVlM9mRIgyUPg9BzF+PuTqQH1ZekgIjYVOeWSXWq35Q==}
 
-  meilisearch@0.39.0:
-    resolution: {integrity: sha512-nNf/HOqQ/wSxaSYKyIsE8thMPciLyIpEDIp0ZbJxkOZ/tETDNfaBNbY+Eq/wbTR9O769QSiQFf5OhssfGyOzbA==}
+  meilisearch@0.44.1:
+    resolution: {integrity: sha512-ZTZYBmomtRwjaWbvU8U8ct04g/YnrNOlvchogJOPgHcQIQBfjdbAvMJ8mLhuZEzpioYXIT6Cv+FcE150pc2+nw==}
 
   memfs@3.5.3:
     resolution: {integrity: sha512-UERzLsxzllchadvbPs5aolHh65ISpKpM+ccLbOJ8/vvpBKmAWf+la7dXFy7Mr0ySHbdHrFv5kGFCUHHe6GFEmw==}
@@ -17505,11 +17505,7 @@ snapshots:
     dependencies:
       cssom: 0.5.0
 
-  meilisearch@0.39.0:
-    dependencies:
-      cross-fetch: 3.1.8
-    transitivePeerDependencies:
-      - encoding
+  meilisearch@0.44.1: {}
 
   memfs@3.5.3:
     dependencies:
