@@ -5,7 +5,11 @@ type UseArticleViews = (articleId: Nullable<string>) => UseQueryResult<{ count: 
 
 const useArticleViews: UseArticleViews = (articleId) =>
 {
-  const { data: articleViews = 0, error, isLoading } = api.views.getArticleViews.useQuery({ articleId: articleId! }, {
+  const {
+    data: articleViews = 0,
+    error,
+    isLoading
+  } = api.views.getContentItemViewsCount.useQuery({ itemId: articleId!, itemType: "article" }, {
     enabled: articleId != null,
   });
 

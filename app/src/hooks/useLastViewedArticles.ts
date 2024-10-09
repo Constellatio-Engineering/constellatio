@@ -9,13 +9,13 @@ export const useLastViewedArticles = () =>
     data: lastViewedArticles = [],
     error: getLastViewedArticlesError,
     isLoading: isGetLastViewedArticlesLoading
-  } = api.views.getLastViewedArticles.useQuery();
+  } = api.views.getLastViewedContentItems.useQuery({ itemType: "article" });
   const { allArticles, error: getArticlesError, isLoading: isGetAllArticlesLoading } = useArticles();
 
   const articles = lastViewedArticles
-    .map(({ articleId, viewedDate }) =>
+    .map(({ itemId, viewedDate }) =>
     {
-      const article = allArticles.find(({ id }) => id === articleId);
+      const article = allArticles.find(({ id }) => id === itemId);
 
       if(!article)
       {

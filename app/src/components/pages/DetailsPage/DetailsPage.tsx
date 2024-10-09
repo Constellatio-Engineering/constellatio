@@ -28,14 +28,11 @@ type IDetailsPageProps = {
 
 const DetailsPage: FunctionComponent<IDetailsPageProps> = ({ content, variant }) => 
 {
-  const { invalidateArticleViews, invalidateCaseViews } = useContextAndErrorIfNull(InvalidateQueriesContext);
+  const { invalidateContentItemsViewsCount } = useContextAndErrorIfNull(InvalidateQueriesContext);
   const contentId = content?.id;
   const caseId = content?.__typename === "Case" ? contentId : undefined;
-  const { mutate: addArticleView } = api.views.addArticleView.useMutation({
-    onSuccess: async () => invalidateArticleViews({ articleId: contentId! })
-  });
-  const { mutate: addCaseView } = api.views.addCaseView.useMutation({
-    onSuccess: async () => invalidateCaseViews({ caseId: contentId! })
+  const { mutate: addContentItemView } = api.views.addContentItemView.useMutation({
+    onSuccess: async (_data, variables) => invalidateContentItemsViewsCount(variables)
   });
   const wasViewCountUpdated = useRef<boolean>(false);
   const { caseProgress, isLoading: isCaseProgressLoading } = useCaseProgress(caseId);
@@ -51,17 +48,12 @@ const DetailsPage: FunctionComponent<IDetailsPageProps> = ({ content, variant })
       return;
     }
 
-    if(content?.__typename === "Case")
-    {
-      addCaseView({ caseId: contentId });
-      wasViewCountUpdated.current = true;
-    }
-    else if(content?.__typename === "Article")
-    {
-      addArticleView({ articleId: contentId });
-      wasViewCountUpdated.current = true;
-    }
-  }, [addArticleView, addCaseView, content?.__typename, contentId]);
+    addContentItemView({
+      itemId: contentId,
+      itemType: content?.__typename === "Case" ? "case" : "article"
+    });
+    wasViewCountUpdated.current = true;
+  }, [addContentItemView, content?.__typename, contentId]);
 
   useEffect(() =>
   {

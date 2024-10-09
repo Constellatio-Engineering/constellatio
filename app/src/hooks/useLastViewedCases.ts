@@ -1,7 +1,5 @@
 import useCases from "@/hooks/useCases";
-import { type IGenCase } from "@/services/graphql/__generated/sdk";
 import { api } from "@/utils/api";
-import { type UseQueryResult } from "@/utils/types";
 
 export const useLastViewedCases = () =>
 {
@@ -9,13 +7,13 @@ export const useLastViewedCases = () =>
     data: lastViewedCases = [],
     error: getLastViewedCasesError,
     isLoading: isGetLastViewedCasesLoading
-  } = api.views.getLastViewedCases.useQuery();
+  } = api.views.getLastViewedContentItems.useQuery({ itemType: "case" });
   const { allCases, error: getCasesError, isLoading: isGetAllCasesLoading } = useCases();
 
   const cases = lastViewedCases
-    .map(({ caseId, viewedDate }) =>
+    .map(({ itemId, viewedDate }) =>
     {
-      const legalCase = allCases.find(({ id }) => id === caseId);
+      const legalCase = allCases.find(({ id }) => id === itemId);
 
       if(!legalCase)
       {

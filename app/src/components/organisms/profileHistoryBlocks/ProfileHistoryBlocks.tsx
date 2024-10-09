@@ -47,9 +47,9 @@ const ProfileHistoryBlocks: FunctionComponent = () =>
   const { isLoading: areLastViewedCasesLoading, lastViewedCases } = useLastViewedCases();
   const isLoading = areLastViewedArticlesLoading || areLastViewedCasesLoading;
 
-  const { data } = api.views.getViewsHistory.useQuery({});
+  /* const { data } = api.views.getViewsHistory.useQuery({});
 
-  console.log("data", data);
+  console.log("data", data);*/
 
   const itemsGroupedByDate = useMemo(() =>
   {

@@ -1,7 +1,7 @@
 /* eslint-disable max-lines */
 import { db } from "@/db/connection";
 import {
-  articlesViews, casesProgress, casesViews, documents, uploadedFiles, users, usersToBadges 
+  casesProgress, contentViews, documents, uploadedFiles, users, usersToBadges
 } from "@/db/schema";
 import { env } from "@/env.mjs";
 import { deleteClickupCustomFieldValue } from "@/lib/clickup/tasks/delete-custom-field-value";
@@ -33,13 +33,11 @@ export const getUsersWithActivityStats = async (query?: SQL) =>
       completedCases: countDistinct(casesProgress.caseId),
       createdDocuments: countDistinct(documents.id),
       uploadedFiles: countDistinct(uploadedFiles.id),
-      viewedArticles: countDistinct(articlesViews.articleId),
-      viewedCases: countDistinct(casesViews.caseId)
+      viewedContentItems: countDistinct(contentViews.contentItemId)
     })
     .from(users)
     .where(query)
-    .leftJoin(casesViews, eq(users.id, casesViews.userId))
-    .leftJoin(articlesViews, eq(users.id, articlesViews.userId))
+    .leftJoin(contentViews, eq(users.id, contentViews.userId))
     .leftJoin(documents, eq(users.id, documents.userId))
     .leftJoin(uploadedFiles, eq(users.id, uploadedFiles.userId))
     .leftJoin(usersToBadges, eq(users.id, usersToBadges.userId))
