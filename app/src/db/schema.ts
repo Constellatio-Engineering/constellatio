@@ -84,6 +84,9 @@ export type FileMimeType = typeof fileMimeTypes[number];
 export const streakActivityTypes = ["time", "solvedCase", "forumActivity"] as const;
 export type StreakActivityType = typeof streakActivityTypes[number]; 
 
+export const contentItemViewsTypes = ["case", "article", "forumQuestion"] as const;
+export type ContentItemViewType = typeof contentItemViewsTypes[number];
+
 export const badgeIdentifiers = [
   "fall-1",
   "forum-power",
@@ -160,6 +163,7 @@ export const badgePublicationStateEnum = pgEnum("BadgePublicationState", badgePu
 export const roleEnum = pgEnum("Role", roles);
 export const notificationTypeIdentifierEnum = pgEnum("NotificationType", notificationTypesIdentifiers);
 export const streakActivityTypeEnum = pgEnum("StreakActivityType", streakActivityTypes);
+export const contentItemViewTypeEnum = pgEnum("ContentItemViewType", contentItemViewsTypes);
 
 // TODO: Go through all queries and come up with useful indexes
 
@@ -287,32 +291,6 @@ export const notes = pgTable("Note", {
 export type NoteInsert = InferInsertModel<typeof notes>;
 export type Note = InferSelectModel<typeof notes>;
 export type NoteSql = InferPgSelectModel<typeof notes>;
-
-export const casesViews = pgTable("CaseView", {
-  id: serial().primaryKey(),
-  userId: uuid("UserId").references(() => users.id, { onDelete: "no action" }).notNull(),
-  caseId: uuid("CaseId").notNull(),
-  createdAt: timestamp("CreatedAt").defaultNow().notNull(),
-}, table => ({
-  caseId_index: index("CaseView_CaseId_Index").on(table.caseId),
-}));
-
-export type CaseViewInsert = InferInsertModel<typeof casesViews>;
-export type CaseView = InferSelectModel<typeof casesViews>;
-export type CaseViewSql = InferPgSelectModel<typeof casesViews>;
-
-export const articlesViews = pgTable("ArticleView", {
-  id: serial().primaryKey(),
-  userId: uuid("UserId").references(() => users.id, { onDelete: "no action" }).notNull(),
-  articleId: uuid("ArticleId").notNull(),
-  createdAt: timestamp("CreatedAt").defaultNow().notNull(),
-}, table => ({
-  articleId_index: index("ArticleView_ArticleId_Index").on(table.articleId),
-}));
-
-export type ArticleViewInsert = InferInsertModel<typeof articlesViews>;
-export type ArticleView = InferSelectModel<typeof articlesViews>;
-export type ArticleViewSql = InferPgSelectModel<typeof articlesViews>;
 
 export const casesProgress = pgTable("CaseProgress", {
   userId: uuid("UserId").references(() => users.id, { onDelete: "no action" }).notNull(),
@@ -489,19 +467,6 @@ export const forumQuestionToTopicsRelations = relations(forumQuestionToTopics, (
 export type ForumQuestionToTopicInsert = InferInsertModel<typeof forumQuestionToTopics>;
 export type ForumQuestionToTopic = InferSelectModel<typeof forumQuestionToTopics>;
 export type ForumQuestionToTopicSql = InferPgSelectModel<typeof forumQuestionToTopics>;
-
-export const forumQuestionViews = pgTable("ForumQuestionView", {
-  id: serial().primaryKey(),
-  userId: uuid("UserId").references(() => users.id, { onDelete: "no action" }).notNull(),
-  questionIdId: uuid("QuestionId").notNull(),
-  createdAt: timestamp("CreatedAt").defaultNow().notNull(),
-}, table => ({
-  questionId_index: index("ForumQuestionView_QuestionId_Index").on(table.questionIdId),
-}));
-
-export type ForumQuestionViewInsert = InferInsertModel<typeof forumQuestionViews>;
-export type ForumQuestionView = InferSelectModel<typeof forumQuestionViews>;
-export type ForumQuestionViewSql = InferPgSelectModel<typeof forumQuestionViews>;
 
 export const forumAnswers = pgTable("ForumAnswer", {
   id: uuid("Id").defaultRandom().primaryKey(),
@@ -776,3 +741,18 @@ export const streakActivities = pgTable("StreakActivities", {
 export type StreakActivityInsert = InferInsertModel<typeof streakActivities>;
 export type StreakActivity = InferSelectModel<typeof streakActivities>;
 export type StreakActivitySql = InferPgSelectModel<typeof streakActivities>;
+
+export const contentViews = pgTable("ContentView", {
+  id: serial().primaryKey(),
+  userId: uuid("UserId").references(() => users.id, { onDelete: "no action" }).notNull(),
+  contentItemId: uuid("ContentItemId").notNull(),
+  createdAt: timestamp("CreatedAt").defaultNow().notNull(),
+  contentItemType: contentItemViewTypeEnum("ContentItemType").notNull(),
+}, table => ({
+  contentItemId_index: index("ContentView_ContentItemId_Index").on(table.contentItemId),
+  contentItemType_index: index("ContentView_ContentItemType_Index").on(table.contentItemType),
+}));
+
+export type ContentViewInsert = InferInsertModel<typeof contentViews>;
+export type ContentView = InferSelectModel<typeof contentViews>;
+export type ContentViewSql = InferPgSelectModel<typeof contentViews>;
