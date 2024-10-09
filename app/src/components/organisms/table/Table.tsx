@@ -45,7 +45,6 @@ const Table: FunctionComponent<ITableProps> = ({ children, isTablet, tableType }
                 <ColumnHeader title={header.title}/>
               </th>
             );
-            
           })}
         </tr>
       </thead>

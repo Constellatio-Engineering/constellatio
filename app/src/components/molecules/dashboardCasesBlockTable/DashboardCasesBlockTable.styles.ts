@@ -4,25 +4,31 @@ import { css } from "@emotion/react";
 
 export const wrapper = css`
   flex: 1;
+  border: 1px solid ${colooors["neutrals-01"][3]};
+  border-radius: 12px;
+  overflow: hidden;
 `;
 
-export const casesTable = () => css`
+export const casesTable = (numberOfCasesShown: number) => css`
   min-width: 100%;
   text-align: left;
-  border-radius: 12px;
   thead {
     background: ${colooors["neutrals-01"][2]};
   }
   tbody {
+    &:hover {
+        cursor: pointer;        
+    }
     tr {
+      &:nth-child(n):not(:nth-child(${numberOfCasesShown})) {
+        border-bottom: 1px solid ${colooors["neutrals-01"][3]};
+      }
       transition: all 300ms ease-in-out;
       &:hover {
         transition: all 300ms ease-in-out;
         background: ${colooors["neutrals-01"][2]};
         > td > button {
-          background: ${colooors["neutrals-01"][2]};
-        }
-        > td > div {
+          cursor: pointer;
           background: ${colooors["neutrals-01"][2]};
         }
       }
@@ -30,16 +36,8 @@ export const casesTable = () => css`
   }
   td,
   th {
-    border-block: 1px solid ${colooors["neutrals-01"][3]};
     width: max-content;
-    padding: 0 16px;
     white-space: nowrap;
-    &:first-of-type {
-      border-left: 1px solid ${colooors["neutrals-01"][3]};
-    }
-    &:last-of-type {
-      border-right: 1px solid ${colooors["neutrals-01"][3]};
-    }
   }
   th {
     padding: 8px 16px;
@@ -47,17 +45,10 @@ export const casesTable = () => css`
     text-transform: uppercase;
   }
   td {
+    padding: 0 16px;
     height: 60px;
     vertical-align: middle;
-    cursor: pointer;
-  }
-
-  td.primaryCell {
-    &:hover {
-      background-color: ${colooors["neutrals-01"][1]};
-      cursor: pointer;
-    }
-  }
+  }  
   .primaryCell {
     width: 100%;
     p {
