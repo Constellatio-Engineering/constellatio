@@ -4,6 +4,7 @@ import { SubtitleText } from "@/components/atoms/SubtitleText/SubtitleText";
 import EmptyStateCard from "@/components/organisms/emptyStateCard/EmptyStateCard";
 import { useLastViewedArticles } from "@/hooks/useLastViewedArticles";
 import { useLastViewedCases } from "@/hooks/useLastViewedCases";
+import { api } from "@/utils/api";
 
 import { Skeleton } from "@mantine/core";
 import entry from "next/dist/server/typescript/rules/entry";
@@ -21,8 +22,6 @@ function getHistoryItemsGroupedByDate(items: HistoryItem[]): DateWithHistoryItem
 
   for(const item of items)
   {
-    console.log(item.title + " - " + item.viewedDate.toLocaleTimeString("de"));
-
     const { viewedDate } = item;
     const date = viewedDate.toLocaleDateString("de", { day: "2-digit", month: "2-digit", year: "numeric" });
 
@@ -47,6 +46,10 @@ const ProfileHistoryBlocks: FunctionComponent = () =>
   const { isLoading: areLastViewedArticlesLoading, lastViewedArticles } = useLastViewedArticles();
   const { isLoading: areLastViewedCasesLoading, lastViewedCases } = useLastViewedCases();
   const isLoading = areLastViewedArticlesLoading || areLastViewedCasesLoading;
+
+  const { data } = api.views.getViewsHistory.useQuery({});
+
+  console.log("data", data);
 
   const itemsGroupedByDate = useMemo(() =>
   {
@@ -106,8 +109,6 @@ const ProfileHistoryBlocks: FunctionComponent = () =>
                     labelVariant = "neutral";
                   }
                 }
-
-                console.log(item.legalArea);
 
                 return (
                   <div key={item.id} css={styles.tableRow}>

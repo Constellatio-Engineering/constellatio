@@ -1,6 +1,7 @@
 import { db } from "@/db/connection";
 import { articlesViews, casesViews } from "@/db/schema";
 import { addUserToCrmUpdateQueue } from "@/lib/clickup/utils";
+import { idValidation } from "@/schemas/common.validation";
 import { addArticleViewSchema } from "@/schemas/views/addArticleView.schema";
 import { addCaseViewSchema } from "@/schemas/views/addCaseView.schema";
 import { getArticleViewsSchema } from "@/schemas/views/getArticleViews.schema";
@@ -8,6 +9,8 @@ import { getCaseViewsSchema } from "@/schemas/views/getCaseViews.schema";
 import { createTRPCRouter, protectedProcedure } from "@/server/api/trpc";
 
 import { desc, eq, sql } from "drizzle-orm";
+import { unionAll } from "drizzle-orm/pg-core";
+import { z } from "zod";
 
 /* async function getLastViewedItems<Table extends (typeof articlesViews | typeof casesViews)>(table: Table, idColumn: any, userId: string)
 {
@@ -128,5 +131,40 @@ export const viewsRouter = createTRPCRouter({
         .limit(3);
 
       return caseViews;
+    }),
+  getViewsHistory: protectedProcedure
+    .input(z.object({
+      /* cursor: z.object({
+        index: z.number().int().min(0).nullish()
+      }),
+      limit: z.number().min(1).max(50)*/
+    }))
+    .query(async ({ ctx: { userId }, input: { /* cursor, limit*/ } }) =>
+    {
+      const articlesQuery = db
+        .select({
+          itemId: articlesViews.articleId,
+          viewedAt: articlesViews.createdAt,
+        })
+        .from(articlesViews)
+        .where(eq(articlesViews.userId, userId));
+
+      const casesQuery = db
+        .select({
+          itemId: casesViews.caseId,
+          viewedAt: casesViews.createdAt,
+        })
+        .from(casesViews)
+        .where(eq(casesViews.userId, userId));
+
+      const test = unionAll(articlesQuery, casesQuery);
+
+      console.log(test.toSQL());
+
+      const result = await test;
+
+      console.log(result);
+
+      return casesQuery;
     }),
 });
