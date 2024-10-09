@@ -87,7 +87,7 @@ export const viewsRouter = createTRPCRouter({
       const distinctArticleViewsSubquery = db
         .select({
           articleId: articlesViews.articleId,
-          createdAt: sql<Date>`MAX(${articlesViews.createdAt})`.as("maxCreatedAt"),
+          createdAt: sql`MAX(${articlesViews.createdAt})`.mapWith(articlesViews.createdAt).as("maxCreatedAt"),
         })
         .from(articlesViews)
         .where(eq(articlesViews.userId, userId))
@@ -111,7 +111,7 @@ export const viewsRouter = createTRPCRouter({
       const distinctCaseViewsSubquery = db
         .select({
           caseId: casesViews.caseId,
-          createdAt: sql<Date>`MAX(${casesViews.createdAt})`.as("maxCreatedAt"),
+          createdAt: sql`MAX(${casesViews.createdAt})`.mapWith(casesViews.createdAt).as("maxCreatedAt"),
         })
         .from(casesViews)
         .where(eq(casesViews.userId, userId))
