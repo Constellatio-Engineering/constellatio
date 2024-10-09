@@ -61,10 +61,13 @@ const DashboardCasesBlockTable: FunctionComponent = () =>
   const { bookmarks: casesBookmarks, isLoading: isGetCasesBookmarksLoading } = useBookmarks("case", { enabled: true });
   const bookmarks = casesBookmarks;
   const routeToCase = (id: string | null | undefined): void => void router.push(`${appPaths.cases}/${id}`);
+
+  const numberOfCasesShown = 6;
+
   return (
     <div css={styles.wrapper}>
       {allCases?.length > 0 && (
-        <table css={styles.casesTable}>
+        <table css={styles.casesTable(numberOfCasesShown)}>
           <thead>
             <tr>
               <th className="primaryCell">
@@ -92,7 +95,7 @@ const DashboardCasesBlockTable: FunctionComponent = () =>
             </tr>
           </thead>
           <tbody>
-            {sortedCases.slice(0, 6).map((item, index) => (
+            {sortedCases.slice(0, numberOfCasesShown).map((item, index) => (
               <tr key={index}>
                 <td className="primaryCell" onClick={() => routeToCase(item?.id)}>
                   <BodyText styleType="body-01-medium" title={item?.title ?? ""} component="p">{item?.title}</BodyText>
