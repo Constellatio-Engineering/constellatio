@@ -1,7 +1,5 @@
 import useArticles from "@/hooks/useArticles";
-import { type IGenArticle } from "@/services/graphql/__generated/sdk";
 import { api } from "@/utils/api";
-import { type UseQueryResult } from "@/utils/types";
 
 export const useLastViewedArticles = () =>
 {

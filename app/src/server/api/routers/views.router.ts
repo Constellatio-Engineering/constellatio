@@ -19,7 +19,7 @@ export const viewsRouter = createTRPCRouter({
       // only allow one view per minute
 
       const now = new Date();
-      const rateLimitTimeframe = new Date(now.getTime() - 1 * 1000);
+      const rateLimitTimeframe = new Date(now.getTime() - 60 * 1000);
 
       try
       {

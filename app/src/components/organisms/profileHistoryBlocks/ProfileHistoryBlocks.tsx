@@ -4,10 +4,8 @@ import { SubtitleText } from "@/components/atoms/SubtitleText/SubtitleText";
 import EmptyStateCard from "@/components/organisms/emptyStateCard/EmptyStateCard";
 import { useLastViewedArticles } from "@/hooks/useLastViewedArticles";
 import { useLastViewedCases } from "@/hooks/useLastViewedCases";
-import { api } from "@/utils/api";
 
 import { Skeleton } from "@mantine/core";
-import entry from "next/dist/server/typescript/rules/entry";
 import React, { type FunctionComponent, useMemo } from "react";
 
 import * as styles from "./ProfileHistoryBlocks.styles";
