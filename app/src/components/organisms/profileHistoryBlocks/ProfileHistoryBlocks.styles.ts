@@ -22,24 +22,33 @@ export const tableRow = () => css`
   align-items: center;
   background: ${colooors["neutrals-01"][0]};
   padding: 20px 16px;
+  color: #000000;
   border-bottom: ${colooors["neutrals-01"][3]} 1px solid;
   gap: 20px;
   min-height: 70px;
+  transition: background-color 0.15s ease;
+  :hover, :after {
+    background-color: ${colooors["neutrals-01"][1]};
+  }
 `;
 
 export const timeCell = () => css`
-    color: ${colooors["neutrals-01"][7]};
+  color: ${colooors["neutrals-01"][7]};
 `;
 
 export const blockTitle = css`
   flex: 1;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  min-width: 0;
 `;
 
 export const blockCategoryWrapper = () => css`
   color: ${colooors["neutrals-02"][0]};
   text-align: right;
   max-width: 300px;
-  padding-left: 20px;
+  padding-left: 40px;
 `;
 
 export const blockCategory = () => css`

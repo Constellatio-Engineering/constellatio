@@ -7,7 +7,7 @@ import ProfileHistoryBlocks from "../profileHistoryBlocks/ProfileHistoryBlocks";
 const ProfileHistoryTab: FunctionComponent = () => 
 {
   return (
-    <div style={{ width: "100%" }}>
+    <div style={{ overflow: "hidden", width: "100%" }}>
       <Title order={3} css={styles.tabHeader}>Verlauf</Title>
       <ProfileHistoryBlocks/>
     </div>

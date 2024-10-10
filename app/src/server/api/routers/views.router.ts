@@ -7,14 +7,15 @@ import { addContentItemViewSchema } from "@/schemas/views/addContentItemView.sch
 import { getContentItemViewsSchema } from "@/schemas/views/getContentItemViews.schema";
 import { getLastViewedContentItemsSchema } from "@/schemas/views/getLastViewedContentItems.schema";
 import { createTRPCRouter, protectedProcedure } from "@/server/api/trpc";
+import { getAllMainCategories } from "@/services/content/getAllMainCategories";
 import { getArticleById } from "@/services/content/getArticleById";
 import { getCaseById } from "@/services/content/getCaseById";
 import { InternalServerError } from "@/utils/serverError";
-import { sleep } from "@/utils/utils";
+import { type Nullable } from "@/utils/types";
 
 import { type inferProcedureOutput } from "@trpc/server";
 import {
-  and, desc, eq, gt, inArray, lt, type SQL, sql 
+  and, desc, eq, gt, inArray, lte, type SQL, sql
 } from "drizzle-orm";
 import postgres from "postgres";
 import { z } from "zod";
@@ -157,12 +158,9 @@ export const viewsRouter = createTRPCRouter({
     }))
     .query(async ({ ctx: { userId }, input: { cursor, initialPageSize, loadMorePageSize } }) =>
     {
-      await sleep(500);
-
       // only allow to query a set amount of days back
       const now = new Date();
       const historyLimit = new Date(now.getTime() - env.NEXT_PUBLIC_CONTENT_ITEMS_VIEWS_HISTORY_DAYS_LIMIT * 24 * 60 * 60 * 1000);
-
       const pageSize = cursor == null ? initialPageSize : loadMorePageSize;
       const queryConditions: SQL[] = [
         eq(contentViews.userId, userId),
@@ -171,7 +169,7 @@ export const viewsRouter = createTRPCRouter({
 
       if(cursor != null)
       {
-        queryConditions.push(lt(contentViews.id, cursor));
+        queryConditions.push(lte(contentViews.id, cursor));
       }
 
       const visitedItemsRaw = await db
@@ -219,17 +217,20 @@ export const viewsRouter = createTRPCRouter({
 
       const visitedForumQuestionsData = await db.query.forumQuestions.findMany({
         where: inArray(forumQuestions.id, visitedForumQuestions.map(item => item.itemId)),
+        with: { forumQuestionToLegalFields: true }
       });
+
+      const allMainCategories = await getAllMainCategories();
 
       // const visitedItems = removeConsecutiveDuplicates(visitedItemsRaw, "itemId")
       const visitedItems = visitedItemsRaw
         .map(item =>
         {
           let visitedItemsData: {
+            additionalInfo: Nullable<string>;
             id: number;
             itemId: string;
-            itemType: ContentItemViewType;
-            legalArea: string;
+            itemType: ContentItemViewType; 
             title: string;
             viewedAt: Date;
           } | null = null;
@@ -240,13 +241,13 @@ export const viewsRouter = createTRPCRouter({
             {
               const data = visitedCasesData.find(caseData => caseData?.id === item.itemId);
 
-              if(data && data.title && data.legalArea?.legalAreaName)
+              if(data && data.title)
               {
                 visitedItemsData = {
+                  additionalInfo: data.legalArea?.legalAreaName,
                   id: item.id,
                   itemId: item.itemId,
                   itemType: item.itemType,
-                  legalArea: data.legalArea.legalAreaName,
                   title: data.title,
                   viewedAt: item.viewedAt
                 };
@@ -258,13 +259,13 @@ export const viewsRouter = createTRPCRouter({
             {
               const data = visitedArticlesData.find(articleData => articleData?.id === item.itemId);
 
-              if(data && data.title && data.legalArea?.legalAreaName)
+              if(data && data.title)
               {
                 visitedItemsData = {
+                  additionalInfo: data.legalArea?.legalAreaName,
                   id: item.id,
                   itemId: item.itemId,
                   itemType: item.itemType,
-                  legalArea: data.legalArea.legalAreaName,
                   title: data.title,
                   viewedAt: item.viewedAt
                 };
@@ -279,10 +280,10 @@ export const viewsRouter = createTRPCRouter({
               if(data)
               {
                 visitedItemsData = {
+                  additionalInfo: allMainCategories.find(mainCategory => mainCategory?.id === data.forumQuestionToLegalFields[0]?.legalFieldId)?.mainCategory,
                   id: item.id,
                   itemId: item.itemId,
                   itemType: item.itemType,
-                  legalArea: "TODO",
                   title: data.title,
                   viewedAt: item.viewedAt
                 };

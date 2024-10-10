@@ -5,56 +5,27 @@ import { SubtitleText } from "@/components/atoms/SubtitleText/SubtitleText";
 import EmptyStateCard from "@/components/organisms/emptyStateCard/EmptyStateCard";
 import { HistoryItemsSkeleton } from "@/components/organisms/profileHistoryBlocks/HistoryItemsSkeleton";
 import { env } from "@/env.mjs";
-import { type useLastViewedArticles } from "@/hooks/useLastViewedArticles";
-import { type useLastViewedCases } from "@/hooks/useLastViewedCases";
-import { type AppRouter } from "@/server/api/root";
 import { type ViewsHistoryItems } from "@/server/api/routers/views.router";
 import { api } from "@/utils/api";
+import { appPaths } from "@/utils/paths";
 
 import { Skeleton } from "@mantine/core";
-import { type inferProcedureOutput } from "@trpc/server";
+import Link from "next/link";
 import React, { Fragment, type FunctionComponent, useEffect, useMemo } from "react";
 import { useInView } from "react-intersection-observer";
 
 import * as styles from "./ProfileHistoryBlocks.styles";
 
-type HistoryItem = ReturnType<typeof useLastViewedArticles>["lastViewedArticles"][number] | ReturnType<typeof useLastViewedCases>["lastViewedCases"][number];
-
-type DateWithHistoryItems = Map<string, HistoryItem[]>;
-
-function getHistoryItemsGroupedByDate(items: HistoryItem[]): DateWithHistoryItems
-{
-  const map: DateWithHistoryItems = new Map();
-
-  for(const item of items)
-  {
-    const { viewedDate } = item;
-    const date = viewedDate.toLocaleDateString("de", { day: "2-digit", month: "2-digit", year: "numeric" });
-
-    if(!map.has(date))
-    {
-      map.set(date, []);
-    }
-
-    map.get(date)!.push(item);
-  }
-
-  map.forEach((items, key) =>
-  {
-    map.set(key, items.sort((a, b) => b.viewedDate.getTime() - a.viewedDate.getTime()));
-  });
-
-  return map;
-}
-
-function getHistoryItemsGroupedByDate2(items: ViewsHistoryItems)
+function getHistoryItemsGroupedByDate(items: ViewsHistoryItems)
 {
   const map = new Map<string, ViewsHistoryItems>();
 
   for(const item of items)
   {
     const { viewedAt } = item;
-    const date = viewedAt.toLocaleDateString("de", { day: "2-digit", month: "2-digit", year: "numeric" });
+    const date = viewedAt.toLocaleDateString("de", {
+      day: "2-digit", month: "long", weekday: "short", year: "numeric"
+    });
 
     if(!map.has(date))
     {
@@ -72,25 +43,15 @@ function getHistoryItemsGroupedByDate2(items: ViewsHistoryItems)
   return map;
 }
 
-// const initialPageSize = 15;
-// const loadMorePageSize = 10;
+const initialPageSize = 15;
+const loadMorePageSize = 10;
 
-const initialPageSize = 2;
-const loadMorePageSize = 2;
-
-const ProfileHistoryBlocks: FunctionComponent = () => 
+const ProfileHistoryBlocks: FunctionComponent = () =>
 {
-  /* const { inView: isEndOfListInView, ref: endOfListLabelRef } = useInView({
+  const { inView: isEndOfListInView, ref: endOfListLabelRef } = useInView({
     initialInView: false,
     rootMargin: "30% 0px 30%",
     threshold: 0,
-    triggerOnce: false,
-  });*/
-
-  const { inView: isEndOfListInView, ref: endOfListLabelRef } = useInView({
-    initialInView: false,
-    rootMargin: "0px",
-    threshold: 1,
     triggerOnce: false,
   });
 
@@ -106,7 +67,7 @@ const ProfileHistoryBlocks: FunctionComponent = () =>
   }, {
     getNextPageParam: ((previouslyFetchedPage) => previouslyFetchedPage?.nextCursor),
     initialCursor: null,
-    refetchOnMount: false,
+    refetchOnMount: "always",
     refetchOnReconnect: false,
     retry: false,
     staleTime: Infinity
@@ -118,7 +79,7 @@ const ProfileHistoryBlocks: FunctionComponent = () =>
   }, [viewsHistoryQuery?.pages]);
 
   const loadedItemsLength = allItems.length;
-  const itemsGroupedByDate = useMemo(() => Array.from(getHistoryItemsGroupedByDate2(allItems)), [allItems]);
+  const itemsGroupedByDate = useMemo(() => Array.from(getHistoryItemsGroupedByDate(allItems)), [allItems]);
 
   useEffect(() =>
   {
@@ -152,49 +113,58 @@ const ProfileHistoryBlocks: FunctionComponent = () =>
                 {items.map((item) =>
                 {
                   let labelVariant: ILabelProps["variant"];
+                  let href: string;
 
                   switch (item.itemType)
                   {
                     case "article":
                     {
                       labelVariant = "dictionary";
+                      href = `${appPaths.dictionary}/${item.itemId}`;
                       break;
                     }
                     case "case":
                     {
                       labelVariant = "case";
+                      href = `${appPaths.cases}/${item.itemId}`;
                       break;
                     }
                     case "forumQuestion":
                     {
                       labelVariant = "forum";
+                      href = `${appPaths.forum}/${item.itemId}`;
                       break;
-                    }
-                    default:
-                    {
-                      labelVariant = "neutral";
                     }
                   }
 
                   return (
-                    <div key={item.id} css={styles.tableRow}>
+                    <Link
+                      href={href}
+                      prefetch={false}
+                      key={item.id}
+                      title={item.title}
+                      css={styles.tableRow}>
                       <BodyText styleType="body-02-medium" component="p" css={styles.timeCell}>
                         {item.viewedAt.toLocaleTimeString("de", { hour: "2-digit", minute: "2-digit" })}
                       </BodyText>
                       <div css={styles.blockType}>
                         <Label variant={labelVariant}/>
                       </div>
-                      <BodyText css={styles.blockTitle} styleType="body-01-medium" component="p">{item.title}</BodyText>
-                      <div css={styles.blockCategoryWrapper}>
-                        <BodyText
-                          title={item.legalArea}
-                          css={styles.blockCategory}
-                          styleType="body-02-medium"
-                          component="p">
-                          {item.legalArea}
-                        </BodyText>
-                      </div>
-                    </div>
+                      <BodyText css={styles.blockTitle} styleType="body-01-medium" component="p">
+                        {item.title}
+                      </BodyText>
+                      {item.additionalInfo && (
+                        <div css={styles.blockCategoryWrapper}>
+                          <BodyText
+                            title={item.additionalInfo}
+                            css={styles.blockCategory}
+                            styleType="body-02-medium"
+                            component="p">
+                            {item.additionalInfo}
+                          </BodyText>
+                        </div>
+                      )}
+                    </Link>
                   );
                 })}
                 {(isFetchingNextPage && (index === itemsGroupedByDate.length - 1)) && (

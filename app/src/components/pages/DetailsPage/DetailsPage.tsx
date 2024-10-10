@@ -5,13 +5,11 @@ import CaseNavBar from "@/components/organisms/caseNavBar/CaseNavBar";
 import CaseResultsReviewStep from "@/components/organisms/caseResultsReviewStep/CaseResultsReviewStep";
 import CaseSolveCaseStep from "@/components/organisms/caseSolveCaseStep/CaseSolveCaseStep";
 import CaseSolvingHeader from "@/components/organisms/caseSolvingHeader/CaseSolvingHeader";
+import { useAddContentItemView } from "@/hooks/useAddContentItemView";
 import useCaseProgress from "@/hooks/useCaseProgress";
-import useContextAndErrorIfNull from "@/hooks/useContextAndErrorIfNull";
 import useGamesProgress from "@/hooks/useGamesProgress";
-import { InvalidateQueriesContext } from "@/provider/InvalidateQueriesProvider";
 import { type FullLegalCase } from "@/services/content/getCaseById";
 import useCaseSolvingStore, { type CaseStepIndex } from "@/stores/caseSolving.store";
-import { api } from "@/utils/api";
 import { type ArticleWithNextAndPreviousArticleId } from "@/utils/articles";
 import { getGamesFromCase } from "@/utils/case";
 import { appPaths } from "@/utils/paths";
@@ -28,12 +26,9 @@ type IDetailsPageProps = {
 
 const DetailsPage: FunctionComponent<IDetailsPageProps> = ({ content, variant }) => 
 {
-  const { invalidateContentItemsViewsCount } = useContextAndErrorIfNull(InvalidateQueriesContext);
   const contentId = content?.id;
   const caseId = content?.__typename === "Case" ? contentId : undefined;
-  const { mutate: addContentItemView } = api.views.addContentItemView.useMutation({
-    onSuccess: async (_data, variables) => invalidateContentItemsViewsCount(variables)
-  });
+  const { mutate: addContentItemView } = useAddContentItemView();
   const { caseProgress, isLoading: isCaseProgressLoading } = useCaseProgress(caseId);
   const { gamesProgress, isLoading: isGamesProgressLoading } = useGamesProgress(caseId);
   const games = content?.__typename === "Case" ? getGamesFromCase(content) : [];
@@ -121,7 +116,6 @@ const DetailsPage: FunctionComponent<IDetailsPageProps> = ({ content, variant })
   });
   const currentGame = games[currentGameIndex];
   const currentGameIndexInFullTextTasksJson = currentGame?.indexInFullTextTasksJson || 0;
-  // const mainCategorySlug = content?.mainCategoryField?.[0]?.slug;
   const mainCategoryName = content?.mainCategoryField?.[0]?.mainCategory;
   const legalAreaName = content?.legalArea?.legalAreaName;
   const topicName = content?.topic?.[0]?.topicName;
@@ -139,10 +133,6 @@ const DetailsPage: FunctionComponent<IDetailsPageProps> = ({ content, variant })
             path: variant === "case" ? appPaths.cases : appPaths.dictionary,
             slug: variant === "case" ? "Fälle" : "Lexikon" 
           },
-          /* mainCategorySlug && {
-            path: `${variant === "case" ? appPaths.cases : appPaths.dictionary}?category=${mainCategorySlug}`,
-            slug: mainCategorySlug
-          },*/
           mainCategoryName && {
             path: `${appPaths.search}?find=${mainCategoryName}`,
             slug: mainCategoryName

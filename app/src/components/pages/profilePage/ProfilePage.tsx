@@ -52,7 +52,7 @@ const ProfilePageContent: FunctionComponent = () =>
     {
       return (
         <div>
-          <h2>Da ist leider etwas schief gelaufen...</h2>
+          <h2>Da ist leider etwas schiefgelaufen...</h2>
         </div>
       );
     }
