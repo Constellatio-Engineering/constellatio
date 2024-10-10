@@ -13,7 +13,7 @@ services:
       - "host.docker.internal:host-gateway"
 
   meilisearch:
-    image: getmeili/meilisearch:v1.9.0
+    image: getmeili/meilisearch:v1.10.2
     container_name: meilisearch
     restart: always
     extra_hosts:

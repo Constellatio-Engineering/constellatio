@@ -1,5 +1,4 @@
 import { MeilisearchContext } from "@/provider/MeilisearchProvider";
-import useSearchBarStore from "@/stores/searchBar.store";
 import {
   type ArticleSearchIndexItem,
   type CaseSearchIndexItem,
@@ -10,6 +9,7 @@ import {
 } from "@/utils/search";
 
 import { keepPreviousData, useQuery } from "@tanstack/react-query";
+import { useRouter } from "next/router";
 import { useContext } from "react";
 
 export type SearchResults = {
@@ -30,7 +30,7 @@ const initialSearchResults: SearchResults = {
   userUploads: [],
 };
 
-type UseSearchResults = () => {
+type UseSearchResults = (overwriteSearchValue?: string) => {
   isLoading: boolean;
   refetch: () => void;
   searchResults: SearchResults;
@@ -38,10 +38,17 @@ type UseSearchResults = () => {
 
 export const searchResultsQueryKey = "searchResults";
 
-const useSearchResults: UseSearchResults = () =>
+const useSearchResults: UseSearchResults = (overwriteSearchValue) =>
 {
+  const router = useRouter();
+  let searchValue = router.query.find as string;
+
+  if(overwriteSearchValue != null)
+  {
+    searchValue = overwriteSearchValue;
+  }
+
   const { meilisearchInstance } = useContext(MeilisearchContext);
-  const searchValue = useSearchBarStore((s) => s.searchValue);
   const hasInput = searchValue?.length > 0;
 
   const { data: searchResults = initialSearchResults, isPending: isLoading, refetch } = useQuery({

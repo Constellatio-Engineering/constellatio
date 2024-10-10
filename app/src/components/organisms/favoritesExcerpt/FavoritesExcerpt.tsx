@@ -46,8 +46,6 @@ const FavoritesExcerpt: FunctionComponent<Props> = ({ favorites, isLoading = fal
     ); 
   }
 
-  // new Date(a?._meta?.createdAt).getTime()
-
   const favoritesFiltered: Favorites = favorites
     .filter(favorite => favorite.title != null && favorite.resourceId != null && favorite.favoriteType != null)
     .map(favorite => ({
@@ -96,7 +94,7 @@ const FavoritesExcerpt: FunctionComponent<Props> = ({ favorites, isLoading = fal
               key={resourceId}
               resourceId={resourceId}
               isLoading={false}
-              onClick={async () => router.push(`/${link}/${resourceId}`)}
+              href={`${link}/${resourceId}`}
               title={title}
               favoriteType={favoriteType}
             />

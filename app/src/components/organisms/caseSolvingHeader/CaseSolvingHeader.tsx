@@ -122,6 +122,7 @@ const CaseSolvingHeader: FunctionComponent<ICaseSolvingHeaderProps> = ({
             <Button
               type="button"
               component={Link}
+              prefetch={false}
               href={`${appPaths.dictionary}/${previousArticleId}`}
               css={[styles.navButton, !previousArticleId && styles.navButtonDisabled]}
               disabled={!previousArticleId}
@@ -131,6 +132,7 @@ const CaseSolvingHeader: FunctionComponent<ICaseSolvingHeaderProps> = ({
             </Button>
             <Button
               type="button"
+              prefetch={false}
               component={Link}
               href={`${appPaths.dictionary}/${nextArticleId}`}
               css={[styles.navButton, !nextArticleId && styles.navButtonDisabled]}

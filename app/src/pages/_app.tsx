@@ -5,6 +5,7 @@ import { AuthenticationRequiredProtection } from "@/components/helpers/authentic
 import FeedbackButton from "@/components/molecules/feedbackButton/FeedbackButton";
 import Lightbox from "@/components/molecules/lightbox/Lightbox";
 import NewNotificationEarnedWatchdog from "@/components/molecules/newNotificationEarnedWatchdog/NewNotificationEarnedWatchdog";
+import { ScrollToTopButton } from "@/components/molecules/scrollToTopButton/ScrollToTopButton";
 import ComputerRecommendedModal from "@/components/organisms/computerRecommendedModal/ComputerRecommendedModal";
 import FileViewer from "@/components/organisms/fileViewer/FileViewer";
 import { MaterialTagsDrawer } from "@/components/organisms/materialTagsDrawer/MaterialTagsDrawer";
@@ -140,6 +141,7 @@ const AppContainer: FunctionComponent<ConstellatioAppProps> = ({ Component, page
                       <FileViewer/>
                       <DocumentEditor/>
                       <MaterialTagsDrawer/>
+                      <ScrollToTopButton/>
                       <FeedbackButton/>
                       <Layout Component={Component} pageProps={pageProps}/>
                     </Fragment>

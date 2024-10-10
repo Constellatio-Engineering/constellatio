@@ -4,7 +4,6 @@ export const DownloadIcon: FunctionComponent<{ readonly size?: number }> = ({ si
   <svg
     width={size}
     height={size}
-    transform="rotate(180)"
     viewBox="0 0 20 20"
     fill="none"
     xmlns="http://www.w3.org/2000/svg">
