@@ -16,7 +16,7 @@ import { type ArticleWithNextAndPreviousArticleId } from "@/utils/articles";
 import { getGamesFromCase } from "@/utils/case";
 import { appPaths } from "@/utils/paths";
 
-import React, { type FunctionComponent, useEffect, useRef } from "react";
+import React, { type FunctionComponent, useEffect } from "react";
 
 import * as styles from "./DetailsPage.styles";
 import ErrorPage from "../errorPage/ErrorPage";
@@ -34,7 +34,6 @@ const DetailsPage: FunctionComponent<IDetailsPageProps> = ({ content, variant })
   const { mutate: addContentItemView } = api.views.addContentItemView.useMutation({
     onSuccess: async (_data, variables) => invalidateContentItemsViewsCount(variables)
   });
-  const wasViewCountUpdated = useRef<boolean>(false);
   const { caseProgress, isLoading: isCaseProgressLoading } = useCaseProgress(caseId);
   const { gamesProgress, isLoading: isGamesProgressLoading } = useGamesProgress(caseId);
   const games = content?.__typename === "Case" ? getGamesFromCase(content) : [];
@@ -43,7 +42,7 @@ const DetailsPage: FunctionComponent<IDetailsPageProps> = ({ content, variant })
 
   useEffect(() =>
   {
-    if(!contentId || !content?.__typename || wasViewCountUpdated.current)
+    if(!contentId || !content?.__typename)
     {
       return;
     }
@@ -52,7 +51,6 @@ const DetailsPage: FunctionComponent<IDetailsPageProps> = ({ content, variant })
       itemId: contentId,
       itemType: content?.__typename === "Case" ? "case" : "article"
     });
-    wasViewCountUpdated.current = true;
   }, [addContentItemView, content?.__typename, contentId]);
 
   useEffect(() =>

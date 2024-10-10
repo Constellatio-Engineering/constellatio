@@ -6,15 +6,66 @@ import { getContentItemViewsSchema } from "@/schemas/views/getContentItemViews.s
 import { getLastViewedContentItemsSchema } from "@/schemas/views/getLastViewedContentItems.schema";
 import { createTRPCRouter, protectedProcedure } from "@/server/api/trpc";
 
-import { and, desc, eq, sql } from "drizzle-orm";
+import {
+  and, desc, eq, gt, sql
+} from "drizzle-orm";
+import postgres from "postgres";
 
 export const viewsRouter = createTRPCRouter({
   addContentItemView: protectedProcedure
     .input(addContentItemViewSchema)
     .mutation(async ({ ctx: { userId }, input: { itemId, itemType } }) =>
     {
-      await db.insert(contentViews).values({ contentItemId: itemId, contentItemType: itemType, userId });
-      await addUserToCrmUpdateQueue(userId);
+      // only allow one view per minute
+
+      const now = new Date();
+      const rateLimitTimeframe = new Date(now.getTime() - 1 * 1000);
+
+      try
+      {
+        await db.transaction(
+          async (trx) =>
+          {
+            const recentViews = await trx
+              .select({ itemId: contentViews.contentItemId })
+              .from(contentViews)
+              .where(and(
+                eq(contentViews.userId, userId),
+                eq(contentViews.contentItemId, itemId),
+                eq(contentViews.contentItemType, itemType),
+                gt(contentViews.createdAt, rateLimitTimeframe)
+              ))
+              .for("update");  // Locking the row(s) to avoid race conditions
+
+            if(recentViews.length > 0)
+            {
+              return;
+            }
+
+            await trx
+              .insert(contentViews)
+              .values({ contentItemId: itemId, contentItemType: itemType, userId });
+          },
+          {
+            accessMode: "read write",
+            deferrable: true,
+            isolationLevel: "serializable"
+          }
+        );
+
+        await addUserToCrmUpdateQueue(userId);
+      }
+      catch (e: unknown)
+      {
+        if(e instanceof postgres.PostgresError && e.code === "40001")
+        {
+          console.info("Two or more transactions attempted to access the same data at the same time");
+        }
+        else
+        {
+          throw e;
+        }
+      }
     }),
   getAllSeenArticles: protectedProcedure
     .query(async ({ ctx: { userId } }) =>
