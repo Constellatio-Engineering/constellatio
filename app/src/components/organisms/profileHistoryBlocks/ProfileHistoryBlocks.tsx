@@ -72,8 +72,11 @@ function getHistoryItemsGroupedByDate2(items: ViewsHistoryItems)
   return map;
 }
 
-const initialPageSize = 15;
-const loadMorePageSize = 10;
+// const initialPageSize = 15;
+// const loadMorePageSize = 10;
+
+const initialPageSize = 50;
+const loadMorePageSize = 50;
 
 const ProfileHistoryBlocks: FunctionComponent = () => 
 {
@@ -103,8 +106,9 @@ const ProfileHistoryBlocks: FunctionComponent = () =>
   }, {
     getNextPageParam: ((previouslyFetchedPage) => previouslyFetchedPage?.nextCursor),
     initialCursor: null,
-    refetchOnMount: true,
-    refetchOnReconnect: true,
+    refetchOnMount: false,
+    refetchOnReconnect: false,
+    retry: false,
     staleTime: Infinity
   });
 
@@ -149,24 +153,6 @@ const ProfileHistoryBlocks: FunctionComponent = () =>
                 {
                   let labelVariant: ILabelProps["variant"];
 
-                  /* switch (item.__typename)
-                {
-                  case "Article":
-                  {
-                    labelVariant = "dictionary";
-                    break;
-                  }
-                  case "Case":
-                  {
-                    labelVariant = "case";
-                    break;
-                  }
-                  default:
-                  {
-                    labelVariant = "neutral";
-                  }
-                }*/
-
                   switch (item.itemType)
                   {
                     case "article":
@@ -196,15 +182,16 @@ const ProfileHistoryBlocks: FunctionComponent = () =>
                         {item.viewedAt.toLocaleTimeString("de", { hour: "2-digit", minute: "2-digit" })}
                       </BodyText>
                       <div css={styles.blockType}>
-                        <Label variant={labelVariant} title={"Lexikon"}/>
+                        <Label variant={labelVariant}/>
                       </div>
-                      <BodyText css={styles.blockTitle} styleType="body-01-medium" component="p">{item?.itemId}</BodyText>
+                      <BodyText css={styles.blockTitle} styleType="body-01-medium" component="p">{item.title}</BodyText>
                       <div css={styles.blockCategoryWrapper}>
                         <BodyText
-                          title={"item.legalArea?.legalAreaName"}
+                          title={item.legalArea}
                           css={styles.blockCategory}
                           styleType="body-02-medium"
-                          component="p">{"item?.legalArea?.legalAreaName"}
+                          component="p">
+                          {item.legalArea}
                         </BodyText>
                       </div>
                     </div>

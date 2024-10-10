@@ -11,9 +11,35 @@ export interface ILabelProps extends PropsWithChildren
 
 const Label: FunctionComponent<ILabelProps> = ({ children, title, variant }) => 
 {
+  let defaultTitle: string;
+
+  switch (variant)
+  {
+    case "dictionary":
+    {
+      defaultTitle = "Lexikon";
+      break;
+    }
+    case "case":
+    {
+      defaultTitle = "Fälle";
+      break;
+    }
+    case "forum":
+    {
+      defaultTitle = "Forum";
+      break;
+    }
+    default:
+    {
+      defaultTitle = "Lexikon";
+      break;
+    }
+  }
+
   return (
     <div css={styles.wrapper({ variant })}>
-      <CaptionText styleType="caption-01-medium" component="p">{title ?? children}</CaptionText>
+      <CaptionText styleType="caption-01-medium" component="p">{title ?? defaultTitle ?? children}</CaptionText>
     </div>
   );
 };

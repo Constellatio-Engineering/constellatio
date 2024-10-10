@@ -1,16 +1,23 @@
+/* eslint-disable max-lines */
 import { db } from "@/db/connection";
-import { contentViews } from "@/db/schema";
+import { type ContentItemViewType, contentViews, type ForumQuestion, forumQuestions } from "@/db/schema";
 import { env } from "@/env.mjs";
 import { addUserToCrmUpdateQueue } from "@/lib/clickup/utils";
 import { addContentItemViewSchema } from "@/schemas/views/addContentItemView.schema";
 import { getContentItemViewsSchema } from "@/schemas/views/getContentItemViews.schema";
 import { getLastViewedContentItemsSchema } from "@/schemas/views/getLastViewedContentItems.schema";
 import { createTRPCRouter, protectedProcedure } from "@/server/api/trpc";
+import { getArticleById } from "@/services/content/getArticleById";
+import { getCaseById } from "@/services/content/getCaseById";
+import { type IGenArticle, type IGenCase } from "@/services/graphql/__generated/sdk";
+import { removeConsecutiveDuplicates } from "@/utils/array";
 import { InternalServerError } from "@/utils/serverError";
+import { type Nullable } from "@/utils/types";
+import { sleep } from "@/utils/utils";
 
 import { type inferProcedureOutput } from "@trpc/server";
 import {
-  and, desc, eq, gt, lt, type SQL, sql
+  and, desc, eq, gt, inArray, lt, type SQL, sql
 } from "drizzle-orm";
 import postgres from "postgres";
 import { z } from "zod";
@@ -141,6 +148,8 @@ export const viewsRouter = createTRPCRouter({
     }))
     .query(async ({ ctx: { userId }, input: { cursor, initialPageSize, loadMorePageSize } }) =>
     {
+      await sleep(1500);
+
       // only allow to query a set amount of days back
       const now = new Date();
       const historyLimit = new Date(now.getTime() - env.NEXT_PUBLIC_CONTENT_ITEMS_VIEWS_HISTORY_DAYS_LIMIT * 24 * 60 * 60 * 1000);
@@ -156,7 +165,7 @@ export const viewsRouter = createTRPCRouter({
         queryConditions.push(lt(contentViews.id, cursor));
       }
 
-      const visitedItems = await db
+      const visitedItemsRaw = await db
         .select({
           id: contentViews.id,
           itemId: contentViews.contentItemId,
@@ -168,12 +177,12 @@ export const viewsRouter = createTRPCRouter({
         .orderBy(desc(contentViews.createdAt))
         .limit(pageSize + 1);
 
-      const hasNextPage = visitedItems.length > pageSize;
+      const hasNextPage = visitedItemsRaw.length > pageSize;
       let nextCursor: number | null = null;
 
       if(hasNextPage)
       {
-        const nextItem = visitedItems.pop();
+        const nextItem = visitedItemsRaw.pop();
 
         if(nextItem == null)
         {
@@ -182,6 +191,100 @@ export const viewsRouter = createTRPCRouter({
 
         nextCursor = nextItem.id;
       }
+
+      const visitedCases = [...new Set(visitedItemsRaw.filter(item => item.itemType === "case"))];
+      const visitedArticles = [...new Set(visitedItemsRaw.filter(item => item.itemType === "article"))];
+      const visitedForumQuestions = [...new Set(visitedItemsRaw.filter(item => item.itemType === "forumQuestion"))];
+
+      const visitedCasesData = await Promise.all(visitedCases.map(async ({ itemId }) =>
+      {
+        const caseData = await getCaseById({ id: itemId });
+        return caseData.legalCase;
+      }).filter(Boolean));
+
+      const visitedArticlesData = await Promise.all(visitedArticles.map(async ({ itemId }) =>
+      {
+        const articleData = await getArticleById({ id: itemId });
+        return articleData.article;
+      }).filter(Boolean));
+
+      const visitedForumQuestionsData = await db.query.forumQuestions.findMany({
+        where: inArray(forumQuestions.id, visitedForumQuestions.map(item => item.itemId)),
+      });
+
+      const visitedItems = removeConsecutiveDuplicates(visitedItemsRaw, "itemId")
+        .map(item =>
+        {
+          let visitedItemsData: {
+            id: number;
+            itemId: string;
+            itemType: ContentItemViewType;
+            legalArea: string;
+            title: string;
+            viewedAt: Date;
+          } | null = null;
+
+          switch (item.itemType)
+          {
+            case "case":
+            {
+              const data = visitedCasesData.find(caseData => caseData?.id === item.itemId);
+
+              if(data && data.title && data.legalArea?.legalAreaName)
+              {
+                visitedItemsData = {
+                  id: item.id,
+                  itemId: item.itemId,
+                  itemType: item.itemType,
+                  legalArea: data.legalArea.legalAreaName,
+                  title: data.title,
+                  viewedAt: item.viewedAt
+                };
+              }
+
+              break;
+            }
+            case "article":
+            {
+              const data = visitedArticlesData.find(articleData => articleData?.id === item.itemId);
+
+              if(data && data.title && data.legalArea?.legalAreaName)
+              {
+                visitedItemsData = {
+                  id: item.id,
+                  itemId: item.itemId,
+                  itemType: item.itemType,
+                  legalArea: data.legalArea.legalAreaName,
+                  title: data.title,
+                  viewedAt: item.viewedAt
+                };
+              }
+
+              break;
+            }
+            case "forumQuestion":
+            {
+              const data = visitedForumQuestionsData.find(questionData => questionData.id === item.itemId);
+
+              if(data)
+              {
+                visitedItemsData = {
+                  id: item.id,
+                  itemId: item.itemId,
+                  itemType: item.itemType,
+                  legalArea: "TODO",
+                  title: data.title,
+                  viewedAt: item.viewedAt
+                };
+              }
+
+              break;
+            }
+          }
+
+          return visitedItemsData;
+        })
+        .filter(Boolean);
 
       return { nextCursor, visitedItems };
     }),

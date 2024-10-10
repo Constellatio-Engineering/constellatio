@@ -38,7 +38,7 @@ export const blockTitle = css`
 export const blockCategoryWrapper = () => css`
   color: ${colooors["neutrals-02"][0]};
   text-align: right;
-  max-width: 200px;
+  max-width: 300px;
   padding-left: 20px;
 `;
 
