@@ -1,15 +1,19 @@
 import { db } from "@/db/connection";
 import { contentViews } from "@/db/schema";
+import { env } from "@/env.mjs";
 import { addUserToCrmUpdateQueue } from "@/lib/clickup/utils";
 import { addContentItemViewSchema } from "@/schemas/views/addContentItemView.schema";
 import { getContentItemViewsSchema } from "@/schemas/views/getContentItemViews.schema";
 import { getLastViewedContentItemsSchema } from "@/schemas/views/getLastViewedContentItems.schema";
 import { createTRPCRouter, protectedProcedure } from "@/server/api/trpc";
+import { InternalServerError } from "@/utils/serverError";
 
+import { type inferProcedureOutput } from "@trpc/server";
 import {
-  and, desc, eq, gt, sql
+  and, desc, eq, gt, lt, type SQL, sql
 } from "drizzle-orm";
 import postgres from "postgres";
+import { z } from "zod";
 
 export const viewsRouter = createTRPCRouter({
   addContentItemView: protectedProcedure
@@ -17,7 +21,6 @@ export const viewsRouter = createTRPCRouter({
     .mutation(async ({ ctx: { userId }, input: { itemId, itemType } }) =>
     {
       // only allow one view per minute
-
       const now = new Date();
       const rateLimitTimeframe = new Date(now.getTime() - 60 * 1000);
 
@@ -130,39 +133,58 @@ export const viewsRouter = createTRPCRouter({
 
       return views;
     }),
-  /* getViewsHistory: protectedProcedure
+  getViewsHistory: protectedProcedure
     .input(z.object({
-      /!* cursor: z.object({
-        index: z.number().int().min(0).nullish()
-      }),
-      limit: z.number().min(1).max(50)*!/
+      cursor: z.number().int().min(0).nullish(),
+      initialPageSize: z.number().min(1).max(50),
+      loadMorePageSize: z.number().min(1).max(50)
     }))
-    .query(async ({ ctx: { userId }, input: { /!* cursor, limit*!/ } }) =>
+    .query(async ({ ctx: { userId }, input: { cursor, initialPageSize, loadMorePageSize } }) =>
     {
-      const articlesQuery = db
+      // only allow to query a set amount of days back
+      const now = new Date();
+      const historyLimit = new Date(now.getTime() - env.NEXT_PUBLIC_CONTENT_ITEMS_VIEWS_HISTORY_DAYS_LIMIT * 24 * 60 * 60 * 1000);
+
+      const pageSize = cursor == null ? initialPageSize : loadMorePageSize;
+      const queryConditions: SQL[] = [
+        eq(contentViews.userId, userId),
+        gt(contentViews.createdAt, historyLimit)
+      ];
+
+      if(cursor != null)
+      {
+        queryConditions.push(lt(contentViews.id, cursor));
+      }
+
+      const visitedItems = await db
         .select({
-          itemId: articlesViews.articleId,
-          viewedAt: articlesViews.createdAt,
+          id: contentViews.id,
+          itemId: contentViews.contentItemId,
+          itemType: contentViews.contentItemType,
+          viewedAt: contentViews.createdAt,
         })
-        .from(articlesViews)
-        .where(eq(articlesViews.userId, userId));
+        .from(contentViews)
+        .where(and(...queryConditions))
+        .orderBy(desc(contentViews.createdAt))
+        .limit(pageSize + 1);
 
-      const casesQuery = db
-        .select({
-          itemId: casesViews.caseId,
-          viewedAt: casesViews.createdAt,
-        })
-        .from(casesViews)
-        .where(eq(casesViews.userId, userId));
+      const hasNextPage = visitedItems.length > pageSize;
+      let nextCursor: number | null = null;
 
-      const test = unionAll(articlesQuery, casesQuery);
+      if(hasNextPage)
+      {
+        const nextItem = visitedItems.pop();
 
-      console.log(test.toSQL());
+        if(nextItem == null)
+        {
+          throw new InternalServerError(new Error("nextItem is null"));
+        }
 
-      const result = await test;
+        nextCursor = nextItem.id;
+      }
 
-      console.log(result);
-
-      return casesQuery;
-    }),*/
+      return { nextCursor, visitedItems };
+    }),
 });
+
+export type ViewsHistoryItems = inferProcedureOutput<typeof viewsRouter.getViewsHistory>["visitedItems"];

@@ -11,8 +11,6 @@ export const blockDate = () => css`
   margin-bottom: 16px;
 `;
 
-export const list = css``;
-
 export const table = () => css`
   border-radius: 12px;
   overflow: hidden;
@@ -25,7 +23,8 @@ export const tableRow = () => css`
   background: ${colooors["neutrals-01"][0]};
   padding: 20px 16px;
   border-bottom: ${colooors["neutrals-01"][3]} 1px solid;
-  gap: 20px
+  gap: 20px;
+  min-height: 70px;
 `;
 
 export const timeCell = () => css`
@@ -55,4 +54,17 @@ export const blockType = css`
 
 export const listItem = css`
   margin: 32px 0;
+`;
+
+export const endOfListReached = css`
+  color: ${colooors["neutrals-01"][6]};
+  text-align: center;
+  font-weight: 500;
+  margin-top: 30px;
+  margin-bottom: 100px;
+  visibility: hidden;
+`;
+
+export const endOfListReachedVisible = css`
+  visibility: visible;
 `;
