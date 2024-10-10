@@ -75,8 +75,8 @@ function getHistoryItemsGroupedByDate2(items: ViewsHistoryItems)
 // const initialPageSize = 15;
 // const loadMorePageSize = 10;
 
-const initialPageSize = 50;
-const loadMorePageSize = 50;
+const initialPageSize = 2;
+const loadMorePageSize = 2;
 
 const ProfileHistoryBlocks: FunctionComponent = () => 
 {
@@ -141,7 +141,7 @@ const ProfileHistoryBlocks: FunctionComponent = () =>
         </Fragment>
       ) : (
         <Fragment>
-          {itemsGroupedByDate.map(([date, items]) => (
+          {itemsGroupedByDate.map(([date, items], index) => (
             <div css={styles.listItem} key={date}>
               <div css={styles.blockDate}>
                 <SubtitleText styleType="subtitle-01-medium" component="p">
@@ -196,28 +196,8 @@ const ProfileHistoryBlocks: FunctionComponent = () =>
                       </div>
                     </div>
                   );
-
-                  /* return (
-                  <div key={item.id} css={styles.tableRow}>
-                    <BodyText styleType="body-02-medium" component="p" css={styles.timeCell}>
-                      {item.viewedAt.toLocaleTimeString("de", { hour: "2-digit", minute: "2-digit" })}
-                    </BodyText>
-                    <div css={styles.blockType}>
-                      <Label variant={labelVariant} title={"Lexikon"}/>
-                    </div>
-                    <BodyText css={styles.blockTitle} styleType="body-01-medium" component="p">{item?.title}</BodyText>
-                    <div css={styles.blockCategoryWrapper}>
-                      <BodyText
-                        title={item.legalArea?.legalAreaName ?? ""}
-                        css={styles.blockCategory}
-                        styleType="body-02-medium"
-                        component="p">{item?.legalArea?.legalAreaName}
-                      </BodyText>
-                    </div>
-                  </div>
-                );*/
                 })}
-                {isFetchingNextPage && (
+                {(isFetchingNextPage && (index === itemsGroupedByDate.length - 1)) && (
                   <HistoryItemsSkeleton amountOfItems={loadMorePageSize}/>
                 )}
               </div>

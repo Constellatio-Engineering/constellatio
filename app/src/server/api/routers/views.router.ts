@@ -1,6 +1,6 @@
 /* eslint-disable max-lines */
 import { db } from "@/db/connection";
-import { type ContentItemViewType, contentViews, type ForumQuestion, forumQuestions } from "@/db/schema";
+import { type ContentItemViewType, contentViews, forumQuestions } from "@/db/schema";
 import { env } from "@/env.mjs";
 import { addUserToCrmUpdateQueue } from "@/lib/clickup/utils";
 import { addContentItemViewSchema } from "@/schemas/views/addContentItemView.schema";
@@ -9,15 +9,12 @@ import { getLastViewedContentItemsSchema } from "@/schemas/views/getLastViewedCo
 import { createTRPCRouter, protectedProcedure } from "@/server/api/trpc";
 import { getArticleById } from "@/services/content/getArticleById";
 import { getCaseById } from "@/services/content/getCaseById";
-import { type IGenArticle, type IGenCase } from "@/services/graphql/__generated/sdk";
-import { removeConsecutiveDuplicates } from "@/utils/array";
 import { InternalServerError } from "@/utils/serverError";
-import { type Nullable } from "@/utils/types";
 import { sleep } from "@/utils/utils";
 
 import { type inferProcedureOutput } from "@trpc/server";
 import {
-  and, desc, eq, gt, inArray, lt, type SQL, sql
+  and, desc, eq, gt, inArray, lt, type SQL, sql 
 } from "drizzle-orm";
 import postgres from "postgres";
 import { z } from "zod";
@@ -42,13 +39,25 @@ export const viewsRouter = createTRPCRouter({
               .where(and(
                 eq(contentViews.userId, userId),
                 eq(contentViews.contentItemId, itemId),
-                eq(contentViews.contentItemType, itemType),
                 gt(contentViews.createdAt, rateLimitTimeframe)
               ))
               .for("update");  // Locking the row(s) to avoid race conditions
 
             if(recentViews.length > 0)
             {
+              return;
+            }
+
+            const [lastViewedItem] = await trx
+              .select({ itemId: contentViews.contentItemId })
+              .from(contentViews)
+              .where(eq(contentViews.userId, userId))
+              .orderBy(desc(contentViews.createdAt))
+              .limit(1);
+
+            if(lastViewedItem && lastViewedItem.itemId === itemId)
+            {
+              // no duplicate consecutive inserts
               return;
             }
 
@@ -148,7 +157,7 @@ export const viewsRouter = createTRPCRouter({
     }))
     .query(async ({ ctx: { userId }, input: { cursor, initialPageSize, loadMorePageSize } }) =>
     {
-      await sleep(1500);
+      await sleep(500);
 
       // only allow to query a set amount of days back
       const now = new Date();
@@ -212,7 +221,8 @@ export const viewsRouter = createTRPCRouter({
         where: inArray(forumQuestions.id, visitedForumQuestions.map(item => item.itemId)),
       });
 
-      const visitedItems = removeConsecutiveDuplicates(visitedItemsRaw, "itemId")
+      // const visitedItems = removeConsecutiveDuplicates(visitedItemsRaw, "itemId")
+      const visitedItems = visitedItemsRaw
         .map(item =>
         {
           let visitedItemsData: {
