@@ -1,99 +1,304 @@
+/* eslint-disable max-lines */
 import { db } from "@/db/connection";
-import { articlesViews, casesViews } from "@/db/schema";
+import { type ContentItemViewType, contentViews, forumQuestions } from "@/db/schema";
+import { env } from "@/env.mjs";
 import { addUserToCrmUpdateQueue } from "@/lib/clickup/utils";
-import { addArticleViewSchema } from "@/schemas/views/addArticleView.schema";
-import { addCaseViewSchema } from "@/schemas/views/addCaseView.schema";
-import { getArticleViewsSchema } from "@/schemas/views/getArticleViews.schema";
-import { getCaseViewsSchema } from "@/schemas/views/getCaseViews.schema";
+import { addContentItemViewSchema } from "@/schemas/views/addContentItemView.schema";
+import { getContentItemViewsSchema } from "@/schemas/views/getContentItemViews.schema";
+import { getLastViewedContentItemsSchema } from "@/schemas/views/getLastViewedContentItems.schema";
 import { createTRPCRouter, protectedProcedure } from "@/server/api/trpc";
+import { getAllMainCategories } from "@/services/content/getAllMainCategories";
+import { getArticleById } from "@/services/content/getArticleById";
+import { getCaseById } from "@/services/content/getCaseById";
+import { InternalServerError } from "@/utils/serverError";
+import { type Nullable } from "@/utils/types";
 
-import { desc, eq, sql } from "drizzle-orm";
+import { type inferProcedureOutput } from "@trpc/server";
+import {
+  and, desc, eq, gt, inArray, lte, type SQL, sql
+} from "drizzle-orm";
+import postgres from "postgres";
+import { z } from "zod";
 
 export const viewsRouter = createTRPCRouter({
-  addArticleView: protectedProcedure
-    .input(addArticleViewSchema)
-    .mutation(async ({ ctx: { userId }, input: { articleId } }) =>
+  addContentItemView: protectedProcedure
+    .input(addContentItemViewSchema)
+    .mutation(async ({ ctx: { userId }, input: { itemId, itemType } }) =>
     {
-      await db
-        .insert(articlesViews)
-        .values({ articleId, userId })
-        .onConflictDoUpdate({
-          set: { updatedAt: new Date() },
-          target: [articlesViews.articleId, articlesViews.userId],
-        });
+      // only allow one view per minute
+      const now = new Date();
+      const rateLimitTimeframe = new Date(now.getTime() - 60 * 1000);
 
-      await addUserToCrmUpdateQueue(userId);
-    }),
-  addCaseView: protectedProcedure
-    .input(addCaseViewSchema)
-    .mutation(async ({ ctx: { userId }, input: { caseId } }) =>
-    {
-      await db
-        .insert(casesViews)
-        .values({ caseId, userId })
-        .onConflictDoUpdate({
-          set: { updatedAt: new Date() },
-          target: [casesViews.caseId, casesViews.userId],
-        });
+      try
+      {
+        await db.transaction(
+          async (trx) =>
+          {
+            const recentViews = await trx
+              .select({ itemId: contentViews.contentItemId })
+              .from(contentViews)
+              .where(and(
+                eq(contentViews.userId, userId),
+                eq(contentViews.contentItemId, itemId),
+                gt(contentViews.createdAt, rateLimitTimeframe)
+              ))
+              .for("update");  // Locking the row(s) to avoid race conditions
 
-      await addUserToCrmUpdateQueue(userId);
+            if(recentViews.length > 0)
+            {
+              return;
+            }
+
+            const [lastViewedItem] = await trx
+              .select({ itemId: contentViews.contentItemId })
+              .from(contentViews)
+              .where(eq(contentViews.userId, userId))
+              .orderBy(desc(contentViews.createdAt))
+              .limit(1);
+
+            if(lastViewedItem && lastViewedItem.itemId === itemId)
+            {
+              // no duplicate consecutive inserts
+              return;
+            }
+
+            await trx
+              .insert(contentViews)
+              .values({ contentItemId: itemId, contentItemType: itemType, userId });
+          },
+          {
+            accessMode: "read write",
+            deferrable: true,
+            isolationLevel: "serializable"
+          }
+        );
+
+        await addUserToCrmUpdateQueue(userId);
+      }
+      catch (e: unknown)
+      {
+        if(e instanceof postgres.PostgresError && e.code === "40001")
+        {
+          console.info("Two or more transactions attempted to access the same data at the same time");
+        }
+        else
+        {
+          throw e;
+        }
+      }
     }),
   getAllSeenArticles: protectedProcedure
     .query(async ({ ctx: { userId } }) =>
     {
       const seenArticles = await db
         .select({
-          articleId: articlesViews.articleId,
+          articleId: contentViews.contentItemId,
         })
-        .from(articlesViews)
-        .where(eq(articlesViews.userId, userId));
+        .from(contentViews)
+        .where(
+          and(
+            eq(contentViews.userId, userId),
+            eq(contentViews.contentItemType, "article")
+          )
+        );
 
       return seenArticles.map(seenArticle => seenArticle.articleId);
     }),
-  getArticleViews: protectedProcedure
-    .input(getArticleViewsSchema)
-    .query(async ({ input: { articleId } }) =>
+  getContentItemViewsCount: protectedProcedure
+    .input(getContentItemViewsSchema)
+    .query(async ({ input: { itemId, itemType } }) =>
     {
       const [result] = await db
         .select({ count: sql<number>`cast(count(*) as int)` })
-        .from(articlesViews)
-        .where(eq(articlesViews.articleId, articleId));
+        .from(contentViews)
+        .where(
+          and(
+            eq(contentViews.contentItemId, itemId),
+            eq(contentViews.contentItemType, itemType)
+          )
+        );
 
       return result?.count ?? 0;
     }),
-  getCaseViews: protectedProcedure
-    .input(getCaseViewsSchema)
-    .query(async ({ input: { caseId } }) =>
+  getLastViewedContentItems: protectedProcedure
+    .input(getLastViewedContentItemsSchema)
+    .query(async ({ ctx: { userId }, input: { itemType } }) =>
     {
-      const [result] = await db
-        .select({ count: sql<number>`cast(count(*) as int)` })
-        .from(casesViews)
-        .where(eq(casesViews.caseId, caseId));
+      const distinctViewsSubquery = db
+        .select({
+          createdAt: sql`MAX(${contentViews.createdAt})`.mapWith(contentViews.createdAt).as("maxCreatedAt"),
+          itemId: contentViews.contentItemId,
+        })
+        .from(contentViews)
+        .where(
+          and(
+            eq(contentViews.userId, userId),
+            eq(contentViews.contentItemType, itemType)
+          )
+        )
+        .groupBy(contentViews.contentItemId)
+        .as("distinct_views");
 
-      return result?.count ?? 0;
+      const views = await db
+        .select({
+          itemId: distinctViewsSubquery.itemId,
+          viewedDate: distinctViewsSubquery.createdAt,
+        })
+        .from(distinctViewsSubquery)
+        .orderBy(desc(distinctViewsSubquery.createdAt))
+        .limit(3);
+
+      return views;
     }),
-  getLastViewedArticles: protectedProcedure
-    .query(async ({ ctx: { userId } }) =>
+  getViewsHistory: protectedProcedure
+    .input(z.object({
+      cursor: z.number().int().min(0).nullish(),
+      initialPageSize: z.number().min(1).max(50),
+      loadMorePageSize: z.number().min(1).max(50)
+    }))
+    .query(async ({ ctx: { userId }, input: { cursor, initialPageSize, loadMorePageSize } }) =>
     {
-      const articleViews = await db.query.articlesViews.findMany({
-        columns: { articleId: true },
-        limit: 3,
-        orderBy: [desc(articlesViews.updatedAt)],
-        where: eq(articlesViews.userId, userId)
+      // only allow to query a set amount of days back
+      const now = new Date();
+      const historyLimit = new Date(now.getTime() - env.NEXT_PUBLIC_CONTENT_ITEMS_VIEWS_HISTORY_DAYS_LIMIT * 24 * 60 * 60 * 1000);
+      const pageSize = cursor == null ? initialPageSize : loadMorePageSize;
+      const queryConditions: SQL[] = [
+        eq(contentViews.userId, userId),
+        gt(contentViews.createdAt, historyLimit)
+      ];
+
+      if(cursor != null)
+      {
+        queryConditions.push(lte(contentViews.id, cursor));
+      }
+
+      const visitedItemsRaw = await db
+        .select({
+          id: contentViews.id,
+          itemId: contentViews.contentItemId,
+          itemType: contentViews.contentItemType,
+          viewedAt: contentViews.createdAt,
+        })
+        .from(contentViews)
+        .where(and(...queryConditions))
+        .orderBy(desc(contentViews.createdAt))
+        .limit(pageSize + 1);
+
+      const hasNextPage = visitedItemsRaw.length > pageSize;
+      let nextCursor: number | null = null;
+
+      if(hasNextPage)
+      {
+        const nextItem = visitedItemsRaw.pop();
+
+        if(nextItem == null)
+        {
+          throw new InternalServerError(new Error("nextItem is null"));
+        }
+
+        nextCursor = nextItem.id;
+      }
+
+      const visitedCases = [...new Set(visitedItemsRaw.filter(item => item.itemType === "case"))];
+      const visitedArticles = [...new Set(visitedItemsRaw.filter(item => item.itemType === "article"))];
+      const visitedForumQuestions = [...new Set(visitedItemsRaw.filter(item => item.itemType === "forumQuestion"))];
+
+      const visitedCasesData = await Promise.all(visitedCases.map(async ({ itemId }) =>
+      {
+        const caseData = await getCaseById({ id: itemId });
+        return caseData.legalCase;
+      }).filter(Boolean));
+
+      const visitedArticlesData = await Promise.all(visitedArticles.map(async ({ itemId }) =>
+      {
+        const articleData = await getArticleById({ id: itemId });
+        return articleData.article;
+      }).filter(Boolean));
+
+      const visitedForumQuestionsData = await db.query.forumQuestions.findMany({
+        where: inArray(forumQuestions.id, visitedForumQuestions.map(item => item.itemId)),
+        with: { forumQuestionToLegalFields: true }
       });
 
-      return articleViews.map(({ articleId }) => articleId);
-    }),
-  getLastViewedCases: protectedProcedure
-    .query(async ({ ctx: { userId } }) =>
-    {
-      const caseViews = await db.query.casesViews.findMany({
-        columns: { caseId: true },
-        limit: 3,
-        orderBy: [desc(casesViews.updatedAt)],
-        where: eq(casesViews.userId, userId)
-      });
+      const allMainCategories = await getAllMainCategories();
 
-      return caseViews.map(({ caseId }) => caseId);
+      // const visitedItems = removeConsecutiveDuplicates(visitedItemsRaw, "itemId")
+      const visitedItems = visitedItemsRaw
+        .map(item =>
+        {
+          let visitedItemsData: {
+            additionalInfo: Nullable<string>;
+            id: number;
+            itemId: string;
+            itemType: ContentItemViewType; 
+            title: string;
+            viewedAt: Date;
+          } | null = null;
+
+          switch (item.itemType)
+          {
+            case "case":
+            {
+              const data = visitedCasesData.find(caseData => caseData?.id === item.itemId);
+
+              if(data && data.title)
+              {
+                visitedItemsData = {
+                  additionalInfo: data.legalArea?.legalAreaName,
+                  id: item.id,
+                  itemId: item.itemId,
+                  itemType: item.itemType,
+                  title: data.title,
+                  viewedAt: item.viewedAt
+                };
+              }
+
+              break;
+            }
+            case "article":
+            {
+              const data = visitedArticlesData.find(articleData => articleData?.id === item.itemId);
+
+              if(data && data.title)
+              {
+                visitedItemsData = {
+                  additionalInfo: data.legalArea?.legalAreaName,
+                  id: item.id,
+                  itemId: item.itemId,
+                  itemType: item.itemType,
+                  title: data.title,
+                  viewedAt: item.viewedAt
+                };
+              }
+
+              break;
+            }
+            case "forumQuestion":
+            {
+              const data = visitedForumQuestionsData.find(questionData => questionData.id === item.itemId);
+
+              if(data)
+              {
+                visitedItemsData = {
+                  additionalInfo: allMainCategories.find(mainCategory => mainCategory?.id === data.forumQuestionToLegalFields[0]?.legalFieldId)?.mainCategory,
+                  id: item.id,
+                  itemId: item.itemId,
+                  itemType: item.itemType,
+                  title: data.title,
+                  viewedAt: item.viewedAt
+                };
+              }
+
+              break;
+            }
+          }
+
+          return visitedItemsData;
+        })
+        .filter(Boolean);
+
+      return { nextCursor, visitedItems };
     }),
 });
+
+export type ViewsHistoryItems = inferProcedureOutput<typeof viewsRouter.getViewsHistory>["visitedItems"];

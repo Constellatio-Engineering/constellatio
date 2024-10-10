@@ -1,12 +1,16 @@
 import { api } from "@/utils/api";
 import { type Nullable, type UseQueryResult } from "@/utils/types";
 
-type UseArticleViews = (articleId: Nullable<string>) => UseQueryResult<{ count: number }>;
+type UseArticleViews = (articleId: Nullable<string>, isEnabled: boolean) => UseQueryResult<{ count: number }>;
 
-const useArticleViews: UseArticleViews = (articleId) =>
+const useArticleViews: UseArticleViews = (articleId, isEnabled) =>
 {
-  const { data: articleViews = 0, error, isLoading } = api.views.getArticleViews.useQuery({ articleId: articleId! }, {
-    enabled: articleId != null,
+  const {
+    data: articleViews = 0,
+    error,
+    isLoading
+  } = api.views.getContentItemViewsCount.useQuery({ itemId: articleId!, itemType: "article" }, {
+    enabled: articleId != null && isEnabled,
   });
 
   return {

@@ -1,5 +1,6 @@
 /* eslint-disable import/no-unused-modules */
 
+import { type Primitive } from "@/utils/types";
 // function that shuffles an array with the Fisher-Yates algorithm
 import { getDistinctItemsByKey } from "@/utils/utils";
 
@@ -90,6 +91,21 @@ export function areArraysEqualByKey<T>(arr1: T[], arr2: T[], identifierKey: keyo
 export function getDoesAnyItemMatch<T extends Record<string, unknown>>(values: T[], key: keyof T, value: NonNullable<T[keyof T]>): boolean
 {
   return values.some(v => v[key] === value);
+}
+
+export function removeConsecutiveDuplicates<T extends Record<K, Primitive>, K extends keyof T>(
+  arr: T[],
+  key: K
+): T[] 
+{
+  return arr.filter((obj, index, array) => 
+  {
+    // If it's the first element, keep it
+    if(index === 0) { return true; }
+
+    // Compare the current object's specified property with the previous object's
+    return obj[key] !== array[index - 1]![key];
+  });
 }
 
 /**
