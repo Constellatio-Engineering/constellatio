@@ -1,7 +1,7 @@
 import { css } from "@emotion/react";
 import { type MantineTheme } from "@mantine/core";
 
-export const feedbackButtonStyles = (isUserLoggedIn: boolean, theme: MantineTheme) => css`
+export const feedbackButtonStyles = (theme: MantineTheme) => css`
   overflow: hidden;
   height: auto;
   right: 0;
@@ -11,16 +11,25 @@ export const feedbackButtonStyles = (isUserLoggedIn: boolean, theme: MantineThem
   z-index: 4;
   border: none;
   outline: none;
-  opacity: ${isUserLoggedIn ? 1 : 0};
-  transition: opacity 0.3s ease-in-out 2s, background-color 0.1s ease;
+  transition: background-color 0.1s ease;
+  animation: fadeFeedbackButtonIn 0.3s ease-in-out 2s forwards;
+  opacity: 0;
   cursor: pointer;
   bottom: 5rem;
   color: #ffffff;
   padding: 16px 8px;
   border-radius: ${theme.radius["radius-8"]} 0 0 ${theme.radius["radius-8"]};
   background-color: #151515;
+  @keyframes fadeFeedbackButtonIn {
+    0% {
+      opacity: 0;
+    }
+    100% {
+      opacity: 1;
+    }
+  }
 
   &:hover {
-    background-color: #2f2f2f;
+    background-color: #3f3f3f;
   }
 `;

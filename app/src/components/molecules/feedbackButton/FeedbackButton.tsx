@@ -79,16 +79,21 @@ const FeedbackButton: FunctionComponent = () =>
 
   }, [user, isLoading, isUserLoggedIn]);
 
+  if(!isUserLoggedIn)
+  {
+    return null;
+  }
+
   return (
     <Tooltip
       label={"Du hast eine Anmerkung zu einem Fall oder ein Verbesserungsvorschlag zu unserer App? Dann freuen wir uns über dein Feedback!"}
       multiline={true}
       width={200}
-      openDelay={1000}
+      openDelay={800}
       position={"left"}
       withArrow={true}>
       <UnstyledButton
-        styles={styles.feedbackButtonStyles(isUserLoggedIn, theme)}
+        styles={styles.feedbackButtonStyles(theme)}
         onClick={async () =>
         {
           await formbricks.track("feedback_button_clicked");
