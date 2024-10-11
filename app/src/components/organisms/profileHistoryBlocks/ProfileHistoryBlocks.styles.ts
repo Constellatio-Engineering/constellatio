@@ -24,7 +24,6 @@ export const tableRow = () => css`
   padding: 20px 16px;
   color: #000000;
   border-bottom: ${colooors["neutrals-01"][3]} 1px solid;
-  gap: 20px;
   min-height: 70px;
   transition: background-color 0.15s ease;
   :hover, :after {
@@ -34,6 +33,7 @@ export const tableRow = () => css`
 
 export const timeCell = () => css`
   color: ${colooors["neutrals-01"][7]};
+  min-width: 40px;
 `;
 
 export const blockTitle = css`
@@ -58,11 +58,16 @@ export const blockCategory = () => css`
 `;
 
 export const blockType = css`
-  min-width: max-content;
+  margin: 0 30px 0 20px;
+  > div {
+    min-width: 70px;
+    width: 70px;
+    text-align: center;
+  }
 `;
 
 export const listItem = css`
-  margin: 32px 0;
+    margin-bottom: 48px;
 `;
 
 export const endOfListReached = css`
