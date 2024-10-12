@@ -9,6 +9,7 @@ await import("./src/env.mjs");
 /** @type {import("next").NextConfig} */
 const config = {
   experimental: {
+    bundlePagesExternals: process.env.NEXT_PUBLIC_DEPLOYMENT_ENVIRONMENT !== "development",
     optimizePackageImports: [
       "@mantine/*",
       "@tabler/icons-react",

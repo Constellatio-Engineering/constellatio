@@ -21,7 +21,8 @@ const handler: NextApiHandler = async (req, res) =>
 
   if(!userId || typeof userId !== "string")
   {
-    return res.status(400).json({ error: "userId is required" });
+    console.error("userId is not provided or is not a string");
+    return res.json(null);
   }
 
   const getSubscriptionStatusResult = await db.query.users.findFirst({

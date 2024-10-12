@@ -151,7 +151,7 @@ export const scrollToTop = (): void =>
 };
 
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
-const printAllSettledPromisesSummary = (settledPromises: Array<PromiseSettledResult<unknown>>, actionName: string): void =>
+export const printAllSettledPromisesSummary = (settledPromises: Array<PromiseSettledResult<unknown>>, actionName: string): void =>
 {
   const failedPromises = settledPromises.filter((result): result is PromiseRejectedResult => result.status === "rejected");
   const successfulPromises = settledPromises.filter((result): result is PromiseFulfilledResult<AxiosResponse> => result.status === "fulfilled");
