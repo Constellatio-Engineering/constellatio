@@ -29,8 +29,10 @@ export const middleware: NextMiddleware = async (req) =>
 
   try
   {
+    console.time("fetching subscription status");
     const response = await fetch((isDevelopment ? "http://localhost:3010" : env.NEXT_PUBLIC_WEBSITE_URL) + `/${apiPaths.getSubscriptionStatus}?secret=${env.GET_SUBSCRIPTION_STATUS_SECRET}&userId=${getIsUserLoggedInResult.user.id}`);
     subscriptionStatus = (await response.json() as Pick<User, "subscriptionStatus">).subscriptionStatus;
+    console.timeEnd("fetching subscription status");
   }
   catch (e: unknown)
   {

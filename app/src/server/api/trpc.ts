@@ -138,6 +138,8 @@ const t = initTRPC
     transformer: superjson,
   });
 
+export const { createCallerFactory } = t;
+
 /**
  * 3. ROUTER & PROCEDURE (THE IMPORTANT BIT)
  *

@@ -14,6 +14,10 @@
   },
   "crons": [
     {
+      "path": "/api/cron/keep-alive",
+      "schedule": "*/5 * * * *"
+    },
+    {
       "path": "/api/cron/update-search-indexes",
       "schedule": "*/1 * * * *"
     },
