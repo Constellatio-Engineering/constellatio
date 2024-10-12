@@ -18,7 +18,7 @@ type TFloatingButton = ButtonProps & {
   readonly variation: FloatingButtonVariation;
 };
 
-const _FloatingButton: FC<TFloatingButton> = ({
+const FloatingButtonComponent: FC<TFloatingButton> = ({
   pinsNotificationsAmount,
   variation,
   ...props
@@ -59,4 +59,4 @@ const _FloatingButton: FC<TFloatingButton> = ({
   );
 };
 
-export const FloatingButton = createPolymorphicComponent<"button", TFloatingButton>(_FloatingButton);
+export const FloatingButton = createPolymorphicComponent<"button", TFloatingButton>(FloatingButtonComponent);
