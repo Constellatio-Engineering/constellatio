@@ -1,17 +1,30 @@
 /* eslint-disable import/no-unused-modules */
-import { type User } from "@/db/schema";
+import * as schema from "@/db/schema";
+import { users } from "@/db/schema";
 import { env } from "@/env.mjs";
 import { getIsUserLoggedInServer } from "@/utils/auth";
-import { isDevelopment } from "@/utils/env";
-import { apiPaths, appPaths, authPaths } from "@/utils/paths";
+import { appPaths, authPaths } from "@/utils/paths";
 import { queryParams } from "@/utils/query-params";
 import { getHasSubscription } from "@/utils/subscription";
 
+import { neonConfig, Pool } from "@neondatabase/serverless";
 import { createMiddlewareClient } from "@supabase/auth-helpers-nextjs";
+import { eq } from "drizzle-orm";
+import { drizzle as drizzleServerless } from "drizzle-orm/neon-serverless";
 import { type NextMiddleware, NextResponse } from "next/server";
 
-export const middleware: NextMiddleware = async (req) =>
+if(env.NEXT_PUBLIC_DEPLOYMENT_ENVIRONMENT === "development")
 {
+  neonConfig.wsProxy = (host) => `${host}:54330/v1`;
+  neonConfig.useSecureWebSocket = false;
+  neonConfig.pipelineTLS = false;
+  neonConfig.pipelineConnect = false;
+}
+
+export const middleware: NextMiddleware = async (req, ctx) =>
+{
+  const pool = new Pool({ connectionString: env.DATABASE_URL_SERVERLESS });
+  const db = drizzleServerless(pool, { schema });
   const res = NextResponse.next();
   const supabase = createMiddlewareClient({ req, res });
   const getIsUserLoggedInResult = await getIsUserLoggedInServer(supabase);
@@ -22,48 +35,37 @@ export const middleware: NextMiddleware = async (req) =>
     redirectUrl.pathname = authPaths.login;
     redirectUrl.searchParams.set(queryParams.redirectedFrom, req.nextUrl.pathname + req.nextUrl.search);
     console.info("User is not logged in. Redirecting to: ", redirectUrl.toString());
+    ctx.waitUntil(pool.end());
     return NextResponse.redirect(redirectUrl);
   }
 
-  let subscriptionStatus: Pick<User, "subscriptionStatus">["subscriptionStatus"] | null = null;
+  const getSubscriptionStatusResult = await db.query.users.findFirst({
+    columns: { subscriptionStatus: true },
+    where: eq(users.id, getIsUserLoggedInResult.user.id)
+  });
 
-  try
-  {
-    console.time("fetching subscription status");
-    const response = await fetch((isDevelopment ? "http://localhost:3010" : env.NEXT_PUBLIC_WEBSITE_URL) + `/${apiPaths.getSubscriptionStatus}?secret=${env.GET_SUBSCRIPTION_STATUS_SECRET}&userId=${getIsUserLoggedInResult.user.id}`);
-    subscriptionStatus = (await response.json() as Pick<User, "subscriptionStatus">).subscriptionStatus;
-    console.timeEnd("fetching subscription status");
-  }
-  catch (e: unknown)
-  {
-    console.error("error while fetching subscription status", e);
-    return NextResponse.json({
-      error: "Error while fetching subscription status",
-      success: false
-    }, {
-      status: 500
-    });
-  }
-
-  const hasSubscription = getHasSubscription(subscriptionStatus);
+  const hasSubscription = getHasSubscription(getSubscriptionStatusResult?.subscriptionStatus);
 
   if(!hasSubscription)
   {
-    console.info("User does not have a subscription. Redirecting to subscription tab", subscriptionStatus);
+    console.info("User does not have a subscription. Redirecting to subscription tab");
 
     const redirectUrl = req.nextUrl.clone();
 
     if(redirectUrl.pathname.startsWith(appPaths.profile) && redirectUrl.searchParams.get("tab") === "subscription")
     {
       console.log("User is already on subscription tab. Not redirecting.");
+      ctx.waitUntil(pool.end());
       return NextResponse.next();
     }
 
     redirectUrl.pathname = appPaths.profile;
     redirectUrl.searchParams.set("tab", "subscription");
+    ctx.waitUntil(pool.end());
     return NextResponse.redirect(redirectUrl);
   }
 
+  ctx.waitUntil(pool.end());
   return NextResponse.next();
 };
 

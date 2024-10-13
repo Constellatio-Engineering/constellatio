@@ -2,6 +2,17 @@
 
 services:
 
+  pg_proxy:
+    image: ghcr.io/neondatabase/wsproxy:latest
+    environment:
+      APPEND_PORT: 'host.docker.internal:65433'
+      ALLOW_ADDR_REGEX: '.*'
+      LOG_TRAFFIC: 'true'
+    extra_hosts:
+      - "host.docker.internal:host-gateway"
+    ports:
+      - '54330:80'
+
   stripe-webhook-listener:
     image: stripe/stripe-cli
     command: "listen --api-key ${STRIPE_API_KEY} --device-name ${STRIPE_DEVICE_NAME} --forward-to http://host.docker.internal:3010/api/integration/webhooks/stripe"
