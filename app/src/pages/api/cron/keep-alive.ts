@@ -36,11 +36,6 @@ const handler: NextApiHandler = async (req, res): Promise<void> =>
     axios.get(websiteUrl + authPaths.login), // keep alive getStaticProps
     axios.get(websiteUrl + authPaths.register), // keep alive getStaticProps
     axios.get(websiteUrl + appPaths.dashboard), // keep alive middleware
-    axios.get(`${websiteUrl}/api/user/get-subscription-status`, {
-      params: {
-        secret: env.GET_SUBSCRIPTION_STATUS_SECRET,
-      }
-    }), // keep alive api route that fetches subscription status (called by middleware)
     caller.internalUseOnly_utils.keepAlive() // keep alive trpc routes
   ]);
 
