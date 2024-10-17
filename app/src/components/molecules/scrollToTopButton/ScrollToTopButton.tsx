@@ -23,7 +23,7 @@ export const ScrollToTopButton: FunctionComponent = () =>
   return (
     <Tooltip
       label={"Nach oben scrollen"}
-      openDelay={800}
+      openDelay={600}
       position={"left"}
       withArrow={true}>
       <UnstyledButton

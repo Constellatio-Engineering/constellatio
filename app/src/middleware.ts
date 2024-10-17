@@ -21,10 +21,11 @@ if(env.NEXT_PUBLIC_DEPLOYMENT_ENVIRONMENT === "development")
   neonConfig.pipelineConnect = false;
 }
 
+// NOTE: As per the docs, you must not reuse the same pool for multiple requests, so we need to create a new one for each request in a serverless/edge function.
+// Don't forget to call pool.end() when you're done with the pool.
+
 export const middleware: NextMiddleware = async (req, ctx) =>
 {
-  const pool = new Pool({ connectionString: env.DATABASE_URL_SERVERLESS });
-  const db = drizzleServerless(pool, { schema });
   const res = NextResponse.next();
   const supabase = createMiddlewareClient({ req, res });
   const getIsUserLoggedInResult = await getIsUserLoggedInServer(supabase);
@@ -35,14 +36,18 @@ export const middleware: NextMiddleware = async (req, ctx) =>
     redirectUrl.pathname = authPaths.login;
     redirectUrl.searchParams.set(queryParams.redirectedFrom, req.nextUrl.pathname + req.nextUrl.search);
     console.info("User is not logged in. Redirecting to: ", redirectUrl.toString());
-    ctx.waitUntil(pool.end());
     return NextResponse.redirect(redirectUrl);
   }
+
+  const pool = new Pool({ connectionString: env.DATABASE_URL_SERVERLESS });
+  const db = drizzleServerless(pool, { schema });
 
   const getSubscriptionStatusResult = await db.query.users.findFirst({
     columns: { subscriptionStatus: true },
     where: eq(users.id, getIsUserLoggedInResult.user.id)
   });
+
+  ctx.waitUntil(pool.end());
 
   const hasSubscription = getHasSubscription(getSubscriptionStatusResult?.subscriptionStatus);
 
@@ -55,17 +60,14 @@ export const middleware: NextMiddleware = async (req, ctx) =>
     if(redirectUrl.pathname.startsWith(appPaths.profile) && redirectUrl.searchParams.get("tab") === "subscription")
     {
       console.log("User is already on subscription tab. Not redirecting.");
-      ctx.waitUntil(pool.end());
       return NextResponse.next();
     }
 
     redirectUrl.pathname = appPaths.profile;
     redirectUrl.searchParams.set("tab", "subscription");
-    ctx.waitUntil(pool.end());
     return NextResponse.redirect(redirectUrl);
   }
 
-  ctx.waitUntil(pool.end());
   return NextResponse.next();
 };
 
