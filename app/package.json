@@ -73,6 +73,7 @@
     "@mantine/spotlight": "6.0.21",
     "@mantine/styles": "6.0.21",
     "@mantine/tiptap": "6.0.21",
+    "@next/third-parties": "14.2.15",
     "@react-hook/resize-observer": "1.2.6",
     "@supabase/auth-helpers-nextjs": "0.10.0",
     "@supabase/auth-helpers-react": "0.5.0",

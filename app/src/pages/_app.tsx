@@ -22,6 +22,7 @@ import { isProduction } from "@/utils/env";
 
 import { ModalsProvider } from "@mantine/modals";
 import { Notifications } from "@mantine/notifications";
+import { GoogleTagManager } from "@next/third-parties/google"; 
 import { SessionContextProvider } from "@supabase/auth-helpers-react";
 import { type NextPage } from "next";
 import { type AppProps } from "next/app";
@@ -86,6 +87,9 @@ const AppContainer: FunctionComponent<ConstellatioAppProps> = ({ Component, page
 
   return (
     <>
+      {env.NEXT_PUBLIC_GOOGLE_TAG_MANAGER.isEnabled && (
+        <GoogleTagManager gtmId={env.NEXT_PUBLIC_GOOGLE_TAG_MANAGER.tagManagerId}/>
+      )}
       <Head>
         <title>{pageTitle}</title>
         <meta charSet="UTF-8"/>
