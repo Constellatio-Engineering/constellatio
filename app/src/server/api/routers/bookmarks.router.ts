@@ -1,7 +1,6 @@
 import { db } from "@/db/connection";
 import { allBookmarkResourceTypes, type BookmarkInsert, bookmarks } from "@/db/schema";
 import { addOrRemoveBookmarkSchema } from "@/schemas/bookmarks/addOrRemoveBookmark.schema";
-import { addBadgeForUser } from "@/server/api/services/badges.services";
 import { createTRPCRouter, protectedProcedure } from "@/server/api/trpc";
 import { filterBookmarkForClient } from "@/utils/filters";
 

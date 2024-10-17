@@ -3,6 +3,10 @@ import { bookmarkHandlerBookmarkInsert } from "@/pages/api/integration/webhooks/
 import {
   gameProgressHandlerGameProgressInsert
 } from "@/pages/api/integration/webhooks/supabase/handlers/gameProgress.handler";
+import {
+  ugcHandlerDocumentInsert,
+  ugcHandlerUploadedFileInsert
+} from "@/pages/api/integration/webhooks/supabase/handlers/ugc.handler";
 import { type WebhookPayload } from "@/pages/api/integration/webhooks/supabase/types";
 
 import { type NextApiHandler } from "next";
@@ -92,6 +96,26 @@ const handler: NextApiHandler = async (req, res) =>
       {
         case "INSERT":
           await gameProgressHandlerGameProgressInsert(payload.record);
+          break;
+      }
+      break;
+    }
+    case "Document":
+    {
+      switch (payload.type)
+      {
+        case "INSERT":
+          await ugcHandlerDocumentInsert(payload.record);
+          break;
+      }
+      break;
+    }
+    case "UploadedFile":
+    {
+      switch (payload.type)
+      {
+        case "INSERT":
+          await ugcHandlerUploadedFileInsert(payload.record);
           break;
       }
       break;

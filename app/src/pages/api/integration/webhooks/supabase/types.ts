@@ -2,7 +2,15 @@
 
 import type {
   BookmarkSql,
-  CaseProgressSql, ForumAnswerSql, ForumQuestionSql, GameProgressSql, PingSql, ProfilePictureSql, StreakSql, UserSql
+  CaseProgressSql,
+  DocumentSql,
+  ForumAnswerSql,
+  ForumQuestionSql,
+  GameProgressSql,
+  PingSql,
+  ProfilePictureSql,
+  StreakSql, UploadedFileSql,
+  UserSql
 } from "@/db/schema";
 
 type Tables =
@@ -14,7 +22,9 @@ type Tables =
   | CaseProgressSql
   | StreakSql
   | BookmarkSql
-  | GameProgressSql;
+  | GameProgressSql
+  | DocumentSql
+  | UploadedFileSql;
 
 // ============ COMMON ============
 type InsertPayload = {
@@ -171,6 +181,26 @@ interface InsertGameProgressPayload extends InsertPayload
 type GameProgressPayload = InsertGameProgressPayload;
 
 
+// ============ DOCUMENT ============
+interface InsertDocumentPayload extends InsertPayload
+{
+  record: DocumentSql["columns"];
+  table: DocumentSql["table"];
+}
+
+type DocumentPayload = InsertDocumentPayload;
+
+
+// ============ UPLOADEDFILE ============
+interface InsertUploadedFilePayload extends InsertPayload
+{
+  record: UploadedFileSql["columns"];
+  table: UploadedFileSql["table"];
+}
+
+type UploadedFilePayload = InsertUploadedFilePayload;
+
+
 // ============ ALL ============
 export type WebhookPayload =
   | UserPayload
@@ -181,4 +211,6 @@ export type WebhookPayload =
   | CaseProgressPayload
   | StreakPayload
   | BookmarkPayload
-  | GameProgressPayload;
+  | GameProgressPayload
+  | DocumentPayload
+  | UploadedFilePayload;

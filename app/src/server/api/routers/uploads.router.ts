@@ -8,7 +8,6 @@ import { generateCreateSignedUploadUrlSchema } from "@/schemas/uploads/createSig
 import { deleteUploadSchema } from "@/schemas/uploads/deleteUpload.schema";
 import { getUploadedFilesSchema } from "@/schemas/uploads/getUploadedFiles.schema";
 import { updateUploadedFileSchema } from "@/schemas/uploads/updateUploadedFile.schema";
-import { addBadgeForUser } from "@/server/api/services/badges.services";
 import { addTags } from "@/server/api/services/tags.services";
 import { deleteFiles, getClouStorageFileUrl, getSignedCloudStorageUploadUrl } from "@/server/api/services/uploads.services";
 import { createTRPCRouter, protectedProcedure } from "@/server/api/trpc";
@@ -124,8 +123,6 @@ export const uploadsRouter = createTRPCRouter({
 
       const insertResult = await db.insert(uploadedFiles).values(uploadInsert).returning();
       await addUserToCrmUpdateQueue(userId);
-
-      await addBadgeForUser({ badgeIdentifier: "ugc-1", userId });
 
       const searchIndexItem = createUploadsSearchIndexItem({
         ...uploadInsert,
