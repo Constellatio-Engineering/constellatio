@@ -8,6 +8,19 @@ const urlValidation = z
 		message: "urls must not end with a trailing slash",
 	});
 
+const stringToJSONSchema = z.string().transform( ( str, ctx ) =>
+{
+  try
+  {
+    return JSON.parse( str )
+  }
+  catch ( e )
+  {
+    ctx.addIssue( { code: 'custom', message: 'Invalid JSON' } )
+    return z.NEVER
+  }
+});
+
 export const env = createEnv({
   /**
    * Specify your server-side environment variables schema here. This way you can ensure the app
@@ -62,6 +75,15 @@ export const env = createEnv({
 	 * `NEXT_PUBLIC_`.
 	 */
 	client: {
+    NEXT_PUBLIC_GOOGLE_TAG_MANAGER: stringToJSONSchema.pipe(z.discriminatedUnion("isEnabled", [
+      z.object({
+        isEnabled: z.literal(true),
+        tagManagerId: z.string(),
+      }),
+      z.object({
+        isEnabled: z.literal(false),
+      }),
+    ])),
 		NEXT_PUBLIC_SUPABASE_ANON_KEY: z.string(),
 		NEXT_PUBLIC_SUPABASE_URL: urlValidation,
 		NEXT_PUBLIC_WEBSITE_URL: urlValidation,
@@ -88,6 +110,7 @@ export const env = createEnv({
    * middlewares) or client-side, so we need to destruct manually.
    */
   runtimeEnv: {
+    NEXT_PUBLIC_GOOGLE_TAG_MANAGER: process.env.NEXT_PUBLIC_GOOGLE_TAG_MANAGER,
     NEXT_PUBLIC_DEPLOYMENT_ENVIRONMENT: process.env.NEXT_PUBLIC_DEPLOYMENT_ENVIRONMENT,
     SUPABASE_SERVICE_ROLE_KEY: process.env.SUPABASE_SERVICE_ROLE_KEY,
     NEXT_PUBLIC_SUPABASE_ANON_KEY: process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY,
