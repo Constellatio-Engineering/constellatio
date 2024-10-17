@@ -218,6 +218,13 @@
       "when": 1728484122304,
       "tag": "0037_petite_rhodey",
       "breakpoints": true
+    },
+    {
+      "idx": 38,
+      "version": "7",
+      "when": 1729169116924,
+      "tag": "0038_first_excalibur",
+      "breakpoints": true
     }
   ]
 }
