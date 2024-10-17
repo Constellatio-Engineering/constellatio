@@ -4,6 +4,7 @@ import { AuthStateContext } from "@/provider/AuthStateProvider";
 
 import { useTheme } from "@emotion/react";
 import formbricks from "@formbricks/js/app";
+import { Tooltip } from "@mantine/core";
 import React, { type FunctionComponent, useContext, useEffect, useRef } from "react";
 
 import * as styles from "./FeedbackButton.styles";
@@ -78,15 +79,28 @@ const FeedbackButton: FunctionComponent = () =>
 
   }, [user, isLoading, isUserLoggedIn]);
 
+  if(!isUserLoggedIn)
+  {
+    return null;
+  }
+
   return (
-    <UnstyledButton
-      styles={styles.feedbackButtonStyles(isUserLoggedIn, theme)}
-      onClick={async () =>
-      {
-        await formbricks.track("feedback_button_clicked");
-      }}>
-      Feedback
-    </UnstyledButton>
+    <Tooltip
+      label={"Du hast eine Anmerkung zu einem Fall oder ein Verbesserungsvorschlag zu unserer App? Dann freuen wir uns über dein Feedback!"}
+      multiline={true}
+      width={200}
+      openDelay={800}
+      position={"left"}
+      withArrow={true}>
+      <UnstyledButton
+        styles={styles.feedbackButtonStyles(theme)}
+        onClick={async () =>
+        {
+          await formbricks.track("feedback_button_clicked");
+        }}>
+        Feedback
+      </UnstyledButton>
+    </Tooltip>
   );
 };
 

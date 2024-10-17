@@ -1,10 +1,11 @@
+import { env } from "@/env.mjs";
+
 import { type ExtractTablesWithRelations } from "drizzle-orm";
 import { type PgTransaction } from "drizzle-orm/pg-core";
 import { drizzle, type PostgresJsQueryResultHKT } from "drizzle-orm/postgres-js";
 import postgres from "postgres";
 
 import * as schema from "./schema";
-import { env } from "../env.mjs";
 
 const connectionString = env.DATABASE_URL;
 
@@ -17,9 +18,7 @@ const client = postgres(connectionString, {
   idle_timeout: 10,
   max: env.POSTGRES_MAX_CONNECTIONS,
   max_lifetime: 60 * 10,
-  ...(env.NEXT_PUBLIC_DEPLOYMENT_ENVIRONMENT !== "development" && {
-    prepare: false
-  })
+  prepare: false
 });
 
 export const db = drizzle(client, { schema });

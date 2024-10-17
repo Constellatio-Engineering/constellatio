@@ -38,10 +38,15 @@ type GetArticleDetailPagePropsResult = {
 
 export const getStaticProps: GetStaticProps<GetArticleDetailPagePropsResult, Params> = async ({ params }) =>
 {
+  if(!params?.id || params.id === "null")
+  {
+    return {
+      notFound: true,
+      revalidate: 5
+    };
+  }
+
   const { article } = await getArticleById({ id: params?.id });
-  const allArticles = await getAllArticles();
-  const articlesWithNextAndPreviousArticleId = getArticlesWithNextAndPreviousArticleId(allArticles);
-  const articleFromAllArticle = articlesWithNextAndPreviousArticleId.find((article) => article.id === params?.id);
 
   if(!article)
   {
@@ -51,6 +56,9 @@ export const getStaticProps: GetStaticProps<GetArticleDetailPagePropsResult, Par
     };
   }
 
+  const allArticles = await getAllArticles();
+  const articlesWithNextAndPreviousArticleId = getArticlesWithNextAndPreviousArticleId(allArticles);
+  const articleFromAllArticle = articlesWithNextAndPreviousArticleId.find((article) => article.id === params?.id);
   const fullTextTaskJsonContent = article.fullTextTasks?.json?.content;
 
   if(fullTextTaskJsonContent != null)

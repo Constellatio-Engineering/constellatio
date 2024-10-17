@@ -16,6 +16,7 @@ import AnswersSkeleton from "@/components/pages/forumQuestionDetailPage/answersS
 import EditAndDeleteButtons from "@/components/pages/forumQuestionDetailPage/editAndDeleteButtons/EditAndDeleteButtons";
 import ForumItemAuthor from "@/components/pages/forumQuestionDetailPage/forumItemAuthor/ForumItemAuthor";
 import ForumQuestionDetailsPageSkeleton from "@/components/pages/forumQuestionDetailPage/forumQuestionDetailsPageSkeleton/ForumQuestionDetailsPageSkeleton";
+import { useAddContentItemView } from "@/hooks/useAddContentItemView";
 import useBookmarks from "@/hooks/useBookmarks";
 import useContextAndErrorIfNull from "@/hooks/useContextAndErrorIfNull";
 import { useForumAnswers } from "@/hooks/useForumAnswers";
@@ -33,7 +34,7 @@ import { notifications } from "@mantine/notifications";
 import ErrorPage from "next/error";
 import Link from "next/link";
 import { useRouter } from "next/router";
-import React, { Fragment, type FunctionComponent, useState } from "react";
+import React, { Fragment, type FunctionComponent, useEffect, useState } from "react";
 
 import * as styles from "./ForumQuestionDetailPage.styles";
 import { QuestionUpvoteButton } from "../forumOverviewPage/upvoteButton/QuestionUpvoteButton";
@@ -80,6 +81,7 @@ export const ForumQuestionDetailPage: FunctionComponent<Props> = ({ questionId }
     },
     sortBy: answersSorting
   });
+  const { mutate: addContentItemView } = useAddContentItemView();
 
   const { isPending: isDeletingQuestion, mutate: deleteQuestion } = api.forum.deleteQuestion.useMutation({
     onError: () =>
@@ -107,6 +109,14 @@ export const ForumQuestionDetailPage: FunctionComponent<Props> = ({ questionId }
       });
     }
   });
+
+  useEffect(() =>
+  {
+    addContentItemView({
+      itemId: questionId,
+      itemType: "forumQuestion"
+    });
+  }, [addContentItemView, questionId]);
 
   const changeSorting = async (newSorting: GetAnswersSortingOption): Promise<void> =>
   {

@@ -10,8 +10,7 @@ type InvalidateDocumentsOptions = inferProcedureInput<AppRouter["documents"]["ge
 type InvalidateUploadedFilesOptions = inferProcedureInput<AppRouter["uploads"]["getUploadedFiles"]>;
 type InvalidateFoldersOptions = inferProcedureInput<AppRouter["folders"]["getFolders"]>;
 type InvalidateBookmarksOptions = inferProcedureInput<AppRouter["bookmarks"]["getAllBookmarks"]>;
-type InvalidateArticleViewsOptions = inferProcedureInput<AppRouter["views"]["getArticleViews"]>;
-type InvalidateCaseViewsOptions = inferProcedureInput<AppRouter["views"]["getCaseViews"]>;
+type InvalidateContentItemsViewsCountOptions = inferProcedureInput<AppRouter["views"]["getContentItemViewsCount"]>;
 type InvalidateCaseProgressOptions = inferProcedureInput<AppRouter["casesProgress"]["getCaseProgress"]>;
 type InvalidateGamesProgressOptions = inferProcedureInput<AppRouter["gamesProgress"]["getGamesProgress"]>;
 type InvalidateSubmittedCaseSolutionOptions = inferProcedureInput<AppRouter["casesProgress"]["getSubmittedSolution"]>;
@@ -27,11 +26,10 @@ type InvalidateNotificationOptions = inferProcedureInput<AppRouter["notification
 
 type InvalidateQueries = {
   invalidateAmountOfUnreadNotifications: (options?: InvalidateAmountOfUnreadNotificationsOptions) => Promise<void>;
-  invalidateArticleViews: (options: InvalidateArticleViewsOptions) => Promise<void>;
   invalidateBadges: (options?: InvalidateBadgesOptions) => Promise<void>;
   invalidateBookmarks: (options?: InvalidateBookmarksOptions) => Promise<void[]>;
   invalidateCaseProgress: (options?: InvalidateCaseProgressOptions) => Promise<void[]>;
-  invalidateCaseViews: (options: InvalidateCaseViewsOptions) => Promise<void>;
+  invalidateContentItemsViewsCount: (options: InvalidateContentItemsViewsCountOptions) => Promise<void>;
   invalidateDocuments: (options?: InvalidateDocumentsOptions) => Promise<void>;
   invalidateEverything: () => Promise<void>;
   invalidateFolders: (options?: InvalidateFoldersOptions) => Promise<void>;
@@ -63,7 +61,6 @@ const InvalidateQueriesProvider: FunctionComponent<InvalidateQueriesProviderProp
 
   const invalidateQueries: InvalidateQueries = useMemo(() => ({
     invalidateAmountOfUnreadNotifications: async (options) => apiContext.notifications.getAmountOfUnreadNotifications.invalidate(options),
-    invalidateArticleViews: async (options) => apiContext.views.getArticleViews.invalidate(options),
     invalidateBadges: async (options) => apiContext.badges.getBadges.invalidate(options),
     invalidateBookmarks: async (options) => Promise.all([
       apiContext.badges.getBadges.invalidate(),
@@ -73,7 +70,7 @@ const InvalidateQueriesProvider: FunctionComponent<InvalidateQueriesProviderProp
       apiContext.badges.getBadges.invalidate(),
       apiContext.casesProgress.getCaseProgress.invalidate(options),
     ]),
-    invalidateCaseViews: async (options) => apiContext.views.getCaseViews.invalidate(options),
+    invalidateContentItemsViewsCount: async (options) => apiContext.views.getContentItemViewsCount.invalidate(options),
     invalidateDocuments: async (options) => apiContext.documents.getDocuments.invalidate(options),
     invalidateEverything: async () => invalidateAll(),
     invalidateFolders: async (options) => apiContext.folders.getFolders.invalidate(options),
@@ -105,8 +102,7 @@ const InvalidateQueriesProvider: FunctionComponent<InvalidateQueriesProviderProp
   }), [
     invalidateAll,
     apiContext.folders.getFolders,
-    apiContext.views.getArticleViews,
-    apiContext.views.getCaseViews,
+    apiContext.views.getContentItemViewsCount,
     apiContext.documents.getDocuments,
     apiContext.bookmarks.getAllBookmarks,
     apiContext.badges.getBadges,

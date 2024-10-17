@@ -145,8 +145,13 @@ export const scrollTo = (element: HTMLElement, offset = 100): void =>
   window.scrollTo({ behavior: "smooth", top: y });
 };
 
+export const scrollToTop = (): void =>
+{
+  window.scrollTo({ behavior: "smooth", top: 0 });
+};
+
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
-const printAllSettledPromisesSummary = (settledPromises: Array<PromiseSettledResult<unknown>>, actionName: string): void =>
+export const printAllSettledPromisesSummary = (settledPromises: Array<PromiseSettledResult<unknown>>, actionName: string): void =>
 {
   const failedPromises = settledPromises.filter((result): result is PromiseRejectedResult => result.status === "rejected");
   const successfulPromises = settledPromises.filter((result): result is PromiseFulfilledResult<AxiosResponse> => result.status === "fulfilled");

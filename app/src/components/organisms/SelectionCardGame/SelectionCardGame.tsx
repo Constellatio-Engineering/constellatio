@@ -10,7 +10,7 @@ import { SelectionCard } from "@/components/molecules/SelectionCard/SelectionCar
 import useContextAndErrorIfNull from "@/hooks/useContextAndErrorIfNull";
 import { InvalidateQueriesContext } from "@/provider/InvalidateQueriesProvider";
 import { type IGenCardSelectionGame } from "@/services/graphql/__generated/sdk";
-import useSelectionCardGameStore, { type TCardGameOption, } from "@/stores/selectionCardGame.store";
+import useSelectionCardGameStore, { type QuestionType, type TCardGameOption, } from "@/stores/selectionCardGame.store";
 import { api } from "@/utils/api";
 
 import { LoadingOverlay, Title } from "@mantine/core";
@@ -20,7 +20,7 @@ import {
   Container, Game, GameWrapper, LegendWrapper, Options, TitleWrapper, 
 } from "./SelectionCardGame.styles";
 
-export type SelectionCardGameProps = Pick<IGenCardSelectionGame, "game" | "helpNote" | "question"> & {
+export type SelectionCardGameProps = Pick<IGenCardSelectionGame, "game" | "helpNote" | "question" | "questionType"> & {
   readonly caseId: string;
   readonly id: string;
 };
@@ -30,9 +30,32 @@ let SelectionCardGame: FC<SelectionCardGameProps> = ({
   game,
   helpNote,
   id,
-  question
+  question,
+  questionType: questionTypeUnsafe
 }) => 
 {
+  let questionType: QuestionType;
+
+  switch (questionTypeUnsafe)
+  {
+    case "single_punch_question":
+    {
+      questionType = "singlePunch";
+      break;
+    }
+    case "multi_punch_question":
+    {
+      questionType = "multiPunch";
+      break;
+    }
+    default:
+    {
+      console.error(`Unknown question type: ${questionTypeUnsafe}. Using multiPunch as default.`);
+      questionType = "multiPunch";
+      break;
+    }
+  }
+
   const { invalidateGamesProgress } = useContextAndErrorIfNull(InvalidateQueriesContext);
   const { mutate: setGameProgress } = api.gamesProgress.setGameProgress.useMutation({
     onError: (error) => console.error("Error while setting game progress", error),
@@ -44,7 +67,7 @@ let SelectionCardGame: FC<SelectionCardGameProps> = ({
     gameSubmitted,
     resetCounter,
     resultMessage
-  } = useSelectionCardGameStore((s) => s.getGameState({ caseId, gameId: id }));
+  } = useSelectionCardGameStore((s) => s.getGameState({ caseId, gameId: id, questionType }));
   const updateGameState = useSelectionCardGameStore((s) => s.updateGameState);
   const toggleAnswer = useSelectionCardGameStore((s) => s.toggleAnswer);
   const gameOptions = game?.options;
@@ -116,7 +139,11 @@ let SelectionCardGame: FC<SelectionCardGameProps> = ({
   return (
     <Container>
       <TitleWrapper>
-        <Gamification/> <Title order={4}>Multiple Choice</Title>
+        <Gamification/>
+        {" "}
+        <Title order={4}>
+          {questionType === "singlePunch" ? "Single Choice" : "Multiple Choice"}
+        </Title>
       </TitleWrapper>
       <GameWrapper>
         {question && (

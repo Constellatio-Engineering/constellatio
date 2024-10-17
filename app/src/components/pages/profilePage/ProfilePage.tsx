@@ -2,6 +2,7 @@ import ContentWrapper from "@/components/helpers/contentWrapper/ContentWrapper";
 import ChangeEmailTab from "@/components/organisms/changeEmailTab/ChangeEmailTab";
 import ChangePasswordTab from "@/components/organisms/changePasswordTab/ChangePasswordTab";
 import ProfileDetailsTab from "@/components/organisms/profileDetailsTab/ProfileDetailsTab";
+import ProfileHistoryTab from "@/components/organisms/profileHistoryTab/ProfileHistoryTab";
 // import ProfileHistoryTab from "@/components/organisms/profileHistoryTab/ProfileHistoryTab";
 import ProfileMenu from "@/components/organisms/profileMenu/ProfileMenu";
 import RenderedTabSkeleton from "@/components/organisms/profileMenu/renderedTabSkeleton/RenderedTabSkeleton";
@@ -22,15 +23,16 @@ import * as styles from "./ProfilePage.styles";
 export const tabQueryKey = "tab";
 export const changeEmailTabSlug = "change-email";
 export const subscriptionTabSlug = "subscription";
+export const historyTabSlug = "history";
 
 export const tabs = [
   { slug: "overview", title: "Übersicht" },
   { slug: "profile-details", title: "Persönliche Daten" },
+  { slug: historyTabSlug, title: "Verlauf" },
   { slug: changeEmailTabSlug, title: "E-Mail ändern" },
   { slug: "change-password", title: "Passwort ändern" },
   { slug: subscriptionTabSlug, title: "Abonnement" },
   { slug: "referral", title: "Freunde einladen" },
-  // { slug: "history", title: "Verlauf" },
 ] as const;
 
 const ProfilePageContent: FunctionComponent = () =>
@@ -50,7 +52,7 @@ const ProfilePageContent: FunctionComponent = () =>
     {
       return (
         <div>
-          <h2>Da ist leider etwas schief gelaufen...</h2>
+          <h2>Da ist leider etwas schiefgelaufen...</h2>
         </div>
       );
     }
@@ -63,11 +65,11 @@ const ProfilePageContent: FunctionComponent = () =>
         return <ProfileDetailsTab userDetails={userDetails}/>;
       case "change-password":
         return <ChangePasswordTab/>;
-      case "change-email":
+      case changeEmailTabSlug:
         return <ChangeEmailTab userDetails={userDetails}/>;
-      // case "history":
-      //   return <ProfileHistoryTab/>;
-      case "subscription":
+      case historyTabSlug:
+        return <ProfileHistoryTab/>;
+      case subscriptionTabSlug:
         return <SubscriptionTab/>;
       case "referral":
         return <ProfileReferral/>;

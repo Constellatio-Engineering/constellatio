@@ -18,5 +18,4 @@ export const wrapper = css`
 export const casesHeaderTitle = () => css`
     color: ${colooors["neutrals-02"][1]};
     margin :24px 0;
-    
 `;

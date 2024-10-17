@@ -1,7 +1,7 @@
 /* eslint-disable max-lines */
 import { db } from "@/db/connection";
 import {
-  articlesViews, casesProgress, casesViews, documents, uploadedFiles, users, usersToBadges 
+  casesProgress, contentViews, documents, uploadedFiles, users, usersToBadges 
 } from "@/db/schema";
 import { env } from "@/env.mjs";
 import { deleteClickupCustomFieldValue } from "@/lib/clickup/tasks/delete-custom-field-value";
@@ -10,9 +10,8 @@ import { updateClickupTask } from "@/lib/clickup/tasks/update-task";
 import { type ClickupTask } from "@/lib/clickup/types";
 import { clickupCrmCustomField, getUserCrmData } from "@/lib/clickup/utils";
 import { stripe } from "@/lib/stripe/stripe";
-import { sleep } from "@/utils/utils";
 
-import { type SupabaseClient } from "@supabase/auth-helpers-nextjs";
+import { createPagesServerClient, type SupabaseClient } from "@supabase/auth-helpers-nextjs";
 import { type AxiosResponse } from "axios";
 import {
   and, countDistinct, eq, getTableColumns, type SQL 
@@ -26,6 +25,24 @@ const stripeConcurrencyLimit = pLimit(env.STRIPE_SDK_CONCURRENCY_LIMIT);
 
 export const getUsersWithActivityStats = async (query?: SQL) =>
 {
+  const articlesViews = db
+    .select({
+      itemId: contentViews.contentItemId,
+      userId: contentViews.userId,
+    })
+    .from(contentViews)
+    .where(eq(contentViews.contentItemType, "article"))
+    .as("articlesViewsSubquery");
+
+  const casesViews = db
+    .select({
+      itemId: contentViews.contentItemId,
+      userId: contentViews.userId,
+    })
+    .from(contentViews)
+    .where(eq(contentViews.contentItemType, "case"))
+    .as("casesViewsSubquery");
+
   return db
     .select({
       ...getTableColumns(users),
@@ -33,16 +50,16 @@ export const getUsersWithActivityStats = async (query?: SQL) =>
       completedCases: countDistinct(casesProgress.caseId),
       createdDocuments: countDistinct(documents.id),
       uploadedFiles: countDistinct(uploadedFiles.id),
-      viewedArticles: countDistinct(articlesViews.articleId),
-      viewedCases: countDistinct(casesViews.caseId)
+      viewedArticles: countDistinct(articlesViews.itemId),
+      viewedCases: countDistinct(casesViews.itemId)
     })
     .from(users)
     .where(query)
-    .leftJoin(casesViews, eq(users.id, casesViews.userId))
-    .leftJoin(articlesViews, eq(users.id, articlesViews.userId))
     .leftJoin(documents, eq(users.id, documents.userId))
     .leftJoin(uploadedFiles, eq(users.id, uploadedFiles.userId))
     .leftJoin(usersToBadges, eq(users.id, usersToBadges.userId))
+    .leftJoin(articlesViews, eq(users.id, articlesViews.userId))
+    .leftJoin(casesViews, eq(users.id, casesViews.userId))
     .leftJoin(casesProgress,
       and(
         eq(casesProgress.progressState, "completed"),
@@ -278,7 +295,16 @@ const handler: NextApiHandler = async (req, res): Promise<void> =>
 
   console.warn("------- CAUTION: Make sure to use the production environment variables when running this script! -------");
 
-  await sleep(1000);
+  // await sleep(1000);
+
+  const supabaseServerClient = createPagesServerClient({ req, res }, {
+    supabaseKey: env.SUPABASE_SERVICE_ROLE_KEY,
+    supabaseUrl: env.NEXT_PUBLIC_SUPABASE_URL
+  });
+
+  const test = await getCrmDataForUser("4cfc014e-8bcc-4799-8b50-2db0ecb01936", supabaseServerClient);
+
+  console.log(test);
 
   // const allUsers = await db.query.users.findMany({
   //   columns: {
