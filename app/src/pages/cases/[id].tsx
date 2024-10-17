@@ -40,6 +40,14 @@ type GetCaseDetailPagePropsResult = {
 
 export const getStaticProps: GetStaticProps<GetCaseDetailPagePropsResult, Params> = async ({ params }) =>
 {
+  if(!params?.id || params.id === "null")
+  {
+    return {
+      notFound: true,
+      revalidate: 5
+    };
+  }
+
   const { legalCase } = await getCaseById({ id: params?.id });
 
   if(!legalCase)

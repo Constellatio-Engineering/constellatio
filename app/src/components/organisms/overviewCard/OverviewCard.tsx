@@ -58,8 +58,8 @@ const OverviewCard: FunctionComponent<IOverviewCard> = ({
   variant,
 }) => 
 {
-  const { count: articleViews } = useArticleViews(contentId);
-  const { count: caseViews } = useCaseViews(contentId);
+  const { count: articleViews } = useArticleViews(contentId, variant === "dictionary");
+  const { count: caseViews } = useCaseViews(contentId, variant === "case");
   const views = variant === "dictionary" ? articleViews : caseViews;
   const [opened, { close, open }] = useDisclosure(false);
   const [isResetCaseModalOpened, { close: closeResetCaseModal, open: openResetCaseModal }] = useDisclosure(false);

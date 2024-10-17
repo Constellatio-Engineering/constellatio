@@ -33,7 +33,6 @@ export const isPathAuthPath = (path: string): boolean => authPathsArray.some((au
 
 export const apiPaths = {
   downloadDocument: "/api/documents/download",
-  getSubscriptionStatus: "/api/user/get-subscription-status",
 } as const;
 
 export const apiPathsArray = Object.values(apiPaths);

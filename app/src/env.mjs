@@ -16,6 +16,7 @@ export const env = createEnv({
   server: {
     SUPABASE_SERVICE_ROLE_KEY: z.string(),
     DATABASE_URL: urlValidation,
+    DATABASE_URL_SERVERLESS: urlValidation,
     CAISY_API_KEY: z.string(),
     CAISY_PROJECT_ID: z.string(),
     STRIPE_SECRET_KEY: z.string(),
@@ -40,7 +41,6 @@ export const env = createEnv({
     RECREATE_SEARCH_INDEX_SECRET: z.string(),
     POSTGRES_MAX_CONNECTIONS: z.string().pipe(z.coerce.number().int().min(1).max(9999)),
     STRIPE_PAYMENT_METHODS_CONFIGURATION_ID: z.string(),
-    GET_SUBSCRIPTION_STATUS_SECRET: z.string(),
     KV_URL: z.string().url(),
     KV_REST_API_URL: z.string().url(),
     KV_REST_API_TOKEN: z.string(),
@@ -80,6 +80,7 @@ export const env = createEnv({
     NEXT_PUBLIC_IS_REQUEST_BATCHING_DISABLED: z.enum(["true", "false"]).transform((value) => value === "true"),
     NEXT_PUBLIC_TRIAL_PERIOD_IN_DAYS: z.string().pipe(z.coerce.number().int().min(1).max(730)),
     NEXT_PUBLIC_STREAK_DAILY_TIME_ACTIVITY_THRESHOLD_SECONDS: z.string().pipe(z.coerce.number().int().min(1).max(86400)),
+    NEXT_PUBLIC_CONTENT_ITEMS_VIEWS_HISTORY_DAYS_LIMIT: z.string().pipe(z.coerce.number().int().min(1).max(365))
   },
 
   /**
@@ -92,6 +93,7 @@ export const env = createEnv({
     NEXT_PUBLIC_SUPABASE_ANON_KEY: process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY,
     NEXT_PUBLIC_SUPABASE_URL: process.env.NEXT_PUBLIC_SUPABASE_URL,
     DATABASE_URL: process.env.DATABASE_URL,
+    DATABASE_URL_SERVERLESS: process.env.DATABASE_URL_SERVERLESS,
     NEXT_PUBLIC_IS_IN_MAINTENANCE_MODE: process.env.NEXT_PUBLIC_IS_IN_MAINTENANCE_MODE,
     STRIPE_SECRET_KEY: process.env.STRIPE_SECRET_KEY,
     NEXT_PUBLIC_SIGN_UP_DEFAULT_EMAIL: process.env.NEXT_PUBLIC_SIGN_UP_DEFAULT_EMAIL,
@@ -125,7 +127,6 @@ export const env = createEnv({
     NEXT_PUBLIC_APP_NAME: process.env.NEXT_PUBLIC_APP_NAME,
     POSTGRES_MAX_CONNECTIONS: process.env.POSTGRES_MAX_CONNECTIONS,
     STRIPE_PAYMENT_METHODS_CONFIGURATION_ID: process.env.STRIPE_PAYMENT_METHODS_CONFIGURATION_ID,
-    GET_SUBSCRIPTION_STATUS_SECRET: process.env.GET_SUBSCRIPTION_STATUS_SECRET,
     NEXT_PUBLIC_FORMBRICKS_HOST: process.env.NEXT_PUBLIC_FORMBRICKS_HOST,
     NEXT_PUBLIC_FORMBRICKS_ENVIRONMENT_ID: process.env.NEXT_PUBLIC_FORMBRICKS_ENVIRONMENT_ID,
     NEXT_PUBLIC_TRIAL_PERIOD_IN_DAYS: process.env.NEXT_PUBLIC_TRIAL_PERIOD_IN_DAYS,
@@ -145,6 +146,7 @@ export const env = createEnv({
     SYNC_USERS_TO_CRM: process.env.SYNC_USERS_TO_CRM,
     SUPABASE_WEBHOOK_SECRET: process.env.SUPABASE_WEBHOOK_SECRET,
     NEXT_PUBLIC_STREAK_DAILY_TIME_ACTIVITY_THRESHOLD_SECONDS: process.env.NEXT_PUBLIC_STREAK_DAILY_TIME_ACTIVITY_THRESHOLD_SECONDS,
+    NEXT_PUBLIC_CONTENT_ITEMS_VIEWS_HISTORY_DAYS_LIMIT: process.env.NEXT_PUBLIC_CONTENT_ITEMS_VIEWS_HISTORY_DAYS_LIMIT,
   },
   /**
    * Run `build` or `dev` with `SKIP_ENV_VALIDATION` to skip env validation.

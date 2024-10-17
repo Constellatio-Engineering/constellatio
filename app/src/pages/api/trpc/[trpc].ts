@@ -4,7 +4,10 @@ import { createTRPCContext } from "@/server/api/trpc";
 import { createNextApiHandler } from "@trpc/server/adapters/next";
 
 export const config = {
-  maxDuration: 30,
+  api: {
+    externalResolver: true,
+  },
+  maxDuration: 5,
 };
 
 export default createNextApiHandler({

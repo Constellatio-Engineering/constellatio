@@ -8,6 +8,7 @@ import { documentsRouter } from "@/server/api/routers/documents.router";
 import { foldersRouter } from "@/server/api/routers/folders.router";
 import { forumRouter } from "@/server/api/routers/forum.router";
 import { gamesProgressRouter } from "@/server/api/routers/gamesProgress.router";
+import { internalUseOnly_utilsRouter } from "@/server/api/routers/internalUtils.router";
 import { notesRouter } from "@/server/api/routers/notes.router";
 import { notificationsRouter } from "@/server/api/routers/notifications.router";
 import { searchRouter } from "@/server/api/routers/search.router";
@@ -35,6 +36,7 @@ export const appRouter = createTRPCRouter({
   folders: foldersRouter,
   forum: forumRouter,
   gamesProgress: gamesProgressRouter,
+  internalUseOnly_utils: internalUseOnly_utilsRouter,
   notes: notesRouter,
   notifications: notificationsRouter,
   referral: referralRouter,

@@ -34,7 +34,6 @@ export const wrapper = ({
 	padding: 0 16px;
 	align-items: center;
 	gap: 8px;
-	border-bottom: 1px solid ${colooors["neutrals-01"][3]};
 	background-color: ${colooors["neutrals-01"][0]};
 	color: ${variant === "titleTableCell"
     ? colooors["neutrals-02"][2]

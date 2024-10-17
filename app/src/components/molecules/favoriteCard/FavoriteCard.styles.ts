@@ -21,6 +21,7 @@ export const wrapperLoaded = css`
   display: flex;
   padding: 20px;
   flex-direction: column;
+  color: #000000;
   justify-content: space-between;
   align-items: flex-start;
   &:hover {
