@@ -34,11 +34,6 @@ export const bookmarksRouter = createTRPCRouter({
       };
 
       await db.insert(bookmarks).values(bookmarkInsert);
-
-      if(input.resourceType === "case" || input.resourceType === "article")
-      {
-        await addBadgeForUser({ badgeIdentifier: "favorit", userId });
-      }
     }),
   getAllBookmarks: protectedProcedure
     .input(z.object({

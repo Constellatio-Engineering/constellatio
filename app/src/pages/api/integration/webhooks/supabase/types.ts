@@ -1,7 +1,8 @@
 /* eslint-disable @typescript-eslint/naming-convention,no-multiple-empty-lines */
 
 import type {
-  CaseProgressSql, ForumAnswerSql, ForumQuestionSql, PingSql, ProfilePictureSql, StreakSql, UserSql 
+  BookmarkSql,
+  CaseProgressSql, ForumAnswerSql, ForumQuestionSql, GameProgressSql, PingSql, ProfilePictureSql, StreakSql, UserSql
 } from "@/db/schema";
 
 type Tables =
@@ -11,7 +12,9 @@ type Tables =
   | ForumAnswerSql
   | ForumQuestionSql
   | CaseProgressSql
-  | StreakSql;
+  | StreakSql
+  | BookmarkSql
+  | GameProgressSql;
 
 // ============ COMMON ============
 type InsertPayload = {
@@ -21,6 +24,7 @@ type InsertPayload = {
   table: string;
   type: "INSERT";
 };
+
 type UpdatePayload = {
   old_record: Tables["columns"];
   record: Tables["columns"];
@@ -60,7 +64,6 @@ interface DeleteUserPayload extends DeletePayload
 type UserPayload = InsertUserPayload | UpdateUserPayload | DeleteUserPayload;
 
 
-
 // ============ PROFILE PICTURE ============
 interface InsertProfilePicturePayload extends InsertPayload
 {
@@ -82,7 +85,6 @@ interface DeleteProfilePicturePayload extends DeletePayload
 }
 
 type ProfilePicturePayload = InsertProfilePicturePayload | UpdateProfilePicturePayload | DeleteProfilePicturePayload;
-
 
 
 // ============ PING ============
@@ -149,6 +151,26 @@ interface UpdateStreakPayload extends UpdatePayload
 type StreakPayload = InsertStreakPayload | UpdateStreakPayload;
 
 
+// ============ BOOKMARK ============
+interface InsertBookmarkPayload extends InsertPayload
+{
+  record: BookmarkSql["columns"];
+  table: BookmarkSql["table"];
+}
+
+type BookmarkPayload = InsertBookmarkPayload;
+
+
+// ============ GAMEPROGRESS ============
+interface InsertGameProgressPayload extends InsertPayload
+{
+  record: GameProgressSql["columns"];
+  table: GameProgressSql["table"];
+}
+
+type GameProgressPayload = InsertGameProgressPayload;
+
+
 // ============ ALL ============
 export type WebhookPayload =
   | UserPayload
@@ -157,4 +179,6 @@ export type WebhookPayload =
   | ForumAnswerPayload
   | ForumQuestionPayload
   | CaseProgressPayload
-  | StreakPayload;
+  | StreakPayload
+  | BookmarkPayload
+  | GameProgressPayload;

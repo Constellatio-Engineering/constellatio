@@ -1,4 +1,8 @@
 import { env } from "@/env.mjs";
+import { bookmarkHandlerBookmarkInsert } from "@/pages/api/integration/webhooks/supabase/handlers/bookmark.handler";
+import {
+  gameProgressHandlerGameProgressInsert
+} from "@/pages/api/integration/webhooks/supabase/handlers/gameProgress.handler";
 import { type WebhookPayload } from "@/pages/api/integration/webhooks/supabase/types";
 
 import { type NextApiHandler } from "next";
@@ -72,6 +76,26 @@ const handler: NextApiHandler = async (req, res) =>
           break;
       }
       break;
+    case "Bookmark":
+    {
+      switch (payload.type)
+      {
+        case "INSERT":
+          await bookmarkHandlerBookmarkInsert(payload.record);
+          break;
+      }
+      break;
+    }
+    case "GameProgress":
+    {
+      switch (payload.type)
+      {
+        case "INSERT":
+          await gameProgressHandlerGameProgressInsert(payload.record);
+          break;
+      }
+      break;
+    }
     case "User":
     {
       throw new Error("Case 'User' is not implemented yet");
