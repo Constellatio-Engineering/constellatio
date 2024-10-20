@@ -7,7 +7,7 @@ export const config = {
   api: {
     externalResolver: true,
   },
-  maxDuration: 5,
+  maxDuration: 15,
 };
 
 export default createNextApiHandler({
