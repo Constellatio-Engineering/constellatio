@@ -6,6 +6,7 @@ import { supabase } from "@/lib/supabase";
 import { appPaths } from "@/utils/paths";
 
 import { Loader, Title } from "@mantine/core";
+import { sendGTMEvent } from "@next/third-parties/google";
 import { isAuthError } from "@supabase/auth-js";
 import { type AuthResponse } from "@supabase/gotrue-js";
 import { useMutation } from "@tanstack/react-query";
@@ -52,6 +53,12 @@ const EmailConfirmCard: FunctionComponent<EmailConfirmCardProps> = ({ params }) 
       {
         throw result.error;
       }
+
+      sendGTMEvent({
+        email: result.data.user?.email,
+        event: "email_confirmed",
+        userId: result.data.user?.id,
+      });
 
       return result.data;
     },

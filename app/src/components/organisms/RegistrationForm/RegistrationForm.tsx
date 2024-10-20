@@ -25,6 +25,7 @@ import { appPaths, authPaths, getConfirmEmailUrl } from "@/utils/paths";
 import { Stack, Title } from "@mantine/core";
 import { useForm, zodResolver } from "@mantine/form";
 import { notifications } from "@mantine/notifications";
+import { sendGTMEvent } from "@next/third-parties/google";
 import Link from "next/link";
 import { useRouter } from "next/router";
 import { type FunctionComponent, useEffect, useRef, useState } from "react";
@@ -131,8 +132,14 @@ export const RegistrationForm: FunctionComponent = () =>
         title: "Oops!",
       });
     },
-    onSuccess: async result =>
+    onSuccess: async (result, variables) =>
     {
+      sendGTMEvent({
+        email: variables.email,
+        event: "sign_up",
+        method: "E-Mail"
+      });
+
       switch (result.resultType)
       {
         case "emailConfirmationRequired":
