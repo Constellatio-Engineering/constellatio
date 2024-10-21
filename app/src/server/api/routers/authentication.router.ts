@@ -75,6 +75,7 @@ export const authenticationRouter = createTRPCRouter({
         const { subscriptionId, subscriptionStatus } = getDataFromStripeSubscription(subscription);
 
         const userToInsert: UserInsert = {
+          authProvider: "email",
           displayName: input.displayName,
           email: input.email,
           firstName: input.firstName,
@@ -84,7 +85,7 @@ export const authenticationRouter = createTRPCRouter({
           semester: input.semester,
           stripeCustomerId,
           subscriptionId,
-          subscriptionStatus,
+          subscriptionStatus, 
           university: input.university,
         };
 

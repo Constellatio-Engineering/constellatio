@@ -76,6 +76,13 @@ double_confirm_changes = true
 # If enabled, users need to confirm their email address before signing in.
 enable_confirmations = false
 
+[auth.external.google]
+enabled = true
+redirect_uri = "http://localhost:54321/auth/v1/callback"
+client_id = "env(SUPABASE_AUTH_EXTERNAL_GOOGLE_CLIENT_ID)"
+secret = "env(SUPABASE_AUTH_EXTERNAL_GOOGLE_SECRET)"
+# url = ""
+
 # Uncomment to customize email template
 [auth.email.template.confirmation]
 subject = "Registrierung bei Constellatio bestätigen"

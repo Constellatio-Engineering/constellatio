@@ -1,3 +1,4 @@
+import { Button } from "@/components/atoms/Button/Button";
 import { SwitcherTab } from "@/components/atoms/Switcher-tab/SwitcherTab";
 import { Switcher } from "@/components/molecules/Switcher/Switcher";
 import { Header } from "@/components/organisms/Header/Header";
@@ -5,6 +6,7 @@ import { LoginForm } from "@/components/organisms/LoginForm/LoginForm";
 import { RegistrationForm } from "@/components/organisms/RegistrationForm/RegistrationForm";
 import { RegistrationVisualHeader } from "@/components/organisms/RegistrationVisualHeader/RegistrationVisualHeader";
 import { colooors } from "@/constants/styles/colors";
+import { supabase } from "@/lib/supabase";
 
 import { Container, Flex, Tabs } from "@mantine/core";
 import { useMediaQuery } from "@mantine/hooks";
@@ -27,6 +29,30 @@ export const AuthPage: FC<AuthPageProps> = ({ tab }) =>
   const router = useRouter();
   const handleTabChange = async (tab: AuthPageProps["tab"]): Promise<boolean> => router.push(`/${tab}`);
   const isPhoneScreen = useMediaQuery("(max-width: 480px)");
+
+  const signInWithGoogle = async () =>
+  {
+    const { data, error } = await supabase.auth.signInWithOAuth({
+      options: {
+        redirectTo: "https://app.constellatio.localhost/api/auth/callback",
+      },
+      provider: "google"
+    });
+
+    if(error)
+    {
+      console.log("error while signing in with Google", error);
+      return;
+    }
+
+    if(!data.url)
+    {
+      console.log("no url was returned after signing in with Google");
+      return;
+    }
+
+    await router.push(data.url);
+  };
 
   useEffect(() =>
   {
@@ -52,6 +78,9 @@ export const AuthPage: FC<AuthPageProps> = ({ tab }) =>
           paddingTop: "0px !important",
         })}>
         <Header variant="relative"/>
+        <Button<"button"> styleType={"primary"} onClick={signInWithGoogle}>
+          SignIn with Google
+        </Button>
         <Container
           w={isPhoneScreen ? 300 : 440}
           pt={50}

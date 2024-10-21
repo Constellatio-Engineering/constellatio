@@ -12,6 +12,7 @@ import { getSignedCloudStorageUploadUrl } from "@/server/api/services/uploads.se
 import { getUserWithRelations } from "@/server/api/services/users.service";
 import { createTRPCRouter, protectedProcedure } from "@/server/api/trpc";
 import { filterUserForClient } from "@/utils/filters";
+import { NotFoundError, UnauthorizedError } from "@/utils/serverError";
 
 import { eq } from "drizzle-orm";
 
@@ -39,8 +40,20 @@ export const usersRouter = createTRPCRouter({
   getUserDetails: protectedProcedure
     .query(async ({ ctx: { userId } }) =>
     {
-      const user = await getUserWithRelations(userId);
-      return filterUserForClient(user);
+      try
+      {
+        const user = await getUserWithRelations(userId);
+        return filterUserForClient(user);
+      }
+      catch (e: unknown)
+      {
+        if(e instanceof NotFoundError)
+        {
+          console.log("User not found - unauthorized");
+          throw new UnauthorizedError();
+        }
+        throw e;
+      }
     }),
   setOnboardingResult: protectedProcedure
     .input(setOnboardingResultSchema)

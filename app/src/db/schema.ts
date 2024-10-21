@@ -134,6 +134,9 @@ export type UserBadgeState = typeof userBadgeStates[number];
 export const roles = ["forumMod", "admin"] as const;
 export type Role = typeof roles[number];
 
+export const authProviders = ["email", "google"] as const;
+export type AuthProvider = typeof authProviders[number];
+
 export const notificationTypesIdentifiers = [
   "forumQuestionPosted",
   "answerToForumQuestionPosted",
@@ -164,11 +167,13 @@ export const roleEnum = pgEnum("Role", roles);
 export const notificationTypeIdentifierEnum = pgEnum("NotificationType", notificationTypesIdentifiers);
 export const streakActivityTypeEnum = pgEnum("StreakActivityType", streakActivityTypes);
 export const contentItemViewTypeEnum = pgEnum("ContentItemViewType", contentItemViewsTypes);
+export const authProviderEnum = pgEnum("AuthProvider", authProviders);
 
 // TODO: Go through all queries and come up with useful indexes
 
 export const users = pgTable("User", {
   id: uuid("Id").primaryKey(),
+  authProvider: authProviderEnum("AuthProvider").notNull(),
   email: text("Email").unique().notNull(),
   displayName: text("DisplayName").notNull(),
   firstName: text("FirstName").notNull(),
