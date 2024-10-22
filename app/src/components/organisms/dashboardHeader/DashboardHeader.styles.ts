@@ -24,6 +24,9 @@ export const contentContainer = css`
 export const headerTitle = () => css`
     color: ${colooors["neutrals-01"][0]};
     text-align: center;
+  @media screen and (max-width: ${900}px) {
+    font-size: 36px;
+  }
 `;
 
 export const headerCardsArea = css`

@@ -15,12 +15,16 @@ import StreakCard from "../streakCard/StreakCard";
 const DashboardHeader: FunctionComponent = () => 
 {
   const { userDetails } = useUserDetails();
+  const firstName = userDetails?.firstName;
 
   return (
     <div css={styles.wrapper}>
       <OverviewHeader variant="red" height={490}/>
       <ContentWrapper stylesOverrides={styles.contentContainer}>
-        <Title css={styles.headerTitle} order={1}>Willkommen{userDetails?.firstName && `, ${userDetails?.firstName}!`}</Title>
+        <Title css={styles.headerTitle} order={1}>
+          Willkommen
+          {firstName ? `, ${firstName}!` : " bei Constellatio!"}
+        </Title>
         {/* <DashboardheaderProgressBar/> */}
         <div css={styles.headerCardsArea}>
           <LearningTimeCard/>

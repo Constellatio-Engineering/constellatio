@@ -38,11 +38,7 @@ export const RegistrationForm: FunctionComponent = () =>
 {
   const router = useRouter();
   const { ref_code: inputRefCode } = router.query;
-  let refCode = null;
-  if(inputRefCode && typeof inputRefCode === "string") 
-  { 
-    refCode = inputRefCode;
-  }
+  const refCode = (inputRefCode && typeof inputRefCode === "string") ? inputRefCode : undefined;
   const [shouldShowEmailConfirmationDialog, setShouldShowEmailConfirmationDialog] = useState<boolean>(false);
   const lastConfirmationEmailTimestamp = useRef<number>();
   const lastEnteredPassword = useAuthPageStore(s => s.lastEnteredPassword);
@@ -57,7 +53,7 @@ export const RegistrationForm: FunctionComponent = () =>
       lastName: "User",
       password: lastEnteredPassword || "Super-secure-password-123",
       passwordConfirmation: lastEnteredPassword || "Super-secure-password-123",
-      refCode: refCode ?? null,
+      refCode,
       semester: "7",
       university: allUniversities[20]!.name ?? null,
     } : {
@@ -69,7 +65,7 @@ export const RegistrationForm: FunctionComponent = () =>
       lastName: "",
       password: lastEnteredPassword,
       passwordConfirmation: "",
-      refCode: refCode ?? null,
+      refCode,
       semester: null,
       university: null,
     },
@@ -77,22 +73,17 @@ export const RegistrationForm: FunctionComponent = () =>
     validateInputOnBlur: true,
   });
 
-  let referringUserName = null;
-  if(refCode && typeof refCode === "string") 
-  { 
-    const {
-      data: referringUserNameResult,
-    } = api.referral.getReffererByCode.useQuery({
-      code: refCode
-    }, {
-      refetchOnMount: false,
-      staleTime: Infinity
-    });
-    if(referringUserNameResult) 
-    {
-      referringUserName = referringUserNameResult?.displayName;
-    }
-  }
+  const { data: referringUserNameResult } = api.referral.getReffererByCode.useQuery({
+    code: refCode!
+  }, {
+    enabled: refCode != null,
+    refetchOnMount: false,
+    refetchOnReconnect: false,
+    refetchOnWindowFocus: false,
+    staleTime: Infinity
+  });
+
+  const referringUserName = referringUserNameResult?.displayName;
 
   useEffect(() =>
   {
