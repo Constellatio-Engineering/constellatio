@@ -184,7 +184,6 @@ export const users = pgTable("User", {
   stripeCustomerId: text("StripeCustomerId"),
   university: text("University"),
   onboardingResult: onboardingResultEnum("OnboardingResult"),
-  wasSignupCompleted: boolean().default(false),
   subscriptionStatus: subscriptionStatusEnum("SubscriptionStatus"),
   subscriptionId: text("SubscriptionId"),
 });

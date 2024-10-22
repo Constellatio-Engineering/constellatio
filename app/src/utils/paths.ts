@@ -22,7 +22,6 @@ export const getIsPathAppPath = (path: string): boolean => appPathsArray.some((a
 export const authPaths = {
   confirm: "/confirm",
   confirmEmailChange: "/confirm-email-change",
-  finishSignup: "/finish-signup",
   login: "/login",
   paymentConfirm: "/payment-success",
   recover: "/recover",

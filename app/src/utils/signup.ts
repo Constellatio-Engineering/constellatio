@@ -1,6 +1,6 @@
 import { db } from "@/db/connection";
 import {
-  authProviders, referrals, type UserInsert, users, usersToBadges
+  type AuthProvider, referrals, type UserInsert, users, usersToBadges 
 } from "@/db/schema";
 import { env } from "@/env.mjs";
 import { addUserToCrmUpdateQueue } from "@/lib/clickup/utils";
@@ -11,25 +11,22 @@ import { getDataFromStripeSubscription } from "@/utils/stripe";
 import { printAllSettledPromisesSummary } from "@/utils/utils";
 
 import { type SupabaseClient } from "@supabase/auth-helpers-nextjs";
-import { type User } from "@supabase/supabase-js";
 import { count, eq } from "drizzle-orm";
-import { z } from "zod";
 
-const allowedAuthProviders = z.enum(authProviders);
-
-type FinishSignUp = (props: {
-  authProvider: unknown;
+export type FinishSignUpProps = {
   referralCode?: string;
   supabaseServerClient: SupabaseClient;
-  user: User;
-}) => Promise<void>;
+  user: {
+    authProvider: AuthProvider;
+    displayName: string | null;
+    email: string;
+    firstName: string | null;
+    id: string;
+    lastName: string | null;
+  };
+};
 
-export const finishSignup: FinishSignUp = async ({
-  authProvider: authProviderUnsafe,
-  referralCode,
-  supabaseServerClient,
-  user
-}) =>
+export const finishSignup = async ({ referralCode, supabaseServerClient, user }: FinishSignUpProps) =>
 {
   const userId = user.id;
   const userEmail = user.email;
@@ -38,8 +35,6 @@ export const finishSignup: FinishSignUp = async ({
 
   try
   {
-    const authProvider = allowedAuthProviders.parse(authProviderUnsafe);
-
     if(!userEmail)
     {
       throw new InternalServerError(new Error("User email was null after signUp. This should not happen and must be investigated."));
@@ -70,10 +65,12 @@ export const finishSignup: FinishSignUp = async ({
     stripeSubscriptionId = subscriptionId;
 
     const userToInsert: UserInsert = {
-      authProvider,
-      displayName: `${authProvider}-user-${Date.now() + Math.random()}`,
+      authProvider: user.authProvider,
+      displayName: user.displayName || `${user.authProvider}-user-${Date.now() + Math.random()}`,
       email: userEmail,
+      firstName: user.firstName,
       id: userId,
+      lastName: user.lastName,
       stripeCustomerId,
       subscriptionId,
       subscriptionStatus,

@@ -42,10 +42,7 @@ export const middleware: NextMiddleware = async (req, ctx) =>
   const db = drizzleServerless(pool, { schema });
 
   const user = await db.query.users.findFirst({
-    columns: {
-      subscriptionStatus: true,
-      wasSignupCompleted: true
-    },
+    columns: { subscriptionStatus: true },
     where: eq(users.id, getIsUserLoggedInResult.user.id)
   });
 
@@ -57,14 +54,6 @@ export const middleware: NextMiddleware = async (req, ctx) =>
     redirectUrl.pathname = authPaths.login;
     return NextResponse.redirect(redirectUrl);
   }
-
-  /* const hasFinishedSignup = user.wasSignupCompleted;
-
-  if(!hasFinishedSignup)
-  {
-    redirectUrl.pathname = authPaths.finishSignup;
-    return NextResponse.redirect(redirectUrl);
-  }*/
 
   const hasSubscription = getHasSubscription(user.subscriptionStatus);
 

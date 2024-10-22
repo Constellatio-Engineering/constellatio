@@ -274,6 +274,20 @@
       "when": 1729582850013,
       "tag": "0046_pink_molecule_man",
       "breakpoints": true
+    },
+    {
+      "idx": 47,
+      "version": "7",
+      "when": 1729640914265,
+      "tag": "0047_gigantic_beyonder",
+      "breakpoints": true
+    },
+    {
+      "idx": 48,
+      "version": "7",
+      "when": 1729640914899,
+      "tag": "0048_regular_sasquatch",
+      "breakpoints": true
     }
   ]
 }

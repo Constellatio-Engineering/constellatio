@@ -42,10 +42,16 @@ export const authenticationRouter = createTRPCRouter({
       }
 
       await finishSignup({
-        authProvider: "email",
-        referralCode: input.refCode, 
+        referralCode: input.refCode,
         supabaseServerClient,
-        user: userData
+        user: {
+          authProvider: "email",
+          displayName: input.displayName,
+          email: input.email,
+          firstName: null,
+          id: userData.id,
+          lastName: null,
+        }
       });
 
       if(!signUpData.session)
