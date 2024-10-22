@@ -3,6 +3,7 @@ import { type GameResultSchemaType } from "@/schemas/gamesProgress/setGameProgre
 import { type SearchIndex, searchIndices } from "@/utils/search";
 import { getCurrentDate } from "@/utils/utils";
 
+import type { Provider } from "@supabase/auth-js";
 import { type InferInsertModel, type InferSelectModel, relations } from "drizzle-orm";
 import {
   type AnyPgColumn,
@@ -134,7 +135,7 @@ export type UserBadgeState = typeof userBadgeStates[number];
 export const roles = ["forumMod", "admin"] as const;
 export type Role = typeof roles[number];
 
-export const authProviders = ["email", "google"] as const;
+export const authProviders = ["email", "google", "linkedin_oidc"] as const;
 export type AuthProvider = typeof authProviders[number];
 
 export const notificationTypesIdentifiers = [
