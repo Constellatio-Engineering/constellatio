@@ -7,7 +7,7 @@ const FirstNameInput: FunctionComponent<TextInputProps> = (props) => (
   <Input
     {...props}
     inputType="text"
-    label="Vorname*"
+    label="Vorname (optional)"
     title="Vorname"
     placeholder="Maximilian"
   />
