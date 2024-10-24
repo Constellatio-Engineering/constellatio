@@ -12,9 +12,28 @@ import { eq } from "drizzle-orm";
 import { type NextApiHandler, type NextApiResponse } from "next";
 import { z } from "zod";
 
-const redirectToErrorPage = (res: NextApiResponse) =>
+const redirectToErrorPage = (res: NextApiResponse, error: unknown) =>
 {
-  res.redirect(`${authPaths.login}?${queryParams.socialAuthError}=true`);
+  let errorMessage: string;
+
+  if(error instanceof Error)
+  {
+    errorMessage = error.message;
+  }
+  else if(error && typeof error === "object")
+  {
+    errorMessage = String(error);
+  }
+  else if(typeof error === "string")
+  {
+    errorMessage = error;
+  }
+  else
+  {
+    errorMessage = "An unknown error occurred";
+  }
+
+  res.redirect(`${authPaths.login}?${queryParams.socialAuthError}=${encodeURIComponent(errorMessage)}`);
 };
 
 const callbackProviderSchema = z.object({
@@ -63,13 +82,13 @@ const handler: NextApiHandler = async (req, res) =>
   if(!code)
   {
     console.warn("No code was provided. Redirecting to index route.");
-    return redirectToErrorPage(res);
+    return redirectToErrorPage(res, "No code was provided");
   }
 
   if(typeof code !== "string")
   {
     console.error("Code is not a string. Got: ", code, "Redirecting to index route.");
-    return redirectToErrorPage(res);
+    return redirectToErrorPage(res, "Code is not a string");
   }
 
   const supabase = createPagesServerClient({ req, res }, {
@@ -83,7 +102,6 @@ const handler: NextApiHandler = async (req, res) =>
   {
     if(error)
     {
-      // TODO: Test this and implement frontend error handling
       console.error("Error while exchanging code for session: ", error);
       throw error;
     }
@@ -143,7 +161,7 @@ const handler: NextApiHandler = async (req, res) =>
   {
     console.error("Error while finishing signup", e);
     await supabase.auth.signOut();
-    return redirectToErrorPage(res);
+    return redirectToErrorPage(res, e);
   }
 
   return res.redirect(appPaths.dashboard);

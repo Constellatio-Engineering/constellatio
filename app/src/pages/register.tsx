@@ -6,10 +6,10 @@ import { type FunctionComponent } from "react";
 
 export { getServerSideProps } from "./login";
 
-const Login: FunctionComponent<ServerSidePropsResult> = () => (
+const Login: FunctionComponent<ServerSidePropsResult> = ({ socialAuthError }) => (
   <>
     <PageHead pageTitle="Registrierung"/>
-    <AuthPage tab="register"/>
+    <AuthPage tab="register" socialAuthError={socialAuthError}/>
   </>
 );
 

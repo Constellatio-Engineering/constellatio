@@ -4,6 +4,8 @@ import { env } from "@/env.mjs";
 import { getIsUserLoggedInServer } from "@/utils/auth";
 import { getCommonProps } from "@/utils/commonProps";
 import { appPaths } from "@/utils/paths";
+import { queryParams } from "@/utils/query-params";
+import { type Nullable } from "@/utils/types";
 
 import { createPagesServerClient } from "@supabase/auth-helpers-nextjs";
 import { type GetServerSideProps } from "next";
@@ -12,7 +14,9 @@ import { type FunctionComponent } from "react";
 
 import { defaultLocale } from "../../next.config.mjs";
 
-export type ServerSidePropsResult = SSRConfig;
+export type ServerSidePropsResult = SSRConfig & {
+  readonly socialAuthError: Nullable<string>;
+};
 
 export const getServerSideProps: GetServerSideProps<ServerSidePropsResult> = async (ctx) =>
 {
@@ -34,16 +38,20 @@ export const getServerSideProps: GetServerSideProps<ServerSidePropsResult> = asy
   }
 
   const commonProps = await getCommonProps({ locale: ctx.locale || defaultLocale });
+  const socialAuthError = ctx.query?.[queryParams.socialAuthError];
 
   return {
-    props: commonProps,
+    props: {
+      ...commonProps,
+      socialAuthError: socialAuthError ? (Array.isArray(socialAuthError) ? socialAuthError.join(" ") : socialAuthError) : null,
+    },
   };
 };
 
-const Login: FunctionComponent<ServerSidePropsResult> = () => (
+const Login: FunctionComponent<ServerSidePropsResult> = ({ socialAuthError }) => (
   <>
     <PageHead pageTitle="Login"/>
-    <AuthPage tab="login"/>
+    <AuthPage tab="login" socialAuthError={socialAuthError}/>
   </>
 );
 

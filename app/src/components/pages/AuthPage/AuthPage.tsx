@@ -1,6 +1,7 @@
 import { SwitcherTab } from "@/components/atoms/Switcher-tab/SwitcherTab";
 import GoogleIcon from "@/components/Icons/Google_G_logo.svg";
 import LinkedInIcon from "@/components/Icons/LinkedIn_icon.svg";
+import ErrorCard from "@/components/molecules/errorCard/ErrorCard";
 import { Switcher } from "@/components/molecules/Switcher/Switcher";
 import { Header } from "@/components/organisms/Header/Header";
 import { LoginForm } from "@/components/organisms/LoginForm/LoginForm";
@@ -10,6 +11,7 @@ import { SocialLoginButton } from "@/components/pages/AuthPage/socialLoginButton
 import { colooors } from "@/constants/styles/colors";
 import { env } from "@/env.mjs";
 import { supabase } from "@/lib/supabase";
+import { type Nullable } from "@/utils/types";
 
 import { Container, Flex, Tabs } from "@mantine/core";
 import { useMediaQuery } from "@mantine/hooks";
@@ -24,10 +26,11 @@ import * as styles from "./AuthPage.styles";
 
 export interface AuthPageProps
 {
+  readonly socialAuthError: Nullable<string>;
   readonly tab: "login" | "register";
 }
 
-export const AuthPage: FC<AuthPageProps> = ({ tab }) =>
+export const AuthPage: FC<AuthPageProps> = ({ socialAuthError, tab }) =>
 {
   const { t } = useTranslation();
   const router = useRouter();
@@ -88,6 +91,9 @@ export const AuthPage: FC<AuthPageProps> = ({ tab }) =>
           pb={tab === "register" ? "spacing-100" : 0}
           sx={{ marginTop: "40px" }}>
           <div css={styles.socialButtonsWrapper}>
+            {socialAuthError && (
+              <ErrorCard error={socialAuthError}/>
+            )}
             <SocialLoginButton
               icon={GoogleIcon}
               name={"Google"}
