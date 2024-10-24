@@ -3,7 +3,6 @@ import GoogleIcon from "@/components/Icons/Google_G_logo.svg";
 import LinkedInIcon from "@/components/Icons/LinkedIn_icon.svg";
 import ErrorCard from "@/components/molecules/errorCard/ErrorCard";
 import { Switcher } from "@/components/molecules/Switcher/Switcher";
-import { tab } from "@/components/organisms/caseNavBar/CaseNavBar.styles";
 import { Header } from "@/components/organisms/Header/Header";
 import { LoginForm } from "@/components/organisms/LoginForm/LoginForm";
 import { RegistrationForm, type SignupFormVariant } from "@/components/organisms/RegistrationForm/RegistrationForm";

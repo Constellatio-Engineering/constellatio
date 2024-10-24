@@ -1,4 +1,3 @@
-import GoogleIcon from "@/components/Icons/Google_G_logo.svg";
 import { UnstyledButton } from "@/components/molecules/unstyledButton/UnstyledButton";
 
 import { type StaticImport } from "next/dist/shared/lib/get-img-props";

@@ -10,14 +10,12 @@
 import { db } from "@/db/connection";
 import { users } from "@/db/schema";
 import { env } from "@/env.mjs";
-import { appRouter } from "@/server/api/root";
 import { type ClientError, clientErrors } from "@/utils/clientError";
 import { EmailAlreadyTakenError, RateLimitError, UnauthorizedError } from "@/utils/serverError";
 import { sleep } from "@/utils/utils";
 
 import { createPagesServerClient, type SupabaseClient, type User } from "@supabase/auth-helpers-nextjs";
 import { type Session } from "@supabase/auth-helpers-react";
-import { createServerSideHelpers } from "@trpc/react-query/server";
 import { initTRPC } from "@trpc/server";
 import { type CreateNextContextOptions } from "@trpc/server/adapters/next";
 import { eq } from "drizzle-orm";

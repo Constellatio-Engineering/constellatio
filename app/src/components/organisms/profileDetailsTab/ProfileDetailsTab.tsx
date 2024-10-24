@@ -1,5 +1,6 @@
 import DisplayNameInput from "@/components/organisms/RegistrationForm/form/DisplayNameInput";
 import FirstNameInput from "@/components/organisms/RegistrationForm/form/FirstNameInput";
+import GenderDropdown from "@/components/organisms/RegistrationForm/form/GenderDropdown";
 import LastNameInput from "@/components/organisms/RegistrationForm/form/LastNameInput";
 import SemesterDropdown from "@/components/organisms/RegistrationForm/form/SemesterDropdown";
 import UniversityDropdown from "@/components/organisms/RegistrationForm/form/UniversityDropdown";
@@ -33,6 +34,7 @@ const ProfileDetailsTab: FunctionComponent<Props> = ({ userDetails }) =>
     initialValues: {
       displayName: userDetails.displayName,
       firstName: userDetails.firstName ?? "",
+      gender: userDetails.gender,
       lastName: userDetails.lastName ?? "",
       semester: userDetails.semester ? String(userDetails.semester) : null,
       university: userDetails.university as University || null,
@@ -93,6 +95,7 @@ const ProfileDetailsTab: FunctionComponent<Props> = ({ userDetails }) =>
         <LastNameInput {...form.getInputProps("lastName")}/>
         <UniversityDropdown {...form.getInputProps("university")}/>
         <SemesterDropdown {...form.getInputProps("semester")}/>
+        <GenderDropdown {...form.getInputProps("gender")}/>
         <Button<"button">
           size="large"
           type="submit"

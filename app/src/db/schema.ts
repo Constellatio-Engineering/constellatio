@@ -3,7 +3,6 @@ import { type GameResultSchemaType } from "@/schemas/gamesProgress/setGameProgre
 import { type SearchIndex, searchIndices } from "@/utils/search";
 import { getCurrentDate } from "@/utils/utils";
 
-import type { Provider } from "@supabase/auth-js";
 import { type InferInsertModel, type InferSelectModel, relations } from "drizzle-orm";
 import {
   type AnyPgColumn,
