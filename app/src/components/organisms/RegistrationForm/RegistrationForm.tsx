@@ -77,9 +77,9 @@ export const RegistrationForm: FunctionComponent<Props> = ({ formVariant }) =>
 
   const formMinimal = useForm<RegistrationFormMinimalSchema>({
     initialValues: isDevelopmentOrStaging ? {
-      displayName: lastEnteredEmail,
-      email: lastEnteredEmail,
-      password: lastEnteredPassword,
+      displayName: "Constellatio Test User",
+      email: lastEnteredEmail || env.NEXT_PUBLIC_SIGN_UP_DEFAULT_EMAIL || (isDevelopment ? "devUser@constellatio-dummy-mail.de" : ""),
+      password: lastEnteredPassword || "Super-secure-password-123",
       refCode,
     } : {
       displayName: "",
@@ -154,7 +154,8 @@ export const RegistrationForm: FunctionComponent<Props> = ({ formVariant }) =>
     {
       sendGTMEvent({
         email: variables.email,
-        event: "sign_up",
+        event: "sign_up", 
+        formVariant,
         method: "E-Mail"
       });
 

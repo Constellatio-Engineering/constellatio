@@ -1,19 +1,18 @@
 import { db } from "@/db/connection";
-import {
-  type AuthProvider, referrals, type UserInsert, users, usersToBadges 
-} from "@/db/schema";
+import { referrals, type UserInsert, users, usersToBadges } from "@/db/schema";
 import { env } from "@/env.mjs";
 import { addUserToCrmUpdateQueue } from "@/lib/clickup/utils";
 import { stripe } from "@/lib/stripe/stripe";
 import { addBadgeForUser } from "@/server/api/services/badges.services";
 import { InternalServerError } from "@/utils/serverError";
 import { getDataFromStripeSubscription } from "@/utils/stripe";
+import { type Nullable } from "@/utils/types";
 import { printAllSettledPromisesSummary } from "@/utils/utils";
 
 import { type SupabaseClient } from "@supabase/auth-helpers-nextjs";
 import { count, eq } from "drizzle-orm";
 
-export type FinishSignUpProps = {
+/* export type FinishSignUpProps = {
   referralCode?: string;
   supabaseServerClient: SupabaseClient;
   user: {
@@ -23,6 +22,14 @@ export type FinishSignUpProps = {
     firstName: string | null;
     id: string;
     lastName: string | null;
+  };
+};*/
+
+export type FinishSignUpProps = {
+  referralCode?: string;
+  supabaseServerClient: SupabaseClient;
+  user: Omit<UserInsert, "subscriptionStatus" | "stripeCustomerId" | "stripeSubscriptionId" | "displayName"> & {
+    displayName: Nullable<UserInsert["displayName"]>;
   };
 };
 
@@ -69,11 +76,14 @@ export const finishSignup = async ({ referralCode, supabaseServerClient, user }:
       displayName: user.displayName || `${user.authProvider}-user-${Date.now() + Math.random()}`,
       email: userEmail,
       firstName: user.firstName,
+      gender: user.gender,
       id: userId,
       lastName: user.lastName,
+      semester: user.semester,
       stripeCustomerId,
       subscriptionId,
       subscriptionStatus,
+      university: user.university,
     };
 
     await db.insert(users).values(userToInsert);

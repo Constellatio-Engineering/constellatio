@@ -1,16 +1,18 @@
 import { db } from "@/db/connection";
 import { users } from "@/db/schema";
 import { registrationFormSchema } from "@/schemas/auth/registrationForm.schema";
+import { registrationFormMinimalSchema } from "@/schemas/auth/registrationFormMinimal.schema";
 import { createTRPCRouter, publicProcedure } from "@/server/api/trpc";
 import { getConfirmEmailUrl } from "@/utils/paths";
 import { EmailAlreadyTakenError, InternalServerError, RegisterError } from "@/utils/serverError";
 import { finishSignup } from "@/utils/signup";
 
 import { eq } from "drizzle-orm";
+import { z } from "zod";
 
 export const authenticationRouter = createTRPCRouter({
   register: publicProcedure
-    .input(registrationFormSchema)
+    .input(z.union([registrationFormSchema, registrationFormMinimalSchema]))
     .mutation(async ({ ctx: { supabaseServerClient }, input }) =>
     {
       const existingUser = await db.query.users.findFirst({
@@ -45,12 +47,9 @@ export const authenticationRouter = createTRPCRouter({
         referralCode: input.refCode,
         supabaseServerClient,
         user: {
+          ...input,
           authProvider: "email",
-          displayName: input.displayName,
-          email: input.email,
-          firstName: null,
           id: userData.id,
-          lastName: null,
         }
       });
 
