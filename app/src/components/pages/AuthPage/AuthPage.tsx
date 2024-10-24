@@ -1,13 +1,21 @@
 import { SwitcherTab } from "@/components/atoms/Switcher-tab/SwitcherTab";
+import GoogleIcon from "@/components/Icons/Google_G_logo.svg";
+import LinkedInIcon from "@/components/Icons/LinkedIn_icon.svg";
+import ErrorCard from "@/components/molecules/errorCard/ErrorCard";
 import { Switcher } from "@/components/molecules/Switcher/Switcher";
 import { Header } from "@/components/organisms/Header/Header";
 import { LoginForm } from "@/components/organisms/LoginForm/LoginForm";
-import { RegistrationForm } from "@/components/organisms/RegistrationForm/RegistrationForm";
+import { RegistrationForm, type SignupFormVariant } from "@/components/organisms/RegistrationForm/RegistrationForm";
 import { RegistrationVisualHeader } from "@/components/organisms/RegistrationVisualHeader/RegistrationVisualHeader";
+import { SocialLoginButton } from "@/components/pages/AuthPage/socialLoginButton/SocialLoginButton";
 import { colooors } from "@/constants/styles/colors";
+import { env } from "@/env.mjs";
+import { supabase } from "@/lib/supabase";
+import { type Nullable } from "@/utils/types";
 
 import { Container, Flex, Tabs } from "@mantine/core";
 import { useMediaQuery } from "@mantine/hooks";
+import { type Provider } from "@supabase/auth-js";
 import { useRouter } from "next/router";
 import { useTranslation } from "next-i18next";
 import { type FC, useEffect } from "react";
@@ -16,17 +24,52 @@ import { makeZodI18nMap } from "zod-i18n-map";
 
 import * as styles from "./AuthPage.styles";
 
-export interface AuthPageProps
-{
-  readonly tab: "login" | "register";
-}
+type CommonProps = {
+  readonly socialAuthError: Nullable<string>;
+};
 
-export const AuthPage: FC<AuthPageProps> = ({ tab }) =>
+type LoginProps = {
+  readonly tab: "login";
+};
+
+type RegisterProps = {
+  readonly formVariant: SignupFormVariant;
+  readonly tab: "register";
+};
+
+export type AuthPageProps = CommonProps & (LoginProps | RegisterProps);
+
+export const AuthPage: FC<AuthPageProps> = (props) =>
 {
+  const { socialAuthError, tab } = props;
   const { t } = useTranslation();
   const router = useRouter();
   const handleTabChange = async (tab: AuthPageProps["tab"]): Promise<boolean> => router.push(`/${tab}`);
   const isPhoneScreen = useMediaQuery("(max-width: 480px)");
+
+  const signInWithSocialLogin = async (provider: Provider) =>
+  {
+    const { data, error } = await supabase.auth.signInWithOAuth({
+      options: {
+        redirectTo: `${env.NEXT_PUBLIC_WEBSITE_URL}/api/auth/callback`,
+      },
+      provider
+    });
+
+    if(error)
+    {
+      console.log(`error while signing in with ${provider}`, error);
+      return;
+    }
+
+    if(!data.url)
+    {
+      console.log("no url was returned after signing in with " + provider);
+      return;
+    }
+
+    await router.push(data.url);
+  };
 
   useEffect(() =>
   {
@@ -56,7 +99,25 @@ export const AuthPage: FC<AuthPageProps> = ({ tab }) =>
           w={isPhoneScreen ? 300 : 440}
           pt={50}
           pb={tab === "register" ? "spacing-100" : 0}
-          sx={{ marginTop: "80px" }}>
+          sx={{ marginTop: "40px" }}>
+          <div css={styles.socialButtonsWrapper}>
+            {socialAuthError && (
+              <ErrorCard error={socialAuthError}/>
+            )}
+            <SocialLoginButton
+              icon={GoogleIcon}
+              name={"Google"}
+              onClick={async () => signInWithSocialLogin("google")}
+            />
+            <SocialLoginButton
+              icon={LinkedInIcon}
+              name={"LinkedIn"}
+              onClick={async () => signInWithSocialLogin("linkedin_oidc")}
+            />
+          </div>
+          <div css={styles.separatorWrapper}>
+            <span>oder</span>
+          </div>
           <Switcher
             size="big"
             value={tab}
@@ -72,7 +133,7 @@ export const AuthPage: FC<AuthPageProps> = ({ tab }) =>
               <LoginForm/>
             </Tabs.Panel>
             <Tabs.Panel value="register">
-              <RegistrationForm/>
+              <RegistrationForm formVariant={props.tab === "register" ? props.formVariant : "minimal"}/>
             </Tabs.Panel>
           </Switcher>
         </Container>

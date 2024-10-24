@@ -1,21 +1,16 @@
 /* eslint-disable max-lines */
 import { BodyText } from "@/components/atoms/BodyText/BodyText";
 import { Button } from "@/components/atoms/Button/Button";
-import { Checkbox } from "@/components/atoms/Checkbox/Checkbox";
 import { CustomLink } from "@/components/atoms/CustomLink/CustomLink";
 import MaterialsLabel from "@/components/atoms/materialsLabel/MaterialsLabel";
-import DisplayNameInput from "@/components/organisms/RegistrationForm/form/DisplayNameInput";
-import EmailInput from "@/components/organisms/RegistrationForm/form/EmailInput";
-import FirstNameInput from "@/components/organisms/RegistrationForm/form/FirstNameInput";
-import GenderDropdown, { allGenders } from "@/components/organisms/RegistrationForm/form/GenderDropdown";
-import LastNameInput from "@/components/organisms/RegistrationForm/form/LastNameInput";
-import PasswordInput from "@/components/organisms/RegistrationForm/form/PasswordInput";
-import SemesterDropdown from "@/components/organisms/RegistrationForm/form/SemesterDropdown";
-import UniversityDropdown from "@/components/organisms/RegistrationForm/form/UniversityDropdown";
+import { FormFull } from "@/components/organisms/RegistrationForm/form/FormFull";
+import { FormMinimal } from "@/components/organisms/RegistrationForm/form/FormMinimal";
+import { allGenders } from "@/components/organisms/RegistrationForm/form/GenderDropdown";
 import { colooors } from "@/constants/styles/colors";
 import { env } from "@/env.mjs";
 import { supabase } from "@/lib/supabase";
 import { registrationFormSchema, type RegistrationFormSchema } from "@/schemas/auth/registrationForm.schema";
+import { type RegistrationFormMinimalSchema, registrationFormMinimalSchema } from "@/schemas/auth/registrationFormMinimal.schema";
 import { allUniversities } from "@/schemas/auth/userData.validation";
 import useAuthPageStore from "@/stores/authPage.store";
 import { api } from "@/utils/api";
@@ -34,20 +29,23 @@ import * as styles from "./RegistrationForm.styles";
 
 const resendEmailConfirmationTimeout = env.NEXT_PUBLIC_RESEND_EMAIL_CONFIRMATION_TIMEOUT_IN_SECONDS * 1000;
 
-export const RegistrationForm: FunctionComponent = () =>
+export type SignupFormVariant = "full" | "minimal";
+
+type Props = {
+  readonly formVariant: SignupFormVariant;
+};
+
+export const RegistrationForm: FunctionComponent<Props> = ({ formVariant }) =>
 {
   const router = useRouter();
   const { ref_code: inputRefCode } = router.query;
-  let refCode = null;
-  if(inputRefCode && typeof inputRefCode === "string") 
-  { 
-    refCode = inputRefCode;
-  }
+  const refCode = (inputRefCode && typeof inputRefCode === "string") ? inputRefCode : undefined;
   const [shouldShowEmailConfirmationDialog, setShouldShowEmailConfirmationDialog] = useState<boolean>(false);
   const lastConfirmationEmailTimestamp = useRef<number>();
   const lastEnteredPassword = useAuthPageStore(s => s.lastEnteredPassword);
   const lastEnteredEmail = useAuthPageStore(s => s.lastEnteredEmail);
-  const form = useForm<RegistrationFormSchema>({
+
+  const formFull = useForm<RegistrationFormSchema>({
     initialValues: isDevelopmentOrStaging ? {
       acceptTOS: true,
       displayName: "Constellatio Test User",
@@ -57,7 +55,7 @@ export const RegistrationForm: FunctionComponent = () =>
       lastName: "User",
       password: lastEnteredPassword || "Super-secure-password-123",
       passwordConfirmation: lastEnteredPassword || "Super-secure-password-123",
-      refCode: refCode ?? null,
+      refCode,
       semester: "7",
       university: allUniversities[20]!.name ?? null,
     } : {
@@ -69,7 +67,7 @@ export const RegistrationForm: FunctionComponent = () =>
       lastName: "",
       password: lastEnteredPassword,
       passwordConfirmation: "",
-      refCode: refCode ?? null,
+      refCode,
       semester: null,
       university: null,
     },
@@ -77,22 +75,33 @@ export const RegistrationForm: FunctionComponent = () =>
     validateInputOnBlur: true,
   });
 
-  let referringUserName = null;
-  if(refCode && typeof refCode === "string") 
-  { 
-    const {
-      data: referringUserNameResult,
-    } = api.referral.getReffererByCode.useQuery({
-      code: refCode
-    }, {
-      refetchOnMount: false,
-      staleTime: Infinity
-    });
-    if(referringUserNameResult) 
-    {
-      referringUserName = referringUserNameResult?.displayName;
-    }
-  }
+  const formMinimal = useForm<RegistrationFormMinimalSchema>({
+    initialValues: isDevelopmentOrStaging ? {
+      displayName: "Constellatio Test User",
+      email: lastEnteredEmail || env.NEXT_PUBLIC_SIGN_UP_DEFAULT_EMAIL || (isDevelopment ? "devUser@constellatio-dummy-mail.de" : ""),
+      password: lastEnteredPassword || "Super-secure-password-123",
+      refCode,
+    } : {
+      displayName: "",
+      email: lastEnteredEmail,
+      password: lastEnteredPassword,
+      refCode,
+    },
+    validate: zodResolver(registrationFormMinimalSchema),
+    validateInputOnBlur: true,
+  });
+
+  const { data: referringUserNameResult } = api.referral.getReffererByCode.useQuery({
+    code: refCode!
+  }, {
+    enabled: refCode != null,
+    refetchOnMount: false,
+    refetchOnReconnect: false,
+    refetchOnWindowFocus: false,
+    staleTime: Infinity
+  });
+
+  const referringUserName = referringUserNameResult?.displayName;
 
   useEffect(() =>
   {
@@ -110,17 +119,26 @@ export const RegistrationForm: FunctionComponent = () =>
   useEffect(() =>
   {
     useAuthPageStore.setState({
-      lastEnteredEmail: form.values.email,
-      lastEnteredPassword: form.values.password,
+      lastEnteredEmail: formFull.values.email,
+      lastEnteredPassword: formFull.values.password,
     });
-  }, [form.values.email, form.values.password]);
+  }, [formFull.values.email, formFull.values.password]);
+
+  useEffect(() =>
+  {
+    useAuthPageStore.setState({
+      lastEnteredEmail: formMinimal.values.email,
+      lastEnteredPassword: formMinimal.values.password,
+    });
+  }, [formMinimal.values.email, formMinimal.values.password]);
 
   const { isPending: isRegisterLoading, mutate: register } = api.authentication.register.useMutation({
     onError: e =>
     {
       if(e.data?.clientError.identifier === "email-already-taken")
       {
-        form.setFieldError("email", "Diese E-Mail Adresse wird bereits verwendet");
+        formFull.setFieldError("email", "Diese E-Mail-Adresse wird bereits verwendet");
+        formMinimal.setFieldError("email", "Diese E-Mail-Adresse wird bereits verwendet");
         return;
       }
 
@@ -136,7 +154,8 @@ export const RegistrationForm: FunctionComponent = () =>
     {
       sendGTMEvent({
         email: variables.email,
-        event: "sign_up",
+        event: "sign_up", 
+        formVariant,
         method: "E-Mail"
       });
 
@@ -158,7 +177,10 @@ export const RegistrationForm: FunctionComponent = () =>
     },
   });
 
-  const handleSubmit = form.onSubmit(formValues => register(formValues as RegistrationFormSchema));
+  const handleFullFormSubmit = formFull.onSubmit(formValues => register(formValues as RegistrationFormSchema));
+  const handleMinimalFormSubmit = formMinimal.onSubmit(formValues => register(formValues as RegistrationFormMinimalSchema));
+
+  const formEmailInput = formVariant === "full" ? formFull.values.email : formMinimal.values.email;
 
   const resendConfirmationEmail = async (): Promise<void> =>
   {
@@ -176,7 +198,7 @@ export const RegistrationForm: FunctionComponent = () =>
     lastConfirmationEmailTimestamp.current = Date.now();
 
     const { error } = await supabase.auth.resend({
-      email: form.values.email,
+      email: formEmailInput,
       options: { emailRedirectTo: getConfirmEmailUrl() },
       type: "signup"
     });
@@ -211,7 +233,7 @@ export const RegistrationForm: FunctionComponent = () =>
         <Title ta="center" order={3}>Bestätige deine E-Mail Adresse</Title>
         <div style={{ display: "grid", gap: "10px" }}>
           <BodyText ta="center" styleType="body-01-regular">
-            Wir haben eine E-Mail an {form.values.email ? <strong>{form.values.email}</strong> : "deine E-Mail Adresse"} geschickt.
+            Wir haben eine E-Mail an {formEmailInput ? <strong>{formEmailInput}</strong> : "deine E-Mail Adresse"} geschickt.
             Klicke auf den Link, um deinen Account zu aktivieren.
           </BodyText>
           <BodyText ta="center" styleType="body-01-regular">
@@ -244,47 +266,28 @@ export const RegistrationForm: FunctionComponent = () =>
   }
 
   return (
-    <form onSubmit={handleSubmit}>
+    <form onSubmit={formVariant === "full" ? handleFullFormSubmit : handleMinimalFormSubmit}>
       <Stack spacing="spacing-24">
         <Stack spacing="spacing-12">
-          <CustomLink
-            styleType="link-secondary"
-            component={Link}
-            href={authPaths.login}
-            stylesOverwrite={{ color: colooors["neutrals-02"][2], marginBottom: 10, textAlign: "left" }}>
-            Du hast schon ein Konto?
-          </CustomLink>
+          {formVariant === "full" && (
+            <CustomLink
+              styleType="link-secondary"
+              component={Link}
+              href={authPaths.login}
+              stylesOverwrite={{ color: colooors["neutrals-02"][2], marginBottom: 10, textAlign: "left" }}>
+              Du hast schon ein Konto?
+            </CustomLink>
+          )}
           {referringUserName && (
             <div>
               <MaterialsLabel title={`Eingeladen von: ${referringUserName}`} variant="heart"/>
             </div>
           )}
-          <FirstNameInput {...form.getInputProps("firstName")}/>
-          <LastNameInput {...form.getInputProps("lastName")}/>
-          <DisplayNameInput {...form.getInputProps("displayName")}/>
-          <EmailInput {...form.getInputProps("email")}/>
-          <PasswordInput
-            passwordInputProps={form.getInputProps("password")}
-            confirmPasswordInputProps={form.getInputProps("passwordConfirmation")}
-            passwordToValidate={form.values.password}
-          />
-          <UniversityDropdown {...form.getInputProps("university")}/>
-          <SemesterDropdown {...form.getInputProps("semester")}/>
-          <GenderDropdown {...form.getInputProps("gender")}/>
-          <Checkbox
-            {...form.getInputProps("acceptTOS", { type: "checkbox" })}
-            label={(
-              <BodyText component="p" styleType="body-01-medium" css={styles.dataLinkWrapper}>
-                Ich akzeptiere die&nbsp;
-                <CustomLink styleType="link-primary" href="https://www.constellatio.de/agb" target="_blank">Allgemeinen Geschäftsbedingungen</CustomLink>
-                {" "}und die&nbsp;
-                <CustomLink styleType="link-primary" href="https://www.constellatio.de/datenschutzerklaerung" target="_blank">Datenschutzerklärung</CustomLink>.<br/>
-                Mit der Erstellung des Kontos wird unmittelbar deine kostenlose {env.NEXT_PUBLIC_TRIAL_PERIOD_IN_DAYS}-tägige Testphase gestartet.
-                Diese Testphase ist völlig risikofrei und endet automatisch.
-              </BodyText>
-            )}
-            title="acceptTOS"
-          />
+          {formVariant === "full" ? (
+            <FormFull form={formFull}/>
+          ) : (
+            <FormMinimal form={formMinimal}/>
+          )}
         </Stack>
         <Button<"button">
           styleType="primary"
@@ -295,21 +298,23 @@ export const RegistrationForm: FunctionComponent = () =>
           Konto erstellen
         </Button>
       </Stack>
-      <BodyText
-        mt={30}
-        component="p"
-        styleType="body-02-medium"
-        ta="left"
-        c="neutrals-01.7">
-        Hinweis: Diese Version von Constellatio ist nur für die Verwendung am Computer optimiert.
-        Wenn du technische Fragen hast, wende dich bitte an unseren Support unter&nbsp;
-        <CustomLink
-          href="mailto:gutentag@constellatio.de"
-          styleType="link-secondary"
+      {formVariant === "full" && (
+        <BodyText
+          mt={30}
+          component="p"
+          styleType="body-02-medium"
+          ta="left"
           c="neutrals-01.7">
-          gutentag@constellatio.de
-        </CustomLink>
-      </BodyText>
+          Hinweis: Diese Version von Constellatio ist nur für die Verwendung am Computer optimiert.
+          Wenn du technische Fragen hast, wende dich bitte an unseren Support unter&nbsp;
+          <CustomLink
+            href="mailto:gutentag@constellatio.de"
+            styleType="link-secondary"
+            c="neutrals-01.7">
+            gutentag@constellatio.de
+          </CustomLink>
+        </BodyText>
+      )}
     </form>
   );
 };
