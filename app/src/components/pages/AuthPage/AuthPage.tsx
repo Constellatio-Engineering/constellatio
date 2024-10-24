@@ -15,6 +15,7 @@ import { type Nullable } from "@/utils/types";
 
 import { Container, Flex, Tabs } from "@mantine/core";
 import { useMediaQuery } from "@mantine/hooks";
+import { sendGTMEvent } from "@next/third-parties/google";
 import { type Provider } from "@supabase/auth-js";
 import { useRouter } from "next/router";
 import { useTranslation } from "next-i18next";
@@ -67,6 +68,11 @@ export const AuthPage: FC<AuthPageProps> = (props) =>
       console.log("no url was returned after signing in with " + provider);
       return;
     }
+
+    sendGTMEvent({
+      event: "sign_up",
+      method: provider
+    });
 
     await router.push(data.url);
   };
