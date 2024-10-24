@@ -14,17 +14,19 @@ import StreakCard from "../streakCard/StreakCard";
 
 const DashboardHeader: FunctionComponent = () => 
 {
-  const { userDetails } = useUserDetails();
+  const { isLoading, userDetails } = useUserDetails();
   const firstName = userDetails?.firstName;
 
   return (
     <div css={styles.wrapper}>
       <OverviewHeader variant="red" height={490}/>
       <ContentWrapper stylesOverrides={styles.contentContainer}>
-        <Title css={styles.headerTitle} order={1}>
-          Willkommen
-          {firstName ? `, ${firstName}!` : " bei Constellatio!"}
-        </Title>
+        <div css={styles.headerTitleWrapper}>
+          <Title css={styles.headerTitle} order={1}>
+            Willkommen
+            {isLoading ? " ..." : firstName ? `, ${firstName}!` : " bei Constellatio!"}
+          </Title>
+        </div>
         {/* <DashboardheaderProgressBar/> */}
         <div css={styles.headerCardsArea}>
           <LearningTimeCard/>
