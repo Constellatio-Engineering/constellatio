@@ -1,20 +1,18 @@
 import { db } from "@/db/connection";
-import { referrals, type UserInsert, users } from "@/db/schema";
-import { env } from "@/env.mjs";
-import { addUserToCrmUpdateQueue } from "@/lib/clickup/utils";
-import { stripe } from "@/lib/stripe/stripe";
+import { users } from "@/db/schema";
 import { registrationFormSchema } from "@/schemas/auth/registrationForm.schema";
-import { addBadgeForUser } from "@/server/api/services/badges.services";
+import { registrationFormMinimalSchema } from "@/schemas/auth/registrationFormMinimal.schema";
 import { createTRPCRouter, publicProcedure } from "@/server/api/trpc";
 import { getConfirmEmailUrl } from "@/utils/paths";
 import { EmailAlreadyTakenError, InternalServerError, RegisterError } from "@/utils/serverError";
-import { getDataFromStripeSubscription } from "@/utils/stripe";
+import { finishSignup } from "@/utils/signup";
 
-import { eq, sql } from "drizzle-orm";
+import { eq } from "drizzle-orm";
+import { z } from "zod";
 
 export const authenticationRouter = createTRPCRouter({
   register: publicProcedure
-    .input(registrationFormSchema)
+    .input(z.union([registrationFormSchema, registrationFormMinimalSchema]))
     .mutation(async ({ ctx: { supabaseServerClient }, input }) =>
     {
       const existingUser = await db.query.users.findFirst({
@@ -38,118 +36,22 @@ export const authenticationRouter = createTRPCRouter({
         throw new RegisterError(signUpError);
       }
 
-      const userId = signUpData.user?.id;
+      const userData = signUpData.user;
 
-      if(!userId)
+      if(!userData)
       {
-        throw new InternalServerError(new Error("User ID was null after signUp. This should probably not happen and should be investigated."));
+        throw new InternalServerError(new Error("User data was null after signUp. This should probably not happen and should be investigated."));
       }
 
-      let stripeCustomerId: string | undefined;
-      let subscriptionId: string | undefined;
-
-      try
-      {
-        const createCustomerResult = await stripe.customers.create({
-          address: { country: "DE" },
-          email: input.email,
-          metadata: { supabaseUuid: userId, },
-          name: `${input.firstName} ${input.lastName}`
-        });
-
-        stripeCustomerId = createCustomerResult.id;
-
-        const subscription = await stripe.subscriptions.create({
-          automatic_tax: { enabled: true },
-          customer: stripeCustomerId,
-          items: [{ plan: env.STRIPE_PREMIUM_PLAN_PRICE_ID, quantity: 1 }],
-          payment_settings: {
-            save_default_payment_method: "on_subscription"
-          },
-          trial_period_days: env.NEXT_PUBLIC_TRIAL_PERIOD_IN_DAYS,
-          trial_settings: {
-            end_behavior: { missing_payment_method: "cancel" }
-          }
-        });
-
-        const { subscriptionId, subscriptionStatus } = getDataFromStripeSubscription(subscription);
-
-        const userToInsert: UserInsert = {
-          displayName: input.displayName,
-          email: input.email,
-          firstName: input.firstName,
-          gender: input.gender,
-          id: userId,
-          lastName: input.lastName,
-          semester: input.semester,
-          stripeCustomerId,
-          subscriptionId,
-          subscriptionStatus,
-          university: input.university,
-        };
-
-        await db.insert(users).values(userToInsert);
-        await addUserToCrmUpdateQueue(userId);
-
-        if(input.refCode) 
-        {
-          const referral = await db.query.referralCodes.findFirst({
-            where: eq(referrals.code, input.refCode)
-          });
-
-          if(referral?.userId)
-          {
-            await db.insert(referrals).values({
-              code: input.refCode,
-              paid: false,
-              referredUserId: userId,
-              referringUserId: referral.userId,
-            });
-
-            // TODO: An immediate discount can be applied here
-          }
+      await finishSignup({
+        referralCode: input.refCode,
+        supabaseServerClient,
+        user: {
+          ...input,
+          authProvider: "email",
+          id: userData.id,
         }
-      }
-      catch (e: unknown)
-      {
-        console.log("Deleting user because insertion into public schema failed");
-
-        const cleanups: Array<Promise<unknown> | undefined> = [
-          supabaseServerClient.auth.admin.deleteUser(userId),
-          stripeCustomerId ? stripe.customers.del(stripeCustomerId) : undefined,
-          subscriptionId ? stripe.subscriptions.cancel(subscriptionId) : undefined
-        ].filter(Boolean);
-
-        const cleanupResults = await Promise.allSettled(cleanups);
-
-        console.log("Cleanup results", cleanupResults);
-
-        for(const cleanupResult of cleanupResults)
-        {
-          if(cleanupResult.status === "rejected")
-          {
-            console.error("Error while cleaning up after failed user insertion", cleanupResult.reason);
-          }
-        }
-
-        throw new InternalServerError(new Error("Error while creating user: " + e));
-      }
-
-      const usersCount = (await db.select({ count: sql<number>`cast(count(*) as int)` }).from(users))?.[0]?.count;
-
-      if(usersCount != null)
-      {
-        if(usersCount <= 100)
-        {
-          console.log("is one of the first 100 users");
-          await addBadgeForUser({ badgeIdentifier: "1-100", userId });
-        }
-        else if(usersCount > 100 && usersCount <= 1000)
-        {
-          console.log("is one of the first 1000 users");
-          await addBadgeForUser({ badgeIdentifier: "1-1000", userId });
-        }
-      }
+      });
 
       if(!signUpData.session)
       {

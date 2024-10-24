@@ -7,7 +7,7 @@ const LastNameInput: FunctionComponent<TextInputProps> = (props) => (
   <Input
     {...props}
     inputType="text"
-    label="Nachname*"
+    label="Nachname (optional)"
     title="Nachname"
     placeholder="Mustermann"
   />

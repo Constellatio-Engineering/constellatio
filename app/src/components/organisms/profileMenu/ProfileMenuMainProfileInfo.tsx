@@ -17,6 +17,8 @@ type Props = {
 
 const ProfileMenuMainProfileInfo: FunctionComponent<Props> = ({ userDetails }) =>
 {
+  const { displayName, firstName, lastName } = userDetails;
+  const name = [firstName, lastName].filter(Boolean).join(" ");
   const [showEditImgModal, setShowEditImgModal] = React.useState<boolean>(false);
 
   return (
@@ -31,9 +33,15 @@ const ProfileMenuMainProfileInfo: FunctionComponent<Props> = ({ userDetails }) =
       </div>
       <div css={styles.profileName}>
         <div css={styles.profileNameText}>
-          <Title style={{ fontSize: 25 }} order={2}>{userDetails.firstName + " " + userDetails.lastName}</Title>
+          <Title style={{ fontSize: 25 }} order={2}>{name || displayName}</Title>
         </div>
-        <BodyText styleType="body-01-medium" css={styles.profileNameHandler} component="p">@{userDetails.displayName}</BodyText>
+        <BodyText styleType="body-01-medium" css={styles.profileNameHandler} component="p">
+          {name ? (
+            <span>@{displayName}</span>
+          ) : (
+            <span css={styles.noNameSet}>Kein Name gespeichert</span>
+          )}
+        </BodyText>
       </div>
       <EditProfileImgModal
         opened={showEditImgModal}

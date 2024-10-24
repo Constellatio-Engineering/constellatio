@@ -93,6 +93,11 @@ export const profileNameText = () => css`
   color: ${colooors["neutrals-02"][1]};
 `;
 
+export const noNameSet = css`
+  font-style: italic;
+  font-size: inherit;
+`;
+
 export const tabsListWrapper = css`
   @media screen and (max-width: ${1100}px) {
     display: none;

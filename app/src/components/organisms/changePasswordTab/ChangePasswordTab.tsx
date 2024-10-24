@@ -120,7 +120,7 @@ const ChangePasswordTab: FunctionComponent = () =>
           passwordInputProps={form.getInputProps("newPassword")}
           passwordLabelOverride="Neues Passwort"
           passwordConfirmLabelOverride="Neues Passwort erneut eingeben"
-          confirmPasswordInputProps={form.getInputProps("newPasswordConfirm")}
+          confirmPassword={form.getInputProps("newPasswordConfirm")}
           passwordToValidate={form.values.newPassword}
         />
         <Button<"button">
