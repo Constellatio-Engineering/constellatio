@@ -3,9 +3,10 @@ import GoogleIcon from "@/components/Icons/Google_G_logo.svg";
 import LinkedInIcon from "@/components/Icons/LinkedIn_icon.svg";
 import ErrorCard from "@/components/molecules/errorCard/ErrorCard";
 import { Switcher } from "@/components/molecules/Switcher/Switcher";
+import { tab } from "@/components/organisms/caseNavBar/CaseNavBar.styles";
 import { Header } from "@/components/organisms/Header/Header";
 import { LoginForm } from "@/components/organisms/LoginForm/LoginForm";
-import { RegistrationForm } from "@/components/organisms/RegistrationForm/RegistrationForm";
+import { RegistrationForm, type SignupFormVariant } from "@/components/organisms/RegistrationForm/RegistrationForm";
 import { RegistrationVisualHeader } from "@/components/organisms/RegistrationVisualHeader/RegistrationVisualHeader";
 import { SocialLoginButton } from "@/components/pages/AuthPage/socialLoginButton/SocialLoginButton";
 import { colooors } from "@/constants/styles/colors";
@@ -24,14 +25,24 @@ import { makeZodI18nMap } from "zod-i18n-map";
 
 import * as styles from "./AuthPage.styles";
 
-export interface AuthPageProps
-{
+type CommonProps = {
   readonly socialAuthError: Nullable<string>;
-  readonly tab: "login" | "register";
-}
+};
 
-export const AuthPage: FC<AuthPageProps> = ({ socialAuthError, tab }) =>
+type LoginProps = {
+  readonly tab: "login";
+};
+
+type RegisterProps = {
+  readonly formVariant: SignupFormVariant;
+  readonly tab: "register";
+};
+
+export type AuthPageProps = CommonProps & (LoginProps | RegisterProps);
+
+export const AuthPage: FC<AuthPageProps> = (props) =>
 {
+  const { socialAuthError, tab } = props;
   const { t } = useTranslation();
   const router = useRouter();
   const handleTabChange = async (tab: AuthPageProps["tab"]): Promise<boolean> => router.push(`/${tab}`);
@@ -123,7 +134,7 @@ export const AuthPage: FC<AuthPageProps> = ({ socialAuthError, tab }) =>
               <LoginForm/>
             </Tabs.Panel>
             <Tabs.Panel value="register">
-              <RegistrationForm/>
+              <RegistrationForm formVariant={props.tab === "register" ? props.formVariant : "minimal"}/>
             </Tabs.Panel>
           </Switcher>
         </Container>

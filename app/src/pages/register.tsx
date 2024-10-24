@@ -6,11 +6,15 @@ import { type FunctionComponent } from "react";
 
 export { getServerSideProps } from "./login";
 
-const Login: FunctionComponent<ServerSidePropsResult> = ({ socialAuthError }) => (
+const Register: FunctionComponent<ServerSidePropsResult> = ({ formVariant, socialAuthError }) => (
   <>
     <PageHead pageTitle="Registrierung"/>
-    <AuthPage tab="register" socialAuthError={socialAuthError}/>
+    <AuthPage
+      tab="register"
+      socialAuthError={socialAuthError}
+      formVariant={formVariant}
+    />
   </>
 );
 
-export default Login;
+export default Register;

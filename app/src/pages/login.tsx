@@ -1,4 +1,5 @@
 import PageHead from "@/components/organisms/pageHead/PageHead";
+import { type SignupFormVariant } from "@/components/organisms/RegistrationForm/RegistrationForm";
 import { AuthPage } from "@/components/pages/AuthPage/AuthPage";
 import { env } from "@/env.mjs";
 import { getIsUserLoggedInServer } from "@/utils/auth";
@@ -15,6 +16,9 @@ import { type FunctionComponent } from "react";
 import { defaultLocale } from "../../next.config.mjs";
 
 export type ServerSidePropsResult = SSRConfig & {
+  // False positive, this is used in the Register AuthPage
+  // eslint-disable-next-line react/no-unused-prop-types
+  readonly formVariant: SignupFormVariant;
   readonly socialAuthError: Nullable<string>;
 };
 
@@ -38,12 +42,14 @@ export const getServerSideProps: GetServerSideProps<ServerSidePropsResult> = asy
   }
 
   const commonProps = await getCommonProps({ locale: ctx.locale || defaultLocale });
-  const socialAuthError = ctx.query?.[queryParams.socialAuthError];
+  const socialAuthErrorQueryParam = ctx.query[queryParams.socialAuthError];
+  const formVariant: SignupFormVariant = ctx.query[queryParams.signupFormVariant] === "full" ? "full" : "minimal";
 
   return {
     props: {
       ...commonProps,
-      socialAuthError: socialAuthError ? (Array.isArray(socialAuthError) ? socialAuthError.join(" ") : socialAuthError) : null,
+      formVariant,
+      socialAuthError: socialAuthErrorQueryParam ? (Array.isArray(socialAuthErrorQueryParam) ? socialAuthErrorQueryParam.join(" ") : socialAuthErrorQueryParam) : null
     },
   };
 };
