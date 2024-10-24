@@ -29,6 +29,7 @@ export const headerTitle = () => css`
   top: 53%;
   left: 50%;
   transform: translate(-50%, -50%);
+  width: 100%;
   @media screen and (max-width: ${900}px) {
     font-size: 36px;
   }

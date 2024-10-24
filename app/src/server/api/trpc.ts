@@ -10,15 +10,18 @@
 import { db } from "@/db/connection";
 import { users } from "@/db/schema";
 import { env } from "@/env.mjs";
+import { appRouter } from "@/server/api/root";
 import { type ClientError, clientErrors } from "@/utils/clientError";
 import { EmailAlreadyTakenError, RateLimitError, UnauthorizedError } from "@/utils/serverError";
 import { sleep } from "@/utils/utils";
 
 import { createPagesServerClient, type SupabaseClient, type User } from "@supabase/auth-helpers-nextjs";
 import { type Session } from "@supabase/auth-helpers-react";
+import { createServerSideHelpers } from "@trpc/react-query/server";
 import { initTRPC } from "@trpc/server";
 import { type CreateNextContextOptions } from "@trpc/server/adapters/next";
 import { eq } from "drizzle-orm";
+import { type GetServerSidePropsContext, type NextApiRequest, type NextApiResponse } from "next";
 import superjson from "superjson";
 
 /**
@@ -58,15 +61,29 @@ type TrpcContext = {
   user: User | null;
 };
 
-export const createTRPCContext = async ({ req, res }: CreateNextContextOptions): Promise<TrpcContext> =>
+export const getTrpcContext = async (context: GetServerSidePropsContext | {
+  req: NextApiRequest;
+  res: NextApiResponse;
+}): Promise<TrpcContext> =>
 {
-  const supabaseServerClient = createPagesServerClient({ req, res }, {
+  const supabaseServerClient = createPagesServerClient(context, {
     supabaseKey: env.SUPABASE_SERVICE_ROLE_KEY,
     supabaseUrl: env.NEXT_PUBLIC_SUPABASE_URL
   });
 
   const { data: { user } } = await supabaseServerClient.auth.getUser();
   const { data: { session } } = await supabaseServerClient.auth.getSession();
+
+  return {
+    session,
+    supabaseServerClient,
+    user,
+  };
+};
+
+export const createTRPCContext = async (context: CreateNextContextOptions): Promise<TrpcContext> =>
+{
+  const trpcContext = await getTrpcContext(context);
 
   if(env.THROTTLE_REQUESTS_IN_MS && env.NEXT_PUBLIC_DEPLOYMENT_ENVIRONMENT !== "production")
   {
@@ -75,11 +92,7 @@ export const createTRPCContext = async ({ req, res }: CreateNextContextOptions):
     await sleep(env.THROTTLE_REQUESTS_IN_MS);
   }
 
-  return {
-    session,
-    supabaseServerClient,
-    user
-  };
+  return trpcContext;
 };
 
 /**
@@ -212,3 +225,4 @@ export const forumModProcedure = protectedProcedure.use(async ({ ctx, next, path
     },
   });
 });
+

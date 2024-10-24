@@ -16,6 +16,7 @@ const DashboardHeader: FunctionComponent = () =>
 {
   const { isLoading, userDetails } = useUserDetails();
   const firstName = userDetails?.firstName;
+  const displayName = userDetails?.displayName;
 
   return (
     <div css={styles.wrapper}>
@@ -24,7 +25,13 @@ const DashboardHeader: FunctionComponent = () =>
         <div css={styles.headerTitleWrapper}>
           <Title css={styles.headerTitle} order={1}>
             Willkommen
-            {isLoading ? " ..." : firstName ? `, ${firstName}!` : " bei Constellatio!"}
+            {isLoading
+              ? " ..."
+              : firstName
+                ? `, ${firstName}!`
+                : displayName
+                  ? `, ${displayName}!`
+                  : " bei Constellatio!"}
           </Title>
         </div>
         {/* <DashboardheaderProgressBar/> */}
