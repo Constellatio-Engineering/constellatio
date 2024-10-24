@@ -167,7 +167,10 @@ export const getQuestions = async (params: GetQuestionsParams) => // eslint-disa
         with: {
           profilePictures: {
             columns: {
+              profilePictureSource: true,
               serverFilename: true,
+              url: true,
+              userId: true,
             },
           }
         }
@@ -196,7 +199,7 @@ export const getQuestions = async (params: GetQuestionsParams) => // eslint-disa
 
       if(_authorProfilePictureUrl)
       {
-        authorProfilePictureUrl = getProfilePictureUrl({ serverFilename: _authorProfilePictureUrl.serverFilename, userId: question.author.id });
+        authorProfilePictureUrl = getProfilePictureUrl(_authorProfilePictureUrl);
       }
     }
 
@@ -317,7 +320,10 @@ export const getAnswers = async (params: GetAnswersParams) => // eslint-disable-
         with: {
           profilePictures: {
             columns: {
+              profilePictureSource: true,
               serverFilename: true,
+              url: true,
+              userId: true,
             },
           }
         }
@@ -337,7 +343,7 @@ export const getAnswers = async (params: GetAnswersParams) => // eslint-disable-
 
       if(_authorProfilePictureUrl)
       {
-        authorProfilePictureUrl = getProfilePictureUrl({ serverFilename: _authorProfilePictureUrl.serverFilename, userId: answer.author.id });
+        authorProfilePictureUrl = getProfilePictureUrl(_authorProfilePictureUrl);
       }
     }
 
