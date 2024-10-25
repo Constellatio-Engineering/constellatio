@@ -17,4 +17,7 @@ export const contentWrapper = css`
   align-items: center;
   gap: 16px;
   display:flex;
+  flex-wrap: nowrap;
+  padding: 0 24px;
+  
 `;

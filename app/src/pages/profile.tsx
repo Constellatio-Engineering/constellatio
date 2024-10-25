@@ -2,11 +2,12 @@ import { Layout } from "@/components/layouts/Layout";
 import PageHead from "@/components/organisms/pageHead/PageHead";
 import ProfilePageWrapper from "@/components/pages/profilePage/ProfilePage";
 import { type NextPageWithLayout } from "@/pages/_app";
+import { getTrpcServerSideHelpers } from "@/server/api/utils";
 import { type IGenMainCategory } from "@/services/graphql/__generated/sdk";
 import { getCommonProps } from "@/utils/commonProps";
 import { type Nullable } from "@/utils/types";
 
-import { type GetStaticProps } from "next";
+import { type GetServerSideProps } from "next";
 import { type SSRConfig } from "next-i18next";
 import React from "react";
 
@@ -17,18 +18,25 @@ export type IProfilePageProps = {
   readonly data: string;
 };
 
-type StaticPropsResult = SSRConfig;
+type ServerSidePropsResult = SSRConfig;
 
-export const getStaticProps: GetStaticProps<StaticPropsResult> = async ({ locale = defaultLocale }) =>
+export const getServerSideProps: GetServerSideProps<ServerSidePropsResult> = async (context) =>
 {
-  const commonProps = await getCommonProps({ locale });
+  const commonProps = await getCommonProps({ locale: context.locale || defaultLocale });
+  const trpcHelpers = await getTrpcServerSideHelpers(context);
+  console.time("prefetch");
+  await trpcHelpers.users.getUserDetails.prefetch();
+  console.timeEnd("prefetch");
 
   return {
-    props: commonProps,
+    props: {
+      ...commonProps,
+      trpcState: trpcHelpers.dehydrate(),
+    },
   };
 };
 
-const Page: NextPageWithLayout<StaticPropsResult> = () =>
+const Page: NextPageWithLayout<ServerSidePropsResult> = () =>
 {
   return (
     <>

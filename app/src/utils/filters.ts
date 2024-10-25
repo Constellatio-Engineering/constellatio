@@ -1,9 +1,10 @@
 import { type Bookmark } from "@/db/schema";
 import { type UserWithRelations } from "@/server/api/services/users.service";
 
-export type UserFiltered = Pick<UserWithRelations, "email" | "id" | "gender" | "lastName" | "firstName" | "displayName" | "semester" | "university" | "roles" | "isForumModerator" | "isAdmin" | "profilePicture">;
+export type UserFiltered = Pick<UserWithRelations, "email" | "id" | "gender" | "lastName" | "firstName" | "displayName" | "semester" | "university" | "roles" | "isForumModerator" | "isAdmin" | "profilePicture" | "authProvider">;
 
 export const filterUserForClient = (user: UserWithRelations): UserFiltered => ({
+  authProvider: user.authProvider,
   displayName: user.displayName,
   email: user.email,
   firstName: user.firstName,
