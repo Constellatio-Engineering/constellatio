@@ -92,7 +92,7 @@ export const AdminPage: FunctionComponent = () =>
         <form onSubmit={form.onSubmit(handleSubmit)} css={styles.form}>
           <Title order={2} sx={{ fontSize: 26 }}>User löschen</Title>
           <p>
-            Achtung: Diese Funktion sollte nicht genutzt werden, um Accounts tatsächlicher Benutzer zu löschen.
+            <mark>Achtung</mark>: Diese Funktion sollte nicht genutzt werden, um Accounts tatsächlicher Benutzer zu löschen.
             Diese Funktion sollte nur verwendet werden, um Accounts von Testbenutzern zu löschen.
           </p>
           <Input

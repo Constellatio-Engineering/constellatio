@@ -13,6 +13,12 @@ export const contentWrapper = css`
   display: flex;
   flex-direction: column;
   gap: 40px;
+  mark {
+    background-color: #ff8ec2;
+    border-radius: 4px;
+    font-weight: 700;
+    padding: 3px 5px;
+  }
 `;
 
 export const form = css`

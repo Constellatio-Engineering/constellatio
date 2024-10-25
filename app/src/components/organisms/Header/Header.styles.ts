@@ -56,6 +56,7 @@ export const SHeaderRelative = styled.header`
   background: #fff;
   width: 100%;
   height: 60px;
+  min-height: 60px;
   z-index: 40;
   display: grid;
   place-items: center;
