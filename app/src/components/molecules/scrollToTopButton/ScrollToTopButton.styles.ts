@@ -3,7 +3,7 @@ import { colooors } from "@/constants/styles/colors";
 import { css } from "@emotion/react";
 import { type MantineTheme } from "@mantine/core";
 
-export const scrollToTopButtonStyles = (theme: MantineTheme) => css`
+export const scrollToTopButtonStyles = (isVisible: boolean, theme: MantineTheme) => css`
   overflow: hidden;
   width: 32px;
   height: 32px;
@@ -14,14 +14,14 @@ export const scrollToTopButtonStyles = (theme: MantineTheme) => css`
   outline: none;
   cursor: pointer;
   bottom: 12rem;
-  // background-color: ${colooors["brand-01"][4]};
   background-color: ${colooors["neutrals-01"][8]};
   transition: background-color 0.1s ease;
   animation: fadeFeedbackButtonIn 0.3s ease-in-out 2s forwards;
   opacity: 0;
-  transition: background-color 0.1s ease;
+  transition: background-color 0.1s ease, transform 0.3s ease;
   border-radius: ${theme.radius["radius-8"]} 0 0 ${theme.radius["radius-8"]};
   color: white;
+  transform: translateX(${isVisible ? "0%" : "100%"});
   @keyframes fadeScrollToTopButtonIn {
     0% {
       opacity: 0;
@@ -31,7 +31,6 @@ export const scrollToTopButtonStyles = (theme: MantineTheme) => css`
     }
   }
   &:hover {
-    // background-color: ${colooors["brand-01"][7]};
     background-color: ${colooors["neutrals-01"][7]};
   }
 `;
