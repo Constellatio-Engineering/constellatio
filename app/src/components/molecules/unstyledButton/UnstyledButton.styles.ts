@@ -4,6 +4,7 @@ export const wrapper = css`
   all: unset;
   cursor: pointer;
   display: inline-block;
+  box-sizing: border-box;
   text-align: center;
   opacity: 1;
   transition: opacity 0.2s ease-in-out;

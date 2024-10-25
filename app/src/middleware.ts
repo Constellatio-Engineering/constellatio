@@ -1,6 +1,6 @@
 /* eslint-disable import/no-unused-modules */
 import * as schema from "@/db/schema";
-import { users } from "@/db/schema";
+import { users, usersToRoles } from "@/db/schema";
 import { env } from "@/env.mjs";
 import { getIsUserLoggedInServer } from "@/utils/auth";
 import { appPaths, authPaths } from "@/utils/paths";
@@ -27,39 +27,66 @@ if(env.NEXT_PUBLIC_DEPLOYMENT_ENVIRONMENT === "development")
 export const middleware: NextMiddleware = async (req, ctx) =>
 {
   const res = NextResponse.next();
+  const redirectUrl = req.nextUrl.clone();
   const supabase = createMiddlewareClient({ req, res });
   const getIsUserLoggedInResult = await getIsUserLoggedInServer(supabase);
 
   if(!getIsUserLoggedInResult.isUserLoggedIn)
   {
-    const redirectUrl = req.nextUrl.clone();
     redirectUrl.pathname = authPaths.login;
     redirectUrl.searchParams.set(queryParams.redirectedFrom, req.nextUrl.pathname + req.nextUrl.search);
-    console.info("User is not logged in. Redirecting to: ", redirectUrl.toString());
     return NextResponse.redirect(redirectUrl);
   }
 
   const pool = new Pool({ connectionString: env.DATABASE_URL_SERVERLESS });
   const db = drizzleServerless(pool, { schema });
 
-  const getSubscriptionStatusResult = await db.query.users.findFirst({
+  const user = await db.query.users.findFirst({
     columns: { subscriptionStatus: true },
     where: eq(users.id, getIsUserLoggedInResult.user.id)
   });
 
   ctx.waitUntil(pool.end());
 
-  const hasSubscription = getHasSubscription(getSubscriptionStatusResult?.subscriptionStatus);
+  if(!user)
+  {
+    await supabase.auth.signOut();
+    redirectUrl.pathname = authPaths.login;
+    return NextResponse.redirect(redirectUrl);
+  }
+
+  if(req.nextUrl.pathname.startsWith(appPaths.admin))
+  {
+    const pool = new Pool({ connectionString: env.DATABASE_URL_SERVERLESS });
+    const db = drizzleServerless(pool, { schema });
+
+    const userRoles = await db.query.usersToRoles.findMany({
+      columns: { },
+      where: eq(usersToRoles.userId, getIsUserLoggedInResult.user.id), 
+      with: { role: true }
+    });
+
+    ctx.waitUntil(pool.end());
+
+    const isAdmin = userRoles.some(userRole => userRole.role.identifier === "admin");
+
+    if(!isAdmin)
+    {
+      redirectUrl.pathname = "/404";
+      return NextResponse.rewrite(redirectUrl);
+    }
+    else
+    {
+      return NextResponse.next();
+    }
+  }
+
+  const hasSubscription = getHasSubscription(user.subscriptionStatus);
 
   if(!hasSubscription)
   {
-    console.info("User does not have a subscription. Redirecting to subscription tab");
-
-    const redirectUrl = req.nextUrl.clone();
-
     if(redirectUrl.pathname.startsWith(appPaths.profile) && redirectUrl.searchParams.get("tab") === "subscription")
     {
-      console.log("User is already on subscription tab. Not redirecting.");
       return NextResponse.next();
     }
 
@@ -80,6 +107,7 @@ export const config = {
      * - register (registration route)
      * - recover (recover password route)
      * - confirm (email confirmation route)
+     * - finish-signup (finish signup route)
      * - _next/static (static files)
      * - _next/image (image optimization files)
      * - favicon.* (favicon files)
@@ -87,6 +115,6 @@ export const config = {
      *
      * CAUTION: This does not work for the root path ("/")!
      */
-    "/((?!api|login|register|confirm|recover|static|.*\\..*|_next|extension|tests).*)",
+    "/((?!api|login|register|confirm|finish-signup|recover|static|.*\\..*|_next|extension|tests).*)",
   ],
 };

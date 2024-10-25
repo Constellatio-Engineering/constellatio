@@ -13,7 +13,10 @@ export const getUserWithRelations = async (userId: string) =>
     with: {
       profilePictures: {
         columns: {
-          serverFilename: true,
+          profilePictureSource: true,
+          serverFilename: true, 
+          url: true,
+          userId: true,
         },
       },
       usersToRoles: {
@@ -48,7 +51,7 @@ export const getUserWithRelations = async (userId: string) =>
     isAdmin,
     isForumModerator,
     profilePicture: !_profilePicture ? null : {
-      url: getProfilePictureUrl({ serverFilename: _profilePicture.serverFilename, userId }),
+      url: getProfilePictureUrl(_profilePicture),
     },
     roles
   });

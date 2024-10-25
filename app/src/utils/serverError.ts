@@ -61,6 +61,14 @@ export class NotFoundError extends TRPCError
   }
 }
 
+export class SelfDeletionRequestError extends TRPCError
+{
+  public constructor()
+  {
+    super({ code: "FORBIDDEN" });
+  }
+}
+
 export class ForbiddenError extends TRPCError
 {
   public constructor()

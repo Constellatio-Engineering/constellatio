@@ -11,19 +11,28 @@ export const contentContainer = css`
   top: 100px;
   z-index: 4;
   padding: 0;
-  h1 {
-    position: relative;
-    top: 10px
-  }
   @media screen and (max-width: 1300px) {
     min-width: auto;
     width: 94%;
   }
 `;
 
+export const headerTitleWrapper = css`
+  position: relative;
+  height: 70px;
+`;
+
 export const headerTitle = () => css`
-    color: ${colooors["neutrals-01"][0]};
-    text-align: center;
+  color: ${colooors["neutrals-01"][0]};
+  text-align: center;
+  position: absolute;
+  top: 53%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  width: 100%;
+  @media screen and (max-width: ${900}px) {
+    font-size: 36px;
+  }
 `;
 
 export const headerCardsArea = css`

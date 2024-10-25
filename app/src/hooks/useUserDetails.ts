@@ -13,6 +13,7 @@ const useUserDetails: UseUserDetails = () =>
   const { data: userDetails, error, isLoading } = api.users.getUserDetails.useQuery(undefined, {
     refetchOnMount: "always",
     refetchOnWindowFocus: "always",
+    retry: false,
     staleTime: Infinity
   });
   

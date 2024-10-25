@@ -16,7 +16,7 @@ export const cardStyles = ({
   shouldUseFullWidth?: boolean;
   stylesOverwrite?: CSSObject;
   theme: MantineTheme;
-  variant: "error" | "success";
+  variant: "error" | "success" | "warning";
 }): CardStyle =>
 {
   const styles: CardStyle = () => ({
@@ -24,20 +24,32 @@ export const cardStyles = ({
       flex: "initial",
     },
     icon: {
-      color: variant === "success" ? colooors["support-success"][4] : colooors["support-error"][3],
+      color: variant === "success"
+        ? colooors["support-success"][4]
+        : variant === "warning"
+          ? "#dda627"
+          : colooors["support-error"][3],
       flex: "initial",
       height: spaciiing["spacing-24"],
       margin: 0,
       width: spaciiing["spacing-24"],
     },
     message: {
-      color: variant === "success" ? colooors["support-success"][4] : colooors["support-error"][3],
+      color: variant === "success"
+        ? colooors["support-success"][4]
+        : variant === "warning"
+          ? "#dda627"
+          : colooors["support-error"][3],
       fontSize: theme.fontSizes["spacing-16"],
       fontWeight: 500,
       lineHeight: theme.fontSizes["spacing-24"],
     },
     root: {
-      backgroundColor: variant === "success" ? colooors["support-success"][1] : colooors["support-error"][0],
+      backgroundColor: variant === "success"
+        ? colooors["support-success"][1]
+        : variant === "warning"
+          ? "#fdf3dc"
+          : colooors["support-error"][1],
       borderRadius: theme.radius["radius-12"],
       maxWidth: shouldUseFullWidth ? "unset" : "440px",
       padding: `${spaciiing["spacing-16"]} ${spaciiing["spacing-20"]}`,

@@ -1,12 +1,15 @@
-import { emailValidation, nameValidation, semesterValidation, universityValidation } from "@/schemas/auth/userData.validation";
+import {
+  displayNameValidation, emailValidation, genderValidation, optionalNameValidation, semesterValidation, universityValidation
+} from "@/schemas/auth/userData.validation";
 
 import { z } from "zod";
 
 export const updateUserDetailsSchema = z.object({
-  displayName: nameValidation.optional(),
+  displayName: displayNameValidation.optional(),
   email: emailValidation.optional(),
-  firstName: nameValidation.optional(),
-  lastName: nameValidation.optional(),
+  firstName: optionalNameValidation.optional(),
+  gender: genderValidation.nullable().optional(),
+  lastName: optionalNameValidation.optional(),
   semester: semesterValidation.nullable().optional(),
   university: universityValidation.nullable().optional(),
 });

@@ -47,7 +47,9 @@ const _Button: FC<TButton> = ({
         backgroundColor:
           styleType === "secondarySimple" || styleType === "secondarySubtle"
             ? colooors["neutrals-01"][0]
-            : colooors["neutrals-01"][3],
+            : styleType === "tertiary"
+              ? "transparent"
+              : colooors["neutrals-01"][3],
         border: styleType !== "primary" ? `1px solid ${colooors["neutrals-01"][3]}` : "",
         color: colooors["neutrals-01"][7],
       },

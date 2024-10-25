@@ -63,7 +63,10 @@ export const getNotifications = async (params: GetNotificationsParams) => // esl
         with: {
           profilePictures: {
             columns: {
+              profilePictureSource: true,
               serverFilename: true,
+              url: true,
+              userId: true,
             },
           }
         }
@@ -73,15 +76,12 @@ export const getNotifications = async (params: GetNotificationsParams) => // esl
 
   const notificationsWithAdditionalData = notificationsQueryResult.map((notification) =>
   {
-    const senderProfilePicture = notification.sender.profilePictures[0]?.serverFilename;
+    const [senderProfilePicture] = notification.sender.profilePictures;
     let senderProfilePictureUrl = null;
 
     if(senderProfilePicture)
     {
-      senderProfilePictureUrl = getProfilePictureUrl({
-        serverFilename: senderProfilePicture,
-        userId: notification.sender.id 
-      });
+      senderProfilePictureUrl = getProfilePictureUrl(senderProfilePicture);
     }
 
     return ({

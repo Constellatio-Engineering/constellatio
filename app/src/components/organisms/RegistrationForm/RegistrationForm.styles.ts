@@ -3,6 +3,13 @@ import { css } from "@emotion/react";
 export const dataLinkWrapper = css`
   width: 110%;
   cursor: pointer;
+  font-weight: 500;
+  a {
+    color: inherit;
+    white-space: wrap;
+    font-size: inherit;
+    font-weight: inherit;
+  }
 `;
 
 export const waitingForConfirmation = css`

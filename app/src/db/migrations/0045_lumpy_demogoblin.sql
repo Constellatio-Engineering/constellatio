@@ -1,0 +1,1 @@
+ALTER TYPE "AuthProvider" ADD VALUE 'linkedin_oidc';

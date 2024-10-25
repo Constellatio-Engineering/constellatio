@@ -16,7 +16,7 @@ export const registrationFormSchema = z
     lastName: nameValidation,
     password: passwordSchema,
     passwordConfirmation: passwordSchema,
-    refCode: refCodeValidation.nullable(),
+    refCode: refCodeValidation.optional(),
     semester: semesterValidation.nullable(),
     university: universityValidation.nullable(),
   })

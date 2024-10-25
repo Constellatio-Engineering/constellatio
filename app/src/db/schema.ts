@@ -134,6 +134,9 @@ export type UserBadgeState = typeof userBadgeStates[number];
 export const roles = ["forumMod", "admin"] as const;
 export type Role = typeof roles[number];
 
+export const authProviders = ["email", "google", "linkedin_oidc"] as const;
+export type AuthProvider = typeof authProviders[number];
+
 export const notificationTypesIdentifiers = [
   "forumQuestionPosted",
   "answerToForumQuestionPosted",
@@ -142,6 +145,9 @@ export const notificationTypesIdentifiers = [
   "forumAnswerUpvoted",
   "forumAnswerAccepted",
 ] as const;
+
+export const profilePictureSources = ["internal", "external"] as const;
+export type ProfilePictureSource = typeof profilePictureSources[number];
 
 export const genderEnum = pgEnum("Gender", allGenderIdentifiers);
 export const onboardingResultEnum = pgEnum("OnboardingResult", allOnboardingResults);
@@ -164,16 +170,19 @@ export const roleEnum = pgEnum("Role", roles);
 export const notificationTypeIdentifierEnum = pgEnum("NotificationType", notificationTypesIdentifiers);
 export const streakActivityTypeEnum = pgEnum("StreakActivityType", streakActivityTypes);
 export const contentItemViewTypeEnum = pgEnum("ContentItemViewType", contentItemViewsTypes);
+export const authProviderEnum = pgEnum("AuthProvider", authProviders);
+export const profilePictureSourceEnum = pgEnum("ProfilePictureSource", profilePictureSources);
 
 // TODO: Go through all queries and come up with useful indexes
 
 export const users = pgTable("User", {
   id: uuid("Id").primaryKey(),
+  authProvider: authProviderEnum("AuthProvider").notNull(),
   email: text("Email").unique().notNull(),
   displayName: text("DisplayName").notNull(),
-  firstName: text("FirstName").notNull(),
+  firstName: text("FirstName"),
   gender: genderEnum("Gender"),
-  lastName: text("LastName").notNull(),
+  lastName: text("LastName"),
   semester: smallint("Semester"),
   stripeCustomerId: text("StripeCustomerId"),
   university: text("University"),
@@ -195,12 +204,21 @@ export type UserInsert = InferInsertModel<typeof users>;
 export type User = InferSelectModel<typeof users>;
 export type UserSql = InferPgSelectModel<typeof users>;
 
+/**
+ * This table is used to store profile pictures for users.
+ * There are two types of profile pictures:
+ * 1. Internal profile pictures. These are profile pictures that were uploaded by the user to our own cloud storage.
+ * 2. External profile pictures. These are the original profile pictures from the social auth provider.
+ * Be careful because some columns like serverFilename cannot be null when the profile picture source is internal.
+ */
 export const profilePictures = pgTable("ProfilePicture", {
   id: uuid("Id").primaryKey(),
-  serverFilename: text("ServerFilename").notNull(),
-  fileExtension: imageFileExtensionEnum("FileExtension").notNull(),
-  contentType: imageFileMimeTypeEnum("ContentType").notNull(),
+  serverFilename: text("ServerFilename"),
+  url: text("Url"),
+  fileExtension: imageFileExtensionEnum("FileExtension"),
+  contentType: imageFileMimeTypeEnum("ContentType"),
   userId: uuid("UserId").references(() => users.id, { onDelete: "no action" }).notNull().unique(),
+  profilePictureSource: profilePictureSourceEnum("ProfilePictureSource").notNull(),
 });
 
 export const profilePicturesRelations = relations(profilePictures, ({ one }) => ({
@@ -677,7 +695,7 @@ export type UploadedFileToTagSql = InferPgSelectModel<typeof uploadedFilesToTags
 export const referralCodes = pgTable("ReferralCode", {
   code: text("Code").primaryKey(),
   createdAt: timestamp("CreatedAt").defaultNow().notNull(),
-  userId: uuid("UserId").references(() => users.id, { onDelete: "cascade" })
+  userId: uuid("UserId").references(() => users.id, { onDelete: "cascade" }).notNull()
 });
 
 export type ReferralCodeInsert = InferInsertModel<typeof referralCodes>;

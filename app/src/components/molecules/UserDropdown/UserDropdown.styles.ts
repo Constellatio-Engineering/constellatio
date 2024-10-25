@@ -56,3 +56,8 @@ export const target = () => css`
   border: 3px solid ${colooors["neutrals-01"][0]};
   outline: 1px solid ${colooors["neutrals-01"][3]};
 `;
+
+export const noNameSet = css`
+  font-style: italic;
+  font-size: inherit;
+`;

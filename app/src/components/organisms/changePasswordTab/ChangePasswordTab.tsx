@@ -3,6 +3,7 @@ import { AlertCard } from "@/components/atoms/Card/AlertCard";
 import { Input } from "@/components/atoms/Input/Input";
 import ErrorCard from "@/components/molecules/errorCard/ErrorCard";
 import PasswordInput from "@/components/organisms/RegistrationForm/form/PasswordInput";
+import useUserDetails from "@/hooks/useUserDetails";
 import { supabase } from "@/lib/supabase";
 import { type UpdatePasswordSchema, updatePasswordSchema, type UpdatePasswordValues } from "@/schemas/auth/updatePassword.schema";
 
@@ -17,10 +18,15 @@ import { makeZodI18nMap } from "zod-i18n-map";
 
 import * as styles from "../profileDetailsTab/ProfileDetailsTab.styles";
 
-const ChangePasswordTab: FunctionComponent = () => 
+type Props = {
+  readonly isDisabled: boolean;
+};
+
+const ChangePasswordTab: FunctionComponent<Props> = ({ isDisabled }) =>
 {
   const { t } = useTranslation();
   const user = useUser();
+  const { userDetails } = useUserDetails();
 
   const initialValues: UpdatePasswordSchema = {
     currentPassword: "",
@@ -48,6 +54,11 @@ const ChangePasswordTab: FunctionComponent = () =>
   } = useMutation({
     mutationFn: async (formValues: UpdatePasswordValues) =>
     {
+      if(userDetails?.authProvider !== "email")
+      {
+        return;
+      }
+
       // get current session so the user does not get logged out after failed password change with invalid current password
       const { data, error: getCurrentSessionError } = await supabase.auth.getSession();
 
@@ -96,6 +107,12 @@ const ChangePasswordTab: FunctionComponent = () =>
   return (
     <div css={styles.wrapper}>
       <Title css={styles.changePasswordTitle} order={3}>Passwort ändern</Title>
+      {isDisabled && (
+        <AlertCard variant="warning" shouldUseFullWidth={true} mb={30}>
+          Du kannst dein Passwort nicht ändern, da du dich mit einem externen Anbieter angemeldet hast.
+          Solltest du dein Konto auf einen Login mit E-Mail-Adresse und Passwort umstellen wollen, melde dich bitte bei unserem Support.
+        </AlertCard>
+      )}
       <ErrorCard
         error={error}
         marginBottom={0}
@@ -104,34 +121,36 @@ const ChangePasswordTab: FunctionComponent = () =>
           unknownError: "Entschuldigung, wir konnten das Passwort nicht ändern. Bitte versuche es später erneut.",
         }}
       />
-      {isSuccess && (
-        <AlertCard style={{ display: "flex", justifyContent: "flex-start" }} variant="success">
-          Dein Passwort wurde erfolgreich geändert
-        </AlertCard>
-      )}
-      <form onSubmit={handleSubmit}>
-        <Input
-          {...form.getInputProps("currentPassword")}
-          inputType="password"
-          label="Aktuelles Passwort"
-          description="Um dein Konto zu schützen, möchten wir sicher gehen, dass du es bist."
-        />
-        <PasswordInput
-          passwordInputProps={form.getInputProps("newPassword")}
-          passwordLabelOverride="Neues Passwort"
-          passwordConfirmLabelOverride="Neues Passwort erneut eingeben"
-          confirmPasswordInputProps={form.getInputProps("newPasswordConfirm")}
-          passwordToValidate={form.values.newPassword}
-        />
-        <Button<"button">
-          type="submit"
-          loading={isLoading}
-          styleType="primary"
-          disabled={!form.isDirty() || isLoading}
-          size="large">
-          Passwort ändern
-        </Button>
-      </form>
+      <div css={isDisabled && styles.contentDisabled}>
+        {isSuccess && (
+          <AlertCard style={{ display: "flex", justifyContent: "flex-start" }} variant="success">
+            Dein Passwort wurde erfolgreich geändert
+          </AlertCard>
+        )}
+        <form onSubmit={handleSubmit}>
+          <Input
+            {...form.getInputProps("currentPassword")}
+            inputType="password"
+            label="Aktuelles Passwort"
+            description="Um dein Konto zu schützen, möchten wir sicher gehen, dass du es bist."
+          />
+          <PasswordInput
+            passwordInputProps={form.getInputProps("newPassword")}
+            passwordLabelOverride="Neues Passwort"
+            passwordConfirmLabelOverride="Neues Passwort erneut eingeben"
+            confirmPassword={form.getInputProps("newPasswordConfirm")}
+            passwordToValidate={form.values.newPassword}
+          />
+          <Button<"button">
+            type="submit"
+            loading={isLoading}
+            styleType="primary"
+            disabled={!form.isDirty() || isLoading}
+            size="large">
+            Passwort ändern
+          </Button>
+        </form>
+      </div>
     </div>
   );
 };

@@ -6,7 +6,7 @@ import React, { type FunctionComponent } from "react";
 import PasswordStrengthBar from "react-password-strength-bar";
 
 type Props = {
-  readonly confirmPasswordInputProps: TextInputProps;
+  readonly confirmPassword: TextInputProps | false;
   readonly passwordConfirmLabelOverride?: string;
   readonly passwordInputProps: TextInputProps;
   readonly passwordLabelOverride?: string;
@@ -14,11 +14,11 @@ type Props = {
 };
 
 const PasswordInput: FunctionComponent<Props> = ({
-  confirmPasswordInputProps,
+  confirmPassword,
   passwordConfirmLabelOverride,
   passwordInputProps,
   passwordLabelOverride,
-  passwordToValidate
+  passwordToValidate,
 }) =>
 {
   return (
@@ -42,14 +42,16 @@ const PasswordInput: FunctionComponent<Props> = ({
           isPasswordRevealed={isPasswordRevealed}
         />*/}
       </Box>
-      <Input
-        {...confirmPasswordInputProps}
-        inputType="password"
-        mt={-8}
-        label={passwordConfirmLabelOverride ?? "Passwort bestätigen*"}
-        placeholder={"*".repeat(16)}
-        title="Passwort bestätigen"
-      />
+      {confirmPassword && (
+        <Input
+          {...confirmPassword}
+          inputType="password"
+          mt={-8}
+          label={passwordConfirmLabelOverride ?? "Passwort bestätigen*"}
+          placeholder={"*".repeat(16)}
+          title="Passwort bestätigen"
+        />
+      )}
     </>
   );
 };

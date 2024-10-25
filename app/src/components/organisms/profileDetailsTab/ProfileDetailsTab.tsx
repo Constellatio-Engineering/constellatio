@@ -1,5 +1,6 @@
 import DisplayNameInput from "@/components/organisms/RegistrationForm/form/DisplayNameInput";
 import FirstNameInput from "@/components/organisms/RegistrationForm/form/FirstNameInput";
+import GenderDropdown from "@/components/organisms/RegistrationForm/form/GenderDropdown";
 import LastNameInput from "@/components/organisms/RegistrationForm/form/LastNameInput";
 import SemesterDropdown from "@/components/organisms/RegistrationForm/form/SemesterDropdown";
 import UniversityDropdown from "@/components/organisms/RegistrationForm/form/UniversityDropdown";
@@ -32,9 +33,10 @@ const ProfileDetailsTab: FunctionComponent<Props> = ({ userDetails }) =>
   const form = useForm<UpdateUserDetailsSchema>({
     initialValues: {
       displayName: userDetails.displayName,
-      firstName: userDetails.firstName,
-      lastName: userDetails.lastName,
-      semester: String(userDetails.semester),
+      firstName: userDetails.firstName ?? "",
+      gender: userDetails.gender,
+      lastName: userDetails.lastName ?? "",
+      semester: userDetails.semester ? String(userDetails.semester) : null,
       university: userDetails.university as University || null,
     },
     validate: zodResolver(updateUserDetailsSchema),
@@ -73,6 +75,8 @@ const ProfileDetailsTab: FunctionComponent<Props> = ({ userDetails }) =>
 
   const onSubmit = form.onSubmit(formValues => updateUserDetails(formValues));
 
+  console.log(form.values.lastName, typeof form.values.lastName);
+
   return (
     <div css={styles.wrapper}>
       <Title css={styles.profileDetailsTabTitle} order={3}>Persönliche Daten</Title>
@@ -86,11 +90,12 @@ const ProfileDetailsTab: FunctionComponent<Props> = ({ userDetails }) =>
         </AlertCard>
       )}*/}
       <form onSubmit={onSubmit}>
+        <DisplayNameInput {...form.getInputProps("displayName")}/>
         <FirstNameInput {...form.getInputProps("firstName")}/>
         <LastNameInput {...form.getInputProps("lastName")}/>
-        <DisplayNameInput {...form.getInputProps("displayName")}/>
         <UniversityDropdown {...form.getInputProps("university")}/>
         <SemesterDropdown {...form.getInputProps("semester")}/>
+        <GenderDropdown {...form.getInputProps("gender")}/>
         <Button<"button">
           size="large"
           type="submit"

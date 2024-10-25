@@ -23,7 +23,7 @@ const HeaderDefaultRecreateSearch: FunctionComponent = () =>
       onClick={() => recreateSearchIndices()}
       icon={null}>
       <div style={{ alignItems: "center", display: "flex" }}>
-        Recreate Search Indices
+        Recreate Search Indexes
         {isRecreatingSearchIndices && <Loader size={22} ml={6}/>}
       </div>
     </Menu.Item>
