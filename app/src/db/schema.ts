@@ -695,7 +695,7 @@ export type UploadedFileToTagSql = InferPgSelectModel<typeof uploadedFilesToTags
 export const referralCodes = pgTable("ReferralCode", {
   code: text("Code").primaryKey(),
   createdAt: timestamp("CreatedAt").defaultNow().notNull(),
-  userId: uuid("UserId").references(() => users.id, { onDelete: "cascade" })
+  userId: uuid("UserId").references(() => users.id, { onDelete: "cascade" }).notNull()
 });
 
 export type ReferralCodeInsert = InferInsertModel<typeof referralCodes>;

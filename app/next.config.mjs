@@ -38,6 +38,11 @@ const config = {
         hostname: "lh3.googleusercontent.com",
         port: '',
       },
+      {
+        protocol: "https",
+        hostname: "media.licdn.com",
+        port: '',
+      },
     ],
   },
   reactStrictMode: true,
