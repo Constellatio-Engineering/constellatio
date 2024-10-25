@@ -10,7 +10,7 @@ import { cardStyles } from "./AlertCard.styles";
 export type AlertCardProps = AlertProps & {
   readonly shouldUseFullWidth?: boolean;
   readonly stylesOverwrite?: CSSObject;
-  readonly variant: "error" | "success";
+  readonly variant: "error" | "success" | "warning";
 };
 
 export const AlertCard: FC<AlertCardProps> = ({

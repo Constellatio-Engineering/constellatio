@@ -26,6 +26,7 @@ export interface ErrorCardsProps
   readonly overwriteErrorMessages?: OverwriteErrorMessages;
   readonly renderAdditionalContent?: RenderAdditionalContent;
   readonly shouldUseFullWidth?: boolean;
+  readonly variant?: "error" | "warning";
 }
 
 const ErrorCard: FunctionComponent<ErrorCardsProps> = ({
@@ -33,7 +34,8 @@ const ErrorCard: FunctionComponent<ErrorCardsProps> = ({
   marginBottom = 20,
   overwriteErrorMessages,
   renderAdditionalContent,
-  shouldUseFullWidth
+  shouldUseFullWidth,
+  variant = "error"
 }) =>
 {
   const renderedError: HandledError | null = useMemo(() =>

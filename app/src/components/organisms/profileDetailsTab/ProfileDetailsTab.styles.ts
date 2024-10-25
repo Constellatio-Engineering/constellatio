@@ -51,8 +51,14 @@ export const wrapper = () => css`
   @media screen and (max-width: 1100px) {
     margin: 0 auto;
   }
-
 `;
+
+export const contentDisabled = css`
+  user-select: none;
+  pointer-events: none;
+  opacity: 0.4;
+`;
+
 export const profileDetailsTabTitle = css`
   display: block;
   @media screen and (max-width: 1100px) {

@@ -150,8 +150,8 @@ export const AuthPage: FC<AuthPageProps> = (props) =>
         </Container>
         <div css={styles.footerWrapper}>
           <Link href="https://www.constellatio.de/agb" target="_blank">AGB</Link>
-          <Link href="https://www.constellatio.de/agb" target="_blank">Datenschutzerklärung</Link>
-          <Link href="https://www.constellatio.de/agb" target="_blank">Impressum</Link>
+          <Link href="https://www.constellatio.de/datenschutzerklaerung" target="_blank">Datenschutzerklärung</Link>
+          <Link href="https://www.constellatio.de/impressum" target="_blank">Impressum</Link>
         </div>
       </Container>
     </Flex>
