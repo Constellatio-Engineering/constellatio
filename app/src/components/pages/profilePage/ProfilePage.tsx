@@ -64,9 +64,9 @@ const ProfilePageContent: FunctionComponent = () =>
       case "profile-details":
         return <ProfileDetailsTab userDetails={userDetails}/>;
       case "change-password":
-        return <ChangePasswordTab/>;
+        return <ChangePasswordTab isDisabled={userDetails.authProvider !== "email"}/>;
       case changeEmailTabSlug:
-        return <ChangeEmailTab userDetails={userDetails}/>;
+        return <ChangeEmailTab userDetails={userDetails} isDisabled={userDetails.authProvider !== "email"}/>;
       case historyTabSlug:
         return <ProfileHistoryTab/>;
       case subscriptionTabSlug:

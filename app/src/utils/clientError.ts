@@ -1,4 +1,10 @@
-type ClientErrorIdentifiers = "email-already-taken" | "internal-server-error" | "unauthorized" | "too-many-requests";
+type ClientErrorIdentifiers =
+  "not-found" |
+  "email-already-taken" |
+  "internal-server-error" |
+  "unauthorized" |
+  "self-deletion-request-forbidden" |
+  "too-many-requests";
 
 interface ClientErrorShape
 {
@@ -18,6 +24,14 @@ export const clientErrors: ClientErrors = {
   "internal-server-error": {
     details: { message: "Es ist etwas schief gelaufen" },
     identifier: "internal-server-error"
+  },
+  "not-found": {
+    details: { message: "Diese Ressource wurde nicht gefunden" },
+    identifier: "not-found"
+  },
+  "self-deletion-request-forbidden": {
+    details: { message: "Du kannst dich nicht selbst löschen" },
+    identifier: "self-deletion-request-forbidden"
   },
   "too-many-requests": {
     details: { message: "Zu viele Anfragen" },

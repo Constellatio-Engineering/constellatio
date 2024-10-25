@@ -69,6 +69,7 @@ export const usersRouter = createTRPCRouter({
         contentType: file.contentType,
         fileExtension: file.fileExtensionLowercase,
         id: file.id,
+        profilePictureSource: "internal",
         serverFilename: file.serverFilename,
         userId,
       };
@@ -78,6 +79,7 @@ export const usersRouter = createTRPCRouter({
           contentType: profilePictureInsert.contentType,
           fileExtension: profilePictureInsert.fileExtension,
           id: profilePictureInsert.id,
+          profilePictureSource: "internal",
           serverFilename: profilePictureInsert.serverFilename,
         },
         target: profilePictures.userId,

@@ -23,10 +23,11 @@ import * as styles from "./ChangeEmailTab.styles";
 import * as parentStyles from "../profileDetailsTab/ProfileDetailsTab.styles";
 
 type Props = {
+  readonly isDisabled: boolean;
   readonly userDetails: UserFiltered;
 };
 
-const ChangeEmailTab: FunctionComponent<Props> = ({ userDetails }) =>
+const ChangeEmailTab: FunctionComponent<Props> = ({ isDisabled, userDetails }) =>
 {
   const router = useRouter();
   const wasEmailChangedSuccessfully = router.query[queryParams.emailChangeSuccess] === "true";
@@ -55,6 +56,11 @@ const ChangeEmailTab: FunctionComponent<Props> = ({ userDetails }) =>
   } = useMutation({
     mutationFn: async (formValues: UpdateEmailSchema) =>
     {
+      if(userDetails.authProvider !== "email")
+      {
+        return;
+      }
+
       const changeEmailResult = await supabase.auth.updateUser({ email: formValues.newEmail }, {
         emailRedirectTo: getConfirmEmailChange(),
       });
@@ -79,42 +85,50 @@ const ChangeEmailTab: FunctionComponent<Props> = ({ userDetails }) =>
     <>
       <div css={parentStyles.wrapper}>
         <Title css={styles.changeEmailTabTitle} order={3}>E-Mail Adresse ändern</Title>
-        {wasEmailChangedSuccessfully && (
-          <AlertCard mb={30} variant="success">Deine E-Mail Adresse wurde erfolgreich geändert</AlertCard>
-        )}
-        <BodyText pb={30} style={{ borderBottom: "1px solid #e3e3e3" }} styleType="body-01-regular">Deine aktuelle E-Mail Adresse ist <strong>{userDetails?.email}</strong></BodyText>
-        {isSuccess && (
-          <AlertCard style={{ display: "flex", justifyContent: "flex-start", marginBlock: 30 }} variant="success">
-            Wir haben dir sowohl an deine neue, als auch an deine alte E-Mail Adresse eine Bestätigungsmail gesendet.
-            Bitte <strong>bestätige beide E-Mails</strong>, um deine E-Mail Adresse zu ändern.
+        {isDisabled && (
+          <AlertCard variant="warning" shouldUseFullWidth={true} mb={30}>
+            Du kannst deine E-Mail Adresse nicht ändern, da du dich mit einem externen Anbieter angemeldet hast.
+            Solltest du dein Konto auf einen Login mit E-Mail-Adresse und Passwort umstellen wollen, melde dich bitte bei unserem Support.
           </AlertCard>
         )}
-        <ErrorCard
-          error={error}
-          marginBottom={10}
-          overwriteErrorMessages={{
-            unknownError: "Beim Ändern der E-Mail Adresse ist ein Fehler aufgetreten. Bitte versuche es später erneut.",
-          }}
-        />
-        {!isSuccess && (
-          <form onSubmit={handleSubmit}>
-            <Input
-              {...form.getInputProps("newEmail")}
-              inputType="text"
-              label="Neue E-Mail Adresse"
-              title="Neue E-Mail Adresse"
-              placeholder="max.mustermann@email.de"
-            />
-            <Button<"button">
-              type="submit"
-              loading={isLoading}
-              styleType="primary"
-              disabled={!form.isDirty() || isLoading}
-              size="large">
-              Bestätigungslink senden
-            </Button>
-          </form>
-        )}
+        <div css={isDisabled && parentStyles.contentDisabled}>
+          {wasEmailChangedSuccessfully && (
+            <AlertCard mb={30} variant="success">Deine E-Mail Adresse wurde erfolgreich geändert</AlertCard>
+          )}
+          <BodyText pb={30} style={{ borderBottom: "1px solid #e3e3e3" }} styleType="body-01-regular">Deine aktuelle E-Mail Adresse ist <strong>{userDetails?.email}</strong></BodyText>
+          {isSuccess && (
+            <AlertCard style={{ display: "flex", justifyContent: "flex-start", marginBlock: 30 }} variant="success">
+              Wir haben dir sowohl an deine neue, als auch an deine alte E-Mail Adresse eine Bestätigungsmail gesendet.
+              Bitte <strong>bestätige beide E-Mails</strong>, um deine E-Mail Adresse zu ändern.
+            </AlertCard>
+          )}
+          <ErrorCard
+            error={error}
+            marginBottom={10}
+            overwriteErrorMessages={{
+              unknownError: "Beim Ändern der E-Mail Adresse ist ein Fehler aufgetreten. Bitte versuche es später erneut.",
+            }}
+          />
+          {!isSuccess && (
+            <form onSubmit={handleSubmit}>
+              <Input
+                {...form.getInputProps("newEmail")}
+                inputType="text"
+                label="Neue E-Mail Adresse"
+                title="Neue E-Mail Adresse"
+                placeholder="max.mustermann@email.de"
+              />
+              <Button<"button">
+                type="submit"
+                loading={isLoading}
+                styleType="primary"
+                disabled={!form.isDirty() || isLoading}
+                size="large">
+                Bestätigungslink senden
+              </Button>
+            </form>
+          )}
+        </div>
       </div>
       <Modal
         opened={isConfirmationModalOpen}

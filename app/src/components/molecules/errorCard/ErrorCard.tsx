@@ -33,7 +33,7 @@ const ErrorCard: FunctionComponent<ErrorCardsProps> = ({
   marginBottom = 20,
   overwriteErrorMessages,
   renderAdditionalContent,
-  shouldUseFullWidth
+  shouldUseFullWidth,
 }) =>
 {
   const renderedError: HandledError | null = useMemo(() =>

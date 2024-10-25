@@ -7,7 +7,7 @@ import { isDevelopment } from "@/utils/env";
 import { appPaths } from "@/utils/paths";
 
 import { Menu, Title } from "@mantine/core";
-import { IconLogout, IconUser } from "@tabler/icons-react";
+import { IconLogout, IconUser, IconAlertTriangleFilled } from "@tabler/icons-react";
 import Link from "next/link";
 import React, { type FunctionComponent } from "react";
 
@@ -34,6 +34,7 @@ export const UserDropdown: FunctionComponent = () =>
 
   const rolesJoined = roles.length > 0 && roles.map(r => r.name).join(", ");
   const name = [firstName, lastName].filter(Boolean).join(" ");
+  const isAdmin = roles.some(r => r.identifier === "admin");
 
   return (
     <Menu
@@ -72,6 +73,15 @@ export const UserDropdown: FunctionComponent = () =>
         </Menu.Item>
         {isDevelopment && (
           <HeaderDefaultRecreateSearch/>
+        )}
+        {isAdmin && (
+          <Menu.Item
+            sx={{ fontSize: 15 }}
+            component={Link}
+            href={appPaths.admin}
+            icon={<IconAlertTriangleFilled size="1rem" stroke={1.5}/>}>
+            Admin Panel
+          </Menu.Item>
         )}
         <Menu.Item
           sx={{ fontSize: 15 }}

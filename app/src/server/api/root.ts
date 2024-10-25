@@ -1,3 +1,4 @@
+import { adminRouter } from "@/server/api/routers/admin.router";
 import { authenticationRouter } from "@/server/api/routers/authentication.router";
 import { badgesRouter } from "@/server/api/routers/badges.router";
 import { billingRouter } from "@/server/api/routers/billing.router";
@@ -26,6 +27,7 @@ import { streakRouter } from "./routers/streak.router";
  * All routers added in /api/routers should be manually added here.
  */
 export const appRouter = createTRPCRouter({
+  admin: adminRouter,
   authentication: authenticationRouter,
   badges: badgesRouter,
   billing: billingRouter,

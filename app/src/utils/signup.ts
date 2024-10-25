@@ -1,5 +1,7 @@
 import { db } from "@/db/connection";
-import { referrals, type UserInsert, users, usersToBadges } from "@/db/schema";
+import {
+  profilePictures, referrals, type UserInsert, users, usersToBadges 
+} from "@/db/schema";
 import { env } from "@/env.mjs";
 import { addUserToCrmUpdateQueue } from "@/lib/clickup/utils";
 import { stripe } from "@/lib/stripe/stripe";
@@ -7,7 +9,7 @@ import { addBadgeForUser } from "@/server/api/services/badges.services";
 import { InternalServerError } from "@/utils/serverError";
 import { getDataFromStripeSubscription } from "@/utils/stripe";
 import { type Nullable } from "@/utils/types";
-import { printAllSettledPromisesSummary } from "@/utils/utils";
+import { getRandomUuid, printAllSettledPromisesSummary } from "@/utils/utils";
 
 import { type SupabaseClient } from "@supabase/auth-helpers-nextjs";
 import { count, eq } from "drizzle-orm";
@@ -30,6 +32,7 @@ export type FinishSignUpProps = {
   supabaseServerClient: SupabaseClient;
   user: Omit<UserInsert, "subscriptionStatus" | "stripeCustomerId" | "stripeSubscriptionId" | "displayName"> & {
     displayName: Nullable<UserInsert["displayName"]>;
+    socialAuthProfilePictureUrl: Nullable<string>;
   };
 };
 
@@ -87,6 +90,21 @@ export const finishSignup = async ({ referralCode, supabaseServerClient, user }:
     };
 
     await db.insert(users).values(userToInsert);
+
+    if(user.socialAuthProfilePictureUrl)
+    {
+      await db
+        .insert(profilePictures)
+        .values({
+          contentType: null,
+          fileExtension: null,
+          id: getRandomUuid(),
+          profilePictureSource: "external",
+          url: user.socialAuthProfilePictureUrl,
+          userId
+        })
+        .onConflictDoNothing();
+    }
 
     const usersCount = (await db.select({ count: count(users.id) }).from(users))?.[0]?.count;
 

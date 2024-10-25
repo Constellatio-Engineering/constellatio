@@ -11,8 +11,8 @@ type FindClickupTaskResponse = GetClickupTaskResponse["tasks"];
 // https://clickup.com/api/clickupreference/operation/GetTasks/
 // https://clickup.com/api/developer-portal/filtertasks/
 export const findClickupTask = async (listId: string, params: ClickUpFindTaskParams): Promise<FindClickupTaskResponse> =>
-{  
-  const paramStrings = Object.keys(params).map((key) => 
+{
+  const paramStrings = Object.keys(params).map((key) =>
   {
     const typedKey = key as keyof ClickUpFindTaskParams;
 
@@ -25,15 +25,15 @@ export const findClickupTask = async (listId: string, params: ClickUpFindTaskPar
       const localParams: string[] = [];
       for(const value of values as string[]) 
       {
-        localParams.push(`${key}[]=${value}`);
+        localParams.push(`${key}[]=${encodeURIComponent(value)}`);
       }
       return localParams.join("&");
     }
     else if("custom_fields" === key)
     {
-      return `${key}=${JSON.stringify(params[key])}`;
+      return `${key}=${encodeURIComponent(JSON.stringify(params[key]))}`;
     }
-    return `${key}=${values.toString()}`;
+    return `${key}=${encodeURIComponent(values.toString())}`;
   });
 
   let finalParams = "";

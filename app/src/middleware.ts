@@ -1,6 +1,6 @@
 /* eslint-disable import/no-unused-modules */
 import * as schema from "@/db/schema";
-import { users } from "@/db/schema";
+import { users, usersToRoles } from "@/db/schema";
 import { env } from "@/env.mjs";
 import { getIsUserLoggedInServer } from "@/utils/auth";
 import { appPaths, authPaths } from "@/utils/paths";
@@ -53,6 +53,32 @@ export const middleware: NextMiddleware = async (req, ctx) =>
     await supabase.auth.signOut();
     redirectUrl.pathname = authPaths.login;
     return NextResponse.redirect(redirectUrl);
+  }
+
+  if(req.nextUrl.pathname.startsWith(appPaths.admin))
+  {
+    const pool = new Pool({ connectionString: env.DATABASE_URL_SERVERLESS });
+    const db = drizzleServerless(pool, { schema });
+
+    const userRoles = await db.query.usersToRoles.findMany({
+      columns: { },
+      where: eq(usersToRoles.userId, getIsUserLoggedInResult.user.id), 
+      with: { role: true }
+    });
+
+    ctx.waitUntil(pool.end());
+
+    const isAdmin = userRoles.some(userRole => userRole.role.identifier === "admin");
+
+    if(!isAdmin)
+    {
+      redirectUrl.pathname = "/404";
+      return NextResponse.rewrite(redirectUrl);
+    }
+    else
+    {
+      return NextResponse.next();
+    }
   }
 
   const hasSubscription = getHasSubscription(user.subscriptionStatus);

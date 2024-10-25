@@ -4,6 +4,9 @@ export const responsiveBreakpoint = 960;
 
 export const wrapper = css`
   border-radius: 30px 0 0 30px;
+  min-height: 100svh;
+  display: flex;
+  flex-direction: column;
   @media screen and (max-width: ${responsiveBreakpoint}px) {
     border-radius: 0;
   }
@@ -42,5 +45,25 @@ export const separatorWrapper = css`
     text-align: center;
     color: #8d8d8d;
     font-weight: 500;
+  }
+`;
+
+export const footerWrapper = css`
+  width: 100%;
+  display: flex;
+  padding: 16px 0 26px;
+  justify-content: center;
+  align-items: center;
+  gap: 12px;
+
+  a {
+    font-size: 14px;
+    color: #949494;
+    font-weight: 500;
+    transition: color 0.1s ease;
+
+    :hover {
+      color: #5e5e5e;
+    }
   }
 `;

@@ -15,7 +15,9 @@ import { type Nullable } from "@/utils/types";
 
 import { Container, Flex, Tabs } from "@mantine/core";
 import { useMediaQuery } from "@mantine/hooks";
+import { sendGTMEvent } from "@next/third-parties/google";
 import { type Provider } from "@supabase/auth-js";
+import Link from "next/link";
 import { useRouter } from "next/router";
 import { useTranslation } from "next-i18next";
 import { type FC, useEffect } from "react";
@@ -68,6 +70,11 @@ export const AuthPage: FC<AuthPageProps> = (props) =>
       return;
     }
 
+    sendGTMEvent({
+      event: "sign_up",
+      method: provider
+    });
+
     await router.push(data.url);
   };
 
@@ -81,7 +88,7 @@ export const AuthPage: FC<AuthPageProps> = (props) =>
       justify="space-between"
       bg="brand-01.5"
       sx={{
-        height: "100vh", minHeight: 600, overflow: "hidden", padding: 0 
+        height: "100svh", minHeight: 600, overflow: "hidden", padding: 0
       }}>
       <RegistrationVisualHeader/>
       <Container
@@ -98,8 +105,11 @@ export const AuthPage: FC<AuthPageProps> = (props) =>
         <Container
           w={isPhoneScreen ? 300 : 440}
           pt={50}
-          pb={tab === "register" ? "spacing-100" : 0}
-          sx={{ marginTop: "40px" }}>
+          pb={60}
+          sx={{
+            flex: "1 0 auto",
+            marginTop: "40px",
+          }}>
           <div css={styles.socialButtonsWrapper}>
             {socialAuthError && (
               <ErrorCard error={socialAuthError}/>
@@ -137,6 +147,11 @@ export const AuthPage: FC<AuthPageProps> = (props) =>
             </Tabs.Panel>
           </Switcher>
         </Container>
+        <div css={styles.footerWrapper}>
+          <Link href="https://www.constellatio.de/agb" target="_blank">AGB</Link>
+          <Link href="https://www.constellatio.de/datenschutzerklaerung" target="_blank">Datenschutzerklärung</Link>
+          <Link href="https://www.constellatio.de/impressum" target="_blank">Impressum</Link>
+        </div>
       </Container>
     </Flex>
   );
