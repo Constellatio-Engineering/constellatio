@@ -288,6 +288,20 @@
       "when": 1729640914899,
       "tag": "0048_regular_sasquatch",
       "breakpoints": true
+    },
+    {
+      "idx": 49,
+      "version": "7",
+      "when": 1729891149480,
+      "tag": "0049_fancy_wolverine",
+      "breakpoints": true
+    },
+    {
+      "idx": 50,
+      "version": "7",
+      "when": 1729891150330,
+      "tag": "0050_tense_falcon",
+      "breakpoints": true
     }
   ]
 }
