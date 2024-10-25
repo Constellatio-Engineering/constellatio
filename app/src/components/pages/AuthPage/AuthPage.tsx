@@ -1,4 +1,3 @@
-import { CustomLink } from "@/components/atoms/CustomLink/CustomLink";
 import { SwitcherTab } from "@/components/atoms/Switcher-tab/SwitcherTab";
 import GoogleIcon from "@/components/Icons/Google_G_logo.svg";
 import LinkedInIcon from "@/components/Icons/LinkedIn_icon.svg";

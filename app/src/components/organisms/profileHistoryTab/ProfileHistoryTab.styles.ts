@@ -6,16 +6,13 @@ export const titleWrapper = css`
   display: flex;
   align-items: center;
   justify-content: space-between;
-`;
-
-export const tabHeader = css`
   margin-top: 24px;
-  flex: 1;
   margin-bottom: 32px;
   @media screen and (max-width: 1100px) {
-      display:none;
+    display:none;
   }
 `;
+
 export const refreshButton = css`
   min-width: max-content;
   margin-left: 30px;

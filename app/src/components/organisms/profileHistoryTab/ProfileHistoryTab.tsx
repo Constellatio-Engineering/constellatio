@@ -1,3 +1,4 @@
+/* eslint-disable max-lines */
 import { BodyText } from "@/components/atoms/BodyText/BodyText";
 import { Button } from "@/components/atoms/Button/Button";
 import Label, { type ILabelProps } from "@/components/atoms/label/Label";
@@ -62,7 +63,6 @@ const ProfileHistoryTab: FunctionComponent = () =>
     hasNextPage,
     isFetching,
     isFetchingNextPage,
-    isLoading,
     isPending,
     isRefetching,
     refetch,
@@ -78,16 +78,6 @@ const ProfileHistoryTab: FunctionComponent = () =>
     retry: false,
     staleTime: Infinity
   });
-
-  useEffect(() =>
-  {
-    console.log({
-      isFetching,
-      isLoading,
-      isPending,
-      isRefetching,
-    });
-  }, [isFetching, isLoading, isPending, isRefetching]);
 
   const allItems = useMemo(() =>
   {
@@ -108,7 +98,7 @@ const ProfileHistoryTab: FunctionComponent = () =>
   return (
     <div style={{ overflow: "hidden", width: "100%" }}>
       <div css={styles.titleWrapper}>
-        <Title order={3} css={styles.tabHeader}>Verlauf</Title>
+        <Title order={3}>Verlauf</Title>
         <Button<"button">
           styleType={"tertiary"}
           onClick={async () => refetch()}
