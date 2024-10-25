@@ -16,7 +16,7 @@ import * as styles from "./AdminPage.styles";
 export const AdminPage: FunctionComponent = () =>
 {
   const form = useForm<DeleteUserSchema>({
-    initialValues: { userIdOrEmail: "christian@dualmeta.io" },
+    initialValues: { userIdOrEmail: "" },
     validate: zodResolver(deleteUserSchema),
     validateInputOnBlur: true,
   });
@@ -100,7 +100,7 @@ export const AdminPage: FunctionComponent = () =>
             inputType="text"
             placeholder={"user@constellatio.de"}
             label="E-Mail oder User ID"
-            description="Die E-Mail Adresse oder ID des Users, das gelöscht werden soll."
+            description="Die E-Mail Adresse oder ID des Users, der gelöscht werden soll."
           />
           <Button<"button">
             styleType={"primary"}
