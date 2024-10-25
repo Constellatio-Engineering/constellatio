@@ -50,6 +50,7 @@ export const authenticationRouter = createTRPCRouter({
           ...input,
           authProvider: "email",
           id: userData.id,
+          socialAuthProfilePictureUrl: null,
         }
       });
 

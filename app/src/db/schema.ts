@@ -146,6 +146,9 @@ export const notificationTypesIdentifiers = [
   "forumAnswerAccepted",
 ] as const;
 
+export const profilePictureSources = ["internal", "external"] as const;
+export type ProfilePictureSource = typeof profilePictureSources[number];
+
 export const genderEnum = pgEnum("Gender", allGenderIdentifiers);
 export const onboardingResultEnum = pgEnum("OnboardingResult", allOnboardingResults);
 export const resourceTypeEnum = pgEnum("ResourceType", allBookmarkResourceTypes);
@@ -168,6 +171,7 @@ export const notificationTypeIdentifierEnum = pgEnum("NotificationType", notific
 export const streakActivityTypeEnum = pgEnum("StreakActivityType", streakActivityTypes);
 export const contentItemViewTypeEnum = pgEnum("ContentItemViewType", contentItemViewsTypes);
 export const authProviderEnum = pgEnum("AuthProvider", authProviders);
+export const profilePictureSourceEnum = pgEnum("ProfilePictureSource", profilePictureSources);
 
 // TODO: Go through all queries and come up with useful indexes
 
@@ -200,12 +204,21 @@ export type UserInsert = InferInsertModel<typeof users>;
 export type User = InferSelectModel<typeof users>;
 export type UserSql = InferPgSelectModel<typeof users>;
 
+/**
+ * This table is used to store profile pictures for users.
+ * There are two types of profile pictures:
+ * 1. Internal profile pictures. These are profile pictures that were uploaded by the user to our own cloud storage.
+ * 2. External profile pictures. These are the original profile pictures from the social auth provider.
+ * Be careful because some columns like serverFilename cannot be null when the profile picture source is internal.
+ */
 export const profilePictures = pgTable("ProfilePicture", {
   id: uuid("Id").primaryKey(),
-  serverFilename: text("ServerFilename").notNull(),
-  fileExtension: imageFileExtensionEnum("FileExtension").notNull(),
-  contentType: imageFileMimeTypeEnum("ContentType").notNull(),
+  serverFilename: text("ServerFilename"),
+  url: text("Url"),
+  fileExtension: imageFileExtensionEnum("FileExtension"),
+  contentType: imageFileMimeTypeEnum("ContentType"),
   userId: uuid("UserId").references(() => users.id, { onDelete: "no action" }).notNull().unique(),
+  profilePictureSource: profilePictureSourceEnum("ProfilePictureSource").notNull(),
 });
 
 export const profilePicturesRelations = relations(profilePictures, ({ one }) => ({

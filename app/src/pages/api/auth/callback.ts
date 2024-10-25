@@ -76,7 +76,6 @@ const handler: NextApiHandler = async (req, res) =>
 {
   console.log("----- Auth callback received -----");
 
-  console.log("req.query", req.query);
   const { code } = req.query;
 
   if(!code)
@@ -121,7 +120,7 @@ const handler: NextApiHandler = async (req, res) =>
       provider: providerData.app_metadata.provider
     });
 
-    let userNameData: Pick<FinishSignUpProps["user"], "displayName" | "firstName" | "lastName">;
+    let additionalUserData: Pick<FinishSignUpProps["user"], "displayName" | "firstName" | "lastName" | "socialAuthProfilePictureUrl">;
 
     switch (parsedCallbackData.provider)
     {
@@ -129,19 +128,21 @@ const handler: NextApiHandler = async (req, res) =>
       {
         const { firstName, lastName } = splitFullName(parsedCallbackData.user_metadata.full_name);
 
-        userNameData = {
+        additionalUserData = {
           displayName: parsedCallbackData.user_metadata.name || parsedCallbackData.email.split("@")[0] || null,
           firstName,
           lastName,
+          socialAuthProfilePictureUrl: parsedCallbackData.user_metadata.avatar_url || parsedCallbackData.user_metadata.picture
         };
         break;
       }
       case "linkedin_oidc":
       {
-        userNameData = {
+        additionalUserData = {
           displayName: `${parsedCallbackData.user_metadata.given_name} ${parsedCallbackData.user_metadata.family_name}`,
           firstName: parsedCallbackData.user_metadata.given_name,
           lastName: parsedCallbackData.user_metadata.family_name,
+          socialAuthProfilePictureUrl: parsedCallbackData.user_metadata.picture
         };
         break;
       }
@@ -150,7 +151,7 @@ const handler: NextApiHandler = async (req, res) =>
     await finishSignup({
       supabaseServerClient: supabase,
       user: {
-        ...userNameData,
+        ...additionalUserData,
         authProvider: parsedCallbackData.provider,
         email: parsedCallbackData.email,
         id: parsedCallbackData.id,
