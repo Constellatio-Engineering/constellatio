@@ -11,7 +11,9 @@ import { db } from "@/db/connection";
 import { users } from "@/db/schema";
 import { env } from "@/env.mjs";
 import { type ClientError, clientErrors } from "@/utils/clientError";
-import { EmailAlreadyTakenError, RateLimitError, UnauthorizedError } from "@/utils/serverError";
+import {
+  EmailAlreadyTakenError, NotFoundError, RateLimitError, SelfDeletionRequestError, UnauthorizedError 
+} from "@/utils/serverError";
 import { sleep } from "@/utils/utils";
 
 import { createPagesServerClient, type SupabaseClient, type User } from "@supabase/auth-helpers-nextjs";
@@ -107,6 +109,8 @@ const t = initTRPC
     {
       let errorData: ClientError;
 
+      console.log("errorFormatter", error, shape);
+
       if(error instanceof EmailAlreadyTakenError)
       {
         errorData = clientErrors["email-already-taken"];
@@ -119,11 +123,21 @@ const t = initTRPC
       {
         errorData = clientErrors["too-many-requests"];
       }
+      else if(error instanceof SelfDeletionRequestError)
+      {
+        errorData = clientErrors["self-deletion-request-forbidden"];
+      }
+      else if(error instanceof NotFoundError)
+      {
+        errorData = clientErrors["not-found"];
+      }
       else
       {
         console.warn("Unhandled Server Error. Please check tRPC error formatter in your 'trpc.ts' file. Error was:", error, shape);
         errorData = clientErrors["internal-server-error"];
       }
+
+      console.log("errorData", errorData);
 
       return {
         ...shape, // TODO Dont return shape, at least not for internal server errors
@@ -192,6 +206,37 @@ const enforceUserIsAuthenticated = t.middleware(async ({ ctx, next }) =>
 });
 
 export const protectedProcedure = t.procedure.use(enforceUserIsAuthenticated);
+
+export const adminProcedure = protectedProcedure.use(async ({ ctx, next, path }) =>
+{
+  const userData = await db.query.users.findFirst({
+    columns: {},
+    where: eq(users.id, ctx.userId),
+    with: {
+      usersToRoles: {
+        columns: {},
+        with: {
+          role: true,
+        }
+      }
+    }
+  });
+
+  const isAdmin = userData?.usersToRoles.some(({ role }) => role.identifier === "admin");
+
+  if(!isAdmin)
+  {
+    console.warn(`User '${ctx.userId}' tried to access admin-only procedure '${path}' without being an admin.`);
+    throw new UnauthorizedError();
+  }
+
+  return next({
+    ctx: {
+      adminUserId: ctx.session.user.id,
+      session: ctx.session
+    },
+  });
+});
 
 export const forumModProcedure = protectedProcedure.use(async ({ ctx, next, path }) =>
 {

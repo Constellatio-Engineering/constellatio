@@ -4,6 +4,7 @@ import { type Question } from "@/server/api/routers/forum.router";
 import { type Values } from "@/utils/types";
 
 export const appPaths = {
+  admin: "/admin",
   cases: "/cases",
   dashboard: "/dashboard",
   dictionary: "/dictionary",
