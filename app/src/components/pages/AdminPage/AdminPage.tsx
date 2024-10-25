@@ -94,6 +94,7 @@ export const AdminPage: FunctionComponent = () =>
           <p>
             <mark>Achtung</mark>: Diese Funktion sollte nicht genutzt werden, um Accounts tatsächlicher Benutzer zu löschen.
             Diese Funktion sollte nur verwendet werden, um Accounts von Testbenutzern zu löschen.
+            Neben den Einträgen in der Datenbank wird auch der Nutzer im Clickup CRM gelöscht.
           </p>
           <Input
             {...form.getInputProps("userIdOrEmail" satisfies keyof DeleteUserSchema)}

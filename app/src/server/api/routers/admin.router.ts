@@ -12,9 +12,15 @@ import {
   updateUserInCrmQueue, uploadedFiles, uploadFolders,
   users, usersToBadges, usersToRoles
 } from "@/db/schema";
+import { env } from "@/env.mjs";
+import { deleteClickupTask } from "@/lib/clickup/tasks/delete-task";
+import { findClickupTask } from "@/lib/clickup/tasks/find-task";
+import { type ClickupTask } from "@/lib/clickup/types";
+import { clickupCrmCustomField, getClickupCrmUserByUserId } from "@/lib/clickup/utils";
 import { deleteUserSchema } from "@/schemas/admin/deleteUser.schema";
 import { adminProcedure, createTRPCRouter } from "@/server/api/trpc";
 import { NotFoundError, SelfDeletionRequestError } from "@/utils/serverError";
+import { printAllSettledPromisesSummary } from "@/utils/utils";
 
 import { eq, or, type SQL } from "drizzle-orm";
 
@@ -83,6 +89,33 @@ export const adminRouter = createTRPCRouter({
         await transaction.delete(users).where(eq(users.id, userToDelete.id));
         await ctx.supabaseServerClient.auth.admin.deleteUser(userToDelete.id);
       });
+
+      if(env.NEXT_PUBLIC_DEPLOYMENT_ENVIRONMENT === "production")
+      {
+        let clickupTasks: ClickupTask[];
+
+        if(userEmail)
+        {
+          clickupTasks = await findClickupTask(env.CLICKUP_CRM_LIST_ID, {
+            custom_fields: [{
+              field_id: clickupCrmCustomField.email.fieldId,
+              operator: "=",
+              value: userEmail
+            }],
+            include_closed: true,
+          });
+        }
+        else
+        {
+          clickupTasks = await getClickupCrmUserByUserId(userId);
+        }
+
+        console.log(`found ${clickupTasks.length} clickup tasks for user ${userToDelete.email}`, clickupTasks.map(task => task.id));
+        
+        const results = await Promise.allSettled(clickupTasks.map(async task => deleteClickupTask(task.id)));
+
+        printAllSettledPromisesSummary(results, "delete clickup tasks");
+      }
 
       console.info(`Benutzer '${userToDelete.displayName}' mit E-Mail '${userToDelete.email}' erfolgreich gelöscht`);
     }),
