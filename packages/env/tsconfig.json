@@ -1,0 +1,13 @@
+{
+  "extends": "@acme/tsconfig/base.json",
+  "include": ["env.ts"],
+  "exclude": ["node_modules"],
+  /*"compilerOptions": {
+    "module": "ESNext",
+    "moduleResolution": "Bundler",
+    "target": "ESNext",
+    "declaration": true,
+    "noEmit": false,
+    "emitDeclarationOnly": false
+  }*/
+}

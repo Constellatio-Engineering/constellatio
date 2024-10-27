@@ -1,5 +1,5 @@
 /* eslint-disable import/no-unused-modules */
-import { env } from "@/env.mjs";
+import { env } from "@acme/env";
 import { supabase } from "@/lib/supabase";
 /**
  * This is the client-side entrypoint for your tRPC API. It is used to create the `api` object which
@@ -9,9 +9,9 @@ import { supabase } from "@/lib/supabase";
  */
 // import { supabase } from "@/lib/supabase";
 import { type AppRouter } from "@/server/api/root";
-import { type ClientError } from "@/utils/clientError";
-import { showErrorNotification } from "@/utils/notifications";
-import { authPaths, getIsPathAppPath } from "@/utils/paths";
+import { type ClientError } from "@acme/utils";
+import { showErrorNotification } from "@acme/utils";
+import { authPaths, getIsPathAppPath } from "@acme/utils";
 
 import { QueryCache } from "@tanstack/react-query";
 import type { TRPCLink } from "@trpc/client";

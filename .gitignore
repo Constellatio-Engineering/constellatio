@@ -26,3 +26,6 @@ yarn-error.log*
 
 # testing endpoint
 app/src/pages/api/test
+
+dist
+.cache

@@ -1,0 +1,24 @@
+{
+  "name": "@acme/env",
+  "version": "0.1.0",
+  "private": true,
+  "type": "module",
+  "main": "./env.js",
+  "module": "./env.mjs",
+  "types": "./env.d.ts",
+  "license": "MIT",
+  "scripts": {
+    "build": "tsc && cp ./env.ts ./env.mjs",
+    "clean": "git clean -xdf .cache .turbo dist node_modules",
+    "dev": "tsc",
+    "typecheck": "tsc --noEmit --emitDeclarationOnly false"
+  },
+  "dependencies": {
+    "zod": "catalog:",
+    "@t3-oss/env-nextjs": "catalog:"
+  },
+  "devDependencies": {
+    "@acme/tsconfig": "workspace:*",
+    "eslint": "catalog:"
+  }
+}
