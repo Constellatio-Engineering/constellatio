@@ -18,7 +18,7 @@
   },
   "dependencies": {
     "@constellatio/env": "workspace:*",
-    "@constellatio/shared-types": "workspace:*",
+    "@constellatio/shared": "workspace:*",
     "@constellatio/utility-types": "workspace:*",
     "graphql": "16.8.1",
     "graphql-request": "6.1.0",
@@ -26,7 +26,6 @@
   },
   "devDependencies": {
     "@constellatio/tsconfig": "workspace:*",
-    "@total-typescript/ts-reset": "catalog:",
     "eslint": "catalog:",
     "typescript": "catalog:"
   }

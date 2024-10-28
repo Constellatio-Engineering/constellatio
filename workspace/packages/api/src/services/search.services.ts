@@ -44,7 +44,7 @@ import {
   tagSearchIndexItemPrimaryKey,
   uploadSearchIndexItemPrimaryKey
 } from "@constellatio/meilisearch";
-import { CaisyWebhookEventType } from "@constellatio/shared-types";
+import { CaisyWebhookEventType } from "@constellatio/shared/validation";
 import { meiliSearchAdmin } from "~/lib/meilisearch";
 import { addTags } from "./tags.services";
 

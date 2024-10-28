@@ -2,7 +2,7 @@ import { and, desc, eq, inArray, lte, type SQL } from "@constellatio/db";
 import { db } from "@constellatio/db/client";
 import { notifications } from "@constellatio/db/schema";
 import { GetNotificationsSchema } from "@constellatio/schemas";
-import { getProfilePictureUrl } from "@constellatio/utils";
+import { getProfilePictureUrl } from "~/utils/users";
 
 type GetInfiniteNotificationsParams = GetNotificationsSchema & {
   getNotificationsType: "infinite";

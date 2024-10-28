@@ -28,7 +28,7 @@
     "@constellatio/db-to-search": "workspace:*",
     "@constellatio/env": "workspace:*",
     "@constellatio/schemas": "workspace:*",
-    "@constellatio/shared-types": "workspace:*",
+    "@constellatio/shared": "workspace:*",
     "@constellatio/utils": "workspace:*",
     "@t3-oss/env-nextjs": "catalog:",
     "drizzle-orm": "0.35.3",

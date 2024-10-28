@@ -3,9 +3,9 @@ import { db } from "@constellatio/db/client";
 import { notes, uploadedFiles } from "@constellatio/db/schema";
 import { env } from "@constellatio/env";
 import { UploadableFile } from "@constellatio/schemas";
-import { FileExtension, FileMimeType } from "@constellatio/shared-types";
-import { addUserToCrmUpdateQueue } from "../lib/clickup/utils";
-import { cloudStorage } from "../lib/cloud-storage";
+import { FileExtension, FileMimeType } from "@constellatio/shared/validation";
+import { addUserToCrmUpdateQueue } from "~/lib/clickup/utils";
+import { cloudStorage } from "~/lib/cloud-storage";
 
 type File = {
   id: string;

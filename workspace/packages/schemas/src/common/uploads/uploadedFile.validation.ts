@@ -1,5 +1,5 @@
 /* eslint-disable @typescript-eslint/explicit-function-return-type */
-import { type FileMimeType } from "@constellatio/shared-types";
+import { type FileMimeType } from "@constellatio/shared/validation";
 import { idValidation } from "@/common/common.validation";
 import { getFileExtensionLowercase } from "@constellatio/utils";
 

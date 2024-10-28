@@ -1,4 +1,4 @@
-import { allOnboardingResults } from "@constellatio/shared-types";
+import { allOnboardingResults } from "@constellatio/shared/validation";
 
 import { z } from "zod";
 

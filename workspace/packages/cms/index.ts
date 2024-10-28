@@ -12,3 +12,7 @@ export * from "./src/content/getArticleById";
 export * from "./src/content/getCaseById";
 export * from "./src/content/getOverviewPageProps";
 export * from "./src/content/getPopularSearches";
+
+export * from "./src/utils/articles";
+export * from "./src/utils/caisy";
+export * from "./src/utils/case";

@@ -5,7 +5,7 @@ import { db } from "@constellatio/db/client";
 import { contentViews, forumQuestions } from "@constellatio/db/schema";
 import { env } from "@constellatio/env";
 import { addContentItemViewSchema, getContentItemViewsSchema, getLastViewedContentItemsSchema } from "@constellatio/schemas";
-import { ContentItemViewType } from "@constellatio/shared-types";
+import { ContentItemViewType } from "@constellatio/shared/validation";
 import { Nullable } from "@constellatio/utility-types";
 import { type inferProcedureOutput } from "@trpc/server";
 import postgres from "postgres";

@@ -1,7 +1,6 @@
 /* eslint-disable import/no-unused-modules */
 import { env } from "@constellatio/env";
-import { type Question } from "@/server/api/routers/forum.router";
-import { type Values } from "@/utils/types";
+import { type Values } from "@constellatio/utility-types";
 
 export const appPaths = {
   admin: "/admin",
@@ -60,7 +59,7 @@ export const getConfirmEmailChange = (): string =>
   return env.NEXT_PUBLIC_WEBSITE_URL + authPaths.confirmEmailChange;
 };
 
-export const getForumQuestionUrl = (question: Pick<Question, "id">): string =>
+export const getForumQuestionUrl = (question: { id: string }): string =>
 {
-  return appPaths.forum + "/" + question.id;
+  return `${appPaths.forum}/${question.id}`;
 };

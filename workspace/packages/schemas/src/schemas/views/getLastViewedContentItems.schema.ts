@@ -1,4 +1,4 @@
-import { contentItemViewsTypes } from "@constellatio/shared-types";
+import { contentItemViewsTypes } from "@constellatio/shared/validation";
 
 import { z } from "zod";
 

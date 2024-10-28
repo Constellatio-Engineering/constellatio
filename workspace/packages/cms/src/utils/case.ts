@@ -1,4 +1,4 @@
-import { CaseProgressState } from "@constellatio/shared-types";
+import { CaseProgressState } from "@constellatio/shared/validation";
 import { Nullable } from "@constellatio/utility-types";
 import { FullLegalCase } from "../content/getCaseById";
 import { IGenCardSelectionGame, IGenDragNDropGame, IGenFillInGapsGame } from "../graphql/__generated/sdk";

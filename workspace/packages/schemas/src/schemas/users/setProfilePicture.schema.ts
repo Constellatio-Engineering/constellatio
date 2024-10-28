@@ -1,4 +1,4 @@
-import { imageFileExtensions, type ImageFileMimeType, imageFileMimeTypes } from "@constellatio/shared-types";
+import { imageFileExtensions, type ImageFileMimeType, imageFileMimeTypes } from "@constellatio/shared/validation";
 import { idValidation } from "@/common/common.validation";
 
 import { z } from "zod";

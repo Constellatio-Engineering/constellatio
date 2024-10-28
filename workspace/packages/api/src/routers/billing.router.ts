@@ -2,9 +2,10 @@ import { eq } from "@constellatio/db";
 import { db } from "@constellatio/db/client";
 import { users } from "@constellatio/db/schema";
 import { env } from "@constellatio/env";
-import { appPaths, authPaths, getFutureSubscriptionStatus, getHasSubscription } from "@constellatio/utils";
+import { appPaths, authPaths } from "@constellatio/shared/paths";
 import { stripe } from "~/lib/stripe/stripe";
 import { InternalServerError } from "~/utils/serverError";
+import { getFutureSubscriptionStatus, getHasSubscription } from "~/utils/subscription";
 import { createTRPCRouter, protectedProcedure } from "../trpc";
 import { type inferProcedureOutput } from "@trpc/server";
 

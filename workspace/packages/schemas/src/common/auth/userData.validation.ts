@@ -1,5 +1,5 @@
 /* eslint-disable max-lines */
-import { allGenderIdentifiers, type GenderIdentifier } from "@constellatio/shared-types";
+import { allGenderIdentifiers, type GenderIdentifier } from "@constellatio/shared/validation";
 
 import { z } from "zod";
 

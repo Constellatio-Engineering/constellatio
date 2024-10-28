@@ -2,7 +2,7 @@ import { AllTags, IGenTags } from "@constellatio/cms";
 import { searchIndices } from "@constellatio/db-to-search";
 import { TagSearchIndexItem } from "@constellatio/meilisearch";
 import { NullableProperties } from "@constellatio/utility-types";
-import { meiliSearchAdmin } from "../lib/meilisearch";
+import { meiliSearchAdmin } from "~/lib/meilisearch";
 
 
 type AddTags = <T>(

@@ -1,12 +1,16 @@
 {
-  "name": "@constellatio/shared-types",
+  "name": "@constellatio/shared",
   "version": "0.1.0",
   "private": true,
   "type": "module",
   "exports": {
-    ".": {
-      "types": "./dist/index.d.ts",
-      "default": "./index.ts"
+    "./paths": {
+      "types": "./dist/paths.d.ts",
+      "default": "./src/paths.ts"
+    },
+    "./validation": {
+      "types": "./dist/validation.d.ts",
+      "default": "./src/validation.ts"
     }
   },
   "license": "MIT",
@@ -17,7 +21,9 @@
     "typecheck": "tsc --noEmit --emitDeclarationOnly false"
   },
   "dependencies": {
-    "@constellatio/db-to-search": "workspace:*"
+    "@constellatio/db-to-search": "workspace:*",
+    "@constellatio/env": "workspace:*",
+    "@constellatio/utility-types": "workspace:*"
   },
   "devDependencies": {
     "@constellatio/tsconfig": "workspace:*",

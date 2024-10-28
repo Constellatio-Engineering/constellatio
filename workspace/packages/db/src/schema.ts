@@ -17,7 +17,7 @@ import {
   fileMimeTypes,
   imageFileExtensions,
   imageFileMimeTypes, notificationTypesIdentifiers, profilePictureSources, roles, streakActivityTypes, userBadgeStates
-} from "@constellatio/shared-types";
+} from "@constellatio/shared/validation";
 import { getCurrentDate } from "@constellatio/utils";
 
 import { type InferInsertModel, type InferSelectModel, relations } from "drizzle-orm";

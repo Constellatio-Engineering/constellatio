@@ -2,9 +2,10 @@ import { eq } from "@constellatio/db";
 import { db } from "@constellatio/db/client";
 import { users } from "@constellatio/db/schema";
 import { registrationFormMinimalSchema, registrationFormSchema } from "@constellatio/schemas";
-import { finishSignup, getConfirmEmailUrl } from "@constellatio/utils";
+import { getConfirmEmailUrl } from "@constellatio/shared/paths";
 import { z } from "zod";
 import { EmailAlreadyTakenError, InternalServerError, RegisterError } from "~/utils/serverError";
+import { finishSignup } from "~/utils/signup";
 import { createTRPCRouter, publicProcedure } from "../trpc";
 
 export const authenticationRouter = createTRPCRouter({

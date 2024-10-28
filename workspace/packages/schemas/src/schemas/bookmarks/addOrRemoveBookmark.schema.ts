@@ -1,4 +1,4 @@
-import { allBookmarkResourceTypes } from "@constellatio/shared-types";
+import { allBookmarkResourceTypes } from "@constellatio/shared/validation";
 import { idValidation } from "@/common/common.validation";
 
 import { z } from "zod";

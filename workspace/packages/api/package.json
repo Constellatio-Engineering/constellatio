@@ -25,6 +25,7 @@
     "@constellatio/schemas": "workspace:*",
     "@constellatio/utility-types": "workspace:*",
     "@constellatio/utils": "workspace:*",
+    "@constellatio/shared": "workspace:*",
     "@google-cloud/storage": "7.13.0",
     "@supabase/auth-helpers-nextjs": "catalog:",
     "@supabase/auth-helpers-react": "catalog:",
@@ -41,7 +42,6 @@
   },
   "devDependencies": {
     "@constellatio/tsconfig": "workspace:*",
-    "@total-typescript/ts-reset": "catalog:",
     "eslint": "catalog:",
     "typescript": "catalog:"
   }

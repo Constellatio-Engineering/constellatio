@@ -1,4 +1,4 @@
-import { fileExtensions, fileMimeTypes } from "@constellatio/shared-types";
+import { fileExtensions, fileMimeTypes } from "@constellatio/shared/validation";
 import { idValidation } from "@/common/common.validation";
 import { filenameValidation, folderIdValidation, generateContentTypeValidation } from "@/common/uploads/uploadedFile.validation";
 

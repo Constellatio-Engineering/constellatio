@@ -3,12 +3,17 @@
   "version": "0.1.0",
   "private": true,
   "type": "module",
-  "main": "./env.js",
-  "module": "./env.mjs",
-  "types": "./env.d.ts",
+  "main": "./dist/env.mjs",
+  "types": "./dist/env.d.ts",
+  "exports": {
+    ".": {
+      "import": "./dist/env.mjs",
+      "types": "./dist/env.d.ts"
+    }
+  },
   "license": "MIT",
   "scripts": {
-    "build": "tsc && cp ./env.ts ./env.mjs",
+    "build": "tsc && cp ./src/env.ts ./dist/env.mjs",
     "clean": "git clean -xdf .cache .turbo dist node_modules",
     "dev": "tsc",
     "typecheck": "tsc --noEmit --emitDeclarationOnly false"

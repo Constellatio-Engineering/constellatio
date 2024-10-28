@@ -23,7 +23,7 @@
   "dependencies": {
     "@constellatio/env": "workspace:*",
     "@constellatio/utils": "workspace:*",
-    "@constellatio/shared-types": "workspace:*",
+    "@constellatio/shared": "workspace:*",
     "zod": "catalog:"
   },
   "devDependencies": {

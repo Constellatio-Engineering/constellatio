@@ -1,11 +1,8 @@
-import { db } from "@/db/connection";
-import { badges, type BadgeWithUserData, usersToBadges, } from "@/db/schema";
-import { markBadgeAsSeenSchema } from "@/schemas/badges/markBadgeAsSeen.schema";
-import { createTRPCRouter, protectedProcedure } from "@/server/api/trpc";
-
-import {
-  and, asc, eq, ne, sql 
-} from "drizzle-orm";
+import { db } from "@constellatio/db/client";
+import { badges, BadgeWithUserData, usersToBadges } from "@constellatio/db/schema";
+import { markBadgeAsSeenSchema } from "@constellatio/schemas";
+import { createTRPCRouter, protectedProcedure } from "../trpc";
+import { and, asc, eq, ne, sql } from "@constellatio/db";
 
 export const badgesRouter = createTRPCRouter({
   getBadges: protectedProcedure
