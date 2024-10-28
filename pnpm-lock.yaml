@@ -60,8 +60,8 @@ importers:
         specifier: 2.2.3
         version: 2.2.3(@swc/core@1.7.40(@swc/helpers@0.5.5))(@types/node@20.12.11)(typescript@5.5.4)
       supabase:
-        specifier: 1.165.0
-        version: 1.165.0
+        specifier: 1.207.9
+        version: 1.207.9
       turbo:
         specifier: 2.2.3
         version: 2.2.3
@@ -69,7 +69,7 @@ importers:
         specifier: 'catalog:'
         version: 5.5.4
 
-  workspaces/app:
+  workspace/app:
     dependencies:
       '@caisy/rich-text-react-renderer':
         specifier: 0.7.3
@@ -220,7 +220,7 @@ importers:
         version: 11.0.0-rc.569(@trpc/server@11.0.0-rc.569)
       '@trpc/next':
         specifier: 'catalog:'
-        version: 11.0.0-rc.569(@tanstack/react-query@5.59.15(react@18.2.0))(@trpc/client@11.0.0-rc.569(@trpc/server@11.0.0-rc.569))(@trpc/react-query@11.0.0-rc.569(@tanstack/react-query@5.59.15(react@18.2.0))(@trpc/client@11.0.0-rc.569(@trpc/server@11.0.0-rc.569))(@trpc/server@11.0.0-rc.569)(react-dom@18.2.0(react@18.2.0))(react@18.2.0))(@trpc/server@11.0.0-rc.569)(next@14.2.15(@babel/core@7.26.0)(react-dom@18.2.0(react@18.2.0))(react@18.2.0))(react-dom@18.2.0(react@18.2.0))(react@18.2.0)
+        version: 11.0.0-rc.569(@tanstack/react-query@5.59.15(react@18.2.0))(@trpc/client@11.0.0-rc.569(@trpc/server@11.0.0-rc.569))(@trpc/react-query@11.0.0-rc.569(@tanstack/react-query@5.59.15(react@18.2.0))(@trpc/client@11.0.0-rc.569(@trpc/server@11.0.0-rc.569))(@trpc/server@11.0.0-rc.569)(react-dom@18.2.0(react@18.2.0))(react@18.2.0))(@trpc/server@11.0.0-rc.569)(next@14.2.15(react-dom@18.2.0(react@18.2.0))(react@18.2.0))(react-dom@18.2.0(react@18.2.0))(react@18.2.0)
       '@trpc/react-query':
         specifier: 'catalog:'
         version: 11.0.0-rc.569(@tanstack/react-query@5.59.15(react@18.2.0))(@trpc/client@11.0.0-rc.569(@trpc/server@11.0.0-rc.569))(@trpc/server@11.0.0-rc.569)(react-dom@18.2.0(react@18.2.0))(react@18.2.0)
@@ -496,7 +496,7 @@ importers:
         specifier: 'catalog:'
         version: 5.5.4
 
-  workspaces/packages/api:
+  workspace/packages/api:
     dependencies:
       '@constellatio/cms':
         specifier: workspace:*
@@ -575,7 +575,7 @@ importers:
         specifier: 'catalog:'
         version: 5.5.4
 
-  workspaces/packages/cms:
+  workspace/packages/cms:
     dependencies:
       '@constellatio/env':
         specifier: workspace:*
@@ -609,7 +609,7 @@ importers:
         specifier: 'catalog:'
         version: 5.5.4
 
-  workspaces/packages/db:
+  workspace/packages/db:
     dependencies:
       '@constellatio/db-to-search':
         specifier: workspace:*
@@ -649,7 +649,7 @@ importers:
         specifier: 'catalog:'
         version: 5.5.4
 
-  workspaces/packages/db-to-search:
+  workspace/packages/db-to-search:
     dependencies:
       '@t3-oss/env-nextjs':
         specifier: 'catalog:'
@@ -674,7 +674,7 @@ importers:
         specifier: 'catalog:'
         version: 5.5.4
 
-  workspaces/packages/env:
+  workspace/packages/env:
     dependencies:
       '@t3-oss/env-nextjs':
         specifier: 'catalog:'
@@ -690,7 +690,7 @@ importers:
         specifier: 'catalog:'
         version: 8.57.0
 
-  workspaces/packages/meilisearch:
+  workspace/packages/meilisearch:
     dependencies:
       '@constellatio/cms':
         specifier: workspace:*
@@ -715,7 +715,7 @@ importers:
         specifier: 'catalog:'
         version: 5.5.4
 
-  workspaces/packages/schemas:
+  workspace/packages/schemas:
     dependencies:
       '@constellatio/env':
         specifier: workspace:*
@@ -740,7 +740,7 @@ importers:
         specifier: 'catalog:'
         version: 5.5.4
 
-  workspaces/packages/shared-types:
+  workspace/packages/shared-types:
     dependencies:
       '@constellatio/db-to-search':
         specifier: workspace:*
@@ -756,7 +756,7 @@ importers:
         specifier: 'catalog:'
         version: 5.5.4
 
-  workspaces/packages/utility-types:
+  workspace/packages/utility-types:
     devDependencies:
       '@constellatio/tsconfig':
         specifier: workspace:*
@@ -768,7 +768,7 @@ importers:
         specifier: 'catalog:'
         version: 5.5.4
 
-  workspaces/packages/utils:
+  workspace/packages/utils:
     dependencies:
       '@constellatio/env':
         specifier: workspace:*
@@ -787,7 +787,7 @@ importers:
         version: 11.0.0-rc.569(@trpc/server@11.0.0-rc.569)
       '@trpc/next':
         specifier: 'catalog:'
-        version: 11.0.0-rc.569(@tanstack/react-query@5.59.15(react@18.2.0))(@trpc/client@11.0.0-rc.569(@trpc/server@11.0.0-rc.569))(@trpc/react-query@11.0.0-rc.569(@tanstack/react-query@5.59.15(react@18.2.0))(@trpc/client@11.0.0-rc.569(@trpc/server@11.0.0-rc.569))(@trpc/server@11.0.0-rc.569)(react-dom@18.2.0(react@18.2.0))(react@18.2.0))(@trpc/server@11.0.0-rc.569)(next@14.2.15(@babel/core@7.26.0)(react-dom@18.2.0(react@18.2.0))(react@18.2.0))(react-dom@18.2.0(react@18.2.0))(react@18.2.0)
+        version: 11.0.0-rc.569(@tanstack/react-query@5.59.15(react@18.2.0))(@trpc/client@11.0.0-rc.569(@trpc/server@11.0.0-rc.569))(@trpc/react-query@11.0.0-rc.569(@tanstack/react-query@5.59.15(react@18.2.0))(@trpc/client@11.0.0-rc.569(@trpc/server@11.0.0-rc.569))(@trpc/server@11.0.0-rc.569)(react-dom@18.2.0(react@18.2.0))(react@18.2.0))(@trpc/server@11.0.0-rc.569)(next@14.2.15(react-dom@18.2.0(react@18.2.0))(react@18.2.0))(react-dom@18.2.0(react@18.2.0))(react@18.2.0)
       '@trpc/server':
         specifier: 'catalog:'
         version: 11.0.0-rc.569
@@ -814,7 +814,7 @@ importers:
         specifier: 'catalog:'
         version: 5.5.4
 
-  workspaces/tooling/typescript: {}
+  workspace/tooling/typescript: {}
 
 packages:
 
@@ -4884,10 +4884,6 @@ packages:
   bignumber.js@9.1.2:
     resolution: {integrity: sha512-2/mKyZH9K85bzOEfhXDBFZTGd1CTs+5IHpeFQo9luiBG7hghdC851Pj2WAhb6E3R6b9tZj/XKhbg4fum+Kepug==}
 
-  bin-links@4.0.4:
-    resolution: {integrity: sha512-cMtq4W5ZsEwcutJrVId+a/tjt8GSbS+h0oNkdl6+6rBuEv8Ot33Bevj5KPm40t309zuhVic8NjpuL42QCiJWWA==}
-    engines: {node: ^14.17.0 || ^16.13.0 || >=18.0.0}
-
   bin-links@5.0.0:
     resolution: {integrity: sha512-sdleLVfCjBtgO5cNjA2HVRvWBJAHs4zwenaCPMNJAJU0yNxpzj80IpjOIimkpkr+mhlA+how5poQtt53PygbHA==}
     engines: {node: ^18.17.0 || >=20.5.0}
@@ -5151,10 +5147,6 @@ packages:
   clsx@2.1.1:
     resolution: {integrity: sha512-eYm0QWBtUrBWZWG0d386OGAw16Z995PiOVo2B7bjWSbHedGl5e0ZWaq65kOGgUSNesEIDkB9ISbTg/JK9dhCZA==}
     engines: {node: '>=6'}
-
-  cmd-shim@6.0.3:
-    resolution: {integrity: sha512-FMabTRlc5t5zjdenF6mS0MBeFZm0XqHqeOkcskKFb/LYCcRQ5fVgLOHVc4Lq9CqABd9zhjwPjMBCJvMCziSVtA==}
-    engines: {node: ^14.17.0 || ^16.13.0 || >=18.0.0}
 
   cmd-shim@7.0.0:
     resolution: {integrity: sha512-rtpaCbr164TPPh+zFdkWpCyZuKkjpAzODfaZCf/SVJZzJN+4bHQb/LP3Jzq5/+84um3XXY8r548XiWKSborwVw==}
@@ -7863,10 +7855,6 @@ packages:
     resolution: {integrity: sha512-6eZs5Ls3WtCisHWp9S2GUy8dqkpGi4BVSz3GaqiE6ezub0512ESztXUwUB6C6IKbQkY2Pnb/mD4WYojCRwcwLA==}
     engines: {node: '>=0.10.0'}
 
-  npm-normalize-package-bin@3.0.1:
-    resolution: {integrity: sha512-dMxCf+zZ+3zeQZXKxmyuCKlIDPGuv8EF940xbkC4kQVDTtqoh6rJFO+JTKSA6/Rwi0getWmtuy4Itup0AMcaDQ==}
-    engines: {node: ^14.17.0 || ^16.13.0 || >=18.0.0}
-
   npm-normalize-package-bin@4.0.0:
     resolution: {integrity: sha512-TZKxPvItzai9kN9H/TkmCtx/ZN/hvr3vUycjlfmH0ootY9yFBzNOpiXAdIn1Iteqsvk4lQn6B5PTrt+n6h8k/w==}
     engines: {node: ^18.17.0 || >=20.5.0}
@@ -8687,10 +8675,6 @@ packages:
     resolution: {integrity: sha512-/3IjMdb2L9QbBdWiW5e3P2/npwMBaU9mHCSCUzNln0ZCYbcfTsGbTJrU/kGemdH2IWmB2ioZ+zkxtmq6g09fGQ==}
     engines: {node: '>=0.10.0'}
 
-  read-cmd-shim@4.0.0:
-    resolution: {integrity: sha512-yILWifhaSEEytfXI76kB9xEEiG1AiozaCJZ83A87ytjRiN+jVibXjedjCRNjoZviinhG+4UkalO3mWTd8u5O0Q==}
-    engines: {node: ^14.17.0 || ^16.13.0 || >=18.0.0}
-
   read-cmd-shim@5.0.0:
     resolution: {integrity: sha512-SEbJV7tohp3DAAILbEMPXavBjAnMN0tVnh4+9G8ihV4Pq3HYF9h8QNez9zkJ1ILkv9G2BjdzwctznGZXgu/HGw==}
     engines: {node: ^18.17.0 || >=20.5.0}
@@ -9317,13 +9301,13 @@ packages:
   stylis@4.2.0:
     resolution: {integrity: sha512-Orov6g6BB1sDfYgzWfTHDOxamtX1bE/zo104Dh9e6fqJ3PooipYyfJ0pUmrZO2wAvO8YbEyeFrkV91XTsGMSrw==}
 
-  supabase@1.165.0:
-    resolution: {integrity: sha512-bN1TSR6p4POxCQqb3OsO6vo2H9yKIUB2HW44SiLAV9leBIjdm4AsrJJ1hmc/YecqjtuBooAr7RXz/uGKQEQbEQ==}
+  supabase@1.204.3:
+    resolution: {integrity: sha512-uO09eyAw7TZAX/7wPeieQBWrl4QAJ0WLF+HTkFy35GWBmQULP5nkJR93LcuhSyooYiqwEUKlChEF/PGAEmTCKw==}
     engines: {npm: '>=8'}
     hasBin: true
 
-  supabase@1.204.3:
-    resolution: {integrity: sha512-uO09eyAw7TZAX/7wPeieQBWrl4QAJ0WLF+HTkFy35GWBmQULP5nkJR93LcuhSyooYiqwEUKlChEF/PGAEmTCKw==}
+  supabase@1.207.9:
+    resolution: {integrity: sha512-BJPwsAd2UBIpQawcQV3/xKHEZ8YrrkHYpgibxCZbG+RuxuhTtkHG7zR4I3LylIIEwcKp3hmDKu/hO1m2NT5RXA==}
     engines: {npm: '>=8'}
     hasBin: true
 
@@ -9382,10 +9366,6 @@ packages:
   tar@6.2.1:
     resolution: {integrity: sha512-DZ4yORTwrbTj/7MZYq2w+/ZFdI6OZ/f9SFHR+71gIVUZhOQPHzVCLpvRnPgyaMpfWxxk/4ONva3GQSyNIKRv6A==}
     engines: {node: '>=10'}
-
-  tar@7.0.1:
-    resolution: {integrity: sha512-IjMhdQMZFpKsHEQT3woZVxBtCQY+0wk3CVxdRkGXEgyGa0dNS/ehPvOMr2nmfC7x5Zj2N+l6yZUpmICjLGS35w==}
-    engines: {node: '>=18'}
 
   tar@7.4.3:
     resolution: {integrity: sha512-5S7Va8hKfV7W5U6g3aYxXmlPoZVAwUMy9AOKyF2fVuZa2UD3qZjg578OrLRt8PcNN1PleVaL/5/yYATNL0ICUw==}
@@ -9997,10 +9977,6 @@ packages:
   write-file-atomic@4.0.2:
     resolution: {integrity: sha512-7KxauUdBmSdWnmpaGFg+ppNjKF8uNLry8LyzjauQDOVONfFLNKrKvQOxZ/VuTIcS/gge/YNahf5RIIQWTSarlg==}
     engines: {node: ^12.13.0 || ^14.15.0 || >=16.0.0}
-
-  write-file-atomic@5.0.1:
-    resolution: {integrity: sha512-+QU2zd6OTD8XWIJCbffaiQeH9U73qIqafo1x6V1snCWYGJf6cVE0cDR4D8xRzcEnfI21IFrUPzPGtcPf8AC+Rw==}
-    engines: {node: ^14.17.0 || ^16.13.0 || >=18.0.0}
 
   write-file-atomic@6.0.0:
     resolution: {integrity: sha512-GmqrO8WJ1NuzJ2DrziEI2o57jKAVIQNf8a18W3nCYU3H7PNWqCCVTeH6/NQE93CIllIgQS98rrmVkYgTX9fFJQ==}
@@ -14435,7 +14411,7 @@ snapshots:
     dependencies:
       '@trpc/server': 11.0.0-rc.569
 
-  '@trpc/next@11.0.0-rc.569(@tanstack/react-query@5.59.15(react@18.2.0))(@trpc/client@11.0.0-rc.569(@trpc/server@11.0.0-rc.569))(@trpc/react-query@11.0.0-rc.569(@tanstack/react-query@5.59.15(react@18.2.0))(@trpc/client@11.0.0-rc.569(@trpc/server@11.0.0-rc.569))(@trpc/server@11.0.0-rc.569)(react-dom@18.2.0(react@18.2.0))(react@18.2.0))(@trpc/server@11.0.0-rc.569)(next@14.2.15(@babel/core@7.26.0)(react-dom@18.2.0(react@18.2.0))(react@18.2.0))(react-dom@18.2.0(react@18.2.0))(react@18.2.0)':
+  '@trpc/next@11.0.0-rc.569(@tanstack/react-query@5.59.15(react@18.2.0))(@trpc/client@11.0.0-rc.569(@trpc/server@11.0.0-rc.569))(@trpc/react-query@11.0.0-rc.569(@tanstack/react-query@5.59.15(react@18.2.0))(@trpc/client@11.0.0-rc.569(@trpc/server@11.0.0-rc.569))(@trpc/server@11.0.0-rc.569)(react-dom@18.2.0(react@18.2.0))(react@18.2.0))(@trpc/server@11.0.0-rc.569)(next@14.2.15(react-dom@18.2.0(react@18.2.0))(react@18.2.0))(react-dom@18.2.0(react@18.2.0))(react@18.2.0)':
     dependencies:
       '@trpc/client': 11.0.0-rc.569(@trpc/server@11.0.0-rc.569)
       '@trpc/server': 11.0.0-rc.569
@@ -15441,13 +15417,6 @@ snapshots:
 
   bignumber.js@9.1.2: {}
 
-  bin-links@4.0.4:
-    dependencies:
-      cmd-shim: 6.0.3
-      npm-normalize-package-bin: 3.0.1
-      read-cmd-shim: 4.0.0
-      write-file-atomic: 5.0.1
-
   bin-links@5.0.0:
     dependencies:
       cmd-shim: 7.0.0
@@ -15833,8 +15802,6 @@ snapshots:
   clsx@1.1.1: {}
 
   clsx@2.1.1: {}
-
-  cmd-shim@6.0.3: {}
 
   cmd-shim@7.0.0: {}
 
@@ -17078,7 +17045,7 @@ snapshots:
 
   extract-zip@2.0.1:
     dependencies:
-      debug: 4.3.1
+      debug: 4.3.7
       get-stream: 5.2.0
       yauzl: 2.10.0
     optionalDependencies:
@@ -17776,7 +17743,7 @@ snapshots:
   https-proxy-agent@5.0.0:
     dependencies:
       agent-base: 6.0.2
-      debug: 4.3.1
+      debug: 4.3.7
     transitivePeerDependencies:
       - supports-color
 
@@ -18841,8 +18808,6 @@ snapshots:
 
   normalize-path@3.0.0: {}
 
-  npm-normalize-package-bin@3.0.1: {}
-
   npm-normalize-package-bin@4.0.0: {}
 
   npm-run-path@4.0.1:
@@ -19766,8 +19731,6 @@ snapshots:
     dependencies:
       loose-envify: 1.4.0
 
-  read-cmd-shim@4.0.0: {}
-
   read-cmd-shim@5.0.0: {}
 
   read-pkg-up@7.0.1:
@@ -20492,16 +20455,16 @@ snapshots:
 
   stylis@4.2.0: {}
 
-  supabase@1.165.0:
+  supabase@1.204.3:
     dependencies:
-      bin-links: 4.0.4
+      bin-links: 5.0.0
       https-proxy-agent: 7.0.5
       node-fetch: 3.3.2
-      tar: 7.0.1
+      tar: 7.4.3
     transitivePeerDependencies:
       - supports-color
 
-  supabase@1.204.3:
+  supabase@1.207.9:
     dependencies:
       bin-links: 5.0.0
       https-proxy-agent: 7.0.5
@@ -20579,15 +20542,6 @@ snapshots:
       minizlib: 2.1.2
       mkdirp: 1.0.4
       yallist: 4.0.0
-
-  tar@7.0.1:
-    dependencies:
-      '@isaacs/fs-minipass': 4.0.1
-      chownr: 3.0.0
-      minipass: 5.0.0
-      minizlib: 3.0.1
-      mkdirp: 3.0.1
-      yallist: 5.0.0
 
   tar@7.4.3:
     dependencies:
@@ -21240,11 +21194,6 @@ snapshots:
     dependencies:
       imurmurhash: 0.1.4
       signal-exit: 3.0.7
-
-  write-file-atomic@5.0.1:
-    dependencies:
-      imurmurhash: 0.1.4
-      signal-exit: 4.1.0
 
   write-file-atomic@6.0.0:
     dependencies:

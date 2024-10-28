@@ -1,7 +1,7 @@
 packages:
-  - workspaces/packages/*
-  - workspaces/tooling/*
-  - workspaces/app
+  - workspace/packages/*
+  - workspace/tooling/*
+  - workspace/app
 
 catalog:
   "@supabase/auth-helpers-nextjs": 0.10.0
