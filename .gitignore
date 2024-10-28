@@ -29,3 +29,4 @@ app/src/pages/api/test
 
 dist
 .cache
+.turbo
