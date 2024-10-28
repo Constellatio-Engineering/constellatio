@@ -2,8 +2,9 @@ import * as fs from 'fs';
 import * as path from 'path';
 
 const srcDir = 'src';
-const schemaPattern = /\.ts$/;
-const indexFile = path.join('exports.ts');
+const utilsDir = "utils";
+const schemaPattern = /\.utils\.ts$/;
+const indexFile = path.join(srcDir,'exports.ts');
 
 function findSchemaFiles(dir) {
   const results = [];
@@ -22,7 +23,7 @@ function findSchemaFiles(dir) {
         .replace(/\\/g, '/');
 
       // Remove the .ts extension
-      const importPath = './' + srcDir + '/' + relativePath.replace(/\.ts$/, '');
+      const importPath = './' + relativePath.replace(/\.ts$/, '');
       results.push(importPath);
     }
   }
@@ -31,9 +32,7 @@ function findSchemaFiles(dir) {
 }
 
 function generateIndex() {
-  const schemaFiles = findSchemaFiles(srcDir);
-
-  console.log(schemaFiles);
+  const schemaFiles = findSchemaFiles(`${srcDir}/${utilsDir}`);
 
   const exports = schemaFiles
     .sort()

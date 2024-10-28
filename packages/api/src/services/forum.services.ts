@@ -13,7 +13,7 @@ import {
   users
 } from "@acme/db/schema";
 import { type GetAnswersSchema, type GetQuestionsSchema } from "@acme/schemas";
-import { getProfilePictureUrl } from "@acme/utils";
+import { getProfilePictureUrl } from "~/utils/users";
 
 type GetUpvotesForQuestion = (questionId: string) => Promise<number>;
 

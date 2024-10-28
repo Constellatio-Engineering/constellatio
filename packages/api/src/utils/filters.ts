@@ -1,5 +1,5 @@
-import { type Bookmark } from "@/db/schema";
-import { type UserWithRelations } from "@/server/api/services/users.service";
+import { Bookmark } from "@acme/db/schema";
+import { UserWithRelations } from "~/services/users.service";
 
 export type UserFiltered = Pick<UserWithRelations, "email" | "id" | "gender" | "lastName" | "firstName" | "displayName" | "semester" | "university" | "roles" | "isForumModerator" | "isAdmin" | "profilePicture" | "authProvider">;
 

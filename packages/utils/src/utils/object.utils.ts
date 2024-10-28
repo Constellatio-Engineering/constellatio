@@ -1,5 +1,7 @@
 /* eslint-disable import/no-unused-modules */
 
+import { ObjectKeys } from "@acme/utility-types";
+
 export function mapToObject<Key extends string, Value>(map: Map<Key, Value>): {
   [K in Key]: Value;
 }
@@ -18,3 +20,5 @@ export function getIsValidKey<T extends Record<string, unknown>>(obj: T, key: st
 {
   return Object.hasOwn(obj, key);
 }
+
+export const objectKeys = Object.keys as <Type extends object>(value: Type) => Array<ObjectKeys<Type>>;

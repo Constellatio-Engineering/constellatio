@@ -18,7 +18,7 @@ import {
   imageFileExtensions,
   imageFileMimeTypes, notificationTypesIdentifiers, profilePictureSources, roles, streakActivityTypes, userBadgeStates
 } from "@acme/shared-types";
-import { getCurrentDate } from "./utils";
+import { getCurrentDate } from "@acme/utils";
 
 import { type InferInsertModel, type InferSelectModel, relations } from "drizzle-orm";
 import {

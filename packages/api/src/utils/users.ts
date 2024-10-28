@@ -1,5 +1,5 @@
-import { type ProfilePicture } from "@/db/schema";
-import { env } from "@/env.mjs";
+import { ProfilePicture } from "@acme/db/schema";
+import { env } from "@acme/env";
 
 export const getProfilePictureUrl = (props: Pick<ProfilePicture, "profilePictureSource" | "userId" | "serverFilename" | "url">) =>
 {

@@ -5,14 +5,10 @@
   "type": "module",
   "exports": {
     ".": {
-      "types": "./index.d.ts",
+      "types": "./dist/index.d.ts",
       "default": "./index.ts"
     }
   },
-  "files": [
-    "src",
-    "dist"
-  ],
   "license": "MIT",
   "scripts": {
     "build": "tsc",
@@ -22,15 +18,19 @@
   },
   "dependencies": {
     "@acme/env": "workspace:*",
-    "@acme/utils": "workspace:*",
     "@acme/utility-types": "workspace:*",
+    "@acme/utils": "workspace:*",
     "@tanstack/react-query": "catalog:",
     "@trpc/client": "catalog:",
     "@trpc/next": "catalog:",
     "@trpc/server": "catalog:",
-    "superjson": "catalog:"
+    "axios": "1.7.7",
+    "superjson": "catalog:",
+    "uuid": "11.0.1"
   },
   "devDependencies": {
+    "@acme/tsconfig": "workspace:*",
+    "@total-typescript/ts-reset": "catalog:",
     "eslint": "catalog:",
     "typescript": "catalog:"
   }

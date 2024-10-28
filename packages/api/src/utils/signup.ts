@@ -1,18 +1,15 @@
-import { db } from "@/db/connection";
-import {
-  profilePictures, referrals, type UserInsert, users, usersToBadges 
-} from "@/db/schema";
-import { env } from "@/env.mjs";
-import { addUserToCrmUpdateQueue } from "@/lib/clickup/utils";
-import { stripe } from "@/lib/stripe/stripe";
-import { addBadgeForUser } from "@/server/api/services/badges.services";
-import { InternalServerError } from "@/utils/serverError";
-import { getDataFromStripeSubscription } from "@/utils/stripe";
-import { type Nullable } from "@/utils/types";
-import { getRandomUuid, printAllSettledPromisesSummary } from "@/utils/utils";
-
+import { count, eq } from "@acme/db";
+import { db } from "@acme/db/client";
+import { profilePictures, referrals, UserInsert, users, usersToBadges } from "@acme/db/schema";
+import { env } from "@acme/env";
+import { Nullable } from "@acme/utility-types";
+import { getRandomUuid, printAllSettledPromisesSummary } from "@acme/utils";
 import { type SupabaseClient } from "@supabase/auth-helpers-nextjs";
-import { count, eq } from "drizzle-orm";
+import { addUserToCrmUpdateQueue } from "~/lib/clickup/utils";
+import { stripe } from "~/lib/stripe/stripe";
+import { addBadgeForUser } from "~/services/badges.services";
+import { InternalServerError } from "~/utils/serverError";
+import { getDataFromStripeSubscription } from "~/utils/stripe";
 
 /* export type FinishSignUpProps = {
   referralCode?: string;

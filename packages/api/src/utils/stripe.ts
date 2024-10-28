@@ -1,5 +1,4 @@
-import { type User } from "@/db/schema";
-
+import { User } from "@acme/db/schema";
 import type Stripe from "stripe";
 
 type SubscriptionData = Pick<User, "subscriptionStatus" | "subscriptionId">;

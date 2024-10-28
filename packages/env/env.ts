@@ -177,3 +177,8 @@ export const env = createEnv({
    */
   skipValidation: !!process.env.SKIP_ENV_VALIDATION,
 });
+
+export const isDevelopmentOrStaging = env.NEXT_PUBLIC_DEPLOYMENT_ENVIRONMENT === "development" || env.NEXT_PUBLIC_DEPLOYMENT_ENVIRONMENT === "staging";
+export const isDevelopment = env.NEXT_PUBLIC_DEPLOYMENT_ENVIRONMENT === "development";
+export const isStaging = env.NEXT_PUBLIC_DEPLOYMENT_ENVIRONMENT === "staging";
+export const isProduction = env.NEXT_PUBLIC_DEPLOYMENT_ENVIRONMENT === "production";

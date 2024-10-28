@@ -26,12 +26,13 @@
   },
   "dependencies": {
     "@acme/db-to-search": "workspace:*",
-    "@acme/shared-types": "workspace:*",
     "@acme/env": "workspace:*",
     "@acme/schemas": "workspace:*",
+    "@acme/shared-types": "workspace:*",
+    "@acme/utils": "workspace:*",
+    "@t3-oss/env-nextjs": "catalog:",
     "drizzle-orm": "0.35.3",
-    "postgres": "3.4.5",
-    "@t3-oss/env-nextjs": "catalog:"
+    "postgres": "3.4.5"
   },
   "devDependencies": {
     "@acme/tsconfig": "workspace:*",

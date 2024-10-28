@@ -1,7 +1,7 @@
-import { type CaseProgressState } from "@/db/schema";
-import { type FullLegalCase } from "@/services/content/getCaseById";
-import { type IGenCardSelectionGame, type IGenDragNDropGame, type IGenFillInGapsGame } from "@/services/graphql/__generated/sdk";
-import { type Nullable } from "@/utils/types";
+import { CaseProgressState } from "@acme/shared-types";
+import { Nullable } from "@acme/utility-types";
+import { FullLegalCase } from "../content/getCaseById";
+import { IGenCardSelectionGame, IGenDragNDropGame, IGenFillInGapsGame } from "../graphql/__generated/sdk";
 
 type Game = (IGenCardSelectionGame | IGenDragNDropGame | IGenFillInGapsGame) & {
   indexInFullTextTasksJson: number;

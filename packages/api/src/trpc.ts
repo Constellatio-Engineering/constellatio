@@ -14,7 +14,6 @@ import { env } from "@acme/env";
 import {
   EmailAlreadyTakenError, NotFoundError, RateLimitError, SelfDeletionRequestError, UnauthorizedError
 } from "./utils/serverError";
-import { sleep } from "@acme/utils";
 
 import { createPagesServerClient, type SupabaseClient, type User } from "@supabase/auth-helpers-nextjs";
 import { type Session } from "@supabase/auth-helpers-react";
@@ -23,6 +22,7 @@ import { type CreateNextContextOptions } from "@trpc/server/adapters/next";
 import { type GetServerSidePropsContext, type NextApiRequest, type NextApiResponse } from "next";
 import superjson from "superjson";
 import { type ClientError, clientErrors } from "./utils/clientError";
+import { sleep } from "./utils/common";
 
 type CreateContextOptions = Record<string, never>;
 

@@ -30,6 +30,7 @@ export * from "./schemas/documents/updateDocument.schema";
 export * from "./schemas/folders/createFolder.schema";
 export * from "./schemas/folders/deleteFolder.schema";
 export * from "./schemas/folders/renameFolder.schema";
+export * from "./schemas/formbricks/feedback-received.schema";
 export * from "./schemas/forum/deleteAnswer.schema";
 export * from "./schemas/forum/deleteQuestion.schema";
 export * from "./schemas/forum/getAnswerById.schema";

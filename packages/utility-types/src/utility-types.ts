@@ -12,6 +12,8 @@ export type Prettify<T> = {
   [K in keyof T]: T[K]
 } & {};
 
+export type ObjectKeys<T extends object> = `${Exclude<keyof T, symbol>}`;
+
 export type RemoveUndefined<T> = T extends undefined ? never : T;
 
 export type RemoveNull<T> = T extends null ? never : T;

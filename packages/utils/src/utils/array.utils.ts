@@ -1,9 +1,7 @@
 /* eslint-disable import/no-unused-modules */
 
-
 // function that shuffles an array with the Fisher-Yates algorithm
-import { Primitive } from "@acme/utility-types";
-import { getDistinctItemsByKey } from "./utils";
+import { type Nullable, Primitive } from "@acme/utility-types";
 
 export const shuffleArray = <T>(array: T[]): T[] =>
 {
@@ -92,6 +90,52 @@ export function areArraysEqualByKey<T>(arr1: T[], arr2: T[], identifierKey: keyo
 export function getDoesAnyItemMatch<T extends Record<string, unknown>>(values: T[], key: keyof T, value: NonNullable<T[keyof T]>): boolean
 {
   return values.some(v => v[key] === value);
+}
+
+export const removeItemsByIndices = <T>(arrayToDeleteItemsFrom: T[], indices: number[]): T[] =>
+{
+  const resultArray = [...arrayToDeleteItemsFrom];
+
+  // Sort the indices array in descending order to ensure proper removal
+  indices.sort((a, b) => b - a);
+
+  // Remove items from the result array using the indices
+  for(const index of indices)
+  {
+    if(index >= 0 && index < resultArray.length)
+    {
+      resultArray.splice(index, 1);
+    }
+  }
+
+  return resultArray;
+};
+
+export const getItemsByIndices = <T>(arrayToGetItemsFrom: T[], indices: number[]): T[] =>
+{
+  const resultArray: T[] = [];
+
+  for(const index of indices)
+  {
+    if(index >= 0 && index < arrayToGetItemsFrom.length)
+    {
+      resultArray.push(arrayToGetItemsFrom[index]!);
+    }
+  }
+
+  return resultArray;
+};
+
+export function getDistinctItemsByKey<T>(items: Array<Nullable<T>>, key: keyof T): T[]
+{
+  return [
+    ...new Map(
+      items
+        .filter(Boolean)
+        .filter(item => item[key] != null)
+        .map(item => [item[key], item])
+    ).values()
+  ];
 }
 
 export function removeConsecutiveDuplicates<T extends Record<K, Primitive>, K extends keyof T>(
