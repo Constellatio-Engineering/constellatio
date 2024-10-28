@@ -1,0 +1,43 @@
+{
+  "name": "@constellatio/db",
+  "version": "0.1.0",
+  "private": true,
+  "type": "module",
+  "exports": {
+    ".": {
+      "types": "./dist/index.d.ts",
+      "default": "./src/index.ts"
+    },
+    "./client": {
+      "types": "./dist/client.d.ts",
+      "default": "./src/client.ts"
+    },
+    "./schema": {
+      "types": "./dist/schema.d.ts",
+      "default": "./src/schema.ts"
+    }
+  },
+  "license": "MIT",
+  "scripts": {
+    "build": "tsc",
+    "clean": "git clean -xdf .cache .turbo dist node_modules",
+    "dev": "tsc",
+    "typecheck": "tsc --noEmit --emitDeclarationOnly false"
+  },
+  "dependencies": {
+    "@constellatio/db-to-search": "workspace:*",
+    "@constellatio/env": "workspace:*",
+    "@constellatio/schemas": "workspace:*",
+    "@constellatio/shared-types": "workspace:*",
+    "@constellatio/utils": "workspace:*",
+    "@t3-oss/env-nextjs": "catalog:",
+    "drizzle-orm": "0.35.3",
+    "postgres": "3.4.5"
+  },
+  "devDependencies": {
+    "@constellatio/tsconfig": "workspace:*",
+    "drizzle-kit": "0.26.2",
+    "eslint": "catalog:",
+    "typescript": "catalog:"
+  }
+}

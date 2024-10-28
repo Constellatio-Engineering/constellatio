@@ -1,0 +1,30 @@
+{
+  "name": "@constellatio/meilisearch",
+  "version": "0.1.0",
+  "private": true,
+  "type": "module",
+  "exports": {
+    ".": {
+      "types": "./dist/index.d.ts",
+      "default": "./src/index.ts"
+    }
+  },
+  "license": "MIT",
+  "scripts": {
+    "build": "tsc",
+    "clean": "git clean -xdf .cache .turbo dist node_modules",
+    "dev": "tsc",
+    "typecheck": "tsc --noEmit --emitDeclarationOnly false"
+  },
+  "dependencies": {
+    "@constellatio/cms": "workspace:*",
+    "@constellatio/db": "workspace:*",
+    "@constellatio/utils": "workspace:*",
+    "@constellatio/utility-types": "workspace:*"
+  },
+  "devDependencies": {
+    "@constellatio/tsconfig": "workspace:*",
+    "eslint": "catalog:",
+    "typescript": "catalog:"
+  }
+}

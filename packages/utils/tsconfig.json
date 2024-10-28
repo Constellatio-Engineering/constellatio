@@ -1,5 +1,0 @@
-{
-  "extends": "@acme/tsconfig/internal-package.json",
-  "include": ["src", "index.ts", "reset.d.ts"],
-  "exclude": ["node_modules"],
-}
