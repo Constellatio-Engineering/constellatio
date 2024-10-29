@@ -374,6 +374,9 @@ importers:
         specifier: 11.0.1
         version: 11.0.1
     devDependencies:
+      '@constellatio/eslint-config':
+        specifier: workspace:*
+        version: link:../../tooling/eslint
       '@constellatio/tsconfig':
         specifier: workspace:*
         version: link:../../tooling/typescript

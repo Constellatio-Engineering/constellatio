@@ -240,7 +240,7 @@ module.exports = {
         before: true
       }
     ],
-    "barrel-files/avoid-importing-barrel-files": "error",
+    "barrel-files/avoid-importing-barrel-files": "off",
     "barrel-files/avoid-barrel-files": "error",
     "barrel-files/avoid-namespace-import": "error",
     "barrel-files/avoid-re-export-all": "error",

@@ -35,7 +35,7 @@ import {
 } from "@constellatio/db/schema";
 import { env } from "@constellatio/env";
 import { deleteUserSchema } from "@constellatio/schemas/routers/admin/deleteUser.schema";
-import { printAllSettledPromisesSummary } from "@constellatio/utils";
+import { printAllSettledPromisesSummary } from "@constellatio/utils/promise";
 
 import { adminProcedure, createTRPCRouter } from "../trpc";
 

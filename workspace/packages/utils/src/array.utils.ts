@@ -1,7 +1,7 @@
 /* eslint-disable import/no-unused-modules */
 
 // function that shuffles an array with the Fisher-Yates algorithm
-import { type Nullable, Primitive } from "@constellatio/utility-types";
+import { type Nullable, type Primitive } from "@constellatio/utility-types";
 
 export const shuffleArray = <T>(array: T[]): T[] =>
 {

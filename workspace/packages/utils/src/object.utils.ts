@@ -1,6 +1,6 @@
 /* eslint-disable import/no-unused-modules */
 
-import { ObjectKeys } from "@constellatio/utility-types";
+import { type ObjectKeys } from "@constellatio/utility-types";
 
 export function mapToObject<Key extends string, Value>(map: Map<Key, Value>): {
   [K in Key]: Value;

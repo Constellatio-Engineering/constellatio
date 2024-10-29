@@ -1,7 +1,6 @@
 {
   "extends": "@constellatio/tsconfig/internal-package.json",
-  "include": ["src", "index.ts"],
-  "exclude": ["node_modules"],
+  "include": ["src", "*.ts"],
   "compilerOptions": {
     "lib": ["ES2022", "DOM"]
   }

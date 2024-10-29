@@ -1,4 +1,4 @@
-import { AxiosError, AxiosResponse } from "axios";
+import { type AxiosResponse, AxiosError } from "axios";
 
 export const printAllSettledPromisesSummary = (settledPromises: Array<PromiseSettledResult<unknown>>, actionName: string): void =>
 {
