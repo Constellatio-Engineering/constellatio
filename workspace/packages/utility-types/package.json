@@ -5,8 +5,8 @@
   "type": "module",
   "exports": {
     ".": {
-      "types": "./dist/index.d.ts",
-      "default": "./index.ts"
+      "types": "./dist/utility-types.d.ts",
+      "default": "./src/utility-types.ts"
     }
   },
   "license": "MIT",
@@ -19,6 +19,7 @@
   "dependencies": {},
   "devDependencies": {
     "@constellatio/tsconfig": "workspace:*",
+    "@constellatio/eslint-config": "workspace:*",
     "eslint": "catalog:",
     "typescript": "catalog:"
   }
