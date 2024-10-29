@@ -4,34 +4,26 @@
   "private": true,
   "type": "module",
   "exports": {
-    ".": {
-      "types": "./dist/index.d.ts",
-      "default": "./src/index.ts"
-    },
-    "./schemas/*": {
-      "types": "./dist/schemas/*.d.ts",
-      "default": "./src/schemas/*.ts"
-    },
     "./common/*": {
       "types": "./dist/common/*.d.ts",
       "default": "./src/common/*.ts"
+    },
+    "./integration/*": {
+      "types": "./dist/integration/*.d.ts",
+      "default": "./src/integration/*.ts"
+    },
+    "./routers/*": {
+      "types": "./dist/routers/*.d.ts",
+      "default": "./src/routers/*.ts"
     }
   },
-  "typesVersions": {
-    "*": {
-      "schemas/*": ["./dist/schemas/*"],
-      "common/*": ["./dist/common/*"]
-    }
-  },
-  "files": [
-    "src",
-    "dist"
-  ],
   "license": "MIT",
   "scripts": {
     "build": "tsc",
     "clean": "git clean -xdf .cache .turbo dist node_modules",
     "dev": "tsc",
+    "lint": "eslint src",
+    "lint:fix": "eslint --fix src",
     "typecheck": "tsc --noEmit --emitDeclarationOnly false"
   },
   "dependencies": {

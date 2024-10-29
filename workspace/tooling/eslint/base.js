@@ -26,7 +26,8 @@ module.exports = {
     "newline-destructuring",
     "sort-destructure-keys",
     "sort-keys-fix",
-    "prefer-arrow"
+    "prefer-arrow",
+    "barrel-files"
   ],
   "extends": [
     "eslint:recommended",
@@ -239,6 +240,10 @@ module.exports = {
         before: true
       }
     ],
+    "barrel-files/avoid-importing-barrel-files": "error",
+    "barrel-files/avoid-barrel-files": "error",
+    "barrel-files/avoid-namespace-import": "error",
+    "barrel-files/avoid-re-export-all": "error",
     "block-scoped-var": "error",
     "block-spacing": [
       "error",
@@ -276,13 +281,14 @@ module.exports = {
     "import/no-duplicates": "error",
     "import/no-deprecated": "error",
     "import/no-extraneous-dependencies": "error",
-    "import/no-unused-modules": [
+    /*"import/no-unused-modules": [
       "warn",
       {
         "unusedExports": true,
         "missingExports": true
       }
-    ],
+    ],*/
+    "import/no-unused-modules": "off",
     "import/order": [
       "error",
       {

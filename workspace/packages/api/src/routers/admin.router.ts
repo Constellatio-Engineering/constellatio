@@ -7,20 +7,34 @@ import { NotFoundError, SelfDeletionRequestError } from "~/utils/serverError";
 import { eq, or, type SQL } from "@constellatio/db";
 import { db } from "@constellatio/db/client";
 import {
-  answerUpvotes, bookmarks, casesProgress, casesSolutions,
-  contentViews, documents, forumAnswers, forumQuestions, gamesProgress, notes, notifications,
-  pings, profilePictures,
+  answerUpvotes,
+  bookmarks,
+  casesProgress,
+  casesSolutions,
+  contentViews,
+  documents,
+  forumAnswers,
+  forumQuestions,
+  gamesProgress,
+  notes,
+  notifications,
+  pings,
+  profilePictures,
   questionUpvotes,
   referralBalances,
   referralCodes,
   referrals,
   streak,
   streakActivities,
-  updateUserInCrmQueue, uploadedFiles, uploadFolders,
-  users, usersToBadges, usersToRoles
+  updateUserInCrmQueue,
+  uploadedFiles,
+  uploadFolders,
+  users,
+  usersToBadges,
+  usersToRoles
 } from "@constellatio/db/schema";
-import { env } from "@constellatio/env"; 
-import { deleteUserSchema } from "@constellatio/schemas";
+import { env } from "@constellatio/env";
+import { deleteUserSchema } from "@constellatio/schemas/routers/admin/deleteUser.schema";
 import { printAllSettledPromisesSummary } from "@constellatio/utils";
 
 import { adminProcedure, createTRPCRouter } from "../trpc";

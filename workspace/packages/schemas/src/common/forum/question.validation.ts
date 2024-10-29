@@ -1,6 +1,6 @@
-import { idValidation } from "@/common/common.validation";
-import { removeHtmlTagsFromString } from "@constellatio/utils";
+import { idValidation } from "~/common/common.validation";
 
+import { removeHtmlTagsFromString } from "@constellatio/utils"; 
 import { z } from "zod";
 
 export const questionTextValidation = z.string().nullable().transform((value, context) =>
