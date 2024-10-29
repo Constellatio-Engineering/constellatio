@@ -1,4 +1,10 @@
-import { eq, or, SQL } from "@constellatio/db";
+import { deleteClickupTask } from "~/lib/clickup/tasks/delete-task";
+import { findClickupTask } from "~/lib/clickup/tasks/find-task";
+import { type ClickupTask } from "~/lib/clickup/types";
+import { clickupCrmCustomField, getClickupCrmUserByUserId } from "~/lib/clickup/utils";
+import { NotFoundError, SelfDeletionRequestError } from "~/utils/serverError";
+
+import { eq, or, type SQL } from "@constellatio/db";
 import { db } from "@constellatio/db/client";
 import {
   answerUpvotes, bookmarks, casesProgress, casesSolutions,
@@ -13,15 +19,10 @@ import {
   updateUserInCrmQueue, uploadedFiles, uploadFolders,
   users, usersToBadges, usersToRoles
 } from "@constellatio/db/schema";
-import { env } from "@constellatio/env";
+import { env } from "@constellatio/env"; 
 import { deleteUserSchema } from "@constellatio/schemas";
 import { printAllSettledPromisesSummary } from "@constellatio/utils";
-import { deleteClickupTask } from "~/lib/clickup/tasks/delete-task";
-import { findClickupTask } from "~/lib/clickup/tasks/find-task";
-import { type ClickupTask } from "~/lib/clickup/types";
-import { clickupCrmCustomField, getClickupCrmUserByUserId } from "~/lib/clickup/utils";
 
-import { NotFoundError, SelfDeletionRequestError } from "~/utils/serverError";
 import { adminProcedure, createTRPCRouter } from "../trpc";
 
 export const adminRouter = createTRPCRouter({

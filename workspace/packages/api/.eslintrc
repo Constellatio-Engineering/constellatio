@@ -1,0 +1,22 @@
+{
+  "root": true,
+  "parserOptions": {
+    "project": "./tsconfig.json"
+  },
+  "extends": [
+    "@constellatio/eslint-config/base"
+  ],
+  "rules": {
+    "no-restricted-imports": [
+      "error",
+      {
+        "paths": [
+          {
+            "name": "@constellatio/schemas",
+            "message": "Please import directly from schema files instead."
+          }
+        ]
+      }
+    ]
+  }
+}

@@ -1,6 +1,6 @@
 {
   "extends": "@constellatio/tsconfig/internal-package.json",
-  "include": ["src", "index.ts"],
+  "include": ["src", "*.ts"],
   "exclude": ["node_modules"],
   "compilerOptions": {
     "baseUrl": ".",

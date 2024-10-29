@@ -7,6 +7,20 @@
     ".": {
       "types": "./dist/index.d.ts",
       "default": "./src/index.ts"
+    },
+    "./schemas/*": {
+      "types": "./dist/schemas/*.d.ts",
+      "default": "./src/schemas/*.ts"
+    },
+    "./common/*": {
+      "types": "./dist/common/*.d.ts",
+      "default": "./src/common/*.ts"
+    }
+  },
+  "typesVersions": {
+    "*": {
+      "schemas/*": ["./dist/schemas/*"],
+      "common/*": ["./dist/common/*"]
     }
   },
   "files": [
@@ -28,6 +42,7 @@
   },
   "devDependencies": {
     "@constellatio/tsconfig": "workspace:*",
+    "@constellatio/eslint-config": "workspace:*",
     "eslint": "catalog:",
     "typescript": "catalog:"
   }

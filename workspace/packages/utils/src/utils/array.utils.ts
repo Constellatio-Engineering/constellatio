@@ -22,7 +22,7 @@ export const shuffleArray = <T>(array: T[]): T[] =>
 };
 
 // function that checks if 2 arrays are equal sets (ignoring order)
-export const areArraysEqualSets = <T extends string | number | boolean | null | undefined>(arrayA: T[], arrayB: T[]): boolean =>
+export const areArraysEqualSets = <T extends Nullable<Primitive>>(arrayA: T[], arrayB: T[]): boolean =>
 {
   const superSet: {
     [key: string]: number;

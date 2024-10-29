@@ -1,28 +1,19 @@
-/**
- * YOU PROBABLY DON'T NEED TO EDIT THIS FILE, UNLESS:
- * 1. You want to modify request context (see Part 1).
- * 2. You want to create a new middleware or type of procedure (see Part 3).
- *
- * TL;DR - This is where all the tRPC server stuff is created and plugged in. The pieces you will
- * need to use are documented accordingly near the end.
- */
-
+import { eq } from "@constellatio/db";
 import { db } from "@constellatio/db/client";
 import { users } from "@constellatio/db/schema";
-import { eq } from "@constellatio/db";
 import { env } from "@constellatio/env";
-import {
-  EmailAlreadyTakenError, NotFoundError, RateLimitError, SelfDeletionRequestError, UnauthorizedError
-} from "./utils/serverError";
-
 import { createPagesServerClient, type SupabaseClient, type User } from "@supabase/auth-helpers-nextjs";
 import { type Session } from "@supabase/auth-helpers-react";
 import { initTRPC } from "@trpc/server";
 import { type CreateNextContextOptions } from "@trpc/server/adapters/next";
 import { type GetServerSidePropsContext, type NextApiRequest, type NextApiResponse } from "next";
 import superjson from "superjson";
+
 import { type ClientError, clientErrors } from "./utils/clientError";
 import { sleep } from "./utils/common";
+import {
+  EmailAlreadyTakenError, NotFoundError, RateLimitError, SelfDeletionRequestError, UnauthorizedError
+} from "./utils/serverError"; 
 
 type CreateContextOptions = Record<string, never>;
 
