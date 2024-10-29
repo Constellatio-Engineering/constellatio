@@ -23,6 +23,7 @@
   "devDependencies": {
     "@constellatio/utility-types": "workspace:*",
     "@constellatio/tsconfig": "workspace:*",
+    "@constellatio/eslint-config": "workspace:*",
     "drizzle-kit": "0.26.2",
     "eslint": "catalog:",
     "typescript": "catalog:"
