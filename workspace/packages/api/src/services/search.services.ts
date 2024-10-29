@@ -1,6 +1,8 @@
 /* eslint-disable max-lines */
+import { meiliSearchAdmin } from "~/lib/meilisearch";
+
 import {
-  AllTags,
+  type AllTags,
   getArticleById,
   getCaseById,
   type IGenGetAllArticlesByLegalAreaQuery,
@@ -16,7 +18,6 @@ import {
   type IGenTags,
   type IGenTopic,
 } from "@constellatio/cms";
-import { searchIndices } from "@constellatio/db-to-search";
 import { db } from "@constellatio/db/client";
 import {
   type DocumentWithTags,
@@ -28,6 +29,7 @@ import {
   type SearchIndexUpdateQueueInsert,
   type UploadedFileWithTags
 } from "@constellatio/db/schema";
+import { searchIndices } from "@constellatio/db-to-search";
 import {
   type ArticleSearchIndexItem,
   articleSearchIndexItemPrimaryKey,
@@ -43,9 +45,9 @@ import {
   forumQuestionSearchIndexItemPrimaryKey,
   tagSearchIndexItemPrimaryKey,
   uploadSearchIndexItemPrimaryKey
-} from "@constellatio/meilisearch";
-import { CaisyWebhookEventType } from "@constellatio/shared/validation";
-import { meiliSearchAdmin } from "~/lib/meilisearch";
+} from "@constellatio/meilisearch/utils";
+import { type CaisyWebhookEventType } from "@constellatio/shared/validation";
+
 import { addTags } from "./tags.services";
 
 export const addContentToSearchQueue = async (items: SearchIndexUpdateQueueInsert | SearchIndexUpdateQueueInsert[]): Promise<void> =>

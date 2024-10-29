@@ -1,11 +1,13 @@
-import { and, asc, eq } from "@constellatio/db";
-import { searchIndices } from "@constellatio/db-to-search";
-import { db } from "@constellatio/db/client";
-import { documents, uploadedFiles, uploadFolders } from "@constellatio/db/schema";
-import { DocumentSearchItemNodes, UploadSearchItemNodes } from "@constellatio/meilisearch";
-import { createFolderSchema, deleteFolderSchema, renameFolderSchema } from "@constellatio/schemas";
 import { meiliSearchAdmin } from "~/lib/meilisearch";
 import { deleteFiles } from "~/services/uploads.services";
+
+import { and, asc, eq } from "@constellatio/db";
+import { db } from "@constellatio/db/client";
+import { documents, uploadedFiles, uploadFolders } from "@constellatio/db/schema";
+import { searchIndices } from "@constellatio/db-to-search";
+import { type DocumentSearchItemNodes, type UploadSearchItemNodes } from "@constellatio/meilisearch/utils";
+import { createFolderSchema, deleteFolderSchema, renameFolderSchema } from "@constellatio/schemas";
+
 import { createTRPCRouter, protectedProcedure } from "../trpc";
 
 export const foldersRouter = createTRPCRouter({

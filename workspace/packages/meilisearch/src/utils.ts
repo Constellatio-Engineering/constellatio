@@ -1,12 +1,12 @@
 /* eslint-disable max-lines */
-import { type Document, type ForumQuestion, type UploadedFile } from "@constellatio/db/schema";
 import {
   type FullLegalCase, type IGenArticle, type IGenLegalArea, type IGenMainCategory, type IGenTags, type IGenTopic
 } from "@constellatio/cms";
+import { type Document, type ForumQuestion, type UploadedFile } from "@constellatio/db/schema";
 import {
   type DotSeparatedKeys, type NullableProperties, type Prettify, type RemoveUndefined
 } from "@constellatio/utility-types";
-import { removeHtmlTagsFromString } from "@constellatio/utils";
+import { removeHtmlTagsFromString } from "@constellatio/utils/html";
 
 type CaseSearchIndexItemContent = {
   durationToCompleteInMinutes: number;
@@ -106,15 +106,15 @@ export type UploadSearchItemNodes = RemoveUndefined<DotSeparatedKeys<UploadSearc
 export type UploadSearchItemUpdate = Partial<Omit<UploadSearchIndexItem, "id" | "userId">> & Pick<UploadSearchIndexItem, "id">;
 
 export const createUploadsSearchIndexItem = ({
-                                               contentType,
-                                               createdAt,
-                                               fileExtension,
-                                               folderId,
-                                               id,
-                                               originalFilename,
-                                               tags,
-                                               userId
-                                             }: UploadSearchIndexItem): UploadSearchIndexItem =>
+  contentType,
+  createdAt,
+  fileExtension,
+  folderId,
+  id,
+  originalFilename,
+  tags,
+  userId
+}: UploadSearchIndexItem): UploadSearchIndexItem =>
 {
   return ({
     contentType,
@@ -143,15 +143,15 @@ export type DocumentSearchItemNodes = RemoveUndefined<DotSeparatedKeys<DocumentS
 export type DocumentSearchItemUpdate = Partial<Omit<DocumentSearchIndexItem, "id" | "userId">> & Pick<DocumentSearchIndexItem, "id">;
 
 export const createDocumentSearchIndexItem = ({
-                                                content,
-                                                createdAt,
-                                                folderId,
-                                                id,
-                                                name,
-                                                tags,
-                                                updatedAt,
-                                                userId
-                                              }: DocumentSearchIndexItem): DocumentSearchIndexItem =>
+  content,
+  createdAt,
+  folderId,
+  id,
+  name,
+  tags,
+  updatedAt,
+  userId
+}: DocumentSearchIndexItem): DocumentSearchIndexItem =>
 {
   return ({
     content: removeHtmlTagsFromString(content, true),
@@ -205,15 +205,15 @@ export type ForumQuestionSearchItemNodes = RemoveUndefined<DotSeparatedKeys<Foru
 export type ForumQuestionSearchItemUpdate = Prettify<Partial<Omit<ForumQuestionSearchIndexItem, "id" | "userId">> & Pick<ForumQuestionSearchIndexItem, "id">>;
 
 export const createForumQuestionSearchIndexItem = ({
-                                                     id,
-                                                     legalFields,
-                                                     slug,
-                                                     subfields,
-                                                     text,
-                                                     title,
-                                                     topics,
-                                                     userId
-                                                   }: ForumQuestionSearchIndexItem): ForumQuestionSearchIndexItem =>
+  id,
+  legalFields,
+  slug,
+  subfields,
+  text,
+  title,
+  topics,
+  userId
+}: ForumQuestionSearchIndexItem): ForumQuestionSearchIndexItem =>
 {
   return ({
     id,

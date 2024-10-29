@@ -1,28 +1,34 @@
 /* eslint-disable max-lines */
 
-import { and, count, eq, inArray, or } from "@constellatio/db";
-import { searchIndices } from "@constellatio/db-to-search";
+import { meiliSearchAdmin } from "~/lib/meilisearch";
+import { getAllLegalFields, getAllSubfields, getAllTopics } from "~/services/caisy.services";
+import { getAnswers, getQuestions, insertLegalFieldsAndTopicsForQuestion, resetLegalFieldsAndTopicsForQuestion } from "~/services/forum.services";
+import { BadRequestError, ForbiddenError, InternalServerError, NotFoundError } from "~/utils/serverError";
+
+import {
+  and, count, eq, inArray, or 
+} from "@constellatio/db";
 import { db } from "@constellatio/db/client";
-import { answerUpvotes, correctAnswers, ForumAnswerInsert, forumAnswers, ForumQuestionInsert, forumQuestions, notifications, questionUpvotes } from "@constellatio/db/schema";
-import { createForumQuestionSearchIndexItem, forumQuestionSearchIndexItemPrimaryKey, ForumQuestionSearchItemUpdate } from "@constellatio/meilisearch";
+import {
+  answerUpvotes, correctAnswers, type ForumAnswerInsert, forumAnswers, type ForumQuestionInsert, forumQuestions, notifications, questionUpvotes 
+} from "@constellatio/db/schema";
+import { searchIndices } from "@constellatio/db-to-search";
+import { createForumQuestionSearchIndexItem, forumQuestionSearchIndexItemPrimaryKey, type ForumQuestionSearchItemUpdate } from "@constellatio/meilisearch/utils";
 import {
   deleteAnswerSchema,
   deleteQuestionSchema,
   getAnswerByIdSchema,
   getAnswersSchema,
   getQuestionByIdSchema,
-  GetQuestionsSchema,
+  type GetQuestionsSchema,
   getQuestionsSchema,
   markAnswerAsCorrectSchema, postAnswerSchema, postQuestionSchema, updateAnswerSchema, updateQuestionSchema, upvoteAnswerSchema, upvoteQuestionSchema
 } from "@constellatio/schemas";
 import { removeHtmlTagsFromString } from "@constellatio/utils";
+import { type inferProcedureOutput } from "@trpc/server";
 import slugify from "slugify";
-import { meiliSearchAdmin } from "~/lib/meilisearch";
-import { getAllLegalFields, getAllSubfields, getAllTopics } from "~/services/caisy.services";
-import { getAnswers, getQuestions, insertLegalFieldsAndTopicsForQuestion, resetLegalFieldsAndTopicsForQuestion } from "~/services/forum.services";
-import { BadRequestError, ForbiddenError, InternalServerError, NotFoundError } from "~/utils/serverError";
+
 import { createTRPCRouter, forumModProcedure, protectedProcedure } from "../trpc";
-import { inferProcedureOutput } from "@trpc/server";
 
 const createSlug = (title: string): string =>
 {

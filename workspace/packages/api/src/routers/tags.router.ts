@@ -7,7 +7,7 @@ import {
   type Document, documents, documentsToTags, type UploadedFile, uploadedFiles, uploadedFilesToTags 
 } from "@constellatio/db/schema";
 import { searchIndices } from "@constellatio/db-to-search";
-import { type DocumentSearchIndexItem, type TagSearchIndexItem, type UploadSearchIndexItem } from "@constellatio/meilisearch";
+import { type DocumentSearchIndexItem, type TagSearchIndexItem, type UploadSearchIndexItem } from "@constellatio/meilisearch/utils";
 import { setTagsForEntitySchema } from "@constellatio/schemas";
 import { type Nullable } from "@constellatio/utility-types"; 
 

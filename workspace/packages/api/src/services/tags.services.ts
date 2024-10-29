@@ -1,9 +1,9 @@
-import { AllTags, IGenTags } from "@constellatio/cms";
-import { searchIndices } from "@constellatio/db-to-search";
-import { TagSearchIndexItem } from "@constellatio/meilisearch";
-import { NullableProperties } from "@constellatio/utility-types";
 import { meiliSearchAdmin } from "~/lib/meilisearch";
 
+import { type AllTags, type IGenTags } from "@constellatio/cms";
+import { searchIndices } from "@constellatio/db-to-search";
+import { type TagSearchIndexItem } from "@constellatio/meilisearch/utils";
+import { type NullableProperties } from "@constellatio/utility-types";
 
 type AddTags = <T>(
   objects: Array<T & {

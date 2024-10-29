@@ -1,19 +1,25 @@
 /* eslint-disable max-lines */
-import { and, desc, eq, inArray, isNull, SQLWrapper } from "@constellatio/db";
-import { searchIndices } from "@constellatio/db-to-search";
-import { db } from "@constellatio/db/client";
-import { UploadedFileInsert, uploadedFiles } from "@constellatio/db/schema";
-import { createUploadsSearchIndexItem, uploadSearchIndexItemPrimaryKey, UploadSearchItemUpdate } from "@constellatio/meilisearch";
-import { addUploadSchema, deleteUploadSchema, generateCreateSignedUploadUrlSchema, getUploadedFilesSchema, updateUploadedFileSchema } from "@constellatio/schemas";
-import { fileExtensions, fileMimeTypes } from "@constellatio/shared/validation";
-import type { inferProcedureOutput } from "@trpc/server";
-import { z } from "zod";
 import { addUserToCrmUpdateQueue } from "~/lib/clickup/utils";
 import { meiliSearchAdmin } from "~/lib/meilisearch";
 import { addBadgeForUser } from "~/services/badges.services";
 import { addTags } from "~/services/tags.services";
 import { deleteFiles, getClouStorageFileUrl, getSignedCloudStorageUploadUrl } from "~/services/uploads.services";
 import { NotFoundError } from "~/utils/serverError";
+
+import {
+  and, desc, eq, inArray, isNull, type SQLWrapper 
+} from "@constellatio/db";
+import { db } from "@constellatio/db/client";
+import { type UploadedFileInsert, uploadedFiles } from "@constellatio/db/schema";
+import { searchIndices } from "@constellatio/db-to-search";
+import { createUploadsSearchIndexItem, uploadSearchIndexItemPrimaryKey, type UploadSearchItemUpdate } from "@constellatio/meilisearch/utils";
+import {
+  addUploadSchema, deleteUploadSchema, generateCreateSignedUploadUrlSchema, getUploadedFilesSchema, updateUploadedFileSchema 
+} from "@constellatio/schemas";
+import { fileExtensions, fileMimeTypes } from "@constellatio/shared/validation";
+import type { inferProcedureOutput } from "@trpc/server";
+import { z } from "zod";
+
 import { createTRPCRouter, protectedProcedure } from "../trpc";
 
 export const uploadsRouter = createTRPCRouter({

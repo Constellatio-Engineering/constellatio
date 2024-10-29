@@ -1,16 +1,19 @@
-import { and, desc, eq, isNull, SQLWrapper } from "@constellatio/db";
-import { searchIndices } from "@constellatio/db-to-search";
-import { db } from "@constellatio/db/client";
-import { DocumentInsert, documents } from "@constellatio/db/schema";
-import { createDocumentSearchIndexItem, documentSearchIndexItemPrimaryKey, DocumentSearchItemUpdate } from "@constellatio/meilisearch";
-import { createDocumentSchema, deleteDocumentSchema, getDocumentsSchema, updateDocumentSchema } from "@constellatio/schemas";
-import { removeHtmlTagsFromString } from "@constellatio/utils";
 import { addUserToCrmUpdateQueue } from "~/lib/clickup/utils";
 import { meiliSearchAdmin } from "~/lib/meilisearch";
 import { addTags } from "~/services/tags.services";
-import { createTRPCRouter, protectedProcedure } from "../trpc";
 
-import { inferProcedureOutput } from "@trpc/server";
+import {
+  and, desc, eq, isNull, type SQLWrapper 
+} from "@constellatio/db";
+import { db } from "@constellatio/db/client";
+import { type DocumentInsert, documents } from "@constellatio/db/schema";
+import { searchIndices } from "@constellatio/db-to-search";
+import { createDocumentSearchIndexItem, documentSearchIndexItemPrimaryKey, type DocumentSearchItemUpdate } from "@constellatio/meilisearch/utils";
+import { createDocumentSchema, deleteDocumentSchema, getDocumentsSchema, updateDocumentSchema } from "@constellatio/schemas";
+import { removeHtmlTagsFromString } from "@constellatio/utils";
+import { type inferProcedureOutput } from "@trpc/server";
+
+import { createTRPCRouter, protectedProcedure } from "../trpc";
 
 export const documentsRouter = createTRPCRouter({
   createDocument: protectedProcedure
