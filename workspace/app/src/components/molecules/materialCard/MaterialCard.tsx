@@ -3,11 +3,10 @@ import { SubtitleText } from "@/components/atoms/SubtitleText/SubtitleText";
 import useDocumentEditorStore from "@/stores/documentEditor.store";
 import useMaterialsStore from "@/stores/materials.store";
 
+import { type Document } from "@constellatio/db/schema";
 import React, { type FunctionComponent } from "react";
 
 import * as styles from "./MaterialCard.styles";
-
-import { type Document } from "@/db/schema";
 
 type PaperCard =
 {

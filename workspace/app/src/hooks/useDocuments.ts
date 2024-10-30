@@ -2,9 +2,8 @@ import useMaterialsStore from "@/stores/materials.store";
 import { api } from "@/utils/api";
 import { type UseQueryResult } from "@/utils/types";
 
+import { type GetDocumentsResult } from "@constellatio/api/routers/documents.router";
 import { keepPreviousData } from "@tanstack/react-query";
-
-import { type GetDocumentsResult } from "@/server/api/routers/documents.router";
 
 type UseDocuments = () => UseQueryResult<{
   documentsInAllFolders: GetDocumentsResult;

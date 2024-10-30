@@ -3,8 +3,8 @@ import useUploadedFiles from "@/hooks/useUploadedFiles";
 import useMaterialsStore from "@/stores/materials.store";
 import { type TrpcClientErrorBase } from "@/utils/types";
 
-import { type Note } from "@/db/schema";
-import { type GetUploadedFileResult } from "@/server/api/routers/uploads.router";
+import { type GetUploadedFileResult } from "@constellatio/api/routers/uploads.router";
+import { type Note } from "@constellatio/db/schema";
 
 export type UploadedFileWithNote = GetUploadedFileResult & { note: Note | null };
 

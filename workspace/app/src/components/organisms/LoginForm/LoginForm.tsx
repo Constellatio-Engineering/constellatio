@@ -8,11 +8,14 @@ import ErrorCard from "@/components/molecules/errorCard/ErrorCard";
 import { colooors } from "@/constants/styles/colors";
 import useContextAndErrorIfNull from "@/hooks/useContextAndErrorIfNull";
 import { useResendConfirmationEmail } from "@/hooks/useResendConfirmationEmail";
+import { supabase } from "@/lib/supabase";
 import { InvalidateQueriesContext } from "@/provider/InvalidateQueriesProvider";
 import useAuthPageStore from "@/stores/authPage.store";
 import { queryParams } from "@/utils/query-params";
 
-import { Stack } from "@mantine/core";
+import { loginFormSchema, type LoginFormSchema } from "@constellatio/schemas/routers/auth/loginForm.schema";
+import { appPaths, authPaths } from "@constellatio/shared/paths";
+import { Stack } from "@mantine/core"; 
 import { useForm, zodResolver } from "@mantine/form";
 import { useAtom } from "jotai";
 import Link from "next/link";
@@ -21,10 +24,6 @@ import React, { type FunctionComponent, useEffect, useState } from "react";
 
 import * as styles from "./LoginForm.styles";
 import { ResetPasswordModal, resetPasswordModalVisible } from "../ResetPasswordModal/ResetPasswordModal";
-
-import { supabase } from "@/lib/supabase";
-import { loginFormSchema, type LoginFormSchema } from "@/schemas/auth/loginForm.schema";
-import { appPaths, authPaths } from "@/utils/paths";
 
 export const LoginForm: FunctionComponent = () =>
 {

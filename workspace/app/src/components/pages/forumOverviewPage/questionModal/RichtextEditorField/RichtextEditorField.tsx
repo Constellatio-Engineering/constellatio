@@ -1,6 +1,7 @@
 /* eslint-disable max-lines */
 import { Button, type TButton } from "@/components/atoms/Button/Button";
 
+import { type PostQuestionSchema } from "@constellatio/schemas/routers/forum/postQuestion.schema";
 import { Skeleton } from "@mantine/core";
 import { type GetInputProps } from "@mantine/form/lib/types";
 import { Link, RichTextEditor } from "@mantine/tiptap";
@@ -15,8 +16,6 @@ import { StarterKit } from "@tiptap/starter-kit";
 import React, { type FunctionComponent, useEffect, useState } from "react";
 
 import * as styles from "./RichtextEditorField.styles";
-
-import type { PostQuestionSchema } from "@/schemas/forum/postQuestion.schema";
 
 type RichtextEditorButton = {
   readonly action: (editor: Editor) => void;

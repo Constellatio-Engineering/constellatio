@@ -1,8 +1,8 @@
 import MenuTab from "@/components/atoms/menuTab/MenuTab";
 import ContentWrapper from "@/components/helpers/contentWrapper/ContentWrapper";
 import { type FavoriteCategoryNavTab } from "@/components/organisms/personalSpaceFavoriteTab/PersonalSpaceFavoriteTab";
-import { type NonEmptyArray } from "@/utils/types";
 
+import { type NonEmptyArray } from "@constellatio/utility-types";
 import React, { type FunctionComponent } from "react";
 
 import * as styles from "./PersonalSpaceNavBar.styles";

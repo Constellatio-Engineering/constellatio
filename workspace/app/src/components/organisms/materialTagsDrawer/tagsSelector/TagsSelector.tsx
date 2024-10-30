@@ -5,15 +5,14 @@ import { useTagsSearchResults } from "@/hooks/useTagsSearchResults";
 import { type EditorOpened, useTagsEditorStore } from "@/stores/tagsEditor.store";
 import { useTagsSearchBarStore } from "@/stores/tagsSearchBar.store";
 
+import { type IGenTags } from "@constellatio/cms/generated-types";
+import { type TagSearchIndexItem } from "@constellatio/meilisearch/utils"; 
+import { appPaths } from "@constellatio/shared/paths";
 import { ActionIcon, Badge, Input, rem } from "@mantine/core";
 import { IconSearch, IconX } from "@tabler/icons-react";
 import React, { type FunctionComponent, type MouseEvent } from "react";
 
 import * as styles from "./TagsSelector.styles";
-
-import { type IGenTags } from "@/services/graphql/__generated/sdk";
-import { appPaths } from "@/utils/paths";
-import { type TagSearchIndexItem } from "@/utils/search";
 
 type CustomBadgeProps = {
   readonly deleteButtonAction?: (e: MouseEvent) => void;

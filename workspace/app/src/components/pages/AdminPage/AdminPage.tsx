@@ -4,6 +4,7 @@ import { Input } from "@/components/atoms/Input/Input";
 import ContentWrapper from "@/components/helpers/contentWrapper/ContentWrapper";
 import { api } from "@/utils/api";
 
+import { deleteUserSchema, type DeleteUserSchema } from "@constellatio/schemas/routers/admin/deleteUser.schema";
 import { Title } from "@mantine/core";
 import { useForm, zodResolver } from "@mantine/form";
 import { modals } from "@mantine/modals";
@@ -11,8 +12,6 @@ import { notifications } from "@mantine/notifications";
 import { type FunctionComponent } from "react";
 
 import * as styles from "./AdminPage.styles";
-
-import { deleteUserSchema, type DeleteUserSchema } from "@/schemas/admin/deleteUser.schema";
 
 export const AdminPage: FunctionComponent = () =>
 {

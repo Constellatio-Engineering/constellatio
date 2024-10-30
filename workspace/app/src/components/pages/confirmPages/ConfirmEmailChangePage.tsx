@@ -5,14 +5,13 @@ import { InvalidateQueriesContext } from "@/provider/InvalidateQueriesProvider";
 import { api } from "@/utils/api";
 import { queryParams } from "@/utils/query-params";
 
+import { appPaths } from "@constellatio/shared/paths";
 import { Loader, Title } from "@mantine/core";
 import { useUser } from "@supabase/auth-helpers-react";
 import { useRouter } from "next/router";
 import React, { type FunctionComponent, useEffect, useRef, useState } from "react";
 
 import * as styles from "./ConfirmPage.styles";
-
-import { appPaths } from "@/utils/paths";
 
 const ConfirmEmailChangePage: FunctionComponent = () =>
 {

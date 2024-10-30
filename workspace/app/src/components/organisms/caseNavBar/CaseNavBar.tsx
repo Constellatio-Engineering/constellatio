@@ -3,14 +3,13 @@ import ContentWrapper from "@/components/helpers/contentWrapper/ContentWrapper";
 import { Check } from "@/components/Icons/Check";
 import useCaseSolvingStore, { type CaseStepIndex } from "@/stores/caseSolving.store";
 
+import { getCaseProgressStateAsNumber } from "@constellatio/cms/utils/case";
+import { type CaseProgressState } from "@constellatio/shared/validation";
 import React, { type FunctionComponent } from "react";
 
 import * as styles from "./CaseNavBar.styles";
 
-import { type CaseProgressState } from "@/db/schema";
-import { getCaseProgressStateAsNumber } from "@/utils/case";
-
-export interface ICaseNavBarProps 
+export interface ICaseNavBarProps
 {
   readonly caseProgressState: CaseProgressState;
   readonly caseStepIndex: CaseStepIndex;

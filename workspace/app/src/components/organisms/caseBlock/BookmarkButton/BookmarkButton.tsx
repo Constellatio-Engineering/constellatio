@@ -3,16 +3,15 @@ import { BookmarkFilledIcon } from "@/components/Icons/BookmarkFilledIcon";
 import TableIconButton from "@/components/molecules/tableIconButton/TableIconButton";
 import useAddBookmark from "@/hooks/useAddBookmark";
 import useRemoveBookmark from "@/hooks/useRemoveBookmark";
-import { type Nullable } from "@/utils/types";
 
+import { type AddOrRemoveBookmarkSchema } from "@constellatio/schemas/routers/bookmarks/addOrRemoveBookmark.schema";
+import { appPaths } from "@constellatio/shared/paths";
+import { type Nullable } from "@constellatio/utility-types";
 import { useRouter } from "next/router";
 import React, { type FunctionComponent } from "react";
 
 import DeleteBookmarkModal from "../../deleteBookmarkModal/DeleteBookmarkModal";
 import { type ICaseBlockProps } from "../ItemBlock";
-
-import { type AddOrRemoveBookmarkSchema } from "@/schemas/bookmarks/addOrRemoveBookmark.schema";
-import { appPaths } from "@/utils/paths";
 
 interface Props
 {

@@ -10,16 +10,15 @@ import { Timer } from "@/components/Icons/timer";
 import ResetCaseProgressModal from "@/components/organisms/resetCaseProgressModal/ResetCaseProgressModal";
 import useArticleViews from "@/hooks/useArticleViews";
 import useCaseViews from "@/hooks/useCaseViews";
-import { type Nullable } from "@/utils/types";
 
+import { type IGenLegalArea, type IGenTags, type Maybe } from "@constellatio/cms/generated-types";
+import { type Nullable } from "@constellatio/utility-types";
+import { formatDate } from "@constellatio/utils/dates";
 import { useDisclosure } from "@mantine/hooks";
 import React, { type FunctionComponent } from "react";
 
 import * as styles from "./OverviewCard.styles";
 import OverviewCardTagsModal from "../overviewCardTagsModal/OverviewCardTagsModal";
-
-import { type IGenLegalArea, type IGenTags, type Maybe } from "@/services/graphql/__generated/sdk";
-import { formatDate } from "@/utils/utils";
 
 export interface IOverviewCard 
 {

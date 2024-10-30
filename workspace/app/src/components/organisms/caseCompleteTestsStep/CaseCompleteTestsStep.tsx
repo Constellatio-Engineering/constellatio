@@ -10,6 +10,9 @@ import useCaseSolvingStore from "@/stores/caseSolving.store";
 import { api } from "@/utils/api";
 import type { IDocumentLink, IHeadingNode } from "types/richtext";
 
+import { type IGenArticle_FullTextTasks, type IGenCase_Facts, type IGenCase_FullTextTasks, type Maybe } from "@constellatio/cms/generated-types";
+import { type Games } from "@constellatio/cms/utils/case";
+import { type GameProgress } from "@constellatio/db/schema";
 import { Container, Title } from "@mantine/core";
 import {
   type FunctionComponent, useCallback, useEffect, useMemo, useRef 
@@ -27,10 +30,6 @@ import { getNestedHeadingIndex } from "../floatingPanel/generateTocHelper";
 import FloatingPanelTablet from "../floatingPanelTablet/FloatingPanelTablet";
 import SelectionCardGame from "../SelectionCardGame/SelectionCardGame";
 import { SolveCaseGame } from "../SolveCaseGame/SolveCaseGame";
-
-import { type GameProgress } from "@/db/schema";
-import { type IGenArticle_FullTextTasks, type IGenCase_Facts, type IGenCase_FullTextTasks, type Maybe } from "@/services/graphql/__generated/sdk";
-import { type Games } from "@/utils/case";
 
 export const headingObservedThreshold = 0.23;
 

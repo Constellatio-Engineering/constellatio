@@ -1,11 +1,10 @@
 import { Svg } from "@/basic-components/SVG/Svg";
-import { type Nullable } from "@/utils/types";
 
+import { type IGenArticle, type IGenMainCategory } from "@constellatio/cms/generated-types";
+import { type Nullable } from "@constellatio/utility-types";
 import React, { type FunctionComponent } from "react";
 
 import ItemBlock from "../caseBlock/ItemBlock";
-
-import { type IGenArticle, type IGenMainCategory } from "@/services/graphql/__generated/sdk";
 
 interface FavoriteArticlesListProps
 {

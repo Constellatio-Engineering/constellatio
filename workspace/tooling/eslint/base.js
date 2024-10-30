@@ -245,7 +245,7 @@ module.exports = {
     "barrel-files/avoid-namespace-import": [
       "error",
       {
-        "allowList": ["./schema"]
+        "allowList": ["./schema", ".styles", ".style", "node:process"]
       }
     ],
     "barrel-files/avoid-re-export-all": "error",

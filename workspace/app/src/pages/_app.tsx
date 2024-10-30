@@ -13,12 +13,14 @@ import DocumentEditor from "@/components/organisms/papersBlock/documentEditor/Do
 import SubscriptionModal from "@/components/organisms/subscriptionModal/SubscriptionModal";
 import MaintenancePage from "@/components/pages/maintenancePage/MaintenancePage";
 import { env } from "@/env.mjs";
+import { supabase } from "@/lib/supabase"; 
 import AuthStateProvider from "@/provider/AuthStateProvider";
 import CustomThemingProvider from "@/provider/CustomThemingProvider";
 import InvalidateQueriesProvider from "@/provider/InvalidateQueriesProvider";
 import MeilisearchProvider from "@/provider/MeilisearchProvider";
 import { api } from "@/utils/api";
 
+import { isProduction } from "@constellatio/env";
 import { ModalsProvider } from "@mantine/modals";
 import { Notifications } from "@mantine/notifications";
 import { GoogleTagManager } from "@next/third-parties/google"; 
@@ -31,9 +33,6 @@ import { appWithTranslation, type UserConfig } from "next-i18next";
 import React, { Fragment, type FunctionComponent, type ReactElement, type ReactNode } from "react";
 
 import nextI18NextConfig from "../../next-i18next.config.js";
-
-import { supabase } from "@/lib/supabase";
-import { isProduction } from "@/utils/env";
 
 export type NextPageWithLayout<P = object, IP = P> = NextPage<P, IP> & {
   getLayout?: (page: ReactElement) => ReactNode;

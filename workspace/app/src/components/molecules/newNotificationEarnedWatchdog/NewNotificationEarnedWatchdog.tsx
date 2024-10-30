@@ -9,6 +9,8 @@ import { AuthStateContext } from "@/provider/AuthStateProvider";
 import { InvalidateQueriesContext } from "@/provider/InvalidateQueriesProvider";
 import { api } from "@/utils/api";
 
+import { type BadgeWithUserData } from "@constellatio/db/schema";
+import { getIsPathAppPath } from "@constellatio/shared/paths";
 import { Modal, Title } from "@mantine/core";
 import { useLocalStorage } from "@mantine/hooks";
 import { useRouter } from "next/router";
@@ -16,9 +18,6 @@ import React, { type FunctionComponent, useContext } from "react";
 import { z } from "zod";
 
 import * as styles from "./NewNotificationEarnedWatchdog.styles";
-
-import { type BadgeWithUserData } from "@/db/schema";
-import { getIsPathAppPath } from "@/utils/paths";
 
 /*
  * The dismissed badges are stored in localStorage in case an error occurs

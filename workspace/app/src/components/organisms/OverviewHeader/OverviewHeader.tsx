@@ -2,6 +2,8 @@ import ContentWrapper from "@/components/helpers/contentWrapper/ContentWrapper";
 import { OverlayLines } from "@/components/Icons/bg-layer";
 import { Trash } from "@/components/Icons/Trash";
 
+import { type GetOverviewPagePropsResult } from "@constellatio/cms/content/getOverviewPageProps";
+import type { Maybe, Scalars } from "@constellatio/cms/generated-types";
 import { type SerializedStyles } from "@emotion/react";
 import { Title } from "@mantine/core";
 import React, { type FunctionComponent, useState } from "react";
@@ -12,10 +14,7 @@ import CategoryTab from "../../molecules/categoryTab/CategoryTab";
 import FiltersButton from "../../molecules/filtersButton/FiltersButton";
 import FilterTag from "../../molecules/filterTag/FilterTag";
 
-import { type GetOverviewPagePropsResult } from "@/services/content/getOverviewPageProps";
-import type { Maybe, Scalars } from "@/services/graphql/__generated/sdk";
-
-export interface ICasesOverviewHeaderProps 
+export interface ICasesOverviewHeaderProps
 {
   readonly categories?: GetOverviewPagePropsResult["allMainCategories"];
   readonly contentWrapperStylesOverrides?: SerializedStyles;

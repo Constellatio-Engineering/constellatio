@@ -8,6 +8,8 @@ import { HistoryItemsSkeleton } from "@/components/organisms/profileHistoryTab/H
 import { env } from "@/env.mjs";
 import { api } from "@/utils/api";
 
+import { type ViewsHistoryItems } from "@constellatio/api/routers/views.router";
+import { appPaths } from "@constellatio/shared/paths";
 import { Skeleton, Title } from "@mantine/core";
 import { IconReload } from "@tabler/icons-react";
 import Link from "next/link";
@@ -15,9 +17,6 @@ import React, { Fragment, type FunctionComponent, useEffect, useMemo } from "rea
 import { useInView } from "react-intersection-observer";
 
 import * as styles from "./ProfileHistoryTab.styles";
-
-import type { ViewsHistoryItems } from "@/server/api/routers/views.router";
-import { appPaths } from "@/utils/paths";
 
 function getHistoryItemsGroupedByDate(items: ViewsHistoryItems)
 {

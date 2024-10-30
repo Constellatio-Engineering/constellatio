@@ -8,9 +8,15 @@ import { FormMinimal } from "@/components/organisms/RegistrationForm/form/FormMi
 import { allGenders } from "@/components/organisms/RegistrationForm/form/GenderDropdown";
 import { colooors } from "@/constants/styles/colors";
 import { env } from "@/env.mjs";
+import { supabase } from "@/lib/supabase";
 import useAuthPageStore from "@/stores/authPage.store";
 import { api } from "@/utils/api";
 
+import { isDevelopment, isDevelopmentOrStaging } from "@constellatio/env";
+import { allUniversities } from "@constellatio/schemas/common/auth/userData.validation";
+import { registrationFormSchema, type RegistrationFormSchema } from "@constellatio/schemas/routers/auth/registrationForm.schema";
+import { registrationFormMinimalSchema, type RegistrationFormMinimalSchema } from "@constellatio/schemas/routers/auth/registrationFormMinimal.schema";
+import { appPaths, authPaths, getConfirmEmailUrl } from "@constellatio/shared/paths";
 import { Stack, Title } from "@mantine/core";
 import { useForm, zodResolver } from "@mantine/form";
 import { notifications } from "@mantine/notifications";
@@ -20,14 +26,6 @@ import { useRouter } from "next/router";
 import { type FunctionComponent, useEffect, useRef, useState } from "react";
 
 import * as styles from "./RegistrationForm.styles";
-
-import { supabase } from "@/lib/supabase";
-import { registrationFormSchema, type RegistrationFormSchema } from "@/schemas/auth/registrationForm.schema";
-import { type RegistrationFormMinimalSchema, registrationFormMinimalSchema } from "@/schemas/auth/registrationFormMinimal.schema";
-import { allUniversities } from "@/schemas/auth/userData.validation";
-import { isDevelopment, isDevelopmentOrStaging } from "@/utils/env";
-import { appPaths, authPaths, getConfirmEmailUrl } from "@/utils/paths";
-
 const resendEmailConfirmationTimeout = env.NEXT_PUBLIC_RESEND_EMAIL_CONFIRMATION_TIMEOUT_IN_SECONDS * 1000;
 
 export type SignupFormVariant = "full" | "minimal";

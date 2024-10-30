@@ -1,13 +1,12 @@
 import { env } from "@/env.mjs";
 
-import { and, eq, gte, sum } from "drizzle-orm";
-
-import { db } from "@/db/connection";
+import { addBadgeForUser } from "@constellatio/api/src/services/badges.services";
+import { createStreakActivity } from "@constellatio/api/src/services/streak.services";
+import { and, eq, gte, sum } from "@constellatio/db";
+import { db } from "@constellatio/db/client";
 import {
   type CaseProgressSql, type ForumAnswerSql, type ForumQuestionSql, pings, type PingSql, streak, type StreakSql 
-} from "@/db/schema";
-import { addBadgeForUser } from "@/server/api/services/badges.services";
-import { createStreakActivity } from "@/server/api/services/streak.services";
+} from "@constellatio/db/schema";
 
 export const streakHandlerPingInsert = async (record: PingSql["columns"]): Promise<void> =>
 {

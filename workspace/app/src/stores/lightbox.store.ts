@@ -1,5 +1,4 @@
-import { type Nullable } from "@/utils/types";
-
+import { type Nullable } from "@constellatio/utility-types";
 import { create } from "zustand";
 import { immer } from "zustand/middleware/immer";
 

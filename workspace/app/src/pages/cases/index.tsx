@@ -3,17 +3,14 @@ import PageHead from "@/components/organisms/pageHead/PageHead";
 import OverviewPage from "@/components/pages/OverviewPage/OverviewPage";
 import useCasesProgress from "@/hooks/useCasesProgress";
 import { type NextPageWithLayout } from "@/pages/_app";
-
-// import { dummyCases } from "@/pages/cases/dummy-data";
 import { statusesFilterOptions, type StatusFilterOption, useCasesOverviewFiltersStore } from "@/stores/overviewFilters.store";
 
+import { type AllCases, getAllCases } from "@constellatio/cms/content/getAllCases";
+import { getOverviewPageProps, type GetOverviewPagePropsResult } from "@constellatio/cms/content/getOverviewPageProps";
+import { type CaseProgressState } from "@constellatio/shared/validation";
 import { type GetStaticProps } from "next";
 import { useMemo } from "react";
 import { useStore } from "zustand";
-
-import { type CaseProgressState } from "@/db/schema";
-import getAllCases, { type AllCases } from "@/services/content/getAllCases";
-import { getOverviewPageProps, type GetOverviewPagePropsResult } from "@/services/content/getOverviewPageProps";
 
 type GetCasesOverviewPagePropsResult = GetOverviewPagePropsResult & {
   items: AllCases;

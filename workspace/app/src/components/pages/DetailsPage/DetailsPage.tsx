@@ -10,15 +10,14 @@ import useCaseProgress from "@/hooks/useCaseProgress";
 import useGamesProgress from "@/hooks/useGamesProgress";
 import useCaseSolvingStore, { type CaseStepIndex } from "@/stores/caseSolving.store";
 
+import { type FullLegalCase } from "@constellatio/cms/content/getCaseById";
+import { type ArticleWithNextAndPreviousArticleId } from "@constellatio/cms/utils/articles";
+import { getGamesFromCase } from "@constellatio/cms/utils/case";
+import { appPaths } from "@constellatio/shared/paths";
 import React, { type FunctionComponent, useEffect } from "react";
 
 import * as styles from "./DetailsPage.styles";
 import ErrorPage from "../errorPage/ErrorPage";
-
-import { type FullLegalCase } from "@/services/content/getCaseById";
-import { type ArticleWithNextAndPreviousArticleId } from "@/utils/articles";
-import { getGamesFromCase } from "@/utils/case";
-import { appPaths } from "@/utils/paths";
 
 type IDetailsPageProps = {
   readonly content: FullLegalCase | ArticleWithNextAndPreviousArticleId | undefined;

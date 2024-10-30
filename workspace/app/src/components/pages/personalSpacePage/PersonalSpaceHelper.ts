@@ -1,5 +1,5 @@
-import type { GetOverviewPagePropsResult } from "@/services/content/getOverviewPageProps";
-import { type IGenAsset } from "@/services/graphql/__generated/sdk";
+import { type GetOverviewPagePropsResult } from "@constellatio/cms/content/getOverviewPageProps";
+import { type IGenAsset } from "@constellatio/cms/generated-types";
 
 export const categoriesHelper = (
   materialsCategoryData: {

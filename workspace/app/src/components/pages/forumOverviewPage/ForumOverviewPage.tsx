@@ -5,13 +5,12 @@ import ForumQuestions from "@/components/pages/forumOverviewPage/forumQuestions/
 import { useForumPageStore } from "@/stores/forumPage.store";
 import { api } from "@/utils/api";
 
+import { type GetQuestionsCursorType } from "@constellatio/schemas/routers/forum/getQuestions.schema";
 import React, { Fragment, type FunctionComponent } from "react";
 
 import * as styles from "./ForumOverviewPage.styles";
 import PostQuestionModal from "./postQuestionModal/PostQuestionModal";
 import SearchBar from "./searchBar/SearchBar";
-
-import { type GetQuestionsCursorType } from "@/schemas/forum/getQuestions.schema";
 
 export const defaultLimit = 10;
 

@@ -1,15 +1,16 @@
 /* eslint-disable max-lines */
 import { env } from "@/env.mjs";
 
-import { eq } from "drizzle-orm";
+import { addArticlesAndCasesToSearchQueue, addContentToSearchQueue } from "@constellatio/api/src/services/search.services";
+import { caisySDK } from "@constellatio/cms/sdk";
+import { eq } from "@constellatio/db";
+import { db } from "@constellatio/db/client";
+import { documentsToTags, uploadedFilesToTags } from "@constellatio/db/schema";
+import { type CaisyWebhookEventType } from "@constellatio/shared/validation";
 import { type NextApiHandler } from "next";
 import { z, ZodError } from "zod";
 
-import { db } from "@/db/connection";
-import { type CaisyWebhookEventType, documentsToTags, uploadedFilesToTags } from "@/db/schema";
 import { createContentTaskIfNotExists } from "@/lib/clickup/utils";
-import { addArticlesAndCasesToSearchQueue, addContentToSearchQueue } from "@/server/api/services/search.services";
-import { caisySDK } from "@/services/graphql/getSdk";
 
 const caisyWebhookSchema = z.object({
   metadata: z.object({

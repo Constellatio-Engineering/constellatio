@@ -9,6 +9,11 @@ import { InvalidateQueriesContext } from "@/provider/InvalidateQueriesProvider";
 import { type UploadState } from "@/stores/uploadsProgress.store";
 import { api } from "@/utils/api";
 
+import { type CreateSignedUploadUrlSchema, generateCreateSignedUploadUrlSchema, type UploadableFile } from "@constellatio/schemas/routers/uploads/createSignedUploadUrl.schema";
+import { type FileExtension, fileExtensions, type FileMimeType, fileMimeTypes } from "@constellatio/shared/validation";
+import { removeItemsByIndices } from "@constellatio/utils/array";
+import { getRandomUuid } from "@constellatio/utils/id";
+import { getIndicesOfSucceededPromises } from "@constellatio/utils/promise";
 import { Title } from "@mantine/core";
 import { notifications } from "@mantine/notifications";
 import axios from "axios";
@@ -18,10 +23,6 @@ import * as styles from "./UploadedMaterialBlock.styles";
 import BadgeCard from "../badgeCard/BadgeCard";
 import EmptyStateCard from "../emptyStateCard/EmptyStateCard";
 import UploadedMaterialTable from "../uploadedMaterialTable/UploadedMaterialTable";
-
-import { type FileExtension, fileExtensions, type FileMimeType, fileMimeTypes } from "@/db/schema";
-import { type CreateSignedUploadUrlSchema, generateCreateSignedUploadUrlSchema, type UploadableFile } from "@/schemas/uploads/createSignedUploadUrl.schema";
-import { getIndicesOfSucceededPromises, getRandomUuid, removeItemsByIndices } from "@/utils/utils";
 
 export type SelectedFile = {
   clientSideUuid: string;

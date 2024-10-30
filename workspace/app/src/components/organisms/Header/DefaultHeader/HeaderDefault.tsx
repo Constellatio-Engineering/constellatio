@@ -12,6 +12,7 @@ import OnboardingModal from "@/components/organisms/onboardingModal/OnboardingMo
 import useOnboardingResult from "@/hooks/useOnboardingResult";
 import { useOnboardingStore } from "@/stores/onboarding.store";
 
+import { appPaths } from "@constellatio/shared/paths";
 import Image from "next/image";
 import Link from "next/link";
 import { useRouter } from "next/router";
@@ -23,8 +24,6 @@ import ConstellatioLogoIcon from "../../../../../public/images/icons/constellati
 import SearchOverlay from "../../searchOverlay/SearchOverlay";
 import * as styles from "../Header.styles";
 import { SHeader } from "../Header.styles";
-
-import { appPaths } from "@/utils/paths";
 
 interface IHeaderLink
 {

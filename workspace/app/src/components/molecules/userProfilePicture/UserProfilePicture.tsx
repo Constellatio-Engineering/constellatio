@@ -1,5 +1,4 @@
-import { type Nullable } from "@/utils/types";
-
+import { type Nullable } from "@constellatio/utility-types";
 import Image from "next/image";
 import React, { type FunctionComponent } from "react";
 

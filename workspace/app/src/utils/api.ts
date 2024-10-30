@@ -1,24 +1,17 @@
 /* eslint-disable import/no-unused-modules */
-import { env } from "@constellatio/env";
+import { supabase } from "@/lib/supabase";
+import { showErrorNotification } from "@/utils/notifications";
 
-/**
- * This is the client-side entrypoint for your tRPC API. It is used to create the `api` object which
- * contains the Next.js App-wrapper, as well as your type-safe React Query hooks.
- *
- * We also create a few inference helpers for input and output types.
- */
-// import { supabase } from "@/lib/supabase";
-import { type ClientError } from "@constellatio/utils";
-import { showErrorNotification, authPaths, getIsPathAppPath } from "@constellatio/utils";
+import { type AppRouter } from "@constellatio/api";
+import { type ClientError } from "@constellatio/api/utils/clientError";
+import { env } from "@constellatio/env";
+import { authPaths, getIsPathAppPath } from "@constellatio/shared/paths";
 import { QueryCache } from "@tanstack/react-query";
 import type { TRPCLink } from "@trpc/client";
 import { httpBatchLink, httpLink, loggerLink, TRPCClientError } from "@trpc/client";
 import { createTRPCNext } from "@trpc/next";
 import { type inferRouterInputs, type inferRouterOutputs } from "@trpc/server";
 import superjson from "superjson";
-
-import { supabase } from "@/lib/supabase";
-import { type AppRouter } from "@/server/api/root";
 
 const getBaseUrl = (): string =>
 {

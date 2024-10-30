@@ -10,12 +10,11 @@ import { useOnDocumentMutation } from "@/hooks/useOnDocumentMutation";
 import useDocumentEditorStore, { type EditorStateDrawerOpened } from "@/stores/documentEditor.store";
 import { api } from "@/utils/api";
 
+import { type CreateDocumentSchema } from "@constellatio/schemas/routers/documents/createDocument.schema";
+import { type UpdateDocumentSchema } from "@constellatio/schemas/routers/documents/updateDocument.schema";
 import React, { type FunctionComponent, useCallback } from "react";
 
 import * as styles from "./EditorForm.styles";
-
-import { type CreateDocumentSchema } from "@/schemas/documents/createDocument.schema";
-import { type UpdateDocumentSchema } from "@/schemas/documents/updateDocument.schema";
 
 interface EditorFormProps
 {

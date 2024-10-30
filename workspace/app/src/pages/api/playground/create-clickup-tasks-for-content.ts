@@ -1,19 +1,18 @@
 /* eslint-disable max-lines */
 import { env } from "@/env.mjs";
 
+import { createClickupChecklist } from "@constellatio/api/lib/clickup/checklists/create-checklist";
+import { createClickupChecklistItem } from "@constellatio/api/lib/clickup/checklists/create-checklist-item";
+import { createClickupTask } from "@constellatio/api/lib/clickup/tasks/create-task";
+import { type ClickupCreateChecklistResponse, type ClickupTask } from "@constellatio/api/lib/clickup/types";
+import { getContentTaskCrmData } from "@constellatio/api/lib/clickup/utils";
+import { sleep } from "@constellatio/api/utils/common";
+import { getAllArticles } from "@constellatio/cms/content/getAllArticles";
+import { getAllCases } from "@constellatio/cms/content/getAllCases";
 import { AxiosError } from "axios";
 import type { NextApiHandler } from "next";
 
 import * as process from "node:process";
-
-import { createClickupChecklist } from "@/lib/clickup/checklists/create-checklist";
-import { createClickupChecklistItem } from "@/lib/clickup/checklists/create-checklist-item";
-import { createClickupTask } from "@/lib/clickup/tasks/create-task";
-import { type ClickupCreateChecklistResponse, type ClickupTask } from "@/lib/clickup/types";
-import { getContentTaskCrmData } from "@/lib/clickup/utils";
-import getAllArticles from "@/services/content/getAllArticles";
-import getAllCases from "@/services/content/getAllCases";
-import { sleep } from "@/utils/utils";
 
 const handler: NextApiHandler = async (req, res): Promise<void> =>
 {

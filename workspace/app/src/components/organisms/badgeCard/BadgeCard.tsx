@@ -1,14 +1,13 @@
 import { type SelectedFile } from "@/components/organisms/uploadedMaterialBlock/UploadedMaterialBlock";
 import { env } from "@/env.mjs";
 
+import { fileExtensions } from "@constellatio/shared/validation";
 import React, { type FunctionComponent } from "react";
 
 import * as styles from "./BadgeCard.styles";
 import { BodyText } from "../../atoms/BodyText/BodyText";
 import IconButton from "../../atoms/iconButton/IconButton";
 import { DownloadIcon } from "../../Icons/DownloadIcon";
-
-import { fileExtensions } from "@/db/schema";
 
 interface BadgeCardProps
 {

@@ -1,13 +1,11 @@
-import { type Nullable } from "@/utils/types";
-
+import { appPaths } from "@constellatio/shared/paths";
+import { type Nullable } from "@constellatio/utility-types";
 import Link from "next/link";
 import { useRouter } from "next/router";
 import React, { type FunctionComponent } from "react";
 
 import * as styles from "./Tag.styles";
 import { BodyText } from "../BodyText/BodyText";
-
-import { appPaths } from "@/utils/paths";
 
 export interface ITag 
 {

@@ -1,17 +1,16 @@
 /* eslint-disable max-lines */
 import { env } from "@/env.mjs";
 
-import { eq, inArray } from "drizzle-orm";
+import { meiliSearchAdmin } from "@constellatio/api/src/lib/meilisearch";
+import { addArticlesToSearchIndex, addCasesToSearchIndex, addUserDocumentsToSearchIndex, addUserUploadsToSearchIndex } from "@constellatio/api/src/services/search.services";
+import { getAllArticles } from "@constellatio/cms/content/getAllArticles";
+import { getAllCases } from "@constellatio/cms/content/getAllCases";
+import { type AllTags, getAllTags } from "@constellatio/cms/content/getAllTags";
+import { eq, inArray } from "@constellatio/db";
+import { db } from "@constellatio/db/client";
+import { documents, searchIndexUpdateQueue, uploadedFiles } from "@constellatio/db/schema";
+import { searchIndices } from "@constellatio/db-to-search";
 import { type NextApiHandler } from "next";
-
-import { db } from "@/db/connection";
-import { documents, searchIndexUpdateQueue, uploadedFiles } from "@/db/schema";
-import { meiliSearchAdmin } from "@/lib/meilisearch";
-import { addArticlesToSearchIndex, addCasesToSearchIndex, addUserDocumentsToSearchIndex, addUserUploadsToSearchIndex } from "@/server/api/services/search.services";
-import getAllArticles from "@/services/content/getAllArticles";
-import getAllCases from "@/services/content/getAllCases";
-import { type AllTags, getAllTags } from "@/services/content/getAllTags";
-import { searchIndices } from "@/utils/search";
 
 type UpdateArticles = () => Promise<{
   createArticlesIndexTaskId: number | undefined;

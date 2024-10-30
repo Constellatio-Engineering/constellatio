@@ -4,8 +4,10 @@ import UseQueryStateWrapper from "@/components/Wrappers/useQueryStateWrapper/Use
 import useArticles from "@/hooks/useArticles";
 import useBookmarks from "@/hooks/useBookmarks";
 import useCases from "@/hooks/useCases";
-import { type NonEmptyArray, type Nullable } from "@/utils/types";
 
+import { type IGenArticle, type IGenArticleOverviewFragment, type IGenFullCaseFragment, type IGenMainCategory } from "@constellatio/cms/generated-types";
+import { appPaths } from "@constellatio/shared/paths";
+import { type NonEmptyArray, type Nullable } from "@constellatio/utility-types";
 import { Loader } from "@mantine/core";
 import { useRouter } from "next/router";
 import { parseAsString, useQueryState } from "next-usequerystate";
@@ -16,9 +18,6 @@ import EmptyStateCard from "../emptyStateCard/EmptyStateCard";
 import FavoriteArticlesList from "../favoriteArticlesList/FavoriteArticlesList";
 import FavoriteCasesList from "../favoriteCasesList/FavoriteCasesList";
 import PersonalSpaceNavBar from "../personalSpaceNavBar/PersonalSpaceNavBar";
-
-import { type IGenArticle, type IGenArticleOverviewFragment, type IGenFullCaseFragment, type IGenMainCategory } from "@/services/graphql/__generated/sdk";
-import { appPaths } from "@/utils/paths";
 
 export type FavoriteCategoryNavTab = {
   itemsPerTab: number;

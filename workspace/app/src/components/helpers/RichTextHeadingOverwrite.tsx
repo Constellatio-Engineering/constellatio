@@ -1,11 +1,10 @@
 import useCaseSolvingStore from "@/stores/caseSolving.store";
 import { type IHeadingNode } from "types/richtext";
 
+import { slugFormatter } from "@constellatio/utils/slug";
 import React, { type ReactElement } from "react";
 
 import { getNumericalLabel } from "../organisms/floatingPanel/generateTocHelper";
-
-import { slugFormatter } from "@/utils/utils";
 
 export const richTextHeadingOverwriteClassName = "richTextHeadingOverwrite";
 

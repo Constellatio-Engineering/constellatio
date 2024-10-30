@@ -2,12 +2,11 @@ import QuestionModal from "@/components/pages/forumOverviewPage/questionModal/Qu
 import { useUpdateQuestion } from "@/hooks/useUpdateQuestion";
 import { useForumPageStore } from "@/stores/forumPage.store";
 
+import { type Question } from "@constellatio/api/routers/forum.router";
+import { type PostQuestionSchema } from "@constellatio/schemas/routers/forum/postQuestion.schema";
+import { questionUpdateSchema } from "@constellatio/schemas/routers/forum/updateQuestion.schema";
 import { useForm, zodResolver } from "@mantine/form";
 import React, { type FunctionComponent } from "react";
-
-import { type PostQuestionSchema } from "@/schemas/forum/postQuestion.schema";
-import { questionUpdateSchema } from "@/schemas/forum/updateQuestion.schema";
-import type { Question } from "@/server/api/routers/forum.router";
 
 const getFormValuesFromQuestion = (
   question: Pick<Question, "text" | "legalFieldId" | "subfieldsIds" | "topicsIds" | "title">

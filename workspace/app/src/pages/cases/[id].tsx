@@ -4,15 +4,12 @@ import DetailsPage from "@/components/pages/DetailsPage/DetailsPage";
 import { type NextPageWithLayout } from "@/pages/_app";
 import { type TDragAndDropGameOptionType } from "@/stores/dragDropGame.store";
 
+import { getAllCases } from "@constellatio/cms/content/getAllCases";
+import { type FullLegalCase, getCaseById } from "@constellatio/cms/content/getCaseById";
+import { shuffleArray } from "@constellatio/utils/array";
 import type { GetStaticPaths, GetStaticPathsResult, GetStaticProps } from "next";
 
 import { type ParsedUrlQuery } from "querystring";
-
-import getAllCases from "@/services/content/getAllCases";
-import { type FullLegalCase, getCaseById } from "@/services/content/getCaseById";
-import { shuffleArray } from "@/utils/array";
-
-// import { dummyCases } from "@/utils/dummy-data";
 
 interface Params extends ParsedUrlQuery
 {

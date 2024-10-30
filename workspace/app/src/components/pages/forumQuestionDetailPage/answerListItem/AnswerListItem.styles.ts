@@ -1,5 +1,5 @@
 import { colooors } from "@/constants/styles/colors";
-import type { UnknownMantineStylesParams } from "@/utils/types";
+import { type UnknownMantineStylesParams } from "@/utils/types";
 
 import { css } from "@emotion/react";
 import type { ModalStylesNames } from "@mantine/core";

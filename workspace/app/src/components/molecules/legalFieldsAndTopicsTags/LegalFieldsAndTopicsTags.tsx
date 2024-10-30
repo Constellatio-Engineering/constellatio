@@ -1,8 +1,8 @@
 import Tag from "@/components/atoms/tag/Tag";
 import { TagsSkeleton } from "@/components/pages/forumOverviewPage/questionsSkeleton/QuestionsSkeleton";
 import { useLegalFieldsAndTopics } from "@/hooks/useLegalFieldsAndTopics";
-import { type Nullable } from "@/utils/types";
 
+import { type Nullable } from "@constellatio/utility-types";
 import React, { type FunctionComponent } from "react";
 
 import * as styles from "./LegalFieldsAndTopicsTags.styles";

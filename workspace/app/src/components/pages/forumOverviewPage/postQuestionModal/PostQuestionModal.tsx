@@ -2,10 +2,9 @@ import QuestionModal from "@/components/pages/forumOverviewPage/questionModal/Qu
 import { usePostQuestion } from "@/hooks/usePostQuestion";
 import { useForumPageStore } from "@/stores/forumPage.store";
 
+import { postQuestionSchema, type PostQuestionSchema } from "@constellatio/schemas/routers/forum/postQuestion.schema";
 import { useForm, zodResolver } from "@mantine/form";
 import React, { type FunctionComponent } from "react";
-
-import { postQuestionSchema, type PostQuestionSchema } from "@/schemas/forum/postQuestion.schema";
 
 const PostQuestionModal: FunctionComponent = () =>
 {

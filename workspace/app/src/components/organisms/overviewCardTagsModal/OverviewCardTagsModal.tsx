@@ -2,11 +2,10 @@ import { BodyText } from "@/components/atoms/BodyText/BodyText";
 import Tag from "@/components/atoms/tag/Tag";
 import { Modal } from "@/components/molecules/Modal/Modal";
 
+import { type IGenTags, type Maybe } from "@constellatio/cms/generated-types";
 import React, { type FunctionComponent } from "react";
 
 import * as styles from "../../organisms/overviewCard/OverviewCard.styles";
-
-import { type IGenTags, type Maybe } from "@/services/graphql/__generated/sdk";
 
 interface OverviewCardTagsModalProps
 {

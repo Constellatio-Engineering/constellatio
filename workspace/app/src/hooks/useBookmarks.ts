@@ -1,11 +1,10 @@
 import { api } from "@/utils/api";
 import { type UseQueryResult } from "@/utils/types";
 
+import { type AppRouter } from "@constellatio/api";
+import { type BookmarkFiltered } from "@constellatio/api/utils/filters";
+import { type BookmarkResourceType } from "@constellatio/shared/validation";
 import { type inferReactQueryProcedureOptions } from "@trpc/react-query";
-
-import { type BookmarkResourceType } from "@/db/schema";
-import { type AppRouter } from "@/server/api/root";
-import { type BookmarkFiltered } from "@/utils/filters";
 
 type UseBookmarks = (
   resourceType: BookmarkResourceType | undefined,

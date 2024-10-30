@@ -15,6 +15,8 @@ import useDragDropGameStore, {
 } from "@/stores/dragDropGame.store";
 import { api } from "@/utils/api";
 
+import { type IGenDragNDropGame } from "@constellatio/cms/generated-types";
+import { shuffleArray } from "@constellatio/utils/array";
 import { DragDropContext, type DropResult } from "@hello-pangea/dnd";
 import { LoadingOverlay, Title } from "@mantine/core";
 import React, { type FC, useCallback, useMemo } from "react";
@@ -22,9 +24,6 @@ import React, { type FC, useCallback, useMemo } from "react";
 import {
   Container, Game, GameWrapper, LegendWrapper, TitleWrapper, 
 } from "./DragDropGame.styles";
-
-import { type IGenDragNDropGame } from "@/services/graphql/__generated/sdk";
-import { shuffleArray } from "@/utils/array";
 
 export type TDragDropGame = Pick<IGenDragNDropGame, "game" | "helpNote" | "question"> & {
   readonly caseId: string;

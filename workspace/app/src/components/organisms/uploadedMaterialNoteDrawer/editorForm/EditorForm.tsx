@@ -11,12 +11,11 @@ import { InvalidateQueriesContext } from "@/provider/InvalidateQueriesProvider";
 import useNoteEditorStore, { type EditorStateDrawerOpened } from "@/stores/noteEditor.store";
 import { api } from "@/utils/api";
 
+import { type CreateNoteSchema } from "@constellatio/schemas/routers/notes/createNote.schema";
+import { type UpdateNoteSchema } from "@constellatio/schemas/routers/notes/updateNote.schema";
 import React, { type FunctionComponent, useState } from "react";
 
 import * as styles from "./EditorForm.styles";
-
-import { type CreateNoteSchema } from "@/schemas/notes/createNote.schema";
-import { type UpdateNoteSchema } from "@/schemas/notes/updateNote.schema";
 
 interface EditorFormProps
 {

@@ -8,6 +8,9 @@ import useContextAndErrorIfNull from "@/hooks/useContextAndErrorIfNull";
 import { InvalidateQueriesContext } from "@/provider/InvalidateQueriesProvider";
 import { api } from "@/utils/api";
 
+import { type UserFiltered } from "@constellatio/api/utils/filters";
+import { type University } from "@constellatio/schemas/common/auth/userData.validation";
+import { type UpdateUserDetailsSchema, updateUserDetailsSchema } from "@constellatio/schemas/routers/auth/updateUserDetails.schema";
 import { Title } from "@mantine/core";
 import { useForm, zodResolver } from "@mantine/form";
 import { notifications } from "@mantine/notifications";
@@ -18,10 +21,6 @@ import { makeZodI18nMap } from "zod-i18n-map";
 
 import * as styles from "./ProfileDetailsTab.styles";
 import { Button } from "../../atoms/Button/Button";
-
-import { type UpdateUserDetailsSchema, updateUserDetailsSchema } from "@/schemas/auth/updateUserDetails.schema";
-import { type University } from "@/schemas/auth/userData.validation";
-import { type UserFiltered } from "@/utils/filters";
 
 type Props = {
   readonly userDetails: UserFiltered;

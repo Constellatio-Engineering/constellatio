@@ -1,11 +1,11 @@
-/* import { db } from "@/db/connection";
-import { documents } from "@/db/schema";
+/* import { db } from "@constellatio/db/client";
+import { documents } from "@constellatio/db/schema";
 import { downloadDocumentSchema } from "@/schemas/documents/downloadDocument.schema";
 import { getIsUserLoggedInServer } from "@/utils/auth";
 import { createPdfBuffer } from "@/utils/pdf";
 
 import { createPagesServerClient } from "@supabase/auth-helpers-nextjs";
-import { and, eq } from "drizzle-orm";*/
+import { and, eq } from "@constellatio/db"*/
 import { type NextApiHandler } from "next";
 
 const handler: NextApiHandler = (req, res) =>

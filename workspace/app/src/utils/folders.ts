@@ -1,6 +1,6 @@
 import { defaultFolderName } from "@/utils/translations";
 
-import { type UploadFolder } from "@/db/schema";
+import { type UploadFolder } from "@constellatio/db/schema";
 
 export const getFolderName = (folderId: string | null, folders: UploadFolder[]): string =>
 {

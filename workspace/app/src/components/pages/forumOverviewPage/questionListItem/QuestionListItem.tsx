@@ -7,15 +7,14 @@ import EditQuestionModal from "@/components/pages/forumOverviewPage/editQuestion
 import useBookmarks from "@/hooks/useBookmarks";
 import { useForumQuestionDetails } from "@/hooks/useForumQuestionDetails";
 
+import { getForumQuestionUrl } from "@constellatio/shared/paths";
+import { removeHtmlTagsFromString } from "@constellatio/utils/html";
 import { Title, Tooltip } from "@mantine/core";
 import Link from "next/link";
 import React, { type FunctionComponent } from "react";
 
 import * as styles from "./QuestionListItem.styles";
 import { QuestionUpvoteButton } from "../upvoteButton/QuestionUpvoteButton";
-
-import { getForumQuestionUrl } from "@/utils/paths";
-import { removeHtmlTagsFromString } from "@/utils/utils";
 
 type Props = {
   readonly questionId: string;

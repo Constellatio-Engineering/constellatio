@@ -2,13 +2,12 @@ import UpvoteButton from "@/components/pages/forumOverviewPage/upvoteButton/Upvo
 import useContextAndErrorIfNull from "@/hooks/useContextAndErrorIfNull";
 import { InvalidateQueriesContext } from "@/provider/InvalidateQueriesProvider";
 import { api } from "@/utils/api";
-import { type Nullable } from "@/utils/types";
 
+import { type AppRouter } from "@constellatio/api";
+import { type Nullable } from "@constellatio/utility-types";
 import { notifications } from "@mantine/notifications";
 import { type inferProcedureOutput } from "@trpc/server";
 import React, { type FunctionComponent } from "react";
-
-import { type AppRouter } from "@/server/api/root";
 
 type MutationContext = {
   readonly answerBackup: Nullable<inferProcedureOutput<AppRouter["forum"]["getAnswerById"]>>;

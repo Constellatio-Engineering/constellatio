@@ -1,8 +1,7 @@
+import { type Document } from "@constellatio/db/schema";
+import { getRandomUuid } from "@constellatio/utils/id";
 import { create } from "zustand";
 import { immer } from "zustand/middleware/immer";
-
-import { type Document } from "@/db/schema";
-import { getRandomUuid } from "@/utils/utils";
 
 type DocumentUpdate = Partial<Pick<Document, "name" | "content">>;
 type NewDocument = Pick<Document, "name" | "content" | "id" | "folderId">;

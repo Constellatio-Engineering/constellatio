@@ -1,9 +1,9 @@
+import { supabase } from "@/lib/supabase";
+
+import { sleep } from "@constellatio/api/utils/common";
+import { authPaths } from "@constellatio/shared/paths";
 import { notifications } from "@mantine/notifications";
 import router from "next/router";
-
-import { supabase } from "@/lib/supabase";
-import { authPaths } from "@/utils/paths";
-import { sleep } from "@/utils/utils";
 
 type UseSignout = () => {
   handleSignOut: () => Promise<void>;

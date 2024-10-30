@@ -1,4 +1,5 @@
 
+import { type GetDocumentsResult } from "@constellatio/api/routers/documents.router";
 import React, { type FunctionComponent, useState } from "react";
 
 import * as styles from "./DocsTable.styles";
@@ -7,9 +8,7 @@ import { Button } from "../../atoms/Button/Button";
 import { CaptionText } from "../../atoms/CaptionText/CaptionText";
 import { ArrowDown } from "../../Icons/ArrowDown";
 
-import { type GetDocumentsResult } from "@/server/api/routers/documents.router";
-
-interface DocsTableProps 
+interface DocsTableProps
 {
   readonly docs: GetDocumentsResult;
 }

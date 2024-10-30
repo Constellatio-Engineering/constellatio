@@ -1,18 +1,16 @@
 import { env } from "@/env.mjs";
 
-import { eq } from "drizzle-orm";
+import { addUserToCrmUpdateQueue } from "@constellatio/api/src/lib/clickup/utils";
+import { handleInvoicePaid } from "@constellatio/api/src/lib/stripe/invoice-paid";
+import { stripe } from "@constellatio/api/src/lib/stripe/stripe";
+import { handleSubscriptionEvent } from "@constellatio/api/src/lib/stripe/subscription";
+import { InternalServerError } from "@constellatio/api/utils/serverError";
+import { eq } from "@constellatio/db";
+import { db } from "@constellatio/db/client";
+import { users } from "@constellatio/db/schema";
 import type { NextApiHandler } from "next";
 import getRawBody from "raw-body";
 import type Stripe from "stripe";
-
-import { db } from "@/db/connection";
-import { users } from "@/db/schema";
-import { addUserToCrmUpdateQueue } from "@/lib/clickup/utils";
-import { handleInvoicePaid } from "@/lib/stripe/invoice-paid";
-import { stripe } from "@/lib/stripe/stripe";
-import { handleSubscriptionEvent } from "@/lib/stripe/subscription";
-import { InternalServerError } from "@/utils/serverError";
-
 export const config = {
   api: {
     bodyParser: false,

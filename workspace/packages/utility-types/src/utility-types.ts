@@ -34,8 +34,6 @@ export type DotSeparatedKeys<T, Prefix extends string = ""> = {
       : `${Prefix}${K & string}`;
 }[keyof T];
 
-export type UnknownMantineStylesParams = Record<string, unknown>;
-
 export type Optional<T, K extends keyof T> = Pick<Partial<T>, K> & Omit<T, K>;
 
 export type PartialUndefined<T, K extends keyof T> = {

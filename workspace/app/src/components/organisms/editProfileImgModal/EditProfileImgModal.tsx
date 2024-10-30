@@ -11,16 +11,15 @@ import useContextAndErrorIfNull from "@/hooks/useContextAndErrorIfNull";
 import { InvalidateQueriesContext } from "@/provider/InvalidateQueriesProvider";
 import { api } from "@/utils/api";
 
+import { type CreateSignedUploadUrlSchema, generateCreateSignedUploadUrlSchema, type UploadableFile } from "@constellatio/schemas/routers/uploads/createSignedUploadUrl.schema";
+import { type ImageFileExtension, imageFileExtensions, type ImageFileMimeType, imageFileMimeTypes } from "@constellatio/shared/validation";
+import { getRandomUuid } from "@constellatio/utils/id";
 import { notifications } from "@mantine/notifications";
 import { useMutation } from "@tanstack/react-query";
 import axios from "axios";
 import React, { type FunctionComponent, useEffect, useState } from "react";
 
 import * as styles from "./EditProfileImgModal.styles";
-
-import { type ImageFileExtension, imageFileExtensions, type ImageFileMimeType, imageFileMimeTypes } from "@/db/schema";
-import { type CreateSignedUploadUrlSchema, generateCreateSignedUploadUrlSchema, type UploadableFile } from "@/schemas/uploads/createSignedUploadUrl.schema";
-import { getRandomUuid } from "@/utils/utils";
 
 type SelectedFile = {
   clientSideUuid: string;

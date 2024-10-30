@@ -2,7 +2,7 @@
 
 import type {
   CaseProgressSql, ForumAnswerSql, ForumQuestionSql, PingSql, ProfilePictureSql, StreakSql, UserSql 
-} from "@/db/schema";
+} from "@constellatio/db/schema";
 
 type Tables =
   | UserSql

@@ -1,6 +1,5 @@
-import { type Nullable } from "@/utils/types";
-
 import { type ElementType, RichTextRenderer } from "@caisy/rich-text-react-renderer";
+import { type Nullable } from "@constellatio/utility-types";
 import { type SerializedStyles } from "@emotion/react";
 import React, { type FC, type ReactElement } from "react";
 

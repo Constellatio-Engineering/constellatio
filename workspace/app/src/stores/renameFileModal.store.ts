@@ -1,8 +1,7 @@
+import { type UploadedFile } from "@constellatio/db/schema";
+import { getFileNameWithoutExtension } from "@constellatio/utils/files";
 import { create } from "zustand";
 import { immer } from "zustand/middleware/immer";
-
-import { type UploadedFile } from "@/db/schema";
-import { getFileNameWithoutExtension } from "@/utils/utils";
 
 type RenameFileModalClosed = {
   modalState: "closed";

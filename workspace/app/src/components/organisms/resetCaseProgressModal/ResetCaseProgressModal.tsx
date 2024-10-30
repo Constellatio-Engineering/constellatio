@@ -1,8 +1,8 @@
 import { Button } from "@/components/atoms/Button/Button";
 import { Modal } from "@/components/molecules/Modal/Modal";
 import useResetCaseProgress from "@/hooks/useResetCaseProgress";
-import { type Nullable } from "@/utils/types";
 
+import { type Nullable } from "@constellatio/utility-types";
 import { Group, Text } from "@mantine/core";
 import React, { type FunctionComponent } from "react";
 

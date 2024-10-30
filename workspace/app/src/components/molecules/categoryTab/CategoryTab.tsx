@@ -1,11 +1,10 @@
 import { Svg } from "@/basic-components/SVG/Svg";
 import { BodyText } from "@/components/atoms/BodyText/BodyText";
 
+import type { IGenMainCategory } from "@constellatio/cms/generated-types";
 import React, { type FunctionComponent } from "react";
 
 import * as styles from "./CategoryTab.style";
-
-import type { IGenMainCategory } from "@/services/graphql/__generated/sdk";
 
 export type CategoryTabProps = IGenMainCategory & 
 {

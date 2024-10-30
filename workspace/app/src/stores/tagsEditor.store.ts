@@ -1,11 +1,10 @@
+import { type GetDocumentResult } from "@constellatio/api/routers/documents.router";
+import { type GetUploadedFileResult } from "@constellatio/api/routers/uploads.router";
+import { type IGenTags } from "@constellatio/cms/generated-types";
+import { type TagSearchIndexItem } from "@constellatio/meilisearch/utils";
+import { areArraysEqualSets } from "@constellatio/utils/array";
 import { create } from "zustand";
 import { immer } from "zustand/middleware/immer";
-
-import { type GetDocumentResult } from "@/server/api/routers/documents.router";
-import { type GetUploadedFileResult } from "@/server/api/routers/uploads.router";
-import { type IGenTags } from "@/services/graphql/__generated/sdk";
-import { areArraysEqualSets } from "@/utils/array";
-import { type TagSearchIndexItem } from "@/utils/search";
 
 type EditorClosed = {
   state: "closed";

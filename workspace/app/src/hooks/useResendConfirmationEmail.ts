@@ -1,9 +1,8 @@
+import { supabase } from "@/lib/supabase";
 
 import { notifications } from "@mantine/notifications";
 import type { AuthOtpResponse } from "@supabase/gotrue-js";
 import { useMutation } from "@tanstack/react-query";
-
-import { supabase } from "@/lib/supabase";
 
 type Params = {
   email: string;

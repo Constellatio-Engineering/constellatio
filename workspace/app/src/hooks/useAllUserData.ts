@@ -1,7 +1,7 @@
 import useDocuments from "@/hooks/useDocuments";
 import useUploadedFiles from "@/hooks/useUploadedFiles";
 
-import { type Document, type UploadedFile } from "@/db/schema";
+import { type Document, type UploadedFile } from "@constellatio/db/schema";
 
 export type AllUserData = Array<
 (UploadedFile & { dataType: "file" }) |

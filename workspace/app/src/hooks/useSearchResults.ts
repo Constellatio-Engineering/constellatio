@@ -1,17 +1,12 @@
 import { MeilisearchContext } from "@/provider/MeilisearchProvider";
 
+import { searchIndices } from "@constellatio/db-to-search";
+import {
+  type ArticleSearchIndexItem, type CaseSearchIndexItem, type DocumentSearchIndexItem, type ForumQuestionSearchIndexItem, type UploadSearchIndexItem 
+} from "@constellatio/meilisearch/utils";
 import { keepPreviousData, useQuery } from "@tanstack/react-query";
 import { useRouter } from "next/router";
 import { useContext } from "react";
-
-import {
-  type ArticleSearchIndexItem,
-  type CaseSearchIndexItem,
-  type DocumentSearchIndexItem,
-  type ForumQuestionSearchIndexItem,
-  searchIndices,
-  type UploadSearchIndexItem
-} from "@/utils/search";
 
 export type SearchResults = {
   articles: ArticleSearchIndexItem[];

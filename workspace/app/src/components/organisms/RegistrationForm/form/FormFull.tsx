@@ -11,12 +11,11 @@ import SemesterDropdown from "@/components/organisms/RegistrationForm/form/Semes
 import UniversityDropdown from "@/components/organisms/RegistrationForm/form/UniversityDropdown";
 import { env } from "@/env.mjs";
 
+import { type RegistrationFormSchema } from "@constellatio/schemas/routers/auth/registrationForm.schema";
 import { type UseFormReturnType } from "@mantine/form";
 import { type FunctionComponent } from "react";
 
 import * as styles from "../RegistrationForm.styles";
-
-import { type RegistrationFormSchema } from "@/schemas/auth/registrationForm.schema";
 
 type Props = {
   readonly form: UseFormReturnType<RegistrationFormSchema>;

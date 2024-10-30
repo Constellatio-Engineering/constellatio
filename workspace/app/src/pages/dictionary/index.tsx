@@ -5,15 +5,14 @@ import { type NextPageWithLayout } from "@/pages/_app";
 import { useArticlesOverviewFiltersStore, type WasSeenFilterOption, wasSeenFilterOptions } from "@/stores/overviewFilters.store";
 import { api } from "@/utils/api";
 
+import { type AppRouter } from "@constellatio/api";
+import { getAllArticles } from "@constellatio/cms/content/getAllArticles";
+import { getOverviewPageProps, type GetOverviewPagePropsResult } from "@constellatio/cms/content/getOverviewPageProps";
+import { type ArticleWithNextAndPreviousArticleId, getArticlesWithNextAndPreviousArticleId } from "@constellatio/cms/utils/articles";
 import { type inferProcedureOutput } from "@trpc/server";
 import { type GetStaticProps } from "next";
 import { useMemo } from "react";
 import { useStore } from "zustand";
-
-import type { AppRouter } from "@/server/api/root";
-import getAllArticles from "@/services/content/getAllArticles";
-import { getOverviewPageProps, type GetOverviewPagePropsResult } from "@/services/content/getOverviewPageProps";
-import { type ArticleWithNextAndPreviousArticleId, getArticlesWithNextAndPreviousArticleId } from "@/utils/articles";
 
 type GetArticlesOverviewPagePropsResult = GetOverviewPagePropsResult & {
   items: ArticleWithNextAndPreviousArticleId[];

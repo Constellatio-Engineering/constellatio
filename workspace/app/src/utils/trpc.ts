@@ -1,3 +1,5 @@
+import { appRouter } from "@constellatio/api";
+import { getTrpcContext } from "@constellatio/api/src/trpc";
 import { type GetServerSidePropsContext, type NextApiRequest, type NextApiResponse } from "next";
 import superjson from "superjson";
 

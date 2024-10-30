@@ -1,17 +1,17 @@
 import { env } from "@/env.mjs";
 import { queryParams } from "@/utils/query-params";
 
+import { finishSignup, type FinishSignUpProps } from "@constellatio/api/utils/signup";
+import { eq } from "@constellatio/db";
+import { db } from "@constellatio/db/client";
+import { users } from "@constellatio/db/schema";
+import { idValidation } from "@constellatio/schemas/common/common.validation";
+import { appPaths, authPaths } from "@constellatio/shared/paths";
+import { authProviders } from "@constellatio/shared/validation";
+import { splitFullName } from "@constellatio/utils/user";
 import { createPagesServerClient } from "@supabase/auth-helpers-nextjs";
-import { eq } from "drizzle-orm";
 import { type NextApiHandler, type NextApiResponse } from "next";
 import { z } from "zod";
-
-import { db } from "@/db/connection";
-import { authProviders, users } from "@/db/schema";
-import { idValidation } from "@/schemas/common.validation";
-import { appPaths, authPaths } from "@/utils/paths";
-import { finishSignup, type FinishSignUpProps } from "@/utils/signup";
-import { splitFullName } from "@/utils/utils";
 
 const redirectToErrorPage = (res: NextApiResponse, error: unknown) =>
 {

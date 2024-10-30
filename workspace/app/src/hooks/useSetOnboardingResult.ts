@@ -3,8 +3,6 @@ import { api } from "@/utils/api";
 
 import useContextAndErrorIfNull from "./useContextAndErrorIfNull";
 
-// Don't know how to infer the type of setOnboardingResult
-// eslint-disable-next-line @typescript-eslint/explicit-function-return-type
 const useSetOnboardingResult = () =>
 {
   const { invalidateOnboardingResult } = useContextAndErrorIfNull(InvalidateQueriesContext);

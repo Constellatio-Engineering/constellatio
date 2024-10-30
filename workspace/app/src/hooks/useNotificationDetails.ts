@@ -1,8 +1,8 @@
 import { defaultLimit } from "@/components/pages/forumOverviewPage/ForumOverviewPage";
 import { api } from "@/utils/api";
 
-import type { NotificationWithRelations } from "@/server/api/routers/notifications.router";
-import { getForumQuestionUrl } from "@/utils/paths";
+import { type NotificationWithRelations } from "@constellatio/api/routers/notifications.router";
+import { getForumQuestionUrl } from "@constellatio/shared/paths";
 
 type NotificationFrontendData = {
   link: string;

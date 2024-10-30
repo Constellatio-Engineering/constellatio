@@ -12,14 +12,13 @@ import { InvalidateQueriesContext } from "@/provider/InvalidateQueriesProvider";
 import useSelectionCardGameStore, { type QuestionType, type TCardGameOption, } from "@/stores/selectionCardGame.store";
 import { api } from "@/utils/api";
 
+import { type IGenCardSelectionGame } from "@constellatio/cms/generated-types";
 import { LoadingOverlay, Title } from "@mantine/core";
 import React, { type FC, memo, useMemo } from "react";
 
 import {
   Container, Game, GameWrapper, LegendWrapper, Options, TitleWrapper, 
 } from "./SelectionCardGame.styles";
-
-import { type IGenCardSelectionGame } from "@/services/graphql/__generated/sdk";
 
 export type SelectionCardGameProps = Pick<IGenCardSelectionGame, "game" | "helpNote" | "question" | "questionType"> & {
   readonly caseId: string;

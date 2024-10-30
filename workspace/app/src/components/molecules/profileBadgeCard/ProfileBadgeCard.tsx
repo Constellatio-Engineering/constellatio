@@ -3,11 +3,10 @@ import { BodyText } from "@/components/atoms/BodyText/BodyText";
 import { CheckCircleRed } from "@/components/Icons/CheckCirleRed";
 import useDashboardPageStore from "@/stores/dashboardPage.store";
 
+import { type BadgeWithUserData } from "@constellatio/db/schema";
 import React, { type FunctionComponent, useEffect, useRef, useState } from "react";
 
 import * as styles from "./ProfileBadgeCard.styles";
-
-import { type BadgeWithUserData } from "@/db/schema";
 
 interface ProfileBadgeCardProps extends BadgeWithUserData
 {

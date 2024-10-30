@@ -6,6 +6,7 @@ import UseQueryStateWrapper from "@/components/Wrappers/useQueryStateWrapper/Use
 import useSearchResults from "@/hooks/useSearchResults";
 import useSearchBarStore from "@/stores/searchBar.store";
 
+import { appPaths } from "@constellatio/shared/paths";
 import { Input } from "@mantine/core";
 import { useLocalStorage } from "@mantine/hooks";
 import { useMantineTheme } from "@mantine/styles";
@@ -13,8 +14,6 @@ import { useRouter } from "next/router";
 import React, { type FormEventHandler, type FunctionComponent, useEffect } from "react";
 
 import * as styles from "./SearchBar.styles";
-
-import { appPaths } from "@/utils/paths";
 
 const SearchBarContent: FunctionComponent = () =>
 {

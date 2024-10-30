@@ -1,8 +1,7 @@
 import { api } from "@/utils/api";
 
+import { getIsPathAppPath } from "@constellatio/shared/paths";
 import { useRouter } from "next/router";
-
-import { getIsPathAppPath } from "@/utils/paths";
 
 type Options = {
   disabled?: boolean;

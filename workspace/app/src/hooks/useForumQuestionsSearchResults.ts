@@ -1,10 +1,10 @@
 import { MeilisearchContext } from "@/provider/MeilisearchProvider";
 import { useForumQuestionsSearchStore } from "@/stores/forumQuestionsSearch.store";
 
+import { searchIndices } from "@constellatio/db-to-search";
+import { type ForumQuestionSearchIndexItem } from "@constellatio/meilisearch/utils";
 import { keepPreviousData, useQuery } from "@tanstack/react-query";
 import { useContext } from "react";
-
-import { type ForumQuestionSearchIndexItem, searchIndices } from "@/utils/search";
 
 const forumQuestionsSearchResultsQueryKey = "forumQuestionsSearchResults";
 

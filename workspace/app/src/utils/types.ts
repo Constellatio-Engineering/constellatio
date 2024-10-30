@@ -3,7 +3,7 @@
 import { type CSSObject } from "@mantine/core";
 import { type TRPCClientErrorBase } from "@trpc/client";
 import { type DefaultErrorShape } from "@trpc/server/unstable-core-do-not-import";
-import { type ComponentType, type ReactNode } from "react";
+import { type ReactNode } from "react";
 
 export type MantineCssObjectStyles = () => CSSObject;
 
@@ -18,3 +18,4 @@ export type WithChildren<T> = T & {
   children: ReactNode | ReactNode[];
 };
 
+export type UnknownMantineStylesParams = Record<string, unknown>;

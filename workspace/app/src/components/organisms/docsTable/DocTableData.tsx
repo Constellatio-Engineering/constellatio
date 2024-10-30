@@ -12,8 +12,11 @@ import useUploadFolders from "@/hooks/useUploadFolders";
 import useDocumentEditorStore from "@/stores/documentEditor.store";
 import { useTagsEditorStore } from "@/stores/tagsEditor.store";
 import { api } from "@/utils/api";
+import { downloadFileFromUrl } from "@/utils/download";
 import { getFolderName } from "@/utils/folders";
 
+import { type GetDocumentResult } from "@constellatio/api/routers/documents.router";
+import { apiPaths } from "@constellatio/shared/paths";
 import { Menu, Modal, Title } from "@mantine/core";
 import { notifications } from "@mantine/notifications";
 import { useMutation } from "@tanstack/react-query";
@@ -24,10 +27,6 @@ import * as styles from "./DocsTable.styles";
 import { BodyText } from "../../atoms/BodyText/BodyText";
 import { DotsIcon } from "../../Icons/dots";
 import MoveToModal from "../moveToModal/MoveToModal";
-
-import { type GetDocumentResult } from "@/server/api/routers/documents.router";
-import { apiPaths } from "@/utils/paths";
-import { downloadFileFromUrl } from "@/utils/utils";
 
 const formatDate = (date: Date): string => `${String(date.getDate()).padStart(2, "0")}.${String(date.getMonth() + 1).padStart(2, "0")}.${date.getFullYear()}`;
 

@@ -1,8 +1,8 @@
+import { type IGenCase } from "@constellatio/cms/generated-types";
+import { type CaseProgressState } from "@constellatio/shared/validation";
+
 import useCases from "./useCases";
 import useCasesProgress from "./useCasesProgress";
-
-import { type CaseProgressState } from "@/db/schema";
-import { type IGenCase } from "@/services/graphql/__generated/sdk";
 
 type UseAllCasesWithProgress = () => {
   casesWithProgress: Array<IGenCase & {

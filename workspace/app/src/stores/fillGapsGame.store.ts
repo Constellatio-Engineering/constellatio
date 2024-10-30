@@ -1,6 +1,5 @@
 /* eslint-disable max-lines */
-import { type Nullable } from "@/utils/types";
-
+import { type Nullable } from "@constellatio/utility-types";
 import { distance } from "fastest-levenshtein";
 import { create } from "zustand";
 import { immer } from "zustand/middleware/immer";

@@ -1,4 +1,4 @@
-import { maximumAmountOfSemesters } from "@/schemas/auth/userData.validation";
+import { maximumAmountOfSemesters } from "@constellatio/schemas/common/auth/userData.validation";
 
 export const transformSemesterToString = (semester: number, includePostfix: boolean): string =>
 {

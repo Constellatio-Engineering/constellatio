@@ -1,8 +1,7 @@
+import { type GetAnswersSortingOption } from "@constellatio/schemas/routers/forum/getAnswers.schema";
+import { type GetQuestionsCursorType } from "@constellatio/schemas/routers/forum/getQuestions.schema";
 import { create } from "zustand";
 import { immer } from "zustand/middleware/immer";
-
-import { type GetAnswersSortingOption } from "@/schemas/forum/getAnswers.schema";
-import type { GetQuestionsCursorType } from "@/schemas/forum/getQuestions.schema";
 
 type ModalClosed = {
   state: "closed";

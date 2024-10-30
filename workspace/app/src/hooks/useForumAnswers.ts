@@ -1,8 +1,7 @@
 import { api } from "@/utils/api";
 
+import { type AppRouter } from "@constellatio/api";
 import { type inferProcedureInput } from "@trpc/server";
-
-import { type AppRouter } from "@/server/api/root";
 
 type Params = inferProcedureInput<AppRouter["forum"]["getAnswers"]>;
 

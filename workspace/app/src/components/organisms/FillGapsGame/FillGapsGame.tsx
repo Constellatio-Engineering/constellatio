@@ -17,6 +17,7 @@ import { InvalidateQueriesContext } from "@/provider/InvalidateQueriesProvider";
 import useFillGapsGameStore from "@/stores/fillGapsGame.store";
 import { api } from "@/utils/api";
 
+import { type IGenFillInGapsGame } from "@constellatio/cms/generated-types";
 import { Title } from "@mantine/core";
 import React, {
   type FC, memo, type ReactElement, useCallback, useEffect, useMemo, 
@@ -25,8 +26,6 @@ import React, {
 import {
   Container, Game, GameWrapper, LegendWrapper, Options, stylesOverwrite, TitleWrapper, 
 } from "./FillGapsGame.styles";
-
-import { type IGenFillInGapsGame } from "@/services/graphql/__generated/sdk";
 
 export type TFillGapsGame = Pick<IGenFillInGapsGame, "fillGameParagraph" | "helpNote" | "question" | "id"> & {
   readonly caseId: string;

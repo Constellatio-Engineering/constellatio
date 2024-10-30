@@ -1,7 +1,7 @@
 import { api } from "@/utils/api";
 import { type UseQueryResult } from "@/utils/types";
 
-import { type UploadFolder } from "@/db/schema";
+import { type UploadFolder } from "@constellatio/db/schema";
 
 type UseUploadFolders = () => UseQueryResult<{ folders: UploadFolder[] }>;
 

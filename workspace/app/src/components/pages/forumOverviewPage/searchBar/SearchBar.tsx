@@ -5,14 +5,13 @@ import EmptyStateCard from "@/components/organisms/emptyStateCard/EmptyStateCard
 import { useForumQuestionsSearchResults } from "@/hooks/useForumQuestionsSearchResults";
 import { useForumQuestionsSearchStore } from "@/stores/forumQuestionsSearch.store";
 
+import { getForumQuestionUrl } from "@constellatio/shared/paths";
 import { Input, Popover } from "@mantine/core";
 import { useMantineTheme } from "@mantine/styles";
 import Link from "next/link";
 import React, { type FunctionComponent } from "react";
 
 import * as styles from "./SearchBar.styles";
-
-import { getForumQuestionUrl } from "@/utils/paths";
 
 const SearchBar: FunctionComponent = () =>
 {

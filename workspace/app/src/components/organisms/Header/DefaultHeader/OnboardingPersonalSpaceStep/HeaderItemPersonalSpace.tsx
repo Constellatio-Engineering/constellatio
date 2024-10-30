@@ -1,6 +1,7 @@
 import { Svg } from "@/basic-components/SVG/Svg";
 import MenuTab from "@/components/atoms/menuTab/MenuTab";
 
+import { appPaths } from "@constellatio/shared/paths";
 import { Group, HoverCard } from "@mantine/core";
 import { IconFolder } from "@tabler/icons-react";
 import Link from "next/link";
@@ -9,8 +10,6 @@ import React, { forwardRef, type ForwardRefRenderFunction } from "react";
 import * as styles from "./HeaderItemPersonalSpace.styles";
 import BookmarkIconSvg from "../../../../../../public/images/icons/bookmark.svg";
 import FileIconSvg from "../../../../../../public/images/icons/file.svg";
-
-import { appPaths } from "@/utils/paths";
 
 export type THeaderItemPersonalSpaceProps = {
   readonly pathname: string;

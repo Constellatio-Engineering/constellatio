@@ -2,10 +2,9 @@ import { Layout } from "@/components/layouts/Layout";
 import PageHead from "@/components/organisms/pageHead/PageHead";
 import DashboardPage from "@/components/pages/dashboardPage/DashboardPage";
 import { type NextPageWithLayout } from "@/pages/_app";
+import { getTrpcServerSideHelpers } from "@/utils/trpc";
 
 import { type GetServerSidePropsContext } from "next";
-
-import { getTrpcServerSideHelpers } from "@/server/api/utils";
 
 export async function getServerSideProps(context: GetServerSidePropsContext)
 {

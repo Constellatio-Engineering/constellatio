@@ -9,14 +9,13 @@ import { colooors } from "@/constants/styles/colors";
 import useBookmarks from "@/hooks/useBookmarks";
 import useCases from "@/hooks/useCases";
 import useCasesProgress from "@/hooks/useCasesProgress";
+import { extractNumeric } from "@/utils/helpers";
 
+import { appPaths } from "@constellatio/shared/paths";
 import { useRouter } from "next/router";
 import React, { type FunctionComponent } from "react";
 
 import * as styles from "./DashboardCasesBlockTable.styles";
-
-import { appPaths } from "@/utils/paths";
-import { extractNumeric } from "@/utils/utils";
 
 const getProgressWeight = (progress: string): number => 
 {

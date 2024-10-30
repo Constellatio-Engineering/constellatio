@@ -1,10 +1,8 @@
-
+import { passwordRequirements } from "@constellatio/schemas/common/auth/userData.validation";
 import { Stack } from "@mantine/core";
 import React, { type FC } from "react";
 
 import { PasswordStrengthMeter } from "../atoms/PasswordStrengthMeter/PasswordStrengthMeter";
-
-import { passwordRequirements } from "@/schemas/auth/userData.validation";
 
 interface TPasswordValidationSchema 
 {

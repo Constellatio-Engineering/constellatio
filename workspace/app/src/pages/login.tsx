@@ -4,17 +4,16 @@ import { AuthPage } from "@/components/pages/AuthPage/AuthPage";
 import { env } from "@/env.mjs";
 import { getCommonProps } from "@/utils/commonProps";
 import { queryParams } from "@/utils/query-params";
-import { type Nullable } from "@/utils/types";
 
+import { getIsUserLoggedInServer } from "@constellatio/api/utils/auth";
+import { appPaths } from "@constellatio/shared/paths";
+import { type Nullable } from "@constellatio/utility-types";
 import { createPagesServerClient } from "@supabase/auth-helpers-nextjs";
 import { type GetServerSideProps } from "next";
 import { type SSRConfig } from "next-i18next";
 import { type FunctionComponent } from "react";
 
 import { defaultLocale } from "../../next.config.mjs";
-
-import { getIsUserLoggedInServer } from "@/utils/auth";
-import { appPaths } from "@/utils/paths";
 
 export type ServerSidePropsResult = SSRConfig & {
   // False positive, this is used in the Register AuthPage

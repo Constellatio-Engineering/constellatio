@@ -5,12 +5,11 @@ import { Footer } from "@/components/organisms/Footer/Footer";
 import { Header } from "@/components/organisms/Header/Header";
 import { UpdatePasswordForm } from "@/components/organisms/UpdatePasswordForm/UpdatePasswordForm";
 
+import { authPaths } from "@constellatio/shared/paths";
 import { Box, Stack, Title } from "@mantine/core";
 import Link from "next/link";
 import { useRouter } from "next/router";
 import { type FunctionComponent, useEffect, useState } from "react";
-
-import { authPaths } from "@/utils/paths";
 
 type RecoverPagePropsContent = "unknownError" | "linkExpired" | "updatePasswordForm";
 

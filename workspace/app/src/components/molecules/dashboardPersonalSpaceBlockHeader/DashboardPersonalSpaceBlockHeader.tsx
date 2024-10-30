@@ -1,13 +1,12 @@
 import { Button } from "@/components/atoms/Button/Button";
 
+import { appPaths } from "@constellatio/shared/paths";
 import { Title } from "@mantine/core";
 import { useMediaQuery } from "@mantine/hooks";
 import Link from "next/link";
 import React, { type FunctionComponent } from "react";
 
 import * as styles from "./DashboardPersonalSpaceBlockHeader.styles";
-
-import { appPaths } from "@/utils/paths";
 
 const DashboardPersonalSpaceBlockHeader: FunctionComponent = () => 
 {

@@ -1,9 +1,9 @@
 import { type ArticlesPageProps, type CasesPageProps, type OverviewPageProps } from "@/components/pages/OverviewPage/OverviewPage";
 import type { CommonOverviewFiltersStore } from "@/stores/overviewFilters.store";
 
-import type { IGenLegalArea } from "@/services/graphql/__generated/sdk";
-import { getIsValidKey, mapToObject } from "@/utils/object";
-import { getIsObjectWithId, getIsObjectWithValue, getIsPrimitive } from "@/utils/utils";
+import type { IGenLegalArea } from "@constellatio/cms/generated-types";
+import { getIsValidKey, mapToObject } from "@constellatio/utils/object";
+import { getIsObjectWithId, getIsObjectWithValue, getIsPrimitive } from "@constellatio/utils/type-validation";
 
 export function getItemsMatchingTheFilters<Item extends OverviewPageProps["items"][number]>(
   items: Item[],

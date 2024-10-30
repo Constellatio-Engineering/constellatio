@@ -4,6 +4,7 @@ import { BoxIcon } from "@/components/Icons/BoxIcon";
 import { FileIcon } from "@/components/Icons/FileIcon";
 import { Toc } from "@/components/organisms/floatingPanel/Toc";
 
+import { type IGenCase_Facts } from "@constellatio/cms/generated-types";
 import { Tabs } from "@mantine/core";
 import { type Maybe } from "graphql/jsutils/Maybe";
 import React, { type FunctionComponent, useMemo, useRef, useState } from "react";
@@ -17,8 +18,6 @@ import { Trash } from "../../Icons/Trash";
 import { ExclamationMark } from "../../Icons/vector";
 import { Richtext } from "../../molecules/Richtext/Richtext";
 import { Switcher } from "../../molecules/Switcher/Switcher";
-
-import { type IGenCase_Facts } from "@/services/graphql/__generated/sdk";
 
 type ITableTab = {
   icon: { src: React.ReactNode };

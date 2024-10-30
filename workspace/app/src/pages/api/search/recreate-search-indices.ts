@@ -1,32 +1,29 @@
 import { env } from "@/env.mjs";
 
-import { type NextApiHandler } from "next";
-
-import { db } from "@/db/connection";
-import { meiliSearchAdmin } from "@/lib/meilisearch";
-import { getAllLegalFields, getAllSubfields, getAllTopics } from "@/server/api/services/caisy.services";
+import { meiliSearchAdmin } from "@constellatio/api/lib/meilisearch";
+import { getAllLegalFields, getAllSubfields, getAllTopics } from "@constellatio/api/services/caisy.services";
 import {
   addArticlesToSearchIndex,
-  addCasesToSearchIndex,
-  addForumQuestionsToSearchIndex,
-  addTagsToSearchIndex,
+  addCasesToSearchIndex, addForumQuestionsToSearchIndex, addTagsToSearchIndex,
   addUserDocumentsToSearchIndex,
   addUserUploadsToSearchIndex,
   resetSearchIndex
-} from "@/server/api/services/search.services";
-import getAllArticles from "@/services/content/getAllArticles";
-import getAllCases from "@/services/content/getAllCases";
-import { getAllTags } from "@/services/content/getAllTags";
-import { isDevelopment } from "@/utils/env";
+} from "@constellatio/api/services/search.services";
+import { getAllArticles } from "@constellatio/cms/content/getAllArticles";
+import { getAllCases } from "@constellatio/cms/content/getAllCases";
+import { getAllTags } from "@constellatio/cms/content/getAllTags";
+import { db } from "@constellatio/db/client";
+import { searchIndices } from "@constellatio/db-to-search";
+import { isDevelopment } from "@constellatio/env";
 import {
   type ArticleSearchItemNodes,
   type CaseSearchItemNodes,
   type DocumentSearchItemNodes,
   type ForumQuestionSearchItemNodes,
-  searchIndices,
   type TagSearchItemNodes,
   type UploadSearchItemNodes
-} from "@/utils/search";
+} from "@constellatio/meilisearch/utils";
+import { type NextApiHandler } from "next";
 
 const handler: NextApiHandler = async (req, res) =>
 {

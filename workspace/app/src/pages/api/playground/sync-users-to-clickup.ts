@@ -1,19 +1,19 @@
 /* eslint-disable max-lines */
 import { env } from "@/env.mjs";
 
-import { createPagesServerClient, type SupabaseClient } from "@supabase/auth-helpers-nextjs";
-import { type AxiosResponse } from "axios";
 import {
   and, countDistinct, eq, getTableColumns, type SQL 
-} from "drizzle-orm";
+} from "@constellatio/db";
+import { db } from "@constellatio/db/client";
+import {
+  casesProgress, contentViews, documents, uploadedFiles, users, usersToBadges 
+} from "@constellatio/db/schema";
+import { createPagesServerClient, type SupabaseClient } from "@supabase/auth-helpers-nextjs";
+import { type AxiosResponse } from "axios";
 import type { NextApiHandler } from "next";
 import pLimit from "p-limit";
 import type Stripe from "stripe";
 
-import { db } from "@/db/connection";
-import {
-  casesProgress, contentViews, documents, uploadedFiles, users, usersToBadges 
-} from "@/db/schema";
 import { deleteClickupCustomFieldValue } from "@/lib/clickup/tasks/delete-custom-field-value";
 import { updateClickupCustomField } from "@/lib/clickup/tasks/update-custom-field";
 import { updateClickupTask } from "@/lib/clickup/tasks/update-task";

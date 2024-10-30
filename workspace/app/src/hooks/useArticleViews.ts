@@ -1,5 +1,7 @@
 import { api } from "@/utils/api";
-import { type Nullable, type UseQueryResult } from "@/utils/types";
+import { type UseQueryResult } from "@/utils/types";
+
+import { type Nullable } from "@constellatio/utility-types";
 
 type UseArticleViews = (articleId: Nullable<string>, isEnabled: boolean) => UseQueryResult<{ count: number }>;
 

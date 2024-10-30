@@ -1,8 +1,8 @@
-// import { type IGenArticle } from "@/services/graphql/__generated/sdk";
+// import { type IGenArticle } from "@constellatio/cms/generated-types";
 import { api } from "@/utils/api";
 import { type UseQueryResult } from "@/utils/types";
 
-import { type allArticles } from "@/services/content/getAllArticles";
+import { type allArticles } from "@constellatio/cms/content/getAllArticles";
 
 type UseArticles = () => UseQueryResult<{ allArticles: allArticles }>;
 

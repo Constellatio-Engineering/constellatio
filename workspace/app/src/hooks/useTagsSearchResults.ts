@@ -1,9 +1,9 @@
 import { MeilisearchContext } from "@/provider/MeilisearchProvider";
 
+import { searchIndices } from "@constellatio/db-to-search";
+import { type TagSearchIndexItem } from "@constellatio/meilisearch/utils";
 import { keepPreviousData, useQuery } from "@tanstack/react-query";
 import { useContext } from "react";
-
-import { searchIndices, type TagSearchIndexItem } from "@/utils/search";
 
 const initialSearchResults: TagSearchIndexItem[] = [];
 

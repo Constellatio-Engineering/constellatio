@@ -9,15 +9,14 @@ import { useDataLossProtection } from "@/hooks/useDataLossProtection";
 import { useLegalFieldsAndTopics } from "@/hooks/useLegalFieldsAndTopics";
 import { useForumPageStore } from "@/stores/forumPage.store";
 
+import { titleMaxLength } from "@constellatio/schemas/common/forum/question.validation";
+import { type PostQuestionSchema } from "@constellatio/schemas/routers/forum/postQuestion.schema";
 import { Modal, type ModalProps, type SelectItem, Title } from "@mantine/core";
 import { type UseFormReturnType } from "@mantine/form";
 import React, { type FunctionComponent, useMemo } from "react";
 
 import * as styles from "./QuestionModal.styles";
 import { RichtextEditorField } from "./RichtextEditorField/RichtextEditorField";
-
-import { type PostQuestionSchema } from "@/schemas/forum/postQuestion.schema";
-import { titleMaxLength } from "@/schemas/forum/question.valiation";
 
 export type QuestionModalProps = Omit<ModalProps, "onSubmit"> & {
   readonly error: ErrorCardsProps["error"];

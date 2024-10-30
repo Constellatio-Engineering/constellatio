@@ -1,6 +1,6 @@
 import { api } from "@/utils/api";
 
-import { type IGenSearch } from "@/services/graphql/__generated/sdk";
+import { type IGenSearch } from "@constellatio/cms/generated-types";
 
 type UseGetPopularSearch = () => {
   error: unknown | null;

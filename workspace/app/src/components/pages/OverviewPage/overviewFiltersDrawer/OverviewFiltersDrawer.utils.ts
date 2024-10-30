@@ -2,10 +2,10 @@
 
 import type { CaseOverviewPageItems } from "@/pages/cases";
 import { type FilterableAttributes, type FilterOption } from "@/stores/overviewFilters.store";
-import { type NullableProperties } from "@/utils/types";
 
-import { getIsValidKey } from "@/utils/object";
-import { getIsObjectWithId, getIsObjectWithValue, getIsPrimitive, objectKeys } from "@/utils/utils";
+import { type NullableProperties } from "@constellatio/utility-types";
+import { getIsValidKey, objectKeys } from "@constellatio/utils/object";
+import { getIsObjectWithId, getIsObjectWithValue, getIsPrimitive } from "@constellatio/utils/type-validation";
 
 export const sortFilterOptions = (a: FilterOption, b: FilterOption): number =>
 {

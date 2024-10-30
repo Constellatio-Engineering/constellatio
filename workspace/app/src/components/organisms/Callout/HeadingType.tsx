@@ -7,9 +7,8 @@ import { Pen } from "@/components/Icons/Pen";
 import { Quote } from "@/components/Icons/Quote";
 import { StarIcon } from "@/components/Icons/StarIcon";
 
+import { type IGenCallout } from "@constellatio/cms/generated-types";
 import React, { type FunctionComponent } from "react";
-
-import { type IGenCallout } from "@/services/graphql/__generated/sdk";
 
 export const HeadingType: FunctionComponent<Pick<IGenCallout, "calloutType">> = ({ calloutType }) => 
 {

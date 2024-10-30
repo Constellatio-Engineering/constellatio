@@ -2,7 +2,9 @@
 import { BodyText } from "@/components/atoms/BodyText/BodyText";
 import { Button } from "@/components/atoms/Button/Button";
 import { useResendConfirmationEmail } from "@/hooks/useResendConfirmationEmail";
+import { supabase } from "@/lib/supabase";
 
+import { appPaths } from "@constellatio/shared/paths";
 import { Loader, Title } from "@mantine/core";
 import { sendGTMEvent } from "@next/third-parties/google";
 import { isAuthError } from "@supabase/auth-js";
@@ -14,9 +16,6 @@ import React, { type FunctionComponent, useEffect, useMemo, useState } from "rea
 import { type ParsedUrlQuery } from "querystring";
 
 import * as styles from "./EmailConfirmCard.styles";
-
-import { supabase } from "@/lib/supabase";
-import { appPaths } from "@/utils/paths";
 
 type ConfirmationState = "invalidLink" | "showError" | "showResendError" | "success" | "linkResentSuccessfully";
 

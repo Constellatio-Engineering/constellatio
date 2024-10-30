@@ -1,12 +1,11 @@
 import { InvalidateQueriesContext } from "@/provider/InvalidateQueriesProvider";
 import { api } from "@/utils/api";
 
+import { type AppRouter } from "@constellatio/api";
 import { notifications } from "@mantine/notifications";
 import { type inferProcedureOutput } from "@trpc/server";
 
 import useContextAndErrorIfNull from "./useContextAndErrorIfNull";
-
-import { type AppRouter } from "@/server/api/root";
 
 type Params = {
   onError?: (error: unknown) => void;

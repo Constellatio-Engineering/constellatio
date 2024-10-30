@@ -10,8 +10,9 @@ import { RegistrationVisualHeader } from "@/components/organisms/RegistrationVis
 import { SocialLoginButton } from "@/components/pages/AuthPage/socialLoginButton/SocialLoginButton";
 import { colooors } from "@/constants/styles/colors";
 import { env } from "@/env.mjs";
-import { type Nullable } from "@/utils/types";
+import { supabase } from "@/lib/supabase";
 
+import { type Nullable } from "@constellatio/utility-types";
 import { Container, Flex, Tabs } from "@mantine/core";
 import { useMediaQuery } from "@mantine/hooks";
 import { sendGTMEvent } from "@next/third-parties/google";
@@ -24,8 +25,6 @@ import { z } from "zod";
 import { makeZodI18nMap } from "zod-i18n-map";
 
 import * as styles from "./AuthPage.styles";
-
-import { supabase } from "@/lib/supabase";
 
 type CommonProps = {
   readonly socialAuthError: Nullable<string>;

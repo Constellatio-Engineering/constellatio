@@ -1,7 +1,8 @@
 import { api } from "@/utils/api";
-import { type Nullable, type UseQueryResult } from "@/utils/types";
+import { type UseQueryResult } from "@/utils/types";
 
-import { type CaseSolution } from "@/db/schema";
+import { type CaseSolution } from "@constellatio/db/schema";
+import { type Nullable } from "@constellatio/utility-types";
 
 type UseSubmittedCaseSolution = (caseId: Nullable<string>) => UseQueryResult<{ submittedCaseSolution: Nullable<CaseSolution> }>;
 

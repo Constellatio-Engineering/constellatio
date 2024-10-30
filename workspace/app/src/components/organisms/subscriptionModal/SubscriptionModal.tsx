@@ -9,6 +9,8 @@ import useSubscription from "@/hooks/useSubscription";
 import { AuthStateContext } from "@/provider/AuthStateProvider";
 import { api } from "@/utils/api";
 
+import { type SubscriptionDetails } from "@constellatio/api/routers/billing.router";
+import { getIsPathAppPath } from "@constellatio/shared/paths";
 import { Title } from "@mantine/core";
 import { useLocalStorage } from "@mantine/hooks";
 import { differenceInDays, formatDistance } from "date-fns";
@@ -18,9 +20,6 @@ import { type FunctionComponent, useContext, useMemo, useState } from "react";
 import { z } from "zod";
 
 import ModalFlag from "../../../../public/images/placeholder-flag.png";
-
-import { type SubscriptionDetails } from "@/server/api/routers/billing.router";
-import { getIsPathAppPath } from "@/utils/paths";
 
 const localStorageKey = "daysLeftToSubscriptionEnds";
 

@@ -1,8 +1,7 @@
+import { getCaseProgressStateAsNumber } from "@constellatio/cms/utils/case";
+import { type CaseProgressState } from "@constellatio/shared/validation";
 import { create } from "zustand";
 import { immer } from "zustand/middleware/immer";
-
-import { type CaseProgressState } from "@/db/schema";
-import { getCaseProgressStateAsNumber } from "@/utils/case";
 
 export type CaseStepIndex = 0 | 1 | 2;
 

@@ -14,8 +14,9 @@ import useUserDetails from "@/hooks/useUserDetails";
 import { InvalidateQueriesContext } from "@/provider/InvalidateQueriesProvider";
 import { useForumPageStore } from "@/stores/forumPage.store";
 import { api } from "@/utils/api";
-import { type Prettify } from "@/utils/types";
 
+import { type GetAnswersAnswerParent, type GetAnswersQuestionParent } from "@constellatio/schemas/routers/forum/getAnswers.schema";
+import { type Prettify } from "@constellatio/utility-types";
 import { Loader, Modal, Title, TypographyStylesProvider } from "@mantine/core";
 import { notifications } from "@mantine/notifications";
 import React, { type FunctionComponent, useState } from "react";
@@ -23,8 +24,6 @@ import React, { type FunctionComponent, useState } from "react";
 import * as styles from "./AnswerListItem.styles";
 import ForumListItem from "../../forumOverviewPage/forumListItem/ForumListItem";
 import AnswerEditor from "../answerEditor/AnswerEditor";
-
-import { type GetAnswersAnswerParent, type GetAnswersQuestionParent } from "@/schemas/forum/getAnswers.schema";
 
 interface CommonProps
 {

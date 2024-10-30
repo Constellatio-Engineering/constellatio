@@ -27,6 +27,8 @@ import { InvalidateQueriesContext } from "@/provider/InvalidateQueriesProvider";
 import { useForumPageStore } from "@/stores/forumPage.store";
 import { api } from "@/utils/api";
 
+import { type GetAnswersSortingOption } from "@constellatio/schemas/routers/forum/getAnswers.schema";
+import { appPaths } from "@constellatio/shared/paths";
 import { Modal, Title, TypographyStylesProvider } from "@mantine/core";
 import { notifications } from "@mantine/notifications";
 import ErrorPage from "next/error";
@@ -36,9 +38,6 @@ import React, { Fragment, type FunctionComponent, useEffect, useState } from "re
 
 import * as styles from "./ForumQuestionDetailPage.styles";
 import { QuestionUpvoteButton } from "../forumOverviewPage/upvoteButton/QuestionUpvoteButton";
-
-import { type GetAnswersSortingOption } from "@/schemas/forum/getAnswers.schema";
-import { appPaths } from "@/utils/paths";
 
 type SortingOptions = {
   [key in GetAnswersSortingOption]: {

@@ -4,13 +4,12 @@ import FavoritesExcerpt from "@/components/organisms/favoritesExcerpt/FavoritesE
 import { useLastViewedArticles } from "@/hooks/useLastViewedArticles";
 import { useLastViewedCases } from "@/hooks/useLastViewedCases";
 
+import { appPaths } from "@constellatio/shared/paths";
 import { Title } from "@mantine/core";
 import Link from "next/link";
 import React, { type FunctionComponent } from "react";
 
 import * as styles from "./DashboardLastEditedBlock.styles";
-
-import { appPaths } from "@/utils/paths";
 
 const DashboardLastEditedBlock: FunctionComponent = () =>
 {

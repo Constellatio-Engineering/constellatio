@@ -5,14 +5,13 @@ import AnswersSkeleton from "@/components/pages/forumQuestionDetailPage/answersS
 import { useForumAnswers } from "@/hooks/useForumAnswers";
 import { usePostAnswer } from "@/hooks/usePostAnswer";
 import { useForumPageStore } from "@/stores/forumPage.store";
+import { scrollTo } from "@/utils/scroll";
 
+import { type GetAnswersQuestionParent } from "@constellatio/schemas/routers/forum/getAnswers.schema";
 import React, { Fragment, type FunctionComponent, useId } from "react";
 import { flushSync } from "react-dom";
 
 import * as styles from "./AnswerListItemWithReplies.styles";
-
-import { type GetAnswersQuestionParent } from "@/schemas/forum/getAnswers.schema";
-import { scrollTo } from "@/utils/utils";
 
 type Props = {
   readonly answerId: string;

@@ -2,17 +2,12 @@
 import { env } from "@/env.mjs";
 import { queryParams } from "@/utils/query-params";
 
-import { neonConfig, Pool } from "@neondatabase/serverless";
+import { getIsUserLoggedInServer } from "@constellatio/api/utils/auth";
+import { getHasSubscription } from "@constellatio/api/utils/subscription";
+import { users, usersToRoles } from "@constellatio/db/schema";
+import { appPaths, authPaths } from "@constellatio/shared/paths";
 import { createMiddlewareClient } from "@supabase/auth-helpers-nextjs";
-import { eq } from "drizzle-orm";
-import { drizzle as drizzleServerless } from "drizzle-orm/neon-serverless";
 import { type NextMiddleware, NextResponse } from "next/server";
-
-import { users, usersToRoles } from "@/db/schema";
-import * as schema from "@/db/schema";
-import { getIsUserLoggedInServer } from "@/utils/auth";
-import { appPaths, authPaths } from "@/utils/paths";
-import { getHasSubscription } from "@/utils/subscription";
 
 if(env.NEXT_PUBLIC_DEPLOYMENT_ENVIRONMENT === "development")
 {

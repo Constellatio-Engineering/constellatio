@@ -1,16 +1,15 @@
 /* eslint-disable max-lines */
 import type { CaseOverviewPageProps } from "@/pages/cases";
 import type { ArticleOverviewPageProps } from "@/pages/dictionary";
+import { getUrlSearchParams } from "@/utils/helpers";
 
+import { areArraysEqualByKey } from "@constellatio/utils/array";
+import { getIsValidKey } from "@constellatio/utils/object";
 import { castDraft, enableMapSet } from "immer";
 import { z } from "zod";
 import { createStore } from "zustand";
 import { persist } from "zustand/middleware";
 import { immer } from "zustand/middleware/immer";
-
-import { areArraysEqualByKey } from "@/utils/array";
-import { getIsValidKey } from "@/utils/object";
-import { getUrlSearchParams } from "@/utils/utils";
 
 enableMapSet();
 
