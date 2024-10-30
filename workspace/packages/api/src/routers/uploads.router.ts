@@ -13,9 +13,11 @@ import { db } from "@constellatio/db/client";
 import { type UploadedFileInsert, uploadedFiles } from "@constellatio/db/schema";
 import { searchIndices } from "@constellatio/db-to-search";
 import { createUploadsSearchIndexItem, uploadSearchIndexItemPrimaryKey, type UploadSearchItemUpdate } from "@constellatio/meilisearch/utils";
-import {
-  addUploadSchema, deleteUploadSchema, generateCreateSignedUploadUrlSchema, getUploadedFilesSchema, updateUploadedFileSchema 
-} from "@constellatio/schemas";
+import { addUploadSchema } from "@constellatio/schemas/routers/uploads/addUpload.schema";
+import { generateCreateSignedUploadUrlSchema } from "@constellatio/schemas/routers/uploads/createSignedUploadUrl.schema";
+import { deleteUploadSchema } from "@constellatio/schemas/routers/uploads/deleteUpload.schema";
+import { getUploadedFilesSchema } from "@constellatio/schemas/routers/uploads/getUploadedFiles.schema";
+import { updateUploadedFileSchema } from "@constellatio/schemas/routers/uploads/updateUploadedFile.schema";
 import { fileExtensions, fileMimeTypes } from "@constellatio/shared/validation";
 import type { inferProcedureOutput } from "@trpc/server";
 import { z } from "zod";

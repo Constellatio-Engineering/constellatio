@@ -28,8 +28,8 @@
     "@constellatio/utility-types": "workspace:*"
   },
   "devDependencies": {
-    "@constellatio/tsconfig": "workspace:*",
     "@constellatio/eslint-config": "workspace:*",
+    "@constellatio/tsconfig": "workspace:*",
     "eslint": "catalog:",
     "typescript": "catalog:"
   }

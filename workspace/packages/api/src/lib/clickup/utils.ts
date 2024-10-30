@@ -31,7 +31,8 @@ import {
   casesProgress, contentViews, documents, updateUserInCrmQueue, uploadedFiles, type User, users, usersToBadges 
 } from "@constellatio/db/schema";
 import { env } from "@constellatio/env";
-import { allUniversities, type FormbricksFeedbackWebhook } from "@constellatio/schemas";
+import { allUniversities } from "@constellatio/schemas/common/auth/userData.validation";
+import { type FormbricksFeedbackWebhook } from "@constellatio/schemas/integration/formbricks/feedback-received.schema";
 import { type Nullable } from "@constellatio/utility-types";
 import { createPagesServerClient, type SupabaseClient, type User as SupabaseUser } from "@supabase/auth-helpers-nextjs";
 import { type AxiosResponse, type AxiosRequestConfig } from "axios";
@@ -328,6 +329,77 @@ export const clickupCrmCustomField = {
   }
 } as const;
 
+type CalculateMembershipEndDateProps = (subscriptionData: Stripe.Response<Stripe.Subscription>) => {
+  isCanceled: true;
+  subscriptionEndDate: Date;
+} | {
+  isCanceled: false;
+};
+
+const calculateSubscriptionFuture: CalculateMembershipEndDateProps = (subscriptionData) =>
+{
+  const {
+    cancel_at,
+    cancel_at_period_end,
+    current_period_end,
+    default_payment_method,
+    ended_at,
+    status,
+    trial_end
+  } = subscriptionData;
+
+  switch (status)
+  {
+    case "active":
+      if(cancel_at_period_end)
+      {
+        return ({
+          isCanceled: true,
+          subscriptionEndDate: new Date(cancel_at! * 1000)
+        });
+      }
+      else
+      {
+        return { isCanceled: false };
+      }
+    case "canceled":
+      return ({
+        isCanceled: true,
+        subscriptionEndDate: new Date((ended_at || cancel_at)! * 1000)
+      });
+    case "trialing":
+      if(cancel_at)
+      {
+        return ({
+          isCanceled: true,
+          subscriptionEndDate: new Date(cancel_at * 1000)
+        });
+      }
+      else if(!default_payment_method)
+      {
+        return ({
+          isCanceled: true,
+          subscriptionEndDate: new Date(trial_end! * 1000)
+        });
+      }
+      else
+      {
+        return { isCanceled: false };
+      }
+    case "incomplete":
+    case "incomplete_expired":
+    case "unpaid":
+    case "past_due":
+      return ({
+        isCanceled: true,
+        subscriptionEndDate: new Date(current_period_end! * 1000)
+      });
+    case "paused":
+    default:
+      return { isCanceled: false };
+  }
+};
+
 export const getUsersWithActivityStats = async (query?: SQL) =>
 {
   const articlesViews = db
@@ -375,6 +447,217 @@ export const getUsersWithActivityStats = async (query?: SQL) =>
 };
 
 export type UserWithActivityStats = Awaited<ReturnType<typeof getUsersWithActivityStats>>[number];
+
+type GetUserCrmData = (props: {
+  allInvoices: Stripe.Invoice[];
+  defaultPaymentMethod: Stripe.PaymentMethod | null;
+  subscriptionData: Stripe.Response<Stripe.Subscription> | null;
+  supabaseUserData: SupabaseUser;
+  user: UserWithActivityStats;
+}) => {
+  custom_fields: CustomFieldInsert[];
+  name: string;
+};
+
+export const getUserCrmData: GetUserCrmData = ({
+  allInvoices,
+  defaultPaymentMethod,
+  subscriptionData,
+  supabaseUserData,
+  user
+}): Required<Pick<ClickupTaskCreate, "name" | "custom_fields">> =>
+{
+  let stripeSubscriptionStatusCustomFieldId: string | undefined;
+
+  if(subscriptionData?.status != null)
+  {
+    switch (subscriptionData.status)
+    {
+      case "active":
+        stripeSubscriptionStatusCustomFieldId = clickupCrmCustomField.aboStatus.options.active.fieldId;
+        break;
+      case "past_due":
+        stripeSubscriptionStatusCustomFieldId = clickupCrmCustomField.aboStatus.options.overdue.fieldId;
+        break;
+      case "incomplete":
+        stripeSubscriptionStatusCustomFieldId = clickupCrmCustomField.aboStatus.options.incomplete.fieldId;
+        break;
+      case "trialing":
+        stripeSubscriptionStatusCustomFieldId = clickupCrmCustomField.aboStatus.options.trialing.fieldId;
+        break;
+      case "canceled":
+        stripeSubscriptionStatusCustomFieldId = clickupCrmCustomField.aboStatus.options.canceled.fieldId;
+        break;
+      case "incomplete_expired":
+        stripeSubscriptionStatusCustomFieldId = clickupCrmCustomField.aboStatus.options.incompleteExpired.fieldId;
+        break;
+      case "paused":
+        stripeSubscriptionStatusCustomFieldId = clickupCrmCustomField.aboStatus.options.paused.fieldId;
+        break;
+      case "unpaid":
+        stripeSubscriptionStatusCustomFieldId = clickupCrmCustomField.aboStatus.options.unpaid.fieldId;
+        break;
+    }
+  }
+
+  const subscriptionFuture = subscriptionData ? calculateSubscriptionFuture(subscriptionData) : null;
+
+  const userIdCustomFieldData: ShortTextCustomFieldInsertProps = {
+    id: clickupCrmCustomField.userId.fieldId,
+    value: user.id
+  };
+
+  const universityCustomFieldData: DropDownCustomFieldInsertProps = {
+    id: clickupCrmCustomField.university.fieldId,
+    value: allUniversities.find(u => u.name === user.university)?.clickupId
+  };
+
+  const semesterCustomFieldData: NumberCustomFieldInsertProps = {
+    id: clickupCrmCustomField.semester.fieldId,
+    value: user.semester
+  };
+
+  const emailCustomFieldData: EmailCustomFieldInsertProps = {
+    id: clickupCrmCustomField.email.fieldId,
+    value: user.email
+  };
+
+  const signedUpDateCustomFieldData: DateCustomFieldInsertProps = {
+    id: clickupCrmCustomField.signedUpDate.fieldId,
+    value: new Date(supabaseUserData!.created_at).getTime(),
+    value_options: { time: true }
+  };
+
+  const categoryCustomFieldData: DropDownCustomFieldInsertProps = {
+    id: clickupCrmCustomField.category.fieldId,
+    value: (user.university || user.semester) ? clickupCrmCustomField.category.options.student.fieldId : undefined
+  };
+
+  const aboStatusCustomFieldData: DropDownCustomFieldInsertProps = {
+    id: clickupCrmCustomField.aboStatus.fieldId,
+    value: stripeSubscriptionStatusCustomFieldId
+  };
+
+  const memberUntilCustomFieldData: DateCustomFieldInsertProps = {
+    id: clickupCrmCustomField.memberUntil.fieldId,
+    value: subscriptionFuture?.isCanceled ? subscriptionFuture.subscriptionEndDate.getTime() : undefined,
+    value_options: { time: true }
+  };
+
+  const willSubscriptionContinueCustomFieldData: DropDownCustomFieldInsertProps = {
+    id: clickupCrmCustomField.willSubscriptionContinue.fieldId,
+    value: subscriptionFuture?.isCanceled ? clickupCrmCustomField.willSubscriptionContinue.options.no.fieldId : clickupCrmCustomField.willSubscriptionContinue.options.yes.fieldId
+  };
+
+  const subscriptionItems = subscriptionData?.items.data;
+  const plan = subscriptionItems?.[0]?.plan;
+
+  if(subscriptionItems && subscriptionItems.length > 1)
+  {
+    console.error(`User ${user.id} has more than one subscription item. This is not supported and must be investigated.`);
+  }
+
+  const paymentIntervalOptions = clickupCrmCustomField.paymentInterval.options;
+
+  let paymentIntervalFieldValue: typeof paymentIntervalOptions[keyof typeof paymentIntervalOptions]["fieldId"] | undefined;
+
+  if(plan?.interval != null)
+  {
+    switch (plan.interval)
+    {
+      case "day":
+        paymentIntervalFieldValue = paymentIntervalOptions.daily.fieldId;
+        break;
+      case "month":
+        paymentIntervalFieldValue = paymentIntervalOptions.monthly.fieldId;
+        break;
+      case "week":
+        paymentIntervalFieldValue = paymentIntervalOptions.weekly.fieldId;
+        break;
+      case "year":
+        paymentIntervalFieldValue = paymentIntervalOptions.yearly.fieldId;
+        break;
+    }
+  }
+
+  const paymentIntervalCustomFieldData: DropDownCustomFieldInsertProps = {
+    id: clickupCrmCustomField.paymentInterval.fieldId,
+    value: paymentIntervalFieldValue
+  };
+
+  const allInvoicesWithMoneySpent = allInvoices.filter(invoice => invoice.total > 0);
+  const totalMoneySpent = allInvoicesWithMoneySpent.reduce((acc, invoice) => acc + invoice.total, 0) / 100;
+
+  const totalMoneySpentCustomFieldData: CurrencyCustomFieldInsertProps = {
+    id: clickupCrmCustomField.totalMoneySpent.fieldId,
+    value: totalMoneySpent
+  };
+
+  const amountOfPaymentsCustomFieldData: NumberCustomFieldInsertProps = {
+    id: clickupCrmCustomField.amountOfPayments.fieldId,
+    value: allInvoicesWithMoneySpent.length
+  };
+
+  const amountOfUploadedFilesCustomFieldData: NumberCustomFieldInsertProps = {
+    id: clickupCrmCustomField.amountOfUploadedFiles.fieldId,
+    value: user.uploadedFiles
+  };
+
+  const amountOfViewedArticlesCustomFieldData: NumberCustomFieldInsertProps = {
+    id: clickupCrmCustomField.amountOfViewedArticles.fieldId,
+    value: user.viewedArticles
+  };
+
+  const amountOfViewedCasesCustomFieldData: NumberCustomFieldInsertProps = {
+    id: clickupCrmCustomField.amountOfViewedCases.fieldId,
+    value: user.viewedCases
+  };
+
+  const amountOfCreatedDocsCustomFieldData: NumberCustomFieldInsertProps = {
+    id: clickupCrmCustomField.amountOfCreatedDocs.fieldId,
+    value: user.createdDocuments
+  };
+
+  const amountOfSolvedCasesCustomFieldData: NumberCustomFieldInsertProps = {
+    id: clickupCrmCustomField.amountOfSolvedCases.fieldId,
+    value: user.completedCases
+  };
+
+  const amountOfBadesCustomFieldData: NumberCustomFieldInsertProps = {
+    id: clickupCrmCustomField.amountOfBades.fieldId,
+    value: user.completedBadges
+  };
+
+  const defaultPaymentMethodCustomFieldData: ShortTextCustomFieldInsertProps = {
+    id: clickupCrmCustomField.paymentMethod.fieldId,
+    value: defaultPaymentMethod?.type
+  };
+
+  return ({
+    custom_fields: [
+      userIdCustomFieldData,
+      categoryCustomFieldData,
+      emailCustomFieldData,
+      universityCustomFieldData,
+      semesterCustomFieldData,
+      signedUpDateCustomFieldData,
+      memberUntilCustomFieldData,
+      aboStatusCustomFieldData,
+      willSubscriptionContinueCustomFieldData,
+      paymentIntervalCustomFieldData,
+      totalMoneySpentCustomFieldData,
+      amountOfPaymentsCustomFieldData,
+      amountOfUploadedFilesCustomFieldData,
+      amountOfViewedArticlesCustomFieldData,
+      amountOfViewedCasesCustomFieldData,
+      amountOfCreatedDocsCustomFieldData,
+      amountOfSolvedCasesCustomFieldData,
+      amountOfBadesCustomFieldData,
+      defaultPaymentMethodCustomFieldData
+    ],
+    name: user.firstName + " " + user.lastName,
+  });
+};
 
 // eslint-disable-next-line @typescript-eslint/explicit-function-return-type
 export const getCrmDataForUser = async (userIdOrData: string | UserWithActivityStats, supabaseServerClient: SupabaseClient<never, "public", never>) =>
@@ -591,77 +874,6 @@ export const getUpdateUsersCrmDataPromises = ({
   return updateUsersPromises;
 };
 
-type CalculateMembershipEndDateProps = (subscriptionData: Stripe.Response<Stripe.Subscription>) => {
-  isCanceled: true;
-  subscriptionEndDate: Date;
-} | {
-  isCanceled: false;
-};
-
-const calculateSubscriptionFuture: CalculateMembershipEndDateProps = (subscriptionData) =>
-{
-  const {
-    cancel_at,
-    cancel_at_period_end,
-    current_period_end,
-    default_payment_method,
-    ended_at,
-    status,
-    trial_end
-  } = subscriptionData;
-
-  switch (status)
-  {
-    case "active":
-      if(cancel_at_period_end)
-      {
-        return ({
-          isCanceled: true,
-          subscriptionEndDate: new Date(cancel_at! * 1000)
-        });
-      }
-      else
-      {
-        return { isCanceled: false };
-      }
-    case "canceled":
-      return ({
-        isCanceled: true,
-        subscriptionEndDate: new Date((ended_at || cancel_at)! * 1000)
-      });
-    case "trialing":
-      if(cancel_at)
-      {
-        return ({
-          isCanceled: true,
-          subscriptionEndDate: new Date(cancel_at * 1000)
-        });
-      }
-      else if(!default_payment_method)
-      {
-        return ({
-          isCanceled: true,
-          subscriptionEndDate: new Date(trial_end! * 1000)
-        });
-      }
-      else
-      {
-        return { isCanceled: false };
-      }
-    case "incomplete":
-    case "incomplete_expired":
-    case "unpaid":
-    case "past_due":
-      return ({
-        isCanceled: true,
-        subscriptionEndDate: new Date(current_period_end! * 1000)
-      });
-    case "paused":
-    default:
-      return { isCanceled: false };
-  }
-};
-
 // eslint-disable-next-line @typescript-eslint/explicit-function-return-type
 export const getClickupCrmUserByUserId = async (userId: Nullable<string>): Promise<ClickupTask[]> =>
 {
@@ -801,217 +1013,6 @@ export const getContentTaskCrmData: GetContentTaskCrmData = (content) =>
     ],
     due_date: new Date(Date.now() + 30 * 24 * 60 * 60 * 1000).getTime(),
     name: content.title ?? "Error: No title",
-  });
-};
-
-type GetUserCrmData = (props: {
-  allInvoices: Stripe.Invoice[];
-  defaultPaymentMethod: Stripe.PaymentMethod | null;
-  subscriptionData: Stripe.Response<Stripe.Subscription> | null;
-  supabaseUserData: SupabaseUser;
-  user: UserWithActivityStats;
-}) => {
-  custom_fields: CustomFieldInsert[];
-  name: string;
-};
-
-export const getUserCrmData: GetUserCrmData = ({
-  allInvoices,
-  defaultPaymentMethod,
-  subscriptionData,
-  supabaseUserData,
-  user
-}): Required<Pick<ClickupTaskCreate, "name" | "custom_fields">> =>
-{
-  let stripeSubscriptionStatusCustomFieldId: string | undefined;
-
-  if(subscriptionData?.status != null)
-  {
-    switch (subscriptionData.status)
-    {
-      case "active":
-        stripeSubscriptionStatusCustomFieldId = clickupCrmCustomField.aboStatus.options.active.fieldId;
-        break;
-      case "past_due":
-        stripeSubscriptionStatusCustomFieldId = clickupCrmCustomField.aboStatus.options.overdue.fieldId;
-        break;
-      case "incomplete":
-        stripeSubscriptionStatusCustomFieldId = clickupCrmCustomField.aboStatus.options.incomplete.fieldId;
-        break;
-      case "trialing":
-        stripeSubscriptionStatusCustomFieldId = clickupCrmCustomField.aboStatus.options.trialing.fieldId;
-        break;
-      case "canceled":
-        stripeSubscriptionStatusCustomFieldId = clickupCrmCustomField.aboStatus.options.canceled.fieldId;
-        break;
-      case "incomplete_expired":
-        stripeSubscriptionStatusCustomFieldId = clickupCrmCustomField.aboStatus.options.incompleteExpired.fieldId;
-        break;
-      case "paused":
-        stripeSubscriptionStatusCustomFieldId = clickupCrmCustomField.aboStatus.options.paused.fieldId;
-        break;
-      case "unpaid":
-        stripeSubscriptionStatusCustomFieldId = clickupCrmCustomField.aboStatus.options.unpaid.fieldId;
-        break;
-    }
-  }
-
-  const subscriptionFuture = subscriptionData ? calculateSubscriptionFuture(subscriptionData) : null;
-
-  const userIdCustomFieldData: ShortTextCustomFieldInsertProps = {
-    id: clickupCrmCustomField.userId.fieldId,
-    value: user.id
-  };
-
-  const universityCustomFieldData: DropDownCustomFieldInsertProps = {
-    id: clickupCrmCustomField.university.fieldId,
-    value: allUniversities.find(u => u.name === user.university)?.clickupId
-  };
-
-  const semesterCustomFieldData: NumberCustomFieldInsertProps = {
-    id: clickupCrmCustomField.semester.fieldId,
-    value: user.semester
-  };
-
-  const emailCustomFieldData: EmailCustomFieldInsertProps = {
-    id: clickupCrmCustomField.email.fieldId,
-    value: user.email
-  };
-
-  const signedUpDateCustomFieldData: DateCustomFieldInsertProps = {
-    id: clickupCrmCustomField.signedUpDate.fieldId,
-    value: new Date(supabaseUserData!.created_at).getTime(),
-    value_options: { time: true }
-  };
-
-  const categoryCustomFieldData: DropDownCustomFieldInsertProps = {
-    id: clickupCrmCustomField.category.fieldId,
-    value: (user.university || user.semester) ? clickupCrmCustomField.category.options.student.fieldId : undefined
-  };
-
-  const aboStatusCustomFieldData: DropDownCustomFieldInsertProps = {
-    id: clickupCrmCustomField.aboStatus.fieldId,
-    value: stripeSubscriptionStatusCustomFieldId
-  };
-
-  const memberUntilCustomFieldData: DateCustomFieldInsertProps = {
-    id: clickupCrmCustomField.memberUntil.fieldId,
-    value: subscriptionFuture?.isCanceled ? subscriptionFuture.subscriptionEndDate.getTime() : undefined,
-    value_options: { time: true }
-  };
-
-  const willSubscriptionContinueCustomFieldData: DropDownCustomFieldInsertProps = {
-    id: clickupCrmCustomField.willSubscriptionContinue.fieldId,
-    value: subscriptionFuture?.isCanceled ? clickupCrmCustomField.willSubscriptionContinue.options.no.fieldId : clickupCrmCustomField.willSubscriptionContinue.options.yes.fieldId
-  };
-
-  const subscriptionItems = subscriptionData?.items.data;
-  const plan = subscriptionItems?.[0]?.plan;
-
-  if(subscriptionItems && subscriptionItems.length > 1)
-  {
-    console.error(`User ${user.id} has more than one subscription item. This is not supported and must be investigated.`);
-  }
-
-  const paymentIntervalOptions = clickupCrmCustomField.paymentInterval.options;
-
-  let paymentIntervalFieldValue: typeof paymentIntervalOptions[keyof typeof paymentIntervalOptions]["fieldId"] | undefined;
-
-  if(plan?.interval != null)
-  {
-    switch (plan.interval)
-    {
-      case "day":
-        paymentIntervalFieldValue = paymentIntervalOptions.daily.fieldId;
-        break;
-      case "month":
-        paymentIntervalFieldValue = paymentIntervalOptions.monthly.fieldId;
-        break;
-      case "week":
-        paymentIntervalFieldValue = paymentIntervalOptions.weekly.fieldId;
-        break;
-      case "year":
-        paymentIntervalFieldValue = paymentIntervalOptions.yearly.fieldId;
-        break;
-    }
-  }
-
-  const paymentIntervalCustomFieldData: DropDownCustomFieldInsertProps = {
-    id: clickupCrmCustomField.paymentInterval.fieldId,
-    value: paymentIntervalFieldValue
-  };
-
-  const allInvoicesWithMoneySpent = allInvoices.filter(invoice => invoice.total > 0);
-  const totalMoneySpent = allInvoicesWithMoneySpent.reduce((acc, invoice) => acc + invoice.total, 0) / 100;
-
-  const totalMoneySpentCustomFieldData: CurrencyCustomFieldInsertProps = {
-    id: clickupCrmCustomField.totalMoneySpent.fieldId,
-    value: totalMoneySpent
-  };
-
-  const amountOfPaymentsCustomFieldData: NumberCustomFieldInsertProps = {
-    id: clickupCrmCustomField.amountOfPayments.fieldId,
-    value: allInvoicesWithMoneySpent.length
-  };
-
-  const amountOfUploadedFilesCustomFieldData: NumberCustomFieldInsertProps = {
-    id: clickupCrmCustomField.amountOfUploadedFiles.fieldId,
-    value: user.uploadedFiles
-  };
-
-  const amountOfViewedArticlesCustomFieldData: NumberCustomFieldInsertProps = {
-    id: clickupCrmCustomField.amountOfViewedArticles.fieldId,
-    value: user.viewedArticles
-  };
-
-  const amountOfViewedCasesCustomFieldData: NumberCustomFieldInsertProps = {
-    id: clickupCrmCustomField.amountOfViewedCases.fieldId,
-    value: user.viewedCases
-  };
-
-  const amountOfCreatedDocsCustomFieldData: NumberCustomFieldInsertProps = {
-    id: clickupCrmCustomField.amountOfCreatedDocs.fieldId,
-    value: user.createdDocuments
-  };
-
-  const amountOfSolvedCasesCustomFieldData: NumberCustomFieldInsertProps = {
-    id: clickupCrmCustomField.amountOfSolvedCases.fieldId,
-    value: user.completedCases
-  };
-
-  const amountOfBadesCustomFieldData: NumberCustomFieldInsertProps = {
-    id: clickupCrmCustomField.amountOfBades.fieldId,
-    value: user.completedBadges
-  };
-
-  const defaultPaymentMethodCustomFieldData: ShortTextCustomFieldInsertProps = {
-    id: clickupCrmCustomField.paymentMethod.fieldId,
-    value: defaultPaymentMethod?.type
-  };
-
-  return ({
-    custom_fields: [
-      userIdCustomFieldData,
-      categoryCustomFieldData,
-      emailCustomFieldData,
-      universityCustomFieldData,
-      semesterCustomFieldData,
-      signedUpDateCustomFieldData,
-      memberUntilCustomFieldData,
-      aboStatusCustomFieldData,
-      willSubscriptionContinueCustomFieldData,
-      paymentIntervalCustomFieldData,
-      totalMoneySpentCustomFieldData,
-      amountOfPaymentsCustomFieldData,
-      amountOfUploadedFilesCustomFieldData,
-      amountOfViewedArticlesCustomFieldData,
-      amountOfViewedCasesCustomFieldData,
-      amountOfCreatedDocsCustomFieldData,
-      amountOfSolvedCasesCustomFieldData,
-      amountOfBadesCustomFieldData,
-      defaultPaymentMethodCustomFieldData
-    ],
-    name: user.firstName + " " + user.lastName,
   });
 };
 

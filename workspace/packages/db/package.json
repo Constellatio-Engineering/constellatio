@@ -34,11 +34,11 @@
     "@constellatio/utils": "workspace:*",
     "@t3-oss/env-nextjs": "catalog:",
     "drizzle-orm": "0.35.3",
-    "postgres": "3.4.5"
+    "postgres": "catalog:"
   },
   "devDependencies": {
-    "@constellatio/tsconfig": "workspace:*",
     "@constellatio/eslint-config": "workspace:*",
+    "@constellatio/tsconfig": "workspace:*",
     "drizzle-kit": "0.26.2",
     "eslint": "catalog:",
     "typescript": "catalog:"

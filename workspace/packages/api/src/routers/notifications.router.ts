@@ -4,7 +4,9 @@ import { InternalServerError } from "~/utils/serverError";
 import { and, count, eq, isNull } from "@constellatio/db";
 import { db } from "@constellatio/db/client";
 import { notifications } from "@constellatio/db/schema";
-import { getNotificationByIdSchema, type GetNotificationsSchema, getNotificationsSchema, setNotificationReadStatusSchema } from "@constellatio/schemas";
+import { getNotificationByIdSchema } from "@constellatio/schemas/routers/notifications/getNotificationById.schema";
+import { type GetNotificationsSchema, getNotificationsSchema } from "@constellatio/schemas/routers/notifications/getNotifications.schema";
+import { setNotificationReadStatusSchema } from "@constellatio/schemas/routers/notifications/setNotificationReadStatus.schema";
 import { type inferProcedureOutput } from "@trpc/server";
 
 import { createTRPCRouter, protectedProcedure } from "../trpc";

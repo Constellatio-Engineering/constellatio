@@ -18,7 +18,7 @@
     "lint": "turbo run lint --continue -- --cache --cache-location .cache/.eslintcache",
     "lint:fix": "turbo run lint --continue -- --fix --cache --cache-location .cache/.eslintcache",
     "lint:ws": "pnpm dlx sherif@latest",
-    "postinstall": "pnpm lint:ws",
+    "postinstall": "pnpm lint:ws -f",
     "typecheck": "turbo run typecheck",
     "separatorSupabase": "---------------------- SUPABASE ----------------------",
     "start:supabase": "supabase start --ignore-health-check",

@@ -8,7 +8,10 @@ import { NotFoundError, UnauthorizedError } from "~/utils/serverError";
 import { eq } from "@constellatio/db";
 import { db } from "@constellatio/db/client";
 import { type ProfilePictureInsert, profilePictures, users } from "@constellatio/db/schema";
-import { generateCreateSignedUploadUrlSchema, setOnboardingResultSchema, setProfilePictureSchema, updateUserDetailsSchema } from "@constellatio/schemas";
+import { updateUserDetailsSchema } from "@constellatio/schemas/routers/auth/updateUserDetails.schema";
+import { generateCreateSignedUploadUrlSchema } from "@constellatio/schemas/routers/uploads/createSignedUploadUrl.schema";
+import { setOnboardingResultSchema } from "@constellatio/schemas/routers/users/setOnboardingResult.schema";
+import { setProfilePictureSchema } from "@constellatio/schemas/routers/users/setProfilePicture.schema";
 import { imageFileExtensions, imageFileMimeTypes } from "@constellatio/shared/validation";
 
 import { createTRPCRouter, protectedProcedure } from "../trpc";

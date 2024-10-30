@@ -3,7 +3,10 @@ import {
 } from "@constellatio/db";
 import { db } from "@constellatio/db/client";
 import { type NoteInsert, notes, uploadedFiles } from "@constellatio/db/schema";
-import { createNoteSchema, deleteNoteSchema, getNotesSchema, updateNoteSchema } from "@constellatio/schemas";
+import { createNoteSchema } from "@constellatio/schemas/routers/notes/createNote.schema";
+import { deleteNoteSchema } from "@constellatio/schemas/routers/notes/deleteNote.schema";
+import { getNotesSchema } from "@constellatio/schemas/routers/notes/getNotes.schema";
+import { updateNoteSchema } from "@constellatio/schemas/routers/notes/updateNote.schema";
 
 import { createTRPCRouter, protectedProcedure } from "../trpc";
 

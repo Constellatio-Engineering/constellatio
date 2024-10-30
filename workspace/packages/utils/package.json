@@ -66,8 +66,8 @@
     "uuid": "11.0.1"
   },
   "devDependencies": {
-    "@constellatio/tsconfig": "workspace:*",
     "@constellatio/eslint-config": "workspace:*",
+    "@constellatio/tsconfig": "workspace:*",
     "eslint": "catalog:",
     "typescript": "catalog:"
   }

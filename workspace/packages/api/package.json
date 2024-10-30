@@ -25,9 +25,9 @@
     "@constellatio/env": "workspace:*",
     "@constellatio/meilisearch": "workspace:*",
     "@constellatio/schemas": "workspace:*",
+    "@constellatio/shared": "workspace:*",
     "@constellatio/utility-types": "workspace:*",
     "@constellatio/utils": "workspace:*",
-    "@constellatio/shared": "workspace:*",
     "@google-cloud/storage": "7.13.0",
     "@supabase/auth-helpers-nextjs": "catalog:",
     "@supabase/auth-helpers-react": "catalog:",
@@ -39,12 +39,15 @@
     "date-fns": "4.1.0",
     "google-auth-library": "9.14.2",
     "meilisearch": "catalog:",
+    "postgres": "catalog:",
     "slugify": "1.6.6",
-    "stripe": "16.9.0"
+    "stripe": "16.9.0",
+    "superjson": "2.2.1",
+    "zod": "catalog:"
   },
   "devDependencies": {
-    "@constellatio/tsconfig": "workspace:*",
     "@constellatio/eslint-config": "workspace:*",
+    "@constellatio/tsconfig": "workspace:*",
     "eslint": "catalog:",
     "typescript": "catalog:"
   }

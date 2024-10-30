@@ -30,12 +30,18 @@ catalogs:
     '@trpc/server':
       specifier: 11.0.0-rc.569
       version: 11.0.0-rc.569
+    '@types/node':
+      specifier: 20.17.1
+      version: 20.17.1
     eslint:
       specifier: 8.57.0
       version: 8.57.0
     meilisearch:
       specifier: 0.44.1
       version: 0.44.1
+    postgres:
+      specifier: 3.4.5
+      version: 3.4.5
     superjson:
       specifier: 2.2.1
       version: 2.2.1
@@ -125,12 +131,21 @@ importers:
       meilisearch:
         specifier: 'catalog:'
         version: 0.44.1
+      postgres:
+        specifier: 'catalog:'
+        version: 3.4.5
       slugify:
         specifier: 1.6.6
         version: 1.6.6
       stripe:
         specifier: 16.9.0
         version: 16.9.0
+      superjson:
+        specifier: 2.2.1
+        version: 2.2.1
+      zod:
+        specifier: 'catalog:'
+        version: 3.23.8
     devDependencies:
       '@constellatio/eslint-config':
         specifier: workspace:*
@@ -165,6 +180,9 @@ importers:
       graphql-tag:
         specifier: 2.12.6
         version: 2.12.6(graphql@16.8.1)
+      superjson:
+        specifier: 'catalog:'
+        version: 2.2.1
     devDependencies:
       '@constellatio/eslint-config':
         specifier: workspace:*
@@ -203,7 +221,7 @@ importers:
         specifier: 0.35.3
         version: 0.35.3(@libsql/client-wasm@0.14.0)(@neondatabase/serverless@0.10.1)(@types/pg@8.11.6)(@types/react@18.2.31)(postgres@3.4.5)(react@18.2.0)
       postgres:
-        specifier: 3.4.5
+        specifier: 'catalog:'
         version: 3.4.5
     devDependencies:
       '@constellatio/eslint-config':
@@ -228,7 +246,7 @@ importers:
         specifier: 'catalog:'
         version: 0.10.1(typescript@5.5.4)(zod@3.23.8)
       postgres:
-        specifier: 3.4.5
+        specifier: 'catalog:'
         version: 3.4.5
     devDependencies:
       '@constellatio/eslint-config':
@@ -471,8 +489,9 @@ importers:
       '@total-typescript/ts-reset':
         specifier: 0.6.1
         version: 0.6.1
+    devDependencies:
       '@types/node':
-        specifier: 20.17.1
+        specifier: 'catalog:'
         version: 20.17.1
 
 packages:

@@ -8,8 +8,8 @@ import {
 } from "@constellatio/db/schema";
 import { searchIndices } from "@constellatio/db-to-search";
 import { type DocumentSearchIndexItem, type TagSearchIndexItem, type UploadSearchIndexItem } from "@constellatio/meilisearch/utils";
-import { setTagsForEntitySchema } from "@constellatio/schemas";
-import { type Nullable } from "@constellatio/utility-types"; 
+import { setTagsForEntitySchema } from "@constellatio/schemas/routers/tags/setTagsForEntity.schema";
+import { type Nullable } from "@constellatio/utility-types";
 
 import { createTRPCRouter, protectedProcedure } from "../trpc";
 

@@ -9,8 +9,11 @@ import { db } from "@constellatio/db/client";
 import { type DocumentInsert, documents } from "@constellatio/db/schema";
 import { searchIndices } from "@constellatio/db-to-search";
 import { createDocumentSearchIndexItem, documentSearchIndexItemPrimaryKey, type DocumentSearchItemUpdate } from "@constellatio/meilisearch/utils";
-import { createDocumentSchema, deleteDocumentSchema, getDocumentsSchema, updateDocumentSchema } from "@constellatio/schemas";
-import { removeHtmlTagsFromString } from "@constellatio/utils";
+import { createDocumentSchema } from "@constellatio/schemas/routers/documents/createDocument.schema";
+import { deleteDocumentSchema } from "@constellatio/schemas/routers/documents/deleteDocument.schema";
+import { getDocumentsSchema } from "@constellatio/schemas/routers/documents/getDocuments.schema";
+import { updateDocumentSchema } from "@constellatio/schemas/routers/documents/updateDocument.schema";
+import { removeHtmlTagsFromString } from "@constellatio/utils/html";
 import { type inferProcedureOutput } from "@trpc/server";
 
 import { createTRPCRouter, protectedProcedure } from "../trpc";

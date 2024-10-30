@@ -4,7 +4,7 @@ import { filterBookmarkForClient } from "~/utils/filters";
 import { and, eq, type SQLWrapper } from "@constellatio/db";
 import { db } from "@constellatio/db/client";
 import { type BookmarkInsert, bookmarks } from "@constellatio/db/schema";
-import { addOrRemoveBookmarkSchema } from "@constellatio/schemas";
+import { addOrRemoveBookmarkSchema } from "@constellatio/schemas/routers/bookmarks/addOrRemoveBookmark.schema";
 import { allBookmarkResourceTypes } from "@constellatio/shared/validation";
 import { z } from "zod";
 

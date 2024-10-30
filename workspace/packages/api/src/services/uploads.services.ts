@@ -5,7 +5,7 @@ import { and, eq, inArray } from "@constellatio/db";
 import { db } from "@constellatio/db/client";
 import { notes, uploadedFiles } from "@constellatio/db/schema";
 import { env } from "@constellatio/env";
-import { type UploadableFile } from "@constellatio/schemas";
+import { type UploadableFile } from "@constellatio/schemas/routers/uploads/createSignedUploadUrl.schema";
 import { type FileExtension, type FileMimeType } from "@constellatio/shared/validation";
 
 type File = {

@@ -21,12 +21,12 @@
     "typecheck": "tsc --noEmit --emitDeclarationOnly false"
   },
   "dependencies": {
-    "zod": "catalog:",
-    "@t3-oss/env-nextjs": "catalog:"
+    "@t3-oss/env-nextjs": "catalog:",
+    "zod": "catalog:"
   },
   "devDependencies": {
-    "@constellatio/tsconfig": "workspace:*",
     "@constellatio/eslint-config": "workspace:*",
+    "@constellatio/tsconfig": "workspace:*",
     "eslint": "catalog:"
   }
 }

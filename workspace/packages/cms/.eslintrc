@@ -5,5 +5,8 @@
   },
   "extends": [
     "@constellatio/eslint-config/base"
+  ],
+  "ignorePatterns": [
+    "src/graphql/__generated/*.ts"
   ]
 }

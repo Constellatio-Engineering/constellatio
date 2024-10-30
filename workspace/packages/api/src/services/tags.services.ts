@@ -1,5 +1,6 @@
 import { meiliSearchAdmin } from "~/lib/meilisearch";
 
+import { type AllTags } from "@constellatio/cms/content/getAllTags";
 import { type IGenTags } from "@constellatio/cms/generated-types";
 import { searchIndices } from "@constellatio/db-to-search";
 import { type TagSearchIndexItem } from "@constellatio/meilisearch/utils";

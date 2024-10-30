@@ -5,5 +5,13 @@
   },
   "extends": [
     "@constellatio/eslint-config/base"
+  ],
+  "overrides": [
+    {
+      "files": ["src/lib/clickup/**/*.ts"],
+      "rules": {
+        "@typescript-eslint/naming-convention": "off"
+      }
+    }
   ]
 }

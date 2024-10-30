@@ -4,7 +4,8 @@ import { finishSignup } from "~/utils/signup";
 import { eq } from "@constellatio/db";
 import { db } from "@constellatio/db/client";
 import { users } from "@constellatio/db/schema";
-import { registrationFormMinimalSchema, registrationFormSchema } from "@constellatio/schemas";
+import { registrationFormSchema } from "@constellatio/schemas/routers/auth/registrationForm.schema";
+import { registrationFormMinimalSchema } from "@constellatio/schemas/routers/auth/registrationFormMinimal.schema";
 import { getConfirmEmailUrl } from "@constellatio/shared/paths";
 import { z } from "zod";
 

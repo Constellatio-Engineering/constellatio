@@ -1,7 +1,7 @@
 import { and, count, eq } from "@constellatio/db";
 import { db } from "@constellatio/db/client";
 import { referralBalances, referralCodes, referrals, users } from "@constellatio/db/schema";
-import { getReferralCountSchema } from "@constellatio/schemas";
+import { getReferralCountSchema } from "@constellatio/schemas/routers/referrals/getReferralCount.schema";
 
 import crypto from "crypto";
 

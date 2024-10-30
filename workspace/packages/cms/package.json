@@ -36,11 +36,12 @@
     "@constellatio/utility-types": "workspace:*",
     "graphql": "16.8.1",
     "graphql-request": "6.1.0",
-    "graphql-tag": "2.12.6"
+    "graphql-tag": "2.12.6",
+    "superjson": "catalog:"
   },
   "devDependencies": {
-    "@constellatio/tsconfig": "workspace:*",
     "@constellatio/eslint-config": "workspace:*",
+    "@constellatio/tsconfig": "workspace:*",
     "eslint": "catalog:",
     "typescript": "catalog:"
   }

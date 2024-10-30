@@ -819,11 +819,11 @@ export type IGenQuery = {
   LegalArea?: Maybe<IGenLegalArea>;
   MainCategory?: Maybe<IGenMainCategory>;
   Search?: Maybe<IGenSearch>;
-  __typename?: 'Query';
   SearchEntry?: Maybe<IGenSearchEntry>;
   SubCategory?: Maybe<IGenSubCategory>;
   Tags?: Maybe<IGenTags>;
   Topic?: Maybe<IGenTopic>;
+  __typename?: "Query";
   allArticle?: Maybe<IGenArticle_Connection>;
   allAsset?: Maybe<IGenAsset_Connection>;
   allCallout?: Maybe<IGenCallout_Connection>;
@@ -2153,6 +2153,10 @@ export type Requester<C = {}, E = unknown> = <R, V>(doc: DocumentNode, vars?: V,
 export function getSdk<C, E>(requester: Requester<C, E>) 
 {
   return {
+    async getAllArticleOverview(variables?: IGenGetAllArticleOverviewQueryVariables, options?: C): Promise<IGenGetAllArticleOverviewQuery> 
+    {
+      return requester<IGenGetAllArticleOverviewQuery, IGenGetAllArticleOverviewQueryVariables>(GetAllArticleOverviewDocument, variables, options) as Promise<IGenGetAllArticleOverviewQuery>;
+    },
     async getAllArticlesByLegalArea(variables: IGenGetAllArticlesByLegalAreaQueryVariables, options?: C): Promise<IGenGetAllArticlesByLegalAreaQuery> 
     {
       return requester<IGenGetAllArticlesByLegalAreaQuery, IGenGetAllArticlesByLegalAreaQueryVariables>(GetAllArticlesByLegalAreaDocument, variables, options) as Promise<IGenGetAllArticlesByLegalAreaQuery>;
@@ -2160,10 +2164,6 @@ export function getSdk<C, E>(requester: Requester<C, E>)
     async getAllArticlesByMainCategory(variables: IGenGetAllArticlesByMainCategoryQueryVariables, options?: C): Promise<IGenGetAllArticlesByMainCategoryQuery> 
     {
       return requester<IGenGetAllArticlesByMainCategoryQuery, IGenGetAllArticlesByMainCategoryQueryVariables>(GetAllArticlesByMainCategoryDocument, variables, options) as Promise<IGenGetAllArticlesByMainCategoryQuery>;
-    },
-    async getAllArticleOverview(variables?: IGenGetAllArticleOverviewQueryVariables, options?: C): Promise<IGenGetAllArticleOverviewQuery> 
-{
-      return requester<IGenGetAllArticleOverviewQuery, IGenGetAllArticleOverviewQueryVariables>(GetAllArticleOverviewDocument, variables, options) as Promise<IGenGetAllArticleOverviewQuery>;
     },
     async getAllArticlesByTag(variables: IGenGetAllArticlesByTagQueryVariables, options?: C): Promise<IGenGetAllArticlesByTagQuery> 
     {
@@ -2181,6 +2181,10 @@ export function getSdk<C, E>(requester: Requester<C, E>)
     {
       return requester<IGenGetAllCasesByCategoryDetailsQuery, IGenGetAllCasesByCategoryDetailsQueryVariables>(GetAllCasesByCategoryDetailsDocument, variables, options) as Promise<IGenGetAllCasesByCategoryDetailsQuery>;
     },
+    async getAllCasesById(variables: IGenGetAllCasesByIdQueryVariables, options?: C): Promise<IGenGetAllCasesByIdQuery> 
+    {
+      return requester<IGenGetAllCasesByIdQuery, IGenGetAllCasesByIdQueryVariables>(GetAllCasesByIdDocument, variables, options) as Promise<IGenGetAllCasesByIdQuery>;
+    },
     async getAllCasesByLegalArea(variables: IGenGetAllCasesByLegalAreaQueryVariables, options?: C): Promise<IGenGetAllCasesByLegalAreaQuery> 
     {
       return requester<IGenGetAllCasesByLegalAreaQuery, IGenGetAllCasesByLegalAreaQueryVariables>(GetAllCasesByLegalAreaDocument, variables, options) as Promise<IGenGetAllCasesByLegalAreaQuery>;
@@ -2189,10 +2193,6 @@ export function getSdk<C, E>(requester: Requester<C, E>)
     {
       return requester<IGenGetAllCasesByMainCategoryQuery, IGenGetAllCasesByMainCategoryQueryVariables>(GetAllCasesByMainCategoryDocument, variables, options) as Promise<IGenGetAllCasesByMainCategoryQuery>;
     },
-    async getPopularSearches(variables?: IGenGetPopularSearchesQueryVariables, options?: C): Promise<IGenGetPopularSearchesQuery> 
-{
-      return requester<IGenGetPopularSearchesQuery, IGenGetPopularSearchesQueryVariables>(GetPopularSearchesDocument, variables, options) as Promise<IGenGetPopularSearchesQuery>;
-    },
     async getAllCasesByTag(variables: IGenGetAllCasesByTagQueryVariables, options?: C): Promise<IGenGetAllCasesByTagQuery> 
     {
       return requester<IGenGetAllCasesByTagQuery, IGenGetAllCasesByTagQueryVariables>(GetAllCasesByTagDocument, variables, options) as Promise<IGenGetAllCasesByTagQuery>;
@@ -2200,10 +2200,6 @@ export function getSdk<C, E>(requester: Requester<C, E>)
     async getAllCasesByTopic(variables: IGenGetAllCasesByTopicQueryVariables, options?: C): Promise<IGenGetAllCasesByTopicQuery> 
     {
       return requester<IGenGetAllCasesByTopicQuery, IGenGetAllCasesByTopicQueryVariables>(GetAllCasesByTopicDocument, variables, options) as Promise<IGenGetAllCasesByTopicQuery>;
-    },
-    async getAllCasesById(variables: IGenGetAllCasesByIdQueryVariables, options?: C): Promise<IGenGetAllCasesByIdQuery> 
-    {
-      return requester<IGenGetAllCasesByIdQuery, IGenGetAllCasesByIdQueryVariables>(GetAllCasesByIdDocument, variables, options) as Promise<IGenGetAllCasesByIdQuery>;
     },
     async getAllLegalArea(variables?: IGenGetAllLegalAreaQueryVariables, options?: C): Promise<IGenGetAllLegalAreaQuery> 
     {
@@ -2244,6 +2240,10 @@ export function getSdk<C, E>(requester: Requester<C, E>)
     async getMainCategoryById(variables: IGenGetMainCategoryByIdQueryVariables, options?: C): Promise<IGenGetMainCategoryByIdQuery> 
     {
       return requester<IGenGetMainCategoryByIdQuery, IGenGetMainCategoryByIdQueryVariables>(GetMainCategoryByIdDocument, variables, options) as Promise<IGenGetMainCategoryByIdQuery>;
+    },
+    async getPopularSearches(variables?: IGenGetPopularSearchesQueryVariables, options?: C): Promise<IGenGetPopularSearchesQuery> 
+    {
+      return requester<IGenGetPopularSearchesQuery, IGenGetPopularSearchesQueryVariables>(GetPopularSearchesDocument, variables, options) as Promise<IGenGetPopularSearchesQuery>;
     },
     async getSubCategoryById(variables: IGenGetSubCategoryByIdQueryVariables, options?: C): Promise<IGenGetSubCategoryByIdQuery> 
     {

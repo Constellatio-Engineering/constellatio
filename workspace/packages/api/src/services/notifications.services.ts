@@ -5,7 +5,7 @@ import {
 } from "@constellatio/db";
 import { db } from "@constellatio/db/client";
 import { notifications } from "@constellatio/db/schema";
-import { type GetNotificationsSchema } from "@constellatio/schemas";
+import { type GetNotificationsSchema } from "@constellatio/schemas/routers/notifications/getNotifications.schema";
 
 type GetInfiniteNotificationsParams = GetNotificationsSchema & {
   getNotificationsType: "infinite";

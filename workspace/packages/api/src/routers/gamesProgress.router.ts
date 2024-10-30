@@ -1,8 +1,10 @@
-import { caisySDK, getGamesFromCase } from "@constellatio/cms";
+import { caisySDK } from "@constellatio/cms/sdk";
+import { getGamesFromCase } from "@constellatio/cms/utils/case";
 import { and, eq, inArray } from "@constellatio/db";
 import { db } from "@constellatio/db/client";
 import { type GameProgress, gamesProgress } from "@constellatio/db/schema";
-import { getGamesProgressSchema, setGameProgressStateSchema } from "@constellatio/schemas";
+import { getGamesProgressSchema } from "@constellatio/schemas/routers/gamesProgress/getGamesProgress.schema";
+import { setGameProgressStateSchema } from "@constellatio/schemas/routers/gamesProgress/setGameProgressState.schema";
 
 import { createTRPCRouter, protectedProcedure } from "../trpc";
 

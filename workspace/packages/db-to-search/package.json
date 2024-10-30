@@ -19,13 +19,13 @@
     "typecheck": "tsc --noEmit --emitDeclarationOnly false"
   },
   "dependencies": {
-    "postgres": "3.4.5",
-    "@t3-oss/env-nextjs": "catalog:"
+    "@t3-oss/env-nextjs": "catalog:",
+    "postgres": "catalog:"
   },
   "devDependencies": {
-    "@constellatio/utility-types": "workspace:*",
-    "@constellatio/tsconfig": "workspace:*",
     "@constellatio/eslint-config": "workspace:*",
+    "@constellatio/tsconfig": "workspace:*",
+    "@constellatio/utility-types": "workspace:*",
     "drizzle-kit": "0.26.2",
     "eslint": "catalog:",
     "typescript": "catalog:"

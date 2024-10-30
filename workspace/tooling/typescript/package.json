@@ -3,10 +3,12 @@
   "private": true,
   "version": "0.1.0",
   "dependencies": {
-    "@total-typescript/ts-reset": "0.6.1",
-    "@types/node": "20.17.1"
+    "@total-typescript/ts-reset": "0.6.1"
   },
   "files": [
     "*.json"
-  ]
+  ],
+  "devDependencies": {
+    "@types/node": "catalog:"
+  }
 }

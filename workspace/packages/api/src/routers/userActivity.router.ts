@@ -6,8 +6,9 @@ import {
 import { db } from "@constellatio/db/client";
 import { pings } from "@constellatio/db/schema";
 import { env } from "@constellatio/env";
-import { getUsageTimeSchema, pingSchema } from "@constellatio/schemas";
-import { getCurrentDateInLocalTimezone, getDateInLocalTimezone } from "@constellatio/utils";
+import { getUsageTimeSchema } from "@constellatio/schemas/routers/userActivity/getUsageTime.schema";
+import { pingSchema } from "@constellatio/schemas/routers/userActivity/ping.schema";
+import { getCurrentDateInLocalTimezone, getDateInLocalTimezone } from "@constellatio/utils/dates";
 import { Ratelimit } from "@upstash/ratelimit";
 import { kv } from "@vercel/kv";
 

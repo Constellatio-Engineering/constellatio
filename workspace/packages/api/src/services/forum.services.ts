@@ -16,7 +16,8 @@ import {
   questionUpvotes,
   users
 } from "@constellatio/db/schema";
-import { type GetAnswersSchema, type GetQuestionsSchema } from "@constellatio/schemas";
+import { type GetAnswersSchema } from "@constellatio/schemas/routers/forum/getAnswers.schema";
+import { type GetQuestionsSchema } from "@constellatio/schemas/routers/forum/getQuestions.schema";
 
 type GetUpvotesForQuestion = (questionId: string) => Promise<number>;
 

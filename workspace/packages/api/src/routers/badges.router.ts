@@ -3,7 +3,7 @@ import {
 } from "@constellatio/db";
 import { db } from "@constellatio/db/client";
 import { badges, type BadgeWithUserData, usersToBadges } from "@constellatio/db/schema";
-import { markBadgeAsSeenSchema } from "@constellatio/schemas";
+import { markBadgeAsSeenSchema } from "@constellatio/schemas/routers/badges/markBadgeAsSeen.schema";
 
 import { createTRPCRouter, protectedProcedure } from "../trpc";
 

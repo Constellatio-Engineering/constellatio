@@ -14,17 +14,20 @@ import {
 } from "@constellatio/db/schema";
 import { searchIndices } from "@constellatio/db-to-search";
 import { createForumQuestionSearchIndexItem, forumQuestionSearchIndexItemPrimaryKey, type ForumQuestionSearchItemUpdate } from "@constellatio/meilisearch/utils";
-import {
-  deleteAnswerSchema,
-  deleteQuestionSchema,
-  getAnswerByIdSchema,
-  getAnswersSchema,
-  getQuestionByIdSchema,
-  type GetQuestionsSchema,
-  getQuestionsSchema,
-  markAnswerAsCorrectSchema, postAnswerSchema, postQuestionSchema, updateAnswerSchema, updateQuestionSchema, upvoteAnswerSchema, upvoteQuestionSchema
-} from "@constellatio/schemas";
-import { removeHtmlTagsFromString } from "@constellatio/utils";
+import { deleteAnswerSchema } from "@constellatio/schemas/routers/forum/deleteAnswer.schema";
+import { deleteQuestionSchema } from "@constellatio/schemas/routers/forum/deleteQuestion.schema";
+import { getAnswerByIdSchema } from "@constellatio/schemas/routers/forum/getAnswerById.schema";
+import { getAnswersSchema } from "@constellatio/schemas/routers/forum/getAnswers.schema";
+import { getQuestionByIdSchema } from "@constellatio/schemas/routers/forum/getQuestionById.schema";
+import { type GetQuestionsSchema, getQuestionsSchema } from "@constellatio/schemas/routers/forum/getQuestions.schema";
+import { markAnswerAsCorrectSchema } from "@constellatio/schemas/routers/forum/markAnswerAsCorrect.schema";
+import { postAnswerSchema } from "@constellatio/schemas/routers/forum/postAnswer.schema";
+import { postQuestionSchema } from "@constellatio/schemas/routers/forum/postQuestion.schema";
+import { updateAnswerSchema } from "@constellatio/schemas/routers/forum/updateAnswer.schema";
+import { updateQuestionSchema } from "@constellatio/schemas/routers/forum/updateQuestion.schema";
+import { upvoteAnswerSchema } from "@constellatio/schemas/routers/forum/upvoteAnswer.schema";
+import { upvoteQuestionSchema } from "@constellatio/schemas/routers/forum/upvoteQuestion.schema";
+import { removeHtmlTagsFromString } from "@constellatio/utils/html";
 import { type inferProcedureOutput } from "@trpc/server";
 import slugify from "slugify";
 

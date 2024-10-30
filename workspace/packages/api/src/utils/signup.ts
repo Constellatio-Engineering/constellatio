@@ -11,7 +11,8 @@ import {
 } from "@constellatio/db/schema";
 import { env } from "@constellatio/env";
 import { type Nullable } from "@constellatio/utility-types";
-import { getRandomUuid, printAllSettledPromisesSummary } from "@constellatio/utils";
+import { getRandomUuid } from "@constellatio/utils/id";
+import { printAllSettledPromisesSummary } from "@constellatio/utils/promise";
 import { type SupabaseClient } from "@supabase/auth-helpers-nextjs";
 
 /* export type FinishSignUpProps = {

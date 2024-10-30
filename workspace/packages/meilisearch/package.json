@@ -21,12 +21,12 @@
   "dependencies": {
     "@constellatio/cms": "workspace:*",
     "@constellatio/db": "workspace:*",
-    "@constellatio/utils": "workspace:*",
-    "@constellatio/utility-types": "workspace:*"
+    "@constellatio/utility-types": "workspace:*",
+    "@constellatio/utils": "workspace:*"
   },
   "devDependencies": {
-    "@constellatio/tsconfig": "workspace:*",
     "@constellatio/eslint-config": "workspace:*",
+    "@constellatio/tsconfig": "workspace:*",
     "eslint": "catalog:",
     "typescript": "catalog:"
   }

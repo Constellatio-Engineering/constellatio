@@ -2,14 +2,18 @@
 import { addUserToCrmUpdateQueue } from "~/lib/clickup/utils";
 import { InternalServerError } from "~/utils/serverError";
 
-import { getAllMainCategories, getArticleById, getCaseById } from "@constellatio/cms";
+import { getAllMainCategories } from "@constellatio/cms/content/getAllMainCategories";
+import { getArticleById } from "@constellatio/cms/content/getArticleById";
+import { getCaseById } from "@constellatio/cms/content/getCaseById";
 import {
   and, desc, eq, gt, inArray, lte, type SQL, sql 
 } from "@constellatio/db";
 import { db } from "@constellatio/db/client";
 import { contentViews, forumQuestions } from "@constellatio/db/schema";
 import { env } from "@constellatio/env";
-import { addContentItemViewSchema, getContentItemViewsSchema, getLastViewedContentItemsSchema } from "@constellatio/schemas";
+import { addContentItemViewSchema } from "@constellatio/schemas/routers/views/addContentItemView.schema";
+import { getContentItemViewsSchema } from "@constellatio/schemas/routers/views/getContentItemViews.schema";
+import { getLastViewedContentItemsSchema } from "@constellatio/schemas/routers/views/getLastViewedContentItems.schema";
 import { type ContentItemViewType } from "@constellatio/shared/validation";
 import { type Nullable } from "@constellatio/utility-types";
 import { type inferProcedureOutput } from "@trpc/server";
@@ -75,6 +79,7 @@ export const viewsRouter = createTRPCRouter({
       }
       catch (e: unknown)
       {
+        // eslint-disable-next-line import/no-named-as-default-member
         if(e instanceof postgres.PostgresError && e.code === "40001")
         {
           console.info("Two or more transactions attempted to access the same data at the same time");

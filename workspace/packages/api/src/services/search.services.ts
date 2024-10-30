@@ -1,23 +1,18 @@
 /* eslint-disable max-lines */
 import { meiliSearchAdmin } from "~/lib/meilisearch";
 
+import { type AllTags } from "@constellatio/cms/content/getAllTags";
+import { getArticleById } from "@constellatio/cms/content/getArticleById";
+import { getCaseById } from "@constellatio/cms/content/getCaseById";
 import {
-  type AllTags,
-  getArticleById,
-  getCaseById,
-  type IGenGetAllArticlesByLegalAreaQuery,
-  type IGenGetAllArticlesByMainCategoryQuery,
-  type IGenGetAllArticlesByTagQuery,
-  type IGenGetAllArticlesByTopicQuery,
-  type IGenGetAllCasesByLegalAreaQuery,
-  type IGenGetAllCasesByMainCategoryQuery,
-  type IGenGetAllCasesByTagQuery,
+  type IGenGetAllArticlesByLegalAreaQuery, type IGenGetAllArticlesByMainCategoryQuery, type IGenGetAllArticlesByTagQuery,
+  type IGenGetAllArticlesByTopicQuery, type IGenGetAllCasesByLegalAreaQuery, type IGenGetAllCasesByMainCategoryQuery, type IGenGetAllCasesByTagQuery,
   type IGenGetAllCasesByTopicQuery,
   type IGenLegalArea,
   type IGenMainCategory,
   type IGenTags,
-  type IGenTopic,
-} from "@constellatio/cms";
+  type IGenTopic
+} from "@constellatio/cms/generated-types";
 import { db } from "@constellatio/db/client";
 import {
   type DocumentWithTags,

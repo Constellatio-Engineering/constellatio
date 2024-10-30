@@ -28,13 +28,13 @@
   },
   "dependencies": {
     "@constellatio/env": "workspace:*",
-    "@constellatio/utils": "workspace:*",
     "@constellatio/shared": "workspace:*",
+    "@constellatio/utils": "workspace:*",
     "zod": "catalog:"
   },
   "devDependencies": {
-    "@constellatio/tsconfig": "workspace:*",
     "@constellatio/eslint-config": "workspace:*",
+    "@constellatio/tsconfig": "workspace:*",
     "eslint": "catalog:",
     "typescript": "catalog:"
   }
