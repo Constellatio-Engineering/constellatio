@@ -24,7 +24,15 @@
     "dev": "tsc",
     "lint": "eslint src",
     "lint:fix": "eslint --fix src",
-    "typecheck": "tsc --noEmit --emitDeclarationOnly false"
+    "typecheck": "tsc --noEmit --emitDeclarationOnly false",
+    "apply-migrations": "drizzle-kit migrate",
+    "db:push": "drizzle-kit push",
+    "drizzle:studio": "drizzle-kit studio",
+    "generate-migrations-without-row-level-security": "drizzle-kit generate",
+    "generate-new-custom-migration": "drizzle-kit generate --custom",
+    "generate-migrations": "sh ./scripts/generate-migrations.sh",
+    "drop-migration": "drizzle-kit drop",
+    "check-migrations": "drizzle-kit check"
   },
   "dependencies": {
     "@constellatio/db-to-search": "workspace:*",

@@ -28,7 +28,10 @@
     "dev": "tsc",
     "lint": "eslint src",
     "lint:fix": "eslint --fix src",
-    "typecheck": "tsc --noEmit --emitDeclarationOnly false"
+    "typecheck": "tsc --noEmit --emitDeclarationOnly false",
+    "gen": "graphql-codegen -r dotenv/config --config codegen.ts",
+    "gen:watch": "graphql-codegen --watch -r dotenv/config --config codegen.ts",
+    "supabase:typegen": "npx supabase gen types typescript --project-id kzrdtppwdumjscxldnwo --schema public > src/lib/database.types.ts"
   },
   "dependencies": {
     "@constellatio/env": "workspace:*",

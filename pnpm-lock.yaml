@@ -330,6 +330,12 @@ importers:
         specifier: 4.5.2
         version: 4.5.2(@types/react@18.2.31)(immer@10.1.1)(react@18.2.0)
     devDependencies:
+      '@constellatio/eslint-config':
+        specifier: workspace:*
+        version: link:../tooling/eslint
+      '@constellatio/tsconfig':
+        specifier: workspace:*
+        version: link:../tooling/typescript
       '@emotion/babel-preset-css-prop':
         specifier: 11.11.0
         version: 11.11.0(@babel/core@7.26.0)
