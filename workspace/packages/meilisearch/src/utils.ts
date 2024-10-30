@@ -1,7 +1,8 @@
 /* eslint-disable max-lines */
+import { type FullLegalCase } from "@constellatio/cms/content/getCaseById";
 import {
-  type FullLegalCase, type IGenArticle, type IGenLegalArea, type IGenMainCategory, type IGenTags, type IGenTopic
-} from "@constellatio/cms";
+  type IGenArticle, type IGenLegalArea, type IGenMainCategory, type IGenTags, type IGenTopic
+} from "@constellatio/cms/generated-types";
 import { type Document, type ForumQuestion, type UploadedFile } from "@constellatio/db/schema";
 import {
   type DotSeparatedKeys, type NullableProperties, type Prettify, type RemoveUndefined

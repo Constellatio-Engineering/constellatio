@@ -19,15 +19,16 @@ import {
 import { stripe } from "~/lib/stripe/stripe";
 import { InternalServerError } from "~/utils/serverError";
 
-import {
-  type allArticles, type AllCases, caisySDK, type IGenFullArticleFragment, type IGenFullCaseFragment 
-} from "@constellatio/cms";
+import { type allArticles } from "@constellatio/cms/content/getAllArticles";
+import { type AllCases } from "@constellatio/cms/content/getAllCases";
+import { type IGenFullArticleFragment, type IGenFullCaseFragment } from "@constellatio/cms/generated-types";
+import { caisySDK } from "@constellatio/cms/sdk";
 import {
   and, countDistinct, eq, getTableColumns, type SQL 
 } from "@constellatio/db";
 import { db } from "@constellatio/db/client";
 import {
- casesProgress, contentViews, documents, updateUserInCrmQueue, uploadedFiles, type User, users, usersToBadges 
+  casesProgress, contentViews, documents, updateUserInCrmQueue, uploadedFiles, type User, users, usersToBadges 
 } from "@constellatio/db/schema";
 import { env } from "@constellatio/env";
 import { allUniversities, type FormbricksFeedbackWebhook } from "@constellatio/schemas";

@@ -1,6 +1,7 @@
 import { getAllLegalFields, getAllSubfields, getAllTopics, getInitialTags } from "~/services/caisy.services";
 
-import { getAllCases, getAllArticles } from "@constellatio/cms";
+import { getAllArticles } from "@constellatio/cms/content/getAllArticles";
+import { getAllCases } from "@constellatio/cms/content/getAllCases";
 
 import { createTRPCRouter, protectedProcedure } from "../trpc";
 
