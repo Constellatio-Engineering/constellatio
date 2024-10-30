@@ -10,7 +10,7 @@ type ClientErrorShape =
 {
   details: unknown;
   readonly identifier: ClientErrorIdentifiers;
-}
+};
 
 type ClientErrors = {
   [key in ClientErrorIdentifiers]: ClientErrorShape;

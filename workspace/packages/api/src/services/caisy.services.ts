@@ -1,4 +1,6 @@
-import { caisySDK, IGenLegalArea, IGenMainCategory, IGenSubCategory, IGenTags, IGenTopic } from "@constellatio/cms";
+import {
+  caisySDK, type IGenLegalArea, type IGenMainCategory, type IGenSubCategory, type IGenTags, type IGenTopic 
+} from "@constellatio/cms";
 
 export const getAllLegalFields = async (): Promise<IGenMainCategory[]> =>
 {

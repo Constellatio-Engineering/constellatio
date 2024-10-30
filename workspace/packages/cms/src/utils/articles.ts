@@ -1,6 +1,6 @@
-import { IGenArticle } from "../graphql/__generated/sdk";
 import { sortByTopic } from "./caisy";
-import { allArticles } from "../content/getAllArticles";
+import { type allArticles } from "../content/getAllArticles";
+import { type IGenArticle } from "../graphql/__generated/sdk";
 
 export type ArticleWithNextAndPreviousArticleId = IGenArticle & {
   nextArticleId: string | null;

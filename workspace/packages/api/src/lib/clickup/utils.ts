@@ -1,10 +1,4 @@
 /* eslint-disable max-lines */
-import { allArticles, AllCases, caisySDK, IGenFullArticleFragment, IGenFullCaseFragment } from "@constellatio/cms";
-import { db } from "@constellatio/db/client";
-import { casesProgress, contentViews, documents, updateUserInCrmQueue, uploadedFiles, User, users, usersToBadges } from "@constellatio/db/schema";
-import { env } from "@constellatio/env";
-import { allUniversities, FormbricksFeedbackWebhook } from "@constellatio/schemas";
-import { Nullable } from "@constellatio/utility-types";
 import { createClickupTask } from "~/lib/clickup/tasks/create-task";
 import { deleteClickupCustomFieldValue } from "~/lib/clickup/tasks/delete-custom-field-value";
 import { findClickupTask } from "~/lib/clickup/tasks/find-task";
@@ -22,14 +16,26 @@ import {
   type NumberCustomFieldInsertProps,
   type ShortTextCustomFieldInsertProps, type TextCustomFieldInsertProps,
 } from "~/lib/clickup/types";
-
-import { createPagesServerClient, type SupabaseClient, type User as SupabaseUser } from "@supabase/auth-helpers-nextjs";
-import { AxiosResponse, type AxiosRequestConfig } from "axios";
-import { type NextApiRequest, type NextApiResponse } from "next";
-import type Stripe from "stripe";
 import { stripe } from "~/lib/stripe/stripe";
 import { InternalServerError } from "~/utils/serverError";
-import { and, countDistinct, eq, getTableColumns, SQL } from "@constellatio/db";
+
+import {
+  type allArticles, type AllCases, caisySDK, type IGenFullArticleFragment, type IGenFullCaseFragment 
+} from "@constellatio/cms";
+import {
+  and, countDistinct, eq, getTableColumns, type SQL 
+} from "@constellatio/db";
+import { db } from "@constellatio/db/client";
+import {
+ casesProgress, contentViews, documents, updateUserInCrmQueue, uploadedFiles, type User, users, usersToBadges 
+} from "@constellatio/db/schema";
+import { env } from "@constellatio/env";
+import { allUniversities, type FormbricksFeedbackWebhook } from "@constellatio/schemas";
+import { type Nullable } from "@constellatio/utility-types";
+import { createPagesServerClient, type SupabaseClient, type User as SupabaseUser } from "@supabase/auth-helpers-nextjs";
+import { type AxiosResponse, type AxiosRequestConfig } from "axios";
+import { type NextApiRequest, type NextApiResponse } from "next";
+import type Stripe from "stripe";
 
 export const clickupRequestConfig: AxiosRequestConfig = {
   headers: {
@@ -483,9 +489,9 @@ export const getCrmDataForUser = async (userIdOrData: string | UserWithActivityS
 };
 
 export const getUpdateUsersCrmDataPromises = ({
-                                                existingCrmUser,
-                                                userWithCrmData
-                                              }: {
+  existingCrmUser,
+  userWithCrmData
+}: {
   existingCrmUser: ClickupTask;
   userWithCrmData: NonNullable<Awaited<ReturnType<typeof getCrmDataForUser>>>;
 }) =>

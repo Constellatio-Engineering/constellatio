@@ -1,4 +1,6 @@
-import { and, asc, between, desc, eq } from "@constellatio/db";
+import {
+  and, asc, between, desc, eq 
+} from "@constellatio/db";
 import { db } from "@constellatio/db/client";
 import { streak, streakActivities } from "@constellatio/db/schema";
 import { differenceInDays, startOfTomorrow, subDays } from "date-fns";

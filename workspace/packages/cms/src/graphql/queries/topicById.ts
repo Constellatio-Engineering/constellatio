@@ -1,4 +1,5 @@
 import { gql } from "graphql-request";
+
 import { f_Topic } from "../fragments/Topic";
 
 export const q_topicById = gql`

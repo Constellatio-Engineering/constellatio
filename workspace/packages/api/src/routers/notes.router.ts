@@ -1,7 +1,10 @@
-import { and, eq, inArray, isNull, SQLWrapper } from "@constellatio/db";
+import {
+  and, eq, inArray, isNull, type SQLWrapper 
+} from "@constellatio/db";
 import { db } from "@constellatio/db/client";
-import { NoteInsert, notes, uploadedFiles } from "@constellatio/db/schema";
+import { type NoteInsert, notes, uploadedFiles } from "@constellatio/db/schema";
 import { createNoteSchema, deleteNoteSchema, getNotesSchema, updateNoteSchema } from "@constellatio/schemas";
+
 import { createTRPCRouter, protectedProcedure } from "../trpc";
 
 export const notesRouter = createTRPCRouter({

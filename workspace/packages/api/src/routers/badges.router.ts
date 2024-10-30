@@ -1,8 +1,11 @@
+import {
+  and, asc, eq, ne, sql 
+} from "@constellatio/db";
 import { db } from "@constellatio/db/client";
-import { badges, BadgeWithUserData, usersToBadges } from "@constellatio/db/schema";
+import { badges, type BadgeWithUserData, usersToBadges } from "@constellatio/db/schema";
 import { markBadgeAsSeenSchema } from "@constellatio/schemas";
+
 import { createTRPCRouter, protectedProcedure } from "../trpc";
-import { and, asc, eq, ne, sql } from "@constellatio/db";
 
 export const badgesRouter = createTRPCRouter({
   getBadges: protectedProcedure

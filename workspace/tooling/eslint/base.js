@@ -242,7 +242,12 @@ module.exports = {
     ],
     "barrel-files/avoid-importing-barrel-files": "off",
     "barrel-files/avoid-barrel-files": "error",
-    "barrel-files/avoid-namespace-import": "error",
+    "barrel-files/avoid-namespace-import": [
+      "error",
+      {
+        "allowList": ["./schema"]
+      }
+    ],
     "barrel-files/avoid-re-export-all": "error",
     "block-scoped-var": "error",
     "block-spacing": [

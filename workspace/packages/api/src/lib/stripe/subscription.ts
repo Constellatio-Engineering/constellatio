@@ -1,9 +1,9 @@
-import { eq } from "@constellatio/db";
-import { db } from "@constellatio/db/client";
-import { users } from "@constellatio/db/schema";
 import { addUserToCrmUpdateQueue } from "~/lib/clickup/utils";
 import { getUserIdFromStripeEventData } from "~/lib/stripe/utils";
 
+import { eq } from "@constellatio/db";
+import { db } from "@constellatio/db/client";
+import { users } from "@constellatio/db/schema";
 import type Stripe from "stripe";
 
 export const handleSubscriptionEvent = async (subscriptionData: Stripe.Subscription) =>

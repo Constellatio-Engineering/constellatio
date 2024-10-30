@@ -1,8 +1,9 @@
+import { NotFoundError } from "~/utils/serverError";
+import { getProfilePictureUrl } from "~/utils/users";
+
 import { eq } from "@constellatio/db";
 import { db } from "@constellatio/db/client";
 import { users } from "@constellatio/db/schema";
-import { NotFoundError } from "~/utils/serverError";
-import { getProfilePictureUrl } from "~/utils/users";
 
 export const getUserWithRelations = async (userId: string) =>
 {

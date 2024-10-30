@@ -2,7 +2,7 @@
 
 // Note: All types in this file are not necessarily exhaustive or correct. For an accurate list of types, please refer to the ClickUp API documentation.
 
-import { Nullable } from "@constellatio/utility-types";
+import { type Nullable } from "@constellatio/utility-types";
 
 type CustomFieldBaseProperties = {
   date_created: number;

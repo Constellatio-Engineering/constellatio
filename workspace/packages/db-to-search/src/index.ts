@@ -1,4 +1,4 @@
-import { Values } from "@constellatio/utility-types";
+import { type Values } from "@constellatio/utility-types";
 
 export const searchIndices = {
   articles: "articles",

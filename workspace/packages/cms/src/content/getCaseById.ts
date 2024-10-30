@@ -1,4 +1,5 @@
 import { type RemoveNull } from "@constellatio/utility-types";
+
 import { caisySDK } from "../graphql/getSdk";
 
 // eslint-disable-next-line @typescript-eslint/explicit-function-return-type

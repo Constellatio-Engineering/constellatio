@@ -2,7 +2,7 @@
 import { idValidation } from "~/common/common.validation";
 
 import { type FileMimeType } from "@constellatio/shared/validation";
-import { getFileExtensionLowercase } from "@constellatio/utils";
+import { getFileExtensionLowercase } from "@constellatio/utils/files";
 import { z } from "zod";
 
 export const folderIdValidation = idValidation.nullable();

@@ -1,4 +1,4 @@
-import { ProfilePicture } from "@constellatio/db/schema";
+import { type ProfilePicture } from "@constellatio/db/schema";
 import { env } from "@constellatio/env";
 
 export const getProfilePictureUrl = (props: Pick<ProfilePicture, "profilePictureSource" | "userId" | "serverFilename" | "url">) =>

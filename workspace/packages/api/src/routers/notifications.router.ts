@@ -1,11 +1,13 @@
+import { getNotifications } from "~/services/notifications.services";
+import { InternalServerError } from "~/utils/serverError";
+
 import { and, count, eq, isNull } from "@constellatio/db";
 import { db } from "@constellatio/db/client";
 import { notifications } from "@constellatio/db/schema";
-import { getNotificationByIdSchema, GetNotificationsSchema, getNotificationsSchema, setNotificationReadStatusSchema } from "@constellatio/schemas";
-import { getNotifications } from "~/services/notifications.services";
-import { InternalServerError } from "~/utils/serverError";
+import { getNotificationByIdSchema, type GetNotificationsSchema, getNotificationsSchema, setNotificationReadStatusSchema } from "@constellatio/schemas";
+import { type inferProcedureOutput } from "@trpc/server";
+
 import { createTRPCRouter, protectedProcedure } from "../trpc";
-import { inferProcedureOutput } from "@trpc/server";
 
 export const notificationsRouter = createTRPCRouter({
   getAmountOfUnreadNotifications: protectedProcedure

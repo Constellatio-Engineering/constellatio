@@ -1,7 +1,7 @@
 import { and, eq, sql } from "@constellatio/db";
 import { db } from "@constellatio/db/client";
 import { streak, streakActivities } from "@constellatio/db/schema";
-import { StreakActivityType } from "@constellatio/shared/validation";
+import { type StreakActivityType } from "@constellatio/shared/validation";
 
 export const createStreakActivity = async (
   activityType: StreakActivityType,

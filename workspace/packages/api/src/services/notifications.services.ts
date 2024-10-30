@@ -1,8 +1,11 @@
-import { and, desc, eq, inArray, lte, type SQL } from "@constellatio/db";
+import { getProfilePictureUrl } from "~/utils/users";
+
+import {
+  and, desc, eq, inArray, lte, type SQL 
+} from "@constellatio/db";
 import { db } from "@constellatio/db/client";
 import { notifications } from "@constellatio/db/schema";
-import { GetNotificationsSchema } from "@constellatio/schemas";
-import { getProfilePictureUrl } from "~/utils/users";
+import { type GetNotificationsSchema } from "@constellatio/schemas";
 
 type GetInfiniteNotificationsParams = GetNotificationsSchema & {
   getNotificationsType: "infinite";

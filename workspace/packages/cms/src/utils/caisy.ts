@@ -1,4 +1,4 @@
-import { IGenArticle, IGenCase } from "../graphql/__generated/sdk";
+import { type IGenArticle, type IGenCase } from "../graphql/__generated/sdk";
 
 export const getCaisyImageBlurUrl = (imageSrc: string): string =>
 {

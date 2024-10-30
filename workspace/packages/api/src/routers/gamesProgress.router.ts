@@ -1,8 +1,9 @@
 import { caisySDK, getGamesFromCase } from "@constellatio/cms";
 import { and, eq, inArray } from "@constellatio/db";
 import { db } from "@constellatio/db/client";
-import { GameProgress, gamesProgress } from "@constellatio/db/schema";
+import { type GameProgress, gamesProgress } from "@constellatio/db/schema";
 import { getGamesProgressSchema, setGameProgressStateSchema } from "@constellatio/schemas";
+
 import { createTRPCRouter, protectedProcedure } from "../trpc";
 
 export const gamesProgressRouter = createTRPCRouter({

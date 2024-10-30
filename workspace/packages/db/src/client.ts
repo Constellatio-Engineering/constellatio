@@ -4,8 +4,6 @@ import { type PgTransaction } from "drizzle-orm/pg-core";
 import { drizzle, type PostgresJsQueryResultHKT } from "drizzle-orm/postgres-js";
 import postgres from "postgres";
 
-// this is the default way to do this with drizzle
-// eslint-disable-next-line barrel-files/avoid-namespace-import
 import * as schema from "./schema";
 
 const connectionString = env.DATABASE_URL;

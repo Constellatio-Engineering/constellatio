@@ -1,7 +1,8 @@
-import { CaseProgressState } from "@constellatio/shared/validation";
-import { Nullable } from "@constellatio/utility-types";
-import { FullLegalCase } from "../content/getCaseById";
-import { IGenCardSelectionGame, IGenDragNDropGame, IGenFillInGapsGame } from "../graphql/__generated/sdk";
+import { type CaseProgressState } from "@constellatio/shared/validation";
+import { type Nullable } from "@constellatio/utility-types";
+
+import { type FullLegalCase } from "../content/getCaseById";
+import { type IGenCardSelectionGame, type IGenDragNDropGame, type IGenFillInGapsGame } from "../graphql/__generated/sdk";
 
 type Game = (IGenCardSelectionGame | IGenDragNDropGame | IGenFillInGapsGame) & {
   indexInFullTextTasksJson: number;

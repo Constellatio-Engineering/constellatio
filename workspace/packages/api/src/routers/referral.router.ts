@@ -2,6 +2,7 @@ import { and, count, eq } from "@constellatio/db";
 import { db } from "@constellatio/db/client";
 import { referralBalances, referralCodes, referrals, users } from "@constellatio/db/schema";
 import { getReferralCountSchema } from "@constellatio/schemas";
+
 import crypto from "crypto";
 
 import { createTRPCRouter, protectedProcedure, publicProcedure } from "../trpc";

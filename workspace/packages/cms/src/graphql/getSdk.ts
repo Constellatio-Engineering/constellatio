@@ -1,6 +1,5 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import { env } from "@constellatio/env";
-
 import { print } from "graphql";
 import { GraphQLError } from "graphql/index";
 import { GraphQLClient } from "graphql-request";

@@ -1,7 +1,7 @@
 /* eslint-disable @typescript-eslint/naming-convention */
-import { ArticleWithNextAndPreviousArticleId } from "../utils/articles";
 import { type AllCases } from "./getAllCases";
 import { caisySDK } from "../graphql/getSdk";
+import { type ArticleWithNextAndPreviousArticleId } from "../utils/articles";
 
 // eslint-disable-next-line @typescript-eslint/explicit-function-return-type
 export const getOverviewPageProps = async (items: Array<AllCases[number] | ArticleWithNextAndPreviousArticleId>) =>

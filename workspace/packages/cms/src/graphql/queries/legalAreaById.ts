@@ -1,4 +1,5 @@
 import { gql } from "graphql-request";
+
 import { f_LegalArea } from "../fragments/LegalArea";
 
 export const q_legalAreaById = gql`

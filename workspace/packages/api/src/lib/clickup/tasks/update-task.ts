@@ -1,7 +1,7 @@
-import { env } from "@constellatio/env";
 import { type ClickupTask } from "~/lib/clickup/types";
 import { clickupRequestConfig } from "~/lib/clickup/utils";
 
+import { env } from "@constellatio/env";
 import axios from "axios";
 
 // Note: To update Custom Fields on a task, you must use the Set Custom Field endpoint.

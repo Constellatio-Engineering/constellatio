@@ -1,4 +1,4 @@
-import { User } from "@constellatio/db/schema";
+import { type User } from "@constellatio/db/schema";
 import type Stripe from "stripe";
 
 type SubscriptionData = Pick<User, "subscriptionStatus" | "subscriptionId">;

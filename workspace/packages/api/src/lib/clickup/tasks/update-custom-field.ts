@@ -1,7 +1,7 @@
-import { env } from "@constellatio/env";
 import { type CustomFieldInsert } from "~/lib/clickup/types";
 import { clickupRequestConfig } from "~/lib/clickup/utils";
 
+import { env } from "@constellatio/env";
 import axios from "axios";
 
 type UpdateClickupCustomFieldProps = {

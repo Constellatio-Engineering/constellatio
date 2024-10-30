@@ -1,5 +1,9 @@
 /* eslint-disable max-lines */
-import { and, asc, count, desc, eq, getTableColumns, inArray, lt, lte, or, type SQL, sql } from "@constellatio/db";
+import { getProfilePictureUrl } from "~/utils/users";
+
+import {
+  and, asc, count, desc, eq, getTableColumns, inArray, lt, lte, or, type SQL, sql 
+} from "@constellatio/db";
 import { db, type DbConnection } from "@constellatio/db/client";
 import {
   answerUpvotes,
@@ -13,7 +17,6 @@ import {
   users
 } from "@constellatio/db/schema";
 import { type GetAnswersSchema, type GetQuestionsSchema } from "@constellatio/schemas";
-import { getProfilePictureUrl } from "~/utils/users";
 
 type GetUpvotesForQuestion = (questionId: string) => Promise<number>;
 

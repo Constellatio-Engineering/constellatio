@@ -1,5 +1,7 @@
-import { getAllCases, getAllArticles } from "@constellatio/cms";
 import { getAllLegalFields, getAllSubfields, getAllTopics, getInitialTags } from "~/services/caisy.services";
+
+import { getAllCases, getAllArticles } from "@constellatio/cms";
+
 import { createTRPCRouter, protectedProcedure } from "../trpc";
 
 export const caisyRouter = createTRPCRouter({

@@ -1,14 +1,16 @@
-import { eq } from "@constellatio/db";
-import { db } from "@constellatio/db/client";
-import { ProfilePictureInsert, profilePictures, users } from "@constellatio/db/schema";
-import { generateCreateSignedUploadUrlSchema, setOnboardingResultSchema, setProfilePictureSchema, updateUserDetailsSchema } from "@constellatio/schemas";
-import { imageFileExtensions, imageFileMimeTypes } from "@constellatio/shared/validation";
 import { addUserToCrmUpdateQueue } from "~/lib/clickup/utils";
 import { stripe } from "~/lib/stripe/stripe";
 import { getSignedCloudStorageUploadUrl } from "~/services/uploads.services";
 import { getUserWithRelations } from "~/services/users.service";
 import { filterUserForClient } from "~/utils/filters";
 import { NotFoundError, UnauthorizedError } from "~/utils/serverError";
+
+import { eq } from "@constellatio/db";
+import { db } from "@constellatio/db/client";
+import { type ProfilePictureInsert, profilePictures, users } from "@constellatio/db/schema";
+import { generateCreateSignedUploadUrlSchema, setOnboardingResultSchema, setProfilePictureSchema, updateUserDetailsSchema } from "@constellatio/schemas";
+import { imageFileExtensions, imageFileMimeTypes } from "@constellatio/shared/validation";
+
 import { createTRPCRouter, protectedProcedure } from "../trpc";
 
 export const usersRouter = createTRPCRouter({

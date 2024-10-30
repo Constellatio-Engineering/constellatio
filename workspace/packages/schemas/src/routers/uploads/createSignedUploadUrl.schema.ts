@@ -3,7 +3,7 @@ import { filenameValidation, generateContentTypeValidation } from "~/common/uplo
 
 import { env } from "@constellatio/env";
 import { type FileExtension, type FileMimeType } from "@constellatio/shared/validation";
-import { getFileExtensionLowercase } from "@constellatio/utils";
+import { getFileExtensionLowercase } from "@constellatio/utils/files";
 import { z } from "zod";
 
 export const generateCreateSignedUploadUrlSchema = <T extends FileExtension, U extends FileMimeType>(

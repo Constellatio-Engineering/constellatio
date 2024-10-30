@@ -1,11 +1,13 @@
-import { and, eq, SQLWrapper } from "@constellatio/db";
+import { addBadgeForUser } from "~/services/badges.services";
+import { filterBookmarkForClient } from "~/utils/filters";
+
+import { and, eq, type SQLWrapper } from "@constellatio/db";
 import { db } from "@constellatio/db/client";
-import { BookmarkInsert, bookmarks } from "@constellatio/db/schema";
+import { type BookmarkInsert, bookmarks } from "@constellatio/db/schema";
 import { addOrRemoveBookmarkSchema } from "@constellatio/schemas";
 import { allBookmarkResourceTypes } from "@constellatio/shared/validation";
 import { z } from "zod";
-import { addBadgeForUser } from "~/services/badges.services";
-import { filterBookmarkForClient } from "~/utils/filters";
+
 import { createTRPCRouter, protectedProcedure } from "../trpc";
 
 export const bookmarksRouter = createTRPCRouter({

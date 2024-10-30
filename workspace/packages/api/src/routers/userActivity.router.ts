@@ -1,4 +1,8 @@
-import { and, asc, eq, gte, lte, sql, sum } from "@constellatio/db";
+import { RateLimitError } from "~/utils/serverError";
+
+import {
+  and, asc, eq, gte, lte, sql, sum 
+} from "@constellatio/db";
 import { db } from "@constellatio/db/client";
 import { pings } from "@constellatio/db/schema";
 import { env } from "@constellatio/env";
@@ -6,7 +10,7 @@ import { getUsageTimeSchema, pingSchema } from "@constellatio/schemas";
 import { getCurrentDateInLocalTimezone, getDateInLocalTimezone } from "@constellatio/utils";
 import { Ratelimit } from "@upstash/ratelimit";
 import { kv } from "@vercel/kv";
-import { RateLimitError } from "~/utils/serverError";
+
 import { createTRPCRouter, protectedProcedure } from "../trpc";
 
 const rateLimit = new Ratelimit({
