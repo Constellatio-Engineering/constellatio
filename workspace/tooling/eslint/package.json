@@ -4,8 +4,8 @@
   "version": "0.3.0",
   "exports": {
     "./base": "./base.js",
-    "./nextjs": "./nextjs.js",
-    "./react": "./react.js"
+    "./drizzle": "./drizzle.js",
+    "./nextjs": "./nextjs.js"
   },
   "scripts": {
     "clean": "git clean -xdf .cache .turbo node_modules",

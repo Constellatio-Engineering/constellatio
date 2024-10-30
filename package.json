@@ -18,7 +18,8 @@
     "lint": "turbo run lint --continue -- --cache --cache-location .cache/.eslintcache",
     "lint:fix": "turbo run lint --continue -- --fix --cache --cache-location .cache/.eslintcache",
     "lint:ws": "pnpm dlx sherif@latest",
-    "postinstall": "pnpm lint:ws -f",
+    "lint:ws:fix": "pnpm dlx sherif@latest -f",
+    "postinstall": "pnpm lint:ws",
     "typecheck": "turbo run typecheck",
     "separatorSupabase": "---------------------- SUPABASE ----------------------",
     "start:supabase": "supabase start --ignore-health-check",
@@ -39,7 +40,7 @@
   },
   "devDependencies": {
     "@turbo/gen": "2.2.3",
-    "supabase": "1.207.9",
+    "supabase": "catalog:",
     "turbo": "2.2.3",
     "typescript": "catalog:"
   }
