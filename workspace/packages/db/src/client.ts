@@ -1,15 +1,14 @@
+import { env } from "@constellatio/env"; 
 import { type ExtractTablesWithRelations } from "drizzle-orm";
 import { type PgTransaction } from "drizzle-orm/pg-core";
 import { drizzle, type PostgresJsQueryResultHKT } from "drizzle-orm/postgres-js";
 import postgres from "postgres";
 
+// this is the default way to do this with drizzle
+// eslint-disable-next-line barrel-files/avoid-namespace-import
 import * as schema from "./schema";
-import { env } from "@constellatio/env";
 
 const connectionString = env.DATABASE_URL;
-
-console.log("drizzle.config.ts", env);
-console.log("connectionString", connectionString);
 
 // automatically close connections that have either been idle for 10 seconds or existed for more than 10 minutes
 const client = postgres(connectionString, {

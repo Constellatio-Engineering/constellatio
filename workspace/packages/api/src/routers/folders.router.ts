@@ -6,7 +6,9 @@ import { db } from "@constellatio/db/client";
 import { documents, uploadedFiles, uploadFolders } from "@constellatio/db/schema";
 import { searchIndices } from "@constellatio/db-to-search";
 import { type DocumentSearchItemNodes, type UploadSearchItemNodes } from "@constellatio/meilisearch/utils";
-import { createFolderSchema, deleteFolderSchema, renameFolderSchema } from "@constellatio/schemas";
+import { createFolderSchema } from "@constellatio/schemas/routers/folders/createFolder.schema";
+import { deleteFolderSchema } from "@constellatio/schemas/routers/folders/deleteFolder.schema";
+import { renameFolderSchema } from "@constellatio/schemas/routers/folders/renameFolder.schema";
 
 import { createTRPCRouter, protectedProcedure } from "../trpc";
 

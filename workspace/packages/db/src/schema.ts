@@ -1,6 +1,6 @@
-/* eslint-disable sort-keys-fix/sort-keys-fix,@typescript-eslint/naming-convention,@typescript-eslint/no-use-before-define,max-lines */
+/* eslint-disable sort-keys-fix/sort-keys-fix,@typescript-eslint/naming-convention,@typescript-eslint/no-use-before-define,max-lines,import/no-deprecated */
 
-import { GameResultSchemaType } from "@constellatio/schemas";
+import { type GameResultSchemaType } from "@constellatio/schemas/routers/gamesProgress/setGameProgressState.schema";
 import {
   allBookmarkResourceTypes,
   allCaisyWebhookEventTypes,
@@ -18,8 +18,7 @@ import {
   imageFileExtensions,
   imageFileMimeTypes, notificationTypesIdentifiers, profilePictureSources, roles, streakActivityTypes, userBadgeStates
 } from "@constellatio/shared/validation";
-import { getCurrentDate } from "@constellatio/utils";
-
+import { getCurrentDate } from "@constellatio/utils/dates";
 import { type InferInsertModel, type InferSelectModel, relations } from "drizzle-orm";
 import {
   type AnyPgColumn,
