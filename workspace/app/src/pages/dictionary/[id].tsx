@@ -2,13 +2,14 @@ import { Layout } from "@/components/layouts/Layout";
 import PageHead from "@/components/organisms/pageHead/PageHead";
 import DetailsPage from "@/components/pages/DetailsPage/DetailsPage";
 import { type NextPageWithLayout } from "@/pages/_app";
-import getAllArticles from "@/services/content/getAllArticles";
-import { getArticleById } from "@/services/content/getArticleById";
-import { type ArticleWithNextAndPreviousArticleId, getArticlesWithNextAndPreviousArticleId } from "@/utils/articles";
 
 import { type GetStaticPaths, type GetStaticPathsResult, type GetStaticProps } from "next";
 
 import { type ParsedUrlQuery } from "querystring";
+
+import getAllArticles from "@/services/content/getAllArticles";
+import { getArticleById } from "@/services/content/getArticleById";
+import { type ArticleWithNextAndPreviousArticleId, getArticlesWithNextAndPreviousArticleId } from "@/utils/articles";
 
 interface Params extends ParsedUrlQuery
 {

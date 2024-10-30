@@ -1,4 +1,9 @@
 import { MeilisearchContext } from "@/provider/MeilisearchProvider";
+
+import { keepPreviousData, useQuery } from "@tanstack/react-query";
+import { useRouter } from "next/router";
+import { useContext } from "react";
+
 import {
   type ArticleSearchIndexItem,
   type CaseSearchIndexItem,
@@ -7,10 +12,6 @@ import {
   searchIndices,
   type UploadSearchIndexItem
 } from "@/utils/search";
-
-import { keepPreviousData, useQuery } from "@tanstack/react-query";
-import { useRouter } from "next/router";
-import { useContext } from "react";
 
 export type SearchResults = {
   articles: ArticleSearchIndexItem[];

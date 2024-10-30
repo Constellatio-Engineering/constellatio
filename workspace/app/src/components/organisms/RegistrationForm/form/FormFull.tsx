@@ -10,12 +10,13 @@ import PasswordInput from "@/components/organisms/RegistrationForm/form/Password
 import SemesterDropdown from "@/components/organisms/RegistrationForm/form/SemesterDropdown";
 import UniversityDropdown from "@/components/organisms/RegistrationForm/form/UniversityDropdown";
 import { env } from "@/env.mjs";
-import { type RegistrationFormSchema } from "@/schemas/auth/registrationForm.schema";
 
 import { type UseFormReturnType } from "@mantine/form";
 import { type FunctionComponent } from "react";
 
 import * as styles from "../RegistrationForm.styles";
+
+import { type RegistrationFormSchema } from "@/schemas/auth/registrationForm.schema";
 
 type Props = {
   readonly form: UseFormReturnType<RegistrationFormSchema>;

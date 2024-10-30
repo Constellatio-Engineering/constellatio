@@ -2,15 +2,17 @@ import { Layout } from "@/components/layouts/Layout";
 import PageHead from "@/components/organisms/pageHead/PageHead";
 import DetailsPage from "@/components/pages/DetailsPage/DetailsPage";
 import { type NextPageWithLayout } from "@/pages/_app";
-import getAllCases from "@/services/content/getAllCases";
-import { type FullLegalCase, getCaseById } from "@/services/content/getCaseById";
 import { type TDragAndDropGameOptionType } from "@/stores/dragDropGame.store";
-import { shuffleArray } from "@/utils/array";
 
-// import { dummyCases } from "@/utils/dummy-data";
 import type { GetStaticPaths, GetStaticPathsResult, GetStaticProps } from "next";
 
 import { type ParsedUrlQuery } from "querystring";
+
+import getAllCases from "@/services/content/getAllCases";
+import { type FullLegalCase, getCaseById } from "@/services/content/getCaseById";
+import { shuffleArray } from "@/utils/array";
+
+// import { dummyCases } from "@/utils/dummy-data";
 
 interface Params extends ParsedUrlQuery
 {

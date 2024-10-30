@@ -7,9 +7,7 @@ import { Modal } from "@/components/molecules/Modal/Modal";
 import { useSignout } from "@/hooks/useSignout";
 import useSubscription from "@/hooks/useSubscription";
 import { AuthStateContext } from "@/provider/AuthStateProvider";
-import { type SubscriptionDetails } from "@/server/api/routers/billing.router";
 import { api } from "@/utils/api";
-import { getIsPathAppPath } from "@/utils/paths";
 
 import { Title } from "@mantine/core";
 import { useLocalStorage } from "@mantine/hooks";
@@ -20,6 +18,9 @@ import { type FunctionComponent, useContext, useMemo, useState } from "react";
 import { z } from "zod";
 
 import ModalFlag from "../../../../public/images/placeholder-flag.png";
+
+import { type SubscriptionDetails } from "@/server/api/routers/billing.router";
+import { getIsPathAppPath } from "@/utils/paths";
 
 const localStorageKey = "daysLeftToSubscriptionEnds";
 

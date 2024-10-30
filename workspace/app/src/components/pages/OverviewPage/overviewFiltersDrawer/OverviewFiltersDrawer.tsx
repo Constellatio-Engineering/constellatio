@@ -12,15 +12,16 @@ import {
   useArticlesOverviewFiltersStore,
   useCasesOverviewFiltersStore
 } from "@/stores/overviewFilters.store";
-import { findIntersection } from "@/utils/array";
-import { getIsValidKey, mapToObject } from "@/utils/object";
-import { getDistinctItemsByKey, objectKeys } from "@/utils/utils";
 
 import { Drawer } from "@mantine/core";
 import React, { type FunctionComponent, useEffect, useMemo } from "react";
 import { useStore } from "zustand";
 
 import * as styles from "./OverviewFiltersDrawer.styles";
+
+import { findIntersection } from "@/utils/array";
+import { getIsValidKey, mapToObject } from "@/utils/object";
+import { getDistinctItemsByKey, objectKeys } from "@/utils/utils";
 
 export type CasesOverviewFiltersDrawerProps = Pick<CaseOverviewPageProps, "items" | "variant">;
 

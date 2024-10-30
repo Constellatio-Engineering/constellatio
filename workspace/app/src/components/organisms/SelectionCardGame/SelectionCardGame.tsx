@@ -9,7 +9,6 @@ import { ResultCard } from "@/components/molecules/ResultCard/ResultCard";
 import { SelectionCard } from "@/components/molecules/SelectionCard/SelectionCard";
 import useContextAndErrorIfNull from "@/hooks/useContextAndErrorIfNull";
 import { InvalidateQueriesContext } from "@/provider/InvalidateQueriesProvider";
-import { type IGenCardSelectionGame } from "@/services/graphql/__generated/sdk";
 import useSelectionCardGameStore, { type QuestionType, type TCardGameOption, } from "@/stores/selectionCardGame.store";
 import { api } from "@/utils/api";
 
@@ -19,6 +18,8 @@ import React, { type FC, memo, useMemo } from "react";
 import {
   Container, Game, GameWrapper, LegendWrapper, Options, TitleWrapper, 
 } from "./SelectionCardGame.styles";
+
+import { type IGenCardSelectionGame } from "@/services/graphql/__generated/sdk";
 
 export type SelectionCardGameProps = Pick<IGenCardSelectionGame, "game" | "helpNote" | "question" | "questionType"> & {
   readonly caseId: string;

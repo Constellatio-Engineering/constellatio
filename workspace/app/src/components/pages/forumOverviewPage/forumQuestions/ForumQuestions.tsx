@@ -5,13 +5,14 @@ import QuestionListItem from "@/components/pages/forumOverviewPage/questionListI
 import QuestionsSkeleton from "@/components/pages/forumOverviewPage/questionsSkeleton/QuestionsSkeleton";
 import { useForumPageStore } from "@/stores/forumPage.store";
 import { api } from "@/utils/api";
-import { appPaths } from "@/utils/paths";
 
 import { useRouter } from "next/router";
 import React, { Fragment, type FunctionComponent, useEffect, useMemo } from "react";
 import { useInView } from "react-intersection-observer";
 
 import * as styles from "./ForumQuestions.styles";
+
+import { appPaths } from "@/utils/paths";
 
 type Props = {
   readonly questionIds?: string[];

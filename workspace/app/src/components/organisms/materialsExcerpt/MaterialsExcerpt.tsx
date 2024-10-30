@@ -2,10 +2,11 @@ import MaterialCard from "@/components/molecules/materialCard/MaterialCard";
 import EmptyStateCard from "@/components/organisms/emptyStateCard/EmptyStateCard";
 import * as styles from "@/components/organisms/favoritesExcerpt/FavoritesExcerpt.styles";
 import { type AllUserData } from "@/hooks/useAllUserData";
-import { appPaths } from "@/utils/paths";
 
 import { useRouter } from "next/router";
 import React, { Fragment, type FunctionComponent } from "react";
+
+import { appPaths } from "@/utils/paths";
 
 type Props = {
   readonly allUserData: AllUserData;

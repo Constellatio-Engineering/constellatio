@@ -2,8 +2,9 @@
 
 import type { CaseOverviewPageItems } from "@/pages/cases";
 import { type FilterableAttributes, type FilterOption } from "@/stores/overviewFilters.store";
-import { getIsValidKey } from "@/utils/object";
 import { type NullableProperties } from "@/utils/types";
+
+import { getIsValidKey } from "@/utils/object";
 import { getIsObjectWithId, getIsObjectWithValue, getIsPrimitive, objectKeys } from "@/utils/utils";
 
 export const sortFilterOptions = (a: FilterOption, b: FilterOption): number =>

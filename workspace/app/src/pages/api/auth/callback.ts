@@ -1,16 +1,17 @@
-import { db } from "@/db/connection";
-import { authProviders, users } from "@/db/schema";
 import { env } from "@/env.mjs";
-import { idValidation } from "@/schemas/common.validation";
-import { appPaths, authPaths } from "@/utils/paths";
 import { queryParams } from "@/utils/query-params";
-import { finishSignup, type FinishSignUpProps } from "@/utils/signup";
-import { splitFullName } from "@/utils/utils";
 
 import { createPagesServerClient } from "@supabase/auth-helpers-nextjs";
 import { eq } from "drizzle-orm";
 import { type NextApiHandler, type NextApiResponse } from "next";
 import { z } from "zod";
+
+import { db } from "@/db/connection";
+import { authProviders, users } from "@/db/schema";
+import { idValidation } from "@/schemas/common.validation";
+import { appPaths, authPaths } from "@/utils/paths";
+import { finishSignup, type FinishSignUpProps } from "@/utils/signup";
+import { splitFullName } from "@/utils/utils";
 
 const redirectToErrorPage = (res: NextApiResponse, error: unknown) =>
 {

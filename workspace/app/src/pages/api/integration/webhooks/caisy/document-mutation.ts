@@ -1,14 +1,15 @@
 /* eslint-disable max-lines */
-import { db } from "@/db/connection";
-import { type CaisyWebhookEventType, documentsToTags, uploadedFilesToTags } from "@/db/schema";
 import { env } from "@/env.mjs";
-import { createContentTaskIfNotExists } from "@/lib/clickup/utils";
-import { addArticlesAndCasesToSearchQueue, addContentToSearchQueue } from "@/server/api/services/search.services";
-import { caisySDK } from "@/services/graphql/getSdk";
 
 import { eq } from "drizzle-orm";
 import { type NextApiHandler } from "next";
 import { z, ZodError } from "zod";
+
+import { db } from "@/db/connection";
+import { type CaisyWebhookEventType, documentsToTags, uploadedFilesToTags } from "@/db/schema";
+import { createContentTaskIfNotExists } from "@/lib/clickup/utils";
+import { addArticlesAndCasesToSearchQueue, addContentToSearchQueue } from "@/server/api/services/search.services";
+import { caisySDK } from "@/services/graphql/getSdk";
 
 const caisyWebhookSchema = z.object({
   metadata: z.object({

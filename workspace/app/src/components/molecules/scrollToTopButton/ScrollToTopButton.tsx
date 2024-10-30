@@ -1,13 +1,14 @@
 import { ArrowUp } from "@/components/Icons/ArrowUp";
 import { UnstyledButton } from "@/components/molecules/unstyledButton/UnstyledButton";
 import { AuthStateContext } from "@/provider/AuthStateProvider";
-import { scrollToTop } from "@/utils/utils";
 
 import { useTheme } from "@emotion/react";
 import { Tooltip } from "@mantine/core";
 import React, { type FunctionComponent, useContext, useEffect, useState } from "react";
 
 import * as styles from "./ScrollToTopButton.styles";
+
+import { scrollToTop } from "@/utils/utils";
 
 export const ScrollToTopButton: FunctionComponent = () => 
 {

@@ -1,9 +1,10 @@
-import { type Note } from "@/db/schema";
 import useNotes from "@/hooks/useNotes";
 import useUploadedFiles from "@/hooks/useUploadedFiles";
-import { type GetUploadedFileResult } from "@/server/api/routers/uploads.router";
 import useMaterialsStore from "@/stores/materials.store";
 import { type TrpcClientErrorBase } from "@/utils/types";
+
+import { type Note } from "@/db/schema";
+import { type GetUploadedFileResult } from "@/server/api/routers/uploads.router";
 
 export type UploadedFileWithNote = GetUploadedFileResult & { note: Note | null };
 

@@ -17,8 +17,6 @@ import useBookmarks from "@/hooks/useBookmarks";
 import useCases from "@/hooks/useCases";
 import useRemoveBookmark from "@/hooks/useRemoveBookmark";
 import useSubmittedCaseSolution from "@/hooks/useSubmittedCaseSolution";
-import { type AddOrRemoveBookmarkSchema } from "@/schemas/bookmarks/addOrRemoveBookmark.schema";
-import { type IGenCase_Facts, type IGenCase_Resolution, type Maybe } from "@/services/graphql/__generated/sdk";
 import { type IHeadingNode } from "types/richtext";
 
 import {
@@ -30,6 +28,9 @@ import React, { type FunctionComponent, useEffect, useRef, useState } from "reac
 import * as styles from "./CaseResultsReviewStep.styles";
 import { getNestedHeadingIndex } from "../floatingPanel/generateTocHelper";
 import IconButtonBar from "../iconButtonBar/IconButtonBar";
+
+import { type AddOrRemoveBookmarkSchema } from "@/schemas/bookmarks/addOrRemoveBookmark.schema";
+import { type IGenCase_Facts, type IGenCase_Resolution, type Maybe } from "@/services/graphql/__generated/sdk";
 
 interface ICaseResultsReviewStepProps 
 {

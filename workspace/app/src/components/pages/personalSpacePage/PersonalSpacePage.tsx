@@ -7,7 +7,6 @@ import useBookmarks from "@/hooks/useBookmarks";
 import useCases from "@/hooks/useCases";
 import useDocuments from "@/hooks/useDocuments";
 import useUploadedFiles from "@/hooks/useUploadedFiles";
-import { type IGenArticle } from "@/services/graphql/__generated/sdk";
 
 import { parseAsString, useQueryState } from "next-usequerystate";
 import React, { type FunctionComponent, useId } from "react";
@@ -16,6 +15,8 @@ import { categoriesHelper } from "./PersonalSpaceHelper";
 import * as styles from "./PersonalSpacePage.styles";
 import BookmarkIconSvg from "../../../../public/images/icons/bookmark.svg";
 import FileIconSvg from "../../../../public/images/icons/file.svg";
+
+import { type IGenArticle } from "@/services/graphql/__generated/sdk";
 
 const PersonalSpacePageContent: FunctionComponent = () =>
 {

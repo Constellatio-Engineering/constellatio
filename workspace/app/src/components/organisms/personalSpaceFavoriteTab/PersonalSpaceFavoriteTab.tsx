@@ -4,8 +4,6 @@ import UseQueryStateWrapper from "@/components/Wrappers/useQueryStateWrapper/Use
 import useArticles from "@/hooks/useArticles";
 import useBookmarks from "@/hooks/useBookmarks";
 import useCases from "@/hooks/useCases";
-import { type IGenArticle, type IGenArticleOverviewFragment, type IGenFullCaseFragment, type IGenMainCategory } from "@/services/graphql/__generated/sdk";
-import { appPaths } from "@/utils/paths";
 import { type NonEmptyArray, type Nullable } from "@/utils/types";
 
 import { Loader } from "@mantine/core";
@@ -18,6 +16,9 @@ import EmptyStateCard from "../emptyStateCard/EmptyStateCard";
 import FavoriteArticlesList from "../favoriteArticlesList/FavoriteArticlesList";
 import FavoriteCasesList from "../favoriteCasesList/FavoriteCasesList";
 import PersonalSpaceNavBar from "../personalSpaceNavBar/PersonalSpaceNavBar";
+
+import { type IGenArticle, type IGenArticleOverviewFragment, type IGenFullCaseFragment, type IGenMainCategory } from "@/services/graphql/__generated/sdk";
+import { appPaths } from "@/utils/paths";
 
 export type FavoriteCategoryNavTab = {
   itemsPerTab: number;

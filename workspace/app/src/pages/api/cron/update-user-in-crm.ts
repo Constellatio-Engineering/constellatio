@@ -1,12 +1,13 @@
 /* eslint-disable max-lines */
-import { db } from "@/db/connection";
-import { updateUserInCrmQueue } from "@/db/schema";
 import { env } from "@/env.mjs";
-import { syncUserToCrm } from "@/lib/clickup/utils";
 
 import { AxiosError } from "axios";
 import { eq } from "drizzle-orm";
 import { type NextApiHandler } from "next";
+
+import { db } from "@/db/connection";
+import { updateUserInCrmQueue } from "@/db/schema";
+import { syncUserToCrm } from "@/lib/clickup/utils";
 
 const handler: NextApiHandler = async (req, res): Promise<void> =>
 {

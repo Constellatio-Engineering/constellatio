@@ -3,13 +3,14 @@ import { Button } from "@/components/atoms/Button/Button";
 import { env } from "@/env.mjs";
 import useSetOnboardingResult from "@/hooks/useSetOnboardingResult";
 import { type SearchStoreProps } from "@/stores/onboarding.store";
-import { appPaths } from "@/utils/paths";
 
 import { Modal, Title } from "@mantine/core";
 import { useRouter } from "next/router";
 import { type FunctionComponent, useEffect, useRef } from "react";
 
 import * as styles from "./OnboardingModal.styles";
+
+import { appPaths } from "@/utils/paths";
 
 type Props = {
   readonly onboardingStepsIndex: number;

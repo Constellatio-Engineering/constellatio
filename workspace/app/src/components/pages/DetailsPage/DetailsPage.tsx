@@ -8,16 +8,17 @@ import CaseSolvingHeader from "@/components/organisms/caseSolvingHeader/CaseSolv
 import { useAddContentItemView } from "@/hooks/useAddContentItemView";
 import useCaseProgress from "@/hooks/useCaseProgress";
 import useGamesProgress from "@/hooks/useGamesProgress";
-import { type FullLegalCase } from "@/services/content/getCaseById";
 import useCaseSolvingStore, { type CaseStepIndex } from "@/stores/caseSolving.store";
-import { type ArticleWithNextAndPreviousArticleId } from "@/utils/articles";
-import { getGamesFromCase } from "@/utils/case";
-import { appPaths } from "@/utils/paths";
 
 import React, { type FunctionComponent, useEffect } from "react";
 
 import * as styles from "./DetailsPage.styles";
 import ErrorPage from "../errorPage/ErrorPage";
+
+import { type FullLegalCase } from "@/services/content/getCaseById";
+import { type ArticleWithNextAndPreviousArticleId } from "@/utils/articles";
+import { getGamesFromCase } from "@/utils/case";
+import { appPaths } from "@/utils/paths";
 
 type IDetailsPageProps = {
   readonly content: FullLegalCase | ArticleWithNextAndPreviousArticleId | undefined;

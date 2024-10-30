@@ -7,7 +7,6 @@ import { Notepad } from "@/components/Icons/Notepad";
 import { NotepadFilled } from "@/components/Icons/NotepadFilled";
 import { VideoIcon } from "@/components/Icons/Video";
 import { UnstyledButton } from "@/components/molecules/unstyledButton/UnstyledButton";
-import { type UploadedFile } from "@/db/schema";
 import { type UploadedFileWithNote } from "@/hooks/useUploadedFilesWithNotes";
 import useUploadFolders from "@/hooks/useUploadFolders";
 import useMaterialsStore from "@/stores/materials.store";
@@ -19,6 +18,8 @@ import React, { type FunctionComponent } from "react";
 
 import * as styles from "./UploadedMaterialTableBody.styles";
 import MaterialOptionsMenu from "../materialsOptionsMenu/MaterialsOptionsMenu";
+
+import { type UploadedFile } from "@/db/schema";
 
 const fileNameIcon = (file: UploadedFile): React.ReactNode =>
 {

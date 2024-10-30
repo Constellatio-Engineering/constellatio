@@ -1,6 +1,7 @@
-import { type GetCaseProgressResult } from "@/server/api/routers/caseProgress.router";
 import { api } from "@/utils/api";
 import { type Nullable, type UseQueryResult } from "@/utils/types";
+
+import { type GetCaseProgressResult } from "@/server/api/routers/caseProgress.router";
 
 type UseCaseProgress = (caseId: Nullable<string>) => UseQueryResult<{ caseProgress: GetCaseProgressResult | undefined }>;
 

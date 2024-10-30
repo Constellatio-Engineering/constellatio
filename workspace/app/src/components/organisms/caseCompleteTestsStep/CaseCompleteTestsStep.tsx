@@ -3,14 +3,11 @@ import { Button } from "@/components/atoms/Button/Button";
 import { type IStatusLabel } from "@/components/atoms/statusLabel/StatusLabel";
 import { RichTextHeadingOverwrite, richTextHeadingOverwriteClassName } from "@/components/helpers/RichTextHeadingOverwrite";
 import GameComponentWrapper from "@/components/molecules/gameComponentWrapper/GameComponentWrapper";
-import { type GameProgress } from "@/db/schema";
 import useContextAndErrorIfNull from "@/hooks/useContextAndErrorIfNull";
 import { useWindowDimensions } from "@/hooks/useWindowDimensions";
 import { InvalidateQueriesContext } from "@/provider/InvalidateQueriesProvider";
-import { type IGenArticle_FullTextTasks, type IGenCase_Facts, type IGenCase_FullTextTasks, type Maybe } from "@/services/graphql/__generated/sdk";
 import useCaseSolvingStore from "@/stores/caseSolving.store";
 import { api } from "@/utils/api";
-import { type Games } from "@/utils/case";
 import type { IDocumentLink, IHeadingNode } from "types/richtext";
 
 import { Container, Title } from "@mantine/core";
@@ -30,6 +27,10 @@ import { getNestedHeadingIndex } from "../floatingPanel/generateTocHelper";
 import FloatingPanelTablet from "../floatingPanelTablet/FloatingPanelTablet";
 import SelectionCardGame from "../SelectionCardGame/SelectionCardGame";
 import { SolveCaseGame } from "../SolveCaseGame/SolveCaseGame";
+
+import { type GameProgress } from "@/db/schema";
+import { type IGenArticle_FullTextTasks, type IGenCase_Facts, type IGenCase_FullTextTasks, type Maybe } from "@/services/graphql/__generated/sdk";
+import { type Games } from "@/utils/case";
 
 export const headingObservedThreshold = 0.23;
 

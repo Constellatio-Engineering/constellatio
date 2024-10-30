@@ -1,11 +1,12 @@
 import { BellIcon } from "@/components/Icons/Bell";
 import { useAmountOfUnreadNotification } from "@/hooks/useAmountOfUnreadNotification";
-import { appPaths } from "@/utils/paths";
 
 import Link from "next/link";
 import React, { type FunctionComponent } from "react";
 
 import * as styles from "./NotificationsBell.styles";
+
+import { appPaths } from "@/utils/paths";
 
 const NotificationsBell: FunctionComponent = () =>
 {

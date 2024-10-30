@@ -1,6 +1,7 @@
-import { type CaseSolution } from "@/db/schema";
 import { api } from "@/utils/api";
 import { type Nullable, type UseQueryResult } from "@/utils/types";
+
+import { type CaseSolution } from "@/db/schema";
 
 type UseSubmittedCaseSolution = (caseId: Nullable<string>) => UseQueryResult<{ submittedCaseSolution: Nullable<CaseSolution> }>;
 

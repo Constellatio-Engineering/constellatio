@@ -1,10 +1,11 @@
 import { CompletedStatusLabelIcon, InProgressStatusLabelIcon, NotStartedStatusLabelIcon } from "@/components/Icons/StatusLabelIcons";
-import { type CaseProgressState } from "@/db/schema";
 
 import React, { type FunctionComponent, type PropsWithChildren } from "react";
 
 import * as styles from "./StatusLabel.styles";
 import { BodyText } from "../BodyText/BodyText";
+
+import { type CaseProgressState } from "@/db/schema";
 
 export interface IStatusLabel extends PropsWithChildren 
 {

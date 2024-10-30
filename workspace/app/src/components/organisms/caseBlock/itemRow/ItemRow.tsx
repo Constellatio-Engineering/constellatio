@@ -6,7 +6,6 @@ import { type ICaseBlockProps } from "@/components/organisms/caseBlock/ItemBlock
 import { timeFormatter } from "@/components/organisms/overviewCard/OverviewCard";
 import useBookmarks from "@/hooks/useBookmarks";
 import useCasesProgress from "@/hooks/useCasesProgress";
-import { appPaths } from "@/utils/paths";
 import { type Nullable } from "@/utils/types";
 
 import { useMediaQuery } from "@mantine/hooks";
@@ -14,6 +13,8 @@ import Link from "next/link";
 import React, { type FunctionComponent, memo } from "react";
 
 import * as styles from "./ItemRow.styles";
+
+import { appPaths } from "@/utils/paths";
 
 type Props = Pick<ICaseBlockProps, "variant" | "tableType"> & {
   readonly durationToCompleteInMinutes: number;

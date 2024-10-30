@@ -1,6 +1,7 @@
 import { defaultLimit } from "@/components/pages/forumOverviewPage/ForumOverviewPage";
-import type { NotificationWithRelations } from "@/server/api/routers/notifications.router";
 import { api } from "@/utils/api";
+
+import type { NotificationWithRelations } from "@/server/api/routers/notifications.router";
 import { getForumQuestionUrl } from "@/utils/paths";
 
 type NotificationFrontendData = {

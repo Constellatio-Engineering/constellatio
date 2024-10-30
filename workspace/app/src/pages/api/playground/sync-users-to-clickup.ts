@@ -1,15 +1,5 @@
 /* eslint-disable max-lines */
-import { db } from "@/db/connection";
-import {
-  casesProgress, contentViews, documents, uploadedFiles, users, usersToBadges 
-} from "@/db/schema";
 import { env } from "@/env.mjs";
-import { deleteClickupCustomFieldValue } from "@/lib/clickup/tasks/delete-custom-field-value";
-import { updateClickupCustomField } from "@/lib/clickup/tasks/update-custom-field";
-import { updateClickupTask } from "@/lib/clickup/tasks/update-task";
-import { type ClickupTask } from "@/lib/clickup/types";
-import { clickupCrmCustomField, getUserCrmData } from "@/lib/clickup/utils";
-import { stripe } from "@/lib/stripe/stripe";
 
 import { createPagesServerClient, type SupabaseClient } from "@supabase/auth-helpers-nextjs";
 import { type AxiosResponse } from "axios";
@@ -20,10 +10,19 @@ import type { NextApiHandler } from "next";
 import pLimit from "p-limit";
 import type Stripe from "stripe";
 
+import { db } from "@/db/connection";
+import {
+  casesProgress, contentViews, documents, uploadedFiles, users, usersToBadges 
+} from "@/db/schema";
+import { deleteClickupCustomFieldValue } from "@/lib/clickup/tasks/delete-custom-field-value";
+import { updateClickupCustomField } from "@/lib/clickup/tasks/update-custom-field";
+import { updateClickupTask } from "@/lib/clickup/tasks/update-task";
+import { type ClickupTask } from "@/lib/clickup/types";
+import { clickupCrmCustomField, getUserCrmData } from "@/lib/clickup/utils";
+import { stripe } from "@/lib/stripe/stripe";
+
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
 const stripeConcurrencyLimit = pLimit(env.STRIPE_SDK_CONCURRENCY_LIMIT);
-
-
 
 const handler: NextApiHandler = async (req, res): Promise<void> =>
 {

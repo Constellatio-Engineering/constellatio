@@ -1,8 +1,9 @@
 import { Dropdown, type DropdownProps } from "@/components/atoms/Dropdown/Dropdown";
-import { type GenderIdentifier } from "@/db/schema";
 
 import { Box } from "@mantine/core";
 import React, { type FunctionComponent } from "react";
+
+import { type GenderIdentifier } from "@/db/schema";
 
 type Gender = {
   readonly identifier: GenderIdentifier;

@@ -1,10 +1,11 @@
 import { searchResultsQueryKey } from "@/hooks/useSearchResults";
-import { type AppRouter } from "@/server/api/root";
 import { api } from "@/utils/api";
 
 import { useQueryClient } from "@tanstack/react-query";
 import { type inferProcedureInput } from "@trpc/server";
 import { createContext, type FunctionComponent, type ReactNode, useMemo } from "react";
+
+import { type AppRouter } from "@/server/api/root";
 
 type InvalidateDocumentsOptions = inferProcedureInput<AppRouter["documents"]["getDocuments"]>;
 type InvalidateUploadedFilesOptions = inferProcedureInput<AppRouter["uploads"]["getUploadedFiles"]>;

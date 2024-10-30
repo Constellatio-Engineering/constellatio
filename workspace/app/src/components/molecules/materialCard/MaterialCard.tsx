@@ -1,12 +1,13 @@
 import MaterialsLabel from "@/components/atoms/materialsLabel/MaterialsLabel";
 import { SubtitleText } from "@/components/atoms/SubtitleText/SubtitleText";
-import { type Document } from "@/db/schema";
 import useDocumentEditorStore from "@/stores/documentEditor.store";
 import useMaterialsStore from "@/stores/materials.store";
 
 import React, { type FunctionComponent } from "react";
 
 import * as styles from "./MaterialCard.styles";
+
+import { type Document } from "@/db/schema";
 
 type PaperCard =
 {

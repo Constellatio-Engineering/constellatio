@@ -1,9 +1,10 @@
-import { type Note } from "@/db/schema";
-import { type AppRouter } from "@/server/api/root";
 import { api } from "@/utils/api";
 import { type UseQueryResult } from "@/utils/types";
 
 import { type inferReactQueryProcedureOptions } from "@trpc/react-query";
+
+import { type Note } from "@/db/schema";
+import { type AppRouter } from "@/server/api/root";
 
 type UseNotes = (
   options?: inferReactQueryProcedureOptions<AppRouter>["notes"]["getNotes"]

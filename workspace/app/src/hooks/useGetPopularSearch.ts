@@ -1,5 +1,6 @@
-import { type IGenSearch } from "@/services/graphql/__generated/sdk";
 import { api } from "@/utils/api";
+
+import { type IGenSearch } from "@/services/graphql/__generated/sdk";
 
 type UseGetPopularSearch = () => {
   error: unknown | null;

@@ -1,4 +1,4 @@
-import { GetServerSidePropsContext, NextApiRequest, NextApiResponse } from "next";
+import { type GetServerSidePropsContext, type NextApiRequest, type NextApiResponse } from "next";
 import superjson from "superjson";
 
 export const getTrpcServerSideHelpers = async (context: GetServerSidePropsContext | {

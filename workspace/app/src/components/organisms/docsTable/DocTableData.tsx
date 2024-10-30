@@ -9,13 +9,10 @@ import { Trash } from "@/components/Icons/Trash";
 import { UnstyledButton } from "@/components/molecules/unstyledButton/UnstyledButton";
 import { useOnDocumentMutation } from "@/hooks/useOnDocumentMutation";
 import useUploadFolders from "@/hooks/useUploadFolders";
-import { type GetDocumentResult } from "@/server/api/routers/documents.router";
 import useDocumentEditorStore from "@/stores/documentEditor.store";
 import { useTagsEditorStore } from "@/stores/tagsEditor.store";
 import { api } from "@/utils/api";
 import { getFolderName } from "@/utils/folders";
-import { apiPaths } from "@/utils/paths";
-import { downloadFileFromUrl } from "@/utils/utils";
 
 import { Menu, Modal, Title } from "@mantine/core";
 import { notifications } from "@mantine/notifications";
@@ -27,6 +24,10 @@ import * as styles from "./DocsTable.styles";
 import { BodyText } from "../../atoms/BodyText/BodyText";
 import { DotsIcon } from "../../Icons/dots";
 import MoveToModal from "../moveToModal/MoveToModal";
+
+import { type GetDocumentResult } from "@/server/api/routers/documents.router";
+import { apiPaths } from "@/utils/paths";
+import { downloadFileFromUrl } from "@/utils/utils";
 
 const formatDate = (date: Date): string => `${String(date.getDate()).padStart(2, "0")}.${String(date.getMonth() + 1).padStart(2, "0")}.${date.getFullYear()}`;
 

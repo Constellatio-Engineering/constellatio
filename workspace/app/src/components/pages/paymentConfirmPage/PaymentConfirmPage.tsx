@@ -1,11 +1,12 @@
 import { Button } from "@/components/atoms/Button/Button";
-import { appPaths } from "@/utils/paths";
 
 import { Title } from "@mantine/core";
 import { useRouter } from "next/router";
 import React, { type FunctionComponent } from "react";
 
 import * as styles from "./PaymentConfirmPage.styles";
+
+import { appPaths } from "@/utils/paths";
 
 const PaymentConfirmPage: FunctionComponent = () => 
 {

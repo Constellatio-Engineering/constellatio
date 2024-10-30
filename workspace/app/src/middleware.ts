@@ -1,17 +1,18 @@
 /* eslint-disable import/no-unused-modules */
-import * as schema from "@/db/schema";
-import { users, usersToRoles } from "@/db/schema";
 import { env } from "@/env.mjs";
-import { getIsUserLoggedInServer } from "@/utils/auth";
-import { appPaths, authPaths } from "@/utils/paths";
 import { queryParams } from "@/utils/query-params";
-import { getHasSubscription } from "@/utils/subscription";
 
 import { neonConfig, Pool } from "@neondatabase/serverless";
 import { createMiddlewareClient } from "@supabase/auth-helpers-nextjs";
 import { eq } from "drizzle-orm";
 import { drizzle as drizzleServerless } from "drizzle-orm/neon-serverless";
 import { type NextMiddleware, NextResponse } from "next/server";
+
+import { users, usersToRoles } from "@/db/schema";
+import * as schema from "@/db/schema";
+import { getIsUserLoggedInServer } from "@/utils/auth";
+import { appPaths, authPaths } from "@/utils/paths";
+import { getHasSubscription } from "@/utils/subscription";
 
 if(env.NEXT_PUBLIC_DEPLOYMENT_ENVIRONMENT === "development")
 {

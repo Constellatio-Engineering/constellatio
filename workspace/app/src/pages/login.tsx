@@ -2,9 +2,7 @@ import PageHead from "@/components/organisms/pageHead/PageHead";
 import { type SignupFormVariant } from "@/components/organisms/RegistrationForm/RegistrationForm";
 import { AuthPage } from "@/components/pages/AuthPage/AuthPage";
 import { env } from "@/env.mjs";
-import { getIsUserLoggedInServer } from "@/utils/auth";
 import { getCommonProps } from "@/utils/commonProps";
-import { appPaths } from "@/utils/paths";
 import { queryParams } from "@/utils/query-params";
 import { type Nullable } from "@/utils/types";
 
@@ -14,6 +12,9 @@ import { type SSRConfig } from "next-i18next";
 import { type FunctionComponent } from "react";
 
 import { defaultLocale } from "../../next.config.mjs";
+
+import { getIsUserLoggedInServer } from "@/utils/auth";
+import { appPaths } from "@/utils/paths";
 
 export type ServerSidePropsResult = SSRConfig & {
   // False positive, this is used in the Register AuthPage

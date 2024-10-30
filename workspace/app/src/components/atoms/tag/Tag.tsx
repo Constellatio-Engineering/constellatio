@@ -1,4 +1,3 @@
-import { appPaths } from "@/utils/paths";
 import { type Nullable } from "@/utils/types";
 
 import Link from "next/link";
@@ -7,6 +6,8 @@ import React, { type FunctionComponent } from "react";
 
 import * as styles from "./Tag.styles";
 import { BodyText } from "../BodyText/BodyText";
+
+import { appPaths } from "@/utils/paths";
 
 export interface ITag 
 {

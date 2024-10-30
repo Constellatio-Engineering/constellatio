@@ -3,7 +3,6 @@ import { headingObservedThreshold } from "@/components/organisms/caseCompleteTes
 import { Toc } from "@/components/organisms/floatingPanel/Toc";
 import { usePrevious } from "@/hooks/usePrevious";
 import useCaseSolvingStore from "@/stores/caseSolving.store";
-import { slugFormatter } from "@/utils/utils";
 
 import { useIntersection } from "@mantine/hooks";
 import React, {
@@ -15,6 +14,8 @@ import { getNumericalLabel, type TOCItem } from "./generateTocHelper";
 import { BodyText } from "../../atoms/BodyText/BodyText";
 import { ArrowSolidDown } from "../../Icons/arrow-solid-down";
 import { ArrowSolidRight } from "../../Icons/arrow-solid-right";
+
+import { slugFormatter } from "@/utils/utils";
 
 const scrollToElement = (e: React.MouseEvent<HTMLDivElement>, targetId: string): void =>
 {

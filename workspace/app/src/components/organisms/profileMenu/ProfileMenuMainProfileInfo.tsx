@@ -2,12 +2,13 @@ import { BodyText } from "@/components/atoms/BodyText/BodyText";
 import { Edit } from "@/components/Icons/Edit";
 import ProfilePicture from "@/components/molecules/profilePicture/ProfilePicture";
 import EditProfileImgModal from "@/components/organisms/editProfileImgModal/EditProfileImgModal";
-import { type UserFiltered } from "@/utils/filters";
 
 import { Title } from "@mantine/core";
 import React, { type FunctionComponent } from "react";
 
 import * as styles from "./ProfileMenu.styles";
+
+import { type UserFiltered } from "@/utils/filters";
 
 const profilePictureSizeInPx = 90;
 

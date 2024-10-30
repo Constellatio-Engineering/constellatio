@@ -1,6 +1,7 @@
-import { type UploadFolder } from "@/db/schema";
 import { api } from "@/utils/api";
 import { type UseQueryResult } from "@/utils/types";
+
+import { type UploadFolder } from "@/db/schema";
 
 type UseUploadFolders = () => UseQueryResult<{ folders: UploadFolder[] }>;
 

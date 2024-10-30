@@ -7,13 +7,14 @@ import MaterialsExcerpt from "@/components/organisms/materialsExcerpt/MaterialsE
 import useAllFavorites from "@/hooks/useAllFavorites";
 import { useAllUserData } from "@/hooks/useAllUserData";
 import useUploadedFiles from "@/hooks/useUploadedFiles";
-import { appPaths } from "@/utils/paths";
 
 import { Loader } from "@mantine/core";
 import Link from "next/link";
 import React, { type FunctionComponent, useState } from "react";
 
 import * as styles from "./ProfilePersonalSpaceBlock.styles";
+
+import { appPaths } from "@/utils/paths";
 
 const ProfilePersonalSpaceBlock: FunctionComponent = () => 
 {

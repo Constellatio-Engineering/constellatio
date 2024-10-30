@@ -1,6 +1,5 @@
 import { Button } from "@/components/atoms/Button/Button";
 import Label from "@/components/atoms/label/Label";
-import { appPaths } from "@/utils/paths";
 
 import { Title } from "@mantine/core";
 import { useMediaQuery } from "@mantine/hooks";
@@ -8,6 +7,8 @@ import Link from "next/link";
 import React, { type FunctionComponent } from "react";
 
 import * as styles from "./DashboardCasesBlockHeader.styles";
+
+import { appPaths } from "@/utils/paths";
 
 const DashboardCasesBlockHeader: FunctionComponent = () => 
 {

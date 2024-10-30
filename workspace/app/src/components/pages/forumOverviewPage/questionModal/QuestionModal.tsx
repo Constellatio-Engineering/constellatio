@@ -7,8 +7,6 @@ import { Cross } from "@/components/Icons/Cross";
 import ErrorCard, { type ErrorCardsProps } from "@/components/molecules/errorCard/ErrorCard";
 import { useDataLossProtection } from "@/hooks/useDataLossProtection";
 import { useLegalFieldsAndTopics } from "@/hooks/useLegalFieldsAndTopics";
-import { type PostQuestionSchema } from "@/schemas/forum/postQuestion.schema";
-import { titleMaxLength } from "@/schemas/forum/question.valiation";
 import { useForumPageStore } from "@/stores/forumPage.store";
 
 import { Modal, type ModalProps, type SelectItem, Title } from "@mantine/core";
@@ -17,6 +15,9 @@ import React, { type FunctionComponent, useMemo } from "react";
 
 import * as styles from "./QuestionModal.styles";
 import { RichtextEditorField } from "./RichtextEditorField/RichtextEditorField";
+
+import { type PostQuestionSchema } from "@/schemas/forum/postQuestion.schema";
+import { titleMaxLength } from "@/schemas/forum/question.valiation";
 
 export type QuestionModalProps = Omit<ModalProps, "onSubmit"> & {
   readonly error: ErrorCardsProps["error"];

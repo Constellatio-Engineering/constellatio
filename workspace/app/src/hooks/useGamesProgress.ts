@@ -1,6 +1,7 @@
-import { type GameProgress } from "@/db/schema";
 import { api } from "@/utils/api";
 import { type Nullable, type UseQueryResult } from "@/utils/types";
+
+import { type GameProgress } from "@/db/schema";
 
 type UseGamesProgress = (caseId: Nullable<string>) => UseQueryResult<{ gamesProgress: GameProgress[] | undefined }>;
 

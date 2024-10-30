@@ -1,8 +1,8 @@
-import { type Note } from "@/db/schema";
-import { getRandomUuid } from "@/utils/utils";
-
 import { create } from "zustand";
 import { immer } from "zustand/middleware/immer";
+
+import { type Note } from "@/db/schema";
+import { getRandomUuid } from "@/utils/utils";
 
 type NoteUpdate = Partial<Pick<Note, "content">>;
 type NewNote = Pick<Note, "id" | "content" | "fileId">;

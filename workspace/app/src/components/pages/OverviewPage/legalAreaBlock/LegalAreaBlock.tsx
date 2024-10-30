@@ -1,9 +1,10 @@
 import ItemBlock from "@/components/organisms/caseBlock/ItemBlock";
 import { type LegalAreaWithItems } from "@/components/pages/OverviewPage/OverviewPage.utils";
-import { sortByTopic } from "@/utils/caisy";
-import { extractNumeric } from "@/utils/utils";
 
 import React, { type FunctionComponent, useMemo } from "react";
+
+import { sortByTopic } from "@/utils/caisy";
+import { extractNumeric } from "@/utils/utils";
 
 type Props = LegalAreaWithItems & {
   readonly variant: "case" | "dictionary";

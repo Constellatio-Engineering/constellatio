@@ -3,8 +3,6 @@ import ProfilePicture from "@/components/molecules/profilePicture/ProfilePicture
 import HeaderDefaultRecreateSearch from "@/components/organisms/Header/DefaultHeader/HeaderDefaultRecreateSearch";
 import { useSignout } from "@/hooks/useSignout";
 import useUserDetails from "@/hooks/useUserDetails";
-import { isDevelopment } from "@/utils/env";
-import { appPaths } from "@/utils/paths";
 
 import { Menu, Title } from "@mantine/core";
 import { IconLogout, IconUser, IconAlertTriangleFilled } from "@tabler/icons-react";
@@ -12,6 +10,9 @@ import Link from "next/link";
 import React, { type FunctionComponent } from "react";
 
 import * as styles from "./UserDropdown.styles";
+
+import { isDevelopment } from "@/utils/env";
+import { appPaths } from "@/utils/paths";
 
 export const UserDropdown: FunctionComponent = () =>
 {

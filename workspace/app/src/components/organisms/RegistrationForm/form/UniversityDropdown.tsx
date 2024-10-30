@@ -1,7 +1,8 @@
 import { Dropdown, type DropdownProps } from "@/components/atoms/Dropdown/Dropdown";
-import { allUniversityNames } from "@/schemas/auth/userData.validation";
 
 import React, { type FunctionComponent } from "react";
+
+import { allUniversityNames } from "@/schemas/auth/userData.validation";
 
 type Props = Omit<DropdownProps, "data">;
 

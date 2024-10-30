@@ -3,14 +3,11 @@ import { Button } from "@/components/atoms/Button/Button";
 import { SubtitleText } from "@/components/atoms/SubtitleText/SubtitleText";
 import { Cross } from "@/components/Icons/Cross";
 import { DownloadIcon } from "@/components/Icons/DownloadIcon";
-import { type FileExtension, fileExtensions, type FileMimeType, fileMimeTypes } from "@/db/schema";
 import useContextAndErrorIfNull from "@/hooks/useContextAndErrorIfNull";
 import useUploadedFilesWithNotes from "@/hooks/useUploadedFilesWithNotes";
 import { InvalidateQueriesContext } from "@/provider/InvalidateQueriesProvider";
-import { type CreateSignedUploadUrlSchema, generateCreateSignedUploadUrlSchema, type UploadableFile } from "@/schemas/uploads/createSignedUploadUrl.schema";
 import { type UploadState } from "@/stores/uploadsProgress.store";
 import { api } from "@/utils/api";
-import { getIndicesOfSucceededPromises, getRandomUuid, removeItemsByIndices } from "@/utils/utils";
 
 import { Title } from "@mantine/core";
 import { notifications } from "@mantine/notifications";
@@ -21,6 +18,10 @@ import * as styles from "./UploadedMaterialBlock.styles";
 import BadgeCard from "../badgeCard/BadgeCard";
 import EmptyStateCard from "../emptyStateCard/EmptyStateCard";
 import UploadedMaterialTable from "../uploadedMaterialTable/UploadedMaterialTable";
+
+import { type FileExtension, fileExtensions, type FileMimeType, fileMimeTypes } from "@/db/schema";
+import { type CreateSignedUploadUrlSchema, generateCreateSignedUploadUrlSchema, type UploadableFile } from "@/schemas/uploads/createSignedUploadUrl.schema";
+import { getIndicesOfSucceededPromises, getRandomUuid, removeItemsByIndices } from "@/utils/utils";
 
 export type SelectedFile = {
   clientSideUuid: string;

@@ -4,13 +4,14 @@ import { SearchOverlayLink } from "@/components/organisms/searchOverlay/SearchOv
 import useGetPopularSearch from "@/hooks/useGetPopularSearch";
 import useSearchResults from "@/hooks/useSearchResults";
 import useSearchBarStore from "@/stores/searchBar.store";
-import { appPaths } from "@/utils/paths";
 
 import { type FunctionComponent } from "react";
 
 import * as styles from "./SearchOverlay.styles";
 import SuggestionSection from "./SuggestionSection";
 import EmptyStateCard from "../emptyStateCard/EmptyStateCard";
+
+import { appPaths } from "@/utils/paths";
 
 type SearchOverlayLeftSideProps = {
   readonly hasInput: boolean;

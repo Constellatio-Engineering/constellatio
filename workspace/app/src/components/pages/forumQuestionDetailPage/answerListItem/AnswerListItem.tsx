@@ -12,7 +12,6 @@ import useContextAndErrorIfNull from "@/hooks/useContextAndErrorIfNull";
 import { useForumAnswerDetails } from "@/hooks/useForumAnswerDetails";
 import useUserDetails from "@/hooks/useUserDetails";
 import { InvalidateQueriesContext } from "@/provider/InvalidateQueriesProvider";
-import { type GetAnswersAnswerParent, type GetAnswersQuestionParent } from "@/schemas/forum/getAnswers.schema";
 import { useForumPageStore } from "@/stores/forumPage.store";
 import { api } from "@/utils/api";
 import { type Prettify } from "@/utils/types";
@@ -24,6 +23,8 @@ import React, { type FunctionComponent, useState } from "react";
 import * as styles from "./AnswerListItem.styles";
 import ForumListItem from "../../forumOverviewPage/forumListItem/ForumListItem";
 import AnswerEditor from "../answerEditor/AnswerEditor";
+
+import { type GetAnswersAnswerParent, type GetAnswersQuestionParent } from "@/schemas/forum/getAnswers.schema";
 
 interface CommonProps
 {

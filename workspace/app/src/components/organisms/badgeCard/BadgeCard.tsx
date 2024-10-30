@@ -1,5 +1,4 @@
 import { type SelectedFile } from "@/components/organisms/uploadedMaterialBlock/UploadedMaterialBlock";
-import { fileExtensions } from "@/db/schema";
 import { env } from "@/env.mjs";
 
 import React, { type FunctionComponent } from "react";
@@ -8,6 +7,8 @@ import * as styles from "./BadgeCard.styles";
 import { BodyText } from "../../atoms/BodyText/BodyText";
 import IconButton from "../../atoms/iconButton/IconButton";
 import { DownloadIcon } from "../../Icons/DownloadIcon";
+
+import { fileExtensions } from "@/db/schema";
 
 interface BadgeCardProps
 {

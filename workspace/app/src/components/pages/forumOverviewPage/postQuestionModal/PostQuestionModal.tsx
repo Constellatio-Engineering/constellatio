@@ -1,10 +1,11 @@
 import QuestionModal from "@/components/pages/forumOverviewPage/questionModal/QuestionModal";
 import { usePostQuestion } from "@/hooks/usePostQuestion";
-import { postQuestionSchema, type PostQuestionSchema } from "@/schemas/forum/postQuestion.schema";
 import { useForumPageStore } from "@/stores/forumPage.store";
 
 import { useForm, zodResolver } from "@mantine/form";
 import React, { type FunctionComponent } from "react";
+
+import { postQuestionSchema, type PostQuestionSchema } from "@/schemas/forum/postQuestion.schema";
 
 const PostQuestionModal: FunctionComponent = () =>
 {

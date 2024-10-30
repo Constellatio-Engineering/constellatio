@@ -6,10 +6,7 @@ import SemesterDropdown from "@/components/organisms/RegistrationForm/form/Semes
 import UniversityDropdown from "@/components/organisms/RegistrationForm/form/UniversityDropdown";
 import useContextAndErrorIfNull from "@/hooks/useContextAndErrorIfNull";
 import { InvalidateQueriesContext } from "@/provider/InvalidateQueriesProvider";
-import { type UpdateUserDetailsSchema, updateUserDetailsSchema } from "@/schemas/auth/updateUserDetails.schema";
-import { type University } from "@/schemas/auth/userData.validation";
 import { api } from "@/utils/api";
-import { type UserFiltered } from "@/utils/filters";
 
 import { Title } from "@mantine/core";
 import { useForm, zodResolver } from "@mantine/form";
@@ -21,6 +18,10 @@ import { makeZodI18nMap } from "zod-i18n-map";
 
 import * as styles from "./ProfileDetailsTab.styles";
 import { Button } from "../../atoms/Button/Button";
+
+import { type UpdateUserDetailsSchema, updateUserDetailsSchema } from "@/schemas/auth/updateUserDetails.schema";
+import { type University } from "@/schemas/auth/userData.validation";
+import { type UserFiltered } from "@/utils/filters";
 
 type Props = {
   readonly userDetails: UserFiltered;

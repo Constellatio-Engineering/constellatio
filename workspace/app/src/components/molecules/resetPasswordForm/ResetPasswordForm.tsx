@@ -4,15 +4,16 @@ import { Input } from "@/components/atoms/Input/Input";
 import ErrorCard from "@/components/molecules/errorCard/ErrorCard";
 import { type ResetPasswordModalProgress } from "@/components/organisms/ResetPasswordModal/ResetPasswordModal";
 import { env } from "@/env.mjs";
-import { supabase } from "@/lib/supabase";
-import { resetPasswordFormSchema } from "@/schemas/auth/resetPassword.schema";
-import { authPaths } from "@/utils/paths";
 
 import { Stack, Title } from "@mantine/core";
 import { useForm, zodResolver } from "@mantine/form";
 import React, { type Dispatch, type FunctionComponent, type SetStateAction, useState } from "react";
 
 import * as styles from "./ResetPasswordForm.styles";
+
+import { supabase } from "@/lib/supabase";
+import { resetPasswordFormSchema } from "@/schemas/auth/resetPassword.schema";
+import { authPaths } from "@/utils/paths";
 
 interface ResetPasswordFormValues
 {

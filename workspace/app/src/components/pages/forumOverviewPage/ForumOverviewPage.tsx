@@ -2,7 +2,6 @@ import ContentWrapper from "@/components/helpers/contentWrapper/ContentWrapper";
 import EmptyStateCard from "@/components/organisms/emptyStateCard/EmptyStateCard";
 import ForumHeader from "@/components/pages/forumOverviewPage/forumHeader/ForumHeader";
 import ForumQuestions from "@/components/pages/forumOverviewPage/forumQuestions/ForumQuestions";
-import { type GetQuestionsCursorType } from "@/schemas/forum/getQuestions.schema";
 import { useForumPageStore } from "@/stores/forumPage.store";
 import { api } from "@/utils/api";
 
@@ -11,6 +10,8 @@ import React, { Fragment, type FunctionComponent } from "react";
 import * as styles from "./ForumOverviewPage.styles";
 import PostQuestionModal from "./postQuestionModal/PostQuestionModal";
 import SearchBar from "./searchBar/SearchBar";
+
+import { type GetQuestionsCursorType } from "@/schemas/forum/getQuestions.schema";
 
 export const defaultLimit = 10;
 

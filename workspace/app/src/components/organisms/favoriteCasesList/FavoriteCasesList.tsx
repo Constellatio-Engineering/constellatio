@@ -1,10 +1,11 @@
 import { Svg } from "@/basic-components/SVG/Svg";
-import { type IGenArticleOverviewFragment, type IGenFullCaseFragment, type IGenMainCategory } from "@/services/graphql/__generated/sdk";
 import { type Nullable } from "@/utils/types";
 
 import React, { type FunctionComponent } from "react";
 
 import ItemBlock from "../caseBlock/ItemBlock";
+
+import { type IGenArticleOverviewFragment, type IGenFullCaseFragment, type IGenMainCategory } from "@/services/graphql/__generated/sdk";
 
 interface FavoriteCasesListProps
 {

@@ -1,12 +1,13 @@
 import { CaisyImageV2 } from "@/components/atoms/caisyImageV2/CaisyImageV2";
 import { FloatingButton } from "@/components/atoms/FloatingButton/FloatingButton";
-import { type IGenAsset } from "@/services/graphql/__generated/sdk";
-import { getFileExtensionLowercase } from "@/utils/files";
 
 import { saveAs } from "file-saver";
 import React, { type FC } from "react";
 
 import * as styles from "./ImageWrapperCard.styles";
+
+import { type IGenAsset } from "@/services/graphql/__generated/sdk";
+import { getFileExtensionLowercase } from "@/utils/files";
 
 export type ImageWrapperCardProps = IGenAsset;
 

@@ -1,9 +1,10 @@
 import useContextAndErrorIfNull from "@/hooks/useContextAndErrorIfNull";
 import { InvalidateQueriesContext } from "@/provider/InvalidateQueriesProvider";
-import { appPaths } from "@/utils/paths";
 
 import { useRouter } from "next/router";
 import { useCallback } from "react";
+
+import { appPaths } from "@/utils/paths";
 
 type OnDocumentMutation = () => Promise<void>;
 

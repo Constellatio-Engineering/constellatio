@@ -7,12 +7,9 @@ import { Palette } from "@/components/Icons/Palette";
 import { Modal } from "@/components/molecules/Modal/Modal";
 import ProfilePicture from "@/components/molecules/profilePicture/ProfilePicture";
 import { Switcher } from "@/components/molecules/Switcher/Switcher";
-import { type ImageFileExtension, imageFileExtensions, type ImageFileMimeType, imageFileMimeTypes } from "@/db/schema";
 import useContextAndErrorIfNull from "@/hooks/useContextAndErrorIfNull";
 import { InvalidateQueriesContext } from "@/provider/InvalidateQueriesProvider";
-import { type CreateSignedUploadUrlSchema, generateCreateSignedUploadUrlSchema, type UploadableFile } from "@/schemas/uploads/createSignedUploadUrl.schema";
 import { api } from "@/utils/api";
-import { getRandomUuid } from "@/utils/utils";
 
 import { notifications } from "@mantine/notifications";
 import { useMutation } from "@tanstack/react-query";
@@ -20,6 +17,10 @@ import axios from "axios";
 import React, { type FunctionComponent, useEffect, useState } from "react";
 
 import * as styles from "./EditProfileImgModal.styles";
+
+import { type ImageFileExtension, imageFileExtensions, type ImageFileMimeType, imageFileMimeTypes } from "@/db/schema";
+import { type CreateSignedUploadUrlSchema, generateCreateSignedUploadUrlSchema, type UploadableFile } from "@/schemas/uploads/createSignedUploadUrl.schema";
+import { getRandomUuid } from "@/utils/utils";
 
 type SelectedFile = {
   clientSideUuid: string;

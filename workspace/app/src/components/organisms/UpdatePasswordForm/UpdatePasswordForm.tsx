@@ -3,9 +3,6 @@ import { Button } from "@/components/atoms/Button/Button";
 import { Input } from "@/components/atoms/Input/Input";
 import { PasswordValidationSchema } from "@/components/helpers/PasswordValidationSchema";
 import ErrorCard from "@/components/molecules/errorCard/ErrorCard";
-import { supabase } from "@/lib/supabase";
-import { type UpdatePasswordFormSchema, updatePasswordFormSchema } from "@/schemas/auth/updatePasswordForm.schema";
-import { appPaths } from "@/utils/paths";
 
 import { Box, Stack, Title } from "@mantine/core";
 import { useForm, zodResolver } from "@mantine/form";
@@ -15,6 +12,10 @@ import { useRouter } from "next/router";
 import React, { type FunctionComponent } from "react";
 
 import * as styles from "./UpdatePasswordForm.styles";
+
+import { supabase } from "@/lib/supabase";
+import { type UpdatePasswordFormSchema, updatePasswordFormSchema } from "@/schemas/auth/updatePasswordForm.schema";
+import { appPaths } from "@/utils/paths";
 
 const initialValues: UpdatePasswordFormSchema = {
   password: "",

@@ -1,13 +1,14 @@
 import CountLabel from "@/components/atoms/countLabel/CountLabel";
 import { ArrowRight } from "@/components/Icons/ArrowRight";
-import { appPaths } from "@/utils/paths";
-import { slugFormatter } from "@/utils/utils";
 
 import { Title } from "@mantine/core";
 import Link from "next/link";
 import React, { type FunctionComponent } from "react";
 
 import * as styles from "./ProgressCard.styles";
+
+import { appPaths } from "@/utils/paths";
+import { slugFormatter } from "@/utils/utils";
 
 interface ProgressCardProps
 {

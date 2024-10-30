@@ -1,16 +1,17 @@
-import { db } from "@/db/connection";
-import { users } from "@/db/schema";
 import { env } from "@/env.mjs";
-import { addUserToCrmUpdateQueue } from "@/lib/clickup/utils";
-import { handleInvoicePaid } from "@/lib/stripe/invoice-paid";
-import { stripe } from "@/lib/stripe/stripe";
-import { handleSubscriptionEvent } from "@/lib/stripe/subscription";
-import { InternalServerError } from "@/utils/serverError";
 
 import { eq } from "drizzle-orm";
 import type { NextApiHandler } from "next";
 import getRawBody from "raw-body";
 import type Stripe from "stripe";
+
+import { db } from "@/db/connection";
+import { users } from "@/db/schema";
+import { addUserToCrmUpdateQueue } from "@/lib/clickup/utils";
+import { handleInvoicePaid } from "@/lib/stripe/invoice-paid";
+import { stripe } from "@/lib/stripe/stripe";
+import { handleSubscriptionEvent } from "@/lib/stripe/subscription";
+import { InternalServerError } from "@/utils/serverError";
 
 export const config = {
   api: {

@@ -1,8 +1,9 @@
-import { type AppRouter } from "@/server/api/root";
-import { type Question } from "@/server/api/routers/forum.router";
 import { api } from "@/utils/api";
 
 import { type inferReactQueryProcedureOptions } from "@trpc/react-query";
+
+import { type AppRouter } from "@/server/api/root";
+import { type Question } from "@/server/api/routers/forum.router";
 
 type Params = inferReactQueryProcedureOptions<AppRouter>["forum"]["updateQuestion"];
 

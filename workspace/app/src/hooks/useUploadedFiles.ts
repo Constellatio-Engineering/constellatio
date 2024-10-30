@@ -1,10 +1,11 @@
 import { AuthStateContext } from "@/provider/AuthStateProvider";
-import { type GetUploadedFilesResult } from "@/server/api/routers/uploads.router";
 import useMaterialsStore from "@/stores/materials.store";
 import { api } from "@/utils/api";
 import { type UseQueryResult } from "@/utils/types";
 
 import { useContext } from "react";
+
+import { type GetUploadedFilesResult } from "@/server/api/routers/uploads.router";
 
 type UseUploadedFiles = () => UseQueryResult<{
   uploadedFilesInAllFolders: GetUploadedFilesResult;

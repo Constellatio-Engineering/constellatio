@@ -1,6 +1,7 @@
-import { type AllCases } from "@/services/content/getAllCases";
 import { api } from "@/utils/api";
 import { type UseQueryResult } from "@/utils/types";
+
+import { type AllCases } from "@/services/content/getAllCases";
 
 type UseCases = () => UseQueryResult<{ allCases: AllCases }>;
 

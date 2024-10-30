@@ -1,6 +1,7 @@
 import { type ArticlesPageProps, type CasesPageProps, type OverviewPageProps } from "@/components/pages/OverviewPage/OverviewPage";
-import type { IGenLegalArea } from "@/services/graphql/__generated/sdk";
 import type { CommonOverviewFiltersStore } from "@/stores/overviewFilters.store";
+
+import type { IGenLegalArea } from "@/services/graphql/__generated/sdk";
 import { getIsValidKey, mapToObject } from "@/utils/object";
 import { getIsObjectWithId, getIsObjectWithValue, getIsPrimitive } from "@/utils/utils";
 

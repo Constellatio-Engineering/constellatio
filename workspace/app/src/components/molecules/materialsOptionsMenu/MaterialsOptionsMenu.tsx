@@ -10,16 +10,17 @@ import { Edit } from "@/components/Icons/Edit";
 import { FolderIcon } from "@/components/Icons/Folder";
 import { Trash } from "@/components/Icons/Trash";
 import MoveToModal from "@/components/organisms/moveToModal/MoveToModal";
-import { type UploadedFile } from "@/db/schema";
 import { useOnUploadedFileMutation } from "@/hooks/useOnUploadedFileMutation";
 import useRenameFileModalStore from "@/stores/renameFileModal.store";
 import { api } from "@/utils/api";
-import { downloadFileFromUrl } from "@/utils/utils";
 
 import { Menu, Modal, Title } from "@mantine/core";
 import React, { type FunctionComponent, useState } from "react";
 
 import * as styles from "./MaterialsOptionsMenu.styles";
+
+import { type UploadedFile } from "@/db/schema";
+import { downloadFileFromUrl } from "@/utils/utils";
 
 interface MaterialOptionsMenuProps 
 {

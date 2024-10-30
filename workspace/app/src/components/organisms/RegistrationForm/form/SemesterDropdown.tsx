@@ -1,9 +1,10 @@
 import { Dropdown, type DropdownProps } from "@/components/atoms/Dropdown/Dropdown";
-import { maximumAmountOfSemesters } from "@/schemas/auth/userData.validation";
 import { transformSemesterToString } from "@/utils/data-transformation";
 
 import { Box } from "@mantine/core";
 import React, { type FunctionComponent } from "react";
+
+import { maximumAmountOfSemesters } from "@/schemas/auth/userData.validation";
 
 type Props = Omit<DropdownProps, "data">;
 

@@ -14,7 +14,6 @@ import RichtextOverwrite from "@/components/organisms/FillGapsGame/RichtextOverw
 import { colooors } from "@/constants/styles/colors";
 import useContextAndErrorIfNull from "@/hooks/useContextAndErrorIfNull";
 import { InvalidateQueriesContext } from "@/provider/InvalidateQueriesProvider";
-import { type IGenFillInGapsGame } from "@/services/graphql/__generated/sdk";
 import useFillGapsGameStore from "@/stores/fillGapsGame.store";
 import { api } from "@/utils/api";
 
@@ -26,6 +25,8 @@ import React, {
 import {
   Container, Game, GameWrapper, LegendWrapper, Options, stylesOverwrite, TitleWrapper, 
 } from "./FillGapsGame.styles";
+
+import { type IGenFillInGapsGame } from "@/services/graphql/__generated/sdk";
 
 export type TFillGapsGame = Pick<IGenFillInGapsGame, "fillGameParagraph" | "helpNote" | "question" | "id"> & {
   readonly caseId: string;

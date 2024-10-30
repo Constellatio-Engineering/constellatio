@@ -6,8 +6,6 @@ import BookmarkButton from "@/components/organisms/caseBlock/BookmarkButton/Book
 import EditQuestionModal from "@/components/pages/forumOverviewPage/editQuestionModal/EditQuestionModal";
 import useBookmarks from "@/hooks/useBookmarks";
 import { useForumQuestionDetails } from "@/hooks/useForumQuestionDetails";
-import { getForumQuestionUrl } from "@/utils/paths";
-import { removeHtmlTagsFromString } from "@/utils/utils";
 
 import { Title, Tooltip } from "@mantine/core";
 import Link from "next/link";
@@ -15,6 +13,9 @@ import React, { type FunctionComponent } from "react";
 
 import * as styles from "./QuestionListItem.styles";
 import { QuestionUpvoteButton } from "../upvoteButton/QuestionUpvoteButton";
+
+import { getForumQuestionUrl } from "@/utils/paths";
+import { removeHtmlTagsFromString } from "@/utils/utils";
 
 type Props = {
   readonly questionId: string;

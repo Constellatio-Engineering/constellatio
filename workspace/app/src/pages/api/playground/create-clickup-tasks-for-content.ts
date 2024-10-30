@@ -1,5 +1,11 @@
 /* eslint-disable max-lines */
 import { env } from "@/env.mjs";
+
+import { AxiosError } from "axios";
+import type { NextApiHandler } from "next";
+
+import * as process from "node:process";
+
 import { createClickupChecklist } from "@/lib/clickup/checklists/create-checklist";
 import { createClickupChecklistItem } from "@/lib/clickup/checklists/create-checklist-item";
 import { createClickupTask } from "@/lib/clickup/tasks/create-task";
@@ -8,11 +14,6 @@ import { getContentTaskCrmData } from "@/lib/clickup/utils";
 import getAllArticles from "@/services/content/getAllArticles";
 import getAllCases from "@/services/content/getAllCases";
 import { sleep } from "@/utils/utils";
-
-import { AxiosError } from "axios";
-import type { NextApiHandler } from "next";
-
-import * as process from "node:process";
 
 const handler: NextApiHandler = async (req, res): Promise<void> =>
 {

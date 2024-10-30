@@ -3,7 +3,6 @@ import TableCell from "@/components/atoms/tableCell/TableCell";
 import { Bookmark } from "@/components/Icons/Bookmark";
 import { ClockIcon } from "@/components/Icons/ClockIcon";
 import TableIconButton from "@/components/molecules/tableIconButton/TableIconButton";
-import { appPaths } from "@/utils/paths";
 
 import { Box } from "@mantine/core";
 import { type Meta, type StoryObj } from "@storybook/react";
@@ -11,6 +10,8 @@ import Link from "next/link";
 import { type FunctionComponent } from "react";
 
 import Table, { type ITableProps } from "./Table";
+
+import { appPaths } from "@/utils/paths";
 
 const Template: FunctionComponent<ITableProps> = (args) => (
   <Box w={955}>

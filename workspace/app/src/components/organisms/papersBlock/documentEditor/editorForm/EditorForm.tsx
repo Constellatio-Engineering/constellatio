@@ -7,14 +7,15 @@ import { RichtextEditorField } from "@/components/molecules/RichtextEditorField/
 import MantineRichtextRenderer from "@/components/organisms/mantineRichtextRenderer/MantineRichtextRenderer";
 import { useDataLossProtection } from "@/hooks/useDataLossProtection";
 import { useOnDocumentMutation } from "@/hooks/useOnDocumentMutation";
-import { type CreateDocumentSchema } from "@/schemas/documents/createDocument.schema";
-import { type UpdateDocumentSchema } from "@/schemas/documents/updateDocument.schema";
 import useDocumentEditorStore, { type EditorStateDrawerOpened } from "@/stores/documentEditor.store";
 import { api } from "@/utils/api";
 
 import React, { type FunctionComponent, useCallback } from "react";
 
 import * as styles from "./EditorForm.styles";
+
+import { type CreateDocumentSchema } from "@/schemas/documents/createDocument.schema";
+import { type UpdateDocumentSchema } from "@/schemas/documents/updateDocument.schema";
 
 interface EditorFormProps
 {

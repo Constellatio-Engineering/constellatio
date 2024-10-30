@@ -2,7 +2,6 @@ import { BodyText } from "@/components/atoms/BodyText/BodyText";
 import { Button } from "@/components/atoms/Button/Button";
 import { Input } from "@/components/atoms/Input/Input";
 import ContentWrapper from "@/components/helpers/contentWrapper/ContentWrapper";
-import { deleteUserSchema, type DeleteUserSchema } from "@/schemas/admin/deleteUser.schema";
 import { api } from "@/utils/api";
 
 import { Title } from "@mantine/core";
@@ -12,6 +11,8 @@ import { notifications } from "@mantine/notifications";
 import { type FunctionComponent } from "react";
 
 import * as styles from "./AdminPage.styles";
+
+import { deleteUserSchema, type DeleteUserSchema } from "@/schemas/admin/deleteUser.schema";
 
 export const AdminPage: FunctionComponent = () =>
 {

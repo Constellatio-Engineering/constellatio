@@ -9,9 +9,6 @@ import useArticles from "@/hooks/useArticles";
 import useBookmarks from "@/hooks/useBookmarks";
 import useCases from "@/hooks/useCases";
 import useRemoveBookmark from "@/hooks/useRemoveBookmark";
-import { type AddOrRemoveBookmarkSchema } from "@/schemas/bookmarks/addOrRemoveBookmark.schema";
-import { type IGenArticle, type Maybe } from "@/services/graphql/__generated/sdk";
-import { appPaths } from "@/utils/paths";
 import { type Nullable } from "@/utils/types";
 
 import { Button, Title } from "@mantine/core";
@@ -21,6 +18,10 @@ import React, { type FunctionComponent } from "react";
 
 import * as styles from "./CaseSolvingHeader.styles";
 import OverviewCard, { type IOverviewCard } from "../overviewCard/OverviewCard";
+
+import { type AddOrRemoveBookmarkSchema } from "@/schemas/bookmarks/addOrRemoveBookmark.schema";
+import { type IGenArticle, type Maybe } from "@/services/graphql/__generated/sdk";
+import { appPaths } from "@/utils/paths";
 
 interface IBreadcrumbItem 
 {

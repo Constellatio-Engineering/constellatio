@@ -4,8 +4,6 @@ import { Input } from "@/components/atoms/Input/Input";
 import ErrorCard from "@/components/molecules/errorCard/ErrorCard";
 import PasswordInput from "@/components/organisms/RegistrationForm/form/PasswordInput";
 import useUserDetails from "@/hooks/useUserDetails";
-import { supabase } from "@/lib/supabase";
-import { type UpdatePasswordSchema, updatePasswordSchema, type UpdatePasswordValues } from "@/schemas/auth/updatePassword.schema";
 
 import { Title } from "@mantine/core";
 import { useForm, zodResolver } from "@mantine/form";
@@ -17,6 +15,9 @@ import { z } from "zod";
 import { makeZodI18nMap } from "zod-i18n-map";
 
 import * as styles from "../profileDetailsTab/ProfileDetailsTab.styles";
+
+import { supabase } from "@/lib/supabase";
+import { type UpdatePasswordSchema, updatePasswordSchema, type UpdatePasswordValues } from "@/schemas/auth/updatePassword.schema";
 
 type Props = {
   readonly isDisabled: boolean;

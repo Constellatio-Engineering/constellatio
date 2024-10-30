@@ -8,8 +8,6 @@ import SearchPapersBlock from "@/components/organisms/searchPapersBlock/SearchPa
 import UploadedMaterialTable from "@/components/organisms/uploadedMaterialTable/UploadedMaterialTable";
 import ForumQuestions from "@/components/pages/forumOverviewPage/forumQuestions/ForumQuestions";
 import useSearchResults, { type SearchResults, type SearchResultsKey } from "@/hooks/useSearchResults";
-import { type IGenArticleOverviewFragment, type IGenFullCaseFragment } from "@/services/graphql/__generated/sdk";
-import { type ArticleSearchIndexItem, type CaseSearchIndexItem } from "@/utils/search";
 import { type CommonKeysInTypes, type Nullable } from "@/utils/types";
 
 import { useRouter } from "next/router";
@@ -17,6 +15,9 @@ import { Fragment, type FunctionComponent } from "react";
 
 import { convertTabQueryAsItemTab } from "./seachPageHelpers";
 import * as styles from "./SearchPage.styles";
+
+import { type IGenArticleOverviewFragment, type IGenFullCaseFragment } from "@/services/graphql/__generated/sdk";
+import { type ArticleSearchIndexItem, type CaseSearchIndexItem } from "@/utils/search";
 
 type Props = {
   readonly tabQuery: SearchResultsKey;

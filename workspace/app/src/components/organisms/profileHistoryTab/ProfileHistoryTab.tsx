@@ -6,9 +6,7 @@ import { SubtitleText } from "@/components/atoms/SubtitleText/SubtitleText";
 import EmptyStateCard from "@/components/organisms/emptyStateCard/EmptyStateCard";
 import { HistoryItemsSkeleton } from "@/components/organisms/profileHistoryTab/HistoryItemsSkeleton";
 import { env } from "@/env.mjs";
-import type { ViewsHistoryItems } from "@/server/api/routers/views.router";
-import { api } from "@/utils/api"; 
-import { appPaths } from "@/utils/paths";
+import { api } from "@/utils/api";
 
 import { Skeleton, Title } from "@mantine/core";
 import { IconReload } from "@tabler/icons-react";
@@ -17,6 +15,9 @@ import React, { Fragment, type FunctionComponent, useEffect, useMemo } from "rea
 import { useInView } from "react-intersection-observer";
 
 import * as styles from "./ProfileHistoryTab.styles";
+
+import type { ViewsHistoryItems } from "@/server/api/routers/views.router";
+import { appPaths } from "@/utils/paths";
 
 function getHistoryItemsGroupedByDate(items: ViewsHistoryItems)
 {

@@ -2,13 +2,14 @@ import { Button } from "@/components/atoms/Button/Button";
 import { ArrowDown } from "@/components/Icons/ArrowDown";
 import CaseBlockHead, { type ICaseBlockHeadProps } from "@/components/molecules/caseBlockHead/CaseBlockHead";
 import ItemRow from "@/components/organisms/caseBlock/itemRow/ItemRow";
-import { type IGenArticle, type IGenCase } from "@/services/graphql/__generated/sdk";
 
 import { useMediaQuery } from "@mantine/hooks";
 import React, { type FunctionComponent, useState } from "react";
 
 import * as styles from "./ItemBlock.styles";
 import Table, { type CasesTableProps, type DictionaryTableProps } from "../table/Table";
+
+import { type IGenArticle, type IGenCase } from "@/services/graphql/__generated/sdk";
 
 const CasesTable: CasesTableProps = {
   type: "cases",

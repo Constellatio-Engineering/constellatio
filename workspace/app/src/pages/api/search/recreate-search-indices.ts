@@ -1,5 +1,8 @@
-import { db } from "@/db/connection";
 import { env } from "@/env.mjs";
+
+import { type NextApiHandler } from "next";
+
+import { db } from "@/db/connection";
 import { meiliSearchAdmin } from "@/lib/meilisearch";
 import { getAllLegalFields, getAllSubfields, getAllTopics } from "@/server/api/services/caisy.services";
 import {
@@ -24,8 +27,6 @@ import {
   type TagSearchItemNodes,
   type UploadSearchItemNodes
 } from "@/utils/search";
-
-import { type NextApiHandler } from "next";
 
 const handler: NextApiHandler = async (req, res) =>
 {

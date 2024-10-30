@@ -1,9 +1,10 @@
 import { Input } from "@/components/atoms/Input/Input";
-import { minimumPasswordLength } from "@/schemas/auth/userData.validation";
 
 import { Box, type TextInputProps } from "@mantine/core";
 import React, { type FunctionComponent } from "react";
 import PasswordStrengthBar from "react-password-strength-bar";
+
+import { minimumPasswordLength } from "@/schemas/auth/userData.validation";
 
 type Props = {
   readonly confirmPassword: TextInputProps | false;

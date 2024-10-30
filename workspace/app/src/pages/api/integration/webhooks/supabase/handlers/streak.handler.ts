@@ -1,12 +1,13 @@
+import { env } from "@/env.mjs";
+
+import { and, eq, gte, sum } from "drizzle-orm";
+
 import { db } from "@/db/connection";
 import {
   type CaseProgressSql, type ForumAnswerSql, type ForumQuestionSql, pings, type PingSql, streak, type StreakSql 
 } from "@/db/schema";
-import { env } from "@/env.mjs";
 import { addBadgeForUser } from "@/server/api/services/badges.services";
 import { createStreakActivity } from "@/server/api/services/streak.services";
-
-import { and, eq, gte, sum } from "drizzle-orm";
 
 export const streakHandlerPingInsert = async (record: PingSql["columns"]): Promise<void> =>
 {

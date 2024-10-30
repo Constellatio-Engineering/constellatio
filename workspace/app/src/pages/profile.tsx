@@ -2,8 +2,6 @@ import { Layout } from "@/components/layouts/Layout";
 import PageHead from "@/components/organisms/pageHead/PageHead";
 import ProfilePageWrapper from "@/components/pages/profilePage/ProfilePage";
 import { type NextPageWithLayout } from "@/pages/_app";
-import { getTrpcServerSideHelpers } from "@/server/api/utils";
-import { type IGenMainCategory } from "@/services/graphql/__generated/sdk";
 import { getCommonProps } from "@/utils/commonProps";
 import { type Nullable } from "@/utils/types";
 
@@ -12,6 +10,9 @@ import { type SSRConfig } from "next-i18next";
 import React from "react";
 
 import { defaultLocale } from "../../next.config.mjs";
+
+import { getTrpcServerSideHelpers } from "@/server/api/utils";
+import { type IGenMainCategory } from "@/services/graphql/__generated/sdk";
 
 export type IProfilePageProps = { 
   readonly allMainCategory: Array<Nullable<IGenMainCategory>>;

@@ -1,13 +1,14 @@
 import ProfileLearningTimeBlockHeader from "@/components/molecules/profileLearningTimeBlockHeader/ProfileLearningTimeBlockHeader";
 import { Chart } from "@/components/organisms/learninTimeCard/Chart";
-import { type AppRouter } from "@/server/api/root";
 import { api } from "@/utils/api";
-import { convertSecondsToDuration } from "@/utils/dates";
 
 import { type inferProcedureOutput } from "@trpc/server";
 import React, { type FunctionComponent, useMemo } from "react";
 
 import * as styles from "./LearninTimeCard.styles";
+
+import { type AppRouter } from "@/server/api/root";
+import { convertSecondsToDuration } from "@/utils/dates";
 
 export type UsageTimeData = inferProcedureOutput<AppRouter["userActivity"]["getUsageTime"]>;
 

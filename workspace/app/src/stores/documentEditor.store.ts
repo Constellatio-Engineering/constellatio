@@ -1,8 +1,8 @@
-import { type Document } from "@/db/schema";
-import { getRandomUuid } from "@/utils/utils";
-
 import { create } from "zustand";
 import { immer } from "zustand/middleware/immer";
+
+import { type Document } from "@/db/schema";
+import { getRandomUuid } from "@/utils/utils";
 
 type DocumentUpdate = Partial<Pick<Document, "name" | "content">>;
 type NewDocument = Pick<Document, "name" | "content" | "id" | "folderId">;

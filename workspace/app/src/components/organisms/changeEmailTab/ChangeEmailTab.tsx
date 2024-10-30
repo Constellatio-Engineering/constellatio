@@ -4,10 +4,6 @@ import { AlertCard } from "@/components/atoms/Card/AlertCard";
 import { Input } from "@/components/atoms/Input/Input";
 import ErrorCard from "@/components/molecules/errorCard/ErrorCard";
 import { Modal } from "@/components/molecules/Modal/Modal";
-import { supabase } from "@/lib/supabase";
-import { type UpdateEmailSchema, updateEmailSchema } from "@/schemas/auth/updateEmail.schema";
-import { type UserFiltered } from "@/utils/filters";
-import { getConfirmEmailChange } from "@/utils/paths";
 import { queryParams } from "@/utils/query-params";
 
 import { Title } from "@mantine/core";
@@ -21,6 +17,11 @@ import { makeZodI18nMap } from "zod-i18n-map";
 
 import * as styles from "./ChangeEmailTab.styles";
 import * as parentStyles from "../profileDetailsTab/ProfileDetailsTab.styles";
+
+import { supabase } from "@/lib/supabase";
+import { type UpdateEmailSchema, updateEmailSchema } from "@/schemas/auth/updateEmail.schema";
+import { type UserFiltered } from "@/utils/filters";
+import { getConfirmEmailChange } from "@/utils/paths";
 
 type Props = {
   readonly isDisabled: boolean;

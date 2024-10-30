@@ -1,17 +1,19 @@
 import { Layout } from "@/components/layouts/Layout";
 import PageHead from "@/components/organisms/pageHead/PageHead";
 import OverviewPage from "@/components/pages/OverviewPage/OverviewPage";
-import { type CaseProgressState } from "@/db/schema";
 import useCasesProgress from "@/hooks/useCasesProgress";
 import { type NextPageWithLayout } from "@/pages/_app";
+
 // import { dummyCases } from "@/pages/cases/dummy-data";
-import getAllCases, { type AllCases } from "@/services/content/getAllCases";
-import { getOverviewPageProps, type GetOverviewPagePropsResult } from "@/services/content/getOverviewPageProps";
 import { statusesFilterOptions, type StatusFilterOption, useCasesOverviewFiltersStore } from "@/stores/overviewFilters.store";
 
 import { type GetStaticProps } from "next";
 import { useMemo } from "react";
 import { useStore } from "zustand";
+
+import { type CaseProgressState } from "@/db/schema";
+import getAllCases, { type AllCases } from "@/services/content/getAllCases";
+import { getOverviewPageProps, type GetOverviewPagePropsResult } from "@/services/content/getOverviewPageProps";
 
 type GetCasesOverviewPagePropsResult = GetOverviewPagePropsResult & {
   items: AllCases;

@@ -1,9 +1,9 @@
+import { notifications } from "@mantine/notifications";
+import router from "next/router";
+
 import { supabase } from "@/lib/supabase";
 import { authPaths } from "@/utils/paths";
 import { sleep } from "@/utils/utils";
-
-import { notifications } from "@mantine/notifications";
-import router from "next/router";
 
 type UseSignout = () => {
   handleSignOut: () => Promise<void>;

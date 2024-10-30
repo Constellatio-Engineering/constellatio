@@ -1,12 +1,13 @@
 import QuestionModal from "@/components/pages/forumOverviewPage/questionModal/QuestionModal";
 import { useUpdateQuestion } from "@/hooks/useUpdateQuestion";
-import { type PostQuestionSchema } from "@/schemas/forum/postQuestion.schema";
-import { questionUpdateSchema } from "@/schemas/forum/updateQuestion.schema";
-import type { Question } from "@/server/api/routers/forum.router";
 import { useForumPageStore } from "@/stores/forumPage.store";
 
 import { useForm, zodResolver } from "@mantine/form";
 import React, { type FunctionComponent } from "react";
+
+import { type PostQuestionSchema } from "@/schemas/forum/postQuestion.schema";
+import { questionUpdateSchema } from "@/schemas/forum/updateQuestion.schema";
+import type { Question } from "@/server/api/routers/forum.router";
 
 const getFormValuesFromQuestion = (
   question: Pick<Question, "text" | "legalFieldId" | "subfieldsIds" | "topicsIds" | "title">

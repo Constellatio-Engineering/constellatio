@@ -4,14 +4,15 @@ import AnswerListItem from "@/components/pages/forumQuestionDetailPage/answerLis
 import AnswersSkeleton from "@/components/pages/forumQuestionDetailPage/answersSkeleton/AnswersSkeleton";
 import { useForumAnswers } from "@/hooks/useForumAnswers";
 import { usePostAnswer } from "@/hooks/usePostAnswer";
-import { type GetAnswersQuestionParent } from "@/schemas/forum/getAnswers.schema";
 import { useForumPageStore } from "@/stores/forumPage.store";
-import { scrollTo } from "@/utils/utils";
 
 import React, { Fragment, type FunctionComponent, useId } from "react";
 import { flushSync } from "react-dom";
 
 import * as styles from "./AnswerListItemWithReplies.styles";
+
+import { type GetAnswersQuestionParent } from "@/schemas/forum/getAnswers.schema";
+import { scrollTo } from "@/utils/utils";
 
 type Props = {
   readonly answerId: string;

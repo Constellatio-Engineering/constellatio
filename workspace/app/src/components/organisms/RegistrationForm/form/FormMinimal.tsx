@@ -4,12 +4,13 @@ import DisplayNameInput from "@/components/organisms/RegistrationForm/form/Displ
 import EmailInput from "@/components/organisms/RegistrationForm/form/EmailInput";
 import PasswordInput from "@/components/organisms/RegistrationForm/form/PasswordInput";
 import { env } from "@/env.mjs";
-import { type RegistrationFormMinimalSchema } from "@/schemas/auth/registrationFormMinimal.schema";
 
 import { type UseFormReturnType } from "@mantine/form";
 import { type FunctionComponent } from "react";
 
 import * as styles from "../RegistrationForm.styles";
+
+import { type RegistrationFormMinimalSchema } from "@/schemas/auth/registrationFormMinimal.schema";
 
 type Props = {
   readonly form: UseFormReturnType<RegistrationFormMinimalSchema>;

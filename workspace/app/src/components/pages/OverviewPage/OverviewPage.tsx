@@ -15,8 +15,6 @@ import UseQueryStateWrapper from "@/components/Wrappers/useQueryStateWrapper/Use
 import { type CaseOverviewPageProps } from "@/pages/cases";
 import { type ArticleOverviewPageProps } from "@/pages/dictionary";
 import { type ArticlesOverviewFiltersStore, type CasesOverviewFiltersStore, type CommonOverviewFiltersStore, } from "@/stores/overviewFilters.store";
-import { mapToObject } from "@/utils/object";
-import { objectKeys } from "@/utils/utils";
 
 import { Title } from "@mantine/core";
 import { parseAsString, useQueryState } from "next-usequerystate";
@@ -24,6 +22,9 @@ import React, { Fragment, type FunctionComponent, useDeferredValue, useMemo } fr
 
 import * as styles from "./OverviewPage.styles";
 import ErrorPage from "../errorPage/ErrorPage";
+
+import { mapToObject } from "@/utils/object";
+import { objectKeys } from "@/utils/utils";
 
 type CommonFiltersStoreProps = Pick<CommonOverviewFiltersStore, "clearAllFilters" | "openDrawer"> & {
   readonly totalFiltersCount: number;

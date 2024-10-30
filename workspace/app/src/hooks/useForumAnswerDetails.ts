@@ -1,6 +1,7 @@
-import { type GetAnswersSchema } from "@/schemas/forum/getAnswers.schema";
 import { useForumPageStore } from "@/stores/forumPage.store";
 import { api } from "@/utils/api";
+
+import { type GetAnswersSchema } from "@/schemas/forum/getAnswers.schema";
 
 export const useForumAnswerDetails = ({ answerId, parent }: {answerId: string; parent: GetAnswersSchema["parent"]}) =>
 {

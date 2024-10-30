@@ -1,10 +1,11 @@
 import { env } from "@/env.mjs";
-import { getIsUserLoggedInServer } from "@/utils/auth";
-import { appPaths, authPaths } from "@/utils/paths";
 
 import { createPagesServerClient } from "@supabase/auth-helpers-nextjs";
 import { type GetServerSideProps } from "next";
 import { type FunctionComponent } from "react";
+
+import { getIsUserLoggedInServer } from "@/utils/auth";
+import { appPaths, authPaths } from "@/utils/paths";
 
 export const getServerSideProps: GetServerSideProps = async (ctx) =>
 {

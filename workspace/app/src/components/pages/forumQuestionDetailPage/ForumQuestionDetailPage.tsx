@@ -24,10 +24,8 @@ import { useForumQuestionDetails } from "@/hooks/useForumQuestionDetails";
 import { usePostAnswer } from "@/hooks/usePostAnswer";
 import useUserDetails from "@/hooks/useUserDetails";
 import { InvalidateQueriesContext } from "@/provider/InvalidateQueriesProvider";
-import { type GetAnswersSortingOption } from "@/schemas/forum/getAnswers.schema";
 import { useForumPageStore } from "@/stores/forumPage.store";
 import { api } from "@/utils/api";
-import { appPaths } from "@/utils/paths";
 
 import { Modal, Title, TypographyStylesProvider } from "@mantine/core";
 import { notifications } from "@mantine/notifications";
@@ -38,6 +36,9 @@ import React, { Fragment, type FunctionComponent, useEffect, useState } from "re
 
 import * as styles from "./ForumQuestionDetailPage.styles";
 import { QuestionUpvoteButton } from "../forumOverviewPage/upvoteButton/QuestionUpvoteButton";
+
+import { type GetAnswersSortingOption } from "@/schemas/forum/getAnswers.schema";
+import { appPaths } from "@/utils/paths";
 
 type SortingOptions = {
   [key in GetAnswersSortingOption]: {

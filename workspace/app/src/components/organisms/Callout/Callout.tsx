@@ -3,7 +3,6 @@ import { richTextParagraphOverwrite } from "@/components/helpers/richTextParagra
 import { ArrowDown } from "@/components/Icons/ArrowDown";
 import { ArrowUp } from "@/components/Icons/ArrowUp";
 import { Richtext } from "@/components/molecules/Richtext/Richtext";
-import { type IGenCallout } from "@/services/graphql/__generated/sdk";
 
 import { Group, Spoiler, Stack } from "@mantine/core";
 import { useMantineTheme } from "@mantine/styles";
@@ -11,6 +10,8 @@ import React, { type FC } from "react";
 
 import { calloutStyles, RichTextStyles, spoilerStyles } from "./Callout.styles";
 import { HeadingType } from "./HeadingType";
+
+import { type IGenCallout } from "@/services/graphql/__generated/sdk";
 
 export type CalloutProps = IGenCallout;
 

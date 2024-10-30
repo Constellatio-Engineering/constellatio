@@ -1,7 +1,6 @@
 import BadgeImage from "@/components/atoms/badgeImage/BadgeImage";
 import { BodyText } from "@/components/atoms/BodyText/BodyText";
 import { Cross } from "@/components/Icons/Cross";
-import { type BadgeWithUserData } from "@/db/schema";
 import useBadges from "@/hooks/useBadges";
 import useContextAndErrorIfNull from "@/hooks/useContextAndErrorIfNull";
 import useOnboardingResult from "@/hooks/useOnboardingResult";
@@ -9,7 +8,6 @@ import { usePrevious } from "@/hooks/usePrevious";
 import { AuthStateContext } from "@/provider/AuthStateProvider";
 import { InvalidateQueriesContext } from "@/provider/InvalidateQueriesProvider";
 import { api } from "@/utils/api";
-import { getIsPathAppPath } from "@/utils/paths";
 
 import { Modal, Title } from "@mantine/core";
 import { useLocalStorage } from "@mantine/hooks";
@@ -18,6 +16,9 @@ import React, { type FunctionComponent, useContext } from "react";
 import { z } from "zod";
 
 import * as styles from "./NewNotificationEarnedWatchdog.styles";
+
+import { type BadgeWithUserData } from "@/db/schema";
+import { getIsPathAppPath } from "@/utils/paths";
 
 /*
  * The dismissed badges are stored in localStorage in case an error occurs

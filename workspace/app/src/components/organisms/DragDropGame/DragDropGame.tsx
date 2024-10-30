@@ -9,13 +9,11 @@ import { ResultCard } from "@/components/molecules/ResultCard/ResultCard";
 import { DragDropColumn } from "@/components/organisms/DragDropGame/DragDropColumn/DragDropColumn";
 import useContextAndErrorIfNull from "@/hooks/useContextAndErrorIfNull";
 import { InvalidateQueriesContext } from "@/provider/InvalidateQueriesProvider";
-import { type IGenDragNDropGame } from "@/services/graphql/__generated/sdk";
 import useDragDropGameStore, {
   type GameStatus,
   type TDragAndDropGameOptionType,
 } from "@/stores/dragDropGame.store";
 import { api } from "@/utils/api";
-import { shuffleArray } from "@/utils/array";
 
 import { DragDropContext, type DropResult } from "@hello-pangea/dnd";
 import { LoadingOverlay, Title } from "@mantine/core";
@@ -24,6 +22,9 @@ import React, { type FC, useCallback, useMemo } from "react";
 import {
   Container, Game, GameWrapper, LegendWrapper, TitleWrapper, 
 } from "./DragDropGame.styles";
+
+import { type IGenDragNDropGame } from "@/services/graphql/__generated/sdk";
+import { shuffleArray } from "@/utils/array";
 
 export type TDragDropGame = Pick<IGenDragNDropGame, "game" | "helpNote" | "question"> & {
   readonly caseId: string;

@@ -1,12 +1,13 @@
 import FavoriteCard from "@/components/molecules/favoriteCard/FavoriteCard";
 import EmptyStateCard from "@/components/organisms/emptyStateCard/EmptyStateCard";
 import { type Favorites, type FavoritesNullable } from "@/hooks/useAllFavorites";
-import { appPaths } from "@/utils/paths";
 
 import { useRouter } from "next/router";
 import React, { type FunctionComponent } from "react";
 
 import * as styles from "./FavoritesExcerpt.styles";
+
+import { appPaths } from "@/utils/paths";
 
 type Props = {
   readonly favorites: FavoritesNullable;
