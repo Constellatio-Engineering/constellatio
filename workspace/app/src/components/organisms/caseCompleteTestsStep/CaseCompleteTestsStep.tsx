@@ -3,6 +3,7 @@ import { Button } from "@/components/atoms/Button/Button";
 import { type IStatusLabel } from "@/components/atoms/statusLabel/StatusLabel";
 import { RichTextHeadingOverwrite, richTextHeadingOverwriteClassName } from "@/components/helpers/RichTextHeadingOverwrite";
 import GameComponentWrapper from "@/components/molecules/gameComponentWrapper/GameComponentWrapper";
+import { LawsLinksDisclaimer } from "@/components/molecules/lawsLinksDisclaimer/LawsLinksDisclaimer";
 import useContextAndErrorIfNull from "@/hooks/useContextAndErrorIfNull";
 import { useWindowDimensions } from "@/hooks/useWindowDimensions";
 import { InvalidateQueriesContext } from "@/provider/InvalidateQueriesProvider";
@@ -260,6 +261,7 @@ const CaseCompleteTestsStep: FunctionComponent<ICaseCompleteTestsStepProps> = ({
             <div css={styles.fullTextAndTasksWrapper}>
               <Richtext
                 data={variant === "case" ? renderedCaseContent : fullTextTasks}
+                prefixComponent={<LawsLinksDisclaimer marginBottomInPx={variant === "dictionary" ? 45 : undefined}/>}
                 richTextOverwrite={{
                   documentLink: documentLinkOverwrite,
                   heading: (props) => 
