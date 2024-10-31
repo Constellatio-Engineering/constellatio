@@ -17,7 +17,7 @@ import { defaultFolderName, everythingFolderName } from "@/utils/translations";
 import { Modal, Title } from "@mantine/core";
 import { useDisclosure } from "@mantine/hooks";
 import { notifications } from "@mantine/notifications";
-import React, { type FunctionComponent } from "react";
+import { type FunctionComponent } from "react";
 
 import * as styles from "./MaterialMenu.styles";
 

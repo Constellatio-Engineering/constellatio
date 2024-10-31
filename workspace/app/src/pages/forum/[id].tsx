@@ -5,7 +5,6 @@ import { type NextPageWithLayout } from "@/pages/_app";
 
 import ErrorPage from "next/error";
 import { useRouter } from "next/router";
-import React from "react";
 
 const Page: NextPageWithLayout = () =>
 {

@@ -6,7 +6,7 @@ import { useForumPageStore } from "@/stores/forumPage.store";
 import { api } from "@/utils/api";
 
 import { type GetQuestionsCursorType } from "@constellatio/schemas/routers/forum/getQuestions.schema";
-import React, { Fragment, type FunctionComponent } from "react";
+import { Fragment, type FunctionComponent } from "react";
 
 import * as styles from "./ForumOverviewPage.styles";
 import PostQuestionModal from "./postQuestionModal/PostQuestionModal";

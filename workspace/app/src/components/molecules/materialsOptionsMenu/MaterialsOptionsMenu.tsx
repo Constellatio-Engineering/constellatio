@@ -17,7 +17,7 @@ import { downloadFileFromUrl } from "@/utils/download";
 
 import { type UploadedFile } from "@constellatio/db/schema";
 import { Menu, Modal, Title } from "@mantine/core";
-import React, { type FunctionComponent, useState } from "react";
+import { type FunctionComponent, useState } from "react";
 
 import * as styles from "./MaterialsOptionsMenu.styles";
 

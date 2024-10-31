@@ -1,6 +1,6 @@
 import { TocItem } from "@/components/organisms/floatingPanel/TocItem";
 
-import React, { type FunctionComponent } from "react";
+import { type FunctionComponent } from "react";
 
 import * as styles from "./FloatingPanel.styles";
 import { type TOCItem } from "./generateTocHelper";

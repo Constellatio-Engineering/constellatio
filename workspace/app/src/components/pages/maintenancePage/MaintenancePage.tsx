@@ -1,5 +1,5 @@
 import Image from "next/image";
-import React, { type FunctionComponent } from "react";
+import { type FunctionComponent } from "react";
 
 import * as styles from "./MaintenancePage.styles";
 import ConstellatioFullLogoPng from "../../../../public/images/full-logo.png";

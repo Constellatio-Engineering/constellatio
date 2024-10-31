@@ -1,5 +1,5 @@
 import { Group } from "@mantine/core";
-import React, { type ButtonHTMLAttributes, type FC, type ReactNode } from "react";
+import { type ButtonHTMLAttributes, type FC, type ReactNode } from "react";
 
 import { SButton } from "./LinkButton.styles";
 

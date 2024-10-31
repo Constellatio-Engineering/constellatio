@@ -7,7 +7,7 @@ import { Richtext } from "@/components/molecules/Richtext/Richtext";
 import { type IGenCallout } from "@constellatio/cms/generated-types";
 import { Group, Spoiler, Stack } from "@mantine/core";
 import { useMantineTheme } from "@mantine/styles";
-import React, { type FC } from "react";
+import { type FC } from "react";
 
 import { calloutStyles, RichTextStyles, spoilerStyles } from "./Callout.styles";
 import { HeadingType } from "./HeadingType";

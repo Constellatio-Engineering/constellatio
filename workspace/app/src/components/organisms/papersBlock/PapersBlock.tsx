@@ -5,7 +5,7 @@ import useDocuments from "@/hooks/useDocuments";
 import useDocumentEditorStore from "@/stores/documentEditor.store";
 
 import { Title } from "@mantine/core";
-import React, { type FunctionComponent } from "react";
+import { type FunctionComponent } from "react";
 
 import * as styles from "./PapersBlock.styles";
 import DocsTable from "../docsTable/DocsTable";

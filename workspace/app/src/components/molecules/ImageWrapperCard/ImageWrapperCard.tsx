@@ -4,7 +4,7 @@ import { FloatingButton } from "@/components/atoms/FloatingButton/FloatingButton
 import { type IGenAsset } from "@constellatio/cms/generated-types";
 import { getFileExtensionLowercase } from "@constellatio/utils/files";
 import { saveAs } from "file-saver";
-import React, { type FC } from "react";
+import { type FC } from "react";
 
 import * as styles from "./ImageWrapperCard.styles";
 

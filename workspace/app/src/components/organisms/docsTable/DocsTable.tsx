@@ -1,6 +1,6 @@
 
 import { type GetDocumentsResult } from "@constellatio/api/routers/documents.router";
-import React, { type FunctionComponent, useState } from "react";
+import { type FunctionComponent, useState } from "react";
 
 import * as styles from "./DocsTable.styles";
 import { DocsTableData } from "./DocTableData";

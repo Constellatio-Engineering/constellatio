@@ -4,7 +4,7 @@ import { colooors } from "@/constants/styles/colors";
 import { spaciiing } from "@/constants/styles/spacing";
 
 import { useMantineTheme } from "@mantine/core";
-import React, { type FC, type ReactNode } from "react";
+import { type FC, type ReactNode } from "react";
 
 import { ResultWrapper } from "./SelectionCard.styles";
 

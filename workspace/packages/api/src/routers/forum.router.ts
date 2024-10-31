@@ -1,10 +1,5 @@
 /* eslint-disable max-lines */
 
-import { meiliSearchAdmin } from "~/lib/meilisearch";
-import { getAllLegalFields, getAllSubfields, getAllTopics } from "~/services/caisy.services";
-import { getAnswers, getQuestions, insertLegalFieldsAndTopicsForQuestion, resetLegalFieldsAndTopicsForQuestion } from "~/services/forum.services";
-import { BadRequestError, ForbiddenError, InternalServerError, NotFoundError } from "~/utils/serverError";
-
 import {
   and, count, eq, inArray, or 
 } from "@constellatio/db";
@@ -31,7 +26,11 @@ import { removeHtmlTagsFromString } from "@constellatio/utils/html";
 import { type inferProcedureOutput } from "@trpc/server";
 import slugify from "slugify";
 
+import { meiliSearchAdmin } from "../lib/meilisearch";
+import { getAllLegalFields, getAllSubfields, getAllTopics } from "../services/caisy.services";
+import { getAnswers, getQuestions, insertLegalFieldsAndTopicsForQuestion, resetLegalFieldsAndTopicsForQuestion } from "../services/forum.services";
 import { createTRPCRouter, forumModProcedure, protectedProcedure } from "../trpc";
+import { BadRequestError, ForbiddenError, InternalServerError, NotFoundError } from "../utils/serverError";
 
 const createSlug = (title: string): string =>
 {

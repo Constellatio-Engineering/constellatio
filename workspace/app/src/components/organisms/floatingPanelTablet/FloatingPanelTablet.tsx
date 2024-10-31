@@ -4,7 +4,7 @@ import SlidingPanelTitle from "@/components/molecules/slidingPanelTitle/SlidingP
 
 import { Drawer, type ModalBaseStylesNames, type Styles, UnstyledButton } from "@mantine/core";
 import { useDisclosure } from "@mantine/hooks";
-import React, { type FunctionComponent, useState } from "react";
+import { type FunctionComponent, useState } from "react";
 
 import * as styles from "./FloatingPanelTablet.styles";
 import FloatingPanel, { type IFloatingPanelProps } from "../floatingPanel/FloatingPanel";

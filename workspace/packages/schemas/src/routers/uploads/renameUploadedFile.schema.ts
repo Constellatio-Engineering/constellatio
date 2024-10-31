@@ -1,6 +1,6 @@
-import { idValidation } from "~/common/common.validation";
-
 import { z } from "zod";
+
+import { idValidation } from "../../common/common.validation";
 
 // TODO: Check if filename has appropriate extension
 

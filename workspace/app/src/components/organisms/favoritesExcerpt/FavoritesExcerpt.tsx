@@ -4,7 +4,7 @@ import { type Favorites, type FavoritesNullable } from "@/hooks/useAllFavorites"
 
 import { appPaths } from "@constellatio/shared/paths";
 import { useRouter } from "next/router";
-import React, { type FunctionComponent } from "react";
+import { type FunctionComponent } from "react";
 
 import * as styles from "./FavoritesExcerpt.styles";
 

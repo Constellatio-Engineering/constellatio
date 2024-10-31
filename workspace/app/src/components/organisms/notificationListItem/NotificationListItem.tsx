@@ -9,7 +9,7 @@ import { api } from "@/utils/api";
 
 import { notifications } from "@mantine/notifications";
 import Link from "next/link";
-import React, { type FunctionComponent } from "react";
+import { type FunctionComponent } from "react";
 
 import * as styles from "./NotificationListItem.styles";
 

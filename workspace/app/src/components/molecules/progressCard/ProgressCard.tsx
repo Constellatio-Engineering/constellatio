@@ -5,7 +5,7 @@ import { appPaths } from "@constellatio/shared/paths";
 import { slugFormatter } from "@constellatio/utils/slug";
 import { Title } from "@mantine/core";
 import Link from "next/link";
-import React, { type FunctionComponent } from "react";
+import { type FunctionComponent } from "react";
 
 import * as styles from "./ProgressCard.styles";
 

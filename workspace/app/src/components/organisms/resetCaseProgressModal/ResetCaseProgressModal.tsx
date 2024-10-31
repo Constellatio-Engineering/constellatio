@@ -4,7 +4,7 @@ import useResetCaseProgress from "@/hooks/useResetCaseProgress";
 
 import { type Nullable } from "@constellatio/utility-types";
 import { Group, Text } from "@mantine/core";
-import React, { type FunctionComponent } from "react";
+import { type FunctionComponent } from "react";
 
 type Props = {
   readonly caseId: string;

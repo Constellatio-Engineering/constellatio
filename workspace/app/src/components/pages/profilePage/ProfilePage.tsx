@@ -16,7 +16,7 @@ import useUserDetails from "@/hooks/useUserDetails";
 
 import { Container } from "@mantine/core";
 import { parseAsString, useQueryState } from "next-usequerystate";
-import React, { type FunctionComponent, type ReactNode, useMemo } from "react";
+import { type FunctionComponent, type ReactNode, useMemo } from "react";
 
 import * as styles from "./ProfilePage.styles";
 

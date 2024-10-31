@@ -7,7 +7,7 @@ import { showErrorNotification } from "@/utils/notifications";
 import { Skeleton, Title } from "@mantine/core";
 import { useMediaQuery } from "@mantine/hooks";
 import { useRouter } from "next/router";
-import React, { type FunctionComponent, useState } from "react";
+import { type FunctionComponent, useState } from "react";
 
 import * as styles from "./SubscriptionTab.styles";
 

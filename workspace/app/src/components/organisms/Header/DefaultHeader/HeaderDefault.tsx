@@ -38,7 +38,7 @@ const links: IHeaderLink[] = [
   { slug: appPaths.forum, title: "Forum" },
 ];
 
-const HeaderDefault: FunctionComponent = () => 
+export const HeaderDefault: FunctionComponent = () =>
 {
   const { pathname } = useRouter();
   const { data: onboardingResult, isPending: isGetOnboardingResultLoading } = useOnboardingResult();
@@ -150,5 +150,3 @@ const HeaderDefault: FunctionComponent = () =>
     </>
   );
 };
-
-export default HeaderDefault;

@@ -1,7 +1,7 @@
 import AnswersSkeleton from "@/components/pages/forumQuestionDetailPage/answersSkeleton/AnswersSkeleton";
 
 import { Skeleton } from "@mantine/core";
-import React, { Fragment, type FunctionComponent } from "react";
+import { Fragment, type FunctionComponent } from "react";
 
 import * as styles from "./AnswersSkeletonWithSorting.styles";
 

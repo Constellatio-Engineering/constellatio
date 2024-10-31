@@ -1,5 +1,3 @@
-import { meiliSearchAdmin } from "~/lib/meilisearch";
-import { deleteFiles } from "~/services/uploads.services";
 
 import { and, asc, eq } from "@constellatio/db";
 import { db } from "@constellatio/db/client";
@@ -10,6 +8,8 @@ import { createFolderSchema } from "@constellatio/schemas/routers/folders/create
 import { deleteFolderSchema } from "@constellatio/schemas/routers/folders/deleteFolder.schema";
 import { renameFolderSchema } from "@constellatio/schemas/routers/folders/renameFolder.schema";
 
+import { meiliSearchAdmin } from "../lib/meilisearch";
+import { deleteFiles } from "../services/uploads.services";
 import { createTRPCRouter, protectedProcedure } from "../trpc";
 
 export const foldersRouter = createTRPCRouter({

@@ -1,4 +1,4 @@
-import React, { type FunctionComponent, useEffect } from "react";
+import { type FunctionComponent, useEffect } from "react";
 
 import * as styles from "./ErrorPage.styles";
 

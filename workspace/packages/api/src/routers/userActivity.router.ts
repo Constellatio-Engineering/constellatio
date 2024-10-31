@@ -1,5 +1,3 @@
-import { RateLimitError } from "~/utils/serverError";
-
 import {
   and, asc, eq, gte, lte, sql, sum 
 } from "@constellatio/db";
@@ -13,6 +11,7 @@ import { Ratelimit } from "@upstash/ratelimit";
 import { kv } from "@vercel/kv";
 
 import { createTRPCRouter, protectedProcedure } from "../trpc";
+import { RateLimitError } from "../utils/serverError";
 
 const rateLimit = new Ratelimit({
   limiter: Ratelimit.fixedWindow(1, `${env.NEXT_PUBLIC_USER_ACTIVITY_PING_INTERVAL_SECONDS} s`), // allow 1 request for every ping interval

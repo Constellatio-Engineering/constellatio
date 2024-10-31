@@ -1,8 +1,8 @@
-import { type ClickupTaskCreate } from "~/lib/clickup/types";
-import { clickupRequestConfig } from "~/lib/clickup/utils";
- 
 import { env } from "@constellatio/env";
 import axios from "axios";
+
+import { type ClickupTaskCreate } from "../types";
+import { clickupRequestConfig } from "../utils";
 
 // eslint-disable-next-line @typescript-eslint/explicit-function-return-type
 export const createClickupTask = async (listId: string, body: ClickupTaskCreate) =>

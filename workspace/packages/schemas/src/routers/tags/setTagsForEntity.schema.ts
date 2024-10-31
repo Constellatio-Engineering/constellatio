@@ -1,7 +1,8 @@
-import { idValidation } from "~/common/common.validation";
 
 import { type SearchIndexType } from "@constellatio/shared/validation";
 import { z } from "zod";
+
+import { idValidation } from "../../common/common.validation";
 
 const allowedEntityTypes: [SearchIndexType, ...SearchIndexType[]] = ["user-documents", "user-uploads"];
 

@@ -1,6 +1,6 @@
-import { idValidation } from "~/common/common.validation";
-
 import { z } from "zod";
+
+import { idValidation } from "../../common/common.validation";
 
 const formbricksTestWebhookSchema = z.object({
   event: z.literal("testEndpoint")

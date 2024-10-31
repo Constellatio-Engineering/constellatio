@@ -1,5 +1,5 @@
 import { Anchor, type AnchorProps, createPolymorphicComponent, type CSSObject } from "@mantine/core";
-import React, { type FC } from "react";
+import { type FC } from "react";
 
 import { customLinkStyles } from "./customLink.styles";
 

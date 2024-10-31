@@ -5,7 +5,7 @@ import {
   type CSSObject, type Styles, Tabs, type TabsProps, type TabsStylesNames, type TabsStylesParams
 } from "@mantine/core";
 import { useMantineTheme } from "@mantine/styles";
-import React, { type FC } from "react";
+import { type FC } from "react";
 
 export type SwitcherProps = TabsProps & {
   readonly panelStyleOverwrite?: CSSObject | undefined;

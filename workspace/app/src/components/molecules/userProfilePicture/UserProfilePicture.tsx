@@ -1,6 +1,6 @@
 import { type Nullable } from "@constellatio/utility-types";
 import Image from "next/image";
-import React, { type FunctionComponent } from "react";
+import { type FunctionComponent } from "react";
 
 import * as styles from "./UserProfilePicture.styles";
 import genericProfileIcon from "../../../../public/images/icons/generic-user-icon.svg";

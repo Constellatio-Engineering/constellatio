@@ -1,7 +1,7 @@
 import { Input } from "@/components/atoms/Input/Input";
 
 import { type TextInputProps } from "@mantine/core";
-import React, { type FunctionComponent } from "react";
+import { type FunctionComponent } from "react";
 
 const DisplayNameInput: FunctionComponent<TextInputProps> = (props) => (
   <Input

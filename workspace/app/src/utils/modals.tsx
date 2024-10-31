@@ -1,6 +1,5 @@
 import { Text } from "@mantine/core";
 import { modals } from "@mantine/modals";
-import React from "react";
 
 type ShowConfirmChangesDeletionModal = (params: {
   onCancel?: () => void;

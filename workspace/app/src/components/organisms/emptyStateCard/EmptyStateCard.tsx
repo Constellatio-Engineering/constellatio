@@ -4,7 +4,7 @@ import { SubtitleText } from "@/components/atoms/SubtitleText/SubtitleText";
 import { EmptyStateCardIcon } from "@/components/Icons/EmptyStateCardIcon";
 
 import { type ButtonProps, Title } from "@mantine/core";
-import React, { type FunctionComponent, type ReactNode } from "react";
+import { type FunctionComponent, type ReactNode } from "react";
 
 import * as styles from "./EmptyStateCard.styles";
 

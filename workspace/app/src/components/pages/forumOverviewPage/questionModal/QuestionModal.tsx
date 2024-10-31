@@ -13,7 +13,7 @@ import { titleMaxLength } from "@constellatio/schemas/common/forum/question.vali
 import { type PostQuestionSchema } from "@constellatio/schemas/routers/forum/postQuestion.schema";
 import { Modal, type ModalProps, type SelectItem, Title } from "@mantine/core";
 import { type UseFormReturnType } from "@mantine/form";
-import React, { type FunctionComponent, useMemo } from "react";
+import { type FunctionComponent, useMemo } from "react";
 
 import * as styles from "./QuestionModal.styles";
 import { RichtextEditorField } from "./RichtextEditorField/RichtextEditorField";

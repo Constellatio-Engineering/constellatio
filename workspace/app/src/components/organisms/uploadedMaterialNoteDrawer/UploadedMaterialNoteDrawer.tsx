@@ -3,7 +3,7 @@ import useNoteEditorStore from "@/stores/noteEditor.store";
 import { showConfirmChangesDeletionModal } from "@/utils/modals";
 
 import { Drawer } from "@mantine/core";
-import React, { type FunctionComponent, useCallback } from "react";
+import { type FunctionComponent, useCallback } from "react";
 
 import EditorForm from "./editorForm/EditorForm";
 import * as styles from "./UploadedMaterialNoteDrawer.styles";

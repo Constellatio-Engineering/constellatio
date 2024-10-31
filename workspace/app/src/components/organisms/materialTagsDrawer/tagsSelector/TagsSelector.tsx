@@ -10,7 +10,7 @@ import { type TagSearchIndexItem } from "@constellatio/meilisearch/utils";
 import { appPaths } from "@constellatio/shared/paths";
 import { ActionIcon, Badge, Input, rem } from "@mantine/core";
 import { IconSearch, IconX } from "@tabler/icons-react";
-import React, { type FunctionComponent, type MouseEvent } from "react";
+import { type FunctionComponent, type MouseEvent } from "react";
 
 import * as styles from "./TagsSelector.styles";
 

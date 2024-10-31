@@ -2,7 +2,7 @@ import { Edit } from "@/components/Icons/Edit";
 import { Trash } from "@/components/Icons/Trash";
 import IconAndTextButton from "@/components/molecules/iconAndTextButton/IconAndTextButton";
 
-import React, { type FunctionComponent } from "react";
+import { type FunctionComponent } from "react";
 
 import * as styles from "./EditAndDeleteButtons.styles";
 

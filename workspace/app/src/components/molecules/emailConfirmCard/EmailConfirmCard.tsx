@@ -11,7 +11,7 @@ import { isAuthError } from "@supabase/auth-js";
 import { type AuthResponse } from "@supabase/gotrue-js";
 import { useMutation } from "@tanstack/react-query";
 import { useRouter } from "next/router";
-import React, { type FunctionComponent, useEffect, useMemo, useState } from "react";
+import { type FunctionComponent, useEffect, useMemo, useState } from "react";
 
 import { type ParsedUrlQuery } from "querystring";
 

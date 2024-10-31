@@ -1,6 +1,3 @@
-import { meiliSearchAdmin } from "~/lib/meilisearch";
-import { NotFoundError } from "~/utils/serverError";
-
 import { and, eq, notInArray } from "@constellatio/db";
 import { db } from "@constellatio/db/client";
 import {
@@ -11,7 +8,9 @@ import { type DocumentSearchIndexItem, type TagSearchIndexItem, type UploadSearc
 import { setTagsForEntitySchema } from "@constellatio/schemas/routers/tags/setTagsForEntity.schema";
 import { type Nullable } from "@constellatio/utility-types";
 
+import { meiliSearchAdmin } from "../lib/meilisearch";
 import { createTRPCRouter, protectedProcedure } from "../trpc";
+import { NotFoundError } from "../utils/serverError";
 
 export const tagsRouter = createTRPCRouter({
   setTagsForEntity: protectedProcedure

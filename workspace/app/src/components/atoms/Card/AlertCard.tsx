@@ -3,7 +3,7 @@ import { CheckCircle } from "@/components/Icons/CheckCircle";
 
 import { Alert, type AlertProps, type CSSObject } from "@mantine/core";
 import { useMantineTheme } from "@mantine/styles";
-import React, { type FC } from "react";
+import { type FC } from "react";
 
 import { cardStyles } from "./AlertCard.styles";
 

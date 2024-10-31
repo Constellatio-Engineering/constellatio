@@ -1,7 +1,7 @@
 import { CompletedStatusLabelIcon, InProgressStatusLabelIcon, NotStartedStatusLabelIcon } from "@/components/Icons/StatusLabelIcons";
 
 import { type CaseProgressState } from "@constellatio/shared/validation";
-import React, { type FunctionComponent, type PropsWithChildren } from "react";
+import { type FunctionComponent, type PropsWithChildren } from "react";
 
 import * as styles from "./StatusLabel.styles";
 import { BodyText } from "../BodyText/BodyText";

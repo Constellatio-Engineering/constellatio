@@ -4,7 +4,7 @@ import ForumItemAuthor from "@/components/pages/forumQuestionDetailPage/forumIte
 import useUserDetails from "@/hooks/useUserDetails";
 
 import { type Editor } from "@tiptap/react";
-import React, { type FunctionComponent } from "react";
+import { type FunctionComponent } from "react";
 
 import * as styles from "./AnswerEditor.styles";
 

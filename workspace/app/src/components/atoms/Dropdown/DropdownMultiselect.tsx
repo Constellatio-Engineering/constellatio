@@ -2,7 +2,7 @@ import { DropdownItem } from "@/components/atoms/Dropdown/DropdownItem";
 import { dropdownMultiselectStyles } from "@/components/atoms/Dropdown/DropdownMultiselect.styles";
 
 import { MultiSelect, type MultiSelectProps, Skeleton } from "@mantine/core";
-import React, { type FC } from "react";
+import { type FC } from "react";
 
 type DropdownProps = MultiSelectProps & {
   readonly isLoading?: boolean;

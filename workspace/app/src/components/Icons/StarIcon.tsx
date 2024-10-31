@@ -1,4 +1,4 @@
-import React, { type FunctionComponent } from "react";
+import { type FunctionComponent } from "react";
 
 export const StarIcon: FunctionComponent<{readonly size?: number}> = ({ size = 20 }) => (
   <svg

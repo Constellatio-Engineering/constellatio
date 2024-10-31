@@ -1,7 +1,7 @@
-import { clickupRequestConfig } from "~/lib/clickup/utils";
-
 import { env } from "@constellatio/env";
 import axios from "axios";
+
+import { clickupRequestConfig } from "../utils";
 
 type DeleteClickupCustomFieldValueProps = {
   fieldId: string; 

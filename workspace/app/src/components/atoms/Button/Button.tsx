@@ -10,7 +10,7 @@ import {
   type CSSObject,
   type Styles,
 } from "@mantine/core";
-import React, { type ButtonHTMLAttributes, type FC } from "react";
+import { type ButtonHTMLAttributes, type FC } from "react";
 
 export type TButton = (ButtonProps | ButtonHTMLAttributes<HTMLButtonElement>) & {
   readonly size?: "large" | "medium";

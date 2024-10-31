@@ -8,7 +8,7 @@ import { type Nullable } from "@constellatio/utility-types";
 import { Input } from "@mantine/core";
 import { IconSearch } from "@tabler/icons-react";
 import fuzzysort from "fuzzysort";
-import React, { type FunctionComponent, useDeferredValue, useMemo } from "react";
+import { type FunctionComponent, useDeferredValue, useMemo } from "react";
 
 import * as styles from "./FilterCategory.styles";
 

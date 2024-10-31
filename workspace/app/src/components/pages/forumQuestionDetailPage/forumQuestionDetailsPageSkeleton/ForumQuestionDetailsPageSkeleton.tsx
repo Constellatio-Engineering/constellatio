@@ -4,7 +4,7 @@ import AnswersSkeletonWithSorting from "@/components/pages/forumQuestionDetailPa
 import QuestionDetailSkeleton from "@/components/pages/forumQuestionDetailPage/questionDetailSkeleton/QuestionDetailSkeleton";
 
 import { Skeleton } from "@mantine/core";
-import React, { type FunctionComponent } from "react";
+import { type FunctionComponent } from "react";
 
 import * as styles from "../ForumQuestionDetailPage.styles";
 

@@ -18,7 +18,7 @@ import { type FullLegalCase } from "@constellatio/cms/content/getCaseById";
 import { type Nullable } from "@constellatio/utility-types";
 import { Skeleton, Title } from "@mantine/core";
 import { notifications } from "@mantine/notifications";
-import React, { type FunctionComponent, useState } from "react";
+import { type FunctionComponent, useState } from "react";
 
 import * as styles from "./CaseSolveCaseStep.styles";
 

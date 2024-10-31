@@ -1,5 +1,5 @@
 import { type TabProps, Tabs } from "@mantine/core";
-import React, { forwardRef } from "react";
+import { forwardRef } from "react";
 
 type TSwitcherTab = TabProps;
 

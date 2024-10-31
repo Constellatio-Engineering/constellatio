@@ -1,8 +1,8 @@
+import { z } from "zod";
+
 import {
   legalFieldIdValidation, questionTextValidation, subfieldsIdsValidation, titleValidation, topicsIdsValidation 
-} from "~/common/forum/question.validation";
-
-import { z } from "zod";
+} from "../../common/forum/question.validation";
 
 export const postQuestionSchema = z.object({
   legalFieldId: legalFieldIdValidation,

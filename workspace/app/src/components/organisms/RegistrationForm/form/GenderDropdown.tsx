@@ -2,7 +2,7 @@ import { Dropdown, type DropdownProps } from "@/components/atoms/Dropdown/Dropdo
 
 import { type GenderIdentifier } from "@constellatio/shared/validation";
 import { Box } from "@mantine/core";
-import React, { type FunctionComponent } from "react";
+import { type FunctionComponent } from "react";
 
 type Gender = {
   readonly identifier: GenderIdentifier;

@@ -16,7 +16,7 @@ import {
 import { findIntersection, getDistinctItemsByKey } from "@constellatio/utils/array";
 import { getIsValidKey, mapToObject, objectKeys } from "@constellatio/utils/object";
 import { Drawer } from "@mantine/core";
-import React, { type FunctionComponent, useEffect, useMemo } from "react";
+import { type FunctionComponent, useEffect, useMemo } from "react";
 import { useStore } from "zustand";
 
 import * as styles from "./OverviewFiltersDrawer.styles";

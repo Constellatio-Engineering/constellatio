@@ -14,7 +14,7 @@ import { api } from "@/utils/api";
 
 import { type IGenCardSelectionGame } from "@constellatio/cms/generated-types";
 import { LoadingOverlay, Title } from "@mantine/core";
-import React, { type FC, memo, useMemo } from "react";
+import { type FC, memo, useMemo } from "react";
 
 import {
   Container, Game, GameWrapper, LegendWrapper, Options, TitleWrapper, 

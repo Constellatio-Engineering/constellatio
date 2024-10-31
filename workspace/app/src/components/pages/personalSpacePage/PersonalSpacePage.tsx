@@ -10,7 +10,7 @@ import useUploadedFiles from "@/hooks/useUploadedFiles";
 
 import { type IGenArticle } from "@constellatio/cms/generated-types";
 import { parseAsString, useQueryState } from "next-usequerystate";
-import React, { type FunctionComponent, useId } from "react";
+import { type FunctionComponent, useId } from "react";
 
 import { categoriesHelper } from "./PersonalSpaceHelper";
 import * as styles from "./PersonalSpacePage.styles";

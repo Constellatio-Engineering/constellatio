@@ -1,8 +1,8 @@
-import { type CustomFieldInsert } from "~/lib/clickup/types";
-import { clickupRequestConfig } from "~/lib/clickup/utils";
-
 import { env } from "@constellatio/env";
 import axios from "axios";
+
+import { type CustomFieldInsert } from "../types";
+import { clickupRequestConfig } from "../utils";
 
 type UpdateClickupCustomFieldProps = {
   taskId: string;

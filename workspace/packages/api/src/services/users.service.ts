@@ -1,11 +1,20 @@
-import { NotFoundError } from "~/utils/serverError";
-import { getProfilePictureUrl } from "~/utils/users";
-
 import { eq } from "@constellatio/db";
 import { db } from "@constellatio/db/client";
-import { users } from "@constellatio/db/schema";
+import { type User, type UserRole, users } from "@constellatio/db/schema";
 
-export const getUserWithRelations = async (userId: string) =>
+import { NotFoundError } from "../utils/serverError";
+import { getProfilePictureUrl } from "../utils/users";
+
+export type UserWithRelations = User & {
+  isAdmin: boolean;
+  isForumModerator: boolean;
+  profilePicture: null | {
+    url: string;
+  };
+  roles: Array<Pick<UserRole, "identifier" | "name">>;
+};
+
+export const getUserWithRelations = async (userId: string): Promise<UserWithRelations> =>
 {
   const user = await db.query.users.findFirst({
     where: eq(users.id, userId),
@@ -55,5 +64,3 @@ export const getUserWithRelations = async (userId: string) =>
     roles
   });
 };
-
-export type UserWithRelations = Awaited<ReturnType<typeof getUserWithRelations>>;

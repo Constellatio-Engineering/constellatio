@@ -15,7 +15,7 @@ import { type IGenLegalArea, type IGenTags, type Maybe } from "@constellatio/cms
 import { type Nullable } from "@constellatio/utility-types";
 import { formatDate } from "@constellatio/utils/dates";
 import { useDisclosure } from "@mantine/hooks";
-import React, { type FunctionComponent } from "react";
+import { type FunctionComponent } from "react";
 
 import * as styles from "./OverviewCard.styles";
 import OverviewCardTagsModal from "../overviewCardTagsModal/OverviewCardTagsModal";

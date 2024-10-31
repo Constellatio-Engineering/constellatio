@@ -4,7 +4,7 @@ import { Edit } from "@/components/Icons/Edit";
 import { Trash } from "@/components/Icons/Trash";
 
 import { Menu, Modal, Title } from "@mantine/core";
-import React, { type FunctionComponent, type HTMLProps, type ReactNode, useState } from "react";
+import { type FunctionComponent, type HTMLProps, type ReactNode, useState } from "react";
 
 import { BodyText } from "../BodyText/BodyText";
 import { Button, type TButton } from "../Button/Button";

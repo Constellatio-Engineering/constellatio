@@ -1,6 +1,6 @@
 import { CaptionText } from "@/components/atoms/CaptionText/CaptionText";
 
-import React, { type FunctionComponent } from "react";
+import { type FunctionComponent } from "react";
 
 type UploadedMaterialTableHeadProps = {
   readonly variant: "personalSpace" | "searchPapers";

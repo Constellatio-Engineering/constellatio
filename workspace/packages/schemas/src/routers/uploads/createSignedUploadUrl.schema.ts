@@ -1,10 +1,10 @@
 /* eslint-disable @typescript-eslint/explicit-function-return-type */
-import { filenameValidation, generateContentTypeValidation } from "~/common/uploads/uploadedFile.validation";
-
 import { env } from "@constellatio/env";
 import { type FileExtension, type FileMimeType } from "@constellatio/shared/validation";
 import { getFileExtensionLowercase } from "@constellatio/utils/files";
 import { z } from "zod";
+
+import { filenameValidation, generateContentTypeValidation } from "../../common/uploads/uploadedFile.validation";
 
 export const generateCreateSignedUploadUrlSchema = <T extends FileExtension, U extends FileMimeType>(
   fileExtensions: readonly T[],

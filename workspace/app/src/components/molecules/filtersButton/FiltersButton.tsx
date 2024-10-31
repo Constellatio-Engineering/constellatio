@@ -1,5 +1,5 @@
 import { type Interpolation, type Theme } from "@emotion/react";
-import React, { type FunctionComponent } from "react";
+import { type FunctionComponent } from "react";
 
 import * as styles from "./FiltersButton.style";
 import { BodyText } from "../../atoms/BodyText/BodyText";

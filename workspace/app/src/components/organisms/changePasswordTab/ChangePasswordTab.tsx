@@ -12,7 +12,7 @@ import { useForm, zodResolver } from "@mantine/form";
 import { useUser } from "@supabase/auth-helpers-react";
 import { useMutation } from "@tanstack/react-query";
 import { useTranslation } from "next-i18next";
-import React, { type FunctionComponent, useEffect } from "react";
+import { type FunctionComponent, useEffect } from "react";
 import { z } from "zod";
 import { makeZodI18nMap } from "zod-i18n-map";
 

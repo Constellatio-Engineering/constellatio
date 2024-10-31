@@ -1,8 +1,8 @@
-import {
-  displayNameValidation, emailValidation, genderValidation, optionalNameValidation, semesterValidation, universityValidation
-} from "~/common/auth/userData.validation";
-
 import { z } from "zod";
+
+import {
+  displayNameValidation, emailValidation, genderValidation, optionalNameValidation, semesterValidation, universityValidation 
+} from "../../common/auth/userData.validation";
 
 export const updateUserDetailsSchema = z.object({
   displayName: displayNameValidation.optional(),

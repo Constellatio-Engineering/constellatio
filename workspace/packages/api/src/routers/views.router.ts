@@ -1,7 +1,4 @@
 /* eslint-disable max-lines */
-import { addUserToCrmUpdateQueue } from "~/lib/clickup/utils";
-import { InternalServerError } from "~/utils/serverError";
-
 import { getAllMainCategories } from "@constellatio/cms/content/getAllMainCategories";
 import { getArticleById } from "@constellatio/cms/content/getArticleById";
 import { getCaseById } from "@constellatio/cms/content/getCaseById";
@@ -20,7 +17,9 @@ import { type inferProcedureOutput } from "@trpc/server";
 import postgres from "postgres";
 import { z } from "zod";
 
+import { addUserToCrmUpdateQueue } from "../lib/clickup/utils";
 import { createTRPCRouter, protectedProcedure } from "../trpc";
+import { InternalServerError } from "../utils/serverError";
 
 export const viewsRouter = createTRPCRouter({
   addContentItemView: protectedProcedure

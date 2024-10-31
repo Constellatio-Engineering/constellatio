@@ -1,4 +1,4 @@
-import React, { type FunctionComponent } from "react";
+import { type FunctionComponent } from "react";
 
 import * as styles from "./StatusTableCell.styles";
 import StatusLabel, { type IStatusLabel } from "../statusLabel/StatusLabel";

@@ -1,6 +1,6 @@
 import { CaptionText } from "@/components/atoms/CaptionText/CaptionText";
 
-import React, { type FunctionComponent, type ReactNode } from "react";
+import { type FunctionComponent, type ReactNode } from "react";
 
 import * as styles from "./GameComponentWrapper.styles";
 

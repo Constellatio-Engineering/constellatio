@@ -3,7 +3,7 @@ import { transformSemesterToString } from "@/utils/data-transformation";
 
 import { maximumAmountOfSemesters } from "@constellatio/schemas/common/auth/userData.validation";
 import { Box } from "@mantine/core";
-import React, { type FunctionComponent } from "react";
+import { type FunctionComponent } from "react";
 
 type Props = Omit<DropdownProps, "data">;
 

@@ -1,7 +1,7 @@
-import { idValidation } from "~/common/common.validation";
-import { contentValidation, folderIdValidation, nameValidation } from "~/routers/documents/document.validation";
-
 import { z } from "zod";
+
+import { idValidation } from "../../common/common.validation";
+import { contentValidation, folderIdValidation, nameValidation } from "../../common/documents/document.validation";
 
 export const updateDocumentSchema = z.object({
   id: idValidation,

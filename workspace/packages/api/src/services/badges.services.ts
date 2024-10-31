@@ -1,10 +1,10 @@
-import { addUserToCrmUpdateQueue } from "~/lib/clickup/utils";
-import { InternalServerError } from "~/utils/serverError";
-
 import { eq } from "@constellatio/db";
 import { db } from "@constellatio/db/client";
 import { badges, usersToBadges } from "@constellatio/db/schema";
 import { type BadgeIdentifier } from "@constellatio/shared/validation";
+
+import { addUserToCrmUpdateQueue } from "../lib/clickup/utils";
+import { InternalServerError } from "../utils/serverError";
 
 type AddBadgeForUser = (params: {
   badgeIdentifier: BadgeIdentifier;

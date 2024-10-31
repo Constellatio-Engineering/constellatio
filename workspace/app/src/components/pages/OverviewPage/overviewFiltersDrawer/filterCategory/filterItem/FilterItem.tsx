@@ -1,7 +1,7 @@
 import { Checkbox } from "@/components/atoms/Checkbox/Checkbox";
 import { type FilterCategoryProps } from "@/components/pages/OverviewPage/overviewFiltersDrawer/filterCategory/FilterCategory";
 
-import React, { type FunctionComponent } from "react";
+import { type FunctionComponent } from "react";
 
 import * as styles from "./FilterItem.styles";
 

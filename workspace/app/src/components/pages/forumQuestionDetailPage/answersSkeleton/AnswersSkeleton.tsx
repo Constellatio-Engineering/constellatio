@@ -1,7 +1,7 @@
 import ForumListItem from "@/components/pages/forumOverviewPage/forumListItem/ForumListItem";
 
 import { Skeleton } from "@mantine/core";
-import React, { type FunctionComponent } from "react";
+import { type FunctionComponent } from "react";
 
 import * as styles from "./AnswersSkeleton.styles";
 

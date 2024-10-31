@@ -5,7 +5,7 @@ import { appPaths } from "@constellatio/shared/paths";
 import { Group, HoverCard } from "@mantine/core";
 import { IconFolder } from "@tabler/icons-react";
 import Link from "next/link";
-import React, { forwardRef, type ForwardRefRenderFunction } from "react";
+import { forwardRef, type ForwardRefRenderFunction } from "react";
 
 import * as styles from "./HeaderItemPersonalSpace.styles";
 import BookmarkIconSvg from "../../../../../../public/images/icons/bookmark.svg";

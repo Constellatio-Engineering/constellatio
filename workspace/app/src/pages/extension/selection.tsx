@@ -1,6 +1,6 @@
 import { SelectionGameWrapper } from "@/components/Wrappers/SelectionGame/SelectionGame";
 
-import React, { type FunctionComponent } from "react";
+import { type FunctionComponent } from "react";
 
 const NextPage: FunctionComponent = () =>
 {

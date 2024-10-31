@@ -7,7 +7,7 @@ import { type AppRouter } from "@constellatio/api";
 import { type Nullable } from "@constellatio/utility-types";
 import { notifications } from "@mantine/notifications";
 import { type inferProcedureOutput } from "@trpc/server";
-import React, { type FunctionComponent } from "react";
+import { type FunctionComponent } from "react";
 
 type MutationContext = {
   readonly questionBackup: Nullable<inferProcedureOutput<AppRouter["forum"]["getQuestionById"]>>;

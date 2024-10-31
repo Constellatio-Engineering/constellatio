@@ -7,7 +7,7 @@ import { Toc } from "@/components/organisms/floatingPanel/Toc";
 import { type IGenCase_Facts } from "@constellatio/cms/generated-types";
 import { Tabs } from "@mantine/core";
 import { type Maybe } from "graphql/jsutils/Maybe";
-import React, { type FunctionComponent, useMemo, useRef, useState } from "react";
+import { type FunctionComponent, useMemo, useRef, useState } from "react";
 
 import * as styles from "./FloatingPanel.styles";
 import { type DataType, generateTOC } from "./generateTocHelper";

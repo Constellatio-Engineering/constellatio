@@ -1,4 +1,4 @@
-import React, { type FunctionComponent } from "react";
+import { type FunctionComponent } from "react";
 
 export const Gamification: FunctionComponent = ({ size = 24 }: { readonly size?: number }) => (
   <svg

@@ -8,7 +8,7 @@ import { api } from "@/utils/api";
 
 import { appPaths } from "@constellatio/shared/paths";
 import { useRouter } from "next/router";
-import React, { Fragment, type FunctionComponent, useEffect, useMemo } from "react";
+import { Fragment, type FunctionComponent, useEffect, useMemo } from "react";
 import { useInView } from "react-intersection-observer";
 
 import * as styles from "./ForumQuestions.styles";

@@ -1,6 +1,6 @@
 import { useSortable } from "@dnd-kit/sortable";
 import { CSS } from "@dnd-kit/utilities";
-import React, { type FunctionComponent, type ReactNode } from "react";
+import { type FunctionComponent, type ReactNode } from "react";
 
 type SortableItemProps = {
   readonly children: ReactNode;

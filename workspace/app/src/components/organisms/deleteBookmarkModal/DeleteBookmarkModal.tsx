@@ -2,7 +2,7 @@ import { Button } from "@/components/atoms/Button/Button";
 import { Modal } from "@/components/molecules/Modal/Modal";
 
 import { Title } from "@mantine/core";
-import React, { type FunctionComponent } from "react";
+import { type FunctionComponent } from "react";
 
 interface DeleteBookmarkModalProps
 {

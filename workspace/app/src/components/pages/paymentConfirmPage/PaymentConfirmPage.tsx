@@ -3,7 +3,7 @@ import { Button } from "@/components/atoms/Button/Button";
 import { appPaths } from "@constellatio/shared/paths";
 import { Title } from "@mantine/core";
 import { useRouter } from "next/router";
-import React, { type FunctionComponent } from "react";
+import { type FunctionComponent } from "react";
 
 import * as styles from "./PaymentConfirmPage.styles";
 

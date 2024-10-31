@@ -6,7 +6,7 @@ import { type Question } from "@constellatio/api/routers/forum.router";
 import { type PostQuestionSchema } from "@constellatio/schemas/routers/forum/postQuestion.schema";
 import { questionUpdateSchema } from "@constellatio/schemas/routers/forum/updateQuestion.schema";
 import { useForm, zodResolver } from "@mantine/form";
-import React, { type FunctionComponent } from "react";
+import { type FunctionComponent } from "react";
 
 const getFormValuesFromQuestion = (
   question: Pick<Question, "text" | "legalFieldId" | "subfieldsIds" | "topicsIds" | "title">

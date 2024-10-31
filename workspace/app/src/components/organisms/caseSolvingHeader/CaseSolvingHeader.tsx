@@ -17,7 +17,7 @@ import { type Nullable } from "@constellatio/utility-types";
 import { Button, Title } from "@mantine/core";
 import { IconArrowLeft, IconArrowRight } from "@tabler/icons-react";
 import Link from "next/link";
-import React, { type FunctionComponent } from "react";
+import { type FunctionComponent } from "react";
 
 import * as styles from "./CaseSolvingHeader.styles";
 import OverviewCard, { type IOverviewCard } from "../overviewCard/OverviewCard";

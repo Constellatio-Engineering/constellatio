@@ -1,6 +1,6 @@
-import { emailValidation, nameValidation, passwordSchema, refCodeValidation } from "~/common/auth/userData.validation";
-
 import { z } from "zod";
+
+import { emailValidation, nameValidation, passwordSchema, refCodeValidation } from "../../common/auth/userData.validation";
 
 export const registrationFormMinimalSchema = z
   .object({

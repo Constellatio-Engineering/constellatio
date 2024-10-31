@@ -19,7 +19,7 @@ import { api } from "@/utils/api";
 
 import { type IGenFillInGapsGame } from "@constellatio/cms/generated-types";
 import { Title } from "@mantine/core";
-import React, {
+import {
   type FC, memo, type ReactElement, useCallback, useEffect, useMemo, 
 } from "react";
 

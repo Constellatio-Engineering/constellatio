@@ -6,7 +6,7 @@ import { FolderIcon } from "@/components/Icons/Folder";
 import { Trash } from "@/components/Icons/Trash";
 
 import { Tabs } from "@mantine/core";
-import React, { type FunctionComponent } from "react";
+import { type FunctionComponent } from "react";
 
 import * as styles from "../../organisms/profilePersonalSpaceBlock/ProfilePersonalSpaceBlock.styles";
 import { Switcher } from "../Switcher/Switcher";

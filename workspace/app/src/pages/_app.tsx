@@ -30,7 +30,7 @@ import { type AppProps } from "next/app";
 import Head from "next/head";
 import { useRouter } from "next/router";
 import { appWithTranslation, type UserConfig } from "next-i18next";
-import React, { Fragment, type FunctionComponent, type ReactElement, type ReactNode } from "react";
+import { Fragment, type FunctionComponent, type ReactElement, type ReactNode } from "react";
 
 import nextI18NextConfig from "../../next-i18next.config.js";
 

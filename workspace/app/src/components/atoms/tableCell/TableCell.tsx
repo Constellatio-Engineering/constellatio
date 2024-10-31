@@ -1,4 +1,4 @@
-import React, { type FunctionComponent, type ReactNode } from "react";
+import { type FunctionComponent, type ReactNode } from "react";
 
 import * as styles from "./TableCell.style";
 import { BodyText } from "../BodyText/BodyText";

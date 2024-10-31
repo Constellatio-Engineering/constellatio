@@ -1,6 +1,6 @@
 import { BodyText } from "@/components/atoms/BodyText/BodyText";
 
-import React, { type FunctionComponent } from "react";
+import { type FunctionComponent } from "react";
 
 import * as styles from "./MenuListItem.styles";
 

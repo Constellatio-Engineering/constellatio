@@ -3,7 +3,7 @@ import ProgressCard from "@/components/molecules/progressCard/ProgressCard";
 import useAllCasesWithProgress from "@/hooks/useAllCasesWithProgress";
 import { useLegalFields } from "@/hooks/useLegalFields";
 
-import React, { type FunctionComponent } from "react";
+import { type FunctionComponent } from "react";
 
 import * as styles from "./ProgressCardSection.styles";
 

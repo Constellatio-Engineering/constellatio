@@ -1,9 +1,3 @@
-import { addUserToCrmUpdateQueue } from "~/lib/clickup/utils";
-import { stripe } from "~/lib/stripe/stripe";
-import { addBadgeForUser } from "~/services/badges.services";
-import { InternalServerError } from "~/utils/serverError";
-import { getDataFromStripeSubscription } from "~/utils/stripe";
-
 import { count, eq } from "@constellatio/db";
 import { db } from "@constellatio/db/client";
 import {
@@ -14,6 +8,12 @@ import { type Nullable } from "@constellatio/utility-types";
 import { getRandomUuid } from "@constellatio/utils/id";
 import { printAllSettledPromisesSummary } from "@constellatio/utils/promise";
 import { type SupabaseClient } from "@supabase/auth-helpers-nextjs";
+
+import { InternalServerError } from "./serverError";
+import { getDataFromStripeSubscription } from "./stripe";
+import { addUserToCrmUpdateQueue } from "../lib/clickup/utils";
+import { stripe } from "../lib/stripe/stripe";
+import { addBadgeForUser } from "../services/badges.services";
 
 /* export type FinishSignUpProps = {
   referralCode?: string;

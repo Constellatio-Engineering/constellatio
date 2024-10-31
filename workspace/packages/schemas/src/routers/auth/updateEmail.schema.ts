@@ -1,6 +1,6 @@
-import { emailValidation } from "~/common/auth/userData.validation";
-
 import { z } from "zod";
+
+import { emailValidation } from "../../common/auth/userData.validation";
 
 export const updateEmailSchema = z
   .object({

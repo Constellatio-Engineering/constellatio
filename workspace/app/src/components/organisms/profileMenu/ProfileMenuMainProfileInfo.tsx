@@ -5,7 +5,7 @@ import EditProfileImgModal from "@/components/organisms/editProfileImgModal/Edit
 
 import { type UserFiltered } from "@constellatio/api/utils/filters";
 import { Title } from "@mantine/core";
-import React, { type FunctionComponent } from "react";
+import { type FunctionComponent } from "react";
 
 import * as styles from "./ProfileMenu.styles";
 

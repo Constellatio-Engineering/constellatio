@@ -1,4 +1,4 @@
-import React, { type FunctionComponent, type PropsWithChildren } from "react";
+import { type FunctionComponent, type PropsWithChildren } from "react";
 
 import * as styles from "./Label.styles";
 import { CaptionText } from "../CaptionText/CaptionText";

@@ -4,7 +4,7 @@ import { type ModalOpened as LightboxModalOpened, useLightboxModalStore } from "
 
 import { Modal } from "@mantine/core";
 import Image from "next/image";
-import React, { type FunctionComponent, useRef } from "react";
+import { type FunctionComponent, useRef } from "react";
 
 import * as styles from "./Lightbox.styles";
 

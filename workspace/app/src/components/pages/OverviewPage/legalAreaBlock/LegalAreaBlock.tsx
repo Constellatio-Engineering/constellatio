@@ -3,7 +3,7 @@ import { type LegalAreaWithItems } from "@/components/pages/OverviewPage/Overvie
 import { extractNumeric } from "@/utils/helpers";
 
 import { sortByTopic } from "@constellatio/cms/utils/caisy";
-import React, { type FunctionComponent, useMemo } from "react";
+import { type FunctionComponent, useMemo } from "react";
 
 type Props = LegalAreaWithItems & {
   readonly variant: "case" | "dictionary";

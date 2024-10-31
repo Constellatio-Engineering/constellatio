@@ -1,6 +1,6 @@
-import { idValidation } from "~/common/common.validation";
-
 import { z } from "zod";
+
+import { idValidation } from "../common.validation";
 
 export const contentValidation = z.string();
 export const folderIdValidation = idValidation.nullable();

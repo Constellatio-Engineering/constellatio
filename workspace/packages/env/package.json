@@ -7,8 +7,8 @@
   "types": "./dist/env.d.ts",
   "exports": {
     ".": {
-      "default": "./dist/env.mjs",
-      "types": "./dist/env.d.ts"
+      "types": "./dist/env.d.ts",
+      "default": "./dist/env.mjs"
     }
   },
   "license": "MIT",

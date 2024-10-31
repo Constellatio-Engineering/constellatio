@@ -1,6 +1,6 @@
-import { folderIdValidation } from "~/routers/documents/document.validation";
-
 import { z } from "zod";
+
+import { folderIdValidation } from "../../common/documents/document.validation";
 
 export const getDocumentsSchema = z.object({
   folderId: folderIdValidation.optional()

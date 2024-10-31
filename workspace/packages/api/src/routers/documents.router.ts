@@ -1,7 +1,3 @@
-import { addUserToCrmUpdateQueue } from "~/lib/clickup/utils";
-import { meiliSearchAdmin } from "~/lib/meilisearch";
-import { addTags } from "~/services/tags.services";
-
 import {
   and, desc, eq, isNull, type SQLWrapper 
 } from "@constellatio/db";
@@ -16,6 +12,9 @@ import { updateDocumentSchema } from "@constellatio/schemas/routers/documents/up
 import { removeHtmlTagsFromString } from "@constellatio/utils/html";
 import { type inferProcedureOutput } from "@trpc/server";
 
+import { addUserToCrmUpdateQueue } from "../lib/clickup/utils";
+import { meiliSearchAdmin } from "../lib/meilisearch";
+import { addTags } from "../services/tags.services";
 import { createTRPCRouter, protectedProcedure } from "../trpc";
 
 export const documentsRouter = createTRPCRouter({

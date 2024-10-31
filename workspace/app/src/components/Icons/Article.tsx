@@ -1,4 +1,4 @@
-import React, { type FunctionComponent } from "react";
+import { type FunctionComponent } from "react";
 
 export const Article: FunctionComponent<{readonly size?: number}> = ({ size = 20 }) => (
   <svg

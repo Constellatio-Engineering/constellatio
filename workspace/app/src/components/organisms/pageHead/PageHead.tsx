@@ -1,7 +1,7 @@
 import { env } from "@/env.mjs";
 
 import Head from "next/head";
-import React, { type FunctionComponent } from "react";
+import { type FunctionComponent } from "react";
 
 type IProps =
 {

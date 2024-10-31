@@ -8,7 +8,7 @@ import { Global } from "@emotion/react";
 import { MantineProvider, type ScrollAreaStylesNames, type ScrollAreaStylesParams, type Styles } from "@mantine/core";
 import { type DeepPartial } from "@mantine/styles/lib/theme/types/DeepPartial";
 import { Karla, Libre_Baskerville } from "next/font/google";
-import React, { type FunctionComponent, type ReactNode } from "react";
+import { type FunctionComponent, type ReactNode } from "react";
 
 import { type ExtendedCustomColors } from "../../types/mantine";
 

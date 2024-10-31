@@ -11,7 +11,7 @@ import { type NonEmptyArray, type Nullable } from "@constellatio/utility-types";
 import { Loader } from "@mantine/core";
 import { useRouter } from "next/router";
 import { parseAsString, useQueryState } from "next-usequerystate";
-import React, { type FunctionComponent } from "react";
+import { type FunctionComponent } from "react";
 
 import * as styles from "./PersonalSpaceFavoriteTab.styles";
 import EmptyStateCard from "../emptyStateCard/EmptyStateCard";

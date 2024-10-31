@@ -11,7 +11,7 @@ import useUploadedFiles from "@/hooks/useUploadedFiles";
 import { appPaths } from "@constellatio/shared/paths";
 import { Loader } from "@mantine/core";
 import Link from "next/link";
-import React, { type FunctionComponent, useState } from "react";
+import { type FunctionComponent, useState } from "react";
 
 import * as styles from "./ProfilePersonalSpaceBlock.styles";
 

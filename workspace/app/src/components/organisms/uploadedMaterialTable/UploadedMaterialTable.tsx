@@ -4,7 +4,7 @@ import UploadedMaterialTableBody from "@/components/molecules/uploadedMaterialTa
 import UploadedMaterialTableHead from "@/components/molecules/uploadedMaterialTableHead/UploadedMaterialTableHead";
 import { type UploadedFileWithNote } from "@/hooks/useUploadedFilesWithNotes";
 
-import React, { type FunctionComponent, useState } from "react";
+import { type FunctionComponent, useState } from "react";
 
 import * as styles from "./UploadedMaterialTable.styles";
 import UploadedMaterialNoteDrawer from "../uploadedMaterialNoteDrawer/UploadedMaterialNoteDrawer";

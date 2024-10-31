@@ -1,7 +1,7 @@
 import ContentWrapper from "@/components/helpers/contentWrapper/ContentWrapper";
 
 import { Title } from "@mantine/core";
-import React, { type FunctionComponent } from "react";
+import { type FunctionComponent } from "react";
 
 import * as styles from "./NotificationsPageHeader.styles";
 import OverviewHeader from "../OverviewHeader/OverviewHeader";

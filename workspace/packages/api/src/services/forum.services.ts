@@ -1,6 +1,4 @@
 /* eslint-disable max-lines */
-import { getProfilePictureUrl } from "~/utils/users";
-
 import {
   and, asc, count, desc, eq, getTableColumns, inArray, lt, lte, or, type SQL, sql 
 } from "@constellatio/db";
@@ -18,6 +16,8 @@ import {
 } from "@constellatio/db/schema";
 import { type GetAnswersSchema } from "@constellatio/schemas/routers/forum/getAnswers.schema";
 import { type GetQuestionsSchema } from "@constellatio/schemas/routers/forum/getQuestions.schema";
+
+import { getProfilePictureUrl } from "../utils/users";
 
 type GetUpvotesForQuestion = (questionId: string) => Promise<number>;
 

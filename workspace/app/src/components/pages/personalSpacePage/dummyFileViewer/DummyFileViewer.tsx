@@ -2,7 +2,7 @@ import useSignedGetUrl from "@/hooks/useSignedGetUrl";
 
 import { Loader } from "@mantine/core";
 import Image from "next/image";
-import React, { type FunctionComponent } from "react";
+import { type FunctionComponent } from "react";
 
 import * as styles from "./DummyFileViewer.styles";
 

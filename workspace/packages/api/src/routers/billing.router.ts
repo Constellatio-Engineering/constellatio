@@ -1,7 +1,3 @@
-import { stripe } from "~/lib/stripe/stripe";
-import { InternalServerError } from "~/utils/serverError";
-import { getFutureSubscriptionStatus, getHasSubscription } from "~/utils/subscription";
-
 import { eq } from "@constellatio/db";
 import { db } from "@constellatio/db/client";
 import { users } from "@constellatio/db/schema";
@@ -9,7 +5,10 @@ import { env } from "@constellatio/env";
 import { appPaths, authPaths } from "@constellatio/shared/paths";
 import { type inferProcedureOutput } from "@trpc/server";
 
+import { stripe } from "../lib/stripe/stripe";
 import { createTRPCRouter, protectedProcedure } from "../trpc";
+import { InternalServerError } from "../utils/serverError";
+import { getFutureSubscriptionStatus, getHasSubscription } from "../utils/subscription";
 
 export const billingRouter = createTRPCRouter({
   generateStripeBillingPortalSession: protectedProcedure.mutation(async ({ ctx: { userId } }) =>

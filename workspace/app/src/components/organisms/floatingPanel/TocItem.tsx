@@ -6,7 +6,7 @@ import useCaseSolvingStore from "@/stores/caseSolving.store";
 
 import { slugFormatter } from "@constellatio/utils/slug";
 import { useIntersection } from "@mantine/hooks";
-import React, {
+import {
   useEffect, useLayoutEffect, useMemo, useRef, useState 
 } from "react";
 

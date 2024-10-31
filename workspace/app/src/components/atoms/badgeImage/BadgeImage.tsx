@@ -1,5 +1,5 @@
 /* eslint-disable @next/next/no-img-element */
-import React, { type ComponentProps, type FunctionComponent } from "react";
+import { type ComponentProps, type FunctionComponent } from "react";
 
 interface BadgeImageProps extends Omit<ComponentProps<"img">, "src">
 {

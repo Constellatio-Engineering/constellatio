@@ -6,7 +6,7 @@ import { type GetOverviewPagePropsResult } from "@constellatio/cms/content/getOv
 import type { Maybe, Scalars } from "@constellatio/cms/generated-types";
 import { type SerializedStyles } from "@emotion/react";
 import { Title } from "@mantine/core";
-import React, { type FunctionComponent, useState } from "react";
+import { type FunctionComponent, useState } from "react";
 
 import * as styles from "./OverviewHeader.styles";
 import { LinkButton } from "../../atoms/LinkButton/LinkButton";

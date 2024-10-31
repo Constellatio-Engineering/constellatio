@@ -4,7 +4,7 @@ import { type IGenAsset } from "@constellatio/cms/generated-types";
 import { getCaisyImageBlurUrl } from "@constellatio/cms/utils/caisy";
 import { type SerializedStyles } from "@emotion/react";
 import Image from "next/image";
-import React, { type FunctionComponent } from "react";
+import { type FunctionComponent } from "react";
 
 import * as styles from "./CaisyImageV2.styles";
 

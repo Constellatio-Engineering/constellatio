@@ -1,5 +1,5 @@
 import { Skeleton } from "@mantine/core";
-import React, { type FunctionComponent } from "react";
+import { type FunctionComponent } from "react";
 
 import * as styles from "./SkeletonSlide.styles";
 

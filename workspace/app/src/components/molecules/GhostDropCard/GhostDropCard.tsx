@@ -1,6 +1,6 @@
 import { DownloadIcon } from "@/components/Icons/DownloadIcon";
 
-import React, { type FunctionComponent } from "react";
+import { type FunctionComponent } from "react";
 
 import { Card } from "./GhostDropCard.styles";
 import { BodyText } from "../../atoms/BodyText/BodyText";

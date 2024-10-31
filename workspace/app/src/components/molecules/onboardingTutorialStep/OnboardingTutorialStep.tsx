@@ -3,7 +3,7 @@ import CountLabel from "@/components/atoms/countLabel/CountLabel";
 import { SubtitleText } from "@/components/atoms/SubtitleText/SubtitleText";
 
 import { Popover } from "@mantine/core";
-import React, { type FunctionComponent, type ReactNode } from "react";
+import { type FunctionComponent, type ReactNode } from "react";
 
 import * as styles from "./OnboardingTutorialStep.styles";
 

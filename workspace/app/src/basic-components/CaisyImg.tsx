@@ -1,5 +1,5 @@
 /* eslint-disable @next/next/no-img-element */
-import React, { type FC } from "react";
+import { type FC } from "react";
 
 interface TCaisyImg extends React.ImgHTMLAttributes<HTMLImageElement>
 {

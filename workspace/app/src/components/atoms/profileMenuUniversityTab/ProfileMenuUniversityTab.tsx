@@ -2,7 +2,7 @@ import CaisyImg from "@/basic-components/CaisyImg";
 import { transformSemesterToString } from "@/utils/data-transformation";
 
 import Image from "next/image";
-import React, { type FunctionComponent } from "react";
+import { type FunctionComponent } from "react";
 
 import UniversityIcon from "./iconmonstr-building-34-240.png";
 import * as styles from "./ProfileMenuUniversityTab.styles";

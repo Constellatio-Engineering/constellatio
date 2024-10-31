@@ -2,7 +2,7 @@ import { BodyText } from "@/components/atoms/BodyText/BodyText";
 import { DragAndDropGameIcon } from "@/components/Icons/DragAndDropGameIcon";
 
 import type { DroppableProvided } from "@hello-pangea/dnd";
-import React, { type ComponentProps, type FunctionComponent } from "react";
+import { type ComponentProps, type FunctionComponent } from "react";
 
 import * as styles from "./ColumnWrapper.styles";
 

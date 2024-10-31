@@ -2,7 +2,7 @@ import { Svg } from "@/basic-components/SVG/Svg";
 
 import { type IGenArticle, type IGenMainCategory } from "@constellatio/cms/generated-types";
 import { type Nullable } from "@constellatio/utility-types";
-import React, { type FunctionComponent } from "react";
+import { type FunctionComponent } from "react";
 
 import ItemBlock from "../caseBlock/ItemBlock";
 

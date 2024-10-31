@@ -7,7 +7,7 @@ import { useLastViewedCases } from "@/hooks/useLastViewedCases";
 import { appPaths } from "@constellatio/shared/paths";
 import { Title } from "@mantine/core";
 import Link from "next/link";
-import React, { type FunctionComponent } from "react";
+import { type FunctionComponent } from "react";
 
 import * as styles from "./DashboardLastEditedBlock.styles";
 

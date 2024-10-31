@@ -2,7 +2,7 @@ import ContentWrapper from "@/components/helpers/contentWrapper/ContentWrapper";
 import useUserDetails from "@/hooks/useUserDetails";
 
 import { Title } from "@mantine/core";
-import React, { type FunctionComponent } from "react";
+import { type FunctionComponent } from "react";
 
 import * as styles from "./DashboardHeader.styles";
 import BadgesCarouselBlock from "../badgesCarouselBlock/BadgesCarouselBlock";

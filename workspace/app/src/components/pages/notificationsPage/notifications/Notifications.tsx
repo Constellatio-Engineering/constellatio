@@ -3,7 +3,7 @@ import NotificationListItem from "@/components/organisms/notificationListItem/No
 import { defaultLimit } from "@/components/pages/forumOverviewPage/ForumOverviewPage";
 import { api } from "@/utils/api";
 
-import React, { Fragment, type FunctionComponent, useEffect, useMemo } from "react";
+import { Fragment, type FunctionComponent, useEffect, useMemo } from "react";
 import { useInView } from "react-intersection-observer";
 
 import * as styles from "./Notifications.styles";

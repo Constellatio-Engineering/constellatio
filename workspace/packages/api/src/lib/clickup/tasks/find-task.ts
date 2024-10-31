@@ -1,8 +1,8 @@
-import { type ClickUpFindTaskParams, type ClickupTask } from "~/lib/clickup/types";
-import { clickupRequestConfig } from "~/lib/clickup/utils";
-
 import { env } from "@constellatio/env";
 import axios from "axios";
+
+import { type ClickUpFindTaskParams, type ClickupTask } from "../types";
+import { clickupRequestConfig } from "../utils";
 
 // eslint-disable-next-line @typescript-eslint/naming-convention
 type GetClickupTaskResponse = { last_page: boolean; tasks: ClickupTask[] };

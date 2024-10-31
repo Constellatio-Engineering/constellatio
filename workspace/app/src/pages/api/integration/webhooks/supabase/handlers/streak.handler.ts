@@ -1,7 +1,7 @@
 import { env } from "@/env.mjs";
 
-import { addBadgeForUser } from "@constellatio/api/src/services/badges.services";
-import { createStreakActivity } from "@constellatio/api/src/services/streak.services";
+import { addBadgeForUser } from "@constellatio/api/services/badges.services";
+import { createStreakActivity } from "@constellatio/api/services/streak.services";
 import { and, eq, gte, sum } from "@constellatio/db";
 import { db } from "@constellatio/db/client";
 import {

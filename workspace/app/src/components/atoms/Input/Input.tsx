@@ -6,7 +6,7 @@ import {
   type CSSObject, PasswordInput, type PasswordInputProps, TextInput, type TextInputProps 
 } from "@mantine/core";
 import { useMantineTheme } from "@mantine/styles";
-import React, { type FC } from "react";
+import { type FC } from "react";
 
 import { passwordStyles, textStyles } from "./input.styles";
 

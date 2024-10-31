@@ -2,7 +2,7 @@ import { type MantineCssObjectStyles } from "@/utils/types";
 
 import { Group, Text } from "@mantine/core";
 import { useMantineTheme } from "@mantine/styles";
-import React, { type ComponentPropsWithoutRef, forwardRef, type ReactNode } from "react";
+import { type ComponentPropsWithoutRef, forwardRef, type ReactNode } from "react";
 
 type TDropdownItem = ComponentPropsWithoutRef<"div"> & {
   readonly icon: ReactNode;

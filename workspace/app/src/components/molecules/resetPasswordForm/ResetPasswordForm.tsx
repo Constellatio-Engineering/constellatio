@@ -10,7 +10,7 @@ import { resetPasswordFormSchema } from "@constellatio/schemas/routers/auth/rese
 import { authPaths } from "@constellatio/shared/paths";
 import { Stack, Title } from "@mantine/core";
 import { useForm, zodResolver } from "@mantine/form";
-import React, { type Dispatch, type FunctionComponent, type SetStateAction, useState } from "react";
+import { type Dispatch, type FunctionComponent, type SetStateAction, useState } from "react";
 
 import * as styles from "./ResetPasswordForm.styles";
 

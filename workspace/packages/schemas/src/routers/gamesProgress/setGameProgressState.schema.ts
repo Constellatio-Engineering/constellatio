@@ -1,7 +1,8 @@
-import { idValidation } from "~/common/common.validation";
 
 import { allGameProgressStates } from "@constellatio/shared/validation";
 import { z } from "zod";
+
+import { idValidation } from "../../common/common.validation";
 
 const gameOptionsSchema =
   z.object({

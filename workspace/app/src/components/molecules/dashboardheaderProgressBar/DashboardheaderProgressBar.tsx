@@ -1,7 +1,7 @@
 import { CaptionText } from "@/components/atoms/CaptionText/CaptionText";
 import { PlanePaperIcon } from "@/components/Icons/PlanePaper";
 
-import React, { type FunctionComponent } from "react";
+import { type FunctionComponent } from "react";
 
 import * as styles from "./DashboardheaderProgressBar.styles";
 

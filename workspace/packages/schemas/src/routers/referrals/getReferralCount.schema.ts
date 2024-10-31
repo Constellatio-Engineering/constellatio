@@ -1,6 +1,6 @@
-import { refCodeValidation } from "~/common/auth/userData.validation";
-
 import { z } from "zod";
+
+import { refCodeValidation } from "../../common/auth/userData.validation";
 
 export const getReferralCountSchema = z.object({
   code: refCodeValidation,

@@ -1,6 +1,6 @@
-import { timeZoneOffsetValidation } from "~/common/common.validation";
-
 import { z } from "zod";
+
+import { timeZoneOffsetValidation } from "../../common/common.validation";
 
 export const getUsageTimeSchema = z
   .object({

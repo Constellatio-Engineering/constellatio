@@ -1,4 +1,4 @@
-import React, { type FunctionComponent } from "react";
+import { type FunctionComponent } from "react";
 
 export const ClockIcon: FunctionComponent = ({ size = 16 }: {readonly size?: number}) => (
   <svg

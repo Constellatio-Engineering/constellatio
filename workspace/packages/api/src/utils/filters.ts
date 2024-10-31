@@ -1,6 +1,6 @@
-import { type UserWithRelations } from "~/services/users.service";
-
 import { type Bookmark } from "@constellatio/db/schema";
+
+import { type UserWithRelations } from "../services/users.service";
 
 export type UserFiltered = Pick<UserWithRelations, "email" | "id" | "gender" | "lastName" | "firstName" | "displayName" | "semester" | "university" | "roles" | "isForumModerator" | "isAdmin" | "profilePicture" | "authProvider">;
 

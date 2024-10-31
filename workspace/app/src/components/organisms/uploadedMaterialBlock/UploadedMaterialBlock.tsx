@@ -17,7 +17,7 @@ import { getIndicesOfSucceededPromises } from "@constellatio/utils/promise";
 import { Title } from "@mantine/core";
 import { notifications } from "@mantine/notifications";
 import axios from "axios";
-import React, { type ChangeEvent, type FormEvent, type FunctionComponent, useState } from "react";
+import { type ChangeEvent, type FormEvent, type FunctionComponent, useState } from "react";
 
 import * as styles from "./UploadedMaterialBlock.styles";
 import BadgeCard from "../badgeCard/BadgeCard";

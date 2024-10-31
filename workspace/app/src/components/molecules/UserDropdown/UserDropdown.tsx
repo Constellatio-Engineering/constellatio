@@ -9,7 +9,7 @@ import { appPaths } from "@constellatio/shared/paths";
 import { Menu, Title } from "@mantine/core";
 import { IconLogout, IconUser, IconAlertTriangleFilled } from "@tabler/icons-react";
 import Link from "next/link";
-import React, { type FunctionComponent } from "react";
+import { type FunctionComponent } from "react";
 
 import * as styles from "./UserDropdown.styles";
 

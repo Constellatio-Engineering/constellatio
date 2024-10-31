@@ -5,7 +5,7 @@ import useCaseSolvingStore, { type CaseStepIndex } from "@/stores/caseSolving.st
 
 import { getCaseProgressStateAsNumber } from "@constellatio/cms/utils/case";
 import { type CaseProgressState } from "@constellatio/shared/validation";
-import React, { type FunctionComponent } from "react";
+import { type FunctionComponent } from "react";
 
 import * as styles from "./CaseNavBar.styles";
 

@@ -4,7 +4,7 @@ import { useForumPageStore } from "@/stores/forumPage.store";
 
 import { postQuestionSchema, type PostQuestionSchema } from "@constellatio/schemas/routers/forum/postQuestion.schema";
 import { useForm, zodResolver } from "@mantine/form";
-import React, { type FunctionComponent } from "react";
+import { type FunctionComponent } from "react";
 
 const PostQuestionModal: FunctionComponent = () =>
 {

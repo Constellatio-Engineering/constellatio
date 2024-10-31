@@ -2,7 +2,7 @@
 import { getIsPathAppPath } from "@constellatio/shared/paths";
 import { useMediaQuery } from "@mantine/hooks";
 import { useRouter } from "next/router";
-import React, { type FunctionComponent } from "react";
+import { type FunctionComponent } from "react";
 
 import { BodyText } from "../../atoms/BodyText/BodyText";
 import { CustomLink } from "../../atoms/CustomLink/CustomLink";

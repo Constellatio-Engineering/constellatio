@@ -1,7 +1,7 @@
 import { ArrowDown } from "@/components/Icons/ArrowDown";
 import { ArrowUp } from "@/components/Icons/ArrowUp";
 
-import React, { type FunctionComponent, useEffect, useState } from "react";
+import { type FunctionComponent, useEffect, useState } from "react";
 
 import * as styles from "./ColumnHeader.styles";
 import { CaptionText } from "../CaptionText/CaptionText";

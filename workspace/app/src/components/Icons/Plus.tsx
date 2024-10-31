@@ -1,4 +1,4 @@
-import React, { type FunctionComponent } from "react";
+import { type FunctionComponent } from "react";
 
 export const Plus: FunctionComponent = ({ size = 20 }: { readonly size?: number }) => (
   <svg

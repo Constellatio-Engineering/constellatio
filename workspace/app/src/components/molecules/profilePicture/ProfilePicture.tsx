@@ -2,7 +2,7 @@ import { type IProfilePictureAvatars, ProfileAvatar } from "@/components/Icons/P
 import useUserDetails from "@/hooks/useUserDetails";
 
 import Image from "next/image";
-import React, { type ComponentProps, type FunctionComponent } from "react";
+import { type ComponentProps, type FunctionComponent } from "react";
 
 import * as styles from "./ProfilePicture.styles";
 import genericProfileIcon from "../../../../public/images/icons/generic-user-icon.svg";

@@ -4,7 +4,7 @@ import useDocumentEditorStore from "@/stores/documentEditor.store";
 import { showConfirmChangesDeletionModal } from "@/utils/modals";
 
 import { Drawer, ScrollArea } from "@mantine/core";
-import React, { type FunctionComponent, useCallback } from "react";
+import { type FunctionComponent, useCallback } from "react";
 
 import EditorForm from "./editorForm/EditorForm";
 

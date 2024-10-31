@@ -1,5 +1,5 @@
 import { type SerializedStyles } from "@emotion/react";
-import React, { type ComponentProps, forwardRef } from "react";
+import { type ComponentProps, forwardRef } from "react";
 
 import * as styles from "./UnstyledButton.styles";
 

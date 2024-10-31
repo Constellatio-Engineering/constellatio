@@ -2,7 +2,7 @@ import { Heart } from "@/components/Icons/Heart";
 import { MoveDownIcon } from "@/components/Icons/MoveDown";
 import { NoteIcon } from "@/components/Icons/Note";
 
-import React, { type FunctionComponent } from "react";
+import { type FunctionComponent } from "react";
 
 import * as styles from "./MaterialsLabel.styles";
 import { CaptionText } from "../CaptionText/CaptionText";

@@ -3,8 +3,6 @@ import PageHead from "@/components/organisms/pageHead/PageHead";
 import PersonalSpacePage from "@/components/pages/personalSpacePage/PersonalSpacePage";
 import { type NextPageWithLayout } from "@/pages/_app";
 
-import React from "react";
-
 const Page: NextPageWithLayout = () =>
 {
   return (

@@ -3,7 +3,7 @@ import { Cross } from "@/components/Icons/Cross";
 
 import { Box, Text } from "@mantine/core";
 import { useMantineTheme } from "@mantine/styles";
-import React, { type FC, type ReactNode } from "react";
+import { type FC, type ReactNode } from "react";
 
 import { styles } from "./PasswordStrengthMeter.styles";
 

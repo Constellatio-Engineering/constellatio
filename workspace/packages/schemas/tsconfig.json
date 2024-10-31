@@ -1,13 +1,5 @@
 {
   "extends": "@constellatio/tsconfig/internal-package.json",
   "include": ["src/**/*", "*.ts"],
-  "exclude": ["node_modules"],
-  "compilerOptions": {
-    "baseUrl": ".",
-    "paths": {
-      "~/integration/*": ["src/integration/*"],
-      "~/routers/*": ["src/routers/*"],
-      "~/common/*": ["src/common/*"]
-    }
-  }
+  "exclude": ["node_modules"]
 }

@@ -3,7 +3,7 @@ import { useAmountOfUnreadNotification } from "@/hooks/useAmountOfUnreadNotifica
 
 import { appPaths } from "@constellatio/shared/paths";
 import Link from "next/link";
-import React, { type FunctionComponent } from "react";
+import { type FunctionComponent } from "react";
 
 import * as styles from "./NotificationsBell.styles";
 

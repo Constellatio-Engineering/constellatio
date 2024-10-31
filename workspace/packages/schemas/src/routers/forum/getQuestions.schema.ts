@@ -1,8 +1,8 @@
 
-import { idValidation } from "~/common/common.validation";
-import { cursorValidation, limitValidation } from "~/common/forum/cursor.validation";
-
 import { z } from "zod";
+
+import { idValidation } from "../../common/common.validation";
+import { cursorValidation, limitValidation } from "../../common/forum/cursor.validation";
 
 export const getQuestionsSchema = z.object({
   cursor: cursorValidation,

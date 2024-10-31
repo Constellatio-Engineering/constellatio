@@ -1,5 +1,5 @@
 /* eslint-disable max-lines */
-import React, { type FunctionComponent } from "react";
+import { type FunctionComponent } from "react";
 
 export const SearchPageHeaderBgLayer: FunctionComponent = () => (
   <svg

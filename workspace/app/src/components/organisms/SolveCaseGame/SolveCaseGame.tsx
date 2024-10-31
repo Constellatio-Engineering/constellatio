@@ -3,7 +3,7 @@ import { Button } from "@/components/atoms/Button/Button";
 import { Pen } from "@/components/Icons/Pen";
 
 import { Title } from "@mantine/core";
-import React, { type FC } from "react";
+import { type FC } from "react";
 
 import { Container, GameWrapper, TitleWrapper } from "./SolveCaseGame.styles";
 

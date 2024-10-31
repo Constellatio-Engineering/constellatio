@@ -3,7 +3,7 @@ import { ClapHands } from "@/components/Icons/ClapHands";
 import { Heart } from "@/components/Icons/Heart";
 import { api } from "@/utils/api";
 
-import React, { type FunctionComponent } from "react";
+import { type FunctionComponent } from "react";
 
 import * as styles from "./ProfileReferralCardSection.styles";
 import ProfileReferralCard from "../profileReferralCard/ProfileReferralCard";

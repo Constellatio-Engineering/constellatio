@@ -34,7 +34,7 @@ import { notifications } from "@mantine/notifications";
 import ErrorPage from "next/error";
 import Link from "next/link";
 import { useRouter } from "next/router";
-import React, { Fragment, type FunctionComponent, useEffect, useState } from "react";
+import { Fragment, type FunctionComponent, useEffect, useState } from "react";
 
 import * as styles from "./ForumQuestionDetailPage.styles";
 import { QuestionUpvoteButton } from "../forumOverviewPage/upvoteButton/QuestionUpvoteButton";

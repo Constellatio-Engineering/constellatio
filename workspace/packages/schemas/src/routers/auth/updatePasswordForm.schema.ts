@@ -1,6 +1,6 @@
-import { passwordSchema } from "~/common/auth/userData.validation";
-
 import { z } from "zod";
+
+import { passwordSchema } from "../../common/auth/userData.validation";
 
 export const updatePasswordFormSchema = z
   .object({

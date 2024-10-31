@@ -5,7 +5,7 @@ import { AuthStateContext } from "@/provider/AuthStateProvider";
 import { useTheme } from "@emotion/react";
 import formbricks from "@formbricks/js/app";
 import { Tooltip } from "@mantine/core";
-import React, { type FunctionComponent, useContext, useEffect, useRef } from "react";
+import { type FunctionComponent, useContext, useEffect, useRef } from "react";
 
 import * as styles from "./FeedbackButton.styles";
 

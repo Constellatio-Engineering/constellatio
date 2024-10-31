@@ -5,7 +5,7 @@ import { api } from "@/utils/api";
 import { type AppRouter } from "@constellatio/api";
 import { convertSecondsToDuration } from "@constellatio/utils/dates";
 import { type inferProcedureOutput } from "@trpc/server";
-import React, { type FunctionComponent, useMemo } from "react";
+import { type FunctionComponent, useMemo } from "react";
 
 import * as styles from "./LearninTimeCard.styles";
 

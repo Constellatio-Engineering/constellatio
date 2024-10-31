@@ -8,7 +8,7 @@ import { type AddOrRemoveBookmarkSchema } from "@constellatio/schemas/routers/bo
 import { appPaths } from "@constellatio/shared/paths";
 import { type Nullable } from "@constellatio/utility-types";
 import { useRouter } from "next/router";
-import React, { type FunctionComponent } from "react";
+import { type FunctionComponent } from "react";
 
 import DeleteBookmarkModal from "../../deleteBookmarkModal/DeleteBookmarkModal";
 import { type ICaseBlockProps } from "../ItemBlock";

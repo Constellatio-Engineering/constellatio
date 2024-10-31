@@ -2,7 +2,7 @@ import { UnstyledButton } from "@/components/molecules/unstyledButton/UnstyledBu
 
 import { type StaticImport } from "next/dist/shared/lib/get-img-props";
 import Image from "next/image";
-import React, { type FunctionComponent } from "react";
+import { type FunctionComponent } from "react";
 
 import * as styles from "./SocialLoginButton.styles";
 

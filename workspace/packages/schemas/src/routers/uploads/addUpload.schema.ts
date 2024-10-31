@@ -1,8 +1,8 @@
-import { idValidation } from "~/common/common.validation";
-import { filenameValidation, folderIdValidation, generateContentTypeValidation } from "~/common/uploads/uploadedFile.validation";
-
 import { fileExtensions, fileMimeTypes } from "@constellatio/shared/validation";
 import { z } from "zod";
+
+import { idValidation } from "../../common/common.validation";
+import { filenameValidation, folderIdValidation, generateContentTypeValidation } from "../../common/uploads/uploadedFile.validation";
 
 export const addUploadSchema = z.object({
   contentType: generateContentTypeValidation(fileMimeTypes),

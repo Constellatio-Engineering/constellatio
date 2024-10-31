@@ -12,7 +12,7 @@ import { api } from "@/utils/api";
 
 import { type CreateDocumentSchema } from "@constellatio/schemas/routers/documents/createDocument.schema";
 import { type UpdateDocumentSchema } from "@constellatio/schemas/routers/documents/updateDocument.schema";
-import React, { type FunctionComponent, useCallback } from "react";
+import { type FunctionComponent, useCallback } from "react";
 
 import * as styles from "./EditorForm.styles";
 

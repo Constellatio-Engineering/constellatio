@@ -1,7 +1,7 @@
 import ContentWrapper from "@/components/helpers/contentWrapper/ContentWrapper";
 
 import { ScrollArea } from "@mantine/core";
-import React, { type FunctionComponent } from "react";
+import { type FunctionComponent } from "react";
 
 import * as styles from "./ProfileNavMenuTablet.styles";
 import MenuTab from "../../atoms/menuTab/MenuTab";

@@ -1,5 +1,5 @@
 import { Checkbox as MantineCheckBox, type CheckboxProps as MantineCheckBoxProps, type CSSObject } from "@mantine/core";
-import React, { type FC } from "react";
+import { type FC } from "react";
 
 import { checkboxStyles } from "./Checkbox.styles";
 

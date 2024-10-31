@@ -1,7 +1,7 @@
 import { spaciiing } from "@/constants/styles/spacing";
 
 import { createPolymorphicComponent, type CSSObject, Text, type TextProps } from "@mantine/core";
-import React, { type FC } from "react";
+import { type FC } from "react";
 
 type TBodyText = TextProps & {
   readonly styleOverwrite?: CSSObject;

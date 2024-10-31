@@ -8,7 +8,7 @@ import useUploadFolders from "@/hooks/useUploadFolders";
 import { defaultFolderName } from "@/utils/translations";
 
 import { useMantineTheme } from "@mantine/core";
-import React, { type FunctionComponent, useState } from "react";
+import { type FunctionComponent, useState } from "react";
 
 import * as styles from "./MoveToModal.styles";
 

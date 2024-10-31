@@ -1,23 +1,4 @@
 /* eslint-disable max-lines */
-import { createClickupTask } from "~/lib/clickup/tasks/create-task";
-import { deleteClickupCustomFieldValue } from "~/lib/clickup/tasks/delete-custom-field-value";
-import { findClickupTask } from "~/lib/clickup/tasks/find-task";
-import { updateClickupCustomField } from "~/lib/clickup/tasks/update-custom-field";
-import { updateClickupTask } from "~/lib/clickup/tasks/update-task";
-import {
-  type ClickupTask,
-  type ClickupTaskCreate,
-  type CurrencyCustomFieldInsertProps,
-  type CustomFieldInsert,
-  type DateCustomFieldInsertProps,
-  type DropDownCustomFieldInsertProps,
-  type EmailCustomFieldInsertProps,
-  type LabelCustomFieldInsertProps,
-  type NumberCustomFieldInsertProps,
-  type ShortTextCustomFieldInsertProps, type TextCustomFieldInsertProps,
-} from "~/lib/clickup/types";
-import { stripe } from "~/lib/stripe/stripe";
-import { InternalServerError } from "~/utils/serverError";
 
 import { type allArticles } from "@constellatio/cms/content/getAllArticles";
 import { type AllCases } from "@constellatio/cms/content/getAllCases";
@@ -38,6 +19,23 @@ import { createPagesServerClient, type SupabaseClient, type User as SupabaseUser
 import { type AxiosResponse, type AxiosRequestConfig } from "axios";
 import { type NextApiRequest, type NextApiResponse } from "next";
 import type Stripe from "stripe";
+
+import { InternalServerError } from "../../utils/serverError";
+import { stripe } from "../stripe/stripe";
+import { createClickupTask } from "./tasks/create-task";
+import { deleteClickupCustomFieldValue } from "./tasks/delete-custom-field-value";
+import { findClickupTask } from "./tasks/find-task";
+import { updateClickupCustomField } from "./tasks/update-custom-field";
+import { updateClickupTask } from "./tasks/update-task";
+import {
+  type ClickupTask,
+  type ClickupTaskCreate, type CurrencyCustomFieldInsertProps,
+  type CustomFieldInsert, type DateCustomFieldInsertProps,
+  type DropDownCustomFieldInsertProps,
+  type EmailCustomFieldInsertProps, type LabelCustomFieldInsertProps,
+  type NumberCustomFieldInsertProps,
+  type ShortTextCustomFieldInsertProps, type TextCustomFieldInsertProps
+} from "./types";
 
 export const clickupRequestConfig: AxiosRequestConfig = {
   headers: {

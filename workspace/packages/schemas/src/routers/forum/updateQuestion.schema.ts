@@ -1,10 +1,10 @@
 
-import { idValidation } from "~/common/common.validation";
+import { z } from "zod";
+
+import { idValidation } from "../../common/common.validation";
 import {
   legalFieldIdValidation, questionTextValidation, subfieldsIdsValidation, titleValidation, topicsIdsValidation 
-} from "~/common/forum/question.validation";
-
-import { z } from "zod";
+} from "../../common/forum/question.validation";
 
 export const questionUpdateSchema = z.object({
   legalFieldId: legalFieldIdValidation,

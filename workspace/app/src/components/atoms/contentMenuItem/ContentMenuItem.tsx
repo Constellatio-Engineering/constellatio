@@ -1,6 +1,6 @@
 import { ArrowSolidRight } from "@/components/Icons/arrow-solid-right";
 
-import React, { type FunctionComponent } from "react";
+import { type FunctionComponent } from "react";
 
 import * as styles from "./ContentMenuItem.styles";
 import { BodyText } from "../BodyText/BodyText";

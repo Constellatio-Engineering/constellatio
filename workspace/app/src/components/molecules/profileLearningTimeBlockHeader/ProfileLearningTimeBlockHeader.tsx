@@ -4,7 +4,7 @@ import { SubtitleText } from "@/components/atoms/SubtitleText/SubtitleText";
 import { ClockIcon } from "@/components/Icons/ClockIcon";
 
 import { Skeleton } from "@mantine/core";
-import React, { type FunctionComponent } from "react";
+import { type FunctionComponent } from "react";
 
 import * as styles from "./ProfileLearningTimeBlockHeader.styles";
 

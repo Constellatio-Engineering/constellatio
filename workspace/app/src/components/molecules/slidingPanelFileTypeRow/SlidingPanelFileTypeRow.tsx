@@ -3,7 +3,7 @@ import Label, { type ILabelProps } from "@/components/atoms/label/Label";
 import MaterialsLabel from "@/components/atoms/materialsLabel/MaterialsLabel";
 import { SubtitleText } from "@/components/atoms/SubtitleText/SubtitleText";
 
-import React, { type FunctionComponent } from "react";
+import { type FunctionComponent } from "react";
 
 import * as styles from "./SlidingPanelFileTypeRow.styles";
 

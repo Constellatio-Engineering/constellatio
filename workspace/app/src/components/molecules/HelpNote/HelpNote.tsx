@@ -2,7 +2,7 @@ import { BodyText } from "@/components/atoms/BodyText/BodyText";
 import { richTextParagraphOverwrite } from "@/components/helpers/richTextParagraphOverwrite";
 import { InfoFilled } from "@/components/Icons/InfoFilled";
 
-import React, { type FC } from "react";
+import { type FC } from "react";
 
 import { HeadingWrapper, IconWrapper, RichTextWrapper, Wrapper } from "./HelpNote.styles";
 import { Richtext } from "../Richtext/Richtext";

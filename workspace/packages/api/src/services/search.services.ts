@@ -1,6 +1,4 @@
 /* eslint-disable max-lines */
-import { meiliSearchAdmin } from "~/lib/meilisearch";
-
 import { type AllTags } from "@constellatio/cms/content/getAllTags";
 import { getArticleById } from "@constellatio/cms/content/getArticleById";
 import { getCaseById } from "@constellatio/cms/content/getCaseById";
@@ -44,6 +42,7 @@ import {
 import { type CaisyWebhookEventType } from "@constellatio/shared/validation";
 
 import { addTags } from "./tags.services";
+import { meiliSearchAdmin } from "../lib/meilisearch";
 
 export const addContentToSearchQueue = async (items: SearchIndexUpdateQueueInsert | SearchIndexUpdateQueueInsert[]): Promise<void> =>
 {

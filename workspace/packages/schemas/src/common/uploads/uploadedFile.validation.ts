@@ -1,9 +1,9 @@
 /* eslint-disable @typescript-eslint/explicit-function-return-type */
-import { idValidation } from "~/common/common.validation";
-
 import { type FileMimeType } from "@constellatio/shared/validation";
 import { getFileExtensionLowercase } from "@constellatio/utils/files";
 import { z } from "zod";
+
+import { idValidation } from "../common.validation";
 
 export const folderIdValidation = idValidation.nullable();
 export const filenameValidation = z.string().min(1).max(255).refine(filename => getFileExtensionLowercase(filename) != null, {

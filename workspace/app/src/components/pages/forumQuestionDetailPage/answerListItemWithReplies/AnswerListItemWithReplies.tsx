@@ -8,7 +8,7 @@ import { useForumPageStore } from "@/stores/forumPage.store";
 import { scrollTo } from "@/utils/scroll";
 
 import { type GetAnswersQuestionParent } from "@constellatio/schemas/routers/forum/getAnswers.schema";
-import React, { Fragment, type FunctionComponent, useId } from "react";
+import { Fragment, type FunctionComponent, useId } from "react";
 import { flushSync } from "react-dom";
 
 import * as styles from "./AnswerListItemWithReplies.styles";

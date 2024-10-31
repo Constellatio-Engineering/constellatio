@@ -19,7 +19,7 @@ import { type GetAnswersAnswerParent, type GetAnswersQuestionParent } from "@con
 import { type Prettify } from "@constellatio/utility-types";
 import { Loader, Modal, Title, TypographyStylesProvider } from "@mantine/core";
 import { notifications } from "@mantine/notifications";
-import React, { type FunctionComponent, useState } from "react";
+import { type FunctionComponent, useState } from "react";
 
 import * as styles from "./AnswerListItem.styles";
 import ForumListItem from "../../forumOverviewPage/forumListItem/ForumListItem";

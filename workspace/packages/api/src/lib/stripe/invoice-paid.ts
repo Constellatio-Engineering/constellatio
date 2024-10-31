@@ -1,12 +1,12 @@
-import { createClickupTask } from "~/lib/clickup/tasks/create-task";
-import { clickupUserIds, getClickupCrmUserByUserId } from "~/lib/clickup/utils";
-import { getUserIdFromStripeEventData } from "~/lib/stripe/utils";
-
 import { and, count, eq, sql } from "@constellatio/db";
 import { db } from "@constellatio/db/client";
 import { referralBalances, referrals, users } from "@constellatio/db/schema";
 import { env } from "@constellatio/env";
 import type Stripe from "stripe";
+
+import { getUserIdFromStripeEventData } from "./utils";
+import { createClickupTask } from "../clickup/tasks/create-task";
+import { clickupUserIds, getClickupCrmUserByUserId } from "../clickup/utils";
 
 const ReferralBonusAmount = 10;
 const ReferralExtraBonusAmount = 50;

@@ -1,5 +1,3 @@
-import { EmailAlreadyTakenError, InternalServerError, RegisterError } from "~/utils/serverError";
-import { finishSignup } from "~/utils/signup";
 
 import { eq } from "@constellatio/db";
 import { db } from "@constellatio/db/client";
@@ -10,6 +8,8 @@ import { getConfirmEmailUrl } from "@constellatio/shared/paths";
 import { z } from "zod";
 
 import { createTRPCRouter, publicProcedure } from "../trpc";
+import { EmailAlreadyTakenError, InternalServerError, RegisterError } from "../utils/serverError";
+import { finishSignup } from "../utils/signup";
 
 export const authenticationRouter = createTRPCRouter({
   register: publicProcedure

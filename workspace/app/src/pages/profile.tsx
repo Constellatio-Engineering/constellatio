@@ -9,7 +9,6 @@ import { type IGenMainCategory } from "@constellatio/cms/generated-types";
 import { type Nullable } from "@constellatio/utility-types";
 import { type GetServerSideProps } from "next";
 import { type SSRConfig } from "next-i18next";
-import React from "react";
 
 import { defaultLocale } from "../../next.config.mjs";
 

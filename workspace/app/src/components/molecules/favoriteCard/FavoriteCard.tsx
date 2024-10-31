@@ -5,7 +5,7 @@ import useBookmarks from "@/hooks/useBookmarks";
 
 import { Skeleton, Title } from "@mantine/core";
 import Link from "next/link";
-import React, { type FunctionComponent } from "react";
+import { type FunctionComponent } from "react";
 
 import * as styles from "./FavoriteCard.styles";
 

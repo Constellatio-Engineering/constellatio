@@ -3,7 +3,7 @@ import { ArrowDown } from "@/components/Icons/ArrowDown";
 import { ArrowUp } from "@/components/Icons/ArrowUp";
 import useBadges from "@/hooks/useBadges";
 
-import React, { Fragment, type FunctionComponent } from "react";
+import { Fragment, type FunctionComponent } from "react";
 
 import * as styles from "./ProfileBadgesBlockList.styles";
 import ProfileBadgeCard from "../profileBadgeCard/ProfileBadgeCard";

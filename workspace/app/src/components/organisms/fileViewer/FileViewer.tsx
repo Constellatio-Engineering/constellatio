@@ -6,7 +6,7 @@ import useUploadedFiles from "@/hooks/useUploadedFiles";
 import useMaterialsStore from "@/stores/materials.store";
 
 import { Loader, Modal, ScrollArea } from "@mantine/core";
-import React, { type FunctionComponent, useMemo, useState } from "react";
+import { type FunctionComponent, useMemo, useState } from "react";
 
 import * as styles from "./FileViewer.styles";
 

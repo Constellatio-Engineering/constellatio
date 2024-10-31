@@ -4,9 +4,10 @@ import { queryParams } from "@/utils/query-params";
 
 import { getIsUserLoggedInServer } from "@constellatio/api/utils/auth";
 import { getHasSubscription } from "@constellatio/api/utils/subscription";
-import { eq, schema } from "@constellatio/db";
+import { drizzleServerless, eq, schema } from "@constellatio/db";
 import { users, usersToRoles } from "@constellatio/db/schema";
 import { appPaths, authPaths } from "@constellatio/shared/paths";
+import { neonConfig, Pool } from "@neondatabase/serverless";
 import { createMiddlewareClient } from "@supabase/auth-helpers-nextjs";
 import { type NextMiddleware, NextResponse } from "next/server";
 

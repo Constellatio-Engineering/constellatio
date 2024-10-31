@@ -1,11 +1,4 @@
 /* eslint-disable max-lines */
-import { addUserToCrmUpdateQueue } from "~/lib/clickup/utils";
-import { meiliSearchAdmin } from "~/lib/meilisearch";
-import { addBadgeForUser } from "~/services/badges.services";
-import { addTags } from "~/services/tags.services";
-import { deleteFiles, getClouStorageFileUrl, getSignedCloudStorageUploadUrl } from "~/services/uploads.services";
-import { NotFoundError } from "~/utils/serverError";
-
 import {
   and, desc, eq, inArray, isNull, type SQLWrapper 
 } from "@constellatio/db";
@@ -22,7 +15,13 @@ import { fileExtensions, fileMimeTypes } from "@constellatio/shared/validation";
 import type { inferProcedureOutput } from "@trpc/server";
 import { z } from "zod";
 
+import { addUserToCrmUpdateQueue } from "../lib/clickup/utils";
+import { meiliSearchAdmin } from "../lib/meilisearch";
+import { addBadgeForUser } from "../services/badges.services";
+import { addTags } from "../services/tags.services";
+import { deleteFiles, getClouStorageFileUrl, getSignedCloudStorageUploadUrl } from "../services/uploads.services";
 import { createTRPCRouter, protectedProcedure } from "../trpc";
+import { NotFoundError } from "../utils/serverError";
 
 export const uploadsRouter = createTRPCRouter({
   createSignedGetUrl: protectedProcedure

@@ -6,7 +6,7 @@ import { Pin } from "@/components/Icons/Pin";
 
 import { Button, type ButtonProps, createPolymorphicComponent } from "@mantine/core";
 import { useMantineTheme } from "@mantine/styles";
-import React, { type FC } from "react";
+import { type FC } from "react";
 
 import { floatingButtonStyles } from "./FloatingButton.styles";
 import { BodyText } from "../BodyText/BodyText";

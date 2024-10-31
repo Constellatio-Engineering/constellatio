@@ -13,7 +13,7 @@ import { appPaths } from "@constellatio/shared/paths";
 import { Skeleton, Title } from "@mantine/core";
 import { IconReload } from "@tabler/icons-react";
 import Link from "next/link";
-import React, { Fragment, type FunctionComponent, useEffect, useMemo } from "react";
+import { Fragment, type FunctionComponent, useEffect, useMemo } from "react";
 import { useInView } from "react-intersection-observer";
 
 import * as styles from "./ProfileHistoryTab.styles";

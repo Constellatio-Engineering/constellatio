@@ -2,7 +2,7 @@ import { AuthStateContext } from "@/provider/AuthStateProvider";
 
 import { type Nullable } from "@constellatio/utility-types";
 import Image from "next/image";
-import React, { type FunctionComponent, useContext } from "react";
+import { type FunctionComponent, useContext } from "react";
 
 import * as styles from "./ForumItemAuthor.styles";
 import genericProfileIcon from "../../../../../public/images/icons/generic-user-icon.svg";

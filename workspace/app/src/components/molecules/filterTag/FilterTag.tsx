@@ -1,6 +1,6 @@
 import { UnstyledButton } from "@/components/molecules/unstyledButton/UnstyledButton";
 
-import React, { type FunctionComponent } from "react";
+import { type FunctionComponent } from "react";
 
 import * as styles from "./FilterTag.style";
 import { BodyText } from "../../atoms/BodyText/BodyText";

@@ -13,7 +13,7 @@ import { arrayMove, SortableContext, sortableKeyboardCoordinates, verticalListSo
 import { Box, Switch, Title } from "@mantine/core";
 import { useForm } from "@mantine/form";
 import { randomId } from "@mantine/hooks";
-import React, { type FC, useState } from "react";
+import { type FC, useState } from "react";
 
 import {
   CardItem, CardItemWrapper, Container, GameWrapper, OptionWrapper, OutputWrapper, switchStyle, 

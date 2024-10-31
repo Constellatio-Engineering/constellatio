@@ -83,6 +83,18 @@ const config = {
   productionBrowserSourceMaps: process.env.NEXT_PUBLIC_DEPLOYMENT_ENVIRONMENT !== "production",
   reactStrictMode: true,
   swcMinify: true,
+  transpilePackages: [
+    "@constellatio/api",
+    "@constellatio/cms",
+    "@constellatio/db",
+    "@constellatio/db-to-search",
+    "@constellatio/env",
+    "@constellatio/meilisearch",
+    "@constellatio/schemas",
+    "@constellatio/shared",
+    "@constellatio/utility-types",
+    "@constellatio/utils",
+  ],
   typescript: {
     ignoreBuildErrors: true
   },

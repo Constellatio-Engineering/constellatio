@@ -5,7 +5,7 @@ import FileUploadListItem from "@/components/molecules/fileUploadListItem/FileUp
 import { type UploadState } from "@/stores/uploadsProgress.store";
 
 import { ScrollArea } from "@mantine/core";
-import React, { type FunctionComponent, useEffect } from "react";
+import { type FunctionComponent, useEffect } from "react";
 
 import * as styles from "./FileUploadMenu.styles";
 

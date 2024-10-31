@@ -3,5 +3,7 @@
 export * from "drizzle-orm/sql";
 export { alias } from "drizzle-orm/pg-core";
 export { getTableColumns } from "drizzle-orm/utils";
+import { drizzle as drizzleServerless } from "drizzle-orm/neon-serverless";
 
 export * as schema from "./schema";
+export { drizzleServerless };

@@ -15,7 +15,7 @@ import { useTagsEditorStore } from "@/stores/tagsEditor.store";
 import { getFolderName } from "@/utils/folders";
 
 import { type UploadedFile } from "@constellatio/db/schema";
-import React, { type FunctionComponent } from "react";
+import { type FunctionComponent } from "react";
 
 import * as styles from "./UploadedMaterialTableBody.styles";
 import MaterialOptionsMenu from "../materialsOptionsMenu/MaterialsOptionsMenu";

@@ -4,7 +4,7 @@ import useDocumentEditorStore from "@/stores/documentEditor.store";
 import useMaterialsStore from "@/stores/materials.store";
 
 import { type Document } from "@constellatio/db/schema";
-import React, { type FunctionComponent } from "react";
+import { type FunctionComponent } from "react";
 
 import * as styles from "./MaterialCard.styles";
 

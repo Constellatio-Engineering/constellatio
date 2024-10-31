@@ -4,7 +4,7 @@ import { UnstyledButton } from "@/components/molecules/unstyledButton/UnstyledBu
 import useUserDetails from "@/hooks/useUserDetails";
 
 import { Tooltip } from "@mantine/core";
-import React, { type FunctionComponent } from "react";
+import { type FunctionComponent } from "react";
 
 import * as styles from "./UpvoteButton.styles";
 

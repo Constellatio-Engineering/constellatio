@@ -5,7 +5,7 @@ import { scrollToTop } from "@/utils/scroll";
 
 import { useTheme } from "@emotion/react";
 import { Tooltip } from "@mantine/core";
-import React, { type FunctionComponent, useContext, useEffect, useState } from "react";
+import { type FunctionComponent, useContext, useEffect, useState } from "react";
 
 import * as styles from "./ScrollToTopButton.styles";
 

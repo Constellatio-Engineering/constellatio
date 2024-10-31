@@ -1,5 +1,5 @@
 import { Select, type SelectProps, Skeleton } from "@mantine/core";
-import React, { type FC } from "react";
+import { type FC } from "react";
 
 import { dropdownStyles } from "./Dropdown.styles";
 import { DropdownItem } from "./DropdownItem";

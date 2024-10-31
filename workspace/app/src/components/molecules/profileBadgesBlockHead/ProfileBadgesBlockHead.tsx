@@ -7,7 +7,7 @@ import useBadges from "@/hooks/useBadges";
 import useDashboardPageStore from "@/stores/dashboardPage.store";
 
 import { Skeleton } from "@mantine/core";
-import React, { type FunctionComponent } from "react";
+import { type FunctionComponent } from "react";
 
 import * as styles from "./../../organisms/profileBadgesBlock/ProfileBadgesBlock.styles";
 

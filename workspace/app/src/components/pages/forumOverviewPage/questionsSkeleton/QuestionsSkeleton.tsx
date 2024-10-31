@@ -1,7 +1,7 @@
 import { defaultLimit } from "@/components/pages/forumOverviewPage/ForumOverviewPage";
 
 import { Skeleton } from "@mantine/core";
-import React, { type FunctionComponent } from "react";
+import { type FunctionComponent } from "react";
 
 import * as styles from "./QuestionsSkeleton.styles";
 import ForumListItem from "../forumListItem/ForumListItem";

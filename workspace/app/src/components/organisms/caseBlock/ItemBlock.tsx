@@ -5,7 +5,7 @@ import ItemRow from "@/components/organisms/caseBlock/itemRow/ItemRow";
 
 import { type IGenArticle, type IGenCase } from "@constellatio/cms/generated-types";
 import { useMediaQuery } from "@mantine/hooks";
-import React, { type FunctionComponent, useState } from "react";
+import { type FunctionComponent, useState } from "react";
 
 import * as styles from "./ItemBlock.styles";
 import Table, { type CasesTableProps, type DictionaryTableProps } from "../table/Table";

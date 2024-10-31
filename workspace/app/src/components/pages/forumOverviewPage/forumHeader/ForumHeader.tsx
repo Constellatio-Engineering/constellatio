@@ -7,7 +7,7 @@ import { useForumPageStore } from "@/stores/forumPage.store";
 
 import { Title } from "@mantine/core";
 import Image from "next/image";
-import React, { type FunctionComponent } from "react";
+import { type FunctionComponent } from "react";
 
 import FlagImage from "./assets/flag.png";
 import * as styles from "./ForumHeader.styles";

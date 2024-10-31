@@ -2,7 +2,7 @@ import { Input } from "@/components/atoms/Input/Input";
 
 import { minimumPasswordLength } from "@constellatio/schemas/common/auth/userData.validation";
 import { Box, type TextInputProps } from "@mantine/core";
-import React, { type FunctionComponent } from "react";
+import { type FunctionComponent } from "react";
 import PasswordStrengthBar from "react-password-strength-bar";
 
 type Props = {

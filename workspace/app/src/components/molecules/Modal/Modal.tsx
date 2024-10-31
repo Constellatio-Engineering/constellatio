@@ -1,6 +1,6 @@
 import { Modal as MantineModal, type ModalProps as MantineModalProps } from "@mantine/core";
 import { useMantineTheme } from "@mantine/styles";
-import React, { type FC } from "react";
+import { type FC } from "react";
 
 import { modalStyles } from "./Modal.styles";
 

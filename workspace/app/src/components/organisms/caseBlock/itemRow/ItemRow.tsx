@@ -11,7 +11,7 @@ import { appPaths } from "@constellatio/shared/paths";
 import { type Nullable } from "@constellatio/utility-types";
 import { useMediaQuery } from "@mantine/hooks";
 import Link from "next/link";
-import React, { type FunctionComponent, memo } from "react";
+import { type FunctionComponent, memo } from "react";
 
 import * as styles from "./ItemRow.styles";
 

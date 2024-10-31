@@ -1,7 +1,7 @@
 import { Dropdown, type DropdownProps } from "@/components/atoms/Dropdown/Dropdown";
 
 import { allUniversityNames } from "@constellatio/schemas/common/auth/userData.validation";
-import React, { type FunctionComponent } from "react";
+import { type FunctionComponent } from "react";
 
 type Props = Omit<DropdownProps, "data">;
 

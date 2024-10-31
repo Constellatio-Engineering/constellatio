@@ -6,7 +6,7 @@ import { colooors } from "@/constants/styles/colors";
 import useBadges from "@/hooks/useBadges";
 
 import { Carousel } from "@mantine/carousel";
-import React, { type FunctionComponent } from "react";
+import { type FunctionComponent } from "react";
 
 import SkeletonSlide from "./skeletonSlide/SkeletonSlide";
 import ProfileBadgeCard from "../profileBadgeCard/ProfileBadgeCard";

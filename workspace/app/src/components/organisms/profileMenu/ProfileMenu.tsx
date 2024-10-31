@@ -12,7 +12,7 @@ import useUserDetails from "@/hooks/useUserDetails";
 import { useOnboardingStore } from "@/stores/onboarding.store";
 
 import { IconLogout } from "@tabler/icons-react";
-import React, { type FunctionComponent } from "react";
+import { type FunctionComponent } from "react";
 
 import * as styles from "./ProfileMenu.styles";
 import ProfileMenuMainProfileInfo from "./ProfileMenuMainProfileInfo";

@@ -3,7 +3,7 @@ import { TagsSkeleton } from "@/components/pages/forumOverviewPage/questionsSkel
 import { useLegalFieldsAndTopics } from "@/hooks/useLegalFieldsAndTopics";
 
 import { type Nullable } from "@constellatio/utility-types";
-import React, { type FunctionComponent } from "react";
+import { type FunctionComponent } from "react";
 
 import * as styles from "./LegalFieldsAndTopicsTags.styles";
 

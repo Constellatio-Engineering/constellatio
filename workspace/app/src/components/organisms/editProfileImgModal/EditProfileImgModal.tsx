@@ -17,7 +17,7 @@ import { getRandomUuid } from "@constellatio/utils/id";
 import { notifications } from "@mantine/notifications";
 import { useMutation } from "@tanstack/react-query";
 import axios from "axios";
-import React, { type FunctionComponent, useEffect, useState } from "react";
+import { type FunctionComponent, useEffect, useState } from "react";
 
 import * as styles from "./EditProfileImgModal.styles";
 

@@ -4,7 +4,7 @@ import IconButton from "@/components/atoms/iconButton/IconButton";
 import Label from "@/components/atoms/label/Label";
 
 import { Title } from "@mantine/core";
-import React, { type FunctionComponent } from "react";
+import { type FunctionComponent } from "react";
 
 import * as styles from "./CaseBlockHead.styles";
 

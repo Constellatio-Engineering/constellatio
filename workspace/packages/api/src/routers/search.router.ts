@@ -1,9 +1,8 @@
-import { getDefaultSearchApiKey, meiliSearchAdmin } from "~/lib/meilisearch";
-
 import { getPopularSearches } from "@constellatio/cms/content/getPopularSearches";
 import { type SearchIndex } from "@constellatio/db-to-search";
 import { env } from "@constellatio/env";
 
+import { getDefaultSearchApiKey, meiliSearchAdmin } from "../lib/meilisearch";
 import { createTRPCRouter, protectedProcedure } from "../trpc";
 
 type SearchRules = {

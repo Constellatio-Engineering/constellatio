@@ -2,7 +2,7 @@ import { LinkButton, type TLinkButton } from "@/components/atoms/LinkButton/Link
 import { Cross } from "@/components/Icons/Cross";
 
 import { Title } from "@mantine/core";
-import React, { type FunctionComponent } from "react";
+import { type FunctionComponent } from "react";
 
 import * as styles from "./SlidingPanelTitle.styles";
 

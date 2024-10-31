@@ -5,7 +5,7 @@ import useDragDropGameStore, { type GameStatus, type TDragAndDropGameOptionType 
 import {
   Draggable, type DraggableProvided, type DraggableStateSnapshot, Droppable, type DroppableProvided, type DroppableStateSnapshot 
 } from "@hello-pangea/dnd";
-import React, { type FunctionComponent } from "react";
+import { type FunctionComponent } from "react";
 
 type Props = {
   readonly columnType: "options" | "dropped";

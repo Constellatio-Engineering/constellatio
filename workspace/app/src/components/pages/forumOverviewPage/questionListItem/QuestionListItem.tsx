@@ -11,7 +11,7 @@ import { getForumQuestionUrl } from "@constellatio/shared/paths";
 import { removeHtmlTagsFromString } from "@constellatio/utils/html";
 import { Title, Tooltip } from "@mantine/core";
 import Link from "next/link";
-import React, { type FunctionComponent } from "react";
+import { type FunctionComponent } from "react";
 
 import * as styles from "./QuestionListItem.styles";
 import { QuestionUpvoteButton } from "../upvoteButton/QuestionUpvoteButton";

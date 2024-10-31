@@ -2,7 +2,7 @@ import useSearchBarStore from "@/stores/searchBar.store";
 
 import { type LinkProps } from "next/dist/client/link";
 import Link from "next/link";
-import React, { type FunctionComponent } from "react";
+import { type FunctionComponent } from "react";
 
 type Props = Omit<React.AnchorHTMLAttributes<HTMLAnchorElement>, keyof LinkProps> & LinkProps & {
   readonly children?: React.ReactNode;

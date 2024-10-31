@@ -1,4 +1,4 @@
-import React, { type ReactNode, type FunctionComponent } from "react";
+import { type ReactNode, type FunctionComponent } from "react";
 
 import IconButton from "../../atoms/iconButton/IconButton";
 

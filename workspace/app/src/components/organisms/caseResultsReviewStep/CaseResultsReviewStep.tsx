@@ -25,7 +25,7 @@ import {
   Accordion, Container, ScrollArea, Spoiler, Title 
 } from "@mantine/core";
 import { useDisclosure } from "@mantine/hooks";
-import React, { type FunctionComponent, useEffect, useRef, useState } from "react";
+import { type FunctionComponent, useEffect, useRef, useState } from "react";
 
 import * as styles from "./CaseResultsReviewStep.styles";
 import { getNestedHeadingIndex } from "../floatingPanel/generateTocHelper";

@@ -1,6 +1,3 @@
-import { addUserToCrmUpdateQueue } from "~/lib/clickup/utils";
-import { addBadgeForUser } from "~/services/badges.services";
-
 import { caisySDK } from "@constellatio/cms/sdk";
 import { getGamesFromCase } from "@constellatio/cms/utils/case";
 import { and, eq, inArray, type SQLWrapper } from "@constellatio/db";
@@ -13,6 +10,8 @@ import { resetCaseProgressSchema } from "@constellatio/schemas/routers/caseProgr
 import { setCaseProgressStateSchema } from "@constellatio/schemas/routers/caseProgress/setCaseProgressState.schema";
 import { submitCaseSolutionSchema } from "@constellatio/schemas/routers/caseProgress/submitCaseSolution.schema";
 
+import { addUserToCrmUpdateQueue } from "../lib/clickup/utils";
+import { addBadgeForUser } from "../services/badges.services";
 import { createTRPCRouter, protectedProcedure } from "../trpc";
 
 export type GetCaseProgressResult = Pick<CaseProgress, "progressState" | "caseId">;

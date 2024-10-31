@@ -5,7 +5,7 @@ import { type AllUserData } from "@/hooks/useAllUserData";
 
 import { appPaths } from "@constellatio/shared/paths";
 import { useRouter } from "next/router";
-import React, { Fragment, type FunctionComponent } from "react";
+import { Fragment, type FunctionComponent } from "react";
 
 type Props = {
   readonly allUserData: AllUserData;

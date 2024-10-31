@@ -3,7 +3,7 @@ import { BodyText } from "@/components/atoms/BodyText/BodyText";
 import { Button } from "@/components/atoms/Button/Button";
 
 import { Title } from "@mantine/core";
-import React, { type FunctionComponent } from "react";
+import { type FunctionComponent } from "react";
 
 import * as styles from "./ResetPasswordSuccess.styles";
 import FlagImg from "../../../../../public/images/placeholder-flag.png";

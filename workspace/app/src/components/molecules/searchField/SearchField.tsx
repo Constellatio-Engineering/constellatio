@@ -3,7 +3,7 @@ import { Search } from "@/components/Icons/Search";
 import useSearchBarStore from "@/stores/searchBar.store";
 
 import { type TextInputProps } from "@mantine/core";
-import React, { type FunctionComponent } from "react";
+import { type FunctionComponent } from "react";
 
 import * as styles from "./SearchField.styles";
 

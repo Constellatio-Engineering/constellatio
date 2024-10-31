@@ -1,7 +1,7 @@
 import PageHead from "@/components/organisms/pageHead/PageHead";
 import RecoverPage from "@/components/pages/RecoverPage/RecoverPage";
 
-import React, { type FunctionComponent } from "react";
+import { type FunctionComponent } from "react";
 
 const Recover: FunctionComponent = () =>
 {

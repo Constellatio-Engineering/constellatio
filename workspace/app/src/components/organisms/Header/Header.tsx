@@ -1,7 +1,7 @@
 import Image from "next/image";
 import { type FC } from "react";
 
-import HeaderDefault from "./DefaultHeader/HeaderDefault";
+import { HeaderDefault } from "./DefaultHeader/HeaderDefault";
 import * as styles from "./Header.styles";
 import { SHeader } from "./Header.styles";
 import ConstellatioFullLogoPng from "../../../../public/images/full-logo.png";

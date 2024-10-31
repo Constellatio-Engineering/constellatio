@@ -5,7 +5,7 @@ import { env } from "@/env.mjs";
 import { api } from "@/utils/api";
 
 import { Loader } from "@mantine/core";
-import React, { type FunctionComponent } from "react";
+import { type FunctionComponent } from "react";
 
 import * as styles from "./ProfileReferralCodeSection.styles";
 

@@ -1,7 +1,8 @@
-import { idValidation } from "~/common/common.validation";
 
 import { imageFileExtensions, type ImageFileMimeType, imageFileMimeTypes } from "@constellatio/shared/validation";
 import { z } from "zod";
+
+import { idValidation } from "../../common/common.validation";
 
 // this is a limitation of typescript. A string should be comparable to a string union, but it's not.
 // eslint-disable-next-line @typescript-eslint/no-explicit-any

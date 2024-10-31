@@ -13,7 +13,7 @@ import { api } from "@/utils/api";
 
 import { type CreateNoteSchema } from "@constellatio/schemas/routers/notes/createNote.schema";
 import { type UpdateNoteSchema } from "@constellatio/schemas/routers/notes/updateNote.schema";
-import React, { type FunctionComponent, useState } from "react";
+import { type FunctionComponent, useState } from "react";
 
 import * as styles from "./EditorForm.styles";
 

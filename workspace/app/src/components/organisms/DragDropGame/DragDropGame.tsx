@@ -19,7 +19,7 @@ import { type IGenDragNDropGame } from "@constellatio/cms/generated-types";
 import { shuffleArray } from "@constellatio/utils/array";
 import { DragDropContext, type DropResult } from "@hello-pangea/dnd";
 import { LoadingOverlay, Title } from "@mantine/core";
-import React, { type FC, useCallback, useMemo } from "react";
+import { type FC, useCallback, useMemo } from "react";
 
 import {
   Container, Game, GameWrapper, LegendWrapper, TitleWrapper, 

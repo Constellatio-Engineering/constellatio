@@ -14,7 +14,7 @@ import { type FullLegalCase } from "@constellatio/cms/content/getCaseById";
 import { type ArticleWithNextAndPreviousArticleId } from "@constellatio/cms/utils/articles";
 import { getGamesFromCase } from "@constellatio/cms/utils/case";
 import { appPaths } from "@constellatio/shared/paths";
-import React, { type FunctionComponent, useEffect } from "react";
+import { type FunctionComponent, useEffect } from "react";
 
 import * as styles from "./DetailsPage.styles";
 import ErrorPage from "../errorPage/ErrorPage";

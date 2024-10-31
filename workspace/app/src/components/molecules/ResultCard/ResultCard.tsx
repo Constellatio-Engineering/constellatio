@@ -1,7 +1,7 @@
 import { Check } from "@/components/Icons/Check";
 import { Cross } from "@/components/Icons/Cross";
 
-import React, { type FC } from "react";
+import { type FC } from "react";
 
 import { Card, IconWrapper, LabelWrapper, TextWrapper } from "./ResultCard.stlyes";
 import { CaptionText } from "../../atoms/CaptionText/CaptionText";

@@ -1,6 +1,6 @@
 import { Container, Flex, Title } from "@mantine/core";
 import Image from "next/image";
-import React, { type FunctionComponent } from "react";
+import { type FunctionComponent } from "react";
 
 import * as styles from "./RegistrationVisualHeader.style";
 import visual from "../../../../public/images/Registration-visual.svg";
