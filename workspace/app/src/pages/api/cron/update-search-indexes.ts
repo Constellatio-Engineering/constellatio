@@ -1,8 +1,8 @@
 /* eslint-disable max-lines */
 import { env } from "@/env.mjs";
 
-import { meiliSearchAdmin } from "@constellatio/api/src/lib/meilisearch";
-import { addArticlesToSearchIndex, addCasesToSearchIndex, addUserDocumentsToSearchIndex, addUserUploadsToSearchIndex } from "@constellatio/api/src/services/search.services";
+import { meiliSearchAdmin } from "@constellatio/api/lib/meilisearch";
+import { addArticlesToSearchIndex, addCasesToSearchIndex, addUserDocumentsToSearchIndex, addUserUploadsToSearchIndex } from "@constellatio/api/services/search.services";
 import { getAllArticles } from "@constellatio/cms/content/getAllArticles";
 import { getAllCases } from "@constellatio/cms/content/getAllCases";
 import { type AllTags, getAllTags } from "@constellatio/cms/content/getAllTags";

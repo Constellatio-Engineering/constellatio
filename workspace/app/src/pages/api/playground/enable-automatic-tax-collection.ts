@@ -1,10 +1,11 @@
 import { env } from "@/env.mjs";
 
+import { type NextApiHandler } from "next";
+
+/* import { stripe } from "@constellatio/api/lib/stripe/stripe";
+import { sleep } from "@constellatio/api/utils/common";
 import type { NextApiHandler } from "next";
 import type Stripe from "stripe";
-
-import { stripe } from "@/lib/stripe/stripe";
-import { sleep } from "@/utils/utils";
 
 const handler: NextApiHandler = async (req, res): Promise<void> =>
 {
@@ -72,6 +73,17 @@ const handler: NextApiHandler = async (req, res): Promise<void> =>
   }
 
   return res.status(200).json(customers);
+};*/
+
+// eslint-disable-next-line @typescript-eslint/require-await
+const handler: NextApiHandler = async (_req, res): Promise<void> =>
+{
+  if(env.NEXT_PUBLIC_DEPLOYMENT_ENVIRONMENT !== "development")
+  {
+    return res.status(401).json({ message: "Unauthorized" });
+  }
+
+  return res.status(400).json({ message: "Not implemented" });
 };
 
 export default handler;

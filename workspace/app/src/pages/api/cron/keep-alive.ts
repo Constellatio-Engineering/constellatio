@@ -1,14 +1,12 @@
 /* eslint-disable max-lines */
 import { env } from "@/env.mjs";
 
+import { appRouter, createCallerFactory } from "@constellatio/api";
 import { appPaths, authPaths } from "@constellatio/shared/paths";
 import { printAllSettledPromisesSummary } from "@constellatio/utils/promise";
 import { createPagesServerClient } from "@supabase/auth-helpers-nextjs";
 import axios from "axios";
 import { type NextApiHandler } from "next";
-
-import { appRouter } from "@/server/api/root";
-import { createCallerFactory } from "@/server/api/trpc";
 
 // do not cache this function
 export const revalidate = 0;

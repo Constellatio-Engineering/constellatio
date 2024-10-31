@@ -21,7 +21,7 @@ const formbricksFeedbackWebhookSchema = z.object({
   event: z.enum(["responseUpdated", "responseCreated", "responseFinished"]),
 });
 
-const formbricksWebhookSchema = z.discriminatedUnion("event", [
+export const formbricksWebhookSchema = z.discriminatedUnion("event", [
   formbricksTestWebhookSchema,
   formbricksFeedbackWebhookSchema
 ]);

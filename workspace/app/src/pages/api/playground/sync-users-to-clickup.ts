@@ -1,6 +1,10 @@
 /* eslint-disable max-lines */
 import { env } from "@/env.mjs";
 
+import { type NextApiHandler } from "next";
+// import pLimit from "p-limit";
+
+/* import { getCrmDataForUser } from "@constellatio/api/lib/clickup/utils";
 import {
   and, countDistinct, eq, getTableColumns, type SQL 
 } from "@constellatio/db";
@@ -19,30 +23,31 @@ import { updateClickupCustomField } from "@/lib/clickup/tasks/update-custom-fiel
 import { updateClickupTask } from "@/lib/clickup/tasks/update-task";
 import { type ClickupTask } from "@/lib/clickup/types";
 import { clickupCrmCustomField, getUserCrmData } from "@/lib/clickup/utils";
-import { stripe } from "@/lib/stripe/stripe";
+import { stripe } from "@/lib/stripe/stripe";*/
 
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
-const stripeConcurrencyLimit = pLimit(env.STRIPE_SDK_CONCURRENCY_LIMIT);
+// const stripeConcurrencyLimit = pLimit(env.STRIPE_SDK_CONCURRENCY_LIMIT);
 
-const handler: NextApiHandler = async (req, res): Promise<void> =>
+// eslint-disable-next-line @typescript-eslint/require-await
+const handler: NextApiHandler = async (_req, res): Promise<void> =>
 {
   if(env.NEXT_PUBLIC_DEPLOYMENT_ENVIRONMENT !== "development")
   {
     return res.status(401).json({ message: "Unauthorized" });
   }
 
-  console.warn("------- CAUTION: Make sure to use the production environment variables when running this script! -------");
+  return res.status(400).json({ message: "Not implemented" });
 
   // await sleep(1000);
 
-  const supabaseServerClient = createPagesServerClient({ req, res }, {
+  /* const supabaseServerClient = createPagesServerClient({ req, res }, {
     supabaseKey: env.SUPABASE_SERVICE_ROLE_KEY,
     supabaseUrl: env.NEXT_PUBLIC_SUPABASE_URL
   });
 
   const test = await getCrmDataForUser("4cfc014e-8bcc-4799-8b50-2db0ecb01936", supabaseServerClient);
 
-  console.log(test);
+  console.log(test);*/
 
   // const allUsers = await db.query.users.findMany({
   //   columns: {
@@ -58,7 +63,7 @@ const handler: NextApiHandler = async (req, res): Promise<void> =>
   //   .values(allUsers.map(user => ({ userId: user.id })))
   //   .onConflictDoNothing();
 
-  return res.status(200).json({ message: "Success" });
+  // return res.status(200).json({ message: "Success" });
 
   // const supabaseServerClient = createPagesServerClient({ req, res }, {
   //   supabaseKey: env.SUPABASE_SERVICE_ROLE_KEY,

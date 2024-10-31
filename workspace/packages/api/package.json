@@ -8,9 +8,17 @@
       "types": "./dist/index.d.ts",
       "default": "./index.ts"
     },
+    "./lib/*": {
+      "types": "./dist/src/lib/*.d.ts",
+      "default": "./src/lib/*.ts"
+    },
     "./routers/*": {
       "types": "./dist/src/routers/*.d.ts",
       "default": "./src/routers/*.ts"
+    },
+    "./services/*": {
+      "types": "./dist/src/services/*.d.ts",
+      "default": "./src/services/*.ts"
     },
     "./utils/*": {
       "types": "./dist/src/utils/*.d.ts",

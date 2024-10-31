@@ -1,9 +1,9 @@
 import { env } from "@/env.mjs";
 
-import { addUserToCrmUpdateQueue } from "@constellatio/api/src/lib/clickup/utils";
-import { handleInvoicePaid } from "@constellatio/api/src/lib/stripe/invoice-paid";
-import { stripe } from "@constellatio/api/src/lib/stripe/stripe";
-import { handleSubscriptionEvent } from "@constellatio/api/src/lib/stripe/subscription";
+import { addUserToCrmUpdateQueue } from "@constellatio/api/lib/clickup/utils";
+import { handleInvoicePaid } from "@constellatio/api/lib/stripe/invoice-paid";
+import { stripe } from "@constellatio/api/lib/stripe/stripe";
+import { handleSubscriptionEvent } from "@constellatio/api/lib/stripe/subscription";
 import { InternalServerError } from "@constellatio/api/utils/serverError";
 import { eq } from "@constellatio/db";
 import { db } from "@constellatio/db/client";

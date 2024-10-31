@@ -1,7 +1,9 @@
 /* eslint-disable max-lines */
 import { env } from "@/env.mjs";
 
-import { createClickupChecklist } from "@constellatio/api/lib/clickup/checklists/create-checklist";
+import { type NextApiHandler } from "next";
+
+/* import { createClickupChecklist } from "@constellatio/api/lib/clickup/checklists/create-checklist";
 import { createClickupChecklistItem } from "@constellatio/api/lib/clickup/checklists/create-checklist-item";
 import { createClickupTask } from "@constellatio/api/lib/clickup/tasks/create-task";
 import { type ClickupCreateChecklistResponse, type ClickupTask } from "@constellatio/api/lib/clickup/types";
@@ -120,6 +122,17 @@ const handler: NextApiHandler = async (req, res): Promise<void> =>
   }
 
   return res.status(200).json({ message: "Finished" });
+};*/
+
+// eslint-disable-next-line @typescript-eslint/require-await
+const handler: NextApiHandler = async (_req, res): Promise<void> =>
+{
+  if(env.NEXT_PUBLIC_DEPLOYMENT_ENVIRONMENT !== "development")
+  {
+    return res.status(401).json({ message: "Unauthorized" });
+  }
+
+  return res.status(400).json({ message: "Not implemented" });
 };
 
 export default handler;
