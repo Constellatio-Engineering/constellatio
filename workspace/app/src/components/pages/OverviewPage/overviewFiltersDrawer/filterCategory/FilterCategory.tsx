@@ -8,7 +8,7 @@ import { type Nullable } from "@constellatio/utility-types";
 import { Input } from "@mantine/core";
 import { IconSearch } from "@tabler/icons-react";
 import fuzzysort from "fuzzysort";
-import { type FunctionComponent, useDeferredValue, useMemo } from "react";
+import { type FunctionComponent, useDeferredValue, useMemo, useState } from "react";
 
 import * as styles from "./FilterCategory.styles";
 
@@ -33,9 +33,9 @@ export const FilterCategory: FunctionComponent<FilterCategoryProps> = ({
   title
 }) =>
 {
-  const [isOpen, setIsOpen] = React.useState<boolean>(false);
+  const [isOpen, setIsOpen] = useState<boolean>(false);
   const hasActiveFilters = activeFiltersCount > 0;
-  const [searchValue, setSearchValue] = React.useState<string>("");
+  const [searchValue, setSearchValue] = useState<string>("");
 
   const _itemsFiltered = useMemo(() =>
   {

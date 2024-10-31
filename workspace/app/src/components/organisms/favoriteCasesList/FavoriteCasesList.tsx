@@ -2,7 +2,7 @@ import { Svg } from "@/basic-components/SVG/Svg";
 
 import { type IGenArticleOverviewFragment, type IGenFullCaseFragment, type IGenMainCategory } from "@constellatio/cms/generated-types";
 import { type Nullable } from "@constellatio/utility-types";
-import { type FunctionComponent } from "react";
+import { Fragment, type FunctionComponent } from "react";
 
 import ItemBlock from "../caseBlock/ItemBlock";
 
@@ -19,7 +19,7 @@ const FavoriteCasesList: FunctionComponent<FavoriteCasesListProps> = ({ bookmark
     const items = casesByMainCategory(mainCategoryBlock.id);
 
     return (
-      <React.Fragment key={blockIndex}>
+      <Fragment key={blockIndex}>
         <ItemBlock
           variant="case"
           tableType="favorites"
@@ -36,7 +36,7 @@ const FavoriteCasesList: FunctionComponent<FavoriteCasesListProps> = ({ bookmark
           }}
           items={items}
         />
-      </React.Fragment>
+      </Fragment>
     );
   }
   );

@@ -3,7 +3,7 @@ import { ArrowDown } from "@/components/Icons/ArrowDown";
 import { ArrowUp } from "@/components/Icons/ArrowUp";
 import useBadges from "@/hooks/useBadges";
 
-import { Fragment, type FunctionComponent } from "react";
+import { Fragment, type FunctionComponent, useState } from "react";
 
 import * as styles from "./ProfileBadgesBlockList.styles";
 import ProfileBadgeCard from "../profileBadgeCard/ProfileBadgeCard";
@@ -11,7 +11,7 @@ import ProfileBadgeCard from "../profileBadgeCard/ProfileBadgeCard";
 const ProfileBadgesBlockList: FunctionComponent = () => 
 {
   const { getBadgesResult: { badges } } = useBadges();
-  const [showAll, setShowAll] = React.useState<boolean>(false);
+  const [showAll, setShowAll] = useState<boolean>(false);
   const badgesToShowWithoutShowAll = 9;
 
   return (

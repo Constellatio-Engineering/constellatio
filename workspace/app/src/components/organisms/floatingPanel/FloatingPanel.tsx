@@ -7,7 +7,9 @@ import { Toc } from "@/components/organisms/floatingPanel/Toc";
 import { type IGenCase_Facts } from "@constellatio/cms/generated-types";
 import { Tabs } from "@mantine/core";
 import { type Maybe } from "graphql/jsutils/Maybe";
-import { type FunctionComponent, useMemo, useRef, useState } from "react";
+import {
+  Fragment, type FunctionComponent, useMemo, useRef, useState 
+} from "react";
 
 import * as styles from "./FloatingPanel.styles";
 import { type DataType, generateTOC } from "./generateTocHelper";
@@ -68,13 +70,13 @@ const FloatingPanel: FunctionComponent<IFloatingPanelProps> = ({
         {variant === "case" && facts && !hidden && (
           <Tabs.List>
             {tabs && tabs?.map((tab, tabIndex) => (
-              <React.Fragment key={tabIndex}>
+              <Fragment key={tabIndex}>
                 <SwitcherTab
                   icon={tab?.icon?.src ?? <Trash/>}
                   value={tab.title}
                   onClick={() => setSelectedTabState(tab?.title)}>{tab.title}
                 </SwitcherTab>
-              </React.Fragment>
+              </Fragment>
             ))}
           </Tabs.List>
         )}

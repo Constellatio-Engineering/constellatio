@@ -12,7 +12,7 @@ import { api } from "@/utils/api";
 
 import { type CreateDocumentSchema } from "@constellatio/schemas/routers/documents/createDocument.schema";
 import { type UpdateDocumentSchema } from "@constellatio/schemas/routers/documents/updateDocument.schema";
-import { type FunctionComponent, useCallback } from "react";
+import { type FunctionComponent, useCallback, useState } from "react";
 
 import * as styles from "./EditorForm.styles";
 
@@ -28,7 +28,7 @@ const EditorForm: FunctionComponent<EditorFormProps> = ({ editorState, onClose }
   const updateEditorDocument = useDocumentEditorStore(s => s.updateEditorDocument);
   const setEditDocumentState = useDocumentEditorStore(s => s.setEditDocumentState);
   const { hasUnsavedChanges } = useDocumentEditorStore(s => s.getComputedValues());
-  const [showConfirmDeleteDocWindow, setShowConfirmDeleteDocWindow] = React.useState<boolean>(false);
+  const [showConfirmDeleteDocWindow, setShowConfirmDeleteDocWindow] = useState<boolean>(false);
   const { onDocumentMutation } = useOnDocumentMutation();
   useDataLossProtection(hasUnsavedChanges);
 

@@ -1,30 +1,24 @@
-import { AlertCard } from "@/components/atoms/Card/AlertCard";
+import { styles } from "@/components/atoms/PasswordStrengthMeter/PasswordStrengthMeter.styles";
 
-import { Checkbox } from "@mantine/core";
 import { type FunctionComponent } from "react";
-
-import * as styles from "./ProfileNotificationsTabForm.styles";
-import { BodyText } from "../../atoms/BodyText/BodyText";
-import { Button } from "../../atoms/Button/Button";
-import { Checkbox as CheckboxComp } from "../../atoms/Checkbox/Checkbox";
 
 const ProfileNotificationsTabForm: FunctionComponent = () => 
 {
-  const [value, setValue] = React.useState<string[]>([]);
-  const [err, setErr] = React.useState<string>("");
-  const [success, setSuccess] = React.useState<string>("");
-  // TODO not being used
-  console.log("not being used", { err, success });
+  return <p>Unused</p>;
+
+  /* const [value, setValue] = useState<string[]>([]);
+  const [err, setErr] = useState<string>("");
+  const [success, setSuccess] = useState<string>("");
+
   const handleSubmit = (e: React.FormEvent<HTMLFormElement>): void => 
   {
-    
     e.preventDefault();
     console.log({ value });
     alert("Values Successfuly logged to console!");
     setErr("Sorry, we weren’t able to save changes. Please, try again"); 
-    setSuccess("Your changes have been saved"); 
-  
+    setSuccess("Your changes have been saved");
   };
+
   return (
     <div css={styles.wrapper}>
       <form onSubmit={handleSubmit}>
@@ -43,7 +37,7 @@ const ProfileNotificationsTabForm: FunctionComponent = () =>
         <Button<"button"> type="submit" styleType="primary" css={styles.submitButton}>Save</Button>
       </form>
     </div>
-  );
+  );*/
 };
 
 export default ProfileNotificationsTabForm;

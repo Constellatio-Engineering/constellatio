@@ -5,7 +5,7 @@ import FileUploadListItem from "@/components/molecules/fileUploadListItem/FileUp
 import { type UploadState } from "@/stores/uploadsProgress.store";
 
 import { ScrollArea } from "@mantine/core";
-import { type FunctionComponent, useEffect } from "react";
+import { Fragment, type FunctionComponent, useEffect, useState } from "react";
 
 import * as styles from "./FileUploadMenu.styles";
 
@@ -16,7 +16,7 @@ interface FileUploadMenuProps
 
 const FileUploadMenu: FunctionComponent<FileUploadMenuProps> = ({ uploads }) => 
 {
-  const [isShowMenu, setIsShowMenu] = React.useState<boolean>(false);
+  const [isShowMenu, setIsShowMenu] = useState<boolean>(false);
   const areUploadsInProgress = uploads.some(u => u.state.type === "uploading");
   const uploadedFilesCount = uploads.length;
 
@@ -40,14 +40,14 @@ const FileUploadMenu: FunctionComponent<FileUploadMenuProps> = ({ uploads }) =>
           h={200}
           sx={{ borderRadius: "12px" }}>
           {uploads.map((upload: UploadState, index: number) => upload && (
-            <React.Fragment key={index}>
+            <Fragment key={index}>
               <FileUploadListItem
                 file={upload}
                 title={upload.fileNameWithExtension}
                 fileIcon={<FileIcon/>}
                 progress={upload.state.type === "uploading" ? upload.state.progressInPercent : 100}
               />
-            </React.Fragment>
+            </Fragment>
           )).reverse()}
         </ScrollArea>
       </div>

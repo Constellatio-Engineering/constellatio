@@ -10,13 +10,13 @@ import useAllFavorites from "@/hooks/useAllFavorites";
 import { useAllUserData } from "@/hooks/useAllUserData";
 
 import { Tabs } from "@mantine/core";
-import { type FunctionComponent } from "react";
+import { type FunctionComponent, useState } from "react";
 
 import * as styles from "./DashboardPersonalSpaceBlock.styles";
 
 const DashboardPersonalSpaceBlock: FunctionComponent = () => 
 {
-  const [switcherValue, setSwitcherValue] = React.useState<"favorites" | "materials">("favorites");
+  const [switcherValue, setSwitcherValue] = useState<"favorites" | "materials">("favorites");
   const { favoritesList, isLoading } = useAllFavorites();
   const { allUserData } = useAllUserData();
 

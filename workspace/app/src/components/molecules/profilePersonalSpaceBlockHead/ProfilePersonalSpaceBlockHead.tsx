@@ -6,7 +6,7 @@ import { FolderIcon } from "@/components/Icons/Folder";
 import { Trash } from "@/components/Icons/Trash";
 
 import { Tabs } from "@mantine/core";
-import { type FunctionComponent } from "react";
+import { Fragment, type FunctionComponent } from "react";
 
 import * as styles from "../../organisms/profilePersonalSpaceBlock/ProfilePersonalSpaceBlock.styles";
 import { Switcher } from "../Switcher/Switcher";
@@ -43,13 +43,13 @@ const ProfilePersonalSpaceBlockHead: FunctionComponent<ProfilePersonalSpaceBlock
           tabStyleOverwrite={{ flex: "1" }}>
           <Tabs.List>
             {tabs && tabs?.map((tab, tabIndex) => (
-              <React.Fragment key={tabIndex}>
+              <Fragment key={tabIndex}>
                 <SwitcherTab
                   icon={tab?.icon?.src ?? <Trash/>}
                   value={tab.title}
                   onClick={() => setSelectedTab(tabIndex)}>{tab.title}
                 </SwitcherTab>
-              </React.Fragment>
+              </Fragment>
             ))}
           </Tabs.List>
         </Switcher>

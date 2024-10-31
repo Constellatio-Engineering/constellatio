@@ -5,7 +5,7 @@ import EditProfileImgModal from "@/components/organisms/editProfileImgModal/Edit
 
 import { type UserFiltered } from "@constellatio/api/utils/filters";
 import { Title } from "@mantine/core";
-import { type FunctionComponent } from "react";
+import { type FunctionComponent, useState } from "react";
 
 import * as styles from "./ProfileMenu.styles";
 
@@ -19,7 +19,7 @@ const ProfileMenuMainProfileInfo: FunctionComponent<Props> = ({ userDetails }) =
 {
   const { displayName, firstName, lastName } = userDetails;
   const name = [firstName, lastName].filter(Boolean).join(" ");
-  const [showEditImgModal, setShowEditImgModal] = React.useState<boolean>(false);
+  const [showEditImgModal, setShowEditImgModal] = useState<boolean>(false);
 
   return (
     <div css={styles.profileInfo}>

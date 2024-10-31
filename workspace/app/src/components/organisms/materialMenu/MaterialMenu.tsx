@@ -17,7 +17,7 @@ import { defaultFolderName, everythingFolderName } from "@/utils/translations";
 import { Modal, Title } from "@mantine/core";
 import { useDisclosure } from "@mantine/hooks";
 import { notifications } from "@mantine/notifications";
-import { type FunctionComponent } from "react";
+import { type FunctionComponent, useState } from "react";
 
 import * as styles from "./MaterialMenu.styles";
 
@@ -51,7 +51,7 @@ const MaterialMenu: FunctionComponent = () =>
     },
     onSuccess: invalidateFolders
   });
-  const [newFolderName, setNewFolderName] = React.useState<string>("");
+  const [newFolderName, setNewFolderName] = useState<string>("");
   
   return (
     <div css={styles.wrapper}>

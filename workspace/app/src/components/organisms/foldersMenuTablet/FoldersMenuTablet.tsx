@@ -23,7 +23,7 @@ import { defaultFolderName, everythingFolderName } from "@/utils/translations";
 import { Menu, Title } from "@mantine/core";
 // import { useDisclosure } from "@mantine/hooks";
 import { notifications } from "@mantine/notifications";
-import { type FunctionComponent } from "react";
+import { type FunctionComponent, useState } from "react";
 
 import * as styles from "./FoldersMenuTablet.styles";
 
@@ -34,9 +34,9 @@ const FoldersMenuTablet: FunctionComponent = () =>
   const { folders = [] } = useUploadFolders();
   const { invalidateFolders } = useContextAndErrorIfNull(InvalidateQueriesContext);
   // const [opened, showCreateFolderModal close, open }] = useDisclosure(false);
-  const [showCreateFolderModal, setShowCreateFolderModal] = React.useState<boolean>(false);
-  const [showRenameModal, setShowRenameModal] = React.useState<boolean>(false);
-  const [showDeleteModal, setShowDeleteModal] = React.useState<boolean>(false);
+  const [showCreateFolderModal, setShowCreateFolderModal] = useState<boolean>(false);
+  const [showRenameModal, setShowRenameModal] = useState<boolean>(false);
+  const [showDeleteModal, setShowDeleteModal] = useState<boolean>(false);
   const { mutate: deleteFolder } = useDeleteFolder();
   const { mutate: createFolder } = api.folders.createFolder.useMutation({
     onError: (error) => 
@@ -62,7 +62,7 @@ const FoldersMenuTablet: FunctionComponent = () =>
   });
 
   const currentFolder = selectedFolderId ? folders.find(x => x.id === selectedFolderId) : null;
-  const [newFolderName, setNewFolderName] = React.useState<string>("");
+  const [newFolderName, setNewFolderName] = useState<string>("");
   return (
     <div css={styles.wrapper}>
       <div css={styles.selectedFolder}>

@@ -2,7 +2,7 @@ import ContentWrapper from "@/components/helpers/contentWrapper/ContentWrapper";
 import useMaterialsStore from "@/stores/materials.store";
 import uploadsProgressStore from "@/stores/uploadsProgress.store";
 
-import { type FunctionComponent } from "react";
+import { type FunctionComponent, useRef } from "react";
 
 import * as styles from "./PersonalSpaceMaterialsTab.styles";
 import FileUploadMenu from "../fileUploadMenu/FileUploadMenu";
@@ -14,7 +14,7 @@ import UploadedMaterialBlock from "../uploadedMaterialBlock/UploadedMaterialBloc
 const PersonalSpaceMaterialsTab: FunctionComponent = () =>
 {
   const selectedFolderId = useMaterialsStore(s => s.selectedFolderId);
-  const fileInputRef = React.useRef<HTMLInputElement>(null);
+  const fileInputRef = useRef<HTMLInputElement>(null);
   const { setUploadState, uploads } = uploadsProgressStore();
   const areUploadsInProgress = uploads.some(u => u.state.type === "uploading");
 

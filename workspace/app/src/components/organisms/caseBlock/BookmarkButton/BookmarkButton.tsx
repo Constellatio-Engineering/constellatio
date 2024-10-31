@@ -8,7 +8,7 @@ import { type AddOrRemoveBookmarkSchema } from "@constellatio/schemas/routers/bo
 import { appPaths } from "@constellatio/shared/paths";
 import { type Nullable } from "@constellatio/utility-types";
 import { useRouter } from "next/router";
-import { type FunctionComponent } from "react";
+import { type FunctionComponent, useState } from "react";
 
 import DeleteBookmarkModal from "../../deleteBookmarkModal/DeleteBookmarkModal";
 import { type ICaseBlockProps } from "../ItemBlock";
@@ -30,7 +30,7 @@ const BookmarkButton: FunctionComponent<Props> = ({
 {
   const router = useRouter();
   const mustConfirmDeletion = router.pathname.startsWith(appPaths.personalSpace) || router.pathname.startsWith(appPaths.dashboard);
-  const [showDeleteBookmarkModal, setShowDeleteBookmarkModal] = React.useState<boolean>(false);
+  const [showDeleteBookmarkModal, setShowDeleteBookmarkModal] = useState<boolean>(false);
   const { isPending: isAddingBookmarkLoading, mutate: addBookmark } = useAddBookmark();
   const {
     isPending: isRemovingBookmarkLoading,

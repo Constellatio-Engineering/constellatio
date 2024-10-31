@@ -17,7 +17,7 @@ import { getRandomUuid } from "@constellatio/utils/id";
 import { notifications } from "@mantine/notifications";
 import { useMutation } from "@tanstack/react-query";
 import axios from "axios";
-import { type FunctionComponent, useEffect, useState } from "react";
+import { type FunctionComponent, useEffect, useRef, useState } from "react";
 
 import * as styles from "./EditProfileImgModal.styles";
 
@@ -41,13 +41,13 @@ interface EditProfileImgModalProps
 const EditProfileImgModal: FunctionComponent<EditProfileImgModalProps> = ({ onClose, opened }) => 
 {
   const { invalidateUserDetails } = useContextAndErrorIfNull(InvalidateQueriesContext);
-  const inputRef = React.useRef<HTMLInputElement>(null);
+  const inputRef = useRef<HTMLInputElement>(null);
   const [selectedFile, setSelectedFile] = useState<SelectedFile>();
   const selectedTab = tabs?.[0]?.title ?? "";
   const selectedFileUrl = selectedFile?.file && URL.createObjectURL(selectedFile?.file);
   const { mutateAsync: createSignedUploadUrl } = api.users.createSignedProfilePictureUploadUrl.useMutation();
   const { mutateAsync: setProfilePicture } = api.users.setProfilePicture.useMutation();
-  const fileInputRef = React.useRef<HTMLInputElement>(null);
+  const fileInputRef = useRef<HTMLInputElement>(null);
   const uploadFileNotificationId = `upload-file-${selectedFile?.clientSideUuid}`;
 
   const { isPending: isLoading, mutate: uploadFile } = useMutation({

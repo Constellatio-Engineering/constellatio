@@ -49,7 +49,7 @@ const CaseResultsReviewStep: FunctionComponent<ICaseResultsReviewStepProps> = ({
   const [isExpandSolution, setIsExpandSolution] = useState<boolean>(false);
   const { isLoading, submittedCaseSolution } = useSubmittedCaseSolution(caseId);
   const solutionContent = useRef<HTMLDivElement>(null);
-  const [solutionElementHeight, setSolutionElementHeight] = React.useState<number>(0);
+  const [solutionElementHeight, setSolutionElementHeight] = useState<number>(0);
   const solution: string = isLoading ? "lädt..." : (submittedCaseSolution?.solution || "");
   const allResolutionHeadings = resolution?.json?.content?.filter((x: { attrs: { level: number }; type: "heading" }) => x.type === "heading");
   const { allCases = [] } = useCases();
