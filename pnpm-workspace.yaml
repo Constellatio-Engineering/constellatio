@@ -2,6 +2,7 @@ packages:
   - workspace/packages/*
   - workspace/tooling/*
   - workspace/app
+  - supabase
 
 catalog:
   "@google-cloud/storage": 7.13.0

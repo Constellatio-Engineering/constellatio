@@ -87,6 +87,12 @@ importers:
         specifier: 'catalog:'
         version: 5.5.4
 
+  supabase:
+    devDependencies:
+      supabase:
+        specifier: 'catalog:'
+        version: 1.207.9
+
   workspace/app:
     dependencies:
       '@caisy/rich-text-react-renderer':

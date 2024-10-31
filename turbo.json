@@ -1,6 +1,7 @@
 {
   "$schema": "https://turborepo.org/schema.json",
   "ui": "tui",
+  "envMode": "strict",
   "tasks": {
     "topo": {
       "dependsOn": ["^topo"]
@@ -21,6 +22,11 @@
     "lint": {
       "dependsOn": ["^topo", "^build"],
       "outputs": [".cache/.eslintcache"]
+    },
+    "start:supabase": {
+      "dependsOn": [],
+      "cache": false,
+      "persistent": false
     },
     "typecheck": {
       "dependsOn": ["^topo", "^build"],
