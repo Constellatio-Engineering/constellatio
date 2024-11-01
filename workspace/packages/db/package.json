@@ -25,7 +25,8 @@
     "lint": "eslint src",
     "lint:fix": "eslint --fix src",
     "typecheck": "tsc --noEmit --emitDeclarationOnly false",
-    "apply-migrations": "drizzle-kit migrate",
+    "apply-migrations2": "dotenv-run -v -u -- drizzle-kit migrate",
+    "apply-migrations": "dotenv-run -v -u -- pnpm exec drizzle-kit migrate",
     "db:push": "drizzle-kit push",
     "drizzle:studio": "drizzle-kit studio",
     "generate-migrations-without-row-level-security": "drizzle-kit generate",
@@ -40,7 +41,6 @@
     "@constellatio/schemas": "workspace:*",
     "@constellatio/shared": "workspace:*",
     "@constellatio/utils": "workspace:*",
-    "@t3-oss/env-nextjs": "catalog:",
     "drizzle-orm": "0.35.3",
     "postgres": "catalog:"
   },

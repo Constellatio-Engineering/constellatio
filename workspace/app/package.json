@@ -4,7 +4,7 @@
   "private": true,
   "scripts": {
     "separatorDev": "---------------------- NEXT.JS ----------------------",
-    "dev-without-migrations": "next dev --turbo -p 3010",
+    "dev": "dotenv-run -v -u -- next dev --turbo -p 3010",
     "start": "next start -p 3010",
     "build": "next build",
     "sepatatorLint": "---------------------- LINT ----------------------",

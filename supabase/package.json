@@ -3,13 +3,6 @@
   "version": "1.0.0",
   "license": "UNLICENSED",
   "private": true,
-  "scripts": {
-    "start:supabase": "supabase start --ignore-health-check --workdir=.",
-    "stop:supabase": "supabase stop",
-    "restart:supabase": "supabase stop && pnpm start:supabase",
-    "reset:supabase": "supabase db reset",
-    "supabase:status": "supabase status"
-  },
   "devDependencies": {
     "supabase": "catalog:"
   }

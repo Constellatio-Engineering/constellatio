@@ -1,11 +1,9 @@
 {
   "$schema": "https://turborepo.org/schema.json",
-  "ui": "tui",
+  "ui": "stream",
   "envMode": "strict",
+  "globalDependencies": ["**/.env", "**/.env.*local"],
   "tasks": {
-    "topo": {
-      "dependsOn": ["^topo"]
-    },
     "build": {
       "dependsOn": ["^build"],
       "outputs": ["dist/**", ".next/**", "!.next/cache/**"]
@@ -13,6 +11,12 @@
     "check-types": {
       "dependsOn": ["check-types"],
       "outputs": []
+    },
+    "clean": {
+      "cache": false
+    },
+    "//#clean": {
+      "cache": false
     },
     "dev": {
       "dependsOn": ["^dev"],
@@ -23,20 +27,18 @@
       "dependsOn": ["^topo", "^build"],
       "outputs": [".cache/.eslintcache"]
     },
-    "start:supabase": {
-      "dependsOn": [],
-      "cache": false,
-      "persistent": false
+    "//#start:docker": {
+      "cache": false
+    },
+    "//#start:supabase": {
+      "cache": false
+    },
+    "topo": {
+      "dependsOn": ["^topo"]
     },
     "typecheck": {
       "dependsOn": ["^topo", "^build"],
       "outputs": [".cache/tsbuildinfo.json"]
-    },
-    "clean": {
-      "cache": false
-    },
-    "//#clean": {
-      "cache": false
     }
   }
 }

@@ -9,7 +9,8 @@
     ".": {
       "types": "./dist/env.d.ts",
       "default": "./dist/env.mjs"
-    }
+    },
+    "./dist/*": "./dist/*"
   },
   "license": "MIT",
   "scripts": {

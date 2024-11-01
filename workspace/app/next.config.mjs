@@ -4,7 +4,7 @@
  */
 export const defaultLocale = "de";
 
-await import("./src/env.mjs");
+await import("@constellatio/env/dist/env.mjs");
 
 /** @type {import("next").NextConfig} */
 const config = {
