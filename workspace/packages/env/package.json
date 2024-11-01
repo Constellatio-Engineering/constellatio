@@ -14,9 +14,10 @@
   },
   "license": "MIT",
   "scripts": {
-    "build": "tsc && cp ./src/env.ts ./dist/env.mjs",
+    "compile": "tsc && cp ./src/env.ts ./dist/env.mjs",
+    "build": "pnpm compile",
     "clean": "git clean -xdf .cache .turbo dist node_modules",
-    "dev": "tsc",
+    "dev": "pnpm compile",
     "lint": "eslint src",
     "lint:fix": "eslint --fix src",
     "typecheck": "tsc --noEmit --emitDeclarationOnly false"

@@ -1,9 +1,0 @@
-{
-  "name": "@constellatio/supabase",
-  "version": "1.0.0",
-  "license": "UNLICENSED",
-  "private": true,
-  "devDependencies": {
-    "supabase": "catalog:"
-  }
-}
