@@ -9,8 +9,8 @@ import LastNameInput from "@/components/organisms/RegistrationForm/form/LastName
 import PasswordInput from "@/components/organisms/RegistrationForm/form/PasswordInput";
 import SemesterDropdown from "@/components/organisms/RegistrationForm/form/SemesterDropdown";
 import UniversityDropdown from "@/components/organisms/RegistrationForm/form/UniversityDropdown";
-import { env } from "@/env.mjs";
 
+import { env } from "@constellatio/env";
 import { type RegistrationFormSchema } from "@constellatio/schemas/routers/auth/registrationForm.schema";
 import { type UseFormReturnType } from "@mantine/form";
 import { type FunctionComponent } from "react";

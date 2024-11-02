@@ -1,5 +1,4 @@
-import { env } from "@/env.mjs";
-
+import { env } from "@constellatio/env";
 import { type NextApiHandler } from "next";
 
 /* import { stripe } from "@constellatio/api/lib/stripe/stripe";

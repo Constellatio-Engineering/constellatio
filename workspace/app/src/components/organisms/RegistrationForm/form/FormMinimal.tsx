@@ -3,8 +3,8 @@ import { CustomLink } from "@/components/atoms/CustomLink/CustomLink";
 import DisplayNameInput from "@/components/organisms/RegistrationForm/form/DisplayNameInput";
 import EmailInput from "@/components/organisms/RegistrationForm/form/EmailInput";
 import PasswordInput from "@/components/organisms/RegistrationForm/form/PasswordInput";
-import { env } from "@/env.mjs";
 
+import { env } from "@constellatio/env";
 import { type RegistrationFormMinimalSchema } from "@constellatio/schemas/routers/auth/registrationFormMinimal.schema";
 import { type UseFormReturnType } from "@mantine/form";
 import { type FunctionComponent } from "react";

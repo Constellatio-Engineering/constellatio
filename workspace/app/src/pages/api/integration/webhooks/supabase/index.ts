@@ -1,6 +1,6 @@
-import { env } from "@/env.mjs";
 import { type WebhookPayload } from "@/pages/api/integration/webhooks/supabase/types";
 
+import { env } from "@constellatio/env";
 import { type NextApiHandler } from "next";
 
 import {

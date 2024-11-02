@@ -10,7 +10,7 @@
     "sepatatorLint": "---------------------- LINT ----------------------",
     "typecheck": "tsc --noEmit",
     "lint": "eslint src",
-    "lint:fix": "eslint --fix src types",
+    "lint:fix": "eslint --fix src",
     "separatorTunnel": "---------------------- TUNNEL ----------------------",
     "ngrok-auth": "ngrok authtoken $NGROK_AUTHTOKEN",
     "tunnel": "ngrok start --config=ngrok.yml constellatio-web-app",

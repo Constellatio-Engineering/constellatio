@@ -1,4 +1,3 @@
-import { env } from "@/env.mjs";
 
 import { meiliSearchAdmin } from "@constellatio/api/lib/meilisearch";
 import { getAllLegalFields, getAllSubfields, getAllTopics } from "@constellatio/api/services/caisy.services";
@@ -14,7 +13,7 @@ import { getAllCases } from "@constellatio/cms/content/getAllCases";
 import { getAllTags } from "@constellatio/cms/content/getAllTags";
 import { db } from "@constellatio/db/client";
 import { searchIndices } from "@constellatio/db-to-search";
-import { isDevelopment } from "@constellatio/env";
+import { env, isDevelopment } from "@constellatio/env";
 import {
   type ArticleSearchItemNodes,
   type CaseSearchItemNodes,

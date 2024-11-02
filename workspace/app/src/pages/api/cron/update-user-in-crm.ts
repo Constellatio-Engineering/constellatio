@@ -1,10 +1,10 @@
 /* eslint-disable max-lines */
-import { env } from "@/env.mjs";
 
 import { syncUserToCrm } from "@constellatio/api/lib/clickup/utils";
 import { eq } from "@constellatio/db";
 import { db } from "@constellatio/db/client";
 import { updateUserInCrmQueue } from "@constellatio/db/schema";
+import { env } from "@constellatio/env";
 import { AxiosError } from "axios";
 import { type NextApiHandler } from "next";
 

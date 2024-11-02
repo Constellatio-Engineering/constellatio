@@ -9,9 +9,9 @@ import { RegistrationForm, type SignupFormVariant } from "@/components/organisms
 import { RegistrationVisualHeader } from "@/components/organisms/RegistrationVisualHeader/RegistrationVisualHeader";
 import { SocialLoginButton } from "@/components/pages/AuthPage/socialLoginButton/SocialLoginButton";
 import { colooors } from "@/constants/styles/colors";
-import { env } from "@/env.mjs";
 import { supabase } from "@/lib/supabase";
 
+import { env } from "@constellatio/env";
 import { type Nullable } from "@constellatio/utility-types";
 import { Container, Flex, Tabs } from "@mantine/core";
 import { useMediaQuery } from "@mantine/hooks";

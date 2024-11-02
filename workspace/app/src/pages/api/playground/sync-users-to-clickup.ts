@@ -1,6 +1,5 @@
 /* eslint-disable max-lines */
-import { env } from "@/env.mjs";
-
+import { env } from "@constellatio/env";
 import { type NextApiHandler } from "next";
 // import pLimit from "p-limit";
 

@@ -1,7 +1,7 @@
 import { UnstyledButton } from "@/components/molecules/unstyledButton/UnstyledButton";
-import { env } from "@/env.mjs";
 import { AuthStateContext } from "@/provider/AuthStateProvider";
 
+import { env } from "@constellatio/env";
 import { useTheme } from "@emotion/react";
 import formbricks from "@formbricks/js/app";
 import { Tooltip } from "@mantine/core";

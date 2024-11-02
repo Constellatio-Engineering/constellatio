@@ -1,6 +1,6 @@
-import { env } from "@/env.mjs";
 import { api } from "@/utils/api";
 
+import { env } from "@constellatio/env";
 import { type FunctionComponent, useCallback, useEffect, useRef } from "react";
 import { useIdleTimer } from "react-idle-timer";
 

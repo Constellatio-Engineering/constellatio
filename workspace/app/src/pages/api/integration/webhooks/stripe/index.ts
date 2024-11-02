@@ -1,4 +1,3 @@
-import { env } from "@/env.mjs";
 
 import { addUserToCrmUpdateQueue } from "@constellatio/api/lib/clickup/utils";
 import { handleInvoicePaid } from "@constellatio/api/lib/stripe/invoice-paid";
@@ -8,6 +7,7 @@ import { InternalServerError } from "@constellatio/api/utils/serverError";
 import { eq } from "@constellatio/db";
 import { db } from "@constellatio/db/client";
 import { users } from "@constellatio/db/schema";
+import { env } from "@constellatio/env";
 import type { NextApiHandler } from "next";
 import getRawBody from "raw-body";
 import type Stripe from "stripe";

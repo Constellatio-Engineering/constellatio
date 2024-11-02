@@ -1,5 +1,4 @@
-import { env } from "@/env.mjs";
-
+import { env } from "@constellatio/env";
 import Head from "next/head";
 import { type FunctionComponent } from "react";
 

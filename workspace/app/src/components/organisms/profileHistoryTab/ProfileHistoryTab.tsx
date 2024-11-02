@@ -5,10 +5,10 @@ import Label, { type ILabelProps } from "@/components/atoms/label/Label";
 import { SubtitleText } from "@/components/atoms/SubtitleText/SubtitleText";
 import EmptyStateCard from "@/components/organisms/emptyStateCard/EmptyStateCard";
 import { HistoryItemsSkeleton } from "@/components/organisms/profileHistoryTab/HistoryItemsSkeleton";
-import { env } from "@/env.mjs";
 import { api } from "@/utils/api";
 
 import { type ViewsHistoryItems } from "@constellatio/api/routers/views.router";
+import { env } from "@constellatio/env";
 import { appPaths } from "@constellatio/shared/paths";
 import { Skeleton, Title } from "@mantine/core";
 import { IconReload } from "@tabler/icons-react";

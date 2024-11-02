@@ -1,8 +1,8 @@
-import { env } from "@/env.mjs";
 import { AuthStateContext } from "@/provider/AuthStateProvider";
 import { api } from "@/utils/api";
 import { type UseQueryResult } from "@/utils/types";
 
+import { env } from "@constellatio/env";
 import { useContext } from "react";
 
 type UseTenantToken = () => UseQueryResult<{ searchToken: string | undefined}>;

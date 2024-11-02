@@ -7,12 +7,11 @@ import { FormFull } from "@/components/organisms/RegistrationForm/form/FormFull"
 import { FormMinimal } from "@/components/organisms/RegistrationForm/form/FormMinimal";
 import { allGenders } from "@/components/organisms/RegistrationForm/form/GenderDropdown";
 import { colooors } from "@/constants/styles/colors";
-import { env } from "@/env.mjs";
 import { supabase } from "@/lib/supabase";
 import useAuthPageStore from "@/stores/authPage.store";
 import { api } from "@/utils/api";
 
-import { isDevelopment, isDevelopmentOrStaging } from "@constellatio/env";
+import { env, isDevelopment, isDevelopmentOrStaging } from "@constellatio/env";
 import { allUniversities } from "@constellatio/schemas/common/auth/userData.validation";
 import { registrationFormSchema, type RegistrationFormSchema } from "@constellatio/schemas/routers/auth/registrationForm.schema";
 import { registrationFormMinimalSchema, type RegistrationFormMinimalSchema } from "@constellatio/schemas/routers/auth/registrationFormMinimal.schema";

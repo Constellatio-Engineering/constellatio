@@ -1,9 +1,9 @@
 // eslint-disable-next-line @typescript-eslint/ban-ts-comment
 
-import { env } from "@/env.mjs";
 import { type IParagraph } from "@/utils/richtext";
 
 import { RichTextRenderer } from "@caisy/rich-text-react-renderer";
+import { env } from "@constellatio/env";
 import { type ReactElement } from "react";
 
 /**

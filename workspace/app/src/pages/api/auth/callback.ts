@@ -1,10 +1,10 @@
-import { env } from "@/env.mjs";
 import { queryParams } from "@/utils/query-params";
 
 import { finishSignup, type FinishSignUpProps } from "@constellatio/api/utils/signup";
 import { eq } from "@constellatio/db";
 import { db } from "@constellatio/db/client";
 import { users } from "@constellatio/db/schema";
+import { env } from "@constellatio/env";
 import { idValidation } from "@constellatio/schemas/common/common.validation";
 import { appPaths, authPaths } from "@constellatio/shared/paths";
 import { authProviders } from "@constellatio/shared/validation";

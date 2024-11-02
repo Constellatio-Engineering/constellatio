@@ -1,5 +1,4 @@
 /* eslint-disable max-lines */
-import { env } from "@/env.mjs";
 
 import { meiliSearchAdmin } from "@constellatio/api/lib/meilisearch";
 import { addArticlesToSearchIndex, addCasesToSearchIndex, addUserDocumentsToSearchIndex, addUserUploadsToSearchIndex } from "@constellatio/api/services/search.services";
@@ -10,6 +9,7 @@ import { eq, inArray } from "@constellatio/db";
 import { db } from "@constellatio/db/client";
 import { documents, searchIndexUpdateQueue, uploadedFiles } from "@constellatio/db/schema";
 import { searchIndices } from "@constellatio/db-to-search";
+import { env } from "@constellatio/env";
 import { type NextApiHandler } from "next";
 
 type UpdateArticles = () => Promise<{

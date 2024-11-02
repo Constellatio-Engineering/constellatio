@@ -1,9 +1,9 @@
 import { BodyText } from "@/components/atoms/BodyText/BodyText";
 import { Button } from "@/components/atoms/Button/Button";
 import CopyToClipboard from "@/components/molecules/copyToClipboard/CopyToClipboard";
-import { env } from "@/env.mjs";
 import { api } from "@/utils/api";
 
+import { env } from "@constellatio/env";
 import { Loader } from "@mantine/core";
 import { type FunctionComponent } from "react";
 

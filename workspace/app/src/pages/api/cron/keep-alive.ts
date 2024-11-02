@@ -1,7 +1,6 @@
 /* eslint-disable max-lines */
-import { env } from "@/env.mjs";
-
 import { appRouter, createCallerFactory } from "@constellatio/api";
+import { env } from "@constellatio/env";
 import { appPaths, authPaths } from "@constellatio/shared/paths";
 import { printAllSettledPromisesSummary } from "@constellatio/utils/promise";
 import { createPagesServerClient } from "@supabase/auth-helpers-nextjs";

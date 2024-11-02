@@ -1,6 +1,5 @@
-import { env } from "@/env.mjs";
-
 import { getIsUserLoggedInServer } from "@constellatio/api/utils/auth";
+import { env } from "@constellatio/env";
 import { appPaths, authPaths } from "@constellatio/shared/paths";
 import { createPagesServerClient } from "@supabase/auth-helpers-nextjs";
 import { type GetServerSideProps } from "next";

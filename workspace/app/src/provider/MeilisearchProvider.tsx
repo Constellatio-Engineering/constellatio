@@ -1,6 +1,6 @@
-import { env } from "@/env.mjs";
 import useTenantToken from "@/hooks/useTenantToken";
 
+import { env } from "@constellatio/env";
 import { MeiliSearch } from "meilisearch";
 import { createContext, type FunctionComponent, type ReactNode, useMemo } from "react";
 

@@ -1,11 +1,11 @@
 import PageHead from "@/components/organisms/pageHead/PageHead";
 import { type SignupFormVariant } from "@/components/organisms/RegistrationForm/RegistrationForm";
 import { AuthPage } from "@/components/pages/AuthPage/AuthPage";
-import { env } from "@/env.mjs";
 import { getCommonProps } from "@/utils/commonProps";
 import { queryParams } from "@/utils/query-params";
 
 import { getIsUserLoggedInServer } from "@constellatio/api/utils/auth";
+import { env } from "@constellatio/env";
 import { appPaths } from "@constellatio/shared/paths";
 import { type Nullable } from "@constellatio/utility-types";
 import { createPagesServerClient } from "@supabase/auth-helpers-nextjs";

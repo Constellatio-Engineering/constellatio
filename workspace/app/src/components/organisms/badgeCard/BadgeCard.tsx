@@ -1,6 +1,6 @@
 import { type SelectedFile } from "@/components/organisms/uploadedMaterialBlock/UploadedMaterialBlock";
-import { env } from "@/env.mjs";
 
+import { env } from "@constellatio/env";
 import { fileExtensions } from "@constellatio/shared/validation";
 import { type FunctionComponent } from "react";
 

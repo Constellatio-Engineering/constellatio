@@ -1,9 +1,9 @@
 import { BodyText } from "@/components/atoms/BodyText/BodyText";
 import { Button } from "@/components/atoms/Button/Button";
-import { env } from "@/env.mjs";
 import useSetOnboardingResult from "@/hooks/useSetOnboardingResult";
 import { type SearchStoreProps } from "@/stores/onboarding.store";
 
+import { env } from "@constellatio/env";
 import { appPaths } from "@constellatio/shared/paths";
 import { Modal, Title } from "@mantine/core";
 import { useRouter } from "next/router";

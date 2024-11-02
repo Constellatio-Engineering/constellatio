@@ -3,9 +3,9 @@ import { Button } from "@/components/atoms/Button/Button";
 import { Input } from "@/components/atoms/Input/Input";
 import ErrorCard from "@/components/molecules/errorCard/ErrorCard";
 import { type ResetPasswordModalProgress } from "@/components/organisms/ResetPasswordModal/ResetPasswordModal";
-import { env } from "@/env.mjs";
 import { supabase } from "@/lib/supabase";
 
+import { env } from "@constellatio/env";
 import { resetPasswordFormSchema } from "@constellatio/schemas/routers/auth/resetPassword.schema";
 import { authPaths } from "@constellatio/shared/paths";
 import { Stack, Title } from "@mantine/core";

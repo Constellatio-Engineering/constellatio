@@ -1,5 +1,4 @@
 /* eslint-disable max-lines */
-import { env } from "@/env.mjs";
 
 import { createContentTaskIfNotExists } from "@constellatio/api/lib/clickup/utils";
 import { addArticlesAndCasesToSearchQueue, addContentToSearchQueue } from "@constellatio/api/services/search.services";
@@ -7,6 +6,7 @@ import { caisySDK } from "@constellatio/cms/sdk";
 import { eq } from "@constellatio/db";
 import { db } from "@constellatio/db/client";
 import { documentsToTags, uploadedFilesToTags } from "@constellatio/db/schema";
+import { env } from "@constellatio/env";
 import { type CaisyWebhookEventType } from "@constellatio/shared/validation";
 import { type NextApiHandler } from "next";
 import { z, ZodError } from "zod";
