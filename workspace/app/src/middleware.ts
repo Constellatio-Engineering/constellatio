@@ -27,9 +27,7 @@ export const middleware: NextMiddleware = async (req, ctx) =>
   const res = NextResponse.next();
   const redirectUrl = req.nextUrl.clone();
 
-  return NextResponse.next();
-
-  /* const supabase = createMiddlewareClient({ req, res });
+  const supabase = createMiddlewareClient({ req, res });
   const getIsUserLoggedInResult = await getIsUserLoggedInServer(supabase);
 
   if(!getIsUserLoggedInResult.isUserLoggedIn)
@@ -96,7 +94,7 @@ export const middleware: NextMiddleware = async (req, ctx) =>
     return NextResponse.redirect(redirectUrl);
   }
 
-  return NextResponse.next();*/
+  return NextResponse.next();
 };
 
 export const config = {
