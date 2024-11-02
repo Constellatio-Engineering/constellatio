@@ -30,6 +30,7 @@
   },
   "devDependencies": {
     "@constellatio/tsconfig": "workspace:*",
+    "@total-typescript/ts-reset": "catalog:",
     "@types/eslint": "8.56.12",
     "typescript": "catalog:"
   }

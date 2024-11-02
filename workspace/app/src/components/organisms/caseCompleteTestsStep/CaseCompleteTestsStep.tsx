@@ -9,7 +9,7 @@ import { useWindowDimensions } from "@/hooks/useWindowDimensions";
 import { InvalidateQueriesContext } from "@/provider/InvalidateQueriesProvider";
 import useCaseSolvingStore from "@/stores/caseSolving.store";
 import { api } from "@/utils/api";
-import type { IDocumentLink, IHeadingNode } from "types/richtext";
+import type { IDocumentLink, IHeadingNode } from "@/utils/richtext";
 
 import { type IGenArticle_FullTextTasks, type IGenCase_Facts, type IGenCase_FullTextTasks, type Maybe } from "@constellatio/cms/generated-types";
 import { type Games } from "@constellatio/cms/utils/case";

@@ -29,6 +29,8 @@
   "devDependencies": {
     "@constellatio/eslint-config": "workspace:*",
     "@constellatio/tsconfig": "workspace:*",
+    "@total-typescript/ts-reset": "catalog:",
+    "@types/node": "catalog:",
     "eslint": "catalog:"
   }
 }

@@ -38,10 +38,7 @@
     /** Transpile using Bundler (not tsc) */
     "module": "Preserve",
     "moduleResolution": "Bundler",
-    "noEmit": true,
-
-    /** additional types */
-    "types": ["@total-typescript/ts-reset", "node"]
+    "noEmit": true
   },
   "exclude": ["node_modules", "build", "dist", ".next", ".expo"]
 }

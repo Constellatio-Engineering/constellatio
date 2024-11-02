@@ -1,5 +1,5 @@
 /* eslint-disable sort-keys-fix/sort-keys-fix */
-import { type IHeadingNode } from "types/richtext";
+import { type IHeadingNode } from "@/utils/richtext";
 
 type ContentType = {
   text: string;

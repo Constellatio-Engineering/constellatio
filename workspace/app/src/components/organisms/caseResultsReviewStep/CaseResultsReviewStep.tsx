@@ -17,7 +17,7 @@ import useBookmarks from "@/hooks/useBookmarks";
 import useCases from "@/hooks/useCases";
 import useRemoveBookmark from "@/hooks/useRemoveBookmark";
 import useSubmittedCaseSolution from "@/hooks/useSubmittedCaseSolution";
-import { type IHeadingNode } from "types/richtext";
+import { type IHeadingNode } from "@/utils/richtext";
 
 import { type IGenCase_Facts, type IGenCase_Resolution, type Maybe } from "@constellatio/cms/generated-types";
 import { type AddOrRemoveBookmarkSchema } from "@constellatio/schemas/routers/bookmarks/addOrRemoveBookmark.schema";

@@ -46,6 +46,7 @@
   "devDependencies": {
     "@constellatio/eslint-config": "workspace:*",
     "@constellatio/tsconfig": "workspace:*",
+    "@total-typescript/ts-reset": "catalog:",
     "drizzle-kit": "0.26.2",
     "eslint": "catalog:",
     "typescript": "catalog:"

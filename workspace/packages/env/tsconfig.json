@@ -1,13 +1,8 @@
 {
   "extends": "@constellatio/tsconfig/internal-package.json",
   "include": ["src"],
-  "exclude": ["node_modules"]
-  /*"compilerOptions": {
-    "module": "ESNext",
-    "moduleResolution": "Bundler",
-    "target": "ESNext",
-    "declaration": true,
-    "noEmit": false,
-    "emitDeclarationOnly": false
-  }*/
+  "exclude": ["node_modules"],
+  "compilerOptions": {
+    "types": ["@total-typescript/ts-reset", "@types/node"]
+  }
 }

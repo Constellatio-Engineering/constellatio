@@ -1,5 +1,5 @@
 import useCaseSolvingStore from "@/stores/caseSolving.store";
-import { type IHeadingNode } from "types/richtext";
+import { type IHeadingNode } from "@/utils/richtext";
 
 import { slugFormatter } from "@constellatio/utils/slug";
 import { type ReactElement } from "react";
