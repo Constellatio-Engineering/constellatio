@@ -11,11 +11,15 @@
     "clean": "git clean -xdf .cache .turbo node_modules",
     "typecheck": "tsc --noEmit"
   },
-  "dependencies": {
+  "devDependencies": {
+    "@constellatio/tsconfig": "workspace:*",
+    "@total-typescript/ts-reset": "catalog:",
+    "@types/eslint": "8.56.12",
     "@typescript-eslint/eslint-plugin": "7.18.0",
     "@typescript-eslint/parser": "7.18.0",
     "eslint": "catalog:",
     "eslint-config-next": "14.2.15",
+    "eslint-config-turbo": "2.2.3",
     "eslint-import-resolver-typescript": "3.6.3",
     "eslint-plugin-barrel-files": "github:kotti97/eslint-plugin-barrel-files#main",
     "eslint-plugin-drizzle": "0.2.3",
@@ -26,12 +30,7 @@
     "eslint-plugin-sort-destructure-keys": "2.0.0",
     "eslint-plugin-sort-keys-fix": "1.1.2",
     "eslint-plugin-storybook": "0.9.0",
-    "eslint-plugin-typescript-sort-keys": "3.2.0"
-  },
-  "devDependencies": {
-    "@constellatio/tsconfig": "workspace:*",
-    "@total-typescript/ts-reset": "catalog:",
-    "@types/eslint": "8.56.12",
+    "eslint-plugin-typescript-sort-keys": "3.2.0",
     "typescript": "catalog:"
   }
 }

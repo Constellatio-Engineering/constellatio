@@ -30,6 +30,7 @@ module.exports = {
     "barrel-files"
   ],
   "extends": [
+    "turbo",
     "eslint:recommended",
     "plugin:@typescript-eslint/eslint-recommended",
     "plugin:@typescript-eslint/recommended",
