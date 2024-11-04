@@ -1,0 +1,42 @@
+{
+  "name": "@constellatio/schemas",
+  "version": "0.1.0",
+  "private": true,
+  "type": "module",
+  "exports": {
+    "./common/*": {
+      "types": "./dist/common/*.d.ts",
+      "default": "./src/common/*.ts"
+    },
+    "./integration/*": {
+      "types": "./dist/integration/*.d.ts",
+      "default": "./src/integration/*.ts"
+    },
+    "./routers/*": {
+      "types": "./dist/routers/*.d.ts",
+      "default": "./src/routers/*.ts"
+    }
+  },
+  "license": "MIT",
+  "scripts": {
+    "build": "tsc",
+    "clean": "git clean -xdf .cache .turbo dist node_modules",
+    "dev": "tsc",
+    "lint": "eslint src",
+    "lint:fix": "eslint --fix src",
+    "typecheck": "tsc --noEmit --emitDeclarationOnly false"
+  },
+  "dependencies": {
+    "@constellatio/env": "workspace:*",
+    "@constellatio/shared": "workspace:*",
+    "@constellatio/utils": "workspace:*",
+    "zod": "catalog:"
+  },
+  "devDependencies": {
+    "@constellatio/eslint-config": "workspace:*",
+    "@constellatio/tsconfig": "workspace:*",
+    "@total-typescript/ts-reset": "catalog:",
+    "eslint": "catalog:",
+    "typescript": "catalog:"
+  }
+}

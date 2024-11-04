@@ -1,0 +1,20 @@
+{
+  "root": true,
+  "parserOptions": {
+    "project": "./tsconfig.json"
+  },
+  "extends": [
+    "@constellatio/eslint-config/base",
+    "@constellatio/eslint-config/drizzle",
+    "@constellatio/eslint-config/nextjs"
+  ],
+  "overrides": [
+    {
+      "files": ["src/components/Icons/**/*"],
+      "rules": {
+        "import/no-unused-modules": "off",
+        "react/no-multi-comp": "off"
+      }
+    }
+  ]
+}

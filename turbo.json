@@ -1,0 +1,110 @@
+{
+  "$schema": "https://turborepo.org/schema.json",
+  "ui": "tui",
+  "envMode": "strict",
+  "globalDependencies": ["**/.env", "**/.env.*local"],
+  "tasks": {
+    "build": {
+      "dependsOn": ["^build"],
+      "outputs": ["dist/**", ".next/**", "!.next/cache/**"]
+    },
+    "check-types": {
+      "dependsOn": ["check-types"],
+      "outputs": []
+    },
+    "clean": {
+      "cache": false
+    },
+    "//#clean": {
+      "cache": false
+    },
+    "dev": {
+      "dependsOn": ["^dev"],
+      "cache": false,
+      "persistent": false
+    },
+    "lint": {
+      "dependsOn": ["^topo", "^build"],
+      "outputs": [".cache/.eslintcache"]
+    },
+    "//#start:docker": {
+      "cache": false
+    },
+    "//#start:supabase": {
+      "cache": false
+    },
+    "topo": {
+      "dependsOn": ["^topo"]
+    },
+    "typecheck": {
+      "dependsOn": ["^topo", "^build"],
+      "outputs": [".cache/tsbuildinfo.json"]
+    }
+  },
+  "globalEnv": [
+    "CAISY_API_KEY",
+    "CAISY_ARTICLE_BLUEPRINT_ID",
+    "CAISY_CASE_BLUEPRINT_ID",
+    "CAISY_LEGAL_AREA_BLUEPRINT_ID",
+    "CAISY_MAIN_CATEGORY_BLUEPRINT_ID",
+    "CAISY_PROJECT_ID",
+    "CAISY_SUB_CATEGORY_BLUEPRINT_ID",
+    "CAISY_TAG_BLUEPRINT_ID",
+    "CAISY_TOPIC_BLUEPRINT_ID",
+    "CAISY_WEBHOOKS_SECRET_KEY",
+    "CLICKUP_API_ENDPOINT",
+    "CLICKUP_API_TOKEN",
+    "CLICKUP_CONTENT_TASKS_LIST_ID",
+    "CLICKUP_CRM_LIST_ID",
+    "CLICKUP_FEEDBACK_LIST_ID",
+    "CLICKUP_REFERRAL_PAYOUT_LIST_ID",
+    "CRON_SECRET",
+    "DATABASE_URL",
+    "DATABASE_URL_SERVERLESS",
+    "GOOGLE_CLOUD_STORAGE_BUCKET_NAME",
+    "GOOGLE_CLOUD_STORAGE_PROJECT_ID",
+    "GOOGLE_CLOUD_STORAGE_PUBLIC_BUCKET_NAME",
+    "GOOGLE_SERVICE_ACCOUNT_BASE64",
+    "KV_REST_API_READ_ONLY_TOKEN",
+    "KV_REST_API_TOKEN",
+    "KV_REST_API_URL",
+    "KV_URL",
+    "MEILISEARCH_HOST_URL",
+    "MEILISEARCH_MASTER_API_KEY",
+    "NEXT_PUBLIC_APP_NAME",
+    "NEXT_PUBLIC_CONTENT_ITEMS_VIEWS_HISTORY_DAYS_LIMIT",
+    "NEXT_PUBLIC_DEPLOYMENT_ENVIRONMENT",
+    "NEXT_PUBLIC_FORMBRICKS_ENVIRONMENT_ID",
+    "NEXT_PUBLIC_FORMBRICKS_HOST",
+    "NEXT_PUBLIC_GOOGLE_TAG_MANAGER",
+    "NEXT_PUBLIC_IS_IN_MAINTENANCE_MODE",
+    "NEXT_PUBLIC_IS_REQUEST_BATCHING_DISABLED",
+    "NEXT_PUBLIC_MAXIMUM_FILE_UPLOAD_SIZE_IN_MB",
+    "NEXT_PUBLIC_MEILISEARCH_PUBLIC_URL",
+    "NEXT_PUBLIC_MEILISEARCH_TENANT_TOKEN_EXPIRATION_TIME_MS",
+    "NEXT_PUBLIC_RESEND_EMAIL_CONFIRMATION_TIMEOUT_IN_SECONDS",
+    "NEXT_PUBLIC_SIGN_UP_DEFAULT_EMAIL",
+    "NEXT_PUBLIC_STREAK_DAILY_TIME_ACTIVITY_THRESHOLD_SECONDS",
+    "NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY",
+    "NEXT_PUBLIC_SUPABASE_ANON_KEY",
+    "NEXT_PUBLIC_SUPABASE_URL",
+    "NEXT_PUBLIC_TRIAL_PERIOD_IN_DAYS",
+    "NEXT_PUBLIC_USER_ACTIVITY_PING_INTERVAL_SECONDS",
+    "NEXT_PUBLIC_WEBSITE_URL",
+    "NODE_ENV",
+    "PORT",
+    "POSTGRES_MAX_CONNECTIONS",
+    "RECREATE_SEARCH_INDEX_SECRET",
+    "SKIP_ENV_VALIDATION",
+    "STRIPE_PAYMENT_METHODS_CONFIGURATION_ID",
+    "STRIPE_PREMIUM_PLAN_PRICE_ID",
+    "STRIPE_SDK_CONCURRENCY_LIMIT",
+    "STRIPE_SECRET_KEY",
+    "STRIPE_SIGNING_SECRET",
+    "SUPABASE_SERVICE_ROLE_KEY",
+    "SUPABASE_WEBHOOK_SECRET",
+    "SYNC_USERS_TO_CRM",
+    "THROTTLE_REQUESTS_IN_MS",
+    "VERCEL_URL"
+  ]
+}
