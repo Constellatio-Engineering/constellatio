@@ -2,7 +2,7 @@
 import { queryParams } from "@/utils/query-params";
 
 import { finishSignup, type FinishSignUpProps } from "@constellatio/api/utils/signup";
-import { eq } from "@constellatio/db";
+import { eq, or, type SQL } from "@constellatio/db";
 import { db } from "@constellatio/db/client";
 import { users } from "@constellatio/db/schema";
 import { env } from "@constellatio/env";
@@ -121,8 +121,15 @@ const handler: NextApiHandler = async (req, res) =>
       throw error;
     }
 
+    const existingUserQuery: SQL[] = [eq(users.id, data.user.id)];
+
+    if(data.user.email)
+    {
+      existingUserQuery.push(eq(users.email, data.user.email));
+    }
+
     const existingUser = await db.query.users.findFirst({
-      where: eq(users.id, data.user.id)
+      where: or(...existingUserQuery)
     });
 
     if(existingUser)
