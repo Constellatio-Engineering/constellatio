@@ -5,6 +5,7 @@
   "devCommand": "pnpm dev",
   "framework": "nextjs",
   "regions": ["fra1"],
+  "outputDirectory": "workspace/app/.next",
   "public": false,
   "functions": {
     "src/pages/api/cron/**/*": {
