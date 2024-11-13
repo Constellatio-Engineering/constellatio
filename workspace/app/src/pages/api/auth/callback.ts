@@ -98,6 +98,8 @@ const handler: NextApiHandler = async (req, res) =>
 
   const { data, error } = await supabase.auth.exchangeCodeForSession(code);
 
+  console.log("exchangeCodeForSession: " + JSON.stringify(data));
+
   try
   {
     if(error)
@@ -116,6 +118,9 @@ const handler: NextApiHandler = async (req, res) =>
     }
     
     const providerData = callbackProviderSchema.parse(data.user);
+
+    console.log("providerData: " + JSON.stringify(providerData));
+
     const parsedCallbackData = callbackSchema.parse({
       ...data.user,
       provider: providerData.app_metadata.provider
