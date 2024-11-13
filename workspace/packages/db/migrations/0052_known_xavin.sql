@@ -1,0 +1,1 @@
+ALTER TYPE "public"."AuthProvider" ADD VALUE 'apple' BEFORE 'email';

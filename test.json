@@ -1,0 +1,109 @@
+{
+  "session": {
+    "access_token": "eyJhbGciOiJIUzI1NiIsImtpZCI6IkpuVUhNR29lV25mQjl5QUkiLCJ0eXAiOiJKV1QifQ.eyJpc3MiOiJodHRwczovL2Fkc3FzZWt1ZGluZnZlbmhpZGN6LnN1cGFiYXNlLmNvL2F1dGgvdjEiLCJzdWIiOiI4ZmZiMzA2OC00OGE1LTRkZDQtYWZkZS05ODU3MDg0ZWU4MTYiLCJhdWQiOiJhdXRoZW50aWNhdGVkIiwiZXhwIjoxNzMxNDY5Mzk0LCJpYXQiOjE3MzE0NjU3OTQsImVtYWlsIjoiYWNjb3VudHNAY2hyaXN0aWFua290dG1hbm4ubWUiLCJwaG9uZSI6IiIsImFwcF9tZXRhZGF0YSI6eyJwcm92aWRlciI6ImVtYWlsIiwicHJvdmlkZXJzIjpbImVtYWlsIiwiYXBwbGUiXX0sInVzZXJfbWV0YWRhdGEiOnsiY3VzdG9tX2NsYWltcyI6eyJhdXRoX3RpbWUiOjE3MzE0NjU3OTF9LCJlbWFpbCI6ImFjY291bnRzQGNocmlzdGlhbmtvdHRtYW5uLm1lIiwiZW1haWxfdmVyaWZpZWQiOnRydWUsImZ1bGxfbmFtZSI6IkNocmlzdGlhbiBLb3R0bWFubiIsImlzcyI6Imh0dHBzOi8vYXBwbGVpZC5hcHBsZS5jb20iLCJuYW1lIjoiQ2hyaXN0aWFuIEtvdHRtYW5uIiwicGhvbmVfdmVyaWZpZWQiOmZhbHNlLCJwcm92aWRlcl9pZCI6IjAwMTA1NC4wZjEwZTlkODU1Yjk0YmJmYWE4MjlhOTM2YWY5YTQ3MC4wMjMyIiwic3ViIjoiMDAxMDU0LjBmMTBlOWQ4NTViOTRiYmZhYTgyOWE5MzZhZjlhNDcwLjAyMzIifSwicm9sZSI6ImF1dGhlbnRpY2F0ZWQiLCJhYWwiOiJhYWwxIiwiYW1yIjpbeyJtZXRob2QiOiJvYXV0aCIsInRpbWVzdGFtcCI6MTczMTQ2NTc5NH1dLCJzZXNzaW9uX2lkIjoiNmQ0YWQ4M2YtODYxNS00OWExLWFmZDAtYjMzYzA2ODNkZDdjIiwiaXNfYW5vbnltb3VzIjpmYWxzZX0.NhtP0Vl9HegRchnHxZuAw57IRlEdZHYaVjnf_cutBSY",
+    "token_type": "bearer",
+    "expires_in": 3600,
+    "expires_at": 1731469394,
+    "refresh_token": "MoIjlS-qi6EQcq9DXZSvpw",
+    "user": {
+      "id": "8ffb3068-48a5-4dd4-afde-9857084ee816",
+      "aud": "authenticated",
+      "role": "authenticated",
+      "email": "accounts@christiankottmann.me",
+      "email_confirmed_at": "2024-01-11T02:29:37.021216Z",
+      "phone": "",
+      "confirmed_at": "2024-01-11T02:29:37.021216Z",
+      "last_sign_in_at": "2024-11-13T02:43:14.723895719Z",
+      "app_metadata": {
+        "provider": "email",
+        "providers": [
+          "email",
+          "apple"
+        ]
+      },
+      "user_metadata": {
+        "custom_claims": {
+          "auth_time": 1731465791
+        },
+        "email": "accounts@christiankottmann.me",
+        "email_verified": true,
+        "full_name": "Christian Kottmann",
+        "iss": "https://appleid.apple.com",
+        "name": "Christian Kottmann",
+        "phone_verified": false,
+        "provider_id": "001054.0f10e9d855b94bbfaa829a936af9a470.0232",
+        "sub": "001054.0f10e9d855b94bbfaa829a936af9a470.0232"
+      },
+      "identities": [
+        {
+          "identity_id": "cfbb92f8-0fa9-445f-b007-4e1824b9c7e2",
+          "id": "8ffb3068-48a5-4dd4-afde-9857084ee816",
+          "user_id": "8ffb3068-48a5-4dd4-afde-9857084ee816",
+          "identity_data": {
+            "email": "accounts@christiankottmann.me",
+            "email_verified": false,
+            "phone_verified": false,
+            "sub": "8ffb3068-48a5-4dd4-afde-9857084ee816"
+          },
+          "provider": "email",
+          "last_sign_in_at": "2024-01-11T02:29:15.698649Z",
+          "created_at": "2024-01-11T02:29:15.698699Z",
+          "updated_at": "2024-01-11T02:29:15.698699Z",
+          "email": "accounts@christiankottmann.me"
+        },
+        {
+          "identity_id": "3da91f2a-0c54-4696-81e0-afa397aa355a",
+          "id": "001054.0f10e9d855b94bbfaa829a936af9a470.0232",
+          "user_id": "8ffb3068-48a5-4dd4-afde-9857084ee816",
+          "identity_data": {
+            "custom_claims": {
+              "auth_time": 1731465791
+            },
+            "email": "accounts@christiankottmann.me",
+            "email_verified": true,
+            "iss": "https://appleid.apple.com",
+            "phone_verified": false,
+            "provider_id": "001054.0f10e9d855b94bbfaa829a936af9a470.0232",
+            "sub": "001054.0f10e9d855b94bbfaa829a936af9a470.0232"
+          },
+          "provider": "apple",
+          "last_sign_in_at": "2024-11-13T02:32:19.861342Z",
+          "created_at": "2024-11-13T02:32:19.861404Z",
+          "updated_at": "2024-11-13T02:43:12.647014Z",
+          "email": "accounts@christiankottmann.me"
+        }
+      ],
+      "created_at": "2024-01-11T02:29:15.695285Z",
+      "updated_at": "2024-11-13T02:43:14.731683Z",
+      "is_anonymous": false
+    },
+    "provider_token": "a8ee6e50332ec4474935a1e36ad61ba79.0.rrqvu.5ZXeSiykZp5DxYeQxkcabQ",
+    "provider_refresh_token": "r9b57070f493d41ff89cbccd29d9c0061.0.rrqvu.G3wzqB0ph9kGW7bJCLM6ww"
+  },
+  "user": {
+    "id": "8ffb3068-48a5-4dd4-afde-9857084ee816",
+    "aud": "authenticated",
+    "role": "authenticated",
+    "email": "accounts@christiankottmann.me",
+    "email_confirmed_at": "2024-01-11T02:29:37.021216Z",
+    "phone": "",
+    "confirmed_at": "2024-01-11T02:29:37.021216Z",
+    "last_sign_in_at": "2024-11-13T02:43:14.723895719Z",
+    "app_metadata": {
+      "provider": "email",
+      "providers": [
+        "email",
+        "apple"
+      ]
+    },
+    "user_metadata": {
+      "custom_claims": {
+        "auth_time": 1731465791
+      },
+      "email": "accounts@christiankottmann.me",
+      "email_verified": true,
+      "full_name": "Christian Kottmann",
+      "iss": "https://appleid.apple.com",
+      "name": "Christian Kottmann",
+      "phone_verified": false,
+      "provider_id": "001054.0f10e
