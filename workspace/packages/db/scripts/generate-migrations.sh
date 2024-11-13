@@ -8,4 +8,4 @@ generated_sql=$(pnpm run generate-new-custom-migration)
 file_name=$(echo "$generated_sql" | grep -o '\b\S\+\.sql\b')
 
 # Step 4: Append the contents of enable-row-level-security.sql to the extracted file
-cat ./src/db/custom-sql/enable-row-level-security.sql >> "$file_name"
+cat ./custom-sql/enable-row-level-security.sql >> "$file_name"
