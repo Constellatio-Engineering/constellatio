@@ -8,10 +8,6 @@
       "dependsOn": ["^build"],
       "outputs": ["dist/**", ".next/**", "!.next/cache/**"]
     },
-    "check-types": {
-      "dependsOn": ["check-types"],
-      "outputs": []
-    },
     "clean": {
       "cache": false
     },

@@ -32,7 +32,7 @@ jobs:
       - name: Install Dependencies
         run: pnpm install
       - name: Run type checking
-        run: pnpm check-types
+        run: pnpm typecheck
       - name: Run ESLint
         run: pnpm eslint
 
