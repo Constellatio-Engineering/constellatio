@@ -25,14 +25,15 @@
     "lint": "eslint src",
     "lint:fix": "eslint --fix src",
     "typecheck": "tsc --noEmit --emitDeclarationOnly false",
-    "apply-migrations": "dotenv-run -v -u -- drizzle-kit migrate",
-    "db:push": "drizzle-kit push",
-    "drizzle:studio": "drizzle-kit studio",
-    "generate-migrations-without-row-level-security": "drizzle-kit generate",
-    "generate-new-custom-migration": "drizzle-kit generate --custom",
+    "apply-migrations": "pnpm with-env drizzle-kit migrate",
+    "db:push": "pnpm with-env drizzle-kit push",
+    "drizzle:studio": "pnpm with-env drizzle-kit studio",
+    "generate-migrations-without-row-level-security": "pnpm with-env drizzle-kit generate",
+    "generate-new-custom-migration": "pnpm with-env drizzle-kit generate --custom",
     "generate-migrations": "sh ./scripts/generate-migrations.sh",
-    "drop-migration": "drizzle-kit drop",
-    "check-migrations": "drizzle-kit check"
+    "drop-migration": "pnpm with-env drizzle-kit drop",
+    "check-migrations": "pnpm with-env drizzle-kit check",
+    "with-env": "dotenv-run -- "
   },
   "dependencies": {
     "@constellatio/db-to-search": "workspace:*",

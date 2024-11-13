@@ -92,7 +92,7 @@ export type BadgePublicationState = typeof badgePublicationState[number];
 export const userBadgeStates = ["not-seen", "seen"] as const;
 export type UserBadgeState = typeof userBadgeStates[number];
 
-export const roles = ["forumMod", "admin"] as const;
+export const roles = ["forumMod", "admin", "testing-user"] as const;
 export type Role = typeof roles[number];
 
 export const authProviders = ["email", "google", "linkedin_oidc"] as const;
