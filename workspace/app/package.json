@@ -4,7 +4,7 @@
   "private": true,
   "scripts": {
     "separatorDev": "---------------------- NEXT.JS ----------------------",
-    "dev": "pnpm with-env next dev --turbo -p 3010",
+    "next:dev": "pnpm with-env next dev --turbo -p 3010",
     "start": "pnpm with-env next start -p 3010",
     "build": "pnpm with-env next build",
     "sepatatorLint": "---------------------- LINT ----------------------",

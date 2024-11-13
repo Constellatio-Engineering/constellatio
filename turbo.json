@@ -5,6 +5,7 @@
   "globalDependencies": ["**/.env", "**/.env.*local"],
   "tasks": {
     "apply-migrations": {
+      "dependsOn": ["//#start:supabase"],
       "cache": false,
       "persistent": false
     },
@@ -18,20 +19,22 @@
     "//#clean": {
       "cache": false
     },
-    "dev": {
-      "dependsOn": ["^dev"],
+    "next:dev": {
+      "dependsOn": ["apply-migrations"],
       "cache": false,
-      "persistent": false
+      "persistent": true
     },
     "lint": {
       "dependsOn": ["^topo", "^build"],
       "outputs": [".cache/.eslintcache"]
     },
     "//#start:docker": {
-      "cache": false
+      "cache": false,
+      "persistent": true
     },
     "//#start:supabase": {
-      "cache": false
+      "cache": false,
+      "persistent": false
     },
     "topo": {
       "dependsOn": ["^topo"]
@@ -39,6 +42,11 @@
     "typecheck": {
       "dependsOn": ["^topo", "^build"],
       "outputs": [".cache/tsbuildinfo.json"]
+    },
+    "typegen": {
+      "dependsOn": ["^build"],
+      "cache": false,
+      "persistent": false
     }
   },
   "globalEnv": [
