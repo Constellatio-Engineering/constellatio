@@ -11,7 +11,6 @@
   "scripts": {
     "separatorTurbo": "---------------------- TURBO ----------------------",
     "build": "turbo run build",
-    "check-types": "turbo run check-types",
     "clean": "git clean -xdf node_modules",
     "clean:workspaces": "turbo run clean",
     "dev": "dotenv-run -v -u -- turbo watch dev --continue",
