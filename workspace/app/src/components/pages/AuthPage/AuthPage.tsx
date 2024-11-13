@@ -118,6 +118,7 @@ export const AuthPage: FC<AuthPageProps> = (props) =>
             <SocialLoginButton
               icon={AppleIcon}
               name={"Apple"}
+              isDisabledInDevelopment={true}
               onClick={async () => signInWithSocialLogin("apple")}
             />
             <SocialLoginButton
