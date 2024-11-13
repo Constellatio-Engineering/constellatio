@@ -1,4 +1,5 @@
 import { SwitcherTab } from "@/components/atoms/Switcher-tab/SwitcherTab";
+import AppleIcon from "@/components/Icons/Apple_logo_black.svg";
 import GoogleIcon from "@/components/Icons/Google_G_logo.svg";
 import LinkedInIcon from "@/components/Icons/LinkedIn_icon.svg";
 import ErrorCard from "@/components/molecules/errorCard/ErrorCard";
@@ -114,6 +115,11 @@ export const AuthPage: FC<AuthPageProps> = (props) =>
             {socialAuthError && (
               <ErrorCard error={socialAuthError}/>
             )}
+            <SocialLoginButton
+              icon={AppleIcon}
+              name={"Apple"}
+              onClick={async () => signInWithSocialLogin("apple")}
+            />
             <SocialLoginButton
               icon={GoogleIcon}
               name={"Google"}
