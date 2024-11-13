@@ -1,3 +1,4 @@
+/* eslint-disable max-lines */
 import { queryParams } from "@/utils/query-params";
 
 import { finishSignup, type FinishSignUpProps } from "@constellatio/api/utils/signup";
@@ -109,7 +110,8 @@ const handler: NextApiHandler = async (req, res) =>
 
   const { data, error } = await supabase.auth.exchangeCodeForSession(code);
 
-  console.log("exchangeCodeForSession: " + JSON.stringify(data));
+  console.log("exchangeCodeForSession");
+  console.log(data);
 
   try
   {
@@ -125,20 +127,23 @@ const handler: NextApiHandler = async (req, res) =>
 
     if(existingUser)
     {
-      console.log("User already exists, " + JSON.stringify(existingUser));
+      console.log("User already exists");
+      console.log(existingUser);
       return res.redirect(appPaths.dashboard);
     }
     
     const providerData = callbackProviderSchema.parse(data.user);
 
-    console.log("providerData: " + JSON.stringify(providerData));
+    console.log("providerData");
+    console.log(providerData);
 
     const parsedCallbackData = callbackSchema.parse({
       ...data.user,
       provider: providerData.app_metadata.provider
     });
 
-    console.log("parsedCallbackData: " + JSON.stringify(parsedCallbackData));
+    console.log("parsedCallbackData");
+    console.log(parsedCallbackData);
 
     let additionalUserData: Pick<FinishSignUpProps["user"], "displayName" | "firstName" | "lastName" | "socialAuthProfilePictureUrl">;
 
@@ -180,14 +185,15 @@ const handler: NextApiHandler = async (req, res) =>
       }
     }
 
-    console.log("finishSignup: " + JSON.stringify({
+    console.log("finishSignup");
+    console.log({
       supabaseServerClient: supabase,
       user: {
         ...additionalUserData,
         authProvider: parsedCallbackData.provider,
         email: parsedCallbackData.email,
       },
-    }));
+    });
 
     await finishSignup({
       supabaseServerClient: supabase,
