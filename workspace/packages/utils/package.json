@@ -1,0 +1,75 @@
+{
+  "name": "@constellatio/utils",
+  "version": "0.1.0",
+  "private": true,
+  "type": "module",
+  "exports": {
+    "./array": {
+      "types": "./dist/array.utils.d.ts",
+      "default": "./src/array.utils.ts"
+    },
+    "./dates": {
+      "types": "./dist/dates.utils.d.ts",
+      "default": "./src/dates.utils.ts"
+    },
+    "./files": {
+      "types": "./dist/files.utils.d.ts",
+      "default": "./src/files.utils.ts"
+    },
+    "./html": {
+      "types": "./dist/html.utils.d.ts",
+      "default": "./src/html.utils.ts"
+    },
+    "./id": {
+      "types": "./dist/id.utils.d.ts",
+      "default": "./src/id.utils.ts"
+    },
+    "./object": {
+      "types": "./dist/object.utils.d.ts",
+      "default": "./src/object.utils.ts"
+    },
+    "./promise": {
+      "types": "./dist/promise.utils.d.ts",
+      "default": "./src/promise.utils.ts"
+    },
+    "./slug": {
+      "types": "./dist/slug.utils.d.ts",
+      "default": "./src/slug.utils.ts"
+    },
+    "./type-validation": {
+      "types": "./dist/type-validation.utils.d.ts",
+      "default": "./src/type-validation.utils.ts"
+    },
+    "./user": {
+      "types": "./dist/user.utils.d.ts",
+      "default": "./src/user.utils.ts"
+    }
+  },
+  "license": "MIT",
+  "scripts": {
+    "build": "tsc",
+    "clean": "git clean -xdf .cache .turbo dist node_modules",
+    "dev": "tsc",
+    "lint": "eslint src",
+    "lint:fix": "eslint --fix src",
+    "typecheck": "tsc --noEmit --emitDeclarationOnly false"
+  },
+  "dependencies": {
+    "@constellatio/env": "workspace:*",
+    "@constellatio/utility-types": "workspace:*",
+    "@tanstack/react-query": "catalog:",
+    "@trpc/client": "catalog:",
+    "@trpc/next": "catalog:",
+    "@trpc/server": "catalog:",
+    "axios": "1.7.7",
+    "superjson": "catalog:",
+    "uuid": "11.0.1"
+  },
+  "devDependencies": {
+    "@constellatio/eslint-config": "workspace:*",
+    "@constellatio/tsconfig": "workspace:*",
+    "@total-typescript/ts-reset": "catalog:",
+    "eslint": "catalog:",
+    "typescript": "catalog:"
+  }
+}

@@ -1,0 +1,37 @@
+{
+  "name": "@constellatio/shared",
+  "version": "0.1.0",
+  "private": true,
+  "type": "module",
+  "exports": {
+    "./paths": {
+      "types": "./dist/paths.d.ts",
+      "default": "./src/paths.ts"
+    },
+    "./validation": {
+      "types": "./dist/validation.d.ts",
+      "default": "./src/validation.ts"
+    }
+  },
+  "license": "MIT",
+  "scripts": {
+    "build": "tsc",
+    "clean": "git clean -xdf .cache .turbo dist node_modules",
+    "dev": "tsc",
+    "lint": "eslint src",
+    "lint:fix": "eslint --fix src",
+    "typecheck": "tsc --noEmit --emitDeclarationOnly false"
+  },
+  "dependencies": {
+    "@constellatio/db-to-search": "workspace:*",
+    "@constellatio/env": "workspace:*",
+    "@constellatio/utility-types": "workspace:*"
+  },
+  "devDependencies": {
+    "@constellatio/eslint-config": "workspace:*",
+    "@constellatio/tsconfig": "workspace:*",
+    "@total-typescript/ts-reset": "catalog:",
+    "eslint": "catalog:",
+    "typescript": "catalog:"
+  }
+}
