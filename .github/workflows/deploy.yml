@@ -30,7 +30,7 @@ jobs:
         uses: actions/setup-node@v4
         with:
           node-version: 20
-          cache-dependency-path: ./app/pnpm-lock.yaml
+          cache-dependency-path: ./pnpm-lock.yaml
           cache: 'pnpm'
       - name: Install Dependencies
         run: pnpm install
@@ -62,7 +62,7 @@ jobs:
         uses: actions/setup-node@v4
         with:
           node-version: 20
-          cache-dependency-path: ./app/pnpm-lock.yaml
+          cache-dependency-path: ./pnpm-lock.yaml
           cache: 'pnpm'
       - name: Install Dependencies
         run: pnpm install
