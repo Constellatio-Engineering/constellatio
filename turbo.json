@@ -4,6 +4,10 @@
   "envMode": "strict",
   "globalDependencies": ["**/.env", "**/.env.*local"],
   "tasks": {
+    "apply-migrations": {
+      "cache": false,
+      "persistent": false
+    },
     "build": {
       "dependsOn": ["^build"],
       "outputs": ["dist/**", ".next/**", "!.next/cache/**"]
