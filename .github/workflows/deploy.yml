@@ -18,9 +18,6 @@ jobs:
   lint:
     name: Run Linting
     runs-on: ubuntu-latest
-    defaults:
-      run:
-        working-directory: app
     steps:
       - name: Checkout code
         uses: actions/checkout@v4
@@ -50,9 +47,6 @@ jobs:
       || github.ref_name == 'staging' && 'staging'
       ||                                 'development'
       }}
-    defaults:
-      run:
-        working-directory: app
     steps:
       - name: Checkout code
         uses: actions/checkout@v4
