@@ -43,6 +43,16 @@ const callbackProviderSchema = z.object({
   }),
 });
 
+const appleCallbackSchema = z.object({
+  email: z.string().email(),
+  id: idValidation,
+  provider: z.literal("apple"),
+  user_metadata: z.object({
+    full_name: z.string(),
+    name: z.string(),
+  }).partial()
+});
+
 const googleCallbackSchema = z.object({
   email: z.string().email(),
   id: idValidation,
@@ -67,6 +77,7 @@ const linkedinCallbackSchema = z.object({
 });
 
 const callbackSchema = z.discriminatedUnion("provider", [
+  appleCallbackSchema,
   googleCallbackSchema,
   linkedinCallbackSchema
 ]);
@@ -114,6 +125,7 @@ const handler: NextApiHandler = async (req, res) =>
 
     if(existingUser)
     {
+      console.log("User already exists, " + JSON.stringify(existingUser));
       return res.redirect(appPaths.dashboard);
     }
     
@@ -126,10 +138,24 @@ const handler: NextApiHandler = async (req, res) =>
       provider: providerData.app_metadata.provider
     });
 
+    console.log("parsedCallbackData: " + JSON.stringify(parsedCallbackData));
+
     let additionalUserData: Pick<FinishSignUpProps["user"], "displayName" | "firstName" | "lastName" | "socialAuthProfilePictureUrl">;
 
     switch (parsedCallbackData.provider)
     {
+      case "apple":
+      {
+        const { firstName, lastName } = splitFullName(parsedCallbackData.user_metadata.full_name);
+
+        additionalUserData = {
+          displayName: parsedCallbackData.user_metadata.name || parsedCallbackData.email.split("@")[0] || null,
+          firstName,
+          lastName,
+          socialAuthProfilePictureUrl: null,
+        };
+        break;
+      }
       case "google":
       {
         const { firstName, lastName } = splitFullName(parsedCallbackData.user_metadata.full_name);
@@ -153,6 +179,15 @@ const handler: NextApiHandler = async (req, res) =>
         break;
       }
     }
+
+    console.log("finishSignup: " + JSON.stringify({
+      supabaseServerClient: supabase,
+      user: {
+        ...additionalUserData,
+        authProvider: parsedCallbackData.provider,
+        email: parsedCallbackData.email,
+      },
+    }));
 
     await finishSignup({
       supabaseServerClient: supabase,

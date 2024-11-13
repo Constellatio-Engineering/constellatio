@@ -95,7 +95,7 @@ export type UserBadgeState = typeof userBadgeStates[number];
 export const roles = ["forumMod", "admin", "testing-user"] as const;
 export type Role = typeof roles[number];
 
-export const authProviders = ["email", "google", "linkedin_oidc"] as const;
+export const authProviders = ["apple", "email", "google", "linkedin_oidc"] as const;
 export type AuthProvider = typeof authProviders[number];
 
 export const notificationTypesIdentifiers = [
