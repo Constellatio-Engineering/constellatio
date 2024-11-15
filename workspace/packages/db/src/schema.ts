@@ -89,7 +89,7 @@ export const users = pgTable("User", {
   onboardingResult: onboardingResultEnum("OnboardingResult"),
   subscriptionStatus: subscriptionStatusEnum("SubscriptionStatus"),
   subscriptionId: text("SubscriptionId"),
-});
+}).enableRLS();
 
 export const usersRelations = relations(users, ({ many }) => ({
   notifications: many(notifications),
@@ -119,7 +119,7 @@ export const profilePictures = pgTable("ProfilePicture", {
   contentType: imageFileMimeTypeEnum("ContentType"),
   userId: uuid("UserId").references(() => users.id, { onDelete: "no action" }).notNull().unique(),
   profilePictureSource: profilePictureSourceEnum("ProfilePictureSource").notNull(),
-});
+}).enableRLS();
 
 export const profilePicturesRelations = relations(profilePictures, ({ one }) => ({
   user: one(users, {
@@ -140,7 +140,7 @@ export const bookmarks = pgTable("Bookmark", {
   resourceId: uuid("ResourceId").notNull()
 }, table => ({
   userId_resourceType_resourceId_unique: unique().on(table.userId, table.resourceType, table.resourceId),
-}));
+})).enableRLS();
 
 export type BookmarkInsert = InferInsertModel<typeof bookmarks>;
 export type Bookmark = InferSelectModel<typeof bookmarks>;
@@ -151,7 +151,7 @@ export const uploadFolders = pgTable("UploadFolder", {
   createdAt: timestamp("CreatedAt").defaultNow().notNull(),
   userId: uuid("UserId").references(() => users.id, { onDelete: "no action" }).notNull(),
   name: text("Name").notNull()
-});
+}).enableRLS();
 
 export type UploadFolderInsert = InferInsertModel<typeof uploadFolders>;
 export type UploadFolder = InferSelectModel<typeof uploadFolders>;
@@ -167,7 +167,7 @@ export const uploadedFiles = pgTable("UploadedFile", {
   sizeInBytes: integer("SizeInBytes").notNull(),
   fileExtension: fileExtensionEnum("FileExtension").notNull(),
   contentType: fileMimeTypeEnum("ContentType").notNull(),
-});
+}).enableRLS();
 
 export const uploadedFilesRelations = relations(uploadedFiles, ({ many }) => ({
   tags: many(uploadedFilesToTags),
@@ -186,7 +186,7 @@ export const documents = pgTable("Document", {
   folderId: uuid("FolderId").references(() => uploadFolders.id, { onDelete: "no action" }),
   name: text("Name").notNull(),
   content: text("Content").notNull(),
-});
+}).enableRLS();
 
 export const documentsRelations = relations(documents, ({ many }) => ({
   tags: many(documentsToTags),
@@ -204,7 +204,7 @@ export const notes = pgTable("Note", {
   createdAt: timestamp("CreatedAt").defaultNow().notNull(),
   updatedAt: timestamp("UpdatedAt").defaultNow().notNull().$onUpdate(getCurrentDate),
   content: text("Content").notNull(),
-});
+}).enableRLS();
 
 export type NoteInsert = InferInsertModel<typeof notes>;
 export type Note = InferSelectModel<typeof notes>;
@@ -216,7 +216,7 @@ export const casesProgress = pgTable("CaseProgress", {
   progressState: caseProgressStateEnum("ProgressState").notNull().default("not-started"),
 }, table => ({
   pk: primaryKey({ columns: [table.userId, table.caseId] }),
-}));
+})).enableRLS();
 
 export type CaseProgressInsert = InferInsertModel<typeof casesProgress>;
 export type CaseProgress = InferSelectModel<typeof casesProgress>;
@@ -228,7 +228,7 @@ export const casesSolutions = pgTable("CaseSolution", {
   solution: text("Solution").notNull(),
 }, table => ({
   pk: primaryKey({ columns: [table.userId, table.caseId] }),
-}));
+})).enableRLS();
 
 export type CaseSolutionInsert = InferInsertModel<typeof casesSolutions>;
 export type CaseSolution = InferSelectModel<typeof casesSolutions>;
@@ -244,7 +244,7 @@ export const gamesProgress = pgTable("GameProgress", {
   gameResult: jsonb("GameResult").$type<GameResultSchemaType>(),
 }, table => ({
   unique: unique().on(table.userId, table.gameId),
-}));
+})).enableRLS();
 
 export type GameProgressInsert = InferInsertModel<typeof gamesProgress>;
 export type GameProgress = InferSelectModel<typeof gamesProgress>;
@@ -256,7 +256,7 @@ export const searchIndexUpdateQueue = pgTable("SearchIndexUpdateQueue", {
   eventType: caisyWebhookEventTypeEnum("EventType").notNull(),
 }, table => ({
   pk: primaryKey({ columns: [table.cmsId, table.searchIndexType, table.eventType] }),
-}));
+})).enableRLS();
 
 export type SearchIndexUpdateQueueInsert = InferInsertModel<typeof searchIndexUpdateQueue>;
 export type SearchIndexUpdateQueueItem = InferSelectModel<typeof searchIndexUpdateQueue>;
@@ -269,7 +269,7 @@ export const badges = pgTable("Badge", {
   description: text("Description").notNull(),
   imageFilename: text("ImageFilename").notNull(),
   publicationState: badgePublicationStateEnum("PublicationState").notNull().default("not-listed"),
-});
+}).enableRLS();
 
 export const badgesRelations = relations(badges, ({ many }) => ({
   usersToBadges: many(usersToBadges),
@@ -289,7 +289,7 @@ export const usersToBadges = pgTable("User_to_Badge", {
   userBadgeState: userBadgeStateEnum("UserBadgeState").default("not-seen").notNull(),
 }, (table) => ({
   pk: primaryKey({ columns: [table.userId, table.badgeId] }),
-}));
+})).enableRLS();
 
 export const usersToBadgesRelations = relations(usersToBadges, ({ one }) => ({
   badge: one(badges, {
@@ -313,7 +313,7 @@ export const forumQuestions = pgTable("ForumQuestion", {
   text: text("Text").notNull(),
 }, table => ({
   id_slug_index: uniqueIndex("ForumQuestion_Id_Slug_Index").on(table.id, table.slug),
-}));
+})).enableRLS();
 
 export const forumQuestionsRelations = relations(forumQuestions, ({ many, one }) => ({
   forumQuestionToLegalFields: many(forumQuestionsToLegalFields),
@@ -337,7 +337,7 @@ export const forumQuestionsToLegalFields = pgTable("ForumQuestion_to_LegalField"
   legalFieldId: uuid("LegalFieldId").notNull(),
 }, table => ({
   pk: primaryKey({ columns: [table.questionId, table.legalFieldId] }),
-}));
+})).enableRLS();
 
 export const forumQuestionsToLegalFieldsRelations = relations(forumQuestionsToLegalFields, ({ one }) => ({
   question: one(forumQuestions, {
@@ -355,7 +355,7 @@ export const forumQuestionToSubfields = pgTable("ForumQuestion_to_Subfield", {
   subfieldId: uuid("SubfieldId").notNull(),
 }, table => ({
   pk: primaryKey({ columns: [table.questionId, table.subfieldId] }),
-}));
+})).enableRLS();
 
 export const forumQuestionToSubfieldsRelations = relations(forumQuestionToSubfields, ({ one }) => ({
   question: one(forumQuestions, {
@@ -373,7 +373,7 @@ export const forumQuestionToTopics = pgTable("ForumQuestion_to_Topic", {
   topicId: uuid("TopicId").notNull(),
 }, table => ({
   pk: primaryKey({ columns: [table.questionId, table.topicId] }),
-}));
+})).enableRLS();
 
 export const forumQuestionToTopicsRelations = relations(forumQuestionToTopics, ({ one }) => ({
   question: one(forumQuestions, {
@@ -395,7 +395,7 @@ export const forumAnswers = pgTable("ForumAnswer", {
   text: text("AnswerText").notNull(),
   parentQuestionId: uuid("ParentQuestionId").references(() => forumQuestions.id, { onDelete: "no action" }),
   parentAnswerId: uuid("ParentAnswerId").references((): AnyPgColumn => forumAnswers.id, { onDelete: "no action" }),
-});
+}).enableRLS();
 
 export const forumAnswersRelations = relations(forumAnswers, ({ one }) => ({
   user: one(users, {
@@ -419,7 +419,7 @@ export const correctAnswers = pgTable("CorrectAnswer", {
   confirmedByUserId: uuid("ConfirmedByUserId").references(() => users.id, { onDelete: "no action" }).notNull(),
   questionId: uuid("QuestionId").references(() => forumQuestions.id, { onDelete: "cascade" }).notNull(),
   answerId: uuid("AnswerId").references(() => forumAnswers.id, { onDelete: "cascade" }).unique().notNull(),
-});
+}).enableRLS();
 
 export type CorrectAnswerInsert = InferInsertModel<typeof correctAnswers>;
 export type CorrectAnswer = InferSelectModel<typeof correctAnswers>;
@@ -432,7 +432,7 @@ export const questionUpvotes = pgTable("QuestionUpvote", {
 }, table => ({
   questionId_index: index("QuestionUpvote_QuestionId_Index").on(table.questionId),
   pk: primaryKey({ columns: [table.userId, table.questionId] }),
-}));
+})).enableRLS();
 
 export const questionUpvotesRelations = relations(questionUpvotes, ({ one }) => ({
   question: one(forumQuestions, {
@@ -452,7 +452,7 @@ export const answerUpvotes = pgTable("AnswerUpvote", {
 }, table => ({
   answerId_index: index("AnswerUpvote_QuestionId_Index").on(table.answerId),
   pk: primaryKey({ columns: [table.userId, table.answerId] }),
-}));
+})).enableRLS();
 
 export type AnswerUpvoteInsert = InferInsertModel<typeof answerUpvotes>;
 export type AnswerUpvote = InferSelectModel<typeof answerUpvotes>;
@@ -465,7 +465,7 @@ export const userRoles = pgTable("UserRole", {
   description: text("Description").notNull(),
 }, table => ({
   role_index: index("UserRole_Role_Index").on(table.identifier),
-}));
+})).enableRLS();
 
 export const userRolesRelations = relations(userRoles, ({ many }) => ({
   usersToRoles: many(usersToRoles),
@@ -480,7 +480,7 @@ export const usersToRoles = pgTable("User_to_Role", {
   roleId: uuid("RoleId").references(() => userRoles.id, { onDelete: "no action" }).notNull(),
 }, table => ({
   pk: primaryKey({ columns: [table.userId, table.roleId] }),
-}));
+})).enableRLS();
 
 export const usersToRolesRelations = relations(usersToRoles, ({ one }) => ({
   role: one(userRoles, {
@@ -501,7 +501,7 @@ export const notificationTypes = pgTable("NotificationType", {
   identifier: notificationTypeIdentifierEnum("NotificationType").primaryKey(),
   name: text("Name").notNull(),
   description: text("Description").notNull(),
-});
+}).enableRLS();
 
 export const notificationTypesRelations = relations(notificationTypes, ({ many }) => ({
   notifications: many(notifications),
@@ -520,7 +520,7 @@ export const notifications = pgTable("Notification", {
   typeIdentifier: notificationTypeIdentifierEnum("Type").references(() => notificationTypes.identifier, { onDelete: "no action" }).notNull(),
   createdAt: timestamp("CreatedAt").defaultNow().notNull(),
   readAt: timestamp("ReadAt"),
-});
+}).enableRLS();
 
 export const notificationsRelations = relations(notifications, ({ one }) => ({
   notificationType: one(notificationTypes, {
@@ -550,7 +550,7 @@ export const pings = pgTable("Ping", {
   pingInterval: smallint("PingInterval").notNull(),
 }, table => ({
   path_index: index("Ping_Path_Index").on(table.path),
-}));
+})).enableRLS();
 
 export type PingInsert = InferInsertModel<typeof pings>;
 export type Ping = InferSelectModel<typeof pings>;
@@ -561,7 +561,7 @@ export const documentsToTags = pgTable("Document_to_Tag", {
   tagId: uuid("TagId").notNull(),
 }, table => ({
   pk: primaryKey({ columns: [table.documentId, table.tagId] }),
-}));
+})).enableRLS();
 
 export const documentsToTagsRelations = relations(documentsToTags, ({ one }) => ({
   document: one(documents, {
@@ -579,7 +579,7 @@ export const uploadedFilesToTags = pgTable("UploadedFile_to_Tag", {
   tagId: uuid("TagId").notNull(),
 }, table => ({
   pk: primaryKey({ columns: [table.fileId, table.tagId] }),
-}));
+})).enableRLS();
 
 export const uploadedFilesToTagsRelations = relations(uploadedFilesToTags, ({ one }) => ({
   file: one(uploadedFiles, {
@@ -596,7 +596,7 @@ export const referralCodes = pgTable("ReferralCode", {
   code: text("Code").primaryKey(),
   createdAt: timestamp("CreatedAt").defaultNow().notNull(),
   userId: uuid("UserId").references(() => users.id, { onDelete: "cascade" }).notNull()
-});
+}).enableRLS();
 
 export type ReferralCodeInsert = InferInsertModel<typeof referralCodes>;
 export type ReferralCode = InferSelectModel<typeof referralCodes>;
@@ -609,7 +609,7 @@ export const referrals = pgTable("Referral", {
   referredUserId: uuid("ReferredUserId").references(() => users.id, { onDelete: "no action" }).notNull(),
   referringUserId: uuid("ReferringUserId").references(() => users.id, { onDelete: "no action" }).notNull(),
   paid: boolean("Paid").default(false).notNull(),
-});
+}).enableRLS();
 
 export type ReferralInsert = InferInsertModel<typeof referrals>;
 export type Referral = InferSelectModel<typeof referrals>;
@@ -621,7 +621,7 @@ export const referralBalances = pgTable("ReferralBalance", {
   paidOutRefferalBonus: integer("PaidOutRefferalBonus").default(0).notNull(),
   createdAt: timestamp("CreatedAt").defaultNow().notNull(),
   userId: uuid("UserId").references(() => users.id, { onDelete: "cascade" }).notNull(),
-});
+}).enableRLS();
 
 export type ReferralBalanceInsert = InferInsertModel<typeof referralBalances>;
 export type ReferralBalance = InferSelectModel<typeof referralBalances>;
@@ -630,7 +630,7 @@ export type ReferralBalanceSql = InferPgSelectModel<typeof referralBalances>;
 export const updateUserInCrmQueue = pgTable("UpdateUserInCrmQueue", {
   userId: uuid("UserId").references(() => users.id, { onDelete: "cascade" }).notNull().unique(),
   createdAt: timestamp("CreatedAt").defaultNow().notNull(),
-});
+}).enableRLS();
 
 export type UpdateUserInCrmQueueInsert = InferInsertModel<typeof updateUserInCrmQueue>;
 export type UpdateUserInCrmQueue = InferSelectModel<typeof updateUserInCrmQueue>;
@@ -643,7 +643,7 @@ export const streak = pgTable("Streak", {
   satisfiedDays: integer("SatisfiedDays").default(1),
   streakAlive: boolean("StreakAlive").default(true),
   lastCheckDate: date("LastCheckDate", { mode: "date" }).defaultNow().notNull(),
-});
+}).enableRLS();
 
 export type StreakInsert = InferInsertModel<typeof streak>;
 export type Streak = InferSelectModel<typeof streak>;
@@ -654,7 +654,7 @@ export const streakActivities = pgTable("StreakActivities", {
   userId: uuid("UserId").references(() => users.id, { onDelete: "cascade" }).notNull(),
   activityType: streakActivityTypeEnum("ActivityType").notNull(),
   createdAt: date("CreatedAt", { mode: "date" }).defaultNow().notNull(),
-});
+}).enableRLS();
 
 export type StreakActivityInsert = InferInsertModel<typeof streakActivities>;
 export type StreakActivity = InferSelectModel<typeof streakActivities>;
@@ -669,7 +669,7 @@ export const contentViews = pgTable("ContentView", {
 }, table => ({
   contentItemId_index: index("ContentView_ContentItemId_Index").on(table.contentItemId),
   contentItemType_index: index("ContentView_ContentItemType_Index").on(table.contentItemType),
-}));
+})).enableRLS();
 
 export type ContentViewInsert = InferInsertModel<typeof contentViews>;
 export type ContentView = InferSelectModel<typeof contentViews>;

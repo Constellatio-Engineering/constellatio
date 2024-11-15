@@ -45,24 +45,10 @@
       "breakpoints": true
     },
     {
-      "idx": 11,
-      "version": "6",
-      "when": 1719445398575,
-      "tag": "0011_loose_pyro",
-      "breakpoints": true
-    },
-    {
       "idx": 12,
       "version": "6",
       "when": 1722244386434,
       "tag": "0012_melted_red_skull",
-      "breakpoints": true
-    },
-    {
-      "idx": 13,
-      "version": "6",
-      "when": 1722244386977,
-      "tag": "0013_blushing_grandmaster",
       "breakpoints": true
     },
     {
@@ -73,13 +59,6 @@
       "breakpoints": true
     },
     {
-      "idx": 15,
-      "version": "6",
-      "when": 1725229824462,
-      "tag": "0015_sharp_leo",
-      "breakpoints": true
-    },
-    {
       "idx": 16,
       "version": "6",
       "when": 1725584932340,
@@ -87,24 +66,10 @@
       "breakpoints": true
     },
     {
-      "idx": 17,
-      "version": "6",
-      "when": 1725584953410,
-      "tag": "0017_medical_rictor",
-      "breakpoints": true
-    },
-    {
       "idx": 18,
       "version": "6",
       "when": 1725612131320,
       "tag": "0018_thankful_blonde_phantom",
-      "breakpoints": true
-    },
-    {
-      "idx": 19,
-      "version": "6",
-      "when": 1725612131870,
-      "tag": "0019_rich_namora",
       "breakpoints": true
     },
     {
@@ -129,24 +94,10 @@
       "breakpoints": true
     },
     {
-      "idx": 23,
-      "version": "6",
-      "when": 1725626295759,
-      "tag": "0023_sweet_marvel_apes",
-      "breakpoints": true
-    },
-    {
       "idx": 24,
       "version": "6",
       "when": 1725651339614,
       "tag": "0024_married_katie_power",
-      "breakpoints": true
-    },
-    {
-      "idx": 25,
-      "version": "6",
-      "when": 1725651340199,
-      "tag": "0025_mixed_adam_warlock",
       "breakpoints": true
     },
     {
@@ -171,24 +122,10 @@
       "breakpoints": true
     },
     {
-      "idx": 30,
-      "version": "7",
-      "when": 1728327195199,
-      "tag": "0030_steady_johnny_storm",
-      "breakpoints": true
-    },
-    {
       "idx": 31,
       "version": "7",
       "when": 1728403979191,
       "tag": "0031_worthless_proudstar",
-      "breakpoints": true
-    },
-    {
-      "idx": 32,
-      "version": "7",
-      "when": 1728403979936,
-      "tag": "0032_crazy_swarm",
       "breakpoints": true
     },
     {
@@ -213,13 +150,6 @@
       "breakpoints": true
     },
     {
-      "idx": 37,
-      "version": "7",
-      "when": 1728484122304,
-      "tag": "0037_petite_rhodey",
-      "breakpoints": true
-    },
-    {
       "idx": 38,
       "version": "7",
       "when": 1729169116924,
@@ -241,24 +171,10 @@
       "breakpoints": true
     },
     {
-      "idx": 42,
-      "version": "7",
-      "when": 1729565234021,
-      "tag": "0042_bored_dragon_man",
-      "breakpoints": true
-    },
-    {
       "idx": 43,
       "version": "7",
       "when": 1729565802125,
       "tag": "0043_colossal_storm",
-      "breakpoints": true
-    },
-    {
-      "idx": 44,
-      "version": "7",
-      "when": 1729565802817,
-      "tag": "0044_gorgeous_tomas",
       "breakpoints": true
     },
     {
@@ -269,13 +185,6 @@
       "breakpoints": true
     },
     {
-      "idx": 46,
-      "version": "7",
-      "when": 1729582850013,
-      "tag": "0046_pink_molecule_man",
-      "breakpoints": true
-    },
-    {
       "idx": 47,
       "version": "7",
       "when": 1729640914265,
@@ -283,24 +192,10 @@
       "breakpoints": true
     },
     {
-      "idx": 48,
-      "version": "7",
-      "when": 1729640914899,
-      "tag": "0048_regular_sasquatch",
-      "breakpoints": true
-    },
-    {
       "idx": 49,
       "version": "7",
       "when": 1729891149480,
       "tag": "0049_fancy_wolverine",
-      "breakpoints": true
-    },
-    {
-      "idx": 50,
-      "version": "7",
-      "when": 1729891150330,
-      "tag": "0050_tense_falcon",
       "breakpoints": true
     },
     {
@@ -318,10 +213,10 @@
       "breakpoints": true
     },
     {
-      "idx": 53,
+      "idx": 54,
       "version": "7",
-      "when": 1731466544287,
-      "tag": "0053_real_white_tiger",
+      "when": 1731629759845,
+      "tag": "0054_funny_hydra",
       "breakpoints": true
     }
   ]

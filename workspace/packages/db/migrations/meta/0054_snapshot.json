@@ -1,6 +1,6 @@
 {
-  "id": "73d6cbec-35d5-4727-9dcc-d5a6be6b6666",
-  "prevId": "1c05613f-f776-4735-be38-f726a94fb7a4",
+  "id": "39a950bb-7857-40bb-9322-d84f0e45b94c",
+  "prevId": "94e7ef80-8fa2-49ee-891a-7c7c6bdcf4a8",
   "version": "7",
   "dialect": "postgresql",
   "tables": {
@@ -40,37 +40,37 @@
             }
           ],
           "isUnique": false,
-          "with": {},
+          "concurrently": false,
           "method": "btree",
-          "concurrently": false
+          "with": {}
         }
       },
       "foreignKeys": {
         "AnswerUpvote_UserId_User_Id_fk": {
           "name": "AnswerUpvote_UserId_User_Id_fk",
           "tableFrom": "AnswerUpvote",
+          "tableTo": "User",
           "columnsFrom": [
             "UserId"
           ],
-          "tableTo": "User",
           "columnsTo": [
             "Id"
           ],
-          "onUpdate": "no action",
-          "onDelete": "no action"
+          "onDelete": "no action",
+          "onUpdate": "no action"
         },
         "AnswerUpvote_AnswerId_ForumAnswer_Id_fk": {
           "name": "AnswerUpvote_AnswerId_ForumAnswer_Id_fk",
           "tableFrom": "AnswerUpvote",
+          "tableTo": "ForumAnswer",
           "columnsFrom": [
             "AnswerId"
           ],
-          "tableTo": "ForumAnswer",
           "columnsTo": [
             "Id"
           ],
-          "onUpdate": "no action",
-          "onDelete": "cascade"
+          "onDelete": "cascade",
+          "onUpdate": "no action"
         }
       },
       "compositePrimaryKeys": {
@@ -82,7 +82,10 @@
           ]
         }
       },
-      "uniqueConstraints": {}
+      "uniqueConstraints": {},
+      "policies": {},
+      "checkConstraints": {},
+      "isRLSEnabled": true
     },
     "public.Badge": {
       "name": "Badge",
@@ -135,12 +138,15 @@
       "uniqueConstraints": {
         "Badge_Identifier_unique": {
           "name": "Badge_Identifier_unique",
+          "nullsNotDistinct": false,
           "columns": [
             "Identifier"
-          ],
-          "nullsNotDistinct": false
+          ]
         }
-      }
+      },
+      "policies": {},
+      "checkConstraints": {},
+      "isRLSEnabled": true
     },
     "public.Bookmark": {
       "name": "Bookmark",
@@ -185,29 +191,32 @@
         "Bookmark_UserId_User_Id_fk": {
           "name": "Bookmark_UserId_User_Id_fk",
           "tableFrom": "Bookmark",
+          "tableTo": "User",
           "columnsFrom": [
             "UserId"
           ],
-          "tableTo": "User",
           "columnsTo": [
             "Id"
           ],
-          "onUpdate": "no action",
-          "onDelete": "no action"
+          "onDelete": "no action",
+          "onUpdate": "no action"
         }
       },
       "compositePrimaryKeys": {},
       "uniqueConstraints": {
         "Bookmark_UserId_ResourceType_ResourceId_unique": {
           "name": "Bookmark_UserId_ResourceType_ResourceId_unique",
+          "nullsNotDistinct": false,
           "columns": [
             "UserId",
             "ResourceType",
             "ResourceId"
-          ],
-          "nullsNotDistinct": false
+          ]
         }
-      }
+      },
+      "policies": {},
+      "checkConstraints": {},
+      "isRLSEnabled": true
     },
     "public.CaseProgress": {
       "name": "CaseProgress",
@@ -239,15 +248,15 @@
         "CaseProgress_UserId_User_Id_fk": {
           "name": "CaseProgress_UserId_User_Id_fk",
           "tableFrom": "CaseProgress",
+          "tableTo": "User",
           "columnsFrom": [
             "UserId"
           ],
-          "tableTo": "User",
           "columnsTo": [
             "Id"
           ],
-          "onUpdate": "no action",
-          "onDelete": "no action"
+          "onDelete": "no action",
+          "onUpdate": "no action"
         }
       },
       "compositePrimaryKeys": {
@@ -259,7 +268,10 @@
           ]
         }
       },
-      "uniqueConstraints": {}
+      "uniqueConstraints": {},
+      "policies": {},
+      "checkConstraints": {},
+      "isRLSEnabled": true
     },
     "public.CaseSolution": {
       "name": "CaseSolution",
@@ -289,15 +301,15 @@
         "CaseSolution_UserId_User_Id_fk": {
           "name": "CaseSolution_UserId_User_Id_fk",
           "tableFrom": "CaseSolution",
+          "tableTo": "User",
           "columnsFrom": [
             "UserId"
           ],
-          "tableTo": "User",
           "columnsTo": [
             "Id"
           ],
-          "onUpdate": "no action",
-          "onDelete": "no action"
+          "onDelete": "no action",
+          "onUpdate": "no action"
         }
       },
       "compositePrimaryKeys": {
@@ -309,7 +321,10 @@
           ]
         }
       },
-      "uniqueConstraints": {}
+      "uniqueConstraints": {},
+      "policies": {},
+      "checkConstraints": {},
+      "isRLSEnabled": true
     },
     "public.ContentView": {
       "name": "ContentView",
@@ -360,9 +375,9 @@
             }
           ],
           "isUnique": false,
-          "with": {},
+          "concurrently": false,
           "method": "btree",
-          "concurrently": false
+          "with": {}
         },
         "ContentView_ContentItemType_Index": {
           "name": "ContentView_ContentItemType_Index",
@@ -375,28 +390,31 @@
             }
           ],
           "isUnique": false,
-          "with": {},
+          "concurrently": false,
           "method": "btree",
-          "concurrently": false
+          "with": {}
         }
       },
       "foreignKeys": {
         "ContentView_UserId_User_Id_fk": {
           "name": "ContentView_UserId_User_Id_fk",
           "tableFrom": "ContentView",
+          "tableTo": "User",
           "columnsFrom": [
             "UserId"
           ],
-          "tableTo": "User",
           "columnsTo": [
             "Id"
           ],
-          "onUpdate": "no action",
-          "onDelete": "no action"
+          "onDelete": "no action",
+          "onUpdate": "no action"
         }
       },
       "compositePrimaryKeys": {},
-      "uniqueConstraints": {}
+      "uniqueConstraints": {},
+      "policies": {},
+      "checkConstraints": {},
+      "isRLSEnabled": true
     },
     "public.CorrectAnswer": {
       "name": "CorrectAnswer",
@@ -440,53 +458,56 @@
         "CorrectAnswer_ConfirmedByUserId_User_Id_fk": {
           "name": "CorrectAnswer_ConfirmedByUserId_User_Id_fk",
           "tableFrom": "CorrectAnswer",
+          "tableTo": "User",
           "columnsFrom": [
             "ConfirmedByUserId"
           ],
-          "tableTo": "User",
           "columnsTo": [
             "Id"
           ],
-          "onUpdate": "no action",
-          "onDelete": "no action"
+          "onDelete": "no action",
+          "onUpdate": "no action"
         },
         "CorrectAnswer_QuestionId_ForumQuestion_Id_fk": {
           "name": "CorrectAnswer_QuestionId_ForumQuestion_Id_fk",
           "tableFrom": "CorrectAnswer",
+          "tableTo": "ForumQuestion",
           "columnsFrom": [
             "QuestionId"
           ],
-          "tableTo": "ForumQuestion",
           "columnsTo": [
             "Id"
           ],
-          "onUpdate": "no action",
-          "onDelete": "cascade"
+          "onDelete": "cascade",
+          "onUpdate": "no action"
         },
         "CorrectAnswer_AnswerId_ForumAnswer_Id_fk": {
           "name": "CorrectAnswer_AnswerId_ForumAnswer_Id_fk",
           "tableFrom": "CorrectAnswer",
+          "tableTo": "ForumAnswer",
           "columnsFrom": [
             "AnswerId"
           ],
-          "tableTo": "ForumAnswer",
           "columnsTo": [
             "Id"
           ],
-          "onUpdate": "no action",
-          "onDelete": "cascade"
+          "onDelete": "cascade",
+          "onUpdate": "no action"
         }
       },
       "compositePrimaryKeys": {},
       "uniqueConstraints": {
         "CorrectAnswer_AnswerId_unique": {
           "name": "CorrectAnswer_AnswerId_unique",
+          "nullsNotDistinct": false,
           "columns": [
             "AnswerId"
-          ],
-          "nullsNotDistinct": false
+          ]
         }
-      }
+      },
+      "policies": {},
+      "checkConstraints": {},
+      "isRLSEnabled": true
     },
     "public.Document": {
       "name": "Document",
@@ -543,32 +564,35 @@
         "Document_UserId_User_Id_fk": {
           "name": "Document_UserId_User_Id_fk",
           "tableFrom": "Document",
+          "tableTo": "User",
           "columnsFrom": [
             "UserId"
           ],
-          "tableTo": "User",
           "columnsTo": [
             "Id"
           ],
-          "onUpdate": "no action",
-          "onDelete": "no action"
+          "onDelete": "no action",
+          "onUpdate": "no action"
         },
         "Document_FolderId_UploadFolder_Id_fk": {
           "name": "Document_FolderId_UploadFolder_Id_fk",
           "tableFrom": "Document",
+          "tableTo": "UploadFolder",
           "columnsFrom": [
             "FolderId"
           ],
-          "tableTo": "UploadFolder",
           "columnsTo": [
             "Id"
           ],
-          "onUpdate": "no action",
-          "onDelete": "no action"
+          "onDelete": "no action",
+          "onUpdate": "no action"
         }
       },
       "compositePrimaryKeys": {},
-      "uniqueConstraints": {}
+      "uniqueConstraints": {},
+      "policies": {},
+      "checkConstraints": {},
+      "isRLSEnabled": true
     },
     "public.Document_to_Tag": {
       "name": "Document_to_Tag",
@@ -592,15 +616,15 @@
         "Document_to_Tag_DocumentId_Document_Id_fk": {
           "name": "Document_to_Tag_DocumentId_Document_Id_fk",
           "tableFrom": "Document_to_Tag",
+          "tableTo": "Document",
           "columnsFrom": [
             "DocumentId"
           ],
-          "tableTo": "Document",
           "columnsTo": [
             "Id"
           ],
-          "onUpdate": "no action",
-          "onDelete": "cascade"
+          "onDelete": "cascade",
+          "onUpdate": "no action"
         }
       },
       "compositePrimaryKeys": {
@@ -612,7 +636,10 @@
           ]
         }
       },
-      "uniqueConstraints": {}
+      "uniqueConstraints": {},
+      "policies": {},
+      "checkConstraints": {},
+      "isRLSEnabled": true
     },
     "public.ForumAnswer": {
       "name": "ForumAnswer",
@@ -675,45 +702,48 @@
         "ForumAnswer_UserId_User_Id_fk": {
           "name": "ForumAnswer_UserId_User_Id_fk",
           "tableFrom": "ForumAnswer",
+          "tableTo": "User",
           "columnsFrom": [
             "UserId"
           ],
-          "tableTo": "User",
           "columnsTo": [
             "Id"
           ],
-          "onUpdate": "no action",
-          "onDelete": "no action"
+          "onDelete": "no action",
+          "onUpdate": "no action"
         },
         "ForumAnswer_ParentQuestionId_ForumQuestion_Id_fk": {
           "name": "ForumAnswer_ParentQuestionId_ForumQuestion_Id_fk",
           "tableFrom": "ForumAnswer",
+          "tableTo": "ForumQuestion",
           "columnsFrom": [
             "ParentQuestionId"
           ],
-          "tableTo": "ForumQuestion",
           "columnsTo": [
             "Id"
           ],
-          "onUpdate": "no action",
-          "onDelete": "no action"
+          "onDelete": "no action",
+          "onUpdate": "no action"
         },
         "ForumAnswer_ParentAnswerId_ForumAnswer_Id_fk": {
           "name": "ForumAnswer_ParentAnswerId_ForumAnswer_Id_fk",
           "tableFrom": "ForumAnswer",
+          "tableTo": "ForumAnswer",
           "columnsFrom": [
             "ParentAnswerId"
           ],
-          "tableTo": "ForumAnswer",
           "columnsTo": [
             "Id"
           ],
-          "onUpdate": "no action",
-          "onDelete": "no action"
+          "onDelete": "no action",
+          "onUpdate": "no action"
         }
       },
       "compositePrimaryKeys": {},
-      "uniqueConstraints": {}
+      "uniqueConstraints": {},
+      "policies": {},
+      "checkConstraints": {},
+      "isRLSEnabled": true
     },
     "public.ForumQuestion_to_Subfield": {
       "name": "ForumQuestion_to_Subfield",
@@ -737,15 +767,15 @@
         "ForumQuestion_to_Subfield_QuestionId_ForumQuestion_Id_fk": {
           "name": "ForumQuestion_to_Subfield_QuestionId_ForumQuestion_Id_fk",
           "tableFrom": "ForumQuestion_to_Subfield",
+          "tableTo": "ForumQuestion",
           "columnsFrom": [
             "QuestionId"
           ],
-          "tableTo": "ForumQuestion",
           "columnsTo": [
             "Id"
           ],
-          "onUpdate": "no action",
-          "onDelete": "cascade"
+          "onDelete": "cascade",
+          "onUpdate": "no action"
         }
       },
       "compositePrimaryKeys": {
@@ -757,7 +787,10 @@
           ]
         }
       },
-      "uniqueConstraints": {}
+      "uniqueConstraints": {},
+      "policies": {},
+      "checkConstraints": {},
+      "isRLSEnabled": true
     },
     "public.ForumQuestion_to_Topic": {
       "name": "ForumQuestion_to_Topic",
@@ -781,15 +814,15 @@
         "ForumQuestion_to_Topic_QuestionId_ForumQuestion_Id_fk": {
           "name": "ForumQuestion_to_Topic_QuestionId_ForumQuestion_Id_fk",
           "tableFrom": "ForumQuestion_to_Topic",
+          "tableTo": "ForumQuestion",
           "columnsFrom": [
             "QuestionId"
           ],
-          "tableTo": "ForumQuestion",
           "columnsTo": [
             "Id"
           ],
-          "onUpdate": "no action",
-          "onDelete": "cascade"
+          "onDelete": "cascade",
+          "onUpdate": "no action"
         }
       },
       "compositePrimaryKeys": {
@@ -801,7 +834,10 @@
           ]
         }
       },
-      "uniqueConstraints": {}
+      "uniqueConstraints": {},
+      "policies": {},
+      "checkConstraints": {},
+      "isRLSEnabled": true
     },
     "public.ForumQuestion": {
       "name": "ForumQuestion",
@@ -877,28 +913,31 @@
             }
           ],
           "isUnique": true,
-          "with": {},
+          "concurrently": false,
           "method": "btree",
-          "concurrently": false
+          "with": {}
         }
       },
       "foreignKeys": {
         "ForumQuestion_UserId_User_Id_fk": {
           "name": "ForumQuestion_UserId_User_Id_fk",
           "tableFrom": "ForumQuestion",
+          "tableTo": "User",
           "columnsFrom": [
             "UserId"
           ],
-          "tableTo": "User",
           "columnsTo": [
             "Id"
           ],
-          "onUpdate": "no action",
-          "onDelete": "no action"
+          "onDelete": "no action",
+          "onUpdate": "no action"
         }
       },
       "compositePrimaryKeys": {},
-      "uniqueConstraints": {}
+      "uniqueConstraints": {},
+      "policies": {},
+      "checkConstraints": {},
+      "isRLSEnabled": true
     },
     "public.ForumQuestion_to_LegalField": {
       "name": "ForumQuestion_to_LegalField",
@@ -922,15 +961,15 @@
         "ForumQuestion_to_LegalField_QuestionId_ForumQuestion_Id_fk": {
           "name": "ForumQuestion_to_LegalField_QuestionId_ForumQuestion_Id_fk",
           "tableFrom": "ForumQuestion_to_LegalField",
+          "tableTo": "ForumQuestion",
           "columnsFrom": [
             "QuestionId"
           ],
-          "tableTo": "ForumQuestion",
           "columnsTo": [
             "Id"
           ],
-          "onUpdate": "no action",
-          "onDelete": "cascade"
+          "onDelete": "cascade",
+          "onUpdate": "no action"
         }
       },
       "compositePrimaryKeys": {
@@ -942,7 +981,10 @@
           ]
         }
       },
-      "uniqueConstraints": {}
+      "uniqueConstraints": {},
+      "policies": {},
+      "checkConstraints": {},
+      "isRLSEnabled": true
     },
     "public.GameProgress": {
       "name": "GameProgress",
@@ -1000,28 +1042,31 @@
         "GameProgress_UserId_User_Id_fk": {
           "name": "GameProgress_UserId_User_Id_fk",
           "tableFrom": "GameProgress",
+          "tableTo": "User",
           "columnsFrom": [
             "UserId"
           ],
-          "tableTo": "User",
           "columnsTo": [
             "Id"
           ],
-          "onUpdate": "no action",
-          "onDelete": "no action"
+          "onDelete": "no action",
+          "onUpdate": "no action"
         }
       },
       "compositePrimaryKeys": {},
       "uniqueConstraints": {
         "GameProgress_UserId_GameId_unique": {
           "name": "GameProgress_UserId_GameId_unique",
+          "nullsNotDistinct": false,
           "columns": [
             "UserId",
             "GameId"
-          ],
-          "nullsNotDistinct": false
+          ]
         }
-      }
+      },
+      "policies": {},
+      "checkConstraints": {},
+      "isRLSEnabled": true
     },
     "public.Note": {
       "name": "Note",
@@ -1072,32 +1117,35 @@
         "Note_UserId_User_Id_fk": {
           "name": "Note_UserId_User_Id_fk",
           "tableFrom": "Note",
+          "tableTo": "User",
           "columnsFrom": [
             "UserId"
           ],
-          "tableTo": "User",
           "columnsTo": [
             "Id"
           ],
-          "onUpdate": "no action",
-          "onDelete": "no action"
+          "onDelete": "no action",
+          "onUpdate": "no action"
         },
         "Note_FileId_UploadedFile_Id_fk": {
           "name": "Note_FileId_UploadedFile_Id_fk",
           "tableFrom": "Note",
+          "tableTo": "UploadedFile",
           "columnsFrom": [
             "FileId"
           ],
-          "tableTo": "UploadedFile",
           "columnsTo": [
             "Id"
           ],
-          "onUpdate": "no action",
-          "onDelete": "no action"
+          "onDelete": "no action",
+          "onUpdate": "no action"
         }
       },
       "compositePrimaryKeys": {},
-      "uniqueConstraints": {}
+      "uniqueConstraints": {},
+      "policies": {},
+      "checkConstraints": {},
+      "isRLSEnabled": true
     },
     "public.NotificationType": {
       "name": "NotificationType",
@@ -1126,7 +1174,10 @@
       "indexes": {},
       "foreignKeys": {},
       "compositePrimaryKeys": {},
-      "uniqueConstraints": {}
+      "uniqueConstraints": {},
+      "policies": {},
+      "checkConstraints": {},
+      "isRLSEnabled": true
     },
     "public.Notification": {
       "name": "Notification",
@@ -1189,45 +1240,48 @@
         "Notification_RecipientId_User_Id_fk": {
           "name": "Notification_RecipientId_User_Id_fk",
           "tableFrom": "Notification",
+          "tableTo": "User",
           "columnsFrom": [
             "RecipientId"
           ],
-          "tableTo": "User",
           "columnsTo": [
             "Id"
           ],
-          "onUpdate": "no action",
-          "onDelete": "no action"
+          "onDelete": "no action",
+          "onUpdate": "no action"
         },
         "Notification_SenderId_User_Id_fk": {
           "name": "Notification_SenderId_User_Id_fk",
           "tableFrom": "Notification",
+          "tableTo": "User",
           "columnsFrom": [
             "SenderId"
           ],
-          "tableTo": "User",
           "columnsTo": [
             "Id"
           ],
-          "onUpdate": "no action",
-          "onDelete": "no action"
+          "onDelete": "no action",
+          "onUpdate": "no action"
         },
         "Notification_Type_NotificationType_NotificationType_fk": {
           "name": "Notification_Type_NotificationType_NotificationType_fk",
           "tableFrom": "Notification",
+          "tableTo": "NotificationType",
           "columnsFrom": [
             "Type"
           ],
-          "tableTo": "NotificationType",
           "columnsTo": [
             "NotificationType"
           ],
-          "onUpdate": "no action",
-          "onDelete": "no action"
+          "onDelete": "no action",
+          "onUpdate": "no action"
         }
       },
       "compositePrimaryKeys": {},
-      "uniqueConstraints": {}
+      "uniqueConstraints": {},
+      "policies": {},
+      "checkConstraints": {},
+      "isRLSEnabled": true
     },
     "public.Ping": {
       "name": "Ping",
@@ -1283,28 +1337,31 @@
             }
           ],
           "isUnique": false,
-          "with": {},
+          "concurrently": false,
           "method": "btree",
-          "concurrently": false
+          "with": {}
         }
       },
       "foreignKeys": {
         "Ping_UserId_User_Id_fk": {
           "name": "Ping_UserId_User_Id_fk",
           "tableFrom": "Ping",
+          "tableTo": "User",
           "columnsFrom": [
             "UserId"
           ],
-          "tableTo": "User",
           "columnsTo": [
             "Id"
           ],
-          "onUpdate": "no action",
-          "onDelete": "cascade"
+          "onDelete": "cascade",
+          "onUpdate": "no action"
         }
       },
       "compositePrimaryKeys": {},
-      "uniqueConstraints": {}
+      "uniqueConstraints": {},
+      "policies": {},
+      "checkConstraints": {},
+      "isRLSEnabled": true
     },
     "public.ProfilePicture": {
       "name": "ProfilePicture",
@@ -1320,25 +1377,38 @@
           "name": "ServerFilename",
           "type": "text",
           "primaryKey": false,
-          "notNull": true
+          "notNull": false
+        },
+        "Url": {
+          "name": "Url",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false
         },
         "FileExtension": {
           "name": "FileExtension",
           "type": "ImageFileExtension",
           "typeSchema": "public",
           "primaryKey": false,
-          "notNull": true
+          "notNull": false
         },
         "ContentType": {
           "name": "ContentType",
           "type": "ImageFileMimeType",
           "typeSchema": "public",
           "primaryKey": false,
-          "notNull": true
+          "notNull": false
         },
         "UserId": {
           "name": "UserId",
           "type": "uuid",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "ProfilePictureSource": {
+          "name": "ProfilePictureSource",
+          "type": "ProfilePictureSource",
+          "typeSchema": "public",
           "primaryKey": false,
           "notNull": true
         }
@@ -1348,27 +1418,30 @@
         "ProfilePicture_UserId_User_Id_fk": {
           "name": "ProfilePicture_UserId_User_Id_fk",
           "tableFrom": "ProfilePicture",
+          "tableTo": "User",
           "columnsFrom": [
             "UserId"
           ],
-          "tableTo": "User",
           "columnsTo": [
             "Id"
           ],
-          "onUpdate": "no action",
-          "onDelete": "no action"
+          "onDelete": "no action",
+          "onUpdate": "no action"
         }
       },
       "compositePrimaryKeys": {},
       "uniqueConstraints": {
         "ProfilePicture_UserId_unique": {
           "name": "ProfilePicture_UserId_unique",
+          "nullsNotDistinct": false,
           "columns": [
             "UserId"
-          ],
-          "nullsNotDistinct": false
+          ]
         }
-      }
+      },
+      "policies": {},
+      "checkConstraints": {},
+      "isRLSEnabled": true
     },
     "public.QuestionUpvote": {
       "name": "QuestionUpvote",
@@ -1406,37 +1479,37 @@
             }
           ],
           "isUnique": false,
-          "with": {},
+          "concurrently": false,
           "method": "btree",
-          "concurrently": false
+          "with": {}
         }
       },
       "foreignKeys": {
         "QuestionUpvote_UserId_User_Id_fk": {
           "name": "QuestionUpvote_UserId_User_Id_fk",
           "tableFrom": "QuestionUpvote",
+          "tableTo": "User",
           "columnsFrom": [
             "UserId"
           ],
-          "tableTo": "User",
           "columnsTo": [
             "Id"
           ],
-          "onUpdate": "no action",
-          "onDelete": "no action"
+          "onDelete": "no action",
+          "onUpdate": "no action"
         },
         "QuestionUpvote_QuestionId_ForumQuestion_Id_fk": {
           "name": "QuestionUpvote_QuestionId_ForumQuestion_Id_fk",
           "tableFrom": "QuestionUpvote",
+          "tableTo": "ForumQuestion",
           "columnsFrom": [
             "QuestionId"
           ],
-          "tableTo": "ForumQuestion",
           "columnsTo": [
             "Id"
           ],
-          "onUpdate": "no action",
-          "onDelete": "cascade"
+          "onDelete": "cascade",
+          "onUpdate": "no action"
         }
       },
       "compositePrimaryKeys": {
@@ -1448,7 +1521,10 @@
           ]
         }
       },
-      "uniqueConstraints": {}
+      "uniqueConstraints": {},
+      "policies": {},
+      "checkConstraints": {},
+      "isRLSEnabled": true
     },
     "public.ReferralBalance": {
       "name": "ReferralBalance",
@@ -1493,19 +1569,22 @@
         "ReferralBalance_UserId_User_Id_fk": {
           "name": "ReferralBalance_UserId_User_Id_fk",
           "tableFrom": "ReferralBalance",
+          "tableTo": "User",
           "columnsFrom": [
             "UserId"
           ],
-          "tableTo": "User",
           "columnsTo": [
             "Id"
           ],
-          "onUpdate": "no action",
-          "onDelete": "cascade"
+          "onDelete": "cascade",
+          "onUpdate": "no action"
         }
       },
       "compositePrimaryKeys": {},
-      "uniqueConstraints": {}
+      "uniqueConstraints": {},
+      "policies": {},
+      "checkConstraints": {},
+      "isRLSEnabled": true
     },
     "public.ReferralCode": {
       "name": "ReferralCode",
@@ -1528,7 +1607,7 @@
           "name": "UserId",
           "type": "uuid",
           "primaryKey": false,
-          "notNull": false
+          "notNull": true
         }
       },
       "indexes": {},
@@ -1536,19 +1615,22 @@
         "ReferralCode_UserId_User_Id_fk": {
           "name": "ReferralCode_UserId_User_Id_fk",
           "tableFrom": "ReferralCode",
+          "tableTo": "User",
           "columnsFrom": [
             "UserId"
           ],
-          "tableTo": "User",
           "columnsTo": [
             "Id"
           ],
-          "onUpdate": "no action",
-          "onDelete": "cascade"
+          "onDelete": "cascade",
+          "onUpdate": "no action"
         }
       },
       "compositePrimaryKeys": {},
-      "uniqueConstraints": {}
+      "uniqueConstraints": {},
+      "policies": {},
+      "checkConstraints": {},
+      "isRLSEnabled": true
     },
     "public.Referral": {
       "name": "Referral",
@@ -1598,32 +1680,35 @@
         "Referral_ReferredUserId_User_Id_fk": {
           "name": "Referral_ReferredUserId_User_Id_fk",
           "tableFrom": "Referral",
+          "tableTo": "User",
           "columnsFrom": [
             "ReferredUserId"
           ],
-          "tableTo": "User",
           "columnsTo": [
             "Id"
           ],
-          "onUpdate": "no action",
-          "onDelete": "no action"
+          "onDelete": "no action",
+          "onUpdate": "no action"
         },
         "Referral_ReferringUserId_User_Id_fk": {
           "name": "Referral_ReferringUserId_User_Id_fk",
           "tableFrom": "Referral",
+          "tableTo": "User",
           "columnsFrom": [
             "ReferringUserId"
           ],
-          "tableTo": "User",
           "columnsTo": [
             "Id"
           ],
-          "onUpdate": "no action",
-          "onDelete": "no action"
+          "onDelete": "no action",
+          "onUpdate": "no action"
         }
       },
       "compositePrimaryKeys": {},
-      "uniqueConstraints": {}
+      "uniqueConstraints": {},
+      "policies": {},
+      "checkConstraints": {},
+      "isRLSEnabled": true
     },
     "public.SearchIndexUpdateQueue": {
       "name": "SearchIndexUpdateQueue",
@@ -1662,7 +1747,10 @@
           ]
         }
       },
-      "uniqueConstraints": {}
+      "uniqueConstraints": {},
+      "policies": {},
+      "checkConstraints": {},
+      "isRLSEnabled": true
     },
     "public.Streak": {
       "name": "Streak",
@@ -1721,19 +1809,22 @@
         "Streak_UserId_User_Id_fk": {
           "name": "Streak_UserId_User_Id_fk",
           "tableFrom": "Streak",
+          "tableTo": "User",
           "columnsFrom": [
             "UserId"
           ],
-          "tableTo": "User",
           "columnsTo": [
             "Id"
           ],
-          "onUpdate": "no action",
-          "onDelete": "no action"
+          "onDelete": "no action",
+          "onUpdate": "no action"
         }
       },
       "compositePrimaryKeys": {},
-      "uniqueConstraints": {}
+      "uniqueConstraints": {},
+      "policies": {},
+      "checkConstraints": {},
+      "isRLSEnabled": true
     },
     "public.StreakActivities": {
       "name": "StreakActivities",
@@ -1771,19 +1862,22 @@
         "StreakActivities_UserId_User_Id_fk": {
           "name": "StreakActivities_UserId_User_Id_fk",
           "tableFrom": "StreakActivities",
+          "tableTo": "User",
           "columnsFrom": [
             "UserId"
           ],
-          "tableTo": "User",
           "columnsTo": [
             "Id"
           ],
-          "onUpdate": "no action",
-          "onDelete": "cascade"
+          "onDelete": "cascade",
+          "onUpdate": "no action"
         }
       },
       "compositePrimaryKeys": {},
-      "uniqueConstraints": {}
+      "uniqueConstraints": {},
+      "policies": {},
+      "checkConstraints": {},
+      "isRLSEnabled": true
     },
     "public.UpdateUserInCrmQueue": {
       "name": "UpdateUserInCrmQueue",
@@ -1808,27 +1902,30 @@
         "UpdateUserInCrmQueue_UserId_User_Id_fk": {
           "name": "UpdateUserInCrmQueue_UserId_User_Id_fk",
           "tableFrom": "UpdateUserInCrmQueue",
+          "tableTo": "User",
           "columnsFrom": [
             "UserId"
           ],
-          "tableTo": "User",
           "columnsTo": [
             "Id"
           ],
-          "onUpdate": "no action",
-          "onDelete": "cascade"
+          "onDelete": "cascade",
+          "onUpdate": "no action"
         }
       },
       "compositePrimaryKeys": {},
       "uniqueConstraints": {
         "UpdateUserInCrmQueue_UserId_unique": {
           "name": "UpdateUserInCrmQueue_UserId_unique",
+          "nullsNotDistinct": false,
           "columns": [
             "UserId"
-          ],
-          "nullsNotDistinct": false
+          ]
         }
-      }
+      },
+      "policies": {},
+      "checkConstraints": {},
+      "isRLSEnabled": true
     },
     "public.UploadFolder": {
       "name": "UploadFolder",
@@ -1866,19 +1963,22 @@
         "UploadFolder_UserId_User_Id_fk": {
           "name": "UploadFolder_UserId_User_Id_fk",
           "tableFrom": "UploadFolder",
+          "tableTo": "User",
           "columnsFrom": [
             "UserId"
           ],
-          "tableTo": "User",
           "columnsTo": [
             "Id"
           ],
-          "onUpdate": "no action",
-          "onDelete": "no action"
+          "onDelete": "no action",
+          "onUpdate": "no action"
         }
       },
       "compositePrimaryKeys": {},
-      "uniqueConstraints": {}
+      "uniqueConstraints": {},
+      "policies": {},
+      "checkConstraints": {},
+      "isRLSEnabled": true
     },
     "public.UploadedFile": {
       "name": "UploadedFile",
@@ -1948,32 +2048,35 @@
         "UploadedFile_UserId_User_Id_fk": {
           "name": "UploadedFile_UserId_User_Id_fk",
           "tableFrom": "UploadedFile",
+          "tableTo": "User",
           "columnsFrom": [
             "UserId"
           ],
-          "tableTo": "User",
           "columnsTo": [
             "Id"
           ],
-          "onUpdate": "no action",
-          "onDelete": "no action"
+          "onDelete": "no action",
+          "onUpdate": "no action"
         },
         "UploadedFile_FolderId_UploadFolder_Id_fk": {
           "name": "UploadedFile_FolderId_UploadFolder_Id_fk",
           "tableFrom": "UploadedFile",
+          "tableTo": "UploadFolder",
           "columnsFrom": [
             "FolderId"
           ],
-          "tableTo": "UploadFolder",
           "columnsTo": [
             "Id"
           ],
-          "onUpdate": "no action",
-          "onDelete": "no action"
+          "onDelete": "no action",
+          "onUpdate": "no action"
         }
       },
       "compositePrimaryKeys": {},
-      "uniqueConstraints": {}
+      "uniqueConstraints": {},
+      "policies": {},
+      "checkConstraints": {},
+      "isRLSEnabled": true
     },
     "public.UploadedFile_to_Tag": {
       "name": "UploadedFile_to_Tag",
@@ -1997,15 +2100,15 @@
         "UploadedFile_to_Tag_FileId_UploadedFile_Id_fk": {
           "name": "UploadedFile_to_Tag_FileId_UploadedFile_Id_fk",
           "tableFrom": "UploadedFile_to_Tag",
+          "tableTo": "UploadedFile",
           "columnsFrom": [
             "FileId"
           ],
-          "tableTo": "UploadedFile",
           "columnsTo": [
             "Id"
           ],
-          "onUpdate": "no action",
-          "onDelete": "cascade"
+          "onDelete": "cascade",
+          "onUpdate": "no action"
         }
       },
       "compositePrimaryKeys": {
@@ -2017,7 +2120,10 @@
           ]
         }
       },
-      "uniqueConstraints": {}
+      "uniqueConstraints": {},
+      "policies": {},
+      "checkConstraints": {},
+      "isRLSEnabled": true
     },
     "public.UserRole": {
       "name": "UserRole",
@@ -2062,9 +2168,9 @@
             }
           ],
           "isUnique": false,
-          "with": {},
+          "concurrently": false,
           "method": "btree",
-          "concurrently": false
+          "with": {}
         }
       },
       "foreignKeys": {},
@@ -2072,12 +2178,15 @@
       "uniqueConstraints": {
         "UserRole_Identifier_unique": {
           "name": "UserRole_Identifier_unique",
+          "nullsNotDistinct": false,
           "columns": [
             "Identifier"
-          ],
-          "nullsNotDistinct": false
+          ]
         }
-      }
+      },
+      "policies": {},
+      "checkConstraints": {},
+      "isRLSEnabled": true
     },
     "public.User": {
       "name": "User",
@@ -2106,7 +2215,7 @@
           "name": "DisplayName",
           "type": "text",
           "primaryKey": false,
-          "notNull": false
+          "notNull": true
         },
         "FirstName": {
           "name": "FirstName",
@@ -2152,13 +2261,6 @@
           "primaryKey": false,
           "notNull": false
         },
-        "wasSignupCompleted": {
-          "name": "wasSignupCompleted",
-          "type": "boolean",
-          "primaryKey": false,
-          "notNull": false,
-          "default": false
-        },
         "SubscriptionStatus": {
           "name": "SubscriptionStatus",
           "type": "SubscriptionStatus",
@@ -2179,12 +2281,15 @@
       "uniqueConstraints": {
         "User_Email_unique": {
           "name": "User_Email_unique",
+          "nullsNotDistinct": false,
           "columns": [
             "Email"
-          ],
-          "nullsNotDistinct": false
+          ]
         }
-      }
+      },
+      "policies": {},
+      "checkConstraints": {},
+      "isRLSEnabled": true
     },
     "public.User_to_Badge": {
       "name": "User_to_Badge",
@@ -2216,28 +2321,28 @@
         "User_to_Badge_UserId_User_Id_fk": {
           "name": "User_to_Badge_UserId_User_Id_fk",
           "tableFrom": "User_to_Badge",
+          "tableTo": "User",
           "columnsFrom": [
             "UserId"
           ],
-          "tableTo": "User",
           "columnsTo": [
             "Id"
           ],
-          "onUpdate": "no action",
-          "onDelete": "no action"
+          "onDelete": "no action",
+          "onUpdate": "no action"
         },
         "User_to_Badge_BadgeId_Badge_Id_fk": {
           "name": "User_to_Badge_BadgeId_Badge_Id_fk",
           "tableFrom": "User_to_Badge",
+          "tableTo": "Badge",
           "columnsFrom": [
             "BadgeId"
           ],
-          "tableTo": "Badge",
           "columnsTo": [
             "Id"
           ],
-          "onUpdate": "no action",
-          "onDelete": "no action"
+          "onDelete": "no action",
+          "onUpdate": "no action"
         }
       },
       "compositePrimaryKeys": {
@@ -2249,7 +2354,10 @@
           ]
         }
       },
-      "uniqueConstraints": {}
+      "uniqueConstraints": {},
+      "policies": {},
+      "checkConstraints": {},
+      "isRLSEnabled": true
     },
     "public.User_to_Role": {
       "name": "User_to_Role",
@@ -2273,28 +2381,28 @@
         "User_to_Role_UserId_User_Id_fk": {
           "name": "User_to_Role_UserId_User_Id_fk",
           "tableFrom": "User_to_Role",
+          "tableTo": "User",
           "columnsFrom": [
             "UserId"
           ],
-          "tableTo": "User",
           "columnsTo": [
             "Id"
           ],
-          "onUpdate": "no action",
-          "onDelete": "no action"
+          "onDelete": "no action",
+          "onUpdate": "no action"
         },
         "User_to_Role_RoleId_UserRole_Id_fk": {
           "name": "User_to_Role_RoleId_UserRole_Id_fk",
           "tableFrom": "User_to_Role",
+          "tableTo": "UserRole",
           "columnsFrom": [
             "RoleId"
           ],
-          "tableTo": "UserRole",
           "columnsTo": [
             "Id"
           ],
-          "onUpdate": "no action",
-          "onDelete": "no action"
+          "onDelete": "no action",
+          "onUpdate": "no action"
         }
       },
       "compositePrimaryKeys": {
@@ -2306,7 +2414,10 @@
           ]
         }
       },
-      "uniqueConstraints": {}
+      "uniqueConstraints": {},
+      "policies": {},
+      "checkConstraints": {},
+      "isRLSEnabled": true
     }
   },
   "enums": {
@@ -2314,8 +2425,10 @@
       "name": "AuthProvider",
       "schema": "public",
       "values": [
+        "apple",
         "email",
-        "google"
+        "google",
+        "linkedin_oidc"
       ]
     },
     "public.BadgeIdentifier": {
@@ -2481,6 +2594,14 @@
         "completed"
       ]
     },
+    "public.ProfilePictureSource": {
+      "name": "ProfilePictureSource",
+      "schema": "public",
+      "values": [
+        "internal",
+        "external"
+      ]
+    },
     "public.ResourceType": {
       "name": "ResourceType",
       "schema": "public",
@@ -2495,7 +2616,8 @@
       "schema": "public",
       "values": [
         "forumMod",
-        "admin"
+        "admin",
+        "testing-user"
       ]
     },
     "public.SearchIndexType": {
@@ -2544,6 +2666,9 @@
   },
   "schemas": {},
   "sequences": {},
+  "roles": {},
+  "policies": {},
+  "views": {},
   "_meta": {
     "columns": {},
     "schemas": {},
