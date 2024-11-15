@@ -25,6 +25,7 @@
       "persistent": true
     },
     "lint": {
+      "inputs": ["**/*.{ts,tsx}"],
       "dependsOn": ["^topo", "^build"],
       "outputs": [".cache/.eslintcache"]
     },
@@ -40,6 +41,7 @@
       "dependsOn": ["^topo"]
     },
     "typecheck": {
+      "inputs": ["**/*.{ts,tsx}"],
       "dependsOn": ["^topo", "^build"],
       "outputs": [".cache/tsbuildinfo.json"]
     },

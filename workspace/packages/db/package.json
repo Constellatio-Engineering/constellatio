@@ -28,9 +28,8 @@
     "apply-migrations": "pnpm with-env drizzle-kit migrate",
     "db:push": "pnpm with-env drizzle-kit push",
     "drizzle:studio": "pnpm with-env drizzle-kit studio",
-    "generate-migrations-without-row-level-security": "pnpm with-env drizzle-kit generate",
     "generate-new-custom-migration": "pnpm with-env drizzle-kit generate --custom",
-    "generate-migrations": "sh ./scripts/generate-migrations.sh",
+    "generate-migrations": "pnpm with-env drizzle-kit generate",
     "drop-migration": "pnpm with-env drizzle-kit drop",
     "check-migrations": "pnpm with-env drizzle-kit check",
     "with-env": "dotenv-run -- "
@@ -41,14 +40,14 @@
     "@constellatio/schemas": "workspace:*",
     "@constellatio/shared": "workspace:*",
     "@constellatio/utils": "workspace:*",
-    "drizzle-orm": "0.35.3",
+    "drizzle-orm": "0.36.1",
     "postgres": "catalog:"
   },
   "devDependencies": {
     "@constellatio/eslint-config": "workspace:*",
     "@constellatio/tsconfig": "workspace:*",
     "@total-typescript/ts-reset": "catalog:",
-    "drizzle-kit": "0.26.2",
+    "drizzle-kit": "0.28.0",
     "eslint": "catalog:",
     "typescript": "catalog:"
   }
