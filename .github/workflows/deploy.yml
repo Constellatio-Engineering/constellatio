@@ -45,7 +45,7 @@ jobs:
       - name: Run type checking
         run: pnpm typecheck
       - name: Run ESLint
-        run: pnpm eslint
+        run: pnpm lint
 
   deploy:
     name: Deploy to Vercel
