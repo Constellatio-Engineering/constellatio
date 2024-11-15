@@ -5,7 +5,6 @@ import { addOrRemoveBookmarkSchema } from "@constellatio/schemas/routers/bookmar
 import { allBookmarkResourceTypes } from "@constellatio/shared/validation";
 import { z } from "zod";
 
-import { addBadgeForUser } from "../services/badges.services";
 import { createTRPCRouter, protectedProcedure } from "../trpc";
 import { filterBookmarkForClient } from "../utils/filters";
 
@@ -35,11 +34,6 @@ export const bookmarksRouter = createTRPCRouter({
       };
 
       await db.insert(bookmarks).values(bookmarkInsert);
-
-      if(input.resourceType === "case" || input.resourceType === "article")
-      {
-        await addBadgeForUser({ badgeIdentifier: "favorit", userId });
-      }
     }),
   getAllBookmarks: protectedProcedure
     .input(z.object({

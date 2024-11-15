@@ -11,7 +11,6 @@ import { setCaseProgressStateSchema } from "@constellatio/schemas/routers/casePr
 import { submitCaseSolutionSchema } from "@constellatio/schemas/routers/caseProgress/submitCaseSolution.schema";
 
 import { addUserToCrmUpdateQueue } from "../lib/clickup/utils";
-import { addBadgeForUser } from "../services/badges.services";
 import { createTRPCRouter, protectedProcedure } from "../trpc";
 
 export type GetCaseProgressResult = Pick<CaseProgress, "progressState" | "caseId">;
@@ -131,11 +130,10 @@ export const caseProgressRouter = createTRPCRouter({
           set: { progressState },
           target: [casesProgress.caseId, casesProgress.userId],
         });
-     
+
       if(progressState === "completed")
       {
         await addUserToCrmUpdateQueue(userId);
-        await addBadgeForUser({ badgeIdentifier: "fall-1", userId });
       }
     }),
   submitSolution: protectedProcedure

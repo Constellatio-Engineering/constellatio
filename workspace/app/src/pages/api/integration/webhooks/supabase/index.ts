@@ -1,3 +1,27 @@
+import {
+  articleProgressHandlerContentViewInsert
+} from "@/pages/api/integration/webhooks/supabase/handlers/articleProgress.handler";
+import { bookmarkHandlerBookmarkInsert } from "@/pages/api/integration/webhooks/supabase/handlers/bookmark.handler";
+import {
+  caseProgressHandlerCaseProgressInsert
+} from "@/pages/api/integration/webhooks/supabase/handlers/caseProgress.handler";
+import {
+  forumActivityHandlerAnswerInsert, forumActivityHandlerQuestionInsert
+} from "@/pages/api/integration/webhooks/supabase/handlers/forumActivity.handler";
+import {
+  forumAnswerActivityHandlerCorrectAnswerInsert
+} from "@/pages/api/integration/webhooks/supabase/handlers/forumAnswerActivity.handler";
+import {
+  gameProgressHandlerGameProgressInsert
+} from "@/pages/api/integration/webhooks/supabase/handlers/gameProgress.handler";
+import {
+  isOneOfTheFirstUsersHandlerUserInsert
+} from "@/pages/api/integration/webhooks/supabase/handlers/isOneOfTheFirstUsers.handler";
+import {
+  ugcHandlerDocumentInsert,
+  ugcHandlerUploadedFileInsert
+} from "@/pages/api/integration/webhooks/supabase/handlers/ugc.handler";
+import { usageTimeHandlerPingInsert } from "@/pages/api/integration/webhooks/supabase/handlers/usageTime.handler";
 import { type WebhookPayload } from "@/pages/api/integration/webhooks/supabase/types";
 
 import { env } from "@constellatio/env";
@@ -22,7 +46,7 @@ const handler: NextApiHandler = async (req, res) =>
   }
 
   const payload = req.body as WebhookPayload;
-  // console.log("Supabase Webhook received:", payload);
+  console.log("Supabase Webhook received:", payload);
 
   switch (payload.table)
   {
@@ -31,6 +55,7 @@ const handler: NextApiHandler = async (req, res) =>
       {
         case "INSERT":
           await streakHandlerPingInsert(payload.record);
+          await usageTimeHandlerPingInsert(payload.record);
           break;
       }
       break;
@@ -39,6 +64,7 @@ const handler: NextApiHandler = async (req, res) =>
       {
         case "INSERT":
           await streakHandlerForumAnswerInsert(payload.record);
+          await forumActivityHandlerAnswerInsert(payload.record);
           break;
       }
       break;
@@ -47,6 +73,15 @@ const handler: NextApiHandler = async (req, res) =>
       {
         case "INSERT":
           await streakHandlerForumQuestionInsert(payload.record);
+          await forumActivityHandlerQuestionInsert(payload.record);
+          break;
+      }
+      break;
+    case "CorrectAnswer":
+      switch (payload.type)
+      {
+        case "INSERT":
+          await forumAnswerActivityHandlerCorrectAnswerInsert(payload.record);
           break;
       }
       break;
@@ -55,6 +90,7 @@ const handler: NextApiHandler = async (req, res) =>
       {
         case "INSERT":
           await streakHandlerCaseProgressInsert(payload.record);
+          await caseProgressHandlerCaseProgressInsert(payload.record);
           break;
         case "UPDATE":
           await streakHandlerCaseProgressUpdate(payload.record);
@@ -72,9 +108,64 @@ const handler: NextApiHandler = async (req, res) =>
           break;
       }
       break;
+    case "Bookmark":
+    {
+      switch (payload.type)
+      {
+        case "INSERT":
+          await bookmarkHandlerBookmarkInsert(payload.record);
+          break;
+      }
+      break;
+    }
+    case "GameProgress":
+    {
+      switch (payload.type)
+      {
+        case "INSERT":
+          await gameProgressHandlerGameProgressInsert(payload.record);
+          break;
+      }
+      break;
+    }
+    case "Document":
+    {
+      switch (payload.type)
+      {
+        case "INSERT":
+          await ugcHandlerDocumentInsert(payload.record);
+          break;
+      }
+      break;
+    }
+    case "UploadedFile":
+    {
+      switch (payload.type)
+      {
+        case "INSERT":
+          await ugcHandlerUploadedFileInsert(payload.record);
+          break;
+      }
+      break;
+    }
     case "User":
     {
-      throw new Error("Case 'User' is not implemented yet");
+      switch (payload.type)
+      {
+        case "INSERT":
+          await isOneOfTheFirstUsersHandlerUserInsert(payload.record);
+          break;
+      }
+      break;
+    }
+    case "ContentView": {
+      switch (payload.type)
+      {
+        case "INSERT":
+          await articleProgressHandlerContentViewInsert(payload.record);
+          break;
+      }
+      break;
     }
     case "ProfilePicture":
     {

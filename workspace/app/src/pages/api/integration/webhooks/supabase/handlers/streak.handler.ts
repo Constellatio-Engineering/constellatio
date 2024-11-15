@@ -11,7 +11,7 @@ import { env } from "@constellatio/env";
 export const streakHandlerPingInsert = async (record: PingSql["columns"]): Promise<void> =>
 {
   const { UserId } = record;
-
+  
   const latestStreakQuery = await db
     .select()
     .from(streak)
