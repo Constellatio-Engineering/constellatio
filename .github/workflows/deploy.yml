@@ -89,7 +89,7 @@ jobs:
         run: vercel deploy --prod --token=${{ secrets.VERCEL_ACCESS_TOKEN }} --scope=${{ vars.VERCEL_SCOPE }} --name=${{ vars.VERCEL_PROJECT_NAME }} --yes
       - name: Apply Database Migrations
         id: apply-db-migrations
-        run: pnpm apply-migrations
+        run: pnpm apply-migrations:ci
       - name: Rollback Vercel Deployment after failed database migrations
         if: failure() && steps.apply-db-migrations.conclusion == 'failure'
         run: |
