@@ -11,6 +11,7 @@
   "scripts": {
     "separatorTurbo": "---------------------- TURBO ----------------------",
     "apply-migrations": "turbo run apply-migrations",
+    "apply-migrations:ci": "turbo run apply-migrations:ci",
     "build": "turbo run build",
     "clean": "git clean -xdf node_modules",
     "clean:workspaces": "turbo run clean",

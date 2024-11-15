@@ -9,6 +9,10 @@
       "cache": false,
       "persistent": false
     },
+    "apply-migrations:ci": {
+      "cache": false,
+      "persistent": false
+    },
     "build": {
       "dependsOn": ["^build"],
       "outputs": ["dist/**", ".next/**", "!.next/cache/**"]
