@@ -119,7 +119,8 @@ let SelectionCardGame: FC<SelectionCardGameProps> = ({
         originalOptions,
         userAnswers: checkedAnswersIds
       },
-      progressState: "completed" 
+      progressState: "completed",
+      wasSolvedCorrectly: winCondition
     });
   };
 

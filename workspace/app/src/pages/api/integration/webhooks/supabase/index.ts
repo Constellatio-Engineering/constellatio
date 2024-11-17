@@ -3,7 +3,7 @@ import {
 } from "@/pages/api/integration/webhooks/supabase/handlers/articleProgress.handler";
 import { bookmarkHandlerBookmarkInsert } from "@/pages/api/integration/webhooks/supabase/handlers/bookmark.handler";
 import {
-  caseProgressHandlerCaseProgressInsert
+  caseProgressHandler
 } from "@/pages/api/integration/webhooks/supabase/handlers/caseProgress.handler";
 import {
   forumActivityHandlerAnswerInsert, forumActivityHandlerQuestionInsert
@@ -90,10 +90,11 @@ const handler: NextApiHandler = async (req, res) =>
       {
         case "INSERT":
           await streakHandlerCaseProgressInsert(payload.record);
-          await caseProgressHandlerCaseProgressInsert(payload.record);
+          await caseProgressHandler(payload.record);
           break;
         case "UPDATE":
           await streakHandlerCaseProgressUpdate(payload.record);
+          await caseProgressHandler(payload.record);
           break;
       }
       break;
@@ -123,6 +124,7 @@ const handler: NextApiHandler = async (req, res) =>
       switch (payload.type)
       {
         case "INSERT":
+        case "UPDATE":
           await gameProgressHandlerGameProgressInsert(payload.record);
           break;
       }

@@ -242,6 +242,7 @@ export const gamesProgress = pgTable("GameProgress", {
   createdAt: timestamp("CreatedAt").defaultNow().notNull(),
   updatedAt: timestamp("UpdatedAt").defaultNow().notNull().$onUpdate(getCurrentDate),
   gameResult: jsonb("GameResult").$type<GameResultSchemaType>(),
+  wasSolvedCorrectly: boolean("WasSolvedCorrectly"),
 }, table => ({
   unique: unique().on(table.userId, table.gameId),
 })).enableRLS();

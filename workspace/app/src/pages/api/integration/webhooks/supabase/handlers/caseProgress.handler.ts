@@ -1,19 +1,24 @@
 import { addBadgeForUser } from "@constellatio/api/services/badges.services";
-import { type CaseProgressSql } from "@constellatio/db/schema";
+import { and, countDistinct, eq } from "@constellatio/db";
+import { db } from "@constellatio/db/client";
+import { type CaseProgressSql, casesProgress } from "@constellatio/db/schema";
 
-const getNumberOfCompletedCases = (userId: string): number | null =>
+const getNumberOfCompletedCases = async (userId: string): Promise<number> =>
 {
-  // TODO: Aus CaseProgress Datenbank die Anzahl der korrekt beantworteten Games ziehen
-  //  Dafür Einträge nach completed in column "ProgressState" filtern.
+  const [completedCases] = await db
+    .select({ count: countDistinct(casesProgress.caseId) })
+    .from(casesProgress)
+    .where(and(
+      eq(casesProgress.userId, userId),
+      eq(casesProgress.progressState, "completed")
+    ));
 
-  return 0;
+  return completedCases?.count ?? 0;
 };
-const handleBadges = async (completedCasesCount: number | null, userId: string) =>
+
+const handleBadges = async (completedCasesCount: number, userId: string) =>
 {
-  if(!completedCasesCount)
-  {
-    return;
-  }
+  console.log("completedCasesCount", completedCasesCount);
 
   if(completedCasesCount >= 1)
   {
@@ -32,11 +37,12 @@ const handleBadges = async (completedCasesCount: number | null, userId: string) 
     await addBadgeForUser({ badgeIdentifier: "fall-25", userId });
   }
 };
-export const caseProgressHandlerCaseProgressInsert = async (record: CaseProgressSql["columns"]): Promise<void> =>
+
+export const caseProgressHandler = async (record: CaseProgressSql["columns"]): Promise<void> =>
 {
   const { UserId: userId } = record;
 
-  const completedCasesCount = getNumberOfCompletedCases(userId);
+  const completedCasesCount = await getNumberOfCompletedCases(userId);
 
   await handleBadges(completedCasesCount, userId);
 };

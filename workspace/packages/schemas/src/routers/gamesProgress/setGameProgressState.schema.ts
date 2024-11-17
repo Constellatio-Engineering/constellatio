@@ -40,6 +40,7 @@ export const setGameProgressStateSchema = z.object({
   gameId: idValidation,
   gameResult: gameResultSchema.optional(),
   progressState: z.enum(allGameProgressStates),
+  wasSolvedCorrectly: z.boolean(),
 });
 
 export type SetGameProgressStateSchema = z.input<typeof setGameProgressStateSchema>;

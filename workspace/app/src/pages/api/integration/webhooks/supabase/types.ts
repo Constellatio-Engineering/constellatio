@@ -193,7 +193,14 @@ interface InsertGameProgressPayload extends InsertPayload
   table: GameProgressSql["table"];
 }
 
-type GameProgressPayload = InsertGameProgressPayload;
+interface UpdateGameProgressPayload extends UpdatePayload
+{
+  old_record: GameProgressSql["columns"];
+  record: GameProgressSql["columns"];
+  table: GameProgressSql["table"];
+}
+
+type GameProgressPayload = InsertGameProgressPayload | UpdateGameProgressPayload;
 
 
 // ============ DOCUMENT ============
