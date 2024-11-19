@@ -19,7 +19,7 @@ import {
   imageFileMimeTypes, notificationTypesIdentifiers, profilePictureSources, roles, streakActivityTypes, userBadgeStates
 } from "@constellatio/shared/validation";
 import { getCurrentDate } from "@constellatio/utils/dates";
-import { type InferInsertModel, type InferSelectModel, relations } from "drizzle-orm";
+import { type InferInsertModel, type InferSelectModel, relations, sql } from "drizzle-orm";
 import {
   type AnyPgColumn,
   boolean,
@@ -29,6 +29,7 @@ import {
   type PgColumn,
   pgEnum,
   pgTable,
+  pgPolicy,
   type PgTable,
   primaryKey,
   serial,
@@ -39,6 +40,7 @@ import {
   uniqueIndex,
   uuid
 } from "drizzle-orm/pg-core";
+import { authenticatedRole, authUid } from "drizzle-orm/supabase";
 
 type InferPgSelectModel<T extends PgTable> = {
   columns: {
@@ -521,7 +523,14 @@ export const notifications = pgTable("Notification", {
   typeIdentifier: notificationTypeIdentifierEnum("Type").references(() => notificationTypes.identifier, { onDelete: "no action" }).notNull(),
   createdAt: timestamp("CreatedAt").defaultNow().notNull(),
   readAt: timestamp("ReadAt"),
-}).enableRLS();
+}, (table) => [
+  pgPolicy("notifications_read_access_for_users_own_notifications", {
+    as: "permissive",
+    for: "select",
+    to: authenticatedRole,
+    using: sql`${table.recipientId} = auth.uid()`
+  })
+]).enableRLS();
 
 export const notificationsRelations = relations(notifications, ({ one }) => ({
   notificationType: one(notificationTypes, {
