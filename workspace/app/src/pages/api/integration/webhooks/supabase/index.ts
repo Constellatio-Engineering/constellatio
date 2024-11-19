@@ -6,7 +6,7 @@ import {
   caseProgressHandler
 } from "@/pages/api/integration/webhooks/supabase/handlers/caseProgress.handler";
 import {
-  forumActivityHandlerAnswerInsert, forumActivityHandlerQuestionInsert
+  forumActivityHandler,
 } from "@/pages/api/integration/webhooks/supabase/handlers/forumActivity.handler";
 import {
   forumAnswerActivityHandlerCorrectAnswerInsert
@@ -18,7 +18,6 @@ import {
   isOneOfTheFirstUsersHandlerUserInsert
 } from "@/pages/api/integration/webhooks/supabase/handlers/isOneOfTheFirstUsers.handler";
 import {
-  ugcHandlerDocumentInsert,
   ugcHandlerUploadedFileInsert
 } from "@/pages/api/integration/webhooks/supabase/handlers/ugc.handler";
 import { usageTimeHandlerPingInsert } from "@/pages/api/integration/webhooks/supabase/handlers/usageTime.handler";
@@ -64,7 +63,7 @@ const handler: NextApiHandler = async (req, res) =>
       {
         case "INSERT":
           await streakHandlerForumAnswerInsert(payload.record);
-          await forumActivityHandlerAnswerInsert(payload.record);
+          await forumActivityHandler(payload.record.UserId);
           break;
       }
       break;
@@ -73,7 +72,7 @@ const handler: NextApiHandler = async (req, res) =>
       {
         case "INSERT":
           await streakHandlerForumQuestionInsert(payload.record);
-          await forumActivityHandlerQuestionInsert(payload.record);
+          await forumActivityHandler(payload.record.UserId);
           break;
       }
       break;
@@ -126,16 +125,6 @@ const handler: NextApiHandler = async (req, res) =>
         case "INSERT":
         case "UPDATE":
           await gameProgressHandlerGameProgressInsert(payload.record);
-          break;
-      }
-      break;
-    }
-    case "Document":
-    {
-      switch (payload.type)
-      {
-        case "INSERT":
-          await ugcHandlerDocumentInsert(payload.record);
           break;
       }
       break;

@@ -1,32 +1,31 @@
 import { addBadgeForUser } from "@constellatio/api/services/badges.services";
-import { type ForumAnswerSql, type ForumQuestionSql } from "@constellatio/db/schema";
+import { countDistinct, eq, unionAll } from "@constellatio/db";
+import { db } from "@constellatio/db/client";
+import { forumAnswers, forumQuestions } from "@constellatio/db/schema";
 
-const getNumberOfForumAnswers = (userId: string): number | null =>
+const getNumberOfForumQuestionsAndAnswers = async (userId: string): Promise<number> =>
 {
-  // TODO: Summe der Antworten zu userId aus ForumAnswer Datenbank ziehen
+  const questions = db
+    .select({ forumItemId: forumQuestions.id })
+    .from(forumQuestions)
+    .where(eq(forumQuestions.userId, userId));
 
-  return 0;
+  const answers = db
+    .select({ forumItemId: forumAnswers.id })
+    .from(forumAnswers)
+    .where(eq(forumAnswers.userId, userId));
+
+  const unionAllSubquery = unionAll(questions, answers).as("union_all_questions_and_answers");
+
+  const [result] = await db
+    .select({ combinedCount: countDistinct(unionAllSubquery.forumItemId) })
+    .from(unionAllSubquery);
+
+  return result?.combinedCount ?? 0;
 };
 
-const getNumberOfForumQuestions = (userId: string): number | null =>
+const handleBadges = async (forumActivityCount: number, userId: string) =>
 {
-  // TODO: Summe der Antworten zu userId aus ForumAnswer Datenbank ziehen
-
-  return 0;
-};
-
-const handleBadges = async (userId: string) =>
-{
-  const answersCount = getNumberOfForumAnswers(userId);
-  const questionsCount = getNumberOfForumQuestions(userId);
-
-  const forumActivityCount = (answersCount || 0) + (questionsCount || 0);
-
-  if(!forumActivityCount)
-  {
-    return;
-  }
-
   if(forumActivityCount >= 1)
   {
     await addBadgeForUser({ badgeIdentifier: "forum-1", userId });
@@ -41,16 +40,8 @@ const handleBadges = async (userId: string) =>
   }
 };
 
-export const forumActivityHandlerAnswerInsert = async (record: ForumAnswerSql["columns"]): Promise<void> =>
+export const forumActivityHandler = async (userId: string): Promise<void> =>
 {
-  const { UserId: userId } = record;
-
-  await handleBadges(userId);
-};
-
-export const forumActivityHandlerQuestionInsert = async (record: ForumQuestionSql["columns"]): Promise<void> =>
-{
-  const { UserId: userId } = record;
-
-  await handleBadges(userId);
+  const forumActivityCount = await getNumberOfForumQuestionsAndAnswers(userId);
+  await handleBadges(forumActivityCount, userId);
 };

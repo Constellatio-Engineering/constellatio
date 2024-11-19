@@ -1,19 +1,21 @@
 import { addBadgeForUser } from "@constellatio/api/services/badges.services";
-import { type DocumentSql, type UploadedFileSql } from "@constellatio/db/schema";
+import { countDistinct, eq } from "@constellatio/db";
+import { db } from "@constellatio/db/client";
+import { uploadedFiles, type UploadedFileSql } from "@constellatio/db/schema";
 
-const getNumberOfUploadedUgcs = (userId: string): number | null =>
+const getNumberOfUploadedUgcs = async (userId: string): Promise<number> =>
 {
-  // TODO: Anzahl von Ugcs aus Document und UploadedFile Datenbanken ziehen und zurückgeben
+  const [files] = await db
+    .select({ count: countDistinct(uploadedFiles.id) })
+    .from(uploadedFiles)
+    .where(eq(uploadedFiles.userId, userId));
 
-  return 0;
+  return files?.count ?? 0;
 };
 
-const handleBadges = async (numberOfUploadedUgcs: number | null, userId: string) =>
+const handleBadges = async (numberOfUploadedUgcs: number, userId: string) =>
 {
-  if(!numberOfUploadedUgcs)
-  {
-    return;
-  }
+  console.log("numberOfUploadedUgcs", numberOfUploadedUgcs);
 
   if(numberOfUploadedUgcs >= 1)
   {
@@ -29,20 +31,11 @@ const handleBadges = async (numberOfUploadedUgcs: number | null, userId: string)
   }
 };
 
-export const ugcHandlerDocumentInsert = async (record: DocumentSql["columns"]): Promise<void> =>
-{
-  const { UserId: userId } = record;
-
-  const numberOfUploadedUgcs = getNumberOfUploadedUgcs(userId);
-
-  await handleBadges(numberOfUploadedUgcs, userId);
-};
-
 export const ugcHandlerUploadedFileInsert = async (record: UploadedFileSql["columns"]): Promise<void> =>
 {
   const { UserId: userId } = record;
 
-  const numberOfUploadedUgcs = getNumberOfUploadedUgcs(userId);
+  const numberOfUploadedUgcs = await getNumberOfUploadedUgcs(userId);
 
   await handleBadges(numberOfUploadedUgcs, userId);
 };

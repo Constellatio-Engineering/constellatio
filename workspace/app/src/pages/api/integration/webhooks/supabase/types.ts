@@ -204,13 +204,13 @@ type GameProgressPayload = InsertGameProgressPayload | UpdateGameProgressPayload
 
 
 // ============ DOCUMENT ============
-interface InsertDocumentPayload extends InsertPayload
+/* interface InsertDocumentPayload extends InsertPayload
 {
   record: DocumentSql["columns"];
   table: DocumentSql["table"];
 }
 
-type DocumentPayload = InsertDocumentPayload;
+type DocumentPayload = InsertDocumentPayload;*/
 
 
 // ============ UPLOADEDFILE ============
@@ -245,6 +245,6 @@ export type WebhookPayload =
   | StreakPayload
   | BookmarkPayload
   | GameProgressPayload
-  | DocumentPayload
+  // | DocumentPayload
   | UploadedFilePayload
   | ContentViewPayload;
