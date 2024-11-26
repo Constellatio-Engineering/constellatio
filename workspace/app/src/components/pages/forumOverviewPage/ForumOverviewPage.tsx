@@ -12,7 +12,7 @@ import * as styles from "./ForumOverviewPage.styles";
 import PostQuestionModal from "./postQuestionModal/PostQuestionModal";
 import SearchBar from "./searchBar/SearchBar";
 
-export const defaultLimit = 10;
+export const defaultLimit = 2;
 
 type SortingOptions = {
   [key in GetQuestionsCursorType]: {

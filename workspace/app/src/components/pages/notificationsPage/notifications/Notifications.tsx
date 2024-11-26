@@ -22,7 +22,8 @@ const Notifications: FunctionComponent = () =>
 {
   const { inView: isEndOfListInView, ref: endOfListLabelRef } = useInView({
     initialInView: false,
-    rootMargin: "30% 0px 30%",
+    rootMargin: "0px 0px 0px 0px",
+    // rootMargin: "30% 0px 30%",
     threshold: 0,
     triggerOnce: false,
   });
@@ -32,8 +33,10 @@ const Notifications: FunctionComponent = () =>
     error,
     fetchNextPage,
     hasNextPage,
+    isFetching,
     isFetchingNextPage,
     isPending,
+    isRefetching,
     status,
   } = api.notifications.getNotifications.useInfiniteQuery({
     limit: defaultLimit,
@@ -54,6 +57,14 @@ const Notifications: FunctionComponent = () =>
     refetchOnMount: true,
     refetchOnReconnect: true,
     staleTime: Infinity
+  });
+
+  console.log({
+    isFetching,
+    isFetchingNextPage,
+    isPending,
+    isRefetching,
+    status
   });
 
   const notifications = useMemo(() =>

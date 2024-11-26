@@ -290,9 +290,15 @@ export const usersToBadges = pgTable("User_to_Badge", {
   userId: uuid("UserId").references(() => users.id, { onDelete: "no action" }).notNull(),
   badgeId: uuid("BadgeId").references(() => badges.id, { onDelete: "no action" }).notNull(),
   userBadgeState: userBadgeStateEnum("UserBadgeState").default("not-seen").notNull(),
-}, (table) => ({
-  pk: primaryKey({ columns: [table.userId, table.badgeId] }),
-})).enableRLS();
+}, (table) => [
+  primaryKey({ columns: [table.userId, table.badgeId] }),
+  pgPolicy("usersToBadges_read_access_for_users_own_badges", {
+    as: "permissive",
+    for: "select",
+    to: authenticatedRole,
+    using: sql`${table.userId} = auth.uid()`
+  })
+]).enableRLS();
 
 export const usersToBadgesRelations = relations(usersToBadges, ({ one }) => ({
   badge: one(badges, {

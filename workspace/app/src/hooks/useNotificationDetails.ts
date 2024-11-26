@@ -67,7 +67,7 @@ export const useNotificationDetails = (notificationId: string) =>
 
       return ({
         ...notification,
-        frontendData: getNotificationFrontendData(notification!),
+        frontendData: getNotificationFrontendData(notification),
       });
     },
     staleTime: Infinity

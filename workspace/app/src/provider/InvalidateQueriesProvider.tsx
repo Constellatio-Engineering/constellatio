@@ -23,6 +23,7 @@ type InvalidateUserDetailsResultOptions = inferProcedureInput<AppRouter["users"]
 type InvalidateBadgesOptions = inferProcedureInput<AppRouter["badges"]["getBadges"]>;
 type InvalidateAmountOfUnreadNotificationsOptions = inferProcedureInput<AppRouter["notifications"]["getAmountOfUnreadNotifications"]>;
 type InvalidateNotificationOptions = inferProcedureInput<AppRouter["notifications"]["getNotificationById"]>;
+type InvalidateNotificationsOptions = inferProcedureInput<AppRouter["notifications"]["getNotifications"]>;
 
 type InvalidateQueries = {
   invalidateAmountOfUnreadNotifications: (options?: InvalidateAmountOfUnreadNotificationsOptions) => Promise<void>;
@@ -40,6 +41,7 @@ type InvalidateQueries = {
   invalidateGamesProgress: (options: InvalidateGamesProgressOptions) => Promise<void>;
   invalidateNotes: () => Promise<void>;
   invalidateNotification: (options: InvalidateNotificationOptions) => Promise<void>;
+  invalidateNotifications: (options?: InvalidateNotificationsOptions) => Promise<void>;
   invalidateOnboardingResult: (options?: InvalidateOnboardingResultOptions) => Promise<void>;
   invalidateSearchResults: (value?: string) => Promise<void>;
   invalidateSubmittedCaseSolution: (options: InvalidateSubmittedCaseSolutionOptions) => Promise<void>;
@@ -81,6 +83,7 @@ const InvalidateQueriesProvider: FunctionComponent<InvalidateQueriesProviderProp
     invalidateGamesProgress: async (options) => apiContext.gamesProgress.getGamesProgress.invalidate(options),
     invalidateNotes: async () => apiContext.notes.getNotes.invalidate(),
     invalidateNotification: async (options) => apiContext.notifications.getNotificationById.invalidate(options),
+    invalidateNotifications: async (options) => apiContext.notifications.getNotifications.invalidate(options),
     invalidateOnboardingResult: async (options) => apiContext.users.getOnboardingResult.invalidate(options),
     invalidateSearchResults: async (value) =>
     {
@@ -109,6 +112,7 @@ const InvalidateQueriesProvider: FunctionComponent<InvalidateQueriesProviderProp
     apiContext.notes.getNotes,
     apiContext.notifications.getAmountOfUnreadNotifications,
     apiContext.notifications.getNotificationById,
+    apiContext.notifications.getNotifications,
     apiContext.forum.getQuestions,
     apiContext.forum.getAnswers,
     apiContext.forum.getAnswerById,

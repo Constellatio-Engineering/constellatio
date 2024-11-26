@@ -8,6 +8,7 @@ import { type inferProcedureOutput } from "@trpc/server";
 
 import { getNotifications } from "../services/notifications.services";
 import { createTRPCRouter, protectedProcedure } from "../trpc";
+import { sleep } from "../utils/common";
 import { InternalServerError } from "../utils/serverError";
 
 export const notificationsRouter = createTRPCRouter({
@@ -40,6 +41,8 @@ export const notificationsRouter = createTRPCRouter({
     .input(getNotificationsSchema)
     .query(async ({ ctx: { userId }, input: { cursor, limit, notificationIds } }) =>
     {
+      await sleep(1000);
+
       const notifications = await getNotifications({
         cursor,
         getNotificationsType: "infinite",
