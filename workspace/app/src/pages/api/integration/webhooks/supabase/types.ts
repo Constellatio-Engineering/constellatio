@@ -3,7 +3,7 @@
 import type {
   BookmarkSql,
   CaseProgressSql,
-  ContentViewSql,
+  // ContentViewSql,
   CorrectAnswerSql,
   DocumentSql,
   ForumAnswerSql,
@@ -28,8 +28,8 @@ type Tables =
   | BookmarkSql
   | GameProgressSql
   | DocumentSql
-  | UploadedFileSql
-  | ContentViewSql;
+  // | ContentViewSql
+  | UploadedFileSql;
 
 // ============ COMMON ============
 type InsertPayload = {
@@ -224,13 +224,13 @@ type UploadedFilePayload = InsertUploadedFilePayload;
 
 
 // ============ CONTENTVIEW ============
-interface InsertContentViewPayload extends InsertPayload
+/* interface InsertContentViewPayload extends InsertPayload
 {
   record: ContentViewSql["columns"];
   table: ContentViewSql["table"];
 }
 
-type ContentViewPayload = InsertContentViewPayload;
+type ContentViewPayload = InsertContentViewPayload;*/
 
 
 // ============ ALL ============
@@ -246,5 +246,5 @@ export type WebhookPayload =
   | BookmarkPayload
   | GameProgressPayload
   // | DocumentPayload
-  | UploadedFilePayload
-  | ContentViewPayload;
+  // | ContentViewPayload
+  | UploadedFilePayload;

@@ -1,6 +1,3 @@
-import {
-  articleProgressHandlerContentViewInsert
-} from "@/pages/api/integration/webhooks/supabase/handlers/articleProgress.handler";
 import { bookmarkHandlerBookmarkInsert } from "@/pages/api/integration/webhooks/supabase/handlers/bookmark.handler";
 import {
   caseProgressHandler
@@ -45,7 +42,7 @@ const handler: NextApiHandler = async (req, res) =>
   }
 
   const payload = req.body as WebhookPayload;
-  console.log("Supabase Webhook received:", payload);
+  console.log(`Supabase Webhook received ob table '${payload.table}'`);
 
   switch (payload.table)
   {
@@ -149,18 +146,13 @@ const handler: NextApiHandler = async (req, res) =>
       }
       break;
     }
-    case "ContentView": {
-      switch (payload.type)
-      {
-        case "INSERT":
-          await articleProgressHandlerContentViewInsert(payload.record);
-          break;
-      }
-      break;
-    }
     case "ProfilePicture":
     {
       throw new Error("Case 'ProfilePicture' is not implemented yet");
+    }
+    default:
+    {
+      console.warn("Unknown table", payload);
     }
   }
 

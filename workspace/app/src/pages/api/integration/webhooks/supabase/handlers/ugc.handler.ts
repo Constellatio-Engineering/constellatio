@@ -15,8 +15,6 @@ const getNumberOfUploadedUgcs = async (userId: string): Promise<number> =>
 
 const handleBadges = async (numberOfUploadedUgcs: number, userId: string) =>
 {
-  console.log("numberOfUploadedUgcs", numberOfUploadedUgcs);
-
   if(numberOfUploadedUgcs >= 1)
   {
     await addBadgeForUser({ badgeIdentifier: "ugc-1", userId });
