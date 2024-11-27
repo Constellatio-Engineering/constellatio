@@ -1,6 +1,6 @@
 import EmptyStateCard from "@/components/organisms/emptyStateCard/EmptyStateCard";
 import NotificationListItem from "@/components/organisms/notificationListItem/NotificationListItem";
-import { defaultLimit } from "@/components/pages/forumOverviewPage/ForumOverviewPage";
+import { pageSize } from "@/components/pages/forumOverviewPage/ForumOverviewPage";
 import { api } from "@/utils/api";
 
 import { Fragment, type FunctionComponent, useEffect, useMemo } from "react";
@@ -22,8 +22,7 @@ const Notifications: FunctionComponent = () =>
 {
   const { inView: isEndOfListInView, ref: endOfListLabelRef } = useInView({
     initialInView: false,
-    rootMargin: "0px 0px 0px 0px",
-    // rootMargin: "30% 0px 30%",
+    rootMargin: "30% 0px 30%",
     threshold: 0,
     triggerOnce: false,
   });
@@ -33,38 +32,19 @@ const Notifications: FunctionComponent = () =>
     error,
     fetchNextPage,
     hasNextPage,
-    isFetching,
     isFetchingNextPage,
     isPending,
-    isRefetching,
     status,
   } = api.notifications.getNotifications.useInfiniteQuery({
-    limit: defaultLimit,
+    pageSize,
   }, {
-    getNextPageParam: (previouslyFetchedPage) =>
-    {
-      const nextCursor = previouslyFetchedPage?.nextCursor;
-
-      if(nextCursor == null)
-      {
-        // backend returned no cursor, we're at the end of the list
-        return null;
-      }
-
-      return nextCursor;
-    },
-    initialCursor: { index: null },
-    refetchOnMount: true,
-    refetchOnReconnect: true,
+    getNextPageParam: ((previouslyFetchedPage) => previouslyFetchedPage?.nextCursor),
+    initialCursor: null,
+    refetchOnMount: "always",
+    refetchOnReconnect: false,
+    refetchOnWindowFocus: false,
+    retry: false,
     staleTime: Infinity
-  });
-
-  console.log({
-    isFetching,
-    isFetchingNextPage,
-    isPending,
-    isRefetching,
-    status
   });
 
   const notifications = useMemo(() =>

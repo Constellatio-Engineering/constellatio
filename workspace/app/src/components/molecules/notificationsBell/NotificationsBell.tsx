@@ -1,4 +1,5 @@
 import { BellIcon } from "@/components/Icons/Bell";
+import { pageSize } from "@/components/pages/forumOverviewPage/ForumOverviewPage";
 import { useAmountOfUnreadNotification } from "@/hooks/useAmountOfUnreadNotification";
 import useContextAndErrorIfNull from "@/hooks/useContextAndErrorIfNull";
 import { supabase } from "@/lib/supabase";
@@ -57,7 +58,7 @@ const NotificationsBell: FunctionComponent = () =>
           });*/
 
           void invalidateAmountOfUnreadNotifications();
-          void invalidateNotifications();
+          void invalidateNotifications({ pageSize });
         }
       )
       .subscribe();

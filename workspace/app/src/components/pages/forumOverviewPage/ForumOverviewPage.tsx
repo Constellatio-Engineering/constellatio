@@ -12,7 +12,7 @@ import * as styles from "./ForumOverviewPage.styles";
 import PostQuestionModal from "./postQuestionModal/PostQuestionModal";
 import SearchBar from "./searchBar/SearchBar";
 
-export const defaultLimit = 2;
+export const pageSize = 3;
 
 type SortingOptions = {
   [key in GetQuestionsCursorType]: {
@@ -46,7 +46,7 @@ const ForumOverviewPage: FunctionComponent = () =>
       cursor: {
         cursorType: newCursor,
       },
-      limit: defaultLimit,
+      limit: pageSize,
     }, () => ({
       pageParams: [
         {
