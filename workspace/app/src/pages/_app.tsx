@@ -12,7 +12,7 @@ import { MaterialTagsDrawer } from "@/components/organisms/materialTagsDrawer/Ma
 import DocumentEditor from "@/components/organisms/papersBlock/documentEditor/DocumentEditor";
 import SubscriptionModal from "@/components/organisms/subscriptionModal/SubscriptionModal";
 import MaintenancePage from "@/components/pages/maintenancePage/MaintenancePage";
-import { supabase } from "@/lib/supabase"; 
+import { supabase } from "@/lib/supabase";
 import AuthStateProvider from "@/provider/AuthStateProvider";
 import CustomThemingProvider from "@/provider/CustomThemingProvider";
 import InvalidateQueriesProvider from "@/provider/InvalidateQueriesProvider";
@@ -22,7 +22,7 @@ import { api } from "@/utils/api";
 import { env, isProduction } from "@constellatio/env";
 import { ModalsProvider } from "@mantine/modals";
 import { Notifications } from "@mantine/notifications";
-import { GoogleTagManager } from "@next/third-parties/google"; 
+import { GoogleTagManager } from "@next/third-parties/google";
 import { SessionContextProvider } from "@supabase/auth-helpers-react";
 import { type NextPage } from "next";
 import { type AppProps } from "next/app";

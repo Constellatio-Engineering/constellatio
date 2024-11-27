@@ -218,6 +218,62 @@
       "when": 1731629759845,
       "tag": "0054_funny_hydra",
       "breakpoints": true
+    },
+    {
+      "idx": 55,
+      "version": "7",
+      "when": 1731632782117,
+      "tag": "0055_broken_raza",
+      "breakpoints": true
+    },
+    {
+      "idx": 56,
+      "version": "7",
+      "when": 1731883114494,
+      "tag": "0056_confused_jack_power",
+      "breakpoints": true
+    },
+    {
+      "idx": 57,
+      "version": "7",
+      "when": 1731884368582,
+      "tag": "0057_motionless_molly_hayes",
+      "breakpoints": true
+    },
+    {
+      "idx": 58,
+      "version": "7",
+      "when": 1731961313159,
+      "tag": "0058_vengeful_madame_web",
+      "breakpoints": true
+    },
+    {
+      "idx": 59,
+      "version": "7",
+      "when": 1732661020507,
+      "tag": "0059_oval_captain_america",
+      "breakpoints": true
+    },
+    {
+      "idx": 60,
+      "version": "7",
+      "when": 1732661040561,
+      "tag": "0060_noisy_doctor_octopus",
+      "breakpoints": true
+    },
+    {
+      "idx": 61,
+      "version": "7",
+      "when": 1732666192509,
+      "tag": "0061_windy_kitty_pryde",
+      "breakpoints": true
+    },
+    {
+      "idx": 62,
+      "version": "7",
+      "when": 1732745471570,
+      "tag": "0062_giant_whiplash",
+      "breakpoints": true
     }
   ]
 }

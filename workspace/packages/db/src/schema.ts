@@ -19,7 +19,7 @@ import {
   imageFileMimeTypes, notificationTypesIdentifiers, profilePictureSources, roles, streakActivityTypes, userBadgeStates
 } from "@constellatio/shared/validation";
 import { getCurrentDate } from "@constellatio/utils/dates";
-import { type InferInsertModel, type InferSelectModel, relations } from "drizzle-orm";
+import { type InferInsertModel, type InferSelectModel, relations, sql } from "drizzle-orm";
 import {
   type AnyPgColumn,
   boolean,
@@ -29,6 +29,7 @@ import {
   type PgColumn,
   pgEnum,
   pgTable,
+  pgPolicy,
   type PgTable,
   primaryKey,
   serial,
@@ -37,8 +38,10 @@ import {
   timestamp,
   unique,
   uniqueIndex,
-  uuid
+  uuid,
+  check
 } from "drizzle-orm/pg-core";
+import { authenticatedRole } from "drizzle-orm/supabase";
 
 type InferPgSelectModel<T extends PgTable> = {
   columns: {
@@ -242,6 +245,7 @@ export const gamesProgress = pgTable("GameProgress", {
   createdAt: timestamp("CreatedAt").defaultNow().notNull(),
   updatedAt: timestamp("UpdatedAt").defaultNow().notNull().$onUpdate(getCurrentDate),
   gameResult: jsonb("GameResult").$type<GameResultSchemaType>(),
+  wasSolvedCorrectly: boolean("WasSolvedCorrectly"),
 }, table => ({
   unique: unique().on(table.userId, table.gameId),
 })).enableRLS();
@@ -287,9 +291,15 @@ export const usersToBadges = pgTable("User_to_Badge", {
   userId: uuid("UserId").references(() => users.id, { onDelete: "no action" }).notNull(),
   badgeId: uuid("BadgeId").references(() => badges.id, { onDelete: "no action" }).notNull(),
   userBadgeState: userBadgeStateEnum("UserBadgeState").default("not-seen").notNull(),
-}, (table) => ({
-  pk: primaryKey({ columns: [table.userId, table.badgeId] }),
-})).enableRLS();
+}, (table) => [
+  primaryKey({ columns: [table.userId, table.badgeId] }),
+  pgPolicy("usersToBadges_read_access_for_users_own_badges", {
+    as: "permissive",
+    for: "select",
+    to: authenticatedRole,
+    using: sql`${table.userId} = auth.uid()`
+  })
+]).enableRLS();
 
 export const usersToBadgesRelations = relations(usersToBadges, ({ one }) => ({
   badge: one(badges, {
@@ -520,7 +530,15 @@ export const notifications = pgTable("Notification", {
   typeIdentifier: notificationTypeIdentifierEnum("Type").references(() => notificationTypes.identifier, { onDelete: "no action" }).notNull(),
   createdAt: timestamp("CreatedAt").defaultNow().notNull(),
   readAt: timestamp("ReadAt"),
-}).enableRLS();
+}, (table) => [
+  check("sender_recipient_different", sql`${table.senderId} != ${table.recipientId}`),
+  pgPolicy("notifications_read_access_for_users_own_notifications", {
+    as: "permissive",
+    for: "select",
+    to: authenticatedRole,
+    using: sql`${table.recipientId} = auth.uid()`
+  })
+]).enableRLS();
 
 export const notificationsRelations = relations(notifications, ({ one }) => ({
   notificationType: one(notificationTypes, {

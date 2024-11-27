@@ -49,7 +49,7 @@
   "scripts": {
     "build": "tsc",
     "clean": "git clean -xdf .cache .turbo dist node_modules",
-    "dev": "tsc",
+    "typegen": "tsc",
     "lint": "eslint src",
     "lint:fix": "eslint --fix src",
     "typecheck": "tsc --noEmit --emitDeclarationOnly false"

@@ -1,6 +1,6 @@
 import EmptyStateCard from "@/components/organisms/emptyStateCard/EmptyStateCard";
 import ForumListItem from "@/components/pages/forumOverviewPage/forumListItem/ForumListItem";
-import { defaultLimit } from "@/components/pages/forumOverviewPage/ForumOverviewPage";
+import { pageSize } from "@/components/pages/forumOverviewPage/ForumOverviewPage";
 import QuestionListItem from "@/components/pages/forumOverviewPage/questionListItem/QuestionListItem";
 import QuestionsSkeleton from "@/components/pages/forumOverviewPage/questionsSkeleton/QuestionsSkeleton";
 import { useForumPageStore } from "@/stores/forumPage.store";
@@ -53,7 +53,7 @@ const ForumQuestions: FunctionComponent<Props> = ({ questionIds }) =>
     isRefetching,
     status,
   } = api.forum.getQuestions.useInfiniteQuery({
-    limit: defaultLimit,
+    limit: pageSize,
     questionIds,
   }, {
     getNextPageParam: (previouslyFetchedPage) =>

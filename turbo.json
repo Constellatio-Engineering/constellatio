@@ -46,7 +46,6 @@
       "outputs": [".cache/tsbuildinfo.json"]
     },
     "typegen": {
-      "dependsOn": ["^build"],
       "cache": false,
       "persistent": false
     }

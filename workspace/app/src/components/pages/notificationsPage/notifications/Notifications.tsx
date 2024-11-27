@@ -1,6 +1,6 @@
 import EmptyStateCard from "@/components/organisms/emptyStateCard/EmptyStateCard";
 import NotificationListItem from "@/components/organisms/notificationListItem/NotificationListItem";
-import { defaultLimit } from "@/components/pages/forumOverviewPage/ForumOverviewPage";
+import { pageSize } from "@/components/pages/forumOverviewPage/ForumOverviewPage";
 import { api } from "@/utils/api";
 
 import { Fragment, type FunctionComponent, useEffect, useMemo } from "react";
@@ -36,23 +36,14 @@ const Notifications: FunctionComponent = () =>
     isPending,
     status,
   } = api.notifications.getNotifications.useInfiniteQuery({
-    limit: defaultLimit,
+    pageSize,
   }, {
-    getNextPageParam: (previouslyFetchedPage) =>
-    {
-      const nextCursor = previouslyFetchedPage?.nextCursor;
-
-      if(nextCursor == null)
-      {
-        // backend returned no cursor, we're at the end of the list
-        return null;
-      }
-
-      return nextCursor;
-    },
-    initialCursor: { index: null },
-    refetchOnMount: true,
-    refetchOnReconnect: true,
+    getNextPageParam: ((previouslyFetchedPage) => previouslyFetchedPage?.nextCursor),
+    initialCursor: null,
+    refetchOnMount: "always",
+    refetchOnReconnect: false,
+    refetchOnWindowFocus: false,
+    retry: false,
     staleTime: Infinity
   });
 

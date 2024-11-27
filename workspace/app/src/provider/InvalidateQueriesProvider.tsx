@@ -23,12 +23,13 @@ type InvalidateUserDetailsResultOptions = inferProcedureInput<AppRouter["users"]
 type InvalidateBadgesOptions = inferProcedureInput<AppRouter["badges"]["getBadges"]>;
 type InvalidateAmountOfUnreadNotificationsOptions = inferProcedureInput<AppRouter["notifications"]["getAmountOfUnreadNotifications"]>;
 type InvalidateNotificationOptions = inferProcedureInput<AppRouter["notifications"]["getNotificationById"]>;
+type InvalidateNotificationsOptions = inferProcedureInput<AppRouter["notifications"]["getNotifications"]>;
 
 type InvalidateQueries = {
   invalidateAmountOfUnreadNotifications: (options?: InvalidateAmountOfUnreadNotificationsOptions) => Promise<void>;
   invalidateBadges: (options?: InvalidateBadgesOptions) => Promise<void>;
-  invalidateBookmarks: (options?: InvalidateBookmarksOptions) => Promise<void[]>;
-  invalidateCaseProgress: (options?: InvalidateCaseProgressOptions) => Promise<void[]>;
+  invalidateBookmarks: (options?: InvalidateBookmarksOptions) => Promise<void>;
+  invalidateCaseProgress: (options?: InvalidateCaseProgressOptions) => Promise<void>;
   invalidateContentItemsViewsCount: (options: InvalidateContentItemsViewsCountOptions) => Promise<void>;
   invalidateDocuments: (options?: InvalidateDocumentsOptions) => Promise<void>;
   invalidateEverything: () => Promise<void>;
@@ -40,10 +41,11 @@ type InvalidateQueries = {
   invalidateGamesProgress: (options: InvalidateGamesProgressOptions) => Promise<void>;
   invalidateNotes: () => Promise<void>;
   invalidateNotification: (options: InvalidateNotificationOptions) => Promise<void>;
+  invalidateNotifications: (options?: InvalidateNotificationsOptions) => Promise<void>;
   invalidateOnboardingResult: (options?: InvalidateOnboardingResultOptions) => Promise<void>;
   invalidateSearchResults: (value?: string) => Promise<void>;
   invalidateSubmittedCaseSolution: (options: InvalidateSubmittedCaseSolutionOptions) => Promise<void>;
-  invalidateUploadedFiles: (options?: InvalidateUploadedFilesOptions) => Promise<void[]>;
+  invalidateUploadedFiles: (options?: InvalidateUploadedFilesOptions) => Promise<void>;
   invalidateUserDetails: (options?: InvalidateUserDetailsResultOptions) => Promise<void>;
 };
 
@@ -62,14 +64,8 @@ const InvalidateQueriesProvider: FunctionComponent<InvalidateQueriesProviderProp
   const invalidateQueries: InvalidateQueries = useMemo(() => ({
     invalidateAmountOfUnreadNotifications: async (options) => apiContext.notifications.getAmountOfUnreadNotifications.invalidate(options),
     invalidateBadges: async (options) => apiContext.badges.getBadges.invalidate(options),
-    invalidateBookmarks: async (options) => Promise.all([
-      apiContext.badges.getBadges.invalidate(),
-      apiContext.bookmarks.getAllBookmarks.invalidate(options)
-    ]), 
-    invalidateCaseProgress: async (options) => Promise.all([
-      apiContext.badges.getBadges.invalidate(),
-      apiContext.casesProgress.getCaseProgress.invalidate(options),
-    ]),
+    invalidateBookmarks: async (options) => apiContext.bookmarks.getAllBookmarks.invalidate(options),
+    invalidateCaseProgress: async (options) => apiContext.casesProgress.getCaseProgress.invalidate(options),
     invalidateContentItemsViewsCount: async (options) => apiContext.views.getContentItemViewsCount.invalidate(options),
     invalidateDocuments: async (options) => apiContext.documents.getDocuments.invalidate(options),
     invalidateEverything: async () => invalidateAll(),
@@ -81,6 +77,7 @@ const InvalidateQueriesProvider: FunctionComponent<InvalidateQueriesProviderProp
     invalidateGamesProgress: async (options) => apiContext.gamesProgress.getGamesProgress.invalidate(options),
     invalidateNotes: async () => apiContext.notes.getNotes.invalidate(),
     invalidateNotification: async (options) => apiContext.notifications.getNotificationById.invalidate(options),
+    invalidateNotifications: async (options) => apiContext.notifications.getNotifications.invalidate(options),
     invalidateOnboardingResult: async (options) => apiContext.users.getOnboardingResult.invalidate(options),
     invalidateSearchResults: async (value) =>
     {
@@ -94,10 +91,7 @@ const InvalidateQueriesProvider: FunctionComponent<InvalidateQueriesProviderProp
       await queryClient.invalidateQueries({ queryKey });
     },
     invalidateSubmittedCaseSolution: async (options) => apiContext.casesProgress.getSubmittedSolution.invalidate(options),
-    invalidateUploadedFiles: async (options) => Promise.all([
-      apiContext.badges.getBadges.invalidate(),
-      apiContext.uploads.getUploadedFiles.invalidate(options),
-    ]),
+    invalidateUploadedFiles: async (options) => apiContext.uploads.getUploadedFiles.invalidate(options),
     invalidateUserDetails: async (options) => apiContext.users.getUserDetails.invalidate(options)
   }), [
     invalidateAll,
@@ -109,6 +103,7 @@ const InvalidateQueriesProvider: FunctionComponent<InvalidateQueriesProviderProp
     apiContext.notes.getNotes,
     apiContext.notifications.getAmountOfUnreadNotifications,
     apiContext.notifications.getNotificationById,
+    apiContext.notifications.getNotifications,
     apiContext.forum.getQuestions,
     apiContext.forum.getAnswers,
     apiContext.forum.getAnswerById,

@@ -300,12 +300,15 @@ export const forumRouter = createTRPCRouter({
           throw new BadRequestError(new Error("parent answer not found"));
         }
 
-        await db.insert(notifications).values({
-          recipientId: parentAnswer.userId,
-          resourceId: input.parent.answerId,
-          senderId: userId,
-          typeIdentifier: "replyToForumAnswerPosted",
-        });
+        if(parentAnswer.userId !== userId)
+        {
+          await db.insert(notifications).values({
+            recipientId: parentAnswer.userId,
+            resourceId: input.parent.answerId,
+            senderId: userId,
+            typeIdentifier: "replyToForumAnswerPosted",
+          });
+        }
       }
       else if(input.parent.parentType === "question")
       {
@@ -318,12 +321,15 @@ export const forumRouter = createTRPCRouter({
           throw new BadRequestError(new Error("parent question not found"));
         }
 
-        await db.insert(notifications).values({
-          recipientId: parentQuestion.userId,
-          resourceId: input.parent.questionId,
-          senderId: userId,
-          typeIdentifier: "answerToForumQuestionPosted",
-        });
+        if(parentQuestion.userId !== userId)
+        {
+          await db.insert(notifications).values({
+            recipientId: parentQuestion.userId,
+            resourceId: input.parent.questionId,
+            senderId: userId,
+            typeIdentifier: "answerToForumQuestionPosted",
+          });
+        }
       }
 
       return insertedAnswer;

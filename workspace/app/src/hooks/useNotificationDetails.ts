@@ -1,4 +1,4 @@
-import { defaultLimit } from "@/components/pages/forumOverviewPage/ForumOverviewPage";
+import { pageSize } from "@/components/pages/forumOverviewPage/ForumOverviewPage";
 import { api } from "@/utils/api";
 
 import { type NotificationWithRelations } from "@constellatio/api/routers/notifications.router";
@@ -53,7 +53,7 @@ export const useNotificationDetails = (notificationId: string) =>
       // There seems to be a bug with the types where cursor is required for getInfiniteData, but it is not (taken from the docs)
       // eslint-disable-next-line @typescript-eslint/ban-ts-comment
       // @ts-ignore
-      const getNotificationsCacheData = apiContext.notifications.getNotifications.getInfiniteData({ limit: defaultLimit });
+      const getNotificationsCacheData = apiContext.notifications.getNotifications.getInfiniteData({ limit: pageSize });
       const notificationsFromCache = getNotificationsCacheData?.pages.flatMap((page) => page?.notifications ?? []) ?? [];
       return notificationsFromCache.find((notification) => notification.id === notificationId);
     },
@@ -67,7 +67,7 @@ export const useNotificationDetails = (notificationId: string) =>
 
       return ({
         ...notification,
-        frontendData: getNotificationFrontendData(notification!),
+        frontendData: getNotificationFrontendData(notification),
       });
     },
     staleTime: Infinity

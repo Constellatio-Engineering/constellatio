@@ -1,4 +1,4 @@
-import { defaultLimit } from "@/components/pages/forumOverviewPage/ForumOverviewPage";
+import { pageSize } from "@/components/pages/forumOverviewPage/ForumOverviewPage";
 
 import { Skeleton } from "@mantine/core";
 import { type FunctionComponent } from "react";
@@ -18,7 +18,7 @@ export const TagsSkeleton: FunctionComponent = () => (
   </div>
 );
 
-const QuestionsSkeleton: FunctionComponent<Props> = ({ numberOfSkeletons = defaultLimit }) =>
+const QuestionsSkeleton: FunctionComponent<Props> = ({ numberOfSkeletons = pageSize }) =>
 {
   return Array.from({ length: numberOfSkeletons }).map((_, index) => (
     <ForumListItem key={index}>
