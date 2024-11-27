@@ -155,7 +155,8 @@ let FillGapsGame: FC<TFillGapsGame> = ({
         gameType: "FillGapsGame",
         userAnswers: userAnswers ?? [],
       },
-      progressState: "completed" 
+      progressState: "completed",
+      wasSolvedCorrectly: allCorrect
     });
   };
 

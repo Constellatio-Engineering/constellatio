@@ -19,7 +19,6 @@ import { useRouter } from "next/router";
 import { type FunctionComponent, useEffect } from "react";
 
 import ConstellatioFullLogoAlphaVersion from "../../../../../public/images/icons/constellatio-full-logo-alpha-version.svg";
-// import ConstellatioFullLogo from "../../../../../public/images/icons/constellatio-full-logo.svg";
 import ConstellatioLogoIcon from "../../../../../public/images/icons/constellatio-icon.svg";
 import SearchOverlay from "../../searchOverlay/SearchOverlay";
 import * as styles from "../Header.styles";

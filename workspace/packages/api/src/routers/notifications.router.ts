@@ -2,12 +2,13 @@ import { and, count, eq, isNull } from "@constellatio/db";
 import { db } from "@constellatio/db/client";
 import { notifications } from "@constellatio/db/schema";
 import { getNotificationByIdSchema } from "@constellatio/schemas/routers/notifications/getNotificationById.schema";
-import { type GetNotificationsSchema, getNotificationsSchema } from "@constellatio/schemas/routers/notifications/getNotifications.schema";
+import { getNotificationsSchema } from "@constellatio/schemas/routers/notifications/getNotifications.schema";
 import { setNotificationReadStatusSchema } from "@constellatio/schemas/routers/notifications/setNotificationReadStatus.schema";
 import { type inferProcedureOutput } from "@trpc/server";
 
 import { getNotifications } from "../services/notifications.services";
 import { createTRPCRouter, protectedProcedure } from "../trpc";
+import { sleep } from "../utils/common";
 import { InternalServerError } from "../utils/serverError";
 
 export const notificationsRouter = createTRPCRouter({
@@ -38,18 +39,20 @@ export const notificationsRouter = createTRPCRouter({
     }),
   getNotifications: protectedProcedure
     .input(getNotificationsSchema)
-    .query(async ({ ctx: { userId }, input: { cursor, limit, notificationIds } }) =>
+    .query(async ({ ctx: { userId }, input: { cursor, notificationIds, pageSize } }) =>
     {
+      await sleep(50);
+
       const notifications = await getNotifications({
         cursor,
         getNotificationsType: "infinite",
-        limit,
         notificationIds,
+        pageSize,
         userId
       });
 
-      const hasNextPage = notifications.length > limit;
-      let nextCursor: GetNotificationsSchema["cursor"] | null = null;
+      const hasNextPage = notifications.length > pageSize;
+      let nextCursor: number | null = null;
 
       if(hasNextPage)
       {
@@ -61,9 +64,7 @@ export const notificationsRouter = createTRPCRouter({
           throw new InternalServerError(new Error("nextNotification is null"));
         }
 
-        nextCursor = {
-          index: nextNotification.index
-        };
+        nextCursor = nextNotification.index;
       }
 
       return { nextCursor, notifications };

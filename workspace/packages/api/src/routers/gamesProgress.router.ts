@@ -43,7 +43,8 @@ export const gamesProgressRouter = createTRPCRouter({
             id: 0,
             progressState: "not-started",
             updatedAt: new Date(),
-            userId
+            userId,
+            wasSolvedCorrectly: null
           });
         }
         else
@@ -56,7 +57,15 @@ export const gamesProgressRouter = createTRPCRouter({
     }),
   setGameProgress: protectedProcedure
     .input(setGameProgressStateSchema)
-    .mutation(async ({ ctx: { userId }, input: { gameId, gameResult, progressState } }) =>
+    .mutation(async ({
+      ctx: { userId },
+      input: {
+        gameId,
+        gameResult,
+        progressState,
+        wasSolvedCorrectly
+      } 
+    }) =>
     {
       await db.insert(gamesProgress)
         .values({
@@ -64,9 +73,10 @@ export const gamesProgressRouter = createTRPCRouter({
           gameResult,
           progressState,
           userId,
+          wasSolvedCorrectly,
         })
         .onConflictDoUpdate({
-          set: { gameResult },
+          set: { gameResult, wasSolvedCorrectly },
           target: [gamesProgress.gameId, gamesProgress.userId],
         });
     })

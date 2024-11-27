@@ -8,6 +8,8 @@
     "sourceMap": false,
     "emitDeclarationOnly": true,
     "noEmit": false,
-    "outDir": "${configDir}/dist"
+    "noEmitOnError": false,
+    "outDir": "${configDir}/dist",
+    "skipLibCheck": true
   }
 }

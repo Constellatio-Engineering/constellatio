@@ -1,7 +1,19 @@
 /* eslint-disable @typescript-eslint/naming-convention,no-multiple-empty-lines */
 
 import type {
-  CaseProgressSql, ForumAnswerSql, ForumQuestionSql, PingSql, ProfilePictureSql, StreakSql, UserSql 
+  BookmarkSql,
+  CaseProgressSql,
+  // ContentViewSql,
+  CorrectAnswerSql,
+  DocumentSql,
+  ForumAnswerSql,
+  ForumQuestionSql,
+  GameProgressSql,
+  PingSql,
+  ProfilePictureSql,
+  StreakSql,
+  UploadedFileSql,
+  UserSql
 } from "@constellatio/db/schema";
 
 type Tables =
@@ -10,8 +22,14 @@ type Tables =
   | PingSql
   | ForumAnswerSql
   | ForumQuestionSql
+  | CorrectAnswerSql
   | CaseProgressSql
-  | StreakSql;
+  | StreakSql
+  | BookmarkSql
+  | GameProgressSql
+  | DocumentSql
+  // | ContentViewSql
+  | UploadedFileSql;
 
 // ============ COMMON ============
 type InsertPayload = {
@@ -21,6 +39,7 @@ type InsertPayload = {
   table: string;
   type: "INSERT";
 };
+
 type UpdatePayload = {
   old_record: Tables["columns"];
   record: Tables["columns"];
@@ -44,21 +63,20 @@ interface InsertUserPayload extends InsertPayload
   table: UserSql["table"];
 }
 
-interface UpdateUserPayload extends UpdatePayload
-{
-  old_record: UserSql["columns"];
-  record: UserSql["columns"];
-  table: UserSql["table"];
-}
+// interface UpdateUserPayload extends UpdatePayload
+// {
+//   old_record: UserSql["columns"];
+//   record: UserSql["columns"];
+//   table: UserSql["table"];
+// }
+//
+// interface DeleteUserPayload extends DeletePayload
+// {
+//   old_record: UserSql["columns"];
+//   table: UserSql["table"];
+// }
 
-interface DeleteUserPayload extends DeletePayload
-{
-  old_record: UserSql["columns"];
-  table: UserSql["table"];
-}
-
-type UserPayload = InsertUserPayload | UpdateUserPayload | DeleteUserPayload;
-
+type UserPayload = InsertUserPayload;
 
 
 // ============ PROFILE PICTURE ============
@@ -82,7 +100,6 @@ interface DeleteProfilePicturePayload extends DeletePayload
 }
 
 type ProfilePicturePayload = InsertProfilePicturePayload | UpdateProfilePicturePayload | DeleteProfilePicturePayload;
-
 
 
 // ============ PING ============
@@ -115,6 +132,16 @@ interface InsertForumQuestionPayload extends InsertPayload
 type ForumQuestionPayload = InsertForumQuestionPayload;
 
 
+// ============ CORRECT ANSWER ============
+interface InsertCorrectAnswerPayload extends InsertPayload
+{
+  record: CorrectAnswerSql["columns"];
+  table: CorrectAnswerSql["table"];
+}
+
+type CorrectAnswerPayload = InsertCorrectAnswerPayload;
+
+
 // ============ CASE PROGRESS ============
 interface InsertCaseProgressPayload extends InsertPayload
 {
@@ -122,7 +149,7 @@ interface InsertCaseProgressPayload extends InsertPayload
   table: CaseProgressSql["table"];
 }
 
-interface UpdateCaseProgressPayload extends UpdatePayload 
+interface UpdateCaseProgressPayload extends UpdatePayload
 {
   old_record: CaseProgressSql["columns"];
   record: CaseProgressSql["columns"];
@@ -149,6 +176,63 @@ interface UpdateStreakPayload extends UpdatePayload
 type StreakPayload = InsertStreakPayload | UpdateStreakPayload;
 
 
+// ============ BOOKMARK ============
+interface InsertBookmarkPayload extends InsertPayload
+{
+  record: BookmarkSql["columns"];
+  table: BookmarkSql["table"];
+}
+
+type BookmarkPayload = InsertBookmarkPayload;
+
+
+// ============ GAMEPROGRESS ============
+interface InsertGameProgressPayload extends InsertPayload
+{
+  record: GameProgressSql["columns"];
+  table: GameProgressSql["table"];
+}
+
+interface UpdateGameProgressPayload extends UpdatePayload
+{
+  old_record: GameProgressSql["columns"];
+  record: GameProgressSql["columns"];
+  table: GameProgressSql["table"];
+}
+
+type GameProgressPayload = InsertGameProgressPayload | UpdateGameProgressPayload;
+
+
+// ============ DOCUMENT ============
+/* interface InsertDocumentPayload extends InsertPayload
+{
+  record: DocumentSql["columns"];
+  table: DocumentSql["table"];
+}
+
+type DocumentPayload = InsertDocumentPayload;*/
+
+
+// ============ UPLOADEDFILE ============
+interface InsertUploadedFilePayload extends InsertPayload
+{
+  record: UploadedFileSql["columns"];
+  table: UploadedFileSql["table"];
+}
+
+type UploadedFilePayload = InsertUploadedFilePayload;
+
+
+// ============ CONTENTVIEW ============
+/* interface InsertContentViewPayload extends InsertPayload
+{
+  record: ContentViewSql["columns"];
+  table: ContentViewSql["table"];
+}
+
+type ContentViewPayload = InsertContentViewPayload;*/
+
+
 // ============ ALL ============
 export type WebhookPayload =
   | UserPayload
@@ -156,5 +240,11 @@ export type WebhookPayload =
   | PingPayload
   | ForumAnswerPayload
   | ForumQuestionPayload
+  | CorrectAnswerPayload
   | CaseProgressPayload
-  | StreakPayload;
+  | StreakPayload
+  | BookmarkPayload
+  | GameProgressPayload
+  // | DocumentPayload
+  // | ContentViewPayload
+  | UploadedFilePayload;

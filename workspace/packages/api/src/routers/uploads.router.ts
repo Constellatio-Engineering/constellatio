@@ -17,7 +17,6 @@ import { z } from "zod";
 
 import { addUserToCrmUpdateQueue } from "../lib/clickup/utils";
 import { meiliSearchAdmin } from "../lib/meilisearch";
-import { addBadgeForUser } from "../services/badges.services";
 import { addTags } from "../services/tags.services";
 import { deleteFiles, getClouStorageFileUrl, getSignedCloudStorageUploadUrl } from "../services/uploads.services";
 import { createTRPCRouter, protectedProcedure } from "../trpc";
@@ -126,8 +125,6 @@ export const uploadsRouter = createTRPCRouter({
 
       const insertResult = await db.insert(uploadedFiles).values(uploadInsert).returning();
       await addUserToCrmUpdateQueue(userId);
-
-      await addBadgeForUser({ badgeIdentifier: "ugc-1", userId });
 
       const searchIndexItem = createUploadsSearchIndexItem({
         ...uploadInsert,

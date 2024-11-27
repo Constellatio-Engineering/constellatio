@@ -1,4 +1,4 @@
-import { count, eq } from "@constellatio/db";
+import { eq } from "@constellatio/db";
 import { db } from "@constellatio/db/client";
 import {
   profilePictures, referrals, type UserInsert, users, usersToBadges 
@@ -13,7 +13,6 @@ import { InternalServerError } from "./serverError";
 import { getDataFromStripeSubscription } from "./stripe";
 import { addUserToCrmUpdateQueue } from "../lib/clickup/utils";
 import { stripe } from "../lib/stripe/stripe";
-import { addBadgeForUser } from "../services/badges.services";
 
 /* export type FinishSignUpProps = {
   referralCode?: string;
@@ -107,21 +106,6 @@ export const finishSignup = async ({ referralCode, supabaseServerClient, user }:
         .onConflictDoNothing();
     }
 
-    const usersCount = (await db.select({ count: count(users.id) }).from(users))?.[0]?.count;
-
-    // TODO: This should be in the supabase webhook handler
-    if(usersCount != null)
-    {
-      if(usersCount <= 100)
-      {
-        await addBadgeForUser({ badgeIdentifier: "1-100", userId });
-      }
-      else if(usersCount > 100 && usersCount <= 1000)
-      {
-        await addBadgeForUser({ badgeIdentifier: "1-1000", userId });
-      }
-    }
-
     if(referralCode)
     {
       // TODO: This should be in the supabase webhook handler
@@ -159,7 +143,7 @@ export const finishSignup = async ({ referralCode, supabaseServerClient, user }:
       supabaseServerClient.auth.admin.deleteUser(userId),
     ].filter(Boolean);
 
-    const cleanupResults: Array<PromiseSettledResult<unknown>> = []; 
+    const cleanupResults: Array<PromiseSettledResult<unknown>> = [];
 
     for(const cleanup of cleanups)
     {

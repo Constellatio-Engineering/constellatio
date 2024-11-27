@@ -28,22 +28,25 @@ export const getNotifications = async (params: GetNotificationsParams) => // esl
   }
 
   const queryConditions: SQL[] = [];
+  let limit: number | undefined;
 
   queryConditions.push(eq(notifications.recipientId, params.userId));
 
   if(params.getNotificationsType === "infinite")
   {
-    const { cursor, notificationIds } = params;
+    const { cursor, notificationIds, pageSize } = params;
 
     if(notificationIds != null)
     {
       queryConditions.push(inArray(notifications.id, notificationIds));
     }
 
-    if(cursor.index != null)
+    if(cursor != null)
     {
-      queryConditions.push(lte(notifications.index, cursor.index));
+      queryConditions.push(lte(notifications.index, cursor));
     }
+
+    limit = pageSize + 1;
   }
   else
   {
@@ -51,6 +54,7 @@ export const getNotifications = async (params: GetNotificationsParams) => // esl
   }
 
   const notificationsQueryResult = await db.query.notifications.findMany({
+    limit,
     orderBy: [desc(notifications.createdAt)],
     where: and(...queryConditions),
     with: {

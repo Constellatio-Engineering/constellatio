@@ -112,7 +112,7 @@ export const DragDropGame: FC<TDragDropGame> = ({
   const onGameFinishHandler = (): void => 
   {
     const winCondition = checkWinCondition();
-    let gameStatus: GameStatus = "lose";
+    let gameStatus: GameStatus;
 
     if(game?.orderRequired) 
     {
@@ -195,7 +195,8 @@ export const DragDropGame: FC<TDragDropGame> = ({
         gameType: "DragDropGame",
         userAnswers: droppedItems
       },
-      progressState: "completed"
+      progressState: "completed",
+      wasSolvedCorrectly: gameStatus === "win"
     });
   };
 

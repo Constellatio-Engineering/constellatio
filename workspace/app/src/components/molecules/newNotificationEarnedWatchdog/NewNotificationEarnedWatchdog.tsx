@@ -5,6 +5,7 @@ import useBadges from "@/hooks/useBadges";
 import useContextAndErrorIfNull from "@/hooks/useContextAndErrorIfNull";
 import useOnboardingResult from "@/hooks/useOnboardingResult";
 import { usePrevious } from "@/hooks/usePrevious";
+import { supabase } from "@/lib/supabase";
 import { AuthStateContext } from "@/provider/AuthStateProvider";
 import { InvalidateQueriesContext } from "@/provider/InvalidateQueriesProvider";
 import { api } from "@/utils/api";
@@ -14,7 +15,7 @@ import { getIsPathAppPath } from "@constellatio/shared/paths";
 import { Modal, Title } from "@mantine/core";
 import { useLocalStorage } from "@mantine/hooks";
 import { useRouter } from "next/router";
-import { type FunctionComponent, useContext } from "react";
+import { type FunctionComponent, useContext, useEffect } from "react";
 import { z } from "zod";
 
 import * as styles from "./NewNotificationEarnedWatchdog.styles";
@@ -88,6 +89,20 @@ const NewNotificationEarnedWatchdog: FunctionComponent = () =>
     },
     onSettled: invalidateBadges,
   });
+
+  useEffect(() =>
+  {
+    const channel = supabase
+      .channel("realtime badges")
+      .on(
+        "postgres_changes",
+        { event: "INSERT", schema: "public", table: "User_to_Badge", },
+        (_payload) => void invalidateBadges()
+      )
+      .subscribe();
+
+    return () => void supabase.removeChannel(channel);
+  }, [invalidateBadges]);
 
   const newEarnedBadges = badges
     .filter(badge => badge.isCompleted && !badge.wasSeen)
