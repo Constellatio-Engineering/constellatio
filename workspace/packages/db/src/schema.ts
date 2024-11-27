@@ -38,9 +38,10 @@ import {
   timestamp,
   unique,
   uniqueIndex,
-  uuid
+  uuid,
+  check
 } from "drizzle-orm/pg-core";
-import { authenticatedRole, authUid } from "drizzle-orm/supabase";
+import { authenticatedRole } from "drizzle-orm/supabase";
 
 type InferPgSelectModel<T extends PgTable> = {
   columns: {
@@ -530,6 +531,7 @@ export const notifications = pgTable("Notification", {
   createdAt: timestamp("CreatedAt").defaultNow().notNull(),
   readAt: timestamp("ReadAt"),
 }, (table) => [
+  check("sender_recipient_different", sql`${table.senderId} != ${table.recipientId}`),
   pgPolicy("notifications_read_access_for_users_own_notifications", {
     as: "permissive",
     for: "select",
