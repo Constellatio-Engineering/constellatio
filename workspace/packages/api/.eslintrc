@@ -1,0 +1,18 @@
+{
+  "root": true,
+  "parserOptions": {
+    "project": "./tsconfig.json"
+  },
+  "extends": [
+    "@constellatio/eslint-config/base",
+    "@constellatio/eslint-config/drizzle"
+  ],
+  "overrides": [
+    {
+      "files": ["src/lib/clickup/**/*.ts"],
+      "rules": {
+        "@typescript-eslint/naming-convention": "off"
+      }
+    }
+  ]
+}

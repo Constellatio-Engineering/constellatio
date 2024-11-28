@@ -6,6 +6,8 @@ env:
   VERCEL_PROJECT_ID: ${{ secrets.VERCEL_PROJECT_ID }}
   VERCEL_ACCESS_TOKEN: ${{ secrets.VERCEL_ACCESS_TOKEN }}
   DATABASE_URL: ${{ secrets.DATABASE_URL }}
+  TURBO_TOKEN: ${{ secrets.TURBO_TOKEN }}
+  TURBO_TEAM: ${{ vars.TURBO_TEAM }}
 
 on:
   push:
@@ -18,28 +20,32 @@ jobs:
   lint:
     name: Run Linting
     runs-on: ubuntu-latest
-    defaults:
-      run:
-        working-directory: app
     steps:
       - name: Checkout code
         uses: actions/checkout@v4
+        with:
+          fetch-depth: 2
+      - name: Cache turbo build setup
+        uses: actions/cache@v4
+        with:
+          path: .turbo
+          key: ${{ runner.os }}-turbo-${{ github.sha }}
+          restore-keys: |
+            ${{ runner.os }}-turbo-
       - name: Setup pnpm
         uses: pnpm/action-setup@v4
-        with:
-          version: 8
       - name: Setup Node
         uses: actions/setup-node@v4
         with:
-          node-version: 18
-          cache-dependency-path: ./app/pnpm-lock.yaml
+          node-version: 20
+          cache-dependency-path: ./pnpm-lock.yaml
           cache: 'pnpm'
       - name: Install Dependencies
         run: pnpm install
       - name: Run type checking
-        run: pnpm check-types
+        run: pnpm typecheck
       - name: Run ESLint
-        run: pnpm eslint
+        run: pnpm lint
 
   deploy:
     name: Deploy to Vercel
@@ -52,21 +58,25 @@ jobs:
       || github.ref_name == 'staging' && 'staging'
       ||                                 'development'
       }}
-    defaults:
-      run:
-        working-directory: app
     steps:
       - name: Checkout code
         uses: actions/checkout@v4
+        with:
+          fetch-depth: 2
+      - name: Cache turbo build setup
+        uses: actions/cache@v4
+        with:
+          path: .turbo
+          key: ${{ runner.os }}-turbo-${{ github.sha }}
+          restore-keys: |
+            ${{ runner.os }}-turbo-
       - name: Setup pnpm
         uses: pnpm/action-setup@v4
-        with:
-          version: 8
       - name: Setup Node
         uses: actions/setup-node@v4
         with:
-          node-version: 18
-          cache-dependency-path: ./app/pnpm-lock.yaml
+          node-version: 20
+          cache-dependency-path: ./pnpm-lock.yaml
           cache: 'pnpm'
       - name: Install Dependencies
         run: pnpm install
@@ -79,7 +89,7 @@ jobs:
         run: vercel deploy --prod --token=${{ secrets.VERCEL_ACCESS_TOKEN }} --scope=${{ vars.VERCEL_SCOPE }} --name=${{ vars.VERCEL_PROJECT_NAME }} --yes
       - name: Apply Database Migrations
         id: apply-db-migrations
-        run: pnpm apply-migrations
+        run: pnpm apply-migrations:ci
       - name: Rollback Vercel Deployment after failed database migrations
         if: failure() && steps.apply-db-migrations.conclusion == 'failure'
         run: |

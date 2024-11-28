@@ -1,0 +1,59 @@
+{
+  "name": "@constellatio/cms",
+  "version": "0.1.0",
+  "private": true,
+  "type": "module",
+  "exports": {
+    "./sdk": {
+      "types": "./dist/graphql/getSdk.d.ts",
+      "default": "./src/graphql/getSdk.ts"
+    },
+    "./generated-types": {
+      "types": "./dist/graphql/__generated/sdk.d.ts",
+      "default": "./src/graphql/__generated/sdk.ts"
+    },
+    "./content/*": {
+      "types": "./dist/content/*.d.ts",
+      "default": "./src/content/*.ts"
+    },
+    "./utils/*": {
+      "types": "./dist/utils/*.d.ts",
+      "default": "./src/utils/*.ts"
+    }
+  },
+  "license": "MIT",
+  "scripts": {
+    "build": "tsc",
+    "clean": "git clean -xdf .cache .turbo dist node_modules",
+    "typegen": "tsc",
+    "lint": "eslint src",
+    "lint:fix": "eslint --fix src",
+    "typecheck": "tsc --noEmit --emitDeclarationOnly false",
+    "gen": "graphql-codegen -r dotenv/config --config codegen.ts",
+    "gen:watch": "graphql-codegen --watch -r dotenv/config --config codegen.ts",
+    "supabase:typegen": "npx supabase gen types typescript --project-id kzrdtppwdumjscxldnwo --schema public > src/lib/database.types.ts"
+  },
+  "dependencies": {
+    "@constellatio/env": "workspace:*",
+    "@constellatio/shared": "workspace:*",
+    "@constellatio/utility-types": "workspace:*",
+    "graphql": "16.8.1",
+    "graphql-request": "6.1.0",
+    "graphql-tag": "2.12.6",
+    "superjson": "catalog:"
+  },
+  "devDependencies": {
+    "@constellatio/eslint-config": "workspace:*",
+    "@constellatio/tsconfig": "workspace:*",
+    "@graphql-codegen/cli": "4.0.1",
+    "@graphql-codegen/introspection": "4.0.3",
+    "@graphql-codegen/typed-document-node": "5.0.6",
+    "@graphql-codegen/typescript": "4.0.6",
+    "@graphql-codegen/typescript-generic-sdk": "3.1.0",
+    "@graphql-codegen/typescript-operations": "4.2.0",
+    "@total-typescript/ts-reset": "catalog:",
+    "dotenv": "16.4.5",
+    "eslint": "catalog:",
+    "typescript": "catalog:"
+  }
+}

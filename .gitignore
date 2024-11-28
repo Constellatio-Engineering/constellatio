@@ -18,7 +18,7 @@ yarn-debug.log*
 yarn-error.log*
 
 # local env files
-.env*.local
+supabase/.env.local
 
 # misc
 .DS_Store
@@ -26,3 +26,9 @@ yarn-error.log*
 
 # testing endpoint
 app/src/pages/api/test
+
+dist
+.cache
+.turbo
+
+.env.local

@@ -1,0 +1,36 @@
+{
+  "name": "@constellatio/env",
+  "version": "0.1.0",
+  "private": true,
+  "type": "module",
+  "main": "./dist/env.mjs",
+  "types": "./dist/env.d.ts",
+  "exports": {
+    ".": {
+      "types": "./dist/env.d.ts",
+      "default": "./dist/env.mjs"
+    },
+    "./dist/*": "./dist/*"
+  },
+  "license": "MIT",
+  "scripts": {
+    "compile": "tsc && cp ./src/env.ts ./dist/env.mjs",
+    "build": "pnpm compile",
+    "clean": "git clean -xdf .cache .turbo dist node_modules",
+    "dev": "pnpm compile",
+    "lint": "eslint src",
+    "lint:fix": "eslint --fix src",
+    "typecheck": "tsc --noEmit --emitDeclarationOnly false"
+  },
+  "dependencies": {
+    "@t3-oss/env-nextjs": "catalog:",
+    "zod": "catalog:"
+  },
+  "devDependencies": {
+    "@constellatio/eslint-config": "workspace:*",
+    "@constellatio/tsconfig": "workspace:*",
+    "@total-typescript/ts-reset": "catalog:",
+    "@types/node": "catalog:",
+    "eslint": "catalog:"
+  }
+}

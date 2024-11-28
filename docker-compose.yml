@@ -17,7 +17,7 @@ services:
     image: stripe/stripe-cli
     command: "listen --api-key ${STRIPE_API_KEY} --device-name ${STRIPE_DEVICE_NAME} --forward-to http://host.docker.internal:3010/api/integration/webhooks/stripe"
     env_file:
-      - stripe/.env.local
+      - ./docker/stripe/.env.local
     container_name: stripe-webhook-listener
     restart: always
     extra_hosts:
@@ -30,11 +30,11 @@ services:
     extra_hosts:
       - "host.docker.internal:host-gateway"
     env_file:
-      - ./meilisearch/.env
+      - ./docker/meilisearch/.env
     ports:
       - '7700:7700'
     volumes:
-      - ./meilisearch/data:/meili_data
+      - ./docker/meilisearch/data:/meili_data
 
   caddy:
     image: caddy:2.4.3-alpine
@@ -46,7 +46,7 @@ services:
       - '80:80'
       - '443:443'
     volumes:
-      - ./caddy/Caddyfile:/etc/caddy/Caddyfile
-      - ./caddy/certs:/data/certs
-      - ./caddy/data:/data
-      - ./caddy/config:/config
+      - ./docker/caddy/Caddyfile:/etc/caddy/Caddyfile
+      - ./docker/caddy/certs:/data/certs
+      - ./docker/caddy/data:/data
+      - ./docker/caddy/config:/config

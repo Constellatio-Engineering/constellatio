@@ -1,0 +1,1 @@
+ALTER TABLE "GameProgress" ADD COLUMN "WasSolvedCorrectly" boolean;

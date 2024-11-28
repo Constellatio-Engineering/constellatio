@@ -1,0 +1,33 @@
+{
+  "name": "@constellatio/db-to-search",
+  "version": "0.1.0",
+  "private": true,
+  "type": "module",
+  "exports": {
+    ".": {
+      "types": "./dist/index.d.ts",
+      "default": "./src/index.ts"
+    }
+  },
+  "license": "MIT",
+  "scripts": {
+    "build": "tsc",
+    "clean": "git clean -xdf .cache .turbo dist node_modules",
+    "typegen": "tsc",
+    "lint": "eslint src",
+    "lint:fix": "eslint --fix src",
+    "typecheck": "tsc --noEmit --emitDeclarationOnly false"
+  },
+  "dependencies": {
+    "@t3-oss/env-nextjs": "catalog:",
+    "postgres": "catalog:"
+  },
+  "devDependencies": {
+    "@constellatio/eslint-config": "workspace:*",
+    "@constellatio/tsconfig": "workspace:*",
+    "@constellatio/utility-types": "workspace:*",
+    "@total-typescript/ts-reset": "catalog:",
+    "eslint": "catalog:",
+    "typescript": "catalog:"
+  }
+}
