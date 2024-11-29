@@ -39,9 +39,10 @@ import {
   unique,
   uniqueIndex,
   uuid,
-  check
+  check,
+  pgSchema
 } from "drizzle-orm/pg-core";
-import { authenticatedRole } from "drizzle-orm/supabase";
+import { authenticatedRole, authUid } from "drizzle-orm/supabase";
 
 type InferPgSelectModel<T extends PgTable> = {
   columns: {
@@ -78,8 +79,14 @@ export const profilePictureSourceEnum = pgEnum("ProfilePictureSource", profilePi
 
 // TODO: Go through all queries and come up with useful indexes
 
+const authSchema = pgSchema("auth");
+
+const auth_users = authSchema.table("users", {
+  id: uuid("id").primaryKey(),
+});
+
 export const users = pgTable("User", {
-  id: uuid("Id").primaryKey(),
+  id: uuid("Id").primaryKey().references(() => auth_users.id, { onDelete: "no action" }),
   authProvider: authProviderEnum("AuthProvider").notNull(),
   email: text("Email").unique().notNull(),
   displayName: text("DisplayName").notNull(),
@@ -154,7 +161,9 @@ export const uploadFolders = pgTable("UploadFolder", {
   createdAt: timestamp("CreatedAt").defaultNow().notNull(),
   userId: uuid("UserId").references(() => users.id, { onDelete: "no action" }).notNull(),
   name: text("Name").notNull()
-}).enableRLS();
+}, table => [
+  index("UploadFolder_UserId_FK_Index").on(table.userId),
+]).enableRLS();
 
 export type UploadFolderInsert = InferInsertModel<typeof uploadFolders>;
 export type UploadFolder = InferSelectModel<typeof uploadFolders>;
@@ -170,7 +179,10 @@ export const uploadedFiles = pgTable("UploadedFile", {
   sizeInBytes: integer("SizeInBytes").notNull(),
   fileExtension: fileExtensionEnum("FileExtension").notNull(),
   contentType: fileMimeTypeEnum("ContentType").notNull(),
-}).enableRLS();
+}, table => [
+  index("UploadedFile_UserId_FK_Index").on(table.userId),
+  index("UploadedFile_FolderId_FK_Index").on(table.folderId),
+]).enableRLS();
 
 export const uploadedFilesRelations = relations(uploadedFiles, ({ many }) => ({
   tags: many(uploadedFilesToTags),
@@ -189,7 +201,10 @@ export const documents = pgTable("Document", {
   folderId: uuid("FolderId").references(() => uploadFolders.id, { onDelete: "no action" }),
   name: text("Name").notNull(),
   content: text("Content").notNull(),
-}).enableRLS();
+}, (table) => [
+  index("Document_UserId_FK_Index").on(table.userId),
+  index("Document_FolderId_FK_Index").on(table.folderId),
+]).enableRLS();
 
 export const documentsRelations = relations(documents, ({ many }) => ({
   tags: many(documentsToTags),
@@ -207,7 +222,10 @@ export const notes = pgTable("Note", {
   createdAt: timestamp("CreatedAt").defaultNow().notNull(),
   updatedAt: timestamp("UpdatedAt").defaultNow().notNull().$onUpdate(getCurrentDate),
   content: text("Content").notNull(),
-}).enableRLS();
+}, (table) => [
+  index("Note_UserId_FK_Index").on(table.userId),
+  index("Note_FileId_FK_Index").on(table.fileId),
+]).enableRLS();
 
 export type NoteInsert = InferInsertModel<typeof notes>;
 export type Note = InferSelectModel<typeof notes>;
@@ -297,8 +315,10 @@ export const usersToBadges = pgTable("User_to_Badge", {
     as: "permissive",
     for: "select",
     to: authenticatedRole,
-    using: sql`${table.userId} = auth.uid()`
-  })
+    using: sql`${table.userId} = ${authUid}`
+  }),
+  index("User_to_Badge_UserId_FK_Index").on(table.userId),
+  index("User_to_Badge_BadgeId_FK_Index").on(table.badgeId),
 ]).enableRLS();
 
 export const usersToBadgesRelations = relations(usersToBadges, ({ one }) => ({
@@ -323,6 +343,7 @@ export const forumQuestions = pgTable("ForumQuestion", {
   text: text("Text").notNull(),
 }, table => ({
   id_slug_index: uniqueIndex("ForumQuestion_Id_Slug_Index").on(table.id, table.slug),
+  forumQuestions_userId_fk_index: index("ForumQuestion_UserId_FK_Index").on(table.userId),
 })).enableRLS();
 
 export const forumQuestionsRelations = relations(forumQuestions, ({ many, one }) => ({
@@ -405,7 +426,11 @@ export const forumAnswers = pgTable("ForumAnswer", {
   text: text("AnswerText").notNull(),
   parentQuestionId: uuid("ParentQuestionId").references(() => forumQuestions.id, { onDelete: "no action" }),
   parentAnswerId: uuid("ParentAnswerId").references((): AnyPgColumn => forumAnswers.id, { onDelete: "no action" }),
-}).enableRLS();
+}, (table) => [
+  index("ForumAnswer_UserId_FK_Index").on(table.userId),
+  index("ForumAnswer_ParentQuestionId_FK_Index").on(table.parentQuestionId),
+  index("ForumAnswer_ParentAnswerId_FK_Index").on(table.parentAnswerId),
+]).enableRLS();
 
 export const forumAnswersRelations = relations(forumAnswers, ({ one }) => ({
   user: one(users, {
@@ -429,7 +454,11 @@ export const correctAnswers = pgTable("CorrectAnswer", {
   confirmedByUserId: uuid("ConfirmedByUserId").references(() => users.id, { onDelete: "no action" }).notNull(),
   questionId: uuid("QuestionId").references(() => forumQuestions.id, { onDelete: "cascade" }).notNull(),
   answerId: uuid("AnswerId").references(() => forumAnswers.id, { onDelete: "cascade" }).unique().notNull(),
-}).enableRLS();
+}, (table) => [
+  index("CorrectAnswer_UserId_FK_Index").on(table.confirmedByUserId),
+  index("CorrectAnswer_QuestionId_FK_Index").on(table.questionId),
+  index("CorrectAnswer_AnswerId_FK_Index").on(table.answerId),
+]).enableRLS();
 
 export type CorrectAnswerInsert = InferInsertModel<typeof correctAnswers>;
 export type CorrectAnswer = InferSelectModel<typeof correctAnswers>;
@@ -490,6 +519,8 @@ export const usersToRoles = pgTable("User_to_Role", {
   roleId: uuid("RoleId").references(() => userRoles.id, { onDelete: "no action" }).notNull(),
 }, table => ({
   pk: primaryKey({ columns: [table.userId, table.roleId] }),
+  usersToRoles_userId_fk_index: index("User_to_Role_UserId_FK_Index").on(table.userId),
+  usersToRoles_roleId_fk_index: index("User_to_Role_RoleId_FK_Index").on(table.roleId),
 })).enableRLS();
 
 export const usersToRolesRelations = relations(usersToRoles, ({ one }) => ({
@@ -536,8 +567,12 @@ export const notifications = pgTable("Notification", {
     as: "permissive",
     for: "select",
     to: authenticatedRole,
-    using: sql`${table.recipientId} = auth.uid()`
-  })
+    using: sql`${table.recipientId} = ${authUid}`
+  }),
+  index("Notification_RecipientId_FK_Index").on(table.recipientId),
+  index("Notification_SenderId_FK_Index").on(table.senderId),
+  index("Notification_ResourceId_FK_Index").on(table.resourceId),
+  index("Notification_TypeIdentifier_FK_Index").on(table.typeIdentifier),
 ]).enableRLS();
 
 export const notificationsRelations = relations(notifications, ({ one }) => ({
@@ -568,6 +603,7 @@ export const pings = pgTable("Ping", {
   pingInterval: smallint("PingInterval").notNull(),
 }, table => ({
   path_index: index("Ping_Path_Index").on(table.path),
+  pings_userId_fk_index: index("Ping_UserId_FK_Index").on(table.userId),
 })).enableRLS();
 
 export type PingInsert = InferInsertModel<typeof pings>;
@@ -614,7 +650,9 @@ export const referralCodes = pgTable("ReferralCode", {
   code: text("Code").primaryKey(),
   createdAt: timestamp("CreatedAt").defaultNow().notNull(),
   userId: uuid("UserId").references(() => users.id, { onDelete: "cascade" }).notNull()
-}).enableRLS();
+}, table => [
+  index("ReferralCode_UserId_FK_Index").on(table.userId),
+]).enableRLS();
 
 export type ReferralCodeInsert = InferInsertModel<typeof referralCodes>;
 export type ReferralCode = InferSelectModel<typeof referralCodes>;
@@ -627,7 +665,10 @@ export const referrals = pgTable("Referral", {
   referredUserId: uuid("ReferredUserId").references(() => users.id, { onDelete: "no action" }).notNull(),
   referringUserId: uuid("ReferringUserId").references(() => users.id, { onDelete: "no action" }).notNull(),
   paid: boolean("Paid").default(false).notNull(),
-}).enableRLS();
+}, (table) => [
+  index("Referral_UserId_FK_Index").on(table.referredUserId),
+  index("Referral_ReferringUserId_FK_Index").on(table.referringUserId),
+]).enableRLS();
 
 export type ReferralInsert = InferInsertModel<typeof referrals>;
 export type Referral = InferSelectModel<typeof referrals>;
@@ -639,14 +680,16 @@ export const referralBalances = pgTable("ReferralBalance", {
   paidOutRefferalBonus: integer("PaidOutRefferalBonus").default(0).notNull(),
   createdAt: timestamp("CreatedAt").defaultNow().notNull(),
   userId: uuid("UserId").references(() => users.id, { onDelete: "cascade" }).notNull(),
-}).enableRLS();
+}, (table) => [
+  index("ReferralBalance_UserId_FK_Index").on(table.userId),
+]).enableRLS();
 
 export type ReferralBalanceInsert = InferInsertModel<typeof referralBalances>;
 export type ReferralBalance = InferSelectModel<typeof referralBalances>;
 export type ReferralBalanceSql = InferPgSelectModel<typeof referralBalances>;
 
 export const updateUserInCrmQueue = pgTable("UpdateUserInCrmQueue", {
-  userId: uuid("UserId").references(() => users.id, { onDelete: "cascade" }).notNull().unique(),
+  userId: uuid("UserId").references(() => users.id, { onDelete: "cascade" }).primaryKey(),
   createdAt: timestamp("CreatedAt").defaultNow().notNull(),
 }).enableRLS();
 
@@ -661,7 +704,9 @@ export const streak = pgTable("Streak", {
   satisfiedDays: integer("SatisfiedDays").default(1),
   streakAlive: boolean("StreakAlive").default(true),
   lastCheckDate: date("LastCheckDate", { mode: "date" }).defaultNow().notNull(),
-}).enableRLS();
+}, table => [
+  index("Streak_UserId_FK_Index").on(table.userId),
+]).enableRLS();
 
 export type StreakInsert = InferInsertModel<typeof streak>;
 export type Streak = InferSelectModel<typeof streak>;
@@ -672,7 +717,9 @@ export const streakActivities = pgTable("StreakActivities", {
   userId: uuid("UserId").references(() => users.id, { onDelete: "cascade" }).notNull(),
   activityType: streakActivityTypeEnum("ActivityType").notNull(),
   createdAt: date("CreatedAt", { mode: "date" }).defaultNow().notNull(),
-}).enableRLS();
+}, table => [
+  index("StreakActivity_UserId_FK_Index").on(table.userId),
+]).enableRLS();
 
 export type StreakActivityInsert = InferInsertModel<typeof streakActivities>;
 export type StreakActivity = InferSelectModel<typeof streakActivities>;
@@ -687,6 +734,7 @@ export const contentViews = pgTable("ContentView", {
 }, table => ({
   contentItemId_index: index("ContentView_ContentItemId_Index").on(table.contentItemId),
   contentItemType_index: index("ContentView_ContentItemType_Index").on(table.contentItemType),
+  contentViews_userId_fk_index: index("ContentView_UserId_FK_Index").on(table.userId),
 })).enableRLS();
 
 export type ContentViewInsert = InferInsertModel<typeof contentViews>;
