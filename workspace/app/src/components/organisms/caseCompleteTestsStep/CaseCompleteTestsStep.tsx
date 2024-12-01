@@ -72,7 +72,7 @@ const CaseCompleteTestsStep: FunctionComponent<ICaseCompleteTestsStepProps> = ({
     const hasCompletedGame = gameProgress?.results.some(({ progressState }) => progressState === "completed");
     return hasCompletedGame;
   }).length;
-  const currentGameId = currentGame.id!;
+  const currentGameId = currentGame?.id;
   const areAllGamesCompleted = completedGamesCount === games.length;
   const { invalidateCaseProgress } = useContextAndErrorIfNull(InvalidateQueriesContext);
   const { mutate: setProgressState } = api.casesProgress.setProgressState.useMutation({

@@ -1,12 +1,13 @@
 import { CaptionText } from "@/components/atoms/CaptionText/CaptionText";
 
+import { type Nullable } from "@constellatio/utility-types";
 import { type FunctionComponent, type ReactNode } from "react";
 
 import * as styles from "./GameComponentWrapper.styles";
 
 type Props = {
   readonly children: ReactNode;
-  readonly currentGameId: string | undefined;
+  readonly currentGameId: Nullable<string>;
   readonly gameId: string;
 };
 
