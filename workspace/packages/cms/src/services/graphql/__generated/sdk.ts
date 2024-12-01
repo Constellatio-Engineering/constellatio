@@ -1,0 +1,1301 @@
+import { DocumentNode } from 'graphql';
+import gql from 'graphql-tag';
+export type Maybe<T> = T | null;
+export type InputMaybe<T> = Maybe<T>;
+export type Exact<T extends { [key: string]: unknown }> = { [K in keyof T]: T[K] };
+export type MakeOptional<T, K extends keyof T> = Omit<T, K> & { [SubKey in K]?: Maybe<T[SubKey]> };
+export type MakeMaybe<T, K extends keyof T> = Omit<T, K> & { [SubKey in K]: Maybe<T[SubKey]> };
+export type MakeEmpty<T extends { [key: string]: unknown }, K extends keyof T> = { [_ in K]?: never };
+export type Incremental<T> = T | { [P in keyof T]?: P extends ' $fragmentName' | '__typename' ? T[P] : never };
+/** All built-in and custom scalars, mapped to their actual values */
+export type Scalars = {
+  ID: { input: string; output: string; }
+  String: { input: string; output: string; }
+  Boolean: { input: boolean; output: boolean; }
+  Int: { input: number; output: number; }
+  Float: { input: number; output: number; }
+  DateTime: { input: any; output: any; }
+  JSON: { input: any; output: any; }
+};
+
+export type IGenArticle = {
+  __typename?: 'Article';
+  _meta?: Maybe<IGenCaisyDocument_Meta>;
+  fullTextTasks?: Maybe<IGenArticle_FullTextTasks>;
+  id?: Maybe<Scalars['ID']['output']>;
+  legalArea?: Maybe<IGenLegalArea>;
+  mainCategoryField?: Maybe<Array<Maybe<IGenArticle_MainCategoryField>>>;
+  tags?: Maybe<Array<Maybe<IGenArticle_Tags>>>;
+  title?: Maybe<Scalars['String']['output']>;
+  topic?: Maybe<Array<Maybe<IGenArticle_Topic>>>;
+};
+
+
+export type IGenArticleFullTextTasksArgs = {
+  locale?: InputMaybe<Scalars['String']['input']>;
+};
+
+
+export type IGenArticleLegalAreaArgs = {
+  after?: InputMaybe<Scalars['String']['input']>;
+  first?: InputMaybe<Scalars['Int']['input']>;
+  locale?: InputMaybe<Scalars['String']['input']>;
+};
+
+
+export type IGenArticleMainCategoryFieldArgs = {
+  after?: InputMaybe<Scalars['String']['input']>;
+  first?: InputMaybe<Scalars['Int']['input']>;
+  locale?: InputMaybe<Scalars['String']['input']>;
+};
+
+
+export type IGenArticleTagsArgs = {
+  after?: InputMaybe<Scalars['String']['input']>;
+  first?: InputMaybe<Scalars['Int']['input']>;
+  locale?: InputMaybe<Scalars['String']['input']>;
+};
+
+
+export type IGenArticleTopicArgs = {
+  after?: InputMaybe<Scalars['String']['input']>;
+  first?: InputMaybe<Scalars['Int']['input']>;
+  locale?: InputMaybe<Scalars['String']['input']>;
+};
+
+export type IGenArticle_Connection = {
+  __typename?: 'Article_Connection';
+  edges?: Maybe<Array<Maybe<IGenArticle_ConnectionEdge>>>;
+  pageInfo?: Maybe<IGenPageInfo>;
+  totalCount?: Maybe<Scalars['Int']['output']>;
+};
+
+export type IGenArticle_ConnectionEdge = {
+  __typename?: 'Article_ConnectionEdge';
+  cursor?: Maybe<Scalars['String']['output']>;
+  node?: Maybe<IGenArticle>;
+};
+
+export type IGenArticle_LegalArea_Where = {
+  findOne?: InputMaybe<IGenArticle_LegalArea_WhereConnection>;
+};
+
+export type IGenArticle_LegalArea_WhereConnection = {
+  LegalArea?: InputMaybe<IGenLegalArea_Nested_Where>;
+};
+
+export type IGenArticle_MainCategoryField_Where = {
+  findOne?: InputMaybe<IGenArticle_MainCategoryField_WhereConnection>;
+};
+
+export type IGenArticle_MainCategoryField_WhereConnection = {
+  MainCategory?: InputMaybe<IGenMainCategory_Nested_Where>;
+};
+
+export type IGenArticle_Sort = {
+  createdAt?: InputMaybe<IGenOrder>;
+  id?: InputMaybe<IGenOrder>;
+  legalArea?: InputMaybe<IGenOrder>;
+  mainCategoryField?: InputMaybe<IGenOrder>;
+  publishedAt?: InputMaybe<IGenOrder>;
+  tags?: InputMaybe<IGenOrder>;
+  title?: InputMaybe<IGenOrder>;
+  topic?: InputMaybe<IGenOrder>;
+  updatedAt?: InputMaybe<IGenOrder>;
+};
+
+export type IGenArticle_Tags_Where = {
+  findOne?: InputMaybe<IGenArticle_Tags_WhereConnection>;
+};
+
+export type IGenArticle_Tags_WhereConnection = {
+  Tags?: InputMaybe<IGenTags_Nested_Where>;
+};
+
+export type IGenArticle_Topic_Where = {
+  findOne?: InputMaybe<IGenArticle_Topic_WhereConnection>;
+};
+
+export type IGenArticle_Topic_WhereConnection = {
+  Topic?: InputMaybe<IGenTopic_Nested_Where>;
+};
+
+export type IGenArticle_Where = {
+  AND?: InputMaybe<Array<InputMaybe<IGenArticle_Where>>>;
+  OR?: InputMaybe<Array<InputMaybe<IGenArticle_Where>>>;
+  fullTextTasks?: InputMaybe<IGenCaisyField_Richtext_Where>;
+  legalArea?: InputMaybe<IGenArticle_LegalArea_Where>;
+  mainCategoryField?: InputMaybe<IGenArticle_MainCategoryField_Where>;
+  tags?: InputMaybe<IGenArticle_Tags_Where>;
+  title?: InputMaybe<IGenCaisyField_String_Where>;
+  topic?: InputMaybe<IGenArticle_Topic_Where>;
+};
+
+export type IGenArticle_FullTextTasks = {
+  __typename?: 'Article_fullTextTasks';
+  connections?: Maybe<Array<Maybe<IGenArticle_FullTextTasks_Connections>>>;
+  json?: Maybe<Scalars['JSON']['output']>;
+};
+
+
+export type IGenArticle_FullTextTasksConnectionsArgs = {
+  after?: InputMaybe<Scalars['String']['input']>;
+  first?: InputMaybe<Scalars['Int']['input']>;
+  locale?: InputMaybe<Scalars['String']['input']>;
+};
+
+export type IGenArticle_FullTextTasks_Connections = IGenAsset | IGenCallout | IGenCardSelectionGame | IGenDragNDropGame | IGenFillInGapsGame;
+
+export type IGenArticle_MainCategoryField = IGenMainCategory;
+
+export type IGenArticle_Tags = IGenTags;
+
+export type IGenArticle_Topic = IGenTopic;
+
+export type IGenAsset = {
+  __typename?: 'Asset';
+  _meta?: Maybe<IGenCaisyDocument_Meta>;
+  author?: Maybe<Scalars['String']['output']>;
+  blurHash?: Maybe<Scalars['String']['output']>;
+  copyright?: Maybe<Scalars['String']['output']>;
+  description?: Maybe<Scalars['String']['output']>;
+  dominantColor?: Maybe<Scalars['String']['output']>;
+  height?: Maybe<Scalars['Int']['output']>;
+  id?: Maybe<Scalars['ID']['output']>;
+  keywords?: Maybe<Scalars['String']['output']>;
+  originType?: Maybe<Scalars['String']['output']>;
+  originalName?: Maybe<Scalars['String']['output']>;
+  src?: Maybe<Scalars['String']['output']>;
+  title?: Maybe<Scalars['String']['output']>;
+  width?: Maybe<Scalars['Int']['output']>;
+};
+
+export type IGenAsset_Connection = {
+  __typename?: 'Asset_Connection';
+  edges?: Maybe<Array<Maybe<IGenAsset_ConnectionEdge>>>;
+  pageInfo?: Maybe<IGenPageInfo>;
+  totalCount?: Maybe<Scalars['Int']['output']>;
+};
+
+export type IGenAsset_ConnectionEdge = {
+  __typename?: 'Asset_ConnectionEdge';
+  cursor?: Maybe<Scalars['String']['output']>;
+  node?: Maybe<IGenAsset>;
+};
+
+export type IGenAsset_Sort = {
+  author?: InputMaybe<IGenOrder>;
+  blurHash?: InputMaybe<IGenOrder>;
+  copyright?: InputMaybe<IGenOrder>;
+  createdAt?: InputMaybe<IGenOrder>;
+  description?: InputMaybe<IGenOrder>;
+  dominantColor?: InputMaybe<IGenOrder>;
+  height?: InputMaybe<IGenOrder>;
+  id?: InputMaybe<IGenOrder>;
+  keywords?: InputMaybe<IGenOrder>;
+  originType?: InputMaybe<IGenOrder>;
+  originalName?: InputMaybe<IGenOrder>;
+  publishedAt?: InputMaybe<IGenOrder>;
+  title?: InputMaybe<IGenOrder>;
+  updatedAt?: InputMaybe<IGenOrder>;
+  width?: InputMaybe<IGenOrder>;
+};
+
+export type IGenAsset_Where = {
+  AND?: InputMaybe<Array<InputMaybe<IGenAsset_Where>>>;
+  OR?: InputMaybe<Array<InputMaybe<IGenAsset_Where>>>;
+  author?: InputMaybe<IGenCaisyField_String_Where>;
+  blurHash?: InputMaybe<IGenCaisyField_String_Where>;
+  copyright?: InputMaybe<IGenCaisyField_String_Where>;
+  description?: InputMaybe<IGenCaisyField_String_Where>;
+  dominantColor?: InputMaybe<IGenCaisyField_Color_Where>;
+  height?: InputMaybe<IGenCaisyField_Number_WhereInt>;
+  keywords?: InputMaybe<IGenCaisyField_String_Where>;
+  originType?: InputMaybe<IGenCaisyField_String_Where>;
+  originalName?: InputMaybe<IGenCaisyField_String_Where>;
+  title?: InputMaybe<IGenCaisyField_String_Where>;
+  width?: InputMaybe<IGenCaisyField_Number_WhereInt>;
+};
+
+export type IGenCaisyDocument_Meta = {
+  __typename?: 'CaisyDocument_Meta';
+  createdAt?: Maybe<Scalars['DateTime']['output']>;
+  firstPublishedAt?: Maybe<Scalars['DateTime']['output']>;
+  id?: Maybe<Scalars['ID']['output']>;
+  locale?: Maybe<Scalars['String']['output']>;
+  locales?: Maybe<Array<Maybe<Scalars['String']['output']>>>;
+  publishedAt?: Maybe<Scalars['DateTime']['output']>;
+  updatedAt?: Maybe<Scalars['DateTime']['output']>;
+};
+
+export type IGenCaisyField_Color_Where = {
+  contains?: InputMaybe<Scalars['String']['input']>;
+  eq?: InputMaybe<Scalars['String']['input']>;
+  neq?: InputMaybe<Scalars['String']['input']>;
+};
+
+export type IGenCaisyField_Number_WhereInt = {
+  eq?: InputMaybe<Scalars['Int']['input']>;
+  gt?: InputMaybe<Scalars['Int']['input']>;
+  gte?: InputMaybe<Scalars['Int']['input']>;
+  lt?: InputMaybe<Scalars['Int']['input']>;
+  lte?: InputMaybe<Scalars['Int']['input']>;
+  neq?: InputMaybe<Scalars['Int']['input']>;
+};
+
+export type IGenCaisyField_Richtext_Where = {
+  contains?: InputMaybe<Scalars['String']['input']>;
+  eq?: InputMaybe<Scalars['String']['input']>;
+  neq?: InputMaybe<Scalars['String']['input']>;
+};
+
+export type IGenCaisyField_String_Where = {
+  contains?: InputMaybe<Scalars['String']['input']>;
+  eq?: InputMaybe<Scalars['String']['input']>;
+  neq?: InputMaybe<Scalars['String']['input']>;
+};
+
+export type IGenCaisy_Field_Document_NotFound = {
+  __typename?: 'Caisy_Field_Document_NotFound';
+  id?: Maybe<Scalars['ID']['output']>;
+  message?: Maybe<Scalars['String']['output']>;
+};
+
+export type IGenCallout = {
+  __typename?: 'Callout';
+  _meta?: Maybe<IGenCaisyDocument_Meta>;
+  calloutType?: Maybe<Scalars['String']['output']>;
+  expandable?: Maybe<Scalars['Boolean']['output']>;
+  id?: Maybe<Scalars['ID']['output']>;
+  text?: Maybe<IGenCallout_Text>;
+  title?: Maybe<Scalars['String']['output']>;
+};
+
+
+export type IGenCalloutTextArgs = {
+  locale?: InputMaybe<Scalars['String']['input']>;
+};
+
+export enum IGenCallout_CalloutType {
+  BestPractice = 'bestPractice',
+  Definition = 'definition',
+  Example = 'example',
+  LawReference = 'lawReference',
+  Quote = 'quote',
+  Remember = 'remember',
+  SpecialProblem = 'specialProblem'
+}
+
+export type IGenCallout_CalloutType_Where = {
+  eq?: InputMaybe<IGenCallout_CalloutType>;
+};
+
+export type IGenCallout_Connection = {
+  __typename?: 'Callout_Connection';
+  edges?: Maybe<Array<Maybe<IGenCallout_ConnectionEdge>>>;
+  pageInfo?: Maybe<IGenPageInfo>;
+  totalCount?: Maybe<Scalars['Int']['output']>;
+};
+
+export type IGenCallout_ConnectionEdge = {
+  __typename?: 'Callout_ConnectionEdge';
+  cursor?: Maybe<Scalars['String']['output']>;
+  node?: Maybe<IGenCallout>;
+};
+
+export type IGenCallout_Sort = {
+  calloutType?: InputMaybe<IGenOrder>;
+  createdAt?: InputMaybe<IGenOrder>;
+  expandable?: InputMaybe<IGenOrder>;
+  id?: InputMaybe<IGenOrder>;
+  publishedAt?: InputMaybe<IGenOrder>;
+  title?: InputMaybe<IGenOrder>;
+  updatedAt?: InputMaybe<IGenOrder>;
+};
+
+export type IGenCallout_Where = {
+  AND?: InputMaybe<Array<InputMaybe<IGenCallout_Where>>>;
+  OR?: InputMaybe<Array<InputMaybe<IGenCallout_Where>>>;
+  calloutType?: InputMaybe<IGenCallout_CalloutType_Where>;
+  expandable?: InputMaybe<Scalars['Boolean']['input']>;
+  text?: InputMaybe<IGenCaisyField_Richtext_Where>;
+  title?: InputMaybe<IGenCaisyField_String_Where>;
+};
+
+export type IGenCallout_Text = {
+  __typename?: 'Callout_text';
+  connections?: Maybe<Array<Maybe<IGenCallout_Text_Connections>>>;
+  json?: Maybe<Scalars['JSON']['output']>;
+};
+
+
+export type IGenCallout_TextConnectionsArgs = {
+  after?: InputMaybe<Scalars['String']['input']>;
+  first?: InputMaybe<Scalars['Int']['input']>;
+  locale?: InputMaybe<Scalars['String']['input']>;
+};
+
+export type IGenCallout_Text_Connections = IGenCaisy_Field_Document_NotFound;
+
+export type IGenCardSelectionGame = {
+  __typename?: 'CardSelectionGame';
+  _meta?: Maybe<IGenCaisyDocument_Meta>;
+  game?: Maybe<Scalars['JSON']['output']>;
+  helpNote?: Maybe<IGenCardSelectionGame_HelpNote>;
+  id?: Maybe<Scalars['ID']['output']>;
+  question?: Maybe<Scalars['String']['output']>;
+  questionType?: Maybe<Scalars['String']['output']>;
+};
+
+
+export type IGenCardSelectionGameHelpNoteArgs = {
+  locale?: InputMaybe<Scalars['String']['input']>;
+};
+
+export type IGenCardSelectionGame_Connection = {
+  __typename?: 'CardSelectionGame_Connection';
+  edges?: Maybe<Array<Maybe<IGenCardSelectionGame_ConnectionEdge>>>;
+  pageInfo?: Maybe<IGenPageInfo>;
+  totalCount?: Maybe<Scalars['Int']['output']>;
+};
+
+export type IGenCardSelectionGame_ConnectionEdge = {
+  __typename?: 'CardSelectionGame_ConnectionEdge';
+  cursor?: Maybe<Scalars['String']['output']>;
+  node?: Maybe<IGenCardSelectionGame>;
+};
+
+export enum IGenCardSelectionGame_QuestionType {
+  MultiPunchQuestion = 'multi_punch_question',
+  SinglePunchQuestion = 'single_punch_question'
+}
+
+export type IGenCardSelectionGame_QuestionType_Where = {
+  eq?: InputMaybe<IGenCardSelectionGame_QuestionType>;
+};
+
+export type IGenCardSelectionGame_Sort = {
+  createdAt?: InputMaybe<IGenOrder>;
+  id?: InputMaybe<IGenOrder>;
+  publishedAt?: InputMaybe<IGenOrder>;
+  question?: InputMaybe<IGenOrder>;
+  questionType?: InputMaybe<IGenOrder>;
+  updatedAt?: InputMaybe<IGenOrder>;
+};
+
+export type IGenCardSelectionGame_Where = {
+  AND?: InputMaybe<Array<InputMaybe<IGenCardSelectionGame_Where>>>;
+  OR?: InputMaybe<Array<InputMaybe<IGenCardSelectionGame_Where>>>;
+  helpNote?: InputMaybe<IGenCaisyField_Richtext_Where>;
+  question?: InputMaybe<IGenCaisyField_String_Where>;
+  questionType?: InputMaybe<IGenCardSelectionGame_QuestionType_Where>;
+};
+
+export type IGenCardSelectionGame_HelpNote = {
+  __typename?: 'CardSelectionGame_helpNote';
+  connections?: Maybe<Array<Maybe<IGenCardSelectionGame_HelpNote_Connections>>>;
+  json?: Maybe<Scalars['JSON']['output']>;
+};
+
+
+export type IGenCardSelectionGame_HelpNoteConnectionsArgs = {
+  after?: InputMaybe<Scalars['String']['input']>;
+  first?: InputMaybe<Scalars['Int']['input']>;
+  locale?: InputMaybe<Scalars['String']['input']>;
+};
+
+export type IGenCardSelectionGame_HelpNote_Connections = IGenCaisy_Field_Document_NotFound;
+
+export type IGenCase = {
+  __typename?: 'Case';
+  _meta?: Maybe<IGenCaisyDocument_Meta>;
+  durationToCompleteInMinutes?: Maybe<Scalars['Int']['output']>;
+  facts?: Maybe<IGenCase_Facts>;
+  fullTextTasks?: Maybe<IGenCase_FullTextTasks>;
+  id?: Maybe<Scalars['ID']['output']>;
+  legalArea?: Maybe<IGenLegalArea>;
+  mainCategoryField?: Maybe<Array<Maybe<IGenCase_MainCategoryField>>>;
+  resolution?: Maybe<IGenCase_Resolution>;
+  tags?: Maybe<Array<Maybe<IGenCase_Tags>>>;
+  title?: Maybe<Scalars['String']['output']>;
+  topic?: Maybe<Array<Maybe<IGenCase_Topic>>>;
+};
+
+
+export type IGenCaseFactsArgs = {
+  locale?: InputMaybe<Scalars['String']['input']>;
+};
+
+
+export type IGenCaseFullTextTasksArgs = {
+  locale?: InputMaybe<Scalars['String']['input']>;
+};
+
+
+export type IGenCaseLegalAreaArgs = {
+  after?: InputMaybe<Scalars['String']['input']>;
+  first?: InputMaybe<Scalars['Int']['input']>;
+  locale?: InputMaybe<Scalars['String']['input']>;
+};
+
+
+export type IGenCaseMainCategoryFieldArgs = {
+  after?: InputMaybe<Scalars['String']['input']>;
+  first?: InputMaybe<Scalars['Int']['input']>;
+  locale?: InputMaybe<Scalars['String']['input']>;
+};
+
+
+export type IGenCaseResolutionArgs = {
+  locale?: InputMaybe<Scalars['String']['input']>;
+};
+
+
+export type IGenCaseTagsArgs = {
+  after?: InputMaybe<Scalars['String']['input']>;
+  first?: InputMaybe<Scalars['Int']['input']>;
+  locale?: InputMaybe<Scalars['String']['input']>;
+};
+
+
+export type IGenCaseTopicArgs = {
+  after?: InputMaybe<Scalars['String']['input']>;
+  first?: InputMaybe<Scalars['Int']['input']>;
+  locale?: InputMaybe<Scalars['String']['input']>;
+};
+
+export type IGenCase_Connection = {
+  __typename?: 'Case_Connection';
+  edges?: Maybe<Array<Maybe<IGenCase_ConnectionEdge>>>;
+  pageInfo?: Maybe<IGenPageInfo>;
+  totalCount?: Maybe<Scalars['Int']['output']>;
+};
+
+export type IGenCase_ConnectionEdge = {
+  __typename?: 'Case_ConnectionEdge';
+  cursor?: Maybe<Scalars['String']['output']>;
+  node?: Maybe<IGenCase>;
+};
+
+export type IGenCase_LegalArea_Where = {
+  findOne?: InputMaybe<IGenCase_LegalArea_WhereConnection>;
+};
+
+export type IGenCase_LegalArea_WhereConnection = {
+  LegalArea?: InputMaybe<IGenLegalArea_Nested_Where>;
+};
+
+export type IGenCase_MainCategoryField_Where = {
+  findOne?: InputMaybe<IGenCase_MainCategoryField_WhereConnection>;
+};
+
+export type IGenCase_MainCategoryField_WhereConnection = {
+  MainCategory?: InputMaybe<IGenMainCategory_Nested_Where>;
+};
+
+export type IGenCase_Sort = {
+  createdAt?: InputMaybe<IGenOrder>;
+  durationToCompleteInMinutes?: InputMaybe<IGenOrder>;
+  id?: InputMaybe<IGenOrder>;
+  legalArea?: InputMaybe<IGenOrder>;
+  mainCategoryField?: InputMaybe<IGenOrder>;
+  publishedAt?: InputMaybe<IGenOrder>;
+  tags?: InputMaybe<IGenOrder>;
+  title?: InputMaybe<IGenOrder>;
+  topic?: InputMaybe<IGenOrder>;
+  updatedAt?: InputMaybe<IGenOrder>;
+};
+
+export type IGenCase_Tags_Where = {
+  findOne?: InputMaybe<IGenCase_Tags_WhereConnection>;
+};
+
+export type IGenCase_Tags_WhereConnection = {
+  Tags?: InputMaybe<IGenTags_Nested_Where>;
+};
+
+export type IGenCase_Topic_Where = {
+  findOne?: InputMaybe<IGenCase_Topic_WhereConnection>;
+};
+
+export type IGenCase_Topic_WhereConnection = {
+  Topic?: InputMaybe<IGenTopic_Nested_Where>;
+};
+
+export type IGenCase_Where = {
+  AND?: InputMaybe<Array<InputMaybe<IGenCase_Where>>>;
+  OR?: InputMaybe<Array<InputMaybe<IGenCase_Where>>>;
+  durationToCompleteInMinutes?: InputMaybe<IGenCaisyField_Number_WhereInt>;
+  facts?: InputMaybe<IGenCaisyField_Richtext_Where>;
+  fullTextTasks?: InputMaybe<IGenCaisyField_Richtext_Where>;
+  legalArea?: InputMaybe<IGenCase_LegalArea_Where>;
+  mainCategoryField?: InputMaybe<IGenCase_MainCategoryField_Where>;
+  resolution?: InputMaybe<IGenCaisyField_Richtext_Where>;
+  tags?: InputMaybe<IGenCase_Tags_Where>;
+  title?: InputMaybe<IGenCaisyField_String_Where>;
+  topic?: InputMaybe<IGenCase_Topic_Where>;
+};
+
+export type IGenCase_Facts = {
+  __typename?: 'Case_facts';
+  connections?: Maybe<Array<Maybe<IGenCase_Facts_Connections>>>;
+  json?: Maybe<Scalars['JSON']['output']>;
+};
+
+
+export type IGenCase_FactsConnectionsArgs = {
+  after?: InputMaybe<Scalars['String']['input']>;
+  first?: InputMaybe<Scalars['Int']['input']>;
+  locale?: InputMaybe<Scalars['String']['input']>;
+};
+
+export type IGenCase_Facts_Connections = IGenCaisy_Field_Document_NotFound;
+
+export type IGenCase_FullTextTasks = {
+  __typename?: 'Case_fullTextTasks';
+  connections?: Maybe<Array<Maybe<IGenCase_FullTextTasks_Connections>>>;
+  json?: Maybe<Scalars['JSON']['output']>;
+};
+
+
+export type IGenCase_FullTextTasksConnectionsArgs = {
+  after?: InputMaybe<Scalars['String']['input']>;
+  first?: InputMaybe<Scalars['Int']['input']>;
+  locale?: InputMaybe<Scalars['String']['input']>;
+};
+
+export type IGenCase_FullTextTasks_Connections = IGenAsset | IGenCallout | IGenCardSelectionGame | IGenDragNDropGame | IGenFillInGapsGame;
+
+export type IGenCase_MainCategoryField = IGenMainCategory;
+
+export type IGenCase_Resolution = {
+  __typename?: 'Case_resolution';
+  connections?: Maybe<Array<Maybe<IGenCase_Resolution_Connections>>>;
+  json?: Maybe<Scalars['JSON']['output']>;
+};
+
+
+export type IGenCase_ResolutionConnectionsArgs = {
+  after?: InputMaybe<Scalars['String']['input']>;
+  first?: InputMaybe<Scalars['Int']['input']>;
+  locale?: InputMaybe<Scalars['String']['input']>;
+};
+
+export type IGenCase_Resolution_Connections = IGenCaisy_Field_Document_NotFound;
+
+export type IGenCase_Tags = IGenTags;
+
+export type IGenCase_Topic = IGenTopic;
+
+export type IGenDragNDropGame = {
+  __typename?: 'DragNDropGame';
+  _meta?: Maybe<IGenCaisyDocument_Meta>;
+  game?: Maybe<Scalars['JSON']['output']>;
+  helpNote?: Maybe<IGenDragNDropGame_HelpNote>;
+  id?: Maybe<Scalars['ID']['output']>;
+  question?: Maybe<Scalars['String']['output']>;
+};
+
+
+export type IGenDragNDropGameHelpNoteArgs = {
+  locale?: InputMaybe<Scalars['String']['input']>;
+};
+
+export type IGenDragNDropGame_Connection = {
+  __typename?: 'DragNDropGame_Connection';
+  edges?: Maybe<Array<Maybe<IGenDragNDropGame_ConnectionEdge>>>;
+  pageInfo?: Maybe<IGenPageInfo>;
+  totalCount?: Maybe<Scalars['Int']['output']>;
+};
+
+export type IGenDragNDropGame_ConnectionEdge = {
+  __typename?: 'DragNDropGame_ConnectionEdge';
+  cursor?: Maybe<Scalars['String']['output']>;
+  node?: Maybe<IGenDragNDropGame>;
+};
+
+export type IGenDragNDropGame_Sort = {
+  createdAt?: InputMaybe<IGenOrder>;
+  id?: InputMaybe<IGenOrder>;
+  publishedAt?: InputMaybe<IGenOrder>;
+  question?: InputMaybe<IGenOrder>;
+  updatedAt?: InputMaybe<IGenOrder>;
+};
+
+export type IGenDragNDropGame_Where = {
+  AND?: InputMaybe<Array<InputMaybe<IGenDragNDropGame_Where>>>;
+  OR?: InputMaybe<Array<InputMaybe<IGenDragNDropGame_Where>>>;
+  helpNote?: InputMaybe<IGenCaisyField_Richtext_Where>;
+  question?: InputMaybe<IGenCaisyField_String_Where>;
+};
+
+export type IGenDragNDropGame_HelpNote = {
+  __typename?: 'DragNDropGame_helpNote';
+  connections?: Maybe<Array<Maybe<IGenDragNDropGame_HelpNote_Connections>>>;
+  json?: Maybe<Scalars['JSON']['output']>;
+};
+
+
+export type IGenDragNDropGame_HelpNoteConnectionsArgs = {
+  after?: InputMaybe<Scalars['String']['input']>;
+  first?: InputMaybe<Scalars['Int']['input']>;
+  locale?: InputMaybe<Scalars['String']['input']>;
+};
+
+export type IGenDragNDropGame_HelpNote_Connections = IGenCaisy_Field_Document_NotFound;
+
+export type IGenFillInGapsGame = {
+  __typename?: 'FillInGapsGame';
+  _meta?: Maybe<IGenCaisyDocument_Meta>;
+  fillGameParagraph?: Maybe<IGenFillInGapsGame_FillGameParagraph>;
+  helpNote?: Maybe<IGenFillInGapsGame_HelpNote>;
+  id?: Maybe<Scalars['ID']['output']>;
+  question?: Maybe<Scalars['String']['output']>;
+};
+
+
+export type IGenFillInGapsGameFillGameParagraphArgs = {
+  locale?: InputMaybe<Scalars['String']['input']>;
+};
+
+
+export type IGenFillInGapsGameHelpNoteArgs = {
+  locale?: InputMaybe<Scalars['String']['input']>;
+};
+
+export type IGenFillInGapsGame_Connection = {
+  __typename?: 'FillInGapsGame_Connection';
+  edges?: Maybe<Array<Maybe<IGenFillInGapsGame_ConnectionEdge>>>;
+  pageInfo?: Maybe<IGenPageInfo>;
+  totalCount?: Maybe<Scalars['Int']['output']>;
+};
+
+export type IGenFillInGapsGame_ConnectionEdge = {
+  __typename?: 'FillInGapsGame_ConnectionEdge';
+  cursor?: Maybe<Scalars['String']['output']>;
+  node?: Maybe<IGenFillInGapsGame>;
+};
+
+export type IGenFillInGapsGame_Sort = {
+  createdAt?: InputMaybe<IGenOrder>;
+  id?: InputMaybe<IGenOrder>;
+  publishedAt?: InputMaybe<IGenOrder>;
+  question?: InputMaybe<IGenOrder>;
+  updatedAt?: InputMaybe<IGenOrder>;
+};
+
+export type IGenFillInGapsGame_Where = {
+  AND?: InputMaybe<Array<InputMaybe<IGenFillInGapsGame_Where>>>;
+  OR?: InputMaybe<Array<InputMaybe<IGenFillInGapsGame_Where>>>;
+  fillGameParagraph?: InputMaybe<IGenCaisyField_Richtext_Where>;
+  helpNote?: InputMaybe<IGenCaisyField_Richtext_Where>;
+  question?: InputMaybe<IGenCaisyField_String_Where>;
+};
+
+export type IGenFillInGapsGame_FillGameParagraph = {
+  __typename?: 'FillInGapsGame_fillGameParagraph';
+  connections?: Maybe<Array<Maybe<IGenFillInGapsGame_FillGameParagraph_Connections>>>;
+  json?: Maybe<Scalars['JSON']['output']>;
+};
+
+
+export type IGenFillInGapsGame_FillGameParagraphConnectionsArgs = {
+  after?: InputMaybe<Scalars['String']['input']>;
+  first?: InputMaybe<Scalars['Int']['input']>;
+  locale?: InputMaybe<Scalars['String']['input']>;
+};
+
+export type IGenFillInGapsGame_FillGameParagraph_Connections = IGenCaisy_Field_Document_NotFound;
+
+export type IGenFillInGapsGame_HelpNote = {
+  __typename?: 'FillInGapsGame_helpNote';
+  connections?: Maybe<Array<Maybe<IGenFillInGapsGame_HelpNote_Connections>>>;
+  json?: Maybe<Scalars['JSON']['output']>;
+};
+
+
+export type IGenFillInGapsGame_HelpNoteConnectionsArgs = {
+  after?: InputMaybe<Scalars['String']['input']>;
+  first?: InputMaybe<Scalars['Int']['input']>;
+  locale?: InputMaybe<Scalars['String']['input']>;
+};
+
+export type IGenFillInGapsGame_HelpNote_Connections = IGenCaisy_Field_Document_NotFound;
+
+export type IGenLegalArea = {
+  __typename?: 'LegalArea';
+  _meta?: Maybe<IGenCaisyDocument_Meta>;
+  id?: Maybe<Scalars['ID']['output']>;
+  legalAreaName?: Maybe<Scalars['String']['output']>;
+  sorting?: Maybe<Scalars['Int']['output']>;
+};
+
+export type IGenLegalArea_Connection = {
+  __typename?: 'LegalArea_Connection';
+  edges?: Maybe<Array<Maybe<IGenLegalArea_ConnectionEdge>>>;
+  pageInfo?: Maybe<IGenPageInfo>;
+  totalCount?: Maybe<Scalars['Int']['output']>;
+};
+
+export type IGenLegalArea_ConnectionEdge = {
+  __typename?: 'LegalArea_ConnectionEdge';
+  cursor?: Maybe<Scalars['String']['output']>;
+  node?: Maybe<IGenLegalArea>;
+};
+
+export type IGenLegalArea_Nested_Where = {
+  AND?: InputMaybe<Array<InputMaybe<IGenLegalArea_Nested_Where>>>;
+  OR?: InputMaybe<Array<InputMaybe<IGenLegalArea_Nested_Where>>>;
+  legalAreaName?: InputMaybe<IGenCaisyField_String_Where>;
+  sorting?: InputMaybe<IGenCaisyField_Number_WhereInt>;
+};
+
+export type IGenLegalArea_Sort = {
+  createdAt?: InputMaybe<IGenOrder>;
+  id?: InputMaybe<IGenOrder>;
+  legalAreaName?: InputMaybe<IGenOrder>;
+  publishedAt?: InputMaybe<IGenOrder>;
+  sorting?: InputMaybe<IGenOrder>;
+  updatedAt?: InputMaybe<IGenOrder>;
+};
+
+export type IGenLegalArea_Where = {
+  AND?: InputMaybe<Array<InputMaybe<IGenLegalArea_Where>>>;
+  OR?: InputMaybe<Array<InputMaybe<IGenLegalArea_Where>>>;
+  legalAreaName?: InputMaybe<IGenCaisyField_String_Where>;
+  sorting?: InputMaybe<IGenCaisyField_Number_WhereInt>;
+};
+
+export type IGenMainCategory = {
+  __typename?: 'MainCategory';
+  _meta?: Maybe<IGenCaisyDocument_Meta>;
+  icon?: Maybe<IGenAsset>;
+  id?: Maybe<Scalars['ID']['output']>;
+  mainCategory?: Maybe<Scalars['String']['output']>;
+  slug?: Maybe<Scalars['String']['output']>;
+};
+
+
+export type IGenMainCategoryIconArgs = {
+  after?: InputMaybe<Scalars['String']['input']>;
+  first?: InputMaybe<Scalars['Int']['input']>;
+  locale?: InputMaybe<Scalars['String']['input']>;
+};
+
+export type IGenMainCategory_Connection = {
+  __typename?: 'MainCategory_Connection';
+  edges?: Maybe<Array<Maybe<IGenMainCategory_ConnectionEdge>>>;
+  pageInfo?: Maybe<IGenPageInfo>;
+  totalCount?: Maybe<Scalars['Int']['output']>;
+};
+
+export type IGenMainCategory_ConnectionEdge = {
+  __typename?: 'MainCategory_ConnectionEdge';
+  cursor?: Maybe<Scalars['String']['output']>;
+  node?: Maybe<IGenMainCategory>;
+};
+
+export type IGenMainCategory_Nested_Where = {
+  AND?: InputMaybe<Array<InputMaybe<IGenMainCategory_Nested_Where>>>;
+  OR?: InputMaybe<Array<InputMaybe<IGenMainCategory_Nested_Where>>>;
+  mainCategory?: InputMaybe<IGenCaisyField_String_Where>;
+  slug?: InputMaybe<IGenCaisyField_String_Where>;
+};
+
+export type IGenMainCategory_Sort = {
+  createdAt?: InputMaybe<IGenOrder>;
+  icon?: InputMaybe<IGenOrder>;
+  id?: InputMaybe<IGenOrder>;
+  mainCategory?: InputMaybe<IGenOrder>;
+  publishedAt?: InputMaybe<IGenOrder>;
+  slug?: InputMaybe<IGenOrder>;
+  updatedAt?: InputMaybe<IGenOrder>;
+};
+
+export type IGenMainCategory_Where = {
+  AND?: InputMaybe<Array<InputMaybe<IGenMainCategory_Where>>>;
+  OR?: InputMaybe<Array<InputMaybe<IGenMainCategory_Where>>>;
+  mainCategory?: InputMaybe<IGenCaisyField_String_Where>;
+  slug?: InputMaybe<IGenCaisyField_String_Where>;
+};
+
+export enum IGenOrder {
+  Asc = 'ASC',
+  Desc = 'DESC'
+}
+
+export type IGenPageInfo = {
+  __typename?: 'PageInfo';
+  endCursor?: Maybe<Scalars['String']['output']>;
+  hasNextPage?: Maybe<Scalars['Boolean']['output']>;
+  hasPreviousPage?: Maybe<Scalars['Boolean']['output']>;
+  startCursor?: Maybe<Scalars['String']['output']>;
+};
+
+export type IGenQuery = {
+  __typename?: 'Query';
+  Article?: Maybe<IGenArticle>;
+  Asset?: Maybe<IGenAsset>;
+  Callout?: Maybe<IGenCallout>;
+  CardSelectionGame?: Maybe<IGenCardSelectionGame>;
+  Case?: Maybe<IGenCase>;
+  DragNDropGame?: Maybe<IGenDragNDropGame>;
+  FillInGapsGame?: Maybe<IGenFillInGapsGame>;
+  LegalArea?: Maybe<IGenLegalArea>;
+  MainCategory?: Maybe<IGenMainCategory>;
+  Search?: Maybe<IGenSearch>;
+  SearchEntry?: Maybe<IGenSearchEntry>;
+  SubCategory?: Maybe<IGenSubCategory>;
+  Tags?: Maybe<IGenTags>;
+  Topic?: Maybe<IGenTopic>;
+  allArticle?: Maybe<IGenArticle_Connection>;
+  allAsset?: Maybe<IGenAsset_Connection>;
+  allCallout?: Maybe<IGenCallout_Connection>;
+  allCardSelectionGame?: Maybe<IGenCardSelectionGame_Connection>;
+  allCase?: Maybe<IGenCase_Connection>;
+  allDragNDropGame?: Maybe<IGenDragNDropGame_Connection>;
+  allFillInGapsGame?: Maybe<IGenFillInGapsGame_Connection>;
+  allLegalArea?: Maybe<IGenLegalArea_Connection>;
+  allMainCategory?: Maybe<IGenMainCategory_Connection>;
+  allSearchEntry?: Maybe<IGenSearchEntry_Connection>;
+  allSubCategory?: Maybe<IGenSubCategory_Connection>;
+  allTags?: Maybe<IGenTags_Connection>;
+  allTopic?: Maybe<IGenTopic_Connection>;
+};
+
+
+export type IGenQueryArticleArgs = {
+  id: Scalars['ID']['input'];
+  locale?: InputMaybe<Scalars['String']['input']>;
+};
+
+
+export type IGenQueryAssetArgs = {
+  id: Scalars['ID']['input'];
+  locale?: InputMaybe<Scalars['String']['input']>;
+};
+
+
+export type IGenQueryCalloutArgs = {
+  id: Scalars['ID']['input'];
+  locale?: InputMaybe<Scalars['String']['input']>;
+};
+
+
+export type IGenQueryCardSelectionGameArgs = {
+  id: Scalars['ID']['input'];
+  locale?: InputMaybe<Scalars['String']['input']>;
+};
+
+
+export type IGenQueryCaseArgs = {
+  id: Scalars['ID']['input'];
+  locale?: InputMaybe<Scalars['String']['input']>;
+};
+
+
+export type IGenQueryDragNDropGameArgs = {
+  id: Scalars['ID']['input'];
+  locale?: InputMaybe<Scalars['String']['input']>;
+};
+
+
+export type IGenQueryFillInGapsGameArgs = {
+  id: Scalars['ID']['input'];
+  locale?: InputMaybe<Scalars['String']['input']>;
+};
+
+
+export type IGenQueryLegalAreaArgs = {
+  id: Scalars['ID']['input'];
+  locale?: InputMaybe<Scalars['String']['input']>;
+};
+
+
+export type IGenQueryMainCategoryArgs = {
+  id: Scalars['ID']['input'];
+  locale?: InputMaybe<Scalars['String']['input']>;
+};
+
+
+export type IGenQuerySearchArgs = {
+  locale?: InputMaybe<Scalars['String']['input']>;
+};
+
+
+export type IGenQuerySearchEntryArgs = {
+  id: Scalars['ID']['input'];
+  locale?: InputMaybe<Scalars['String']['input']>;
+};
+
+
+export type IGenQuerySubCategoryArgs = {
+  id: Scalars['ID']['input'];
+  locale?: InputMaybe<Scalars['String']['input']>;
+};
+
+
+export type IGenQueryTagsArgs = {
+  id: Scalars['ID']['input'];
+  locale?: InputMaybe<Scalars['String']['input']>;
+};
+
+
+export type IGenQueryTopicArgs = {
+  id: Scalars['ID']['input'];
+  locale?: InputMaybe<Scalars['String']['input']>;
+};
+
+
+export type IGenQueryAllArticleArgs = {
+  after?: InputMaybe<Scalars['String']['input']>;
+  before?: InputMaybe<Scalars['String']['input']>;
+  first?: InputMaybe<Scalars['Int']['input']>;
+  last?: InputMaybe<Scalars['Int']['input']>;
+  locale?: InputMaybe<Scalars['String']['input']>;
+  sort?: InputMaybe<Array<InputMaybe<IGenArticle_Sort>>>;
+  where?: InputMaybe<Array<InputMaybe<IGenArticle_Where>>>;
+};
+
+
+export type IGenQueryAllAssetArgs = {
+  after?: InputMaybe<Scalars['String']['input']>;
+  before?: InputMaybe<Scalars['String']['input']>;
+  first?: InputMaybe<Scalars['Int']['input']>;
+  last?: InputMaybe<Scalars['Int']['input']>;
+  locale?: InputMaybe<Scalars['String']['input']>;
+  sort?: InputMaybe<Array<InputMaybe<IGenAsset_Sort>>>;
+  where?: InputMaybe<Array<InputMaybe<IGenAsset_Where>>>;
+};
+
+
+export type IGenQueryAllCalloutArgs = {
+  after?: InputMaybe<Scalars['String']['input']>;
+  before?: InputMaybe<Scalars['String']['input']>;
+  first?: InputMaybe<Scalars['Int']['input']>;
+  last?: InputMaybe<Scalars['Int']['input']>;
+  locale?: InputMaybe<Scalars['String']['input']>;
+  sort?: InputMaybe<Array<InputMaybe<IGenCallout_Sort>>>;
+  where?: InputMaybe<Array<InputMaybe<IGenCallout_Where>>>;
+};
+
+
+export type IGenQueryAllCardSelectionGameArgs = {
+  after?: InputMaybe<Scalars['String']['input']>;
+  before?: InputMaybe<Scalars['String']['input']>;
+  first?: InputMaybe<Scalars['Int']['input']>;
+  last?: InputMaybe<Scalars['Int']['input']>;
+  locale?: InputMaybe<Scalars['String']['input']>;
+  sort?: InputMaybe<Array<InputMaybe<IGenCardSelectionGame_Sort>>>;
+  where?: InputMaybe<Array<InputMaybe<IGenCardSelectionGame_Where>>>;
+};
+
+
+export type IGenQueryAllCaseArgs = {
+  after?: InputMaybe<Scalars['String']['input']>;
+  before?: InputMaybe<Scalars['String']['input']>;
+  first?: InputMaybe<Scalars['Int']['input']>;
+  last?: InputMaybe<Scalars['Int']['input']>;
+  locale?: InputMaybe<Scalars['String']['input']>;
+  sort?: InputMaybe<Array<InputMaybe<IGenCase_Sort>>>;
+  where?: InputMaybe<Array<InputMaybe<IGenCase_Where>>>;
+};
+
+
+export type IGenQueryAllDragNDropGameArgs = {
+  after?: InputMaybe<Scalars['String']['input']>;
+  before?: InputMaybe<Scalars['String']['input']>;
+  first?: InputMaybe<Scalars['Int']['input']>;
+  last?: InputMaybe<Scalars['Int']['input']>;
+  locale?: InputMaybe<Scalars['String']['input']>;
+  sort?: InputMaybe<Array<InputMaybe<IGenDragNDropGame_Sort>>>;
+  where?: InputMaybe<Array<InputMaybe<IGenDragNDropGame_Where>>>;
+};
+
+
+export type IGenQueryAllFillInGapsGameArgs = {
+  after?: InputMaybe<Scalars['String']['input']>;
+  before?: InputMaybe<Scalars['String']['input']>;
+  first?: InputMaybe<Scalars['Int']['input']>;
+  last?: InputMaybe<Scalars['Int']['input']>;
+  locale?: InputMaybe<Scalars['String']['input']>;
+  sort?: InputMaybe<Array<InputMaybe<IGenFillInGapsGame_Sort>>>;
+  where?: InputMaybe<Array<InputMaybe<IGenFillInGapsGame_Where>>>;
+};
+
+
+export type IGenQueryAllLegalAreaArgs = {
+  after?: InputMaybe<Scalars['String']['input']>;
+  before?: InputMaybe<Scalars['String']['input']>;
+  first?: InputMaybe<Scalars['Int']['input']>;
+  last?: InputMaybe<Scalars['Int']['input']>;
+  locale?: InputMaybe<Scalars['String']['input']>;
+  sort?: InputMaybe<Array<InputMaybe<IGenLegalArea_Sort>>>;
+  where?: InputMaybe<Array<InputMaybe<IGenLegalArea_Where>>>;
+};
+
+
+export type IGenQueryAllMainCategoryArgs = {
+  after?: InputMaybe<Scalars['String']['input']>;
+  before?: InputMaybe<Scalars['String']['input']>;
+  first?: InputMaybe<Scalars['Int']['input']>;
+  last?: InputMaybe<Scalars['Int']['input']>;
+  locale?: InputMaybe<Scalars['String']['input']>;
+  sort?: InputMaybe<Array<InputMaybe<IGenMainCategory_Sort>>>;
+  where?: InputMaybe<Array<InputMaybe<IGenMainCategory_Where>>>;
+};
+
+
+export type IGenQueryAllSearchEntryArgs = {
+  after?: InputMaybe<Scalars['String']['input']>;
+  before?: InputMaybe<Scalars['String']['input']>;
+  first?: InputMaybe<Scalars['Int']['input']>;
+  last?: InputMaybe<Scalars['Int']['input']>;
+  locale?: InputMaybe<Scalars['String']['input']>;
+  sort?: InputMaybe<Array<InputMaybe<IGenSearchEntry_Sort>>>;
+  where?: InputMaybe<Array<InputMaybe<IGenSearchEntry_Where>>>;
+};
+
+
+export type IGenQueryAllSubCategoryArgs = {
+  after?: InputMaybe<Scalars['String']['input']>;
+  before?: InputMaybe<Scalars['String']['input']>;
+  first?: InputMaybe<Scalars['Int']['input']>;
+  last?: InputMaybe<Scalars['Int']['input']>;
+  locale?: InputMaybe<Scalars['String']['input']>;
+  sort?: InputMaybe<Array<InputMaybe<IGenSubCategory_Sort>>>;
+  where?: InputMaybe<Array<InputMaybe<IGenSubCategory_Where>>>;
+};
+
+
+export type IGenQueryAllTagsArgs = {
+  after?: InputMaybe<Scalars['String']['input']>;
+  before?: InputMaybe<Scalars['String']['input']>;
+  first?: InputMaybe<Scalars['Int']['input']>;
+  last?: InputMaybe<Scalars['Int']['input']>;
+  locale?: InputMaybe<Scalars['String']['input']>;
+  sort?: InputMaybe<Array<InputMaybe<IGenTags_Sort>>>;
+  where?: InputMaybe<Array<InputMaybe<IGenTags_Where>>>;
+};
+
+
+export type IGenQueryAllTopicArgs = {
+  after?: InputMaybe<Scalars['String']['input']>;
+  before?: InputMaybe<Scalars['String']['input']>;
+  first?: InputMaybe<Scalars['Int']['input']>;
+  last?: InputMaybe<Scalars['Int']['input']>;
+  locale?: InputMaybe<Scalars['String']['input']>;
+  sort?: InputMaybe<Array<InputMaybe<IGenTopic_Sort>>>;
+  where?: InputMaybe<Array<InputMaybe<IGenTopic_Where>>>;
+};
+
+export type IGenSearch = {
+  __typename?: 'Search';
+  _meta?: Maybe<IGenCaisyDocument_Meta>;
+  id?: Maybe<Scalars['ID']['output']>;
+  popularCategories?: Maybe<Array<Maybe<IGenSearch_PopularCategories>>>;
+  popularSearches?: Maybe<Array<Maybe<IGenSearch_PopularSearches>>>;
+};
+
+
+export type IGenSearchPopularCategoriesArgs = {
+  after?: InputMaybe<Scalars['String']['input']>;
+  first?: InputMaybe<Scalars['Int']['input']>;
+  locale?: InputMaybe<Scalars['String']['input']>;
+};
+
+
+export type IGenSearchPopularSearchesArgs = {
+  after?: InputMaybe<Scalars['String']['input']>;
+  first?: InputMaybe<Scalars['Int']['input']>;
+  locale?: InputMaybe<Scalars['String']['input']>;
+};
+
+export type IGenSearchEntry = {
+  __typename?: 'SearchEntry';
+  _meta?: Maybe<IGenCaisyDocument_Meta>;
+  id?: Maybe<Scalars['ID']['output']>;
+  searchField?: Maybe<Scalars['String']['output']>;
+};
+
+export type IGenSearchEntry_Connection = {
+  __typename?: 'SearchEntry_Connection';
+  edges?: Maybe<Array<Maybe<IGenSearchEntry_ConnectionEdge>>>;
+  pageInfo?: Maybe<IGenPageInfo>;
+  totalCount?: Maybe<Scalars['Int']['output']>;
+};
+
+export type IGenSearchEntry_ConnectionEdge = {
+  __typename?: 'SearchEntry_ConnectionEdge';
+  cursor?: Maybe<Scalars['String']['output']>;
+  node?: Maybe<IGenSearchEntry>;
+};
+
+export type IGenSearchEntry_Sort = {
+  createdAt?: InputMaybe<IGenOrder>;
+  id?: InputMaybe<IGenOrder>;
+  publishedAt?: InputMaybe<IGenOrder>;
+  searchField?: InputMaybe<IGenOrder>;
+  updatedAt?: InputMaybe<IGenOrder>;
+};
+
+export type IGenSearchEntry_Where = {
+  AND?: InputMaybe<Array<InputMaybe<IGenSearchEntry_Where>>>;
+  OR?: InputMaybe<Array<InputMaybe<IGenSearchEntry_Where>>>;
+  searchField?: InputMaybe<IGenCaisyField_String_Where>;
+};
+
+export type IGenSearch_PopularCategories = IGenSearchEntry;
+
+export type IGenSearch_PopularSearches = IGenSearchEntry;
+
+export type IGenSubCategory = {
+  __typename?: 'SubCategory';
+  _meta?: Maybe<IGenCaisyDocument_Meta>;
+  id?: Maybe<Scalars['ID']['output']>;
+  mainCategory?: Maybe<Array<Maybe<IGenSubCategory_MainCategory>>>;
+  subCategory?: Maybe<Scalars['String']['output']>;
+};
+
+
+export type IGenSubCategoryMainCategoryArgs = {
+  after?: InputMaybe<Scalars['String']['input']>;
+  first?: InputMaybe<Scalars['Int']['input']>;
+  locale?: InputMaybe<Scalars['String']['input']>;
+};
+
+export type IGenSubCategory_Connection = {
+  __typename?: 'SubCategory_Connection';
+  edges?: Maybe<Array<Maybe<IGenSubCategory_ConnectionEdge>>>;
+  pageInfo?: Maybe<IGenPageInfo>;
+  totalCount?: Maybe<Scalars['Int']['output']>;
+};
+
+export type IGenSubCategory_ConnectionEdge = {
+  __typename?: 'SubCategory_ConnectionEdge';
+  cursor?: Maybe<Scalars['String']['output']>;
+  node?: Maybe<IGenSubCategory>;
+};
+
+export type IGenSubCategory_MainCategory_Where = {
+  findOne?: InputMaybe<IGenSubCategory_MainCategory_WhereConnection>;
+};
+
+export type IGenSubCategory_MainCategory_WhereConnection = {
+  MainCategory?: InputMaybe<IGenMainCategory_Nested_Where>;
+};
+
+export type IGenSubCategory_Sort = {
+  createdAt?: InputMaybe<IGenOrder>;
+  id?: InputMaybe<IGenOrder>;
+  mainCategory?: InputMaybe<IGenOrder>;
+  publishedAt?: InputMaybe<IGenOrder>;
+  subCategory?: InputMaybe<IGenOrder>;
+  updatedAt?: InputMaybe<IGenOrder>;
+};
+
+export type IGenSubCategory_Where = {
+  AND?: InputMaybe<Array<InputMaybe<IGenSubCategory_Where>>>;
+  OR?: InputMaybe<Array<InputMaybe<IGenSubCategory_Where>>>;
+  mainCategory?: InputMaybe<IGenSubCategory_MainCategory_Where>;
+  subCategory?: InputMaybe<IGenCaisyField_String_Where>;
+};
+
+export type IGenSubCategory_MainCategory = IGenMainCategory;
+
+export type IGenTags = {
+  __typename?: 'Tags';
+  _meta?: Maybe<IGenCaisyDocument_Meta>;
+  id?: Maybe<Scalars['ID']['output']>;
+  isShownInitiallyBeforeSearch?: Maybe<Scalars['Boolean']['output']>;
+  tagName?: Maybe<Scalars['String']['output']>;
+};
+
+export type IGenTags_Connection = {
+  __typename?: 'Tags_Connection';
+  edges?: Maybe<Array<Maybe<IGenTags_ConnectionEdge>>>;
+  pageInfo?: Maybe<IGenPageInfo>;
+  totalCount?: Maybe<Scalars['Int']['output']>;
+};
+
+export type IGenTags_ConnectionEdge = {
+  __typename?: 'Tags_ConnectionEdge';
+  cursor?: Maybe<Scalars['String']['output']>;
+  node?: Maybe<IGenTags>;
+};
+
+export type IGenTags_Nested_Where = {
+  AND?: InputMaybe<Array<InputMaybe<IGenTags_Nested_Where>>>;
+  OR?: InputMaybe<Array<InputMaybe<IGenTags_Nested_Where>>>;
+  isShownInitiallyBeforeSearch?: InputMaybe<Scalars['Boolean']['input']>;
+  tagName?: InputMaybe<IGenCaisyField_String_Where>;
+};
+
+export type IGenTags_Sort = {
+  createdAt?: InputMaybe<IGenOrder>;
+  id?: InputMaybe<IGenOrder>;
+  isShownInitiallyBeforeSearch?: InputMaybe<IGenOrder>;
+  publishedAt?: InputMaybe<IGenOrder>;
+  tagName?: InputMaybe<IGenOrder>;
+  updatedAt?: InputMaybe<IGenOrder>;
+};
+
+export type IGenTags_Where = {
+  AND?: InputMaybe<Array<InputMaybe<IGenTags_Where>>>;
+  OR?: InputMaybe<Array<InputMaybe<IGenTags_Where>>>;
+  isShownInitiallyBeforeSearch?: InputMaybe<Scalars['Boolean']['input']>;
+  tagName?: InputMaybe<IGenCaisyField_String_Where>;
+};
+
+export type IGenTopic = {
+  __typename?: 'Topic';
+  _meta?: Maybe<IGenCaisyDocument_Meta>;
+  id?: Maybe<Scalars['ID']['output']>;
+  sorting?: Maybe<Scalars['Int']['output']>;
+  topicName?: Maybe<Scalars['String']['output']>;
+};
+
+export type IGenTopic_Connection = {
+  __typename?: 'Topic_Connection';
+  edges?: Maybe<Array<Maybe<IGenTopic_ConnectionEdge>>>;
+  pageInfo?: Maybe<IGenPageInfo>;
+  totalCount?: Maybe<Scalars['Int']['output']>;
+};
+
+export type IGenTopic_ConnectionEdge = {
+  __typename?: 'Topic_ConnectionEdge';
+  cursor?: Maybe<Scalars['String']['output']>;
+  node?: Maybe<IGenTopic>;
+};
+
+export type IGenTopic_Nested_Where = {
+  AND?: InputMaybe<Array<InputMaybe<IGenTopic_Nested_Where>>>;
+  OR?: InputMaybe<Array<InputMaybe<IGenTopic_Nested_Where>>>;
+  sorting?: InputMaybe<IGenCaisyField_Number_WhereInt>;
+  topicName?: InputMaybe<IGenCaisyField_String_Where>;
+};
+
+export type IGenTopic_Sort = {
+  createdAt?: InputMaybe<IGenOrder>;
+  id?: InputMaybe<IGenOrder>;
+  publishedAt?: InputMaybe<IGenOrder>;
+  sorting?: InputMaybe<IGenOrder>;
+  topicName?: InputMaybe<IGenOrder>;
+  updatedAt?: InputMaybe<IGenOrder>;
+};
+
+export type IGenTopic_Where = {
+  AND?: InputMaybe<Array<InputMaybe<IGenTopic_Where>>>;
+  OR?: InputMaybe<Array<InputMaybe<IGenTopic_Where>>>;
+  sorting?: InputMaybe<IGenCaisyField_Number_WhereInt>;
+  topicName?: InputMaybe<IGenCaisyField_String_Where>;
+};
+
+
+export type Requester<C = {}, E = unknown> = <R, V>(doc: DocumentNode, vars?: V, options?: C) => Promise<R> | AsyncIterable<R>
+export function getSdk<C, E>(requester: Requester<C, E>) {
+  return {
+
+  };
+}
+export type Sdk = ReturnType<typeof getSdk>;

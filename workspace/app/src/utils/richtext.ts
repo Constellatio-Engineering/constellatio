@@ -47,7 +47,7 @@ export interface IHeading extends TRichTextElements
 
 export type IHeadingNode = TRichTextElements & 
 { 
-  attrs: { level: number };
+  attrs: { id: string | null; level: number };
   content: TextElement[];
   id: string;
   type: "heading"; 

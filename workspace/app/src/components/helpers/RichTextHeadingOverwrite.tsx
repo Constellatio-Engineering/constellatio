@@ -24,6 +24,8 @@ export const RichTextHeadingOverwrite = ({
   const isObserved = node.id === observedHeadlineId;
   const debugObservedHeadline = false;
 
+  console.log("RichTextHeadingOverwrite", node.attrs.id, node?.content?.[0]?.text);
+
   return (
     <HeadingTag
       style={debugObservedHeadline ? { backgroundColor: isObserved ? "red" : "blue" } : {}}

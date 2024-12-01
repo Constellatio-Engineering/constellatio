@@ -57,20 +57,6 @@ export const getStaticProps: GetStaticProps<GetCaseDetailPagePropsResult, Params
     };
   }
 
-  const fullTextTaskJsonContent = legalCase.fullTextTasks?.json?.content;
-
-  if(fullTextTaskJsonContent != null)
-  {
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    (fullTextTaskJsonContent as any[]).forEach((content, i) =>
-    {
-      legalCase.fullTextTasks!.json.content[i] = {
-        ...content,
-        id: String(i)
-      };
-    });
-  }
-
   legalCase.fullTextTasks?.connections?.forEach((connection) =>
   {
     if(connection?.__typename === "DragNDropGame")

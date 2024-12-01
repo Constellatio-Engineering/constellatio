@@ -59,19 +59,6 @@ export const getStaticProps: GetStaticProps<GetArticleDetailPagePropsResult, Par
   const allArticles = await getAllArticles();
   const articlesWithNextAndPreviousArticleId = getArticlesWithNextAndPreviousArticleId(allArticles);
   const articleFromAllArticle = articlesWithNextAndPreviousArticleId.find((article) => article.id === params?.id);
-  const fullTextTaskJsonContent = article.fullTextTasks?.json?.content;
-
-  if(fullTextTaskJsonContent != null)
-  {
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    (fullTextTaskJsonContent as any[]).forEach((content, i) =>
-    {
-      article.fullTextTasks!.json.content[i] = {
-        ...content,
-        id: String(i)
-      };
-    });
-  }
 
   return {
     props: {
@@ -87,6 +74,8 @@ export const getStaticProps: GetStaticProps<GetArticleDetailPagePropsResult, Par
 
 const Page: NextPageWithLayout<GetArticleDetailPagePropsResult> = ({ article }) =>
 {
+  console.log(article);
+
   return (
     <>
       <PageHead pageTitle={article?.title || "Artikel ohne Titel"}/>

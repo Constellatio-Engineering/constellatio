@@ -120,6 +120,8 @@ const CaseCompleteTestsStep: FunctionComponent<ICaseCompleteTestsStepProps> = ({
 
   let renderedCaseContent: IGenCase_FullTextTasks | IGenArticle_FullTextTasks | null;
 
+  console.log("json", fullTextTasks?.json?.content[0]);
+
   if(fullTextTasks?.json?.content?.length >= 1 && !areAllGamesCompleted)
   {
     renderedCaseContent = {
