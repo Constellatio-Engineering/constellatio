@@ -5,6 +5,7 @@ import { db } from "@constellatio/db/client";
 import { type GameProgress, gamesProgress } from "@constellatio/db/schema";
 import { getGamesProgressSchema } from "@constellatio/schemas/routers/gamesProgress/getGamesProgress.schema";
 import { setGameProgressStateSchema } from "@constellatio/schemas/routers/gamesProgress/setGameProgressState.schema";
+import { type inferProcedureOutput } from "@trpc/server";
 
 import { createTRPCRouter, protectedProcedure } from "../trpc";
 
@@ -19,7 +20,6 @@ export const gamesProgressRouter = createTRPCRouter({
 
       if(!gameIds || gameIds.length === 0)
       {
-        console.log("no games found for caseId: ", caseId);
         return [];
       }
 
@@ -30,26 +30,38 @@ export const gamesProgressRouter = createTRPCRouter({
         )
       });
 
-      const resultArray: GameProgress[] = gameIds.map(gameId =>
+      const resultArray: Array<{
+        gameId: string;
+        results: GameProgress[];
+      }> = gameIds.map(gameId =>
       {
-        const gameProgress = _gamesProgress.find(({ gameId: _gameId }) => _gameId === gameId);
-
-        if(!gameProgress)
+        const gameProgress = _gamesProgress.filter(({ gameId: _gameId, progressState }) =>
         {
-          return ({ 
-            createdAt: new Date(),
+          return _gameId === gameId && progressState === "completed";
+        });
+
+        if(gameProgress.length === 0)
+        {
+          return ({
             gameId,
-            gameResult: null,
-            id: 0,
-            progressState: "not-started",
-            updatedAt: new Date(),
-            userId,
-            wasSolvedCorrectly: null
+            results: [{
+              createdAt: new Date(),
+              gameId,
+              gameResult: null,
+              id: 0,
+              progressState: "not-started",
+              updatedAt: new Date(),
+              userId,
+              wasSolvedCorrectly: null
+            }]
           });
         }
         else
         {
-          return gameProgress;
+          return ({
+            gameId,
+            results: gameProgress
+          });
         }
       });
 
@@ -74,10 +86,8 @@ export const gamesProgressRouter = createTRPCRouter({
           progressState,
           userId,
           wasSolvedCorrectly,
-        })
-        .onConflictDoUpdate({
-          set: { gameResult, wasSolvedCorrectly },
-          target: [gamesProgress.gameId, gamesProgress.userId],
         });
     })
 });
+
+export type GetGamesProgressResult = inferProcedureOutput<typeof gamesProgressRouter["getGamesProgress"]>;
