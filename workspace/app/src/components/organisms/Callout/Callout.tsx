@@ -5,69 +5,100 @@ import { ArrowUp } from "@/components/Icons/ArrowUp";
 import { Richtext } from "@/components/molecules/Richtext/Richtext";
 
 import { type IGenCallout } from "@constellatio/cms/generated-types";
-import { Group, Spoiler, Stack } from "@mantine/core";
+import { Group, Stack } from "@mantine/core";
 import { useMantineTheme } from "@mantine/styles";
-import { type FC, useState } from "react";
+import {
+  type FC, useCallback, useEffect, useLayoutEffect, useRef, useState
+} from "react";
 
-import { calloutStyles, RichTextStyles, spoilerStyles } from "./Callout.styles";
+import * as styles from "./Callout.styles";
 import { HeadingType } from "./HeadingType";
 
 export type CalloutProps = IGenCallout;
 
-export const Callout: FC<CalloutProps> = ({ calloutType, expandable, text }) => 
+const expandableThreshold = 180;
+
+export const Callout: FC<CalloutProps> = ({ calloutType, text }) =>
 {
   const theme = useMantineTheme();
-  const [isContentHide, setIsContentHide] = useState<boolean>(true);
+  const contentRef = useRef<HTMLDivElement>(null);
+  const [isExpandable, setIsExpandable] = useState(false);
+  const [isExpanded, setIsExpanded] = useState(false);
+  const [contentHeight, setContentHeight] = useState<number>(styles.collapsedHeight);
 
-  const ShowAllBtn = (
-    <Button<"a">
-      styleType="tertiary"
-      rightIcon={<ArrowDown size={20}/>}
-      size="medium"
-      style={{ zIndex: 2 }}
-      onClick={() => setIsContentHide(false)}
-      component="a">
-      Ausklappen
-    </Button>
-  );
+  const onSizeChange = useCallback((element: Element) =>
+  {
+    const contentHeight = element.scrollHeight;
+    const shouldBeExpandable = contentHeight > expandableThreshold;
+    setContentHeight(contentHeight);
+    setIsExpandable(shouldBeExpandable);
+  }, []);
 
-  const ShowLessBtn = (
-    <Button<"a">
-      styleType="tertiary"
-      rightIcon={<ArrowUp size={20}/>}
-      size="medium"
-      style={{ zIndex: 2 }}
-      onClick={() => setIsContentHide(true)}
-      component="a">
-      Einklappen
-    </Button>
-  );
+  useLayoutEffect(() =>
+  {
+    const checkContentHeight = () => 
+    {
+      if(contentRef.current) 
+      {
+        onSizeChange(contentRef.current);
+      }
+    };
+
+    checkContentHeight();
+  }, [onSizeChange]);
+
+  useEffect(() =>
+  {
+    const contentElement = contentRef.current;
+
+    if(!contentElement)
+    {
+      return;
+    }
+
+    const resizeObserver = new ResizeObserver((entries) =>
+    {
+      for(const entry of entries)
+      {
+        onSizeChange(entry.target);
+      }
+    });
+
+    resizeObserver.observe(contentElement);
+
+    return () => resizeObserver.unobserve(contentElement);
+  }, [onSizeChange]);
 
   return (
-    <Stack spacing="spacing-4" sx={calloutStyles(theme)}>
+    <Stack spacing="spacing-4" sx={styles.calloutStyles(theme)}>
       <Group spacing="spacing-8">
         <HeadingType calloutType={calloutType}/>
+        <p><mark style={{ backgroundColor: "pink", padding: 2 }}>{contentHeight}px</mark></p>
       </Group>
-      {text?.json &&
-        (expandable ? (
-          <Spoiler
-            hideLabel={ShowLessBtn}
-            maxHeight={190}
-            showLabel={ShowAllBtn}
-            styles={spoilerStyles({ isContentHide })}>
+      <div css={[styles.contentWrapper, isExpandable && styles.contentWrapperExpandable(isExpanded, contentHeight)]}>
+        {isExpandable && (
+          <div css={styles.fog(isExpanded)}/>
+        )}
+        <div ref={contentRef}>
+          {text?.json && (
             <Richtext
               data={text}
-              stylesOverwrite={RichTextStyles}
+              stylesOverwrite={styles.RichTextStyles}
               richTextOverwrite={{ paragraph: richTextParagraphOverwrite }}
             />
-          </Spoiler>
-        ) : (
-          <Richtext
-            data={text}
-            stylesOverwrite={RichTextStyles}
-            richTextOverwrite={{ paragraph: richTextParagraphOverwrite }}
-          />
-        ))}
+          )}
+        </div>
+      </div>
+      {isExpandable && (
+        <Button<"button">
+          styleType="tertiary"
+          onClick={() => setIsExpanded(!isExpanded)}
+          rightIcon={isExpanded ? <ArrowUp size={20}/> : <ArrowDown size={20}/>}
+          size="medium"
+          style={{ alignSelf: "flex-start", marginTop: 4, zIndex: 2 }}>
+          {isExpanded ? "Einklappen" : "Ausklappen"}
+        </Button>
+      )}
     </Stack>
   );
 };
