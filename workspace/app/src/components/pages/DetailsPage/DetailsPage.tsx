@@ -30,7 +30,7 @@ const DetailsPage: FunctionComponent<IDetailsPageProps> = ({ content, variant })
   const caseId = content?.__typename === "Case" ? contentId : undefined;
   const { mutate: addContentItemView } = useAddContentItemView();
   const { caseProgress, isLoading: isCaseProgressLoading } = useCaseProgress(caseId);
-  const { gamesProgress, isLoading: isGamesProgressLoading } = useGamesProgress(caseId);
+  const { data: gamesProgress, isLoading: isGamesProgressLoading } = useGamesProgress(caseId);
   const games = content?.__typename === "Case" ? getGamesFromCase(content) : [];
   const caseStepIndex = useCaseSolvingStore(s => s.caseStepIndex);
   const progressState = caseProgress?.progressState;
@@ -112,9 +112,11 @@ const DetailsPage: FunctionComponent<IDetailsPageProps> = ({ content, variant })
   const currentGameIndex = games.findIndex(game =>
   {
     const gameProgress = gamesProgress?.find(gameProgress => gameProgress.gameId === game.id);
-    return gameProgress?.progressState === "not-started";
+    const hasCompletedGame = gameProgress?.results.some(({ progressState }) => progressState === "completed");
+    return !hasCompletedGame;
   });
-  const currentGame = games[currentGameIndex];
+
+  const currentGame = currentGameIndex === -1 ? games[0]! : games[currentGameIndex]!;
   const currentGameIndexInFullTextTasksJson = currentGame?.indexInFullTextTasksJson || 0;
   const mainCategoryName = content?.mainCategoryField?.[0]?.mainCategory;
   const legalAreaName = content?.legalArea?.legalAreaName;
@@ -173,7 +175,8 @@ const DetailsPage: FunctionComponent<IDetailsPageProps> = ({ content, variant })
             <CaseCompleteTestsStep
               currentGameIndexInFullTextTasksJson={currentGameIndexInFullTextTasksJson}
               games={games}
-              gamesProgress={gamesProgress ?? []}
+              gamesProgress={gamesProgress}
+              currentGame={currentGame}
               caseId={contentId}
               facts={content?.__typename === "Case" ? content?.facts : undefined}
               fullTextTasks={content?.fullTextTasks}

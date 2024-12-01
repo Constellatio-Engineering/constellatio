@@ -261,12 +261,9 @@ export const gamesProgress = pgTable("GameProgress", {
   gameId: uuid("GameId").notNull(),
   progressState: gameProgressStateEnum("ProgressState").notNull().default("not-started"),
   createdAt: timestamp("CreatedAt").defaultNow().notNull(),
-  updatedAt: timestamp("UpdatedAt").defaultNow().notNull().$onUpdate(getCurrentDate),
   gameResult: jsonb("GameResult").$type<GameResultSchemaType>(),
   wasSolvedCorrectly: boolean("WasSolvedCorrectly"),
-}, table => ({
-  unique: unique().on(table.userId, table.gameId),
-})).enableRLS();
+}).enableRLS();
 
 export type GameProgressInsert = InferInsertModel<typeof gamesProgress>;
 export type GameProgress = InferSelectModel<typeof gamesProgress>;
