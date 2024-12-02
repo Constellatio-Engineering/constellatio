@@ -1,4 +1,6 @@
 {
+  "id": "9d1a3e52-94bc-4223-956b-3af8516acb09",
+  "prevId": "3f01d206-7bb6-4867-bd4e-993605af9d98",
   "version": "7",
   "dialect": "postgresql",
   "tables": {
@@ -28,6 +30,7 @@
       },
       "indexes": {
         "AnswerUpvote_QuestionId_Index": {
+          "name": "AnswerUpvote_QuestionId_Index",
           "columns": [
             {
               "expression": "AnswerId",
@@ -36,9 +39,8 @@
               "nulls": "last"
             }
           ],
-          "with": {},
-          "name": "AnswerUpvote_QuestionId_Index",
           "isUnique": false,
+          "with": {},
           "method": "btree",
           "concurrently": false
         }
@@ -80,74 +82,10 @@
           ]
         }
       },
-      "uniqueConstraints": {}
-    },
-    "public.ArticleView": {
-      "name": "ArticleView",
-      "schema": "",
-      "columns": {
-        "UserId": {
-          "name": "UserId",
-          "type": "uuid",
-          "primaryKey": false,
-          "notNull": true
-        },
-        "ArticleId": {
-          "name": "ArticleId",
-          "type": "uuid",
-          "primaryKey": false,
-          "notNull": true
-        },
-        "UpdatedAt": {
-          "name": "UpdatedAt",
-          "type": "timestamp",
-          "primaryKey": false,
-          "notNull": false,
-          "default": "now()"
-        }
-      },
-      "indexes": {
-        "ArticleView_ArticleId_Index": {
-          "columns": [
-            {
-              "expression": "ArticleId",
-              "isExpression": false,
-              "asc": true,
-              "nulls": "last"
-            }
-          ],
-          "with": {},
-          "name": "ArticleView_ArticleId_Index",
-          "isUnique": false,
-          "method": "btree",
-          "concurrently": false
-        }
-      },
-      "foreignKeys": {
-        "ArticleView_UserId_User_Id_fk": {
-          "name": "ArticleView_UserId_User_Id_fk",
-          "tableFrom": "ArticleView",
-          "columnsFrom": [
-            "UserId"
-          ],
-          "tableTo": "User",
-          "columnsTo": [
-            "Id"
-          ],
-          "onUpdate": "no action",
-          "onDelete": "no action"
-        }
-      },
-      "compositePrimaryKeys": {
-        "ArticleView_UserId_ArticleId_pk": {
-          "name": "ArticleView_UserId_ArticleId_pk",
-          "columns": [
-            "UserId",
-            "ArticleId"
-          ]
-        }
-      },
-      "uniqueConstraints": {}
+      "uniqueConstraints": {},
+      "policies": {},
+      "checkConstraints": {},
+      "isRLSEnabled": true
     },
     "public.Badge": {
       "name": "Badge",
@@ -163,6 +101,7 @@
         "Identifier": {
           "name": "Identifier",
           "type": "BadgeIdentifier",
+          "typeSchema": "public",
           "primaryKey": false,
           "notNull": true
         },
@@ -187,6 +126,7 @@
         "PublicationState": {
           "name": "PublicationState",
           "type": "BadgePublicationState",
+          "typeSchema": "public",
           "primaryKey": false,
           "notNull": true,
           "default": "'not-listed'"
@@ -203,7 +143,10 @@
           ],
           "nullsNotDistinct": false
         }
-      }
+      },
+      "policies": {},
+      "checkConstraints": {},
+      "isRLSEnabled": true
     },
     "public.Bookmark": {
       "name": "Bookmark",
@@ -225,6 +168,7 @@
         "ResourceType": {
           "name": "ResourceType",
           "type": "ResourceType",
+          "typeSchema": "public",
           "primaryKey": false,
           "notNull": true
         },
@@ -269,7 +213,10 @@
           ],
           "nullsNotDistinct": false
         }
-      }
+      },
+      "policies": {},
+      "checkConstraints": {},
+      "isRLSEnabled": true
     },
     "public.CaseProgress": {
       "name": "CaseProgress",
@@ -290,6 +237,7 @@
         "ProgressState": {
           "name": "ProgressState",
           "type": "CaseProgressState",
+          "typeSchema": "public",
           "primaryKey": false,
           "notNull": true,
           "default": "'not-started'"
@@ -320,7 +268,10 @@
           ]
         }
       },
-      "uniqueConstraints": {}
+      "uniqueConstraints": {},
+      "policies": {},
+      "checkConstraints": {},
+      "isRLSEnabled": true
     },
     "public.CaseSolution": {
       "name": "CaseSolution",
@@ -370,53 +321,99 @@
           ]
         }
       },
-      "uniqueConstraints": {}
+      "uniqueConstraints": {},
+      "policies": {},
+      "checkConstraints": {},
+      "isRLSEnabled": true
     },
-    "public.CaseView": {
-      "name": "CaseView",
+    "public.ContentView": {
+      "name": "ContentView",
       "schema": "",
       "columns": {
+        "id": {
+          "name": "id",
+          "type": "serial",
+          "primaryKey": true,
+          "notNull": true
+        },
         "UserId": {
           "name": "UserId",
           "type": "uuid",
           "primaryKey": false,
           "notNull": true
         },
-        "CaseId": {
-          "name": "CaseId",
+        "ContentItemId": {
+          "name": "ContentItemId",
           "type": "uuid",
           "primaryKey": false,
           "notNull": true
         },
-        "UpdatedAt": {
-          "name": "UpdatedAt",
+        "CreatedAt": {
+          "name": "CreatedAt",
           "type": "timestamp",
           "primaryKey": false,
-          "notNull": false,
+          "notNull": true,
           "default": "now()"
+        },
+        "ContentItemType": {
+          "name": "ContentItemType",
+          "type": "ContentItemViewType",
+          "typeSchema": "public",
+          "primaryKey": false,
+          "notNull": true
         }
       },
       "indexes": {
-        "CaseView_CaseId_Index": {
+        "ContentView_ContentItemId_Index": {
+          "name": "ContentView_ContentItemId_Index",
           "columns": [
             {
-              "expression": "CaseId",
+              "expression": "ContentItemId",
               "isExpression": false,
               "asc": true,
               "nulls": "last"
             }
           ],
-          "with": {},
-          "name": "CaseView_CaseId_Index",
           "isUnique": false,
+          "with": {},
+          "method": "btree",
+          "concurrently": false
+        },
+        "ContentView_ContentItemType_Index": {
+          "name": "ContentView_ContentItemType_Index",
+          "columns": [
+            {
+              "expression": "ContentItemType",
+              "isExpression": false,
+              "asc": true,
+              "nulls": "last"
+            }
+          ],
+          "isUnique": false,
+          "with": {},
+          "method": "btree",
+          "concurrently": false
+        },
+        "ContentView_UserId_FK_Index": {
+          "name": "ContentView_UserId_FK_Index",
+          "columns": [
+            {
+              "expression": "UserId",
+              "isExpression": false,
+              "asc": true,
+              "nulls": "last"
+            }
+          ],
+          "isUnique": false,
+          "with": {},
           "method": "btree",
           "concurrently": false
         }
       },
       "foreignKeys": {
-        "CaseView_UserId_User_Id_fk": {
-          "name": "CaseView_UserId_User_Id_fk",
-          "tableFrom": "CaseView",
+        "ContentView_UserId_User_Id_fk": {
+          "name": "ContentView_UserId_User_Id_fk",
+          "tableFrom": "ContentView",
           "columnsFrom": [
             "UserId"
           ],
@@ -428,16 +425,11 @@
           "onDelete": "no action"
         }
       },
-      "compositePrimaryKeys": {
-        "CaseView_UserId_CaseId_Pk": {
-          "name": "CaseView_UserId_CaseId_Pk",
-          "columns": [
-            "UserId",
-            "CaseId"
-          ]
-        }
-      },
-      "uniqueConstraints": {}
+      "compositePrimaryKeys": {},
+      "uniqueConstraints": {},
+      "policies": {},
+      "checkConstraints": {},
+      "isRLSEnabled": true
     },
     "public.CorrectAnswer": {
       "name": "CorrectAnswer",
@@ -476,7 +468,53 @@
           "notNull": true
         }
       },
-      "indexes": {},
+      "indexes": {
+        "CorrectAnswer_UserId_FK_Index": {
+          "name": "CorrectAnswer_UserId_FK_Index",
+          "columns": [
+            {
+              "expression": "ConfirmedByUserId",
+              "isExpression": false,
+              "asc": true,
+              "nulls": "last"
+            }
+          ],
+          "isUnique": false,
+          "with": {},
+          "method": "btree",
+          "concurrently": false
+        },
+        "CorrectAnswer_QuestionId_FK_Index": {
+          "name": "CorrectAnswer_QuestionId_FK_Index",
+          "columns": [
+            {
+              "expression": "QuestionId",
+              "isExpression": false,
+              "asc": true,
+              "nulls": "last"
+            }
+          ],
+          "isUnique": false,
+          "with": {},
+          "method": "btree",
+          "concurrently": false
+        },
+        "CorrectAnswer_AnswerId_FK_Index": {
+          "name": "CorrectAnswer_AnswerId_FK_Index",
+          "columns": [
+            {
+              "expression": "AnswerId",
+              "isExpression": false,
+              "asc": true,
+              "nulls": "last"
+            }
+          ],
+          "isUnique": false,
+          "with": {},
+          "method": "btree",
+          "concurrently": false
+        }
+      },
       "foreignKeys": {
         "CorrectAnswer_ConfirmedByUserId_User_Id_fk": {
           "name": "CorrectAnswer_ConfirmedByUserId_User_Id_fk",
@@ -527,7 +565,10 @@
           ],
           "nullsNotDistinct": false
         }
-      }
+      },
+      "policies": {},
+      "checkConstraints": {},
+      "isRLSEnabled": true
     },
     "public.Document": {
       "name": "Document",
@@ -579,7 +620,38 @@
           "notNull": true
         }
       },
-      "indexes": {},
+      "indexes": {
+        "Document_UserId_FK_Index": {
+          "name": "Document_UserId_FK_Index",
+          "columns": [
+            {
+              "expression": "UserId",
+              "isExpression": false,
+              "asc": true,
+              "nulls": "last"
+            }
+          ],
+          "isUnique": false,
+          "with": {},
+          "method": "btree",
+          "concurrently": false
+        },
+        "Document_FolderId_FK_Index": {
+          "name": "Document_FolderId_FK_Index",
+          "columns": [
+            {
+              "expression": "FolderId",
+              "isExpression": false,
+              "asc": true,
+              "nulls": "last"
+            }
+          ],
+          "isUnique": false,
+          "with": {},
+          "method": "btree",
+          "concurrently": false
+        }
+      },
       "foreignKeys": {
         "Document_UserId_User_Id_fk": {
           "name": "Document_UserId_User_Id_fk",
@@ -609,7 +681,57 @@
         }
       },
       "compositePrimaryKeys": {},
-      "uniqueConstraints": {}
+      "uniqueConstraints": {},
+      "policies": {},
+      "checkConstraints": {},
+      "isRLSEnabled": true
+    },
+    "public.Document_to_Tag": {
+      "name": "Document_to_Tag",
+      "schema": "",
+      "columns": {
+        "DocumentId": {
+          "name": "DocumentId",
+          "type": "uuid",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "TagId": {
+          "name": "TagId",
+          "type": "uuid",
+          "primaryKey": false,
+          "notNull": true
+        }
+      },
+      "indexes": {},
+      "foreignKeys": {
+        "Document_to_Tag_DocumentId_Document_Id_fk": {
+          "name": "Document_to_Tag_DocumentId_Document_Id_fk",
+          "tableFrom": "Document_to_Tag",
+          "columnsFrom": [
+            "DocumentId"
+          ],
+          "tableTo": "Document",
+          "columnsTo": [
+            "Id"
+          ],
+          "onUpdate": "no action",
+          "onDelete": "cascade"
+        }
+      },
+      "compositePrimaryKeys": {
+        "Document_to_Tag_DocumentId_TagId_pk": {
+          "name": "Document_to_Tag_DocumentId_TagId_pk",
+          "columns": [
+            "DocumentId",
+            "TagId"
+          ]
+        }
+      },
+      "uniqueConstraints": {},
+      "policies": {},
+      "checkConstraints": {},
+      "isRLSEnabled": true
     },
     "public.ForumAnswer": {
       "name": "ForumAnswer",
@@ -667,7 +789,53 @@
           "notNull": false
         }
       },
-      "indexes": {},
+      "indexes": {
+        "ForumAnswer_UserId_FK_Index": {
+          "name": "ForumAnswer_UserId_FK_Index",
+          "columns": [
+            {
+              "expression": "UserId",
+              "isExpression": false,
+              "asc": true,
+              "nulls": "last"
+            }
+          ],
+          "isUnique": false,
+          "with": {},
+          "method": "btree",
+          "concurrently": false
+        },
+        "ForumAnswer_ParentQuestionId_FK_Index": {
+          "name": "ForumAnswer_ParentQuestionId_FK_Index",
+          "columns": [
+            {
+              "expression": "ParentQuestionId",
+              "isExpression": false,
+              "asc": true,
+              "nulls": "last"
+            }
+          ],
+          "isUnique": false,
+          "with": {},
+          "method": "btree",
+          "concurrently": false
+        },
+        "ForumAnswer_ParentAnswerId_FK_Index": {
+          "name": "ForumAnswer_ParentAnswerId_FK_Index",
+          "columns": [
+            {
+              "expression": "ParentAnswerId",
+              "isExpression": false,
+              "asc": true,
+              "nulls": "last"
+            }
+          ],
+          "isUnique": false,
+          "with": {},
+          "method": "btree",
+          "concurrently": false
+        }
+      },
       "foreignKeys": {
         "ForumAnswer_UserId_User_Id_fk": {
           "name": "ForumAnswer_UserId_User_Id_fk",
@@ -710,7 +878,10 @@
         }
       },
       "compositePrimaryKeys": {},
-      "uniqueConstraints": {}
+      "uniqueConstraints": {},
+      "policies": {},
+      "checkConstraints": {},
+      "isRLSEnabled": true
     },
     "public.ForumQuestion_to_Subfield": {
       "name": "ForumQuestion_to_Subfield",
@@ -754,7 +925,10 @@
           ]
         }
       },
-      "uniqueConstraints": {}
+      "uniqueConstraints": {},
+      "policies": {},
+      "checkConstraints": {},
+      "isRLSEnabled": true
     },
     "public.ForumQuestion_to_Topic": {
       "name": "ForumQuestion_to_Topic",
@@ -798,7 +972,10 @@
           ]
         }
       },
-      "uniqueConstraints": {}
+      "uniqueConstraints": {},
+      "policies": {},
+      "checkConstraints": {},
+      "isRLSEnabled": true
     },
     "public.ForumQuestion": {
       "name": "ForumQuestion",
@@ -858,6 +1035,7 @@
       },
       "indexes": {
         "ForumQuestion_Id_Slug_Index": {
+          "name": "ForumQuestion_Id_Slug_Index",
           "columns": [
             {
               "expression": "Id",
@@ -872,9 +1050,23 @@
               "nulls": "last"
             }
           ],
-          "with": {},
-          "name": "ForumQuestion_Id_Slug_Index",
           "isUnique": true,
+          "with": {},
+          "method": "btree",
+          "concurrently": false
+        },
+        "ForumQuestion_UserId_FK_Index": {
+          "name": "ForumQuestion_UserId_FK_Index",
+          "columns": [
+            {
+              "expression": "UserId",
+              "isExpression": false,
+              "asc": true,
+              "nulls": "last"
+            }
+          ],
+          "isUnique": false,
+          "with": {},
           "method": "btree",
           "concurrently": false
         }
@@ -895,7 +1087,10 @@
         }
       },
       "compositePrimaryKeys": {},
-      "uniqueConstraints": {}
+      "uniqueConstraints": {},
+      "policies": {},
+      "checkConstraints": {},
+      "isRLSEnabled": true
     },
     "public.ForumQuestion_to_LegalField": {
       "name": "ForumQuestion_to_LegalField",
@@ -939,12 +1134,21 @@
           ]
         }
       },
-      "uniqueConstraints": {}
+      "uniqueConstraints": {},
+      "policies": {},
+      "checkConstraints": {},
+      "isRLSEnabled": true
     },
     "public.GameProgress": {
       "name": "GameProgress",
       "schema": "",
       "columns": {
+        "Id": {
+          "name": "Id",
+          "type": "serial",
+          "primaryKey": true,
+          "notNull": true
+        },
         "UserId": {
           "name": "UserId",
           "type": "uuid",
@@ -960,9 +1164,29 @@
         "ProgressState": {
           "name": "ProgressState",
           "type": "GameProgressState",
+          "typeSchema": "public",
           "primaryKey": false,
           "notNull": true,
           "default": "'not-started'"
+        },
+        "CreatedAt": {
+          "name": "CreatedAt",
+          "type": "timestamp",
+          "primaryKey": false,
+          "notNull": true,
+          "default": "now()"
+        },
+        "GameResult": {
+          "name": "GameResult",
+          "type": "jsonb",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "WasSolvedCorrectly": {
+          "name": "WasSolvedCorrectly",
+          "type": "boolean",
+          "primaryKey": false,
+          "notNull": false
         }
       },
       "indexes": {},
@@ -981,16 +1205,11 @@
           "onDelete": "no action"
         }
       },
-      "compositePrimaryKeys": {
-        "GameProgress_UserId_GameId_pk": {
-          "name": "GameProgress_UserId_GameId_pk",
-          "columns": [
-            "UserId",
-            "GameId"
-          ]
-        }
-      },
-      "uniqueConstraints": {}
+      "compositePrimaryKeys": {},
+      "uniqueConstraints": {},
+      "policies": {},
+      "checkConstraints": {},
+      "isRLSEnabled": true
     },
     "public.Note": {
       "name": "Note",
@@ -1036,7 +1255,38 @@
           "notNull": true
         }
       },
-      "indexes": {},
+      "indexes": {
+        "Note_UserId_FK_Index": {
+          "name": "Note_UserId_FK_Index",
+          "columns": [
+            {
+              "expression": "UserId",
+              "isExpression": false,
+              "asc": true,
+              "nulls": "last"
+            }
+          ],
+          "isUnique": false,
+          "with": {},
+          "method": "btree",
+          "concurrently": false
+        },
+        "Note_FileId_FK_Index": {
+          "name": "Note_FileId_FK_Index",
+          "columns": [
+            {
+              "expression": "FileId",
+              "isExpression": false,
+              "asc": true,
+              "nulls": "last"
+            }
+          ],
+          "isUnique": false,
+          "with": {},
+          "method": "btree",
+          "concurrently": false
+        }
+      },
       "foreignKeys": {
         "Note_UserId_User_Id_fk": {
           "name": "Note_UserId_User_Id_fk",
@@ -1066,15 +1316,19 @@
         }
       },
       "compositePrimaryKeys": {},
-      "uniqueConstraints": {}
+      "uniqueConstraints": {},
+      "policies": {},
+      "checkConstraints": {},
+      "isRLSEnabled": true
     },
     "public.NotificationType": {
       "name": "NotificationType",
       "schema": "",
       "columns": {
-        "NotificationTypeIdentifier": {
-          "name": "NotificationTypeIdentifier",
-          "type": "NotificationTypeIdentifier",
+        "NotificationType": {
+          "name": "NotificationType",
+          "type": "NotificationTypeEnum",
+          "typeSchema": "public",
           "primaryKey": true,
           "notNull": true
         },
@@ -1094,7 +1348,10 @@
       "indexes": {},
       "foreignKeys": {},
       "compositePrimaryKeys": {},
-      "uniqueConstraints": {}
+      "uniqueConstraints": {},
+      "policies": {},
+      "checkConstraints": {},
+      "isRLSEnabled": true
     },
     "public.Notification": {
       "name": "Notification",
@@ -1131,9 +1388,10 @@
           "primaryKey": false,
           "notNull": false
         },
-        "NotificationTypeIdentifier": {
-          "name": "NotificationTypeIdentifier",
-          "type": "NotificationTypeIdentifier",
+        "NotificationType": {
+          "name": "NotificationType",
+          "type": "NotificationTypeEnum",
+          "typeSchema": "public",
           "primaryKey": false,
           "notNull": true
         },
@@ -1151,7 +1409,68 @@
           "notNull": false
         }
       },
-      "indexes": {},
+      "indexes": {
+        "Notification_RecipientId_FK_Index": {
+          "name": "Notification_RecipientId_FK_Index",
+          "columns": [
+            {
+              "expression": "RecipientId",
+              "isExpression": false,
+              "asc": true,
+              "nulls": "last"
+            }
+          ],
+          "isUnique": false,
+          "with": {},
+          "method": "btree",
+          "concurrently": false
+        },
+        "Notification_SenderId_FK_Index": {
+          "name": "Notification_SenderId_FK_Index",
+          "columns": [
+            {
+              "expression": "SenderId",
+              "isExpression": false,
+              "asc": true,
+              "nulls": "last"
+            }
+          ],
+          "isUnique": false,
+          "with": {},
+          "method": "btree",
+          "concurrently": false
+        },
+        "Notification_ResourceId_FK_Index": {
+          "name": "Notification_ResourceId_FK_Index",
+          "columns": [
+            {
+              "expression": "ResourceId",
+              "isExpression": false,
+              "asc": true,
+              "nulls": "last"
+            }
+          ],
+          "isUnique": false,
+          "with": {},
+          "method": "btree",
+          "concurrently": false
+        },
+        "Notification_TypeIdentifier_FK_Index": {
+          "name": "Notification_TypeIdentifier_FK_Index",
+          "columns": [
+            {
+              "expression": "NotificationType",
+              "isExpression": false,
+              "asc": true,
+              "nulls": "last"
+            }
+          ],
+          "isUnique": false,
+          "with": {},
+          "method": "btree",
+          "concurrently": false
+        }
+      },
       "foreignKeys": {
         "Notification_RecipientId_User_Id_fk": {
           "name": "Notification_RecipientId_User_Id_fk",
@@ -1179,22 +1498,135 @@
           "onUpdate": "no action",
           "onDelete": "no action"
         },
-        "Notification_NotificationTypeIdentifier_NotificationType_NotificationTypeIdentifier_fk": {
-          "name": "Notification_NotificationTypeIdentifier_NotificationType_NotificationTypeIdentifier_fk",
+        "Notification_NotificationType_fk": {
+          "name": "Notification_NotificationType_fk",
           "tableFrom": "Notification",
           "columnsFrom": [
-            "NotificationTypeIdentifier"
+            "NotificationType"
           ],
           "tableTo": "NotificationType",
           "columnsTo": [
-            "NotificationTypeIdentifier"
+            "NotificationType"
           ],
           "onUpdate": "no action",
           "onDelete": "no action"
         }
       },
       "compositePrimaryKeys": {},
-      "uniqueConstraints": {}
+      "uniqueConstraints": {},
+      "policies": {
+        "notifications_read_access_for_users_own_notifications": {
+          "name": "notifications_read_access_for_users_own_notifications",
+          "as": "PERMISSIVE",
+          "for": "SELECT",
+          "to": [
+            "authenticated"
+          ],
+          "using": "\"Notification\".\"RecipientId\" = (select auth.uid())"
+        }
+      },
+      "checkConstraints": {
+        "sender_recipient_different": {
+          "name": "sender_recipient_different",
+          "value": "\"Notification\".\"SenderId\" != \"Notification\".\"RecipientId\""
+        }
+      },
+      "isRLSEnabled": true
+    },
+    "public.Ping": {
+      "name": "Ping",
+      "schema": "",
+      "columns": {
+        "Index": {
+          "name": "Index",
+          "type": "serial",
+          "primaryKey": true,
+          "notNull": true
+        },
+        "UserId": {
+          "name": "UserId",
+          "type": "uuid",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "Path": {
+          "name": "Path",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "Search": {
+          "name": "Search",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "CreatedAt": {
+          "name": "CreatedAt",
+          "type": "timestamp",
+          "primaryKey": false,
+          "notNull": true,
+          "default": "now()"
+        },
+        "PingInterval": {
+          "name": "PingInterval",
+          "type": "smallint",
+          "primaryKey": false,
+          "notNull": true
+        }
+      },
+      "indexes": {
+        "Ping_Path_Index": {
+          "name": "Ping_Path_Index",
+          "columns": [
+            {
+              "expression": "Path",
+              "isExpression": false,
+              "asc": true,
+              "nulls": "last"
+            }
+          ],
+          "isUnique": false,
+          "with": {},
+          "method": "btree",
+          "concurrently": false
+        },
+        "Ping_UserId_FK_Index": {
+          "name": "Ping_UserId_FK_Index",
+          "columns": [
+            {
+              "expression": "UserId",
+              "isExpression": false,
+              "asc": true,
+              "nulls": "last"
+            }
+          ],
+          "isUnique": false,
+          "with": {},
+          "method": "btree",
+          "concurrently": false
+        }
+      },
+      "foreignKeys": {
+        "Ping_UserId_User_Id_fk": {
+          "name": "Ping_UserId_User_Id_fk",
+          "tableFrom": "Ping",
+          "columnsFrom": [
+            "UserId"
+          ],
+          "tableTo": "User",
+          "columnsTo": [
+            "Id"
+          ],
+          "onUpdate": "no action",
+          "onDelete": "cascade"
+        }
+      },
+      "compositePrimaryKeys": {},
+      "uniqueConstraints": {},
+      "policies": {},
+      "checkConstraints": {},
+      "isRLSEnabled": true
     },
     "public.ProfilePicture": {
       "name": "ProfilePicture",
@@ -1210,23 +1642,38 @@
           "name": "ServerFilename",
           "type": "text",
           "primaryKey": false,
-          "notNull": true
+          "notNull": false
+        },
+        "Url": {
+          "name": "Url",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false
         },
         "FileExtension": {
           "name": "FileExtension",
           "type": "ImageFileExtension",
+          "typeSchema": "public",
           "primaryKey": false,
-          "notNull": true
+          "notNull": false
         },
         "ContentType": {
           "name": "ContentType",
           "type": "ImageFileMimeType",
+          "typeSchema": "public",
           "primaryKey": false,
-          "notNull": true
+          "notNull": false
         },
         "UserId": {
           "name": "UserId",
           "type": "uuid",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "ProfilePictureSource": {
+          "name": "ProfilePictureSource",
+          "type": "ProfilePictureSource",
+          "typeSchema": "public",
           "primaryKey": false,
           "notNull": true
         }
@@ -1256,7 +1703,10 @@
           ],
           "nullsNotDistinct": false
         }
-      }
+      },
+      "policies": {},
+      "checkConstraints": {},
+      "isRLSEnabled": true
     },
     "public.QuestionUpvote": {
       "name": "QuestionUpvote",
@@ -1284,6 +1734,7 @@
       },
       "indexes": {
         "QuestionUpvote_QuestionId_Index": {
+          "name": "QuestionUpvote_QuestionId_Index",
           "columns": [
             {
               "expression": "QuestionId",
@@ -1292,9 +1743,8 @@
               "nulls": "last"
             }
           ],
-          "with": {},
-          "name": "QuestionUpvote_QuestionId_Index",
           "isUnique": false,
+          "with": {},
           "method": "btree",
           "concurrently": false
         }
@@ -1336,7 +1786,257 @@
           ]
         }
       },
-      "uniqueConstraints": {}
+      "uniqueConstraints": {},
+      "policies": {},
+      "checkConstraints": {},
+      "isRLSEnabled": true
+    },
+    "public.ReferralBalance": {
+      "name": "ReferralBalance",
+      "schema": "",
+      "columns": {
+        "Index": {
+          "name": "Index",
+          "type": "serial",
+          "primaryKey": true,
+          "notNull": true
+        },
+        "TotalRefferalBonus": {
+          "name": "TotalRefferalBonus",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": true,
+          "default": 0
+        },
+        "PaidOutRefferalBonus": {
+          "name": "PaidOutRefferalBonus",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": true,
+          "default": 0
+        },
+        "CreatedAt": {
+          "name": "CreatedAt",
+          "type": "timestamp",
+          "primaryKey": false,
+          "notNull": true,
+          "default": "now()"
+        },
+        "UserId": {
+          "name": "UserId",
+          "type": "uuid",
+          "primaryKey": false,
+          "notNull": true
+        }
+      },
+      "indexes": {
+        "ReferralBalance_UserId_FK_Index": {
+          "name": "ReferralBalance_UserId_FK_Index",
+          "columns": [
+            {
+              "expression": "UserId",
+              "isExpression": false,
+              "asc": true,
+              "nulls": "last"
+            }
+          ],
+          "isUnique": false,
+          "with": {},
+          "method": "btree",
+          "concurrently": false
+        }
+      },
+      "foreignKeys": {
+        "ReferralBalance_UserId_User_Id_fk": {
+          "name": "ReferralBalance_UserId_User_Id_fk",
+          "tableFrom": "ReferralBalance",
+          "columnsFrom": [
+            "UserId"
+          ],
+          "tableTo": "User",
+          "columnsTo": [
+            "Id"
+          ],
+          "onUpdate": "no action",
+          "onDelete": "cascade"
+        }
+      },
+      "compositePrimaryKeys": {},
+      "uniqueConstraints": {},
+      "policies": {},
+      "checkConstraints": {},
+      "isRLSEnabled": true
+    },
+    "public.ReferralCode": {
+      "name": "ReferralCode",
+      "schema": "",
+      "columns": {
+        "Code": {
+          "name": "Code",
+          "type": "text",
+          "primaryKey": true,
+          "notNull": true
+        },
+        "CreatedAt": {
+          "name": "CreatedAt",
+          "type": "timestamp",
+          "primaryKey": false,
+          "notNull": true,
+          "default": "now()"
+        },
+        "UserId": {
+          "name": "UserId",
+          "type": "uuid",
+          "primaryKey": false,
+          "notNull": true
+        }
+      },
+      "indexes": {
+        "ReferralCode_UserId_FK_Index": {
+          "name": "ReferralCode_UserId_FK_Index",
+          "columns": [
+            {
+              "expression": "UserId",
+              "isExpression": false,
+              "asc": true,
+              "nulls": "last"
+            }
+          ],
+          "isUnique": false,
+          "with": {},
+          "method": "btree",
+          "concurrently": false
+        }
+      },
+      "foreignKeys": {
+        "ReferralCode_UserId_User_Id_fk": {
+          "name": "ReferralCode_UserId_User_Id_fk",
+          "tableFrom": "ReferralCode",
+          "columnsFrom": [
+            "UserId"
+          ],
+          "tableTo": "User",
+          "columnsTo": [
+            "Id"
+          ],
+          "onUpdate": "no action",
+          "onDelete": "cascade"
+        }
+      },
+      "compositePrimaryKeys": {},
+      "uniqueConstraints": {},
+      "policies": {},
+      "checkConstraints": {},
+      "isRLSEnabled": true
+    },
+    "public.Referral": {
+      "name": "Referral",
+      "schema": "",
+      "columns": {
+        "Index": {
+          "name": "Index",
+          "type": "serial",
+          "primaryKey": true,
+          "notNull": true
+        },
+        "Code": {
+          "name": "Code",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "CreatedAt": {
+          "name": "CreatedAt",
+          "type": "timestamp",
+          "primaryKey": false,
+          "notNull": true,
+          "default": "now()"
+        },
+        "ReferredUserId": {
+          "name": "ReferredUserId",
+          "type": "uuid",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "ReferringUserId": {
+          "name": "ReferringUserId",
+          "type": "uuid",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "Paid": {
+          "name": "Paid",
+          "type": "boolean",
+          "primaryKey": false,
+          "notNull": true,
+          "default": false
+        }
+      },
+      "indexes": {
+        "Referral_UserId_FK_Index": {
+          "name": "Referral_UserId_FK_Index",
+          "columns": [
+            {
+              "expression": "ReferredUserId",
+              "isExpression": false,
+              "asc": true,
+              "nulls": "last"
+            }
+          ],
+          "isUnique": false,
+          "with": {},
+          "method": "btree",
+          "concurrently": false
+        },
+        "Referral_ReferringUserId_FK_Index": {
+          "name": "Referral_ReferringUserId_FK_Index",
+          "columns": [
+            {
+              "expression": "ReferringUserId",
+              "isExpression": false,
+              "asc": true,
+              "nulls": "last"
+            }
+          ],
+          "isUnique": false,
+          "with": {},
+          "method": "btree",
+          "concurrently": false
+        }
+      },
+      "foreignKeys": {
+        "Referral_ReferredUserId_User_Id_fk": {
+          "name": "Referral_ReferredUserId_User_Id_fk",
+          "tableFrom": "Referral",
+          "columnsFrom": [
+            "ReferredUserId"
+          ],
+          "tableTo": "User",
+          "columnsTo": [
+            "Id"
+          ],
+          "onUpdate": "no action",
+          "onDelete": "no action"
+        },
+        "Referral_ReferringUserId_User_Id_fk": {
+          "name": "Referral_ReferringUserId_User_Id_fk",
+          "tableFrom": "Referral",
+          "columnsFrom": [
+            "ReferringUserId"
+          ],
+          "tableTo": "User",
+          "columnsTo": [
+            "Id"
+          ],
+          "onUpdate": "no action",
+          "onDelete": "no action"
+        }
+      },
+      "compositePrimaryKeys": {},
+      "uniqueConstraints": {},
+      "policies": {},
+      "checkConstraints": {},
+      "isRLSEnabled": true
     },
     "public.SearchIndexUpdateQueue": {
       "name": "SearchIndexUpdateQueue",
@@ -1345,20 +2045,239 @@
         "CmsId": {
           "name": "CmsId",
           "type": "uuid",
-          "primaryKey": true,
+          "primaryKey": false,
           "notNull": true
         },
-        "ResourceType": {
-          "name": "ResourceType",
+        "SearchIndexType": {
+          "name": "SearchIndexType",
           "type": "SearchIndexType",
+          "typeSchema": "public",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "EventType": {
+          "name": "EventType",
+          "type": "CaisyWebhookEventType",
+          "typeSchema": "public",
           "primaryKey": false,
           "notNull": true
         }
       },
       "indexes": {},
       "foreignKeys": {},
+      "compositePrimaryKeys": {
+        "SearchIndexUpdateQueue_CmsId_SearchIndexType_EventType_pk": {
+          "name": "SearchIndexUpdateQueue_CmsId_SearchIndexType_EventType_pk",
+          "columns": [
+            "CmsId",
+            "SearchIndexType",
+            "EventType"
+          ]
+        }
+      },
+      "uniqueConstraints": {},
+      "policies": {},
+      "checkConstraints": {},
+      "isRLSEnabled": true
+    },
+    "public.Streak": {
+      "name": "Streak",
+      "schema": "",
+      "columns": {
+        "id": {
+          "name": "id",
+          "type": "serial",
+          "primaryKey": true,
+          "notNull": true
+        },
+        "UserId": {
+          "name": "UserId",
+          "type": "uuid",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "StartDate": {
+          "name": "StartDate",
+          "type": "date",
+          "primaryKey": false,
+          "notNull": true,
+          "default": "now()"
+        },
+        "LastSatisfiedDate": {
+          "name": "LastSatisfiedDate",
+          "type": "date",
+          "primaryKey": false,
+          "notNull": true,
+          "default": "now()"
+        },
+        "SatisfiedDays": {
+          "name": "SatisfiedDays",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": false,
+          "default": 1
+        },
+        "StreakAlive": {
+          "name": "StreakAlive",
+          "type": "boolean",
+          "primaryKey": false,
+          "notNull": false,
+          "default": true
+        },
+        "LastCheckDate": {
+          "name": "LastCheckDate",
+          "type": "date",
+          "primaryKey": false,
+          "notNull": true,
+          "default": "now()"
+        }
+      },
+      "indexes": {
+        "Streak_UserId_FK_Index": {
+          "name": "Streak_UserId_FK_Index",
+          "columns": [
+            {
+              "expression": "UserId",
+              "isExpression": false,
+              "asc": true,
+              "nulls": "last"
+            }
+          ],
+          "isUnique": false,
+          "with": {},
+          "method": "btree",
+          "concurrently": false
+        }
+      },
+      "foreignKeys": {
+        "Streak_UserId_User_Id_fk": {
+          "name": "Streak_UserId_User_Id_fk",
+          "tableFrom": "Streak",
+          "columnsFrom": [
+            "UserId"
+          ],
+          "tableTo": "User",
+          "columnsTo": [
+            "Id"
+          ],
+          "onUpdate": "no action",
+          "onDelete": "no action"
+        }
+      },
       "compositePrimaryKeys": {},
-      "uniqueConstraints": {}
+      "uniqueConstraints": {},
+      "policies": {},
+      "checkConstraints": {},
+      "isRLSEnabled": true
+    },
+    "public.StreakActivities": {
+      "name": "StreakActivities",
+      "schema": "",
+      "columns": {
+        "id": {
+          "name": "id",
+          "type": "serial",
+          "primaryKey": true,
+          "notNull": true
+        },
+        "UserId": {
+          "name": "UserId",
+          "type": "uuid",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "ActivityType": {
+          "name": "ActivityType",
+          "type": "StreakActivityType",
+          "typeSchema": "public",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "CreatedAt": {
+          "name": "CreatedAt",
+          "type": "date",
+          "primaryKey": false,
+          "notNull": true,
+          "default": "now()"
+        }
+      },
+      "indexes": {
+        "StreakActivity_UserId_FK_Index": {
+          "name": "StreakActivity_UserId_FK_Index",
+          "columns": [
+            {
+              "expression": "UserId",
+              "isExpression": false,
+              "asc": true,
+              "nulls": "last"
+            }
+          ],
+          "isUnique": false,
+          "with": {},
+          "method": "btree",
+          "concurrently": false
+        }
+      },
+      "foreignKeys": {
+        "StreakActivities_UserId_User_Id_fk": {
+          "name": "StreakActivities_UserId_User_Id_fk",
+          "tableFrom": "StreakActivities",
+          "columnsFrom": [
+            "UserId"
+          ],
+          "tableTo": "User",
+          "columnsTo": [
+            "Id"
+          ],
+          "onUpdate": "no action",
+          "onDelete": "cascade"
+        }
+      },
+      "compositePrimaryKeys": {},
+      "uniqueConstraints": {},
+      "policies": {},
+      "checkConstraints": {},
+      "isRLSEnabled": true
+    },
+    "public.UpdateUserInCrmQueue": {
+      "name": "UpdateUserInCrmQueue",
+      "schema": "",
+      "columns": {
+        "UserId": {
+          "name": "UserId",
+          "type": "uuid",
+          "primaryKey": true,
+          "notNull": true
+        },
+        "CreatedAt": {
+          "name": "CreatedAt",
+          "type": "timestamp",
+          "primaryKey": false,
+          "notNull": true,
+          "default": "now()"
+        }
+      },
+      "indexes": {},
+      "foreignKeys": {
+        "UpdateUserInCrmQueue_UserId_User_Id_fk": {
+          "name": "UpdateUserInCrmQueue_UserId_User_Id_fk",
+          "tableFrom": "UpdateUserInCrmQueue",
+          "columnsFrom": [
+            "UserId"
+          ],
+          "tableTo": "User",
+          "columnsTo": [
+            "Id"
+          ],
+          "onUpdate": "no action",
+          "onDelete": "cascade"
+        }
+      },
+      "compositePrimaryKeys": {},
+      "uniqueConstraints": {},
+      "policies": {},
+      "checkConstraints": {},
+      "isRLSEnabled": true
     },
     "public.UploadFolder": {
       "name": "UploadFolder",
@@ -1391,7 +2310,23 @@
           "notNull": true
         }
       },
-      "indexes": {},
+      "indexes": {
+        "UploadFolder_UserId_FK_Index": {
+          "name": "UploadFolder_UserId_FK_Index",
+          "columns": [
+            {
+              "expression": "UserId",
+              "isExpression": false,
+              "asc": true,
+              "nulls": "last"
+            }
+          ],
+          "isUnique": false,
+          "with": {},
+          "method": "btree",
+          "concurrently": false
+        }
+      },
       "foreignKeys": {
         "UploadFolder_UserId_User_Id_fk": {
           "name": "UploadFolder_UserId_User_Id_fk",
@@ -1408,7 +2343,10 @@
         }
       },
       "compositePrimaryKeys": {},
-      "uniqueConstraints": {}
+      "uniqueConstraints": {},
+      "policies": {},
+      "checkConstraints": {},
+      "isRLSEnabled": true
     },
     "public.UploadedFile": {
       "name": "UploadedFile",
@@ -1461,17 +2399,50 @@
         "FileExtension": {
           "name": "FileExtension",
           "type": "FileExtension",
+          "typeSchema": "public",
           "primaryKey": false,
           "notNull": true
         },
         "ContentType": {
           "name": "ContentType",
           "type": "FileMimeType",
+          "typeSchema": "public",
           "primaryKey": false,
           "notNull": true
         }
       },
-      "indexes": {},
+      "indexes": {
+        "UploadedFile_UserId_FK_Index": {
+          "name": "UploadedFile_UserId_FK_Index",
+          "columns": [
+            {
+              "expression": "UserId",
+              "isExpression": false,
+              "asc": true,
+              "nulls": "last"
+            }
+          ],
+          "isUnique": false,
+          "with": {},
+          "method": "btree",
+          "concurrently": false
+        },
+        "UploadedFile_FolderId_FK_Index": {
+          "name": "UploadedFile_FolderId_FK_Index",
+          "columns": [
+            {
+              "expression": "FolderId",
+              "isExpression": false,
+              "asc": true,
+              "nulls": "last"
+            }
+          ],
+          "isUnique": false,
+          "with": {},
+          "method": "btree",
+          "concurrently": false
+        }
+      },
       "foreignKeys": {
         "UploadedFile_UserId_User_Id_fk": {
           "name": "UploadedFile_UserId_User_Id_fk",
@@ -1501,7 +2472,57 @@
         }
       },
       "compositePrimaryKeys": {},
-      "uniqueConstraints": {}
+      "uniqueConstraints": {},
+      "policies": {},
+      "checkConstraints": {},
+      "isRLSEnabled": true
+    },
+    "public.UploadedFile_to_Tag": {
+      "name": "UploadedFile_to_Tag",
+      "schema": "",
+      "columns": {
+        "FileId": {
+          "name": "FileId",
+          "type": "uuid",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "TagId": {
+          "name": "TagId",
+          "type": "uuid",
+          "primaryKey": false,
+          "notNull": true
+        }
+      },
+      "indexes": {},
+      "foreignKeys": {
+        "UploadedFile_to_Tag_FileId_UploadedFile_Id_fk": {
+          "name": "UploadedFile_to_Tag_FileId_UploadedFile_Id_fk",
+          "tableFrom": "UploadedFile_to_Tag",
+          "columnsFrom": [
+            "FileId"
+          ],
+          "tableTo": "UploadedFile",
+          "columnsTo": [
+            "Id"
+          ],
+          "onUpdate": "no action",
+          "onDelete": "cascade"
+        }
+      },
+      "compositePrimaryKeys": {
+        "UploadedFile_to_Tag_FileId_TagId_pk": {
+          "name": "UploadedFile_to_Tag_FileId_TagId_pk",
+          "columns": [
+            "FileId",
+            "TagId"
+          ]
+        }
+      },
+      "uniqueConstraints": {},
+      "policies": {},
+      "checkConstraints": {},
+      "isRLSEnabled": true
     },
     "public.UserRole": {
       "name": "UserRole",
@@ -1517,6 +2538,7 @@
         "Identifier": {
           "name": "Identifier",
           "type": "Role",
+          "typeSchema": "public",
           "primaryKey": false,
           "notNull": true
         },
@@ -1535,6 +2557,7 @@
       },
       "indexes": {
         "UserRole_Role_Index": {
+          "name": "UserRole_Role_Index",
           "columns": [
             {
               "expression": "Identifier",
@@ -1543,9 +2566,8 @@
               "nulls": "last"
             }
           ],
-          "with": {},
-          "name": "UserRole_Role_Index",
           "isUnique": false,
+          "with": {},
           "method": "btree",
           "concurrently": false
         }
@@ -1560,7 +2582,10 @@
           ],
           "nullsNotDistinct": false
         }
-      }
+      },
+      "policies": {},
+      "checkConstraints": {},
+      "isRLSEnabled": true
     },
     "public.User": {
       "name": "User",
@@ -1570,6 +2595,13 @@
           "name": "Id",
           "type": "uuid",
           "primaryKey": true,
+          "notNull": true
+        },
+        "AuthProvider": {
+          "name": "AuthProvider",
+          "type": "AuthProvider",
+          "typeSchema": "public",
+          "primaryKey": false,
           "notNull": true
         },
         "Email": {
@@ -1588,11 +2620,12 @@
           "name": "FirstName",
           "type": "text",
           "primaryKey": false,
-          "notNull": true
+          "notNull": false
         },
         "Gender": {
           "name": "Gender",
           "type": "Gender",
+          "typeSchema": "public",
           "primaryKey": false,
           "notNull": false
         },
@@ -1600,7 +2633,7 @@
           "name": "LastName",
           "type": "text",
           "primaryKey": false,
-          "notNull": true
+          "notNull": false
         },
         "Semester": {
           "name": "Semester",
@@ -1623,30 +2656,14 @@
         "OnboardingResult": {
           "name": "OnboardingResult",
           "type": "OnboardingResult",
+          "typeSchema": "public",
           "primaryKey": false,
           "notNull": false
         },
         "SubscriptionStatus": {
           "name": "SubscriptionStatus",
           "type": "SubscriptionStatus",
-          "primaryKey": false,
-          "notNull": false
-        },
-        "SubscriptionStartDate": {
-          "name": "SubscriptionStartDate",
-          "type": "timestamp",
-          "primaryKey": false,
-          "notNull": false
-        },
-        "SubscriptionEndDate": {
-          "name": "SubscriptionEndDate",
-          "type": "timestamp",
-          "primaryKey": false,
-          "notNull": false
-        },
-        "TrialSubscriptionId": {
-          "name": "TrialSubscriptionId",
-          "type": "text",
+          "typeSchema": "public",
           "primaryKey": false,
           "notNull": false
         },
@@ -1658,7 +2675,22 @@
         }
       },
       "indexes": {},
-      "foreignKeys": {},
+      "foreignKeys": {
+        "User_Id_users_id_fk": {
+          "name": "User_Id_users_id_fk",
+          "tableFrom": "User",
+          "columnsFrom": [
+            "Id"
+          ],
+          "tableTo": "users",
+          "schemaTo": "auth",
+          "columnsTo": [
+            "id"
+          ],
+          "onUpdate": "no action",
+          "onDelete": "no action"
+        }
+      },
       "compositePrimaryKeys": {},
       "uniqueConstraints": {
         "User_Email_unique": {
@@ -1668,7 +2700,10 @@
           ],
           "nullsNotDistinct": false
         }
-      }
+      },
+      "policies": {},
+      "checkConstraints": {},
+      "isRLSEnabled": true
     },
     "public.User_to_Badge": {
       "name": "User_to_Badge",
@@ -1689,12 +2724,44 @@
         "UserBadgeState": {
           "name": "UserBadgeState",
           "type": "UserBadgeState",
+          "typeSchema": "public",
           "primaryKey": false,
           "notNull": true,
           "default": "'not-seen'"
         }
       },
-      "indexes": {},
+      "indexes": {
+        "User_to_Badge_UserId_FK_Index": {
+          "name": "User_to_Badge_UserId_FK_Index",
+          "columns": [
+            {
+              "expression": "UserId",
+              "isExpression": false,
+              "asc": true,
+              "nulls": "last"
+            }
+          ],
+          "isUnique": false,
+          "with": {},
+          "method": "btree",
+          "concurrently": false
+        },
+        "User_to_Badge_BadgeId_FK_Index": {
+          "name": "User_to_Badge_BadgeId_FK_Index",
+          "columns": [
+            {
+              "expression": "BadgeId",
+              "isExpression": false,
+              "asc": true,
+              "nulls": "last"
+            }
+          ],
+          "isUnique": false,
+          "with": {},
+          "method": "btree",
+          "concurrently": false
+        }
+      },
       "foreignKeys": {
         "User_to_Badge_UserId_User_Id_fk": {
           "name": "User_to_Badge_UserId_User_Id_fk",
@@ -1732,7 +2799,20 @@
           ]
         }
       },
-      "uniqueConstraints": {}
+      "uniqueConstraints": {},
+      "policies": {
+        "usersToBadges_read_access_for_users_own_badges": {
+          "name": "usersToBadges_read_access_for_users_own_badges",
+          "as": "PERMISSIVE",
+          "for": "SELECT",
+          "to": [
+            "authenticated"
+          ],
+          "using": "\"User_to_Badge\".\"UserId\" = (select auth.uid())"
+        }
+      },
+      "checkConstraints": {},
+      "isRLSEnabled": true
     },
     "public.User_to_Role": {
       "name": "User_to_Role",
@@ -1751,7 +2831,38 @@
           "notNull": true
         }
       },
-      "indexes": {},
+      "indexes": {
+        "User_to_Role_UserId_FK_Index": {
+          "name": "User_to_Role_UserId_FK_Index",
+          "columns": [
+            {
+              "expression": "UserId",
+              "isExpression": false,
+              "asc": true,
+              "nulls": "last"
+            }
+          ],
+          "isUnique": false,
+          "with": {},
+          "method": "btree",
+          "concurrently": false
+        },
+        "User_to_Role_RoleId_FK_Index": {
+          "name": "User_to_Role_RoleId_FK_Index",
+          "columns": [
+            {
+              "expression": "RoleId",
+              "isExpression": false,
+              "asc": true,
+              "nulls": "last"
+            }
+          ],
+          "isUnique": false,
+          "with": {},
+          "method": "btree",
+          "concurrently": false
+        }
+      },
       "foreignKeys": {
         "User_to_Role_UserId_User_Id_fk": {
           "name": "User_to_Role_UserId_User_Id_fk",
@@ -1789,10 +2900,23 @@
           ]
         }
       },
-      "uniqueConstraints": {}
+      "uniqueConstraints": {},
+      "policies": {},
+      "checkConstraints": {},
+      "isRLSEnabled": true
     }
   },
   "enums": {
+    "public.AuthProvider": {
+      "name": "AuthProvider",
+      "schema": "public",
+      "values": [
+        "apple",
+        "email",
+        "google",
+        "linkedin_oidc"
+      ]
+    },
     "public.BadgeIdentifier": {
       "name": "BadgeIdentifier",
       "schema": "public",
@@ -1827,7 +2951,10 @@
         "ugc-10",
         "forum-5",
         "feedback-5",
-        "ugc-5"
+        "ugc-5",
+        "streak-14",
+        "streak-42",
+        "streak-84"
       ]
     },
     "public.BadgePublicationState": {
@@ -1839,6 +2966,14 @@
         "published"
       ]
     },
+    "public.CaisyWebhookEventType": {
+      "name": "CaisyWebhookEventType",
+      "schema": "public",
+      "values": [
+        "upsert",
+        "delete"
+      ]
+    },
     "public.CaseProgressState": {
       "name": "CaseProgressState",
       "schema": "public",
@@ -1847,6 +2982,15 @@
         "completing-tests",
         "solving-case",
         "completed"
+      ]
+    },
+    "public.ContentItemViewType": {
+      "name": "ContentItemViewType",
+      "schema": "public",
+      "values": [
+        "case",
+        "article",
+        "forumQuestion"
       ]
     },
     "public.DocumentFileExtension": {
@@ -1916,8 +3060,8 @@
         "image/png"
       ]
     },
-    "public.NotificationTypeIdentifier": {
-      "name": "NotificationTypeIdentifier",
+    "public.NotificationTypeEnum": {
+      "name": "NotificationTypeEnum",
       "schema": "public",
       "values": [
         "forumQuestionPosted",
@@ -1936,6 +3080,14 @@
         "completed"
       ]
     },
+    "public.ProfilePictureSource": {
+      "name": "ProfilePictureSource",
+      "schema": "public",
+      "values": [
+        "internal",
+        "external"
+      ]
+    },
     "public.ResourceType": {
       "name": "ResourceType",
       "schema": "public",
@@ -1950,15 +3102,29 @@
       "schema": "public",
       "values": [
         "forumMod",
-        "admin"
+        "admin",
+        "testing-user"
       ]
     },
     "public.SearchIndexType": {
       "name": "SearchIndexType",
       "schema": "public",
       "values": [
-        "article",
-        "case"
+        "articles",
+        "cases",
+        "forum-questions",
+        "tags",
+        "user-documents",
+        "user-uploads"
+      ]
+    },
+    "public.StreakActivityType": {
+      "name": "StreakActivityType",
+      "schema": "public",
+      "values": [
+        "time",
+        "solvedCase",
+        "forumActivity"
       ]
     },
     "public.SubscriptionStatus": {
@@ -1985,12 +3151,13 @@
     }
   },
   "schemas": {},
+  "views": {},
+  "sequences": {},
+  "roles": {},
+  "policies": {},
   "_meta": {
+    "columns": {},
     "schemas": {},
-    "tables": {},
-    "columns": {}
-  },
-  "id": "cfa0d5d5-c337-4579-be40-ee407f5cc141",
-  "prevId": "47056695-1d87-4fd0-8870-04709b130dd0",
-  "sequences": {}
+    "tables": {}
+  }
 }

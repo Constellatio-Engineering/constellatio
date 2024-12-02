@@ -61,8 +61,8 @@ catalogs:
       specifier: 16.9.0
       version: 16.9.0
     supabase:
-      specifier: 1.207.9
-      version: 1.207.9
+      specifier: 1.226.3
+      version: 1.226.3
     superjson:
       specifier: 2.2.1
       version: 2.2.1
@@ -85,7 +85,7 @@ importers:
         version: 2.2.3(@types/node@22.8.6)(typescript@5.5.4)
       supabase:
         specifier: 'catalog:'
-        version: 1.207.9
+        version: 1.226.3
       turbo:
         specifier: 2.2.3
         version: 2.2.3
@@ -407,7 +407,7 @@ importers:
         version: 8.57.0
       supabase:
         specifier: 'catalog:'
-        version: 1.207.9
+        version: 1.226.3
       typescript:
         specifier: 'catalog:'
         version: 5.5.4
@@ -6284,8 +6284,8 @@ packages:
   stylis@4.2.0:
     resolution: {integrity: sha512-Orov6g6BB1sDfYgzWfTHDOxamtX1bE/zo104Dh9e6fqJ3PooipYyfJ0pUmrZO2wAvO8YbEyeFrkV91XTsGMSrw==}
 
-  supabase@1.207.9:
-    resolution: {integrity: sha512-BJPwsAd2UBIpQawcQV3/xKHEZ8YrrkHYpgibxCZbG+RuxuhTtkHG7zR4I3LylIIEwcKp3hmDKu/hO1m2NT5RXA==}
+  supabase@1.226.3:
+    resolution: {integrity: sha512-+KytrqHMQTg1J71E26Og1lMOsUG7MW+Fvcdlu9ZpUCz2dQG96gm0HEjUlL9/PV01DmhNIUZ1+EUaf8QMco4BLg==}
     engines: {npm: '>=8'}
     hasBin: true
 
@@ -9351,7 +9351,7 @@ snapshots:
 
   agent-base@6.0.2:
     dependencies:
-      debug: 4.3.1
+      debug: 4.3.7
     transitivePeerDependencies:
       - supports-color
 
@@ -12991,7 +12991,7 @@ snapshots:
 
   stylis@4.2.0: {}
 
-  supabase@1.207.9:
+  supabase@1.226.3:
     dependencies:
       bin-links: 5.0.0
       https-proxy-agent: 7.0.5

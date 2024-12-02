@@ -17,13 +17,6 @@
       "breakpoints": true
     },
     {
-      "idx": 5,
-      "version": "5",
-      "when": 1711062352332,
-      "tag": "0005_nappy_northstar",
-      "breakpoints": true
-    },
-    {
       "idx": 7,
       "version": "5",
       "when": 1711404776207,
@@ -262,13 +255,6 @@
       "breakpoints": true
     },
     {
-      "idx": 61,
-      "version": "7",
-      "when": 1732666192509,
-      "tag": "0061_windy_kitty_pryde",
-      "breakpoints": true
-    },
-    {
       "idx": 62,
       "version": "7",
       "when": 1732745471570,
@@ -308,6 +294,41 @@
       "version": "7",
       "when": 1733091183452,
       "tag": "0067_moaning_alex_wilder",
+      "breakpoints": true
+    },
+    {
+      "idx": 68,
+      "version": "7",
+      "when": 1733160785352,
+      "tag": "0068_parallel_the_initiative",
+      "breakpoints": true
+    },
+    {
+      "idx": 69,
+      "version": "7",
+      "when": 1733164066897,
+      "tag": "0069_classy_mordo",
+      "breakpoints": true
+    },
+    {
+      "idx": 70,
+      "version": "7",
+      "when": 1733164091106,
+      "tag": "0070_parched_spyke",
+      "breakpoints": true
+    },
+    {
+      "idx": 71,
+      "version": "7",
+      "when": 1733165531837,
+      "tag": "0071_groovy_silverclaw",
+      "breakpoints": true
+    },
+    {
+      "idx": 72,
+      "version": "7",
+      "when": 1733169683205,
+      "tag": "0072_hot_katie_power",
       "breakpoints": true
     }
   ]

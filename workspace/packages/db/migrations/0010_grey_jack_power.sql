@@ -22,10 +22,7 @@ CREATE TABLE IF NOT EXISTS "UploadedFile_to_Tag" (
 	CONSTRAINT "UploadedFile_to_Tag_FileId_TagId_pk" PRIMARY KEY("FileId","TagId")
 );
 --> statement-breakpoint
-ALTER TABLE "NotificationType" RENAME COLUMN "NotificationTypeIdentifier" TO "NotificationType";--> statement-breakpoint
-ALTER TABLE "Notification" RENAME COLUMN "NotificationTypeIdentifier" TO "Type";--> statement-breakpoint
 ALTER TABLE "SearchIndexUpdateQueue" RENAME COLUMN "ResourceType" TO "SearchIndexType";--> statement-breakpoint
-ALTER TABLE "Notification" DROP CONSTRAINT "Notification_NotificationTypeIdentifier_NotificationType_NotificationTypeIdentifier_fk";
 --> statement-breakpoint
 
 ALTER TABLE "SearchIndexUpdateQueue" DROP CONSTRAINT IF EXISTS "SearchIndexUpdateQueue_pkey";--> statement-breakpoint
@@ -39,12 +36,6 @@ END $$;
 --> statement-breakpoint
 DO $$ BEGIN
  ALTER TABLE "UploadedFile_to_Tag" ADD CONSTRAINT "UploadedFile_to_Tag_FileId_UploadedFile_Id_fk" FOREIGN KEY ("FileId") REFERENCES "public"."UploadedFile"("Id") ON DELETE cascade ON UPDATE no action;
-EXCEPTION
- WHEN duplicate_object THEN null;
-END $$;
---> statement-breakpoint
-DO $$ BEGIN
- ALTER TABLE "Notification" ADD CONSTRAINT "Notification_Type_NotificationType_NotificationType_fk" FOREIGN KEY ("Type") REFERENCES "public"."NotificationType"("NotificationType") ON DELETE no action ON UPDATE no action;
 EXCEPTION
  WHEN duplicate_object THEN null;
 END $$;
