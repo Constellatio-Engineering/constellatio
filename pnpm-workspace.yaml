@@ -21,7 +21,7 @@ catalog:
   "meilisearch": 0.44.1
   "next": 14.2.15
   "postgres": 3.4.5
-  "supabase": 1.207.9
+  "supabase": 1.226.3
   "stripe": 16.9.0
   "superjson": 2.2.1
   "typescript": 5.5.4
