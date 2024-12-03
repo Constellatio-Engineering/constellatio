@@ -747,3 +747,67 @@ export const contentViews = pgTable("ContentView", {
 export type ContentViewInsert = InferInsertModel<typeof contentViews>;
 export type ContentView = InferSelectModel<typeof contentViews>;
 export type ContentViewSql = InferPgSelectModel<typeof contentViews>;
+
+export const flashcardsCollections = pgTable("FlashcardsCollection", {
+  id: uuid("Id").primaryKey().defaultRandom().notNull(),
+  index: serial("Index"),
+  createdAt: timestamp("CreatedAt").defaultNow().notNull(),
+  updatedAt: timestamp("UpdatedAt").defaultNow().notNull().$onUpdate(getCurrentDate),
+  userId: uuid("UserId").references(() => users.id, { onDelete: "no action" }).notNull(),
+  name: text("Name").notNull(),
+  description: text("Description").notNull(),
+}, table => [
+  index("FlashcardsCollection_UserId_FK_Index").on(table.userId),
+]).enableRLS();
+
+export const flashcardsCollectionsRelations = relations(flashcardsCollections, ({ many }) => ({
+  flashcardsToCollections: many(flashcardsToCollections),
+}));
+
+export type FlashcardsCollectionInsert = InferInsertModel<typeof flashcardsCollections>;
+export type FlashcardsCollection = InferSelectModel<typeof flashcardsCollections>;
+export type FlashcardsCollectionSql = InferPgSelectModel<typeof flashcardsCollections>;
+
+export const flashcards = pgTable("Flashcard", {
+  id: uuid("Id").primaryKey().defaultRandom().notNull(),
+  index: serial("Index"),
+  createdAt: timestamp("CreatedAt").defaultNow().notNull(),
+  updatedAt: timestamp("UpdatedAt").defaultNow().notNull().$onUpdate(getCurrentDate),
+  userId: uuid("UserId").references(() => users.id, { onDelete: "no action" }).notNull(),
+  question: text("Question").notNull(),
+  answer: text("Answer").notNull(),
+}, table => [
+  index("Flashcard_UserId_FK_Index").on(table.userId),
+]).enableRLS();
+
+export const flashcardsRelations = relations(flashcards, ({ many }) => ({
+  flashcardsToCollections: many(flashcardsToCollections),
+}));
+
+export type FlashcardInsert = InferInsertModel<typeof flashcards>;
+export type Flashcard = InferSelectModel<typeof flashcards>;
+export type FlashcardSql = InferPgSelectModel<typeof flashcards>;
+
+export const flashcardsToCollections = pgTable("FlashcardsToCollections", {
+  flashcardId: uuid("FlashcardId").references(() => flashcards.id, { onDelete: "cascade" }).notNull(),
+  collectionId: uuid("CollectionId").references(() => flashcardsCollections.id, { onDelete: "no action" }).notNull(),
+}, table => [
+  primaryKey({ columns: [table.flashcardId, table.collectionId] }),
+  index("FlashcardsToCollections_FlashcardId_FK_Index").on(table.flashcardId),
+  index("FlashcardsToCollections_CollectionId_FK_Index").on(table.collectionId),
+]).enableRLS();
+
+export const flashcardsToCollectionsRelations = relations(flashcardsToCollections, ({ one }) => ({
+  flashcard: one(flashcards, {
+    fields: [flashcardsToCollections.flashcardId],
+    references: [flashcards.id],
+  }),
+  collection: one(flashcardsCollections, {
+    fields: [flashcardsToCollections.collectionId],
+    references: [flashcardsCollections.id],
+  }),
+}));
+
+export type FlashcardsToCollectionsInsert = InferInsertModel<typeof flashcardsToCollections>;
+export type FlashcardsToCollections = InferSelectModel<typeof flashcardsToCollections>;
+export type FlashcardsToCollectionsSql = InferPgSelectModel<typeof flashcardsToCollections>;

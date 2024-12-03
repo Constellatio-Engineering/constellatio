@@ -27,7 +27,7 @@
     "typecheck": "tsc --noEmit --emitDeclarationOnly false",
     "apply-migrations": "pnpm with-env drizzle-kit migrate",
     "db:pull": "pnpm with-env drizzle-kit pull",
-    "db:push": "pnpm with-env drizzle-kit push --verbose --strict",
+    "db:push": "pnpm with-env drizzle-kit push --verbose",
     "drizzle:studio": "pnpm with-env drizzle-kit studio",
     "generate-new-custom-migration": "pnpm with-env drizzle-kit generate --custom",
     "generate-migrations": "pnpm with-env drizzle-kit generate",
