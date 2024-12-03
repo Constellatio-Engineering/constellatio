@@ -13,7 +13,7 @@ type UseAllCasesWithProgress = () => {
 const useAllCasesWithProgress: UseAllCasesWithProgress = () =>
 {
   const { allCases } = useCases();
-  const { casesProgress } = useCasesProgress();
+  const { data: casesProgress } = useCasesProgress();
 
   const casesWithProgress = allCases
     .map(legalCase => ({

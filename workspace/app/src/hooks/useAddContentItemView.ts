@@ -5,9 +5,17 @@ import useContextAndErrorIfNull from "./useContextAndErrorIfNull";
 
 export const useAddContentItemView = () =>
 {
-  const { invalidateContentItemsViewsCount } = useContextAndErrorIfNull(InvalidateQueriesContext);
+  const { invalidateContentItemsViewsCount, invalidateSeenArticles } = useContextAndErrorIfNull(InvalidateQueriesContext);
 
   return api.views.addContentItemView.useMutation({
-    onSuccess: async (_data, variables) => invalidateContentItemsViewsCount(variables)
+    onSuccess: (_data, variables) =>
+    {
+      if(variables.itemType === "article")
+      {
+        void invalidateSeenArticles();
+      }
+
+      void invalidateContentItemsViewsCount(variables);
+    }
   });
 };

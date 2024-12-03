@@ -24,6 +24,7 @@ type InvalidateBadgesOptions = inferProcedureInput<AppRouter["badges"]["getBadge
 type InvalidateAmountOfUnreadNotificationsOptions = inferProcedureInput<AppRouter["notifications"]["getAmountOfUnreadNotifications"]>;
 type InvalidateNotificationOptions = inferProcedureInput<AppRouter["notifications"]["getNotificationById"]>;
 type InvalidateNotificationsOptions = inferProcedureInput<AppRouter["notifications"]["getNotifications"]>;
+type InvalidateSeenArticlesOptions = inferProcedureInput<AppRouter["views"]["getSeenArticles"]>;
 
 type InvalidateQueries = {
   invalidateAmountOfUnreadNotifications: (options?: InvalidateAmountOfUnreadNotificationsOptions) => Promise<void>;
@@ -44,6 +45,7 @@ type InvalidateQueries = {
   invalidateNotifications: (options?: InvalidateNotificationsOptions) => Promise<void>;
   invalidateOnboardingResult: (options?: InvalidateOnboardingResultOptions) => Promise<void>;
   invalidateSearchResults: (value?: string) => Promise<void>;
+  invalidateSeenArticles: (options?: InvalidateSeenArticlesOptions) => Promise<void>;
   invalidateSubmittedCaseSolution: (options: InvalidateSubmittedCaseSolutionOptions) => Promise<void>;
   invalidateUploadedFiles: (options?: InvalidateUploadedFilesOptions) => Promise<void>;
   invalidateUserDetails: (options?: InvalidateUserDetailsResultOptions) => Promise<void>;
@@ -90,6 +92,7 @@ const InvalidateQueriesProvider: FunctionComponent<InvalidateQueriesProviderProp
 
       await queryClient.invalidateQueries({ queryKey });
     },
+    invalidateSeenArticles: async (options) => apiContext.views.getSeenArticles.invalidate(options),
     invalidateSubmittedCaseSolution: async (options) => apiContext.casesProgress.getSubmittedSolution.invalidate(options),
     invalidateUploadedFiles: async (options) => apiContext.uploads.getUploadedFiles.invalidate(options),
     invalidateUserDetails: async (options) => apiContext.users.getUserDetails.invalidate(options)
@@ -114,6 +117,7 @@ const InvalidateQueriesProvider: FunctionComponent<InvalidateQueriesProviderProp
     apiContext.casesProgress.getSubmittedSolution,
     apiContext.users.getUserDetails,
     apiContext.users.getOnboardingResult,
+    apiContext.views.getSeenArticles,
     queryClient
   ]);
 

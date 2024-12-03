@@ -3,7 +3,7 @@ import { getAllMainCategories } from "@constellatio/cms/content/getAllMainCatego
 import { getArticleById } from "@constellatio/cms/content/getArticleById";
 import { getCaseById } from "@constellatio/cms/content/getCaseById";
 import {
-  and, desc, eq, gt, inArray, lte, type SQL, sql 
+  and, desc, eq, gt, inArray, lte, type SQL, sql, type SQLWrapper
 } from "@constellatio/db";
 import { db } from "@constellatio/db/client";
 import { contentViews, forumQuestions } from "@constellatio/db/schema";
@@ -11,6 +11,7 @@ import { env } from "@constellatio/env";
 import { addContentItemViewSchema } from "@constellatio/schemas/routers/views/addContentItemView.schema";
 import { getContentItemViewsSchema } from "@constellatio/schemas/routers/views/getContentItemViews.schema";
 import { getLastViewedContentItemsSchema } from "@constellatio/schemas/routers/views/getLastViewedContentItems.schema";
+import { getSeenArticlesSchema } from "@constellatio/schemas/routers/views/getSeenArticles.schema";
 import { type ContentItemViewType } from "@constellatio/shared/validation";
 import { type Nullable } from "@constellatio/utility-types";
 import { type inferProcedureOutput } from "@trpc/server";
@@ -89,23 +90,6 @@ export const viewsRouter = createTRPCRouter({
         }
       }
     }),
-  getAllSeenArticles: protectedProcedure
-    .query(async ({ ctx: { userId } }) =>
-    {
-      const seenArticles = await db
-        .select({
-          articleId: contentViews.contentItemId,
-        })
-        .from(contentViews)
-        .where(
-          and(
-            eq(contentViews.userId, userId),
-            eq(contentViews.contentItemType, "article")
-          )
-        );
-
-      return seenArticles.map(seenArticle => seenArticle.articleId);
-    }),
   getContentItemViewsCount: protectedProcedure
     .input(getContentItemViewsSchema)
     .query(async ({ input: { itemId, itemType } }) =>
@@ -151,6 +135,27 @@ export const viewsRouter = createTRPCRouter({
         .limit(3);
 
       return views;
+    }),
+  getSeenArticles: protectedProcedure
+    .input(getSeenArticlesSchema)
+    .query(async ({ ctx: { userId }, input }) =>
+    {
+      const queryConditions: SQLWrapper[] = [
+        eq(contentViews.userId, userId),
+        eq(contentViews.contentItemType, "article")
+      ];
+
+      if(input?.articleIds)
+      {
+        queryConditions.push(inArray(contentViews.contentItemId, input.articleIds));
+      }
+
+      const seenArticles = await db
+        .select({ articleId: contentViews.contentItemId })
+        .from(contentViews)
+        .where(and(...queryConditions));
+
+      return seenArticles.map(seenArticle => seenArticle.articleId);
     }),
   getViewsHistory: protectedProcedure
     .input(z.object({

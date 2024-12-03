@@ -115,6 +115,21 @@ input Article_MainCategoryField_WhereConnection {
 }
 
 """"""
+input Article_Nested_Where {
+  """"""
+  AND: [Article_Nested_Where]
+
+  """"""
+  OR: [Article_Nested_Where]
+
+  """"""
+  fullTextTasks: CaisyField_Richtext_Where
+
+  """"""
+  title: CaisyField_String_Where
+}
+
+""""""
 input Article_Sort {
   """"""
   createdAt: Order
@@ -656,6 +671,24 @@ type CardSelectionGame_ConnectionEdge {
 }
 
 """"""
+input CardSelectionGame_Nested_Where {
+  """"""
+  AND: [CardSelectionGame_Nested_Where]
+
+  """"""
+  OR: [CardSelectionGame_Nested_Where]
+
+  """"""
+  helpNote: CaisyField_Richtext_Where
+
+  """"""
+  question: CaisyField_String_Where
+
+  """"""
+  questionType: CardSelectionGame_QuestionType_Where
+}
+
+""""""
 enum CardSelectionGame_QuestionType {
   """"""
   multi_punch_question
@@ -855,6 +888,30 @@ input Case_MainCategoryField_Where {
 input Case_MainCategoryField_WhereConnection {
   """"""
   MainCategory: MainCategory_Nested_Where
+}
+
+""""""
+input Case_Nested_Where {
+  """"""
+  AND: [Case_Nested_Where]
+
+  """"""
+  OR: [Case_Nested_Where]
+
+  """"""
+  durationToCompleteInMinutes: CaisyField_Number_WhereInt
+
+  """"""
+  facts: CaisyField_Richtext_Where
+
+  """"""
+  fullTextTasks: CaisyField_Richtext_Where
+
+  """"""
+  resolution: CaisyField_Richtext_Where
+
+  """"""
+  title: CaisyField_String_Where
 }
 
 """"""
@@ -1073,6 +1130,21 @@ type DragNDropGame_ConnectionEdge {
 }
 
 """"""
+input DragNDropGame_Nested_Where {
+  """"""
+  AND: [DragNDropGame_Nested_Where]
+
+  """"""
+  OR: [DragNDropGame_Nested_Where]
+
+  """"""
+  helpNote: CaisyField_Richtext_Where
+
+  """"""
+  question: CaisyField_String_Where
+}
+
+""""""
 input DragNDropGame_Sort {
   """"""
   createdAt: Order
@@ -1143,7 +1215,49 @@ type FillInGapsGame {
   id: ID
 
   """"""
+  legalArea(
+    """
+    The cursor to start the pagination from. In this case the curser equals the id for the (last) element. If not set, we wil start from the beginning.
+    """
+    after: String
+
+    """The number of items to return. Default and max value is 100."""
+    first: Int = 100
+
+    """"""
+    locale: String
+  ): LegalArea
+
+  """"""
+  mainCategory(
+    """
+    The cursor to start the pagination from. In this case the curser equals the id for the (last) element. If not set, we wil start from the beginning.
+    """
+    after: String
+
+    """The number of items to return. Default and max value is 100."""
+    first: Int = 100
+
+    """"""
+    locale: String
+  ): MainCategory
+
+  """"""
   question: String
+
+  """"""
+  topic(
+    """
+    The cursor to start the pagination from. In this case the curser equals the id for the (last) element. If not set, we wil start from the beginning.
+    """
+    after: String
+
+    """The number of items to return. Default and max value is 100."""
+    first: Int = 100
+
+    """"""
+    locale: String
+  ): [FillInGapsGame_topic]
 }
 
 """"""
@@ -1168,6 +1282,48 @@ type FillInGapsGame_ConnectionEdge {
 }
 
 """"""
+input FillInGapsGame_LegalArea_Where {
+  """"""
+  findOne: FillInGapsGame_LegalArea_WhereConnection
+}
+
+""""""
+input FillInGapsGame_LegalArea_WhereConnection {
+  """"""
+  LegalArea: LegalArea_Nested_Where
+}
+
+""""""
+input FillInGapsGame_MainCategory_Where {
+  """"""
+  findOne: FillInGapsGame_MainCategory_WhereConnection
+}
+
+""""""
+input FillInGapsGame_MainCategory_WhereConnection {
+  """"""
+  MainCategory: MainCategory_Nested_Where
+}
+
+""""""
+input FillInGapsGame_Nested_Where {
+  """"""
+  AND: [FillInGapsGame_Nested_Where]
+
+  """"""
+  OR: [FillInGapsGame_Nested_Where]
+
+  """"""
+  fillGameParagraph: CaisyField_Richtext_Where
+
+  """"""
+  helpNote: CaisyField_Richtext_Where
+
+  """"""
+  question: CaisyField_String_Where
+}
+
+""""""
 input FillInGapsGame_Sort {
   """"""
   createdAt: Order
@@ -1176,13 +1332,34 @@ input FillInGapsGame_Sort {
   id: Order
 
   """"""
+  legalArea: Order
+
+  """"""
+  mainCategory: Order
+
+  """"""
   publishedAt: Order
 
   """"""
   question: Order
 
   """"""
+  topic: Order
+
+  """"""
   updatedAt: Order
+}
+
+""""""
+input FillInGapsGame_Topic_Where {
+  """"""
+  findOne: FillInGapsGame_Topic_WhereConnection
+}
+
+""""""
+input FillInGapsGame_Topic_WhereConnection {
+  """"""
+  Topic: Topic_Nested_Where
 }
 
 """"""
@@ -1200,7 +1377,16 @@ input FillInGapsGame_Where {
   helpNote: CaisyField_Richtext_Where
 
   """"""
+  legalArea: FillInGapsGame_LegalArea_Where
+
+  """"""
+  mainCategory: FillInGapsGame_MainCategory_Where
+
+  """"""
   question: CaisyField_String_Where
+
+  """"""
+  topic: FillInGapsGame_Topic_Where
 }
 
 """"""
@@ -1249,8 +1435,399 @@ type FillInGapsGame_helpNote {
 """"""
 union FillInGapsGame_helpNote_Connections = Caisy_Field_Document_NotFound
 
+""""""
+union FillInGapsGame_topic = Topic
+
 """Any JSON value"""
 scalar JSON
+
+""""""
+type LearningPath {
+  """"""
+  _meta: CaisyDocument_Meta
+
+  """"""
+  description(locale: String): LearningPath_description
+
+  """"""
+  estimatedDuration: Int
+
+  """"""
+  id: ID
+
+  """"""
+  title: String
+
+  """"""
+  units(
+    """
+    The cursor to start the pagination from. In this case the curser equals the id for the (last) element. If not set, we wil start from the beginning.
+    """
+    after: String
+
+    """The number of items to return. Default and max value is 100."""
+    first: Int = 100
+
+    """"""
+    locale: String
+  ): [LearningPath_units]
+}
+
+""""""
+type LearningPathUnit {
+  """"""
+  _meta: CaisyDocument_Meta
+
+  """"""
+  contentPieces(
+    """
+    The cursor to start the pagination from. In this case the curser equals the id for the (last) element. If not set, we wil start from the beginning.
+    """
+    after: String
+
+    """The number of items to return. Default and max value is 100."""
+    first: Int = 100
+
+    """"""
+    locale: String
+  ): [LearningPathUnit_contentPieces]
+
+  """"""
+  id: ID
+
+  """"""
+  ignoreOrder: Boolean
+
+  """"""
+  learningTests(
+    """
+    The cursor to start the pagination from. In this case the curser equals the id for the (last) element. If not set, we wil start from the beginning.
+    """
+    after: String
+
+    """The number of items to return. Default and max value is 100."""
+    first: Int = 100
+
+    """"""
+    locale: String
+  ): [LearningPathUnit_learningTests]
+}
+
+""""""
+type LearningPathUnit_Connection {
+  """"""
+  edges: [LearningPathUnit_ConnectionEdge]
+
+  """"""
+  pageInfo: PageInfo
+
+  """"""
+  totalCount: Int
+}
+
+""""""
+type LearningPathUnit_ConnectionEdge {
+  """"""
+  cursor: String
+
+  """"""
+  node: LearningPathUnit
+}
+
+""""""
+input LearningPathUnit_ContentPieces_Where {
+  """"""
+  findOne: LearningPathUnit_ContentPieces_WhereConnection
+}
+
+""""""
+input LearningPathUnit_ContentPieces_WhereConnection {
+  """"""
+  Article: Article_Nested_Where
+
+  """"""
+  Case: Case_Nested_Where
+}
+
+""""""
+input LearningPathUnit_LearningTests_Where {
+  """"""
+  findOne: LearningPathUnit_LearningTests_WhereConnection
+}
+
+""""""
+input LearningPathUnit_LearningTests_WhereConnection {
+  """"""
+  LearningTest: LearningTest_Nested_Where
+}
+
+""""""
+input LearningPathUnit_Nested_Where {
+  """"""
+  AND: [LearningPathUnit_Nested_Where]
+
+  """"""
+  OR: [LearningPathUnit_Nested_Where]
+
+  """"""
+  ignoreOrder: Boolean
+}
+
+""""""
+input LearningPathUnit_Sort {
+  """"""
+  contentPieces: Order
+
+  """"""
+  createdAt: Order
+
+  """"""
+  id: Order
+
+  """"""
+  ignoreOrder: Order
+
+  """"""
+  learningTests: Order
+
+  """"""
+  publishedAt: Order
+
+  """"""
+  updatedAt: Order
+}
+
+""""""
+input LearningPathUnit_Where {
+  """"""
+  AND: [LearningPathUnit_Where]
+
+  """"""
+  OR: [LearningPathUnit_Where]
+
+  """"""
+  contentPieces: LearningPathUnit_ContentPieces_Where
+
+  """"""
+  ignoreOrder: Boolean
+
+  """"""
+  learningTests: LearningPathUnit_LearningTests_Where
+}
+
+""""""
+union LearningPathUnit_contentPieces = Article | Case
+
+""""""
+union LearningPathUnit_learningTests = LearningTest
+
+""""""
+type LearningPath_Connection {
+  """"""
+  edges: [LearningPath_ConnectionEdge]
+
+  """"""
+  pageInfo: PageInfo
+
+  """"""
+  totalCount: Int
+}
+
+""""""
+type LearningPath_ConnectionEdge {
+  """"""
+  cursor: String
+
+  """"""
+  node: LearningPath
+}
+
+""""""
+input LearningPath_Sort {
+  """"""
+  createdAt: Order
+
+  """"""
+  estimatedDuration: Order
+
+  """"""
+  id: Order
+
+  """"""
+  publishedAt: Order
+
+  """"""
+  title: Order
+
+  """"""
+  units: Order
+
+  """"""
+  updatedAt: Order
+}
+
+""""""
+input LearningPath_Units_Where {
+  """"""
+  findOne: LearningPath_Units_WhereConnection
+}
+
+""""""
+input LearningPath_Units_WhereConnection {
+  """"""
+  LearningPathUnit: LearningPathUnit_Nested_Where
+}
+
+""""""
+input LearningPath_Where {
+  """"""
+  AND: [LearningPath_Where]
+
+  """"""
+  OR: [LearningPath_Where]
+
+  """"""
+  description: CaisyField_Richtext_Where
+
+  """"""
+  estimatedDuration: CaisyField_Number_WhereInt
+
+  """"""
+  title: CaisyField_String_Where
+
+  """"""
+  units: LearningPath_Units_Where
+}
+
+""""""
+type LearningPath_description {
+  """"""
+  connections(
+    """
+    The cursor to start the pagination from. In this case the curser equals the id for the (last) element. If not set, we wil start from the beginning.
+    """
+    after: String
+
+    """The number of items to return. Default and max value is 100."""
+    first: Int = 100
+
+    """"""
+    locale: String
+  ): [LearningPath_description_Connections]
+
+  """"""
+  json: JSON
+}
+
+""""""
+union LearningPath_description_Connections = Caisy_Field_Document_NotFound
+
+""""""
+union LearningPath_units = LearningPathUnit
+
+""""""
+type LearningTest {
+  """"""
+  _meta: CaisyDocument_Meta
+
+  """"""
+  gamifications(
+    """
+    The cursor to start the pagination from. In this case the curser equals the id for the (last) element. If not set, we wil start from the beginning.
+    """
+    after: String
+
+    """The number of items to return. Default and max value is 100."""
+    first: Int = 100
+
+    """"""
+    locale: String
+  ): [LearningTest_gamifications]
+
+  """"""
+  id: ID
+}
+
+""""""
+type LearningTest_Connection {
+  """"""
+  edges: [LearningTest_ConnectionEdge]
+
+  """"""
+  pageInfo: PageInfo
+
+  """"""
+  totalCount: Int
+}
+
+""""""
+type LearningTest_ConnectionEdge {
+  """"""
+  cursor: String
+
+  """"""
+  node: LearningTest
+}
+
+""""""
+input LearningTest_Gamifications_Where {
+  """"""
+  findOne: LearningTest_Gamifications_WhereConnection
+}
+
+""""""
+input LearningTest_Gamifications_WhereConnection {
+  """"""
+  CardSelectionGame: CardSelectionGame_Nested_Where
+
+  """"""
+  DragNDropGame: DragNDropGame_Nested_Where
+
+  """"""
+  FillInGapsGame: FillInGapsGame_Nested_Where
+}
+
+""""""
+input LearningTest_Nested_Where {
+  """"""
+  AND: [LearningTest_Nested_Where]
+
+  """"""
+  OR: [LearningTest_Nested_Where]
+}
+
+""""""
+input LearningTest_Sort {
+  """"""
+  createdAt: Order
+
+  """"""
+  gamifications: Order
+
+  """"""
+  id: Order
+
+  """"""
+  publishedAt: Order
+
+  """"""
+  updatedAt: Order
+}
+
+""""""
+input LearningTest_Where {
+  """"""
+  AND: [LearningTest_Where]
+
+  """"""
+  OR: [LearningTest_Where]
+
+  """"""
+  gamifications: LearningTest_Gamifications_Where
+}
+
+""""""
+union LearningTest_gamifications = CardSelectionGame | DragNDropGame | FillInGapsGame
 
 """"""
 type LegalArea {
@@ -1491,6 +2068,15 @@ type Query {
   FillInGapsGame(id: ID!, locale: String): FillInGapsGame
 
   """"""
+  LearningPath(id: ID!, locale: String): LearningPath
+
+  """"""
+  LearningPathUnit(id: ID!, locale: String): LearningPathUnit
+
+  """"""
+  LearningTest(id: ID!, locale: String): LearningTest
+
+  """"""
   LegalArea(id: ID!, locale: String): LegalArea
 
   """"""
@@ -1531,6 +2117,15 @@ type Query {
 
   """"""
   allFillInGapsGame(after: String, before: String, first: Int, last: Int, locale: String, sort: [FillInGapsGame_Sort], where: [FillInGapsGame_Where]): FillInGapsGame_Connection
+
+  """"""
+  allLearningPath(after: String, before: String, first: Int, last: Int, locale: String, sort: [LearningPath_Sort], where: [LearningPath_Where]): LearningPath_Connection
+
+  """"""
+  allLearningPathUnit(after: String, before: String, first: Int, last: Int, locale: String, sort: [LearningPathUnit_Sort], where: [LearningPathUnit_Where]): LearningPathUnit_Connection
+
+  """"""
+  allLearningTest(after: String, before: String, first: Int, last: Int, locale: String, sort: [LearningTest_Sort], where: [LearningTest_Where]): LearningTest_Connection
 
   """"""
   allLegalArea(after: String, before: String, first: Int, last: Int, locale: String, sort: [LegalArea_Sort], where: [LegalArea_Where]): LegalArea_Connection

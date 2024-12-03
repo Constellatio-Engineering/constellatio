@@ -80,7 +80,7 @@ const Page: NextPageWithLayout<GetCasesOverviewPagePropsResult> = ({
   ...props
 }) =>
 {
-  const { casesProgress } = useCasesProgress();
+  const { data: casesProgress } = useCasesProgress();
   const casesWithProgress = useMemo(() => getCasesWithProgress(items, casesProgress), [items, casesProgress]);
   const filters = useStore(useCasesOverviewFiltersStore, s => s.filters);
   const openDrawer = useStore(useCasesOverviewFiltersStore, s => s.openDrawer);

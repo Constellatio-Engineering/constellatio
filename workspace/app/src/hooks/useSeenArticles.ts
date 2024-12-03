@@ -4,17 +4,15 @@ import { type AppRouter } from "@constellatio/api";
 import { type inferReactQueryProcedureOptions } from "@trpc/react-query";
 import { type inferProcedureInput } from "@trpc/server";
 
-const useCasesProgress = (
-  input?: inferProcedureInput<AppRouter["casesProgress"]["getCasesProgress"]>,
-  options?: inferReactQueryProcedureOptions<AppRouter>["casesProgress"]["getCasesProgress"]
+export const useSeenArticles = (
+  input?: inferProcedureInput<AppRouter["views"]["getSeenArticles"]>,
+  options?: inferReactQueryProcedureOptions<AppRouter>["views"]["getSeenArticles"]
 ) =>
 {
-  return api.casesProgress.getCasesProgress.useQuery(input, {
+  return api.views.getSeenArticles.useQuery(input, {
     refetchOnMount: false,
     refetchOnReconnect: false,
     refetchOnWindowFocus: false,
     ...options,
   });
 };
-
-export default useCasesProgress;
