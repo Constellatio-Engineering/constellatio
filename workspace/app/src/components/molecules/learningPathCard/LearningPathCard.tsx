@@ -1,6 +1,7 @@
 "use client";
 
 import { LearningPathUnitCompleted } from "@/components/Icons/LearningPathUnitCompleted";
+import { LearningPathUnitInProgress } from "@/components/Icons/LearningPathUnitInProgress";
 import { LearningPathUnitUpcoming } from "@/components/Icons/LearningPathUnitUpcoming";
 
 import { type IGenLearningPathUnit } from "@constellatio/cms/generated-types";
@@ -12,7 +13,7 @@ import { type FunctionComponent } from "react";
 // import { Badge } from '@/components/ui/badge'; // Using your existing Badge component
 import * as styles from "./LearningPathCard.styles";
 
-type statusType = "completed" | "in-progress" | "upcoming";
+export type cardStatusType = "completed" | "in-progress" | "upcoming";
 
 interface LearningPathCardProps 
 {
@@ -33,7 +34,7 @@ export const LearningPathCard: FunctionComponent<LearningPathCardProps> = ({
   unit
 }) =>
 {
-  let status: statusType;
+  let status: cardStatusType;
 
   if(completedCount === 0)
   {
@@ -49,13 +50,11 @@ export const LearningPathCard: FunctionComponent<LearningPathCardProps> = ({
   }
 
   return (
-    <Link href={`${appPaths.learningPaths}/${learningPathId}#${unit.id}`} css={[styles.wrapper, status === "completed" && styles.wrapperCompleted, status === "in-progress" && styles.wrapperInProgress]}>
-      <div css={styles.iconWrapper}>
-        {status === "completed" ? (
-          <LearningPathUnitCompleted size={110}/>
-        ) : (
-          <LearningPathUnitUpcoming size={110}/>
-        )}
+    <Link href={`${appPaths.learningPaths}/${learningPathId}#${unit.id}`} css={styles.wrapper(status)}>
+      <div css={[styles.iconWrapper, status === "completed" && styles.iconWrapperCompleted]}>
+        {status === "completed" && <LearningPathUnitCompleted size={110}/>}
+        {status === "in-progress" && <LearningPathUnitInProgress size={110}/>}
+        {status === "upcoming" && <LearningPathUnitUpcoming size={110}/>}
       </div>
       <div>
         <p css={styles.preTitle}>{preTitle}</p>

@@ -1,8 +1,11 @@
+import { type cardStatusType } from "@/components/molecules/learningPathCard/LearningPathCard";
+
 import { css } from "@emotion/react";
 
-export const wrapper = css`
+export const wrapper = (status: cardStatusType) => css`
   color: inherit;
-  border: 1px solid #F0F0F0;
+  background-color: ${status === "upcoming" ? "transparent" : "#F9F9F9"};
+  border: 2px solid ${status === "completed" ? "#0AA949" : "#F0F0F0"};
   border-radius: 12px;
   display: flex;
   flex-direction: column;
@@ -13,18 +16,12 @@ export const wrapper = css`
   height: 100%;
 `;
 
-export const wrapperCompleted = css`
-  border-color: #0AA949;
-`;
-
-export const wrapperInProgress = css`
-    border-width: 3px;
-    border-color: rgba(165, 216, 255, 0.8);
-`;
-
 export const iconWrapper = css`
-  transform: translateX(5px);
   margin-bottom: 12px;
+`;
+
+export const iconWrapperCompleted = css`
+  transform: translateX(5px);
 `;
 
 export const preTitle = css`
