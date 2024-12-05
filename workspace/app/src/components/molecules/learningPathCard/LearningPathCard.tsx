@@ -1,5 +1,6 @@
 "use client";
 
+import StatusLabel from "@/components/atoms/statusLabel/StatusLabel";
 import { LearningPathUnitCompleted } from "@/components/Icons/LearningPathUnitCompleted";
 import { LearningPathUnitInProgress } from "@/components/Icons/LearningPathUnitInProgress";
 import { LearningPathUnitUpcoming } from "@/components/Icons/LearningPathUnitUpcoming";
@@ -49,6 +50,19 @@ export const LearningPathCard: FunctionComponent<LearningPathCardProps> = ({
     status = "in-progress";
   }
 
+  const getProgressState = (status: cardStatusType) =>
+  {
+    switch (status) 
+    {
+      case "in-progress":
+        return "solving-case";
+      case "upcoming":
+        return "not-started";
+      default:
+        return "completed";
+    }
+  };
+  
   return (
     <Link href={`${appPaths.learningPaths}/${learningPathId}#${unit.id}`} css={styles.wrapper(status)}>
       <div css={[styles.iconWrapper, status === "completed" && styles.iconWrapperCompleted]}>
@@ -60,6 +74,9 @@ export const LearningPathCard: FunctionComponent<LearningPathCardProps> = ({
         <p css={styles.preTitle}>{preTitle}</p>
         <p title={title} css={styles.title}>{title}</p>
         <p css={styles.preTitle}>{completedCount} / {totalCount}</p>
+      </div>
+      <div css={styles.statusLabelWrapper}>
+        <StatusLabel progressState={getProgressState(status)}/>
       </div>
     </Link>
   );

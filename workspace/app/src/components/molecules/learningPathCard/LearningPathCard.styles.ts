@@ -42,3 +42,12 @@ export const title = css`
   overflow: hidden;
   text-overflow: ellipsis;
 `;
+
+export const statusLabelWrapper = css`
+    display: flex;
+    flex-direction: column;
+    flex: 1;
+    justify-content: flex-end;
+    min-height: 0;
+    margin-top: 20px;
+`;
