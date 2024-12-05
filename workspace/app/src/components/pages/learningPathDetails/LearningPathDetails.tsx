@@ -2,8 +2,6 @@
 import ContentWrapper from "@/components/helpers/contentWrapper/ContentWrapper";
 import { LearningPathHeader } from "@/components/pages/learningPathDetails/learningPathHeader/LearningPathHeader";
 import { LearningPathUnit } from "@/components/pages/learningPathDetails/learningPathUnit/LearningPathUnit";
-import useCasesProgress from "@/hooks/useCasesProgress";
-import { useSeenArticles } from "@/hooks/useSeenArticles";
 
 import { type IGenArticle, type IGenCase, type IGenLearningPath } from "@constellatio/cms/generated-types";
 import { type FunctionComponent, useMemo } from "react";
@@ -44,27 +42,29 @@ export const LearningPathDetailsPage: FunctionComponent<Props> = (learningPath) 
     .reduce((total, unit) => total + (unit.learningTests?.length ?? 0) + (unit.contentPieces?.length ?? 0), 0);
 
   return (
-    <ContentWrapper stylesOverrides={styles.contentWrapper}>
-      <div css={styles.layoutWrapper}>
-        <div css={styles.unitsColumn}>
-          {learningPath.units?.filter(Boolean).map((unit, index) => (
-            <LearningPathUnit
-              key={unit.id}
-              index={index}
-              isLastUnit={index === (learningPath.units?.length ?? 0) - 1}
-              unit={unit}
-              allArticleIdsInLearningPath={allArticleIdsInLearningPath}
-              allCaseIdsInLearningPath={allCaseIdsInLearningPath}
-            />
-          ))}
+    <>
+      <ContentWrapper stylesOverrides={styles.contentWrapper}>
+        <div css={styles.layoutWrapper}>
+          <div css={styles.unitsColumn}>
+            {learningPath.units?.filter(Boolean).map((unit, index) => (
+              <LearningPathUnit
+                key={unit.id}
+                index={index}
+                isLastUnit={index === (learningPath.units?.length ?? 0) - 1}
+                unit={unit}
+                allArticleIdsInLearningPath={allArticleIdsInLearningPath}
+                allCaseIdsInLearningPath={allCaseIdsInLearningPath}
+              />
+            ))}
+          </div>
+          <LearningPathHeader
+            description={learningPath.description}
+            estimatedDuration={learningPath.estimatedDuration}
+            title={learningPath.title}
+            totalTasks={totalTasks ?? 0}
+          />
         </div>
-        <LearningPathHeader
-          description={learningPath.description}
-          estimatedDuration={learningPath.estimatedDuration}
-          title={learningPath.title}
-          totalTasks={totalTasks ?? 0}
-        />
-      </div>
-    </ContentWrapper>
+      </ContentWrapper>
+    </>
   );
 };

@@ -1,15 +1,15 @@
+/* eslint-disable max-lines */
 import { type FunctionComponent } from "react";
 
-export const Unit: FunctionComponent<{ readonly totalTasks: number }> = ({
-  totalTasks
+export const Unit: FunctionComponent<{ readonly size: number }> = ({
+  size
 }) => (
   <svg
-    width="124"
-    height="123"
+    width={size}
+    height={size}
     viewBox="0 0 124 123"
     fill="none"
-    xmlns="http://www.w3.org/2000/svg"
-  >
+    xmlns="http://www.w3.org/2000/svg">
     <g filter="url(#filter0_d_22_59)">
       <path
         d="M112 59.5C112 86.8381 89.6142 109 62 109C34.3858 109 12 86.8381 12 59.5C12 32.1619 34.3858 10 62 10C89.6142 10 112 32.1619 112 59.5Z"
@@ -21,26 +21,25 @@ export const Unit: FunctionComponent<{ readonly totalTasks: number }> = ({
       />
     </g>
     <path
-      fill-rule="evenodd"
-      clip-rule="evenodd"
+      fillRule="evenodd"
+      clipRule="evenodd"
       d="M62 103.879C86.7576 103.879 106.828 84.01 106.828 59.5C106.828 34.99 86.7576 15.1207 62 15.1207C37.2424 15.1207 17.1724 34.99 17.1724 59.5C17.1724 84.01 37.2424 103.879 62 103.879ZM62 109C89.6142 109 112 86.8381 112 59.5C112 32.1619 89.6142 10 62 10C34.3858 10 12 32.1619 12 59.5C12 86.8381 34.3858 109 62 109Z"
       fill="white"
     />
     <path
-      fill-rule="evenodd"
-      clip-rule="evenodd"
+      fillRule="evenodd"
+      clipRule="evenodd"
       d="M76.4301 40.903L42.1724 31.6919V82.5302L76.4301 91.7413V40.903Z"
       fill="white"
     />
     <mask
       id="mask0_22_59"
-      style={{ maskType: 'luminance' }}
+      style={{ maskType: "luminance" }}
       maskUnits="userSpaceOnUse"
       x="42"
       y="31"
       width="35"
-      height="61"
-    >
+      height="61">
       <path
         d="M76.4301 40.903L42.1724 31.6919V82.5302L76.4301 91.7413V40.903Z"
         fill="white"
@@ -48,83 +47,83 @@ export const Unit: FunctionComponent<{ readonly totalTasks: number }> = ({
     </mask>
     <g mask="url(#mask0_22_59)">
       <path
-        fill-rule="evenodd"
-        clip-rule="evenodd"
+        fillRule="evenodd"
+        clipRule="evenodd"
         d="M58.7786 62.2942C65.9432 64.2195 71.7648 73.6789 71.7648 83.4017C71.7648 93.1245 65.9483 99.4527 58.7786 97.5274C51.614 95.6021 45.7925 86.1427 45.7925 76.4199C45.7925 66.6971 51.609 60.3689 58.7786 62.2942Z"
         fill="black"
         stroke="white"
-        stroke-width="2.5"
-        stroke-linecap="round"
-        stroke-linejoin="round"
+        strokeWidth="2.5"
+        strokeLinecap="round"
+        strokeLinejoin="round"
       />
       <path
-        fill-rule="evenodd"
-        clip-rule="evenodd"
+        fillRule="evenodd"
+        clipRule="evenodd"
         d="M58.7584 69.1899C58.203 67.7763 55.8603 66.6515 50.579 63.3379C45.3027 60.0193 47.2416 52.009 47.3527 50.0128C47.4587 48.0165 45.2321 45.5541 45.2321 45.5541C49.7257 44.931 58.7584 52.6423 58.7584 52.6423L58.7837 52.6322C59.3138 52.4701 67.9275 49.881 72.2798 52.8247C72.2798 52.8247 70.0531 54.0914 70.1642 56.1434C70.2703 58.2004 72.2141 67.2544 66.9379 67.7307C61.6566 68.2069 59.3138 68.0701 58.7584 69.1848V69.1899Z"
         fill="black"
         stroke="white"
-        stroke-width="2.5"
-        stroke-linecap="round"
-        stroke-linejoin="round"
+        strokeWidth="2.5"
+        strokeLinecap="round"
+        strokeLinejoin="round"
       />
       <path
-        fill-rule="evenodd"
-        clip-rule="evenodd"
+        fillRule="evenodd"
+        clipRule="evenodd"
         d="M63.1612 57.7443C64.5547 58.1192 65.6907 59.5987 65.6907 61.0528C65.6907 62.5069 64.5597 63.3733 63.1612 62.9984C61.7676 62.6235 60.6316 61.144 60.6316 59.6899C60.6316 58.2358 61.7626 57.3694 63.1612 57.7443Z"
         fill="white"
       />
       <path
-        fill-rule="evenodd"
-        clip-rule="evenodd"
+        fillRule="evenodd"
+        clipRule="evenodd"
         d="M63.1612 58.3523C64.2316 58.6411 65.105 59.776 65.105 60.8906C65.105 62.0053 64.2366 62.6741 63.1612 62.3853C62.0908 62.0965 61.2173 60.9565 61.2173 59.8469C61.2173 58.7373 62.0857 58.0635 63.1612 58.3523Z"
         fill="black"
       />
       <path
-        fill-rule="evenodd"
-        clip-rule="evenodd"
+        fillRule="evenodd"
+        clipRule="evenodd"
         d="M59.3391 60.379C59.3391 60.379 59.8036 59.8571 60.6518 59.391C60.9346 59.234 61.2577 59.0972 61.6263 58.9806C61.9999 58.859 62.4241 58.778 62.8936 58.7324C63.2925 58.6918 63.7267 58.6665 64.2013 58.7222C65.3979 58.8134 66.1351 58.5905 66.5794 58.2206C66.9581 57.9065 67.1449 57.5164 67.2106 57.1313C67.3166 56.5183 67.1449 55.9559 67.1449 55.9559C67.1348 55.9001 67.0793 55.8697 67.0237 55.8799C66.9682 55.89 66.9379 55.9457 66.948 55.9964C66.948 55.9964 67.1146 57.2022 66.231 57.719C65.8423 57.947 65.2515 58.0078 64.3376 57.8001C63.7823 57.6937 63.2622 57.6532 62.7926 57.7038C62.2221 57.7646 61.7222 57.9318 61.288 58.1396C60.8841 58.3372 60.5408 58.5753 60.258 58.8286C59.4603 59.5329 59.1422 60.2523 59.1422 60.2523C59.1068 60.3081 59.122 60.3841 59.1775 60.4195C59.2331 60.455 59.3088 60.4398 59.3441 60.3841L59.3391 60.379Z"
         fill="white"
       />
       <path
-        fill-rule="evenodd"
-        clip-rule="evenodd"
+        fillRule="evenodd"
+        clipRule="evenodd"
         d="M54.3556 55.3883C52.9621 55.0134 51.826 55.8848 51.826 57.3339C51.826 58.7829 52.957 60.2674 54.3556 60.6424C55.7492 61.0173 56.8852 60.1458 56.8852 58.6968C56.8852 57.2477 55.7542 55.7632 54.3556 55.3883Z"
         fill="white"
       />
       <path
-        fill-rule="evenodd"
-        clip-rule="evenodd"
+        fillRule="evenodd"
+        clipRule="evenodd"
         d="M54.3556 55.9964C53.2852 55.7076 52.4117 56.3764 52.4117 57.491C52.4117 58.6057 53.2802 59.7457 54.3556 60.0294C55.426 60.3182 56.2995 59.6494 56.2995 58.5348C56.2995 57.4201 55.4311 56.2801 54.3556 55.9964Z"
         fill="black"
       />
       <path
-        fill-rule="evenodd"
-        clip-rule="evenodd"
+        fillRule="evenodd"
+        clipRule="evenodd"
         d="M58.3848 60.0141C58.3848 60.0141 58.102 59.1477 57.4002 58.0685C57.1528 57.6936 56.86 57.2933 56.5015 56.9032C56.1026 56.4726 55.6381 56.047 55.0978 55.6872C54.598 55.3528 54.0274 55.0894 53.4115 54.8766C52.437 54.5675 51.7958 54.1571 51.3716 53.7163C50.382 52.6827 50.5688 51.5529 50.5688 51.5529C50.584 51.4971 50.5487 51.4465 50.4982 51.4313C50.4477 51.4161 50.3921 51.4516 50.377 51.5022C50.377 51.5022 49.9579 52.7638 50.9223 54.0963C51.3363 54.6688 52.0129 55.2363 53.0883 55.7328C53.6185 55.9558 54.088 56.2547 54.5323 56.5536C55.0221 56.8779 55.4664 57.2173 55.8653 57.5669C56.2339 57.8912 56.5671 58.2053 56.8549 58.5093C57.7031 59.4011 58.1727 60.1205 58.1727 60.1205C58.203 60.1813 58.2737 60.2066 58.3292 60.1762C58.3898 60.1458 58.4151 60.0749 58.3848 60.0192V60.0141Z"
         fill="white"
       />
       <path
-        fill-rule="evenodd"
-        clip-rule="evenodd"
+        fillRule="evenodd"
+        clipRule="evenodd"
         d="M58.4656 66.2511C58.5111 66.3879 58.6272 66.4994 58.7534 66.5348C58.8797 66.5703 58.9958 66.5196 59.0412 66.4082C59.0412 66.4082 59.9703 64.1991 59.9703 63.1503C59.9703 62.4511 59.425 61.7418 58.7534 61.5594C58.0819 61.377 57.5366 61.7976 57.5366 62.4967C57.5366 63.5506 58.4606 66.2562 58.4606 66.2562L58.4656 66.2511Z"
         fill="white"
       />
       <path
         d="M71.7598 49.2729L73.4007 49.7137L73.5724 65.3341"
         stroke="black"
-        stroke-width="2"
-        stroke-linecap="round"
-        stroke-linejoin="round"
+        strokeWidth="2"
+        strokeLinecap="round"
+        strokeLinejoin="round"
       />
       <path
-        fill-rule="evenodd"
-        clip-rule="evenodd"
+        fillRule="evenodd"
+        clipRule="evenodd"
         d="M58.7584 55.1756L65.5796 53.3922L62.9743 46.836L54.5424 44.5662L51.9371 49.724L58.7584 55.1756Z"
         fill="#BA3636"
       />
       <path
-        fill-rule="evenodd"
-        clip-rule="evenodd"
+        fillRule="evenodd"
+        clipRule="evenodd"
         d="M72.3201 48.0063L46.156 40.9739V43.6997L72.3201 50.7322V48.0063Z"
         fill="#BA3636"
       />
@@ -132,8 +131,8 @@ export const Unit: FunctionComponent<{ readonly totalTasks: number }> = ({
     <path
       d="M76.4301 40.903L42.1724 31.6919M76.4301 40.903V91.7464L42.1724 82.5353V31.6919M76.4301 40.903L81.3226 37.1335M42.1724 31.6919L47.0649 27.9224L81.3226 37.1335M81.3226 87.9768V37.1335M76.4301 91.7413L81.3226 87.9718"
       stroke="black"
-      stroke-linecap="round"
-      stroke-linejoin="round"
+      strokeLinecap="round"
+      strokeLinejoin="round"
     />
     <path
       d="M81.019 35.2062C81.2968 34.4632 82.3583 34.4632 82.636 35.2062L84.0183 38.9045C84.1056 39.1381 84.2917 39.3223 84.5277 39.4087L88.2633 40.7772C89.0138 41.0521 89.0138 42.1031 88.2633 42.378L84.5277 43.7465C84.2917 43.8329 84.1056 44.0171 84.0183 44.2507L82.636 47.949C82.3583 48.692 81.2968 48.692 81.019 47.949L79.6367 44.2507C79.5494 44.0171 79.3634 43.8329 79.1274 43.7465L75.3918 42.378C74.6412 42.1031 74.6412 41.0521 75.3918 40.7772L79.1274 39.4087C79.3634 39.3223 79.5494 39.1381 79.6367 38.9045L81.019 35.2062Z"
@@ -141,8 +140,8 @@ export const Unit: FunctionComponent<{ readonly totalTasks: number }> = ({
     />
     <g filter="url(#filter1_d_22_59)">
       <path
-        fill-rule="evenodd"
-        clip-rule="evenodd"
+        fillRule="evenodd"
+        clipRule="evenodd"
         d="M79.6368 38.9045C79.5494 39.1381 79.3634 39.3222 79.1274 39.4087L75.3918 40.7772C74.6413 41.0521 74.6413 42.103 75.3918 42.378L79.1274 43.7465C79.3634 43.8329 79.5494 44.0171 79.6368 44.2507L81.0191 47.949C81.2968 48.692 82.3583 48.692 82.6361 47.949L84.0184 44.2507C84.1057 44.0171 84.2917 43.8329 84.5277 43.7465L88.2633 42.378C89.0139 42.103 89.0139 41.0521 88.2633 40.7772L84.5277 39.4087C84.2917 39.3222 84.1057 39.1381 84.0184 38.9045L82.6361 35.2062C82.3583 34.4631 81.2968 34.4631 81.0191 35.2062L79.6368 38.9045ZM86.8396 36.6156L89.46 37.5755C93.2127 38.9503 93.2127 44.2049 89.46 45.5796L86.8396 46.5395L85.87 49.1337C84.4814 52.8488 79.1737 52.8489 77.7851 49.1337L76.8155 46.5395L74.1951 45.5796C70.4425 44.2049 70.4424 38.9503 74.1951 37.5755L76.8155 36.6156L77.7851 34.0215C79.1737 30.3063 84.4814 30.3063 85.87 34.0215L86.8396 36.6156Z"
         fill="#FBFBFB"
       />
@@ -155,18 +154,17 @@ export const Unit: FunctionComponent<{ readonly totalTasks: number }> = ({
         width="124"
         height="123"
         filterUnits="userSpaceOnUse"
-        color-interpolation-filters="sRGB"
-      >
-        <feFlood flood-opacity="0" result="BackgroundImageFix" />
+        colorInterpolationFilters="sRGB">
+        <feFlood floodOpacity="0" result="BackgroundImageFix"/>
         <feColorMatrix
           in="SourceAlpha"
           type="matrix"
           values="0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 127 0"
           result="hardAlpha"
         />
-        <feOffset dy="2" />
-        <feGaussianBlur stdDeviation="6" />
-        <feComposite in2="hardAlpha" operator="out" />
+        <feOffset dy="2"/>
+        <feGaussianBlur stdDeviation="6"/>
+        <feComposite in2="hardAlpha" operator="out"/>
         <feColorMatrix
           type="matrix"
           values="0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0.12 0"
@@ -190,18 +188,17 @@ export const Unit: FunctionComponent<{ readonly totalTasks: number }> = ({
         width="44.8939"
         height="44.6851"
         filterUnits="userSpaceOnUse"
-        color-interpolation-filters="sRGB"
-      >
-        <feFlood flood-opacity="0" result="BackgroundImageFix" />
+        colorInterpolationFilters="sRGB">
+        <feFlood floodOpacity="0" result="BackgroundImageFix"/>
         <feColorMatrix
           in="SourceAlpha"
           type="matrix"
           values="0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 127 0"
           result="hardAlpha"
         />
-        <feOffset dy="2" />
-        <feGaussianBlur stdDeviation="6" />
-        <feComposite in2="hardAlpha" operator="out" />
+        <feOffset dy="2"/>
+        <feGaussianBlur stdDeviation="6"/>
+        <feComposite in2="hardAlpha" operator="out"/>
         <feColorMatrix
           type="matrix"
           values="0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0.12 0"

@@ -1479,6 +1479,20 @@ type LearningPathUnit {
   _meta: CaisyDocument_Meta
 
   """"""
+  caseLearningTest(
+    """
+    The cursor to start the pagination from. In this case the curser equals the id for the (last) element. If not set, we wil start from the beginning.
+    """
+    after: String
+
+    """The number of items to return. Default and max value is 100."""
+    first: Int = 100
+
+    """"""
+    locale: String
+  ): [LearningPathUnit_caseLearningTest]
+
+  """"""
   contentPieces(
     """
     The cursor to start the pagination from. In this case the curser equals the id for the (last) element. If not set, we wil start from the beginning.
@@ -1514,6 +1528,18 @@ type LearningPathUnit {
 
   """"""
   title: String
+}
+
+""""""
+input LearningPathUnit_CaseLearningTest_Where {
+  """"""
+  findOne: LearningPathUnit_CaseLearningTest_WhereConnection
+}
+
+""""""
+input LearningPathUnit_CaseLearningTest_WhereConnection {
+  """"""
+  Case: Case_Nested_Where
 }
 
 """"""
@@ -1582,6 +1608,9 @@ input LearningPathUnit_Nested_Where {
 """"""
 input LearningPathUnit_Sort {
   """"""
+  caseLearningTest: Order
+
+  """"""
   contentPieces: Order
 
   """"""
@@ -1615,6 +1644,9 @@ input LearningPathUnit_Where {
   OR: [LearningPathUnit_Where]
 
   """"""
+  caseLearningTest: LearningPathUnit_CaseLearningTest_Where
+
+  """"""
   contentPieces: LearningPathUnit_ContentPieces_Where
 
   """"""
@@ -1626,6 +1658,9 @@ input LearningPathUnit_Where {
   """"""
   title: CaisyField_String_Where
 }
+
+""""""
+union LearningPathUnit_caseLearningTest = Case
 
 """"""
 union LearningPathUnit_contentPieces = Article | Case
@@ -1743,6 +1778,9 @@ type LearningTest {
   _meta: CaisyDocument_Meta
 
   """"""
+  content(locale: String): LearningTest_content
+
+  """"""
   gamifications(
     """
     The cursor to start the pagination from. In this case the curser equals the id for the (last) element. If not set, we wil start from the beginning.
@@ -1806,6 +1844,9 @@ input LearningTest_Nested_Where {
 
   """"""
   OR: [LearningTest_Nested_Where]
+
+  """"""
+  content: CaisyField_Richtext_Where
 }
 
 """"""
@@ -1835,8 +1876,34 @@ input LearningTest_Where {
   OR: [LearningTest_Where]
 
   """"""
+  content: CaisyField_Richtext_Where
+
+  """"""
   gamifications: LearningTest_Gamifications_Where
 }
+
+""""""
+type LearningTest_content {
+  """"""
+  connections(
+    """
+    The cursor to start the pagination from. In this case the curser equals the id for the (last) element. If not set, we wil start from the beginning.
+    """
+    after: String
+
+    """The number of items to return. Default and max value is 100."""
+    first: Int = 100
+
+    """"""
+    locale: String
+  ): [LearningTest_content_Connections]
+
+  """"""
+  json: JSON
+}
+
+""""""
+union LearningTest_content_Connections = CardSelectionGame | DragNDropGame | FillInGapsGame
 
 """"""
 union LearningTest_gamifications = CardSelectionGame | DragNDropGame | FillInGapsGame

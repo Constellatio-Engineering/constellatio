@@ -843,11 +843,19 @@ export type IGenLearningPathUnitsArgs = {
 export type IGenLearningPathUnit = {
   __typename?: 'LearningPathUnit';
   _meta?: Maybe<IGenCaisyDocument_Meta>;
+  caseLearningTest?: Maybe<Array<Maybe<IGenLearningPathUnit_CaseLearningTest>>>;
   contentPieces?: Maybe<Array<Maybe<IGenLearningPathUnit_ContentPieces>>>;
   id?: Maybe<Scalars['ID']['output']>;
   ignoreOrder?: Maybe<Scalars['Boolean']['output']>;
   learningTests?: Maybe<Array<Maybe<IGenLearningPathUnit_LearningTests>>>;
   title?: Maybe<Scalars['String']['output']>;
+};
+
+
+export type IGenLearningPathUnitCaseLearningTestArgs = {
+  after?: InputMaybe<Scalars['String']['input']>;
+  first?: InputMaybe<Scalars['Int']['input']>;
+  locale?: InputMaybe<Scalars['String']['input']>;
 };
 
 
@@ -862,6 +870,14 @@ export type IGenLearningPathUnitLearningTestsArgs = {
   after?: InputMaybe<Scalars['String']['input']>;
   first?: InputMaybe<Scalars['Int']['input']>;
   locale?: InputMaybe<Scalars['String']['input']>;
+};
+
+export type IGenLearningPathUnit_CaseLearningTest_Where = {
+  findOne?: InputMaybe<IGenLearningPathUnit_CaseLearningTest_WhereConnection>;
+};
+
+export type IGenLearningPathUnit_CaseLearningTest_WhereConnection = {
+  Case?: InputMaybe<IGenCase_Nested_Where>;
 };
 
 export type IGenLearningPathUnit_Connection = {
@@ -902,6 +918,7 @@ export type IGenLearningPathUnit_Nested_Where = {
 };
 
 export type IGenLearningPathUnit_Sort = {
+  caseLearningTest?: InputMaybe<IGenOrder>;
   contentPieces?: InputMaybe<IGenOrder>;
   createdAt?: InputMaybe<IGenOrder>;
   id?: InputMaybe<IGenOrder>;
@@ -915,11 +932,14 @@ export type IGenLearningPathUnit_Sort = {
 export type IGenLearningPathUnit_Where = {
   AND?: InputMaybe<Array<InputMaybe<IGenLearningPathUnit_Where>>>;
   OR?: InputMaybe<Array<InputMaybe<IGenLearningPathUnit_Where>>>;
+  caseLearningTest?: InputMaybe<IGenLearningPathUnit_CaseLearningTest_Where>;
   contentPieces?: InputMaybe<IGenLearningPathUnit_ContentPieces_Where>;
   ignoreOrder?: InputMaybe<Scalars['Boolean']['input']>;
   learningTests?: InputMaybe<IGenLearningPathUnit_LearningTests_Where>;
   title?: InputMaybe<IGenCaisyField_String_Where>;
 };
+
+export type IGenLearningPathUnit_CaseLearningTest = IGenCase;
 
 export type IGenLearningPathUnit_ContentPieces = IGenArticle | IGenCase;
 
@@ -985,8 +1005,14 @@ export type IGenLearningPath_Units = IGenLearningPathUnit;
 export type IGenLearningTest = {
   __typename?: 'LearningTest';
   _meta?: Maybe<IGenCaisyDocument_Meta>;
+  content?: Maybe<IGenLearningTest_Content>;
   gamifications?: Maybe<Array<Maybe<IGenLearningTest_Gamifications>>>;
   id?: Maybe<Scalars['ID']['output']>;
+};
+
+
+export type IGenLearningTestContentArgs = {
+  locale?: InputMaybe<Scalars['String']['input']>;
 };
 
 
@@ -1022,6 +1048,7 @@ export type IGenLearningTest_Gamifications_WhereConnection = {
 export type IGenLearningTest_Nested_Where = {
   AND?: InputMaybe<Array<InputMaybe<IGenLearningTest_Nested_Where>>>;
   OR?: InputMaybe<Array<InputMaybe<IGenLearningTest_Nested_Where>>>;
+  content?: InputMaybe<IGenCaisyField_Richtext_Where>;
 };
 
 export type IGenLearningTest_Sort = {
@@ -1035,8 +1062,24 @@ export type IGenLearningTest_Sort = {
 export type IGenLearningTest_Where = {
   AND?: InputMaybe<Array<InputMaybe<IGenLearningTest_Where>>>;
   OR?: InputMaybe<Array<InputMaybe<IGenLearningTest_Where>>>;
+  content?: InputMaybe<IGenCaisyField_Richtext_Where>;
   gamifications?: InputMaybe<IGenLearningTest_Gamifications_Where>;
 };
+
+export type IGenLearningTest_Content = {
+  __typename?: 'LearningTest_content';
+  connections?: Maybe<Array<Maybe<IGenLearningTest_Content_Connections>>>;
+  json?: Maybe<Scalars['JSON']['output']>;
+};
+
+
+export type IGenLearningTest_ContentConnectionsArgs = {
+  after?: InputMaybe<Scalars['String']['input']>;
+  first?: InputMaybe<Scalars['Int']['input']>;
+  locale?: InputMaybe<Scalars['String']['input']>;
+};
+
+export type IGenLearningTest_Content_Connections = IGenCardSelectionGame | IGenDragNDropGame | IGenFillInGapsGame;
 
 export type IGenLearningTest_Gamifications = IGenCardSelectionGame | IGenDragNDropGame | IGenFillInGapsGame;
 
@@ -1786,9 +1829,15 @@ export type IGenLearningPathUnitFragment = { __typename: 'LearningPathUnit', id?
   ) | null> | null, learningTests?: Array<(
     { __typename?: 'LearningTest' }
     & IGenLearningTestFragment
+  ) | null> | null, caseLearningTest?: Array<(
+    { __typename?: 'Case' }
+    & IGenLearningTestCaseFragment
   ) | null> | null };
 
-export type IGenLearningTestFragment = { __typename: 'LearningTest', id?: string | null, gamifications?: Array<(
+export type IGenLearningTestFragment = { __typename: 'LearningTest', id?: string | null, content?: (
+    { __typename?: 'LearningTest_content' }
+    & IGenLearningTestContentFragment
+  ) | null, gamifications?: Array<(
     { __typename?: 'CardSelectionGame' }
     & IGenCardSelectionGameFragment
   ) | (
@@ -1796,6 +1845,22 @@ export type IGenLearningTestFragment = { __typename: 'LearningTest', id?: string
     & IGenDragNDropGameFragment
   ) | (
     { __typename?: 'FillInGapsGame' }
+    & IGenFillInGapsGameFragment
+  ) | null> | null };
+
+export type IGenLearningTestCaseFragment = { __typename: 'Case', id?: string | null, title?: string | null, _meta?: { __typename?: 'CaisyDocument_Meta', updatedAt?: any | null } | null, fullTextTasks?: (
+    { __typename?: 'Case_fullTextTasks' }
+    & IGenCaseFullTextTasksFragment
+  ) | null };
+
+export type IGenLearningTestContentFragment = { __typename: 'LearningTest_content', json?: any | null, connections?: Array<(
+    { __typename: 'CardSelectionGame' }
+    & IGenCardSelectionGameFragment
+  ) | (
+    { __typename: 'DragNDropGame' }
+    & IGenDragNDropGameFragment
+  ) | (
+    { __typename: 'FillInGapsGame' }
     & IGenFillInGapsGameFragment
   ) | null> | null };
 
@@ -2300,14 +2365,42 @@ export const CaseOverviewFragmentDoc = gql`
   }
 }
     `;
+export const LearningTestContentFragmentDoc = gql`
+    fragment LearningTestContent on LearningTest_content {
+  __typename
+  json
+  connections {
+    __typename
+    ...FillInGapsGame
+    ...CardSelectionGame
+    ...DragNDropGame
+  }
+}
+    `;
 export const LearningTestFragmentDoc = gql`
     fragment LearningTest on LearningTest {
   __typename
   id
+  content {
+    ...LearningTestContent
+  }
   gamifications {
     ...CardSelectionGame
     ...DragNDropGame
     ...FillInGapsGame
+  }
+}
+    `;
+export const LearningTestCaseFragmentDoc = gql`
+    fragment LearningTestCase on Case {
+  __typename
+  _meta {
+    updatedAt
+  }
+  id
+  title
+  fullTextTasks {
+    ...CaseFullTextTasks
   }
 }
     `;
@@ -2323,6 +2416,9 @@ export const LearningPathUnitFragmentDoc = gql`
   }
   learningTests {
     ...LearningTest
+  }
+  caseLearningTest {
+    ...LearningTestCase
   }
 }
     `;
@@ -2571,9 +2667,13 @@ ${MainCategoryFragmentDoc}
 ${AssetFragmentDoc}
 ${CaseOverviewFragmentDoc}
 ${LearningTestFragmentDoc}
+${LearningTestContentFragmentDoc}
+${FillInGapsGameFragmentDoc}
 ${CardSelectionGameFragmentDoc}
 ${DragNDropGameFragmentDoc}
-${FillInGapsGameFragmentDoc}`;
+${LearningTestCaseFragmentDoc}
+${CaseFullTextTasksFragmentDoc}
+${CalloutFragmentDoc}`;
 export const GetAllLegalAreaDocument = gql`
     query getAllLegalArea {
   allLegalArea {
@@ -2702,9 +2802,13 @@ ${MainCategoryFragmentDoc}
 ${AssetFragmentDoc}
 ${CaseOverviewFragmentDoc}
 ${LearningTestFragmentDoc}
+${LearningTestContentFragmentDoc}
+${FillInGapsGameFragmentDoc}
 ${CardSelectionGameFragmentDoc}
 ${DragNDropGameFragmentDoc}
-${FillInGapsGameFragmentDoc}`;
+${LearningTestCaseFragmentDoc}
+${CaseFullTextTasksFragmentDoc}
+${CalloutFragmentDoc}`;
 export const GetLegalAreaByIdDocument = gql`
     query getLegalAreaById($id: ID!) {
   LegalArea(id: $id) {
