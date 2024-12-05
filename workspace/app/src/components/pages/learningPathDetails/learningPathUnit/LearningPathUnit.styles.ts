@@ -10,13 +10,17 @@ export const visualPathWrapper = css`
   position: relative;
 `;
 
-export const connectingLine = css`
+export const iconWrapperCompleted = css`
+  transform: translateX(5px);
+`;
+
+export const connectingLine = (isColoured: boolean) => css`
   position: absolute;
   left: 50%;
   top: 60px;
   height: 100%;
-  width: 3px;
-  background-color: #E58180;
+  width: 5px;
+  background-color: ${isColoured ? "#E58180" : "#E8E8E8"};
   transform: translateX(-50%);
   z-index: -1;
 `;

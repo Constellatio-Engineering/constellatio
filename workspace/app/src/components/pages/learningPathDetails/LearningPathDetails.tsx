@@ -2,8 +2,6 @@
 import ContentWrapper from "@/components/helpers/contentWrapper/ContentWrapper";
 import { LearningPathHeader } from "@/components/pages/learningPathDetails/learningPathHeader/LearningPathHeader";
 import { LearningPathUnit } from "@/components/pages/learningPathDetails/learningPathUnit/LearningPathUnit";
-import useCasesProgress from "@/hooks/useCasesProgress";
-import { useSeenArticles } from "@/hooks/useSeenArticles";
 
 import { type IGenArticle, type IGenCase, type IGenLearningPath } from "@constellatio/cms/generated-types";
 import { type FunctionComponent, useMemo } from "react";
