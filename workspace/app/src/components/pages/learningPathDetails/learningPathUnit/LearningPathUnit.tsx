@@ -1,3 +1,6 @@
+import { LearningPathUnitCompleted } from "@/components/Icons/LearningPathUnitCompleted";
+import { LearningPathUnitInProgress } from "@/components/Icons/LearningPathUnitInProgress";
+import { LearningPathUnitUpcoming } from "@/components/Icons/LearningPathUnitUpcoming";
 import { LearningPathContentPiece } from "@/components/pages/learningPathDetails/learningPathUnit/learningPathContentPiece/LearningPathContentPiece";
 import useCasesProgress from "@/hooks/useCasesProgress";
 import { useSeenArticles } from "@/hooks/useSeenArticles";
@@ -8,6 +11,8 @@ import { type FunctionComponent } from "react";
 
 import * as sharedStyles from "../LearningPathDetails.styles";
 import * as styles from "./LearningPathUnit.styles";
+
+type unitStatusType = "completed" | "in-progress" | "upcoming";
 
 type Props = {
   readonly allArticleIdsInLearningPath: string[];
@@ -28,15 +33,30 @@ export const LearningPathUnit: FunctionComponent<Props> = ({
   const { data: casesProgress } = useCasesProgress({ caseIds: allCaseIdsInLearningPath }, { refetchOnMount: true });
   const { data: seenArticles } = useSeenArticles({ articleIds: allArticleIdsInLearningPath }, { refetchOnMount: true });
 
+  let unitStatus: unitStatusType;
+
+  if(index === 0)
+  {
+    unitStatus = "completed";
+  }
+  else if(index === 1)
+  {
+    unitStatus = "in-progress";
+  }
+  else
+  {
+    unitStatus = "upcoming";
+  }
+
   return (
     <div key={unit.id} css={styles.wrapper}>
       <div css={styles.visualPathWrapper}>
-        <div style={{
-          backgroundColor: "#efefef", height: 100, padding: 12, width: 100 
-        }}>
-          Icon here
+        <div css={unitStatus === "completed" && styles.iconWrapperCompleted}>
+          {unitStatus === "completed" && <LearningPathUnitCompleted size={110}/>}
+          {unitStatus === "in-progress" && <LearningPathUnitInProgress size={110}/>}
+          {unitStatus === "upcoming" && <LearningPathUnitUpcoming size={110}/>}
         </div>
-        {!isLastUnit && <div css={styles.connectingLine}/>}
+        {!isLastUnit && <div css={styles.connectingLine(unitStatus === "completed")}/>}
       </div>
       <div css={[sharedStyles.card, styles.unit]}>
         <Title order={2} css={styles.unitTitle}>
