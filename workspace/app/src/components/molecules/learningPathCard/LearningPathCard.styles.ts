@@ -14,6 +14,11 @@ export const wrapper = (status: cardStatusType) => css`
   width: 240px;
   text-align: center;
   height: 100%;
+  transition: all 0.3s ease;
+    
+  :hover {
+    background-color: #f3f3f3;
+  }
 `;
 
 export const iconWrapper = css`
@@ -44,10 +49,10 @@ export const title = css`
 `;
 
 export const statusLabelWrapper = css`
-    display: flex;
-    flex-direction: column;
-    flex: 1;
-    justify-content: flex-end;
-    min-height: 0;
-    margin-top: 20px;
+  display: flex;
+  flex-direction: column;
+  flex: 1;
+  justify-content: flex-end;
+  min-height: 0;
+  margin-top: 20px;
 `;

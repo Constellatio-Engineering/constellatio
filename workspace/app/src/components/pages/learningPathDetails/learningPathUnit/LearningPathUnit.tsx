@@ -49,7 +49,7 @@ export const LearningPathUnit: FunctionComponent<Props> = ({
   }
 
   return (
-    <div key={unit.id} css={styles.wrapper}>
+    <div key={unit.id} id={unit.id!} css={styles.wrapper}>
       <div css={styles.visualPathWrapper}>
         <div css={unitStatus === "completed" && styles.iconWrapperCompleted}>
           {unitStatus === "completed" && <LearningPathUnitCompleted size={110}/>}
@@ -68,23 +68,34 @@ export const LearningPathUnit: FunctionComponent<Props> = ({
         <div css={styles.unitContentPieces}>
           {unit.contentPieces?.filter(Boolean).map(contentPiece =>
           {
-            let isCompleted = false;
+            let status: unitStatusType = "upcoming";
 
             if(contentPiece.__typename === "Case")
             {
               const caseProgress = casesProgress?.find(caseProgress => caseProgress.caseId === contentPiece.id);
-              isCompleted = caseProgress?.progressState === "completed";
+              if(caseProgress?.progressState === "completed") 
+              {
+                status = "completed";
+              }
+              else if(caseProgress?.progressState === "not-started") 
+              {
+                status = "upcoming";
+              }
+              else if(caseProgress?.progressState === "completing-tests" || caseProgress?.progressState === "solving-case")
+              {
+                status = "in-progress";
+              }
             }
             else if(contentPiece.__typename === "Article")
             {
-              isCompleted = seenArticles?.some(articleId => articleId === contentPiece.id) ?? false;
+              status = seenArticles?.some(articleId => articleId === contentPiece.id) ? "completed" : "upcoming";
             }
 
             return (
               <LearningPathContentPiece
                 key={contentPiece.id}
                 contentPiece={contentPiece}
-                isCompleted={isCompleted}
+                status={status}
               />
             );
           })}
