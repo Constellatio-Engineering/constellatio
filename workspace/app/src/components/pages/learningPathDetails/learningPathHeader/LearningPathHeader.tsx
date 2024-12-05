@@ -43,15 +43,16 @@ export const LearningPathHeader: FunctionComponent<Props> = ({
             <IconClock size={24} />
           </div>
           <div css={styles.metricText}>
-            <span css={styles.metricLabel}>Duration</span>
-            <span css={styles.metricValue}>{estimatedDuration}</span>
+            <span css={styles.metricLabel}>Dauer</span>
+            {/* TODO: move to helpers/ extra component */}
+            <span css={styles.metricValue}>{estimatedDuration} Tage</span>
           </div>
         </div>
         <div css={styles.metricItem}>
           <div css={styles.metricIcon}>?</div>
           <div css={styles.metricText}>
-            <span css={styles.metricLabel}>Practice</span>
-            <span css={styles.metricValue}>{totalTasks}</span>
+            <span css={styles.metricLabel}>Inhalt</span>
+            <span css={styles.metricValue}>{totalTasks} Aufgaben</span>
           </div>
         </div>
       </div>
