@@ -1,18 +1,15 @@
+import { Unit } from "@/components/Icons/Unit";
 import { Richtext } from "@/components/molecules/Richtext/Richtext";
 
 import { type IGenLearningPath } from "@constellatio/cms/generated-types";
 import { Title } from "@mantine/core";
+import { IconClock } from "@tabler/icons-react";
 import { type FunctionComponent } from "react";
 
 import * as sharedStyles from "../LearningPathDetails.styles";
 import * as styles from "./LearningPathHeader.styles";
-import { IconClock } from "@tabler/icons-react";
-import { Unit } from "@/components/Icons/Unit";
 
-type Props = Pick<
-  IGenLearningPath,
-  "description" | "estimatedDuration" | "title"
-> & {
+type Props = Pick<IGenLearningPath, "description" | "estimatedDuration" | "title"> & {
   readonly totalTasks: number;
 };
 
@@ -21,30 +18,27 @@ export const LearningPathHeader: FunctionComponent<Props> = ({
   estimatedDuration,
   title,
   totalTasks,
-}) => {
+}) => 
+{
   return (
     <div css={[sharedStyles.card, styles.wrapper]}>
       <div>
         <div css={styles.UnitIconAndTotalTaskWrapper}>
-          <Unit />
+          <Unit size={110}/>
           <div css={styles.totalTasksNotificationWrapper}>
             <span css={styles.totalTasksNotification}>{totalTasks}</span>
           </div>
         </div>
       </div>
-
       <Title order={1}>{title}</Title>
-
-      <Richtext data={description} />
-
+      <Richtext data={description}/>
       <div css={styles.metricsWrapper}>
         <div css={styles.metricItem}>
           <div css={styles.metricIcon}>
-            <IconClock size={24} />
+            <IconClock size={24}/>
           </div>
           <div css={styles.metricText}>
             <span css={styles.metricLabel}>Dauer</span>
-            {/* TODO: move to helpers/ extra component */}
             <span css={styles.metricValue}>{estimatedDuration} Tage</span>
           </div>
         </div>

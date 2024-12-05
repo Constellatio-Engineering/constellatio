@@ -1,15 +1,14 @@
 import { type CaseProgressState } from "@constellatio/shared/validation";
 import { type Nullable } from "@constellatio/utility-types";
 
-import { type FullLegalCase } from "../content/getCaseById";
-import { type IGenCardSelectionGame, type IGenDragNDropGame, type IGenFillInGapsGame } from "../graphql/__generated/sdk";
+import { type IGenCardSelectionGame, type IGenCase, type IGenDragNDropGame, type IGenFillInGapsGame } from "../graphql/__generated/sdk";
 
 type Game = (IGenCardSelectionGame | IGenDragNDropGame | IGenFillInGapsGame) & {
   indexInFullTextTasksJson: number;
 };
 export type Games = Game[];
 
-export const getGamesFromCase = (legalCase: Nullable<FullLegalCase>): Games =>
+export const getGamesFromCase = (legalCase: Nullable<Pick<IGenCase, "fullTextTasks">>): Games =>
 {
   const fullTextTasks = legalCase?.fullTextTasks;
   const connections = fullTextTasks?.connections;
