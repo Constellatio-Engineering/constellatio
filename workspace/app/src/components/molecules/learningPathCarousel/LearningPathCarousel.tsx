@@ -69,11 +69,11 @@ const LearningPathCarousel: FunctionComponent<Props> = ({ id: learningPathId, is
       {units?.filter(Boolean).map((unit, index) => (
         <Carousel.Slide key={unit.id}>
           <LearningPathCard
-            completedCount={0}
-            totalCount={(unit.contentPieces?.length ?? 0) + (unit.learningTests?.length ?? 0)}
+            completedCount={5 - index}
+            // totalCount={(unit.contentPieces?.length ?? 0) + (unit.learningTests?.length ?? 0)}
+            totalCount={5}
             preTitle={`Lektion ${index + 1}`}
             title={unit.title || "Kein Titel"}
-            status="upcoming"
             learningPathId={learningPathId}
             unit={unit}
           />

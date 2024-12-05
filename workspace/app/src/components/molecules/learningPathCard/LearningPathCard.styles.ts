@@ -13,6 +13,15 @@ export const wrapper = css`
   height: 100%;
 `;
 
+export const wrapperCompleted = css`
+  border-color: #0AA949;
+`;
+
+export const wrapperInProgress = css`
+    border-width: 3px;
+    border-color: rgba(165, 216, 255, 0.8);
+`;
+
 export const iconWrapper = css`
   transform: translateX(5px);
   margin-bottom: 12px;
