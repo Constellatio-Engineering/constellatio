@@ -7,6 +7,7 @@ export const f_LearningPathUnit = gql`
 	fragment LearningPathUnit on LearningPathUnit {
 		__typename
 		id
+		title
 		ignoreOrder
 		contentPieces {
 			...ArticleOverview

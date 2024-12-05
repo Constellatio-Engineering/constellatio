@@ -10,11 +10,13 @@ import { type FunctionComponent } from "react";
 
 import * as styles from "./DashboardPage.styles";
 
-const DashboardPage: FunctionComponent<GetDashboardPagePropsResult> = () => (
+const DashboardPage: FunctionComponent<GetDashboardPagePropsResult> = ({ allLearningPaths }) => (
   <div>
     <DashboardHeader/>
     <ContentWrapper stylesOverrides={styles.sections}>
-      <DashboardLearningPathBlock/>
+      {allLearningPaths?.map(learningPath => (
+        <DashboardLearningPathBlock key={learningPath.id} {...learningPath}/>
+      ))}
       <DashboardLastEditedBlock/>
       <DashboardPersonalSpaceBlock/>
       <DashboardCasesBlock/>

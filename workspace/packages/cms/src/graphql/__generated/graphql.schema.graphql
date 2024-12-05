@@ -1511,6 +1511,9 @@ type LearningPathUnit {
     """"""
     locale: String
   ): [LearningPathUnit_learningTests]
+
+  """"""
+  title: String
 }
 
 """"""
@@ -1571,6 +1574,9 @@ input LearningPathUnit_Nested_Where {
 
   """"""
   ignoreOrder: Boolean
+
+  """"""
+  title: CaisyField_String_Where
 }
 
 """"""
@@ -1594,6 +1600,9 @@ input LearningPathUnit_Sort {
   publishedAt: Order
 
   """"""
+  title: Order
+
+  """"""
   updatedAt: Order
 }
 
@@ -1613,6 +1622,9 @@ input LearningPathUnit_Where {
 
   """"""
   learningTests: LearningPathUnit_LearningTests_Where
+
+  """"""
+  title: CaisyField_String_Where
 }
 
 """"""

@@ -4,9 +4,9 @@
     "project": "./tsconfig.json"
   },
   "extends": [
+    "@constellatio/eslint-config/nextjs",
     "@constellatio/eslint-config/base",
-    "@constellatio/eslint-config/drizzle",
-    "@constellatio/eslint-config/nextjs"
+    "@constellatio/eslint-config/drizzle"
   ],
   "overrides": [
     {

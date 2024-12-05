@@ -6,7 +6,7 @@ import { CaptionText } from "../CaptionText/CaptionText";
 export interface ILabelProps extends PropsWithChildren
 {
   readonly title?: string;
-  readonly variant: "dictionary" | "case" | "forum" | "neutral";
+  readonly variant: "dictionary" | "case" | "forum" | "learning-path" | "neutral";
 }
 
 const Label: FunctionComponent<ILabelProps> = ({ children, title, variant }) => 
@@ -28,6 +28,11 @@ const Label: FunctionComponent<ILabelProps> = ({ children, title, variant }) =>
     case "forum":
     {
       defaultTitle = "Forum";
+      break;
+    }
+    case "learning-path":
+    {
+      defaultTitle = "Lernpfad";
       break;
     }
     default:

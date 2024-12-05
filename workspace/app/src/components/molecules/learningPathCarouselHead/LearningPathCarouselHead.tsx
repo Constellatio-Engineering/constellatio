@@ -1,27 +1,27 @@
-import { Button } from "@/components/atoms/Button/Button";
 import { CaptionText } from "@/components/atoms/CaptionText/CaptionText";
 import IconButton from "@/components/atoms/iconButton/IconButton";
 import { SubtitleText } from "@/components/atoms/SubtitleText/SubtitleText";
 import { MedalIcon } from "@/components/Icons/MedalIcon";
-import useBadges from "@/hooks/useBadges";
-import useDashboardPageStore from "@/stores/dashboardPage.store";
 
 import { Skeleton } from "@mantine/core";
 import { type FunctionComponent } from "react";
 
 import * as styles from "../../organisms/profileBadgesBlock/ProfileBadgesBlock.styles";
 
-const LearningPathCarouselHead: FunctionComponent = () =>
-{
-  const { getBadgesResult: { completedCount, totalCount }, isLoading } = useBadges();
-  const openDrawer = useDashboardPageStore(s => s.openDrawer);
+type Props = {
+  readonly completedCount: number;
+  readonly isLoading: boolean;
+  readonly totalCount: number;
+};
 
+const LearningPathCarouselHead: FunctionComponent<Props> = ({ completedCount, isLoading, totalCount }) =>
+{
   return (
     <div css={styles.badgesBlockHeader}>
       <IconButton icon={<MedalIcon/>} style={{ pointerEvents: "none" }} size="big"/>
       <div css={styles.headerLayout}>
         <div>
-          <CaptionText css={styles.title} styleType="caption-01-medium" component="p">Tasks for Today</CaptionText>
+          <CaptionText css={styles.title} styleType="caption-01-medium" component="p">LEKTION</CaptionText>
           {isLoading ? (
             <Skeleton height={20} mt={4} width={50}/>
           ) : (
@@ -30,7 +30,6 @@ const LearningPathCarouselHead: FunctionComponent = () =>
             </SubtitleText>
           )}
         </div>
-        <Button<"button"> onClick={() => openDrawer({ selectedBadgeId: null })} styleType="secondarySimple">Alle ansehen</Button>
       </div>
     </div>
   );

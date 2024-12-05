@@ -847,6 +847,7 @@ export type IGenLearningPathUnit = {
   id?: Maybe<Scalars['ID']['output']>;
   ignoreOrder?: Maybe<Scalars['Boolean']['output']>;
   learningTests?: Maybe<Array<Maybe<IGenLearningPathUnit_LearningTests>>>;
+  title?: Maybe<Scalars['String']['output']>;
 };
 
 
@@ -897,6 +898,7 @@ export type IGenLearningPathUnit_Nested_Where = {
   AND?: InputMaybe<Array<InputMaybe<IGenLearningPathUnit_Nested_Where>>>;
   OR?: InputMaybe<Array<InputMaybe<IGenLearningPathUnit_Nested_Where>>>;
   ignoreOrder?: InputMaybe<Scalars['Boolean']['input']>;
+  title?: InputMaybe<IGenCaisyField_String_Where>;
 };
 
 export type IGenLearningPathUnit_Sort = {
@@ -906,6 +908,7 @@ export type IGenLearningPathUnit_Sort = {
   ignoreOrder?: InputMaybe<IGenOrder>;
   learningTests?: InputMaybe<IGenOrder>;
   publishedAt?: InputMaybe<IGenOrder>;
+  title?: InputMaybe<IGenOrder>;
   updatedAt?: InputMaybe<IGenOrder>;
 };
 
@@ -915,6 +918,7 @@ export type IGenLearningPathUnit_Where = {
   contentPieces?: InputMaybe<IGenLearningPathUnit_ContentPieces_Where>;
   ignoreOrder?: InputMaybe<Scalars['Boolean']['input']>;
   learningTests?: InputMaybe<IGenLearningPathUnit_LearningTests_Where>;
+  title?: InputMaybe<IGenCaisyField_String_Where>;
 };
 
 export type IGenLearningPathUnit_ContentPieces = IGenArticle | IGenCase;
@@ -1773,7 +1777,7 @@ export type IGenLearningPathFragment = { __typename: 'LearningPath', id?: string
     & IGenLearningPathUnitFragment
   ) | null> | null };
 
-export type IGenLearningPathUnitFragment = { __typename: 'LearningPathUnit', id?: string | null, ignoreOrder?: boolean | null, contentPieces?: Array<(
+export type IGenLearningPathUnitFragment = { __typename: 'LearningPathUnit', id?: string | null, title?: string | null, ignoreOrder?: boolean | null, contentPieces?: Array<(
     { __typename?: 'Article' }
     & IGenArticleOverviewFragment
   ) | (
@@ -1911,6 +1915,16 @@ export type IGenGetInitialTagsQueryVariables = Exact<{ [key: string]: never; }>;
 export type IGenGetInitialTagsQuery = { __typename?: 'Query', allTags?: { __typename?: 'Tags_Connection', edges?: Array<{ __typename?: 'Tags_ConnectionEdge', node?: (
         { __typename?: 'Tags' }
         & IGenTagsFragment
+      ) | null } | null> | null } | null };
+
+export type IGenGetAllLearningPathsQueryVariables = Exact<{
+  after?: InputMaybe<Scalars['String']['input']>;
+}>;
+
+
+export type IGenGetAllLearningPathsQuery = { __typename?: 'Query', allLearningPath?: { __typename?: 'LearningPath_Connection', totalCount?: number | null, pageInfo?: { __typename?: 'PageInfo', endCursor?: string | null, hasNextPage?: boolean | null } | null, edges?: Array<{ __typename?: 'LearningPath_ConnectionEdge', node?: (
+        { __typename?: 'LearningPath' }
+        & IGenLearningPathFragment
       ) | null } | null> | null } | null };
 
 export type IGenGetAllLegalAreaQueryVariables = Exact<{ [key: string]: never; }>;
@@ -2301,6 +2315,7 @@ export const LearningPathUnitFragmentDoc = gql`
     fragment LearningPathUnit on LearningPathUnit {
   __typename
   id
+  title
   ignoreOrder
   contentPieces {
     ...ArticleOverview
@@ -2531,6 +2546,34 @@ export const GetInitialTagsDocument = gql`
   }
 }
     ${TagsFragmentDoc}`;
+export const GetAllLearningPathsDocument = gql`
+    query getAllLearningPaths($after: String) {
+  allLearningPath(first: 100, after: $after) {
+    totalCount
+    pageInfo {
+      endCursor
+      hasNextPage
+    }
+    edges {
+      node {
+        ...LearningPath
+      }
+    }
+  }
+}
+    ${LearningPathFragmentDoc}
+${LearningPathUnitFragmentDoc}
+${ArticleOverviewFragmentDoc}
+${LegalAreaFragmentDoc}
+${TagsFragmentDoc}
+${TopicFragmentDoc}
+${MainCategoryFragmentDoc}
+${AssetFragmentDoc}
+${CaseOverviewFragmentDoc}
+${LearningTestFragmentDoc}
+${CardSelectionGameFragmentDoc}
+${DragNDropGameFragmentDoc}
+${FillInGapsGameFragmentDoc}`;
 export const GetAllLegalAreaDocument = gql`
     query getAllLegalArea {
   allLegalArea {
@@ -2739,6 +2782,9 @@ export function getSdk<C, E>(requester: Requester<C, E>) {
     },
     getInitialTags(variables?: IGenGetInitialTagsQueryVariables, options?: C): Promise<IGenGetInitialTagsQuery> {
       return requester<IGenGetInitialTagsQuery, IGenGetInitialTagsQueryVariables>(GetInitialTagsDocument, variables, options) as Promise<IGenGetInitialTagsQuery>;
+    },
+    getAllLearningPaths(variables?: IGenGetAllLearningPathsQueryVariables, options?: C): Promise<IGenGetAllLearningPathsQuery> {
+      return requester<IGenGetAllLearningPathsQuery, IGenGetAllLearningPathsQueryVariables>(GetAllLearningPathsDocument, variables, options) as Promise<IGenGetAllLearningPathsQuery>;
     },
     getAllLegalArea(variables?: IGenGetAllLegalAreaQueryVariables, options?: C): Promise<IGenGetAllLegalAreaQuery> {
       return requester<IGenGetAllLegalAreaQuery, IGenGetAllLegalAreaQueryVariables>(GetAllLegalAreaDocument, variables, options) as Promise<IGenGetAllLegalAreaQuery>;

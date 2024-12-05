@@ -10,7 +10,7 @@ import { getOverviewPageProps, type GetOverviewPagePropsResult } from "@constell
 import { type CaseProgressState } from "@constellatio/shared/validation";
 import { type GetStaticProps } from "next";
 import { useMemo } from "react";
-import { useStore } from "zustand";
+import { useStoreWithEqualityFn } from "zustand/traditional";
 
 type GetCasesOverviewPagePropsResult = GetOverviewPagePropsResult & {
   items: AllCases;
@@ -33,7 +33,7 @@ export const getStaticProps: GetStaticProps<GetCasesOverviewPagePropsResult> = a
   };
 };
 
-const getCasesWithProgress = (cases: GetCasesOverviewPagePropsResult["items"], casesProgress: ReturnType<typeof useCasesProgress>["casesProgress"]) =>
+const getCasesWithProgress = (cases: GetCasesOverviewPagePropsResult["items"], casesProgress: ReturnType<typeof useCasesProgress>["data"]) =>
 {
   return cases.map(legalCase =>
   {
@@ -82,10 +82,10 @@ const Page: NextPageWithLayout<GetCasesOverviewPagePropsResult> = ({
 {
   const { data: casesProgress } = useCasesProgress();
   const casesWithProgress = useMemo(() => getCasesWithProgress(items, casesProgress), [items, casesProgress]);
-  const filters = useStore(useCasesOverviewFiltersStore, s => s.filters);
-  const openDrawer = useStore(useCasesOverviewFiltersStore, s => s.openDrawer);
-  const clearAllFilters = useStore(useCasesOverviewFiltersStore, s => s.clearAllFilters);
-  const totalFiltersCount = useStore(useCasesOverviewFiltersStore, s => s.getTotalFiltersCount());
+  const filters = useStoreWithEqualityFn(useCasesOverviewFiltersStore, s => s.filters);
+  const openDrawer = useStoreWithEqualityFn(useCasesOverviewFiltersStore, s => s.openDrawer);
+  const clearAllFilters = useStoreWithEqualityFn(useCasesOverviewFiltersStore, s => s.clearAllFilters);
+  const totalFiltersCount = useStoreWithEqualityFn(useCasesOverviewFiltersStore, s => s.getTotalFiltersCount());
 
   return (
     <>

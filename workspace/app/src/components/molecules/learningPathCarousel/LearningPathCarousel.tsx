@@ -2,32 +2,24 @@ import { ArrowLeftWithLine } from "@/components/Icons/ArrowLeftWithLine";
 import { ArrowRightWithLine } from "@/components/Icons/ArrowRightWithLine";
 import { smallBadgeCardWidth } from "@/components/molecules/profileBadgeCard/ProfileBadgeCard.styles";
 import { colooors } from "@/constants/styles/colors";
-import useBadges from "@/hooks/useBadges";
+
+import { type IGenLearningPath } from "@constellatio/cms/generated-types";
 import { Carousel } from "@mantine/carousel";
 import { type FunctionComponent } from "react";
+
 import SkeletonSlide from "./skeletonSlide/SkeletonSlide";
 import { LearningPathCard } from "../learningPathCard/LearningPathCard";
 
-const LearningPathCarousel: FunctionComponent = () => {
-  const {
-    getBadgesResult: { badges },
-    isLoading,
-  } = useBadges();
+type Props = Pick<IGenLearningPath, "id" | "units"> & {
+  readonly isLoading: boolean;
+};
 
-  /* TODO: 
-  
-    - load all UNITS not badges
-      + use hook 
-        + trpc endpoint
-  
-  */
-
-  /* FIXME: 
-  
-  - Slider geht immer auf ausgangsposition zurück (zumindest im Desktop viewport)
-  - Arrow Button is missing
-  
-  */
+const LearningPathCarousel: FunctionComponent<Props> = ({ id: learningPathId, isLoading, units }) =>
+{
+  if(!learningPathId)
+  {
+    return null;
+  }
 
   return (
     <Carousel
@@ -54,32 +46,36 @@ const LearningPathCarousel: FunctionComponent = () => {
           "[data-inactive]": {
             opacity: 0,
           },
-          left: "-35px",
-          width: "calc(100% + 70px)",
+          left: "-45px",
+          width: "calc(100% + 90px)",
+          zIndex: 2,
         },
         position: "relative",
       }}
-      nextControlIcon={<ArrowRightWithLine size={16} />}
-      previousControlIcon={<ArrowLeftWithLine size={16} />}
+      nextControlIcon={<ArrowRightWithLine size={16}/>}
+      previousControlIcon={<ArrowLeftWithLine size={16}/>}
       slideGap="16px"
       align="start"
-      slidesToScroll="auto"
-    >
+      slidesToScroll="auto">
       {isLoading && (
         <>
           {Array.from({ length: 6 }).map((_, index) => (
             <Carousel.Slide key={index}>
-              <SkeletonSlide />
+              <SkeletonSlide/>
             </Carousel.Slide>
           ))}
         </>
       )}
-      {badges.map((badge) => (
-        <Carousel.Slide key={badge.id}>
+      {units?.filter(Boolean).map((unit, index) => (
+        <Carousel.Slide key={unit.id}>
           <LearningPathCard
-            title="ArbR 1 | Working with young unicor..."
-            status="completed"
-            onClick={() => console.log("Card clicked")}
+            completedCount={0}
+            totalCount={(unit.contentPieces?.length ?? 0) + (unit.learningTests?.length ?? 0)}
+            preTitle={`Lektion ${index + 1}`}
+            title={unit.title || "Kein Titel"}
+            status="upcoming"
+            learningPathId={learningPathId}
+            unit={unit}
           />
         </Carousel.Slide>
       ))}
