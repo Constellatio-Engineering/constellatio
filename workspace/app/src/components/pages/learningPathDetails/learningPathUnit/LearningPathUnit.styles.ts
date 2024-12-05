@@ -1,3 +1,5 @@
+import { colooors } from "@/constants/styles/colors";
+
 import { css } from "@emotion/react";
 
 export const wrapper = css`
@@ -47,4 +49,28 @@ export const unitContentPieces = css`
   grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
   gap: 20px;
   margin: 24px 0;
+`;
+
+export const testList = css`
+  list-style: none;
+`;
+
+export const container = css`
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  padding: 16px;
+  background-color: #ffffff;
+  border-radius: 12px;
+  background-color: ${colooors["neutrals-01"][2]};
+  gap: 16px;
+`;
+
+export const contentWrapper = css`
+  display: flex;
+  flex-direction: column;
+  align-items: start;
+  gap: 16px;
+  flex: 1;
 `;

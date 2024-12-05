@@ -1,6 +1,8 @@
+import { Button } from "@/components/atoms/Button/Button";
 import { LearningPathUnitCompleted } from "@/components/Icons/LearningPathUnitCompleted";
 import { LearningPathUnitInProgress } from "@/components/Icons/LearningPathUnitInProgress";
 import { LearningPathUnitUpcoming } from "@/components/Icons/LearningPathUnitUpcoming";
+import { Puzzle } from "@/components/Icons/Puzzle";
 import { LearningPathContentPiece } from "@/components/pages/learningPathDetails/learningPathUnit/learningPathContentPiece/LearningPathContentPiece";
 import { LearningPathTestDrawer } from "@/components/pages/learningPathDetails/learningPathUnit/learningPathTestDrawer/LearningPathTestDrawer";
 import useCasesProgress from "@/hooks/useCasesProgress";
@@ -33,6 +35,9 @@ export const LearningPathUnit: FunctionComponent<Props> = ({
 {
   const { data: casesProgress } = useCasesProgress({ caseIds: allCaseIdsInLearningPath }, { refetchOnMount: true });
   const { data: seenArticles } = useSeenArticles({ articleIds: allArticleIdsInLearningPath }, { refetchOnMount: true });
+  const [openedTest, setOpenedTest] = useState<string | null>(null);
+
+  console.log("openedTest", openedTest);
 
   let unitStatus: unitStatusType;
 
@@ -48,8 +53,6 @@ export const LearningPathUnit: FunctionComponent<Props> = ({
   {
     unitStatus = "upcoming";
   }
-
-  const [openedTest, setOpenedTest] = useState<string | null>("ba4c716e-a7ed-4dc5-b500-31707823d80b");
 
   return (
     <>
@@ -104,10 +107,27 @@ export const LearningPathUnit: FunctionComponent<Props> = ({
               );
             })}
           </div>
-          <ul style={{ listStylePosition: "inside" }}>
-            {unit.learningTests?.filter(Boolean).map(learningTest => (
+          <ul css={styles.testList}>
+            {unit.caseLearningTest?.filter(Boolean).map((learningTest, learningTestIndex) => (
               <li key={learningTest.id}>
-                {learningTest.__typename} - {learningTest.gamifications?.length} gamifications
+                <div css={styles.container}>
+                  <Puzzle size={32}/>
+                  <div css={styles.contentWrapper}>
+                    <Title order={4}>
+                      {learningTest.__typename} {learningTestIndex + 1}
+                    </Title>
+                    <p>To complete the module please master this test</p>
+                  </div>
+                  <Button<"button">
+                    onClick={() =>
+                    {
+                      console.log("start test", learningTest.id);
+                      setOpenedTest(learningTest.id!);
+                    }}
+                    styleType="secondarySimple">
+                    Start the test
+                  </Button>
+                </div>
               </li>
             ))}
           </ul>
