@@ -5,7 +5,7 @@ import { css } from "@emotion/react";
 export const wrapper = (status: cardStatusType) => css`
   color: inherit;
   background-color: ${status === "upcoming" ? "transparent" : "#F9F9F9"};
-  border: 2px solid ${status === "completed" ? "#0AA949" : "#F0F0F0"};
+  border: 1px solid ${status === "completed" ? "#0AA949" : "#F0F0F0"};
   border-radius: 12px;
   display: flex;
   flex-direction: column;

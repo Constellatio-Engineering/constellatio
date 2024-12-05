@@ -5,7 +5,7 @@ import { css } from "@emotion/react";
 export const wrapper = (status: cardStatusType) => css`
     padding: 24px 12px;
     color: #000000;
-    border: 2px solid ${status === "completed" ? "#0AA949" : "#F0F0F0"};
+    border: 1px solid ${status === "completed" ? "#0AA949" : "#F0F0F0"};
     border-radius: 12px;
     display: flex;
     flex-direction: column;
