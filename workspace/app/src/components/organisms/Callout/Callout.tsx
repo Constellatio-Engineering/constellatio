@@ -73,7 +73,6 @@ export const Callout: FC<CalloutProps> = ({ calloutType, text }) =>
     <Stack spacing="spacing-4" sx={styles.calloutStyles(theme)}>
       <Group spacing="spacing-8">
         <HeadingType calloutType={calloutType}/>
-        <p><mark style={{ backgroundColor: "pink", padding: 2 }}>{contentHeight}px</mark></p>
       </Group>
       <div css={[styles.contentWrapper, isExpandable && styles.contentWrapperExpandable(isExpanded, contentHeight)]}>
         {isExpandable && (
