@@ -44,6 +44,7 @@ type LayoutProps = {
 
 if(typeof document === "undefined") 
 {
+  // eslint-disable-next-line import/no-named-as-default-member
   React.useLayoutEffect = React.useEffect;
 }
 

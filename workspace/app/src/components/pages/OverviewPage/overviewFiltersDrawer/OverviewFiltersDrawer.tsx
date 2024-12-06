@@ -17,7 +17,7 @@ import { findIntersection, getDistinctItemsByKey } from "@constellatio/utils/arr
 import { getIsValidKey, mapToObject, objectKeys } from "@constellatio/utils/object";
 import { Drawer } from "@mantine/core";
 import { type FunctionComponent, useEffect, useMemo } from "react";
-import { useStore } from "zustand";
+import { useStoreWithEqualityFn } from "zustand/traditional";
 
 import * as styles from "./OverviewFiltersDrawer.styles";
 
@@ -25,7 +25,7 @@ export type CasesOverviewFiltersDrawerProps = Pick<CaseOverviewPageProps, "items
 
 export const CasesOverviewFiltersDrawer: FunctionComponent<CasesOverviewFiltersDrawerProps> = (props) =>
 {
-  const casesOverviewFiltersStore = useStore(useCasesOverviewFiltersStore);
+  const casesOverviewFiltersStore = useStoreWithEqualityFn(useCasesOverviewFiltersStore);
 
   return (
     <OverviewFiltersDrawerContent
@@ -39,7 +39,7 @@ export type ArticlesOverviewFiltersDrawerProps = Pick<ArticleOverviewPageProps, 
 
 export const ArticlesOverviewFiltersDrawer: FunctionComponent<ArticlesOverviewFiltersDrawerProps> = (props) =>
 {
-  const articlesOverviewFiltersStore = useStore(useArticlesOverviewFiltersStore);
+  const articlesOverviewFiltersStore = useStoreWithEqualityFn(useArticlesOverviewFiltersStore);
 
   return (
     <OverviewFiltersDrawerContent

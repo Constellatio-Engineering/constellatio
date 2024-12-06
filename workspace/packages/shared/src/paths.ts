@@ -8,6 +8,7 @@ export const appPaths = {
   dashboard: "/dashboard",
   dictionary: "/dictionary",
   forum: "/forum",
+  learningPaths: "/learning-paths",
   notifications: "/notifications",
   personalSpace: "/personal-space",
   profile: "/profile",
