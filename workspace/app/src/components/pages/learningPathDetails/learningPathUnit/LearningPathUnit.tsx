@@ -16,6 +16,7 @@ import * as sharedStyles from "../LearningPathDetails.styles";
 import * as styles from "./LearningPathUnit.styles";
 
 type unitStatusType = "completed" | "in-progress" | "upcoming";
+export type testStatusType = "completed" | "in-progress" | "upcoming" | "not-started";
 
 type Props = {
   readonly allArticleIdsInLearningPath: string[];
@@ -40,18 +41,27 @@ export const LearningPathUnit: FunctionComponent<Props> = ({
   console.log("openedTest", openedTest);
 
   let unitStatus: unitStatusType;
+  let testStatus: testStatusType;
 
   if(index === 0)
   {
     unitStatus = "completed";
+    testStatus = "in-progress";
   }
   else if(index === 1)
   {
     unitStatus = "in-progress";
+    testStatus = "in-progress";
+  }
+  else if(index === 2)
+  {
+    unitStatus = "upcoming";
+    testStatus = "not-started";
   }
   else
   {
     unitStatus = "upcoming";
+    testStatus = "upcoming";
   }
 
   return (
@@ -110,13 +120,17 @@ export const LearningPathUnit: FunctionComponent<Props> = ({
           <ul css={styles.testList}>
             {unit.caseLearningTest?.filter(Boolean).map((learningTest, learningTestIndex) => (
               <li key={learningTest.id}>
-                <div css={styles.container}>
+                <div css={styles.container2(testStatus)}>
                   <Puzzle size={32}/>
                   <div css={styles.contentWrapper}>
                     <Title order={4}>
                       {learningTest.__typename} {learningTestIndex + 1}
                     </Title>
-                    <p>To complete the module please master this test</p>
+                    <p>
+                      {testStatus === "upcoming" && "Schließe das vorherige Modul ab, um diesen Test freizuschalten"}
+                      {(testStatus === "not-started" || testStatus === "in-progress") && "Teste dein Wissen und schließe das Modul ab!"}
+                      {testStatus === "completed" && "Super! Du hast diesen Test erfolgreich abgeschlossen."}
+                    </p>
                   </div>
                   <Button<"button">
                     onClick={() =>
@@ -125,7 +139,9 @@ export const LearningPathUnit: FunctionComponent<Props> = ({
                       setOpenedTest(learningTest.id!);
                     }}
                     styleType="secondarySimple">
-                    Start the test
+                    {(testStatus === "upcoming" || testStatus === "not-started") && "Test starten"}
+                    {testStatus === "in-progress" && "Test fortsetzen"}
+                    {testStatus === "completed" && "Test neu starten"}
                   </Button>
                 </div>
               </li>

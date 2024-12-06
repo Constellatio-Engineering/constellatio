@@ -1,3 +1,4 @@
+import { type testStatusType } from "@/components/pages/learningPathDetails/learningPathUnit/LearningPathUnit";
 import { colooors } from "@/constants/styles/colors";
 
 import { css } from "@emotion/react";
@@ -61,10 +62,41 @@ export const container = css`
   align-items: center;
   justify-content: space-between;
   padding: 16px;
-  background-color: #ffffff;
   border-radius: 12px;
   background-color: ${colooors["neutrals-01"][2]};
   gap: 16px;
+`;
+
+export const container2 = (testStatus: testStatusType) => css`
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    justify-content: space-between;
+    padding: 16px;
+    border-radius: 12px;
+    gap: 16px;
+    
+    background-color: ${
+  testStatus === "completed"
+    ? "#e7f6ea" // Grünlicher Hintergrund
+    : testStatus === "in-progress"
+      ? "#edeefa" // Bläulicher Hintergrund
+      : colooors["neutrals-01"][2] // Fallback
+};
+
+    border: 1px solid ${
+  testStatus === "completed"
+    ? "#26b961" // Grüne Border
+    : testStatus === "in-progress"
+      ? "#9fafe1" // Blaue Border
+      : "#e0e0e0" // Fallback
+};
+
+    opacity: ${
+  testStatus === "upcoming" ? 0.5 : 1 // Disabled Look durch reduzierte Opazität
+};
+
+    transition: all 0.3s ease-in-out; // Für sanfte Animationen beim Statuswechsel
 `;
 
 export const contentWrapper = css`
