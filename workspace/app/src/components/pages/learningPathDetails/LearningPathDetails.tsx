@@ -1,5 +1,7 @@
-/* eslint-disable max-lines */
 import ContentWrapper from "@/components/helpers/contentWrapper/ContentWrapper";
+import {
+  LearningPathCompletedCard
+} from "@/components/pages/learningPathDetails/learningPathCompletedCard/LearningPathCompletedCard";
 import { LearningPathHeader } from "@/components/pages/learningPathDetails/learningPathHeader/LearningPathHeader";
 import { LearningPathUnit } from "@/components/pages/learningPathDetails/learningPathUnit/LearningPathUnit";
 
@@ -57,12 +59,15 @@ export const LearningPathDetailsPage: FunctionComponent<Props> = (learningPath) 
               />
             ))}
           </div>
-          <LearningPathHeader
-            description={learningPath.description}
-            estimatedDuration={learningPath.estimatedDuration}
-            title={learningPath.title}
-            totalTasks={totalTasks ?? 0}
-          />
+          <div css={styles.headerColumn}>
+            <LearningPathCompletedCard/>
+            <LearningPathHeader
+              description={learningPath.description}
+              estimatedDuration={learningPath.estimatedDuration}
+              title={learningPath.title}
+              totalTasks={totalTasks ?? 0}
+            />
+          </div>
         </div>
       </ContentWrapper>
     </>

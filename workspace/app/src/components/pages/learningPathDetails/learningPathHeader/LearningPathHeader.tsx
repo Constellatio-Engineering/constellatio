@@ -21,7 +21,7 @@ export const LearningPathHeader: FunctionComponent<Props> = ({
 }) => 
 {
   return (
-    <div css={[sharedStyles.card, styles.wrapper]}>
+    <div css={sharedStyles.card}>
       <div>
         <div css={styles.UnitIconAndTotalTaskWrapper}>
           <Unit size={110}/>
