@@ -41,7 +41,7 @@ export const DragDropGame: FC<TDragDropGame> = ({
   const { invalidateGamesProgress } = useContextAndErrorIfNull(InvalidateQueriesContext);
   const { mutate: setGameProgress } = api.gamesProgress.setGameProgress.useMutation({
     onError: (error) => console.error("Error while setting game progress", error),
-    onSuccess: async () => invalidateGamesProgress({ caseId })
+    onSuccess: async () => invalidateGamesProgress({ caseId, queryType: "byCaseId" })
   });
   const {
     droppedItems,
