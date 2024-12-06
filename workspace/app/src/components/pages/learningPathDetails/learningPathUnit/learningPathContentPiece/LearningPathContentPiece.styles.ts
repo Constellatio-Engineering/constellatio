@@ -25,13 +25,7 @@ export const completed = css`
 `;
 
 export const iconWrapper = css`
-  height: 110px;
-  width: 110px;
-  display: flex;
-  background-color: lightgray;
-  align-items: center;
-  justify-content: center;
-  margin-bottom: 12px;
+  margin-bottom: 20px;
 `;
 
 export const preTitle = css`

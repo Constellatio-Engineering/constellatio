@@ -1,5 +1,7 @@
 import Label from "@/components/atoms/label/Label";
 import StatusLabel from "@/components/atoms/statusLabel/StatusLabel";
+import { ArticleIcon } from "@/components/Icons/ArticleIcon";
+import { CaseIcon } from "@/components/Icons/CaseIcon";
 import { type cardStatusType } from "@/components/molecules/learningPathCard/LearningPathCard";
 
 import { type IGenLearningPathUnit_ContentPieces } from "@constellatio/cms/generated-types";
@@ -36,7 +38,7 @@ export const LearningPathContentPiece: FunctionComponent<Props> = ({ contentPiec
   return (
     <Link href={variant === "case" ? `${appPaths.cases}/${contentPiece.id}` : `${appPaths.dictionary}/${contentPiece.id}`} css={styles.wrapper(status)}>
       <div css={styles.iconWrapper}>
-        {variant === "case" ? <div>Case Icon</div> : <div>Dictionary Icon</div>}
+        {variant === "case" ? <CaseIcon size={70}/> : <ArticleIcon size={70}/>}
       </div>
       <div>
         <Label variant={variant}/>

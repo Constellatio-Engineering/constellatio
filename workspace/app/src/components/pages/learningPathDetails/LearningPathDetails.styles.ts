@@ -1,3 +1,5 @@
+import { headerHeightPx } from "@/components/organisms/Header/Header.styles";
+
 import { css } from "@emotion/react";
 
 export const contentWrapper = css`
@@ -22,4 +24,15 @@ export const unitsColumn = css`
   gap: 30px;
   flex: 1;
   min-width: 0;
+`;
+
+export const headerColumn = css`
+    width: 500px;
+    align-self: flex-start;
+    position: sticky;
+    top: ${headerHeightPx + 30}px;
+    
+    h1 {
+        font-size: 28px;
+    }
 `;
