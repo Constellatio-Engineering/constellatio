@@ -47,7 +47,7 @@ export const getStaticProps: GetStaticProps<GetLearningPathDetailPagePropsResult
     };
   }
 
-  const { LearningPath } = await caisySDK.getLearningPathById({ id: "4f9adf51-1500-4f19-b59b-0c79c10ebde3" });
+  const { LearningPath } = await caisySDK.getLearningPathById({ id: params.id });
 
   if(!LearningPath)
   {

@@ -1,11 +1,24 @@
 import { api } from "@/utils/api";
 
-import { type Nullable } from "@constellatio/utility-types";
+import type { AppRouter } from "@constellatio/api";
+import { type inferReactQueryProcedureOptions } from "@trpc/react-query";
+import { type inferProcedureInput } from "@trpc/server";
 
-const useGamesProgress = (caseId: Nullable<string>) =>
+const useGamesProgress = (
+  input: inferProcedureInput<AppRouter["gamesProgress"]["getGamesProgress"]>,
+  options?: inferReactQueryProcedureOptions<AppRouter>["gamesProgress"]["getGamesProgress"]
+) =>
 {
-  return api.gamesProgress.getGamesProgress.useQuery({ caseId: caseId! }, {
-    enabled: caseId != null,
+  let isEnabled = true;
+
+  if(input.queryType === "byCaseId" && input.caseId == null)
+  {
+    isEnabled = true;
+  }
+
+  return api.gamesProgress.getGamesProgress.useQuery(input, {
+    enabled: isEnabled,
+    ...options
   });
 };
 
