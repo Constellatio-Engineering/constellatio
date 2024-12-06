@@ -43,6 +43,7 @@ export const labelWrapper = css`
 export const comingSoon = css`
   text-transform: uppercase;
   color: #949494;
+  font-weight: 500;
   font-size: 20px;
 `;
 
