@@ -33,7 +33,7 @@ let ItemRow: FunctionComponent<Props> = ({
   variant
 }) =>
 {
-  const { casesProgress } = useCasesProgress();
+  const { data: casesProgress } = useCasesProgress();
   const { bookmarks: casesBookmarks, isLoading: isGetCasesBookmarksLoading } = useBookmarks("case", {
     enabled: variant === "case"
   });

@@ -7,13 +7,13 @@ dotenv.config({ path: __dirname + "/.env.local" });
 
 export const config: CodegenConfig = {
   generates: {
-    "src/services/graphql/__generated/graphql.schema.graphql": {
+    "src/graphql/__generated/graphql.schema.graphql": {
       plugins: ["schema-ast"],
     },
-    "src/services/graphql/__generated/graphql.schema.json": {
+    "src/graphql/__generated/graphql.schema.json": {
       plugins: ["introspection"],
     },
-    "src/services/graphql/__generated/sdk.ts": {
+    "src/graphql/__generated/sdk.ts": {
       config: {
         dedupeFragments: true,
         exportFragmentSpreadSubTypes: true,
@@ -24,9 +24,9 @@ export const config: CodegenConfig = {
         typesPrefix: "IGen",
       },
       documents: [
-        "src/services/graphql/**/*.graphql",
-        "src/services/graphql/fragments/**/*.ts",
-        "src/services/graphql/queries/**/*.ts",
+        "src/graphql/**/*.graphql",
+        "src/graphql/fragments/**/*.ts",
+        "src/graphql/queries/**/*.ts",
       ],
       plugins: [
         "typescript",
@@ -39,7 +39,7 @@ export const config: CodegenConfig = {
   overwrite: true,
   schema: [
     {
-      [`https://cloud.caisy.io/api/v3/e/${process.env.CAISY_PROJECT_ID}/graphql` || ""]: {
+      [`https://cloud.caisy.io/api/v3/e/${process.env.CAISY_PROJECT_ID}/graphql`]: {
         headers: {
           "x-caisy-apikey": `${process.env.CAISY_API_KEY}`,
         },

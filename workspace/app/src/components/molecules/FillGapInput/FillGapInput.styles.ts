@@ -66,7 +66,7 @@ export const fillGapInputStyles = ({ index, status, width = 145 }: FillGapInputS
     root: {
       display: "inline-block",
       marginTop: spaciiing["spacing-2"],
-      maxWidth: width + "px",
+      maxWidth: Math.max(width, 80) + "px",
       paddingBottom: status === "error" ? spaciiing["spacing-4"] : "0",
       paddingLeft: spaciiing["spacing-2"],
       paddingRight: spaciiing["spacing-2"],

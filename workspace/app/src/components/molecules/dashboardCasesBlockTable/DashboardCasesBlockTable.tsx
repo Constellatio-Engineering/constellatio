@@ -38,7 +38,7 @@ const DashboardCasesBlockTable: FunctionComponent = () =>
 {
   const router = useRouter();
   const { allCases } = useCases();
-  const { casesProgress } = useCasesProgress();
+  const { data: casesProgress } = useCasesProgress();
   const casesWithProgress = allCases.map(caseItem =>
   {
     return {
