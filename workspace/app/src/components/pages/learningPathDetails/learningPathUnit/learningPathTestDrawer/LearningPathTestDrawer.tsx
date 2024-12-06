@@ -29,7 +29,7 @@ export const LearningPathTestDrawer: FunctionComponent<Props> = ({
   isOpened
 }) =>
 {
-  const { data: gamesProgress, isLoading: isGamesProgressLoading } = useGamesProgress(caseLearningTestId);
+  const { data: gamesProgress, isLoading: isGamesProgressLoading } = useGamesProgress({ caseId: caseLearningTestId, queryType: "byCaseId" });
   const content = caseLearningTest?.fullTextTasks;
 
   // eslint-disable-next-line @typescript-eslint/no-explicit-any

@@ -17,7 +17,7 @@ const useResetCaseProgress = () =>
     onError: (error) => console.error(error),
     onSuccess: async (caseId) =>
     {
-      await invalidateGamesProgress({ caseId });
+      await invalidateGamesProgress({ caseId, queryType: "byCaseId" });
       await invalidateCaseProgress({ caseId });
       resetFillGapsGames(caseId);
       resetSelectionCardGames(caseId);

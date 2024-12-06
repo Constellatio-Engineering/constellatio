@@ -5,10 +5,8 @@ import { LearningPathUnitUpcoming } from "@/components/Icons/LearningPathUnitUpc
 import { Puzzle } from "@/components/Icons/Puzzle";
 import { LearningPathContentPiece } from "@/components/pages/learningPathDetails/learningPathUnit/learningPathContentPiece/LearningPathContentPiece";
 import { LearningPathTestDrawer } from "@/components/pages/learningPathDetails/learningPathUnit/learningPathTestDrawer/LearningPathTestDrawer";
-import useCasesProgress from "@/hooks/useCasesProgress";
-import { useSeenArticles } from "@/hooks/useSeenArticles";
+import { type UnitWithProgress } from "@/hooks/useLearningPathProgress";
 
-import { type IGenLearningPathUnit } from "@constellatio/cms/generated-types";
 import { Title } from "@mantine/core";
 import { type FunctionComponent, useState } from "react";
 
@@ -18,52 +16,25 @@ import * as styles from "./LearningPathUnit.styles";
 type unitStatusType = "completed" | "in-progress" | "upcoming";
 
 type Props = {
-  readonly allArticleIdsInLearningPath: string[];
-  readonly allCaseIdsInLearningPath: string[];
   readonly index: number;
   readonly isLastUnit: boolean;
-  readonly unit: IGenLearningPathUnit;
+  readonly unit: UnitWithProgress;
 };
 
-export const LearningPathUnit: FunctionComponent<Props> = ({
-  allArticleIdsInLearningPath,
-  allCaseIdsInLearningPath,
-  index,
-  isLastUnit,
-  unit
-}) =>
+export const LearningPathUnit: FunctionComponent<Props> = ({ index, isLastUnit, unit }) =>
 {
-  const { data: casesProgress } = useCasesProgress({ caseIds: allCaseIdsInLearningPath }, { refetchOnMount: true });
-  const { data: seenArticles } = useSeenArticles({ articleIds: allArticleIdsInLearningPath }, { refetchOnMount: true });
   const [openedTest, setOpenedTest] = useState<string | null>(null);
-
-  console.log("openedTest", openedTest);
-
-  let unitStatus: unitStatusType;
-
-  if(index === 0)
-  {
-    unitStatus = "completed";
-  }
-  else if(index === 1)
-  {
-    unitStatus = "in-progress";
-  }
-  else
-  {
-    unitStatus = "upcoming";
-  }
 
   return (
     <>
       <div key={unit.id} id={unit.id!} css={styles.wrapper}>
         <div css={styles.visualPathWrapper}>
-          <div css={unitStatus === "completed" && styles.iconWrapperCompleted}>
-            {unitStatus === "completed" && <LearningPathUnitCompleted size={110}/>}
-            {unitStatus === "in-progress" && <LearningPathUnitInProgress size={110}/>}
-            {unitStatus === "upcoming" && <LearningPathUnitUpcoming size={110}/>}
+          <div css={unit.progressState === "completed" && styles.iconWrapperCompleted}>
+            {unit.progressState === "completed" && <LearningPathUnitCompleted size={110}/>}
+            {unit.progressState === "in-progress" && <LearningPathUnitInProgress size={110}/>}
+            {unit.progressState === "upcoming" && <LearningPathUnitUpcoming size={110}/>}
           </div>
-          {!isLastUnit && <div css={styles.connectingLine(unitStatus === "completed")}/>}
+          {!isLastUnit && <div css={styles.connectingLine(unit.progressState === "completed")}/>}
         </div>
         <div css={[sharedStyles.card, styles.unit]}>
           <Title order={2} css={styles.unitTitle}>
@@ -79,7 +50,7 @@ export const LearningPathUnit: FunctionComponent<Props> = ({
 
               if(contentPiece.__typename === "Case")
               {
-                const caseProgress = casesProgress?.find(caseProgress => caseProgress.caseId === contentPiece.id);
+                const caseProgress = unit.casesProgress?.find(caseProgress => caseProgress.caseId === contentPiece.id);
                 if(caseProgress?.progressState === "completed")
                 {
                   status = "completed";
@@ -95,7 +66,7 @@ export const LearningPathUnit: FunctionComponent<Props> = ({
               }
               else if(contentPiece.__typename === "Article")
               {
-                status = seenArticles?.some(articleId => articleId === contentPiece.id) ? "completed" : "upcoming";
+                status = unit.seenArticles?.some(articleId => articleId === contentPiece.id) ? "completed" : "upcoming";
               }
 
               return (

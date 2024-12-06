@@ -30,7 +30,7 @@ const DetailsPage: FunctionComponent<IDetailsPageProps> = ({ content, variant })
   const caseId = content?.__typename === "Case" ? contentId : undefined;
   const { mutate: addContentItemView } = useAddContentItemView();
   const { caseProgress, isLoading: isCaseProgressLoading } = useCaseProgress(caseId);
-  const { data: gamesProgress, isLoading: isGamesProgressLoading } = useGamesProgress(caseId);
+  const { data: gamesProgress, isLoading: isGamesProgressLoading } = useGamesProgress({ caseId: caseId!, queryType: "byCaseId" });
   const games = content?.__typename === "Case" ? getGamesFromCase(content) : [];
   const caseStepIndex = useCaseSolvingStore(s => s.caseStepIndex);
   const progressState = caseProgress?.progressState;
