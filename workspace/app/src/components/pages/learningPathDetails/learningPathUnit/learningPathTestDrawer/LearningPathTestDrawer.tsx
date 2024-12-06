@@ -1,21 +1,13 @@
-import { RichTextHeadingOverwrite } from "@/components/helpers/RichTextHeadingOverwrite";
 import { richTextParagraphOverwrite } from "@/components/helpers/richTextParagraphOverwrite";
 import { Richtext } from "@/components/molecules/Richtext/Richtext";
 import SlidingPanelTitle from "@/components/molecules/slidingPanelTitle/SlidingPanelTitle";
 import { DragDropGame } from "@/components/organisms/DragDropGame/DragDropGame";
 import FillGapsGame from "@/components/organisms/FillGapsGame/FillGapsGame";
-import { getNestedHeadingIndex } from "@/components/organisms/floatingPanel/generateTocHelper";
 import SelectionCardGame from "@/components/organisms/SelectionCardGame/SelectionCardGame";
 import useGamesProgress from "@/hooks/useGamesProgress";
-import type { IDocumentLink, IHeadingNode } from "@/utils/richtext";
+import type { IDocumentLink } from "@/utils/richtext";
 
-import {
-  type IGenArticle_FullTextTasks,
-  type IGenCase,
-  type IGenCase_FullTextTasks,
-  type IGenLearningTest_Content,
-  IGenLearningTestCaseFragment
-} from "@constellatio/cms/generated-types";
+import { type IGenCase } from "@constellatio/cms/generated-types";
 import { getGamesFromCase } from "@constellatio/cms/utils/case";
 import { type Nullable } from "@constellatio/utility-types";
 import { Drawer, ScrollArea } from "@mantine/core";
@@ -39,8 +31,6 @@ export const LearningPathTestDrawer: FunctionComponent<Props> = ({
 {
   const { data: gamesProgress, isLoading: isGamesProgressLoading } = useGamesProgress(caseLearningTestId);
   const content = caseLearningTest?.fullTextTasks;
-
-  console.log("gamesProgress", gamesProgress);
 
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const documentLinkOverwrite = useCallback((props: any) =>

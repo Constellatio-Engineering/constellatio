@@ -55,7 +55,7 @@ export const UnitIconAndTotalTaskWrapper = css`
   position: relative;
   min-width: 0;
   width: fit-content;
-`
+`;
 
 export const totalTasksNotificationWrapper = css`
   position: absolute;

@@ -1,8 +1,4 @@
-import { colooors } from "@/constants/styles/colors";
-import type { UnknownMantineStylesParams } from "@/utils/types";
-
 import { css } from "@emotion/react";
-import { type Styles, type ModalStylesNames, type DrawerStylesNames } from "@mantine/core";
 
 export const contentWrapper = css`
   padding-top: 60px;

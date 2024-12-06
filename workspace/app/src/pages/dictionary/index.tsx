@@ -12,7 +12,7 @@ import { type ArticleWithNextAndPreviousArticleId, getArticlesWithNextAndPreviou
 import { type inferProcedureOutput } from "@trpc/server";
 import { type GetStaticProps } from "next";
 import { useMemo } from "react";
-import { useStore } from "zustand";
+import { useStoreWithEqualityFn } from "zustand/traditional";
 
 type GetArticlesOverviewPagePropsResult = GetOverviewPagePropsResult & {
   items: ArticleWithNextAndPreviousArticleId[];
@@ -78,10 +78,10 @@ const NextPage: NextPageWithLayout<GetArticlesOverviewPagePropsResult> = ({
 {
   const { data: seenArticles } = useSeenArticles();
   const articlesWithSeenStatus = useMemo(() => getArticlesWithSeenStatus(items, seenArticles), [items, seenArticles]);
-  const filters = useStore(useArticlesOverviewFiltersStore, s => s.filters);
-  const openDrawer = useStore(useArticlesOverviewFiltersStore, s => s.openDrawer);
-  const clearAllFilters = useStore(useArticlesOverviewFiltersStore, s => s.clearAllFilters);
-  const totalFiltersCount = useStore(useArticlesOverviewFiltersStore, s => s.getTotalFiltersCount());
+  const filters = useStoreWithEqualityFn(useArticlesOverviewFiltersStore, s => s.filters);
+  const openDrawer = useStoreWithEqualityFn(useArticlesOverviewFiltersStore, s => s.openDrawer);
+  const clearAllFilters = useStoreWithEqualityFn(useArticlesOverviewFiltersStore, s => s.clearAllFilters);
+  const totalFiltersCount = useStoreWithEqualityFn(useArticlesOverviewFiltersStore, s => s.getTotalFiltersCount());
 
   return (
     <>
