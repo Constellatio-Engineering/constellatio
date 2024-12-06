@@ -28,27 +28,22 @@ export const LearningPathUnit: FunctionComponent<Props> = ({ index, isLastUnit, 
 
   console.log("openedTest", openedTest);
 
-  let unitStatus: unitStatusType;
   let testStatus: testStatusType;
 
   if(index === 0)
   {
-    unitStatus = "completed";
     testStatus = "in-progress";
   }
   else if(index === 1)
   {
-    unitStatus = "in-progress";
-    testStatus = "in-progress";
+    testStatus = "completed";
   }
   else if(index === 2)
   {
-    unitStatus = "upcoming";
     testStatus = "not-started";
   }
   else
   {
-    unitStatus = "upcoming";
     testStatus = "upcoming";
   }
 
