@@ -1,9 +1,9 @@
 import { Layout } from "@/components/layouts/Layout";
 import PageHead from "@/components/organisms/pageHead/PageHead";
 import OverviewPage from "@/components/pages/OverviewPage/OverviewPage";
+import { useSeenArticles } from "@/hooks/useSeenArticles";
 import { type NextPageWithLayout } from "@/pages/_app";
 import { useArticlesOverviewFiltersStore, type WasSeenFilterOption, wasSeenFilterOptions } from "@/stores/overviewFilters.store";
-import { api } from "@/utils/api";
 
 import { type AppRouter } from "@constellatio/api";
 import { getAllArticles } from "@constellatio/cms/content/getAllArticles";
@@ -12,7 +12,7 @@ import { type ArticleWithNextAndPreviousArticleId, getArticlesWithNextAndPreviou
 import { type inferProcedureOutput } from "@trpc/server";
 import { type GetStaticProps } from "next";
 import { useMemo } from "react";
-import { useStore } from "zustand";
+import { useStoreWithEqualityFn } from "zustand/traditional";
 
 type GetArticlesOverviewPagePropsResult = GetOverviewPagePropsResult & {
   items: ArticleWithNextAndPreviousArticleId[];
@@ -35,7 +35,7 @@ export const getStaticProps: GetStaticProps<GetArticlesOverviewPagePropsResult> 
   };
 };
 
-const getArticlesWithSeenStatus = (articles: GetArticlesOverviewPagePropsResult["items"], seenArticles?: inferProcedureOutput<AppRouter["views"]["getAllSeenArticles"]>) =>
+const getArticlesWithSeenStatus = (articles: GetArticlesOverviewPagePropsResult["items"], seenArticles?: inferProcedureOutput<AppRouter["views"]["getSeenArticles"]>) =>
 {
   return articles.map(article =>
   {
@@ -76,12 +76,12 @@ const NextPage: NextPageWithLayout<GetArticlesOverviewPagePropsResult> = ({
   ...props
 }) =>
 {
-  const { data: seenArticles } = api.views.getAllSeenArticles.useQuery(undefined);
+  const { data: seenArticles } = useSeenArticles();
   const articlesWithSeenStatus = useMemo(() => getArticlesWithSeenStatus(items, seenArticles), [items, seenArticles]);
-  const filters = useStore(useArticlesOverviewFiltersStore, s => s.filters);
-  const openDrawer = useStore(useArticlesOverviewFiltersStore, s => s.openDrawer);
-  const clearAllFilters = useStore(useArticlesOverviewFiltersStore, s => s.clearAllFilters);
-  const totalFiltersCount = useStore(useArticlesOverviewFiltersStore, s => s.getTotalFiltersCount());
+  const filters = useStoreWithEqualityFn(useArticlesOverviewFiltersStore, s => s.filters);
+  const openDrawer = useStoreWithEqualityFn(useArticlesOverviewFiltersStore, s => s.openDrawer);
+  const clearAllFilters = useStoreWithEqualityFn(useArticlesOverviewFiltersStore, s => s.clearAllFilters);
+  const totalFiltersCount = useStoreWithEqualityFn(useArticlesOverviewFiltersStore, s => s.getTotalFiltersCount());
 
   return (
     <>

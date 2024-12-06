@@ -4,27 +4,35 @@ import DashboardPage from "@/components/pages/dashboardPage/DashboardPage";
 import { type NextPageWithLayout } from "@/pages/_app";
 import { getTrpcServerSideHelpers } from "@/utils/trpc";
 
-import { type GetServerSidePropsContext } from "next";
+import { type AllLearningPaths, getAllLearningPaths } from "@constellatio/cms/content/getAllLearningPaths";
+import { type Nullable } from "@constellatio/utility-types";
+import { type GetServerSideProps } from "next";
 
-export async function getServerSideProps(context: GetServerSidePropsContext)
+export type GetDashboardPagePropsResult = {
+  readonly allLearningPaths: Nullable<AllLearningPaths>;
+};
+
+export const getServerSideProps: GetServerSideProps<GetDashboardPagePropsResult> = async (context) =>
 {
+  const allLearningPaths = await getAllLearningPaths();
   const trpcHelpers = await getTrpcServerSideHelpers(context);
 
   await trpcHelpers.users.getUserDetails.prefetch();
 
   return {
     props: {
+      allLearningPaths,
       trpcState: trpcHelpers.dehydrate(),
     },
   };
-}
+};
 
-const Dashboard: NextPageWithLayout = () =>
+const Dashboard: NextPageWithLayout<GetDashboardPagePropsResult> = (props) =>
 {
   return (
     <>
       <PageHead pageTitle="Dashboard"/>
-      <DashboardPage/>
+      <DashboardPage {...props}/>
     </>
   );
 };

@@ -5,19 +5,19 @@
   "type": "module",
   "exports": {
     "./sdk": {
-      "types": "./dist/graphql/getSdk.d.ts",
+      "types": "./dist/src/graphql/getSdk.d.ts",
       "default": "./src/graphql/getSdk.ts"
     },
     "./generated-types": {
-      "types": "./dist/graphql/__generated/sdk.d.ts",
+      "types": "./dist/src/graphql/__generated/sdk.d.ts",
       "default": "./src/graphql/__generated/sdk.ts"
     },
     "./content/*": {
-      "types": "./dist/content/*.d.ts",
+      "types": "./dist/src/content/*.d.ts",
       "default": "./src/content/*.ts"
     },
     "./utils/*": {
-      "types": "./dist/utils/*.d.ts",
+      "types": "./dist/src/utils/*.d.ts",
       "default": "./src/utils/*.ts"
     }
   },
@@ -29,9 +29,10 @@
     "lint": "eslint src",
     "lint:fix": "eslint --fix src",
     "typecheck": "tsc --noEmit --emitDeclarationOnly false",
-    "gen": "graphql-codegen -r dotenv/config --config codegen.ts",
-    "gen:watch": "graphql-codegen --watch -r dotenv/config --config codegen.ts",
-    "supabase:typegen": "npx supabase gen types typescript --project-id kzrdtppwdumjscxldnwo --schema public > src/lib/database.types.ts"
+    "gen": "pnpm with-env graphql-codegen -r dotenv/config --config codegen.ts",
+    "gen:watch": "pnpm with-env graphql-codegen --watch -r dotenv/config --config codegen.ts",
+    "supabase:typegen": "npx supabase gen types typescript --project-id kzrdtppwdumjscxldnwo --schema public > src/lib/database.types.ts",
+    "with-env": "dotenv-run -- "
   },
   "dependencies": {
     "@constellatio/env": "workspace:*",

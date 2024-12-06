@@ -1,4 +1,3 @@
-
 import { eq, or, type SQL } from "@constellatio/db";
 import { db } from "@constellatio/db/client";
 import {
@@ -36,6 +35,7 @@ import { deleteClickupTask } from "../lib/clickup/tasks/delete-task";
 import { findClickupTask } from "../lib/clickup/tasks/find-task";
 import { type ClickupTask } from "../lib/clickup/types";
 import { clickupCrmCustomField, getClickupCrmUserByUserId } from "../lib/clickup/utils";
+import { stripe } from "../lib/stripe/stripe";
 import { adminProcedure, createTRPCRouter } from "../trpc";
 import { NotFoundError, SelfDeletionRequestError } from "../utils/serverError";
 
@@ -103,6 +103,11 @@ export const adminRouter = createTRPCRouter({
         await transaction.delete(profilePictures).where(eq(profilePictures.userId, userToDelete.id));
         await transaction.delete(users).where(eq(users.id, userToDelete.id));
         await ctx.supabaseServerClient.auth.admin.deleteUser(userToDelete.id);
+
+        if(userToDelete.stripeCustomerId)
+        {
+          await stripe.customers.del(userToDelete.stripeCustomerId);
+        }
       });
 
       if(env.NEXT_PUBLIC_DEPLOYMENT_ENVIRONMENT === "production")

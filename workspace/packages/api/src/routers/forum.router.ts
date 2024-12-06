@@ -304,7 +304,7 @@ export const forumRouter = createTRPCRouter({
         {
           await db.insert(notifications).values({
             recipientId: parentAnswer.userId,
-            resourceId: input.parent.answerId,
+            resourceId: parentAnswer.parentQuestionId,
             senderId: userId,
             typeIdentifier: "replyToForumAnswerPosted",
           });

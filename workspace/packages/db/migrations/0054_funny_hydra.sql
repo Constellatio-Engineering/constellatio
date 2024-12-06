@@ -14,8 +14,6 @@ ALTER TABLE "ForumQuestion" ENABLE ROW LEVEL SECURITY;--> statement-breakpoint
 ALTER TABLE "ForumQuestion_to_LegalField" ENABLE ROW LEVEL SECURITY;--> statement-breakpoint
 ALTER TABLE "GameProgress" ENABLE ROW LEVEL SECURITY;--> statement-breakpoint
 ALTER TABLE "Note" ENABLE ROW LEVEL SECURITY;--> statement-breakpoint
-ALTER TABLE "NotificationType" ENABLE ROW LEVEL SECURITY;--> statement-breakpoint
-ALTER TABLE "Notification" ENABLE ROW LEVEL SECURITY;--> statement-breakpoint
 ALTER TABLE "Ping" ENABLE ROW LEVEL SECURITY;--> statement-breakpoint
 ALTER TABLE "ProfilePicture" ENABLE ROW LEVEL SECURITY;--> statement-breakpoint
 ALTER TABLE "QuestionUpvote" ENABLE ROW LEVEL SECURITY;--> statement-breakpoint

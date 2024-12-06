@@ -16,7 +16,11 @@ import {
   fileExtensions,
   fileMimeTypes,
   imageFileExtensions,
-  imageFileMimeTypes, notificationTypesIdentifiers, profilePictureSources, roles, streakActivityTypes, userBadgeStates
+  imageFileMimeTypes, notificationTypesIdentifiers,
+  profilePictureSources,
+  roles,
+  streakActivityTypes,
+  userBadgeStates
 } from "@constellatio/shared/validation";
 import { getCurrentDate } from "@constellatio/utils/dates";
 import { type InferInsertModel, type InferSelectModel, relations, sql } from "drizzle-orm";
@@ -40,7 +44,8 @@ import {
   uniqueIndex,
   uuid,
   check,
-  pgSchema
+  pgSchema,
+  foreignKey
 } from "drizzle-orm/pg-core";
 import { authenticatedRole, authUid } from "drizzle-orm/supabase";
 
@@ -71,7 +76,7 @@ export const badgeIdentifierEnum = pgEnum("BadgeIdentifier", badgeIdentifiers);
 export const userBadgeStateEnum = pgEnum("UserBadgeState", userBadgeStates);
 export const badgePublicationStateEnum = pgEnum("BadgePublicationState", badgePublicationState);
 export const roleEnum = pgEnum("Role", roles);
-export const notificationTypeIdentifierEnum = pgEnum("NotificationType", notificationTypesIdentifiers);
+export const notificationTypeEnum = pgEnum("NotificationTypeEnum", notificationTypesIdentifiers);
 export const streakActivityTypeEnum = pgEnum("StreakActivityType", streakActivityTypes);
 export const contentItemViewTypeEnum = pgEnum("ContentItemViewType", contentItemViewsTypes);
 export const authProviderEnum = pgEnum("AuthProvider", authProviders);
@@ -261,12 +266,9 @@ export const gamesProgress = pgTable("GameProgress", {
   gameId: uuid("GameId").notNull(),
   progressState: gameProgressStateEnum("ProgressState").notNull().default("not-started"),
   createdAt: timestamp("CreatedAt").defaultNow().notNull(),
-  updatedAt: timestamp("UpdatedAt").defaultNow().notNull().$onUpdate(getCurrentDate),
   gameResult: jsonb("GameResult").$type<GameResultSchemaType>(),
   wasSolvedCorrectly: boolean("WasSolvedCorrectly"),
-}, table => ({
-  unique: unique().on(table.userId, table.gameId),
-})).enableRLS();
+}).enableRLS();
 
 export type GameProgressInsert = InferInsertModel<typeof gamesProgress>;
 export type GameProgress = InferSelectModel<typeof gamesProgress>;
@@ -539,7 +541,7 @@ export type UserToRole = InferSelectModel<typeof usersToRoles>;
 export type UserToRoleSql = InferPgSelectModel<typeof usersToRoles>;
 
 export const notificationTypes = pgTable("NotificationType", {
-  identifier: notificationTypeIdentifierEnum("NotificationType").primaryKey(),
+  identifier: notificationTypeEnum("NotificationType").primaryKey(),
   name: text("Name").notNull(),
   description: text("Description").notNull(),
 }).enableRLS();
@@ -558,11 +560,16 @@ export const notifications = pgTable("Notification", {
   recipientId: uuid("RecipientId").references(() => users.id, { onDelete: "no action" }).notNull(),
   senderId: uuid("SenderId").references(() => users.id, { onDelete: "no action" }).notNull(),
   resourceId: uuid("ResourceId"),
-  typeIdentifier: notificationTypeIdentifierEnum("Type").references(() => notificationTypes.identifier, { onDelete: "no action" }).notNull(),
+  typeIdentifier: notificationTypeEnum("NotificationType").notNull(),
   createdAt: timestamp("CreatedAt").defaultNow().notNull(),
   readAt: timestamp("ReadAt"),
 }, (table) => [
   check("sender_recipient_different", sql`${table.senderId} != ${table.recipientId}`),
+  foreignKey({
+    columns: [table.typeIdentifier],
+    foreignColumns: [notificationTypes.identifier],
+    name: "Notification_NotificationType_fk"
+  }).onDelete("no action"),
   pgPolicy("notifications_read_access_for_users_own_notifications", {
     as: "permissive",
     for: "select",

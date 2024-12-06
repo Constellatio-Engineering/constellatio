@@ -11,9 +11,10 @@ import useCaseSolvingStore from "@/stores/caseSolving.store";
 import { api } from "@/utils/api";
 import type { IDocumentLink, IHeadingNode } from "@/utils/richtext";
 
+import { type GetGamesProgressResult } from "@constellatio/api/routers/gamesProgress.router";
 import { type IGenArticle_FullTextTasks, type IGenCase_Facts, type IGenCase_FullTextTasks, type Maybe } from "@constellatio/cms/generated-types";
 import { type Games } from "@constellatio/cms/utils/case";
-import { type GameProgress } from "@constellatio/db/schema";
+import { type Nullable } from "@constellatio/utility-types";
 import { Container, Title } from "@mantine/core";
 import {
   type FunctionComponent, useCallback, useEffect, useMemo, useRef 
@@ -37,17 +38,19 @@ export const headingObservedThreshold = 0.23;
 interface ICaseCompleteTestsStepProps 
 {
   readonly caseId: string;
+  readonly currentGame: Games[number];
   readonly currentGameIndexInFullTextTasksJson: number;
   readonly facts: Maybe<IGenCase_Facts> | undefined;
   readonly fullTextTasks: Maybe<IGenCase_FullTextTasks> | Maybe<IGenArticle_FullTextTasks>;
   readonly games: Games;
-  readonly gamesProgress: GameProgress[];
+  readonly gamesProgress: Nullable<GetGamesProgressResult>;
   readonly progressState: IStatusLabel["progressState"] | undefined;
   readonly variant?: "case" | "dictionary";
 }
 
 const CaseCompleteTestsStep: FunctionComponent<ICaseCompleteTestsStepProps> = ({
   caseId,
+  currentGame,
   currentGameIndexInFullTextTasksJson,
   facts,
   fullTextTasks,
@@ -63,9 +66,14 @@ const CaseCompleteTestsStep: FunctionComponent<ICaseCompleteTestsStepProps> = ({
 
   const windowDimensions = useWindowDimensions();
   const windowHeight = windowDimensions?.height;
-  const completedGames = gamesProgress.filter(({ progressState }) => progressState === "completed");
-  const currentGameId = gamesProgress.find(({ progressState }) => progressState === "not-started")?.gameId;
-  const areAllGamesCompleted = completedGames.length === games.length;
+  const completedGamesCount = games.filter(game => 
+  {
+    const gameProgress = gamesProgress?.find(gameProgress => gameProgress.gameId === game.id);
+    const hasCompletedGame = gameProgress?.results.some(({ progressState }) => progressState === "completed");
+    return hasCompletedGame;
+  }).length;
+  const currentGameId = currentGame?.id;
+  const areAllGamesCompleted = completedGamesCount === games.length;
   const { invalidateCaseProgress } = useContextAndErrorIfNull(InvalidateQueriesContext);
   const { mutate: setProgressState } = api.casesProgress.setProgressState.useMutation({
     onError: (error) => console.error(error),

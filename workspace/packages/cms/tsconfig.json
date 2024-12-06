@@ -1,6 +1,6 @@
 {
   "extends": "@constellatio/tsconfig/internal-package.json",
-  "include": ["src"],
+  "include": ["src", "codegen.ts"],
   "exclude": ["node_modules"],
   "compilerOptions": {
     "types": ["@total-typescript/ts-reset"]

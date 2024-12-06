@@ -1,6 +1,6 @@
 {
-  "id": "4c3a678d-cc27-485f-b93e-532ffac1df69",
-  "prevId": "2a1dc00b-f13d-4b81-b0d2-6382fd6607ef",
+  "id": "d482b9bc-2911-449f-9ebd-41a33b2777e7",
+  "prevId": "27a4847d-7c22-481f-b809-03eb49a95163",
   "version": "7",
   "dialect": "postgresql",
   "tables": {
@@ -393,6 +393,21 @@
           "concurrently": false,
           "method": "btree",
           "with": {}
+        },
+        "ContentView_UserId_FK_Index": {
+          "name": "ContentView_UserId_FK_Index",
+          "columns": [
+            {
+              "expression": "UserId",
+              "isExpression": false,
+              "asc": true,
+              "nulls": "last"
+            }
+          ],
+          "isUnique": false,
+          "concurrently": false,
+          "method": "btree",
+          "with": {}
         }
       },
       "foreignKeys": {
@@ -453,7 +468,53 @@
           "notNull": true
         }
       },
-      "indexes": {},
+      "indexes": {
+        "CorrectAnswer_UserId_FK_Index": {
+          "name": "CorrectAnswer_UserId_FK_Index",
+          "columns": [
+            {
+              "expression": "ConfirmedByUserId",
+              "isExpression": false,
+              "asc": true,
+              "nulls": "last"
+            }
+          ],
+          "isUnique": false,
+          "concurrently": false,
+          "method": "btree",
+          "with": {}
+        },
+        "CorrectAnswer_QuestionId_FK_Index": {
+          "name": "CorrectAnswer_QuestionId_FK_Index",
+          "columns": [
+            {
+              "expression": "QuestionId",
+              "isExpression": false,
+              "asc": true,
+              "nulls": "last"
+            }
+          ],
+          "isUnique": false,
+          "concurrently": false,
+          "method": "btree",
+          "with": {}
+        },
+        "CorrectAnswer_AnswerId_FK_Index": {
+          "name": "CorrectAnswer_AnswerId_FK_Index",
+          "columns": [
+            {
+              "expression": "AnswerId",
+              "isExpression": false,
+              "asc": true,
+              "nulls": "last"
+            }
+          ],
+          "isUnique": false,
+          "concurrently": false,
+          "method": "btree",
+          "with": {}
+        }
+      },
       "foreignKeys": {
         "CorrectAnswer_ConfirmedByUserId_User_Id_fk": {
           "name": "CorrectAnswer_ConfirmedByUserId_User_Id_fk",
@@ -559,7 +620,38 @@
           "notNull": true
         }
       },
-      "indexes": {},
+      "indexes": {
+        "Document_UserId_FK_Index": {
+          "name": "Document_UserId_FK_Index",
+          "columns": [
+            {
+              "expression": "UserId",
+              "isExpression": false,
+              "asc": true,
+              "nulls": "last"
+            }
+          ],
+          "isUnique": false,
+          "concurrently": false,
+          "method": "btree",
+          "with": {}
+        },
+        "Document_FolderId_FK_Index": {
+          "name": "Document_FolderId_FK_Index",
+          "columns": [
+            {
+              "expression": "FolderId",
+              "isExpression": false,
+              "asc": true,
+              "nulls": "last"
+            }
+          ],
+          "isUnique": false,
+          "concurrently": false,
+          "method": "btree",
+          "with": {}
+        }
+      },
       "foreignKeys": {
         "Document_UserId_User_Id_fk": {
           "name": "Document_UserId_User_Id_fk",
@@ -697,7 +789,53 @@
           "notNull": false
         }
       },
-      "indexes": {},
+      "indexes": {
+        "ForumAnswer_UserId_FK_Index": {
+          "name": "ForumAnswer_UserId_FK_Index",
+          "columns": [
+            {
+              "expression": "UserId",
+              "isExpression": false,
+              "asc": true,
+              "nulls": "last"
+            }
+          ],
+          "isUnique": false,
+          "concurrently": false,
+          "method": "btree",
+          "with": {}
+        },
+        "ForumAnswer_ParentQuestionId_FK_Index": {
+          "name": "ForumAnswer_ParentQuestionId_FK_Index",
+          "columns": [
+            {
+              "expression": "ParentQuestionId",
+              "isExpression": false,
+              "asc": true,
+              "nulls": "last"
+            }
+          ],
+          "isUnique": false,
+          "concurrently": false,
+          "method": "btree",
+          "with": {}
+        },
+        "ForumAnswer_ParentAnswerId_FK_Index": {
+          "name": "ForumAnswer_ParentAnswerId_FK_Index",
+          "columns": [
+            {
+              "expression": "ParentAnswerId",
+              "isExpression": false,
+              "asc": true,
+              "nulls": "last"
+            }
+          ],
+          "isUnique": false,
+          "concurrently": false,
+          "method": "btree",
+          "with": {}
+        }
+      },
       "foreignKeys": {
         "ForumAnswer_UserId_User_Id_fk": {
           "name": "ForumAnswer_UserId_User_Id_fk",
@@ -916,6 +1054,21 @@
           "concurrently": false,
           "method": "btree",
           "with": {}
+        },
+        "ForumQuestion_UserId_FK_Index": {
+          "name": "ForumQuestion_UserId_FK_Index",
+          "columns": [
+            {
+              "expression": "UserId",
+              "isExpression": false,
+              "asc": true,
+              "nulls": "last"
+            }
+          ],
+          "isUnique": false,
+          "concurrently": false,
+          "method": "btree",
+          "with": {}
         }
       },
       "foreignKeys": {
@@ -1023,13 +1176,6 @@
           "notNull": true,
           "default": "now()"
         },
-        "UpdatedAt": {
-          "name": "UpdatedAt",
-          "type": "timestamp",
-          "primaryKey": false,
-          "notNull": true,
-          "default": "now()"
-        },
         "GameResult": {
           "name": "GameResult",
           "type": "jsonb",
@@ -1060,16 +1206,7 @@
         }
       },
       "compositePrimaryKeys": {},
-      "uniqueConstraints": {
-        "GameProgress_UserId_GameId_unique": {
-          "name": "GameProgress_UserId_GameId_unique",
-          "nullsNotDistinct": false,
-          "columns": [
-            "UserId",
-            "GameId"
-          ]
-        }
-      },
+      "uniqueConstraints": {},
       "policies": {},
       "checkConstraints": {},
       "isRLSEnabled": true
@@ -1118,7 +1255,38 @@
           "notNull": true
         }
       },
-      "indexes": {},
+      "indexes": {
+        "Note_UserId_FK_Index": {
+          "name": "Note_UserId_FK_Index",
+          "columns": [
+            {
+              "expression": "UserId",
+              "isExpression": false,
+              "asc": true,
+              "nulls": "last"
+            }
+          ],
+          "isUnique": false,
+          "concurrently": false,
+          "method": "btree",
+          "with": {}
+        },
+        "Note_FileId_FK_Index": {
+          "name": "Note_FileId_FK_Index",
+          "columns": [
+            {
+              "expression": "FileId",
+              "isExpression": false,
+              "asc": true,
+              "nulls": "last"
+            }
+          ],
+          "isUnique": false,
+          "concurrently": false,
+          "method": "btree",
+          "with": {}
+        }
+      },
       "foreignKeys": {
         "Note_UserId_User_Id_fk": {
           "name": "Note_UserId_User_Id_fk",
@@ -1151,157 +1319,6 @@
       "uniqueConstraints": {},
       "policies": {},
       "checkConstraints": {},
-      "isRLSEnabled": true
-    },
-    "public.NotificationType": {
-      "name": "NotificationType",
-      "schema": "",
-      "columns": {
-        "NotificationType": {
-          "name": "NotificationType",
-          "type": "NotificationType",
-          "typeSchema": "public",
-          "primaryKey": true,
-          "notNull": true
-        },
-        "Name": {
-          "name": "Name",
-          "type": "text",
-          "primaryKey": false,
-          "notNull": true
-        },
-        "Description": {
-          "name": "Description",
-          "type": "text",
-          "primaryKey": false,
-          "notNull": true
-        }
-      },
-      "indexes": {},
-      "foreignKeys": {},
-      "compositePrimaryKeys": {},
-      "uniqueConstraints": {},
-      "policies": {},
-      "checkConstraints": {},
-      "isRLSEnabled": true
-    },
-    "public.Notification": {
-      "name": "Notification",
-      "schema": "",
-      "columns": {
-        "Id": {
-          "name": "Id",
-          "type": "uuid",
-          "primaryKey": true,
-          "notNull": true,
-          "default": "gen_random_uuid()"
-        },
-        "Index": {
-          "name": "Index",
-          "type": "serial",
-          "primaryKey": false,
-          "notNull": true
-        },
-        "RecipientId": {
-          "name": "RecipientId",
-          "type": "uuid",
-          "primaryKey": false,
-          "notNull": true
-        },
-        "SenderId": {
-          "name": "SenderId",
-          "type": "uuid",
-          "primaryKey": false,
-          "notNull": true
-        },
-        "ResourceId": {
-          "name": "ResourceId",
-          "type": "uuid",
-          "primaryKey": false,
-          "notNull": false
-        },
-        "Type": {
-          "name": "Type",
-          "type": "NotificationType",
-          "typeSchema": "public",
-          "primaryKey": false,
-          "notNull": true
-        },
-        "CreatedAt": {
-          "name": "CreatedAt",
-          "type": "timestamp",
-          "primaryKey": false,
-          "notNull": true,
-          "default": "now()"
-        },
-        "ReadAt": {
-          "name": "ReadAt",
-          "type": "timestamp",
-          "primaryKey": false,
-          "notNull": false
-        }
-      },
-      "indexes": {},
-      "foreignKeys": {
-        "Notification_RecipientId_User_Id_fk": {
-          "name": "Notification_RecipientId_User_Id_fk",
-          "tableFrom": "Notification",
-          "tableTo": "User",
-          "columnsFrom": [
-            "RecipientId"
-          ],
-          "columnsTo": [
-            "Id"
-          ],
-          "onDelete": "no action",
-          "onUpdate": "no action"
-        },
-        "Notification_SenderId_User_Id_fk": {
-          "name": "Notification_SenderId_User_Id_fk",
-          "tableFrom": "Notification",
-          "tableTo": "User",
-          "columnsFrom": [
-            "SenderId"
-          ],
-          "columnsTo": [
-            "Id"
-          ],
-          "onDelete": "no action",
-          "onUpdate": "no action"
-        },
-        "Notification_Type_NotificationType_NotificationType_fk": {
-          "name": "Notification_Type_NotificationType_NotificationType_fk",
-          "tableFrom": "Notification",
-          "tableTo": "NotificationType",
-          "columnsFrom": [
-            "Type"
-          ],
-          "columnsTo": [
-            "NotificationType"
-          ],
-          "onDelete": "no action",
-          "onUpdate": "no action"
-        }
-      },
-      "compositePrimaryKeys": {},
-      "uniqueConstraints": {},
-      "policies": {
-        "notifications_read_access_for_users_own_notifications": {
-          "name": "notifications_read_access_for_users_own_notifications",
-          "as": "PERMISSIVE",
-          "for": "SELECT",
-          "to": [
-            "authenticated"
-          ],
-          "using": "\"Notification\".\"RecipientId\" = auth.uid()"
-        }
-      },
-      "checkConstraints": {
-        "sender_recipient_different": {
-          "name": "sender_recipient_different",
-          "value": "\"Notification\".\"SenderId\" != \"Notification\".\"RecipientId\""
-        }
-      },
       "isRLSEnabled": true
     },
     "public.Ping": {
@@ -1352,6 +1369,21 @@
           "columns": [
             {
               "expression": "Path",
+              "isExpression": false,
+              "asc": true,
+              "nulls": "last"
+            }
+          ],
+          "isUnique": false,
+          "concurrently": false,
+          "method": "btree",
+          "with": {}
+        },
+        "Ping_UserId_FK_Index": {
+          "name": "Ping_UserId_FK_Index",
+          "columns": [
+            {
+              "expression": "UserId",
               "isExpression": false,
               "asc": true,
               "nulls": "last"
@@ -1585,7 +1617,23 @@
           "notNull": true
         }
       },
-      "indexes": {},
+      "indexes": {
+        "ReferralBalance_UserId_FK_Index": {
+          "name": "ReferralBalance_UserId_FK_Index",
+          "columns": [
+            {
+              "expression": "UserId",
+              "isExpression": false,
+              "asc": true,
+              "nulls": "last"
+            }
+          ],
+          "isUnique": false,
+          "concurrently": false,
+          "method": "btree",
+          "with": {}
+        }
+      },
       "foreignKeys": {
         "ReferralBalance_UserId_User_Id_fk": {
           "name": "ReferralBalance_UserId_User_Id_fk",
@@ -1631,7 +1679,23 @@
           "notNull": true
         }
       },
-      "indexes": {},
+      "indexes": {
+        "ReferralCode_UserId_FK_Index": {
+          "name": "ReferralCode_UserId_FK_Index",
+          "columns": [
+            {
+              "expression": "UserId",
+              "isExpression": false,
+              "asc": true,
+              "nulls": "last"
+            }
+          ],
+          "isUnique": false,
+          "concurrently": false,
+          "method": "btree",
+          "with": {}
+        }
+      },
       "foreignKeys": {
         "ReferralCode_UserId_User_Id_fk": {
           "name": "ReferralCode_UserId_User_Id_fk",
@@ -1696,7 +1760,38 @@
           "default": false
         }
       },
-      "indexes": {},
+      "indexes": {
+        "Referral_UserId_FK_Index": {
+          "name": "Referral_UserId_FK_Index",
+          "columns": [
+            {
+              "expression": "ReferredUserId",
+              "isExpression": false,
+              "asc": true,
+              "nulls": "last"
+            }
+          ],
+          "isUnique": false,
+          "concurrently": false,
+          "method": "btree",
+          "with": {}
+        },
+        "Referral_ReferringUserId_FK_Index": {
+          "name": "Referral_ReferringUserId_FK_Index",
+          "columns": [
+            {
+              "expression": "ReferringUserId",
+              "isExpression": false,
+              "asc": true,
+              "nulls": "last"
+            }
+          ],
+          "isUnique": false,
+          "concurrently": false,
+          "method": "btree",
+          "with": {}
+        }
+      },
       "foreignKeys": {
         "Referral_ReferredUserId_User_Id_fk": {
           "name": "Referral_ReferredUserId_User_Id_fk",
@@ -1825,7 +1920,23 @@
           "default": "now()"
         }
       },
-      "indexes": {},
+      "indexes": {
+        "Streak_UserId_FK_Index": {
+          "name": "Streak_UserId_FK_Index",
+          "columns": [
+            {
+              "expression": "UserId",
+              "isExpression": false,
+              "asc": true,
+              "nulls": "last"
+            }
+          ],
+          "isUnique": false,
+          "concurrently": false,
+          "method": "btree",
+          "with": {}
+        }
+      },
       "foreignKeys": {
         "Streak_UserId_User_Id_fk": {
           "name": "Streak_UserId_User_Id_fk",
@@ -1878,7 +1989,23 @@
           "default": "now()"
         }
       },
-      "indexes": {},
+      "indexes": {
+        "StreakActivity_UserId_FK_Index": {
+          "name": "StreakActivity_UserId_FK_Index",
+          "columns": [
+            {
+              "expression": "UserId",
+              "isExpression": false,
+              "asc": true,
+              "nulls": "last"
+            }
+          ],
+          "isUnique": false,
+          "concurrently": false,
+          "method": "btree",
+          "with": {}
+        }
+      },
       "foreignKeys": {
         "StreakActivities_UserId_User_Id_fk": {
           "name": "StreakActivities_UserId_User_Id_fk",
@@ -1907,7 +2034,7 @@
         "UserId": {
           "name": "UserId",
           "type": "uuid",
-          "primaryKey": false,
+          "primaryKey": true,
           "notNull": true
         },
         "CreatedAt": {
@@ -1935,15 +2062,7 @@
         }
       },
       "compositePrimaryKeys": {},
-      "uniqueConstraints": {
-        "UpdateUserInCrmQueue_UserId_unique": {
-          "name": "UpdateUserInCrmQueue_UserId_unique",
-          "nullsNotDistinct": false,
-          "columns": [
-            "UserId"
-          ]
-        }
-      },
+      "uniqueConstraints": {},
       "policies": {},
       "checkConstraints": {},
       "isRLSEnabled": true
@@ -1979,7 +2098,23 @@
           "notNull": true
         }
       },
-      "indexes": {},
+      "indexes": {
+        "UploadFolder_UserId_FK_Index": {
+          "name": "UploadFolder_UserId_FK_Index",
+          "columns": [
+            {
+              "expression": "UserId",
+              "isExpression": false,
+              "asc": true,
+              "nulls": "last"
+            }
+          ],
+          "isUnique": false,
+          "concurrently": false,
+          "method": "btree",
+          "with": {}
+        }
+      },
       "foreignKeys": {
         "UploadFolder_UserId_User_Id_fk": {
           "name": "UploadFolder_UserId_User_Id_fk",
@@ -2064,7 +2199,38 @@
           "notNull": true
         }
       },
-      "indexes": {},
+      "indexes": {
+        "UploadedFile_UserId_FK_Index": {
+          "name": "UploadedFile_UserId_FK_Index",
+          "columns": [
+            {
+              "expression": "UserId",
+              "isExpression": false,
+              "asc": true,
+              "nulls": "last"
+            }
+          ],
+          "isUnique": false,
+          "concurrently": false,
+          "method": "btree",
+          "with": {}
+        },
+        "UploadedFile_FolderId_FK_Index": {
+          "name": "UploadedFile_FolderId_FK_Index",
+          "columns": [
+            {
+              "expression": "FolderId",
+              "isExpression": false,
+              "asc": true,
+              "nulls": "last"
+            }
+          ],
+          "isUnique": false,
+          "concurrently": false,
+          "method": "btree",
+          "with": {}
+        }
+      },
       "foreignKeys": {
         "UploadedFile_UserId_User_Id_fk": {
           "name": "UploadedFile_UserId_User_Id_fk",
@@ -2297,7 +2463,22 @@
         }
       },
       "indexes": {},
-      "foreignKeys": {},
+      "foreignKeys": {
+        "User_Id_users_id_fk": {
+          "name": "User_Id_users_id_fk",
+          "tableFrom": "User",
+          "tableTo": "users",
+          "schemaTo": "auth",
+          "columnsFrom": [
+            "Id"
+          ],
+          "columnsTo": [
+            "id"
+          ],
+          "onDelete": "no action",
+          "onUpdate": "no action"
+        }
+      },
       "compositePrimaryKeys": {},
       "uniqueConstraints": {
         "User_Email_unique": {
@@ -2337,7 +2518,38 @@
           "default": "'not-seen'"
         }
       },
-      "indexes": {},
+      "indexes": {
+        "User_to_Badge_UserId_FK_Index": {
+          "name": "User_to_Badge_UserId_FK_Index",
+          "columns": [
+            {
+              "expression": "UserId",
+              "isExpression": false,
+              "asc": true,
+              "nulls": "last"
+            }
+          ],
+          "isUnique": false,
+          "concurrently": false,
+          "method": "btree",
+          "with": {}
+        },
+        "User_to_Badge_BadgeId_FK_Index": {
+          "name": "User_to_Badge_BadgeId_FK_Index",
+          "columns": [
+            {
+              "expression": "BadgeId",
+              "isExpression": false,
+              "asc": true,
+              "nulls": "last"
+            }
+          ],
+          "isUnique": false,
+          "concurrently": false,
+          "method": "btree",
+          "with": {}
+        }
+      },
       "foreignKeys": {
         "User_to_Badge_UserId_User_Id_fk": {
           "name": "User_to_Badge_UserId_User_Id_fk",
@@ -2384,7 +2596,7 @@
           "to": [
             "authenticated"
           ],
-          "using": "\"User_to_Badge\".\"UserId\" = auth.uid()"
+          "using": "\"User_to_Badge\".\"UserId\" = (select auth.uid())"
         }
       },
       "checkConstraints": {},
@@ -2407,7 +2619,38 @@
           "notNull": true
         }
       },
-      "indexes": {},
+      "indexes": {
+        "User_to_Role_UserId_FK_Index": {
+          "name": "User_to_Role_UserId_FK_Index",
+          "columns": [
+            {
+              "expression": "UserId",
+              "isExpression": false,
+              "asc": true,
+              "nulls": "last"
+            }
+          ],
+          "isUnique": false,
+          "concurrently": false,
+          "method": "btree",
+          "with": {}
+        },
+        "User_to_Role_RoleId_FK_Index": {
+          "name": "User_to_Role_RoleId_FK_Index",
+          "columns": [
+            {
+              "expression": "RoleId",
+              "isExpression": false,
+              "asc": true,
+              "nulls": "last"
+            }
+          ],
+          "isUnique": false,
+          "concurrently": false,
+          "method": "btree",
+          "with": {}
+        }
+      },
       "foreignKeys": {
         "User_to_Role_UserId_User_Id_fk": {
           "name": "User_to_Role_UserId_User_Id_fk",
@@ -2603,18 +2846,6 @@
       "values": [
         "image/jpeg",
         "image/png"
-      ]
-    },
-    "public.NotificationType": {
-      "name": "NotificationType",
-      "schema": "public",
-      "values": [
-        "forumQuestionPosted",
-        "answerToForumQuestionPosted",
-        "forumQuestionUpvoted",
-        "replyToForumAnswerPosted",
-        "forumAnswerUpvoted",
-        "forumAnswerAccepted"
       ]
     },
     "public.OnboardingResult": {
