@@ -1,6 +1,8 @@
 {
-  "eslint.workingDirectories": [{ 
-    "directory": "app", 
+  "eslint.workingDirectories": [
+    
+    { 
+    "directory": "workspace/app", 
     "changeProcessCWD": true
 }],
   "editor.codeActionsOnSave": {
