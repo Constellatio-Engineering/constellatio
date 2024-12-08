@@ -15,6 +15,9 @@ export type GetDashboardPagePropsResult = {
 export const getServerSideProps: GetServerSideProps<GetDashboardPagePropsResult> = async (context) =>
 {
   const allLearningPaths = await getAllLearningPaths();
+
+  console.log("allLearningPaths", allLearningPaths);
+
   const trpcHelpers = await getTrpcServerSideHelpers(context);
 
   await trpcHelpers.users.getUserDetails.prefetch();

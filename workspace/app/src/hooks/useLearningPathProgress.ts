@@ -19,18 +19,18 @@ export const useLearningPathProgress = (learningPath: IGenLearningPath) =>
     cases
   } = useMemo(() =>
   {
-    const cases: IGenCase[] = [];
-    const articles: IGenArticle[] = [];
-
     const allUnits = learningPath.units?.filter(Boolean) ?? [];
     const allContentPieces = allUnits.flatMap(unit => unit.contentPieces?.filter(Boolean) ?? []) ?? [];
     const allTestGamifications = allUnits
-      .flatMap(unit => unit.caseLearningTest?.filter(Boolean) ?? [])
+      .flatMap(unit => unit.caseLearningTests?.filter(Boolean) ?? [])
       .flatMap(test => test.fullTextTasks?.connections?.filter(Boolean) ?? [])
       .filter(connection =>
       {
         return connection.__typename === "CardSelectionGame" || connection.__typename === "DragNDropGame" || connection.__typename === "FillInGapsGame";
       }) as Array<IGenFillInGapsGame | IGenDragNDropGame | IGenCardSelectionGame>;
+
+    const cases: IGenCase[] = [];
+    const articles: IGenArticle[] = [];
 
     allContentPieces.forEach(contentPiece =>
     {
@@ -48,6 +48,10 @@ export const useLearningPathProgress = (learningPath: IGenLearningPath) =>
       allContentPieces, allTestGamifications, allUnits, articles, cases
     };
   }, [learningPath]);
+
+  const totalTasks = learningPath.units
+    ?.filter(Boolean)
+    .reduce((total, unit) => total + (unit.caseLearningTests?.length ?? 0) + (unit.contentPieces?.length ?? 0), 0);
 
   const allCaseIdsInLearningPath = useMemo(() => cases.map(caseItem => caseItem.id).filter(Boolean), [cases]);
   const allArticleIdsInLearningPath = useMemo(() => articles.map(articleItem => articleItem.id).filter(Boolean), [articles]);
@@ -89,9 +93,23 @@ export const useLearningPathProgress = (learningPath: IGenLearningPath) =>
       seenArticles,
       seenArticlesCount
     });
-  }), [allContentPieces.length, allTestGamifications.length, allUnits, casesProgress, gamesProgress, seenArticles?.length]);
+  }), [allContentPieces.length, allTestGamifications.length, allUnits, casesProgress, gamesProgress, seenArticles]);
 
-  return unitsWithProgress;
+  for(let i = 1; i < unitsWithProgress.length; i++)
+  {
+    const unitBefore = unitsWithProgress[i - 1]!;
+
+    if(unitBefore.progressState !== "completed")
+    {
+      unitsWithProgress[i]!.progressState = "upcoming";
+    }
+  }
+
+  return {
+    isCompleted: false,
+    totalTasks,
+    unitsWithProgress
+  };
 };
 
-export type UnitWithProgress = ReturnType<typeof useLearningPathProgress>[number];
+export type LearningPathProgress = ReturnType<typeof useLearningPathProgress>;

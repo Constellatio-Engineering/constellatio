@@ -15,11 +15,7 @@ type Props = IGenLearningPath;
 
 export const LearningPathDetailsPage: FunctionComponent<Props> = (learningPath) =>
 {
-  const unitsWithProgress = useLearningPathProgress(learningPath);
-
-  const totalTasks = learningPath.units
-    ?.filter(Boolean)
-    .reduce((total, unit) => total + (unit.learningTests?.length ?? 0) + (unit.contentPieces?.length ?? 0), 0);
+  const { totalTasks, unitsWithProgress } = useLearningPathProgress(learningPath);
 
   return (
     <>
