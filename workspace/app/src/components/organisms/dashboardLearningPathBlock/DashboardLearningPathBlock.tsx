@@ -55,7 +55,7 @@ export const TimeUnit: React.FC<TimeUnitProps> = ({ label, value }) =>
   );
 };
 
-const targetDate = new Date("2024-12-09T14:00:00.000Z");
+const targetDate = new Date("2024-12-10T14:00:00.000Z");
 
 export const CountdownTimer: React.FC = () => 
 {
