@@ -8,7 +8,7 @@ import { BodyText } from "../BodyText/BodyText";
 
 export interface IStatusLabel extends PropsWithChildren 
 {
-  readonly progressState: CaseProgressState;
+  readonly progressState: CaseProgressState | "in-progress" | "upcoming";
   readonly variant?: "case" | "dictionary";
 }
 
@@ -18,6 +18,7 @@ const StatusLabel: FunctionComponent<IStatusLabel> = ({ progressState, variant =
   {
     case "completing-tests":
     case "solving-case":
+    case "in-progress":
       return (
         <div css={styles.inProgress}>
           <InProgressStatusLabelIcon/>
@@ -32,6 +33,7 @@ const StatusLabel: FunctionComponent<IStatusLabel> = ({ progressState, variant =
         </div>
       );
     case "not-started":
+    case "upcoming":
       return (
         <div css={styles.notStarted}>
           <NotStartedStatusLabelIcon/>

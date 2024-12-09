@@ -2,79 +2,146 @@ import useCasesProgress from "@/hooks/useCasesProgress";
 import useGamesProgress from "@/hooks/useGamesProgress";
 import { useSeenArticles } from "@/hooks/useSeenArticles";
 
-import type {
-  IGenArticle, IGenCardSelectionGame, IGenCase, IGenDragNDropGame, IGenFillInGapsGame, IGenLearningPath 
-} from "@constellatio/cms/generated-types";
+import { getGamesFromCase } from "@constellatio/cms/utils/case";
+import { type LearningPathWithExtraData } from "@constellatio/cms/utils/learningPaths";
 import { useMemo } from "react";
 
-type LearningPathProgressState = "completed" | "in-progress" | "upcoming";
+type CompletedProgressState = "completed";
+type InProgressProgressState = "in-progress";
+type UpcomingProgressState = "upcoming";
 
-export const useLearningPathProgress = (learningPath: IGenLearningPath) =>
+type LearningPathProgressState = CompletedProgressState | InProgressProgressState | UpcomingProgressState;
+type CaseLearningPathProgressState = CompletedProgressState | InProgressProgressState | UpcomingProgressState;
+type ArticleLearningPathProgressState = CompletedProgressState | UpcomingProgressState;
+
+export const useLearningPathProgress = (learningPath: LearningPathWithExtraData) =>
 {
   const {
-    allContentPieces,
-    allTestGamifications,
-    allUnits,
-    articles,
-    cases
-  } = useMemo(() =>
+    allArticleIdsInLearningPath,
+    allCaseIdsInLearningPath,
+    allGameIdsInLearningPath,
+    allUnits
+  } = learningPath;
+
+  const {
+    data: casesProgress,
+    isPending: isCasesProgressPending
+  } = useCasesProgress({ caseIds: allCaseIdsInLearningPath }, { refetchOnMount: true });
+  const {
+    data: seenArticles,
+    isPending: isSeenArticlesPending
+  } = useSeenArticles({ articleIds: allArticleIdsInLearningPath }, { refetchOnMount: true });
+  const {
+    data: gamesProgress,
+    isPending: isGamesProgressPending
+  } = useGamesProgress({ gamesIds: allGameIdsInLearningPath, queryType: "byGameIds" }, { refetchOnMount: true });
+
+  const unitsWithProgress = useMemo(() => allUnits.map((unit, index) =>
   {
-    const allUnits = learningPath.units?.filter(Boolean) ?? [];
-    const allContentPieces = allUnits.flatMap(unit => unit.contentPieces?.filter(Boolean) ?? []) ?? [];
-    const allTestGamifications = allUnits
-      .flatMap(unit => unit.caseLearningTests?.filter(Boolean) ?? [])
-      .flatMap(test => test.fullTextTasks?.connections?.filter(Boolean) ?? [])
-      .filter(connection =>
-      {
-        return connection.__typename === "CardSelectionGame" || connection.__typename === "DragNDropGame" || connection.__typename === "FillInGapsGame";
-      }) as Array<IGenFillInGapsGame | IGenDragNDropGame | IGenCardSelectionGame>;
+    let completedContentPiecesCount = 0;
+    let completedCaseLearningTestsCount = 0;
 
-    const cases: IGenCase[] = [];
-    const articles: IGenArticle[] = [];
-
-    allContentPieces.forEach(contentPiece =>
+    const allContentPiecesWithProgress = (unit.contentPieces?.filter(Boolean) ?? []).map(contentPiece =>
     {
       if(contentPiece.__typename === "Case")
       {
-        cases.push(contentPiece);
+        const _progressState = casesProgress?.find(p => p.caseId === contentPiece.id)?.progressState;
+
+        let caseLearningPathProgressState: CaseLearningPathProgressState;
+
+        switch (_progressState)
+        {
+          case "completed":
+          {
+            completedContentPiecesCount++;
+            caseLearningPathProgressState = "completed";
+            break;
+          }
+          case "completing-tests":
+          case "solving-case":
+          {
+            caseLearningPathProgressState = "in-progress";
+            break;
+          }
+          default:
+          {
+            caseLearningPathProgressState = "upcoming";
+            break;
+          }
+        }
+
+        return ({
+          ...contentPiece,
+          progressState: caseLearningPathProgressState
+        });
       }
-      else if(contentPiece.__typename === "Article")
+      else
       {
-        articles.push(contentPiece);
+        const wasSeen = seenArticles?.some(articleId => articleId === contentPiece.id) ?? false;
+
+        let progressState: ArticleLearningPathProgressState;
+
+        if(wasSeen)
+        {
+          completedContentPiecesCount++;
+          progressState = "completed";
+        }
+        else
+        {
+          progressState = "upcoming";
+        }
+
+        return ({
+          ...contentPiece,
+          progressState,
+        });
       }
     });
 
-    return {
-      allContentPieces, allTestGamifications, allUnits, articles, cases
-    };
-  }, [learningPath]);
+    const areAllContentPiecesCompleted = allContentPiecesWithProgress.every(contentPiece => contentPiece.progressState === "completed");
+    const allCaseLearningTestsOfUnit = unit.caseLearningTests?.filter(Boolean) ?? [];
 
-  const totalTasks = learningPath.units
-    ?.filter(Boolean)
-    .reduce((total, unit) => total + (unit.caseLearningTests?.length ?? 0) + (unit.contentPieces?.length ?? 0), 0);
+    const caseLearningTestsWithProgress = allCaseLearningTestsOfUnit.map(learningTest =>
+    {
+      const gamesInLearningTest = getGamesFromCase(learningTest);
+      const gamesWithProgress = gamesInLearningTest.map(game =>
+      {
+        const gameProgress = gamesProgress?.find(gameProgress => gameProgress.gameId === game.id);
+        const isCompleted = gameProgress?.results.some(({ progressState }) => progressState === "completed") ?? false;
+        const wasSolvedCorrectly = gameProgress?.results.some(({ wasSolvedCorrectly }) => wasSolvedCorrectly) ?? false;
 
-  const allCaseIdsInLearningPath = useMemo(() => cases.map(caseItem => caseItem.id).filter(Boolean), [cases]);
-  const allArticleIdsInLearningPath = useMemo(() => articles.map(articleItem => articleItem.id).filter(Boolean), [articles]);
-  const allGameIdsInLearningPath = useMemo(() => allTestGamifications.map(game => game.id).filter(Boolean), [allTestGamifications]);
+        return ({
+          ...game,
+          isCompleted,
+          wasSolvedCorrectly
+        });
+      });
 
-  const { data: casesProgress } = useCasesProgress({ caseIds: allCaseIdsInLearningPath }, { refetchOnMount: true });
-  const { data: seenArticles } = useSeenArticles({ articleIds: allArticleIdsInLearningPath }, { refetchOnMount: true });
-  const { data: gamesProgress } = useGamesProgress({ gamesIds: allGameIdsInLearningPath, queryType: "byGameIds" }, { refetchOnMount: true });
+      const isCompleted = gamesWithProgress.every(game => game.isCompleted);
 
-  const unitsWithProgress = useMemo(() => allUnits.map(unit =>
-  {
-    const seenArticlesCount = seenArticles?.length ?? 0;
-    const completedCasesCount = casesProgress?.filter(caseProgress => caseProgress.progressState === "completed").length ?? 0;
-    const completedGamesCount = gamesProgress?.filter(game => game.results.some((r) => r.progressState === "completed")).length ?? 0;
-    const completedContentPieces = completedCasesCount + seenArticlesCount;
+      if(isCompleted)
+      {
+        completedCaseLearningTestsCount++;
+      }
+
+      return ({
+        ...learningTest,
+        gamesWithProgress,
+        isCompleted
+      });
+    });
+
+    const areAllCaseLearningTestsCompleted = caseLearningTestsWithProgress.every(learningTest => learningTest.isCompleted);
+    const totalTasksCount = allContentPiecesWithProgress.length + allCaseLearningTestsOfUnit.length;
+    const completedTasksCount = completedContentPiecesCount + completedCaseLearningTestsCount;
 
     let progressState: LearningPathProgressState;
 
-    if(completedContentPieces === 0)
+    if(completedContentPiecesCount === 0)
     {
       progressState = "upcoming";
     }
-    else if((allContentPieces.length === completedCasesCount + seenArticlesCount) && (allTestGamifications.length === completedGamesCount))
+    else if(areAllContentPiecesCompleted && areAllCaseLearningTestsCompleted)
     {
       progressState = "completed";
     }
@@ -83,17 +150,20 @@ export const useLearningPathProgress = (learningPath: IGenLearningPath) =>
       progressState = "in-progress";
     }
 
+    if(index === 0 && progressState !== "completed")
+    {
+      progressState = "in-progress";
+    }
+
     return ({
       ...unit,
-      casesProgress,
-      completedCasesCount,
-      completedGamesCount,
-      gamesProgress,
+      caseLearningTests: caseLearningTestsWithProgress,
+      completedTasksCount,
+      contentPieces: allContentPiecesWithProgress,
       progressState,
-      seenArticles,
-      seenArticlesCount
+      totalTasksCount
     });
-  }), [allContentPieces.length, allTestGamifications.length, allUnits, casesProgress, gamesProgress, seenArticles]);
+  }), [allUnits, casesProgress, gamesProgress, seenArticles]);
 
   for(let i = 1; i < unitsWithProgress.length; i++)
   {
@@ -105,11 +175,16 @@ export const useLearningPathProgress = (learningPath: IGenLearningPath) =>
     }
   }
 
+  const areAllUnitsCompleted = unitsWithProgress.every(unit => unit.progressState === "completed");
+  const completedUnitsCount = unitsWithProgress.filter(unit => unit.progressState === "completed").length;
+
   return {
-    isCompleted: false,
-    totalTasks,
-    unitsWithProgress
+    ...learningPath,
+    completedUnitsCount,
+    isCompleted: areAllUnitsCompleted,
+    isPending: isCasesProgressPending || isSeenArticlesPending || isGamesProgressPending,
+    units: unitsWithProgress
   };
 };
 
-export type LearningPathProgress = ReturnType<typeof useLearningPathProgress>;
+export type LearningPathWithProgress = ReturnType<typeof useLearningPathProgress>;

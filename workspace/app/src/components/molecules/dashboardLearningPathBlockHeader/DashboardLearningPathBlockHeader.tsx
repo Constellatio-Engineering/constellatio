@@ -1,7 +1,7 @@
 import { Button } from "@/components/atoms/Button/Button";
 import Label from "@/components/atoms/label/Label";
+import { type LearningPathWithProgress } from "@/hooks/useLearningPathProgress";
 
-import { type IGenLearningPath } from "@constellatio/cms/generated-types";
 import { appPaths } from "@constellatio/shared/paths";
 import { Title } from "@mantine/core";
 import { useMediaQuery } from "@mantine/hooks";
@@ -10,7 +10,7 @@ import { type FunctionComponent } from "react";
 
 import * as styles from "./DashboardLearningPathBlockHeader.styles";
 
-type Props = Pick<IGenLearningPath, "id" | "title">;
+type Props = Pick<LearningPathWithProgress, "id" | "title">;
 
 const DashboardLearningPathHeader: FunctionComponent<Props> = ({ id, title }) =>
 {
