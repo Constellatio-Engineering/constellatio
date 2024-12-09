@@ -8,6 +8,7 @@ node_modules
 
 #vscode
 .vscode
+!.vscode/settings.json
 
 # vercel
 .vercel
@@ -25,7 +26,7 @@ supabase/.env.local
 *.pem
 
 # testing endpoint
-app/src/pages/api/test
+workspace/app/src/pages/api/test
 
 dist
 .cache
