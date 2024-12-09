@@ -5,7 +5,7 @@ import { type AllCases } from "@constellatio/cms/content/getAllCases";
 import { type IGenFullArticleFragment, type IGenFullCaseFragment } from "@constellatio/cms/generated-types";
 import { caisySDK } from "@constellatio/cms/sdk";
 import {
-  and, countDistinct, eq, getTableColumns, type SQL 
+  and, countDistinct, eq, getTableColumns, sql, type SQL 
 } from "@constellatio/db";
 import { db } from "@constellatio/db/client";
 import {
@@ -398,50 +398,169 @@ const calculateSubscriptionFuture: CalculateMembershipEndDateProps = (subscripti
   }
 };
 
-export const getUsersWithActivityStats = async (query?: SQL) =>
+export const getUsersWithActivityStats = async (userId: string) =>
 {
-  const articlesViews = db
-    .select({
-      itemId: contentViews.contentItemId,
-      userId: contentViews.userId,
-    })
-    .from(contentViews)
-    .where(eq(contentViews.contentItemType, "article"))
-    .as("articlesViewsSubquery");
+// Subquery für Badges: Gruppen nach UserId und BadgeId
+const userBadgesSub = db
+  .select({
+    userId: usersToBadges.userId,
+    badgeId: usersToBadges.badgeId,
+  })
+  .from(usersToBadges)
+  .where(eq(usersToBadges.userId, userId))
+  .groupBy(usersToBadges.userId, usersToBadges.badgeId)
+  .as('user_badges_sub');
 
-  const casesViews = db
-    .select({
-      itemId: contentViews.contentItemId,
-      userId: contentViews.userId,
-    })
-    .from(contentViews)
-    .where(eq(contentViews.contentItemType, "case"))
-    .as("casesViewsSubquery");
+const userBadges = db.$with("user_badges").as(
+  db.select({
+    userId: userBadgesSub.userId,
+    badge_count: sql`COUNT(*)`.as('badge_count'),
+  })
+  .from(userBadgesSub)
+  .groupBy(userBadgesSub.userId)
+);
 
-  return db
-    .select({
-      ...getTableColumns(users),
-      completedBadges: countDistinct(usersToBadges.badgeId),
-      completedCases: countDistinct(casesProgress.caseId),
-      createdDocuments: countDistinct(documents.id),
-      uploadedFiles: countDistinct(uploadedFiles.id),
-      viewedArticles: countDistinct(articlesViews.itemId),
-      viewedCases: countDistinct(casesViews.itemId)
-    })
-    .from(users)
-    .where(query)
-    .leftJoin(documents, eq(users.id, documents.userId))
-    .leftJoin(uploadedFiles, eq(users.id, uploadedFiles.userId))
-    .leftJoin(usersToBadges, eq(users.id, usersToBadges.userId))
-    .leftJoin(articlesViews, eq(users.id, articlesViews.userId))
-    .leftJoin(casesViews, eq(users.id, casesViews.userId))
-    .leftJoin(casesProgress,
-      and(
-        eq(casesProgress.progressState, "completed"),
-        eq(users.id, casesProgress.userId)
-      )
+// Subquery für abgeschlossene Cases
+const userCaseProgressSub = db
+  .select({
+    userId: casesProgress.userId,
+    caseId: casesProgress.caseId,
+  })
+  .from(casesProgress)
+  .where(
+    and(
+      eq(casesProgress.userId, userId),
+      eq(casesProgress.progressState, 'completed')
     )
-    .groupBy(users.id);
+  )
+  .groupBy(casesProgress.userId, casesProgress.caseId)
+  .as('user_case_progress_sub');
+
+const userCaseProgressCt = db.$with("user_case_progress").as(
+  db.select({
+    userId: userCaseProgressSub.userId,
+    case_count: sql`COUNT(*)`.as('case_count'),
+  })
+  .from(userCaseProgressSub)
+  .groupBy(userCaseProgressSub.userId)
+);
+
+// Subquery für Dokumente
+const userDocumentsSub = db
+  .select({
+    userId: documents.userId,
+    docId: documents.id
+  })
+  .from(documents)
+  .where(eq(documents.userId, userId))
+  .groupBy(documents.userId, documents.id)
+  .as('user_documents_sub');
+
+const userDocumentsCt = db.$with("user_documents").as(
+  db.select({
+    userId: userDocumentsSub.userId,
+    doc_count: sql`COUNT(*)`.as('doc_count'),
+  })
+  .from(userDocumentsSub)
+  .groupBy(userDocumentsSub.userId)
+);
+
+// Subquery für hochgeladene Dateien
+const userUploadedFilesSub = db
+  .select({
+    userId: uploadedFiles.userId,
+    fileId: uploadedFiles.id,
+  })
+  .from(uploadedFiles)
+  .where(eq(uploadedFiles.userId, userId))
+  .groupBy(uploadedFiles.userId, uploadedFiles.id)
+  .as('user_uploaded_files_sub');
+
+const userUploadedFilesCt = db.$with("user_uploaded_files").as(
+  db.select({
+    userId: userUploadedFilesSub.userId,
+    file_count: sql`COUNT(*)`.as('file_count'),
+  })
+  .from(userUploadedFilesSub)
+  .groupBy(userUploadedFilesSub.userId)
+);
+
+// Subquery für Artikel-Views
+const articlesViewsSub = db
+  .select({
+    userId: contentViews.userId,
+    itemId: contentViews.contentItemId,
+  })
+  .from(contentViews)
+  .where(
+    and(
+      eq(contentViews.userId, userId),
+      eq(contentViews.contentItemType, "article")
+    )
+  )
+  .groupBy(contentViews.userId, contentViews.contentItemId)
+  .as("articles_views_sub");
+
+const userArticleViews = db.$with("user_article_views").as(
+  db.select({
+    userId: articlesViewsSub.userId,
+    article_view_count: sql`COUNT(*)`.as("article_view_count")
+  })
+  .from(articlesViewsSub)
+  .groupBy(articlesViewsSub.userId)
+);
+
+// Subquery für Case-Views
+const casesViewsSub = db
+  .select({
+    userId: contentViews.userId,
+    itemId: contentViews.contentItemId,
+  })
+  .from(contentViews)
+  .where(
+    and(
+      eq(contentViews.userId, userId),
+      eq(contentViews.contentItemType, "case")
+    )
+  )
+  .groupBy(contentViews.userId, contentViews.contentItemId)
+  .as("cases_views_sub");
+
+const userCaseViews = db.$with("user_case_views").as(
+  db.select({
+    userId: casesViewsSub.userId,
+    case_view_count: sql`COUNT(*)`.as("case_view_count")
+    })
+    .from(casesViewsSub)
+    .groupBy(casesViewsSub.userId)
+  );
+
+return await db
+  .with(
+    userBadges,
+    userCaseProgressCt,
+    userDocumentsCt,
+    userUploadedFilesCt,
+    userArticleViews,
+    userCaseViews
+  )
+  .select({
+    ...getTableColumns(users),
+    badge_count: sql`COALESCE(${userBadges.badge_count}, 0)`.as('completedBadges'),
+    case_count: sql`COALESCE(${userCaseProgressCt.case_count}, 0)`.as('completedCases'),
+    doc_count: sql`COALESCE(${userDocumentsCt.doc_count}, 0)`.as('createdDocuments'),
+    file_count: sql`COALESCE(${userUploadedFilesCt.file_count}, 0)`.as('uploadedFiles'),
+    article_view_count: sql`COALESCE(${userArticleViews.article_view_count}, 0)`.as('viewedArticles'),
+    case_view_count: sql`COALESCE(${userCaseViews.case_view_count}, 0)`.as('viewedCases'),
+  })
+  .from(users)
+  .where(eq(users.id, userId))
+  .leftJoin(userBadges, eq(users.id, userBadges.userId))
+  .leftJoin(userCaseProgressCt, eq(users.id, userCaseProgressCt.userId))
+  .leftJoin(userDocumentsCt, eq(users.id, userDocumentsCt.userId))
+  .leftJoin(userUploadedFilesCt, eq(users.id, userUploadedFilesCt.userId))
+  .leftJoin(userArticleViews, eq(users.id, userArticleViews.userId))
+  .leftJoin(userCaseViews, eq(users.id, userCaseViews.userId));
 };
 
 export type UserWithActivityStats = Awaited<ReturnType<typeof getUsersWithActivityStats>>[number];
@@ -664,7 +783,7 @@ export const getCrmDataForUser = async (userIdOrData: string | UserWithActivityS
 
   if(typeof userIdOrData === "string")
   {
-    const [getUserDataResult] = await getUsersWithActivityStats(eq(users.id, userIdOrData));
+    const [getUserDataResult] = await getUsersWithActivityStats(userIdOrData);
 
     if(getUserDataResult == null)
     {
