@@ -546,12 +546,12 @@ return await db
   )
   .select({
     ...getTableColumns(users),
-    badge_count: sql`COALESCE(${userBadges.badge_count}, 0)`.as('completedBadges'),
-    case_count: sql`COALESCE(${userCaseProgressCt.case_count}, 0)`.as('completedCases'),
-    doc_count: sql`COALESCE(${userDocumentsCt.doc_count}, 0)`.as('createdDocuments'),
-    file_count: sql`COALESCE(${userUploadedFilesCt.file_count}, 0)`.as('uploadedFiles'),
-    article_view_count: sql`COALESCE(${userArticleViews.article_view_count}, 0)`.as('viewedArticles'),
-    case_view_count: sql`COALESCE(${userCaseViews.case_view_count}, 0)`.as('viewedCases'),
+    completedBadges: sql<number>`COALESCE(${userBadges.badge_count}, 0)`.as('completedBadges'),
+    completedCases: sql<number>`COALESCE(${userCaseProgressCt.case_count}, 0)`.as('completedCases'),
+    createdDocuments: sql<number>`COALESCE(${userDocumentsCt.doc_count}, 0)`.as('createdDocuments'),
+    uploadedFiles: sql<number>`COALESCE(${userUploadedFilesCt.file_count}, 0)`.as('uploadedFiles'),
+    viewedArticles: sql<number>`COALESCE(${userArticleViews.article_view_count}, 0)`.as('viewedArticles'),
+    viewedCases: sql<number>`COALESCE(${userCaseViews.case_view_count}, 0)`.as('viewedCases'),
   })
   .from(users)
   .where(eq(users.id, userId))
