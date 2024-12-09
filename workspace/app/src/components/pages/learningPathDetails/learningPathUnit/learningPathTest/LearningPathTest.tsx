@@ -2,6 +2,7 @@ import { Button } from "@/components/atoms/Button/Button";
 import { Puzzle } from "@/components/Icons/Puzzle";
 import { LearningPathTestDrawer } from "@/components/pages/learningPathDetails/learningPathUnit/learningPathTestDrawer/LearningPathTestDrawer";
 import { type LearningPathUnitProps } from "@/components/pages/learningPathDetails/learningPathUnit/LearningPathUnit";
+import { useResetCaseProgress } from "@/hooks/useResetCaseProgress";
 
 import { Title } from "@mantine/core";
 import { type FunctionComponent } from "react";
@@ -14,6 +15,7 @@ type Props = {
   readonly learningTestIndex: number;
   readonly openTest: (testId: string) => void;
   readonly openedTest: string | null;
+  readonly refetchGamesProgress: () => void;
 };
 
 export const LearningPathTest: FunctionComponent<Props> = ({
@@ -22,8 +24,10 @@ export const LearningPathTest: FunctionComponent<Props> = ({
   learningTestIndex,
   openedTest,
   openTest,
+  refetchGamesProgress,
 }) =>
 {
+  const { mutateAsync: resetCaseProgress } = useResetCaseProgress();
   const { id, progressState, title } = learningTest;
 
   let text: string;
@@ -35,13 +39,17 @@ export const LearningPathTest: FunctionComponent<Props> = ({
       text = "Schließe alle vorherigen Module ab, um diesen Test freizuschalten";
       buttonText = "Test starten";
       break;
+    case "not-started":
+      text = "Teste dein Wissen und schließe das Modul ab!";
+      buttonText = "Test starten";
+      break;
     case "in-progress":
       text = "Teste dein Wissen und schließe das Modul ab!";
       buttonText = "Test fortsetzen";
       break;
     case "completed":
       text = "Super! Du hast diesen Test erfolgreich abgeschlossen.";
-      buttonText = "Test neu starten";
+      buttonText = "Fortschritt zurücksetzen";
       break;
   }
   
@@ -55,7 +63,18 @@ export const LearningPathTest: FunctionComponent<Props> = ({
             <p>{text}</p>
           </div>
           <Button<"button">
-            onClick={() => openTest(id!)}
+            onClick={async () =>
+            {
+              if(progressState === "completed")
+              {
+                await resetCaseProgress({ caseId: id! });
+                void refetchGamesProgress();
+              }
+              else
+              {
+                openTest(id!);
+              }
+            }}
             styleType="secondarySimple">
             {buttonText}
           </Button>
@@ -63,7 +82,11 @@ export const LearningPathTest: FunctionComponent<Props> = ({
       </li>
       <LearningPathTestDrawer
         key={id}
-        closeDrawer={closeTest}
+        closeDrawer={() =>
+        {
+          void refetchGamesProgress();
+          void closeTest();
+        }}
         caseLearningTest={learningTest}
         caseLearningTestId={learningTest.id!}
         isOpened={openedTest === learningTest.id}

@@ -1,3 +1,4 @@
+/* eslint-disable max-lines */
 import useCasesProgress from "@/hooks/useCasesProgress";
 import useGamesProgress from "@/hooks/useGamesProgress";
 import { useSeenArticles } from "@/hooks/useSeenArticles";
@@ -9,11 +10,12 @@ import { useMemo } from "react";
 type CompletedProgressState = "completed";
 type InProgressProgressState = "in-progress";
 type UpcomingProgressState = "upcoming";
+type NotStartedProgressState = "not-started";
 
 type LearningPathProgressState = CompletedProgressState | InProgressProgressState | UpcomingProgressState;
 type CaseLearningPathProgressState = CompletedProgressState | InProgressProgressState | UpcomingProgressState;
 type ArticleLearningPathProgressState = CompletedProgressState | UpcomingProgressState;
-export type CaseLearningTestProgressState = CompletedProgressState | InProgressProgressState | UpcomingProgressState;
+export type CaseLearningTestProgressState = CompletedProgressState | InProgressProgressState | UpcomingProgressState | NotStartedProgressState;
 
 export const useLearningPathProgress = (learningPath: LearningPathWithExtraData) =>
 {
@@ -34,7 +36,8 @@ export const useLearningPathProgress = (learningPath: LearningPathWithExtraData)
   } = useSeenArticles({ articleIds: allArticleIdsInLearningPath }, { refetchOnMount: true });
   const {
     data: gamesProgress,
-    isPending: isGamesProgressPending
+    isPending: isGamesProgressPending,
+    refetch: refetchGamesProgress
   } = useGamesProgress({ gamesIds: allGameIdsInLearningPath, queryType: "byGameIds" }, { refetchOnMount: true });
 
   const unitsWithProgress = useMemo(() => allUnits.map((unit, index) =>
@@ -104,21 +107,28 @@ export const useLearningPathProgress = (learningPath: LearningPathWithExtraData)
 
     const caseLearningTestsWithProgress = allCaseLearningTestsOfUnit.map(learningTest =>
     {
+      let completedGamesCount = 0;
+
       const gamesInLearningTest = getGamesFromCase(learningTest);
       const gamesWithProgress = gamesInLearningTest.map(game =>
       {
         const gameProgress = gamesProgress?.find(gameProgress => gameProgress.gameId === game.id);
-        const isCompleted = gameProgress?.results.some(({ progressState }) => progressState === "completed") ?? false;
+        // const isCompleted = gameProgress?.results.some(({ progressState }) => progressState === "completed") ?? false;
         const wasSolvedCorrectly = gameProgress?.results.some(({ wasSolvedCorrectly }) => wasSolvedCorrectly) ?? false;
+
+        if(wasSolvedCorrectly)
+        {
+          completedGamesCount++;
+        }
 
         return ({
           ...game,
-          isCompleted,
+          // isCompleted,
           wasSolvedCorrectly
         });
       });
 
-      const isCompleted = gamesWithProgress.every(game => game.isCompleted);
+      const isCompleted = gamesWithProgress.every(game => game.wasSolvedCorrectly);
 
       let learningTestProgressState: CaseLearningTestProgressState;
 
@@ -129,7 +139,14 @@ export const useLearningPathProgress = (learningPath: LearningPathWithExtraData)
       }
       else if(areAllContentPiecesCompleted)
       {
-        learningTestProgressState = "in-progress";
+        if(completedGamesCount === 0)
+        {
+          learningTestProgressState = "not-started";
+        }
+        else
+        {
+          learningTestProgressState = "in-progress";
+        }
       }
       else
       {
@@ -196,6 +213,7 @@ export const useLearningPathProgress = (learningPath: LearningPathWithExtraData)
     completedUnitsCount,
     isCompleted: areAllUnitsCompleted,
     isPending: isCasesProgressPending || isSeenArticlesPending || isGamesProgressPending,
+    refetchGamesProgress,
     units: unitsWithProgress
   };
 };

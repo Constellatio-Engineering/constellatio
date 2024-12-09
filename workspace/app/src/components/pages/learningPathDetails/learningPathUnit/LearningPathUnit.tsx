@@ -14,10 +14,16 @@ import * as styles from "./LearningPathUnit.styles";
 export type LearningPathUnitProps = {
   readonly index: number;
   readonly isLastUnit: boolean;
+  readonly refetchGamesProgress: () => void;
   readonly unit: LearningPathDetailsPageProps["units"][number];
 };
 
-export const LearningPathUnit: FunctionComponent<LearningPathUnitProps> = ({ index, isLastUnit, unit }) =>
+export const LearningPathUnit: FunctionComponent<LearningPathUnitProps> = ({
+  index,
+  isLastUnit,
+  refetchGamesProgress,
+  unit
+}) =>
 {
   const [openedTest, setOpenedTest] = useState<string | null>(null);
   const {
@@ -62,6 +68,7 @@ export const LearningPathUnit: FunctionComponent<LearningPathUnitProps> = ({ ind
             <LearningPathTest
               key={learningTest.id}
               {...learningTest}
+              refetchGamesProgress={refetchGamesProgress}
               learningTestIndex={learningTestIndex}
               learningTest={learningTest}
               openTest={() => setOpenedTest(learningTest.id!)}

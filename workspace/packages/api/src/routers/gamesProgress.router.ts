@@ -76,6 +76,21 @@ export const gamesProgressRouter = createTRPCRouter({
 
       return resultArray;
     }),
+  /* resetGamesProgress: protectedProcedure
+    .input(z.object({
+      gameIds: idValidation.array()
+    }))
+    .mutation(async ({ ctx: { userId }, input: { gameIds } }) =>
+    {
+      await db
+        .delete(gamesProgress)
+        .where(
+          and(
+            inArray(gamesProgress.gameId, gameIds),
+            eq(gamesProgress.userId, userId)
+          )
+        );
+    }),*/
   setGameProgress: protectedProcedure
     .input(setGameProgressStateSchema)
     .mutation(async ({

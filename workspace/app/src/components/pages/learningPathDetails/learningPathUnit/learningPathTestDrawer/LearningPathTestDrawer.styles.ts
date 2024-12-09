@@ -49,3 +49,19 @@ export const richTextWrapper = css`
 export const gameWrapper = css`
   margin: 36px 0;
 `;
+
+export const wrapper = css`
+  background-color: #EEF8F2;
+  border: 1px solid #008D39;
+  margin-bottom: 60px;
+  color: #008D39;
+  padding: 24px;
+  border-radius: 12px;
+  h1 {
+    font-size: 32px;
+  }
+`;
+
+export const buttonWrapper = css`
+  margin-top: 20px;
+`;

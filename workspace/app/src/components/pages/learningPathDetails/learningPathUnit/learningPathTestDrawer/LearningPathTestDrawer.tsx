@@ -1,3 +1,4 @@
+import { Button } from "@/components/atoms/Button/Button";
 import { richTextParagraphOverwrite } from "@/components/helpers/richTextParagraphOverwrite";
 import { Richtext } from "@/components/molecules/Richtext/Richtext";
 import SlidingPanelTitle from "@/components/molecules/slidingPanelTitle/SlidingPanelTitle";
@@ -10,8 +11,8 @@ import type { IDocumentLink } from "@/utils/richtext";
 import { type IGenCase } from "@constellatio/cms/generated-types";
 import { getGamesFromCase } from "@constellatio/cms/utils/case";
 import { type Nullable } from "@constellatio/utility-types";
-import { Drawer, ScrollArea } from "@mantine/core";
-import { type FunctionComponent, useCallback } from "react";
+import { Drawer, ScrollArea, Title } from "@mantine/core";
+import React, { type FunctionComponent, useCallback } from "react";
 
 import * as styles from "./LearningPathTestDrawer.styles";
 
@@ -19,6 +20,7 @@ type Props = {
   readonly caseLearningTest: Nullable<IGenCase>;
   readonly caseLearningTestId: string;
   readonly closeDrawer: () => void;
+  readonly isCompleted: boolean;
   readonly isOpened: boolean;
 };
 
@@ -26,6 +28,7 @@ export const LearningPathTestDrawer: FunctionComponent<Props> = ({
   caseLearningTest,
   caseLearningTestId,
   closeDrawer,
+  isCompleted,
   isOpened
 }) =>
 {
@@ -126,12 +129,6 @@ export const LearningPathTestDrawer: FunctionComponent<Props> = ({
       size={760}
       scrollAreaComponent={ScrollArea.Autosize}
       styles={styles.drawerStyles()}>
-      {/* {editorState.state !== "closed" && (
-          <EditorForm
-            onClose={onClose}
-            editorState={editorState}
-          />
-        )}*/}
       <div css={styles.contentWrapper}>
         <Richtext
           data={renderedCaseContent}
@@ -141,6 +138,21 @@ export const LearningPathTestDrawer: FunctionComponent<Props> = ({
             paragraph: richTextParagraphOverwrite,
           }}
         />
+      </div>
+      <div css={styles.contentWrapper}>
+        {areAllGamesCompleted && (
+          <div css={styles.wrapper}>
+            <Title order={1}>Gut gemacht!</Title>
+            <div>Du hast alle Trainingsmodule abgeschlossen und dein Wissen im Zivilrecht erheblich verbessert. Weiter so!</div>
+            <div css={styles.buttonWrapper}>
+              <Button<"button">
+                styleType={"secondarySimple"}
+                onClick={closeDrawer}>
+                Test schließen
+              </Button>
+            </div>
+          </div>
+        )}
       </div>
     </Drawer>
   );
