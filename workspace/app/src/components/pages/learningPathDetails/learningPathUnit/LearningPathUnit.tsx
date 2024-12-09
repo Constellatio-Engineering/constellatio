@@ -70,7 +70,7 @@ export const LearningPathUnit: FunctionComponent<Props> = ({
             Lektion {index + 1} - {unit.title}
           </Title>
           <p css={styles.unitCompletedCount}>
-            {0} / {(unit.contentPieces?.length ?? 0) + (unit.learningTests?.length ?? 0)}
+            {0} / {(unit.contentPieces?.length ?? 0) + (unit.caseLearningTests?.length ?? 0)}
           </p>
           <div css={styles.unitContentPieces}>
             {unit.contentPieces?.filter(Boolean).map(contentPiece =>
@@ -108,7 +108,7 @@ export const LearningPathUnit: FunctionComponent<Props> = ({
             })}
           </div>
           <ul css={styles.testList}>
-            {unit.caseLearningTest?.filter(Boolean).map((learningTest, learningTestIndex) => (
+            {unit.caseLearningTests?.filter(Boolean).map((learningTest, learningTestIndex) => (
               <li key={learningTest.id}>
                 <div css={styles.container}>
                   <Puzzle size={32}/>
@@ -133,7 +133,7 @@ export const LearningPathUnit: FunctionComponent<Props> = ({
           </ul>
         </div>
       </div>
-      {unit.caseLearningTest?.filter(Boolean).filter(l => l.id != null).map(learningTest => (
+      {unit.caseLearningTests?.filter(Boolean).filter(l => l.id != null).map(learningTest => (
         <LearningPathTestDrawer
           key={learningTest.id}
           closeDrawer={() => setOpenedTest(null)}

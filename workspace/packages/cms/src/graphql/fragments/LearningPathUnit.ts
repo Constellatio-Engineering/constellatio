@@ -1,10 +1,8 @@
 import { gql } from "graphql-request";
 
-import { f_LearningTest } from "./LearningTest";
 import { f_LearningTestCase } from "./LearningTestCase";
 
 export const f_LearningPathUnit = gql`
-	${f_LearningTest}
 	${f_LearningTestCase}
 	fragment LearningPathUnit on LearningPathUnit {
 		__typename
@@ -15,10 +13,7 @@ export const f_LearningPathUnit = gql`
 			...ArticleOverview
 			...CaseOverview
 		}
-		learningTests {
-			...LearningTest
-		}
-		caseLearningTest {
+		caseLearningTests {
 			...LearningTestCase
 		}
 	}
