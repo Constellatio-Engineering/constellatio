@@ -25,7 +25,7 @@ supabase/.env.local
 *.pem
 
 # testing endpoint
-app/src/pages/api/test
+workspace/app/src/pages/api/test
 
 dist
 .cache
