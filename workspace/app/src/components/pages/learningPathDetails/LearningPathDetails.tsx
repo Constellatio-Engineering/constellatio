@@ -39,7 +39,7 @@ export const LearningPathDetailsPage: FunctionComponent<Props> = (learningPath) 
 
   const totalTasks = learningPath.units
     ?.filter(Boolean)
-    .reduce((total, unit) => total + (unit.learningTests?.length ?? 0) + (unit.contentPieces?.length ?? 0), 0);
+    .reduce((total, unit) => total + (unit.caseLearningTests?.length ?? 0) + (unit.contentPieces?.length ?? 0), 0);
 
   return (
     <>
