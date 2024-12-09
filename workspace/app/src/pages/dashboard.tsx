@@ -17,9 +17,6 @@ export const getServerSideProps: GetServerSideProps<GetDashboardPagePropsResult>
 {
   const getAllLearningPathsResult = await getAllLearningPaths();
   const allLearningPaths = getAllLearningPathsResult.map(getLearningPathExtraData);
-
-  console.log("allLearningPaths", allLearningPaths);
-
   const trpcHelpers = await getTrpcServerSideHelpers(context);
 
   await trpcHelpers.users.getUserDetails.prefetch();

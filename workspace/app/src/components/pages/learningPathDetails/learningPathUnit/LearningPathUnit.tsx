@@ -3,9 +3,9 @@ import { LearningPathUnitCompleted } from "@/components/Icons/LearningPathUnitCo
 import { LearningPathUnitInProgress } from "@/components/Icons/LearningPathUnitInProgress";
 import { LearningPathUnitUpcoming } from "@/components/Icons/LearningPathUnitUpcoming";
 import { Puzzle } from "@/components/Icons/Puzzle";
+import { type LearningPathDetailsPageProps } from "@/components/pages/learningPathDetails/LearningPathDetails";
 import { LearningPathContentPiece } from "@/components/pages/learningPathDetails/learningPathUnit/learningPathContentPiece/LearningPathContentPiece";
 import { LearningPathTestDrawer } from "@/components/pages/learningPathDetails/learningPathUnit/learningPathTestDrawer/LearningPathTestDrawer";
-import { type LearningPathProgress } from "@/hooks/useLearningPathProgress";
 
 import { Title } from "@mantine/core";
 import { type FunctionComponent, useState } from "react";
@@ -13,37 +13,15 @@ import { type FunctionComponent, useState } from "react";
 import * as sharedStyles from "../LearningPathDetails.styles";
 import * as styles from "./LearningPathUnit.styles";
 
-type unitStatusType = "completed" | "in-progress" | "upcoming";
-export type testStatusType = "completed" | "in-progress" | "upcoming" | "not-started";
-
-type Props = {
+export type LearningPathUnitProps = {
   readonly index: number;
   readonly isLastUnit: boolean;
-  readonly unit: LearningPathProgress["unitsWithProgress"][number];
+  readonly unit: LearningPathDetailsPageProps["units"][number];
 };
 
-export const LearningPathUnit: FunctionComponent<Props> = ({ index, isLastUnit, unit }) =>
+export const LearningPathUnit: FunctionComponent<LearningPathUnitProps> = ({ index, isLastUnit, unit }) =>
 {
   const [openedTest, setOpenedTest] = useState<string | null>(null);
-
-  let testStatus: testStatusType;
-
-  if(index === 0)
-  {
-    testStatus = "in-progress";
-  }
-  else if(index === 1)
-  {
-    testStatus = "completed";
-  }
-  else if(index === 2)
-  {
-    testStatus = "not-started";
-  }
-  else
-  {
-    testStatus = "upcoming";
-  }
 
   return (
     <>
@@ -61,47 +39,20 @@ export const LearningPathUnit: FunctionComponent<Props> = ({ index, isLastUnit, 
             Lektion {index + 1} - {unit.title}
           </Title>
           <p css={styles.unitCompletedCount}>
-            {0} / {(unit.contentPieces?.length ?? 0) + (unit.caseLearningTests?.length ?? 0)}
+            {unit.completedTasksCount} / {unit.totalTasksCount}
           </p>
           <div css={styles.unitContentPieces}>
-            {unit.contentPieces?.filter(Boolean).map(contentPiece =>
-            {
-              let status: unitStatusType = "upcoming";
-
-              if(contentPiece.__typename === "Case")
-              {
-                const caseProgress = unit.casesProgress?.find(caseProgress => caseProgress.caseId === contentPiece.id);
-                if(caseProgress?.progressState === "completed")
-                {
-                  status = "completed";
-                }
-                else if(caseProgress?.progressState === "not-started")
-                {
-                  status = "upcoming";
-                }
-                else if(caseProgress?.progressState === "completing-tests" || caseProgress?.progressState === "solving-case")
-                {
-                  status = "in-progress";
-                }
-              }
-              else if(contentPiece.__typename === "Article")
-              {
-                status = unit.seenArticles?.some(articleId => articleId === contentPiece.id) ? "completed" : "upcoming";
-              }
-
-              return (
-                <LearningPathContentPiece
-                  key={contentPiece.id}
-                  contentPiece={contentPiece}
-                  status={status}
-                />
-              );
-            })}
+            {unit.contentPieces?.filter(Boolean).map(contentPiece => (
+              <LearningPathContentPiece
+                key={contentPiece.id}
+                {...contentPiece}
+              />
+            ))}
           </div>
           <ul css={styles.testList}>
             {unit.caseLearningTests?.filter(Boolean).map((learningTest, learningTestIndex) => (
               <li key={learningTest.id}>
-                <div css={styles.container2(testStatus)}>
+                <div css={styles.container2(learningTest.isCompleted)}>
                   <Puzzle size={32}/>
                   <div css={styles.contentWrapper}>
                     <Title order={4}>

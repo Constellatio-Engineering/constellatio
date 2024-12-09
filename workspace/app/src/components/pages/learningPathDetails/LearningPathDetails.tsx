@@ -4,25 +4,24 @@ import {
 } from "@/components/pages/learningPathDetails/learningPathCompletedCard/LearningPathCompletedCard";
 import { LearningPathHeader } from "@/components/pages/learningPathDetails/learningPathHeader/LearningPathHeader";
 import { LearningPathUnit } from "@/components/pages/learningPathDetails/learningPathUnit/LearningPathUnit";
-import { useLearningPathProgress } from "@/hooks/useLearningPathProgress";
+import { type LearningPathWithProgress, useLearningPathProgress } from "@/hooks/useLearningPathProgress";
 
-import { type IGenLearningPath } from "@constellatio/cms/generated-types";
 import { type FunctionComponent } from "react";
 
 import * as styles from "./LearningPathDetails.styles";
 
-type Props = IGenLearningPath;
+export type LearningPathDetailsPageProps = LearningPathWithProgress;
 
-export const LearningPathDetailsPage: FunctionComponent<Props> = (learningPath) =>
+export const LearningPathDetailsPage: FunctionComponent<LearningPathDetailsPageProps> = (learningPath) =>
 {
-  const { totalTasks, unitsWithProgress } = useLearningPathProgress(learningPath);
+  const { totalTasks, units } = useLearningPathProgress(learningPath);
 
   return (
     <>
       <ContentWrapper stylesOverrides={styles.contentWrapper}>
         <div css={styles.layoutWrapper}>
           <div css={styles.unitsColumn}>
-            {unitsWithProgress.map((unit, index) => (
+            {units.map((unit, index) => (
               <LearningPathUnit
                 key={unit.id}
                 index={index}

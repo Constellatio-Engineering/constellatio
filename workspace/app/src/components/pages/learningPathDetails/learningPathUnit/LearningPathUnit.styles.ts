@@ -1,4 +1,3 @@
-import { type testStatusType } from "@/components/pages/learningPathDetails/learningPathUnit/LearningPathUnit";
 import { colooors } from "@/constants/styles/colors";
 
 import { css } from "@emotion/react";
