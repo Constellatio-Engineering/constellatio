@@ -1,4 +1,5 @@
 import { colooors } from "@/constants/styles/colors";
+import { type CaseLearningTestProgressState } from "@/hooks/useLearningPathProgress";
 
 import { css } from "@emotion/react";
 
@@ -30,6 +31,11 @@ export const connectingLine = (isColoured: boolean) => css`
 export const unit = css`
   flex: 1;
   min-width: 0;
+`;
+
+export const unitDisabled = css`
+  opacity: 0.4;
+  pointer-events: none;
 `;
 
 export const unitTitle = css`
@@ -64,44 +70,4 @@ export const container = css`
   border-radius: 12px;
   background-color: ${colooors["neutrals-01"][2]};
   gap: 16px;
-`;
-
-export const container2 = (testStatus: testStatusType) => css`
-    display: flex;
-    flex-wrap: wrap;
-    align-items: center;
-    justify-content: space-between;
-    padding: 16px;
-    border-radius: 12px;
-    gap: 16px;
-    
-    background-color: ${
-  testStatus === "completed"
-    ? "#e7f6ea" // Grünlicher Hintergrund
-    : testStatus === "in-progress"
-      ? "#edeefa" // Bläulicher Hintergrund
-      : colooors["neutrals-01"][2] // Fallback
-};
-
-    border: 1px solid ${
-  testStatus === "completed"
-    ? "#26b961" // Grüne Border
-    : testStatus === "in-progress"
-      ? "#9fafe1" // Blaue Border
-      : "#e0e0e0" // Fallback
-};
-
-    opacity: ${
-  testStatus === "upcoming" ? 0.5 : 1 // Disabled Look durch reduzierte Opazität
-};
-
-    transition: all 0.3s ease-in-out; // Für sanfte Animationen beim Statuswechsel
-`;
-
-export const contentWrapper = css`
-  display: flex;
-  flex-direction: column;
-  align-items: start;
-  gap: 16px;
-  flex: 1;
 `;

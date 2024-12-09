@@ -13,6 +13,7 @@ type UpcomingProgressState = "upcoming";
 type LearningPathProgressState = CompletedProgressState | InProgressProgressState | UpcomingProgressState;
 type CaseLearningPathProgressState = CompletedProgressState | InProgressProgressState | UpcomingProgressState;
 type ArticleLearningPathProgressState = CompletedProgressState | UpcomingProgressState;
+export type CaseLearningTestProgressState = CompletedProgressState | InProgressProgressState | UpcomingProgressState;
 
 export const useLearningPathProgress = (learningPath: LearningPathWithExtraData) =>
 {
@@ -119,15 +120,27 @@ export const useLearningPathProgress = (learningPath: LearningPathWithExtraData)
 
       const isCompleted = gamesWithProgress.every(game => game.isCompleted);
 
+      let learningTestProgressState: CaseLearningTestProgressState;
+
       if(isCompleted)
       {
+        learningTestProgressState = "completed";
         completedCaseLearningTestsCount++;
+      }
+      else if(areAllContentPiecesCompleted)
+      {
+        learningTestProgressState = "in-progress";
+      }
+      else
+      {
+        learningTestProgressState = "upcoming";
       }
 
       return ({
         ...learningTest,
         gamesWithProgress,
-        isCompleted
+        isCompleted,
+        progressState: learningTestProgressState
       });
     });
 

@@ -14,7 +14,7 @@ export type LearningPathDetailsPageProps = LearningPathWithProgress;
 
 export const LearningPathDetailsPage: FunctionComponent<LearningPathDetailsPageProps> = (learningPath) =>
 {
-  const { totalTasks, units } = useLearningPathProgress(learningPath);
+  const { isCompleted, totalTasks, units } = useLearningPathProgress(learningPath);
 
   return (
     <>
@@ -31,7 +31,9 @@ export const LearningPathDetailsPage: FunctionComponent<LearningPathDetailsPageP
             ))}
           </div>
           <div css={styles.headerColumn}>
-            <LearningPathCompletedCard/>
+            {isCompleted && (
+              <LearningPathCompletedCard/>
+            )}
             <LearningPathHeader
               description={learningPath.description}
               estimatedDuration={learningPath.estimatedDuration}
