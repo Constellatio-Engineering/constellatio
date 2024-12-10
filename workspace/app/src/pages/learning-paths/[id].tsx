@@ -1,5 +1,6 @@
 import { Layout } from "@/components/layouts/Layout";
 import PageHead from "@/components/organisms/pageHead/PageHead";
+import ErrorPage from "@/components/pages/errorPage/ErrorPage";
 import { LearningPathDetailsPage } from "@/components/pages/learningPathDetails/LearningPathDetails";
 import { type NextPageWithLayout } from "@/pages/_app";
 
@@ -67,6 +68,12 @@ export const getStaticProps: GetStaticProps<GetLearningPathDetailPagePropsResult
 
 const Page: NextPageWithLayout<GetLearningPathDetailPagePropsResult> = ({ learningPath }) =>
 {
+  if(!learningPath)
+  {
+    // Don't know why this happens but sometimes the learningPath is null even though the staticPaths and staticProps are working correctly.
+    return <ErrorPage title={"learningPath was null"}/>;
+  }
+
   return (
     <>
       <PageHead pageTitle={learningPath.title || "Lernpfad ohne Titel"}/>
