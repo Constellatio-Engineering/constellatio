@@ -1,14 +1,23 @@
-import { headerHeightPx } from "@/components/organisms/Header/Header.styles";
+import { responsiveBreakpoint } from "@/components/pages/learningPathDetails/LearningPathDetails.styles";
 
 import { css } from "@emotion/react";
 
 export const wrapper = css`
-  width: 500px;
-  align-self: flex-start;
-  position: sticky;
-  top: ${headerHeightPx + 30}px;
+  width: 100%;
   h1 {
     font-size: 28px;
+  }
+  @media screen and (max-width: ${1400}px) {
+    h1 {
+      font-size: 26px;
+    }
+  }
+  @media screen and (max-width: ${responsiveBreakpoint}px) {
+    width: 100%;
+    max-width: unset;
+    background-color: transparent;
+    padding: 12px;
+    margin-bottom: 20px;
   }
 `;
 
@@ -41,13 +50,14 @@ export const metricText = css`
 `;
 
 export const metricLabel = css`
-  font-size: 12px;
+  font-size: 14px;
   color: #666;
   text-transform: uppercase;
+  margin-bottom: 2px;
 `;
 
 export const metricValue = css`
-  font-size: 14px;
+  font-size: 16px;
   font-weight: 500;
 `;
 

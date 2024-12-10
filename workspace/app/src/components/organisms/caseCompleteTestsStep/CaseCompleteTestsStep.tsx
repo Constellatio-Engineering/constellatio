@@ -1,6 +1,5 @@
 /* eslint-disable max-lines */
 import { Button } from "@/components/atoms/Button/Button";
-import { type IStatusLabel } from "@/components/atoms/statusLabel/StatusLabel";
 import { RichTextHeadingOverwrite, richTextHeadingOverwriteClassName } from "@/components/helpers/RichTextHeadingOverwrite";
 import GameComponentWrapper from "@/components/molecules/gameComponentWrapper/GameComponentWrapper";
 import { LawsLinksDisclaimer } from "@/components/molecules/lawsLinksDisclaimer/LawsLinksDisclaimer";
@@ -11,6 +10,7 @@ import useCaseSolvingStore from "@/stores/caseSolving.store";
 import { api } from "@/utils/api";
 import type { IDocumentLink, IHeadingNode } from "@/utils/richtext";
 
+import { type GetCaseProgressResult } from "@constellatio/api/routers/caseProgress.router";
 import { type GetGamesProgressResult } from "@constellatio/api/routers/gamesProgress.router";
 import { type IGenArticle_FullTextTasks, type IGenCase_Facts, type IGenCase_FullTextTasks, type Maybe } from "@constellatio/cms/generated-types";
 import { type Games } from "@constellatio/cms/utils/case";
@@ -44,7 +44,7 @@ interface ICaseCompleteTestsStepProps
   readonly fullTextTasks: Maybe<IGenCase_FullTextTasks> | Maybe<IGenArticle_FullTextTasks>;
   readonly games: Games;
   readonly gamesProgress: Nullable<GetGamesProgressResult>;
-  readonly progressState: IStatusLabel["progressState"] | undefined;
+  readonly progressState: Nullable<GetCaseProgressResult["progressState"]>;
   readonly variant?: "case" | "dictionary";
 }
 

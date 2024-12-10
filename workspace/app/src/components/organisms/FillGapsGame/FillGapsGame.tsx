@@ -42,7 +42,7 @@ let FillGapsGame: FC<TFillGapsGame> = ({
   const { invalidateGamesProgress } = useContextAndErrorIfNull(InvalidateQueriesContext);
   const { mutate: setGameProgress } = api.gamesProgress.setGameProgress.useMutation({
     onError: (error) => console.error("Error while setting game progress", error),
-    onSuccess: async () => invalidateGamesProgress({ caseId })
+    onSuccess: async () => invalidateGamesProgress({ caseId, queryType: "byCaseId" })
   });
   const gameState = useFillGapsGameStore((s) => s.getGameState(id));
   const allGames = useFillGapsGameStore((s) => s.games);

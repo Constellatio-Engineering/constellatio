@@ -1,3 +1,4 @@
+import { Button } from "@/components/atoms/Button/Button";
 import { richTextParagraphOverwrite } from "@/components/helpers/richTextParagraphOverwrite";
 import { Richtext } from "@/components/molecules/Richtext/Richtext";
 import SlidingPanelTitle from "@/components/molecules/slidingPanelTitle/SlidingPanelTitle";
@@ -10,8 +11,8 @@ import type { IDocumentLink } from "@/utils/richtext";
 import { type IGenCase } from "@constellatio/cms/generated-types";
 import { getGamesFromCase } from "@constellatio/cms/utils/case";
 import { type Nullable } from "@constellatio/utility-types";
-import { Drawer, ScrollArea } from "@mantine/core";
-import { type FunctionComponent, useCallback } from "react";
+import { Drawer, ScrollArea, Title } from "@mantine/core";
+import React, { type FunctionComponent, useCallback } from "react";
 
 import * as styles from "./LearningPathTestDrawer.styles";
 
@@ -29,7 +30,7 @@ export const LearningPathTestDrawer: FunctionComponent<Props> = ({
   isOpened
 }) =>
 {
-  const { data: gamesProgress, isLoading: isGamesProgressLoading } = useGamesProgress(caseLearningTestId);
+  const { data: gamesProgress } = useGamesProgress({ caseId: caseLearningTestId, queryType: "byCaseId" });
   const content = caseLearningTest?.fullTextTasks;
 
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
@@ -120,27 +121,48 @@ export const LearningPathTestDrawer: FunctionComponent<Props> = ({
       lockScroll={true}
       opened={isOpened}
       onClose={closeDrawer}
-      title={<SlidingPanelTitle title={"title"} closeButtonAction={closeDrawer}/>}
+      title={(
+        <SlidingPanelTitle
+          title={caseLearningTest.title ?? "Kein Titel"}
+          closeButtonAction={closeDrawer}
+          subTitle={(
+            <div css={styles.progressBarWrapper}>
+              {Array.from({ length: games.length }).map((_, index) => (
+                <div key={index} css={styles.progressBarItem(completedGamesCount > index, games.length)}/>
+              ))}
+            </div>
+          )}
+        />
+      )}
       position="right"
       withCloseButton={false}
-      size={760}
+      size={740}
       scrollAreaComponent={ScrollArea.Autosize}
       styles={styles.drawerStyles()}>
-      {/* {editorState.state !== "closed" && (
-          <EditorForm
-            onClose={onClose}
-            editorState={editorState}
-          />
-        )}*/}
       <div css={styles.contentWrapper}>
-        <Richtext
-          data={renderedCaseContent}
-          stylesOverwrite={styles.richTextWrapper}
-          richTextOverwrite={{
-            documentLink: documentLinkOverwrite,
-            paragraph: richTextParagraphOverwrite,
-          }}
-        />
+        <div style={{ width: "100%" }}>
+          <Richtext
+            data={renderedCaseContent}
+            stylesOverwrite={styles.richTextWrapper}
+            richTextOverwrite={{
+              documentLink: documentLinkOverwrite,
+              paragraph: richTextParagraphOverwrite,
+            }}
+          />
+          {areAllGamesCompleted && (
+            <div css={styles.wrapper}>
+              <Title order={1}>Gut gemacht!</Title>
+              <div>Du hast alle Aufgaben des Tests abgeschlossen! Du kannst den Test nun abschließen.</div>
+              <div css={styles.buttonWrapper}>
+                <Button<"button">
+                  styleType={"secondarySimple"}
+                  onClick={closeDrawer}>
+                  Test schließen
+                </Button>
+              </div>
+            </div>
+          )}
+        </div>
       </div>
     </Drawer>
   );

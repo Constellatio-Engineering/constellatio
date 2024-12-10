@@ -1,11 +1,12 @@
 import { Layout } from "@/components/layouts/Layout";
 import PageHead from "@/components/organisms/pageHead/PageHead";
+import ErrorPage from "@/components/pages/errorPage/ErrorPage";
 import { LearningPathDetailsPage } from "@/components/pages/learningPathDetails/LearningPathDetails";
 import { type NextPageWithLayout } from "@/pages/_app";
 
 import { getAllLearningPaths } from "@constellatio/cms/content/getAllLearningPaths";
-import { type IGenLearningPath } from "@constellatio/cms/generated-types";
 import { caisySDK } from "@constellatio/cms/sdk";
+import { getLearningPathExtraData, type LearningPathWithExtraData } from "@constellatio/cms/utils/learningPaths";
 import type { GetStaticPaths, GetStaticPathsResult, GetStaticProps } from "next";
 
 import { type ParsedUrlQuery } from "querystring";
@@ -27,19 +28,14 @@ export const getStaticPaths: GetStaticPaths<Params> = async () =>
       }
     }));
 
-  /* return {
+  return {
     fallback: true,
     paths
-  };*/
-
-  return {
-    fallback: false,
-    paths: []
   };
 };
 
-type GetLearningPathDetailPagePropsResult = {
-  readonly learningPath: IGenLearningPath;
+export type GetLearningPathDetailPagePropsResult = {
+  readonly learningPath: LearningPathWithExtraData;
 };
 
 export const getStaticProps: GetStaticProps<GetLearningPathDetailPagePropsResult, Params> = async ({ params }) =>
@@ -52,7 +48,7 @@ export const getStaticProps: GetStaticProps<GetLearningPathDetailPagePropsResult
     };
   }
 
-  const { LearningPath } = await caisySDK.getLearningPathById({ id: "4f9adf51-1500-4f19-b59b-0c79c10ebde3" });
+  const { LearningPath } = await caisySDK.getLearningPathById({ id: params.id });
 
   if(!LearningPath)
   {
@@ -62,14 +58,22 @@ export const getStaticProps: GetStaticProps<GetLearningPathDetailPagePropsResult
     };
   }
 
+  const learningPath = getLearningPathExtraData(LearningPath);
+
   return {
-    props: { learningPath: LearningPath },
+    props: { learningPath },
     revalidate: 10
   };
 };
 
 const Page: NextPageWithLayout<GetLearningPathDetailPagePropsResult> = ({ learningPath }) =>
 {
+  if(!learningPath)
+  {
+    // Don't know why this happens but sometimes the learningPath is null even though the staticPaths and staticProps are working correctly.
+    return <ErrorPage title={"learningPath was null"}/>;
+  }
+
   return (
     <>
       <PageHead pageTitle={learningPath.title || "Lernpfad ohne Titel"}/>

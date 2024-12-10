@@ -13,7 +13,7 @@ const SuggestionSection: FunctionComponent<SuggestionSectionProps> = ({ children
 {
   return (
     <div className="suggestion__section">
-      {label && <Label variant={labelVariant}>{label}</Label>}
+      {label && <Label variant={labelVariant} title={label}/>}
       {children}
     </div>
   );

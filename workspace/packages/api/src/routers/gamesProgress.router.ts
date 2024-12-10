@@ -12,13 +12,22 @@ import { createTRPCRouter, protectedProcedure } from "../trpc";
 export const gamesProgressRouter = createTRPCRouter({
   getGamesProgress: protectedProcedure
     .input(getGamesProgressSchema)
-    .query(async ({ ctx: { userId }, input: { caseId } }) =>
+    .query(async ({ ctx: { userId }, input }) =>
     {
-      const caseFromCms = await caisySDK.getCaseById({ id: caseId });
-      const games = getGamesFromCase(caseFromCms.Case);
-      const gameIds = games?.map(({ id }) => id).filter(Boolean);
+      let gameIds: string[];
 
-      if(!gameIds || gameIds.length === 0)
+      if(input.queryType === "byGameIds")
+      {
+        gameIds = input.gamesIds;
+      }
+      else
+      {
+        const caseFromCms = await caisySDK.getCaseById({ id: input.caseId });
+        const games = getGamesFromCase(caseFromCms.Case);
+        gameIds = games?.map(({ id }) => id).filter(Boolean);
+      }
+
+      if(gameIds.length === 0)
       {
         return [];
       }
@@ -67,6 +76,21 @@ export const gamesProgressRouter = createTRPCRouter({
 
       return resultArray;
     }),
+  /* resetGamesProgress: protectedProcedure
+    .input(z.object({
+      gameIds: idValidation.array()
+    }))
+    .mutation(async ({ ctx: { userId }, input: { gameIds } }) =>
+    {
+      await db
+        .delete(gamesProgress)
+        .where(
+          and(
+            inArray(gamesProgress.gameId, gameIds),
+            eq(gamesProgress.userId, userId)
+          )
+        );
+    }),*/
   setGameProgress: protectedProcedure
     .input(setGameProgressStateSchema)
     .mutation(async ({

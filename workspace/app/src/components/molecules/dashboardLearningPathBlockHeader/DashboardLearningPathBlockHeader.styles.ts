@@ -3,7 +3,7 @@ import { colooors } from "@/constants/styles/colors";
 import { css } from "@emotion/react";
 
 export const wrapper = css`
-  min-width: 220px;
+  width: 260px;
   display: flex;
   justify-content: space-between;
   align-items: flex-start;
@@ -16,6 +16,12 @@ export const wrapper = css`
 `;
 
 export const learningPathHeaderTitle = () => css`
-    color: ${colooors["neutrals-02"][1]};
-    margin :24px 0;
+  color: ${colooors["neutrals-02"][1]};
+  margin :24px 0;
+  word-break: break-word;
+  max-width: 100%;
+`;
+
+export const statusLabelWrapper = css`
+  margin-top: -10px;
 `;

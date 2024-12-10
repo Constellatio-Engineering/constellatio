@@ -34,3 +34,18 @@ export const wrapper = () => css`
     width: calc(100% - 72px);
   }
 `;
+
+export const titleWrapper = css`
+  flex: 1;
+  min-width: 0;
+  margin-right: 22px;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+`;
+
+export const subTitleWrapper = css`
+  min-width: 0;
+  align-self: stretch;
+  max-width: 100%;
+`;
