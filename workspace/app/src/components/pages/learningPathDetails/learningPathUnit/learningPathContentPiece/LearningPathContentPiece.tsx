@@ -24,9 +24,9 @@ export const LearningPathContentPiece: FunctionComponent<Props> = ({
   const variant = contentPieceType === "Case" ? "case" : "dictionary";
 
   return (
-    <Link href={variant === "case" ? `${appPaths.cases}/${id}` : `${appPaths.dictionary}/${id}`} css={styles.wrapper(progressState)}>
+    <Link href={variant === "case" ? `${appPaths.cases}/${id}` : `${appPaths.dictionary}/${id}`} css={styles.wrapper(progressState === "completed")}>
       <div css={styles.iconWrapper}>
-        {variant === "case" ? <CaseIcon size={70}/> : <ArticleIcon size={70}/>}
+        {variant === "case" ? <CaseIcon size={66}/> : <ArticleIcon size={66}/>}
       </div>
       <div>
         <Label variant={variant}/>

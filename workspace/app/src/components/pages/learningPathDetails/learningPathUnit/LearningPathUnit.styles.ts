@@ -1,16 +1,21 @@
 import { colooors } from "@/constants/styles/colors";
-import { type CaseLearningTestProgressState } from "@/hooks/useLearningPathProgress";
 
 import { css } from "@emotion/react";
 
 export const wrapper = css`
   display: flex;
   gap: 30px;
+  @media screen and (max-width: ${1500}px) {
+    gap: 0px;
+  }
 `;
 
 export const visualPathWrapper = css`
   min-width: max-content;
   position: relative;
+  @media screen and (max-width: ${1500}px) {
+    margin-left: -16px;
+  }
 `;
 
 export const iconWrapperCompleted = css`

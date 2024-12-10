@@ -213,8 +213,8 @@ export const useLearningPathProgress = (learningPath: LearningPathWithExtraData)
     });
   });
 
-  const areAllUnitsCompleted = unitsWithProgress.every(unit => unit.isCompleted);
-  const completedUnitsCount = unitsWithProgress.filter(unit => unit.isCompleted).length;
+  const areAllUnitsCompleted = unitsWithProgress.every(unit => unit.progressState === "completed");
+  const completedUnitsCount = unitsWithProgress.filter(unit => unit.progressState === "completed").length;
 
   return {
     ...learningPath,

@@ -6,11 +6,19 @@ export const wrapper = css`
   margin-bottom: 20px;
   color: #008D39;
   h1 {
-    font-size: 30px;
+    font-size: 28px;
   }
   p {
     font-size: 18px;
     line-height: 1.3;
+  }
+  @media screen and (max-width: ${1400}px) {
+    h1 {
+      font-size: 24px;
+    }
+    p {
+      font-size: 16px;
+    }
   }
 `;
 

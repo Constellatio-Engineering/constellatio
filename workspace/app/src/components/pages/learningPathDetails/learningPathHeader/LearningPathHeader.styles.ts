@@ -1,4 +1,25 @@
+import { responsiveBreakpoint } from "@/components/pages/learningPathDetails/LearningPathDetails.styles";
+
 import { css } from "@emotion/react";
+
+export const wrapper = css`
+  width: 100%;
+  h1 {
+    font-size: 28px;
+  }
+  @media screen and (max-width: ${1400}px) {
+    h1 {
+      font-size: 26px;
+    }
+  }
+  @media screen and (max-width: ${responsiveBreakpoint}px) {
+    width: 100%;
+    max-width: unset;
+    background-color: transparent;
+    padding: 12px;
+    margin-bottom: 20px;
+  }
+`;
 
 export const metricsWrapper = css`
   display: flex;

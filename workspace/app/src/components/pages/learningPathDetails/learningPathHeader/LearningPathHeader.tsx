@@ -1,3 +1,4 @@
+import { Medal } from "@/components/Icons/Medal";
 import { Unit } from "@/components/Icons/Unit";
 import { Richtext } from "@/components/molecules/Richtext/Richtext";
 
@@ -25,7 +26,7 @@ export const LearningPathHeader: FunctionComponent<Props> = ({
   const minutes = durationInMinutes % 60;
 
   return (
-    <div css={sharedStyles.card}>
+    <div css={[sharedStyles.card, styles.wrapper]}>
       <div>
         <div css={styles.UnitIconAndTotalTaskWrapper}>
           <Unit size={100}/>
@@ -47,7 +48,9 @@ export const LearningPathHeader: FunctionComponent<Props> = ({
           </div>
         </div>
         <div css={styles.metricItem}>
-          <div css={styles.metricIcon}>?</div>
+          <div css={styles.metricIcon}>
+            <Medal size={24}/>
+          </div>
           <div css={styles.metricText}>
             <span css={styles.metricLabel}>Inhalt</span>
             <span css={styles.metricValue}>{totalTasks} Aufgaben</span>
