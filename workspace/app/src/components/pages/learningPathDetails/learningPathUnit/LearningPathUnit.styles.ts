@@ -5,11 +5,17 @@ import { css } from "@emotion/react";
 export const wrapper = css`
   display: flex;
   gap: 30px;
+  @media screen and (max-width: ${1500}px) {
+    gap: 0px;
+  }
 `;
 
 export const visualPathWrapper = css`
   min-width: max-content;
   position: relative;
+  @media screen and (max-width: ${1500}px) {
+    margin-left: -16px;
+  }
 `;
 
 export const iconWrapperCompleted = css`
@@ -27,21 +33,47 @@ export const connectingLine = (isColoured: boolean) => css`
   z-index: -1;
 `;
 
-export const unit = css`
+export const unitWrapper = css`
   flex: 1;
   min-width: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 60px;
+`;
+
+export const unit = css`
+  width: 100%;
+`;
+
+export const unitDisabled = css`
+  opacity: 0.4;
+  pointer-events: none;
+`;
+
+export const unitTitleWrapper = css`
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 30px;
+  margin-bottom: 6px;
 `;
 
 export const unitTitle = css`
   font-size: 20px;
   line-height: 1.4;
-  margin-bottom: 8px;
+  flex: 1;
+  min-width: 0;
+`;
+
+export const unitProgressStateBadgeWrapper = css`
+  min-width: max-content;
 `;
 
 export const unitCompletedCount = css`
   font-weight: 500;
   color: #949494;
   font-size: 18px;
+  letter-spacing: 3px;
 `;
 
 export const unitContentPieces = css`
@@ -61,16 +93,7 @@ export const container = css`
   align-items: center;
   justify-content: space-between;
   padding: 16px;
-  background-color: #ffffff;
   border-radius: 12px;
   background-color: ${colooors["neutrals-01"][2]};
   gap: 16px;
-`;
-
-export const contentWrapper = css`
-  display: flex;
-  flex-direction: column;
-  align-items: start;
-  gap: 16px;
-  flex: 1;
 `;

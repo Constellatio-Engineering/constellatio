@@ -1,8 +1,50 @@
 {
-  "eslint.workingDirectories": [{ 
-    "directory": "app", 
+  "eslint.workingDirectories": [
+    { 
+    "directory": "workspace/app", 
     "changeProcessCWD": true
-}],
+  },
+  {
+    "directory": "workspace/packages/api",
+    "changeProcessCWD": true
+  },
+  {
+    "directory": "workspace/packages/cms",
+    "changeProcessCWD": true
+  },
+  {
+    "directory": "workspace/packages/db",
+    "changeProcessCWD": true
+  },
+  {
+    "directory": "workspace/packages/db-to-search",
+    "changeProcessCWD": true
+  },
+  {
+    "directory": "workspace/packages/env",
+    "changeProcessCWD": true
+  },
+  {
+    "directory": "workspace/packages/meilisearch",
+    "changeProcessCWD": true
+  },
+  {
+    "directory": "workspace/packages/schemas",
+    "changeProcessCWD": true
+  },
+  {
+    "directory": "workspace/packages/shared",
+    "changeProcessCWD": true
+  },
+  {
+    "directory": "workspace/packages/utility-types",
+    "changeProcessCWD": true
+  },
+  {
+    "directory": "workspace/packages/utils",
+    "changeProcessCWD": true
+  }
+],
   "editor.codeActionsOnSave": {
     "source.fixAll": "always"
   },

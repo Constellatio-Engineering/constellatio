@@ -16,9 +16,9 @@ export const getAllLearningPaths = async (props?: GetAllLearningPathsProps): Pro
 
   try 
   {
-    const { allLearningPath } = await caisySDK.getAllLearningPaths({ after });
+    const getAllLearningPathsResult = await caisySDK.getAllLearningPaths({ after });
 
-    allLearningPath?.edges?.forEach((edge) =>
+    getAllLearningPathsResult?.allLearningPath?.edges?.forEach((edge) =>
     {
       if(edge?.node) 
       {
@@ -26,10 +26,10 @@ export const getAllLearningPaths = async (props?: GetAllLearningPathsProps): Pro
       }
     });
 
-    if(allLearningPath?.pageInfo?.hasNextPage)
+    if(getAllLearningPathsResult?.allLearningPath?.pageInfo?.hasNextPage)
     {
       return await getAllLearningPaths({
-        after: allLearningPath.pageInfo.endCursor!,
+        after: getAllLearningPathsResult?.allLearningPath.pageInfo.endCursor ?? undefined,
         allLearningPaths
       });
     }

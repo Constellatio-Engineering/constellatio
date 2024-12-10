@@ -2,19 +2,22 @@ import { ArrowLeftWithLine } from "@/components/Icons/ArrowLeftWithLine";
 import { ArrowRightWithLine } from "@/components/Icons/ArrowRightWithLine";
 import { smallBadgeCardWidth } from "@/components/molecules/profileBadgeCard/ProfileBadgeCard.styles";
 import { colooors } from "@/constants/styles/colors";
+import { type LearningPathWithProgress } from "@/hooks/useLearningPathProgress";
 
-import { type IGenLearningPath } from "@constellatio/cms/generated-types";
+import { type Nullable } from "@constellatio/utility-types";
 import { Carousel } from "@mantine/carousel";
 import { type FunctionComponent } from "react";
 
 import SkeletonSlide from "./skeletonSlide/SkeletonSlide";
 import { LearningPathCard } from "../learningPathCard/LearningPathCard";
 
-type Props = Pick<IGenLearningPath, "id" | "units"> & {
+export type LearningPathCarouselProps = {
   readonly isLoading: boolean;
+  readonly learningPathId: Nullable<string>;
+  readonly units: LearningPathWithProgress["units"];
 };
 
-const LearningPathCarousel: FunctionComponent<Props> = ({ id: learningPathId, isLoading, units }) =>
+const LearningPathCarousel: FunctionComponent<LearningPathCarouselProps> = ({ isLoading, learningPathId, units }) =>
 {
   if(!learningPathId)
   {
@@ -66,16 +69,12 @@ const LearningPathCarousel: FunctionComponent<Props> = ({ id: learningPathId, is
           ))}
         </>
       )}
-      {units?.filter(Boolean).map((unit, index) => (
+      {units.map((unit, index) => (
         <Carousel.Slide key={unit.id}>
           <LearningPathCard
-            completedCount={5 - index}
-            // totalCount={(unit.contentPieces?.length ?? 0) + (unit.learningTests?.length ?? 0)}
-            totalCount={5}
+            {...unit}
             preTitle={`Lektion ${index + 1}`}
-            title={unit.title || "Kein Titel"}
             learningPathId={learningPathId}
-            unit={unit}
           />
         </Carousel.Slide>
       ))}

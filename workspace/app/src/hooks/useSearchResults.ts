@@ -61,22 +61,27 @@ const useSearchResults: UseSearchResults = (overwriteSearchValue) =>
         queries: [
           {
             indexUid: searchIndices.articles,
+            limit: 1000,
             q: searchValue,
           },
           {
             indexUid: searchIndices.cases,
+            limit: 1000,
             q: searchValue,
           },
           {
             indexUid: searchIndices.userDocuments,
+            limit: 1000,
             q: searchValue,
           },
           {
             indexUid: searchIndices.userUploads,
+            limit: 1000,
             q: searchValue,
           },
           {
             indexUid: searchIndices.forumQuestions,
+            limit: 1000,
             q: searchValue,
           },
         ]
