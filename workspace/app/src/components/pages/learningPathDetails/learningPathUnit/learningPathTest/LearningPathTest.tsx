@@ -12,7 +12,6 @@ import * as styles from "./LearningPathTest.styles";
 type Props = {
   readonly closeTest: () => void;
   readonly learningTest: LearningPathUnitProps["unit"]["caseLearningTests"][number];
-  readonly learningTestIndex: number;
   readonly openTest: (testId: string) => void;
   readonly openedTest: string | null;
   readonly refetchGamesProgress: () => void;
@@ -21,7 +20,6 @@ type Props = {
 export const LearningPathTest: FunctionComponent<Props> = ({
   closeTest,
   learningTest,
-  learningTestIndex,
   openedTest,
   openTest,
   refetchGamesProgress,

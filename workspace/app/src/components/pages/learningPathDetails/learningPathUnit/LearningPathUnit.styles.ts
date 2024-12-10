@@ -28,9 +28,16 @@ export const connectingLine = (isColoured: boolean) => css`
   z-index: -1;
 `;
 
-export const unit = css`
+export const unitWrapper = css`
   flex: 1;
   min-width: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 60px;
+`;
+
+export const unit = css`
+  width: 100%;
 `;
 
 export const unitDisabled = css`
@@ -38,16 +45,30 @@ export const unitDisabled = css`
   pointer-events: none;
 `;
 
+export const unitTitleWrapper = css`
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 30px;
+  margin-bottom: 6px;
+`;
+
 export const unitTitle = css`
   font-size: 20px;
   line-height: 1.4;
-  margin-bottom: 8px;
+  flex: 1;
+  min-width: 0;
+`;
+
+export const unitProgressStateBadgeWrapper = css`
+  min-width: max-content;
 `;
 
 export const unitCompletedCount = css`
   font-weight: 500;
   color: #949494;
   font-size: 18px;
+  letter-spacing: 3px;
 `;
 
 export const unitContentPieces = css`

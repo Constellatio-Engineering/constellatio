@@ -28,9 +28,9 @@ export const LearningPathCard: FunctionComponent<Props> = ({
   return (
     <Link href={`${appPaths.learningPaths}/${learningPathId}#${unitId}`} css={styles.wrapper(progressState)}>
       <div css={[styles.iconWrapper, progressState === "completed" && styles.iconWrapperCompleted]}>
-        {progressState === "completed" && <LearningPathUnitCompleted size={110}/>}
-        {progressState === "in-progress" && <LearningPathUnitInProgress size={110}/>}
-        {progressState === "upcoming" && <LearningPathUnitUpcoming size={110}/>}
+        {progressState === "completed" && <LearningPathUnitCompleted size={100}/>}
+        {progressState === "in-progress" && <LearningPathUnitInProgress size={100}/>}
+        {progressState === "upcoming" && <LearningPathUnitUpcoming size={100}/>}
       </div>
       <div>
         <p css={styles.preTitle}>{preTitle}</p>

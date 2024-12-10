@@ -20,11 +20,15 @@ export const LearningPathHeader: FunctionComponent<Props> = ({
   totalTasks,
 }) => 
 {
+  const durationInMinutes = estimatedDuration ?? 0;
+  const hours = Math.floor(durationInMinutes / 60);
+  const minutes = durationInMinutes % 60;
+
   return (
     <div css={sharedStyles.card}>
       <div>
         <div css={styles.UnitIconAndTotalTaskWrapper}>
-          <Unit size={110}/>
+          <Unit size={100}/>
           <div css={styles.totalTasksNotificationWrapper}>
             <span css={styles.totalTasksNotification}>{totalTasks}</span>
           </div>
@@ -39,7 +43,7 @@ export const LearningPathHeader: FunctionComponent<Props> = ({
           </div>
           <div css={styles.metricText}>
             <span css={styles.metricLabel}>Dauer</span>
-            <span css={styles.metricValue}>{estimatedDuration} Tage</span>
+            <span css={styles.metricValue}>{hours}:{minutes}h</span>
           </div>
         </div>
         <div css={styles.metricItem}>

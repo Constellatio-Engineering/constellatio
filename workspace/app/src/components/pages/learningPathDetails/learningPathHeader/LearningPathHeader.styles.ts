@@ -29,13 +29,14 @@ export const metricText = css`
 `;
 
 export const metricLabel = css`
-  font-size: 12px;
+  font-size: 14px;
   color: #666;
   text-transform: uppercase;
+  margin-bottom: 2px;
 `;
 
 export const metricValue = css`
-  font-size: 14px;
+  font-size: 16px;
   font-weight: 500;
 `;
 

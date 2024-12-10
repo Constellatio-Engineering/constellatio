@@ -1,6 +1,8 @@
+import StatusLabel from "@/components/atoms/statusLabel/StatusLabel";
 import { LearningPathUnitCompleted } from "@/components/Icons/LearningPathUnitCompleted";
 import { LearningPathUnitInProgress } from "@/components/Icons/LearningPathUnitInProgress";
 import { LearningPathUnitUpcoming } from "@/components/Icons/LearningPathUnitUpcoming";
+import { LearningPathCompletedCard } from "@/components/pages/learningPathDetails/learningPathCompletedCard/LearningPathCompletedCard";
 import { type LearningPathDetailsPageProps } from "@/components/pages/learningPathDetails/LearningPathDetails";
 import { LearningPathContentPiece } from "@/components/pages/learningPathDetails/learningPathUnit/learningPathContentPiece/LearningPathContentPiece";
 import { LearningPathTest } from "@/components/pages/learningPathDetails/learningPathUnit/learningPathTest/LearningPathTest";
@@ -9,11 +11,13 @@ import { Title } from "@mantine/core";
 import { type FunctionComponent, useState } from "react";
 
 import * as sharedStyles from "../LearningPathDetails.styles";
+import { unitTitleWrapper } from "./LearningPathUnit.styles";
 import * as styles from "./LearningPathUnit.styles";
 
 export type LearningPathUnitProps = {
   readonly index: number;
   readonly isLastUnit: boolean;
+  readonly isLearningPathCompleted: boolean;
   readonly refetchGamesProgress: () => void;
   readonly unit: LearningPathDetailsPageProps["units"][number];
 };
@@ -21,6 +25,7 @@ export type LearningPathUnitProps = {
 export const LearningPathUnit: FunctionComponent<LearningPathUnitProps> = ({
   index,
   isLastUnit,
+  isLearningPathCompleted,
   refetchGamesProgress,
   unit
 }) =>
@@ -48,35 +53,44 @@ export const LearningPathUnit: FunctionComponent<LearningPathUnitProps> = ({
           <div css={styles.connectingLine(progressState === "completed")}/>
         )}
       </div>
-      <div css={[sharedStyles.card, styles.unit, progressState === "upcoming" && styles.unitDisabled]}>
-        <Title order={2} css={styles.unitTitle}>
-          Lektion {index + 1} - {title}
-        </Title>
-        <p css={styles.unitCompletedCount}>
-          {completedTasksCount} / {totalTasksCount}
-        </p>
-        <div css={styles.unitContentPieces}>
-          {contentPieces?.filter(Boolean).map(contentPiece => (
-            <LearningPathContentPiece
-              key={contentPiece.id}
-              {...contentPiece}
-            />
-          ))}
+      <div css={styles.unitWrapper}>
+        <div css={[sharedStyles.card, styles.unit, progressState === "upcoming" && styles.unitDisabled]}>
+          <div css={styles.unitTitleWrapper}>
+            <Title order={2} css={styles.unitTitle}>
+              Lektion {index + 1} - {title}
+            </Title>
+            <div css={styles.unitProgressStateBadgeWrapper}>
+              <StatusLabel progressState={progressState} overwrites={{ completed: "Abgeschlossen" }}/>
+            </div>
+          </div>
+          <p css={styles.unitCompletedCount}>
+            {completedTasksCount}/{totalTasksCount}
+          </p>
+          <div css={styles.unitContentPieces}>
+            {contentPieces?.filter(Boolean).map(contentPiece => (
+              <LearningPathContentPiece
+                key={contentPiece.id}
+                {...contentPiece}
+              />
+            ))}
+          </div>
+          <ul css={styles.testList}>
+            {caseLearningTests?.filter(Boolean).map((learningTest) => (
+              <LearningPathTest
+                key={learningTest.id}
+                {...learningTest}
+                refetchGamesProgress={refetchGamesProgress}
+                learningTest={learningTest}
+                openTest={() => setOpenedTest(learningTest.id!)}
+                openedTest={openedTest}
+                closeTest={() => setOpenedTest(null)}
+              />
+            ))}
+          </ul>
         </div>
-        <ul css={styles.testList}>
-          {caseLearningTests?.filter(Boolean).map((learningTest, learningTestIndex) => (
-            <LearningPathTest
-              key={learningTest.id}
-              {...learningTest}
-              refetchGamesProgress={refetchGamesProgress}
-              learningTestIndex={learningTestIndex}
-              learningTest={learningTest}
-              openTest={() => setOpenedTest(learningTest.id!)}
-              openedTest={openedTest}
-              closeTest={() => setOpenedTest(null)}
-            />
-          ))}
-        </ul>
+        {(isLearningPathCompleted && isLastUnit) && (
+          <LearningPathCompletedCard/>
+        )}
       </div>
     </div>
   );

@@ -20,7 +20,6 @@ type Props = {
   readonly caseLearningTest: Nullable<IGenCase>;
   readonly caseLearningTestId: string;
   readonly closeDrawer: () => void;
-  readonly isCompleted: boolean;
   readonly isOpened: boolean;
 };
 
@@ -28,11 +27,10 @@ export const LearningPathTestDrawer: FunctionComponent<Props> = ({
   caseLearningTest,
   caseLearningTestId,
   closeDrawer,
-  isCompleted,
   isOpened
 }) =>
 {
-  const { data: gamesProgress, isLoading: isGamesProgressLoading } = useGamesProgress({ caseId: caseLearningTestId, queryType: "byCaseId" });
+  const { data: gamesProgress } = useGamesProgress({ caseId: caseLearningTestId, queryType: "byCaseId" });
   const content = caseLearningTest?.fullTextTasks;
 
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
@@ -123,36 +121,41 @@ export const LearningPathTestDrawer: FunctionComponent<Props> = ({
       lockScroll={true}
       opened={isOpened}
       onClose={closeDrawer}
-      title={<SlidingPanelTitle title={"title"} closeButtonAction={closeDrawer}/>}
+      title={(
+        <SlidingPanelTitle
+          title={caseLearningTest.title ?? "Kein Titel"}
+          closeButtonAction={closeDrawer}
+        />
+      )}
       position="right"
       withCloseButton={false}
-      size={760}
+      size={740}
       scrollAreaComponent={ScrollArea.Autosize}
       styles={styles.drawerStyles()}>
       <div css={styles.contentWrapper}>
-        <Richtext
-          data={renderedCaseContent}
-          stylesOverwrite={styles.richTextWrapper}
-          richTextOverwrite={{
-            documentLink: documentLinkOverwrite,
-            paragraph: richTextParagraphOverwrite,
-          }}
-        />
-      </div>
-      <div css={styles.contentWrapper}>
-        {areAllGamesCompleted && (
-          <div css={styles.wrapper}>
-            <Title order={1}>Gut gemacht!</Title>
-            <div>Du hast alle Trainingsmodule abgeschlossen und dein Wissen im Zivilrecht erheblich verbessert. Weiter so!</div>
-            <div css={styles.buttonWrapper}>
-              <Button<"button">
-                styleType={"secondarySimple"}
-                onClick={closeDrawer}>
-                Test schließen
-              </Button>
+        <div style={{ width: "100%" }}>
+          <Richtext
+            data={renderedCaseContent}
+            stylesOverwrite={styles.richTextWrapper}
+            richTextOverwrite={{
+              documentLink: documentLinkOverwrite,
+              paragraph: richTextParagraphOverwrite,
+            }}
+          />
+          {areAllGamesCompleted && (
+            <div css={styles.wrapper}>
+              <Title order={1}>Gut gemacht!</Title>
+              <div>Du hast alle Aufgaben des Tests abgeschlossen! Du kannst den Test nun abschließen.</div>
+              <div css={styles.buttonWrapper}>
+                <Button<"button">
+                  styleType={"secondarySimple"}
+                  onClick={closeDrawer}>
+                  Test schließen
+                </Button>
+              </div>
             </div>
-          </div>
-        )}
+          )}
+        </div>
       </div>
     </Drawer>
   );

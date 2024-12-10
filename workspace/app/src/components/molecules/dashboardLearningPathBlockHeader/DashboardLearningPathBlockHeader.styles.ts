@@ -19,3 +19,7 @@ export const learningPathHeaderTitle = () => css`
     color: ${colooors["neutrals-02"][1]};
     margin :24px 0;
 `;
+
+export const statusLabelWrapper = css`
+  margin-top: -10px;
+`;

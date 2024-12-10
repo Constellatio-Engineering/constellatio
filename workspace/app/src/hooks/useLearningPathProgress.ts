@@ -1,4 +1,5 @@
 /* eslint-disable max-lines */
+import { unitCompletedCount } from "@/components/pages/learningPathDetails/learningPathUnit/LearningPathUnit.styles";
 import useCasesProgress from "@/hooks/useCasesProgress";
 import useGamesProgress from "@/hooks/useGamesProgress";
 import { useSeenArticles } from "@/hooks/useSeenArticles";
@@ -12,7 +13,7 @@ type InProgressProgressState = "in-progress";
 type UpcomingProgressState = "upcoming";
 type NotStartedProgressState = "not-started";
 
-type LearningPathProgressState = CompletedProgressState | InProgressProgressState | UpcomingProgressState;
+export type LearningPathProgressState = CompletedProgressState | InProgressProgressState | UpcomingProgressState;
 type CaseLearningPathProgressState = CompletedProgressState | InProgressProgressState | UpcomingProgressState;
 type ArticleLearningPathProgressState = CompletedProgressState | UpcomingProgressState;
 export type CaseLearningTestProgressState = CompletedProgressState | InProgressProgressState | UpcomingProgressState | NotStartedProgressState;
@@ -40,7 +41,7 @@ export const useLearningPathProgress = (learningPath: LearningPathWithExtraData)
     refetch: refetchGamesProgress
   } = useGamesProgress({ gamesIds: allGameIdsInLearningPath, queryType: "byGameIds" }, { refetchOnMount: true });
 
-  const unitsWithProgress = useMemo(() => allUnits.map((unit, index) =>
+  const _unitsWithProgress = useMemo(() => allUnits.map((unit) =>
   {
     let completedContentPiecesCount = 0;
     let completedCaseLearningTestsCount = 0;
@@ -164,49 +165,56 @@ export const useLearningPathProgress = (learningPath: LearningPathWithExtraData)
     const areAllCaseLearningTestsCompleted = caseLearningTestsWithProgress.every(learningTest => learningTest.isCompleted);
     const totalTasksCount = allContentPiecesWithProgress.length + allCaseLearningTestsOfUnit.length;
     const completedTasksCount = completedContentPiecesCount + completedCaseLearningTestsCount;
-
-    let progressState: LearningPathProgressState;
-
-    if(completedContentPiecesCount === 0)
-    {
-      progressState = "upcoming";
-    }
-    else if(areAllContentPiecesCompleted && areAllCaseLearningTestsCompleted)
-    {
-      progressState = "completed";
-    }
-    else
-    {
-      progressState = "in-progress";
-    }
-
-    if(index === 0 && progressState !== "completed")
-    {
-      progressState = "in-progress";
-    }
+    const isCompleted = (areAllContentPiecesCompleted && areAllCaseLearningTestsCompleted);
 
     return ({
       ...unit,
       caseLearningTests: caseLearningTestsWithProgress,
       completedTasksCount,
       contentPieces: allContentPiecesWithProgress,
-      progressState,
+      isCompleted,
       totalTasksCount
     });
   }), [allUnits, casesProgress, gamesProgress, seenArticles]);
 
-  for(let i = 1; i < unitsWithProgress.length; i++)
+  let incompleteUnitBeforeFound = false;
+
+  const unitsWithProgress = _unitsWithProgress.map((unit, i) =>
   {
-    const unitBefore = unitsWithProgress[i - 1]!;
+    const unitBefore = _unitsWithProgress[i - 1];
 
-    if(unitBefore.progressState !== "completed")
+    if(!unit.isCompleted)
     {
-      unitsWithProgress[i]!.progressState = "upcoming";
+      incompleteUnitBeforeFound = true;
     }
-  }
 
-  const areAllUnitsCompleted = unitsWithProgress.every(unit => unit.progressState === "completed");
-  const completedUnitsCount = unitsWithProgress.filter(unit => unit.progressState === "completed").length;
+    let progressState: LearningPathProgressState | undefined;
+
+    if(i === 0 && !unit.isCompleted)
+    {
+      progressState = "in-progress";
+    }
+    else if(unitBefore?.isCompleted && !unit.isCompleted)
+    {
+      progressState = "in-progress";
+    }
+    else if(unit.isCompleted && !incompleteUnitBeforeFound)
+    {
+      progressState = "completed";
+    }
+    else
+    {
+      progressState = "upcoming";
+    }
+
+    return ({
+      ...unit,
+      progressState
+    });
+  });
+
+  const areAllUnitsCompleted = unitsWithProgress.every(unit => unit.isCompleted);
+  const completedUnitsCount = unitsWithProgress.filter(unit => unit.isCompleted).length;
 
   return {
     ...learningPath,

@@ -17,14 +17,12 @@ export const LearningPathCompletedCard: FunctionComponent<ILearningPathCompleted
   return (
     <div css={[sharedStyles.card, styles.wrapper]}>
       <Title order={1}>Gut gemacht!</Title>
-      <div>Du hast alle Trainingsmodule abgeschlossen und dein Wissen im Zivilrecht erheblich verbessert. Weiter so!</div>
+      <p>Du hast alle Trainingsmodule abgeschlossen und dein Wissen erheblich verbessert. Weiter so!</p>
       <div css={styles.buttonWrapper}>
         <Button<"button">
           styleType={"secondarySimple"}
-          onClick={async () =>
-          {
-            await formbricks.track("feedback_button_clicked");
-          }}>Feedback
+          onClick={async () => formbricks.track("feedback_button_clicked")}>
+          Feedback
         </Button>
       </div>
     </div>

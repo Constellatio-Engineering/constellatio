@@ -31,7 +31,6 @@ export const headerColumn = css`
     align-self: flex-start;
     position: sticky;
     top: ${headerHeightPx + 30}px;
-    
     h1 {
         font-size: 28px;
     }

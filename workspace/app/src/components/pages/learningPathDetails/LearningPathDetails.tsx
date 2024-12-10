@@ -31,6 +31,7 @@ export const LearningPathDetailsPage: FunctionComponent<LearningPathDetailsPageP
               index={index}
               isLastUnit={index === (learningPath.units?.length ?? 0) - 1}
               unit={unit}
+              isLearningPathCompleted={isCompleted}
               refetchGamesProgress={refetchGamesProgress}
             />
           ))}

@@ -34,9 +34,7 @@ export const drawerStyles = () =>
 
 export const contentWrapper = css`
   width: 100%;
-  max-width: 720px;
-  padding: 50px 36px;
-  padding-bottom: 0;
+  padding: 50px 32px 0;
   display: flex;
   justify-content: center;
   margin: 0 auto;

@@ -12,12 +12,17 @@ type Props = LearningPathWithExtraData;
 
 const DashboardLearningPathBlock: FunctionComponent<Props> = (learningPath) =>
 {
-  const { completedUnitsCount, isPending, units } = useLearningPathProgress(learningPath);
+  const {
+    completedUnitsCount,
+    isCompleted,
+    isPending,
+    units
+  } = useLearningPathProgress(learningPath);
 
   return (
     <div css={styles.wrapper}>
       <div css={styles.innerWrapper}>
-        <DashboardLearningPathHeader {...learningPath}/>
+        <DashboardLearningPathHeader {...learningPath} isCompleted={isCompleted}/>
         <div css={styles.carouselWrapper}>
           <LearningPathCarouselHead isLoading={isPending} completedCount={completedUnitsCount} totalCount={units.length}/>
           <LearningPathCarousel isLoading={isPending} learningPathId={learningPath.id} units={units}/>
