@@ -3,15 +3,14 @@ import { LearningPathUnitCompleted } from "@/components/Icons/LearningPathUnitCo
 import { LearningPathUnitInProgress } from "@/components/Icons/LearningPathUnitInProgress";
 import { LearningPathUnitUpcoming } from "@/components/Icons/LearningPathUnitUpcoming";
 import { LearningPathCompletedCard } from "@/components/pages/learningPathDetails/learningPathCompletedCard/LearningPathCompletedCard";
-import { type LearningPathDetailsPageProps } from "@/components/pages/learningPathDetails/LearningPathDetails";
 import { LearningPathContentPiece } from "@/components/pages/learningPathDetails/learningPathUnit/learningPathContentPiece/LearningPathContentPiece";
 import { LearningPathTest } from "@/components/pages/learningPathDetails/learningPathUnit/learningPathTest/LearningPathTest";
+import { type LearningPathWithProgress } from "@/hooks/useLearningPathProgress";
 
 import { Title } from "@mantine/core";
 import { type FunctionComponent, useState } from "react";
 
 import * as sharedStyles from "../LearningPathDetails.styles";
-import { unitTitleWrapper } from "./LearningPathUnit.styles";
 import * as styles from "./LearningPathUnit.styles";
 
 export type LearningPathUnitProps = {
@@ -19,7 +18,7 @@ export type LearningPathUnitProps = {
   readonly isLastUnit: boolean;
   readonly isLearningPathCompleted: boolean;
   readonly refetchGamesProgress: () => void;
-  readonly unit: LearningPathDetailsPageProps["units"][number];
+  readonly unit: LearningPathWithProgress["units"][number];
 };
 
 export const LearningPathUnit: FunctionComponent<LearningPathUnitProps> = ({

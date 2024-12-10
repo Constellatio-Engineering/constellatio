@@ -1,5 +1,4 @@
 /* eslint-disable max-lines */
-import { unitCompletedCount } from "@/components/pages/learningPathDetails/learningPathUnit/LearningPathUnit.styles";
 import useCasesProgress from "@/hooks/useCasesProgress";
 import useGamesProgress from "@/hooks/useGamesProgress";
 import { useSeenArticles } from "@/hooks/useSeenArticles";

@@ -4,13 +4,14 @@ import {
 } from "@/components/pages/learningPathDetails/learningPathCompletedCard/LearningPathCompletedCard";
 import { LearningPathHeader } from "@/components/pages/learningPathDetails/learningPathHeader/LearningPathHeader";
 import { LearningPathUnit } from "@/components/pages/learningPathDetails/learningPathUnit/LearningPathUnit";
-import { type LearningPathWithProgress, useLearningPathProgress } from "@/hooks/useLearningPathProgress";
+import { useLearningPathProgress } from "@/hooks/useLearningPathProgress";
+import { type GetLearningPathDetailPagePropsResult } from "@/pages/learning-paths/[id]";
 
 import { type FunctionComponent } from "react";
 
 import * as styles from "./LearningPathDetails.styles";
 
-export type LearningPathDetailsPageProps = LearningPathWithProgress;
+export type LearningPathDetailsPageProps = GetLearningPathDetailPagePropsResult["learningPath"];
 
 export const LearningPathDetailsPage: FunctionComponent<LearningPathDetailsPageProps> = (learningPath) =>
 {

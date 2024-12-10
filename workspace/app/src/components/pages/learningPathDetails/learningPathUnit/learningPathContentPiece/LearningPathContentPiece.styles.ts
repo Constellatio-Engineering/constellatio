@@ -1,5 +1,3 @@
-import { responsiveBreakpoint } from "@/components/pages/learningPathDetails/LearningPathDetails.styles";
-
 import { css } from "@emotion/react";
 
 export const wrapper = (isCompleted: boolean) => css`

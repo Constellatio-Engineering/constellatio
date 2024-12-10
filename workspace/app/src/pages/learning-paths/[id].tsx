@@ -4,7 +4,6 @@ import { LearningPathDetailsPage } from "@/components/pages/learningPathDetails/
 import { type NextPageWithLayout } from "@/pages/_app";
 
 import { getAllLearningPaths } from "@constellatio/cms/content/getAllLearningPaths";
-import { type IGenLearningPath } from "@constellatio/cms/generated-types";
 import { caisySDK } from "@constellatio/cms/sdk";
 import { getLearningPathExtraData, type LearningPathWithExtraData } from "@constellatio/cms/utils/learningPaths";
 import type { GetStaticPaths, GetStaticPathsResult, GetStaticProps } from "next";
@@ -34,7 +33,7 @@ export const getStaticPaths: GetStaticPaths<Params> = async () =>
   };
 };
 
-type GetLearningPathDetailPagePropsResult = {
+export type GetLearningPathDetailPagePropsResult = {
   readonly learningPath: LearningPathWithExtraData;
 };
 
