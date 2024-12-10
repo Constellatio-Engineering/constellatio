@@ -9,6 +9,8 @@ import useArticles from "@/hooks/useArticles";
 import useBookmarks from "@/hooks/useBookmarks";
 import useCases from "@/hooks/useCases";
 import useRemoveBookmark from "@/hooks/useRemoveBookmark";
+import { getUrlSearchParams } from "@/utils/helpers";
+import { queryParams } from "@/utils/query-params";
 
 import { type IGenArticle, type Maybe } from "@constellatio/cms/generated-types";
 import { type AddOrRemoveBookmarkSchema } from "@constellatio/schemas/routers/bookmarks/addOrRemoveBookmark.schema";
@@ -17,7 +19,7 @@ import { type Nullable } from "@constellatio/utility-types";
 import { Button, Title } from "@mantine/core";
 import { IconArrowLeft, IconArrowRight } from "@tabler/icons-react";
 import Link from "next/link";
-import { type FunctionComponent } from "react";
+import { type FunctionComponent, useEffect, useState } from "react";
 
 import * as styles from "./CaseSolvingHeader.styles";
 import OverviewCard, { type IOverviewCard } from "../overviewCard/OverviewCard";
@@ -58,6 +60,20 @@ const CaseSolvingHeader: FunctionComponent<ICaseSolvingHeaderProps> = ({
   const isItemBookmarked = bookmarkedCases.some(bookmark => bookmark.title === title) || bookmarkedArticles?.some(bookmark => bookmark.title === title) || false;
   const { mutate: addBookmark } = useAddBookmark();
   const { mutate: removeBookmark } = useRemoveBookmark({ shouldUseOptimisticUpdate: true });
+  const [referringLearningPath, setReferringLearningPath] = useState<Nullable<string>>();
+
+  useEffect(() =>
+  {
+    const searchParams = new URLSearchParams(getUrlSearchParams());
+    const _referringLearningPathParam = searchParams.get(queryParams.referringLearningPath);
+
+    if(!_referringLearningPathParam)
+    {
+      return;
+    }
+
+    setReferringLearningPath(`${_referringLearningPathParam}#${searchParams.get(queryParams.referringLearningPathUnit)}`);
+  }, []);
 
   const onBookmarkIconClick = (): void =>
   {
@@ -104,6 +120,18 @@ const CaseSolvingHeader: FunctionComponent<ICaseSolvingHeaderProps> = ({
         <div css={[styles.body, variant === "dictionary" && styles.bodyArticles]}>
           <div css={styles.bodyText}>
             <div className="icons-bar">
+              {referringLearningPath && (
+                <Button
+                  type="button"
+                  prefetch={true}
+                  component={Link}
+                  href={`${appPaths.learningPaths}/${referringLearningPath}`}
+                  css={[styles.navButton, styles.backToLearningPathButton]}
+                  leftIcon={<IconArrowLeft/>}
+                  variant="outline">
+                  Zurück zum Lernpfad
+                </Button>
+              )}
               <IconButtonBar icons={icons}/>
             </div>
             <div className="bread-crumb">

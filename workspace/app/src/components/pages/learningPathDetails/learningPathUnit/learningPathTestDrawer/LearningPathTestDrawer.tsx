@@ -125,6 +125,13 @@ export const LearningPathTestDrawer: FunctionComponent<Props> = ({
         <SlidingPanelTitle
           title={caseLearningTest.title ?? "Kein Titel"}
           closeButtonAction={closeDrawer}
+          subTitle={(
+            <div css={styles.progressBarWrapper}>
+              {Array.from({ length: games.length }).map((_, index) => (
+                <div key={index} css={styles.progressBarItem(completedGamesCount > index, games.length)}/>
+              ))}
+            </div>
+          )}
         />
       )}
       position="right"

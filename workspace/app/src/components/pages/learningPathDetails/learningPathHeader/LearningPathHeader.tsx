@@ -44,7 +44,7 @@ export const LearningPathHeader: FunctionComponent<Props> = ({
           </div>
           <div css={styles.metricText}>
             <span css={styles.metricLabel}>Dauer</span>
-            <span css={styles.metricValue}>{hours}:{minutes}h</span>
+            <span css={styles.metricValue}>{`${hours}:${minutes.toString().padStart(2, "0")}h`}</span>
           </div>
         </div>
         <div css={styles.metricItem}>

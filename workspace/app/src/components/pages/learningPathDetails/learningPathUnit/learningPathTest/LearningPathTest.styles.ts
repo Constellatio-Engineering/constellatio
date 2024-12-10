@@ -14,7 +14,8 @@ export const container = (testStatus: CaseLearningTestProgressState) => css`
     
     background-color: ${
   testStatus === "completed"
-    ? "#e7f6ea" // Grünlicher Hintergrund
+    // ? "#e7f6ea" // Grünlicher Hintergrund
+    ? "#ffffff" 
     : testStatus === "in-progress"
       ? "#edeefa" // Bläulicher Hintergrund
       : colooors["neutrals-01"][2] // Fallback

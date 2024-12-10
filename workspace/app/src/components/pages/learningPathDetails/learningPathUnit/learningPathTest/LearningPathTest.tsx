@@ -1,4 +1,5 @@
 import { Button } from "@/components/atoms/Button/Button";
+import StatusLabel from "@/components/atoms/statusLabel/StatusLabel";
 import { Puzzle } from "@/components/Icons/Puzzle";
 import { LearningPathTestDrawer } from "@/components/pages/learningPathDetails/learningPathUnit/learningPathTestDrawer/LearningPathTestDrawer";
 import { type LearningPathUnitProps } from "@/components/pages/learningPathDetails/learningPathUnit/LearningPathUnit";
@@ -29,7 +30,7 @@ export const LearningPathTest: FunctionComponent<Props> = ({
   const { id, progressState, title } = learningTest;
 
   let text: string;
-  let buttonText: string;
+  let buttonText: string | null;
 
   switch (progressState) 
   {
@@ -47,7 +48,8 @@ export const LearningPathTest: FunctionComponent<Props> = ({
       break;
     case "completed":
       text = "Super! Du hast diesen Test erfolgreich abgeschlossen.";
-      buttonText = "Fortschritt zurücksetzen";
+      // buttonText = "Fortschritt zurücksetzen";
+      buttonText = null;
       break;
   }
   
@@ -60,22 +62,27 @@ export const LearningPathTest: FunctionComponent<Props> = ({
             <Title order={4}>{title}</Title>
             <p>{text}</p>
           </div>
-          <Button<"button">
-            onClick={async () =>
-            {
-              if(progressState === "completed")
+          {buttonText && (
+            <Button<"button">
+              onClick={async () =>
               {
-                await resetCaseProgress({ caseId: id! });
-                void refetchGamesProgress();
-              }
-              else
-              {
-                openTest(id!);
-              }
-            }}
-            styleType="secondarySimple">
-            {buttonText}
-          </Button>
+                if(progressState === "completed")
+                {
+                  await resetCaseProgress({ caseId: id! });
+                  void refetchGamesProgress();
+                }
+                else
+                {
+                  openTest(id!);
+                }
+              }}
+              styleType="secondarySimple">
+              {buttonText}
+            </Button>
+          )}
+          {progressState === "completed" && (
+            <StatusLabel progressState={"completed"} overwrites={{ completed: "Abgeschlossen" }}/>
+          )}
         </div>
       </li>
       <LearningPathTestDrawer
